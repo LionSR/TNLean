@@ -80,16 +80,15 @@ MPDO coverage tracker
 \section{Faithful replacement}
 
 A faithful formalization should state the purification RFP definition with the
-positive-length global purification equation \path{eq:MPDO-Puri-1}, exclude the
-degenerate zero reduced density, and require the purifying spin--ancilla tensor
-to be a pure-state RFP. The trace over the ancillary index, discussed after
-Definition \path{def:Puri-RFP}, is a separate one-site tpCPM; it is not the
-two-map mixed-state RFP condition \path{RFPMixedTS}. The definitions are now
-present in \path{TNLean/MPS/MPDO/PRFP.lean}: the global equation is
-\leanid{MPOTensor.HasGlobalPurificationEquation}, the nonzero reduced-density
-condition is \leanid{MPOTensor.HasNonzeroPurificationDensity}, the pure-state
-witness is \leanid{MPOTensor.HasPurificationRFPWitness}, and the source
-predicate is \leanid{MPOTensor.IsPRFP}. The ancillary-trace map is
+positive-length global purification equation \path{eq:MPDO-Puri-1} and require
+the purifying spin--ancilla tensor to be a pure-state RFP. The trace over the
+ancillary index, discussed after Definition \path{def:Puri-RFP}, is a separate
+one-site tpCPM; it is not the two-map mixed-state RFP condition
+\path{RFPMixedTS}. The definitions are now present in
+\path{TNLean/MPS/MPDO/PRFP.lean}: the global equation is
+\leanid{MPOTensor.HasGlobalPurificationEquation}, the pure-state witness is
+\leanid{MPOTensor.HasPurificationRFPWitness}, and the source predicate is
+\leanid{MPOTensor.IsPRFP}. The ancillary-trace map is
 \leanid{MPOTensor.ancillaryTraceMap}; the corresponding tpCPM condition is
 \leanid{MPOTensor.HasTracePreservingSpinReduction}. Only after the remaining
 theorem is proved should the theorem
@@ -125,9 +124,8 @@ $M$ and proves the useful consequence
 via \leanid{MPOTensor.IsLPDO.isMPDO}.
 
 This local predicate is not Definition \path{def:Puri-RFP}. The source-level
-positive-length global purification equation, the nonzero reduced-density
-condition, and the trace-preserving structure appearing after the ancillary
-trace are recorded separately in
+positive-length global purification equation and the trace-preserving structure
+appearing after the ancillary trace are recorded separately in
 \path{TNLean/MPS/MPDO/PRFP.lean}. The equivalence
 \[
   \operatorname{PRFP}(M) \Longleftrightarrow \operatorname{ZCL}(M)

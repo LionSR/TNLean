@@ -18,8 +18,9 @@ at each positive chain length as the ancillary trace of a pure MPS density matri
 `rho_p^(N)(M) = tr_a(|Psi^(N)(A)><Psi^(N)(A)|)`
 
 with the purifying spin-ancilla tensor `A` a pure-state RFP whose reduced
-density is nonzero at some positive length. This file encodes that equality as
-an equality of the finite-chain matrices indexed by spin configurations.
+density is obtained by tracing the ancillary legs. This file encodes that
+equality as an equality of the finite-chain matrices indexed by spin
+configurations.
 
 The source text immediately after Definition 4.4 observes that tracing the
 ancilla gives a trace-preserving completely positive map on the spin degrees of
@@ -34,11 +35,9 @@ purification RFP with zero correlation length remains a separate open result.
 * `MPOTensor.purificationDensity`: the finite-chain ancillary trace.
 * `MPOTensor.HasGlobalPurificationEquation`: the positive-length equation
   `eq:MPDO-Puri-1`.
-* `MPOTensor.HasNonzeroPurificationDensity`: nonzero positive-length density.
 * `MPOTensor.ancillaryTraceMap`: the spin map obtained by tracing the ancilla.
 * `MPOTensor.HasTracePreservingSpinReduction`: the tpCPM condition for that map.
-* `MPOTensor.HasPurificationRFPWitness`: the nondegenerate purification-RFP
-  witness.
+* `MPOTensor.HasPurificationRFPWitness`: the source purification-RFP witness.
 * `MPOTensor.IsPRFP`: the source purification-RFP predicate.
 * `MPOTensor.IsPRFPWithTracePreservingSpinReduction`: the PRFP predicate
   together with the trace-preserving spin map.
@@ -107,13 +106,6 @@ def HasGlobalPurificationEquation (M : MPOTensor d D)
     {dK D' : ℕ} (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ) : Prop :=
   ∀ N : ℕ, 0 < N → mpo M N = purificationDensity A N
 
-/-- The purifying family has a nonzero positive-length reduced density. This
-excludes the degenerate zero purification, which is not a source PRFP case and
-would make the PRFP--ZCL comparison vacuous. -/
-def HasNonzeroPurificationDensity {d dK D' : ℕ}
-    (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ) : Prop :=
-  ∃ N : ℕ, 0 < N ∧ purificationDensity A N ≠ 0
-
 /-- The post-ancilla spin reduction is trace-preserving and completely positive.
 This records the tpCPM described after arXiv:1606.00608, Definition
 `def:Puri-RFP` (lines 761--764), without imposing the two-map mixed-state RFP
@@ -121,15 +113,13 @@ condition of Definition 4.1. -/
 def HasTracePreservingSpinReduction (d dK : ℕ) : Prop :=
   IsKrausCPTP (ancillaryTraceMap d dK)
 
-/-- The nondegenerate purification-RFP witness from arXiv:1606.00608,
+/-- The purification-RFP witness from arXiv:1606.00608,
 Definition `def:Puri-RFP` (lines 756--764): there is a purifying spin-ancilla
 MPS tensor satisfying the global purification equation, and that purifying
-tensor is a pure-state renormalization fixed point whose reduced density is
-nonzero at some positive length. -/
+tensor is a pure-state renormalization fixed point. -/
 def HasPurificationRFPWitness (M : MPOTensor d D) : Prop :=
   ∃ (dK D' : ℕ) (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ),
-    HasGlobalPurificationEquation M A ∧ HasNonzeroPurificationDensity A ∧
-      MPSTensor.IsRFP (purificationTensor A)
+    HasGlobalPurificationEquation M A ∧ MPSTensor.IsRFP (purificationTensor A)
 
 /-- Purification renormalization fixed point in the sense of arXiv:1606.00608,
 Definition `def:Puri-RFP` (lines 756--764): the tensor has a global
@@ -146,9 +136,8 @@ physical index. It is not the two-map mixed-state RFP condition of Definition
 4.1. -/
 def IsPRFPWithTracePreservingSpinReduction (M : MPOTensor d D) : Prop :=
   ∃ (dK D' : ℕ) (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ),
-    HasGlobalPurificationEquation M A ∧ HasNonzeroPurificationDensity A ∧
-      MPSTensor.IsRFP (purificationTensor A) ∧
-        HasTracePreservingSpinReduction d dK
+    HasGlobalPurificationEquation M A ∧ MPSTensor.IsRFP (purificationTensor A) ∧
+      HasTracePreservingSpinReduction d dK
 
 /-- A purification RFP supplies the global purification-RFP witness. -/
 theorem IsPRFP.hasPurificationRFPWitness {M : MPOTensor d D}
@@ -160,15 +149,15 @@ purification-RFP predicate. -/
 theorem IsPRFPWithTracePreservingSpinReduction.isPRFP {M : MPOTensor d D}
     (h : IsPRFPWithTracePreservingSpinReduction M) : IsPRFP M :=
   by
-  rcases h with ⟨dK, D', A, hglobal, hnonzero, hRFP, _htrace⟩
-  exact ⟨dK, D', A, hglobal, hnonzero, hRFP⟩
+  rcases h with ⟨dK, D', A, hglobal, hRFP, _htrace⟩
+  exact ⟨dK, D', A, hglobal, hRFP⟩
 
 /-- A purification RFP with trace-preserving spin reduction carries the
 post-ancilla tpCPM structure on the spin degrees of freedom. -/
 theorem IsPRFPWithTracePreservingSpinReduction.hasTracePreservingSpinReduction
     {M : MPOTensor d D} (h : IsPRFPWithTracePreservingSpinReduction M) :
     ∃ dK : ℕ, HasTracePreservingSpinReduction d dK := by
-  rcases h with ⟨dK, _D', _A, _hglobal, _hnonzero, _hRFP, htrace⟩
+  rcases h with ⟨dK, _D', _A, _hglobal, _hRFP, htrace⟩
   exact ⟨dK, htrace⟩
 
 /-- A purification-RFP witness contains a purifying tensor satisfying the global
@@ -177,23 +166,15 @@ theorem HasPurificationRFPWitness.hasGlobalPurificationEquation {M : MPOTensor d
     (h : HasPurificationRFPWitness M) :
     ∃ (dK D' : ℕ) (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ),
       HasGlobalPurificationEquation M A := by
-  rcases h with ⟨dK, D', A, hglobal, _hnonzero, _hRFP⟩
+  rcases h with ⟨dK, D', A, hglobal, _hRFP⟩
   exact ⟨dK, D', A, hglobal⟩
-
-/-- A purification-RFP witness contains a nonzero positive-length density. -/
-theorem HasPurificationRFPWitness.hasNonzeroPurificationDensity {M : MPOTensor d D}
-    (h : HasPurificationRFPWitness M) :
-    ∃ (dK D' : ℕ) (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ),
-      HasNonzeroPurificationDensity A := by
-  rcases h with ⟨dK, D', A, _hglobal, hnonzero, _hRFP⟩
-  exact ⟨dK, D', A, hnonzero⟩
 
 /-- A purification-RFP witness contains a pure-state RFP purifying tensor. -/
 theorem HasPurificationRFPWitness.purifying_isRFP {M : MPOTensor d D}
     (h : HasPurificationRFPWitness M) :
     ∃ (dK D' : ℕ) (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ),
       MPSTensor.IsRFP (purificationTensor A) := by
-  rcases h with ⟨dK, D', A, _hglobal, _hnonzero, hRFP⟩
+  rcases h with ⟨dK, D', A, _hglobal, hRFP⟩
   exact ⟨dK, D', A, hRFP⟩
 
 end MPOTensor
