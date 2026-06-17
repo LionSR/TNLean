@@ -972,6 +972,70 @@ unconditional result.
     \]
 \end{lemma}
 
+\begin{lemma}[Splitting the last edge of a finite cycle]%
+    \label{lem:finite_cycle_product_split_last}
+    \lean{TNLean.Algebra.prod_univ_eq_prod_castSucc_last}
+    \leanok
+    \uses{}
+    For elements $\kappa_0,\ldots,\kappa_n$ of a commutative group,
+    \[
+        \prod_{k=0}^{n}\kappa_k
+        =
+        \left(\prod_{k=0}^{n-1}\kappa_k\right)\cdot\kappa_n.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{}
+    Separate the final factor from the product over the finite interval.
+\end{proof}
+
+\begin{lemma}[Finite-cycle coboundary]\label{lem:finite_cycle_coboundary}
+    \lean{TNLean.Algebra.exists_fin_succ_coboundary_of_prod_eq_one}
+    \leanok
+    \uses{}
+    Let $G$ be a commutative group, and let
+    $\kappa_0,\ldots,\kappa_n\in G$. If
+    \[
+        \prod_{k=0}^{n}\kappa_k=1,
+    \]
+    then there are $\varphi_0,\ldots,\varphi_n\in G$ such that, for every
+    $k<n$,
+    \[
+        \kappa_k=\varphi_k\varphi_{k+1}^{-1},
+    \]
+    and
+    \[
+        \kappa_n=\varphi_n\varphi_0^{-1}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:finite_cycle_product_split_last}
+    Set $\varphi_k=(\kappa_0\cdots\kappa_{k-1})^{-1}$, with the empty product
+    equal to $1$. For $k<n$,
+    \[
+        \varphi_k\varphi_{k+1}^{-1}
+        =
+        (\kappa_0\cdots\kappa_{k-1})^{-1}
+        (\kappa_0\cdots\kappa_k)
+        =
+        \kappa_k.
+    \]
+    The remaining identity follows from
+    \[
+        (\kappa_0\cdots\kappa_{n-1})\kappa_n=1,
+    \]
+    which gives
+    \[
+        \varphi_n\varphi_0^{-1}
+        =
+        (\kappa_0\cdots\kappa_{n-1})^{-1}
+        =
+        \kappa_n.
+    \]
+\end{proof}
+
 \begin{lemma}[Per-site proportionality from blocked sector match]%
     \label{lem:sector_tensor_proportional_blocked_match}
     \lean{MPSTensor.sectorTensor_proportional_of_blockedMatch}
