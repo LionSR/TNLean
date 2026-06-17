@@ -5,7 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalCrossing
 
 /-!
-# PGVWC comparison identities for block-diagonal parent spaces
+# Boundary-condition comparisons for block-diagonal parent spaces
 
 The word-indexed Pérez-García--Verstraete--Wolf--Cirac comparison
 \[
@@ -26,8 +26,8 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-- PGVWC comparison identities upgrade the block-diagonal boundary
-representation to periodic single-block states.
+/-- The \(C^j,D^j\) boundary-condition comparison upgrades a block-diagonal
+boundary representation to periodic single-block states.
 
 Under the normalized BNT hypotheses, every vector in the block-diagonal
 periodic-boundary ground space has block-diagonal boundary conditions \(X_j\). If those
@@ -53,9 +53,10 @@ which transitively uses the boundary-condition comparison at boundary-crossing
 windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
 2126--2128. Documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
-derive the PGVWC07 \(C^j,D^j,E^j\) boundary-condition comparison from
-arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
-remove the external comparison hypothesis; tracked in issue 2651. -/
+derive the Perez-Garcia--Verstraete--Wolf--Cirac \(C^j,D^j,E^j\)
+boundary-condition comparison from arXiv:quant-ph/0608197, Theorem 12, proof
+lines 1446--1456, and use it to remove the external comparison hypothesis;
+tracked in issue 2651. -/
 theorem exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -101,8 +102,8 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_bnt_c
   exact blockDiagonal_boundary_component_chainGroundSpace_of_pgvwc_comparison_of_injective
     μ A hN hLN X hBlk hUnital hNlarge C hCompat
 
-/-- PGVWC comparison identities give the block-diagonal periodic-boundary equality
-in the finite BNT range.
+/-- The \(C^j,D^j\) boundary-condition comparison gives the block-diagonal
+periodic-boundary equality in the finite BNT range.
 
 This theorem assumes the source \(C^j,D^j\) comparison only up to the
 word-indexed matrix identity
@@ -124,9 +125,10 @@ which transitively uses the boundary-condition comparison at boundary-crossing
 windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
 2126--2128. Documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
-derive the PGVWC07 \(C^j,D^j,E^j\) boundary-condition comparison from
-arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
-remove the external comparison hypothesis; tracked in issue 2651. -/
+derive the Perez-Garcia--Verstraete--Wolf--Cirac \(C^j,D^j,E^j\)
+boundary-condition comparison from arXiv:quant-ph/0608197, Theorem 12, proof
+lines 1446--1456, and use it to remove the external comparison hypothesis;
+tracked in issue 2651. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_pgvwc_comparison
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
