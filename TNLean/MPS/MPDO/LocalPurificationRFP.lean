@@ -30,10 +30,11 @@ Definition 3.2).
 
 The predicate below is a strictly weaker local condition, not the source
 purification-RFP definition. The source PRFP definition is stated in
-`TNLean.MPS.MPDO.PRFP` using the global purification equation and the
-trace-preserving post-ancilla structure recorded after it. This local condition
-is still useful because it pins the tensor `M^{ij}` itself, not merely the family
-of density operators `M` generates.
+`TNLean.MPS.MPDO.PRFP` using the positive-length global purification equation
+and the nonzero reduced-density condition. The trace-preserving post-ancilla
+structure discussed after the source definition is recorded there separately.
+This local condition is still useful because it pins the tensor `M^{ij}` itself,
+not merely the family of density operators `M` generates.
 
 `MPOTensor.IsLocalPurificationRFP` is exactly `MPOTensor.IsLPDO` (the local
 purification structure) together with the requirement that the purifying tensor,
@@ -82,8 +83,8 @@ spin–ancilla index `Fin (d * dK)`, is a pure-state renormalization fixed point
 
 **Scope restriction:** This is a local tensor condition motivated by
 arXiv:1606.00608, `Psipuri` (line 747), not the source PRFP definition itself.
-The global purification and post-ancilla trace-preserving structure are recorded
-separately in `TNLean.MPS.MPDO.PRFP`; see
+The positive-length global purification equation and nonzero reduced-density
+condition are recorded separately in `TNLean.MPS.MPDO.PRFP`; see
 `docs/paper-gaps/cpsv16_purification_rfp_definition.tex`. -/
 def IsLocalPurificationRFP (M : MPOTensor d D) : Prop :=
   ∃ (dK D' : ℕ) (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
