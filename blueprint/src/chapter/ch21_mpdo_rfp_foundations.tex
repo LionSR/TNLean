@@ -158,6 +158,41 @@
     \cite[lines~751 and~761--764]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
+\begin{theorem}[The ancillary trace is trace-preserving completely positive]
+    \label{thm:mpdo_ancillary_trace_map_is_kraus_cptp}
+    \lean{MPOTensor.ancillaryTraceMap_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_ancillary_trace_map, def:is_kraus_cptp}
+    For every ancillary dimension, the one-site ancillary trace map is
+    trace-preserving and completely positive.
+\end{theorem}
+\begin{proof}
+    \leanok
+    For each ancillary label \(k\), let \(V_k\) be the projection from the
+    spin--ancilla space onto the spin space with fixed ancillary label:
+    \[
+        (V_k)_{i,(j,\ell)}
+        =
+        \begin{cases}
+            1, & i=j\text{ and }k=\ell,\\
+            0, & \text{otherwise}.
+        \end{cases}
+    \]
+    Then
+    \[
+        (V_k X V_k^\dagger)_{ij}=X_{(i,k),(j,k)},
+    \]
+    so summing over \(k\) gives the ancillary trace. The identity resolution is
+    entrywise:
+    \[
+        \sum_k (V_k^\dagger V_k)_{(i,k'),(j,\ell')}
+        =
+        \delta_{ij}\delta_{k'\ell'} .
+    \]
+    Thus the operators \(V_k\) form a trace-preserving Kraus family for the
+    ancillary trace.
+\end{proof}
+
 \begin{definition}[Global purification equation]
     \label{def:mpdo_global_purification_equation}
     \lean{MPOTensor.HasGlobalPurificationEquation}
@@ -186,8 +221,8 @@
     \lean{MPOTensor.HasTracePreservingSpinReduction}
     \leanok
     \uses{def:mpdo_ancillary_trace_map, def:is_kraus_cptp}
-    The spin reduction obtained by tracing the ancillary index is required to
-    be a trace-preserving completely positive map:
+    The spin reduction obtained by tracing the ancillary index is
+    trace-preserving and completely positive when
     \[
         \operatorname{tr}_a
         \quad\text{is a tpCPM}.
@@ -195,6 +230,22 @@
     This is the structure described immediately after Definition~4.4 in
     \cite[lines~761--764]{Cirac2016MPDO_arXiv}.
 \end{definition}
+
+\begin{corollary}[Trace-preserving spin reduction of the ancillary trace]
+    \label{cor:mpdo_has_trace_preserving_spin_reduction}
+    \lean{MPOTensor.hasTracePreservingSpinReduction}
+    \leanok
+    \uses{def:mpdo_has_trace_preserving_spin_reduction,
+        thm:mpdo_ancillary_trace_map_is_kraus_cptp}
+    For every ancillary dimension, the spin reduction obtained by tracing the
+    ancillary index is trace-preserving and completely positive.
+\end{corollary}
+\begin{proof}
+    \leanok
+    This is exactly
+    Theorem~\ref{thm:mpdo_ancillary_trace_map_is_kraus_cptp}, unpacked through
+    Definition~\ref{def:mpdo_has_trace_preserving_spin_reduction}.
+\end{proof}
 
 \begin{definition}[Purification RFP witness]
     \label{def:mpdo_purification_rfp_witness}
@@ -236,13 +287,13 @@
     \label{def:mpdo_prfp_trace_preserving_spin_reduction}
     \lean{MPOTensor.IsPRFPWithTracePreservingSpinReduction}
     \leanok
-    \uses{def:mpdo_is_prfp, def:mpdo_has_trace_preserving_spin_reduction}
-    A purification RFP has trace-preserving spin reduction when, in addition,
-    the partial trace over the ancillary index gives the trace-preserving
-    completely positive map of
-    Definition~\ref{def:mpdo_has_trace_preserving_spin_reduction}. This records
+    \uses{def:mpdo_is_prfp, cor:mpdo_has_trace_preserving_spin_reduction}
+    A purification RFP is viewed together with trace-preserving spin reduction
+    by applying Corollary~\ref{cor:mpdo_has_trace_preserving_spin_reduction} to
+    the ancillary trace map appearing in its purification equation. This records
     the structure obtained after tracing the ancillary indices in
-    \cite[lines~761--764]{Cirac2016MPDO_arXiv}.
+    \cite[lines~761--764]{Cirac2016MPDO_arXiv}, without adding a separate
+    hypothesis to Definition~4.4.
 \end{definition}
 
 \begin{definition}[Local purification RFP condition]\label{def:is_local_purification_rfp}
