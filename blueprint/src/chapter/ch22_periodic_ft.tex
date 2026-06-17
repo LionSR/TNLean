@@ -205,7 +205,7 @@ The following compatibility theorems are proved in the present chapter.
 \begin{definition}[Entrywise periodic $Z$-gauge ratio]\label{def:z_gauge_entry}
     \lean{MPSTensor.zGaugeEntry}
     \leanok
-    Given complex weights $\mu,\nu$, define the entrywise
+    Given complex multiplicity entries $\mu,\nu$, define the entrywise
     $Z$-gauge ratio by
     \[
         z(\mu,\nu) := \mu/\nu.
@@ -236,7 +236,7 @@ The following compatibility theorems are proved in the present chapter.
     \lean{MPSTensor.zGaugeDiagonal}
     \leanok
     \uses{def:z_gauge_entry}
-    For matched weight families $(\mu_i)_i$ and $(\nu_i)_i$ on a finite
+    For matched multiplicity entries $(\mu_i)_i$ and $(\nu_i)_i$ on a finite
     index type, define the diagonal matrix
     \[
         Z := \diag\!(z(\mu_i,\nu_i))_i.
@@ -254,7 +254,7 @@ The following compatibility theorems are proved in the present chapter.
     \]
 \end{lemma}
 
-\begin{lemma}[Diagonal $Z$-gauge transports diagonal weights]\label{lem:z_gauge_diagonal_mul}
+\begin{lemma}[Diagonal $Z$-gauge transports diagonal multiplicities]\label{lem:z_gauge_diagonal_mul}
     \lean{MPSTensor.zGaugeDiagonal_mul_diagonal}
     \leanok
     \uses{def:z_gauge_diagonal, lem:z_gauge_entry_mul}
@@ -492,12 +492,11 @@ unconditional result.
     tensors contain no repeated pair of distinct basis elements. Assume the
     periodic-overlap hypothesis and the corresponding power equality for the
     scalar multiplicity entries. Then the bases are matched by a bijection, and
-    each matched pair has a scalar diagonal $Z_j\in M_1(\mathbb C)$ with the
-    inverse-orientation scalar relation
+    each matched pair has a scalar diagonal $Z_j\in M_1(\mathbb C)$ with
     \[
         Z_j^{m_j}=\Id,
         \qquad
-        Z_j\,\diag(\mu_{B,\pi(j)})=\diag(\mu_{A,j}).
+        Z_j\,\diag(\mu_{A,j})=\diag(\mu_{B,\pi(j)}).
     \]
     The two scalar multiplicity entries also determine the same singleton
     multiset.
