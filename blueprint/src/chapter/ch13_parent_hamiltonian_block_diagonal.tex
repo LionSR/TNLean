@@ -664,6 +664,44 @@ in both cases.
     $X_j$ replaced by $\mu_j^NX_j$, gives the displayed matrix identity.
 \end{proof}
 
+\begin{theorem}[Fixed boundary-crossing block membership from the PGVWC comparison]
+    \label{thm:block_diagonal_boundary_crossing_component_mem_ground_space}
+    \lean{MPSTensor.blockDiagonal_boundary_crossing_component_mem_groundSpace_of_pgvwc_comparison_of_sum_mem_iSup}
+    \leanok
+    \uses{thm:block_diagonal_boundary_crossing_pgvwc_comparison,
+        lem:block_diagonal_boundary_crossing_matrix_identity}
+    Assume $0<N$, $L\le N$, and let the cyclic interval beginning at $i$
+    cross the boundary cut, so $N<i+L$. Suppose that the block tensors have
+    the common word-span property at length $N-i$ and that
+    \[
+        \sum_j
+        R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)
+        \in\bigvee_jG_L(A_j).
+    \]
+    Then each block component of the fixed boundary-crossing restriction lies
+    in its local block space:
+    \[
+        R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)
+        \in G_L(A_j).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:block_diagonal_boundary_crossing_pgvwc_comparison,
+        lem:block_diagonal_boundary_crossing_matrix_identity}
+    Theorem~\ref{thm:block_diagonal_boundary_crossing_pgvwc_comparison}
+    gives matrices $C^j_{i,\tau}$ with
+    \[
+        A^j_\beta C^j_{i,\tau}
+        =
+        \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho .
+    \]
+    Thus $E=C^j_{i,\tau}$ satisfies the boundary matrix identity required in
+    Lemma~\ref{lem:block_diagonal_boundary_crossing_matrix_identity}, and the
+    displayed membership follows for every block $j$.
+\end{proof}
+
 \begin{lemma}[Boundary-crossing cyclic intervals from the boundary matrix identity]
     \label{lem:block_diagonal_boundary_crossing_matrix_identity}
     \lean{MPSTensor.blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_crossing_matrix}
