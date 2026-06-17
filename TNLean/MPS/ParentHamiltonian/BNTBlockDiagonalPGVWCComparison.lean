@@ -2,7 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalCrossing
+import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalCrossingTrace
 
 /-!
 # Boundary-condition comparisons for block-diagonal parent spaces
@@ -101,6 +101,116 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_bnt_c
   refine ⟨X, hψX, ?_⟩
   exact blockDiagonal_boundary_component_chainGroundSpace_of_pgvwc_comparison_of_injective
     μ A hN hLN X hBlk hUnital hNlarge C hCompat
+
+/-- Boundary-crossing local constraints supply the \(C^j,D^j\) comparison.
+
+Assume the block-diagonal periodic vector has already been written with
+block-diagonal boundary conditions \(X_j\).  For every cyclic interval crossing
+the cut, the local constraint puts the sum of the block restrictions in
+\(\bigvee_j G_L(A_j)\).  If the complementary tail words span the product
+matrix algebra in the corresponding length \(N-i\), the fixed-window
+Pérez-García--Verstraete--Wolf--Cirac comparison gives matrices
+\(C^j_{i,\rho}\) satisfying
+\[
+  A^j_\beta C^j_{i,\rho}
+  =
+  \bigl((\mu_j^N X_j)A^j_\beta\bigr)A^j_\rho .
+\]
+Combining this with the existing normalized \(E^j\)-calculation gives the
+periodic single-block constraints.
+
+This is the source comparison in arXiv:quant-ph/0608197, Theorem 12, proof
+lines 1436--1451, specialized to the block-diagonal boundary conditions of
+arXiv:2011.12127, Section IV.C, lines 2126--2128.
+
+**Unfaithful:** This proof still relies on
+`exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1`
+for the block-diagonal boundary representation of \(\psi\). Documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
+derive that representation and the crossing comparison from the source
+boundary-condition argument; tracked in issue 2971. -/
+theorem
+    exists_blockDiagonal_boundary_chainGroundSpace_of_crossing_pgvwc_comparison_bnt_c1
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hμ : ∀ k : Fin r, μ k ≠ 0)
+    {L₀ L N : ℕ}
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hL₀ : 0 < L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
+    (hRange :
+      (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
+    (hNlarge : L + L₀ ≤ N)
+    (hCrossingSpan :
+      ∀ i : Fin N, N < i.val + L → WordTupleSpanTop A (N - i.val))
+    {ψ : NSiteSpace d N}
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N) :
+    ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+        ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
+      ∀ j : Fin r,
+        groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
+  classical
+  refine exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_bnt_c1
+    μ A hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange
+    hNlarge hψ ?_
+  intro X hψX
+  have hExists :
+      ∀ i : Fin N, ∀ ρ : Fin (N - L) → Fin d,
+        ∃ C : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+          N < i.val + L →
+            ∀ j : Fin r, ∀ β : Fin (i.val + L - N) → Fin d,
+              evalWord (A j) (List.ofFn β) * C j =
+                (((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
+                  evalWord (A j) (List.ofFn ρ) := by
+    intro i ρ
+    by_cases hcross : N < i.val + L
+    · let τ : Fin N → Fin d := fun t =>
+        if htail : i.val + L - N ≤ t.val ∧ t.val < i.val then
+          ρ ⟨t.val - (i.val + L - N), by omega⟩
+        else
+          default
+      have hρ : (List.ofFn fun k : Fin (N - L) =>
+          τ ⟨i.val + L - N + k.val, by omega⟩) = List.ofFn ρ := by
+        apply List.ext_getElem
+        · simp
+        · intro n hn₁ hn₂
+          simp only [List.getElem_ofFn]
+          have hn : n < N - L := by
+            simpa using hn₂
+          have htail :
+              i.val + L ≤ i.val + L - N + n + N ∧
+                (⟨i.val + L - N + n, by omega⟩ : Fin N) < i := by
+            constructor
+            · omega
+            · change i.val + L - N + n < i.val
+              omega
+          simp [τ, htail]
+      have hmem :
+          (∑ j : Fin r,
+              cyclicRestrictₗ hN L i τ
+                (groundSpaceMap (A j) N ((μ j) ^ N • X j))) ∈
+            ⨆ j : Fin r, groundSpace (A j) L :=
+        blockDiagonal_boundary_cyclicRestrict_sum_mem_iSup_groundSpace
+          μ A hμ hN hLN hψ X hψX i τ
+      obtain ⟨C, hC⟩ :=
+        blockDiagonal_boundary_crossing_pgvwc_comparison_of_sum_mem_iSup
+          μ A hN hLN X i τ hcross (hCrossingSpan i hcross) hmem
+      refine ⟨C, ?_⟩
+      intro _ j β
+      simpa [hρ] using hC j β
+    · refine ⟨fun j => 0, ?_⟩
+      intro hi
+      exact False.elim (hcross hi)
+  choose C hC using hExists
+  refine ⟨fun j i ρ => C i ρ j, ?_⟩
+  intro j i hi ρ β
+  exact hC i ρ hi j β
 
 /-- The \(C^j,D^j\) boundary-condition comparison gives the block-diagonal
 periodic-boundary equality in the finite BNT range.
