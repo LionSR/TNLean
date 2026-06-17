@@ -144,13 +144,27 @@
     \cite[eq.~\textup{(4.7)}, line~751]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
+\begin{definition}[Single-site ancillary trace map]
+    \label{def:mpdo_ancillary_trace_map}
+    \lean{MPOTensor.ancillaryTraceMap}
+    \leanok
+    For a matrix $X$ on the spin--ancilla space, the ancillary trace map is
+    \[
+        \bigl[\operatorname{tr}_a(X)\bigr]_{ij}
+        =
+        \sum_k X_{(i,k),(j,k)} .
+    \]
+    This is the one-site trace over ancillary degrees of freedom appearing in
+    \cite[lines~751 and~761--764]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
 \begin{definition}[Global purification equation]
     \label{def:mpdo_global_purification_equation}
     \lean{MPOTensor.HasGlobalPurificationEquation}
     \leanok
     \uses{def:mpo_family, def:mpdo_purification_density}
     An MPO tensor $M$ satisfies the global purification equation with a
-    purifying tensor $A$ if, for every length $N$,
+    purifying tensor $A$ if, for every positive length $N$,
     \[
         \rho^{(N)}(M)=\rho^{(N)}_p(A).
     \]
@@ -162,21 +176,53 @@
         \bigl(
             |\Psi^{(N)}(A)\rangle\langle\Psi^{(N)}(A)|
         \bigr),
+        \qquad N>0,
     \]
     as in \cite[line~751]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Nonzero purification density]
+    \label{def:mpdo_nonzero_purification_density}
+    \lean{MPOTensor.HasNonzeroPurificationDensity}
+    \leanok
+    \uses{def:mpdo_purification_density}
+    A purifying tensor has nonzero purification density if
+    \[
+        \rho^{(N)}_p(A)\ne 0
+    \]
+    for at least one positive length $N$. This excludes the degenerate zero
+    purification, which is not part of the source PRFP--ZCL comparison.
+\end{definition}
+
+\begin{definition}[Trace-preserving spin reduction]
+    \label{def:mpdo_has_trace_preserving_spin_reduction}
+    \lean{MPOTensor.HasTracePreservingSpinReduction}
+    \leanok
+    \uses{def:mpdo_ancillary_trace_map, def:is_kraus_cptp}
+    The spin reduction obtained by tracing the ancillary index is required to
+    be a trace-preserving completely positive map:
+    \[
+        \operatorname{tr}_a
+        \quad\text{is a tpCPM}.
+    \]
+    This is the structure described immediately after Definition~4.4 in
+    \cite[lines~761--764]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{definition}[Purification RFP witness]
     \label{def:mpdo_purification_rfp_witness}
     \lean{MPOTensor.HasPurificationRFPWitness}
     \leanok
-    \uses{def:mpdo_global_purification_equation, def:is_rfp}
+    \uses{def:mpdo_global_purification_equation,
+        def:mpdo_nonzero_purification_density, def:is_rfp}
     An MPO tensor $M$ has a purification RFP witness if it satisfies the global
     purification equation for some purifying spin--ancilla tensor $A$, and
     $\widehat A$ is a pure-state renormalization fixed point:
     \[
         \E_{\widehat A}\circ\E_{\widehat A}=\E_{\widehat A}.
     \]
+    The reduced density $\rho^{(N)}_p(A)$ is required to be nonzero for at least
+    one positive length.
     This is the content of Definition~4.4 of
     \cite[lines~756--764]{Cirac2016MPDO_arXiv}.
 \end{definition}
@@ -196,21 +242,24 @@
         \bigl(
             |\Psi^{(N)}(A)\rangle\langle\Psi^{(N)}(A)|
         \bigr)
-        \quad\text{for all }N,
+        \quad\text{for all }N>0,
     \]
-    and $\widehat A$ is a pure-state renormalization fixed point. This is
-    Definition~4.4 of \cite[lines~756--764]{Cirac2016MPDO_arXiv}.
+    with nonzero reduced density for at least one positive length, and
+    $\widehat A$ is a pure-state renormalization fixed point. This is
+    Definition~4.4 of \cite[lines~756--764]{Cirac2016MPDO_arXiv}, with the
+    degenerate zero purification excluded.
 \end{definition}
 
 \begin{definition}[Trace-preserving spin reduction for a purification RFP]
     \label{def:mpdo_prfp_trace_preserving_spin_reduction}
     \lean{MPOTensor.IsPRFPWithTracePreservingSpinReduction}
     \leanok
-    \uses{def:mpdo_is_prfp, def:is_rfp_via_ts}
+    \uses{def:mpdo_is_prfp, def:mpdo_has_trace_preserving_spin_reduction}
     A purification RFP has trace-preserving spin reduction when, in addition,
-    the spin degrees of freedom carry the trace-preserving completely positive
-    maps of Definition~\ref{def:is_rfp_via_ts}. This records the structure
-    obtained after tracing the ancillary indices in
+    the partial trace over the ancillary index gives the trace-preserving
+    completely positive map of
+    Definition~\ref{def:mpdo_has_trace_preserving_spin_reduction}. This records
+    the structure obtained after tracing the ancillary indices in
     \cite[lines~761--764]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
