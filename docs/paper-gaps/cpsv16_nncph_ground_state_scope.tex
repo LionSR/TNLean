@@ -99,9 +99,11 @@ This still does not prove the full source theorem.  The present declarations do
 not yet prove the named ground-space spanning condition, the three-way
 equivalence with ZCL, the complete canonical-form hypotheses from the source
 statement, or the Beigi ground-space characterization as an internal theorem.
-The reverse direction still depends on the axiom
-\leanid{Axioms.beigi_nncph_to_rfp}, and the RFP-to-NNCPH direction still depends
-on \leanid{Axioms.rfp_to_nncph_commute}.
+The reverse theorem now consumes both the explicit BNT relation
+\leanid{MPSTensor.IsBNT} and the named all-chain condition
+\leanid{MPSTensor.HasNNCPHGroundSpaces}, but the implication still depends on
+the axiom \leanid{Axioms.beigi_nncph_to_rfp}. The RFP-to-NNCPH direction still
+depends on \leanid{Axioms.rfp_to_nncph_commute}.
 
 \section{Elimination plan}
 
@@ -122,10 +124,11 @@ one-dimensional nearest-neighbor commuting-Hamiltonian ground-space
 classification and identify the resulting locally orthogonal states with the
 basis of normal tensors of $A$.\footnote{Tracked by \ghissue{2633}.}
 
-The present formal result is therefore a scope restriction: it names the
-ground-state clause and proves the RFP-to-ground-state implication from the
-already axiomatized commutation direction together with frustration-freeness of
-the MPS vector for the canonical parent interaction.
+The present formal boundary is therefore: the reverse implication has the
+source ground-space hypothesis, but its proof is still the Beigi axiom; the
+forward implication proves only the commutation and zero-energy equations from
+the already axiomatized commutation direction together with frustration-freeness
+of the MPS vector for the canonical parent interaction.
 
 \bibliographystyle{alpha}
 \bibliography{references}
