@@ -50,25 +50,18 @@ $p$-divisibility of the transfer map.
     which requires the stronger condition that every block is $1$-periodic.
 \end{definition}
 
-\begin{remark}[Positive-weight normal canonical form gives irreducible form]
+\begin{remark}[Normal canonical form gives irreducible form]
     \label{rem:irr_form_vs_ncf}
-\lean{MPSTensor.toIsIrreducibleFormOfWeightPos,
-    MPSTensor.toIsIrreducibleFormOfWeightPos_period_eq_one}
+\lean{MPSTensor.toIsIrreducibleFormOfPhaseNormalized,
+    MPSTensor.toIsIrreducibleFormOfPhaseNormalized_period_eq_one}
 \leanok
-    A normal canonical block family whose weights satisfy the positive real
-    convention $\mu_j>0$ assembles to a tensor in irreducible form, and the
-    corresponding irreducible-form witness has all periods equal to~$1$.
-    This is the period-one part of the statement in
+    Let $A^i=\bigoplus_j \mu_j A_j^i$ be a normal canonical block family with
+    nonzero complex weights. Replacing $\mu_j$ by $|\mu_j|$ and $A_j$ by
+    $(\mu_j/|\mu_j|)A_j$ gives the positive-weight irreducible form convention
+    and does not change the MPV family. The corresponding irreducible-form
+    witness has all periods equal to~$1$. This is the period-one part of the statement in
     \cite[Section~II]{DeLasCuevas2017Irreducible} that normal tensors are
     periodic tensors with period~$1$.
-
-    The positivity of the weights is part of the irreducible-form convention.
-    If a canonical-form decomposition is written with arbitrary nonzero complex
-    coefficients, one must first normalize their phases before applying this
-    implication.
-    % Maintainer note: the positive-real hypothesis is explicit because the
-    % local normal-canonical predicate only assumes nonzero complex weights; see
-    % docs/paper-gaps/1708_normal_canonical_irreducible_form_weights.tex.
 \end{remark}
 
 \begin{remark}[Irreducible form allows higher periods]
