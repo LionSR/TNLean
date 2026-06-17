@@ -2711,6 +2711,32 @@ $n \ge 2L + 1$ sites from it, and reuse the matrix-level collapse above
 verbatim — the collapse itself nowhere uses $3L \le n$ beyond consuming the
 per-bond family.
 
+\section*{The Applications translation-invariant description corollary}
+
+The Applications section contains a different translation-invariance
+corollary (lines 1801--1890 of
+\path{Papers/1804.04964/paper_normal.tex}), tracked by \ghissue{2920}. Its
+input is a single site-dependent injective MPS whose resulting closed-chain
+state is invariant under the cyclic shift. Its conclusion is not a gauge
+between two given tensor families: the proof applies the non-translation
+invariant closed-chain theorem to the family and its cyclic shift, obtains
+per-bond gauges \(Z_i\), and then telescopes them to construct a repeated
+tensor \(B=Z_1^{-1}A_1\) that gives the same state.
+
+This corollary is not covered by the two-tensor results above. The already
+formalized statements compare two supplied tensors, or two supplied repeated
+tensors, with the same closed-chain state. They do not start from one
+site-dependent family and a cyclic-shift invariance hypothesis on its state,
+and they do not construct the comparison tensor internally. A uniform
+matrix-tensor version would be faithful to the existence of the repeated
+description, but would make the source's ``all bond dimensions are the same''
+conclusion vacuous: the type already fixes one bond dimension \(D\). The fully
+faithful statement therefore requires a per-bond, rectangular matrix model in
+which the adjacent invertible gauges first imply equality of the bond
+dimensions. Until that vocabulary exists, the intended first theorem is the
+uniform-\(D\) existence statement, carrying this scope restriction explicitly;
+the per-bond-dimension theorem remains a separate follow-up.
+
 \section*{The strengthening to $n \ge 2L+1$ via overlapping windows}
 
 The plan recorded in the previous section is carried out: the source's
