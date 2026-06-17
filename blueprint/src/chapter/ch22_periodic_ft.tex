@@ -268,19 +268,19 @@ The following compatibility theorems are proved in the present chapter.
     \lean{MPSTensor.ZGaugeEquiv}
     \leanok
     Let $A$ be an $m$-periodic irreducible tensor of bond dimension $D$.
-    A \emph{$Z$-gauge transformation} of $A$ is a diagonal unitary
-    matrix $Z \in \MN{D}$ satisfying:
+    The present global $Z$-gauge predicate is an algebraic witness
+    $Z \in \MN{D}$ satisfying:
     \begin{enumerate}
         \item $Z$ commutes with every Kraus operator: $[A^i, Z] = 0$
               for all physical indices $i$, and
-        \item $Z^m = \Id_D$ (all diagonal entries are $m$-th roots of unity).
+        \item $Z^m = \Id_D$.
     \end{enumerate}
-    Replacing $A$ by $ZA$ (i.e.\ $A^i \mapsto Z A^i$) leaves the
-    MPV family invariant for lengths $N$ that are multiples of $m$,
-    because the factor $\tr(Z^N) = \tr(\Id) = D$ for $N \equiv 0 \pmod{m}$.
     Two tensors $A, B$ are \emph{$Z$-gauge equivalent} if there exists
     an invertible $Y$ and a $Z$-gauge transformation $Z$ for $A$ such that
     $Z A^i = Y B^i Y^{-1}$ for all~$i$.
+    The source equal-case theorem uses the stronger block-multiplicity
+    diagonal gauges \(Z_j\) from Theorem~\ref{thm:periodic_ft}; those
+    data are not part of this global predicate.
 \end{definition}
 
 \begin{remark}[$Z$-gauge is trivial for period-$1$ blocks]

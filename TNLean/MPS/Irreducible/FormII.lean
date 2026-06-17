@@ -43,7 +43,7 @@ to channel / QPF normalization, following:
 ## References
 
 * [Cirac et al., arXiv:1606.00608, Section 2.3 and Appendix A][Cirac2017Annals]
-* [De las Cuevas et al., arXiv:1708.00029, Section 2.1][Cirac2017Irreducible]
+* [De las Cuevas et al., arXiv:1708.00029, Section 2.1][DeLasCuevas2017Irreducible]
 * [Pérez-García et al., quant-ph/0608197, Theorem 3][PerezGarcia2007]
 -/
 
