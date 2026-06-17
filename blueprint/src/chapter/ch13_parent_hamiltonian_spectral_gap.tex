@@ -1285,6 +1285,39 @@ sufficient stronger hypotheses.
     $\gamma_L=1/(4L)$.
 \end{proof}
 
+\begin{theorem}[Gap bound from a cyclic anticommutator estimate]
+    \label{thm:anticommutator_gap_bound}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_anticommutator}
+    \leanok
+    \uses{lem:parent_hamiltonian_cyclic_overlap_anticommutator_gap}
+    Let \(L>1\). Suppose that for every \(N\ge2L\) and every overlapping
+    off-diagonal pair of cyclic length-\(L\) windows,
+    \[
+        h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}
+        + h_{j,\mathrm{ES}}h_{i,\mathrm{ES}}
+        \ge
+        -\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}
+          (h_{i,\mathrm{ES}}+h_{j,\mathrm{ES}})
+    \]
+    in quadratic form. Then the parent Hamiltonian has the explicit gap
+    constant
+    \[
+        \gamma_L := \frac{1}{4L}>0.
+    \]
+    Concretely, if \(N\ge2L\) and
+    \(v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp\), then
+    \[
+        \gamma_L\|v\|\le \|H_{N,L}^{\mathrm{ES}}(A)v\|.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This is Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_anticommutator_gap}
+    stated as the public conditional gap theorem, with the anticommutator
+    inequality retained as an explicit hypothesis.
+\end{proof}
+
 \begin{theorem}[Gap bound from a strict cyclic compression constant]
     \label{thm:friedrichs_gap_bound_constant}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_overlap_norm_constant}
@@ -1323,10 +1356,12 @@ sufficient stronger hypotheses.
 \begin{theorem}[Conditional spectral gap for MPS parent Hamiltonians]
     \label{thm:parent_hamiltonian_gapped}
     \lean{MPSTensor.parentHamiltonian_gapped}
+    \lean{MPSTensor.parentHamiltonian_gapped_of_anticommutator}
     \leanok
-    \uses{thm:friedrichs_gap_bound}
-    For a tensor $A$ and a range $L > 1$, assume the overlapping
-    cyclic-window norm-compression estimate of
+    \uses{thm:anticommutator_gap_bound, thm:friedrichs_gap_bound}
+    For a tensor $A$ and a range $L > 1$, assume either the cyclic-window
+    anticommutator estimate of Theorem~\ref{thm:anticommutator_gap_bound} or the
+    stronger overlapping cyclic-window norm-compression estimate of
     Theorem~\ref{thm:friedrichs_gap_bound}. Then there exists $\gamma > 0$ such
     that for every $N \ge 2L$ and every vector
     $v \in (\mathcal G_{N,L}^{\mathrm{ES}}(A))^{\perp}$ one has
@@ -1339,8 +1374,8 @@ sufficient stronger hypotheses.
 
 \begin{proof}
     \leanok
-    This follows immediately from Theorem~\ref{thm:friedrichs_gap_bound} by
-    taking $\gamma$ to be the explicit constant produced there.
+    This follows immediately from the corresponding explicit theorem by taking
+    $\gamma$ to be the constant produced there.
 \end{proof}
 
 \begin{theorem}[Conditional spectral gap from a strict cyclic compression constant]
