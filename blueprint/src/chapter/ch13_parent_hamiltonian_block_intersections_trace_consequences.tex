@@ -237,6 +237,42 @@ $\bigvee_jG_{n+2}(A^j)$ and to obtain the one-step block-intersection identity.
     $D^j_\beta=X_jA^j_\beta$ is immediate.
 \end{proof}
 
+\begin{lemma}[Fixed complementary-word compatibility from traces]
+    \label{lem:fixed_complementary_word_boundary_compatibility_from_traces}
+    \lean{MPSTensor.pgvwc07_fixed_complementary_word_compatibility_of_trace_decomposition}
+    \leanok
+    \uses{lem:block_matrices_equal_from_trace_pairings}
+    Let $A^1,\ldots,A^g$ be block tensors with the common word-span property
+    at length $m$. Fix a complementary word $\rho$ of length $M$ and matrices
+    $C^j_\rho,X_j\in\MN{D_j}$. If, for every wrapped word $\beta$ of length
+    $K$ and every middle word $w$ of length $m$,
+    \[
+        \sum_j\tr\!\left(A^j_\beta C^j_\rho A^j_w\right)
+        =
+        \sum_j\tr\!\left((X_jA^j_\beta)A^j_\rho A^j_w\right),
+    \]
+    then
+    \[
+        A^j_\beta C^j_\rho=(X_jA^j_\beta)A^j_\rho
+    \]
+    for every block $j$ and every wrapped word $\beta$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_matrices_equal_from_trace_pairings}
+    Fix $\beta$ and set
+    \[
+        \Delta_j=A^j_\beta C^j_\rho-(X_jA^j_\beta)A^j_\rho .
+    \]
+    The trace equality gives
+    \[
+        \sum_j\tr(\Delta_jA^j_w)=0
+    \]
+    for every word $w$ of length $m$. The common word-span property and the
+    product trace pairing imply $\Delta_j=0$ for every $j$.
+\end{proof}
+
 \begin{lemma}[Normalized boundary matrix identities]
     \label{lem:normalized_boundary_matrix_identities}
     \lean{MPSTensor.pgvwc07_boundary_matrix_identities_of_indexed_compatibility}
