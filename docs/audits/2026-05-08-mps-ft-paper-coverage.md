@@ -11,7 +11,10 @@
 
 **Leaning on** (not audited in detail):
 - **CPSV21**: Cirac, Pérez-García, Schuch, Verstraete, *Matrix product states and projected entangled pair states: Concepts, symmetries, theorems*, Rev. Mod. Phys. **93**, 045003 (2021), arXiv:2011.12127 — used for the rendered numbering of the BNT and Fundamental Theorem statements.
-- **DSSPC17**: De las Cuevas, Schuch, Pérez-García, Cirac, *Continuum limits of matrix product states*, arXiv:1708.00029 — used in `Periodic/FundamentalTheorem.lean`.
+- **DeLasCuevas2017Irreducible**: Gemma De las Cuevas, J. Ignacio Cirac,
+  Norbert Schuch, David Pérez-García, *Irreducible forms of Matrix Product
+  States: Theory and Applications*, arXiv:1708.00029 — used in
+  `Periodic/FundamentalTheorem.lean`.
 
 **Scope**: This audit covers MPS / pure-state sections of PGVWC07 and CPSV16, plus a full Wielandt source-paper crosswalk (§9). The MPDO / mixed-state sections of CPSV16 (§IV, Appendix C) are listed for completeness but not deeply traced. A separate MPDO coverage audit is recommended.
 
@@ -212,7 +215,9 @@ Listed for completeness; detailed MPDO coverage audit is out of scope.
 | `Periodic/Overlap/Case3.lean` | 6 | Non-decaying self-overlap ⇒ gauge equivalence |
 | `Periodic/Overlap/Dichotomy.lean` | 4 | Top-level dichotomy assembly |
 
-These 15 sorrys cascade into `Periodic/FundamentalTheorem.lean` (Theorem 3.4 of DSSPC17), which has a conditional proof that takes the dichotomy as a hypothesis.
+These 15 sorrys cascade into `Periodic/FundamentalTheorem.lean` (Theorem 3.4
+of arXiv:1708.00029), which has a conditional proof that takes the dichotomy
+as a hypothesis.
 
 ### 4.2 Parent Hamiltonian cluster (issue #1484/#1485)
 
