@@ -84,7 +84,10 @@ non-periodic FT cleanup loop unless explicitly brought back into scope.
   range-reduction comparison and the remaining periodic-boundary identity.
 - `cpgsv21_block_diagonal_parent_ground_space.tex` records the degenerate
   parent-Hamiltonian block-diagonal boundary-condition theorem behind the
-  periodic block decomposition and the BNT ground-space span.
+  periodic block decomposition and the BNT ground-space span. The fixed-window
+  PGVWC07 \(C^j,D^j\) comparison is now formalized under a crossing-tail
+  word-span hypothesis; the remaining boundary is the source-range
+  block-diagonal boundary representation and discharge of those span hypotheses.
 - `cpgsv21_martingale_overlap.tex` records the spectral-gap martingale
   comparison: the finite-row cyclic-window reduction is formalized, while the
   remaining source comparison is the overlapping-window principal-angle, or
