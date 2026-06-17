@@ -138,6 +138,46 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     nearest-neighbor case of the spanning condition above.
 \end{remark}
 
+\begin{lemma}[Zero-energy BNT vectors lie in the parent-Hamiltonian kernel]
+    \label{lem:bnt_span_le_parent_hamiltonian_kernel}
+    \lean{MPSTensor.bntMPSVectorSpan_le_ker_parentHamiltonian_of_forall_annihilates}
+    \lean{MPSTensor.bntMPSVectorSpan_le_ker_parentHamiltonian_of_forall_frustrationFree}
+    \leanok
+    \uses{def:bnt_span, def:is_frustration_free, def:parent_hamiltonian}
+    Let $B$ be a canonical-form tensor with BNT components
+    $A_1,\ldots,A_g$. If every component vector has zero energy for the
+    parent Hamiltonian,
+    \[
+        H_L^{(N)}(B)V^{(N)}(A_j)=0
+        \qquad (1\le j\le g),
+    \]
+    then
+    \[
+        \spn\{V^{(N)}(A_j):j=1,\ldots,g\}
+        \subseteq
+        \ker H_L^{(N)}(B).
+    \]
+    It is enough to assume the local frustration-free equations
+    $h_iV^{(N)}(A_j)=0$ for every $i$ and $j$.
+    This is the easy inclusion in the source ground-space spanning equation of
+    \cite[Definition~3.9]{Cirac2016MPDO_arXiv}; the reverse inclusion is the
+    remaining spanning direction.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The kernel is a linear subspace. Hence it is enough to check the generators
+    $V^{(N)}(A_j)$. The first hypothesis gives this directly. Under the
+    local frustration-free equations,
+    \[
+        H_L^{(N)}(B)V^{(N)}(A_j)
+        =
+        \sum_i h_iV^{(N)}(A_j)
+        =
+        0.
+    \]
+\end{proof}
+
 \begin{theorem}[Renormalization fixed points have commuting nearest-neighbor parent terms]\label{thm:rfp_implies_nncph}
     \lean{MPSTensor.rfp_implies_nncph}
     \leanok
