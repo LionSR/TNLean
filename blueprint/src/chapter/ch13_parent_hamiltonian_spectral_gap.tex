@@ -1289,8 +1289,7 @@ sufficient stronger hypotheses.
     \label{thm:anticommutator_gap_bound}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_anticommutator}
     \leanok
-    \uses{lem:parent_hamiltonian_cyclic_overlap_anticommutator_gap,
-        lem:martingale_mps}
+    \uses{lem:parent_hamiltonian_cyclic_overlap_anticommutator_gap}
     Let \(L>1\). Suppose that for every \(N\ge2L\) and every overlapping
     off-diagonal pair of cyclic length-\(L\) windows,
     \[
@@ -1315,9 +1314,8 @@ sufficient stronger hypotheses.
 \begin{proof}
     \leanok
     This is Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_anticommutator_gap}
-    stated as the public conditional gap theorem.  The remaining mathematical
-    input is exactly the anticommutator estimate isolated in
-    Lemma~\ref{lem:martingale_mps}.
+    stated as the public conditional gap theorem, with the anticommutator
+    inequality retained as an explicit hypothesis.
 \end{proof}
 
 \begin{theorem}[Gap bound from a strict cyclic compression constant]
