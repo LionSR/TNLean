@@ -8,7 +8,6 @@ import TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan
 import TNLean.Wielandt.RankOne.Products
 import TNLean.Algebra.BurnsideMatrix
 import TNLean.Algebra.BurnsideTheorem
-import TNLean.Algebra.IrreducibleTensorAction
 
 /-!
 # From Cumulative Span to Word Span
@@ -53,9 +52,6 @@ supplied by strong irreducibility, i.e. peripheral spectrum `{1}`.
 
 * `isNormal_of_isIrreducibleAction_of_aperiodic`:
   If `IsIrreducibleAction A`, `1 ∈ wordSpan A 1`, and `NeZero D`, then `IsNormal A`.
-
-* `isNormal_of_isIrreducibleTensor_of_aperiodic`:
-  If `IsIrreducibleTensor A`, `1 ∈ wordSpan A 1`, and `NeZero D`, then `IsNormal A`.
 
 ## References
 
@@ -279,19 +275,6 @@ theorem isNormal_of_isIrreducibleAction_of_aperiodic [NeZero D]
     (hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan A 1) :
     IsNormal A := by
   exact isNormal_of_algSpan_eq_top_of_aperiodic A (burnside_matrix A hIrr) hone
-
-/-- If `IsIrreducibleTensor A`, `1 ∈ wordSpan A 1`, and `NeZero D`, then `IsNormal A`.
-
-Extends the chain with `IsIrreducibleTensor → IsIrreducibleAction`
-(proved in `IrreducibleTensorAction.lean`). This is the conclusion later combined
-with strong irreducibility, which supplies the aperiodicity hypothesis. -/
-theorem isNormal_of_isIrreducibleTensor_of_aperiodic [NeZero D]
-    (A : MPSTensor d D)
-    (hIrr : IsIrreducibleTensor A)
-    (hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan A 1) :
-    IsNormal A :=
-  isNormal_of_isIrreducibleAction_of_aperiodic A
-    (isIrreducibleAction_of_isIrreducibleTensor A hIrr) hone
 
 /-! ## Part 5: Additional useful lemmas -/
 
