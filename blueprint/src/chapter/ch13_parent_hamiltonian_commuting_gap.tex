@@ -204,7 +204,8 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
 
 \begin{theorem}[Renormalization fixed points have commuting nearest-neighbor parent terms]\label{thm:rfp_implies_nncph}
     \lean{MPSTensor.rfp_implies_nncph}
-    \leanok
+    \lean{Axioms.rfp_to_nncph_commute}
+    \notready
     \uses{def:is_rfp, def:is_nncph, def:normal}
     If $A$ has nonzero virtual dimension and is a normal renormalization fixed
     point, then for every chain length $N \ge 2$ the two-site parent terms
@@ -213,12 +214,16 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     This implication is cited here from the structural characterization theorem
     for renormalization fixed points in~\cite{Cirac2016MPDO_arXiv}; the source
     proof says that RFP $\Rightarrow$ NNCPH is immediate from that theorem.
+    The present formalization still supplies this implication through the axiom
+    tagged above; the source derivation from the Appendix~B product-of-pairs
+    form remains to be proved.
 \end{theorem}
 
 \begin{theorem}[Renormalization fixed points satisfy the NNCPH commutation and zero-energy equations]%
     \label{thm:rfp_implies_nncph_ground_state}
     \lean{MPSTensor.rfp_implies_nncph_ground_state}
-    \leanok
+    \lean{Axioms.rfp_to_nncph_commute}
+    \notready
     \uses{thm:rfp_implies_nncph, def:is_nncph_ground_state}
     If $A$ has nonzero virtual dimension and is a normal renormalization fixed
     point, then for every chain length $N \ge 2$ the MPS vector $V^{(N)}(A)$
@@ -228,15 +233,17 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
         h_i h_j = h_j h_i,\qquad
         h_i V^{(N)}(A)=0.
     \]
-    % Scope restriction recorded in
-    % docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex.
+    The zero-energy equation is the usual parent-Hamiltonian
+    frustration-freeness statement. The commuting part is still inherited from
+    the axiom tagged above, so this entry is not yet the full source
+    implication.
 \end{theorem}
 
 \begin{proof}
-    \leanok
+    \notready
     \uses{thm:rfp_implies_nncph, lem:parent_hamiltonian_ff}
-    The first equation is Theorem~\ref{thm:rfp_implies_nncph}. The second is
-    Lemma~\ref{lem:parent_hamiltonian_ff} with $L=2$.
+    Conditional on Theorem~\ref{thm:rfp_implies_nncph}, the first equation is
+    immediate. The second is Lemma~\ref{lem:parent_hamiltonian_ff} with $L=2$.
 \end{proof}
 
 \begin{remark}[Product-of-pairs equations for nearest-neighbor parent-term commutation]%
@@ -307,7 +314,8 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
 
 \begin{theorem}[All-chain nearest-neighbor commuting parent-Hamiltonian ground spaces imply a renormalization fixed point]\label{thm:nncph_implies_rfp}
     \lean{MPSTensor.nncph_implies_rfp}
-    \leanok
+    \lean{Axioms.beigi_nncph_to_rfp}
+    \notready
     \uses{def:is_rfp, def:bnt, def:has_nncph_ground_spaces, def:normal}
     Let $B$ be normal and in left-canonical form. Suppose that the family
     \(A_j\) is a BNT for \(B\), and that the nearest-neighbor parent
@@ -325,4 +333,9 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
         \operatorname{span}\{V^{(N)}(A_j):j=1,\ldots,g\}.
     \]
     Then $B$ is a renormalization fixed point.
+    The present formalization still supplies this reverse implication through
+    the axiom tagged above, which stands for Beigi's one-dimensional
+    nearest-neighbor commuting-Hamiltonian ground-space theorem and the
+    identification of the resulting locally orthogonal states with the BNT of
+    $B$.
 \end{theorem}
