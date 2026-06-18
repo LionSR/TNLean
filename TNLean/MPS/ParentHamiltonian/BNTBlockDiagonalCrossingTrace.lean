@@ -11,7 +11,7 @@ import TNLean.MPS.ParentHamiltonian.BlockIntersectionProperty
 This file records the fixed-interval trace-decomposition equality obtained from
 the block-diagonal local constraint at a cyclic interval crossing the boundary
 cut.  It is the local coefficient form of the two trace decompositions in
-arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines 1436--1444, specialized to the
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1436--1444, specialized to the
 block-diagonal boundary conditions used in arXiv:2011.12127, Section IV.C,
 lines 2126--2128.
 -/
@@ -41,7 +41,7 @@ If the block sum of the cyclic restrictions lies in
 \]
 for every local word \(\sigma\). This is the fixed-interval
 trace-decomposition comparison used in Perez-Garcia--Verstraete--Wolf--Cirac,
-Theorem 2blocks.2. -/
+Theorem 12. -/
 theorem blockDiagonal_boundary_crossing_trace_decomposition_of_sum_mem_iSup
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
@@ -214,7 +214,7 @@ word \(\beta\) before the cut,
 \]
 This is the fixed cyclic-interval coordinate form of the
 Perez-Garcia--Verstraete--Wolf--Cirac \(C^j,D^j\) comparison in
-arXiv:quant-ph/0608197, Theorem 2blocks.2, proof lines 1446--1448. The source writes
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1448. The source writes
 the local coordinates as \(i_1,\ldots,i_{m+1}\); here \(\beta\) is the wrapped
 word before the cut and \(\rho\) is the complementary outside word. -/
 theorem blockDiagonal_boundary_crossing_pgvwc_comparison_of_sum_mem_iSup
@@ -291,7 +291,7 @@ for each block \(j\), the boundary matrix required to write
 as a vector in \(G_L(A^j)\).
 
 This is the fixed-window local-membership consequence of arXiv:quant-ph/0608197,
-Theorem 2blocks.2, proof lines 1436--1456, in the block-diagonal boundary-condition
+Theorem 12, proof lines 1436--1456, in the block-diagonal boundary-condition
 coordinates used in arXiv:2011.12127, Section IV.C, lines 2126--2128. -/
 theorem
     blockDiagonal_boundary_crossing_component_mem_groundSpace_of_pgvwc_comparison_of_sum_mem_iSup

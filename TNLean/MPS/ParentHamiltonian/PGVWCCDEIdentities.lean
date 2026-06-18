@@ -9,7 +9,7 @@ import TNLean.MPS.ParentHamiltonian.BlockIntersectionProperty
 
 This file derives the word-valued \(C^j,D^j,E^j\) matrix identities from
 matching left and right block trace decompositions in arXiv:quant-ph/0608197,
-Theorem 2blocks.2, proof lines 1446--1451.
+Theorem 12, proof lines 1446--1451.
 
 The formula for \(E^j\) uses the adjointed word product
 \[
@@ -44,7 +44,7 @@ such that
   D^j_\beta=A^j_\beta E^j,\qquad
   A^j_\beta C^j_\rho=A^j_\beta E^jA^j_\rho .
 \]
-This is the word-valued form of arXiv:quant-ph/0608197, Theorem 2blocks.2, proof
+This is the word-valued form of arXiv:quant-ph/0608197, Theorem 12, proof
 lines 1446--1451.
 
 **Local fix (adjoint correction):** The source line writes
