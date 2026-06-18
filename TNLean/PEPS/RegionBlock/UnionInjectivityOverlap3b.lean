@@ -150,7 +150,8 @@ theorem overlap_bridge_rightCoupling_eq_zero {R₁ R₂ : Finset V}
   -- It suffices to show the scaled combination vanishes.
   rw [← smul_right_injective ℂ hcrossne |>.eq_iff (a := _) (b := (0 : _)), smul_zero]
   -- The crossing collapse expresses the scaled combination through the `R₂\R₁` weights.
-  have hcollapse := (overlapRightGeometry (V := V) R₁ R₂).crossingBond_smul_complCoeff_combination_eq
+  have hcollapse :=
+    (overlapRightGeometry (V := V) R₁ R₂).crossingBond_smul_complCoeff_combination_eq
     (A := A) row bβ σcompl
   rw [hcollapse]
   -- Per `bc'`, transport the host coefficient sum to `R₂` and apply the bridge identity.

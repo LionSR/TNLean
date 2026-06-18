@@ -53,6 +53,7 @@ def singleCrossing (A : Tensor G d) (red blue : Finset V) (e : Edge G)
     {g : Edge G // IsCrossingEdge (G := G) A red blue g} :=
   ⟨e, (hsingle e).mpr rfl⟩
 
+omit [Fintype V] in
 /-- The single red-to-blue crossing edge is a boundary edge of the red region. -/
 theorem isRegionBoundaryEdge_singleCrossing (A : Tensor G d) (red blue : Finset V) (e : Edge G)
     (hsingle : ∀ g : Edge G, IsCrossingEdge (G := G) A red blue g ↔ g = e) :
@@ -66,6 +67,7 @@ def singleBoundaryEdge (A : Tensor G d) (red blue : Finset V) (e : Edge G)
     {f : Edge G // IsRegionBoundaryEdge (G := G) red f} :=
   ⟨e, isRegionBoundaryEdge_singleCrossing (G := G) A red blue e hsingle⟩
 
+omit [Fintype V] in
 /-- Under the singleton hypothesis, the crossing-edge subtype has the single boundary
 edge as its only inhabitant. -/
 theorem crossingEdge_unique (A : Tensor G d) (red blue : Finset V) (e : Edge G)
@@ -92,6 +94,7 @@ noncomputable def singletonCrossingEquiv (A : Tensor G d) (red blue : Finset V) 
     rfl
   right_inv y := rfl
 
+omit [Fintype V] in
 /-- The single-leg crossing bundle equivalence reads a crossing configuration at the
 single crossing edge. -/
 @[simp] theorem singletonCrossingEquiv_apply (A : Tensor G d) (red blue : Finset V) (e : Edge G)
@@ -114,6 +117,7 @@ noncomputable def singletonBundleMatrix (A : Tensor G d) (red blue : Finset V) (
   fun p q => M (singletonCrossingEquiv (G := G) A red blue e hsingle p)
     (singletonCrossingEquiv (G := G) A red blue e hsingle q)
 
+omit [Fintype V] in
 /-- The single-leg crossing equivalence of the red-to-blue crossing label of a red
 boundary configuration is the configuration's value on the single crossing edge. -/
 theorem singletonCrossingEquiv_redBoundaryRBCrossing (red blue : Finset V) (e : Edge G)
@@ -132,6 +136,7 @@ configurations carry the same value on every red boundary edge not crossing to t
 blue region -- is, when the only red-to-blue crossing is the single edge `e`, the
 single-edge agreement `SameAwayFromBond` on the single boundary edge `e`. -/
 
+omit [Fintype V] in
 /-- Under the singleton hypothesis, the whole-bundle agreement is the single-edge
 agreement on the single boundary edge `e`. -/
 theorem sameAwayFromRBBundle_iff_sameAwayFromBond (red blue : Finset V) (e : Edge G)

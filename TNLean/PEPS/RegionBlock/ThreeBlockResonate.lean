@@ -477,7 +477,7 @@ theorem hostLabel_p2_eq_hostLabel_regionMerge_complement
       rcases f.2 with ⟨h1host, h2nothost⟩ | ⟨h1nothost, h2host⟩
       · -- `f.1.1 ∈ univ \ red`, `f.1.2 ∉ univ \ red` i.e. `f.1.2 ∈ red`.
         have h2red : f.1.1.2 ∈ D.red := by
-          have := h2nothost; rw [Finset.mem_sdiff] at this; push_neg at this
+          have := h2nothost; rw [Finset.mem_sdiff] at this; push Not at this
           exact this (Finset.mem_univ _)
         have h2notcompl : f.1.1.2 ∉ D.complement := fun hc =>
           (Finset.disjoint_left.mp D.red_disjoint_complement) h2red hc
@@ -485,7 +485,7 @@ theorem hostLabel_p2_eq_hostLabel_regionMerge_complement
         · refine Or.inl ⟨hc1, h2notcompl⟩
         · exact absurd hc2 h2notcompl
       · have h1red : f.1.1.1 ∈ D.red := by
-          have := h1nothost; rw [Finset.mem_sdiff] at this; push_neg at this
+          have := h1nothost; rw [Finset.mem_sdiff] at this; push Not at this
           exact this (Finset.mem_univ _)
         have h1notcompl : f.1.1.1 ∉ D.complement := fun hc =>
           (Finset.disjoint_left.mp D.red_disjoint_complement) h1red hc

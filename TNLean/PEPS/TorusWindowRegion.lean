@@ -118,7 +118,7 @@ theorem horizontalStaircaseEdge_val {L K a b : ℕ} (hL : 0 < L)
   · rw [href.1]; exact ZMod.val_cast_of_lt (by omega)
   · rw [href.1]; exact ZMod.val_cast_of_lt (by omega)
   · rw [href.2]
-    show (((a + L - 1 : ℕ) : ZMod width) + 1).val = a + L
+    change (((a + L - 1 : ℕ) : ZMod width) + 1).val = a + L
     rw [show ((a + L - 1 : ℕ) : ZMod width) + 1 = ((a + L : ℕ) : ZMod width) from by
       rw [← Nat.cast_add_one]; congr 1; omega]
     exact ZMod.val_cast_of_lt (by omega)
@@ -252,7 +252,7 @@ theorem verticalStaircaseEdge_val {L K a b : ℕ} (hK : 0 < K)
   · rw [href.1]; exact ZMod.val_cast_of_lt (by omega)
   · rw [href.2]; exact ZMod.val_cast_of_lt (by omega)
   · rw [href.2]
-    show (((b + K - 1 : ℕ) : ZMod height) + 1).val = b + K
+    change (((b + K - 1 : ℕ) : ZMod height) + 1).val = b + K
     rw [show ((b + K - 1 : ℕ) : ZMod height) + 1 = ((b + K : ℕ) : ZMod height) from by
       rw [← Nat.cast_add_one]; congr 1; omega]
     exact ZMod.val_cast_of_lt (by omega)

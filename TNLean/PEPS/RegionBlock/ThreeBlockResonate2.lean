@@ -261,7 +261,7 @@ theorem hostLabel_p2_eq_hostLabel_regionMerge_blue
     have hbdry : IsRegionBoundaryEdge (G := G) D.blue f.1 := by
       rcases f.2 with ⟨h1host, h2nothost⟩ | ⟨h1nothost, h2host⟩
       · have h2red : f.1.1.2 ∈ D.red := by
-          have := h2nothost; rw [Finset.mem_sdiff] at this; push_neg at this
+          have := h2nothost; rw [Finset.mem_sdiff] at this; push Not at this
           exact this (Finset.mem_univ _)
         have h2notblue : f.1.1.2 ∉ D.blue := fun hb =>
           (Finset.disjoint_left.mp D.red_disjoint_blue) h2red hb
@@ -269,7 +269,7 @@ theorem hostLabel_p2_eq_hostLabel_regionMerge_blue
         · refine Or.inl ⟨hb1, h2notblue⟩
         · exact absurd hb2 h2notblue
       · have h1red : f.1.1.1 ∈ D.red := by
-          have := h1nothost; rw [Finset.mem_sdiff] at this; push_neg at this
+          have := h1nothost; rw [Finset.mem_sdiff] at this; push Not at this
           exact this (Finset.mem_univ _)
         have h1notblue : f.1.1.1 ∉ D.blue := fun hb =>
           (Finset.disjoint_left.mp D.red_disjoint_blue) h1red hb
