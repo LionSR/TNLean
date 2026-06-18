@@ -548,6 +548,11 @@ Frobenius norm should become the default norm for matrix Hilbert-Schmidt
 arguments.  The local squared norm may remain as a convenience wrapper, but
 should no longer carry an independent foundation.
 
+The old `TNLean/Algebra/MatrixFrobenius.lean` pass-through file exposed only
+positive-definiteness of the identity matrix for the Frobenius inner product.
+It has been removed: call sites now use Mathlib's `Matrix.PosDef.one`
+directly.
+
 ### `TNLean/Spectral/TransferOperatorGap.lean`
 
 Status: partial replacement.
