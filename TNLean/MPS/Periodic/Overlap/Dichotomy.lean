@@ -67,10 +67,30 @@ theorem periodicOverlapDichotomy
     haveI : NeZero m_a := ⟨hA.period_pos.ne'⟩
     by_cases hD : D₁ = D₂
     · subst hD
-      obtain ⟨dimA, blocksA, hA_blocks_lc, hA_mpv, hA_cyclic, hNondegA⟩ :=
-        exists_cyclic_sector_decomp_after_blocking_of_isPeriodic A hA
-      obtain ⟨dimB, blocksB, hB_blocks_lc, hB_mpv, hB_cyclic, hNondegB⟩ :=
-        exists_cyclic_sector_decomp_after_blocking_of_isPeriodic B hB
+      obtain ⟨dimA, blocksA, PA, φA, hA_blocks_lc, hA_mpv, hPAproj, hPAsum,
+        hAShift', hAComm, hATrace, hAIntertwine, hAMul, hAStar, hNondegA,
+        hA_letter⟩ :=
+        exists_cyclic_sector_decomp_with_letter_after_blocking_of_isPeriodic A hA
+      obtain ⟨dimB, blocksB, PB, φB, hB_blocks_lc, hB_mpv, hPBproj, hPBsum,
+        hBShift', hBComm, hBTrace, hBIntertwine, hBMul, hBStar, hNondegB,
+        hB_letter⟩ :=
+        exists_cyclic_sector_decomp_with_letter_after_blocking_of_isPeriodic B hB
+      have hAShift :
+          ∀ k, transferMap (d := d) (D := D₁) (fun i => (A i)ᴴ) (PA (k + 1)) =
+            PA k := by
+        intro k
+        simpa [cyclicNextOfPos, Fin.add_def] using hAShift' k
+      have hBShift :
+          ∀ k, transferMap (d := d) (D := D₁) (fun i => (B i)ᴴ) (PB (k + 1)) =
+            PB k := by
+        intro k
+        simpa [cyclicNextOfPos, Fin.add_def] using hBShift' k
+      have hA_cyclic : IsCyclicSectorDecomp A blocksA :=
+        ⟨PA, φA, hPAproj, hPAsum, hAShift, hAComm, hATrace, hAIntertwine,
+          hAMul, hAStar⟩
+      have hB_cyclic : IsCyclicSectorDecomp B blocksB :=
+        ⟨PB, φB, hPBproj, hPBsum, hBShift, hBComm, hBTrace, hBIntertwine,
+          hBMul, hBStar⟩
       by_cases hmatch : ∃ (u₀ v₀ : Fin m_a) (hdim : dimA u₀ = dimB v₀),
           GaugePhaseEquiv
             (cast (congr_arg (MPSTensor (blockPhysDim d m_a)) hdim) (blocksA u₀))
@@ -78,7 +98,9 @@ theorem periodicOverlapDichotomy
       · refine Or.inr ⟨rfl, ?_⟩
         simpa using
           periodicOverlap_gaugeEquiv_of_sector_match A B hA hB blocksA blocksB
-            hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv hA_cyclic hB_cyclic hNondegA hmatch
+            hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv hA_cyclic hB_cyclic
+            hPAproj hPBproj hPAsum hPBsum hAShift hBShift hA_letter hB_letter
+            hNondegA hmatch
       · refine Or.inl ?_
         refine periodicOverlap_tendsto_zero_of_no_sector_match A B hA hB blocksA blocksB
           hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv hA_cyclic hB_cyclic hNondegA hNondegB ?_
