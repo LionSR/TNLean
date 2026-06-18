@@ -585,13 +585,3 @@ theorem uniform_eigenvalue_gap_of_finite_lt_one
     linarith [Finset.le_max' norms ‖μ‖ hμ_norm_mem]
   · -- Empty: no non-1 eigenvalues, δ = 1 works vacuously
     exact ⟨1, one_pos, fun μ hμ hne => absurd ⟨μ, hμ, hne⟩ hS⟩
-
-/-- Deprecated name for `uniform_eigenvalue_gap_of_finite_lt_one`. -/
-@[deprecated uniform_eigenvalue_gap_of_finite_lt_one (since := "2026-05-30")]
-theorem uniform_spectral_gap_of_finite_lt_one
-    {K V : Type*} [NormedField K] [AddCommGroup V] [Module K V]
-    {E : V →ₗ[K] V}
-    (hfin : Set.Finite {μ : K | Module.End.HasEigenvalue E μ})
-    (hlt : ∀ μ, Module.End.HasEigenvalue E μ → μ ≠ 1 → ‖μ‖ < 1) :
-    ∃ δ > 0, ∀ μ, Module.End.HasEigenvalue E μ → μ ≠ 1 → ‖μ‖ ≤ 1 - δ :=
-  uniform_eigenvalue_gap_of_finite_lt_one hfin hlt
