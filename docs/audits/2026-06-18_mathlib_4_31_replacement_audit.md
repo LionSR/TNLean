@@ -52,6 +52,10 @@ The clearest replacements are:
 - Local shaped Hermitian spectral-decomposition wrappers should be avoided:
   call sites can use `Matrix.IsHermitian.spectral_theorem` directly and locally
   simplify Mathlib's `conjStarAlgAut` form to `U * diagonal * Uᴴ`.
+- The old `TNLean.Algebra.MatrixFunctionalCalculus` scope is no longer needed:
+  Mathlib 4.31 provides the required matrix `NonnegSpectrumClass` instance
+  through `MatrixOrder`, and the non-unital CFC instance through
+  `ContinuousFunctionalCalculus.toNonUnital`.
 - Positive-map and completely-positive-map arguments should gradually acquire
   bridge lemmas to Mathlib's `PositiveLinearMap` and `CompletelyPositiveMap`.
 
@@ -490,6 +494,11 @@ TNLean has trace and Jensen-style results in:
 - `TNLean/Channel/Schwarz/OperatorConvexity.lean`
 - `TNLean/Channel/Schwarz/TraceCFC.lean`
 
+The former scoped helper file `TNLean/Algebra/MatrixFunctionalCalculus.lean`
+has been removed.  Its two instances are available directly from Mathlib 4.31:
+`Matrix.instNonnegSpectrumClass` under `open scoped MatrixOrder`, and
+`ContinuousFunctionalCalculus.toNonUnital`.
+
 Mathlib 4.31 can strengthen the order-theoretic part of these arguments, but
 the trace Jensen inequalities and matrix-trace CFC formulas remain
 TNLean-specific.
@@ -713,7 +722,9 @@ The following order minimizes mathematical risk.
 
 ## Immediate Mathlib 4.31 build issue observed and local repair
 
-After fetching Mathlib 4.31 caches, the following command was run:
+After fetching Mathlib 4.31 caches, the following early upgrade check was run
+while the now-deleted `TNLean.Algebra.MatrixFunctionalCalculus` target still
+existed:
 
 ```text
 lake build TNLean.Algebra.MatrixFunctionalCalculus \

@@ -27,7 +27,7 @@ block quadratic form.
 positive map, commuting family, block positivity, Schwarz inequality
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder BigOperators TNMatrixCFC
+open scoped Matrix ComplexOrder MatrixOrder BigOperators
 open Matrix Finset Complex Module.End
 
 namespace PositiveOnAbelian

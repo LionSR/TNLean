@@ -27,7 +27,7 @@ inequality applies termwise.
 positive map, normal operator, Kadison--Schwarz inequality
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder BigOperators TNMatrixCFC
+open scoped Matrix ComplexOrder MatrixOrder BigOperators
 open Matrix Finset Complex Module.End
 
 namespace PositiveOnAbelian

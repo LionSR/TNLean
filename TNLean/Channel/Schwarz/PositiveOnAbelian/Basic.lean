@@ -39,7 +39,7 @@ diagonalization has reduced them to a scalar problem.
 positive map, commuting family, Schwarz inequality, normal operator
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder BigOperators TNMatrixCFC
+open scoped Matrix ComplexOrder MatrixOrder BigOperators
 open Matrix Finset Complex Module.End
 
 namespace PositiveOnAbelian
