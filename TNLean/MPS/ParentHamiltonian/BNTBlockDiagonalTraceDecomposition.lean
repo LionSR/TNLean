@@ -14,6 +14,11 @@ derive that trace-decomposition equality from the \(C^j,D^j\) comparison after
 specializing \(D^j_\beta\) to the block-diagonal boundary expression
 \((\mu_j^N X_j)A^j_\beta\). The normalized \(E^j\)-calculation is then supplied
 by the downstream complementary-word lemmas.
+
+The variables \(\beta\), \(\rho\), and \(w\) are not names from the paper.
+They are the three word coordinates obtained by opening a boundary-crossing
+cyclic interval; the source proof uses the boundary indices \(i_1\) and
+\(i_{m+1}\) for the corresponding matrices \(C^j\) and \(D^j\).
 -/
 
 open scoped Matrix BigOperators
@@ -35,7 +40,7 @@ boundary-crossing trace decompositions
   =
   \sum_j\operatorname{tr}\bigl(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_w\bigr)
 \]
-hold for every boundary-crossing interval \(i\), wrapped word \(\beta\),
+hold for every boundary-crossing interval \(i\), cut word \(\beta\),
 complementary word \(\rho\), and word \(w\) of length \(m\), then the
 single-block vectors
 \[
