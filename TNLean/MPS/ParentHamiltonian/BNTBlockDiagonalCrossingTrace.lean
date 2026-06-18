@@ -16,7 +16,7 @@ block-diagonal boundary conditions used in arXiv:2011.12127, Section IV.C,
 lines 2126--2128.
 
 The paper writes the two decompositions with \(C^j_{i_1}\) and
-\(D^j_{i_{m+1}}\). Below, \(\beta\) and \(\alpha\) are the two pieces of the
+\(D^j_{i_{m+1}}\). Below, \(\beta\) and \(w\) are the two pieces of the
 local word after opening the cut, while \(\rho\) is the complementary outside
 word on the sites not lying in the local interval.
 -/
