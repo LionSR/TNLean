@@ -98,6 +98,22 @@ formulation `MPSTensor.IsPeripherallyPrimitive`, and the spreading predicate
 def HasPrimitiveFixedPoint {d D : ℕ} [NeZero D] (A : MPSTensor d D) : Prop :=
   ∃ ρ : Matrix (Fin D) (Fin D) ℂ, IsPrimitiveMPS A ρ
 
+/-- Deprecated name for `IsPrimitiveMPS.complementary_transfer_map_gap`. -/
+@[deprecated IsPrimitiveMPS.complementary_transfer_map_gap (since := "2026-05-30")]
+theorem IsPrimitiveMPS.spectral_gap {d D : ℕ} [NeZero D]
+    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ} (h : IsPrimitiveMPS A ρ) :
+    spectralRadius ℂ
+        ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+          ((transferMap (d := d) (D := D) A) -
+            fixedPointProj (D := D) ρ
+              (by
+                intro htrace
+                exact
+                  h.fixedPoint_ne_zero
+                    ((Matrix.PosSemidef.trace_eq_zero_iff h.fixedPoint_psd).1 htrace)))) <
+      1 :=
+  h.complementary_transfer_map_gap
+
 /-! ## Part 2: Derive overlap → 1 from primitivity -/
 
 /-- A primitive MPS tensor has self-overlap converging to 1.

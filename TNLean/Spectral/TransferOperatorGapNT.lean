@@ -178,11 +178,9 @@ private theorem eigenvector_gives_gauge_of_irreducible_TP [NeZero D]
     hSA_det hSB_det hX'u hμ hInter2
 
 -- The spectral-radius extraction below still spends extra time finding the
--- finite-dimensional completeness instances for continuous endomorphisms of
--- matrix spaces.
+-- finite-dimensional completeness facts for continuous endomorphisms of matrix spaces.
 set_option synthInstance.maxHeartbeats 200000 in
--- Instance search for the finite-dimensional continuous endomorphism space of matrices
--- needs a local heartbeat bump during the spectral-radius extraction.
+-- The larger local bound is used only during this spectral-radius extraction.
 /-- If the mixed transfer spectral radius of two irreducible left-canonical tensors is at least
 `1`, then the tensors are gauge-phase equivalent. -/
 theorem modulus_one_eigenvalue_implies_gauge_of_irreducible_TP
