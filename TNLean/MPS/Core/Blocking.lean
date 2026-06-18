@@ -328,7 +328,7 @@ then the same equation holds after replacing letters by words of length \(L\):
   \sum_\rho A_\rho A_\rho^\dagger=I.
 \]
 This is the iterated form of the normalization used in arXiv:quant-ph/0608197,
-Theorem 2blocks.2, proof line 1450. -/
+Theorem 12, proof line 1450. -/
 theorem sum_evalWord_mul_conjTranspose_evalWord
     (A : MPSTensor d D)
     (hRight : ∑ i : Fin d, A i * (A i)ᴴ = 1) :

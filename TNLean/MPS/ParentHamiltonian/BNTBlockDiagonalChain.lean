@@ -185,7 +185,7 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital
 /-- Finite-length block injectivity gives the periodic-boundary inclusion into
 \(S_N\), and \(S_N\) is an internal direct sum of local block ground spaces.
 
-**Unfaithful:** This proof relies on the finite-\(C_1\) inclusion and
+**Unfaithful:** This proof relies on the finite-length-injectivity inclusion and
 internal-direct-sum conclusions above, which transitively use the
 boundary-condition comparison at boundary-crossing windows rather than deriving
 it from arXiv:2011.12127, Section IV.C, lines 2126--2128. Documented in
