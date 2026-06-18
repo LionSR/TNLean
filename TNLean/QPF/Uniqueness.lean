@@ -99,7 +99,8 @@ private lemma sqrtFactor_mul_conjTranspose' [DecidableEq (Fin D)]
     _ = U * Matrix.diagonal (fun j => (↑(hρ.eigenvalues j) : ℂ)) * Uᴴ := by
         rw [sqrtΛ_mul_sqrtΛ' hρ hρ_pd.posSemidef]
     _ = ρ := by
-        simpa [U] using (spectral_decomp_eq hρ).symm
+        simpa [U, Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose,
+          Function.comp_def] using hρ.spectral_theorem.symm
 
 private lemma sqrtFactor_mul_invFactor_conj' [DecidableEq (Fin D)]
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.IsHermitian) (hρ_pd : ρ.PosDef) :

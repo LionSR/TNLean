@@ -62,7 +62,9 @@ theorem svd_of_posSemidef {M : Matrix n n ℂ} (hM : M.PosSemidef) :
         Matrix.diagonal (fun i => (σ i : ℂ)) *
         (U : Matrix n n ℂ)ᴴ :=
   ⟨hM.isHermitian.eigenvectorUnitary, hM.isHermitian.eigenvalues,
-    hM.eigenvalues_nonneg, hM.isHermitian.spectral_decomp_eq_of_generalIndex⟩
+    hM.eigenvalues_nonneg, by
+      simpa [Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose,
+        Function.comp_def] using hM.isHermitian.spectral_theorem⟩
 
 /-- **Singular Value Decomposition (invertible case).** Every invertible
 complex square matrix admits an SVD
@@ -115,7 +117,9 @@ theorem svd_of_isUnit {M : Matrix n n ℂ} (hM : IsUnit M) :
       Mᴴ * M = (V : Matrix n n ℂ) *
         Matrix.diagonal (fun i => (lam i : ℂ)) *
         (V : Matrix n n ℂ)ᴴ :=
-    hN_psd.isHermitian.spectral_decomp_eq_of_generalIndex
+    by
+      simpa [V, lam, Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose,
+        Function.comp_def] using hN_psd.isHermitian.spectral_theorem
   -- Unitarity of V.
   have hVhV : (V : Matrix n n ℂ)ᴴ * (V : Matrix n n ℂ) = 1 := by
     have := Matrix.mem_unitaryGroup_iff'.mp V.prop

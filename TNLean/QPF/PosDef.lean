@@ -206,8 +206,11 @@ theorem posSemidef_fixedPoint_isPosDef_of_irreducible
   have hQ1Q : Q * (1 - Q) = 0 := by rw [mul_sub, mul_one, hQ_idem, sub_self]
   have h1QQ : (1 - Q) * Q = 0 := by rw [sub_mul, one_mul, hQ_idem, sub_self]
   have hQ_proj : IsOrthogonalProjection Q := ⟨hQ_herm, hQ_idem⟩
+  have hρ_spectral :
+      ρ = U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ := by
+    simpa [U, Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose,
+      Function.comp_def] using hH.spectral_theorem
   have hQρ : Q * ρ = ρ := by
-    have hρ_spectral := spectral_decomp_eq hH
     rw [hρ_spectral, hQ_def,
         Matrix.mul_assoc, Matrix.mul_assoc, Matrix.mul_assoc,
         ← Matrix.mul_assoc Uᴴ U, hUU, Matrix.one_mul,
@@ -229,7 +232,7 @@ theorem posSemidef_fixedPoint_isPosDef_of_irreducible
     have hΛw : Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) *ᵥ w = 0 := by
       have hρv :
           (U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ) *ᵥ v = 0 :=
-        spectral_decomp_eq hH ▸ hv
+        hρ_spectral ▸ hv
       set Λ := Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ))
       have hUΛw : U *ᵥ (Λ *ᵥ w) = 0 := by
         rw [Matrix.mulVec_mulVec, show w = Uᴴ *ᵥ v from rfl, Matrix.mulVec_mulVec]; exact hρv

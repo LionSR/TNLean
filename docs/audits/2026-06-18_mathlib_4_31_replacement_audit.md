@@ -47,6 +47,9 @@ The clearest replacements are:
 - Hermitian eigenvector-unitary wrappers should be replaced by Mathlib's
   unitary-group API, such as `Matrix.UnitaryGroup.star_mul_self`,
   `Unitary.mul_star_self_of_mem`, and `Matrix.UnitaryGroup.det_isUnit`.
+- Local shaped Hermitian spectral-decomposition wrappers should be avoided:
+  call sites can use `Matrix.IsHermitian.spectral_theorem` directly and locally
+  simplify Mathlib's `conjStarAlgAut` form to `U * diagonal * Uᴴ`.
 - Positive-map and completely-positive-map arguments should gradually acquire
   bridge lemmas to Mathlib's `PositiveLinearMap` and `CompletelyPositiveMap`.
 
@@ -285,12 +288,23 @@ copies of a shaped spectral-decomposition lemma were also removed from
 `TNLean/Channel/PerronFrobenius/Normalization.lean` and
 `TNLean/MPS/Irreducible/FixedPointProjection.lean`.
 
+The public shaped spectral-decomposition wrappers were also removed from
+`TNLean/Algebra/HermitianHelpers.lean`:
+
+- `Matrix.IsHermitian.spectral_decomp_eq_of_generalIndex`
+- `spectral_decomp_eq`
+
+The remaining uses now invoke `Matrix.IsHermitian.spectral_theorem` directly,
+with local simplification of `Unitary.conjStarAlgAut_apply`,
+`Matrix.star_eq_conjTranspose`, and `Function.comp_def` when the proof needs
+the concrete `U * diagonal * Uᴴ` form.
+
 Recommended action:
 
 - Prefer Mathlib's unitary API directly for `Uᴴ * U = 1`, `U * Uᴴ = 1`, and
   invertibility of an eigenvector unitary.
-- Keep a shaped `U * diagonal * Uᴴ` spectral-decomposition lemma only where it
-  genuinely avoids repeated rewriting from Mathlib's `conjStarAlgAut` form.
+- Prefer local one-line invocations of `Matrix.IsHermitian.spectral_theorem`
+  over shared pass-through lemmas for the shaped spectral decomposition.
 - Do not add new local aliases for elementary unitary identities.
 
 ### Determinants, kernels, and characteristic polynomials

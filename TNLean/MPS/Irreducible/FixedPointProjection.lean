@@ -168,7 +168,8 @@ lemma supportProj_mul (hρ_psd : ρ.PosSemidef) :
         (hH.posSemidef_iff_eigenvalues_nonneg.mp hρ_psd) i
       simp [le_antisymm hi hnonneg]
   have hρ_spec : ρ = U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ := by
-    simpa [U] using (spectral_decomp_eq (D := D) (M := ρ) hH)
+    simpa [U, Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose,
+      Function.comp_def] using hH.spectral_theorem
   have hP_def : supportProj (D := D) ρ hρ_psd = U * Matrix.diagonal sgn * Uᴴ := by
     simp [supportProj, U, sgn]
   -- Compute `P * ρ`.
@@ -206,7 +207,8 @@ theorem supportProj_mulVec_eq_zero_of_mulVec_eq_zero
     simp [U]
   set w : Fin D → ℂ := Uᴴ *ᵥ v
   have hρ_spec : ρ = U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ := by
-    simpa [U] using (spectral_decomp_eq (D := D) (M := ρ) hH)
+    simpa [U, Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose,
+      Function.comp_def] using hH.spectral_theorem
   have hΛw : Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) *ᵥ w = 0 := by
     have hρv : (U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ) *ᵥ v = 0 := by
       rw [← hρ_spec]; exact hv

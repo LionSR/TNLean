@@ -56,7 +56,8 @@ private lemma supportProj_eq_mul_supportInv
     simpa [U, Matrix.star_eq_conjTranspose] using
       Matrix.UnitaryGroup.star_mul_self hH.eigenvectorUnitary
   have hρ_spec : ρ = U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ := by
-    simpa [U] using (spectral_decomp_eq (D := D) (M := ρ) hH)
+    simpa [U, Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose,
+      Function.comp_def] using hH.spectral_theorem
   have hP_def : supportProj (D := D) ρ hρ = U * Matrix.diagonal sgn * Uᴴ := by
     simp [supportProj, U, sgn]
   have hS_def : supportInv (D := D) ρ hρ = U * Matrix.diagonal invEig * Uᴴ := by
