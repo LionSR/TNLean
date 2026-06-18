@@ -264,7 +264,7 @@ theorem groundSpace_iSupIndep_of_wordTupleSpanTop
     {n : ℕ} (hSpan : WordTupleSpanTop A n) :
     iSupIndep fun j : Fin r => groundSpace (A j) n := by
   classical
-  rw [iSupIndep_iff_finset_sum_eq_zero_imp_eq_zero]
+  rw [iSupIndep_iff_finsetSum_eq_zero_imp_eq_zero]
   intro s φ hφ hsum j hj
   have hMatrix : ∀ i : Fin r, i ∈ s →
       ∃ X : Matrix (Fin (dim i)) (Fin (dim i)) ℂ,
