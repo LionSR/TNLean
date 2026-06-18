@@ -22,7 +22,8 @@ concrete cyclic-window overlap predicate and its row-cardinality bound
 \(2(L - 1)\). The final reduction theorems (`*_gap_bound_of_cyclic_window_*`)
 supply all the already-proved structural input (local projection,
 non-overlap positivity, and row cardinality) and leave only the
-principal-angle estimate as a remaining hypothesis.
+source anticommutator estimate, or a sufficient norm-compression estimate, as a
+remaining hypothesis.
 
 The abstract spectral-theorem step (`FrustrationFree.spectralGap_of_martingale`)
 and the projection-geometry lemmas (`ProjectionGeometry.quadraticForm_sum_*`)
@@ -42,8 +43,8 @@ variable {d D : ℕ}
 implies the corresponding norm lower bound on the orthogonal complement of the
 Euclidean-space ground space.
 
-This theorem isolates the operator-theoretic part of the remaining
-principal-angle estimate. The hypotheses already include the quantitative
+This theorem isolates the operator-theoretic part of the remaining martingale
+estimate. The hypotheses already include the quantitative
 martingale estimate
 
 \(γ \operatorname{Re}\langle H_N v, v\rangle ≤
@@ -75,9 +76,10 @@ theorem parentHamiltonianES_norm_bound_of_quadratic_form
 uniform quadratic-form estimate with constant \(1 / (4 * L)\).
 
 Thus the remaining MPS-specific content is precisely to prove the hypothesis
-`hQuad` from the principal-angle / anticommutator estimate and the finite
-row-sum bound; the positivity, kernel transport, and spectral-theorem conversion
-are already available here. -/
+`hQuad` from the source anticommutator estimate, or from a sufficient
+norm-compression estimate, together with the finite row-sum bound. The
+positivity, kernel transport, and spectral-theorem conversion are already
+available here. -/
 theorem parentHamiltonianES_gap_bound_of_quadratic_form
     (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
     (hQuad : ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
@@ -523,8 +525,8 @@ theorem parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs
       localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap A (by omega) hnot v)
     hFriedrichs
 
-/-- Uniform explicit gap-bound reduction from the remaining overlapping-window
-principal-angle, or norm-compression, estimate.
+/-- Uniform explicit gap-bound reduction from an ordered overlapping-window
+cross-term estimate.
 
 The concrete cyclic-window row-cardinality bound, local symmetric-projection
 structure, and non-overlap positivity are already proved.  Consequently it is
@@ -603,13 +605,13 @@ theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator
     linarith
 
 /-- Uniform explicit gap-bound reduction from a norm-compression form of the
-overlapping-window Friedrichs estimate.
+overlapping-window martingale estimate.
 
 It suffices to prove that for every overlapping off-diagonal pair the compressed
-product of transported local projections satisfies
+product of local projections satisfies
 \(‖hᵢ (hⱼ v)‖ ≤ (1 - 1/(4L)) / (2(L-1)) * ‖hᵢ v‖\).  The abstract projection
-geometry converts this principal-angle style condition into the ordered
-Friedrichs lower bound and then applies the finite-overlap martingale reduction. -/
+geometry converts this norm-compression condition into the ordered cross-term
+lower bound and then applies the finite-overlap martingale reduction. -/
 theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound
     (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
     (hOverlapNorm : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
@@ -672,8 +674,9 @@ theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_le
 /-- Uniform gap-bound reduction from a strict overlap norm-compression constant.
 
 If every overlapping off-diagonal cyclic pair satisfies the compression estimate
-with coefficient \(η\), and \(η * (2 * (L - 1)) < 1\), then the transported parent
-Hamiltonians have gap constant \(1 - η * (2 * (L - 1))\).  Thus any uniform
+with coefficient \(η\), and \(η * (2 * (L - 1)) < 1\), then the parent
+Hamiltonians under the canonical \(\ell^2\) identification have gap constant
+\(1 - η * (2 * (L - 1))\).  Thus any uniform
 compression constant strictly below the reciprocal of the cyclic overlap degree
 yields a positive gap. -/
 theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_lt
