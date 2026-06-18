@@ -130,8 +130,6 @@ private local instance instTROCPartialOrder : PartialOrder Mat :=
   Matrix.instPartialOrder
 private local instance instTROCStarOrderedRing : StarOrderedRing Mat :=
   Matrix.instStarOrderedRing
-private local instance instTROCNonnegSpectrumClass : NonnegSpectrumClass ℝ Mat :=
-  Matrix.instNonnegSpectrumClass
 private local instance instTROCCStarAlgebra : CStarAlgebra Mat :=
   CStarAlgebra.mk
 

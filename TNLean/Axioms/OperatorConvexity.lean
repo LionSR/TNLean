@@ -12,15 +12,23 @@ import Mathlib.LinearAlgebra.Matrix.Trace
 /-!
 # Axiomatized operator convexity and concavity
 
-This module collects the axioms for **operator convexity/concavity** of matrix
-power and logarithm functions, the **operator Jensen inequality** for positive
-maps, and the **Lieb concavity theorem**. These results are deferred pending
-upstream Mathlib work in `CFC.Rpow.Order` and `CFC.ExpLog.Order`.
+This module collects the axioms for the **operator Jensen inequalities** for
+matrix powers and logarithms under positive maps, and the **Lieb concavity
+theorem**.
+
+Mathlib 4.31 proves the operator concavity inputs for `x ↦ x ^ p`,
+`0 ≤ p ≤ 1`, and for `log`, via `CFC.concaveOn_rpow` and
+`CFC.concaveOn_log`.  The axioms below remain because those concavity
+statements are not yet accompanied by a Hansen--Pedersen operator Jensen
+theorem for arbitrary positive subunital or unital maps, by operator
+convexity of `x ↦ x ^ p` for `1 ≤ p ≤ 2`, or by Lieb's joint concavity
+theorem.
 
 ## Axioms
 
-The following results are standard in matrix analysis. They are axiomatized
-here because the connecting Mathlib infrastructure is not yet available:
+The following results are standard in matrix analysis.  They are axiomatized
+here because the positive-map Jensen and Lieb-concavity parts of the argument
+are not yet available in Mathlib:
 
 * `posMap_rpow_concave_jensen` — Jensen inequality for concave `rpow`.
 * `posMap_rpow_convex_jensen` — Jensen inequality for convex `rpow`.
@@ -34,29 +42,30 @@ via the spectral theorem and the scalar Jensen inequality.
 
 ## Status
 
-All results are axiomatized. The specific Mathlib TODOs blocking proofs:
+All four declarations remain axioms.  Mathlib 4.31 supplies the C-star
+functional-calculus concavity inputs for the first and third statements, but
+not the positive-map Jensen theorem needed to obtain the displayed
+inequalities.
 
-* `CFC.Rpow.Order`: operator concavity of `rpow` over `[0, 1]`,
-  operator convexity of `rpow` over `[1, 2]`.
-* `CFC.ExpLog.Order`: operator concavity of `log`.
-* General operator Jensen inequality for positive maps: absent from Mathlib.
+The remaining Mathlib or local formalization gaps are:
+
+* General operator Jensen inequality for positive maps.
+* `CFC.Rpow.Order`: operator convexity of `rpow` over `[1, 2]`.
 * Lieb concavity integral representation: absent from Mathlib.
 
 ## Proof plan
 
-1. **Operator concavity of `rpow` for `p ∈ [0, 1]`**: follows from the
-   integral representation `a ^ p = C_p ∫ t^{p-1} a(a + t)⁻¹ dt` (already
-   in Mathlib as `exists_measure_nnrpow_eq_integral_cfcₙ_rpowIntegrand₀₁`),
-   once the integrand is shown to be operator concave (parallel to the
-   existing monotonicity proof in `CFC.Rpow.IntegralRepresentation`).
-2. **Operator convexity of `rpow` for `p ∈ [1, 2]`**: uses the
+1. **Concave Jensen for `rpow`, `p ∈ [0, 1]`**: combine
+   `CFC.concaveOn_rpow` with the Hansen--Pedersen block-matrix proof of
+   operator Jensen for positive subunital maps.  The finite-POVM compression
+   half of this route is recorded in
+   `TNLean.Channel.Schwarz.OperatorJensenAux`.
+2. **Operator convexity of `rpow` for `p ∈ [1, 2]`**: use the
    decomposition `x^p = x · x^{p-1}` for `p ∈ [1, 2]`, reducing to
    concavity of `x^{p-1}` for `p - 1 ∈ [0, 1]`.
-3. **Operator concavity of `log`**: follows from rpow concavity via the
-   limit `log x = lim_{p → 0} (x^p - 1)/p`.
-4. **Jensen inequality for positive maps**: follows from operator
-   concavity/convexity via the Hansen--Pedersen 2×2 matrix block trick.
-5. **Lieb concavity**: requires the integral representation
+3. **Concave Jensen for `log`**: combine `CFC.concaveOn_log` with the
+   unital Hansen--Pedersen Jensen theorem.
+4. **Lieb concavity**: requires the integral representation
    `A^s B^{1-s} = (sin πs/π) ∫₀^∞ t^{s-1} A(A+tB)⁻¹ B dt` and
    resolvent monotonicity.
 
@@ -88,8 +97,6 @@ private local instance instAxiomOCPartialOrder : PartialOrder Mat :=
   Matrix.instPartialOrder
 private local instance instAxiomOCStarOrderedRing : StarOrderedRing Mat :=
   Matrix.instStarOrderedRing
-private local instance instAxiomOCNonnegSpectrumClass : NonnegSpectrumClass ℝ Mat :=
-  Matrix.instNonnegSpectrumClass
 private local instance instAxiomOCCStarAlgebra : CStarAlgebra Mat :=
   CStarAlgebra.mk
 
