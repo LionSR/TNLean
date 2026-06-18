@@ -44,6 +44,9 @@ The clearest replacements are:
   `BlockTriangular.pow` and `BlockTriangular.exp`.
 - Parts of the local Frobenius-norm development should be replaced by
   `Matrix.Norms.Frobenius`.
+- Hermitian eigenvector-unitary wrappers should be replaced by Mathlib's
+  unitary-group API, such as `Matrix.UnitaryGroup.star_mul_self`,
+  `Unitary.mul_star_self_of_mem`, and `Matrix.UnitaryGroup.det_isUnit`.
 - Positive-map and completely-positive-map arguments should gradually acquire
   bridge lemmas to Mathlib's `PositiveLinearMap` and `CompletelyPositiveMap`.
 
@@ -255,6 +258,40 @@ Recommended action:
   direct Mathlib theorem is later found.
 - Consider upstreaming the positive-semidefinite kernel-sum lemmas if they are
   stated without TNLean-specific hypotheses.
+
+### Hermitian spectral decomposition and unitary matrices
+
+Relevant Mathlib declarations include:
+
+- `Matrix.IsHermitian.spectral_theorem`
+- `Matrix.UnitaryGroup.star_mul_self`
+- `Unitary.mul_star_self_of_mem`
+- `Matrix.UnitaryGroup.det_isUnit`
+
+TNLean's Hermitian spectral helper file should keep the genuinely local
+extremal-eigenvalue and scalar-shift lemmas, such as `minEigenvalue`,
+`maxEigenvalue`, `hermitian_sub_scalar_spectral`, and
+`smul_one_sub_hermitian_spectral`.
+
+The elementary eigenvector-unitary wrappers were exact aliases for Mathlib
+facts and have been removed:
+
+- `eig_conj_mul`
+- `eig_mul_conj`
+- `eigenvectorUnitary_isUnit`
+
+The dependent proofs now use the Mathlib unitary facts directly.  Two private
+copies of a shaped spectral-decomposition lemma were also removed from
+`TNLean/Channel/PerronFrobenius/Normalization.lean` and
+`TNLean/MPS/Irreducible/FixedPointProjection.lean`.
+
+Recommended action:
+
+- Prefer Mathlib's unitary API directly for `Uᴴ * U = 1`, `U * Uᴴ = 1`, and
+  invertibility of an eigenvector unitary.
+- Keep a shaped `U * diagonal * Uᴴ` spectral-decomposition lemma only where it
+  genuinely avoids repeated rewriting from Mathlib's `conjStarAlgAut` form.
+- Do not add new local aliases for elementary unitary identities.
 
 ### Determinants, kernels, and characteristic polynomials
 
