@@ -85,12 +85,16 @@ theorem periodicOverlapDichotomy
             PB k := by
         intro k
         simpa [cyclicNextOfPos, Fin.add_def] using hBShift' k
+      have hA_cyclic_with : IsCyclicSectorDecompWith A blocksA PA φA :=
+        ⟨hPAproj, hPAsum, hAShift, hAComm, hATrace, hAIntertwine, hAMul,
+          hAStar⟩
+      have hB_cyclic_with : IsCyclicSectorDecompWith B blocksB PB φB :=
+        ⟨hPBproj, hPBsum, hBShift, hBComm, hBTrace, hBIntertwine, hBMul,
+          hBStar⟩
       have hA_cyclic : IsCyclicSectorDecomp A blocksA :=
-        ⟨PA, φA, hPAproj, hPAsum, hAShift, hAComm, hATrace, hAIntertwine,
-          hAMul, hAStar⟩
+        ⟨PA, φA, hA_cyclic_with⟩
       have hB_cyclic : IsCyclicSectorDecomp B blocksB :=
-        ⟨PB, φB, hPBproj, hPBsum, hBShift, hBComm, hBTrace, hBIntertwine,
-          hBMul, hBStar⟩
+        ⟨PB, φB, hB_cyclic_with⟩
       by_cases hmatch : ∃ (u₀ v₀ : Fin m_a) (hdim : dimA u₀ = dimB v₀),
           GaugePhaseEquiv
             (cast (congr_arg (MPSTensor (blockPhysDim d m_a)) hdim) (blocksA u₀))
@@ -98,9 +102,8 @@ theorem periodicOverlapDichotomy
       · refine Or.inr ⟨rfl, ?_⟩
         simpa using
           periodicOverlap_gaugeEquiv_of_sector_match A B hA hB blocksA blocksB
-            hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv hA_cyclic hB_cyclic
-            hPAproj hPBproj hPAsum hPBsum hAShift hBShift hA_letter hB_letter
-            hNondegA hmatch
+            hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv hA_cyclic_with
+            hB_cyclic_with hA_letter hB_letter hNondegA hmatch
       · refine Or.inl ?_
         refine periodicOverlap_tendsto_zero_of_no_sector_match A B hA hB blocksA blocksB
           hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv hA_cyclic hB_cyclic hNondegA hNondegB ?_

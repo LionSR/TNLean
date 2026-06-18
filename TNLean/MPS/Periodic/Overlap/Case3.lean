@@ -601,21 +601,13 @@ private lemma repeatedBlocks_of_blockedSectorGaugePhase
     (hB_mpv :
       SameMPV₂ (blockTensor B m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksB))
-    (hA_cyclic : IsCyclicSectorDecomp A blocksA)
-    (hB_cyclic : IsCyclicSectorDecomp B blocksB)
     {PA PB : Fin m → MatrixAlg D}
     {φA : (k : Fin m) →
       Matrix (Fin (dimA k)) (Fin (dimA k)) ℂ ≃ₗ[ℂ] cornerSubmodule (PA k)}
     {φB : (k : Fin m) →
       Matrix (Fin (dimB k)) (Fin (dimB k)) ℂ ≃ₗ[ℂ] cornerSubmodule (PB k)}
-    (hPAproj : ∀ k, IsOrthogonalProjection (PA k))
-    (hPBproj : ∀ k, IsOrthogonalProjection (PB k))
-    (hPAsum : ∑ k : Fin m, PA k = 1)
-    (hPBsum : ∑ k : Fin m, PB k = 1)
-    (hAShift :
-      ∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (PA (k + 1)) = PA k)
-    (hBShift :
-      ∀ k, transferMap (d := d) (D := D) (fun i => (B i)ᴴ) (PB (k + 1)) = PB k)
+    (hA_cyclic : IsCyclicSectorDecompWith A blocksA PA φA)
+    (hB_cyclic : IsCyclicSectorDecompWith B blocksB PB φB)
     (hA_letter : ∀ k (i : Fin (blockPhysDim d m)),
       (φA k (blocksA k i)).1 = PA k * (blockTensor A m) i * PA k)
     (hB_letter : ∀ k (i : Fin (blockPhysDim d m)),
@@ -696,21 +688,13 @@ lemma sectorTensor_proportional_of_blockedMatch
     (hB_mpv :
       SameMPV₂ (blockTensor B m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksB))
-    (hA_cyclic : IsCyclicSectorDecomp A blocksA)
-    (hB_cyclic : IsCyclicSectorDecomp B blocksB)
     {PA PB : Fin m → MatrixAlg D}
     {φA : (k : Fin m) →
       Matrix (Fin (dimA k)) (Fin (dimA k)) ℂ ≃ₗ[ℂ] cornerSubmodule (PA k)}
     {φB : (k : Fin m) →
       Matrix (Fin (dimB k)) (Fin (dimB k)) ℂ ≃ₗ[ℂ] cornerSubmodule (PB k)}
-    (hPAproj : ∀ k, IsOrthogonalProjection (PA k))
-    (hPBproj : ∀ k, IsOrthogonalProjection (PB k))
-    (hPAsum : ∑ k : Fin m, PA k = 1)
-    (hPBsum : ∑ k : Fin m, PB k = 1)
-    (hAShift :
-      ∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (PA (k + 1)) = PA k)
-    (hBShift :
-      ∀ k, transferMap (d := d) (D := D) (fun i => (B i)ᴴ) (PB (k + 1)) = PB k)
+    (hA_cyclic : IsCyclicSectorDecompWith A blocksA PA φA)
+    (hB_cyclic : IsCyclicSectorDecompWith B blocksB PB φB)
     (hA_letter : ∀ k (i : Fin (blockPhysDim d m)),
       (φA k (blocksA k i)).1 = PA k * (blockTensor A m) i * PA k)
     (hB_letter : ∀ k (i : Fin (blockPhysDim d m)),
@@ -728,8 +712,8 @@ lemma sectorTensor_proportional_of_blockedMatch
     RepeatedBlocks A B := by
   exact repeatedBlocks_of_blockedSectorGaugePhase
     A B hA_lc hB_lc blocksA blocksB hA_blocks_lc hB_blocks_lc
-    hA_mpv hB_mpv hA_cyclic hB_cyclic hPAproj hPBproj hPAsum hPBsum
-    hAShift hBShift hA_letter hB_letter q hBlockMatch hNondeg hNormal
+    hA_mpv hB_mpv hA_cyclic hB_cyclic hA_letter hB_letter q hBlockMatch hNondeg
+    hNormal
 
 /-- **Case 3: a matching sector implies gauge equivalence**. If two periodic tensors have
 the same period and a compressed sector match exists, then they are related by a gauge
@@ -774,21 +758,13 @@ theorem periodicOverlap_gaugeEquiv_of_sector_match
     (hB_mpv :
       SameMPV₂ (blockTensor B m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksB))
-    (hA_cyclic : IsCyclicSectorDecomp A blocksA)
-    (hB_cyclic : IsCyclicSectorDecomp B blocksB)
     {PA PB : Fin m → MatrixAlg D}
     {φA : (k : Fin m) →
       Matrix (Fin (dimA k)) (Fin (dimA k)) ℂ ≃ₗ[ℂ] cornerSubmodule (PA k)}
     {φB : (k : Fin m) →
       Matrix (Fin (dimB k)) (Fin (dimB k)) ℂ ≃ₗ[ℂ] cornerSubmodule (PB k)}
-    (hPAproj : ∀ k, IsOrthogonalProjection (PA k))
-    (hPBproj : ∀ k, IsOrthogonalProjection (PB k))
-    (hPAsum : ∑ k : Fin m, PA k = 1)
-    (hPBsum : ∑ k : Fin m, PB k = 1)
-    (hAShift :
-      ∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (PA (k + 1)) = PA k)
-    (hBShift :
-      ∀ k, transferMap (d := d) (D := D) (fun i => (B i)ᴴ) (PB (k + 1)) = PB k)
+    (hA_cyclic : IsCyclicSectorDecompWith A blocksA PA φA)
+    (hB_cyclic : IsCyclicSectorDecompWith B blocksB PB φB)
     (hA_letter : ∀ k (i : Fin (blockPhysDim d m)),
       (φA k (blocksA k i)).1 = PA k * (blockTensor A m) i * PA k)
     (hB_letter : ∀ k (i : Fin (blockPhysDim d m)),
@@ -815,18 +791,22 @@ theorem periodicOverlap_gaugeEquiv_of_sector_match
   obtain ⟨u₀, v₀, hdim₀, hMatch⟩ := hSomeMatch
   have hA_lc := hA.leftCanonical
   have hB_lc := hB.leftCanonical
+  have hA_cyclic_exists : IsCyclicSectorDecomp A blocksA :=
+    ⟨PA, φA, hA_cyclic⟩
+  have hB_cyclic_exists : IsCyclicSectorDecomp B blocksB :=
+    ⟨PB, φB, hB_cyclic⟩
   -- Stage 1: propagate the single match to every offset `l` around the cycle.
   have hprop := sectorMatch_propagation A B hA hB blocksA blocksB
-    hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv hA_cyclic hB_cyclic
+    hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv hA_cyclic_exists hB_cyclic_exists
     hdim₀ (hNondegA u₀) hMatch
   -- Stage 2: each sector of `A` is a normal tensor.
   have hNormal : ∀ u, IsNormal (blocksA u) := fun u =>
-    sectorBlocked_isNormal_of_isPeriodic A hA blocksA hA_blocks_lc hA_mpv hA_cyclic u
-      (hNondegA u)
+    sectorBlocked_isNormal_of_isPeriodic A hA blocksA hA_blocks_lc hA_mpv
+      hA_cyclic_exists u (hNondegA u)
   -- Stage 3: contract the (reindexed) per-sector matches into a global gauge.
   refine sectorTensor_proportional_of_blockedMatch A B hA_lc hB_lc blocksA blocksB
-    hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv hA_cyclic hB_cyclic hPAproj hPBproj
-    hPAsum hPBsum hAShift hBShift hA_letter hB_letter (v₀ - u₀) ?_ hNondegA hNormal
+    hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv hA_cyclic hB_cyclic hA_letter
+    hB_letter (v₀ - u₀) ?_ hNondegA hNormal
   -- Reindex `hprop` from the (u₀ + l, v₀ + l) form to the (u, u + (v₀ - u₀)) form
   -- by taking l = u - u₀, so u₀ + l = u and v₀ + l = u + (v₀ - u₀).
   intro u

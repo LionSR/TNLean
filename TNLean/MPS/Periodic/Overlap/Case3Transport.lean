@@ -102,9 +102,8 @@ private lemma sum_trace_proj_overlap_shift {L' m : ℕ} [NeZero m]
   rw [trace_proj_evalWord_rotateCfg A P hShiftA u σ,
     trace_proj_evalWord_rotateCfg B Q hShiftB v σ]
 
-/-- Bridge between blocked configurations of length `N` and physical
-configurations of length `N * m`.  Uses the canonical `MPSTensor.decodeBlockEquiv`
-from `TNLean.MPS.Core.Blocking`. -/
+/-- Equivalence between blocked configurations of length `N` and physical
+configurations of length `N * m`, via `MPSTensor.decodeBlockEquiv`. -/
 private noncomputable def blockedCfgEquiv (d N m : ℕ) :
     (Fin N → Fin (blockPhysDim d m)) ≃ (Fin (N * m) → Fin d) :=
   ((Equiv.arrowCongr (Equiv.refl (Fin N)) (decodeBlockEquiv d m)).trans
