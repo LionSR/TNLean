@@ -340,7 +340,8 @@ private theorem linftyOp_norm_entry_le [NeZero D]
   have h : ‖M i j‖₊ ≤ ‖M‖₊ := by
     rw [Matrix.linfty_opNNNorm_def]
     have h1 : ‖M i j‖₊ ≤ ∑ k : Fin D, ‖M i k‖₊ :=
-      Finset.single_le_sum (f := fun k => ‖M i k‖₊) (fun _ _ => zero_le _) (Finset.mem_univ j)
+      Finset.single_le_sum (f := fun k => ‖M i k‖₊)
+        (fun k _ => (zero_le : 0 ≤ ‖M i k‖₊)) (Finset.mem_univ j)
     have h2 : ∑ k : Fin D, ‖M i k‖₊ ≤
         Finset.univ.sup (fun a : Fin D => ∑ k : Fin D, ‖M a k‖₊) :=
       Finset.le_sup (f := fun a : Fin D => ∑ k : Fin D, ‖M a k‖₊) (Finset.mem_univ i)

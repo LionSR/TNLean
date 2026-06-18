@@ -126,9 +126,9 @@ noncomputable def toIsIrreducibleFormOfPhaseNormalized
     have hPeriod : IsPeriodic 1 (blocks k) := by
       rw [IsPeriodic.one_iff_primitive]
       exact ⟨hNCF.block_irreducible k, hNCF.leftCanonical k, hNCF.block_primitive k⟩
-    simpa [phaseNormalizedBlocks] using
-      isPeriodic_smul_of_norm_one
-        (phase_norm_one (hNCF.mu_ne_zero k)) (blocks k) hPeriod
+    change IsPeriodic 1 (fun i => (μ k / (‖μ k‖ : ℂ)) • blocks k i)
+    exact isPeriodic_smul_of_norm_one
+      (phase_norm_one (hNCF.mu_ne_zero k)) (blocks k) hPeriod
   weight_pos := by
     intro k
     constructor

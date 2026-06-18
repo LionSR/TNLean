@@ -108,8 +108,7 @@ private lemma normalizedProjection_mem_densityMatrices
   have htrP_ne : Matrix.trace P ≠ 0 := trace_ne_zero_of_orthogonalProjection_ne_zero hP hP_ne
   refine ⟨?_, ?_⟩
   · exact hP_psd.smul (inv_nonneg_of_nonneg hP_psd.trace_nonneg)
-  · change Matrix.trace (((Matrix.trace P)⁻¹) • P) = 1
-    simp [Matrix.trace_smul, htrP_ne]
+  · simp [Matrix.trace_smul, htrP_ne]
 
 private lemma normalizedProjection_corner
     {P : Matrix (Fin D) (Fin D) ℂ}
@@ -318,12 +317,18 @@ theorem isIrreducibleMap_of_channel_posDef_fixedPoint_unique
     rw [Matrix.mul_smul, Matrix.smul_mul, Finset.mul_sum, Finset.sum_mul]
     congr 1
     exact Finset.sum_congr rfl (fun n _ => hcorner_iter n)
+  haveI : TopologicalSpace.PseudoMetrizableSpace (Matrix (Fin D) (Fin D) ℂ) :=
+    PseudoEMetricSpace.pseudoMetrizableSpace
+  haveI : FirstCountableTopology (Matrix (Fin D) (Fin D) ℂ) :=
+    TopologicalSpace.PseudoMetrizableSpace.firstCountableTopology
   obtain ⟨σ, _hσ_mem, φ, hφ_mono, hφ_tendsto⟩ :=
     densityMatrices_isCompact.tendsto_subseq hces_mem
   have hσ_tendsto : Filter.Tendsto
       (fun k => cesaroMean E ρ₀ (φ k + 1))
       Filter.atTop (nhds σ) := by
-    simpa [Function.comp] using hφ_tendsto
+    convert hφ_tendsto using 1
+    ext k
+    rfl
   have hσ_lim : σ ∈ densityMatrices D ∧ E σ = σ :=
     IsChannel.cesaroMean_subseq_limit_fixedPoint (E := E) hE hρ₀_mem
       hφ_mono.tendsto_atTop hσ_tendsto
@@ -444,10 +449,7 @@ theorem isIrreducibleMap_of_hasSpectralProperties
           = ∑ i : Fin n,
               (S * (d • K i) * S⁻¹) * X * (S * (d • K i) * S⁻¹)ᴴ := by
                 subst B
-                subst A'
-                subst S
-                simp [MPSTensor.transferMap_apply, MPSTensor.tpGauge]
-                rfl
+                simp [MPSTensor.transferMap_apply, MPSTensor.tpGauge, hA'_def, hS_def]
       _ = ∑ i : Fin n,
               (↑r : ℂ)⁻¹ • (S * (K i * (S⁻¹ * X * S⁻¹) * (K i)ᴴ) * S) := by
             refine Finset.sum_congr rfl ?_

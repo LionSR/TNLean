@@ -294,7 +294,6 @@ theorem rowCutGaugeFactorizes_false : ¬ RowCutGaugeFactorizes := by
     have h := hZrel a b
     -- Right-multiply `h` by `Ginv` and cancel `Gmat * Ginv = 1`.
     have h2 := congrArg (· * Ginv) h
-    simp only at h2
     -- `h2 : Z * (Ginv (single) Gmat) * Ginv = lam • (single * Z) * Ginv`.
     rw [Matrix.mul_assoc (Z : Matrix (Fin 4) (Fin 4) ℂ), Matrix.mul_assoc,
       Gmat_mul_Ginv, Matrix.mul_one, Matrix.smul_mul] at h2

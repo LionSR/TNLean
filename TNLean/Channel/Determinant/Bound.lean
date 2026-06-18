@@ -151,15 +151,15 @@ private theorem positiveTracePreserving_eigenvalue_norm_le_one [NeZero d]
     let y : MatrixAlg d := (1 / 2 : ℝ) • (Complex.I • (zᴴ - z))
     have hx_herm : x.IsHermitian := by
       ext i j
-      simp only [smul_add, one_div, conjTranspose_apply, add_apply, smul_apply,
+      simp only [smul_add, one_div, conjTranspose_apply, Matrix.add_apply, Matrix.smul_apply,
         Complex.real_smul, Complex.ofReal_inv, Complex.ofReal_ofNat, RCLike.star_def,
         star_add, star_mul', star_inv₀, star_ofNat, RingHomCompTriple.comp_apply,
         RingHom.id_apply, add_comm, x]
     have hy_herm : y.IsHermitian := by
       ext i j
       simp only [one_div, sub_eq_add_neg, smul_add, smul_neg, conjTranspose_apply,
-        add_apply, smul_apply, RCLike.star_def, smul_eq_mul, Complex.real_smul,
-        Complex.ofReal_inv, Complex.ofReal_ofNat, neg_apply, add_comm, star_add,
+        Matrix.add_apply, Matrix.smul_apply, RCLike.star_def, smul_eq_mul, Complex.real_smul,
+        Complex.ofReal_inv, Complex.ofReal_ofNat, Matrix.neg_apply, add_comm, star_add,
         star_neg, star_mul', star_inv₀, star_ofNat, Complex.conj_I, neg_mul, mul_neg,
         neg_neg, RingHomCompTriple.comp_apply, RingHom.id_apply, y]
     have hx_tr : Matrix.trace x = 0 := by
@@ -177,17 +177,17 @@ private theorem positiveTracePreserving_eigenvalue_norm_le_one [NeZero d]
         _ = -((2 : ℂ)⁻¹ * w) := by norm_num [Complex.I_sq]
     have hIy : Complex.I • y = (1 / 2 : ℝ) • (z - zᴴ) := by
       ext i j
-      simp only [one_div, sub_eq_add_neg, smul_add, smul_neg, smul_apply, add_apply,
+      simp only [one_div, sub_eq_add_neg, smul_add, smul_neg, Matrix.smul_apply, Matrix.add_apply,
         conjTranspose_apply, RCLike.star_def, smul_eq_mul, Complex.real_smul,
-        Complex.ofReal_inv, Complex.ofReal_ofNat, neg_apply, add_comm, mul_add,
+        Complex.ofReal_inv, Complex.ofReal_ofNat, Matrix.neg_apply, add_comm, mul_add,
         mul_neg, hmulI, neg_neg, y]
     have hz_decomp : z = x + Complex.I • y := by
       rw [hIy]
       ext i j
-      simp only [smul_add, one_div, sub_eq_add_neg, smul_neg, add_apply, smul_apply,
-        Complex.real_smul, Complex.ofReal_inv, Complex.ofReal_ofNat, conjTranspose_apply,
-        RCLike.star_def, neg_apply, x]
-      ring
+      simp only [smul_add, one_div, sub_eq_add_neg, smul_neg, Matrix.add_apply,
+        Matrix.smul_apply, Complex.real_smul, Complex.ofReal_inv, Complex.ofReal_ofNat,
+        conjTranspose_apply, RCLike.star_def, Matrix.neg_apply, x]
+      ring_nf
     obtain ⟨Cx, hCx⟩ :=
       positiveTracePreserving_bounded_orbit_of_trace_zero_hermitian (d := d) hPos hTP
         hx_herm hx_tr

@@ -15,6 +15,10 @@ block-upper-triangular Lindblad form ((3) → (4)), and vice versa ((4) → (3))
 open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace
 open Matrix Finset TNLean
 
+attribute [local instance 1001]
+  Matrix.linftyOpNormedAddCommGroup
+  Matrix.linftyOpNormedSpace
+
 noncomputable section
 
 variable {D : ℕ}
@@ -144,6 +148,8 @@ theorem generatorPreservesCompression_of_semigroupPreservesCompression
     simp [expSemigroup_zero] at h
     exact h.hasDerivWithinAt
   -- The compression map M ↦ P * M * P is a continuous ℝ-linear map
+  letI : NormedAddCommGroup Mat := Matrix.linftyOpNormedAddCommGroup
+  letI : NormedSpace ℝ Mat := Matrix.linftyOpNormedSpace
   let compress : Mat →ₗ[ℝ] Mat :=
     { toFun := fun M => P * M * P
       map_add' := by
@@ -166,13 +172,12 @@ theorem generatorPreservesCompression_of_semigroupPreservesCompression
     have hcomp := compressCLM.hasFDerivAt.comp_hasDerivWithinAt (x := (0 : ℝ)) hd_f
     simp only [Function.comp_def] at hcomp
     -- hcomp : HasDerivWithinAt (fun x => compressCLM (exp L x Y)) (compressCLM (L Y)) ...
-    -- We need to rewrite compressCLM to P * · * P
-    have h1 : (fun u => compressCLM (expSemigroup L u Y)) =
-        (fun u => P * (expSemigroup L u Y) * P) :=
-      funext (fun u => hclm_eq _)
-    have h2 : compressCLM (L Y) = P * (L Y) * P := hclm_eq _
-    rw [h1, h2] at hcomp
-    exact hcomp
+    -- Replace the compressed function and derivative by their matrix expression.
+    have hcomp' : HasDerivWithinAt
+        (fun u : ℝ => P * (expSemigroup L u Y) * P) (compressCLM (L Y)) (Set.Ici 0) 0 :=
+      hcomp.congr (fun u _hu => (hclm_eq (expSemigroup L u Y)).symm)
+        (hclm_eq (expSemigroup L 0 Y)).symm
+    exact hcomp'.congr_deriv (hclm_eq _)
   -- g(t) = f(t) for all t ≥ 0 (hypothesis)
   have heq : ∀ t ∈ Set.Ici (0 : ℝ),
       P * (expSemigroup L t Y) * P = expSemigroup L t Y :=
@@ -326,7 +331,23 @@ theorem semigroup_preserves_compression_of_generator
   have heval_sum : HasSum (fun n : ℕ => (((Nat.factorial n : ℂ)⁻¹) • ((t : ℂ) • E) ^ n) Y)
       (expSemigroup L t Y) := by
     have h := ev_Y.hasSum hexp_sum
-    convert h using 1
+    have h' : HasSum
+        (fun n : ℕ => (((Nat.factorial n : ℂ)⁻¹) • ((t : ℂ) • E) ^ n) Y)
+        (ev_Y (NormedSpace.exp ((t : ℂ) • E))) := by
+      refine HasSum.congr_fun h ?_
+      intro n
+      change ((Nat.factorial n : ℂ)⁻¹) • (((t : ℂ) • E) ^ n) Y =
+        ((Nat.factorial n : ℂ)⁻¹) • (((t : ℂ) • E) ^ n) Y
+      rfl
+    have hlim :
+        ev_Y (NormedSpace.exp ((t : ℂ) • E)) = expSemigroup L t Y := by
+      change (expSemigroupCLM E t) Y = expSemigroup L t Y
+      rw [show E = endEquiv L by rfl]
+      rw [← expSemigroup_toCLM L t]
+      change (LinearMap.toContinuousLinearMap (expSemigroup L t)) Y =
+        expSemigroup L t Y
+      rfl
+    exact hlim ▸ h'
   have hcomp_sum : HasSum
       (fun n : ℕ => compressCLM ((((Nat.factorial n : ℂ)⁻¹) • ((t : ℂ) • E) ^ n) Y))
       (compressCLM (expSemigroup L t Y)) :=
@@ -357,7 +378,7 @@ theorem semigroup_preserves_compression_of_generator
     calc
       compressCLM ((((Nat.factorial n : ℂ)⁻¹) • ((t : ℂ) • E) ^ n) Y)
           = ((Nat.factorial n : ℂ)⁻¹) • compressCLM ((((t : ℂ) • E) ^ n) Y) := by
-              simp [ContinuousLinearMap.smul_apply]
+              simp
       _ = ((Nat.factorial n : ℂ)⁻¹) • compressCLM ((t : ℂ) ^ n • (L ^ n) Y) := by
               rw [hpow_apply]
       _ = ((Nat.factorial n : ℂ)⁻¹ * (t : ℂ) ^ n) • compressCLM ((L ^ n) Y) := by
@@ -367,7 +388,7 @@ theorem semigroup_preserves_compression_of_generator
               rw [hpow_apply]
               simp [smul_smul]
       _ = (((Nat.factorial n : ℂ)⁻¹) • ((t : ℂ) • E) ^ n) Y := by
-              simp [ContinuousLinearMap.smul_apply]
+              simp
   have hsame_sum : HasSum (fun n : ℕ => (((Nat.factorial n : ℂ)⁻¹) • ((t : ℂ) • E) ^ n) Y)
       (compressCLM (expSemigroup L t Y)) := by
     rwa [show (fun n => compressCLM ((((Nat.factorial n : ℂ)⁻¹) • ((t : ℂ) • E) ^ n) Y)) =

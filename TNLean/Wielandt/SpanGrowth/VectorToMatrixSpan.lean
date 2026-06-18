@@ -67,10 +67,12 @@ theorem map_wordSpan_eq_vectorSpreadSpan
       (Set.range fun σ : Fin n → Fin d => A.evalWord (List.ofFn σ) *ᵥ φ) =
         (fun M : Matrix (Fin D) (Fin D) ℂ => M *ᵥ φ) ''
           (Set.range fun σ : Fin n → Fin d => A.evalWord (List.ofFn σ)) := by
-    -- This is exactly `Set.range_comp`.
-    simpa [Function.comp] using
-      (Set.range_comp (fun M : Matrix (Fin D) (Fin D) ℂ => M *ᵥ φ)
-        (fun σ : Fin n → Fin d => A.evalWord (List.ofFn σ)))
+    ext v
+    constructor
+    · rintro ⟨σ, rfl⟩
+      exact ⟨A.evalWord (List.ofFn σ), ⟨σ, rfl⟩, rfl⟩
+    · rintro ⟨M, ⟨σ, rfl⟩, rfl⟩
+      exact ⟨σ, rfl⟩
   -- Finish by rewriting.
   simp [hrange]
 
@@ -98,7 +100,7 @@ theorem wordSpan_mul_le (A : MPSTensor d D) (m n : ℕ) :
     simpa [List.length_append] using
       (evalWord_mem_wordSpan A (List.ofFn σ₁ ++ List.ofFn σ₂))
   -- Rewrite the product using `evalWord_append`.
-  simpa [evalWord_append] using hmem
+  simpa [wordSpan, evalWord_append] using hmem
 
 /-- The product of two full matrix-algebra submodules is full. -/
 private theorem top_mul_top_eq_top :

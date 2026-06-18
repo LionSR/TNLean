@@ -214,42 +214,42 @@ theorem afterBlocking_commonLengthCommonSectorData_of_sameMPV₂
     exact pow_ne_zero familyB.p (hμB (familyB.flatKey x).1)
   · intro x
     let y := familyA.flatKey x
-    simpa [CommonBlockedCyclicSectorFamily.commonFlatBlocks,
-      CommonBlockedCyclicSectorFamily.commonFlatDim, y] using
-      (familyA.derived_properties y.1 y.2).1
+    change ∑ i : Fin (blockPhysDim d familyA.p),
+      (familyA.commonSectorBlock y.1 y.2 i)ᴴ * familyA.commonSectorBlock y.1 y.2 i = 1
+    exact (familyA.derived_properties y.1 y.2).1
   · intro x
     let y := familyB.flatKey x
-    simpa [CommonBlockedCyclicSectorFamily.commonFlatBlocks,
-      CommonBlockedCyclicSectorFamily.commonFlatDim, y] using
-      (familyB.derived_properties y.1 y.2).1
+    change ∑ i : Fin (blockPhysDim d familyB.p),
+      (familyB.commonSectorBlock y.1 y.2 i)ᴴ * familyB.commonSectorBlock y.1 y.2 i = 1
+    exact (familyB.derived_properties y.1 y.2).1
   · intro x
     let y := familyA.flatKey x
-    simpa [CommonBlockedCyclicSectorFamily.commonFlatBlocks,
-      CommonBlockedCyclicSectorFamily.commonFlatDim, y] using
-      (familyA.derived_properties y.1 y.2).2.1
+    change _root_.IsPrimitive
+      (transferMap (d := blockPhysDim d familyA.p) (D := familyA.sectorDim y.1 y.2)
+        (familyA.commonSectorBlock y.1 y.2))
+    exact (familyA.derived_properties y.1 y.2).2.1
   · intro x
     let y := familyB.flatKey x
-    simpa [CommonBlockedCyclicSectorFamily.commonFlatBlocks,
-      CommonBlockedCyclicSectorFamily.commonFlatDim, y] using
-      (familyB.derived_properties y.1 y.2).2.1
+    change _root_.IsPrimitive
+      (transferMap (d := blockPhysDim d familyB.p) (D := familyB.sectorDim y.1 y.2)
+        (familyB.commonSectorBlock y.1 y.2))
+    exact (familyB.derived_properties y.1 y.2).2.1
   · intro x
     let y := familyA.flatKey x
-    simpa [CommonBlockedCyclicSectorFamily.commonFlatBlocks,
-      CommonBlockedCyclicSectorFamily.commonFlatDim, y] using
-      (familyA.derived_properties y.1 y.2).2.2.1
+    change IsIrreducibleTensor (familyA.commonSectorBlock y.1 y.2)
+    exact (familyA.derived_properties y.1 y.2).2.2.1
   · intro x
     let y := familyB.flatKey x
-    simpa [CommonBlockedCyclicSectorFamily.commonFlatBlocks,
-      CommonBlockedCyclicSectorFamily.commonFlatDim, y] using
-      (familyB.derived_properties y.1 y.2).2.2.1
+    change IsIrreducibleTensor (familyB.commonSectorBlock y.1 y.2)
+    exact (familyB.derived_properties y.1 y.2).2.2.1
   · intro x
     let y := familyA.flatKey x
-    simpa [CommonBlockedCyclicSectorFamily.commonFlatDim, y] using
-      (familyA.derived_properties y.1 y.2).2.2.2
+    change 0 < familyA.sectorDim y.1 y.2
+    exact (familyA.derived_properties y.1 y.2).2.2.2
   · intro x
     let y := familyB.flatKey x
-    simpa [CommonBlockedCyclicSectorFamily.commonFlatDim, y] using
-      (familyB.derived_properties y.1 y.2).2.2.2
+    change 0 < familyB.sectorDim y.1 y.2
+    exact (familyB.derived_properties y.1 y.2).2.2.2
 
 /-!
 ### What remains for the full 1606.00608 Fundamental Theorem

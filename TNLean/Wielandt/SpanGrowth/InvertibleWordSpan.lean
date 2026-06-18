@@ -286,8 +286,9 @@ theorem wordSpan_finrank_mono_of_isUnit' (A : MPSTensor d D)
       calc Module.finrank ℂ (wordSpan A m)
           ≤ Module.finrank ℂ (wordSpan A (m + k)) := ih (by omega)
         _ ≤ Module.finrank ℂ (wordSpan A (m + (k + 1))) := by
-            simpa [Nat.add_assoc] using
-              wordSpan_finrank_mono_of_isUnit A i₀ hU (m + k)
+            have hk : m + k + 1 = m + (k + 1) := by omega
+            rw [← hk]
+            exact wordSpan_finrank_mono_of_isUnit A i₀ hU (m + k)
 
 /-! ## Permanence of fullness -/
 

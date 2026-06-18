@@ -207,7 +207,7 @@ theorem posSemidef_eq_zero_of_posDef_trace_mul_eq_zero
       Matrix.trace_mul_cycle S M Sᴴ
     have htr'' : Matrix.trace (Sᴴ * S * M) = 0 := by
       -- Rewrite `tr(ρ M)=0` using `ρ = S†S`.
-      simpa [hρ_eq, Matrix.mul_assoc] using htr
+      simpa [hρ_eq, Matrix.mul_assoc, ← Matrix.star_eq_conjTranspose] using htr
     exact hcycle.trans htr''
   -- PSD + trace 0 ⇒ zero.
   have hSMS_zero : S * M * Sᴴ = 0 := (hSMS_psd.trace_eq_zero_iff.mp htr')

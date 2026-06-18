@@ -204,7 +204,8 @@ theorem isPrimitive_restriction_of_cyclic_decomp
       cornerRestriction (P k) (T ^ m) (hInv k) ⟨P k, hPk_corner k⟩ = ⟨P k, hPk_corner k⟩ := by
     intro k
     apply Subtype.ext
-    simpa using hPk_fix k
+    change (T ^ m) (P k) = P k
+    exact hPk_fix k
   have hcorner_ne : ∀ k : Fin m, (⟨P k, hPk_corner k⟩ : cornerSubmodule (P k)) ≠ 0 := by
     intro k hzero
     apply hPne k

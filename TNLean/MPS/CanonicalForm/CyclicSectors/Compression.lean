@@ -128,7 +128,9 @@ theorem exists_compressedTensor_of_supported_projection_with_letter_and_isometry
   let f : Fin D → ℂ := fun j => (↑(hHerm.eigenvalues j) : ℂ)
   have hPdiag_eq : Pdiag = Matrix.diagonal f := by
     have h := hHerm.conjStarAlgAut_star_eigenvectorUnitary
-    simpa [Pdiag, f, Unitary.conjStarAlgAut_star_apply] using h
+    change (star (↑hHerm.eigenvectorUnitary : MatrixAlg D) * P *
+        (↑hHerm.eigenvectorUnitary : MatrixAlg D)) = Matrix.diagonal f
+    simpa [f, Function.comp_def, Unitary.conjStarAlgAut_star_apply] using h
   have hPdiag_idem : Pdiag * Pdiag = Pdiag := by
     change Umatᴴ * P * Umat * (Umatᴴ * P * Umat) = Umatᴴ * P * Umat
     calc
@@ -173,7 +175,8 @@ theorem exists_compressedTensor_of_supported_projection_with_letter_and_isometry
         | inl s' =>
             by_cases h : s = s'
             · subst h
-              simpa [p, P0] using s.2
+              have hs : (Equiv.sumCompl p) (Sum.inl s) = s.1 := rfl
+              simpa [P0, p, eST, hs] using s.2
             · simp [P0, Matrix.fromBlocks_apply₁₁, h]
         | inr t =>
             simp [P0, Matrix.fromBlocks_apply₁₂]
@@ -184,7 +187,8 @@ theorem exists_compressedTensor_of_supported_projection_with_letter_and_isometry
         | inr t' =>
             by_cases h : t = t'
             · subst h
-              simpa [p, P0] using hfT t
+              have ht : (Equiv.sumCompl p) (Sum.inr t) = t.1 := rfl
+              simpa [P0, p, eST, ht] using hfT t
             · simp [P0, Matrix.fromBlocks_apply₂₂, h]
   -- B_i is Pdiag-supported
   have hBsupp : ∀ i : Fin d, Pdiag * B i * Pdiag = B i := by
@@ -343,7 +347,7 @@ theorem exists_compressedTensor_of_supported_projection_with_letter_and_isometry
         simp only [show ∀ i, rAlg (B i) = X i from fun i => rfl] at h0
         -- Now use the fact that rAlg preserves star/conjTranspose
         rw [hPdiag_std] at h0
-        convert h0 using 1
+        simpa [hφ_ct] using h0
       -- Substitute block form X_i = fromBlocks(B11_i, 0, 0, 0)
       have hblock : ∀ i, (X i)ᴴ * X i =
           Matrix.fromBlocks ((B11 i)ᴴ * B11 i) 0 0 (0 : Matrix T T ℂ) := by

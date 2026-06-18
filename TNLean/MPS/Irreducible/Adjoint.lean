@@ -187,8 +187,8 @@ theorem exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleT
       (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i *
         (↑U : Matrix (Fin D) (Fin D) ℂ)
   have hSame : SameMPV₂ A B := by
-    simpa [B, Matrix.star_eq_conjTranspose] using
-      sameMPV_conj_unitary (d := d) (D := D) A U
+    intro N σ
+    exact sameMPV_conj_unitary (d := d) (D := D) A U N σ
   have hUnitalB : ∑ i : Fin d, B i * (B i)ᴴ = 1 := by
     simpa [B, Aadj, Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose,
       Matrix.mul_assoc] using hTP_conj

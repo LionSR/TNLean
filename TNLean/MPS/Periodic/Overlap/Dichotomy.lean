@@ -175,7 +175,9 @@ theorem periodicBasis_eventuallyLinearlyIndependent
   let fN : MPVSpace d (p * N) →ₗ[ℂ] V :=
     lp.lsingle (𝕜 := ℂ) (E := fun N : ℕ => MPVSpace d N) 2 (p * N)
   have hN' : LinearIndependent ℂ (fun k : Fin r => fN (mpvState (d := d) (A k) (p * N))) := by
-    simpa [hv, fN, lp.lsingle_apply] using hN₀ N hN
+    convert hN₀ N hN using 1
+    ext k L i
+    rfl
   exact LinearIndependent.of_comp fN hN'
 
 end MPSTensor

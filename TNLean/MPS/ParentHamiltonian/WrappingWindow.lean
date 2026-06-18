@@ -82,6 +82,14 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
+private theorem fin_cons_mk_succ {L : ℕ} (i : Fin d) (σ : Fin L → Fin d)
+    (k : Fin L) (h : k.val + 1 < L + 1) :
+    (Fin.cons (n := L) (α := fun _ => Fin d) i σ) ⟨k.val + 1, h⟩ = σ k := by
+  have hidx : (⟨k.val + 1, h⟩ : Fin (L + 1)) = k.succ := by
+    ext
+    rfl
+  rw [hidx, Fin.cons_succ]
+
 /-! ### Cyclic config decomposition at the last-site boundary-crossing position
 
 These lemmas analyze the structure of `cyclicCfg` at position \(N-1\),
@@ -424,6 +432,7 @@ theorem wrapping_window_compatibility_of_isNBlkInjective
   rw [evalWord_cyclicCfg_snoc hM1 (by omega) hL (Fin.cons j σ_tail) τ] at key
   rw [init_evalWord_split hM1 (by omega) hL (Fin.cons j σ_tail) τ] at key
   rw [evalWord_ofFn_cons] at key
+  simp only [fin_cons_mk_succ] at key
   have key' :
       Matrix.trace
           (evalWord A (List.ofFn σ_tail) *

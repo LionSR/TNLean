@@ -163,13 +163,21 @@ theorem gaugePhaseEquiv_twisted_of_hasStringOrder
   haveI : NeZero D := ⟨hD⟩
   let V := Matrix (Fin D) (Fin D) ℂ
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
-  let F' : V →L[ℂ] V := Φ (twistedTransferMap A u)
+  let F' : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ :=
+    (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+      (twistedTransferMap A u)
   obtain ⟨X, Y, hnot0⟩ := not_tendsto_zero_of_hasStringOrder A u Λ hSO
   have hsr_ge : spectralRadius ℂ F' ≥ 1 := by
     have hsr_not_lt : ¬ spectralRadius ℂ F' < 1 := by
       intro hlt
+      have hlt' :
+          spectralRadius ℂ
+            ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+              (A.twistedTransferMap u)) < 1 := by
+        change spectralRadius ℂ F' < 1
+        exact hlt
       exact hnot0 (stringOrderBoundaryParam_tendsto_zero_of_spectralRadius_lt_one
-        A u Λ X Y <| by simpa [F'] using hlt)
+        A u Λ X Y hlt')
     exact le_of_not_gt hsr_not_lt
   haveI : Nontrivial V := by
     haveI : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
@@ -186,9 +194,11 @@ theorem gaugePhaseEquiv_twisted_of_hasStringOrder
     hcompact.exists_isMaxOn hF'_nonempty continuous_nnnorm.continuousOn
   have hμ_rad : (‖μ‖₊ : ENNReal) = spectralRadius ℂ F' := by
     exact le_antisymm (le_iSup₂ (α := ENNReal) μ hμ_spec) (iSup₂_le <| mod_cast hμ_max)
-  have hμ_spec_end : μ ∈ spectrum ℂ (twistedTransferMap A u) := by
-    rw [← AlgEquiv.spectrum_eq Φ]
+  have hμ_spec_Φ : μ ∈ spectrum ℂ (Φ (twistedTransferMap A u)) := by
+    change μ ∈ spectrum ℂ F'
     exact hμ_spec
+  have hμ_spec_end : μ ∈ spectrum ℂ (twistedTransferMap A u) := by
+    simpa [AlgEquiv.spectrum_eq Φ (twistedTransferMap A u)] using hμ_spec_Φ
   have hμ_ev : Module.End.HasEigenvalue (twistedTransferMap A u) μ :=
     Module.End.hasEigenvalue_iff_mem_spectrum.mpr hμ_spec_end
   obtain ⟨X, hX_mem, hX_ne⟩ := hμ_ev.exists_hasEigenvector

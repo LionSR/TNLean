@@ -14,6 +14,7 @@ import Mathlib.Analysis.Normed.Algebra.GelfandFormula
 import Mathlib.Analysis.SpecificLimits.Normed
 import Mathlib.LinearAlgebra.Eigenspace.Basic
 import Mathlib.LinearAlgebra.Eigenspace.Minpoly
+import Mathlib.Topology.Algebra.Module.Spaces.ContinuousLinearMap
 
 /-!
 # Transfer-operator gap for the mixed transfer operator
@@ -250,7 +251,8 @@ theorem spectralRadius_mixedTransfer_le_one
   · have : Subsingleton (Matrix (Fin 0) (Fin 0) ℂ) := ⟨fun a b => by ext i; exact i.elim0⟩
     have : Subsingleton (Matrix (Fin 0) (Fin 0) ℂ →L[ℂ] Matrix (Fin 0) (Fin 0) ℂ) :=
       ContinuousLinearMap.uniqueOfLeft.instSubsingleton
-    rw [spectrum.SpectralRadius.of_subsingleton]; exact zero_le _
+    rw [spectrum.SpectralRadius.of_subsingleton]
+    exact zero_le
   · haveI : NeZero D := ⟨hD⟩
     have h_spec := AlgEquiv.spectrum_eq (Module.End.toContinuousLinearMap
       (Matrix (Fin D) (Fin D) ℂ)) (mixedTransferMap A B)
@@ -443,15 +445,26 @@ theorem modulus_one_eigenvalue_implies_gauge
   haveI : NeZero D := ⟨hD⟩
   -- Step 1: Extract eigenvalue with |μ| = 1 and eigenvector X ≠ 0
   -- The spectral radius equals 1 (≥ 1 from hypothesis, ≤ 1 already proved)
-  set V := Matrix (Fin D) (Fin D) ℂ
+  let V := Matrix (Fin D) (Fin D) ℂ
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
   let F' : V →L[ℂ] V := Φ (mixedTransferMap A B)
+  haveI : CompleteSpace V := FiniteDimensional.complete ℂ V
+  haveI : FiniteDimensional ℂ (V →L[ℂ] V) :=
+    Φ.toLinearEquiv.finiteDimensional
+  have h_complete : CompleteSpace (V →L[ℂ] V) :=
+    FiniteDimensional.complete ℂ (V →L[ℂ] V)
+  letI : CompleteSpace (V →L[ℂ] V) := h_complete
   haveI : Nontrivial V := by
     haveI : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
     exact Matrix.nonempty
   haveI : Nontrivial (V →L[ℂ] V) := ContinuousLinearMap.instNontrivialId
   -- Spectral radius is achieved
-  obtain ⟨μ, hμ_spec, hμ_norm⟩ := spectrum.exists_nnnorm_eq_spectralRadius F'
+  obtain ⟨μ, hμ_spec, hμ_norm⟩ :=
+    @spectrum.exists_nnnorm_eq_spectralRadius_of_nonempty ℂ _ _
+      (instGCNormedRingMatrixCLM D D) (instGCNormedAlgebraMatrixCLM D D)
+      (instGCCompleteSpaceMatrixCLM D D) inferInstance (a := F')
+      (@spectrum.nonempty _ (instGCNormedRingMatrixCLM D D)
+        (instGCNormedAlgebraMatrixCLM D D) (instGCCompleteSpaceMatrixCLM D D) inferInstance F')
   -- Transfer to eigenvalue of the linear map
   have h_spec_eq := AlgEquiv.spectrum_eq Φ (mixedTransferMap A B)
   have hμ_spec_end : μ ∈ spectrum ℂ (mixedTransferMap A B) := h_spec_eq ▸ hμ_spec
@@ -511,16 +524,38 @@ theorem mixedTransfer_pow_tendsto_zero
     (X : Matrix (Fin D) (Fin D) ℂ) :
     Filter.Tendsto (fun n => ((mixedTransferMap A B) ^ n) X)
       Filter.atTop (nhds 0) := by
-  let V := Matrix (Fin D) (Fin D) ℂ
-  let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
-  let F' : V →L[ℂ] V := Φ (mixedTransferMap A B)
+  let Φ :
+      (Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) ≃ₐ[ℂ]
+        (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)
+  let F' : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ :=
+    Φ (mixedTransferMap A B)
+  letI : CompleteSpace
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    instGCCompleteSpaceMatrixCLM D D
   have h_clm : Filter.Tendsto (fun n => F' ^ n) Filter.atTop (nhds 0) :=
-    pow_tendsto_zero_of_spectralRadius_lt_one F'
+    @pow_tendsto_zero_of_spectralRadius_lt_one
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
+      (instGCNormedRingMatrixCLM D D) (instGCCompleteSpaceMatrixCLM D D)
+      (instGCNormedAlgebraMatrixCLM D D) F'
       (spectralRadius_mixedTransfer_lt_one A B hA hB hA_norm hB_norm hAB)
-  have h_eval := (ContinuousLinearMap.apply ℂ V X).continuous.tendsto (0 : V →L[ℂ] V)
-  rw [map_zero] at h_eval
-  suffices ∀ n, ((mixedTransferMap A B) ^ n) X = (F' ^ n) X by
-    simp_rw [this]; exact h_eval.comp h_clm
+  have h_eval :
+      Filter.Tendsto (fun n =>
+        ((F' ^ n : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) X))
+        Filter.atTop (nhds 0) := by
+    apply squeeze_zero_norm' (a := fun n => ‖F' ^ n‖ * ‖X‖)
+    · filter_upwards with n
+      change ‖((F' ^ n :
+        Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) X)‖ ≤
+        ‖F' ^ n‖ * ‖X‖
+      exact (F' ^ n).le_opNorm X
+    · simpa [instGCNormedRingMatrixCLM] using (tendsto_norm_zero.comp h_clm).mul_const ‖X‖
+  suffices ∀ n,
+      ((mixedTransferMap A B) ^ n) X =
+        ((F' ^ n :
+          Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) X) by
+    simp_rw [this]
+    exact h_eval
   intro n
   rw [(map_pow Φ (mixedTransferMap A B) n).symm]; rfl
 

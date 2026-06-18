@@ -16,7 +16,7 @@ git = "https://github.com/PatrickMassot/checkdecls.git"
 [[require]]
 name = "Gametheory"
 git = "https://github.com/LionSR/Brouwer.git"
-rev = "main"
+rev = "bdd5a5deecf2938beeafcb4ddd72ba5d1b4ec3e2"
 
 [[require]]
 name = "mathlib"

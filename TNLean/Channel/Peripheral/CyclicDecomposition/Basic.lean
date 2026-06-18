@@ -73,16 +73,19 @@ def cornerRestriction {D : ℕ} (P : MatrixAlg D) (T : MatrixEnd D)
     (hInv : PreservesCorner P T) :
     cornerSubmodule P →ₗ[ℂ] cornerSubmodule P where
   toFun X := ⟨T X.1, by
+    change P * T X.1 * P = T X.1
     have hX : P * X.1 * P = X.1 := X.2
-    simpa [hX] using hInv X.1⟩
+    have h := hInv X.1
+    rw [hX] at h
+    exact h⟩
   map_add' X Y := by
     apply Subtype.ext
     ext i j
-    simp only [Submodule.coe_add, map_add, add_apply]
+    simp only [Submodule.coe_add, map_add, Matrix.add_apply]
   map_smul' c X := by
     apply Subtype.ext
     ext i j
-    simp only [SetLike.val_smul, map_smul, smul_apply, smul_eq_mul, RingHom.id_apply]
+    simp only [SetLike.val_smul, map_smul, Matrix.smul_apply, RingHom.id_apply]
 
 /-- Ambient reformulation of irreducibility for the restriction of `T` to the corner
 `P · M_D(ℂ) · P`. -/
@@ -368,7 +371,7 @@ lemma cornerCompressionExpand_conjTranspose
       cornerCompressionExpand Umat eST eS Mᴴ := by
   rw [cornerCompressionExpand_apply Umat eST eS M,
     cornerCompressionExpand_apply Umat eST eS Mᴴ]
-  simp only [Matrix.reindexLinearEquiv_apply]
+  simp only [Matrix.coe_reindexLinearEquiv]
   rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,
     Matrix.conjTranspose_conjTranspose, Matrix.mul_assoc]
   congr 1
@@ -391,7 +394,7 @@ lemma cornerCompressionExpand_mul
   rw [cornerCompressionExpand_apply Umat eST eS (M₁ * M₂),
     cornerCompressionExpand_apply Umat eST eS M₁,
     cornerCompressionExpand_apply Umat eST eS M₂]
-  simp only [Matrix.reindexLinearEquiv_apply]
+  simp only [Matrix.coe_reindexLinearEquiv]
   set Y₁ : MatrixAlg D :=
     Matrix.reindex eST.symm eST.symm
       (Matrix.fromBlocks (Matrix.reindex eS.symm eS.symm M₁)
@@ -666,7 +669,8 @@ private lemma exists_cornerSubmodule_matrixLinearEquiv_aux {D : ℕ}
   let f : Fin D → ℂ := fun j => (↑(hHerm.eigenvalues j) : ℂ)
   have hPdiag_eq : Pdiag = Matrix.diagonal f := by
     have h := hHerm.conjStarAlgAut_star_eigenvectorUnitary
-    simpa [Pdiag, f, Unitary.conjStarAlgAut_star_apply] using h
+    simpa [Pdiag, f, Umat, Matrix.star_eq_conjTranspose, Function.comp_def,
+      Unitary.conjStarAlgAut_star_apply] using h
   have hPdiag_idem : Pdiag * Pdiag = Pdiag := by
     change Umatᴴ * P * Umat * (Umatᴴ * P * Umat) = Umatᴴ * P * Umat
     calc
@@ -727,7 +731,14 @@ private lemma exists_cornerSubmodule_matrixLinearEquiv_aux {D : ℕ}
         cases y with
         | inl s' =>
             by_cases h : s = s'
-            · subst h; simpa [p, P0] using s.2
+            · subst h
+              rw [Matrix.diagonal_apply_eq]
+              change f ((Equiv.sumCompl p) (Sum.inl s)) =
+                (Matrix.fromBlocks (1 : Matrix S S ℂ) 0 0 (0 : Matrix T T ℂ))
+                  (Sum.inl s) (Sum.inl s)
+              rw [Matrix.fromBlocks_apply₁₁]
+              rw [Equiv.sumCompl_apply_inl]
+              simpa using s.2
             · simp [P0, Matrix.fromBlocks_apply₁₁, h]
         | inr t => simp [P0, Matrix.fromBlocks_apply₁₂]
     | inr t =>
@@ -735,7 +746,14 @@ private lemma exists_cornerSubmodule_matrixLinearEquiv_aux {D : ℕ}
         | inl s => simp [P0, Matrix.fromBlocks_apply₂₁]
         | inr t' =>
             by_cases h : t = t'
-            · subst h; simpa [p, P0] using hfT t
+            · subst h
+              rw [Matrix.diagonal_apply_eq]
+              change f ((Equiv.sumCompl p) (Sum.inr t)) =
+                (Matrix.fromBlocks (1 : Matrix S S ℂ) 0 0 (0 : Matrix T T ℂ))
+                  (Sum.inr t) (Sum.inr t)
+              rw [Matrix.fromBlocks_apply₂₂]
+              rw [Equiv.sumCompl_apply_inr]
+              simpa using hfT t
             · simp [P0, Matrix.fromBlocks_apply₂₂, h]
   -- Forward and inverse maps for the compression equiv.
   have hP_decomp : P = Umat * Pdiag * Umatᴴ := by

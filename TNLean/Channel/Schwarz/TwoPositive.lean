@@ -89,6 +89,16 @@ private noncomputable def finTwoSumEquiv (α : Type*) : α × Fin 2 ≃ α ⊕ �
   rw [finSumFinEquiv_symm_last]
   simp
 
+@[simp] private theorem finTwoSumEquiv_symm_inl {α : Type*} (a : α) :
+    (finTwoSumEquiv α).symm (Sum.inl a) = (a, 0) := by
+  rw [← Equiv.eq_symm_apply]
+  exact finTwoSumEquiv_apply_zero a
+
+@[simp] private theorem finTwoSumEquiv_symm_inr {α : Type*} (a : α) :
+    (finTwoSumEquiv α).symm (Sum.inr a) = (a, 1) := by
+  rw [← Equiv.eq_symm_apply]
+  exact finTwoSumEquiv_apply_one a
+
 /-! ## Definitions of n-positivity -/
 
 /-- A linear map `E : M_n(ℂ) → M_n(ℂ)` is **k-positive** if the ampliation
@@ -325,7 +335,10 @@ theorem Is2PositiveMap.isPositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n 
     simpa [X', Matrix.reindex_apply] using hdiag.submatrix e
   have hY' := h X' hX'
   let emb : n → n × Fin 2 := fun i => (i, 0)
-  simpa [emb, X', Matrix.reindex_apply] using hY'.submatrix emb
+  convert hY'.submatrix emb using 1
+  ext i j
+  simp [emb, X', Matrix.reindex_apply, e]
+  rfl
 
 /-! ## Kadison–Schwarz for 2-positive maps -/
 
@@ -406,10 +419,14 @@ theorem kadison_schwarz_2positive
           (((E X)ᴴ)ᴴ) (1 : Matrix n n ℂ) := by
     ext ip jq
     rcases ip with i | i <;> rcases jq with j | j
-    · simpa [Matrix.reindex_apply] using congr_fun (congr_fun (hEBlock 0 0) i) j
-    · simpa [Matrix.reindex_apply] using congr_fun (congr_fun (hEBlock 0 1) i) j
-    · simpa [Matrix.reindex_apply] using congr_fun (congr_fun (hEBlock 1 0) i) j
-    · simpa [Matrix.reindex_apply] using congr_fun (congr_fun (hEBlock 1 1) i) j
+    · convert congr_fun (congr_fun (hEBlock 0 0) i) j using 1 <;>
+        simp [Matrix.reindex_apply, e]
+    · convert congr_fun (congr_fun (hEBlock 0 1) i) j using 1 <;>
+        simp [Matrix.reindex_apply, e]
+    · convert congr_fun (congr_fun (hEBlock 1 0) i) j using 1 <;>
+        simp [Matrix.reindex_apply, e]
+    · convert congr_fun (congr_fun (hEBlock 1 1) i) j using 1 <;>
+        simp [Matrix.reindex_apply, e]
   have hBlockPsD :
       (Matrix.fromBlocks (E (Xᴴ * X)) ((E X)ᴴ)
         (((E X)ᴴ)ᴴ) (1 : Matrix n n ℂ)).PosSemidef := by

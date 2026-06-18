@@ -739,10 +739,9 @@ def toPositiveBlockedStructureChiTracePowerForm
   tracePower := by
     intro n hn i j k
     rw [cmp.blocked_coeff_eq n hn i j k]
-    simpa only [AlgebraStructureData.BlockedStructureChiFamily.tracePowerCoeff,
-      pulledBlockedChiFamily, DiagonalChiFamily.comap, blockedLabel, dif_pos hn] using
-      hχ.tracePower n hn
-        (cmp.sourceLabel n hn i) (cmp.sourceLabel n hn j) (cmp.targetLabel n hn k)
+    rw [cmp.pulledBlockedChi_tracePowerCoeff_of_pos hχ n hn i j k n]
+    exact hχ.tracePower n hn
+      (cmp.sourceLabel n hn i) (cmp.sourceLabel n hn j) (cmp.targetLabel n hn k)
 
 end BNTBlockedBasisCoefficientComparison
 

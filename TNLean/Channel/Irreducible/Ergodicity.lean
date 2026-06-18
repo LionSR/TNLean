@@ -56,9 +56,10 @@ private lemma IsChannel.iter_mem_densityMatrices
     (hE : IsChannel E) {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hρ : ρ ∈ densityMatrices D) (n : ℕ) : (E ^ n) ρ ∈ densityMatrices D := by
   induction n with
-  | zero => simpa only [pow_zero] using hρ
+  | zero =>
+      change ρ ∈ densityMatrices D
+      exact hρ
   | succ n ih =>
-      change (E ^ (n + 1)) ρ ∈ densityMatrices D
       rw [pow_succ']
       exact IsChannel.map_densityMatrices E hE ((E ^ n) ρ) ih
 
@@ -141,11 +142,17 @@ theorem IsChannel.exists_unique_density_fixedPoint_of_irreducible
   obtain ⟨ρ₀, hρ₀⟩ := densityMatrices_nonempty hD
   have hces_mem : ∀ N : ℕ, cesaroMean E ρ₀ (N + 1) ∈ densityMatrices D :=
     IsChannel.cesaroMean_mem_densityMatrices (E := E) hE hρ₀
+  haveI : FirstCountableTopology (Matrix (Fin D) (Fin D) ℂ) := by
+    change FirstCountableTopology (Fin D → Fin D → ℂ)
+    infer_instance
   obtain ⟨σ, _hσ_mem, φ, hφ_mono, hφ_tendsto⟩ :=
     densityMatrices_isCompact.tendsto_subseq hces_mem
   have hσ_lim : σ ∈ densityMatrices D ∧ E σ = σ :=
     IsChannel.cesaroMean_subseq_limit_fixedPoint (E := E) hE hρ₀
-      hφ_mono.tendsto_atTop (by simpa only [Function.comp] using hφ_tendsto)
+      hφ_mono.tendsto_atTop (by
+        change Filter.Tendsto ((fun n => cesaroMean E ρ₀ (n + 1)) ∘ φ)
+          Filter.atTop (nhds σ)
+        exact hφ_tendsto)
   have hσ_mem : σ ∈ densityMatrices D := hσ_lim.1
   have hσ_fix : E σ = σ := hσ_lim.2
   have hσ_ne : σ ≠ 0 := ne_zero_of_mem_densityMatrices (D := D) hσ_mem
@@ -180,6 +187,9 @@ theorem IsChannel.cesaroMean_tendsto_of_irreducible
     IsChannel.exists_unique_density_fixedPoint_of_irreducible (E := E) hE hIrr hD
   have hces_mem : ∀ N : ℕ, cesaroMean E ρ (N + 1) ∈ densityMatrices D :=
     IsChannel.cesaroMean_mem_densityMatrices (E := E) hE hρ
+  haveI : FirstCountableTopology (Matrix (Fin D) (Fin D) ℂ) := by
+    change FirstCountableTopology (Fin D → Fin D → ℂ)
+    infer_instance
   have h_tendsto : Filter.Tendsto (fun N => cesaroMean E ρ (N + 1))
       Filter.atTop (nhds σ) := by
     refine Filter.tendsto_of_subseq_tendsto ?_
@@ -190,9 +200,15 @@ theorem IsChannel.cesaroMean_tendsto_of_irreducible
       hns.comp hφ_mono.tendsto_atTop
     have ha_lim : a ∈ densityMatrices D ∧ E a = a :=
       IsChannel.cesaroMean_subseq_limit_fixedPoint (E := E) hE hρ hψ_tendsto
-        (by simpa only [Function.comp] using hφ_tendsto)
+        (by
+          change Filter.Tendsto ((fun n => cesaroMean E ρ (ns n + 1)) ∘ φ)
+            Filter.atTop (nhds a)
+          exact hφ_tendsto)
     have ha_eq : a = σ := hσ_unique a ha_lim.1 ha_lim.2
-    exact ⟨φ, by simpa [Function.comp, ha_eq] using hφ_tendsto⟩
+    refine ⟨φ, ?_⟩
+    change Filter.Tendsto ((fun n => cesaroMean E ρ (ns n + 1)) ∘ φ)
+      Filter.atTop (nhds σ)
+    simpa [ha_eq] using hφ_tendsto
   exact ⟨σ, hσ_mem, hσ_pd, hσ_fix, hσ_unique, h_tendsto⟩
 
 end Ergodicity

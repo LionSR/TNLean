@@ -104,6 +104,17 @@ def regionComplementBoundaryConfig (A : Tensor G d) (R : Finset V)
     RegionBoundaryConfig (G := G) A (Finset.univ \ R) :=
   fun f => bdry ((regionBoundaryEdgeComplEquiv (G := G) R).symm f)
 
+/-- The complement boundary configuration reads the boundary edge `f` of `R`,
+viewed on the complement as `regionBoundaryEdgeToCompl R f`, off the original
+boundary value at `f`. -/
+theorem regionComplementBoundaryConfig_apply_toCompl (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (bdry : RegionBoundaryConfig (G := G) A R) :
+    regionComplementBoundaryConfig (G := G) A R bdry (regionBoundaryEdgeToCompl (G := G) R f) =
+      bdry f := by
+  rw [regionComplementBoundaryConfig]
+  congr 1
+
 /-- The complement region `univ \ R`, viewed as an abstract two-block tensor over
 the edges crossing the boundary of `R`.
 
@@ -163,8 +174,12 @@ theorem isTwoBlockInjective_regionComplementTwoBlock (A : Tensor G d) (R : Finse
   simp only [Prod.mk.injEq, true_and]
   funext f
   have := congrFun hxy (regionBoundaryEdgeToCompl (G := G) R f)
-  simpa [regionComplementBoundaryConfig, regionBoundaryEdgeToCompl,
-    regionBoundaryEdgeComplEquiv, Equiv.subtypeEquivRight] using this
+  change regionComplementBoundaryConfig (G := G) A R bx
+      (regionBoundaryEdgeToCompl (G := G) R f) =
+    regionComplementBoundaryConfig (G := G) A R by'
+      (regionBoundaryEdgeToCompl (G := G) R f) at this
+  rwa [regionComplementBoundaryConfig_apply_toCompl,
+    regionComplementBoundaryConfig_apply_toCompl] at this
 
 /-! ### The region-inserted coefficient
 

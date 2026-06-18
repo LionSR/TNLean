@@ -319,6 +319,7 @@ theorem perVertexScalar (A B : Tensor G d)
         c * gaugeVertex B Z v
           (fun ie => Fin.cast (congr_fun hPA.bondDim_eq ie.1) (η ie)) σ := by
   classical
+  have hPA_abs := hPA
   set Btilde := absorbEdgeGauges B Z with hBt
   have hbd : A.bondDim = Btilde.bondDim := hPA.bondDim_eq
   have hBtinj : IsVertexInjective Btilde := isVertexInjective_absorbEdgeGauges B Z hB
@@ -344,8 +345,11 @@ theorem perVertexScalar (A B : Tensor G d)
       (by intro e; rw [reindexTensor_bondDim]; exact hpos e) v)
     (sameTwoBlockInsertions_of_edgeInsertedCoeff_eq A Btilde v hbd hedge)
   refine ⟨c, hc_ne, fun η σ => ?_⟩
-  simpa only [vertexTwoBlock, reindexTensor_component, absorbEdgeGauges_component]
-    using hprop (PUnit.unit : PUnit) η σ
+  have hlocal := hprop (PUnit.unit : PUnit) η σ
+  change A.component v η σ =
+    c * (absorbEdgeGauges B Z).component v
+      (fun ie => Fin.cast (congr_fun hPA_abs.bondDim_eq ie.1) (η ie)) σ
+  simpa only [vertexTwoBlock, reindexTensor_component, hBt] using hlocal
 
 /-! ### Construction of the global gauge from per-vertex scalars
 

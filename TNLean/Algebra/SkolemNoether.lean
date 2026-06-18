@@ -48,10 +48,12 @@ theorem linear_mul_endomorphism_bijective
       rcases eq_bot_or_eq_top (TwoSidedIdeal.ker f) with h | h
       · exact h
       · exact absurd (LinearMap.ext fun A => by
-          simpa [f] using (TwoSidedIdeal.mem_ker (f := f)).1
+          change f A = 0
+          exact (TwoSidedIdeal.mem_ker (f := f)).1
             (h ▸ (show A ∈ (⊤ : TwoSidedIdeal _) by simp))) hNonzero
     have hinj : Function.Injective T := by
-      simpa [f] using (TwoSidedIdeal.ker_eq_bot (f := f)).1 hker
+      intro A B hAB
+      exact (TwoSidedIdeal.ker_eq_bot (f := f)).1 hker hAB
     exact ⟨hinj, LinearMap.surjective_of_injective hinj⟩
 
 /-- Full matrix algebras over `ℂ` can be algebra-isomorphic only when their
@@ -91,19 +93,22 @@ theorem skolemNoether_matrix {n : Type*} [Fintype n] [DecidableEq n]
   have hX_toLin : Matrix.GeneralLinearGroup.toLin X =
       LinearMap.GeneralLinearGroup.ofLinearEquiv T := by simp [X]
   have hX_lin : e (X : Matrix n n ℂ) = (T : (n → ℂ) →ₗ[ℂ] n → ℂ) := by
-    have := congrArg (fun u : LinearMap.GeneralLinearGroup ℂ (n → ℂ) =>
-      (↑u : (n → ℂ) →ₗ[ℂ] n → ℂ)) hX_toLin
-    simpa [Matrix.GeneralLinearGroup.toLin, Units.coe_mapEquiv, e] using this
+    change ((Matrix.GeneralLinearGroup.toLin X : LinearMap.GeneralLinearGroup ℂ (n → ℂ)) :
+      (n → ℂ) →ₗ[ℂ] n → ℂ) = (T : (n → ℂ) →ₗ[ℂ] n → ℂ)
+    rw [hX_toLin]
+    rfl
   have hX_lin_inv :
       e ((X⁻¹ : GL n ℂ) : Matrix n n ℂ) = (T.symm : (n → ℂ) →ₗ[ℂ] n → ℂ) := by
     have hX_toLin_inv : Matrix.GeneralLinearGroup.toLin (X⁻¹) =
         LinearMap.GeneralLinearGroup.ofLinearEquiv T.symm := by
       simp only [MulEquiv.map_inv, hX_toLin]
       exact (LinearMap.GeneralLinearGroup.ofLinearEquiv_inv (f := T)).symm
-    have := congrArg (fun u : LinearMap.GeneralLinearGroup ℂ (n → ℂ) =>
-      (↑u : (n → ℂ) →ₗ[ℂ] n → ℂ)) hX_toLin_inv
-    simp only [Matrix.GeneralLinearGroup.toLin, Units.coe_mapEquiv, e] at this ⊢
-    convert this using 1
+    change ((Matrix.GeneralLinearGroup.toLin (X⁻¹) :
+      LinearMap.GeneralLinearGroup ℂ (n → ℂ)) :
+        (n → ℂ) →ₗ[ℂ] n → ℂ) =
+      (T.symm : (n → ℂ) →ₗ[ℂ] n → ℂ)
+    rw [hX_toLin_inv]
+    rfl
   -- Compute both sides under `e`.
   calc e (f M)
       = fEnd (e M) := by simp [fEnd]

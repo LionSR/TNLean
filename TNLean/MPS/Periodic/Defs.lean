@@ -54,7 +54,7 @@ theorem SameState.trans {A B C : PeriodicMPSTensor (d := d) (D := D) m}
     SameState A C :=
   MPSChainTensor.SameState.trans hAB hBC
 
-instance instEquivalenceSameState :
+def instEquivalenceSameState :
     Equivalence (SameState (d := d) (D := D) (m := m)) where
   -- `Equivalence` is a structure (not a class): this is a convenience bundle,
   -- not intended to be found via typeclass search.
@@ -74,7 +74,7 @@ theorem GaugeEquiv.trans {A B C : PeriodicMPSTensor (d := d) (D := D) m}
     GaugeEquiv A C :=
   MPSChainTensor.GaugeEquiv.trans hAB hBC
 
-instance instEquivalenceGaugeEquiv :
+def instEquivalenceGaugeEquiv :
     Equivalence (GaugeEquiv (d := d) (D := D) (m := m)) where
   -- `Equivalence` is a structure (not a class): this is a convenience bundle,
   -- not intended to be found via typeclass search.
@@ -273,7 +273,7 @@ private lemma evalWord_leftMul_of_commute
   | [] => by simp [evalWord]
   | i :: w => by
       have hCommZi : Commute Z (A i) := by
-        simpa [Commute] using hcomm i
+        exact hcomm i
       have hCommPow : A i * Z ^ w.length = Z ^ w.length * A i :=
         (hCommZi.symm.pow_right w.length).eq
       calc

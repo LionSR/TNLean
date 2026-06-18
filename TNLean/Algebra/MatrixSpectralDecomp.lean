@@ -91,7 +91,7 @@ theorem PosSemidef.eq_sum_vecMulVec_nonzero_eigs
                 _ = c i * star (c i) := by
                         simp [c, pow_two]
             rw [hEig]
-            simpa [term, c] using
+            simpa [term, c, ← Matrix.star_eq_conjTranspose] using
               (mul_single_mul_conjTranspose_eq_vecMulVec
                 (K := (hA.eigenvectorUnitary : Matrix n n ℂ)) (c := c i) i i)
   have hsplit :

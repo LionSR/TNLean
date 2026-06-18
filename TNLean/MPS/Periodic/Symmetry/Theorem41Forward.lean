@@ -138,9 +138,10 @@ theorem isLeftCanonical_kraus_isometry
     have hEq : transferMap C = transferMap B := by
       simpa [C] using transferMap_kraus_isometry B W hW
     simpa [hEq] using transferMap_isChannel B hB
-  simpa [C] using
-    kraus_sum_conjTranspose_mul_of_tp C (transferMap C)
-      (fun X => by simp [transferMap_apply]) hCh.tp
+  change IsLeftCanonical C
+  rw [IsLeftCanonical]
+  exact kraus_sum_conjTranspose_mul_of_tp C (transferMap C)
+    (fun X => by simp [transferMap_apply]) hCh.tp
 
 /-- A physical-index isometry preserves periodicity and its period. -/
 theorem isPeriodic_kraus_isometry
