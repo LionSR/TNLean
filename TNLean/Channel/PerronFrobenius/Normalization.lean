@@ -45,26 +45,6 @@ variable {D : ℕ}
 
 namespace PerronFrobeniusNormalization
 
-/-- A small auxiliary lemma: rewrite the spectral theorem in `U * diagonal * Uᴴ` form. -/
-private lemma spectral_decomp_eq [DecidableEq (Fin D)]
-    {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.IsHermitian) :
-    M = (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)
-      * Matrix.diagonal (fun j => (↑(hM.eigenvalues j) : ℂ))
-      * (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ := by
-  have h := hM.spectral_theorem
-  -- Unfold the unitary conjugation.
-  -- `simp` turns `RCLike.ofReal` into coercion to `ℂ`.
-  simpa [Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose, Matrix.mul_assoc,
-    Function.comp_def] using h
-
-/-- `Uᴴ * U = 1` for the eigenvector unitary `U`. -/
-private lemma eig_conj_mul [DecidableEq (Fin D)]
-    {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.IsHermitian) :
-    (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ
-      * (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ) = 1 := by
-  rw [← Matrix.star_eq_conjTranspose]
-  exact Matrix.UnitaryGroup.star_mul_self hM.eigenvectorUnitary
-
 /--
 Given a PSD matrix `ρ`, choose the orthogonal projection onto its support using the spectral
 theorem.
@@ -87,9 +67,11 @@ private lemma exists_supportProjection
   let sgn : Fin D → ℂ := fun j => if 0 < hH.eigenvalues j then 1 else 0
   let P : Matrix (Fin D) (Fin D) ℂ := U * Matrix.diagonal sgn * Uᴴ
   have hUU : Uᴴ * U = 1 := by
-    simpa [U] using eig_conj_mul (D := D) hH
+    simpa [U, Matrix.star_eq_conjTranspose] using
+      Matrix.UnitaryGroup.star_mul_self hH.eigenvectorUnitary
   have hρ_spectral : ρ = U * Matrix.diagonal eig * Uᴴ := by
-    simpa [U, eig] using spectral_decomp_eq (D := D) hH
+    simpa [U, eig, Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose,
+      Matrix.mul_assoc, Function.comp_def] using hH.spectral_theorem
   have hsgn_star : star sgn = sgn := by
     ext j
     simp [sgn, Pi.star_apply]

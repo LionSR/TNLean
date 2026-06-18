@@ -8,8 +8,8 @@ import Mathlib.Analysis.Matrix.PosDef
 # Hermitian matrix spectral decomposition and adjoint identities
 
 This file provides lemmas for Hermitian complex matrices over `Fin D`: the
-unitary identities for the eigenvector matrix, the standard
-`U * diagonal * Uᴴ` spectral decomposition, and the adjoint identity for the
+standard `U * diagonal * Uᴴ` spectral decomposition, extremal eigenvalue
+lemmas, scalar-shift spectral formulae, and the adjoint identity for the
 matrix-vector dot-product pairing.
 -/
 
@@ -34,29 +34,6 @@ theorem spectral_decomp_eq_of_generalIndex
   rwa [Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose] at h
 
 end Matrix.IsHermitian
-
-/-- `Uᴴ * U = 1` for the eigenvector unitary of a Hermitian matrix. -/
-theorem eig_conj_mul [DecidableEq (Fin D)]
-    {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.IsHermitian) :
-    (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ *
-      (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ) = 1 := by
-  rw [← Matrix.star_eq_conjTranspose]
-  exact Matrix.UnitaryGroup.star_mul_self hM.eigenvectorUnitary
-
-/-- `U * Uᴴ = 1` for the eigenvector unitary of a Hermitian matrix. -/
-theorem eig_mul_conj [DecidableEq (Fin D)]
-    {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.IsHermitian) :
-    (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ) *
-      (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ = 1 := by
-  rw [← Matrix.star_eq_conjTranspose]
-  exact Unitary.mul_star_self_of_mem hM.eigenvectorUnitary.prop
-
-/-- The eigenvector unitary of a Hermitian matrix is a unit in the matrix ring. -/
-theorem eigenvectorUnitary_isUnit [DecidableEq (Fin D)]
-    {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.IsHermitian) :
-    IsUnit (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ) := by
-  rw [Matrix.isUnit_iff_isUnit_det]
-  exact Matrix.UnitaryGroup.det_isUnit hM.eigenvectorUnitary
 
 /-- Smallest eigenvalue of a Hermitian matrix on a nonempty finite space. -/
 noncomputable def minEigenvalue [Nonempty (Fin D)]
@@ -133,7 +110,8 @@ theorem hermitian_sub_scalar_spectral
       (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ := by
   set U : Matrix (Fin D) (Fin D) ℂ := ↑hM.eigenvectorUnitary
   have hUU : U * Uᴴ = 1 := by
-    simpa [U] using eig_mul_conj hM
+    simpa [U, Matrix.star_eq_conjTranspose] using
+      (Unitary.mul_star_self_of_mem hM.eigenvectorUnitary.prop)
   have h_cI : (↑c : ℂ) • (1 : Matrix (Fin D) (Fin D) ℂ) =
       U * ((↑c : ℂ) • 1) * Uᴴ := by
     calc
@@ -164,7 +142,8 @@ theorem smul_one_sub_hermitian_spectral
       (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ := by
   set U : Matrix (Fin D) (Fin D) ℂ := ↑hM.eigenvectorUnitary
   have hUU : U * Uᴴ = 1 := by
-    simpa [U] using eig_mul_conj hM
+    simpa [U, Matrix.star_eq_conjTranspose] using
+      (Unitary.mul_star_self_of_mem hM.eigenvectorUnitary.prop)
   have h_cI : (↑c : ℂ) • (1 : Matrix (Fin D) (Fin D) ℂ) =
       U * ((↑c : ℂ) • 1) * Uᴴ := by
     calc

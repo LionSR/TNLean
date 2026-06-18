@@ -44,7 +44,8 @@ private theorem hermitian_fixed_eq_scalar_of_irreducible_unital
   set c0 : ℝ := minEigenvalue hH
   set U : MatrixAlg D := (↑hH.eigenvectorUnitary : MatrixAlg D)
   have hU_unit : IsUnit U := by
-    simpa [U] using eigenvectorUnitary_isUnit (D := D) hH
+    rw [Matrix.isUnit_iff_isUnit_det]
+    simpa [U] using Matrix.UnitaryGroup.det_isUnit hH.eigenvectorUnitary
   have hshift_eq :
       H - (c0 : ℂ) • 1 =
         U * Matrix.diagonal (fun i : Fin D => (↑(hH.eigenvalues i - c0) : ℂ)) * Uᴴ := by
