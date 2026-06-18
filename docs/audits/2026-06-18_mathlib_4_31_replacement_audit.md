@@ -514,7 +514,10 @@ TNLean files where this may be useful include:
 Recommended action:
 
 - Replace elementary symmetric-projection positivity arguments by Mathlib
-  projection API where possible.
+  projection API where possible.  The exact local wrapper
+  `LinearMap.IsSymmetricProjection.re_inner_nonneg` has been removed; uses now
+  call `LinearMap.IsSymmetricProjection.isPositive` and
+  `LinearMap.IsPositive.re_inner_nonneg_left` directly.
 - Keep the Friedrichs-angle and martingale-type estimates local.
 - Prefer `Submodule.projectionOnto` for new complement projections.
 
