@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Irreducible.Growth.OneStep
 import TNLean.Channel.Irreducible.Growth.Preservation
+import TNLean.Algebra.MatrixAux
 
 /-!
 # Kernel-descent proof of the growth condition

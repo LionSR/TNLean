@@ -8,7 +8,6 @@ import TNLean.Spectral.GaugeConstruction
 import TNLean.QPF.Assembly
 import TNLean.Channel.FixedPoint.CanonicalGauge
 import TNLean.Channel.Schwarz.Basic
-import TNLean.Algebra.MatrixAux
 import Mathlib.Data.Matrix.Block
 import Mathlib.Analysis.Normed.Algebra.GelfandFormula
 import Mathlib.Analysis.SpecificLimits.Normed
