@@ -8,8 +8,10 @@ import TNLean.MPS.ParentHamiltonian.Martingale.Reduction
 # Uniform spectral gap for the MPS parent Hamiltonian
 
 **Root-only.** This file contains the final conditional spectral-gap theorems
-for the MPS parent Hamiltonian. The overlapping-window principal-angle
-estimate remains an explicit hypothesis.
+for the MPS parent Hamiltonian. The source anticommutator estimate remains an
+explicit hypothesis. A cyclic-window norm-compression estimate, obtainable from
+principal-angle bounds when available, is recorded as a sufficient stronger
+hypothesis.
 
 ## Main results
 
@@ -20,7 +22,7 @@ estimate remains an explicit hypothesis.
 * `parentHamiltonianES_gap_bound_of_overlap_norm_constant` — the corresponding
   positive-gap bound from a strict uniform compression coefficient.
 * `parentHamiltonian_gapped` — conditional uniform spectral gap for MPS parent
-  Hamiltonians under the same principal-angle input.
+  Hamiltonians under the explicit norm-compression input.
 * `parentHamiltonian_gapped_of_anticommutator` — conditional uniform spectral
   gap under the source anticommutator estimate.
 * `parentHamiltonian_gapped_of_overlap_norm_constant` — the corresponding
@@ -73,18 +75,18 @@ theorem parentHamiltonianES_gap_bound_of_anticommutator
 /-- Gap bound from a strict uniform overlapping cyclic-window compression
 coefficient for the MPS parent Hamiltonian.
 
-This is the current formal boundary for applying the martingale input in
-arXiv:2011.12127, Section IV.C (the martingale-2 estimate), with an arbitrary
-compression constant. It does not assert the special coefficient used in
+This is the constant-flexible form of the norm-compression route to the
+martingale bound. It does not assert the special coefficient used in
 `parentHamiltonianES_gap_bound_of_friedrichs`; instead, it says that any uniform
 overlapping-window compression bound
 
 \(‖p_i p_j v‖ ≤ η ‖p_i v‖\)
 
 with \(2(L-1)\eta < 1\) yields the positive gap constant
-\(1 - 2(L-1)\eta\). The comparison between this flexible cyclic-window
-hypothesis and the cited FNW--Nachtergaele--Kastoryano principal-angle estimates
-is recorded in `docs/paper-gaps/cpgsv21_martingale_overlap.tex`. -/
+\(1 - 2(L-1)\eta\). This is a sufficient strengthening of the source
+anticommutator hypothesis. The comparison with the cited
+FNW--Nachtergaele--Kastoryano principal-angle estimates is recorded in
+`docs/paper-gaps/cpgsv21_martingale_overlap.tex`. -/
 theorem parentHamiltonianES_gap_bound_of_overlap_norm_constant
     (A : MPSTensor d D) (L : ℕ) (hL : 1 < L) {η : ℝ}
     (hηnonneg : 0 ≤ η)
@@ -103,8 +105,8 @@ theorem parentHamiltonianES_gap_bound_of_overlap_norm_constant
   exact parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_lt
     A L hL hηnonneg hηlt hOverlapNorm
 
-/-- Gap bound from the overlapping cyclic-window principal-angle estimate for the
-MPS parent Hamiltonian.
+/-- Gap bound from the explicit overlapping cyclic-window norm-compression
+estimate for the MPS parent Hamiltonian.
 
 The hypothesis is the precise norm-compression estimate for overlapping
 cyclic-window local projections. The finite row-counting geometry, non-overlap
@@ -184,7 +186,7 @@ theorem parentHamiltonianES_gap_bound_of_friedrichs
     simpa [div_eq_mul_inv, mul_assoc, mul_left_comm, mul_comm] using hgap'
 
 /--
-**Conditional spectral gap for MPS parent Hamiltonians.**
+**Conditional spectral gap from an explicit norm-compression estimate.**
 
 For an MPS tensor \(A\) and interaction range \(L > 1\), the overlapping-window
 norm-compression estimate implies the existence of a uniform gap \(γ > 0\)
@@ -218,7 +220,9 @@ Combined with \(h_i^2 = h_i\), this yields the quadratic-form inequality
 by `FrustrationFree.spectralGap_of_martingale` is automatic here because
 \(H_N = ∑ᵢ hᵢ\) is a sum of orthogonal projectors.
 
-The proof below invokes
+This theorem records the stronger norm-compression route. The source-facing
+conditional theorem is `parentHamiltonian_gapped_of_anticommutator`. The proof
+below invokes
 `parentHamiltonianES_gap_bound_of_friedrichs`, which combines the already
 formalized martingale reductions after the overlapping-window estimate is given. -/
 theorem parentHamiltonian_gapped
