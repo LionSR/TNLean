@@ -56,6 +56,9 @@ The clearest replacements are:
   Mathlib 4.31 provides the required matrix `NonnegSpectrumClass` instance
   through `MatrixOrder`, and the non-unital CFC instance through
   `ContinuousFunctionalCalculus.toNonUnital`.
+- The remaining local deprecated-name aliases in non-Archive Lean code were
+  exact pass-through layers and have been removed after confirming that the
+  new names are used internally.
 - Positive-map and completely-positive-map arguments should gradually acquire
   bridge lemmas to Mathlib's `PositiveLinearMap` and `CompletelyPositiveMap`.
 - The remaining non-Archive axioms were checked.  They are all still used, and
@@ -580,6 +583,17 @@ equality characterization in the form stated here.  These axioms remain
 necessary until the quantum relative-entropy and Markov-decomposition
 formalization is supplied locally or upstream.
 
+The same audit was compared against the current non-Archive `sorry` surface.
+The remaining proof placeholders are the three Lorentz-normal-form statements
+in `TNLean/Channel/LorentzNormalForm.lean` and the cyclic contraction step in
+`TNLean/MPS/Periodic/Overlap/Case3.lean`.  None is discharged by the eight
+sanctioned axioms: the Lorentz-normal-form statements require coercivity,
+compactness packaging, and the SL(2, C) Lorentz-orbit classification, while
+the periodic-overlap statement requires the cyclic sector-contraction theorem.
+Thus the axioms remain useful assumptions for their own theorem families, but
+they do not give a direct Mathlib-4.31 replacement or a local shortcut for the
+present `sorry`s.
+
 ### Projection and continuous-linear-map API
 
 Relevant Mathlib commits:
@@ -882,6 +896,8 @@ lake build TNLean.Algebra.MatrixAux TNLean.Spectral.GaugeConstruction \
   TNLean.Channel.Irreducible.Growth.KernelDescent \
   TNLean.Channel.Peripheral.GroupStructure TNLean.PiAlgebra.CanonicalFormSepAux \
   -q --log-level=info
+lake env lean TNLean/Spectral/QuantitativeGap.lean --json
+lake env lean TNLean/MPS/Structure/PrimitivityBridge.lean --json
 ```
 
 The final root build also succeeds:
