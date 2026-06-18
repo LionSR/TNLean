@@ -5,11 +5,16 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.ParentHamiltonian.BlockIntersectionProperty
 
 /-!
-# PGVWC C-D-E identities from trace decompositions
+# PGVWC07 \(C^j,D^j,E^j\) identities from trace decompositions
 
 This file derives the word-valued \(C^j,D^j,E^j\) matrix identities from
 matching left and right block trace decompositions in arXiv:quant-ph/0608197,
 Theorem 12, proof lines 1446--1451.
+
+In the source proof the auxiliary matrices are indexed by the boundary indices
+\(i_1\) and \(i_{m+1}\). The variables \(\beta\) and \(\rho\) below are the
+cut-adapted word coordinates used to express the same comparison after a
+periodic interval has been opened at the chosen cut.
 
 The formula for \(E^j\) uses the adjointed word product
 \[
@@ -33,7 +38,7 @@ Assume the right trace decomposition has
 \[
   D^j_\beta=X_jA^j_\beta .
 \]
-If the two trace decompositions agree for every wrapped word \(\beta\),
+If the two trace decompositions agree for every cut word \(\beta\),
 complementary word \(\rho\), and middle word \(w\), then for every block \(j\)
 there is a matrix
 \[
@@ -45,7 +50,9 @@ such that
   A^j_\beta C^j_\rho=A^j_\beta E^jA^j_\rho .
 \]
 This is the word-valued form of arXiv:quant-ph/0608197, Theorem 12, proof
-lines 1446--1451.
+lines 1446--1451. The source notation is \(C^j_{i_1}\) and
+\(D^j_{i_{m+1}}\); the parameters \(\beta\) and \(\rho\) are the local word
+coordinates used here to state the same identity for an opened cyclic interval.
 
 **Local fix (adjoint correction):** The source line writes
 \(E^j=\sum_k C^j_kA^j_k\), while the normalization step uses

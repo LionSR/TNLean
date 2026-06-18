@@ -18,6 +18,11 @@ comparison from arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1451,
 after specializing \(D^j_\beta\) to \((\mu_j^N X_j)A^j_\beta\). The normalized
 \(E^j\)-calculation then implies the periodic-boundary single-block constraints
 and the finite-range block-diagonal periodic-boundary equality used here.
+
+The source proof writes this comparison with site-indexed matrices
+\(C^j_{i_1}\), \(D^j_{i_{m+1}}\), and the derived matrix \(E^j\). The words
+\(\beta\) and \(\rho\) below are cut-adapted coordinates for the same
+periodic-boundary comparison, not additional source terminology.
 -/
 
 open scoped Matrix BigOperators
@@ -127,7 +132,10 @@ periodic single-block constraints.
 
 This is the source comparison in arXiv:quant-ph/0608197, Theorem 12, proof
 lines 1436--1451, specialized to the block-diagonal boundary conditions of
-arXiv:2011.12127, Section IV.C, lines 2126--2128.
+arXiv:2011.12127, Section IV.C, lines 2126--2128. Here \(\rho\) is the
+complementary outside word produced by opening the cyclic interval;
+arXiv:quant-ph/0608197 writes the same step with the boundary indices \(i_1\)
+and \(i_{m+1}\).
 
 **Scope restriction (length-\(L_0\) injectivity range):** PGVWC07, Theorem 12,
 assumes \(L\ge 3(b-1)(L_0+1)+1\).  This theorem is stated in the current BNT
@@ -365,10 +373,12 @@ word-indexed matrix identity
 \]
 for every boundary-crossing interval, local word \(\beta\) before the cut,
 and outside word \(\rho\), with \(D^j_\beta\) already specialized to
-\((\mu_j^NX_j)A^j_\beta\). The normalized \(E^j\)-calculation and the
-block-injective crossing-window argument then give the periodic-boundary
-single-block constraints, and hence the block-diagonal periodic-boundary
-equality.
+\((\mu_j^NX_j)A^j_\beta\). The words \(\beta\) and \(\rho\) are formal
+word coordinates for the opened boundary comparison, refining the source
+end-site notation rather than replacing it. The normalized \(E^j\)-calculation
+and the block-injective crossing-window argument then give the
+periodic-boundary single-block constraints, and hence the block-diagonal
+periodic-boundary equality.
 
 **Scope restriction (length-\(L_0\) injectivity range):** PGVWC07, Theorem 12,
 assumes \(L\ge 3(b-1)(L_0+1)+1\).  This theorem is stated in the current BNT
