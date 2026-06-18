@@ -66,6 +66,9 @@ The clearest replacements are:
   The operator-concavity facts newly available in Mathlib are useful inputs for
   future proofs of the Jensen axioms, not replacements for the present
   positive-map Jensen conclusions.
+- Four scalar-instance pass-through abbreviations in
+  `TNLean.Algebra.MatrixOperatorSpace` were removed.  Their few explicit users
+  now use the corresponding `inferInstance` arguments directly.
 
 There are also important non-replacements.
 
@@ -594,6 +597,10 @@ Thus the axioms remain useful assumptions for their own theorem families, but
 they do not give a direct Mathlib-4.31 replacement or a local shortcut for the
 present `sorry`s.
 
+This comparison was repeated after the alias-cleanup batch.  The conclusion is
+unchanged: the axioms are not unused, and none supplies the missing cyclic
+sector-contraction or Lorentz-normal-form ingredients.
+
 ### Projection and continuous-linear-map API
 
 Relevant Mathlib commits:
@@ -848,6 +855,19 @@ Current status:
 This was a genuine upgrade compatibility issue, separate from the replacement
 audit.  Its local repair is already present in the worktree.
 
+A follow-up pass removed four exact scalar-instance aliases from
+`TNLean.Algebra.MatrixOperatorSpace`:
+
+- `complexPosSMulMonoDef`
+- `complexContinuousSMulReal`
+- `matrixContinuousSMulReal`
+- `matrixScalarTowerRealComplex`
+
+The remaining semigroup proofs use the same instances directly through
+`inferInstance`, including the fully explicit derivative arguments in
+`TNLean.Channel.Semigroup.Basic`, `TNLean.Channel.Semigroup.Kernel`, and
+`TNLean.Channel.Semigroup.Primitivity.Helpers`.
+
 ## Verification performed
 
 The Mathlib cache was fetched for the 4.31 worktree.  An initial cache fetch
@@ -859,7 +879,11 @@ adaptation work:
 
 ```text
 lake env lean TNLean/Algebra/GramMatrixLI.lean
+lake env lean TNLean/Algebra/MatrixOperatorSpace.lean
 lake build TNLean.Algebra.MatrixOperatorSpace
+lake env lean TNLean/Channel/Semigroup/Basic.lean
+lake env lean TNLean/Channel/Semigroup/Kernel.lean
+lake env lean TNLean/Channel/Semigroup/Primitivity/Helpers.lean
 lake env lean TNLean/MPS/Symmetry/StringOrder.lean --json
 lake env lean TNLean/Wielandt/Primitivity/PrimitiveBridge.lean --json
 lake env lean TNLean/Channel/Semigroup/Primitivity/Basic.lean --json

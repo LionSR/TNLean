@@ -270,7 +270,7 @@ theorem hasDerivAt_expSemigroup_apply
       Matrix.linftyOpNormedAddCommGroup.toAddCommGroup
       (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)).toModule
       PseudoMetricSpace.toUniformSpace.toTopologicalSpace
-      (TNOperatorSpace.matrixContinuousSMulReal (Fin D))
+      (inferInstance : ContinuousSMul ℝ (Matrix (Fin D) (Fin D) ℂ))
       (fun u : ℝ => expSemigroup L u X) (expSemigroup L t (L X)) t := by
   have hCLM :
       @HasDerivAt ℝ _ (MatrixCLM (Fin D))

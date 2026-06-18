@@ -14,10 +14,10 @@ variable {D : ℕ}
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
 local instance : ContinuousSMul ℝ Mat :=
-  TNOperatorSpace.matrixContinuousSMulReal (n := Fin D)
+  inferInstance
 
 local instance : IsScalarTower ℝ ℂ Mat :=
-  TNOperatorSpace.matrixScalarTowerRealComplex (n := Fin D)
+  inferInstance
 
 /-! ## Auxiliary lemmas for the primitivity proof -/
 
@@ -95,7 +95,7 @@ theorem expSemigroup_apply_eigenvector
   letI : TopologicalSpace Mat := PseudoMetricSpace.toUniformSpace.toTopologicalSpace
   letI : NormedSpace ℝ Mat :=
     TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)
-  letI : ContinuousSMul ℝ Mat := TNOperatorSpace.matrixContinuousSMulReal (Fin D)
+  letI : ContinuousSMul ℝ Mat := inferInstance
   letI : IsScalarTower ℝ ℂ Mat := by infer_instance
   let c : ℝ → ℂ := fun u => Complex.exp (-((u : ℂ) * μ))
   let g : ℝ → Matrix (Fin D) (Fin D) ℂ := fun u => expSemigroup L u X
@@ -106,7 +106,7 @@ theorem expSemigroup_apply_eigenvector
     have h :
         HasDerivAt (c • g) (c u • (μ • g u) + (-(c u * μ)) • g u) u :=
       @HasDerivAt.smul ℝ _ Mat _ _ g (μ • g u) u ℂ _ _ _ _
-        (TNOperatorSpace.matrixScalarTowerRealComplex (n := Fin D)) c (-(c u * μ)) hc hg
+        (inferInstance : IsScalarTower ℝ ℂ Mat) c (-(c u * μ)) hc hg
     exact h
   have hdiff : Differentiable ℝ f := by
     intro u

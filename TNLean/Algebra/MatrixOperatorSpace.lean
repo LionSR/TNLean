@@ -70,21 +70,13 @@ instance complexPosSMulMono : PosSMulMono ℝ ℂ :=
   PosSMulMono.of_smul_nonneg fun a ha b hb => by
     simpa using smul_nonneg ha hb
 
-abbrev complexPosSMulMonoDef : PosSMulMono ℝ ℂ := inferInstance
-
 instance : ContinuousSMul ℝ ℂ :=
   show ContinuousSMul ℝ (RestrictScalars ℝ ℂ ℂ) from inferInstance
-
-abbrev complexContinuousSMulReal : ContinuousSMul ℝ ℂ := inferInstance
 
 instance (n : Type*) [Finite n] : ContinuousSMul ℝ (Matrix n n ℂ) := by
   classical
   letI : Fintype n := Fintype.ofFinite n
   exact show ContinuousSMul ℝ (RestrictScalars ℝ ℂ (Matrix n n ℂ)) from inferInstance
-
-abbrev matrixContinuousSMulReal : ContinuousSMul ℝ (Matrix n n ℂ) := inferInstance
-
-abbrev matrixScalarTowerRealComplex : IsScalarTower ℝ ℂ (Matrix n n ℂ) := inferInstance
 
 omit [DecidableEq n] [Fintype n] in
 instance : LinearMap.CompatibleSMul (Matrix n n ℂ) (Matrix n n ℂ) ℝ ℂ :=
