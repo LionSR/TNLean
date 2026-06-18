@@ -107,7 +107,6 @@ Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 theorem regionInsertionOp_realizes_of_realizes_on_stateVec (A B : Tensor G d)
     (R : Finset V) (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
-    (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hB : IsVertexInjective B) (hposB : ∀ e : Edge G, 0 < B.bondDim e)
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
@@ -256,7 +255,7 @@ theorem isIncidentMatrixForm_of_coeff_eq (A B : Tensor G d) (R : Finset V)
           (localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f) c) =
         localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f)
           (localIncidentMatrixOp B (regionBoundaryEdgeInIncident (G := G) R f) N.transpose c) :=
-    regionInsertionOp_realizes_of_realizes_on_stateVec A B R f hvA hvB hB hposB M N
+    regionInsertionOp_realizes_of_realizes_on_stateVec A B R f hvA hB hposB M N
       (regionInsertionOp_regionStateVec_eq_of_coeff_eq A B R f hvA hvB hAB hposB hDim M N hcoeff)
   -- Read off the incident-matrix form of the virtual pullback.
   exact localVirtualOpOfPhysicalOpAt_eq_of_realizes B hvB

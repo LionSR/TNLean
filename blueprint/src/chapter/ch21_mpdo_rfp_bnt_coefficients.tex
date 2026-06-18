@@ -1,0 +1,458 @@
+\begin{definition}[BNT-label coefficient family]%
+    \label{def:mpdo_bnt_label_coefficient_family}
+    \lean{MPOTensor.BNTLabelCoefficientFamily}
+    \lean{MPOTensor.BNTLabelCoefficientFamily.ofChi}
+    \lean{MPOTensor.BNTLabelCoefficientFamily.ofChi_coeff}
+    \lean{MPOTensor.BNTLabelCoefficientFamily.ofChi_coeff_eq_trace_matrix_pow}
+    \leanok
+    The same-length coefficient system
+    $c^{(L)}_{\alpha,\beta,\gamma}$ from \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}, indexed by
+    fixed BNT labels $\alpha,\beta,\gamma$. The coefficient is attached to
+    the length-$L$ product
+    $O_L(M_\alpha)O_L(M_\beta)$, not to the blocked-basis multiplication
+    $\mathcal A_n\times\mathcal A_n\to\mathcal A_{2n}$.
+    When a diagonal $\chi$-family has already been constructed, it also
+    canonically determines the coefficient family
+    $c^{(L)}_{\alpha,\beta,\gamma}
+        = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})
+        = \sum_r\chi_{\alpha,\beta,\gamma,r}^{\,L}$, as in
+    \cite[Appendix~C.4]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[BNT-label operator family]%
+    \label{def:mpdo_bnt_label_operator_family}
+    \lean{MPOTensor.BNTLabelOperatorFamily}
+    \leanok
+    A BNT-label operator family records, for each chain length $L$, the
+    operators $O_L(M_\alpha)$ indexed by the fixed BNT labels $\alpha$.
+    The ambient algebra at length $L$ is left abstract here; the later
+    comparison step must relate it to the chosen blocked support algebras.
+\end{definition}
+
+\begin{definition}[Same-length BNT product form]%
+    \label{def:mpdo_bnt_label_same_length_product_form}
+    \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm}
+    \leanok
+    \uses{def:mpdo_bnt_label_operator_family,
+        def:mpdo_bnt_label_coefficient_family}
+    A BNT-label operator family and a BNT-label coefficient system have
+    same-length product form when, for every positive length $L$,
+    \[
+        O_L(M_\alpha)O_L(M_\beta)
+        = \sum_\gamma
+        c^{(L)}_{\alpha,\beta,\gamma} O_L(M_\gamma).
+    \]
+    This is the product identity appearing in \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}, stated
+    independently of the blocked-basis multiplication
+    $\mathcal A_n\times\mathcal A_n\to\mathcal A_{2n}$.
+\end{definition}
+
+\begin{theorem}[Same-length BNT product expansion]%
+    \label{thm:mpdo_bnt_label_same_length_product_eq_sum}
+    \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.eq_sum}
+    \leanok
+    \uses{def:mpdo_bnt_label_same_length_product_form}
+    Under same-length BNT product form, the product of two length-$L$
+    BNT-label operators is the corresponding finite linear combination of
+    length-$L$ BNT-label operators.
+\end{theorem}
+\begin{proof}\leanok
+    This is exactly the defining equality of same-length product form.
+\end{proof}
+
+\begin{definition}[BNT-label trace-scalar family]%
+    \label{def:mpdo_bnt_label_trace_scalar_family}
+    \lean{MPOTensor.BNTLabelTraceScalarFamily}
+    \leanok
+    A BNT-label trace-scalar family records the scalars
+    $m_\alpha=\operatorname{tr}(\mu_\alpha)$ indexed by the fixed BNT labels
+    $\alpha$, as in the idempotent condition of \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[BNT idempotent coefficient form]%
+    \label{def:mpdo_bnt_label_idempotent_coefficient_form}
+    \lean{MPOTensor.BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm}
+    \leanok
+    \uses{def:mpdo_bnt_label_trace_scalar_family,
+        def:mpdo_bnt_label_coefficient_family}
+    A BNT-label trace-scalar family and a BNT-label coefficient system have
+    idempotent coefficient form when, for every BNT label $\gamma$,
+    \[
+        m_\gamma =
+        \sum_{\alpha,\beta}
+        c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta.
+    \]
+    This is the idempotent condition in \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}, stated separately
+    from the trace-power formula.
+\end{definition}
+
+\begin{theorem}[BNT idempotent coefficient expansion]%
+    \label{thm:mpdo_bnt_label_idempotent_coefficient_eq_sum}
+    \lean{MPOTensor.BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.eq_sum}
+    \leanok
+    \uses{def:mpdo_bnt_label_idempotent_coefficient_form}
+    Under BNT idempotent coefficient form, each $m_\gamma$ is the
+    corresponding finite linear combination of products $m_\alpha m_\beta$
+    with the length-one coefficients $c^{(1)}_{\alpha,\beta,\gamma}$.
+\end{theorem}
+\begin{proof}\leanok
+    This is exactly the defining equality of BNT idempotent coefficient form.
+\end{proof}
+
+\begin{definition}[Blocked-basis BNT-label assignment]%
+    \label{def:mpdo_bnt_blocked_basis_label_assignment}
+    \lean{MPOTensor.BNTBlockedBasisLabelAssignment}
+    \lean{MPOTensor.BNTBlockedBasisLabelAssignment.blockedLabel}
+    \leanok
+    \uses{def:mpdo_blocked_structure_coefficients}
+    The BNT-label assignment consists, for every positive blocked length $n$,
+    of a source label map $\sigma_n$ from the chosen basis of
+    $\mathcal A_n$ and a target label map $\tau_n$ from the chosen basis of
+    $\mathcal A_{2n}$ to the fixed BNT labels. It also gives the combined
+    label map $\sigma_n \sqcup \tau_n$ on the disjoint union of these two
+    blocked bases.
+\end{definition}
+
+\begin{definition}[BNT comparison with blocked coefficients]%
+    \label{def:mpdo_bnt_blocked_basis_coefficient_comparison}
+    \lean{MPOTensor.BNTBlockedBasisCoefficientComparison}
+    \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.sourceLabel}
+    \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.targetLabel}
+    \leanok
+    \uses{def:mpdo_bnt_label_coefficient_family,
+        def:mpdo_blocked_structure_coefficients,
+        def:mpdo_bnt_blocked_basis_label_assignment}
+    A comparison between the BNT-label coefficients and the chosen
+    blocked-basis coefficients consists of a BNT-label assignment together
+    with the equality
+    \[
+        c^{(n)}_{i,j,k}
+        =
+        c^{(n)}_{\sigma_n(i),\sigma_n(j),\tau_n(k)}.
+    \]
+    This is a blocked-basis comparison: the left hand side is expanded in the
+    chosen basis of $\mathcal A_{2n}$, so the statement is not itself the
+    same-length BNT product law.
+    This records the coefficient-comparison statement separately from the
+    construction of the label maps from the MPDO tensor.
+\end{definition}
+
+\begin{theorem}[Blocked coefficients are pulled back from BNT labels]%
+    \label{thm:mpdo_bnt_blocked_basis_coefficient_eq}
+    \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.blocked_coeff_eq}
+    \leanok
+    \uses{def:mpdo_bnt_blocked_basis_coefficient_comparison}
+    Under a BNT comparison with blocked coefficients, each chosen blocked-basis
+    multiplication coefficient is the corresponding BNT-label coefficient.
+\end{theorem}
+\begin{proof}\leanok
+    This is exactly the defining equality of the comparison.
+\end{proof}
+
+\begin{definition}[Positive-length BNT-label trace-power form]%
+    \label{def:mpdo_bnt_label_positive_length_chi_trace_power_form}
+    \lean{MPOTensor.BNTLabelCoefficientFamily.HasPositiveLengthChiTracePowerForm}
+    \leanok
+    \uses{def:mpdo_bnt_label_coefficient_family,
+        def:mpdo_diagonal_chi_family}
+    A BNT-label coefficient system and a diagonal $\chi$-family are
+    compatible when, for every positive length $L$,
+    \[
+        c^{(L)}_{\alpha,\beta,\gamma}
+        = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L}).
+    \]
+    The same matrix $\chi_{\alpha,\beta,\gamma}$ is used for all positive
+    $L$.
+\end{definition}
+
+\begin{theorem}[BNT-label coefficient as a positive-length trace power]%
+    \label{thm:mpdo_bnt_label_chi_eq_trace_matrix_pow}
+    \lean{MPOTensor.BNTLabelCoefficientFamily.HasPositiveLengthChiTracePowerForm.eq_trace_matrix_pow}
+    \leanok
+    \uses{def:mpdo_bnt_label_positive_length_chi_trace_power_form,
+        thm:mpdo_trace_matrix_pow}
+    Under positive-length BNT-label trace-power form, for every $L>0$,
+    $c^{(L)}_{\alpha,\beta,\gamma}$ is the trace of
+    $\chi_{\alpha,\beta,\gamma}^{L}$.
+\end{theorem}
+\begin{proof}\leanok
+    Combine the defining positive-length trace-power identity with the trace
+    formula for powers of a diagonal matrix.
+\end{proof}
+
+\begin{theorem}[Canonical BNT coefficients from a $\chi$-family]%
+    \label{thm:mpdo_bnt_label_of_chi_positive_length_trace_power}
+    \lean{MPOTensor.BNTLabelCoefficientFamily.ofChi_hasPositiveLengthChiTracePowerForm}
+    \leanok
+    \uses{def:mpdo_bnt_label_coefficient_family,
+        def:mpdo_bnt_label_positive_length_chi_trace_power_form}
+    The coefficient family canonically determined by a diagonal
+    $\chi$-family satisfies the positive-length trace-power condition with
+    respect to the same $\chi$-family.
+\end{theorem}
+\begin{proof}\leanok
+    This is immediate from the definition of the canonical coefficient family.
+\end{proof}
+
+\begin{definition}[Positive BNT-label $\chi$ trace-power witness]%
+    \label{def:mpdo_positive_bnt_label_chi_trace_power_form}
+    \lean{MPOTensor.PositiveBNTLabelChiTracePowerForm}
+    \lean{MPOTensor.PositiveBNTLabelChiTracePowerForm.ofChi}
+    \leanok
+    \uses{def:mpdo_bnt_label_positive_length_chi_trace_power_form,
+        def:mpdo_diagonal_chi_family,
+        thm:mpdo_bnt_label_of_chi_positive_length_trace_power}
+    A positive BNT-label $\chi$ witness consists of a length-independent
+    diagonal $\chi_{\alpha,\beta,\gamma}$-family, positivity of every
+    diagonal entry, and the positive-length trace-power identity for the
+    BNT-label coefficients. This is the coefficient statement of
+    \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}; constructing the witness from an MPDO tensor and
+    comparing it to blocked bases remain separate obligations.
+    If the coefficient family is chosen canonically from the same
+    $\chi$-family, positivity of the diagonal entries alone gives such a
+    witness.
+\end{definition}
+
+\begin{theorem}[Positive BNT-label witness gives trace powers]%
+    \label{thm:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow}
+    \lean{MPOTensor.PositiveBNTLabelChiTracePowerForm.eq_trace_pow}
+    \leanok
+    \uses{def:mpdo_positive_bnt_label_chi_trace_power_form,
+        thm:mpdo_bnt_label_chi_eq_trace_matrix_pow}
+    A positive BNT-label $\chi$ witness gives, for every $L>0$, the formula
+    $c^{(L)}_{\alpha,\beta,\gamma}
+        =\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})$.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the trace reformulation of the positive-length trace-power identity
+    from the witness.
+\end{proof}
+
+\begin{theorem}[Same-length BNT product with chi-trace coefficients]%
+    \label{thm:mpdo_bnt_label_same_length_product_eq_sum_chi_trace_pow}
+    \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.eq_sum_chi_trace_pow}
+    \leanok
+    \uses{thm:mpdo_bnt_label_same_length_product_eq_sum,
+        thm:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow}
+    If the same-length BNT product identity holds and the BNT-label
+    coefficients come from a positive length-independent $\chi$-witness, then
+    for every $L>0$,
+    \[
+        O_L(M_\alpha)O_L(M_\beta)
+        = \sum_\gamma
+        \operatorname{tr}\bigl(    \chi_{\alpha,\beta,\gamma}^{\,L}
+        \bigr) O_L(M_\gamma).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Substitute the positive-length trace-power formula into the same-length BNT
+    product expansion.
+\end{proof}
+
+\begin{theorem}[Same-length BNT product for canonical chi coefficients]%
+    \label{thm:mpdo_bnt_label_same_length_product_eq_sum_of_chi_trace_pow}
+    \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.eq_sum_ofChi_trace_pow}
+    \leanok
+    \uses{thm:mpdo_bnt_label_same_length_product_eq_sum,
+        def:mpdo_bnt_label_coefficient_family}
+    If the same-length BNT product identity holds with the coefficient family
+    canonically determined by a diagonal $\chi$-family, then for every
+    $L>0$,
+    \[
+        O_L(M_\alpha)O_L(M_\beta)
+        = \sum_\gamma
+        \operatorname{tr}\bigl(    \chi_{\alpha,\beta,\gamma}^{\,L}
+        \bigr) O_L(M_\gamma).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Substitute the canonical trace-power formula for the coefficients into the
+    same-length BNT product expansion.
+\end{proof}
+
+\begin{theorem}[BNT idempotent coefficients as chi traces]%
+    \label{thm:mpdo_bnt_label_idempotent_eq_sum_chi_trace}
+    \lean{MPOTensor.BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.eq_sum_chi_trace}
+    \leanok
+    \uses{thm:mpdo_bnt_label_idempotent_coefficient_eq_sum,
+        thm:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow}
+    If the BNT trace scalars satisfy the idempotent coefficient condition and
+    the BNT-label coefficients come from a positive length-independent
+    $\chi$-witness, then
+    \[
+        m_\gamma =
+        \sum_{\alpha,\beta}
+        \operatorname{tr}(\chi_{\alpha,\beta,\gamma})
+        m_\alpha m_\beta.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Substitute the length-one trace-power formula into the idempotent
+    coefficient identity.
+\end{proof}
+
+\begin{theorem}[BNT idempotent coefficients for canonical chi coefficients]%
+    \label{thm:mpdo_bnt_label_idempotent_eq_sum_of_chi_trace}
+    \lean{MPOTensor.BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.eq_sum_ofChi_trace}
+    \leanok
+    \uses{thm:mpdo_bnt_label_idempotent_coefficient_eq_sum,
+        def:mpdo_bnt_label_coefficient_family}
+    If the BNT trace scalars satisfy the idempotent coefficient condition with
+    the coefficient family canonically determined by a diagonal
+    $\chi$-family, then
+    \[
+        m_\gamma =
+        \sum_{\alpha,\beta}
+        \operatorname{tr}(\chi_{\alpha,\beta,\gamma})
+        m_\alpha m_\beta.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Substitute the length-one canonical trace formula into the idempotent
+    coefficient identity.
+\end{proof}
+
+\begin{theorem}[Blocked coefficients inherit BNT trace powers]%
+    \label{thm:mpdo_bnt_blocked_basis_coefficient_eq_trace_pow}
+    \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.blocked_coeff_eq_trace_pow}
+    \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.%
+        blocked_coeff_eq_ofChi_trace_pow}
+    \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.%
+        blocked_coeff_eq_pulledBlockedChi_trace_pow}
+    \leanok
+    \uses{def:mpdo_bnt_blocked_basis_coefficient_comparison,
+        def:mpdo_positive_bnt_label_chi_trace_power_form,
+        thm:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow}
+    If the chosen blocked-basis coefficients are compared with the fixed
+    BNT-label coefficient system, and that BNT-label system has a positive
+    length-independent $\chi$-witness, then each positive-length blocked
+    coefficient is the trace power of the corresponding BNT-label
+    $\chi$-matrix:
+    \[
+        c^{(n)}_{i,j,k}
+        = \operatorname{tr}
+        \bigl(    \chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}^{\,n}
+        \bigr).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Use the comparison equality to replace the blocked-basis coefficient by the
+    corresponding BNT-label coefficient, and then apply the BNT-label
+    trace-power formula.
+    In the special case where the compared BNT-label coefficient family is
+    already the canonical family determined by $\chi$, the same conclusion
+    follows directly from the canonical trace formula.
+\end{proof}
+
+\begin{definition}[Blocked $\chi$ family for multiplication coefficients]%
+    \label{def:mpdo_blocked_structure_chi_family}
+    \lean{MPOTensor.AlgebraStructureData.BlockedStructureChiFamily}
+    \leanok
+    \uses{def:mpdo_blocked_structure_coefficients}
+    A dependent diagonal matrix family indexed by the blocked multiplication
+    triples $(n,i,j,k)$, where $i$ and $j$ label basis elements of
+    $\mathcal{A}_n$ and $k$ labels a basis element of $\mathcal{A}_{2n}$.
+    This is a blocked-basis analog of the uniform BNT-label family in
+    \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}; the remaining uniformity
+    gap is recorded in
+    \path{docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex}.
+\end{definition}
+
+\begin{theorem}[Trace of a blocked $\chi$ power]%
+    \label{thm:mpdo_blocked_structure_chi_trace_matrix_pow}
+    \lean{MPOTensor.AlgebraStructureData.BlockedStructureChiFamily.trace_matrix_pow}
+    \leanok
+    \uses{def:mpdo_blocked_structure_chi_family}
+    For each blocked multiplication triple $(n,i,j,k)$ and every exponent
+    $L$, the trace of the $L$-th power of its diagonal matrix is the sum of the
+    $L$-th powers of the corresponding diagonal entries.
+\end{theorem}
+\begin{proof}\leanok
+    Diagonal matrices raise to powers entrywise and the trace of a diagonal
+    matrix is the sum of its entries.
+\end{proof}
+
+\begin{definition}[Trace-power form for blocked multiplication coefficients]%
+    \label{def:mpdo_has_blocked_structure_chi_trace_power_form}
+    \lean{MPOTensor.AlgebraStructureData.HasBlockedStructureChiTracePowerForm}
+    \leanok
+    \uses{def:mpdo_blocked_structure_coefficients,
+        def:mpdo_blocked_structure_chi_family}
+    The blocked multiplication coefficients are in trace-power form when, for
+    every positive blocked size $n$ and every multiplication triple $(i,j,k)$,
+    the coefficient $c^{(n)}_{i,j,k}$ equals
+    \[
+        \sum_r \chi_{n,i,j,k,r}^{\,n}.
+    \]
+    Equivalently, by
+    Theorem~\ref{thm:mpdo_blocked_structure_chi_trace_matrix_pow}, it is the
+    trace of the $n$-th power of the corresponding diagonal matrix. The exponent
+    $n$ is the source blocking length of the two factors in $\mathcal{A}_n$; the
+    product is expanded in the basis of $\mathcal{A}_{2n}$.
+\end{definition}
+
+\begin{theorem}[Blocked coefficient as a trace power]%
+    \label{thm:mpdo_blocked_structure_chi_eq_trace_matrix_pow}
+    \lean{MPOTensor.AlgebraStructureData.HasBlockedStructureChiTracePowerForm.eq_trace_matrix_pow}
+    \leanok
+    \uses{def:mpdo_has_blocked_structure_chi_trace_power_form,
+        thm:mpdo_blocked_structure_chi_trace_matrix_pow}
+    Under trace-power form for the blocked multiplication coefficients,
+    for every positive blocked size $n$, the coefficient $c^{(n)}_{i,j,k}$ is
+    the trace of the $n$-th power of the diagonal matrix attached to
+    $(n,i,j,k)$.
+\end{theorem}
+\begin{proof}\leanok
+    Combine the defining trace-power identity with the trace formula for
+    powers of a diagonal matrix.
+\end{proof}
+
+\begin{definition}[Positive blocked $\chi$ trace-power witness]%
+    \label{def:mpdo_positive_blocked_structure_chi_trace_power_form}
+    \lean{MPOTensor.AlgebraStructureData.PositiveBlockedStructureChiTracePowerForm}
+    \leanok
+    \uses{def:mpdo_has_blocked_structure_chi_trace_power_form,
+        def:mpdo_blocked_structure_chi_family}
+    A positive blocked $\chi$ trace-power witness consists of a blocked
+    $\chi$ family, positivity of all its diagonal entries, and the
+    positive-length trace-power identity for the blocked multiplication
+    coefficients. This is the blocked-basis analog of the positive
+    diagonal matrices in
+    \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}; the uniform BNT-label gap
+    is recorded in
+    \path{docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex}.
+\end{definition}
+
+\begin{theorem}[BNT witnesses give blocked $\chi$ witnesses]%
+    \label{thm:mpdo_bnt_blocked_basis_to_positive_blocked_chi_trace_power_form}
+    \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.blockedLabel}
+    \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.pulledBlockedChiFamily}
+    \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.pulledBlockedChiFamily_toDiagonal_of_pos}
+    \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.pulledBlockedChi_tracePowerCoeff_of_pos}
+    \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.pulledBlockedChi_dim_of_pos}
+    \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.pulledBlockedChi_trace_matrix_pow_of_pos}
+    \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.%
+        toPositiveBlockedStructureChiTracePowerForm}
+    \leanok
+    \uses{def:mpdo_bnt_blocked_basis_coefficient_comparison,
+        def:mpdo_positive_bnt_label_chi_trace_power_form,
+        def:mpdo_positive_blocked_structure_chi_trace_power_form,
+        thm:mpdo_bnt_blocked_basis_coefficient_eq}
+    Suppose that the chosen blocked-basis coefficients are compared with a
+    fixed BNT-label coefficient system, and that this BNT-label system has a
+    positive length-independent $\chi$-witness. Then the chosen blocked
+    bases carry a positive blocked $\chi$ trace-power witness.
+    The construction is obtained by pulling back the BNT-label
+    $\chi_{\alpha,\beta,\gamma}$-matrices along the source and target label
+    maps.
+    % Formalization note: the zero-length component of the blocked chi family is
+    % filled by empty diagonal matrices; it plays no role in the positive-length
+    % trace-power statement.
+\end{theorem}
+\begin{proof}\leanok
+    Reindex the positive BNT-label $\chi$-family along the blocked-basis
+    label map. Positivity is preserved by reindexing, and the trace-power
+    identity follows by substituting the blocked-basis comparison into the
+    BNT-label trace-power formula.
+\end{proof}
+

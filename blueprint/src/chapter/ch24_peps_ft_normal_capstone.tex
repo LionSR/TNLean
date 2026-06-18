@@ -1242,6 +1242,31 @@ recorded in the route note
     them, including across the seam.
 \end{proof}
 
+\begin{theorem}[Cyclic gauges preserve closed-chain states]%
+    \label{thm:mps_chain_gaugeEquiv_sameState}
+    \lean{MPSChainTensor.arcEval_eq_gauge_conj}
+    \lean{MPSChainTensor.GaugeEquiv.sameState}
+    \leanok
+    \uses{def:chain_arc_window_injective, def:non_ti_chain}
+    Let \(A_0,\ldots,A_{n-1}\) and \(B_0,\ldots,B_{n-1}\) be two
+    site-dependent closed chains with a cyclic gauge relation
+    \[
+        B_v^i = Z_v\, A_v^i\, Z_{v+1}^{-1}
+    \]
+    at every site.  Then they generate the same closed-chain state.  More
+    generally, the product along any arc is conjugated by the two gauges on
+    the boundary bonds of that arc; for a full turn around the chain the
+    two boundary bonds coincide, and cyclicity of trace removes the
+    remaining conjugation.
+\end{theorem}
+\begin{proof}\leanok
+    Iterate the sitewise gauge relation along the arc.  Consecutive
+    boundary matrices cancel, leaving only the gauges at the two ends.
+    For a word of length \(n\) read from the first site, the two ends are
+    the same bond, so the closed trace is invariant under the resulting
+    conjugation.
+\end{proof}
+
 \begin{corollary}[Fundamental Theorem for injective closed MPS chains]%
     \label{cor:fundamentalTheorem_injectiveMPSChain_of_sameState}
     \lean{TNLean.PEPS.fundamentalTheorem_injectiveMPSChain_of_sameState}
@@ -1327,6 +1352,28 @@ recorded in the route note
     iterate it along the chain.  At the first site one takes
     \(L_0=R_0=I\); passing from \(v\) to \(v+1\) multiplies the left and
     right virtual factors by the adjacent gauges.
+\end{proof}
+
+\begin{corollary}[Gauge-to-first description from a cyclic-invariant state]%
+    \label{cor:exists_gauge_to_first_of_cyclicShiftInvariantState}
+    \lean{TNLean.PEPS.exists_gauge_to_first_of_cyclicShiftInvariantState}
+    \leanok
+    \uses{cor:fundamentalTheorem_injectiveMPSChain_cyclicShift,
+        cor:exists_gauge_to_first_of_cyclicShift_gaugeEquiv}
+    Let \(A_0,\ldots,A_{n-1}\) be an injective site-dependent closed chain
+    on \(n\ge 3\) sites.  If its generated state is invariant under the
+    cyclic translation of the sites, then for every site \(v\) there are
+    invertible matrices \(L_v\) and \(R_v\) such that
+    \[
+        A_v^i = L_v\, A_0^i\, R_v^{-1}
+    \]
+    for every physical index \(i\).  This is the uniform-bond-dimension form
+    of the \(L_v,R_v\) step in the Applications-section proof of
+    \cite[lines~1803--1890]{Molnar2018NormalPEPS}.
+\end{corollary}
+\begin{proof}\leanok
+    Apply the injective chain theorem to the chain and its cyclic shift, then
+    telescope the resulting bond gauges around the chain.
 \end{proof}
 
 \begin{theorem}[Uniqueness of the injective closed-chain gauge]%

@@ -67,7 +67,7 @@ variable [NeZero n]
 
 /-- The gauge matrix at an incidence whose stored first endpoint is the
 vertex. -/
-theorem edgeGaugeAt_of_fst {V : Type*} [Fintype V] [LinearOrder V]
+theorem edgeGaugeAt_of_fst {V : Type*} [LinearOrder V]
     {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ} (A : Tensor G d)
     (X : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ) (v : V) (ie : IncidentEdge G v)
     (h : ie.1.1.1 = v) :
@@ -76,7 +76,7 @@ theorem edgeGaugeAt_of_fst {V : Type*} [Fintype V] [LinearOrder V]
 
 /-- The gauge matrix at an incidence whose stored second endpoint is the
 vertex. -/
-theorem edgeGaugeAt_of_snd {V : Type*} [Fintype V] [LinearOrder V]
+theorem edgeGaugeAt_of_snd {V : Type*} [LinearOrder V]
     {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ} (A : Tensor G d)
     (X : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ) (v : V) (ie : IncidentEdge G v)
     (h : ¬ ie.1.1.1 = v) :
@@ -253,7 +253,7 @@ theorem cycleLeftGauge_eq (hn : 3 ≤ n) (A : MPSTensor d D)
   · -- The bond entering site `0` is the seam edge, stored first endpoint `0`.
     have hfst : (cycleSuccEdge hn (v - 1)).1.1 = v := by
       rw [cycleSuccEdge_val_of_eq hn (pred_zero_wrap hn hv0)]
-      show v - 1 + 1 = v
+      change v - 1 + 1 = v
       rw [sub_add_cancel]
     have hM : cycleLeftGauge hn A X v =
         (X (cycleSuccEdge hn (v - 1)) : Matrix (Fin D) (Fin D) ℂ) :=
@@ -346,7 +346,7 @@ theorem cycleGaugeOfEdgeGauge_edgeGaugeOfCycleGauge (hn : 3 ≤ n)
     have hpair := cycleSuccEdge_val_of_eq hn (pred_zero_wrap hn hv0)
     have hcond : ¬ ((cycleSuccEdge hn (v - 1)).1.1 + 1 = (cycleSuccEdge hn (v - 1)).1.2) := by
       rw [hpair]
-      show ¬ (v - 1 + 1) + 1 = v - 1
+      change ¬ (v - 1 + 1) + 1 = v - 1
       rw [sub_add_cancel]
       intro h
       have h1 : ((1 : Fin n) : ℕ) = 1 := val_one_of_two_le (by omega)
@@ -355,14 +355,14 @@ theorem cycleGaugeOfEdgeGauge_edgeGaugeOfCycleGauge (hn : 3 ≤ n)
       have := v.isLt
       split_ifs at hval <;> omega
     rw [edgeGaugeOfCycleGauge, if_neg hcond, hpair]
-    show ((Z (v - 1 + 1))⁻¹)⁻¹ = Z v
+    change ((Z (v - 1 + 1))⁻¹)⁻¹ = Z v
     rw [sub_add_cancel, inv_inv]
   · rw [if_neg hv0]
     have hpair := cycleSuccEdge_val_of_lt hn (pred_val_lt hn hv0)
     have hcond : (cycleSuccEdge hn (v - 1)).1.1 + 1 = (cycleSuccEdge hn (v - 1)).1.2 := by
       rw [hpair]
     rw [edgeGaugeOfCycleGauge, if_pos hcond, hpair]
-    show glTranspose (glTranspose (Z (v - 1 + 1))) = Z v
+    change glTranspose (glTranspose (Z (v - 1 + 1))) = Z v
     rw [sub_add_cancel, glTranspose_glTranspose]
 
 end GaugeConversion
@@ -382,7 +382,7 @@ theorem exists_ne_zero_of_isNBlkInjective {L : ℕ} (hL : 0 < L) (hD : 0 < D)
       MPSTensor.evalWord B (List.ofFn σ)) ⊆ {0} := by
     rintro _ ⟨σ, rfl⟩
     obtain ⟨L', rfl⟩ : ∃ L', L = L' + 1 := ⟨L - 1, by omega⟩
-    show MPSTensor.evalWord B (List.ofFn σ) ∈ ({0} : Set (Matrix (Fin D) (Fin D) ℂ))
+    change MPSTensor.evalWord B (List.ofFn σ) ∈ ({0} : Set (Matrix (Fin D) (Fin D) ℂ))
     rw [Set.mem_singleton_iff, List.ofFn_succ, MPSTensor.evalWord_cons, hall (σ 0),
       Matrix.zero_mul]
   have hle : (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) ≤ ⊥ := by
@@ -529,7 +529,7 @@ theorem fundamentalTheorem_normalMPS_gauge_unique {n L d D : ℕ} [NeZero n] (hL
       have hcond : ¬ ((cycleSuccEdge hn3 (v - 1)).1.1 + 1 = (cycleSuccEdge hn3 (v - 1)).1.2) := by
         have hpair := cycleSuccEdge_val_of_eq hn3 (pred_zero_wrap hn3 hv0)
         rw [hpair]
-        show ¬ (v - 1 + 1) + 1 = v - 1
+        change ¬ (v - 1 + 1) + 1 = v - 1
         rw [sub_add_cancel]
         intro h
         have h1 : ((1 : Fin n) : ℕ) = 1 := val_one_of_two_le (by omega)
@@ -539,7 +539,7 @@ theorem fundamentalTheorem_normalMPS_gauge_unique {n L d D : ℕ} [NeZero n] (hL
         split_ifs at hval <;> omega
       have hZ1 : (cycleSuccEdge hn3 (v - 1)).1.1 = v := by
         rw [cycleSuccEdge_val_of_eq hn3 (pred_zero_wrap hn3 hv0)]
-        show v - 1 + 1 = v
+        change v - 1 + 1 = v
         rw [sub_add_cancel]
       rw [edgeGaugeOfCycleGauge, edgeGaugeOfCycleGauge, if_neg hcond, if_neg hcond, hZ1]
         at hce
@@ -635,7 +635,7 @@ theorem fundamentalTheorem_normalMPS_gauge_unique {n L d D : ℕ} [NeZero n] (hL
         apply Fin.ext
         have h1 : ((1 : Fin n) : ℕ) = 1 := val_one_of_two_le (by omega)
         rw [Fin.val_add_eq_ite, h1]
-        show (if n ≤ k + 1 then k + 1 - n else k + 1) = k + 1
+        change (if n ≤ k + 1 then k + 1 - n else k + 1) = k + 1
         split_ifs <;> omega
       rw [← hsucc, hstep ⟨k, hk'⟩, IH hk']
   exact ⟨μ 0, fun v => by rw [hμ v, hconst v]⟩

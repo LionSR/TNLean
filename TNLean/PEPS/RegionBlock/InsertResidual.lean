@@ -610,7 +610,7 @@ theorem insertOuterBondProd_smul_insertResidual_eq (A : Tensor G d) (R : Finset 
       regionBlockedWeight_bridge_eq_smul_insertResidual (G := G) A R hv μ σ η hcons]
   · rw [if_neg hcons]
     rw [InsertConsistent] at hcons
-    push_neg at hcons
+    push Not at hcons
     obtain ⟨g, hgv, hne⟩ := hcons
     rw [insertResidual_eq_zero_of_inconsistent (G := G) A R μ σ η g hgv hne, smul_zero]
 
