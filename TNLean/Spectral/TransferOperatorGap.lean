@@ -132,12 +132,6 @@ The Euclidean-space embedding `matToES` is imported from
 `TNLean.Spectral.FrobeniusNorm`; submultiplicativity is Mathlib's
 Frobenius-norm estimate. -/
 
-private lemma norm_matToES_mul_le (A B : Matrix (Fin D) (Fin D) ℂ) :
-    ‖matToES (A * B)‖ ≤ ‖matToES A‖ * ‖matToES B‖ := by
-  rw [norm_matToES_eq_frobenius_norm, norm_matToES_eq_frobenius_norm,
-    norm_matToES_eq_frobenius_norm]
-  exact Matrix.frobenius_norm_mul A B
-
 private lemma trace_cycle_for_frobSq (w v : Matrix (Fin D) (Fin D) ℂ) :
     (w * vᴴ * (v * wᴴ)).trace = (wᴴ * w * (vᴴ * v)).trace := by
   rw [Matrix.mul_assoc w vᴴ _, ← Matrix.mul_assoc vᴴ v wᴴ,
@@ -177,12 +171,16 @@ private lemma hs_contraction_mixedTransfer [NeZero D]
     evalWord A (List.ofFn σ) * (X * (evalWord B (List.ofFn σ))ᴴ))‖ ^ 2 from
     (norm_matToES_sq _).symm]
   set fA := fun σ : Fin n → Fin d => ‖matToES (evalWord A (List.ofFn σ))‖ with hfA_def
-  set fB := fun σ : Fin n → Fin d => ‖matToES (X * (evalWord B (List.ofFn σ))ᴴ)‖ with hfB_def
+  set fB := fun σ : Fin n → Fin d =>
+    ‖matToES (X * (evalWord B (List.ofFn σ))ᴴ)‖ with hfB_def
   have h_chain : ‖matToES (∑ σ : Fin n → Fin d,
     evalWord A (List.ofFn σ) * (X * (evalWord B (List.ofFn σ))ᴴ))‖ ≤
     ∑ σ : Fin n → Fin d, fA σ * fB σ :=
     ((by rw [matToES_finset_sum]; exact norm_sum_le _ _) : ‖matToES _‖ ≤ _).trans
-      (Finset.sum_le_sum fun σ _ => norm_matToES_mul_le _ _)
+      (Finset.sum_le_sum fun σ _ => by
+        simpa [hfA_def, hfB_def, norm_matToES_eq_frobenius_norm] using
+          Matrix.frobenius_norm_mul (evalWord A (List.ofFn σ))
+            (X * (evalWord B (List.ofFn σ))ᴴ))
   have h_A : ∑ σ : Fin n → Fin d, fA σ ^ 2 = (D : ℝ) := by
     simp_rw [hfA_def, norm_matToES_sq]; exact sum_frobSq_words A hA_norm n
   have h_B : ∑ σ : Fin n → Fin d, fB σ ^ 2 = frobSq X := by
@@ -263,7 +261,8 @@ Proof strategy:
 
 2. **Per-index relation**: Set `C_i = X⁻¹ A_i X`. From the eigenvector equation,
    `∑ C_i B_i† = μI`. By Cauchy-Schwarz on the Hilbert-Schmidt inner product:
-   `D² = |tr(∑ C_i B_i†)|² = |∑⟨B_i, C_i⟩|² ≤ (∑‖C_i‖²)(∑‖B_i‖²) = tr(∑C_i†C_i)·D`.
+   `D² = |tr(∑ C_i B_i†)|² = |∑⟨B_i, C_i⟩|² ≤
+    (∑‖C_i‖²)(∑‖B_i‖²) = tr(∑C_i†C_i)·D`.
    So `tr(∑ C_i†C_i) ≥ D`. Also `∑(C_i - μB_i)†(C_i - μB_i) = ∑C_i†C_i - I ≥ 0`
    (the trace computation uses `∑B_i†B_i = I` and `∑C_iB_i† = μI`).
    Together with `E_A(XX†) = XX†` (which follows from QPF theory applied to

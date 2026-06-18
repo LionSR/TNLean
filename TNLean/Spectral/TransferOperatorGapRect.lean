@@ -77,13 +77,6 @@ The general definitions `frobSq`, `matToES`, and their basic lemmas are imported
 `TNLean.Spectral.FrobeniusNorm`.  Mathlib's native Frobenius-norm
 submultiplicativity gives the mixed-shape estimate used below. -/
 
-private lemma norm_matToES_rect_mul_le
-    (A : Matrix (Fin D₁) (Fin D₁) ℂ) (B : Matrix (Fin D₁) (Fin D₂) ℂ) :
-    ‖matToES (A * B)‖ ≤ ‖matToES A‖ * ‖matToES B‖ := by
-  rw [norm_matToES_eq_frobenius_norm, norm_matToES_eq_frobenius_norm,
-    norm_matToES_eq_frobenius_norm]
-  exact Matrix.frobenius_norm_mul A B
-
 /-! ## Hilbert–Schmidt contraction for the rectangular mixed transfer -/
 
 section HSContraction
@@ -121,8 +114,8 @@ private lemma sum_frobSq_rect_words
   rw [← Complex.re_sum, ← Matrix.trace_sum, word_conjTranspose_mul_sum K hK n]
   simp [Matrix.trace_one, Fintype.card_fin]
 
-/-- **Uniform Frobenius-norm bound**: `‖F₂^n(X)‖_F² ≤ D₁² · ‖X‖_F²` for the rectangular
-mixed transfer operator. -/
+/-- **Uniform Frobenius-norm bound**: `‖F₂^n(X)‖_F² ≤ D₁² · ‖X‖_F²`
+for the rectangular mixed transfer operator. -/
 private lemma hs_contraction_rect [NeZero D₁] [NeZero D₂]
     (A : MPSTensor d D₁) (B : MPSTensor d D₂) (X : Matrix (Fin D₁) (Fin D₂) ℂ)
     (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -145,7 +138,10 @@ private lemma hs_contraction_rect [NeZero D₁] [NeZero D₂]
     evalWord A (List.ofFn σ) * (X * (evalWord B (List.ofFn σ))ᴴ))‖ ≤
     ∑ σ : Fin n → Fin d, fA σ * fB σ :=
     ((by rw [matToES_finset_sum]; exact norm_sum_le _ _) : ‖matToES _‖ ≤ _).trans
-      (Finset.sum_le_sum fun σ _ => norm_matToES_rect_mul_le _ _)
+      (Finset.sum_le_sum fun σ _ => by
+        simpa [hfA_def, hfB_def, norm_matToES_eq_frobenius_norm] using
+          Matrix.frobenius_norm_mul (evalWord A (List.ofFn σ))
+            (X * (evalWord B (List.ofFn σ))ᴴ))
   have h_A : ∑ σ : Fin n → Fin d, fA σ ^ 2 = (D₁ : ℝ) := by
     simp_rw [hfA_def, norm_matToES_sq]; exact sum_frobSq_rect_words A hA_norm n
   have h_B : ∑ σ : Fin n → Fin d, fB σ ^ 2 = frobSq X := by
@@ -201,7 +197,9 @@ theorem spectralRadius_mixedTransfer₂_le_one
       ContinuousLinearMap.uniqueOfLeft.instSubsingleton
     rw [spectrum.SpectralRadius.of_subsingleton]; exact zero_le
   · rcases eq_or_ne D₂ 0 with rfl | hD₂
-    · have : Subsingleton (Matrix (Fin D₁) (Fin 0) ℂ) := ⟨fun a b => by ext i j; exact j.elim0⟩
+    · have : Subsingleton (Matrix (Fin D₁) (Fin 0) ℂ) := ⟨fun a b => by
+        ext i j
+        exact j.elim0⟩
       have : Subsingleton (Matrix (Fin D₁) (Fin 0) ℂ →L[ℂ] Matrix (Fin D₁) (Fin 0) ℂ) :=
         ContinuousLinearMap.uniqueOfLeft.instSubsingleton
       rw [spectrum.SpectralRadius.of_subsingleton]; exact zero_le

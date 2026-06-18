@@ -74,6 +74,9 @@ The clearest replacements are:
   proofs now use Mathlib's `ContinuousLinearMap.toNormedRing`,
   `ContinuousLinearMap.toNormedAlgebra`, and local finite-dimensional
   completeness proofs directly.
+- Two one-use Frobenius submultiplicativity wrappers in the transfer-operator
+  gap files were removed.  The proofs now call Mathlib's
+  `Matrix.frobenius_norm_mul` directly at the Hilbert-Schmidt estimate.
 
 There are also important non-replacements.
 
@@ -720,6 +723,46 @@ Status: partial replacement.
 The matrix-norm parts should move toward Mathlib's Frobenius norm.  The
 transfer-operator gap estimates are project-specific and remain local.
 
+The one-use private wrappers
+
+- `norm_matToES_mul_le`
+- `norm_matToES_rect_mul_le`
+
+have been removed from `TNLean/Spectral/TransferOperatorGap.lean` and
+`TNLean/Spectral/TransferOperatorGapRect.lean`.  The two Cauchy-Schwarz chains
+now unfold the local `matToES` abbreviations at the call site and apply
+Mathlib's `Matrix.frobenius_norm_mul` directly.
+
+### Remaining axiom boundary recheck, 2026-06-19
+
+The remaining non-Archive axioms were checked again against the Mathlib 4.31
+checkout:
+
+- `posMap_rpow_concave_jensen`
+- `posMap_rpow_convex_jensen`
+- `posMap_log_concave_jensen`
+- `lieb_concavity_axiom`
+- `Axioms.rfp_to_nncph_commute`
+- `Axioms.beigi_nncph_to_rfp`
+- `strong_subadditivity`
+- `hayashi_ssa_equality_characterization`
+
+Mathlib 4.31 provides useful inputs for the operator-convexity boundary,
+notably `CFC.concaveOn_rpow`, `CFC.concaveOn_log`,
+`PositiveLinearMap`, and `CompletelyPositiveMap`.  It does not yet provide the
+Hansen-Pedersen positive-map Jensen theorem, operator convexity of `rpow` on
+`[1,2]`, Lieb joint concavity, finite-dimensional quantum strong
+subadditivity, the Hayashi equality characterization, or the Beigi
+nearest-neighbor commuting-Hamiltonian ground-space theorem.  The local axioms
+therefore remain load-bearing assumptions.
+
+The current non-Archive `sorry` sites are in
+`TNLean/Channel/LorentzNormalForm.lean` and
+`TNLean/MPS/Periodic/Overlap/Case3.lean`.  These do not import the Beigi or
+entropy axiom boundary as a direct missing step, and the operator-convexity
+axioms do not match their current goals.  No present `sorry` was closed by the
+remaining axioms in this recheck.
+
 ### `TNLean/Channel/Semigroup/ProductFormula.lean`
 
 Status: keep most local estimates.
@@ -947,6 +990,8 @@ lake env lean TNLean/Channel/Irreducible/Growth/Preservation.lean --json
 lake env lean TNLean/Channel/Irreducible/Growth/KernelDescent.lean --json
 lake env lean TNLean/Channel/Peripheral/GroupStructure.lean --json
 lake env lean TNLean/Spectral/TransferOperatorGap.lean --json
+lake env lean TNLean/Spectral/TransferOperatorGap.lean
+lake env lean TNLean/Spectral/TransferOperatorGapRect.lean
 lake env lean TNLean/PiAlgebra/CanonicalFormSepAux.lean --json
 lake build TNLean.Algebra.MatrixAux TNLean.Spectral.GaugeConstruction \
   TNLean.Spectral.TransferOperatorGapNT TNLean.Spectral.TransferOperatorGap \
