@@ -106,12 +106,16 @@ theorem isTwoBlockInjective_regionTwoBlock_iff (A : Tensor G d) (R : Finset V) :
         (regionBlockedTensorFamily (G := G) A R) ∘ (Equiv.punitProd _) := by
     funext η τ; rfl
   rw [hequiv]
+  let eunit : PUnit × RegionBoundaryConfig (G := G) A R ≃
+      RegionBoundaryConfig (G := G) A R := Equiv.punitProd _
   constructor
   · intro h
-    have := h.comp (Equiv.punitProd _).symm (Equiv.punitProd _).symm.injective
-    simpa [Function.comp] using this
+    have := h.comp eunit.symm eunit.symm.injective
+    convert this using 1
+    ext ρ τ
+    simp [eunit, Function.comp]
   · intro h
-    exact h.comp _ (Equiv.punitProd _).injective
+    exact h.comp eunit eunit.injective
 
 /-- The region two-block tensor is two-block injective whenever the blocked-region
 tensor family of `R` is linearly independent.

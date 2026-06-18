@@ -53,6 +53,7 @@ the Euclidean linear map level. -/
 lemma toEuclideanLin_mul (A B : Matrix (Fin D) (Fin D) ℂ) :
     (Matrix.toEuclideanLin A : EuclideanSpace ℂ (Fin D) →ₗ[ℂ] EuclideanSpace ℂ (Fin D)) *
       Matrix.toEuclideanLin B = Matrix.toEuclideanLin (A * B) := by
+  rw [Module.End.mul_eq_comp]
   simpa only [Matrix.toEuclideanLin_eq_toLin_orthonormal] using
     (Matrix.toLin_mul (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
       (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
@@ -197,10 +198,10 @@ private lemma familyMain_term_eq
       = z i • (familyMainKraus C (i, p) * (familyMainKraus C (i, p))ᴴ) := by
   ext r s
   simp only [rectKrausMap, univ_unique, PUnit.default_eq_unit, sum_const, card_singleton,
-    smul_apply, Matrix.mul_apply, familyMainKraus, diagonal_apply, mul_ite, ite_mul, zero_mul,
+    Matrix.smul_apply, Matrix.mul_apply, familyMainKraus, diagonal_apply, mul_ite, ite_mul, zero_mul,
     mul_zero, sum_ite_eq', mem_univ, ↓reduceIte, conjTranspose_apply, RCLike.star_def,
-    Option.elim_some, one_smul, smul_eq_mul]
-  ring
+    Option.elim_some, one_smul]
+  ring_nf
 
 private lemma familyMain_outer_sum
     {ι : Type*} [Fintype ι] [DecidableEq ι]
@@ -237,9 +238,9 @@ private lemma familyDefect_term_zero
       (Matrix.diagonal (fun o : Option ι => o.elim 0 z)) = 0 := by
   ext r s
   simp only [rectKrausMap, univ_unique, PUnit.default_eq_unit, sum_const, card_singleton,
-    smul_apply, Matrix.mul_apply, familyDefectKraus, Matrix.diagonal_apply, mul_ite, ite_mul,
+    Matrix.smul_apply, Matrix.mul_apply, familyDefectKraus, Matrix.diagonal_apply, mul_ite, ite_mul,
     zero_mul, mul_zero, sum_ite_eq', mem_univ, ↓reduceIte, conjTranspose_apply, RCLike.star_def,
-    Option.elim_none, nsmul_zero, zero_apply]
+    Option.elim_none, nsmul_zero, Matrix.zero_apply]
 
 /-- The diagonal / finite-spectrum Schwarz inequality for a positive family
 `{Bᵢ}` with `∑ᵢ Bᵢ ≤ 1`. This is the direct diagonal case needed for the

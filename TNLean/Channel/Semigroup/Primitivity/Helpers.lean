@@ -13,8 +13,6 @@ variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-local instance : ContinuousSMul ℝ ℂ := TNOperatorSpace.complexContinuousSMulReal
-
 local instance : ContinuousSMul ℝ Mat :=
   TNOperatorSpace.matrixContinuousSMulReal (n := Fin D)
 
@@ -87,10 +85,21 @@ theorem expSemigroup_apply_eigenvector
     (L : Mat →ₗ[ℂ] Mat) (X : Mat) (μ : ℂ)
     (hX : L X = μ • X) (t : ℝ) :
     expSemigroup L t X = Complex.exp ((t : ℂ) * μ) • X := by
+  letI : NormedSpace ℝ ℂ := NormedAlgebra.toNormedSpace ℂ
+  letI : ContinuousSMul ℝ ℂ :=
+    show ContinuousSMul ℝ (RestrictScalars ℝ ℂ ℂ) from inferInstance
+  letI : AddCommGroup Mat := Matrix.linftyOpNormedAddCommGroup.toAddCommGroup
+  letI : NormedAddCommGroup Mat := Matrix.linftyOpNormedAddCommGroup
+  letI : Module ℝ Mat :=
+    (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)).toModule
+  letI : TopologicalSpace Mat := PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+  letI : NormedSpace ℝ Mat :=
+    TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)
+  letI : ContinuousSMul ℝ Mat := TNOperatorSpace.matrixContinuousSMulReal (Fin D)
   letI : IsScalarTower ℝ ℂ Mat := by infer_instance
   let c : ℝ → ℂ := fun u => Complex.exp (-((u : ℂ) * μ))
   let g : ℝ → Matrix (Fin D) (Fin D) ℂ := fun u => expSemigroup L u X
-  let f : ℝ → Matrix (Fin D) (Fin D) ℂ := fun u => c u • g u
+  let f : ℝ → Matrix (Fin D) (Fin D) ℂ := c • g
   have hsmul_deriv (u : ℝ) (hc : HasDerivAt c (-(c u * μ)) u)
       (hg : HasDerivAt g (μ • g u) u) :
       HasDerivAt f (c u • (μ • g u) + (-(c u * μ)) • g u) u := by
@@ -98,14 +107,14 @@ theorem expSemigroup_apply_eigenvector
         HasDerivAt (c • g) (c u • (μ • g u) + (-(c u * μ)) • g u) u :=
       @HasDerivAt.smul ℝ _ Mat _ _ g (μ • g u) u ℂ _ _ _ _
         (TNOperatorSpace.matrixScalarTowerRealComplex (n := Fin D)) c (-(c u * μ)) hc hg
-    simpa [f, c, g] using h
+    exact h
   have hdiff : Differentiable ℝ f := by
     intro u
     have hmul : HasDerivAt (fun u : ℝ => (u : ℂ) * μ) ((1 : ℂ) * μ) u :=
       (Complex.ofRealCLM.hasDerivAt.mul_const μ)
     have hc : HasDerivAt c (-(c u * μ)) u := by
       dsimp [c]
-      simpa using (Complex.hasDerivAt_exp (-((u : ℂ) * μ))).comp u hmul.neg
+      simpa [mul_assoc] using hmul.neg.cexp
     have hg : HasDerivAt g (μ • g u) u := by
       dsimp [g]
       simpa [hX, smul_smul, mul_assoc] using hasDerivAt_expSemigroup_apply (D := D) L X u
@@ -117,7 +126,7 @@ theorem expSemigroup_apply_eigenvector
       (Complex.ofRealCLM.hasDerivAt.mul_const μ)
     have hc : HasDerivAt c (-(c u * μ)) u := by
       dsimp [c]
-      simpa using (Complex.hasDerivAt_exp (-((u : ℂ) * μ))).comp u hmul.neg
+      simpa [mul_assoc] using hmul.neg.cexp
     have hg : HasDerivAt g (μ • g u) u := by
       dsimp [g]
       simpa [hX, smul_smul, mul_assoc] using hasDerivAt_expSemigroup_apply (D := D) L X u
@@ -405,6 +414,7 @@ theorem spectralRadius_lt_one_of_eigenvalues_lt_one [NeZero D]
   have hμ_ev : Module.End.HasEigenvalue F μ :=
     Module.End.hasEigenvalue_iff_mem_spectrum.mpr hμ_spec_end
   have hμ_lt : ‖μ‖ < 1 := hF μ hμ_ev
+  change spectralRadius ℂ (Φ F) < 1
   rw [← hμ_norm]
   exact by
     exact_mod_cast hμ_lt

@@ -138,7 +138,12 @@ theorem IsCPMap.smul_nonneg
     {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
     (hE : IsCPMap E) {c : ℝ} (hc : 0 ≤ c) :
     IsCPMap ((c : ℂ) • E) := by
-  simpa [LinearMap.comp_apply] using (isCPMap_smul_id_nonneg (n := n) hc).comp hE
+  rw [← show
+      (((c : ℂ) • (LinearMap.id : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ)).comp E)
+        = (c : ℂ) • E by
+    ext X
+    simp [LinearMap.comp_apply]]
+  exact (isCPMap_smul_id_nonneg (n := n) hc).comp hE
 
 /-- Completely positive maps are closed under powers. -/
 theorem IsCPMap.pow
@@ -146,9 +151,13 @@ theorem IsCPMap.pow
     (hE : IsCPMap E) :
     ∀ m : ℕ, IsCPMap (E ^ m)
   | 0 => by
-      simpa using isCPMap_id (n := n)
+      rw [show E ^ 0 = (LinearMap.id : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) by
+        ext X
+        simp]
+      exact isCPMap_id (n := n)
   | m + 1 => by
-      simpa [pow_succ] using (hE.pow m).comp hE
+      rw [pow_succ, Module.End.mul_eq_comp]
+      exact (hE.pow m).comp hE
 
 /-- Finite sums of completely positive maps are completely positive. -/
 theorem Finset.isCPMap_sum
@@ -239,7 +248,8 @@ variable {D : ℕ}
 
 /-- In fixed positive finite dimension, the set of CP continuous endomorphisms is closed. -/
 theorem isClosed_setOf_isCPMap [NeZero D] :
-    IsClosed {T : MatrixCLM (Fin D) | IsCPMap T.toLinearMap} := by
+    @IsClosed (MatrixCLM (Fin D)) PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+      {T : MatrixCLM (Fin D) | IsCPMap T.toLinearMap} := by
   have hset : {T : MatrixCLM (Fin D) | IsCPMap T.toLinearMap}
       = {T | (ChoiJamiolkowski.choiCLM (D := D) T).PosSemidef} := by
     ext T
@@ -254,7 +264,8 @@ theorem isClosed_setOf_isCPMap [NeZero D] :
 theorem IsCPMap.of_tendsto_toCLM [NeZero D]
     {E : ℕ → LM D} {F : LM D}
     (hE : ∀ n, IsCPMap (E n))
-    (hlim : Filter.Tendsto (fun n => endEquivD D (E n)) Filter.atTop
+    (hlim : @Filter.Tendsto ℕ (MatrixCLM (Fin D))
+      (fun n => endEquivD D (E n)) Filter.atTop
       (nhds (endEquivD D F))) :
     IsCPMap F :=
   (isClosed_setOf_isCPMap (D := D)).mem_of_tendsto hlim
@@ -275,12 +286,30 @@ section ExpSemigroupClosure
 
 variable {D : ℕ}
 
+private def expSeriesCLM (x : MatrixCLM (Fin D)) : MatrixCLM (Fin D) :=
+  letI : NormedRing (MatrixCLM (Fin D)) := ContinuousLinearMap.toNormedRing
+  letI : NormedAlgebra ℂ (MatrixCLM (Fin D)) := ContinuousLinearMap.toNormedAlgebra
+  NormedSpace.exp x
+
+private def expSemigroupSeriesTerm (L : LM D) (t : ℝ) (n : ℕ) :
+    MatrixCLM (Fin D) :=
+  letI : NormedRing (MatrixCLM (Fin D)) := ContinuousLinearMap.toNormedRing
+  letI : NormedAlgebra ℂ (MatrixCLM (Fin D)) := ContinuousLinearMap.toNormedAlgebra
+  ((Nat.factorial n : ℂ)⁻¹) • (((t : ℂ) • endEquivD D L) ^ n)
+
 private theorem hasSum_expSemigroup_series
     (L : LM D) (t : ℝ) :
-    HasSum (fun n : ℕ => ((Nat.factorial n : ℂ)⁻¹) • (((t : ℂ) • endEquivD D L) ^ n))
-      (expSemigroupCLM (endEquivD D L) t) := by
-  simpa [expSemigroupCLM] using
-    (NormedSpace.exp_series_hasSum_exp' (𝕂 := ℂ) (((t : ℂ) • endEquivD D L)))
+    @HasSum (MatrixCLM (Fin D)) ℕ ContinuousLinearMap.toNormedRing.toAddCommMonoid
+      PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+      (expSemigroupSeriesTerm L t)
+      (expSeriesCLM (((t : ℂ) • endEquivD D L))) (SummationFilter.unconditional ℕ) := by
+  unfold expSemigroupSeriesTerm expSeriesCLM
+  exact @NormedSpace.exp_series_hasSum_exp' ℂ (MatrixCLM (Fin D))
+    _ _ _
+    ContinuousLinearMap.toNormedRing
+    ContinuousLinearMap.toNormedAlgebra
+    (TNOperatorSpace.instCompleteSpaceMatrixCLM (Fin D))
+    (((t : ℂ) • endEquivD D L))
 
 /-- If `L` itself is completely positive, then `exp(tL)` is completely positive for all `t ≥ 0`. -/
 theorem IsCPMap.expSemigroup
@@ -335,8 +364,31 @@ theorem IsCPMap.expSemigroup
       exact Finset.isCPMap_sum (s := Finset.range n) termLM (fun i hi => hterm i)
     have hlim : Filter.Tendsto (fun n => endEquivD D (partialLM n)) Filter.atTop
         (nhds (endEquivD D (_root_.expSemigroup L t))) := by
-      simpa [partialLM, termLM, _root_.expSemigroup, expSemigroup_toCLM] using
+      have hseries :=
         (hasSum_expSemigroup_series (D := D) L t).tendsto_sum_nat
+      have hpartial_eq :
+          ∀ n, endEquivD D (partialLM n) =
+            @Finset.sum ℕ (MatrixCLM (Fin D))
+              ContinuousLinearMap.toNormedRing.toAddCommMonoid
+              (Finset.range n) (expSemigroupSeriesTerm L t) := by
+        intro n
+        induction n with
+        | zero =>
+            simp [partialLM]
+            rfl
+        | succ n ih =>
+            simp [partialLM, termLM, expSemigroupSeriesTerm]
+            rfl
+      have hseries' :=
+        Filter.Tendsto.congr (fun n => (hpartial_eq n).symm) hseries
+      have hlimit :
+          expSeriesCLM (((t : ℂ) • endEquivD D L)) =
+            endEquivD D (_root_.expSemigroup L t) := by
+        change expSemigroupCLM (endEquivD D L) t =
+          endEquivD D (_root_.expSemigroup L t)
+        rw [← expSemigroup_toCLM]
+      rw [hlimit] at hseries'
+      exact hseries'
     exact IsCPMap.of_tendsto_toCLM (D := D) hpartial hlim
 
 end ExpSemigroupClosure

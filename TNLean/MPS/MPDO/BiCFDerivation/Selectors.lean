@@ -360,9 +360,11 @@ theorem hasBlockSelectorWords_of_wordTupleSpanTop
     exact Submodule.mem_top
   rcases (Submodule.mem_span_range_iff_exists_fun ℂ).mp htarget with ⟨c, hc⟩
   refine ⟨c, ?_, ?_⟩
-  · simpa [target] using congrArg (fun M => M k) hc
+  · simpa [target, wordTuple, Fintype.linearCombination_apply] using
+      congrArg (fun M => M k) hc
   · intro j hj
-    simpa [target, hj] using congrArg (fun M => M j) hc
+    simpa [target, hj, wordTuple, Fintype.linearCombination_apply] using
+      congrArg (fun M => M j) hc
 
 private theorem exists_dualCoeffs_of_wordEntryFamily_linearIndependent
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -376,7 +378,8 @@ private theorem exists_dualCoeffs_of_wordEntryFamily_linearIndependent
   have hlcKer : lc.ker = ⊥ := by
     rw [LinearMap.ker_eq_bot']
     intro c hc
-    exact funext (Fintype.linearIndependent_iff.mp hLI c (by simpa [lc] using hc))
+    exact funext (Fintype.linearIndependent_iff.mp hLI c
+      (by simpa [lc, Fintype.linearCombination_apply] using hc))
   obtain ⟨Ψ, hΨ⟩ := lc.exists_leftInverse_of_injective hlcKer
   let coeff : BlockEntryIndex dim → (Fin L → Fin d) → ℂ :=
     fun x w => Ψ ((Pi.single w (1 : ℂ) : (Fin L → Fin d) → ℂ)) x

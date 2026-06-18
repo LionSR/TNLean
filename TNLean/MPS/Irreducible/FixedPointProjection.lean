@@ -159,7 +159,7 @@ private lemma spectral_decomp_eq
   -- `conjStarAlgAut` acts as `U * X * Uᴴ`.
   rw [Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose] at h
   -- The statement matches after rewriting.
-  simpa using h
+  simpa [Function.comp_def] using h
 
 /-- `supportProj ρ` satisfies `P * ρ = ρ`. -/
 lemma supportProj_mul (hρ_psd : ρ.PosSemidef) :

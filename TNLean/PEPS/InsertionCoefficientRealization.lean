@@ -67,8 +67,48 @@ theorem edgeInsertedCoeff_eq_sum_left_physicalRealization (A : Tensor G d)
     have hTensor := congrFun
       (localTensorMap_localIncidentMatrixOp_single (G := G) A
         (edgeLeftIncident (G := G) e) M.transpose β.edgeIndex β.leftResidual) (σ e.1.1)
-    simpa [edgeLeftLocalConfig, edgeInsertedLeftLocalConfig, Matrix.transpose_apply]
-      using h.trans hTensor
+    calc
+      O₁ (A.component e.1.1 (edgeLeftLocalConfig (G := G) A e β)) (σ e.1.1)
+          = (localTensorMap A e.1.1)
+              ((localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose)
+                (Pi.single (edgeLeftLocalConfig (G := G) A e β) 1)) (σ e.1.1) := h
+      _ = ∑ y : Fin (A.bondDim e),
+            M y β.edgeIndex *
+              A.component e.1.1
+                (edgeInsertedLeftLocalConfig (G := G) A e
+                  { leftEdgeIndex := y
+                    rightEdgeIndex := β.edgeIndex
+                    leftResidual := β.leftResidual
+                    rightResidual := β.rightResidual })
+                (σ e.1.1) := by
+          change
+            (localTensorMap A e.1.1)
+              ((localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose)
+                (Pi.single
+                  ((localVirtualConfigSplitAt A (edgeLeftIncident (G := G) e)).symm
+                    (β.edgeIndex, β.leftResidual)) 1)) (σ e.1.1)
+              = ∑ x : Fin (A.bondDim e),
+                  M x β.edgeIndex *
+                    A.component e.1.1
+                      ((localVirtualConfigSplitAt A (edgeLeftIncident (G := G) e)).symm
+                        (x, β.leftResidual)) (σ e.1.1)
+          calc
+            (localTensorMap A e.1.1)
+                ((localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose)
+                  (Pi.single
+                    ((localVirtualConfigSplitAt A (edgeLeftIncident (G := G) e)).symm
+                      (β.edgeIndex, β.leftResidual)) 1)) (σ e.1.1)
+                = (∑ y : Fin (A.bondDim e),
+                    M.transpose β.edgeIndex y •
+                      A.component e.1.1
+                        ((localVirtualConfigSplitAt A (edgeLeftIncident (G := G) e)).symm
+                          (y, β.leftResidual))) (σ e.1.1) := hTensor
+            _ = ∑ x : Fin (A.bondDim e),
+                  M x β.edgeIndex *
+                    A.component e.1.1
+                      ((localVirtualConfigSplitAt A (edgeLeftIncident (G := G) e)).symm
+                        (x, β.leftResidual)) (σ e.1.1) := by
+                simp [Matrix.transpose_apply]
   calc
     edgeInsertedCoeff (G := G) A e σ M = ∑ β : EdgeInsertedBoundaryConfig (G := G) A e,
         F β := by
@@ -136,7 +176,48 @@ theorem edgeInsertedCoeff_eq_sum_right_physicalRealization (A : Tensor G d)
     have hTensor := congrFun
       (localTensorMap_localIncidentMatrixOp_single (G := G) A
         (edgeRightIncident (G := G) e) M β.edgeIndex β.rightResidual) (σ e.1.2)
-    simpa [edgeRightLocalConfig, edgeInsertedRightLocalConfig] using h.trans hTensor
+    calc
+      O₂ (A.component e.1.2 (edgeRightLocalConfig (G := G) A e β)) (σ e.1.2)
+          = (localTensorMap A e.1.2)
+              ((localIncidentMatrixOp A (edgeRightIncident (G := G) e) M)
+                (Pi.single (edgeRightLocalConfig (G := G) A e β) 1)) (σ e.1.2) := h
+      _ = ∑ y : Fin (A.bondDim e),
+            M β.edgeIndex y *
+              A.component e.1.2
+                (edgeInsertedRightLocalConfig (G := G) A e
+                  { leftEdgeIndex := β.edgeIndex
+                    rightEdgeIndex := y
+                    leftResidual := β.leftResidual
+                    rightResidual := β.rightResidual })
+                (σ e.1.2) := by
+          change
+            (localTensorMap A e.1.2)
+              ((localIncidentMatrixOp A (edgeRightIncident (G := G) e) M)
+                (Pi.single
+                  ((localVirtualConfigSplitAt A (edgeRightIncident (G := G) e)).symm
+                    (β.edgeIndex, β.rightResidual)) 1)) (σ e.1.2)
+              = ∑ x : Fin (A.bondDim e),
+                  M β.edgeIndex x *
+                    A.component e.1.2
+                      ((localVirtualConfigSplitAt A (edgeRightIncident (G := G) e)).symm
+                        (x, β.rightResidual)) (σ e.1.2)
+          calc
+            (localTensorMap A e.1.2)
+                ((localIncidentMatrixOp A (edgeRightIncident (G := G) e) M)
+                  (Pi.single
+                    ((localVirtualConfigSplitAt A (edgeRightIncident (G := G) e)).symm
+                      (β.edgeIndex, β.rightResidual)) 1)) (σ e.1.2)
+                = (∑ y : Fin (A.bondDim e),
+                    M β.edgeIndex y •
+                      A.component e.1.2
+                        ((localVirtualConfigSplitAt A (edgeRightIncident (G := G) e)).symm
+                          (y, β.rightResidual))) (σ e.1.2) := hTensor
+            _ = ∑ x : Fin (A.bondDim e),
+                  M β.edgeIndex x *
+                    A.component e.1.2
+                      ((localVirtualConfigSplitAt A (edgeRightIncident (G := G) e)).symm
+                        (x, β.rightResidual)) (σ e.1.2) := by
+                simp
   calc
     edgeInsertedCoeff (G := G) A e σ M = ∑ β : EdgeInsertedBoundaryConfig (G := G) A e,
         F β := by

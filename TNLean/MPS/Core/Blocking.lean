@@ -399,13 +399,18 @@ theorem leftCanonical_blockTensor
           blockTensor (d := d) (D := D) A L i
       = ∑ σ : Fin L → Fin d,
           (evalWord A (List.ofFn σ))ᴴ * evalWord A (List.ofFn σ) := by
-            simpa [blockTensor, wordOfBlock, decodeBlock, e, blockPhysDim] using
-              (Fintype.sum_equiv e
-                (f := fun i : Fin (blockPhysDim d L) =>
+            change
+              (∑ i : Fin (blockPhysDim d L),
+                (evalWord A (List.ofFn (e i)))ᴴ * evalWord A (List.ofFn (e i))) =
+                ∑ σ : Fin L → Fin d,
+                  (evalWord A (List.ofFn σ))ᴴ * evalWord A (List.ofFn σ)
+            exact
+              Fintype.sum_equiv e
+                (fun i : Fin (blockPhysDim d L) =>
                   (evalWord A (List.ofFn (e i)))ᴴ * evalWord A (List.ofFn (e i)))
-                (g := fun σ : Fin L → Fin d =>
+                (fun σ : Fin L → Fin d =>
                   (evalWord A (List.ofFn σ))ᴴ * evalWord A (List.ofFn σ))
-                (by intro i; rfl))
+                (by intro i; rfl)
     _ = 1 := sum_evalWord_conjTranspose_mul_evalWord (A := A) hLeft L
 
 lemma mpv_blockTensor_eq_mpv (A : MPSTensor d D) (L N : ℕ)

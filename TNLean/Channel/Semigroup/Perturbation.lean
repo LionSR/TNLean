@@ -48,34 +48,42 @@ set_option maxHeartbeats 800000 in
 `exp((t-s)•L) * (L' - L) * exp(s•L')`. -/
 private theorem hasDerivAt_semigroup_product
     (L L' : MatrixCLM (Fin D)) (t s : ℝ) :
-    HasDerivAt (fun u => expSemigroupCLM L (t - u) * expSemigroupCLM L' u)
+    @HasDerivAt ℝ _ (MatrixCLM (Fin D))
+      ContinuousLinearMap.addCommGroup
+      ContinuousLinearMap.module
+      ContinuousLinearMap.topologicalSpace
+      (TNOperatorSpace.instContinuousSMulRealMatrixCLM (Fin D))
+      (fun u => expSemigroupCLM L (t - u) * expSemigroupCLM L' u)
       (expSemigroupCLM L (t - s) * (L' - L) * expSemigroupCLM L' s) s := by
-  have hg :
-      HasDerivAt (fun u => expSemigroupCLM L (t - u))
-        (-(expSemigroupCLM L (t - s) * L)) s := by
-    have hbase :
-        HasDerivAt (fun u : ℝ => expSemigroupCLM L u)
-          (expSemigroupCLM L (t - s) * L) (t - s) :=
+  have hg := by
+    have hbase :=
       hasDerivAt_expSemigroupCLM L (t - s)
     simpa [neg_one_smul] using
       (HasDerivAt.comp_const_sub
         (𝕜 := ℝ)
         (f := fun u : ℝ => expSemigroupCLM L u)
         (a := t) (x := s) hbase)
-  have hh :
-      HasDerivAt (fun u => expSemigroupCLM L' u)
-        (expSemigroupCLM L' s * L') s :=
+  have hh :=
     hasDerivAt_expSemigroupCLM L' s
   let c : ℝ → MatrixCLM (Fin D) := fun u => expSemigroupCLM L (t - u)
   let d : ℝ → MatrixCLM (Fin D) := fun u => expSemigroupCLM L' u
-  have hc : HasDerivAt c (-(expSemigroupCLM L (t - s) * L)) s := hg
-  have hd : HasDerivAt d (expSemigroupCLM L' s * L') s := hh
-  have hprod : HasDerivAt
-      (fun u => expSemigroupCLM L (t - u) * expSemigroupCLM L' u)
-      (-(expSemigroupCLM L (t - s) * L) * expSemigroupCLM L' s +
-        expSemigroupCLM L (t - s) * (expSemigroupCLM L' s * L')) s := by
+  have hc := hg
+  have hd := hh
+  have hprod₀ := by
     simpa [c, d, mul_assoc] using
       (HasDerivAt.mul (𝕜 := ℝ) (𝔸 := MatrixCLM (Fin D)) hc hd)
+  have hprod :
+      @HasDerivAt ℝ _ (MatrixCLM (Fin D))
+        ContinuousLinearMap.addCommGroup
+        ContinuousLinearMap.module
+        ContinuousLinearMap.topologicalSpace
+        (TNOperatorSpace.instContinuousSMulRealMatrixCLM (Fin D))
+        (fun u => expSemigroupCLM L (t - u) * expSemigroupCLM L' u)
+        (-(expSemigroupCLM L (t - s) * L) * expSemigroupCLM L' s +
+          expSemigroupCLM L (t - s) * (expSemigroupCLM L' s * L')) s := by
+    refine hprod₀.congr_of_eventuallyEq ?_
+    filter_upwards with u
+    rfl
   -- The derivative from product rule is: -(exp(...)* L) * exp(...) + exp(...) * (exp(...) * L')
   -- We need: exp(...) * (L' - L) * exp(...)
   suffices heq :
@@ -89,13 +97,13 @@ private theorem hasDerivAt_semigroup_product
     by
       have hcomm_smul : Commute ((s : ℂ) • L') L' := by
         ext v
-        simp only [ContinuousLinearMap.mul_apply, ContinuousLinearMap.smul_apply, map_smul]
+        simp only [mul_apply_eq_comp, _root_.smul_apply, map_smul]
       simpa [expSemigroupCLM] using hcomm_smul.exp_left.eq.symm
   -- Prove the algebra at the pointwise level (avoids CLM instance diamonds with neg_mul)
   apply ContinuousLinearMap.ext; intro v
   -- Expand both sides using CLM operations
-  simp only [ContinuousLinearMap.mul_apply, ContinuousLinearMap.neg_apply,
-    ContinuousLinearMap.add_apply, ContinuousLinearMap.sub_apply, map_sub]
+  simp only [mul_apply_eq_comp, _root_.neg_apply,
+    _root_.add_apply, _root_.sub_apply, map_sub]
   -- Use hcomm: L'(exp v) = exp(L' v), rearranged to exp(L' v) = L'(exp v)
   have hcomm_v : expSemigroupCLM L' s (L' v) =
       L' (expSemigroupCLM L' s v) :=
@@ -114,7 +122,12 @@ theorem duhamel_formula
   rw [integral_Icc_eq_integral_Ioc, ← intervalIntegral.integral_of_le ht]
   -- Step 1: derivative
   have hderiv : ∀ s ∈ Set.uIcc 0 t,
-      HasDerivAt (fun u => expSemigroupCLM L (t - u) * expSemigroupCLM L' u)
+      @HasDerivAt ℝ _ (MatrixCLM (Fin D))
+        ContinuousLinearMap.addCommGroup
+        ContinuousLinearMap.module
+        ContinuousLinearMap.topologicalSpace
+        (TNOperatorSpace.instContinuousSMulRealMatrixCLM (Fin D))
+        (fun u => expSemigroupCLM L (t - u) * expSemigroupCLM L' u)
         (expSemigroupCLM L (t - s) * (L' - L) * expSemigroupCLM L' s) s :=
     fun s _ => hasDerivAt_semigroup_product L L' t s
   have hcont :
@@ -136,7 +149,10 @@ theorem duhamel_formula
   -- Simplify f(t) - f(0):
   -- f(t) = expSemigroupCLM L (t - t) * expSemigroupCLM L' t = 1 * T' t = T' t
   -- f(0) = expSemigroupCLM L (t - 0) * expSemigroupCLM L' 0 = T t * 1 = T t
-  simp [sub_self, sub_zero, expSemigroupCLM_zero, one_mul, mul_one]
+  change expSemigroupCLM L' t - expSemigroupCLM L t =
+      expSemigroupCLM L (t - t) * expSemigroupCLM L' t -
+        expSemigroupCLM L (t - 0) * expSemigroupCLM L' 0
+  simp [sub_self, sub_zero, expSemigroupCLM_zero]
 
 /-! ## Auxiliary estimate for biSup bounds -/
 
@@ -398,18 +414,21 @@ theorem dysonTerm_continuous (L L' : MatrixCLM (Fin D)) (n : ℕ) :
 /-! ## Integrability of Dyson integrands -/
 
 /-- The integrand `s ↦ T_{t−s} Δ T'ⁿ(s)` is integrable on `[0, t]`. -/
-private lemma integrableOn_dyson_integrand (L L' : MatrixCLM (Fin D)) (n : ℕ) {t : ℝ}
+  private lemma integrableOn_dyson_integrand (L L' : MatrixCLM (Fin D)) (n : ℕ) {t : ℝ}
     (_ : 0 ≤ t) :
     IntegrableOn
       (fun s => expSemigroupCLM L (t - s) * (L' - L) * dysonTerm L L' s n)
       (Set.Icc 0 t) := by
-  apply ContinuousOn.integrableOn_Icc
-  apply ContinuousOn.mul
-  · apply ContinuousOn.mul
-    · exact ((expSemigroupCLM_continuous L).comp
-        (continuous_const.sub continuous_id)).continuousOn
-    · exact continuousOn_const
-  · exact (dysonTerm_continuous L L' n).continuousOn
+  have hcont :
+      Continuous (fun s => expSemigroupCLM L (t - s) * (L' - L) *
+        dysonTerm L L' s n) := by
+    apply Continuous.mul
+    · apply Continuous.mul
+      · exact ((expSemigroupCLM_continuous L).comp
+          (continuous_const.sub continuous_id))
+      · exact continuous_const
+    · exact dysonTerm_continuous L L' n
+  exact hcont.continuousOn.integrableOn_Icc
 
 /-- The integrand for the remainder is integrable on `[0, t]`. -/
 private lemma integrableOn_remainder_integrand (L L' : MatrixCLM (Fin D)) (N : ℕ)
@@ -418,14 +437,17 @@ private lemma integrableOn_remainder_integrand (L L' : MatrixCLM (Fin D)) (N : �
       (fun s => expSemigroupCLM L (t - s) * (L' - L) *
         (expSemigroupCLM L' s - ∑ n ∈ Finset.range N, dysonTerm L L' s n))
       (Set.Icc 0 t) := by
-  apply ContinuousOn.integrableOn_Icc
-  apply ContinuousOn.mul
-  · apply ContinuousOn.mul
-    · exact ((expSemigroupCLM_continuous L).comp
-        (continuous_const.sub continuous_id)).continuousOn
-    · exact continuousOn_const
-  · exact ((expSemigroupCLM_continuous L').sub
-      (continuous_finset_sum _ fun n _ => dysonTerm_continuous L L' n)).continuousOn
+  have hcont :
+      Continuous (fun s => expSemigroupCLM L (t - s) * (L' - L) *
+        (expSemigroupCLM L' s - ∑ n ∈ Finset.range N, dysonTerm L L' s n)) := by
+    apply Continuous.mul
+    · apply Continuous.mul
+      · exact ((expSemigroupCLM_continuous L).comp
+          (continuous_const.sub continuous_id))
+      · exact continuous_const
+    · exact (expSemigroupCLM_continuous L').sub
+        (continuous_finsetSum _ fun n _ => dysonTerm_continuous L L' n)
+  exact hcont.continuousOn.integrableOn_Icc
 
 /-! ## Dyson series identity (Wolf Equation 7.13) -/
 
@@ -455,11 +477,25 @@ private theorem dysonRemainder_integral_eq (L L' : MatrixCLM (Fin D))
     -- Need: ∫ T Δ R_N - ∫ T Δ T'ᴺ = ∫ T Δ (R_N - T'ᴺ)
     -- where R_N(s) = T'_s - ∑_{n<N} T'ⁿ(s)
     -- and R_{N+1}(s) = T'_s - ∑_{n<N+1} T'ⁿ(s) = R_N(s) - T'ᴺ(s)
-    rw [← MeasureTheory.integral_sub
-      (integrableOn_remainder_integrand L L' N ht)
-      (integrableOn_dyson_integrand L L' N ht)]
-    congr 1; ext s
-    simp only [Finset.sum_range_succ, mul_sub, mul_add, sub_sub]
+    calc
+      (∫ s in Set.Icc 0 t,
+          expSemigroupCLM L (t - s) * (L' - L) *
+            (expSemigroupCLM L' s - ∑ n ∈ Finset.range N, dysonTerm L L' s n)) -
+          ∫ s in Set.Icc 0 t,
+            expSemigroupCLM L (t - s) * (L' - L) * dysonTerm L L' s N
+          = ∫ s in Set.Icc 0 t,
+              expSemigroupCLM L (t - s) * (L' - L) *
+                (expSemigroupCLM L' s - ∑ n ∈ Finset.range N, dysonTerm L L' s n) -
+              expSemigroupCLM L (t - s) * (L' - L) * dysonTerm L L' s N := by
+              exact (MeasureTheory.integral_sub
+                (integrableOn_remainder_integrand L L' N ht)
+                (integrableOn_dyson_integrand L L' N ht)).symm
+      _ = ∫ s in Set.Icc 0 t,
+            expSemigroupCLM L (t - s) * (L' - L) *
+              (expSemigroupCLM L' s - ∑ n ∈ Finset.range (N + 1),
+                dysonTerm L L' s n) := by
+          congr 1; ext s
+          simp only [Finset.sum_range_succ, mul_sub, mul_add, sub_sub]
 
 /-- **Factorial norm bound on the Dyson series remainder.**
 For `s ∈ [0,t]`, `M = sup_{u ∈ [0,t]} ‖T_u‖`, `M' = sup_{u ∈ [0,t]} ‖T'_u‖`:
@@ -538,6 +574,12 @@ the Dyson–Phillips series `∑ₙ T'⁽ⁿ⁾(t)` equals the perturbed semigro
 This completes the Dyson–Phillips expansion for matrix semigroups. -/
 theorem dyson_series_eq (L L' : MatrixCLM (Fin D)) {t : ℝ} (ht : 0 ≤ t) :
     HasSum (fun n => dysonTerm L L' t n) (expSemigroupCLM L' t) := by
+  letI hSeminormed : SeminormedAddCommGroup (MatrixCLM (Fin D)) :=
+    ContinuousLinearMap.toNormedAddCommGroup.toSeminormedAddCommGroup
+  change @HasSum (MatrixCLM (Fin D)) ℕ hSeminormed.toAddCommMonoid
+    PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+    (fun n => dysonTerm L L' t n) (expSemigroupCLM L' t)
+    (SummationFilter.unconditional ℕ)
   -- The partial sums converge to the tsum (by summability).
   -- We show they also converge to T'_t, then use uniqueness of limits.
   -- Summable norms (for hasSum_iff_tendsto_nat)
@@ -547,7 +589,9 @@ theorem dyson_series_eq (L L' : MatrixCLM (Fin D)) {t : ℝ} (ht : 0 ≤ t) :
       ((Real.summable_pow_div_factorial
         (t * ‖L' - L‖ * (⨆ u ∈ Set.Icc 0 t, ‖expSemigroupCLM L u‖))).mul_left
         (⨆ u ∈ Set.Icc 0 t, ‖expSemigroupCLM L u‖))
-  rw [hasSum_iff_tendsto_nat_of_summable_norm hSn]
+  rw [@hasSum_iff_tendsto_nat_of_summable_norm (MatrixCLM (Fin D))
+    hSeminormed (f := fun n => dysonTerm L L' t n)
+    (a := expSemigroupCLM L' t) hSn]
   -- Show partial sums converge to T'_t:
   -- ‖T'_t - ∑_{n<N} T'ⁿ(t)‖ ≤ M' · (t·‖Δ‖·M)^N / N! → 0
   rw [Metric.tendsto_atTop]

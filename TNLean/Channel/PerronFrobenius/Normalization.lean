@@ -54,7 +54,8 @@ private lemma spectral_decomp_eq [DecidableEq (Fin D)]
   have h := hM.spectral_theorem
   -- Unfold the unitary conjugation.
   -- `simp` turns `RCLike.ofReal` into coercion to `ℂ`.
-  simpa [Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose] using h
+  simpa [Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose, Matrix.mul_assoc,
+    Function.comp_def] using h
 
 /-- `Uᴴ * U = 1` for the eigenvector unitary `U`. -/
 private lemma eig_conj_mul [DecidableEq (Fin D)]

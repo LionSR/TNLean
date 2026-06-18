@@ -142,9 +142,9 @@ theorem fixed_eq_scalar_of_irreducible_unital
       _ = (2 : ℂ) • X := by
             ext i j
             simp only [
-              sub_eq_add_neg, add_apply, conjTranspose_apply, RCLike.star_def,
-              neg_apply, add_left_comm, add_assoc, add_neg_cancel, add_zero,
-              smul_apply, smul_eq_mul, two_mul
+              sub_eq_add_neg, Matrix.add_apply, conjTranspose_apply, RCLike.star_def,
+              Matrix.neg_apply, add_left_comm, add_assoc, add_neg_cancel, add_zero,
+              Matrix.smul_apply, smul_eq_mul, two_mul
             ]
   calc
     X = (1 / 2 : ℂ) • ((2 : ℂ) • X) := by
@@ -160,12 +160,13 @@ theorem fixed_eq_scalar_of_irreducible_unital
           by_cases hij : i = j
           · subst hij
             simp only [
-              one_div, sub_eq_add_neg, smul_apply, add_apply, one_apply_eq, smul_eq_mul,
-              mul_one, neg_apply, mul_comm, mul_left_comm, one_mul
+              one_div, sub_eq_add_neg, Matrix.smul_apply, Matrix.add_apply,
+              Matrix.one_apply_eq, smul_eq_mul, mul_one, Matrix.neg_apply, mul_comm,
+              mul_left_comm, one_mul
             ]
           · simp only [
-              one_div, smul_apply, sub_apply, ne_eq, hij, not_false_eq_true, one_apply_ne,
-              smul_eq_mul, mul_zero, sub_self
+              one_div, Matrix.smul_apply, Matrix.sub_apply, ne_eq, hij, not_false_eq_true,
+              Matrix.one_apply_ne, smul_eq_mul, mul_zero, sub_self
             ]
 
 section PeripheralUnitary
@@ -364,7 +365,7 @@ theorem exists_normalized_peripheral_unitary_of_irreducible_schwarz
   rcases fixed_eq_scalar_of_irreducible_unital
       (K := K) hUnital hIrr ((U : MatrixAlg D) ^ m) hUm_fix with ⟨α, hUm_scalar⟩
   have hUm_unitary : (((U : MatrixAlg D) ^ m)ᴴ * ((U : MatrixAlg D) ^ m)) = 1 := by
-    simpa using Matrix.UnitaryGroup.star_mul_self (U ^ m)
+    simpa [Matrix.star_eq_conjTranspose] using Matrix.UnitaryGroup.star_mul_self (U ^ m)
   have hα_unit_mul : α * (starRingEnd ℂ) α = 1 := by
     let i0 : Fin D := ⟨0, NeZero.pos D⟩
     have hscalar_mat : ((α • (1 : MatrixAlg D))ᴴ * (α • (1 : MatrixAlg D)) : MatrixAlg D) = 1 := by

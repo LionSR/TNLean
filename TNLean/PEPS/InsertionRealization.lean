@@ -613,7 +613,7 @@ theorem resonate_invert_right_endpoint (A : Tensor G d) (e : Edge G)
         ∑ k : Fin (A.bondDim e), AL k τl * O₂ (AR k) τr := by
     intro τl τr
     have h := resonate_middle_inverted (G := G) A e hMid O₁ O₂ hEq τl τr ρl ρr
-    simpa [hAL, hAR] using h
+    simpa [hAL, hAR, hsL, hsR, edgeLeftLocalConfig, edgeRightLocalConfig] using h
   set ΦR := localTensorMap A e.1.2
   set ΨR := localLeftInverseAt A hv
   funext τl
@@ -708,7 +708,7 @@ theorem resonate_invert_left_endpoint (A : Tensor G d) (e : Edge G)
         ∑ k : Fin (A.bondDim e), AL k τl * O₂ (AR k) τr := by
     intro τl τr
     have h := resonate_middle_inverted (G := G) A e hMid O₁ O₂ hEq τl τr ρl ρr
-    simpa [hAL, hAR] using h
+    simpa [hAL, hAR, hsL, hsR, edgeLeftLocalConfig, edgeRightLocalConfig] using h
   set ΦL := localTensorMap A e.1.1
   set ΨL := localLeftInverseAt A hu
   funext τr

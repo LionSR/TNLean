@@ -573,7 +573,6 @@ theorem fundamentalTheorem_normalMPSChain_of_overlap {n L d D : ℕ} [NeZero n]
       rw [h2] at h1
       have h3 := congrArg
         (fun M => M * (Z (p + (L + 1)) : Matrix (Fin D) (Fin D) ℂ)) h1
-      simp only at h3
       have hQcancel : (((Z (p + (L + 1)))⁻¹ : GL (Fin D) ℂ) :
           Matrix (Fin D) (Fin D) ℂ) *
           (Z (p + (L + 1)) : Matrix (Fin D) (Fin D) ℂ) = 1 := by

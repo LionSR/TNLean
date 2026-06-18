@@ -121,7 +121,10 @@ private theorem matrix_eq_zero_of_mul_nilpIndex
     intro j
     have hcolKilled : (A i₀) *ᵥ (X.col j) = 0 := by
       have : ((A i₀) * X).col j = 0 := by
-        simpa using congrArg (fun Z : Matrix (Fin D) (Fin D) ℂ => Z.col j) hMX
+        have hzero : (0 : Matrix (Fin D) (Fin D) ℂ).col j = (0 : Fin D → ℂ) := by
+          ext i
+          simp [Matrix.col_apply]
+        simpa [hzero] using congrArg (fun Z : Matrix (Fin D) (Fin D) ℂ => Z.col j) hMX
       simpa [col_mul (P := A i₀) (X := X) (j := j)] using this
     have hv : X.col j ∈ LinearMap.range (f ^ D) := by
       simpa [f, Matrix.toLin'_pow] using hcols j

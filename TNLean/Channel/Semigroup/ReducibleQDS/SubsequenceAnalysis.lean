@@ -21,11 +21,22 @@ The proof combines:
 open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace
 open Matrix Finset TNLean
 
+attribute [local instance 1001]
+  Matrix.linftyOpNormedAddCommGroup
+  Matrix.linftyOpNormedSpace
+
 noncomputable section
 
 variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
+
+local instance instSubsequenceNormOneClassMatrixCLM [NeZero D] :
+    @NormOneClass (Mat →L[ℂ] Mat)
+      (TNOperatorSpace.instNormedRingMatrixCLM (Fin D)).toNorm _ := by
+  constructor
+  change ‖(ContinuousLinearMap.id ℂ Mat)‖ = 1
+  exact ContinuousLinearMap.norm_id (𝕜 := ℂ) (E := Mat)
 
 /-! ## (4) → (2): Block-upper-triangular → rank-deficient kernel element -/
 
@@ -111,6 +122,10 @@ private theorem channel_fixedPoint_in_PMP
     refine congrArg ((1 / ↑(N + 1 : ℕ) : ℂ) • ·) ?_
     exact Finset.sum_congr rfl (fun n _ => h_iter_PMP n)
   -- Extract convergent subsequence
+  haveI : TopologicalSpace.PseudoMetrizableSpace Mat :=
+    PseudoEMetricSpace.pseudoMetrizableSpace
+  haveI : FirstCountableTopology Mat :=
+    TopologicalSpace.PseudoMetrizableSpace.firstCountableTopology
   obtain ⟨ρ, hρ_mem, φ, hφ_mono, hφ_tendsto⟩ :=
     densityMatrices_isCompact.tendsto_subseq hσ_dm
   -- ρ is in PMP (limit of PMP elements, PMP is closed)
@@ -160,7 +175,15 @@ private theorem norm_expSemigroupCLM_taylor_bound [NeZero D]
     (E : (Mat →L[ℂ] Mat)) {s : ℝ} (hs : 0 ≤ s) :
     ‖expSemigroupCLM E s - (1 + (s : ℂ) • E)‖ ≤
       s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) := by
-  have h := norm_exp_sub_one_sub_self_le ((s : ℂ) • E)
+  have h :
+      ‖NormedSpace.exp ((s : ℂ) • E) - 1 - (s : ℂ) • E‖ ≤
+        ‖((s : ℂ) • E)‖ ^ 2 * Real.exp ‖((s : ℂ) • E)‖ :=
+    @norm_exp_sub_one_sub_self_le (Mat →L[ℂ] Mat)
+      (TNOperatorSpace.instNormedRingMatrixCLM (Fin D))
+      (TNOperatorSpace.instNormedAlgebraComplexMatrixCLM (Fin D))
+      (TNOperatorSpace.instCompleteSpaceMatrixCLM (Fin D))
+      (instSubsequenceNormOneClassMatrixCLM (D := D))
+      ((s : ℂ) • E)
   simp only [expSemigroupCLM] at h ⊢
   have hnorm_smul : ‖(s : ℂ) • E‖ = s * ‖E‖ := by
     rw [norm_smul, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hs]
@@ -280,7 +303,8 @@ private theorem generator_vanishes_at_limit
       simpa [s, m] using hρ_fix (φ n)
     have hfp_clm : (expSemigroupCLM E s) (ρ_shift (φ n)) = ρ_shift (φ n) := by
       have hfp' : endEquiv (expSemigroup L s) (ρ_shift (φ n)) = ρ_shift (φ n) := by
-        simpa using hfp
+        change expSemigroup L s (ρ_shift (φ n)) = ρ_shift (φ n)
+        exact hfp
       simpa [E, expSemigroup_toCLM (L := L) s] using hfp'
     have h_eq_clm :
         (s : ℂ) • (endEquiv L) (ρ_shift (φ n)) =
@@ -320,7 +344,9 @@ private theorem generator_vanishes_at_limit
               (norm_nonneg _)
     have h_norm_smul : ‖(s : ℂ) • L (ρ_shift (φ n))‖ ≤
         s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ_shift (φ n)‖ := by
-      simpa [hE_apply] using h_norm_smul_clm
+      change ‖(s : ℂ) • (endEquiv L) (ρ_shift (φ n))‖ ≤
+        s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ_shift (φ n)‖
+      exact h_norm_smul_clm
     have hs_pos : 0 < s := by
       dsimp [s, m]
       positivity
@@ -374,7 +400,10 @@ theorem hasRankDeficientKernelElement_of_hasBlockUpperTriangularLindblad
   have hT_pres := semigroup_preserves_compression_of_generator hP_nt.1 hgen
   obtain ⟨ρ_shift, hρ_mem, hρ_PMP, hρ_fix⟩ :=
     exists_fixed_point_sequence_in_PMP hP_nt.1 hP_ne hGKSL hT_pres
-  haveI : FirstCountableTopology Mat := by infer_instance
+  haveI : TopologicalSpace.PseudoMetrizableSpace Mat :=
+    PseudoEMetricSpace.pseudoMetrizableSpace
+  haveI : FirstCountableTopology Mat :=
+    TopologicalSpace.PseudoMetrizableSpace.firstCountableTopology
   haveI : (nhds (0 : Mat)).IsCountablyGenerated := by infer_instance
   haveI : (_root_.uniformity Mat).IsCountablyGenerated :=
     IsUniformAddGroup.uniformity_countably_generated

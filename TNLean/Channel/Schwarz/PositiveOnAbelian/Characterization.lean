@@ -176,16 +176,17 @@ private lemma blockForm_nonneg_of_scalarPSD_of_commuting {n D : ℕ}
   have hH : ∀ i j, (H i j).IsHermitian := by
     intro i j
     ext r s
-    simp only [one_div, smul_add, conjTranspose_apply, add_apply, smul_apply, smul_eq_mul,
-      RCLike.star_def, star_add, star_mul', star_inv₀, star_ofNat,
+    simp only [one_div, smul_add, conjTranspose_apply, Matrix.add_apply,
+      Matrix.smul_apply, smul_eq_mul, RCLike.star_def, star_add, star_mul', star_inv₀, star_ofNat,
       RingHomCompTriple.comp_apply, RingHom.id_apply, add_comm, H]
   have hK : ∀ i j, (K i j).IsHermitian := by
     intro i j
     ext r s
-    simp only [sub_eq_add_neg, smul_add, smul_neg, conjTranspose_apply, add_apply, smul_apply,
-      RCLike.star_def, smul_eq_mul, neg_apply, star_add, star_mul', star_div₀, conj_I,
+    simp only [sub_eq_add_neg, smul_add, smul_neg, conjTranspose_apply, Matrix.add_apply,
+      Matrix.smul_apply, RCLike.star_def, smul_eq_mul, Matrix.neg_apply, star_add, star_mul',
+      star_div₀, conj_I,
       star_ofNat, RingHomCompTriple.comp_apply, RingHom.id_apply, star_neg, K]
-    ring
+    ring_nf
   have hTsymm : ∀ idx, (T idx).IsSymmetric := by
     intro idx
     cases idx with
@@ -330,8 +331,8 @@ private lemma blockForm_nonneg_of_scalarPSD_of_commuting {n D : ℕ}
     χ a (Sum.inl (i, j)) + Complex.I * χ a (Sum.inr (i, j))
   have hM_decomp (i j : Fin n) : M i j = H i j + Complex.I • K i j := by
     ext r s
-    simp only [one_div, smul_add, sub_eq_add_neg, smul_neg, add_apply, smul_apply, smul_eq_mul,
-      conjTranspose_apply, RCLike.star_def, neg_apply, H, K]
+    simp only [one_div, smul_add, sub_eq_add_neg, smul_neg, Matrix.add_apply,
+      Matrix.smul_apply, smul_eq_mul, conjTranspose_apply, RCLike.star_def, Matrix.neg_apply, H, K]
     ring_nf
     norm_num [Complex.I_sq]
     ring

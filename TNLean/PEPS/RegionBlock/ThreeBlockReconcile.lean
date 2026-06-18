@@ -102,7 +102,6 @@ theorem threeBlock_middle_strip_descent
   have hstrip := congrArg
     (fun g => regionBlockedLeftInverse (G := G) A D.complement
       (regionBlockedTensorInjective_complement (A := A) (e := e) D) g) hfun
-  simp only at hstrip
   -- Multiply both middle-strip read-offs by the interior bond product to land on rows.
   have hM := threeBlock_middle_strip (A := A) (e := e) D f M σred σblue
   have hM' := threeBlock_middle_strip (A := A) (e := e) D f M' σred σblue

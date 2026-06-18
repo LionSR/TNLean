@@ -41,7 +41,7 @@ variable {A : Matrix (Fin D) (Fin D) ℂ}
 /-- A normal matrix commutes with its adjoint. -/
 private lemma commute_conjTranspose_of_normal
     (hA : Aᴴ * A = A * Aᴴ) : Commute A Aᴴ := by
-  simpa only [Commute] using hA.symm
+  exact (commute_iff_eq A Aᴴ).mpr hA.symm
 
 /-- For a normal matrix `A`, the generator `A` commutes with `Aᴴ * A`. -/
 private lemma commute_conjTranspose_mul_self_of_normal
@@ -116,15 +116,16 @@ private lemma exists_diagonal_family_of_normal
   let K : Mat := (Complex.I / 2 : ℂ) • (Aᴴ - A)
   have hH : H.IsHermitian := by
     ext i j
-    simp only [smul_add, one_div, conjTranspose_apply, add_apply, smul_apply, smul_eq_mul,
-      RCLike.star_def, star_add, star_mul', star_inv₀, star_ofNat,
+    simp only [smul_add, one_div, conjTranspose_apply, Matrix.add_apply,
+      Matrix.smul_apply, smul_eq_mul, RCLike.star_def, star_add, star_mul', star_inv₀, star_ofNat,
       RingHomCompTriple.comp_apply, RingHom.id_apply, add_comm, H]
   have hK : K.IsHermitian := by
     ext i j
-    simp only [sub_eq_add_neg, smul_add, smul_neg, conjTranspose_apply, add_apply, smul_apply,
-      RCLike.star_def, smul_eq_mul, neg_apply, star_add, star_mul', star_div₀, conj_I,
+    simp only [sub_eq_add_neg, smul_add, smul_neg, conjTranspose_apply, Matrix.add_apply,
+      Matrix.smul_apply, RCLike.star_def, smul_eq_mul, Matrix.neg_apply, star_add, star_mul',
+      star_div₀, conj_I,
       star_ofNat, RingHomCompTriple.comp_apply, RingHom.id_apply, star_neg, K]
-    ring
+    ring_nf
   have hHKmat : Commute H K := by
     simpa only [H, K, smul_add, one_div, Matrix.smul_mul, Matrix.mul_smul, mul_comm,
       mul_left_comm, mul_assoc, ne_eq, div_eq_zero_iff, Complex.I_ne_zero, OfNat.ofNat_ne_zero,
@@ -186,11 +187,11 @@ private lemma exists_diagonal_family_of_normal
         (((hKrestr a.1).hasEigenvector_eigenvectorBasis rfl a.2).1)
     have hv' := congrArg (fun x : Module.End.eigenspace Hlin a.1 => (x : E)) hv_eq
     rw [hb_eq a]
-    simpa only [ν, Krestr] using hv'
+    simpa [ν, Krestr] using hv'
   have hA_decomp : A = H + Complex.I • K := by
     ext i j
-    simp only [one_div, smul_add, sub_eq_add_neg, smul_neg, add_apply, smul_apply, smul_eq_mul,
-      conjTranspose_apply, RCLike.star_def, neg_apply, H, K]
+    simp only [one_div, smul_add, sub_eq_add_neg, smul_neg, Matrix.add_apply,
+      Matrix.smul_apply, smul_eq_mul, conjTranspose_apply, RCLike.star_def, Matrix.neg_apply, H, K]
     ring_nf
     norm_num [Complex.I_sq]
     ring
@@ -215,8 +216,8 @@ private lemma exists_diagonal_family_of_normal
         (μ := eig) hAb)
   have hAstar_decomp : Aᴴ = H - Complex.I • K := by
     ext i j
-    simp only [one_div, smul_add, sub_eq_add_neg, smul_neg, add_apply, smul_apply, smul_eq_mul,
-      conjTranspose_apply, RCLike.star_def, neg_apply, H, K]
+    simp only [one_div, smul_add, sub_eq_add_neg, smul_neg, Matrix.add_apply,
+      Matrix.smul_apply, smul_eq_mul, conjTranspose_apply, RCLike.star_def, Matrix.neg_apply, H, K]
     ring_nf
     norm_num [Complex.I_sq]
     ring
@@ -225,8 +226,8 @@ private lemma exists_diagonal_family_of_normal
       congrArg Matrix.toEuclideanLin hAstar_decomp
   have hAstarb (a : s) : Matrix.toEuclideanLin Aᴴ (b a) = star (eig a) • b a := by
     rw [hAstar_lin_decomp]
-    have hμreal : star (a.1 : ℂ) = (a.1 : ℂ) := by
-      simpa only using hHlin.conj_eigenvalue_eq_self a.1.property
+    have hμreal : (starRingEnd ℂ) (a.1 : ℂ) = (a.1 : ℂ) :=
+      hHlin.conj_eigenvalue_eq_self a.1.property
     have hνreal : star (ν a) = ν a := by
       simp only [ν, RCLike.star_def, Complex.conj_ofReal]
     calc

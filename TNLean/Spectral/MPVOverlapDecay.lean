@@ -15,6 +15,13 @@ namespace MPSTensor
 open scoped Matrix BigOperators ComplexOrder NNReal ENNReal Matrix.Norms.Operator
 open Matrix Filter
 
+attribute [local instance]
+  instGCNormedAddCommGroupMatrixCLM
+  instGCNormedRingMatrixCLM
+  instGCSeminormedRingMatrixCLM
+  instGCNormedAlgebraMatrixCLM
+  instGCCompleteSpaceMatrixCLM
+
 /-!
 # MPV overlap decay
 
@@ -81,7 +88,7 @@ theorem mpvOverlap_tendsto_zero
     have hcont : Continuous (Matrix.entryLinearMap ℂ ℂ p q) :=
       LinearMap.continuous_of_finiteDimensional _
     -- Compose the matrix convergence with the continuous entry functional.
-    simpa [term, Matrix.entryLinearMap_apply] using
+    simpa [term, Matrix.entryLinearMap_apply, Function.comp_def] using
       (hcont.tendsto (0 : Matrix (Fin D) (Fin D) ℂ)).comp hmat
   -- For fixed `p`, the inner `q`-sum tends to `0`.
   have hinner : ∀ p : Fin D,
@@ -171,8 +178,16 @@ theorem mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one
   classical
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
   let F' : V →L[ℂ] V := Φ (mixedTransferMap₂ (d := d) (D₁ := D₁) (D₂ := D₂) A B)
+  letI : CompleteSpace (V →L[ℂ] V) := instGCCompleteSpaceMatrixCLM D₁ D₂
+  have hSpectF : spectralRadius ℂ F' < 1 := by
+    change spectralRadius ℂ
+      (((Module.End.toContinuousLinearMap V)
+        (mixedTransferMap₂ (d := d) (D₁ := D₁) (D₂ := D₂) A B)) : V →L[ℂ] V) < 1
+    simpa only [] using hSpect
   have hpow0 : Tendsto (fun n => F' ^ n) atTop (nhds 0) :=
-    pow_tendsto_zero_of_spectralRadius_lt_one (a := F') (by simpa [F', Φ] using hSpect)
+    @pow_tendsto_zero_of_spectralRadius_lt_one (V →L[ℂ] V)
+      (instGCNormedRingMatrixCLM D₁ D₂) (instGCCompleteSpaceMatrixCLM D₁ D₂)
+      (instGCNormedAlgebraMatrixCLM D₁ D₂) F' hSpectF
   have htr0 :
       Tendsto (fun n => LinearMap.trace ℂ V ((F' ^ n : V →L[ℂ] V) : V →ₗ[ℂ] V))
         atTop (nhds (0 : ℂ)) :=

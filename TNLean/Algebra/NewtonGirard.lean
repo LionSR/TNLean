@@ -83,12 +83,11 @@ private lemma derivative_det_eq_sum (A : Matrix n n R[X]) :
           ((∏ k ∈ Finset.univ.erase j, A (σ k) k) * derivative (A (σ j) j))
       · apply Finset.sum_congr rfl
         intro σ _
-        simpa using
-          (Finset.smul_sum
-            (r := Equiv.Perm.sign σ)
-            (s := Finset.univ)
-            (f := fun j : n =>
-              (∏ k ∈ Finset.univ.erase j, A (σ k) k) * derivative (A (σ j) j)))
+        exact Finset.smul_sum
+          (r := Equiv.Perm.sign σ)
+          (s := Finset.univ)
+          (f := fun j : n =>
+            (∏ k ∈ Finset.univ.erase j, A (σ k) k) * derivative (A (σ j) j))
       · simpa using
           (Finset.sum_comm :
             (∑ σ : Equiv.Perm n, ∑ j : n,
@@ -209,6 +208,7 @@ private lemma T_trace_coeff (M : Matrix n n R) (l m : ℕ) :
     simp only [coeff_sub, coeff_X_mul_zero, sub_zero, coeff_mul_C] at h0
     rw [Finset.sum_range_one]
     convert h0 using 2
+    simp
   | succ m ih =>
     have hrec := T_trace_recursion M (l + 1)
     have hcoeff_eq : (T_trace M (l + 1)).coeff (m + 1) - (T_trace M (l + 2)).coeff m =

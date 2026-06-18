@@ -130,6 +130,9 @@ theorem norm_eq_one_of_selfOverlap_scale_at_nonzero_limit
     hAA.eventually_ne hr
   have hRatio : Filter.Tendsto (fun N => ‖mpvOverlap (d := d) B B N‖ /
       ‖mpvOverlap (d := d) A A N‖) Filter.atTop (nhds 1) := by
+    change Filter.Tendsto
+      ((fun N => ‖mpvOverlap (d := d) B B N‖) /
+        fun N => ‖mpvOverlap (d := d) A A N‖) Filter.atTop (nhds 1)
     simpa [div_self hr] using hBB.div hAA hr
   have hRatioEq : ∀ᶠ N in Filter.atTop,
       ‖mpvOverlap (d := d) B B N‖ / ‖mpvOverlap (d := d) A A N‖ = (‖ζ‖ ^ 2) ^ N := by

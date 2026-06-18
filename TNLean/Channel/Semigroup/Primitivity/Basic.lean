@@ -123,10 +123,12 @@ theorem eigenvalue_exp_of_eigenvalue_generator
     · have hu : IsUnit t := isUnit_iff_ne_zero.mpr ht
       simpa [smul_eq_mul] using
         (spectrum.smul_mem_smul_iff (a := L) (r := hu.unit)).mpr hμ
-  simpa [Complex.exp_eq_exp_ℂ] using
-    (@spectrum.exp_mem_exp ℂ
+  have hs :=
+    @spectrum.exp_mem_exp ℂ
       (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
-      inferInstance inferInstance inferInstance hComplete (t • L) (z := t * μ) htmul)
+      inferInstance inferInstance inferInstance hComplete (t • L) (z := t * μ) htmul
+  rw [Complex.exp_eq_exp_ℂ]
+  exact hs
 
 /-! ## Key lemma: exp(itθ) root of unity for all t > 0 implies θ = 0
 

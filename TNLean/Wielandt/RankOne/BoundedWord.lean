@@ -334,7 +334,11 @@ lemma matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow
     intro j
     have hcolKilled : M *ᵥ (X.col j) = 0 := by
       have : (M * X).col j = 0 := by
-        simpa using congrArg (fun Z : Matrix (Fin D) (Fin D) ℂ => Z.col j) hMX
+        have hzeroCol : (0 : Matrix (Fin D) (Fin D) ℂ).col j = (0 : Fin D → ℂ) := by
+          ext i
+          rfl
+        simpa [hzeroCol] using
+          congrArg (fun Z : Matrix (Fin D) (Fin D) ℂ => Z.col j) hMX
       -- Rewrite the column as a matrix-vector product.
       simpa [col_mul (P := M) (X := X) (j := j)] using this
     exact vec_eq_zero_of_mulVec_eq_zero_of_mem_range_pow (D := D) M (hcols j) hcolKilled
@@ -410,7 +414,7 @@ theorem mulLeft_mem_biRectSpan_pow_succ
       M0 * (M0 ^ D) = M0 ^ (D + 1) := by rw [pow_succ']
       _ = (M0 ^ D) * M0 := by rw [pow_succ]
   have hM0 : M0 ∈ wordSpan B 1 := by
-    simpa only [M0, evalWord, Matrix.mul_one] using
+    simpa [M0, evalWord] using
       (evalWord_mem_wordSpan B ([i₀] : List (Fin d)))
   have hY' : M0 * Y ∈ wordSpan B (n + 1) := by
     have : M0 * Y ∈ (wordSpan B 1) * (wordSpan B n) :=

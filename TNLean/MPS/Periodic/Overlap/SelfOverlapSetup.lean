@@ -387,7 +387,8 @@ private lemma cornerRestriction_primitive_and_irreducible_of_cyclicDecomp
   let T : MatrixEnd D := transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
   let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
   have hUnital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K := by
-    simpa [KadisonSchwarz.IsUnitalKraus, K] using hP.leftCanonical
+    change ∑ i : Fin d, (A i)ᴴ * ((A i)ᴴ)ᴴ = 1
+    simpa [IsLeftCanonical] using hP.leftCanonical
   have hK_apply : ∀ X : MatrixAlg D, T X = KadisonSchwarz.krausMap K X := by
     intro X
     simp [T, K, MPSTensor.transferMap_apply, KadisonSchwarz.krausMap]

@@ -164,7 +164,7 @@ theorem fusionIsometryData_one_iff_isRFP (M : MPOTensor d D) :
     exact F.isRFP
   · intro hM
     exact ⟨FusionIsometryData.ofBlockedTransferMapIdempotent
-      (M := M) (n := 1) (by simpa only [blockedTransferMap_one] using hM)⟩
+      (M := M) (n := 1) (by simpa only [IsRFP, blockedTransferMap_one] using hM)⟩
 
 /-- If `M` is already an MPDO renormalization fixed point, then every positive
 blocked transfer map coincides with the original transfer map. -/

@@ -91,16 +91,40 @@ theorem continuous_matrixAbs : Continuous (matrixAbs (D := D)) := by
         exact IsSelfAdjoint.star_mul_self A)
       (hf := by
         simpa using Real.continuous_sqrt))
-  have hsqrtM : Continuous (fun A : Matrix (Fin D) (Fin D) ℂ ↦ cfc Real.sqrt (star A * A)) := by
-    simpa [g] using
-      CStarMatrix.ofMatrixL.symm.continuous.comp (hsqrtC.comp CStarMatrix.ofMatrixL.continuous)
+  let F : Matrix (Fin D) (Fin D) ℂ → Matrix (Fin D) (Fin D) ℂ :=
+    fun A ↦ CStarMatrix.ofMatrixL.symm (cfc Real.sqrt (g (CStarMatrix.ofMatrixL A)))
+  have hF : Continuous F :=
+    CStarMatrix.ofMatrixL.symm.continuous.comp (hsqrtC.comp CStarMatrix.ofMatrixL.continuous)
   have hEq :
-      matrixAbs (D := D) = fun A : Matrix (Fin D) (Fin D) ℂ ↦ cfc Real.sqrt (star A * A) := by
+      F = matrixAbs (D := D) := by
     funext A
-    rw [matrixAbs, CFC.abs, CFC.sqrt_eq_real_sqrt (a := star A * A)]
-    exact cfcₙ_eq_cfc (a := star A * A) (f := Real.sqrt)
-  rw [hEq]
-  exact hsqrtM
+    let φ : Matrix (Fin D) (Fin D) ℂ ≃⋆ₐ[ℂ] CStarMatrix (Fin D) (Fin D) ℂ :=
+      CStarMatrix.ofMatrixStarAlgEquiv
+    have hφcont : Continuous (φ : Matrix (Fin D) (Fin D) ℂ → CStarMatrix (Fin D) (Fin D) ℂ) := by
+      change Continuous (CStarMatrix.ofMatrixL : Matrix (Fin D) (Fin D) ℂ →
+        CStarMatrix (Fin D) (Fin D) ℂ)
+      exact CStarMatrix.ofMatrixL.continuous
+    have hφa : IsSelfAdjoint (φ (star A * A)) := by
+      rw [map_mul, map_star]
+      exact IsSelfAdjoint.star_mul_self (φ A)
+    have hmap :
+        φ (cfc Real.sqrt (star A * A)) = cfc Real.sqrt (φ (star A * A)) :=
+      StarAlgHomClass.map_cfc φ Real.sqrt (star A * A)
+        (hφ := hφcont) (ha := IsSelfAdjoint.star_mul_self A) (hφa := hφa)
+    have harg : φ (star A * A) = star (φ A) * φ A := by
+      rw [map_mul, map_star]
+    calc
+      F A = φ.symm (cfc Real.sqrt (star (φ A) * φ A)) := by
+        rfl
+      _ = φ.symm (cfc Real.sqrt (φ (star A * A))) := by
+        rw [harg]
+      _ = cfc Real.sqrt (star A * A) := by
+        simpa using congrArg φ.symm hmap.symm
+      _ = matrixAbs A := by
+        rw [matrixAbs, CFC.abs, CFC.sqrt_eq_real_sqrt (a := star A * A)]
+        exact (cfcₙ_eq_cfc (a := star A * A) (f := Real.sqrt)).symm
+  rw [← hEq]
+  exact hF
 
 @[simp]
 theorem matrixAbs_eq_self_of_posSemidef
@@ -217,8 +241,13 @@ theorem continuous_hermitianTraceOnePart [NeZero D] :
     fun A => (1 - (Matrix.trace (H A)).re) / D
   have hc : Continuous c := by
     unfold c
-    simpa [div_eq_mul_inv] using
-      (continuous_const.sub (Complex.continuous_re.comp hH.matrix_trace)).mul continuous_const
+    rw [show (fun A : Matrix (Fin D) (Fin D) ℂ =>
+        (1 - (Matrix.trace (H A)).re) / (D : ℝ)) =
+          ((fun A : Matrix (Fin D) (Fin D) ℂ => 1 - (Matrix.trace (H A)).re) *
+            fun _ => (D : ℝ)⁻¹) by
+        funext A
+        simp [div_eq_mul_inv]]
+    exact (continuous_const.sub (Complex.continuous_re.comp hH.matrix_trace)).mul continuous_const
   unfold hermitianTraceOnePart
   exact hH.add ((Complex.continuous_ofReal.comp hc).smul continuous_const)
 

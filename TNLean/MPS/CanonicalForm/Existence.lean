@@ -192,9 +192,8 @@ theorem exists_CFII_data_of_TP_of_isIrreducibleTensor
       SameMPV₂ A
         (fun i =>
           (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * (↑U : Matrix (Fin D) (Fin D) ℂ)) := by
-    -- Existing lemma is stated with `star` rather than `ᴴ`.
-    simpa only [Matrix.star_eq_conjTranspose] using
-      sameMPV_conj_unitary (d := d) (D := D) A U
+    intro N σ
+    exact sameMPV_conj_unitary (d := d) (D := D) A U N σ
   -- Collect the statements under the `let B := ...` binder.
   exact ⟨hSame, hΛ_pd, hΛ_diag, hTP_conj, hΛ_fix⟩
 

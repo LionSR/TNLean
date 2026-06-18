@@ -176,7 +176,7 @@ abbrev MPVPhaseClass {r : ℕ} {dim : Fin r → ℕ}
 noncomputable instance instFintypeMPVPhaseClass {r : ℕ} {dim : Fin r → ℕ}
     (blocks : (k : Fin r) → MPSTensor d (dim k)) : Fintype (MPVPhaseClass blocks) := by
   dsimp [MPVPhaseClass]
-  infer_instance
+  exact Fintype.ofFinite _
 
 /-- Finite class data for the MPV phase relation.
 
