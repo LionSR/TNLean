@@ -47,7 +47,7 @@ larger (dilated) Hilbert space via an isometry (Wolf Eq. (2.16)).
   (Neumark's theorem)][Wolf2012QChannels]
 -/
 
-open scoped Matrix MatrixOrder ComplexOrder TNMatrixCFC
+open scoped Matrix MatrixOrder ComplexOrder
 open Matrix Finset BigOperators
 
 variable {D n : ℕ}

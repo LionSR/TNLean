@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 
 import TNLean.MPS.Core.Transfer
-import TNLean.Algebra.MatrixFunctionalCalculus
 
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
 import Mathlib.Analysis.Matrix.Order
@@ -31,7 +30,7 @@ Main declarations:
   coefficients under the corresponding similarities.
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder BigOperators TNMatrixCFC
+open scoped Matrix ComplexOrder MatrixOrder BigOperators
 
 namespace MPSTensor
 

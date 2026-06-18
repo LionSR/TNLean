@@ -38,7 +38,7 @@ No fixed-point theorem is assumed here — that is proved in
 * [Cirac et al., arXiv:1606.00608, Appendix A][Cirac2017Annals]
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder BigOperators TNMatrixCFC
+open scoped Matrix ComplexOrder MatrixOrder BigOperators
 open Matrix Finset
 
 variable {D : ℕ}
