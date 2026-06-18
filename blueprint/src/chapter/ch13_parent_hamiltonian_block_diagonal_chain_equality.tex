@@ -331,6 +331,63 @@ $D^j_\beta=(\mu_j^NX_j)A^j_\beta$.
     and the internality of the sum of the $G_N(A_j)$.
 \end{proof}
 
+\begin{lemma}[$C^j,D^j$ comparisons at boundary-crossing intervals reduce to periodic-boundary equality]
+    \label{lem:bnt_block_diagonal_crossing_pgvwc_comparison_equality}
+    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_crossing_pgvwc_comparison}
+    \leanok
+    \uses{lem:bnt_block_diagonal_boundary_representation_equality,
+        lem:block_diagonal_boundary_local_sum_mem,
+        thm:block_diagonal_boundary_crossing_pgvwc_comparison,
+        lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
+    With the hypotheses and notation of
+    Lemma~\ref{lem:bnt_block_diagonal_boundary_representation_equality}, assume
+    in addition that $L+L_0\le N$. Assume also that, for every
+    boundary-crossing interval beginning at $i$, the simultaneous products
+    \[
+        w\longmapsto (A^1_w,\ldots,A^g_w),
+        \qquad |w|=N-i,
+    \]
+    span the product algebra $\prod_j\MN{D_j}$. Then
+    \[
+        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right)
+        =
+        \bigvee_j\mathcal G_{N,L}(A_j),
+    \]
+    and the $N$-site ground spaces $G_N(A_j)=\mathcal G_{N,N}(A_j)$
+    have internal sum.
+    This is the equality-level consequence of the boundary-condition comparison
+    in \cite[Theorem~12, proof lines~1436--1451]{PerezGarcia2007Matrix}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:bnt_block_diagonal_boundary_representation_equality,
+        lem:block_diagonal_boundary_local_sum_mem,
+        thm:block_diagonal_boundary_crossing_pgvwc_comparison,
+        lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
+    For each $\psi$,
+    Lemma~\ref{lem:bnt_block_diagonal_boundary_representation_equality} gives
+    block-diagonal boundary conditions $X_j$.  For a boundary-crossing interval,
+    Lemma~\ref{lem:block_diagonal_boundary_local_sum_mem} puts the sum of the
+    restricted block components in $\bigvee_jG_L(A_j)$.  The stated product-span
+    hypothesis and
+    Theorem~\ref{thm:block_diagonal_boundary_crossing_pgvwc_comparison} give the
+    matrices $C^j_{i,\rho}$ satisfying
+    \[
+        A^j_\beta C^j_{i,\rho}
+        =
+        \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho .
+    \]
+    Lemma~\ref{lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
+    then gives
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)
+    \]
+    for every $j$. Applying
+    Lemma~\ref{lem:bnt_block_diagonal_boundary_representation_equality} again
+    gives the displayed equality and internality.
+\end{proof}
+
 \begin{lemma}[Trace-decomposition comparisons reduce to periodic-boundary equality]
     \label{lem:bnt_block_diagonal_trace_decomposition_equality}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition}
