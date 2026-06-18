@@ -324,7 +324,8 @@ theorem overlapFiber_bridge_rightCoupling_eq_zero {R₁ R₂ : Finset V}
   have hcrossne : ((overlapRightGeometry (V := V) R₁ R₂).blueRedCrossingBondProd A : ℂ) ≠ 0 :=
     Nat.cast_ne_zero.mpr hcrosspos.ne'
   rw [← smul_right_injective ℂ hcrossne |>.eq_iff (a := _) (b := (0 : _)), smul_zero]
-  have hcollapse := (overlapRightGeometry (V := V) R₁ R₂).crossingBond_smul_complCoeff_combination_eq
+  have hcollapse :=
+    (overlapRightGeometry (V := V) R₁ R₂).crossingBond_smul_complCoeff_combination_eq
     (A := A) row bβ σcompl
   rw [hcollapse]
   have hcoeff : ∀ bc' : RegionBoundaryConfig (G := G) A
@@ -441,7 +442,8 @@ theorem overlapFiber_bridgeRow_eq_zero {R₁ R₂ : Finset V}
     exact overlapFiber_bridge_rightCoupling_eq_zero (G := G) (A := A) hR₁ c hc hpos δ σcompl bβ
   -- Feed to the rebuild: the interior-bond scaled host-weight combination vanishes.
   have hrebuild := fun σblue σcompl =>
-    overlapRight_bondProd_smul_hostWeight_combination_eq_zero (G := G) (A := A) (R₁ := R₁) (R₂ := R₂)
+    overlapRight_bondProd_smul_hostWeight_combination_eq_zero (G := G) (A := A)
+      (R₁ := R₁) (R₂ := R₂)
       row hrowhyp σblue σcompl
   -- interior bond positive ⟹ host-weight combination vanishes through complPhysical.
   have hintne : (regionInteriorBondProd (G := G) A g.blue : ℂ) ≠ 0 :=
@@ -489,6 +491,7 @@ same union host label as `q₀` by the partition determinacy, so the fiber coeff
 label is forced to vanish. -/
 
 set_option linter.unusedSectionVars false in
+omit [DecidableEq V] in
 open scoped Classical in
 /-- Transport of host annihilation along a region-set equality: if a coefficient family `c`
 annihilates the blocked weights of `R`, then its transport annihilates the blocked weights of an
@@ -510,6 +513,7 @@ theorem hc_transport {S R : Finset V} (h : S = R)
   rw [hb]
 
 set_option linter.unusedSectionVars false in
+omit [Fintype V] in
 open scoped Classical in
 /-- **Union host-boundary surjectivity.** With positive bond dimensions, every union `R₁ ∪ R₂`
 boundary configuration is the union boundary label of some global virtual configuration: read the

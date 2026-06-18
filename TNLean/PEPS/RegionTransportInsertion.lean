@@ -74,7 +74,7 @@ theorem regionBoundaryConfigMap_boundaryEdgeMap (A : Tensor G d) (φ : G ≃g G'
       Fin.cast (transport_bondDim_boundaryEdgeMap A φ R f).symm (g f) := by
   have hrt : regionBoundaryEdgeMapEquiv φ R (boundaryEdgeMap φ R f) = f := by
     rw [boundaryEdgeMap, Equiv.apply_symm_apply]
-  show g (regionBoundaryEdgeMapEquiv φ R (boundaryEdgeMap φ R f)) = _
+  change g (regionBoundaryEdgeMapEquiv φ R (boundaryEdgeMap φ R f)) = _
   -- The argument equals `f`, so the value equals `g f` up to the bond-dimension cast: the cast
   -- preserves the underlying natural-number value, which is `(g ·).val` evaluated at equal points.
   apply Fin.eq_of_val_eq

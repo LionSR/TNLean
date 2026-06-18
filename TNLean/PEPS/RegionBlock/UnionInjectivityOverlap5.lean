@@ -84,6 +84,7 @@ The fused leg `complPhysical σblue σcompl` ranges over every physical configur
 and complement blocks (the red block is disjoint from the host), so reading the prescribed leg on
 the blue block and on the complement block recovers it. -/
 
+omit [LinearOrder V] in
 /-- The fused complement physical leg is surjective: every physical configuration of the host
 `univ \ g.red` is `g.complPhysical σblue σcompl` for some blue and complement legs. -/
 theorem ThreeBlockGeometry.complPhysical_surjective (g : ThreeBlockGeometry V) :

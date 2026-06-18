@@ -397,8 +397,7 @@ theorem range_regionBlockedTensorMap_eq_of_sameState (A B : Tensor G d) (R : Fin
     (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
     (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
     (hposA : ∀ e : Edge G, 0 < A.bondDim e)
-    (hposB : ∀ e : Edge G, 0 < B.bondDim e)
-    (hDim : A.bondDim = B.bondDim) :
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e) :
     LinearMap.range (regionBlockedTensorMap (G := G) A R) =
       LinearMap.range (regionBlockedTensorMap (G := G) B R) := by
   rw [range_regionBlockedTensorMap_eq_span_regionPartialState A R hCA hposA,
@@ -464,11 +463,11 @@ theorem exists_stateCoeff_ne_zero_of_regionInjective (A : Tensor G d) (R : Finse
   obtain ⟨τ₀, hτ₀⟩ :
       ∃ τ, regionBlockedWeight (G := G) A (Finset.univ \ R) ν₀ τ ≠ 0 := by
     by_contra hall
-    push_neg at hall
+    push Not at hall
     exact hne (by funext τ; simpa [regionBlockedTensorFamily] using hall τ)
   -- Suppose, for contradiction, every closed state coefficient vanishes.
   by_contra hzero
-  push_neg at hzero
+  push Not at hzero
   -- Then every partial state across the region cut vanishes.
   have hpartial : ∀ τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R),
       regionPartialState (G := G) A R τ = 0 := by
