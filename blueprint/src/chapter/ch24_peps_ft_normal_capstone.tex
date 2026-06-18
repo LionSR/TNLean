@@ -1242,6 +1242,31 @@ recorded in the route note
     them, including across the seam.
 \end{proof}
 
+\begin{theorem}[Cyclic gauges preserve closed-chain states]%
+    \label{thm:mps_chain_gaugeEquiv_sameState}
+    \lean{MPSChainTensor.arcEval_eq_gauge_conj}
+    \lean{MPSChainTensor.GaugeEquiv.sameState}
+    \leanok
+    \uses{def:chain_arc_window_injective, def:non_ti_chain}
+    Let \(A_0,\ldots,A_{n-1}\) and \(B_0,\ldots,B_{n-1}\) be two
+    site-dependent closed chains with a cyclic gauge relation
+    \[
+        B_v^i = Z_v\, A_v^i\, Z_{v+1}^{-1}
+    \]
+    at every site.  Then they generate the same closed-chain state.  More
+    generally, the product along any arc is conjugated by the two gauges on
+    the boundary bonds of that arc; for a full turn around the chain the
+    two boundary bonds coincide, and cyclicity of trace removes the
+    remaining conjugation.
+\end{theorem}
+\begin{proof}\leanok
+    Iterate the sitewise gauge relation along the arc.  Consecutive
+    boundary matrices cancel, leaving only the gauges at the two ends.
+    For a word of length \(n\) read from the first site, the two ends are
+    the same bond, so the closed trace is invariant under the resulting
+    conjugation.
+\end{proof}
+
 \begin{corollary}[Fundamental Theorem for injective closed MPS chains]%
     \label{cor:fundamentalTheorem_injectiveMPSChain_of_sameState}
     \lean{TNLean.PEPS.fundamentalTheorem_injectiveMPSChain_of_sameState}
