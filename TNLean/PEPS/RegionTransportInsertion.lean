@@ -244,7 +244,7 @@ theorem regionInsertedCoeff_transport (A : Tensor G d) (φ : G ≃g G') (R : Fin
   split_ifs with hsame
   · -- The matrix entries agree: `M` read at the image-bond values equals the reindexed `M`
     -- read at the original-bond values, by the bond-dimension cast.
-    rw [Matrix.reindexAlgEquiv_apply, Matrix.reindex_apply, Matrix.submatrix_apply,
+    rw [Matrix.coe_reindexAlgEquiv, Matrix.reindex_apply, Matrix.submatrix_apply,
       regionBoundaryConfigMap_boundaryEdgeMap A φ R f μ,
       regionBoundaryConfigMap_boundaryEdgeMap A φ R f ν]
     simp only [finCongr_symm, finCongr_apply, Fin.cast_eq_cast]

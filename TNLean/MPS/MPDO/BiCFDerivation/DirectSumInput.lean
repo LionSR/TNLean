@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Algebra.TracePairing
-import TNLean.Algebra.MatrixAux
 import TNLean.MPS.MPDO.BiCFDerivation.Core
 
 /-!
@@ -246,7 +245,7 @@ theorem leftTraceWordMap_range_finrank_eq_of_isNBlkInjective {A : MPSTensor d D}
     Module.finrank ℂ ((leftTraceWordMap A L).range) = D ^ 2 := by
   rw [LinearMap.finrank_range_of_inj
     (leftTraceWordMap_injective_of_isNBlkInjective hA)]
-  exact Matrix.finrank_matrix_fin_eq_sq D
+  simp [Module.finrank_matrix, Fintype.card_fin, pow_two]
 
 /-- The paper's dimension step for the two-block direct-sum argument.
 

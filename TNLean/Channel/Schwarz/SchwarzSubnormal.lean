@@ -297,7 +297,7 @@ private theorem topLeft_schwarz_of_normal_extension
         (1 : Matrix (Fin (D + E)) (Fin (D + E)) ℂ) - Sf 1 =
           Matrix.reindex e e ((1 : Matrix (Fin D ⊕ Fin E) (Fin D ⊕ Fin E) ℂ) - S 1) := by
       ext i j
-      simp [Sf, ρ, Matrix.reindexLinearEquiv_apply, Matrix.one_apply]
+      simp [Sf, ρ, Matrix.coe_reindexLinearEquiv, Matrix.one_apply]
     simpa only [hEq, reindex_apply, posSemidef_submatrix_equiv] using hSubS.submatrix e.symm
   have hNormalf : Nfᴴ * Nf = Nf * Nfᴴ := by
     change (ρ N)ᴴ * ρ N = ρ N * (ρ N)ᴴ
@@ -317,9 +317,9 @@ private theorem topLeft_schwarz_of_normal_extension
     have h :
         ((S (Nᴴ * N)).submatrix e.symm e.symm -
           (S Nᴴ * S N).submatrix e.symm e.symm).PosSemidef := by
-      simpa only [Sf, Nf, ρ, Matrix.conjTranspose_reindex, reindexLinearEquiv_symm,
+      simpa only [Sf, Nf, ρ, Matrix.conjTranspose_reindex, Matrix.symm_reindexLinearEquiv,
         reindex_apply, conjTranspose_submatrix, submatrix_mul_equiv, LinearMap.coe_comp,
-        LinearEquiv.coe_coe, Function.comp_apply, reindexLinearEquiv_apply,
+        LinearEquiv.coe_coe, Function.comp_apply, Matrix.coe_reindexLinearEquiv,
         Matrix.reindexLinearEquiv_mul, Matrix.submatrix_sub, Equiv.symm_symm,
         submatrix_submatrix, Equiv.symm_comp_self, submatrix_id_id] using hLeftf
     simpa only [submatrix_sub, Pi.sub_apply, submatrix_submatrix, Equiv.symm_comp_self,
@@ -333,10 +333,10 @@ private theorem topLeft_schwarz_of_normal_extension
     have h :
         ((S (N * Nᴴ)).submatrix e.symm e.symm -
           (S N * S Nᴴ).submatrix e.symm e.symm).PosSemidef := by
-      simpa only [Sf, Nf, ρ, Matrix.conjTranspose_reindex, reindexLinearEquiv_symm,
+      simpa only [Sf, Nf, ρ, Matrix.conjTranspose_reindex, Matrix.symm_reindexLinearEquiv,
         reindex_apply, conjTranspose_submatrix, conjTranspose_conjTranspose,
         submatrix_mul_equiv, LinearMap.coe_comp, LinearEquiv.coe_coe, Function.comp_apply,
-        reindexLinearEquiv_apply, Matrix.reindexLinearEquiv_mul, Matrix.submatrix_sub,
+        Matrix.coe_reindexLinearEquiv, Matrix.reindexLinearEquiv_mul, Matrix.submatrix_sub,
         Equiv.symm_symm, submatrix_submatrix, Equiv.symm_comp_self, submatrix_id_id] using
         hRightf
     simpa only [submatrix_sub, Pi.sub_apply, submatrix_submatrix, Equiv.symm_comp_self,

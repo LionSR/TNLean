@@ -383,7 +383,7 @@ theorem component_eq_of_regionProportional (A Btilde : Tensor G d) (R : Finset V
   have heq : c_R * A.component v η σv = c_S * C.component v η σv := sub_eq_zero.mp hsub
   change A.component v η σv = (c_S / c_R) * C.component v η σv
   rw [div_mul_eq_mul_div, eq_div_iff hcR]
-  linear_combination heq
+  simpa [mul_comm] using heq
 
 /-! ### The per-vertex gauge relation from two two-block proportionalities
 

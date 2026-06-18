@@ -21,26 +21,13 @@ Extracted from various files for reusability.
 ## Main results
 
 - `Matrix.sum_mul_mul`: pull fixed left/right factors through a finite sum
-- `Matrix.finrank_matrix_fin_eq_sq`: square `Fin D` matrices have dimension `D ^ 2`
 - `Matrix.dim_le_of_mulVec_injective`: injective mulVec implies dimension bound
 - `Matrix.PosSemidef.mulVec_eq_zero_left/right`: kernel containment for PSD matrix sums
-- `Matrix.trace_eq_of_charpoly_eq`: equal characteristic polynomials imply equal traces
 -/
 
 open scoped Matrix BigOperators ComplexOrder
 
 namespace Matrix
-
-/-- The complex vector-space dimension of `D × D` matrices is `D ^ 2`. -/
-theorem finrank_matrix_fin_eq_sq (D : ℕ) :
-    Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) = D ^ 2 := by
-  rw [Module.finrank_matrix, Fintype.card_fin, Module.finrank_self, mul_one]
-  ring
-
-/-- The top submodule of `D × D` matrices has dimension `D ^ 2`. -/
-theorem finrank_top_matrix_fin_eq_sq (D : ℕ) :
-    Module.finrank ℂ (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) = D ^ 2 := by
-  simpa using finrank_matrix_fin_eq_sq D
 
 /-- Pull fixed left and right matrix factors through a finite sum indexed by `Fin d`. -/
 theorem sum_mul_mul {α : Type*} [NonUnitalNonAssocSemiring α]
@@ -106,26 +93,3 @@ theorem mulVec_eq_zero_right
 end Matrix.PosSemidef
 
 end KernelPSD
-
-/-! ## Characteristic polynomial lemmas -/
-
-section CharpolyAux
-
-namespace Matrix
-
-/-- If two square matrices over `ℂ` have the same characteristic polynomial, they have the same
-trace. This follows from the fact that the trace is the negation of the next-to-leading coefficient
-of the characteristic polynomial. -/
-theorem trace_eq_of_charpoly_eq
-    {D : ℕ} [NeZero D]
-    (T U : Matrix (Fin D) (Fin D) ℂ)
-    (h : T.charpoly = U.charpoly) :
-    Matrix.trace T = Matrix.trace U := by
-  have : Nonempty (Fin D) := Fin.pos_iff_nonempty.mp (NeZero.pos D)
-  have hT := Matrix.trace_eq_neg_charpoly_coeff T
-  have hU := Matrix.trace_eq_neg_charpoly_coeff U
-  rw [hT, hU, h]
-
-end Matrix
-
-end CharpolyAux

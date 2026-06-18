@@ -1,7 +1,7 @@
-import TNLean.Algebra.MatrixAux
 import TNLean.MPS.Defs
 
 import Mathlib.LinearAlgebra.GeneralLinearGroup.AlgEquiv
+import Mathlib.LinearAlgebra.Dimension.Finrank
 import Mathlib.RingTheory.SimpleRing.Matrix
 
 /-!
@@ -69,8 +69,9 @@ theorem matrixAlgEquiv_fin_eq {D E : ℕ}
   have hfinrank : Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) =
       Module.finrank ℂ (Matrix (Fin E) (Fin E) ℂ) :=
     LinearEquiv.finrank_eq φ.toLinearEquiv
-  rw [Matrix.finrank_matrix_fin_eq_sq, Matrix.finrank_matrix_fin_eq_sq] at hfinrank
-  exact Nat.pow_left_injective (by norm_num) hfinrank
+  have hsq : D ^ 2 = E ^ 2 := by
+    simpa [Module.finrank_matrix, Fintype.card_fin, pow_two] using hfinrank
+  exact Nat.pow_left_injective (by norm_num) hsq
 
 /-- Skolem--Noether for matrices: every $\C$-algebra automorphism of $\MN{D}$ is inner.
 For any $f \in \Aut_{\C\text{-alg}}(\MN{D})$, there exists an invertible $X$ such that
