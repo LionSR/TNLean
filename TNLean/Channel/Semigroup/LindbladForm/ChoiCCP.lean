@@ -116,7 +116,8 @@ theorem choi_projected_posSemidef_implies_ccp
         ring
       have hBstar : Bᴴ = X - Complex.I • Y := by
         have htmp := congrArg Matrix.conjTranspose hB
-        simpa [Matrix.conjTranspose_add, Matrix.conjTranspose_smul, hX_herm.eq, hY_herm.eq]
+        simpa [Matrix.conjTranspose_add, Matrix.conjTranspose_smul, hX_herm.eq, hY_herm.eq,
+          sub_eq_add_neg]
           using htmp
       have hLBstar : L (Bᴴ) = L X - Complex.I • L Y := by
         rw [hBstar, map_sub]

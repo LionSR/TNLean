@@ -113,8 +113,9 @@ theorem regionBoundaryLabel_compl_eq_iff (A : Tensor G d) (R : Finset V)
   · intro h
     funext f
     have hh := congrFun h (regionBoundaryEdgeToCompl (G := G) R f)
-    simpa [regionBoundaryLabel, regionComplementBoundaryConfig, regionBoundaryEdgeToCompl,
-      regionBoundaryEdgeComplEquiv, Equiv.subtypeEquivRight] using hh
+    rw [regionComplementBoundaryConfig_apply_toCompl] at hh
+    simpa [regionBoundaryLabel, regionBoundaryEdgeToCompl, regionBoundaryEdgeComplEquiv,
+      Equiv.subtypeEquivRight] using hh
   · intro h
     funext f
     simp only [regionBoundaryLabel_apply, regionComplementBoundaryConfig]

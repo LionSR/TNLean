@@ -323,7 +323,11 @@ theorem rectSpan_nilpIndex_eq_mulLeft_image_of_finrank_eq
     have hsurj := rectSpanNilpIndexLeftStep_surjective_of_finrank_eq
       A i₀ n hfin
     obtain ⟨⟨X, hX⟩, hXY⟩ := hsurj ⟨Y, hY⟩
-    exact ⟨X, hX, by simpa [LinearMap.mulLeft_apply] using congrArg Subtype.val hXY⟩
+    have hXYval : A i₀ * X = Y := by
+      have hval := congrArg Subtype.val hXY
+      change A i₀ * X = Y at hval
+      exact hval
+    exact ⟨X, hX, by simpa [LinearMap.mulLeft_apply] using hXYval⟩
   · -- ≥: (A i₀) * R_n ⊆ R_{n+1} by left-step
     intro Y hY
     obtain ⟨X, hX, rfl⟩ := Submodule.mem_map.mp hY

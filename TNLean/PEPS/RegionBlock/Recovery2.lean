@@ -192,7 +192,6 @@ theorem regionOpenCoeff_update_eq (A : Tensor G d) (R : Finset V)
     simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hζ
     obtain ⟨hbl, _⟩ := hζ
     funext e
-    simp only []
     by_cases he : e = f.1
     · subst he; rw [Function.update_self]
       have := congrFun hbl f; rw [regionBoundaryLabel_apply] at this; exact this.symm
@@ -201,7 +200,6 @@ theorem regionOpenCoeff_update_eq (A : Tensor G d) (R : Finset V)
     simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hζ
     obtain ⟨hbl, _⟩ := hζ
     funext e
-    simp only []
     by_cases he : e = f.1
     · subst he; rw [Function.update_self]
       have := congrFun hbl f

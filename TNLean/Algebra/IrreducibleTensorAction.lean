@@ -68,7 +68,9 @@ lemma isIrreducibleAction_of_isIrreducibleTensor
     have huW' : (A i).mulVec u ∈ W := hW i u huW
     have : e.toLinearMap ((A i).mulVec u) ∈ W' :=
       Submodule.mem_map_of_mem (f := e.toLinearMap) huW'
-    simpa [W', Matrix.toEuclideanLin, e] using this
+    convert this using 1
+    rw [Matrix.toEuclideanLin, Matrix.toLpLin_apply]
+    rfl
   -- The matrix `P` is Hermitian.
   have hHerm : P.IsHermitian := by
     have hSymm : (Matrix.toEuclideanLin P).IsSymmetric := by

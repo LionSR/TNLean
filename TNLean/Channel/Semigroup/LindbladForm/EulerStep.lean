@@ -30,9 +30,23 @@ Euler product approximation.
 open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace
 open Matrix TNLean
 
+attribute [local instance 1001]
+  Matrix.linftyOpNormedAddCommGroup
+  Matrix.linftyOpNormedSpace
+
+attribute [local instance]
+  TNOperatorSpace.instIsScalarTowerRealComplexMatrixCLM
+
 noncomputable section
 
 variable {D : ℕ}
+
+local instance instEulerNormOneClassMatrixCLM [NeZero D] :
+    @NormOneClass (MatrixCLM (Fin D))
+      (TNOperatorSpace.instNormedRingMatrixCLM (Fin D)).toNorm _ := by
+  constructor
+  change ‖(ContinuousLinearMap.id ℂ (Matrix (Fin D) (Fin D) ℂ))‖ = 1
+  exact ContinuousLinearMap.norm_id (𝕜 := ℂ) (E := Matrix (Fin D) (Fin D) ℂ)
 
 section LindbladForms
 
@@ -78,6 +92,8 @@ theorem cp_semigroup_implies_ccp_generator
     ext ρ i j
     exact i.elim0
   · haveI : NeZero D := ⟨hD⟩
+    letI : NormedAddCommGroup (MatChoi D) := Matrix.linftyOpNormedAddCommGroup
+    letI : NormedSpace ℝ (MatChoi D) := Matrix.linftyOpNormedSpace
     let L_CLM : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ :=
       (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) L
     let P : MatChoi D := 1 - Matrix.omegaProj D
@@ -90,7 +106,9 @@ theorem cp_semigroup_implies_ccp_generator
         g t = ChoiJamiolkowski.choiMatrix (expSemigroup L t) := by
       have h := congrArg (fun T => ChoiJamiolkowski.choiCLM (D := D) T)
         (expSemigroup_toCLM L t)
-      simpa [g, choiR, choiRCLM, L_CLM] using h.symm
+      change ChoiJamiolkowski.choiCLM (D := D) (expSemigroupCLM (endEquiv L) t) =
+        ChoiJamiolkowski.choiMatrix (expSemigroup L t)
+      exact h.symm
     have hgp_sandwich (t : ℝ) :
         gp t = sandR (g t) := by
       simp [gp, projR, g, ContinuousLinearMap.comp_apply]
@@ -104,28 +122,42 @@ theorem cp_semigroup_implies_ccp_generator
       simp [ChoiJamiolkowski.projectedChoiMatrix]
     have hg_deriv : HasDerivAt g (ChoiJamiolkowski.choiMatrix L) 0 := by
       have hchoi0 : HasFDerivAt choiR choiR (expSemigroupCLM L_CLM 0) := choiR.hasFDerivAt
-      simpa [g, choiR, L_CLM] using
-        (HasFDerivAt.comp_hasDerivAt
+      have hcomp :=
+        HasFDerivAt.comp_hasDerivAt
           (x := 0) (l := choiR) (l' := choiR)
           (f := fun u => expSemigroupCLM L_CLM u) (f' := L_CLM)
-          hchoi0 (hasDerivAt_expSemigroupCLM_zero L_CLM))
+          hchoi0 (hasDerivAt_expSemigroupCLM_zero L_CLM)
+      have hderiv :
+          choiR L_CLM = ChoiJamiolkowski.choiMatrix L := by
+        change ChoiJamiolkowski.choiMatrix L = ChoiJamiolkowski.choiMatrix L
+        rfl
+      change HasDerivAt (choiR ∘ fun u => expSemigroupCLM L_CLM u)
+        (ChoiJamiolkowski.choiMatrix L) 0
+      exact hcomp.congr_deriv hderiv
     have hgp_deriv : HasDerivAt gp (ChoiJamiolkowski.projectedChoiMatrix L) 0 := by
       have hsand0 : HasFDerivAt sandR sandR (g 0) := sandR.hasFDerivAt
       have haux : HasDerivAt (fun u : ℝ => sandR (g u))
           (sandR (ChoiJamiolkowski.choiMatrix L)) 0 := by
-        simpa [Function.comp] using
-          (HasFDerivAt.comp_hasDerivAt
+        have hcomp :=
+          HasFDerivAt.comp_hasDerivAt
             (x := 0) (l := sandR) (l' := sandR)
             (f := g) (f' := ChoiJamiolkowski.choiMatrix L)
-            hsand0 hg_deriv)
+            hsand0 hg_deriv
+        change HasDerivAt (sandR ∘ g) (sandR (ChoiJamiolkowski.choiMatrix L)) 0
+        exact hcomp
       have haux' : HasDerivAt gp (sandR (ChoiJamiolkowski.choiMatrix L)) 0 := by
         have hfun : gp = fun u : ℝ => sandR (g u) := by
           funext u
           exact hgp_sandwich u
         rw [hfun]
         exact haux
-      change HasDerivAt gp (P * ChoiJamiolkowski.choiMatrix L * P) 0
-      simpa [sandR, sandRCLM, Matrix.mul_assoc] using haux'
+      have hderiv :
+          sandR (ChoiJamiolkowski.choiMatrix L) =
+            ChoiJamiolkowski.projectedChoiMatrix L := by
+        change P * ChoiJamiolkowski.choiMatrix L * P =
+          ChoiJamiolkowski.projectedChoiMatrix L
+        simp [ChoiJamiolkowski.projectedChoiMatrix, P, Matrix.mul_assoc]
+      exact haux'.congr_deriv hderiv
     have hg0 : g 0 = Matrix.omegaProj D := by
       rw [hchoi_eq 0, expSemigroup_zero, ChoiJamiolkowski.choiMatrix_id]
     have hgp0 : gp 0 = 0 := by
@@ -134,16 +166,15 @@ theorem cp_semigroup_implies_ccp_generator
       have hPω : P * Matrix.omegaProj D = 0 := by
         simpa [P] using Matrix.one_sub_omegaProj_mul_omegaProj (d := D)
       simp [hPω]
-    rw [hasDerivAt_iff_tendsto_slope] at hg_deriv hgp_deriv
     have hg_slope :
         Filter.Tendsto (slope g 0) (nhdsWithin 0 (Set.Ioi 0))
           (nhds (ChoiJamiolkowski.choiMatrix L)) :=
-      hg_deriv.mono_left <|
+      hg_deriv.tendsto_slope.mono_left <|
         nhdsWithin_mono 0 (fun x hx => Set.mem_compl_singleton_iff.mpr (ne_of_gt hx))
     have hgp_slope :
         Filter.Tendsto (slope gp 0) (nhdsWithin 0 (Set.Ioi 0))
           (nhds (ChoiJamiolkowski.projectedChoiMatrix L)) :=
-      hgp_deriv.mono_left <|
+      hgp_deriv.tendsto_slope.mono_left <|
         nhdsWithin_mono 0 (fun x hx => Set.mem_compl_singleton_iff.mpr (ne_of_gt hx))
     have hslope_proj_psd :
         ∀ᶠ t in nhdsWithin (0 : ℝ) (Set.Ioi 0), (slope gp 0 t).PosSemidef := by
@@ -208,6 +239,12 @@ private abbrev sgMat (D : ℕ) := Matrix (Fin D) (Fin D) ℂ
 private abbrev sgLM (D : ℕ) := sgMat D →ₗ[ℂ] sgMat D
 private abbrev sgCLM (D : ℕ) := sgMat D →L[ℂ] sgMat D
 
+local instance (priority := 1001) instNormOneClassSgCLM [NeZero D] :
+    NormOneClass (sgCLM D) := by
+  constructor
+  change ‖(ContinuousLinearMap.id ℂ (sgMat D))‖ = 1
+  exact ContinuousLinearMap.norm_id (𝕜 := ℂ) (E := sgMat D)
+
 private abbrev sgEndEquiv (D : ℕ) : sgLM D ≃ₐ[ℂ] sgCLM D :=
   Module.End.toContinuousLinearMap (sgMat D)
 
@@ -248,12 +285,12 @@ private theorem eulerStep_apply (G : GeneratorDecomp D) (s : ℝ) (ρ : sgMat D)
             simp only [mul_smul_comm]
           rw [hρκ, hκρκ]
           have hrhs :
-              ρ + s • (G.φ ρ + -(G.κ * ρ) + -(ρ * G.κᴴ)) + (s * s) • (G.κ * (ρ * G.κᴴ)) =
+              ρ + s • (G.φ ρ + -(G.κ * ρ) + -(ρ * G.κᴴ)) +
+                  (s * s) • (G.κ * (ρ * G.κᴴ)) =
                 ρ + (s • G.φ ρ + -(s • (G.κ * ρ)) + -(s • (ρ * G.κᴴ))) +
                   (s * s) • (G.κ * (ρ * G.κᴴ)) := by
             ext i j
             simp [Complex.real_smul, add_assoc]
-            ring
           rw [hrhs]
           ext i j
           simp [Complex.real_smul]
@@ -273,14 +310,8 @@ private theorem eulerStep_toCLM_eq (G : GeneratorDecomp D) (s : ℝ) :
     (ρ + (s : ℂ) • G.toLinearMap ρ + ((s ^ 2 : ℝ) : ℂ) • quadMap G ρ) i j
   rw [eulerStep_apply]
   rw [quadMap_apply, GeneratorDecomp.toLinearMap_apply]
-  simp only [add_apply, smul_apply, neg_apply, Complex.real_smul, Complex.ofReal_mul,
-    Complex.coe_smul, smul_eq_mul, sub_eq_add_neg, pow_two]
-  have hsmul :
-      (s • (G.φ ρ + -(G.κ * ρ) + -(ρ * G.κᴴ))) i j =
-        ↑s * (G.φ ρ i j + -(G.κ * ρ) i j + -(ρ * G.κᴴ) i j) := by
-    simp only [smul_apply, add_apply, neg_apply, Complex.real_smul]
-  rw [← hsmul]
-  rfl
+  simp only [Matrix.add_apply, Matrix.smul_apply, Matrix.neg_apply, Complex.real_smul,
+    Complex.ofReal_mul, Complex.coe_smul, smul_eq_mul, sub_eq_add_neg, pow_two]
 
 set_option maxHeartbeats 1000000 in
 -- The specialization of the generic exponential remainder estimate to CLM endomorphisms
@@ -288,10 +319,24 @@ set_option maxHeartbeats 1000000 in
 private theorem norm_expSemigroupCLM_sub_one_add_smul_le [NeZero D]
     (A : sgCLM D) {s : ℝ} (hs : 0 ≤ s) :
     ‖expSemigroupCLM A s - (1 + (s : ℂ) • A)‖ ≤ s ^ 2 * ‖A‖ ^ 2 * Real.exp (s * ‖A‖) := by
-  have h := norm_exp_sub_one_sub_self_le (((s : ℂ) • A))
-  simpa [expSemigroupCLM, sub_eq_add_neg, add_assoc, add_left_comm, add_comm, norm_smul,
-    Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hs, pow_two, mul_assoc,
-    mul_left_comm, mul_comm] using h
+  have hrem := @norm_exp_sub_one_sub_self_le (sgCLM D)
+    (TNOperatorSpace.instNormedRingMatrixCLM (Fin D))
+    (TNOperatorSpace.instNormedAlgebraComplexMatrixCLM (Fin D))
+    (TNOperatorSpace.instCompleteSpaceMatrixCLM (Fin D))
+    (instNormOneClassSgCLM (D := D))
+    (((s : ℂ) • A))
+  have hnorm :
+      expSemigroupCLM A s - (1 + (s : ℂ) • A) =
+        NormedSpace.exp ((s : ℂ) • A) - 1 - (s : ℂ) • A := by
+    simp [expSemigroupCLM]
+    abel_nf
+  rw [hnorm]
+  calc
+    ‖NormedSpace.exp ((s : ℂ) • A) - 1 - (s : ℂ) • A‖ ≤
+        ‖((s : ℂ) • A)‖ ^ 2 * Real.exp ‖((s : ℂ) • A)‖ := hrem
+    _ = s ^ 2 * ‖A‖ ^ 2 * Real.exp (s * ‖A‖) := by
+        simp [norm_smul, Real.norm_eq_abs, abs_of_nonneg hs, pow_two,
+          mul_assoc, mul_left_comm, mul_comm]
 
 private theorem norm_eulerStep_sub_expSemigroupCLM_le [NeZero D]
     (G : GeneratorDecomp D) {s : ℝ} (hs : 0 ≤ s) :
@@ -315,10 +360,13 @@ private theorem norm_eulerStep_sub_expSemigroupCLM_le [NeZero D]
         ((s ^ 2 : ℝ) : ℂ) • sgEndEquiv D (quadMap G)‖ ≤
         ‖(1 + (s : ℂ) • sgEndEquiv D G.toLinearMap) -
             expSemigroupCLM (sgEndEquiv D G.toLinearMap) s‖ +
-          ‖((s ^ 2 : ℝ) : ℂ) • sgEndEquiv D (quadMap G)‖ := norm_add_le _ _
+          ‖((s ^ 2 : ℝ) : ℂ) • sgEndEquiv D (quadMap G)‖ := by
+          exact norm_add_le _ _
     _ = ‖expSemigroupCLM (sgEndEquiv D G.toLinearMap) s -
             (1 + (s : ℂ) • sgEndEquiv D G.toLinearMap)‖ +
-          ‖((s ^ 2 : ℝ) : ℂ) • sgEndEquiv D (quadMap G)‖ := by rw [norm_sub_rev]
+          ‖((s ^ 2 : ℝ) : ℂ) • sgEndEquiv D (quadMap G)‖ := by
+          congr 1
+          exact norm_sub_rev _ _
     _ ≤ s ^ 2 * ‖sgEndEquiv D G.toLinearMap‖ ^ 2 *
             Real.exp (s * ‖sgEndEquiv D G.toLinearMap‖) +
           ‖((s ^ 2 : ℝ) : ℂ) • sgEndEquiv D (quadMap G)‖ := by
@@ -334,6 +382,10 @@ private theorem norm_eulerStep_toCLM_le [NeZero D]
     (G : GeneratorDecomp D) {s T : ℝ} (hs : 0 ≤ s) (hT : s ≤ T) :
     ‖sgEndEquiv D (eulerStep G s)‖ ≤
       Real.exp (s * (‖sgEndEquiv D G.toLinearMap‖ + T * ‖sgEndEquiv D (quadMap G)‖)) := by
+  haveI : NormOneClass (sgCLM D) := by
+    constructor
+    change ‖(ContinuousLinearMap.id ℂ (sgMat D))‖ = 1
+    exact ContinuousLinearMap.norm_id (𝕜 := ℂ) (E := sgMat D)
   rw [eulerStep_toCLM_eq]
   have hbasic : ‖1 + (s : ℂ) • sgEndEquiv D G.toLinearMap + ((s ^ 2 : ℝ) : ℂ) •
       sgEndEquiv D (quadMap G)‖ ≤
@@ -375,6 +427,10 @@ private theorem norm_pow_sub_pow_le [NeZero D]
       simp only [pow_zero, sub_self, norm_zero, Nat.cast_zero, zero_mul]
       exact le_rfl
   | m + 1 => by
+      haveI : NormOneClass (sgCLM D) := by
+        constructor
+        change ‖(ContinuousLinearMap.id ℂ (sgMat D))‖ = 1
+        exact ContinuousLinearMap.norm_id (𝕜 := ℂ) (E := sgMat D)
       have hm := norm_pow_sub_pow_le hM hA hB m
       have hsplit : A ^ (m + 1) - B ^ (m + 1) = A ^ m * (A - B) + (A ^ m - B ^ m) * B := by
         rw [pow_succ, pow_succ, mul_sub, sub_mul]
@@ -389,7 +445,11 @@ private theorem norm_pow_sub_pow_le [NeZero D]
               gcongr <;> exact norm_mul_le _ _
         _ ≤ M ^ m * ‖A - B‖ + ((m : ℝ) * M ^ m * ‖A - B‖) * M := by
               gcongr
-              · exact norm_pow_le _ _ |>.trans <|
+              · have hpowA : ‖A ^ m‖ ≤ ‖A‖ ^ m :=
+                  @norm_pow_le (sgCLM D)
+                    (TNOperatorSpace.instNormedRingMatrixCLM (Fin D)).toSeminormedRing
+                    (instNormOneClassSgCLM (D := D)) A m
+                exact hpowA.trans <|
                   pow_le_pow_left₀ (show 0 ≤ ‖A‖ from norm_nonneg _) hA _
         _ = M ^ m * ‖A - B‖ + (m : ℝ) * M ^ (m + 1) * ‖A - B‖ := by
               ring_nf
@@ -503,8 +563,8 @@ private theorem generatorDecomp_cp_semigroup (G : GeneratorDecomp D) :
       simpa using (Filter.Tendsto.div_atTop tendsto_const_nhds hden)
     have hlim : Filter.Tendsto (fun n : ℕ => sgEndEquiv D (approx n)) Filter.atTop
         (nhds (sgEndEquiv D (expSemigroup G.toLinearMap t))) := by
-      rw [tendsto_iff_norm_sub_tendsto_zero]
-      exact squeeze_zero (fun n => norm_nonneg _) hbound hbound_tendsto
+      exact tendsto_iff_norm_sub_tendsto_zero.2
+        (squeeze_zero (fun n => norm_nonneg _) hbound hbound_tendsto)
     exact IsCPMap.of_tendsto_toCLM (D := D) happrox_cp hlim
 
 /-- **Wolf Proposition 7.3 (direction 2 → 1)**: If `L` is CCP, then `T_t = exp(tL)`

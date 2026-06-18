@@ -32,7 +32,6 @@ These definitions provide the analytic structure on continuous endomorphisms
 of rectangular complex matrices needed by the spectral-radius arguments. -/
 
 section CLMInstances
-open scoped Matrix.Norms.Frobenius
 
 private noncomputable abbrev endEquivMatrixCLM (m n : ℕ) :
     (Matrix (Fin m) (Fin n) ℂ →ₗ[ℂ] Matrix (Fin m) (Fin n) ℂ) ≃ₐ[ℂ]
@@ -44,34 +43,50 @@ private noncomputable abbrev endEquivMatrixCLM (m n : ℕ) :
       (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
   (endEquivMatrixCLM m n).toLinearEquiv.finiteDimensional
 
-@[reducible] noncomputable def instGCNormedAddCommGroupMatrixCLM (m n : ℕ) :
+@[local instance, reducible] noncomputable def instGCNormedAddCommGroupMatrixCLM (m n : ℕ) :
     NormedAddCommGroup
       (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  by infer_instance
+  ContinuousLinearMap.toNormedAddCommGroup
 
-@[reducible] noncomputable def instGCNormedRingMatrixCLM (m n : ℕ) :
+@[local instance, reducible] noncomputable def instGCNormedRingMatrixCLM (m n : ℕ) :
     NormedRing
       (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  by
-    letI := instGCNormedAddCommGroupMatrixCLM m n
-    infer_instance
+  ContinuousLinearMap.toNormedRing
+
+@[local instance, reducible] noncomputable def instGCSeminormedRingMatrixCLM (m n : ℕ) :
+    SeminormedRing
+      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
+  ContinuousLinearMap.toSeminormedRing
 
 set_option maxSynthPendingDepth 6 in
-@[reducible] noncomputable def instGCNormedAlgebraMatrixCLM (m n : ℕ) :
+@[local instance, reducible] noncomputable def instGCNormedAlgebraMatrixCLM (m n : ℕ) :
     NormedAlgebra ℂ
       (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
   by
-    letI := instGCNormedAddCommGroupMatrixCLM m n
-    letI := instGCNormedRingMatrixCLM m n
-    infer_instance
+    letI : NormedAddCommGroup
+        (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
+      instGCNormedAddCommGroupMatrixCLM m n
+    letI : SeminormedRing
+        (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
+      instGCSeminormedRingMatrixCLM m n
+    letI : NormedRing
+        (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
+      instGCNormedRingMatrixCLM m n
+    exact ContinuousLinearMap.toNormedAlgebra
 
-@[reducible] def instGCCompleteSpaceMatrixCLM (m n : ℕ) :
-    @CompleteSpace
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ)
-      (instGCNormedAddCommGroupMatrixCLM m n).toPseudoMetricSpace.toUniformSpace :=
+@[local instance, reducible] noncomputable def instGCCompleteSpaceMatrixCLM (m n : ℕ) :
+    CompleteSpace
+      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
   by
-    letI := instGCFiniteDimensionalMatrixCLM m n
-    letI := instGCNormedAddCommGroupMatrixCLM m n
+    letI : NormedAddCommGroup
+        (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
+      instGCNormedAddCommGroupMatrixCLM m n
+    letI : FiniteDimensional ℂ
+        (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
+      instGCFiniteDimensionalMatrixCLM m n
+    letI : NormedAlgebra ℂ
+        (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
+      instGCNormedAlgebraMatrixCLM m n
     exact FiniteDimensional.complete ℂ
       (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ)
 

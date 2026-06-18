@@ -72,7 +72,7 @@ Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500 of
 blocked around every horizontal and vertical edge. -/
 def squareLatticeGraph (width height : ℕ) : SimpleGraph (SquareLatticeVertex width height) where
   Adj v w := squareLatticeHorizontalNeighbor v w ∨ squareLatticeVerticalNeighbor v w
-  symm := by
+  symm := ⟨by
     intro v w h
     rcases h with h | h
     · rcases h with ⟨hy, hx | hx⟩
@@ -80,7 +80,7 @@ def squareLatticeGraph (width height : ℕ) : SimpleGraph (SquareLatticeVertex w
       · exact Or.inl ⟨hy.symm, Or.inl hx⟩
     · rcases h with ⟨hx, hy | hy⟩
       · exact Or.inr ⟨hx.symm, Or.inr hy⟩
-      · exact Or.inr ⟨hx.symm, Or.inl hy⟩
+      · exact Or.inr ⟨hx.symm, Or.inl hy⟩⟩
   loopless := by
     constructor
     intro v h

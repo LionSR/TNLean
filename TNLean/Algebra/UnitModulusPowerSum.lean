@@ -101,7 +101,8 @@ lemma cesaro_geom_sum_tendsto_zero {ν : ℂ} (hν : ‖ν‖ = 1) (hne : ν ≠
       have hAtTop : Tendsto (fun T : ℕ => ((T : ℝ))) atTop atTop := by
         exact_mod_cast tendsto_natCast_atTop_atTop (R := ℝ)
       have := Filter.Tendsto.inv_tendsto_atTop hAtTop
-      simpa [Function.comp] using this
+      refine this.congr' ?_
+      exact Filter.Eventually.of_forall fun _ => rfl
     have := hT.const_mul (2 / ‖ν - 1‖)
     simpa using this
   refine squeeze_zero (fun T => norm_nonneg _) hbound hRHS
@@ -255,7 +256,7 @@ theorem unitModulus_power_sum_not_tendsto_zero
         (fun T : ℕ => ∑ p : Fin r × Fin r,
           (T : ℂ)⁻¹ * ∑ N ∈ Finset.range T, (μ p.1 * star (μ p.2)) ^ N)
         atTop (nhds target) :=
-      tendsto_finset_sum
+      tendsto_finsetSum
         (Finset.univ : Finset (Fin r × Fin r))
         (fun p _ => hPair_cesaro p)
     refine hSum.congr' ?_

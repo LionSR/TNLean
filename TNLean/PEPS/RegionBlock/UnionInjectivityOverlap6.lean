@@ -383,7 +383,7 @@ theorem overlapFiber_bridge_rightCoupling_eq_zero {R₁ R₂ : Finset V}
   rw [Finset.sum_congr rfl (fun bc' _ => by rw [mul_smul]), ← Finset.smul_sum]
   have hstripzero := overlapLeft_firstStrip_fiber_weightCombination_eq_zero (G := G) (A := A)
       hR₁ c hc δ β₁ σcompl
-  rw [show (∑ x : RegionBoundaryConfig (G := G) A
+  rw [(by exact hstripzero : (∑ x : RegionBoundaryConfig (G := G) A
           (overlapRightGeometry (V := V) R₁ R₂).complement,
         (∑ bdry : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂),
             cFiber (A := A) c δ bdry *
@@ -393,8 +393,7 @@ theorem overlapFiber_bridge_rightCoupling_eq_zero {R₁ R₂ : Finset V}
                       regionBoundaryLabel (G := G) A (R₂ \ R₁) q₂ = x
                 then (1 : ℂ) else 0)) •
           regionBlockedWeight (G := G) A (overlapRightGeometry (V := V) R₁ R₂).complement
-            x σcompl) = 0 from by
-      convert hstripzero using 2, smul_zero]
+            x σcompl) = 0), smul_zero]
 
 /-! ### The `P₀`-fiber bridge row vanishes after inverting `R₂`
 

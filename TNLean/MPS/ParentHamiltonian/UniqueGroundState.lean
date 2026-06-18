@@ -136,8 +136,15 @@ theorem mpv_mem_chainGroundSpace (A : MPSTensor d D) (L N : ℕ)
   rw [chainGroundSpace, dif_pos ⟨hN, hLN⟩]
   simp only [Submodule.mem_iInf, Submodule.mem_comap]
   intro i τ
-  simpa [cyclicRestrictₗ_apply, cyclicCfg, replaceWindow] using
-    mpv_window_mem_groundSpace A L N hLN i τ
+  have hrestrict :
+      cyclicRestrictₗ hN L i τ (mpv A) =
+        (fun σ => mpv A (replaceWindow L hLN i τ σ)) := by
+    ext σ
+    rw [cyclicRestrictₗ_apply]
+    have hcfg : cyclicCfg hN L i σ τ = replaceWindow L hLN i τ σ := rfl
+    rw [hcfg]
+  rw [hrestrict]
+  exact mpv_window_mem_groundSpace A L N hLN i τ
 
 /-- Every constrained cyclic window of a chain-ground-space vector has a boundary
 matrix representation in the local MPS ground space. -/
@@ -948,7 +955,8 @@ theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : IsInjec
     have h10 : (1 : Matrix (Fin D) (Fin D) ℂ) = 0 :=
       (groundSpaceMap_injective hA (by omega : 0 < N)) hEq
     exact one_ne_zero h10
-  simpa [mpvSubmodule] using finrank_span_singleton (K := ℂ) hmpv
+  change Module.finrank ℂ (ℂ ∙ (mpv A : NSiteSpace d N)) = 1
+  exact finrank_span_singleton (K := ℂ) hmpv
 
 /-- Unique ground state for tensors injective after blocking at range \(2L₀\),
 with \(L₀+1<N\).
@@ -963,7 +971,8 @@ theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
     chainGroundSpace_eq_mpvSubmodule_normal hNormal hA hL₀ (by omega) (by omega) hN
       hNlarge]
   have hmpv := mpv_ne_zero_of_isNBlkInjective hA hL₀ hN'
-  simpa [mpvSubmodule] using finrank_span_singleton (K := ℂ) hmpv
+  change Module.finrank ℂ (ℂ ∙ (mpv A : NSiteSpace d N)) = 1
+  exact finrank_span_singleton (K := ℂ) hmpv
 
 /-- Unique ground state for normal tensors at range \(L₀+1\), with \(L₀+1<N\):
 \(\dim \mathcal G_{N,L₀+1}(A)=1\).
@@ -976,5 +985,6 @@ theorem parentHamiltonian_unique_gs_normal {A : MPSTensor d D} [NeZero D]
     chainGroundSpace_eq_mpvSubmodule_normal hA hInj hL₀ (by omega) (by omega)
       (le_of_lt hN) hN]
   have hmpv := mpv_ne_zero_of_isNBlkInjective hInj hL₀ (le_of_lt hN)
-  simpa [mpvSubmodule] using finrank_span_singleton (K := ℂ) hmpv
+  change Module.finrank ℂ (ℂ ∙ (mpv A : NSiteSpace d N)) = 1
+  exact finrank_span_singleton (K := ℂ) hmpv
 end MPSTensor

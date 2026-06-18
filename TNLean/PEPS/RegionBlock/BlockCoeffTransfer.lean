@@ -508,8 +508,7 @@ theorem doubleSum_kernel_injective (B : Tensor G d) (R : Finset V)
       rw [regionBlockedTensorMap_apply, regionBlockedTensorMap_apply]
       have := heq σ τ
       simp only [smul_eq_mul, Finset.sum_mul]
-      simp only [smul_eq_mul] at this ⊢
-      convert this using 2 <;> rw [Finset.sum_mul]
+      convert this using 2
     exact congrFun (regionBlockedTensorMap_injective_of_injective (G := G) B R hRB hmap)
   -- For each `μ`, the two complement rows agree by complement injectivity.
   funext μ

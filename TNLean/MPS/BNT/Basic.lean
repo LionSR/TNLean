@@ -141,7 +141,9 @@ lemma eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal
   let fN : MPVSpace d N →ₗ[ℂ] V := lp.lsingle (𝕜 := ℂ) (E := fun N : ℕ => MPVSpace d N) 2 N
   -- Rewrite the embedded family as `fN ∘ mpvState` and apply `LinearIndependent.of_comp`.
   have hN' : LinearIndependent ℂ (fun j : ι => fN (mpvState (d := d) (A j) N)) := by
-    simpa [v, fN, lp.lsingle_apply] using hN
+    convert hN using 1
+    ext j L i
+    rfl
   exact LinearIndependent.of_comp fN hN'
 
 /--

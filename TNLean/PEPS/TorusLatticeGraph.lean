@@ -168,13 +168,13 @@ is set on a periodic lattice. -/
 def torusGraph (width height : ℕ) [NeZero width] [NeZero height]
     [Fact (1 < width)] [Fact (1 < height)] : SimpleGraph (TorusVertex width height) where
   Adj v w := torusHorizontalNeighbor v w ∨ torusVerticalNeighbor v w
-  symm := by
+  symm := ⟨by
     intro v w h
     rcases h with ⟨hy, hx | hx⟩ | ⟨hx, hy | hy⟩
     · exact Or.inl ⟨hy.symm, Or.inr hx⟩
     · exact Or.inl ⟨hy.symm, Or.inl hx⟩
     · exact Or.inr ⟨hx.symm, Or.inr hy⟩
-    · exact Or.inr ⟨hx.symm, Or.inl hy⟩
+    · exact Or.inr ⟨hx.symm, Or.inl hy⟩⟩
   loopless := by
     constructor
     intro v h

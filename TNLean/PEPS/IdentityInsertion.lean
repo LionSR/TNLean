@@ -73,8 +73,9 @@ theorem edgeInsertedCoeff_identity (A : Tensor G d) (e : Edge G) (σ : V → Fin
             change
               insertedSummand (edgeBoundaryToInsertedBoundaryConfig (G := G) A e β) =
                 blockedSummand β
-            simpa only [insertedSummand, blockedSummand] using
-              edgeInsertedCoeff_identity_diagonal_summand (G := G) A e σ β
+            unfold insertedSummand blockedSummand
+            convert edgeInsertedCoeff_identity_diagonal_summand (G := G) A e σ β using 1
+            rfl
   calc
     edgeInsertedCoeff (G := G) A e σ
         (1 : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)

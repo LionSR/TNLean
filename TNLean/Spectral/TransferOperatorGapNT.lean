@@ -259,9 +259,20 @@ theorem mpvOverlap_tendsto_zero_of_irreducible_TP
     (hAB : ¬ GaugePhaseEquiv A B) :
     Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop (nhds 0) := by
   exact mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one (A := A) (B := B) <| by
-    simpa only [mixedTransferSpectralRadius] using
-      spectralRadius_mixedTransfer_lt_one_of_irreducible_TP
-        A B hA_irr hB_irr hA_left hB_left hAB
+    have hsq :
+        spectralRadius ℂ
+            ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+              (mixedTransferMap A B)) < 1 := by
+      simpa only [mixedTransferSpectralRadius] using
+        spectralRadius_mixedTransfer_lt_one_of_irreducible_TP
+          A B hA_irr hB_irr hA_left hB_left hAB
+    have hagree :
+        mixedTransferMap (d := d) (D := D) A B =
+          mixedTransferMap₂ (d := d) (D₁ := D) (D₂ := D) A B := by
+      ext X
+      simp
+    rw [← hagree]
+    exact hsq
 
 end SameDimensionOverlap
 
@@ -310,7 +321,7 @@ private lemma exists_posSemidef_fixedPoint_gauge_of_irreducible_TP {D : ℕ}
   have hS_u : IsUnit S.det := Ne.isUnit hS_det
   have hS_mul : S * Sᴴ = ρ := by
     calc S * Sᴴ = S0ᴴ * S0 := by simp only [Matrix.conjTranspose_conjTranspose, S]
-    _ = ρ := by simpa only using hρ_eq.symm
+    _ = ρ := by simpa only [Matrix.star_eq_conjTranspose] using hρ_eq.symm
   exact ⟨ρ, S, hρ_psd, hρ_ne, hρ_fix, hS_det, hS_u, hS_mul⟩
 
 /-- Fixed-point gauges turn a rectangular modulus-one eigenvector into a nonzero
@@ -597,7 +608,8 @@ theorem mixedTransferSpectralRadius₂_lt_one_of_dim_ne_of_irreducible_TP
     (Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ))
       (mixedTransferMap₂ A B)
   have hEqF : spectralRadius ℂ F = 1 := by
-    simpa only using hEq
+    change spectralRadius ℂ F = 1 at hEq
+    exact hEq
   let Φ :
       ((Matrix (Fin D₁) (Fin D₂) ℂ) →ₗ[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) ≃ₐ[ℂ]
         ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
@@ -609,8 +621,7 @@ theorem mixedTransferSpectralRadius₂_lt_one_of_dim_ne_of_irreducible_TP
       (@spectrum.nonempty _ (instGCNormedRingMatrixCLM D₁ D₂)
         (instGCNormedAlgebraMatrixCLM D₁ D₂)
         (instGCCompleteSpaceMatrixCLM D₁ D₂) inferInstance F)
-  have hμ_one : (↑‖μ‖₊ : ENNReal) = 1 := by
-    simpa only [ENNReal.coe_eq_one, hEqF] using hμ_rad
+  have hμ_one : (↑‖μ‖₊ : ENNReal) = 1 := hμ_rad.trans hEqF
   have hμ_nnn : ‖μ‖₊ = (1 : NNReal) := (ENNReal.coe_eq_one).1 hμ_one
   have hμ_norm : ‖μ‖ = 1 := by
     have : (‖μ‖₊ : ℝ) = (1 : ℝ) := by
@@ -621,11 +632,12 @@ theorem mixedTransferSpectralRadius₂_lt_one_of_dim_ne_of_irreducible_TP
       (Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ))
       (mixedTransferMap₂ A B)
   have hμ_spec' : μ ∈ spectrum ℂ (mixedTransferMap₂ A B) := by
-    have : μ ∈ spectrum ℂ
+    have hμ_clm : μ ∈ spectrum ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ))
           (mixedTransferMap₂ A B)) := by
-      simpa only [F] using hμ_spec
-    simpa only [h_spec] using this
+      change μ ∈ spectrum ℂ F
+      exact hμ_spec
+    exact h_spec ▸ hμ_clm
   have hHas : Module.End.HasEigenvalue (mixedTransferMap₂ A B) μ :=
     Module.End.hasEigenvalue_iff_mem_spectrum.mpr hμ_spec'
   obtain ⟨X, hX_mem, hX_ne⟩ := hHas.exists_hasEigenvector

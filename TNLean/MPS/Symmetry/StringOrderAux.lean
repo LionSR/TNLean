@@ -68,7 +68,6 @@ lemma transferMap_tpGauge_eq_similarityMap
       transferMap (tpGauge (d := d) (D := D) A σ) X
           = ∑ i : Fin d, (S * A i * S⁻¹) * X * (S * A i * S⁻¹)ᴴ := by
               simp [transferMap_apply, tpGauge, S]
-              rfl
       _ = ∑ i : Fin d, S * (A i * (S⁻¹ * X * S⁻¹ * (A i)ᴴ)) * S := by
             refine Finset.sum_congr rfl ?_
             intro x _
@@ -274,10 +273,10 @@ theorem twistedTPGaugeSetup_hasEigenvalue [NeZero D]
             setup.S * (A i * V * (setup.B i)ᴴ) * setup.Sᴴ := by
       intro i
       have hAeq : setup.A' i = setup.S * A i * setup.S⁻¹ := by
-        rw [setup.hA'_def, tpGauge, setup.hS_def]; rfl
+        rw [setup.hA'_def, tpGauge, setup.hS_def]
       have hBstar : (setup.B' i)ᴴ = setup.S⁻¹ * (setup.B i)ᴴ * setup.S := by
         have hB'eq : setup.B' i = setup.S * setup.B i * setup.S⁻¹ := by
-          rw [setup.hB'_def, tpGauge, setup.hS_def]; rfl
+          rw [setup.hB'_def, tpGauge, setup.hS_def]
         calc (setup.B' i)ᴴ
             = (setup.S⁻¹)ᴴ * (setup.B i)ᴴ * setup.Sᴴ := by
                   rw [hB'eq]; simp [Matrix.conjTranspose_mul, Matrix.mul_assoc]
@@ -535,7 +534,7 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted
             ∑ j : Fin d, u i j * (starRingEnd ℂ) (u n' j) = if i = n' then 1 else 0 := by
         intro n'
         have hentry := congrFun (congrFun hu i) n'
-        simpa [Matrix.mul_apply, Matrix.conjTranspose_apply] using hentry
+        simpa [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply] using hentry
       calc
         ∑ j : Fin d, u i j • B j
             = ∑ j : Fin d, ∑ n' : Fin d, (u i j * (starRingEnd ℂ) (u n' j)) • A n' := by
@@ -661,7 +660,7 @@ theorem boundaryState_invariant_of_virtualUnitary
         ∑ i : Fin d, (starRingEnd ℂ) (u i k) * u i j = if k = j then 1 else 0 := by
     intro k j
     have hentry := congrFun (congrFun huc k) j
-    simpa [Matrix.mul_apply, Matrix.conjTranspose_apply] using hentry
+    simpa [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply] using hentry
   have hA_from_B :
       ∀ k : Fin d, A k = μ • (V * B k * Vᴴ) := by
     intro k

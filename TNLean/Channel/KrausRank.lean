@@ -250,7 +250,10 @@ theorem hasKrausCard_choiRank_of_cp {E : Mat →ₗ[ℂ] Mat}
     have hchoi : ChoiJamiolkowski.choiMatrix E =
         ∑ i : {j : Fin D × Fin D // hτ.eigenvalues j ≠ 0},
           Matrix.vecMulVec (v i) (star (v i)) := by
-      simpa using hchoi'
+      refine hchoi'.trans ?_
+      apply Finset.sum_congr rfl
+      intro i _
+      congr 1
     have hcard : Fintype.card {j : Fin D × Fin D // hτ.eigenvalues j ≠ 0} = choiRank E := by
       unfold choiRank
       simpa [hτ] using (hτ.rank_eq_card_non_zero_eigs).symm

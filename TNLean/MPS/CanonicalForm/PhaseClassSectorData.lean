@@ -191,7 +191,7 @@ theorem collapsedBntSectorDecomp_hasBNT
         (HasIrreducibleBlocks.ofForall (fun j => hIrr (classes.repr j)))
         (IsLeftCanonicalBlockFamily.ofForall (fun j => hTP (classes.repr j)))
         classes.blocks_not_equiv i j hij
-  simpa [P, collapsedBntSectorDecomp] using hLI
+  simpa [HasBNTSectorData, P, collapsedBntSectorDecomp, classes] using hLI
 
 
 

@@ -867,8 +867,10 @@ theorem pgvwc07_mem_iSup_groundSpace_iff_iSup_restrictions
           ⨆ j : Fin r, groundSpace (A j) (n + 1)
         exact Submodule.zero_mem _
       · intro φ ξ hφ hξ
-        simpa [restrictLast, restrictLastₗ] using
-          (Submodule.add_mem (⨆ j : Fin r, groundSpace (A j) (n + 1)) hφ hξ)
+        change ((fun σ : Fin (n + 1) → Fin d => φ (Fin.snoc σ b)) +
+            fun σ : Fin (n + 1) → Fin d => ξ (Fin.snoc σ b)) ∈
+          ⨆ j : Fin r, groundSpace (A j) (n + 1)
+        exact Submodule.add_mem (⨆ j : Fin r, groundSpace (A j) (n + 1)) hφ hξ
     · intro a
       refine Submodule.iSup_induction
         (p := fun j : Fin r => groundSpace (A j) (n + 2))
@@ -882,8 +884,10 @@ theorem pgvwc07_mem_iSup_groundSpace_iff_iSup_restrictions
           ⨆ j : Fin r, groundSpace (A j) (n + 1)
         exact Submodule.zero_mem _
       · intro φ ξ hφ hξ
-        simpa [restrictFirst, restrictFirstₗ] using
-          (Submodule.add_mem (⨆ j : Fin r, groundSpace (A j) (n + 1)) hφ hξ)
+        change ((fun σ : Fin (n + 1) → Fin d => φ (Fin.cons a σ)) +
+            fun σ : Fin (n + 1) → Fin d => ξ (Fin.cons a σ)) ∈
+          ⨆ j : Fin r, groundSpace (A j) (n + 1)
+        exact Submodule.add_mem (⨆ j : Fin r, groundSpace (A j) (n + 1)) hφ hξ
   · intro hRestrict
     exact pgvwc07_mem_iSup_groundSpace_of_iSup_restrictions
       A hSpan hUnital ψ hRestrict.1 hRestrict.2

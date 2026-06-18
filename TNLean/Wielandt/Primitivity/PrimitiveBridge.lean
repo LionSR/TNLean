@@ -109,8 +109,10 @@ theorem IsPrimitiveMPS.isPeripherallyPrimitive [NeZero D]
         (fun z _ => (‖z‖₊ : ENNReal)) ν hν_mem
     have hν_lt : (‖ν‖₊ : ENNReal) < 1 :=
       lt_of_le_of_lt hν_le hP.complementary_transfer_map_gap
+    have hν_lt_nn : ‖ν‖₊ < (1 : NNReal) := by
+      exact ENNReal.coe_lt_one_iff.mp hν_lt
     have : ((‖ν‖₊ : ℝ) < 1) := by
-      simpa using hν_lt
+      exact_mod_cast hν_lt_nn
     simpa using this
   exact _root_.isPrimitive_of_compl_eigenvalues_lt_one
     (E := E) (ρ := ρ) hP.fixedPoint_is_fixed hP.fixedPoint_ne_zero hP.trace_ne_zero
@@ -182,9 +184,18 @@ theorem IsPrimitiveMPS.transferMap_pow_apply_tendsto [NeZero D]
       (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ) N) ^ n)
       atTop (nhds 0) :=
     hP.complement_pow_tendsto_zero
-  have heval := (ContinuousLinearMap.apply ℂ (Matrix (Fin D) (Fin D) ℂ) X).continuous.tendsto
-    (0 : (Matrix (Fin D) (Fin D) ℂ) →L[ℂ] (Matrix (Fin D) (Fin D) ℂ))
-  rw [map_zero] at heval
+  have heval : Tendsto
+      (fun T : (Matrix (Fin D) (Fin D) ℂ) →L[ℂ] (Matrix (Fin D) (Fin D) ℂ) => T X)
+      (nhds 0) (nhds 0) := by
+    have heval0 :=
+      (ContinuousLinearMap.apply ℂ (Matrix (Fin D) (Fin D) ℂ) X).continuous.tendsto
+        (0 : (Matrix (Fin D) (Fin D) ℂ) →L[ℂ] (Matrix (Fin D) (Fin D) ℂ))
+    change Tendsto
+      (fun T : (Matrix (Fin D) (Fin D) ℂ) →L[ℂ] (Matrix (Fin D) (Fin D) ℂ) => T X)
+      (nhds 0)
+      (nhds (((0 : (Matrix (Fin D) (Fin D) ℂ) →L[ℂ]
+        (Matrix (Fin D) (Fin D) ℂ))) X)) at heval0
+    simpa [_root_.zero_apply] using heval0
   have hconv := heval.comp hN_clm
   suffices hsuff : ∀ n,
       (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ) N ^ (n + 1)) X

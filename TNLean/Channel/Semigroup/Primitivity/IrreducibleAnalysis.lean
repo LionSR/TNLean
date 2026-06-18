@@ -295,7 +295,8 @@ theorem residualSlice_limit_zero_of_fixedPoint
   have hδ_cont : Continuous (fun t : ℝ => T t δ) := by
     have hEval : Continuous (fun A : Mat →L[ℂ] Mat => A δ) :=
       (ContinuousLinearMap.apply ℂ Mat δ).continuous
-    simpa using hEval.comp hT.semigroup.continuous
+    change Continuous ((fun A : Mat →L[ℂ] Mat => A δ) ∘ fun t : ℝ => endEquiv (T t))
+    exact hEval.comp hT.semigroup.continuous
   have hsub_decay : Filter.Tendsto (fun k : ℕ => T ((↑(φ k) : ℝ) * u) δ)
       Filter.atTop (nhds 0) :=
     hδ_decay.comp φ.strictMono.tendsto_atTop

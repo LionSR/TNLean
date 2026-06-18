@@ -91,9 +91,11 @@ private theorem extract_unitary_from_inner_form [NeZero d]
   have hPHP_psd : ((↑P : MatrixAlg d)ᴴ * (↑P : MatrixAlg d)).PosSemidef :=
     Matrix.posSemidef_conjTranspose_mul_self _
   have hc_nonneg : 0 ≤ c := by
-    have := hPHP_psd.diag_nonneg (i := (0 : Fin d))
-    simpa only [ge_iff_le, hPHP_smul, smul_apply, one_apply_eq, smul_eq_mul,
-      mul_one] using this
+    have hdiag :
+        ((↑P : MatrixAlg d)ᴴ * (↑P : MatrixAlg d)) (0 : Fin d) (0 : Fin d) = c := by
+      rw [hPHP_smul]
+      simp only [Matrix.smul_apply, Matrix.one_apply_eq, smul_eq_mul, mul_one]
+    simpa only [hdiag] using hPHP_psd.diag_nonneg (i := (0 : Fin d))
   -- Step 3: c ≠ 0 (from invertibility of P)
   have hc_ne : c ≠ 0 := by
     intro hc0
@@ -289,7 +291,7 @@ theorem channelDet_unitary_eq_one (U : Matrix.unitaryGroup (Fin d) ℂ) :
     change Matrix.vec (((U : MatrixAlg d) * X * (U : MatrixAlg d)ᴴ) : MatrixAlg d) =
       M.mulVec (Matrix.vec X)
     symm
-    simpa only [RCLike.star_def, conjTranspose] using
+    simpa only [M, RCLike.star_def, conjTranspose, ← Matrix.transpose_map] using
       (Matrix.kronecker_mulVec_vec (A := (U : MatrixAlg d)) (X := X)
         (B := (U : MatrixAlg d).map star))
   have hconj :
@@ -304,8 +306,8 @@ theorem channelDet_unitary_eq_one (U : Matrix.unitaryGroup (Fin d) ℂ) :
       toLin'_apply, LinearEquiv.apply_symm_apply] using congrFun (hvec (e.symm w)) ij
   have hdet_map_star :
       ((U : MatrixAlg d).map star).det = star (Matrix.det (U : MatrixAlg d)) := by
-    simpa only [RCLike.star_def, RingEquiv.mapMatrix_apply, starRingAut_apply] using
-      (RingEquiv.map_det (starRingAut : ℂ ≃+* ℂ) (U : MatrixAlg d)).symm
+    simpa only [RCLike.star_def, RingHom.mapMatrix_apply] using
+      (RingHom.map_det (starRingEnd ℂ) (U : MatrixAlg d)).symm
   have hdet_unitary :
       star (Matrix.det (U : MatrixAlg d)) * Matrix.det (U : MatrixAlg d) = 1 := by
     have hU : ((U : MatrixAlg d)ᴴ) * (U : MatrixAlg d) = 1 := by

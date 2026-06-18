@@ -81,7 +81,6 @@ theorem IsPositiveMap.map_conjTranspose
     rw [hIC]
     ext i j
     simp [sub_eq_add_neg]
-    ring
   have hA_decomp : A = B + Complex.I • C := by
     rw [hIC]
     ext i j
@@ -150,7 +149,6 @@ theorem IsPositiveMap.image_bounded
     have hEq : (b : ℝ) • I - T ((b : ℝ) • I) = (b : ℝ) • (I - T I) := by
       ext i j
       simp [I, sub_eq_add_neg]
-      ring
     rw [hEq]
     exact hSub_psd.smul hb0
   refine ⟨?_, ?_⟩

@@ -285,8 +285,7 @@ noncomputable def fixedPoints_starSubalgebra
     (X : Mat) :
     X ∈ fixedPoints_starSubalgebra (K := K) h_tp hρ hρ_fix ↔
       X ∈ adjointFixedPoints K := by
-  simpa only using
-    (mem_adjointFixedPointsStarSubalgebra (K := K) h_tp hρ hρ_fix X)
+  simp [fixedPoints_starSubalgebra]
 
 /-- **Wolf Theorem 6.13** with the prompt's naming convention.
 

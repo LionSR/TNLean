@@ -362,7 +362,8 @@ theorem fundamentalTheorem_periodic_proportional
   have hfA_bij : Function.Bijective fA :=
     ⟨hfA_inj, Finite.injective_iff_surjective.mp hfA_inj⟩
   exact ⟨Equiv.ofBijective fA hfA_bij, fun j => by
-    simpa only [Equiv.ofBijective_apply] using hfA_rep j⟩
+    change HetRepeatedBlocks (A j) (B (fA j))
+    exact hfA_rep j⟩
 
 /-- **Theorem 3.4 (Periodic FT, proportional case) from `IsPeriodic` data.**
 

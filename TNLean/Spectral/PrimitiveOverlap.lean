@@ -41,6 +41,13 @@ aperiodic, peripheral spectrum roots of unity, etc.) is a separate module.
 open scoped Matrix ComplexOrder BigOperators NNReal ENNReal
 open Matrix Filter
 
+attribute [local instance]
+  instGCNormedAddCommGroupMatrixCLM
+  instGCNormedRingMatrixCLM
+  instGCSeminormedRingMatrixCLM
+  instGCNormedAlgebraMatrixCLM
+  instGCCompleteSpaceMatrixCLM
+
 namespace MPSTensor
 
 section General
@@ -95,20 +102,22 @@ theorem linearMap_trace_pow_tendsto_one_of_spectralRadius_compl_lt_one
   letI : FiniteDimensional ℂ V := by infer_instance
   letI : CompleteSpace V := FiniteDimensional.complete ℂ V
   letI : Nontrivial V := by infer_instance
-  letI : SeparatingDual ℂ V := by infer_instance
-  have hCompleteCLM : CompleteSpace (V →L[ℂ] V) := by
-    exact
-      (SeparatingDual.completeSpace_continuousLinearMap_iff
-        (𝕜 := ℂ) (E := V) (F := V)).2 inferInstance
+  letI : CompleteSpace (V →L[ℂ] V) := instGCCompleteSpaceMatrixCLM D D
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
   let P : V →ₗ[ℂ] V := fixedPointProj (D := D) ρ htr
   let N : V →ₗ[ℂ] V := E - P
+  have hSpectN : spectralRadius ℂ (Φ N) < 1 := by
+    change spectralRadius ℂ
+      ((Module.End.toContinuousLinearMap V) (E - fixedPointProj (D := D) ρ htr)) < 1
+    simpa [N, P] using hSpect
   -- Step 1: show `trace(N^n) → 0` from the spectral radius assumption.
   have hNpow_clm : Filter.Tendsto (fun n => (Φ N) ^ n) Filter.atTop (nhds 0) :=
     by
       exact
-        @pow_tendsto_zero_of_spectralRadius_lt_one (V →L[ℂ] V) _ hCompleteCLM _ (Φ N)
-          (by simpa [N, P] using hSpect)
+        @pow_tendsto_zero_of_spectralRadius_lt_one (V →L[ℂ] V)
+          (instGCNormedRingMatrixCLM D D) (instGCCompleteSpaceMatrixCLM D D)
+          (instGCNormedAlgebraMatrixCLM D D) (Φ N)
+          hSpectN
   have hNtrace0' :
       Filter.Tendsto
         (fun n => LinearMap.trace ℂ V ((Φ N) ^ n : V →L[ℂ] V))

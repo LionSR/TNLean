@@ -179,17 +179,6 @@ def regionComplementBoundaryConfigEquiv (A : Tensor G d) (R : Finset V) :
     regionComplementBoundaryConfigEquiv (G := G) A R bdry =
       regionComplementBoundaryConfig (G := G) A R bdry := rfl
 
-/-- The complement boundary configuration reads the boundary edge `f` of `R`,
-viewed on the complement as `regionBoundaryEdgeToCompl R f`, off the original
-boundary value at `f`. -/
-theorem regionComplementBoundaryConfig_apply_toCompl (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
-    (bdry : RegionBoundaryConfig (G := G) A R) :
-    regionComplementBoundaryConfig (G := G) A R bdry (regionBoundaryEdgeToCompl (G := G) R f) =
-      bdry f := by
-  rw [regionComplementBoundaryConfig]
-  congr 1
-
 /-- Applying the complement boundary-configuration reindexing twice (for `R` and
 then for `univ \ R`) is the double-complement boundary-configuration transport. -/
 theorem regionComplementBoundaryConfig_compl_compl (A : Tensor G d) (R : Finset V)

@@ -254,7 +254,9 @@ theorem localGauge_exists_of_factorizedLocalGauge (A B : Tensor G d)
     B.component v (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ =
         (localProjector A hA v
           (B.component v (castLocalVirtualConfig A B hDim v η))) σ := by
-          simpa [castLocalVirtualConfig_apply] using hproj.symm
+          convert hproj.symm using 2
+          ext ie
+          simp [castLocalVirtualConfig_apply]
     _ = (localTensorMap A v
           (localGaugeMap A B hA hDim v (Pi.single η (1 : ℂ)))) σ := by
           simpa using hspec.symm

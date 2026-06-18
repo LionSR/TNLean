@@ -75,7 +75,7 @@ private lemma mpv_twoBlockTensor_eq {n m N : ℕ}
         ∑ k : Fin 2,
           (1 : ℂ) ^ N •
             mpv (twoBlockBlocks (d := d) (n := n) (m := m) A₁ A₂ k) σ := by
-    simpa [twoBlockTensor] using h
+    convert h using 1 <;> (simp [mpv, twoBlockTensor] <;> rfl)
   calc
     mpv (twoBlockTensor (d := d) (n := n) (m := m) A₁ A₂) σ
         = ∑ k : Fin 2,
@@ -133,7 +133,7 @@ theorem exists_twoBlock_decomp_of_lowerZero
     -- unpack the spectral theorem statement
     have h := hHerm.conjStarAlgAut_star_eigenvectorUnitary
     -- rewrite the conjugation automorphism in matrix form
-    simpa [Pdiag, f, Unitary.conjStarAlgAut_star_apply] using h
+    simpa [Pdiag, f, Unitary.conjStarAlgAut_star_apply, Function.comp_def] using h
   -- `Pdiag` is idempotent, hence its diagonal entries are `0` or `1`.
   have hU_mul_star : Umat * star Umat = 1 :=
     Unitary.mul_star_self_of_mem U.2
@@ -298,7 +298,10 @@ theorem exists_twoBlock_decomp_of_lowerZero
               -- On the `1`-eigenspace, the diagonal entries are `1`.
               -- Here `s.2` is the defining property `f s.1 = 1`.
               -- `Equiv.sumCompl p (Sum.inl s)` is definitionally `s.1`, so this is exactly `s.2`.
-              simpa [p] using s.2
+              rw [Matrix.diagonal_apply_eq, Matrix.fromBlocks_apply₁₁]
+              change f ((Equiv.sumCompl p) (Sum.inl s)) = (1 : Matrix S S ℂ) s s
+              rw [Equiv.sumCompl_apply_inl]
+              simpa using s.2
             · -- Off-diagonal entries vanish.
               simp [Matrix.fromBlocks_apply₁₁, h]
         | inr t =>
@@ -313,7 +316,10 @@ theorem exists_twoBlock_decomp_of_lowerZero
             · subst h
               -- On the `0`-eigenspace, the diagonal entries are `0`.
               -- On the `0`-eigenspace, `f t.1 = 0` by `hfT`.
-              simpa [p] using (hfT t)
+              rw [Matrix.diagonal_apply_eq, Matrix.fromBlocks_apply₂₂]
+              change f ((Equiv.sumCompl p) (Sum.inr t)) = (0 : Matrix T T ℂ) t t
+              rw [Equiv.sumCompl_apply_inr]
+              simpa using hfT t
             · simp [Matrix.fromBlocks_apply₂₂, h]
   -- Show that the reindexed diagonal-part tensor is block diagonal with
   -- diagonal blocks `A11raw` and `A22raw`.
@@ -450,7 +456,7 @@ private lemma orthProj_spectral_eq'
       (↑hHerm.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ := by
   have h := hHerm.spectral_theorem
   rw [Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose] at h
-  simpa using h
+  simpa [Matrix.mul_assoc, Function.comp_def] using h
 
 /-- **Strict dimension decrease** for the invariant-projection splitting step.
 
@@ -480,7 +486,7 @@ theorem exists_twoBlock_decomp_of_lowerZero_strict
   let f : Fin D → ℂ := fun j => (↑(hHerm.eigenvalues j) : ℂ)
   have hPdiag_eq : Pdiag = Matrix.diagonal f := by
     have h := hHerm.conjStarAlgAut_star_eigenvectorUnitary
-    simpa [Pdiag, f, Unitary.conjStarAlgAut_star_apply] using h
+    simpa [Pdiag, f, Unitary.conjStarAlgAut_star_apply, Function.comp_def] using h
   have hU_mul_star : Umat * star Umat = 1 :=
     Unitary.mul_star_self_of_mem U.2
   have hPdiag_idem : Pdiag * Pdiag = Pdiag := by
@@ -622,7 +628,11 @@ theorem exists_twoBlock_decomp_of_lowerZero_strict
         cases y with
         | inl s' =>
             by_cases h : s = s'
-            · subst h; simpa [p] using s.2
+            · subst h
+              rw [Matrix.diagonal_apply_eq, Matrix.fromBlocks_apply₁₁]
+              change f ((Equiv.sumCompl p) (Sum.inl s)) = (1 : Matrix S S ℂ) s s
+              rw [Equiv.sumCompl_apply_inl]
+              simpa using s.2
             · simp [Matrix.fromBlocks_apply₁₁, h]
         | inr t =>
             simp [Matrix.fromBlocks_apply₁₂]
@@ -632,7 +642,11 @@ theorem exists_twoBlock_decomp_of_lowerZero_strict
             simp [Matrix.fromBlocks_apply₂₁]
         | inr t' =>
             by_cases h : t = t'
-            · subst h; simpa [p] using (hfT t)
+            · subst h
+              rw [Matrix.diagonal_apply_eq, Matrix.fromBlocks_apply₂₂]
+              change f ((Equiv.sumCompl p) (Sum.inr t)) = (0 : Matrix T T ℂ) t t
+              rw [Equiv.sumCompl_apply_inr]
+              simpa using hfT t
             · simp [Matrix.fromBlocks_apply₂₂, h]
   have hLetter_block : ∀ i : Fin d,
       Matrix.reindex eST eST ((diagPart Aconj Pdiag) i) =

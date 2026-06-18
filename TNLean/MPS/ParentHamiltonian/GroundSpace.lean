@@ -56,7 +56,7 @@ lemma groundSpace_finrank_le (A : MPSTensor d D) (L : ℕ) :
     Module.finrank ℂ (groundSpace A L) ≤ D ^ 2 := by
   have hRange : Module.finrank ℂ (groundSpace A L) ≤
       Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) := by
-    simpa [groundSpace] using LinearMap.finrank_range_le (groundSpaceMap A L)
+    exact LinearMap.finrank_range_le (groundSpaceMap A L)
   have hMatrix : Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) = D ^ 2 :=
     Matrix.finrank_matrix_fin_eq_sq D
   exact hRange.trans (by simp [hMatrix])

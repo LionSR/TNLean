@@ -224,7 +224,7 @@ theorem v0Inc_pair (v₀ w : V) (hw : w ≠ v₀) (e : Edge G)
 
 /-- The edges of `G` incident to both `w` and `v₀` (with `w ≠ v₀`) form a
 subsingleton. -/
-instance v0Inc_subsingleton (v₀ w : V) (hw : w ≠ v₀) :
+theorem v0Inc_subsingleton (v₀ w : V) (hw : w ≠ v₀) :
     Subsingleton {ie : IncidentEdge G w // v0Inc (G := G) v₀ ie.1} := by
   refine ⟨fun a b => ?_⟩
   apply Subtype.ext; apply Subtype.ext; apply Subtype.ext

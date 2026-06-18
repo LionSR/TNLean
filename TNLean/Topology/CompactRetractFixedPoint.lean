@@ -92,7 +92,9 @@ theorem fixedPoint_of_compact_retract
     have hK'_comp : IsCompact K' := by
       simpa [K'] using hK_comp.image e.continuous
     have hr'_cont : Continuous r' := by
-      simpa [r'] using e.continuous.comp (hr_cont.comp e.symm.continuous)
+      convert e.continuous.comp (hr_cont.comp e.symm.continuous) using 1
+      ext x
+      rfl
     have hr'_maps : Set.MapsTo r' Set.univ K' := by
       intro x _
       refine ⟨r (e.symm x), hr_maps (by simp), ?_⟩
@@ -108,7 +110,9 @@ theorem fixedPoint_of_compact_retract
     have hf'_cont : ContinuousOn f' K' := by
       have hcont : ContinuousOn (fun x => f (e.symm x)) K' :=
         hf_cont.comp e.symm.continuous.continuousOn hsymm_maps
-      simpa [f'] using e.continuous.comp_continuousOn hcont
+      convert e.continuous.comp_continuousOn hcont using 1
+      ext x
+      rfl
     have hf'_maps : Set.MapsTo f' K' K' := by
       intro x hx
       rcases hx with ⟨y, hy, rfl⟩

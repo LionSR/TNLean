@@ -109,7 +109,7 @@ theorem SameState.trans {A B C : MPSChainTensor d D n}
   fun σ => (hAB σ).trans (hBC σ)
 
 /-- `SameState` is an equivalence relation. -/
-instance instEquivalenceSameState : Equivalence (SameState (d := d) (D := D) (n := n)) where
+def instEquivalenceSameState : Equivalence (SameState (d := d) (D := D) (n := n)) where
   refl := SameState.refl
   symm := SameState.symm
   trans := SameState.trans
@@ -138,7 +138,7 @@ theorem GaugeEquiv.trans {A B C : MPSChainTensor d D n}
   simp [Matrix.mul_assoc, mul_inv_rev]
 
 /-- `GaugeEquiv` is an equivalence relation. -/
-instance instEquivalenceGaugeEquiv : Equivalence (GaugeEquiv (d := d) (D := D) (n := n)) where
+def instEquivalenceGaugeEquiv : Equivalence (GaugeEquiv (d := d) (D := D) (n := n)) where
   refl := GaugeEquiv.refl
   symm := GaugeEquiv.symm
   trans := GaugeEquiv.trans
