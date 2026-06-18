@@ -66,20 +66,20 @@ theorem isBlueBoundaryEdge_of_hostBoundary_blue
   rcases hf with ⟨h1host, h2nothost⟩ | ⟨h1nothost, h2host⟩
   · -- `f.1.1 ∈ univ \ red`, `f.1.2 ∈ red`.
     have h2red : f.1.2 ∈ D.red := by
-      rw [Finset.mem_sdiff] at h2nothost; push_neg at h2nothost
+      rw [Finset.mem_sdiff] at h2nothost; push Not at h2nothost
       exact h2nothost (Finset.mem_univ _)
     have h2notblue : f.1.2 ∉ D.blue := fun hbl =>
       (Finset.disjoint_left.mp D.red_disjoint_blue) h2red hbl
     rcases hb with ⟨_, hb1⟩ | ⟨h2host', _⟩
     · exact Or.inl ⟨hb1, h2notblue⟩
-    · exact absurd h2host' (by rw [Finset.mem_sdiff]; push_neg; exact fun _ => h2red)
+    · exact absurd h2host' (by rw [Finset.mem_sdiff]; push Not; exact fun _ => h2red)
   · have h1red : f.1.1 ∈ D.red := by
-      rw [Finset.mem_sdiff] at h1nothost; push_neg at h1nothost
+      rw [Finset.mem_sdiff] at h1nothost; push Not at h1nothost
       exact h1nothost (Finset.mem_univ _)
     have h1notblue : f.1.1 ∉ D.blue := fun hbl =>
       (Finset.disjoint_left.mp D.red_disjoint_blue) h1red hbl
     rcases hb with ⟨h1host', _⟩ | ⟨_, hb2⟩
-    · exact absurd h1host' (by rw [Finset.mem_sdiff]; push_neg; exact fun _ => h1red)
+    · exact absurd h1host' (by rw [Finset.mem_sdiff]; push Not; exact fun _ => h1red)
     · exact Or.inr ⟨h1notblue, hb2⟩
 
 /-- A boundary edge of the host `univ \ red` whose host-side endpoint lies in the
@@ -92,20 +92,20 @@ theorem isComplBoundaryEdge_of_hostBoundary_compl
     IsRegionBoundaryEdge (G := G) D.complement f := by
   rcases hf with ⟨h1host, h2nothost⟩ | ⟨h1nothost, h2host⟩
   · have h2red : f.1.2 ∈ D.red := by
-      rw [Finset.mem_sdiff] at h2nothost; push_neg at h2nothost
+      rw [Finset.mem_sdiff] at h2nothost; push Not at h2nothost
       exact h2nothost (Finset.mem_univ _)
     have h2notcompl : f.1.2 ∉ D.complement := fun hcl =>
       (Finset.disjoint_left.mp D.red_disjoint_complement) h2red hcl
     rcases hc with ⟨_, hc1⟩ | ⟨h2host', _⟩
     · exact Or.inl ⟨hc1, h2notcompl⟩
-    · exact absurd h2host' (by rw [Finset.mem_sdiff]; push_neg; exact fun _ => h2red)
+    · exact absurd h2host' (by rw [Finset.mem_sdiff]; push Not; exact fun _ => h2red)
   · have h1red : f.1.1 ∈ D.red := by
-      rw [Finset.mem_sdiff] at h1nothost; push_neg at h1nothost
+      rw [Finset.mem_sdiff] at h1nothost; push Not at h1nothost
       exact h1nothost (Finset.mem_univ _)
     have h1notcompl : f.1.1 ∉ D.complement := fun hcl =>
       (Finset.disjoint_left.mp D.red_disjoint_complement) h1red hcl
     rcases hc with ⟨h1host', _⟩ | ⟨_, hc2⟩
-    · exact absurd h1host' (by rw [Finset.mem_sdiff]; push_neg; exact fun _ => h1red)
+    · exact absurd h1host' (by rw [Finset.mem_sdiff]; push Not; exact fun _ => h1red)
     · exact Or.inr ⟨h1notcompl, hc2⟩
 
 /-- The host-side endpoint of a host boundary edge lies in the blue block or in the
@@ -463,11 +463,11 @@ theorem isRegionBoundaryEdge_red_of_host
   rcases hg with ⟨h1host, h2nothost⟩ | ⟨h1nothost, h2host⟩
   · have h1notred : g.1.1 ∉ D.red := (Finset.mem_sdiff.mp h1host).2
     have h2red : g.1.2 ∈ D.red := by
-      rw [Finset.mem_sdiff] at h2nothost; push_neg at h2nothost
+      rw [Finset.mem_sdiff] at h2nothost; push Not at h2nothost
       exact h2nothost (Finset.mem_univ _)
     exact Or.inr ⟨h1notred, h2red⟩
   · have h1red : g.1.1 ∈ D.red := by
-      rw [Finset.mem_sdiff] at h1nothost; push_neg at h1nothost
+      rw [Finset.mem_sdiff] at h1nothost; push Not at h1nothost
       exact h1nothost (Finset.mem_univ _)
     have h2notred : g.1.2 ∉ D.red := (Finset.mem_sdiff.mp h2host).2
     exact Or.inl ⟨h1red, h2notred⟩
@@ -641,10 +641,10 @@ theorem regionBlockedWeight_complement_eq_smul_constrained
     -- A crossing edge is a red boundary edge, hence a host boundary edge.
     have hhost : IsRegionBoundaryEdge (G := G) (Finset.univ \ D.red) g := by
       rcases hg.1 with ⟨h1red, h2notred⟩ | ⟨h1notred, h2red⟩
-      · exact Or.inr ⟨by rw [Finset.mem_sdiff]; push_neg; exact fun _ => h1red,
+      · exact Or.inr ⟨by rw [Finset.mem_sdiff]; push Not; exact fun _ => h1red,
           by rw [Finset.mem_sdiff]; exact ⟨Finset.mem_univ _, h2notred⟩⟩
       · exact Or.inl ⟨by rw [Finset.mem_sdiff]; exact ⟨Finset.mem_univ _, h1notred⟩,
-          by rw [Finset.mem_sdiff]; push_neg; exact fun _ => h2red⟩
+          by rw [Finset.mem_sdiff]; push Not; exact fun _ => h2red⟩
     have h1 := congrFun hq.2.1 ⟨g, hhost⟩
     have h2 := congrFun hq0host ⟨g, hhost⟩
     rw [regionBoundaryLabel_apply] at h1 h2
@@ -884,7 +884,8 @@ theorem regionBlockedTensorInjective_union
     rw [hh', hb', hc'] at e1
     rw [e2]
     -- `host q' = hostLabelFrom (blue q) (compl q) = host q`, and `host q' = bdry'`.
-    rw [← e1] at e2 ⊢ <;> exact e2
+    rw [← e1] at e2
+    rw [← e1]
   · intro h; exact absurd (Finset.mem_univ _) h
 
 /-- **The host block is blocked-tensor injective.** The set complement of the red block

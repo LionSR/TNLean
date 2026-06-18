@@ -33,6 +33,7 @@ variable (g : ThreeBlockGeometry V)
 
 The source's `injective_union`, re-derived over the bare geometry. -/
 
+omit [DecidableRel G.Adj] in
 /-- A boundary edge of the host `univ \ red` whose host-side endpoint lies in the blue
 block is a boundary edge of the blue block: the host-side endpoint is in blue, and the
 red-side endpoint lies outside blue (the blocks are disjoint). -/
@@ -44,22 +45,23 @@ theorem ThreeBlockGeometry.isBlueBoundaryEdge_of_hostBoundary_blue
   rcases hf with ⟨h1host, h2nothost⟩ | ⟨h1nothost, h2host⟩
   · -- `f.1.1 ∈ univ \ red`, `f.1.2 ∈ red`.
     have h2red : f.1.2 ∈ g.red := by
-      rw [Finset.mem_sdiff] at h2nothost; push_neg at h2nothost
+      rw [Finset.mem_sdiff] at h2nothost; push Not at h2nothost
       exact h2nothost (Finset.mem_univ _)
     have h2notblue : f.1.2 ∉ g.blue := fun hbl =>
       (Finset.disjoint_left.mp g.red_disjoint_blue) h2red hbl
     rcases hb with ⟨_, hb1⟩ | ⟨h2host', _⟩
     · exact Or.inl ⟨hb1, h2notblue⟩
-    · exact absurd h2host' (by rw [Finset.mem_sdiff]; push_neg; exact fun _ => h2red)
+    · exact absurd h2host' (by rw [Finset.mem_sdiff]; push Not; exact fun _ => h2red)
   · have h1red : f.1.1 ∈ g.red := by
-      rw [Finset.mem_sdiff] at h1nothost; push_neg at h1nothost
+      rw [Finset.mem_sdiff] at h1nothost; push Not at h1nothost
       exact h1nothost (Finset.mem_univ _)
     have h1notblue : f.1.1 ∉ g.blue := fun hbl =>
       (Finset.disjoint_left.mp g.red_disjoint_blue) h1red hbl
     rcases hb with ⟨h1host', _⟩ | ⟨_, hb2⟩
-    · exact absurd h1host' (by rw [Finset.mem_sdiff]; push_neg; exact fun _ => h1red)
+    · exact absurd h1host' (by rw [Finset.mem_sdiff]; push Not; exact fun _ => h1red)
     · exact Or.inr ⟨h1notblue, hb2⟩
 
+omit [DecidableRel G.Adj] in
 /-- A boundary edge of the host `univ \ red` whose host-side endpoint lies in the
 complement block is a boundary edge of the complement block. -/
 theorem ThreeBlockGeometry.isComplBoundaryEdge_of_hostBoundary_compl
@@ -69,22 +71,23 @@ theorem ThreeBlockGeometry.isComplBoundaryEdge_of_hostBoundary_compl
     IsRegionBoundaryEdge (G := G) g.complement f := by
   rcases hf with ⟨h1host, h2nothost⟩ | ⟨h1nothost, h2host⟩
   · have h2red : f.1.2 ∈ g.red := by
-      rw [Finset.mem_sdiff] at h2nothost; push_neg at h2nothost
+      rw [Finset.mem_sdiff] at h2nothost; push Not at h2nothost
       exact h2nothost (Finset.mem_univ _)
     have h2notcompl : f.1.2 ∉ g.complement := fun hcl =>
       (Finset.disjoint_left.mp g.red_disjoint_complement) h2red hcl
     rcases hc with ⟨_, hc1⟩ | ⟨h2host', _⟩
     · exact Or.inl ⟨hc1, h2notcompl⟩
-    · exact absurd h2host' (by rw [Finset.mem_sdiff]; push_neg; exact fun _ => h2red)
+    · exact absurd h2host' (by rw [Finset.mem_sdiff]; push Not; exact fun _ => h2red)
   · have h1red : f.1.1 ∈ g.red := by
-      rw [Finset.mem_sdiff] at h1nothost; push_neg at h1nothost
+      rw [Finset.mem_sdiff] at h1nothost; push Not at h1nothost
       exact h1nothost (Finset.mem_univ _)
     have h1notcompl : f.1.1 ∉ g.complement := fun hcl =>
       (Finset.disjoint_left.mp g.red_disjoint_complement) h1red hcl
     rcases hc with ⟨h1host', _⟩ | ⟨_, hc2⟩
-    · exact absurd h1host' (by rw [Finset.mem_sdiff]; push_neg; exact fun _ => h1red)
+    · exact absurd h1host' (by rw [Finset.mem_sdiff]; push Not; exact fun _ => h1red)
     · exact Or.inr ⟨h1notcompl, hc2⟩
 
+omit [DecidableRel G.Adj] in
 /-- The host-side endpoint of a host boundary edge lies in the blue block or in the
 complement block, by the disjoint cover `univ \ red = blue ⊔ complement`. -/
 theorem ThreeBlockGeometry.hostBoundary_hostVertex_mem_blue_or_compl
@@ -422,6 +425,7 @@ theorem ThreeBlockGeometry.blueRedCrossing_fiber_card
           (fun eg : Edge G => g.IsBlueRedCrossingEdge A eg))
         (fun eg => by simp [Finset.mem_filter]) (fun eg => A.bondDim eg)]
 
+omit [DecidableRel G.Adj] in
 /-- A host boundary edge is a red boundary edge: having one endpoint in `univ \ red`
 and one in `red` is the same as having one endpoint in `red` and one outside. -/
 theorem ThreeBlockGeometry.isRegionBoundaryEdge_red_of_host
@@ -430,11 +434,11 @@ theorem ThreeBlockGeometry.isRegionBoundaryEdge_red_of_host
   rcases hg with ⟨h1host, h2nothost⟩ | ⟨h1nothost, h2host⟩
   · have h1notred : eg.1.1 ∉ g.red := (Finset.mem_sdiff.mp h1host).2
     have h2red : eg.1.2 ∈ g.red := by
-      rw [Finset.mem_sdiff] at h2nothost; push_neg at h2nothost
+      rw [Finset.mem_sdiff] at h2nothost; push Not at h2nothost
       exact h2nothost (Finset.mem_univ _)
     exact Or.inr ⟨h1notred, h2red⟩
   · have h1red : eg.1.1 ∈ g.red := by
-      rw [Finset.mem_sdiff] at h1nothost; push_neg at h1nothost
+      rw [Finset.mem_sdiff] at h1nothost; push Not at h1nothost
       exact h1nothost (Finset.mem_univ _)
     have h2notred : eg.1.2 ∉ g.red := (Finset.mem_sdiff.mp h2host).2
     exact Or.inl ⟨h1red, h2notred⟩
@@ -606,10 +610,10 @@ theorem ThreeBlockGeometry.regionBlockedWeight_complement_eq_smul_constrained
     -- A crossing edge is a red boundary edge, hence a host boundary edge.
     have hhost : IsRegionBoundaryEdge (G := G) (Finset.univ \ g.red) eg := by
       rcases hg.1 with ⟨h1red, h2notred⟩ | ⟨h1notred, h2red⟩
-      · exact Or.inr ⟨by rw [Finset.mem_sdiff]; push_neg; exact fun _ => h1red,
+      · exact Or.inr ⟨by rw [Finset.mem_sdiff]; push Not; exact fun _ => h1red,
           by rw [Finset.mem_sdiff]; exact ⟨Finset.mem_univ _, h2notred⟩⟩
       · exact Or.inl ⟨by rw [Finset.mem_sdiff]; exact ⟨Finset.mem_univ _, h1notred⟩,
-          by rw [Finset.mem_sdiff]; push_neg; exact fun _ => h2red⟩
+          by rw [Finset.mem_sdiff]; push Not; exact fun _ => h2red⟩
     have h1 := congrFun hq.2.1 ⟨eg, hhost⟩
     have h2 := congrFun hq0host ⟨eg, hhost⟩
     rw [regionBoundaryLabel_apply] at h1 h2
@@ -726,7 +730,8 @@ injective. -/
 
 open scoped Classical in
 /-- **The union lemma of the normal PEPS Fundamental Theorem.** The host block
-`univ \ red`, the union of the blue and complement injective blocks of the geometry, is blocked-tensor injective.
+`univ \ red`, the union of the blue and complement injective blocks of the
+geometry, is blocked-tensor injective.
 
 A coefficient family `c` annihilating the host blocked-region weight family is stripped
 of the blue block (`complCoeff_combination_eq_zero`), leaving the `c`-weighted complement
@@ -845,7 +850,8 @@ theorem ThreeBlockGeometry.regionBlockedTensorInjective_union
     rw [hh', hb', hc'] at e1
     rw [e2]
     -- `host q' = hostLabelFrom (blue q) (compl q) = host q`, and `host q' = bdry'`.
-    rw [← e1] at e2 ⊢ <;> exact e2
+    rw [← e1] at e2
+    rw [← e1]
   · intro h; exact absurd (Finset.mem_univ _) h
 
 /-! ### The disjoint two-region union lemma
@@ -878,15 +884,19 @@ def twoRegionGeometry (S T : Finset V) (hST : Disjoint S T) : ThreeBlockGeometry
     simp only [Finset.mem_union, Finset.mem_sdiff, Finset.mem_univ, true_and, iff_true]
     tauto
 
+omit [LinearOrder V] in
 @[simp] theorem twoRegionGeometry_blue (S T : Finset V) (hST : Disjoint S T) :
     (twoRegionGeometry (V := V) S T hST).blue = S := rfl
 
+omit [LinearOrder V] in
 @[simp] theorem twoRegionGeometry_complement (S T : Finset V) (hST : Disjoint S T) :
     (twoRegionGeometry (V := V) S T hST).complement = T := rfl
 
+omit [LinearOrder V] in
 @[simp] theorem twoRegionGeometry_red (S T : Finset V) (hST : Disjoint S T) :
     (twoRegionGeometry (V := V) S T hST).red = Finset.univ \ (S ∪ T) := rfl
 
+omit [LinearOrder V] in
 /-- The host block of the two-region geometry is the union `S ∪ T`. -/
 theorem twoRegionGeometry_univ_sdiff_red (S T : Finset V) (hST : Disjoint S T) :
     Finset.univ \ (twoRegionGeometry (V := V) S T hST).red = S ∪ T := by
@@ -940,7 +950,7 @@ theorem regionBlockedTensorInjective_biUnion_disjoint {ι : Type*}
           (by rintro rfl; exact hi hj)
       refine regionBlockedTensorInjective_union_disjoint hdisj_it
         (hR i (by simp)) (ih ?_ ?_) hpos
-      · exact hdisj.mono (by simp [Finset.coe_cons, Set.subset_insert])
+      · exact hdisj.mono (by simp [Set.subset_insert])
       · exact fun j hj => hR j (by simp [hj])
 
 end PEPS

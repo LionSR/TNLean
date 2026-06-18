@@ -312,7 +312,7 @@ theorem fundamentalTheorem_normalMPS_translationInvariant {n L d D : ℕ} [NeZer
         apply Fin.ext
         have h1 : ((1 : Fin n) : ℕ) = 1 := val_one_of_two_le (by omega)
         rw [Fin.val_add_eq_ite, h1]
-        show (if n ≤ k + 1 then k + 1 - n else k + 1) = k + 1
+        change (if n ≤ k + 1 then k + 1 - n else k + 1) = k + 1
         split_ifs <;> omega
       rw [← hsucc, hstep ⟨k, hk'⟩, IH hk']
   -- The gauge at site `k` is the starting gauge scaled by the `k`-th power.

@@ -247,22 +247,34 @@ omit [Fintype V] [DecidableRel G.Adj] in
 theorem edge0_inc_v0 (v₀ w₀ : V) (hadj : G.Adj v₀ w₀) :
     (edge0 (G := G) v₀ w₀ hadj).1.1 = v₀ ∨ (edge0 (G := G) v₀ w₀ hadj).1.2 = v₀ := by
   rcases lt_or_gt_of_ne (G.ne_of_adj hadj) with h | h
-  · left; show min v₀ w₀ = v₀; exact min_eq_left h.le
-  · right; show max v₀ w₀ = v₀; exact max_eq_left h.le
+  · left
+    change min v₀ w₀ = v₀
+    exact min_eq_left h.le
+  · right
+    change max v₀ w₀ = v₀
+    exact max_eq_left h.le
 
 omit [Fintype V] [DecidableRel G.Adj] in
 theorem edge0_inc_w0 (v₀ w₀ : V) (hadj : G.Adj v₀ w₀) :
     (edge0 (G := G) v₀ w₀ hadj).1.1 = w₀ ∨ (edge0 (G := G) v₀ w₀ hadj).1.2 = w₀ := by
   rcases lt_or_gt_of_ne (G.ne_of_adj hadj) with h | h
-  · right; show max v₀ w₀ = w₀; exact max_eq_right h.le
-  · left; show min v₀ w₀ = w₀; exact min_eq_right h.le
+  · right
+    change max v₀ w₀ = w₀
+    exact max_eq_right h.le
+  · left
+    change min v₀ w₀ = w₀
+    exact min_eq_right h.le
 
 omit [Fintype V] [DecidableRel G.Adj] in
 theorem edge0_v0Inc (v₀ w₀ : V) (hadj : G.Adj v₀ w₀) :
     v0Inc (G := G) v₀ (edge0 (G := G) v₀ w₀ hadj) := by
   rcases lt_or_gt_of_ne (G.ne_of_adj hadj) with h | h
-  · left; show min v₀ w₀ = v₀; exact min_eq_left h.le
-  · right; show max v₀ w₀ = v₀; exact max_eq_left h.le
+  · left
+    change min v₀ w₀ = v₀
+    exact min_eq_left h.le
+  · right
+    change max v₀ w₀ = v₀
+    exact max_eq_left h.le
 
 /-- If the edge scalar is `1` on every `v₀`-incident edge other than `{v₀, w₀}`,
 then the `v₀`-incident part of the oriented incidence product at a vertex
@@ -347,13 +359,13 @@ theorem unit_at_v0 (v₀ w₀ : V) (hadj : G.Adj v₀ w₀) (t : V → ℂˣ) (s
     edgeScalarUnit (G := G) s v₀ ⟨edge0 (G := G) v₀ w₀ hadj, hinc⟩ = t v₀ := by
   have hne : v₀ ≠ w₀ := G.ne_of_adj hadj
   rw [edgeScalarUnit, hs0]
-  show (if (edge0 (G := G) v₀ w₀ hadj).1.1 = v₀ then _ else _) = t v₀
+  change (if (edge0 (G := G) v₀ w₀ hadj).1.1 = v₀ then _ else _) = t v₀
   rcases lt_or_gt_of_ne hne with h | h
   · have hl : (edge0 (G := G) v₀ w₀ hadj).1.1 = v₀ := by
-      show min v₀ w₀ = v₀; exact min_eq_left h.le
+      change min v₀ w₀ = v₀; exact min_eq_left h.le
     rw [if_pos hl, if_pos h]
   · have hl : ¬ (edge0 (G := G) v₀ w₀ hadj).1.1 = v₀ := by
-      show ¬ min v₀ w₀ = v₀; rw [min_eq_right h.le]; exact ne_of_lt h
+      change ¬ min v₀ w₀ = v₀; rw [min_eq_right h.le]; exact ne_of_lt h
     rw [if_neg hl, if_neg (not_lt.mpr h.le), inv_inv]
 
 omit [Fintype V] [DecidableRel G.Adj] in
@@ -365,13 +377,13 @@ theorem unit_at_w0 (v₀ w₀ : V) (hadj : G.Adj v₀ w₀) (t : V → ℂˣ) (s
     edgeScalarUnit (G := G) s w₀ ⟨edge0 (G := G) v₀ w₀ hadj, hinc⟩ = (t v₀)⁻¹ := by
   have hne : v₀ ≠ w₀ := G.ne_of_adj hadj
   rw [edgeScalarUnit, hs0]
-  show (if (edge0 (G := G) v₀ w₀ hadj).1.1 = w₀ then _ else _) = (t v₀)⁻¹
+  change (if (edge0 (G := G) v₀ w₀ hadj).1.1 = w₀ then _ else _) = (t v₀)⁻¹
   rcases lt_or_gt_of_ne hne with h | h
   · have hl : ¬ (edge0 (G := G) v₀ w₀ hadj).1.1 = w₀ := by
-      show ¬ min v₀ w₀ = w₀; rw [min_eq_left h.le]; exact ne_of_lt h
+      change ¬ min v₀ w₀ = w₀; rw [min_eq_left h.le]; exact ne_of_lt h
     rw [if_neg hl, if_pos h]
   · have hl : (edge0 (G := G) v₀ w₀ hadj).1.1 = w₀ := by
-      show min v₀ w₀ = w₀; exact min_eq_right h.le
+      change min v₀ w₀ = w₀; exact min_eq_right h.le
     rw [if_pos hl, if_neg (not_lt.mpr h.le)]
 
 /-! ### Existence: solving the oriented incidence equation -/

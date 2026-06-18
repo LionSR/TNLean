@@ -438,7 +438,7 @@ lemma R_su2Diag_eq_rotZ (θ : ℝ) :
       Fin.mk_one, Fin.isValue, Complex.ofReal_zero, Complex.ofReal_one, Complex.ofReal_neg,
       neg_mul, mul_neg, neg_zero, mul_zero, zero_mul, add_zero, zero_add, mul_one, one_mul,
       hexpP, hexpN, hcos, hsin] <;>
-    (ring_nf; (try (simp only [Complex.I_sq, Complex.I_pow_four]; ring));
+    (ring_nf; (try (simp only [Complex.I_sq, Complex.I_pow_four]; ring_nf));
       (try linear_combination hpyth))
 
 /-- Conjugating the Pauli vector by the cover `su2Xrot β` realizes the rotation by
@@ -469,7 +469,7 @@ lemma R_su2Xrot_eq_rotX (β : ℝ) :
       Fin.mk_one, Fin.isValue, Complex.ofReal_zero, Complex.ofReal_one, Complex.ofReal_neg,
       neg_mul, mul_neg, neg_zero, mul_zero, zero_mul, add_zero, zero_add, mul_one, one_mul,
       hcos, hsin] <;>
-    (ring_nf; (try (simp only [Complex.I_sq, Complex.I_pow_four]; ring));
+    (ring_nf; (try (simp only [Complex.I_sq, Complex.I_pow_four]; ring_nf));
       (try linear_combination hpyth))
 
 

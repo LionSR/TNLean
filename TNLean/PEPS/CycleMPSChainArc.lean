@@ -119,6 +119,39 @@ lemma arcEval_const [NeZero n] (B : MPSTensor d D) (s : ℕ) (w : List (Fin d)) 
   | nil => rfl
   | cons i w ih => rw [arcEval_cons, MPSTensor.evalWord_cons, ih (s + 1)]
 
+/-- **Arc products telescope under a cyclic gauge**
+(arXiv:1804.04964, Applications section, lines 1863--1889).
+
+If two site-dependent chains are related by a cyclic virtual gauge, then every
+arc product of the second chain is the corresponding arc product of the first
+chain conjugated by the gauges at the two boundary bonds.  For a full closed
+chain this is the cancellation mechanism behind the source's substitution of
+the \(L_i,R_i\) expression into the trace. -/
+theorem arcEval_eq_gauge_conj [NeZero n] {A B : MPSChainTensor d D n}
+    {Z : Fin n → GL (Fin D) ℂ}
+    (hZ : ∀ (k : Fin n) (i : Fin d),
+      B k i = (Z k : Matrix (Fin D) (Fin D) ℂ) * A k i *
+        (((Z (cyclicSucc k))⁻¹ : GL (Fin D) ℂ) :
+          Matrix (Fin D) (Fin D) ℂ))
+    (s : ℕ) (w : List (Fin d)) :
+    arcEval B s w =
+      (Z (s : Fin n) : Matrix (Fin D) (Fin D) ℂ) * arcEval A s w *
+        (((Z ((s + w.length : ℕ) : Fin n))⁻¹ : GL (Fin D) ℂ) :
+          Matrix (Fin D) (Fin D) ℂ) := by
+  induction w generalizing s with
+  | nil =>
+      simp only [arcEval_nil, List.length_nil, Nat.add_zero, Matrix.mul_one,
+        Units.mul_inv]
+  | cons i w ih =>
+      have hsucc : cyclicSucc (s : Fin n) = ((s + 1 : ℕ) : Fin n) := by
+        rw [cyclicSucc_eq_add_one]
+        norm_num [Nat.cast_add]
+      have hlen : s + (i :: w).length = s + 1 + w.length := by
+        rw [List.length_cons]
+        omega
+      rw [arcEval_cons, arcEval_cons, hZ (s : Fin n) i, hsucc, ih (s + 1), hlen]
+      simp only [Matrix.mul_assoc, Units.inv_mul_cancel_left]
+
 /-- The arc product of the word of the first `k + 1` letters of a tuple
 peels its last letter at the matching site. -/
 lemma arcEval_take_succ [NeZero n] (A : MPSChainTensor d D n) (s : ℕ)
@@ -288,6 +321,17 @@ lemma coeff_eq_trace_arcEval [NeZero n] (A : MPSChainTensor d D n)
   rw [arcEval_ofFn_eq_prod A (fun k => k) σ 0 fun k => by
     rw [Nat.zero_add, Fin.cast_val_eq_self]]
   rfl
+
+/-- A cyclic virtual gauge leaves the closed-chain state unchanged
+(arXiv:1804.04964, Applications section, lines 1863--1889). -/
+theorem GaugeEquiv.sameState [NeZero n] {A B : MPSChainTensor d D n}
+    (hAB : GaugeEquiv A B) : SameState A B := by
+  obtain ⟨Z, hZ⟩ := hAB
+  intro σ
+  rw [coeff_eq_trace_arcEval A σ, coeff_eq_trace_arcEval B σ]
+  have hEval := arcEval_eq_gauge_conj (A := A) (B := B) (Z := Z) hZ 0 (List.ofFn σ)
+  rw [hEval, List.length_ofFn]
+  simpa using (MPSTensor.trace_conj_eq (Z 0) (arcEval A 0 (List.ofFn σ))).symm
 
 /-- Rotating the closed trace one site forward: the leading letter moves to
 the end of the word, and the arc rebases one site downstream. -/

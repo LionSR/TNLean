@@ -89,7 +89,7 @@ theorem ThreeBlockGeometry.hostLabel_p2_eq_hostLabel_regionMerge_blue
     have hbdry : IsRegionBoundaryEdge (G := G) g.blue f.1 := by
       rcases f.2 with ⟨h1host, h2nothost⟩ | ⟨h1nothost, h2host⟩
       · have h2red : f.1.1.2 ∈ g.red := by
-          have := h2nothost; rw [Finset.mem_sdiff] at this; push_neg at this
+          have := h2nothost; rw [Finset.mem_sdiff] at this; push Not at this
           exact this (Finset.mem_univ _)
         have h2notblue : f.1.1.2 ∉ g.blue := fun hb =>
           (Finset.disjoint_left.mp g.red_disjoint_blue) h2red hb
@@ -97,7 +97,7 @@ theorem ThreeBlockGeometry.hostLabel_p2_eq_hostLabel_regionMerge_blue
         · refine Or.inl ⟨hb1, h2notblue⟩
         · exact absurd hb2 h2notblue
       · have h1red : f.1.1.1 ∈ g.red := by
-          have := h1nothost; rw [Finset.mem_sdiff] at this; push_neg at this
+          have := h1nothost; rw [Finset.mem_sdiff] at this; push Not at this
           exact this (Finset.mem_univ _)
         have h1notblue : f.1.1.1 ∉ g.blue := fun hb =>
           (Finset.disjoint_left.mp g.red_disjoint_blue) h1red hb
@@ -347,6 +347,9 @@ theorem ThreeBlockGeometry.threeBlockDoubleSum_eq_complCoeff_sum_blue
     simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_product] at hpq ⊢
     obtain ⟨hp, hhost, hq⟩ := hpq
     exact ⟨⟨hhost, hp.trans hq.symm⟩, hp⟩
+
+namespace ThreeBlockGeometry
+
 open scoped Classical in
 /-- **The core blue smul-factorization (pointwise).** The blue mirror of
 `regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical`: the blue
@@ -356,7 +359,7 @@ the blue blocked-region weight.
 
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
 `Papers/1804.04964/paper_normal.tex`. -/
-theorem ThreeBlockGeometry.regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_blue
+theorem regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_blue
     (bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ g.red))
     (σblue : RegionPhysicalConfig (V := V) (d := d) g.blue)
     (σcompl : RegionPhysicalConfig (V := V) (d := d) g.complement) :
@@ -373,6 +376,8 @@ theorem ThreeBlockGeometry.regionInteriorBondProd_smul_regionBlockedWeight_three
     g.threeBlockDoubleSum_eq_complCoeff_sum_blue bdry σblue σcompl]
   refine Finset.sum_congr rfl (fun bβ _ => ?_)
   rw [smul_eq_mul, mul_comm]
+
+end ThreeBlockGeometry
 
 open scoped Classical in
 /-- **The core blue smul-factorization (as functions of `σblue`).** The blue
@@ -394,7 +399,8 @@ theorem regionInteriorBondProd_smul_geometryBlueWeight_eq
           regionBlockedWeight (G := G) A g.blue bβ := by
   funext σblue
   rw [Pi.smul_apply, Finset.sum_apply,
-    g.regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_blue bdry σblue σcompl]
+    g.regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_blue
+      bdry σblue σcompl]
   refine Finset.sum_congr rfl (fun bβ _ => ?_)
   rw [Pi.smul_apply]
 

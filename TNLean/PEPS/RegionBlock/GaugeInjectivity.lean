@@ -250,7 +250,7 @@ lemma prod_region_edgeGauge_eq_prod_factor (B : Tensor G d)
         (fun (v : V) (ie : IncidentEdge G v) =>
           if h : v ∈ R then edgeGaugeAt B X v ie (ζ ie.1) (ξ ⟨v, h⟩ ie) else 1) w.1 ie from
     Finset.prod_congr rfl fun w _ => Finset.prod_congr rfl fun ie _ => by
-      show edgeGaugeAt B X w.1 ie (ζ ie.1) (ξ w ie) =
+      change edgeGaugeAt B X w.1 ie (ζ ie.1) (ξ w ie) =
         if h : w.1 ∈ R then edgeGaugeAt B X w.1 ie (ζ ie.1) (ξ ⟨w.1, h⟩ ie) else 1
       rw [dif_pos w.2]]
   rw [prod_region_incident_eq_prod_edge R
@@ -282,14 +282,14 @@ noncomputable def regionBoundaryFiberEquiv (B : Tensor G d) (R : Finset V)
   left_inv ζ := by
     apply Subtype.ext
     funext e
-    show (if hb : IsRegionBoundaryEdge (G := G) R e then bdry ⟨e, hb⟩ else ζ.1 e) = ζ.1 e
+    change (if hb : IsRegionBoundaryEdge (G := G) R e then bdry ⟨e, hb⟩ else ζ.1 e) = ζ.1 e
     by_cases hb : IsRegionBoundaryEdge (G := G) R e
     · rw [dif_pos hb]
       exact (congrFun ζ.2 ⟨e, hb⟩).symm
     · rw [dif_neg hb]
   right_inv h := by
     funext e
-    show (if hb : IsRegionBoundaryEdge (G := G) R e.1 then bdry ⟨e.1, hb⟩ else h ⟨e.1, hb⟩) =
+    change (if hb : IsRegionBoundaryEdge (G := G) R e.1 then bdry ⟨e.1, hb⟩ else h ⟨e.1, hb⟩) =
       h e
     rw [dif_neg e.2]
 
@@ -558,7 +558,7 @@ theorem regionLocalOfGlobal_fiber_card (B : Tensor G d) (R : Finset V)
       funext w ie
       obtain ⟨v, hv⟩ := w
       obtain ⟨e, hie⟩ := ie
-      show regionGlobalOfLocal (G := G) B R ξ h e = ξ ⟨v, hv⟩ ⟨e, hie⟩
+      change regionGlobalOfLocal (G := G) B R ξ h e = ξ ⟨v, hv⟩ ⟨e, hie⟩
       by_cases hleft : e.1.1 = v
       · subst v
         have hinc : IsRegionIncidentEdge (G := G) R e := Or.inl hv
@@ -593,7 +593,7 @@ theorem regionLocalOfGlobal_fiber_card (B : Tensor G d) (R : Finset V)
     · -- The free labels of a rebuilt configuration are the free labels.
       intro h _
       funext e
-      show regionGlobalOfLocal (G := G) B R ξ h e.1 = h e
+      change regionGlobalOfLocal (G := G) B R ξ h e.1 = h e
       rw [regionGlobalOfLocal, dif_neg e.2]
   · rw [Finset.card_univ, Fintype.card_pi]
     simp only [Fintype.card_fin]

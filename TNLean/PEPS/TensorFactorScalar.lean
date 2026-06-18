@@ -185,7 +185,7 @@ theorem threeLeg_residual_forms_scalar [Nonempty α] [Nonempty β] [Nonempty γ]
 
 section PiProduct
 
-variable {ι : Type*} [Fintype ι] [DecidableEq ι] {n : ι → Type*}
+variable {ι : Type*} [Fintype ι] {n : ι → Type*}
 variable [∀ i, Fintype (n i)] [∀ i, DecidableEq (n i)]
 
 omit [DecidableEq α] [DecidableEq β] [DecidableEq γ] in
@@ -202,7 +202,7 @@ theorem exists_ne_zero_row_of_isUnit {m : Type*} [Fintype m] [DecidableEq m]
   simp only [h0, zero_mul, Finset.sum_const_zero] at hval
   exact one_ne_zero hval.symm
 
-omit [DecidableEq α] [DecidableEq β] [DecidableEq γ] [Fintype ι] [DecidableEq ι] in
+omit [DecidableEq α] [DecidableEq β] [DecidableEq γ] [Fintype ι] in
 /-- A reference configuration: per leg, a base row paired with a column on which
 the invertible per-leg matrix is nonzero. -/
 theorem exists_ref_config (N : (i : ι) → Matrix (n i) (n i) ℂ)

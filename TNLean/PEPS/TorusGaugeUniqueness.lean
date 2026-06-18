@@ -463,7 +463,7 @@ theorem torusCovariantAbsorbedGauge_unique_classScalar
         (((xhStart + 1 : ℕ) : ZMod width), ((yhStart + 2 : ℕ) : ZMod height)) :=
       (torusRightEdge_endpoints_of_lt
         (p := (((xhStart + 1 : ℕ) : ZMod width), ((yhStart + 2 : ℕ) : ZMod height)))
-        (by show ((xhStart + 1 : ℕ) : ZMod width).val + 1 < width
+        (by change ((xhStart + 1 : ℕ) : ZMod width).val + 1 < width
             rw [ZMod.val_cast_of_lt (by omega : xhStart + 1 < width)]
             omega)).1
     -- The translated reference edge is the right edge at the translated left endpoint.
@@ -523,7 +523,7 @@ theorem torusCovariantAbsorbedGauge_unique_classScalar
         (((xhStart + 2 : ℕ) : ZMod width), ((yhStart + 1 : ℕ) : ZMod height)) :=
       (torusUpEdge_endpoints_of_lt
         (p := (((xhStart + 2 : ℕ) : ZMod width), ((yhStart + 1 : ℕ) : ZMod height)))
-        (by show ((yhStart + 1 : ℕ) : ZMod height).val + 1 < height
+        (by change ((yhStart + 1 : ℕ) : ZMod height).val + 1 < height
             rw [ZMod.val_cast_of_lt (by omega : yhStart + 1 < height)]
             omega)).1
     have hEeq : Edge.map (translate a b)

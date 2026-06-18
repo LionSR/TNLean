@@ -104,7 +104,6 @@ theorem regionInsertedCoeff_eq_blockTransferRow (A B : Tensor G d) (R : Finset V
     (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
     (hAB : SameState A B)
     (hposA : ∀ e : Edge G, 0 < A.bondDim e) (hposB : ∀ e : Edge G, 0 < B.bondDim e)
-    (hDim : A.bondDim = B.bondDim)
     (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
@@ -120,7 +119,7 @@ theorem regionInsertedCoeff_eq_blockTransferRow (A B : Tensor G d) (R : Finset V
       (funext (fun σ' =>
         (regionInsertedCoeff_eq_region_blockedMap A R f M σ' τ).symm))⟩
   -- The block-level image coincidence transports it into the second tensor's range.
-  rw [range_regionBlockedTensorMap_eq_of_sameState A B R hAB hCA hCB hposA hposB hDim]
+  rw [range_regionBlockedTensorMap_eq_of_sameState A B R hAB hCA hCB hposA hposB]
     at hmemA
   rw [LinearMap.mem_range] at hmemA
   obtain ⟨c, hc⟩ := hmemA
@@ -179,7 +178,7 @@ theorem regionBlockedTensorInjective_doubleCompl (A : Tensor G d) (R : Finset V)
     rw [Function.comp_apply, Function.comp_apply, LinearEquiv.funCongrLeft_apply,
       LinearMap.funLeft_apply]
     -- `Ψ bdry = regionDoubleComplBoundaryConfig bdry`, `Φ σ = regionDoubleComplPhysicalConfig σ`.
-    show regionBlockedTensorFamily (G := G) A (Finset.univ \ (Finset.univ \ R))
+    change regionBlockedTensorFamily (G := G) A (Finset.univ \ (Finset.univ \ R))
         (regionDoubleComplBoundaryConfig (G := G) A R bdry)
         (regionDoubleComplPhysicalConfig (V := V) (d := d) R σ) =
       regionBlockedTensorFamily (G := G) A R bdry σ
@@ -218,13 +217,12 @@ theorem range_regionBlockedTensorMap_compl_eq_of_sameState (A B : Tensor G d) (R
     (hAB : SameState A B)
     (hRA : RegionBlockedTensorInjective (G := G) A R)
     (hRB : RegionBlockedTensorInjective (G := G) B R)
-    (hposA : ∀ e : Edge G, 0 < A.bondDim e) (hposB : ∀ e : Edge G, 0 < B.bondDim e)
-    (hDim : A.bondDim = B.bondDim) :
+    (hposA : ∀ e : Edge G, 0 < A.bondDim e) (hposB : ∀ e : Edge G, 0 < B.bondDim e) :
     LinearMap.range (regionBlockedTensorMap (G := G) A (Finset.univ \ R)) =
       LinearMap.range (regionBlockedTensorMap (G := G) B (Finset.univ \ R)) :=
   range_regionBlockedTensorMap_eq_of_sameState A B (Finset.univ \ R) hAB
     (regionBlockedTensorInjective_doubleCompl A R hRA)
-    (regionBlockedTensorInjective_doubleCompl B R hRB) hposA hposB hDim
+    (regionBlockedTensorInjective_doubleCompl B R hRB) hposA hposB
 
 /-! ### The transfer kernel through the second tensor's complement block
 
@@ -261,7 +259,6 @@ theorem blockTransferRow_mem_range (A B : Tensor G d) (R : Finset V)
     (hRB : RegionBlockedTensorInjective (G := G) B R)
     (hAB : SameState A B)
     (hposA : ∀ e : Edge G, 0 < A.bondDim e) (hposB : ∀ e : Edge G, 0 < B.bondDim e)
-    (hDim : A.bondDim = B.bondDim)
     (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (μ : RegionBoundaryConfig (G := G) B R) :
@@ -275,7 +272,7 @@ theorem blockTransferRow_mem_range (A B : Tensor G d) (R : Finset V)
         LinearMap.range (regionBlockedTensorMap (G := G) B (Finset.univ \ R)) := by
     intro σ'
     rw [← range_regionBlockedTensorMap_compl_eq_of_sameState A B R hAB hRA hRB
-      hposA hposB hDim]
+      hposA hposB]
     rw [LinearMap.mem_range]
     exact ⟨regionComplementRow (G := G) A R f M σ',
       (funext (fun τ =>
@@ -320,7 +317,6 @@ theorem blockTransferRow_eq_complement_blockedMap (A B : Tensor G d) (R : Finset
     (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
     (hAB : SameState A B)
     (hposA : ∀ e : Edge G, 0 < A.bondDim e) (hposB : ∀ e : Edge G, 0 < B.bondDim e)
-    (hDim : A.bondDim = B.bondDim)
     (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (μ : RegionBoundaryConfig (G := G) B R) :
@@ -329,7 +325,7 @@ theorem blockTransferRow_eq_complement_blockedMap (A B : Tensor G d) (R : Finset
       regionBlockedTensorMap (G := G) B (Finset.univ \ R)
         (transferCoeff (G := G) A B R hRB hCB f M μ) := by
   obtain ⟨c, hc⟩ :=
-    blockTransferRow_mem_range A B R hRA hRB hAB hposA hposB hDim f M μ
+    blockTransferRow_mem_range A B R hRA hRB hAB hposA hposB f M μ
   -- `transferCoeff` is the complement left inverse of the transferred row coordinate,
   -- which is `regionBlockedTensorMap B (univ \ R) c` by the membership `hc`.
   have htc : transferCoeff (G := G) A B R hRB hCB f M μ = c := by
@@ -370,7 +366,6 @@ theorem regionInsertedCoeff_eq_doubleSum_transferCoeff_block (A B : Tensor G d) 
     (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
     (hAB : SameState A B)
     (hposA : ∀ e : Edge G, 0 < A.bondDim e) (hposB : ∀ e : Edge G, 0 < B.bondDim e)
-    (hDim : A.bondDim = B.bondDim)
     (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
@@ -382,12 +377,12 @@ theorem regionInsertedCoeff_eq_doubleSum_transferCoeff_block (A B : Tensor G d) 
             regionBlockedWeight (G := G) B (Finset.univ \ R) ν' τ *
             regionBlockedWeight (G := G) B R μ σ := by
   -- The region-side reading.
-  rw [regionInsertedCoeff_eq_blockTransferRow A B R hRB hCA hCB hAB hposA hposB hDim f M σ τ,
+  rw [regionInsertedCoeff_eq_blockTransferRow A B R hRB hCA hCB hAB hposA hposB f M σ τ,
     regionBlockedTensorMap_apply]
   refine Finset.sum_congr rfl (fun μ _ => ?_)
   -- The transferred row coordinate is the complement blocked map of the kernel.
   have hrow := congrFun
-    (blockTransferRow_eq_complement_blockedMap A B R hRA hRB hCB hAB hposA hposB hDim f M μ) τ
+    (blockTransferRow_eq_complement_blockedMap A B R hRA hRB hCB hAB hposA hposB f M μ) τ
   rw [hrow, regionBlockedTensorMap_apply, smul_eq_mul, Finset.sum_mul]
   refine Finset.sum_congr rfl (fun ν' _ => ?_)
   rw [smul_eq_mul]
@@ -425,7 +420,6 @@ theorem regionInsertedCoeff_eq_of_transferCoeff_form_block (A B : Tensor G d) (R
     (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
     (hAB : SameState A B)
     (hposA : ∀ e : Edge G, 0 < A.bondDim e) (hposB : ∀ e : Edge G, 0 < B.bondDim e)
-    (hDim : A.bondDim = B.bondDim)
     (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
@@ -441,7 +435,7 @@ theorem regionInsertedCoeff_eq_of_transferCoeff_form_block (A B : Tensor G d) (R
       regionInsertedCoeff (G := G) B R f N σ τ := by
   classical
   rw [regionInsertedCoeff_eq_doubleSum_transferCoeff_block A B R hRA hRB hCA hCB hAB
-      hposA hposB hDim f M σ τ,
+      hposA hposB f M σ τ,
     regionInsertedCoeff_eq]
   -- Reindex the second tensor's complement-boundary sum by the complement equivalence.
   set E := regionComplementBoundaryConfigEquiv (G := G) B R with hE
@@ -610,7 +604,6 @@ theorem transferCoeff_eq_incidentKernel_iff_coeff_eq (A B : Tensor G d) (R : Fin
     (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
     (hAB : SameState A B)
     (hposA : ∀ e : Edge G, 0 < A.bondDim e) (hposB : ∀ e : Edge G, 0 < B.bondDim e)
-    (hDim : A.bondDim = B.bondDim)
     (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) :
@@ -622,14 +615,14 @@ theorem transferCoeff_eq_incidentKernel_iff_coeff_eq (A B : Tensor G d) (R : Fin
   constructor
   · intro hker σ τ
     refine regionInsertedCoeff_eq_of_transferCoeff_form_block A B R hRA hRB hCA hCB hAB
-      hposA hposB hDim f M N (fun μ ν' => ?_) σ τ
+      hposA hposB f M N (fun μ ν' => ?_) σ τ
     have := congrFun (congrFun hker μ) ν'
     rwa [incidentKernel] at this
   · intro hcoeff
     -- Both kernels reproduce the same coefficient `coeff_A M = coeff_B N`; uniqueness.
     refine doubleSum_kernel_injective B R hRB hCB _ _ (fun σ τ => ?_)
     rw [← regionInsertedCoeff_eq_doubleSum_transferCoeff_block A B R hRA hRB hCA hCB hAB
-        hposA hposB hDim f M σ τ,
+        hposA hposB f M σ τ,
       doubleSum_incidentKernel_eq_regionInsertedCoeff B R f N σ τ, hcoeff σ τ]
 
 /-- **The transfer kernel of the identity is the incident kernel of the identity.**
@@ -654,7 +647,7 @@ theorem transferCoeff_one_eq_incidentKernel_one (A B : Tensor G d) (R : Finset V
     transferCoeff (G := G) A B R hRB hCB f 1 =
       incidentKernel (G := G) B R f 1 := by
   rw [transferCoeff_eq_incidentKernel_iff_coeff_eq A B R hRA hRB hCA hCB hAB
-    hposA hposB hDim f 1 1]
+    hposA hposB f 1 1]
   intro σ τ
   rw [regionInsertedCoeff_one_eq_stateCoeff (G := G) A R f σ τ,
     regionInsertedCoeff_one_eq_stateCoeff (G := G) B R f σ τ,
@@ -686,7 +679,6 @@ theorem coeffTransfer_iff_transferCoeff_incidentForm (A B : Tensor G d) (R : Fin
     (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
     (hAB : SameState A B)
     (hposA : ∀ e : Edge G, 0 < A.bondDim e) (hposB : ∀ e : Edge G, 0 < B.bondDim e)
-    (hDim : A.bondDim = B.bondDim)
     (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
     (∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
         ∃ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
@@ -700,7 +692,7 @@ theorem coeffTransfer_iff_transferCoeff_incidentForm (A B : Tensor G d) (R : Fin
   refine forall_congr' (fun M => ?_)
   refine exists_congr (fun N => ?_)
   exact (transferCoeff_eq_incidentKernel_iff_coeff_eq A B R hRA hRB hCA hCB hAB
-    hposA hposB hDim f M N).symm
+    hposA hposB f M N).symm
 
 /-! ### The per-edge gauge from a block-frame coefficient transfer
 

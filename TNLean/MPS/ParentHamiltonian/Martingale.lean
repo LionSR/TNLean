@@ -10,16 +10,18 @@ import TNLean.MPS.ParentHamiltonian.Martingale.Gap
 /-!
 # Martingale estimate for parent Hamiltonians
 
-The MPS parent-Hamiltonian spectral gap is reduced to a uniform Friedrichs-angle
-bound on adjacent local ground spaces. For the frustration-free sum of orthogonal
-projectors \(H=\sum_i h_i\), the principal-angle estimate on overlapping length-\(L\)
-windows yields the anticommutator inequality
+The MPS parent-Hamiltonian spectral gap is reduced to the anticommutator
+martingale condition stated in arXiv:2011.12127, Section IV.C. For the
+frustration-free sum of orthogonal projectors \(H=\sum_i h_i\), the required
+estimate for overlapping length-\(L\) windows has the form
 \(h_i h_j+h_j h_i \ge -c_{ij}(1-\gamma)(h_i+h_j)\) with row sums
 \(\sum_{j\ne i} c_{ij}\le 1\), since at most \(2(L-1)\) local terms overlap a
 given window. Together with \(h_i^2=h_i\) this gives the quadratic-form
 inequality \(H^2\ge \gamma H\), and the spectral theorem turns that into the
 norm bound \(\gamma\|v\|\le \|Hv\|\) on \((\ker H)^\perp\). The
-Friedrichs-angle estimate itself remains a separate hypothesis.
+MPS-specific anticommutator estimate remains a separate hypothesis. A
+norm-compression estimate from principal angles is also recorded as a sufficient
+stronger route.
 
 The four components are:
 
@@ -27,10 +29,10 @@ The four components are:
   `FrustrationFree.spectralGap_of_martingale` (quadratic form implies norm bound);
 * `Martingale.Transport` — Euclidean local projectors, ground-space and
   Hamiltonian transport, positivity, commutation, and kernel identification;
-* `Martingale.Reduction` — martingale quadratic-form reduction chain from
-  ordered cross-term bounds down to concrete cyclic-window Friedrichs;
-* `Martingale.Gap` — conditional gap theorems from the overlapping
-  cyclic-window estimate.
+* `Martingale.Reduction` — martingale quadratic-form reductions from ordered
+  cross-term and anticommutator bounds to concrete cyclic-window estimates;
+* `Martingale.Gap` — conditional gap theorems from the overlapping cyclic-window
+  anticommutator estimate and from sufficient norm-compression estimates.
 
 ## Argument
 
@@ -43,11 +45,13 @@ The four components are:
    the intersection of their kernels.
 4. **Martingale operator bound**: the intersection property identifies the
    kernels of overlapping local terms. The remaining quantitative input is the
-   Friedrichs-angle estimate, equivalently the anticommutator bound
+   anticommutator estimate
 
         \(h_i h_j+h_j h_i\ge -c_{ij}(1-\gamma)(h_i+h_j)\)
 
    with coefficients whose rows are summable uniformly in the chain length.
+   Principal-angle estimates may supply this bound through a norm-compression
+   inequality for the corresponding excitation projections.
 5. **Row-sum bound** \(\sum_{j\ne i} c_{ij}\le 1\): at most \(2(L-1)\) local terms
    overlap a given length-\(L\) cyclic window under the convention used here.
 6. **Quadratic form to norm bound**: combining these estimates with \(h_i^2=h_i\)
