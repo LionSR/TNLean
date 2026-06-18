@@ -209,19 +209,14 @@ variable {d D : ℕ}
 
 noncomputable section
 
-/-- Positive-definiteness of the identity matrix, used to make the Frobenius inner product
-nondegenerate. -/
-private lemma frobenius_posDef_one :
-    (1 : Matrix (Fin D) (Fin D) ℂ).PosDef := by
-  classical
-  simpa only using (Matrix.PosDef.one (n := Fin D) (R := ℂ))
-
 -- Frobenius norm / inner product from the weight matrix `1`.
 local instance : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
-  Matrix.toMatrixNormedAddCommGroup (n := Fin D) (𝕜 := ℂ) 1 frobenius_posDef_one
+  Matrix.toMatrixNormedAddCommGroup (n := Fin D) (𝕜 := ℂ) 1
+    (Matrix.PosDef.one (n := Fin D) (R := ℂ))
 
 local instance : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
-  Matrix.toMatrixInnerProductSpace (n := Fin D) (𝕜 := ℂ) 1 frobenius_posDef_one.posSemidef
+  Matrix.toMatrixInnerProductSpace (n := Fin D) (𝕜 := ℂ) 1
+    (Matrix.PosDef.one (n := Fin D) (R := ℂ)).posSemidef
 
 /-- Under the Frobenius inner product induced by the weight matrix `1`, we have
 `⟪X, Y⟫ = trace (Y * Xᴴ)`. -/
