@@ -101,7 +101,7 @@ section PositiveMapHermitian
 
 variable {n : Type*} [Finite n]
 
-/-- Reinterpret a positive matrix map as Mathlib's positive linear map. -/
+/-- Reinterpret a positive matrix map as a positive linear map. -/
 def IsPositiveMap.toPositiveLinearMap
     {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ} (hE : IsPositiveMap E) :
     Matrix n n ℂ →ₚ[ℂ] Matrix n n ℂ := by
@@ -114,10 +114,7 @@ def IsPositiveMap.toPositiveLinearMap
         rw [Matrix.le_iff] at hAB ⊢
         simpa [map_sub] using hE (B - A) hAB }
 
-/-- Positive maps preserve Hermiticity.
-
-This is the matrix form of Mathlib's `map_isSelfAdjoint` theorem for
-positive linear maps. -/
+/-- Positive maps preserve Hermiticity. -/
 theorem IsPositiveMap.map_isHermitian
     {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
     (hE : IsPositiveMap E) {X : Matrix n n ℂ} (hX : X.IsHermitian) :

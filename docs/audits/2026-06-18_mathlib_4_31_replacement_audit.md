@@ -56,9 +56,9 @@ The clearest replacements are:
   Mathlib 4.31 provides the required matrix `NonnegSpectrumClass` instance
   through `MatrixOrder`, and the non-unital CFC instance through
   `ContinuousFunctionalCalculus.toNonUnital`.
-- The remaining local deprecated-name aliases in non-Archive Lean code were
-  exact pass-through layers and have been removed after confirming that the
-  new names are used internally.
+- The remaining local deprecated-name aliases in non-Archive Lean code are exact
+  pass-through layers retained under their existing deprecation dates; internal
+  call sites use the new names.
 - Positive-map and completely-positive-map arguments should gradually acquire
   bridge lemmas to Mathlib's `PositiveLinearMap` and `CompletelyPositiveMap`.
   The first such bridge, `IsPositiveMap.toPositiveLinearMap`, is now used to
@@ -69,8 +69,9 @@ The clearest replacements are:
   future proofs of the Jensen axioms, not replacements for the present
   positive-map Jensen conclusions.
 - Four scalar-instance pass-through abbreviations in
-  `TNLean.Algebra.MatrixOperatorSpace` were removed.  Their few explicit users
-  now use the corresponding `inferInstance` arguments directly.
+  `TNLean.Algebra.MatrixOperatorSpace` are retained as deprecated abbreviations.
+  Their few explicit users now use the corresponding `inferInstance` arguments
+  directly.
 - The rectangular continuous-linear-map instance package formerly exported by
   `TNLean.Spectral.GaugeConstruction` has been removed.  The spectral-radius
   proofs now use Mathlib's `ContinuousLinearMap.toNormedRing`,
@@ -937,7 +938,8 @@ Current status:
 This was a genuine upgrade compatibility issue, separate from the replacement
 audit.  Its local repair is already present in the worktree.
 
-A follow-up pass removed four exact scalar-instance aliases from
+A follow-up pass removed explicit uses of four exact scalar-instance aliases
+from downstream proofs while retaining the names as deprecated abbreviations in
 `TNLean.Algebra.MatrixOperatorSpace`:
 
 - `complexPosSMulMonoDef`
@@ -945,7 +947,7 @@ A follow-up pass removed four exact scalar-instance aliases from
 - `matrixContinuousSMulReal`
 - `matrixScalarTowerRealComplex`
 
-The remaining semigroup proofs use the same instances directly through
+The remaining semigroup proofs use the same structures directly through
 `inferInstance`, including the fully explicit derivative arguments in
 `TNLean.Channel.Semigroup.Basic`, `TNLean.Channel.Semigroup.Kernel`, and
 `TNLean.Channel.Semigroup.Primitivity.Helpers`.
