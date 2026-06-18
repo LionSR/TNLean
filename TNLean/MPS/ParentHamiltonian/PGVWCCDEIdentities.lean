@@ -5,7 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.ParentHamiltonian.BlockIntersectionProperty
 
 /-!
-# PGVWC07 \(C^j,D^j,E^j\) identities from trace decompositions
+# \(C^j,D^j,E^j\) matrix identities from trace decompositions
 
 This file derives the word-valued \(C^j,D^j,E^j\) matrix identities from
 matching left and right block trace decompositions in arXiv:quant-ph/0608197,

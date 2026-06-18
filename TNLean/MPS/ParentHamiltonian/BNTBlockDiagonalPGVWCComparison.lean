@@ -374,8 +374,9 @@ word-indexed matrix identity
 for every boundary-crossing interval, local word \(\beta\) before the cut,
 and outside word \(\rho\), with \(D^j_\beta\) already specialized to
 \((\mu_j^NX_j)A^j_\beta\). The words \(\beta\) and \(\rho\) are formal
-word coordinates for the opened boundary comparison, refining the source
-end-site notation rather than replacing it. The normalized \(E^j\)-calculation
+word coordinates for the opened boundary comparison; they reindex the source
+end-site comparison by blocked words rather than replacing the source notation.
+The normalized \(E^j\)-calculation
 and the block-injective crossing-window argument then give the
 periodic-boundary single-block constraints, and hence the block-diagonal
 periodic-boundary equality.
