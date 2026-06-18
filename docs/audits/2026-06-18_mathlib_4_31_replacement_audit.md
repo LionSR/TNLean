@@ -56,9 +56,9 @@ The clearest replacements are:
   Mathlib 4.31 provides the required matrix `NonnegSpectrumClass` instance
   through `MatrixOrder`, and the non-unital CFC instance through
   `ContinuousFunctionalCalculus.toNonUnital`.
-- The remaining local deprecated-name aliases in non-Archive Lean code are exact
-  pass-through layers retained under their existing deprecation dates; internal
-  call sites use the new names.
+- The remaining local deprecated-name aliases in non-Archive Lean code were
+  exact pass-through layers and have been removed after confirming that the
+  new names are used internally.
 - Positive-map and completely-positive-map arguments should gradually acquire
   bridge lemmas to Mathlib's `PositiveLinearMap` and `CompletelyPositiveMap`.
   The first such bridge, `IsPositiveMap.toPositiveLinearMap`, is now used to
@@ -69,9 +69,8 @@ The clearest replacements are:
   future proofs of the Jensen axioms, not replacements for the present
   positive-map Jensen conclusions.
 - Four scalar-instance pass-through abbreviations in
-  `TNLean.Algebra.MatrixOperatorSpace` are retained as deprecated abbreviations.
-  Their few explicit users now use the corresponding `inferInstance` arguments
-  directly.
+  `TNLean.Algebra.MatrixOperatorSpace` were removed.  Their few explicit users
+  now use the corresponding `inferInstance` arguments directly.
 - The rectangular continuous-linear-map instance package formerly exported by
   `TNLean.Spectral.GaugeConstruction` has been removed.  The spectral-radius
   proofs now use Mathlib's `ContinuousLinearMap.toNormedRing`,
@@ -797,6 +796,22 @@ The current non-Archive `sorry` sites are in
 entropy axiom boundary as a direct missing step, and the operator-convexity
 axioms do not match their current goals.  No present `sorry` was closed by the
 remaining axioms in this recheck.
+
+The present usefulness check is:
+
+- `posMap_rpow_concave_jensen`, `posMap_rpow_convex_jensen`, and
+  `posMap_log_concave_jensen`: useful for the Schwarz/operator-convexity
+  family, but their conclusions are order inequalities for positive maps.
+  They do not address the compactness/coercivity step in Lorentz normal form or
+  the cyclic sector contraction in periodic overlap.
+- `lieb_concavity_axiom`: useful for Ando--Lieb trace concavity.  Its trace
+  inequality has no direct target among the current proof placeholders.
+- `Axioms.rfp_to_nncph_commute` and `Axioms.beigi_nncph_to_rfp`: useful for the
+  parent-Hamiltonian RFP--NNCPH equivalence.  They do not supply the sector
+  phase-coboundary contraction in `Case3.lean`.
+- `strong_subadditivity` and `hayashi_ssa_equality_characterization`: useful
+  for the entropy/MPDO Markov-chain branch.  They do not enter the Lorentz
+  normal form file or the periodic-overlap contraction.
 
 ### `TNLean/Channel/Semigroup/ProductFormula.lean`
 
