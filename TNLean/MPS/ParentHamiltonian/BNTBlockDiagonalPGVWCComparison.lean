@@ -212,6 +212,72 @@ theorem
   intro j i hi ρ β
   exact hC i ρ hi j β
 
+/-- Boundary-crossing local constraints give the block-diagonal periodic-boundary
+equality in the finite BNT range.
+
+Let
+\[
+  B=\bigoplus_j\mu_jA_j.
+\]
+Assume the normalized BNT block-separation hypotheses and the finite injectivity
+range. If every boundary-crossing interval has the simultaneous block-word
+spanning property needed to separate the block traces, then the local constraint
+for a vector in \(\mathcal G_{N,L}(B)\) gives the Pérez-García--Verstraete--Wolf--
+Cirac \(C^j,D^j\) comparison. The preceding theorem then shows that the
+corresponding block components lie in the single-block periodic chain spaces.
+Consequently
+\[
+  \mathcal G_{N,L}(B)=\bigvee_j\mathcal G_{N,L}(A_j),
+\]
+and the length-\(N\) single-block spaces are independent.
+
+This is the equality-level form of PGVWC07, Theorem 12, proof lines 1436--1451,
+specialized to the block-diagonal boundary conditions of
+arXiv:2011.12127, Section IV.C, lines 2126--2128.
+
+**Scope restriction (crossing span):** The theorem assumes that the simultaneous
+block-word tuples of length \(N-i\) span the product algebra for each
+boundary-crossing interval beginning at \(i\). Removing this visible span
+hypothesis from the finite BNT range is part of the remaining PGVWC07
+boundary-comparison cleanup recorded in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
+
+**Unfaithful:** This proof still relies on
+`exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1`
+for the block-diagonal boundary representation of \(\psi\). Documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
+derive that representation and the crossing comparison from the source
+boundary-condition argument; tracked in issue 2971. -/
+theorem
+    chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_crossing_pgvwc_comparison
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hμ : ∀ k : Fin r, μ k ≠ 0)
+    {L₀ L N : ℕ}
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hL₀ : 0 < L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
+    (hRange :
+      (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
+    (hNlarge : L + L₀ ≤ N)
+    (hCrossingSpan :
+      ∀ i : Fin N, N < i.val + L → WordTupleSpanTop A (N - i.val)) :
+    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N =
+        ⨆ j : Fin r, chainGroundSpace (A j) L N ∧
+      iSupIndep (fun j : Fin r => groundSpace (A j) N) := by
+  exact
+    chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_blockBoundary
+      μ A hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange
+      (fun ψ hψ =>
+        exists_blockDiagonal_boundary_chainGroundSpace_of_crossing_pgvwc_comparison_bnt_c1
+          μ A hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange
+          hNlarge hCrossingSpan hψ)
+
 /-- The \(C^j,D^j\) boundary-condition comparison gives the block-diagonal
 periodic-boundary equality in the finite BNT range.
 
