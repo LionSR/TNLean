@@ -497,6 +497,11 @@ Applied bridge:
 - The proof of `IsPositiveMap.map_isHermitian` now applies Mathlib's
   `map_isSelfAdjoint` to this bridge, replacing the local CFC positive-part /
   negative-part decomposition.
+- `TNLean/Channel/Schwarz/PositiveMapProperties.lean` now proves
+  `IsPositiveMap.map_le_map` by the monotonicity of the bridged
+  `PositiveLinearMap`, and proves `IsPositiveMap.map_conjTranspose` from
+  Mathlib's star-preservation theorem for positive maps between C-star
+  algebras.
 - The direct imports of the CFC basic and positive-part files were removed from
   `TNLean/Channel/Basic.lean`; the needed Mathlib theorem is provided by
   `Mathlib.Analysis.CStarAlgebra.PositiveLinearMap`.
