@@ -58,6 +58,11 @@ The clearest replacements are:
   `ContinuousFunctionalCalculus.toNonUnital`.
 - Positive-map and completely-positive-map arguments should gradually acquire
   bridge lemmas to Mathlib's `PositiveLinearMap` and `CompletelyPositiveMap`.
+- The remaining non-Archive axioms were checked.  They are all still used, and
+  Mathlib 4.31 does not yet contain direct replacements for their statements.
+  The operator-concavity facts newly available in Mathlib are useful inputs for
+  future proofs of the Jensen axioms, not replacements for the present
+  positive-map Jensen conclusions.
 
 There are also important non-replacements.
 
@@ -499,6 +504,15 @@ has been removed.  Its two instances are available directly from Mathlib 4.31:
 `Matrix.instNonnegSpectrumClass` under `open scoped MatrixOrder`, and
 `ContinuousFunctionalCalculus.toNonUnital`.
 
+The same `MatrixOrder` scoped instance also replaces the private local matrix
+`NonnegSpectrumClass` aliases that were present in:
+
+- `TNLean/Analysis/OperatorConvexity.lean`
+- `TNLean/Axioms/OperatorConvexity.lean`
+- `TNLean/Channel/Schwarz/OperatorMonotone.lean`
+- `TNLean/Channel/Schwarz/OperatorConvexity.lean`
+- `TNLean/Channel/Schwarz/AndoLieb.lean`
+
 Mathlib 4.31 can strengthen the order-theoretic part of these arguments, but
 the trace Jensen inequalities and matrix-trace CFC formulas remain
 TNLean-specific.
@@ -515,6 +529,56 @@ Recommended action:
   inequalities for positive or completely positive maps.
 - Consider upstreaming source-independent trace-CFC lemmas once their
   assumptions are clean.
+
+### Sanctioned axiom audit
+
+The non-Archive Lean sources contain eight actual axiom declarations:
+
+- `posMap_rpow_concave_jensen`
+- `posMap_rpow_convex_jensen`
+- `posMap_log_concave_jensen`
+- `lieb_concavity_axiom`
+- `Axioms.rfp_to_nncph_commute`
+- `Axioms.beigi_nncph_to_rfp`
+- `strong_subadditivity`
+- `hayashi_ssa_equality_characterization`
+
+All eight have downstream uses.  None is an unused declaration that can be
+deleted without changing the present chain of proved results.
+
+Mathlib 4.31 gives useful new ingredients for the first and third operator
+axioms:
+
+- `CFC.concaveOn_rpow`
+- `CFC.concaveOn_log`
+- `CFC.rpow_le_rpow`
+- `CFC.log_le_log`
+- the `PositiveLinearMap` and `CompletelyPositiveMap` structures
+
+These do not prove the current axioms directly.  The current statements are
+Jensen inequalities after applying an arbitrary positive subunital or unital
+map on a matrix algebra.  The missing formal theorem is the
+Hansen--Pedersen/Choi--Davis--Jensen passage from operator concavity to
+positive-map Jensen.  The local file
+`TNLean/Channel/Schwarz/OperatorJensenAux.lean` already contains part of the
+finite-POVM compression route toward the concave real-power case.
+
+For `posMap_rpow_convex_jensen`, Mathlib's
+`CFC.Rpow.Order` still lists operator convexity of `rpow` on `[1, 2]` as a
+TODO.  For `lieb_concavity_axiom`, no Mathlib theorem was found for Lieb's
+joint concavity in the matrix-trace form used by TNLean.
+
+For the two Beigi/CPSV parent-Hamiltonian axioms, no Mathlib material was
+found for matrix product states, nearest-neighbor commuting Hamiltonian
+ground-space classification, or the RFP--NNCPH bridge.  These remain
+project-specific mathematical assumptions.
+
+For the two entropy axioms, Mathlib 4.31 has classical information-theoretic
+entropy material, but no finite-dimensional quantum von Neumann strong
+subadditivity theorem and no Hayashi/Ruskai/Hayden--Jozsa--Petz--Winter
+equality characterization in the form stated here.  These axioms remain
+necessary until the quantum relative-entropy and Markov-decomposition
+formalization is supplied locally or upstream.
 
 ### Projection and continuous-linear-map API
 
@@ -796,6 +860,14 @@ lake env lean TNLean/MPS/Periodic/Overlap/SelfOverlapSetup.lean --json
 lake env lean TNLean/MPS/Periodic/Overlap/Dichotomy.lean --json
 lake env lean TNLean/MPS/Periodic/FundamentalTheorem.lean --json
 lake env lean TNLean/MPS/Periodic/Symmetry/Theorem41Forward.lean --json
+lake env lean TNLean/Axioms/OperatorConvexity.lean --json
+lake env lean TNLean/Analysis/OperatorConvexity.lean --json
+lake env lean TNLean/Channel/Schwarz/OperatorMonotone.lean --json
+lake env lean TNLean/Channel/Schwarz/OperatorConvexity.lean --json
+lake env lean TNLean/Channel/Schwarz/AndoLieb.lean --json
+lake build TNLean.Analysis.OperatorConvexity TNLean.Axioms.OperatorConvexity \
+  TNLean.Channel.Schwarz.OperatorMonotone TNLean.Channel.Schwarz.OperatorConvexity \
+  TNLean.Channel.Schwarz.AndoLieb -q --log-level=info
 ```
 
 The final root build also succeeds:

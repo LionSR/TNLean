@@ -59,8 +59,6 @@ private local instance instOperatorMonotonePartialOrder : PartialOrder Mat :=
   Matrix.instPartialOrder
 private local instance instOperatorMonotoneStarOrderedRing : StarOrderedRing Mat :=
   Matrix.instStarOrderedRing
-private local instance instOperatorMonotoneNonnegSpectrumClass : NonnegSpectrumClass ℝ Mat :=
-  Matrix.instNonnegSpectrumClass
 private local instance instOperatorMonotoneCStarAlgebra : CStarAlgebra Mat :=
   CStarAlgebra.mk
 
