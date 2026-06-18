@@ -61,6 +61,8 @@ The clearest replacements are:
   new names are used internally.
 - Positive-map and completely-positive-map arguments should gradually acquire
   bridge lemmas to Mathlib's `PositiveLinearMap` and `CompletelyPositiveMap`.
+  The first such bridge, `IsPositiveMap.toPositiveLinearMap`, is now used to
+  prove `IsPositiveMap.map_isHermitian` from Mathlib's `map_isSelfAdjoint`.
 - The remaining non-Archive axioms were checked.  They are all still used, and
   Mathlib 4.31 does not yet contain direct replacements for their statements.
   The operator-concavity facts newly available in Mathlib are useful inputs for
@@ -454,7 +456,7 @@ Relevant declarations and structures include:
 
 - `PositiveLinearMap`
 - `PositiveLinearMap.exists_norm_apply_le`
-- `PositiveLinearMap.map_isSelfAdjoint`
+- `map_isSelfAdjoint`
 - `PositiveLinearMap.apply_le_of_isSelfAdjoint`
 - `PositiveLinearMap.norm_apply_le_of_nonneg`
 - `CompletelyPositiveMap`
@@ -479,13 +481,25 @@ used by Wolf's notes.
 Recommended action:
 
 - Do not replace the local channel definitions wholesale.
-- Add bridge lemmas in a separate layer:
+- Add bridge lemmas:
   local Kraus positivity implies a Mathlib `CompletelyPositiveMap`, and
   Mathlib complete positivity implies the local finite-dimensional positivity
   statements when transported to matrices.
 - Use `PositiveLinearMap` to replace local proofs of self-adjointness,
-  monotonicity, and boundedness only after the bridge exists.
+  monotonicity, and boundedness when this does not change the public channel
+  vocabulary.
 - Keep Choi, Kraus, Stinespring, partial trace, and tensor-map statements local.
+
+Applied bridge:
+
+- `TNLean/Channel/Basic.lean` now defines
+  `IsPositiveMap.toPositiveLinearMap`.
+- The proof of `IsPositiveMap.map_isHermitian` now applies Mathlib's
+  `map_isSelfAdjoint` to this bridge, replacing the local CFC positive-part /
+  negative-part decomposition.
+- The direct imports of the CFC basic and positive-part files were removed from
+  `TNLean/Channel/Basic.lean`; the needed Mathlib theorem is provided by
+  `Mathlib.Analysis.CStarAlgebra.PositiveLinearMap`.
 
 ### Operator convexity, monotonicity, and CFC
 
