@@ -702,7 +702,7 @@ theorem edgeInsertedCoeff_reindexTensor (B : Tensor G d) {bd : Edge G → ℕ}
   -- The matrix entry: `(reindexAlgEquiv (finCongr) N) (cast i) (cast k) = N i k`.
   have hN : (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun h e)) N)
       (Fin.cast (congr_fun h e) i) (Fin.cast (congr_fun h e) k) = N i k := by
-    rw [Matrix.reindexAlgEquiv_apply, Matrix.reindex_apply, Matrix.submatrix_apply]
+    rw [Matrix.coe_reindexAlgEquiv, Matrix.reindex_apply, Matrix.submatrix_apply]
     simp
   rw [hN]
   -- The product factor reindexes the doubled configuration through the cast.

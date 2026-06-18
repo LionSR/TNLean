@@ -93,7 +93,7 @@ theorem reindexAlgEquiv_transpose {m n : ℕ} (h : m = n)
     (N : Matrix (Fin m) (Fin m) ℂ) :
     Matrix.reindexAlgEquiv ℂ ℂ (finCongr h) Nᵀ =
       (Matrix.reindexAlgEquiv ℂ ℂ (finCongr h) N)ᵀ := by
-  simp only [Matrix.reindexAlgEquiv_apply, Matrix.reindex_apply,
+  simp only [Matrix.coe_reindexAlgEquiv, Matrix.reindex_apply,
     Matrix.transpose_submatrix]
 
 /-- **Per-edge gauge family from the edge-blocked insertion algebra
