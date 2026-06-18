@@ -143,6 +143,10 @@ private lemma rpow_eq_cfc_power {A : Mat} (hA : 0 ≤ A) (hH : A.IsHermitian) (p
   rw [CFC.rpow_eq_cfc_real (a := A) (y := p) hA]
   exact hH.cfc_eq _
 
+private lemma hermitian_cfc_neg {A : Mat} (hH : A.IsHermitian) (f : ℝ → ℝ) :
+    hH.cfc (fun x => -f x) = -(hH.cfc f) := by
+  rw [← hH.cfc_eq, ← hH.cfc_eq, _root_.cfc_neg f]
+
 /-- Expand `(t • A) *ᵥ v` to `(t : ℂ) • (A *ᵥ v)` without relying on
 `Matrix.smul_mulVec`, which fails to unify due to an elaboration quirk in
 the real-scalar instance chain on `Matrix _ _ ℂ`. -/
@@ -302,12 +306,8 @@ theorem trace_rpow_concave
   have hbound := trace_cfc_convex_bound hconvex_neg hPSD₁ hPSD₂ ht₀ h1mt hPSD
   -- Unfold `cfc (-f)` on each Hermitian to `-(cfc f)` and push the minus
   -- through `trace.re`.
-  rw [show hPSD.1.cfc (fun x => -f x) = -(hPSD.1.cfc f) by
-      rw [← hPSD.1.cfc_eq, ← hPSD.1.cfc_eq, _root_.cfc_neg f],
-    show hPSD₁.1.cfc (fun x => -f x) = -(hPSD₁.1.cfc f) by
-      rw [← hPSD₁.1.cfc_eq, ← hPSD₁.1.cfc_eq, _root_.cfc_neg f],
-    show hPSD₂.1.cfc (fun x => -f x) = -(hPSD₂.1.cfc f) by
-      rw [← hPSD₂.1.cfc_eq, ← hPSD₂.1.cfc_eq, _root_.cfc_neg f]] at hbound
+  rw [hermitian_cfc_neg hPSD.1 f, hermitian_cfc_neg hPSD₁.1 f,
+    hermitian_cfc_neg hPSD₂.1 f] at hbound
   simp only [Matrix.trace_neg, Complex.neg_re, mul_neg] at hbound
   rw [rpow_eq_cfc_power hA₁ hPSD₁.1, rpow_eq_cfc_power hA₂ hPSD₂.1,
     rpow_eq_cfc_power hPSD.nonneg hPSD.1]
