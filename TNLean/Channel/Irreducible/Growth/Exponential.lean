@@ -155,7 +155,6 @@ private theorem tsum_posDef_of_posDef_initial_segment
   rw [hsplit]
   exact htrunc_pd.add_posSemidef htail_psd
 
-set_option maxHeartbeats 4000000 in
 -- Vanishing PSD quadratic forms determine kernel vectors.
 private theorem posSemidef_mulVec_eq_zero_of_not_dot_pos
     {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.PosSemidef)
@@ -173,7 +172,6 @@ private theorem posSemidef_mulVec_eq_zero_of_not_dot_pos
     exact Complex.ext h_re_zero him_zero.symm
   exact (hM.dotProduct_mulVec_zero_iff v).mp hq_zero
 
-set_option maxHeartbeats 4000000 in
 -- A vanishing PSD sum forces each summand to vanish.
 private theorem posSemidef_sum_mulVec_eq_zero_of_mem
     {ι : Type*} {s : Finset ι}
@@ -190,7 +188,7 @@ private theorem posSemidef_sum_mulVec_eq_zero_of_mem
         (fun i hi => (hterm i hi).dotProduct_mulVec_nonneg v)).mp hsum_q_zero k hk
   exact ((hterm k hk).dotProduct_mulVec_zero_iff v).mp hqterm_zero
 
-set_option maxHeartbeats 4000000 in -- Evaluates the operator exponential series at a matrix.
+-- Evaluates the operator exponential series at a matrix.
 private theorem exp_apply_terms_summable
     (Φ : TNLean.MatrixCLM (Fin D)) (A : Matrix (Fin D) (Fin D) ℂ) :
     Summable (fun n : ℕ => ((n.factorial : ℂ)⁻¹) • ((Φ ^ n : TNLean.MatrixCLM (Fin D)) A)) := by
@@ -202,7 +200,7 @@ private theorem exp_apply_terms_summable
   change Summable (fun n : ℕ => ((n.factorial : ℂ)⁻¹) • evA (Φ ^ n))
   exact h
 
-set_option maxHeartbeats 4000000 in -- Evaluates the exponential series identity at a matrix.
+-- Evaluates the exponential series identity at a matrix.
 private theorem exp_apply_eq_tsum_terms
     (Φ : TNLean.MatrixCLM (Fin D)) (A : Matrix (Fin D) (Fin D) ℂ) :
     (NormedSpace.exp Φ) A =
