@@ -1,0 +1,367 @@
+%======================================================================
+% Region-transport covariance and torus translation covariance
+%======================================================================
+
+\begin{theorem}[Transport of the complement-side blocked weight]%
+    \label{thm:peps_regionComplementWeight_transport}
+    \lean{TNLean.PEPS.regionComplementWeight_transport}
+    \leanok
+    \uses{def:peps_tensor_transport, def:peps_regionComplementTwoBlock}
+    Let $\phi:G\simeq G'$ be a graph isomorphism.  The blocked weight of the
+    transported tensor $A^\phi$ over the complement of the image region, read at
+    the image complement boundary configuration and the image complement physical
+    configuration, equals the blocked weight of $A$ over $V\setminus R$:
+    \[
+        T_{A^\phi,V'\setminus\phi(R)}^{(\phi\cdot\eta)^c}(\phi\cdot\tau)
+        =
+        T_{A,V\setminus R}^{\eta^c}(\tau).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    The image of the complement of $R$ is the complement of the image of $R$, and
+    after this identification the blocked weight transports along $\phi$ by the
+    change of summation variables on virtual configurations.
+\end{proof}
+
+\begin{theorem}[Transport preserves agreement away from a bond]%
+    \label{thm:peps_sameAwayFromBond_regionBoundaryConfigMap}
+    \lean{TNLean.PEPS.sameAwayFromBond_regionBoundaryConfigMap}
+    \leanok
+    \uses{thm:peps_regionComplementWeight_transport}
+    Let $\phi:G\simeq G'$ be a graph isomorphism and let $f$ be a crossing edge
+    of $R$.  Two crossing-edge labels of $R$ agree away from $f$ if and only if
+    their images under the boundary reindex induced by $\phi$ agree away from the
+    image of $f$.
+\end{theorem}
+\begin{proof}\leanok
+    The boundary reindex is a bijection on crossing edges that carries $f$ to its
+    image, so it carries the crossing edges other than $f$ bijectively to the
+    crossing edges other than the image of $f$.  Agreement on the former family
+    is therefore equivalent to agreement on the latter.
+\end{proof}
+
+\begin{theorem}[Covariance of the region insertion coefficient]%
+    \label{thm:peps_regionInsertedCoeff_transport}
+    \lean{TNLean.PEPS.regionInsertedCoeff_transport}
+    \leanok
+    \uses{def:peps_regionInsertedCoeff, def:peps_tensor_transport,
+        thm:peps_regionComplementWeight_transport,
+        thm:peps_sameAwayFromBond_regionBoundaryConfigMap}
+    Let $\phi:G\simeq G'$ be a graph isomorphism and let $f$ be a crossing edge
+    of $R$.  The region insertion coefficient of the transported tensor $A^\phi$
+    over the image region, with $M$ inserted on the image of $f$ and the physical
+    configurations relabelled by $\phi$, equals the region insertion coefficient
+    of $A$ over $R$, with $M$ carried back to the bond of $A$ at $f$:
+    \[
+        C_{A^\phi}\bigl(\phi(R),\phi(f),M;\phi\cdot\sigma,\phi\cdot\tau\bigr)
+        =
+        C_A\bigl(R,f,\phi^{*}M;\sigma,\tau\bigr).
+    \]
+    No endpoint orientation enters: the matrix is inserted between the two single
+    boundary values on the edge.
+\end{theorem}
+\begin{proof}\leanok
+    The two crossing-label sums reindex by the boundary action of $\phi$, the
+    agreement-away-from-$f$ constraint is preserved by
+    Theorem~\ref{thm:peps_sameAwayFromBond_regionBoundaryConfigMap}, the region
+    weight transports along $\phi$, and the complement weight transports by
+    Theorem~\ref{thm:peps_regionComplementWeight_transport}.  The inserted matrix
+    entry is read at the two boundary values, which the bond-dimension
+    identification carries to the corresponding entry of $\phi^{*}M$.
+\end{proof}
+
+\begin{theorem}[Region insertion coefficient under an equality of tensors]%
+    \label{thm:peps_regionInsertedCoeff_congrTensor}
+    \lean{TNLean.PEPS.regionInsertedCoeff_congrTensor}
+    \leanok
+    \uses{def:peps_regionInsertedCoeff}
+    If two tensors are equal, then their region insertion coefficients are equal,
+    with the inserted matrix carried across the induced equality of bond
+    dimensions:
+    \[
+        A_1=A_2
+        \quad\Longrightarrow\quad
+        C_{A_1}(R,f,M;\sigma,\tau)
+        =
+        C_{A_2}\bigl(R,f,\psi M;\sigma,\tau\bigr).
+    \]
+    This applies to any tensor equality $A_1=A_2$, including the equality between
+    a translation-invariant tensor and its transported copy.
+\end{theorem}
+\begin{proof}\leanok
+    Substituting the equality of tensors identifies the two coefficients, and the
+    induced equality of bond dimensions is the identity, so the carried matrix is
+    the original one.
+\end{proof}
+
+\begin{theorem}[Bond dimension at a translated crossing edge]%
+    \label{thm:peps_bondDim_boundaryEdgeMap_translate}
+    \lean{TNLean.PEPS.bondDim_boundaryEdgeMap_translate}
+    \leanok
+    \uses{def:peps_torus_translation_invariant,
+        def:peps_torus_geometry_translation}
+    Let $A$ be translation invariant on the discrete torus, let $f$ be a crossing
+    edge of $R$, and let $T_{a,b}$ be a translation.  The bond dimension of $A$
+    at the translated crossing edge equals its bond dimension at the reference
+    crossing edge:
+    \[
+        D_A\bigl(T_{a,b}(f)\bigr)=D_A(f).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Translation carries the reference edge to its image, and translation
+    invariance fixes the tensor under transport, so the bond dimension is
+    unchanged.
+\end{proof}
+
+\begin{theorem}[Translation covariance of the coefficient identity]%
+    \label{thm:peps_regionInsertedCoeff_translate_coeffIdentity}
+    \lean{TNLean.PEPS.regionInsertedCoeff_translate_coeffIdentity}
+    \leanok
+    \uses{thm:peps_regionInsertedCoeff_transport,
+        thm:peps_regionInsertedCoeff_congrTensor,
+        thm:peps_bondDim_boundaryEdgeMap_translate,
+        def:peps_torus_translation_invariant}
+    Let $A$ and $B$ be translation invariant on the discrete torus, and let $f$ be
+    a crossing edge of $R$.  Suppose a map $g$ realizes the coefficient identity
+    at the reference edge:
+    \[
+        C_A(R,f,M;\sigma,\tau)
+        =
+        C_B\bigl(R,f,g(M);\sigma,\tau\bigr).
+    \]
+    Then, for every translation $T_{a,b}$, the same identity holds at the
+    translated crossing edge of the translated region, with the inserted matrix
+    carried between the translated and reference bonds:
+    \[
+        C_A\bigl(T_{a,b}(R),T_{a,b}(f),M';
+            T_{a,b}\cdot\sigma,T_{a,b}\cdot\tau\bigr)
+        =
+        C_B\bigl(T_{a,b}(R),T_{a,b}(f),
+            \widehat{g}(M');
+            T_{a,b}\cdot\sigma,T_{a,b}\cdot\tau\bigr),
+    \]
+    where $\widehat{g}$ applies $g$ to the reference-bond reindex of $M'$ and
+    carries the result back to the translated bond.
+\end{theorem}
+\begin{proof}\leanok
+    Translation invariance identifies the transported tensor with the original,
+    so Theorem~\ref{thm:peps_regionInsertedCoeff_transport} carries the reference
+    coefficient of $A$ to the translated edge with no change of tensor;
+    Theorem~\ref{thm:peps_regionInsertedCoeff_congrTensor} mediates the literal
+    and transported tensors.  Applying the reference identity for $g$ and
+    transporting back for $B$ in the same way gives the displayed equality, the
+    inserted matrix being carried across the equal bond dimensions of
+    Theorem~\ref{thm:peps_bondDim_boundaryEdgeMap_translate}.
+\end{proof}
+
+\begin{definition}[Single-vertex two-block tensor]%
+    \label{def:peps_vertexTwoBlock}
+    \lean{TNLean.PEPS.vertexTwoBlock}
+    \leanok
+    \uses{def:peps_tensor}
+    Fix a vertex $v$.  The single-vertex tensor $A_v$ is regarded as a
+    two-block tensor whose shared bonds are the edges incident to $v$, whose
+    external boundary is a one-point space, and whose physical index is the
+    physical index at $v$:
+    \[
+        T_v(*,\eta,\sigma)=A_v(\eta,\sigma).
+    \]
+\end{definition}
+
+\begin{theorem}[Injectivity of the single-vertex two-block tensor]%
+    \label{thm:peps_isTwoBlockInjective_vertexTwoBlock}
+    \lean{TNLean.PEPS.isTwoBlockInjective_vertexTwoBlock}
+    \leanok
+    \uses{def:IsVertexInjective, def:peps_vertexTwoBlock}
+    If $A$ is vertex-injective, then the single-vertex two-block tensor at every
+    vertex is injective.
+\end{theorem}
+\begin{proof}\leanok
+    Vertex injectivity is linear independence of the coefficient family
+    $\eta\mapsto A_v(\eta,-)$.  The auxiliary one-point boundary only reindexes
+    this same family, so the two-block injectivity condition is the same linear
+    independence statement.
+\end{proof}
+
+\begin{definition}[Complement two-block tensor]%
+    \label{def:peps_complementTwoBlock}
+    \lean{TNLean.PEPS.complementTwoBlock}
+    \leanok
+    \uses{def:peps_tensor}
+    For a vertex $v$, the complementary block $V\setminus\{v\}$ defines a
+    two-block tensor on the same incident shared bonds. Its coefficient is the
+    contraction of all tensors away from $v$, with the incident bond indices
+    left open at the complement endpoints:
+    \[
+        T_{v^c}(*,\eta,\tau)=A_{v^c}(\eta,\tau).
+    \]
+\end{definition}
+
+\begin{theorem}[Injectivity of the vertex-complement contraction]%
+    \label{thm:peps_vertexComplementTensorInjective}
+    \lean{TNLean.PEPS.vertexComplementTensorInjective_of_isVertexInjective}
+    \leanok
+    \uses{def:IsVertexInjective, def:peps_tensor}
+    If $A$ is vertex-injective and every virtual bond space has positive
+    dimension, then the coefficient family
+    \[
+        \eta\longmapsto \bigl(\tau\longmapsto A_{v^c}(\eta,\tau)\bigr)
+    \]
+    of the vertex-complement contraction is linearly independent.
+\end{theorem}
+\begin{proof}\leanok
+    Let $c=(c_\eta)_\eta$ be a finite coefficient family on the open star of
+    $v$. For a set $S\subseteq V\setminus\{v\}$, let $K_S(c)$ be the assertion
+    that for every virtual configuration $\zeta_0$ and physical configuration
+    $\tau$,
+    \[
+        \sum_{\zeta}
+        \mathbf 1[
+                \zeta_f=\zeta_{0,f}\text{ for every edge }f
+                \text{ whose endpoints are outside }S]\,
+        c_{\zeta|_{\operatorname{Star}(v)}}
+        \prod_{w\in S} A_w(\zeta|_{\operatorname{Star}(w)},\tau_w)=0 .
+    \]
+    The initial vanishing of the complement contraction is exactly
+    $K_{V\setminus\{v\}}(c)$. If $j\in S$ and $j\neq v$, the one-sided inverse at
+    the vertex $j$ separates the local tensor $A_j$ and gives
+    $K_S(c)\Rightarrow K_{S\setminus\{j\}}(c)$. Iterating this implication over
+    the complement vertices gives $K_\varnothing(c)$. At $S=\varnothing$ the
+    exposed virtual indices are all fixed by $\zeta_0$; positive bond dimensions
+    allow $\zeta_0$ to realize any prescribed star configuration at $v$. Hence
+    every coefficient $c_\eta$ is zero.
+\end{proof}
+
+\begin{theorem}[Injectivity of the complement two-block tensor]%
+    \label{thm:peps_isTwoBlockInjective_complementTwoBlock}
+    \lean{TNLean.PEPS.isTwoBlockInjective_complementTwoBlock}
+    \leanok
+    \uses{def:IsVertexInjective, def:peps_complementTwoBlock,
+        thm:peps_vertexComplementTensorInjective}
+    If $A$ is vertex-injective and every virtual bond space has positive
+    dimension, then the complement two-block tensor at every vertex is
+    injective.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_vertexComplementTensorInjective}
+    The previous theorem gives linear independence of the coefficient family
+    $\eta\mapsto A_{v^c}(\eta,-)$. The two-block tensor only adds a one-point
+    external boundary, so this is the same injectivity condition after the
+    harmless reindexing $(*,\eta)\leftrightarrow\eta$.
+\end{proof}
+
+\begin{theorem}[One-vertex versus complement comparison]%
+    \label{thm:peps_oneVertexComplementComparison}
+    \lean{TNLean.PEPS.one_vertex_complement_comparison}
+    \leanok
+    \uses{thm:peps_postAbsorptionEdgeInsertionEquality,
+        thm:peps_twoInjectiveTensorInsertionComparison}
+    Let the shared bond type and the two external boundary spaces be nonempty.
+    After the edge gauges have been absorbed into the second tensor family
+    $\widetilde B$, block one vertex $v$ against its complement. Assume that
+    $A_v,A_{v^c},\widetilde B_v,\widetilde B_{v^c}$ are injective as two-block
+    tensors. The post-absorption insertion equality gives, for every shared
+    bond $b$, every matrix $X\in\MN{D_b}$, and all external and
+    physical indices,
+    \[
+        C_{A_v,A_{v^c}}(b,X;\eta_v,\eta_{v^c},\sigma_v,\sigma_{v^c})
+        =
+        C_{\widetilde B_v,\widetilde B_{v^c}}
+        (b,X;\eta_v,\eta_{v^c},\sigma_v,\sigma_{v^c}).
+    \]
+    Then
+    \[
+        \exists\lambda_v\in\C^\times,\qquad
+        A_v=\lambda_v\widetilde B_v.
+    \]
+    \begin{center}
+        \TNPEPSOneVertexComplementComparison
+    \end{center}
+    This is the final local comparison following the post-absorption insertion
+    equality in \cite[Section~3]{Molnar2018NormalPEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    With $A_1=A_v$, $A_2=A_{v^c}$, $B_1=\widetilde B_v$, and
+    $B_2=\widetilde B_{v^c}$, the post-absorption equality is precisely
+    \[
+        \forall b,X,\eta_v,\eta_{v^c},\sigma_v,\sigma_{v^c},\quad
+        C_{A_1,A_2}(b,X;\eta_v,\eta_{v^c},\sigma_v,\sigma_{v^c})
+        =
+        C_{B_1,B_2}(b,X;\eta_v,\eta_{v^c},\sigma_v,\sigma_{v^c}).
+    \]
+    Theorem~\ref{thm:peps_twoInjectiveTensorInsertionComparison} gives
+    \[
+        \exists\lambda_v\in\mathbb C^\times,\qquad
+        A_v=\lambda_v\widetilde B_v,\qquad
+        A_{v^c}=\lambda_v^{-1}\widetilde B_{v^c}.
+    \]
+    The desired local proportionality is the first equality.
+\end{proof}
+
+\begin{remark}[Normal-region form]
+    The normal-region application in \cite[Section~4]{Molnar2018NormalPEPS}
+    uses the same scalar comparison after comparing two injective regions
+    $R\subset S=R\cup\{v\}$. If the region comparisons give
+    $A_R=\lambda_R\widetilde B_R$ and
+    $A_S=\lambda_S\widetilde B_S$, then the source-paper diagram reads
+    \[
+        A_R A_v
+        =
+        A_S
+        =
+        \lambda_S\widetilde B_S
+        =
+        \lambda_S\widetilde B_R\widetilde B_v.
+    \]
+    Applying the left inverse supplied by injectivity of the block
+    $A_R=\lambda_R\widetilde B_R$ gives
+    $A_v=(\lambda_S/\lambda_R)\widetilde B_v$.
+\end{remark}
+
+\begin{theorem}[Fundamental Theorem for injective PEPS, conditional on
+        bond-dimension equality]%
+    \label{thm:fundamentalTheorem_PEPS_of_bondDim}
+    \lean{TNLean.PEPS.fundamentalTheorem_PEPS_of_bondDim}
+    \leanok
+    \uses{thm:gaugeConsistency, thm:peps_oneVertexComplementComparison,
+        def:GaugeEquivPEPS, def:IsVertexInjective}
+    Suppose that the corresponding virtual edge spaces of $A$ and $B$ are
+    already identified, every virtual bond of $A$ has positive dimension, and
+    the graph is connected.
+    If $A$ and $B$ are vertex-injective and give the same PEPS state, then
+    there are invertible matrices $X_e$, one for each edge, such that at every
+    vertex the tensor $B_v$ is obtained from $A_v$ by the oriented endpoint
+    action of the incident matrices.
+\end{theorem}
+\begin{proof}\leanok
+    Gauge consistency supplies the edge gauges directly, and the gauge
+    equivalence packages them with the identified bond dimensions.
+\end{proof}
+
+\begin{theorem}[Fundamental Theorem for injective PEPS]%
+    \label{thm:fundamentalTheorem_PEPS}
+    \lean{TNLean.PEPS.fundamentalTheorem_PEPS}
+    \leanok
+    % Scope restriction: this is the positive-bond variant of Theorem 2 in
+    % \cite{Molnar2018NormalPEPS}. The elimination plan for the positivity
+    % hypotheses is recorded in
+    % \path{docs/paper-gaps/peps_injective_ft_section3_route.tex}.
+    \uses{thm:fundamentalTheorem_PEPS_of_bondDim, def:GaugeEquivPEPS,
+        def:IsVertexInjective}
+    Let $A$ and $B$ be vertex-injective PEPS tensors on a finite simple
+    graph, and suppose every virtual bond of $A$ and $B$ has positive
+    dimension and that the graph is connected. If they give the same PEPS
+    state, then their corresponding
+    virtual edge spaces have the same dimensions and, after identifying these
+    spaces, there are invertible matrices $X_e$, one for each edge, such that
+    $B_v$ is obtained from $A_v$ by the oriented endpoint action of the matrices
+    incident to $v$.
+\end{theorem}
+\begin{proof}\leanok
+    The bond dimensions agree edgewise, because blocking around an edge gives
+    two injective three-site chains whose matched matrix insertions on that bond
+    form an algebra equivalence between the two bond matrix algebras, forcing
+    equal sizes. With the bond dimensions identified, the conditional form of
+    the theorem applies.
+\end{proof}
