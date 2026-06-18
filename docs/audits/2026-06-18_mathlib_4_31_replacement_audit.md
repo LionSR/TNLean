@@ -136,6 +136,8 @@ Recommended action:
 
 - Do not rename or replace `nilpIndex` by `LinearMap.index`.
 - Continue to use Mathlib's `ker_pow_*` stabilization lemmas.
+- Use the Mathlib 4.31 name `LinearMap.coe_restrict_apply` rather than the
+  deprecated `LinearMap.restrict_coe_apply`.
 - Keep the project-specific nilpotent-index lemmas local unless Mathlib later
   gains a dedicated generalized-eigenspace-index API.
 
