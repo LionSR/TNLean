@@ -69,6 +69,11 @@ The clearest replacements are:
 - Four scalar-instance pass-through abbreviations in
   `TNLean.Algebra.MatrixOperatorSpace` were removed.  Their few explicit users
   now use the corresponding `inferInstance` arguments directly.
+- The rectangular continuous-linear-map instance package formerly exported by
+  `TNLean.Spectral.GaugeConstruction` has been removed.  The spectral-radius
+  proofs now use Mathlib's `ContinuousLinearMap.toNormedRing`,
+  `ContinuousLinearMap.toNormedAlgebra`, and local finite-dimensional
+  completeness proofs directly.
 
 There are also important non-replacements.
 
@@ -868,6 +873,26 @@ The remaining semigroup proofs use the same instances directly through
 `TNLean.Channel.Semigroup.Basic`, `TNLean.Channel.Semigroup.Kernel`, and
 `TNLean.Channel.Semigroup.Primitivity.Helpers`.
 
+A further pass removed the rectangular continuous-linear-map declarations from
+`TNLean.Spectral.GaugeConstruction`:
+
+- `instGCFiniteDimensionalMatrixCLM`
+- `instGCNormedAddCommGroupMatrixCLM`
+- `instGCNormedRingMatrixCLM`
+- `instGCSeminormedRingMatrixCLM`
+- `instGCNormedAlgebraMatrixCLM`
+- `instGCCompleteSpaceMatrixCLM`
+
+These were exact local wrappers around the continuous-linear-map normed-ring
+and finite-dimensional-completeness infrastructure.  The spectral and
+string-order proofs now use Mathlib's
+`ContinuousLinearMap.toNormedAddCommGroup`,
+`ContinuousLinearMap.toSeminormedRing`, `ContinuousLinearMap.toNormedRing`,
+`ContinuousLinearMap.toNormedSpace`, and
+`ContinuousLinearMap.toNormedAlgebra` directly, with local
+`FiniteDimensional.complete` proofs where spectrum or power-decay lemmas need
+completeness.
+
 ## Verification performed
 
 The Mathlib cache was fetched for the 4.31 worktree.  An initial cache fetch
@@ -909,6 +934,14 @@ lake build TNLean.Analysis.OperatorConvexity TNLean.Axioms.OperatorConvexity \
 lake env lean TNLean/Algebra/MatrixAux.lean --json
 lake env lean TNLean/Spectral/GaugeConstruction.lean --json
 lake env lean TNLean/Spectral/TransferOperatorGapNT.lean --json
+lake env lean TNLean/Spectral/TransferOperatorGapRect.lean
+lake env lean TNLean/Spectral/PrimitiveOverlap.lean
+lake env lean TNLean/Spectral/MPVOverlapDecay.lean
+lake env lean TNLean/MPS/Symmetry/StringOrderDefs.lean
+lake build TNLean.Spectral.GaugeConstruction TNLean.Spectral.TransferOperatorGap \
+  TNLean.Spectral.TransferOperatorGapRect TNLean.Spectral.TransferOperatorGapNT \
+  TNLean.Spectral.PrimitiveOverlap TNLean.Spectral.MPVOverlapDecay \
+  TNLean.MPS.Symmetry.StringOrderDefs -q --log-level=info
 lake env lean TNLean/Channel/Irreducible/Growth/OneStep.lean --json
 lake env lean TNLean/Channel/Irreducible/Growth/Preservation.lean --json
 lake env lean TNLean/Channel/Irreducible/Growth/KernelDescent.lean --json

@@ -63,11 +63,9 @@ noncomputable scoped instance : NormedAlgebra ℂ (Matrix (Fin D) (Fin D) ℂ) :
   Matrix.linftyOpNormedAlgebra
 
 attribute [local instance]
-  instGCFiniteDimensionalMatrixCLM
-  instGCNormedAddCommGroupMatrixCLM
-  instGCNormedRingMatrixCLM
-  instGCNormedAlgebraMatrixCLM
-  instGCCompleteSpaceMatrixCLM
+  ContinuousLinearMap.toNormedAddCommGroup
+  ContinuousLinearMap.toNormedRing
+  ContinuousLinearMap.toNormedAlgebra
 
 /-! ### Spectral radius of the mixed transfer operator -/
 
@@ -435,6 +433,11 @@ theorem modulus_one_eigenvalue_implies_gauge
   let V := Matrix (Fin D) (Fin D) ℂ
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
   let F' : V →L[ℂ] V := Φ (mixedTransferMap A B)
+  letI : NormedAddCommGroup (V →L[ℂ] V) := ContinuousLinearMap.toNormedAddCommGroup
+  letI : SeminormedRing (V →L[ℂ] V) := ContinuousLinearMap.toSeminormedRing
+  letI : NormedRing (V →L[ℂ] V) := ContinuousLinearMap.toNormedRing
+  letI : NormedSpace ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedSpace
+  letI : NormedAlgebra ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedAlgebra
   haveI : CompleteSpace V := FiniteDimensional.complete ℂ V
   haveI : FiniteDimensional ℂ (V →L[ℂ] V) :=
     Φ.toLinearEquiv.finiteDimensional
@@ -448,10 +451,12 @@ theorem modulus_one_eigenvalue_implies_gauge
   -- Spectral radius is achieved
   obtain ⟨μ, hμ_spec, hμ_norm⟩ :=
     @spectrum.exists_nnnorm_eq_spectralRadius_of_nonempty ℂ _ _
-      (instGCNormedRingMatrixCLM D D) (instGCNormedAlgebraMatrixCLM D D)
-      (instGCCompleteSpaceMatrixCLM D D) inferInstance (a := F')
-      (@spectrum.nonempty _ (instGCNormedRingMatrixCLM D D)
-        (instGCNormedAlgebraMatrixCLM D D) (instGCCompleteSpaceMatrixCLM D D) inferInstance F')
+      (ContinuousLinearMap.toNormedRing : NormedRing (V →L[ℂ] V))
+      (ContinuousLinearMap.toNormedAlgebra : NormedAlgebra ℂ (V →L[ℂ] V))
+      inferInstance inferInstance (a := F')
+      (@spectrum.nonempty _ (ContinuousLinearMap.toNormedRing : NormedRing (V →L[ℂ] V))
+        (ContinuousLinearMap.toNormedAlgebra : NormedAlgebra ℂ (V →L[ℂ] V))
+        inferInstance inferInstance F')
   -- Transfer to eigenvalue of the linear map
   have h_spec_eq := AlgEquiv.spectrum_eq Φ (mixedTransferMap A B)
   have hμ_spec_end : μ ∈ spectrum ℂ (mixedTransferMap A B) := h_spec_eq ▸ hμ_spec
@@ -517,14 +522,34 @@ theorem mixedTransfer_pow_tendsto_zero
     Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)
   let F' : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ :=
     Φ (mixedTransferMap A B)
-  letI : CompleteSpace
+  letI : NormedAddCommGroup
       (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
-    instGCCompleteSpaceMatrixCLM D D
+    ContinuousLinearMap.toNormedAddCommGroup
+  letI : SeminormedRing
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    ContinuousLinearMap.toSeminormedRing
+  letI : NormedRing
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    ContinuousLinearMap.toNormedRing
+  letI : NormedSpace ℂ
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    ContinuousLinearMap.toNormedSpace
+  letI : NormedAlgebra ℂ
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    ContinuousLinearMap.toNormedAlgebra
+  haveI : FiniteDimensional ℂ
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    Φ.toLinearEquiv.finiteDimensional
+  have hComplete : CompleteSpace
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    FiniteDimensional.complete ℂ
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
+  letI : CompleteSpace
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) := hComplete
   have h_clm : Filter.Tendsto (fun n => F' ^ n) Filter.atTop (nhds 0) :=
     @pow_tendsto_zero_of_spectralRadius_lt_one
       (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
-      (instGCNormedRingMatrixCLM D D) (instGCCompleteSpaceMatrixCLM D D)
-      (instGCNormedAlgebraMatrixCLM D D) F'
+      ContinuousLinearMap.toNormedRing hComplete ContinuousLinearMap.toNormedAlgebra F'
       (spectralRadius_mixedTransfer_lt_one A B hA hB hA_norm hB_norm hAB)
   have h_eval :
       Filter.Tendsto (fun n =>
@@ -536,7 +561,7 @@ theorem mixedTransfer_pow_tendsto_zero
         Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) X)‖ ≤
         ‖F' ^ n‖ * ‖X‖
       exact (F' ^ n).le_opNorm X
-    · simpa [instGCNormedRingMatrixCLM] using (tendsto_norm_zero.comp h_clm).mul_const ‖X‖
+    · simpa using (tendsto_norm_zero.comp h_clm).mul_const ‖X‖
   suffices ∀ n,
       ((mixedTransferMap A B) ^ n) X =
         ((F' ^ n :

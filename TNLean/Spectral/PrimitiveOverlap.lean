@@ -42,11 +42,10 @@ open scoped Matrix ComplexOrder BigOperators NNReal ENNReal
 open Matrix Filter
 
 attribute [local instance]
-  instGCNormedAddCommGroupMatrixCLM
-  instGCNormedRingMatrixCLM
-  instGCSeminormedRingMatrixCLM
-  instGCNormedAlgebraMatrixCLM
-  instGCCompleteSpaceMatrixCLM
+  ContinuousLinearMap.toNormedAddCommGroup
+  ContinuousLinearMap.toNormedRing
+  ContinuousLinearMap.toSeminormedRing
+  ContinuousLinearMap.toNormedAlgebra
 
 namespace MPSTensor
 
@@ -102,8 +101,15 @@ theorem linearMap_trace_pow_tendsto_one_of_spectralRadius_compl_lt_one
   letI : FiniteDimensional ℂ V := by infer_instance
   letI : CompleteSpace V := FiniteDimensional.complete ℂ V
   letI : Nontrivial V := by infer_instance
-  letI : CompleteSpace (V →L[ℂ] V) := instGCCompleteSpaceMatrixCLM D D
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
+  letI : NormedAddCommGroup (V →L[ℂ] V) := ContinuousLinearMap.toNormedAddCommGroup
+  letI : SeminormedRing (V →L[ℂ] V) := ContinuousLinearMap.toSeminormedRing
+  letI : NormedRing (V →L[ℂ] V) := ContinuousLinearMap.toNormedRing
+  letI : NormedSpace ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedSpace
+  letI : NormedAlgebra ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedAlgebra
+  haveI : FiniteDimensional ℂ (V →L[ℂ] V) := Φ.toLinearEquiv.finiteDimensional
+  have hComplete : CompleteSpace (V →L[ℂ] V) := FiniteDimensional.complete ℂ (V →L[ℂ] V)
+  letI : CompleteSpace (V →L[ℂ] V) := hComplete
   let P : V →ₗ[ℂ] V := fixedPointProj (D := D) ρ htr
   let N : V →ₗ[ℂ] V := E - P
   have hSpectN : spectralRadius ℂ (Φ N) < 1 := by
@@ -115,8 +121,9 @@ theorem linearMap_trace_pow_tendsto_one_of_spectralRadius_compl_lt_one
     by
       exact
         @pow_tendsto_zero_of_spectralRadius_lt_one (V →L[ℂ] V)
-          (instGCNormedRingMatrixCLM D D) (instGCCompleteSpaceMatrixCLM D D)
-          (instGCNormedAlgebraMatrixCLM D D) (Φ N)
+          (ContinuousLinearMap.toNormedRing : NormedRing (V →L[ℂ] V))
+          hComplete
+          (ContinuousLinearMap.toNormedAlgebra : NormedAlgebra ℂ (V →L[ℂ] V)) (Φ N)
           hSpectN
   have hNtrace0' :
       Filter.Tendsto

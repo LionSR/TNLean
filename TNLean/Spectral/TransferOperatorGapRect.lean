@@ -51,11 +51,9 @@ namespace MPSTensor
 variable {d D₁ D₂ : ℕ}
 
 attribute [local instance] Matrix.linftyOpNormedAddCommGroup Matrix.linftyOpNormedSpace
-  instGCFiniteDimensionalMatrixCLM
-  instGCNormedAddCommGroupMatrixCLM
-  instGCNormedRingMatrixCLM
-  instGCNormedAlgebraMatrixCLM
-  instGCCompleteSpaceMatrixCLM
+  ContinuousLinearMap.toNormedAddCommGroup
+  ContinuousLinearMap.toNormedRing
+  ContinuousLinearMap.toNormedAlgebra
 
 /-! ## Rectangular spectral radius abbreviation -/
 
@@ -321,27 +319,63 @@ theorem mixedTransferSpectralRadius₂_lt_one_of_dim_ne
   rw [mixedTransferSpectralRadius₂_eq] at hEq
   set F : (Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ :=
     (Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ)) (mixedTransferMap₂ A B)
+  letI : NormedAddCommGroup
+      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
+    ContinuousLinearMap.toNormedAddCommGroup
+  letI : SeminormedRing
+      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
+    ContinuousLinearMap.toSeminormedRing
+  letI : NormedRing
+      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
+    ContinuousLinearMap.toNormedRing
+  letI : NormedSpace ℂ
+      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
+    ContinuousLinearMap.toNormedSpace
+  letI : NormedAlgebra ℂ
+      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
+    ContinuousLinearMap.toNormedAlgebra
+  haveI : FiniteDimensional ℂ
+      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
+    (Module.End.toContinuousLinearMap
+      (Matrix (Fin D₁) (Fin D₂) ℂ)).toLinearEquiv.finiteDimensional
+  letI : CompleteSpace
+      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
+    FiniteDimensional.complete ℂ
+      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ)
   have hEqF : spectralRadius ℂ F = 1 := by
     change spectralRadius ℂ F = 1 at hEq
     exact hEq
   -- If `spectralRadius = 1`, pick `μ ∈ spectrum` with `‖μ‖ = 1`.
-  -- Use `@` to supply the `instGC*` instances explicitly, avoiding a `UniformSpace` diamond
-  -- between the strong topology and the operator-norm topology on `E →L[ℂ] E`.
+  -- Use `@` to keep the operator-norm topology on `E →L[ℂ] E` explicit.
   obtain ⟨μ, hμ_spec, hμ_rad⟩ :=
     @spectrum.exists_nnnorm_eq_spectralRadius_of_nonempty ℂ _ _
-      (instGCNormedRingMatrixCLM D₁ D₂) (instGCNormedAlgebraMatrixCLM D₁ D₂)
-      (instGCCompleteSpaceMatrixCLM D₁ D₂) inferInstance (a := F)
-      (@spectrum.nonempty _ (instGCNormedRingMatrixCLM D₁ D₂)
-        (instGCNormedAlgebraMatrixCLM D₁ D₂) (instGCCompleteSpaceMatrixCLM D₁ D₂) inferInstance F)
+      (ContinuousLinearMap.toNormedRing :
+        NormedRing
+          ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ))
+      (ContinuousLinearMap.toNormedAlgebra :
+        NormedAlgebra ℂ
+          ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ))
+      inferInstance inferInstance (a := F)
+      (@spectrum.nonempty _
+        (ContinuousLinearMap.toNormedRing :
+          NormedRing
+            ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ))
+        (ContinuousLinearMap.toNormedAlgebra :
+          NormedAlgebra ℂ
+            ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ))
+        inferInstance inferInstance F)
   have hμ_one : (↑‖μ‖₊ : ENNReal) = 1 := hμ_rad.trans hEqF
   have hμ_nnn : ‖μ‖₊ = (1 : NNReal) := (ENNReal.coe_eq_one).1 hμ_one
   have hμ_norm : ‖μ‖ = 1 := by
     have : (‖μ‖₊ : ℝ) = (1 : ℝ) := by exact_mod_cast hμ_nnn
     simpa [coe_nnnorm] using this
   -- Convert `μ ∈ spectrum` to an eigenvalue of the linear map `mixedTransferMap₂ A B`.
+  let Φ :
+      ((Matrix (Fin D₁) (Fin D₂) ℂ) →ₗ[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) ≃ₐ[ℂ]
+        ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
+    Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ)
   have h_spec :=
-    AlgEquiv.spectrum_eq
-      (Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ)) (mixedTransferMap₂ A B)
+    AlgEquiv.spectrum_eq Φ (mixedTransferMap₂ A B)
   have hμ_spec' : μ ∈ spectrum ℂ (mixedTransferMap₂ A B) := by
     have hμ_clm : μ ∈ spectrum ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ))
@@ -360,7 +394,9 @@ theorem mixedTransferSpectralRadius₂_lt_one_of_dim_ne
       hA hB hA_norm hB_norm X μ hFX hμ_norm hX_ne
   exact hD hDim
 
-/-- **Overlap decay for dimension-mismatched tensors**: `mpvOverlap A B N → 0` when `D₁ ≠ D₂`. -/
+/-- **Overlap decay for dimension-mismatched tensors.**
+
+`mpvOverlap A B N → 0` when `D₁ ≠ D₂`. -/
 theorem mpvOverlap_tendsto_zero_of_dim_ne
     {d D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)

@@ -33,11 +33,10 @@ The main equivalence theorems live in `TNLean.MPS.Symmetry.StringOrder`.
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
 attribute [local instance]
-  instGCNormedAddCommGroupMatrixCLM
-  instGCNormedRingMatrixCLM
-  instGCSeminormedRingMatrixCLM
-  instGCNormedAlgebraMatrixCLM
-  instGCCompleteSpaceMatrixCLM
+  ContinuousLinearMap.toNormedAddCommGroup
+  ContinuousLinearMap.toNormedRing
+  ContinuousLinearMap.toSeminormedRing
+  ContinuousLinearMap.toNormedAlgebra
 
 namespace MPSTensor
 
@@ -236,13 +235,31 @@ lemma stringOrderBoundaryParam_tendsto_zero_of_spectralRadius_lt_one
       Filter.atTop (nhds 0) := by
   let F' : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ :=
     (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) (twistedTransferMap A u)
+  letI : NormedAddCommGroup
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    ContinuousLinearMap.toNormedAddCommGroup
+  letI : SeminormedRing
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    ContinuousLinearMap.toSeminormedRing
+  letI : NormedRing
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    ContinuousLinearMap.toNormedRing
+  letI : NormedSpace ℂ
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    ContinuousLinearMap.toNormedSpace
+  letI : NormedAlgebra ℂ
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    ContinuousLinearMap.toNormedAlgebra
   haveI : FiniteDimensional ℂ
       (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
     (Module.End.toContinuousLinearMap
       (Matrix (Fin D) (Fin D) ℂ)).toLinearEquiv.finiteDimensional
-  letI : CompleteSpace
+  have hComplete : CompleteSpace
       (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
-    instGCCompleteSpaceMatrixCLM D D
+    FiniteDimensional.complete ℂ
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
+  letI : CompleteSpace
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) := hComplete
   have hsrF : spectralRadius ℂ F' < 1 := by
     change spectralRadius ℂ
       (((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
@@ -252,8 +269,7 @@ lemma stringOrderBoundaryParam_tendsto_zero_of_spectralRadius_lt_one
   have hpow : Filter.Tendsto (fun L => F' ^ L) Filter.atTop (nhds 0) :=
     @pow_tendsto_zero_of_spectralRadius_lt_one
       (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
-      (instGCNormedRingMatrixCLM D D) (instGCCompleteSpaceMatrixCLM D D)
-      (instGCNormedAlgebraMatrixCLM D D) F' hsrF
+      ContinuousLinearMap.toNormedRing hComplete ContinuousLinearMap.toNormedAlgebra F' hsrF
   have hIter0 :
       Filter.Tendsto (fun L => ((twistedTransferMap A u) ^ L) Y)
         Filter.atTop (nhds 0) := by
