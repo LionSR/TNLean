@@ -29,8 +29,8 @@ The clearest replacements are:
   `Matrix.det_gram_ne_zero_iff_linearIndependent`, while retaining the local
   convergence packaging.
 - Several finite-dimensional matrix-dimension wrappers in
-  `TNLean/Algebra/MatrixAux.lean` can be reduced to `Module.finrank_matrix` and
-  elementary simplification.
+  `TNLean/Algebra/MatrixAux.lean` have been removed or reduced to direct
+  Mathlib finite-rank arguments.
 - The local finite-sum wrapper `Matrix.sum_mul_mul` was only a specialization
   of Mathlib's `Matrix.sum_mul` and `Matrix.mul_sum`, and has been removed.
 - Trace-from-characteristic-polynomial wrappers can be shortened using the
@@ -222,24 +222,24 @@ Relevant declarations include:
 - `Matrix.rank_transpose`
 - `Matrix.rank_add_rank_le_card_of_mul_eq_zero`
 
-TNLean has local finite-dimensional wrappers such as:
+TNLean had local finite-dimensional wrappers such as:
 
 - `Matrix.finrank_matrix_fin_eq_sq`
 - `Matrix.finrank_top_matrix_fin_eq_sq`
 - `Matrix.dim_le_of_mulVec_injective`
 
-Known downstream uses include:
-
-- `TNLean/Wielandt/SpanGrowth/InvertibleWordSpan.lean`
-- `TNLean/MPS/ParentHamiltonian/GroundSpace.lean`
+The square-dimension wrappers and the rectangular injectivity-to-dimension
+wrapper have now been removed.  The remaining rectangular dimension arguments
+in `TNLean/Spectral/GaugeConstruction.lean` and
+`TNLean/Spectral/TransferOperatorGapNT.lean` use
+`Matrix.toLin'` together with `LinearMap.finrank_le_finrank_of_injective`
+directly.
 
 Recommended action:
 
-- Replace square-dimension wrappers by `Module.finrank_matrix` plus
-  simplification.
-- Replace injectivity-to-dimension arguments by
-  `LinearMap.finrank_le_finrank_of_injective` when the map has already been
-  expressed as a linear map.
+- Prefer `Module.finrank_matrix`, `Matrix.toLin'`, and
+  `LinearMap.finrank_le_finrank_of_injective` directly for future
+  dimension-counting proofs.
 - Use `Matrix.sum_mul` and `Matrix.mul_sum` directly for fixed matrix factors
   pulled through finite sums; the former local wrapper `Matrix.sum_mul_mul` has
   been removed from `TNLean/Algebra/MatrixAux.lean`.
@@ -637,14 +637,14 @@ be limited to any remaining elementary kernel-stabilization arguments.
 
 ### `TNLean/Algebra/MatrixAux.lean`
 
-Status: several wrappers are candidates for deletion or shrinking.
+Status: the finite-dimensional and finite-sum wrappers have been removed.
 
-Likely replacements:
+Completed replacements:
 
 - `finrank_matrix_fin_eq_sq` by `Module.finrank_matrix`.
 - `finrank_top_matrix_fin_eq_sq` by `Module.finrank_matrix` and top-submodule
   simplification.
-- `dim_le_of_mulVec_injective` by
+- `dim_le_of_mulVec_injective` by direct uses of `Matrix.toLin'` and
   `LinearMap.finrank_le_finrank_of_injective`.
 - `trace_eq_of_charpoly_eq` by Mathlib trace/charpoly coefficient lemmas.
 - Elementary sum-distribution lemmas by `Matrix.sum_mul`, `Matrix.mul_sum`,
@@ -868,6 +868,20 @@ lake env lean TNLean/Channel/Schwarz/AndoLieb.lean --json
 lake build TNLean.Analysis.OperatorConvexity TNLean.Axioms.OperatorConvexity \
   TNLean.Channel.Schwarz.OperatorMonotone TNLean.Channel.Schwarz.OperatorConvexity \
   TNLean.Channel.Schwarz.AndoLieb -q --log-level=info
+lake env lean TNLean/Algebra/MatrixAux.lean --json
+lake env lean TNLean/Spectral/GaugeConstruction.lean --json
+lake env lean TNLean/Spectral/TransferOperatorGapNT.lean --json
+lake env lean TNLean/Channel/Irreducible/Growth/OneStep.lean --json
+lake env lean TNLean/Channel/Irreducible/Growth/Preservation.lean --json
+lake env lean TNLean/Channel/Irreducible/Growth/KernelDescent.lean --json
+lake env lean TNLean/Channel/Peripheral/GroupStructure.lean --json
+lake env lean TNLean/Spectral/TransferOperatorGap.lean --json
+lake env lean TNLean/PiAlgebra/CanonicalFormSepAux.lean --json
+lake build TNLean.Algebra.MatrixAux TNLean.Spectral.GaugeConstruction \
+  TNLean.Spectral.TransferOperatorGapNT TNLean.Spectral.TransferOperatorGap \
+  TNLean.Channel.Irreducible.Growth.KernelDescent \
+  TNLean.Channel.Peripheral.GroupStructure TNLean.PiAlgebra.CanonicalFormSepAux \
+  -q --log-level=info
 ```
 
 The final root build also succeeds:
