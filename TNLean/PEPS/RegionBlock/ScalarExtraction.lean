@@ -359,7 +359,11 @@ theorem component_eq_of_regionProportional (A Btilde : Tensor G d) (R : Finset V
     rw [RegionBlockedTensorInjective, Fintype.linearIndependent_iff] at hli
     refine hli g ?_
     funext ρ
-    simpa using hcomb ρ
+    simp only [Finset.sum_apply, Pi.smul_apply, smul_eq_mul, Pi.zero_apply]
+    trans ∑ b : RegionBoundaryConfig (G := G) A R,
+        g b * regionBlockedTensorFamily (G := G) C R b ρ
+    · exact Finset.sum_congr rfl (fun _ _ => rfl)
+    · exact hcomb ρ
   -- The bridge fiber of `boundaryLabelOfInsert μ η` over the consistent configs is `{η}`.
   have hgη : g (boundaryLabelOfInsert (G := G) A R hv μ η)
       = c_R * A.component v η σv - c_S * C.component v η σv := by

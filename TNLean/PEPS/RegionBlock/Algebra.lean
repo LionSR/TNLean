@@ -88,8 +88,12 @@ theorem regionComplementWeight_linearIndependent (A : Tensor G d) (R : Finset V)
     intro x y hxy
     funext f
     have := congrFun hxy (regionBoundaryEdgeToCompl (G := G) R f)
-    simpa [regionComplementBoundaryConfig, regionBoundaryEdgeToCompl,
-      regionBoundaryEdgeComplEquiv, Equiv.subtypeEquivRight] using this
+    convert this using 1
+    · rfl
+    · exact (heq_of_eq
+        (regionComplementBoundaryConfig_apply_toCompl (G := G) A R f x)).symm
+    · exact (heq_of_eq
+        (regionComplementBoundaryConfig_apply_toCompl (G := G) A R f y)).symm
   have hfam : (fun ν : RegionBoundaryConfig (G := G) A R =>
         fun τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R) =>
           regionBlockedWeight (G := G) A (Finset.univ \ R)

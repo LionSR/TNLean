@@ -188,9 +188,12 @@ theorem posDef_of_ker_subset_irreducible_cp
         hQ_herm.eq, Matrix.conjTranspose_zero] at this
       rwa [← Matrix.mul_assoc] at this
     suffices h_vec : ∀ v, (Q * (K i)ᴴ * (1 - Q)) *ᵥ v = 0 by
-      ext a b; simpa only [zero_apply, mulVec, dotProduct, Pi.single_apply, mul_ite, mul_one,
-        mul_zero, sum_ite_eq', mem_univ, ↓reduceIte, Pi.zero_apply] using
-        congr_fun (h_vec (Pi.single b 1)) a
+      ext a b
+      change (Q * (K i)ᴴ * (1 - Q)) a b = 0
+      have h_entry := congr_fun (h_vec (Pi.single b 1)) a
+      change ((Q * (K i)ᴴ * (1 - Q)) *ᵥ Pi.single b 1) a = 0 at h_entry
+      simpa only [mulVec, dotProduct, Pi.single_apply, mul_ite, mul_one,
+        mul_zero, sum_ite_eq', mem_univ, ↓reduceIte] using h_entry
     intro v
     rw [show (Q * (K i)ᴴ * (1 - Q)) *ᵥ v = Q *ᵥ ((K i)ᴴ *ᵥ ((1 - Q) *ᵥ v)) from by
       simp only [Matrix.mul_assoc, Matrix.mulVec_mulVec]]

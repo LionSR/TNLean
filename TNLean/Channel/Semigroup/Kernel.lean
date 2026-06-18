@@ -37,7 +37,7 @@ These statements are the semigroup-side kernel/fixed-point connections needed fo
 Wolf Chapter 7.
 -/
 
-open scoped Matrix ComplexOrder BigOperators NNReal TNOperatorSpace
+open scoped Matrix Matrix.Norms.Operator ComplexOrder BigOperators NNReal TNOperatorSpace
 open Matrix Finset NormedSpace
 
 noncomputable section
@@ -81,14 +81,51 @@ nonnegative time. -/
 theorem expSemigroup_apply_eq_self_of_generator_apply_eq_zero
     (L : Mat →ₗ[ℂ] Mat) {X : Mat} (hX : L X = 0) :
     ∀ t : ℝ, 0 ≤ t → expSemigroup L t X = X := by
+  letI : AddCommGroup Mat := Matrix.linftyOpNormedAddCommGroup.toAddCommGroup
+  letI : NormedAddCommGroup Mat := Matrix.linftyOpNormedAddCommGroup
+  letI : Module ℝ Mat :=
+    (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)).toModule
+  letI : TopologicalSpace Mat := PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+  letI : NormedSpace ℝ Mat :=
+    TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)
+  letI : ContinuousSMul ℝ Mat := TNOperatorSpace.matrixContinuousSMulReal (Fin D)
   intro t _ht
-  have hdiff : Differentiable ℝ (fun u : ℝ => expSemigroup L u X) := by
+  have hdiff :
+      @Differentiable ℝ _ ℝ _ _ _ Mat
+        Matrix.linftyOpNormedAddCommGroup.toAddCommGroup
+        (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)).toModule
+        PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+        (fun u : ℝ => expSemigroup L u X) := by
     intro u
-    exact (hasDerivAt_expSemigroup_apply (L := L) X u).differentiableAt
-  have hderiv : ∀ u : ℝ, deriv (fun s : ℝ => expSemigroup L s X) u = 0 := by
+    exact @HasDerivAt.differentiableAt ℝ _ Mat
+      Matrix.linftyOpNormedAddCommGroup
+      (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D))
+      (f := fun u : ℝ => expSemigroup L u X) (f' := (expSemigroup L u) (L X)) (x := u)
+      (hasDerivAt_expSemigroup_apply (L := L) X u)
+  have hderiv :
+      ∀ u : ℝ,
+        @deriv ℝ _ Mat
+          Matrix.linftyOpNormedAddCommGroup.toAddCommGroup
+          (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)).toModule
+          PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+          (fun s : ℝ => expSemigroup L s X) u = 0 := by
     intro u
-    simpa [hX] using (hasDerivAt_expSemigroup_apply (L := L) X u).deriv
-  have hconst := is_const_of_deriv_eq_zero hdiff hderiv 0 t
+    have hu :
+        @HasDerivAt ℝ _ Mat
+          Matrix.linftyOpNormedAddCommGroup.toAddCommGroup
+          (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)).toModule
+          PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+          (TNOperatorSpace.matrixContinuousSMulReal (Fin D))
+          (fun u : ℝ => expSemigroup L u X) 0 u := by
+      simpa [hX] using (hasDerivAt_expSemigroup_apply (L := L) X u)
+    exact @HasDerivAt.deriv ℝ _ Mat
+      Matrix.linftyOpNormedAddCommGroup
+      (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D))
+      (f := fun u : ℝ => expSemigroup L u X) (f' := 0) (x := u) hu
+  have hconst := @is_const_of_deriv_eq_zero ℝ Mat _
+    Matrix.linftyOpNormedAddCommGroup
+    (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D))
+    (f := fun u : ℝ => expSemigroup L u X) hdiff hderiv 0 t
   simpa [expSemigroup_zero] using hconst.symm
 
 /-- If `X` is fixed by `exp(tL)` for every `t ≥ 0`, then `L X = 0`. -/
@@ -97,12 +134,44 @@ theorem generator_apply_eq_zero_of_expSemigroup_apply_eq_self
     (hX : ∀ t : ℝ, 0 ≤ t → expSemigroup L t X = X) :
     L X = 0 := by
   have hd₁ :
-      HasDerivWithinAt (fun u : ℝ => expSemigroup L u X) (L X) (Set.Ici 0) 0 := by
-    simpa [expSemigroup_zero] using
-      (hasDerivAt_expSemigroup_apply (L := L) X 0).hasDerivWithinAt
-  have hd₂' : HasDerivWithinAt (fun _ : ℝ => X) 0 (Set.Ici 0) 0 :=
-    (hasDerivAt_const 0 X).hasDerivWithinAt
-  have hd₂ : HasDerivWithinAt (fun u : ℝ => expSemigroup L u X) 0 (Set.Ici 0) 0 :=
+      @HasDerivWithinAt ℝ _ Mat
+        Matrix.linftyOpNormedAddCommGroup.toAddCommGroup
+        (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)).toModule
+        PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+        (TNOperatorSpace.matrixContinuousSMulReal (Fin D))
+        (fun u : ℝ => expSemigroup L u X) (L X) (Set.Ici 0) 0 := by
+    have hAt :
+        @HasDerivAt ℝ _ Mat
+          Matrix.linftyOpNormedAddCommGroup.toAddCommGroup
+          (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)).toModule
+          PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+          (TNOperatorSpace.matrixContinuousSMulReal (Fin D))
+          (fun u : ℝ => expSemigroup L u X) (L X) 0 := by
+      simpa [expSemigroup_zero] using hasDerivAt_expSemigroup_apply (L := L) X 0
+    exact @HasDerivAt.hasDerivWithinAt ℝ _ Mat
+      Matrix.linftyOpNormedAddCommGroup
+      (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D))
+      (f := fun u : ℝ => expSemigroup L u X) (f' := L X) (x := 0) (s := Set.Ici 0)
+      hAt
+  have hd₂' :
+      @HasDerivWithinAt ℝ _ Mat
+        Matrix.linftyOpNormedAddCommGroup.toAddCommGroup
+        (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)).toModule
+        PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+        (TNOperatorSpace.matrixContinuousSMulReal (Fin D))
+        (fun _ : ℝ => X) 0 (Set.Ici 0) 0 := by
+    exact @HasDerivAt.hasDerivWithinAt ℝ _ Mat
+      Matrix.linftyOpNormedAddCommGroup
+      (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D))
+      (f := fun _ : ℝ => X) (f' := 0) (x := 0) (s := Set.Ici 0)
+      (hasDerivAt_const (x := 0) (c := X))
+  have hd₂ :
+      @HasDerivWithinAt ℝ _ Mat
+        Matrix.linftyOpNormedAddCommGroup.toAddCommGroup
+        (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)).toModule
+        PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+        (TNOperatorSpace.matrixContinuousSMulReal (Fin D))
+        (fun u : ℝ => expSemigroup L u X) 0 (Set.Ici 0) 0 :=
     hd₂'.congr (fun u hu => hX u hu) (by simp [expSemigroup_zero])
   exact (uniqueDiffWithinAt_Ici 0).eq_deriv _ hd₁ hd₂
 

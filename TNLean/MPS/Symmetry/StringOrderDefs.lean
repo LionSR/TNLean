@@ -32,6 +32,13 @@ The main equivalence theorems live in `TNLean.MPS.Symmetry.StringOrder`.
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
+attribute [local instance]
+  instGCNormedAddCommGroupMatrixCLM
+  instGCNormedRingMatrixCLM
+  instGCSeminormedRingMatrixCLM
+  instGCNormedAlgebraMatrixCLM
+  instGCCompleteSpaceMatrixCLM
+
 namespace MPSTensor
 
 variable {d D : ℕ}
@@ -227,31 +234,43 @@ lemma stringOrderBoundaryParam_tendsto_zero_of_spectralRadius_lt_one
           (twistedTransferMap A u)) < 1) :
     Filter.Tendsto (fun L => stringOrderBoundaryParam A u Λ X Y L)
       Filter.atTop (nhds 0) := by
-  let V := Matrix (Fin D) (Fin D) ℂ
-  let F' : V →L[ℂ] V :=
-    (Module.End.toContinuousLinearMap V) (twistedTransferMap A u)
-  haveI : FiniteDimensional ℂ (V →L[ℂ] V) :=
-    (Module.End.toContinuousLinearMap V).toLinearEquiv.finiteDimensional
-  have hpow : Filter.Tendsto (fun L => F' ^ L) Filter.atTop (nhds 0) := by
-    let hComplete : CompleteSpace (V →L[ℂ] V) := FiniteDimensional.complete ℂ (V →L[ℂ] V)
-    exact @pow_tendsto_zero_of_spectralRadius_lt_one (V →L[ℂ] V)
-      inferInstance hComplete inferInstance F' <| by
-        simpa only [F'] using hsr
-  have hEval := (ContinuousLinearMap.apply ℂ V Y).continuous.tendsto (0 : V →L[ℂ] V)
-  rw [map_zero] at hEval
+  let F' : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ :=
+    (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) (twistedTransferMap A u)
+  haveI : FiniteDimensional ℂ
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    (Module.End.toContinuousLinearMap
+      (Matrix (Fin D) (Fin D) ℂ)).toLinearEquiv.finiteDimensional
+  letI : CompleteSpace
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    instGCCompleteSpaceMatrixCLM D D
+  have hsrF : spectralRadius ℂ F' < 1 := by
+    change spectralRadius ℂ
+      (((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+        (twistedTransferMap A u)) :
+          Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) < 1
+    simpa using hsr
+  have hpow : Filter.Tendsto (fun L => F' ^ L) Filter.atTop (nhds 0) :=
+    @pow_tendsto_zero_of_spectralRadius_lt_one
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
+      (instGCNormedRingMatrixCLM D D) (instGCCompleteSpaceMatrixCLM D D)
+      (instGCNormedAlgebraMatrixCLM D D) F' hsrF
   have hIter0 :
       Filter.Tendsto (fun L => ((twistedTransferMap A u) ^ L) Y)
         Filter.atTop (nhds 0) := by
     have hEval0 : Filter.Tendsto (fun L => (F' ^ L) Y) Filter.atTop (nhds 0) :=
-      hEval.comp hpow
+      ((ContinuousLinearMap.apply ℂ (Matrix (Fin D) (Fin D) ℂ) Y).continuous.tendsto
+        (0 : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)).comp hpow
     refine hEval0.congr' ?_
     filter_upwards with L
     have hpow_eq :
-        (((Module.End.toContinuousLinearMap V) (twistedTransferMap A u)) ^ L) =
-          (Module.End.toContinuousLinearMap V) ((twistedTransferMap A u) ^ L) := by
-      exact (map_pow (Module.End.toContinuousLinearMap V) (twistedTransferMap A u) L).symm
+        (((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+          (twistedTransferMap A u)) ^ L) =
+          (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+            ((twistedTransferMap A u) ^ L) := by
+      exact (map_pow (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+        (twistedTransferMap A u) L).symm
     exact congrArg (fun T => T Y) hpow_eq
-  let φ : V →ₗ[ℂ] ℂ :=
+  let φ : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] ℂ :=
     (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp
       ((LinearMap.mulLeft ℂ Λ).comp (LinearMap.mulLeft ℂ X))
   have hφ_cont : Continuous φ := LinearMap.continuous_of_finiteDimensional φ
@@ -260,6 +279,7 @@ lemma stringOrderBoundaryParam_tendsto_zero_of_spectralRadius_lt_one
         Filter.atTop (nhds (φ 0)) :=
     hφ_cont.continuousAt.tendsto.comp hIter0
   simpa only [map_zero, stringOrderBoundaryParam, twistedTransferIter, φ,
+    LinearMap.comp_apply, LinearMap.mulLeft_apply, Matrix.traceLinearMap_apply,
     Matrix.mul_assoc] using hφ0
 
 /-- Local symmetry in the virtual FCS language of the paper: there is a unitary

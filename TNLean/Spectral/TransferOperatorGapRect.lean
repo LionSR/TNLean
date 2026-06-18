@@ -212,12 +212,12 @@ theorem spectralRadius_mixedTransfer₂_le_one
   · have : Subsingleton (Matrix (Fin 0) (Fin D₂) ℂ) := ⟨fun a b => by ext i; exact i.elim0⟩
     have : Subsingleton (Matrix (Fin 0) (Fin D₂) ℂ →L[ℂ] Matrix (Fin 0) (Fin D₂) ℂ) :=
       ContinuousLinearMap.uniqueOfLeft.instSubsingleton
-    rw [spectrum.SpectralRadius.of_subsingleton]; exact zero_le _
+    rw [spectrum.SpectralRadius.of_subsingleton]; exact zero_le
   · rcases eq_or_ne D₂ 0 with rfl | hD₂
     · have : Subsingleton (Matrix (Fin D₁) (Fin 0) ℂ) := ⟨fun a b => by ext i j; exact j.elim0⟩
       have : Subsingleton (Matrix (Fin D₁) (Fin 0) ℂ →L[ℂ] Matrix (Fin D₁) (Fin 0) ℂ) :=
         ContinuousLinearMap.uniqueOfLeft.instSubsingleton
-      rw [spectrum.SpectralRadius.of_subsingleton]; exact zero_le _
+      rw [spectrum.SpectralRadius.of_subsingleton]; exact zero_le
     · haveI : NeZero D₁ := ⟨hD₁⟩
       haveI : NeZero D₂ := ⟨hD₂⟩
       have h_spec := AlgEquiv.spectrum_eq (Module.End.toContinuousLinearMap
@@ -332,7 +332,9 @@ theorem mixedTransferSpectralRadius₂_lt_one_of_dim_ne
   rw [mixedTransferSpectralRadius₂_eq] at hEq
   set F : (Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ :=
     (Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ)) (mixedTransferMap₂ A B)
-  have hEqF : spectralRadius ℂ F = 1 := by simpa [F] using hEq
+  have hEqF : spectralRadius ℂ F = 1 := by
+    change spectralRadius ℂ F = 1 at hEq
+    exact hEq
   -- If `spectralRadius = 1`, pick `μ ∈ spectrum` with `‖μ‖ = 1`.
   -- Use `@` to supply the `instGC*` instances explicitly, avoiding a `UniformSpace` diamond
   -- between the strong topology and the operator-norm topology on `E →L[ℂ] E`.
@@ -342,7 +344,7 @@ theorem mixedTransferSpectralRadius₂_lt_one_of_dim_ne
       (instGCCompleteSpaceMatrixCLM D₁ D₂) inferInstance (a := F)
       (@spectrum.nonempty _ (instGCNormedRingMatrixCLM D₁ D₂)
         (instGCNormedAlgebraMatrixCLM D₁ D₂) (instGCCompleteSpaceMatrixCLM D₁ D₂) inferInstance F)
-  have hμ_one : (↑‖μ‖₊ : ENNReal) = 1 := by simpa [hEqF] using hμ_rad
+  have hμ_one : (↑‖μ‖₊ : ENNReal) = 1 := hμ_rad.trans hEqF
   have hμ_nnn : ‖μ‖₊ = (1 : NNReal) := (ENNReal.coe_eq_one).1 hμ_one
   have hμ_norm : ‖μ‖ = 1 := by
     have : (‖μ‖₊ : ℝ) = (1 : ℝ) := by exact_mod_cast hμ_nnn
@@ -352,11 +354,12 @@ theorem mixedTransferSpectralRadius₂_lt_one_of_dim_ne
     AlgEquiv.spectrum_eq
       (Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ)) (mixedTransferMap₂ A B)
   have hμ_spec' : μ ∈ spectrum ℂ (mixedTransferMap₂ A B) := by
-    have : μ ∈ spectrum ℂ
+    have hμ_clm : μ ∈ spectrum ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ))
           (mixedTransferMap₂ A B)) := by
-      simpa [F] using hμ_spec
-    simpa [h_spec] using this
+      change μ ∈ spectrum ℂ F
+      exact hμ_spec
+    exact h_spec ▸ hμ_clm
   have hHas : Module.End.HasEigenvalue (mixedTransferMap₂ A B) μ :=
     Module.End.hasEigenvalue_iff_mem_spectrum.mpr hμ_spec'
   obtain ⟨X, hX_mem, hX_ne⟩ := hHas.exists_hasEigenvector

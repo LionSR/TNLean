@@ -280,6 +280,9 @@ theorem IsChannel.exists_posSemidef_fixedPoint
         Finset.sum_const, Finset.card_range, nsmul_eq_mul, mul_one, one_div]
       exact inv_mul_cancel₀ (Nat.cast_ne_zero.mpr (by omega))
   -- Step 4: Extract convergent subsequence by compactness
+  haveI : FirstCountableTopology (Matrix (Fin D) (Fin D) ℂ) := by
+    change FirstCountableTopology (Fin D → Fin D → ℂ)
+    infer_instance
   obtain ⟨ρ, hρ_mem, φ, hφ_mono, hφ_tendsto⟩ :=
     densityMatrices_isCompact.tendsto_subseq hσ_mem
   -- Step 5: ρ is PSD with trace 1

@@ -247,9 +247,14 @@ private theorem cumulativeSpan_dim_growth_from_one
           lt_of_le_of_ne (cumulativeSpan_mono A (1 + k)) hstab
         have hstrict :
             Module.finrank ℂ (cumulativeSpan A (1 + k)) <
+              Module.finrank ℂ (cumulativeSpan A (1 + k + 1)) :=
+          cumulativeSpan_finrank_strict_mono A hlt
+        have hstrict' :
+            Module.finrank ℂ (cumulativeSpan A (1 + k)) <
               Module.finrank ℂ (cumulativeSpan A (1 + (k + 1))) := by
-          simpa only [Nat.add_assoc] using
-            cumulativeSpan_finrank_strict_mono A hlt
+          have hidx : 1 + (k + 1) = 1 + k + 1 := by omega
+          rw [hidx]
+          exact hstrict
         omega
 
 /-- The key step for the sharp bound: if `IsNormal` and

@@ -180,6 +180,8 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
     -- GA det eventually nonzero.
     have hGA_det_tendsto : Tendsto (fun N => (GA N).det) atTop (nhds (1 : ℂ)) := by
       have := (continuous_id.matrix_det.tendsto (1 : Matrix (Fin g) (Fin g) ℂ)).comp hGA_tendsto
+      change Tendsto ((fun M : Matrix (Fin g) (Fin g) ℂ => M.det) ∘ GA)
+        atTop (nhds (1 : ℂ))
       simpa only [Function.id_def, Matrix.det_one] using this
     --
     have hGA_det_ne : ∀ᶠ N in atTop, (GA N).det ≠ 0 :=
@@ -216,6 +218,9 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
       have hprod : ∀ i : Fin g,
           Tendsto (fun N => starRingEnd ℂ (u N i) * v N i) atTop (nhds (0 : ℂ)) := by
         intro i
+        change Tendsto
+          (fun N => star (u N i) * mpvInner (d := d) (A i) (B j) N)
+          atTop (nhds (0 : ℂ))
         simpa only [star_zero, zero_mul] using
           (hu_tendsto_zero i).star.mul (hall_inner i)
       have hsum : Tendsto (fun N => ∑ i : Fin g, starRingEnd ℂ (u N i) * v N i)

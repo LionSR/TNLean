@@ -195,7 +195,7 @@ theorem isGSNNCHAt_of_realizes (data : CommutingFormData d N)
     {ρ : ChainOperator d N} (hρ : data.Realizes ρ) : IsGSNNCHAt ρ := by
   rcases hρ with ⟨c, hc, hρ⟩
   refine ⟨data.toGSNNCHData c hc, ?_⟩
-  simpa [GSNNCHData.state] using hρ
+  simpa [GSNNCHData.state, toGSNNCHData] using hρ
 
 end CommutingFormData
 

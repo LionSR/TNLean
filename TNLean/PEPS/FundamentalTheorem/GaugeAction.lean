@@ -327,7 +327,8 @@ private noncomputable def virtualConfigEquivConsistentLocal (A : Tensor G d) :
       have hEq : (⟨e, hinc⟩ : IncidentEdge G e.1.2) =
           edgeRightIncident (G := G) e :=
         Subtype.ext rfl
-      simpa [hEq] using hξ e
+      cases hEq
+      exact hξ e
 
 private lemma sum_local_with_edge_deltas (A : Tensor G d) (σ : V → Fin d) :
     (∑ ξ : LocalConfig (G := G) A,

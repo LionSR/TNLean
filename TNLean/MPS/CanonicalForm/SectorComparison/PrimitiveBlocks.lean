@@ -160,9 +160,14 @@ theorem isIrreducibleTensor_blockTensor_of_tp_primitive_irr [NeZero D]
       have hN_clm : Filter.Tendsto (fun n => (Φ N) ^ n) Filter.atTop (nhds 0) :=
         hPrimMPS.complement_pow_tendsto_zero
       -- Evaluate at σ': (Φ N)^n σ' → 0.
-      have heval := (ContinuousLinearMap.apply ℂ V σ').continuous.tendsto
-        (0 : V →L[ℂ] V)
-      rw [map_zero] at heval
+      have heval : Filter.Tendsto (fun T : V →L[ℂ] V => T σ')
+          (nhds (0 : V →L[ℂ] V)) (nhds (0 : V)) := by
+        have heval0 := (ContinuousLinearMap.apply ℂ V σ').continuous.tendsto
+          (0 : V →L[ℂ] V)
+        change Filter.Tendsto (fun T : V →L[ℂ] V => T σ')
+          (nhds (0 : V →L[ℂ] V))
+          (nhds (((0 : V →L[ℂ] V)) σ')) at heval0
+        simpa [_root_.zero_apply] using heval0
       have hconv := heval.comp hN_clm
       -- Convert CLM powers to LinearMap powers: (Φ N)^n σ' = N^n σ'.
       suffices hsuff : ∀ n, ((Φ N) ^ n) σ' = (N ^ n) σ' by

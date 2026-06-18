@@ -112,8 +112,15 @@ theorem diagonal_jensen_of_convexOn
   -- Spectral form of `A`.
   have hA_spec : A = U * Matrix.diagonal (fun i => ((μ i : ℂ))) * Uᴴ := by
     have h := hH.spectral_theorem
+    have hdiag : Matrix.diagonal (Complex.ofReal ∘ hH.eigenvalues) =
+        Matrix.diagonal (fun i => ((hH.eigenvalues i : ℝ) : ℂ)) := by
+      ext i j
+      by_cases hij : i = j
+      · subst hij
+        simp [Function.comp_apply]
+      · simp [Matrix.diagonal, hij]
     simpa [Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose,
-      hU_def, hμ_def] using h
+      Matrix.mul_assoc, hU_def, hμ_def, hdiag] using h
   -- Spectral form of `hH.cfc f`.
   have hfA_spec : hH.cfc f
       = U * Matrix.diagonal (fun i => ((f (μ i) : ℂ))) * Uᴴ := by

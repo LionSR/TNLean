@@ -45,10 +45,48 @@ variable {D : ℕ}
 
 /-! ## Spectral radius identity (Wolf 6.3(4)) -/
 
+section SimilarityCLM
+
 private noncomputable def sandwichLinearMap
     (L R : Matrix (Fin D) (Fin D) ℂ) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ where
   toFun X := L * X * R
+  map_add' X Y := by
+    simp [Matrix.mul_add, Matrix.add_mul, Matrix.mul_assoc]
+  map_smul' a X := by
+    simp [Matrix.mul_assoc]
+
+private noncomputable def sandwichLinearEquiv
+    (C : Matrix (Fin D) (Fin D) ℂ) (hC : C.det ≠ 0) :
+    Matrix (Fin D) (Fin D) ℂ ≃ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ where
+  toFun X := C * X * Cᴴ
+  invFun X := C⁻¹ * X * (Cᴴ)⁻¹
+  left_inv X := by
+    have hC_unit : IsUnit C.det := Ne.isUnit hC
+    have hCstar : Cᴴ.det ≠ 0 := by
+      rw [Matrix.det_conjTranspose]
+      exact star_ne_zero.mpr hC
+    have hCstar_unit : IsUnit (Cᴴ.det) := Ne.isUnit hCstar
+    calc
+      C⁻¹ * (C * X * Cᴴ) * (Cᴴ)⁻¹
+          = (C⁻¹ * C) * X * (Cᴴ * (Cᴴ)⁻¹) := by
+              simp [Matrix.mul_assoc]
+      _ = X := by
+            simp [Matrix.nonsing_inv_mul C hC_unit,
+              Matrix.mul_nonsing_inv Cᴴ hCstar_unit]
+  right_inv X := by
+    have hC_unit : IsUnit C.det := Ne.isUnit hC
+    have hCstar : Cᴴ.det ≠ 0 := by
+      rw [Matrix.det_conjTranspose]
+      exact star_ne_zero.mpr hC
+    have hCstar_unit : IsUnit (Cᴴ.det) := Ne.isUnit hCstar
+    calc
+      C * (C⁻¹ * X * (Cᴴ)⁻¹) * Cᴴ
+          = (C * C⁻¹) * X * ((Cᴴ)⁻¹ * Cᴴ) := by
+              simp [Matrix.mul_assoc]
+      _ = X := by
+            simp [Matrix.mul_nonsing_inv C hC_unit,
+              Matrix.nonsing_inv_mul Cᴴ hCstar_unit]
   map_add' X Y := by
     simp [Matrix.mul_add, Matrix.add_mul, Matrix.mul_assoc]
   map_smul' a X := by
@@ -112,25 +150,35 @@ private lemma spectralRadius_similarity_eq
         (similarityMap (D := D) C E)) =
       spectralRadius ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) E) := by
-  have hsim :
-      (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-        (similarityMap (D := D) C E) =
-        (sandwichEquiv (D := D) C hC).symm.conjContinuousAlgEquiv
-          ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) E) := by
-    apply ContinuousLinearMap.ext
+  let Φ : (Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) ≃ₐ[ℂ]
+      TNLean.MatrixCLM (Fin D) :=
+    TNLean.matrixEndEquiv (Fin D)
+  have hsim_alg :
+      similarityMap (D := D) C E =
+        (sandwichLinearEquiv (D := D) C hC).symm.conjAlgEquiv ℂ E := by
+    apply LinearMap.ext
     intro X
-    change C⁻¹ * E (C * X * Cᴴ) * (Cᴴ)⁻¹ =
-      C⁻¹ * E (C * X * Cᴴ) * (Cᴴ)⁻¹
-    simp [Matrix.mul_assoc]
-  have hspectrum :
-      spectrum ℂ
-        ((sandwichEquiv (D := D) C hC).symm.conjContinuousAlgEquiv
-          ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) E)) =
-        spectrum ℂ
-          ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) E) :=
-    AlgEquiv.spectrum_eq ((sandwichEquiv (D := D) C hC).symm.conjContinuousAlgEquiv)
-      ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) E)
-  rw [hsim, spectralRadius, hspectrum, spectralRadius]
+    ext i j
+    simp [similarityMap, sandwichLinearEquiv, LinearEquiv.conjAlgEquiv_apply, Matrix.mul_assoc]
+  have hspec_left :
+      spectrum ℂ (Φ (similarityMap (D := D) C E)) =
+        spectrum ℂ (similarityMap (D := D) C E) :=
+    AlgEquiv.spectrum_eq Φ (similarityMap (D := D) C E)
+  have hspec_alg :
+      spectrum ℂ (similarityMap (D := D) C E) = spectrum ℂ E := by
+    rw [hsim_alg]
+    exact AlgEquiv.spectrum_eq
+      ((sandwichLinearEquiv (D := D) C hC).symm.conjAlgEquiv ℂ) E
+  have hspec_right :
+      spectrum ℂ (Φ E) = spectrum ℂ E :=
+    AlgEquiv.spectrum_eq Φ E
+  have hspec :
+      spectrum ℂ (Φ (similarityMap (D := D) C E)) = spectrum ℂ (Φ E) := by
+    rw [hspec_left, hspec_alg, hspec_right]
+  change spectralRadius ℂ (Φ (similarityMap (D := D) C E)) = spectralRadius ℂ (Φ E)
+  rw [spectralRadius, spectralRadius, hspec]
+
+end SimilarityCLM
 
 set_option synthInstance.maxHeartbeats 200000 in
 -- `CompleteSpace` on matrix endomorphism CLMs is finite-dimensional but expensive to synthesize.
@@ -161,7 +209,7 @@ private lemma spectralRadius_smul
       _ = (‖c‖₊ : ℝ≥0∞) * ‖c⁻¹ • z‖₊ := hnorm
       _ ≤ (‖c‖₊ : ℝ≥0∞) * spectralRadius ℂ F := by
           gcongr
-          show (‖c⁻¹ • z‖₊ : ℝ≥0∞) ≤ spectralRadius ℂ F
+          change (‖c⁻¹ • z‖₊ : ℝ≥0∞) ≤ spectralRadius ℂ F
           rw [spectralRadius]
           exact @le_iSup₂ ENNReal ℂ (· ∈ spectrum ℂ F) _
             (fun k _ => (‖k‖₊ : ENNReal)) (c⁻¹ • z) hμ
@@ -305,7 +353,6 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
                 subst A'
                 subst S
                 simp [MPSTensor.transferMap_apply, MPSTensor.tpGauge]
-                rfl
       _ = ∑ i : Fin n,
               (↑r : ℂ)⁻¹ • (S * (K i * (S⁻¹ * X * S⁻¹) * (K i)ᴴ) * S) := by
             refine Finset.sum_congr rfl ?_
@@ -393,11 +440,18 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
         spectralRadius ℂ
           ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
             (similarityMap (D := D) S⁻¹ E)) := by
-    simpa [hE'_def] using
-      spectralRadius_smul (D := D)
-        ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-          (similarityMap (D := D) S⁻¹ E))
-        (c := (↑r : ℂ)⁻¹) (inv_ne_zero (by exact_mod_cast hr.ne'))
+    have hE'_clm :
+        ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) E') =
+          (↑r : ℂ)⁻¹ •
+            ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+              (similarityMap (D := D) S⁻¹ E)) := by
+      rw [hE'_def]
+      rfl
+    rw [hE'_clm]
+    exact spectralRadius_smul (D := D)
+      ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+        (similarityMap (D := D) S⁻¹ E))
+      (c := (↑r : ℂ)⁻¹) (inv_ne_zero (by exact_mod_cast hr.ne'))
   have hnorm_inv : (‖((↑r : ℂ)⁻¹)‖₊ : ℝ≥0∞) = (ENNReal.ofReal r)⁻¹ := by
     let rInvNN : ℝ≥0 := ⟨r⁻¹, by positivity⟩
     have hnorm_cast : ‖(r : ℂ)‖ = r := by

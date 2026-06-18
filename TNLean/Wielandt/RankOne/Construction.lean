@@ -132,7 +132,7 @@ theorem IsNBlkInjective_transposeTensor
         (fun M : Matrix (Fin D) (Fin D) ℂ => Mᵀ) ''
             Set.range (fun σ : Fin N → Fin d => evalWord A (List.ofFn σ)) =
           Set.range fun σ : Fin N → Fin d => (evalWord A (List.ofFn σ))ᵀ := by
-      simpa [Function.comp] using
+      simpa [Function.comp_def] using
         (Set.range_comp (fun M : Matrix (Fin D) (Fin D) ℂ => Mᵀ)
           (fun σ : Fin N → Fin d => evalWord A (List.ofFn σ))).symm
     simp [e, hrange']
@@ -293,7 +293,7 @@ theorem map_wordSpan_eq_rowSpreadSpan
       (Set.range fun σ : Fin n → Fin d => Matrix.vecMul ψ (evalWord A (List.ofFn σ))) =
         (fun M : Matrix (Fin D) (Fin D) ℂ => Matrix.vecMul ψ M) ''
           (Set.range fun σ : Fin n → Fin d => evalWord A (List.ofFn σ)) := by
-    simpa [Function.comp] using
+    simpa [Function.comp_def] using
       (Set.range_comp (fun M : Matrix (Fin D) (Fin D) ℂ => Matrix.vecMul ψ M)
         (fun σ : Fin n → Fin d => evalWord A (List.ofFn σ)))
   simp [hrange]
@@ -332,8 +332,9 @@ theorem rowSpreadSpan_eq_top_of_cumulativeSpan_eq_top_of_eigenvector_transpose
   classical
   have hrow :
       rowSpreadSpan A ψ (D - 1) = vectorSpreadSpan (transposeTensor A) ψ (D - 1) := by
-    simpa [transposeTensor] using
-      (rowSpreadSpan_eq_vectorSpreadSpan_transpose (A := A) (ψ := ψ) (n := D - 1))
+    change rowSpreadSpan A ψ (D - 1) =
+      vectorSpreadSpan (fun i => (A i)ᵀ) ψ (D - 1)
+    exact rowSpreadSpan_eq_vectorSpreadSpan_transpose (A := A) (ψ := ψ) (n := D - 1)
   have hCumT : cumulativeSpan (transposeTensor A) N = ⊤ :=
     cumulativeSpan_transposeTensor_eq_top_of_cumulativeSpan_eq_top (A := A) hCum
   have hcum : cumulativeVectorSpan (transposeTensor A) ψ (D - 1) = ⊤ := by

@@ -116,7 +116,9 @@ private theorem transferMap_pow_tendsto
   -- Evaluate at σ to get pointwise convergence
   have heval := (ContinuousLinearMap.apply ℂ (Matrix (Fin D) (Fin D) ℂ) σ).continuous.tendsto
     (0 : (Matrix (Fin D) (Fin D) ℂ) →L[ℂ] (Matrix (Fin D) (Fin D) ℂ))
-  rw [map_zero] at heval
+  change Tendsto
+    (fun T : (Matrix (Fin D) (Fin D) ℂ) →L[ℂ] (Matrix (Fin D) (Fin D) ℂ) => T σ)
+    (nhds 0) (nhds (0 : Matrix (Fin D) (Fin D) ℂ)) at heval
   have hconv := heval.comp hN_clm
   -- Convert ContinuousLinearMap powers to LinearMap powers
   suffices hsuff : ∀ n,

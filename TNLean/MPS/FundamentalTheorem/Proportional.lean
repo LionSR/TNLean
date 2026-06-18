@@ -97,7 +97,14 @@ private theorem gaugePhaseEquiv_of_eventually_proportionalMPV₂_of_overlap_deca
       Filter.Tendsto
         (fun N => ‖mpvOverlap (d := d) A A N‖ / ‖mpvOverlap (d := d) B B N‖)
         Filter.atTop (nhds (1 : ℝ)) := by
-    simpa using hA_self_norm.div hB_self_norm one_ne_zero
+    have hdiv := hA_self_norm.div hB_self_norm one_ne_zero
+    have hfun :
+        ((fun N => ‖mpvOverlap (d := d) A A N‖) /
+          (fun N => ‖mpvOverlap (d := d) B B N‖)) =
+            (fun N => ‖mpvOverlap (d := d) A A N‖ / ‖mpvOverlap (d := d) B B N‖) := by
+      funext N
+      rfl
+    simpa [hfun] using hdiv
   have hB_self_norm_ne :
       (∀ᶠ N in Filter.atTop, ‖mpvOverlap (d := d) B B N‖ ≠ (0 : ℝ)) :=
     hB_self_norm.eventually_ne one_ne_zero

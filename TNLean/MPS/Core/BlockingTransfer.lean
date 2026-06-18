@@ -38,10 +38,10 @@ theorem transferMap_blockTensor_apply
   simp only [transferMap_apply, blockTensor, wordOfBlock]
   -- Reindex the blocked sum by the equivalence `Fin (blockPhysDim d L) ≃ (Fin L → Fin d)`.
   let e : Fin (blockPhysDim d L) ≃ (Fin L → Fin d) :=
-    (finCongr (blockPhysDim_eq_pow d L)).trans finFunctionFinEquiv.symm
+    decodeBlockEquiv d L
   -- After rewriting `decodeBlock` in terms of `e`, `Fintype.sum_equiv` is exactly the desired
   -- reindexing statement.
-  simpa [decodeBlock, e, blockPhysDim] using
+  simpa [decodeBlockEquiv_apply, e] using
     (Fintype.sum_equiv e
       (f := fun i =>
         evalWord A (List.ofFn (e i)) * X * (evalWord A (List.ofFn (e i)))ᴴ)

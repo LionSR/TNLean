@@ -129,7 +129,7 @@ noncomputable def commonFlatBlocks (F : CommonBlockedCyclicSectorFamily blocks)
 noncomputable def commonSectorTensor (F : CommonBlockedCyclicSectorFamily blocks)
     (k : Fin r) : MPSTensor (blockPhysDim d F.p) (∑ s : Fin (F.period k), F.sectorDim k s) :=
   toTensorFromBlocks (d := blockPhysDim d F.p)
-    (μ := fun _ : Fin (F.period k) => (1 : ℂ)) (F.commonSectorBlock k)
+    (μ := fun _ : Fin (F.period k) => (1 : ℂ)) (fun s => F.commonSectorBlock k s)
 
 /-- The common blocked tensor obtained by reindexing blocked physical words from
 iterated blocking to the ambient blocked alphabet. -/
@@ -205,7 +205,19 @@ private theorem commonReindexedBlock_sameMPV₂_commonSectorTensor
             (blockTensor (d := d) (D := dim k) (blocks k) (F.period k)) (F.extra k))) σ :=
       ((F.reindexed_sameMPV₂ k) N σ).symm
     _ = mpv (F.commonSectorTensor k) σ := by
-      simpa [commonSectorTensor, commonSectorBlock] using F.nested_same k N σ
+      change
+        mpv (cast (congr_arg (fun d' => MPSTensor d' (dim k)) (F.blockPhysDim_nested_eq k))
+            (blockTensor (d := blockPhysDim d (F.period k)) (D := dim k)
+              (blockTensor (d := d) (D := dim k) (blocks k) (F.period k))
+              (F.extra k))) σ =
+          mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
+            (μ := fun _ : Fin (F.period k) => (1 : ℂ))
+            (fun s =>
+              cast (congr_arg (fun d' => MPSTensor d' (F.sectorDim k s))
+                  (F.blockPhysDim_nested_eq k))
+                (blockTensor (d := blockPhysDim d (F.period k)) (D := F.sectorDim k s)
+                  (F.sectorBlocks k s) (F.extra k)))) σ
+      exact F.nested_same k N σ
 
 /-- Weighted nonzero blocks with explicit relabelings flatten to the common-sector family. -/
 private theorem sameMPV₂_weightedCommonReindexedBlock_commonFlat

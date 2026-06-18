@@ -16,12 +16,12 @@ git = "https://github.com/PatrickMassot/checkdecls.git"
 [[require]]
 name = "Gametheory"
 git = "https://github.com/LionSR/Brouwer.git"
-rev = "main"
+rev = "bdd5a5deecf2938beeafcb4ddd72ba5d1b4ec3e2"
 
 [[require]]
 name = "mathlib"
 scope = "leanprover-community"
-rev = "v4.30.0-rc2"
+rev = "v4.31.0"
 
 [[lean_lib]]
 name = "TNLean"
