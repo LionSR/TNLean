@@ -14,10 +14,10 @@ boundary edge realized by conjugation with the transported gauge `glReindex h Z`
 
 The translation covariance of the bare coefficient identity is
 `regionInsertedCoeff_translate_coeffIdentity`; specializing its abstract transfer map to a
-conjugation `M ↦ Z · (reindex M) · Z⁻¹` and rewriting the nested bond-dimension reindexings with
-`reindexAlgEquiv_gaugeConj` identifies the transported transfer with conjugation by the
-reindexed gauge.  No new geometry enters: the reindexing along the bond-dimension equalities
-aligns the translated reference identity with the required conjugation form.
+conjugation `M ↦ Z · (reindex M) · Z⁻¹` and using the reindexing algebra equivalence
+identifies the transported transfer with conjugation by the reindexed gauge.  No new geometry
+enters: the reindexing along the bond-dimension equalities aligns the translated reference
+identity with the required conjugation form.
 
 ## References
 
@@ -55,11 +55,11 @@ invertible gauge `Z` over `B`'s bond on `f` transports to the translated boundar
 realized by conjugation with the transported gauge `glReindex hbond Z` over `B`'s bond on the
 translated edge.
 
-The translation covariance `regionInsertedCoeff_translate_coeffIdentity` carries the bare identity
-with its transfer map; specializing the transfer to the conjugation `M ↦ Z · (reindex M) · Z⁻¹`
-and collapsing the nested reindexings with `reindexAlgEquiv_gaugeConj` and
-`reindexAlgEquiv_finCongr_symm_round` identifies the transported map with conjugation by
-`glReindex hbond Z`.
+The translation covariance `regionInsertedCoeff_translate_coeffIdentity` carries the bare
+identity with its transfer map; specializing the transfer to the conjugation
+`M ↦ Z · (reindex M) · Z⁻¹`
+and using multiplicativity of the matrix reindexing equivalence identifies the transported map
+with conjugation by `glReindex hbond Z`.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, line 1498 of
 `Papers/1804.04964/paper_normal.tex`. -/
@@ -119,7 +119,10 @@ theorem regionInsertedCoeff_translate_coeffIdentity_conj
   set hbB := bondDim_boundaryEdgeMap_translate hB a b R f with hbBdef
   -- Expand `g`, then pull the conjugation through the bond-dimension reindexing.
   simp only [hg]
-  rw [reindexAlgEquiv_gaugeConj hbB.symm Z]
+  rw [map_mul, map_mul, glReindex_coe,
+    show (glReindex hbB.symm Z)⁻¹ = glReindex hbB.symm Z⁻¹ from
+      (map_inv (glReindex hbB.symm) Z).symm,
+    glReindex_coe]
   -- The two inner reindexings of `M'` agree by proof irrelevance of the bond-dimension equalities:
   -- triple reindexing and the single reindexing across `hE'` both reindex `M'` by the composite
   -- finite-index equivalence.

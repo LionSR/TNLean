@@ -214,6 +214,21 @@ Recommended action:
 - Avoid adding local reindexing wrappers unless a file uses the same cast
   pattern repeatedly.
 
+Applied PEPS follow-up:
+
+- `TNLean.PEPS.reindexAlgEquiv_smul` was removed.  The four scalar
+  transport uses in `TNLean/PEPS/TorusGaugeUniqueness.lean` now rewrite by
+  Mathlib's `map_smul` for the algebra equivalence.
+- `TNLean.PEPS.reindexAlgEquiv_finCongr_symm_round` was removed from
+  `TNLean/PEPS/EdgeGaugeFamily.lean`.  Its single use is now a local proof at
+  the transport site, so the cancellation no longer appears as exported API.
+- `TNLean.PEPS.reindexAlgEquiv_gaugeConj` was removed from
+  `TNLean/PEPS/TorusEdgeGaugeCovariance.lean`.  The only use in
+  `TNLean/PEPS/TorusWitnessTransport.lean` now uses `map_mul`, `map_inv`, and
+  `glReindex_coe` directly.
+- The corresponding blueprint theorem was deleted, since the algebra fact is
+  now an inline proof step rather than a named Lean declaration.
+
 ### Rank and finite-dimensional matrix dimensions
 
 Relevant Mathlib commits:

@@ -45,14 +45,6 @@ theorem glReindex_coe {m n : ℕ} (h : m = n) (Z : GL (Fin m) ℂ) :
       Matrix.reindexAlgEquiv ℂ ℂ (finCongr h) (↑Z : Matrix (Fin m) (Fin m) ℂ) :=
   rfl
 
-/-- Reindexing back and forth across an index-size equality is the identity. -/
-theorem reindexAlgEquiv_finCongr_symm_round {m n : ℕ} (h h' : m = n)
-    (N : Matrix (Fin n) (Fin n) ℂ) :
-    Matrix.reindexAlgEquiv ℂ ℂ (finCongr h)
-        (Matrix.reindexAlgEquiv ℂ ℂ (finCongr h'.symm) N) = N := by
-  subst h
-  simp
-
 /-- Transporting an invertible matrix across two successive index-size equalities is transporting
 across their composite. -/
 theorem glReindex_glReindex {m n k : ℕ} (h₁ : m = n) (h₂ : n = k) (Z : GL (Fin m) ℂ) :
@@ -176,8 +168,12 @@ theorem exists_edgeGaugeFamily (A B : Tensor G d)
   rw [hProofEq]
   -- The reindexing equivalence is multiplicative; push it through products, and
   -- the inverse-index transport cancels against the outer reindex.
-  simp only [map_mul,
-    reindexAlgEquiv_finCongr_symm_round (hEdge e) (hEdge e)]
+  have hRound {m n : ℕ} (h h' : m = n) (N : Matrix (Fin n) (Fin n) ℂ) :
+      Matrix.reindexAlgEquiv ℂ ℂ (finCongr h)
+          (Matrix.reindexAlgEquiv ℂ ℂ (finCongr h'.symm) N) = N := by
+    subst h
+    simp
+  simp only [map_mul, hRound (hEdge e) (hEdge e)]
 
 end PEPS
 end TNLean
