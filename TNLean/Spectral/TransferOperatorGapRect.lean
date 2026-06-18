@@ -76,26 +76,15 @@ theorem mixedTransferSpectralRadius₂_eq
 /-! ## Rectangular Frobenius norm and Euclidean-space embedding
 
 The general definitions `frobSq`, `matToES`, and their basic lemmas are imported from
-`TNLean.Spectral.FrobeniusNorm`.  This section adds the mixed-shape
-submultiplicativity lemma used below. -/
+`TNLean.Spectral.FrobeniusNorm`.  Mathlib's native Frobenius-norm
+submultiplicativity gives the mixed-shape estimate used below. -/
 
 private lemma norm_matToES_rect_mul_le
     (A : Matrix (Fin D₁) (Fin D₁) ℂ) (B : Matrix (Fin D₁) (Fin D₂) ℂ) :
     ‖matToES (A * B)‖ ≤ ‖matToES A‖ * ‖matToES B‖ := by
-  have h : ‖matToES (A * B)‖ ^ 2 ≤ (‖matToES A‖ * ‖matToES B‖) ^ 2 := by
-    rw [norm_matToES_sq, mul_pow, norm_matToES_sq, norm_matToES_sq]
-    -- Frobenius submultiplicativity for mixed-shape matrices
-    simp only [frobSq, Matrix.mul_apply]
-    calc ∑ i, ∑ j, ‖∑ k, A i k * B k j‖ ^ 2
-        ≤ ∑ i, ∑ j, (∑ k, ‖A i k‖ ^ 2) * (∑ k, ‖B k j‖ ^ 2) :=
-          Finset.sum_le_sum fun i _ => Finset.sum_le_sum fun j _ =>
-            norm_sq_sum_mul_le _ _
-      _ = (∑ i, ∑ k, ‖A i k‖ ^ 2) * (∑ j, ∑ k, ‖B k j‖ ^ 2) := by
-          simp_rw [← Finset.mul_sum, ← Finset.sum_mul]
-      _ = (∑ i, ∑ j, ‖A i j‖ ^ 2) * (∑ i, ∑ j, ‖B i j‖ ^ 2) := by
-          (congr 1; exact Finset.sum_comm)
-  nlinarith [Real.sqrt_le_sqrt h, Real.sqrt_sq (norm_nonneg (matToES (A * B))),
-    Real.sqrt_sq (mul_nonneg (norm_nonneg (matToES A)) (norm_nonneg (matToES B)))]
+  rw [norm_matToES_eq_frobenius_norm, norm_matToES_eq_frobenius_norm,
+    norm_matToES_eq_frobenius_norm]
+  exact Matrix.frobenius_norm_mul A B
 
 /-! ## Hilbert–Schmidt contraction for the rectangular mixed transfer -/
 
