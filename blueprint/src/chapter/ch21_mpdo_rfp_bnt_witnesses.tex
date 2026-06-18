@@ -1,0 +1,299 @@
+\begin{definition}[Existential BNT-label theorem witness]%
+    \label{def:mpdo_bnt_label_theorem_witness}
+    \lean{MPOTensor.BNTLabelTheoremWitness}
+    \lean{MPOTensor.HasBNTLabelTheoremWitness}
+    \lean{MPOTensor.BNTLabelTheoremWitness.toTheoremData}
+    \lean{MPOTensor.BNTLabelTheoremWitness.coeffs}
+    \lean{MPOTensor.BNTLabelTheoremWitness.operators}
+    \lean{MPOTensor.BNTLabelTheoremWitness.traceScalars}
+    \lean{MPOTensor.BNTLabelTheoremWitness.positiveChi}
+    \lean{MPOTensor.BNTLabelTheoremWitness.blockedComparison}
+    \lean{MPOTensor.BNTLabelTheoremWitness.same_length_product_form}
+    \lean{MPOTensor.BNTLabelTheoremWitness.idempotent_coefficient_form}
+    \lean{MPOTensor.BNTLabelTheoremWitness.same_length_product_form_ofChi}
+    \lean{MPOTensor.BNTLabelTheoremWitness.idempotent_coefficient_form_ofChi}
+    \lean{MPOTensor.BNTLabelTheoremWitness.same_length_product_eq_sum_ofChi}
+    \lean{MPOTensor.BNTLabelTheoremWitness.idempotent_eq_sum_ofChi}
+    \lean{MPOTensor.BNTLabelTheoremWitness.positive_chi_pos_entries}
+    \lean{MPOTensor.BNTLabelTheoremWitness.positive_chi_trace_power}
+    \lean{MPOTensor.BNTLabelTheoremWitness.labelAssignment}
+    \lean{MPOTensor.BNTLabelTheoremWitness.sourceLabel}
+    \lean{MPOTensor.BNTLabelTheoremWitness.targetLabel}
+    \lean{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi}
+    \lean{MPOTensor.BNTLabelTheoremWitness.ofChi}
+    \lean{MPOTensor.BNTLabelTheoremWitness.hasBNTLabelTheoremWitness}
+    \lean{MPOTensor.BNTLabelTheoremWitness.ofChi_hasBNTLabelTheoremWitness}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_data}
+    An existential BNT-label theorem witness consists of the finite BNT-label
+    type, the same-length operator spaces, their algebraic structure, and the
+    corresponding BNT-label theorem data, including the pulled-back
+    blocked-basis $\chi$-family. The construction of such a witness from an
+    MPDO tensor is the outstanding step toward \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}.
+    The proposition-level form is the nonemptiness of this witness type.
+    In the source-side special case where the coefficients are canonically
+    determined by a $\chi$-family, the witness is obtained from
+    that same $\chi$-family together with the remaining product, idempotent,
+    and blocked-comparison statements.
+    For any such witness, the product and idempotent predicates can be
+    rephrased with the canonical coefficient family determined by its
+    $\chi$-matrices, with the corresponding displayed equations.
+\end{definition}
+
+\begin{theorem}[BNT theorem witnesses give source equations]%
+    \label{thm:mpdo_has_bnt_label_theorem_witness_source_equations}
+    \lean{MPOTensor.HasBNTLabelTheoremWitness.exists_source_predicates}
+    \lean{MPOTensor.HasBNTLabelTheoremWitness.exists_positive_length_coeff_eq_ofChi}
+    \lean{MPOTensor.HasBNTLabelTheoremWitness.exists_source_ofChi_predicates}
+    \lean{MPOTensor.HasBNTLabelTheoremWitness.exists_source_ofChi_equations}
+    \lean{MPOTensor.HasBNTLabelTheoremWitness.exists_source_coefficient_equations}
+    \lean{MPOTensor.HasBNTLabelTheoremWitness.exists_source_chi_trace_equations}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_witness}
+    A proposition-level BNT-label theorem witness contains the source-side
+    same-length product law, the idempotent scalar law, the positive-length
+    trace-power law, and positivity of the diagonal
+    $\chi_{\alpha,\beta,\gamma}$-entries. After unpacking the witness, the
+    same-length product and idempotent equations can first be written with the
+    BNT-label coefficients $c^{(L)}_{\alpha,\beta,\gamma}$, and then with
+    the coefficients expressed as
+    $\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{\,L})$ and
+    $\operatorname{tr}(\chi_{\alpha,\beta,\gamma})$, respectively. At
+    every positive length, the BNT-label coefficient family also agrees with
+    the canonical coefficient family determined by these $\chi$-matrices.
+    Consequently, the product and idempotent predicates may be stated directly
+    using that canonical coefficient family, and the same displayed source
+    equations hold with those canonical coefficients.
+\end{theorem}
+\begin{proof}\leanok
+    Unpack the existential witness and apply the corresponding witness-level
+    equations.
+\end{proof}
+
+\begin{theorem}[BNT theorem witnesses give coefficient trace powers]%
+    \label{thm:mpdo_bnt_label_theorem_witness_coeff_eq_trace_pow}
+    \lean{MPOTensor.BNTLabelTheoremWitness.coeff_eq_trace_pow}
+    \lean{MPOTensor.BNTLabelTheoremWitness.coeff_eq_ofChi_coeff}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_witness,
+        thm:mpdo_bnt_label_theorem_data_coeff_eq_trace_pow}
+    An existential BNT-label theorem witness gives the formula
+    $c_{\alpha,\beta,\gamma}^{(L)}
+        = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{\,L})$
+    for every positive length $L$. Equivalently, at positive lengths, its
+    coefficient family agrees with the canonical coefficient family determined
+    by the same $\chi$-matrices.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the corresponding theorem-data identity carried by the witness.
+\end{proof}
+
+\begin{theorem}[BNT theorem witnesses give positive chi entries]%
+    \label{thm:mpdo_bnt_label_theorem_witness_chi_entry_pos}
+    \lean{MPOTensor.BNTLabelTheoremWitness.chi_entry_pos}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_witness,
+        def:mpdo_positive_bnt_label_chi_trace_power_form}
+    An existential BNT-label theorem witness gives positivity of every
+    diagonal entry of $\chi_{\alpha,\beta,\gamma}$.
+\end{theorem}
+\begin{proof}\leanok
+    This follows from the positivity condition in the positive BNT-label
+    $\chi$-witness.
+\end{proof}
+
+\begin{theorem}[BNT theorem witnesses give the same-length product law]%
+    \label{thm:mpdo_bnt_label_theorem_witness_same_length_product_eq_sum}
+    \lean{MPOTensor.BNTLabelTheoremWitness.same_length_product_eq_sum}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_witness,
+        thm:mpdo_bnt_label_theorem_data_same_length_product_eq_sum}
+    An existential BNT-label theorem witness gives the product identity
+    $O_L(M_\alpha)O_L(M_\beta)
+        = \sum_\gamma c_{\alpha,\beta,\gamma}^{(L)} O_L(M_\gamma)$
+    for every positive length $L$.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the corresponding theorem-data identity carried by the witness.
+\end{proof}
+
+\begin{theorem}[BNT theorem witnesses give the idempotent scalar law]%
+    \label{thm:mpdo_bnt_label_theorem_witness_idempotent_eq_sum}
+    \lean{MPOTensor.BNTLabelTheoremWitness.idempotent_eq_sum}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_witness,
+        thm:mpdo_bnt_label_theorem_data_idempotent_eq_sum}
+    An existential BNT-label theorem witness gives the idempotent scalar
+    identity
+    $m_\gamma =
+        \sum_{\alpha,\beta} c_{\alpha,\beta,\gamma}^{(1)}m_\alpha m_\beta$.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the corresponding theorem-data identity carried by the witness.
+\end{proof}
+
+\begin{theorem}[BNT theorem witnesses give the blocked coefficient comparison]%
+    \label{thm:mpdo_bnt_label_theorem_witness_blocked_coeff_eq}
+    \lean{MPOTensor.BNTLabelTheoremWitness.blocked_coeff_eq}
+    \lean{MPOTensor.BNTLabelTheoremWitness.blockedComparison_ofChi}
+    \lean{MPOTensor.BNTLabelTheoremWitness.blocked_coeff_eq_ofChi}
+    \lean{MPOTensor.HasBNTLabelTheoremWitness.exists_blocked_coefficient_comparison}
+    \lean{MPOTensor.HasBNTLabelTheoremWitness.%
+        exists_blocked_coefficient_comparison_ofChi}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_witness,
+        thm:mpdo_bnt_label_theorem_data_blocked_coeff_eq}
+    An existential BNT-label theorem witness gives the comparison between the
+    blocked-basis coefficients and the BNT-label coefficients through the
+    source and target label maps. The same comparison is also available with
+    the canonical coefficient family determined by the witness's
+    $\chi$-matrices. The proposition-level nonempty form of the witness
+    gives the same comparisons after choosing a witness.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the corresponding theorem-data comparison carried by the witness.
+\end{proof}
+
+\begin{theorem}[BNT theorem witnesses give the chi-trace product law]%
+    \label{thm:mpdo_bnt_label_theorem_witness_same_length_product_eq_sum_chi_trace_pow}
+    \lean{MPOTensor.BNTLabelTheoremWitness.same_length_product_eq_sum_chi_trace_pow}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_witness,
+        thm:mpdo_bnt_label_theorem_data_same_length_product_eq_sum_chi_trace_pow}
+    An existential BNT-label theorem witness gives, for every positive length
+    $L$, the identity
+    $O_L(M_\alpha)O_L(M_\beta)
+        = \sum_\gamma
+        \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{\,L}) O_L(M_\gamma)$.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the corresponding theorem-data identity carried by the witness.
+\end{proof}
+
+\begin{theorem}[BNT theorem witnesses give the chi-trace idempotent law]%
+    \label{thm:mpdo_bnt_label_theorem_witness_idempotent_eq_sum_chi_trace}
+    \lean{MPOTensor.BNTLabelTheoremWitness.idempotent_eq_sum_chi_trace}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_witness,
+        thm:mpdo_bnt_label_theorem_data_idempotent_eq_sum_chi_trace}
+    An existential BNT-label theorem witness gives the idempotent scalar
+    identity
+    $m_\gamma =
+        \sum_{\alpha,\beta}
+        \operatorname{tr}(\chi_{\alpha,\beta,\gamma})m_\alpha m_\beta$.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the corresponding theorem-data identity carried by the witness.
+\end{proof}
+
+\begin{theorem}[BNT theorem witnesses give blocked coefficient trace powers]%
+    \label{thm:mpdo_bnt_label_theorem_witness_blocked_coeff_eq_trace_pow}
+    \lean{MPOTensor.BNTLabelTheoremWitness.blocked_coeff_eq_trace_pow}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_witness,
+        thm:mpdo_bnt_label_theorem_data_blocked_coeff_eq_trace_pow}
+    An existential BNT-label theorem witness gives the blocked-basis
+    coefficient trace-power formula obtained by pulling the BNT-label
+    $\chi$-matrices back along the blocked-basis comparison maps.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the corresponding theorem-data identity carried by the witness.
+\end{proof}
+
+\begin{theorem}[BNT theorem witnesses give positive blocked $\chi$ witnesses]%
+    \label{thm:mpdo_bnt_label_theorem_witness_to_positive_blocked_chi_trace_power_form}
+    \lean{MPOTensor.BNTLabelTheoremWitness.toPositiveBlockedStructureChiTracePowerForm}
+    \lean{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi_toDiagonal_of_pos}
+    \lean{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi_tracePowerCoeff_of_pos}
+    \lean{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi_dim_of_pos}
+    \lean{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi_trace_matrix_pow_of_pos}
+    \lean{MPOTensor.HasBNTLabelTheoremWitness.positive_blocked_chi_witness}
+    \lean{MPOTensor.HasBNTLabelTheoremWitness.exists_blocked_chi_trace_power_form}
+    \lean{MPOTensor.HasBNTLabelTheoremWitness.exists_blocked_chi_pullback}
+    \lean{MPOTensor.HasBNTLabelTheoremWitness.exists_blocked_coeff_eq_trace_pow}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_witness,
+        thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form}
+    An existential BNT-label theorem witness gives a positive blocked-basis
+    $\chi$ trace-power witness for the chosen algebra-structure data. The
+    blocked-basis $\chi$-family is the pullback of the BNT-label
+    $\chi$-family along the source and target comparison maps. The
+    proposition-level nonempty form of the witness gives the corresponding
+    existential blocked-basis trace-power family, both in coefficient form and
+    in matrix-trace form.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the corresponding theorem-data consequence carried by the witness.
+\end{proof}
+
+\begin{theorem}[BNT theorem witnesses give blocked trace-power form]%
+    \label{thm:mpdo_bnt_label_theorem_witness_positive_blocked_chi_trace_power}
+    \lean{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi_tracePower}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_witness,
+        thm:mpdo_bnt_label_theorem_witness_to_positive_blocked_chi_trace_power_form}
+    The pulled-back blocked-basis $\chi$-family obtained from an existential
+    BNT-label theorem witness satisfies the blocked trace-power predicate.
+\end{theorem}
+\begin{proof}\leanok
+    This is the trace-power part of the positive blocked-basis
+    $\chi$-witness obtained from the existential witness.
+\end{proof}
+
+\begin{theorem}[BNT theorem witnesses give positive blocked chi families]%
+    \label{thm:mpdo_bnt_label_theorem_witness_positive_blocked_chi_pos_entries}
+    \lean{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi_posEntries}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_witness,
+        thm:mpdo_bnt_label_theorem_witness_to_positive_blocked_chi_trace_power_form}
+    The pulled-back blocked-basis $\chi$-family obtained from an existential
+    BNT-label theorem witness has positive diagonal entries.
+\end{theorem}
+\begin{proof}\leanok
+    This is the positivity part of the positive blocked-basis
+    $\chi$-witness obtained from the existential witness.
+\end{proof}
+
+\begin{theorem}[BNT theorem witnesses give positive pulled-back blocked entries]%
+    \label{thm:mpdo_bnt_label_theorem_witness_positive_blocked_chi_entry_pos}
+    \lean{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi_entry_pos}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_witness,
+        thm:mpdo_bnt_label_theorem_witness_to_positive_blocked_chi_trace_power_form}
+    The pulled-back blocked-basis $\chi$-entries obtained from an
+    existential BNT-label theorem witness are positive.
+\end{theorem}
+\begin{proof}\leanok
+    This is the positivity part of the positive blocked-basis
+    $\chi$-witness obtained from the existential witness.
+\end{proof}
+
+\begin{theorem}[BNT theorem witnesses give pulled-back blocked trace powers]%
+    \label{thm:mpdo_bnt_label_theorem_witness_blocked_coeff_eq_positive_blocked_chi_trace_pow}
+    \lean{MPOTensor.BNTLabelTheoremWitness.blocked_coeff_eq_positiveBlockedChi_trace_pow}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_witness,
+        thm:mpdo_bnt_label_theorem_witness_to_positive_blocked_chi_trace_power_form,
+        thm:mpdo_positive_blocked_structure_chi_eq_trace_matrix_pow}
+    The positive-length blocked-basis coefficients are traces of powers of the
+    pulled-back blocked-basis $\chi$-matrices obtained from an existential
+    BNT-label theorem witness.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the trace-power identity of the positive blocked-basis
+    $\chi$-witness obtained from the existential witness.
+\end{proof}
+
+\begin{theorem}[Positive blocked $\chi$ witness gives trace powers]%
+    \label{thm:mpdo_positive_blocked_structure_chi_eq_trace_matrix_pow}
+    \lean{MPOTensor.AlgebraStructureData.PositiveBlockedStructureChiTracePowerForm.eq_trace_pow}
+    \leanok
+    \uses{def:mpdo_positive_blocked_structure_chi_trace_power_form,
+        thm:mpdo_blocked_structure_chi_eq_trace_matrix_pow}
+    A positive blocked $\chi$ trace-power witness gives, for every positive
+    blocked size $n$, the formula
+    $c^{(n)}_{i,j,k}=\operatorname{tr}(\chi_{n,i,j,k}^{\,n})$.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the trace reformulation of the trace-power identity from the witness.
+\end{proof}
