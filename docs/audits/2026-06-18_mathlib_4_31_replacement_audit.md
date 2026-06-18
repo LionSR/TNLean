@@ -31,6 +31,8 @@ The clearest replacements are:
 - Several finite-dimensional matrix-dimension wrappers in
   `TNLean/Algebra/MatrixAux.lean` can be reduced to `Module.finrank_matrix` and
   elementary simplification.
+- The local finite-sum wrapper `Matrix.sum_mul_mul` was only a specialization
+  of Mathlib's `Matrix.sum_mul` and `Matrix.mul_sum`, and has been removed.
 - Trace-from-characteristic-polynomial wrappers can be shortened using the
   expanded Mathlib trace/charpoly API, especially
   `Matrix.trace_eq_neg_charpoly_coeff`,
@@ -229,6 +231,9 @@ Recommended action:
 - Replace injectivity-to-dimension arguments by
   `LinearMap.finrank_le_finrank_of_injective` when the map has already been
   expressed as a linear map.
+- Use `Matrix.sum_mul` and `Matrix.mul_sum` directly for fixed matrix factors
+  pulled through finite sums; the former local wrapper `Matrix.sum_mul_mul` has
+  been removed from `TNLean/Algebra/MatrixAux.lean`.
 - Keep local lemmas only when they encode a recurring theorem statement in the
   vocabulary of MPS or Wielandt theory.
 

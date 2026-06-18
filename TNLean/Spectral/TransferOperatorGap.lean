@@ -116,8 +116,7 @@ lemma word_conjTranspose_mul_sum (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
       show ∀ A B C D : Matrix (Fin D) (Fin D) ℂ,
         A * B * (C * D) = A * (B * C) * D from fun _ _ _ _ => by simp [Matrix.mul_assoc]]
     rw [Finset.sum_comm]
-    simp_rw [Matrix.sum_mul_mul
-      (M := fun i => (K i)ᴴ * K i), hK, Matrix.mul_one]
+    simp_rw [← Matrix.sum_mul, ← Matrix.mul_sum, hK, Matrix.mul_one]
     exact ih
 
 /-- The standard transfer map preserves trace (for TP tensors). -/
