@@ -278,7 +278,7 @@ theorem exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_
   refine ⟨φ, hφ, hψφ, ?_⟩
   intro φ' hφ' hψφ'
   apply funext
-  rw [iSupIndep_iff_finset_sum_eq_zero_imp_eq_zero] at hIndep
+  rw [iSupIndep_iff_finsetSum_eq_zero_imp_eq_zero] at hIndep
   intro j
   have hsum : ∑ i, (φ' i - φ i) = 0 := by
     rw [Finset.sum_sub_distrib, ← hψφ', ← hψφ, sub_self]

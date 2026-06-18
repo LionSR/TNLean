@@ -253,14 +253,14 @@ private lemma exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicD
           mpvOverlap (d := blockPhysDim d m) (blocksA u) (blocksB v) N)
         atTop (nhds (0 : ℂ)) := by
     intro u
-    have := tendsto_finset_sum (s := Finset.univ) fun v _ => hNone u v
+    have := tendsto_finsetSum (s := Finset.univ) fun v _ => hNone u v
     simpa using this
   have hSumZero :
       Tendsto
         (fun N => ∑ u : Fin m, ∑ v : Fin m,
           mpvOverlap (d := blockPhysDim d m) (blocksA u) (blocksB v) N)
         atTop (nhds (0 : ℂ)) := by
-    have := tendsto_finset_sum (s := Finset.univ) fun u _ => hInnerZero u
+    have := tendsto_finsetSum (s := Finset.univ) fun u _ => hInnerZero u
     simpa using this
   have hGlobalZero :
       Tendsto
