@@ -56,10 +56,11 @@ theorem pgvwc07_iSup_restriction_intersection_of_bnt_directSum_selectors
       A hIrr hLeft hOverlap hBlocks hBlk hBlk3 hInj hL)
     hUnital
 
-/-- Condition-C1 form of the PGVWC one-step block-intersection identity.
+/-- Length-\(L_0\) injectivity form of the PGVWC one-step block-intersection
+identity.
 
-Under a common Condition C1 length \(L_0\), the source length is \(L_0+1\).
-Writing \(S_m=\bigvee_j G_m(A_j)\), the identity is
+Assume each block is injective at a common length \(L_0\). At the source length
+\(L_0+1\), writing \(S_m=\bigvee_j G_m(A_j)\), the identity is
 \[
   \mathbb C^d\otimes S_m\cap S_m\otimes\mathbb C^d=S_{m+1}.
 \]
@@ -168,15 +169,17 @@ theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital
   exact wordTupleSpanTop_of_ge_of_common_blockInjective_of_unital_of_pairBlockSeparatingWords
     A hBlk hUnital hPair (by simpa [S] using hn)
 
-/-- Condition-C1 form of the BNT product span at all sufficiently large lengths.
+/-- Length-\(L_0\) injectivity form of the BNT product span at all sufficiently
+large lengths.
 
-Assume Condition C1 for every block at the common length \(L_0\) and the
+Assume every block is injective at the common length \(L_0\) and the
 normalization
 \[
   \sum_a A^j_aA^{j\dagger}_a=I.
 \]
-The normalization propagates Condition C1 from \(L_0\) to \(L_0+1\) and
-\(3(L_0+1)\). The BNT direct-sum argument at the source length \(L_0+1\)
+The normalization propagates this finite-length injectivity from \(L_0\) to
+\(L_0+1\) and \(3(L_0+1)\). The BNT direct-sum argument at the source length
+\(L_0+1\)
 then gives the simultaneous product span for every
 \[
   n\ge (L_0+1)+(r-1)\,3(L_0+1).
@@ -242,8 +245,8 @@ theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital
     (wordTupleSpanTop_of_ge_of_bnt_directSum_unital
       A hIrr hLeft hOverlap hBlocks hBlk hInj hL hUnital hn)
 
-/-- Condition-C1 form of the internal-direct-sum conclusion for the block local
-spaces.
+/-- Length-\(L_0\) injectivity form of the internal-direct-sum conclusion for
+the block local spaces.
 
 **Unfaithful:** This proof relies on
 `wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1`, which transitively uses
@@ -307,8 +310,8 @@ theorem pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital
       A hIrr hLeft hOverlap hBlocks hBlk hInj hL hUnital hn)
     hUnital
 
-/-- Condition-C1 form of the one-step block-intersection identity at every
-length above the BNT block-separation bound.
+/-- Length-\(L_0\) injectivity form of the one-step block-intersection identity
+at every length above the BNT block-separation bound.
 
 **Unfaithful:** This proof relies on
 `wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1`, which transitively uses
@@ -386,10 +389,11 @@ theorem pgvwc07_directSum_restriction_intersection_of_ge_of_bnt_directSum_unital
     pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital
       A hIrr hLeft hOverlap hBlocks hBlk hInj hL hUnital hn⟩
 
-/-- Condition-C1 form of the large-length block intersection as an internal
-direct sum.
+/-- Length-\(L_0\) injectivity form of the large-length block intersection as
+an internal direct sum.
 
-**Unfaithful:** This proof relies on the finite-\(C_1\) internal-direct-sum and
+**Unfaithful:** This proof relies on the finite-length-injectivity
+internal-direct-sum and
 block-intersection conclusions above, which transitively use the
 periodic-boundary coordinate comparison rather than deriving it from
 arXiv:2011.12127,
@@ -519,8 +523,8 @@ theorem pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_unital
   exact pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital
     A hIrr hLeft hOverlap hBlocks hBlk hInj hL hUnital hn
 
-/-- Condition-C1 form of the eventual block-intersection identity without a
-separate one-site injectivity assumption.
+/-- Length-\(L_0\) injectivity form of the eventual block-intersection identity
+without a separate one-site injectivity assumption.
 
 **Unfaithful:** This proof relies on
 `pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`, which
