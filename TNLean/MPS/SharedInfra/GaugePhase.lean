@@ -9,7 +9,7 @@ import TNLean.Spectral.MPVOverlapDecay
 import TNLean.Spectral.TransferOperatorGapNT
 import TNLean.Topology.TendstoHelpers
 
-import Mathlib.Data.Real.Sqrt
+import Mathlib.Analysis.Real.Sqrt
 
 /-!
 # Shared gauge-phase lemmas for MPS tensors

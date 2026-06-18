@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Analysis.Matrix.Normed
 import Mathlib.Analysis.Matrix.Order
 
 /-!
@@ -27,8 +28,8 @@ both norms give the same spectral radius.
 * `MPSTensor.frobSq_trace`: `frobSq X = (trace(X† X)).re`.
 * `MPSTensor.frobSq_eq_zero_iff`, `frobSq_pos_of_ne_zero`, `frobSq_smul`.
 * `MPSTensor.norm_matToES_sq`: `‖matToES X‖² = frobSq X`.
-* `MPSTensor.norm_sq_sum_mul_le`: Cauchy–Schwarz estimate for norm-squared of
-  an inner product.
+* `MPSTensor.norm_matToES_eq_frobenius_norm`: the Euclidean-space norm of
+  `matToES X` agrees with Mathlib's Frobenius matrix norm.
 -/
 
 open scoped Matrix ComplexOrder BigOperators
@@ -103,13 +104,18 @@ lemma norm_matToES_sq (M : Matrix (Fin m) (Fin n) ℂ) :
       ← Complex.ofReal_pow]]
   exact Complex.ofReal_re _
 
-/-! ### Cauchy–Schwarz estimate -/
+section FrobeniusMatrixNorm
 
-/-- Cauchy–Schwarz for `‖∑ aₖ bₖ‖²`. -/
-lemma norm_sq_sum_mul_le {D : ℕ} (a b : Fin D → ℂ) :
-    ‖∑ k, a k * b k‖ ^ 2 ≤ (∑ k, ‖a k‖ ^ 2) * (∑ k, ‖b k‖ ^ 2) :=
-  (pow_le_pow_left₀ (norm_nonneg _)
-    ((norm_sum_le _ _).trans (Finset.sum_le_sum fun _ _ => norm_mul_le _ _)) 2).trans
-    (Finset.sum_mul_sq_le_sq_mul_sq _ _ _)
+open scoped Matrix.Norms.Frobenius
+
+/-- The Euclidean-space norm of a flattened matrix is Mathlib's Frobenius norm. -/
+lemma norm_matToES_eq_frobenius_norm (M : Matrix (Fin m) (Fin n) ℂ) :
+    ‖matToES M‖ = ‖M‖ := by
+  rw [← sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _)]
+  rw [norm_matToES_sq, Matrix.frobenius_norm_def, ← Real.sqrt_eq_rpow, Real.sq_sqrt]
+  · simp [frobSq]
+  · positivity
+
+end FrobeniusMatrixNorm
 
 end MPSTensor

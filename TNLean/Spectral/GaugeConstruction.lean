@@ -5,10 +5,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.Spectral.MixedTransfer
 import TNLean.Channel.FixedPoint.CanonicalGauge
 import TNLean.Channel.Schwarz.Basic
-import TNLean.Algebra.MatrixAux
 
 import Mathlib.Data.Matrix.Block
+import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Normed
+import Mathlib.LinearAlgebra.Dimension.Finrank
+import Mathlib.LinearAlgebra.Matrix.ToLin
 
 /-!
 # Gauge construction for transfer-operator gap rigidity
@@ -510,8 +512,7 @@ theorem self_mul_conjTranspose_fixed_of_intertwining
     _ = ∑ i : Fin d, X * (B i * (B i)ᴴ) * Xᴴ := by
       simp only [hterm]
     _ = X * (∑ i : Fin d, B i * (B i)ᴴ) * Xᴴ := by
-      simpa using
-        (Matrix.sum_mul_mul (L := X) (R := Xᴴ) (M := fun i : Fin d => B i * (B i)ᴴ))
+      simp only [← Matrix.sum_mul, ← Matrix.mul_sum]
     _ = X * Xᴴ := by
       simp only [hB_unital, Matrix.mul_one]
 
@@ -552,8 +553,7 @@ theorem ungauge_transfer_fixedPoint
     _ = ∑ i : Fin d, S * (A' i * σ * (A' i)ᴴ) * Sᴴ := by
       simp only [hterm]
     _ = S * (∑ i : Fin d, A' i * σ * (A' i)ᴴ) * Sᴴ := by
-      simpa using
-        (Matrix.sum_mul_mul (L := S) (R := Sᴴ) (M := fun i : Fin d => A' i * σ * (A' i)ᴴ))
+      simp only [← Matrix.sum_mul, ← Matrix.mul_sum]
     _ = S * transferMap A' σ * Sᴴ := by
       simp only [A', transferMap_apply]
     _ = S * σ * Sᴴ := by rw [hσ]
@@ -697,9 +697,19 @@ theorem dim_eq_of_gauged_intertwining [NeZero D₁] [NeZero D₂]
       simp only [Matrix.mulVec_mulVec]
     rw [this, hInter1 k, Matrix.smul_mulVec, ← Matrix.mulVec_mulVec,
       hv, Matrix.mulVec_zero, smul_zero]
-  have h_D₂_le : D₂ ≤ D₁ :=
-    Matrix.dim_le_of_mulVec_injective X
-      (injective_of_ker_all X hX (ker_all_of_inj B hB X hker_X))
+  have h_D₂_le : D₂ ≤ D₁ := by
+    have hXinj : ∀ v : Fin D₂ → ℂ, X *ᵥ v = 0 → v = 0 :=
+      injective_of_ker_all X hX (ker_all_of_inj B hB X hker_X)
+    let f : (Fin D₂ → ℂ) →ₗ[ℂ] (Fin D₁ → ℂ) := Matrix.toLin' X
+    have hf_inj : Function.Injective f := by
+      intro u v huv
+      have hsub : f (u - v) = 0 := by
+        rw [map_sub, huv, sub_self]
+      exact sub_eq_zero.mp <| hXinj (u - v) (by simpa [f, Matrix.toLin'_apply] using hsub)
+    have hfinrank :
+        Module.finrank ℂ (Fin D₂ → ℂ) ≤ Module.finrank ℂ (Fin D₁ → ℂ) :=
+      LinearMap.finrank_le_finrank_of_injective hf_inj
+    simpa [Module.finrank_fintype_fun_eq_card, Fintype.card_fin] using hfinrank
   have hXh_ne : Xᴴ ≠ 0 := by
     intro h
     apply hX
@@ -716,9 +726,19 @@ theorem dim_eq_of_gauged_intertwining [NeZero D₁] [NeZero D₂]
       simp only [Matrix.mulVec_mulVec]
     rw [this, hInter2h k, Matrix.smul_mulVec, ← Matrix.mulVec_mulVec,
       hv, Matrix.mulVec_zero, smul_zero]
-  have h_D₁_le : D₁ ≤ D₂ :=
-    Matrix.dim_le_of_mulVec_injective Xᴴ
-      (injective_of_ker_all Xᴴ hXh_ne (ker_all_of_inj A hA Xᴴ hker_Xh))
+  have h_D₁_le : D₁ ≤ D₂ := by
+    have hXhinj : ∀ v : Fin D₁ → ℂ, Xᴴ *ᵥ v = 0 → v = 0 :=
+      injective_of_ker_all Xᴴ hXh_ne (ker_all_of_inj A hA Xᴴ hker_Xh)
+    let f : (Fin D₁ → ℂ) →ₗ[ℂ] (Fin D₂ → ℂ) := Matrix.toLin' Xᴴ
+    have hf_inj : Function.Injective f := by
+      intro u v huv
+      have hsub : f (u - v) = 0 := by
+        rw [map_sub, huv, sub_self]
+      exact sub_eq_zero.mp <| hXhinj (u - v) (by simpa [f, Matrix.toLin'_apply] using hsub)
+    have hfinrank :
+        Module.finrank ℂ (Fin D₁ → ℂ) ≤ Module.finrank ℂ (Fin D₂ → ℂ) :=
+      LinearMap.finrank_le_finrank_of_injective hf_inj
+    simpa [Module.finrank_fintype_fun_eq_card, Fintype.card_fin] using hfinrank
   exact le_antisymm h_D₁_le h_D₂_le
 
 end MPSTensor

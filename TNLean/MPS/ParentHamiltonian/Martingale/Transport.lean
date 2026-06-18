@@ -59,7 +59,7 @@ theorem parentInteractionES_apply_eq_zero_iff (A : MPSTensor d D) (L : ℕ)
     parentInteractionES A L v = 0 ↔ v ∈ groundSpaceES A L := by
   change (groundSpaceES A L)ᗮ.starProjection v = 0 ↔ v ∈ groundSpaceES A L
   rw [Submodule.starProjection_orthogonal']
-  simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.one_apply]
+  simp only [sub_apply, one_apply_eq_self]
   rw [sub_eq_zero, eq_comm, Submodule.starProjection_eq_self_iff]
 
 /-- The cyclic window restriction map transported from `NSiteSpace` to the

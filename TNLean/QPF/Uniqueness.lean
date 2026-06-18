@@ -99,7 +99,8 @@ private lemma sqrtFactor_mul_conjTranspose' [DecidableEq (Fin D)]
     _ = U * Matrix.diagonal (fun j => (↑(hρ.eigenvalues j) : ℂ)) * Uᴴ := by
         rw [sqrtΛ_mul_sqrtΛ' hρ hρ_pd.posSemidef]
     _ = ρ := by
-        simpa [U] using (spectral_decomp_eq hρ).symm
+        simpa [U, Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose,
+          Function.comp_def] using hρ.spectral_theorem.symm
 
 private lemma sqrtFactor_mul_invFactor_conj' [DecidableEq (Fin D)]
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.IsHermitian) (hρ_pd : ρ.PosDef) :
@@ -116,7 +117,8 @@ private lemma sqrtFactor_mul_invFactor_conj' [DecidableEq (Fin D)]
     _ = U * 1 * Uᴴ := by rw [sqrtΛ_mul_sqrtInvΛ' hρ hρ_pd]
     _ = 1 := by
         rw [Matrix.mul_one]
-        simpa [U] using eig_mul_conj hρ
+        simpa [U, Matrix.star_eq_conjTranspose] using
+          (Unitary.mul_star_self_of_mem hρ.eigenvectorUnitary.prop)
 
 private lemma invFactor_mul_sqrtFactor_conj' [DecidableEq (Fin D)]
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.IsHermitian) (hρ_pd : ρ.PosDef) :
@@ -133,7 +135,8 @@ private lemma invFactor_mul_sqrtFactor_conj' [DecidableEq (Fin D)]
     _ = U * 1 * Uᴴ := by rw [sqrtInvΛ_mul_sqrtΛ' hρ hρ_pd]
     _ = 1 := by
         rw [Matrix.mul_one]
-        simpa [U] using eig_mul_conj hρ
+        simpa [U, Matrix.star_eq_conjTranspose] using
+          (Unitary.mul_star_self_of_mem hρ.eigenvectorUnitary.prop)
 
 private lemma sqrtFactor_isUnit' [DecidableEq (Fin D)]
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.IsHermitian) (hρ_pd : ρ.PosDef) :
@@ -198,7 +201,9 @@ lemma exists_critical_scalar [Nonempty (Fin D)]
     exact (Matrix.IsUnit.posDef_star_left_conjugate_iff hB_unit).mpr hσ_pd
   set c₀ := minEigenvalue hH_herm
   set V : Matrix (Fin D) (Fin D) ℂ := ↑hH_herm.eigenvectorUnitary
-  have hV_unit := eigenvectorUnitary_isUnit hH_herm
+  have hV_unit : IsUnit V := by
+    rw [Matrix.isUnit_iff_isUnit_det]
+    simpa [V] using Matrix.UnitaryGroup.det_isUnit hH_herm.eigenvectorUnitary
   have h_shift := hermitian_sub_scalar_spectral hH_herm c₀
   have hct : ∀ f, V * Matrix.diagonal f * Vᴴ = V * Matrix.diagonal f * star V :=
     fun _ => by simp [Matrix.star_eq_conjTranspose]

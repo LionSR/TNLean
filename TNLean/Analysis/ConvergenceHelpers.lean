@@ -67,7 +67,7 @@ lemma sum_tendsto_one_of_diag
     simp only [hμj0, div_self hμ0, one_pow, one_mul]; exact hdiag
   have h2 : Tendsto (fun N => ∑ j ∈ Finset.univ.erase j0,
       (μ j / μ0) ^ N * g j N) atTop (nhds (0 : ℂ)) := by
-    have := tendsto_finset_sum (Finset.univ.erase j0)
+    have := tendsto_finsetSum (Finset.univ.erase j0)
       (fun (j : Fin r) (hj : j ∈ Finset.univ.erase j0) =>
         (tendsto_pow_atTop_nhds_zero_of_norm_lt_one
           (hratio j (Finset.ne_of_mem_erase hj))).mul

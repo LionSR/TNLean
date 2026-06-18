@@ -31,7 +31,7 @@ $\rho^{-1/2} \Fix(T) \rho^{-1/2}$ is a `StarSubalgebra` of `M_D(\mathbb{C})`.
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Corollary 6.7, Section 6.4]
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder TNMatrixCFC BigOperators
+open scoped Matrix ComplexOrder MatrixOrder BigOperators
 open Matrix Finset Complex
 
 namespace Kraus

@@ -383,7 +383,7 @@ theorem regionInsertedCoeff_reindexTensor (B : Tensor G d) {bd : Edge G → ℕ}
     refine congr_arg₂ (· * ·) (congr_arg₂ (· * ·) ?_ rfl) rfl
     split_ifs with h₁ h₂ h₂
     · -- Both predicates hold: the conjugated matrix entry equals the original entry.
-      rw [Matrix.reindexAlgEquiv_apply, Matrix.reindex_apply, Matrix.submatrix_apply]
+      rw [Matrix.coe_reindexAlgEquiv, Matrix.reindex_apply, Matrix.submatrix_apply]
       simp
     · exact absurd (hsame.mpr h₁) h₂
     · exact absurd (hsame.mp h₂) h₁

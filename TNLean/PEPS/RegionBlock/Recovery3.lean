@@ -1,5 +1,6 @@
 import TNLean.PEPS.RegionBlock.Recovery2
 import TNLean.PEPS.VertexComplement.KernelDescent
+import Mathlib.LinearAlgebra.Matrix.Rank
 
 /-!
 # Region physical-to-virtual recovery: the spanning step and the transfer datum

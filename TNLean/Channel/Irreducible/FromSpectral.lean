@@ -459,7 +459,7 @@ theorem isIrreducibleMap_of_hasSpectralProperties
             rw [← Finset.smul_sum]
       _ = (↑r : ℂ)⁻¹ •
             (S * (∑ i : Fin n, K i * (S⁻¹ * X * S⁻¹) * (K i)ᴴ) * S) := by
-            rw [Matrix.sum_mul_mul]
+            simp only [← Matrix.sum_mul, ← Matrix.mul_sum]
       _ = (↑r : ℂ)⁻¹ • (S * E (S⁻¹ * X * S⁻¹) * S) := by
             rw [hE_eq]
             simp [MPSTensor.transferMap_apply]

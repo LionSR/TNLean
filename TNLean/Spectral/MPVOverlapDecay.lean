@@ -45,7 +45,7 @@ equivalent, then the MPV overlaps decay to `0` as `N → ∞`.
    to get `((mixedTransferMap A B)^N) (Matrix.single p q 1) → 0`.
 4. Extract the `(p,q)` entry using the continuous linear functional
    `Matrix.entryLinearMap ℂ ℂ p q`.
-5. Reassemble the finite sum using `tendsto_finset_sum`.
+5. Reassemble the finite sum using `tendsto_finsetSum`.
 
 ## Rectangular overlaps for different bond dimensions
 
@@ -94,13 +94,13 @@ theorem mpvOverlap_tendsto_zero
   have hinner : ∀ p : Fin D,
       Filter.Tendsto (fun N => ∑ q : Fin D, term p q N) Filter.atTop (nhds 0) := fun p => by
     simpa [Finset.sum_const_zero] using
-      tendsto_finset_sum (s := Finset.univ) (fun q _ => hterm p q)
+      tendsto_finsetSum (s := Finset.univ) (fun q _ => hterm p q)
   -- The outer `p`-sum also tends to `0`.
   have hsum :
       Filter.Tendsto (fun N => ∑ p : Fin D, ∑ q : Fin D, term p q N)
         Filter.atTop (nhds 0) := by
     simpa [Finset.sum_const_zero] using
-      tendsto_finset_sum (s := Finset.univ) (fun p _ => hinner p)
+      tendsto_finsetSum (s := Finset.univ) (fun p _ => hinner p)
   -- Rewrite the finite sum as the operator trace.
   have htraceEq : ∀ N : ℕ,
       (LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ)) ((mixedTransferMap A B) ^ N)

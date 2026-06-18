@@ -402,7 +402,7 @@ private theorem blockTensor_selfOverlap_tendsto_of_cyclicSectorDecomp
           mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks v) N)
         atTop (nhds (∑ v : Fin m, if u = v then (1 : ℂ) else 0)) := by
     intro u
-    exact tendsto_finset_sum (s := Finset.univ) fun v _ =>
+    exact tendsto_finsetSum (s := Finset.univ) fun v _ =>
       sectorOverlap_tendsto_delta_of_cyclicSectorDecomp
         A hP blocks hBlocks_lc hBlocks_mpv hPproj hPsum hCyclicP hComm hTrace
         hIntertwine hMul hStar hLetter hV_iso hV_range hEmbed hNondeg u v
@@ -411,7 +411,7 @@ private theorem blockTensor_selfOverlap_tendsto_of_cyclicSectorDecomp
         (fun N => ∑ u : Fin m, ∑ v : Fin m,
           mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks v) N)
         atTop (nhds (∑ u : Fin m, ∑ v : Fin m, if u = v then (1 : ℂ) else 0)) := by
-    exact tendsto_finset_sum (s := Finset.univ) fun u _ => hInner u
+    exact tendsto_finsetSum (s := Finset.univ) fun u _ => hInner u
   have hLimit :
       (∑ u : Fin m, ∑ v : Fin m, if u = v then (1 : ℂ) else 0) = (m : ℂ) := by
     simp

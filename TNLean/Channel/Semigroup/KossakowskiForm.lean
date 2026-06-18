@@ -26,7 +26,7 @@ generator (Wolf Equation 7.23) and proves its equivalence with the Lindblad form
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 7.1.2, Theorem 7.1, Equation 7.23]
 -/
 
-open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNMatrixCFC TNOperatorSpace
+open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace
 open Matrix TNLean
 
 noncomputable section

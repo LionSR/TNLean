@@ -116,7 +116,7 @@ theorem bondModelMatrix_eq_singletonBundleMatrix
     intro r
     rw [Equiv.symm_apply_eq, bridgeEquiv, Equiv.trans_apply, Equiv.apply_symm_apply]
     rfl
-  rw [bondModelMatrix_apply, singletonBundleMatrix, Matrix.reindexAlgEquiv_apply,
+  rw [bondModelMatrix_apply, singletonBundleMatrix, Matrix.coe_reindexAlgEquiv,
     Matrix.reindex_apply, Matrix.submatrix_apply, hbe, hbe]
 
 /-! ### Surjectivity of the descent's physical legs
@@ -366,7 +366,7 @@ theorem exists_regionInsertedCoeff_eq_of_coherentFrames
     fun σ τ => ?_⟩
   have hMrecover : Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle)
       (Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle).symm M) = M := by
-    rw [← Matrix.reindexAlgEquiv_symm, AlgEquiv.apply_symm_apply]
+    rw [← Matrix.symm_reindexAlgEquiv, AlgEquiv.apply_symm_apply]
   rw [← hMrecover]
   exact regionInsertedCoeff_eq_of_coarse_eq F F' hP hP' hred hblue hcompl hbond hd hpos e
     hsingle _ Ncoarse hN σ τ
@@ -476,7 +476,7 @@ theorem regionEdgeTransfer_regionInsertedCoeff
     F'.frame.coarseTensor_pos_bondDim Mcoarse with hNc
   have hMrecover :
       Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle) Mcoarse = M := by
-    rw [hMc, ← Matrix.reindexAlgEquiv_symm, AlgEquiv.apply_symm_apply]
+    rw [hMc, ← Matrix.symm_reindexAlgEquiv, AlgEquiv.apply_symm_apply]
   have hRtransfer : regionEdgeTransfer F F' hred hblue e hsingle M =
       Matrix.reindexAlgEquiv ℂ ℂ
         (bridgeEquiv (G := G) F' e (hsingle_transport F F' e hred hblue hsingle)) Ncoarse := rfl

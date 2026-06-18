@@ -8,7 +8,6 @@ import TNLean.Spectral.GaugeConstruction
 import TNLean.QPF.Assembly
 import TNLean.Channel.FixedPoint.CanonicalGauge
 import TNLean.Channel.Schwarz.Basic
-import TNLean.Algebra.MatrixAux
 import Mathlib.Data.Matrix.Block
 import Mathlib.Analysis.Normed.Algebra.GelfandFormula
 import Mathlib.Analysis.SpecificLimits.Normed
@@ -87,8 +86,7 @@ theorem mixedTransferSpectralRadius_eq (A B : MPSTensor d D) :
 
 The definition and basic lemmas (`frobSq`, `frobSq_nonneg`, `frobSq_eq_zero_iff`,
 `frobSq_pos_of_ne_zero`, `frobSq_smul`, `frobSq_trace`, `matToES`, …) are
-provided by `TNLean.Spectral.FrobeniusNorm` for general rectangular matrices.
-Below we add the square-matrix-specific lemma `frobSq_mul_le`. -/
+provided by `TNLean.Spectral.FrobeniusNorm` for general rectangular matrices. -/
 
 /-! ### Eigenvector iteration -/
 
@@ -117,8 +115,7 @@ lemma word_conjTranspose_mul_sum (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
       show ∀ A B C D : Matrix (Fin D) (Fin D) ℂ,
         A * B * (C * D) = A * (B * C) * D from fun _ _ _ _ => by simp [Matrix.mul_assoc]]
     rw [Finset.sum_comm]
-    simp_rw [Matrix.sum_mul_mul
-      (M := fun i => (K i)ᴴ * K i), hK, Matrix.mul_one]
+    simp_rw [← Matrix.sum_mul, ← Matrix.mul_sum, hK, Matrix.mul_one]
     exact ih
 
 /-- The standard transfer map preserves trace (for TP tensors). -/
@@ -133,25 +130,15 @@ lemma trace_transferMap (A : MPSTensor d D) (Z : Matrix (Fin D) (Fin D) ℂ)
 
 /-! ### Hilbert–Schmidt contraction for the mixed transfer operator
 
-The Euclidean-space embedding `matToES` and its basic lemmas are imported from
-`TNLean.Spectral.FrobeniusNorm`.  Below we add square-matrix submultiplicativity. -/
-
-private lemma frobSq_mul_le (A B : Matrix (Fin D) (Fin D) ℂ) :
-    frobSq (A * B) ≤ frobSq A * frobSq B := by
-  simp only [frobSq, Matrix.mul_apply]
-  calc ∑ i, ∑ j, ‖∑ k, A i k * B k j‖ ^ 2
-      ≤ ∑ i, ∑ j, (∑ k, ‖A i k‖ ^ 2) * (∑ k, ‖B k j‖ ^ 2) :=
-        Finset.sum_le_sum fun i _ => Finset.sum_le_sum fun j _ => norm_sq_sum_mul_le _ _
-    _ = (∑ i, ∑ k, ‖A i k‖ ^ 2) * (∑ j, ∑ k, ‖B k j‖ ^ 2) := by
-        simp_rw [← Finset.mul_sum, ← Finset.sum_mul]
-    _ = _ := by congr 1; exact Finset.sum_comm
+The Euclidean-space embedding `matToES` is imported from
+`TNLean.Spectral.FrobeniusNorm`; submultiplicativity is Mathlib's
+Frobenius-norm estimate. -/
 
 private lemma norm_matToES_mul_le (A B : Matrix (Fin D) (Fin D) ℂ) :
     ‖matToES (A * B)‖ ≤ ‖matToES A‖ * ‖matToES B‖ := by
-  have h : ‖matToES (A * B)‖ ^ 2 ≤ (‖matToES A‖ * ‖matToES B‖) ^ 2 := by
-    rw [norm_matToES_sq, mul_pow, norm_matToES_sq, norm_matToES_sq]; exact frobSq_mul_le A B
-  nlinarith [Real.sqrt_le_sqrt h, Real.sqrt_sq (norm_nonneg (matToES (A * B))),
-    Real.sqrt_sq (mul_nonneg (norm_nonneg (matToES A)) (norm_nonneg (matToES B)))]
+  rw [norm_matToES_eq_frobenius_norm, norm_matToES_eq_frobenius_norm,
+    norm_matToES_eq_frobenius_norm]
+  exact Matrix.frobenius_norm_mul A B
 
 private lemma trace_cycle_for_frobSq (w v : Matrix (Fin D) (Fin D) ℂ) :
     (w * vᴴ * (v * wᴴ)).trace = (wᴴ * w * (vᴴ * v)).trace := by

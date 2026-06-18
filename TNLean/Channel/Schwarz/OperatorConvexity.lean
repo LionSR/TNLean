@@ -40,9 +40,10 @@ subunitality, because `log` is unbounded below.
 ### Status
 
 The three Jensen instances below are proved from the axioms in
-`TNLean.Axioms.OperatorConvexity`, which axiomatize the operator
-concavity/convexity results and the Jensen inequality pending upstream
-Mathlib work in `CFC.Rpow.Order` and `CFC.ExpLog.Order`.
+`TNLean.Axioms.OperatorConvexity`.  Mathlib 4.31 now supplies the operator
+concavity inputs for `rpow` on `[0, 1]` and for `log`, but the
+positive-map Jensen theorem that turns those inputs into the displayed
+inequalities is still not present.
 
 A first batch of finite-POVM / compression auxiliaries for the direct concave
 real-power route now lives in `OperatorJensenAux.lean`, but those lemmas are
@@ -75,8 +76,6 @@ private local instance instOperatorConvexityPartialOrder : PartialOrder Mat :=
   Matrix.instPartialOrder
 private local instance instOperatorConvexityStarOrderedRing : StarOrderedRing Mat :=
   Matrix.instStarOrderedRing
-private local instance instOperatorConvexityNonnegSpectrumClass : NonnegSpectrumClass ℝ Mat :=
-  Matrix.instNonnegSpectrumClass
 private local instance instOperatorConvexityCStarAlgebra : CStarAlgebra Mat :=
   CStarAlgebra.mk
 

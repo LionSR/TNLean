@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Core.Transfer
 
-import Mathlib.Data.Matrix.Bilinear
+import Mathlib.LinearAlgebra.Matrix.Bilinear
 
 /-!
 # Mixed transfer operator and iterated word formulae
@@ -154,8 +154,8 @@ section MixedTransferRect
 It acts on `D₁ × D₂` matrices by
 `X ↦ ∑ i, A i * X * (B i)ᴴ`.
 
-We implement it using `mulLeftLinearMap` / `mulRightLinearMap` from
-`Mathlib.Data.Matrix.Bilinear`, which support rectangular matrix multiplication. -/
+The definition uses `mulLeftLinearMap` / `mulRightLinearMap` from
+`Mathlib.LinearAlgebra.Matrix.Bilinear`, the multiplication linear maps for rectangular matrices. -/
 noncomputable def mixedTransferMap₂ {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂) :
     Matrix (Fin D₁) (Fin D₂) ℂ →ₗ[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ :=

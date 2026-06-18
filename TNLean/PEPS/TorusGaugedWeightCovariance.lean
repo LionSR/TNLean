@@ -35,15 +35,6 @@ open scoped BigOperators Matrix
 namespace TNLean
 namespace PEPS
 
-/-! ### Congruence and reindexing helpers -/
-
-/-- Evaluating a reindexed matrix at the cast indices recovers the original entry. -/
-theorem reindexAlgEquiv_apply_cast {m n : ℕ} (h : m = n)
-    (M : Matrix (Fin m) (Fin m) ℂ) (i j : Fin m) :
-    Matrix.reindexAlgEquiv ℂ ℂ (finCongr h) M (Fin.cast h i) (Fin.cast h j) = M i j := by
-  rw [Matrix.reindexAlgEquiv_apply, Matrix.reindex_apply, Matrix.submatrix_apply]
-  congr 1
-
 section Generic
 
 variable {V W : Type*} [Fintype V] [LinearOrder V] [Fintype W] [LinearOrder W]
@@ -286,8 +277,8 @@ theorem regionBlockedWeight_applyGauge_translate {B : Tensor (torusGraph width h
   rw [show (regionBoundaryEdgeMapEquiv (translate a b) R).symm f =
     boundaryEdgeMap (translate a b) R f from rfl]
   rw [hcastB, hcastB', hK]
-  exact reindexAlgEquiv_apply_cast
-    (bondDim_boundaryEdgeMap_translate hB a b R f).symm _ (bdry f) (bdry' f)
+  rw [Matrix.coe_reindexAlgEquiv, Matrix.reindex_apply, Matrix.submatrix_apply]
+  congr 1
 
 /-! ### Translation transport of the region-block scalar proportionality -/
 

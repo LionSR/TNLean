@@ -47,7 +47,8 @@ private theorem trace_mul_nonneg_of_posSemidef
   let U : Matrix (Fin D) (Fin D) ℂ := ↑hB.isHermitian.eigenvectorUnitary
   let Λ : Fin D → ℂ := fun i => ↑(hB.isHermitian.eigenvalues i)
   have hspec : B = U * Matrix.diagonal Λ * Uᴴ := by
-    simpa only using spectral_decomp_eq hB.isHermitian
+    simpa [U, Λ, Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose,
+      Function.comp_def] using hB.isHermitian.spectral_theorem
   have hUAU_psd : (Uᴴ * A * U).PosSemidef := by
     simpa only [Matrix.mul_assoc, conjTranspose_conjTranspose] using
       hA.mul_mul_conjTranspose_same (B := Uᴴ)

@@ -2,8 +2,6 @@
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.Algebra.MatrixFunctionalCalculus
-
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.Matrix.Spectrum
@@ -40,8 +38,8 @@ Chapter 6 of Wolf's lecture notes.
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 6][Wolf2012QChannels]
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder TNMatrixCFC
-open Matrix Finset TNLean
+open scoped Matrix ComplexOrder MatrixOrder
+open Matrix Finset
 
 /-! ## Positive maps -/
 

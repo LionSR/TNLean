@@ -30,7 +30,6 @@ import TNLean.Algebra.UnitModulusPowerSum
 import TNLean.Algebra.FiniteCycleCoboundary
 import TNLean.Algebra.BurnsideMatrix
 import TNLean.Algebra.IrreducibleTensorAction
-import TNLean.Algebra.MatrixFrobenius
 import TNLean.Algebra.PerronFrobenius.RankOne
 import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.ScalarCommutant

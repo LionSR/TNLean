@@ -6,6 +6,8 @@ import TNLean.Spectral.TransferOperatorGapRect
 import TNLean.Spectral.GaugeConstruction
 import TNLean.Channel.PerronFrobenius.Existence
 import TNLean.MPS.Irreducible.FormII
+import Mathlib.LinearAlgebra.Dimension.Finrank
+import Mathlib.LinearAlgebra.Matrix.ToLin
 
 /-!
 # Transfer-operator gap for normal tensor (irreducible + TP) blocks
@@ -537,10 +539,28 @@ private lemma dim_eq_of_gram_fixedPoints_of_irreducible_TP
     have : cA • v = 0 := by
       simpa only [smul_eq_zero, Matrix.smul_mulVec, Matrix.one_mulVec] using h0
     exact (smul_eq_zero.mp this).resolve_left hcA_ne
-  have h_D₂_le : D₂ ≤ D₁ :=
-    Matrix.dim_le_of_mulVec_injective X' hXinj
-  have h_D₁_le : D₁ ≤ D₂ :=
-    Matrix.dim_le_of_mulVec_injective X'ᴴ hXhinj
+  have h_D₂_le : D₂ ≤ D₁ := by
+    let f : (Fin D₂ → ℂ) →ₗ[ℂ] (Fin D₁ → ℂ) := Matrix.toLin' X'
+    have hf_inj : Function.Injective f := by
+      intro u v huv
+      have hsub : f (u - v) = 0 := by
+        rw [map_sub, huv, sub_self]
+      exact sub_eq_zero.mp <| hXinj (u - v) (by simpa [f, Matrix.toLin'_apply] using hsub)
+    have hfinrank :
+        Module.finrank ℂ (Fin D₂ → ℂ) ≤ Module.finrank ℂ (Fin D₁ → ℂ) :=
+      LinearMap.finrank_le_finrank_of_injective hf_inj
+    simpa [Module.finrank_fintype_fun_eq_card, Fintype.card_fin] using hfinrank
+  have h_D₁_le : D₁ ≤ D₂ := by
+    let f : (Fin D₁ → ℂ) →ₗ[ℂ] (Fin D₂ → ℂ) := Matrix.toLin' X'ᴴ
+    have hf_inj : Function.Injective f := by
+      intro u v huv
+      have hsub : f (u - v) = 0 := by
+        rw [map_sub, huv, sub_self]
+      exact sub_eq_zero.mp <| hXhinj (u - v) (by simpa [f, Matrix.toLin'_apply] using hsub)
+    have hfinrank :
+        Module.finrank ℂ (Fin D₁ → ℂ) ≤ Module.finrank ℂ (Fin D₂ → ℂ) :=
+      LinearMap.finrank_le_finrank_of_injective hf_inj
+    simpa [Module.finrank_fintype_fun_eq_card, Fintype.card_fin] using hfinrank
   exact le_antisymm h_D₁_le h_D₂_le
 
 private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP

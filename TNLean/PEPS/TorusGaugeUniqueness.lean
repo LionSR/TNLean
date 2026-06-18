@@ -68,7 +68,7 @@ theorem reindexAlgEquiv_smul {m n : ℕ} (h : m = n) (c : ℂ)
     (M : Matrix (Fin m) (Fin m) ℂ) :
     Matrix.reindexAlgEquiv ℂ ℂ (finCongr h) (c • M) =
       c • Matrix.reindexAlgEquiv ℂ ℂ (finCongr h) M := by
-  simp only [Matrix.reindexAlgEquiv_apply, Matrix.reindex_apply, Matrix.submatrix_smul,
+  simp only [Matrix.coe_reindexAlgEquiv, Matrix.reindex_apply, Matrix.submatrix_smul,
     Pi.smul_apply]
 
 /-! ### The conjugation-form identity of an absorbing family -/
@@ -332,8 +332,9 @@ theorem torusRightEdge_fst_eq_iff (hw : 2 < width) (q : TorusVertex width height
       rw [h1', h2'] at hcon
       have hx : q.1 + 1 + 1 = q.1 := hcon
       refine h20 (add_left_cancel (a := q.1) (b := ((2 : ℕ) : ZMod width)) (c := 0) ?_)
-      push_cast
-      linear_combination hx
+      calc
+        q.1 + ((2 : ℕ) : ZMod width) = q.1 + 1 + 1 := by ring
+        _ = q.1 + 0 := by rw [hx, add_zero]
 
 /-- At an up edge, the stored first endpoint is the lower endpoint exactly when the stored second
 endpoint is the cyclic upper successor of the first.  The vertical counterpart of
@@ -368,8 +369,9 @@ theorem torusUpEdge_fst_eq_iff (hh : 2 < height) (q : TorusVertex width height) 
       rw [h1', h2'] at hcon
       have hy : q.2 + 1 + 1 = q.2 := hcon
       refine h20 (add_left_cancel (a := q.2) (b := ((2 : ℕ) : ZMod height)) (c := 0) ?_)
-      push_cast
-      linear_combination hy
+      calc
+        q.2 + ((2 : ℕ) : ZMod height) = q.2 + 1 + 1 := by ring
+        _ = q.2 + 0 := by rw [hy, add_zero]
 
 end StoredOrder
 

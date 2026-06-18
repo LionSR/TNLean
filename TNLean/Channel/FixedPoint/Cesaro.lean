@@ -26,7 +26,7 @@ statements are for channels (`IsChannel`) which carry a CP hypothesis.
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 6][Wolf2012QChannels]
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder TNMatrixCFC
+open scoped Matrix ComplexOrder MatrixOrder
 open Matrix Finset
 
 variable {D : ℕ}

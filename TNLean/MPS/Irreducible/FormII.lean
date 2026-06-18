@@ -247,10 +247,16 @@ theorem exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
   -- The eigenvalue diagonal matrix
   set Λ := Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) with hΛ_def
   -- Step 5a: The spectral decomposition: ρ = U * Λ * U†
-  have h_spectral : ρ = Umat * Λ * Umatᴴ := spectral_decomp_eq hH
+  have h_spectral : ρ = Umat * Λ * Umatᴴ := by
+    simpa [Umat, hU_raw_def, Λ, hΛ_def, Unitary.conjStarAlgAut_apply,
+      Matrix.star_eq_conjTranspose, Function.comp_def] using hH.spectral_theorem
   -- Step 5b: Unitarity identities
-  have hUU : Umatᴴ * Umat = 1 := eig_conj_mul hH
-  have hUU' : Umat * Umatᴴ = 1 := eig_mul_conj hH
+  have hUU : Umatᴴ * Umat = 1 := by
+    simpa [Umat, hU_raw_def, Matrix.star_eq_conjTranspose] using
+      Matrix.UnitaryGroup.star_mul_self hH.eigenvectorUnitary
+  have hUU' : Umat * Umatᴴ = 1 := by
+    simpa [Umat, hU_raw_def, Matrix.star_eq_conjTranspose] using
+      (Unitary.mul_star_self_of_mem hH.eigenvectorUnitary.prop)
   -- Step 5c: Λ = U† * ρ * U
   have hΛ_eq : Λ = Umatᴴ * ρ * Umat := by
     conv_rhs => rw [h_spectral]
