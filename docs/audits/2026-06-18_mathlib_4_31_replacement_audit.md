@@ -228,6 +228,10 @@ Applied PEPS follow-up:
   `glReindex_coe` directly.
 - The corresponding blueprint theorem was deleted, since the algebra fact is
   now an inline proof step rather than a named Lean declaration.
+- The private MPS cyclic-sector helper
+  `reindexLinearEquiv_conjTranspose` was removed from
+  `TNLean/MPS/CanonicalForm/CyclicSectors/Compression.lean`; its two uses now
+  cite Mathlib's `Matrix.conjTranspose_reindex` directly.
 
 ### Rank and finite-dimensional matrix dimensions
 
