@@ -7,8 +7,8 @@ import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalCrossingTrace
 /-!
 # Finite-spanning versions of trace-decomposition results for block-diagonal parent spaces
 
-This file packages a finite-spanning form of the trace decompositions in
-Perez-Garcia--Verstraete--Wolf--Cirac, Theorem 12, into the block-diagonal
+This file records a finite-spanning form of the trace decompositions in
+Theorem 12 of arXiv:quant-ph/0608197 and applies it to the block-diagonal
 boundary and finite-range equality conclusions. The remaining source step is to
 derive that trace-decomposition equality from the \(C^j,D^j\) comparison after
 specializing \(D^j_\beta\) to the block-diagonal boundary expression
@@ -58,9 +58,9 @@ which transitively uses the boundary-condition comparison at boundary-crossing
 windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
 2126--2128. Documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
-derive the Perez-Garcia--Verstraete--Wolf--Cirac \(C^j,D^j,E^j\)
-boundary-condition comparison from arXiv:quant-ph/0608197, Theorem 12, proof
-lines 1446--1456, and use it to discharge the currently assumed
+derive the \(C^j,D^j,E^j\) boundary-condition comparison from
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
+discharge the currently assumed
 trace-decomposition equality; tracked in issue 2971. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1
@@ -121,8 +121,8 @@ theorem
 equality in the finite BNT range.
 
 This theorem combines the block-diagonal boundary representation with the
-trace-decomposition form of the Pérez-García--Verstraete--Wolf--Cirac
-boundary-crossing comparison. It assumes a finite simultaneous word-spanning
+trace-decomposition form of the boundary-condition comparison in
+arXiv:quant-ph/0608197, Theorem 12. It assumes a finite simultaneous word-spanning
 length \(m\) and the trace equality at that length, for every
 boundary-crossing interval and every block-diagonal boundary representation.
 Deriving that equality from the source \(C^j,D^j\) comparison, with
@@ -135,9 +135,9 @@ which transitively uses the boundary-condition comparison at boundary-crossing
 windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
 2126--2128. Documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
-derive the Perez-Garcia--Verstraete--Wolf--Cirac \(C^j,D^j,E^j\)
-boundary-condition comparison from arXiv:quant-ph/0608197, Theorem 12, proof
-lines 1446--1456, and use it to discharge the currently assumed
+derive the \(C^j,D^j,E^j\) boundary-condition comparison from
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
+discharge the currently assumed
 trace-decomposition equality; tracked in issue 2971. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition
