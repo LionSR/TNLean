@@ -510,8 +510,7 @@ theorem self_mul_conjTranspose_fixed_of_intertwining
     _ = ∑ i : Fin d, X * (B i * (B i)ᴴ) * Xᴴ := by
       simp only [hterm]
     _ = X * (∑ i : Fin d, B i * (B i)ᴴ) * Xᴴ := by
-      simpa using
-        (Matrix.sum_mul_mul (L := X) (R := Xᴴ) (M := fun i : Fin d => B i * (B i)ᴴ))
+      simp only [← Matrix.sum_mul, ← Matrix.mul_sum]
     _ = X * Xᴴ := by
       simp only [hB_unital, Matrix.mul_one]
 
@@ -552,8 +551,7 @@ theorem ungauge_transfer_fixedPoint
     _ = ∑ i : Fin d, S * (A' i * σ * (A' i)ᴴ) * Sᴴ := by
       simp only [hterm]
     _ = S * (∑ i : Fin d, A' i * σ * (A' i)ᴴ) * Sᴴ := by
-      simpa using
-        (Matrix.sum_mul_mul (L := S) (R := Sᴴ) (M := fun i : Fin d => A' i * σ * (A' i)ᴴ))
+      simp only [← Matrix.sum_mul, ← Matrix.mul_sum]
     _ = S * transferMap A' σ * Sᴴ := by
       simp only [A', transferMap_apply]
     _ = S * σ * Sᴴ := by rw [hσ]

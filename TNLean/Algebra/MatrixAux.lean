@@ -18,7 +18,6 @@ Extracted from various files for reusability.
 
 ## Main results
 
-- `Matrix.sum_mul_mul`: pull fixed left/right factors through a finite sum
 - `Matrix.dim_le_of_mulVec_injective`: injective mulVec implies dimension bound
 - `Matrix.PosSemidef.mulVec_eq_zero_left/right`: kernel containment for PSD matrix sums
 -/
@@ -26,13 +25,6 @@ Extracted from various files for reusability.
 open scoped Matrix BigOperators ComplexOrder
 
 namespace Matrix
-
-/-- Pull fixed left and right matrix factors through a finite sum indexed by `Fin d`. -/
-theorem sum_mul_mul {α : Type*} [NonUnitalNonAssocSemiring α]
-    {d l m n r : ℕ} (L : Matrix (Fin l) (Fin m) α)
-    (M : Fin d → Matrix (Fin m) (Fin n) α) (R : Matrix (Fin n) (Fin r) α) :
-    ∑ i : Fin d, L * M i * R = L * (∑ i : Fin d, M i) * R := by
-  simp only [← Matrix.sum_mul, ← Matrix.mul_sum]
 
 /-- If multiplication by a rectangular matrix has trivial kernel, then the source dimension is at
 most the target dimension. -/
