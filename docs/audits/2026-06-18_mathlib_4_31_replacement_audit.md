@@ -423,6 +423,7 @@ Relevant declarations include:
 - `CFC.monotone_rpow`
 - `CFC.rpow_le_rpow`
 - `CFC.monotone_log`
+- `CFC.log_le_log`
 - `CFC.concaveOn_log`
 
 TNLean has trace and Jensen-style results in:
@@ -439,6 +440,10 @@ Recommended action:
 
 - Use the new CFC monotonicity and concavity theorems to remove scalar
   side-proofs and ad hoc operator-order lemmas.
+- Remove exact matrix-specialized aliases of these order lemmas when the
+  Mathlib theorem has the same content.  This has been done in
+  `TNLean/Channel/Schwarz/OperatorMonotone.lean` for the former aliases of
+  `CFC.rpow_le_rpow` and `CFC.log_le_log`.
 - Keep local trace Jensen statements until Mathlib has corresponding trace
   inequalities for positive or completely positive maps.
 - Consider upstreaming source-independent trace-CFC lemmas once their
