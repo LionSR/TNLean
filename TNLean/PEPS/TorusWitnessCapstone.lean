@@ -97,9 +97,9 @@ The reference horizontal gauge `Zh` and its coefficient identity come from
 horizontal edge as the translation image of the reference edge
 (`translate_horizontalReferenceEdge`), the reference coefficient identity transports to that
 edge realized by the transported gauge (`edgeCoeffIdentityWitness_translate`), supplying both
-witness identities.  This is the horizontal half of the translation construction of the witnesses; the
-per-edge gauge family is the transported reference, the source's *"X, the same matrix on all
-horizontal edges"* read in the ordered edge convention.
+witness identities.  This is the horizontal half of the translation construction of the
+witnesses; the per-edge gauge family is the transported reference, the source's *"X, the
+same matrix on all horizontal edges"* read in the ordered edge convention.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1572 of
 `Papers/1804.04964/paper_normal.tex`. -/

@@ -84,7 +84,7 @@ theorem regionBoundaryEdgeInVertex_compl_eq_outVertex (R : Finset V)
   rw [regionBoundaryEdgeInVertex, regionBoundaryEdgeOutVertex,
     regionBoundaryEdgeToCompl]
   rcases f.2 with ⟨h1, h2⟩ | ⟨h1, h2⟩
-  · rw [if_pos h1, if_neg (by rw [Finset.mem_sdiff]; push_neg; exact fun _ => h1)]
+  · rw [if_pos h1, if_neg (by rw [Finset.mem_sdiff]; push Not; exact fun _ => h1)]
   · rw [if_neg h1, if_pos (by rw [Finset.mem_sdiff]; exact ⟨Finset.mem_univ _, h1⟩)]
 
 /-! ### The blocked-region tensor map and its left inverse

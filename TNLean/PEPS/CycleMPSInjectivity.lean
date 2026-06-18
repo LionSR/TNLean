@@ -55,7 +55,7 @@ def arcSite {L : ℕ} (hLn : L < n) (s : Fin n) (j : Fin L) : Fin n :=
 theorem arcSite_mem {L : ℕ} (hLn : L < n) (s : Fin n) (j : Fin L) :
     arcSite hLn s j ∈ cycleArcFrom s L := by
   rw [mem_cycleArcFrom]
-  show (s + ⟨j.val, lt_trans j.isLt hLn⟩ - s).val < L
+  change (s + ⟨j.val, lt_trans j.isLt hLn⟩ - s).val < L
   rw [add_sub_cancel_left]
   exact j.isLt
 
@@ -75,11 +75,11 @@ def arcSiteEquiv {L : ℕ} (hLn : L < n) (s : Fin n) :
   invFun w := ⟨(w.1 - s).val, mem_cycleArcFrom.mp w.2⟩
   left_inv j := by
     apply Fin.ext
-    show ((s + ⟨j.val, lt_trans j.isLt hLn⟩ - s : Fin n)).val = j.val
+    change ((s + ⟨j.val, lt_trans j.isLt hLn⟩ - s : Fin n)).val = j.val
     rw [add_sub_cancel_left]
   right_inv w := by
     apply Subtype.ext
-    show s + (⟨(w.1 - s).val, _⟩ : Fin n) = w.1
+    change s + (⟨(w.1 - s).val, _⟩ : Fin n) = w.1
     rw [show (⟨(w.1 - s).val, lt_trans (mem_cycleArcFrom.mp w.2) hLn⟩ : Fin n) = w.1 - s from
       Fin.ext rfl, add_comm, sub_add_cancel]
 
@@ -469,9 +469,9 @@ theorem regionBlockedTensorInjective_cycleTensorOfMPS (hn : 3 ≤ n) {L : ℕ} (
       fun w => x ⟨(w.1 - s).val, mem_cycleArcFrom.mp w.2⟩ with hτ
     have hword : arcWord hLn s τ = x := by
       funext j
-      show x ⟨((arcSite hLn s j : Fin n) - s).val, _⟩ = x j
+      change x ⟨((arcSite hLn s j : Fin n) - s).val, _⟩ = x j
       refine congrArg x (Fin.ext ?_)
-      show ((s + ⟨j.val, lt_trans j.isLt hLn⟩ - s : Fin n)).val = j.val
+      change ((s + ⟨j.val, lt_trans j.isLt hLn⟩ - s : Fin n)).val = j.val
       rw [add_sub_cancel_left]
     have hcτ : ∑ bdry' : RegionBoundaryConfig (G := SimpleGraph.cycleGraph n)
         (cycleTensorOfMPS hn A) (cycleArcFrom s L),

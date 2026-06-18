@@ -73,6 +73,7 @@ structure ThreeBlockGeometry (V : Type*) [Fintype V] [DecidableEq V] : Type _ wh
 
 variable (g : ThreeBlockGeometry V)
 
+omit [LinearOrder V] in
 /-- The set complement of the red block is the disjoint union of the blue and
 complement blocks.
 
@@ -118,6 +119,7 @@ def ThreeBlockGeometry.complPhysical
         · exact absurd hbl hb
       · exact hc⟩
 
+omit [LinearOrder V] in
 @[simp] theorem ThreeBlockGeometry.complPhysical_apply_blue
     (σblue : RegionPhysicalConfig (V := V) (d := d) g.blue)
     (σcompl : RegionPhysicalConfig (V := V) (d := d) g.complement)
@@ -125,6 +127,7 @@ def ThreeBlockGeometry.complPhysical
     g.complPhysical (d := d) σblue σcompl w = σblue ⟨w.1, hb⟩ := by
   rw [ThreeBlockGeometry.complPhysical, dif_pos hb]
 
+omit [LinearOrder V] in
 @[simp] theorem ThreeBlockGeometry.complPhysical_apply_not_blue
     (σblue : RegionPhysicalConfig (V := V) (d := d) g.blue)
     (σcompl : RegionPhysicalConfig (V := V) (d := d) g.complement)
@@ -301,7 +304,7 @@ theorem ThreeBlockGeometry.hostLabel_p2_eq_hostLabel_regionMerge_complement
       rcases f.2 with ⟨h1host, h2nothost⟩ | ⟨h1nothost, h2host⟩
       · -- `f.1.1 ∈ univ \ red`, `f.1.2 ∉ univ \ red` i.e. `f.1.2 ∈ red`.
         have h2red : f.1.1.2 ∈ g.red := by
-          have := h2nothost; rw [Finset.mem_sdiff] at this; push_neg at this
+          have := h2nothost; rw [Finset.mem_sdiff] at this; push Not at this
           exact this (Finset.mem_univ _)
         have h2notcompl : f.1.1.2 ∉ g.complement := fun hc =>
           (Finset.disjoint_left.mp g.red_disjoint_complement) h2red hc
@@ -309,7 +312,7 @@ theorem ThreeBlockGeometry.hostLabel_p2_eq_hostLabel_regionMerge_complement
         · refine Or.inl ⟨hc1, h2notcompl⟩
         · exact absurd hc2 h2notcompl
       · have h1red : f.1.1.1 ∈ g.red := by
-          have := h1nothost; rw [Finset.mem_sdiff] at this; push_neg at this
+          have := h1nothost; rw [Finset.mem_sdiff] at this; push Not at this
           exact this (Finset.mem_univ _)
         have h1notcompl : f.1.1.1 ∉ g.complement := fun hc =>
           (Finset.disjoint_left.mp g.red_disjoint_complement) h1red hc

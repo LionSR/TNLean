@@ -95,7 +95,7 @@ theorem torusRightEdge_endpoints_of_lt {p : TorusVertex width height}
     (torusRightEdge p).1.1 = p ∧ (torusRightEdge p).1.2 = (p.1 + 1, p.2) := by
   have hadj : (torusGraph width height).Adj p (p.1 + 1, p.2) := torusGraph_adj_right p.1 p.2
   have hcmp : p < ((p.1 + 1, p.2) : TorusVertex width height) := by
-    show toLex (p.1.val, p.2.val) < toLex ((p.1 + 1).val, p.2.val)
+    change toLex (p.1.val, p.2.val) < toLex ((p.1 + 1).val, p.2.val)
     rw [Prod.Lex.toLex_lt_toLex]
     exact Or.inl (by rw [ZMod.val_add_of_lt (by rw [ZMod.val_one]; omega), ZMod.val_one]; omega)
   rw [torusRightEdge, Edge.ofAdj_of_lt hadj hcmp]
@@ -108,9 +108,11 @@ theorem torusUpEdge_endpoints_of_lt {p : TorusVertex width height}
     (torusUpEdge p).1.1 = p ∧ (torusUpEdge p).1.2 = (p.1, p.2 + 1) := by
   have hadj : (torusGraph width height).Adj p (p.1, p.2 + 1) := torusGraph_adj_up p.1 p.2
   have hcmp : p < ((p.1, p.2 + 1) : TorusVertex width height) := by
-    show toLex (p.1.val, p.2.val) < toLex (p.1.val, (p.2 + 1).val)
+    change toLex (p.1.val, p.2.val) < toLex (p.1.val, (p.2 + 1).val)
     rw [Prod.Lex.toLex_lt_toLex]
-    exact Or.inr ⟨rfl, by rw [ZMod.val_add_of_lt (by rw [ZMod.val_one]; omega), ZMod.val_one]; omega⟩
+    exact Or.inr ⟨rfl, by
+      rw [ZMod.val_add_of_lt (by rw [ZMod.val_one]; omega), ZMod.val_one]
+      omega⟩
   rw [torusUpEdge, Edge.ofAdj_of_lt hadj hcmp]
   exact ⟨rfl, rfl⟩
 
@@ -138,7 +140,7 @@ theorem horizontalReferenceEdge_val {xStart yStart : ℕ}
   · rw [torusHorizontalReferenceEdge, href.1]; exact ZMod.val_cast_of_lt (by omega)
   · rw [torusHorizontalReferenceEdge, href.1]; exact ZMod.val_cast_of_lt (by omega)
   · rw [torusHorizontalReferenceEdge, href.2]
-    show ((xStart + 1 : ℕ) + 1 : ZMod width).val = xStart + 2
+    change ((xStart + 1 : ℕ) + 1 : ZMod width).val = xStart + 2
     rw [show ((xStart + 1 : ℕ) + 1 : ZMod width) = ((xStart + 2 : ℕ) : ZMod width) from by
       push_cast; ring]
     exact ZMod.val_cast_of_lt (by omega)
@@ -265,7 +267,7 @@ theorem verticalReferenceEdge_val {xStart yStart : ℕ}
   · rw [torusVerticalReferenceEdge, href.1]; exact ZMod.val_cast_of_lt (by omega)
   · rw [torusVerticalReferenceEdge, href.2]; exact ZMod.val_cast_of_lt (by omega)
   · rw [torusVerticalReferenceEdge, href.2]
-    show ((yStart + 1 : ℕ) + 1 : ZMod height).val = yStart + 2
+    change ((yStart + 1 : ℕ) + 1 : ZMod height).val = yStart + 2
     rw [show ((yStart + 1 : ℕ) + 1 : ZMod height) = ((yStart + 2 : ℕ) : ZMod height) from by
       push_cast; ring]
     exact ZMod.val_cast_of_lt (by omega)

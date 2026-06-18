@@ -163,7 +163,7 @@ theorem coeffTransfer_of_regionResonateReconcile (A B : Tensor G d) (R : Finset 
           (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
           regionInsertedCoeff (G := G) A R f M σ τ =
             regionInsertedCoeff (G := G) B R f N σ τ :=
-  coeffTransfer_of_bondLocal A B R hRA hRB hCA hCB hAB hposA hposB hDim f
+  coeffTransfer_of_bondLocal A B R hRA hRB hCA hCB hAB hposA hposB f
     (isBondLocalTransferKernel_of_regionResonateReconcile A B R hRB hCB f
       hvA hvB hvAout hAB hA hB hposA hposB hDim hrec)
 

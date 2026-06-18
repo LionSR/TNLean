@@ -97,7 +97,6 @@ theorem windowCoeffTransferAB_of_bondLocal {A B : Tensor (torusGraph width heigh
     (hAB : SameState A B)
     (hposA : ∀ g : Edge (torusGraph width height), 0 < A.bondDim g)
     (hposB : ∀ g : Edge (torusGraph width height), 0 < B.bondDim g)
-    (hDim : A.bondDim = B.bondDim)
     (hbondAB : IsBondLocalTransferKernel (G := torusGraph width height) A B
       (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K)
       (by
@@ -139,7 +138,7 @@ theorem windowCoeffTransferAB_of_bondLocal {A B : Tensor (torusGraph width heigh
     (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K)
     hRA hRB (hA.regionBlockedTensorInjective_windowComplement hUA hL hK hxw hyh _)
     (hB.regionBlockedTensorInjective_windowComplement hUB hL hK hxw hyh _)
-    hAB hposA hposB hDim
+    hAB hposA hposB
     ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A (by omega) (by omega)
       ha0 haw hbh⟩ hbondAB
 
@@ -165,7 +164,6 @@ theorem windowCoeffTransferBA_of_bondLocal {A B : Tensor (torusGraph width heigh
     (hAB : SameState A B)
     (hposA : ∀ g : Edge (torusGraph width height), 0 < A.bondDim g)
     (hposB : ∀ g : Edge (torusGraph width height), 0 < B.bondDim g)
-    (hDim : A.bondDim = B.bondDim)
     (hbondBA : IsBondLocalTransferKernel (G := torusGraph width height) B A
       (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K)
       (by
@@ -207,7 +205,7 @@ theorem windowCoeffTransferBA_of_bondLocal {A B : Tensor (torusGraph width heigh
     (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K)
     hRB hRA (hB.regionBlockedTensorInjective_windowComplement hUB hL hK hxw hyh _)
     (hA.regionBlockedTensorInjective_windowComplement hUA hL hK hxw hyh _)
-    hAB.symm hposB hposA hDim.symm
+    hAB.symm hposB hposA
     ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A (by omega) (by omega)
       ha0 haw hbh⟩ hbondBA
 
@@ -285,19 +283,19 @@ theorem exists_windowEdgeCoeffIdentityWitness_of_bondLocal
           ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A (by omega)
             (by omega) ha0 haw hbh⟩
           (windowCoeffTransferAB_of_bondLocal hA hB hUA hUB hL hK ha0 haw hbh hxw hyh hAB
-            hposA hposB hDim hbondAB) (M * M') =
+            hposA hposB hbondAB) (M * M') =
         coeffTransferMap (G := torusGraph width height) A B
             (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K)
             ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A (by omega)
               (by omega) ha0 haw hbh⟩
             (windowCoeffTransferAB_of_bondLocal hA hB hUA hUB hL hK ha0 haw hbh hxw hyh hAB
-              hposA hposB hDim hbondAB) M *
+              hposA hposB hbondAB) M *
           coeffTransferMap (G := torusGraph width height) A B
             (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K)
             ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A (by omega)
               (by omega) ha0 haw hbh⟩
             (windowCoeffTransferAB_of_bondLocal hA hB hUA hUB hL hK ha0 haw hbh hxw hyh hAB
-              hposA hposB hDim hbondAB) M') :
+              hposA hposB hbondAB) M') :
     ∃ (Z Zref : GL (Fin (B.bondDim
         (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K))) ℂ)
       (hE : A.bondDim
@@ -309,9 +307,9 @@ theorem exists_windowEdgeCoeffIdentityWitness_of_bondLocal
   exists_windowEdgeCoeffIdentityWitness_of_coeffTransfer hA hB hUA hUB hL hK ha0 haw hbh hxw hyh
     hAB hposA hposB hDim
     (windowCoeffTransferAB_of_bondLocal hA hB hUA hUB hL hK ha0 haw hbh hxw hyh hAB
-      hposA hposB hDim hbondAB)
+      hposA hposB hbondAB)
     (windowCoeffTransferBA_of_bondLocal hA hB hUA hUB hL hK ha0 haw hbh hxw hyh hAB
-      hposA hposB hDim hbondBA)
+      hposA hposB hbondBA)
     hmul
 
 end PEPS

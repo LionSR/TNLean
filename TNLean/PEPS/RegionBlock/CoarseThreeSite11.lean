@@ -653,7 +653,7 @@ theorem isBondLocalTransferKernel_of_coherentFrames
     IsBondLocalTransferKernel (G := G) A B F.frame.red hRB hCB
       (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) := by
   rw [bondLocal_iff_coeffTransfer A B F.frame.red F.frame.red_injective hRB
-    (regionInjective_compl_red F hP hposA) hCB hAB hposA hposB hbond
+    (regionInjective_compl_red F hP hposA) hCB hAB hposA hposB
     (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle)]
   intro M
   exact exists_regionInsertedCoeff_eq_sharedRegion F F' hP hP' hred hblue hcompl hbond hAB

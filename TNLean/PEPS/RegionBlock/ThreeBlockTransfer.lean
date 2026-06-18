@@ -192,7 +192,6 @@ theorem coeffTransfer_of_bondLocal (A B : Tensor G d) (R : Finset V)
     (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
     (hAB : SameState A B)
     (hposA : ∀ g : Edge G, 0 < A.bondDim g) (hposB : ∀ g : Edge G, 0 < B.bondDim g)
-    (hDim : A.bondDim = B.bondDim)
     (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
     (hbond : IsBondLocalTransferKernel (G := G) A B R hRB hCB f) :
     ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
@@ -205,7 +204,7 @@ theorem coeffTransfer_of_bondLocal (A B : Tensor G d) (R : Finset V)
   obtain ⟨N, hN⟩ := hbond M
   refine ⟨N, ?_⟩
   exact (transferCoeff_eq_incidentKernel_iff_coeff_eq A B R hRA hRB hCA hCB hAB
-    hposA hposB hDim f M N).mp hN
+    hposA hposB f M N).mp hN
 
 /-- **Bond locality is exactly the coefficient transfer.** The transfer kernel of
 every inserted matrix on the boundary edge `f` of the red region is bond-local if and
@@ -228,7 +227,6 @@ theorem bondLocal_iff_coeffTransfer (A B : Tensor G d) (R : Finset V)
     (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
     (hAB : SameState A B)
     (hposA : ∀ g : Edge G, 0 < A.bondDim g) (hposB : ∀ g : Edge G, 0 < B.bondDim g)
-    (hDim : A.bondDim = B.bondDim)
     (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
     IsBondLocalTransferKernel (G := G) A B R hRB hCB f ↔
       ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
@@ -238,7 +236,7 @@ theorem bondLocal_iff_coeffTransfer (A B : Tensor G d) (R : Finset V)
             regionInsertedCoeff (G := G) A R f M σ τ =
               regionInsertedCoeff (G := G) B R f N σ τ :=
   (coeffTransfer_iff_transferCoeff_incidentForm A B R hRA hRB hCA hCB hAB
-    hposA hposB hDim f).symm
+    hposA hposB f).symm
 
 /-- **The identity transfer is bond-local.** For a single tensor `A`, the transfer
 kernel `transferCoeff A A R f M` of any inserted matrix `M` is the incident-matrix
@@ -258,7 +256,7 @@ theorem isBondLocalTransferKernel_self (A : Tensor G d) (R : Finset V)
   intro M
   refine ⟨M, ?_⟩
   exact (transferCoeff_eq_incidentKernel_iff_coeff_eq A A R hRA hRA hCA hCA
-    (fun _ => rfl) hposA hposA rfl f M M).mpr (fun _ _ => rfl)
+    (fun _ => rfl) hposA hposA f M M).mpr (fun _ _ => rfl)
 
 /-! ### The per-edge gauge from bond locality in both directions
 
@@ -278,7 +276,6 @@ theorem SharedNormalEdgeBlockingData.coeffTransferAB
     (D : SharedNormalEdgeBlockingData A B e)
     (hAB : SameState A B)
     (hposA : ∀ g : Edge G, 0 < A.bondDim g) (hposB : ∀ g : Edge G, 0 < B.bondDim g)
-    (hDim : A.bondDim = B.bondDim)
     (f : {f : Edge G // IsRegionBoundaryEdge (G := G) D.red f})
     (hbondAB : IsBondLocalTransferKernel (G := G) A B D.red
       D.regionInjective_red_B (D.regionInjective_compl_red_B hposB) f) :
@@ -290,7 +287,7 @@ theorem SharedNormalEdgeBlockingData.coeffTransferAB
             regionInsertedCoeff (G := G) B D.red f N σ τ :=
   coeffTransfer_of_bondLocal A B D.red D.regionInjective_red_A D.regionInjective_red_B
     (D.regionInjective_compl_red_A hposA) (D.regionInjective_compl_red_B hposB) hAB
-    hposA hposB hDim f hbondAB
+    hposA hposB f hbondAB
 
 /-- The backward coefficient transfer of a shared one-edge blocking datum, derived from
 the `B → A` bond locality (the shared datum with the two tensors swapped). For each
@@ -300,7 +297,6 @@ theorem SharedNormalEdgeBlockingData.coeffTransferBA
     (D : SharedNormalEdgeBlockingData A B e)
     (hBA : SameState B A)
     (hposA : ∀ g : Edge G, 0 < A.bondDim g) (hposB : ∀ g : Edge G, 0 < B.bondDim g)
-    (hDim : B.bondDim = A.bondDim)
     (f : {f : Edge G // IsRegionBoundaryEdge (G := G) D.red f})
     (hbondBA : IsBondLocalTransferKernel (G := G) B A D.red
       D.regionInjective_red_A (D.regionInjective_compl_red_A hposA) f) :
@@ -312,7 +308,7 @@ theorem SharedNormalEdgeBlockingData.coeffTransferBA
             regionInsertedCoeff (G := G) A D.red f M σ τ :=
   coeffTransfer_of_bondLocal B A D.red D.regionInjective_red_B D.regionInjective_red_A
     (D.regionInjective_compl_red_B hposB) (D.regionInjective_compl_red_A hposA) hBA
-    hposB hposA hDim f hbondBA
+    hposB hposA f hbondBA
 
 /-- **The per-edge gauge from two-directional bond locality.** Given a shared one-edge
 blocking datum for the two tensors of `SameState A B`, positive bond dimensions,
@@ -343,18 +339,18 @@ theorem SharedNormalEdgeBlockingData.exists_regionEdgeGauge
       D.regionInjective_red_A (D.regionInjective_compl_red_A hposA) f)
     (hmul : ∀ M M' : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
       coeffTransferMap (G := G) A B D.red f
-          (D.coeffTransferAB hAB hposA hposB hDim f hbondAB) (M * M') =
+          (D.coeffTransferAB hAB hposA hposB f hbondAB) (M * M') =
         coeffTransferMap (G := G) A B D.red f
-            (D.coeffTransferAB hAB hposA hposB hDim f hbondAB) M *
+            (D.coeffTransferAB hAB hposA hposB f hbondAB) M *
           coeffTransferMap (G := G) A B D.red f
-            (D.coeffTransferAB hAB hposA hposB hDim f hbondAB) M') :
+            (D.coeffTransferAB hAB hposA hposB f hbondAB) M') :
     ∃ hEdge : A.bondDim f.1 = B.bondDim f.1,
       ∃ Z : GL (Fin (B.bondDim f.1)) ℂ,
         ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
           (regionInsertionTransfer_of_coeffTransfer A B D.red f
               D.regionInjective_red_B (D.regionInjective_compl_red_B hposB) hAB hposB hDim
-              (D.coeffTransferAB hAB hposA hposB hDim f hbondAB)
-              (D.coeffTransferBA hAB.symm hposA hposB hDim.symm f hbondBA) hmul).fwd M =
+              (D.coeffTransferAB hAB hposA hposB f hbondAB)
+              (D.coeffTransferBA hAB.symm hposA hposB f hbondBA) hmul).fwd M =
             (Z : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) *
               Matrix.reindexAlgEquiv ℂ ℂ (finCongr hEdge) M *
               ((Z⁻¹ : GL (Fin (B.bondDim f.1)) ℂ) :
@@ -363,8 +359,8 @@ theorem SharedNormalEdgeBlockingData.exists_regionEdgeGauge
     D.regionInjective_red_A (D.regionInjective_compl_red_A hposA)
     D.regionInjective_red_B (D.regionInjective_compl_red_B hposB)
     hAB hposA hposB hDim
-    (D.coeffTransferAB hAB hposA hposB hDim f hbondAB)
-    (D.coeffTransferBA hAB.symm hposA hposB hDim.symm f hbondBA) hmul
+    (D.coeffTransferAB hAB hposA hposB f hbondAB)
+    (D.coeffTransferBA hAB.symm hposA hposB f hbondBA) hmul
 
 end PEPS
 end TNLean

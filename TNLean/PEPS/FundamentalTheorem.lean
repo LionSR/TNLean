@@ -279,6 +279,7 @@ theorem post_absorption_edge_insertion_equality (A B : Tensor G d)
   rw [hZt, hZit, map_mul, map_mul]
   rfl
 
+omit [Fintype V] in
 /-- Reindexing a PEPS tensor along a bond-dimension equality preserves vertex
 injectivity: the local coefficient family of the reindexed tensor is the
 original family precomposed with the bondwise index recast, an injective
@@ -625,11 +626,11 @@ theorem exists_stateCoeff_ne_zero (A : Tensor G d)
     -- Some complement physical configuration gives a nonzero complement weight.
     obtain ⟨τ₀, hτ₀⟩ : ∃ τ, vertexComplementWeight (G := G) A v starCfg₀ τ ≠ 0 := by
       by_contra hall
-      push_neg at hall
+      push Not at hall
       exact hne (by funext τ; simpa [vertexComplementTensorFamily] using hall τ)
     -- Suppose, for contradiction, every state coefficient vanishes.
     by_contra hzero
-    push_neg at hzero
+    push Not at hzero
     -- For each physical leg `σ₁` at `v`, the complement weights form a kernel
     -- vector of the local tensor map at `v`.
     have hkernel : ∀ σ₁ : Fin d,
@@ -735,6 +736,7 @@ theorem prod_perVertexScalar_eq_one (A B : Tensor G d)
     rw [one_mul]; exact h1.symm
   exact mul_right_cancel₀ hσ h2
 
+omit [Fintype V] [DecidableRel G.Adj] in
 /-- On a connected graph with more than one vertex, every vertex has a nonempty
 incident-edge set. -/
 theorem nonempty_incidentEdge_of_connected [Nontrivial V]
