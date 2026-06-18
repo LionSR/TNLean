@@ -27,7 +27,7 @@ inequality applies termwise.
 positive map, normal operator, Kadison--Schwarz inequality
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder BigOperators TNMatrixCFC
+open scoped Matrix ComplexOrder MatrixOrder BigOperators
 open Matrix Finset Complex Module.End
 
 namespace PositiveOnAbelian
@@ -273,7 +273,7 @@ private lemma exists_diagonal_family_of_normal
     simpa only using Matrix.posSemidef_vecMulVec_self_star ((b i).ofLp)
   have hPsum : ∑ i, P i = (1 : Mat) := by
     have hrank := b.sum_rankOne_eq_id
-    simpa only [ContinuousLinearMap.coe_sum, map_sum, ContinuousLinearMap.coe_id,
+    simpa only [ContinuousLinearMap.toLinearMap_sum, map_sum, ContinuousLinearMap.coe_id,
       Matrix.toLpLin_symm_id] using
       congrArg (fun L : E →L[ℂ] E =>
         Matrix.toEuclideanLin.symm (L : E →ₗ[ℂ] E)) hrank

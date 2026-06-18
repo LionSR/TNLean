@@ -13,10 +13,10 @@ import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Ord
 /-!
 # Operator-monotone corollaries for subunital positive maps
 
-Mathlib already proves operator monotonicity of `x ↦ x^p` for `p ∈ [0,1]` and of
-`log`. This file states those matrix-specialized lemmas and proves Wolf
-Corollary 5.2 from the operator Jensen inequality
-(`OperatorConvexity.lean`).
+Mathlib already proves operator monotonicity of `x ↦ x^p` for `p ∈ [0,1]` and
+of `log`, through `CFC.rpow_le_rpow` and `CFC.log_le_log`. This file uses the
+same functional-calculus setting to prove Wolf Corollary 5.2 from the operator
+Jensen inequality (`OperatorConvexity.lean`).
 
 **Status note:** The Corollary 5.2 theorems in this file depend on Jensen-type lemmas
 imported from `OperatorConvexity.lean` that are proved from four explicit
@@ -59,23 +59,8 @@ private local instance instOperatorMonotonePartialOrder : PartialOrder Mat :=
   Matrix.instPartialOrder
 private local instance instOperatorMonotoneStarOrderedRing : StarOrderedRing Mat :=
   Matrix.instStarOrderedRing
-private local instance instOperatorMonotoneNonnegSpectrumClass : NonnegSpectrumClass ℝ Mat :=
-  Matrix.instNonnegSpectrumClass
 private local instance instOperatorMonotoneCStarAlgebra : CStarAlgebra Mat :=
   CStarAlgebra.mk
-
-/-- Matrix-specialized operator monotonicity of `x ↦ x^p` for `p ∈ [0,1]`. -/
-theorem matrix_rpow_le_rpow
-    {A B : Mat} {p : ℝ} (hp : p ∈ Set.Icc (0 : ℝ) 1) (hAB : A ≤ B) :
-    A ^ p ≤ B ^ p := by
-  simpa using (CFC.rpow_le_rpow (A := Mat) hp hAB)
-
-/-- Matrix-specialized operator monotonicity of `log` on positive definite matrices. -/
-theorem matrix_log_le_log
-    {A B : Mat} (hAB : A ≤ B) (hA : A.PosDef) :
-    CFC.log A ≤ CFC.log B :=
-  CFC.log_le_log (A := Mat) hAB
-    (ha := Matrix.isStrictlyPositive_iff_posDef.mpr hA)
 
 /-- Wolf Corollary 5.2(1) in matrix form.
 

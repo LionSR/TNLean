@@ -37,11 +37,6 @@ theorem re_inner_apply_apply_self {P : E →ₗ[𝕜] E} (hP : P.IsSymmetricProj
       hP.isIdempotentElem.eq
   rw [show ⟪P v, P v⟫_𝕜 = ⟪P (P v), v⟫_𝕜 from (hP.isSymmetric (P v) v).symm, hidem]
 
-/-- A symmetric projection has nonnegative quadratic form. -/
-theorem re_inner_nonneg {P : E →ₗ[𝕜] E} (hP : P.IsSymmetricProjection) (v : E) :
-    0 ≤ RCLike.re (⟪P v, v⟫_𝕜) :=
-  hP.isPositive.re_inner_nonneg_left v
-
 /-- A norm bound on the compressed product of two projections gives the ordered
 Friedrichs lower bound.
 
@@ -104,7 +99,8 @@ theorem re_inner_apply_apply_nonneg_of_commute {P Q : E →ₗ[𝕜] E}
       ⟪Q (P v), v⟫_𝕜 = ⟪Q (Q (P v)), v⟫_𝕜 := by rw [hQidem]
       _ = ⟪Q (P v), Q v⟫_𝕜 := hQ.isSymmetric (Q (P v)) v
   calc
-    0 ≤ RCLike.re (⟪P (Q v), Q v⟫_𝕜) := hP.re_inner_nonneg (Q v)
+    0 ≤ RCLike.re (⟪P (Q v), Q v⟫_𝕜) :=
+      hP.isPositive.re_inner_nonneg_left (Q v)
     _ = RCLike.re (⟪P v, Q v⟫_𝕜) := by
       rw [hsym₁, hsym₂, hcomm v]
 
@@ -375,7 +371,8 @@ theorem quadraticForm_sum_projections_of_ordered_rowSum {γ : ℝ} (hγle : γ �
   intro v
   let q : ι → ℝ := fun i => RCLike.re (⟪P i v, v⟫_ℂ)
   let cross : ι → ι → ℝ := fun i j => RCLike.re (⟪P i v, P j v⟫_ℂ)
-  have hq_nonneg : ∀ i, 0 ≤ q i := fun i => (hP i).re_inner_nonneg v
+  have hq_nonneg : ∀ i, 0 ≤ q i :=
+    fun i => (hP i).isPositive.re_inner_nonneg_left v
   have hCrossSum : -(1 - γ) * (∑ i, q i) ≤
       ∑ i, ∑ j ∈ Finset.univ.erase i, cross i j :=
     crossTerm_sum_bound_of_ordered_rowSum hγle q cross c hq_nonneg hRow
@@ -423,7 +420,8 @@ theorem quadraticForm_sum_projections_of_anticommutator_rowCol {γ : ℝ} (hγle
   intro v
   let q : ι → ℝ := fun i => RCLike.re (⟪P i v, v⟫_ℂ)
   let cross : ι → ι → ℝ := fun i j => RCLike.re (⟪P i v, P j v⟫_ℂ)
-  have hq_nonneg : ∀ i, 0 ≤ q i := fun i => (hP i).re_inner_nonneg v
+  have hq_nonneg : ∀ i, 0 ≤ q i :=
+    fun i => (hP i).isPositive.re_inner_nonneg_left v
   have hCrossSymm : ∀ i j, cross j i = cross i j := by
     intro i j
     simpa [cross] using (inner_re_symm (𝕜 := ℂ) (P i v) (P j v)).symm

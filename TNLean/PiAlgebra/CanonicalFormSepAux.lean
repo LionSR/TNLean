@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Core.RepeatedWord
 import TNLean.PiAlgebra.FundamentalTheoremComplete
-import TNLean.Algebra.MatrixAux
 import TNLean.Spectral.TransferOperatorGap
 import TNLean.Spectral.TransferOperatorGapNT
 import TNLean.Spectral.MPVOverlapDecay

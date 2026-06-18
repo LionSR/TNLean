@@ -34,7 +34,7 @@ top-level theorems are then the two real-power specialisations:
 
 * `trace_rpow_convex` applies the lemma directly to `f = fun x => x^p`.
 * `trace_rpow_concave` applies the lemma to `-f` and uses
-  `IsHermitian.cfc_neg` plus `trace_neg` to flip signs.
+  Mathlib's abstract `cfc_neg` plus `trace_neg` to flip signs.
 
 Internally the convexity lemma:
 
@@ -110,17 +110,6 @@ theorem IsHermitian.sum_dotProduct_eigenvectorBasis_eq_trace
               exact Unitary.mul_star_self_of_mem hM.eigenvectorUnitary.prop]
             rw [one_mul]
 
-/-- **CFC commutes with negation on a Hermitian matrix.**
-
-For any `f : ℝ → ℝ`, `hA.cfc (fun x => -f x) = -(hA.cfc f)`.
-
-NOTE: the proof reaches through `IsHermitian.cfc_eq` to the abstract
-`cfc` (where `cfc_neg` lives). If Mathlib reorganizes the connection between
-`IsHermitian.cfc` and the abstract CFC, this proof may need updating. -/
-theorem IsHermitian.cfc_neg {A : Matrix n n 𝕜} (hA : A.IsHermitian) (f : ℝ → ℝ) :
-    hA.cfc (fun x => -f x) = -(hA.cfc f) := by
-  rw [← hA.cfc_eq, ← hA.cfc_eq, _root_.cfc_neg f A]
-
 end Matrix
 
 namespace TNLean
@@ -141,8 +130,6 @@ private local instance instTROCPartialOrder : PartialOrder Mat :=
   Matrix.instPartialOrder
 private local instance instTROCStarOrderedRing : StarOrderedRing Mat :=
   Matrix.instStarOrderedRing
-private local instance instTROCNonnegSpectrumClass : NonnegSpectrumClass ℝ Mat :=
-  Matrix.instNonnegSpectrumClass
 private local instance instTROCCStarAlgebra : CStarAlgebra Mat :=
   CStarAlgebra.mk
 
@@ -153,6 +140,10 @@ private lemma rpow_eq_cfc_power {A : Mat} (hA : 0 ≤ A) (hH : A.IsHermitian) (p
     A ^ p = hH.cfc (fun x : ℝ => x ^ p) := by
   rw [CFC.rpow_eq_cfc_real (a := A) (y := p) hA]
   exact hH.cfc_eq _
+
+private lemma hermitian_cfc_neg {A : Mat} (hH : A.IsHermitian) (f : ℝ → ℝ) :
+    hH.cfc (fun x => -f x) = -(hH.cfc f) := by
+  rw [← hH.cfc_eq, ← hH.cfc_eq, _root_.cfc_neg f]
 
 /-- Expand `(t • A) *ᵥ v` to `(t : ℂ) • (A *ᵥ v)` without relying on
 `Matrix.smul_mulVec`, which fails to unify due to an elaboration quirk in
@@ -191,7 +182,7 @@ For a convex `f : ℝ → ℝ` on `[0, ∞)` and PSD matrices `A₁, A₂` with
 convex combination is bounded above by the convex combination of traces.
 
 Used by `trace_rpow_convex` directly and by `trace_rpow_concave` through
-negation (via `IsHermitian.cfc_neg`). -/
+negation (via Mathlib's abstract `cfc_neg`). -/
 private lemma trace_cfc_convex_bound
     {f : ℝ → ℝ} (hconvex : ConvexOn ℝ (Set.Ici (0 : ℝ)) f)
     {A₁ A₂ : Mat} (hA₁ : A₁.PosSemidef) (hA₂ : A₂.PosSemidef)
@@ -313,8 +304,8 @@ theorem trace_rpow_concave
   have hbound := trace_cfc_convex_bound hconvex_neg hPSD₁ hPSD₂ ht₀ h1mt hPSD
   -- Unfold `cfc (-f)` on each Hermitian to `-(cfc f)` and push the minus
   -- through `trace.re`.
-  rw [IsHermitian.cfc_neg hPSD.1 f, IsHermitian.cfc_neg hPSD₁.1 f,
-    IsHermitian.cfc_neg hPSD₂.1 f] at hbound
+  rw [hermitian_cfc_neg hPSD.1 f, hermitian_cfc_neg hPSD₁.1 f,
+    hermitian_cfc_neg hPSD₂.1 f] at hbound
   simp only [Matrix.trace_neg, Complex.neg_re, mul_neg] at hbound
   rw [rpow_eq_cfc_power hA₁ hPSD₁.1, rpow_eq_cfc_power hA₂ hPSD₂.1,
     rpow_eq_cfc_power hPSD.nonneg hPSD.1]

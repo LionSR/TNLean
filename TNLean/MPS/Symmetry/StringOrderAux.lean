@@ -75,7 +75,7 @@ lemma transferMap_tpGauge_eq_similarityMap
               Matrix.conjTranspose_nonsing_inv]
             simp [Matrix.mul_assoc, hS_herm]
       _ = S * (∑ i : Fin d, A i * (S⁻¹ * X * S⁻¹ * (A i)ᴴ)) * S := by
-            rw [Matrix.sum_mul_mul]
+            simp only [← Matrix.sum_mul, ← Matrix.mul_sum]
       _ = similarityMap (D := D) S⁻¹ (transferMap A) X := by
             simp [similarityMap, transferMap_apply, S, hS_inv_inv, hS_inv_herm',
               Matrix.mul_assoc]
@@ -312,9 +312,7 @@ theorem twistedTPGaugeSetup_hasEigenvalue [NeZero D]
       _ = ∑ i : Fin d, setup.S * (A i * V * (setup.B i)ᴴ) * setup.Sᴴ := by
             simp [hTerm]
       _ = setup.S * (∑ i : Fin d, A i * V * (setup.B i)ᴴ) * setup.Sᴴ := by
-            simpa using
-              (Matrix.sum_mul_mul
-                (L := setup.S) (M := fun i : Fin d => A i * V * (setup.B i)ᴴ) (R := setup.Sᴴ))
+            simp only [← Matrix.sum_mul, ← Matrix.mul_sum]
       _ = ev • (setup.S * V * setup.Sᴴ) := by
             simpa [mixedTransferMap_apply, Matrix.mul_assoc] using
               congrArg (fun M => setup.S * M * setup.Sᴴ) hEigMixed
@@ -730,9 +728,7 @@ theorem boundaryState_invariant_of_virtualUnitary
               _ = V * ((B i)ᴴ * Λ * B i) * Vᴴ := by
                     rw [hμ_sq, one_smul]
       _ = V * (∑ i : Fin d, (B i)ᴴ * Λ * B i) * Vᴴ := by
-            simpa using
-              (Matrix.sum_mul_mul
-                (L := V) (M := fun i : Fin d => (B i)ᴴ * Λ * B i) (R := Vᴴ))
+            simp only [← Matrix.sum_mul, ← Matrix.mul_sum]
       _ = V * transferMap (fun i => (B i)ᴴ) Λ * Vᴴ := by
             simp [transferMap_apply]
       _ = ρ := by simp [ρ, hBfix, Matrix.mul_assoc]

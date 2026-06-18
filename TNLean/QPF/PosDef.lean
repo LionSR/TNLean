@@ -175,8 +175,12 @@ theorem posSemidef_fixedPoint_isPosDef_of_irreducible
   set U : Matrix (Fin D) (Fin D) ℂ := ↑hH.eigenvectorUnitary
   set sgnEig : Fin D → ℂ := fun i => if 0 < hH.eigenvalues i then 1 else 0
   set Q := U * Matrix.diagonal sgnEig * Uᴴ with hQ_def
-  have hUU : Uᴴ * U = 1 := eig_conj_mul hH
-  have hUU' : U * Uᴴ = 1 := eig_mul_conj hH
+  have hUU : Uᴴ * U = 1 := by
+    simpa [U, Matrix.star_eq_conjTranspose] using
+      Matrix.UnitaryGroup.star_mul_self hH.eigenvectorUnitary
+  have hUU' : U * Uᴴ = 1 := by
+    simpa [U, Matrix.star_eq_conjTranspose] using
+      (Unitary.mul_star_self_of_mem hH.eigenvectorUnitary.prop)
   have hsgnEig_star : star sgnEig = sgnEig := by
     ext i; simp only [sgnEig, Pi.star_apply]; split <;> simp
   have hsgnEig_sq : ∀ i, sgnEig i * sgnEig i = sgnEig i := by
@@ -202,8 +206,11 @@ theorem posSemidef_fixedPoint_isPosDef_of_irreducible
   have hQ1Q : Q * (1 - Q) = 0 := by rw [mul_sub, mul_one, hQ_idem, sub_self]
   have h1QQ : (1 - Q) * Q = 0 := by rw [sub_mul, one_mul, hQ_idem, sub_self]
   have hQ_proj : IsOrthogonalProjection Q := ⟨hQ_herm, hQ_idem⟩
+  have hρ_spectral :
+      ρ = U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ := by
+    simpa [U, Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose,
+      Function.comp_def] using hH.spectral_theorem
   have hQρ : Q * ρ = ρ := by
-    have hρ_spectral := spectral_decomp_eq hH
     rw [hρ_spectral, hQ_def,
         Matrix.mul_assoc, Matrix.mul_assoc, Matrix.mul_assoc,
         ← Matrix.mul_assoc Uᴴ U, hUU, Matrix.one_mul,
@@ -225,7 +232,7 @@ theorem posSemidef_fixedPoint_isPosDef_of_irreducible
     have hΛw : Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) *ᵥ w = 0 := by
       have hρv :
           (U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ) *ᵥ v = 0 :=
-        spectral_decomp_eq hH ▸ hv
+        hρ_spectral ▸ hv
       set Λ := Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ))
       have hUΛw : U *ᵥ (Λ *ᵥ w) = 0 := by
         rw [Matrix.mulVec_mulVec, show w = Uᴴ *ᵥ v from rfl, Matrix.mulVec_mulVec]; exact hρv

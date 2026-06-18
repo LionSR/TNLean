@@ -29,7 +29,7 @@ lemma parentInteraction_apply_mem_groundSpace (A : MPSTensor d D) (L : ℕ)
   have hkill : (groundSpaceES A L)ᗮ.starProjection
       ((WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm v) = 0 := by
     rw [Submodule.starProjection_orthogonal']
-    simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.one_apply]
+    simp only [sub_apply, one_apply_eq_self]
     rw [sub_eq_zero]
     exact (Submodule.starProjection_eq_self_iff.mpr hmem).symm
   -- Unfold `parentInteraction` to expose the equiv ∘ projection ∘ equiv⁻¹ structure.

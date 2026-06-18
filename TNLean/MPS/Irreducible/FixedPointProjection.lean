@@ -144,23 +144,6 @@ lemma isOrthogonalProjection_supportProj :
   ⟨supportProj_isHermitian (D := D) (ρ := ρ) (hρ := hρ),
     supportProj_idem (D := D) (ρ := ρ) (hρ := hρ)⟩
 
-/-- Spectral decomposition for a Hermitian matrix, in matrix form.
-
-Kept local to avoid a dependency on `TNLean.QPF.PosDef`.
--/
-private lemma spectral_decomp_eq
-    (M : Matrix (Fin D) (Fin D) ℂ) (hM : M.IsHermitian) :
-    M = (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ) *
-      Matrix.diagonal (fun j => (↑(hM.eigenvalues j) : ℂ)) *
-      (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ := by
-  classical
-  have h := hM.spectral_theorem
-  -- Rewrite the conjugation automorphism into matrix multiplication.
-  -- `conjStarAlgAut` acts as `U * X * Uᴴ`.
-  rw [Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose] at h
-  -- The statement matches after rewriting.
-  simpa [Function.comp_def] using h
-
 /-- `supportProj ρ` satisfies `P * ρ = ρ`. -/
 lemma supportProj_mul (hρ_psd : ρ.PosSemidef) :
     supportProj (D := D) ρ hρ_psd * ρ = ρ := by
@@ -185,7 +168,8 @@ lemma supportProj_mul (hρ_psd : ρ.PosSemidef) :
         (hH.posSemidef_iff_eigenvalues_nonneg.mp hρ_psd) i
       simp [le_antisymm hi hnonneg]
   have hρ_spec : ρ = U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ := by
-    simpa [U] using (spectral_decomp_eq (D := D) ρ hH)
+    simpa [U, Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose,
+      Function.comp_def] using hH.spectral_theorem
   have hP_def : supportProj (D := D) ρ hρ_psd = U * Matrix.diagonal sgn * Uᴴ := by
     simp [supportProj, U, sgn]
   -- Compute `P * ρ`.
@@ -223,7 +207,8 @@ theorem supportProj_mulVec_eq_zero_of_mulVec_eq_zero
     simp [U]
   set w : Fin D → ℂ := Uᴴ *ᵥ v
   have hρ_spec : ρ = U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ := by
-    simpa [U] using (spectral_decomp_eq (D := D) ρ hH)
+    simpa [U, Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose,
+      Function.comp_def] using hH.spectral_theorem
   have hΛw : Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) *ᵥ w = 0 := by
     have hρv : (U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ) *ᵥ v = 0 := by
       rw [← hρ_spec]; exact hv
@@ -509,7 +494,8 @@ private lemma max_shift_posSemidef [Nonempty (Fin D)]
   classical
   set U : Matrix (Fin D) (Fin D) ℂ := ↑hX.eigenvectorUnitary
   have hU_unit : IsUnit U := by
-    simpa [U] using eigenvectorUnitary_isUnit (D := D) hX
+    rw [Matrix.isUnit_iff_isUnit_det]
+    simpa [U] using Matrix.UnitaryGroup.det_isUnit hX.eigenvectorUnitary
   rw [smul_one_sub_hermitian_spectral hX (maxEigenvalue hX)]
   rw [show Uᴴ = star U by simp [Matrix.star_eq_conjTranspose]]
   exact (Matrix.IsUnit.posSemidef_star_right_conjugate_iff hU_unit).mpr
@@ -526,7 +512,8 @@ private lemma max_shift_not_posDef [Nonempty (Fin D)]
   intro h_pd
   set U : Matrix (Fin D) (Fin D) ℂ := ↑hX.eigenvectorUnitary
   have hU_unit : IsUnit U := by
-    simpa [U] using eigenvectorUnitary_isUnit (D := D) hX
+    rw [Matrix.isUnit_iff_isUnit_det]
+    simpa [U] using Matrix.UnitaryGroup.det_isUnit hX.eigenvectorUnitary
   have h_diag_pd :
       (Matrix.diagonal (fun j => (↑(maxEigenvalue hX - hX.eigenvalues j) : ℂ)) :
         Matrix (Fin D) (Fin D) ℂ).PosDef := by

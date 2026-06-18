@@ -44,7 +44,7 @@ theorem eventually_linearIndependent_of_gram_tendsto_nondegenerate
     ((continuous_id.matrix_det).tendsto L).comp hG
   have hdet_ne : ∀ᶠ N in atTop, (G N).det ≠ 0 := hdet.eventually_ne hL
   exact hdet_ne.mono fun N hN =>
-    Matrix.linearIndependent_of_det_gram_ne_zero (𝕜 := ℂ) (v := fun i => v i N) hN
+    (Matrix.det_gram_ne_zero_iff_linearIndependent (𝕜 := ℂ) (v := fun i => v i N)).mp hN
 
 /--
 **Lem1 (arXiv:1606.00608 / arXiv:1708.00029)**: eventual linear independence from

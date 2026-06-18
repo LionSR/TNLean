@@ -16,7 +16,7 @@ This file begins the explicit retraction route toward Brouwer fixed points on
 `densityMatrices D` by constructing the Hermitian trace-one recentering map.
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder TNMatrixCFC
+open scoped Matrix ComplexOrder MatrixOrder
 open Matrix
 
 variable {D : ℕ}

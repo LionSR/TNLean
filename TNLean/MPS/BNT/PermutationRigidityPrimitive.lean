@@ -197,7 +197,7 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
         simpa only [mul_zero] using (hGA_inv_entry i k).mul (hall_inner k)
       have hsum : Tendsto (fun N => ∑ k : Fin g, (GA N)⁻¹ i k * v N k) atTop (nhds (0 : ℂ)) := by
         simpa only [Finset.sum_const_zero] using
-          tendsto_finset_sum Finset.univ (fun k _ => hterm k)
+          tendsto_finsetSum Finset.univ (fun k _ => hterm k)
       have hev : ∀ᶠ N in atTop, u N i = ∑ k : Fin g, (GA N)⁻¹ i k * v N k := by
         filter_upwards [hGA_det_ne, Filter.eventually_atTop.2 ⟨N0, fun N h => h⟩]
           with N hdetN hN0N
@@ -226,7 +226,7 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
       have hsum : Tendsto (fun N => ∑ i : Fin g, starRingEnd ℂ (u N i) * v N i)
           atTop (nhds (0 : ℂ)) := by
         simpa only [Finset.sum_const_zero] using
-          tendsto_finset_sum Finset.univ (fun i _ => hprod i)
+          tendsto_finsetSum Finset.univ (fun i _ => hprod i)
       have hev : ∀ᶠ N in atTop, mpvInner (d := d) (B j) (B j) N =
           ∑ i : Fin g, starRingEnd ℂ (u N i) * v N i := by
         filter_upwards [Filter.eventually_atTop.2 ⟨N0, fun N h => h⟩] with N hN0N

@@ -68,8 +68,6 @@ private local instance instAndoLiebPartialOrder : PartialOrder Mat :=
   Matrix.instPartialOrder
 private local instance instAndoLiebStarOrderedRing : StarOrderedRing Mat :=
   Matrix.instStarOrderedRing
-private local instance instAndoLiebNonnegSpectrumClass : NonnegSpectrumClass ℝ Mat :=
-  Matrix.instNonnegSpectrumClass
 private local instance instAndoLiebCStarAlgebra : CStarAlgebra Mat :=
   CStarAlgebra.mk
 

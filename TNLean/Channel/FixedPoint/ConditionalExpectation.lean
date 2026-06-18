@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.FixedPoint.Algebra
 import TNLean.Channel.Semigroup.CPClosure
-import TNLean.Algebra.MatrixFunctionalCalculus
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
 import Mathlib.Analysis.Matrix.Order
 
@@ -53,7 +52,7 @@ Wedderburn block decomposition from Wolf Theorem 6.14 (issue #27).
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 6.15, Section 6.4]
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder BigOperators TNMatrixCFC
+open scoped Matrix ComplexOrder MatrixOrder BigOperators
 open Matrix Finset Complex
 
 namespace Kraus

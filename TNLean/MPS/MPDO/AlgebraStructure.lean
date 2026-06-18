@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Algebra.Algebra.Bilinear
+import Mathlib.Analysis.Matrix.Order
 import Mathlib.LinearAlgebra.Basis.VectorSpace
 import Mathlib.LinearAlgebra.FiniteDimensional.Defs
-import TNLean.Algebra.MatrixFrobenius
 import TNLean.Channel.FixedPoint.Algebra
 import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
 import TNLean.MPS.MPDO.FusionIsometries
@@ -122,12 +122,12 @@ noncomputable section
 local instance instMatrixNormedAddCommGroup (D : ℕ) :
     NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
   Matrix.toMatrixNormedAddCommGroup (n := Fin D) (𝕜 := ℂ) 1
-    (Matrix.frobenius_posDef_one (D := D))
+    (Matrix.PosDef.one (n := Fin D) (R := ℂ))
 
 local instance instMatrixInnerProductSpace (D : ℕ) :
     InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
   Matrix.toMatrixInnerProductSpace (n := Fin D) (𝕜 := ℂ) 1
-    (Matrix.frobenius_posDef_one (D := D)).posSemidef
+    (Matrix.PosDef.one (n := Fin D) (R := ℂ)).posSemidef
 
 namespace MPOTensor
 

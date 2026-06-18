@@ -355,7 +355,7 @@ theorem exists_twoBlock_decomp_of_lowerZero
         φ ((diagPart (d := d) (D := D) Aconj Pdiag) i) =
           Matrix.fromBlocks (A11raw i) 0 0 (A22raw i) := by
       -- Push `φ` through `diagPart` without rewriting it away.
-      -- (We use `simp only` to avoid the simp lemma `reindexAlgEquiv_apply`.)
+      -- Use `simp only` so the algebra equivalence is not unfolded too early.
       simp only [MPSTensor.diagPart, map_add, map_mul, map_sub, map_one, hφP, hφA]
       -- Now the goal is a block-matrix identity.
       rw [hQ, hXfull]

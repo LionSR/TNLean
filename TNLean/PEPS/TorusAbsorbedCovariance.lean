@@ -113,14 +113,16 @@ theorem torusRightEdge_injective (hw : 2 < width) {p q : TorusVertex width heigh
     have e1 : p.1 = q.1 + 1 := congrArg Prod.fst (hp1.symm.trans hq1)
     have e2 : p.1 + 1 = q.1 := congrArg Prod.fst (hp2.symm.trans hq2)
     refine h20 (add_left_cancel (a := q.1) (b := ((2 : ℕ) : ZMod width)) (c := 0) ?_)
-    push_cast
-    linear_combination e2 - e1
+    calc
+      q.1 + ((2 : ℕ) : ZMod width) = p.1 + 1 := by rw [e1]; ring
+      _ = q.1 + 0 := by rw [e2, add_zero]
   · exfalso
     have e1 : p.1 + 1 = q.1 := congrArg Prod.fst (hp1.symm.trans hq1)
     have e2 : p.1 = q.1 + 1 := congrArg Prod.fst (hp2.symm.trans hq2)
     refine h20 (add_left_cancel (a := q.1) (b := ((2 : ℕ) : ZMod width)) (c := 0) ?_)
-    push_cast
-    linear_combination e1 - e2
+    calc
+      q.1 + ((2 : ℕ) : ZMod width) = p.1 + 1 := by rw [e2]; ring
+      _ = q.1 + 0 := by rw [e1, add_zero]
   · exact hp2.symm.trans hq2
 
 /-- For `2 < height`, distinct lower endpoints give distinct up edges. -/
@@ -142,14 +144,16 @@ theorem torusUpEdge_injective (hh : 2 < height) {p q : TorusVertex width height}
     have e1 : p.2 = q.2 + 1 := congrArg Prod.snd (hp1.symm.trans hq1)
     have e2 : p.2 + 1 = q.2 := congrArg Prod.snd (hp2.symm.trans hq2)
     refine h20 (add_left_cancel (a := q.2) (b := ((2 : ℕ) : ZMod height)) (c := 0) ?_)
-    push_cast
-    linear_combination e2 - e1
+    calc
+      q.2 + ((2 : ℕ) : ZMod height) = p.2 + 1 := by rw [e1]; ring
+      _ = q.2 + 0 := by rw [e2, add_zero]
   · exfalso
     have e1 : p.2 + 1 = q.2 := congrArg Prod.snd (hp1.symm.trans hq1)
     have e2 : p.2 = q.2 + 1 := congrArg Prod.snd (hp2.symm.trans hq2)
     refine h20 (add_left_cancel (a := q.2) (b := ((2 : ℕ) : ZMod height)) (c := 0) ?_)
-    push_cast
-    linear_combination e1 - e2
+    calc
+      q.2 + ((2 : ℕ) : ZMod height) = p.2 + 1 := by rw [e2]; ring
+      _ = q.2 + 0 := by rw [e1, add_zero]
   · exact hp2.symm.trans hq2
 
 /-- For `2 < width`, the translation carrying a right edge to a given edge is unique. -/

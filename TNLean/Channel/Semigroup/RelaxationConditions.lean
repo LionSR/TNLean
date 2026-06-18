@@ -18,7 +18,7 @@ The conversion from each algebraic hypothesis to
 non-reducibility consequences.
 -/
 
-open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace TNMatrixCFC
+open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace
 open Matrix Finset Module
 
 noncomputable section
