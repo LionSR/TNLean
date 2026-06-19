@@ -136,8 +136,10 @@ block-diagonal boundary conditions in arXiv:2011.12127, Section IV.C, lines
 
 **Scope restriction (crossing span):** This theorem assumes that the
 simultaneous block-word tuples of length \(N-i\) span the product algebra at
-each boundary-crossing interval \(i\). Removing that span hypothesis is part of
-the remaining comparison with the cited source recorded in
+each boundary-crossing interval \(i\). This is not a consequence of the
+large-length BNT product-span bound alone: for a crossing interval beginning at
+\(i=N-1\), the required tail length is \(1\). Removing that span hypothesis is
+part of the remaining comparison with the cited source recorded in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_crossing_pgvwc_comparison_of_boundary
@@ -325,9 +327,11 @@ range derived from length-\(L_0\) block injectivity,
 
 **Scope restriction (crossing span):** The theorem assumes that the simultaneous
 block-word tuples of length \(N-i\) span the product algebra for each
-boundary-crossing interval beginning at \(i\). Removing this visible span
-hypothesis from the finite BNT range is part of the remaining source-faithful
-boundary comparison recorded in
+boundary-crossing interval beginning at \(i\). The finite BNT range gives
+large-length simultaneous product spans; it does not by itself supply the
+shortest crossing tails, where \(N-i\) can be \(1\). Replacing this visible
+span hypothesis is part of the remaining source-faithful boundary comparison
+recorded in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
 
 **Unfaithful:** This proof still relies on
@@ -387,9 +391,11 @@ range derived from length-\(L_0\) block injectivity,
 
 **Scope restriction (crossing span):** The theorem assumes that the simultaneous
 block-word tuples of length \(N-i\) span the product algebra for each
-boundary-crossing interval beginning at \(i\). Removing this visible span
-hypothesis from the finite BNT range is part of the remaining source-faithful
-boundary comparison recorded in
+boundary-crossing interval beginning at \(i\). The finite BNT range gives
+large-length simultaneous product spans; it does not by itself supply the
+shortest crossing tails, where \(N-i\) can be \(1\). Replacing this visible
+span hypothesis is part of the remaining source-faithful boundary comparison
+recorded in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
 
 **Unfaithful:** This proof still relies on
