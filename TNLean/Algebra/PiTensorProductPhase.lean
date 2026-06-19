@@ -137,8 +137,10 @@ to have product one.
 
 This is the product-one form used to pass from a uniform product-tensor
 proportionality to sector scalars satisfying \(\prod_v \kappa_v=1\) and
-\(A_v^i=(\kappa_v\xi)B_v^i\). It starts from the uniform product-tensor
-identity, as in
+\(A_v^i=(\kappa_v\xi)B_v^i\).
+
+**Scope restriction (arXiv:1708.00029, Appendix A, lines 1068--1080):** this
+theorem starts from the uniform product-tensor identity, as in
 `exists_kappa_of_piTensorProduct_eq_smul`; the contraction producing that
 identity from the \(F_u,\Omega_u\) maps is recorded separately in
 `docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`. -/
