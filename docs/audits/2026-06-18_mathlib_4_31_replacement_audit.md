@@ -1283,6 +1283,26 @@ lake build TNLean.Channel.Semigroup.ReducibleQDS.GeneratorCompression \
   TNLean.Channel.Semigroup.RelaxationConditions -q --log-level=info
 ```
 
+### Lindblad-form heartbeat retest, 2026-06-19
+
+`TNLean.Channel.Semigroup.LindbladForm.EulerStep` no longer needs its three
+theorem-level heartbeat bounds.  Lean 4.31 now elaborates the conditional
+complete-positivity direction of Wolf Proposition 7.3, the one-step Kraus-map
+expansion, and the CLM exponential-remainder estimate under the default
+heartbeat budget.
+
+The same retest removed the two theorem-level heartbeat bounds from
+`TNLean.Channel.Semigroup.LindbladForm.TraceBridge`: the CLM trace-constant
+lemma and the right-derivative trace-annihilation theorem also elaborate under
+the default budget.
+
+Focused check:
+
+```bash
+lake build TNLean.Channel.Semigroup.LindbladForm.EulerStep \
+  TNLean.Channel.Semigroup.LindbladForm.TraceBridge -q --log-level=info
+```
+
 ### Further projection-complement proof reductions, 2026-06-19
 
 A second pass replaced remaining handwritten complement identities of the form

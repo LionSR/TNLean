@@ -63,9 +63,6 @@ private def sandRCLM (D : ℕ) (P : MatChoi D) : MatChoi D →L[ℝ] MatChoi D :
 
 /-! ## Proposition 7.3: CP semigroup ↔ CCP generator (Wolf Proposition 7.3) -/
 
-set_option maxHeartbeats 2000000 in
--- The proof composes CLM-valued derivatives with Choi/projected-Choi maps and
--- then takes one-sided slope limits; source elaboration otherwise times out.
 /-- **Wolf Proposition 7.3 (direction 1 → 2)**: If `T_t = exp(tL)` is a semigroup
 of completely positive maps, then `L` is conditionally completely positive.
 
@@ -258,9 +255,6 @@ private theorem quadMap_apply (G : GeneratorDecomp D) (ρ : sgMat D) :
     quadMap G ρ = G.κ * ρ * G.κᴴ := by
   simp [quadMap, Kraus.mapLM_apply, Kraus.map_apply]
 
-set_option maxHeartbeats 800000 in
--- Expanding the one-step Kraus map into the generator-plus-quadratic form
--- needs extra normalization heartbeats, but only in this local theorem.
 private theorem eulerStep_apply (G : GeneratorDecomp D) (s : ℝ) (ρ : sgMat D) :
     eulerStep G s ρ =
       ρ + s • (G.φ ρ + -(G.κ * ρ) + -(ρ * G.κᴴ)) + (s * s) • (G.κ * ρ * G.κᴴ) := by
@@ -313,9 +307,6 @@ private theorem eulerStep_toCLM_eq (G : GeneratorDecomp D) (s : ℝ) :
   simp only [Matrix.add_apply, Matrix.smul_apply, Matrix.neg_apply, Complex.real_smul,
     Complex.ofReal_mul, Complex.coe_smul, smul_eq_mul, sub_eq_add_neg, pow_two]
 
-set_option maxHeartbeats 1000000 in
--- The specialization of the generic exponential remainder estimate to CLM endomorphisms
--- requires a large normalization simp step.
 private theorem norm_expSemigroupCLM_sub_one_add_smul_le [NeZero D]
     (A : sgCLM D) {s : ℝ} (hs : 0 ≤ s) :
     ‖expSemigroupCLM A s - (1 + (s : ℂ) • A)‖ ≤ s ^ 2 * ‖A‖ ^ 2 * Real.exp (s * ‖A‖) := by
