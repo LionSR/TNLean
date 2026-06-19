@@ -31,8 +31,6 @@ canonical-form reduction has produced common cyclic-sector families.
 matrix product states, canonical form, common sectors
 -/
 
-set_option maxHeartbeats 800000 in
--- The conclusion records both decompositions and all their structural hypotheses together.
 /-- **Unconditional common primitive irreducible block decompositions.**
 
 Two tensors with the same MPV family have one common positive blocking length
