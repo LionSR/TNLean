@@ -39,19 +39,8 @@ This is the linear span of all matrices of the form `P * M * Q` where
 noncomputable def biRectSpan
     (P Q : Matrix (Fin D) (Fin D) ℂ) (B : MPSTensor d D) (n : ℕ) :
     Submodule ℂ (Matrix (Fin D) (Fin D) ℂ) :=
-  Submodule.map (LinearMap.mulLeft ℂ P)
-    (Submodule.map (LinearMap.mulRight ℂ Q) (wordSpan B n))
-
-@[simp]
-lemma biRectSpan_eq_map_comp
-    (P Q : Matrix (Fin D) (Fin D) ℂ) (B : MPSTensor d D) (n : ℕ) :
-    biRectSpan (d := d) (D := D) P Q B n =
-      Submodule.map ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q))
-        (wordSpan B n) := by
-  -- `Submodule.map_comp` is stated for semilinear maps; specialize to linear maps.
-  simpa only [biRectSpan, LinearMap.comp_apply] using
-    (Submodule.map_comp (f := (LinearMap.mulRight ℂ Q)) (g := (LinearMap.mulLeft ℂ P))
-      (p := wordSpan B n)).symm
+  Submodule.map ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q))
+    (wordSpan B n)
 
 /-- If the exact word span is already full, the bi-rectangular span is the full two-sided
 range. -/
@@ -60,7 +49,7 @@ theorem biRectSpan_eq_range_of_wordSpan_eq_top
     (htop : wordSpan B n = ⊤) :
     biRectSpan (d := d) (D := D) P Q B n =
       LinearMap.range ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) := by
-  rw [biRectSpan_eq_map_comp, htop, Submodule.map_top]
+  rw [biRectSpan, htop, Submodule.map_top]
 
 private theorem mem_biRectSpan_iff
     (P Q : Matrix (Fin D) (Fin D) ℂ) (B : MPSTensor d D) {n : ℕ}
@@ -70,15 +59,14 @@ private theorem mem_biRectSpan_iff
   constructor
   · intro hM
     rcases Submodule.mem_map.mp hM with ⟨X, hX, rfl⟩
-    rcases Submodule.mem_map.mp hX with ⟨Y, hY, rfl⟩
-    refine ⟨Y, hY, ?_⟩
-    simp only [LinearMap.mulLeft_apply, LinearMap.mulRight_apply, Matrix.mul_assoc]
+    exact ⟨X, hX, by
+      simp only [LinearMap.comp_apply, LinearMap.mulLeft_apply, LinearMap.mulRight_apply,
+        Matrix.mul_assoc]⟩
   · rintro ⟨X, hX, hM⟩
     rw [← hM]
-    refine Submodule.mem_map.mpr ?_
-    refine ⟨X * Q, ?_, ?_⟩
-    · exact Submodule.mem_map.mpr ⟨X, hX, by simp only [LinearMap.mulRight_apply]⟩
-    · simp only [LinearMap.mulLeft_apply, Matrix.mul_assoc]
+    exact Submodule.mem_map.mpr ⟨X, hX, by
+      simp only [LinearMap.comp_apply, LinearMap.mulLeft_apply, LinearMap.mulRight_apply,
+        Matrix.mul_assoc]⟩
 
 /-- `biRectSpan` always lives in the range of the two-sided multiplication map. -/
 theorem biRectSpan_le_range
@@ -113,18 +101,8 @@ right-multiplication by `Q` followed by left-multiplication by `P`. -/
 noncomputable def cumulativeBiRectSpan
     (P Q : Matrix (Fin D) (Fin D) ℂ) (B : MPSTensor d D) (n : ℕ) :
     Submodule ℂ (Matrix (Fin D) (Fin D) ℂ) :=
-  Submodule.map (LinearMap.mulLeft ℂ P)
-    (Submodule.map (LinearMap.mulRight ℂ Q) (cumulativeSpan B n))
-
-@[simp]
-lemma cumulativeBiRectSpan_eq_map_comp
-    (P Q : Matrix (Fin D) (Fin D) ℂ) (B : MPSTensor d D) (n : ℕ) :
-    cumulativeBiRectSpan (d := d) (D := D) P Q B n =
-      Submodule.map ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q))
-        (cumulativeSpan B n) := by
-  simpa only [cumulativeBiRectSpan, LinearMap.comp_apply] using
-    (Submodule.map_comp (f := (LinearMap.mulRight ℂ Q)) (g := (LinearMap.mulLeft ℂ P))
-      (p := cumulativeSpan B n)).symm
+  Submodule.map ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q))
+    (cumulativeSpan B n)
 
 private theorem mem_cumulativeBiRectSpan_iff
     (P Q : Matrix (Fin D) (Fin D) ℂ) (B : MPSTensor d D) {n : ℕ}
@@ -134,15 +112,14 @@ private theorem mem_cumulativeBiRectSpan_iff
   constructor
   · intro hM
     rcases Submodule.mem_map.mp hM with ⟨X, hX, rfl⟩
-    rcases Submodule.mem_map.mp hX with ⟨Y, hY, rfl⟩
-    refine ⟨Y, hY, ?_⟩
-    simp [LinearMap.mulLeft_apply, LinearMap.mulRight_apply, Matrix.mul_assoc]
+    exact ⟨X, hX, by
+      simp [LinearMap.comp_apply, LinearMap.mulLeft_apply, LinearMap.mulRight_apply,
+        Matrix.mul_assoc]⟩
   · rintro ⟨X, hX, hM⟩
     rw [← hM]
-    refine Submodule.mem_map.mpr ?_
-    refine ⟨X * Q, ?_, ?_⟩
-    · exact Submodule.mem_map.mpr ⟨X, hX, by simp [LinearMap.mulRight_apply]⟩
-    · simp [LinearMap.mulLeft_apply, Matrix.mul_assoc]
+    exact Submodule.mem_map.mpr ⟨X, hX, by
+      simp [LinearMap.comp_apply, LinearMap.mulLeft_apply, LinearMap.mulRight_apply,
+        Matrix.mul_assoc]⟩
 
 /-- If the cumulative span is already full, the cumulative bi-rectangular span is the
 full two-sided range. -/
@@ -151,7 +128,7 @@ theorem cumulativeBiRectSpan_eq_range_of_cumulativeSpan_eq_top
     (htop : cumulativeSpan B n = ⊤) :
     cumulativeBiRectSpan (d := d) (D := D) P Q B n =
       LinearMap.range ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) := by
-  rw [cumulativeBiRectSpan_eq_map_comp, htop, Submodule.map_top]
+  rw [cumulativeBiRectSpan, htop, Submodule.map_top]
 
 /-- Left multiplication by an exact-length word-span element raises cumulative length
 by the corresponding offset. -/
