@@ -760,12 +760,13 @@ products and should remain local.
 
 ### `TNLean/Spectral/FrobeniusNorm.lean`
 
-Status: strong refactor candidate.
+Status: partially applied.
 
 This is one of the most promising local developments to shrink.  Mathlib's
-Frobenius norm should become the default norm for matrix Hilbert-Schmidt
-arguments.  The local squared norm may remain as a convenience wrapper, but
-should no longer carry an independent foundation.
+Frobenius norm is now the foundation for matrix Hilbert-Schmidt arguments:
+`frobSq` is a squared Mathlib Frobenius norm, and the entrywise sum formula is
+kept as `frobSq_eq_sum` for trace and finite-sum arguments.  The local squared
+norm remains only as a convenience wrapper for downstream transfer estimates.
 
 The old `TNLean/Algebra/MatrixFrobenius.lean` pass-through file exposed only
 positive-definiteness of the identity matrix for the Frobenius inner product.
