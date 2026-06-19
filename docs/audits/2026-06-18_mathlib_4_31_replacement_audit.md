@@ -93,6 +93,9 @@ The clearest replacements are:
   statement.  The duplicate `_of_channel` theorem had the same hypotheses and
   conclusion as `channelDet_norm_eq_one_iff_exists_unitaryChannel`, so the
   blueprint points directly to the latter.
+- Further Lean 4.31 elaboration checks removed local heartbeat bounds from the
+  POVM unitary-comparison proof, the irreducible-channel spectral-radius scalar
+  proof, and the semigroup perturbation derivative proof.
 
 There are also important non-replacements.
 
@@ -1053,6 +1056,18 @@ ball-free theorem `NormedSpace.map_exp` for continuous algebra homomorphisms.
 Lean 4.31 also elaborates the commuting-exponential step in this file without
 the former local `synthInstance.maxHeartbeats` adjustment.
 
+A later semigroup perturbation pass removed the old local heartbeat bound around
+`hasDerivAt_semigroup_product`.  The CLM-valued product-derivative proof now
+elaborates under the default Lean 4.31 budget.  The same pass removed two inert
+proof-normalization steps from `TNLean.Channel.Semigroup.LindbladForm.Basic`
+that Lean 4.31 reports as unused.
+
+In `TNLean.Channel.POVM.Uniqueness`, the Gram-matrix comparison theorem
+`exists_unitary_mul_eq_of_conjTranspose_mul_eq` no longer needs its old local
+heartbeat bound.  Its proof already names the Euclidean-space inner-product and
+finite-dimensional structures explicitly, so Lean 4.31 elaborates the
+partial-isometry argument directly.
+
 In `TNLean.Channel.KrausFreedom`, the Euclidean-space inner-product instance is
 now given explicitly by `PiLp.innerProductSpace (fun _ : ι => ℂ)`.  This removes
 the former large local synthesis budget around the cached instance and makes the
@@ -1095,6 +1110,11 @@ Perron--Frobenius gauge extraction in the non-translation-invariant file no
 longer need their previous local bounds.  The non-rectangular
 non-translation-invariant spectral-radius extraction still keeps its local
 `synthInstance.maxHeartbeats` bound.
+
+The scalar spectral-radius identity `spectralRadius_smul` in
+`TNLean.Channel.Irreducible.SpectralRadius` also no longer needs a local
+`synthInstance.maxHeartbeats` bound for the matrix-endomorphism continuous
+linear-map completeness search.
 
 ### Fixed-point Wedderburn decomposition
 

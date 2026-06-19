@@ -35,8 +35,6 @@ variable {D n : ℕ}
 
 namespace POVM
 
-set_option maxHeartbeats 1600000 in
--- The partial-isometry extension proof drives higher-order typeclass search in Lean 4.29.
 /-- If two square matrices have the same Gram matrix, then they differ by left
 multiplication by a unitary matrix. -/
 private theorem exists_unitary_mul_eq_of_conjTranspose_mul_eq
