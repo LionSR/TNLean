@@ -1245,6 +1245,43 @@ lake build TNLean.Channel.Semigroup.ReducibleQDS.GeneratorCompression \
   TNLean.Channel.Semigroup.RelaxationConditions -q --log-level=info
 ```
 
+### Further projection-complement proof reductions, 2026-06-19
+
+A second pass replaced remaining handwritten complement identities of the form
+`P * (1 - P) = 0`, `(1 - P) * P = 0`, and `(1 - P) * (1 - P) = 1 - P`
+by Mathlib's idempotent API, without changing any theorem statements.
+
+The affected files are:
+
+- `TNLean/Channel/MaximallyEntangled.lean`
+- `TNLean/Channel/Irreducible/FromSpectral.lean`
+- `TNLean/Channel/Irreducible/Growth/Exponential.lean`
+- `TNLean/Channel/Irreducible/Growth/OneStep.lean`
+- `TNLean/Channel/Irreducible/Similarity.lean`
+- `TNLean/Channel/Semigroup/ReducibleQDS/FixedDensity.lean`
+- `TNLean/MPS/Core/CPPrimitive.lean`
+- `TNLean/MPS/Irreducible/FixedPointProjection.lean`
+- `TNLean/MPS/Irreducible/FormII.lean`
+- `TNLean/QPF/PosDef.lean`
+
+The public maximally-entangled projection lemmas remain, because they name the
+local Choi--Jamiolkowski object `omegaProj`.  Their proofs now reduce the
+idempotence theorem `omegaProj_mul_self` through
+`IsIdempotentElem.one_sub_mul_self`, `IsIdempotentElem.mul_one_sub_self`, and
+`IsIdempotentElem.one_sub`.
+
+Focused check:
+
+```bash
+lake build TNLean.QPF.PosDef TNLean.Channel.MaximallyEntangled \
+  TNLean.Channel.Irreducible.Growth.OneStep \
+  TNLean.Channel.Irreducible.Growth.Exponential \
+  TNLean.Channel.Irreducible.FromSpectral TNLean.Channel.Irreducible.Similarity \
+  TNLean.Channel.Semigroup.ReducibleQDS.FixedDensity \
+  TNLean.MPS.Core.CPPrimitive TNLean.MPS.Irreducible.FormII \
+  TNLean.MPS.Irreducible.FixedPointProjection -q --log-level=info
+```
+
 ### Trace-pairing extensionality, 2026-06-19
 
 Mathlib 4.31 has equality-form trace-pairing extensionality lemmas:
@@ -1398,6 +1435,13 @@ lake build TNLean.Algebra.TracePairing TNLean.MPS.Chain.TensorEquality \
   TNLean.PEPS.CycleMPSChainOverlapInsertion -q --log-level=info
 lake build TNLean.Channel.Semigroup.ReducibleQDS.GeneratorCompression \
   TNLean.Channel.Semigroup.RelaxationConditions -q --log-level=info
+lake build TNLean.QPF.PosDef TNLean.Channel.MaximallyEntangled \
+  TNLean.Channel.Irreducible.Growth.OneStep \
+  TNLean.Channel.Irreducible.Growth.Exponential \
+  TNLean.Channel.Irreducible.FromSpectral TNLean.Channel.Irreducible.Similarity \
+  TNLean.Channel.Semigroup.ReducibleQDS.FixedDensity \
+  TNLean.MPS.Core.CPPrimitive TNLean.MPS.Irreducible.FormII \
+  TNLean.MPS.Irreducible.FixedPointProjection -q --log-level=info
 ```
 
 The final root build also succeeds:

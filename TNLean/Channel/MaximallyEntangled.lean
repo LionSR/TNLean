@@ -6,6 +6,7 @@ import Mathlib.LinearAlgebra.Matrix.Kronecker
 import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Data.Complex.Basic
 import Mathlib.Analysis.Real.Sqrt
+import Mathlib.Algebra.Ring.Idempotent
 
 /-!
 # Maximally entangled state and SWAP operator
@@ -181,17 +182,17 @@ theorem one_sub_omegaProj_conjTranspose :
 
 theorem one_sub_omegaProj_mul_omegaProj :
     ((1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) - omegaProj d) * omegaProj d = 0 := by
-  rw [sub_mul, one_mul, omegaProj_mul_self, sub_self]
+  exact IsIdempotentElem.one_sub_mul_self (omegaProj_mul_self (d := d))
 
 theorem omegaProj_mul_one_sub_omegaProj :
     omegaProj d * ((1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) - omegaProj d) = 0 := by
-  rw [mul_sub, mul_one, omegaProj_mul_self, sub_self]
+  exact IsIdempotentElem.mul_one_sub_self (omegaProj_mul_self (d := d))
 
 theorem one_sub_omegaProj_mul_self :
     ((1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) - omegaProj d) *
         ((1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) - omegaProj d) =
       (1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) - omegaProj d := by
-  rw [sub_mul, one_mul, omegaProj_mul_one_sub_omegaProj, sub_zero]
+  exact IsIdempotentElem.one_sub (omegaProj_mul_self (d := d))
 
 theorem omegaProj_mulVec_omegaVec :
     omegaProj d *ᵥ omegaVec d = omegaVec d := by

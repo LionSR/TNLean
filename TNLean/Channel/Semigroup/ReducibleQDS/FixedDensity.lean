@@ -97,8 +97,7 @@ private lemma not_posDef_of_proj_sandwich_eq_self
     (hρ : P * ρ * P = ρ) :
     ¬ ρ.PosDef := by
   intro hρ_pd
-  have hQP : (1 - P) * P = 0 := by
-    rw [sub_mul, one_mul, hP.2, sub_self]
+  have hQP : (1 - P) * P = 0 := IsIdempotentElem.one_sub_mul_self hP.2
   have hQρ : (1 - P) * ρ = 0 := by
     conv_lhs => rw [← hρ]
     have h_expand : (1 - P) * (P * ρ * P) = ((1 - P) * P) * ρ * P := by

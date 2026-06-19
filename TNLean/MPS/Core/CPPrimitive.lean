@@ -38,7 +38,7 @@ private lemma invariance_implies_complement_zero (A : MPSTensor d D)
     (hInv : ∀ X, P * transferMap (d := d) (D := D) A (P * X * P) * P =
                   transferMap (d := d) (D := D) A (P * X * P)) :
     ∀ i : Fin d, (1 - P) * A i * P = 0 := by
-  have h1P : (1 - P) * P = 0 := by rw [sub_mul, one_mul, hProj.2, sub_self]
+  have h1P : (1 - P) * P = 0 := IsIdempotentElem.one_sub_mul_self hProj.2
   -- (1-P)*E(PXP) = 0 for all X
   have h_vanish : ∀ X, (1 - P) * transferMap (d := d) (D := D) A (P * X * P) = 0 := by
     intro X

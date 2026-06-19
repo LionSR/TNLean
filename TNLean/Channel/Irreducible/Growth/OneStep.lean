@@ -132,7 +132,7 @@ theorem posDef_of_ker_subset_irreducible_cp
         ← Matrix.mul_assoc Uᴴ U, hUU, Matrix.one_mul,
         ← Matrix.mul_assoc (Matrix.diagonal sgnEig), Matrix.diagonal_mul_diagonal,
         show (fun i => sgnEig i * sgnEig i) = sgnEig from funext hsgnEig_sq]
-  have hQ1Q : Q * (1 - Q) = 0 := by rw [mul_sub, mul_one, hQ_idem, sub_self]
+  have hQ1Q : Q * (1 - Q) = 0 := IsIdempotentElem.mul_one_sub_self hQ_idem
   have hQ_proj : IsOrthogonalProjection Q := ⟨hQ_herm, hQ_idem⟩
   have hA_spectral :
       A = U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ := by

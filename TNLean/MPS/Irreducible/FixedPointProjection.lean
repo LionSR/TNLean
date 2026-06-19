@@ -328,8 +328,8 @@ theorem lowerZero_of_posSemidef_fixedPoint
     isOrthogonalProjection_supportProj (D := D) (ρ := ρ) (hρ := hρ_psd)
   have hP_herm : P.IsHermitian := hP_proj.1
   have hP_idem : P * P = P := hP_proj.2
-  have hP1P : P * (1 - P) = 0 := by rw [mul_sub, mul_one, hP_idem, sub_self]
-  have h1PP : (1 - P) * P = 0 := by rw [sub_mul, one_mul, hP_idem, sub_self]
+  have hP1P : P * (1 - P) = 0 := IsIdempotentElem.mul_one_sub_self hP_idem
+  have h1PP : (1 - P) * P = 0 := IsIdempotentElem.one_sub_mul_self hP_idem
   -- Multiplication identities `P*ρ=ρ` and `ρ*P=ρ`.
   have hPρ : P * ρ = ρ := supportProj_mul (D := D) (ρ := ρ) hρ_psd
   have hρP : ρ * P = ρ := mul_supportProj (D := D) (ρ := ρ) hρ_psd

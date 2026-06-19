@@ -373,7 +373,7 @@ theorem irreducible_iff_exp_posDef_forall
           (1 - P) * expSemigroup E 1 P
               = (1 - P) * (P * expSemigroup E 1 P * P) := by rw [hcompress_at_one]
           _ = ((1 - P) * P) * (expSemigroup E 1 P * P) := by simp [Matrix.mul_assoc]
-          _ = 0 := by rw [sub_mul, one_mul, hP.2, sub_self, Matrix.zero_mul]
+          _ = 0 := by rw [IsIdempotentElem.one_sub_mul_self hP.2, Matrix.zero_mul]
       have h_compl_eq_zero : 1 - P = 0 := by
         rcases Matrix.PosDef.isUnit hP_exp_pd with ⟨U, hU⟩
         have hzero : (1 - P) * (↑U : Matrix (Fin D) (Fin D) ℂ) = 0 := by

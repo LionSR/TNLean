@@ -142,8 +142,7 @@ private lemma not_posDef_of_conj_projection_ne_one
     apply hij
     have hw_i := congrFun hw i
     simpa [w, Matrix.mulVec, dotProduct, Pi.single_apply, Finset.sum_ite_eq'] using hw_i
-  have hQ1Q : Q * (1 - Q) = 0 := by
-    rw [mul_sub, mul_one, hQ.2, sub_self]
+  have hQ1Q : Q * (1 - Q) = 0 := IsIdempotentElem.mul_one_sub_self hQ.2
   have hQw : Q *ᵥ w = 0 := by
     ext a
     simpa [w, Matrix.mulVec, dotProduct, Matrix.mul_apply,
