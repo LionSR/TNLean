@@ -849,10 +849,11 @@ now unfold the local `matToES` abbreviations at the call site and apply
 Mathlib's `Matrix.frobenius_norm_mul` directly.
 
 The Mathlib 4.31 pass also removes local synthesis-budget bounds from the
-square transfer-gap theorem, the rectangular transfer-gap theorem, and the
-rectangular non-translation-invariant gap theorem.  The remaining
-non-rectangular non-translation-invariant spectral-radius extraction still
-keeps its local `synthInstance.maxHeartbeats` bound.
+square transfer-gap theorem, the rectangular transfer-gap theorem, the
+rectangular non-translation-invariant gap theorem, and the non-rectangular
+non-translation-invariant spectral-radius extraction.  These proofs now name the
+continuous-linear-map normed structures directly enough that the former local
+`synthInstance.maxHeartbeats` adjustments are no longer needed.
 
 ### Remaining axiom boundary recheck, 2026-06-19
 
@@ -1146,11 +1147,16 @@ completeness.
 The local spectral-radius extraction theorems in
 `TNLean.Spectral.TransferOperatorGap`, `TNLean.Spectral.TransferOperatorGapRect`,
 and `TNLean.Spectral.TransferOperatorGapNT` were retested under Lean 4.31.  The
-square transfer-gap theorem, the rectangular transfer-gap theorem, and the
-Perron--Frobenius gauge extraction in the non-translation-invariant file no
-longer need their previous local bounds.  The non-rectangular
-non-translation-invariant spectral-radius extraction still keeps its local
-`synthInstance.maxHeartbeats` bound.
+square transfer-gap theorem, the rectangular transfer-gap theorem, the
+Perron--Frobenius gauge extraction in the non-translation-invariant file, and
+the non-rectangular non-translation-invariant spectral-radius extraction no
+longer need their previous local bounds.
+
+Focused check for the final non-translation-invariant removal:
+
+```bash
+lake build TNLean.Spectral.TransferOperatorGapNT -q --log-level=info
+```
 
 The scalar spectral-radius identity `spectralRadius_smul` in
 `TNLean.Channel.Irreducible.SpectralRadius` also no longer needs a local
