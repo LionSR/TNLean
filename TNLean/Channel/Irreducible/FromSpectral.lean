@@ -353,10 +353,8 @@ theorem isIrreducibleMap_of_channel_posDef_fixedPoint_unique
     intro hQ0
     apply hP1
     exact (sub_eq_zero.mp hQ0).symm
-  have _hQP : (1 - P) * P = 0 := by
-    rw [sub_mul, one_mul, hP_proj.2, sub_self]
-  have hPQ : P * (1 - P) = 0 := by
-    rw [mul_sub, mul_one, hP_proj.2, sub_self]
+  have _hQP : (1 - P) * P = 0 := IsIdempotentElem.one_sub_mul_self hP_proj.2
+  have hPQ : P * (1 - P) = 0 := IsIdempotentElem.mul_one_sub_self hP_proj.2
   have hQρQ_zero : (1 - P) * ρ * (1 - P) = 0 := by
     calc
       (1 - P) * ρ * (1 - P)
