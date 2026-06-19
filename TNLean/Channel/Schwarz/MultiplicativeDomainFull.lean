@@ -343,7 +343,6 @@ noncomputable def krausMapStarAlgHom (K : Fin d → Mat)
     commutes' := fun μ => by
       change krausMap K (↑(algebraMap ℂ (↥S) μ)) = (algebraMap ℂ Mat) μ
       have : (↑(algebraMap ℂ (↥S) μ) : Mat) = μ • (1 : Mat) := by
-        change (algebraMap ℂ (↥S) μ : Mat) = μ • (1 : Mat)
         simp [Algebra.algebraMap_eq_smul_one]
       rw [this, krausMap_smul, krausMap_one_of_unital K h_unital, Algebra.algebraMap_eq_smul_one]
     map_star' := fun X => by

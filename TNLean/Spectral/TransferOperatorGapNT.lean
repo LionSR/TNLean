@@ -35,11 +35,9 @@ namespace MPSTensor
 variable {d D D₁ D₂ : ℕ}
 
 attribute [local instance] Matrix.linftyOpNormedAddCommGroup Matrix.linftyOpNormedSpace
-  instGCFiniteDimensionalMatrixCLM
-  instGCNormedAddCommGroupMatrixCLM
-  instGCNormedRingMatrixCLM
-  instGCNormedAlgebraMatrixCLM
-  instGCCompleteSpaceMatrixCLM
+  ContinuousLinearMap.toNormedAddCommGroup
+  ContinuousLinearMap.toNormedRing
+  ContinuousLinearMap.toNormedAlgebra
 
 section SameDimension
 
@@ -149,9 +147,6 @@ private lemma isUnit_det_of_gauged_intertwining [NeZero D]
     simpa only using hXXh_scalar
   exact isUnit_det_of_self_mul_conjTranspose_scalar X' hc_ne0 hXXh_scalar'
 
-set_option maxHeartbeats 250000 in
--- Elaborating the Perron--Frobenius gauge extraction below slightly exceeds the
--- default heartbeat limit during `whnf`, so we keep a small local bump.
 private theorem eigenvector_gives_gauge_of_irreducible_TP [NeZero D]
     (A B : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) (μ : ℂ)
     (hA_irr : IsIrreducibleTensor (d := d) (D := D) A)
@@ -179,11 +174,9 @@ private theorem eigenvector_gives_gauge_of_irreducible_TP [NeZero D]
     (A := A) (B := B) (SA := SA) (SB := SB) (X' := X') (μ := μ)
     hSA_det hSB_det hX'u hμ hInter2
 
--- The spectral-radius extraction below still makes 4.29 spend extra time finding
--- the local `CompleteSpace` instances for continuous endomorphisms of matrix spaces.
 set_option synthInstance.maxHeartbeats 200000 in
--- Instance search for the finite-dimensional continuous endomorphism space of matrices
--- needs a local heartbeat bump during the spectral-radius extraction.
+-- The non-rectangular spectral-radius extraction still spends extra time finding
+-- the continuous-linear-map completeness structure used by `exists_mem_spectrum_of_isAlgClosed`.
 /-- If the mixed transfer spectral radius of two irreducible left-canonical tensors is at least
 `1`, then the tensors are gauge-phase equivalent. -/
 theorem modulus_one_eigenvalue_implies_gauge_of_irreducible_TP
@@ -200,16 +193,25 @@ theorem modulus_one_eigenvalue_implies_gauge_of_irreducible_TP
   let V := Matrix (Fin D) (Fin D) ℂ
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
   let F' : V →L[ℂ] V := Φ (mixedTransferMap A B)
+  letI : NormedAddCommGroup (V →L[ℂ] V) := ContinuousLinearMap.toNormedAddCommGroup
+  letI : SeminormedRing (V →L[ℂ] V) := ContinuousLinearMap.toSeminormedRing
+  letI : NormedRing (V →L[ℂ] V) := ContinuousLinearMap.toNormedRing
+  letI : NormedSpace ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedSpace
+  letI : NormedAlgebra ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedAlgebra
+  haveI : FiniteDimensional ℂ (V →L[ℂ] V) := Φ.toLinearEquiv.finiteDimensional
+  letI : CompleteSpace (V →L[ℂ] V) := FiniteDimensional.complete ℂ (V →L[ℂ] V)
   haveI : Nontrivial V := by
     haveI : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
     exact Matrix.nonempty
   haveI : Nontrivial (V →L[ℂ] V) := ContinuousLinearMap.instNontrivialId
   obtain ⟨μ, hμ_spec, hμ_norm⟩ :=
     @spectrum.exists_nnnorm_eq_spectralRadius_of_nonempty ℂ _ _
-      (instGCNormedRingMatrixCLM D D) (instGCNormedAlgebraMatrixCLM D D)
-      (instGCCompleteSpaceMatrixCLM D D) inferInstance (a := F')
-      (@spectrum.nonempty _ (instGCNormedRingMatrixCLM D D)
-        (instGCNormedAlgebraMatrixCLM D D) (instGCCompleteSpaceMatrixCLM D D) inferInstance F')
+      (ContinuousLinearMap.toNormedRing : NormedRing (V →L[ℂ] V))
+      (ContinuousLinearMap.toNormedAlgebra : NormedAlgebra ℂ (V →L[ℂ] V))
+      inferInstance inferInstance (a := F')
+      (@spectrum.nonempty _ (ContinuousLinearMap.toNormedRing : NormedRing (V →L[ℂ] V))
+        (ContinuousLinearMap.toNormedAlgebra : NormedAlgebra ℂ (V →L[ℂ] V))
+        inferInstance inferInstance F')
   have h_spec_eq := AlgEquiv.spectrum_eq Φ (mixedTransferMap A B)
   have hμ_spec_end : μ ∈ spectrum ℂ (mixedTransferMap A B) := h_spec_eq ▸ hμ_spec
   have hμ_ev : Module.End.HasEigenvalue (mixedTransferMap A B) μ :=
@@ -597,9 +599,6 @@ private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
       hρA_psd hρB_psd hρA_ne hρB_ne hρA_fix hρB_fix hSA_u hSB_u
       hSA_mul hSB_mul hσA_def hσB_def hσA_ne hσB_ne hσA_fix hσB_fix
 
-set_option synthInstance.maxHeartbeats 200000 in
--- The rectangular spectral-radius extraction uses the same CLM instance search and needs
--- the same small local heartbeat bump.
 /--
 **Rectangular strict transfer-operator gap** for irreducible left-canonical blocks
 of different bond sizes.
@@ -634,13 +633,45 @@ theorem mixedTransferSpectralRadius₂_lt_one_of_dim_ne_of_irreducible_TP
       ((Matrix (Fin D₁) (Fin D₂) ℂ) →ₗ[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) ≃ₐ[ℂ]
         ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
     Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ)
+  letI : NormedAddCommGroup
+      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
+    ContinuousLinearMap.toNormedAddCommGroup
+  letI : SeminormedRing
+      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
+    ContinuousLinearMap.toSeminormedRing
+  letI : NormedRing
+      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
+    ContinuousLinearMap.toNormedRing
+  letI : NormedSpace ℂ
+      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
+    ContinuousLinearMap.toNormedSpace
+  letI : NormedAlgebra ℂ
+      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
+    ContinuousLinearMap.toNormedAlgebra
+  haveI : FiniteDimensional ℂ
+      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
+    Φ.toLinearEquiv.finiteDimensional
+  letI : CompleteSpace
+      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
+    FiniteDimensional.complete ℂ
+      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ)
   obtain ⟨μ, hμ_spec, hμ_rad⟩ :=
     @spectrum.exists_nnnorm_eq_spectralRadius_of_nonempty ℂ _ _
-      (instGCNormedRingMatrixCLM D₁ D₂) (instGCNormedAlgebraMatrixCLM D₁ D₂)
-      (instGCCompleteSpaceMatrixCLM D₁ D₂) inferInstance (a := F)
-      (@spectrum.nonempty _ (instGCNormedRingMatrixCLM D₁ D₂)
-        (instGCNormedAlgebraMatrixCLM D₁ D₂)
-        (instGCCompleteSpaceMatrixCLM D₁ D₂) inferInstance F)
+      (ContinuousLinearMap.toNormedRing :
+        NormedRing
+          ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ))
+      (ContinuousLinearMap.toNormedAlgebra :
+        NormedAlgebra ℂ
+          ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ))
+      inferInstance inferInstance (a := F)
+      (@spectrum.nonempty _
+        (ContinuousLinearMap.toNormedRing :
+          NormedRing
+            ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ))
+        (ContinuousLinearMap.toNormedAlgebra :
+          NormedAlgebra ℂ
+            ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ))
+        inferInstance inferInstance F)
   have hμ_one : (↑‖μ‖₊ : ENNReal) = 1 := hμ_rad.trans hEqF
   have hμ_nnn : ‖μ‖₊ = (1 : NNReal) := (ENNReal.coe_eq_one).1 hμ_one
   have hμ_norm : ‖μ‖ = 1 := by

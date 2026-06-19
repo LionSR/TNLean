@@ -51,8 +51,7 @@ theorem IsPositiveMap.map_le_map
     (hT : IsPositiveMap T) (hAB : A ≤ B) : T A ≤ T B := by
   classical
   letI := Fintype.ofFinite m
-  rw [Matrix.le_iff] at hAB ⊢
-  simpa [map_sub] using hT (B - A) hAB
+  exact hT.toPositiveLinearMap.monotone hAB
 
 /-- Positive maps preserve adjoints. -/
 theorem IsPositiveMap.map_conjTranspose
@@ -61,43 +60,10 @@ theorem IsPositiveMap.map_conjTranspose
     T Aᴴ = (T A)ᴴ := by
   classical
   letI := Fintype.ofFinite m
-  let B : Matrix m m ℂ := (1 / 2 : ℝ) • (A + Aᴴ)
-  let C : Matrix m m ℂ := (1 / 2 : ℝ) • (Complex.I • (Aᴴ - A))
-  have hB : B.IsHermitian := by
-    ext i j
-    simp [B, add_comm]
-  have hC : C.IsHermitian := by
-    ext i j
-    simp [C, sub_eq_add_neg, add_comm]
-  have hmulI (z : ℂ) : Complex.I * ((2 : ℂ)⁻¹ * (Complex.I * z)) = -((2 : ℂ)⁻¹ * z) := by
-    calc
-      Complex.I * ((2 : ℂ)⁻¹ * (Complex.I * z)) = (Complex.I * Complex.I) * ((2 : ℂ)⁻¹ * z) := by
-        ring
-      _ = -((2 : ℂ)⁻¹ * z) := by norm_num [Complex.I_sq]
-  have hIC : Complex.I • C = (1 / 2 : ℝ) • (A - Aᴴ) := by
-    ext i j
-    simp [C, sub_eq_add_neg, mul_add, hmulI, add_comm]
-  have hNegIC : -(Complex.I • C) = (1 / 2 : ℝ) • (Aᴴ - A) := by
-    rw [hIC]
-    ext i j
-    simp [sub_eq_add_neg]
-  have hA_decomp : A = B + Complex.I • C := by
-    rw [hIC]
-    ext i j
-    simp [B, sub_eq_add_neg]
-    ring
-  have hAstar_decomp : Aᴴ = B - Complex.I • C := by
-    rw [sub_eq_add_neg, hNegIC]
-    ext i j
-    simp [B, sub_eq_add_neg]
-    ring
-  have hTB : (T B).IsHermitian := hT.map_isHermitian hB
-  have hTC : (T C).IsHermitian := hT.map_isHermitian hC
-  have hTA_decomp : T A = T B + Complex.I • T C := by
-    rw [hA_decomp]
-    simp
-  rw [hAstar_decomp, hTA_decomp]
-  simp [sub_eq_add_neg, hTB.eq, hTC.eq, Matrix.conjTranspose_add, Matrix.conjTranspose_smul]
+  letI := Classical.decEq m
+  letI : CStarAlgebra (Matrix m m ℂ) := matrixCStarAlgebra m
+  change hT.toPositiveLinearMap Aᴴ = (hT.toPositiveLinearMap A)ᴴ
+  simpa [Matrix.star_eq_conjTranspose] using map_star hT.toPositiveLinearMap A
 
 /-- A block diagonal matrix with PSD diagonal blocks is PSD. -/
 theorem Matrix.PosSemidef.fromBlocks_diag

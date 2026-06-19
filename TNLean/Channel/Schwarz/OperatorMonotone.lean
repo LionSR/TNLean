@@ -53,14 +53,6 @@ private local instance instOperatorMonotoneNormedRing : NormedRing Mat :=
   Matrix.instL2OpNormedRing
 private local instance instOperatorMonotoneNormedAlgebra : NormedAlgebra ℂ Mat :=
   Matrix.instL2OpNormedAlgebra
-private local instance instOperatorMonotoneCStarRing : CStarRing Mat :=
-  Matrix.instCStarRing
-private local instance instOperatorMonotonePartialOrder : PartialOrder Mat :=
-  Matrix.instPartialOrder
-private local instance instOperatorMonotoneStarOrderedRing : StarOrderedRing Mat :=
-  Matrix.instStarOrderedRing
-private local instance instOperatorMonotoneCStarAlgebra : CStarAlgebra Mat :=
-  CStarAlgebra.mk
 
 /-- Wolf Corollary 5.2(1) in matrix form.
 

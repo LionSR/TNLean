@@ -180,8 +180,6 @@ private lemma spectralRadius_similarity_eq
 
 end SimilarityCLM
 
-set_option synthInstance.maxHeartbeats 200000 in
--- `CompleteSpace` on matrix endomorphism CLMs is finite-dimensional but expensive to synthesize.
 private lemma spectralRadius_smul
     [NeZero D]
     (F : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)

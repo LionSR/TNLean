@@ -41,9 +41,6 @@ variable {D : ℕ}
 
 /-! ## Derivative of the semigroup product -/
 
-set_option maxHeartbeats 800000 in
--- The product-derivative proof combines semigroup differentiation, a translated parameter,
--- and CLM multiplication; 4.29 elaboration needs a higher heartbeat budget here.
 /-- HasDerivAt for `s ↦ exp((t-s)•L) * exp(s•L')` with derivative
 `exp((t-s)•L) * (L' - L) * exp(s•L')`. -/
 private theorem hasDerivAt_semigroup_product

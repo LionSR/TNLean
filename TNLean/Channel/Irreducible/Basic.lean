@@ -50,6 +50,25 @@ lemma isOrthogonalProjection_zero : IsOrthogonalProjection (0 : Matrix (Fin D) (
 lemma isOrthogonalProjection_one : IsOrthogonalProjection (1 : Matrix (Fin D) (Fin D) ℂ) :=
   ⟨Matrix.isHermitian_one, by simp only [Matrix.one_mul]⟩
 
+/-- An orthogonal projection is a star projection. -/
+theorem IsOrthogonalProjection.isStarProjection {P : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsOrthogonalProjection P) : IsStarProjection P := by
+  rw [isStarProjection_iff']
+  exact ⟨hP.2, by simpa [Matrix.star_eq_conjTranspose] using hP.1.eq⟩
+
+/-- A star projection is an orthogonal projection. -/
+theorem IsStarProjection.isOrthogonalProjection {P : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsStarProjection P) : IsOrthogonalProjection P := by
+  rw [isStarProjection_iff'] at hP
+  refine ⟨?_, hP.1⟩
+  change Pᴴ = P
+  simpa [Matrix.star_eq_conjTranspose] using hP.2
+
+/-- The complement of an orthogonal projection is an orthogonal projection. -/
+theorem IsOrthogonalProjection.one_sub {P : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsOrthogonalProjection P) : IsOrthogonalProjection (1 - P) :=
+  hP.isStarProjection.one_sub.isOrthogonalProjection
+
 /-- An orthogonal projection is positive semidefinite. -/
 theorem isOrthogonalProjection_posSemidef {P : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsOrthogonalProjection P) :

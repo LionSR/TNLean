@@ -443,25 +443,6 @@
     \]
 \end{proof}
 
-\begin{theorem}[Reindexing commutes with conjugation]
-    \label{thm:peps_reindexAlgEquiv_gaugeConj}
-    \lean{TNLean.PEPS.reindexAlgEquiv_gaugeConj}
-    \leanok
-    Assume \(D=E\), let \(\iota:\MN{D}\simeq\MN{E}\) be the canonical
-    identification of matrix algebras, and let \(Z\in\GL(D)\).  Then for every
-    \(N\in\MN{D}\),
-    \[
-        \iota(ZNZ^{-1})
-        =
-        \iota(Z)\,\iota(N)\,\iota(Z)^{-1}.
-    \]
-\end{theorem}
-\begin{proof}\leanok
-    The map \(\iota\) is an algebra equivalence, so it preserves products and
-    inverses.  Applying this to the three factors \(Z\), \(N\), and \(Z^{-1}\)
-    gives the displayed identity.
-\end{proof}
-
 \begin{theorem}[Coefficient identities determine the boundary conjugation]
     \label{thm:peps_gaugeConj_eq_of_coeffIdentities}
     \lean{TNLean.PEPS.gaugeConj_eq_of_coeffIdentities}
@@ -509,4 +490,3 @@
         Z_2\,\iota(M)\,Z_2^{-1}.
     \]
 \end{proof}
-

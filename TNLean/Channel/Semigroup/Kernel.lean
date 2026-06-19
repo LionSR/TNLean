@@ -88,7 +88,7 @@ theorem expSemigroup_apply_eq_self_of_generator_apply_eq_zero
   letI : TopologicalSpace Mat := PseudoMetricSpace.toUniformSpace.toTopologicalSpace
   letI : NormedSpace ℝ Mat :=
     TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)
-  letI : ContinuousSMul ℝ Mat := TNOperatorSpace.matrixContinuousSMulReal (Fin D)
+  letI : ContinuousSMul ℝ Mat := inferInstance
   intro t _ht
   have hdiff :
       @Differentiable ℝ _ ℝ _ _ _ Mat
@@ -115,7 +115,7 @@ theorem expSemigroup_apply_eq_self_of_generator_apply_eq_zero
           Matrix.linftyOpNormedAddCommGroup.toAddCommGroup
           (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)).toModule
           PseudoMetricSpace.toUniformSpace.toTopologicalSpace
-          (TNOperatorSpace.matrixContinuousSMulReal (Fin D))
+          (inferInstance : ContinuousSMul ℝ Mat)
           (fun u : ℝ => expSemigroup L u X) 0 u := by
       simpa [hX] using (hasDerivAt_expSemigroup_apply (L := L) X u)
     exact @HasDerivAt.deriv ℝ _ Mat
@@ -138,14 +138,14 @@ theorem generator_apply_eq_zero_of_expSemigroup_apply_eq_self
         Matrix.linftyOpNormedAddCommGroup.toAddCommGroup
         (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)).toModule
         PseudoMetricSpace.toUniformSpace.toTopologicalSpace
-        (TNOperatorSpace.matrixContinuousSMulReal (Fin D))
+        (inferInstance : ContinuousSMul ℝ Mat)
         (fun u : ℝ => expSemigroup L u X) (L X) (Set.Ici 0) 0 := by
     have hAt :
         @HasDerivAt ℝ _ Mat
           Matrix.linftyOpNormedAddCommGroup.toAddCommGroup
           (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)).toModule
           PseudoMetricSpace.toUniformSpace.toTopologicalSpace
-          (TNOperatorSpace.matrixContinuousSMulReal (Fin D))
+          (inferInstance : ContinuousSMul ℝ Mat)
           (fun u : ℝ => expSemigroup L u X) (L X) 0 := by
       simpa [expSemigroup_zero] using hasDerivAt_expSemigroup_apply (L := L) X 0
     exact @HasDerivAt.hasDerivWithinAt ℝ _ Mat
@@ -158,7 +158,7 @@ theorem generator_apply_eq_zero_of_expSemigroup_apply_eq_self
         Matrix.linftyOpNormedAddCommGroup.toAddCommGroup
         (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)).toModule
         PseudoMetricSpace.toUniformSpace.toTopologicalSpace
-        (TNOperatorSpace.matrixContinuousSMulReal (Fin D))
+        (inferInstance : ContinuousSMul ℝ Mat)
         (fun _ : ℝ => X) 0 (Set.Ici 0) 0 := by
     exact @HasDerivAt.hasDerivWithinAt ℝ _ Mat
       Matrix.linftyOpNormedAddCommGroup
@@ -170,7 +170,7 @@ theorem generator_apply_eq_zero_of_expSemigroup_apply_eq_self
         Matrix.linftyOpNormedAddCommGroup.toAddCommGroup
         (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)).toModule
         PseudoMetricSpace.toUniformSpace.toTopologicalSpace
-        (TNOperatorSpace.matrixContinuousSMulReal (Fin D))
+        (inferInstance : ContinuousSMul ℝ Mat)
         (fun u : ℝ => expSemigroup L u X) 0 (Set.Ici 0) 0 :=
     hd₂'.congr (fun u hu => hX u hu) (by simp [expSemigroup_zero])
   exact (uniqueDiffWithinAt_Ici 0).eq_deriv _ hd₁ hd₂

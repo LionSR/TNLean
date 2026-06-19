@@ -95,10 +95,6 @@ theorem norm_pow_eq_one_of_norm_eq_one {μ : ℂ} (hμ : ‖μ‖ = 1) (n : ℕ)
 theorem norm_inv_eq_one_of_norm_eq_one {μ : ℂ} (hμ : ‖μ‖ = 1) :
     ‖μ⁻¹‖ = 1 := by rw [norm_inv, hμ, inv_one]
 
-/-- Unit-norm complex number is nonzero. -/
-theorem ne_zero_of_norm_eq_one {μ : ℂ} (hμ : ‖μ‖ = 1) : μ ≠ 0 := by
-  intro h; simp [h] at hμ
-
 /-- In finite dimensions, the peripheral eigenvalue set is finite. -/
 theorem peripheralEigenvalues_finite
     {V : Type*} [AddCommGroup V] [Module ℂ V]
@@ -125,7 +121,9 @@ theorem isRootOfUnity_of_finite_powers (μ : ℂ) (hμ : ‖μ‖ = 1)
     fun hinj => Set.infinite_range_of_injective hinj hrange_fin
   simp only [Function.Injective, not_forall] at hninj
   obtain ⟨n₁, n₂, heq, hne⟩ := hninj
-  have hμ_ne : μ ≠ 0 := ne_zero_of_norm_eq_one hμ
+  have hμ_ne : μ ≠ 0 := by
+    rw [← norm_ne_zero_iff, hμ]
+    norm_num
   rcases Nat.lt_or_gt_of_ne hne with h | h
   · exact ⟨n₂ - n₁, Nat.sub_pos_of_lt h,
       mul_left_cancel₀ (pow_ne_zero _ hμ_ne) (by
@@ -154,7 +152,9 @@ theorem isRootOfUnity_of_norm_one_of_finite_orbit (μ : ℂ) (hμ : ‖μ‖ = 1
     (n : ℕ) (hrepeat : ∃ i j : ℕ, i < j ∧ j ≤ n ∧ μ ^ i = μ ^ j) :
     ∃ p : ℕ, 0 < p ∧ p ≤ n ∧ μ ^ p = 1 := by
   obtain ⟨i, j, hij, hjn, heq⟩ := hrepeat
-  have hμ_ne : μ ≠ 0 := ne_zero_of_norm_eq_one hμ
+  have hμ_ne : μ ≠ 0 := by
+    rw [← norm_ne_zero_iff, hμ]
+    norm_num
   exact ⟨j - i, Nat.sub_pos_of_lt hij, (Nat.sub_le j i).trans hjn,
     mul_left_cancel₀ (pow_ne_zero _ hμ_ne) (by
       rw [← pow_add, Nat.add_sub_cancel' hij.le, mul_one]; exact heq.symm)⟩

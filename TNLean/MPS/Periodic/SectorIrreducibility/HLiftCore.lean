@@ -101,7 +101,7 @@ theorem hFixUpgrade_of_peripheral
     have h := hQinv (1 : MatrixAlg D)
     simpa [F, Matrix.mul_assoc, hQproj.2] using h
   have hOneSubQ_proj : IsOrthogonalProjection (1 - Q) :=
-    isOrthogonalProjection_one_sub Q hQproj
+    hQproj.one_sub
   have hOneSubQ_psd : (1 - Q).PosSemidef := by
     have hpsd : ((1 - Q) * (1 - Q)ᴴ).PosSemidef :=
       Matrix.posSemidef_self_mul_conjTranspose (1 - Q)

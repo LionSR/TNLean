@@ -103,7 +103,6 @@ theorem posDef_sum_vecMulVec_of_span_eq_top {ι : Type*} [Fintype ι]
         congr 1; ext i
         -- Goal: star x ⬝ᵥ (op(star v ⬝ᵥ x) • v) = ↑‖star x ⬝ᵥ v‖²
         -- Simplify MulOpposite scalar action to multiplication
-        change star x ⬝ᵥ (MulOpposite.op (star (v i) ⬝ᵥ x) • v i) = _
         rw [show MulOpposite.op (star (v i) ⬝ᵥ x) • v i =
             (star (v i) ⬝ᵥ x) • v i from by
           ext j; simp [MulOpposite.smul_eq_mul_unop, mul_comm]]

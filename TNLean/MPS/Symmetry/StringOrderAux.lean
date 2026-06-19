@@ -42,8 +42,6 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-set_option maxHeartbeats 800000 in
--- Expanding `tpGauge`, `transferMap`, and CFC adjoint identities is kernel-expensive.
 /-- The transfer map of a TP-gauged tensor is the similarity transform of the
 original transfer map by the positive square root of the adjoint fixed point. -/
 lemma transferMap_tpGauge_eq_similarityMap

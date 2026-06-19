@@ -13,9 +13,8 @@ realizing the region-insertion coefficient identity of `A` through `B` by conjug
 (`regionInsertedCoeff A R f M = regionInsertedCoeff B R f (conj_Z M)`), induce the *same*
 conjugation map (`gaugeConj_eq_of_coeffIdentities`): the region-insertion transfer map is
 determined by the coefficient identity (`regionInsertedCoeff_transferMap_unique`), and both
-conjugations realize it.  Reindexing across an index-size equality commutes with conjugation
-(`reindexAlgEquiv_gaugeConj`), the matrix-algebra fact that turns a transported gauge
-`glReindex h Z` into the conjugation by the reindexed matrix.
+conjugations realize it.  The reindexing algebra equivalence turns a transported gauge
+`glReindex h Z` into conjugation by the reindexed matrix.
 
 These two facts turn the geometric translation covariance of the coefficient identity
 (`regionInsertedCoeff_translate_coeffIdentity`) into the conjugation form consumed by the
@@ -34,29 +33,6 @@ open scoped BigOperators Matrix
 namespace TNLean
 namespace PEPS
 
-/-! ### Reindexing commutes with conjugation -/
-
-/-- **Reindexing across an index-size equality commutes with conjugation.**
-
-For an invertible matrix `Z : GL (Fin a) ℂ` and the index-size equality `h : a = b`, the
-reindexed conjugation `reindex (Z · N · Z⁻¹)` equals the conjugation by the reindexed matrix
-`glReindex h Z` applied to the reindexed `N`: `(glReindex h Z) · (reindex N) · (glReindex h Z)⁻¹`.
-Reindexing is an algebra equivalence, hence multiplicative and inverse-preserving, so it
-distributes over the triple product.
-
-This is the matrix-algebra fact that identifies the transported reference gauge `glReindex h Xh`
-with the conjugation by `Xh` reindexed across the bond-dimension equality. -/
-theorem reindexAlgEquiv_gaugeConj {a b : ℕ} (h : a = b) (Z : GL (Fin a) ℂ)
-    (N : Matrix (Fin a) (Fin a) ℂ) :
-    Matrix.reindexAlgEquiv ℂ ℂ (finCongr h)
-        ((Z : Matrix (Fin a) (Fin a) ℂ) * N *
-          (↑Z⁻¹ : Matrix (Fin a) (Fin a) ℂ)) =
-      (↑(glReindex h Z) : Matrix (Fin b) (Fin b) ℂ) *
-          Matrix.reindexAlgEquiv ℂ ℂ (finCongr h) N *
-        (↑(glReindex h Z)⁻¹ : Matrix (Fin b) (Fin b) ℂ) := by
-  rw [map_mul, map_mul, glReindex_coe,
-    show (glReindex h Z)⁻¹ = glReindex h Z⁻¹ from (map_inv (glReindex h) Z).symm, glReindex_coe]
-
 /-! ### Conjugation agreement from the coefficient identity -/
 
 section CoeffBridge
@@ -70,9 +46,9 @@ Two invertible matrices `Z₁` and `Z₂` on the boundary edge `f` of a region `
 the region-insertion coefficient identity of `A` through `B` by conjugation
 (`regionInsertedCoeff A R f M = regionInsertedCoeff B R f (conj_{Zᵢ} M)` for all configurations),
 induce the same conjugation map across the bond-dimension equality: for every bond matrix `M`,
-`Z₁ · (reindex M) · Z₁⁻¹ = Z₂ · (reindex M) · Z₂⁻¹`.  The region-insertion transfer map is
-determined by its coefficient identity (`regionInsertedCoeff_transferMap_unique`); both
-conjugations realize it, so they coincide.
+`Z₁ · (reindex M) · Z₁⁻¹ = Z₂ · (reindex M) · Z₂⁻¹`.  The region-insertion
+transfer map is determined by its coefficient identity
+(`regionInsertedCoeff_transferMap_unique`); both conjugations realize it, so they coincide.
 
 This is the determinacy step that turns the geometric translation covariance of the coefficient
 identity into the conjugation form the witness transport consumes.

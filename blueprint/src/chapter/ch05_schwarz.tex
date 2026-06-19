@@ -637,16 +637,18 @@ maps.
 \begin{theorem}[Positive maps preserve adjoints]\label{thm:positive_map_conjTranspose}
     \lean{IsPositiveMap.map_conjTranspose}
     \leanok
-    \uses{def:positive_map}
+    \uses{def:positive_map_is_positive_linear_map}
     If $T : \MN{D} \to \MN{D}$ is positive, then
     $T(A^\dagger) = T(A)^\dagger$ for all $A \in \MN{D}$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Write $A = B + i C$ with $B$ and $C$ Hermitian.
-    Positive maps send Hermitian matrices to Hermitian matrices,
-    so they preserve this decomposition and commute with taking adjoints.
+    Regard $T$ as the associated positive linear map
+    (Definition~\ref{def:positive_map_is_positive_linear_map}). For positive
+    linear maps between matrix $C^*$-algebras, $T(A^\ast)=T(A)^\ast$.
+    Since the star on $\MN{D}$ is the conjugate transpose,
+    $T(A^\dagger)=T(A^\ast)=T(A)^\ast=T(A)^\dagger$.
 \end{proof}
 
 \begin{theorem}[Order intervals are preserved]\label{thm:positive_map_image_bounded}

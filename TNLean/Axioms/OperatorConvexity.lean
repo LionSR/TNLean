@@ -91,14 +91,6 @@ private local instance instAxiomOCNormedRing : NormedRing Mat :=
   Matrix.instL2OpNormedRing
 private local instance instAxiomOCNormedAlgebra : NormedAlgebra ℂ Mat :=
   Matrix.instL2OpNormedAlgebra
-private local instance instAxiomOCCStarRing : CStarRing Mat :=
-  Matrix.instCStarRing
-private local instance instAxiomOCPartialOrder : PartialOrder Mat :=
-  Matrix.instPartialOrder
-private local instance instAxiomOCStarOrderedRing : StarOrderedRing Mat :=
-  Matrix.instStarOrderedRing
-private local instance instAxiomOCCStarAlgebra : CStarAlgebra Mat :=
-  CStarAlgebra.mk
 
 /-! ## Jensen inequality axioms for positive maps -/
 

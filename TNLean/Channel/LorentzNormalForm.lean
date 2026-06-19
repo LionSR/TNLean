@@ -182,9 +182,10 @@ minimisation over `det = 1` to a compact sublevel set, namely
 Hilbert–Schmidt multiplicativity `‖S₂ ⊗ₖ S₁‖² = ‖S₂‖² · ‖S₁‖²` and the AM–GM
 determinant bound `det S = 1 ⟹ ‖S‖² ≥ n` (singular values of `S` have product
 `|det S| = 1`, so their squares average at least `1`; hence the value tends to
-`∞` with `‖S‖`).  These rest on `tr(P · Q) ≥ 0` for positive semidefinite
-`P, Q` and the `PosDef` smallest-eigenvalue bound, neither of which is currently
-in Mathlib. -/
+`∞` with `‖S‖`).  Elementary positive-definite spectral facts such as
+`Matrix.PosDef.eigenvalues_pos` are available; what remains is the packaged
+matrix-analysis estimate combining the filtered Choi trace, Frobenius
+multiplicativity, and the determinant AM--GM bound. -/
 lemma infimum_is_attained
     {τ : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ}
     (_hτ_posDef : τ.PosDef) :

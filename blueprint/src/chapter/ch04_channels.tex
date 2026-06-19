@@ -18,6 +18,16 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     $Y - X \ge 0$.
 \end{remark}
 
+\begin{definition}[Associated positive linear map]
+    \label{def:positive_map_is_positive_linear_map}
+    \lean{IsPositiveMap.toPositiveLinearMap}
+    \leanok
+    \uses{def:positive_map}
+    A positive matrix map $E : \MN{D} \to \MN{D}$ determines the same
+    linear map regarded as a positive linear map: if $A \le B$, then
+    $E(A) \le E(B)$.
+\end{definition}
+
 \begin{definition}[Trace-preserving map]\label{def:trace_preserving}
     \lean{IsTracePreservingMap}
     \leanok
@@ -68,14 +78,16 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \label{thm:positive_map_preserves_hermitian}
     \lean{IsPositiveMap.map_isHermitian}
     \leanok
-    \uses{def:positive_map}
+    \uses{def:positive_map_is_positive_linear_map}
     If $E$ is positive and $X = X^\dagger$, then $E(X) = E(X)^\dagger$.
 \end{theorem}
 
 \begin{proof}\leanok
-    Decompose $X = X_+ - X_-$ into its positive and negative parts.
-    Positivity makes $E(X_+)$ and $E(X_-)$ positive semidefinite, hence Hermitian,
-    so their difference $E(X)$ is Hermitian.
+    Regard $E$ as the associated positive linear map
+    (Definition~\ref{def:positive_map_is_positive_linear_map}). For positive
+    linear maps between matrix $C^*$-algebras, $E(Y^\ast)=E(Y)^\ast$.
+    Since $X=X^\dagger$ means $X=X^\ast$, one obtains
+    $E(X)^\dagger=E(X)^\ast=E(X^\ast)=E(X)$.
 \end{proof}
 
 \begin{definition}[Quantum channel]\label{def:channel}
@@ -160,6 +172,46 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     A matrix $P \in \MN{D}$ is an \emph{orthogonal projection} if
     $P = P^\dagger$ and $P^2 = P$.
 \end{definition}
+
+\begin{theorem}[Orthogonal projections and involutive-algebra projections]
+    \label{thm:orthogonal_projection_star_projection_channel}
+    \lean{IsOrthogonalProjection.isStarProjection}
+    \lean{IsStarProjection.isOrthogonalProjection}
+    \leanok
+    \uses{def:orthogonal_projection_channel}
+    For a complex square matrix, the two descriptions
+    $P = P^\dagger$, $P^2=P$ and $P^* = P$, $P^2=P$ are equivalent.
+\end{theorem}
+
+\begin{proof}\leanok
+    Since the involution on $\MN{D}$ is conjugate transpose,
+    $P^* = P^\dagger$. Therefore
+    \[
+        P^\dagger = P,\; P^2 = P
+        \iff
+        P^* = P,\; P^2 = P.
+    \]
+\end{proof}
+
+\begin{theorem}[Complement of an orthogonal projection]
+    \label{thm:orthogonal_projection_complement_channel}
+    \lean{IsOrthogonalProjection.one_sub}
+    \leanok
+    \uses{def:orthogonal_projection_channel,
+        thm:orthogonal_projection_star_projection_channel}
+    If $P \in \MN{D}$ is an orthogonal projection, then $\Id-P$ is an
+    orthogonal projection.
+\end{theorem}
+
+\begin{proof}\leanok
+    In the involutive algebra $\MN{D}$, $P$ satisfies $P^\dagger=P$ and
+    $P^2=P$. Hence
+    \[
+        (\Id-P)^\dagger=\Id-P,\qquad
+        (\Id-P)^2=\Id-2P+P^2=\Id-P .
+    \]
+    Thus $\Id-P$ is an orthogonal projection.
+\end{proof}
 
 \begin{definition}[Irreducible map]\label{def:irreducible_cp}
     \lean{IsIrreducibleMap}

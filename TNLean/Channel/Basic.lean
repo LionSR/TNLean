@@ -6,8 +6,7 @@ import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.Matrix.Spectrum
 import Mathlib.Analysis.Matrix.Normed
-import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
-import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.PosPart.Basic
+import Mathlib.Analysis.CStarAlgebra.PositiveLinearMap
 import Mathlib.Analysis.RCLike.Lemmas
 import Mathlib.Topology.Algebra.Module.FiniteDimension
 import Mathlib.Topology.Sequences
@@ -102,23 +101,28 @@ section PositiveMapHermitian
 
 variable {n : Type*} [Finite n]
 
-/-- Positive maps preserve Hermiticity.
+/-- A positive matrix map is a positive linear map: if `A ≤ B`, then `E A ≤ E B`. -/
+def IsPositiveMap.toPositiveLinearMap
+    {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ} (hE : IsPositiveMap E) :
+    Matrix n n ℂ →ₚ[ℂ] Matrix n n ℂ := by
+  classical
+  letI := Fintype.ofFinite n
+  exact
+    { toLinearMap := E
+      monotone' := by
+        intro A B hAB
+        rw [Matrix.le_iff] at hAB ⊢
+        simpa [map_sub] using hE (B - A) hAB }
 
-Proof: decompose `X = X⁺ - X⁻` using the CFC positive/negative parts.
-Both parts are PSD, so `E(X⁺)` and `E(X⁻)` are PSD (hence Hermitian),
-and `E(X) = E(X⁺) - E(X⁻)` is a difference of Hermitian matrices. -/
+/-- Positive maps preserve Hermiticity. -/
 theorem IsPositiveMap.map_isHermitian
     {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
     (hE : IsPositiveMap E) {X : Matrix n n ℂ} (hX : X.IsHermitian) :
     (E X).IsHermitian := by
   classical
   letI := Fintype.ofFinite n
-  letI := Classical.decEq n
-  have h_decomp := CFC.posPart_sub_negPart X (isSelfAdjoint_iff.mpr hX)
-  have h_pos_psd := Matrix.nonneg_iff_posSemidef.mp (CFC.posPart_nonneg X)
-  have h_neg_psd := Matrix.nonneg_iff_posSemidef.mp (CFC.negPart_nonneg X)
-  rw [show E X = E (X⁺) - E (X⁻) by conv_lhs => rw [← h_decomp]; simp [map_sub]]
-  exact (hE _ h_pos_psd).isHermitian.sub (hE _ h_neg_psd).isHermitian
+  exact IsSelfAdjoint.isHermitian
+    (map_isSelfAdjoint hE.toPositiveLinearMap X hX.isSelfAdjoint)
 
 end PositiveMapHermitian
 
@@ -239,7 +243,8 @@ theorem posSemidef_trace_bounded_isBounded (c : ℝ) :
   simp_rw [show (2 : ℝ) = ((2 : ℕ) : ℝ) from by norm_num, Real.rpow_natCast]
   calc ∑ i : Fin D, ∑ j : Fin D, ‖X i j‖ ^ 2
       ≤ ∑ _i : Fin D, ∑ _j : Fin D, c ^ 2 :=
-        sum_le_sum fun i _ => sum_le_sum fun j _ => pow_le_pow_left₀ (norm_nonneg _) (hentry i j) 2
+        sum_le_sum fun i _ => sum_le_sum fun j _ =>
+          pow_le_pow_left₀ (norm_nonneg _) (hentry i j) 2
     _ = (↑D * c) ^ 2 := by simp [sum_const]; ring
 
 /-- The PSD cone is closed.

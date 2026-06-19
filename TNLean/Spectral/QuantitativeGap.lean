@@ -447,15 +447,4 @@ theorem transfer_map_gap_of_injective [NeZero D]
     fun μ hμ hne => lt_of_le_of_ne (hbound μ hμ)
       fun h => hne (hPrim.unique_peripheral μ hμ h)
 
-/-- Deprecated name for `transfer_map_gap_of_injective`. -/
-@[deprecated transfer_map_gap_of_injective (since := "2026-05-30")]
-theorem spectral_gap_of_injective [NeZero D]
-    (A : MPSTensor d D)
-    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hA : IsInjective A) :
-    ∃ (δ : ℝ), 0 < δ ∧
-      ∀ (μ : ℂ), Module.End.HasEigenvalue (transferMap (d := d) (D := D) A) μ →
-        μ ≠ 1 → ‖μ‖ ≤ 1 - δ :=
-  transfer_map_gap_of_injective A hNorm hA
-
 end MPSTensor

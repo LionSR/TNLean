@@ -32,14 +32,6 @@ open Matrix Finset
 
 local notation "M2" => Matrix (Fin 2) (Fin 2) ℂ
 
-private lemma complex_one_half_nonneg : (0 : ℂ) ≤ (1 / 2 : ℂ) := by
-  rw [Complex.nonneg_iff]
-  norm_num
-
-private lemma complex_one_quarter_nonneg : (0 : ℂ) ≤ (1 / 4 : ℂ) := by
-  rw [Complex.nonneg_iff]
-  norm_num
-
 /-- Wolf Example 5.3: the linear map
 `T_*(A) = (1/2) A^T + (1/4) tr(A) I` on `M₂(ℂ)`. -/
 noncomputable def wolfExample53 : M2 →ₗ[ℂ] M2 where
@@ -70,11 +62,11 @@ transpose and trace-times-identity. -/
 theorem wolfExample53_isPositive : IsPositiveMap wolfExample53 := by
   intro A hA
   have htranspose : ((1 / 2 : ℂ) • Aᵀ).PosSemidef :=
-    hA.transpose.smul complex_one_half_nonneg
+    hA.transpose.smul (by norm_num [Complex.nonneg_iff])
   have htraceId : ((1 / 4 : ℂ) • (Matrix.trace A • (1 : M2))).PosSemidef := by
     have htrace : ((Matrix.trace A) • (1 : M2)).PosSemidef :=
       Matrix.PosSemidef.one.smul hA.trace_nonneg
-    exact htrace.smul complex_one_quarter_nonneg
+    exact htrace.smul (by norm_num [Complex.nonneg_iff])
   simpa [wolfExample53] using htranspose.add htraceId
 
 private noncomputable def wolfExample53Gap (A : M2) : M2 :=
@@ -189,7 +181,8 @@ private lemma wolfExample53Gap_posSemidef_of_trace_zero (A : M2) (htr : Matrix.t
     (wolfExample53Gap A).PosSemidef := by
   rw [wolfExample53Gap_eq_of_trace_zero A htr]
   have h1 : ((1 / 2 : ℂ) • (Aᴴ * A)ᵀ).PosSemidef :=
-    (Matrix.posSemidef_conjTranspose_mul_self A).transpose.smul complex_one_half_nonneg
+    (Matrix.posSemidef_conjTranspose_mul_self A).transpose.smul
+      (by norm_num [Complex.nonneg_iff])
   have h2base : (Matrix.trace (A * Aᴴ) • (1 : M2) - A * Aᴴ).PosSemidef :=
     trace_smul_one_sub_posSemidef_of_posSemidef (A * Aᴴ)
       (Matrix.posSemidef_self_mul_conjTranspose A)
@@ -198,7 +191,7 @@ private lemma wolfExample53Gap_posSemidef_of_trace_zero (A : M2) (htr : Matrix.t
   have h2 : ((1 / 4 : ℂ) • ((Matrix.trace (Aᴴ * A) • (1 : M2) - A * Aᴴ)ᵀ)).PosSemidef := by
     have h2' : ((Matrix.trace (Aᴴ * A) • (1 : M2) - A * Aᴴ)ᵀ).PosSemidef := by
       simpa [htrace] using h2base.transpose
-    exact h2'.smul complex_one_quarter_nonneg
+    exact h2'.smul (by norm_num [Complex.nonneg_iff])
   exact h1.add h2
 
 /-- Wolf Example 5.3 satisfies the Schwarz inequality.

@@ -51,11 +51,9 @@ namespace MPSTensor
 variable {d D₁ D₂ : ℕ}
 
 attribute [local instance] Matrix.linftyOpNormedAddCommGroup Matrix.linftyOpNormedSpace
-  instGCFiniteDimensionalMatrixCLM
-  instGCNormedAddCommGroupMatrixCLM
-  instGCNormedRingMatrixCLM
-  instGCNormedAlgebraMatrixCLM
-  instGCCompleteSpaceMatrixCLM
+  ContinuousLinearMap.toNormedAddCommGroup
+  ContinuousLinearMap.toNormedRing
+  ContinuousLinearMap.toNormedAlgebra
 
 /-! ## Rectangular spectral radius abbreviation -/
 
@@ -78,13 +76,6 @@ theorem mixedTransferSpectralRadius₂_eq
 The general definitions `frobSq`, `matToES`, and their basic lemmas are imported from
 `TNLean.Spectral.FrobeniusNorm`.  Mathlib's native Frobenius-norm
 submultiplicativity gives the mixed-shape estimate used below. -/
-
-private lemma norm_matToES_rect_mul_le
-    (A : Matrix (Fin D₁) (Fin D₁) ℂ) (B : Matrix (Fin D₁) (Fin D₂) ℂ) :
-    ‖matToES (A * B)‖ ≤ ‖matToES A‖ * ‖matToES B‖ := by
-  rw [norm_matToES_eq_frobenius_norm, norm_matToES_eq_frobenius_norm,
-    norm_matToES_eq_frobenius_norm]
-  exact Matrix.frobenius_norm_mul A B
 
 /-! ## Hilbert–Schmidt contraction for the rectangular mixed transfer -/
 
@@ -123,8 +114,8 @@ private lemma sum_frobSq_rect_words
   rw [← Complex.re_sum, ← Matrix.trace_sum, word_conjTranspose_mul_sum K hK n]
   simp [Matrix.trace_one, Fintype.card_fin]
 
-/-- **Uniform Frobenius-norm bound**: `‖F₂^n(X)‖_F² ≤ D₁² · ‖X‖_F²` for the rectangular
-mixed transfer operator. -/
+/-- **Uniform Frobenius-norm bound**: `‖F₂^n(X)‖_F² ≤ D₁² · ‖X‖_F²`
+for the rectangular mixed transfer operator. -/
 private lemma hs_contraction_rect [NeZero D₁] [NeZero D₂]
     (A : MPSTensor d D₁) (B : MPSTensor d D₂) (X : Matrix (Fin D₁) (Fin D₂) ℂ)
     (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -147,7 +138,10 @@ private lemma hs_contraction_rect [NeZero D₁] [NeZero D₂]
     evalWord A (List.ofFn σ) * (X * (evalWord B (List.ofFn σ))ᴴ))‖ ≤
     ∑ σ : Fin n → Fin d, fA σ * fB σ :=
     ((by rw [matToES_finset_sum]; exact norm_sum_le _ _) : ‖matToES _‖ ≤ _).trans
-      (Finset.sum_le_sum fun σ _ => norm_matToES_rect_mul_le _ _)
+      (Finset.sum_le_sum fun σ _ => by
+        simpa [hfA_def, hfB_def, norm_matToES_eq_frobenius_norm] using
+          Matrix.frobenius_norm_mul (evalWord A (List.ofFn σ))
+            (X * (evalWord B (List.ofFn σ))ᴴ))
   have h_A : ∑ σ : Fin n → Fin d, fA σ ^ 2 = (D₁ : ℝ) := by
     simp_rw [hfA_def, norm_matToES_sq]; exact sum_frobSq_rect_words A hA_norm n
   have h_B : ∑ σ : Fin n → Fin d, fB σ ^ 2 = frobSq X := by
@@ -203,7 +197,9 @@ theorem spectralRadius_mixedTransfer₂_le_one
       ContinuousLinearMap.uniqueOfLeft.instSubsingleton
     rw [spectrum.SpectralRadius.of_subsingleton]; exact zero_le
   · rcases eq_or_ne D₂ 0 with rfl | hD₂
-    · have : Subsingleton (Matrix (Fin D₁) (Fin 0) ℂ) := ⟨fun a b => by ext i j; exact j.elim0⟩
+    · have : Subsingleton (Matrix (Fin D₁) (Fin 0) ℂ) := ⟨fun a b => by
+        ext i j
+        exact j.elim0⟩
       have : Subsingleton (Matrix (Fin D₁) (Fin 0) ℂ →L[ℂ] Matrix (Fin D₁) (Fin 0) ℂ) :=
         ContinuousLinearMap.uniqueOfLeft.instSubsingleton
       rw [spectrum.SpectralRadius.of_subsingleton]; exact zero_le
@@ -298,9 +294,6 @@ end DimensionEquality
 
 section MainTheorem
 
-set_option synthInstance.maxHeartbeats 400000 in
--- Instance search for the rectangular continuous endomorphism space needs a local
--- heartbeat bump during the spectral-radius extraction.
 /-- **Dimension-mismatch transfer-operator gap**: the spectral radius of the rectangular
 mixed transfer operator is strictly less than 1 when the bond dimensions differ. -/
 theorem mixedTransferSpectralRadius₂_lt_one_of_dim_ne
@@ -321,27 +314,63 @@ theorem mixedTransferSpectralRadius₂_lt_one_of_dim_ne
   rw [mixedTransferSpectralRadius₂_eq] at hEq
   set F : (Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ :=
     (Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ)) (mixedTransferMap₂ A B)
+  letI : NormedAddCommGroup
+      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
+    ContinuousLinearMap.toNormedAddCommGroup
+  letI : SeminormedRing
+      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
+    ContinuousLinearMap.toSeminormedRing
+  letI : NormedRing
+      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
+    ContinuousLinearMap.toNormedRing
+  letI : NormedSpace ℂ
+      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
+    ContinuousLinearMap.toNormedSpace
+  letI : NormedAlgebra ℂ
+      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
+    ContinuousLinearMap.toNormedAlgebra
+  haveI : FiniteDimensional ℂ
+      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
+    (Module.End.toContinuousLinearMap
+      (Matrix (Fin D₁) (Fin D₂) ℂ)).toLinearEquiv.finiteDimensional
+  letI : CompleteSpace
+      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
+    FiniteDimensional.complete ℂ
+      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ)
   have hEqF : spectralRadius ℂ F = 1 := by
     change spectralRadius ℂ F = 1 at hEq
     exact hEq
   -- If `spectralRadius = 1`, pick `μ ∈ spectrum` with `‖μ‖ = 1`.
-  -- Use `@` to supply the `instGC*` instances explicitly, avoiding a `UniformSpace` diamond
-  -- between the strong topology and the operator-norm topology on `E →L[ℂ] E`.
+  -- Use `@` to keep the operator-norm topology on `E →L[ℂ] E` explicit.
   obtain ⟨μ, hμ_spec, hμ_rad⟩ :=
     @spectrum.exists_nnnorm_eq_spectralRadius_of_nonempty ℂ _ _
-      (instGCNormedRingMatrixCLM D₁ D₂) (instGCNormedAlgebraMatrixCLM D₁ D₂)
-      (instGCCompleteSpaceMatrixCLM D₁ D₂) inferInstance (a := F)
-      (@spectrum.nonempty _ (instGCNormedRingMatrixCLM D₁ D₂)
-        (instGCNormedAlgebraMatrixCLM D₁ D₂) (instGCCompleteSpaceMatrixCLM D₁ D₂) inferInstance F)
+      (ContinuousLinearMap.toNormedRing :
+        NormedRing
+          ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ))
+      (ContinuousLinearMap.toNormedAlgebra :
+        NormedAlgebra ℂ
+          ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ))
+      inferInstance inferInstance (a := F)
+      (@spectrum.nonempty _
+        (ContinuousLinearMap.toNormedRing :
+          NormedRing
+            ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ))
+        (ContinuousLinearMap.toNormedAlgebra :
+          NormedAlgebra ℂ
+            ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ))
+        inferInstance inferInstance F)
   have hμ_one : (↑‖μ‖₊ : ENNReal) = 1 := hμ_rad.trans hEqF
   have hμ_nnn : ‖μ‖₊ = (1 : NNReal) := (ENNReal.coe_eq_one).1 hμ_one
   have hμ_norm : ‖μ‖ = 1 := by
     have : (‖μ‖₊ : ℝ) = (1 : ℝ) := by exact_mod_cast hμ_nnn
     simpa [coe_nnnorm] using this
   -- Convert `μ ∈ spectrum` to an eigenvalue of the linear map `mixedTransferMap₂ A B`.
+  let Φ :
+      ((Matrix (Fin D₁) (Fin D₂) ℂ) →ₗ[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) ≃ₐ[ℂ]
+        ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
+    Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ)
   have h_spec :=
-    AlgEquiv.spectrum_eq
-      (Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ)) (mixedTransferMap₂ A B)
+    AlgEquiv.spectrum_eq Φ (mixedTransferMap₂ A B)
   have hμ_spec' : μ ∈ spectrum ℂ (mixedTransferMap₂ A B) := by
     have hμ_clm : μ ∈ spectrum ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ))
@@ -360,7 +389,9 @@ theorem mixedTransferSpectralRadius₂_lt_one_of_dim_ne
       hA hB hA_norm hB_norm X μ hFX hμ_norm hX_ne
   exact hD hDim
 
-/-- **Overlap decay for dimension-mismatched tensors**: `mpvOverlap A B N → 0` when `D₁ ≠ D₂`. -/
+/-- **Overlap decay for dimension-mismatched tensors.**
+
+`mpvOverlap A B N → 0` when `D₁ ≠ D₂`. -/
 theorem mpvOverlap_tendsto_zero_of_dim_ne
     {d D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)

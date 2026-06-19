@@ -62,12 +62,6 @@ private theorem leftMulAlgHom_apply (A ρ : Mat D) :
     leftMulAlgHom D A ρ = A * ρ := by
   simp [leftMulAlgHom]
 
-private theorem mem_exp_ball {A : Type*}
-    [NormedRing A] [NormedAlgebra ℂ A] [CompleteSpace A] (x : A) :
-    x ∈ Metric.eball (0 : A) (NormedSpace.expSeries ℂ A).radius := by
-  rw [NormedSpace.expSeries_radius_eq_top]
-  exact edist_lt_top _ _
-
 private def matExpD (A : Mat D) : Mat D :=
   letI : NormedRing (Mat D) := Matrix.linftyOpNormedRing (n := Fin D) (α := ℂ)
   letI : NormedAlgebra ℂ (Mat D) :=
@@ -168,18 +162,11 @@ private theorem exp_leftMulCLM
       leftMulCLMAlgHom D (NormedSpace.exp A) := by
   change clmExpD (leftMulCLMAlgHom D A) =
     leftMulCLMAlgHom D (matExpD A)
-  have h := @NormedSpace.map_exp_of_mem_ball ℂ (Mat D) (MatrixCLM (Fin D))
-    _
-    (Matrix.linftyOpNormedRing (n := Fin D) (α := ℂ))
-    ContinuousLinearMap.toNormedRing
-    (Matrix.linftyOpNormedAlgebra (R := ℂ) (n := Fin D) (α := ℂ))
-    (FiniteDimensional.complete ℂ (Mat D))
-    inferInstance
-    _
-    (Mat D →ₐ[ℂ] MatrixCLM (Fin D))
-    inferInstance inferInstance
-    (leftMulCLMAlgHom D)
-    continuous_leftMulCLMAlgHom A (mem_exp_ball A)
+  letI : NormedRing (Mat D) := Matrix.linftyOpNormedRing (n := Fin D) (α := ℂ)
+  letI : NormedAlgebra ℂ (Mat D) :=
+    Matrix.linftyOpNormedAlgebra (R := ℂ) (n := Fin D) (α := ℂ)
+  letI : CompleteSpace (Mat D) := FiniteDimensional.complete ℂ (Mat D)
+  have h := NormedSpace.map_exp (leftMulCLMAlgHom D) continuous_leftMulCLMAlgHom A
   exact h.symm
 
 private theorem exp_rightMulCLM
@@ -188,25 +175,13 @@ private theorem exp_rightMulCLM
       rightMulCLMAlgHom D (MulOpposite.op (NormedSpace.exp A)) := by
   change clmExpD (rightMulCLMAlgHom D (MulOpposite.op A)) =
     rightMulCLMAlgHom D (MulOpposite.op (matExpD A))
-  have h := @NormedSpace.map_exp_of_mem_ball ℂ ((Mat D)ᵐᵒᵖ) (MatrixCLM (Fin D))
-    _
-    inferInstance
-    ContinuousLinearMap.toNormedRing
-    inferInstance
-    inferInstance
-    inferInstance
-    _
-    ((Mat D)ᵐᵒᵖ →ₐ[ℂ] MatrixCLM (Fin D))
-    inferInstance inferInstance
-    (rightMulCLMAlgHom D)
-    continuous_rightMulCLMAlgHom (MulOpposite.op A) (mem_exp_ball (MulOpposite.op A))
+  have h := NormedSpace.map_exp (rightMulCLMAlgHom D) continuous_rightMulCLMAlgHom
+    (MulOpposite.op A)
   have hop : NormedSpace.exp (MulOpposite.op A) = MulOpposite.op (matExpD A) := by
-    simpa [matExpD] using (NormedSpace.exp_op (R := Mat D) (x := A))
+    simp [matExpD, NormedSpace.exp_op (𝔸 := Mat D) (x := A)]
   rw [← hop]
   exact h.symm
 
-set_option synthInstance.maxHeartbeats 200000 in
--- `exp_add_of_commute` on CLMs triggers deep completeness search under Lean 4.29.
 /-- The dissipative drift semigroup is explicit:
 `exp(t · (ρ ↦ -κρ - ρκ†))(ρ) = e^{-tκ} ρ e^{-tκ†}`. -/
 theorem expSemigroup_dissipativeDrift_apply

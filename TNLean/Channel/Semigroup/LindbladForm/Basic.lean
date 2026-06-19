@@ -158,10 +158,8 @@ theorem LindbladForm.toLinearMap_eq_generatorDecomp (F : LindbladForm D) :
     rw [conjTranspose_add, conjTranspose_smul, conjTranspose_smul,
       F.H_hermitian, hS_herm]
     congr 1
-    · change star Complex.I • F.H = -Complex.I • F.H
-      rw [Complex.star_def, Complex.conj_I, neg_smul]
-    · change star (1 / 2 : ℂ) • S = (1 / 2 : ℂ) • S
-      simp only [one_div, star_inv₀, star_ofNat]
+    · rw [Complex.star_def, Complex.conj_I, neg_smul]
+    · simp only [one_div, star_inv₀, star_ofNat]
   rw [hκ_conj]
   -- Expand dissipator
   simp only [dissipator]

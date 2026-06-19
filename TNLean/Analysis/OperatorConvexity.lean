@@ -124,14 +124,6 @@ private local instance instTROCNormedRing : NormedRing Mat :=
   Matrix.instL2OpNormedRing
 private local instance instTROCNormedAlgebra : NormedAlgebra ℂ Mat :=
   Matrix.instL2OpNormedAlgebra
-private local instance instTROCCStarRing : CStarRing Mat :=
-  Matrix.instCStarRing
-private local instance instTROCPartialOrder : PartialOrder Mat :=
-  Matrix.instPartialOrder
-private local instance instTROCStarOrderedRing : StarOrderedRing Mat :=
-  Matrix.instStarOrderedRing
-private local instance instTROCCStarAlgebra : CStarAlgebra Mat :=
-  CStarAlgebra.mk
 
 /-- For `0 ≤ A` (Loewner) in `Mat` and a Hermitian proof `hH`,
 `A^p = hH.cfc (fun x => x^p)`. Taking `hH` as an explicit argument ensures

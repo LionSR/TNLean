@@ -25,7 +25,7 @@ method:
 * kernel identification: the Euclidean-space ground space equals \(\ker h_L\).
 -/
 
-open scoped BigOperators InnerProductSpace
+open scoped BigOperators ComplexOrder InnerProductSpace
 
 namespace MPSTensor
 
@@ -638,35 +638,14 @@ theorem localTermES_eq_average_localTermESSummand {N : ℕ} (A : MPSTensor d D)
           localTermESSummand A (Fin.pos i) L i τ)) v σ := by
             simp
 
-private theorem isPositive_smul_of_real_re_nonneg {ι : Type*} [Fintype ι]
-    {T : EuclideanSpace ℂ ι →ₗ[ℂ] EuclideanSpace ℂ ι} (hT : T.IsPositive) {c : ℂ}
-    (hc_star : star c = c) (hc_re : 0 ≤ c.re) :
-    (c • T).IsPositive := by
-  refine ⟨hT.left.smul hc_star, fun x => ?_⟩
-  have him : c.im = 0 := by
-    have him' := congrArg Complex.im hc_star
-    simp at him'
-    linarith
-  have himstar : RCLike.im ((starRingEnd ℂ) c) = 0 := by
-    simp [him]
-  have hre : RCLike.re ((starRingEnd ℂ) c) = c.re := by
-    simp
-  change 0 ≤ RCLike.re ⟪c • T x, x⟫_ℂ
-  rw [inner_smul_left, RCLike.mul_re, himstar, zero_mul, sub_zero, hre]
-  exact mul_nonneg hc_re (hT.re_inner_nonneg_left x)
-
 /-- The transported local term is positive because it is a finite cyclic average
 of the positive summands \(R_{i,\tau}^\dagger P_L R_{i,\tau}\). -/
 theorem localTermES_isPositive {N : ℕ} (A : MPSTensor d D) (L : ℕ) (i : Fin N) :
     (localTermES A L i).IsPositive := by
   by_cases hLN : L ≤ N
   · rw [localTermES_eq_average_localTermESSummand A hLN i]
-    refine isPositive_smul_of_real_re_nonneg
-      (localTermESSummand_sum_isPositive A (Fin.pos i) L i) ?_ ?_
-    · simp
-    · rw [Complex.inv_re, Complex.normSq_natCast]
-      have hnonneg : 0 ≤ ((d ^ L : ℕ) : ℝ) := Nat.cast_nonneg (d ^ L)
-      exact div_nonneg hnonneg (mul_nonneg hnonneg hnonneg)
+    exact (localTermESSummand_sum_isPositive A (Fin.pos i) L i).smul_of_nonneg
+      (by positivity)
   · simp [localTermES, localTerm, hLN]
 
 private theorem localTermES_isIdempotentElem {N : ℕ} (A : MPSTensor d D) (L : ℕ)

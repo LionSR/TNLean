@@ -101,7 +101,6 @@ private theorem cyclic_projection_mem_multiplicativeDomain
   intro k
   have hPk_star : (P k)ᴴ = P k := (hPproj k).1.eq
   have hTPk_eq : transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) = P (k - 1) := by
-    change transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) = P (k - 1)
     simpa [show k - 1 + 1 = k by abel] using hcyclic (k - 1)
   have hTPk_proj :
       IsOrthogonalProjection (transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k)) := by
