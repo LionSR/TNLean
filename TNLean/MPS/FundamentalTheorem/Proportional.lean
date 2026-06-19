@@ -149,7 +149,7 @@ private theorem gaugePhaseEquiv_of_eventually_proportionalMPV₂_of_overlap_deca
   have hto0 :
       Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop (nhds 0) :=
     hZero hNot
-  exact (hCrossNorm.ne_nhds one_ne_zero) (by simpa using hto0.norm)
+  exact one_ne_zero (tendsto_nhds_unique hCrossNorm (by simpa using hto0.norm))
 
 
 /-! ## Gauge-phase equivalence from unit-modulus overlap -/

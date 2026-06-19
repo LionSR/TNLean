@@ -1814,6 +1814,17 @@ Focused check:
 lake build TNLean.Channel.Semigroup.KossakowskiForm -q --log-level=info
 ```
 
+### Limit-uniqueness helper removal, 2026-06-19
+
+Additional pass-through scouting found that `TNLean.Topology.TendstoHelpers`
+only restated Mathlib's Hausdorff uniqueness theorem `tendsto_nhds_unique` as
+`Filter.Tendsto.ne_nhds`.  The local statement had two MPS use sites, both
+limit-uniqueness contradictions.
+
+Those proofs now call `tendsto_nhds_unique` directly, and the helper file was
+removed.  Future proofs that need this limit-uniqueness fact should use the
+Mathlib theorem rather than reintroducing the wrapper.
+
 ## Conclusions
 
 Mathlib 4.31 materially improves the background library for TNLean, especially
