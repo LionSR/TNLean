@@ -9,6 +9,7 @@ import TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan
 import TNLean.Wielandt.RectangularSpan.Universality
 import Mathlib.LinearAlgebra.Dimension.Finrank
 import Mathlib.LinearAlgebra.Dimension.Constructions
+import Mathlib.LinearAlgebra.Matrix.Bilinear
 
 /-!
 # Invertible-element word span growth
@@ -196,9 +197,8 @@ theorem mulLeft_pow_image_wordSpan_le (A : MPSTensor d D)
                 (Submodule.map (LinearMap.mulLeft ℂ (A i₀ ^ k)) (wordSpan A n)) := by
               rw [← Submodule.map_comp]
               congr 1
-              ext x
-              simp only [LinearMap.comp_apply, LinearMap.mulLeft_apply,
-                pow_succ', ← Matrix.mul_assoc]
+              rw [pow_succ']
+              exact mulLeftLinearMap_mul (o := Fin D) (R := ℂ) (A i₀) (A i₀ ^ k)
           _ ≤ Submodule.map (LinearMap.mulLeft ℂ (A i₀)) (wordSpan A (n + k)) :=
               Submodule.map_mono ih
           _ ≤ wordSpan A ((n + k) + 1) :=
@@ -409,8 +409,7 @@ private theorem map_mulRight_map_mulRight
       Submodule.map (LinearMap.mulRight ℂ (b * c)) S := by
   simp only [← Submodule.map_comp]
   congr 1
-  ext x
-  simp only [LinearMap.comp_apply, LinearMap.mulRight_apply, Matrix.mul_assoc]
+  exact (mulRightLinearMap_mul (l := Fin D) (R := ℂ) b c).symm
 
 /-- If `dim(S_r) = dim(S_{r+1})`, then every later word span is absorbed into
 the right-multiplication image of `S_r` by powers of the invertible generator.
