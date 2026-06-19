@@ -423,6 +423,52 @@ $\bigvee_jG_{n+2}(A^j)$ and to obtain the one-step block-intersection identity.
     \]
 \end{proof}
 
+\begin{lemma}[Block-diagonal boundary $C^j,D^j,E^j$ identities from trace decompositions]
+    \label{lem:block_boundary_cde_identities_from_trace_decompositions}
+    \lean{MPSTensor.pgvwc07_complementary_word_cde_identities_of_block_boundary_trace_decomposition}
+    \leanok
+    \uses{lem:pgvwc_cde_identities_from_trace_decompositions}
+    Let $A^1,\ldots,A^g$ be block tensors with the common word-span property
+    at length $m$. Fix $N\in\N$, complex numbers $\mu_j$, and
+    block-diagonal boundary matrices $X_j$, and put
+    \[
+        D^j_\beta=(\mu_j^NX_j)A^j_\beta .
+    \]
+    Suppose that, for every wrapped word $\beta$ of length $K$, every
+    complementary word $\rho$ of length $M$, and every middle word $w$ of
+    length $m$,
+    \[
+        \sum_j\tr\!\left(A^j_\beta C^j_\rho A^j_w\right)
+        =
+        \sum_j\tr\!\left(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_w\right).
+    \]
+    If each block satisfies
+    \[
+        \sum_a A^j_aA^{j\,\dagger}_a=I,
+    \]
+    then for every block $j$ there is a matrix
+    \[
+        E^j=\sum_\rho C^j_\rho\left(A^j_\rho\right)^\dagger
+    \]
+    such that, for every wrapped word $\beta$ and complementary word $\rho$,
+    \[
+        (\mu_j^NX_j)A^j_\beta=A^j_\beta E^j,
+        \qquad
+        A^j_\beta C^j_\rho=A^j_\beta E^jA^j_\rho .
+    \]
+    This is the boundary-matrix calculation in
+    \cite[Theorem~12, proof lines~1446--1451]{PerezGarcia2007Matrix},
+    after substituting the block-diagonal boundary matrix
+    $D^j_\beta=(\mu_j^NX_j)A^j_\beta$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:pgvwc_cde_identities_from_trace_decompositions}
+    Apply Lemma~\ref{lem:pgvwc_cde_identities_from_trace_decompositions}
+    with $D^j_\beta=(\mu_j^NX_j)A^j_\beta$.
+\end{proof}
+
 \begin{lemma}[Complementary-word boundary identities from a compatibility hypothesis]
     \label{lem:complementary_word_boundary_identities_from_pgvwc}
     \lean{MPSTensor.pgvwc07_complementary_word_boundary_identities_formula_of_compatibility}

@@ -111,4 +111,62 @@ theorem pgvwc07_complementary_word_cde_identities_of_trace_decomposition
   · intro ρ β
     simpa [E] using hIds.2 ρ β
 
+/-- Block-diagonal boundary specialization of the PGVWC \(C^j,D^j,E^j\)
+identities.
+
+This is arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1451,
+specialized to the block-diagonal periodic boundary matrix
+\[
+  D^j_\beta=(\mu_j^NX_j)A^j_\beta .
+\]
+The conclusion gives a single matrix \(E^j\), independent of \(\rho\), such
+that
+\[
+  (\mu_j^NX_j)A^j_\beta=A^j_\beta E^j,\qquad
+  A^j_\beta C^j_\rho=A^j_\beta E^jA^j_\rho .
+\]
+
+The words \(\beta\) and \(\rho\) are the local coordinates obtained by opening
+a boundary-crossing interval; the source proof uses \(C^j_{i_1}\) and
+\(D^j_{i_{m+1}}\).
+
+**Local fix (adjoint correction):** As in the unspecialized theorem, the
+formal matrix is \(E^j=\sum_\rho C^j_\rho(A^j_\rho)^\dagger\), matching the
+normalization \(\sum_\rho A^j_\rho(A^j_\rho)^\dagger=I\); the source line omits
+the adjoint. Documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
+theorem pgvwc07_complementary_word_cde_identities_of_block_boundary_trace_decomposition
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    {m K M N : ℕ} (hSpan : WordTupleSpanTop A m)
+    (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (C : (j : Fin r) → (Fin M → Fin d) →
+      Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    (hCoeff : ∀ ρ : Fin M → Fin d, ∀ β : Fin K → Fin d,
+      ∀ w : Fin m → Fin d,
+        (∑ j : Fin r,
+          Matrix.trace
+            ((evalWord (A j) (List.ofFn β) * C j ρ) *
+              evalWord (A j) (List.ofFn w))) =
+        (∑ j : Fin r,
+          Matrix.trace
+            (((((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
+                evalWord (A j) (List.ofFn ρ)) *
+              evalWord (A j) (List.ofFn w)))) :
+    ∀ j : Fin r,
+      ∃ E : Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+        E = (∑ ρ : Fin M → Fin d, C j ρ * (evalWord (A j) (List.ofFn ρ))ᴴ) ∧
+        (∀ β : Fin K → Fin d,
+          ((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β) =
+            evalWord (A j) (List.ofFn β) * E) ∧
+        (∀ ρ : Fin M → Fin d, ∀ β : Fin K → Fin d,
+          evalWord (A j) (List.ofFn β) * C j ρ =
+            evalWord (A j) (List.ofFn β) * E *
+              evalWord (A j) (List.ofFn ρ)) := by
+  exact
+    pgvwc07_complementary_word_cde_identities_of_trace_decomposition
+      (A := A) (m := m) (K := K) (M := M) hSpan
+      (fun j => (μ j) ^ N • X j) C hUnital hCoeff
+
 end MPSTensor
