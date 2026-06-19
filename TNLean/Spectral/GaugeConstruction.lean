@@ -28,6 +28,21 @@ open scoped Matrix Matrix.Norms.Operator MatrixOrder ComplexOrder BigOperators
 
 attribute [local instance] Matrix.linftyOpNormedAddCommGroup Matrix.linftyOpNormedSpace
 
+/-! ### Continuous-linear endomorphism dimensions -/
+
+private noncomputable abbrev endEquivMatrixCLM (m n : ℕ) :
+    (Matrix (Fin m) (Fin n) ℂ →ₗ[ℂ] Matrix (Fin m) (Fin n) ℂ) ≃ₐ[ℂ]
+      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
+  Module.End.toContinuousLinearMap (Matrix (Fin m) (Fin n) ℂ)
+
+/-- Continuous endomorphisms of finite matrix spaces form a finite-dimensional space. -/
+@[deprecated "Use the finite-dimensionality of continuous endomorphisms directly."
+  (since := "2026-06-19"), reducible]
+noncomputable def instGCFiniteDimensionalMatrixCLM (m n : ℕ) :
+    FiniteDimensional ℂ
+      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
+  (endEquivMatrixCLM m n).toLinearEquiv.finiteDimensional
+
 namespace MPSTensor
 
 variable {d D D₁ D₂ : ℕ}

@@ -217,20 +217,23 @@ Recommended action:
 
 Applied PEPS follow-up:
 
-- `TNLean.PEPS.reindexAlgEquiv_smul` was removed.  The four scalar transport
-  sites in `TNLean/PEPS/TorusGaugeUniqueness.lean` now rewrite by Mathlib's
-  `map_smul` for the algebra equivalence.
-- `TNLean.PEPS.reindexAlgEquiv_finCongr_symm_round` was removed from
-  `TNLean/PEPS/EdgeGaugeFamily.lean`.  The only local transport site now uses a
-  proof by simplifying `Matrix.reindexAlgEquiv` directly.
-- `TNLean.PEPS.reindexAlgEquiv_gaugeConj` was removed from
-  `TNLean/PEPS/TorusEdgeGaugeCovariance.lean`.  The only use in
-  `TNLean/PEPS/TorusWitnessTransport.lean` now uses `map_mul`, `map_inv`, and
-  `glReindex_coe` directly.
-- `TNLean.PEPS.reindexAlgEquiv_transpose` was removed from
-  `TNLean/PEPS/EdgeGaugeFamily.lean`.  Its users now call Mathlib's
-  `Matrix.transpose_reindex` directly, with local `change` steps where the
-  gauge-applied bond dimension is definitionally equal to the original one.
+- Explicit uses of `TNLean.PEPS.reindexAlgEquiv_smul` were removed.  The four
+  scalar transport sites in `TNLean/PEPS/TorusGaugeUniqueness.lean` now rewrite
+  by Mathlib's `map_smul` for the algebra equivalence, while the public theorem
+  remains as a deprecated compatibility name.
+- Explicit uses of `TNLean.PEPS.reindexAlgEquiv_finCongr_symm_round` were
+  removed from `TNLean/PEPS/EdgeGaugeFamily.lean`.  The only local transport
+  site now uses a proof by simplifying `Matrix.reindexAlgEquiv` directly, while
+  the public theorem remains as a deprecated compatibility name.
+- Explicit uses of `TNLean.PEPS.reindexAlgEquiv_gaugeConj` were removed.  The
+  only use in `TNLean/PEPS/TorusWitnessTransport.lean` now uses `map_mul`,
+  `map_inv`, and `glReindex_coe` directly, while the public theorem remains as
+  a deprecated compatibility name.
+- Explicit uses of `TNLean.PEPS.reindexAlgEquiv_transpose` were removed.  Its
+  users now call Mathlib's `Matrix.transpose_reindex` directly, with local
+  `change` steps where the gauge-applied bond dimension is definitionally equal
+  to the original one, while the public theorem remains as a deprecated
+  compatibility name.
 - The corresponding blueprint theorem was deleted, since the algebra fact is
   now an inline proof step in the blueprint route rather than a formalized
   target.
@@ -991,15 +994,18 @@ The remaining semigroup proofs use the same structures directly through
 `TNLean.Channel.Semigroup.Primitivity.Helpers`.
 
 A further pass removed the local rectangular continuous-linear-map normed
-structure wrappers and the local finite-dimensional witness from
-`TNLean.Spectral.GaugeConstruction`:
+structure wrappers from `TNLean.Spectral.GaugeConstruction`; the
+finite-dimensional witness remains as a deprecated compatibility name:
 
-- `instGCFiniteDimensionalMatrixCLM`
 - `instGCNormedAddCommGroupMatrixCLM`
 - `instGCNormedRingMatrixCLM`
 - `instGCSeminormedRingMatrixCLM`
 - `instGCNormedAlgebraMatrixCLM`
 - `instGCCompleteSpaceMatrixCLM`
+
+Retained compatibility name:
+
+- `instGCFiniteDimensionalMatrixCLM`
 
 These were exact local wrappers around the continuous-linear-map normed-ring
 and finite-dimensional-completeness infrastructure.  The spectral and

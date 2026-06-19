@@ -33,6 +33,23 @@ open scoped BigOperators Matrix
 namespace TNLean
 namespace PEPS
 
+/-! ### Reindexing commutes with conjugation -/
+
+/-- Reindexing across an index-size equality commutes with conjugation. -/
+@[deprecated "Use `map_mul`, `map_inv`, and `glReindex_coe` directly."
+  (since := "2026-06-19")]
+theorem reindexAlgEquiv_gaugeConj {a b : ℕ} (h : a = b) (Z : GL (Fin a) ℂ)
+    (N : Matrix (Fin a) (Fin a) ℂ) :
+    Matrix.reindexAlgEquiv ℂ ℂ (finCongr h)
+        ((Z : Matrix (Fin a) (Fin a) ℂ) * N *
+          (↑Z⁻¹ : Matrix (Fin a) (Fin a) ℂ)) =
+      (↑(glReindex h Z) : Matrix (Fin b) (Fin b) ℂ) *
+          Matrix.reindexAlgEquiv ℂ ℂ (finCongr h) N *
+        (↑(glReindex h Z)⁻¹ : Matrix (Fin b) (Fin b) ℂ) := by
+  rw [map_mul, map_mul, glReindex_coe,
+    show (glReindex h Z)⁻¹ = glReindex h Z⁻¹ from (map_inv (glReindex h) Z).symm,
+    glReindex_coe]
+
 /-! ### Conjugation agreement from the coefficient identity -/
 
 section CoeffBridge
