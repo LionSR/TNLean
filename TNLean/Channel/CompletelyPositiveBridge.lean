@@ -73,7 +73,7 @@ private lemma conjugate_blockDiagConst_apply (k : ℕ) (W : Matrix (Fin D) (Fin 
     ite_mul, zero_mul, mul_ite, mul_zero, Finset.sum_ite_eq, Finset.sum_ite_eq',
     Finset.mem_univ, if_true]
 
-/-- A linear self-map of `M_D(ℂ)`, reinterpreted as a linear self-map of the
+/-- A linear self-map of `M_D(ℂ)`, identified with a linear self-map of the
 C⋆-algebra `CStarMatrix (Fin D) (Fin D) ℂ` (the two types are definitionally
 equal). -/
 def cstarMap (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
