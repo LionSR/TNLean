@@ -132,16 +132,6 @@ private lemma dissipator_eq_half_kossakowski
   -- This is a ℂ-module identity: a-(1/2)b-(1/2)c = (1/2)((a-b)+(a-c))
   module
 
-/-- The PSD factorization: for `C ≥ 0`, `√C† * √C = C`. -/
-private lemma posSemidef_sqrt_factorization {n : ℕ}
-    (C : Matrix (Fin n) (Fin n) ℂ) (hC : C.PosSemidef) :
-    (CFC.sqrt C)ᴴ * CFC.sqrt C = C := by
-  have hC_nonneg : 0 ≤ C := Matrix.nonneg_iff_posSemidef.mpr hC
-  have hsqrt_psd : (CFC.sqrt C).PosSemidef :=
-    Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg C)
-  rw [hsqrt_psd.isHermitian.eq]
-  simpa using CFC.sqrt_mul_sqrt_self C hC_nonneg
-
 /-- Bilinear sum identity: `Σⱼ (Σₖ B_{jk}•Fₖ) * M * (Σₖ B_{jk}•Fₖ)†`
 equals `Σₖₗ (B†B)_{lk} • (Fₖ * M * Fₗ†)`. Used in Kossakowski ↔ Lindblad. -/
 private lemma kraus_sum_eq_double_sum {n : ℕ}
@@ -186,7 +176,13 @@ theorem kossakowski_iff_lindblad
     rintro ⟨KF, hKF⟩
     let B : Matrix (Fin KF.n) (Fin KF.n) ℂ := CFC.sqrt KF.C
     have hB : KF.C = Bᴴ * B := by
-      simpa [B] using (posSemidef_sqrt_factorization KF.C KF.C_posSemidef).symm
+      have hC_nonneg : 0 ≤ KF.C :=
+        Matrix.nonneg_iff_posSemidef.mpr KF.C_posSemidef
+      have hsqrt_psd : (CFC.sqrt KF.C).PosSemidef :=
+        Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg KF.C)
+      change KF.C = (CFC.sqrt KF.C)ᴴ * CFC.sqrt KF.C
+      rw [hsqrt_psd.isHermitian.eq]
+      simpa using (CFC.sqrt_mul_sqrt_self KF.C hC_nonneg).symm
     -- Define Lindblad operators: `Lⱼ = Σₖ B_{jk} • Fₖ`
     refine ⟨⟨KF.n, KF.H, fun j => ∑ k, B j k • KF.F k, KF.H_hermitian⟩, ?_⟩
     rw [hKF]
