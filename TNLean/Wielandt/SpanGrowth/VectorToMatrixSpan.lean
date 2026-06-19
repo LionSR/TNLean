@@ -347,17 +347,9 @@ theorem wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOneBasis
         _ = Matrix.single i j (1 : ℂ) := houter
     simpa [hcalc] using hprod
   -- Conclude `wordSpan = ⊤` by showing it contains the standard matrix basis.
-  apply eq_top_iff.mpr
-  have hbasis :
-      Submodule.span ℂ (Set.range (Matrix.stdBasis ℂ (Fin D) (Fin D))) ≤
-        wordSpan A (n + m) := by
-    refine Submodule.span_le.2 ?_
-    rintro M ⟨ij, rfl⟩
-    rcases ij with ⟨i, j⟩
-    simpa [Matrix.stdBasis_eq_single] using hsingle i j
-  have htop_le :
-      (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) ≤ wordSpan A (n + m) := by
-    simpa [(Matrix.stdBasis ℂ (Fin D) (Fin D)).span_eq] using hbasis
-  exact htop_le
+  refine (Submodule.eq_top_iff_forall_basis_mem
+    (Matrix.stdBasis ℂ (Fin D) (Fin D))).2 ?_
+  rintro ⟨i, j⟩
+  simpa [Matrix.stdBasis_eq_single] using hsingle i j
 
 end MPSTensor
