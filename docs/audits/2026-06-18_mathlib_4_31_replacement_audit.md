@@ -218,7 +218,7 @@ Recommended action:
 Applied PEPS follow-up:
 
 - `TNLean.PEPS.reindexAlgEquiv_smul` was removed.  The four scalar transport
-  uses in `TNLean/PEPS/TorusGaugeUniqueness.lean` now rewrite by Mathlib's
+  sites in `TNLean/PEPS/TorusGaugeUniqueness.lean` now rewrite by Mathlib's
   `map_smul` for the algebra equivalence.
 - `TNLean.PEPS.reindexAlgEquiv_finCongr_symm_round` was removed from
   `TNLean/PEPS/EdgeGaugeFamily.lean`.  The only local transport site now uses a
@@ -687,6 +687,14 @@ Recommended action:
   `LinearMap.IsPositive.re_inner_nonneg_left` directly.
 - Keep the Friedrichs-angle and martingale-type estimates local.
 - Prefer `Submodule.projectionOnto` for new complement projections.
+
+Applied martingale follow-up:
+
+- The private helper `isPositive_smul_of_real_re_nonneg` in
+  `TNLean/MPS/ParentHamiltonian/Martingale/Transport.lean` was removed.  The
+  local-term averaging proof now uses Mathlib's
+  `LinearMap.IsPositive.smul_of_nonneg` directly, with the scalar nonnegativity
+  discharged by `positivity` under `ComplexOrder`.
 
 ## File-by-file replacement map
 
