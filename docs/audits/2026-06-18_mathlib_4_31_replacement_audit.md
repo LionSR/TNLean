@@ -982,7 +982,7 @@ The Schwarz non-completely-positive example also had two private numeral facts:
 - `complex_one_quarter_nonneg`
 
 These were removed.  The four positivity uses now discharge the complex
-nonnegativity side condition directly by `norm_num [Complex.nonneg_iff]`.
+nonnegativity side condition directly by `positivity` under `ComplexOrder`.
 
 Focused check:
 
