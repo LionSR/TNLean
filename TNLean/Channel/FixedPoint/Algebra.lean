@@ -67,6 +67,10 @@ section AuxiliaryLemmas
     adjointMap K (1 : Mat) = 1 := by
   simpa [adjointMap, IsTP, Matrix.mul_one] using h_tp
 
+private theorem isUnital_conjTranspose_of_isTP (K : Fin d → Mat) (h_tp : IsTP K) :
+    IsUnital (fun i => (K i)ᴴ) := by
+  simpa [IsUnital, IsTP] using h_tp
+
 end AuxiliaryLemmas
 
 section FixedPoints
@@ -230,7 +234,7 @@ noncomputable def adjointFixedPointsStarSubalgebra
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : map K ρ = ρ) :
     StarSubalgebra ℂ Mat :=
   fixedPointsStarSubalgebra (K := fun i => (K i)ᴴ)
-    (h_unital := by simpa [IsUnital, IsTP] using h_tp) hρ
+    (h_unital := isUnital_conjTranspose_of_isTP K h_tp) hρ
     (by simpa [adjointMap, map] using hρ_fix)
 
 @[simp] theorem mem_adjointFixedPointsStarSubalgebra
@@ -258,7 +262,7 @@ theorem fixedPoints_in_multiplicativeDomain
     {X : Mat} (hX : X ∈ adjointFixedPoints K) :
     X ∈ KadisonSchwarz.multiplicativeDomain (fun i => (K i)ᴴ) := by
   have h_unital : IsUnital (fun i => (K i)ᴴ) :=
-    by simpa [IsUnital, IsTP] using h_tp
+    isUnital_conjTranspose_of_isTP K h_tp
   exact mem_multiplicativeDomain_of_mem_fixedPoints (K := fun i => (K i)ᴴ) h_unital hρ
     (by simpa [adjointMap, map] using hρ_fix)
     (by simpa [fixedPoints, adjointFixedPoints, map, adjointMap] using hX)
@@ -289,7 +293,7 @@ theorem fixedPoint_commutes_kraus
     (hXX : Xᴴ * X ∈ adjointFixedPoints K) :
     ∀ i : Fin d, X * K i = K i * X := by
   have h_unital : IsUnital (fun i => (K i)ᴴ) :=
-    by simpa [IsUnital, IsTP] using h_tp
+    isUnital_conjTranspose_of_isTP K h_tp
   have hX' : map (fun i => (K i)ᴴ) X = X := by
     simpa [adjointFixedPoints, adjointMap, map] using hX
   have hXX' : map (fun i => (K i)ᴴ) (Xᴴ * X) = Xᴴ * X := by
