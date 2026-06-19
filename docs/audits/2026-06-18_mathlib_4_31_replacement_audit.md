@@ -1149,7 +1149,9 @@ The remaining semigroup proofs use the same structures directly through
 A later pass also removed the private convergence-ball helper `mem_exp_ball`
 from `TNLean.Channel.Semigroup.Basic`.  The semigroup law for
 `expSemigroupCLM` now calls Mathlib's ball-free
-`NormedSpace.exp_add_of_commute` directly.
+`NormedSpace.exp_add_of_commute` directly.  The same proof now uses
+`Commute.refl`, `Commute.smul_left`, and `Commute.smul_right` directly, so the
+private scalar-commutation helper `smul_comm_CLM` is no longer needed.
 
 A subsequent dissipative-drift pass removed the analogous private
 convergence-ball lemma from `TNLean.Channel.Semigroup.Dissipative`.  The
