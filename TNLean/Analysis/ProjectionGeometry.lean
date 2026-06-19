@@ -14,11 +14,11 @@ ordered off-diagonal terms satisfy a row-summable cross-term bound, then
 `H = ∑ i, P i` satisfies `H² ≥ γ H` as a quadratic form.  The file also records
 that commuting symmetric projections have nonnegative ordered cross terms, and
 converts norm-compression estimates for products of projections into the ordered
-Friedrichs cross-term bounds used by the row-sum reduction.
+cross-term bounds used by the row-sum reduction.
 
-The statements deliberately keep the MPS/Friedrichs-angle estimates as explicit
+The statements deliberately keep the MPS-specific overlap estimates as explicit
 hypotheses.  They provide the reusable projection-geometry layer into which the
-model-specific overlap and row-sum bounds can later be plugged.
+model-specific overlap and row-sum bounds are inserted.
 -/
 
 open scoped InnerProductSpace
@@ -38,7 +38,7 @@ theorem re_inner_apply_apply_self {P : E →ₗ[𝕜] E} (hP : P.IsSymmetricProj
   rw [show ⟪P v, P v⟫_𝕜 = ⟪P (P v), v⟫_𝕜 from (hP.isSymmetric (P v) v).symm, hidem]
 
 /-- A norm bound on the compressed product of two projections gives the ordered
-Friedrichs lower bound.
+cross-term lower bound.
 
 For a symmetric projection `P`, the ordered cross term satisfies
 `Re ⟪P v, Q v⟫ = Re ⟪P v, P (Q v)⟫`. Hence Cauchy--Schwarz shows that a
@@ -498,25 +498,26 @@ theorem quadraticForm_sum_projections_of_finite_overlap_anticommutator
   exact quadraticForm_sum_projections_of_anticommutator_rowCol hγle P hP c
     hRow hCol hAntiAll
 
-/-- Finite-overlap Friedrichs conditions for a family of symmetric projections.
+/-- Finite-overlap ordered cross-term conditions for a family of symmetric
+projections.
 
 Assume that each row has at most `m` interacting off-diagonal entries.  On an
-interacting pair, a Friedrichs-angle estimate supplies the ordered bound with
+interacting pair, an ordered cross-term estimate supplies the bound with
 coefficient `1 / m`; on a noninteracting pair, the ordered cross term is
 nonnegative.  Then choosing coefficient `1 / m` on interacting pairs and `0`
 on noninteracting pairs gives row sums at most one, so the abstract row-sum
 reduction gives `H² ≥ γ H` as a quadratic form.
 
 This is the abstract finite-range step: locality provides the cardinal bound
-(for parent Hamiltonians, `m = 2 * (L - 1)`), while the analytic Friedrichs-angle
-argument provides the interacting-pair estimate. -/
+(for parent Hamiltonians, `m = 2 * (L - 1)`), while the analytic part provides
+the interacting-pair estimate. -/
 theorem quadraticForm_sum_projections_of_finite_overlap {γ : ℝ} (hγle : γ ≤ 1)
     (P : ι → E →ₗ[ℂ] E) (hP : ∀ i, (P i).IsSymmetricProjection)
     (overlaps : ι → ι → Prop) [DecidableRel overlaps] {m : ℕ} (hm : 0 < m)
     (hCard : ∀ i, ((Finset.univ.erase i).filter (fun j => overlaps i j)).card ≤ m)
     (hDisjoint : ∀ i j, j ∈ Finset.univ.erase i → ¬ overlaps i j →
       ∀ v : E, 0 ≤ (⟪P i v, P j v⟫_ℂ).re)
-    (hFriedrichs : ∀ i j, j ∈ Finset.univ.erase i → overlaps i j →
+    (hCrossTerm : ∀ i j, j ∈ Finset.univ.erase i → overlaps i j →
       ∀ v : E,
         - (1 - γ) * ((m : ℝ)⁻¹) * (⟪P i v, v⟫_ℂ).re ≤
           (⟪P i v, P j v⟫_ℂ).re) :
@@ -533,11 +534,11 @@ theorem quadraticForm_sum_projections_of_finite_overlap {γ : ℝ} (hγle : γ �
         (⟪P i v, P j v⟫_ℂ).re := by
     intro i j hij v
     by_cases hoverlap : overlaps i j
-    · simpa [c, hoverlap] using hFriedrichs i j hij hoverlap v
+    · simpa [c, hoverlap] using hCrossTerm i j hij hoverlap v
     · simpa [c, hoverlap] using hDisjoint i j hij hoverlap v
   exact quadraticForm_sum_projections_of_ordered_rowSum hγle P hP c hRow hCross
 
-/-- Finite-overlap row-sum reduction from a norm-compression Friedrichs bound.
+/-- Finite-overlap row-sum reduction from a norm-compression bound.
 
 For symmetric projections, a principal-angle style estimate
 `‖P_i (P_j v)‖ ≤ (1 - γ) m⁻¹ ‖P_i v‖` on every interacting pair implies the

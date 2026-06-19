@@ -185,7 +185,7 @@ without passing through this stronger one-sided estimate.\footnote{The
     \leanid{parentHamiltonian_gapped_of_anticommutator} in
     \path{TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean}.
     The cyclic-window compression reductions are
-    \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_friedrichs},
+    \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_ordered_cross_term},
     \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound},
     and
     \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_le}
@@ -197,14 +197,15 @@ without passing through this stronger one-sided estimate.\footnote{The
     \leanid{parentHamiltonian_gapped_of_overlap_norm_constant} in
     \path{TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean}. The
     projection-geometry reductions used by these statements are in
-    \path{TNLean/Analysis/ProjectionGeometry.lean}. The declaration names keep the
-    earlier word \path{friedrichs}; this note uses ``anticommutator estimate'' for
+    \path{TNLean/Analysis/ProjectionGeometry.lean}. The declaration names
+    identify the intermediate ordered cross-term estimate and the sufficient
+    norm-compression estimates; this note uses ``anticommutator estimate'' for
     the source condition and ``norm compression'' for the local sufficient
     strengthening.}
 
 The anticommutator row-sum formulation, including its finite-overlap
-cyclic-window specialization, is now the source-faithful formal boundary. The
-flexible constant formulation is a sufficient compression boundary:
+cyclic-window specialization, is now the formal condition matching the source.
+The flexible constant formulation records a sufficient norm-compression variant:
 instead of requiring the special coefficient in (N), it assumes that for some
 $\eta\ge 0$,
 \begin{equation}
@@ -229,19 +230,21 @@ terms, row-sum coefficients for overlapping terms, and principal-angle estimates
 for local ground spaces. The point still requiring a mathematical check is
 quantitative and conventional.
 
-First, the formal theorem asks for a uniform compression constant $\eta$ for
-overlapping cyclic-window pairs, with $\eta\,2(L-1)<1$. The review text states
-the general martingale condition with coefficients $c_{ij}$ whose rows add to
-one, and it refers to blocking and principal angles to obtain a positive gap.
-It does not by itself identify the Fannes--Nachtergaele--Werner,
-Nachtergaele, or Kastoryano--Lucia estimates with the bound (N$_\eta$) for this
-fixed cyclic-window convention. The stronger displayed coefficient in (N),
-equivalently the choice
+First, the source-matching formal theorem asks for the cyclic-window
+anticommutator estimate
 \[
-    \eta=\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)},
+    p_i p_j+p_jp_i
+    \ge
+    -\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}(p_i+p_j)
 \]
-is therefore not the only possible target; any source-derived $\eta$ satisfying
-(E) would suffice for the existing gap theorem.
+for overlapping off-diagonal pairs. The review text states the same martingale
+condition with general coefficients $c_{ij}$ whose rows add to one, and it
+refers to blocking and principal angles to obtain a positive gap. It does not by
+itself identify the Fannes--Nachtergaele--Werner, Nachtergaele, or
+Kastoryano--Lucia estimates with this coefficient and this fixed cyclic-window
+convention. A proof may instead derive a row-sum anticommutator estimate with
+different positive constants and then specialize the final gap constant
+accordingly.
 
 Second, the blocking parameter in the cited martingale argument must be matched
 with the formal convention. The formal statement is uniform for all $N\ge 2L$
@@ -255,20 +258,22 @@ the same blocking convention.
 Consequently the remaining comparison is not whether the row-sum algebra is
 valid; that part has been isolated and formalized. The remaining comparison is
 whether the cited FNW--Nachtergaele--Kastoryano principal-angle estimates supply
-an overlapping cyclic-window estimate of the form (N$_\eta$) with
-$\eta\,2(L-1)<1$, or whether the formal development is using a stronger
-replacement input than the review text states explicitly.
+the required cyclic-window anticommutator estimate, with constants independent
+of the chain length, after the same blocking convention has been fixed.
 The qualitative fact that two finite-dimensional subspaces have a well-defined
 principal-angle decomposition is not enough: the martingale reduction needs a
 uniform numerical bound after the same blocking convention has been fixed.
 
-There is also a directional point. If (N$_\eta$) is imposed for all vectors
+The norm-compression route remains available as a stronger sufficient target:
+any estimate (N$_\eta$) with $\eta\,2(L-1)<1$ gives a positive gap through the
+already formalized reduction. There is, however, a directional point. If
+(N$_\eta$) is imposed for all vectors
 $v$, then $p_i v=0$ implies $p_i p_j v=0$. Thus $p_j$ maps $\ker p_i$ into
 $\ker p_i$. This is stronger than merely knowing that the
 smallest non-zero principal angle between the two local ground spaces is
-positive. The source comparison must therefore identify a principal-angle
-estimate that gives the directed compressed-product bound (N$_\eta$), or the
-formal hypothesis should be restated directly in the anticommutator form
+positive. A proof using compression must therefore identify a principal-angle
+estimate that gives the directed compressed-product bound (N$_\eta$). A direct
+proof can instead target the anticommutator form
 \[
     h_i h_j+h_jh_i\ge -c_{ij}(1-\gamma)(h_i+h_j)
 \]
@@ -286,7 +291,7 @@ source anticommutator estimate as the hypothesis of
 Theorem \path{thm:anticommutator_gap_bound}, and records norm-compression
 estimates as sufficient stronger hypotheses.
 
-The source-facing theorem entry
+The source-matching theorem entry
 \path{thm:anticommutator_gap_bound} points to
 \leanid{parentHamiltonianES_gap_bound_of_anticommutator} in
 \path{TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean}. Its hypothesis is the
@@ -295,8 +300,8 @@ cyclic-window anticommutator lower bound with coefficient
     \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}.
 \]
 The theorem entries
-\path{thm:friedrichs_gap_bound} and
-\path{thm:friedrichs_gap_bound_constant} point respectively to the special
+\path{thm:overlap_norm_gap_bound} and
+\path{thm:overlap_norm_gap_bound_constant} point respectively to the special
 coefficient theorem and to the constant-$\eta$ theorem in
 \path{TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean}. The special coefficient
 theorem is the specialization of the constant-$\eta$ theorem with
@@ -313,10 +318,11 @@ are proved, while the MPS-specific anticommutator estimate remains to be proved
 or matched precisely to the cited martingale estimates.
 
 Once the quantitative comparison with the cited martingale estimates is settled,
-the blueprint should say either that a compression bound (N$_\eta$) with
-$\eta\,2(L-1)<1$ follows from those estimates under the cyclic-window convention
-used here, or that the final MPS gap theorem uses a deliberately stronger
-replacement estimate.
+the blueprint should say that the cyclic-window anticommutator estimate follows
+from those estimates under the convention used here. If the proof instead goes
+through norm compression, the blueprint should say explicitly that the
+compression bound (N$_\eta$) with $\eta\,2(L-1)<1$ is a stronger sufficient
+estimate implying the anticommutator route.
 
 \section{Conclusion}
 

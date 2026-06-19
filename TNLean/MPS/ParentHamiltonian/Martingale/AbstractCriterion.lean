@@ -48,7 +48,7 @@ the PSD operator \(H\), the norm lower bound — and hence the spectral gap
 for eigenvectors of \(H\) — follows by the spectral theorem. This lemma
 provides the final spectral-theorem step; the remaining MPS-specific
 quadratic-form hypothesis is stated separately in
-`MPSTensor.parentHamiltonianES_gap_bound_of_friedrichs`. -/
+`MPSTensor.parentHamiltonianES_gap_bound_of_overlap_norm_bound`. -/
 theorem spectralGap_of_martingale {ι : Type*} [Fintype ι] {γ : ℝ} (hγ : 0 < γ)
     {H : EuclideanSpace ℂ ι →ₗ[ℂ] EuclideanSpace ℂ ι} (hH : H.IsPositive)
     (hOpIneq : ∀ v, γ * (⟪H v, v⟫_ℂ).re ≤ (⟪H v, H v⟫_ℂ).re) :

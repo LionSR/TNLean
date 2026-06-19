@@ -15,7 +15,7 @@ hypothesis.
 
 ## Main results
 
-* `parentHamiltonianES_gap_bound_of_friedrichs` — the explicit gap bound
+* `parentHamiltonianES_gap_bound_of_overlap_norm_bound` — the explicit gap bound
   obtained from the overlapping-window norm-compression estimate.
 * `parentHamiltonianES_gap_bound_of_anticommutator` — the explicit gap bound
   obtained from the source anticommutator estimate.
@@ -39,7 +39,7 @@ variable {d D : ℕ}
 
 /-- Gap bound from the cyclic-window anticommutator martingale estimate.
 
-This is the source-facing form of the MPS parent-Hamiltonian gap reduction.  The
+This is the source-matching form of the MPS parent-Hamiltonian gap reduction.  The
 hypothesis is the anticommutator lower bound appearing in arXiv:2011.12127,
 Section IV.C, equation eq:4:martingale-2, specialized to overlapping cyclic
 windows:
@@ -77,7 +77,7 @@ coefficient for the MPS parent Hamiltonian.
 
 This is the constant-flexible form of the norm-compression route to the
 martingale bound. It does not assert the special coefficient used in
-`parentHamiltonianES_gap_bound_of_friedrichs`; instead, it says that any uniform
+`parentHamiltonianES_gap_bound_of_overlap_norm_bound`; instead, it says that any uniform
 overlapping-window compression bound
 
 \(‖p_i p_j v‖ ≤ η ‖p_i v‖\)
@@ -122,7 +122,7 @@ This is the specialization of
   \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}.
 \]
 For this value, \(1-η\,2(L-1)=1/(4L)\). -/
-theorem parentHamiltonianES_gap_bound_of_friedrichs
+theorem parentHamiltonianES_gap_bound_of_overlap_norm_bound
     (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
     (hOverlapNorm : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
       j ∈ Finset.univ.erase i → cyclicWindowsOverlap N L i j →
@@ -220,10 +220,10 @@ Combined with \(h_i^2 = h_i\), this yields the quadratic-form inequality
 by `FrustrationFree.spectralGap_of_martingale` is automatic here because
 \(H_N = ∑ᵢ hᵢ\) is a sum of orthogonal projectors.
 
-This theorem records the stronger norm-compression route. The source-facing
+This theorem records the stronger norm-compression route. The source-matching
 conditional theorem is `parentHamiltonian_gapped_of_anticommutator`. The proof
 below invokes
-`parentHamiltonianES_gap_bound_of_friedrichs`, which combines the already
+`parentHamiltonianES_gap_bound_of_overlap_norm_bound`, which combines the already
 formalized martingale reductions after the overlapping-window estimate is given. -/
 theorem parentHamiltonian_gapped
     (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
@@ -237,7 +237,7 @@ theorem parentHamiltonian_gapped
       (v : EuclideanSpace ℂ (Cfg d N)),
       v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
         γ * ‖v‖ ≤ ‖parentHamiltonianES A L N v‖ := by
-  obtain ⟨hγ, hgap⟩ := parentHamiltonianES_gap_bound_of_friedrichs A L hL
+  obtain ⟨hγ, hgap⟩ := parentHamiltonianES_gap_bound_of_overlap_norm_bound A L hL
     hOverlapNorm
   exact ⟨(1 : ℝ) / (4 * (L : ℝ)), hγ, hgap⟩
 
