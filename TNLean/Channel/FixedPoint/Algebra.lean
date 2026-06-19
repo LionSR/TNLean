@@ -67,14 +67,6 @@ section AuxiliaryLemmas
     adjointMap K (1 : Mat) = 1 := by
   simpa [adjointMap, IsTP, Matrix.mul_one] using h_tp
 
-private theorem isUnitalKraus_of_isUnital (K : Fin d → Mat) (h_unital : IsUnital K) :
-    KadisonSchwarz.IsUnitalKraus K := by
-  simpa [IsUnital, KadisonSchwarz.IsUnitalKraus] using h_unital
-
-private theorem isUnital_conjTranspose_of_isTP (K : Fin d → Mat) (h_tp : IsTP K) :
-    IsUnital (fun i => (K i)ᴴ) := by
-  simpa [IsUnital, IsTP] using h_tp
-
 end AuxiliaryLemmas
 
 section FixedPoints
@@ -119,7 +111,7 @@ theorem mem_multiplicativeDomain_of_mem_fixedPoints
     {X : Mat} (hX : X ∈ fixedPoints K) :
     X ∈ KadisonSchwarz.multiplicativeDomain K := by
   let h_unitalKS : KadisonSchwarz.IsUnitalKraus K :=
-    isUnitalKraus_of_isUnital K h_unital
+    by simpa [IsUnital, KadisonSchwarz.IsUnitalKraus] using h_unital
   have hXeq : map K X = X := hX
   have h_left_eq_map : map K (Xᴴ * X) = (map K X)ᴴ * map K X := by
     calc
@@ -238,7 +230,7 @@ noncomputable def adjointFixedPointsStarSubalgebra
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : map K ρ = ρ) :
     StarSubalgebra ℂ Mat :=
   fixedPointsStarSubalgebra (K := fun i => (K i)ᴴ)
-    (h_unital := isUnital_conjTranspose_of_isTP K h_tp) hρ
+    (h_unital := by simpa [IsUnital, IsTP] using h_tp) hρ
     (by simpa [adjointMap, map] using hρ_fix)
 
 @[simp] theorem mem_adjointFixedPointsStarSubalgebra
@@ -266,7 +258,7 @@ theorem fixedPoints_in_multiplicativeDomain
     {X : Mat} (hX : X ∈ adjointFixedPoints K) :
     X ∈ KadisonSchwarz.multiplicativeDomain (fun i => (K i)ᴴ) := by
   have h_unital : IsUnital (fun i => (K i)ᴴ) :=
-    isUnital_conjTranspose_of_isTP K h_tp
+    by simpa [IsUnital, IsTP] using h_tp
   exact mem_multiplicativeDomain_of_mem_fixedPoints (K := fun i => (K i)ᴴ) h_unital hρ
     (by simpa [adjointMap, map] using hρ_fix)
     (by simpa [fixedPoints, adjointFixedPoints, map, adjointMap] using hX)
@@ -297,7 +289,7 @@ theorem fixedPoint_commutes_kraus
     (hXX : Xᴴ * X ∈ adjointFixedPoints K) :
     ∀ i : Fin d, X * K i = K i * X := by
   have h_unital : IsUnital (fun i => (K i)ᴴ) :=
-    isUnital_conjTranspose_of_isTP K h_tp
+    by simpa [IsUnital, IsTP] using h_tp
   have hX' : map (fun i => (K i)ᴴ) X = X := by
     simpa [adjointFixedPoints, adjointMap, map] using hX
   have hXX' : map (fun i => (K i)ᴴ) (Xᴴ * X) = Xᴴ * X := by
