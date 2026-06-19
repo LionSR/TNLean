@@ -23,6 +23,12 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
+/-- Deprecated alias for `IsOrthogonalProjection.one_sub`. -/
+@[deprecated IsOrthogonalProjection.one_sub (since := "2026-06-19")]
+lemma isOrthogonalProjection_one_sub (P : Matrix (Fin D) (Fin D) ℂ)
+    (hP : IsOrthogonalProjection P) : IsOrthogonalProjection (1 - P) :=
+  hP.one_sub
+
 /-- Irreducibility is preserved under passing to the conjugate-transposed Kraus family.
 
 If `A` is irreducible in the tensor sense (no nontrivial invariant orthogonal projection), then the

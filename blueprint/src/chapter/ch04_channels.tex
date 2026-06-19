@@ -83,9 +83,11 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
-    Regard $E$ as the associated positive linear map. Positive linear maps
-    between matrix $C^*$-algebras preserve self-adjoint elements, and the
-    self-adjoint matrices are exactly the Hermitian matrices.
+    Regard $E$ as the associated positive linear map
+    (Definition~\ref{def:positive_map_is_positive_linear_map}). For positive
+    linear maps between matrix $C^*$-algebras, $E(Y^\ast)=E(Y)^\ast$.
+    Since $X=X^\dagger$ means $X=X^\ast$, one obtains
+    $E(X)^\dagger=E(X)^\ast=E(X^\ast)=E(X)$.
 \end{proof}
 
 \begin{definition}[Quantum channel]\label{def:channel}
@@ -199,8 +201,12 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 
 \begin{proof}\leanok
     Reinterpret $P$ as a self-adjoint idempotent in the involutive algebra
-    $\MN{D}$. Its complement $\Id-P$ is again a self-adjoint idempotent, hence
-    an orthogonal projection.
+    $\MN{D}$. From $P^\dagger=P$ and $P^2=P$ one checks
+    \[
+        (\Id-P)^\dagger=\Id-P,\qquad
+        (\Id-P)^2=\Id-2P+P^2=\Id-P .
+    \]
+    Thus $\Id-P$ is an orthogonal projection.
 \end{proof}
 
 \begin{definition}[Irreducible map]\label{def:irreducible_cp}
