@@ -93,6 +93,10 @@ The clearest replacements are:
   statement.  The duplicate `_of_channel` theorem had the same hypotheses and
   conclusion as `channelDet_norm_eq_one_iff_exists_unitaryChannel`, so the
   blueprint points directly to the latter.
+- The Lindblad-form trace-constraint proof now uses Mathlib's
+  `Matrix.ext_iff_trace_mul_right` directly.  The one-use local theorem
+  `Matrix.eq_zero_of_forall_trace_mul_eq_zero` was removed from
+  `TNLean/Channel/Semigroup/LindbladForm/TraceBridge.lean`.
 - Further Lean 4.31 elaboration checks removed local heartbeat bounds from the
   POVM unitary-comparison proof, the irreducible-channel spectral-radius scalar
   proof, the semigroup perturbation derivative proof, and the common
@@ -1480,6 +1484,10 @@ step `M - N = 0`.  They now apply the Mathlib equality-form theorem directly:
 The two private `eq_of_trace_mul_left_eq` helpers in the PEPS overlap
 insertion files were removed; their use sites now call
 `Matrix.ext_iff_trace_mul_left` directly.
+
+The Lindblad-form trace bridge also no longer exports the one-use theorem
+`Matrix.eq_zero_of_forall_trace_mul_eq_zero`: the GKSL trace-constraint proof
+uses `Matrix.ext_iff_trace_mul_right` directly at the equality step.
 
 ### Deprecation-policy exceptions
 
