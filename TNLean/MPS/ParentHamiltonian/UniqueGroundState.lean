@@ -374,7 +374,7 @@ private theorem eq_zero_of_trace_evalWord_mul_eq_zero {A : MPSTensor d D}
     · simpa [wordSpan] using hwordK
     · intro σ
       simp [Matrix.traceLinearMap_apply, h σ]
-  exact trace_mul_right_eq_zero fun N => by
+  exact (Matrix.trace_mul_right_eq_zero_iff (n := Fin D) X).1 fun N => by
     have hNX : Matrix.trace (N * X) = 0 := by
       simpa [Matrix.traceLinearMap_apply] using congrArg (fun f => f N) hφ
     calc Matrix.trace (X * N) = Matrix.trace (N * X) := Matrix.trace_mul_comm X N

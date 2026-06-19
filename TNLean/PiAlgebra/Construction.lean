@@ -247,7 +247,9 @@ theorem piTrace_mul_right_eq_zero
       ∑ k, Matrix.trace (M k * N k) = 0) :
     M = 0 := by
   classical
-  funext k; apply trace_mul_right_eq_zero; intro N_k
+  funext k
+  apply (Matrix.trace_mul_right_eq_zero_iff (n := Fin (dim k)) (M k)).1
+  intro N_k
   have := h (Function.update 0 k N_k)
   rwa [Finset.sum_eq_single k
     (fun j _ hj => by rw [Function.update_of_ne hj, Pi.zero_apply, mul_zero, Matrix.trace_zero])
