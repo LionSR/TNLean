@@ -463,7 +463,7 @@ lemma sectorMatch_propagation
   obtain ⟨hdim, _, hg⟩ := key l
   exact ⟨hdim, hg⟩
 
-/-- Per-sector `RepeatedBlocks` consequence of the propagated gauge-phase data.
+/-- Per-sector `RepeatedBlocks` consequence of the propagated gauge-phase equivalences.
 
 This auxiliary result is weaker than the Case 3 conclusion: it gives a
 `RepeatedBlocks` relation for each compressed sector pair
@@ -631,8 +631,8 @@ private lemma repeatedBlocks_of_blockedSectorGaugePhase
   -- `Ω u` satisfying `hΩ`; after producing product-one unit phases κ_v, it uses
   -- `TNLean.Algebra.exists_fin_complex_unit_cyclic_coboundary_shift_of_prod_eq_one`
   -- for the offset-indexed κ/θ/φ telescoping (lines 1093--1102). This upgrades the
-  -- per-sector blocked gauge data in `hBlockMatch` to one global phase and one global
-  -- gauge. The available two-site theorem is `tensor_proportional`.
+  -- per-sector blocked gauge-phase equivalences in `hBlockMatch` to one global
+  -- phase and one global gauge. The available two-site theorem is `tensor_proportional`.
   sorry
 
 /-- **Per-site proportionality** (eq:thetaACprop, arXiv:1708.00029 lines
@@ -650,7 +650,8 @@ equivalent (after dimension cast). The injectivity contraction argument
 shows these per-sector gauges combine into a single global gauge for
 `RepeatedBlocks`.
 
-The named corner data record the blocked sector tensors
+The specified projectors \(P_u\), \(Q_v\) and corner identifications
+\(\varphi_u\), \(\psi_v\) record the blocked sector tensors
 \[
   C_u^\alpha = P_u (A^{[m]})^\alpha P_u,\qquad
   D_v^\alpha = Q_v (B^{[m]})^\alpha Q_v.
@@ -730,7 +731,7 @@ tensor. The `hSomeMatch` witness provides a single matching sector pair
 follows from `hNondegA`), from which translation propagation extends the
 match to all sectors.
 
-The named projectors and corner identifications realize the blocked sector
+The specified projectors and corner identifications realize the blocked sector
 tensors as the corners \(C_u^\alpha = P_u (A^{[m]})^\alpha P_u\) and
 \(D_v^\alpha = Q_v (B^{[m]})^\alpha Q_v\), matching the \(C_u\)-notation
 used in Lemma bdcf before the Appendix A contraction step.
