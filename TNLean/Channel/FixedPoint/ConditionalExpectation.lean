@@ -188,15 +188,6 @@ theorem scalarConditionalExpectation_mem_adjointFixedPoints
 
 /-! ## Complete positivity and weighted trace preservation -/
 
-/-- An auxiliary lemma identity: `∑ j, single j j c = c • 1` for `c : ℂ`.
-
-The sum of diagonal basis matrices with a common scalar equals that scalar
-times the identity. -/
-private lemma sum_single_diag_const {D : ℕ} (c : ℂ) :
-    (∑ j : Fin D, Matrix.single j j c : Matrix (Fin D) (Fin D) ℂ) =
-      c • (1 : Matrix (Fin D) (Fin D) ℂ) := by
-  rw [Matrix.sum_single_eq_diagonal, Matrix.smul_one_eq_diagonal]
-
 /-- **Wolf Corollary 6.6, CP part.**
 
 The scalar conditional expectation `E_σ` is completely positive whenever `σ`
@@ -264,8 +255,8 @@ theorem scalarConditionalExpectation_isCPMap
                 (fun i => (S * X * S) i i) Finset.univ).symm
       _ = ∑ j : Fin D, Matrix.single j j (Matrix.trace (S * X * S)) := by
             simp [Matrix.trace, Matrix.diag]
-      _ = (Matrix.trace (S * X * S)) • (1 : Mat) :=
-            sum_single_diag_const (D := D) (Matrix.trace (S * X * S))
+      _ = (Matrix.trace (S * X * S)) • (1 : Mat) := by
+            rw [Matrix.sum_single_eq_diagonal, Matrix.smul_one_eq_diagonal]
       _ = (Matrix.trace (σ * X)) • (1 : Mat) := by
             congr 1
             calc Matrix.trace (S * X * S)
