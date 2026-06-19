@@ -203,8 +203,8 @@ theorem posSemidef_fixedPoint_isPosDef_of_irreducible
         ← Matrix.mul_assoc Uᴴ U, hUU, Matrix.one_mul,
         ← Matrix.mul_assoc (Matrix.diagonal sgnEig), Matrix.diagonal_mul_diagonal,
         show (fun i => sgnEig i * sgnEig i) = sgnEig from funext hsgnEig_sq]
-  have hQ1Q : Q * (1 - Q) = 0 := by rw [mul_sub, mul_one, hQ_idem, sub_self]
-  have h1QQ : (1 - Q) * Q = 0 := by rw [sub_mul, one_mul, hQ_idem, sub_self]
+  have hQ1Q : Q * (1 - Q) = 0 := IsIdempotentElem.mul_one_sub_self hQ_idem
+  have h1QQ : (1 - Q) * Q = 0 := IsIdempotentElem.one_sub_mul_self hQ_idem
   have hQ_proj : IsOrthogonalProjection Q := ⟨hQ_herm, hQ_idem⟩
   have hρ_spectral :
       ρ = U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ := by
