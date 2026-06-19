@@ -511,6 +511,49 @@ unconditional result.
 
 \subsection{Periodic overlap dichotomy}
 
+\begin{theorem}[Sector scalars from a product tensor identity]
+    \label{thm:periodic_product_tensor_phase_extraction}
+    \lean{TNLean.Algebra.PiTensorProductPhase.exists_kappa_of_piTensorProduct_eq_smul}
+    \leanok
+    Let $z\in\C$ be nonzero. For each sector $v=0,\ldots,m-1$, let
+    $\{A_v^i\}_i$ and $\{B_v^i\}_i$ be families of complex matrices with the
+    same rectangular size. Suppose that for every choice of letters
+    $\sigma=(\sigma_v)_v$,
+    \[
+        \bigotimes_{v=0}^{m-1} A_v^{\sigma_v}
+        =
+        z\,\bigotimes_{v=0}^{m-1} B_v^{\sigma_v}.
+    \]
+    Suppose also that for each $v$ there is a reference letter $i_v$ and a
+    matrix entry $(r_v,c_v)$ with
+    $(B_v^{i_v})_{r_v,c_v}\ne 0$. Then there are scalars
+    $\kappa_v\in\C$ such that
+    \[
+        \prod_{v=0}^{m-1}\kappa_v=z,
+        \qquad
+        A_v^i=\kappa_v B_v^i
+    \]
+    for every sector $v$ and every letter $i$.
+
+    This is the scalar extraction used in
+    \cite[Appendix~A, lines~1072--1080]{DeLasCuevas2017Irreducible}, after the
+    contraction with the maps $F_u$ and $\Omega_u$ has produced the displayed
+    product-tensor identity.
+\end{theorem}
+
+\begin{proof}\leanok
+    For each sector choose the coordinate functional at the nonzero reference
+    entry and normalize it so that it takes the value $1$ on
+    $B_v^{i_v}$. Applying the tensor product of these functionals to the
+    reference tensor identity gives $\prod_v\kappa_v=z$. To prove the
+    proportionality in sector $v$, replace only the $v$-th functional by the
+    coordinate functional at an arbitrary entry $(r,c)$ and apply the tensor
+    identity with $\sigma_v=i$ and all other letters fixed at their references.
+    The product over the other sectors is nonzero because its product with
+    $\kappa_v$ is $z$, so cancellation gives
+    $(A_v^i)_{r,c}=(\kappa_v B_v^i)_{r,c}$ for every entry.
+\end{proof}
+
 \begin{definition}[Off-diagonal sector decomposition]%
     \label{def:cyclic_sector_decomp}
     \lean{MPSTensor.IsCyclicSectorDecomp, MPSTensor.IsCyclicSectorDecompWith}
