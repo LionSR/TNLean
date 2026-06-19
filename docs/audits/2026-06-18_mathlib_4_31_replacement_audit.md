@@ -105,6 +105,11 @@ The clearest replacements are:
   `Matrix.matrix_eq_sum_single` directly, with `Matrix.smul_single` used only
   to match the local scalar-matrix-unit notation.  The private helper remains
   as the shared statement used at the transfer-matrix proof sites.
+- The dissipative-drift right-multiplication algebra hom now comes from
+  Mathlib's `AlgHom.mulLeftRight`, composed with
+  `Algebra.TensorProduct.includeRight`.  The former hand-written algebra-hom
+  fields for right multiplication were removed, and the left-right
+  multiplication commutation proof now cites `LinearMap.commute_mulLeft_right`.
 - Further Lean 4.31 elaboration checks removed local heartbeat bounds from the
   POVM unitary-comparison proof, the irreducible-channel spectral-radius scalar
   proof, the semigroup perturbation derivative proof, and the common
@@ -1954,6 +1959,34 @@ Focused check:
 
 ```bash
 lake build TNLean.Channel.Semigroup.KossakowskiForm -q --log-level=info
+```
+
+## Dissipative right-multiplication hom cleanup, 2026-06-19
+
+`TNLean/Channel/Semigroup/Dissipative.lean` contained a hand-written algebra
+homomorphism
+
+- `rightMulAlgHom : (Mat D)ᵐᵒᵖ →ₐ[ℂ] (Mat D →ₗ[ℂ] Mat D)`
+
+whose fields only expressed that an element of the opposite algebra acts by
+right multiplication.  Mathlib 4.31 supplies the corresponding bimodule action
+as
+
+- `AlgHom.mulLeftRight ℂ (Mat D) :
+  (Mat D ⊗[ℂ] (Mat D)ᵐᵒᵖ) →ₐ[ℂ] Module.End ℂ (Mat D)`.
+
+The local right-action hom is now the composition of this Mathlib hom with
+`Algebra.TensorProduct.includeRight`.  The proof keeps the local shaped
+application lemma `rightMulAlgHom_apply`, but that lemma is now a `simp`
+consequence of `AlgHom.mulLeftRight_apply`.  The proof that left and right
+multiplication commute now maps Mathlib's `LinearMap.commute_mulLeft_right`
+through `endEquivD`, rather than reproving associativity pointwise on matrix
+entries.
+
+Focused check:
+
+```bash
+lake build TNLean.Channel.Semigroup.Dissipative -q --log-level=info
 ```
 
 ## Conclusions
