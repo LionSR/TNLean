@@ -81,6 +81,14 @@ The clearest replacements are:
 - Two one-use Frobenius submultiplicativity wrappers in the transfer-operator
   gap files were removed.  The proofs now call Mathlib's
   `Matrix.frobenius_norm_mul` directly at the Hilbert-Schmidt estimate.
+- The dissipative-drift semigroup proof now uses Mathlib's ball-free
+  `NormedSpace.map_exp` theorem for continuous algebra homomorphisms.  The
+  local exponential convergence-ball lemma and the old Lean 4.29 heartbeat
+  adjustment are no longer needed.
+- The rectangular Kraus-freedom proof now names the Euclidean-space
+  inner-product structure explicitly by `PiLp.innerProductSpace`, removing a
+  large local synthesis budget that was needed only to find this standard
+  instance.
 
 There are also important non-replacements.
 
@@ -1029,6 +1037,19 @@ from `TNLean.Channel.Semigroup.Basic`.  The semigroup law for
 `expSemigroupCLM` now calls Mathlib's ball-free
 `NormedSpace.exp_add_of_commute` directly.
 
+A subsequent dissipative-drift pass removed the analogous private
+convergence-ball lemma from `TNLean.Channel.Semigroup.Dissipative`.  The
+left- and right-multiplication exponential identities now use Mathlib's
+ball-free theorem `NormedSpace.map_exp` for continuous algebra homomorphisms.
+Lean 4.31 also elaborates the commuting-exponential step in this file without
+the former local `synthInstance.maxHeartbeats` adjustment.
+
+In `TNLean.Channel.KrausFreedom`, the Euclidean-space inner-product instance is
+now given explicitly by `PiLp.innerProductSpace (fun _ : ι => ℂ)`.  This removes
+the former large local synthesis budget around the cached instance and makes the
+finite-dimensional Hilbert-space structure used in the rectangular isometry
+argument explicit.
+
 A further pass removed the local rectangular continuous-linear-map normed
 structure wrappers from `TNLean.Spectral.GaugeConstruction`; the
 finite-dimensional witness remains as a deprecated compatibility name:
@@ -1069,6 +1090,8 @@ lake build TNLean.Algebra.MatrixOperatorSpace
 lake env lean TNLean/Channel/Semigroup/Basic.lean
 lake env lean TNLean/Channel/Semigroup/Kernel.lean
 lake env lean TNLean/Channel/Semigroup/Primitivity/Helpers.lean
+lake build TNLean.Channel.Semigroup.Dissipative -q --log-level=info
+lake build TNLean.Channel.KrausFreedom -q --log-level=info
 lake env lean TNLean/MPS/Symmetry/StringOrder.lean --json
 lake env lean TNLean/Wielandt/Primitivity/PrimitiveBridge.lean --json
 lake env lean TNLean/Channel/Semigroup/Primitivity/Basic.lean --json

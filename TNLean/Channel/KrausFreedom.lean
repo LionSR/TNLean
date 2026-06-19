@@ -121,12 +121,10 @@ private abbrev KrausCoeffSpace (r : ℕ) := EuclideanSpace ℂ (Fin r)
 
 private abbrev KrausEntrySpace (D : ℕ) := EuclideanSpace ℂ (Fin D × Fin D)
 
-set_option synthInstance.maxHeartbeats 16000000 in
--- Needed because inferring this `InnerProductSpace` instance triggers a large
--- typeclass search on `EuclideanSpace` in Lean 4.29.
-/-- Cached `InnerProductSpace` instance for `EuclideanSpace` to avoid synthesis timeout. -/
+/-- The standard inner-product structure on finite-dimensional Euclidean space. -/
 private noncomputable abbrev euclideanIPS (ι : Type*) [Fintype ι] :
-    InnerProductSpace ℂ (EuclideanSpace ℂ ι) := inferInstance
+    InnerProductSpace ℂ (EuclideanSpace ℂ ι) :=
+  PiLp.innerProductSpace (fun _ : ι => ℂ)
 
 /-- `EuclideanSpace` is finite-dimensional via its standard basis. -/
 private noncomputable abbrev euclideanFiniteDimensional (ι : Type*) [Fintype ι] :
