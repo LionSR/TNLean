@@ -14,7 +14,6 @@ trace-preserving semigroups.
 
 ## Main results
 
-* `Matrix.eq_zero_of_forall_trace_mul_eq_zero` — non-degeneracy of trace pairing.
 * `isTracePreservingMap_expSemigroup_of_isTraceAnnihilating` — TA → TP semigroup.
 * `isTraceAnnihilating_of_isTracePreservingMap_semigroup` — TP semigroup → TA.
 -/
@@ -27,21 +26,6 @@ noncomputable section
 variable {D : ℕ}
 
 section LindbladForms
-
-/-! ## Trace pairing non-degeneracy -/
-
-/-- Non-degeneracy of the trace pairing: if `trace(A * B) = 0` for all `B`,
-then `A = 0`. This uses the standard basis matrices `E_{ij}`. -/
-theorem Matrix.eq_zero_of_forall_trace_mul_eq_zero
-    {A : Matrix (Fin D) (Fin D) ℂ}
-    (h : ∀ B : Matrix (Fin D) (Fin D) ℂ, trace (A * B) = 0) :
-    A = 0 := by
-  ext i j
-  -- Take B = single j i 1 (= E_{ji})
-  have := h (Matrix.single j i 1)
-  rw [Matrix.trace_mul_single] at this
-  -- this : MulOpposite.op 1 • A i j = 0
-  simpa using this
 
 /-! ## Equivalence: trace-annihilating ↔ trace-preserving semigroup -/
 
