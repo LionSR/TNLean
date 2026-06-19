@@ -238,7 +238,7 @@ lemma channelDet_norm_one_hs_norm_ge [NeZero d]
       (Matrix.trace (Aᴴ * A)).re =
           ∑ ij : Fin d × Fin d, ∑ kl : Fin d × Fin d,
             ‖(Φ (b ij)) kl.1 kl.2‖ ^ 2 := by
-              simp only [stdBasis, Matrix.trace_conjTranspose_mul_self_re_eq_sum_normSq,
+              simp only [stdBasis, Matrix.trace_conjTranspose_mul_self_re_eq_sum_norm_sq,
                 LinearMap.toMatrix_apply, Module.Basis.map_repr, Module.Basis.map_apply,
                 Module.Basis.coe_reindex, Function.comp_apply,
                 Equiv.sigmaEquivProd_symm_apply, Pi.basis_apply, Pi.basisFun_apply,
@@ -270,7 +270,7 @@ lemma channelDet_norm_one_hs_norm_ge [NeZero d]
                       ‖Φ (Matrix.stdBasis ℂ (Fin d) (Fin d) ij) i j‖ ^ 2 := by
                         rw [Finset.sum_comm]
             exact hsum_sq.trans
-              (Matrix.trace_conjTranspose_mul_self_re_eq_sum_normSq
+              (Matrix.trace_conjTranspose_mul_self_re_eq_sum_norm_sq
                 (A := Φ (Matrix.stdBasis ℂ (Fin d) (Fin d) ij))).symm
   calc
     (d : ℝ) ^ 2 ≤ (Matrix.trace (Aᴴ * A)).re :=

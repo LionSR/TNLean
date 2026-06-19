@@ -99,7 +99,7 @@ lemma norm_matToES_sq (M : Matrix (Fin m) (Fin n) ℂ) :
       ← Complex.ofReal_pow]]
   exact Complex.ofReal_re _
 
-/-- The Euclidean-space norm of a flattened matrix is Mathlib's Frobenius norm. -/
+/-- The Euclidean-space norm of a flattened matrix is the Frobenius norm. -/
 lemma norm_matToES_eq_frobenius_norm (M : Matrix (Fin m) (Fin n) ℂ) :
     ‖matToES M‖ = ‖M‖ := by
   rw [← sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _)]

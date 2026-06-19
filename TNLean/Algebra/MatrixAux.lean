@@ -17,6 +17,8 @@ Extracted from various files for reusability.
 
 ## Main results
 
+- `Matrix.trace_conjTranspose_mul_self_re_eq_sum_norm_sq`: entrywise Hilbert--Schmidt
+  trace identity
 - `Matrix.trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq`: the Hilbert--Schmidt
   trace form of the Frobenius norm
 - `Matrix.PosSemidef.mulVec_eq_zero_left/right`: kernel containment for PSD matrix sums
@@ -31,7 +33,7 @@ section FrobeniusTrace
 variable {m n : Type*} [Fintype m] [Fintype n]
 
 /-- Entrywise form of the Hilbert--Schmidt trace identity. -/
-theorem trace_conjTranspose_mul_self_re_eq_sum_normSq
+theorem trace_conjTranspose_mul_self_re_eq_sum_norm_sq
     (A : Matrix m n ℂ) :
     (trace (Aᴴ * A)).re = ∑ j : n, ∑ i : m, ‖A i j‖ ^ 2 := by
   have hstar_mul_re : ∀ z : ℂ, (star z * z).re = ‖z‖ ^ 2 := by
@@ -47,11 +49,11 @@ theorem trace_conjTranspose_mul_self_re_eq_sum_normSq
   simpa only [RCLike.star_def, Complex.mul_re, Complex.conj_re, Complex.conj_im,
     neg_mul, sub_neg_eq_add] using hstar_mul_re (A i j)
 
-/-- The real trace of `Aᴴ * A` is the square of Mathlib's Frobenius norm. -/
+/-- The real trace of `Aᴴ * A` is the square of the Frobenius norm. -/
 theorem trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq
     (A : Matrix m n ℂ) :
     (trace (Aᴴ * A)).re = ‖A‖ ^ 2 := by
-  rw [trace_conjTranspose_mul_self_re_eq_sum_normSq]
+  rw [trace_conjTranspose_mul_self_re_eq_sum_norm_sq]
   rw [Matrix.frobenius_norm_def, ← Real.sqrt_eq_rpow, Real.sq_sqrt]
   · calc
       ∑ j : n, ∑ i : m, ‖A i j‖ ^ 2 =
