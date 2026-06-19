@@ -42,45 +42,21 @@ abbrev SameState (A B : PeriodicMPSTensor (d := d) (D := D) m) : Prop :=
 abbrev GaugeEquiv (A B : PeriodicMPSTensor (d := d) (D := D) m) : Prop :=
   MPSChainTensor.GaugeEquiv A B
 
-theorem SameState.refl (A : PeriodicMPSTensor (d := d) (D := D) m) : SameState A A :=
-  MPSChainTensor.SameState.refl A
-
-theorem SameState.symm {A B : PeriodicMPSTensor (d := d) (D := D) m}
-    (h : SameState A B) : SameState B A :=
-  MPSChainTensor.SameState.symm h
-
-theorem SameState.trans {A B C : PeriodicMPSTensor (d := d) (D := D) m}
-    (hAB : SameState A B) (hBC : SameState B C) :
-    SameState A C :=
-  MPSChainTensor.SameState.trans hAB hBC
-
 def instEquivalenceSameState :
     Equivalence (SameState (d := d) (D := D) (m := m)) where
   -- `Equivalence` is a structure (not a class): this is a convenience bundle,
   -- not intended to be found via typeclass search.
-  refl := SameState.refl
-  symm := SameState.symm
-  trans := SameState.trans
-
-theorem GaugeEquiv.refl (A : PeriodicMPSTensor (d := d) (D := D) m) : GaugeEquiv A A :=
-  MPSChainTensor.GaugeEquiv.refl A
-
-theorem GaugeEquiv.symm {A B : PeriodicMPSTensor (d := d) (D := D) m}
-    (h : GaugeEquiv A B) : GaugeEquiv B A :=
-  MPSChainTensor.GaugeEquiv.symm h
-
-theorem GaugeEquiv.trans {A B C : PeriodicMPSTensor (d := d) (D := D) m}
-    (hAB : GaugeEquiv A B) (hBC : GaugeEquiv B C) :
-    GaugeEquiv A C :=
-  MPSChainTensor.GaugeEquiv.trans hAB hBC
+  refl := MPSChainTensor.SameState.refl
+  symm := MPSChainTensor.SameState.symm
+  trans := MPSChainTensor.SameState.trans
 
 def instEquivalenceGaugeEquiv :
     Equivalence (GaugeEquiv (d := d) (D := D) (m := m)) where
   -- `Equivalence` is a structure (not a class): this is a convenience bundle,
   -- not intended to be found via typeclass search.
-  refl := GaugeEquiv.refl
-  symm := GaugeEquiv.symm
-  trans := GaugeEquiv.trans
+  refl := MPSChainTensor.GaugeEquiv.refl
+  symm := MPSChainTensor.GaugeEquiv.symm
+  trans := MPSChainTensor.GaugeEquiv.trans
 
 end PeriodicMPSTensor
 
