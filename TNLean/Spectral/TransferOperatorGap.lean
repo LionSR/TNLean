@@ -403,9 +403,6 @@ private lemma eigenvector_gives_gauge [NeZero D]
 
 end
 
-set_option synthInstance.maxHeartbeats 200000 in
--- Instance search for the finite-dimensional continuous endomorphism space of matrices
--- needs a local heartbeat bump during the spectral-radius extraction.
 /-- **Eigenvalue rigidity** (PerezGarcia2007 Lemma 5, cf. Wolf Theorem 6.6):
 if the mixed transfer spectral radius is ≥ 1, then A and B are
 gauge-phase equivalent.

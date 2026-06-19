@@ -89,10 +89,11 @@ The clearest replacements are:
   inner-product structure explicitly by `PiLp.innerProductSpace`, removing a
   large local synthesis budget that was needed only to find this standard
   instance.
-- The determinant-one unitary-channel characterization now has one Lean
-  statement.  The duplicate `_of_channel` theorem had the same hypotheses and
-  conclusion as `channelDet_norm_eq_one_iff_exists_unitaryChannel`, so the
-  blueprint points directly to the latter.
+- The determinant-one unitary-channel characterization now has one canonical
+  Lean statement.  The duplicate `_of_channel` theorem had the same hypotheses
+  and conclusion as `channelDet_norm_eq_one_iff_exists_unitaryChannel`, so the
+  blueprint points directly to the latter; the older name remains as an
+  `@[deprecated]` alias during the transition.
 
 There are also important non-replacements.
 
@@ -830,6 +831,12 @@ have been removed from `TNLean/Spectral/TransferOperatorGap.lean` and
 now unfold the local `matToES` abbreviations at the call site and apply
 Mathlib's `Matrix.frobenius_norm_mul` directly.
 
+The Mathlib 4.31 pass also removes local synthesis-budget bounds from the
+square transfer-gap theorem, the rectangular transfer-gap theorem, and the
+rectangular non-translation-invariant gap theorem.  The remaining
+non-rectangular non-translation-invariant spectral-radius extraction still
+keeps its local `synthInstance.maxHeartbeats` bound.
+
 ### Remaining axiom boundary recheck, 2026-06-19
 
 The remaining non-Archive axioms were checked again against the Mathlib 4.31
@@ -1053,11 +1060,13 @@ the former large local synthesis budget around the cached instance and makes the
 finite-dimensional Hilbert-space structure used in the rectangular isometry
 argument explicit.
 
-The determinant-one unitary-channel theorem no longer has the duplicate
-`channelDet_norm_eq_one_iff_exists_unitaryChannel_of_channel` restatement.  The
-statement already assumes `IsChannel T`, so the removed theorem was an exact
-pass-through layer.  The corresponding blueprint entry now cites only
-`channelDet_norm_eq_one_iff_exists_unitaryChannel`.
+The determinant-one unitary-channel theorem now has one canonical statement.
+The older
+`channelDet_norm_eq_one_iff_exists_unitaryChannel_of_channel` name had the same
+hypotheses and conclusion as
+`channelDet_norm_eq_one_iff_exists_unitaryChannel`, so the corresponding
+blueprint entry cites only the latter.  The older name remains as an
+`@[deprecated]` alias during the transition.
 
 A further pass removed the local rectangular continuous-linear-map normed
 structure wrappers from `TNLean.Spectral.GaugeConstruction`:
@@ -1081,13 +1090,13 @@ completeness.
 
 ### Fixed-point Wedderburn decomposition
 
-Removed pass-through accessor:
+The old public accessor remains only as an `@[deprecated]` transition name:
 
 - `Kraus.wedderburnBlockDims_sum_le`
 
-This theorem merely returned the `dim_le` field from an
+This theorem merely returns the `dim_le` bound from an
 `IsWedderburnBlockDecomp` witness.  The Wedderburn--Artin existence theorems
-and the bundled decomposition structure are unchanged; callers should use
+and the bundled decomposition structure are unchanged; new proofs should use
 `w.dim_le` directly when they have a decomposition witness `w`.
 
 ### Wielandt rank-one products
@@ -1122,13 +1131,8 @@ pass-throughs:
 - `IsPrimitiveMPS.spectral_gap`, `spectral_gap_of_injective`, and
   `uniform_spectral_gap_of_finite_lt_one`.  These were already deprecated
   aliases whose internal call sites had moved to the canonical theorem names.
-- `channelDet_norm_eq_one_iff_exists_unitaryChannel_of_channel`.  This was the
-  same theorem as `channelDet_norm_eq_one_iff_exists_unitaryChannel`, with the
-  same channel hypothesis and conclusion.
 - `MPSTensor.isOrthogonalProjection_one_sub`.  The replacement is the general
   theorem `IsOrthogonalProjection.one_sub`.
-- `Kraus.wedderburnBlockDims_sum_le`.  This only returned the field `w.dim_le`
-  from an `IsWedderburnBlockDecomp` witness.
 - `TNLean.PEPS.reindexAlgEquiv_smul`,
   `TNLean.PEPS.reindexAlgEquiv_finCongr_symm_round`,
   `TNLean.PEPS.reindexAlgEquiv_gaugeConj`, and

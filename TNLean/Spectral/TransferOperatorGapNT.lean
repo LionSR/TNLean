@@ -177,10 +177,7 @@ private theorem eigenvector_gives_gauge_of_irreducible_TP [NeZero D]
     (A := A) (B := B) (SA := SA) (SB := SB) (X' := X') (μ := μ)
     hSA_det hSB_det hX'u hμ hInter2
 
--- The spectral-radius extraction below still spends extra time finding the
--- finite-dimensional completeness facts for continuous endomorphisms of matrix spaces.
 set_option synthInstance.maxHeartbeats 200000 in
--- The larger local bound is used only during this spectral-radius extraction.
 /-- If the mixed transfer spectral radius of two irreducible left-canonical tensors is at least
 `1`, then the tensors are gauge-phase equivalent. -/
 theorem modulus_one_eigenvalue_implies_gauge_of_irreducible_TP
@@ -603,9 +600,6 @@ private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
       hρA_psd hρB_psd hρA_ne hρB_ne hρA_fix hρB_fix hSA_u hSB_u
       hSA_mul hSB_mul hσA_def hσB_def hσA_ne hσB_ne hσA_fix hσB_fix
 
-set_option synthInstance.maxHeartbeats 200000 in
--- The rectangular spectral-radius extraction uses the same CLM instance search and needs
--- the same small local heartbeat bump.
 /--
 **Rectangular strict transfer-operator gap** for irreducible left-canonical blocks
 of different bond sizes.

@@ -294,9 +294,6 @@ end DimensionEquality
 
 section MainTheorem
 
-set_option synthInstance.maxHeartbeats 400000 in
--- Instance search for the rectangular continuous endomorphism space needs a local
--- heartbeat bump during the spectral-radius extraction.
 /-- **Dimension-mismatch transfer-operator gap**: the spectral radius of the rectangular
 mixed transfer operator is strictly less than 1 when the bond dimensions differ. -/
 theorem mixedTransferSpectralRadius₂_lt_one_of_dim_ne

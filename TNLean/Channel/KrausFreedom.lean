@@ -141,7 +141,7 @@ private lemma toEuclideanLin_conjTranspose_mul_apply
   rw [← toLpLin_mul_same]
 
 set_option maxHeartbeats 1600000 in
--- The partial-isometry extension proof drives higher-order typeclass search in 4.29.
+-- The partial-isometry extension passes through several nested finite-dimensional choices.
 /-- **Rectangular Kraus freedom** (Wolf Theorem 2.1 item 4, necessary direction):
 if two Kraus families of sizes `r₁` and `r₂` define the same CPM, then the
 first family is a linear combination of the second via a rectangular isometry
