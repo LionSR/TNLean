@@ -25,20 +25,6 @@ variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-/-! ## Projection complement lemmas -/
-
-/-- `(1 - P) * P = 0` for an orthogonal projection `P`. -/
-theorem orthogonalProjection_complement_mul
-    {P : Mat} (hP : IsOrthogonalProjection P) :
-    (1 - P) * P = 0 := by
-  rw [sub_mul, one_mul, hP.2, sub_self]
-
-/-- `P * (1 - P) = 0` for an orthogonal projection `P`. -/
-theorem orthogonalProjection_mul_complement
-    {P : Mat} (hP : IsOrthogonalProjection P) :
-    P * (1 - P) = 0 := by
-  rw [mul_sub, mul_one, hP.2, sub_self]
-
 /-! ## (3) → (4): Invariant compression → block-upper-triangular Lindblad
 
 The key algebraic step: if `T_t` preserves the compressed algebra `P M_d P`,
@@ -54,8 +40,8 @@ theorem lindblad_block_of_generatorPreservesCompression
     ∀ j : Fin F.r, (1 - P) * F.L j * P = 0 := by
   have hPP : P * P = P := hP.2
   have hP_herm : Pᴴ = P := hP.1
-  have hQP := orthogonalProjection_complement_mul hP
-  have hPQ := orthogonalProjection_mul_complement hP
+  have hQP := IsIdempotentElem.one_sub_mul_self hP.2
+  have hPQ := IsIdempotentElem.mul_one_sub_self hP.2
   have hLP_compress : P * F.toLinearMap P * P = F.toLinearMap P := by
     have h1 := hgen 1; simp only [mul_one] at h1; rwa [hPP] at h1
   have hQ_LP : (1 - P) * F.toLinearMap P = 0 := by
@@ -107,7 +93,7 @@ theorem kappa_block_of_generatorPreservesCompression
     (hgen : GeneratorPreservesCompression F.toLinearMap P)
     (hblock : ∀ j : Fin F.r, (1 - P) * F.L j * P = 0) :
     (1 - P) * F.toGeneratorDecomp.κ * P = 0 := by
-  have hQP := orthogonalProjection_complement_mul hP
+  have hQP := IsIdempotentElem.one_sub_mul_self hP.2
   have hLP_compress : P * F.toLinearMap P * P = F.toLinearMap P := by
     have h1 := hgen 1; simp only [mul_one] at h1; rwa [hP.2] at h1
   have hQ_LP : (1 - P) * F.toLinearMap P = 0 := by
@@ -223,8 +209,8 @@ theorem generator_preserves_compression_of_blockUpperTriangular
   set κ : Mat := Complex.I • F.H + (1/2 : ℂ) • ∑ j : Fin F.r, (F.L j)ᴴ * F.L j
   have hPP : P * P = P := hP.2
   have hP_herm : Pᴴ = P := hP.1
-  have hQP := orthogonalProjection_complement_mul hP
-  have hPQ := orthogonalProjection_mul_complement hP
+  have hQP := IsIdempotentElem.one_sub_mul_self hP.2
+  have hPQ := IsIdempotentElem.mul_one_sub_self hP.2
   have hL_block_ct : ∀ j : Fin F.r, P * (F.L j)ᴴ * (1 - P) = 0 := by
     intro j
     have h := congrArg Matrix.conjTranspose (hL_block j)
