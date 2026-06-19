@@ -507,9 +507,10 @@ private theorem map_mulRight_map_mulLeft_comm
     Submodule.map (LinearMap.mulLeft ℂ a)
       (Submodule.map (LinearMap.mulRight ℂ b) S) := by
   simp only [← Submodule.map_comp]
-  congr 1
-  ext x
-  simp [LinearMap.mulLeft_apply, LinearMap.mulRight_apply, Matrix.mul_assoc]
+  rw [show LinearMap.mulRight ℂ b ∘ₗ LinearMap.mulLeft ℂ a =
+      LinearMap.mulLeft ℂ a ∘ₗ LinearMap.mulRight ℂ b by
+    simpa [Module.End.mul_eq_comp] using
+      (LinearMap.commute_mulLeft_right (R := ℂ) a b).eq.symm]
 
 /-- **Structural permanence**: if `finrank(R_n) = finrank(R_{n+1})` then
 `R_{n+2} = (A i₀) · R_{n+1}`. -/
