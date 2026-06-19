@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalCrossingTrace
+import TNLean.MPS.ParentHamiltonian.PGVWCCDEIdentities
 
 /-!
 # Finite-spanning versions of trace-decomposition results for block-diagonal parent spaces
@@ -26,6 +27,88 @@ open scoped Matrix BigOperators
 namespace MPSTensor
 
 variable {d : ℕ}
+
+/-- Source trace decompositions give the periodic constraints for each block
+under block injectivity.
+
+For each boundary-crossing interval beginning at \(i\), assume there are
+matrices \(C^j_{i,\rho}\) indexed by complementary words such that the two
+trace decompositions agree for every cut word \(\beta\), complementary word
+\(\rho\), and middle word \(w\):
+\[
+  \sum_j\operatorname{tr}(A^j_\beta C^j_{i,\rho}A^j_w)
+  =
+  \sum_j\operatorname{tr}\bigl(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_w\bigr).
+\]
+Since the word tuples \((A^1_w,\ldots,A^r_w)\) span the full product algebra
+\(\prod_j M_{D_j}(\mathbb C)\) at length \(m\), the trace equality implies
+the blockwise identity
+\[
+  A^j_\beta C^j_{i,\rho}=((\mu_j^NX_j)A^j_\beta)A^j_\rho .
+\]
+The normalization \(\sum_\rho A^j_\rho A^{j\dagger}_\rho=I\) and the
+compatibility identity for the complementary word \(\rho\) then give, for each
+block \(j\) and interval \(i\), a matrix \(E_{j,i,\rho}\) such that, for every
+cut word \(\beta\),
+\[
+  ((\mu_j^NX_j)A^j_\beta)A^j_\rho=A^j_\beta E_{j,i,\rho}.
+\]
+These identities give
+\[
+  \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
+\]
+This is the boundary-crossing trace-decomposition form of
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1436--1456.
+
+**Local fix (adjoint correction):** The matrix identity used here
+replaces the source's \(E^j=\sum_k C^j_kA^j_k\) by
+\(E^j=\sum_k C^j_kA^{j\dagger}_k\), since the normalization is
+\(\sum_k A^j_kA^{j\dagger}_k=I\). This is recorded in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
+theorem
+    blockDiagonal_boundary_component_chainGroundSpace_of_trace_decomposition_of_injective
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    {m L₀ L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
+    (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (hTraceSpan : WordTupleSpanTop A m)
+    (hBlk : ∀ j : Fin r, IsNBlkInjective (A j) L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    (hNlarge : L + L₀ ≤ N)
+    (C : ∀ (j : Fin r) (_ : Fin N),
+      (Fin (N - L) → Fin d) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (hCoeff : ∀ i : Fin N,
+      N < i.val + L →
+        ∀ ρ : Fin (N - L) → Fin d, ∀ β : Fin (i.val + L - N) → Fin d,
+          ∀ w : Fin m → Fin d,
+            (∑ j : Fin r,
+              Matrix.trace
+                ((evalWord (A j) (List.ofFn β) * C j i ρ) *
+                  evalWord (A j) (List.ofFn w))) =
+            (∑ j : Fin r,
+              Matrix.trace
+                ((((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β) *
+                    evalWord (A j) (List.ofFn ρ)) *
+                  evalWord (A j) (List.ofFn w)))) :
+    ∀ j : Fin r,
+      groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
+  refine
+    blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities_of_injective
+      μ A hN hLN X hBlk hUnital hNlarge ?_
+  intro j i hi ρ
+  obtain ⟨E, _hE, hBoundary, _hCDE⟩ :=
+    pgvwc07_complementary_word_cde_identities_of_block_boundary_trace_decomposition
+      (μ := μ) (A := A) (m := m) (K := i.val + L - N) (M := N - L) (N := N)
+      hTraceSpan X (fun k => C k i) hUnital (hCoeff i hi) j
+  refine ⟨E * evalWord (A j) (List.ofFn ρ), ?_⟩
+  intro β
+  calc
+    (((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
+        evalWord (A j) (List.ofFn ρ)
+        = (evalWord (A j) (List.ofFn β) * E) *
+            evalWord (A j) (List.ofFn ρ) := by rw [hBoundary β]
+    _ = evalWord (A j) (List.ofFn β) *
+        (E * evalWord (A j) (List.ofFn ρ)) := by rw [Matrix.mul_assoc]
 
 /-- Source trace decompositions upgrade a block-diagonal boundary representation
 to periodic single-block states.
