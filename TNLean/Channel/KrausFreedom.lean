@@ -62,12 +62,8 @@ theorem kraus_dual_eq_of_map_eq
       ∑ α : Fin r₁, (B α)ᴴ * Y * B α =
       ∑ j : Fin r₂, (A j)ᴴ * Y * A j := by
   intro Y
-  suffices hsuff : ∀ X : Matrix (Fin D) (Fin D) ℂ,
-      trace ((∑ α : Fin r₁, (B α)ᴴ * Y * B α -
-              ∑ j : Fin r₂, (A j)ᴴ * Y * A j) * X) = 0 by
-    exact sub_eq_zero.mp ((Matrix.trace_mul_right_eq_zero_iff _).mp hsuff)
+  apply (Matrix.ext_iff_trace_mul_right).2
   intro X
-  rw [sub_mul, Matrix.trace_sub]
   simp_rw [Finset.sum_mul, Matrix.trace_sum]
   have trace_cycle : ∀ K : Matrix (Fin D) (Fin D) ℂ,
       trace (Kᴴ * Y * K * X) = trace (K * X * Kᴴ * Y) := fun K => by
@@ -76,7 +72,7 @@ theorem kraus_dual_eq_of_map_eq
   simp_rw [trace_cycle]
   rw [← Matrix.trace_sum, ← Matrix.trace_sum,
       ← Finset.sum_mul, ← Finset.sum_mul]
-  rw [h X]; ring
+  rw [h X]
 
 /-- Map equality implies equal Stinespring Gramians:
 `∑ Bα†Bα = ∑ Aj†Aj`. -/

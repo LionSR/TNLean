@@ -1700,6 +1700,21 @@ exponentials, and related definitional equalities whose elaboration changed
 between Mathlib 4.29 and 4.31.  No theorem statement was intentionally
 strengthened or weakened by these repairs.
 
+## Additional trace-pairing use-site cleanup, 2026-06-19
+
+Mathlib's equality-form trace-pairing theorem
+`Matrix.ext_iff_trace_mul_right` now replaces the remaining zero-difference
+trace-pairing conversions in the channel layer:
+
+- `TNLean/Channel/KrausRepresentation.lean`
+- `TNLean/Channel/KrausFreedom.lean`
+- `TNLean/Channel/Determinant/UnitaryCharacterization.lean`
+
+The affected proofs now establish matrix equality directly by comparing
+`trace (A * X)` against all test matrices `X`, rather than proving
+`trace ((A - B) * X) = 0` and then invoking the local zero-form trace-pairing
+wrapper.
+
 ## Conclusions
 
 Mathlib 4.31 materially improves the background library for TNLean, especially
