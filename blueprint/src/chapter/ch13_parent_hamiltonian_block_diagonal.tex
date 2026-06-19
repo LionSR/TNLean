@@ -1258,6 +1258,51 @@ in both cases.
     then gives the periodic-boundary constraint for each block.
 \end{proof}
 
+\begin{lemma}[Boundary representation and crossing constraints give periodic components]
+    \label{lem:block_diagonal_boundary_periodic_components_from_crossing_boundary}
+    \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_crossing_pgvwc_comparison_of_boundary}
+    \leanok
+    \uses{lem:block_diagonal_boundary_local_sum_mem,
+        thm:block_diagonal_boundary_crossing_pgvwc_comparison,
+        lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
+    Assume $0<N$, $L\le N$, and $L+L_0\le N$. Suppose each block $A_j$
+    is $L_0$-block-injective and satisfies
+    \[
+        \sum_a A^j_aA^{j\dagger}_a=I .
+    \]
+    Let
+    \[
+        \psi\in
+        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right),
+        \qquad
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right).
+    \]
+    If every boundary-crossing interval has the corresponding tail-word
+    spanning property, then there are block-diagonal boundary conditions $X_j$
+    with the displayed representation of $\psi$ and, for every $j$,
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_boundary_local_sum_mem,
+        thm:block_diagonal_boundary_crossing_pgvwc_comparison,
+        lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
+    For a boundary-crossing interval, the local constraint on $\psi$ and the
+    boundary representation give a vector in $\bigvee_jG_L(A_j)$ by
+    Lemma~\ref{lem:block_diagonal_boundary_local_sum_mem}. The crossing
+    comparison theorem supplies matrices $C^j_{i,\rho}$ satisfying
+    \[
+        A^j_\beta C^j_{i,\rho}
+        =
+        ((\mu_j^NX_j)A^j_\beta)A^j_\rho .
+    \]
+    Lemma~\ref{lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
+    then gives the single-block periodic constraints.
+\end{proof}
+
 \begin{lemma}[Trace-decomposition comparisons give single-block constraints]
     \label{lem:block_diagonal_boundary_component_trace_decomposition_injective}
     \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_trace_decomposition_of_injective}
