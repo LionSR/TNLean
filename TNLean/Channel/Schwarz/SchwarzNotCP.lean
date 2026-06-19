@@ -62,11 +62,11 @@ transpose and trace-times-identity. -/
 theorem wolfExample53_isPositive : IsPositiveMap wolfExample53 := by
   intro A hA
   have htranspose : ((1 / 2 : ℂ) • Aᵀ).PosSemidef :=
-    hA.transpose.smul (by norm_num [Complex.nonneg_iff])
+    hA.transpose.smul (by positivity)
   have htraceId : ((1 / 4 : ℂ) • (Matrix.trace A • (1 : M2))).PosSemidef := by
     have htrace : ((Matrix.trace A) • (1 : M2)).PosSemidef :=
       Matrix.PosSemidef.one.smul hA.trace_nonneg
-    exact htrace.smul (by norm_num [Complex.nonneg_iff])
+    exact htrace.smul (by positivity)
   simpa [wolfExample53] using htranspose.add htraceId
 
 private noncomputable def wolfExample53Gap (A : M2) : M2 :=
@@ -182,7 +182,7 @@ private lemma wolfExample53Gap_posSemidef_of_trace_zero (A : M2) (htr : Matrix.t
   rw [wolfExample53Gap_eq_of_trace_zero A htr]
   have h1 : ((1 / 2 : ℂ) • (Aᴴ * A)ᵀ).PosSemidef :=
     (Matrix.posSemidef_conjTranspose_mul_self A).transpose.smul
-      (by norm_num [Complex.nonneg_iff])
+      (by positivity)
   have h2base : (Matrix.trace (A * Aᴴ) • (1 : M2) - A * Aᴴ).PosSemidef :=
     trace_smul_one_sub_posSemidef_of_posSemidef (A * Aᴴ)
       (Matrix.posSemidef_self_mul_conjTranspose A)
@@ -191,7 +191,7 @@ private lemma wolfExample53Gap_posSemidef_of_trace_zero (A : M2) (htr : Matrix.t
   have h2 : ((1 / 4 : ℂ) • ((Matrix.trace (Aᴴ * A) • (1 : M2) - A * Aᴴ)ᵀ)).PosSemidef := by
     have h2' : ((Matrix.trace (Aᴴ * A) • (1 : M2) - A * Aᴴ)ᵀ).PosSemidef := by
       simpa [htrace] using h2base.transpose
-    exact h2'.smul (by norm_num [Complex.nonneg_iff])
+    exact h2'.smul (by positivity)
   exact h1.add h2
 
 /-- Wolf Example 5.3 satisfies the Schwarz inequality.
