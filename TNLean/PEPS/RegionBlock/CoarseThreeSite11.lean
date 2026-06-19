@@ -431,7 +431,7 @@ noncomputable def regionEdgeTransfer
     (edgeTransferMatrix (F.frame.coarseTensor) (F'.frame.coarseTensor) coarseEdgeRB
       (F.frame.coarseTensor_edgeBlockedThreeSiteInjective).endpoint_linearIndependent.2
       (F'.frame.coarseTensor_edgeBlockedThreeSiteInjective).endpoint_linearIndependent.2
-      F'.frame.coarseTensor_pos_bondDim
+      F'.frame.pos_coarseBondDim
       (Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle).symm M))
 
 open scoped Classical in
@@ -473,7 +473,7 @@ theorem regionEdgeTransfer_regionInsertedCoeff
   set Ncoarse := edgeTransferMatrix (F.frame.coarseTensor) (F'.frame.coarseTensor) coarseEdgeRB
     (F.frame.coarseTensor_edgeBlockedThreeSiteInjective).endpoint_linearIndependent.2
     (F'.frame.coarseTensor_edgeBlockedThreeSiteInjective).endpoint_linearIndependent.2
-    F'.frame.coarseTensor_pos_bondDim Mcoarse with hNc
+    F'.frame.pos_coarseBondDim Mcoarse with hNc
   have hMrecover :
       Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle) Mcoarse = M := by
     rw [hMc, ← Matrix.symm_reindexAlgEquiv, AlgEquiv.apply_symm_apply]
@@ -487,7 +487,7 @@ theorem regionEdgeTransfer_regionInsertedCoeff
   exact edgeTransferMatrix_edgeInsertedCoeff (F.frame.coarseTensor) (F'.frame.coarseTensor)
     coarseEdgeRB (F.frame.coarseTensor_edgeBlockedThreeSiteInjective)
     (F'.frame.coarseTensor_edgeBlockedThreeSiteInjective) hsame
-    F'.frame.coarseTensor_pos_bondDim Mcoarse s
+    F'.frame.pos_coarseBondDim Mcoarse s
 
 /-- **The concrete single-edge transfer is multiplicative.** The conjugated coarse
 edge-transfer matrix sends a product to the product of the transfers: the coarse transfer is
@@ -520,23 +520,23 @@ theorem regionEdgeTransfer_mul
   rw [show edgeTransferMatrix (F.frame.coarseTensor) (F'.frame.coarseTensor) coarseEdgeRB
         (F.frame.coarseTensor_edgeBlockedThreeSiteInjective).endpoint_linearIndependent.2
         (F'.frame.coarseTensor_edgeBlockedThreeSiteInjective).endpoint_linearIndependent.2
-        F'.frame.coarseTensor_pos_bondDim
+        F'.frame.pos_coarseBondDim
         (Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle).symm M *
           Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle).symm M') =
       edgeTransferMatrix (F.frame.coarseTensor) (F'.frame.coarseTensor) coarseEdgeRB
           (F.frame.coarseTensor_edgeBlockedThreeSiteInjective).endpoint_linearIndependent.2
           (F'.frame.coarseTensor_edgeBlockedThreeSiteInjective).endpoint_linearIndependent.2
-          F'.frame.coarseTensor_pos_bondDim
+          F'.frame.pos_coarseBondDim
           (Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle).symm M) *
         edgeTransferMatrix (F.frame.coarseTensor) (F'.frame.coarseTensor) coarseEdgeRB
           (F.frame.coarseTensor_edgeBlockedThreeSiteInjective).endpoint_linearIndependent.2
           (F'.frame.coarseTensor_edgeBlockedThreeSiteInjective).endpoint_linearIndependent.2
-          F'.frame.coarseTensor_pos_bondDim
+          F'.frame.pos_coarseBondDim
           (Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle).symm M') from
       edgeTransferMatrix_mul (F.frame.coarseTensor) (F'.frame.coarseTensor) coarseEdgeRB
         (F.frame.coarseTensor_edgeBlockedThreeSiteInjective)
         (F'.frame.coarseTensor_edgeBlockedThreeSiteInjective) hsame
-        F'.frame.coarseTensor_pos_bondDim _ _]
+        F'.frame.pos_coarseBondDim _ _]
   exact map_mul _ _ _
 
 /-- **The concrete single-edge transfer matches the region-inserted coefficient over the

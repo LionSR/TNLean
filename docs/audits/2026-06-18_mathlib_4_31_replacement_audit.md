@@ -99,6 +99,9 @@ The clearest replacements are:
 - The periodic-MPS equivalence bundles now cite the chain-level relation laws
   directly.  Six local theorem declarations that only restated reflexivity,
   symmetry, and transitivity for the periodic abbreviations were removed.
+- Two PEPS pass-through declarations were removed: a coarse-frame
+  bond-positivity accessor that only exposed the structure field, and a one-use
+  same-state restatement in the row-cut obstruction example.
 
 There are also important non-replacements.
 
@@ -1337,6 +1340,26 @@ Focused check:
 lake build TNLean.MPS.Periodic.Defs -q --log-level=info
 ```
 
+### PEPS accessor pass-through removal, 2026-06-19
+
+Two PEPS declarations had no independent mathematical content and no blueprint
+references:
+
+- `TNLean.PEPS.CoarseBlockingFrame.coarseTensor_pos_bondDim` only exposed the
+  structure field `CoarseBlockingFrame.pos_coarseBondDim`.  The coarse
+  three-site and normal-bond-dimension proofs now use the field directly.
+- `TNLean.PEPS.sameMPV_Aunits_Bunits` only applied
+  `gaugeEquiv_Aunits_Bunits.sameMPV` at one row-cut obstruction proof site.
+  That proof now calls the gauge-invariance theorem directly.
+
+Focused check:
+
+```bash
+lake build TNLean.PEPS.RegionBlock.CoarseThreeSite11 \
+  TNLean.PEPS.NormalBondDimension TNLean.PEPS.TorusRowColumnReductionObstruction \
+  -q --log-level=info
+```
+
 ### Trace-pairing extensionality, 2026-06-19
 
 Mathlib 4.31 has equality-form trace-pairing extensionality lemmas:
@@ -1416,6 +1439,10 @@ pass-throughs:
   `MPSTensor.PeriodicMPSTensor.GaugeEquiv.symm`, and
   `MPSTensor.PeriodicMPSTensor.GaugeEquiv.trans`.  These were exact
   restatements of the chain-level relation laws for the periodic abbreviations.
+- `TNLean.PEPS.CoarseBlockingFrame.coarseTensor_pos_bondDim`.  This only
+  returned the `pos_coarseBondDim` field from a `CoarseBlockingFrame`.
+- `TNLean.PEPS.sameMPV_Aunits_Bunits`.  This was a one-use application of
+  `gaugeEquiv_Aunits_Bunits.sameMPV`.
 
 ## Verification performed
 

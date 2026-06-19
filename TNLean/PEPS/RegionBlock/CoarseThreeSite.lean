@@ -289,10 +289,6 @@ theorem coarseTensor_isVertexInjective : IsVertexInjective (F.coarseTensor) := b
     exact LinearMap.funLeft_injective_of_surjective ℂ ℂ _
       (coarseProj_surjective F.pos_dim (F.regionOf v))
 
-/-- The coarse tensor has positive bond dimensions on every coarse edge. -/
-theorem coarseTensor_pos_bondDim : ∀ f : Edge coarseGraph, 0 < (F.coarseTensor).bondDim f :=
-  F.pos_coarseBondDim
-
 /-- **The coarse three-site chain is injective at the `r-b` edge.** The endpoint
 super-sites (red and blue blocks) and the middle super-site (complement block) are
 all injective, so the edge-blocked three-site injectivity hypothesis holds for the
@@ -305,7 +301,7 @@ Source: arXiv:1804.04964, Section 3, proof of Theorem 3, the three-site chain af
 theorem coarseTensor_edgeBlockedThreeSiteInjective :
     EdgeBlockedThreeSiteInjective (G := coarseGraph) (F.coarseTensor) coarseEdgeRB :=
   F.coarseTensor_isVertexInjective.edgeBlockedThreeSiteInjective
-    F.coarseTensor_pos_bondDim coarseEdgeRB
+    F.pos_coarseBondDim coarseEdgeRB
 
 end CoarseBlockingFrame
 
@@ -350,7 +346,7 @@ theorem coarse_exists_edgeInsertedCoeff_eq {A B : Tensor G d}
           edgeInsertedCoeff (G := coarseGraph) (F'.coarseTensor) coarseEdgeRB σ N :=
   exists_edgeInsertedCoeff_eq (G := coarseGraph) (F.coarseTensor) (F'.coarseTensor)
     coarseEdgeRB F.coarseTensor_edgeBlockedThreeSiteInjective
-    F'.coarseTensor_edgeBlockedThreeSiteInjective hsame F'.coarseTensor_pos_bondDim M
+    F'.coarseTensor_edgeBlockedThreeSiteInjective hsame F'.pos_coarseBondDim M
 
 end PEPS
 end TNLean
