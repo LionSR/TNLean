@@ -104,28 +104,6 @@ structure HasUniqueFixedPoint [DecidableEq (Fin D)]
   /-- Any PSD fixed point is a scalar multiple of `ρ`. -/
   unique : ∀ σ : Matrix (Fin D) (Fin D) ℂ, σ.PosSemidef → E σ = σ → ∃ c : ℂ, σ = c • ρ
 
-/-! ### Auxiliary matrix algebra lemmas -/
-
-/-- Entry computation for a sandwich product with a single-entry matrix. -/
-private lemma mul_single_mul_eq [DecidableEq (Fin D)]
-    (Q P : Matrix (Fin D) (Fin D) ℂ) (k l : Fin D) :
-    Q * Matrix.single k l (1 : ℂ) * P =
-      Matrix.of (fun i j => Q i k * P l j) := by
-  ext i j
-  simp only [Matrix.mul_apply, Matrix.of_apply, Matrix.single_apply]
-  have inner_eq : ∀ x, ∑ x₁, Q i x₁ * (if k = x₁ ∧ l = x then 1 else 0) =
-      if l = x then Q i k else 0 := by
-    intro x
-    by_cases hlx : l = x
-    · subst hlx; simp only [and_true]
-      rw [Finset.sum_eq_single k] <;> simp (config := { contextual := true }) [Ne.symm]
-    · simp only [hlx, and_false, ite_false, mul_zero, Finset.sum_const_zero]
-  simp_rw [inner_eq]
-  rw [Finset.sum_eq_single l]
-  · simp
-  · intro b _ hbl; simp [Ne.symm hbl]
-  · simp
-
 /-- If `(1 - P) * M * P = 0` for all matrices `M`, then `P = 0` or `P = 1`.
 This is the final step: an invariant subspace of every matrix must be trivial. -/
 lemma proj_zero_or_one_of_sandwich [DecidableEq (Fin D)]
@@ -139,12 +117,19 @@ lemma proj_zero_or_one_of_sandwich [DecidableEq (Fin D)]
       by_contra h_all; push Not at h_all
       exact hP (Matrix.ext fun i j => h_all i j)
     ext i k
-    have h_eq := mul_single_mul_eq (1 - P) P k l₀
-    rw [h (Matrix.single k l₀ 1)] at h_eq
-    have h_entry := congr_fun (congr_fun h_eq i) j₀
-    simp [Matrix.of_apply] at h_entry
+    have h_entry := congr_fun (congr_fun (h (Matrix.single k l₀ 1)) i) j₀
+    have hsum :
+        ∑ x, ((1 - P) * Matrix.single k l₀ (1 : ℂ)) i x * P x j₀ =
+          (1 - P) i k * P l₀ j₀ := by
+      rw [Finset.sum_eq_single l₀]
+      · simp
+      · intro b _ hb
+        simp [Matrix.mul_single_apply_of_ne, hb]
+      · simp
+    have h_prod : (1 - P) i k * P l₀ j₀ = 0 := by
+      exact hsum ▸ (by simpa [Matrix.mul_apply] using h_entry)
     simp only [Matrix.sub_apply, Matrix.one_apply, Matrix.zero_apply]
-    exact h_entry.resolve_right hlj
+    exact (mul_eq_zero.mp h_prod).resolve_right hlj
 
 /-- `(M * Mᴴ) c c = ∑ x, ‖M c x‖²` for any matrix `M`. -/
 lemma diagonal_mul_conjTranspose_eq_normSq_sum
