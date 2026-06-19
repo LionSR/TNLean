@@ -170,11 +170,6 @@ lemma SameMPV.trace_evalWord {A B : MPSTensor d D} (h : SameMPV A B) (w : List (
   -- Use the `SameMPV` equality on the configuration `σ := w.get`.
   simpa [mpv, coeff, List.ofFn_get] using h w.length w.get
 
-/-- Nondegeneracy of the trace pairing on `D×D` complex matrices. -/
-lemma trace_mul_right_eq_zero {M : Matrix (Fin D) (Fin D) ℂ}
-    (h : ∀ N : Matrix (Fin D) (Fin D) ℂ, Matrix.trace (M * N) = 0) : M = 0 := by
-  simpa using (Matrix.trace_mul_right_eq_zero_iff (n := Fin D) M).1 h
-
 /-- The linear map `M ↦ (i ↦ trace (M * A i))`. -/
 noncomputable def traceMulRightPi (A : MPSTensor d D) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] (Fin d → ℂ) :=
@@ -208,7 +203,7 @@ theorem traceMulRightPi_ker_eq_bot {A : MPSTensor d D} (hA : IsInjective A) :
     intro i
     simpa using congrArg (· i) hM
   -- Use trace nondegeneracy.
-  exact trace_mul_right_eq_zero fun N => by
+  exact (Matrix.trace_mul_right_eq_zero_iff (n := Fin D) M).1 fun N => by
     simpa [Matrix.traceLinearMap_apply] using congrArg (· N) hφ
 
 /-- If `A` is injective and `A`, `B` generate the same MPV family,

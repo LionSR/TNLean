@@ -63,7 +63,7 @@ theorem groundSpaceMap_injective_of_wordSpan_eq_top {A : MPSTensor d D}
       · intro σ
         simpa [groundSpaceMap_apply, Matrix.traceLinearMap_apply] using
           congrArg (fun ψ => ψ σ) hX
-    exact trace_mul_right_eq_zero fun N => by
+    exact (Matrix.trace_mul_right_eq_zero_iff (n := Fin D) X).1 fun N => by
       have hNX : Matrix.trace (N * X) = 0 := by
         simpa [Matrix.traceLinearMap_apply] using congrArg (fun f => f N) hφ
       calc

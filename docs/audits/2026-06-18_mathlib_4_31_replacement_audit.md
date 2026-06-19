@@ -164,6 +164,9 @@ The clearest replacements are:
 - The Kadison-Schwarz finite-index Kraus-map conjugate-transpose facts now
   defer to the general `Kraus.map_conjTranspose` theorem.  The later
   multiplicative-domain files no longer reprove the same finite-sum identity.
+- The one-way `MPSTensor.trace_mul_right_eq_zero` wrapper was removed.  Call
+  sites now use the forward direction of the public
+  `Matrix.trace_mul_right_eq_zero_iff` theorem directly.
 
 There are also important non-replacements.
 
@@ -878,7 +881,8 @@ Keep for now:
 - Trace-pairing wrappers only when they are part of TNLean's public
   mathematical vocabulary.  Private equality-form wrappers should use
   `Matrix.ext_iff_trace_mul_left` and `Matrix.ext_iff_trace_mul_right`
-  directly.
+  directly.  The one-way `MPSTensor.trace_mul_right_eq_zero` specialization has
+  been removed in favor of `Matrix.trace_mul_right_eq_zero_iff`.
 
 ### `TNLean/Algebra/BlockTriangularTrace.lean`
 

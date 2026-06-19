@@ -149,7 +149,10 @@ theorem isCID_implies_isRFP
   suffices h_diff : transferMap A (transferMap A (X * (u : Matrix (Fin D) (Fin D) ℂ))) -
       transferMap A (X * (u : Matrix (Fin D) (Fin D) ℂ)) = 0 from
     eq_of_sub_eq_zero h_diff
-  apply trace_mul_right_eq_zero; intro N
+  apply (Matrix.trace_mul_right_eq_zero_iff (n := Fin D)
+    (transferMap A (transferMap A (X * (u : Matrix (Fin D) (Fin D) ℂ))) -
+      transferMap A (X * (u : Matrix (Fin D) (Fin D) ℂ)))).1
+  intro N
   -- From IsCID with n=2, m=1: correlator equality gives trace equality
   have h := hCID ↑u hρ_pd hρ_fix X N 2 1 (by omega) (by omega)
   simp only [connectedCorrelator_def, twoPointExpectation_transfer] at h
