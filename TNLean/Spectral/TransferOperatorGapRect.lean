@@ -81,39 +81,6 @@ submultiplicativity gives the mixed-shape estimate used below. -/
 
 section HSContraction
 
-/-- Right-sum identity: `∑_σ ‖X · w_B(σ)†‖_F² = ‖X‖_F²` for rectangular X.
-
-The proof uses trace cycling: `frobSq(v M†) = tr(M† M · v† v).re`, then sum over σ. -/
-private lemma sum_frobSq_rect_right
-    (B : MPSTensor d D₂) (hB : ∑ i : Fin d, (B i)ᴴ * B i = 1)
-    (v : Matrix (Fin D₁) (Fin D₂) ℂ) (n : ℕ) :
-    ∑ σ : Fin n → Fin d, frobSq (v * (evalWord B (List.ofFn σ))ᴴ) = frobSq v := by
-  -- Trace-cycle: tr((v M†)† (v M†)) = tr(M† M v† v)
-  have trace_cycle : ∀ M : Matrix (Fin D₂) (Fin D₂) ℂ,
-      ((v * Mᴴ)ᴴ * (v * Mᴴ)).trace = (Mᴴ * M * (vᴴ * v)).trace := by
-    intro M
-    have h1 : (v * Mᴴ)ᴴ = M * vᴴ := by
-      simp [Matrix.conjTranspose_mul]
-    rw [h1]
-    rw [Matrix.mul_assoc M vᴴ _, ← Matrix.mul_assoc vᴴ v Mᴴ,
-      ← Matrix.mul_assoc M (vᴴ * v) Mᴴ,
-      Matrix.trace_mul_comm (M * (vᴴ * v)) Mᴴ,
-      ← Matrix.mul_assoc Mᴴ M (vᴴ * v)]
-  -- Apply trace cycling to the sum.
-  simp_rw [frobSq_trace]
-  conv_lhs => arg 2; ext σ; rw [trace_cycle (evalWord B (List.ofFn σ))]
-  rw [← Complex.re_sum, ← Matrix.trace_sum, ← Finset.sum_mul,
-    word_conjTranspose_mul_sum B hB n, Matrix.one_mul]
-
-/-- Word Frobenius norm sum for square matrices: `∑_σ ‖w_K(σ)‖_F² = D₁`. -/
-private lemma sum_frobSq_rect_words
-    (K : MPSTensor d D₁) (hK : ∑ i : Fin d, (K i)ᴴ * K i = 1)
-    (n : ℕ) :
-    ∑ σ : Fin n → Fin d, frobSq (evalWord K (List.ofFn σ)) = (D₁ : ℝ) := by
-  simp_rw [frobSq_trace]
-  rw [← Complex.re_sum, ← Matrix.trace_sum, word_conjTranspose_mul_sum K hK n]
-  simp [Matrix.trace_one, Fintype.card_fin]
-
 /-- **Uniform Frobenius-norm bound**: `‖F₂^n(X)‖_F² ≤ D₁² · ‖X‖_F²`
 for the rectangular mixed transfer operator. -/
 private lemma hs_contraction_rect [NeZero D₁] [NeZero D₂]
@@ -143,9 +110,9 @@ private lemma hs_contraction_rect [NeZero D₁] [NeZero D₂]
           Matrix.frobenius_norm_mul (evalWord A (List.ofFn σ))
             (X * (evalWord B (List.ofFn σ))ᴴ))
   have h_A : ∑ σ : Fin n → Fin d, fA σ ^ 2 = (D₁ : ℝ) := by
-    simp_rw [hfA_def, norm_matToES_sq]; exact sum_frobSq_rect_words A hA_norm n
+    simp_rw [hfA_def, norm_matToES_sq]; exact sum_frobSq_words A hA_norm n
   have h_B : ∑ σ : Fin n → Fin d, fB σ ^ 2 = frobSq X := by
-    simp_rw [hfB_def, norm_matToES_sq]; exact sum_frobSq_rect_right B hB_norm X n
+    simp_rw [hfB_def, norm_matToES_sq]; exact sum_frobSq_right B hB_norm X n
   calc ‖matToES _‖ ^ 2
       ≤ (∑ σ : Fin n → Fin d, fA σ * fB σ) ^ 2 :=
         pow_le_pow_left₀ (norm_nonneg _) h_chain 2
