@@ -72,7 +72,7 @@ theorem parentHamiltonianES_norm_bound_of_quadratic_form
     (parentHamiltonianES_isPositive A L N) (hQuad N hLN) v hvKer
 
 /-- The exact explicit gap-bound reduction needed by
-`parentHamiltonianES_gap_bound_of_friedrichs` follows from the corresponding
+`parentHamiltonianES_gap_bound_of_overlap_norm_bound` follows from the corresponding
 uniform quadratic-form estimate with constant \(1 / (4 * L)\).
 
 Thus the remaining MPS-specific content is precisely to prove the hypothesis
@@ -344,8 +344,8 @@ theorem parentHamiltonianES_gap_bound_of_finite_overlap_anticommutator
     A L N hγle (overlaps N) hm (hRowCard N hLN) (hColCard N hLN)
     (hDisjointAnti N hLN) (hAnti N hLN) v
 
-/-- Fixed-chain martingale quadratic-form estimate from finite-overlap
-principal-angle hypotheses.
+/-- Fixed-chain martingale quadratic-form estimate from finite-overlap ordered
+cross-term hypotheses.
 
 This is the local-window specialization of
 `ProjectionGeometry.quadraticForm_sum_projections_of_finite_overlap`.  The
@@ -354,7 +354,7 @@ estimate is needed.  If each row has at most \(m\) such pairs, the non-overlap
 cross terms are nonnegative, and every overlap obeys the ordered estimate with
 coefficient \(1 / m\), then the Euclidean-space parent Hamiltonian satisfies
 \(H² ≥ γ H\) as a quadratic form. -/
-theorem parentHamiltonianES_quadratic_form_of_finite_overlap_friedrichs
+theorem parentHamiltonianES_quadratic_form_of_finite_overlap_ordered_cross_term
     (A : MPSTensor d D) (L N : ℕ) {γ : ℝ} (hγle : γ ≤ 1)
     (overlaps : Fin N → Fin N → Prop) [DecidableRel overlaps] {m : ℕ} (hm : 0 < m)
     (hProj : ∀ i : Fin N, (localTermES A L i).IsSymmetricProjection)
@@ -363,7 +363,7 @@ theorem parentHamiltonianES_quadratic_form_of_finite_overlap_friedrichs
     (hDisjoint : ∀ i j : Fin N, j ∈ Finset.univ.erase i → ¬ overlaps i j →
       ∀ v : EuclideanSpace ℂ (Cfg d N),
         0 ≤ (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re)
-    (hFriedrichs : ∀ i j : Fin N, j ∈ Finset.univ.erase i → overlaps i j →
+    (hCrossTerm : ∀ i j : Fin N, j ∈ Finset.univ.erase i → overlaps i j →
       ∀ v : EuclideanSpace ℂ (Cfg d N),
         - (1 - γ) * ((m : ℝ)⁻¹) * (⟪localTermES A L i v, v⟫_ℂ).re ≤
           (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re) :
@@ -376,15 +376,15 @@ theorem parentHamiltonianES_quadratic_form_of_finite_overlap_friedrichs
     (ProjectionGeometry.quadraticForm_sum_projections_of_finite_overlap
       (ι := Fin N) (E := EuclideanSpace ℂ (Cfg d N)) hγle
       (fun i : Fin N => localTermES A L i) hProj overlaps hm hCard hDisjoint
-      hFriedrichs v)
+      hCrossTerm v)
 
 /-- Fixed-chain martingale quadratic-form estimate from finite-overlap
-norm-compression principal-angle hypotheses.
+norm-compression hypotheses.
 
 For each overlapping pair, it is enough to bound the compressed product
 \(‖hᵢ (hⱼ v)‖\) by \((1 - γ) / m\) times \(‖hᵢ v‖\).  The abstract
-projection-geometry lemma converts this principal-angle style norm estimate into the ordered
-cross-term bound consumed by the finite-overlap row-sum reduction. -/
+projection-geometry lemma converts this norm estimate into the ordered cross-term
+bound consumed by the finite-overlap row-sum reduction. -/
 theorem parentHamiltonianES_quadratic_form_of_finite_overlap_norm_bound
     (A : MPSTensor d D) (L N : ℕ) {γ : ℝ} (hγle : γ ≤ 1)
     (overlaps : Fin N → Fin N → Prop) [DecidableRel overlaps] {m : ℕ} (hm : 0 < m)
@@ -441,16 +441,17 @@ theorem parentHamiltonianES_quadratic_form_of_finite_overlap_norm_bound_of_le
       (fun i : Fin N => localTermES_isSymmetricProjection A L i) overlaps hm hCard
       hDisjoint hηle hOverlapNorm v)
 
-/-- Uniform explicit gap-bound reduction from finite-overlap principal-angle
+/-- Uniform explicit gap-bound reduction from finite-overlap ordered cross-term
 hypotheses.
 
 For parent-Hamiltonian windows of length \(L\), the expected finite-range bound is
 \(m = 2 * (L - 1)\): each local term overlaps at most that many other cyclic
 translates when \(N ≥ 2L\).  This theorem leaves the Euclidean-space local projection
 structure, the cyclic-window overlap predicate, non-overlap positivity, and the
-principal-angle estimate as explicit hypotheses. It only performs the finite-overlap
-row-sum reduction and the existing quadratic-form-to-gap conversion. -/
-theorem parentHamiltonianES_gap_bound_of_finite_overlap_friedrichs
+ordered cross-term estimate as explicit hypotheses. It only performs the
+finite-overlap row-sum reduction and the existing quadratic-form-to-gap
+conversion. -/
+theorem parentHamiltonianES_gap_bound_of_finite_overlap_ordered_cross_term
     (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
     (overlaps : ∀ N : ℕ, Fin N → Fin N → Prop)
     [∀ N : ℕ, DecidableRel (overlaps N)]
@@ -462,7 +463,7 @@ theorem parentHamiltonianES_gap_bound_of_finite_overlap_friedrichs
       j ∈ Finset.univ.erase i → ¬ overlaps N i j →
         ∀ v : EuclideanSpace ℂ (Cfg d N),
           0 ≤ (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re)
-    (hFriedrichs : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
+    (hCrossTerm : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
       j ∈ Finset.univ.erase i → overlaps N i j →
         ∀ v : EuclideanSpace ℂ (Cfg d N),
           - (1 - ((1 : ℝ) / (4 * (L : ℝ)))) *
@@ -487,9 +488,9 @@ theorem parentHamiltonianES_gap_bound_of_finite_overlap_friedrichs
     nlinarith [hLge_one]
   have hm : 0 < 2 * (L - 1) :=
     Nat.mul_pos (by decide) (Nat.sub_pos_of_lt hL)
-  exact parentHamiltonianES_quadratic_form_of_finite_overlap_friedrichs
+  exact parentHamiltonianES_quadratic_form_of_finite_overlap_ordered_cross_term
     A L N hγle (overlaps N) hm (hProj N hLN) (hCard N hLN)
-    (hDisjoint N hLN) (hFriedrichs N hLN) v
+    (hDisjoint N hLN) (hCrossTerm N hLN) v
 
 /-- Uniform explicit gap-bound reduction using the concrete cyclic-window overlap
 predicate.
@@ -500,11 +501,11 @@ to the martingale method.  The row-cardinality estimate is supplied by
 `cyclicWindowsOverlap_card_le`, local projection structure is supplied by
 `localTermES_isSymmetricProjection`, and non-overlap positivity is supplied by
 `localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap`.  Consequently the
-only remaining local hypothesis is the principal-angle estimate for pairs
+only remaining local hypothesis is the ordered cross-term estimate for pairs
 marked by `cyclicWindowsOverlap`. -/
-theorem parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs
+theorem parentHamiltonianES_gap_bound_of_cyclic_window_ordered_cross_term
     (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
-    (hFriedrichs : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
+    (hCrossTerm : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
       j ∈ Finset.univ.erase i → cyclicWindowsOverlap N L i j →
         ∀ v : EuclideanSpace ℂ (Cfg d N),
           - (1 - ((1 : ℝ) / (4 * (L : ℝ)))) *
@@ -517,13 +518,13 @@ theorem parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs
       v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
         ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤
           ‖parentHamiltonianES A L N v‖ := by
-  exact parentHamiltonianES_gap_bound_of_finite_overlap_friedrichs A L hL
+  exact parentHamiltonianES_gap_bound_of_finite_overlap_ordered_cross_term A L hL
     (fun N => cyclicWindowsOverlap N L)
     (fun N _hLN i => localTermES_isSymmetricProjection A L i)
     (fun N hLN i => cyclicWindowsOverlap_card_le hLN hL i)
     (fun N hLN i j _hij hnot v =>
       localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap A (by omega) hnot v)
-    hFriedrichs
+    hCrossTerm
 
 /-- Uniform explicit gap-bound reduction from an ordered overlapping-window
 cross-term estimate.
@@ -532,9 +533,9 @@ The concrete cyclic-window row-cardinality bound, local symmetric-projection
 structure, and non-overlap positivity are already proved.  Consequently it is
 enough to assume the displayed ordered lower bound only for pairs whose cyclic
 supports overlap. -/
-theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_friedrichs
+theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_ordered_cross_term
     (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
-    (hFriedrichs : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
+    (hCrossTerm : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
       j ∈ Finset.univ.erase i → cyclicWindowsOverlap N L i j →
         ∀ v : EuclideanSpace ℂ (Cfg d N),
           - (1 - ((1 : ℝ) / (4 * (L : ℝ)))) *
@@ -547,7 +548,7 @@ theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_friedrichs
       v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
         ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤
           ‖parentHamiltonianES A L N v‖ := by
-  exact parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs A L hL hFriedrichs
+  exact parentHamiltonianES_gap_bound_of_cyclic_window_ordered_cross_term A L hL hCrossTerm
 
 /-- Uniform explicit gap-bound reduction from the cyclic-window anticommutator
 martingale estimate.
@@ -626,7 +627,7 @@ theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound
       v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
         ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤
           ‖parentHamiltonianES A L N v‖ := by
-  refine parentHamiltonianES_gap_bound_of_cyclic_window_overlap_friedrichs A L hL ?_
+  refine parentHamiltonianES_gap_bound_of_cyclic_window_overlap_ordered_cross_term A L hL ?_
   intro N hLN i j hij hoverlap v
   have hCross :
       -((1 - ((1 : ℝ) / (4 * (L : ℝ)))) *
