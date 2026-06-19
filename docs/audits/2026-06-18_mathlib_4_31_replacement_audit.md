@@ -157,6 +157,10 @@ The clearest replacements are:
 - Two standard-basis spanning arguments now use Mathlib's
   `Submodule.eq_top_iff_forall_basis_mem` directly, avoiding local detours
   through `Matrix.stdBasis.span_eq` and `Submodule.span_le`.
+- The rank-one bi-rectangular spans now use the composed two-sided
+  multiplication map in their definitions.  The pass-through lemmas
+  `biRectSpan_eq_map_comp` and `cumulativeBiRectSpan_eq_map_comp`, which only
+  specialized `Submodule.map_comp`, were removed.
 
 There are also important non-replacements.
 
