@@ -752,6 +752,20 @@ In this case, no deprecation attribute is required for X, but it is for W.
 
 Named instances do not require deprecations. Deprecated declarations can be deleted after 6 months.
 
+TNLean also permits a narrow repository-local exception for exact pass-through
+declarations with no independent mathematical content.  A public theorem,
+definition, or abbreviation may be removed without a transition declaration
+only when all of the following hold:
+
+- the old declaration merely forwards to an existing theorem or definition,
+  exposes a field of a bundled structure, or names a proof step now written
+  directly at the use site;
+- all non-Archive uses in TNLean have been migrated or were already absent, and
+  no blueprint `\lean{...}` tag cites the old name;
+- the PR body and an audit note name the removed declarations, give the
+  replacement for each one, and state that this repository-local exception is
+  being used.
+
 ### Avoid `nonrec`
 
 The `nonrec` keyword tells Lean to assume that apparently recursive calls in the declaration body
