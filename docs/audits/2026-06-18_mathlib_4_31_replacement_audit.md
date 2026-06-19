@@ -1906,6 +1906,31 @@ lake build TNLean.QPF.PosDef \
   TNLean.MPS.Irreducible.FixedPointProjection -q --log-level=info
 ```
 
+## Linear-map eigenvector helper removal, 2026-06-19
+
+Additional scouting checked Mathlib 4.31's `Module.End.HasEigenvector` and
+`Module.End.HasEigenvalue` API.  Mathlib has useful general eigenvector
+infrastructure, but no exact replacement for the local helper saying that a
+linear endomorphism with a nonzero eigenvector and nonzero eigenvalue is
+itself nonzero.
+
+This cleanup removes two repository-local public declarations without
+deprecated aliases, using the repository-local deprecation exception:
+
+- `LinearMap.ne_zero_of_eigenvector`
+- `LinearMap.ne_zero_of_pos_eigenvector`
+
+The replacement for `LinearMap.ne_zero_of_eigenvector` is the direct argument:
+assume the linear map is zero, rewrite the displayed eigenvector equation to a
+zero scalar multiple, and apply `eq_zero_or_eq_zero_of_smul_eq_zero` together
+with the nonzero eigenvalue and nonzero eigenvector hypotheses.
+
+The replacement for `LinearMap.ne_zero_of_pos_eigenvector` is the same direct
+argument at the two irreducible-channel Perron-Frobenius use sites, with the
+positive real eigenvalue cast to a nonzero complex scalar.  The local
+`TNLean.Algebra.LinearMapAux` file contained only these declarations, and its
+imports were removed.
+
 ## Conclusions
 
 Mathlib 4.31 materially improves the background library for TNLean, especially
