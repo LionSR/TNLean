@@ -181,16 +181,6 @@ section PosSemidefiniteClosure
 
 variable {m : Type*}
 
-/-- The nonnegative cone of `ℂ` is closed. -/
-private lemma isClosed_complex_nonneg_generic :
-    IsClosed {z : ℂ | 0 ≤ z} := by
-  have : {z : ℂ | 0 ≤ z} = {z | 0 ≤ z.re ∧ z.im = 0} := by
-    ext z
-    simp [Complex.nonneg_iff, eq_comm]
-  rw [this]
-  exact (isClosed_le continuous_const Complex.continuous_re).inter
-    (isClosed_eq Complex.continuous_im continuous_const)
-
 /-- The quadratic form `X ↦ star v ⬝ᵥ X.mulVec v` is continuous. -/
 private lemma continuous_quadraticForm_generic [Fintype m] (v : m → ℂ) :
     Continuous (fun X : Matrix m m ℂ => star v ⬝ᵥ X.mulVec v) :=
@@ -211,8 +201,7 @@ theorem matrix_isClosed_posSemidef [Finite m] :
   rw [this]
   exact (isClosed_eq continuous_star continuous_id).inter
     (isClosed_iInter fun v =>
-      isClosed_complex_nonneg_generic.preimage
-        (continuous_quadraticForm_generic v))
+      (isClosed_le continuous_const continuous_id).preimage (continuous_quadraticForm_generic v))
 
 end PosSemidefiniteClosure
 

@@ -141,16 +141,6 @@ def densityMatrices (D : ℕ) : Set (Matrix (Fin D) (Fin D) ℂ) :=
 @[simp] lemma mem_densityMatrices {ρ : Matrix (Fin D) (Fin D) ℂ} :
     ρ ∈ densityMatrices D ↔ ρ.PosSemidef ∧ trace ρ = 1 := Iff.rfl
 
-/-! ### Auxiliary lemmas for closedness -/
-
-/-- The set of nonneg complex numbers (those with `0 ≤ z` in `ComplexOrder`) is closed. -/
-private lemma isClosed_complex_nonneg : IsClosed {z : ℂ | 0 ≤ z} := by
-  have : {z : ℂ | 0 ≤ z} = {z | 0 ≤ z.re ∧ z.im = 0} := by
-    ext z; simp [Complex.nonneg_iff, eq_comm]
-  rw [this]
-  exact (isClosed_le continuous_const Complex.continuous_re).inter
-    (isClosed_eq Complex.continuous_im continuous_const)
-
 /-- The quadratic form `X ↦ star v ⬝ᵥ X.mulVec v` is continuous. -/
 private lemma continuous_quadraticForm (v : Fin D → ℂ) :
     Continuous (fun X : Matrix (Fin D) (Fin D) ℂ => star v ⬝ᵥ X.mulVec v) :=
@@ -158,16 +148,13 @@ private lemma continuous_quadraticForm (v : Fin D → ℂ) :
 
 /-! ### Auxiliary lemmas for boundedness -/
 
-/-- For a nonneg complex number `z` (in `ComplexOrder`), `‖z‖ = z.re`. -/
-private lemma norm_of_complex_nonneg {z : ℂ} (hz : 0 ≤ z) : ‖z‖ = z.re := by
-  obtain ⟨h_re, h_im⟩ := Complex.nonneg_iff.mp hz
-  rw [Complex.norm_eq_sqrt_sq_add_sq, h_im.symm, zero_pow (by norm_num : 2 ≠ 0),
-    add_zero, Real.sqrt_sq h_re]
-
 /-- For PSD `X`, each diagonal entry norm is bounded by the trace norm. -/
 private lemma posSemidef_diag_norm_le_trace_norm {X : Matrix (Fin D) (Fin D) ℂ}
     (hX : X.PosSemidef) (i : Fin D) : ‖X i i‖ ≤ ‖trace X‖ := by
-  rw [norm_of_complex_nonneg hX.diag_nonneg, norm_of_complex_nonneg hX.trace_nonneg,
+  rw [show ‖X i i‖ = (X i i).re from by
+      simpa using congrArg Complex.re (Complex.norm_of_nonneg' hX.diag_nonneg),
+    show ‖trace X‖ = (trace X).re from by
+      simpa using congrArg Complex.re (Complex.norm_of_nonneg' hX.trace_nonneg),
     show (trace X).re = ∑ j : Fin D, (X j j).re from by simp [Matrix.trace, Matrix.diag]]
   exact single_le_sum (fun j _ => (Complex.nonneg_iff.mp (hX.diag_nonneg (i := j))).1)
     (mem_univ i)
@@ -214,7 +201,8 @@ private lemma posSemidef_entry_norm_le_trace_norm {X : Matrix (Fin D) (Fin D) �
   set v := WithLp.toLp (p := 2) (fun k : Fin D => B k j)
   have sq_le_trace : ∀ k, ‖WithLp.toLp (p := 2) (fun l : Fin D => B l k)‖ ^ 2
       ≤ ‖trace (Bᴴ * B)‖ := fun k => by
-    rw [col_norm_sq_eq_diag, ← norm_of_complex_nonneg hX'.diag_nonneg]
+    rw [col_norm_sq_eq_diag, ← show ‖(Bᴴ * B) k k‖ = ((Bᴴ * B) k k).re from by
+      simpa using congrArg Complex.re (Complex.norm_of_nonneg' hX'.diag_nonneg)]
     exact posSemidef_diag_norm_le_trace_norm hX' k
   calc ‖inner (𝕜 := ℂ) u v‖
       ≤ ‖u‖ * ‖v‖ := norm_inner_le_norm ..
@@ -261,7 +249,8 @@ theorem isClosed_posSemidef :
       Matrix.posSemidef_iff_dotProduct_mulVec]
   rw [this]
   exact (isClosed_eq continuous_star continuous_id).inter
-    (isClosed_iInter fun v => isClosed_complex_nonneg.preimage (continuous_quadraticForm v))
+    (isClosed_iInter fun v =>
+      (isClosed_le continuous_const continuous_id).preimage (continuous_quadraticForm v))
 
 /-- The set of density matrices is compact (Heine-Borel).
 

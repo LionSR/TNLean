@@ -27,7 +27,6 @@ All results are fully proved (no `sorry`).
 
 ### Commuting idempotent algebra (`LinearMap` namespace)
 
-* `comp_idem_of_comm_idem` — product of commuting idempotents is idempotent
 * `idem_comp_left_absorb` — `P ∘ (P ∘ Q) = P ∘ Q`
 * `idem_comp_right_absorb` — `(P ∘ Q) ∘ Q = P ∘ Q`
 * `comm_idem_cross_absorb_left` — `(P ∘ Q) ∘ P = P ∘ Q` when `[P, Q] = 0`
@@ -71,15 +70,6 @@ section CommutingIdempotentAlgebra
 variable {E : Type*} [AddCommGroup E] [Module ℂ E]
 
 namespace LinearMap
-
-/-- Product of commuting idempotent endomorphisms is idempotent.
-This wraps Mathlib's `IsIdempotentElem.mul_of_commute`. -/
-theorem comp_idem_of_comm_idem
-    {P Q : E →ₗ[ℂ] E}
-    (hP : P ∘ₗ P = P) (hQ : Q ∘ₗ Q = Q)
-    (hcomm : P ∘ₗ Q = Q ∘ₗ P) :
-    (P ∘ₗ Q) ∘ₗ (P ∘ₗ Q) = P ∘ₗ Q :=
-  IsIdempotentElem.mul_of_commute hcomm hP hQ
 
 /-- Left absorption: `P ∘ (P ∘ Q) = P ∘ Q` when `P` is idempotent. -/
 theorem idem_comp_left_absorb
@@ -165,9 +155,9 @@ namespace Decorrelation
 theorem HasCommutingParentHam.pK_idem {P_K : E →ₗ[ℂ] E}
     (h : HasCommutingParentHam P_K) :
     P_K ∘ₗ P_K = P_K := by
-  simpa [h.hK] using
-    (LinearMap.comp_idem_of_comm_idem (P := h.P_AX) (Q := h.P_XB)
-      h.hAX_idem h.hXB_idem h.hcomm)
+  change IsIdempotentElem P_K
+  simpa [h.hK, Module.End.mul_eq_comp] using
+    (IsIdempotentElem.mul_of_commute h.hcomm h.hAX_idem h.hXB_idem)
 
 /-- `P_AX ∘ P_K = P_K`: the AX-projector absorbs `P_K` from the left. -/
 theorem HasCommutingParentHam.pAX_comp_pK {P_K : E →ₗ[ℂ] E}

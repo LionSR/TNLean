@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.Algebra.ProjectionTriangularTrace
 import TNLean.MPS.FundamentalTheorem.Multi
 
+import Mathlib.Algebra.GroupWithZero.Idempotent
 import Mathlib.Analysis.Matrix.Spectrum
 import Mathlib.Data.Fintype.EquivFin
 import Mathlib.Data.Fintype.Sum
@@ -74,19 +75,6 @@ noncomputable def twoBlockTensor (A₁ : MPSTensor d n) (A₂ : MPSTensor d m) :
     (μ := fun _ => (1 : ℂ)) (A := twoBlockBlocks (d := d) (n := n) (m := m) A₁ A₂)
 
 end TwoBlock
-
-/-! ## Small auxiliary lemmas -/
-
-/-- If `z : ℂ` satisfies `z * z = z`, then `z = 0` or `z = 1`. -/
-lemma mul_self_eq_self_or_eq_one (z : ℂ) (hz : z * z = z) : z = 0 ∨ z = 1 := by
-  have hz' : z * (z - 1) = 0 := by
-    calc
-      z * (z - 1) = z * z - z := by ring
-      _ = 0 := by simpa using sub_eq_zero.mpr hz
-  rcases mul_eq_zero.mp hz' with h0 | h1
-  · exact Or.inl h0
-  · right
-    exact sub_eq_zero.mp h1
 
 /-! ## Block-diagonal evaluation / trace lemmas -/
 
