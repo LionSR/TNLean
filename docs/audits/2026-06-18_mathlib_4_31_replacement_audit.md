@@ -96,6 +96,9 @@ The clearest replacements are:
 - Further Lean 4.31 elaboration checks removed local heartbeat bounds from the
   POVM unitary-comparison proof, the irreducible-channel spectral-radius scalar
   proof, and the semigroup perturbation derivative proof.
+- The periodic-MPS equivalence bundles now cite the chain-level relation laws
+  directly.  Six local theorem declarations that only restated reflexivity,
+  symmetry, and transitivity for the periodic abbreviations were removed.
 
 There are also important non-replacements.
 
@@ -1308,6 +1311,32 @@ Focused check:
 lake build TNLean.Algebra.ProjectionTriangularTrace -q --log-level=info
 ```
 
+### Periodic relation-law pass-through removal, 2026-06-19
+
+`PeriodicMPSTensor.SameState` and `PeriodicMPSTensor.GaugeEquiv` are
+abbreviations for the corresponding `MPSChainTensor` relations.  The periodic
+reflexivity, symmetry, and transitivity theorems therefore added no new
+periodic-MPS content.  The equivalence bundles now cite the chain-level
+relation laws directly, while retaining the blueprint-facing bundle names:
+
+- `MPSTensor.PeriodicMPSTensor.instEquivalenceSameState`
+- `MPSTensor.PeriodicMPSTensor.instEquivalenceGaugeEquiv`
+
+Removed declarations:
+
+- `MPSTensor.PeriodicMPSTensor.SameState.refl`
+- `MPSTensor.PeriodicMPSTensor.SameState.symm`
+- `MPSTensor.PeriodicMPSTensor.SameState.trans`
+- `MPSTensor.PeriodicMPSTensor.GaugeEquiv.refl`
+- `MPSTensor.PeriodicMPSTensor.GaugeEquiv.symm`
+- `MPSTensor.PeriodicMPSTensor.GaugeEquiv.trans`
+
+Focused check:
+
+```bash
+lake build TNLean.MPS.Periodic.Defs -q --log-level=info
+```
+
 ### Trace-pairing extensionality, 2026-06-19
 
 Mathlib 4.31 has equality-form trace-pairing extensionality lemmas:
@@ -1380,6 +1409,13 @@ pass-throughs:
   `orthogonalProjection_mul_complement`.  These were the matrix-projection
   specializations of `IsIdempotentElem.one_sub_mul_self` and
   `IsIdempotentElem.mul_one_sub_self`.
+- `MPSTensor.PeriodicMPSTensor.SameState.refl`,
+  `MPSTensor.PeriodicMPSTensor.SameState.symm`,
+  `MPSTensor.PeriodicMPSTensor.SameState.trans`,
+  `MPSTensor.PeriodicMPSTensor.GaugeEquiv.refl`,
+  `MPSTensor.PeriodicMPSTensor.GaugeEquiv.symm`, and
+  `MPSTensor.PeriodicMPSTensor.GaugeEquiv.trans`.  These were exact
+  restatements of the chain-level relation laws for the periodic abbreviations.
 
 ## Verification performed
 
