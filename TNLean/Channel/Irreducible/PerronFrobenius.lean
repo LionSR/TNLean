@@ -180,7 +180,12 @@ theorem eigenvalue_unique_of_irreducible_cp
   let n := hSetup.n
   let K := hSetup.K
   have hE_eq : E = MPSTensor.transferMap (d := n) (D := D) K := hSetup.map_eq
-  have hE_ne : E ≠ 0 := LinearMap.ne_zero_of_pos_eigenvector hρ_ne hr₁ hρ_eig
+  have hE_ne : E ≠ 0 := by
+    intro hE0
+    have hsmul : (r₁ : ℂ) • ρ = 0 := by
+      simpa [hE0] using hρ_eig.symm
+    exact hρ_ne
+      ((eq_zero_or_eq_zero_of_smul_eq_zero hsmul).resolve_left (by exact_mod_cast hr₁.ne'))
   obtain ⟨τ, t, hτ_pd, ht_pos, hτ_eig⟩ :=
     hSetup.exists_posDef_adjoint_eigenvector hE_ne
   have htrace : ∀ X : Matrix (Fin D) (Fin D) ℂ,
