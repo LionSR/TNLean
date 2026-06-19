@@ -208,21 +208,6 @@ Every linear functional `φ : M_D(ℂ) → ℂ` can be represented as
 `φ(N) = tr(M_φ · N)` for a unique matrix `M_φ`.  We prove this concretely
 by exhibiting `M_φ i j = φ(e_{ji})` and checking the trace identity. -/
 
-/-- Decomposition of a matrix as a sum of scalar multiples of standard basis
-matrices. -/
-private theorem matrix_eq_sum_smul_single
-    (M : Matrix (Fin D) (Fin D) ℂ) :
-    M = ∑ i, ∑ j, M i j • Matrix.single i j (1 : ℂ) := by
-  ext a b
-  simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul,
-    Matrix.single_apply, mul_ite, mul_one, mul_zero]
-  conv_rhs =>
-    arg 2; ext i; arg 2; ext j
-    rw [show (if i = a ∧ j = b then M i j else 0) =
-      (if i = a then (if j = b then M i j else 0) else 0)
-      from by split_ifs <;> simp_all]
-  simp [Finset.sum_ite_eq', Finset.mem_univ]
-
 /-- Every linear functional `φ` on `M_D(ℂ)` decomposes as
 `φ(N) = ∑_{i,j} N i j · φ(e_{ij})`. -/
 private theorem linearMap_apply_eq_sum
@@ -230,8 +215,12 @@ private theorem linearMap_apply_eq_sum
     (N : Matrix (Fin D) (Fin D) ℂ) :
     φ N = ∑ i : Fin D, ∑ j : Fin D,
       N i j * φ (Matrix.single i j 1) := by
-  conv_lhs => rw [matrix_eq_sum_smul_single N]
-  simp only [map_sum, LinearMap.map_smul, smul_eq_mul]
+  conv_lhs => rw [Matrix.matrix_eq_sum_single N]
+  simp only [map_sum]
+  refine Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => ?_
+  rw [show Matrix.single i j (N i j) = N i j • Matrix.single i j (1 : ℂ) by
+    rw [Matrix.smul_single, smul_eq_mul, mul_one]]
+  rw [LinearMap.map_smul, smul_eq_mul]
 
 /-- The **trace-pairing representation**: for every linear functional `φ`,
 `φ(N) = tr(M_φ · N)` where `M_φ i j = φ(e_{ji})`. -/
