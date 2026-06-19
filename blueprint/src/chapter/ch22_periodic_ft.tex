@@ -554,6 +554,48 @@ unconditional result.
     $(A_v^i)_{r,c}=(\kappa_v B_v^i)_{r,c}$ for every entry.
 \end{proof}
 
+\begin{theorem}[Product-one sector scalars after choosing a root]
+    \label{thm:periodic_product_one_phase_extraction}
+    \lean{TNLean.Algebra.PiTensorProductPhase.exists_kappa_product_one_of_piTensorProduct_eq_root_smul}
+    \leanok
+    \uses{thm:periodic_product_tensor_phase_extraction}
+    Let $m>0$, let $z\in\C$ be nonzero, and choose $\xi\in\C$ with
+    $\xi^m=z$. For each sector $v=0,\ldots,m-1$, let $\{A_v^i\}_i$ and
+    $\{B_v^i\}_i$ be families of complex matrices with the same rectangular
+    size. Suppose that for every choice of letters $\sigma=(\sigma_v)_v$,
+    \[
+        \bigotimes_{v=0}^{m-1} A_v^{\sigma_v}
+        =
+        z\,\bigotimes_{v=0}^{m-1} B_v^{\sigma_v}.
+    \]
+    Suppose also that each sector has a reference letter $i_v$ and a matrix
+    entry $(r_v,c_v)$ with $(B_v^{i_v})_{r_v,c_v}\ne0$. Then there are scalars
+    $\kappa_v\in\C$ such that
+    \[
+        \prod_{v=0}^{m-1}\kappa_v=1,
+        \qquad
+        A_v^i=\kappa_v\xi\,B_v^i
+    \]
+    for every sector $v$ and every letter $i$.
+
+    This is the normalization in
+    \cite[Appendix~A, lines~1072--1080]{DeLasCuevas2017Irreducible}: after the
+    preceding translation step has made the scalar independent of the sector
+    label, choosing a common $m$-th root of that scalar leaves a product-one
+    family of sector scalars.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply Theorem~\ref{thm:periodic_product_tensor_phase_extraction} to obtain
+    scalars $\mu_v$ with $\prod_v\mu_v=z$ and $A_v^i=\mu_vB_v^i$. Since
+    $m>0$, the identities $\xi^m=z$ and $z\ne0$ imply $\xi\ne0$. Put
+    $\kappa_v=\mu_v/\xi$. Then
+    \[
+        \prod_v\kappa_v=\frac{\prod_v\mu_v}{\xi^m}=\frac{z}{z}=1,
+    \]
+    and $A_v^i=(\kappa_v\xi)B_v^i$.
+\end{proof}
+
 \begin{definition}[Off-diagonal sector decomposition]%
     \label{def:cyclic_sector_decomp}
     \lean{MPSTensor.IsCyclicSectorDecomp, MPSTensor.IsCyclicSectorDecompWith}
@@ -1166,7 +1208,8 @@ unconditional result.
     \label{lem:sector_tensor_proportional_blocked_match}
     \lean{MPSTensor.sectorTensor_proportional_of_blockedMatch}
     \notready
-    \uses{lem:sector_match_propagation, def:cyclic_sector_decomp}
+    \uses{lem:sector_match_propagation, def:cyclic_sector_decomp,
+        thm:periodic_product_one_phase_extraction, lem:finite_cycle_coboundary}
     Let $A$ and $B$ be left-canonical tensors with period $m$, and let
     $\bar A\sim\bigoplus_u A_u$ and $\bar B\sim\bigoplus_v B_v$ be unit-weight
     cyclic sector decompositions whose sectors are left-canonical. Let the

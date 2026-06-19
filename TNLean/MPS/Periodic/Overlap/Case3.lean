@@ -576,9 +576,12 @@ The finite-cycle phase choice in lines 1093--1102 is now isolated as
 `TNLean.Algebra.exists_fin_complex_unit_cyclic_coboundary_of_prod_eq_one`; the
 offset-indexed form needed for the sector match `(u, u + q)` is
 `TNLean.Algebra.exists_fin_complex_unit_cyclic_coboundary_shift_of_prod_eq_one`.
+The product-one scalar extraction in lines 1072--1080 is isolated as
+`PiTensorProductPhase.exists_kappa_product_one_of_piTensorProduct_eq_root_smul`.
 Thus the remaining mathematical input is the `m`-factor cyclic contraction
-that produces the sector phases κ_v with `∏ v, κ_v = 1` and `‖κ_v‖ = 1`,
-after which the phase-coboundary lemma performs the κ/θ/φ telescoping. See
+that produces the uniform product-tensor identity and the unit-modulus
+normalization of the resulting sector phases; after that, the algebraic scalar
+extraction and the phase-coboundary lemma perform the κ/θ/φ telescoping. See
 docs/paper-gaps/1708_periodic_overlap_route_alignment.tex. -/
 private lemma repeatedBlocks_of_blockedSectorGaugePhase
     [NeZero D] (A B : MPSTensor d D)
@@ -628,7 +631,9 @@ private lemma repeatedBlocks_of_blockedSectorGaugePhase
       blocksA hA_blocks_lc hNondeg hNormal
   -- Remaining obligation (arXiv:1708.00029 lines 1023--1117): an `m`-factor cyclic
   -- contraction theorem built from the common `L` and the sum-form right inverses
-  -- `Ω u` satisfying `hΩ`; after producing product-one unit phases κ_v, it uses
+  -- `Ω u` satisfying `hΩ`; after producing the uniform product-tensor identity,
+  -- it applies `PiTensorProductPhase.exists_kappa_product_one_of_piTensorProduct_eq_root_smul`
+  -- and the unit-modulus argument from left-canonical normalization, then uses
   -- `TNLean.Algebra.exists_fin_complex_unit_cyclic_coboundary_shift_of_prod_eq_one`
   -- for the offset-indexed κ/θ/φ telescoping (lines 1093--1102). This upgrades the
   -- per-sector blocked gauge-phase equivalences in `hBlockMatch` to one global
@@ -639,6 +644,11 @@ private lemma repeatedBlocks_of_blockedSectorGaugePhase
 1073--1076):
 After injectivity contraction, the sector-restricted tensors satisfy
 A_u^i = κ_v · e^{iη/m} · B_v^i with ∏ κ_v = 1 and |κ_v| = 1.
+The product-one scalar extraction from the uniform product identity is supplied
+by
+`PiTensorProductPhase.exists_kappa_product_one_of_piTensorProduct_eq_root_smul`,
+which formalizes arXiv:1708.00029, Appendix A lines 1072--1080 after a common
+root \(e^{i\eta/m}\) has been chosen.
 
 The offset `q` accounts for the cyclic shift between sector labelings of
 `A` and `B`: propagation from a match at `(u₀, v₀)` yields pairs

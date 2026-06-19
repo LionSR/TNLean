@@ -130,6 +130,62 @@ theorem exists_kappa_of_piTensorProduct_eq_smul
     _ = ((κ v • B v i) a b) * P := by
       simp [Matrix.smul_apply]
 
+/-- arXiv:1708.00029, Appendix A, lines 1072--1080: after the preceding
+translation step has made the scalar \(z\) independent of the sector label,
+choosing a common root \(\xi\) with \(\xi^m=z\) normalizes the sector scalars
+to have product one.
+
+This is the product-one form used to pass from a uniform product-tensor
+proportionality to sector scalars satisfying \(\prod_v \kappa_v=1\) and
+\(A_v^i=(\kappa_v\xi)B_v^i\).
+
+**Scope restriction (arXiv:1708.00029, Appendix A, lines 1068--1080):** this
+theorem starts from the uniform product-tensor identity, as in
+`exists_kappa_of_piTensorProduct_eq_smul`; the contraction producing that
+identity from the \(F_u,\Omega_u\) maps is recorded separately in
+`docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`. -/
+theorem exists_kappa_product_one_of_piTensorProduct_eq_root_smul
+    {d m : ℕ} [NeZero m]
+    {row col : Fin m → Type*}
+    (A B : (v : Fin m) → Fin d → Matrix (row v) (col v) ℂ)
+    (z ξ : ℂ) (hz : z ≠ 0) (hξ_pow : ξ ^ m = z)
+    (ref : Fin m → Fin d) (r : (v : Fin m) → row v) (c : (v : Fin m) → col v)
+    (hB_ref : ∀ v : Fin m, B v (ref v) (r v) (c v) ≠ 0)
+    (hresult :
+      ∀ σ : Fin m → Fin d,
+        (⨂ₜ[ℂ] v : Fin m, A v (σ v)) =
+          z • (⨂ₜ[ℂ] v : Fin m, B v (σ v))) :
+    ∃ κ : Fin m → ℂ,
+      (∏ v : Fin m, κ v = 1) ∧
+      ∀ (v : Fin m) (i : Fin d), A v i = (κ v * ξ) • B v i := by
+  classical
+  obtain ⟨κ₀, hκ₀_prod, hκ₀⟩ :=
+    exists_kappa_of_piTensorProduct_eq_smul
+      A B z hz ref r c hB_ref hresult
+  have hξ_ne : ξ ≠ 0 := by
+    intro hξ_zero
+    have hpow_zero : ξ ^ m = 0 := by
+      rw [hξ_zero]
+      exact zero_pow (NeZero.ne m)
+    exact hz (by rw [← hξ_pow, hpow_zero])
+  let κ : Fin m → ℂ := fun v => κ₀ v / ξ
+  refine ⟨κ, ?_, ?_⟩
+  · calc
+      ∏ v : Fin m, κ v =
+          (∏ v : Fin m, κ₀ v) / (∏ _v : Fin m, ξ) := by
+        simp [κ, Finset.prod_div_distrib]
+      _ = z / ξ ^ m := by
+        simp [hκ₀_prod]
+      _ = 1 := by
+        rw [hξ_pow, div_self hz]
+  · intro v i
+    calc
+      A v i = κ₀ v • B v i := hκ₀ v i
+      _ = (κ v * ξ) • B v i := by
+        have hκ_mul : κ v * ξ = κ₀ v := by
+          simp [κ, hξ_ne]
+        rw [hκ_mul]
+
 end PiTensorProductPhase
 
 end TNLean.Algebra
