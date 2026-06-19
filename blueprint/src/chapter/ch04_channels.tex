@@ -171,6 +171,38 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     $P = P^\dagger$ and $P^2 = P$.
 \end{definition}
 
+\begin{theorem}[Orthogonal projections and involutive-algebra projections]
+    \label{thm:orthogonal_projection_star_projection_channel}
+    \lean{IsOrthogonalProjection.isStarProjection}
+    \lean{IsStarProjection.isOrthogonalProjection}
+    \leanok
+    \uses{def:orthogonal_projection_channel}
+    For a complex square matrix, the two descriptions
+    $P = P^\dagger$, $P^2=P$ and $P^* = P$, $P^2=P$ are equivalent.
+\end{theorem}
+
+\begin{proof}\leanok
+    The involution on complex matrices is conjugate transpose, so the two
+    formulations have the same self-adjointness equation and the same
+    idempotence equation.
+\end{proof}
+
+\begin{theorem}[Complement of an orthogonal projection]
+    \label{thm:orthogonal_projection_complement_channel}
+    \lean{IsOrthogonalProjection.one_sub}
+    \leanok
+    \uses{def:orthogonal_projection_channel,
+        thm:orthogonal_projection_star_projection_channel}
+    If $P \in \MN{D}$ is an orthogonal projection, then $\Id-P$ is an
+    orthogonal projection.
+\end{theorem}
+
+\begin{proof}\leanok
+    Reinterpret $P$ as a self-adjoint idempotent in the involutive algebra
+    $\MN{D}$. Its complement $\Id-P$ is again a self-adjoint idempotent, hence
+    an orthogonal projection.
+\end{proof}
+
 \begin{definition}[Irreducible map]\label{def:irreducible_cp}
     \lean{IsIrreducibleMap}
     \leanok
