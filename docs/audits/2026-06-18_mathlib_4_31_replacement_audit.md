@@ -108,6 +108,9 @@ The clearest replacements are:
   removed; the two transfer estimates now unfold `frobSq` and use `sq_nonneg`.
 - Two RFP/ZCL wrappers were removed: an unused MPDO implication method that
   repeated `MPOTensor.isRFP_iff_isZCL`, and a one-use cluster-example RFP fact.
+- The elementary orthogonal-projection witnesses for `0`, `1`, and positivity
+  now pass through Mathlib's `IsStarProjection.zero`, `IsStarProjection.one`,
+  `IsStarProjection.nonneg`, and `Matrix.nonneg_iff_posSemidef`.
 
 There are also important non-replacements.
 
@@ -749,6 +752,10 @@ Applied projection follow-up:
   predicate `IsOrthogonalProjection` with Mathlib's `IsStarProjection`.
   The complement theorem `IsOrthogonalProjection.one_sub` is proved through
   Mathlib's `IsStarProjection.one_sub`.
+- The elementary witnesses that `0` and `1` are orthogonal projections now use
+  Mathlib's corresponding star-projection constructors, and the proof that an
+  orthogonal projection is positive semidefinite now uses
+  `IsStarProjection.nonneg` followed by `Matrix.nonneg_iff_posSemidef`.
 - Duplicate complement-projection proofs were removed from
   `TNLean/MPS/Irreducible/Adjoint.lean`,
   `TNLean/Channel/Irreducible/FromSpectral.lean`, and
