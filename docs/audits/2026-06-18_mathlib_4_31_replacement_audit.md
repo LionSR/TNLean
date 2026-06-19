@@ -717,6 +717,18 @@ Applied martingale follow-up:
   `LinearMap.IsPositive.smul_of_nonneg` directly, with the scalar nonnegativity
   discharged by `positivity` under `ComplexOrder`.
 
+Applied projection follow-up:
+
+- `TNLean/Channel/Irreducible/Basic.lean` now bridges the local matrix
+  predicate `IsOrthogonalProjection` with Mathlib's `IsStarProjection`.
+  The complement theorem `IsOrthogonalProjection.one_sub` is proved through
+  Mathlib's `IsStarProjection.one_sub`.
+- Duplicate complement-projection proofs were removed from
+  `TNLean/MPS/Irreducible/Adjoint.lean`,
+  `TNLean/Channel/Irreducible/FromSpectral.lean`, and
+  `TNLean/Channel/Semigroup/ReducibleQDS/Defs.lean`; downstream uses now call
+  the single foundational lemma.
+
 ## File-by-file replacement map
 
 ### `TNLean/Algebra/GramMatrixLI.lean`
@@ -1083,6 +1095,9 @@ lake build TNLean.Analysis.OperatorConvexity TNLean.Axioms.OperatorConvexity \
   TNLean.Channel.Schwarz.OperatorConvexity TNLean.Channel.Schwarz.OperatorMonotone \
   -q --log-level=info
 lake build TNLean.Channel.WolfProps -q --log-level=info
+lake build TNLean.Channel.Irreducible.Basic TNLean.MPS.Irreducible.Adjoint \
+  TNLean.Channel.Irreducible.FromSpectral TNLean.Channel.Semigroup.ReducibleQDS.Defs \
+  TNLean.MPS.Periodic.SectorIrreducibility.HLiftCore -q --log-level=info
 lake env lean TNLean/Algebra/MatrixAux.lean --json
 lake env lean TNLean/Spectral/GaugeConstruction.lean --json
 lake env lean TNLean/Spectral/TransferOperatorGapNT.lean --json

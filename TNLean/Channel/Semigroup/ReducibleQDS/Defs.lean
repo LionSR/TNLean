@@ -51,16 +51,6 @@ Such projectors correspond to proper non-zero subspaces of `ℂ^D`. -/
 def IsNontrivialProjection (P : Mat) : Prop :=
   IsOrthogonalProjection P ∧ P ≠ 0 ∧ P ≠ 1
 
-/-- The complement `1 - P` of an orthogonal projection is an orthogonal projection. -/
-theorem IsOrthogonalProjection.one_sub {P : Mat}
-    (hP : IsOrthogonalProjection P) :
-    IsOrthogonalProjection (1 - P) := by
-  refine ⟨Matrix.isHermitian_one.sub hP.1, ?_⟩
-  have hP2 := hP.2 -- P * P = P
-  have : (1 - P) * (1 - P) = 1 - P - P + P * P := by noncomm_ring
-  rw [this, hP2]
-  noncomm_ring
-
 /-! ## The four conditions of Wolf Proposition 7.6 -/
 
 /-- **Condition (1)**: There exists a density matrix with nontrivial kernel
