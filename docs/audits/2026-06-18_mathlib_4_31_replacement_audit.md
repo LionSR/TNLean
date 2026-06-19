@@ -133,6 +133,13 @@ There are also important non-replacements.
   `BlockTriangular.pow`; the local `evalWord` inductions remain necessary
   unless the word-product arguments are reorganized through a submonoid or
   subsemiring construction.
+- The `SO(3)` Euler-angle factorization in
+  `TNLean/MPS/Examples/AKLTRotation.lean` remains local.  Mathlib 4.31 provides
+  the special-orthogonal group interface, a two-dimensional membership
+  characterization, and the `Complex.arg` trigonometric identities used by the
+  local proof, but it does not provide a direct `SO(3)` Euler decomposition.
+  Removing the theorem-level `maxHeartbeats` bound from `so3_euler_decomp`
+  still times out at the default budget.
 
 ## Mathlib 4.31 material found
 
@@ -1154,6 +1161,19 @@ In `TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorData`, the common
 positive-blocking-length cyclic-sector theorem now elaborates under the default
 Lean 4.31 heartbeat budget.  The local theorem-level `maxHeartbeats` override
 and its comment were removed.
+
+In `TNLean.Channel.Schwarz.PositiveOnAbelian.Characterization`, the two
+simultaneous-diagonalization results no longer need theorem-level heartbeat
+bounds.  Lean 4.31 elaborates both
+`blockForm_nonneg_of_scalarPSD_of_commuting` and
+`quadraticForm_nonneg_of_isPositiveMap_of_commuting_images` under the default
+budget.
+
+Focused check:
+
+```bash
+lake build TNLean.Channel.Schwarz.PositiveOnAbelian.Characterization -q --log-level=info
+```
 
 The determinant-one unitary-channel theorem no longer has the duplicate
 `channelDet_norm_eq_one_iff_exists_unitaryChannel_of_channel` restatement.  The
