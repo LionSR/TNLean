@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import Mathlib.Data.Matrix.Basic
 import Mathlib.LinearAlgebra.Matrix.PosDef
+import Mathlib.Analysis.Matrix.Normed
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.CStarAlgebra.Matrix
@@ -16,10 +17,59 @@ Extracted from various files for reusability.
 
 ## Main results
 
+- `Matrix.trace_conjTranspose_mul_self_re_eq_sum_norm_sq`: entrywise Hilbert--Schmidt
+  trace identity
+- `Matrix.trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq`: the Hilbert--Schmidt
+  trace form of the Frobenius norm
 - `Matrix.PosSemidef.mulVec_eq_zero_left/right`: kernel containment for PSD matrix sums
 -/
 
-open scoped Matrix BigOperators ComplexOrder
+open scoped Matrix BigOperators ComplexOrder Matrix.Norms.Frobenius
+
+namespace Matrix
+
+section FrobeniusTrace
+
+variable {m n : Type*} [Fintype m] [Fintype n]
+
+/-- Entrywise form of the Hilbert--Schmidt trace identity. -/
+theorem trace_conjTranspose_mul_self_re_eq_sum_norm_sq
+    (A : Matrix m n ℂ) :
+    (trace (Aᴴ * A)).re = ∑ j : n, ∑ i : m, ‖A i j‖ ^ 2 := by
+  have hstar_mul_re : ∀ z : ℂ, (star z * z).re = ‖z‖ ^ 2 := by
+    intro z
+    rw [show star z = starRingEnd ℂ z from rfl, Complex.conj_mul',
+      ← Complex.ofReal_pow]
+    exact Complex.ofReal_re _
+  simp only [trace, diag, mul_apply, conjTranspose_apply, Complex.re_sum]
+  refine Finset.sum_congr rfl ?_
+  intro j _
+  refine Finset.sum_congr rfl ?_
+  intro i _
+  simpa only [RCLike.star_def, Complex.mul_re, Complex.conj_re, Complex.conj_im,
+    neg_mul, sub_neg_eq_add] using hstar_mul_re (A i j)
+
+/-- The real trace of `Aᴴ * A` is the square of the Frobenius norm. -/
+theorem trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq
+    (A : Matrix m n ℂ) :
+    (trace (Aᴴ * A)).re = ‖A‖ ^ 2 := by
+  rw [trace_conjTranspose_mul_self_re_eq_sum_norm_sq]
+  rw [Matrix.frobenius_norm_def, ← Real.sqrt_eq_rpow, Real.sq_sqrt]
+  · calc
+      ∑ j : n, ∑ i : m, ‖A i j‖ ^ 2 =
+          ∑ j : n, ∑ i : m, ‖A i j‖ ^ (2 : ℝ) := by
+            refine Finset.sum_congr rfl ?_
+            intro j _
+            refine Finset.sum_congr rfl ?_
+            intro i _
+            exact (Real.rpow_natCast (‖A i j‖) 2).symm
+      _ = ∑ i : m, ∑ j : n, ‖A i j‖ ^ (2 : ℝ) := by
+            rw [Finset.sum_comm]
+  · positivity
+
+end FrobeniusTrace
+
+end Matrix
 
 /-! ## Kernel intersection for PSD matrices -/
 
