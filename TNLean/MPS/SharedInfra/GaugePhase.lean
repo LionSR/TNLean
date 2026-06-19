@@ -7,7 +7,6 @@ import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.Overlap.PeripheralToTransferMapGap
 import TNLean.Spectral.MPVOverlapDecay
 import TNLean.Spectral.TransferOperatorGapNT
-import TNLean.Topology.TendstoHelpers
 
 import Mathlib.Analysis.Real.Sqrt
 
@@ -146,8 +145,8 @@ theorem norm_eq_one_of_selfOverlap_scale_at_nonzero_limit
   have h1 : ‖ζ‖ ^ 2 = 1 := by
     by_contra hne'
     rcases lt_or_gt_of_ne hne' with h | h
-    · exact (hPow.ne_nhds one_ne_zero)
-        (tendsto_pow_atTop_nhds_zero_of_lt_one (by positivity) h)
+    · exact one_ne_zero
+        (tendsto_nhds_unique hPow (tendsto_pow_atTop_nhds_zero_of_lt_one (by positivity) h))
     · have hlt2 : ∀ᶠ n in Filter.atTop, (‖ζ‖ ^ 2) ^ n < 2 :=
         hPow.eventually (Iio_mem_nhds (by norm_num : (1 : ℝ) < 2))
       rcases ((Filter.tendsto_atTop.1 (tendsto_pow_atTop_atTop_of_one_lt h) 2).and hlt2).exists
