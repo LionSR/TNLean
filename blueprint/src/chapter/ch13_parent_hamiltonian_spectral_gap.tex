@@ -648,8 +648,8 @@ sufficient stronger hypotheses.
 \end{proof}
 
 \begin{lemma}[Parent-Hamiltonian finite-overlap martingale quadratic reduction]
-    \label{lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic}
-    \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_finite_overlap_friedrichs}
+    \label{lem:parent_hamiltonian_finite_overlap_ordered_cross_term_quadratic}
+    \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_finite_overlap_ordered_cross_term}
     \leanok
     \uses{lem:finite_overlap_projection_rowsum_reduction, def:parent_hamiltonian_es}
     For a fixed chain length $N$, let $m$ be a positive integer and let
@@ -805,10 +805,10 @@ sufficient stronger hypotheses.
 \end{proof}
 
 \begin{lemma}[Parent-Hamiltonian gap from a finite-overlap martingale estimate]
-    \label{lem:parent_hamiltonian_finite_overlap_friedrichs_gap}
-    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_finite_overlap_friedrichs}
+    \label{lem:parent_hamiltonian_finite_overlap_ordered_cross_term_gap}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_finite_overlap_ordered_cross_term}
     \leanok
-    \uses{lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic,
+    \uses{lem:parent_hamiltonian_finite_overlap_ordered_cross_term_quadratic,
         lem:parent_hamiltonian_es_quadratic_reduction}
     Fix $L>1$ and set $m=2(L-1)$. Suppose uniformly for every $N\ge2L$ that
     the hypotheses of the fixed-chain finite-overlap martingale reduction hold
@@ -825,10 +825,10 @@ sufficient stronger hypotheses.
 \end{proof}
 
 \begin{lemma}[Parent-Hamiltonian gap from a cyclic-window martingale estimate]
-    \label{lem:parent_hamiltonian_cyclic_window_friedrichs_gap}
-    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs}
+    \label{lem:parent_hamiltonian_cyclic_window_ordered_cross_term_gap}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_ordered_cross_term}
     \leanok
-    \uses{lem:parent_hamiltonian_finite_overlap_friedrichs_gap,
+    \uses{lem:parent_hamiltonian_finite_overlap_ordered_cross_term_gap,
         lem:cyclic_window_overlap_cardinality, lem:transported_es_local_projections,
         lem:cyclic_window_nonoverlap_positive}
     Fix $L>1$ and let $i\sim_L j$ mean that the cyclic supports of the
@@ -845,7 +845,7 @@ sufficient stronger hypotheses.
 
 \begin{proof}
     \leanok
-    \uses{lem:parent_hamiltonian_finite_overlap_friedrichs_gap,
+    \uses{lem:parent_hamiltonian_finite_overlap_ordered_cross_term_gap,
         lem:cyclic_window_overlap_cardinality, lem:transported_es_local_projections,
         lem:cyclic_window_nonoverlap_positive}
     Lemma~\ref{lem:cyclic_window_overlap_cardinality} gives the row-cardinality
@@ -856,19 +856,19 @@ sufficient stronger hypotheses.
     do not meet, the corresponding windows are site-disjoint, so
     Lemma~\ref{lem:cyclic_window_nonoverlap_positive} gives the required
     non-negative ordered cross term. Apply
-    Lemma~\ref{lem:parent_hamiltonian_finite_overlap_friedrichs_gap} with these
+    Lemma~\ref{lem:parent_hamiltonian_finite_overlap_ordered_cross_term_gap} with these
     facts and the overlapping-window estimate~(\ref{eq:ph_cyclic_window_overlap_estimate}).
 \end{proof}
 
 \begin{lemma}[Parent-Hamiltonian gap from an overlapping cyclic martingale estimate]
-    \label{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap}
-    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_friedrichs}
+    \label{lem:parent_hamiltonian_cyclic_overlap_ordered_cross_term_gap}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_ordered_cross_term}
     \leanok
-    \uses{lem:parent_hamiltonian_cyclic_window_friedrichs_gap}
+    \uses{lem:parent_hamiltonian_cyclic_window_ordered_cross_term_gap}
     Fix $L>1$ and let $i\sim_L j$ mean that the cyclic supports of the
     length-$L$ windows at $i$ and $j$ meet. Suppose uniformly for every
     $N\ge2L$ that overlapping off-diagonal terms satisfy
-    \begin{equation}\label{eq:ph_cyclic_overlap_friedrichs}
+    \begin{equation}\label{eq:ph_cyclic_overlap_ordered_cross_term}
         \operatorname{Re}\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
         \ge -(1-\tfrac{1}{4L})\frac{1}{2(L-1)}
         \operatorname{Re}\langle h_{i,\mathrm{ES}}v,v\rangle.
@@ -879,11 +879,11 @@ sufficient stronger hypotheses.
 
 \begin{proof}
     \leanok
-    \uses{lem:parent_hamiltonian_cyclic_window_friedrichs_gap}
-    Apply Lemma~\ref{lem:parent_hamiltonian_cyclic_window_friedrichs_gap}.
+    \uses{lem:parent_hamiltonian_cyclic_window_ordered_cross_term_gap}
+    Apply Lemma~\ref{lem:parent_hamiltonian_cyclic_window_ordered_cross_term_gap}.
     Its non-overlap positivity and finite-family hypotheses are already internal to
     the preceding reduction; the overlapping estimate
-    (\ref{eq:ph_cyclic_overlap_friedrichs}) supplies its remaining ordered
+    (\ref{eq:ph_cyclic_overlap_ordered_cross_term}) supplies its remaining ordered
     cross-term condition.
 \end{proof}
 
@@ -925,7 +925,7 @@ sufficient stronger hypotheses.
     \label{lem:parent_hamiltonian_cyclic_overlap_norm_gap}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound}
     \leanok
-    \uses{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap,
+    \uses{lem:parent_hamiltonian_cyclic_overlap_ordered_cross_term_gap,
         rem:projection_geometry_rowsum_identities}
     Fix $L>1$. Suppose uniformly for every $N\ge2L$ and every overlapping
     off-diagonal pair that
@@ -940,7 +940,7 @@ sufficient stronger hypotheses.
 
 \begin{proof}
     \leanok
-    \uses{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap,
+    \uses{lem:parent_hamiltonian_cyclic_overlap_ordered_cross_term_gap,
         rem:projection_geometry_rowsum_identities}
     For an overlapping pair, Cauchy--Schwarz and $h_{i,\mathrm{ES}}^2
     =h_{i,\mathrm{ES}}$ give
@@ -1116,7 +1116,7 @@ sufficient stronger hypotheses.
         \qquad \eta\,2(L-1)<1,
     \]
     for every overlapping off-diagonal pair is a sufficient stronger hypothesis;
-    Theorem~\ref{thm:friedrichs_gap_bound_constant} records that consequence.
+    Theorem~\ref{thm:overlap_norm_gap_bound_constant} records that consequence.
     (When $L = 1$ the interaction terms have disjoint supports, so there are no
     overlapping pairs and the spectral gap follows directly without the
     martingale argument.)
@@ -1172,7 +1172,7 @@ sufficient stronger hypotheses.
         \|h_i h_j v\|\le \eta\|h_i v\|,
         \qquad \eta\,2(L-1)<1.
     \]
-    If such an $\eta$ is obtained, Theorem~\ref{thm:friedrichs_gap_bound_constant}
+    If such an $\eta$ is obtained, Theorem~\ref{thm:overlap_norm_gap_bound_constant}
     gives the gap constant $1-\eta\,2(L-1)$. The frequently displayed
     fixed-coefficient compression form is the specialization with
     \[
@@ -1205,8 +1205,8 @@ sufficient stronger hypotheses.
 \end{proof}
 
 \begin{theorem}[Gap bound from cyclic overlap compression]
-    \label{thm:friedrichs_gap_bound}
-    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_friedrichs}
+    \label{thm:overlap_norm_gap_bound}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_overlap_norm_bound}
     \leanok
     \uses{def:parent_ground_space_es, def:parent_hamiltonian_es,
         thm:parent_ground_space_es_kernel,
@@ -1217,14 +1217,14 @@ sufficient stronger hypotheses.
         lem:transported_es_nonoverlap_positive,
         lem:parent_hamiltonian_es_quadratic_reduction,
         lem:parent_hamiltonian_ordered_rowsum_gap,
-        lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic,
-        lem:parent_hamiltonian_finite_overlap_friedrichs_gap,
+        lem:parent_hamiltonian_finite_overlap_ordered_cross_term_quadratic,
+        lem:parent_hamiltonian_finite_overlap_ordered_cross_term_gap,
         lem:cyclic_window_overlap_cardinality,
         lem:cyclic_window_nonoverlap_positive,
-        lem:parent_hamiltonian_cyclic_window_friedrichs_gap,
-        lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap,
+        lem:parent_hamiltonian_cyclic_window_ordered_cross_term_gap,
+        lem:parent_hamiltonian_cyclic_overlap_ordered_cross_term_gap,
         lem:parent_hamiltonian_cyclic_overlap_norm_gap,
-        thm:friedrichs_gap_bound_constant}
+        thm:overlap_norm_gap_bound_constant}
     Let $A$ be a tensor and let $L>1$. Suppose that, for every $N\ge2L$ and
     every overlapping off-diagonal pair of cyclic length-$L$ windows,
     \[
@@ -1254,8 +1254,8 @@ sufficient stronger hypotheses.
     quadratic-form estimate. Lemma~\ref{lem:parent_hamiltonian_ordered_rowsum_gap}
     establishes the finite-sum algebra from ordered cross-term row bounds, while
     Lemma~\ref{lem:parent_hamiltonian_anticommutator_rowsum_gap} records the
-    source anticommutator martingale condition. Lemmas~\ref{lem:parent_hamiltonian_finite_overlap_friedrichs_quadratic}
-    and~\ref{lem:parent_hamiltonian_finite_overlap_friedrichs_gap} state the
+    source anticommutator martingale condition. Lemmas~\ref{lem:parent_hamiltonian_finite_overlap_ordered_cross_term_quadratic}
+    and~\ref{lem:parent_hamiltonian_finite_overlap_ordered_cross_term_gap} state the
     common finite-overlap ordered-cross-term specialization with $m=2(L-1)$.
     Lemma~\ref{lem:transported_es_nonoverlap_positive} supplies the non-overlap
     positivity statement for site-disjoint windows, and
@@ -1263,11 +1263,11 @@ sufficient stronger hypotheses.
     concrete support-disjoint cyclic windows.
     Lemma~\ref{lem:cyclic_window_overlap_cardinality} gives the finite-overlap
     row-cardinality bound.
-    Lemma~\ref{lem:parent_hamiltonian_cyclic_window_friedrichs_gap} combines
+    Lemma~\ref{lem:parent_hamiltonian_cyclic_window_ordered_cross_term_gap} combines
     these results with the finite-overlap reduction, so the only additional
     input is the ordered anticommutator or cross-term estimate for overlapping
     cyclic windows.
-    Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_friedrichs_gap} states the
+    Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_ordered_cross_term_gap} states the
     same overlap-only formulation, and
     Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_norm_gap} states a sufficient
     norm-compression formulation. Equivalently, this is the
@@ -1318,7 +1318,7 @@ sufficient stronger hypotheses.
 \end{proof}
 
 \begin{theorem}[Gap bound from a strict cyclic compression constant]
-    \label{thm:friedrichs_gap_bound_constant}
+    \label{thm:overlap_norm_gap_bound_constant}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_overlap_norm_constant}
     \leanok
     \uses{lem:parent_hamiltonian_cyclic_overlap_norm_constant_gap}
@@ -1357,11 +1357,11 @@ sufficient stronger hypotheses.
     \lean{MPSTensor.parentHamiltonian_gapped}
     \lean{MPSTensor.parentHamiltonian_gapped_of_anticommutator}
     \leanok
-    \uses{thm:anticommutator_gap_bound, thm:friedrichs_gap_bound}
+    \uses{thm:anticommutator_gap_bound, thm:overlap_norm_gap_bound}
     For a tensor $A$ and a range $L > 1$, assume either the cyclic-window
     anticommutator estimate of Theorem~\ref{thm:anticommutator_gap_bound} or the
     stronger overlapping cyclic-window norm-compression estimate of
-    Theorem~\ref{thm:friedrichs_gap_bound}. Then there exists $\gamma > 0$ such
+    Theorem~\ref{thm:overlap_norm_gap_bound}. Then there exists $\gamma > 0$ such
     that for every $N \ge 2L$ and every vector
     $v \in (\mathcal G_{N,L}^{\mathrm{ES}}(A))^{\perp}$ one has
     \[
@@ -1381,7 +1381,7 @@ sufficient stronger hypotheses.
     \label{thm:parent_hamiltonian_gapped_constant}
     \lean{MPSTensor.parentHamiltonian_gapped_of_overlap_norm_constant}
     \leanok
-    \uses{thm:friedrichs_gap_bound_constant}
+    \uses{thm:overlap_norm_gap_bound_constant}
     For a tensor $A$ and a range $L>1$, suppose there is a constant
     $\eta\ge0$ such that $\eta\,2(L-1)<1$ and, for every $N\ge2L$ and every
     overlapping off-diagonal pair of cyclic length-$L$ windows,
@@ -1399,6 +1399,6 @@ sufficient stronger hypotheses.
 
 \begin{proof}
     \leanok
-    This follows from Theorem~\ref{thm:friedrichs_gap_bound_constant} by taking
+    This follows from Theorem~\ref{thm:overlap_norm_gap_bound_constant} by taking
     $\gamma=1-\eta\,2(L-1)$.
 \end{proof}
