@@ -56,9 +56,10 @@ The clearest replacements are:
   Mathlib 4.31 provides the required matrix `NonnegSpectrumClass` instance
   through `MatrixOrder`, and the non-unital CFC instance through
   `ContinuousFunctionalCalculus.toNonUnital`.
-- The remaining local deprecated-name aliases in non-Archive Lean code were
-  exact pass-through layers and have been removed after confirming that the
-  new names are used internally.
+- The remaining local uses of deprecated-name aliases in non-Archive Lean code
+  were exact pass-through layers and have been removed after confirming that the
+  new names are used internally.  Some deprecated compatibility declarations are
+  retained where they are public names.
 - Positive-map and completely-positive-map arguments should gradually acquire
   bridge lemmas to Mathlib's `PositiveLinearMap` and `CompletelyPositiveMap`.
   The first such bridge, `IsPositiveMap.toPositiveLinearMap`, is now used to
@@ -72,11 +73,11 @@ The clearest replacements are:
   `TNLean.Algebra.MatrixOperatorSpace` were removed.  Their few explicit users
   now use the corresponding `inferInstance` arguments directly.
 - The rectangular continuous-linear-map instance package formerly exported by
-  `TNLean.Spectral.GaugeConstruction` has been inlined in the spectral-radius
-  proofs.  They now use Mathlib's `ContinuousLinearMap.toNormedRing`,
-  `ContinuousLinearMap.toNormedAlgebra`, and local finite-dimensional
-  completeness proofs directly; the former public finite-dimensional witness
-  was removed, and downstream proofs construct the required witness locally.
+  `TNLean.Spectral.GaugeConstruction` has mostly been inlined in the
+  spectral-radius proofs.  They now use Mathlib's
+  `ContinuousLinearMap.toNormedRing`, `ContinuousLinearMap.toNormedAlgebra`,
+  and local finite-dimensional completeness proofs directly; the former
+  finite-dimensional witness remains only as a deprecated compatibility name.
 - Two one-use Frobenius submultiplicativity wrappers in the transfer-operator
   gap files were removed.  The proofs now call Mathlib's
   `Matrix.frobenius_norm_mul` directly at the Hilbert-Schmidt estimate.
