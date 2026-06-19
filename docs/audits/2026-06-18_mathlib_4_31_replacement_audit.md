@@ -1215,6 +1215,36 @@ Thus `MPSTensor.proj_mul_projCompl`, `MPSTensor.projCompl_mul_proj`, and
 `MPSTensor.projCompl_mul_projCompl` now only translate
 `IsOrthogonalProjection P` into the corresponding general idempotent fact.
 
+### Semigroup projection-complement cleanup, 2026-06-19
+
+The reducible-QDS generator-compression file contained two public
+projection-complement theorems:
+
+- `orthogonalProjection_complement_mul`
+- `orthogonalProjection_mul_complement`
+
+They were exact matrix-projection specializations of Mathlib's general
+idempotent identities:
+
+- `IsIdempotentElem.one_sub_mul_self`
+- `IsIdempotentElem.mul_one_sub_self`
+
+No blueprint entry or non-Archive Lean declaration outside the semigroup proof
+cluster referred to the local theorem names.  They have therefore been removed,
+and the generator-compression and relaxation-condition proofs now call the
+Mathlib idempotent-complement theorems directly.
+
+The same pass also replaced the private scalar calculation in
+`not_isNontrivialProjection_of_eq_smul_one`: the proof now uses
+`IsIdempotentElem.iff_eq_zero_or_one` instead of factoring `c * (c - 1)`.
+
+Focused check:
+
+```bash
+lake build TNLean.Channel.Semigroup.ReducibleQDS.GeneratorCompression \
+  TNLean.Channel.Semigroup.RelaxationConditions -q --log-level=info
+```
+
 ### Trace-pairing extensionality, 2026-06-19
 
 Mathlib 4.31 has equality-form trace-pairing extensionality lemmas:
@@ -1283,6 +1313,10 @@ pass-throughs:
   specialization of `IsIdempotentElem.iff_eq_zero_or_one`.
 - `LinearMap.comp_idem_of_comm_idem`.  This was the endomorphism-composition
   specialization of `IsIdempotentElem.mul_of_commute`.
+- `orthogonalProjection_complement_mul` and
+  `orthogonalProjection_mul_complement`.  These were the matrix-projection
+  specializations of `IsIdempotentElem.one_sub_mul_self` and
+  `IsIdempotentElem.mul_one_sub_self`.
 
 ## Verification performed
 
@@ -1362,6 +1396,8 @@ lake build TNLean.Algebra.TracePairing TNLean.MPS.Chain.TensorEquality \
   TNLean.PEPS.CycleMPSWordTransport TNLean.PEPS.CycleMPSChainArc \
   TNLean.PEPS.CycleMPSOverlapInsertion TNLean.PEPS.CycleMPSChainOverlapWindow \
   TNLean.PEPS.CycleMPSChainOverlapInsertion -q --log-level=info
+lake build TNLean.Channel.Semigroup.ReducibleQDS.GeneratorCompression \
+  TNLean.Channel.Semigroup.RelaxationConditions -q --log-level=info
 ```
 
 The final root build also succeeds:

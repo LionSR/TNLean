@@ -82,14 +82,8 @@ private theorem not_isNontrivialProjection_of_eq_smul_one
     have hc : c * c = c := by
       have h00 := congrFun (congrFun hIdem 0) 0
       simpa using h00
-    have hc01 : c = 0 ∨ c = 1 := by
-      have hfac : c * (c - 1) = 0 := by
-        calc
-          c * (c - 1) = c * c - c := by ring
-          _ = 0 := by rw [hc, sub_self]
-      rcases mul_eq_zero.mp hfac with hc0 | hc1
-      · exact Or.inl hc0
-      · exact Or.inr (sub_eq_zero.mp hc1)
+    have hc01 : c = 0 ∨ c = 1 :=
+      IsIdempotentElem.iff_eq_zero_or_one.mp hc
     rcases hc01 with hc0 | hc1
     · exact hP_nt.2.1 (by rw [hP, hc0, zero_smul])
     · exact hP_nt.2.2 (by rw [hP, hc1, one_smul])
@@ -98,7 +92,7 @@ private theorem lower_left_block_vanishes_on_adjoin
     {P : Mat} (hP : IsOrthogonalProjection P) (S : Set Mat)
     (hS : ∀ A : Mat, A ∈ S → (1 - P) * A * P = 0) :
     ∀ A : Mat, A ∈ Algebra.adjoin ℂ S → (1 - P) * A * P = 0 := by
-  have hQP := orthogonalProjection_complement_mul hP
+  have hQP := IsIdempotentElem.one_sub_mul_self hP.2
   have hblock_mul :
       ∀ A B : Mat,
         (1 - P) * A * P = 0 →
@@ -650,7 +644,7 @@ private theorem finrank_traceless_blockUT_add_D_le
     intro M; rfl
   have hφ_one : φ (1 : Mat) = 0 := by
     rw [hφ_apply, Matrix.one_mul]
-    exact orthogonalProjection_complement_mul hP.1
+    exact IsIdempotentElem.one_sub_mul_self hP.1.2
   have h_sup : K_φ ⊔ K_τ = ⊤ := by
     simpa [φ, τ, K_φ, K_τ] using
       ker_sup_traceless_eq_top_of_one_mem_ker φ hφ_one hD_ne
@@ -832,7 +826,7 @@ private theorem exists_traceless_blockUT_lindblad_form
       simp only [LinearMap.mulLeft_apply, LinearMap.mulRight_apply]
       rw [hL'_def]
       simp only [Matrix.mul_add, Matrix.add_mul, smul_mul_assoc, mul_smul_comm]
-      rw [Matrix.one_mul, orthogonalProjection_complement_mul hP.1, smul_zero, add_zero]
+      rw [Matrix.one_mul, IsIdempotentElem.one_sub_mul_self hP.1.2, smul_zero, add_zero]
       rw [← Matrix.mul_assoc]
       exact hBlock j
     · -- Traceless
