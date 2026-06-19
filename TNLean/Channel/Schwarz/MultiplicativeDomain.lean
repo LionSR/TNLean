@@ -56,13 +56,6 @@ private theorem trace_krausMap_of_tp (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
   conv_lhs => arg 2; ext i; rw [Matrix.trace_mul_cycle]
   rw [← trace_sum, ← Finset.sum_mul, show ∑ i : Fin d, (K i)ᴴ * K i = 1 from h_tp, one_mul]
 
-/-- The conjugate transpose of `krausMap K X` is `krausMap K (X†)`. -/
-private theorem krausMap_conjTranspose (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (X : Matrix (Fin D) (Fin D) ℂ) :
-    (krausMap K X)ᴴ = krausMap K Xᴴ := by
-  simp only [krausMap, conjTranspose_sum, conjTranspose_mul, conjTranspose_conjTranspose,
-    mul_assoc]
-
 end AuxiliaryLemmas
 
 /-! ## KS equality for peripheral eigenvectors -/
@@ -173,7 +166,7 @@ theorem ks_gap_eq_sum_squares (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
   -- Now use: ∑ KᵢX†Kᵢ† = E(X†) = E(X)†
   have hEXconj : ∑ i : Fin d, K i * Xᴴ * (K i)ᴴ = (E X)ᴴ := by
     change E Xᴴ = (E X)ᴴ
-    exact (krausMap_conjTranspose K X).symm
+    exact krausMap_conjTranspose K X
   -- And: E(X)† * (∑ KᵢKᵢ†) = E(X)† since ∑ KᵢKᵢ† = I
   have hunit : (∑ i : Fin d, (E X)ᴴ * K i * (K i)ᴴ) = (E X)ᴴ := by
     simp_rw [mul_assoc]
