@@ -144,7 +144,7 @@ windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
 derive the \(C^j,D^j,E^j\) boundary-condition comparison from
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
 discharge the currently assumed
-trace-decomposition equality; tracked in issue 2971. -/
+trace-decomposition equality. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -200,6 +200,83 @@ theorem
     blockDiagonal_boundary_component_chainGroundSpace_of_trace_decomposition_of_injective
       μ A hN hLN X hTraceSpan hBlk hUnital hNlarge C hCoeff
 
+/-- BNT normalization gives the common middle-word product span.
+
+In arXiv:quant-ph/0608197, Theorem 12, proof lines 1436--1451, condition C1 is
+used to separate the two trace decompositions at a common middle-word length.
+Under the finite block-injectivity and BNT hypotheses used here, the
+block-separation theorem gives that simultaneous product span at
+\[
+  (L_0+1)+(r-1)\bigl((L_0+1)+((L_0+1)+(L_0+1))\bigr).
+\]
+The remaining hypothesis is therefore the trace-decomposition equality itself,
+with \(D^j_\beta\) specialized to \((\mu_j^NX_j)A^j_\beta\).
+
+**Unfaithful:** This proof still relies on
+`exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1`,
+which transitively uses the boundary-condition comparison at boundary-crossing
+windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
+2126--2128. Documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
+derive the block-diagonal boundary representation and the displayed
+trace-decomposition equality from the source boundary-condition argument. -/
+theorem
+    exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1_span
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hμ : ∀ k : Fin r, μ k ≠ 0)
+    {L₀ L N : ℕ}
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hL₀ : 0 < L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
+    (hRange :
+      (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
+    (hNlarge : L + L₀ ≤ N)
+    {ψ : NSiteSpace d N}
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N)
+    (hTrace :
+      let m : ℕ :=
+        (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1)))
+      ∀ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+        ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+          ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) →
+          ∃ C : ∀ (j : Fin r) (_ : Fin N),
+            (Fin (N - L) → Fin d) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+            ∀ i : Fin N,
+              N < i.val + L →
+                ∀ ρ : Fin (N - L) → Fin d,
+                  ∀ β : Fin (i.val + L - N) → Fin d,
+                    ∀ w : Fin m → Fin d,
+                      (∑ j : Fin r,
+                        Matrix.trace
+                          ((evalWord (A j) (List.ofFn β) * C j i ρ) *
+                            evalWord (A j) (List.ofFn w))) =
+                      (∑ j : Fin r,
+                        Matrix.trace
+                          ((((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β) *
+                              evalWord (A j) (List.ofFn ρ)) *
+                            evalWord (A j) (List.ofFn w)))) :
+    ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+        ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
+      ∀ j : Fin r,
+        groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
+  classical
+  let m : ℕ :=
+    (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1)))
+  have hTraceSpan : WordTupleSpanTop A m :=
+    wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1
+      A hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital (by simp [m])
+  exact
+    exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1
+      μ A hμ hIrr hLeft hOverlap hBlocks hTraceSpan hBlk hL₀ hUnital hN hL hLN hRange
+      hNlarge hψ hTrace
+
 /-- Source trace decompositions give the block-diagonal periodic-boundary
 equality in the finite BNT range.
 
@@ -221,7 +298,7 @@ windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
 derive the \(C^j,D^j,E^j\) boundary-condition comparison from
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
 discharge the currently assumed
-trace-decomposition equality; tracked in issue 2971. -/
+trace-decomposition equality. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -272,5 +349,77 @@ theorem
         exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1
           μ A hμ hIrr hLeft hOverlap hBlocks hTraceSpan hBlk hL₀ hUnital hN hL hLN hRange
           hNlarge hψ (fun X hψX => hTrace hψ X hψX))
+
+/-- BNT normalization gives the common middle-word product span for the
+ground-space equality.
+
+This is the finite block-injective specialization of the preceding equality
+theorem. The simultaneous product span at the middle-word length used in
+arXiv:quant-ph/0608197, Theorem 12, is derived from the BNT hypotheses; the
+remaining input is the trace-decomposition equality from arXiv:quant-ph/0608197,
+Theorem 12, proof lines 1436--1448, with \(D^j_\beta=(\mu_j^NX_j)A^j_\beta\).
+
+**Unfaithful:** This proof still relies on
+`chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_blockBoundary`,
+which transitively uses the boundary-condition comparison at boundary-crossing
+windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
+2126--2128. Documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
+derive the block-diagonal boundary representation and the displayed
+trace-decomposition equality from the source boundary-condition argument. -/
+theorem
+    chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition_bnt_c1_span
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hμ : ∀ k : Fin r, μ k ≠ 0)
+    {L₀ L N : ℕ}
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hL₀ : 0 < L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
+    (hRange :
+      (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
+    (hNlarge : L + L₀ ≤ N)
+    (hTrace :
+      let m : ℕ :=
+        (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1)))
+      ∀ {ψ : NSiteSpace d N},
+        ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N →
+        ∀ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+          ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+            ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) →
+            ∃ C : ∀ (j : Fin r) (_ : Fin N),
+              (Fin (N - L) → Fin d) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+              ∀ i : Fin N,
+                N < i.val + L →
+                  ∀ ρ : Fin (N - L) → Fin d,
+                    ∀ β : Fin (i.val + L - N) → Fin d,
+                      ∀ w : Fin m → Fin d,
+                        (∑ j : Fin r,
+                          Matrix.trace
+                            ((evalWord (A j) (List.ofFn β) * C j i ρ) *
+                              evalWord (A j) (List.ofFn w))) =
+                        (∑ j : Fin r,
+                          Matrix.trace
+                            ((((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β) *
+                                evalWord (A j) (List.ofFn ρ)) *
+                              evalWord (A j) (List.ofFn w)))) :
+    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N =
+        ⨆ j : Fin r, chainGroundSpace (A j) L N ∧
+      iSupIndep (fun j : Fin r => groundSpace (A j) N) := by
+  classical
+  let m : ℕ :=
+    (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1)))
+  have hTraceSpan : WordTupleSpanTop A m :=
+    wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1
+      A hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital (by simp [m])
+  exact
+    chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition
+      μ A hμ hIrr hLeft hOverlap hBlocks hTraceSpan hBlk hL₀ hUnital hN hL hLN hRange
+      hNlarge hTrace
 
 end MPSTensor
