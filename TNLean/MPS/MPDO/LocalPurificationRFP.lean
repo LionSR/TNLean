@@ -158,11 +158,6 @@ lemma witnessM_entry (i j : Fin 2) :
   simp only [witnessM, Matrix.submatrix_apply, witnessA, Fin.sum_univ_two]
   fin_cases i <;> fin_cases j <;> simp [amp_mul_conj]
 
-/-- A `1 × 1` triple matrix product evaluates entrywise. -/
-private lemma mul_triple_one (A B C : Matrix (Fin 1) (Fin 1) ℂ) (i j : Fin 1) :
-    (A * B * C) i j = A 0 0 * B 0 0 * C 0 0 := by
-  fin_cases i; fin_cases j; simp [Matrix.mul_apply]
-
 /-- The transfer map of the witness MPO is `½ • id`: its leading eigenvalue is `½`,
 not `1`, reflecting the maximally mixed reduced state. -/
 lemma transferMap_witnessM :
@@ -172,9 +167,9 @@ lemma transferMap_witnessM :
   obtain rfl : a = 0 := Subsingleton.elim a 0
   obtain rfl : b = 0 := Subsingleton.elim b 0
   rw [transferMap_apply]
-  simp only [Matrix.sum_apply, Fin.sum_univ_two, Matrix.add_apply, mul_triple_one,
-    Matrix.conjTranspose_apply, witnessM_entry, LinearMap.smul_apply, LinearMap.id_apply,
-    Matrix.smul_apply, smul_eq_mul]
+  simp only [Matrix.sum_apply, Fin.sum_univ_two, Matrix.add_apply, Matrix.mul_apply,
+    Fin.sum_univ_one, Matrix.conjTranspose_apply, witnessM_entry, LinearMap.smul_apply,
+    LinearMap.id_apply, Matrix.smul_apply, smul_eq_mul]
   simp only [Fin.reduceEq, ↓reduceIte, star_zero, mul_zero, zero_mul, add_zero,
     show star (2⁻¹ : ℂ) = 2⁻¹ from by simp]
   ring
@@ -192,10 +187,10 @@ lemma witnessAcombined_isRFP : MPSTensor.IsRFP witnessAcombined := by
     have e1 : (1 : Fin (2 * 2)).divNat = 0 ∧ (1 : Fin (2 * 2)).modNat = 1 := by decide
     have e2 : (2 : Fin (2 * 2)).divNat = 1 ∧ (2 : Fin (2 * 2)).modNat = 0 := by decide
     have e3 : (3 : Fin (2 * 2)).divNat = 1 ∧ (3 : Fin (2 * 2)).modNat = 1 := by decide
-    simp only [mul_triple_one, Matrix.conjTranspose_apply, witnessAcombined, purificationTensor,
-      witnessA, Matrix.of_apply, LinearMap.id_apply, e0.1, e0.2, e1.1, e1.2, e2.1, e2.2,
-      e3.1, e3.2, witnessAmplitude, Fin.reduceEq, ↓reduceIte, zero_mul, add_zero,
-      ← starRingEnd_apply, map_inv₀, Complex.conj_ofReal]
+    simp only [Matrix.mul_apply, Fin.sum_univ_one, Matrix.conjTranspose_apply,
+      witnessAcombined, purificationTensor, witnessA, Matrix.of_apply, LinearMap.id_apply, e0.1,
+      e0.2, e1.1, e1.2, e2.1, e2.2, e3.1, e3.2, witnessAmplitude, Fin.reduceEq, ↓reduceIte,
+      zero_mul, add_zero, ← starRingEnd_apply, map_inv₀, Complex.conj_ofReal]
     linear_combination (2 * X 0 0) * sqrt2_inv_mul_self
   rw [MPSTensor.IsRFP, h, LinearMap.comp_id]
 

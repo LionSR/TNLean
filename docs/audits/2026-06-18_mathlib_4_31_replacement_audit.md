@@ -131,6 +131,11 @@ The clearest replacements are:
   determinant, fixed-point conditional expectation, and RFP structural proofs
   now call `Matrix.sum_single_one`, `Matrix.sum_single_eq_diagonal`, or
   `Matrix.smul_one_eq_diagonal` directly.
+- Two MPDO scalar-block helpers were removed.  The duplicate-block
+  counterexample now proves the `1 × 1` span fact locally using
+  `Submodule.span_singleton_eq_top_iff`, and the local-purification example
+  simplifies `1 × 1` triple products directly with `Matrix.mul_apply` and
+  `Fin.sum_univ_one`.
 
 There are also important non-replacements.
 
@@ -1808,10 +1813,27 @@ Kossakowski summand and lets `simp`, together with `Finset.sum_add_distrib`,
 collapse the two if-supported sums directly.  The mathematical statement of
 `kossakowski_iff_lindblad` is unchanged.
 
-Focused check:
+## MPDO scalar one-dimensional cleanup, 2026-06-19
+
+Two private declarations in the MPDO layer were only named one-dimensional
+matrix calculations:
+
+- `span_singleton_one_finOne_eq_top` in
+  `TNLean/MPS/MPDO/BiCFDerivation/Counterexample.lean`.
+- `mul_triple_one` in `TNLean/MPS/MPDO/LocalPurificationRFP.lean`.
+
+The duplicate-block counterexample now proves the needed span statement inside
+`duplicateScalarBlocks_isInjective` from
+`Submodule.span_singleton_eq_top_iff`.  The local-purification example now
+evaluates the two `1 × 1` triple products by simplifying `Matrix.mul_apply`
+with `Fin.sum_univ_one`.  No public MPDO statement changes.
+
+Focused checks:
 
 ```bash
 lake build TNLean.Channel.Semigroup.KossakowskiForm -q --log-level=info
+lake build TNLean.MPS.MPDO.BiCFDerivation.Counterexample \
+  TNLean.MPS.MPDO.LocalPurificationRFP -q --log-level=info
 ```
 
 ### Limit-uniqueness helper removal, 2026-06-19
