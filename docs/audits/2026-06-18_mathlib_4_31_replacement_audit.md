@@ -101,6 +101,10 @@ The clearest replacements are:
   finite sum directly at the proof site using `Matrix.one_apply`,
   `Finset.sum_add_distrib`, and Mathlib's if-supported finite-sum
   simplification.  The private lemma `sum_one_smul_eq` was removed.
+- The transfer-matrix coordinate-expansion helper now cites Mathlib's
+  `Matrix.matrix_eq_sum_single` directly, with `Matrix.smul_single` used only
+  to match the local scalar-matrix-unit notation.  The private helper remains
+  as the shared statement used at the transfer-matrix proof sites.
 - Further Lean 4.31 elaboration checks removed local heartbeat bounds from the
   POVM unitary-comparison proof, the irreducible-channel spectral-radius scalar
   proof, the semigroup perturbation derivative proof, and the common
@@ -1846,6 +1850,19 @@ limit-uniqueness contradictions.
 Those proofs now call `tendsto_nhds_unique` directly, and the helper file was
 removed.  Future proofs that need this limit-uniqueness fact should use the
 Mathlib theorem rather than reintroducing the wrapper.
+
+## Transfer-matrix coordinate expansion cleanup, 2026-06-19
+
+`TNLean/Channel/TransferMatrix.lean` had a private lemma
+`sum_smul_single_eq` stating that a matrix is the finite sum of its entries
+times the corresponding matrix units.  Mathlib 4.31 already provides this
+statement as `Matrix.matrix_eq_sum_single`; the only local difference was the
+choice to write the summands as `ρ k l • Matrix.single k l 1`.
+
+The private helper remains as the shared expansion used by the transfer-matrix
+proof sites, but its proof now cites `Matrix.matrix_eq_sum_single` directly and
+simplifies by `Matrix.smul_single`, `smul_eq_mul`, and `mul_one` to recover the
+local notation.  The transfer-matrix statements are unchanged.
 
 ## Conclusions
 

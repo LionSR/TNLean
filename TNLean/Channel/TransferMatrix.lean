@@ -121,10 +121,8 @@ theorem transferMatrix_apply
 
 private lemma sum_smul_single_eq (ρ : Matrix (Fin D) (Fin D) ℂ) :
     ρ = ∑ k : Fin D, ∑ l : Fin D, ρ k l • Matrix.single k l 1 := by
-  conv_lhs => rw [Matrix.matrix_eq_sum_single ρ]
-  refine Finset.sum_congr rfl fun k _ => Finset.sum_congr rfl fun l _ => ?_
-  ext a b
-  simp [Matrix.single_apply, smul_eq_mul]
+  simpa [Matrix.smul_single, smul_eq_mul, mul_one] using
+    (Matrix.matrix_eq_sum_single ρ)
 
 /-! ### Fundamental property: T̂ represents T in the vectorized picture -/
 
@@ -277,13 +275,14 @@ theorem transferMatrix_tp_iff
         · rw [if_neg hkl, Matrix.trace_single_eq_of_ne k l (1 : ℂ) hkl]
     calc Matrix.trace (T X)
         = Matrix.trace (T (∑ k, ∑ l, X k l • Matrix.single k l 1)) := by
-            rw [← sum_smul_single_eq X]
+            conv_lhs => rw [sum_smul_single_eq X]
       _ = ∑ k, ∑ l, X k l • Matrix.trace (T (Matrix.single k l 1)) := by
             simp_rw [map_sum, LinearMap.map_smul, Matrix.trace_sum, Matrix.trace_smul]
       _ = ∑ k, ∑ l, X k l • Matrix.trace (Matrix.single k l (1 : ℂ)) := by
             simp_rw [key]
       _ = Matrix.trace X := by
-            simp_rw [← Matrix.trace_smul, ← Matrix.trace_sum]; rw [← sum_smul_single_eq X]
+            simp_rw [← Matrix.trace_smul, ← Matrix.trace_sum]
+            rw [← sum_smul_single_eq X]
 
 /-- **Proposition 2.6 (Unital via transfer matrix)**: `T` is unital (`T 1 = 1`) iff
 the row-diagonal sums of the transfer matrix give `δ_{ij}`:
