@@ -54,13 +54,6 @@ variable {d D : ℕ}
 
 section PosDef
 
-private lemma mulVec_eq_zero_of_quadForm_eq_zero
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef)
-    (x : Fin D → ℂ) (hx : star x ⬝ᵥ (ρ *ᵥ x) = 0) :
-    ρ *ᵥ x = 0 := by
-  classical
-  exact (hρ.dotProduct_mulVec_zero_iff x).mp hx
-
 private lemma ker_invariant_under_adjoint
     (A : MPSTensor d D)
     (ρ : Matrix (Fin D) (Fin D) ℂ)
@@ -90,7 +83,7 @@ private lemma ker_invariant_under_adjoint
       h_sum_zero i (Finset.mem_univ _)
     exact Complex.ext hre (hρ_psd.isHermitian.im_star_dotProduct_mulVec_self _)
   intro i
-  exact mulVec_eq_zero_of_quadForm_eq_zero ρ hρ_psd _ (h_each_zero i)
+  exact (hρ_psd.dotProduct_mulVec_zero_iff _).mp (h_each_zero i)
 
 private lemma ker_contains_all_of_span
     (A : MPSTensor d D) (hA : IsInjective A)
@@ -129,7 +122,7 @@ theorem posSemidef_fixedPoint_isPosDef
   suffices h_ne : star x ⬝ᵥ (ρ *ᵥ x) ≠ 0 from
     lt_of_le_of_ne h_nonneg (Ne.symm h_ne)
   intro h_zero
-  have h_ker := mulVec_eq_zero_of_quadForm_eq_zero ρ hρ_psd x h_zero
+  have h_ker := (hρ_psd.dotProduct_mulVec_zero_iff x).mp h_zero
   have h_inv := ker_invariant_under_adjoint A ρ hρ_psd hρ_fix x h_ker
   have h_all := ker_contains_all_of_span A hA ρ x h_inv
   have h_surj : ∀ v : Fin D → ℂ, ρ *ᵥ v = 0 := by
