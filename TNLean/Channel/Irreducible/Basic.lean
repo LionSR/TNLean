@@ -57,14 +57,6 @@ theorem IsStarProjection.isOrthogonalProjection {P : Matrix (Fin D) (Fin D) ℂ}
   change Pᴴ = P
   simpa [Matrix.star_eq_conjTranspose] using hP.2
 
-/-- The zero matrix is an orthogonal projection. -/
-lemma isOrthogonalProjection_zero : IsOrthogonalProjection (0 : Matrix (Fin D) (Fin D) ℂ) :=
-  (IsStarProjection.zero (R := Matrix (Fin D) (Fin D) ℂ)).isOrthogonalProjection
-
-/-- The identity matrix is an orthogonal projection. -/
-lemma isOrthogonalProjection_one : IsOrthogonalProjection (1 : Matrix (Fin D) (Fin D) ℂ) :=
-  (IsStarProjection.one (R := Matrix (Fin D) (Fin D) ℂ)).isOrthogonalProjection
-
 /-- The complement of an orthogonal projection is an orthogonal projection. -/
 theorem IsOrthogonalProjection.one_sub {P : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsOrthogonalProjection P) : IsOrthogonalProjection (1 - P) :=
