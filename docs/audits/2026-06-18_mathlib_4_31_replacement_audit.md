@@ -151,6 +151,9 @@ The clearest replacements are:
 - Two span-growth multiplication-map composition proofs now use Mathlib's
   bundled matrix multiplication-map identities `mulLeftLinearMap_mul` and
   `mulRightLinearMap_mul`, rather than pointwise associativity expansions.
+- The rectangular-span permanence proof now obtains commutation of left- and
+  right-multiplication maps from Mathlib's `LinearMap.commute_mulLeft_right`,
+  rather than reproving matrix associativity pointwise.
 
 There are also important non-replacements.
 
@@ -1990,6 +1993,25 @@ Focused check:
 
 ```bash
 lake build TNLean.Channel.Semigroup.Dissipative -q --log-level=info
+```
+
+## Rectangular-span multiplication-map commutation cleanup, 2026-06-19
+
+`TNLean/Wielandt/RectangularSpan/Universality.lean` had a private theorem
+`map_mulRight_map_mulLeft_comm` proving that submodule images by left and right
+matrix multiplication commute.  The old proof expanded the two linear maps on a
+test matrix and used `Matrix.mul_assoc`.
+
+The proof now cites Mathlib's abstract algebra statement
+`LinearMap.commute_mulLeft_right`, converting the resulting equality in
+`Module.End` to the explicit `LinearMap.comp` form used by
+`Submodule.map_comp`.  The theorem remains as the local submodule-map shape
+needed by the rectangular-span permanence argument.
+
+Focused check:
+
+```bash
+lake build TNLean.Wielandt.RectangularSpan.Universality -q --log-level=info
 ```
 
 ## Conclusions
