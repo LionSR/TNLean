@@ -47,8 +47,8 @@ When weights are present, write
 \end{align}
 for the corresponding block-diagonal tensor.  The letters $g$ and $b$ both
 denote the number of blocks below: $g$ follows the review's block-injective
-canonical form notation, while $b$ follows PGVWC07's notation around
-Theorem~12.
+canonical form notation, while $b$ follows
+\cite[Theorem~12]{PerezGarcia2007MPSReps}.
 
 \section{The source assertion}
 
@@ -88,8 +88,9 @@ After blocking, the corresponding word-span statement is
 \end{align}
 
 The current Lean development separates the product-span input from
-the finite blocking hypothesis.  First, it proves the one-step PGVWC07
-intersection identity under the displayed product-span equation.  Then the
+the finite blocking hypothesis.  First, it proves the one-step intersection
+identity from \cite[Theorem~12]{PerezGarcia2007MPSReps} under the displayed
+product-span equation.  Then the
 normalized basis-of-normal-tensors (BNT) theorems derive that product span in
 the finite Condition C1 range from the injectivity of
 \begin{align}
@@ -281,13 +282,15 @@ as an unconditional hypothesis-free equality theorem in the source range.\footno
 \leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_complementary_identities_bnt_c1}, and
 \leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_complementary_identities}.}
 
-The live blueprint records that larger source statement in source notation,
-without claiming that it is proved.\footnote{Blueprint locations:
+The live blueprint records that larger source statement with explicit citations
+and separately marks the local cut coordinates used by the formalization,
+without claiming that the source statement is proved.\footnote{Blueprint locations:
 \path{def:parent_hamiltonian_ground_space_bnt} for the block-diagonal
 periodic-boundary ground space,
 \path{lem:isup_chain_ground_space_block_le_assembled} for the forward
 inclusion, \path{thm:block_diagonal_ground_space_intersection} for the
-PGVWC07 block-diagonal intersection identity,
+block-diagonal intersection identity from
+\cite[Theorem~12]{PerezGarcia2007MPSReps},
 \path{thm:parent_ground_space_le_bnt_span} for the parent-ground-space
 containment, and \path{thm:gs_eq_bnt_span} for the final span statement, all in
 \path{blueprint/src/chapter/ch13_parent_hamiltonian_bnt_consequences.tex}.} With this notation,
@@ -453,11 +456,13 @@ every block $j$,
   \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal K_{N,L}(A_j).
 \end{align}
 This is the conditional reduction recorded by pull request~\#2724.  There are
-now two formal PGVWC comparison routes. The trace-decomposition route records
-the following implication. Assume the common word-span property for the
-middle-word length \(m\). If, for every boundary-crossing interval, word
+now two formal routes to the boundary-condition comparison. The
+trace-decomposition route records the following implication. Assume the common
+word-span property for the middle-word length \(m\). If, for every
+boundary-crossing interval, word
 $\beta$ before the cut, outside word $\rho$, and middle word $w$ of length \(m\),
-the two PGVWC07 trace comparisons satisfy
+the two trace comparisons from \cite[Theorem~12]{PerezGarcia2007MPSReps}
+satisfy
 \begin{align}
   \sum_j\tr\!\left(A^j_\beta C^j_\rho A^j_w\right)
   =
@@ -498,8 +503,8 @@ After \href{https://github.com/LionSR/TNLean/issues/2651}{issue \#2651} was
 closed, the remaining source-comparison target is tracked by
 \href{https://github.com/LionSR/TNLean/issues/2971}{issue \#2971}: remove the
 remaining external boundary-representation input, and replace the
-span-dependent crossing-tail route by the PGVWC07 \(C^j,D^j,E^j\) comparison
-in the source range
+span-dependent crossing-tail route by the \(C^j,D^j,E^j\) comparison from
+\cite[Theorem~12]{PerezGarcia2007MPSReps} in the source range
 \begin{align}
   b\ge2,
   \qquad

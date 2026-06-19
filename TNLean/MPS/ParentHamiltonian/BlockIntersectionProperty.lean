@@ -16,8 +16,8 @@ equality for the join of the block ground spaces.
 
 ## References
 
-* [Perez-Garcia--Verstraete--Wolf--Cirac 2007], Theorem 12, proof around
-  \(A_b C_a=D_b A_a\) and \(E=\sum_a C_a A_a^\dagger\).
+* arXiv:quant-ph/0608197, Theorem 12, proof around \(A_b C_a=D_b A_a\)
+  and \(E=\sum_a C_a A_a^\dagger\).
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2021], Section IV.C, lines
   2120--2129.
 -/
@@ -61,7 +61,7 @@ theorem exists_sum_mem_of_mem_iSup_fin
     intro i
     exact Submodule.add_mem _ (hfy i) (hfz i)
 
-/-- The left-boundary summand in the PGVWC block-diagonal intersection proof:
+/-- The left-boundary summand in the source block-diagonal intersection proof:
 \[
   \sigma\longmapsto
   \operatorname{tr}(A_{\sigma_{n+2}} C_{\sigma_1}
@@ -75,7 +75,7 @@ noncomputable def pgvwc07LeftBoundaryComponent
     (A (σ (Fin.last (n + 1))) * C (σ 0) *
       evalWord A (List.ofFn (Fin.tail (Fin.init σ))))
 
-/-- Fixing the first physical index in the PGVWC left-boundary summand gives the
+/-- Fixing the first physical index in the source left-boundary summand gives the
 usual ground-space parametrization with boundary matrix \(C_a\). -/
 theorem restrictFirst_pgvwc07LeftBoundaryComponent
     (A : MPSTensor d D) (C : Fin d → Matrix (Fin D) (Fin D) ℂ)
@@ -169,7 +169,7 @@ theorem groundSpaceMap_cons_snoc_trace_boundary
     _ = Matrix.trace ((A b * X * A a) * evalWord A (List.ofFn w)) := by
             simp [Matrix.mul_assoc]
 
-/-- The left-boundary summand is a ground-space vector once the PGVWC boundary
+/-- The left-boundary summand is a ground-space vector once the boundary
 identity \(A_bC_a=A_bEA_a\) holds. -/
 theorem pgvwc07LeftBoundaryComponent_eq_groundSpaceMap
     (A : MPSTensor d D) (C : Fin d → Matrix (Fin D) (Fin D) ℂ)
@@ -211,7 +211,7 @@ theorem pgvwc07LeftBoundaryComponent_eq_groundSpaceMap
     _ = Matrix.trace (((A a * M) * A b) * E) := by
             rw [← Matrix.mul_assoc]
 
-/-- The left-boundary summand belongs to \(G_{n+2}(A)\) once the PGVWC
+/-- The left-boundary summand belongs to \(G_{n+2}(A)\) once the
 boundary identity \(A_bC_a=A_bEA_a\) holds. -/
 theorem pgvwc07LeftBoundaryComponent_mem_groundSpace
     (A : MPSTensor d D) (C : Fin d → Matrix (Fin D) (Fin D) ℂ)
@@ -222,7 +222,7 @@ theorem pgvwc07LeftBoundaryComponent_mem_groundSpace
   rw [groundSpace, LinearMap.mem_range]
   exact ⟨E, rfl⟩
 
-/-- A finite sum of PGVWC left-boundary summands lies in the supremum of the
+/-- A finite sum of source left-boundary summands lies in the supremum of the
 corresponding block ground spaces. -/
 theorem pgvwc07_sum_leftBoundaryComponents_mem_iSup_groundSpace
     {r : ℕ} {dim : Fin r → ℕ}
@@ -337,11 +337,11 @@ theorem block_matrices_eq_of_wordTupleSpanTop_trace
         using sub_eq_zero.mpr (hTrace w)) j
   exact sub_eq_zero.mp hzero
 
-/-- Blockwise boundary identities from membership of a PGVWC left-boundary
+/-- Blockwise boundary identities from membership of a source left-boundary
 trace decomposition in the block ground-space sum.
 
 This is the coefficient-comparison direction in the proof of
-[Perez-Garcia--Verstraete--Wolf--Cirac 2007], Theorem 12.  If a vector
+Theorem 12 of arXiv:quant-ph/0608197. If a vector
 with coefficients
 \[
   \sum_j\operatorname{tr}(A^j_b C^j_a A^j_w)
@@ -436,10 +436,10 @@ theorem pgvwc07_boundary_identities_of_leftBoundaryComponent_mem_iSup
     (fun k => A k b * C k a) (fun k => A k b * E k * A k a) hCoeff j
 
 /-- Boundary-matrix compatibility from equality of the two coefficient
-decompositions in the PGVWC block-diagonal intersection proof.
+decompositions in the source block-diagonal intersection proof.
 
 For fixed physical indices \(a,b\), the coefficient comparison in
-[Perez-Garcia--Verstraete--Wolf--Cirac 2007], Theorem 12, gives
+Theorem 12 of arXiv:quant-ph/0608197 gives
 \[
   \sum_j \operatorname{tr}\!\left(
     A^j_b C^j_a A^j_{i_2}\cdots A^j_{i_m}\right)
@@ -467,12 +467,11 @@ theorem pgvwc07_blockwise_compatibility_of_trace_decomposition
     (fun k => A k b * C k a) (fun k => Dmat k b * A k a) (hCoeff a b) j
 
 /-- Word-valued boundary-matrix compatibility from equality of the two
-coefficient decompositions in the Perez-Garcia--Verstraete--Wolf--Cirac
-block-diagonal intersection proof.
+coefficient decompositions in the proof of Theorem 12 of arXiv:quant-ph/0608197.
 
 This is the same extraction as
 `pgvwc07_blockwise_compatibility_of_trace_decomposition`, with the boundary
-letters replaced by words.  If, for every wrapped word \(\beta\), complementary
+letters replaced by words. If, for every cut word \(\beta\), complementary
 word \(\rho\), and middle word \(w\), the two trace decompositions agree,
 then the blockwise matrices satisfy
 \[
@@ -508,10 +507,9 @@ theorem pgvwc07_blockwise_word_compatibility_of_trace_decomposition
     (hCoeff ρ β) j
 
 /-- Fixed complementary-word compatibility from equality of the two coefficient
-decompositions in the Perez-Garcia--Verstraete--Wolf--Cirac block-diagonal
-intersection proof.
+decompositions in the proof of Theorem 12 of arXiv:quant-ph/0608197.
 
-Fix a complementary word \(\rho\). If, for every wrapped word \(\beta\) and
+Fix a complementary word \(\rho\). If, for every cut word \(\beta\) and
 middle word \(w\), the trace decompositions agree with
 \[
   D^j_\beta=X_jA^j_\beta ,
@@ -590,13 +588,13 @@ theorem pgvwc07_complementary_word_compatibility_of_trace_decomposition
       (A := A) (m := m) (K := K) (M := M) hSpan C
       (fun j β => X j * evalWord (A j) (List.ofFn β)) hCoeff
 
-/-- Complementary-word boundary identities from the PGVWC trace decompositions.
+/-- Complementary-word boundary identities from the source trace decompositions.
 
 Assume the right trace decomposition has
 \[
   D^j_\beta=X_jA^j_\beta .
 \]
-If the two trace decompositions agree for every wrapped word \(\beta\),
+If the two trace decompositions agree for every cut word \(\beta\),
 complementary word \(\rho\), and middle word \(w\), then the normalization
 \(\sum_\rho A^j_\rho A^{j\dagger}_\rho=I\) and the compatibility identity give,
 for every block \(j\) and complementary word \(\rho\), a matrix \(E_{j,\rho}\)
@@ -645,7 +643,7 @@ theorem pgvwc07_complementary_word_boundary_identities_of_trace_decomposition
       (A := A) (m := m) (K := K) (M := M) hSpan X C hCoeff) j)
     ρ
 
-/-- The composed PGVWC open-segment step from the trace decompositions to
+/-- The composed open-segment step from the trace decompositions to
 membership in the supremum of block ground spaces.
 
 For a vector with left-boundary trace decomposition
@@ -664,8 +662,7 @@ imply
   \psi\in \bigvee_j G_{n+2}(A^j).
 \]
 This is the local membership step in
-[Perez-Garcia--Verstraete--Wolf--Cirac 2007] (arXiv:quant-ph/0608197),
-Theorem 12, proof lines 1446--1452. -/
+Theorem 12 of arXiv:quant-ph/0608197, proof lines 1446--1452. -/
 theorem pgvwc07_mem_iSup_groundSpace_of_trace_decomposition
     {r : ℕ} {dim : Fin r → ℕ}
     (A : (j : Fin r) → MPSTensor d (dim j))
@@ -698,7 +695,7 @@ physical index or the last physical index always gives a vector in
 \[
   \bigvee_j G_{n+1}(A^j).
 \]
-Under the PGVWC common word-span hypothesis and the normalization
+Under the common word-span hypothesis and the normalization
 \[
   \sum_a A^j_a A^{j\dagger}_a=I,
 \]
@@ -707,8 +704,7 @@ the vector itself lies in
   \bigvee_j G_{n+2}(A^j).
 \]
 This is the restriction form of the open-segment step in
-[Perez-Garcia--Verstraete--Wolf--Cirac 2007] (arXiv:quant-ph/0608197),
-Theorem 12, proof lines 1442--1452. -/
+Theorem 12 of arXiv:quant-ph/0608197, proof lines 1442--1452. -/
 theorem pgvwc07_mem_iSup_groundSpace_of_iSup_restrictions
     {r : ℕ} {dim : Fin r → ℕ}
     (A : (j : Fin r) → MPSTensor d (dim j))
@@ -825,7 +821,7 @@ theorem pgvwc07_mem_iSup_groundSpace_of_iSup_restrictions
 
 /-- One-step block intersection as a restriction characterization.
 
-Under the PGVWC common word-span hypothesis and the normalization
+Under the common word-span hypothesis and the normalization
 \[
   \sum_a A^j_a A^{j\dagger}_a=I,
 \]
@@ -837,8 +833,7 @@ equivalent to the two fixed-boundary conditions
   \psi(a,-)\in\bigvee_jG_{n+1}(A^j).
 \]
 This is the one-step block-intersection identity of
-[Perez-Garcia--Verstraete--Wolf--Cirac 2007] (arXiv:quant-ph/0608197),
-Theorem 12, proof lines 1442--1452. -/
+Theorem 12 of arXiv:quant-ph/0608197, proof lines 1442--1452. -/
 theorem pgvwc07_mem_iSup_groundSpace_iff_iSup_restrictions
     {r : ℕ} {dim : Fin r → ℕ}
     (A : (j : Fin r) → MPSTensor d (dim j))
@@ -894,7 +889,7 @@ theorem pgvwc07_mem_iSup_groundSpace_iff_iSup_restrictions
 
 /-- Subspace form of the one-step block intersection identity.
 
-Let \(S_n=\bigvee_jG_{n+1}(A^j)\).  Under the PGVWC common word-span
+Let \(S_n=\bigvee_jG_{n+1}(A^j)\). Under the common word-span
 hypothesis and the normalization
 \[
   \sum_a A^j_a A^{j\dagger}_a=I,
@@ -902,8 +897,7 @@ hypothesis and the normalization
 the \((n+2)\)-site block ground space is the intersection of the inverse
 images of \(S_n\) under all fixed last-letter and fixed first-letter
 restrictions.  This is the restriction-subspace form of
-[Perez-Garcia--Verstraete--Wolf--Cirac 2007] (arXiv:quant-ph/0608197),
-Theorem 12, proof lines 1442--1452. -/
+Theorem 12 of arXiv:quant-ph/0608197, proof lines 1442--1452. -/
 theorem pgvwc07_iSup_groundSpace_eq_restriction_intersection
     {r : ℕ} {dim : Fin r → ℕ}
     (A : (j : Fin r) → MPSTensor d (dim j))
@@ -920,7 +914,7 @@ theorem pgvwc07_iSup_groundSpace_eq_restriction_intersection
   simpa [restrictLast, restrictFirst] using
     (pgvwc07_mem_iSup_groundSpace_iff_iSup_restrictions A hSpan hUnital ψ).symm
 
-/-- Product spans give the PGVWC one-step intersection identity as an internal
+/-- Product spans give the one-step block-intersection identity as an internal
 direct sum.
 
 Let
@@ -941,8 +935,8 @@ then \(S_{n+1}\) and \(\bigvee_jG_{n+2}(A^j)\) are internal direct sums, and
   \bigvee_jG_{n+2}(A^j).
 \]
 This is the one-step block-intersection formula of
-[Perez-Garcia--Verstraete--Wolf--Cirac 2007] (arXiv:quant-ph/0608197) together
-with the directness needed to read the joins as direct sums of local block
+Theorem 12 of arXiv:quant-ph/0608197 together with the directness needed to
+read the joins as direct sums of local block
 spaces. -/
 theorem pgvwc07_directSum_restriction_intersection_of_wordTupleSpanTop
     {r : ℕ} {dim : Fin r → ℕ}
@@ -962,7 +956,7 @@ theorem pgvwc07_directSum_restriction_intersection_of_wordTupleSpanTop
     groundSpace_iSupIndep_of_wordTupleSpanTop A hSpan_succ_succ,
     pgvwc07_iSup_groundSpace_eq_restriction_intersection A hSpan hUnital⟩
 
-/-- Period-window form of the PGVWC one-step block intersection.
+/-- Period-window form of the one-step block intersection.
 
 If a positive period and a complete residue window give full homogeneous
 blockwise product spans, then the one-step block-intersection subspace equality

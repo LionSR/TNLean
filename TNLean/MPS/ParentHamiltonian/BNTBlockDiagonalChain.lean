@@ -106,9 +106,9 @@ conditions.
 transitively uses the boundary-condition comparison at boundary-crossing windows
 rather than deriving it from arXiv:2011.12127, Section IV.C, lines 2126--2128.
 Documented in `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
-Elimination: derive the PGVWC07 \(C^j,D^j,E^j\) boundary-condition comparison
-from arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it
-to discharge the currently assumed boundary-condition comparison; tracked in issue 2971. -/
+Elimination: derive the \(C^j,D^j,E^j\) boundary-condition comparison from
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
+discharge the currently assumed boundary-condition comparison; tracked in issue 2971. -/
 theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -190,7 +190,7 @@ internal-direct-sum conclusions above, which transitively use the
 boundary-condition comparison at boundary-crossing windows rather than deriving
 it from arXiv:2011.12127, Section IV.C, lines 2126--2128. Documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
-derive the PGVWC07 \(C^j,D^j,E^j\) boundary-condition comparison from
+derive the \(C^j,D^j,E^j\) boundary-condition comparison from
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
 discharge the currently assumed boundary-condition comparison; tracked in issue 2971. -/
 theorem chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1
@@ -243,7 +243,7 @@ which transitively uses the boundary-condition comparison at boundary-crossing
 windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
 2126--2128. Documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
-derive the PGVWC07 \(C^j,D^j,E^j\) boundary-condition comparison from
+derive the \(C^j,D^j,E^j\) boundary-condition comparison from
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
 discharge the currently assumed boundary-condition comparison; tracked in issue 2971. -/
 theorem exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1
@@ -313,9 +313,9 @@ representation of \(\psi\). The periodic-boundary upgrade is the separate
 boundary-condition comparison for the cyclic windows crossing the chosen cut.
 
 This proves the displayed statement. The
-Pérez-García--Verstraete--Wolf--Cirac boundary-condition comparison
-(arXiv:quant-ph/0608197, proof lines 1454--1456; arXiv:2011.12127, lines
-2126--2128) shows, under the comparison identities, that these same component
+boundary-condition comparison in arXiv:quant-ph/0608197, proof lines
+1454--1456, and arXiv:2011.12127, lines 2126--2128, shows, under the
+comparison identities, that these same component
 vectors lie in \(\mathcal G_{N,L}(A_j)\).
 
 **Unfaithful:** This proof relies on
@@ -324,7 +324,7 @@ which transitively uses the boundary-condition comparison at boundary-crossing
 windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
 2126--2128. Documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
-derive the PGVWC07 \(C^j,D^j,E^j\) boundary-condition comparison from
+derive the \(C^j,D^j,E^j\) boundary-condition comparison from
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
 discharge the currently assumed boundary-condition comparison; tracked in issue 2971. -/
 theorem
@@ -443,7 +443,7 @@ which transitively uses the boundary-condition comparison at boundary-crossing
 windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
 2126--2128. Documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
-derive the PGVWC07 \(C^j,D^j,E^j\) boundary-condition comparison from
+derive the \(C^j,D^j,E^j\) boundary-condition comparison from
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
 discharge the currently assumed boundary-condition comparison; tracked in issue 2971. -/
 theorem chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital_c1
@@ -858,7 +858,7 @@ which transitively uses the boundary-condition comparison at boundary-crossing
 windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
 2126--2128. Documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
-derive the PGVWC07 \(C^j,D^j,E^j\) boundary-condition comparison from
+derive the \(C^j,D^j,E^j\) boundary-condition comparison from
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
 discharge the currently assumed boundary-condition comparison; tracked in issue 2971. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_blockBoundary
@@ -924,7 +924,7 @@ which transitively uses the boundary-condition comparison at boundary-crossing
 windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
 2126--2128. Documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
-derive the PGVWC07 \(C^j,D^j,E^j\) boundary-condition comparison from
+derive the \(C^j,D^j,E^j\) boundary-condition comparison from
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
 discharge the currently assumed boundary-condition comparison; tracked in issue 2971. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_boundary_decomposition
