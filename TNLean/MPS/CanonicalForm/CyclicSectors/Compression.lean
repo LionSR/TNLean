@@ -137,7 +137,7 @@ theorem exists_compressedTensor_of_supported_projection_with_letter_and_isometry
     have hfun : (fun k => f k * f k) = f := by
       apply Matrix.diagonal_injective
       simpa [Matrix.diagonal_mul_diagonal] using hDiag_idem
-    exact mul_self_eq_self_or_eq_one (f j) (congrFun hfun j)
+    exact IsIdempotentElem.iff_eq_zero_or_one.mp (congrFun hfun j)
   -- Index splitting
   let p : Fin D → Prop := fun j => f j = 1
   haveI : DecidablePred p := fun _ => inferInstance

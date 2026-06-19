@@ -1164,6 +1164,56 @@ Removed unused local convenience wrappers:
 The first and third merely restated `cumulativeSpan_eq_top`, while the second
 was just `evalWord_nil`.  No Lean or blueprint declaration referred to them.
 
+### Complex scalar idempotents, 2026-06-19
+
+Removed the local scalar lemma:
+
+- `MPSTensor.mul_self_eq_self_or_eq_one`
+
+This theorem specialized Mathlib's general idempotent-element result
+`IsIdempotentElem.iff_eq_zero_or_one` to complex numbers.  The three local
+uses in invariant-subspace splitting and cyclic-sector compression now call
+the Mathlib theorem directly.
+
+### Complex nonnegative cone and norm, 2026-06-19
+
+Removed private local proofs of standard complex-order facts:
+
+- `isClosed_complex_nonneg`
+- `norm_of_complex_nonneg`
+- `isClosed_complex_nonneg_generic`
+
+Mathlib 4.31 supplies the ordered-topology instance for the complex order under
+`ComplexOrder`, so the closedness proof is now
+`isClosed_le continuous_const continuous_id`.  For nonnegative complex numbers,
+the bounded-density-matrix argument now derives the real norm identity from
+`Complex.norm_of_nonneg'`.
+
+### Commuting idempotent products, 2026-06-19
+
+Removed the local linear-map specialization:
+
+- `LinearMap.comp_idem_of_comm_idem`
+
+The theorem was exactly `IsIdempotentElem.mul_of_commute` for endomorphisms
+written with composition notation.  The commuting-parent-Hamiltonian proof now
+uses the Mathlib theorem directly.
+
+### Projection-complement idempotent algebra, 2026-06-19
+
+The projection-triangular trace file keeps its local projection-complement
+lemma names because they are part of the internal proof script, but their
+handwritten matrix-ring proofs have been replaced by Mathlib's general
+idempotent-complement API:
+
+- `IsIdempotentElem.mul_one_sub_self`
+- `IsIdempotentElem.one_sub_mul_self`
+- `IsIdempotentElem.one_sub`
+
+Thus `MPSTensor.proj_mul_projCompl`, `MPSTensor.projCompl_mul_proj`, and
+`MPSTensor.projCompl_mul_projCompl` now only translate
+`IsOrthogonalProjection P` into the corresponding general idempotent fact.
+
 ### Deprecation-policy exceptions
 
 The usual convention in `docs/MATHLIB_style.md` is to keep a public
@@ -1204,6 +1254,10 @@ pass-throughs:
 - `MPSTensor.matrix_in_cumulativeSpan`, `MPSTensor.one_eq_evalWord_nil`, and
   `MPSTensor.wordSpan_generates_full_algebra`.  These were immediate
   restatements of `cumulativeSpan_eq_top` or `evalWord_nil`.
+- `MPSTensor.mul_self_eq_self_or_eq_one`.  This was the complex-number
+  specialization of `IsIdempotentElem.iff_eq_zero_or_one`.
+- `LinearMap.comp_idem_of_comm_idem`.  This was the endomorphism-composition
+  specialization of `IsIdempotentElem.mul_of_commute`.
 
 ## Verification performed
 
@@ -1254,6 +1308,7 @@ lake build TNLean.Channel.Irreducible.Basic TNLean.MPS.Irreducible.Adjoint \
   TNLean.MPS.Periodic.SectorIrreducibility.HLiftCore -q --log-level=info
 lake env lean TNLean/Algebra/MatrixAux.lean --json
 lake env lean TNLean/Spectral/GaugeConstruction.lean --json
+lake build TNLean.Algebra.ProjectionTriangularTrace -q --log-level=info
 lake env lean TNLean/Spectral/TransferOperatorGapNT.lean --json
 lake env lean TNLean/Spectral/TransferOperatorGapRect.lean
 lake env lean TNLean/Spectral/PrimitiveOverlap.lean
