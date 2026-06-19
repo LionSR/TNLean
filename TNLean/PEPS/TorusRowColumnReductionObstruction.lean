@@ -217,11 +217,6 @@ theorem Aunits_isNBlkInjective : IsNBlkInjective Aunits 1 :=
 theorem gaugeEquiv_Aunits_Bunits : GaugeEquiv Aunits Bunits :=
   ⟨Gunit⁻¹, fun i => by rw [Bunits, inv_inv]⟩
 
-/-- `Aunits` and `Bunits` generate the same matrix product vector family: gauge
-equivalence preserves every closed-chain coefficient. -/
-theorem sameMPV_Aunits_Bunits : SameMPV Aunits Bunits :=
-  gaugeEquiv_Aunits_Bunits.sameMPV
-
 /-- `Bunits` is injective at block length one: gauge equivalence preserves
 injectivity, since conjugation by an invertible matrix maps a spanning family to a
 spanning family. -/
@@ -270,7 +265,8 @@ the section "No coherence question between rows". -/
 theorem rowCutGaugeFactorizes_false : ¬ RowCutGaugeFactorizes := by
   intro hRoute
   obtain ⟨Z, lam, hprod, hrel⟩ :=
-    hRoute Aunits Bunits Aunits_isNBlkInjective Bunits_isNBlkInjective sameMPV_Aunits_Bunits
+    hRoute Aunits Bunits Aunits_isNBlkInjective Bunits_isNBlkInjective
+      gaugeEquiv_Aunits_Bunits.sameMPV
   -- Specialize the relation to the matrix units and clear the inverse on the left.
   -- `Z * (Ginv (single a b 1) Gmat) = lam • (single a b 1 * Z)`.
   have hZrel : ∀ a b : Fin 4,

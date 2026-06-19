@@ -209,8 +209,8 @@ theorem bondDim_apply_eq_of_coherentFrames
     rw [hBc]
     exact F'.frame.coarseTensor_isVertexInjective.scaleVertex (0 : Fin 3)
       (Nat.cast_ne_zero.mpr hcApos.ne')
-  have hposAc : ∀ f : Edge coarseGraph, 0 < Ac.bondDim f := F.frame.coarseTensor_pos_bondDim
-  have hposBc : ∀ f : Edge coarseGraph, 0 < Bc.bondDim f := F'.frame.coarseTensor_pos_bondDim
+  have hposAc : ∀ f : Edge coarseGraph, 0 < Ac.bondDim f := F.frame.pos_coarseBondDim
+  have hposBc : ∀ f : Edge coarseGraph, 0 < Bc.bondDim f := F'.frame.pos_coarseBondDim
   -- The insertion algebra equivalence on the coarse `r-b` bond forces equal sizes.
   have hΦ := edgeTransferAlgEquiv Ac Bc coarseEdgeRB
     (hAcInj.edgeBlockedThreeSiteInjective hposAc coarseEdgeRB)
