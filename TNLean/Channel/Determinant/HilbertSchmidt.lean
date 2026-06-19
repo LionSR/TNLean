@@ -130,10 +130,6 @@ private theorem stdBasis_mul_conjTranspose_self (i j : Fin d) :
   simpa only [stdBasis_conjTranspose_eq_swap] using
     (stdBasis_conjTranspose_mul_self (d := d) (i := j) (j := i))
 
-private theorem sum_single_diag_one :
-    ∑ j : Fin d, Matrix.single j j (1 : ℂ) = (1 : MatrixAlg d) := by
-  simpa only using (Matrix.sum_single_one (m := Fin d) (α := ℂ))
-
 /-- Summing `E_{ij} E_{ij}^†` over the standard matrix basis yields `d • 1`. -/
 theorem sum_stdBasis_mul_conjTranspose :
     ∑ ij : Fin d × Fin d,
@@ -159,7 +155,7 @@ theorem sum_stdBasis_mul_conjTranspose :
           simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin, smul_single,
             nsmul_eq_mul, mul_one, smul_eq_mul]
     _ = (d : ℂ) • ∑ i : Fin d, Matrix.single i i (1 : ℂ) := by rw [Finset.smul_sum]
-    _ = (d : ℂ) • (1 : MatrixAlg d) := by rw [sum_single_diag_one]
+    _ = (d : ℂ) • (1 : MatrixAlg d) := by rw [Matrix.sum_single_one]
 
 /-- If a finite family of nonnegative reals has total sum at most `0`, then every term is `0`. -/
 lemma eq_zero_of_nonneg_of_sum_le_zero {ι : Type*} [Fintype ι]
