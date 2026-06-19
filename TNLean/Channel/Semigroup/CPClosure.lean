@@ -177,34 +177,6 @@ theorem Finset.isCPMap_sum
 
 end GenericCPClosure
 
-section PosSemidefiniteClosure
-
-variable {m : Type*}
-
-/-- The quadratic form `X ↦ star v ⬝ᵥ X.mulVec v` is continuous. -/
-private lemma continuous_quadraticForm_generic [Fintype m] (v : m → ℂ) :
-    Continuous (fun X : Matrix m m ℂ => star v ⬝ᵥ X.mulVec v) :=
-  Continuous.dotProduct continuous_const
-    (Continuous.matrix_mulVec continuous_id continuous_const)
-
-/-- The PSD cone is closed for matrices over any finite index type. -/
-theorem matrix_isClosed_posSemidef [Finite m] :
-    IsClosed {X : Matrix m m ℂ | X.PosSemidef} := by
-  classical
-  letI := Fintype.ofFinite m
-  have : {X : Matrix m m ℂ | X.PosSemidef}
-      = {X | X.IsHermitian} ∩
-        ⋂ (v : m → ℂ), {X | 0 ≤ star v ⬝ᵥ X.mulVec v} := by
-    ext X
-    simp only [Set.mem_setOf_eq, Set.mem_inter_iff, Set.mem_iInter,
-      Matrix.posSemidef_iff_dotProduct_mulVec]
-  rw [this]
-  exact (isClosed_eq continuous_star continuous_id).inter
-    (isClosed_iInter fun v =>
-      (isClosed_le continuous_const continuous_id).preimage (continuous_quadraticForm_generic v))
-
-end PosSemidefiniteClosure
-
 namespace ChoiJamiolkowski
 
 variable {D : ℕ}
