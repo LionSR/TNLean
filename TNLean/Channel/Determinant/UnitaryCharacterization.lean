@@ -227,15 +227,13 @@ private theorem forward_det_one_implies_unitaryChannel [NeZero d]
   have hT_inner : ∀ A : MatrixAlg d,
       T A = (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) * A * (↑P : MatrixAlg d) := by
     intro A
-    suffices h : ∀ B, trace ((T A -
-        (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) * A * (↑P : MatrixAlg d)) * B) = 0 by
-      exact sub_eq_zero.mp ((Matrix.trace_mul_right_eq_zero_iff _).mp h)
+    apply (Matrix.ext_iff_trace_mul_right).2
     intro B
-    rw [sub_mul, trace_sub, hAdj A B]
-    change trace (A * Td B) -
+    rw [hAdj A B]
+    change trace (A * Td B) =
       trace ((↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) * A *
-        (↑P : MatrixAlg d) * B) = 0
-    rw [show Td B = Td_equiv B from rfl, hP B, sub_eq_zero]
+        (↑P : MatrixAlg d) * B)
+    rw [show Td B = Td_equiv B from rfl, hP B]
     simpa only [Matrix.mul_assoc] using
       (Matrix.trace_mul_cycle (A * (↑P : MatrixAlg d)) B
         ((↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d)))

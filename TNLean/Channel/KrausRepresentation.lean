@@ -46,23 +46,17 @@ theorem kraus_sum_conjTranspose_mul_of_tp
     (hK : ∀ X, T X = ∑ i : Fin r, K i * X * (K i)ᴴ)
     (htp : IsTracePreservingMap T) :
     ∑ i : Fin r, (K i)ᴴ * K i = 1 := by
-  -- Show `∑ᵢ Kᵢ†Kᵢ - 1 = 0` via trace pairing nondegeneracy.
   -- For any `N`: `tr((∑ᵢ Kᵢ†Kᵢ) N) = ∑ᵢ tr(Kᵢ†KᵢN) = ∑ᵢ tr(KᵢNKᵢ†) = tr(T(N)) = tr(N)`.
-  suffices h : ∀ N : Matrix (Fin D) (Fin D) ℂ,
-      trace ((∑ i : Fin r, (K i)ᴴ * K i - 1) * N) = 0 by
-    have := (Matrix.trace_mul_right_eq_zero_iff _).mp h
-    exact sub_eq_zero.mp this
+  apply (Matrix.ext_iff_trace_mul_right).2
   intro N
-  rw [sub_mul, Matrix.one_mul]
-  rw [show ((∑ i, (K i)ᴴ * K i) * N - N).trace =
-    ((∑ i, (K i)ᴴ * K i) * N).trace - N.trace from Matrix.trace_sub _ _]
+  rw [Matrix.one_mul]
   rw [Finset.sum_mul, Matrix.trace_sum]
   simp_rw [show ∀ i : Fin r,
     ((K i)ᴴ * K i * N).trace = (K i * N * (K i)ᴴ).trace from
     fun i => by rw [Matrix.mul_assoc ((K i)ᴴ), Matrix.trace_mul_comm, Matrix.mul_assoc]]
   rw [← Matrix.trace_sum]
   conv_lhs => rw [← hK N]
-  rw [htp N, sub_self]
+  rw [htp N]
 
 /-- **Theorem 2.1 item 1 (normalization ⟹ TP, Eq. (2.8))**:
 If `∑ᵢ Kᵢ†Kᵢ = 𝟙`, then `T(X) = ∑ᵢ Kᵢ X Kᵢ†` is trace-preserving. -/
