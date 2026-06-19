@@ -97,6 +97,10 @@ The clearest replacements are:
   `Matrix.ext_iff_trace_mul_right` directly.  The one-use local theorem
   `Matrix.eq_zero_of_forall_trace_mul_eq_zero` was removed from
   `TNLean/Channel/Semigroup/LindbladForm/TraceBridge.lean`.
+- The Kossakowski-to-Lindblad comparison now collapses the identity-matrix
+  finite sum directly at the proof site using `Matrix.one_apply`,
+  `Finset.sum_add_distrib`, and Mathlib's if-supported finite-sum
+  simplification.  The private lemma `sum_one_smul_eq` was removed.
 - Further Lean 4.31 elaboration checks removed local heartbeat bounds from the
   POVM unitary-comparison proof, the irreducible-channel spectral-radius scalar
   proof, the semigroup perturbation derivative proof, and the common
@@ -1790,6 +1794,24 @@ Focused check:
 
 ```bash
 lake build TNLean.MPS.ParentHamiltonian.Martingale.Transport -q --log-level=info
+```
+
+## Kossakowski identity-sum cleanup, 2026-06-19
+
+`TNLean/Channel/Semigroup/KossakowskiForm.lean` had a private theorem
+`sum_one_smul_eq` saying that a finite sum weighted by the identity matrix
+collapses to the diagonal term.  After `Matrix.one_apply`, this is just an
+if-supported finite sum.
+
+The backward Lindblad-to-Kossakowski direction now unfolds the single
+Kossakowski summand and lets `simp`, together with `Finset.sum_add_distrib`,
+collapse the two if-supported sums directly.  The mathematical statement of
+`kossakowski_iff_lindblad` is unchanged.
+
+Focused check:
+
+```bash
+lake build TNLean.Channel.Semigroup.KossakowskiForm -q --log-level=info
 ```
 
 ## Conclusions

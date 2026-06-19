@@ -117,22 +117,6 @@ def KossakowskiForm.toLinearMap (K : KossakowskiForm D) :
 
 /-! ### Auxiliary lemmas for Kossakowski ↔ Lindblad conversion -/
 
-/-- Collapsing a sum weighted by the identity matrix:
-`∑_l (1 : Matrix) l k • f(l) = f(k)`. -/
-private lemma sum_one_smul_eq {n : ℕ}
-    {M : Type*} [AddCommMonoid M] [Module ℂ M]
-    (k : Fin n) (f : Fin n → M) :
-    ∑ l : Fin n,
-      (1 : Matrix (Fin n) (Fin n) ℂ) l k • f l = f k := by
-  simp only [Matrix.one_apply]
-  have : ∀ l : Fin n,
-      (if l = k then (1 : ℂ) else 0) • f l =
-      if l = k then f l else 0 := by
-    intro l; split_ifs <;> simp
-  simp_rw [this]
-  exact (Finset.sum_ite_eq' _ k (fun l => f l)).trans
-    (by simp)
-
 /-- The dissipator equals ½ of the Kossakowski commutator sum
 (for a single operator). This connects the two forms. -/
 private lemma dissipator_eq_half_kossakowski
@@ -266,7 +250,7 @@ theorem kossakowski_iff_lindblad
     apply Finset.sum_congr rfl
     intro k _
     symm
-    exact sum_one_smul_eq k _
+    simp [kossakowskiTerm, Matrix.one_apply, Finset.sum_add_distrib]
 
 end KossakowskiForms
 
