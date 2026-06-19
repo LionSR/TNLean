@@ -513,7 +513,7 @@ unconditional result.
 
 \begin{definition}[Off-diagonal sector decomposition]%
     \label{def:cyclic_sector_decomp}
-    \lean{MPSTensor.IsCyclicSectorDecomp}
+    \lean{MPSTensor.IsCyclicSectorDecomp, MPSTensor.IsCyclicSectorDecompWith}
     \leanok
     \uses{def:periodic_tensor}
     A family of compressed sector tensors
@@ -530,6 +530,9 @@ unconditional result.
         P_k \cdot M_D(\mathbb{C}) \cdot P_k$
     (multiplicative and adjoint-preserving) intertwining the compressed adjoint
     transfer map with the sector adjoint transfer map on the corner of~$P_k$.
+    We shall sometimes keep these projections and corner isomorphisms as
+    specified witnesses; forgetting the witnesses gives the displayed
+    decomposition.
     This is the inverse cyclic indexing of the off-diagonal convention in
     \cite[Appendix~A]{DeLasCuevas2017Irreducible}. There the same adjoint
     transfer map is written $E^*$, and the source projectors satisfy
@@ -1123,7 +1126,15 @@ unconditional result.
     \uses{lem:sector_match_propagation, def:cyclic_sector_decomp}
     Let $A$ and $B$ be left-canonical tensors with period $m$, and let
     $\bar A\sim\bigoplus_u A_u$ and $\bar B\sim\bigoplus_v B_v$ be unit-weight
-    cyclic sector decompositions whose sectors are left-canonical. Assume
+    cyclic sector decompositions whose sectors are left-canonical. Let the
+    specified cyclic projectors be $P_u$ and $Q_v$, and let the specified
+    corner identifications realize the blocked sector tensors by
+    \[
+        A_u^\alpha = P_u\bar A^\alpha P_u,
+        \qquad
+        B_v^\alpha = Q_v\bar B^\alpha Q_v.
+    \]
+    Assume
     $d_u\ne0$ and $A_u$ is normal for every $u$. Fix $q\in\mathbb Z_m$ and
     assume that for every $u$ there are $d_u=e_{u+q}$, $\zeta_u\ne0$, and
     $X_u\in\GL_{d_u}(\C)$ such that
@@ -1156,7 +1167,14 @@ unconditional result.
         def:cyclic_sector_decomp}
     Let $A$ and $B$ be periodic tensors with the same period $m$. Let
     $\bar A\sim\bigoplus_u A_u$ and $\bar B\sim\bigoplus_v B_v$ be unit-weight
-    cyclic sector decompositions whose sectors are left-canonical, and assume
+    cyclic sector decompositions whose sectors are left-canonical, with
+    specified cyclic projectors $P_u,Q_v$ and corner identifications satisfying
+    \[
+        A_u^\alpha = P_u\bar A^\alpha P_u,
+        \qquad
+        B_v^\alpha = Q_v\bar B^\alpha Q_v.
+    \]
+    Assume
     every sector $A_u$ has nonzero virtual dimension. If there are sectors
     $u_0,v_0$ with $d_{u_0}=e_{v_0}$ and
     $A_{u_0}\sim_{\mathrm{gp}}B_{v_0}$ after identifying their virtual spaces,

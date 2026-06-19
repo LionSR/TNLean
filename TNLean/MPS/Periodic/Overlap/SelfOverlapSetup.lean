@@ -84,13 +84,13 @@ algebras, so irreducibility and primitivity may be transferred through the
 corner representation.  The underlying linear maps are isometries for the
 canonical inner products; the support isometries record this property where
 needed. -/
-def IsCyclicSectorDecomp [NeZero D] [NeZero m] (A : MPSTensor d D)
+def IsCyclicSectorDecompWith [NeZero D] [NeZero m] (A : MPSTensor d D)
     {dim : Fin m → ℕ}
-    (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)) : Prop :=
-  ∃ (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
+    (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
+    (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
     (φ : (k : Fin m) →
-      Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k)),
-    (∀ k, IsOrthogonalProjection (P k)) ∧
+      Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k)) : Prop :=
+  (∀ k, IsOrthogonalProjection (P k)) ∧
     (∑ k : Fin m, P k = 1) ∧
     (∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) ∧
     (∀ k (i : Fin (blockPhysDim d m)),
@@ -106,6 +106,17 @@ def IsCyclicSectorDecomp [NeZero D] [NeZero m] (A : MPSTensor d D)
       (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1) ∧
     (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
       (φ k Xᴴ).1 = ((φ k X).1)ᴴ)
+
+/-- A cyclic-sector decomposition with existentially quantified projectors and
+corner identifications. Use `IsCyclicSectorDecompWith` when the particular
+projectors and corner maps are part of the surrounding statement. -/
+def IsCyclicSectorDecomp [NeZero D] [NeZero m] (A : MPSTensor d D)
+    {dim : Fin m → ℕ}
+    (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)) : Prop :=
+  ∃ (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
+    (φ : (k : Fin m) →
+      Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k)),
+    IsCyclicSectorDecompWith A blocks P φ
 
 /-- The single-site off-diagonal grading carried by a cyclic sector decomposition:
 each unblocked Kraus operator carries the cyclic projection index `k` to `k + 1`,
