@@ -201,8 +201,11 @@ theorem regionBoundaryGauge_translate {B : Tensor (torusGraph width height) d}
           glReindex h ((X f.1)⁻¹) := by
         rw [hGL]
         exact (map_inv (glReindex h) (X f.1)).symm
-      rw [if_neg (fun hcon => hPf (hmem.mp hcon)), if_neg hPf, hX', glReindex_coe,
-        reindexAlgEquiv_transpose]
+      rw [if_neg (fun hcon => hPf (hmem.mp hcon)), if_neg hPf, hX',
+        glReindex_coe]
+      simpa only [Matrix.coe_reindexAlgEquiv] using
+        (Matrix.transpose_reindex (finCongr h) (finCongr h)
+          (↑((X f.1)⁻¹) : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ))
   · -- The translation swaps the stored endpoint order.
     have hQ : ¬((boundaryEdgeMap (translate a b) R f).1.1.1 = translate a b f.1.1.1) := by
       rw [hfst]
@@ -225,7 +228,12 @@ theorem regionBoundaryGauge_translate {B : Tensor (torusGraph width height) d}
         rw [hGL, (map_inv (glReindex h) ((glTranspose (X f.1))⁻¹)).symm]
         exact congrArg (glReindex h) (inv_inv (glTranspose (X f.1)))
       rw [if_neg (fun hcon => hv (hmem.mp hcon)), if_pos hPf, hX',
-        glReindex_coe, glTranspose_coe, reindexAlgEquiv_transpose, Matrix.transpose_transpose]
+        glReindex_coe, glTranspose_coe]
+      change ((Matrix.reindex (finCongr h) (finCongr h))
+          (↑(X f.1) : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)ᵀ)ᵀ =
+        (Matrix.reindex (finCongr h) (finCongr h))
+          (↑(X f.1) : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
+      rw [Matrix.transpose_reindex, Matrix.transpose_transpose]
     · have hv : f.1.1.2 ∈ R := by
         rcases hexcl with ⟨hcon, _⟩ | ⟨_, hv⟩
         · exact absurd hcon hPf

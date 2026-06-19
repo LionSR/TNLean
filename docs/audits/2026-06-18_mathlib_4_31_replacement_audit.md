@@ -56,13 +56,46 @@ The clearest replacements are:
   Mathlib 4.31 provides the required matrix `NonnegSpectrumClass` instance
   through `MatrixOrder`, and the non-unital CFC instance through
   `ContinuousFunctionalCalculus.toNonUnital`.
+- The remaining local uses of deprecated-name aliases in non-Archive Lean code
+  were exact pass-through layers and have been removed after confirming that the
+  new names are used internally.  Some deprecated compatibility declarations are
+  retained where they are public names.
 - Positive-map and completely-positive-map arguments should gradually acquire
   bridge lemmas to Mathlib's `PositiveLinearMap` and `CompletelyPositiveMap`.
+  The first such bridge, `IsPositiveMap.toPositiveLinearMap`, is now used to
+  prove `IsPositiveMap.map_isHermitian` from Mathlib's `map_isSelfAdjoint`.
 - The remaining non-Archive axioms were checked.  They are all still used, and
   Mathlib 4.31 does not yet contain direct replacements for their statements.
   The operator-concavity facts newly available in Mathlib are useful inputs for
   future proofs of the Jensen axioms, not replacements for the present
   positive-map Jensen conclusions.
+- Four scalar-instance pass-through abbreviations in
+  `TNLean.Algebra.MatrixOperatorSpace` were removed.  Their few explicit users
+  now use the corresponding `inferInstance` arguments directly.
+- The rectangular continuous-linear-map instance package formerly exported by
+  `TNLean.Spectral.GaugeConstruction` has mostly been inlined in the
+  spectral-radius proofs.  They now use Mathlib's
+  `ContinuousLinearMap.toNormedRing`, `ContinuousLinearMap.toNormedAlgebra`,
+  and local finite-dimensional completeness proofs directly; the former
+  finite-dimensional witness was removed with the other exact local wrappers.
+- Two one-use Frobenius submultiplicativity wrappers in the transfer-operator
+  gap files were removed.  The proofs now call Mathlib's
+  `Matrix.frobenius_norm_mul` directly at the Hilbert-Schmidt estimate.
+- The dissipative-drift semigroup proof now uses Mathlib's ball-free
+  `NormedSpace.map_exp` theorem for continuous algebra homomorphisms.  The
+  local exponential convergence-ball lemma and the old Lean 4.29 heartbeat
+  adjustment are no longer needed.
+- The rectangular Kraus-freedom proof now names the Euclidean-space
+  inner-product structure explicitly by `PiLp.innerProductSpace`, removing a
+  large local synthesis budget that was needed only to find this standard
+  instance.
+- The determinant-one unitary-channel characterization now has one Lean
+  statement.  The duplicate `_of_channel` theorem had the same hypotheses and
+  conclusion as `channelDet_norm_eq_one_iff_exists_unitaryChannel`, so the
+  blueprint points directly to the latter.
+- Further Lean 4.31 elaboration checks removed local heartbeat bounds from the
+  POVM unitary-comparison proof, the irreducible-channel spectral-radius scalar
+  proof, and the semigroup perturbation derivative proof.
 
 There are also important non-replacements.
 
@@ -197,6 +230,32 @@ Recommended action:
   algebra compatibility is needed.
 - Avoid adding local reindexing wrappers unless a file uses the same cast
   pattern repeatedly.
+
+Applied PEPS follow-up:
+
+- Explicit uses of `TNLean.PEPS.reindexAlgEquiv_smul` were removed.  The four
+  scalar transport sites in `TNLean/PEPS/TorusGaugeUniqueness.lean` now rewrite
+  by Mathlib's `map_smul` for the algebra equivalence.  The unused
+  compatibility theorem was then removed.
+- Explicit uses of `TNLean.PEPS.reindexAlgEquiv_finCongr_symm_round` were
+  removed from `TNLean/PEPS/EdgeGaugeFamily.lean`.  The only local transport
+  site now uses a proof by simplifying `Matrix.reindexAlgEquiv` directly.  The
+  unused compatibility theorem was then removed.
+- Explicit uses of `TNLean.PEPS.reindexAlgEquiv_gaugeConj` were removed.  The
+  only use in `TNLean/PEPS/TorusWitnessTransport.lean` now uses `map_mul`,
+  `map_inv`, and `glReindex_coe` directly.  The unused compatibility theorem
+  was then removed.
+- Explicit uses of `TNLean.PEPS.reindexAlgEquiv_transpose` were removed.  Its
+  users now call Mathlib's `Matrix.transpose_reindex` directly, with local
+  `change` steps where the gauge-applied bond dimension is definitionally equal
+  to the original one.  The unused compatibility theorem was then removed.
+- The corresponding blueprint theorem was deleted, since the algebra fact is
+  now an inline proof step in the blueprint route rather than a formalized
+  target.
+- The private MPS cyclic-sector helper
+  `reindexLinearEquiv_conjTranspose` was removed from
+  `TNLean/MPS/CanonicalForm/CyclicSectors/Compression.lean`; its two uses now
+  cite Mathlib's `Matrix.conjTranspose_reindex` directly.
 
 ### Rank and finite-dimensional matrix dimensions
 
@@ -440,7 +499,7 @@ Relevant declarations and structures include:
 
 - `PositiveLinearMap`
 - `PositiveLinearMap.exists_norm_apply_le`
-- `PositiveLinearMap.map_isSelfAdjoint`
+- `map_isSelfAdjoint`
 - `PositiveLinearMap.apply_le_of_isSelfAdjoint`
 - `PositiveLinearMap.norm_apply_le_of_nonneg`
 - `CompletelyPositiveMap`
@@ -465,13 +524,37 @@ used by Wolf's notes.
 Recommended action:
 
 - Do not replace the local channel definitions wholesale.
-- Add bridge lemmas in a separate layer:
+- Add bridge lemmas:
   local Kraus positivity implies a Mathlib `CompletelyPositiveMap`, and
   Mathlib complete positivity implies the local finite-dimensional positivity
   statements when transported to matrices.
 - Use `PositiveLinearMap` to replace local proofs of self-adjointness,
-  monotonicity, and boundedness only after the bridge exists.
+  monotonicity, and boundedness when this does not change the public channel
+  vocabulary.
 - Keep Choi, Kraus, Stinespring, partial trace, and tensor-map statements local.
+
+Applied bridge:
+
+- `TNLean/Channel/Basic.lean` now defines
+  `IsPositiveMap.toPositiveLinearMap`.
+- The proof of `IsPositiveMap.map_isHermitian` now applies Mathlib's
+  `map_isSelfAdjoint` to this bridge, replacing the local CFC positive-part /
+  negative-part decomposition.
+- `TNLean/Channel/Schwarz/PositiveMapProperties.lean` now proves
+  `IsPositiveMap.map_le_map` by the monotonicity of the bridged
+  `PositiveLinearMap`, and proves `IsPositiveMap.map_conjTranspose` from
+  Mathlib's star-preservation theorem for positive maps between C-star
+  algebras.
+- The direct imports of the CFC basic and positive-part files were removed from
+  `TNLean/Channel/Basic.lean`; the needed Mathlib theorem is provided by
+  `Mathlib.Analysis.CStarAlgebra.PositiveLinearMap`.
+
+Additional channel cleanup:
+
+- The private scalar pass-through theorem `star_I_eq_neg_I` was removed from
+  `TNLean/Channel/WolfProps.lean`.  The two polarization proofs now cite
+  `Complex.conj_I` directly as a local proof term inside `simp only`, leaving
+  the other conjugates in the scalar identity untouched.
 
 ### Operator convexity, monotonicity, and CFC
 
@@ -512,6 +595,16 @@ The same `MatrixOrder` scoped instance also replaces the private local matrix
 - `TNLean/Channel/Schwarz/OperatorMonotone.lean`
 - `TNLean/Channel/Schwarz/OperatorConvexity.lean`
 - `TNLean/Channel/Schwarz/AndoLieb.lean`
+
+A later pass also reduced the local matrix-instance blocks in
+`TNLean/Analysis/OperatorConvexity.lean`,
+`TNLean/Axioms/OperatorConvexity.lean`,
+`TNLean/Channel/Schwarz/OperatorConvexity.lean`, and
+`TNLean/Channel/Schwarz/OperatorMonotone.lean`.  The files still keep the two
+local normed instances that the CFC notation requires for the concrete matrix
+norm, but the local `CStarRing`, `PartialOrder`, `StarOrderedRing`, and
+`CStarAlgebra` pass-through aliases are no longer needed; Mathlib 4.31's
+matrix order and C-star instances are used directly.
 
 Mathlib 4.31 can strengthen the order-theoretic part of these arguments, but
 the trace Jensen inequalities and matrix-trace CFC formulas remain
@@ -580,6 +673,21 @@ equality characterization in the form stated here.  These axioms remain
 necessary until the quantum relative-entropy and Markov-decomposition
 formalization is supplied locally or upstream.
 
+The same audit was compared against the current non-Archive `sorry` surface.
+The remaining proof placeholders are the three Lorentz-normal-form statements
+in `TNLean/Channel/LorentzNormalForm.lean` and the cyclic contraction step in
+`TNLean/MPS/Periodic/Overlap/Case3.lean`.  None is discharged by the eight
+sanctioned axioms: the Lorentz-normal-form statements require coercivity,
+compactness packaging, and the SL(2, C) Lorentz-orbit classification, while
+the periodic-overlap statement requires the cyclic sector-contraction theorem.
+Thus the axioms remain useful assumptions for their own theorem families, but
+they do not give a direct Mathlib-4.31 replacement or a local shortcut for the
+present `sorry`s.
+
+This comparison was repeated after the alias-cleanup batch.  The conclusion is
+unchanged: the axioms are not unused, and none supplies the missing cyclic
+sector-contraction or Lorentz-normal-form ingredients.
+
 ### Projection and continuous-linear-map API
 
 Relevant Mathlib commits:
@@ -614,6 +722,26 @@ Recommended action:
   `LinearMap.IsPositive.re_inner_nonneg_left` directly.
 - Keep the Friedrichs-angle and martingale-type estimates local.
 - Prefer `Submodule.projectionOnto` for new complement projections.
+
+Applied martingale follow-up:
+
+- The private helper `isPositive_smul_of_real_re_nonneg` in
+  `TNLean/MPS/ParentHamiltonian/Martingale/Transport.lean` was removed.  The
+  local-term averaging proof now uses Mathlib's
+  `LinearMap.IsPositive.smul_of_nonneg` directly, with the scalar nonnegativity
+  discharged by `positivity` under `ComplexOrder`.
+
+Applied projection follow-up:
+
+- `TNLean/Channel/Irreducible/Basic.lean` now bridges the local matrix
+  predicate `IsOrthogonalProjection` with Mathlib's `IsStarProjection`.
+  The complement theorem `IsOrthogonalProjection.one_sub` is proved through
+  Mathlib's `IsStarProjection.one_sub`.
+- Duplicate complement-projection proofs were removed from
+  `TNLean/MPS/Irreducible/Adjoint.lean`,
+  `TNLean/Channel/Irreducible/FromSpectral.lean`, and
+  `TNLean/Channel/Semigroup/ReducibleQDS/Defs.lean`; downstream uses now call
+  the single foundational lemma.
 
 ## File-by-file replacement map
 
@@ -675,12 +803,13 @@ products and should remain local.
 
 ### `TNLean/Spectral/FrobeniusNorm.lean`
 
-Status: strong refactor candidate.
+Status: partially applied.
 
 This is one of the most promising local developments to shrink.  Mathlib's
-Frobenius norm should become the default norm for matrix Hilbert-Schmidt
-arguments.  The local squared norm may remain as a convenience wrapper, but
-should no longer carry an independent foundation.
+Frobenius norm is now the foundation for matrix Hilbert-Schmidt arguments:
+`frobSq` is a squared Mathlib Frobenius norm, and the entrywise sum formula is
+kept as `frobSq_eq_sum` for trace and finite-sum arguments.  The local squared
+norm remains only as a convenience wrapper for downstream transfer estimates.
 
 The old `TNLean/Algebra/MatrixFrobenius.lean` pass-through file exposed only
 positive-definiteness of the identity matrix for the Frobenius inner product.
@@ -693,6 +822,99 @@ Status: partial replacement.
 
 The matrix-norm parts should move toward Mathlib's Frobenius norm.  The
 transfer-operator gap estimates are project-specific and remain local.
+
+The one-use private wrappers
+
+- `norm_matToES_mul_le`
+- `norm_matToES_rect_mul_le`
+
+have been removed from `TNLean/Spectral/TransferOperatorGap.lean` and
+`TNLean/Spectral/TransferOperatorGapRect.lean`.  The two Cauchy-Schwarz chains
+now unfold the local `matToES` abbreviations at the call site and apply
+Mathlib's `Matrix.frobenius_norm_mul` directly.
+
+The Mathlib 4.31 pass also removes local synthesis-budget bounds from the
+square transfer-gap theorem, the rectangular transfer-gap theorem, and the
+rectangular non-translation-invariant gap theorem.  The remaining
+non-rectangular non-translation-invariant spectral-radius extraction still
+keeps its local `synthInstance.maxHeartbeats` bound.
+
+### Remaining axiom boundary recheck, 2026-06-19
+
+The remaining non-Archive axioms were checked again against the Mathlib 4.31
+checkout:
+
+- `posMap_rpow_concave_jensen`
+- `posMap_rpow_convex_jensen`
+- `posMap_log_concave_jensen`
+- `lieb_concavity_axiom`
+- `Axioms.rfp_to_nncph_commute`
+- `Axioms.beigi_nncph_to_rfp`
+- `strong_subadditivity`
+- `hayashi_ssa_equality_characterization`
+
+Mathlib 4.31 provides useful inputs for the operator-convexity boundary,
+notably `CFC.concaveOn_rpow`, `CFC.concaveOn_log`,
+`PositiveLinearMap`, and `CompletelyPositiveMap`.  It does not yet provide the
+Hansen-Pedersen positive-map Jensen theorem, operator convexity of `rpow` on
+`[1,2]`, Lieb joint concavity, finite-dimensional quantum strong
+subadditivity, the Hayashi equality characterization, or the Beigi
+nearest-neighbor commuting-Hamiltonian ground-space theorem.  The local axioms
+therefore remain load-bearing assumptions.
+
+The current non-Archive `sorry` sites are in
+`TNLean/Channel/LorentzNormalForm.lean` and
+`TNLean/MPS/Periodic/Overlap/Case3.lean`.  These do not import the Beigi or
+entropy axiom boundary as a direct missing step, and the operator-convexity
+axioms do not match their current goals.  No present `sorry` was closed by the
+remaining axioms in this recheck.
+
+The present usefulness check is:
+
+- `posMap_rpow_concave_jensen`, `posMap_rpow_convex_jensen`, and
+  `posMap_log_concave_jensen`: useful for the Schwarz/operator-convexity
+  family, but their conclusions are order inequalities for positive maps.
+  They do not address the compactness/coercivity step in Lorentz normal form or
+  the cyclic sector contraction in periodic overlap.
+- `lieb_concavity_axiom`: useful for Ando--Lieb trace concavity.  Its trace
+  inequality has no direct target among the current proof placeholders.
+- `Axioms.rfp_to_nncph_commute` and `Axioms.beigi_nncph_to_rfp`: useful for the
+  parent-Hamiltonian RFP--NNCPH equivalence.  They do not supply the sector
+  phase-coboundary contraction in `Case3.lean`.
+- `strong_subadditivity` and `hayashi_ssa_equality_characterization`: useful
+  for the entropy/MPDO Markov-chain branch.  They do not enter the Lorentz
+  normal form file or the periodic-overlap contraction.
+
+A declaration-only recheck after the PEPS pass-through removal found the same
+eight axiom declarations.  The Mathlib 4.31 scout found useful positive-map,
+complete-positivity, and functional-calculus infrastructure, but no theorem
+whose statement matches these eight axiom boundaries.
+
+### Small scalar lemma cleanup, 2026-06-19
+
+The peripheral-spectrum file contained one local scalar lemma:
+
+- `ne_zero_of_norm_eq_one`
+
+It was removed.  Its internal uses now call Mathlib's `norm_ne_zero_iff`
+directly at the two root-of-unity cancellation steps and the two semigroup
+primitivity cancellation steps.
+
+The Schwarz non-completely-positive example also had two private numeral facts:
+
+- `complex_one_half_nonneg`
+- `complex_one_quarter_nonneg`
+
+These were removed.  The four positivity uses now discharge the complex
+nonnegativity side condition directly by `norm_num [Complex.nonneg_iff]`.
+
+Focused check:
+
+```bash
+lake build TNLean.Channel.Peripheral.Spectrum \
+  TNLean.Channel.Semigroup.Primitivity.Helpers \
+  TNLean.Channel.Schwarz.SchwarzNotCP -q --log-level=info
+```
 
 ### `TNLean/Channel/Semigroup/ProductFormula.lean`
 
@@ -834,6 +1056,155 @@ Current status:
 This was a genuine upgrade compatibility issue, separate from the replacement
 audit.  Its local repair is already present in the worktree.
 
+A follow-up pass removed explicit uses of four exact scalar-instance aliases
+from downstream proofs and then removed the abbreviations themselves from
+`TNLean.Algebra.MatrixOperatorSpace`:
+
+- `complexPosSMulMonoDef`
+- `complexContinuousSMulReal`
+- `matrixContinuousSMulReal`
+- `matrixScalarTowerRealComplex`
+
+The remaining semigroup proofs use the same structures directly through
+`inferInstance`, including the fully explicit derivative arguments in
+`TNLean.Channel.Semigroup.Basic`, `TNLean.Channel.Semigroup.Kernel`, and
+`TNLean.Channel.Semigroup.Primitivity.Helpers`.
+
+A later pass also removed the private convergence-ball helper `mem_exp_ball`
+from `TNLean.Channel.Semigroup.Basic`.  The semigroup law for
+`expSemigroupCLM` now calls Mathlib's ball-free
+`NormedSpace.exp_add_of_commute` directly.
+
+A subsequent dissipative-drift pass removed the analogous private
+convergence-ball lemma from `TNLean.Channel.Semigroup.Dissipative`.  The
+left- and right-multiplication exponential identities now use Mathlib's
+ball-free theorem `NormedSpace.map_exp` for continuous algebra homomorphisms.
+Lean 4.31 also elaborates the commuting-exponential step in this file without
+the former local `synthInstance.maxHeartbeats` adjustment.
+
+A later semigroup perturbation pass removed the old local heartbeat bound around
+`hasDerivAt_semigroup_product`.  The CLM-valued product-derivative proof now
+elaborates under the default Lean 4.31 budget.  The same pass removed two inert
+proof-normalization steps from `TNLean.Channel.Semigroup.LindbladForm.Basic`
+that Lean 4.31 reports as unused.
+
+In `TNLean.Channel.POVM.Uniqueness`, the Gram-matrix comparison theorem
+`exists_unitary_mul_eq_of_conjTranspose_mul_eq` no longer needs its old local
+heartbeat bound.  Its proof already names the Euclidean-space inner-product and
+finite-dimensional structures explicitly, so Lean 4.31 elaborates the
+partial-isometry argument directly.
+
+In `TNLean.Channel.KrausFreedom`, the Euclidean-space inner-product instance is
+now given explicitly by `PiLp.innerProductSpace (fun _ : ι => ℂ)`.  This removes
+the former large local synthesis budget around the cached instance and makes the
+finite-dimensional Hilbert-space structure used in the rectangular isometry
+argument explicit.  The remaining local `maxHeartbeats` bound around the
+partial-isometry extension theorem was retested under Lean 4.31 and is still
+needed for elaboration.
+
+The determinant-one unitary-channel theorem no longer has the duplicate
+`channelDet_norm_eq_one_iff_exists_unitaryChannel_of_channel` restatement.  The
+statement already assumes `IsChannel T`, so the removed theorem was an exact
+pass-through layer.  The corresponding blueprint entry now cites only
+`channelDet_norm_eq_one_iff_exists_unitaryChannel`.
+
+A further pass removed the local rectangular continuous-linear-map normed
+structure wrappers from `TNLean.Spectral.GaugeConstruction`:
+
+- `instGCNormedAddCommGroupMatrixCLM`
+- `instGCNormedRingMatrixCLM`
+- `instGCSeminormedRingMatrixCLM`
+- `instGCNormedAlgebraMatrixCLM`
+- `instGCCompleteSpaceMatrixCLM`
+- `instGCFiniteDimensionalMatrixCLM`
+
+These were exact local wrappers around the continuous-linear-map normed-ring
+and finite-dimensional-completeness infrastructure.  The spectral and
+string-order proofs now use Mathlib's
+`ContinuousLinearMap.toNormedAddCommGroup`,
+`ContinuousLinearMap.toSeminormedRing`, `ContinuousLinearMap.toNormedRing`,
+`ContinuousLinearMap.toNormedSpace`, and
+`ContinuousLinearMap.toNormedAlgebra` directly, with local
+`FiniteDimensional.complete` proofs where spectrum or power-decay lemmas need
+completeness.
+
+The local spectral-radius extraction theorems in
+`TNLean.Spectral.TransferOperatorGap`, `TNLean.Spectral.TransferOperatorGapRect`,
+and `TNLean.Spectral.TransferOperatorGapNT` were retested under Lean 4.31.  The
+square transfer-gap theorem, the rectangular transfer-gap theorem, and the
+Perron--Frobenius gauge extraction in the non-translation-invariant file no
+longer need their previous local bounds.  The non-rectangular
+non-translation-invariant spectral-radius extraction still keeps its local
+`synthInstance.maxHeartbeats` bound.
+
+The scalar spectral-radius identity `spectralRadius_smul` in
+`TNLean.Channel.Irreducible.SpectralRadius` also no longer needs a local
+`synthInstance.maxHeartbeats` bound for the matrix-endomorphism continuous
+linear-map completeness search.
+
+### Fixed-point Wedderburn decomposition
+
+Removed pass-through accessor:
+
+- `Kraus.wedderburnBlockDims_sum_le`
+
+This theorem merely returned the `dim_le` field from an
+`IsWedderburnBlockDecomp` witness.  The Wedderburn--Artin existence theorems
+and the bundled decomposition structure are unchanged; callers should use
+`w.dim_le` directly when they have a decomposition witness `w`.
+
+### Wielandt rank-one products
+
+Removed unused local convenience wrappers:
+
+- `MPSTensor.matrix_in_cumulativeSpan`
+- `MPSTensor.one_eq_evalWord_nil`
+- `MPSTensor.wordSpan_generates_full_algebra`
+
+The first and third merely restated `cumulativeSpan_eq_top`, while the second
+was just `evalWord_nil`.  No Lean or blueprint declaration referred to them.
+
+### Deprecation-policy exceptions
+
+The usual convention in `docs/MATHLIB_style.md` is to keep a public
+declaration as `@[deprecated]` before deleting it.  This audit records the
+exceptions made in this Mathlib-4.31 cleanup.  In each case below, the removed
+name had no independent mathematical content: it either repeated a statement
+already present under the canonical name, exposed a field projection from a
+bundled structure, or named a local proof step that is now written directly at
+its use site.  All non-Archive uses in TNLean were already absent or were
+rewritten in this PR, and no blueprint entry cites these names.
+
+No compatibility declaration is retained for the following exact
+pass-throughs:
+
+- `complexPosSMulMonoDef`, `complexContinuousSMulReal`,
+  `matrixContinuousSMulReal`, and `matrixScalarTowerRealComplex`.  These were
+  abbreviations for standard scalar structures; the remaining proofs use the
+  corresponding structures by inference.
+- `IsPrimitiveMPS.spectral_gap`, `spectral_gap_of_injective`, and
+  `uniform_spectral_gap_of_finite_lt_one`.  These were already deprecated
+  aliases whose internal call sites had moved to the canonical theorem names.
+- `channelDet_norm_eq_one_iff_exists_unitaryChannel_of_channel`.  This was the
+  same theorem as `channelDet_norm_eq_one_iff_exists_unitaryChannel`, with the
+  same channel hypothesis and conclusion.
+- `MPSTensor.isOrthogonalProjection_one_sub`.  The replacement is the general
+  theorem `IsOrthogonalProjection.one_sub`.
+- `Kraus.wedderburnBlockDims_sum_le`.  This only returned the field `w.dim_le`
+  from an `IsWedderburnBlockDecomp` witness.
+- `TNLean.PEPS.reindexAlgEquiv_smul`,
+  `TNLean.PEPS.reindexAlgEquiv_finCongr_symm_round`,
+  `TNLean.PEPS.reindexAlgEquiv_gaugeConj`, and
+  `TNLean.PEPS.reindexAlgEquiv_transpose`.  The remaining proofs use the
+  algebra-equivalence identities (`map_smul`, `map_mul`, `map_inv`), the
+  `glReindex` coercion theorem, a direct simplification of
+  `Matrix.reindexAlgEquiv`, or `Matrix.transpose_reindex`.
+- `instGCFiniteDimensionalMatrixCLM`.  The finite-dimensional witness is now
+  constructed locally from `Module.End.toContinuousLinearMap`.
+- `MPSTensor.matrix_in_cumulativeSpan`, `MPSTensor.one_eq_evalWord_nil`, and
+  `MPSTensor.wordSpan_generates_full_algebra`.  These were immediate
+  restatements of `cumulativeSpan_eq_top` or `evalWord_nil`.
+
 ## Verification performed
 
 The Mathlib cache was fetched for the 4.31 worktree.  An initial cache fetch
@@ -845,7 +1216,13 @@ adaptation work:
 
 ```text
 lake env lean TNLean/Algebra/GramMatrixLI.lean
+lake env lean TNLean/Algebra/MatrixOperatorSpace.lean
 lake build TNLean.Algebra.MatrixOperatorSpace
+lake env lean TNLean/Channel/Semigroup/Basic.lean
+lake env lean TNLean/Channel/Semigroup/Kernel.lean
+lake env lean TNLean/Channel/Semigroup/Primitivity/Helpers.lean
+lake build TNLean.Channel.Semigroup.Dissipative -q --log-level=info
+lake build TNLean.Channel.KrausFreedom -q --log-level=info
 lake env lean TNLean/MPS/Symmetry/StringOrder.lean --json
 lake env lean TNLean/Wielandt/Primitivity/PrimitiveBridge.lean --json
 lake env lean TNLean/Channel/Semigroup/Primitivity/Basic.lean --json
@@ -868,20 +1245,39 @@ lake env lean TNLean/Channel/Schwarz/AndoLieb.lean --json
 lake build TNLean.Analysis.OperatorConvexity TNLean.Axioms.OperatorConvexity \
   TNLean.Channel.Schwarz.OperatorMonotone TNLean.Channel.Schwarz.OperatorConvexity \
   TNLean.Channel.Schwarz.AndoLieb -q --log-level=info
+lake build TNLean.Analysis.OperatorConvexity TNLean.Axioms.OperatorConvexity \
+  TNLean.Channel.Schwarz.OperatorConvexity TNLean.Channel.Schwarz.OperatorMonotone \
+  -q --log-level=info
+lake build TNLean.Channel.WolfProps -q --log-level=info
+lake build TNLean.Channel.Irreducible.Basic TNLean.MPS.Irreducible.Adjoint \
+  TNLean.Channel.Irreducible.FromSpectral TNLean.Channel.Semigroup.ReducibleQDS.Defs \
+  TNLean.MPS.Periodic.SectorIrreducibility.HLiftCore -q --log-level=info
 lake env lean TNLean/Algebra/MatrixAux.lean --json
 lake env lean TNLean/Spectral/GaugeConstruction.lean --json
 lake env lean TNLean/Spectral/TransferOperatorGapNT.lean --json
+lake env lean TNLean/Spectral/TransferOperatorGapRect.lean
+lake env lean TNLean/Spectral/PrimitiveOverlap.lean
+lake env lean TNLean/Spectral/MPVOverlapDecay.lean
+lake env lean TNLean/MPS/Symmetry/StringOrderDefs.lean
+lake build TNLean.Spectral.GaugeConstruction TNLean.Spectral.TransferOperatorGap \
+  TNLean.Spectral.TransferOperatorGapRect TNLean.Spectral.TransferOperatorGapNT \
+  TNLean.Spectral.PrimitiveOverlap TNLean.Spectral.MPVOverlapDecay \
+  TNLean.MPS.Symmetry.StringOrderDefs -q --log-level=info
 lake env lean TNLean/Channel/Irreducible/Growth/OneStep.lean --json
 lake env lean TNLean/Channel/Irreducible/Growth/Preservation.lean --json
 lake env lean TNLean/Channel/Irreducible/Growth/KernelDescent.lean --json
 lake env lean TNLean/Channel/Peripheral/GroupStructure.lean --json
 lake env lean TNLean/Spectral/TransferOperatorGap.lean --json
+lake env lean TNLean/Spectral/TransferOperatorGap.lean
+lake env lean TNLean/Spectral/TransferOperatorGapRect.lean
 lake env lean TNLean/PiAlgebra/CanonicalFormSepAux.lean --json
 lake build TNLean.Algebra.MatrixAux TNLean.Spectral.GaugeConstruction \
   TNLean.Spectral.TransferOperatorGapNT TNLean.Spectral.TransferOperatorGap \
   TNLean.Channel.Irreducible.Growth.KernelDescent \
   TNLean.Channel.Peripheral.GroupStructure TNLean.PiAlgebra.CanonicalFormSepAux \
   -q --log-level=info
+lake env lean TNLean/Spectral/QuantitativeGap.lean --json
+lake env lean TNLean/MPS/Structure/PrimitivityBridge.lean --json
 ```
 
 The final root build also succeeds:

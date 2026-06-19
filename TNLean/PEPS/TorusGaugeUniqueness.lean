@@ -45,9 +45,9 @@ namespace PEPS
 
 /-! ### Scalar bookkeeping for invertible matrices -/
 
-/-- A proportionality between invertible matrices inverts its constant on the inverses: if
-`W' = c · W` entrywise, then `W'⁻¹ = c⁻¹ · W⁻¹` entrywise.  The candidate `c⁻¹ · W⁻¹` is a
-two-sided inverse of `W'`, and the matrix inverse is unique.
+/-- A proportionality between invertible matrices inverts its constant on the inverses:
+if `W' = c · W` entrywise, then `W'⁻¹ = c⁻¹ · W⁻¹` entrywise.  The candidate
+`c⁻¹ · W⁻¹` is a two-sided inverse of `W'`, and the matrix inverse is unique.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3 (the scalar bookkeeping behind the
 uniqueness clause, line 1471 of `Papers/1804.04964/paper_normal.tex`). -/
@@ -62,14 +62,6 @@ theorem gl_inv_coe_smul {n : ℕ} {W W' : GL (Fin n) ℂ} {c : ℂˣ}
     rw [h, Matrix.smul_mul, Matrix.mul_smul, smul_smul, ← Units.val_mul, mul_inv_cancel,
       Units.val_one, one_smul, hWW]
   rw [Matrix.GeneralLinearGroup.coe_inv, Matrix.inv_eq_right_inv hprod]
-
-/-- Reindexing across an index-size equality commutes with scalar multiplication. -/
-theorem reindexAlgEquiv_smul {m n : ℕ} (h : m = n) (c : ℂ)
-    (M : Matrix (Fin m) (Fin m) ℂ) :
-    Matrix.reindexAlgEquiv ℂ ℂ (finCongr h) (c • M) =
-      c • Matrix.reindexAlgEquiv ℂ ℂ (finCongr h) M := by
-  simp only [Matrix.coe_reindexAlgEquiv, Matrix.reindex_apply, Matrix.submatrix_smul,
-    Pi.smul_apply]
 
 /-! ### The conjugation-form identity of an absorbing family -/
 
@@ -434,14 +426,16 @@ theorem torusCovariantAbsorbedGauge_unique_classScalar
             (ch : ℂ) • (X e : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)) ∧
         (e.1.1.1 + 1 ≠ e.1.2.1 →
           (X' e : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ) =
-            ((ch⁻¹ : ℂˣ) : ℂ) • (X e : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ))) ∧
+            ((ch⁻¹ : ℂˣ) : ℂ) •
+              (X e : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ))) ∧
       (∀ e : Edge (torusGraph width height), IsVerticalTorusEdge e →
         (e.1.1.2 + 1 = e.1.2.2 →
           (X' e : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ) =
             (cv : ℂ) • (X e : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)) ∧
         (e.1.1.2 + 1 ≠ e.1.2.2 →
           (X' e : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ) =
-            ((cv⁻¹ : ℂˣ) : ℂ) • (X e : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ))) := by
+            ((cv⁻¹ : ℂˣ) : ℂ) •
+              (X e : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ))) := by
   have hw2 : 2 < width := by omega
   have hh2 : 2 < height := by omega
   -- The seam-touching reference anchors of the two orientation classes.
@@ -501,7 +495,7 @@ theorem torusCovariantAbsorbedGauge_unique_classScalar
     constructor
     · intro hintr
       rw [hX'e, hXe, if_pos (hiff.mpr hintr), if_pos (hiff.mpr hintr), glReindex_coe,
-        glReindex_coe, hch, reindexAlgEquiv_smul]
+        glReindex_coe, hch, map_smul]
     · intro hintr
       have hcond : ¬((Edge.map (translate a b) (torusHorizontalReferenceEdge (width := width)
           (height := height) xhStart yhStart)).1.1 =
@@ -515,7 +509,7 @@ theorem torusCovariantAbsorbedGauge_unique_classScalar
           Matrix (Fin (B.bondDim (torusHorizontalReferenceEdge xhStart yhStart)))
             (Fin (B.bondDim (torusHorizontalReferenceEdge xhStart yhStart))) ℂ) := by
         rw [glTranspose_coe, glTranspose_coe, hch, Matrix.transpose_smul]
-      rw [gl_inv_coe_smul htr, reindexAlgEquiv_smul]
+      rw [gl_inv_coe_smul htr, map_smul]
   · -- The vertical class.
     intro e he
     obtain ⟨⟨a, b⟩, rfl⟩ := translate_verticalReferenceEdge (xStart := xhStart)
@@ -558,7 +552,7 @@ theorem torusCovariantAbsorbedGauge_unique_classScalar
     constructor
     · intro hintr
       rw [hX'e, hXe, if_pos (hiff.mpr hintr), if_pos (hiff.mpr hintr), glReindex_coe,
-        glReindex_coe, hcv, reindexAlgEquiv_smul]
+        glReindex_coe, hcv, map_smul]
     · intro hintr
       have hcond : ¬((Edge.map (translate a b) (torusVerticalReferenceEdge (width := width)
           (height := height) xhStart yhStart)).1.1 =
@@ -572,7 +566,7 @@ theorem torusCovariantAbsorbedGauge_unique_classScalar
           Matrix (Fin (B.bondDim (torusVerticalReferenceEdge xhStart yhStart)))
             (Fin (B.bondDim (torusVerticalReferenceEdge xhStart yhStart))) ℂ) := by
         rw [glTranspose_coe, glTranspose_coe, hcv, Matrix.transpose_smul]
-      rw [gl_inv_coe_smul htr, reindexAlgEquiv_smul]
+      rw [gl_inv_coe_smul htr, map_smul]
 
 end ClassScalar
 

@@ -146,14 +146,6 @@ def expSemigroupCLM
 
 /-! ### Semigroup law for exp -/
 
-/-- Any element of a complex Banach algebra lies in the convergence ball of the exponential
-series. -/
-private theorem mem_exp_ball {A : Type*}
-    [NormedRing A] [NormedAlgebra ℂ A] [CompleteSpace A] (x : A) :
-    x ∈ Metric.eball (0 : A) (NormedSpace.expSeries ℂ A).radius := by
-  rw [NormedSpace.expSeries_radius_eq_top]
-  exact edist_lt_top _ _
-
 /-- `(t : ℂ) • L` commutes with `(s : ℂ) • L`. -/
 private theorem smul_comm_CLM
     (L : MatrixCLM (Fin D))
@@ -170,10 +162,7 @@ theorem expSemigroupCLM_add
   have hsum : (((t : ℂ) + (s : ℂ)) • L) = (t : ℂ) • L + (s : ℂ) • L := by
     exact add_smul (t : ℂ) (s : ℂ) L
   rw [expSemigroupCLM, hcast, hsum]
-  exact
-    (NormedSpace.exp_add_of_commute_of_mem_ball
-      (x := (t : ℂ) • L) (y := (s : ℂ) • L)
-      (smul_comm_CLM L t s) (mem_exp_ball _) (mem_exp_ball _))
+  exact NormedSpace.exp_add_of_commute (smul_comm_CLM L t s)
 
 theorem expSemigroupCLM_zero
     (L : MatrixCLM (Fin D)) :
@@ -270,7 +259,7 @@ theorem hasDerivAt_expSemigroup_apply
       Matrix.linftyOpNormedAddCommGroup.toAddCommGroup
       (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)).toModule
       PseudoMetricSpace.toUniformSpace.toTopologicalSpace
-      (TNOperatorSpace.matrixContinuousSMulReal (Fin D))
+      (inferInstance : ContinuousSMul ℝ (Matrix (Fin D) (Fin D) ℂ))
       (fun u : ℝ => expSemigroup L u X) (expSemigroup L t (L X)) t := by
   have hCLM :
       @HasDerivAt ℝ _ (MatrixCLM (Fin D))

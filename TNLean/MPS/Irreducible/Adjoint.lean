@@ -23,27 +23,6 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- If `P` is an orthogonal projection, then its complement `1 - P` is also an orthogonal
-projection. -/
-lemma isOrthogonalProjection_one_sub (P : Matrix (Fin D) (Fin D) ℂ)
-    (hP : IsOrthogonalProjection P) : IsOrthogonalProjection (1 - P) := by
-  refine ⟨?_, ?_⟩
-  · -- Hermitian: `(1 - P)ᴴ = 1 - P`.
-    simpa using (Matrix.isHermitian_one.sub hP.1)
-  · -- Idempotent: `(1 - P)² = 1 - P`.
-    calc
-      (1 - P) * (1 - P)
-          = (1 - P) - (1 - P) * P := by
-              -- expand the right factor
-              simp [mul_sub]
-      _ = (1 - P) - (P - P * P) := by
-              -- expand `(1 - P) * P`
-              simp [sub_mul]
-      _ = (1 - P) - (P - P) := by
-              simp [hP.2]
-      _ = 1 - P := by
-              simp
-
 /-- Irreducibility is preserved under passing to the conjugate-transposed Kraus family.
 
 If `A` is irreducible in the tensor sense (no nontrivial invariant orthogonal projection), then the
@@ -79,7 +58,7 @@ theorem isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor
   -- Use `Q = 1 - P` as the invariant projection for the original tensor.
   let Q : Matrix (Fin D) (Fin D) ℂ := 1 - P
   have hQProj : IsOrthogonalProjection Q := by
-    simpa [Q] using isOrthogonalProjection_one_sub (D := D) P hProj
+    simpa [Q] using hProj.one_sub
   have hQ0 : Q ≠ 0 := by
     intro hQ0
     have h' : (1 : Matrix (Fin D) (Fin D) ℂ) - P = 0 := by
@@ -117,7 +96,7 @@ lemma isIrreducibleTensor_of_isIrreducibleMap_conjTranspose
   rcases hA with ⟨P, hPproj, hP0, hP1, hLower⟩
   let Q : Matrix (Fin D) (Fin D) ℂ := 1 - P
   have hQproj : IsOrthogonalProjection Q := by
-    simpa [Q] using isOrthogonalProjection_one_sub (D := D) P hPproj
+    simpa [Q] using hPproj.one_sub
   have hQ0 : Q ≠ 0 := by
     intro hQ0
     have h' : (1 : Matrix (Fin D) (Fin D) ℂ) - P = 0 := by

@@ -71,18 +71,6 @@ private noncomputable def sandwichLinearMap
   map_smul' a X := by
     simp [Matrix.mul_assoc]
 
-private lemma isOrthogonalProjection_one_sub
-    {P : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsOrthogonalProjection P) :
-    IsOrthogonalProjection (1 - P) := by
-  refine ⟨Matrix.isHermitian_one.sub hP.1, ?_⟩
-  calc
-    (1 - P) * (1 - P) = 1 - P - P + P * P := by
-      noncomm_ring
-    _ = 1 - P := by
-      rw [hP.2]
-      abel
-
 private lemma trace_ne_zero_of_orthogonalProjection_ne_zero
     {P : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsOrthogonalProjection P) (hP_ne : P ≠ 0) :
@@ -360,7 +348,7 @@ theorem isIrreducibleMap_of_channel_posDef_fixedPoint_unique
   have hρ_corner : P * ρ * P = ρ := by
     have h := congrArg (fun M => (c⁻¹ : ℂ) • M) hρ_corner_scaled
     simpa [smul_smul, hc_ne, Matrix.mul_assoc] using h
-  have hQ_proj : IsOrthogonalProjection (1 - P) := isOrthogonalProjection_one_sub hP_proj
+  have hQ_proj : IsOrthogonalProjection (1 - P) := hP_proj.one_sub
   have hQ_ne : 1 - P ≠ 0 := by
     intro hQ0
     apply hP1
@@ -379,8 +367,6 @@ theorem isIrreducibleMap_of_channel_posDef_fixedPoint_unique
 
 /-! ## Reverse implication: spectral properties ⇒ irreducible -/
 
--- Lean 4.29 `unusedTactic` linter false-positives on the final `have`/`rw`/`exact` block
-set_option linter.unusedTactic false in
 /-- **Wolf Theorem 6.4, reverse direction** for CP maps.
 
 Starting from a positive-definite right eigenvector and a positive-definite left

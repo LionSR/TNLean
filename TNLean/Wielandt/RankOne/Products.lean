@@ -296,36 +296,4 @@ theorem evalWord_replicate_eigenvector (A : MPSTensor d D)
     -- evalWord A w₀ *ᵥ (μ ^ k • φ) = μ ^ (k + 1) • φ
     rw [Matrix.mulVec_smul, heig, smul_smul, pow_succ]
 
-/-! ### Part 7: Connection lemmas for the Wielandt fixed-length word span -/
-
-/-- **Word products of a normal tensor eventually span all matrices.**
-
-This is a reformulation of `cumulativeSpan_eq_top` from `NonzeroTraceProduct.lean`
-for convenient use: any matrix is in the cumulative span at level D².
-
-Paper: arXiv:0909.5347, Lemma 1. -/
-theorem matrix_in_cumulativeSpan [NeZero D]
-    (A : MPSTensor d D) (hN : IsNormal A)
-    (M : Matrix (Fin D) (Fin D) ℂ) :
-    M ∈ cumulativeSpan A (D ^ 2) := by
-  have := cumulativeSpan_eq_top A hN
-  rw [this]
-  exact Submodule.mem_top
-
-/-- **The identity matrix is in the word span at level 0.**
-
-This is a convenience lemma: `1 = evalWord A []`. -/
-theorem one_eq_evalWord_nil (A : MPSTensor d D) :
-    (1 : Matrix (Fin D) (Fin D) ℂ) = evalWord A [] := by
-  simp [evalWord]
-
-/-- **If `IsNormal A`, then the word products generate the full matrix algebra
-within D² steps.**
-
-Paper: this is the high-level structure of the entire proof of Theorem 1. -/
-theorem wordSpan_generates_full_algebra [NeZero D]
-    (A : MPSTensor d D) (hN : IsNormal A) :
-    ∃ N : ℕ, N ≤ D ^ 2 ∧ cumulativeSpan A N = ⊤ :=
-  ⟨D ^ 2, le_refl _, cumulativeSpan_eq_top A hN⟩
-
 end MPSTensor

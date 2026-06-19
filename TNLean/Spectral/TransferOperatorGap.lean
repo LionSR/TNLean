@@ -63,11 +63,9 @@ noncomputable scoped instance : NormedAlgebra ℂ (Matrix (Fin D) (Fin D) ℂ) :
   Matrix.linftyOpNormedAlgebra
 
 attribute [local instance]
-  instGCFiniteDimensionalMatrixCLM
-  instGCNormedAddCommGroupMatrixCLM
-  instGCNormedRingMatrixCLM
-  instGCNormedAlgebraMatrixCLM
-  instGCCompleteSpaceMatrixCLM
+  ContinuousLinearMap.toNormedAddCommGroup
+  ContinuousLinearMap.toNormedRing
+  ContinuousLinearMap.toNormedAlgebra
 
 /-! ### Spectral radius of the mixed transfer operator -/
 
@@ -134,12 +132,6 @@ The Euclidean-space embedding `matToES` is imported from
 `TNLean.Spectral.FrobeniusNorm`; submultiplicativity is Mathlib's
 Frobenius-norm estimate. -/
 
-private lemma norm_matToES_mul_le (A B : Matrix (Fin D) (Fin D) ℂ) :
-    ‖matToES (A * B)‖ ≤ ‖matToES A‖ * ‖matToES B‖ := by
-  rw [norm_matToES_eq_frobenius_norm, norm_matToES_eq_frobenius_norm,
-    norm_matToES_eq_frobenius_norm]
-  exact Matrix.frobenius_norm_mul A B
-
 private lemma trace_cycle_for_frobSq (w v : Matrix (Fin D) (Fin D) ℂ) :
     (w * vᴴ * (v * wᴴ)).trace = (wᴴ * w * (vᴴ * v)).trace := by
   rw [Matrix.mul_assoc w vᴴ _, ← Matrix.mul_assoc vᴴ v wᴴ,
@@ -179,12 +171,16 @@ private lemma hs_contraction_mixedTransfer [NeZero D]
     evalWord A (List.ofFn σ) * (X * (evalWord B (List.ofFn σ))ᴴ))‖ ^ 2 from
     (norm_matToES_sq _).symm]
   set fA := fun σ : Fin n → Fin d => ‖matToES (evalWord A (List.ofFn σ))‖ with hfA_def
-  set fB := fun σ : Fin n → Fin d => ‖matToES (X * (evalWord B (List.ofFn σ))ᴴ)‖ with hfB_def
+  set fB := fun σ : Fin n → Fin d =>
+    ‖matToES (X * (evalWord B (List.ofFn σ))ᴴ)‖ with hfB_def
   have h_chain : ‖matToES (∑ σ : Fin n → Fin d,
     evalWord A (List.ofFn σ) * (X * (evalWord B (List.ofFn σ))ᴴ))‖ ≤
     ∑ σ : Fin n → Fin d, fA σ * fB σ :=
     ((by rw [matToES_finset_sum]; exact norm_sum_le _ _) : ‖matToES _‖ ≤ _).trans
-      (Finset.sum_le_sum fun σ _ => norm_matToES_mul_le _ _)
+      (Finset.sum_le_sum fun σ _ => by
+        simpa [hfA_def, hfB_def, norm_matToES_eq_frobenius_norm] using
+          Matrix.frobenius_norm_mul (evalWord A (List.ofFn σ))
+            (X * (evalWord B (List.ofFn σ))ᴴ))
   have h_A : ∑ σ : Fin n → Fin d, fA σ ^ 2 = (D : ℝ) := by
     simp_rw [hfA_def, norm_matToES_sq]; exact sum_frobSq_words A hA_norm n
   have h_B : ∑ σ : Fin n → Fin d, fB σ ^ 2 = frobSq X := by
@@ -265,7 +261,8 @@ Proof strategy:
 
 2. **Per-index relation**: Set `C_i = X⁻¹ A_i X`. From the eigenvector equation,
    `∑ C_i B_i† = μI`. By Cauchy-Schwarz on the Hilbert-Schmidt inner product:
-   `D² = |tr(∑ C_i B_i†)|² = |∑⟨B_i, C_i⟩|² ≤ (∑‖C_i‖²)(∑‖B_i‖²) = tr(∑C_i†C_i)·D`.
+   `D² = |tr(∑ C_i B_i†)|² = |∑⟨B_i, C_i⟩|² ≤
+    (∑‖C_i‖²)(∑‖B_i‖²) = tr(∑C_i†C_i)·D`.
    So `tr(∑ C_i†C_i) ≥ D`. Also `∑(C_i - μB_i)†(C_i - μB_i) = ∑C_i†C_i - I ≥ 0`
    (the trace computation uses `∑B_i†B_i = I` and `∑C_iB_i† = μI`).
    Together with `E_A(XX†) = XX†` (which follows from QPF theory applied to
@@ -406,9 +403,6 @@ private lemma eigenvector_gives_gauge [NeZero D]
 
 end
 
-set_option synthInstance.maxHeartbeats 200000 in
--- Instance search for the finite-dimensional continuous endomorphism space of matrices
--- needs a local heartbeat bump during the spectral-radius extraction.
 /-- **Eigenvalue rigidity** (PerezGarcia2007 Lemma 5, cf. Wolf Theorem 6.6):
 if the mixed transfer spectral radius is ≥ 1, then A and B are
 gauge-phase equivalent.
@@ -435,6 +429,11 @@ theorem modulus_one_eigenvalue_implies_gauge
   let V := Matrix (Fin D) (Fin D) ℂ
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
   let F' : V →L[ℂ] V := Φ (mixedTransferMap A B)
+  letI : NormedAddCommGroup (V →L[ℂ] V) := ContinuousLinearMap.toNormedAddCommGroup
+  letI : SeminormedRing (V →L[ℂ] V) := ContinuousLinearMap.toSeminormedRing
+  letI : NormedRing (V →L[ℂ] V) := ContinuousLinearMap.toNormedRing
+  letI : NormedSpace ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedSpace
+  letI : NormedAlgebra ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedAlgebra
   haveI : CompleteSpace V := FiniteDimensional.complete ℂ V
   haveI : FiniteDimensional ℂ (V →L[ℂ] V) :=
     Φ.toLinearEquiv.finiteDimensional
@@ -448,10 +447,12 @@ theorem modulus_one_eigenvalue_implies_gauge
   -- Spectral radius is achieved
   obtain ⟨μ, hμ_spec, hμ_norm⟩ :=
     @spectrum.exists_nnnorm_eq_spectralRadius_of_nonempty ℂ _ _
-      (instGCNormedRingMatrixCLM D D) (instGCNormedAlgebraMatrixCLM D D)
-      (instGCCompleteSpaceMatrixCLM D D) inferInstance (a := F')
-      (@spectrum.nonempty _ (instGCNormedRingMatrixCLM D D)
-        (instGCNormedAlgebraMatrixCLM D D) (instGCCompleteSpaceMatrixCLM D D) inferInstance F')
+      (ContinuousLinearMap.toNormedRing : NormedRing (V →L[ℂ] V))
+      (ContinuousLinearMap.toNormedAlgebra : NormedAlgebra ℂ (V →L[ℂ] V))
+      inferInstance inferInstance (a := F')
+      (@spectrum.nonempty _ (ContinuousLinearMap.toNormedRing : NormedRing (V →L[ℂ] V))
+        (ContinuousLinearMap.toNormedAlgebra : NormedAlgebra ℂ (V →L[ℂ] V))
+        inferInstance inferInstance F')
   -- Transfer to eigenvalue of the linear map
   have h_spec_eq := AlgEquiv.spectrum_eq Φ (mixedTransferMap A B)
   have hμ_spec_end : μ ∈ spectrum ℂ (mixedTransferMap A B) := h_spec_eq ▸ hμ_spec
@@ -517,14 +518,34 @@ theorem mixedTransfer_pow_tendsto_zero
     Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)
   let F' : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ :=
     Φ (mixedTransferMap A B)
-  letI : CompleteSpace
+  letI : NormedAddCommGroup
       (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
-    instGCCompleteSpaceMatrixCLM D D
+    ContinuousLinearMap.toNormedAddCommGroup
+  letI : SeminormedRing
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    ContinuousLinearMap.toSeminormedRing
+  letI : NormedRing
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    ContinuousLinearMap.toNormedRing
+  letI : NormedSpace ℂ
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    ContinuousLinearMap.toNormedSpace
+  letI : NormedAlgebra ℂ
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    ContinuousLinearMap.toNormedAlgebra
+  haveI : FiniteDimensional ℂ
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    Φ.toLinearEquiv.finiteDimensional
+  have hComplete : CompleteSpace
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    FiniteDimensional.complete ℂ
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
+  letI : CompleteSpace
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) := hComplete
   have h_clm : Filter.Tendsto (fun n => F' ^ n) Filter.atTop (nhds 0) :=
     @pow_tendsto_zero_of_spectralRadius_lt_one
       (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
-      (instGCNormedRingMatrixCLM D D) (instGCCompleteSpaceMatrixCLM D D)
-      (instGCNormedAlgebraMatrixCLM D D) F'
+      ContinuousLinearMap.toNormedRing hComplete ContinuousLinearMap.toNormedAlgebra F'
       (spectralRadius_mixedTransfer_lt_one A B hA hB hA_norm hB_norm hAB)
   have h_eval :
       Filter.Tendsto (fun n =>
@@ -536,7 +557,7 @@ theorem mixedTransfer_pow_tendsto_zero
         Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) X)‖ ≤
         ‖F' ^ n‖ * ‖X‖
       exact (F' ^ n).le_opNorm X
-    · simpa [instGCNormedRingMatrixCLM] using (tendsto_norm_zero.comp h_clm).mul_const ‖X‖
+    · simpa using (tendsto_norm_zero.comp h_clm).mul_const ‖X‖
   suffices ∀ n,
       ((mixedTransferMap A B) ^ n) X =
         ((F' ^ n :
@@ -585,13 +606,3 @@ theorem uniform_eigenvalue_gap_of_finite_lt_one
     linarith [Finset.le_max' norms ‖μ‖ hμ_norm_mem]
   · -- Empty: no non-1 eigenvalues, δ = 1 works vacuously
     exact ⟨1, one_pos, fun μ hμ hne => absurd ⟨μ, hμ, hne⟩ hS⟩
-
-/-- Deprecated name for `uniform_eigenvalue_gap_of_finite_lt_one`. -/
-@[deprecated uniform_eigenvalue_gap_of_finite_lt_one (since := "2026-05-30")]
-theorem uniform_spectral_gap_of_finite_lt_one
-    {K V : Type*} [NormedField K] [AddCommGroup V] [Module K V]
-    {E : V →ₗ[K] V}
-    (hfin : Set.Finite {μ : K | Module.End.HasEigenvalue E μ})
-    (hlt : ∀ μ, Module.End.HasEigenvalue E μ → μ ≠ 1 → ‖μ‖ < 1) :
-    ∃ δ > 0, ∀ μ, Module.End.HasEigenvalue E μ → μ ≠ 1 → ‖μ‖ ≤ 1 - δ :=
-  uniform_eigenvalue_gap_of_finite_lt_one hfin hlt

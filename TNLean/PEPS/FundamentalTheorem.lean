@@ -267,15 +267,18 @@ theorem post_absorption_edge_insertion_equality (A B : Tensor G d)
           Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)ᵀ =
         Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hDim e))
           (↑(X e) : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) := by
-    rw [glReindex_coe, glTranspose_coe, ← reindexAlgEquiv_transpose,
+    rw [glReindex_coe, glTranspose_coe]
+    simp only [Matrix.coe_reindexAlgEquiv, Matrix.transpose_reindex,
       Matrix.transpose_transpose]
   have hZit :
       ((↑(glReindex (congr_fun hDim e) (glTranspose (X e))) :
           Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)⁻¹)ᵀ =
         Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hDim e))
-     (↑(X e)⁻¹ : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) := by
+    (↑(X e)⁻¹ : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) := by
     rw [← Matrix.GeneralLinearGroup.coe_inv, ← map_inv, glReindex_coe,
-      glTranspose_inv_coe, ← reindexAlgEquiv_transpose, Matrix.transpose_transpose]
+      glTranspose_inv_coe]
+    simp only [Matrix.coe_reindexAlgEquiv, Matrix.transpose_reindex,
+      Matrix.transpose_transpose]
   rw [hZt, hZit, map_mul, map_mul]
   rfl
 
@@ -315,7 +318,8 @@ theorem perVertexScalar (A B : Tensor G d)
     (Z : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
     (hPA : PostAbsorptionEdgeInsertionEquality A (absorbEdgeGauges B Z))
     (v : V) [Nonempty (IncidentEdge G v)] :
-    ∃ c : ℂ, c ≠ 0 ∧ ∀ (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
+    ∃ c : ℂ, c ≠ 0 ∧
+      ∀ (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
       A.component v η σ =
         c * gaugeVertex B Z v
           (fun ie => Fin.cast (congr_fun hPA.bondDim_eq ie.1) (η ie)) σ := by
@@ -396,7 +400,8 @@ theorem productKernel_invert {ι : Type*} [Fintype ι] [DecidableEq ι] {n : ι 
   calc (∑ ξ : (i : ι) → n i, ∑ η' : (i : ι) → n i,
             ((∏ i, Minv i (η i) (η' i)) * (∏ i, M i (η' i) (ξ i))) • g ξ)
       = ∑ ξ : (i : ι) → n i,
-          (∑ η' : (i : ι) → n i, (∏ i, Minv i (η i) (η' i)) * (∏ i, M i (η' i) (ξ i))) • g ξ := by
+          (∑ η' : (i : ι) → n i,
+            (∏ i, Minv i (η i) (η' i)) * (∏ i, M i (η' i) (ξ i))) • g ξ := by
         refine Finset.sum_congr rfl ?_
         intro ξ _
         rw [Finset.sum_smul]
@@ -459,7 +464,8 @@ theorem edgeGaugeAt_globalGauge (A B : Tensor G d) (hbd : A.bondDim = B.bondDim)
     have hXinv : ((scalarGL (n := A.bondDim ie.1) (s ie.1)
           * glReindex (congr_fun hbd ie.1).symm ((Z ie.1)⁻¹))⁻¹
         : Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ)
-        = (↑(s ie.1) : ℂ)⁻¹ • (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd ie.1).symm)
+        = (↑(s ie.1) : ℂ)⁻¹ •
+          (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd ie.1).symm)
             (↑(Z ie.1) : Matrix _ _ ℂ)) := by
       rw [scalarGL_coe, glReindex_coe,
         Matrix.scalar_apply, ← Matrix.smul_eq_diagonal_mul,
@@ -468,7 +474,8 @@ theorem edgeGaugeAt_globalGauge (A B : Tensor G d) (hbd : A.bondDim = B.bondDim)
       rw [← glReindex_coe, ← glReindex_coe, ← Matrix.GeneralLinearGroup.coe_inv,
         ← map_inv, inv_inv]
     rw [Matrix.GeneralLinearGroup.coe_inv, Units.val_mul, hXinv, Matrix.transpose_smul,
-      ← reindexAlgEquiv_transpose, Units.val_inv_eq_inv_val]
+      Units.val_inv_eq_inv_val]
+    simp only [Matrix.coe_reindexAlgEquiv, Matrix.transpose_reindex]
 
 /-- **Per-vertex global-gauge identity.** At a vertex `v`, the per-vertex scalar
 relation `A_v = c · gaugeVertex B Z v` together with `∏ s_e = c⁻¹` (oriented
@@ -628,7 +635,8 @@ theorem exists_stateCoeff_ne_zero (A : Tensor G d)
     have hne : vertexComplementTensorFamily (G := G) A v starCfg₀ ≠ 0 :=
       hcompInj.ne_zero starCfg₀
     -- Some complement physical configuration gives a nonzero complement weight.
-    obtain ⟨τ₀, hτ₀⟩ : ∃ τ, vertexComplementWeight (G := G) A v starCfg₀ τ ≠ 0 := by
+    obtain ⟨τ₀, hτ₀⟩ :
+        ∃ τ, vertexComplementWeight (G := G) A v starCfg₀ τ ≠ 0 := by
       by_contra hall
       push Not at hall
       exact hne (by funext τ; simpa [vertexComplementTensorFamily] using hall τ)
@@ -639,12 +647,14 @@ theorem exists_stateCoeff_ne_zero (A : Tensor G d)
     -- vector of the local tensor map at `v`.
     have hkernel : ∀ σ₁ : Fin d,
         ∑ starCfg : LocalVirtualConfig A v,
-          vertexComplementWeight (G := G) A v starCfg τ₀ • A.component v starCfg σ₁ = 0 := by
+          vertexComplementWeight (G := G) A v starCfg τ₀ •
+            A.component v starCfg σ₁ = 0 := by
       intro σ₁
       have hsc := hzero (assembleσ (V := V) (d := d) v σ₁ τ₀)
       rw [stateCoeff_eq_vertexComplement A v] at hsc
       -- Rewrite the assembled physical configuration: `v ↦ σ₁`, complement ↦ `τ₀`.
-      have hσv : (assembleσ (V := V) (d := d) v σ₁ τ₀) v = σ₁ := assembleσ_self v σ₁ τ₀
+      have hσv : (assembleσ (V := V) (d := d) v σ₁ τ₀) v = σ₁ :=
+        assembleσ_self v σ₁ τ₀
       have hσc : (fun w : {w : V // w ≠ v} =>
           (assembleσ (V := V) (d := d) v σ₁ τ₀) w.1) = τ₀ := by
         funext w
@@ -655,7 +665,8 @@ theorem exists_stateCoeff_ne_zero (A : Tensor G d)
             A.component v starCfg σ₁ *
               vertexComplementWeight (G := G) A v starCfg τ₀)
           = ∑ starCfg : LocalVirtualConfig A v,
-              vertexComplementWeight (G := G) A v starCfg τ₀ • A.component v starCfg σ₁ := by
+              vertexComplementWeight (G := G) A v starCfg τ₀ •
+                A.component v starCfg σ₁ := by
         refine Finset.sum_congr rfl (fun starCfg _ => ?_)
         rw [smul_eq_mul, mul_comm]
       rw [hrw] at hsc

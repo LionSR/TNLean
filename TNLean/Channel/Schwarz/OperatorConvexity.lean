@@ -70,14 +70,6 @@ private local instance instOperatorConvexityNormedRing : NormedRing Mat :=
   Matrix.instL2OpNormedRing
 private local instance instOperatorConvexityNormedAlgebra : NormedAlgebra ℂ Mat :=
   Matrix.instL2OpNormedAlgebra
-private local instance instOperatorConvexityCStarRing : CStarRing Mat :=
-  Matrix.instCStarRing
-private local instance instOperatorConvexityPartialOrder : PartialOrder Mat :=
-  Matrix.instPartialOrder
-private local instance instOperatorConvexityStarOrderedRing : StarOrderedRing Mat :=
-  Matrix.instStarOrderedRing
-private local instance instOperatorConvexityCStarAlgebra : CStarAlgebra Mat :=
-  CStarAlgebra.mk
 
 /-- **Operator Jensen for concave `rpow`** (Wolf Theorem 5.1 applied to
 `x ↦ x ^ p` for `p ∈ [0, 1]`).

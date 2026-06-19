@@ -93,12 +93,6 @@ private theorem scalar_polarization (α β γ δ : ℂ) :
   have hI : Complex.I * Complex.I = -1 := Complex.I_mul_I
   linear_combination (2 * α * star δ - 2 * β * star γ) * hI
 
-/-- Scalar lemma: `star Complex.I = -Complex.I`. Thin alias around
-`Complex.conj_I` (star on `ℂ` coincides with `conj`) supplied so it can
-be used inside `simp only` calls that operate on `star` syntactically. -/
-private theorem star_I_eq_neg_I : (star Complex.I : ℂ) = -Complex.I :=
-  Complex.conj_I
-
 /-! ### Sandwich polarization (Proposition 2.2 core identity) -/
 
 /-- **Proposition 2.2 (Wolf), polarization form**. The sesquilinear sandwich
@@ -130,7 +124,8 @@ theorem polarization_sandwich (A B X : Matrix (Fin D) (Fin D) ℂ) :
               star (A b x - Complex.I * B b x)) := by
     intro x i
     have h := scalar_polarization (A a i) (B a i) (A b x) (B b x)
-    simp only [star_add, star_sub, StarMul.star_mul, star_I_eq_neg_I]
+    simp only [star_add, star_sub, StarMul.star_mul,
+      (show (star Complex.I : ℂ) = -Complex.I from Complex.conj_I)]
     linear_combination (X i x) * h
   calc ∑ x : Fin D, ∑ i : Fin D, 4 * (A a i * X i x * star (B b x))
       = ∑ x : Fin D, ∑ i : Fin D,
@@ -182,7 +177,8 @@ theorem vecMulVec_star_eq_polarization (u v : Fin D → ℂ) :
     Matrix.add_apply, Pi.add_apply, Pi.sub_apply, Pi.smul_apply,
     Pi.star_apply, smul_eq_mul]
   have h := scalar_polarization (u a) (v a) (u b) (v b)
-  simp only [star_add, star_sub, StarMul.star_mul, star_I_eq_neg_I]
+  simp only [star_add, star_sub, StarMul.star_mul,
+    (show (star Complex.I : ℂ) = -Complex.I from Complex.conj_I)]
   linear_combination h
 
 /-- Linear maps fixing rank-one self-outer-products also fix generic rank-one

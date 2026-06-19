@@ -26,8 +26,6 @@ can be normalized to a unitary.
   the determinant bound.
 * `channelDet_norm_eq_one_iff_exists_unitaryChannel` — Wolf Theorem 6.1(2) for
   CPTP maps.
-* `channelDet_norm_eq_one_iff_exists_unitaryChannel_of_channel` — the channel
-  alias of the same characterization.
 
 ## References
 
@@ -352,12 +350,5 @@ theorem channelDet_norm_eq_one_iff_exists_unitaryChannel
       exact forward_det_one_implies_unitaryChannel hT h
   · rintro ⟨U, rfl⟩
     exact channelDet_norm_eq_one_of_unitaryChannel U
-
-/-- CPTP specialization of the unitary characterization (alias of
-`channelDet_norm_eq_one_iff_exists_unitaryChannel`). -/
-theorem channelDet_norm_eq_one_iff_exists_unitaryChannel_of_channel
-    (hT : IsChannel T) :
-    ‖channelDet T‖ = 1 ↔ ∃ U : Matrix.unitaryGroup (Fin d) ℂ, T = unitaryChannel U :=
-  channelDet_norm_eq_one_iff_exists_unitaryChannel hT
 
 end WolfStatements

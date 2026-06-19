@@ -16,11 +16,10 @@ open scoped Matrix BigOperators ComplexOrder NNReal ENNReal Matrix.Norms.Operato
 open Matrix Filter
 
 attribute [local instance]
-  instGCNormedAddCommGroupMatrixCLM
-  instGCNormedRingMatrixCLM
-  instGCSeminormedRingMatrixCLM
-  instGCNormedAlgebraMatrixCLM
-  instGCCompleteSpaceMatrixCLM
+  ContinuousLinearMap.toNormedAddCommGroup
+  ContinuousLinearMap.toNormedRing
+  ContinuousLinearMap.toSeminormedRing
+  ContinuousLinearMap.toNormedAlgebra
 
 /-!
 # MPV overlap decay
@@ -178,7 +177,14 @@ theorem mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one
   classical
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
   let F' : V →L[ℂ] V := Φ (mixedTransferMap₂ (d := d) (D₁ := D₁) (D₂ := D₂) A B)
-  letI : CompleteSpace (V →L[ℂ] V) := instGCCompleteSpaceMatrixCLM D₁ D₂
+  letI : NormedAddCommGroup (V →L[ℂ] V) := ContinuousLinearMap.toNormedAddCommGroup
+  letI : SeminormedRing (V →L[ℂ] V) := ContinuousLinearMap.toSeminormedRing
+  letI : NormedRing (V →L[ℂ] V) := ContinuousLinearMap.toNormedRing
+  letI : NormedSpace ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedSpace
+  letI : NormedAlgebra ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedAlgebra
+  haveI : FiniteDimensional ℂ (V →L[ℂ] V) := Φ.toLinearEquiv.finiteDimensional
+  have hComplete : CompleteSpace (V →L[ℂ] V) := FiniteDimensional.complete ℂ (V →L[ℂ] V)
+  letI : CompleteSpace (V →L[ℂ] V) := hComplete
   have hSpectF : spectralRadius ℂ F' < 1 := by
     change spectralRadius ℂ
       (((Module.End.toContinuousLinearMap V)
@@ -186,8 +192,8 @@ theorem mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one
     simpa only [] using hSpect
   have hpow0 : Tendsto (fun n => F' ^ n) atTop (nhds 0) :=
     @pow_tendsto_zero_of_spectralRadius_lt_one (V →L[ℂ] V)
-      (instGCNormedRingMatrixCLM D₁ D₂) (instGCCompleteSpaceMatrixCLM D₁ D₂)
-      (instGCNormedAlgebraMatrixCLM D₁ D₂) F' hSpectF
+      (ContinuousLinearMap.toNormedRing : NormedRing (V →L[ℂ] V)) hComplete
+      (ContinuousLinearMap.toNormedAlgebra : NormedAlgebra ℂ (V →L[ℂ] V)) F' hSpectF
   have htr0 :
       Tendsto (fun n => LinearMap.trace ℂ V ((F' ^ n : V →L[ℂ] V) : V →ₗ[ℂ] V))
         atTop (nhds (0 : ℂ)) :=
