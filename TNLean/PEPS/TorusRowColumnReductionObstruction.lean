@@ -167,10 +167,9 @@ theorem Gmat_blocks_not_proportional :
 The injective `A`-super-tensor of the refutation is the matrix-unit family on the
 bond space `Fin 4`, indexed by the physical super-index `Fin 16 ≃ Fin 4 × Fin 4`.
 Its range is all single matrices, which span the whole matrix algebra, so it is
-injective at block length one (`Aunits_isNBlkInjective`).  The conjugate
-`Bunits i = Ginv (Aunits i) Gmat` has the same closed-chain coefficients
-(`sameMPV`) and the same block injectivity, but the conjugator is `Gunit`, not a
-per-edge product. -/
+injective at block length one.  The conjugate
+`Bunits i = Ginv (Aunits i) Gmat` has the same closed-chain coefficients and the
+same block injectivity, but the conjugator is `Gunit`, not a per-edge product. -/
 
 
 /-- The physical super-index `Fin 16` read as a pair `Fin 4 × Fin 4`. -/
@@ -209,20 +208,9 @@ theorem Aunits_isInjective : IsInjective Aunits := by
     rw [Matrix.smul_single, smul_eq_mul, mul_one]]
   exact Submodule.smul_mem _ _ (single_mem_span_Aunits a b)
 
-/-- `Aunits` is injective at block length one. -/
-theorem Aunits_isNBlkInjective : IsNBlkInjective Aunits 1 :=
-  isNBlkInjective_one_of_isInjective Aunits_isInjective
-
 /-- `Bunits` is the `Gunit⁻¹`-gauge of `Aunits`. -/
 theorem gaugeEquiv_Aunits_Bunits : GaugeEquiv Aunits Bunits :=
   ⟨Gunit⁻¹, fun i => by rw [Bunits, inv_inv]⟩
-
-/-- `Bunits` is injective at block length one: gauge equivalence preserves
-injectivity, since conjugation by an invertible matrix maps a spanning family to a
-spanning family. -/
-theorem Bunits_isNBlkInjective : IsNBlkInjective Bunits 1 :=
-  isNBlkInjective_one_of_isInjective
-    (isInjective_of_gaugeEquiv Aunits_isInjective gaugeEquiv_Aunits_Bunits)
 
 /-! ### The route's required principle and its refutation
 
@@ -264,9 +252,13 @@ arXiv:1804.04964.  Documented in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`
 the section "No coherence question between rows". -/
 theorem rowCutGaugeFactorizes_false : ¬ RowCutGaugeFactorizes := by
   intro hRoute
+  have hAblk : IsNBlkInjective Aunits 1 :=
+    isNBlkInjective_one_of_isInjective Aunits_isInjective
+  have hBblk : IsNBlkInjective Bunits 1 :=
+    isNBlkInjective_one_of_isInjective
+      (isInjective_of_gaugeEquiv Aunits_isInjective gaugeEquiv_Aunits_Bunits)
   obtain ⟨Z, lam, hprod, hrel⟩ :=
-    hRoute Aunits Bunits Aunits_isNBlkInjective Bunits_isNBlkInjective
-      gaugeEquiv_Aunits_Bunits.sameMPV
+    hRoute Aunits Bunits hAblk hBblk gaugeEquiv_Aunits_Bunits.sameMPV
   -- Specialize the relation to the matrix units and clear the inverse on the left.
   -- `Z * (Ginv (single a b 1) Gmat) = lam • (single a b 1 * Z)`.
   have hZrel : ∀ a b : Fin 4,
