@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Analysis.Matrix.Normed
 import Mathlib.Analysis.Matrix.Order
+import TNLean.Algebra.MatrixAux
 
 /-!
 # Frobenius norm squared and Euclidean-space embedding for matrices
@@ -54,13 +55,7 @@ lemma frobSq_eq_sum (X : Matrix (Fin m) (Fin n) ℂ) :
 /-- The Frobenius norm squared equals `(trace(X† X)).re`. -/
 lemma frobSq_trace (X : Matrix (Fin m) (Fin n) ℂ) :
     frobSq X = (Matrix.trace (Xᴴ * X)).re := by
-  rw [frobSq_eq_sum]
-  simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply,
-    Matrix.conjTranspose_apply, Complex.re_sum]
-  rw [Finset.sum_comm]
-  congr 1; ext i; congr 1; ext j
-  rw [show star (X j i) * X j i = ↑(Complex.normSq (X j i)) from
-    Complex.normSq_eq_conj_mul_self.symm, Complex.ofReal_re, Complex.normSq_eq_norm_sq]
+  rw [frobSq, Matrix.trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq]
 
 lemma frobSq_eq_zero_iff (X : Matrix (Fin m) (Fin n) ℂ) : frobSq X = 0 ↔ X = 0 := by
   rw [frobSq, sq_eq_zero_iff, norm_eq_zero]
@@ -104,7 +99,7 @@ lemma norm_matToES_sq (M : Matrix (Fin m) (Fin n) ℂ) :
       ← Complex.ofReal_pow]]
   exact Complex.ofReal_re _
 
-/-- The Euclidean-space norm of a flattened matrix is Mathlib's Frobenius norm. -/
+/-- The Euclidean-space norm of a flattened matrix is the Frobenius norm. -/
 lemma norm_matToES_eq_frobenius_norm (M : Matrix (Fin m) (Fin n) ℂ) :
     ‖matToES M‖ = ‖M‖ := by
   rw [← sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _)]
