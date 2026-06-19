@@ -26,8 +26,7 @@ the AKLT state).
 * `ghz_isZCL` — the GHZ tensor has zero correlation length
 * `clusterBlocked_isZCL` — the blocked cluster tensor has zero correlation length
 
-The supporting renormalization-fixed-point facts `clusterBlocked_isRFP` and
-`clusterBlocked_transferMap_idempotent` are proved in
+The supporting blocked-cluster transfer-map idempotence theorem is proved in
 `TNLean.MPS.Examples.Cluster`.
 
 ## References
@@ -55,10 +54,10 @@ theorem ghz_isZCL : IsZCL ghzTensor :=
 /-! ### Cluster -/
 
 /-- The blocked cluster tensor has zero correlation length: its idempotent
-transfer map (`clusterBlocked_isRFP`) yields correlations independent of the
+transfer map yields correlations independent of the
 separation.  The single-site cluster transfer map is not idempotent; blocking
 two sites produces the renormalization fixed point. -/
 theorem clusterBlocked_isZCL : IsZCL clusterBlocked :=
-  (zcl_iff_idempotent_transfer clusterBlocked).mpr clusterBlocked_isRFP
+  (zcl_iff_idempotent_transfer clusterBlocked).mpr clusterBlocked_transferMap_idempotent
 
 end MPSTensor

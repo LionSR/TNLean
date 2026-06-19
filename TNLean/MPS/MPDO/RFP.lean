@@ -41,10 +41,6 @@ variable {d D : ℕ}
 theorem isRFP_iff_isZCL (M : MPOTensor d D) : IsRFP M ↔ IsZCL M :=
   Iff.rfl
 
-/-- `IsRFP M` implies `IsZCL M`. -/
-theorem IsRFP.isZCL {M : MPOTensor d D} (h : IsRFP M) : IsZCL M :=
-  h
-
 /-- `IsRFP M` is equivalent to the pure-state RFP condition for the
 doubled-index MPS tensor. -/
 theorem isRFP_iff_toMPSTensor_isRFP (M : MPOTensor d D) :
