@@ -698,11 +698,6 @@ theorem clusterBlocked_transferMap_idempotent :
   simp only [Matrix.smul_apply, Matrix.one_apply, smul_eq_mul]
   fin_cases i <;> fin_cases j <;> norm_num
 
-/-- The length-`2` blocked cluster tensor is a renormalization fixed point: its
-transfer map is idempotent (`clusterBlocked_transferMap_idempotent`). -/
-theorem clusterBlocked_isRFP : IsRFP clusterBlocked :=
-  clusterBlocked_transferMap_idempotent
-
 end MPSTensor
 
 end
