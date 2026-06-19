@@ -28,6 +28,7 @@ Chapter 6 of Wolf's lecture notes.
 * `IsCPMap.isPositiveMap`: completely positive maps are positive
 * `IsChannel`: completely positive + trace-preserving (CPTP)
 * `IsPositiveMap.map_isHermitian`: positive maps preserve Hermiticity
+* `matrix_isClosed_posSemidef`: the positive semidefinite cone is closed
 * `densityMatrices_isCompact`: the set of density matrices is compact
 * `densityMatrices_isConvex`: the set of density matrices is convex
 * `IsChannel.map_densityMatrices`: channels map density matrices to density matrices
@@ -142,8 +143,8 @@ def densityMatrices (D : ℕ) : Set (Matrix (Fin D) (Fin D) ℂ) :=
     ρ ∈ densityMatrices D ↔ ρ.PosSemidef ∧ trace ρ = 1 := Iff.rfl
 
 /-- The quadratic form `X ↦ star v ⬝ᵥ X.mulVec v` is continuous. -/
-private lemma continuous_quadraticForm (v : Fin D → ℂ) :
-    Continuous (fun X : Matrix (Fin D) (Fin D) ℂ => star v ⬝ᵥ X.mulVec v) :=
+private lemma continuous_quadraticForm {m : Type*} [Fintype m] (v : m → ℂ) :
+    Continuous (fun X : Matrix m m ℂ => star v ⬝ᵥ X.mulVec v) :=
   Continuous.dotProduct continuous_const (Continuous.matrix_mulVec continuous_id continuous_const)
 
 /-! ### Auxiliary lemmas for boundedness -/
@@ -235,22 +236,31 @@ theorem posSemidef_trace_bounded_isBounded (c : ℝ) :
           pow_le_pow_left₀ (norm_nonneg _) (hentry i j) 2
     _ = (↑D * c) ^ 2 := by simp [sum_const]; ring
 
-/-- The PSD cone is closed.
+/-- The PSD cone is closed for matrices over any finite index type.
 
 Proof: `PosSemidef X ↔ X.IsHermitian ∧ ∀ v, 0 ≤ star v ⬝ᵥ X.mulVec v`.
 - `{X | X.IsHermitian}` is closed (continuous `conjTranspose`).
 - Each `{X | 0 ≤ star v ⬝ᵥ X.mulVec v}` is closed (preimage of closed
   nonneg cone under continuous quadratic form). -/
-theorem isClosed_posSemidef :
-    IsClosed {X : Matrix (Fin D) (Fin D) ℂ | X.PosSemidef} := by
-  have : {X : Matrix (Fin D) (Fin D) ℂ | X.PosSemidef}
-    = {X | X.IsHermitian} ∩ ⋂ (v : Fin D → ℂ), {X | 0 ≤ star v ⬝ᵥ X.mulVec v} := by
-    ext X; simp only [Set.mem_setOf_eq, Set.mem_inter_iff, Set.mem_iInter,
+theorem matrix_isClosed_posSemidef {m : Type*} [Finite m] :
+    IsClosed {X : Matrix m m ℂ | X.PosSemidef} := by
+  classical
+  letI := Fintype.ofFinite m
+  have : {X : Matrix m m ℂ | X.PosSemidef}
+      = {X | X.IsHermitian} ∩
+        ⋂ (v : m → ℂ), {X | 0 ≤ star v ⬝ᵥ X.mulVec v} := by
+    ext X
+    simp only [Set.mem_setOf_eq, Set.mem_inter_iff, Set.mem_iInter,
       Matrix.posSemidef_iff_dotProduct_mulVec]
   rw [this]
   exact (isClosed_eq continuous_star continuous_id).inter
     (isClosed_iInter fun v =>
       (isClosed_le continuous_const continuous_id).preimage (continuous_quadraticForm v))
+
+/-- The PSD cone is closed on `Fin D`-indexed matrices. -/
+theorem isClosed_posSemidef :
+    IsClosed {X : Matrix (Fin D) (Fin D) ℂ | X.PosSemidef} :=
+  matrix_isClosed_posSemidef
 
 /-- The set of density matrices is compact (Heine-Borel).
 
