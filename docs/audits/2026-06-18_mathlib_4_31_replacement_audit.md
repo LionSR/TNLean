@@ -1202,18 +1202,23 @@ uses the Mathlib theorem directly.
 
 ### Projection-complement idempotent algebra, 2026-06-19
 
-The projection-triangular trace file keeps its local projection-complement
-lemma names because they are part of the internal proof script, but their
-handwritten matrix-ring proofs have been replaced by Mathlib's general
-idempotent-complement API:
+The projection-triangular trace file originally carried local
+projection-complement lemmas whose statements were exact specializations of
+Mathlib's general idempotent-complement API:
 
 - `IsIdempotentElem.mul_one_sub_self`
 - `IsIdempotentElem.one_sub_mul_self`
 - `IsIdempotentElem.one_sub`
 
-Thus `MPSTensor.proj_mul_projCompl`, `MPSTensor.projCompl_mul_proj`, and
-`MPSTensor.projCompl_mul_projCompl` now only translate
-`IsOrthogonalProjection P` into the corresponding general idempotent fact.
+The pass-through names have now been removed:
+
+- `MPSTensor.proj_add_projCompl`
+- `MPSTensor.proj_mul_projCompl`
+- `MPSTensor.projCompl_mul_proj`
+- `MPSTensor.projCompl_mul_projCompl`
+
+The internal projection-triangular trace proofs call `simp` or the Mathlib
+idempotent-complement theorems directly.
 
 ### Semigroup projection-complement cleanup, 2026-06-19
 
@@ -1280,6 +1285,27 @@ lake build TNLean.QPF.PosDef TNLean.Channel.MaximallyEntangled \
   TNLean.Channel.Semigroup.ReducibleQDS.FixedDensity \
   TNLean.MPS.Core.CPPrimitive TNLean.MPS.Irreducible.FormII \
   TNLean.MPS.Irreducible.FixedPointProjection -q --log-level=info
+```
+
+### Projection-triangular pass-through removal, 2026-06-19
+
+The internal `ProjectionTriangularTrace` proof no longer introduces local
+abbreviating lemmas for `P + (1 - P) = 1` or the three idempotent-complement
+identities.  The proof now uses `simp`,
+`IsIdempotentElem.mul_one_sub_self`,
+`IsIdempotentElem.one_sub_mul_self`, and `IsIdempotentElem.one_sub` at each
+use site.  This removes a small pass-through layer without changing the main
+statements:
+
+- `MPSTensor.lowerZero_evalWord`
+- `MPSTensor.evalWord_diagPart_eq`
+- `MPSTensor.trace_eq_trace_diag_of_proj`
+- `MPSTensor.sameMPV_diagPart_of_lowerZero`
+
+Focused check:
+
+```bash
+lake build TNLean.Algebra.ProjectionTriangularTrace -q --log-level=info
 ```
 
 ### Trace-pairing extensionality, 2026-06-19
