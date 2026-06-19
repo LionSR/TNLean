@@ -75,8 +75,8 @@ The clearest replacements are:
   `TNLean.Spectral.GaugeConstruction` has been inlined in the spectral-radius
   proofs.  They now use Mathlib's `ContinuousLinearMap.toNormedRing`,
   `ContinuousLinearMap.toNormedAlgebra`, and local finite-dimensional
-  completeness proofs directly; the public finite-dimensional witness remains
-  as a deprecated compatibility name.
+  completeness proofs directly; the former public finite-dimensional witness
+  was removed, and downstream proofs construct the required witness locally.
 - Two one-use Frobenius submultiplicativity wrappers in the transfer-operator
   gap files were removed.  The proofs now call Mathlib's
   `Matrix.frobenius_norm_mul` directly at the Hilbert-Schmidt estimate.
