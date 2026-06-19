@@ -52,10 +52,6 @@ private lemma ofReal_re_eq_self_of_pos {z : ℂ} (hz : 0 < z) :
   · rfl
   · simp [hz_im]
 
-private lemma sum_single_diag_const (c : ℂ) :
-    ∑ i : Fin D, Matrix.single i i c = c • (1 : Mat) := by
-  rw [Matrix.sum_single_eq_diagonal, Matrix.smul_one_eq_diagonal]
-
 private lemma matrixUnits_map (X : Mat) :
     ∑ p : Fin D × Fin D,
       Matrix.single p.1 p.2 (1 : ℂ) * X * (Matrix.single p.1 p.2 (1 : ℂ))ᴴ =
@@ -79,7 +75,7 @@ private lemma matrixUnits_map (X : Mat) :
     _ = ∑ j : Fin D, Matrix.single j j (Matrix.trace X) := by
           simp [Matrix.trace, Matrix.diag]
     _ = Matrix.trace X • (1 : Mat) := by
-          simpa using sum_single_diag_const (D := D) (c := Matrix.trace X)
+          rw [Matrix.sum_single_eq_diagonal, Matrix.smul_one_eq_diagonal]
 
 /-- **Lemma B.1** (arXiv:1606.00608, Appendix B): a normal tensor in canonical
 form II that is an RFP admits the decomposition `A i = X * Λ * U i * X⁻¹`

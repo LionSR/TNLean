@@ -123,6 +123,10 @@ The clearest replacements are:
 - The Wielandt strong-irreducibility trace-representation proof now uses
   Mathlib's `Matrix.matrix_eq_sum_single`; the private coordinate-expansion
   theorem was removed.
+- Three one-use diagonal matrix-unit sum wrappers were removed; the
+  determinant, fixed-point conditional expectation, and RFP structural proofs
+  now call `Matrix.sum_single_one`, `Matrix.sum_single_eq_diagonal`, or
+  `Matrix.smul_one_eq_diagonal` directly.
 
 There are also important non-replacements.
 
@@ -1624,6 +1628,13 @@ pass-throughs:
   blueprint-facing equivalence `MPOTensor.isRFP_iff_isZCL`.
 - `MPSTensor.clusterBlocked_isRFP`.  This was a one-use restatement of the
   blueprint-facing theorem `MPSTensor.clusterBlocked_transferMap_idempotent`.
+- `sum_single_diag_const` in
+  `TNLean.Channel.FixedPoint.ConditionalExpectation` and
+  `TNLean.MPS.RFP.StructuralFull`.  Both were one-use local diagonal
+  matrix-unit sum wrappers for `Matrix.sum_single_eq_diagonal` followed by
+  `Matrix.smul_one_eq_diagonal`.
+- `sum_single_diag_one` in `TNLean.Channel.Determinant.HilbertSchmidt`.  This
+  was a one-use local specialization of `Matrix.sum_single_one`.
 
 ## Verification performed
 
