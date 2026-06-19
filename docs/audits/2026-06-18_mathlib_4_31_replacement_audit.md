@@ -1407,6 +1407,16 @@ lake build TNLean.PEPS.PhysicalToVirtualCounterexample \
   TNLean.PEPS.TorusRowColumnReductionObstruction -q --log-level=info
 ```
 
+### PEPS two-injective heartbeat retest, 2026-06-19
+
+In `TNLean.PEPS.TwoInjectiveComparison.Basic`, the operator-Schmidt bond-gauge
+extraction theorem now elaborates under the default Lean 4.31 heartbeat budget.
+The local theorem-level `maxHeartbeats` override and its comment were removed.
+The diagonal-family lemma in
+`TNLean.Channel.Schwarz.PositiveOnAbelian.Consequences` was retested in the same
+pass and still times out at the default budget during the simultaneous
+diagonalization proof, so its local heartbeat bound remains.
+
 ### Trace-pairing extensionality, 2026-06-19
 
 Mathlib 4.31 has equality-form trace-pairing extensionality lemmas:
