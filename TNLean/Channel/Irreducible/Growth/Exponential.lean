@@ -98,16 +98,6 @@ private theorem isPositiveMap_smul_nonneg
     exact_mod_cast hc
   simpa only [LinearMap.smul_apply, Complex.coe_smul] using (hE X hX).smul hcC
 
-private lemma inv_factorial_nonneg (n : ℕ) :
-    0 ≤ ((n.factorial : ℂ)⁻¹) := by
-  have hfac_pos : (0 : ℂ) < (n.factorial : ℂ) := by
-    exact_mod_cast Nat.factorial_pos n
-  exact le_of_lt (inv_pos.mpr hfac_pos)
-
-private lemma inv_factorial_ne_zero (n : ℕ) :
-    ((n.factorial : ℂ)⁻¹) ≠ 0 :=
-  inv_ne_zero (by exact_mod_cast Nat.factorial_ne_zero n)
-
 private lemma pos_of_matrix_ne_zero
     {A : Matrix (Fin D) (Fin D) ℂ} (hA : A ≠ 0) : 0 < D := by
   by_contra hD
@@ -259,7 +249,7 @@ theorem exp_truncation_posDef_of_irreducible_cp
     isPositiveMap_smul_nonneg hCP.isPositiveMap ht.le
   have hterm_psd : ∀ k : ℕ, (term k).PosSemidef := by
     intro k
-    simpa only using (iterate_posSemidef hF_pos hA k).smul (inv_factorial_nonneg k)
+    simpa only using (iterate_posSemidef hF_pos hA k).smul (by positivity)
   have hsum_psd : (∑ k ∈ Finset.range D, term k).PosSemidef := by
     refine Matrix.posSemidef_sum (s := Finset.range D) (x := term) ?_
     intro k hk
@@ -277,7 +267,8 @@ theorem exp_truncation_posDef_of_irreducible_cp
         (s := Finset.range D) (term := term) (fun i _hi => hterm_psd i) hsum_zero hk
     change (((k.factorial : ℂ)⁻¹) • ((F ^ k) A)) *ᵥ v = 0 at hterm_zero
     rw [Matrix.smul_mulVec] at hterm_zero
-    exact (smul_eq_zero.mp hterm_zero).resolve_left (inv_factorial_ne_zero k)
+    exact (smul_eq_zero.mp hterm_zero).resolve_left
+      (inv_ne_zero (by exact_mod_cast Nat.factorial_ne_zero k))
   have hterm_zero_E : ∀ k ∈ Finset.range D, ((E ^ k) A) *ᵥ v = 0 := by
     intro k hk
     have hkF : ((F ^ k) A) *ᵥ v = 0 := hterm_zero_F k hk
@@ -324,7 +315,7 @@ theorem exp_posDef_of_irreducible_cp
   refine exp_apply_posDef_of_trunc_posDef (D := D) Φ A ?_ ?_
   · intro n
     rw [endEquiv_pow_apply]
-    exact (iterate_posSemidef hF_pos hA n).smul (inv_factorial_nonneg n)
+    exact (iterate_posSemidef hF_pos hA n).smul (by positivity)
   · have htrunc₀ :=
       exp_truncation_posDef_of_irreducible_cp E hCP hIrr A hA hA_ne ht
     have hsum_eq :
