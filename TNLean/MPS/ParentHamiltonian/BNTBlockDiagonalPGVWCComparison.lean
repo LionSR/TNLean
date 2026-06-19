@@ -7,7 +7,7 @@ import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalCrossingTrace
 /-!
 # Boundary-condition comparisons for block-diagonal parent spaces
 
-The word-indexed Pérez-García--Verstraete--Wolf--Cirac comparison
+The word-indexed comparison from arXiv:quant-ph/0608197
 \[
   A^j_\beta C^j_{i,\rho}
   =
@@ -36,8 +36,8 @@ boundary representation to periodic single-block states.
 
 Under the normalized BNT hypotheses, every vector in the block-diagonal
 periodic-boundary ground space has block-diagonal boundary conditions \(X_j\). If those
-same boundary conditions satisfy the Pérez-García--Verstraete--Wolf--Cirac
-comparison, in the word-indexed boundary-crossing form
+same boundary conditions satisfy the source comparison, in the word-indexed
+boundary-crossing form
 \[
   A^j_\beta C^j_{i,\rho}
   =
@@ -52,8 +52,8 @@ into the boundary-crossing identities with \(E_{j,i,\rho}\).
 The words \(\beta\) and \(\rho\) are local coordinates for a boundary-crossing
 window, not terminology of the source statement.
 
-**Scope restriction (length-\(L_0\) injectivity range):** PGVWC07, Theorem 12,
-assumes \(L\ge 3(b-1)(L_0+1)+1\).  This theorem is stated in the current BNT
+**Scope restriction (length-\(L_0\) injectivity range):** Theorem 12 of
+arXiv:quant-ph/0608197 assumes \(L\ge 3(b-1)(L_0+1)+1\). This theorem is stated in the current BNT
 range derived from length-\(L_0\) block injectivity,
 \((L_0+1)+3(r-1)(L_0+1)+1\le L\). The source-range comparison is recorded in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
@@ -64,9 +64,9 @@ which transitively uses the boundary-condition comparison at boundary-crossing
 windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
 2126--2128. Documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
-derive the Perez-Garcia--Verstraete--Wolf--Cirac \(C^j,D^j,E^j\)
-boundary-condition comparison from arXiv:quant-ph/0608197, Theorem 12, proof
-lines 1446--1456, and use it to discharge the currently assumed comparison;
+derive the \(C^j,D^j,E^j\) boundary-condition comparison from
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
+discharge the currently assumed comparison;
 tracked in issue 2971. -/
 theorem exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -119,9 +119,8 @@ Assume the block-diagonal periodic vector has already been written with
 block-diagonal boundary conditions \(X_j\).  For every cyclic interval crossing
 the cut, the local constraint puts the sum of the block restrictions in
 \(\bigvee_j G_L(A_j)\).  If the complementary tail words span the product
-matrix algebra in the corresponding length \(N-i\), the fixed-window
-Pérez-García--Verstraete--Wolf--Cirac comparison gives matrices
-\(C^j_{i,\rho}\) satisfying
+matrix algebra in the corresponding length \(N-i\), the source comparison gives
+matrices \(C^j_{i,\rho}\) satisfying
 \[
   A^j_\beta C^j_{i,\rho}
   =
@@ -137,8 +136,8 @@ complementary outside word produced by opening the cyclic interval;
 arXiv:quant-ph/0608197 writes the same step with the boundary indices \(i_1\)
 and \(i_{m+1}\).
 
-**Scope restriction (length-\(L_0\) injectivity range):** PGVWC07, Theorem 12,
-assumes \(L\ge 3(b-1)(L_0+1)+1\).  This theorem is stated in the current BNT
+**Scope restriction (length-\(L_0\) injectivity range):** Theorem 12 of
+arXiv:quant-ph/0608197 assumes \(L\ge 3(b-1)(L_0+1)+1\). This theorem is stated in the current BNT
 range derived from length-\(L_0\) block injectivity,
 \((L_0+1)+3(r-1)(L_0+1)+1\le L\). The source-range comparison is recorded in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
@@ -251,12 +250,13 @@ Consequently
 \]
 and the length-\(N\) single-block spaces are independent.
 
-This is the equality-level form of PGVWC07, Theorem 12, proof lines 1436--1451,
+This is the equality-level form of Theorem 12 of arXiv:quant-ph/0608197,
+proof lines 1436--1451,
 specialized to the block-diagonal boundary conditions of
 arXiv:2011.12127, Section IV.C, lines 2126--2128.
 
-**Scope restriction (length-\(L_0\) injectivity range):** PGVWC07, Theorem 12,
-assumes \(L\ge 3(b-1)(L_0+1)+1\).  This theorem is stated in the current BNT
+**Scope restriction (length-\(L_0\) injectivity range):** Theorem 12 of
+arXiv:quant-ph/0608197 assumes \(L\ge 3(b-1)(L_0+1)+1\). This theorem is stated in the current BNT
 range derived from length-\(L_0\) block injectivity,
 \((L_0+1)+3(r-1)(L_0+1)+1\le L\). The source-range comparison is recorded in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
@@ -264,8 +264,8 @@ range derived from length-\(L_0\) block injectivity,
 **Scope restriction (crossing span):** The theorem assumes that the simultaneous
 block-word tuples of length \(N-i\) span the product algebra for each
 boundary-crossing interval beginning at \(i\). Removing this visible span
-hypothesis from the finite BNT range is part of the remaining PGVWC07
-boundary-comparison cleanup recorded in
+hypothesis from the finite BNT range is part of the remaining source-faithful
+boundary comparison recorded in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
 
 **Unfaithful:** This proof still relies on
@@ -305,7 +305,7 @@ theorem
           hNlarge hCrossingSpan hψ)
 
 /-- Boundary-crossing local constraints give the ground-space equality stated in
-Pérez-García--Verstraete--Wolf--Cirac, Theorem 12.
+Theorem 12 of arXiv:quant-ph/0608197.
 
 The preceding theorem proves this equality together with an independence
 statement for the length-\(N\) single-block spaces. This theorem records only
@@ -317,8 +317,8 @@ the equality conclusion
 \]
 which is the ground-space assertion in the source theorem.
 
-**Scope restriction (length-\(L_0\) injectivity range):** PGVWC07, Theorem 12,
-assumes \(L\ge 3(b-1)(L_0+1)+1\).  This theorem is stated in the current BNT
+**Scope restriction (length-\(L_0\) injectivity range):** Theorem 12 of
+arXiv:quant-ph/0608197 assumes \(L\ge 3(b-1)(L_0+1)+1\). This theorem is stated in the current BNT
 range derived from length-\(L_0\) block injectivity,
 \((L_0+1)+3(r-1)(L_0+1)+1\le L\). The source-range comparison is recorded in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
@@ -326,8 +326,8 @@ range derived from length-\(L_0\) block injectivity,
 **Scope restriction (crossing span):** The theorem assumes that the simultaneous
 block-word tuples of length \(N-i\) span the product algebra for each
 boundary-crossing interval beginning at \(i\). Removing this visible span
-hypothesis from the finite BNT range is part of the remaining PGVWC07
-boundary-comparison cleanup recorded in
+hypothesis from the finite BNT range is part of the remaining source-faithful
+boundary comparison recorded in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
 
 **Unfaithful:** This proof still relies on
@@ -375,14 +375,14 @@ for every boundary-crossing interval, local word \(\beta\) before the cut,
 and outside word \(\rho\), with \(D^j_\beta\) already specialized to
 \((\mu_j^NX_j)A^j_\beta\). The words \(\beta\) and \(\rho\) are formal
 word coordinates for the opened boundary comparison; they reindex the source
-end-site comparison by blocked words rather than replacing the source notation.
+end-site comparison by blocked words rather than replacing the source indices.
 The normalized \(E^j\)-calculation
 and the block-injective crossing-window argument then give the
 periodic-boundary single-block constraints, and hence the block-diagonal
 periodic-boundary equality.
 
-**Scope restriction (length-\(L_0\) injectivity range):** PGVWC07, Theorem 12,
-assumes \(L\ge 3(b-1)(L_0+1)+1\).  This theorem is stated in the current BNT
+**Scope restriction (length-\(L_0\) injectivity range):** Theorem 12 of
+arXiv:quant-ph/0608197 assumes \(L\ge 3(b-1)(L_0+1)+1\). This theorem is stated in the current BNT
 range derived from length-\(L_0\) block injectivity,
 \((L_0+1)+3(r-1)(L_0+1)+1\le L\). The source-range comparison is recorded in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
@@ -393,7 +393,7 @@ which transitively uses the boundary-condition comparison at boundary-crossing
 windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
 2126--2128. Documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
-derive the Perez-Garcia--Verstraete--Wolf--Cirac \(C^j,D^j,E^j\)
+derive the \(C^j,D^j,E^j\)
 boundary-condition comparison from arXiv:quant-ph/0608197, Theorem 12, proof
 lines 1446--1456, and use it to discharge the currently assumed comparison;
 tracked in issue 2971. -/
@@ -440,7 +440,7 @@ theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_pgvwc_compa
           hNlarge hψ (fun X hψX => hComparison hψ X hψX))
 
 /-- The \(C^j,D^j\) boundary-condition comparison gives the ground-space
-equality stated in PGVWC07, Theorem 12.
+equality stated in Theorem 12 of arXiv:quant-ph/0608197.
 
 The preceding theorem proves this equality together with an independence
 statement for the length-\(N\) single-block spaces. This theorem records only
@@ -452,8 +452,8 @@ the equality conclusion
 \]
 under the assumed word-indexed \(C^j,D^j\) comparison.
 
-**Scope restriction (length-\(L_0\) injectivity range):** PGVWC07, Theorem 12,
-assumes \(L\ge 3(b-1)(L_0+1)+1\).  This theorem is stated in the current BNT
+**Scope restriction (length-\(L_0\) injectivity range):** Theorem 12 of
+arXiv:quant-ph/0608197 assumes \(L\ge 3(b-1)(L_0+1)+1\). This theorem is stated in the current BNT
 range derived from length-\(L_0\) block injectivity,
 \((L_0+1)+3(r-1)(L_0+1)+1\le L\). The source-range comparison is recorded in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
@@ -464,7 +464,7 @@ which transitively uses the boundary-condition comparison at boundary-crossing
 windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
 2126--2128. Documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
-derive the Perez-Garcia--Verstraete--Wolf--Cirac \(C^j,D^j,E^j\)
+derive the \(C^j,D^j,E^j\)
 boundary-condition comparison from arXiv:quant-ph/0608197, Theorem 12, proof
 lines 1446--1456, and use it to discharge the currently assumed comparison;
 tracked in issue 2971. -/

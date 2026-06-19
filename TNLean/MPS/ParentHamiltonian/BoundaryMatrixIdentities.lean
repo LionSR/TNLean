@@ -9,16 +9,15 @@ import TNLean.MPS.ParentHamiltonian.IntersectionProperty
 /-!
 # Boundary matrix identities
 
-Normalized \(C,D,E\) boundary-matrix identities from the
-Perez-Garcia--Verstraete--Wolf--Cirac block-diagonal intersection proof: from
+Normalized \(C,D,E\) boundary-matrix identities from Theorem 12 of
+arXiv:quant-ph/0608197: from
 \(A_b C_a=D_b B_a\) with right-normalized \(B\) and
 \(E=\sum_a C_a B_a^\dagger\), one obtains \(D_b=A_b E\) and
 \(A_b C_a=A_b E B_a\).
 
 ## References
 
-* arXiv:quant-ph/0608197 (Perez-Garcia--Verstraete--Wolf--Cirac 2007),
-  Theorem 12, proof around \(A_b C_a=D_b A_a\) and
+* arXiv:quant-ph/0608197, Theorem 12, proof around \(A_b C_a=D_b A_a\) and
   \(E=\sum_a C_a A_a^\dagger\).
 -/
 
@@ -147,8 +146,8 @@ theorem pgvwc07_boundary_word_matrix_identities_of_compatibility
 
 /-- Two-length word-indexed boundary-matrix identities.
 
-This is the word-alphabet form of the \(C,D,E\) calculation in
-Perez-Garcia--Verstraete--Wolf--Cirac, Theorem 12, proof lines 1446--1451.
+This is the word-alphabet form of the \(C,D,E\) calculation in Theorem 12 of
+arXiv:quant-ph/0608197, proof lines 1446--1451.
 
 The two index sets are words of lengths \(K\) and \(M\):
 \[
@@ -156,7 +155,7 @@ The two index sets are words of lengths \(K\) and \(M\):
   \sum_\rho B_\rho B_\rho^\dagger=I.
 \]
 This is the word form needed when a boundary-crossing cyclic interval has a
-wrapped word and a complementary word of different lengths. -/
+cut word and a complementary word of different lengths. -/
 theorem pgvwc07_boundary_word_matrix_identities_of_two_length_compatibility
     (A : MPSTensor d D) {K M : ℕ}
     (C : (Fin M → Fin d) → Matrix (Fin D) (Fin D) ℂ)
@@ -184,17 +183,17 @@ theorem pgvwc07_boundary_word_matrix_identities_of_two_length_compatibility
 /-- Complementary-word boundary identities, with the \(E_\rho\) formula, from a
 two-length \(C,D,E\) comparison.
 
-This is the boundary-crossing form of the Perez-Garcia--Verstraete--Wolf--Cirac
-calculation in arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1451.
+This is the boundary-crossing form of the calculation in Theorem 12 of
+arXiv:quant-ph/0608197, proof lines 1446--1451.
 
 Let \(X\in M_D(\mathbb C)\) be a matrix. Assume that for every complementary
-word \(\rho\) and wrapped word \(\beta\),
+word \(\rho\) and cut word \(\beta\),
 \[
   A_\beta C_\rho=(X A_\beta)A_\rho,
 \]
 and that the complementary-word products are right-normalized. Then, for every
 complementary word \(\rho\), there is a matrix \(E_\rho\) such that for every
-wrapped word \(\beta\),
+cut word \(\beta\),
 \[
   (X A_\beta)A_\rho=A_\beta E_\rho
 \]
@@ -243,17 +242,17 @@ theorem pgvwc07_complementary_word_boundary_identities_formula_of_compatibility
 /-- Complementary-word boundary identities from a two-length \(C,D,E\)
 comparison.
 
-This is the boundary-crossing form of the Perez-Garcia--Verstraete--Wolf--Cirac
-calculation in arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1451.
+This is the boundary-crossing form of the calculation in Theorem 12 of
+arXiv:quant-ph/0608197, proof lines 1446--1451.
 
 Let \(X\in M_D(\mathbb C)\) be a matrix. Assume that for every complementary
-word \(\rho\) and wrapped word \(\beta\),
+word \(\rho\) and cut word \(\beta\),
 \[
   A_\beta C_\rho=(X A_\beta)A_\rho,
 \]
 and that the complementary-word products are right-normalized. Then, for every
 complementary word \(\rho\), there is a matrix \(E_\rho\) such that for every
-wrapped word \(\beta\),
+cut word \(\beta\),
 \[
   (X A_\beta)A_\rho=A_\beta E_\rho
 \]. -/

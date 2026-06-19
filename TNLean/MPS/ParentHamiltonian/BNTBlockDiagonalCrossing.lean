@@ -17,10 +17,10 @@ Theorem 12.
 
 The equality theorem here is conditional on the matrix identities indexed by
 complementary words obtained after the source \(C^j,D^j\) comparison and the
-normalized \(E^j\)-calculation. The
-Pérez-García--Verstraete--Wolf--Cirac (PGVWC) comparison theorem below proves
-the periodic-boundary conclusion for each block once those identities are in the
-boundary-crossing form used in Theorem 12. Deriving these identities
+normalized \(E^j\)-calculation. The comparison theorem from
+arXiv:quant-ph/0608197 below proves the periodic-boundary conclusion for each
+block once those identities are in the boundary-crossing form used in
+Theorem 12. Deriving these identities
 from the source comparison is documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
 -/
@@ -666,7 +666,7 @@ theorem blockDiagonal_boundary_component_chainGroundSpace_of_boundary_identities
 the periodic constraints for each block.
 
 For each boundary-crossing interval, assume that for every complementary
-word \(\rho\) there is a matrix \(E\) such that, for every wrapped word
+word \(\rho\) there is a matrix \(E\) such that, for every cut word
 \(\beta\),
 \[
   \mu_j^N X_jA^j_\beta A^j_\rho=A^j_\beta E
@@ -734,12 +734,12 @@ theorem
   exact wordSpan_eq_top_of_ge_of_unital (A j) (hUnital j)
     ((wordSpan_eq_top_iff_isNBlkInjective (A j) L₀).mpr (hBlk j)) (by omega)
 
-/-- PGVWC complementary-word comparisons give the periodic constraints for each
+/-- Source complementary-word comparisons give the periodic constraints for each
 block under block injectivity.
 
 For each boundary-crossing interval beginning at \(i\), assume there are
 matrices \(C^j_{i,\rho}\) indexed by complementary words such that, for every
-wrapped word \(\beta\),
+cut word \(\beta\),
 \[
   A^j_\beta C^j_{i,\rho}
   =
@@ -781,12 +781,12 @@ theorem
     (sum_evalWord_mul_conjTranspose_evalWord (A j) (hUnital j) (N - L))
     (hCompat j i hi) ρ
 
-/-- PGVWC trace decompositions give the periodic constraints for each block
+/-- Source trace decompositions give the periodic constraints for each block
 under block injectivity.
 
 For each boundary-crossing interval beginning at \(i\), assume there are
 matrices \(C^j_{i,\rho}\) indexed by complementary words such that the two
-trace decompositions agree for every wrapped word \(\beta\), complementary word
+trace decompositions agree for every cut word \(\beta\), complementary word
 \(\rho\), and middle word \(w\):
 \[
   \sum_j\operatorname{tr}(A^j_\beta C^j_{i,\rho}A^j_w)
@@ -802,7 +802,7 @@ the blockwise identity
 The normalization \(\sum_\rho A^j_\rho A^{j\dagger}_\rho=I\) and the
 compatibility identity for the complementary word \(\rho\) then give, for each
 block \(j\) and interval \(i\), a matrix \(E_{j,i,\rho}\) such that, for every
-wrapped word \(\beta\),
+cut word \(\beta\),
 \[
   ((\mu_j^NX_j)A^j_\beta)A^j_\rho=A^j_\beta E_{j,i,\rho}.
 \]
@@ -860,10 +860,10 @@ representation to periodic single-block states.
 Under the normalized BNT hypotheses, every vector in the block-diagonal
 periodic chain space has block-diagonal boundary conditions \(X_j\).  If those
 same boundary conditions satisfy the matrix identities, indexed by complementary
-words, that the Pérez-García--Verstraete--Wolf--Cirac proof derives after the
-trace-decomposition comparison and the normalized \(E^j\)-calculation: for every
+words, that the source proof derives after the trace-decomposition comparison
+and the normalized \(E^j\)-calculation: for every
 boundary-crossing interval \(i\),
-wrapped word \(\beta\), and complementary word \(\rho\),
+cut word \(\beta\), and complementary word \(\rho\),
 \[
   \mu_j^N X_jA^j_\beta A^j_\rho=A^j_\beta E_{j,i,\rho},
 \]
@@ -873,8 +873,9 @@ then the single-block vectors
 \]
 belong to \(\mathcal G_{N,L}(A_j)\).
 
-These identities are assumptions of this theorem. The PGVWC comparison theorem
-below gives the conclusion for each block from the displayed boundary-crossing
+These identities are assumptions of this theorem. The boundary-condition
+comparison theorem below gives the conclusion for each block from the displayed
+boundary-crossing
 form. Deriving this displayed form from the source comparison is documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
 
@@ -887,8 +888,8 @@ arXiv:quant-ph/0608197, Theorem 12, proof lines 1454--1456.
 which uses boundary-crossing comparison hypotheses not derived from
 arXiv:2011.12127, Section IV.C, lines 2126--2128. Documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
-derive the PGVWC07 \(C^j,D^j,E^j\) comparison from arXiv:quant-ph/0608197,
-Theorem 12, proof lines 1446--1456, and discharge the currently assumed
+derive the \(C^j,D^j,E^j\) boundary-condition comparison from
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and discharge the currently assumed
 complementary-word identity; tracked in issue 2971. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_complementary_identities_bnt_c1
@@ -951,8 +952,8 @@ comparison.
 which uses boundary-crossing comparison hypotheses not derived from
 arXiv:2011.12127, Section IV.C, lines 2126--2128. Documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
-derive the PGVWC07 \(C^j,D^j,E^j\) comparison from arXiv:quant-ph/0608197,
-Theorem 12, proof lines 1446--1456, and discharge the currently assumed
+derive the \(C^j,D^j,E^j\) boundary-condition comparison from
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and discharge the currently assumed
 complementary-word identity; tracked in issue 2971. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_complementary_identities
