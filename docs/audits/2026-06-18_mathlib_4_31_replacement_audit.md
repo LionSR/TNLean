@@ -232,21 +232,20 @@ Applied PEPS follow-up:
 
 - Explicit uses of `TNLean.PEPS.reindexAlgEquiv_smul` were removed.  The four
   scalar transport sites in `TNLean/PEPS/TorusGaugeUniqueness.lean` now rewrite
-  by Mathlib's `map_smul` for the algebra equivalence, while the public theorem
-  remains as a deprecated compatibility name.
+  by Mathlib's `map_smul` for the algebra equivalence.  The unused
+  compatibility theorem was then removed.
 - Explicit uses of `TNLean.PEPS.reindexAlgEquiv_finCongr_symm_round` were
   removed from `TNLean/PEPS/EdgeGaugeFamily.lean`.  The only local transport
-  site now uses a proof by simplifying `Matrix.reindexAlgEquiv` directly, while
-  the public theorem remains as a deprecated compatibility name.
+  site now uses a proof by simplifying `Matrix.reindexAlgEquiv` directly.  The
+  unused compatibility theorem was then removed.
 - Explicit uses of `TNLean.PEPS.reindexAlgEquiv_gaugeConj` were removed.  The
   only use in `TNLean/PEPS/TorusWitnessTransport.lean` now uses `map_mul`,
-  `map_inv`, and `glReindex_coe` directly, while the public theorem remains as
-  a deprecated compatibility name.
+  `map_inv`, and `glReindex_coe` directly.  The unused compatibility theorem
+  was then removed.
 - Explicit uses of `TNLean.PEPS.reindexAlgEquiv_transpose` were removed.  Its
   users now call Mathlib's `Matrix.transpose_reindex` directly, with local
   `change` steps where the gauge-applied bond dimension is definitionally equal
-  to the original one, while the public theorem remains as a deprecated
-  compatibility name.
+  to the original one.  The unused compatibility theorem was then removed.
 - The corresponding blueprint theorem was deleted, since the algebra fact is
   now an inline proof step in the blueprint route rather than a formalized
   target.
@@ -1061,17 +1060,13 @@ pass-through layer.  The corresponding blueprint entry now cites only
 `channelDet_norm_eq_one_iff_exists_unitaryChannel`.
 
 A further pass removed the local rectangular continuous-linear-map normed
-structure wrappers from `TNLean.Spectral.GaugeConstruction`; the
-finite-dimensional witness remains as a deprecated compatibility name:
+structure wrappers from `TNLean.Spectral.GaugeConstruction`:
 
 - `instGCNormedAddCommGroupMatrixCLM`
 - `instGCNormedRingMatrixCLM`
 - `instGCSeminormedRingMatrixCLM`
 - `instGCNormedAlgebraMatrixCLM`
 - `instGCCompleteSpaceMatrixCLM`
-
-Retained compatibility name:
-
 - `instGCFiniteDimensionalMatrixCLM`
 
 These were exact local wrappers around the continuous-linear-map normed-ring

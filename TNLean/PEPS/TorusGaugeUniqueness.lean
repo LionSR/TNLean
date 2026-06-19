@@ -63,16 +63,6 @@ theorem gl_inv_coe_smul {n : ℕ} {W W' : GL (Fin n) ℂ} {c : ℂˣ}
       Units.val_one, one_smul, hWW]
   rw [Matrix.GeneralLinearGroup.coe_inv, Matrix.inv_eq_right_inv hprod]
 
-/-- Reindexing across an index-size equality commutes with scalar multiplication. -/
-@[deprecated "Use the scalar-action preservation of `Matrix.reindexAlgEquiv` directly."
-  (since := "2026-06-19")]
-theorem reindexAlgEquiv_smul {m n : ℕ} (h : m = n) (c : ℂ)
-    (M : Matrix (Fin m) (Fin m) ℂ) :
-    Matrix.reindexAlgEquiv ℂ ℂ (finCongr h) (c • M) =
-      c • Matrix.reindexAlgEquiv ℂ ℂ (finCongr h) M := by
-  simp only [Matrix.coe_reindexAlgEquiv, Matrix.reindex_apply, Matrix.submatrix_smul,
-    Pi.smul_apply]
-
 /-! ### The conjugation-form identity of an absorbing family -/
 
 section CoeffBridge

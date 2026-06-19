@@ -45,16 +45,6 @@ theorem glReindex_coe {m n : ℕ} (h : m = n) (Z : GL (Fin m) ℂ) :
       Matrix.reindexAlgEquiv ℂ ℂ (finCongr h) (↑Z : Matrix (Fin m) (Fin m) ℂ) :=
   rfl
 
-/-- Reindexing back and forth across an index-size equality is the identity. -/
-@[deprecated "Use a local proof by simplifying `Matrix.reindexAlgEquiv`."
-  (since := "2026-06-19")]
-theorem reindexAlgEquiv_finCongr_symm_round {m n : ℕ} (h h' : m = n)
-    (N : Matrix (Fin n) (Fin n) ℂ) :
-    Matrix.reindexAlgEquiv ℂ ℂ (finCongr h)
-        (Matrix.reindexAlgEquiv ℂ ℂ (finCongr h'.symm) N) = N := by
-  subst h
-  simp
-
 /-- Transporting an invertible matrix across two successive index-size equalities is transporting
 across their composite. -/
 theorem glReindex_glReindex {m n k : ℕ} (h₁ : m = n) (h₂ : n = k) (Z : GL (Fin m) ℂ) :
@@ -88,15 +78,6 @@ theorem glTranspose_inv_coe {m : ℕ} (X : GL (Fin m) ℂ) :
       (↑X⁻¹ : Matrix (Fin m) (Fin m) ℂ)ᵀ := by
   rw [Matrix.GeneralLinearGroup.coe_inv, glTranspose_coe,
     ← Matrix.transpose_nonsing_inv, Matrix.GeneralLinearGroup.coe_inv]
-
-/-- Reindexing commutes with transposition. -/
-@[deprecated "Use `Matrix.transpose_reindex` directly." (since := "2026-06-19")]
-theorem reindexAlgEquiv_transpose {m n : ℕ} (h : m = n)
-    (N : Matrix (Fin m) (Fin m) ℂ) :
-    Matrix.reindexAlgEquiv ℂ ℂ (finCongr h) Nᵀ =
-      (Matrix.reindexAlgEquiv ℂ ℂ (finCongr h) N)ᵀ := by
-  simp only [Matrix.coe_reindexAlgEquiv, Matrix.reindex_apply,
-    Matrix.transpose_submatrix]
 
 /-- **Per-edge gauge family from the edge-blocked insertion algebra
 isomorphisms.**
