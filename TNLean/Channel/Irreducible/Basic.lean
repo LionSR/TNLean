@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.Data.Matrix.Basis
+import Mathlib.Analysis.Matrix.Order
 import Mathlib.LinearAlgebra.Matrix.PosDef
 import Mathlib.Tactic.NoncommRing
 
@@ -31,7 +32,7 @@ on matrix algebras `M_D(ℂ)`.
 * [Evans, Høegh-Krohn, *Spectral properties of positive maps*, 1978][Evans1978Spectral]
 -/
 
-open scoped Matrix ComplexOrder BigOperators
+open scoped Matrix ComplexOrder BigOperators MatrixOrder
 
 variable {D : ℕ}
 
@@ -41,14 +42,6 @@ variable {D : ℕ}
 These correspond to projections onto subspaces of `ℂ^D`. -/
 def IsOrthogonalProjection (P : Matrix (Fin D) (Fin D) ℂ) : Prop :=
   P.IsHermitian ∧ P * P = P
-
-/-- The zero matrix is an orthogonal projection. -/
-lemma isOrthogonalProjection_zero : IsOrthogonalProjection (0 : Matrix (Fin D) (Fin D) ℂ) :=
-  ⟨Matrix.isHermitian_zero, by simp only [Matrix.zero_mul]⟩
-
-/-- The identity matrix is an orthogonal projection. -/
-lemma isOrthogonalProjection_one : IsOrthogonalProjection (1 : Matrix (Fin D) (Fin D) ℂ) :=
-  ⟨Matrix.isHermitian_one, by simp only [Matrix.one_mul]⟩
 
 /-- An orthogonal projection is a star projection. -/
 theorem IsOrthogonalProjection.isStarProjection {P : Matrix (Fin D) (Fin D) ℂ}
@@ -64,6 +57,14 @@ theorem IsStarProjection.isOrthogonalProjection {P : Matrix (Fin D) (Fin D) ℂ}
   change Pᴴ = P
   simpa [Matrix.star_eq_conjTranspose] using hP.2
 
+/-- The zero matrix is an orthogonal projection. -/
+lemma isOrthogonalProjection_zero : IsOrthogonalProjection (0 : Matrix (Fin D) (Fin D) ℂ) :=
+  (IsStarProjection.zero (R := Matrix (Fin D) (Fin D) ℂ)).isOrthogonalProjection
+
+/-- The identity matrix is an orthogonal projection. -/
+lemma isOrthogonalProjection_one : IsOrthogonalProjection (1 : Matrix (Fin D) (Fin D) ℂ) :=
+  (IsStarProjection.one (R := Matrix (Fin D) (Fin D) ℂ)).isOrthogonalProjection
+
 /-- The complement of an orthogonal projection is an orthogonal projection. -/
 theorem IsOrthogonalProjection.one_sub {P : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsOrthogonalProjection P) : IsOrthogonalProjection (1 - P) :=
@@ -72,10 +73,8 @@ theorem IsOrthogonalProjection.one_sub {P : Matrix (Fin D) (Fin D) ℂ}
 /-- An orthogonal projection is positive semidefinite. -/
 theorem isOrthogonalProjection_posSemidef {P : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsOrthogonalProjection P) :
-    P.PosSemidef := by
-  have hPP : P = Pᴴ * P := by rw [hP.1, hP.2]
-  rw [hPP]
-  exact P.posSemidef_conjTranspose_mul_self
+    P.PosSemidef :=
+  Matrix.nonneg_iff_posSemidef.mp hP.isStarProjection.nonneg
 
 /-! ### Irreducibility of CP maps -/
 
