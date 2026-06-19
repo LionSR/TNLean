@@ -89,6 +89,10 @@ The clearest replacements are:
   inner-product structure explicitly by `PiLp.innerProductSpace`, removing a
   large local synthesis budget that was needed only to find this standard
   instance.
+- The determinant-one unitary-channel characterization now has one Lean
+  statement.  The duplicate `_of_channel` theorem had the same hypotheses and
+  conclusion as `channelDet_norm_eq_one_iff_exists_unitaryChannel`, so the
+  blueprint points directly to the latter.
 
 There are also important non-replacements.
 
@@ -1049,6 +1053,12 @@ now given explicitly by `PiLp.innerProductSpace (fun _ : ι => ℂ)`.  This remo
 the former large local synthesis budget around the cached instance and makes the
 finite-dimensional Hilbert-space structure used in the rectangular isometry
 argument explicit.
+
+The determinant-one unitary-channel theorem no longer has the duplicate
+`channelDet_norm_eq_one_iff_exists_unitaryChannel_of_channel` restatement.  The
+statement already assumes `IsChannel T`, so the removed theorem was an exact
+pass-through layer.  The corresponding blueprint entry now cites only
+`channelDet_norm_eq_one_iff_exists_unitaryChannel`.
 
 A further pass removed the local rectangular continuous-linear-map normed
 structure wrappers from `TNLean.Spectral.GaugeConstruction`; the
