@@ -331,9 +331,6 @@ Use \(\operatorname{tr}(P \cdot Q) = \operatorname{tr}(Q \cdot P)\) to rotate
 across the periodic boundary,
 then extract a matrix equation via `groundSpaceMap_injective`. -/
 
-set_option maxHeartbeats 800000 in
--- Expanding `cyclicCfg` and rotating the trace across the periodic boundary produces
--- large normalization goals, so this proof needs a larger heartbeat budget.
 private theorem wrapping_window_matEq {A : MPSTensor d D} [NeZero D]
     (hA : IsInjective A) {L : ℕ} (hL : 1 < L) {M : ℕ} (hM : 1 ≤ M) (hLN : L ≤ M + 1)
     {X : Matrix (Fin D) (Fin D) ℂ}
@@ -888,9 +885,6 @@ theorem left_witness_unique_of_isNBlkInjective
         f (1 : Matrix (Fin D) (Fin D) ℂ)) hmul
   simpa using h1
 
-set_option maxHeartbeats 800000 in
--- The double spanning argument over window tails and complements creates large
--- `LinearMap.ext_on_range` goals, so we raise the heartbeat budget here as well.
 /-- If `groundSpaceMap A N X` lies in every cyclic window's ground space,
 then \(X\) commutes with all generators \(A_j\).
 
