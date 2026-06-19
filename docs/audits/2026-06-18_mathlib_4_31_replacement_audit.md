@@ -1103,6 +1103,12 @@ elaborates under the default Lean 4.31 budget.  The same pass removed two inert
 proof-normalization steps from `TNLean.Channel.Semigroup.LindbladForm.Basic`
 that Lean 4.31 reports as unused.
 
+A subsequent check of `TNLean.Channel.Semigroup.Basic` removed the four
+remaining theorem-level heartbeat bounds in that file.  Lean 4.31 now
+elaborates the exponential-semigroup derivative, the one-sided differentiability
+lemma for continuous semigroups, the exponential-form theorem, and generator
+uniqueness under the default heartbeat budget.
+
 In `TNLean.Channel.POVM.Uniqueness`, the Gram-matrix comparison theorem
 `exists_unitary_mul_eq_of_conjTranspose_mul_eq` no longer needs its old local
 heartbeat bound.  Its proof already names the Euclidean-space inner-product and
