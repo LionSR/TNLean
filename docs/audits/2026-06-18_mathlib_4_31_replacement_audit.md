@@ -743,6 +743,20 @@ Applied martingale follow-up:
   `LinearMap.IsPositive.smul_of_nonneg` directly, with the scalar nonnegativity
   discharged by `positivity` under `ComplexOrder`.
 
+Applied wrapping-window follow-up:
+
+- The two theorem-level `maxHeartbeats` bounds in
+  `TNLean/MPS/ParentHamiltonian/WrappingWindow.lean` were removed.  Under Lean
+  4.31, both the trace-rotation extraction lemma `wrapping_window_matEq` and
+  the boundary commutation theorem `boundary_matrix_commutes` elaborate under
+  the default heartbeat budget.
+
+Focused check:
+
+```bash
+lake build TNLean.MPS.ParentHamiltonian.WrappingWindow -q --log-level=info
+```
+
 Applied projection follow-up:
 
 - `TNLean/Channel/Irreducible/Basic.lean` now bridges the local matrix
