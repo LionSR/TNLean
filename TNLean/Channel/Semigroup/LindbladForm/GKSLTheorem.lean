@@ -133,7 +133,8 @@ theorem generatorDecomp_of_gksl
   -- Need: Σ Kᵢ†Kᵢ = G.κ + G.κ† (from TA via trace pairing non-degeneracy)
   have hTA_G : IsTraceAnnihilating G.toLinearMap := hG ▸ hTA
   have hdiff : ∑ i : Fin r, (K i)ᴴ * K i - G.κ - G.κᴴ = 0 := by
-    apply Matrix.eq_zero_of_forall_trace_mul_eq_zero
+    refine (Matrix.ext_iff_trace_mul_right
+      (A := ∑ i : Fin r, (K i)ᴴ * K i - G.κ - G.κᴴ) (B := 0)).2 ?_
     intro ρ
     have h := hTA_G ρ
     simp only [GeneratorDecomp.toLinearMap_apply] at h
@@ -150,8 +151,10 @@ theorem generatorDecomp_of_gksl
     rw [hcycl] at h
     -- trace(ρ * G.κ†) = trace(G.κ† * ρ) by cyclic property
     rw [Matrix.trace_mul_comm ρ G.κᴴ, ← trace_sub, ← trace_sub] at h
-    convert h using 1
-    simp only [sub_mul]
+    have hzero : trace ((∑ i : Fin r, (K i)ᴴ * K i - G.κ - G.κᴴ) * ρ) = 0 := by
+      convert h using 1
+      simp only [sub_mul]
+    simpa using hzero
   -- Σ Kᵢ†Kᵢ - G.κ - G.κ† = 0 ⟹ Σ Kᵢ†Kᵢ = G.κ + G.κ†
   rw [sub_sub] at hdiff
   exact sub_eq_zero.mp hdiff
