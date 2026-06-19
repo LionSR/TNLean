@@ -1090,6 +1090,17 @@ This theorem merely returned the `dim_le` field from an
 and the bundled decomposition structure are unchanged; callers should use
 `w.dim_le` directly when they have a decomposition witness `w`.
 
+### Wielandt rank-one products
+
+Removed unused local convenience wrappers:
+
+- `MPSTensor.matrix_in_cumulativeSpan`
+- `MPSTensor.one_eq_evalWord_nil`
+- `MPSTensor.wordSpan_generates_full_algebra`
+
+The first and third merely restated `cumulativeSpan_eq_top`, while the second
+was just `evalWord_nil`.  No Lean or blueprint declaration referred to them.
+
 ## Verification performed
 
 The Mathlib cache was fetched for the 4.31 worktree.  An initial cache fetch
