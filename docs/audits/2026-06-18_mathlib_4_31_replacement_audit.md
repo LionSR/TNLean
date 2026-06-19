@@ -95,7 +95,8 @@ The clearest replacements are:
   blueprint points directly to the latter.
 - Further Lean 4.31 elaboration checks removed local heartbeat bounds from the
   POVM unitary-comparison proof, the irreducible-channel spectral-radius scalar
-  proof, and the semigroup perturbation derivative proof.
+  proof, the semigroup perturbation derivative proof, and the common
+  cyclic-sector data theorem.
 - The periodic-MPS equivalence bundles now cite the chain-level relation laws
   directly.  Six local theorem declarations that only restated reflexivity,
   symmetry, and transitivity for the periodic abbreviations were removed.
@@ -1123,6 +1124,11 @@ finite-dimensional Hilbert-space structure used in the rectangular isometry
 argument explicit.  The remaining local `maxHeartbeats` bound around the
 partial-isometry extension theorem was retested under Lean 4.31 and is still
 needed for elaboration.
+
+In `TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorData`, the common
+positive-blocking-length cyclic-sector theorem now elaborates under the default
+Lean 4.31 heartbeat budget.  The local theorem-level `maxHeartbeats` override
+and its comment were removed.
 
 The determinant-one unitary-channel theorem no longer has the duplicate
 `channelDet_norm_eq_one_iff_exists_unitaryChannel_of_channel` restatement.  The

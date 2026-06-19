@@ -104,10 +104,6 @@ theorem afterBlocking_perBlockCyclicData_of_sameMPV₂
       exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor
         (d := d) (D := dimB k) (blocksB k) (hTPB k) (hIrrB k)
 
-set_option maxHeartbeats 800000 in
--- The next theorem has a large dependent existential conclusion, matching the
--- CPSV witnesses used by the later sector comparison.
-
 /-- **Two-sided common-length relabeled cyclic-sector theorem.**
 
 Starting from `SameMPV₂ A B`, this theorem chooses one positive physical blocking
