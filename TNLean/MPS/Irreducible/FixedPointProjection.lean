@@ -257,13 +257,6 @@ private lemma dotProduct_mulVec_conjTranspose
     star x ⬝ᵥ (M *ᵥ y) = star (Mᴴ *ᵥ x) ⬝ᵥ y := by
   rw [Matrix.dotProduct_mulVec, Matrix.star_mulVec, Matrix.conjTranspose_conjTranspose]
 
-private lemma mulVec_eq_zero_of_quadForm_eq_zero
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef)
-    (x : Fin D → ℂ) (hx : star x ⬝ᵥ (ρ *ᵥ x) = 0) :
-    ρ *ᵥ x = 0 := by
-  classical
-  exact (hρ.dotProduct_mulVec_zero_iff x).mp hx
-
 /-- If `ρ` is PSD and `E_A(ρ)=ρ`, then `ker ρ` is invariant under each adjoint Kraus operator.
 
 Formally, `ρ *ᵥ x = 0` implies `ρ *ᵥ ((A i)ᴴ *ᵥ x) = 0`.
@@ -302,7 +295,7 @@ private lemma ker_invariant_under_adjoint
           h_sum_zero i (Finset.mem_univ _)
     exact Complex.ext hre (hρ_psd.isHermitian.im_star_dotProduct_mulVec_self _)
   intro i
-  exact mulVec_eq_zero_of_quadForm_eq_zero ρ hρ_psd _ (h_each_zero i)
+  exact (hρ_psd.dotProduct_mulVec_zero_iff _).mp (h_each_zero i)
 
 
 /-- If `ρ` is a PSD fixed point of the transfer map, then its support projection is invariant:
