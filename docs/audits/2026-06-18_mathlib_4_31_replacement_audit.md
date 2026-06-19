@@ -140,6 +140,9 @@ The clearest replacements are:
   `Submodule.span_singleton_eq_top_iff`, and the local-purification example
   simplifies `1 × 1` triple products directly with `Matrix.mul_apply` and
   `Fin.sum_univ_one`.
+- The PSD kernel-zero step in the QPF and MPS fixed-point projection proofs now
+  calls `Matrix.PosSemidef.dotProduct_mulVec_zero_iff` directly.  Two private
+  wrappers named `mulVec_eq_zero_of_quadForm_eq_zero` were removed.
 
 There are also important non-replacements.
 
@@ -1863,6 +1866,25 @@ The private helper remains as the shared expansion used by the transfer-matrix
 proof sites, but its proof now cites `Matrix.matrix_eq_sum_single` directly and
 simplifies by `Matrix.smul_single`, `smul_eq_mul`, and `mul_one` to recover the
 local notation.  The transfer-matrix statements are unchanged.
+
+## PSD kernel-zero wrapper cleanup, 2026-06-19
+
+Two private lemmas named `mulVec_eq_zero_of_quadForm_eq_zero` were exact
+one-line wrappers around Mathlib's positive-semidefinite kernel criterion
+`Matrix.PosSemidef.dotProduct_mulVec_zero_iff`:
+
+- `TNLean/QPF/PosDef.lean`
+- `TNLean/MPS/Irreducible/FixedPointProjection.lean`
+
+Both files now invoke `hρ_psd.dotProduct_mulVec_zero_iff` at the use sites.
+The fixed-point and positive-definiteness statements are unchanged.
+
+Focused check:
+
+```bash
+lake build TNLean.QPF.PosDef \
+  TNLean.MPS.Irreducible.FixedPointProjection -q --log-level=info
+```
 
 ## Conclusions
 
