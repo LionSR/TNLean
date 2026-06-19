@@ -351,9 +351,4 @@ theorem channelDet_norm_eq_one_iff_exists_unitaryChannel
   · rintro ⟨U, rfl⟩
     exact channelDet_norm_eq_one_of_unitaryChannel U
 
-/-- Older public name for `channelDet_norm_eq_one_iff_exists_unitaryChannel`. -/
-@[deprecated (since := "2026-06-19")]
-alias channelDet_norm_eq_one_iff_exists_unitaryChannel_of_channel :=
-  channelDet_norm_eq_one_iff_exists_unitaryChannel
-
 end WolfStatements

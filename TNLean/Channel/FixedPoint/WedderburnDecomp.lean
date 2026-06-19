@@ -338,22 +338,6 @@ theorem adjointFixedPoints_wedderburnDecomp
         (adjointFixedPointsStarSubalgebra (d := d) (D := D) K h_tp hρ hρ_fix)) :=
   starSubalgebra_hasWedderburnBlockDecomp _
 
-section DimConstraints
-
-/-- Older public form of the ambient-dimension bound in a Wedderburn block
-decomposition. -/
-@[deprecated "Use the `dim_le` bound of the Wedderburn block-decomposition witness."
-  (since := "2026-06-19")]
-theorem wedderburnBlockDims_sum_le
-    (K : Fin d → Mat) (h_tp : IsTP K) {ρ : Mat}
-    (hρ : ρ.PosDef) (hρ_fix : map K ρ = ρ) :
-    ∀ (w : IsWedderburnBlockDecomp
-        (adjointFixedPointsStarSubalgebra (d := d) (D := D) K h_tp hρ hρ_fix)),
-      ∑ i : Fin w.numBlocks, w.blockDim i * w.multDim i ≤ D :=
-  fun w => w.dim_le
-
-end DimConstraints
-
 end ConcreteDecomp
 
 end Kraus

@@ -147,9 +147,6 @@ private lemma isUnit_det_of_gauged_intertwining [NeZero D]
     simpa only using hXXh_scalar
   exact isUnit_det_of_self_mul_conjTranspose_scalar X' hc_ne0 hXXh_scalar'
 
-set_option maxHeartbeats 250000 in
--- Elaborating the Perron--Frobenius gauge extraction below slightly exceeds the
--- default heartbeat limit during `whnf`, so we keep a small local bump.
 private theorem eigenvector_gives_gauge_of_irreducible_TP [NeZero D]
     (A B : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) (μ : ℂ)
     (hA_irr : IsIrreducibleTensor (d := d) (D := D) A)
@@ -177,7 +174,6 @@ private theorem eigenvector_gives_gauge_of_irreducible_TP [NeZero D]
     (A := A) (B := B) (SA := SA) (SB := SB) (X' := X') (μ := μ)
     hSA_det hSB_det hX'u hμ hInter2
 
-set_option synthInstance.maxHeartbeats 200000 in
 /-- If the mixed transfer spectral radius of two irreducible left-canonical tensors is at least
 `1`, then the tensors are gauge-phase equivalent. -/
 theorem modulus_one_eigenvalue_implies_gauge_of_irreducible_TP
