@@ -77,7 +77,7 @@ The clearest replacements are:
   spectral-radius proofs.  They now use Mathlib's
   `ContinuousLinearMap.toNormedRing`, `ContinuousLinearMap.toNormedAlgebra`,
   and local finite-dimensional completeness proofs directly; the former
-  finite-dimensional witness remains only as a deprecated compatibility name.
+  finite-dimensional witness was removed with the other exact local wrappers.
 - Two one-use Frobenius submultiplicativity wrappers in the transfer-operator
   gap files were removed.  The proofs now call Mathlib's
   `Matrix.frobenius_norm_mul` directly at the Hilbert-Schmidt estimate.
@@ -1100,6 +1100,47 @@ Removed unused local convenience wrappers:
 
 The first and third merely restated `cumulativeSpan_eq_top`, while the second
 was just `evalWord_nil`.  No Lean or blueprint declaration referred to them.
+
+### Deprecation-policy exceptions
+
+The usual convention in `docs/MATHLIB_style.md` is to keep a public
+declaration as `@[deprecated]` before deleting it.  This audit records the
+exceptions made in this Mathlib-4.31 cleanup.  In each case below, the removed
+name had no independent mathematical content: it either repeated a statement
+already present under the canonical name, exposed a field projection from a
+bundled structure, or named a local proof step that is now written directly at
+its use site.  All non-Archive uses in TNLean were already absent or were
+rewritten in this PR, and no blueprint entry cites these names.
+
+No compatibility declaration is retained for the following exact
+pass-throughs:
+
+- `complexPosSMulMonoDef`, `complexContinuousSMulReal`,
+  `matrixContinuousSMulReal`, and `matrixScalarTowerRealComplex`.  These were
+  abbreviations for standard scalar structures; the remaining proofs use the
+  corresponding structures by inference.
+- `IsPrimitiveMPS.spectral_gap`, `spectral_gap_of_injective`, and
+  `uniform_spectral_gap_of_finite_lt_one`.  These were already deprecated
+  aliases whose internal call sites had moved to the canonical theorem names.
+- `channelDet_norm_eq_one_iff_exists_unitaryChannel_of_channel`.  This was the
+  same theorem as `channelDet_norm_eq_one_iff_exists_unitaryChannel`, with the
+  same channel hypothesis and conclusion.
+- `MPSTensor.isOrthogonalProjection_one_sub`.  The replacement is the general
+  theorem `IsOrthogonalProjection.one_sub`.
+- `Kraus.wedderburnBlockDims_sum_le`.  This only returned the field `w.dim_le`
+  from an `IsWedderburnBlockDecomp` witness.
+- `TNLean.PEPS.reindexAlgEquiv_smul`,
+  `TNLean.PEPS.reindexAlgEquiv_finCongr_symm_round`,
+  `TNLean.PEPS.reindexAlgEquiv_gaugeConj`, and
+  `TNLean.PEPS.reindexAlgEquiv_transpose`.  The remaining proofs use the
+  algebra-equivalence identities (`map_smul`, `map_mul`, `map_inv`), the
+  `glReindex` coercion theorem, a direct simplification of
+  `Matrix.reindexAlgEquiv`, or `Matrix.transpose_reindex`.
+- `instGCFiniteDimensionalMatrixCLM`.  The finite-dimensional witness is now
+  constructed locally from `Module.End.toContinuousLinearMap`.
+- `MPSTensor.matrix_in_cumulativeSpan`, `MPSTensor.one_eq_evalWord_nil`, and
+  `MPSTensor.wordSpan_generates_full_algebra`.  These were immediate
+  restatements of `cumulativeSpan_eq_top` or `evalWord_nil`.
 
 ## Verification performed
 
