@@ -228,8 +228,7 @@ private theorem replaceWindow_commute_of_cyclic_windows_disjoint {N L : ℕ}
 private theorem euclideanSpace_eq_sum_single {α : Type*} [Fintype α] [DecidableEq α]
     (x : EuclideanSpace ℂ α) :
     x = ∑ a : α, x a • EuclideanSpace.single a (1 : ℂ) := by
-  ext a
-  simp [Finset.sum_apply, Pi.single_apply]
+  simpa using ((EuclideanSpace.basisFun α ℂ).sum_repr x).symm
 
 private theorem linearMap_apply_eq_sum {α : Type*} [Fintype α] [DecidableEq α]
     (P : EuclideanSpace ℂ α →ₗ[ℂ] EuclideanSpace ℂ α)
