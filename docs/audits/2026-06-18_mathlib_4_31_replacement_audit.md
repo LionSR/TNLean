@@ -1317,6 +1317,19 @@ lake build TNLean.Channel.Semigroup.LindbladForm.EulerStep \
   TNLean.Channel.Semigroup.LindbladForm.TraceBridge -q --log-level=info
 ```
 
+### Reducible-QDS subsequence heartbeat retest, 2026-06-19
+
+`TNLean.Channel.Semigroup.ReducibleQDS.SubsequenceAnalysis` no longer needs its
+theorem-level heartbeat bound around the subsequence-limit argument
+`generator_vanishes_at_limit`.  Lean 4.31 elaborates the Taylor-remainder
+normalization step under the default heartbeat budget.
+
+Focused check:
+
+```bash
+lake build TNLean.Channel.Semigroup.ReducibleQDS.SubsequenceAnalysis -q --log-level=info
+```
+
 ### Further projection-complement proof reductions, 2026-06-19
 
 A second pass replaced remaining handwritten complement identities of the form

@@ -265,8 +265,6 @@ private theorem compression_eq_limit_of_tendsto
       (fun n => hρ_PMP (φ n)))
     hφ_tendsto
 
-set_option maxHeartbeats 4000000 in
--- Needed for the Taylor remainder normalization step inside the subsequence limit argument.
 private theorem generator_vanishes_at_limit
     [NeZero D]
     {L : Mat →ₗ[ℂ] Mat}
