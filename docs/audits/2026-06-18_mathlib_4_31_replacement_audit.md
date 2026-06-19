@@ -782,9 +782,10 @@ Keep for now:
 
 - Positive-semidefinite kernel lemmas for sums, unless a direct Mathlib theorem
   is found.
-- Trace-pairing wrappers if they are used pervasively, though they should be
-  reproved using `Matrix.ext_iff_trace_mul_left` and
-  `Matrix.ext_iff_trace_mul_right`.
+- Trace-pairing wrappers only when they are part of TNLean's public
+  mathematical vocabulary.  Private equality-form wrappers should use
+  `Matrix.ext_iff_trace_mul_left` and `Matrix.ext_iff_trace_mul_right`
+  directly.
 
 ### `TNLean/Algebra/BlockTriangularTrace.lean`
 
@@ -1214,6 +1215,30 @@ Thus `MPSTensor.proj_mul_projCompl`, `MPSTensor.projCompl_mul_proj`, and
 `MPSTensor.projCompl_mul_projCompl` now only translate
 `IsOrthogonalProjection P` into the corresponding general idempotent fact.
 
+### Trace-pairing extensionality, 2026-06-19
+
+Mathlib 4.31 has equality-form trace-pairing extensionality lemmas:
+
+- `Matrix.ext_iff_trace_mul_left`
+- `Matrix.ext_iff_trace_mul_right`
+
+The blueprint-facing theorem `Matrix.trace_mul_right_eq_zero_iff` is retained,
+because it is a named TNLean statement used in the MPS trace-pairing chapter.
+Its proof now uses `Matrix.ext_iff_trace_mul_right` rather than expanding
+matrix entries by hand.
+
+Several equality proofs no longer pass through the artificial subtraction
+step `M - N = 0`.  They now apply the Mathlib equality-form theorem directly:
+
+- `MPSTensor.internal_products_eq`
+- `MPSTensor.external_products_eq`
+- `MPSTensor.eq_of_trace_mul_evalWord_eq`
+- `eq_of_trace_pairing_span` in `TNLean.PEPS.CycleMPSChainArc`
+
+The two private `eq_of_trace_mul_left_eq` helpers in the PEPS overlap
+insertion files were removed; their use sites now call
+`Matrix.ext_iff_trace_mul_left` directly.
+
 ### Deprecation-policy exceptions
 
 The usual convention in `docs/MATHLIB_style.md` is to keep a public
@@ -1333,6 +1358,10 @@ lake build TNLean.Algebra.MatrixAux TNLean.Spectral.GaugeConstruction \
   -q --log-level=info
 lake env lean TNLean/Spectral/QuantitativeGap.lean --json
 lake env lean TNLean/MPS/Structure/PrimitivityBridge.lean --json
+lake build TNLean.Algebra.TracePairing TNLean.MPS.Chain.TensorEquality \
+  TNLean.PEPS.CycleMPSWordTransport TNLean.PEPS.CycleMPSChainArc \
+  TNLean.PEPS.CycleMPSOverlapInsertion TNLean.PEPS.CycleMPSChainOverlapWindow \
+  TNLean.PEPS.CycleMPSChainOverlapInsertion -q --log-level=info
 ```
 
 The final root build also succeeds:
