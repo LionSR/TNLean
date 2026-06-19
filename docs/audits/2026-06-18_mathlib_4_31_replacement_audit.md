@@ -148,6 +148,9 @@ The clearest replacements are:
 - The PSD kernel-zero step in the QPF and MPS fixed-point projection proofs now
   calls `Matrix.PosSemidef.dotProduct_mulVec_zero_iff` directly.  Two private
   wrappers named `mulVec_eq_zero_of_quadForm_eq_zero` were removed.
+- Two span-growth multiplication-map composition proofs now use Mathlib's
+  bundled matrix multiplication-map identities `mulLeftLinearMap_mul` and
+  `mulRightLinearMap_mul`, rather than pointwise associativity expansions.
 
 There are also important non-replacements.
 
