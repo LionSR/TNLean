@@ -153,17 +153,13 @@ theorem left_injective : Function.Injective (localTensorMap a3 (0 : V3)) := by
   funext η
   exact (IsEmpty.false η).elim
 
-/-- Middle tensor family is linearly independent (its index type is empty). -/
-theorem middle_injective : EdgeMiddleTensorInjective (G := g3) a3 e3 :=
-  linearIndependent_empty_type
-
 /-- The blocked three-site object is injective. -/
 theorem a3_edge_blocked_three_site_injective :
     EdgeBlockedThreeSiteInjective (G := g3) a3 e3 :=
   { left_injective := by
       have : e3.1.1 = (0 : V3) := e3_left
       rw [this]; exact left_injective
-    middle_injective := middle_injective
+    middle_injective := linearIndependent_empty_type
     right_injective := by
       have : e3.1.2 = (1 : V3) := e3_right
       rw [this]; exact right_injective }

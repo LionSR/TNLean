@@ -102,6 +102,8 @@ The clearest replacements are:
 - Two PEPS pass-through declarations were removed: a coarse-frame
   bond-positivity accessor that only exposed the structure field, and a one-use
   same-state restatement in the row-cut obstruction example.
+- Three more PEPS example pass-through declarations were removed by inlining
+  their immediate witnesses at the only proof sites where they were used.
 
 There are also important non-replacements.
 
@@ -1360,6 +1362,32 @@ lake build TNLean.PEPS.RegionBlock.CoarseThreeSite11 \
   -q --log-level=info
 ```
 
+### PEPS example pass-through removal, 2026-06-19
+
+The follow-up PEPS scan found three exported example declarations that named
+only immediate proof steps and had no blueprint references:
+
+- `TNLean.PEPS.middle_injective` in
+  `TNLean/PEPS/PhysicalToVirtualCounterexample.lean` was exactly
+  `linearIndependent_empty_type`, used once as the middle-injectivity field of
+  the three-site counterexample.
+- `TNLean.PEPS.Aunits_isNBlkInjective` in
+  `TNLean/PEPS/TorusRowColumnReductionObstruction.lean` was the direct
+  one-block injectivity consequence of `Aunits_isInjective`.
+- `TNLean.PEPS.Bunits_isNBlkInjective` in the same file was the corresponding
+  one-block consequence after transporting injectivity along
+  `gaugeEquiv_Aunits_Bunits`.
+
+The remaining proofs now use these witnesses locally at the structure field or
+route-specialization site, so no additional public theorem names are exported.
+
+Focused check:
+
+```bash
+lake build TNLean.PEPS.PhysicalToVirtualCounterexample \
+  TNLean.PEPS.TorusRowColumnReductionObstruction -q --log-level=info
+```
+
 ### Trace-pairing extensionality, 2026-06-19
 
 Mathlib 4.31 has equality-form trace-pairing extensionality lemmas:
@@ -1443,6 +1471,11 @@ pass-throughs:
   returned the `pos_coarseBondDim` field from a `CoarseBlockingFrame`.
 - `TNLean.PEPS.sameMPV_Aunits_Bunits`.  This was a one-use application of
   `gaugeEquiv_Aunits_Bunits.sameMPV`.
+- `TNLean.PEPS.middle_injective`.  This was the empty-index linear-independence
+  witness `linearIndependent_empty_type` for one example structure field.
+- `TNLean.PEPS.Aunits_isNBlkInjective` and
+  `TNLean.PEPS.Bunits_isNBlkInjective`.  These were one-use consequences of the
+  standard one-block injectivity theorem.
 
 ## Verification performed
 
