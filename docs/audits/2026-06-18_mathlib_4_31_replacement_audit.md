@@ -154,6 +154,9 @@ The clearest replacements are:
 - The rectangular-span permanence proof now obtains commutation of left- and
   right-multiplication maps from Mathlib's `LinearMap.commute_mulLeft_right`,
   rather than reproving matrix associativity pointwise.
+- Two standard-basis spanning arguments now use Mathlib's
+  `Submodule.eq_top_iff_forall_basis_mem` directly, avoiding local detours
+  through `Matrix.stdBasis.span_eq` and `Submodule.span_le`.
 
 There are also important non-replacements.
 

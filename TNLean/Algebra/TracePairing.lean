@@ -62,16 +62,9 @@ theorem span_range_mul_nonzero_mul_eq_top {n : Type*} [Fintype n]
     exact hprod ▸
       Submodule.subset_span
         (Set.mem_range_self (R, S))
-  apply eq_top_iff.mpr
-  have hbasis :
-      Submodule.span ℂ (Set.range (Matrix.stdBasis ℂ n n)) ≤
-        Submodule.span ℂ
-          (Set.range fun RS : Matrix n n ℂ × Matrix n n ℂ => RS.1 * C * RS.2) := by
-    refine Submodule.span_le.2 ?_
-    rintro M ⟨ij, rfl⟩
-    rcases ij with ⟨i, j⟩
-    simpa [Matrix.stdBasis_eq_single] using hsingle i j
-  simpa [(Matrix.stdBasis ℂ n n).span_eq] using hbasis
+  refine (Submodule.eq_top_iff_forall_basis_mem (Matrix.stdBasis ℂ n n)).2 ?_
+  rintro ⟨i, j⟩
+  simpa [Matrix.stdBasis_eq_single] using hsingle i j
 
 /-- Nondegeneracy of the trace pairing on square matrices over `ℂ`:
 if `trace (M * N) = 0` for all `N`, then `M = 0`. -/
