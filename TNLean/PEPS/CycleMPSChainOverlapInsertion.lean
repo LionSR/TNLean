@@ -540,18 +540,6 @@ theorem insertionHom_unique [NeZero n] {B : MPSChainTensor d D n} {L : ℕ}
 
 /-! ### The conjugation between same-state chains -/
 
-/-- Two matrices with equal trace pairings against every matrix on the left
-are equal. -/
-private theorem eq_of_trace_mul_left_eq {M N : Matrix (Fin D) (Fin D) ℂ}
-    (h : ∀ X : Matrix (Fin D) (Fin D) ℂ,
-      Matrix.trace (X * M) = Matrix.trace (X * N)) : M = N := by
-  have h0 : ∀ X : Matrix (Fin D) (Fin D) ℂ,
-      Matrix.trace ((M - N) * X) = 0 := by
-    intro X
-    rw [Matrix.sub_mul, Matrix.trace_sub, Matrix.trace_mul_comm M X,
-      Matrix.trace_mul_comm N X, h X, sub_self]
-  exact sub_eq_zero.mp (MPSTensor.trace_mul_right_eq_zero h0)
-
 /-- **The conjugation between two same-state site-dependent chains at length
 `n ≥ 2L + 1`** (arXiv:1804.04964, Lemma 5 and the closed-chain corollary of
 Section `normal_alt`, lines 1961--2295 of
@@ -621,7 +609,7 @@ theorem exists_conjugation_of_sameState [NeZero n] {L : ℕ} (hL : 0 < L)
   have hAw : arcEval A p w =
       ((P⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * arcEval B p w *
         (P : Matrix (Fin D) (Fin D) ℂ) := by
-    apply eq_of_trace_mul_left_eq
+    apply (Matrix.ext_iff_trace_mul_left).2
     intro X
     calc Matrix.trace (X * arcEval A p w)
         = Matrix.trace (Φ X * arcEval B p w) := hpair' X w hw

@@ -384,18 +384,16 @@ theorem eq_of_trace_pairing_span {ι : Sort*} {F : ι → Matrix (Fin D) (Fin D)
     (hspan : Submodule.span ℂ (Set.range F) = ⊤)
     {M N : Matrix (Fin D) (Fin D) ℂ}
     (h : ∀ i, Matrix.trace (M * F i) = Matrix.trace (N * F i)) : M = N := by
-  have hzero : ∀ Q : Matrix (Fin D) (Fin D) ℂ,
-      Matrix.trace ((M - N) * Q) = 0 := by
-    intro Q
-    have hQ : Q ∈ Submodule.span ℂ (Set.range F) := hspan ▸ Submodule.mem_top
-    induction hQ using Submodule.span_induction with
-    | mem x hx =>
-        obtain ⟨i, rfl⟩ := hx
-        rw [Matrix.sub_mul, Matrix.trace_sub, h i, sub_self]
-    | zero => rw [Matrix.mul_zero, Matrix.trace_zero]
-    | add x y _ _ hx hy => rw [Matrix.mul_add, Matrix.trace_add, hx, hy, add_zero]
-    | smul c x _ hx => rw [Matrix.mul_smul, Matrix.trace_smul, hx, smul_zero]
-  exact sub_eq_zero.mp (MPSTensor.trace_mul_right_eq_zero hzero)
+  apply (Matrix.ext_iff_trace_mul_right).2
+  intro Q
+  have hQ : Q ∈ Submodule.span ℂ (Set.range F) := hspan ▸ Submodule.mem_top
+  induction hQ using Submodule.span_induction with
+  | mem x hx =>
+      obtain ⟨i, rfl⟩ := hx
+      exact h i
+  | zero => simp
+  | add x y _ _ hx hy => simp [Matrix.mul_add, Matrix.trace_add, hx, hy]
+  | smul c x _ hx => simp [Matrix.trace_smul, hx]
 
 /-- **Uniqueness of a right factor against a spanning family** — the
 spanning-family form of the uniqueness of the bond operator

@@ -247,18 +247,6 @@ private theorem matrix_one_ne_zero (hD : 0 < D) :
   rw [Matrix.one_apply_eq] at hentry
   exact one_ne_zero hentry
 
-/-- Two matrices with equal trace pairings against every matrix on the left
-are equal. -/
-private theorem eq_of_trace_mul_left_eq {M N : Matrix (Fin D) (Fin D) ℂ}
-    (h : ∀ X : Matrix (Fin D) (Fin D) ℂ,
-      Matrix.trace (X * M) = Matrix.trace (X * N)) : M = N := by
-  have h0 : ∀ X : Matrix (Fin D) (Fin D) ℂ,
-      Matrix.trace ((M - N) * X) = 0 := by
-    intro X
-    rw [Matrix.sub_mul, Matrix.trace_sub, Matrix.trace_mul_comm M X,
-      Matrix.trace_mul_comm N X, h X, sub_self]
-  exact sub_eq_zero.mp (trace_mul_right_eq_zero h0)
-
 /-- Any list of declared length is the word of a tuple. -/
 private theorem exists_ofFn_of_length {l : List (Fin d)} {k : ℕ}
     (hl : l.length = k) : ∃ a : Fin k → Fin d, List.ofFn a = l := by
@@ -439,7 +427,7 @@ theorem exists_conjugation_of_mpv_eq {n L : ℕ} (hL : 0 < L) (hn : 2 * L + 1 �
   have hAw : evalWord A w =
       ((P⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * evalWord B w *
         (P : Matrix (Fin D) (Fin D) ℂ) := by
-    apply eq_of_trace_mul_left_eq
+    apply (Matrix.ext_iff_trace_mul_left).2
     intro X
     calc Matrix.trace (X * evalWord A w)
         = Matrix.trace (Φ X * evalWord B w) := hpair X w hw

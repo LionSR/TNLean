@@ -129,20 +129,17 @@ theorem eq_of_trace_mul_evalWord_eq {B : MPSTensor d D} {m : ℕ}
     (h : ∀ ρ : Fin m → Fin d,
       Matrix.trace (M * evalWord B (List.ofFn ρ)) =
         Matrix.trace (N * evalWord B (List.ofFn ρ))) : M = N := by
-  have hzero : ∀ Q : Matrix (Fin D) (Fin D) ℂ,
-      Matrix.trace ((M - N) * Q) = 0 := by
-    intro Q
-    have hQ : Q ∈ Submodule.span ℂ (Set.range fun ρ : Fin m → Fin d =>
-        evalWord B (List.ofFn ρ)) := hspan ▸ Submodule.mem_top
-    induction hQ using Submodule.span_induction with
-    | mem x hx =>
-        obtain ⟨ρ, rfl⟩ := hx
-        rw [Matrix.sub_mul, Matrix.trace_sub, h ρ, sub_self]
-    | zero => rw [Matrix.mul_zero, Matrix.trace_zero]
-    | add x y _ _ hx hy => rw [Matrix.mul_add, Matrix.trace_add, hx, hy, add_zero]
-    | smul c x _ hx => rw [Matrix.mul_smul, Matrix.trace_smul, hx, smul_zero]
-  have hMN : M - N = 0 := trace_mul_right_eq_zero hzero
-  exact sub_eq_zero.mp hMN
+  apply (Matrix.ext_iff_trace_mul_right).2
+  intro Q
+  have hQ : Q ∈ Submodule.span ℂ (Set.range fun ρ : Fin m → Fin d =>
+      evalWord B (List.ofFn ρ)) := hspan ▸ Submodule.mem_top
+  induction hQ using Submodule.span_induction with
+  | mem x hx =>
+      obtain ⟨ρ, rfl⟩ := hx
+      exact h ρ
+  | zero => simp
+  | add x y _ _ hx hy => simp [Matrix.mul_add, Matrix.trace_add, hx, hy]
+  | smul c x _ hx => simp [Matrix.trace_smul, hx]
 
 /-! ### The generic transport construction -/
 
