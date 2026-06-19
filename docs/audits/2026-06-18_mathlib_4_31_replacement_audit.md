@@ -167,6 +167,9 @@ The clearest replacements are:
 - The one-way `MPSTensor.trace_mul_right_eq_zero` wrapper was removed.  Call
   sites now use the forward direction of the public
   `Matrix.trace_mul_right_eq_zero_iff` theorem directly.
+- The two private Kraus zero-padding sum lemmas are replaced by the shared
+  `Fin.sum_castLE_extend_zero`, proved from Mathlib's `Fin.castLEquiv` and the
+  standard subtype/filter finite-sum identities.
 
 There are also important non-replacements.
 
@@ -2057,6 +2060,30 @@ lake build TNLean.Channel.Determinant.HeisenbergDual \
   TNLean.MPS.CanonicalForm.SectorComparison.CyclicSectorDecomposition \
   TNLean.MPS.Periodic.Overlap.SelfOverlapSetup \
   TNLean.MPS.Periodic.SectorIrreducibility.HLift -q --log-level=info
+```
+
+## Fin zero-padding sum cleanup, 2026-06-19
+
+`TNLean/Channel/KrausRank.lean` and `TNLean/Channel/KrausFreedom.lean` both had
+private lemmas named `sum_pad_zeros`.  Each lemma proved the same initial
+segment identity: a sum over `Fin r` may be rewritten as a zero-padded sum over
+`Fin s` when `r ≤ s`.
+
+The new general lemma
+
+- `Fin.sum_castLE_extend_zero`
+
+in `TNLean/Algebra/FinSum.lean` proves this once from Mathlib's
+`Fin.castLEquiv`, together with `Finset.sum_subtype_eq_sum_filter` and
+`Finset.sum_filter`.  The two Kraus files now call this shared theorem at their
+padding sites and no longer carry local `sum_nbij` proofs.
+
+Focused check:
+
+```bash
+lake build TNLean.Algebra.FinSum \
+  TNLean.Channel.KrausRank \
+  TNLean.Channel.KrausFreedom -q --log-level=info
 ```
 
 ## Conclusions
