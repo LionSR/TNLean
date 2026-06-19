@@ -260,22 +260,8 @@ theorem hasDerivAt_expSemigroup_apply
         (fun u : ℝ => expSemigroupCLM (endEquiv L) u)
         (expSemigroupCLM (endEquiv L) t * endEquiv L) t :=
     hasDerivAt_expSemigroupCLM (endEquiv L) t
-  let evalXₗ : MatrixCLM (Fin D) →ₗ[ℝ] Matrix (Fin D) (Fin D) ℂ :=
-    { toFun := fun T => T X
-      map_add' := by
-        intro T₁ T₂
-        simp only [_root_.add_apply]
-      map_smul' := by
-        intro r T
-        change ((r • T) X) = r • (T X)
-        rfl }
   let evalX : MatrixCLM (Fin D) →L[ℝ] Matrix (Fin D) (Fin D) ℂ :=
-    evalXₗ.mkContinuous ‖X‖ fun T =>
-      by
-        change ‖T X‖ ≤ ‖X‖ * ‖T‖
-        calc
-          ‖T X‖ ≤ ‖T‖ * ‖X‖ := ContinuousLinearMap.le_opNorm T X
-          _ = ‖X‖ * ‖T‖ := mul_comm ‖T‖ ‖X‖
+    (ContinuousLinearMap.apply ℂ (Matrix (Fin D) (Fin D) ℂ) X).restrictScalars ℝ
   have hApply :=
       @HasFDerivAt.comp_hasDerivAt ℝ _
         (MatrixCLM (Fin D))
@@ -461,20 +447,13 @@ private theorem continuous_semigroup_hasDerivWithinAt_zero
     -- Pull S(h) out of integral
     have hpull : S h * intervalIntegral S 0 ε MeasureTheory.volume =
         intervalIntegral (fun t => S h * S t) 0 ε MeasureTheory.volume := by
-      let Lleftₗ : MatrixCLM (Fin D) →ₗ[ℝ] MatrixCLM (Fin D) :=
-        { toFun := fun T => S h * T
-          map_add' := by
-            intro T U
-            ext X
-            simp [mul_apply_eq_comp, map_add]
-          map_smul' := by
-            intro r T
-            ext X
-            simp [mul_apply_eq_comp] }
       let Lleft : MatrixCLM (Fin D) →L[ℝ] MatrixCLM (Fin D) :=
-        Lleftₗ.mkContinuous ‖S h‖ fun T => by
-          exact norm_mul_le (S h) T
+        (ContinuousLinearMap.compL ℂ
+          (Matrix (Fin D) (Fin D) ℂ)
+          (Matrix (Fin D) (Fin D) ℂ)
+          (Matrix (Fin D) (Fin D) ℂ) (S h)).restrictScalars ℝ
       have happly (T : MatrixCLM (Fin D)) : Lleft T = S h * T := by
+        ext X
         rfl
       have hS_int : IntervalIntegrable S MeasureTheory.volume 0 ε :=
         Continuous.intervalIntegrable (μ := MeasureTheory.volume) (u := S) hS_cont 0 ε
