@@ -106,6 +106,8 @@ The clearest replacements are:
   their immediate witnesses at the only proof sites where they were used.
 - The Frobenius-square nonnegativity wrapper `MPSTensor.frobSq_nonneg` was
   removed; the two transfer estimates now unfold `frobSq` and use `sq_nonneg`.
+- Two RFP/ZCL wrappers were removed: an unused MPDO implication method that
+  repeated `MPOTensor.isRFP_iff_isZCL`, and a one-use cluster-example RFP fact.
 
 There are also important non-replacements.
 
@@ -1482,6 +1484,10 @@ pass-throughs:
   standard one-block injectivity theorem.
 - `MPSTensor.frobSq_nonneg`.  This was the immediate square-nonnegativity fact
   for the definition `frobSq X = ‖X‖ ^ 2`.
+- `MPOTensor.IsRFP.isZCL`.  This was an unused implication method repeating the
+  blueprint-facing equivalence `MPOTensor.isRFP_iff_isZCL`.
+- `MPSTensor.clusterBlocked_isRFP`.  This was a one-use restatement of the
+  blueprint-facing theorem `MPSTensor.clusterBlocked_transferMap_idempotent`.
 
 ## Verification performed
 
