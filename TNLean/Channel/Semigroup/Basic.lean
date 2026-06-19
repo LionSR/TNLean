@@ -248,9 +248,6 @@ theorem expSemigroup_toCLM
     endEquiv (expSemigroup L t) = expSemigroupCLM (endEquiv L) t := by
   simp [expSemigroup, AlgEquiv.apply_symm_apply]
 
-set_option maxHeartbeats 1000000 in
--- The derivative proof combines CLM-valued differentiation with a restricted-
--- scalars bilinear evaluation map; elaboration is otherwise too expensive.
 /-- The derivative of `t ↦ exp(tL)(X)` at time `t` is `exp(tL)(L X)`. -/
 theorem hasDerivAt_expSemigroup_apply
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -353,8 +350,6 @@ theorem expSemigroup_isContinuousDynSemigroup
 
 /-! ## Proposition 7.1: Continuous semigroup → exp(tL) -/
 
-set_option maxHeartbeats 1200000 in
--- The interval-integral differentiability argument triggers a heavy normalization step.
 /-- In a finite-dimensional normed algebra, the Bochner integral `(1/ε) • ∫₀^ε S(t) dt`
 is close to `S(0) = 1` for small `ε`, hence invertible. From this and the semigroup
 property, `S` is right-differentiable at `0`.
@@ -542,8 +537,6 @@ private theorem continuous_semigroup_hasDerivWithinAt_zero
     rwa [mul_assoc, Units.mul_inv, mul_one] at hmul
   exact hder.hasDerivWithinAt.congr hS_eq (hS_eq 0 (Set.mem_Ici.mpr (le_refl 0)))
 
-set_option maxHeartbeats 800000 in
--- The ODE uniqueness step over CLM endomorphisms needs extra heartbeats for elaboration.
 /-- **Wolf Proposition 7.1** (continuous semigroup → exponential form):
 Every norm-continuous dynamical semigroup on the finite-dimensional algebra
 `M_D(ℂ)` is of the form `T_t = exp(t • L)` for a unique generator `L`. -/
@@ -642,8 +635,6 @@ theorem continuousDynSemigroup_eq_exp
       simpa [show u + (v - u) = v by ring] using hS_add u (v - u) hu hvt)
     (by simp [hS_zero])
 
-set_option maxHeartbeats 800000 in
--- Comparing the one-sided derivatives of two exponential semigroups is elaboration-heavy.
 /-- Uniqueness of the generator: if `exp(t•L) = exp(t•L')` for all `t ≥ 0`,
 then `L = L'`. Proof: both CLM semigroups agree on `[0,∞)`, hence their
 derivatives within `[0,∞)` at `t = 0` agree. Since `[0,∞)` has unique
