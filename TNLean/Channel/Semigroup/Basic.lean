@@ -146,14 +146,6 @@ def expSemigroupCLM
 
 /-! ### Semigroup law for exp -/
 
-/-- `(t : ℂ) • L` commutes with `(s : ℂ) • L`. -/
-private theorem smul_comm_CLM
-    (L : MatrixCLM (Fin D))
-    (t s : ℂ) : Commute (t • L) (s • L) :=
-  by
-    ext X i j
-    simp [mul_left_comm]
-
 theorem expSemigroupCLM_add
     (L : MatrixCLM (Fin D))
     (t s : ℝ) :
@@ -162,7 +154,8 @@ theorem expSemigroupCLM_add
   have hsum : (((t : ℂ) + (s : ℂ)) • L) = (t : ℂ) • L + (s : ℂ) • L := by
     exact add_smul (t : ℂ) (s : ℂ) L
   rw [expSemigroupCLM, hcast, hsum]
-  exact NormedSpace.exp_add_of_commute (smul_comm_CLM L t s)
+  exact NormedSpace.exp_add_of_commute
+    (((Commute.refl L).smul_left (t : ℂ)).smul_right (s : ℂ))
 
 theorem expSemigroupCLM_zero
     (L : MatrixCLM (Fin D)) :
