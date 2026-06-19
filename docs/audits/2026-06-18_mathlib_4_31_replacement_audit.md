@@ -1627,6 +1627,20 @@ lake build TNLean.QPF.PosDef TNLean.Channel.MaximallyEntangled \
   TNLean.MPS.Irreducible.FixedPointProjection -q --log-level=info
 ```
 
+### Semigroup primitivity heartbeat retest, 2026-06-19
+
+`TNLean.Channel.Semigroup.Primitivity.Basic` no longer needs its local heartbeat
+bound around the spectral-mapping theorem
+`eigenvalue_exp_of_eigenvalue_generator`.  Lean 4.31 elaborates the
+`spectrum.exp_mem_exp` argument for the finite-dimensional CLM algebra under
+the default heartbeat budget.
+
+Focused check:
+
+```bash
+lake build TNLean.Channel.Semigroup.Primitivity.Basic -q --log-level=info
+```
+
 The final root build also succeeds:
 
 ```text
