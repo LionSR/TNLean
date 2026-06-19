@@ -709,10 +709,6 @@ theorem gauge_inv
   · subst h; simp
   · rw [if_neg (fun hk => h hk.symm), if_neg h]
 
-set_option maxHeartbeats 400000 in
--- The `Classical`-derived `Fintype (SharedBondConfig bondDim)` instance is
--- noncomputable, so unifying it across the four gauge-extraction calls below
--- exceeds the default heartbeat budget; a modest raise keeps the proof robust.
 open scoped Classical in
 /-- **Bond gauge from the full contraction (operator-Schmidt uniqueness).**
 
