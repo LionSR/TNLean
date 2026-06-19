@@ -79,8 +79,6 @@ private lemma expSemigroupCLM_mul_comm_local
     simp
   exact hc.exp_left.eq
 
-set_option maxHeartbeats 2000000 in
--- The chain-rule / derivative-normalization proof below is source-level expensive on CLMs.
 /-- CLM-level version: trace-annihilating → trace constant under exp semigroup. -/
 private lemma trace_expSemigroupCLM_eq
     (L_CLM : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -141,8 +139,6 @@ theorem isTracePreservingMap_expSemigroup_of_isTraceAnnihilating
   exact trace_expSemigroupCLM_eq L_CLM hTA_CLM t ρ
 
 
-set_option maxHeartbeats 2000000 in
--- The right-derivative / slope comparison argument is source-level expensive on semigroup CLMs.
 /-- If `exp(tL)` is trace-preserving for all `t ≥ 0`, then `L` is trace-annihilating.
 
 **Proof**: The function `f(t) = trace(exp(tL)(ρ))` satisfies `f(t) = trace(ρ)` for
