@@ -2,7 +2,7 @@
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.Channel.Basic
+import TNLean.Channel.Schwarz.Basic
 
 /-!
 # Kadison–Schwarz inequality for completely positive maps
@@ -70,6 +70,24 @@ theorem krausMap_one_of_unital (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
 theorem krausAdjointMap_one_of_TP (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (h : IsTPKraus K) : krausAdjointMap K 1 = 1 := by
   simp only [krausAdjointMap, mul_one]; exact h
+
+/-- The finite-index Kadison-Schwarz Kraus map is the general Kraus map. -/
+theorem krausMap_eq_map (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
+    (X : Matrix (Fin D) (Fin D) ℂ) :
+    krausMap K X = Kraus.map K X :=
+  rfl
+
+/-- The Kadison-Schwarz Kraus map commutes with conjugate transpose. -/
+theorem krausMap_conjTranspose (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
+    (X : Matrix (Fin D) (Fin D) ℂ) :
+    krausMap K Xᴴ = (krausMap K X)ᴴ := by
+  simpa [krausMap_eq_map] using (Kraus.map_conjTranspose (K := K) X).symm
+
+/-- The conjugate transpose of a Kadison-Schwarz Kraus map. -/
+theorem conjTranspose_krausMap (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
+    (X : Matrix (Fin D) (Fin D) ℂ) :
+    (krausMap K X)ᴴ = krausMap K Xᴴ := by
+  simpa [krausMap_eq_map] using Kraus.map_conjTranspose (K := K) X
 
 /-- The adjoint Kraus map equals the Kraus map with conjugate-transposed operators. -/
 private theorem krausAdjointMap_eq (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (Y) :

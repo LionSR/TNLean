@@ -161,6 +161,9 @@ The clearest replacements are:
   multiplication map in their definitions.  The pass-through lemmas
   `biRectSpan_eq_map_comp` and `cumulativeBiRectSpan_eq_map_comp`, which only
   specialized `Submodule.map_comp`, were removed.
+- The Kadison-Schwarz finite-index Kraus-map conjugate-transpose facts now
+  defer to the general `Kraus.map_conjTranspose` theorem.  The later
+  multiplicative-domain files no longer reprove the same finite-sum identity.
 
 There are also important non-replacements.
 
@@ -2019,6 +2022,37 @@ Focused check:
 
 ```bash
 lake build TNLean.Wielandt.RectangularSpan.Universality -q --log-level=info
+```
+
+## Kadison-Schwarz Kraus star-interface cleanup, 2026-06-19
+
+`TNLean/Channel/Schwarz/KadisonSchwarz.lean`,
+`TNLean/Channel/Schwarz/MultiplicativeDomain.lean`, and
+`TNLean/Channel/Schwarz/MultiplicativeDomainFull.lean` each carried their own
+version, or proof, of the same statement that a finite Kraus map commutes with
+conjugate transpose.
+
+The two public Kadison-Schwarz orientations are now proved once in
+`KadisonSchwarz.lean` from the general channel-interface theorem
+`Kraus.map_conjTranspose`, through the definitional equality between
+`KadisonSchwarz.krausMap` and `Kraus.map`.  The private proof in
+`MultiplicativeDomain.lean` and the duplicate public proofs in
+`MultiplicativeDomainFull.lean` were removed; downstream statements keep the
+same names and mathematical content.
+
+Focused checks:
+
+```bash
+lake build TNLean.Channel.Schwarz.KadisonSchwarz \
+  TNLean.Channel.Schwarz.MultiplicativeDomain \
+  TNLean.Channel.Schwarz.MultiplicativeDomainFull -q --log-level=info
+lake build TNLean.Channel.Determinant.HeisenbergDual \
+  TNLean.Channel.FixedPoint.Algebra \
+  TNLean.Channel.Peripheral.ClosureFixedPoint \
+  TNLean.Channel.Peripheral.CyclicGroup \
+  TNLean.MPS.CanonicalForm.SectorComparison.CyclicSectorDecomposition \
+  TNLean.MPS.Periodic.Overlap.SelfOverlapSetup \
+  TNLean.MPS.Periodic.SectorIrreducibility.HLift -q --log-level=info
 ```
 
 ## Conclusions

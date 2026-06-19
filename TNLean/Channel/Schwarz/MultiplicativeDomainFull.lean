@@ -44,14 +44,6 @@ section AuxiliaryLemmas
     krausMap K (μ • X) = μ • krausMap K X := by
   simp [krausMap, Finset.smul_sum, mul_assoc]
 
-theorem krausMap_conjTranspose (K : Fin d → Mat) (X : Mat) :
-    krausMap K Xᴴ = (krausMap K X)ᴴ := by
-  simp [krausMap, conjTranspose_sum, conjTranspose_mul, mul_assoc]
-
-theorem conjTranspose_krausMap (K : Fin d → Mat) (X : Mat) :
-    (krausMap K X)ᴴ = krausMap K Xᴴ := by
-  rw [krausMap_conjTranspose]
-
 end AuxiliaryLemmas
 
 section Definitions
