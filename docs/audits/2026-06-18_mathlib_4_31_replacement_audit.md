@@ -995,6 +995,11 @@ The remaining semigroup proofs use the same structures directly through
 `TNLean.Channel.Semigroup.Basic`, `TNLean.Channel.Semigroup.Kernel`, and
 `TNLean.Channel.Semigroup.Primitivity.Helpers`.
 
+A later pass also removed the private convergence-ball helper `mem_exp_ball`
+from `TNLean.Channel.Semigroup.Basic`.  The semigroup law for
+`expSemigroupCLM` now calls Mathlib's ball-free
+`NormedSpace.exp_add_of_commute` directly.
+
 A further pass removed the local rectangular continuous-linear-map normed
 structure wrappers from `TNLean.Spectral.GaugeConstruction`; the
 finite-dimensional witness remains as a deprecated compatibility name:
