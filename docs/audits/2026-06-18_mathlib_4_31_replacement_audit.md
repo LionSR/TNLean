@@ -535,6 +535,13 @@ Applied bridge:
   `TNLean/Channel/Basic.lean`; the needed Mathlib theorem is provided by
   `Mathlib.Analysis.CStarAlgebra.PositiveLinearMap`.
 
+Additional channel cleanup:
+
+- The private scalar pass-through theorem `star_I_eq_neg_I` was removed from
+  `TNLean/Channel/WolfProps.lean`.  The two polarization proofs now cite
+  `Complex.conj_I` directly as a local proof term inside `simp only`, leaving
+  the other conjugates in the scalar identity untouched.
+
 ### Operator convexity, monotonicity, and CFC
 
 Relevant Mathlib commits:
@@ -574,6 +581,16 @@ The same `MatrixOrder` scoped instance also replaces the private local matrix
 - `TNLean/Channel/Schwarz/OperatorMonotone.lean`
 - `TNLean/Channel/Schwarz/OperatorConvexity.lean`
 - `TNLean/Channel/Schwarz/AndoLieb.lean`
+
+A later pass also reduced the local matrix-instance blocks in
+`TNLean/Analysis/OperatorConvexity.lean`,
+`TNLean/Axioms/OperatorConvexity.lean`,
+`TNLean/Channel/Schwarz/OperatorConvexity.lean`, and
+`TNLean/Channel/Schwarz/OperatorMonotone.lean`.  The files still keep the two
+local normed instances that the CFC notation requires for the concrete matrix
+norm, but the local `CStarRing`, `PartialOrder`, `StarOrderedRing`, and
+`CStarAlgebra` pass-through aliases are no longer needed; Mathlib 4.31's
+matrix order and C-star instances are used directly.
 
 Mathlib 4.31 can strengthen the order-theoretic part of these arguments, but
 the trace Jensen inequalities and matrix-trace CFC formulas remain
@@ -1062,6 +1079,10 @@ lake env lean TNLean/Channel/Schwarz/AndoLieb.lean --json
 lake build TNLean.Analysis.OperatorConvexity TNLean.Axioms.OperatorConvexity \
   TNLean.Channel.Schwarz.OperatorMonotone TNLean.Channel.Schwarz.OperatorConvexity \
   TNLean.Channel.Schwarz.AndoLieb -q --log-level=info
+lake build TNLean.Analysis.OperatorConvexity TNLean.Axioms.OperatorConvexity \
+  TNLean.Channel.Schwarz.OperatorConvexity TNLean.Channel.Schwarz.OperatorMonotone \
+  -q --log-level=info
+lake build TNLean.Channel.WolfProps -q --log-level=info
 lake env lean TNLean/Algebra/MatrixAux.lean --json
 lake env lean TNLean/Spectral/GaugeConstruction.lean --json
 lake env lean TNLean/Spectral/TransferOperatorGapNT.lean --json
