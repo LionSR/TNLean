@@ -104,6 +104,8 @@ The clearest replacements are:
   same-state restatement in the row-cut obstruction example.
 - Three more PEPS example pass-through declarations were removed by inlining
   their immediate witnesses at the only proof sites where they were used.
+- The Frobenius-square nonnegativity wrapper `MPSTensor.frobSq_nonneg` was
+  removed; the two transfer estimates now unfold `frobSq` and use `sq_nonneg`.
 
 There are also important non-replacements.
 
@@ -819,6 +821,8 @@ Frobenius norm is now the foundation for matrix Hilbert-Schmidt arguments:
 `frobSq` is a squared Mathlib Frobenius norm, and the entrywise sum formula is
 kept as `frobSq_eq_sum` for trace and finite-sum arguments.  The local squared
 norm remains only as a convenience wrapper for downstream transfer estimates.
+The separate nonnegativity wrapper `MPSTensor.frobSq_nonneg` has been removed:
+the needed fact is exactly `sq_nonneg ‖X‖` after unfolding `frobSq`.
 
 The old `TNLean/Algebra/MatrixFrobenius.lean` pass-through file exposed only
 positive-definiteness of the identity matrix for the Frobenius inner product.
@@ -1476,6 +1480,8 @@ pass-throughs:
 - `TNLean.PEPS.Aunits_isNBlkInjective` and
   `TNLean.PEPS.Bunits_isNBlkInjective`.  These were one-use consequences of the
   standard one-block injectivity theorem.
+- `MPSTensor.frobSq_nonneg`.  This was the immediate square-nonnegativity fact
+  for the definition `frobSq X = ‖X‖ ^ 2`.
 
 ## Verification performed
 
