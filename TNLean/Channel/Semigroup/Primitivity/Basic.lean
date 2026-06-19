@@ -88,8 +88,6 @@ structure IsQuantumDynSemigroup
 If `λ` is an eigenvalue of `exp(t₀ · L)`, then `λ^(t/t₀)` is an eigenvalue
 of `exp(t · L)`. This uses `spectrum.exp_mem_exp`. -/
 
-set_option maxHeartbeats 5000000 in
--- The spectral-mapping step uses `spectrum.exp_mem_exp` on a large CLM expression.
 /-- If `μ` is an eigenvalue of `L`, then `exp(t · μ)` is an eigenvalue of
 `exp(t · L)` (spectral mapping theorem for exp). -/
 theorem eigenvalue_exp_of_eigenvalue_generator
