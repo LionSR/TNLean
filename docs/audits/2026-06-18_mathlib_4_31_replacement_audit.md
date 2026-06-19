@@ -1421,6 +1421,26 @@ lake build TNLean.QPF.PosDef TNLean.Channel.MaximallyEntangled \
   TNLean.MPS.Irreducible.FixedPointProjection -q --log-level=info
 ```
 
+### Exponential inverse-factorial scalar cleanup, 2026-06-19
+
+`TNLean/Channel/Irreducible/Growth/Exponential.lean` had two private scalar
+lemmas:
+
+- `inv_factorial_nonneg`
+- `inv_factorial_ne_zero`
+
+Both were pass-through wrappers around Mathlib's factorial positivity and
+nonzero facts.  The exponential positivity proof now invokes the native facts
+at the use sites: `positivity` proves the nonnegative inverse-factorial
+coefficient, and `Nat.factorial_ne_zero` under `inv_ne_zero` supplies the
+scalar nonzero fact used to cancel a vanishing scalar multiple.
+
+Focused check:
+
+```bash
+lake build TNLean.Channel.Irreducible.Growth.Exponential -q --log-level=info
+```
+
 ### Projection-triangular pass-through removal, 2026-06-19
 
 The internal `ProjectionTriangularTrace` proof no longer introduces local
