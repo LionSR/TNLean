@@ -340,27 +340,4 @@ theorem adjointFixedPoints_wedderburnDecomp
 
 end ConcreteDecomp
 
-/-! ## Dimension constraints -/
-
-section DimConstraints
-
-/-- In any Wedderburn block decomposition of the fixed-point algebra, the
-weighted sum of block dimensions and multiplicities is at most `D`.
-
-Concretely, if the decomposition has simple summands `M_{d_k}(ℂ)` with
-multiplicities `m_k`, then the parameters satisfy `Σ_k d_k * m_k ≤ D`. This
-is exactly the ambient-dimension constraint stated in
-`IsWedderburnBlockDecomp.dim_le`.
-
-This is a convenience accessor for `IsWedderburnBlockDecomp.dim_le`. -/
-theorem wedderburnBlockDims_sum_le
-    (K : Fin d → Mat) (h_tp : IsTP K) {ρ : Mat}
-    (hρ : ρ.PosDef) (hρ_fix : map K ρ = ρ) :
-    ∀ (w : IsWedderburnBlockDecomp
-        (adjointFixedPointsStarSubalgebra (d := d) (D := D) K h_tp hρ hρ_fix)),
-      ∑ i : Fin w.numBlocks, w.blockDim i * w.multDim i ≤ D :=
-  fun w => w.dim_le
-
-end DimConstraints
-
 end Kraus

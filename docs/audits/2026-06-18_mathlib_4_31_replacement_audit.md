@@ -1084,6 +1084,17 @@ string-order proofs now use Mathlib's
 `FiniteDimensional.complete` proofs where spectrum or power-decay lemmas need
 completeness.
 
+### Fixed-point Wedderburn decomposition
+
+Removed pass-through accessor:
+
+- `Kraus.wedderburnBlockDims_sum_le`
+
+This theorem merely returned the `dim_le` field from an
+`IsWedderburnBlockDecomp` witness.  The Wedderburn--Artin existence theorems
+and the bundled decomposition structure are unchanged; callers should use
+`w.dim_le` directly when they have a decomposition witness `w`.
+
 ## Verification performed
 
 The Mathlib cache was fetched for the 4.31 worktree.  An initial cache fetch
