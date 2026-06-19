@@ -1931,6 +1931,29 @@ positive real eigenvalue cast to a nonzero complex scalar.  The local
 `TNLean.Algebra.LinearMapAux` file contained only these declarations, and its
 imports were removed.
 
+## Kossakowski CFC square-root cleanup, 2026-06-19
+
+`TNLean/Channel/Semigroup/KossakowskiForm.lean` also had the private theorem
+`posSemidef_sqrt_factorization`, whose only role was to restate the CFC
+square-root factorization for a positive semidefinite complex matrix.
+
+The forward Kossakowski-to-Lindblad direction now uses the Mathlib facts
+directly:
+
+- `Matrix.nonneg_iff_posSemidef`
+- `CFC.sqrt_nonneg`
+- `CFC.sqrt_mul_sqrt_self`
+
+Thus the proof still constructs the same square-root factor `B = CFC.sqrt C`,
+but the intermediate theorem has been removed.  This reduces one local
+pass-through layer around Mathlib's C-star-algebra functional-calculus API.
+
+Focused check:
+
+```bash
+lake build TNLean.Channel.Semigroup.KossakowskiForm -q --log-level=info
+```
+
 ## Conclusions
 
 Mathlib 4.31 materially improves the background library for TNLean, especially
