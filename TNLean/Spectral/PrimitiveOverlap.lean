@@ -189,10 +189,7 @@ theorem mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one
   -- First derive `trace((transferMap A)^N) → 1`.
   have hTP : IsTracePreservingMap (transferMap (d := d) (D := D) A) := by
     intro X
-    -- same proof as `MPSTensor.trace_transferMap` in `TransferOperatorGap.lean`
-    rw [transferMap_apply, Matrix.trace_sum]
-    conv_lhs => arg 2; ext i; rw [Matrix.trace_mul_cycle]
-    rw [← Matrix.trace_sum, ← Finset.sum_mul, hNorm, one_mul]
+    exact trace_transferMap A X hNorm
   have htrρ : Matrix.trace ρ ≠ 0 := by
     intro htr0
     exact hρ_ne ((Matrix.PosSemidef.trace_eq_zero_iff hρ_psd).1 htr0)
