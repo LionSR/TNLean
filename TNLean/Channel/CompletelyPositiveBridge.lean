@@ -6,7 +6,7 @@ import TNLean.Channel.Basic
 import Mathlib.Analysis.CStarAlgebra.CompletelyPositiveMap
 
 /-!
-# Bridge from Kraus positivity to Mathlib's completely positive maps
+# Kraus complete positivity as a Mathlib completely positive map
 
 This file connects TNLean's concrete Kraus-operator notion of complete positivity
 (`IsCPMap`) to Mathlib's abstract C⋆-algebra type `CompletelyPositiveMap`.
@@ -21,16 +21,16 @@ the entrywise image of a positive block matrix `M` under a single Kraus term
 `dᵢ` carrying `Kᵢ` on every diagonal entry.  Conjugation preserves positivity
 (`star_right_conjugate_nonneg`), and a finite sum of positive elements is positive.
 
-The bridge makes the Kraus/Stinespring characterisation already formalised in
-`TNLean/Channel/` visible to Mathlib's abstract positive-map and
-completely-positive-map API, without discarding the concrete finite-dimensional
-channel interface used for Wolf-style theorems.
+Every Kraus-represented completely positive map thus satisfies the Mathlib
+`CompletelyPositiveMap` positivity condition, making the concrete
+finite-dimensional channel results available alongside the abstract
+C⋆-algebra positivity theory.
 
 ## Main results
 
 * `IsCPMap.map_cstarMatrix_nonneg` — the entrywise complete-positivity inequality.
-* `IsCPMap.toCompletelyPositiveMap` — packages an `IsCPMap` as a Mathlib
-  `CompletelyPositiveMap`.
+* `IsCPMap.toCompletelyPositiveMap` — exhibits a Kraus-represented completely
+  positive map as a Mathlib `CompletelyPositiveMap`.
 
 ## References
 
@@ -73,17 +73,7 @@ private lemma conjugate_blockDiagConst_apply (k : ℕ) (W : Matrix (Fin D) (Fin 
     ite_mul, zero_mul, mul_ite, mul_zero, Finset.sum_ite_eq, Finset.sum_ite_eq',
     Finset.mem_univ, if_true]
 
-/-- Entrywise evaluation commutes with finite sums of `CStarMatrix` values. -/
-private lemma cstar_sum_apply {ι m nn A : Type*} [AddCommMonoid A] (s : Finset ι)
-    (G : ι → CStarMatrix m nn A) (a : m) (b : nn) :
-    (∑ i ∈ s, G i) a b = ∑ i ∈ s, G i a b := by
-  classical
-  induction s using Finset.induction with
-  | empty => simp
-  | insert x s hx ih =>
-      rw [Finset.sum_insert hx, Finset.sum_insert hx, CStarMatrix.add_apply, ih]
-
-/-- A linear self-map of `M_D(ℂ)`, reinterpreted as a linear self-map of the
+/-- A linear self-map of `M_D(ℂ)`, identified with a linear self-map of the
 C⋆-algebra `CStarMatrix (Fin D) (Fin D) ℂ` (the two types are definitionally
 equal). -/
 def cstarMap (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
@@ -113,7 +103,8 @@ private lemma map_eq_sum_conjugate
   rw [hmap]
   apply CStarMatrix.ext
   intro a b
-  rw [CStarMatrix.map_apply, cstar_sum_apply]
+  rw [CStarMatrix.map_apply]
+  erw [Matrix.sum_apply]
   simp only [conjugate_blockDiagConst_apply]
 
 /-- **Kraus complete positivity, entrywise form.** If `E` is completely positive
@@ -129,13 +120,18 @@ theorem map_cstarMatrix_nonneg
   exact Finset.sum_nonneg fun i _ =>
     star_right_conjugate_nonneg hM (blockDiagConst k (K i))
 
-/-- **Bridge to Mathlib's `CompletelyPositiveMap`.** A TNLean completely positive
-map (`IsCPMap`, defined through a Kraus representation) is a Mathlib completely
-positive map on `CStarMatrix (Fin D) (Fin D) ℂ`. -/
+/-- **Kraus complete positivity implies the Mathlib condition.** Every completely
+positive map admitting a Kraus representation `E(X) = ∑ᵢ Kᵢ X Kᵢ†` is a
+Mathlib `CompletelyPositiveMap` on `CStarMatrix (Fin D) (Fin D) ℂ`. -/
 def toCompletelyPositiveMap
     {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ} (hE : IsCPMap E) :
     CStarMatrix (Fin D) (Fin D) ℂ →CP CStarMatrix (Fin D) (Fin D) ℂ where
   toLinearMap := cstarMap E
   map_cstarMatrix_nonneg' k M hM := hE.map_cstarMatrix_nonneg k M hM
+
+@[simp] lemma toCompletelyPositiveMap_apply
+    {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ} (hE : IsCPMap E)
+    (X : CStarMatrix (Fin D) (Fin D) ℂ) :
+    hE.toCompletelyPositiveMap X = E X := rfl
 
 end IsCPMap

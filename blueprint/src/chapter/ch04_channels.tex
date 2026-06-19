@@ -49,6 +49,40 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     to $E \otimes \id_n$ being positive for all~$n$.
 \end{definition}
 
+\begin{theorem}[Entrywise complete positivity from a Kraus representation]
+    \label{thm:cp_map_entrywise_complete_positive}
+    \lean{IsCPMap.map_cstarMatrix_nonneg}
+    \leanok
+    \uses{def:cp_map}
+    Let $E : \MN{D} \to \MN{D}$ be completely positive in the Kraus sense.
+    For every $k$ and every positive block matrix
+    $M \in M_k(\MN{D})$, the entrywise image
+    \[
+        (E(M_{ab}))_{a,b}
+    \]
+    is again positive in $M_k(\MN{D})$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Write $E(X)=\sum_i K_i X K_i^\dagger$.  For each $i$, let $d_i$ be
+    the block-diagonal matrix with $K_i$ on every diagonal block.  Then
+    \[
+        (E(M_{ab}))_{a,b}=\sum_i d_i M d_i^\dagger .
+    \]
+    Each term on the right is positive because conjugation preserves
+    positivity, and a finite sum of positive matrices is positive.
+\end{proof}
+
+\begin{definition}[Kraus maps as abstract completely positive maps]
+    \label{def:cp_map_to_abstract_completely_positive}
+    \lean{IsCPMap.toCompletelyPositiveMap}
+    \leanok
+    \uses{def:cp_map, thm:cp_map_entrywise_complete_positive}
+    Every Kraus-represented completely positive map
+    $E : \MN{D} \to \MN{D}$ determines a completely positive map between
+    the matrix $C^*$-algebras in the entrywise positivity sense.
+\end{definition}
+
 \begin{theorem}[CP maps are positive]\label{thm:cp_is_positive}
     \lean{IsCPMap.isPositiveMap}
     \leanok
