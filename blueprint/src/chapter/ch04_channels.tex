@@ -18,6 +18,16 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     $Y - X \ge 0$.
 \end{remark}
 
+\begin{definition}[Associated positive linear map]
+    \label{def:positive_map_is_positive_linear_map}
+    \lean{IsPositiveMap.toPositiveLinearMap}
+    \leanok
+    \uses{def:positive_map}
+    A positive matrix map $E : \MN{D} \to \MN{D}$ determines the same
+    linear map regarded as a positive linear map: if $A \le B$, then
+    $E(A) \le E(B)$.
+\end{definition}
+
 \begin{definition}[Trace-preserving map]\label{def:trace_preserving}
     \lean{IsTracePreservingMap}
     \leanok
@@ -68,14 +78,14 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \label{thm:positive_map_preserves_hermitian}
     \lean{IsPositiveMap.map_isHermitian}
     \leanok
-    \uses{def:positive_map}
+    \uses{def:positive_map_is_positive_linear_map}
     If $E$ is positive and $X = X^\dagger$, then $E(X) = E(X)^\dagger$.
 \end{theorem}
 
 \begin{proof}\leanok
-    Decompose $X = X_+ - X_-$ into its positive and negative parts.
-    Positivity makes $E(X_+)$ and $E(X_-)$ positive semidefinite, hence Hermitian,
-    so their difference $E(X)$ is Hermitian.
+    Regard $E$ as the associated positive linear map. Positive linear maps
+    between matrix $C^*$-algebras preserve self-adjoint elements, and the
+    self-adjoint matrices are exactly the Hermitian matrices.
 \end{proof}
 
 \begin{definition}[Quantum channel]\label{def:channel}
