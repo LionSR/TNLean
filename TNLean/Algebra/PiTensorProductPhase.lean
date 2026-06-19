@@ -8,11 +8,11 @@ import Mathlib.Data.Matrix.Basic
 import Mathlib.LinearAlgebra.PiTensorProduct.Dual
 
 /-!
-# Phase extraction from a cyclic tensor-product identity
+# Phase extraction from a product-tensor identity
 
 This file isolates the algebraic proportionality step in arXiv:1708.00029,
-Appendix A, lines 1070--1084.  Once the preceding \(F_u,\Omega_u\) contraction
-has produced a product-tensor identity, the result below extracts the
+Appendix A, lines 1072--1080.  Once the preceding \(F_u,\Omega_u\) contraction
+has produced the uniform product-tensor identity, the result below extracts the
 sectorwise scalars whose product is the global phase.
 -/
 
@@ -47,7 +47,7 @@ reduction from that identity to the uniform form used here is tracked by issue
 The reference entries are the formal analogue of choosing one nonzero matrix
 entry in each right-invertible sector block after the \(F_u,\Omega_u\)
 contraction has produced the displayed product-tensor identity. -/
-theorem exists_kappa_of_pi_tensor_product_resultprop
+theorem exists_kappa_of_piTensorProduct_eq_smul
     {d m : ℕ}
     {row col : Fin m → Type*}
     (A B : (v : Fin m) → Fin d → Matrix (row v) (col v) ℂ)
