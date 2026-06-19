@@ -19,7 +19,7 @@ entrywise to a positive `k × k` matrix over `A₁` yields a positive matrix ove
 the entrywise image of a positive block matrix `M` under a single Kraus term
 `X ↦ Kᵢ X Kᵢ†` equals the conjugation `dᵢ * M * dᵢ†` by the block-diagonal matrix
 `dᵢ` carrying `Kᵢ` on every diagonal entry.  Conjugation preserves positivity
-(`star_right_conjugate_nonneg`), and a finite sum of positive elements is positive.
+and a finite sum of positive elements is positive.
 
 Every Kraus-represented completely positive map thus satisfies the Mathlib
 `CompletelyPositiveMap` positivity condition, making the concrete
@@ -103,8 +103,10 @@ private lemma map_eq_sum_conjugate
   rw [hmap]
   apply CStarMatrix.ext
   intro a b
-  rw [CStarMatrix.map_apply]
-  erw [Matrix.sum_apply]
+  rw [CStarMatrix.map_apply,
+    show (∑ i, blockDiagConst k (K i) * M * star (blockDiagConst k (K i))) a b
+        = ∑ i, (blockDiagConst k (K i) * M * star (blockDiagConst k (K i))) a b
+      from Matrix.sum_apply a b Finset.univ _]
   simp only [conjugate_blockDiagConst_apply]
 
 /-- **Kraus complete positivity, entrywise form.** If `E` is completely positive

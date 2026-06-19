@@ -73,15 +73,20 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     positivity, and a finite sum of positive matrices is positive.
 \end{proof}
 
-\begin{definition}[Kraus maps as abstract completely positive maps]
-    \label{def:cp_map_to_abstract_completely_positive}
+\begin{theorem}[Kraus maps as abstract completely positive maps]
+    \label{thm:cp_map_to_abstract_completely_positive}
     \lean{IsCPMap.toCompletelyPositiveMap}
     \leanok
     \uses{def:cp_map, thm:cp_map_entrywise_complete_positive}
     Every Kraus-represented completely positive map
     $E : \MN{D} \to \MN{D}$ determines a completely positive map between
     the matrix $C^*$-algebras in the entrywise positivity sense.
-\end{definition}
+\end{theorem}
+
+\begin{proof}\leanok
+    The defining entrywise positivity condition is exactly
+    Theorem~\ref{thm:cp_map_entrywise_complete_positive}.
+\end{proof}
 
 \begin{theorem}[CP maps are positive]\label{thm:cp_is_positive}
     \lean{IsCPMap.isPositiveMap}
