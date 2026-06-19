@@ -79,15 +79,6 @@ theorem glTranspose_inv_coe {m : ℕ} (X : GL (Fin m) ℂ) :
   rw [Matrix.GeneralLinearGroup.coe_inv, glTranspose_coe,
     ← Matrix.transpose_nonsing_inv, Matrix.GeneralLinearGroup.coe_inv]
 
-/-- Reindexing commutes with transposition: `reindexAlgEquiv` along a single index
-equivalence sends a transpose to the transpose of the reindexed matrix. -/
-theorem reindexAlgEquiv_transpose {m n : ℕ} (h : m = n)
-    (N : Matrix (Fin m) (Fin m) ℂ) :
-    Matrix.reindexAlgEquiv ℂ ℂ (finCongr h) Nᵀ =
-      (Matrix.reindexAlgEquiv ℂ ℂ (finCongr h) N)ᵀ := by
-  simp only [Matrix.coe_reindexAlgEquiv, Matrix.reindex_apply,
-    Matrix.transpose_submatrix]
-
 /-- **Per-edge gauge family from the edge-blocked insertion algebra
 isomorphisms.**
 

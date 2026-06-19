@@ -72,10 +72,11 @@ The clearest replacements are:
   `TNLean.Algebra.MatrixOperatorSpace` were removed.  Their few explicit users
   now use the corresponding `inferInstance` arguments directly.
 - The rectangular continuous-linear-map instance package formerly exported by
-  `TNLean.Spectral.GaugeConstruction` has been removed.  The spectral-radius
-  proofs now use Mathlib's `ContinuousLinearMap.toNormedRing`,
+  `TNLean.Spectral.GaugeConstruction` has been inlined in the spectral-radius
+  proofs.  They now use Mathlib's `ContinuousLinearMap.toNormedRing`,
   `ContinuousLinearMap.toNormedAlgebra`, and local finite-dimensional
-  completeness proofs directly.
+  completeness proofs directly; the public finite-dimensional witness remains
+  as a deprecated compatibility name.
 - Two one-use Frobenius submultiplicativity wrappers in the transfer-operator
   gap files were removed.  The proofs now call Mathlib's
   `Matrix.frobenius_norm_mul` directly at the Hilbert-Schmidt estimate.
@@ -216,18 +217,23 @@ Recommended action:
 
 Applied PEPS follow-up:
 
-- `TNLean.PEPS.reindexAlgEquiv_smul` was removed.  The four scalar
-  transport uses in `TNLean/PEPS/TorusGaugeUniqueness.lean` now rewrite by
-  Mathlib's `map_smul` for the algebra equivalence.
+- `TNLean.PEPS.reindexAlgEquiv_smul` was removed.  The four scalar transport
+  uses in `TNLean/PEPS/TorusGaugeUniqueness.lean` now rewrite by Mathlib's
+  `map_smul` for the algebra equivalence.
 - `TNLean.PEPS.reindexAlgEquiv_finCongr_symm_round` was removed from
-  `TNLean/PEPS/EdgeGaugeFamily.lean`.  Its single use is now a local proof at
-  the transport site, so the cancellation no longer appears as exported API.
+  `TNLean/PEPS/EdgeGaugeFamily.lean`.  The only local transport site now uses a
+  proof by simplifying `Matrix.reindexAlgEquiv` directly.
 - `TNLean.PEPS.reindexAlgEquiv_gaugeConj` was removed from
   `TNLean/PEPS/TorusEdgeGaugeCovariance.lean`.  The only use in
   `TNLean/PEPS/TorusWitnessTransport.lean` now uses `map_mul`, `map_inv`, and
   `glReindex_coe` directly.
+- `TNLean.PEPS.reindexAlgEquiv_transpose` was removed from
+  `TNLean/PEPS/EdgeGaugeFamily.lean`.  Its users now call Mathlib's
+  `Matrix.transpose_reindex` directly, with local `change` steps where the
+  gauge-applied bond dimension is definitionally equal to the original one.
 - The corresponding blueprint theorem was deleted, since the algebra fact is
-  now an inline proof step rather than a named Lean declaration.
+  now an inline proof step in the blueprint route rather than a formalized
+  target.
 - The private MPS cyclic-sector helper
   `reindexLinearEquiv_conjTranspose` was removed from
   `TNLean/MPS/CanonicalForm/CyclicSectors/Compression.lean`; its two uses now
@@ -817,6 +823,11 @@ The present usefulness check is:
   for the entropy/MPDO Markov-chain branch.  They do not enter the Lorentz
   normal form file or the periodic-overlap contraction.
 
+A declaration-only recheck after the PEPS pass-through removal found the same
+eight axiom declarations.  The Mathlib 4.31 scout found useful positive-map,
+complete-positivity, and functional-calculus infrastructure, but no theorem
+whose statement matches these eight axiom boundaries.
+
 ### `TNLean/Channel/Semigroup/ProductFormula.lean`
 
 Status: keep most local estimates.
@@ -958,7 +969,7 @@ This was a genuine upgrade compatibility issue, separate from the replacement
 audit.  Its local repair is already present in the worktree.
 
 A follow-up pass removed explicit uses of four exact scalar-instance aliases
-from downstream proofs while retaining the names as deprecated abbreviations in
+from downstream proofs and then removed the abbreviations themselves from
 `TNLean.Algebra.MatrixOperatorSpace`:
 
 - `complexPosSMulMonoDef`
@@ -971,7 +982,8 @@ The remaining semigroup proofs use the same structures directly through
 `TNLean.Channel.Semigroup.Basic`, `TNLean.Channel.Semigroup.Kernel`, and
 `TNLean.Channel.Semigroup.Primitivity.Helpers`.
 
-A further pass removed the rectangular continuous-linear-map declarations from
+A further pass removed the local rectangular continuous-linear-map normed
+structure wrappers and the local finite-dimensional witness from
 `TNLean.Spectral.GaugeConstruction`:
 
 - `instGCFiniteDimensionalMatrixCLM`

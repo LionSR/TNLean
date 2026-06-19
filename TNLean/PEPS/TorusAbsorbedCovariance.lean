@@ -51,7 +51,8 @@ theorem glReindex_self {m : ℕ} (h : m = m) (Z : GL (Fin m) ℂ) :
 theorem glTranspose_glReindex {m n : ℕ} (h : m = n) (Z : GL (Fin m) ℂ) :
     glTranspose (glReindex h Z) = glReindex h (glTranspose Z) := by
   ext : 1
-  rw [glTranspose_coe, glReindex_coe, glReindex_coe, glTranspose_coe, reindexAlgEquiv_transpose]
+  rw [glTranspose_coe, glReindex_coe, glReindex_coe, glTranspose_coe]
+  exact Matrix.transpose_reindex _ _ _
 
 /-- The inverse of the packaged transpose is the packaged transpose of the inverse. -/
 theorem glTranspose_inv {m : ℕ} (Z : GL (Fin m) ℂ) :
