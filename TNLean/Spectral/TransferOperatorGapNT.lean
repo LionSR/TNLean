@@ -174,6 +174,7 @@ private theorem eigenvector_gives_gauge_of_irreducible_TP [NeZero D]
     (A := A) (B := B) (SA := SA) (SB := SB) (X' := X') (μ := μ)
     hSA_det hSB_det hX'u hμ hInter2
 
+set_option synthInstance.maxHeartbeats 200000 in
 /-- If the mixed transfer spectral radius of two irreducible left-canonical tensors is at least
 `1`, then the tensors are gauge-phase equivalent. -/
 theorem modulus_one_eigenvalue_implies_gauge_of_irreducible_TP

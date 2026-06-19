@@ -1090,8 +1090,11 @@ completeness.
 The local spectral-radius extraction theorems in
 `TNLean.Spectral.TransferOperatorGap`, `TNLean.Spectral.TransferOperatorGapRect`,
 and `TNLean.Spectral.TransferOperatorGapNT` were retested under Lean 4.31.  The
-old local `synthInstance.maxHeartbeats` adjustments around the rectangular and
-normal-transfer spectral-radius arguments are no longer needed.
+square transfer-gap theorem, the rectangular transfer-gap theorem, and the
+Perron--Frobenius gauge extraction in the non-translation-invariant file no
+longer need their previous local bounds.  The non-rectangular
+non-translation-invariant spectral-radius extraction still keeps its local
+`synthInstance.maxHeartbeats` bound.
 
 ### Fixed-point Wedderburn decomposition
 
