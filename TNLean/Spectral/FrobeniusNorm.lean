@@ -44,9 +44,6 @@ variable {m n : ℕ}
 noncomputable def frobSq (X : Matrix (Fin m) (Fin n) ℂ) : ℝ :=
   ‖X‖ ^ 2
 
-lemma frobSq_nonneg (X : Matrix (Fin m) (Fin n) ℂ) : 0 ≤ frobSq X :=
-  sq_nonneg ‖X‖
-
 /-- The squared Frobenius norm is the sum of the squared entry norms. -/
 lemma frobSq_eq_sum (X : Matrix (Fin m) (Fin n) ℂ) :
     frobSq X = ∑ i : Fin m, ∑ j : Fin n, ‖X i j‖ ^ 2 := by

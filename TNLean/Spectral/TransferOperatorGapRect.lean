@@ -153,7 +153,10 @@ private lemma hs_contraction_rect [NeZero D₁] [NeZero D₂]
         Finset.sum_mul_sq_le_sq_mul_sq Finset.univ fA fB
     _ = (D₁ : ℝ) * frobSq X := by rw [h_A, h_B]
     _ ≤ (D₁ : ℝ) ^ 2 * frobSq X := by
-        nlinarith [sq_nonneg ((D₁ : ℝ) - 1), frobSq_nonneg X,
+        nlinarith [sq_nonneg ((D₁ : ℝ) - 1),
+          show 0 ≤ frobSq X from by
+            rw [frobSq]
+            exact sq_nonneg _,
           show (1 : ℝ) ≤ D₁ from by exact_mod_cast NeZero.one_le (n := D₁)]
 
 end HSContraction
