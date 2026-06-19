@@ -116,6 +116,10 @@ The clearest replacements are:
 - The unused elementary orthogonal-projection witnesses for `0` and `1` were
   removed.  Positivity of an orthogonal projection now passes through Mathlib's
   `IsStarProjection.nonneg` and `Matrix.nonneg_iff_posSemidef`.
+- The Euclidean-space coordinate expansion in the parent-Hamiltonian
+  martingale transport file now uses Mathlib's `EuclideanSpace.basisFun` and
+  `OrthonormalBasis.sum_repr`, rather than reproving the expansion by
+  pointwise simplification.
 
 There are also important non-replacements.
 
@@ -1734,6 +1738,26 @@ The affected proofs now establish matrix equality directly by comparing
 `trace (A * X)` against all test matrices `X`, rather than proving
 `trace ((A - B) * X) = 0` and then invoking the local zero-form trace-pairing
 wrapper.
+
+## Euclidean-space basis expansion, 2026-06-19
+
+`TNLean/MPS/ParentHamiltonian/Martingale/Transport.lean` contained a private
+coordinate expansion theorem
+
+- `euclideanSpace_eq_sum_single`
+
+which proved directly that a vector in `EuclideanSpace` is the sum of its
+coordinates times the standard coordinate vectors.  Mathlib 4.31 supplies this
+as the standard orthonormal-basis expansion for `EuclideanSpace.basisFun`.
+The local theorem is still useful as a shaped private statement for the
+subsequent linear-map coordinate calculation, but its proof is now just
+`OrthonormalBasis.sum_repr` specialized to `EuclideanSpace.basisFun`.
+
+Focused check:
+
+```bash
+lake build TNLean.MPS.ParentHamiltonian.Martingale.Transport -q --log-level=info
+```
 
 ## Conclusions
 
