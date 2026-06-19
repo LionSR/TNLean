@@ -41,8 +41,8 @@ sector scalars multiply to the global scalar.
 theorem starts from the uniform identity
 \(\bigotimes_v A_v(\sigma_v)=z\cdot\bigotimes_v B_v(\sigma_v)\).  The paper
 first obtains a cyclically shifted product identity between sector labels; the
-reduction from that identity to the uniform form used here is tracked by issue
-#873.
+reduction from that identity to the uniform form used here is recorded in
+`docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`.
 
 The reference entries are the formal analogue of choosing one nonzero matrix
 entry in each right-invertible sector block after the \(F_u,\Omega_u\)
