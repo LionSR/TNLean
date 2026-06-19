@@ -600,8 +600,8 @@ theorem quadraticForm_sum_projections_of_finite_overlap_norm_bound_of_le
 
 /-- Finite-overlap row-sum reduction from a strict norm-compression coefficient.
 
-If interacting pairs satisfy `‖P_i (P_j v)‖ ≤ η ‖P_i v‖` and
-`η * m < 1`, then the finite sum of symmetric projections satisfies
+If interacting pairs satisfy `‖P_i (P_j v)‖ ≤ η ‖P_i v‖`, with
+`0 ≤ η` and `η * m < 1`, then the finite sum of symmetric projections satisfies
 `H² ≥ (1 - η * m)H` as a quadratic form.  Thus a compression coefficient
 strictly below the reciprocal of the overlap degree gives a positive
 martingale constant. -/
