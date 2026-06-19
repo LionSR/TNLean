@@ -20,7 +20,7 @@ both norms give the same spectral radius.
 
 ## Main definitions
 
-* `MPSTensor.frobSq`: square of Mathlib's Frobenius matrix norm.
+* `MPSTensor.frobSq`: squared Frobenius norm of a rectangular matrix.
 * `MPSTensor.matToES`: Isometric embedding of a matrix into `EuclideanSpace ℂ (Fin m × Fin n)`.
 
 ## Main results
@@ -29,7 +29,7 @@ both norms give the same spectral radius.
 * `MPSTensor.frobSq_eq_zero_iff`, `frobSq_pos_of_ne_zero`, `frobSq_smul`.
 * `MPSTensor.norm_matToES_sq`: `‖matToES X‖² = frobSq X`.
 * `MPSTensor.norm_matToES_eq_frobenius_norm`: the Euclidean-space norm of
-  `matToES X` agrees with Mathlib's Frobenius matrix norm.
+  `matToES X` is the Frobenius norm of `X`.
 -/
 
 open scoped Matrix ComplexOrder BigOperators Matrix.Norms.Frobenius
