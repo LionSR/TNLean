@@ -152,9 +152,6 @@ private lemma weighted_block_sum_posSemidef {n D : ℕ}
 -- the block quadratic form is nonneg whenever every scalar matrix is PSD.
 -- Proved via the joint-eigenspace decomposition
 -- (LinearMap.IsSymmetric.directSum_isInternal_of_pairwise_commute).
-set_option maxHeartbeats 1600000 in
--- Elaborating the joint-eigenspace decomposition and the finite-index reduction
--- requires more heartbeats than the default.
 private lemma blockForm_nonneg_of_scalarPSD_of_commuting {n D : ℕ}
     (M : Fin n → Fin n → Matrix (Fin D) (Fin D) ℂ)
     (hMadj : ∀ i j, (M j i)ᴴ = M i j)
@@ -440,9 +437,6 @@ private lemma blockForm_nonneg_of_scalarPSD_of_commuting {n D : ℕ}
       intro j _
       rw [← hformTerm i j]
 
-set_option maxHeartbeats 1600000 in
--- Elaborating the simultaneous-diagonalization argument expands enough definitions
--- that the default heartbeat limit may time out.
 theorem quadraticForm_nonneg_of_isPositiveMap_of_commuting_images
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hT : IsPositiveMap T)
