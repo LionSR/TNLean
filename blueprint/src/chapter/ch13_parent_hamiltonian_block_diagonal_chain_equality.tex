@@ -518,6 +518,67 @@ $D^j_\beta=(\mu_j^NX_j)A^j_\beta$.
     and the internality of the sum of the $G_N(A_j)$.
 \end{proof}
 
+\begin{lemma}[BNT product span gives trace-decomposition ground-space equality]
+    \label{lem:bnt_block_diagonal_trace_decomposition_bnt_span_equality}
+    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition_bnt_c1_span}
+    \leanok
+    \uses{lem:unital_block_separating_product_span,
+        lem:bnt_block_diagonal_trace_decomposition_equality}
+    With the hypotheses and notation of
+    Lemma~\ref{lem:bnt_block_diagonal_boundary_representation_equality}, assume
+    in addition that $L+L_0\le N$ and
+    \[
+        L\ge
+        (L_0+1)+(g-1)\bigl((L_0+1)+((L_0+1)+(L_0+1))\bigr)+1.
+    \]
+    Put
+    \[
+        m=(L_0+1)+(g-1)\bigl((L_0+1)+((L_0+1)+(L_0+1))\bigr).
+    \]
+    Assume that, for every
+    \[
+        \psi\in
+        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right)
+    \]
+    and every block-diagonal boundary representation
+    \[
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right),
+    \]
+    there are matrices $C^j_{i,\rho}$ such that, for every
+    boundary-crossing interval $i$, every outside word $\rho$ of length $N-L$,
+    every word $\beta$ before the cut, and every word $w$ of length $m$,
+    \[
+        \sum_j\tr\!\left(A^j_\beta C^j_{i,\rho}A^j_w\right)
+        =
+        \sum_j
+        \tr\!\left(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_w\right).
+    \]
+    Then
+    \[
+        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right)
+        =
+        \bigvee_j\mathcal G_{N,L}(A_j),
+    \]
+    and the $N$-site ground spaces $G_N(A_j)=\mathcal G_{N,N}(A_j)$
+    have internal sum.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:unital_block_separating_product_span,
+        lem:bnt_block_diagonal_trace_decomposition_equality}
+    Lemma~\ref{lem:unital_block_separating_product_span} gives
+    \[
+        \spn\{(A^1_w,\ldots,A^g_w):|w|=m\}
+        =
+        \prod_j\MN{D_j}.
+    \]
+    Applying
+    Lemma~\ref{lem:bnt_block_diagonal_trace_decomposition_equality} with this
+    middle-word span gives the equality of periodic-boundary ground spaces and
+    the internality of the sum of the $N$-site spaces.
+\end{proof}
+
 \begin{lemma}[Boundary decomposition reduces to periodic-boundary equality]
     \label{lem:bnt_block_diagonal_boundary_decomposition_equality}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_boundary_decomposition}
