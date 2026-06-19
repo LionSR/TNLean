@@ -50,13 +50,13 @@ lemma isOrthogonalProjection_zero : IsOrthogonalProjection (0 : Matrix (Fin D) (
 lemma isOrthogonalProjection_one : IsOrthogonalProjection (1 : Matrix (Fin D) (Fin D) ℂ) :=
   ⟨Matrix.isHermitian_one, by simp only [Matrix.one_mul]⟩
 
-/-- Reinterpret an orthogonal projection as a star projection. -/
+/-- An orthogonal projection is a star projection. -/
 theorem IsOrthogonalProjection.isStarProjection {P : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsOrthogonalProjection P) : IsStarProjection P := by
   rw [isStarProjection_iff']
   exact ⟨hP.2, by simpa [Matrix.star_eq_conjTranspose] using hP.1.eq⟩
 
-/-- Reinterpret a star projection as an orthogonal projection. -/
+/-- A star projection is an orthogonal projection. -/
 theorem IsStarProjection.isOrthogonalProjection {P : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsStarProjection P) : IsOrthogonalProjection P := by
   rw [isStarProjection_iff'] at hP

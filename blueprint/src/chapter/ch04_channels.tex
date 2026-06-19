@@ -184,12 +184,13 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
-    The involution on complex matrices is conjugate transpose:
+    Since the involution on $\MN{D}$ is conjugate transpose,
+    $P^* = P^\dagger$. Therefore
     \[
-        P^* = P^\dagger.
+        P^\dagger = P,\; P^2 = P
+        \iff
+        P^* = P,\; P^2 = P.
     \]
-    Hence the two formulations have the same self-adjointness equation and the
-    same idempotence equation.
 \end{proof}
 
 \begin{theorem}[Complement of an orthogonal projection]
@@ -203,8 +204,8 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
-    Reinterpret $P$ as a self-adjoint idempotent in the involutive algebra
-    $\MN{D}$. From $P^\dagger=P$ and $P^2=P$ one checks
+    In the involutive algebra $\MN{D}$, $P$ satisfies $P^\dagger=P$ and
+    $P^2=P$. Hence
     \[
         (\Id-P)^\dagger=\Id-P,\qquad
         (\Id-P)^2=\Id-2P+P^2=\Id-P .

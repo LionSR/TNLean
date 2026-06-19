@@ -101,7 +101,7 @@ section PositiveMapHermitian
 
 variable {n : Type*} [Finite n]
 
-/-- Reinterpret a positive matrix map as a positive linear map. -/
+/-- A positive matrix map is a positive linear map: if `A ≤ B`, then `E A ≤ E B`. -/
 def IsPositiveMap.toPositiveLinearMap
     {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ} (hE : IsPositiveMap E) :
     Matrix n n ℂ →ₚ[ℂ] Matrix n n ℂ := by

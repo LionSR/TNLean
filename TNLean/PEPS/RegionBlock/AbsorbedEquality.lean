@@ -21,18 +21,19 @@ region comparison wants instead the *absorbed* form
 > `regionInsertedCoeff A R f M = regionInsertedCoeff (applyGauge B X) R f M`
 
 with the *same* inserted matrix `M` on both sides and `X` the absorbed
-orientation gauge.  The bridge between the two is the region gauge-absorption
-identity `regionInsertedCoeff_applyGauge`: inserting `M` on the gauged tensor
+orientation gauge.  The region gauge-absorption identity
+`regionInsertedCoeff_applyGauge` connects the two forms: inserting `M` on the gauged tensor
 cancels every interior gauge of the region and of its complement and conjugates
 `M` by the gauge transpose on the single boundary edge `f`, oriented by
 `regionEdgeOrient`.
 
 The matrix reconciliation matches the engine's `Z · · · Z⁻¹` conjugation with
-the bridge's `Xᵀ · orient(·) · (X⁻¹)ᵀ` conjugation by choosing the absorbed
-boundary gauge `X` to be the orientation-adapted transpose of the engine gauge:
+the conjugation `Xᵀ · orient(·) · (X⁻¹)ᵀ` from
+`regionInsertedCoeff_applyGauge` by choosing the absorbed boundary gauge `X` to
+be the orientation-adapted transpose of the engine gauge:
 when `f`'s left endpoint lies in `R`, `X = (Zᵀ)`, so the two transposes cancel;
-otherwise `X = Z⁻¹`, so the bridge's outer transpose flips the conjugation onto
-the same form.  This is the region analogue of the edge-level absorbed equality
+otherwise `X = Z⁻¹`, so the outer transpose flips the conjugation onto the same
+form.  This is the region analogue of the edge-level absorbed equality
 `post_absorption_edge_insertion_equality`, whose absorbed gauge is likewise the
 transposed engine gauge.
 
@@ -57,12 +58,12 @@ namespace PEPS
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 
-/-- The orientation-adapted absorbing gauge at a boundary edge.  The bridge
+/-- The orientation-adapted absorbing gauge at a boundary edge.
 `regionInsertedCoeff_applyGauge` conjugates the inserted matrix by
 `Xᵀ · orient(·) · (X⁻¹)ᵀ` with `orient = regionEdgeOrient B R f`.  To turn it
 into the engine's `Z · · · Z⁻¹` conjugation, the absorbing matrix `X` is the
 transpose of `Z` when `f`'s left endpoint lies in `R` (so the two transposes
-cancel) and the inverse of `Z` otherwise (so the bridge's outer transpose flips
+cancel) and the inverse of `Z` otherwise (so the outer transpose flips
 the conjugation back). -/
 noncomputable def absorbedBoundaryGauge (B : Tensor G d) (R : Finset V)
     (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
@@ -71,7 +72,7 @@ noncomputable def absorbedBoundaryGauge (B : Tensor G d) (R : Finset V)
 
 omit [Fintype V] in
 /-- The matrix reconciliation behind the absorbed equality.  Conjugating `N`
-by the bridge's `Xᵀ · orient(·) · (X⁻¹)ᵀ` with `X` the orientation-adapted
+by `Xᵀ · orient(·) · (X⁻¹)ᵀ` with `X` the orientation-adapted
 absorbing gauge of `Z` reproduces the engine's `Z · N · Z⁻¹` conjugation. -/
 theorem regionEdgeOrient_absorbedBoundaryGauge (B : Tensor G d) (R : Finset V)
     (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
@@ -109,7 +110,7 @@ edge, since only the gauge on `f` enters `regionInsertedCoeff … f`).
 
 This is the region analogue of `post_absorption_edge_insertion_equality`: the conjugation-form
 coefficient identity becomes the absorbed plain equality.  The matrix reconciliation is
-`regionEdgeOrient_absorbedBoundaryGauge`; the bond cancellation is the bridge
+`regionEdgeOrient_absorbedBoundaryGauge`; the bond cancellation is
 `regionInsertedCoeff_applyGauge`.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1519--1544 of
@@ -134,7 +135,8 @@ theorem regionInsertedCoeff_eq_applyGauge_of_conjIdentity (A B : Tensor G d) (R 
     regionInsertedCoeff (G := G) A R f M σ τ =
       regionInsertedCoeff (G := G) (applyGauge B X) R f
         (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd f.1)) M) σ τ := by
-  -- The bridge on the right, with the gauge on `f` chosen as the orientation-adapted absorber.
+  -- Apply the gauge-absorption identity with the gauge on `f` chosen as the
+  -- orientation-adapted absorber.
   rw [regionInsertedCoeff_applyGauge B R X f
     (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd f.1)) M) σ τ]
   -- The engine identity on the left.
