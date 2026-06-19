@@ -6,10 +6,10 @@ import TNLean.Channel.Basic
 import Mathlib.Analysis.CStarAlgebra.CompletelyPositiveMap
 
 /-!
-# Kraus complete positivity as a Mathlib completely positive map
+# Kraus complete positivity as complete positivity on C⋆-matrices
 
 This file connects TNLean's concrete Kraus-operator notion of complete positivity
-(`IsCPMap`) to Mathlib's abstract C⋆-algebra type `CompletelyPositiveMap`.
+(`IsCPMap`) to the abstract C⋆-algebra type `CompletelyPositiveMap`.
 
 A completely positive map in TNLean is a linear map `E : M_D(ℂ) →ₗ[ℂ] M_D(ℂ)`
 admitting a Kraus representation `E(X) = ∑ᵢ Kᵢ X Kᵢ†` (`IsCPMap`).  Mathlib's
@@ -21,16 +21,16 @@ the entrywise image of a positive block matrix `M` under a single Kraus term
 `dᵢ` carrying `Kᵢ` on every diagonal entry.  Conjugation preserves positivity
 and a finite sum of positive elements is positive.
 
-Every Kraus-represented completely positive map thus satisfies the Mathlib
+Every Kraus-represented completely positive map therefore satisfies the
 `CompletelyPositiveMap` positivity condition, making the concrete
-finite-dimensional channel results available alongside the abstract
-C⋆-algebra positivity theory.
+finite-dimensional channel results available alongside the abstract C⋆-algebra
+positivity theory.
 
 ## Main results
 
 * `IsCPMap.map_cstarMatrix_nonneg` — the entrywise complete-positivity inequality.
-* `IsCPMap.toCompletelyPositiveMap` — exhibits a Kraus-represented completely
-  positive map as a Mathlib `CompletelyPositiveMap`.
+* `IsCPMap.toCompletelyPositiveMap` — exhibits an `IsCPMap` as a
+  `CompletelyPositiveMap`.
 
 ## References
 
@@ -73,7 +73,7 @@ private lemma conjugate_blockDiagConst_apply (k : ℕ) (W : Matrix (Fin D) (Fin 
     ite_mul, zero_mul, mul_ite, mul_zero, Finset.sum_ite_eq, Finset.sum_ite_eq',
     Finset.mem_univ, if_true]
 
-/-- A linear self-map of `M_D(ℂ)`, identified with a linear self-map of the
+/-- A linear self-map of `M_D(ℂ)`, reinterpreted as a linear self-map of the
 C⋆-algebra `CStarMatrix (Fin D) (Fin D) ℂ` (the two types are definitionally
 equal). -/
 def cstarMap (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
@@ -122,9 +122,9 @@ theorem map_cstarMatrix_nonneg
   exact Finset.sum_nonneg fun i _ =>
     star_right_conjugate_nonneg hM (blockDiagConst k (K i))
 
-/-- **Kraus complete positivity implies the Mathlib condition.** Every completely
-positive map admitting a Kraus representation `E(X) = ∑ᵢ Kᵢ X Kᵢ†` is a
-Mathlib `CompletelyPositiveMap` on `CStarMatrix (Fin D) (Fin D) ℂ`. -/
+/-- **Kraus complete positivity implies the abstract condition.** A linear map
+admitting a Kraus representation `E(X) = ∑ᵢ Kᵢ X Kᵢ†` is a completely positive
+map on `CStarMatrix (Fin D) (Fin D) ℂ`. -/
 def toCompletelyPositiveMap
     {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ} (hE : IsCPMap E) :
     CStarMatrix (Fin D) (Fin D) ℂ →CP CStarMatrix (Fin D) (Fin D) ℂ where
