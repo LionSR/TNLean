@@ -483,6 +483,7 @@ sufficient stronger hypotheses.
     \label{lem:finite_overlap_projection_norm_reduction}
     \lean{ProjectionGeometry.quadraticForm_sum_projections_of_finite_overlap_norm_bound}
     \lean{ProjectionGeometry.quadraticForm_sum_projections_of_finite_overlap_norm_bound_of_le}
+    \lean{ProjectionGeometry.quadraticForm_sum_projections_of_finite_overlap_norm_bound_of_lt}
     \leanok
     \uses{lem:finite_overlap_projection_rowsum_reduction,
         rem:projection_geometry_rowsum_identities}
@@ -495,7 +496,11 @@ sufficient stronger hypotheses.
     \end{equation}
     Then $H=\sum_iP_i$ satisfies $H^2\ge\gamma H$ as a quadratic form. The same
     conclusion holds from a separate compression coefficient $\eta$ whenever
-    $\eta\le (1-\gamma)/m$.
+    $\eta\le (1-\gamma)/m$. In particular, if $0\le \eta$ and $\eta m<1$, then
+    \[
+        H^2\ge (1-\eta m)H
+    \]
+    and $1-\eta m>0$.
 \end{lemma}
 
 \begin{proof}
@@ -509,7 +514,7 @@ sufficient stronger hypotheses.
     If a separate coefficient $\eta$ is used, the assumption
     $\eta\le(1-\gamma)/m$ first weakens that estimate to
     (\ref{eq:ph_finite_overlap_norm_compression}). The finite-overlap row-sum
-    reduction then applies.
+    reduction then applies. For the strict form take $\gamma=1-\eta m$.
 \end{proof}
 
 \begin{lemma}[Quadratic-form estimate from the martingale condition]

@@ -598,6 +598,47 @@ theorem quadraticForm_sum_projections_of_finite_overlap_norm_bound_of_le
     _ ≤ ((1 - γ) * ((m : ℝ)⁻¹)) * ‖P i v‖ :=
       mul_le_mul_of_nonneg_right hηle (norm_nonneg (P i v))
 
+/-- Finite-overlap row-sum reduction from a strict norm-compression coefficient.
+
+If interacting pairs satisfy `‖P_i (P_j v)‖ ≤ η ‖P_i v‖`, with
+`0 ≤ η` and `η * m < 1`, then the finite sum of symmetric projections satisfies
+`H² ≥ (1 - η * m)H` as a quadratic form.  Thus a compression coefficient
+strictly below the reciprocal of the overlap degree gives a positive
+martingale constant. -/
+theorem quadraticForm_sum_projections_of_finite_overlap_norm_bound_of_lt
+    {η : ℝ} (hηnonneg : 0 ≤ η)
+    (P : ι → E →ₗ[ℂ] E) (hP : ∀ i, (P i).IsSymmetricProjection)
+    (overlaps : ι → ι → Prop) [DecidableRel overlaps] {m : ℕ} (hm : 0 < m)
+    (hηlt : η * (m : ℝ) < 1)
+    (hCard : ∀ i, ((Finset.univ.erase i).filter (fun j => overlaps i j)).card ≤ m)
+    (hDisjoint : ∀ i j, j ∈ Finset.univ.erase i → ¬ overlaps i j →
+      ∀ v : E, 0 ≤ (⟪P i v, P j v⟫_ℂ).re)
+    (hOverlapNorm : ∀ i j, j ∈ Finset.univ.erase i → overlaps i j →
+      ∀ v : E, ‖P i (P j v)‖ ≤ η * ‖P i v‖) :
+    0 < 1 - η * (m : ℝ) ∧
+    ∀ v : E,
+      (1 - η * (m : ℝ)) * (⟪(∑ i, P i) v, v⟫_ℂ).re ≤
+        (⟪(∑ i, P i) v, (∑ i, P i) v⟫_ℂ).re := by
+  have hmRpos : 0 < (m : ℝ) := by
+    exact_mod_cast hm
+  have hγpos : 0 < 1 - η * (m : ℝ) := by
+    linarith
+  refine ⟨hγpos, ?_⟩
+  have hγle : 1 - η * (m : ℝ) ≤ 1 := by
+    have hmul_nonneg : 0 ≤ η * (m : ℝ) :=
+      mul_nonneg hηnonneg hmRpos.le
+    linarith
+  have hηle : η ≤ (1 - (1 - η * (m : ℝ))) * ((m : ℝ)⁻¹) := by
+    have hmne : (m : ℝ) ≠ 0 := ne_of_gt hmRpos
+    have hηeq : η = (1 - (1 - η * (m : ℝ))) * ((m : ℝ)⁻¹) := by
+      calc
+        η = η * ((m : ℝ) * ((m : ℝ)⁻¹)) := by
+          rw [mul_inv_cancel₀ hmne, mul_one]
+        _ = (1 - (1 - η * (m : ℝ))) * ((m : ℝ)⁻¹) := by ring
+    exact le_of_eq hηeq
+  exact quadraticForm_sum_projections_of_finite_overlap_norm_bound_of_le hγle
+    P hP overlaps hm hCard hDisjoint hηle hOverlapNorm
+
 end OffDiagonal
 
 end ProjectionGeometry
