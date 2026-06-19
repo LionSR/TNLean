@@ -281,10 +281,20 @@ The blueprint item labelled \path{lem:martingale_mps} in
 separates the finite-row martingale reduction from the still-open quantitative
 estimate.
 It does not assert that the displayed all-$L>1$ cyclic-window bound has already
-been obtained from the cited principal-angle estimates. Instead, it states that
-bound as the hypothesis of Theorem \path{thm:friedrichs_gap_bound}.
+been obtained from the cited principal-angle estimates. Instead, it records the
+source anticommutator estimate as the hypothesis of
+Theorem \path{thm:anticommutator_gap_bound}, and records norm-compression
+estimates as sufficient stronger hypotheses.
 
-The corresponding theorem entries
+The source-facing theorem entry
+\path{thm:anticommutator_gap_bound} points to
+\leanid{parentHamiltonianES_gap_bound_of_anticommutator} in
+\path{TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean}. Its hypothesis is the
+cyclic-window anticommutator lower bound with coefficient
+\[
+    \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}.
+\]
+The theorem entries
 \path{thm:friedrichs_gap_bound} and
 \path{thm:friedrichs_gap_bound_constant} point respectively to the special
 coefficient theorem and to the constant-$\eta$ theorem in
@@ -295,11 +305,11 @@ theorem is the specialization of the constant-$\eta$ theorem with
     \qquad
     1-\eta\,2(L-1)=\frac{1}{4L}.
 \]
-Both theorem entries are therefore conditional on the same norm-compression
-input, specialized either to this displayed coefficient or to an arbitrary
-coefficient satisfying (E). Thus all finite-row, cyclic-window, non-overlap,
-norm-compression, and spectral-theorem reductions are proved, while the
-MPS-specific principal-angle or norm-compression estimate remains to be proved
+The two norm-compression theorem entries are therefore conditional on the same
+stronger input, specialized either to this displayed coefficient or to an
+arbitrary coefficient satisfying (E). Thus all finite-row, cyclic-window,
+non-overlap, anticommutator, norm-compression, and spectral-theorem reductions
+are proved, while the MPS-specific anticommutator estimate remains to be proved
 or matched precisely to the cited martingale estimates.
 
 Once the quantitative comparison with the cited martingale estimates is settled,
