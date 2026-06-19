@@ -132,22 +132,31 @@ The Euclidean-space embedding `matToES` is imported from
 `TNLean.Spectral.FrobeniusNorm`; submultiplicativity is Mathlib's
 Frobenius-norm estimate. -/
 
-private lemma trace_cycle_for_frobSq (w v : Matrix (Fin D) (Fin D) ℂ) :
-    (w * vᴴ * (v * wᴴ)).trace = (wᴴ * w * (vᴴ * v)).trace := by
-  rw [Matrix.mul_assoc w vᴴ _, ← Matrix.mul_assoc vᴴ v wᴴ,
-      ← Matrix.mul_assoc w (vᴴ * v) wᴴ,
-      Matrix.trace_mul_comm (w * (vᴴ * v)) wᴴ,
-      ← Matrix.mul_assoc wᴴ w (vᴴ * v)]
+private lemma trace_cycle_for_frobSq_right {D₁ D₂ : ℕ}
+    (v : Matrix (Fin D₁) (Fin D₂) ℂ) (M : Matrix (Fin D₂) (Fin D₂) ℂ) :
+    ((v * Mᴴ)ᴴ * (v * Mᴴ)).trace = (Mᴴ * M * (vᴴ * v)).trace := by
+  have h1 : (v * Mᴴ)ᴴ = M * vᴴ := by
+    simp [Matrix.conjTranspose_mul]
+  rw [h1]
+  rw [Matrix.mul_assoc M vᴴ _, ← Matrix.mul_assoc vᴴ v Mᴴ,
+    ← Matrix.mul_assoc M (vᴴ * v) Mᴴ,
+    Matrix.trace_mul_comm (M * (vᴴ * v)) Mᴴ,
+    ← Matrix.mul_assoc Mᴴ M (vᴴ * v)]
 
-private lemma sum_frobSq_right (B : MPSTensor d D) (hB : ∑ i : Fin d, (B i)ᴴ * B i = 1)
-    (v : Matrix (Fin D) (Fin D) ℂ) (n : ℕ) :
+/-- Right multiplication by trace-preserving word products preserves the Frobenius square
+after summing over all words. -/
+lemma sum_frobSq_right {D₁ D₂ : ℕ}
+    (B : MPSTensor d D₂) (hB : ∑ i : Fin d, (B i)ᴴ * B i = 1)
+    (v : Matrix (Fin D₁) (Fin D₂) ℂ) (n : ℕ) :
     ∑ σ : Fin n → Fin d, frobSq (v * (evalWord B (List.ofFn σ))ᴴ) = frobSq v := by
-  simp only [frobSq_trace, Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose]
-  conv_lhs => arg 2; ext σ; rw [trace_cycle_for_frobSq (evalWord B (List.ofFn σ)) v]
+  simp_rw [frobSq_trace]
+  conv_lhs => arg 2; ext σ; rw [trace_cycle_for_frobSq_right v (evalWord B (List.ofFn σ))]
   rw [← Complex.re_sum, ← Matrix.trace_sum, ← Finset.sum_mul,
       word_conjTranspose_mul_sum B hB n, Matrix.one_mul]
 
-private lemma sum_frobSq_words (K : MPSTensor d D) (hK : ∑ i : Fin d, (K i)ᴴ * K i = 1)
+/-- The Frobenius squares of all trace-preserving word products of a fixed length sum to the
+bond dimension. -/
+lemma sum_frobSq_words (K : MPSTensor d D) (hK : ∑ i : Fin d, (K i)ᴴ * K i = 1)
     (n : ℕ) :
     ∑ σ : Fin n → Fin d, frobSq (evalWord K (List.ofFn σ)) = (D : ℝ) := by
   simp only [frobSq_trace]
