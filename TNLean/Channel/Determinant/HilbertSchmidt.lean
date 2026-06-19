@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Determinant.Bound
+import TNLean.Algebra.MatrixAux
 import Mathlib.Analysis.Complex.Polynomial.Basic
 import Mathlib.Analysis.InnerProductSpace.Positive
 import Mathlib.Analysis.InnerProductSpace.Trace
@@ -167,23 +168,6 @@ lemma eq_zero_of_nonneg_of_sum_le_zero {ι : Type*} [Fintype ι]
   have h3 := Finset.sum_eq_zero_iff_of_nonneg (fun i _ => hf i) |>.mp h2
   exact h3 i (Finset.mem_univ i)
 
-private lemma complex_star_mul_re (z : ℂ) : (star z * z).re = ‖z‖ ^ 2 := by
-  rw [show star z = starRingEnd ℂ z from rfl, Complex.conj_mul',
-    ← Complex.ofReal_pow]
-  exact Complex.ofReal_re _
-
-private lemma trace_conjTranspose_mul_self_re_eq_sum_sq {m n : Type*} [Fintype m] [Fintype n]
-    (A : Matrix m n ℂ) :
-    (Matrix.trace (Aᴴ * A)).re = ∑ j, ∑ i, ‖A i j‖ ^ 2 := by
-  simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply, Matrix.conjTranspose_apply,
-    Complex.re_sum]
-  refine Finset.sum_congr rfl ?_
-  intro j _
-  refine Finset.sum_congr rfl ?_
-  intro i _
-  simpa only [RCLike.star_def, Complex.mul_re, Complex.conj_re, Complex.conj_im,
-    neg_mul, sub_neg_eq_add] using complex_star_mul_re (A i j)
-
 private lemma matrix_det_norm_one_trace_conjTranspose_mul_self_ge [NeZero d]
     (A : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) (hdet : ‖A.det‖ = 1) :
     (d : ℝ) ^ 2 ≤ (Matrix.trace (Aᴴ * A)).re := by
@@ -254,7 +238,7 @@ lemma channelDet_norm_one_hs_norm_ge [NeZero d]
       (Matrix.trace (Aᴴ * A)).re =
           ∑ ij : Fin d × Fin d, ∑ kl : Fin d × Fin d,
             ‖(Φ (b ij)) kl.1 kl.2‖ ^ 2 := by
-              simp only [stdBasis, trace_conjTranspose_mul_self_re_eq_sum_sq,
+              simp only [stdBasis, Matrix.trace_conjTranspose_mul_self_re_eq_sum_normSq,
                 LinearMap.toMatrix_apply, Module.Basis.map_repr, Module.Basis.map_apply,
                 Module.Basis.coe_reindex, Function.comp_apply,
                 Equiv.sigmaEquivProd_symm_apply, Pi.basis_apply, Pi.basisFun_apply,
@@ -286,7 +270,7 @@ lemma channelDet_norm_one_hs_norm_ge [NeZero d]
                       ‖Φ (Matrix.stdBasis ℂ (Fin d) (Fin d) ij) i j‖ ^ 2 := by
                         rw [Finset.sum_comm]
             exact hsum_sq.trans
-              (trace_conjTranspose_mul_self_re_eq_sum_sq
+              (Matrix.trace_conjTranspose_mul_self_re_eq_sum_normSq
                 (A := Φ (Matrix.stdBasis ℂ (Fin d) (Fin d) ij))).symm
   calc
     (d : ℝ) ^ 2 ≤ (Matrix.trace (Aᴴ * A)).re :=
