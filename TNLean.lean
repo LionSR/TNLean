@@ -28,6 +28,7 @@ import TNLean.Algebra.MatrixAux
 import TNLean.Algebra.ScalarPowerSumIdentity
 import TNLean.Algebra.UnitModulusPowerSum
 import TNLean.Algebra.FiniteCycleCoboundary
+import TNLean.Algebra.PiTensorProductPhase
 import TNLean.Algebra.BurnsideMatrix
 import TNLean.Algebra.IrreducibleTensorAction
 import TNLean.Algebra.PerronFrobenius.RankOne
