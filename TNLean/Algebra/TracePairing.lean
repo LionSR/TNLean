@@ -80,10 +80,10 @@ theorem trace_mul_right_eq_zero_iff {n : Type*} [Fintype n]
     (∀ N : Matrix n n ℂ, Matrix.trace (M * N) = 0) ↔ M = 0 := by
   classical
   constructor
-  · intro h; ext i j
-    have hNM : Matrix.trace (Matrix.single j i (1 : ℂ) * M) = 0 :=
-      (Matrix.trace_mul_comm M _).symm.trans (h _)
-    simpa [Matrix.trace_single_mul (i := j) (j := i) (a := (1 : ℂ))] using hNM
+  · intro h
+    exact (Matrix.ext_iff_trace_mul_right (A := M) (B := 0)).2 (by
+      intro N
+      simpa using h N)
   · intro h N; simp [h]
 
 end Matrix
