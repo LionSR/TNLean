@@ -890,6 +890,32 @@ eight axiom declarations.  The Mathlib 4.31 scout found useful positive-map,
 complete-positivity, and functional-calculus infrastructure, but no theorem
 whose statement matches these eight axiom boundaries.
 
+### Small scalar lemma cleanup, 2026-06-19
+
+The peripheral-spectrum file contained one local scalar lemma:
+
+- `ne_zero_of_norm_eq_one`
+
+It was removed.  Its internal uses now call Mathlib's `norm_ne_zero_iff`
+directly at the two root-of-unity cancellation steps and the two semigroup
+primitivity cancellation steps.
+
+The Schwarz non-completely-positive example also had two private numeral facts:
+
+- `complex_one_half_nonneg`
+- `complex_one_quarter_nonneg`
+
+These were removed.  The four positivity uses now discharge the complex
+nonnegativity side condition directly by `norm_num [Complex.nonneg_iff]`.
+
+Focused check:
+
+```bash
+lake build TNLean.Channel.Peripheral.Spectrum \
+  TNLean.Channel.Semigroup.Primitivity.Helpers \
+  TNLean.Channel.Schwarz.SchwarzNotCP -q --log-level=info
+```
+
 ### `TNLean/Channel/Semigroup/ProductFormula.lean`
 
 Status: keep most local estimates.
