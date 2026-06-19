@@ -44,25 +44,21 @@ def duplicateScalarBlocks :
     (k : Fin 2) → MPSTensor 1 (duplicateScalarDim k)
   | _ => fun _ => (1 : Matrix (Fin 1) (Fin 1) ℂ)
 
-private theorem span_singleton_one_finOne_eq_top :
-    (ℂ ∙ (1 : Matrix (Fin 1) (Fin 1) ℂ)) = ⊤ := by
-  refine (Submodule.span_singleton_eq_top_iff ℂ
-    (1 : Matrix (Fin 1) (Fin 1) ℂ)).2 ?_
-  intro M
-  refine ⟨M 0 0, ?_⟩
-  ext i j
-  have hi : i = 0 := Fin.eq_zero i
-  have hj : j = 0 := Fin.eq_zero j
-  subst hi
-  subst hj
-  simp
-
 /-- Each duplicate scalar block is injective. -/
 theorem duplicateScalarBlocks_isInjective :
     ∀ k, IsInjective (duplicateScalarBlocks k) := by
   intro k
+  have hspan : (ℂ ∙ (1 : Matrix (Fin 1) (Fin 1) ℂ)) = ⊤ := by
+    refine (Submodule.span_singleton_eq_top_iff ℂ
+      (1 : Matrix (Fin 1) (Fin 1) ℂ)).2 ?_
+    intro M
+    refine ⟨M 0 0, ?_⟩
+    ext i j
+    obtain rfl : i = 0 := Fin.eq_zero i
+    obtain rfl : j = 0 := Fin.eq_zero j
+    simp
   simpa [duplicateScalarBlocks, duplicateScalarDim, IsInjective, Set.range_const] using
-    span_singleton_one_finOne_eq_top
+    hspan
 
 /-- The duplicate scalar blocks are left-canonical. -/
 theorem duplicateScalarBlocks_leftCanonical :
