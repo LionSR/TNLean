@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Data.Complex.Basic
-import Mathlib.LinearAlgebra.Matrix.StdBasis
+import Mathlib.Data.Matrix.Basic
 import Mathlib.LinearAlgebra.PiTensorProduct.Dual
 
 /-!
@@ -22,20 +22,10 @@ namespace TNLean.Algebra
 
 namespace PiTensorProductPhase
 
-/-- Coordinate functional on a matrix entry. -/
-def matrixEntryDual {r c : Type*} (a : r) (b : c) :
-    Module.Dual ℂ (Matrix r c ℂ) where
-  toFun M := M a b
-  map_add' M N := by simp
-  map_smul' z M := by simp
-
 /-- Coordinate functional normalized to take the matrix `M` to one at entry `(a,b)`. -/
 noncomputable def normalizedMatrixEntryDual {r c : Type*} (M : Matrix r c ℂ)
-    (a : r) (b : c) : Module.Dual ℂ (Matrix r c ℂ) where
-  toFun N := (M a b)⁻¹ * N a b
-  map_add' N N' := by simp [mul_add]
-  map_smul' z N := by
-    simp [mul_assoc, mul_comm]
+    (a : r) (b : c) : Module.Dual ℂ (Matrix r c ℂ) :=
+  (M a b)⁻¹ • Matrix.entryLinearMap ℂ ℂ a b
 
 @[simp]
 lemma normalizedMatrixEntryDual_apply_self {r c : Type*} {M : Matrix r c ℂ}
@@ -43,15 +33,22 @@ lemma normalizedMatrixEntryDual_apply_self {r c : Type*} {M : Matrix r c ℂ}
     normalizedMatrixEntryDual M a b M = 1 := by
   simp [normalizedMatrixEntryDual, hM]
 
-/-- arXiv:1708.00029, Appendix A, lines 1070--1084: a product-tensor identity
+/-- arXiv:1708.00029, Appendix A, lines 1072--1080: a product-tensor identity
 with a nonzero reference tensor implies sectorwise proportionality, and the
 sector scalars multiply to the global scalar.
 
+**Scope restriction (arXiv:1708.00029, Appendix A, lines 1068--1080):** this
+theorem starts from the uniform identity
+\(\bigotimes_v A_v(\sigma_v)=z\cdot\bigotimes_v B_v(\sigma_v)\).  The paper
+first obtains a cyclically shifted product identity between sector labels; the
+reduction from that identity to the uniform form used here is tracked by issue
+#873.
+
 The reference entries are the formal analogue of choosing one nonzero matrix
 entry in each right-invertible sector block after the \(F_u,\Omega_u\)
-contraction has produced `eq:resultprop`. -/
-theorem exists_kappa_of_piTensorProduct_resultprop
-    {d m : ℕ} [NeZero m]
+contraction has produced the displayed product-tensor identity. -/
+theorem exists_kappa_of_pi_tensor_product_resultprop
+    {d m : ℕ}
     {row col : Fin m → Type*}
     (A B : (v : Fin m) → Fin d → Matrix (row v) (col v) ℂ)
     (z : ℂ) (hz : z ≠ 0)
@@ -77,7 +74,8 @@ theorem exists_kappa_of_piTensorProduct_resultprop
   refine ⟨κ, hκ_prod, ?_⟩
   intro v i
   ext a b
-  let entry : Module.Dual ℂ (Matrix (row v) (col v) ℂ) := matrixEntryDual a b
+  let entry : Module.Dual ℂ (Matrix (row v) (col v) ℂ) :=
+    Matrix.entryLinearMap ℂ ℂ a b
   let ell' : (w : Fin m) → Module.Dual ℂ (Matrix (row w) (col w) ℂ) :=
     Function.update ell v entry
   have hcoord :
@@ -93,7 +91,7 @@ theorem exists_kappa_of_piTensorProduct_resultprop
         A v i a b * ∏ w ∈ Finset.univ \ {v}, κ w := by
     rw [Finset.prod_eq_mul_prod_sdiff_singleton_of_mem (Finset.mem_univ v)]
     congr 1
-    · simp [ell', entry, matrixEntryDual]
+    · simp [ell', entry]
     · apply Finset.prod_congr rfl
       intro w hw
       have hw_ne : w ≠ v := by
@@ -111,7 +109,7 @@ theorem exists_kappa_of_piTensorProduct_resultprop
         simpa using (Finset.mem_sdiff.mp hw).2
       simp [ell', ell, Function.update_of_ne hw_ne, hB_ref w]
     have hfirst : ell' v (B v (Function.update ref v i v)) = B v i a b := by
-      simp [ell', entry, matrixEntryDual]
+      simp [ell', entry]
     rw [hfirst, hcomp, mul_one]
   let P : ℂ := ∏ w ∈ Finset.univ \ {v}, κ w
   have hκ_split : κ v * P = z := by
