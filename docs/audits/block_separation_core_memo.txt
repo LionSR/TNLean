@@ -218,7 +218,7 @@ Files:
 
 File: `TNLean/Algebra/TracePairing.lean`:
 
-* `trace_mul_right_eq_zero` (nondegeneracy of trace pairing).
+* `Matrix.trace_mul_right_eq_zero_iff` (nondegeneracy of trace pairing).
 * `traceMulRightPi_ker_eq_bot` (injectivity of the “Gram map” when A is injective).
 
 These are plausible ingredients for the “injectivity gives spanning ⇒ enough equations” step
