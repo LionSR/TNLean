@@ -120,6 +120,9 @@ The clearest replacements are:
   martingale transport file now uses Mathlib's `EuclideanSpace.basisFun` and
   `OrthonormalBasis.sum_repr`, rather than reproving the expansion by
   pointwise simplification.
+- The Wielandt strong-irreducibility trace-representation proof now uses
+  Mathlib's `Matrix.matrix_eq_sum_single`; the private coordinate-expansion
+  theorem was removed.
 
 There are also important non-replacements.
 
@@ -1531,6 +1534,25 @@ insertion files were removed; their use sites now call
 The Lindblad-form trace bridge also no longer exports the one-use theorem
 `Matrix.eq_zero_of_forall_trace_mul_eq_zero`: the GKSL trace-constraint proof
 uses `Matrix.ext_iff_trace_mul_right` directly at the equality step.
+
+### Matrix-basis expansion in Wielandt primitivity, 2026-06-19
+
+Removed the private local matrix-coordinate expansion:
+
+- `matrix_eq_sum_smul_single`
+
+This theorem was the scalar-matrix-unit form of Mathlib's
+`Matrix.matrix_eq_sum_single`.  The trace-representation helper
+`linearMap_apply_eq_sum` in
+`TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank` now rewrites by the
+Mathlib theorem and only performs the local scalar simplification from
+`Matrix.single i j (N i j)` to `N i j • Matrix.single i j 1`.
+
+Focused check:
+
+```bash
+lake build TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank -q --log-level=info
+```
 
 ### Deprecation-policy exceptions
 
