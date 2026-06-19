@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Defs
 import TNLean.Channel.Irreducible.Basic
+import Mathlib.Algebra.Ring.Idempotent
 
 /-!
 # Projection-triangular trace lemma
@@ -45,16 +46,13 @@ lemma proj_add_projCompl : P + (1 - P) = (1 : Matrix (Fin D) (Fin D) ℂ) := by
   simp
 
 lemma proj_mul_projCompl (hP : IsOrthogonalProjection P) : P * (1 - P) = 0 := by
-  -- `P*(1-P) = P - P*P = 0`.
-  rw [mul_sub, mul_one, hP.2, sub_self]
+  exact IsIdempotentElem.mul_one_sub_self hP.2
 
 lemma projCompl_mul_proj (hP : IsOrthogonalProjection P) : (1 - P) * P = 0 := by
-  -- `(1-P)*P = P - P*P = 0`.
-  rw [sub_mul, one_mul, hP.2, sub_self]
+  exact IsIdempotentElem.one_sub_mul_self hP.2
 
 lemma projCompl_mul_projCompl (hP : IsOrthogonalProjection P) : (1 - P) * (1 - P) = (1 - P) := by
-  -- `(1-P)^2 = (1-P) - (1-P)P`.
-  rw [mul_sub, mul_one, projCompl_mul_proj (P := P) hP, sub_zero]
+  exact IsIdempotentElem.one_sub hP.2
 
 end Auxiliary
 
