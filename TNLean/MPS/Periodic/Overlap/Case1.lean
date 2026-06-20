@@ -35,23 +35,21 @@ variable {d D : ℕ}
 /-- The conjugation `Y ↦ X Y Xᴴ` as a linear equivalence on matrices. -/
 private noncomputable def glConjEquiv (X : GL (Fin D) ℂ) :
     Matrix (Fin D) (Fin D) ℂ ≃ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
-  LinearEquiv.ofLinear
-    ((LinearMap.mulLeft ℂ X.val).comp (LinearMap.mulRight ℂ X.valᴴ))
-    ((LinearMap.mulLeft ℂ X⁻¹.val).comp (LinearMap.mulRight ℂ X⁻¹.valᴴ))
-    (LinearMap.ext fun Y => by
-      simp only [LinearMap.comp_apply, LinearMap.mulLeft_apply,
-        LinearMap.mulRight_apply, LinearMap.id_apply, ← Matrix.mul_assoc]
-      rw [Units.mul_inv, one_mul, Matrix.mul_assoc Y,
-        show X⁻¹.valᴴ * X.valᴴ = 1 from by
-          rw [← Matrix.conjTranspose_mul, Units.mul_inv]; simp,
-        mul_one])
-    (LinearMap.ext fun Y => by
-      simp only [LinearMap.comp_apply, LinearMap.mulLeft_apply,
-        LinearMap.mulRight_apply, LinearMap.id_apply, ← Matrix.mul_assoc]
-      rw [Units.inv_mul, one_mul, Matrix.mul_assoc Y,
-        show X.valᴴ * X⁻¹.valᴴ = 1 from by
-          rw [← Matrix.conjTranspose_mul, Units.inv_mul]; simp,
-        mul_one])
+  (X.mulLeftLinearEquiv ℂ (Matrix (Fin D) (Fin D) ℂ)).trans
+    ((star X).mulRightLinearEquiv ℂ)
+
+@[simp] private lemma glConjEquiv_apply (X : GL (Fin D) ℂ)
+    (Y : Matrix (Fin D) (Fin D) ℂ) :
+    glConjEquiv X Y = X.val * Y * X.valᴴ := rfl
+
+@[simp] private lemma glConjEquiv_symm_apply (X : GL (Fin D) ℂ)
+    (Y : Matrix (Fin D) (Fin D) ℂ) :
+    (glConjEquiv X).symm Y = X⁻¹.val * Y * X⁻¹.valᴴ := by
+  simp only [glConjEquiv]
+  rw [LinearEquiv.symm_trans_apply]
+  rw [Units.symm_mulRightLinearEquiv_apply, Units.symm_mulLeftLinearEquiv_apply]
+  rw [Units.coe_star_inv]
+  simp [Matrix.star_eq_conjTranspose, Matrix.mul_assoc]
 
 /-- **GaugePhaseEquiv preserves periods.**
 
@@ -93,11 +91,9 @@ private theorem period_eq_of_gaugePhaseEquiv_of_isPeriodic
         (glConjEquiv X).conj (transferMap (d := d) (D := D) A) := by
       apply LinearMap.ext; intro Y
       rw [hEB_eq, hζζ_real, show (↑(‖ζ‖ ^ 2) : ℂ) = (1 : ℂ) from by simp [h_eig_eq],
-        one_smul,
-        show (glConjEquiv X).conj (transferMap (d := d) (D := D) A) Y =
-          X.val * (transferMap (d := d) (D := D) A
-            (X⁻¹.val * (Y * X⁻¹.valᴴ)) * X.valᴴ) from rfl]
-      simp only [Matrix.mul_assoc]
+        one_smul]
+      simp [LinearEquiv.conj_apply, transferMap_apply, Finset.mul_sum, Finset.sum_mul,
+        Matrix.mul_assoc]
     rw [hEB_is_conj]
     exact (peripheralEigenvalues_conj (glConjEquiv X)
       (transferMap (d := d) (D := D) A)).symm
