@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Peripheral.Cycles
+import Mathlib.Logic.Equiv.Fin.Rotate
 
 /-!
 # Multi-cycle block-permutation decompositions
@@ -285,15 +286,12 @@ def totalProj (M : MultiCycleDecomposition T) : M.Idx → MatrixAlg D :=
 `Equiv.Perm.sigmaCongrRight`. -/
 noncomputable def totalPerm (M : MultiCycleDecomposition T) :
     Equiv.Perm M.Idx :=
-  Equiv.Perm.sigmaCongrRight (fun c : M.ι =>
-    { toFun := fun k => k + 1
-      invFun := fun k => k - 1
-      left_inv := by intro k; simp
-      right_inv := by intro k; simp })
+  Equiv.Perm.sigmaCongrRight (fun c : M.ι => finRotate (M.period c))
 
 @[simp]
 lemma totalPerm_apply (M : MultiCycleDecomposition T) (x : M.Idx) :
-    M.totalPerm x = ⟨x.1, x.2 + 1⟩ := rfl
+    M.totalPerm x = ⟨x.1, x.2 + 1⟩ := by
+  simp [totalPerm, finRotate_apply]
 
 /-- **Flattening construction.**  A multi-cycle decomposition gives a
 `CycleStructure` on the total block-index type
@@ -317,7 +315,7 @@ noncomputable def toCycleStructure (M : MultiCycleDecomposition T) :
       exact M.isProj c k)
     (by
       rintro ⟨c, k⟩
-      change T (M.P c (k + 1)) = M.P c k
+      rw [M.totalPerm_apply ⟨c, k⟩]
       exact M.cyclic c k)
     (by
       rintro ⟨c, k⟩ X
