@@ -283,6 +283,6 @@ theorem wolfExample53_not_cp : ¬ IsCPMap wolfExample53 := by
   have hneg : ¬ (0 : ℂ) ≤
       star wolfExample53AntisymmVec ⬝ᵥ
         (ChoiJamiolkowski.choiMatrix wolfExample53).mulVec wolfExample53AntisymmVec := by
-    rw [wolfExample53_choi_negative_antisymm, Complex.nonneg_iff]
+    rw [wolfExample53_choi_negative_antisymm, RCLike.nonneg_iff]
     norm_num
   exact hneg hnonneg
