@@ -30,28 +30,26 @@ cross overlap is unchanged by the simultaneous shift. -/
 
 /-- One-site cyclic rotation of a configuration of length `L'+1`:
 move the last letter to the front. -/
-def rotateCfg {d L' : ℕ} : (Fin (L' + 1) → Fin d) ≃ (Fin (L' + 1) → Fin d) where
-  toFun σ := Fin.cons (σ (Fin.last L')) (Fin.init σ)
-  invFun τ := Fin.snoc (Fin.tail τ) (τ 0)
-  left_inv σ := by
-    funext j
-    refine Fin.lastCases ?_ ?_ j
-    · simp [Fin.snoc_last, Fin.cons_zero]
-    · intro i
-      simp [Fin.snoc_castSucc, Fin.init]
-  right_inv τ := by
-    funext j
-    refine Fin.cases ?_ ?_ j
-    · simp [Fin.cons_zero, Fin.snoc_last]
-    · intro i
-      simp [Fin.cons_succ, Fin.tail]
+def rotateCfg {d L' : ℕ} : (Fin (L' + 1) → Fin d) ≃ (Fin (L' + 1) → Fin d) :=
+  Equiv.arrowCongr (finRotate (L' + 1)) (Equiv.refl (Fin d))
 
 /-- Word evaluation of the rotated configuration pulls the last letter to the front. -/
 private lemma evalWord_ofFn_rotateCfg {L' : ℕ} (A : MPSTensor d D)
     (σ : Fin (L' + 1) → Fin d) :
     evalWord A (List.ofFn (rotateCfg σ)) =
       A (σ (Fin.last L')) * evalWord A (List.ofFn (Fin.init σ)) := by
-  simp only [rotateCfg, Equiv.coe_fn_mk, List.ofFn_cons, evalWord_cons]
+  have hrotate : rotateCfg σ = Fin.cons (σ (Fin.last L')) (Fin.init σ) := by
+    funext j
+    refine Fin.cases ?_ ?_ j
+    · change σ ((finRotate (L' + 1)).symm 0) = σ (Fin.last L')
+      exact congrArg σ (Fin.ext (by simp))
+    · intro i
+      change σ ((finRotate (L' + 1)).symm i.succ) = σ i.castSucc
+      exact congrArg σ (Fin.ext (by
+        rw [finRotate_symm_apply]
+        rw [Fin.val_sub_one_of_ne_zero (by simp)]
+        simp))
+  simp only [hrotate, List.ofFn_cons, evalWord_cons]
 
 /-- Word evaluation of the original configuration pulls the last letter to the right. -/
 private lemma evalWord_ofFn_eq_init_mul_last {L' : ℕ} (A : MPSTensor d D)
