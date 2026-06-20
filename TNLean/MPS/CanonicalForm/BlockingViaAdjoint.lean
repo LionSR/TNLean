@@ -218,14 +218,6 @@ local instance : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
   Matrix.toMatrixInnerProductSpace (n := Fin D) (𝕜 := ℂ) 1
     (Matrix.PosDef.one (n := Fin D) (R := ℂ)).posSemidef
 
-/-- Under the Frobenius inner product induced by the weight matrix `1`, we have
-`⟪X, Y⟫ = trace (Y * Xᴴ)`. -/
-private lemma inner_eq_trace (X Y : Matrix (Fin D) (Fin D) ℂ) :
-    inner ℂ X Y = Matrix.trace (Y * Xᴴ) := by
-  -- `rfl` gives `trace (Y * 1 * Xᴴ)`.
-  simpa only [mul_one] using
-    (show inner ℂ X Y = Matrix.trace (Y * (1 : Matrix (Fin D) (Fin D) ℂ) * Xᴴ) from rfl)
-
 /-- The adjoint of `transferMap A` (Frobenius inner product) is the transfer map of the
 conjugate-transposed Kraus family. -/
 lemma transferMap_conjTranspose_eq_adjoint (A : MPSTensor d D) :
@@ -237,8 +229,11 @@ lemma transferMap_conjTranspose_eq_adjoint (A : MPSTensor d D) :
       (B := transferMap (d := d) (D := D) A)).2 ?_
   intro X Y
   -- Reduce to a trace identity using the definition of the Frobenius inner product.
-  -- `simp only [inner_eq_trace]` rewrites ⟪·,·⟫ to Matrix.trace without unfolding transferMap.
-  simp only [inner_eq_trace]
+  change Matrix.trace (Y * (1 : Matrix (Fin D) (Fin D) ℂ) *
+      (transferMap (d := d) (D := D) K X)ᴴ) =
+    Matrix.trace (transferMap (d := d) (D := D) A Y *
+      (1 : Matrix (Fin D) (Fin D) ℂ) * Xᴴ)
+  simp only [mul_one]
   -- Rewrite the conjugate transpose of a Kraus map.
   have hconj : (transferMap (d := d) (D := D) K X)ᴴ = transferMap (d := d) (D := D) K (Xᴴ) := by
     classical
