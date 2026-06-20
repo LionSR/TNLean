@@ -73,11 +73,8 @@ theorem biRectSpan_le_range
     (P Q : Matrix (Fin D) (Fin D) ℂ) (B : MPSTensor d D) (n : ℕ) :
     biRectSpan (d := d) (D := D) P Q B n ≤
       LinearMap.range ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) := by
-  intro M hM
-  rcases (mem_biRectSpan_iff (d := d) (D := D) P Q B).mp hM with ⟨X, _, hX⟩
-  exact ⟨X, by
-    simpa only [LinearMap.comp_apply, LinearMap.mulLeft_apply, LinearMap.mulRight_apply,
-      Matrix.mul_assoc] using hX⟩
+  rw [biRectSpan]
+  exact LinearMap.map_le_range
 
 /-- Converting a bi-rectangular span element back into a bounded word span,
 assuming `P` and `Q` themselves lie in bounded word spans. -/
