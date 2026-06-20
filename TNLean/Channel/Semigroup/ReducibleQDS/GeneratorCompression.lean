@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Algebra.MatrixOperatorSpace
+import TNLean.Algebra.MatrixAux
 import TNLean.Channel.Semigroup.ReducibleQDS.Defs
 
 /-!
@@ -82,7 +83,7 @@ theorem lindblad_block_of_generatorPreservesCompression
               rw [← Matrix.mul_assoc, hPP]
       _ = (1 - P) * (F.L j * P * (F.L j)ᴴ) * (1 - P) := by
               simp [Matrix.mul_assoc]
-  exact eq_zero_of_sum_mul_conjTranspose_eq_zero _ hsum_zero
+  exact Matrix.eq_zero_of_sum_mul_conjTranspose_eq_zero _ hsum_zero
 
 /-- If the generator preserves the compression and all Lindblad operators
 satisfy `(1-P)*Lⱼ*P = 0`, then the effective Hamiltonian `κ` also satisfies

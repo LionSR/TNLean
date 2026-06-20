@@ -21,6 +21,10 @@ Extracted from various files for reusability.
   trace identity
 - `Matrix.trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq`: the Hilbert--Schmidt
   trace form of the Frobenius norm
+- `Matrix.eq_zero_of_sum_mul_conjTranspose_eq_zero`: a positive sum of squares
+  vanishes only if every summand vanishes
+- `Matrix.eq_zero_of_sum_conjTranspose_mul_self_eq_zero`: the conjugate-transpose
+  variant
 - `Matrix.PosSemidef.mulVec_eq_zero_left/right`: kernel containment for PSD matrix sums
 -/
 
@@ -68,6 +72,49 @@ theorem trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq
   · positivity
 
 end FrobeniusTrace
+
+section SumSquaresZero
+
+variable {ι n : Type*} [Fintype ι] [Fintype n]
+
+/-- If `∑ᵢ Bᵢ * Bᵢ† = 0`, then every `Bᵢ` is zero. -/
+theorem eq_zero_of_sum_mul_conjTranspose_eq_zero
+    (B : ι → Matrix n n ℂ)
+    (h : ∑ i : ι, B i * (B i)ᴴ = 0) :
+    ∀ i, B i = 0 := by
+  intro i
+  have htrace_nonneg :
+      ∀ j : ι, 0 ≤ ((B j * (B j)ᴴ).trace).re :=
+    fun j =>
+      (Complex.le_def.mp (Matrix.posSemidef_self_mul_conjTranspose (B j)).trace_nonneg).1
+  have htrace_sum :
+      ∑ j : ι, ((B j * (B j)ᴴ).trace).re = 0 := by
+    rw [← Complex.re_sum, ← Matrix.trace_sum, h]
+    simp
+  have htrace_re : ((B i * (B i)ᴴ).trace).re = 0 :=
+    le_antisymm
+      (by
+        linarith [Finset.sum_eq_zero_iff_of_nonneg (fun j _ => htrace_nonneg j)
+          |>.mp htrace_sum i (Finset.mem_univ i)])
+      (htrace_nonneg i)
+  have hpsd := Matrix.posSemidef_self_mul_conjTranspose (B i)
+  have htrace_zero : (B i * (B i)ᴴ).trace = 0 :=
+    Complex.ext htrace_re (Complex.le_def.mp hpsd.trace_nonneg).2.symm
+  exact Matrix.self_mul_conjTranspose_eq_zero.mp (hpsd.trace_eq_zero_iff.mp htrace_zero)
+
+/-- If `∑ᵢ Bᵢ† * Bᵢ = 0`, then every `Bᵢ` is zero. -/
+theorem eq_zero_of_sum_conjTranspose_mul_self_eq_zero
+    (B : ι → Matrix n n ℂ)
+    (h : ∑ i : ι, (B i)ᴴ * B i = 0) :
+    ∀ i, B i = 0 := by
+  have hstar :
+      ∀ i, (B i)ᴴ = 0 :=
+    eq_zero_of_sum_mul_conjTranspose_eq_zero (fun i => (B i)ᴴ) (by
+      simpa only [Matrix.conjTranspose_conjTranspose] using h)
+  intro i
+  exact Matrix.conjTranspose_eq_zero.mp (hstar i)
+
+end SumSquaresZero
 
 end Matrix
 
