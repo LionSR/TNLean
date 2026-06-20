@@ -116,21 +116,6 @@ theorem nilpotent_pow_eq_zero_of_finrank
 
 /-! ### Part 4–5: Eigenspace decomposition and structure -/
 
-theorem iSup_maxGenEigenspace_eq_top
-    {K : Type*} {V : Type*}
-    [Field K] [AddCommGroup V] [Module K V]
-    [IsAlgClosed K] [FiniteDimensional K V]
-    (f : End K V) :
-    ⨆ μ, f.maxGenEigenspace μ = ⊤ :=
-  End.iSup_maxGenEigenspace_eq_top f
-
-theorem independent_maxGenEigenspace
-    {K : Type*} {V : Type*}
-    [Field K] [AddCommGroup V] [Module K V]
-    (f : End K V) :
-    iSupIndep f.maxGenEigenspace :=
-  End.independent_maxGenEigenspace f
-
 structure FittingDecomposition
     {K : Type*} {V : Type*}
     [Field K] [AddCommGroup V] [Module K V]
@@ -149,8 +134,8 @@ theorem fittingDecomposition
     (f : End K V) : FittingDecomposition f where
   hNilpNilpotent := isNilpotent_restrict_maxGenEigenspace_zero f
   hInvertible μ hμ := isUnit_restrict_maxGenEigenspace_of_ne_zero f μ hμ
-  hSpan := iSup_maxGenEigenspace_eq_top f
-  hIndep := independent_maxGenEigenspace f
+  hSpan := End.iSup_maxGenEigenspace_eq_top f
+  hIndep := End.independent_maxGenEigenspace f
 
 theorem nilpotent_pow_eq_zero_on_maxGenEigenspace_zero
     {K : Type*} {V : Type*}

@@ -76,7 +76,7 @@ theorem disjoint_ker_iSup_maxGenEigenspace_ne_zero (f : End ℂ (Fin D → ℂ))
       (⨆ (μ : ℂ) (_ : μ ≠ 0), f.maxGenEigenspace μ) := by
   -- First: `maxGenEigenspace 0` is disjoint from the supremum of the others.
   have hindep : iSupIndep f.maxGenEigenspace :=
-    Wielandt.independent_maxGenEigenspace f
+    End.independent_maxGenEigenspace f
   have hdisj0 : Disjoint (f.maxGenEigenspace (0 : ℂ))
       (⨆ (μ : ℂ) (_ : μ ≠ (0 : ℂ)), f.maxGenEigenspace μ) :=
     hindep 0

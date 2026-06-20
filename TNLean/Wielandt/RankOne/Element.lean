@@ -125,7 +125,7 @@ theorem range_pow_le_iSup_maxGenEigenspace_ne_zero
   -- Use `⨆ μ, maxGenEigenspace f μ = ⊤` to write `x` as a sum of generalized-eigen pieces.
   have hx : x ∈ ⨆ μ : ℂ, f.maxGenEigenspace μ := by
     have htop : (⨆ μ : ℂ, f.maxGenEigenspace μ) = ⊤ :=
-      Wielandt.iSup_maxGenEigenspace_eq_top f
+      End.iSup_maxGenEigenspace_eq_top f
     simp [htop]
   -- Prove the desired membership by induction on `x ∈ ⨆ μ, maxGenEigenspace μ`.
   refine Submodule.iSup_induction (p := fun μ : ℂ => f.maxGenEigenspace μ)
