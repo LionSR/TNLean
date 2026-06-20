@@ -223,8 +223,8 @@ theorem Matrix.blockTopRows_conjTranspose_mul_le_one (r s : ℕ) :
     · simp only [hjr, if_false]
       change 0 ≤ star (x j) * x j
       have hsq : star (x j) * x j = ((‖x j‖ : ℝ) ^ 2 : ℂ) := by
-        rw [show star (x j) = starRingEnd ℂ (x j) from rfl, RCLike.conj_mul]
-        norm_cast
+        simpa [Complex.star_def, Complex.normSq_eq_norm_sq] using
+          (Complex.normSq_eq_conj_mul_self (z := x j)).symm
       rw [hsq]
       exact_mod_cast sq_nonneg ‖x j‖
 
