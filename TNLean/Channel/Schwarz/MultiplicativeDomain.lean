@@ -42,22 +42,6 @@ variable {d D : ℕ}
 
 namespace KadisonSchwarz
 
-/-! ## Auxiliary lemmas -/
-
-section AuxiliaryLemmas
-
-/-- Trace of `krausMap` equals trace of the original matrix times ∑ Kᵢ† Kᵢ. When TP, this
-equals the original trace. -/
-private theorem trace_krausMap_of_tp (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (h_tp : IsTPKraus K)
-    (X : Matrix (Fin D) (Fin D) ℂ) :
-    trace (krausMap K X) = trace X := by
-  simp only [krausMap, trace_sum]
-  conv_lhs => arg 2; ext i; rw [Matrix.trace_mul_cycle]
-  rw [← trace_sum, ← Finset.sum_mul, show ∑ i : Fin d, (K i)ᴴ * K i = 1 from h_tp, one_mul]
-
-end AuxiliaryLemmas
-
 /-! ## KS equality for peripheral eigenvectors -/
 
 section KSEquality

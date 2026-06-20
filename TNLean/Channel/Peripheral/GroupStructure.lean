@@ -68,18 +68,6 @@ quantum channels:
 
 /-! ## Auxiliary lemmas for the divisibility proof -/
 
-/-- The transfer map preserves the matrix trace when the Kraus family is trace-preserving
-(i.e., `∑ᵢ Kᵢ† Kᵢ = I`). -/
-private lemma trace_transferMap_of_tp
-    {r : ℕ}
-    (K : Fin r → MatrixAlg D)
-    (hTP : KadisonSchwarz.IsTPKraus (d := r) (D := D) K)
-    (X : MatrixAlg D) :
-    Matrix.trace (MPSTensor.transferMap (d := r) (D := D) K X) = Matrix.trace X := by
-  simp only [MPSTensor.transferMap_apply, Matrix.trace_sum]
-  conv_lhs => arg 2; ext i; rw [Matrix.trace_mul_cycle]
-  rw [← Matrix.trace_sum, ← Finset.sum_mul, hTP, one_mul]
-
 /-- The trace of an orthogonal projection (Hermitian idempotent matrix) over `ℂ` is a natural
 number — it equals the number of unit eigenvalues. -/
 private lemma exists_natCast_eq_trace_of_orthogonal_projection
@@ -150,7 +138,11 @@ private lemma period_dvd_dim_of_cyclic_projections
     (hcyclic : ∀ k, MPSTensor.transferMap (d := r) (D := D) K (P (k + 1)) = P k) :
     m ∣ D := by
   set E := MPSTensor.transferMap (d := r) (D := D) K
-  have htrace_pres := trace_transferMap_of_tp K hTP
+  have htrace_pres :
+      ∀ X : MatrixAlg D, Matrix.trace (E X) = Matrix.trace X := by
+    intro X
+    simpa [E, MPSTensor.transferMap_apply, KadisonSchwarz.krausMap] using
+      (KadisonSchwarz.trace_krausMap_of_tp (D := D) K hTP X)
   have htrace_step : ∀ k : Fin m, Matrix.trace (P k) = Matrix.trace (P (k + 1)) := by
     intro k
     calc Matrix.trace (P k)

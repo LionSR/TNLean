@@ -71,6 +71,16 @@ theorem krausAdjointMap_one_of_TP (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (h : IsTPKraus K) : krausAdjointMap K 1 = 1 := by
   simp only [krausAdjointMap, mul_one]; exact h
 
+/-- A trace-preserving Kraus family preserves the matrix trace. -/
+theorem trace_krausMap_of_tp (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
+    (h_tp : IsTPKraus K)
+    (X : Matrix (Fin D) (Fin D) ℂ) :
+    trace (krausMap K X) = trace X := by
+  simp only [krausMap, trace_sum]
+  conv_lhs => arg 2; ext i; rw [Matrix.trace_mul_cycle]
+  rw [← trace_sum, ← Finset.sum_mul, show ∑ i : Fin d, (K i)ᴴ * K i = 1 from h_tp,
+    one_mul]
+
 /-- The finite-index Kadison-Schwarz Kraus map is the general Kraus map. -/
 theorem krausMap_eq_map (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
@@ -203,9 +213,7 @@ theorem hilbertSchmidt_contraction (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
   have h_nonneg := (kadison_schwarz K h_unital X).trace_nonneg
   rw [trace_sub] at h_nonneg
   have h_pres : trace (krausMap K (Xᴴ * X)) = trace (Xᴴ * X) := by
-    simp only [krausMap, trace_sum]
-    conv_lhs => arg 2; ext i; rw [Matrix.trace_mul_cycle]
-    rw [← trace_sum, ← Finset.sum_mul, show ∑ i : Fin d, (K i)ᴴ * K i = 1 from h_tp, one_mul]
+    exact trace_krausMap_of_tp K h_tp (Xᴴ * X)
   rw [h_pres] at h_nonneg
   exact le_of_sub_nonneg h_nonneg
 
