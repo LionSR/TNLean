@@ -120,20 +120,32 @@ theorem isRootOfUnity_of_finite_powers (μ : ℂ) (hμ : ‖μ‖ = 1)
       mul_left_cancel₀ (pow_ne_zero _ hμ_ne) (by
         rw [← pow_add, Nat.add_sub_cancel' h.le, mul_one]; exact heq)⟩
 
-/-- **Peripheral eigenvalues with powers-are-eigenvalues property are roots of unity.**
+/-- **Peripheral eigenvalues with positive powers that are eigenvalues are roots of unity.**
 This is the combinatorial core of **Wolf Theorem 6.6** (Peripheral spectrum of
 irreducible Schwarz maps), item 1: the peripheral spectrum forms a cyclic group
 `{exp(2πik/m)}_{k ∈ ℤ_m}`. For irreducible CPTP maps, the multiplicative domain
-theory ensures that powers of peripheral eigenvalues remain eigenvalues. -/
+theory ensures that positive powers of peripheral eigenvalues remain eigenvalues. -/
 theorem peripheral_isRootOfUnity_of_pow_eigenvalue
     {V : Type*} [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V]
     (E : V →ₗ[ℂ] V)
     (μ : ℂ) (hμ_norm : ‖μ‖ = 1)
-    (hpow : ∀ n : ℕ, Module.End.HasEigenvalue E (μ ^ n)) :
+    (hpow : ∀ n : ℕ, 0 < n → Module.End.HasEigenvalue E (μ ^ n)) :
     ∃ p : ℕ, 0 < p ∧ μ ^ p = 1 := by
+  have hfin_pos : Set.Finite {z : ℂ | ∃ n : ℕ, z = μ ^ (n + 1)} := by
+    apply Set.Finite.subset (Module.End.finite_hasEigenvalue E)
+    intro z hz
+    rcases hz with ⟨n, rfl⟩
+    exact hpow (n + 1) (Nat.succ_pos n)
   apply isRootOfUnity_of_finite_powers μ hμ_norm
-  apply Set.Finite.subset (Module.End.finite_hasEigenvalue E)
-  intro z ⟨n, hz⟩; rw [hz]; exact hpow n
+  refine (hfin_pos.insert 1).subset ?_
+  intro z hz
+  rcases hz with ⟨n, rfl⟩
+  cases n with
+  | zero => simp
+  | succ n =>
+      simp only [Set.mem_insert_iff, Set.mem_setOf_eq]
+      right
+      exact ⟨n, rfl⟩
 
 /-- **Explicit bound**: among `μ^0, ..., μ^n`, a repeat gives a root of unity. -/
 theorem isRootOfUnity_of_norm_one_of_finite_orbit (μ : ℂ) (hμ : ‖μ‖ = 1)

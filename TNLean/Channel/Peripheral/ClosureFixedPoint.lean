@@ -200,6 +200,7 @@ theorem peripheral_isRootOfUnity_of_irreducible_unital_of_adjoint_fixedPoint
     peripheralEigenvalues_pow_mem_of_irreducible_unital_of_adjoint_fixedPoint
       (K := K) h_unital ρ hρ hfix hIrr
   exact peripheral_isRootOfUnity_of_closed_powers
-    (E := MPSTensor.transferMap (d := d) (D := D) K) hclosed μ hμ
+    (E := MPSTensor.transferMap (d := d) (D := D) K)
+    (fun ν hν n _hn => hclosed ν hν n) μ hμ
 
 end MPSTensor
