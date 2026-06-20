@@ -382,16 +382,6 @@ theorem peripheral_powers_closed_of_irreducible_channel_with_fixed [NeZero D]
   obtain ⟨hpow_eig, hpow_norm⟩ := hpow n
   exact ⟨heig_bwd (μ ^ n) hpow_eig, hpow_norm⟩
 
-/-- Evaluation of powers after bundling an endomorphism as a continuous linear map. -/
-theorem toContinuousLinearMap_pow_apply [NeZero D]
-    (F : Mat →ₗ[ℂ] Mat) (X : Mat) (n : ℕ) :
-    (((Module.End.toContinuousLinearMap Mat) F) ^ n) X = (F ^ n) X := by
-  have hpowEq : ((Module.End.toContinuousLinearMap Mat) F) ^ n =
-      (Module.End.toContinuousLinearMap Mat) (F ^ n) :=
-    (map_pow (Module.End.toContinuousLinearMap Mat) F n).symm
-  rw [hpowEq]
-  rfl
-
 /-- In finite dimensions, a strict modulus bound on every eigenvalue gives a spectral-radius gap. -/
 theorem spectralRadius_lt_one_of_eigenvalues_lt_one [NeZero D]
     (F : Mat →ₗ[ℂ] Mat)

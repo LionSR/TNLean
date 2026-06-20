@@ -43,7 +43,8 @@ theorem primitive_channel_pow_tendsto_zero_of_trace_zero [NeZero D]
       (hEval.tendsto 0).comp hpow0
     refine hEvalT.congr' ?_
     filter_upwards [] with n
-    exact toContinuousLinearMap_pow_apply (D := D) (E - P) X n
+    rw [(map_pow (Module.End.toContinuousLinearMap Mat) (E - P) n).symm]
+    rfl
   have hPX : P X = 0 := by
     simp [P, fixedPointProj, htrX]
   refine hNpow0.congr' ?_
