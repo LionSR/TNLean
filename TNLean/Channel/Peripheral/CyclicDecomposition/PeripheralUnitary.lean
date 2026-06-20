@@ -246,8 +246,8 @@ theorem exists_peripheral_unitary_of_irreducible_schwarz
     have hdiag_nonneg := (Matrix.posSemidef_diagonal_iff).1 hdiag_psd
     exact hdiag_nonneg ⟨0, NeZero.pos D⟩
   have hc_eq_real : c = (c.re : ℂ) :=
-    Complex.ext rfl (by simpa using (Complex.nonneg_iff.mp hc_nonneg).2.symm)
-  have hcre_nonneg : 0 ≤ c.re := (Complex.nonneg_iff.mp hc_nonneg).1
+    Complex.ext rfl (RCLike.nonneg_iff.mp hc_nonneg).2
+  have hcre_nonneg : 0 ≤ c.re := (RCLike.nonneg_iff.mp hc_nonneg).1
   have hcre_ne0 : c.re ≠ 0 := by
     intro h0
     apply hc_ne0
