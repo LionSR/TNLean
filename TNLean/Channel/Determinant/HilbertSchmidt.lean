@@ -100,36 +100,12 @@ theorem channel_all_eigenvalues_norm_one [NeZero d]
   exact hroot_eq μ ((Polynomial.mem_roots A.charpoly_monic.ne_zero).2
     ((Matrix.mem_spectrum_iff_isRoot_charpoly).1 hμ_specA))
 
-private theorem stdBasis_conjTranspose_mul_self (i j : Fin d) :
-    (Matrix.stdBasis ℂ (Fin d) (Fin d) (i, j))ᴴ *
-        Matrix.stdBasis ℂ (Fin d) (Fin d) (i, j) =
-      Matrix.single j j (1 : ℂ) := by
-  ext a b
-  rw [Matrix.stdBasis_eq_single, Matrix.conjTranspose_single]
-  by_cases hja : j = a
-  · by_cases hjb : j = b
-    · subst hja; subst hjb
-      simp only [single, star_one, mul_apply, of_apply, true_and, and_true, mul_ite,
-        mul_one, mul_zero, Finset.sum_ite_eq, Finset.mem_univ, ↓reduceIte, and_self]
-    · have hab : a ≠ b := by simpa only [ne_eq, hja] using hjb
-      simp only [single, hja, star_one, mul_apply, of_apply, true_and, hab,
-        and_false, ↓reduceIte, mul_zero, Finset.sum_const_zero]
-  · simp only [single, star_one, mul_apply, of_apply, hja, false_and, ↓reduceIte,
-      mul_ite, mul_one, mul_zero, ite_self, Finset.sum_const_zero]
-
 /-- Conjugate transpose swaps the indices of a matrix-unit basis element. -/
 theorem stdBasis_conjTranspose_eq_swap (i j : Fin d) :
     (Matrix.stdBasis ℂ (Fin d) (Fin d) (i, j))ᴴ =
       Matrix.stdBasis ℂ (Fin d) (Fin d) (j, i) := by
   rw [Matrix.stdBasis_eq_single, Matrix.stdBasis_eq_single, Matrix.conjTranspose_single]
   simp only [star_one]
-
-private theorem stdBasis_mul_conjTranspose_self (i j : Fin d) :
-    Matrix.stdBasis ℂ (Fin d) (Fin d) (i, j) *
-        (Matrix.stdBasis ℂ (Fin d) (Fin d) (i, j))ᴴ =
-      Matrix.single i i (1 : ℂ) := by
-  simpa only [stdBasis_conjTranspose_eq_swap] using
-    (stdBasis_conjTranspose_mul_self (d := d) (i := j) (j := i))
 
 /-- Summing `E_{ij} E_{ij}^†` over the standard matrix basis yields `d • 1`. -/
 theorem sum_stdBasis_mul_conjTranspose :
@@ -143,7 +119,7 @@ theorem sum_stdBasis_mul_conjTranspose :
             refine Finset.sum_congr rfl ?_
             intro ij _
             rcases ij with ⟨i, j⟩
-            simpa only using stdBasis_mul_conjTranspose_self (d := d) i j
+            simp [Matrix.stdBasis_eq_single]
     _ = ∑ i : Fin d, ∑ j : Fin d, Matrix.single i i (1 : ℂ) := by
           simpa only [Finset.sum_const, Finset.card_univ, Fintype.card_fin,
             smul_single, nsmul_eq_mul, mul_one, Finset.univ_product_univ] using
