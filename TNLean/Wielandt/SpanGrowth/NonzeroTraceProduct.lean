@@ -153,14 +153,6 @@ private theorem trace_one_eq_zero_of_all_traces_zero
     LinearMap.zero_apply] at this
   exact this
 
-/-- `tr(1 : Matrix (Fin D) (Fin D) ℂ) = D`, and `D ≠ 0` when
-`NeZero D`. -/
-private theorem trace_one_ne_zero [NeZero D] :
-    Matrix.trace (1 : Matrix (Fin D) (Fin D) ℂ) ≠ 0 := by
-  rw [Matrix.trace_one]
-  simp only [Fintype.card_fin, ne_eq, Nat.cast_eq_zero]
-  exact NeZero.ne D
-
 /-- **Lemma 1** (arXiv:0909.5347), part (a):
 Under `IsNormal` (eventually full word span), the cumulative span
 T_n must reach ⊤ = M_D(ℂ) by step D².
@@ -193,7 +185,9 @@ theorem exists_nonzero_trace_word [NeZero D]
   push Not at hall
   have htop := cumulativeSpan_eq_top A hN
   have := trace_one_eq_zero_of_all_traces_zero A htop hall
-  exact trace_one_ne_zero this
+  rw [Matrix.trace_one] at this
+  simp only [Fintype.card_fin, Nat.cast_eq_zero] at this
+  exact NeZero.ne D this
 
 /-! ### Sharp bound: D² − dim(S₁) + 1
 
@@ -377,7 +371,9 @@ theorem exists_nonzero_trace_word_sharp [NeZero D]
   push Not at hall
   have htop := cumulativeSpan_eq_top_of_isNormal_sharp A hN
   have := trace_one_eq_zero_of_all_traces_zero A htop hall
-  exact trace_one_ne_zero this
+  rw [Matrix.trace_one] at this
+  simp only [Fintype.card_fin, Nat.cast_eq_zero] at this
+  exact NeZero.ne D this
 
 
 /-! ### Positive-length nonzero trace word
@@ -628,6 +624,8 @@ theorem exists_nonzero_trace_word_sharp_pos [NeZero D]
     exact hall w hw1 hw2
   have htr1 := LinearMap.eqOn_span hvanish h1mem
   simp only [Matrix.traceLinearMap_apply, LinearMap.zero_apply] at htr1
-  exact trace_one_ne_zero htr1
+  rw [Matrix.trace_one] at htr1
+  simp only [Fintype.card_fin, Nat.cast_eq_zero] at htr1
+  exact NeZero.ne D htr1
 
 end MPSTensor
