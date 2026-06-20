@@ -171,15 +171,13 @@ injective at block length one.  The conjugate
 `Bunits i = Ginv (Aunits i) Gmat` has the same closed-chain coefficients and the
 same block injectivity, but the conjugator is `Gunit`, not a per-edge product. -/
 
-
-/-- The physical super-index `Fin 16` read as a pair `Fin 4 × Fin 4`. -/
-def physEquiv : Fin 16 ≃ Fin 4 × Fin 4 := (finProdFinEquiv (m := 4) (n := 4)).symm
-
 /-- The matrix-unit super-tensor: the physical index `k : Fin 16` decodes to a pair
 `(a, b) : Fin 4 × Fin 4`, and `Aunits k = single a b 1`.  Its range is the set of
 all matrix units. -/
 noncomputable def Aunits : MPSTensor 16 4 :=
-  fun k => Matrix.single (physEquiv k).1 (physEquiv k).2 1
+  fun k =>
+    let p := (finProdFinEquiv (m := 4) (n := 4)).symm k
+    Matrix.single p.1 p.2 1
 
 /-- The conjugate super-tensor `Bunits i = Gunit⁻¹ (Aunits i) Gunit`. -/
 noncomputable def Bunits : MPSTensor 16 4 :=
@@ -189,7 +187,7 @@ noncomputable def Bunits : MPSTensor 16 4 :=
 index `finProdFinEquiv (a, b)`. -/
 theorem Aunits_finProd (a b : Fin 4) :
     Aunits (finProdFinEquiv (a, b)) = Matrix.single a b 1 := by
-  simp [Aunits, physEquiv]
+  simp [Aunits]
 
 /-- Every matrix unit lies in the span of the range of `Aunits`, since it is a value
 of `Aunits`. -/
