@@ -49,30 +49,9 @@ on the edges not incident to `j`. -/
 noncomputable def vertexConfigSplitAt (A : Tensor G d) (j : V) :
     VirtualConfig A ≃
       LocalVirtualConfig A j ×
-        ((f : {f : Edge G // ¬ IsIncidentEdge (G := G) j f}) → Fin (A.bondDim f.1)) where
-  toFun ζ :=
-    (fun ie : IncidentEdge G j => ζ ie.1, fun f => ζ f.1)
-  invFun x := fun f =>
-    if h : IsIncidentEdge (G := G) j f then
-      x.1 ⟨f, h⟩
-    else
-      x.2 ⟨f, h⟩
-  left_inv ζ := by
-    funext f
-    dsimp only
-    by_cases h : IsIncidentEdge (G := G) j f
-    · rw [dif_pos h]
-    · rw [dif_neg h]
-  right_inv x := by
-    apply Prod.ext
-    · funext ie
-      have h : IsIncidentEdge (G := G) j ie.1 := ie.2
-      dsimp only
-      rw [dif_pos h]
-    · funext f
-      have h : ¬ IsIncidentEdge (G := G) j f.1 := f.2
-      dsimp only
-      rw [dif_neg h]
+        ((f : {f : Edge G // ¬ IsIncidentEdge (G := G) j f}) → Fin (A.bondDim f.1)) :=
+  Equiv.piEquivPiSubtypeProd (fun f : Edge G => IsIncidentEdge (G := G) j f)
+    (fun f => Fin (A.bondDim f))
 
 omit [Fintype V] in
 @[simp] theorem vertexConfigSplitAt_fst (A : Tensor G d) (j : V) (ζ : VirtualConfig A)
@@ -85,10 +64,8 @@ omit [Fintype V] in
     (r : (f : {f : Edge G // ¬ IsIncidentEdge (G := G) j f}) → Fin (A.bondDim f.1))
     (ie : IncidentEdge G j) :
     (vertexConfigSplitAt (G := G) A j).symm (η, r) ie.1 = η ie := by
-  have h : IsIncidentEdge (G := G) j ie.1 := ie.2
-  change (if hh : IsIncidentEdge (G := G) j ie.1 then η ⟨ie.1, hh⟩ else r ⟨ie.1, hh⟩) =
-    η ie
-  rw [dif_pos h]
+  unfold vertexConfigSplitAt IsIncidentEdge
+  rw [Equiv.piEquivPiSubtypeProd_symm_apply, dif_pos ie.2]
 
 /-! ### Kernel condition -/
 
