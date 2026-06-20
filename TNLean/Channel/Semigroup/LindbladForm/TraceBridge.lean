@@ -36,12 +36,6 @@ private def traceEvalCLM (ρ : Matrix (Fin D) (Fin D) ℂ) :
   ((LinearMap.toContinuousLinearMap (Matrix.traceLinearMap (Fin D) ℂ ℂ)).restrictScalars ℝ).comp
     ((ContinuousLinearMap.apply ℂ (Matrix (Fin D) (Fin D) ℂ) ρ).restrictScalars ℝ)
 
-private lemma traceEvalCLM_apply
-    (T : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
-    (ρ : Matrix (Fin D) (Fin D) ℂ) :
-    traceEvalCLM ρ T = trace (T ρ) := by
-  rfl
-
 /-- `exp(tL) * L = L * exp(tL)` in the CLM algebra, because `L` commutes with `tL`. -/
 private lemma expSemigroupCLM_mul_comm_local
     (L_CLM : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -63,9 +57,10 @@ private lemma trace_expSemigroupCLM_eq
   set f : ℝ → ℂ := g ∘ fun s => expSemigroupCLM L_CLM s
   suffices hsuff : ∀ x y : ℝ, f x = f y by
     have h0 : f 0 = trace ρ := by
-      change (g ∘ fun s => expSemigroupCLM L_CLM s) 0 = trace ρ
-      simp [Function.comp, g, traceEvalCLM_apply, expSemigroupCLM_zero]
-    simpa [f, g, traceEvalCLM_apply] using (hsuff t 0).trans h0
+      change trace ((expSemigroupCLM L_CLM 0) ρ) = trace ρ
+      simp [expSemigroupCLM_zero]
+    change trace ((expSemigroupCLM L_CLM t) ρ) = trace ρ
+    exact (hsuff t 0).trans h0
   apply is_const_of_deriv_eq_zero
   · -- Differentiable
     intro s
@@ -88,7 +83,7 @@ private lemma trace_expSemigroupCLM_eq
       change deriv (g ∘ fun u => expSemigroupCLM L_CLM u) s =
         g (expSemigroupCLM L_CLM s * L_CLM)
       exact hd.deriv
-    rw [hderiv, traceEvalCLM_apply, expSemigroupCLM_mul_comm_local]
+    rw [hderiv, expSemigroupCLM_mul_comm_local]
     change trace (L_CLM ((expSemigroupCLM L_CLM s) ρ)) = 0
     exact hTA _
 
@@ -137,12 +132,12 @@ theorem isTraceAnnihilating_of_isTracePreservingMap_semigroup
       (f' := expSemigroupCLM L_CLM 0 * L_CLM) hg0
       (hasDerivAt_expSemigroupCLM L_CLM 0)
   simp only [expSemigroupCLM_zero, one_mul] at hd0
-  have hg_L : g L_CLM = trace (L ρ) := by rw [traceEvalCLM_apply]; rfl
+  have hg_L : g L_CLM = trace (L ρ) := by
+    rfl
   rw [hg_L] at hd0
   -- For t ≥ 0: g(exp(tL)) = trace(ρ) (constant from TP hypothesis)
   have hconst : ∀ t : ℝ, 0 ≤ t → g (expSemigroupCLM L_CLM t) = trace ρ :=
     fun t ht => by
-      rw [traceEvalCLM_apply]
       change trace ((expSemigroupCLM (endEquiv L) t) ρ) = trace ρ
       rw [← expSemigroup_toCLM L t]
       change trace ((expSemigroup L t) ρ) = trace ρ
