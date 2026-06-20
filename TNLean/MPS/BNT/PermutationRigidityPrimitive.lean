@@ -320,29 +320,25 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
     -- Cross overlap.
     have hCross_eq : ∀ N : ℕ,
         mpvOverlap (d := d) (B j1) (B j2) N =
-        (ζ1 * starRingEnd ℂ ζ2) ^ N *
-          mpvOverlap (d := d) (A (f j1)) (A (f j1)) N := by
-      intro N
-      simp only [mpvOverlap]
-      simp_rw [hmpv1 N, hmpv2 N, star_mul, star_pow]
-      simp_rw [show star ζ2 = starRingEnd ℂ ζ2 from rfl]
-      simp_rw [show ∀ (x : Cfg d N),
-        ζ1 ^ N * mpv (A (f j1)) x * (star (mpv (A (f j1)) x) * (starRingEnd ℂ ζ2) ^ N) =
-        ζ1 ^ N * (starRingEnd ℂ ζ2) ^ N * (mpv (A (f j1)) x * star (mpv (A (f j1)) x)) from
-        fun x => by ring]
-      rw [← Finset.mul_sum, mul_pow]
+        (ζ1 * star ζ2) ^ N *
+          mpvOverlap (d := d) (A (f j1)) (A (f j1)) N :=
+      mpvOverlap_cross_scale_of_mpv_eq_pow_mul
+        (A := A (f j1)) (B1 := B j1) (B2 := B j2) (ζ1 := ζ1) (ζ2 := ζ2)
+        hmpv1 hmpv2
     --
-    have hNormζ : ‖ζ1 * starRingEnd ℂ ζ2‖ = 1 := by
-      rw [norm_mul, RCLike.norm_conj, hζ1_norm, hζ2_norm, mul_one]
+    have hNormζ : ‖ζ1 * star ζ2‖ = 1 := by
+      have hζ2_star : ‖star ζ2‖ = ‖ζ2‖ := by
+        simp
+      rw [norm_mul, hζ2_star, hζ1_norm, hζ2_norm, mul_one]
     --
     have hCross_norm_one :
         Tendsto (fun N => ‖mpvOverlap (d := d) (B j1) (B j2) N‖) atTop (nhds 1) := by
       have heq : (fun N => ‖mpvOverlap (d := d) (B j1) (B j2) N‖) =
-          fun N => ‖(ζ1 * starRingEnd ℂ ζ2) ^ N‖ *
+          fun N => ‖(ζ1 * star ζ2) ^ N‖ *
             ‖mpvOverlap (d := d) (A (f j1)) (A (f j1)) N‖ := by
         ext N; rw [hCross_eq, norm_mul]
       rw [heq]
-      have : (fun N => ‖(ζ1 * starRingEnd ℂ ζ2) ^ N‖ *
+      have : (fun N => ‖(ζ1 * star ζ2) ^ N‖ *
           ‖mpvOverlap (d := d) (A (f j1)) (A (f j1)) N‖) =
           fun N => 1 * ‖mpvOverlap (d := d) (A (f j1)) (A (f j1)) N‖ := by
         ext N; rw [norm_pow, hNormζ, one_pow]
