@@ -75,21 +75,6 @@ private lemma supportProj_eq : supportProj (D := D) ρ hρ = supportU (D := D) �
     Matrix.diagonal (sgnEig (D := D) ρ hρ) * (supportU (D := D) ρ hρ)ᴴ := by
   rfl
 
-private lemma supportU_star_mul_self : (supportU (D := D) ρ hρ)ᴴ * supportU (D := D) ρ hρ = 1 := by
-  -- `Uᴴ * U = 1` for a unitary matrix.
-  classical
-  -- rewrite `ᴴ` as `star` to use the `UnitaryGroup` lemma.
-  rw [← Matrix.star_eq_conjTranspose]
-  simp [supportU]
-
-private lemma supportU_mul_star_self : supportU (D := D) ρ hρ * (supportU (D := D) ρ hρ)ᴴ = 1 := by
-  classical
-  -- The unitary group lemma is phrased with `star`.
-  have : (supportU (D := D) ρ hρ) * star (supportU (D := D) ρ hρ) = 1 := by
-    -- `U * star U = 1` for a unitary.
-    simp [supportU]
-  simpa [Matrix.star_eq_conjTranspose] using this
-
 private lemma sgnEig_star : star (sgnEig (D := D) ρ hρ) = sgnEig (D := D) ρ hρ := by
   classical
   ext i
@@ -121,8 +106,11 @@ lemma supportProj_idem :
     supportProj (D := D) ρ hρ * supportProj (D := D) ρ hρ = supportProj (D := D) ρ hρ := by
   classical
   -- Write `P = U * diag(s) * Uᴴ`.
-  have hUU : (supportU (D := D) ρ hρ)ᴴ * supportU (D := D) ρ hρ = 1 :=
-    supportU_star_mul_self (D := D) (ρ := ρ) (hρ := hρ)
+  have hUU : (supportU (D := D) ρ hρ)ᴴ * supportU (D := D) ρ hρ = 1 := by
+    rw [← Matrix.star_eq_conjTranspose]
+    change star (↑hρ.isHermitian.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ) *
+        (↑hρ.isHermitian.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ) = 1
+    exact Matrix.UnitaryGroup.star_mul_self hρ.isHermitian.eigenvectorUnitary
   rw [supportProj_eq (D := D) (ρ := ρ) (hρ := hρ)]
   -- Expand `P * P` using `Uᴴ * U = 1` and `diag(s) * diag(s) = diag(s)`.
   change supportU (D := D) ρ hρ * Matrix.diagonal (sgnEig (D := D) ρ hρ) *
