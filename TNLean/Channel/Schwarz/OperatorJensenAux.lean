@@ -239,9 +239,9 @@ lemma povmDiagonal_posDef (w : ι → ℝ) {t : ℝ}
     cases a with
     | inl ip =>
         rcases ip with ⟨i, p⟩
-        simpa [d, Complex.lt_def] using hw i
+        simpa [d] using (RCLike.pos_iff.mpr ⟨hw i, rfl⟩ : (0 : ℂ) < (w i : ℂ))
     | inr p =>
-        simpa [d, Complex.lt_def] using ht
+        simpa [d] using (RCLike.pos_iff.mpr ⟨ht, rfl⟩ : (0 : ℂ) < (t : ℂ))
   simpa [povmDiagonal, d] using hdiag
 
 /-- The inverse of the scalar block-diagonal matrix `povmDiagonal w t`, assuming
