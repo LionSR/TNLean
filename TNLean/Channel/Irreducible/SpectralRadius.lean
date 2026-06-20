@@ -47,15 +47,6 @@ variable {D : ℕ}
 
 section SimilarityCLM
 
-private noncomputable def sandwichLinearMap
-    (L R : Matrix (Fin D) (Fin D) ℂ) :
-    Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ where
-  toFun X := L * X * R
-  map_add' X Y := by
-    simp [Matrix.mul_add, Matrix.add_mul, Matrix.mul_assoc]
-  map_smul' a X := by
-    simp [Matrix.mul_assoc]
-
 private noncomputable def sandwichLinearEquiv
     (C : Matrix (Fin D) (Fin D) ℂ) (hC : C.det ≠ 0) :
     Matrix (Fin D) (Fin D) ℂ ≃ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ where
@@ -91,56 +82,6 @@ private noncomputable def sandwichLinearEquiv
     simp [Matrix.mul_add, Matrix.add_mul, Matrix.mul_assoc]
   map_smul' a X := by
     simp [Matrix.mul_assoc]
-
-private noncomputable def sandwichEquiv
-    (C : Matrix (Fin D) (Fin D) ℂ) (hC : C.det ≠ 0) :
-    Matrix (Fin D) (Fin D) ℂ ≃L[ℂ] Matrix (Fin D) (Fin D) ℂ where
-  toFun X := C * X * Cᴴ
-  invFun X := C⁻¹ * X * (Cᴴ)⁻¹
-  left_inv X := by
-    have hC_unit : IsUnit C.det := Ne.isUnit hC
-    have hCstar : Cᴴ.det ≠ 0 := by
-      rw [Matrix.det_conjTranspose]
-      exact star_ne_zero.mpr hC
-    have hCstar_unit : IsUnit (Cᴴ.det) := Ne.isUnit hCstar
-    calc
-      C⁻¹ * (C * X * Cᴴ) * (Cᴴ)⁻¹
-          = (C⁻¹ * C) * X * (Cᴴ * (Cᴴ)⁻¹) := by
-              simp [Matrix.mul_assoc]
-      _ = X := by
-            simp [Matrix.nonsing_inv_mul C hC_unit,
-              Matrix.mul_nonsing_inv Cᴴ hCstar_unit]
-  right_inv X := by
-    have hC_unit : IsUnit C.det := Ne.isUnit hC
-    have hCstar : Cᴴ.det ≠ 0 := by
-      rw [Matrix.det_conjTranspose]
-      exact star_ne_zero.mpr hC
-    have hCstar_unit : IsUnit (Cᴴ.det) := Ne.isUnit hCstar
-    calc
-      C * (C⁻¹ * X * (Cᴴ)⁻¹) * Cᴴ
-          = (C * C⁻¹) * X * ((Cᴴ)⁻¹ * Cᴴ) := by
-              simp [Matrix.mul_assoc]
-      _ = X := by
-            simp [Matrix.mul_nonsing_inv C hC_unit,
-              Matrix.nonsing_inv_mul Cᴴ hCstar_unit]
-  map_add' X Y := by
-    simp [Matrix.mul_add, Matrix.add_mul, Matrix.mul_assoc]
-  map_smul' a X := by
-    simp [Matrix.mul_assoc]
-  continuous_toFun :=
-    (LinearMap.toContinuousLinearMap (sandwichLinearMap (D := D) C Cᴴ)).continuous
-  continuous_invFun :=
-    (LinearMap.toContinuousLinearMap (sandwichLinearMap (D := D) C⁻¹ (Cᴴ)⁻¹)).continuous
-
-@[simp] private lemma sandwichEquiv_apply
-    (C : Matrix (Fin D) (Fin D) ℂ) (hC : C.det ≠ 0)
-    (X : Matrix (Fin D) (Fin D) ℂ) :
-    sandwichEquiv (D := D) C hC X = C * X * Cᴴ := rfl
-
-@[simp] private lemma sandwichEquiv_symm_apply
-    (C : Matrix (Fin D) (Fin D) ℂ) (hC : C.det ≠ 0)
-    (X : Matrix (Fin D) (Fin D) ℂ) :
-    (sandwichEquiv (D := D) C hC).symm X = C⁻¹ * X * (Cᴴ)⁻¹ := rfl
 
 private lemma spectralRadius_similarity_eq
     (C : Matrix (Fin D) (Fin D) ℂ) (hC : C.det ≠ 0)
