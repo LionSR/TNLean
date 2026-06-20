@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 
 import TNLean.MPS.Irreducible.FormII
 import TNLean.Channel.Irreducible.Basic
+import TNLean.Channel.Schwarz.KadisonSchwarz
 
 /-!
 # Irreducibility and conjugate-transposed Kraus families
@@ -13,8 +14,9 @@ This file transfers irreducibility between an MPS tensor and the CP map built
 from its conjugate-transposed Kraus family. The main theorem
 `isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor` is
 complemented by its converse
-`isIrreducibleTensor_of_isIrreducibleMap_conjTranspose` and by the unital/TP
-conversion lemmas for conjugate-transposed Kraus families.
+`isIrreducibleTensor_of_isIrreducibleMap_conjTranspose`. The unital/TP
+conversion lemmas for conjugate-transposed Kraus families live in
+`TNLean.Channel.Schwarz.KadisonSchwarz`.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -177,27 +179,3 @@ theorem exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleT
   exact ⟨hSame, hΛ_pd, hΛ_diag, hUnitalB, hΛ_fixB⟩
 
 end MPSTensor
-
-namespace KadisonSchwarz
-
-variable {d D : ℕ}
-
-/-- The conjugate-transposed operators of a TP family form a unital family.
-
-This lemma is useful when switching between the Schrödinger-picture condition
-`∑ᵢ Kᵢ† Kᵢ = I` (trace-preserving) and the Heisenberg-picture condition for the
-adjoint family `i ↦ Kᵢ†`. -/
-theorem isUnitalKraus_conjTranspose {K : Fin d → Matrix (Fin D) (Fin D) ℂ}
-    (h : IsTPKraus (d := d) (D := D) K) :
-    IsUnitalKraus (d := d) (D := D) (fun i => (K i)ᴴ) := by
-  rw [isUnitalKraus_iff, isTPKraus_iff] at *
-  simpa [Matrix.conjTranspose_conjTranspose] using h
-
-/-- The conjugate-transposed operators of a unital family form a TP family. -/
-theorem isTPKraus_conjTranspose {K : Fin d → Matrix (Fin D) (Fin D) ℂ}
-    (h : IsUnitalKraus (d := d) (D := D) K) :
-    IsTPKraus (d := d) (D := D) (fun i => (K i)ᴴ) := by
-  rw [isUnitalKraus_iff, isTPKraus_iff] at *
-  simpa [Matrix.conjTranspose_conjTranspose] using h
-
-end KadisonSchwarz
