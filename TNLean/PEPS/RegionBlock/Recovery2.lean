@@ -149,65 +149,82 @@ theorem regionOpenCoeff_update_eq (A : Tensor G d) (R : Finset V)
     rw [hηx, localVirtualConfigSplitAt_symm_apply_snd A inc _ ⟨je, hje⟩,
       localVirtualConfigSplitAt_apply_snd]
   rw [regionOpenCoeff, regionOpenCoeff]
-  refine Finset.sum_nbij'
-    (fun ζ => Function.update ζ f.1 (η inc))
-    (fun ζ => Function.update ζ f.1 (ν f)) ?_ ?_ ?_ ?_ ?_
-  · intro ζ hζ
-    simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hζ ⊢
-    obtain ⟨hbl, hvl⟩ := hζ
-    refine ⟨?_, ?_⟩
-    · funext g; rw [regionBoundaryLabel_apply]
-      by_cases hg : g = f
-      · subst hg; rw [Function.update_self, Function.update_self]
-      · have hne : g.1 ≠ f.1 := fun h => hg (Subtype.ext h)
-        rw [Function.update_of_ne hne (η inc) ζ, Function.update_of_ne hg (η inc) ν]
-        have := congrFun hbl g; rw [regionBoundaryLabel_apply] at this; exact this
-    · funext ie; rw [regionVertexLocalConfig_apply]
-      by_cases hie : ie = inc
-      · subst hie; exact Function.update_self _ _ _
-      · have hne : ie.1 ≠ f.1 := fun h => hie (Subtype.ext h)
-        rw [Function.update_of_ne hne (η inc) ζ]
-        have := congrFun hvl ie; rw [regionVertexLocalConfig_apply] at this
-        rw [this, hηxother ie hie]
-  · intro ζ hζ
-    simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hζ ⊢
-    obtain ⟨hbl, hvl⟩ := hζ
-    refine ⟨?_, ?_⟩
-    · funext g; rw [regionBoundaryLabel_apply]
-      by_cases hg : g = f
-      · subst hg; rw [Function.update_self]
-      · have hne : g.1 ≠ f.1 := fun h => hg (Subtype.ext h)
-        rw [Function.update_of_ne hne (ν f) ζ]
-        have := congrFun hbl g
-        rw [regionBoundaryLabel_apply, Function.update_of_ne hg _ ν] at this
-        exact this
-    · funext ie; rw [regionVertexLocalConfig_apply]
-      by_cases hie : ie = inc
-      · subst hie; rw [hηxinc]; exact Function.update_self _ _ _
-      · have hne : ie.1 ≠ f.1 := fun h => hie (Subtype.ext h)
-        rw [Function.update_of_ne hne (ν f) ζ]
-        have := congrFun hvl ie; rw [regionVertexLocalConfig_apply] at this
-        rw [this, hηxother ie hie]
-  · intro ζ hζ
-    simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hζ
-    obtain ⟨hbl, _⟩ := hζ
-    funext e
-    by_cases he : e = f.1
-    · subst he; rw [Function.update_self]
-      have := congrFun hbl f; rw [regionBoundaryLabel_apply] at this; exact this.symm
-    · simp only [Function.update_of_ne he]
-  · intro ζ hζ
-    simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hζ
-    obtain ⟨hbl, _⟩ := hζ
-    funext e
-    by_cases he : e = f.1
-    · subst he; rw [Function.update_self]
-      have := congrFun hbl f
-      rw [regionBoundaryLabel_apply, Function.update_self] at this; exact this.symm
-    · simp only [Function.update_of_ne he]
-  · intro ζ _
-    exact (regionRestProd_congr_off_f (G := G) A R f σ ζ (Function.update ζ f.1 (η inc))
-      (fun e he => (Function.update_of_ne he (η inc) ζ).symm))
+  let P : VirtualConfig A → Prop := fun ζ =>
+    regionBoundaryLabel (G := G) A R ζ = ν ∧
+      regionVertexLocalConfig (G := G) A R f ζ = ηx
+  let Q : VirtualConfig A → Prop := fun ζ =>
+    regionBoundaryLabel (G := G) A R ζ = Function.update ν f (η inc) ∧
+      regionVertexLocalConfig (G := G) A R f ζ = η
+  change (∑ ζ ∈ Finset.univ.filter P, regionRestProd (G := G) A R f σ ζ) =
+    ∑ ζ ∈ Finset.univ.filter Q, regionRestProd (G := G) A R f σ ζ
+  let φ : {ζ : VirtualConfig A // P ζ} ≃ {ζ : VirtualConfig A // Q ζ} := {
+    toFun ζ := ⟨Function.update ζ.1 f.1 (η inc), by
+      obtain ⟨hbl, hvl⟩ := ζ.2
+      refine ⟨?_, ?_⟩
+      · funext g; rw [regionBoundaryLabel_apply]
+        by_cases hg : g = f
+        · subst hg; rw [Function.update_self, Function.update_self]
+        · have hne : g.1 ≠ f.1 := fun h => hg (Subtype.ext h)
+          rw [Function.update_of_ne hne (η inc) ζ.1, Function.update_of_ne hg (η inc) ν]
+          have := congrFun hbl g; rw [regionBoundaryLabel_apply] at this; exact this
+      · funext ie; rw [regionVertexLocalConfig_apply]
+        by_cases hie : ie = inc
+        · subst hie; exact Function.update_self _ _ _
+        · have hne : ie.1 ≠ f.1 := fun h => hie (Subtype.ext h)
+          rw [Function.update_of_ne hne (η inc) ζ.1]
+          have := congrFun hvl ie; rw [regionVertexLocalConfig_apply] at this
+          rw [this, hηxother ie hie]⟩
+    invFun ζ := ⟨Function.update ζ.1 f.1 (ν f), by
+      obtain ⟨hbl, hvl⟩ := ζ.2
+      refine ⟨?_, ?_⟩
+      · funext g; rw [regionBoundaryLabel_apply]
+        by_cases hg : g = f
+        · subst hg; rw [Function.update_self]
+        · have hne : g.1 ≠ f.1 := fun h => hg (Subtype.ext h)
+          rw [Function.update_of_ne hne (ν f) ζ.1]
+          have := congrFun hbl g
+          rw [regionBoundaryLabel_apply, Function.update_of_ne hg _ ν] at this
+          exact this
+      · funext ie; rw [regionVertexLocalConfig_apply]
+        by_cases hie : ie = inc
+        · subst hie; rw [hηxinc]; exact Function.update_self _ _ _
+        · have hne : ie.1 ≠ f.1 := fun h => hie (Subtype.ext h)
+          rw [Function.update_of_ne hne (ν f) ζ.1]
+          have := congrFun hvl ie; rw [regionVertexLocalConfig_apply] at this
+          rw [this, hηxother ie hie]⟩
+    left_inv ζ := by
+      obtain ⟨hbl, _⟩ := ζ.2
+      apply Subtype.ext
+      funext e
+      change Function.update (Function.update ζ.1 f.1 (η inc)) f.1 (ν f) e = ζ.1 e
+      by_cases he : e = f.1
+      · subst he; rw [Function.update_self]
+        have := congrFun hbl f; rw [regionBoundaryLabel_apply] at this; exact this.symm
+      · simp only [Function.update_of_ne he]
+    right_inv ζ := by
+      obtain ⟨hbl, _⟩ := ζ.2
+      apply Subtype.ext
+      funext e
+      change Function.update (Function.update ζ.1 f.1 (ν f)) f.1 (η inc) e = ζ.1 e
+      by_cases he : e = f.1
+      · subst he; rw [Function.update_self]
+        have := congrFun hbl f
+        rw [regionBoundaryLabel_apply, Function.update_self] at this; exact this.symm
+      · simp only [Function.update_of_ne he] }
+  calc
+    (∑ ζ ∈ Finset.univ.filter P, regionRestProd (G := G) A R f σ ζ) =
+        ∑ ζ : {ζ : VirtualConfig A // P ζ}, regionRestProd (G := G) A R f σ ζ.1 := by
+      rw [Finset.sum_subtype (Finset.univ.filter P) (p := P) (fun ζ => by simp)
+        (fun ζ => regionRestProd (G := G) A R f σ ζ)]
+    _ = ∑ ζ : {ζ : VirtualConfig A // Q ζ}, regionRestProd (G := G) A R f σ ζ.1 := by
+      refine Fintype.sum_equiv φ _ _ ?_
+      intro ζ
+      exact (regionRestProd_congr_off_f (G := G) A R f σ ζ.1
+        (Function.update ζ.1 f.1 (η inc))
+        (fun e he => (Function.update_of_ne he (η inc) ζ.1).symm))
+    _ = ∑ ζ ∈ Finset.univ.filter Q, regionRestProd (G := G) A R f σ ζ := by
+      rw [Finset.sum_subtype (Finset.univ.filter Q) (p := Q) (fun ζ => by simp)
+        (fun ζ => regionRestProd (G := G) A R f σ ζ)]
 
 /-! ### The region realization sum
 
