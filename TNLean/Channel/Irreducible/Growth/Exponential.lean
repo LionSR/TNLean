@@ -153,13 +153,13 @@ private theorem posSemidef_mulVec_eq_zero_of_not_dot_pos
   have hq_nonneg : 0 ≤ star v ⬝ᵥ (M *ᵥ v) :=
     hM.dotProduct_mulVec_nonneg v
   have hq_zero : star v ⬝ᵥ (M *ᵥ v) = 0 := by
-    rcases Complex.nonneg_iff.mp hq_nonneg with ⟨hre_nonneg, him_zero⟩
+    rcases RCLike.nonneg_iff.mp hq_nonneg with ⟨hre_nonneg, him_zero⟩
     have h_re_not_pos : ¬ 0 < (star v ⬝ᵥ (M *ᵥ v)).re := by
       intro hre_pos
-      exact hnot ((Complex.pos_iff).2 ⟨hre_pos, him_zero⟩)
+      exact hnot (RCLike.pos_iff.2 ⟨hre_pos, him_zero⟩)
     have h_re_zero : (star v ⬝ᵥ (M *ᵥ v)).re = 0 :=
       le_antisymm (le_of_not_gt h_re_not_pos) hre_nonneg
-    exact Complex.ext h_re_zero him_zero.symm
+    exact Complex.ext h_re_zero him_zero
   exact (hM.dotProduct_mulVec_zero_iff v).mp hq_zero
 
 -- A vanishing PSD sum forces each summand to vanish.

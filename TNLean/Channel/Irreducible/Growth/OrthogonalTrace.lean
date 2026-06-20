@@ -145,14 +145,14 @@ theorem orthogonal_trace_pos_of_irreducible_cp
       have hterm_not_pos : ¬ 0 < Matrix.trace (B * ((E ^ t) A)) := by
         intro hpos
         exact hno ⟨t, ht_pos, ht_le, hpos⟩
-      rcases Complex.nonneg_iff.mp hterm_nonneg with ⟨hre_nonneg, him_zero⟩
+      rcases RCLike.nonneg_iff.mp hterm_nonneg with ⟨hre_nonneg, him_zero⟩
       have h_re_not_pos : ¬ 0 < (Matrix.trace (B * ((E ^ t) A))).re := by
         intro hre_pos
-        exact hterm_not_pos ((Complex.pos_iff).2 ⟨hre_pos, him_zero⟩)
+        exact hterm_not_pos (RCLike.pos_iff.2 ⟨hre_pos, him_zero⟩)
       have h_re_le : (Matrix.trace (B * ((E ^ t) A))).re ≤ 0 := le_of_not_gt h_re_not_pos
       have h_re_zero : (Matrix.trace (B * ((E ^ t) A))).re = 0 :=
         le_antisymm h_re_le hre_nonneg
-      exact Complex.ext h_re_zero him_zero.symm
+      exact Complex.ext h_re_zero him_zero
   have hsum_zero :
       ∑ k ∈ Finset.range (n + 1), n.choose k • Matrix.trace (B * ((E ^ k) A)) = 0 := by
     refine Finset.sum_eq_zero ?_
