@@ -66,11 +66,12 @@ instance (e : Edge G) : DecidableEq (incVertex (G := G) e) := by
 /-- Swap the index of the disjoint union over incident edges from
 "vertex, then incident edge" to "edge, then incident vertex". -/
 noncomputable def sigmaSwap :
-    (Σ v : V, IncidentEdge G v) ≃ (Σ e : Edge G, incVertex (G := G) e) where
-  toFun p := ⟨p.2.1, ⟨p.1, p.2.2⟩⟩
-  invFun q := ⟨q.2.1, ⟨q.1, q.2.2⟩⟩
-  left_inv _ := rfl
-  right_inv _ := rfl
+    (Σ v : V, IncidentEdge G v) ≃ (Σ e : Edge G, incVertex (G := G) e) :=
+  ((Equiv.subtypeProdEquivSigmaSubtype
+      (fun (v : V) (e : Edge G) => e.1.1 = v ∨ e.1.2 = v)).symm.trans
+    ((Equiv.prodComm V (Edge G)).subtypeEquiv fun _ => Iff.rfl)).trans
+      (Equiv.subtypeProdEquivSigmaSubtype
+        (fun (e : Edge G) (v : V) => e.1.1 = v ∨ e.1.2 = v))
 
 omit [DecidableRel G.Adj] in
 /-- The product of the two oriented endpoint contributions of a single edge is
