@@ -341,16 +341,7 @@ theorem sum_evalWord_mul_conjTranspose_evalWord
   have hLeft : ∑ i : Fin d, (Aadj i)ᴴ * Aadj i = 1 := by
     simpa [Aadj] using hRight
   let revEquiv : (Fin L → Fin d) ≃ (Fin L → Fin d) :=
-    { toFun := fun ρ => ρ ∘ Fin.rev
-      invFun := fun ρ => ρ ∘ Fin.rev
-      left_inv := by
-        intro ρ
-        ext i
-        simp [Function.comp_def]
-      right_inv := by
-        intro ρ
-        ext i
-        simp [Function.comp_def] }
+    Equiv.arrowCongr Fin.revPerm (Equiv.refl (Fin d))
   calc
     ∑ ρ : Fin L → Fin d,
         evalWord A (List.ofFn ρ) * (evalWord A (List.ofFn ρ))ᴴ
@@ -361,7 +352,8 @@ theorem sum_evalWord_mul_conjTranspose_evalWord
             intro ρ _
             have hword :
                 List.ofFn (revEquiv ρ) = (List.ofFn ρ).reverse := by
-              simpa [revEquiv] using list_ofFn_comp_fin_rev (σ := ρ)
+              simpa [revEquiv, Equiv.arrowCongr, Function.comp_def] using
+                list_ofFn_comp_fin_rev (σ := ρ)
             have hAdjEval :
                 (evalWord Aadj (List.ofFn (revEquiv ρ)))ᴴ =
                   evalWord A (List.ofFn ρ) := by
