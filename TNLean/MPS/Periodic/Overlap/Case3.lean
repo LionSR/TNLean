@@ -75,13 +75,10 @@ private lemma overlap_norm_tendsto_one_of_gaugePhase_cast
   obtain ⟨X, ζ, _hζ, hX⟩ := hMatch
   have hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d), mpv CB σ = ζ ^ N * mpv CA σ :=
     mpv_eq_pow_mul_of_gaugePhase CA CB X ζ hX
-  have hSelfScale : ∀ N : ℕ,
-      mpvOverlap (d := d) CB CB N =
-        (ζ * starRingEnd ℂ ζ) ^ N * mpvOverlap (d := d) CA CA N :=
-    mpvOverlap_self_scale_of_mpv_eq_pow_mul (A := CA) (B := CB) (ζ := ζ) hmpv
   have hζnorm : ‖ζ‖ = 1 :=
     norm_eq_one_of_selfOverlap_scale (A := CA) (B := CB) (ζ := ζ)
-      (by simpa using hCA_self.norm) (by simpa using hCB_self.norm) hSelfScale
+      (by simpa using hCA_self.norm) (by simpa using hCB_self.norm)
+      (mpvOverlap_self_scale_of_mpv_eq_pow_mul (A := CA) (B := CB) (ζ := ζ) hmpv)
   have hCrossNormEq : ∀ N,
       ‖mpvOverlap (d := d) CA CB N‖ = ‖mpvOverlap (d := d) CA CA N‖ := by
     intro N
