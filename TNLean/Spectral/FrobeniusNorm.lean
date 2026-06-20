@@ -94,9 +94,9 @@ lemma norm_matToES_sq (M : Matrix (Fin m) (Fin n) ℂ) :
     ∑ i, ∑ j, star (M i j) * M i j from Fintype.sum_prod_type _]
   simp only [Complex.re_sum, RCLike.re_to_complex]
   congr 1; ext i; congr 1; ext j
-  rw [mul_comm, show M i j * star (M i j) = (↑(‖M i j‖ ^ 2) : ℂ) from by
-    rw [show star (M i j) = starRingEnd ℂ (M i j) from rfl, Complex.mul_conj',
-      ← Complex.ofReal_pow]]
+  rw [show star (M i j) * M i j = (↑(‖M i j‖ ^ 2) : ℂ) from by
+    simpa [Complex.normSq_eq_norm_sq] using
+      (Complex.normSq_eq_conj_mul_self (z := M i j)).symm]
   exact Complex.ofReal_re _
 
 /-- The Euclidean-space norm of a flattened matrix is the Frobenius norm. -/
