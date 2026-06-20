@@ -190,13 +190,10 @@ theorem regionInsertedCoeff_identity_eq_doubleSum (A : Tensor G d) (R : Finset V
     refine Finset.sum_congr rfl (fun μ _ => ?_)
     rw [Finset.sum_mul_sum]
     refine Finset.sum_congr rfl (fun ζ _ => ?_)
-    refine Finset.sum_nbij' id id ?_ ?_ (fun _ _ => rfl) (fun _ _ => rfl) (fun ξ hξ => rfl)
-    · intro ξ hξ
-      simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hξ ⊢
-      exact (regionBoundaryLabel_compl_eq_iff (G := G) A R μ ξ).mp hξ
-    · intro ξ hξ
-      simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hξ ⊢
-      exact (regionBoundaryLabel_compl_eq_iff (G := G) A R μ ξ).mpr hξ
+    refine Finset.sum_congr ?_ (fun ξ _ => rfl)
+    ext ξ
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+    exact regionBoundaryLabel_compl_eq_iff (G := G) A R μ ξ
 
 /-! ### Multiplicity collapse to the closed state coefficient
 
