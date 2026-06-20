@@ -76,8 +76,9 @@ theorem isUnit_peripheral_eigenvector
         = (KadisonSchwarz.krausMap (d := d) (D := D) K X)ᴴ
             * KadisonSchwarz.krausMap (d := d) (D := D) K X := by
     simpa [Kraus.map, KadisonSchwarz.krausMap] using hKS_map
-  have hμ_star_mul : star μ * μ = 1 := by
-    rw [← starRingEnd_apply, Complex.conj_mul', hμ]; simp
+  have hμ_starRingEnd_mul : ((starRingEnd ℂ) μ) * μ = 1 := by
+    simpa [Complex.normSq_eq_norm_sq, hμ] using
+      (Complex.normSq_eq_conj_mul_self (z := μ)).symm
   have hfix_kraus : KadisonSchwarz.krausMap (d := d) (D := D) K (Xᴴ * X) = Xᴴ * X := by
     calc
       KadisonSchwarz.krausMap (d := d) (D := D) K (Xᴴ * X)
@@ -87,8 +88,6 @@ theorem isUnit_peripheral_eigenvector
       _ = (star μ * μ) • (Xᴴ * X) := by
             simp [conjTranspose_smul, smul_smul, mul_comm]
       _ = Xᴴ * X := by
-            have hμ_starRingEnd_mul : ((starRingEnd ℂ) μ) * μ = 1 := by
-              simpa [Complex.star_def] using hμ_star_mul
             simp [hμ_starRingEnd_mul]
   have hfix_transfer : MPSTensor.transferMap (d := d) (D := D) K (Xᴴ * X) = Xᴴ * X := by
     simpa [MPSTensor.transferMap_apply, KadisonSchwarz.krausMap] using hfix_kraus
