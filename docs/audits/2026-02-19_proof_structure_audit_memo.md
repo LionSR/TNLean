@@ -208,7 +208,7 @@ mixedTransferMap₂_pow_apply :
 
 **Sorry**: None.
 
-**Key proof technique**: Induction on N; `sum_fin_succ_eq` for head+tail reindexing of
+**Key proof technique**: Induction on N; `Fin.consEquiv` for head+tail reindexing of
 word-length-N+1 paths; relies on `Mathlib.Data.Matrix.Bilinear` for rectangular matrix
 multiplication linear maps (`mulLeftLinearMap`, `mulRightLinearMap`).
 

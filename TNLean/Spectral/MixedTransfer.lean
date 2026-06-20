@@ -101,15 +101,6 @@ over all words of length `N` of products of word evaluations.
 
 section IteratedTransfer
 
-/-- Reindex a sum over `Fin (n+1) → Fin d` as a double sum via `Fin.cons`. -/
-lemma sum_fin_succ_eq {n d : ℕ} {M : Type*} [AddCommMonoid M]
-    (f : (Fin (n + 1) → Fin d) → M) :
-    ∑ σ : Fin (n + 1) → Fin d, f σ =
-    ∑ i : Fin d, ∑ τ : Fin n → Fin d, f (Fin.cons i τ) := by
-  rw [← Fintype.sum_prod_type']
-  exact Fintype.sum_equiv (Fin.consEquiv (fun _ => Fin d)).symm _ _
-    (fun σ => by simp [Fin.consEquiv, Fin.cons_self_tail])
-
 /-- Iterating the mixed transfer operator `N` times gives:
 $$F_{AB}^N(X) = \sum_{\sigma : \mathrm{Fin}\,N \to \mathrm{Fin}\,d}
   \mathrm{evalWord}(A, \sigma) \cdot X \cdot \mathrm{evalWord}(B, \sigma)^\dagger$$ -/
@@ -125,7 +116,9 @@ theorem mixedTransferMap_pow_apply (A B : MPSTensor d D) (N : ℕ) :
     rw [pow_succ']
     change mixedTransferMap A B (((mixedTransferMap A B) ^ n) X) = _
     rw [ih]; simp only [mixedTransferMap_apply, map_sum]
-    rw [Finset.sum_comm, sum_fin_succ_eq]
+    rw [Finset.sum_comm]
+    rw [← (Fin.consEquiv (fun _ : Fin (n + 1) => Fin d)).sum_comp]
+    rw [Fintype.sum_prod_type]
     congr 1; funext i
     apply Finset.sum_congr rfl; intro τ _
     simp [Matrix.conjTranspose_mul, Matrix.mul_assoc]
@@ -197,7 +190,9 @@ theorem mixedTransferMap₂_pow_apply {d D₁ D₂ : ℕ}
       -- Push `mixedTransferMap₂` through the σ-sum, then expand the definition.
       simp only [map_sum, mixedTransferMap₂_apply]
       -- Reindex words of length `n+1` by head+tail.
-      rw [Finset.sum_comm, sum_fin_succ_eq]
+      rw [Finset.sum_comm]
+      rw [← (Fin.consEquiv (fun _ : Fin (n + 1) => Fin d)).sum_comp]
+      rw [Fintype.sum_prod_type]
       -- Now it suffices to show the summand matches the recursive word evaluation.
       congr 1
       funext i
