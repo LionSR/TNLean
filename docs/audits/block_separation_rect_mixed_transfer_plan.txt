@@ -163,7 +163,7 @@ New theorem (analogue of `mixedTransferMap_pow_apply`):
             evalWord A (List.ofFn σ) * X * (evalWord B (List.ofFn σ))ᴴ.
 
 Proof skeleton: identical induction to the square proof; only requires matrix associativity and the
-reindexing lemma `sum_fin_succ_eq` (already in `Spectral/MixedTransfer.lean`, can be copied/reused).
+native `Fin.consEquiv` reindexing of word functions by their head and tail.
 
 ----------------------------------------
 D3. Operator-trace identity = mpvOverlap (rectangular)

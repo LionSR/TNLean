@@ -108,13 +108,23 @@ lemma word_conjTranspose_mul_sum (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
   induction n with
   | zero => simp [Finset.univ_unique]
   | succ n ih =>
-    rw [sum_fin_succ_eq]
-    simp_rw [List.ofFn_cons, evalWord, Matrix.conjTranspose_mul,
-      show ∀ A B C D : Matrix (Fin D) (Fin D) ℂ,
-        A * B * (C * D) = A * (B * C) * D from fun _ _ _ _ => by simp [Matrix.mul_assoc]]
+    rw [← (Fin.consEquiv (fun _ : Fin (n + 1) => Fin d)).sum_comp]
+    rw [Fintype.sum_prod_type]
     rw [Finset.sum_comm]
-    simp_rw [← Matrix.sum_mul, ← Matrix.mul_sum, hK, Matrix.mul_one]
-    exact ih
+    exact (Finset.sum_congr rfl (fun τ _ => by
+      have hsum :
+          (∑ a : Fin d, (K a)ᴴ * (K a * evalWord K (List.ofFn τ))) =
+            evalWord K (List.ofFn τ) := by
+        calc
+          (∑ a : Fin d, (K a)ᴴ * (K a * evalWord K (List.ofFn τ)))
+              = (∑ a : Fin d, (K a)ᴴ * K a) * evalWord K (List.ofFn τ) := by
+                simp_rw [← Matrix.mul_assoc]
+                rw [← Matrix.sum_mul]
+          _ = evalWord K (List.ofFn τ) := by
+                rw [hK, Matrix.one_mul]
+      simpa [Fin.consEquiv_apply, List.ofFn_cons, evalWord_cons,
+        Matrix.conjTranspose_mul, Matrix.mul_assoc, ← Matrix.mul_sum] using
+        congrArg (fun M => (evalWord K (List.ofFn τ))ᴴ * M) hsum)).trans ih
 
 /-- The standard transfer map preserves trace (for TP tensors). -/
 lemma trace_transferMap (A : MPSTensor d D) (Z : Matrix (Fin D) (Fin D) ℂ)
