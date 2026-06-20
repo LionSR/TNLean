@@ -71,16 +71,6 @@ theorem mulLeft_mem_rectSpan_nilpIndex_succ
         simpa [M₀] using congrArg (fun Z => Z * M) hcomm.symm
     _ = M₀ * ((A i₀ ^ r) * M) := by simp [Matrix.mul_assoc]
 
-/-- Every element of `rectSpan ((A i₀)^r) A n` lies in `range(mulLeft ((A i₀)^r))`. -/
-private theorem mem_range_mulLeft_nilpIndex
-    (A : MPSTensor d D) (i₀ : Fin d) {n : ℕ}
-    {X : Matrix (Fin D) (Fin D) ℂ}
-    (hX : X ∈ rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n) :
-    X ∈ LinearMap.range (LinearMap.mulLeft ℂ
-      ((A i₀) ^ nilpIndex (toLin' (A i₀)))) := by
-  obtain ⟨M, _, rfl⟩ := Submodule.mem_map.mp hX
-  exact ⟨M, by simp [LinearMap.mulLeft_apply]⟩
-
 /-- Matrix-level injectivity for the nilpIndex power: if `X ∈ range(mulLeft ((A i₀)^r))`
 and `(A i₀) * X = 0`, then `X = 0`.
 
@@ -160,11 +150,16 @@ private theorem rectSpan_nilpIndex_leftStep_injective
   have hmat : (A i₀) * x.1 = (A i₀) * y.1 := congrArg Subtype.val hxy
   have hz : (A i₀) * (x.1 - y.1) = 0 := by
     simpa [Matrix.mul_sub, sub_eq_zero] using hmat
+  have hrect_le_range : rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n ≤
+      LinearMap.range (LinearMap.mulLeft ℂ
+        ((A i₀) ^ nilpIndex (toLin' (A i₀)))) := by
+    rw [rectSpan]
+    exact LinearMap.map_le_range
   have hzRange : (x.1 - y.1) ∈ LinearMap.range (LinearMap.mulLeft ℂ
       ((A i₀) ^ nilpIndex (toLin' (A i₀)))) :=
     Submodule.sub_mem _
-      (mem_range_mulLeft_nilpIndex A i₀ x.2)
-      (mem_range_mulLeft_nilpIndex A i₀ y.2)
+      (hrect_le_range x.2)
+      (hrect_le_range y.2)
   have hzero : x.1 - y.1 = 0 :=
     matrix_eq_zero_of_mul_nilpIndex A i₀ hzRange hz
   exact Subtype.ext (by simpa [sub_eq_zero] using hzero)
