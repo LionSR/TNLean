@@ -205,22 +205,6 @@ theorem ker_pow_nilpIndex_eq_ker_pow_finrank
   rw [← maxGenEigenspace_zero_eq_ker_pow_nilpIndex f,
       End.maxGenEigenspace_eq_genEigenspace_finrank f 0, End.genEigenspace_zero_nat]
 
-/-- Kernel monotonicity: if `n ≤ m`, then `ker(f^n) ≤ ker(f^m)`. -/
-private theorem ker_pow_mono
-    {K : Type*} {V : Type*}
-    [CommRing K] [AddCommGroup V] [Module K V]
-    (f : End K V) {n m : ℕ} (h : n ≤ m) :
-    LinearMap.ker (f ^ n) ≤ LinearMap.ker (f ^ m) := by
-  intro v hv
-  rw [LinearMap.mem_ker] at hv ⊢
-  obtain ⟨d, rfl⟩ := Nat.exists_eq_add_of_le h
-  -- f^(n+d) v = (f^n * f^d) v = f^n (f^d v)... wrong direction
-  -- We need: f^(n+d) v = f^d (f^n v) = f^d 0 = 0
-  -- Use: n+d = d+n, then f^(d+n) = f^d * f^n, so f^(d+n) v = f^d (f^n v)
-  rw [show n + d = d + n from by omega, pow_add]
-  change (f ^ d) ((f ^ n) v) = 0
-  rw [hv, map_zero]
-
 /-- Kernel stabilization at nilpIndex: `ker(f^k) = ker(f^(nilpIndex f))` for `k ≥ nilpIndex f`. -/
 theorem ker_pow_eq_of_nilpIndex_le
     {K : Type*} {V : Type*}
@@ -234,7 +218,9 @@ theorem ker_pow_eq_of_nilpIndex_le
     rw [End.mem_maxGenEigenspace]
     exact ⟨k, by simp only [zero_smul, sub_zero]; exact LinearMap.mem_ker.mp hv⟩
   · -- ker(f^(nilpIndex f)) ≤ ker(f^k): kernel monotonicity
-    exact ker_pow_mono f hk
+    obtain ⟨d, rfl⟩ := Nat.exists_eq_add_of_le hk
+    rw [show nilpIndex f + d = d + nilpIndex f from by omega, pow_add]
+    exact LinearMap.ker_le_ker_comp (f ^ nilpIndex f) (f ^ d)
 
 /-- Range anti-monotonicity: if `n ≤ m`, then `range(f^m) ≤ range(f^n)`. -/
 theorem range_pow_antitone
@@ -342,7 +328,8 @@ theorem nilpIndex_le_finrank_maxGenEigenspace_zero
   -- Step 3: ker(f^s) = ker(f^(s+1))
   have hstab : LinearMap.ker (f ^ s) = LinearMap.ker (f ^ s.succ) := by
     apply le_antisymm
-    · exact ker_pow_mono f (Nat.le_succ s)
+    · rw [show s.succ = 1 + s from by omega, pow_add]
+      exact LinearMap.ker_le_ker_comp (f ^ s) (f ^ 1)
     · calc LinearMap.ker (f ^ s.succ)
           ≤ f.maxGenEigenspace 0 := by
             rw [End.maxGenEigenspace_eq_genEigenspace_finrank f 0, End.genEigenspace_zero_nat]
