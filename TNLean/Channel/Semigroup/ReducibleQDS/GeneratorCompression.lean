@@ -148,7 +148,7 @@ theorem generatorPreservesCompression_of_semigroupPreservesCompression
     rfl
   -- Build a CLM from compress
   let compressCLM : Mat →L[ℝ] Mat :=
-    ⟨compress, LinearMap.continuous_of_finiteDimensional compress⟩
+    LinearMap.toContinuousLinearMap compress
   -- compressCLM applied to anything gives P * · * P
   have hclm_eq : ∀ M : Mat, compressCLM M = P * M * P := hcompress_apply
   -- g(t) := P * f(t) * P has derivative P * L(Y) * P at t = 0
@@ -306,7 +306,7 @@ theorem semigroup_preserves_compression_of_generator
   have hcompress : ∀ M : Mat, compress M = P * M * P := fun M => by
     simp [compress, LinearMap.mulLeft, LinearMap.mulRight, Matrix.mul_assoc]
   let compressCLM : Mat →L[ℂ] Mat :=
-    ⟨compress, LinearMap.continuous_of_finiteDimensional compress⟩
+    LinearMap.toContinuousLinearMap compress
   have hcompress_clm : ∀ M : Mat, compressCLM M = P * M * P := hcompress
   letI : CompleteSpace (Mat →L[ℂ] Mat) :=
     FiniteDimensional.complete ℂ (Mat →L[ℂ] Mat)
