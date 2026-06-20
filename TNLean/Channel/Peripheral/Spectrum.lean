@@ -79,10 +79,6 @@ theorem one_mem_peripheralEigenvalues
     (1 : ℂ) ∈ peripheralEigenvalues E :=
   ⟨hasEigenvalue_of_eigenvector_eq E 1 ρ (by simp [hfix]) hne, by simp⟩
 
-/-- Powers of a unit-norm complex number have norm 1. -/
-theorem norm_pow_eq_one_of_norm_eq_one {μ : ℂ} (hμ : ‖μ‖ = 1) (n : ℕ) :
-    ‖μ ^ n‖ = 1 := by rw [norm_pow, hμ, one_pow]
-
 /-- In finite dimensions, the peripheral eigenvalue set is finite. -/
 theorem peripheralEigenvalues_finite
     {V : Type*} [AddCommGroup V] [Module ℂ V]

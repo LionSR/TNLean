@@ -615,7 +615,8 @@ theorem isPeripherallyPrimitive_of_isPrimitivePaper [NeZero D]
         ((Module.End.hasEigenvector_iff.mpr
           ⟨Module.End.mem_eigenspace_iff.mpr hEigP, hX_ne⟩))
     -- ‖μ^p‖ = 1
-    have hμp_norm : ‖μ ^ p‖ = 1 := norm_pow_eq_one_of_norm_eq_one hμ_norm p
+    have hμp_norm : ‖μ ^ p‖ = 1 := by
+      simp [norm_pow, hμ_norm]
     -- By IsPrimitive (E^p): μ^p = 1
     have hμp_eq : μ ^ p = 1 := hPrimP.unique_peripheral (μ ^ p) hμp_eig hμp_norm
     -- If μ ≠ 1, get contradiction via Part 13

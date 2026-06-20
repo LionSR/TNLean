@@ -174,7 +174,8 @@ theorem peripheralEigenvalues_pow_mem_of_irreducible_unital_of_adjoint_fixedPoin
     refine Module.End.hasEigenvalue_of_hasEigenvector (x := X ^ n) ?_
     refine (Module.End.hasEigenvector_iff.mpr ?_)
     exact ⟨(Module.End.mem_eigenspace_iff).2 hpow_transfer, hXpow_ne⟩
-  refine ⟨hEigPow_transfer, norm_pow_eq_one_of_norm_eq_one hμ_norm n⟩
+  refine ⟨hEigPow_transfer, ?_⟩
+  simp [norm_pow, hμ_norm]
 
 /-- For irreducible unital Kraus maps with a positive definite adjoint fixed point,
 all peripheral eigenvalues are roots of unity.
