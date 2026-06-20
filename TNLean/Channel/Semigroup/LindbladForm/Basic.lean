@@ -88,22 +88,6 @@ def LindbladForm.toLinearMap (F : LindbladForm D) :
     congr 1
     congr 1 <;> ring_nf
 
-/-- Each dissipator term has trace zero. -/
-private lemma trace_dissipator_eq_zero (Lop : Matrix (Fin D) (Fin D) ℂ)
-    (ρ : Matrix (Fin D) (Fin D) ℂ) :
-    trace (dissipator Lop ρ) = 0 := by
-  simp only [dissipator]
-  rw [trace_sub, trace_sub, trace_smul, trace_smul]
-  -- tr(L ρ L†) = tr(L† L ρ) by cyclic property
-  have h1 : trace (Lop * ρ * Lopᴴ) = trace (Lopᴴ * Lop * ρ) := by
-    rw [Matrix.trace_mul_cycle, Matrix.mul_assoc]
-  -- tr(L† L ρ) = tr(ρ L† L) by cyclic property
-  have h2 : trace (Lopᴴ * Lop * ρ) = trace (ρ * (Lopᴴ * Lop)) := by
-    rw [Matrix.trace_mul_comm]
-  rw [h1, h2]
-  simp only [one_div, smul_eq_mul]
-  ring
-
 /-- The Lindblad form is trace-annihilating (Wolf Equation 7.21 preserves trace). -/
 theorem LindbladForm.isTraceAnnihilating (F : LindbladForm D) :
     IsTraceAnnihilating F.toLinearMap := by
@@ -117,7 +101,16 @@ theorem LindbladForm.isTraceAnnihilating (F : LindbladForm D) :
   rw [hH, zero_add]
   -- Dissipative part
   rw [Matrix.trace_sum]
-  exact Finset.sum_eq_zero (fun j _ => trace_dissipator_eq_zero (F.L j) ρ)
+  exact Finset.sum_eq_zero fun j _ => by
+    simp only [dissipator]
+    rw [trace_sub, trace_sub, trace_smul, trace_smul]
+    have h1 : trace (F.L j * ρ * (F.L j)ᴴ) = trace ((F.L j)ᴴ * F.L j * ρ) := by
+      rw [Matrix.trace_mul_cycle, Matrix.mul_assoc]
+    have h2 : trace ((F.L j)ᴴ * F.L j * ρ) = trace (ρ * ((F.L j)ᴴ * F.L j)) := by
+      rw [Matrix.trace_mul_comm]
+    rw [h1, h2]
+    simp only [one_div, smul_eq_mul]
+    ring
 
 /-! ## Lindblad form ↔ generator decomposition (Wolf Equation 7.20–7.21) -/
 
