@@ -1906,16 +1906,16 @@ Mathlib theorem rather than reintroducing the wrapper.
 
 ## Transfer-matrix coordinate expansion cleanup, 2026-06-19
 
-`TNLean/Channel/TransferMatrix.lean` had a private lemma
-`sum_smul_single_eq` stating that a matrix is the finite sum of its entries
-times the corresponding matrix units.  Mathlib 4.31 already provides this
+`TNLean/Channel/TransferMatrix.lean` had a private coordinate-expansion lemma
+stating that a matrix is the finite sum of its entries times the corresponding
+matrix units.  Mathlib 4.31 already provides this
 statement as `Matrix.matrix_eq_sum_single`; the only local difference was the
 choice to write the summands as `ρ k l • Matrix.single k l 1`.
 
-The private helper remains as the shared expansion used by the transfer-matrix
-proof sites, but its proof now cites `Matrix.matrix_eq_sum_single` directly and
-simplifies by `Matrix.smul_single`, `smul_eq_mul`, and `mul_one` to recover the
-local notation.  The transfer-matrix statements are unchanged.
+The private helper has now been removed.  The transfer-matrix proof sites use
+`Matrix.matrix_eq_sum_single` directly, simplifying by `Matrix.smul_single`,
+`smul_eq_mul`, and `mul_one` at the local expansion points to recover the
+scalar-multiple notation.  The transfer-matrix statements are unchanged.
 
 ## PSD kernel-zero wrapper cleanup, 2026-06-19
 
