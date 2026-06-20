@@ -13,8 +13,6 @@ used for square complex matrices and their continuous linear endomorphisms.
 ## Main declarations
 
 * `TNLean.MatrixCLM` — continuous complex endomorphisms of square matrices
-* `TNLean.matrixEndEquiv` — the finite-dimensional equivalence between linear
-  and continuous matrix endomorphisms
 * `TNOperatorSpace` — scoped operator-norm, real-scalar, and
   finite-dimensional structure shared across the semigroup and channel files
 -/
@@ -29,11 +27,6 @@ noncomputable section
 /-- Complex continuous endomorphisms of square matrices. -/
 abbrev MatrixCLM (n : Type*) [Fintype n] [DecidableEq n] :=
   Matrix n n ℂ →L[ℂ] Matrix n n ℂ
-
-/-- The finite-dimensional equivalence between linear and continuous matrix endomorphisms. -/
-abbrev matrixEndEquiv (n : Type*) [Fintype n] [DecidableEq n] :
-    (Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) ≃ₐ[ℂ] MatrixCLM n :=
-  Module.End.toContinuousLinearMap (Matrix n n ℂ)
 
 end
 end TNLean
@@ -207,7 +200,7 @@ instance (n : Type*) [Fintype n] [DecidableEq n] :
 
 instance (n : Type*) [Fintype n] [DecidableEq n] :
     FiniteDimensional ℂ (TNLean.MatrixCLM n) :=
-  (TNLean.matrixEndEquiv n).toLinearEquiv.finiteDimensional
+  (Module.End.toContinuousLinearMap (Matrix n n ℂ)).toLinearEquiv.finiteDimensional
 
 instance (n : Type*) [Fintype n] [DecidableEq n] :
     CompleteSpace (TNLean.MatrixCLM n) :=
