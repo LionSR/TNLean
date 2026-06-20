@@ -235,7 +235,7 @@ theorem leftTraceWordMap_injective_of_isNBlkInjective {A : MPSTensor d D}
     · intro t
       simpa [leftTraceWordMap_apply, Matrix.traceLinearMap_apply] using
         congrArg (fun f => f t) hZ
-  exact (Matrix.trace_mul_right_eq_zero_iff (n := Fin D) Z).1 fun N => by
+  exact (Matrix.ext_iff_trace_mul_right (A := Z) (B := 0)).2 fun N => by
     simpa [Matrix.traceLinearMap_apply] using congrArg (fun f => f N) hφ
 
 /-- Under block injectivity, the trace-test image has the full boundary-matrix

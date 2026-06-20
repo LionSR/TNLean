@@ -149,9 +149,10 @@ theorem isCID_implies_isRFP
   suffices h_diff : transferMap A (transferMap A (X * (u : Matrix (Fin D) (Fin D) ℂ))) -
       transferMap A (X * (u : Matrix (Fin D) (Fin D) ℂ)) = 0 from
     eq_of_sub_eq_zero h_diff
-  apply (Matrix.trace_mul_right_eq_zero_iff (n := Fin D)
-    (transferMap A (transferMap A (X * (u : Matrix (Fin D) (Fin D) ℂ))) -
-      transferMap A (X * (u : Matrix (Fin D) (Fin D) ℂ)))).1
+  apply (Matrix.ext_iff_trace_mul_right
+    (A := transferMap A (transferMap A (X * (u : Matrix (Fin D) (Fin D) ℂ))) -
+      transferMap A (X * (u : Matrix (Fin D) (Fin D) ℂ)))
+    (B := 0)).2
   intro N
   -- From IsCID with n=2, m=1: correlator equality gives trace equality
   have h := hCID ↑u hρ_pd hρ_fix X N 2 1 (by omega) (by omega)
@@ -162,7 +163,11 @@ theorem isCID_implies_isRFP
   -- Goal: tr((E(E(X*ρR)) - E(X*ρR)) * N) = 0
   rw [sub_mul, Matrix.trace_sub,
     Matrix.trace_mul_comm _ N, Matrix.trace_mul_comm _ N]
-  exact sub_eq_zero.mpr heq
+  calc
+    Matrix.trace (N * transferMap A (transferMap A (X * (u : Matrix (Fin D) (Fin D) ℂ)))) -
+        Matrix.trace (N * transferMap A (X * (u : Matrix (Fin D) (Fin D) ℂ))) = 0 :=
+      sub_eq_zero.mpr heq
+    _ = Matrix.trace (0 * N) := by simp
 
 /-- Single-block ZCL is equivalent to transfer-map idempotence (i.e. `IsRFP`).
 

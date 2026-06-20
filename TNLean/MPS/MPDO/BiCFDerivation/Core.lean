@@ -437,11 +437,11 @@ theorem pairTraceSeparatingAt_of_pairWordTupleSpanTop {D₁ D₂ : ℕ}
         exact hΔ w)
       M hM
   constructor
-  · apply (Matrix.trace_mul_right_eq_zero_iff (n := Fin D₁) ΔA).1
+  · apply (Matrix.ext_iff_trace_mul_right (A := ΔA) (B := 0)).2
     intro M
     have hpair := hZeroOnSpan (M, 0) (by rw [hSpan]; exact Submodule.mem_top)
     simpa using hpair
-  · apply (Matrix.trace_mul_right_eq_zero_iff (n := Fin D₂) ΔB).1
+  · apply (Matrix.ext_iff_trace_mul_right (A := ΔB) (B := 0)).2
     intro N
     have hpair := hZeroOnSpan (0, N) (by rw [hSpan]; exact Submodule.mem_top)
     simpa using hpair
@@ -501,11 +501,11 @@ theorem pairTraceSeparatingUpTo_of_pairCumulativeWordTupleSpanTop {D₁ D₂ : �
         exact hΔ w hw)
       M (by simpa [pairCumulativeSpan] using hM)
   constructor
-  · apply (Matrix.trace_mul_right_eq_zero_iff (n := Fin D₁) ΔA).1
+  · apply (Matrix.ext_iff_trace_mul_right (A := ΔA) (B := 0)).2
     intro M
     have hpair := hZeroOnSpan (M, 0) (by rw [hSpan]; exact Submodule.mem_top)
     simpa using hpair
-  · apply (Matrix.trace_mul_right_eq_zero_iff (n := Fin D₂) ΔB).1
+  · apply (Matrix.ext_iff_trace_mul_right (A := ΔB) (B := 0)).2
     intro N
     have hpair := hZeroOnSpan (0, N) (by rw [hSpan]; exact Submodule.mem_top)
     simpa using hpair
@@ -593,11 +593,11 @@ theorem pairTraceSeparatingAll_of_pairAllWordsSpanTop {D₁ D₂ : ℕ}
         exact hΔ w)
       M (by simpa [pairAllWordsSpan] using hM)
   constructor
-  · apply (Matrix.trace_mul_right_eq_zero_iff (n := Fin D₁) ΔA).1
+  · apply (Matrix.ext_iff_trace_mul_right (A := ΔA) (B := 0)).2
     intro M
     have hpair := hZeroOnSpan (M, 0) (by rw [hSpan]; exact Submodule.mem_top)
     simpa using hpair
-  · apply (Matrix.trace_mul_right_eq_zero_iff (n := Fin D₂) ΔB).1
+  · apply (Matrix.ext_iff_trace_mul_right (A := ΔB) (B := 0)).2
     intro N
     have hpair := hZeroOnSpan (0, N) (by rw [hSpan]; exact Submodule.mem_top)
     simpa using hpair
