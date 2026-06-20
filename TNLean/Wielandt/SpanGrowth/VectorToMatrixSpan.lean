@@ -102,17 +102,6 @@ theorem wordSpan_mul_le (A : MPSTensor d D) (m n : ℕ) :
   -- Rewrite the product using `evalWord_append`.
   simpa [wordSpan, evalWord_append] using hmem
 
-/-- The product of two full matrix-algebra submodules is full. -/
-private theorem top_mul_top_eq_top :
-    (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) *
-      (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) = ⊤ := by
-  apply eq_top_iff.mpr
-  intro M _
-  simpa using
-    (Submodule.mul_mem_mul (show M ∈ (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) from
-        Submodule.mem_top)
-      (show (1 : Matrix (Fin D) (Fin D) ℂ) ∈ ⊤ from Submodule.mem_top))
-
 /-- If `wordSpan A N = ⊤`, then `wordSpan A (k * N) = ⊤` for any `k ≥ 1`. -/
 theorem wordSpan_top_of_mul (A : MPSTensor d D) {N : ℕ}
     (htop : wordSpan A N = ⊤) :
@@ -129,7 +118,15 @@ theorem wordSpan_top_of_mul (A : MPSTensor d D) {N : ℕ}
           wordSpan_mul_le A (k * N) N
         have htoptop : wordSpan A (k * N) * wordSpan A N = ⊤ := by
           rw [hih, htop]
-          exact top_mul_top_eq_top
+          apply eq_top_iff.mpr
+          intro M _
+          simpa using
+            (Submodule.mul_mem_mul
+              (show M ∈ (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) from
+                Submodule.mem_top)
+              (show (1 : Matrix (Fin D) (Fin D) ℂ) ∈
+                  (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) from
+                Submodule.mem_top))
         have hle : (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) ≤
             wordSpan A (k * N + N) := by
           rw [← htoptop]

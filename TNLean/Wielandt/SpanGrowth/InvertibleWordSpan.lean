@@ -507,18 +507,6 @@ theorem wordSpan_finrank_strict_mono_of_isUnit_of_isNormal
     exact hconst
   omega
 
-private theorem wordSpan_eq_top_of_finrank_eq_sq
-    (A : MPSTensor d D) (n : ℕ)
-    (hfin : Module.finrank ℂ (wordSpan A n) = D ^ 2) :
-    wordSpan A n = ⊤ := by
-  apply Submodule.eq_of_le_of_finrank_eq (le_top : wordSpan A n ≤ ⊤)
-  calc
-    Module.finrank ℂ (wordSpan A n) = D ^ 2 := hfin
-    _ = Module.finrank ℂ
-          (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) := by
-          symm
-          simp [Module.finrank_matrix, Fintype.card_fin, pow_two]
-
 private theorem wordSpan_finrank_lt_of_ne_top
     (A : MPSTensor d D) (n : ℕ) (hneq : wordSpan A n ≠ ⊤) :
     Module.finrank ℂ (wordSpan A n) < D ^ 2 := by
@@ -526,7 +514,9 @@ private theorem wordSpan_finrank_lt_of_ne_top
   by_contra h
   have hfin : Module.finrank ℂ (wordSpan A n) = D ^ 2 := by
     omega
-  exact hneq (wordSpan_eq_top_of_finrank_eq_sq A n hfin)
+  exact hneq (Submodule.eq_top_of_finrank_eq (by
+    rw [hfin]
+    simp [Module.finrank_matrix, Fintype.card_fin, pow_two]))
 
 /-- **Sharp invertible-case bound**: if some Kraus operator is invertible and
 `A` is normal, then the exact word span at level `D² - krausRank(A) + 1` is
@@ -588,7 +578,9 @@ theorem wordSpan_eq_top_of_isNormal_of_isUnit (A : MPSTensor d D)
     wordSpan_finrank_le A k
   have hfin : Module.finrank ℂ (wordSpan A k) = D ^ 2 := by
     omega
-  exact htop (wordSpan_eq_top_of_finrank_eq_sq A k hfin)
+  exact htop (Submodule.eq_top_of_finrank_eq (by
+    rw [hfin]
+    simp [Module.finrank_matrix, Fintype.card_fin, pow_two]))
 
 /-- The invertible-case sharp numerical bound on the full-Kraus-rank index.
 
