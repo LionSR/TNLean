@@ -251,12 +251,13 @@ theorem groundSpaceMap_injective {A : MPSTensor d D} (hA : IsInjective A)
       · intro σ
         simpa [groundSpaceMap_apply, Matrix.traceLinearMap_apply] using
           congrArg (fun ψ => ψ σ) hX
-    exact (Matrix.trace_mul_right_eq_zero_iff (n := Fin D) X).1 fun N => by
+    exact (Matrix.ext_iff_trace_mul_right (A := X) (B := 0)).2 fun N => by
       have hNX : Matrix.trace (N * X) = 0 := by
         simpa [Matrix.traceLinearMap_apply] using congrArg (fun f => f N) hφ
       calc
         Matrix.trace (X * N) = Matrix.trace (N * X) := Matrix.trace_mul_comm X N
         _ = 0 := hNX
+        _ = Matrix.trace (0 * N) := by simp
   exact LinearMap.ker_eq_bot.mp hker
 
 /-- For an injective tensor, the ground space has dimension exactly \(D^2\) for

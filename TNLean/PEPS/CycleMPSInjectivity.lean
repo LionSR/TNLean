@@ -393,7 +393,9 @@ theorem matrix_eq_zero_of_isNBlkInjective {L : ℕ} {A : MPSTensor d D}
       rw [hpair]
       exact hC x
     simpa using hle hM
-  have hCt : Cᵀ = 0 := (Matrix.trace_mul_right_eq_zero_iff (n := Fin D) Cᵀ).1 hker
+  have hCt : Cᵀ = 0 := (Matrix.ext_iff_trace_mul_right (A := Cᵀ) (B := 0)).2
+    fun M => by
+      simpa using hker M
   simpa using congrArg Matrix.transpose hCt
 
 variable [NeZero n]

@@ -203,7 +203,7 @@ theorem sameMPV_of_sameMPVFrom_of_injective [NeZero D]
   set S := ∑ i, c i • B i
   have hS : S = 1 := by
     suffices h : S - 1 = 0 from sub_eq_zero.mp h
-    apply (Matrix.trace_mul_right_eq_zero_iff (n := Fin D) (S - 1)).1
+    apply (Matrix.ext_iff_trace_mul_right (A := S - 1) (B := 0)).2
     intro N
     -- The linear functional tr((S−1) · _) vanishes on wordSpan B N₀ = ⊤
     have hf : (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp
