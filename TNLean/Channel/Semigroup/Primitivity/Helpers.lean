@@ -38,20 +38,6 @@ theorem semigroup_pow
     rw [hcast, hcomp, ih]
     exact (pow_succ (T t) n).symm
 
-/-- Eigenvector equation for powers of a linear map: if `f v = μ • v` then
-`(f ^ n) v = μ ^ n • v`. -/
-theorem pow_apply_eigenvector
-    {V : Type*} [AddCommGroup V] [Module ℂ V]
-    (f : V →ₗ[ℂ] V) (v : V) (μ : ℂ) (n : ℕ) (hv : f v = μ • v) :
-    (f ^ n) v = μ ^ n • v := by
-  induction n with
-  | zero => simp [pow_zero]
-  | succ n ih =>
-    have hstep : (f ^ (n + 1)) v = (f ^ n) (f v) := by
-      change (f ^ n * f) v = (f ^ n) (f v)
-      rfl
-    rw [hstep, hv, map_smul, ih, smul_smul, pow_succ']
-
 /-- A density matrix is nonzero. -/
 lemma ne_zero_of_mem_densityMatrices' {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hρ : ρ ∈ densityMatrices D) : ρ ≠ 0 := by

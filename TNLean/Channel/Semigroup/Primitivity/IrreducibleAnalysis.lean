@@ -122,7 +122,7 @@ theorem exists_power_fixed_eigenvector_of_peripheral
   have hpt_eq : T (↑p * t) = (T t) ^ p :=
     semigroup_pow T hT.semigroup.semigroup t (le_of_lt ht) p
   refine ⟨p, hp_pos, V, hV_ne, hEV, ?_⟩
-  rw [hpt_eq, pow_apply_eigenvector (T t) V μ p hEV, hμp, one_smul]
+  rw [hpt_eq, hV.pow_apply p, hμp, one_smul]
 
 /-- A trace-nonzero eigenvector exists for peripheral eigenvalues of an irreducible QDS. -/
 theorem exists_trace_ne_zero_eigenvector_of_peripheral
@@ -408,7 +408,7 @@ theorem exists_trace_ne_zero_eigenvector_of_fraction_slice
     calc
       T t₀ X = ((T u) ^ Nat.factorial (Module.finrank ℂ Mat)) X := by rw [hTt₀_eq_pow]
       _ = μ ^ Nat.factorial (Module.finrank ℂ Mat) • X :=
-        pow_apply_eigenvector (T u) X μ (Nat.factorial (Module.finrank ℂ Mat)) hX_eig
+        hXev.pow_apply (Nat.factorial (Module.finrank ℂ Mat))
       _ = X := by simp [hμN]
   have hX_span : X = Matrix.trace X • σ := hfixed_1d X hX_fix_t₀
   have : X = 0 := by simpa [htrX] using hX_span
