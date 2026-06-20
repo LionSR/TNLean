@@ -54,7 +54,8 @@ theorem chainCombinedTensor_isInjective {n : ℕ} (A : Fin n → MPSTensor d D)
   refine Submodule.span_mono ?_ hM
   intro x hx
   obtain ⟨σ, rfl⟩ := hx
-  exact Set.mem_range.mpr ⟨finProdFinEquiv (k, σ), by simp [chainCombinedTensor]⟩
+  rw [← chainCombinedTensor_apply A k σ]
+  exact Set.mem_range_self (finProdFinEquiv (k, σ))
 
 /-! ### The main theorem -/
 
