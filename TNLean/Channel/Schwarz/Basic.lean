@@ -292,7 +292,7 @@ private lemma each_zero_of_sum_conjTranspose_mul_self_zero
       (h_each_nonneg i)
   have h_tr_zero : ((R i)ᴴ * R i).trace = 0 :=
     Complex.ext h_tr_re (RCLike.nonneg_iff.mp h_psd_i.trace_nonneg).2
-  exact Matrix.conjTranspose_mul_self_eq_zero.mp (h_psd_i.trace_eq_zero_iff.mp h_tr_zero)
+  exact Matrix.trace_conjTranspose_mul_self_eq_zero_iff.mp h_tr_zero
 
 /-- **KS gap decomposition** at the level of Kraus operators.
 
