@@ -248,10 +248,6 @@ private def quadMap (G : GeneratorDecomp D) : sgLM D :=
 private def eulerStep (G : GeneratorDecomp D) (s : ℝ) : sgLM D :=
   Kraus.mapLM (fun _ : Fin 1 => (1 : sgMat D) - (s : ℂ) • G.κ) + (s : ℂ) • G.φ
 
-private theorem quadMap_apply (G : GeneratorDecomp D) (ρ : sgMat D) :
-    quadMap G ρ = G.κ * ρ * G.κᴴ := by
-  simp [quadMap, Kraus.mapLM_apply, Kraus.map_apply]
-
 private theorem eulerStep_apply (G : GeneratorDecomp D) (s : ℝ) (ρ : sgMat D) :
     eulerStep G s ρ =
       ρ + s • (G.φ ρ + -(G.κ * ρ) + -(ρ * G.κᴴ)) + (s * s) • (G.κ * ρ * G.κᴴ) := by
@@ -300,7 +296,9 @@ private theorem eulerStep_toCLM_eq (G : GeneratorDecomp D) (s : ℝ) :
   change (eulerStep G s ρ) i j =
     (ρ + (s : ℂ) • G.toLinearMap ρ + ((s ^ 2 : ℝ) : ℂ) • quadMap G ρ) i j
   rw [eulerStep_apply]
-  rw [quadMap_apply, GeneratorDecomp.toLinearMap_apply]
+  rw [GeneratorDecomp.toLinearMap_apply]
+  simp only [quadMap, Kraus.mapLM_apply, Kraus.map_apply, Finset.univ_unique,
+    Fin.default_eq_zero, Fin.isValue, Finset.sum_const, Finset.card_singleton, one_smul]
   simp only [Matrix.add_apply, Matrix.smul_apply, Matrix.neg_apply, Complex.real_smul,
     Complex.ofReal_mul, Complex.coe_smul, smul_eq_mul, sub_eq_add_neg, pow_two]
 
