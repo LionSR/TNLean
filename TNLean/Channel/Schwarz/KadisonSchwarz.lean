@@ -81,28 +81,17 @@ theorem trace_krausMap_of_tp (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
   rw [← trace_sum, ← Finset.sum_mul, show ∑ i : Fin d, (K i)ᴴ * K i = 1 from h_tp,
     one_mul]
 
-/-- The finite-index Kadison-Schwarz Kraus map is the general Kraus map. -/
-theorem krausMap_eq_map (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (X : Matrix (Fin D) (Fin D) ℂ) :
-    krausMap K X = Kraus.map K X :=
-  rfl
-
 /-- The Kadison-Schwarz Kraus map commutes with conjugate transpose. -/
 theorem krausMap_conjTranspose (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     krausMap K Xᴴ = (krausMap K X)ᴴ := by
-  simpa [krausMap_eq_map] using (Kraus.map_conjTranspose (K := K) X).symm
+  simpa [krausMap, Kraus.map] using (Kraus.map_conjTranspose (K := K) X).symm
 
 /-- The conjugate transpose of a Kadison-Schwarz Kraus map. -/
 theorem conjTranspose_krausMap (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     (krausMap K X)ᴴ = krausMap K Xᴴ := by
-  simpa [krausMap_eq_map] using Kraus.map_conjTranspose (K := K) X
-
-/-- The adjoint Kraus map equals the Kraus map with conjugate-transposed operators. -/
-private theorem krausAdjointMap_eq (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (Y) :
-    krausAdjointMap K Y = krausMap (fun i => (K i)ᴴ) Y := by
-  simp [krausAdjointMap, krausMap, conjTranspose_conjTranspose]
+  simpa [krausMap, Kraus.map] using Kraus.map_conjTranspose (K := K) X
 
 /-- The conjugate-transposed operators of a TP family form a unital family. -/
 theorem isUnitalKraus_conjTranspose {K : Fin d → Matrix (Fin D) (Fin D) ℂ}
@@ -192,8 +181,8 @@ theorem kadison_schwarz_adjoint (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (h_tp : IsTPKraus K)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     (krausAdjointMap K (Xᴴ * X) - (krausAdjointMap K X)ᴴ * krausAdjointMap K X).PosSemidef := by
-  simp only [krausAdjointMap_eq]
-  exact kadison_schwarz _ (isUnitalKraus_conjTranspose h_tp) X
+  simpa [krausAdjointMap, krausMap, conjTranspose_conjTranspose] using
+    kadison_schwarz (fun i => (K i)ᴴ) (isUnitalKraus_conjTranspose h_tp) X
 
 /-- **Kadison-Schwarz in Loewner order** (≤ formulation).
 
