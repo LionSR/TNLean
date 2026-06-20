@@ -54,9 +54,9 @@ theorem generator_shift_invariance
     simp only [star_mul', Complex.star_def, Complex.conj_I, Complex.conj_ofReal]
   simp only [hmu, RCLike.star_def, one_div, RingHomCompTriple.comp_apply,
     RingHom.id_apply, star_mul', neg_mul, neg_smul, star_inv₀, star_ofNat]
-  have hnorm : ∀ i : Fin r, c i * starRingEnd ℂ (c i) = starRingEnd ℂ (c i) * c i := by
-    intro i; ring
-  simp_rw [hnorm]
+  simp_rw [show ∀ i : Fin r,
+      c i * starRingEnd ℂ (c i) = starRingEnd ℂ (c i) * c i from
+    fun i => mul_comm _ _]
   simp only [smul_smul]
   set A : Matrix (Fin D) (Fin D) ℂ := ∑ x, c x • (ρ * (K x)ᴴ)
   set B : Matrix (Fin D) (Fin D) ℂ := ∑ x, (starRingEnd ℂ (c x)) • (K x * ρ)
