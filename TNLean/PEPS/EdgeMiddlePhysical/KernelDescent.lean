@@ -25,48 +25,57 @@ private def middleIncidentToComplement (e : Edge G) {j : V}
     {f : Edge G // f ≠ e} :=
   ⟨ie.1, edge_ne_of_middle_incident_for_physical (G := G) e hj ie⟩
 
+/-- Complement edges incident to a middle vertex are the incident edges at that vertex. -/
+private def incidentComplementEquiv (e : Edge G) {j : V} (hj : j ∈ edgeMiddleVertices e) :
+    {f : {f : Edge G // f ≠ e} // IsIncidentTo (G := G) e j f} ≃ IncidentEdge G j where
+  toFun f := ⟨f.1.1, f.2⟩
+  invFun ie := ⟨middleIncidentToComplement (G := G) e hj ie, ie.2⟩
+  left_inv f := by
+    apply Subtype.ext
+    apply Subtype.ext
+    rfl
+  right_inv ie := by
+    apply Subtype.ext
+    rfl
+
 /-- The star-bond split equivalence at a middle vertex `j`. -/
 noncomputable def edgeComplementConfigSplitAt (A : Tensor G d) (e : Edge G) {j : V}
     (hj : j ∈ edgeMiddleVertices e) :
     EdgeComplementConfig (G := G) A e ≃
       LocalVirtualConfig A j ×
         ((f : {f : {f : Edge G // f ≠ e} // ¬ IsIncidentTo (G := G) e j f}) →
-          Fin (A.bondDim f.1.1)) where
-  toFun ζ :=
-    (fun ie : IncidentEdge G j =>
-        ζ (middleIncidentToComplement (G := G) e hj ie),
-      fun f => ζ f.1)
-  invFun x := fun f =>
-    if h : IsIncidentTo (G := G) e j f then
-      x.1 ⟨f.1, h⟩
-    else
-      x.2 ⟨f, h⟩
-  left_inv ζ := by
-    funext f
-    dsimp only
-    by_cases h : IsIncidentTo (G := G) e j f
-    · rw [dif_pos h]
-      rfl
-    · rw [dif_neg h]
-  right_inv x := by
-    apply Prod.ext
-    · funext ie
-      have h : IsIncidentTo (G := G) e j (middleIncidentToComplement (G := G) e hj ie) :=
-        ie.2
-      dsimp only
-      rw [dif_pos h]
-      rfl
-    · funext f
-      have h : ¬ IsIncidentTo (G := G) e j f.1 := f.2
-      dsimp only
-      rw [dif_neg h]
+          Fin (A.bondDim f.1.1)) :=
+  (Equiv.piEquivPiSubtypeProd
+      (fun f : {f : Edge G // f ≠ e} => IsIncidentTo (G := G) e j f)
+      (fun f => Fin (A.bondDim f.1))).trans
+    (Equiv.prodCongr
+      (Equiv.piCongrLeft
+        (fun ie : IncidentEdge G j => Fin (A.bondDim ie.1))
+        (incidentComplementEquiv (G := G) e hj))
+      (Equiv.refl _))
 
 @[simp] theorem edgeComplementConfigSplitAt_fst (A : Tensor G d) (e : Edge G) {j : V}
     (hj : j ∈ edgeMiddleVertices e) (ζ : EdgeComplementConfig (G := G) A e)
     (ie : IncidentEdge G j) :
     (edgeComplementConfigSplitAt (G := G) A e hj ζ).1 ie =
       edgeComplementValue (G := G) A e ζ hj ie :=
-  rfl
+  by
+    let a : {f : {f : Edge G // f ≠ e} // IsIncidentTo (G := G) e j f} :=
+      ⟨middleIncidentToComplement (G := G) e hj ie, ie.2⟩
+    have hieq : (incidentComplementEquiv (G := G) e hj) a = ie := by
+      apply Subtype.ext
+      rfl
+    change
+      (Equiv.piCongrLeft
+        (fun ie : IncidentEdge G j => Fin (A.bondDim ie.1))
+        (incidentComplementEquiv (G := G) e hj)) (fun x => ζ x.1) ie =
+        ζ (middleIncidentToComplement (G := G) e hj ie)
+    rw [← hieq]
+    exact Equiv.piCongrLeft_apply_apply
+      (P := fun ie : IncidentEdge G j => Fin (A.bondDim ie.1))
+      (e := incidentComplementEquiv (G := G) e hj)
+      (f := fun x => ζ x.1)
+      (a := a)
 
 @[simp] theorem edgeComplementValue_edgeComplementConfigSplitAt_symm
     (A : Tensor G d) (e : Edge G) {j : V} (hj : j ∈ edgeMiddleVertices e)
@@ -76,14 +85,29 @@ noncomputable def edgeComplementConfigSplitAt (A : Tensor G d) (e : Edge G) {j :
     (ie : IncidentEdge G j) :
     edgeComplementValue (G := G) A e
         ((edgeComplementConfigSplitAt (G := G) A e hj).symm (η, r)) hj ie = η ie := by
-  have h : IsIncidentTo (G := G) e j (middleIncidentToComplement (G := G) e hj ie) :=
-    ie.2
   change (edgeComplementConfigSplitAt (G := G) A e hj).symm (η, r)
       (middleIncidentToComplement (G := G) e hj ie) = η ie
   rw [edgeComplementConfigSplitAt]
-  dsimp only [Equiv.coe_fn_symm_mk]
-  rw [dif_pos h]
-  rfl
+  change (if h : IsIncidentTo (G := G) e j (middleIncidentToComplement (G := G) e hj ie)
+    then
+      (Equiv.piCongrLeft
+        (fun ie : IncidentEdge G j => Fin (A.bondDim ie.1))
+        (incidentComplementEquiv (G := G) e hj)).symm η
+          ⟨middleIncidentToComplement (G := G) e hj ie, h⟩
+    else r ⟨middleIncidentToComplement (G := G) e hj ie, h⟩) = η ie
+  rw [dif_pos (show IsIncidentTo (G := G) e j
+    (middleIncidentToComplement (G := G) e hj ie) from ie.2)]
+  have hsymm := Equiv.piCongrLeft_symm_apply
+    (P := fun ie : IncidentEdge G j => Fin (A.bondDim ie.1))
+    (e := incidentComplementEquiv (G := G) e hj)
+    (g := η)
+    (a := ⟨middleIncidentToComplement (G := G) e hj ie, ie.2⟩)
+  have hηeq :
+      η ((incidentComplementEquiv (G := G) e hj)
+        ⟨middleIncidentToComplement (G := G) e hj ie, ie.2⟩) = η ie := by
+    cases ie
+    rfl
+  exact hsymm.trans hηeq
 
 /-! ### Kernel-descent construction for the middle block -/
 
@@ -203,8 +227,28 @@ theorem extraIndicator_split (S : Finset V) {j : V}
     intro f hinc
     have hIs : IsIncidentTo (G := G) e j f := hinc
     rw [edgeComplementConfigSplitAt]
-    dsimp only [Equiv.coe_fn_symm_mk]
+    change (if h : IsIncidentTo (G := G) e j f then
+      (Equiv.piCongrLeft
+        (fun ie : IncidentEdge G j => Fin (A.bondDim ie.1))
+        (incidentComplementEquiv (G := G) e hj)).symm η ⟨f, h⟩
+    else r ⟨f, h⟩) = η ⟨f.1, hinc⟩
     rw [dif_pos hIs]
+    have hieq :
+        (incidentComplementEquiv (G := G) e hj) ⟨f, hIs⟩ =
+          (⟨f.1, hinc⟩ : IncidentEdge G j) := by
+      apply Subtype.ext
+      rfl
+    have hsymm := Equiv.piCongrLeft_symm_apply
+      (P := fun ie : IncidentEdge G j => Fin (A.bondDim ie.1))
+      (e := incidentComplementEquiv (G := G) e hj)
+      (g := η)
+      (a := ⟨f, hIs⟩)
+    have hηeq :
+        η ((incidentComplementEquiv (G := G) e hj) ⟨f, hIs⟩) =
+          η (⟨f.1, hinc⟩ : IncidentEdge G j) := by
+      cases hieq
+      rfl
+    exact hsymm.trans hηeq
   congr 1
   apply propext
   constructor

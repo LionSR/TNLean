@@ -43,41 +43,52 @@ incident to `j`. -/
 theorem isIncidentEdge_of_incident (j : V) (ie : IncidentEdge G j) :
     IsIncidentEdge (G := G) j ie.1 := ie.2
 
+/-- Edges incident to `j`, as a subtype, are the incident edges at `j`. -/
+private def incidentEdgeEquiv (j : V) :
+    {f : Edge G // IsIncidentEdge (G := G) j f} ≃ IncidentEdge G j where
+  toFun f := ⟨f.1, f.2⟩
+  invFun ie := ⟨ie.1, ie.2⟩
+  left_inv f := by
+    apply Subtype.ext
+    rfl
+  right_inv ie := by
+    apply Subtype.ext
+    rfl
+
 /-- The split equivalence at a complement vertex `j`: a global virtual
 configuration is the local configuration at `j` together with the configuration
 on the edges not incident to `j`. -/
 noncomputable def vertexConfigSplitAt (A : Tensor G d) (j : V) :
     VirtualConfig A ≃
       LocalVirtualConfig A j ×
-        ((f : {f : Edge G // ¬ IsIncidentEdge (G := G) j f}) → Fin (A.bondDim f.1)) where
-  toFun ζ :=
-    (fun ie : IncidentEdge G j => ζ ie.1, fun f => ζ f.1)
-  invFun x := fun f =>
-    if h : IsIncidentEdge (G := G) j f then
-      x.1 ⟨f, h⟩
-    else
-      x.2 ⟨f, h⟩
-  left_inv ζ := by
-    funext f
-    dsimp only
-    by_cases h : IsIncidentEdge (G := G) j f
-    · rw [dif_pos h]
-    · rw [dif_neg h]
-  right_inv x := by
-    apply Prod.ext
-    · funext ie
-      have h : IsIncidentEdge (G := G) j ie.1 := ie.2
-      dsimp only
-      rw [dif_pos h]
-    · funext f
-      have h : ¬ IsIncidentEdge (G := G) j f.1 := f.2
-      dsimp only
-      rw [dif_neg h]
+        ((f : {f : Edge G // ¬ IsIncidentEdge (G := G) j f}) → Fin (A.bondDim f.1)) :=
+  (Equiv.piEquivPiSubtypeProd
+      (fun f : Edge G => IsIncidentEdge (G := G) j f)
+      (fun f => Fin (A.bondDim f))).trans
+    (Equiv.prodCongr
+      (Equiv.piCongrLeft
+        (fun ie : IncidentEdge G j => Fin (A.bondDim ie.1))
+        (incidentEdgeEquiv (G := G) j))
+      (Equiv.refl _))
 
 omit [Fintype V] in
 @[simp] theorem vertexConfigSplitAt_fst (A : Tensor G d) (j : V) (ζ : VirtualConfig A)
     (ie : IncidentEdge G j) :
-    (vertexConfigSplitAt (G := G) A j ζ).1 ie = ζ ie.1 := rfl
+    (vertexConfigSplitAt (G := G) A j ζ).1 ie = ζ ie.1 := by
+  let a : {f : Edge G // IsIncidentEdge (G := G) j f} := ⟨ie.1, ie.2⟩
+  have hieq : (incidentEdgeEquiv (G := G) j) a = ie := by
+    apply Subtype.ext
+    rfl
+  change
+    (Equiv.piCongrLeft
+      (fun ie : IncidentEdge G j => Fin (A.bondDim ie.1))
+      (incidentEdgeEquiv (G := G) j)) (fun x => ζ x.1) ie = ζ ie.1
+  rw [← hieq]
+  exact Equiv.piCongrLeft_apply_apply
+    (P := fun ie : IncidentEdge G j => Fin (A.bondDim ie.1))
+    (e := incidentEdgeEquiv (G := G) j)
+    (f := fun x => ζ x.1)
+    (a := a)
 
 omit [Fintype V] in
 @[simp] theorem vertexConfigSplitAt_symm_apply_incident (A : Tensor G d) (j : V)
@@ -85,10 +96,22 @@ omit [Fintype V] in
     (r : (f : {f : Edge G // ¬ IsIncidentEdge (G := G) j f}) → Fin (A.bondDim f.1))
     (ie : IncidentEdge G j) :
     (vertexConfigSplitAt (G := G) A j).symm (η, r) ie.1 = η ie := by
-  have h : IsIncidentEdge (G := G) j ie.1 := ie.2
-  change (if hh : IsIncidentEdge (G := G) j ie.1 then η ⟨ie.1, hh⟩ else r ⟨ie.1, hh⟩) =
-    η ie
-  rw [dif_pos h]
+  rw [vertexConfigSplitAt]
+  change (if h : IsIncidentEdge (G := G) j ie.1 then
+    (Equiv.piCongrLeft
+      (fun ie : IncidentEdge G j => Fin (A.bondDim ie.1))
+      (incidentEdgeEquiv (G := G) j)).symm η ⟨ie.1, h⟩
+  else r ⟨ie.1, h⟩) = η ie
+  rw [dif_pos (show IsIncidentEdge (G := G) j ie.1 from ie.2)]
+  have hsymm := Equiv.piCongrLeft_symm_apply
+    (P := fun ie : IncidentEdge G j => Fin (A.bondDim ie.1))
+    (e := incidentEdgeEquiv (G := G) j)
+    (g := η)
+    (a := ⟨ie.1, ie.2⟩)
+  have hηeq : η ((incidentEdgeEquiv (G := G) j) ⟨ie.1, ie.2⟩) = η ie := by
+    cases ie
+    rfl
+  exact hsymm.trans hηeq
 
 /-! ### Kernel condition -/
 
