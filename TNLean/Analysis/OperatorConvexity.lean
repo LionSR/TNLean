@@ -137,36 +137,6 @@ private lemma hermitian_cfc_neg {A : Mat} (hH : A.IsHermitian) (f : ℝ → ℝ)
     hH.cfc (fun x => -f x) = -(hH.cfc f) := by
   rw [← hH.cfc_eq, ← hH.cfc_eq, _root_.cfc_neg f]
 
-/-- Expand `(t • A) *ᵥ v` to `(t : ℂ) • (A *ᵥ v)` without relying on
-`Matrix.smul_mulVec`, which fails to unify due to an elaboration quirk in
-the real-scalar instance chain on `Matrix _ _ ℂ`. -/
-private lemma mulVec_smul_eq (t : ℝ) (A : Mat) (v : Fin D → ℂ) :
-    (t • A : Mat) *ᵥ v = ((t : ℝ) : ℂ) • (A *ᵥ v) := by
-  funext i
-  simp only [Pi.smul_apply, Matrix.mulVec, dotProduct, Matrix.smul_apply,
-    Complex.real_smul, smul_eq_mul]
-  rw [Finset.mul_sum]
-  refine Finset.sum_congr rfl (fun j _ => ?_)
-  ring
-
-private lemma psd_smul_real
-    {A : Mat} (hA : A.PosSemidef) {t : ℝ} (ht : 0 ≤ t) :
-    (t • A).PosSemidef := by
-  refine PosSemidef.of_dotProduct_mulVec_nonneg ?_ ?_
-  · exact hA.1.smul (IsSelfAdjoint.of_nonneg ht)
-  · intro v
-    rw [mulVec_smul_eq, dotProduct_smul, smul_eq_mul]
-    have hnn : (0 : ℂ) ≤ star v ⬝ᵥ A *ᵥ v := hA.dotProduct_mulVec_nonneg v
-    have ht_ℂ : (0 : ℂ) ≤ ((t : ℝ) : ℂ) := RCLike.ofReal_nonneg.mpr ht
-    exact mul_nonneg ht_ℂ hnn
-
-/-- Positive semidefiniteness is preserved under convex combinations of PSD matrices. -/
-private lemma posSemidef_convex_combination
-    {A₁ A₂ : Mat} (h₁ : A₁.PosSemidef) (h₂ : A₂.PosSemidef)
-    {t : ℝ} (ht₀ : 0 ≤ t) (ht₁ : 0 ≤ 1 - t) :
-    (t • A₁ + (1 - t) • A₂).PosSemidef :=
-  (psd_smul_real h₁ ht₀).add (psd_smul_real h₂ ht₁)
-
 /-- **Trace convexity bound for the continuous functional calculus.**
 
 For a convex `f : ℝ → ℝ` on `[0, ∞)` and PSD matrices `A₁, A₂` with
@@ -213,8 +183,11 @@ private lemma trace_cfc_convex_bound
     have hright : star (ψ j) ⬝ᵥ A *ᵥ ψ j
         = (t : ℂ) * (star (ψ j) ⬝ᵥ A₁ *ᵥ ψ j)
           + ((1 - t : ℝ) : ℂ) * (star (ψ j) ⬝ᵥ A₂ *ᵥ ψ j) := by
-      rw [hA_eq, Matrix.add_mulVec, dotProduct_add,
-        mulVec_smul_eq t A₁, mulVec_smul_eq (1 - t) A₂,
+      rw [hA_eq, Matrix.add_mulVec, dotProduct_add]
+      rw [show (t • A₁ : Mat) = (t : ℂ) • A₁ by ext i k; simp [Complex.real_smul]]
+      rw [show ((1 - t) • A₂ : Mat) = ((1 - t : ℝ) : ℂ) • A₂ by
+        ext i k; simp [Complex.real_smul]]
+      rw [Matrix.smul_mulVec, Matrix.smul_mulVec,
         dotProduct_smul, dotProduct_smul, smul_eq_mul, smul_eq_mul]
     have heq := hleft.symm.trans hright
     have hre := congrArg Complex.re heq
@@ -288,7 +261,7 @@ theorem trace_rpow_concave
   have hPSD₁ : A₁.PosSemidef := hA₁.posSemidef
   have hPSD₂ : A₂.PosSemidef := hA₂.posSemidef
   have hPSD : (t • A₁ + (1 - t) • A₂).PosSemidef :=
-    posSemidef_convex_combination hPSD₁ hPSD₂ ht₀ h1mt
+    (hPSD₁.smul ht₀).add (hPSD₂.smul h1mt)
   set f : ℝ → ℝ := fun x => x ^ p with hf_def
   -- `-f` is convex on `[0, ∞)` since `f` is concave there.
   have hconcave : ConcaveOn ℝ (Set.Ici (0 : ℝ)) f := Real.concaveOn_rpow hp.1 hp.2
@@ -322,7 +295,7 @@ theorem trace_rpow_convex
   have hPSD₁ : A₁.PosSemidef := hA₁.posSemidef
   have hPSD₂ : A₂.PosSemidef := hA₂.posSemidef
   have hPSD : (t • A₁ + (1 - t) • A₂).PosSemidef :=
-    posSemidef_convex_combination hPSD₁ hPSD₂ ht₀ h1mt
+    (hPSD₁.smul ht₀).add (hPSD₂.smul h1mt)
   have hconvex : ConvexOn ℝ (Set.Ici (0 : ℝ)) (fun x : ℝ => x ^ p) := convexOn_rpow hp.1
   have hbound := trace_cfc_convex_bound hconvex hPSD₁ hPSD₂ ht₀ h1mt hPSD
   rw [rpow_eq_cfc_power hA₁ hPSD₁.1, rpow_eq_cfc_power hA₂ hPSD₂.1,
