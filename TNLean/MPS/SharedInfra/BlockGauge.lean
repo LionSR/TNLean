@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.SharedInfra.BlockAssembly
 
 import Mathlib.Algebra.BigOperators.Fin
+import Mathlib.Algebra.Group.Pi.Units
 
 /-!
 # Shared block-diagonal gauge infrastructure
@@ -44,20 +45,11 @@ section BlockDiagonalGL
 
 variable {r : ℕ} {dim : Fin r → ℕ}
 
-private theorem blockDiagonal'_mul_one
-    (f g : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
-    (hfg : ∀ k, f k * g k = 1) :
-    Matrix.blockDiagonal' f * Matrix.blockDiagonal' g = 1 := by
-  rw [← Matrix.blockDiagonal'_mul, show (fun k => f k * g k) = 1 from funext hfg,
-    Matrix.blockDiagonal'_one]
-
 /-- Form a block-diagonal element of `GL` from a family of invertible matrices. -/
 noncomputable def blockDiagonalGL (X : (k : Fin r) → GL (Fin (dim k)) ℂ) :
     GL ((k : Fin r) × Fin (dim k)) ℂ :=
-  ⟨Matrix.blockDiagonal' (fun k => (X k : Matrix _ _ ℂ)),
-   Matrix.blockDiagonal' (fun k => ((X k)⁻¹ : Matrix _ _ ℂ)),
-   blockDiagonal'_mul_one _ _ (fun k => by simp),
-   blockDiagonal'_mul_one _ _ (fun k => by simp)⟩
+  Units.map (Matrix.blockDiagonal'RingHom (fun k : Fin r => Fin (dim k)) ℂ).toMonoidHom
+    ((MulEquiv.piUnits).symm X)
 
 /-- Assemble per-block gauges into the flattened global `GL` element used by
 `toTensorFromBlocks`.  This is the reindexed block-diagonal matrix `⊕ₖ X k` on the
@@ -128,11 +120,25 @@ theorem toTensorFromBlocks_eq_globalGaugeOfBlocks_conj
   have hXfin :
       (globalGaugeOfBlocks X : Matrix (Fin (∑ k : Fin r, dim k))
         (Fin (∑ k : Fin r, dim k)) ℂ) = f XBD := by
-    simp [globalGaugeOfBlocks, XBD, blockDiagonalGL, f, e]
+    have hblock :
+        Matrix.blockDiagonal'
+            ((↑((MulEquiv.piUnits).symm X)) :
+              (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) = XBD := by
+      apply congrArg Matrix.blockDiagonal'
+      funext k
+      exact MulEquiv.val_piUnits_symm_apply X k
+    simpa [globalGaugeOfBlocks, XBD, blockDiagonalGL, f, e] using congrArg f hblock
   have hXfin_inv :
       (((globalGaugeOfBlocks X)⁻¹ : GL (Fin (∑ k : Fin r, dim k)) ℂ) :
         Matrix (Fin (∑ k : Fin r, dim k)) (Fin (∑ k : Fin r, dim k)) ℂ) = f XBDinv := by
-    simp [globalGaugeOfBlocks, XBDinv, blockDiagonalGL, f, e]
+    have hblock :
+        Matrix.blockDiagonal'
+            ((↑(((MulEquiv.piUnits).symm X)⁻¹)) :
+              (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) = XBDinv := by
+      apply congrArg Matrix.blockDiagonal'
+      funext k
+      simp
+    simpa [globalGaugeOfBlocks, XBDinv, blockDiagonalGL, f, e] using congrArg f hblock
   rw [htoB, htoA, hBD]
   simp [map_mul, hXfin, hXfin_inv, Matrix.mul_assoc]
 
