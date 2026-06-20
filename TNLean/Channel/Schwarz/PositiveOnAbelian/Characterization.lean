@@ -78,7 +78,7 @@ private lemma blockHermitian_of_blockPositive {n D : ℕ}
       rw [hinnerSum i r, Finset.mul_sum]
       rfl
     have hqreal : star q = q := by
-      have hqim : q.im = 0 := (Complex.nonneg_iff.mp hq).2.symm
+      have hqim : q.im = 0 := (RCLike.nonneg_iff.mp hq).2
       apply Complex.ext
       · simp only [RCLike.star_def, conj_re]
       · simp only [RCLike.star_def, conj_im, hqim, neg_zero]
