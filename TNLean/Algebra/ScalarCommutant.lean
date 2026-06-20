@@ -95,48 +95,6 @@ section Semiring
 
 variable {R : Type*} [Semiring R]
 
-/-- Right multiplication by a block projection keeps the corresponding column block. -/
-@[simp] private theorem mul_blockProjection_apply_col
-    [Fintype ι] [(i : ι) → Fintype (n i)] [(i : ι) → DecidableEq (n i)]
-    (X : Matrix ((i : ι) × n i) ((i : ι) × n i) R)
-    (j i : ι) (a : n i) (b : n j) :
-    (X * blockProjection (n := n) (R := R) j) ⟨i, a⟩ ⟨j, b⟩ = X ⟨i, a⟩ ⟨j, b⟩ := by
-  classical
-  rw [Matrix.mul_apply]
-  rw [Finset.sum_eq_single ⟨j, b⟩]
-  · simp [blockProjection]
-  · rintro ⟨k, c⟩ _ hkc
-    by_cases hkj : k = j
-    · subst k
-      have hcb : c ≠ b := by
-        intro hcb
-        apply hkc
-        subst hcb
-        rfl
-      simp [blockProjection, hcb]
-    · rw [show blockProjection (n := n) (R := R) j ⟨k, c⟩ ⟨j, b⟩ = 0 from by
-        exact Matrix.blockDiagonal'_apply_ne _ c b hkj]
-      simp
-  · intro hmem
-    simp at hmem
-
-/-- Left multiplication by a block projection kills rows in all other blocks. -/
-@[simp] private theorem blockProjection_mul_apply_of_ne
-    [Fintype ι] [(i : ι) → Fintype (n i)] [(i : ι) → DecidableEq (n i)]
-    (X : Matrix ((i : ι) × n i) ((i : ι) × n i) R)
-    {i j : ι} (hij : i ≠ j) (a : n i) (b : n j) :
-    (blockProjection (n := n) (R := R) j * X) ⟨i, a⟩ ⟨j, b⟩ = 0 := by
-  classical
-  rw [Matrix.mul_apply]
-  apply Finset.sum_eq_zero
-  rintro ⟨k, c⟩ _
-  by_cases hik : i = k
-  · subst k
-    simp [blockProjection, hij]
-  · rw [show blockProjection (n := n) (R := R) j ⟨i, a⟩ ⟨k, c⟩ = 0 from by
-      exact Matrix.blockDiagonal'_apply_ne _ a c hik]
-    simp
-
 /-- If a matrix commutes with every block projection, then it is block diagonal.
 
 This is the algebraic off-block-zero step needed in block-decomposition
@@ -152,7 +110,37 @@ theorem isBlockDiagonal'_of_commutes_blockProjection
   rw [isBlockDiagonal'_iff_offBlock_zero]
   intro i j hij a b
   have hentry := congrFun (congrFun (hComm j) ⟨i, a⟩) ⟨j, b⟩
-  simpa [hij] using hentry
+  have hleft :
+      (X * blockProjection (n := n) (R := R) j) ⟨i, a⟩ ⟨j, b⟩ =
+        X ⟨i, a⟩ ⟨j, b⟩ := by
+    rw [Matrix.mul_apply, Finset.sum_eq_single ⟨j, b⟩]
+    · simp [blockProjection]
+    · rintro ⟨k, c⟩ _ hkc
+      by_cases hkj : k = j
+      · subst k
+        have hcb : c ≠ b := by
+          intro hcb
+          apply hkc
+          subst hcb
+          rfl
+        simp [blockProjection, hcb]
+      · rw [show blockProjection (n := n) (R := R) j ⟨k, c⟩ ⟨j, b⟩ = 0 from by
+          exact Matrix.blockDiagonal'_apply_ne _ c b hkj]
+        simp
+    · intro hmem
+      simp at hmem
+  have hright :
+      (blockProjection (n := n) (R := R) j * X) ⟨i, a⟩ ⟨j, b⟩ = 0 := by
+    rw [Matrix.mul_apply]
+    apply Finset.sum_eq_zero
+    rintro ⟨k, c⟩ _
+    by_cases hik : i = k
+    · subst k
+      simp [blockProjection, hij]
+    · rw [show blockProjection (n := n) (R := R) j ⟨i, a⟩ ⟨k, c⟩ = 0 from by
+        exact Matrix.blockDiagonal'_apply_ne _ a c hik]
+      simp
+  simpa [hleft, hright] using hentry
 
 end Semiring
 
