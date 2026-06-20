@@ -412,10 +412,9 @@ theorem ft_sector_bnt_equal_matched_copy_weight_witnessesPos
         atTop (𝓝 (1 : ℝ)) := by
       have h1 := (hQ.basis_normalized_self_overlap k).norm
       simpa using h1
-    have hScale :=
-      mpvOverlap_self_scale_of_mpv_eq_pow_mul (A := P.basis (β k)) (B := Q.basis k)
-        (ζ := ζ k) (hMpv k)
-    exact norm_eq_one_of_selfOverlap_scale (ζ := ζ k) hAA hBB hScale
+    exact norm_eq_one_of_selfOverlap_scale (ζ := ζ k) hAA hBB
+      (mpvOverlap_self_scale_of_mpv_eq_pow_mul (A := P.basis (β k)) (B := Q.basis k)
+        (ζ := ζ k) (hMpv k))
   have hζ_ne : ∀ k : Fin Q.basisCount, ζ k ≠ 0 := by
     intro k hzero
     have hnorm := hζ_norm k
