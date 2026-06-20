@@ -106,13 +106,14 @@ theorem Edge.map_incident (φ : G ≃g G') {v : V} {e : Edge G}
 as a bijection.  The underlying map is the edge action `Edge.map φ`; the incidence
 is preserved because `φ` sends the endpoint equal to `v` to one equal to `φ v`. -/
 def IncidentEdge.equiv (φ : G ≃g G') (v : V) :
-    IncidentEdge G v ≃ IncidentEdge G' (φ v) where
-  toFun ie := ⟨Edge.map φ ie.1, Edge.map_incident φ ie.2⟩
-  invFun ie := ⟨Edge.map φ.symm ie.1, by
-    have h := Edge.map_incident φ.symm (v := φ v) ie.2
-    simpa using h⟩
-  left_inv ie := by apply Subtype.ext; simp
-  right_inv ie := by apply Subtype.ext; simp
+    IncidentEdge G v ≃ IncidentEdge G' (φ v) :=
+  (Edge.equiv φ).subtypeEquiv fun e => by
+    constructor
+    · intro h
+      exact Edge.map_incident φ h
+    · intro h
+      have h' := Edge.map_incident φ.symm (v := φ v) h
+      simpa using h'
 
 omit [Fintype V] [Fintype W] in
 @[simp] theorem IncidentEdge.equiv_coe (φ : G ≃g G') (v : V)
