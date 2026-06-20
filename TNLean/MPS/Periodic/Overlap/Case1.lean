@@ -83,10 +83,10 @@ private theorem period_eq_of_gaugePhaseEquiv_of_isPeriodic
         show (glConjEquiv X).conj (transferMap (d := d) (D := D) A) Y =
           X.val * (transferMap (d := d) (D := D) A
             (X⁻¹.val * (Y * X⁻¹.valᴴ)) * X.valᴴ) from by
-          simp only [LinearEquiv.conj_apply_apply, glConjEquiv, LinearEquiv.trans_apply,
-            LinearEquiv.symm_trans_apply, Units.mulLeftLinearEquiv_apply,
-            Units.mulRightLinearEquiv_apply, Units.symm_mulRightLinearEquiv_apply,
-            Units.symm_mulLeftLinearEquiv_apply, transferMap_apply]
+          rw [LinearEquiv.conj_apply_apply]
+          simp only [glConjEquiv, LinearEquiv.trans_apply, LinearEquiv.symm_trans_apply,
+            Units.mulLeftLinearEquiv_apply, Units.mulRightLinearEquiv_apply,
+            Units.symm_mulLeftLinearEquiv_apply, Units.symm_mulRightLinearEquiv_apply]
           simp [Matrix.star_eq_conjTranspose, Matrix.mul_assoc, Finset.mul_sum, Finset.sum_mul]]
       simp only [Matrix.mul_assoc]
     rw [hEB_is_conj]
