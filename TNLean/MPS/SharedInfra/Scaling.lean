@@ -33,7 +33,8 @@ theorem leftCanonical_smul_of_norm_one (c : ℂ) (hc : ‖c‖ = 1)
   simp_rw [smul_mul_smul_comm]
   rw [← Finset.smul_sum, hA]
   have hsc : (star c : ℂ) * c = 1 := by
-    rw [← starRingEnd_apply, Complex.conj_mul', hc]; simp
+    simpa [Complex.normSq_eq_norm_sq, hc] using
+      (Complex.normSq_eq_conj_mul_self (z := c)).symm
   rw [hsc, one_smul]
 
 /-- Unit-norm scaling preserves periodicity data. -/
@@ -49,7 +50,7 @@ theorem isPeriodic_smul_of_norm_one
     ext X : 1
     rw [transferMap_smul]
     have hsc : c * starRingEnd ℂ c = 1 := by
-      rw [Complex.mul_conj', hc]; simp
+      simpa [Complex.normSq_eq_norm_sq, hc] using Complex.mul_conj c
     simp [hsc]
   refine ⟨isIrreducibleTensor_smul hc_ne A hA.irreducible,
     leftCanonical_smul_of_norm_one c hc A hA.leftCanonical,
