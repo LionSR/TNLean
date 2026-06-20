@@ -147,15 +147,6 @@ private noncomputable def blockedTensorRangeData
       (mem_range_vecMulLinear_pow_of_transpose_eigenvector
         (M := evalWord A (List.ofFn τ₀)) (ψ := ψ) (ν := ν) hν heigψ)
 
-private theorem BlockedTensorRangeData.rankOne_mem_range
-    {A : MPSTensor d D} {L : ℕ} {σ₀ τ₀ : Fin L → Fin d}
-    {φ ψ : Fin D → ℂ}
-    (data : BlockedTensorRangeData (d := d) (D := D) A L σ₀ τ₀ φ ψ) :
-    Matrix.vecMulVec φ ψ ∈
-      LinearMap.range ((LinearMap.mulLeft ℂ data.P).comp (LinearMap.mulRight ℂ data.Q)) := by
-  exact vecMulVec_mem_range_mulLeft_mulRight
-    data.P data.Q φ ψ data.hφ_range data.hψ_range
-
 private theorem BlockedTensorRangeData.rankOne_mem_cumulativeSpan_of_cumulativeSpan_eq_top
     {A : MPSTensor d D} {L : ℕ} {σ₀ τ₀ : Fin L → Fin d}
     {φ ψ : Fin D → ℂ}
@@ -179,7 +170,8 @@ private theorem BlockedTensorRangeData.rankOne_mem_wordSpan_of_wordSpan_eq_top
       (d := blockPhysDim d L) (D := D) data.P data.Q data.B htop]
     exact biRectSpan_le_wordSpan (d := blockPhysDim d L) (D := D)
       data.B data.P data.Q data.hP data.hQ
-  exact hrange_le data.rankOne_mem_range
+  exact hrange_le (vecMulVec_mem_range_mulLeft_mulRight
+    data.P data.Q φ ψ data.hφ_range data.hψ_range)
 
 private theorem BlockedTensorRangeData.rankOne_mem_wordSpan_of_cumulativeSpan_eq_top_of_aperiodic
     {A : MPSTensor d D} {L : ℕ} {σ₀ τ₀ : Fin L → Fin d}
@@ -190,7 +182,9 @@ private theorem BlockedTensorRangeData.rankOne_mem_wordSpan_of_cumulativeSpan_eq
     Matrix.vecMulVec φ ψ ∈ wordSpan data.B (D + N + D) := by
   exact (range_comp_le_wordSpan_of_cumulativeSpan_eq_top_of_aperiodic
     (d := blockPhysDim d L) (D := D)
-    data.B data.P data.Q data.hP data.hQ hcs hone) data.rankOne_mem_range
+    data.B data.P data.Q data.hP data.hQ hcs hone)
+    (vecMulVec_mem_range_mulLeft_mulRight
+      data.P data.Q φ ψ data.hφ_range data.hψ_range)
 
 end LinearAlgebraLemmas
 
