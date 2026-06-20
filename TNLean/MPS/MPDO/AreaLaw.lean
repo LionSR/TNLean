@@ -246,8 +246,8 @@ namespace Matrix
 theorem PosSemidef.smul_inv_trace {n : Type*} [Fintype n]
     {P : Matrix n n ℂ} (hP : P.PosSemidef) : (P.trace⁻¹ • P).PosSemidef := by
   have htr_nonneg : (0 : ℂ) ≤ P.trace := hP.trace_nonneg
-  have hre : 0 ≤ P.trace.re := htr_nonneg.1
-  have him : P.trace.im = 0 := (Complex.le_def.mp htr_nonneg).2.symm
+  have hre : 0 ≤ P.trace.re := (RCLike.nonneg_iff.mp htr_nonneg).1
+  have him : P.trace.im = 0 := (RCLike.nonneg_iff.mp htr_nonneg).2
   set r : ℝ := P.trace.re with hr
   have htr_eq : P.trace = (r : ℂ) := Complex.ext rfl (by simp [him, hr])
   have hinv_eq : (P.trace)⁻¹ = ((r⁻¹ : ℝ) : ℂ) := by rw [htr_eq, Complex.ofReal_inv]
