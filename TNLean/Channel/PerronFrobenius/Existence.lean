@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.PerronFrobenius.Normalization
+import TNLean.Algebra.MatrixAux
 import TNLean.Axioms.BrouwerFixedPoint
 import TNLean.MPS.Irreducible.Adjoint
 import TNLean.MPS.Core.TPGauge
@@ -210,7 +211,7 @@ theorem adjointTransferMap_ne_zero_of_nonzero
   simp only [transferMap_apply, Matrix.mul_one] at h1
   -- ∑ (A j)ᴴ * ((A j)ᴴ)ᴴ = 0, so each (A j)ᴴ = 0, so each A j = 0.
   have h3 : ∀ j : Fin d, (A j)ᴴ = 0 :=
-    eq_zero_of_sum_mul_conjTranspose_eq_zero (fun j => (A j)ᴴ) h1
+    Matrix.eq_zero_of_sum_mul_conjTranspose_eq_zero (fun j => (A j)ᴴ) h1
   have : (A i)ᴴ = 0 := h3 i
   exact hi (Matrix.conjTranspose_eq_zero.mp this)
 

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.Reduction
+import TNLean.Algebra.MatrixAux
 import TNLean.MPS.Core.OrthogonalProjectionInvariance
 import TNLean.QPF.Assembly
 import Mathlib.LinearAlgebra.Matrix.IsDiag
@@ -89,7 +90,7 @@ lemma invariance_implies_lowerZero
     simp_rw [key, ← Finset.sum_mul, ← Finset.mul_sum]
     rw [show ∑ i : Fin d, A i * P * (A i)ᴴ = transferMap (d := d) (D := D) A P from by
       rw [transferMap_apply], h_EP, zero_mul]
-  exact eq_zero_of_sum_mul_conjTranspose_eq_zero _ h_sum_zero
+  exact Matrix.eq_zero_of_sum_mul_conjTranspose_eq_zero _ h_sum_zero
 
 /-- **Irreducible tensor ⇒ irreducible CP map.**
 

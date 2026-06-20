@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.CyclicSectors
+import TNLean.Algebra.MatrixAux
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Irreducible.Adjoint
 import TNLean.MPS.Irreducible.PeriodicBlocking
@@ -88,7 +89,7 @@ theorem pairwise_mul_zero_of_orthogonalProjection_sum_one
                     _ = P i * (P k * P i) := by rw [(hPproj k).2]
                     _ = P i * P k * P i := by simp [Matrix.mul_assoc]
       _ = 0 := hsum_erase
-  have hB_zero := eq_zero_of_sum_mul_conjTranspose_eq_zero B hsum_B
+  have hB_zero := Matrix.eq_zero_of_sum_mul_conjTranspose_eq_zero B hsum_B
   have hPiPj : P i * P j = 0 := by
     by_cases hji : j = i
     · exact False.elim (hij hji.symm)
@@ -141,4 +142,3 @@ theorem preservesCorner_of_adjoint_fixed_projection
                     simp only [Matrix.mul_assoc]
             _ = (A i)ᴴ * (P * X * P) * A i := by
                     simp only [Matrix.mul_assoc, hP.2]
-

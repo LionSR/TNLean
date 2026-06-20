@@ -87,26 +87,6 @@ end KSEquality
 
 section KSGapDecomposition
 
-/-- If `∑ᵢ Rᵢ† Rᵢ = 0`, then each `Rᵢ = 0`. -/
-private lemma each_zero_of_sum_conjTranspose_mul_self_zero
-    (R : Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (h : ∑ i : Fin d, (R i)ᴴ * R i = 0) :
-    ∀ i : Fin d, R i = 0 := by
-  intro i
-  have h_psd_i := Matrix.posSemidef_conjTranspose_mul_self (R i)
-  have h_each_nonneg : ∀ j, 0 ≤ ((R j)ᴴ * R j).trace.re :=
-    fun j => (Complex.le_def.mp (Matrix.posSemidef_conjTranspose_mul_self (R j)).trace_nonneg).1
-  have h_tr_sum_re : (∑ j : Fin d, ((R j)ᴴ * R j).trace.re) = 0 := by
-    rw [← Complex.re_sum, ← Matrix.trace_sum, h]; simp
-  have h_tr_re : ((R i)ᴴ * R i).trace.re = 0 :=
-    le_antisymm
-      (by linarith [Finset.sum_eq_zero_iff_of_nonneg (fun j _ => h_each_nonneg j)
-            |>.mp h_tr_sum_re i (Finset.mem_univ i)])
-      (h_each_nonneg i)
-  have h_tr_zero : ((R i)ᴴ * R i).trace = 0 :=
-    Complex.ext h_tr_re (Complex.le_def.mp h_psd_i.trace_nonneg).2.symm
-  exact Matrix.conjTranspose_mul_self_eq_zero.mp (h_psd_i.trace_eq_zero_iff.mp h_tr_zero)
-
 /-- **KS gap decomposition**. The Kadison-Schwarz gap decomposes as a sum of
 squares at the Kraus-operator level:
 
@@ -179,7 +159,7 @@ theorem kraus_commute_of_ks_equality (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     rw [h_gap] at this
     exact this
   -- Each term is zero
-  have h_each := each_zero_of_sum_conjTranspose_mul_self_zero
+  have h_each := Matrix.eq_zero_of_sum_conjTranspose_mul_self_eq_zero
     (fun i => X * (K i)ᴴ - (K i)ᴴ * krausMap K X) h_sum_zero
   intro i
   exact sub_eq_zero.mp (h_each i)
