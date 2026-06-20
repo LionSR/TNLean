@@ -62,26 +62,6 @@ theorem maxEigenvalue_achieved [Nonempty (Fin D)]
   obtain ⟨i, _, hi⟩ := Finset.mem_image.mp (Finset.max'_mem _ hne)
   exact ⟨i, hi⟩
 
-/-- Diagonal form of `diag(v) - c • 1`. -/
-theorem diagonal_sub_smul_one (v : Fin D → ℝ) (c : ℝ) :
-    Matrix.diagonal (fun j => (↑(v j) : ℂ)) -
-        (↑c : ℂ) • (1 : Matrix (Fin D) (Fin D) ℂ) =
-      Matrix.diagonal (fun j => (↑(v j - c) : ℂ)) := by
-  rw [← Matrix.diagonal_one, ← Matrix.diagonal_smul, Matrix.diagonal_sub]
-  congr 1
-  ext i
-  simp [Pi.smul_apply, Complex.ofReal_sub]
-
-/-- Diagonal form of `c • 1 - diag(v)`. -/
-theorem diagonal_smul_one_sub (v : Fin D → ℝ) (c : ℝ) :
-    (↑c : ℂ) • (1 : Matrix (Fin D) (Fin D) ℂ) -
-        Matrix.diagonal (fun j => (↑(v j) : ℂ)) =
-      Matrix.diagonal (fun j => (↑(c - v j) : ℂ)) := by
-  rw [← Matrix.diagonal_one, ← Matrix.diagonal_smul, Matrix.diagonal_sub]
-  congr 1
-  ext i
-  simp [Pi.smul_apply, Complex.ofReal_sub]
-
 /-- Spectral form of subtracting a scalar multiple of the identity from a Hermitian matrix. -/
 theorem hermitian_sub_scalar_spectral
     {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.IsHermitian) (c : ℝ) :
@@ -116,7 +96,10 @@ theorem hermitian_sub_scalar_spectral
     _ = U * Matrix.diagonal (fun j => (↑(hM.eigenvalues j - c) : ℂ)) * Uᴴ := by
           congr 1
           congr 1
-          exact diagonal_sub_smul_one hM.eigenvalues c
+          rw [Matrix.smul_one_eq_diagonal, Matrix.diagonal_sub]
+          congr 1
+          ext i
+          simp [Complex.ofReal_sub]
 
 /-- Spectral form of subtracting a Hermitian matrix from a scalar multiple of the identity. -/
 theorem smul_one_sub_hermitian_spectral
@@ -153,7 +136,10 @@ theorem smul_one_sub_hermitian_spectral
     _ = U * Matrix.diagonal (fun j => ↑(c - hM.eigenvalues j)) * Uᴴ := by
           congr 1
           congr 1
-          exact diagonal_smul_one_sub hM.eigenvalues c
+          rw [Matrix.smul_one_eq_diagonal, Matrix.diagonal_sub]
+          congr 1
+          ext i
+          simp [Complex.ofReal_sub]
 
 namespace HermitianHelpers
 
