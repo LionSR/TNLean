@@ -106,11 +106,6 @@ theorem quantum_perron_frobenius [DecidableEq (Fin D)]
 
 `quantum_perron_frobenius` requires `0 < D`. The theorem below lifts this restriction. -/
 
-/-- For D = 0, the zero matrix is vacuously positive definite. -/
-private lemma posDef_zero_fin0 : (0 : Matrix (Fin 0) (Fin 0) ℂ).PosDef :=
-  Matrix.PosDef.of_dotProduct_mulVec_pos Matrix.isHermitian_zero
-    (fun x hx => absurd (Subsingleton.elim x 0) hx)
-
 /-- **Injectivity implies unique fixed point** (without the `0 < D` hypothesis).
 Extends `quantum_perron_frobenius` to the case `D = 0`, which holds vacuously. -/
 theorem injective_transfer_unique_fixed_point' [DecidableEq (Fin D)]
@@ -124,7 +119,8 @@ theorem injective_transfer_unique_fixed_point' [DecidableEq (Fin D)]
     interval_cases D
     exact ⟨0, {
       fixed := by ext i; exact Fin.elim0 i
-      pos_def := posDef_zero_fin0
+      pos_def := Matrix.PosDef.of_dotProduct_mulVec_pos Matrix.isHermitian_zero
+        (fun x hx => absurd (Subsingleton.elim x 0) hx)
       unique := fun σ _ _ => ⟨0, by ext i; exact Fin.elim0 i⟩
     }⟩
 
