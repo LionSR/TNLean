@@ -44,9 +44,6 @@ variable {D : ℕ}
 private abbrev Mat (D : ℕ) := Matrix (Fin D) (Fin D) ℂ
 private abbrev LM (D : ℕ) := Mat D →ₗ[ℂ] Mat D
 
-private abbrev endEquivD (D : ℕ) : LM D ≃ₐ[ℂ] MatrixCLM (Fin D) :=
-  matrixEndEquiv (Fin D)
-
 /-- The linear drift generator `ρ ↦ -κρ - ρκ†`. -/
 abbrev dissipativeDrift (κ : Mat D) : LM D :=
   -(LinearMap.mulLeft ℂ κ) - LinearMap.mulRight ℂ κᴴ
@@ -82,10 +79,10 @@ private theorem rightMulAlgHom_apply (A : (Mat D)ᵐᵒᵖ) (ρ : Mat D) :
   simp [rightMulAlgHom]
 
 private abbrev leftMulCLMAlgHom (D : ℕ) : Mat D →ₐ[ℂ] MatrixCLM (Fin D) :=
-  (endEquivD D).toAlgHom.comp (leftMulAlgHom D)
+  (endEquiv (D := D)).toAlgHom.comp (leftMulAlgHom D)
 
 private abbrev rightMulCLMAlgHom (D : ℕ) : (Mat D)ᵐᵒᵖ →ₐ[ℂ] MatrixCLM (Fin D) :=
-  (endEquivD D).toAlgHom.comp (rightMulAlgHom D)
+  (endEquiv (D := D)).toAlgHom.comp (rightMulAlgHom D)
 
 private theorem leftMulCLM_apply (A ρ : Mat D) :
     leftMulCLMAlgHom D A ρ = A * ρ := by
@@ -136,25 +133,28 @@ private theorem mulRight_eq_rightMulAlgHom (A : Mat D) :
   simp
 
 private theorem endEquiv_mulLeft (A : Mat D) :
-    endEquivD D (LinearMap.mulLeft ℂ A) = leftMulCLMAlgHom D A := by
-  simpa [leftMulCLMAlgHom] using congrArg (endEquivD D) (mulLeft_eq_leftMulAlgHom (D := D) A)
+    endEquiv (D := D) (LinearMap.mulLeft ℂ A) = leftMulCLMAlgHom D A := by
+  simpa [leftMulCLMAlgHom] using
+    congrArg (endEquiv (D := D)) (mulLeft_eq_leftMulAlgHom (D := D) A)
 
 private theorem endEquiv_mulRight (A : Mat D) :
-    endEquivD D (LinearMap.mulRight ℂ A) = rightMulCLMAlgHom D (MulOpposite.op A) := by
-  simpa [rightMulCLMAlgHom] using congrArg (endEquivD D) (mulRight_eq_rightMulAlgHom (D := D) A)
+    endEquiv (D := D) (LinearMap.mulRight ℂ A) = rightMulCLMAlgHom D (MulOpposite.op A) := by
+  simpa [rightMulCLMAlgHom] using
+    congrArg (endEquiv (D := D)) (mulRight_eq_rightMulAlgHom (D := D) A)
 
 private theorem left_right_commute (A B : Mat D) :
     Commute (leftMulCLMAlgHom D A) (rightMulCLMAlgHom D (MulOpposite.op B)) := by
   rw [← endEquiv_mulLeft (D := D) A, ← endEquiv_mulRight (D := D) B]
-  exact (LinearMap.commute_mulLeft_right (R := ℂ) A B).map (endEquivD D)
+  exact (LinearMap.commute_mulLeft_right (R := ℂ) A B).map (endEquiv (D := D))
 
 private theorem endEquiv_dissipativeDrift
     (κ : Mat D) :
-    endEquivD D (dissipativeDrift κ) =
+    endEquiv (D := D) (dissipativeDrift κ) =
       leftMulCLMAlgHom D (-κ) + rightMulCLMAlgHom D (MulOpposite.op (-κᴴ)) := by
   calc
-    endEquivD D (dissipativeDrift κ)
-        = -(endEquivD D (LinearMap.mulLeft ℂ κ)) - endEquivD D (LinearMap.mulRight ℂ κᴴ) := by
+    endEquiv (D := D) (dissipativeDrift κ)
+        = -(endEquiv (D := D) (LinearMap.mulLeft ℂ κ)) -
+          endEquiv (D := D) (LinearMap.mulRight ℂ κᴴ) := by
             simp [dissipativeDrift]
     _ = -leftMulCLMAlgHom D κ - rightMulCLMAlgHom D (MulOpposite.op κᴴ) := by
           rw [endEquiv_mulLeft, endEquiv_mulRight]
@@ -199,7 +199,7 @@ theorem expSemigroup_dissipativeDrift_apply
       NormedSpace.exp (-(t : ℂ) • κ) * ρ *
         (NormedSpace.exp (-(t : ℂ) • κ))ᴴ := by
   have hκ :
-      expSemigroupCLM (endEquivD D (dissipativeDrift κ)) t =
+      expSemigroupCLM (endEquiv (D := D) (dissipativeDrift κ)) t =
         leftMulCLMAlgHom D (NormedSpace.exp (-(t : ℂ) • κ)) *
           rightMulCLMAlgHom D
             (MulOpposite.op (NormedSpace.exp (-(t : ℂ) • κᴴ))) := by
@@ -242,7 +242,7 @@ theorem expSemigroup_dissipativeDrift_apply
         (y := rightMulCLMAlgHom D (MulOpposite.op (-(t : ℂ) • κᴴ)))
         hcomm
     rw [expSemigroupCLM, hsplit, hsum, exp_leftMulCLM, exp_rightMulCLM]
-  change expSemigroupCLM (endEquivD D (dissipativeDrift κ)) t ρ = _
+  change expSemigroupCLM (endEquiv (D := D) (dissipativeDrift κ)) t ρ = _
   rw [hκ]
   have hconj : NormedSpace.exp (-(t : ℂ) • κᴴ) =
       (NormedSpace.exp (-(t : ℂ) • κ))ᴴ := by
