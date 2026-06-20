@@ -65,28 +65,9 @@ theorem mpv_eq_pow_mul_of_gaugePhase
     _ = ζ ^ N * mpv A σ := by
           simp [mpv, coeff, w, hwlen]
 
-/-- If `mpv B σ = ζ ^ N * mpv A σ` for every system size `N` and configuration `σ`, then the
-self-overlap of `B` scales by `(ζ * conj ζ) ^ N` times the self-overlap of `A`. -/
-theorem mpvOverlap_self_scale_of_mpv_eq_pow_mul
-    {D D' : ℕ} {A : MPSTensor d D} {B : MPSTensor d D'} {ζ : ℂ}
-    (hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d), mpv B σ = ζ ^ N * mpv A σ) :
-    ∀ N : ℕ,
-      mpvOverlap (d := d) B B N =
-        (ζ * starRingEnd ℂ ζ) ^ N * mpvOverlap (d := d) A A N := by
-  intro N
-  classical
-  simp only [mpvOverlap]
-  simp_rw [hmpv N, star_mul, star_pow]
-  simp_rw [show star ζ = starRingEnd ℂ ζ from rfl]
-  simp_rw [show ∀ x : Cfg d N,
-      ζ ^ N * mpv A x * (star (mpv A x) * (starRingEnd ℂ ζ) ^ N) =
-        ζ ^ N * (starRingEnd ℂ ζ) ^ N * (mpv A x * star (mpv A x)) from
-      fun x => by ring]
-  rw [← Finset.mul_sum, mul_pow]
-
 /-- If two matrix-product vector families are obtained from a common family by
-length-dependent phases, then their mixed overlap scales by the corresponding
-relative phase. -/
+length-dependent phases `ζ1 ^ N` and `ζ2 ^ N`, then their mixed overlap is
+`(ζ1 * conj ζ2) ^ N` times the self-overlap of the common family. -/
 theorem mpvOverlap_cross_scale_of_mpv_eq_pow_mul
     {D D1 D2 : ℕ} {A : MPSTensor d D} {B1 : MPSTensor d D1} {B2 : MPSTensor d D2}
     {ζ1 ζ2 : ℂ}
@@ -104,6 +85,18 @@ theorem mpvOverlap_cross_scale_of_mpv_eq_pow_mul
         ζ1 ^ N * (star ζ2) ^ N * (mpv A x * star (mpv A x)) from
       fun x => by ring]
   rw [← Finset.mul_sum, mul_pow]
+
+/-- If `mpv B σ = ζ ^ N * mpv A σ` for every system size `N` and configuration `σ`, then the
+self-overlap of `B` scales by `(ζ * conj ζ) ^ N` times the self-overlap of `A`. -/
+theorem mpvOverlap_self_scale_of_mpv_eq_pow_mul
+    {D D' : ℕ} {A : MPSTensor d D} {B : MPSTensor d D'} {ζ : ℂ}
+    (hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d), mpv B σ = ζ ^ N * mpv A σ) :
+    ∀ N : ℕ,
+      mpvOverlap (d := d) B B N =
+        (ζ * starRingEnd ℂ ζ) ^ N * mpvOverlap (d := d) A A N := by
+  simpa using
+    (mpvOverlap_cross_scale_of_mpv_eq_pow_mul
+      (A := A) (B1 := B) (B2 := B) (ζ1 := ζ) (ζ2 := ζ) hmpv hmpv)
 
 /-- If all matrix-product amplitudes of `B` are obtained from those of `A` by the
 length-dependent phase `ζ ^ N`, then the mixed overlap with `A` is

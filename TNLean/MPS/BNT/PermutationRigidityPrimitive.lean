@@ -321,8 +321,8 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
     have hCross_eq : ∀ N : ℕ,
         mpvOverlap (d := d) (B j1) (B j2) N =
         (ζ1 * star ζ2) ^ N *
-          mpvOverlap (d := d) (A (f j1)) (A (f j1)) N := by
-      exact mpvOverlap_cross_scale_of_mpv_eq_pow_mul
+          mpvOverlap (d := d) (A (f j1)) (A (f j1)) N :=
+      mpvOverlap_cross_scale_of_mpv_eq_pow_mul
         (A := A (f j1)) (B1 := B j1) (B2 := B j2) (ζ1 := ζ1) (ζ2 := ζ2)
         hmpv1 hmpv2
     --
