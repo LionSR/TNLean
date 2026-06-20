@@ -84,6 +84,27 @@ theorem mpvOverlap_self_scale_of_mpv_eq_pow_mul
       fun x => by ring]
   rw [← Finset.mul_sum, mul_pow]
 
+/-- If two matrix-product vector families are obtained from a common family by
+length-dependent phases, then their mixed overlap scales by the corresponding
+relative phase. -/
+theorem mpvOverlap_cross_scale_of_mpv_eq_pow_mul
+    {D D1 D2 : ℕ} {A : MPSTensor d D} {B1 : MPSTensor d D1} {B2 : MPSTensor d D2}
+    {ζ1 ζ2 : ℂ}
+    (hmpv1 : ∀ (N : ℕ) (σ : Fin N → Fin d), mpv B1 σ = ζ1 ^ N * mpv A σ)
+    (hmpv2 : ∀ (N : ℕ) (σ : Fin N → Fin d), mpv B2 σ = ζ2 ^ N * mpv A σ) :
+    ∀ N : ℕ,
+      mpvOverlap (d := d) B1 B2 N =
+        (ζ1 * star ζ2) ^ N * mpvOverlap (d := d) A A N := by
+  intro N
+  classical
+  simp only [mpvOverlap]
+  simp_rw [hmpv1 N, hmpv2 N, star_mul, star_pow]
+  simp_rw [show ∀ x : Cfg d N,
+      ζ1 ^ N * mpv A x * (star (mpv A x) * (star ζ2) ^ N) =
+        ζ1 ^ N * (star ζ2) ^ N * (mpv A x * star (mpv A x)) from
+      fun x => by ring]
+  rw [← Finset.mul_sum, mul_pow]
+
 /-- If all matrix-product amplitudes of `B` are obtained from those of `A` by the
 length-dependent phase `ζ ^ N`, then the mixed overlap with `A` is
 `(conj ζ) ^ N` times the self-overlap of `A`. -/
