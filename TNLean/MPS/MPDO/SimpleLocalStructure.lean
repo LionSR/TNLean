@@ -314,7 +314,7 @@ stronger property for the sector trace matrix is the remaining MPDO-specific
 evidence. -/
 theorem traceMatrixRe_nonneg (data : ExplicitEtaOperators hη) (k h : Fin hη.m) :
     0 ≤ data.traceMatrixRe k h :=
-  (Complex.le_def.mp (data.eta_pos k h).trace_nonneg).1
+  (RCLike.nonneg_iff.mp (data.eta_pos k h).trace_nonneg).1
 
 end ExplicitEtaOperators
 
