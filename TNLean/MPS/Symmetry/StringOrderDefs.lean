@@ -286,17 +286,17 @@ lemma stringOrderBoundaryParam_tendsto_zero_of_spectralRadius_lt_one
       exact (map_pow (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
         (twistedTransferMap A u) L).symm
     exact congrArg (fun T => T Y) hpow_eq
-  let φ : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] ℂ :=
-    (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp
-      ((LinearMap.mulLeft ℂ Λ).comp (LinearMap.mulLeft ℂ X))
-  have hφ_cont : Continuous φ := LinearMap.continuous_of_finiteDimensional φ
+  let φ : Matrix (Fin D) (Fin D) ℂ →L[ℂ] ℂ :=
+    LinearMap.toContinuousLinearMap <|
+      (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp
+        ((LinearMap.mulLeft ℂ Λ).comp (LinearMap.mulLeft ℂ X))
   have hφ0 :
       Filter.Tendsto (fun L => φ (((twistedTransferMap A u) ^ L) Y))
         Filter.atTop (nhds (φ 0)) :=
-    hφ_cont.continuousAt.tendsto.comp hIter0
+    (φ.continuous.tendsto 0).comp hIter0
   simpa only [map_zero, stringOrderBoundaryParam, twistedTransferIter, φ,
-    LinearMap.comp_apply, LinearMap.mulLeft_apply, Matrix.traceLinearMap_apply,
-    Matrix.mul_assoc] using hφ0
+    LinearMap.coe_toContinuousLinearMap', LinearMap.comp_apply, LinearMap.mulLeft_apply,
+    Matrix.traceLinearMap_apply, Matrix.mul_assoc] using hφ0
 
 /-- Local symmetry in the virtual FCS language of the paper: there is a unitary
 virtual intertwiner satisfying the phased covariance relation and preserving the
