@@ -83,52 +83,10 @@ private theorem matrix_eq_zero_of_mul_nilpIndex
     (hX : X ∈ LinearMap.range (LinearMap.mulLeft ℂ
       ((A i₀) ^ nilpIndex (toLin' (A i₀)))))
     (hMX : (A i₀) * X = 0) : X = 0 := by
-  -- X ∈ range(mulLeft ((A i₀)^r)) = range(mulLeft ((A i₀)^D))
   have hXD : X ∈ LinearMap.range (LinearMap.mulLeft ℂ ((A i₀) ^ D)) :=
     range_mulLeft_pow_nilpIndex_eq A i₀ ▸ hX
-  -- Now use the column-based injectivity from the D-th power
-  -- Same proof as matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow'
-  classical
-  have hcols : ∀ j : Fin D, X.col j ∈
-      LinearMap.range (Matrix.toLin' ((A i₀) ^ D)) := by
-    have := (mem_range_mulLeft_iff_cols (D := D) (P := (A i₀) ^ D) (M := X)).1 hXD
-    simpa using this
-  set f : End ℂ (Fin D → ℂ) := toLin' (A i₀)
-  have hdisj : Disjoint (LinearMap.ker f)
-      (LinearMap.range (f ^ D)) := by
-    have hker_le : LinearMap.ker f ≤
-        End.maxGenEigenspace f (0 : ℂ) := by
-      intro x hx
-      refine (End.mem_maxGenEigenspace f (0 : ℂ) x).2 ⟨1, ?_⟩
-      simpa using (LinearMap.mem_ker.mp hx)
-    have hindep : iSupIndep (End.maxGenEigenspace f) :=
-      independent_maxGenEigenspace f
-    have hdisj0 : Disjoint (End.maxGenEigenspace f (0 : ℂ))
-        (⨆ (μ : ℂ) (_ : μ ≠ (0 : ℂ)), End.maxGenEigenspace f μ) := hindep 0
-    simpa [WielandtRankOne.range_pow_eq_iSup_maxGenEigenspace_ne_zero
-      (D := D) f] using Disjoint.mono_left hker_le hdisj0
-  have hcol0 : ∀ j : Fin D, X.col j = 0 := by
-    intro j
-    have hcolKilled : (A i₀) *ᵥ (X.col j) = 0 := by
-      have : ((A i₀) * X).col j = 0 := by
-        have hzero : (0 : Matrix (Fin D) (Fin D) ℂ).col j = (0 : Fin D → ℂ) := by
-          ext i
-          simp [Matrix.col_apply]
-        simpa [hzero] using congrArg (fun Z : Matrix (Fin D) (Fin D) ℂ => Z.col j) hMX
-      simpa [col_mul (P := A i₀) (X := X) (j := j)] using this
-    have hv : X.col j ∈ LinearMap.range (f ^ D) := by
-      simpa [f, Matrix.toLin'_pow] using hcols j
-    have hker : X.col j ∈ LinearMap.ker f := by
-      refine LinearMap.mem_ker.mpr ?_
-      simpa [f, Matrix.toLin'_apply] using hcolKilled
-    have : X.col j ∈ (⊥ : Submodule ℂ (Fin D → ℂ)) :=
-      hdisj.eq_bot ▸ ⟨hker, hv⟩
-    simpa using this
-  apply Matrix.ext_col
-  intro j
-  have hzero : (0 : Matrix (Fin D) (Fin D) ℂ).col j = (0 : Fin D → ℂ) := by
-    ext i; simp [Matrix.col_apply]
-  simp [hcol0 j, hzero]
+  exact RectSpanGrowth.matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow
+    A i₀ hXD hMX
 
 /-- Linear map sending `rectSpan ((A i₀)^r) A n` to `rectSpan ((A i₀)^r) A (n+1)`
 by left-multiplication with `A i₀`, where `r = nilpIndex`. -/

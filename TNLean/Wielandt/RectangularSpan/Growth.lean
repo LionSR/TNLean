@@ -133,7 +133,7 @@ private theorem vec_eq_zero_of_mulVec_eq_zero_of_mem_range_pow'
 /-- Matrix-level injectivity on the range of left multiplication by `(A i₀)^D`.
 
 If `X ∈ range(mulLeft ((A i₀)^D))` and `(A i₀) * X = 0`, then `X = 0`. -/
-private theorem matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow'
+theorem matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow
     {X : Matrix (Fin D) (Fin D) ℂ}
     (hX : X ∈ LinearMap.range (LinearMap.mulLeft ℂ ((A i₀) ^ D)))
     (hMX : (A i₀) * X = 0) : X = 0 := by
@@ -175,7 +175,7 @@ theorem rectSpanLeftStep_injective (n : ℕ) :
       (hrect_le_range x.2)
       (hrect_le_range y.2)
   have hzero : x.1 - y.1 = 0 :=
-    matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow' A i₀ hzRange hz
+    matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow A i₀ hzRange hz
   exact Subtype.ext (by simpa [sub_eq_zero] using hzero)
 
 /-- Finrank is non-decreasing along the sequence
