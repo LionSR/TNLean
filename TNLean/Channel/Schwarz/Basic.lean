@@ -279,7 +279,8 @@ private lemma each_zero_of_sum_conjTranspose_mul_self_zero
   intro i
   have h_psd_i := Matrix.posSemidef_conjTranspose_mul_self (R i)
   have h_each_nonneg : ∀ j : ι, 0 ≤ ((R j)ᴴ * R j).trace.re :=
-    fun j => (Complex.le_def.mp (Matrix.posSemidef_conjTranspose_mul_self (R j)).trace_nonneg).1
+    fun j => (RCLike.nonneg_iff.mp
+      (Matrix.posSemidef_conjTranspose_mul_self (R j)).trace_nonneg).1
   have h_tr_sum_re : (∑ j : ι, ((R j)ᴴ * R j).trace.re) = 0 := by
     rw [← Complex.re_sum, ← Matrix.trace_sum, h]
     simp
@@ -290,7 +291,7 @@ private lemma each_zero_of_sum_conjTranspose_mul_self_zero
             |>.mp h_tr_sum_re i (Finset.mem_univ i)])
       (h_each_nonneg i)
   have h_tr_zero : ((R i)ᴴ * R i).trace = 0 :=
-    Complex.ext h_tr_re (Complex.le_def.mp h_psd_i.trace_nonneg).2.symm
+    Complex.ext h_tr_re (RCLike.nonneg_iff.mp h_psd_i.trace_nonneg).2
   exact Matrix.conjTranspose_mul_self_eq_zero.mp (h_psd_i.trace_eq_zero_iff.mp h_tr_zero)
 
 /-- **KS gap decomposition** at the level of Kraus operators.
