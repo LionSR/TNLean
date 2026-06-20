@@ -197,9 +197,8 @@ private noncomputable def choiLinearOnCLM :
 
 /-- The Choi matrix as a continuous linear map on continuous endomorphisms. -/
 noncomputable def choiCLM :
-    MatrixCLM (Fin D) →L[ℂ] Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ where
-  toLinearMap := choiLinearOnCLM
-  cont := choiLinearOnCLM.continuous_of_finiteDimensional
+    MatrixCLM (Fin D) →L[ℂ] Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ :=
+  LinearMap.toContinuousLinearMap choiLinearOnCLM
 
 end ChoiJamiolkowski
 
