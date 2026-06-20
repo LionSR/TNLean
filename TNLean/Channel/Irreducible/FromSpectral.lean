@@ -79,15 +79,6 @@ private lemma trace_ne_zero_of_orthogonalProjection_ne_zero
   intro htr
   exact hP_ne ((hP_psd.trace_eq_zero_iff).1 htr)
 
-private lemma ne_zero_of_mem_densityMatrices
-    {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hρ : ρ ∈ densityMatrices D) :
-    ρ ≠ 0 := by
-  intro hρ0
-  have htr : Matrix.trace ρ = 1 := hρ.2
-  rw [hρ0, Matrix.trace_zero (Fin D) ℂ] at htr
-  exact zero_ne_one htr
-
 private lemma normalizedProjection_mem_densityMatrices
     {P : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsOrthogonalProjection P) (hP_ne : P ≠ 0) :
@@ -321,7 +312,11 @@ theorem isIrreducibleMap_of_channel_posDef_fixedPoint_unique
     IsChannel.cesaroMean_subseq_limit_fixedPoint (E := E) hE hρ₀_mem
       hφ_mono.tendsto_atTop hσ_tendsto
   have hσ_fix : E σ = σ := hσ_lim.2
-  have hσ_ne : σ ≠ 0 := ne_zero_of_mem_densityMatrices (D := D) hσ_lim.1
+  have hσ_ne : σ ≠ 0 := by
+    intro hσ0
+    have htr : Matrix.trace σ = 1 := hσ_lim.1.2
+    rw [hσ0, Matrix.trace_zero (Fin D) ℂ] at htr
+    exact zero_ne_one htr
   have hcorner_tendsto : Filter.Tendsto
       (fun k => P * cesaroMean E ρ₀ (φ k + 1) * P)
       Filter.atTop (nhds (P * σ * P)) := by
