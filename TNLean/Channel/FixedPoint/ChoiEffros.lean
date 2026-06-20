@@ -43,8 +43,11 @@ private theorem map_fixes_range_of_idempotent
     (hIdem : mapLM K ∘ₗ mapLM K = mapLM K)
     (X : Mat) :
     map K (map K X) = map K X := by
-  have h := congrArg (fun F : Mat →ₗ[ℂ] Mat => F X) hIdem
-  simpa only [LinearMap.comp_apply, mapLM_apply] using h
+  have hIdem' : IsIdempotentElem (mapLM K) := by
+    simpa [IsIdempotentElem, Module.End.mul_eq_comp] using hIdem
+  simpa only [mapLM_apply] using
+    (LinearMap.IsIdempotentElem.mem_range_iff hIdem').mp
+      (LinearMap.mem_range_self (mapLM K) X)
 
 /-- For an idempotent unital Kraus map with a positive definite adjoint fixed
 point, every projected element lies in the multiplicative domain. -/
