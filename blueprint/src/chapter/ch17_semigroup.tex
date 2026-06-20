@@ -982,11 +982,6 @@ which shows that such generators have the standard Lindblad form.
     $T_{nt} = (T_t)^n$.
 \end{theorem}
 
-\begin{theorem}[Eigenvector propagation under powers]
-    \lean{pow_apply_eigenvector}\leanok
-    If $E(v)=\mu v$, then $E^n(v)=\mu^n v$ for all $n\in\N$.
-\end{theorem}
-
 \begin{lemma}[Density matrices are nonzero]
     \lean{ne_zero_of_mem_densityMatrices'}\leanok
     Every density matrix is nonzero.
@@ -1035,12 +1030,6 @@ which shows that such generators have the standard Lindblad form.
     \lean{peripheral_powers_closed_of_irreducible_channel_with_fixed}\leanok
     For an irreducible channel with faithful fixed point, every power of a
     peripheral eigenvalue is again peripheral.
-\end{theorem}
-
-\begin{theorem}[Continuous-linear-map power evaluation]
-    \lean{toContinuousLinearMap_pow_apply}\leanok
-    Evaluating powers of a linear map agrees with powers in its continuous
-    linear realization.
 \end{theorem}
 
 \begin{theorem}[Spectral-radius criterion from eigenvalue bounds]
