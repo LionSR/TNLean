@@ -156,7 +156,7 @@ theorem redBundleInsertedCoeff_bondModelMatrix_eq_configSum
           (regionBoundaryLabel (G := G) A (Finset.univ \ F.frame.red) η) =
         regionBoundaryLabel (G := G) A F.frame.red η from by
       funext f
-      simp only [regionComplementBoundaryConfigEquiv, Equiv.coe_fn_symm_mk,
+      simp only [regionComplementBoundaryConfigEquiv_symm_apply,
         regionBoundaryLabel_apply, regionBoundaryEdgeComplEquiv_apply_coe]]
     by_cases hag : SameAwayFromRBBundle (G := G) A F.frame.red F.frame.blue
         (regionBoundaryLabel (G := G) A F.frame.red ζr)
