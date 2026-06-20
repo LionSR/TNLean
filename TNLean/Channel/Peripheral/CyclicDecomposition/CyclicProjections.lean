@@ -41,7 +41,8 @@ private lemma star_mul_self_of_primitiveRoot {γ : ℂ} (hγprim : IsPrimitiveRo
     star γ * γ = 1 := by
   have hγ_norm : ‖γ‖ = 1 :=
     Complex.norm_eq_one_of_pow_eq_one hγprim.pow_eq_one (NeZero.ne m)
-  rw [← starRingEnd_apply, Complex.conj_mul', hγ_norm]; simp
+  simpa [Complex.normSq_eq_norm_sq, hγ_norm] using
+    (Complex.normSq_eq_conj_mul_self (z := γ)).symm
 
 /-- A primitive root has unit modulus, written as `γ * star γ = 1`. -/
 private lemma self_mul_star_of_primitiveRoot {γ : ℂ} (hγprim : IsPrimitiveRoot γ m) :
