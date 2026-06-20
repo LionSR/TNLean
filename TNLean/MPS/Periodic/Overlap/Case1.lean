@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Periodic.Overlap.SelfOverlap
 import TNLean.MPS.Periodic.Overlap.GaugePhase
+import Mathlib.Algebra.Module.Equiv.Basic
 
 /-!
 # Periodic overlap dichotomy: Case 1
@@ -37,19 +38,6 @@ private noncomputable def glConjEquiv (X : GL (Fin D) ℂ) :
     Matrix (Fin D) (Fin D) ℂ ≃ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
   (X.mulLeftLinearEquiv ℂ (Matrix (Fin D) (Fin D) ℂ)).trans
     ((star X).mulRightLinearEquiv ℂ)
-
-@[simp] private lemma glConjEquiv_apply (X : GL (Fin D) ℂ)
-    (Y : Matrix (Fin D) (Fin D) ℂ) :
-    glConjEquiv X Y = X.val * Y * X.valᴴ := rfl
-
-@[simp] private lemma glConjEquiv_symm_apply (X : GL (Fin D) ℂ)
-    (Y : Matrix (Fin D) (Fin D) ℂ) :
-    (glConjEquiv X).symm Y = X⁻¹.val * Y * X⁻¹.valᴴ := by
-  simp only [glConjEquiv]
-  rw [LinearEquiv.symm_trans_apply]
-  rw [Units.symm_mulRightLinearEquiv_apply, Units.symm_mulLeftLinearEquiv_apply]
-  rw [Units.coe_star_inv]
-  simp [Matrix.star_eq_conjTranspose, Matrix.mul_assoc]
 
 /-- **GaugePhaseEquiv preserves periods.**
 
@@ -91,9 +79,16 @@ private theorem period_eq_of_gaugePhaseEquiv_of_isPeriodic
         (glConjEquiv X).conj (transferMap (d := d) (D := D) A) := by
       apply LinearMap.ext; intro Y
       rw [hEB_eq, hζζ_real, show (↑(‖ζ‖ ^ 2) : ℂ) = (1 : ℂ) from by simp [h_eig_eq],
-        one_smul]
-      simp [LinearEquiv.conj_apply, transferMap_apply, Finset.mul_sum, Finset.sum_mul,
-        Matrix.mul_assoc]
+        one_smul,
+        show (glConjEquiv X).conj (transferMap (d := d) (D := D) A) Y =
+          X.val * (transferMap (d := d) (D := D) A
+            (X⁻¹.val * (Y * X⁻¹.valᴴ)) * X.valᴴ) from by
+          simp only [LinearEquiv.conj_apply_apply, glConjEquiv, LinearEquiv.trans_apply,
+            LinearEquiv.symm_trans_apply, Units.mulLeftLinearEquiv_apply,
+            Units.mulRightLinearEquiv_apply, Units.symm_mulRightLinearEquiv_apply,
+            Units.symm_mulLeftLinearEquiv_apply, transferMap_apply]
+          simp [Matrix.star_eq_conjTranspose, Matrix.mul_assoc, Finset.mul_sum, Finset.sum_mul]]
+      simp only [Matrix.mul_assoc]
     rw [hEB_is_conj]
     exact (peripheralEigenvalues_conj (glConjEquiv X)
       (transferMap (d := d) (D := D) A)).symm
