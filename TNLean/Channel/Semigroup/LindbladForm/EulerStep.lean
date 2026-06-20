@@ -242,9 +242,6 @@ local instance (priority := 1001) instNormOneClassSgCLM [NeZero D] :
   change ‖(ContinuousLinearMap.id ℂ (sgMat D))‖ = 1
   exact ContinuousLinearMap.norm_id (𝕜 := ℂ) (E := sgMat D)
 
-private abbrev sgEndEquiv (D : ℕ) : sgLM D ≃ₐ[ℂ] sgCLM D :=
-  Module.End.toContinuousLinearMap (sgMat D)
-
 private def quadMap (G : GeneratorDecomp D) : sgLM D :=
   Kraus.mapLM (fun _ : Fin 1 => G.κ)
 
@@ -296,9 +293,9 @@ private theorem eulerStep_cp (G : GeneratorDecomp D) {s : ℝ} (hs : 0 ≤ s) :
   exact G.φ_cp.smul_nonneg hs
 
 private theorem eulerStep_toCLM_eq (G : GeneratorDecomp D) (s : ℝ) :
-    sgEndEquiv D (eulerStep G s) =
-      1 + (s : ℂ) • sgEndEquiv D G.toLinearMap + ((s ^ 2 : ℝ) : ℂ) •
-        sgEndEquiv D (quadMap G) := by
+    (endEquiv (D := D)) (eulerStep G s) =
+      1 + (s : ℂ) • (endEquiv (D := D)) G.toLinearMap + ((s ^ 2 : ℝ) : ℂ) •
+        (endEquiv (D := D)) (quadMap G) := by
   ext ρ i j
   change (eulerStep G s ρ) i j =
     (ρ + (s : ℂ) • G.toLinearMap ρ + ((s ^ 2 : ℝ) : ℂ) • quadMap G ρ) i j
@@ -331,85 +328,100 @@ private theorem norm_expSemigroupCLM_sub_one_add_smul_le [NeZero D]
 
 private theorem norm_eulerStep_sub_expSemigroupCLM_le [NeZero D]
     (G : GeneratorDecomp D) {s : ℝ} (hs : 0 ≤ s) :
-    ‖sgEndEquiv D (eulerStep G s) - expSemigroupCLM (sgEndEquiv D G.toLinearMap) s‖ ≤
+    ‖(endEquiv (D := D)) (eulerStep G s) -
+        expSemigroupCLM ((endEquiv (D := D)) G.toLinearMap) s‖ ≤
       s ^ 2 *
-        (‖sgEndEquiv D G.toLinearMap‖ ^ 2 *
-            Real.exp (s * ‖sgEndEquiv D G.toLinearMap‖) +
-          ‖sgEndEquiv D (quadMap G)‖) := by
+        (‖(endEquiv (D := D)) G.toLinearMap‖ ^ 2 *
+            Real.exp (s * ‖(endEquiv (D := D)) G.toLinearMap‖) +
+          ‖(endEquiv (D := D)) (quadMap G)‖) := by
   rw [eulerStep_toCLM_eq]
   have hsplit :
-      (1 + (s : ℂ) • sgEndEquiv D G.toLinearMap + ((s ^ 2 : ℝ) : ℂ) •
-          sgEndEquiv D (quadMap G)) - expSemigroupCLM (sgEndEquiv D G.toLinearMap) s =
-        ((1 + (s : ℂ) • sgEndEquiv D G.toLinearMap) -
-            expSemigroupCLM (sgEndEquiv D G.toLinearMap) s) +
-          ((s ^ 2 : ℝ) : ℂ) • sgEndEquiv D (quadMap G) := by
+      (1 + (s : ℂ) • (endEquiv (D := D)) G.toLinearMap + ((s ^ 2 : ℝ) : ℂ) •
+          (endEquiv (D := D)) (quadMap G)) - expSemigroupCLM ((endEquiv (D := D)) G.toLinearMap) s =
+        ((1 + (s : ℂ) • (endEquiv (D := D)) G.toLinearMap) -
+            expSemigroupCLM ((endEquiv (D := D)) G.toLinearMap) s) +
+          ((s ^ 2 : ℝ) : ℂ) • (endEquiv (D := D)) (quadMap G) := by
     abel
   rw [hsplit]
   calc
-    ‖((1 + (s : ℂ) • sgEndEquiv D G.toLinearMap) -
-          expSemigroupCLM (sgEndEquiv D G.toLinearMap) s) +
-        ((s ^ 2 : ℝ) : ℂ) • sgEndEquiv D (quadMap G)‖ ≤
-        ‖(1 + (s : ℂ) • sgEndEquiv D G.toLinearMap) -
-            expSemigroupCLM (sgEndEquiv D G.toLinearMap) s‖ +
-          ‖((s ^ 2 : ℝ) : ℂ) • sgEndEquiv D (quadMap G)‖ := by
+    ‖((1 + (s : ℂ) • (endEquiv (D := D)) G.toLinearMap) -
+          expSemigroupCLM ((endEquiv (D := D)) G.toLinearMap) s) +
+        ((s ^ 2 : ℝ) : ℂ) • (endEquiv (D := D)) (quadMap G)‖ ≤
+        ‖(1 + (s : ℂ) • (endEquiv (D := D)) G.toLinearMap) -
+            expSemigroupCLM ((endEquiv (D := D)) G.toLinearMap) s‖ +
+          ‖((s ^ 2 : ℝ) : ℂ) • (endEquiv (D := D)) (quadMap G)‖ := by
           exact norm_add_le _ _
-    _ = ‖expSemigroupCLM (sgEndEquiv D G.toLinearMap) s -
-            (1 + (s : ℂ) • sgEndEquiv D G.toLinearMap)‖ +
-          ‖((s ^ 2 : ℝ) : ℂ) • sgEndEquiv D (quadMap G)‖ := by
+    _ = ‖expSemigroupCLM ((endEquiv (D := D)) G.toLinearMap) s -
+            (1 + (s : ℂ) • (endEquiv (D := D)) G.toLinearMap)‖ +
+          ‖((s ^ 2 : ℝ) : ℂ) • (endEquiv (D := D)) (quadMap G)‖ := by
           congr 1
           exact norm_sub_rev _ _
-    _ ≤ s ^ 2 * ‖sgEndEquiv D G.toLinearMap‖ ^ 2 *
-            Real.exp (s * ‖sgEndEquiv D G.toLinearMap‖) +
-          ‖((s ^ 2 : ℝ) : ℂ) • sgEndEquiv D (quadMap G)‖ := by
+    _ ≤ s ^ 2 * ‖(endEquiv (D := D)) G.toLinearMap‖ ^ 2 *
+            Real.exp (s * ‖(endEquiv (D := D)) G.toLinearMap‖) +
+          ‖((s ^ 2 : ℝ) : ℂ) • (endEquiv (D := D)) (quadMap G)‖ := by
           gcongr
-          exact norm_expSemigroupCLM_sub_one_add_smul_le (A := sgEndEquiv D G.toLinearMap) hs
+          exact norm_expSemigroupCLM_sub_one_add_smul_le (A := (endEquiv (D := D)) G.toLinearMap) hs
     _ = s ^ 2 *
-          (‖sgEndEquiv D G.toLinearMap‖ ^ 2 * Real.exp (s * ‖sgEndEquiv D G.toLinearMap‖) +
-            ‖sgEndEquiv D (quadMap G)‖) := by
+          (‖(endEquiv (D := D)) G.toLinearMap‖ ^ 2 *
+              Real.exp (s * ‖(endEquiv (D := D)) G.toLinearMap‖) +
+            ‖(endEquiv (D := D)) (quadMap G)‖) := by
           rw [norm_smul, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg (sq_nonneg s)]
           ring
 
 private theorem norm_eulerStep_toCLM_le [NeZero D]
     (G : GeneratorDecomp D) {s T : ℝ} (hs : 0 ≤ s) (hT : s ≤ T) :
-    ‖sgEndEquiv D (eulerStep G s)‖ ≤
-      Real.exp (s * (‖sgEndEquiv D G.toLinearMap‖ + T * ‖sgEndEquiv D (quadMap G)‖)) := by
+    ‖(endEquiv (D := D)) (eulerStep G s)‖ ≤
+      Real.exp
+        (s * (‖(endEquiv (D := D)) G.toLinearMap‖ +
+          T * ‖(endEquiv (D := D)) (quadMap G)‖)) := by
   haveI : NormOneClass (sgCLM D) := by
     constructor
     change ‖(ContinuousLinearMap.id ℂ (sgMat D))‖ = 1
     exact ContinuousLinearMap.norm_id (𝕜 := ℂ) (E := sgMat D)
   rw [eulerStep_toCLM_eq]
-  have hbasic : ‖1 + (s : ℂ) • sgEndEquiv D G.toLinearMap + ((s ^ 2 : ℝ) : ℂ) •
-      sgEndEquiv D (quadMap G)‖ ≤
-      1 + s * ‖sgEndEquiv D G.toLinearMap‖ + s ^ 2 * ‖sgEndEquiv D (quadMap G)‖ := by
+  have hbasic : ‖1 + (s : ℂ) • (endEquiv (D := D)) G.toLinearMap + ((s ^ 2 : ℝ) : ℂ) •
+      (endEquiv (D := D)) (quadMap G)‖ ≤
+      1 + s * ‖(endEquiv (D := D)) G.toLinearMap‖ +
+        s ^ 2 * ‖(endEquiv (D := D)) (quadMap G)‖ := by
     calc
-      ‖1 + (s : ℂ) • sgEndEquiv D G.toLinearMap + ((s ^ 2 : ℝ) : ℂ) •
-          sgEndEquiv D (quadMap G)‖ ≤
-          ‖1 + (s : ℂ) • sgEndEquiv D G.toLinearMap‖ +
-            ‖((s ^ 2 : ℝ) : ℂ) • sgEndEquiv D (quadMap G)‖ := norm_add_le _ _
-      _ ≤ (‖(1 : sgCLM D)‖ + ‖(s : ℂ) • sgEndEquiv D G.toLinearMap‖) +
-            ‖((s ^ 2 : ℝ) : ℂ) • sgEndEquiv D (quadMap G)‖ := by
+      ‖1 + (s : ℂ) • (endEquiv (D := D)) G.toLinearMap + ((s ^ 2 : ℝ) : ℂ) •
+          (endEquiv (D := D)) (quadMap G)‖ ≤
+          ‖1 + (s : ℂ) • (endEquiv (D := D)) G.toLinearMap‖ +
+            ‖((s ^ 2 : ℝ) : ℂ) • (endEquiv (D := D)) (quadMap G)‖ := norm_add_le _ _
+      _ ≤ (‖(1 : sgCLM D)‖ + ‖(s : ℂ) • (endEquiv (D := D)) G.toLinearMap‖) +
+            ‖((s ^ 2 : ℝ) : ℂ) • (endEquiv (D := D)) (quadMap G)‖ := by
             gcongr
             exact norm_add_le _ _
-      _ = 1 + s * ‖sgEndEquiv D G.toLinearMap‖ + s ^ 2 * ‖sgEndEquiv D (quadMap G)‖ := by
+      _ = 1 + s * ‖(endEquiv (D := D)) G.toLinearMap‖ +
+            s ^ 2 * ‖(endEquiv (D := D)) (quadMap G)‖ := by
             rw [norm_one, norm_smul, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hs,
               norm_smul, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg (sq_nonneg s)]
-  have hsq_le : s ^ 2 * ‖sgEndEquiv D (quadMap G)‖ ≤ s * (T * ‖sgEndEquiv D (quadMap G)‖) := by
-    have hquad_nonneg : 0 ≤ ‖sgEndEquiv D (quadMap G)‖ := norm_nonneg _
+  have hsq_le :
+      s ^ 2 * ‖(endEquiv (D := D)) (quadMap G)‖ ≤
+        s * (T * ‖(endEquiv (D := D)) (quadMap G)‖) := by
+    have hquad_nonneg : 0 ≤ ‖(endEquiv (D := D)) (quadMap G)‖ := norm_nonneg _
     have hs_le : s ^ 2 ≤ s * T := by
       nlinarith
     simpa [mul_assoc] using mul_le_mul_of_nonneg_right hs_le hquad_nonneg
-  have hlin : 1 + s * ‖sgEndEquiv D G.toLinearMap‖ + s ^ 2 * ‖sgEndEquiv D (quadMap G)‖ ≤
-      1 + s * (‖sgEndEquiv D G.toLinearMap‖ + T * ‖sgEndEquiv D (quadMap G)‖) := by
+  have hlin :
+      1 + s * ‖(endEquiv (D := D)) G.toLinearMap‖ +
+          s ^ 2 * ‖(endEquiv (D := D)) (quadMap G)‖ ≤
+        1 + s * (‖(endEquiv (D := D)) G.toLinearMap‖ +
+          T * ‖(endEquiv (D := D)) (quadMap G)‖) := by
     nlinarith
   calc
-    ‖1 + (s : ℂ) • sgEndEquiv D G.toLinearMap + ((s ^ 2 : ℝ) : ℂ) •
-        sgEndEquiv D (quadMap G)‖ ≤
-        1 + s * (‖sgEndEquiv D G.toLinearMap‖ + T * ‖sgEndEquiv D (quadMap G)‖) :=
+    ‖1 + (s : ℂ) • (endEquiv (D := D)) G.toLinearMap + ((s ^ 2 : ℝ) : ℂ) •
+        (endEquiv (D := D)) (quadMap G)‖ ≤
+        1 + s * (‖(endEquiv (D := D)) G.toLinearMap‖ +
+          T * ‖(endEquiv (D := D)) (quadMap G)‖) :=
       hbasic.trans hlin
-    _ ≤ Real.exp (s * (‖sgEndEquiv D G.toLinearMap‖ + T * ‖sgEndEquiv D (quadMap G)‖)) := by
+    _ ≤ Real.exp
+          (s * (‖(endEquiv (D := D)) G.toLinearMap‖ +
+            T * ‖(endEquiv (D := D)) (quadMap G)‖)) := by
           simpa [add_comm] using
             Real.add_one_le_exp
-              (s * (‖sgEndEquiv D G.toLinearMap‖ + T * ‖sgEndEquiv D (quadMap G)‖))
+              (s * (‖(endEquiv (D := D)) G.toLinearMap‖ +
+                T * ‖(endEquiv (D := D)) (quadMap G)‖))
 
 private theorem norm_pow_sub_pow_le [NeZero D]
     {A B : sgCLM D} {M : ℝ} (hM : 1 ≤ M) (hA : ‖A‖ ≤ M) (hB : ‖B‖ ≤ M) :
@@ -464,16 +476,17 @@ private theorem generatorDecomp_cp_semigroup (G : GeneratorDecomp D) :
       intro n
       have hs : 0 ≤ t / (n + 1) := by positivity
       exact (eulerStep_cp G hs).pow (n + 1)
-    let Lc : sgCLM D := sgEndEquiv D G.toLinearMap
-    let Qc : sgCLM D := sgEndEquiv D (quadMap G)
+    let Lc : sgCLM D := (endEquiv (D := D)) G.toLinearMap
+    let Qc : sgCLM D := (endEquiv (D := D)) (quadMap G)
     let C0 : ℝ := ‖Lc‖ + t * ‖Qc‖
     let C1 : ℝ := ‖Lc‖ ^ 2 * Real.exp (t * ‖Lc‖) + ‖Qc‖
     have hbound : ∀ n : ℕ,
-        ‖sgEndEquiv D (approx n) - sgEndEquiv D (expSemigroup G.toLinearMap t)‖ ≤
+        ‖(endEquiv (D := D)) (approx n) -
+            (endEquiv (D := D)) (expSemigroup G.toLinearMap t)‖ ≤
           t ^ 2 * Real.exp (t * C0) * C1 / (n + 1) := by
       intro n
       let s : ℝ := t / (n + 1)
-      let F : sgCLM D := sgEndEquiv D (eulerStep G s)
+      let F : sgCLM D := (endEquiv (D := D)) (eulerStep G s)
       let S : sgCLM D := expSemigroupCLM Lc s
       have hs_nonneg : 0 ≤ s := by
         dsimp [s]
@@ -522,15 +535,15 @@ private theorem generatorDecomp_cp_semigroup (G : GeneratorDecomp D) :
         dsimp [s]
         rw [Nat.cast_add, Nat.cast_one]
         field_simp
-      have happrox_eq : sgEndEquiv D (approx n) = F ^ (n + 1) := by
+      have happrox_eq : (endEquiv (D := D)) (approx n) = F ^ (n + 1) := by
         dsimp [approx, F]
         rw [map_pow]
-      have hexp_eq : sgEndEquiv D (expSemigroup G.toLinearMap t) = S ^ (n + 1) := by
+      have hexp_eq : (endEquiv (D := D)) (expSemigroup G.toLinearMap t) = S ^ (n + 1) := by
         dsimp [S, Lc, s]
         rw [expSemigroup_toCLM]
         symm
         rw [expSemigroupCLM_pow_eq
-          (A := sgEndEquiv D G.toLinearMap) (s := t / (n + 1)) (m := n + 1)]
+          (A := (endEquiv (D := D)) G.toLinearMap) (s := t / (n + 1)) (m := n + 1)]
         congr 1
         rw [Nat.cast_add, Nat.cast_one]
         field_simp
@@ -552,8 +565,8 @@ private theorem generatorDecomp_cp_semigroup (G : GeneratorDecomp D) :
       have hden : Filter.Tendsto (fun n : ℕ => ((n + 1 : ℕ) : ℝ)) Filter.atTop Filter.atTop :=
         tendsto_natCast_atTop_atTop.comp (Filter.tendsto_add_atTop_nat 1)
       simpa using (Filter.Tendsto.div_atTop tendsto_const_nhds hden)
-    have hlim : Filter.Tendsto (fun n : ℕ => sgEndEquiv D (approx n)) Filter.atTop
-        (nhds (sgEndEquiv D (expSemigroup G.toLinearMap t))) := by
+    have hlim : Filter.Tendsto (fun n : ℕ => (endEquiv (D := D)) (approx n)) Filter.atTop
+        (nhds ((endEquiv (D := D)) (expSemigroup G.toLinearMap t))) := by
       exact tendsto_iff_norm_sub_tendsto_zero.2
         (squeeze_zero (fun n => norm_nonneg _) hbound hbound_tendsto)
     exact IsCPMap.of_tendsto_toCLM (D := D) happrox_cp hlim
