@@ -249,19 +249,24 @@ theorem constrained_mu_sum_collapse (A : Tensor G d) (v : V) (ie : IncidentEdge 
       ∑ j : Fin (A.bondDim ie.1), F (Function.update ρ ie j) := by
   classical
   rw [← Finset.sum_filter]
-  refine Finset.sum_nbij' (fun μ => μ ie) (fun j => Function.update ρ ie j) ?_ ?_ ?_ ?_ ?_
-  · intro μ _; exact Finset.mem_univ _
-  · intro j _
-    rw [Finset.mem_filter]
-    exact ⟨Finset.mem_univ _, fun c hc => Function.update_of_ne hc _ _⟩
-  · intro μ hμ
-    rw [Finset.mem_filter] at hμ
-    rw [(sameAwayFromBond_iff_update A v ie μ ρ).mp hμ.2]
-    simp
-  · intro j _; simp
-  · intro μ hμ
-    rw [Finset.mem_filter] at hμ
-    rw [← (sameAwayFromBond_iff_update A v ie μ ρ).mp hμ.2]
+  let φ : {μ : LocalVirtualConfig A v // SameAwayFromBond ie μ ρ} ≃
+      Fin (A.bondDim ie.1) := {
+    toFun := fun μ => μ.1 ie
+    invFun := fun j =>
+      ⟨Function.update ρ ie j, fun c hc => Function.update_of_ne hc _ _⟩
+    left_inv := fun μ => by
+      apply Subtype.ext
+      exact ((sameAwayFromBond_iff_update A v ie μ.1 ρ).mp μ.2).symm
+    right_inv := fun j => by
+      simp }
+  rw [← Finset.sum_subtype_eq_sum_filter (s := Finset.univ) (f := F)
+    (p := fun μ => SameAwayFromBond ie μ ρ)]
+  simpa using Fintype.sum_equiv φ
+    (fun μ : {μ : LocalVirtualConfig A v // SameAwayFromBond ie μ ρ} => F μ.1)
+    (fun j : Fin (A.bondDim ie.1) => F (Function.update ρ ie j)) (by
+      intro μ
+      change F μ.1 = F (Function.update ρ ie (μ.1 ie))
+      exact congrArg F ((sameAwayFromBond_iff_update A v ie μ.1 ρ).mp μ.2))
 
 /-- Split a global virtual configuration into the value on a chosen edge and the
 configuration on all remaining edges. -/
