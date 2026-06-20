@@ -109,14 +109,6 @@ theorem sum_pow_eq_implies_charpoly_diagonal_eq_of_le_card
   rw [trace_diagonal_pow, trace_diagonal_pow]
   exact h k hk hkcard
 
-private lemma roots_prod_X_sub_C (f : n → ℂ) :
-    (∏ i : n, (X - C (f i))).roots = Finset.univ.val.map f := by
-  have hne : (∏ i : n, (X - C (f i))) ≠ 0 := by
-    rw [Finset.prod_ne_zero_iff]
-    exact fun i _ => X_sub_C_ne_zero (f i)
-  rw [roots_prod _ _ hne]
-  simp
-
 /-- Equal power sums through `card n` determine the same multiset of values for
 two families indexed by the same finite type.
 
@@ -132,7 +124,11 @@ theorem sum_pow_eq_implies_multiset_eq_of_le_card
   rw [charpoly_diagonal, charpoly_diagonal] at hcp
   have hroots : (∏ i : n, (X - C (a i))).roots = (∏ i : n, (X - C (b i))).roots :=
     congrArg Polynomial.roots hcp
-  simpa [roots_prod_X_sub_C] using hroots
+  have hroots_a : (∏ i : n, (X - C (a i))).roots = Finset.univ.val.map a := by
+    simpa using Polynomial.roots_multiset_prod_X_sub_C (Finset.univ.val.map a)
+  have hroots_b : (∏ i : n, (X - C (b i))).roots = Finset.univ.val.map b := by
+    simpa using Polynomial.roots_multiset_prod_X_sub_C (Finset.univ.val.map b)
+  rwa [hroots_a, hroots_b] at hroots
 
 /-- Equal power sums of two families indexed by the same finite type imply that the families
 give rise to the same multiset of values.
