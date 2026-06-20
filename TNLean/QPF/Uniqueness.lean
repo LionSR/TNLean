@@ -211,7 +211,7 @@ lemma exists_critical_scalar [Nonempty (Fin D)]
     rw [h_shift, hct]
     exact (Matrix.IsUnit.posSemidef_star_right_conjugate_iff hV_unit).mpr
       (Matrix.posSemidef_diagonal_iff.mpr (fun i => by
-        simp only [Complex.nonneg_iff]
+        rw [RCLike.nonneg_iff]
         constructor
         · exact_mod_cast sub_nonneg.mpr (minEigenvalue_le hH_herm i)
         · simp [Complex.ofReal_im]))
