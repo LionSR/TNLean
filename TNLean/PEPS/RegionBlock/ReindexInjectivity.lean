@@ -31,17 +31,8 @@ by casting every open leg across the bond-dimension equality. -/
 noncomputable def regionBoundaryConfigCastEquiv (T : Tensor G d) {bd : Edge G → ℕ}
     (h : bd = T.bondDim) (R : Finset V) :
     RegionBoundaryConfig (G := G) (reindexTensor (G := G) T h) R ≃
-      RegionBoundaryConfig (G := G) T R where
-  toFun bdry := fun f => Fin.cast (congr_fun h f.1) (bdry f)
-  invFun bdry := fun f => Fin.cast (congr_fun h f.1).symm (bdry f)
-  left_inv bdry := by
-    funext f
-    apply Fin.eq_of_val_eq
-    simp
-  right_inv bdry := by
-    funext f
-    apply Fin.eq_of_val_eq
-    simp
+      RegionBoundaryConfig (G := G) T R :=
+  Equiv.piCongrRight fun f => finCongr (congr_fun h f.1)
 
 /-- **A bond-dimension reindex preserves blocked-region linear independence.**
 
