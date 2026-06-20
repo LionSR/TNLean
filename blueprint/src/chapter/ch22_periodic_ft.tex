@@ -1134,24 +1134,6 @@ unconditional result.
     \]
 \end{lemma}
 
-\begin{lemma}[Splitting the last edge of a finite cycle]%
-    \label{lem:finite_cycle_product_split_last}
-    \lean{TNLean.Algebra.prod_univ_eq_prod_castSucc_last}
-    \leanok
-    \uses{}
-    For elements $\kappa_0,\ldots,\kappa_n$ of a commutative group,
-    \[
-        \prod_{k=0}^{n}\kappa_k
-        =
-        \left(\prod_{k=0}^{n-1}\kappa_k\right)\cdot\kappa_n.
-    \]
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{}
-    Separate the final factor from the product over the finite interval.
-\end{proof}
-
 \begin{lemma}[Finite-cycle coboundary]\label{lem:finite_cycle_coboundary}
     \lean{TNLean.Algebra.exists_fin_succ_coboundary_of_prod_eq_one}
     \lean{TNLean.Algebra.exists_fin_cyclic_coboundary_of_prod_eq_one}
@@ -1179,7 +1161,7 @@ unconditional result.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:finite_cycle_product_split_last}
+    \uses{}
     Set $\varphi_k=(\kappa_0\cdots\kappa_{k-1})^{-1}$, with the empty product
     equal to $1$. For $k<n$,
     \[
@@ -1190,7 +1172,7 @@ unconditional result.
         =
         \kappa_k.
     \]
-    The remaining identity follows from
+    Separating the final factor in the product-one hypothesis gives
     \[
         (\kappa_0\cdots\kappa_{n-1})\kappa_n=1,
     \]

@@ -21,13 +21,6 @@ namespace TNLean.Algebra
 
 variable {G : Type*} [CommGroup G]
 
-/-- The total product around the cycle is the product of the first `n` edges,
-multiplied by the last edge. -/
-lemma prod_univ_eq_prod_castSucc_last {n : ℕ} (κ : Fin (n + 1) → G) :
-    (∏ v : Fin (n + 1), κ v) =
-      (∏ v : Fin n, κ v.castSucc) * κ (Fin.last n) := by
-  rw [Fin.prod_univ_castSucc]
-
 private lemma prod_eq_partialProd_last {n : ℕ} (ψ : Fin n → G) :
     (∏ v : Fin n, ψ v) = Fin.partialProd ψ (Fin.last n) := by
   rw [← Fin.prod_ofFn]
@@ -55,7 +48,7 @@ lemma exists_fin_succ_coboundary_of_prod_eq_one {n : ℕ}
       Fin.partialProd_right_inv ψ v
     simpa [φ, ψ] using hquot.symm
   · have hsplit : (∏ v : Fin n, κ v.castSucc) * κ (Fin.last n) = 1 := by
-      simpa [prod_univ_eq_prod_castSucc_last κ] using hprod
+      simpa [Fin.prod_univ_castSucc] using hprod
     have hpartial : (∏ v : Fin n, κ v.castSucc) =
         Fin.partialProd ψ (Fin.last n) := by
       simpa [ψ] using prod_eq_partialProd_last ψ
