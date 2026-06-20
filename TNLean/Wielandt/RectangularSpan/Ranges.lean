@@ -82,48 +82,29 @@ theorem mem_range_mulLeft_iff_cols
 
 /-- The submodule of matrices whose columns lie in `range (Matrix.toLin' P)`. -/
 noncomputable def colRangeSubmodule (P : Matrix (Fin D) (Fin D) ℂ) :
-    Submodule ℂ (Matrix (Fin D) (Fin D) ℂ) where
-  carrier := { M | ∀ j : Fin D, M.col j ∈ LinearMap.range (Matrix.toLin' P) }
-  zero_mem' := by
-    intro j
-    have hcol : (0 : Matrix (Fin D) (Fin D) ℂ).col j = (0 : Fin D → ℂ) := by
-      ext i
-      simp [Matrix.col_apply]
-    -- rewrite `0` as the `j`-th column of the zero matrix
-    exact hcol.symm ▸ (LinearMap.range (Matrix.toLin' P)).zero_mem
-  add_mem' := by
-    intro M N hM hN j
-    -- columnwise additivity
-    have hcol : (M + N).col j = M.col j + N.col j := by
-      ext i
-      simp [Matrix.col_apply]
-    -- use submodule closure
-    simpa [hcol] using
-      (Submodule.add_mem (LinearMap.range (Matrix.toLin' P)) (hM j) (hN j))
-  smul_mem' := by
-    intro a M hM j
-    have hcol : (a • M).col j = a • M.col j := by
-      ext i
-      simp [Matrix.col_apply]
-    simpa [hcol] using
-      (Submodule.smul_mem (LinearMap.range (Matrix.toLin' P)) a (hM j))
+    Submodule ℂ (Matrix (Fin D) (Fin D) ℂ) :=
+  Submodule.comap (Matrix.transposeLinearEquiv (Fin D) (Fin D) ℂ ℂ).toLinearMap
+    (Submodule.pi Set.univ (fun _ : Fin D => LinearMap.range (Matrix.toLin' P)))
 
 /-- Identify the range of left-multiplication as the submodule of matrices whose columns lie in
 `range (Matrix.toLin' P)`. -/
 theorem range_mulLeft_eq_pi (P : Matrix (Fin D) (Fin D) ℂ) :
     LinearMap.range (LinearMap.mulLeft ℂ P) = colRangeSubmodule (D := D) P := by
   ext M
-  simpa [colRangeSubmodule] using (mem_range_mulLeft_iff_cols (D := D) P M)
+  change M ∈ LinearMap.range (LinearMap.mulLeft ℂ P) ↔
+    ∀ j ∈ (Set.univ : Set (Fin D)), Mᵀ j ∈ LinearMap.range (Matrix.toLin' P)
+  simpa [Matrix.col, Matrix.transpose_apply] using
+    (mem_range_mulLeft_iff_cols (D := D) P M)
 
 /-- The submodule `colRangeSubmodule P` is linearly equivalent to the product of
 the column ranges. -/
 noncomputable def colRangeSubmoduleEquiv (P : Matrix (Fin D) (Fin D) ℂ) :
     colRangeSubmodule (D := D) P ≃ₗ[ℂ]
       (Fin D → LinearMap.range (Matrix.toLin' P)) where
-  toFun M j := ⟨M.1.col j, M.2 j⟩
+  toFun M j := ⟨M.1.col j, M.2 j (Set.mem_univ j)⟩
   invFun f :=
     ⟨fun i j => (f j).1 i, by
-      intro j
+      intro j _
       change Matrix.col (fun i k => (f k).1 i : Matrix (Fin D) (Fin D) ℂ) j ∈
         LinearMap.range (Matrix.toLin' P)
       have hcol :
