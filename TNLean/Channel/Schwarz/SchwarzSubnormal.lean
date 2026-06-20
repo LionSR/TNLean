@@ -150,17 +150,6 @@ private lemma commuting_dominant_right_bound_posDef
 
 /-! ### General PSD case -/
 
-/-- `Dom.PosSemidef` implies `(Dom + ε • 1).PosDef` for `ε > 0`. -/
-private lemma posDef_add_pos_smul_one (Dom : Mat) (hPSD : Dom.PosSemidef)
-    (ε : ℝ) (hε : 0 < ε) :
-    (Dom + (ε : ℂ) • (1 : Mat)).PosDef := by
-  rw [add_comm]
-  apply Matrix.PosDef.add_posSemidef _ hPSD
-  have h1 : (ε : ℂ) • (1 : Mat) = (ε : ℝ) • (1 : Mat) := by
-    ext i j; simp [Matrix.smul_apply, smul_eq_mul, Complex.real_smul]
-  rw [h1]
-  exact Matrix.PosDef.one.smul hε
-
 /-- If `B ≤ D + ε • 1` for all `ε > 0`, then `B ≤ D`.
 This is the closedness of the PSD cone, applied to the differences
 `D - B + ε • 1`. -/
@@ -427,8 +416,12 @@ theorem commuting_dominant_right_bound
     A * Aᴴ ≤ Dom := by
   apply le_of_forall_le_add_pos_smul_one _ _
   intro ε hε
-  have hPD : (Dom + (ε : ℂ) • (1 : Mat)).PosDef :=
-    posDef_add_pos_smul_one Dom hDomPos ε hε
+  have hPD : (Dom + (ε : ℂ) • (1 : Mat)).PosDef := by
+    apply Matrix.PosDef.posSemidef_add hDomPos
+    have h1 : (ε : ℂ) • (1 : Mat) = (ε : ℝ) • (1 : Mat) := by
+      ext i j; simp [Matrix.smul_apply, smul_eq_mul, Complex.real_smul]
+    rw [h1]
+    exact Matrix.PosDef.one.smul hε
   have hComm' : Commute (Dom + (ε : ℂ) • (1 : Mat)) A :=
     hComm.add_left ((Commute.one_left A).smul_left (ε : ℂ))
   have hDom' : Aᴴ * A ≤ Dom + (ε : ℂ) • (1 : Mat) :=
@@ -687,22 +680,23 @@ theorem schwarz_inequality_commuting_dominant_operator
       T Aᴴ * T A ≤ T Dom + (ε : ℂ) • 1 ∧
         T A * T Aᴴ ≤ T Dom + (ε : ℂ) • 1 := by
     intro ε hε
-    have hPD := posDef_add_pos_smul_one Dom hDomPos ε hε
+    have hPD : (Dom + (ε : ℂ) • (1 : Mat)).PosDef := by
+      apply Matrix.PosDef.posSemidef_add hDomPos
+      have h1 : (ε : ℂ) • (1 : Mat) = (ε : ℝ) • (1 : Mat) := by
+        ext i j; simp [Matrix.smul_apply, smul_eq_mul, Complex.real_smul]
+      rw [h1]
+      exact Matrix.PosDef.one.smul hε
     have hPD_result :=
       schwarz_commuting_dominant_posDef T hPos hSub A _ hPD (hComm_add (ε : ℂ))
         (hDom_add ε hε.le)
     refine ⟨?_, ?_⟩
     · calc T Aᴴ * T A ≤ T (Dom + (ε : ℂ) • 1) := hPD_result.1
         _ = T Dom + (ε : ℂ) • T 1 := by
-            simpa only [Complex.coe_smul, map_add, LinearMap.map_smul_of_tower,
-              add_right_inj] using
-              congrArg (fun X => T Dom + X) (T.map_smul (ε : ℂ) (1 : Mat))
+            simp only [Complex.coe_smul, map_add, LinearMap.map_smul_of_tower]
         _ ≤ T Dom + (ε : ℂ) • 1 := by gcongr
     · calc T A * T Aᴴ ≤ T (Dom + (ε : ℂ) • 1) := hPD_result.2
         _ = T Dom + (ε : ℂ) • T 1 := by
-            simpa only [Complex.coe_smul, map_add, LinearMap.map_smul_of_tower,
-              add_right_inj] using
-              congrArg (fun X => T Dom + X) (T.map_smul (ε : ℂ) (1 : Mat))
+            simp only [Complex.coe_smul, map_add, LinearMap.map_smul_of_tower]
         _ ≤ T Dom + (ε : ℂ) • 1 := by gcongr
   exact ⟨le_of_forall_le_add_pos_smul_one _ _ fun ε hε => (hApprox ε hε).1,
          le_of_forall_le_add_pos_smul_one _ _ fun ε hε => (hApprox ε hε).2⟩
