@@ -93,14 +93,8 @@ lemma mul_assoc_right_scalar (g h k : G) :
 /-- Scalar cancellation on an invertible matrix (requires a nonempty index set). -/
 lemma smul_eq_smul_cancel {a b : ℂ} {M : Matrix (Fin D) (Fin D) ℂ}
     (hD : 0 < D) (hM : IsUnit M) (h : a • M = b • M) : a = b := by
-  rcases Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hD) with ⟨n, rfl⟩
-  rcases hM with ⟨U, rfl⟩
-  have h' : a • (1 : Matrix (Fin (Nat.succ n)) (Fin (Nat.succ n)) ℂ) =
-      b • (1 : Matrix (Fin (Nat.succ n)) (Fin (Nat.succ n)) ℂ) := by
-    simpa [smul_mul_assoc, Matrix.mul_smul, Matrix.mul_assoc] using
-      congrArg (fun T => T * ((↑U⁻¹ : Matrix (Fin (Nat.succ n)) (Fin (Nat.succ n)) ℂ))) h
-  have h00 := congrArg (fun T => T 0 0) h'
-  simpa using h00
+  haveI : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
+  exact smul_left_injective ℂ hM.ne_zero h
 
 /-- Associativity forces the cocycle condition (for `D > 0`). -/
 theorem cocycle_of_assoc (ρ : ProjectiveRepresentation (D := D) ω) (hD : 0 < D) (g h k : G) :
