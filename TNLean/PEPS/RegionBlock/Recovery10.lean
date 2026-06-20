@@ -135,7 +135,8 @@ each crossing edge under the double-complement boundary-edge equivalence. -/
 def regionDoubleComplBoundaryConfigEquiv (A : Tensor G d) (R : Finset V) :
     RegionBoundaryConfig (G := G) A R ≃
       RegionBoundaryConfig (G := G) A (Finset.univ \ (Finset.univ \ R)) :=
-  Equiv.piCongrLeft' _ (regionBoundaryEdgeDoubleComplEquiv (G := G) R).symm
+  Equiv.piCongrLeft' (fun e => Fin (A.bondDim e.1))
+    (regionBoundaryEdgeDoubleComplEquiv (G := G) R).symm
 
 /-- **The double-complement transport of the blocked tensor map.** The blocked
 tensor map of `univ \ (univ \ R)` applied to a row `c`, evaluated at the
