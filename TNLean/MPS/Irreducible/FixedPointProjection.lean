@@ -493,7 +493,7 @@ private lemma max_shift_posSemidef [Nonempty (Fin D)]
   rw [show Uᴴ = star U by simp [Matrix.star_eq_conjTranspose]]
   exact (Matrix.IsUnit.posSemidef_star_right_conjugate_iff hU_unit).mpr
     (Matrix.posSemidef_diagonal_iff.mpr (fun i => by
-      simp only [Complex.nonneg_iff]
+      rw [RCLike.nonneg_iff]
       constructor
       · exact_mod_cast sub_nonneg.mpr (le_maxEigenvalue hX i)
       · simp [Complex.ofReal_im]))
