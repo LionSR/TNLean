@@ -156,8 +156,8 @@ private lemma matrix_det_norm_one_trace_conjTranspose_mul_self_ge [NeZero d]
     change Matrix.det (Aᴴ * A) = 1
     rw [Matrix.det_mul, Matrix.det_conjTranspose]
     have hconj : star A.det * A.det = ((‖A.det‖ ^ 2 : ℝ) : ℂ) := by
-      simpa only [show star A.det = starRingEnd ℂ A.det from rfl, ← Complex.ofReal_pow] using
-        (Complex.conj_mul' A.det)
+      simpa [Complex.star_def, Complex.normSq_eq_norm_sq] using
+        (Complex.normSq_eq_conj_mul_self (z := A.det)).symm
     rw [hconj, hdet]
     norm_num
   have hprod_eq : ∏ i, hBherm.eigenvalues i = 1 := by
