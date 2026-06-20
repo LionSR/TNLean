@@ -98,25 +98,17 @@ lemma norm_choose_MPVBlockPhaseEquiv_eq_one
   classical
   have hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d),
       mpv Y σ = h.choose ^ N * mpv X σ := h.choose_spec.2
-  have hScale :
-      ∀ N : ℕ,
-        mpvOverlap (d := d) Y Y N =
-          (h.choose * starRingEnd ℂ h.choose) ^ N * mpvOverlap (d := d) X X N :=
-    mpvOverlap_self_scale_of_mpv_eq_pow_mul
-      (A := X) (B := Y) (ζ := h.choose) hmpv
-  have hXX_c : Tendsto (fun N => mpvOverlap (d := d) X X N) atTop (𝓝 (1 : ℂ)) :=
-    overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
-      (d := d) (D := DX) X hIrrX hTPX hPrimX
-  have hYY_c : Tendsto (fun N => mpvOverlap (d := d) Y Y N) atTop (𝓝 (1 : ℂ)) :=
-    overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
-      (d := d) (D := DY) Y hIrrY hTPY hPrimY
-  have hXX : Tendsto (fun N => ‖mpvOverlap (d := d) X X N‖) atTop (𝓝 (1 : ℝ)) := by
-    have h1 := hXX_c.norm
-    simpa using h1
-  have hYY : Tendsto (fun N => ‖mpvOverlap (d := d) Y Y N‖) atTop (𝓝 (1 : ℝ)) := by
-    have h1 := hYY_c.norm
-    simpa using h1
-  exact norm_eq_one_of_selfOverlap_scale hXX hYY hScale
+  exact norm_eq_one_of_selfOverlap_scale
+    (by
+      simpa using
+        (overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
+          (d := d) (D := DX) X hIrrX hTPX hPrimX).norm)
+    (by
+      simpa using
+        (overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
+          (d := d) (D := DY) Y hIrrY hTPY hPrimY).norm)
+    (mpvOverlap_self_scale_of_mpv_eq_pow_mul
+      (A := X) (B := Y) (ζ := h.choose) hmpv)
 
 /-!
 ### Bond dimensions inside a prepared phase class
