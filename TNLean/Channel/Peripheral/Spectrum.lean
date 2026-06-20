@@ -25,7 +25,6 @@ the eigenvalues on the unit circle.
 
 ## Main results
 
-* `hasEigenvalue_one_of_fixedPoint` — fixed point gives eigenvalue 1
 * `one_mem_peripheralEigenvalues` — 1 is a peripheral eigenvalue
 * `peripheralEigenvalues_finite` — peripheral eigenvalues are finite
 * `isRootOfUnity_of_finite_powers` — pigeonhole for roots of unity
@@ -73,27 +72,16 @@ theorem hasEigenvalue_of_eigenvector_eq
   Module.End.hasEigenvalue_of_hasEigenvector
     (Module.End.hasEigenvector_iff.mpr ⟨Module.End.mem_eigenspace_iff.mpr hfx, hne⟩)
 
-/-- If `E(ρ) = ρ` with `ρ ≠ 0`, then 1 is an eigenvalue of `E`. -/
-theorem hasEigenvalue_one_of_fixedPoint
-    {V : Type*} [AddCommGroup V] [Module ℂ V]
-    (E : V →ₗ[ℂ] V) (ρ : V) (hfix : E ρ = ρ) (hne : ρ ≠ 0) :
-    Module.End.HasEigenvalue E 1 :=
-  hasEigenvalue_of_eigenvector_eq E 1 ρ (by simp [hfix]) hne
-
 /-- `1` is always a peripheral eigenvalue when a fixed point exists. -/
 theorem one_mem_peripheralEigenvalues
     {V : Type*} [AddCommGroup V] [Module ℂ V]
     (E : V →ₗ[ℂ] V) (ρ : V) (hfix : E ρ = ρ) (hne : ρ ≠ 0) :
     (1 : ℂ) ∈ peripheralEigenvalues E :=
-  ⟨hasEigenvalue_one_of_fixedPoint E ρ hfix hne, by simp⟩
+  ⟨hasEigenvalue_of_eigenvector_eq E 1 ρ (by simp [hfix]) hne, by simp⟩
 
 /-- Powers of a unit-norm complex number have norm 1. -/
 theorem norm_pow_eq_one_of_norm_eq_one {μ : ℂ} (hμ : ‖μ‖ = 1) (n : ℕ) :
     ‖μ ^ n‖ = 1 := by rw [norm_pow, hμ, one_pow]
-
-/-- Inverse of unit-norm is unit-norm. -/
-theorem norm_inv_eq_one_of_norm_eq_one {μ : ℂ} (hμ : ‖μ‖ = 1) :
-    ‖μ⁻¹‖ = 1 := by rw [norm_inv, hμ, inv_one]
 
 /-- In finite dimensions, the peripheral eigenvalue set is finite. -/
 theorem peripheralEigenvalues_finite
@@ -196,7 +184,9 @@ theorem isPrimitive_of_unique_norm_one
     IsPrimitive E := by
   ext μ; constructor
   · intro ⟨hev, hnorm⟩; exact huniq μ hev hnorm
-  · intro h; subst h; exact ⟨hasEigenvalue_one_of_fixedPoint E ρ hfix hne, by simp⟩
+  · intro h
+    subst h
+    exact ⟨hasEigenvalue_of_eigenvector_eq E 1 ρ (by simp [hfix]) hne, by simp⟩
 
 /-- **Primitive ↔ period = 1.** -/
 theorem isPrimitive_iff_period_one
