@@ -175,7 +175,8 @@ theorem peripheral_isRootOfUnity_of_irreducible_channel [NeZero D]
   have hμp_eig : Module.End.HasEigenvalue
       ((MPSTensor.transferMap (d := r) (D := D) K) ^ p) (μ ^ p) := by
     simpa [hE_eq] using hμ_eig.pow p
-  have hμp_norm : ‖μ ^ p‖ = 1 := norm_pow_eq_one_of_norm_eq_one hμ_norm p
+  have hμp_norm : ‖μ ^ p‖ = 1 := by
+    simp [norm_pow, hμ_norm]
   exact ⟨p, hp_pos, hPrimP.unique_peripheral (μ ^ p) hμp_eig hμp_norm⟩
 
 /-- Channel-level formulation for `compl_eigenvalue_norm_lt_one_of_primitive`.
