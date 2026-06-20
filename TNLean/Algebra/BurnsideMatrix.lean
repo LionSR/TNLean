@@ -195,18 +195,6 @@ lemma exists_cumulativeSpan_eq_top_of_algSpan_eq_top (A : MPSTensor d D)
 
 /-! ## Part 2: Invariant submodule characterization -/
 
-
-/-- If `(1 - P) * M * P = 0`, then `M * P = P * (M * P)`. -/
-private theorem mul_proj_eq {P M : Matrix (Fin D) (Fin D) ℂ}
-    (hinv : (1 - P) * M * P = 0) :
-    M * P = P * (M * P) := by
-  -- (1 - P) * M * P = ((1 - P) * M) * P = (M - P * M) * P
-  --   = M * P - P * M * P = M * P - P * (M * P)
-  have h1 : (M - P * M) * P = 0 := by rwa [sub_mul, one_mul] at hinv
-  have h2 : M * P - P * M * P = 0 := by rwa [sub_mul] at h1
-  have h3 : M * P - P * (M * P) = 0 := by rwa [mul_assoc] at h2
-  exact sub_eq_zero.mp h3
-
 /-- `IsIrreducibleAction` implies `IsIrreducibleTensor`.
 
 If there are no nontrivial invariant submodules, then there are no
@@ -221,7 +209,15 @@ lemma isIrreducibleTensor_of_isIrreducibleAction
   set W : Submodule ℂ V := LinearMap.range f
   have hW_inv : IsInvariantSubmodule A W := by
     intro i v ⟨u, hu⟩
-    have hAP : A i * P = P * (A i * P) := mul_proj_eq (hinv i)
+    have hAP : A i * P = P * (A i * P) := by
+      have hinvi : (1 - P) * A i * P = 0 := hinv i
+      have h1 : (A i - P * A i) * P = 0 := by
+        rwa [sub_mul, one_mul] at hinvi
+      have h2 : A i * P - P * A i * P = 0 := by
+        rwa [sub_mul] at h1
+      have h3 : A i * P - P * (A i * P) = 0 := by
+        rwa [mul_assoc] at h2
+      exact sub_eq_zero.mp h3
     refine ⟨(A i * P).mulVec u, ?_⟩
     simp only [V, f, Matrix.toLin'_apply] at hu ⊢
     rw [Matrix.mulVec_mulVec, ← hAP, ← Matrix.mulVec_mulVec, hu]
