@@ -91,7 +91,7 @@ private lemma spectralRadius_similarity_eq
         ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) E) := by
   let Φ : (Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) ≃ₐ[ℂ]
       TNLean.MatrixCLM (Fin D) :=
-    TNLean.matrixEndEquiv (Fin D)
+    Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)
   have hsim_alg :
       similarityMap (D := D) C E =
         (sandwichLinearEquiv (D := D) C hC).symm.conjAlgEquiv ℂ E := by
@@ -126,7 +126,8 @@ private lemma spectralRadius_smul
     spectralRadius ℂ (c • F) = (‖c‖₊ : ℝ≥0∞) * spectralRadius ℂ F := by
   letI : FiniteDimensional ℂ
       (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
-    (TNLean.matrixEndEquiv (Fin D)).toLinearEquiv.finiteDimensional
+    (Module.End.toContinuousLinearMap
+      (Matrix (Fin D) (Fin D) ℂ)).toLinearEquiv.finiteDimensional
   have hF_nonempty : (spectrum ℂ F).Nonempty :=
     spectrum.nonempty_of_isAlgClosed_of_finiteDimensional ℂ F
   have hspec : spectrum ℂ (c • F) = c • spectrum ℂ F := by
