@@ -59,13 +59,13 @@ theorem cross_correlation_tendsto_zero
       Filter.atTop (nhds 0) := by
   -- Compose: F^N(X) → 0 (by the transfer-operator gap) and trace is continuous.
   have h := mixedTransfer_pow_tendsto_zero A B hA hB hA_norm hB_norm hAB X
-  have h_cont : Continuous (Matrix.traceLinearMap (Fin D) ℂ ℂ) :=
-    LinearMap.continuous_of_finiteDimensional _
+  let tr : Matrix (Fin D) (Fin D) ℂ →L[ℂ] ℂ :=
+    LinearMap.toContinuousLinearMap (Matrix.traceLinearMap (Fin D) ℂ ℂ)
   have h2 : Filter.Tendsto
       (fun N => (Matrix.traceLinearMap (Fin D) ℂ ℂ) (((mixedTransferMap A B) ^ N) X))
       Filter.atTop (nhds 0) := by
-    rw [← map_zero (Matrix.traceLinearMap (Fin D) ℂ ℂ)]
-    exact h_cont.continuousAt.tendsto.comp h
+    simpa [tr, Function.comp_def, Matrix.traceLinearMap_apply] using
+      (tr.continuous.tendsto 0).comp h
   simpa [Matrix.traceLinearMap_apply] using h2
 
 /-- **Self-correlation persists**: If `ρ` is a fixed point of `E_A`, then
