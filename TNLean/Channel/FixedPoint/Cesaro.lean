@@ -100,9 +100,9 @@ private theorem psd_orthogonal_difference_eq_zero
   -- Sum of nonneg reals = 0 ⟹ each = 0
   have hY_diag_zero : ∀ j, star (e j) ⬝ᵥ Y.mulVec (e j) = 0 := by
     have him : ∀ j, (star (e j) ⬝ᵥ Y.mulVec (e j)).im = 0 :=
-      fun j => (Complex.nonneg_iff.mp (hY_nonneg j)).2.symm
+      fun j => (RCLike.nonneg_iff.mp (hY_nonneg j)).2
     have hre_nonneg : ∀ j, 0 ≤ (star (e j) ⬝ᵥ Y.mulVec (e j)).re :=
-      fun j => (Complex.nonneg_iff.mp (hY_nonneg j)).1
+      fun j => (RCLike.nonneg_iff.mp (hY_nonneg j)).1
     have hre_sum : ∑ j, (star (e j) ⬝ᵥ Y.mulVec (e j)).re = 0 := by
       have h1 := map_sum Complex.reAddGroupHom (fun j => star (e j) ⬝ᵥ Y.mulVec (e j)) Finset.univ
       rw [← hY_tr_sum, hY_tr] at h1; exact h1.symm
