@@ -97,10 +97,13 @@ theorem IsChannel.cesaroMean_subseq_limit_fixedPoint
   have hσ_mem : σ ∈ densityMatrices D :=
     (densityMatrices_isCompact (D := D)).isClosed.mem_of_tendsto hσ_tendsto <|
       Filter.Eventually.of_forall fun k => hces_mem (ψ k)
-  have hE_cont : Continuous E := LinearMap.continuous_of_finiteDimensional E
+  let E' : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ :=
+    LinearMap.toContinuousLinearMap E
   have h_Eσ : Filter.Tendsto (fun k => E (cesaroMean E ρ (ψ k + 1)))
-      Filter.atTop (nhds (E σ)) :=
-    (hE_cont.tendsto σ).comp hσ_tendsto
+      Filter.atTop (nhds (E σ)) := by
+    change Filter.Tendsto (E ∘ fun k => cesaroMean E ρ (ψ k + 1))
+      Filter.atTop (nhds (E σ))
+    simpa [E'] using (E'.continuous.tendsto σ).comp hσ_tendsto
   have h_diff : Filter.Tendsto
       (fun k => E (cesaroMean E ρ (ψ k + 1)) - cesaroMean E ρ (ψ k + 1))
       Filter.atTop (nhds (E σ - σ)) :=

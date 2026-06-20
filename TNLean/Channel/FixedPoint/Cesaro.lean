@@ -289,10 +289,11 @@ theorem IsChannel.exists_posSemidef_fixedPoint
   have hρ_psd : ρ.PosSemidef := hρ_mem.1
   have hρ_tr : trace ρ = 1 := hρ_mem.2
   -- Step 6: Show E(ρ) = ρ via telescoping + convergence
-  have hE_cont : Continuous E := LinearMap.continuous_of_finiteDimensional E
+  let E' : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ :=
+    LinearMap.toContinuousLinearMap E
   -- σ ∘ φ → ρ, E ∘ σ ∘ φ → E(ρ)
-  have h_Eσ : Filter.Tendsto (E ∘ σ ∘ φ) Filter.atTop (nhds (E ρ)) :=
-    (hE_cont.tendsto ρ).comp hφ_tendsto
+  have h_Eσ : Filter.Tendsto (E ∘ σ ∘ φ) Filter.atTop (nhds (E ρ)) := by
+    simpa [E'] using (E'.continuous.tendsto ρ).comp hφ_tendsto
   -- (E(σ(φ k)) - σ(φ k)) → E(ρ) - ρ
   have h_diff : Filter.Tendsto (fun k => (E ∘ σ ∘ φ) k - (σ ∘ φ) k)
       Filter.atTop (nhds (E ρ - ρ)) :=
