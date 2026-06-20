@@ -99,35 +99,8 @@ structure PGVWC07PositiveLengthWitness (A : MPSTensor d D) where
   bondDim_le : ∑ k : Fin r, dim k ≤ D
 
 private noncomputable def gaugeMulVecLinearEquiv {D : ℕ} (X : GL (Fin D) ℂ) :
-    (Fin D → ℂ) ≃ₗ[ℂ] (Fin D → ℂ) where
-  toFun v := (X : Matrix (Fin D) (Fin D) ℂ) *ᵥ v
-  invFun v := (((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) *ᵥ v)
-  left_inv := by
-    intro v
-    calc
-      (((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) *ᵥ
-          ((X : Matrix (Fin D) (Fin D) ℂ) *ᵥ v))
-          = ((((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) *
-              (X : Matrix (Fin D) (Fin D) ℂ)) *ᵥ v) := by
-              simp [Matrix.mulVec_mulVec]
-      _ = v := by
-            simp
-  right_inv := by
-    intro v
-    calc
-      ((X : Matrix (Fin D) (Fin D) ℂ) *ᵥ
-          ((((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) *ᵥ v)))
-          = (((X : Matrix (Fin D) (Fin D) ℂ) *
-              (((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) *ᵥ v) := by
-              simp [Matrix.mulVec_mulVec]
-      _ = v := by
-            simp
-  map_add' := by
-    intro v w
-    simp [Matrix.mulVec_add]
-  map_smul' := by
-    intro c v
-    simp [Matrix.mulVec_smul]
+    (Fin D → ℂ) ≃ₗ[ℂ] (Fin D → ℂ) :=
+  (Matrix.GeneralLinearGroup.toLin X).toLinearEquiv
 
 private theorem isIrreducibleAction_gaugeEquiv
     {D : ℕ} {A B : MPSTensor d D}
