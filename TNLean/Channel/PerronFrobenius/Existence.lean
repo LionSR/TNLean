@@ -117,14 +117,12 @@ theorem exists_posSemidef_eigenvector
   -- Extract a positive real eigenvalue from the nonnegative (real) trace.
   set r : ℝ := (Matrix.trace (E ρ)).re
   have hr_nonneg : 0 ≤ r := by
-    simpa [r] using (Complex.nonneg_iff.mp hEρ_psd.trace_nonneg).1
-  have htr_im : (Matrix.trace (E ρ)).im = 0 := by
-    -- `Complex.nonneg_iff` provides the imaginary-part condition as `0 = z.im`.
-    simpa using (Complex.nonneg_iff.mp hEρ_psd.trace_nonneg).2.symm
+    simpa [r] using (RCLike.nonneg_iff.mp hEρ_psd.trace_nonneg).1
   have htr_eq : Matrix.trace (E ρ) = (r : ℂ) := by
-    apply Complex.ext
-    · simp [r]
-    · simp [htr_im]
+    symm
+    exact
+      (RCLike.ofReal_eq_re_of_isSelfAdjoint
+        (IsSelfAdjoint.of_nonneg hEρ_psd.trace_nonneg)).mp rfl
   have hr_ne : r ≠ 0 := by
     intro hr0
     apply htr_ne
