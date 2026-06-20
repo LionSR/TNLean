@@ -73,26 +73,27 @@ def abcEquiv {dA dB dC : ℕ} {m : ℕ} {dL dR : Fin m → ℕ}
 tripartite shape `A × (B × C)`. -/
 def sigmaAssoc {dA dC : ℕ} {m : ℕ} (dL dR : Fin m → ℕ) :
     (Σ j : Fin m, (Fin dA × Fin (dL j)) × (Fin (dR j) × Fin dC)) ≃
-      (Fin dA × ((Σ j : Fin m, Fin (dL j) × Fin (dR j)) × Fin dC)) where
-  toFun := fun ⟨j, x⟩ =>
-    let a : Fin dA := x.1.1
-    let l : Fin (dL j) := x.1.2
-    let r : Fin (dR j) := x.2.1
-    let c : Fin dC := x.2.2
-    (a, (⟨j, (l, r)⟩, c))
-  invFun := fun x =>
-    let a : Fin dA := x.1
-    let j : Fin m := x.2.1.1
-    let l : Fin (dL j) := x.2.1.2.1
-    let r : Fin (dR j) := x.2.1.2.2
-    let c : Fin dC := x.2.2
-    ⟨j, ((a, l), (r, c))⟩
-  left_inv := by
-    rintro ⟨j, ⟨⟨a, l⟩, ⟨r, c⟩⟩⟩
-    rfl
-  right_inv := by
-    rintro ⟨a, ⟨⟨j, ⟨l, r⟩⟩, c⟩⟩
-    rfl
+      (Fin dA × ((Σ j : Fin m, Fin (dL j) × Fin (dR j)) × Fin dC)) :=
+  calc
+    (Σ j : Fin m, (Fin dA × Fin (dL j)) × (Fin (dR j) × Fin dC)) ≃
+        (Σ j : Fin m, Fin dA × ((Fin (dL j) × Fin (dR j)) × Fin dC)) :=
+      Equiv.sigmaCongrRight fun j =>
+        (Equiv.prodAssoc (Fin dA) (Fin (dL j)) (Fin (dR j) × Fin dC)).trans
+          (Equiv.prodCongr (Equiv.refl (Fin dA))
+            (Equiv.prodAssoc (Fin (dL j)) (Fin (dR j)) (Fin dC)).symm)
+    _ ≃ (Σ j : Fin m, ((Fin (dL j) × Fin (dR j)) × Fin dC) × Fin dA) :=
+      Equiv.sigmaCongrRight fun j =>
+        Equiv.prodComm (Fin dA) ((Fin (dL j) × Fin (dR j)) × Fin dC)
+    _ ≃ (Σ j : Fin m, (Fin (dL j) × Fin (dR j)) × Fin dC) × Fin dA :=
+      (Equiv.sigmaProdDistrib
+        (fun j : Fin m => (Fin (dL j) × Fin (dR j)) × Fin dC)
+        (Fin dA)).symm
+    _ ≃ Fin dA × (Σ j : Fin m, (Fin (dL j) × Fin (dR j)) × Fin dC) :=
+      Equiv.prodComm _ _
+    _ ≃ Fin dA × ((Σ j : Fin m, Fin (dL j) × Fin (dR j)) × Fin dC) :=
+      Equiv.prodCongr (Equiv.refl (Fin dA))
+        (Equiv.sigmaProdDistrib
+          (fun j : Fin m => Fin (dL j) × Fin (dR j)) (Fin dC)).symm
 
 /-- Lift a unitary on the middle subsystem `B` to the tripartite space
 `A ⊗ B ⊗ C` as `1_A ⊗ U_B ⊗ 1_C`. -/
