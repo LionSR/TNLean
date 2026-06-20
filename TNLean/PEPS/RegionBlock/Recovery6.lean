@@ -158,21 +158,9 @@ complement-side reading. -/
 configuration on `R` corresponds to one on `univ \ R` by reading each crossing edge
 under the boundary-edge identification. -/
 def regionComplementBoundaryConfigEquiv (A : Tensor G d) (R : Finset V) :
-    RegionBoundaryConfig (G := G) A R ≃ RegionBoundaryConfig (G := G) A (Finset.univ \ R) where
-  toFun := regionComplementBoundaryConfig (G := G) A R
-  invFun bdry' := fun f => bdry' (regionBoundaryEdgeComplEquiv (G := G) R f)
-  left_inv bdry := by
-    funext f
-    change regionComplementBoundaryConfig (G := G) A R bdry
-      (regionBoundaryEdgeComplEquiv (G := G) R f) = bdry f
-    rw [regionComplementBoundaryConfig]
-    congr 1
-  right_inv bdry' := by
-    funext g
-    change regionComplementBoundaryConfig (G := G) A R
-      (fun f => bdry' (regionBoundaryEdgeComplEquiv (G := G) R f)) g = bdry' g
-    rw [regionComplementBoundaryConfig]
-    congr 1
+    RegionBoundaryConfig (G := G) A R ≃ RegionBoundaryConfig (G := G) A (Finset.univ \ R) :=
+  Equiv.piCongrLeft' (fun f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f} =>
+      Fin (A.bondDim f.1)) (regionBoundaryEdgeComplEquiv (G := G) R)
 
 @[simp] theorem regionComplementBoundaryConfigEquiv_apply (A : Tensor G d) (R : Finset V)
     (bdry : RegionBoundaryConfig (G := G) A R) :
