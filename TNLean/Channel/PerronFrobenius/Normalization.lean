@@ -280,9 +280,10 @@ theorem continuousAt_normMap
     (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (htr : Matrix.trace (E ρ) ≠ 0) :
     ContinuousAt (normMap (D := D) E) ρ := by
-  -- Continuity of the linear map `E` in finite dimension.
-  have hE : Continuous (fun ρ : Matrix (Fin D) (Fin D) ℂ => E ρ) :=
-    E.continuous_of_finiteDimensional
+  let E' : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ :=
+    LinearMap.toContinuousLinearMap E
+  have hE : Continuous (fun ρ : Matrix (Fin D) (Fin D) ℂ => E ρ) := by
+    simpa [E'] using E'.continuous
   have htrace :
       ContinuousAt (fun ρ : Matrix (Fin D) (Fin D) ℂ => Matrix.trace (E ρ)) ρ :=
     hE.matrix_trace.continuousAt
