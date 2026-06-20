@@ -159,7 +159,9 @@ theorem trace_matrixAbs_add_self_ne_zero_of_trace_one
     have := congrArg Complex.re hsum
     simpa [Complex.add_re] using this
   have : ¬ ((Matrix.trace (matrixAbs B)).re + 1 = 0) := by
-    linarith [(Complex.nonneg_iff.mp habs_nonneg).1]
+    have hre_nonneg : 0 ≤ (Matrix.trace (matrixAbs B)).re :=
+      (RCLike.nonneg_iff.mp habs_nonneg).1
+    linarith
   exact this hre
 
 @[simp]
