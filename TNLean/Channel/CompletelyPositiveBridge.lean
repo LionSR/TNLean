@@ -51,17 +51,6 @@ private def blockDiagConst (k : ℕ) (W : Matrix (Fin D) (Fin D) ℂ) :
     CStarMatrix (Fin k) (Fin k) (CStarMatrix (Fin D) (Fin D) ℂ) :=
   Matrix.diagonal (fun _ : Fin k => CStarMatrix.ofMatrix W)
 
-private lemma blockDiagConst_apply (k : ℕ) (W : Matrix (Fin D) (Fin D) ℂ) (a b : Fin k) :
-    blockDiagConst k W a b = if a = b then CStarMatrix.ofMatrix W else 0 := by
-  simp [blockDiagConst, Matrix.diagonal_apply]
-
-private lemma star_blockDiagConst_apply (k : ℕ) (W : Matrix (Fin D) (Fin D) ℂ) (a b : Fin k) :
-    star (blockDiagConst k W) a b = if a = b then star (CStarMatrix.ofMatrix W) else 0 := by
-  rw [CStarMatrix.star_apply, blockDiagConst_apply]
-  by_cases h : a = b
-  · subst h; simp
-  · rw [if_neg (fun h' => h h'.symm), if_neg h, star_zero]
-
 /-- Conjugating a block matrix `M` by `blockDiagConst k W` acts entrywise as the
 single Kraus term `X ↦ W * X * Wᴴ`. -/
 private lemma conjugate_blockDiagConst_apply (k : ℕ) (W : Matrix (Fin D) (Fin D) ℂ)
@@ -69,9 +58,15 @@ private lemma conjugate_blockDiagConst_apply (k : ℕ) (W : Matrix (Fin D) (Fin 
     (blockDiagConst k W * M * star (blockDiagConst k W)) a b
       = CStarMatrix.ofMatrix W * M a b * star (CStarMatrix.ofMatrix W) := by
   classical
-  simp only [CStarMatrix.mul_apply, blockDiagConst_apply, star_blockDiagConst_apply,
-    ite_mul, zero_mul, mul_ite, mul_zero, Finset.sum_ite_eq, Finset.sum_ite_eq',
-    Finset.mem_univ, if_true]
+  simp only [CStarMatrix.mul_apply, CStarMatrix.star_apply, blockDiagConst,
+    Matrix.diagonal_apply, ite_mul, zero_mul, Finset.sum_ite_eq, Finset.mem_univ,
+    if_true]
+  rw [Finset.sum_eq_single b]
+  · simp
+  · intro x _ hx
+    simp [Ne.symm hx]
+  · intro hb
+    exact False.elim (hb (Finset.mem_univ b))
 
 /-- A linear self-map of `M_D(ℂ)`, identified with a linear self-map of the
 C⋆-algebra `CStarMatrix (Fin D) (Fin D) ℂ` (the two types are definitionally
