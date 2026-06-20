@@ -325,8 +325,12 @@ theorem isIrreducibleMap_of_channel_posDef_fixedPoint_unique
   have hcorner_tendsto : Filter.Tendsto
       (fun k => P * cesaroMean E ρ₀ (φ k + 1) * P)
       Filter.atTop (nhds (P * σ * P)) := by
-    exact ((LinearMap.continuous_of_finiteDimensional
-      (sandwichLinearMap (D := D) P P)).tendsto σ).comp hσ_tendsto
+    let corner : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ :=
+      LinearMap.toContinuousLinearMap (sandwichLinearMap (D := D) P P)
+    change Filter.Tendsto
+      ((sandwichLinearMap (D := D) P P) ∘ fun k => cesaroMean E ρ₀ (φ k + 1))
+      Filter.atTop (nhds ((sandwichLinearMap (D := D) P P) σ))
+    simpa [corner] using (corner.continuous.tendsto σ).comp hσ_tendsto
   have hcorner_seq_eq :
       (fun k => P * cesaroMean E ρ₀ (φ k + 1) * P) =
         fun k => cesaroMean E ρ₀ (φ k + 1) := by
