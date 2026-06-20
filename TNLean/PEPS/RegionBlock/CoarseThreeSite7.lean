@@ -646,11 +646,14 @@ theorem perPair_threeRegionProduct_eq
   simp only [Finset.mul_sum, Finset.sum_mul]
   rw [← Fintype.sum_prod_type', ← Fintype.sum_prod_type', ← Fintype.sum_prod_type',
     ← Fintype.sum_prod_type']
-  refine Finset.sum_nbij' (fun t => ((t.2, t.1.1), t.1.2))
-    (fun t => ((t.1.2, t.2), t.1.1)) (fun _ _ => Finset.mem_univ _)
-    (fun _ _ => Finset.mem_univ _) (fun _ _ => rfl) (fun _ _ => rfl) ?_
-  rintro ⟨⟨ζb, ζc⟩, ζr⟩ _
-  dsimp only
+  let φ : ((VirtualConfig A × VirtualConfig A) × VirtualConfig A) ≃
+      ((VirtualConfig A × VirtualConfig A) × VirtualConfig A) :=
+    (Equiv.prodComm (VirtualConfig A × VirtualConfig A) (VirtualConfig A)).trans
+      (Equiv.prodAssoc (VirtualConfig A) (VirtualConfig A) (VirtualConfig A)).symm
+  refine Fintype.sum_equiv φ _ _ ?_
+  rintro ⟨⟨ζb, ζc⟩, ζr⟩
+  dsimp only [φ]
+  simp only [Equiv.trans_apply, Equiv.prodComm_apply, Equiv.prodAssoc_symm_apply, Prod.swap]
   -- Combine the three selectors and the matrix factor into one selector.
   by_cases hr : regionBoundaryLabel (G := G) A F.frame.red ζr =
       F.frame.legEquivRed (fun ie => ηL ie.1)
