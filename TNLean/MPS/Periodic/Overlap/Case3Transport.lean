@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Periodic.Overlap.Case2
+import Mathlib.Logic.Equiv.Fin.Rotate
 
 /-!
 # Periodic overlap dichotomy: Case 3 transport
@@ -30,28 +31,28 @@ cross overlap is unchanged by the simultaneous shift. -/
 
 /-- One-site cyclic rotation of a configuration of length `L'+1`:
 move the last letter to the front. -/
-def rotateCfg {d L' : ℕ} : (Fin (L' + 1) → Fin d) ≃ (Fin (L' + 1) → Fin d) where
-  toFun σ := Fin.cons (σ (Fin.last L')) (Fin.init σ)
-  invFun τ := Fin.snoc (Fin.tail τ) (τ 0)
-  left_inv σ := by
-    funext j
-    refine Fin.lastCases ?_ ?_ j
-    · simp [Fin.snoc_last, Fin.cons_zero]
-    · intro i
-      simp [Fin.snoc_castSucc, Fin.init]
-  right_inv τ := by
-    funext j
-    refine Fin.cases ?_ ?_ j
-    · simp [Fin.cons_zero, Fin.snoc_last]
-    · intro i
-      simp [Fin.cons_succ, Fin.tail]
+def rotateCfg {d L' : ℕ} : (Fin (L' + 1) → Fin d) ≃ (Fin (L' + 1) → Fin d) :=
+  Equiv.arrowCongr (finRotate (L' + 1)) (Equiv.refl (Fin d))
+
+private lemma rotateCfg_eq_cons_init {d L' : ℕ} (σ : Fin (L' + 1) → Fin d) :
+    rotateCfg σ = Fin.cons (σ (Fin.last L')) (Fin.init σ) := by
+  funext j
+  refine Fin.cases ?_ ?_ j
+  · exact congrArg σ <| Fin.ext <| by
+      rw [finRotate_symm_apply]
+      simp
+  · intro i
+    exact congrArg σ <| Fin.ext <| by
+      rw [finRotate_symm_apply]
+      simp [Fin.val_sub_one_of_ne_zero]
 
 /-- Word evaluation of the rotated configuration pulls the last letter to the front. -/
 private lemma evalWord_ofFn_rotateCfg {L' : ℕ} (A : MPSTensor d D)
     (σ : Fin (L' + 1) → Fin d) :
     evalWord A (List.ofFn (rotateCfg σ)) =
       A (σ (Fin.last L')) * evalWord A (List.ofFn (Fin.init σ)) := by
-  simp only [rotateCfg, Equiv.coe_fn_mk, List.ofFn_cons, evalWord_cons]
+  rw [rotateCfg_eq_cons_init σ]
+  simp only [List.ofFn_cons, evalWord_cons]
 
 /-- Word evaluation of the original configuration pulls the last letter to the right. -/
 private lemma evalWord_ofFn_eq_init_mul_last {L' : ℕ} (A : MPSTensor d D)
