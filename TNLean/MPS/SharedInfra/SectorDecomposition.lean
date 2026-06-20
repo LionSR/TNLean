@@ -225,10 +225,7 @@ noncomputable def sectorFlatEquiv
     (β : Fin Q.basisCount ≃ Fin P.basisCount)
     (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k))) :
     Fin Q.totalCopies ≃ Fin P.totalCopies :=
-  (Q.flatIndexEquiv.symm.trans
-    ((Equiv.sigmaCongrRight τ).trans
-      (Equiv.sigmaCongrLeft (β := fun k' : Fin P.basisCount =>
-        Fin (P.copies k')) β))).trans P.flatIndexEquiv
+  (Q.flatIndexEquiv.symm.trans (Equiv.sigmaCongr β τ)).trans P.flatIndexEquiv
 
 @[simp]
 theorem sectorFlatEquiv_apply
@@ -239,7 +236,7 @@ theorem sectorFlatEquiv_apply
     sectorFlatEquiv (P := P) (Q := Q) β τ s =
       P.flatIndexEquiv ⟨β (Q.flatIndexEquiv.symm s).1,
         τ (Q.flatIndexEquiv.symm s).1 (Q.flatIndexEquiv.symm s).2⟩ := by
-  simp [sectorFlatEquiv, Equiv.sigmaCongrLeft_apply,
+  simp [sectorFlatEquiv, Equiv.sigmaCongr, Equiv.sigmaCongrLeft_apply,
     Equiv.sigmaCongrRight_apply]
 
 /-- Flat-sector dimensions of $P$ and $Q$ agree along `sectorFlatEquiv`,
@@ -258,7 +255,7 @@ theorem flatDim_sectorFlatEquiv
 
 /-- **Total bond dimension matches across matched sector decompositions.**
 
-If $P$ and $Q$ admit a matched basis bijection with matched per-block bond
+If $P$ and $Q$ have a matched basis bijection with matched per-block bond
 dimensions and matched copy permutations, then their total bond dimensions
 $\sum_s D_s$ coincide.
 
