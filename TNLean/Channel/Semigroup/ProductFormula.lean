@@ -87,9 +87,9 @@ theorem norm_expSemigroupCLM_le [NeZero D]
     (((t : ℂ) • A))
   have habs : |t| = t := abs_of_nonneg ht
   change ‖NormedSpace.exp (((t : ℂ) • A))‖ ≤ Real.exp (t * ‖A‖)
-  have hnorm : ‖((t : ℂ) • A)‖ = t * ‖A‖ := by
-    simp [norm_smul, Real.norm_eq_abs, habs]
-  rwa [← hnorm]
+  rw [show ‖((t : ℂ) • A)‖ = t * ‖A‖ by
+    simp [norm_smul, Real.norm_eq_abs, habs]] at h
+  exact h
 
 /-- A single Lie--Trotter step has the expected operator-norm bound. -/
 theorem norm_trotter_step_le [NeZero D]
