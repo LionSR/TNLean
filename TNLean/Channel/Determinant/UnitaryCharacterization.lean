@@ -44,11 +44,9 @@ variable {d : ℕ}
 /-- Column-stacking vectorization as a linear equivalence. -/
 private noncomputable def matrixVecLinearEquiv (d : ℕ) :
     MatrixAlg d ≃ₗ[ℂ] (Fin d × Fin d → ℂ) :=
-  LinearEquiv.ofBijective
-    { toFun := Matrix.vec
-      map_add' := Matrix.vec_add
-      map_smul' := Matrix.vec_smul }
-    Matrix.vec_bijective
+  (Matrix.ofLinearEquiv ℂ).symm.trans
+    ((LinearEquiv.curry ℂ ℂ (Fin d) (Fin d)).symm.trans
+      (LinearEquiv.funCongrLeft ℂ ℂ (Equiv.prodComm (Fin d) (Fin d))))
 
 section WolfStatements
 
@@ -284,6 +282,7 @@ theorem channelDet_unitary_eq_one (U : Matrix.unitaryGroup (Fin d) ℂ) :
   have hvec : ∀ X : MatrixAlg d,
       e (unitaryChannel U X) = Matrix.toLin' M (e X) := by
     intro X
+    -- The equivalence `e` is the column-stacking vectorization used by `Matrix.vec`.
     change Matrix.vec (((U : MatrixAlg d) * X * (U : MatrixAlg d)ᴴ) : MatrixAlg d) =
       M.mulVec (Matrix.vec X)
     symm
