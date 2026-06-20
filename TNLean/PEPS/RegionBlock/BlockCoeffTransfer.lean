@@ -148,7 +148,8 @@ reading each vertex under the double-complement vertex equivalence. -/
 def regionDoubleComplPhysicalConfigEquiv (R : Finset V) :
     RegionPhysicalConfig (V := V) (d := d) R ≃
       RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ (Finset.univ \ R)) :=
-  Equiv.arrowCongr (regionDoubleComplVertexEquiv (V := V) R).symm (Equiv.refl (Fin d))
+  Equiv.piCongrLeft' (fun _ : {w : V // w ∈ R} => Fin d)
+    (regionDoubleComplVertexEquiv (V := V) R).symm
 
 /-- **Double-complement transport of blocked-tensor injectivity.** If the region
 `R` is blocked-tensor injective, then so is `univ \ (univ \ R)`. The blocked tensor
