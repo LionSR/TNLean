@@ -174,9 +174,8 @@ theorem unitModulus_power_sum_not_tendsto_zero
         = ∑ p : Fin r × Fin r, (μ p.1 * star (μ p.2)) ^ N := by
     intro N
     have hnormSq : ((‖S N‖ ^ 2 : ℝ) : ℂ) = S N * star (S N) := by
-      rw [show star (S N) = (starRingEnd ℂ) (S N) from rfl]
-      push_cast
-      exact (Complex.mul_conj' (S N)).symm
+      rw [← Complex.normSq_eq_norm_sq (S N)]
+      simpa using (Complex.mul_conj (S N)).symm
     rw [hnormSq, hS_def]
     -- S N = ∑_q μ_q^N; star (S N) = ∑_q' star (μ_q')^N
     have hStar : star (∑ q : Fin r, (μ q) ^ N)
@@ -208,7 +207,7 @@ theorem unitModulus_power_sum_not_tendsto_zero
     intro p hp
     rcases Finset.mem_image.mp hp with ⟨q, _, rfl⟩
     have hμq_sq : μ q * star (μ q) = 1 := by
-      rw [show star (μ q) = (starRingEnd ℂ) (μ q) from rfl, Complex.mul_conj', hμ q]; simp
+      simpa [Complex.normSq_eq_norm_sq, hμ q] using Complex.mul_conj (μ q)
     exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, hμq_sq⟩
   have hDiag_card : (Finset.univ.image (fun q : Fin r => (q, q))).card = r := by
     rw [Finset.card_image_of_injective _ (fun a b h => (Prod.mk.inj h).1)]
