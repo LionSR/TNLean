@@ -107,8 +107,8 @@ private theorem extract_unitary_from_inner_form [NeZero d]
     exact one_ne_zero (show (1 : MatrixAlg d) = 0 by
       rw [← hPPinv, hP_zero, zero_mul])
   -- Step 4: c is a positive real number
-  have hc_re_nonneg : 0 ≤ c.re := (Complex.nonneg_iff.mp hc_nonneg).1
-  have hc_im_zero : c.im = 0 := (Complex.nonneg_iff.mp hc_nonneg).2.symm
+  have hc_re_nonneg : 0 ≤ c.re := (RCLike.nonneg_iff.mp hc_nonneg).1
+  have hc_im_zero : c.im = 0 := (RCLike.nonneg_iff.mp hc_nonneg).2
   have hc_re_pos : 0 < c.re := by
     rcases lt_or_eq_of_le hc_re_nonneg with h | h
     · exact h
