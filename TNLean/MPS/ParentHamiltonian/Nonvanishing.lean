@@ -112,7 +112,7 @@ theorem mpv_ne_zero_of_isNBlkInjective {A : MPSTensor d D} [NeZero D]
       evalWord A w₂ = 0 := by
     intro w₂ hw₂
     -- Show ∀ M, tr(evalWord A w₂ * M) = 0 to get evalWord A w₂ = 0.
-    apply (Matrix.trace_mul_right_eq_zero_iff (n := Fin D) (evalWord A w₂)).1
+    apply (Matrix.ext_iff_trace_mul_right (A := evalWord A w₂) (B := 0)).2
     intro M
     -- The functional P ↦ tr(P * evalWord A w₂) vanishes on wordSpan A L₀ = ⊤.
     have hφ : (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp
@@ -140,6 +140,7 @@ theorem mpv_ne_zero_of_isNBlkInjective {A : MPSTensor d D} [NeZero D]
         = Matrix.trace (M * evalWord A w₂) := Matrix.trace_mul_comm ..
       _ = 0 := by
           simpa [Matrix.traceLinearMap_apply] using congrArg (· M) hφ
+      _ = Matrix.trace (0 * M) := by simp
   exact allZero_contradiction hInj hL₀ (by omega : 0 < N - L₀) hprod_zero
 
 end MPSTensor

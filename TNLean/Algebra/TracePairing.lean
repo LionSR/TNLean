@@ -203,7 +203,7 @@ theorem traceMulRightPi_ker_eq_bot {A : MPSTensor d D} (hA : IsInjective A) :
     intro i
     simpa using congrArg (· i) hM
   -- Use trace nondegeneracy.
-  exact (Matrix.trace_mul_right_eq_zero_iff (n := Fin D) M).1 fun N => by
+  exact (Matrix.ext_iff_trace_mul_right (A := M) (B := 0)).2 fun N => by
     simpa [Matrix.traceLinearMap_apply] using congrArg (· N) hφ
 
 /-- If `A` is injective and `A`, `B` generate the same MPV family,
