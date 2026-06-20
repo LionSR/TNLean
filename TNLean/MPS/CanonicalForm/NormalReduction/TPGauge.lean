@@ -99,10 +99,6 @@ structure PGVWC07PositiveLengthWitness (A : MPSTensor d D) where
   original bond dimension. -/
   bondDim_le : ∑ k : Fin r, dim k ≤ D
 
-private noncomputable def gaugeMulVecLinearEquiv {D : ℕ} (X : GL (Fin D) ℂ) :
-    (Fin D → ℂ) ≃ₗ[ℂ] (Fin D → ℂ) :=
-  (Matrix.GeneralLinearGroup.toLin X).toLinearEquiv
-
 private theorem isIrreducibleAction_gaugeEquiv
     {D : ℕ} {A B : MPSTensor d D}
     (hGauge : GaugeEquiv (d := d) (D := D) A B)
@@ -110,7 +106,8 @@ private theorem isIrreducibleAction_gaugeEquiv
     IsIrreducibleAction (d := d) (D := D) B := by
   classical
   rcases hGauge with ⟨X, hX⟩
-  let T : (Fin D → ℂ) ≃ₗ[ℂ] (Fin D → ℂ) := gaugeMulVecLinearEquiv X
+  let T : (Fin D → ℂ) ≃ₗ[ℂ] (Fin D → ℂ) :=
+    (Matrix.GeneralLinearGroup.toLin X).toLinearEquiv
   intro W hW
   let W' : Submodule ℂ (Fin D → ℂ) := W.map T.symm.toLinearMap
   have hW' : IsInvariantSubmodule (d := d) (D := D) A W' := by
