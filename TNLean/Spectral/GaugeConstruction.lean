@@ -170,24 +170,6 @@ theorem isInjective_conjugate {D : ℕ}
       _ = ⊤ := by rw [Submodule.map_top]; exact LinearMap.range_eq_top.2 hφ_surj
   exact this
 
-/-- Complex conjugation preserves unit modulus. -/
-lemma norm_starRingEnd_eq_one {μ : ℂ} (hμ : ‖μ‖ = 1) :
-    ‖(starRingEnd ℂ) μ‖ = 1 := by
-  simpa [Complex.norm_conj] using hμ
-
-/-- Scalar multiplication by a unit-modulus complex number preserves `N * Nᴴ`. -/
-lemma smul_mul_conjTranspose_of_norm_eq_one {m n : ℕ}
-    (μ : ℂ) (hμ : ‖μ‖ = 1) (N : Matrix (Fin m) (Fin n) ℂ) :
-    (μ • N) * (μ • N)ᴴ = N * Nᴴ := by
-  have hμ_star_mul : star μ * μ = 1 := by
-    rw [← starRingEnd_apply, Complex.conj_mul', hμ]; simp
-  calc
-    (μ • N) * (μ • N)ᴴ = (star μ * μ) • (N * Nᴴ) := by
-      simp only [Matrix.conjTranspose_smul, Matrix.smul_mul, Matrix.mul_smul, smul_smul]
-    _ = N * Nᴴ := by
-      rw [hμ_star_mul]
-      simp only [one_smul]
-
 /-- Shared block-KS core: transporting a modulus-one mixed-transfer eigenvector to canonical
 gauges produces Kraus-level intertwining relations for the gauged tensors. -/
 theorem gauged_intertwining_core
@@ -375,7 +357,8 @@ theorem gauged_intertwining_core
         Matrix.fromBlocks_smul]
     have h_eq := hL ▸ hR ▸ h'
     exact (Matrix.fromBlocks_inj.1 h_eq).2.1
-  have hμ_conj : ‖(starRingEnd ℂ) μ‖ = 1 := norm_starRingEnd_eq_one hμ
+  have hμ_conj : ‖(starRingEnd ℂ) μ‖ = 1 := by
+    simpa [Complex.norm_conj] using hμ
   have hEigMstar : Kraus.map K Mᴴ = (starRingEnd ℂ μ) • Mᴴ := by
     calc
       Kraus.map K Mᴴ = (Kraus.map K M)ᴴ := by
@@ -426,6 +409,9 @@ theorem self_mul_conjTranspose_fixed_of_intertwining
     (hInter : ∀ i : Fin d, A i * X = μ • X * B i)
     (hμ : ‖μ‖ = 1) :
     transferMap A (X * Xᴴ) = X * Xᴴ := by
+  have hμ_star_mul : star μ * μ = 1 := by
+    simpa [Complex.normSq_eq_norm_sq, hμ] using
+      (Complex.normSq_eq_conj_mul_self (z := μ)).symm
   have hterm :
       ∀ i : Fin d, A i * (X * Xᴴ) * (A i)ᴴ = X * (B i * (B i)ᴴ) * Xᴴ := by
     intro i
@@ -437,7 +423,14 @@ theorem self_mul_conjTranspose_fixed_of_intertwining
       _ = (μ • (X * B i)) * (μ • (X * B i))ᴴ := by
         simp only [hAX]
       _ = (X * B i) * (X * B i)ᴴ := by
-        simpa using smul_mul_conjTranspose_of_norm_eq_one μ hμ (X * B i)
+        calc
+          (μ • (X * B i)) * (μ • (X * B i))ᴴ =
+              (star μ * μ) • ((X * B i) * (X * B i)ᴴ) := by
+                simp only [Matrix.conjTranspose_smul, Matrix.smul_mul, Matrix.mul_smul,
+                  smul_smul]
+          _ = (X * B i) * (X * B i)ᴴ := by
+                rw [hμ_star_mul]
+                simp only [one_smul]
       _ = X * (B i * (B i)ᴴ) * Xᴴ := by
         simp only [Matrix.conjTranspose_mul, Matrix.mul_assoc]
   calc

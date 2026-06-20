@@ -401,7 +401,8 @@ private lemma exists_gram_fixedPoints_of_gauged_rectangular_intertwiner
       transferMap (d := d) (D := D₁) A' σA = σA ∧
       transferMap (d := d) (D := D₂) B' σB = σB := by
   classical
-  have hμ_conj : ‖(starRingEnd ℂ) μ‖ = 1 := norm_starRingEnd_eq_one hμ
+  have hμ_conj : ‖(starRingEnd ℂ) μ‖ = 1 := by
+    simpa [Complex.norm_conj] using hμ
   have hInter1c : ∀ i : Fin d, B' i * X'ᴴ = (starRingEnd ℂ μ) • X'ᴴ * A' i := by
     intro i
     have h22 := congrArg Matrix.conjTranspose (hInter1 i)
