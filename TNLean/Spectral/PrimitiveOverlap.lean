@@ -58,10 +58,8 @@ local notation "V" => Matrix (Fin D) (Fin D) ℂ
 /-- Trace, viewed as a linear functional on the Banach algebra of continuous endomorphisms.
 
 On finite-dimensional spaces this is automatically continuous. -/
-noncomputable def traceCLM : (V →L[ℂ] V) →ₗ[ℂ] ℂ where
-  toFun F := LinearMap.trace ℂ V F
-  map_add' F G := by simp
-  map_smul' c F := by simp
+noncomputable def traceCLM : (V →L[ℂ] V) →ₗ[ℂ] ℂ :=
+  (LinearMap.trace ℂ V).comp (ContinuousLinearMap.coeLM ℂ)
 
 /-- If `F^n → 0` in operator norm, then `trace(F^n) → 0`. -/
 lemma tendsto_trace_pow_of_tendsto_zero
@@ -76,9 +74,10 @@ lemma tendsto_trace_pow_of_tendsto_zero
   have h := (hcont.tendsto (0 : V →L[ℂ] V)).comp hF
   have hzero : traceCLM (D := D) (0 : V →L[ℂ] V) = 0 := by
     simp [traceCLM]
-  change Tendsto ((fun G : V →L[ℂ] V => LinearMap.trace ℂ V G) ∘ fun n => F ^ n)
-      atTop (nhds (0 : ℂ))
-  simpa [traceCLM, Function.comp_apply, hzero] using h
+  change Tendsto (((LinearMap.trace ℂ V) ∘
+      (fun G : V →L[ℂ] V => G.toLinearMap)) ∘ fun n => F ^ n) atTop
+      (nhds (0 : ℂ))
+  simpa [traceCLM, ContinuousLinearMap.coeLM, Function.comp_apply, hzero] using h
 
 /-- **Trace convergence from a complementary transfer-map gap.**
 
