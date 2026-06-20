@@ -167,17 +167,13 @@ private theorem gaugePhase_blockTensor_overlap_not_tendsto_zero_of_periodic
   have hmpv : ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
       mpv Bblk σ = ζ ^ N * mpv Ablk σ :=
     mpv_eq_pow_mul_of_gaugePhase Ablk Bblk X ζ hX
-  have hSelfScale : ∀ N : ℕ,
-      mpvOverlap (d := blockPhysDim d m) Bblk Bblk N =
-        (ζ * starRingEnd ℂ ζ) ^ N *
-          mpvOverlap (d := blockPhysDim d m) Ablk Ablk N :=
-    mpvOverlap_self_scale_of_mpv_eq_pow_mul (A := Ablk) (B := Bblk) (ζ := ζ) hmpv
   have hm_norm_ne : ‖(m : ℂ)‖ ≠ 0 := by
     simpa using (Nat.cast_ne_zero.mpr (NeZero.ne m) : (m : ℂ) ≠ 0)
   have hζnorm : ‖ζ‖ = 1 := by
     exact norm_eq_one_of_selfOverlap_scale_at_nonzero_limit
       (A := Ablk) (B := Bblk) (ζ := ζ) hm_norm_ne
-      hA_self.norm hB_self.norm hSelfScale
+      hA_self.norm hB_self.norm
+      (mpvOverlap_self_scale_of_mpv_eq_pow_mul (A := Ablk) (B := Bblk) (ζ := ζ) hmpv)
   have hCrossNormEq : ∀ N,
       ‖mpvOverlap (d := blockPhysDim d m) Ablk Bblk N‖ =
         ‖mpvOverlap (d := blockPhysDim d m) Ablk Ablk N‖ := by
