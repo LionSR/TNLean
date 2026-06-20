@@ -58,10 +58,9 @@ theorem IsBNTCanonicalForm.norm_phase_of_matched_mpv
       atTop (𝓝 (1 : ℝ)) := by
     have h1 := (hQ.basis_normalized_self_overlap k).norm
     simpa using h1
-  have hScale :=
-    mpvOverlap_self_scale_of_mpv_eq_pow_mul (A := P.basis j) (B := Q.basis k)
-      (ζ := ζ) hmpv
-  exact norm_eq_one_of_selfOverlap_scale (ζ := ζ) hAA hBB hScale
+  exact norm_eq_one_of_selfOverlap_scale (ζ := ζ) hAA hBB
+    (mpvOverlap_self_scale_of_mpv_eq_pow_mul (A := P.basis j) (B := Q.basis k)
+      (ζ := ζ) hmpv)
 
 /-- **Auxiliary lemma: gauge-phase data gives an MPV-level scalar-power identity with unit phase.**
 
