@@ -269,12 +269,10 @@ theorem scalarConditionalExpectation_isCPMap
   have hcpK : IsCPMap (Kraus.mapLM K) := isCPMap_of_krausMapLM K
   -- Rewrite `scalarConditionalExpectation σ` as `(σ.trace.re)⁻¹ • Kraus.mapLM K`.
   have htr_nn : (0 : ℂ) ≤ σ.trace := Matrix.PosSemidef.trace_nonneg hσ
-  have htr_re_nn : (0 : ℝ) ≤ σ.trace.re := (Complex.nonneg_iff.mp htr_nn).1
-  have htr_im : σ.trace.im = 0 := (Complex.nonneg_iff.mp htr_nn).2.symm
-  have htr_eq : ((σ.trace.re : ℝ) : ℂ) = σ.trace := by
-    apply Complex.ext
-    · simp
-    · simp [htr_im]
+  have htr_re_nn : (0 : ℝ) ≤ σ.trace.re := (RCLike.nonneg_iff.mp htr_nn).1
+  have htr_eq : ((σ.trace.re : ℝ) : ℂ) = σ.trace :=
+    (RCLike.ofReal_eq_re_of_isSelfAdjoint
+      (IsSelfAdjoint.of_nonneg htr_nn)).mp rfl
   -- `scalarConditionalExpectation σ = ((σ.trace.re)⁻¹ : ℂ) • Kraus.mapLM K`.
   have hrw : scalarConditionalExpectation σ =
       (((σ.trace.re : ℝ)⁻¹ : ℝ) : ℂ) • Kraus.mapLM K := by
