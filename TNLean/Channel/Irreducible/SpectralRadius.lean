@@ -9,6 +9,8 @@ import TNLean.Channel.Irreducible.Similarity
 import TNLean.Channel.Irreducible.TraceAdjoint
 import TNLean.MPS.Core.TPGauge
 import TNLean.Spectral.TransferOperatorGap
+import Mathlib.Algebra.Module.Equiv.Basic
+import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 
 /-!
 # Irreducible spectral-radius identity (Wolf Theorem 6.3(4))
@@ -47,32 +49,37 @@ variable {D : ℕ}
 
 section SimilarityCLM
 
+private noncomputable def sandwichUnit
+    (C : Matrix (Fin D) (Fin D) ℂ) (hC : C.det ≠ 0) : GL (Fin D) ℂ :=
+  Matrix.GeneralLinearGroup.mkOfDetNeZero C hC
+
 private noncomputable def sandwichLinearEquiv
     (C : Matrix (Fin D) (Fin D) ℂ) (hC : C.det ≠ 0) :
     Matrix (Fin D) (Fin D) ℂ ≃ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
-  let u : (Matrix (Fin D) (Fin D) ℂ)ˣ :=
-    Matrix.nonsingInvUnit C (Ne.isUnit hC)
-  let hCstar : Cᴴ.det ≠ 0 := by
-    rw [Matrix.det_conjTranspose]
-    exact star_ne_zero.mpr hC
-  let v : (Matrix (Fin D) (Fin D) ℂ)ˣ :=
-    Matrix.nonsingInvUnit Cᴴ (Ne.isUnit hCstar)
-  (u.mulLeftLinearEquiv ℂ (Matrix (Fin D) (Fin D) ℂ)).trans
-    (v.mulRightLinearEquiv ℂ)
+  ((sandwichUnit (D := D) C hC).mulLeftLinearEquiv ℂ (Matrix (Fin D) (Fin D) ℂ)).trans
+    ((star (sandwichUnit (D := D) C hC)).mulRightLinearEquiv ℂ)
 
 @[simp] private lemma sandwichLinearEquiv_apply
     (C : Matrix (Fin D) (Fin D) ℂ) (hC : C.det ≠ 0)
     (X : Matrix (Fin D) (Fin D) ℂ) :
-    sandwichLinearEquiv (D := D) C hC X = C * X * Cᴴ := rfl
+    sandwichLinearEquiv (D := D) C hC X = C * X * Cᴴ := by
+  simp [sandwichLinearEquiv, sandwichUnit, Matrix.star_eq_conjTranspose, Matrix.mul_assoc]
 
 @[simp] private lemma sandwichLinearEquiv_symm_apply
     (C : Matrix (Fin D) (Fin D) ℂ) (hC : C.det ≠ 0)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     (sandwichLinearEquiv (D := D) C hC).symm X = C⁻¹ * X * (Cᴴ)⁻¹ := by
-  simp only [sandwichLinearEquiv]
-  rw [LinearEquiv.symm_trans_apply]
-  rw [Units.symm_mulRightLinearEquiv_apply, Units.symm_mulLeftLinearEquiv_apply]
-  simp [Matrix.nonsingInvUnit, Matrix.mul_assoc]
+  have hSymmMulLeft : ∀ Z : Matrix (Fin D) (Fin D) ℂ,
+      ((Units.mulLeftLinearEquiv ℂ (Matrix (Fin D) (Fin D) ℂ))
+        (sandwichUnit (D := D) C hC)).symm Z = C⁻¹ * Z := by
+    intro Z
+    simpa [sandwichUnit, Matrix.GeneralLinearGroup.coe_inv] using
+      Units.symm_mulLeftLinearEquiv_apply (R := ℂ) (sandwichUnit (D := D) C hC) Z
+  simp only [sandwichLinearEquiv, LinearEquiv.symm_trans_apply,
+    Units.symm_mulRightLinearEquiv_apply]
+  rw [hSymmMulLeft]
+  simp [sandwichUnit, Matrix.star_eq_conjTranspose, Matrix.conjTranspose_nonsing_inv,
+    Matrix.mul_assoc]
 
 private lemma spectralRadius_similarity_eq
     (C : Matrix (Fin D) (Fin D) ℂ) (hC : C.det ≠ 0)
