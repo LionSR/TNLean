@@ -34,29 +34,6 @@ namespace PositiveOnAbelian
 
 variable {D : ℕ}
 
-section NormalGenerators
-
-variable {A : Matrix (Fin D) (Fin D) ℂ}
-
-/-- A normal matrix commutes with its adjoint. -/
-private lemma commute_conjTranspose_of_normal
-    (hA : Aᴴ * A = A * Aᴴ) : Commute A Aᴴ := by
-  exact (commute_iff_eq A Aᴴ).mpr hA.symm
-
-/-- For a normal matrix `A`, the generator `A` commutes with `Aᴴ * A`. -/
-private lemma commute_conjTranspose_mul_self_of_normal
-    (hA : Aᴴ * A = A * Aᴴ) : Commute A (Aᴴ * A) :=
-  (commute_conjTranspose_of_normal (A := A) hA).mul_right (Commute.refl A)
-
-/-- For a normal matrix `A`, the generator `Aᴴ` commutes with `Aᴴ * A`. -/
-private lemma conjTranspose_commute_conjTranspose_mul_self_of_normal
-    (hA : Aᴴ * A = A * Aᴴ) : Commute Aᴴ (Aᴴ * A) :=
-  (Commute.refl Aᴴ).mul_right
-    (Commute.symm (commute_conjTranspose_of_normal (A := A) hA))
-
-
-end NormalGenerators
-
 section NormalDiagonalization
 
 local notation "E" => EuclideanSpace ℂ (Fin D)
@@ -89,7 +66,7 @@ private lemma linearMap_eq_sum_rankOne_of_orthonormalBasis
 private lemma commute_parts_of_normal
     (A : Mat) (hA : Aᴴ * A = A * Aᴴ) :
     Commute ((1 / 2 : ℂ) • (A + Aᴴ)) ((Complex.I / 2 : ℂ) • (Aᴴ - A)) := by
-  have hAA : Commute A Aᴴ := commute_conjTranspose_of_normal (A := A) hA
+  have hAA : Commute A Aᴴ := (commute_iff_eq A Aᴴ).mpr hA.symm
   -- Commute (A + Aᴴ) with (Aᴴ - A) by combining the individual commutators.
   have hsum_sub : Commute (A + Aᴴ) (Aᴴ - A) :=
     (hAA.add_left (Commute.refl Aᴴ)).sub_right ((Commute.refl A).add_left hAA.symm)
