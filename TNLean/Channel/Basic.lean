@@ -157,7 +157,7 @@ private lemma posSemidef_diag_norm_le_trace_norm {X : Matrix (Fin D) (Fin D) ℂ
     show ‖trace X‖ = (trace X).re from by
       simpa using congrArg Complex.re (Complex.norm_of_nonneg' hX.trace_nonneg),
     show (trace X).re = ∑ j : Fin D, (X j j).re from by simp [Matrix.trace, Matrix.diag]]
-  exact single_le_sum (fun j _ => (Complex.nonneg_iff.mp (hX.diag_nonneg (i := j))).1)
+  exact single_le_sum (fun j _ => (RCLike.nonneg_iff.mp (hX.diag_nonneg (i := j))).1)
     (mem_univ i)
 
 /-- For PSD `X = Bᴴ * B`, the entry `(Bᴴ * B) i j` equals an inner product of column vectors. -/
