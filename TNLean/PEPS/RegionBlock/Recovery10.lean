@@ -134,17 +134,9 @@ boundary configuration on `R` corresponds to one on `univ \ (univ \ R)` by readi
 each crossing edge under the double-complement boundary-edge equivalence. -/
 def regionDoubleComplBoundaryConfigEquiv (A : Tensor G d) (R : Finset V) :
     RegionBoundaryConfig (G := G) A R ≃
-      RegionBoundaryConfig (G := G) A (Finset.univ \ (Finset.univ \ R)) where
-  toFun := regionDoubleComplBoundaryConfig (G := G) A R
-  invFun bdry := fun e => bdry ((regionBoundaryEdgeDoubleComplEquiv (G := G) R).symm e)
-  left_inv bdry := by
-    funext e
-    simp only [regionDoubleComplBoundaryConfig]
-    congr 1
-  right_inv bdry := by
-    funext e
-    simp only [regionDoubleComplBoundaryConfig]
-    congr 1
+      RegionBoundaryConfig (G := G) A (Finset.univ \ (Finset.univ \ R)) :=
+  Equiv.piCongrLeft' (fun f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f} =>
+      Fin (A.bondDim f.1)) (regionBoundaryEdgeDoubleComplEquiv (G := G) R).symm
 
 /-- **The double-complement transport of the blocked tensor map.** The blocked
 tensor map of `univ \ (univ \ R)` applied to a row `c`, evaluated at the
