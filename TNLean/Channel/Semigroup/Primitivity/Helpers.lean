@@ -38,20 +38,6 @@ theorem semigroup_pow
     rw [hcast, hcomp, ih]
     exact (pow_succ (T t) n).symm
 
-/-- Eigenvector equation for powers of a linear map: if `f v = μ • v` then
-`(f ^ n) v = μ ^ n • v`. -/
-theorem pow_apply_eigenvector
-    {V : Type*} [AddCommGroup V] [Module ℂ V]
-    (f : V →ₗ[ℂ] V) (v : V) (μ : ℂ) (n : ℕ) (hv : f v = μ • v) :
-    (f ^ n) v = μ ^ n • v := by
-  induction n with
-  | zero => simp [pow_zero]
-  | succ n ih =>
-    have hstep : (f ^ (n + 1)) v = (f ^ n) (f v) := by
-      change (f ^ n * f) v = (f ^ n) (f v)
-      rfl
-    rw [hstep, hv, map_smul, ih, smul_smul, pow_succ']
-
 /-- A density matrix is nonzero. -/
 lemma ne_zero_of_mem_densityMatrices' {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hρ : ρ ∈ densityMatrices D) : ρ ≠ 0 := by
@@ -381,16 +367,6 @@ theorem peripheral_powers_closed_of_irreducible_channel_with_fixed [NeZero D]
   intro n
   obtain ⟨hpow_eig, hpow_norm⟩ := hpow n
   exact ⟨heig_bwd (μ ^ n) hpow_eig, hpow_norm⟩
-
-/-- Evaluation of powers after bundling an endomorphism as a continuous linear map. -/
-theorem toContinuousLinearMap_pow_apply [NeZero D]
-    (F : Mat →ₗ[ℂ] Mat) (X : Mat) (n : ℕ) :
-    (((Module.End.toContinuousLinearMap Mat) F) ^ n) X = (F ^ n) X := by
-  have hpowEq : ((Module.End.toContinuousLinearMap Mat) F) ^ n =
-      (Module.End.toContinuousLinearMap Mat) (F ^ n) :=
-    (map_pow (Module.End.toContinuousLinearMap Mat) F n).symm
-  rw [hpowEq]
-  rfl
 
 /-- In finite dimensions, a strict modulus bound on every eigenvalue gives a spectral-radius gap. -/
 theorem spectralRadius_lt_one_of_eigenvalues_lt_one [NeZero D]
