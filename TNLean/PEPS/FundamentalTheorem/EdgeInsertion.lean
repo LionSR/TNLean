@@ -309,17 +309,9 @@ theorem GaugeEquiv.sameState {A B : Tensor G d} (h : GaugeEquiv A B) :
     SameState A B := by
   classical
   rcases h with ⟨hDim, X, hX⟩
+  let φ : VirtualConfig A ≃ VirtualConfig B :=
+    Equiv.piCongrRight fun e => finCongr (congr_fun hDim e)
   intro σ
-  let φ : VirtualConfig A ≃ VirtualConfig B := {
-    toFun := fun η e => Fin.cast (congr_fun hDim e) (η e)
-    invFun := fun η e => Fin.cast (Eq.symm (congr_fun hDim e)) (η e)
-    left_inv := fun η => by
-      funext e
-      simp
-    right_inv := fun η => by
-      funext e
-      simp
-  }
   have hB : stateCoeff B σ = stateCoeff (applyGauge A X) σ := by
     unfold stateCoeff
     rw [← φ.sum_comp (fun η : VirtualConfig B =>
