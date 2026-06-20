@@ -106,13 +106,6 @@ theorem transferMap_rotatePhysical (A : MPSTensor d D) (u : Matrix (Fin d) (Fin 
 
 /-! ### Left-canonical preservation under rotation -/
 
-/-- Extract the orthogonality relation from `uᴴ * u = 1`. -/
-private lemma unitary_orth_entry (u : Matrix (Fin d) (Fin d) ℂ) (hu : uᴴ * u = 1)
-    (j k : Fin d) :
-    ∑ i : Fin d, starRingEnd ℂ (u i j) * u i k = if j = k then 1 else 0 := by
-  have h := congrArg (fun M : Matrix (Fin d) (Fin d) ℂ => M j k) hu
-  simpa [Matrix.mul_apply, Matrix.one_apply, Matrix.conjTranspose_apply] using h
-
 /-- Left-canonical normalization is preserved by unitary rotation of the physical
 index. The proof mirrors `kraus_same_map_of_unitary_combination` for the adjoint
 channel: expand, swap sums, apply orthogonality, collapse. -/
@@ -122,7 +115,11 @@ theorem isLeftCanonical_rotatePhysical (A : MPSTensor d D) (u : Matrix (Fin d) (
   unfold IsLeftCanonical at *
   simp only [rotatePhysical_apply]
   have hu' : uᴴ * u = 1 := mul_eq_one_comm.mp hu
-  have hU := unitary_orth_entry u hu'
+  have hU : ∀ j k : Fin d,
+      ∑ i : Fin d, starRingEnd ℂ (u i j) * u i k = if j = k then 1 else 0 := by
+    intro j k
+    have h := congrArg (fun M : Matrix (Fin d) (Fin d) ℂ => M j k) hu'
+    simpa [Matrix.mul_apply, Matrix.one_apply, Matrix.conjTranspose_apply] using h
   have star_eq : ∀ (c : ℂ), star c = starRingEnd ℂ c := fun _ => rfl
   -- Suffices: show the expanded sum equals ∑_j A_j† A_j
   suffices h : ∑ i : Fin d, (∑ j : Fin d, u i j • A j)ᴴ * (∑ k : Fin d, u i k • A k) =
@@ -157,7 +154,11 @@ theorem isIrreducibleTensor_rotatePhysical (A : MPSTensor d D) (u : Matrix (Fin 
   refine ⟨P, hProj, hNe0, hNe1, ?_⟩
   intro k
   have hu' : uᴴ * u = 1 := mul_eq_one_comm.mp hu
-  have hU := unitary_orth_entry u hu'
+  have hU : ∀ j k : Fin d,
+      ∑ i : Fin d, starRingEnd ℂ (u i j) * u i k = if j = k then 1 else 0 := by
+    intro j k
+    have h := congrArg (fun M : Matrix (Fin d) (Fin d) ℂ => M j k) hu'
+    simpa [Matrix.mul_apply, Matrix.one_apply, Matrix.conjTranspose_apply] using h
   -- Distribute (1-P)*_*P through the sum in the invariance condition
   have hInv' : ∀ i : Fin d, ∑ j : Fin d, u i j • ((1 - P) * A j * P) = 0 := by
     intro i
