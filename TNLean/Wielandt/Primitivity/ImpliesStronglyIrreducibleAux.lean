@@ -162,21 +162,6 @@ theorem trace_eigenvector_eq_zero
   · exact absurd (sub_eq_zero.mp h) hμ_ne
   · exact h
 
-/-- Trace of `X + X†` vanishes when trace of `X` vanishes. -/
-private lemma trace_hermitianPart_eq_zero
-    {X : Matrix (Fin D) (Fin D) ℂ}
-    (htr : Matrix.trace X = 0) :
-    Matrix.trace (X + Xᴴ) = 0 := by
-  rw [Matrix.trace_add, Matrix.trace_conjTranspose, htr, star_zero, add_zero]
-
-/-- Trace of `i(X† - X)` vanishes when trace of `X` vanishes. -/
-private lemma trace_antiHermitianPart_eq_zero
-    {X : Matrix (Fin D) (Fin D) ℂ}
-    (htr : Matrix.trace X = 0) :
-    Matrix.trace (Complex.I • (Xᴴ - X)) = 0 := by
-  rw [Matrix.trace_smul, Matrix.trace_sub, Matrix.trace_conjTranspose, htr, star_zero,
-    sub_zero, smul_zero]
-
 /-- At least one of `X + X†` and `i(X† - X)` is nonzero when `X ≠ 0`. -/
 private lemma hermitianParts_not_both_zero
     {X : Matrix (Fin D) (Fin D) ℂ} (hne : X ≠ 0) :
@@ -244,18 +229,23 @@ theorem exists_hermitian_ne_zero_trace_zero_pow_fixedPoint
       ¬H.PosSemidef := by
   have htr := trace_eigenvector_eq_zero A hNorm hEig hμ_ne
   rcases hermitianParts_not_both_zero hX_ne with h | h
-  · exact ⟨X + Xᴴ,
+  · have htrH : Matrix.trace (X + Xᴴ) = 0 := by
+      rw [Matrix.trace_add, Matrix.trace_conjTranspose, htr, star_zero, add_zero]
+    exact ⟨X + Xᴴ,
       Matrix.isHermitian_add_transpose_self X, h,
-      trace_hermitianPart_eq_zero htr,
+      htrH,
       transferMap_pow_hermitianPart_fixedPoint A hEig hroot,
       not_posSemidef_of_hermitian_ne_zero_trace_eq_zero
-        (Matrix.isHermitian_add_transpose_self X) h (trace_hermitianPart_eq_zero htr)⟩
-  · exact ⟨Complex.I • (Xᴴ - X),
+        (Matrix.isHermitian_add_transpose_self X) h htrH⟩
+  · have htrH : Matrix.trace (Complex.I • (Xᴴ - X)) = 0 := by
+      rw [Matrix.trace_smul, Matrix.trace_sub, Matrix.trace_conjTranspose, htr, star_zero,
+        sub_zero, smul_zero]
+    exact ⟨Complex.I • (Xᴴ - X),
       isHermitian_smul_I_sub_conjTranspose X, h,
-      trace_antiHermitianPart_eq_zero htr,
+      htrH,
       transferMap_pow_antiHermitianPart_fixedPoint A hEig hroot,
       not_posSemidef_of_hermitian_ne_zero_trace_eq_zero
-        (isHermitian_smul_I_sub_conjTranspose X) h (trace_antiHermitianPart_eq_zero htr)⟩
+        (isHermitian_smul_I_sub_conjTranspose X) h htrH⟩
 
 /-! ### Step 7: Auxiliary lemmas for the perturbation construction -/
 
