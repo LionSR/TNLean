@@ -405,7 +405,7 @@ theorem isInjective_of_gaugeEquiv {A B : MPSTensor d D}
     | mem x hx =>
       obtain ⟨i, rfl⟩ := hx
       rw [← hX i]
-      exact Submodule.subset_span (Set.mem_range.mpr ⟨i, rfl⟩)
+      exact Submodule.subset_span (Set.mem_range_self i)
     | zero => simp
     | add x y _ _ hx hy =>
       simp only [Matrix.mul_add, Matrix.add_mul]
