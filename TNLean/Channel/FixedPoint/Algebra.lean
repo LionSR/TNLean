@@ -67,10 +67,6 @@ section AuxiliaryLemmas
     adjointMap K (1 : Mat) = 1 := by
   simpa [adjointMap, IsTP, Matrix.mul_one] using h_tp
 
-private theorem isUnitalKraus_of_isUnital (K : Fin d → Mat) (h_unital : IsUnital K) :
-    KadisonSchwarz.IsUnitalKraus K := by
-  simpa [IsUnital, KadisonSchwarz.IsUnitalKraus] using h_unital
-
 private theorem isUnital_conjTranspose_of_isTP (K : Fin d → Mat) (h_tp : IsTP K) :
     IsUnital (fun i => (K i)ᴴ) := by
   simpa [IsUnital, IsTP] using h_tp
@@ -119,7 +115,7 @@ theorem mem_multiplicativeDomain_of_mem_fixedPoints
     {X : Mat} (hX : X ∈ fixedPoints K) :
     X ∈ KadisonSchwarz.multiplicativeDomain K := by
   let h_unitalKS : KadisonSchwarz.IsUnitalKraus K :=
-    isUnitalKraus_of_isUnital K h_unital
+    by simpa [IsUnital, KadisonSchwarz.IsUnitalKraus] using h_unital
   have hXeq : map K X = X := hX
   have h_left_eq_map : map K (Xᴴ * X) = (map K X)ᴴ * map K X := by
     calc
