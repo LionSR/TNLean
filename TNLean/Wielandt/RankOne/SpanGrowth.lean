@@ -46,17 +46,15 @@ theorem mapsTo_range_pow (f : End ℂ (Fin D → ℂ)) :
     Set.MapsTo f (↑(LinearMap.range (f ^ D)) : Set (Fin D → ℂ))
       (↑(LinearMap.range (f ^ D)) : Set (Fin D → ℂ)) := by
   intro x hx
-  rcases (LinearMap.mem_range.mp hx) with ⟨y, rfl⟩
-  -- `f ((f^D) y) = (f^D) (f y)`.
-  refine (LinearMap.mem_range).2 ⟨f y, ?_⟩
-  -- Reassociate everything to the same power `f^(D+1)`.
-  calc
-    (f ^ D) (f y) = (f ^ (D + 1)) y := by
-      simp [pow_succ, Module.End.mul_apply]
-    _ = (f ^ (1 + D)) y := by
-      simp [Nat.add_comm]
-    _ = f ((f ^ D) y) := by
-      simp [pow_add, Module.End.mul_apply]
+  have hmap : Submodule.map f (LinearMap.range (f ^ D)) ≤
+      LinearMap.range (f ^ D) := by
+    rw [← LinearMap.range_comp]
+    have hcomp : f.comp (f ^ D) = (f ^ D).comp f := by
+      rw [← Module.End.iterate_succ' (f' := f) D,
+        ← Module.End.iterate_succ (f' := f) D]
+    rw [hcomp]
+    exact LinearMap.range_comp_le_range f (f ^ D)
+  exact hmap (Submodule.mem_map_of_mem hx)
 
 /-! ## The kernel of `f` lies in the 0-generalized eigenspace -/
 
