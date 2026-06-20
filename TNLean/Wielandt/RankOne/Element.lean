@@ -88,23 +88,6 @@ lemma pow_mulVec_eq_smul_of_mulVec_eq_smul
 
 namespace WielandtRankOne
 
-/-- If a linear map preserves a submodule, then all powers preserve it. -/
-private lemma pow_apply_mem_of_mapsTo
-    {V : Type*} [AddCommGroup V] [Module ℂ V]
-    (f : End ℂ V) (U : Submodule ℂ V)
-    (hf : Set.MapsTo f (↑U : Set V) (↑U : Set V)) :
-    ∀ n : ℕ, ∀ {v : V}, v ∈ U → (f ^ n) v ∈ U := by
-  intro n
-  induction n with
-  | zero =>
-      intro v hv
-      simpa [pow_zero] using hv
-  | succ n ih =>
-      intro v hv
-      have hv' : f v ∈ U := hf hv
-      -- `f^(n+1) v = f^n (f v)`.
-      simpa [pow_succ, Module.End.mul_apply] using ih (v := f v) hv'
-
 /-- On `V = Fin D → ℂ`, the zero generalized eigenspace is the kernel of `f ^ D`. -/
 private lemma maxGenEigenspace_zero_eq_ker_pow
     (f : End ℂ (Fin D → ℂ)) :
@@ -163,7 +146,8 @@ theorem range_pow_le_iSup_maxGenEigenspace_ne_zero
           (↑(f.maxGenEigenspace μ) : Set (Fin D → ℂ)) :=
         Wielandt.mapsTo_maxGenEigenspace_self f μ
       have hpow : (f ^ D) v ∈ f.maxGenEigenspace μ :=
-        pow_apply_mem_of_mapsTo (f := f) (U := f.maxGenEigenspace μ) hmaps D hv
+        Module.End.pow_apply_mem_of_forall_mem (f' := f) (p := f.maxGenEigenspace μ)
+          D (fun _ hx => hmaps hx) v hv
       have hle : f.maxGenEigenspace μ ≤ W :=
         le_iSup₂_of_le μ hμ0 (le_rfl : f.maxGenEigenspace μ ≤ f.maxGenEigenspace μ)
       exact hle hpow
