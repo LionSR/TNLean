@@ -106,14 +106,6 @@ private noncomputable abbrev euclideanFiniteDimensional (ι : Type*) [Fintype ι
   Module.Basis.finiteDimensional_of_finite
     ((Pi.basisFun ℂ ι).map (EuclideanSpace.equiv ι ℂ).symm.toLinearEquiv)
 
-/-- Rewrite a `toEuclideanLin` composition as matrix multiplication. -/
-private lemma toEuclideanLin_conjTranspose_mul_apply
-    {m n : Type*} [Fintype m] [Fintype n] [DecidableEq m] [DecidableEq n]
-    (M : Matrix m n ℂ) (w : EuclideanSpace ℂ n) :
-    Mᴴ.toEuclideanLin (M.toEuclideanLin w) = (Mᴴ * M).toEuclideanLin w := by
-  change (Mᴴ.toEuclideanLin.comp M.toEuclideanLin) w = _
-  rw [← toLpLin_mul_same]
-
 set_option maxHeartbeats 1600000 in
 -- The partial-isometry extension passes through several nested finite-dimensional choices.
 /-- **Rectangular Kraus freedom** (Wolf Theorem 2.1 item 4, necessary direction):
@@ -201,8 +193,9 @@ theorem kraus_rectangular_freedom
     show fB.adjoint (fB w) = fA'.adjoint (fA' w)
     rw [← Matrix.toEuclideanLin_conjTranspose_eq_adjoint MB,
         ← Matrix.toEuclideanLin_conjTranspose_eq_adjoint MA']
-    rw [toEuclideanLin_conjTranspose_mul_apply MB,
-      toEuclideanLin_conjTranspose_mul_apply MA', hGram]
+    change (MBᴴ.toEuclideanLin.comp MB.toEuclideanLin) w =
+      (MA'ᴴ.toEuclideanLin.comp MA'.toEuclideanLin) w
+    rw [← toLpLin_mul_same, ← toLpLin_mul_same, hGram]
   -- Kernel inclusion
   have hker : LinearMap.ker fA' ≤ LinearMap.ker fB := by
     intro v hv; rw [LinearMap.mem_ker] at hv ⊢
