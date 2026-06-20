@@ -60,13 +60,9 @@ variable {d D : ℕ}
 /-- The linear equivalence between `NSiteSpace d M` and `NSiteSpace d N`
 induced by a proof \(h : M = N\), reindexing configurations via `Fin.cast`. -/
 def reindexSites {d : ℕ} {M N : ℕ} (h : M = N) :
-    NSiteSpace d M ≃ₗ[ℂ] NSiteSpace d N where
-  toFun ψ σ := ψ (σ ∘ Fin.cast h)
-  invFun ψ σ := ψ (σ ∘ Fin.cast h.symm)
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
-  left_inv ψ := by subst h; rfl
-  right_inv ψ := by subst h; rfl
+    NSiteSpace d M ≃ₗ[ℂ] NSiteSpace d N :=
+  LinearEquiv.funCongrLeft ℂ ℂ
+    (Equiv.arrowCongr (finCongr h.symm) (Equiv.refl (Fin d)))
 
 @[simp] theorem reindexSites_apply {M N : ℕ} (h : M = N)
     (ψ : NSiteSpace d M) (σ : Fin N → Fin d) :
