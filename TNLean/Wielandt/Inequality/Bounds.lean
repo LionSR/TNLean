@@ -348,26 +348,6 @@ directly. This transfers to `wordSpan A (D² · n) = ⊤`.
 
 Paper: arXiv:0909.5347, Theorem 1 case (1); Wolf, Theorem 6.9. -/
 
-/-- Auxiliary: for D = 1, `wordSpan A 0 = ⊤`. The span of `{1}` in the
-1×1 matrix algebra is the whole space. -/
-private theorem wordSpan_zero_eq_top_of_D_eq_one
-    (A : MPSTensor d 1) : wordSpan A 0 = ⊤ := by
-  rw [eq_top_iff]
-  -- Every 1×1 matrix is a scalar multiple of the identity
-  intro M _
-  have : M = M 0 0 • (1 : Matrix (Fin 1) (Fin 1) ℂ) := by
-    ext i j; fin_cases i; fin_cases j; simp
-  rw [this]
-  have h1 : (1 : Matrix (Fin 1) (Fin 1) ℂ) ∈ wordSpan A 0 := by
-    have := evalWord_mem_wordSpan A ([] : List (Fin d))
-    simpa [evalWord] using this
-  exact Submodule.smul_mem _ _ h1
-
-/-- Auxiliary: for D = 1, `iIndex A = 0`. -/
-private theorem iIndex_eq_zero_of_D_eq_one
-    (A : MPSTensor d 1) : iIndex A = 0 :=
-  Nat.eq_zero_of_le_zero (Nat.sInf_le (wordSpan_zero_eq_top_of_D_eq_one A))
-
 /-- **Theorem 1, case (1)**: the general Wielandt bound
 `iIndex A ≤ (D² − krausRank A + 1) · D²`.
 
@@ -395,7 +375,20 @@ theorem iIndex_le_general_of_isPrimitivePaper [NeZero D]
   have hD_pos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
   -- Case 1: D = 1 — trivial since iIndex = 0
   by_cases hD1 : D = 1
-  · subst hD1; simp [iIndex_eq_zero_of_D_eq_one]
+  · subst hD1
+    have htop : wordSpan A 0 = ⊤ := by
+      rw [wordSpan_zero, eq_top_iff]
+      intro M _
+      have hM : M = M 0 0 • (1 : Matrix (Fin 1) (Fin 1) ℂ) := by
+        ext i j
+        fin_cases i
+        fin_cases j
+        simp
+      rw [hM]
+      exact Submodule.smul_mem _ _ (Submodule.subset_span rfl)
+    have hiIndex : iIndex A = 0 :=
+      Nat.eq_zero_of_le_zero (Nat.sInf_le htop)
+    simp [hiIndex]
   · -- Case 2: D ≥ 2 — use positive-length trace word + blocking argument
     have hD2 : 2 ≤ D := by omega
     -- Get a **positive-length** sharp nonzero-trace word
