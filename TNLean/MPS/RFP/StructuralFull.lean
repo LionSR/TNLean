@@ -43,15 +43,6 @@ variable {d D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-private lemma ofReal_re_eq_self_of_pos {z : ℂ} (hz : 0 < z) :
-    ((z.re : ℝ) : ℂ) = z := by
-  have h := (Complex.lt_def).1 hz
-  have hz_im : z.im = 0 := by
-    simpa using h.2.symm
-  refine Complex.ext ?_ ?_
-  · rfl
-  · simp [hz_im]
-
 private lemma matrixUnits_map (X : Mat) :
     ∑ p : Fin D × Fin D,
       Matrix.single p.1 p.2 (1 : ℂ) * X * (Matrix.single p.1 p.2 (1 : ℂ))ᴴ =
@@ -161,9 +152,12 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
     rw [Matrix.posDef_diagonal_iff] at hdiag_pd
     exact hdiag_pd
   have htr_re_eq : (((Matrix.trace ρ).re : ℝ) : ℂ) = Matrix.trace ρ :=
-    ofReal_re_eq_self_of_pos hρ_pd.trace_pos
+    (RCLike.ofReal_eq_re_of_isSelfAdjoint
+      (IsSelfAdjoint.of_nonneg (le_of_lt hρ_pd.trace_pos))).mp rfl
   have hρii_re_eq : ∀ k : Fin D, (((ρ k k).re : ℝ) : ℂ) = ρ k k :=
-    fun k => ofReal_re_eq_self_of_pos (hρdiag_pos k)
+    fun k =>
+      (RCLike.ofReal_eq_re_of_isSelfAdjoint
+        (IsSelfAdjoint.of_nonneg (le_of_lt (hρdiag_pos k)))).mp rfl
   have hDpos_nat : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
   have hDpos : 0 < (D : ℝ) := by
     exact_mod_cast hDpos_nat
@@ -255,9 +249,9 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
     by_cases hij : i = j
     · subst hij
       have hρii_re_pos : 0 < (ρ i i).re := by
-        exact (Complex.lt_def).1 (hρdiag_pos i) |>.1
+        exact (RCLike.pos_iff.mp (hρdiag_pos i)).1
       have htr_re_pos : 0 < (Matrix.trace ρ).re := by
-        exact (Complex.lt_def).1 hρ_pd.trace_pos |>.1
+        exact (RCLike.pos_iff.mp hρ_pd.trace_pos).1
       have harg_nonneg : 0 ≤ ((D : ℝ) * (ρ i i).re) / (Matrix.trace ρ).re := by
         exact div_nonneg (by positivity) (le_of_lt htr_re_pos)
       have htr_re_ne : (Matrix.trace ρ).re ≠ 0 := by
@@ -431,9 +425,9 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
   · intro k
     apply Real.sqrt_pos.2
     have hk_pos : 0 < (ρ k k).re := by
-      exact (Complex.lt_def).1 (hρdiag_pos k) |>.1
+      exact (RCLike.pos_iff.mp (hρdiag_pos k)).1
     have htr_pos : 0 < (Matrix.trace ρ).re := by
-      exact (Complex.lt_def).1 hρ_pd.trace_pos |>.1
+      exact (RCLike.pos_iff.mp hρ_pd.trace_pos).1
     positivity
   · intro i
     calc
