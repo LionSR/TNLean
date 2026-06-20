@@ -753,15 +753,15 @@ theorem threeBlockDoubleSum_eq_blueCoeff_sum
   rw [regionBlockedWeight, threeBlockBlueCoeff, Finset.sum_mul_sum]
   -- Reindex the product over `(p, q)` against the separated double sum.
   rw [Finset.filter_filter, ← Finset.sum_product']
-  refine Finset.sum_nbij' (fun p => (p.1, p.2)) (fun p => (p.1, p.2)) ?_ ?_
-    (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-  · -- A `bc'`-fiber pair maps to the separated product index set.
-    rintro ⟨p, q⟩ hpq
+  refine Finset.sum_congr ?_ (fun _ _ => rfl)
+  ext x
+  rcases x with ⟨p, q⟩
+  constructor
+  · intro hpq
     simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_product] at hpq ⊢
     obtain ⟨⟨hhost, hagree⟩, hbc⟩ := hpq
     exact ⟨hbc, hhost, hbc ▸ hagree.symm⟩
-  · -- A separated product index maps back to a `bc'`-fiber pair.
-    rintro ⟨p, q⟩ hpq
+  · intro hpq
     simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_product] at hpq ⊢
     obtain ⟨hp, hhost, hq⟩ := hpq
     exact ⟨⟨hhost, hp.trans hq.symm⟩, hp⟩
