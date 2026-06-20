@@ -1,6 +1,7 @@
 import TNLean.MPS.Defs
 
 import Batteries.Data.Fin
+import Mathlib.Logic.Equiv.Fin.Rotate
 
 /-!
 # Non-translation-invariant MPS chains
@@ -40,25 +41,17 @@ def IsInjective (A : MPSChainTensor d D n) : Prop :=
   ∀ k : Fin n, MPSTensor.IsInjective (A k)
 
 /-- Cyclic successor on `Fin n`, sending the last site back to `0`. -/
-def cyclicSucc : Fin n → Fin n
-  | ⟨i, hi⟩ =>
-      match n with
-      | 0 => False.elim (Nat.not_lt_zero _ hi)
-      | m + 1 => ⟨(i + 1) % (m + 1), Nat.mod_lt _ (Nat.succ_pos _)⟩
+def cyclicSucc : Fin n → Fin n :=
+  finRotate n
 
 @[simp] lemma cyclicSucc_val (k : Fin (n + 1)) :
-    (cyclicSucc k).val = (k.val + 1) % (n + 1) := rfl
+    (cyclicSucc k).val = (k.val + 1) % (n + 1) := by
+  simp [cyclicSucc, Fin.val_add]
 
 /-- The cyclic successor is addition by one on `Fin n`. -/
 @[simp] lemma cyclicSucc_eq_add_one [NeZero n] (k : Fin n) :
     cyclicSucc k = k + 1 := by
-  obtain ⟨m, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (NeZero.ne n)
-  apply Fin.ext
-  rw [cyclicSucc_val, Fin.val_add, Fin.val_one']
-  calc
-    (↑k + 1) % (m + 1)
-        = (↑k % (m + 1) + 1 % (m + 1)) % (m + 1) := Nat.add_mod _ _ _
-    _ = (↑k + 1 % (m + 1)) % (m + 1) := by rw [Nat.mod_eq_of_lt k.isLt]
+  simp [cyclicSucc, finRotate_apply]
 
 /-! ### Cyclic shift of a closed chain -/
 
