@@ -32,7 +32,7 @@ noncomputable def regionBoundaryConfigCastEquiv (T : Tensor G d) {bd : Edge G â†
     (h : bd = T.bondDim) (R : Finset V) :
     RegionBoundaryConfig (G := G) (reindexTensor (G := G) T h) R â‰ƒ
       RegionBoundaryConfig (G := G) T R :=
-  Equiv.piCongrRight fun f => finCongr (congr_fun h f.1)
+  Equiv.piCongrRight (fun f => finCongr (congr_fun h f.1))
 
 /-- **A bond-dimension reindex preserves blocked-region linear independence.**
 
