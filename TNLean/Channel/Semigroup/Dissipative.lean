@@ -87,14 +87,6 @@ private abbrev leftMulCLMAlgHom (D : ℕ) : Mat D →ₐ[ℂ] MatrixCLM (Fin D) 
 private abbrev rightMulCLMAlgHom (D : ℕ) : (Mat D)ᵐᵒᵖ →ₐ[ℂ] MatrixCLM (Fin D) :=
   (endEquivD D).toAlgHom.comp (rightMulAlgHom D)
 
-private lemma continuous_leftMulCLMAlgHom :
-    Continuous (leftMulCLMAlgHom D) :=
-  (leftMulCLMAlgHom D).toLinearMap.continuous_of_finiteDimensional
-
-private lemma continuous_rightMulCLMAlgHom :
-    Continuous (rightMulCLMAlgHom D) :=
-  (rightMulCLMAlgHom D).toLinearMap.continuous_of_finiteDimensional
-
 private theorem leftMulCLM_apply (A ρ : Mat D) :
     leftMulCLMAlgHom D A ρ = A * ρ := by
   change leftMulAlgHom D A ρ = A * ρ
@@ -104,6 +96,33 @@ private theorem rightMulCLM_apply (A : (Mat D)ᵐᵒᵖ) (ρ : Mat D) :
     rightMulCLMAlgHom D A ρ = ρ * MulOpposite.unop A := by
   change rightMulAlgHom D A ρ = ρ * MulOpposite.unop A
   exact rightMulAlgHom_apply A ρ
+
+private lemma continuous_leftMulCLMAlgHom :
+    Continuous (leftMulCLMAlgHom D) := by
+  have h_eq : (leftMulCLMAlgHom D : Mat D → MatrixCLM (Fin D)) =
+      ContinuousLinearMap.mul ℂ (Mat D) := by
+    funext A
+    apply ContinuousLinearMap.ext
+    intro ρ
+    rw [leftMulCLM_apply]
+    rfl
+  rw [h_eq]
+  exact (ContinuousLinearMap.mul ℂ (Mat D)).continuous
+
+private lemma continuous_rightMulCLMAlgHom :
+    Continuous (rightMulCLMAlgHom D) := by
+  have hunop : Continuous (MulOpposite.unop : (Mat D)ᵐᵒᵖ → Mat D) :=
+    MulOpposite.continuous_unop
+  have h_eq : (rightMulCLMAlgHom D : (Mat D)ᵐᵒᵖ → MatrixCLM (Fin D)) =
+      fun A : (Mat D)ᵐᵒᵖ =>
+        (ContinuousLinearMap.mul ℂ (Mat D)).flip (MulOpposite.unop A) := by
+    funext A
+    apply ContinuousLinearMap.ext
+    intro ρ
+    rw [rightMulCLM_apply]
+    rfl
+  rw [h_eq]
+  exact (ContinuousLinearMap.mul ℂ (Mat D)).flip.continuous.comp hunop
 
 private theorem mulLeft_eq_leftMulAlgHom (A : Mat D) :
     LinearMap.mulLeft ℂ A = leftMulAlgHom D A := by
