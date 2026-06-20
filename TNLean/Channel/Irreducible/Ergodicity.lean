@@ -42,15 +42,6 @@ section Ergodicity
 
 variable (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
 
-/-- A density matrix is nonzero. -/
-private lemma ne_zero_of_mem_densityMatrices {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hρ : ρ ∈ densityMatrices D) :
-    ρ ≠ 0 := by
-  intro hρ0
-  have htr : Matrix.trace ρ = 1 := hρ.2
-  rw [hρ0, Matrix.trace_zero (Fin D) ℂ] at htr
-  exact zero_ne_one htr
-
 /-- Iterates of a channel preserve the set of density matrices. -/
 private lemma IsChannel.iter_mem_densityMatrices
     (hE : IsChannel E) {ρ : Matrix (Fin D) (Fin D) ℂ}
@@ -158,7 +149,11 @@ theorem IsChannel.exists_unique_density_fixedPoint_of_irreducible
         exact hφ_tendsto)
   have hσ_mem : σ ∈ densityMatrices D := hσ_lim.1
   have hσ_fix : E σ = σ := hσ_lim.2
-  have hσ_ne : σ ≠ 0 := ne_zero_of_mem_densityMatrices (D := D) hσ_mem
+  have hσ_ne : σ ≠ 0 := by
+    intro hσ0
+    have htr : Matrix.trace σ = 1 := hσ_mem.2
+    rw [hσ0, Matrix.trace_zero (Fin D) ℂ] at htr
+    exact zero_ne_one htr
   have hσ_pd : σ.PosDef :=
     posDef_of_posSemidef_eigenvector_irreducible_cp E hE.cp hIrr σ 1
       hσ_mem.1 hσ_ne zero_lt_one (by simpa using hσ_fix)
