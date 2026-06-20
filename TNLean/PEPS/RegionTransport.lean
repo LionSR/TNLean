@@ -241,7 +241,7 @@ theorem regionBlockedWeight_transport (A : Tensor G d) (φ : G ≃g G') (R : Fin
 def regionPhysicalConfigMapEquiv (φ : G ≃g G') (R : Finset V) :
     RegionPhysicalConfig (V := V) (d := d) R ≃
       RegionPhysicalConfig (V := W) (d := d) (Region.map φ R) :=
-  Equiv.arrowCongr (regionVertexMapEquiv φ R).symm (Equiv.refl (Fin d))
+  Equiv.piCongrLeft' (fun _ : {w : V // w ∈ R} => Fin d) (regionVertexMapEquiv φ R).symm
 
 /-- The transported blocked-region tensor family is the original family reindexed: the
 boundary index by `regionBoundaryConfigMapEquiv`, the physical-leg domain by
