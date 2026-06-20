@@ -494,11 +494,11 @@ private theorem trace_conjTranspose_posDef_mul_lower [NeZero D]
     have hBne : B ≠ 0 := by
       intro h; simp [h] at hB
     have hpsd : (Bᴴ * ρ * B).PosSemidef := hρ.posSemidef.conjTranspose_mul_mul_same B
-    have hre_nonneg : 0 ≤ f B := (Complex.nonneg_iff.mp hpsd.trace_nonneg).1
+    have hre_nonneg : 0 ≤ f B := (RCLike.nonneg_iff.mp hpsd.trace_nonneg).1
     rcases eq_or_lt_of_le hre_nonneg with h | h
     · exfalso
       have him : (Matrix.trace (Bᴴ * ρ * B)).im = 0 :=
-        (Complex.nonneg_iff.mp hpsd.trace_nonneg).2.symm
+        (RCLike.nonneg_iff.mp hpsd.trace_nonneg).2
       exact hBne (eq_zero_of_trace_conjTranspose_mul_posDef_mul_eq_zero ρ hρ B
         (Complex.ext h.symm him))
     · exact h
@@ -620,11 +620,11 @@ theorem hasEventuallyFullKrausRank_of_isStronglyIrreduciblePaper [NeZero D]
   set N := E - Pρ with hN_def
   set Ê := Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ) N with hÊ_def
   -- Step 2: Trace of ρ is real and positive (from PosDef)
-  have htr_nonneg := Complex.nonneg_iff.mp hρPD.posSemidef.trace_nonneg
-  have htr_im : (Matrix.trace ρ).im = 0 := htr_nonneg.2.symm
+  have htr_nonneg := RCLike.nonneg_iff.mp hρPD.posSemidef.trace_nonneg
+  have htr_im : (Matrix.trace ρ).im = 0 := htr_nonneg.2
   have htr_re_pos : 0 < (Matrix.trace ρ).re := by
     rcases eq_or_lt_of_le htr_nonneg.1 with h | h
-    · exact absurd (Complex.ext h.symm htr_nonneg.2.symm) hP.trace_ne_zero
+    · exact absurd (Complex.ext h.symm htr_nonneg.2) hP.trace_ne_zero
     · exact h
   -- Step 3: Uniform positive lower bound: c * ‖B‖² ≤ tr(B†ρB).re
   obtain ⟨c, hcpos, hcbound⟩ := trace_conjTranspose_posDef_mul_lower ρ hρPD
