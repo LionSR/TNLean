@@ -43,22 +43,23 @@ variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 noncomputable def insertVertexComplEquiv (R : Finset V) {v : V} (hv : v ∉ R) :
     {w : V // w ∈ R} ≃
       {w : {x : V // x ∈ insert v R} //
-        w ∈ ({⟨v, Finset.mem_insert_self v R⟩} : Finset {x : V // x ∈ insert v R})ᶜ} where
-  toFun w := ⟨⟨w.1, Finset.mem_insert_of_mem w.2⟩, by
-    simp only [Finset.mem_compl, Finset.mem_singleton]
-    intro hc
-    have : w.1 = v := congrArg Subtype.val hc
-    exact hv (this ▸ w.2)⟩
-  invFun w := ⟨w.1.1, by
-    have hne : w.1.1 ≠ v := by
-      intro hc
-      have : w.1 = ⟨v, Finset.mem_insert_self v R⟩ := Subtype.ext hc
-      exact (Finset.mem_compl.mp w.2) (Finset.mem_singleton.mpr this)
-    rcases Finset.mem_insert.mp w.1.2 with h | h
-    · exact absurd h hne
-    · exact h⟩
-  left_inv w := rfl
-  right_inv w := by ext; rfl
+        w ∈ ({⟨v, Finset.mem_insert_self v R⟩} : Finset {x : V // x ∈ insert v R})ᶜ} :=
+  (Equiv.subtypeSubtypeEquivSubtype (p := fun x : V => x ∈ insert v R)
+      (q := fun x : V => x ∈ R) (fun h => Finset.mem_insert_of_mem h)).symm.trans
+    (Equiv.subtypeEquivRight (fun w : {x : V // x ∈ insert v R} => by
+      constructor
+      · intro hw
+        simp only [Finset.mem_compl, Finset.mem_singleton]
+        intro hsingle
+        have hval : w.1 = v := congrArg Subtype.val hsingle
+        exact hv (hval ▸ hw)
+      · intro hcomp
+        have hne : w ≠ ⟨v, Finset.mem_insert_self v R⟩ := by
+          simpa only [Finset.mem_compl, Finset.mem_singleton] using hcomp
+        rcases Finset.mem_insert.mp w.2 with h | h
+        · exfalso
+          exact hne (Subtype.ext h)
+        · exact h))
 
 /-- The physical configuration on a region `R`, obtained by restricting a physical
 configuration on the inserted region `insert v R`. -/
