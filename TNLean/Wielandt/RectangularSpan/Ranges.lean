@@ -221,43 +221,26 @@ theorem mem_range_mulRight_iff_rows
 
 /-- The submodule of matrices whose rows lie in `range (Q.vecMulLinear)`. -/
 noncomputable def rowRangeSubmodule (Q : Matrix (Fin D) (Fin D) ℂ) :
-    Submodule ℂ (Matrix (Fin D) (Fin D) ℂ) where
-  carrier := { M | ∀ i : Fin D, M.row i ∈ LinearMap.range (Q.vecMulLinear) }
-  zero_mem' := by
-    intro i
-    have hrow : (0 : Matrix (Fin D) (Fin D) ℂ).row i = (0 : Fin D → ℂ) := by
-      ext j
-      simp [Matrix.row_apply]
-    exact hrow.symm ▸ (LinearMap.range (Q.vecMulLinear)).zero_mem
-  add_mem' := by
-    intro M N hM hN i
-    have hrow : (M + N).row i = M.row i + N.row i := by
-      ext j
-      simp [Matrix.row_apply]
-    simpa [hrow] using
-      (Submodule.add_mem (LinearMap.range (Q.vecMulLinear)) (hM i) (hN i))
-  smul_mem' := by
-    intro a M hM i
-    have hrow : (a • M).row i = a • M.row i := by
-      ext j
-      simp [Matrix.row_apply]
-    simpa [hrow] using
-      (Submodule.smul_mem (LinearMap.range (Q.vecMulLinear)) a (hM i))
+    Submodule ℂ (Matrix (Fin D) (Fin D) ℂ) :=
+  Submodule.pi Set.univ (fun _ : Fin D => LinearMap.range (Q.vecMulLinear))
 
 /-- Identify the range of right-multiplication as the submodule of matrices whose rows lie in
 `range (Q.vecMulLinear)`. -/
 theorem range_mulRight_eq_pi (Q : Matrix (Fin D) (Fin D) ℂ) :
     LinearMap.range (LinearMap.mulRight ℂ Q) = rowRangeSubmodule (D := D) Q := by
   ext M
-  simpa [rowRangeSubmodule] using (mem_range_mulRight_iff_rows (D := D) Q M)
+  change M ∈ LinearMap.range (LinearMap.mulRight ℂ Q) ↔
+    ∀ i ∈ (Set.univ : Set (Fin D)), M i ∈ LinearMap.range (Q.vecMulLinear)
+  simpa [Matrix.row] using
+    (mem_range_mulRight_iff_rows (D := D) Q M)
 
 /-- The submodule `rowRangeSubmodule Q` is linearly equivalent to the product of the row ranges. -/
 noncomputable def rowRangeSubmoduleEquiv (Q : Matrix (Fin D) (Fin D) ℂ) :
     rowRangeSubmodule (D := D) Q ≃ₗ[ℂ] (Fin D → LinearMap.range (Q.vecMulLinear)) where
-  toFun M i := ⟨M.1.row i, M.2 i⟩
+  toFun M i := ⟨M.1.row i, M.2 i (Set.mem_univ i)⟩
   invFun f :=
     ⟨fun i j => (f i).1 j, by
-      intro i
+      intro i _
       change Matrix.row (fun i k => (f i).1 k : Matrix (Fin D) (Fin D) ℂ) i ∈
         LinearMap.range (Q.vecMulLinear)
       have hrow :
