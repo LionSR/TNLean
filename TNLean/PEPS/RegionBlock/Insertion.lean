@@ -288,9 +288,10 @@ theorem regionBlockedWeight_reindexTensor (B : Tensor G d) {bd : Edge G → ℕ}
   classical
   rw [regionBlockedWeight, regionBlockedWeight]
   -- Reindex the constrained virtual-configuration sum by casting every bond.
-  refine Finset.sum_nbij'
-    (fun ζ => fun e => Fin.cast (congr_fun h e) (ζ e))
-    (fun ζ => fun e => Fin.cast (congr_fun h e).symm (ζ e)) ?_ ?_ ?_ ?_ ?_
+  let φ : VirtualConfig (reindexTensor (G := G) B h) ≃ VirtualConfig B :=
+    Equiv.piCongrRight fun e =>
+      finCongr (by simpa [reindexTensor_bondDim] using congr_fun h e)
+  refine Finset.sum_nbij' φ φ.symm ?_ ?_ ?_ ?_ ?_
   · -- Forward map lands in the complement filter.
     intro ζ hζ
     simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hζ ⊢
@@ -298,6 +299,8 @@ theorem regionBlockedWeight_reindexTensor (B : Tensor G d) {bd : Edge G → ℕ}
     have hf : regionBoundaryLabel (G := G) (reindexTensor (G := G) B h) R ζ f = bdry f :=
       congrFun hζ f
     rw [regionBoundaryLabel_apply] at hf ⊢
+    change Fin.cast (by simpa [reindexTensor_bondDim] using congr_fun h f.1) (ζ f.1) =
+      Fin.cast (by simpa [reindexTensor_bondDim] using congr_fun h f.1) (bdry f)
     rw [hf]
   · -- Backward map lands in the original filter.
     intro ζ hζ
@@ -306,20 +309,22 @@ theorem regionBlockedWeight_reindexTensor (B : Tensor G d) {bd : Edge G → ℕ}
     have hf : regionBoundaryLabel (G := G) B R ζ f = Fin.cast (congr_fun h f.1) (bdry f) :=
       congrFun hζ f
     rw [regionBoundaryLabel_apply] at hf ⊢
-    rw [hf]
-    simp
+    apply Fin.eq_of_val_eq
+    change (((finCongr (by simpa [reindexTensor_bondDim] using congr_fun h f.1)).symm
+      (ζ f.1) : Fin ((reindexTensor (G := G) B h).bondDim f.1)) : ℕ) = (bdry f : ℕ)
+    rw [finCongr_symm_apply_coe]
+    simpa using congrArg Fin.val hf
   · -- Left inverse.
     intro ζ _
-    funext e
-    simp
+    exact φ.left_inv ζ
   · -- Right inverse.
     intro ζ _
-    funext e
-    simp
+    exact φ.right_inv ζ
   · -- Matching summand: products of casts agree.
     intro ζ _
     refine Finset.prod_congr rfl fun w _ => ?_
     rw [reindexTensor_component]
+    congr 1
 
 open scoped Classical in
 /-- `regionInsertedCoeff` transports along a bond-dimension reindex by conjugating
