@@ -104,14 +104,6 @@ noncomputable def rectSpanLeftStep (n : ℕ) :
   map_add' x y := by ext; simp [Matrix.mul_add]
   map_smul' a x := by ext; simp
 
-/-- Every element of `rectSpan ((A i₀)^D) A n` lies in the range of `mulLeft ((A i₀)^D)`. -/
-private theorem mem_range_mulLeft_pow_of_mem_rectSpan
-    {n : ℕ} {X : Matrix (Fin D) (Fin D) ℂ}
-    (hX : X ∈ rectSpan ((A i₀) ^ D) A n) :
-    X ∈ LinearMap.range (LinearMap.mulLeft ℂ ((A i₀) ^ D)) := by
-  obtain ⟨M, _, rfl⟩ := Submodule.mem_map.mp hX
-  exact ⟨M, by simp [LinearMap.mulLeft_apply]⟩
-
 /-! ### Injectivity of the left-step
 
 The proof uses the Fitting-decomposition disjointness: `ker(A i₀)` is disjoint from
@@ -174,10 +166,14 @@ theorem rectSpanLeftStep_injective (n : ℕ) :
   have hmat : (A i₀) * x.1 = (A i₀) * y.1 := congrArg Subtype.val hxy
   have hz : (A i₀) * (x.1 - y.1) = 0 := by
     simpa [Matrix.mul_sub, sub_eq_zero] using hmat
+  have hrect_le_range :
+      rectSpan ((A i₀) ^ D) A n ≤ LinearMap.range (LinearMap.mulLeft ℂ ((A i₀) ^ D)) := by
+    rw [rectSpan]
+    exact LinearMap.map_le_range
   have hzRange : (x.1 - y.1) ∈ LinearMap.range (LinearMap.mulLeft ℂ ((A i₀) ^ D)) :=
     Submodule.sub_mem _
-      (mem_range_mulLeft_pow_of_mem_rectSpan A i₀ x.2)
-      (mem_range_mulLeft_pow_of_mem_rectSpan A i₀ y.2)
+      (hrect_le_range x.2)
+      (hrect_le_range y.2)
   have hzero : x.1 - y.1 = 0 :=
     matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow' A i₀ hzRange hz
   exact Subtype.ext (by simpa [sub_eq_zero] using hzero)
