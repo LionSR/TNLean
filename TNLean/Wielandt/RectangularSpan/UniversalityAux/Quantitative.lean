@@ -47,28 +47,11 @@ variable {d D : ℕ}
 
 /-! ### Part 1: Initial dimension of rectSpan -/
 
-/-- `wordSpan A 0 = span{1}`: words of length 0 consist only of the identity. -/
-private theorem wordSpan_zero_eq (A : MPSTensor d D) :
-    wordSpan A 0 = Submodule.span ℂ {(1 : Matrix (Fin D) (Fin D) ℂ)} := by
-  -- wordSpan A 0 = span of {evalWord A (List.ofFn σ) : σ : Fin 0 → Fin d}
-  -- There is exactly one function Fin 0 → Fin d (the empty function),
-  -- and evalWord of an empty list is 1.
-  apply le_antisymm
-  · apply Submodule.span_le.mpr
-    rintro M ⟨σ, rfl⟩
-    have hempty : List.ofFn σ = ([] : List (Fin d)) := List.ofFn_eq_nil_iff.mpr rfl
-    simp only [hempty, evalWord]
-    exact Submodule.subset_span rfl
-  · apply Submodule.span_le.mpr
-    rintro M (rfl : M = 1)
-    have := evalWord_mem_wordSpan A ([] : List (Fin d))
-    simpa [evalWord] using this
-
 /-- `rectSpan P A 0 = span{P}`: the level-0 rectangular span is just the 1-D subspace
 spanned by `P` (since `wordSpan A 0 = span{1}`). -/
 theorem rectSpan_zero_eq_span (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D) :
     rectSpan P A 0 = Submodule.span ℂ {P} := by
-  simp only [rectSpan, wordSpan_zero_eq]
+  simp only [rectSpan, wordSpan_zero]
   rw [Submodule.map_span]
   congr 1
   ext M
