@@ -469,36 +469,6 @@ private lemma evalWord_mulVec_mem_range_of_proj {P : Matrix (Fin D) (Fin D) ℂ}
   rw [Matrix.mul_assoc] at h
   exact h.symm
 
-/-- If an idempotent square matrix `P` over `ℂ` has range = ⊤ (as mulVecLin), then `P = 1`. -/
-private lemma eq_one_of_idempotent_range_eq_top
-    {P : Matrix (Fin D) (Fin D) ℂ}
-    (hP_idem : P * P = P)
-    (hP_range : LinearMap.range (Matrix.mulVecLin P) = ⊤) :
-    P = 1 := by
-  -- From surjectivity + idempotence: P *ᵥ v = v for all v
-  have hP_surj := (LinearMap.range_eq_top (f := Matrix.mulVecLin P)).mp hP_range
-  have h_fix : ∀ v : Fin D → ℂ, P *ᵥ v = v := by
-    intro v
-    obtain ⟨w, hw⟩ := hP_surj v
-    rw [Matrix.mulVecLin_apply] at hw
-    calc P *ᵥ v = P *ᵥ (P *ᵥ w) := by rw [hw]
-      _ = (P * P) *ᵥ w := by rw [Matrix.mulVec_mulVec]
-      _ = P *ᵥ w := by rw [hP_idem]
-      _ = v := hw
-  -- From P *ᵥ v = v for all v, we get P = 1
-  -- Use P * M = M for all M, then take M = 1
-  have h_mul_eq : ∀ (M : Matrix (Fin D) (Fin D) ℂ), P * M = M := by
-    intro M
-    ext i j
-    -- (P * M) i j = ∑ k, P i k * M k j
-    -- M i j = (h_fix (M · j)) says P *ᵥ (M · j) = M · j
-    have := congr_fun (h_fix (fun k => M k j)) i
-    simp only [Matrix.mulVec, dotProduct] at this
-    simp only [Matrix.mul_apply]
-    exact this
-  have := h_mul_eq 1
-  rwa [mul_one] at this
-
 /-- A nontrivial invariant projection witnesses failure of paper-primitivity. -/
 private lemma vectorSpreadSpan_ne_top_of_hasInvariantProj
     (A : MPSTensor d D)
@@ -525,16 +495,31 @@ private lemma vectorSpreadSpan_ne_top_of_hasInvariantProj
   refine ⟨φ, hφ_ne, ?_⟩
   -- Show vectorSpreadSpan A φ q ≤ range(P·) < ⊤
   intro h_eq_top
+  have hP_range : LinearMap.range (Matrix.mulVecLin P) = ⊤ := by
+    apply le_antisymm le_top
+    -- ⊤ ≤ range(P·), using vectorSpreadSpan ⊆ range(P·) and vectorSpreadSpan = ⊤
+    rw [← h_eq_top, vectorSpreadSpan, Submodule.span_le]
+    intro v hv
+    obtain ⟨σ, rfl⟩ := hv
+    exact evalWord_mulVec_mem_range_of_proj hP_idem A hinv φ hφ_range (List.ofFn σ)
+  have hP_proj :
+      LinearMap.IsProj (LinearMap.range (Matrix.mulVecLin P)) (Matrix.mulVecLin P) := by
+    refine ⟨LinearMap.mem_range_self _, ?_⟩
+    intro v hv
+    obtain ⟨w, hw⟩ := LinearMap.mem_range.mp hv
+    rw [← hw]
+    change P *ᵥ (P *ᵥ w) = P *ᵥ w
+    rw [Matrix.mulVec_mulVec, hP_idem]
   apply hP_ne1
-  -- From h_eq_top: range(P·) = ⊤, so P is surjective, so P = 1
-  apply eq_one_of_idempotent_range_eq_top hP_idem
-  -- Show range(P *ᵥ ·) = ⊤
-  apply le_antisymm (le_top)
-  -- ⊤ ≤ range(P·), using vectorSpreadSpan ⊆ range(P·) and vectorSpreadSpan = ⊤
-  rw [← h_eq_top, vectorSpreadSpan, Submodule.span_le]
-  intro v hv
-  obtain ⟨σ, rfl⟩ := hv
-  exact evalWord_mulVec_mem_range_of_proj hP_idem A hinv φ hφ_range (List.ofFn σ)
+  ext i j
+  have hj :
+      Pi.single j (1 : ℂ) ∈ LinearMap.range (Matrix.mulVecLin P) := by
+    rw [hP_range]
+    exact Submodule.mem_top
+  have hfix := (LinearMap.IsProj.mem_iff_map_id hP_proj).mp hj
+  have := congr_fun hfix i
+  simpa [Matrix.mulVec, dotProduct, Pi.single_apply, Finset.sum_ite_eq',
+    Finset.mem_univ, Matrix.one_apply] using this
 
 /-- **Paper-primitivity implies irreducibility of the tensor.**
 
