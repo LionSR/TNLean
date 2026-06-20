@@ -137,9 +137,9 @@ private theorem channel_fixedPoint_in_PMP
         (fun n => hσ_PMP (φ n)))
       hφ_tendsto
   -- Show E(ρ) = ρ by telescoping
-  have hE_cont : Continuous E := LinearMap.continuous_of_finiteDimensional E
-  have h_Eσ : Filter.Tendsto (E ∘ σ ∘ φ) Filter.atTop (nhds (E ρ)) :=
-    (hE_cont.tendsto ρ).comp hφ_tendsto
+  let E' : Mat →L[ℂ] Mat := LinearMap.toContinuousLinearMap E
+  have h_Eσ : Filter.Tendsto (E ∘ σ ∘ φ) Filter.atTop (nhds (E ρ)) := by
+    simpa [E'] using (E'.continuous.tendsto ρ).comp hφ_tendsto
   have h_diff : Filter.Tendsto (fun k => (E ∘ σ ∘ φ) k - (σ ∘ φ) k)
       Filter.atTop (nhds (E ρ - ρ)) :=
     h_Eσ.sub hφ_tendsto
@@ -274,14 +274,14 @@ private theorem generator_vanishes_at_limit
     (hφ_mono : StrictMono φ)
     (hφ_tendsto : Filter.Tendsto (fun n => ρ_shift (φ n)) Filter.atTop (nhds ρ)) :
     L ρ = 0 := by
-  have hL_cont : Continuous L := LinearMap.continuous_of_finiteDimensional L
-  have hL_tendsto : Filter.Tendsto (fun n => L (ρ_shift (φ n))) Filter.atTop (nhds (L ρ)) :=
-    (hL_cont.tendsto ρ).comp hφ_tendsto
+  set E : Mat →L[ℂ] Mat := endEquiv L
+  have hL_tendsto : Filter.Tendsto (fun n => L (ρ_shift (φ n))) Filter.atTop (nhds (L ρ)) := by
+    change Filter.Tendsto (E ∘ fun n => ρ_shift (φ n)) Filter.atTop (nhds (E ρ))
+    exact (E.continuous.tendsto ρ).comp hφ_tendsto
   suffices h_to_zero :
       Filter.Tendsto (fun n => L (ρ_shift (φ n))) Filter.atTop (nhds 0) by
     exact tendsto_nhds_unique hL_tendsto h_to_zero
   obtain ⟨R, hR⟩ := density_subseq_norm_bounded (D := D) ρ_shift hρ_mem (φ := φ)
-  set E : Mat →L[ℂ] Mat := endEquiv L
   have hE_apply : ∀ X : Mat, E X = L X := by
     intro X
     rfl
