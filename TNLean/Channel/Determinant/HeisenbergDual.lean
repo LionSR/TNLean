@@ -133,7 +133,7 @@ private theorem heisenberg_dual_ks_eq_stdBasis [NeZero d]
   have hgap_trace_nonneg : ∀ ij : Fin d × Fin d,
       0 ≤ (Matrix.trace (Td (e ij * (e ij)ᴴ) - Td (e ij) * (Td (e ij))ᴴ)).re := by
     intro ij
-    exact (Complex.le_def.mp (hgap_psd ij).trace_nonneg).1
+    exact (RCLike.nonneg_iff.mp (hgap_psd ij).trace_nonneg).1
   have hgap_trace_sum_le : ∑ ij : Fin d × Fin d,
       (Matrix.trace (Td (e ij * (e ij)ᴴ) - Td (e ij) * (Td (e ij))ᴴ)).re ≤ 0 := by
     have hTd_one : Td 1 = 1 := by
@@ -181,7 +181,7 @@ private theorem heisenberg_dual_ks_eq_stdBasis [NeZero d]
   intro ij
   have hpsd := hgap_psd ij
   have htr_re := hgap_trace_zero ij
-  have htr_im := (Complex.le_def.mp hpsd.trace_nonneg).2.symm
+  have htr_im := (RCLike.nonneg_iff.mp hpsd.trace_nonneg).2
   have htr : Matrix.trace (Td (e ij * (e ij)ᴴ) - Td (e ij) * (Td (e ij))ᴴ) = 0 :=
     Complex.ext htr_re htr_im
   exact sub_eq_zero.mp (hpsd.trace_eq_zero_iff.mp htr)
