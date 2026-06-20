@@ -66,28 +66,16 @@ open Matrix Finset
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
 private noncomputable def finTwoSumEquiv (α : Type*) : α × Fin 2 ≃ α ⊕ α :=
-  (((Equiv.prodCongr (Equiv.refl α)
-      ((finSumFinEquiv : Fin 1 ⊕ Fin 1 ≃ Fin 2).symm)).trans
-    (Equiv.prodSumDistrib α (Fin 1) (Fin 1))).trans
-    (Equiv.sumCongr (Equiv.prodUnique α (Fin 1)) (Equiv.prodUnique α (Fin 1))))
+  ((Equiv.prodCongr (Equiv.refl α) finTwoEquiv).trans (Equiv.prodComm α Bool)).trans
+    (Equiv.boolProdEquivSum α)
 
 @[simp] private theorem finTwoSumEquiv_apply_zero {α : Type*} (a : α) :
     finTwoSumEquiv α (a, 0) = Sum.inl a := by
-  change Sum.map Prod.fst Prod.fst
-      ((Equiv.prodSumDistrib α (Fin 1) (Fin 1))
-        (a, ((finSumFinEquiv : Fin 1 ⊕ Fin 1 ≃ Fin 2).symm 0))) = Sum.inl a
-  rw [show (0 : Fin 2) = Fin.castSucc (0 : Fin 1) by rfl]
-  rw [finSumFinEquiv_symm_apply_castSucc]
-  simp
+  simp [finTwoSumEquiv, finTwoEquiv]
 
 @[simp] private theorem finTwoSumEquiv_apply_one {α : Type*} (a : α) :
     finTwoSumEquiv α (a, 1) = Sum.inr a := by
-  change Sum.map Prod.fst Prod.fst
-      ((Equiv.prodSumDistrib α (Fin 1) (Fin 1))
-        (a, ((finSumFinEquiv : Fin 1 ⊕ Fin 1 ≃ Fin 2).symm 1))) = Sum.inr a
-  rw [show (1 : Fin 2) = Fin.last 1 by rfl]
-  rw [finSumFinEquiv_symm_last]
-  simp
+  simp [finTwoSumEquiv, finTwoEquiv]
 
 @[simp] private theorem finTwoSumEquiv_symm_inl {α : Type*} (a : α) :
     (finTwoSumEquiv α).symm (Sum.inl a) = (a, 0) := by
