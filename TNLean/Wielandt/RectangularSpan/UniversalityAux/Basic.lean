@@ -55,8 +55,8 @@ theorem vecMulVec_mem_range_mulLeft_of_mem_range_toLin
     (hφ : φ ∈ LinearMap.range (Matrix.toLin' P)) (ψ : Fin D → ℂ) :
     vecMulVec φ ψ ∈ LinearMap.range (LinearMap.mulLeft ℂ P) := by
   obtain ⟨v, rfl⟩ := LinearMap.mem_range.mp hφ
-  refine ⟨vecMulVec v ψ, ?_⟩
-  simp only [Matrix.toLin'_apply, LinearMap.mulLeft_apply, mul_vecMulVec]
+  simpa only [Matrix.toLin'_apply, LinearMap.mulLeft_apply, mul_vecMulVec] using
+    LinearMap.mem_range_self (LinearMap.mulLeft ℂ P) (vecMulVec v ψ)
 
 /-- **Rank-one universality from stabilized rectangular span.**
 
