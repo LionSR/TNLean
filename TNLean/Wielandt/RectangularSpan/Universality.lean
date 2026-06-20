@@ -498,20 +498,6 @@ theorem rectSpan_succ_eq_iSup_mulRight
 
 /-! ### Part 3: Permanence of finrank stabilization -/
 
-/-- Left-multiplication and right-multiplication commute on image submodules. -/
-private theorem map_mulRight_map_mulLeft_comm
-    (a b : Matrix (Fin D) (Fin D) ℂ)
-    (S : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) :
-    Submodule.map (LinearMap.mulRight ℂ b)
-      (Submodule.map (LinearMap.mulLeft ℂ a) S) =
-    Submodule.map (LinearMap.mulLeft ℂ a)
-      (Submodule.map (LinearMap.mulRight ℂ b) S) := by
-  simp only [← Submodule.map_comp]
-  rw [show LinearMap.mulRight ℂ b ∘ₗ LinearMap.mulLeft ℂ a =
-      LinearMap.mulLeft ℂ a ∘ₗ LinearMap.mulRight ℂ b by
-    simpa [Module.End.mul_eq_comp] using
-      (LinearMap.commute_mulLeft_right (R := ℂ) a b).eq.symm]
-
 /-- **Structural permanence**: if `finrank(R_n) = finrank(R_{n+1})` then
 `R_{n+2} = (A i₀) · R_{n+1}`. -/
 theorem rectSpan_nilpIndex_succ2_eq_mulLeft_of_finrank_eq
@@ -531,7 +517,17 @@ theorem rectSpan_nilpIndex_succ2_eq_mulLeft_of_finrank_eq
   have hexp2 := rectSpan_succ_eq_iSup_mulRight P A (n + 1)
   have hexp1 := rectSpan_succ_eq_iSup_mulRight P A n
   rw [hstab] at hexp2
-  simp_rw [map_mulRight_map_mulLeft_comm (A i₀) _ (rectSpan P A n)] at hexp2
+  have hmap_comm (j : Fin d) :
+      Submodule.map (LinearMap.mulRight ℂ (A j))
+        (Submodule.map (LinearMap.mulLeft ℂ (A i₀)) (rectSpan P A n)) =
+      Submodule.map (LinearMap.mulLeft ℂ (A i₀))
+        (Submodule.map (LinearMap.mulRight ℂ (A j)) (rectSpan P A n)) := by
+    simp only [← Submodule.map_comp]
+    rw [show LinearMap.mulRight ℂ (A j) ∘ₗ LinearMap.mulLeft ℂ (A i₀) =
+        LinearMap.mulLeft ℂ (A i₀) ∘ₗ LinearMap.mulRight ℂ (A j) by
+      simpa [Module.End.mul_eq_comp] using
+        (LinearMap.commute_mulLeft_right (R := ℂ) (A i₀) (A j)).eq.symm]
+  simp_rw [hmap_comm] at hexp2
   rw [← Submodule.map_iSup, ← hexp1] at hexp2
   exact hexp2
 
