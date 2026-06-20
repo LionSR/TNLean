@@ -493,15 +493,16 @@ theorem threeBlockBlueCoeff_comp {R S P : Finset V} (hRS : R ⊆ S) (hSP : S ⊆
           ∏ w : {w : V // w ∈ P \ S}, A.component w.1 (fun ie => p.1 ie.1) (σ₂ w))]
       refine Finset.sum_congr rfl (fun bc'' _ => ?_)
       rw [Finset.sum_mul_sum, Finset.filter_filter, ← Finset.sum_product']
-      refine Finset.sum_nbij' (i := fun q => (q.2, q.1)) (j := fun p => (p.2, p.1))
-        ?_ ?_ (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
+      refine Finset.sum_equiv (Equiv.prodComm _ _) ?_ (fun _ _ => rfl)
+      rintro ⟨q₁, q₂⟩
+      constructor
       · -- A `(q₁, q₂)` index of the separated sum maps to an agreeing-pair fiber element.
-        rintro ⟨q₁, q₂⟩ hq
+        intro hq
         simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_product] at hq ⊢
         obtain ⟨⟨hR, hS₁⟩, hS₂, hP⟩ := hq
         exact ⟨⟨⟨hR, hP⟩, hS₂.trans hS₁.symm⟩, hS₁⟩
       · -- An agreeing-pair fiber element maps back to a `(q₁, q₂)` separated index.
-        rintro ⟨q₂, q₁⟩ hq
+        intro hq
         simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_product] at hq ⊢
         obtain ⟨⟨⟨hR, hP⟩, hagree⟩, hfib⟩ := hq
         exact ⟨⟨hR, hfib⟩, hagree.trans hfib, hP⟩
