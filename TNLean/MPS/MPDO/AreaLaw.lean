@@ -151,15 +151,7 @@ end MPOTensor
 /-- `finRotate` advances the value by one modulo `N`. -/
 theorem coe_finRotate_mod {N : ℕ} (i : Fin N) :
     ((finRotate N) i : ℕ) = (i.val + 1) % N := by
-  match N with
-  | 0 => exact i.elim0
-  | n + 1 =>
-    rw [coe_finRotate]
-    rcases eq_or_ne i (Fin.last n) with h | h
-    · subst h; simp [Fin.val_last, Nat.mod_self]
-    · rw [if_neg h]
-      have : (i : ℕ) < n := Fin.val_lt_last h
-      rw [Nat.mod_eq_of_lt (by omega)]
+  simp [Fin.add_def, finRotate_apply]
 
 /-- The value of the `p`-fold cyclic shift is `(i + p) mod N`. -/
 theorem coe_finRotate_pow {N : ℕ} (p : ℕ) (i : Fin N) :
@@ -201,11 +193,8 @@ theorem append_comp_finRotate_pow {α : Type*} {p q : ℕ}
 theorem cast_comp_finRotate_pow {N M : ℕ} (h : N = M) (p : ℕ) :
     (Fin.cast h) ∘ ((finRotate N : Fin N → Fin N)^[p])
       = ((finRotate M : Fin M → Fin M)^[p]) ∘ (Fin.cast h) := by
-  funext i
-  apply Fin.ext
-  simp only [Function.comp_apply, Fin.val_cast]
-  rw [coe_finRotate_pow, coe_finRotate_pow]
-  subst h; rfl
+  subst h
+  rfl
 
 /-- **Window-to-prefix configuration identity.** Placing the `m`-block `u` at the
 front (with `z, x` after) equals placing it in the middle (with `x` before and
