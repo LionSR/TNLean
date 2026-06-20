@@ -29,22 +29,12 @@ section LindbladForms
 
 /-! ## Equivalence: trace-annihilating ↔ trace-preserving semigroup -/
 
-/-- The trace-evaluation functional as an ℝ-linear map:
-`T ↦ trace(T(ρ))` for a fixed matrix `ρ`. -/
-private def traceEvalLM (ρ : Matrix (Fin D) (Fin D) ℂ) :
-    (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) →ₗ[ℝ] ℂ where
-  toFun T := trace (T ρ)
-  map_add' T S := by simp
-  map_smul' r T := by
-    change trace (((r : ℂ) • T ρ)) = r • trace (T ρ)
-    rw [Matrix.trace_smul]
-    simp [Complex.real_smul]
-
 /-- The trace-evaluation functional as an ℝ-continuous linear map:
 `T ↦ trace(T(ρ))` for a fixed matrix `ρ`. -/
 private def traceEvalCLM (ρ : Matrix (Fin D) (Fin D) ℂ) :
     (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) →L[ℝ] ℂ :=
-  ⟨traceEvalLM ρ, (traceEvalLM ρ).continuous_of_finiteDimensional⟩
+  ((LinearMap.toContinuousLinearMap (Matrix.traceLinearMap (Fin D) ℂ ℂ)).restrictScalars ℝ).comp
+    ((ContinuousLinearMap.apply ℂ (Matrix (Fin D) (Fin D) ℂ) ρ).restrictScalars ℝ)
 
 private lemma traceEvalCLM_apply
     (T : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
