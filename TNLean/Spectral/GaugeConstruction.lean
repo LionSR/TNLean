@@ -170,11 +170,6 @@ theorem isInjective_conjugate {D : ℕ}
       _ = ⊤ := by rw [Submodule.map_top]; exact LinearMap.range_eq_top.2 hφ_surj
   exact this
 
-/-- Complex conjugation preserves unit modulus. -/
-lemma norm_starRingEnd_eq_one {μ : ℂ} (hμ : ‖μ‖ = 1) :
-    ‖(starRingEnd ℂ) μ‖ = 1 := by
-  simpa [Complex.norm_conj] using hμ
-
 /-- Scalar multiplication by a unit-modulus complex number preserves `N * Nᴴ`. -/
 lemma smul_mul_conjTranspose_of_norm_eq_one {m n : ℕ}
     (μ : ℂ) (hμ : ‖μ‖ = 1) (N : Matrix (Fin m) (Fin n) ℂ) :
@@ -375,7 +370,8 @@ theorem gauged_intertwining_core
         Matrix.fromBlocks_smul]
     have h_eq := hL ▸ hR ▸ h'
     exact (Matrix.fromBlocks_inj.1 h_eq).2.1
-  have hμ_conj : ‖(starRingEnd ℂ) μ‖ = 1 := norm_starRingEnd_eq_one hμ
+  have hμ_conj : ‖(starRingEnd ℂ) μ‖ = 1 := by
+    simpa [Complex.norm_conj] using hμ
   have hEigMstar : Kraus.map K Mᴴ = (starRingEnd ℂ μ) • Mᴴ := by
     calc
       Kraus.map K Mᴴ = (Kraus.map K M)ᴴ := by
