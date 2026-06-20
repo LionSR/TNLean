@@ -41,13 +41,6 @@ open ChannelDeterminant.Internal
 
 variable {d : ℕ}
 
-/-- Column-stacking vectorization as a linear equivalence. -/
-private noncomputable def matrixVecLinearEquiv (d : ℕ) :
-    MatrixAlg d ≃ₗ[ℂ] (Fin d × Fin d → ℂ) :=
-  (Matrix.ofLinearEquiv ℂ).symm.trans
-    ((LinearEquiv.curry ℂ ℂ (Fin d) (Fin d)).symm.trans
-      (LinearEquiv.funCongrLeft ℂ ℂ (Equiv.prodComm (Fin d) (Fin d))))
-
 section WolfStatements
 
 variable {T : MatrixEnd d}
@@ -276,7 +269,12 @@ private theorem forward_det_one_implies_unitaryChannel [NeZero d]
 /-- The determinant of a unitary channel equals `1`. -/
 theorem channelDet_unitary_eq_one (U : Matrix.unitaryGroup (Fin d) ℂ) :
     channelDet (unitaryChannel U) = 1 := by
-  let e : MatrixAlg d ≃ₗ[ℂ] (Fin d × Fin d → ℂ) := matrixVecLinearEquiv d
+  let e : MatrixAlg d ≃ₗ[ℂ] (Fin d × Fin d → ℂ) :=
+    LinearEquiv.ofBijective
+      { toFun := Matrix.vec
+        map_add' := Matrix.vec_add
+        map_smul' := Matrix.vec_smul }
+      Matrix.vec_bijective
   let M : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ :=
     ((U : MatrixAlg d).map star) ⊗ₖ (U : MatrixAlg d)
   have hvec : ∀ X : MatrixAlg d,
