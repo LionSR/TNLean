@@ -53,13 +53,6 @@ abbrev dissipativeDrift (κ : Mat D) : LM D :=
     dissipativeDrift κ ρ = -κ * ρ - ρ * κᴴ := by
   simp [dissipativeDrift, LinearMap.mulLeft_apply, LinearMap.mulRight_apply]
 
-private abbrev leftMulAlgHom (D : ℕ) : Mat D →ₐ[ℂ] LM D :=
-  Algebra.lmul ℂ (Mat D)
-
-private theorem leftMulAlgHom_apply (A ρ : Mat D) :
-    leftMulAlgHom D A ρ = A * ρ := by
-  simp [leftMulAlgHom]
-
 private def matExpD (A : Mat D) : Mat D :=
   letI : NormedRing (Mat D) := Matrix.linftyOpNormedRing (n := Fin D) (α := ℂ)
   letI : NormedAlgebra ℂ (Mat D) :=
@@ -79,15 +72,14 @@ private theorem rightMulAlgHom_apply (A : (Mat D)ᵐᵒᵖ) (ρ : Mat D) :
   simp [rightMulAlgHom]
 
 private abbrev leftMulCLMAlgHom (D : ℕ) : Mat D →ₐ[ℂ] MatrixCLM (Fin D) :=
-  (endEquiv (D := D)).toAlgHom.comp (leftMulAlgHom D)
+  (endEquiv (D := D)).toAlgHom.comp (Algebra.lmul ℂ (Mat D))
 
 private abbrev rightMulCLMAlgHom (D : ℕ) : (Mat D)ᵐᵒᵖ →ₐ[ℂ] MatrixCLM (Fin D) :=
   (endEquiv (D := D)).toAlgHom.comp (rightMulAlgHom D)
 
 private theorem leftMulCLM_apply (A ρ : Mat D) :
     leftMulCLMAlgHom D A ρ = A * ρ := by
-  change leftMulAlgHom D A ρ = A * ρ
-  exact leftMulAlgHom_apply A ρ
+  rfl
 
 private theorem rightMulCLM_apply (A : (Mat D)ᵐᵒᵖ) (ρ : Mat D) :
     rightMulCLMAlgHom D A ρ = ρ * MulOpposite.unop A := by
@@ -121,11 +113,6 @@ private lemma continuous_rightMulCLMAlgHom :
   rw [h_eq]
   exact (ContinuousLinearMap.mul ℂ (Mat D)).flip.continuous.comp hunop
 
-private theorem mulLeft_eq_leftMulAlgHom (A : Mat D) :
-    LinearMap.mulLeft ℂ A = leftMulAlgHom D A := by
-  ext ρ i j
-  simp
-
 private theorem mulRight_eq_rightMulAlgHom (A : Mat D) :
     LinearMap.mulRight ℂ A = rightMulAlgHom D (MulOpposite.op A) := by
   ext ρ i j
@@ -134,8 +121,7 @@ private theorem mulRight_eq_rightMulAlgHom (A : Mat D) :
 
 private theorem endEquiv_mulLeft (A : Mat D) :
     endEquiv (D := D) (LinearMap.mulLeft ℂ A) = leftMulCLMAlgHom D A := by
-  simpa [leftMulCLMAlgHom] using
-    congrArg (endEquiv (D := D)) (mulLeft_eq_leftMulAlgHom (D := D) A)
+  rfl
 
 private theorem endEquiv_mulRight (A : Mat D) :
     endEquiv (D := D) (LinearMap.mulRight ℂ A) = rightMulCLMAlgHom D (MulOpposite.op A) := by
