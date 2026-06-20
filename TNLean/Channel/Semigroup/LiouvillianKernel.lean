@@ -374,8 +374,9 @@ private theorem each_commutator_eq_zero_of_sum_eq_zero
     have h_psd_j := Matrix.posSemidef_conjTranspose_mul_self (A * F.L j - F.L j * A)
     have h_each_nonneg : ∀ k : Fin F.r,
         0 ≤ ((A * F.L k - F.L k * A)ᴴ * (A * F.L k - F.L k * A)).trace.re :=
-      fun k => (Complex.le_def.mp
-        (Matrix.posSemidef_conjTranspose_mul_self (A * F.L k - F.L k * A)).trace_nonneg).1
+      fun k => (RCLike.nonneg_iff.mp
+        (Matrix.posSemidef_conjTranspose_mul_self
+          (A * F.L k - F.L k * A)).trace_nonneg).1
     have h_tr_sum_re :
         (∑ k : Fin F.r,
           ((A * F.L k - F.L k * A)ᴴ * (A * F.L k - F.L k * A)).trace.re) = 0 := by
@@ -388,8 +389,8 @@ private theorem each_commutator_eq_zero_of_sum_eq_zero
         (h_each_nonneg j)
     have h_tr_zero :
         ((A * F.L j - F.L j * A)ᴴ * (A * F.L j - F.L j * A)).trace = 0 :=
-      Complex.ext h_tr_re (Complex.le_def.mp h_psd_j.trace_nonneg).2.symm
-    exact Matrix.conjTranspose_mul_self_eq_zero.mp (h_psd_j.trace_eq_zero_iff.mp h_tr_zero)
+      Complex.ext h_tr_re (RCLike.nonneg_iff.mp h_psd_j.trace_nonneg).2
+    exact Matrix.trace_conjTranspose_mul_self_eq_zero_iff.mp h_tr_zero
   exact sub_eq_zero.mp hj
 
 /-- Wolf Theorem 7.2, faithful direction.
