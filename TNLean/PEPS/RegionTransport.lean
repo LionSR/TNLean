@@ -240,11 +240,8 @@ theorem regionBlockedWeight_transport (A : Tensor G d) (φ : G ≃g G') (R : Fin
 /-- The physical-configuration equivalence induced by `φ` on the region. -/
 def regionPhysicalConfigMapEquiv (φ : G ≃g G') (R : Finset V) :
     RegionPhysicalConfig (V := V) (d := d) R ≃
-      RegionPhysicalConfig (V := W) (d := d) (Region.map φ R) where
-  toFun := regionPhysicalConfigMap φ R
-  invFun τ' w := τ' ((regionVertexMapEquiv φ R).symm w)
-  left_inv τ := by funext w; simp [regionPhysicalConfigMap]
-  right_inv τ' := by funext w; simp [regionPhysicalConfigMap]
+      RegionPhysicalConfig (V := W) (d := d) (Region.map φ R) :=
+  Equiv.arrowCongr (regionVertexMapEquiv φ R).symm (Equiv.refl (Fin d))
 
 /-- The transported blocked-region tensor family is the original family reindexed: the
 boundary index by `regionBoundaryConfigMapEquiv`, the physical-leg domain by
