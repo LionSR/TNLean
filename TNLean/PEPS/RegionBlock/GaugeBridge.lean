@@ -203,14 +203,11 @@ theorem regionInsertedCoeff_eq_doubleSum (A : Tensor G d) (R : Finset V)
     rw [mul_assoc, Finset.sum_mul_sum, Finset.mul_sum]
     refine Finset.sum_congr rfl (fun ζ _ => ?_)
     rw [Finset.mul_sum]
-    refine Finset.sum_nbij' id id ?_ ?_ (fun _ _ => rfl) (fun _ _ => rfl) ?_
-    · intro ξ hξ
-      simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hξ ⊢
-      exact (regionBoundaryLabel_compl_eq_iff (G := G) A R ν ξ).mp hξ
-    · intro ξ hξ
-      simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hξ ⊢
-      exact (regionBoundaryLabel_compl_eq_iff (G := G) A R ν ξ).mpr hξ
-    · intro ξ _; simp only [id_eq]; ring
+    refine Finset.sum_congr ?_ (fun ξ _ => ?_)
+    · ext ξ
+      simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+      exact regionBoundaryLabel_compl_eq_iff (G := G) A R ν ξ
+    · ring
 
 /-! ### Global-product form of the gauged region weight
 
