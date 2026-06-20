@@ -315,35 +315,16 @@ instance instFintypeExteriorConfig (A : Tensor G d) (R : Finset V) :
 /-- A global virtual configuration is the labels on the edges touching `R`
 together with the labels on the edges entirely outside `R`. -/
 noncomputable def regionTouchSplit (A : Tensor G d) (R : Finset V) :
-    VirtualConfig A ≃ TouchConfig (G := G) A R × ExteriorConfig (G := G) A R where
-  toFun ζ := (fun f => ζ f.1, fun f => ζ f.1)
-  invFun x := fun f =>
-    if h : IsTouchingEdge (G := G) R f then x.1 ⟨f, h⟩ else x.2 ⟨f, h⟩
-  left_inv ζ := by
-    funext f
-    dsimp only
-    by_cases h : IsTouchingEdge (G := G) R f
-    · rw [dif_pos h]
-    · rw [dif_neg h]
-  right_inv x := by
-    apply Prod.ext
-    · funext f
-      have h : IsTouchingEdge (G := G) R f.1 := f.2
-      dsimp only
-      rw [dif_pos h]
-    · funext f
-      have h : ¬ IsTouchingEdge (G := G) R f.1 := f.2
-      dsimp only
-      rw [dif_neg h]
+    VirtualConfig A ≃ TouchConfig (G := G) A R × ExteriorConfig (G := G) A R :=
+  Equiv.piEquivPiSubtypeProd (fun f : Edge G => IsTouchingEdge (G := G) R f)
+    (fun f => Fin (A.bondDim f))
 
 omit [Fintype V] in
 @[simp] theorem regionTouchSplit_symm_apply_touch (A : Tensor G d) (R : Finset V)
     (t : TouchConfig (G := G) A R) (x : ExteriorConfig (G := G) A R)
     (f : {f : Edge G // IsTouchingEdge (G := G) R f}) :
     (regionTouchSplit (G := G) A R).symm (t, x) f.1 = t f := by
-  have h : IsTouchingEdge (G := G) R f.1 := f.2
-  change (if hh : IsTouchingEdge (G := G) R f.1 then t ⟨f.1, hh⟩ else x ⟨f.1, hh⟩) = t f
-  rw [dif_pos h]
+  rw [regionTouchSplit, Equiv.piEquivPiSubtypeProd_symm_apply, dif_pos f.2]
 
 omit [Fintype V] in
 /-- The boundary label of a split configuration depends only on the touching
