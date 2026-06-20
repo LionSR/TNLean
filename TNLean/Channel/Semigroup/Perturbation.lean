@@ -372,12 +372,6 @@ private lemma dysonTerm_succ_nonpos (L L' : MatrixCLM (Fin D)) (n : ℕ) {t : �
   rw [Real.volume_Icc, ENNReal.ofReal_eq_zero]
   linarith
 
-/-- For `t ≥ 0`, the set integral `∫ s in Icc 0 t` equals the interval integral `∫ s in 0..t`. -/
-private lemma setIntegral_Icc_eq_intervalIntegral {E : Type*} [NormedAddCommGroup E]
-    [NormedSpace ℝ E] {f : ℝ → E} {t : ℝ} (ht : 0 ≤ t) :
-    ∫ s in Set.Icc 0 t, f s = ∫ s in (0 : ℝ)..t, f s := by
-  rw [integral_Icc_eq_integral_Ioc, ← intervalIntegral.integral_of_le ht]
-
 /-- Each Dyson iterate `t ↦ T'ⁿ(t)` is continuous in the time parameter. -/
 theorem dysonTerm_continuous (L L' : MatrixCLM (Fin D)) (n : ℕ) :
     Continuous (fun t => dysonTerm L L' t n) := by
@@ -400,7 +394,8 @@ theorem dysonTerm_continuous (L L' : MatrixCLM (Fin D)) (n : ℕ) :
       apply ContinuousOn.congr hG_cont.continuousOn
       intro t ht
       dsimp only
-      rw [dysonTerm_succ, setIntegral_Icc_eq_intervalIntegral ht]
+      rw [dysonTerm_succ, integral_Icc_eq_integral_Ioc,
+        ← intervalIntegral.integral_of_le ht]
     -- On Iic 0: dysonTerm is 0 (hence continuous there).
     have h_Iic : ContinuousOn (fun t => dysonTerm L L' t (n + 1)) (Set.Iic 0) :=
       continuousOn_const.congr fun _ ht => dysonTerm_succ_nonpos L L' n ht
@@ -544,7 +539,7 @@ theorem norm_dysonRemainder_le (L L' : MatrixCLM (Fin D)) {t : ℝ} (ht : 0 ≤ 
             · exact mul_nonneg hM_nn (norm_nonneg _)
         _ = C * u ^ N := by simp only [hC_def, mul_pow]; ring
     -- Convert set integral to interval integral
-    rw [setIntegral_Icc_eq_intervalIntegral hs0]
+    rw [integral_Icc_eq_integral_Ioc, ← intervalIntegral.integral_of_le hs0]
     -- Integrability of the bound function
     have hCu_int : IntervalIntegrable (fun u => C * u ^ N) volume 0 s :=
       (continuous_const.mul (continuous_pow N)).intervalIntegrable 0 s
