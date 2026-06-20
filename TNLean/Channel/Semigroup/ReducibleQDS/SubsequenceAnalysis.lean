@@ -40,22 +40,6 @@ local instance instSubsequenceNormOneClassMatrixCLM [NeZero D] :
 
 /-! ## (4) → (2): Block-upper-triangular → rank-deficient kernel element -/
 
-/-- A nonzero orthogonal projection has nonzero trace. -/
-private lemma trace_ne_zero_of_proj_ne_zero'
-    {P : Mat} (hP : IsOrthogonalProjection P) (hP_ne : P ≠ 0) :
-    Matrix.trace P ≠ 0 := by
-  intro htr
-  exact hP_ne ((isOrthogonalProjection_posSemidef hP).trace_eq_zero_iff.1 htr)
-
-/-- `P / tr(P)` is a density matrix. -/
-private lemma normalizedProj_mem_densityMatrices'
-    {P : Mat} (hP : IsOrthogonalProjection P) (hP_ne : P ≠ 0) :
-    ((trace P)⁻¹ • P) ∈ densityMatrices D := by
-  have hP_psd := isOrthogonalProjection_posSemidef hP
-  have htrP_ne := trace_ne_zero_of_proj_ne_zero' hP hP_ne
-  exact ⟨hP_psd.smul (inv_nonneg_of_nonneg hP_psd.trace_nonneg),
-    by simp [Matrix.trace_smul, htrP_ne]⟩
-
 /-- `P * (P/tr(P)) * P = P/tr(P)` (the normalized projection is in `PMP`). -/
 private lemma normalizedProj_in_PMP'
     {P : Mat} (hP : IsOrthogonalProjection P) :
@@ -83,7 +67,14 @@ private theorem channel_fixedPoint_in_PMP
       P * ρ * P = ρ ∧ E ρ = ρ := by
   -- Set up initial state
   set σ₀ := (trace P)⁻¹ • P with hσ₀_def
-  have hσ₀_mem : σ₀ ∈ densityMatrices D := normalizedProj_mem_densityMatrices' hP hP_ne
+  have hP_psd := isOrthogonalProjection_posSemidef hP
+  have htrP_ne : Matrix.trace P ≠ 0 := by
+    intro htr
+    exact hP_ne (hP_psd.trace_eq_zero_iff.1 htr)
+  have hσ₀_mem : σ₀ ∈ densityMatrices D := by
+    rw [hσ₀_def]
+    exact ⟨hP_psd.smul (inv_nonneg_of_nonneg hP_psd.trace_nonneg),
+      by simp [Matrix.trace_smul, htrP_ne]⟩
   have hσ₀_PMP : P * σ₀ * P = σ₀ := normalizedProj_in_PMP' hP
   -- Iterates stay in PMP ∩ DM
   have h_iter_mem : ∀ n : ℕ, (E ^ n) σ₀ ∈ densityMatrices D := by
