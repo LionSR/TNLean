@@ -39,13 +39,6 @@ lemma parentInteraction_apply_mem_groundSpace (A : MPSTensor d D) (L : ℕ)
       ((WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm v)) = 0
   rw [hkill, map_zero]
 
-/-! ### Cyclic trace invariance -/
-
-/-- Trace of evalWord is invariant under cyclic swap of concatenated words. -/
-private lemma trace_evalWord_append_comm (A : MPSTensor d D) (w₁ w₂ : List (Fin d)) :
-    Matrix.trace (evalWord A (w₁ ++ w₂)) = Matrix.trace (evalWord A (w₂ ++ w₁)) := by
-  rw [evalWord_append, evalWord_append, Matrix.trace_mul_comm]
-
 /-! ### Periodic MPS vector window membership -/
 
 /-- The periodic MPS vector restricted to any window of \(L\) sites lies in
@@ -76,7 +69,7 @@ lemma mpv_window_mem_groundSpace (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N)
     have hle : i.val ≤ (List.ofFn (replaceWindow L hLN i σ τ)).length := by
       simp [List.length_ofFn]
     rw [← hlist, List.rotate_eq_drop_append_take hle,
-        trace_evalWord_append_comm, List.take_append_drop]
+        evalWord_append, Matrix.trace_mul_comm, ← evalWord_append, List.take_append_drop]
   -- Prove the rotated list equals τ ++ complement elementwise
   apply List.ext_getElem
   · have : compList.length = N - L := by simp [compList, List.length_ofFn]
