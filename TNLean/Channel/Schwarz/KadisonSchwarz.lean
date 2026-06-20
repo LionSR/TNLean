@@ -105,9 +105,17 @@ private theorem krausAdjointMap_eq (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (Y
   simp [krausAdjointMap, krausMap, conjTranspose_conjTranspose]
 
 /-- The conjugate-transposed operators of a TP family form a unital family. -/
-private theorem isUnitalKraus_conjTranspose (h : IsTPKraus K) :
-    IsUnitalKraus (fun i => (K i)ᴴ) := by
+theorem isUnitalKraus_conjTranspose {K : Fin d → Matrix (Fin D) (Fin D) ℂ}
+    (h : IsTPKraus (d := d) (D := D) K) :
+    IsUnitalKraus (d := d) (D := D) (fun i => (K i)ᴴ) := by
   change ∑ i, (K i)ᴴ * ((K i)ᴴ)ᴴ = 1
+  simp only [conjTranspose_conjTranspose]; exact h
+
+/-- The conjugate-transposed operators of a unital family form a TP family. -/
+theorem isTPKraus_conjTranspose {K : Fin d → Matrix (Fin D) (Fin D) ℂ}
+    (h : IsUnitalKraus (d := d) (D := D) K) :
+    IsTPKraus (d := d) (D := D) (fun i => (K i)ᴴ) := by
+  change ∑ i, ((K i)ᴴ)ᴴ * (K i)ᴴ = 1
   simp only [conjTranspose_conjTranspose]; exact h
 
 /-- **Kadison-Schwarz inequality** (Wolf, Chapter 5, Equation (5.2)).
