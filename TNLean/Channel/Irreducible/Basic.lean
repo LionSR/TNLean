@@ -20,11 +20,6 @@ on matrix algebras `M_D(ℂ)`.
 * `IsIrreducibleMap`: a CP map with no non-trivial invariant projection
 * `HasUniqueFixedPoint`: unique PSD fixed point (up to scalar), which is positive definite
 
-## Main lemmas
-
-* `diagonal_mul_conjTranspose_eq_normSq_sum`: diagonal of `M * Mᴴ` is a sum of squared norms
-* `eq_zero_of_sum_mul_conjTranspose_eq_zero`: if `∑ Bᵢ Bᵢᴴ = 0` then each `Bᵢ = 0`
-
 ## References
 
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2,
@@ -130,36 +125,3 @@ lemma proj_zero_or_one_of_sandwich [DecidableEq (Fin D)]
       exact hsum ▸ (by simpa [Matrix.mul_apply] using h_entry)
     simp only [Matrix.sub_apply, Matrix.one_apply, Matrix.zero_apply]
     exact (mul_eq_zero.mp h_prod).resolve_right hlj
-
-/-- `(M * Mᴴ) c c = ∑ x, ‖M c x‖²` for any matrix `M`. -/
-lemma diagonal_mul_conjTranspose_eq_normSq_sum
-    (M : Matrix (Fin D) (Fin D) ℂ) (c : Fin D) :
-    (M * Mᴴ) c c = ↑(∑ x, Complex.normSq (M c x)) := by
-  rw [Matrix.mul_apply, Complex.ofReal_sum]
-  congr 1; ext x
-  simp [Matrix.conjTranspose_apply, Complex.normSq_eq_conj_mul_self]; ring
-
-/-- If `∑ᵢ Bᵢ * Bᵢᴴ = 0` then each `Bᵢ = 0`, since each term is PSD. -/
-lemma eq_zero_of_sum_mul_conjTranspose_eq_zero {ι : Type*} [Fintype ι]
-    (B : ι → Matrix (Fin D) (Fin D) ℂ)
-    (h : ∑ i : ι, B i * (B i)ᴴ = 0) :
-    ∀ i, B i = 0 := by
-  have h_each_diag : ∀ k c, (B k * (B k)ᴴ) c c = 0 := by
-    intro k c
-    have h_diag_eq : ∑ k' : ι, (B k' * (B k')ᴴ) c c = 0 := by
-      have := congr_fun (congr_fun h c) c
-      simpa only [Matrix.sum_apply, Matrix.zero_apply] using this
-    simp_rw [diagonal_mul_conjTranspose_eq_normSq_sum] at h_diag_eq ⊢
-    have h_nonneg : ∀ k', (0 : ℝ) ≤ ∑ x, Complex.normSq (B k' c x) :=
-      fun k' => Finset.sum_nonneg (fun x _ => Complex.normSq_nonneg _)
-    have h_sum_real : ∑ k' : ι, ∑ x, Complex.normSq (B k' c x) = 0 := by
-      exact_mod_cast h_diag_eq
-    simp [(Finset.sum_eq_zero_iff_of_nonneg (fun k' _ => h_nonneg k')).mp
-      h_sum_real k (Finset.mem_univ _)]
-  intro i; ext a b
-  have h_ii := h_each_diag i a
-  rw [diagonal_mul_conjTranspose_eq_normSq_sum] at h_ii
-  have h_sum_real : ∑ x, Complex.normSq (B i a x) = 0 := by exact_mod_cast h_ii
-  exact Complex.normSq_eq_zero.mp
-    ((Finset.sum_eq_zero_iff_of_nonneg (fun x _ => Complex.normSq_nonneg _)).mp
-      h_sum_real b (Finset.mem_univ _))

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Basic
+import TNLean.Algebra.MatrixAux
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Schwarz.KadisonSchwarz
 
@@ -168,7 +169,8 @@ theorem IsIrreducibleMap.map_posSemidef_ne_zero
       simpa [hK] using hEρ
     simpa [hB', Matrix.mul_assoc, Matrix.conjTranspose_mul] using this
   have hKiB : ∀ i : Fin r, K i * Bᴴ = 0 :=
-    eq_zero_of_sum_mul_conjTranspose_eq_zero (B := fun i : Fin r => K i * Bᴴ) hsum0
+    Matrix.eq_zero_of_sum_mul_conjTranspose_eq_zero
+      (B := fun i : Fin r => K i * Bᴴ) hsum0
   have hKiρ : ∀ i : Fin r, K i * ρ = 0 := by
     intro i
     rw [hB']
