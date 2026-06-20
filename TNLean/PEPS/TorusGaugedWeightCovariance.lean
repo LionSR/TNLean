@@ -86,26 +86,10 @@ noncomputable def tiBoundaryConfigEquiv (T : Tensor (torusGraph width height) d)
     (hT : IsTorusTranslationInvariant T) (a : ZMod width) (b : ZMod height)
     (R : Finset (TorusVertex width height)) :
     RegionBoundaryConfig (G := torusGraph width height) T R ≃
-      RegionBoundaryConfig (G := torusGraph width height) T (Region.map (translate a b) R) where
-  toFun := tiBoundaryConfigMap T hT a b R
-  invFun bdry' := (regionBoundaryConfigMapEquiv T (translate a b) R).symm
-    (fun f => Fin.cast (congrFun (congrArg Tensor.bondDim (hT a b)) f.1).symm (bdry' f))
-  left_inv bdry := by
-    beta_reduce
-    have hcollapse : (fun f => Fin.cast
-        (congrFun (congrArg Tensor.bondDim (hT a b)) f.1).symm
-        (tiBoundaryConfigMap T hT a b R bdry f)) =
-        regionBoundaryConfigMap T (translate a b) R bdry := by
-      funext f
-      apply Fin.eq_of_val_eq
-      simp [tiBoundaryConfigMap]
-    rw [hcollapse, ← regionBoundaryConfigMapEquiv_apply, Equiv.symm_apply_apply]
-  right_inv bdry' := by
-    beta_reduce
-    funext f
-    rw [tiBoundaryConfigMap, ← regionBoundaryConfigMapEquiv_apply, Equiv.apply_symm_apply]
-    apply Fin.eq_of_val_eq
-    simp
+      RegionBoundaryConfig (G := torusGraph width height) T (Region.map (translate a b) R) :=
+  (regionBoundaryConfigMapEquiv T (translate a b) R).trans
+    (Equiv.piCongrRight fun f =>
+      finCongr (congrFun (congrArg Tensor.bondDim (hT a b)) f.1))
 
 @[simp] theorem tiBoundaryConfigEquiv_apply (T : Tensor (torusGraph width height) d)
     (hT : IsTorusTranslationInvariant T) (a : ZMod width) (b : ZMod height)
