@@ -94,26 +94,19 @@ theorem range_mulLeft_pow_nilpIndex_eq
       (LinearMap.mulLeft ℂ ((A i₀) ^ D)) := by
   set f := toLin' (A i₀)
   set r := nilpIndex f
-  have hfr := finrank_range_mulLeft ((A i₀) ^ r)
-  have hfD := finrank_range_mulLeft ((A i₀) ^ D)
-  rw [rank_pow_nilpIndex_eq A i₀] at hfr
-  apply Submodule.eq_of_le_of_finrank_eq
-  · intro X hX
-    obtain ⟨M, rfl⟩ := LinearMap.mem_range.mp hX
-    simp only [LinearMap.mulLeft_apply]
-    rw [mem_range_mulLeft_iff_cols]
-    intro j; rw [col_mul]
-    have hrange_eq :
-        LinearMap.range (toLin' ((A i₀) ^ r)) =
-          LinearMap.range (toLin' ((A i₀) ^ D)) := by
-      rw [toLin'_pow, toLin'_pow]
-      exact (range_pow_eq_of_nilpIndex_le f
-        (nilpIndex_le_D' f)).symm
-    exact hrange_eq ▸
-      (⟨M.col j, by rw [toLin'_apply]⟩ :
-        ((A i₀) ^ r) *ᵥ (M.col j) ∈
-          LinearMap.range (toLin' ((A i₀) ^ r)))
-  · omega
+  have hrange_eq :
+      LinearMap.range (toLin' ((A i₀) ^ r)) =
+        LinearMap.range (toLin' ((A i₀) ^ D)) := by
+    rw [toLin'_pow, toLin'_pow]
+    exact (range_pow_eq_of_nilpIndex_le f
+      (nilpIndex_le_D' f)).symm
+  rw [range_mulLeft_eq_pi, range_mulLeft_eq_pi]
+  ext M
+  change (∀ j : Fin D,
+      M.col j ∈ LinearMap.range (toLin' ((A i₀) ^ r))) ↔
+    ∀ j : Fin D,
+      M.col j ∈ LinearMap.range (toLin' ((A i₀) ^ D))
+  rw [hrange_eq]
 
 /-- Eigenvector in range of `toLin' ((A i₀)^r)`. -/
 theorem eigenvector_mem_range_toLin_pow_nilpIndex
