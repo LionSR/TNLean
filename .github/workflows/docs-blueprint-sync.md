@@ -40,6 +40,7 @@ tools:
   edit:
 
 safe-outputs:
+  report-failure-as-issue: false
   create-pull-request:
     title-prefix: "doc(blueprint): "
     labels: [documentation, automation]
