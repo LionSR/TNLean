@@ -37,7 +37,6 @@ import TNLean.Algebra.ScalarCommutant
 import TNLean.Algebra.CocycleCohomology
 
 -- Layer 0b: General analysis
-import TNLean.Analysis.ConvergenceHelpers
 import TNLean.Analysis.ProjectionGeometry
 
 -- Layer 1: Generic convex/topological infrastructure
