@@ -265,65 +265,6 @@ namespace WielandtRankOne
 
 open Module
 
-/-- Vector-level injectivity: if `v ∈ range (M^D)` and `M *ᵥ v = 0`, then `v = 0`.
-
-This is a direct consequence of `disjoint_ker_range_pow` for `Matrix.toLin' M`. -/
-lemma vec_eq_zero_of_mulVec_eq_zero_of_mem_range_pow
-    (M : Matrix (Fin D) (Fin D) ℂ) {v : Fin D → ℂ}
-    (hv : v ∈ LinearMap.range (Matrix.toLin' (M ^ D)))
-    (hMv : M *ᵥ v = 0) : v = 0 := by
-  classical
-  -- Convert to the endomorphism formulation.
-  let f : End ℂ (Fin D → ℂ) := Matrix.toLin' M
-  have hdisj : Disjoint (LinearMap.ker f) (LinearMap.range (f ^ D)) :=
-    disjoint_ker_range_pow (D := D) (f := f)
-  have hv' : v ∈ LinearMap.range (f ^ D) := by
-    -- `Matrix.toLin' (M^D) = (Matrix.toLin' M)^D`.
-    simpa only [f, Matrix.toLin'_pow] using hv
-  have hker : v ∈ LinearMap.ker f := by
-    -- `M *ᵥ v = 0` means `f v = 0`.
-    refine LinearMap.mem_ker.mpr ?_
-    simpa only [f, Matrix.toLin'_apply] using hMv
-  -- Use disjointness: `ker f ⊓ range (f^D) = ⊥`.
-  have hinter : (LinearMap.ker f ⊓ LinearMap.range (f ^ D)) = ⊥ := hdisj.eq_bot
-  have hvInf : v ∈ (LinearMap.ker f ⊓ LinearMap.range (f ^ D)) := ⟨hker, hv'⟩
-  have : v ∈ (⊥ : Submodule ℂ (Fin D → ℂ)) := by
-    simpa only [hinter] using hvInf
-  simpa using this
-
-/-- Matrix-level injectivity on the range of left multiplication by `M^D`.
-
-If `X ∈ range (mulLeft (M^D))` and `M * X = 0`, then `X = 0`. -/
-lemma matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow
-    (M : Matrix (Fin D) (Fin D) ℂ) {X : Matrix (Fin D) (Fin D) ℂ}
-    (hX : X ∈ LinearMap.range (LinearMap.mulLeft ℂ (M ^ D)))
-    (hMX : M * X = 0) : X = 0 := by
-  classical
-  -- Use the column characterization of `range (mulLeft _)`.
-  have hcols : ∀ j : Fin D, X.col j ∈ LinearMap.range (Matrix.toLin' (M ^ D)) := by
-    have := (mem_range_mulLeft_iff_cols (D := D) (P := M ^ D) (M := X)).1 hX
-    simpa using this
-  -- Each column is killed by `M`.
-  have hcol0 : ∀ j : Fin D, X.col j = 0 := by
-    intro j
-    have hcolKilled : M *ᵥ (X.col j) = 0 := by
-      have : (M * X).col j = 0 := by
-        have hzeroCol : (0 : Matrix (Fin D) (Fin D) ℂ).col j = (0 : Fin D → ℂ) := by
-          ext i
-          rfl
-        simpa [hzeroCol] using
-          congrArg (fun Z : Matrix (Fin D) (Fin D) ℂ => Z.col j) hMX
-      -- Rewrite the column as a matrix-vector product.
-      simpa [col_mul (P := M) (X := X) (j := j)] using this
-    exact vec_eq_zero_of_mulVec_eq_zero_of_mem_range_pow (D := D) M (hcols j) hcolKilled
-  -- If all columns are zero, the matrix is zero.
-  apply Matrix.ext_col
-  intro j
-  have hzero : (0 : Matrix (Fin D) (Fin D) ℂ).col j = (0 : Fin D → ℂ) := by
-    ext i
-    simp [Matrix.col_apply]
-  simp [hcol0 j, hzero]
-
 /-- Matrix-level injectivity on the range of right multiplication by `M^D`.
 
 If `X ∈ range (mulRight (M^D))` and `X * M = 0`, then `X = 0`.

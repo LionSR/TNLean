@@ -106,56 +106,10 @@ noncomputable def rectSpanLeftStep (n : ℕ) :
 
 /-! ### Injectivity of the left-step
 
-The proof uses the Fitting-decomposition disjointness: `ker(A i₀)` is disjoint from
-`range((A i₀)^D)`. Since every element of `rectSpan ((A i₀)^D) A n` lies in that range,
-left-multiplication by `A i₀` is injective on it. -/
-
-/-- Vector-level injectivity: if `v ∈ range((A i₀)^D)` and `(A i₀) *ᵥ v = 0`, then `v = 0`.
-
-This uses the Fitting-decomposition disjointness between `ker(f)` and `range(f^D)`. -/
-private theorem vec_eq_zero_of_mulVec_eq_zero_of_mem_range_pow'
-    {v : Fin D → ℂ}
-    (hv : v ∈ LinearMap.range (Matrix.toLin' ((A i₀) ^ D)))
-    (hMv : (A i₀) *ᵥ v = 0) : v = 0 := by
-  classical
-  let f : End ℂ (Fin D → ℂ) := Matrix.toLin' (A i₀)
-  have hdisj : Disjoint (LinearMap.ker f) (LinearMap.range (f ^ D)) :=
-    WielandtRankOne.disjoint_ker_range_pow (D := D) f
-  have hv' : v ∈ LinearMap.range (f ^ D) := by
-    simpa [f, Matrix.toLin'_pow] using hv
-  have hker : v ∈ LinearMap.ker f := by
-    refine LinearMap.mem_ker.mpr ?_
-    simpa [f, Matrix.toLin'_apply] using hMv
-  have hinter : (LinearMap.ker f ⊓ LinearMap.range (f ^ D)) = ⊥ := hdisj.eq_bot
-  have : v ∈ (⊥ : Submodule ℂ (Fin D → ℂ)) := hinter ▸ ⟨hker, hv'⟩
-  simpa using this
-
-/-- Matrix-level injectivity on the range of left multiplication by `(A i₀)^D`.
-
-If `X ∈ range(mulLeft ((A i₀)^D))` and `(A i₀) * X = 0`, then `X = 0`. -/
-theorem matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow
-    {X : Matrix (Fin D) (Fin D) ℂ}
-    (hX : X ∈ LinearMap.range (LinearMap.mulLeft ℂ ((A i₀) ^ D)))
-    (hMX : (A i₀) * X = 0) : X = 0 := by
-  classical
-  have hcols : ∀ j : Fin D, X.col j ∈ LinearMap.range (Matrix.toLin' ((A i₀) ^ D)) := by
-    have := (mem_range_mulLeft_iff_cols (D := D) (P := (A i₀) ^ D) (M := X)).1 hX
-    simpa using this
-  have hcol0 : ∀ j : Fin D, X.col j = 0 := by
-    intro j
-    have hcolKilled : (A i₀) *ᵥ (X.col j) = 0 := by
-      have : ((A i₀) * X).col j = 0 := by
-        have hzero : (0 : Matrix (Fin D) (Fin D) ℂ).col j = (0 : Fin D → ℂ) := by
-          ext i
-          simp [Matrix.col_apply]
-        simpa [hzero] using congrArg (fun Z : Matrix (Fin D) (Fin D) ℂ => Z.col j) hMX
-      simpa [col_mul (P := A i₀) (X := X) (j := j)] using this
-    exact vec_eq_zero_of_mulVec_eq_zero_of_mem_range_pow' A i₀ (hcols j) hcolKilled
-  apply Matrix.ext_col
-  intro j
-  have hzero : (0 : Matrix (Fin D) (Fin D) ℂ).col j = (0 : Fin D → ℂ) := by
-    ext i; simp [Matrix.col_apply]
-  simp [hcol0 j, hzero]
+The proof uses the shared Fitting-decomposition consequence
+`WielandtRankOne.matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow`: every element of
+`rectSpan ((A i₀)^D) A n` lies in `range (mulLeft ((A i₀)^D))`, where left-multiplication
+by `A i₀` is injective. -/
 
 /-- **The left-step map is injective**: multiplication by `A i₀` is injective on
 `rectSpan ((A i₀)^D) A n`, because every element lies in the range of `mulLeft ((A i₀)^D)`
@@ -175,7 +129,8 @@ theorem rectSpanLeftStep_injective (n : ℕ) :
       (hrect_le_range x.2)
       (hrect_le_range y.2)
   have hzero : x.1 - y.1 = 0 :=
-    matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow A i₀ hzRange hz
+    WielandtRankOne.matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow
+      (D := D) (M := A i₀) (X := x.1 - y.1) hzRange hz
   exact Subtype.ext (by simpa [sub_eq_zero] using hzero)
 
 /-- Finrank is non-decreasing along the sequence
