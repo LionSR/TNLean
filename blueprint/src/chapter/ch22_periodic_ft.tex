@@ -1302,11 +1302,27 @@ unconditional result.
         \cdots
         \widetilde B_{u+q+m-1}^{i_m}\widetilde F_{u+q}^{\mathbf i_m}.
     \]
-    Using the displayed identity with $\mathbf i=\mathbf i_r$, the factor
-    $\widetilde F_{u+q+r}^{\mathbf i_r}$ supplies the phase factor
-    $e^{-iN_0\lambda_{u+q+r}}$ when $\Omega_{u+r}$ collapses
-    $F_{u+r}^{\mathbf i_r}$. Tensoring these identities over $r$ and applying
-    $\Omega_{u+1}\otimes\cdots\otimes\Omega_{u+m-1}\otimes\Omega_u$ gives
+    For each $r\in\mathbb Z_m$, substituting $\mathbf i=\mathbf i_r$ in the
+    displayed identity gives
+    \[
+        \widetilde F_{u+q+r}^{\mathbf i_r}
+        =
+        e^{-iN_0\lambda_{u+q+r}}F_{u+r}^{\mathbf i_r}.
+    \]
+    Therefore the right-inverse relation gives the per-sector contraction
+    identity
+    \[
+        \sum_{\mathbf i_r}
+        (\Omega_{u+r}^{\mathbf i_r})_{\alpha,\beta}
+        (\widetilde F_{u+q+r}^{\mathbf i_r})_{\alpha',\beta'}
+        =
+        e^{-iN_0\lambda_{u+q+r}}
+        \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+    \]
+    Applying
+    $\Omega_{u+1}\otimes\cdots\otimes\Omega_{u+m-1}\otimes\Omega_u$ to both
+    sides of the intermediate block-identity equation above and collecting the
+    sector phases gives
     \[
         \begin{aligned}
         A_u^{i_1}\otimes A_{u+1}^{i_2}\otimes\cdots\otimes A_{u+m-1}^{i_m}
