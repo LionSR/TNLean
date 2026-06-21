@@ -474,6 +474,15 @@ then
 \end{align}
 for every block $j$ in the block-injective range.\footnote{Lean declaration:
 \leanid{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_trace_decomposition_of_injective}.}
+There is also an explicit-boundary version: once
+\(\psi=\Gamma_N^{\widehat A}(\bigoplus_jX_j)\) is fixed, the same
+trace-decomposition comparison gives
+\begin{align}
+  \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal K_{N,L}(A_j)
+\end{align}
+for every block \(j\), without using any span assumption at the short
+boundary-crossing tail length \(N-i\).\footnote{Lean declaration:
+\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_of_boundary}.}
 
 In the normalized BNT finite range, this common middle-word span is no longer an
 external assumption. If
