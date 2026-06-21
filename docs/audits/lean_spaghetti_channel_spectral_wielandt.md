@@ -112,7 +112,7 @@ Date: 2026-04-08
 | `TNLean/Channel/Schwarz/SchwarzNormal.lean` | 82 | 0 | 0 | - | 0 | 0 |  |
 | `TNLean/Channel/Schwarz/SchwarzNotCP.lean` | 295 | 0 | 0 | - | 0 | 25 |  |
 | `TNLean/Channel/Schwarz/SchwarzSubnormal.lean` | 676 | 0 | 4 | `topLeft_schwarz_of_normal_extension` 249-340 (92l) | 0 | 31 | split candidate Split normal-extension setup from commuting-dominant estimates. |
-| `TNLean/Channel/Schwarz/TwoPositive.lean` | 363 | 0 | 2 | `kadison_schwarz_2positive` 283-353 (71l) | 1 | 12 | TODOs Has a stale cleanup TODO: reroute `kadison_schwarz_from_2positive` through the 2-positive abstraction instead of delegating back to the direct proof. |
+| `TNLean/Channel/Schwarz/TwoPositive.lean` | 363 | 0 | 2 | `kadison_schwarz_2positive` 283-353 (71l) | 0 | 12 | Cleanup TODO for rerouting `kadison_schwarz_from_2positive` has been discharged; remaining material is local 2-positivity infrastructure. |
 | `TNLean/Channel/Semigroup/Basic.lean` | 617 | 0 | 2 | `continuous_semigroup_hasDerivWithinAt_zero` 319-502 (184l) | 0 | 10 | split candidate Split analytic semigroup preliminaries from the main exponential-semigroup API. |
 | `TNLean/Channel/Semigroup/CPClosure.lean` | 344 | 0 | 1 | `IsCPMap.expSemigroup` 286-344 (59l) | 0 | 11 |  |
 | `TNLean/Channel/Semigroup/Dissipative.lean` | 236 | 0 | 1 | `expSemigroup_dissipativeDrift_apply` 169-226 (58l) | 0 | 14 |  |
@@ -203,4 +203,3 @@ Date: 2026-04-08
 3. Extract the repeated helper patterns: support-projection invariance, CP->Kraus->irreducible setup, and gauge-rigidity scaffolding.
 4. Delete or move documentation-only `True := trivial` theorems into comments / blueprint text instead of the code namespace.
 5. If the team really wants a strict `simp only` policy, start with the hotspot files listed above rather than touching the whole tree at once.
-
