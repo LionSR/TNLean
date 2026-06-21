@@ -63,19 +63,13 @@ private def clmExpD (T : MatrixCLM (Fin D)) : MatrixCLM (Fin D) :=
   letI : NormedRing (MatrixCLM (Fin D)) := ContinuousLinearMap.toNormedRing
   NormedSpace.exp T
 
-private abbrev rightMulAlgHom (D : ℕ) : (Mat D)ᵐᵒᵖ →ₐ[ℂ] LM D :=
-  (AlgHom.mulLeftRight ℂ (Mat D)).comp
-    (Algebra.TensorProduct.includeRight (R := ℂ) (A := Mat D) (B := (Mat D)ᵐᵒᵖ))
-
-private theorem rightMulAlgHom_apply (A : (Mat D)ᵐᵒᵖ) (ρ : Mat D) :
-    rightMulAlgHom D A ρ = ρ * MulOpposite.unop A := by
-  simp [rightMulAlgHom]
-
 private abbrev leftMulCLMAlgHom (D : ℕ) : Mat D →ₐ[ℂ] MatrixCLM (Fin D) :=
   (endEquiv (D := D)).toAlgHom.comp (Algebra.lmul ℂ (Mat D))
 
 private abbrev rightMulCLMAlgHom (D : ℕ) : (Mat D)ᵐᵒᵖ →ₐ[ℂ] MatrixCLM (Fin D) :=
-  (endEquiv (D := D)).toAlgHom.comp (rightMulAlgHom D)
+  (endEquiv (D := D)).toAlgHom.comp
+    ((AlgHom.mulLeftRight ℂ (Mat D)).comp
+      (Algebra.TensorProduct.includeRight (R := ℂ) (A := Mat D) (B := (Mat D)ᵐᵒᵖ)))
 
 private theorem leftMulCLM_apply (A ρ : Mat D) :
     leftMulCLMAlgHom D A ρ = A * ρ := by
@@ -83,8 +77,8 @@ private theorem leftMulCLM_apply (A ρ : Mat D) :
 
 private theorem rightMulCLM_apply (A : (Mat D)ᵐᵒᵖ) (ρ : Mat D) :
     rightMulCLMAlgHom D A ρ = ρ * MulOpposite.unop A := by
-  change rightMulAlgHom D A ρ = ρ * MulOpposite.unop A
-  exact rightMulAlgHom_apply A ρ
+  change ((AlgHom.mulLeftRight ℂ (Mat D)) (1 ⊗ₜ[ℂ] A)) ρ = ρ * MulOpposite.unop A
+  simp [AlgHom.mulLeftRight_apply]
 
 private lemma continuous_leftMulCLMAlgHom :
     Continuous (leftMulCLMAlgHom D) := by
@@ -113,20 +107,16 @@ private lemma continuous_rightMulCLMAlgHom :
   rw [h_eq]
   exact (ContinuousLinearMap.mul ℂ (Mat D)).flip.continuous.comp hunop
 
-private theorem mulRight_eq_rightMulAlgHom (A : Mat D) :
-    LinearMap.mulRight ℂ A = rightMulAlgHom D (MulOpposite.op A) := by
-  ext ρ i j
-  rw [rightMulAlgHom_apply]
-  simp
-
 private theorem endEquiv_mulLeft (A : Mat D) :
     endEquiv (D := D) (LinearMap.mulLeft ℂ A) = leftMulCLMAlgHom D A := by
   rfl
 
 private theorem endEquiv_mulRight (A : Mat D) :
     endEquiv (D := D) (LinearMap.mulRight ℂ A) = rightMulCLMAlgHom D (MulOpposite.op A) := by
-  simpa [rightMulCLMAlgHom] using
-    congrArg (endEquiv (D := D)) (mulRight_eq_rightMulAlgHom (D := D) A)
+  ext ρ i j
+  change (LinearMap.mulRight ℂ A) ρ i j =
+    ((AlgHom.mulLeftRight ℂ (Mat D)) (1 ⊗ₜ[ℂ] MulOpposite.op A)) ρ i j
+  simp [AlgHom.mulLeftRight_apply, LinearMap.mulRight_apply]
 
 private theorem left_right_commute (A B : Mat D) :
     Commute (leftMulCLMAlgHom D A) (rightMulCLMAlgHom D (MulOpposite.op B)) := by
