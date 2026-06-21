@@ -597,6 +597,49 @@ unconditional result.
     and $A_v^i=(\kappa_v\xi)B_v^i$.
 \end{proof}
 
+\begin{theorem}[Left-canonical scalar normalization]
+    \label{thm:left_canonical_scalar_normalization}
+    \lean{MPSTensor.norm_eq_one_of_leftCanonical_smul}
+    \leanok
+    Let $A$ have positive bond dimension, and let $c\in\C$. If both $A$ and
+    the scalar multiple $cA$ are left-canonical, then $|c|=1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The two left-canonical equations give
+    \[
+        \sum_i (A^i)^\dagger A^i=\Id,
+        \qquad
+        \sum_i (cA^i)^\dagger(cA^i)=\Id.
+    \]
+    Substituting the first equation into the second gives
+    $(\bar c c)\Id=\Id$. Since the bond dimension is positive, comparison of
+    any diagonal entry gives $\bar c c=1$, hence $|c|=1$.
+\end{proof}
+
+\begin{theorem}[Left-canonical sector scalar normalization]
+    \label{thm:left_canonical_sector_scalar_normalization}
+    \lean{MPSTensor.kappa_norm_eq_one_of_leftCanonical_smul}
+    \leanok
+    \uses{thm:left_canonical_scalar_normalization}
+    Let $A$ and $B$ be left-canonical tensors with the same positive bond
+    dimension. Suppose that $|\xi|=1$ and
+    \[
+        A^i=(\kappa\xi)B^i
+    \]
+    for every physical index $i$. Then $|\kappa|=1$.
+
+    This is the scalar normalization in
+    \cite[Appendix~A, lines~1082--1084]{DeLasCuevas2017Irreducible}, after the
+    sectorwise proportionality relation has been obtained.
+\end{theorem}
+
+\begin{proof}\leanok
+    By Theorem~\ref{thm:left_canonical_scalar_normalization}, applied to $B$
+    and the scalar $\kappa\xi$, one has $|\kappa\xi|=1$. Since $|\xi|=1$, the
+    multiplicativity of the complex norm gives $|\kappa|=1$.
+\end{proof}
+
 \begin{definition}[Off-diagonal sector decomposition]%
     \label{def:cyclic_sector_decomp}
     \lean{MPSTensor.IsCyclicSectorDecomp, MPSTensor.IsCyclicSectorDecompWith}
@@ -1196,7 +1239,8 @@ unconditional result.
     % gap in docs/paper-gaps/1708_periodic_overlap_route_alignment.tex.
     \notready
     \uses{lem:sector_match_propagation, def:cyclic_sector_decomp,
-        thm:periodic_product_one_phase_extraction, lem:finite_cycle_coboundary}
+        thm:periodic_product_one_phase_extraction,
+        thm:left_canonical_sector_scalar_normalization, lem:finite_cycle_coboundary}
     Let $A$ and $B$ be left-canonical tensors with period $m$, and let
     $\bar A\sim\bigoplus_u A_u$ and $\bar B\sim\bigoplus_v B_v$ be unit-weight
     cyclic sector decompositions whose sectors are left-canonical. Let the
