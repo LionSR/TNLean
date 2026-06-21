@@ -28,8 +28,8 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-- The \(C^j\) comparison with the boundary expression implies the corresponding
-boundary trace comparison.
+/-- The opened-boundary \(C^j\)-comparison with the block boundary expression
+implies the corresponding boundary trace comparison.
 
 For fixed block-diagonal boundary matrices \(X_j\), suppose the opened-boundary
 matrices \(C^j_{i,\rho}\) satisfy
