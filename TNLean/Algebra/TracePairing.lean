@@ -101,67 +101,65 @@ theorem span_range_evalWord_mul_nonzero_mul_evalWord_eq_top {A : MPSTensor d D}
   classical
   let E : Set (Matrix (Fin D) (Fin D) ℂ) :=
     Set.range fun σ : Fin N → Fin d => evalWord A (List.ofFn σ)
-  let T : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ) :=
-    Submodule.span ℂ
-      (Set.range fun uv : (Fin N → Fin d) × (Fin N → Fin d) =>
-        evalWord A (List.ofFn uv.1) * X * evalWord A (List.ofFn uv.2))
+  let sandwich : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ]
+      Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
+    { toFun := fun R => LinearMap.mulLeft ℂ (R * X)
+      map_add' := by
+        intro R S
+        apply LinearMap.ext
+        intro T
+        simpa [LinearMap.mulLeft_apply, Matrix.mul_assoc] using Matrix.add_mul R S (X * T)
+      map_smul' := by
+        intro a R
+        apply LinearMap.ext
+        intro T
+        simpa [LinearMap.mulLeft_apply, Matrix.smul_mul] using
+          congrArg (fun M => a • M) (Matrix.mul_assoc R X T) }
   have hspanE : Submodule.span ℂ E = ⊤ := by
     simpa [E, IsNBlkInjective] using hA
-  have hmul_right_gen : ∀ {R : Matrix (Fin D) (Fin D) ℂ},
-      R ∈ Submodule.span ℂ E → ∀ v : Fin N → Fin d,
-        R * X * evalWord A (List.ofFn v) ∈ T := by
-    intro R hR
-    induction hR using Submodule.span_induction with
-    | mem M hM =>
-      intro v
-      rcases hM with ⟨u, rfl⟩
-      exact Submodule.subset_span ⟨(u, v), rfl⟩
-    | zero =>
-      intro v
-      simp [T]
-    | add R₁ R₂ _ _ hR₁ hR₂ =>
-      intro v
-      simpa [Matrix.add_mul, Matrix.mul_add, Matrix.mul_assoc, T] using
-        Submodule.add_mem T (hR₁ v) (hR₂ v)
-    | smul a R _ hR =>
-      intro v
-      have hEq : (a • R) * X * evalWord A (List.ofFn v) =
-          a • (R * X * evalWord A (List.ofFn v)) := by
-        simp [Matrix.mul_assoc]
-      rw [hEq]
-      exact Submodule.smul_mem T a (hR v)
-  have hmul : ∀ {R S : Matrix (Fin D) (Fin D) ℂ},
-      R ∈ Submodule.span ℂ E → S ∈ Submodule.span ℂ E → R * X * S ∈ T := by
-    intro R S hR hS
-    induction hS using Submodule.span_induction with
-    | mem M hM =>
-      rcases hM with ⟨v, rfl⟩
-      exact hmul_right_gen hR v
-    | zero =>
-      simp [T]
-    | add S₁ S₂ _ _ hS₁ hS₂ =>
-      simpa [Matrix.mul_add, Matrix.mul_assoc, T] using
-        Submodule.add_mem T hS₁ hS₂
-    | smul a S _ hS =>
-      have hEq : R * X * (a • S) = a • (R * X * S) := by
-        simp [Matrix.mul_assoc]
-      rw [hEq]
-      exact Submodule.smul_mem T a hS
-  apply eq_top_iff.mpr
-  have hsource :
-      Submodule.span ℂ
-          (Set.range fun RS : Matrix (Fin D) (Fin D) ℂ × Matrix (Fin D) (Fin D) ℂ =>
-            RS.1 * X * RS.2) ≤ T := by
-    refine Submodule.span_le.2 ?_
-    rintro Y ⟨RS, rfl⟩
-    exact hmul (by rw [hspanE]; exact Submodule.mem_top)
-      (by rw [hspanE]; exact Submodule.mem_top)
-  have htop :
-      Submodule.span ℂ
-          (Set.range fun RS : Matrix (Fin D) (Fin D) ℂ × Matrix (Fin D) (Fin D) ℂ =>
-            RS.1 * X * RS.2) = ⊤ :=
-    Matrix.span_range_mul_nonzero_mul_eq_top hX
-  simpa [T, htop] using hsource
+  have htop_map :
+      Submodule.map₂ sandwich
+          (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ))
+          (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) = ⊤ := by
+    apply eq_top_iff.mpr
+    have hsource_le :
+        Submodule.span ℂ
+            (Set.range fun
+                RS : Matrix (Fin D) (Fin D) ℂ × Matrix (Fin D) (Fin D) ℂ =>
+              RS.1 * X * RS.2) ≤
+          Submodule.map₂ sandwich
+            (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ))
+            (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) := by
+      refine Submodule.span_le.2 ?_
+      rintro Y ⟨RS, rfl⟩
+      change RS.1 * X * RS.2 ∈ Submodule.map₂ sandwich
+        (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ))
+        (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ))
+      rw [Matrix.mul_assoc]
+      simpa [sandwich, LinearMap.mulLeft_apply, Matrix.mul_assoc] using
+        (Submodule.map₂_le.mp (le_refl
+          (Submodule.map₂ sandwich
+            (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ))
+            (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ))))
+          RS.1 Submodule.mem_top RS.2 Submodule.mem_top)
+    have htop :
+        Submodule.span ℂ
+            (Set.range fun
+                RS : Matrix (Fin D) (Fin D) ℂ × Matrix (Fin D) (Fin D) ℂ =>
+              RS.1 * X * RS.2) = ⊤ :=
+      Matrix.span_range_mul_nonzero_mul_eq_top (n := Fin D) hX
+    simpa [htop] using hsource_le
+  calc Submodule.span ℂ
+        (Set.range fun uv : (Fin N → Fin d) × (Fin N → Fin d) =>
+          evalWord A (List.ofFn uv.1) * X * evalWord A (List.ofFn uv.2))
+      = Submodule.span ℂ (Set.image2
+          (fun R S : Matrix (Fin D) (Fin D) ℂ => sandwich R S) E E) := by
+          rw [Set.image2_range]
+          simp [sandwich, Matrix.mul_assoc]
+    _ = Submodule.map₂ sandwich (Submodule.span ℂ E) (Submodule.span ℂ E) := by
+          simpa using (Submodule.map₂_span_span (R := ℂ) sandwich E E).symm
+    _ = ⊤ := by
+          rw [hspanE, htop_map]
 
 /-- If `A` and `B` generate the same MPV family, then
 $\tr(A^w) = \tr(B^w)$ for every word~$w$. -/
