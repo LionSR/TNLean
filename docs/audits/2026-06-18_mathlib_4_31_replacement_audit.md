@@ -109,6 +109,8 @@ The clearest replacements are:
   `Algebra.TensorProduct.includeRight`.  The former hand-written algebra-hom
   fields for right multiplication were removed, and the left-right
   multiplication commutation proof now cites `LinearMap.commute_mulLeft_right`.
+  The two private left- and right-multiplication application wrappers were
+  also removed.
 - Further Lean 4.31 elaboration checks removed local heartbeat bounds from the
   POVM unitary-comparison proof, the irreducible-channel spectral-radius scalar
   proof, the semigroup perturbation derivative proof, and the common
@@ -2010,12 +2012,12 @@ as
   (Mat D ⊗[ℂ] (Mat D)ᵐᵒᵖ) →ₐ[ℂ] Module.End ℂ (Mat D)`.
 
 The local right-action hom is now the composition of this Mathlib hom with
-`Algebra.TensorProduct.includeRight`.  The proof keeps the local shaped
-application lemma `rightMulAlgHom_apply`, but that lemma is now a `simp`
-consequence of `AlgHom.mulLeftRight_apply`.  The proof that left and right
+`Algebra.TensorProduct.includeRight`.  The proof that left and right
 multiplication commute now maps Mathlib's `LinearMap.commute_mulLeft_right`
 through `endEquivD`, rather than reproving associativity pointwise on matrix
-entries.
+entries.  A later pass removed the private left- and right-multiplication
+application wrappers; the remaining proof sites use definitional reduction or
+`AlgHom.mulLeftRight_apply` directly.
 
 Focused check:
 
