@@ -12,7 +12,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale.Transport
 This file records the elementary frustration-free direction for the periodic
 parent Hamiltonian: since the finite parent Hamiltonian is a sum of local
 orthogonal projections, a vector in its kernel satisfies every local cyclic
-constraint. Hence the kernel of \(H_L^{(N)}(A)\) lies in the periodic
+constraint. Hence the kernel of \(H_N(A,L)\) lies in the periodic
 chain-ground-space submodule.
 -/
 
@@ -25,7 +25,7 @@ variable {d D : ℕ}
 /-- The kernel of the finite periodic parent Hamiltonian is contained in the
 periodic chain ground space.
 
-Equivalently, a zero-energy vector for \(H_L^{(N)}(A)\) satisfies every cyclic
+Equivalently, a zero-energy vector for \(H_N(A,L)\) satisfies every cyclic
 \(L\)-site local MPS constraint. -/
 theorem ker_parentHamiltonian_le_chainGroundSpace
     (A : MPSTensor d D) {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
