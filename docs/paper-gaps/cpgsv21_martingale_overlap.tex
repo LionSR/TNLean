@@ -113,9 +113,9 @@ projection estimates inherited from Fannes--Nachtergaele--Werner
 convert one of these source estimates to the cyclic-window inequality used
 below, with constants in the same blocking convention.
 
-\section{The formal reduction}
+\section{Finite-row martingale reduction}
 
-The formal development has separated the finite-row martingale algebra from the
+The current development separates the finite-row martingale algebra from the
 remaining MPS-specific principal-angle estimate. Fix an interaction range
 $L>1$ and an $N$-site periodic chain with $N\ge 2L$. Let $p_i$ denote the
 Hilbert-space representative of the length-$L$ local parent-Hamiltonian
@@ -125,14 +125,14 @@ For each fixed $i$, the number of indices $j$ with $i\sim_L j$ is at most
 \[
     m=2(L-1).
 \]
-The formal row-sum reduction specializes the source coefficients to
+The row-sum reduction specializes the source coefficients to
 \[
     c_{ij}=\frac{1}{2(L-1)}
 \]
 for overlapping cyclic windows and to $0$ otherwise. The row-cardinality bound
 then gives $\sum_j c_{ij}\le 1$.
 
-With this choice, the constant in the formal statement is
+With this choice, the constant in the local statement is
 \[
     \gamma_L=\frac{1}{4L}.
 \]
@@ -150,7 +150,7 @@ formalized row-sum argument proves $H_{N,L}^2\ge \gamma_L H_{N,L}$, and hence a
 norm lower bound with constant $\gamma_L$ on the orthogonal complement of the
 ground space.
 
-The formal proof also isolates a sufficient norm-compression form of the same
+The proof also isolates a sufficient norm-compression form of the same
 input:
 \begin{equation}
     \|p_i p_j v\|
@@ -167,9 +167,9 @@ For a symmetric projection $p_i$ one has
 \]
 Thus (N), together with $\operatorname{Re}\langle p_i v,v\rangle=\|p_i v\|^2$,
 implies (F). This is a sufficient projection-geometry comparison used in the
-formal proof: a norm-compression estimate for each overlapping pair is converted
+proof: a norm-compression estimate for each overlapping pair is converted
 by Cauchy--Schwarz to the ordered cross-term estimate, and the finite row-sum
-argument converts those ordered estimates into the global gap bound. The formal
+argument converts those ordered estimates into the global gap bound. The Lean
 development also records the source anticommutator row-sum reduction directly,
 without passing through this stronger one-sided estimate.\footnote{The
     current formal anchors include the anticommutator row-sum reductions

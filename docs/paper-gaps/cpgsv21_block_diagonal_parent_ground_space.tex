@@ -111,7 +111,7 @@ is
   \ker(H_N)=\operatorname{span}\{V^{(N)}(A_j):j=1,\ldots,g\}.
 \end{align}
 The sentence preceding the theorem restricts the proof to block-diagonal
-boundary conditions.  In the cut-adapted boundary coordinates used below, this
+boundary conditions.  After opening the periodic boundary at the chosen cut, this
 means boundary matrices of the form
 \begin{align}
   X=\bigoplus_{j=1}^g X_j,
@@ -244,8 +244,8 @@ vector in the periodic-boundary space $\mathcal K_{N,L}(\widehat A)$, produce
 block-diagonal boundary matrices whose block components again belong to the
 blockwise periodic-boundary spaces.
 
-The present boundary isolates the remaining source comparison in cut-adapted
-coordinates for boundary-crossing windows.  Suppose
+The present boundary isolates the remaining source comparison in the coordinates
+obtained by opening the periodic boundary for boundary-crossing windows.  Suppose
 \begin{align}
   \psi
   =
@@ -283,7 +283,7 @@ as an unconditional hypothesis-free equality theorem in the source range.\footno
 \leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_complementary_identities}.}
 
 The live blueprint records that larger source statement with explicit citations
-and separates the cut-adapted coordinates from the paper's boundary indices,
+and separates these opened-boundary coordinates from the paper's boundary indices,
 without claiming that the source statement is proved.\footnote{Blueprint locations:
 \path{def:parent_hamiltonian_ground_space_bnt} for the block-diagonal
 periodic-boundary ground space,
@@ -456,12 +456,12 @@ every block $j$,
   \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal K_{N,L}(A_j).
 \end{align}
 This is the conditional reduction recorded by pull request~\#2724.  There are
-now two formal routes to the boundary-condition comparison. The
-trace-decomposition route records the following implication. Assume the common
+now two proved conditional routes to the boundary-condition comparison. The
+boundary-trace route records the following implication. Assume the common
 word-span property for the middle-word length \(m\). If, for every
 boundary-crossing interval, word
 $\beta$ before the cut, outside word $\rho$, and middle word $w$ of length \(m\),
-the two trace comparisons from \cite[Theorem~12]{PerezGarcia2007MPSReps}
+the two boundary trace expressions from \cite[Theorem~12]{PerezGarcia2007MPSReps}
 satisfy
 \begin{align}
   \sum_j\tr\!\left(A^j_\beta C^j_\rho A^j_w\right)
@@ -475,8 +475,8 @@ then
 for every block $j$ in the block-injective range.\footnote{Lean declaration:
 \leanid{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_trace_decomposition_of_injective}.}
 There is also an explicit-boundary version: once
-\(\psi=\Gamma_N^{\widehat A}(\bigoplus_jX_j)\) is fixed, the same
-trace-decomposition comparison gives
+\(\psi=\Gamma_N^{\widehat A}(\bigoplus_jX_j)\) is fixed, the same equality of
+boundary trace expressions gives
 \begin{align}
   \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal K_{N,L}(A_j)
 \end{align}
@@ -497,14 +497,14 @@ then the normalized block-separation theorem gives
   =
   \prod_j M_{D_j}(\mathbb C).
 \end{align}
-Consequently the trace-decomposition implication in the finite range only keeps
-the displayed trace comparison and the block-diagonal boundary representation
+Consequently the boundary-trace implication in the finite range only keeps
+the displayed trace equality and the block-diagonal boundary representation
 as external inputs.\footnote{Lean declarations:
 \leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1_span}
 and
 \leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition_bnt_c1_span}.}
 
-The cut-adapted \(C^j,D^j\) route is closer to the proof of
+The \(C^j,D^j\) opened-boundary route is closer to the proof of
 \cite[Theorem~12]{PerezGarcia2007MPSReps}.
 The words \(\beta\) and \(\rho\) are local word coordinates introduced after
 opening and blocking the cyclic boundary comparison; they reindex the source
