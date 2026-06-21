@@ -175,25 +175,6 @@ theorem omegaProj_mul_self :
     subst hd0
     exact Subsingleton.elim _ _
 
-theorem one_sub_omegaProj_conjTranspose :
-    (((1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) - omegaProj d)ᴴ) =
-      (1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) - omegaProj d := by
-  simp [omegaProj_conjTranspose]
-
-theorem one_sub_omegaProj_mul_omegaProj :
-    ((1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) - omegaProj d) * omegaProj d = 0 := by
-  exact IsIdempotentElem.one_sub_mul_self (omegaProj_mul_self (d := d))
-
-theorem omegaProj_mul_one_sub_omegaProj :
-    omegaProj d * ((1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) - omegaProj d) = 0 := by
-  exact IsIdempotentElem.mul_one_sub_self (omegaProj_mul_self (d := d))
-
-theorem one_sub_omegaProj_mul_self :
-    ((1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) - omegaProj d) *
-        ((1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) - omegaProj d) =
-      (1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) - omegaProj d := by
-  exact IsIdempotentElem.one_sub (omegaProj_mul_self (d := d))
-
 theorem omegaProj_mulVec_omegaVec :
     omegaProj d *ᵥ omegaVec d = omegaVec d := by
   by_cases hd : 0 < d
