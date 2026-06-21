@@ -94,6 +94,10 @@ The clearest replacements are:
 - Two PEPS conjugation-extension helpers no longer prove linear-map equality
   by hand over a spanning set.  They use Mathlib's `LinearMap.ext_on` and
   `LinearMap.ext_on_range` for equality on a spanning set or range.
+- Two PEPS trace-pairing extension lemmas no longer perform explicit
+  `Submodule.span_induction` over a spanning word family.  They use
+  `LinearMap.ext_on_range` to extend equality of the trace-linear functionals
+  to all matrices.
 - Two one-use Frobenius submultiplicativity wrappers in the transfer-operator
   gap files were removed.  The proofs now call Mathlib's
   `Matrix.frobenius_norm_mul` directly at the Hilbert-Schmidt estimate.
@@ -2310,6 +2314,29 @@ Focused checks:
 ```bash
 lake env lean TNLean/PEPS/CycleMPSTranslationInvariant.lean
 lake env lean TNLean/PEPS/CycleMPSChainOverlapCapstone.lean
+```
+
+## PEPS trace-pairing extension cleanup, 2026-06-21
+
+Two trace-pairing uniqueness lemmas used explicit `Submodule.span_induction`
+proofs to extend equality from a spanning family of word products to every
+matrix:
+
+- `MPSTensor.eq_of_trace_mul_evalWord_eq` in
+  `TNLean/PEPS/CycleMPSWordTransport.lean`;
+- `MPSChainTensor.eq_of_trace_pairing_span` in
+  `TNLean/PEPS/CycleMPSChainArc.lean`.
+
+Both proofs now regard `Q ↦ trace (M * Q)` and `Q ↦ trace (N * Q)` as
+linear functionals, use `LinearMap.ext_on_range` on the spanning word family,
+and then apply the native trace-pairing extensionality theorem
+`Matrix.ext_iff_trace_mul_right`.
+
+Focused checks:
+
+```bash
+lake build TNLean.PEPS.CycleMPSChainArc -q --log-level=info
+lake build TNLean.PEPS.CycleMPSWordTransport -q --log-level=info
 ```
 
 ## Conclusions
