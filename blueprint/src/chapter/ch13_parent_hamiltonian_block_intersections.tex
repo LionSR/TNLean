@@ -70,6 +70,28 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \]
 \end{definition}
 
+\begin{lemma}[BNT span as the sum of one-vector spaces]
+    \label{lem:bnt_span_eq_sum_mpv_submodules}
+    \lean{MPSTensor.iSup_mpvSubmodule_eq_bntMPSVectorSpan}
+    \leanok
+    \uses{def:bnt_span, def:mpv_submodule}
+    For a family $A_0,\ldots,A_{r-1}$ and a chain length $N$, let
+    \[
+        M_j=\spn\{V^{(N)}(A_j)\}.
+    \]
+    Then
+    \[
+        \bigvee_{j=0}^{r-1} M_j
+        =
+        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Both sides are the span of the same family of vectors.
+\end{proof}
+
 \begin{definition}[Fixed-length block-injective canonical-form condition]
     \label{def:blockwise_product_word_span}
     \lean{MPSTensor.WordTupleSpanTop}
