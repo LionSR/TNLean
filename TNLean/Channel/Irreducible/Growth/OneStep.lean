@@ -88,8 +88,8 @@ theorem posDef_of_ker_subset_irreducible_cp
             star ((K j')ᴴ *ᵥ v) ⬝ᵥ (A *ᵥ ((K j')ᴴ *ᵥ v))).re = 0 := by
           rw [← hsum]; simp [hqf_EA]
         rwa [Complex.re_sum] at this
-      have hre := (Finset.sum_eq_zero_iff_of_nonneg
-        (fun j' _ => hA_psd.re_dotProduct_nonneg _)).mp h_sum_re j (Finset.mem_univ _)
+      have hre := congrFun (Fintype.sum_eq_zero_iff_of_nonneg
+        (fun j' => hA_psd.re_dotProduct_nonneg _) |>.mp h_sum_re) j
       exact Complex.ext hre (hA_psd.isHermitian.im_star_dotProduct_mulVec_self _)
     exact (hA_psd.dotProduct_mulVec_zero_iff _).mp (h_each i)
   -- Step 2: Construct support projection Q = U * diag(sgn(λ)) * U†
