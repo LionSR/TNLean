@@ -227,20 +227,27 @@ private theorem mul_left_letter_mem_arc_span [NeZero n]
     (i : Fin d) (Q : Matrix (Fin D) (Fin D) ℂ) :
     A (s : Fin n) i * Q ∈ Submodule.span ℂ
       (Set.range fun w : Fin (m + 1) → Fin d => arcEval A s (List.ofFn w)) := by
+  have hmap :
+      Submodule.map (LinearMap.mulLeft ℂ (A (s : Fin n) i))
+          (Submodule.span ℂ (Set.range fun u : Fin m → Fin d =>
+            arcEval A (s + 1) (List.ofFn u))) ≤
+        Submodule.span ℂ
+          (Set.range fun w : Fin (m + 1) → Fin d => arcEval A s (List.ofFn w)) := by
+    rw [Submodule.map_span]
+    refine Submodule.span_le.2 ?_
+    rintro _ ⟨_, ⟨u, rfl⟩, rfl⟩
+    change A (s : Fin n) i * arcEval A (s + 1) (List.ofFn u) ∈
+      Submodule.span ℂ
+        (Set.range fun w : Fin (m + 1) → Fin d => arcEval A s (List.ofFn w))
+    have hcons : arcEval A s (List.ofFn (Fin.cons i u)) =
+        A (s : Fin n) i * arcEval A (s + 1) (List.ofFn u) := by
+      rw [List.ofFn_succ, arcEval_cons, Fin.cons_zero]
+      simp only [Fin.cons_succ]
+    exact hcons ▸ Submodule.subset_span ⟨Fin.cons i u, rfl⟩
   have hQ : Q ∈ Submodule.span ℂ (Set.range fun u : Fin m → Fin d =>
       arcEval A (s + 1) (List.ofFn u)) := hm ▸ Submodule.mem_top
-  induction hQ using Submodule.span_induction with
-  | mem x hx =>
-      obtain ⟨u, rfl⟩ := hx
-      change A (s : Fin n) i * arcEval A (s + 1) (List.ofFn u) ∈ _
-      have hcons : arcEval A s (List.ofFn (Fin.cons i u)) =
-          A (s : Fin n) i * arcEval A (s + 1) (List.ofFn u) := by
-        rw [List.ofFn_succ, arcEval_cons, Fin.cons_zero]
-        simp only [Fin.cons_succ]
-      exact Submodule.subset_span ⟨Fin.cons i u, hcons⟩
-  | zero => rw [Matrix.mul_zero]; exact Submodule.zero_mem _
-  | add x y _ _ hx hy => rw [Matrix.mul_add]; exact Submodule.add_mem _ hx hy
-  | smul c x _ hx => rw [mul_smul_comm]; exact Submodule.smul_mem _ c hx
+  simpa only [LinearMap.mulLeft_apply] using
+    hmap (Submodule.mem_map.mpr ⟨Q, hQ, rfl⟩)
 
 /-- **Arc spanning from window injectivity** (arXiv:1804.04964, Section
 `normal_alt`, line 1940 of `Papers/1804.04964/paper_normal.tex`: "any region
