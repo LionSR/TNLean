@@ -119,9 +119,9 @@ def IsCyclicSectorDecomp [NeZero D] [NeZero m] (A : MPSTensor d D)
     IsCyclicSectorDecompWith A blocks P φ
 
 /-- The single-site off-diagonal grading carried by a cyclic sector decomposition:
-each unblocked Kraus operator carries the cyclic projection index `k` to `k + 1`,
-P_{k+1} · A^i = A^i · P_k.  This is the single-site shift of arXiv:1708.00029,
-eq:Aoffdiag, in inverse-indexed form; the later eq:Auprop only defines the
+each one-site tensor matrix carries the cyclic projection index `k` to `k + 1`,
+P_{k+1} · A^i = A^i · P_k.  This is the single-site shift for tensor matrices in
+arXiv:1708.00029, eq:Aoffdiag, in inverse-indexed form; the later eq:Auprop only defines the
 sector letters \(A_u^i = P_u A^i P_{u+1}\).  The relation used here is obtained
 from the cyclic relation 𝓔^*(P_{k+1}) = P_k stored in `IsCyclicSectorDecomp`. -/
 theorem IsCyclicSectorDecomp.offDiag_shift [NeZero D] [NeZero m]
