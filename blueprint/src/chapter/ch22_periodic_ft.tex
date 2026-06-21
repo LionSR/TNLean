@@ -2009,10 +2009,17 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     gives $\mathcal E_B = (\mathcal E_{A'})^p$.
 \end{proof}
 
-The following conditional statements isolate the refinability--divisibility
-equivalence from \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}.
+The following conditional statements separate the refinability--divisibility
+equivalence of \cite[Theorem~4.1]{DeLasCuevas2017Irreducible} from the
+root-construction assumptions used below.
 
-\begin{theorem}[$p$-refinability iff transfer-map $p$-divisibility]%
+% Source comparison: arXiv:1708.00029, Theorem 4.1, lines 728--731 asserts
+% the same refinability--divisibility equivalence without additional root
+% hypotheses. The forward left-canonical root construction corresponds to
+% lines 735--810, while the reverse transfer-map root construction corresponds
+% to lines 812--818. The Lean theorem below packages the two proved one-way
+% implications and is therefore conditional on those two root hypotheses.
+\begin{theorem}[$p$-refinability iff transfer-map $p$-divisibility, conditional]%
     \label{thm:thm_4_1_p_refinement}
     \lean{MPSTensor.thm_4_1_p_refinement}
     \leanok
@@ -2020,16 +2027,15 @@ equivalence from \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}.
         thm:periodic_ft, thm:thm_4_1_p_refinement_forward,
         thm:thm_4_1_p_refinement_reverse}
     Let $B$ be an MPS tensor in irreducible form~II and let $p \ge 1$.
-    Assume the two root hypotheses used in the one-way statements: the forward
-    left-canonical root hypothesis for refinability $\Rightarrow$ divisibility
-    and the reverse transfer-map root hypothesis for divisibility
-    $\Rightarrow$ refinability. Then $B$ is $p$-refinable iff its transfer
-    map $\mathcal{E}_B$ is $p$-divisible.
+    Assume the forward left-canonical root hypothesis for
+    refinability $\Rightarrow$ divisibility and the reverse transfer-map root
+    hypothesis for divisibility $\Rightarrow$ refinability. Then $B$ is
+    $p$-refinable iff its transfer map $\mathcal{E}_B$ is $p$-divisible.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:thm_4_1_p_refinement_forward, thm:thm_4_1_p_refinement_reverse}
-    Bundle the forward implication
+    Combine the forward implication
     (Theorem~\ref{thm:thm_4_1_p_refinement_forward}) with the reverse
     implication (Theorem~\ref{thm:thm_4_1_p_refinement_reverse}) into a
     single biconditional. The forward direction assumes the left-canonical root
