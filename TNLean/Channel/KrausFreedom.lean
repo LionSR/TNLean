@@ -92,8 +92,6 @@ theorem kraus_conjTranspose_mul_eq_of_map_eq
 
 /-! ### Rectangular Kraus freedom -/
 
-set_option maxHeartbeats 1600000 in
--- The partial-isometry extension passes through several nested finite-dimensional choices.
 /-- **Rectangular Kraus freedom** (Wolf Theorem 2.1 item 4, necessary direction):
 if two Kraus families of sizes `r₁` and `r₂` define the same CPM, then the
 first family is a linear combination of the second via a rectangular isometry
