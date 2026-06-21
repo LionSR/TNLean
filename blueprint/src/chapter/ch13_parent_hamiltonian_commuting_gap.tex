@@ -291,6 +291,7 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
 \begin{lemma}[Kernel containment from chain-space splitting]
     \label{lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting}
     \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan}
+    \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_pgvwc_comparison}
     \leanok
     \uses{thm:parent_hamiltonian_kernel_le_chain_ground_space,
         def:parent_hamiltonian, def:chain_ground_space, def:bnt_span,
@@ -314,6 +315,11 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
         \subseteq
         \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}.
     \]
+    In the finite-length range where the \(C^j,D^j\) comparison of
+    Perez-Garcia, Verstraete, Wolf, and Cirac gives
+    \(\mathcal G_{N,L}(B)=\bigvee_j\mathcal G_{N,L}(A_j)\), the same
+    containment follows with the splitting hypothesis supplied by that
+    comparison.
 \end{lemma}
 
 \begin{proof}

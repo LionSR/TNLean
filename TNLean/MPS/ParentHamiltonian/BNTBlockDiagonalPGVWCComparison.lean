@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalCrossingTrace
+import TNLean.MPS.ParentHamiltonian.GroundSpaceSpanning
 
 /-!
 # Boundary-condition comparisons for block-diagonal parent spaces
@@ -573,5 +574,72 @@ theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_pgvwc_comparison
     (chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_pgvwc_comparison
       μ A hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange
       hNlarge hComparison).1
+
+/-- The PGVWC boundary-condition comparison gives the fixed-chain kernel
+containment needed for the block-diagonal parent-Hamiltonian spanning clause,
+provided each block chain space is already contained in its MPS line.
+
+Let \(B=\bigoplus_j\mu_jA_j\).  The cut-adapted \(C^j,D^j\) comparison gives
+\[
+  \mathcal G_{N,L}(B)=\bigvee_j\mathcal G_{N,L}(A_j).
+\]
+If the single-block periodic chain spaces satisfy
+\(\mathcal G_{N,L}(A_j)\subseteq \mathbb C V^{(N)}(A_j)\), then
+\[
+  \ker H_L^{(N)}(B)\subseteq
+  \operatorname{span}\{V^{(N)}(A_j):j=0,\ldots,r-1\}.
+\]
+
+**Unfaithful:** This proof relies on
+`chainGroundSpace_toTensorFromBlocks_eq_iSup_of_pgvwc_comparison`, whose proof
+transitively uses the boundary-condition comparison at boundary-crossing
+windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
+2126--2128. Documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
+derive the \(C^j,D^j,E^j\) boundary-condition comparison from
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
+discharge the currently assumed comparison; tracked in issue 2971. -/
+theorem ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_pgvwc_comparison
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hμ : ∀ k : Fin r, μ k ≠ 0)
+    {L₀ L N : ℕ}
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hL₀ : 0 < L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
+    (hRange :
+      (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
+    (hNlarge : L + L₀ ≤ N)
+    (hComparison :
+      ∀ {ψ : NSiteSpace d N},
+        ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N →
+        ∀ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+          ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+            ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) →
+          ∃ C : ∀ (j : Fin r) (_ : Fin N),
+            (Fin (N - L) → Fin d) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+            ∀ (j : Fin r) (i : Fin N),
+              N < i.val + L →
+                ∀ ρ : Fin (N - L) → Fin d,
+                  ∀ β : Fin (i.val + L - N) → Fin d,
+                    evalWord (A j) (List.ofFn β) * C j i ρ =
+                      (((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
+                        evalWord (A j) (List.ofFn ρ))
+    (hBlock :
+      ∀ j : Fin r, chainGroundSpace (A j) L N ≤ mpvSubmodule (A j) N) :
+    LinearMap.ker (parentHamiltonian
+      (toTensorFromBlocks (d := d) (μ := μ) A) L N) ≤
+      bntMPSVectorSpan A N := by
+  refine ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan
+    μ A hN hLN ?_ hBlock
+  exact le_of_eq
+    (chainGroundSpace_toTensorFromBlocks_eq_iSup_of_pgvwc_comparison
+      μ A hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange
+      hNlarge hComparison)
 
 end MPSTensor
