@@ -625,7 +625,8 @@ private lemma adjointTransferMap_primitive_and_irreducible_sectorBlock_of_cyclic
       A blocks (φ := φ) hPproj hIntertwine hMul hStar u hNonzero
       hInv hCornerPrim hCornerIrr
 
-/-- **Structural step** for Case 3 of Proposition 3.3 (arXiv:1708.00029):
+/-- **Structural step** for Case 3 of the source proposition
+`equal-or-orthogonal-generalized` (arXiv:1708.00029):
 each nonzero compressed sector block `blocks u` arising from a cyclic sector
 decomposition of a periodic irreducible tensor has both a primitive transfer
 map and is tensor-irreducible.
