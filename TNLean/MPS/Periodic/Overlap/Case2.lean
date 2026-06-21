@@ -37,10 +37,10 @@ variable {d D : ℕ}
 
 /-- Case-2 normality lemma for the compressed blocked sector tensors.
 
-The intended mathematical content is Lemma 2.4: after blocking by the period,
-each cyclic sector is a normal tensor. The statement uses the compressed sector
-tensor on the corner bond space, as produced by
-`exists_cyclic_sector_decomp_after_blocking_of_isPeriodic`.
+The intended mathematical content is arXiv:1708.00029, lemma lem:bdcf,
+lines 377--384: after blocking by the period, each cyclic sector is a normal
+tensor. The statement uses the compressed sector tensor on the corner bond
+space, as produced by `exists_cyclic_sector_decomp_after_blocking_of_isPeriodic`.
 
 The nontriviality hypothesis `dim u ≠ 0` excludes the degenerate
 zero-dimensional "missing sector" case. An `MPSTensor _ 0` may satisfy
