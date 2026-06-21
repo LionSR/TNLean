@@ -12,6 +12,7 @@ import TNLean.Channel.KrausUnitaryFreedom
 import TNLean.Channel.Stinespring
 import TNLean.Channel.OrderedCP
 import TNLean.Channel.RadonNikodym
+import TNLean.Channel.OpenSystem
 import TNLean.Channel.POVM
 import TNLean.Channel.POVM.Uniqueness
 import TNLean.Channel.TransferMatrix
@@ -101,6 +102,9 @@ default root.
     `T(ρ)_{ij} = ∑ₖ (V ρ V†)_{(i,k),(j,k)}` for an isometric `V` ✓
   - `IsChannel.exists_stinespring_open_system_traceRight` — equivalent
     form via `Matrix.traceRight`: `T(ρ) = tr_E[V ρ V†]` ✓
+  - `IsChannel.exists_stinespring_open_system_unitary` — unitary form
+    `T(ρ) = tr_E[U W₀ ρ W₀† U†]`, where `W₀` inserts the system into the
+    first environment coordinate ✓
 
 * **Theorem 2.6** (Naimark / Neumark dilation for POVMs):
   - `POVM` — positive operator-valued measure structure ✓
@@ -237,8 +241,6 @@ default root.
 
 | Result | Notes |
 |--------|-------|
-| Theorem 2.5 (unitary form) | Reduced isometric form formalized;
-  unitary form needs basis extension |
 | Section 2.3 Lorentz normal form (full proof) | Statement formalised
   (`exists_lorentz_normal_form_qubit`);
   proof blocked on compactness of bounded SL(n, ℂ) sets (`infimum_is_attained`) —
