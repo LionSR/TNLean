@@ -1034,6 +1034,16 @@ a common dilation space.
     trace over the ancilla factor.
 \end{proof}
 
+\begin{lemma}[Rectangular Gram equality gives a unitary]
+    \label{lem:exists_unitary_mul_eq_of_gram_eq}
+    \lean{Matrix.exists_unitary_mul_eq_of_conjTranspose_mul_eq}
+    \leanok
+    \uses{}
+    Let $A,B:\C^n\to\C^m$ be linear maps with
+    $B^\dagger B=A^\dagger A$.  Then there is a unitary
+    $U$ on $\C^m$ such that $B=UA$.
+\end{lemma}
+
 \begin{definition}[First environment embedding]
     \label{def:first_env_embedding}
     \lean{Matrix.firstEnvEmbedding}
@@ -1049,21 +1059,22 @@ a common dilation space.
     \uses{def:channel, def:partial_trace, def:first_env_embedding}
     For $D \geq 1$, every quantum channel $T$ on $\C^D$ admits an
     environment dimension $r \geq 1$ and a unitary
-    $U$ on $\C^D \otimes \C^r$ such that
+    $U$ on $\C^D \otimes \C^r$ such that, for every matrix
+    $\rho$ on $\C^D$,
     \[
         T(\rho) =
-        \tr_E\!\left(U W_0 \rho W_0^\dagger U^\dagger\right)
+        \tr_E\!\left(U W_0 \rho W_0^\dagger U^\dagger\right).
     \]
-    for every matrix $\rho$ on $\C^D$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:channel_exists_stinespring_open_system_traceRight}
+    \uses{thm:channel_exists_stinespring_open_system_traceRight,
+        lem:exists_unitary_mul_eq_of_gram_eq}
     Take the isometric open-system representation
-    $T(\rho)=\tr_E(V\rho V^\dagger)$.  Since $V^\dagger V=W_0^\dagger W_0$,
-    finite-dimensional isometry extension gives a unitary $U$ on the
-    system-environment space with $V=UW_0$.  Substituting this identity into
-    the partial trace formula gives the displayed expression.
+    $T(\rho)=\tr_E(V\rho V^\dagger)$.  Since
+    $V^\dagger V=\Id=W_0^\dagger W_0$, Lemma~\ref{lem:exists_unitary_mul_eq_of_gram_eq}
+    gives a unitary $U$ with $V=UW_0$.  Substituting this identity into the
+    partial trace formula gives the displayed expression.
 \end{proof}
 
 %% =========================================================

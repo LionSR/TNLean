@@ -6,6 +6,7 @@ import TNLean.Channel.Basic
 import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.Stinespring
 import TNLean.Algebra.FinSum
+import TNLean.Algebra.MatrixGramUnitary
 import TNLean.Algebra.TracePairing
 
 /-!
@@ -91,10 +92,6 @@ theorem kraus_conjTranspose_mul_eq_of_map_eq
 
 /-! ### Rectangular Kraus freedom -/
 
-private abbrev KrausCoeffSpace (r : ℕ) := EuclideanSpace ℂ (Fin r)
-
-private abbrev KrausEntrySpace (D : ℕ) := EuclideanSpace ℂ (Fin D × Fin D)
-
 set_option maxHeartbeats 1600000 in
 -- The partial-isometry extension passes through several nested finite-dimensional choices.
 /-- **Rectangular Kraus freedom** (Wolf Theorem 2.1 item 4, necessary direction):
@@ -165,88 +162,16 @@ theorem kraus_rectangular_freedom
       simp_rw [step₁]; simp [Finset.sum_ite_eq, Finset.mem_univ]
     rw [collapse, collapse] at h_entry
     exact h_entry
-  -- ===== Phase 3: Construct the isometry =====
-  letI : InnerProductSpace ℂ (KrausCoeffSpace r₁) :=
-    PiLp.innerProductSpace (fun _ : Fin r₁ => ℂ)
-  letI : InnerProductSpace ℂ (KrausEntrySpace D) :=
-    PiLp.innerProductSpace (fun _ : Fin D × Fin D => ℂ)
-  letI : FiniteDimensional ℂ (KrausCoeffSpace r₁) :=
-    (EuclideanSpace.basisFun (Fin r₁) ℂ).toBasis.finiteDimensional_of_finite
-  letI : FiniteDimensional ℂ (KrausEntrySpace D) :=
-    (EuclideanSpace.basisFun (Fin D × Fin D) ℂ).toBasis.finiteDimensional_of_finite
-  let fB : KrausEntrySpace D →ₗ[ℂ] KrausCoeffSpace r₁ := Matrix.toEuclideanLin MB
-  let fA' : KrausEntrySpace D →ₗ[ℂ] KrausCoeffSpace r₁ := Matrix.toEuclideanLin MA'
-  -- Inner product preservation from Gram equality
-  have hinner : ∀ v w : KrausEntrySpace D,
-      ⟪fB v, fB w⟫_ℂ = ⟪fA' v, fA' w⟫_ℂ := by
-    intro v w
-    rw [← LinearMap.adjoint_inner_right fB v (fB w),
-        ← LinearMap.adjoint_inner_right fA' v (fA' w)]
-    congr 1
-    show fB.adjoint (fB w) = fA'.adjoint (fA' w)
-    rw [← Matrix.toEuclideanLin_conjTranspose_eq_adjoint MB,
-        ← Matrix.toEuclideanLin_conjTranspose_eq_adjoint MA']
-    change (MBᴴ.toEuclideanLin.comp MB.toEuclideanLin) w =
-      (MA'ᴴ.toEuclideanLin.comp MA'.toEuclideanLin) w
-    rw [← toLpLin_mul_same, ← toLpLin_mul_same, hGram]
-  -- Kernel inclusion
-  have hker : LinearMap.ker fA' ≤ LinearMap.ker fB := by
-    intro v hv; rw [LinearMap.mem_ker] at hv ⊢
-    have h0 := hinner v v
-    simp only [hv, inner_zero_left] at h0
-    exact inner_self_eq_zero.mp h0
-  -- Construct partial isometry L on range(fA')
-  let L_lm : LinearMap.range fA' →ₗ[ℂ] KrausCoeffSpace r₁ :=
-    ((LinearMap.ker fA').liftQ fB hker).comp
-      fA'.quotKerEquivRange.symm.toLinearMap
-  -- Key: L sends fA'(v) to fB(v)
-  have hL_apply : ∀ v, L_lm ⟨fA' v, LinearMap.mem_range_self fA' v⟩ = fB v := by
-    intro v
-    change ((LinearMap.ker fA').liftQ fB hker)
-        (fA'.quotKerEquivRange.symm ⟨fA' v, LinearMap.mem_range_self fA' v⟩) =
-      fB v
-    rw [fA'.quotKerEquivRange_symm_apply_image]
-    exact Submodule.liftQ_apply _ _ _
-  -- L preserves inner products
-  have hL_inner : ∀ x y : LinearMap.range fA',
-      ⟪L_lm x, L_lm y⟫_ℂ = ⟪x, y⟫_ℂ := by
-    intro ⟨_, hx⟩ ⟨_, hy⟩
-    obtain ⟨v, rfl⟩ := hx; obtain ⟨w, rfl⟩ := hy
-    rw [hL_apply, hL_apply, hinner, Submodule.coe_inner]
-  -- Extend to full isometry
-  let L_iso : LinearMap.range fA' →ₗᵢ[ℂ] KrausCoeffSpace r₁ :=
-    by
-      exact LinearMap.isometryOfInner L_lm hL_inner
-  let U := L_iso.extend
-  -- U ∘ fA' = fB
-  have hU_eq : ∀ v, U (fA' v) = fB v := by
-    intro v
-    have : U (fA' v) = L_iso ⟨fA' v, LinearMap.mem_range_self fA' v⟩ :=
-      LinearIsometry.extend_apply L_iso ⟨fA' v, LinearMap.mem_range_self fA' v⟩
-    rw [this]
-    simpa [L_iso] using hL_apply v
-  -- ===== Phase 4: Extract V =====
-  let U_mat : Matrix (Fin r₁) (Fin r₁) ℂ :=
-    Matrix.toEuclideanLin.symm U.toLinearMap
-  -- Key: toEuclideanLin U_mat = U.toLinearMap
-  have h_U_lin : Matrix.toEuclideanLin U_mat = U.toLinearMap :=
-    LinearEquiv.apply_symm_apply Matrix.toEuclideanLin U.toLinearMap
-  -- U_mat† U_mat = 1 (U is an isometry on a f.d. space)
-  have hU_unitary : U_matᴴ * U_mat = 1 := by
-    apply Matrix.toEuclideanLin.injective; ext1 v
-    have hadj : U.toLinearMap.adjoint (U.toLinearMap v) = v :=
-      ext_inner_right ℂ fun y => by
-        rw [LinearMap.adjoint_inner_left]
-        exact LinearIsometry.inner_map_map U v y
-    rw [toLpLin_mul_same, LinearMap.comp_apply,
-      Matrix.toEuclideanLin_conjTranspose_eq_adjoint, h_U_lin, hadj]
-    simp only [toLpLin_one, LinearMap.id_apply]
-  -- U_mat * MA' = MB (from U ∘ fA' = fB)
-  have hU_mat_eq : U_mat * MA' = MB := by
-    apply Matrix.toEuclideanLin.injective; ext1 v
-    rw [toLpLin_mul_same, LinearMap.comp_apply, h_U_lin]; exact hU_eq v
+  -- ===== Phase 3: Extract the ambient unitary from Gram equality =====
+  obtain ⟨U, hU⟩ := Matrix.exists_unitary_mul_eq_of_conjTranspose_mul_eq
+    (B := MB) (A := MA') hGram
+  have hU_unitary :
+      (U : Matrix (Fin r₁) (Fin r₁) ℂ)ᴴ *
+          (U : Matrix (Fin r₁) (Fin r₁) ℂ) = 1 := by
+    simpa [Matrix.star_eq_conjTranspose] using Matrix.UnitaryGroup.star_mul_self U
+  have hU_mat_eq : (U : Matrix (Fin r₁) (Fin r₁) ℂ) * MA' = MB := hU.symm
   -- Define V as first r₂ columns of U_mat
-  refine ⟨fun α j => U_mat α (Fin.castLE hCard j), ?_, ?_⟩
+  refine ⟨fun α j => (U : Matrix (Fin r₁) (Fin r₁) ℂ) α (Fin.castLE hCard j), ?_, ?_⟩
   · -- V†V = 1
     ext j k
     simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply]
@@ -256,12 +181,13 @@ theorem kraus_rectangular_freedom
   · -- B α = ∑ j, V(α,j) • A j
     intro α; ext a b
     have h_entry : (B α) a b =
-        ∑ β : Fin r₁, U_mat α β * (A' β) a b := by
+        ∑ β : Fin r₁, (U : Matrix (Fin r₁) (Fin r₁) ℂ) α β * (A' β) a b := by
       have := congr_fun (congr_fun hU_mat_eq α) (a, b)
       simpa [Matrix.mul_apply, MB, MA'] using this.symm
     rw [h_entry]; simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
     rw [Fin.sum_castLE_extend_zero
-      (fun j => U_mat α (Fin.castLE hCard j) * (A j) a b) hCard]
+      (fun j => (U : Matrix (Fin r₁) (Fin r₁) ℂ) α (Fin.castLE hCard j) *
+        (A j) a b) hCard]
     apply Finset.sum_congr rfl; intro β _
     simp only [A']; split_ifs with hlt
     · simp only [Fin.eta, Fin.castLE]
