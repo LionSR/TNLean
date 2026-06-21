@@ -550,6 +550,7 @@ notation:
 - `Matrix.frobenius_norm_conjTranspose`
 - `Matrix.frobeniusNormedRing`
 - `Matrix.frobeniusNormedAlgebra`
+- `EuclideanSpace.norm_sq_eq`
 
 TNLean has local Frobenius-norm infrastructure in:
 
@@ -913,6 +914,9 @@ Frobenius norm is now the foundation for matrix Hilbert-Schmidt arguments:
 `frobSq` is a squared Mathlib Frobenius norm, and the entrywise sum formula is
 kept as `frobSq_eq_sum` for trace and finite-sum arguments.  The local squared
 norm remains only as a convenience wrapper for downstream transfer estimates.
+The flattening identity `norm_matToES_sq` now uses Mathlib's
+`EuclideanSpace.norm_sq_eq`; the former proof by expanding the inner product
+over all matrix coordinates has been removed.
 The separate nonnegativity wrapper `MPSTensor.frobSq_nonneg` has been removed:
 the needed fact is exactly `sq_nonneg ‖X‖` after unfolding `frobSq`.
 
