@@ -871,6 +871,38 @@ in both cases.
     then gives the single-block periodic constraints.
 \end{proof}
 
+\begin{lemma}[Boundary comparison implies trace comparison]
+    \label{lem:block_diagonal_boundary_trace_decomposition_from_pgvwc_comparison}
+    \lean{MPSTensor.blockDiagonal_boundary_trace_decomposition_of_pgvwc_comparison}
+    \leanok
+    Fix block-diagonal boundary matrices $X_j$. Suppose the opened-boundary
+    matrices $C^j_{i,\rho}$ satisfy, for every boundary-crossing interval $i$,
+    every outside word $\rho$, and every word $\beta$ before the cut,
+    \[
+        A^j_\beta C^j_{i,\rho}
+        =
+        ((\mu_j^NX_j)A^j_\beta)A^j_\rho .
+    \]
+    Then for every middle word $w$,
+    \[
+        \sum_j\tr\!\left(A^j_\beta C^j_{i,\rho}A^j_w\right)
+        =
+        \sum_j
+        \tr\!\left(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_w\right).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Substituting the comparison identity in each summand gives
+    \[
+        \tr\!\left(A^j_\beta C^j_{i,\rho}A^j_w\right)
+        =
+        \tr\!\left(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_w\right).
+    \]
+    Summing over \(j\) gives the conclusion.
+\end{proof}
+
 \begin{lemma}[Boundary trace comparisons give single-block constraints]
     \label{lem:block_diagonal_boundary_component_trace_decomposition_injective}
     \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_trace_decomposition_of_injective}
