@@ -354,14 +354,6 @@ private theorem exists_ofFn_of_length {l : List (Fin d)} {k : ℕ}
   subst hl
   exact ⟨l.get, List.ofFn_get l⟩
 
-/-- A nonzero-size identity matrix is nonzero. -/
-private theorem matrix_one_ne_zero (hD : 0 < D) :
-    (1 : Matrix (Fin D) (Fin D) ℂ) ≠ 0 := by
-  intro h
-  have hentry := congrFun (congrFun h ⟨0, hD⟩) ⟨0, hD⟩
-  rw [Matrix.one_apply_eq] at hentry
-  exact one_ne_zero hentry
-
 /-- **The insertion correspondence is an algebra homomorphism**
 (arXiv:1804.04964, Lemma 5, the closing clause at line 2253 of
 `Papers/1804.04964/paper_normal.tex`: the maps `O_1 ↦ X` and `O_3^T ↦ X`
@@ -590,7 +582,8 @@ theorem exists_conjugation_of_sameState [NeZero n] {L : ℕ} (hL : 0 < L)
   -- `Φ` is unital, hence nonzero, hence an automorphism, hence inner.
   have hΦne : Φ ≠ 0 := by
     intro h0
-    apply matrix_one_ne_zero hD
+    haveI : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
+    apply (show (1 : Matrix (Fin D) (Fin D) ℂ) ≠ 0 from one_ne_zero)
     rw [← hΦone, h0]
     rfl
   have hBij := MPSTensor.linear_mul_endomorphism_bijective Φ hΦmul hΦne

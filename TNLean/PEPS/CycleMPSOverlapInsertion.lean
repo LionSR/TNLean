@@ -239,14 +239,6 @@ private theorem exists_insertion_image {A B : MPSTensor d D} {n L : ℕ}
 
 /-! ### Assembling the conjugation -/
 
-/-- A nonzero-size identity matrix is nonzero. -/
-private theorem matrix_one_ne_zero (hD : 0 < D) :
-    (1 : Matrix (Fin D) (Fin D) ℂ) ≠ 0 := by
-  intro h
-  have hentry := congrFun (congrFun h ⟨0, hD⟩) ⟨0, hD⟩
-  rw [Matrix.one_apply_eq] at hentry
-  exact one_ne_zero hentry
-
 /-- Any list of declared length is the word of a tuple. -/
 private theorem exists_ofFn_of_length {l : List (Fin d)} {k : ℕ}
     (hl : l.length = k) : ∃ a : Fin k → Fin d, List.ofFn a = l := by
@@ -367,7 +359,8 @@ theorem exists_conjugation_of_mpv_eq {n L : ℕ} (hL : 0 < L) (hn : 2 * L + 1 �
       _ = evalWord B (List.ofFn a) * 1 := (Matrix.mul_one _).symm
   have hΦne : Φ ≠ 0 := by
     intro h0
-    apply matrix_one_ne_zero hD
+    haveI : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
+    apply (show (1 : Matrix (Fin D) (Fin D) ℂ) ≠ 0 from one_ne_zero)
     rw [← hΦone, h0]
     rfl
   have hBij := linear_mul_endomorphism_bijective Φ hΦmul hΦne

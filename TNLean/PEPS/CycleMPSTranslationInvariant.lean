@@ -90,25 +90,6 @@ private theorem gl_proportional_of_conj_eq {D : ℕ} (Z Z' : GL (Fin D) ℂ)
   rw [inv_inv, inv_inv] at hflip
   exact ⟨c⁻¹, hflip⟩
 
-/-- A nonzero-size identity matrix is nonzero. -/
-private theorem one_ne_zero_of_pos {D : ℕ} (hD : 0 < D) :
-    (1 : Matrix (Fin D) (Fin D) ℂ) ≠ 0 := by
-  intro h
-  have hentry := congrFun (congrFun h ⟨0, hD⟩) ⟨0, hD⟩
-  rw [Matrix.one_apply_eq] at hentry
-  exact one_ne_zero hentry
-
-/-- An invertible matrix of positive size is nonzero. -/
-private theorem gl_coe_ne_zero {D : ℕ} (hD : 0 < D) (Z : GL (Fin D) ℂ) :
-    (Z : Matrix (Fin D) (Fin D) ℂ) ≠ 0 := by
-  intro h
-  apply one_ne_zero_of_pos hD
-  calc (1 : Matrix (Fin D) (Fin D) ℂ)
-      = (Z : Matrix (Fin D) (Fin D) ℂ) *
-          ((Z⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) :=
-        (Units.mul_inv Z).symm
-    _ = 0 := by rw [h, Matrix.zero_mul]
-
 /-! ### Iterating the per-bond relation along a word -/
 
 /-- **The per-bond gauge relation iterated along a word.**  If
@@ -358,7 +339,8 @@ theorem fundamentalTheorem_normalMPS_translationInvariant {n L d D : ℕ} [NeZer
       rw [sub_smul, one_smul, ← hcycle, sub_self]
     rcases smul_eq_zero.mp hzero with h | h
     · exact (sub_eq_zero.mp h).symm
-    · exact absurd h (gl_coe_ne_zero hD (Z 0))
+    · haveI : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
+      exact absurd h (Units.ne_zero (Z 0))
   refine ⟨Z 0, (c 0 : ℂ), hroot, fun i => ?_⟩
   have h0 := hZ 0 i
   rw [hc 0] at h0

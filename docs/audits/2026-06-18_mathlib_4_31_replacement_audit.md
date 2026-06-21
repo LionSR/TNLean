@@ -78,6 +78,9 @@ The clearest replacements are:
   `ContinuousLinearMap.toNormedRing`, `ContinuousLinearMap.toNormedAlgebra`,
   and local finite-dimensional completeness proofs directly; the former
   finite-dimensional witness was removed with the other exact local wrappers.
+- Several PEPS proofs no longer inspect the `(0, 0)` entry of the identity
+  matrix to prove nonvanishing.  They use Mathlib's nontrivial matrix-space
+  instance and `Units.ne_zero` for invertible matrices.
 - Two one-use Frobenius submultiplicativity wrappers in the transfer-operator
   gap files were removed.  The proofs now call Mathlib's
   `Matrix.frobenius_norm_mul` directly at the Hilbert-Schmidt estimate.
@@ -2176,6 +2179,37 @@ lake build TNLean.Wielandt.RankOne.SpanGrowth \
   TNLean.Wielandt.RankOne.BoundedWord \
   TNLean.Wielandt.RectangularSpan.Growth \
   TNLean.Wielandt.RectangularSpan.UniversalityAux.NilpIndex -q
+```
+
+## Matrix identity nonzero wrapper cleanup, 2026-06-21
+
+Several PEPS files carried private lemmas proving
+`(1 : Matrix (Fin D) (Fin D) ℂ) ≠ 0` from `0 < D` by evaluating the identity
+matrix at the `(0, 0)` entry.  These were exact local proofs of facts already
+available through Mathlib: once `Fin D` is inhabited, Mathlib gives
+`Nontrivial (Matrix (Fin D) (Fin D) ℂ)`, so `one_ne_zero` proves the identity
+matrix is nonzero.
+
+The removed private wrappers were in:
+
+- `TNLean/PEPS/CycleMPSOverlapCapstone.lean`;
+- `TNLean/PEPS/CycleMPSChainOverlapCapstone.lean`;
+- `TNLean/PEPS/CycleMPSOverlapInsertion.lean`;
+- `TNLean/PEPS/CycleMPSChainOverlapInsertion.lean`;
+- `TNLean/PEPS/CycleMPSTranslationInvariant.lean`.
+
+In the translation-invariant argument, the corresponding nonzero fact for an
+invertible matrix is now `Units.ne_zero` applied to the gauge matrix, again
+after supplying the inhabited `Fin D` instance.
+
+Focused checks:
+
+```bash
+lake env lean TNLean/PEPS/CycleMPSOverlapCapstone.lean
+lake env lean TNLean/PEPS/CycleMPSChainOverlapCapstone.lean
+lake env lean TNLean/PEPS/CycleMPSOverlapInsertion.lean
+lake env lean TNLean/PEPS/CycleMPSChainOverlapInsertion.lean
+lake env lean TNLean/PEPS/CycleMPSTranslationInvariant.lean
 ```
 
 ## Conclusions
