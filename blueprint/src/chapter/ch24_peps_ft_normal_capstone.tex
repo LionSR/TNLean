@@ -1376,6 +1376,44 @@ recorded in the route note
     telescope the resulting bond gauges around the chain.
 \end{proof}
 
+\begin{corollary}[Translation-invariant description of an injective closed MPS chain,
+        uniform bond dimension]%
+    \label{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState}
+    \notready
+    \uses{cor:exists_gauge_to_first_of_cyclicShiftInvariantState,
+        def:mps_chain_cyclic_shift}
+    Let \(A_0,\ldots,A_{n-1}\) be an injective site-dependent closed chain on
+    \(n\ge 3\) sites, with one physical dimension \(d\) and one bond dimension
+    \(D\).  If the closed-chain state is invariant under the cyclic shift
+    \(A_v\mapsto A_{v+1}\), then there is an injective tensor \(B\), with bond
+    dimension \(D\), such that for every physical configuration \(\sigma\),
+    \[
+        \operatorname{tr}\!\left(
+            A_0^{\sigma_0}\cdots A_{n-1}^{\sigma_{n-1}}\right)
+        =
+        \operatorname{tr}\!\left(
+            B^{\sigma_0}\cdots B^{\sigma_{n-1}}\right).
+    \]
+
+    This is the uniform-bond-dimension target corresponding to the
+    Applications-section corollary of
+    \cite[lines~1803--1890]{Molnar2018NormalPEPS}.  The source also concludes
+    that all bond dimensions of the original site-dependent representation are
+    equal; in the present uniform-dimension statement that clause has already
+    been built into the setting.
+\end{corollary}
+\begin{proof}
+    Apply Corollary~\ref{cor:fundamentalTheorem_injectiveMPSChain_cyclicShift}
+    to compare the chain with its cyclic shift.  The resulting gauges give the
+    \(L_v,R_v\) expression of
+    Corollary~\ref{cor:exists_gauge_to_first_of_cyclicShiftInvariantState}.
+    The source then uses the identities
+    \(R_vL_{v+1}^{-1}=Z_0^{-1}\) and the cyclic boundary condition to rewrite
+    the whole closed-chain contraction as the contraction of one repeated
+    tensor.  This final repeated-tensor construction is the remaining
+    formalization step.
+\end{proof}
+
 \begin{theorem}[Uniqueness of the injective closed-chain gauge]%
     \label{thm:fundamentalTheorem_injectiveMPSChain_gauge_unique}
     \lean{TNLean.PEPS.fundamentalTheorem_injectiveMPSChain_gauge_unique}
@@ -1418,11 +1456,6 @@ stated for one physical dimension $d$ and one bond dimension $D$ around the
 chain, while \cite{Molnar2018NormalPEPS} places no restriction on the local
 dimensions; this uniform-dimension restriction is the only narrowing.
 % Paper-gap note: docs/paper-gaps/peps_normal_ft_section3_route.tex
-The translation-symmetry corollary in \cite{Molnar2018NormalPEPS}, that a
-non-translation-invariant injective chain whose state is translation invariant
-admits a translation-invariant description with the same bond dimension, is a
-statement about a single chain rather than a comparison of two, and is not part
-of this section.
 
 \section{The vertex-injective case and the residual edge scalars}
 
