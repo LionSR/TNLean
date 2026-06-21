@@ -354,7 +354,7 @@ theorem projectedChoiPosSemidef_of_cp
   have hchoi : (choiMatrix T).PosSemidef :=
     choiMatrix_of_kraus_posSemidef K T hK
   simpa [IsProjectedChoiPosSemidef, projectedChoiMatrix,
-    Matrix.one_sub_omegaProj_conjTranspose (d := D)] using
+    Matrix.omegaProj_conjTranspose (d := D)] using
     hchoi.mul_mul_conjTranspose_same
       ((1 : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) - Matrix.omegaProj D)
 

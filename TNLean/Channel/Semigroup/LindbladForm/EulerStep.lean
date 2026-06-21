@@ -161,7 +161,8 @@ theorem cp_semigroup_implies_ccp_generator
       rw [hgp_sandwich 0, hg0]
       change P * Matrix.omegaProj D * P = 0
       have hPω : P * Matrix.omegaProj D = 0 := by
-        simpa [P] using Matrix.one_sub_omegaProj_mul_omegaProj (d := D)
+        simpa [P] using
+          IsIdempotentElem.one_sub_mul_self (Matrix.omegaProj_mul_self (d := D))
       simp [hPω]
     have hg_slope :
         Filter.Tendsto (slope g 0) (nhdsWithin 0 (Set.Ioi 0))
