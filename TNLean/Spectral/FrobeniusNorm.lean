@@ -86,18 +86,8 @@ lemma matToES_finset_sum {ι : Type*} (s : Finset ι)
 
 lemma norm_matToES_sq (M : Matrix (Fin m) (Fin n) ℂ) :
     ‖matToES M‖ ^ 2 = frobSq M := by
-  rw [frobSq_eq_sum]
-  rw [sq, ← @inner_self_eq_norm_mul_norm ℂ]
-  change RCLike.re (@inner ℂ _ _ (matToES M) (matToES M)) = _
-  simp only [PiLp.inner_apply, RCLike.inner_apply', matToES_apply, starRingEnd_apply]
-  rw [show (∑ x : Fin m × Fin n, star (M x.1 x.2) * M x.1 x.2) =
-    ∑ i, ∑ j, star (M i j) * M i j from Fintype.sum_prod_type _]
-  simp only [Complex.re_sum, RCLike.re_to_complex]
-  congr 1; ext i; congr 1; ext j
-  rw [show star (M i j) * M i j = (↑(‖M i j‖ ^ 2) : ℂ) from by
-    simpa [Complex.normSq_eq_norm_sq] using
-      (Complex.normSq_eq_conj_mul_self (z := M i j)).symm]
-  exact Complex.ofReal_re _
+  rw [EuclideanSpace.norm_sq_eq, frobSq_eq_sum]
+  exact Fintype.sum_prod_type fun p : Fin m × Fin n => ‖M p.1 p.2‖ ^ 2
 
 /-- The Euclidean-space norm of a flattened matrix is the Frobenius norm. -/
 lemma norm_matToES_eq_frobenius_norm (M : Matrix (Fin m) (Fin n) ℂ) :
