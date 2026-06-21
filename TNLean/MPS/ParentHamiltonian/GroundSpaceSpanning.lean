@@ -25,7 +25,7 @@ variable {d : ℕ}
 
 /-- Zero energy for a block-diagonal parent Hamiltonian lies in the BNT vector
 span once the periodic chain constraints split into the block constraints and
-each block constraint is one-dimensional.
+each block chain space is contained in its periodic MPS line.
 
 Let \(B=\bigoplus_{j=0}^{r-1}\mu_jA_j\). If
 \[

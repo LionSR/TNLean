@@ -322,15 +322,26 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     \[
         \ker H_L^{(N)}(B)\subseteq \mathcal G_{N,L}(B).
     \]
-    The assumed splitting therefore places every zero-energy vector in
-    $\bigvee_j\mathcal G_{N,L}(A_j)$. The blockwise containments give
+    Together with the splitting hypothesis,
+    \[
+        \ker H_L^{(N)}(B)
+        \subseteq
+        \mathcal G_{N,L}(B)
+        \subseteq
+        \bigvee_j\mathcal G_{N,L}(A_j).
+    \]
+    The blockwise containments give
     \[
         \bigvee_j\mathcal G_{N,L}(A_j)
         \subseteq
         \bigvee_j\mathbb C V^{(N)}(A_j),
     \]
-    and Lemma~\ref{lem:bnt_span_eq_sum_mpv_submodules} identifies the last
-    space with the BNT vector span.
+    and Lemma~\ref{lem:bnt_span_eq_sum_mpv_submodules} gives
+    \[
+        \bigvee_j\mathbb C V^{(N)}(A_j)
+        =
+        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}.
+    \]
 \end{proof}
 
 \begin{lemma}[Block-diagonal spanning is equivalent to the reverse inclusion]
