@@ -428,19 +428,21 @@ theorem kadison_schwarz_2positive
     (Matrix.PosDef.fromBlocks₂₂ (A := E (Xᴴ * X)) (B := (E X)ᴴ)
       (D := (1 : Matrix n n ℂ)) Matrix.PosDef.one).1 hBlockPsD
 
-/-- The existing Kraus-based Kadison-Schwarz inequality.
+/-- The Kraus-based Kadison-Schwarz inequality as a consequence of 2-positivity.
 
-This theorem still delegates to the direct proof in `KadisonSchwarz.lean`.
-A follow-up cleanup can reroute it through
-`IsCPMap → Is2PositiveMap → kadison_schwarz_2positive`
-to make the logical subsumption explicit. -/
+The Kraus map is completely positive, hence 2-positive, and the unital Kraus
+condition is exactly unitality of the associated linear map. -/
 theorem kadison_schwarz_from_2positive
     {d D : ℕ}
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (h_unital : KadisonSchwarz.IsUnitalKraus K)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     (KadisonSchwarz.krausMap K (Xᴴ * X) -
-      (KadisonSchwarz.krausMap K X)ᴴ * KadisonSchwarz.krausMap K X).PosSemidef :=
-  -- TODO (#22): reroute through kadison_schwarz_2positive via
-  -- IsCPMap → Is2PositiveMap → kadison_schwarz_2positive.
-  KadisonSchwarz.kadison_schwarz K h_unital X
+      (KadisonSchwarz.krausMap K X)ᴴ * KadisonSchwarz.krausMap K X).PosSemidef := by
+  let E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ := Kraus.mapLM K
+  have hCP : IsCPMap E := ⟨d, K, fun _ => rfl⟩
+  have hUnital : KadisonSchwarz.IsUnitalMap E := by
+    simpa [E, KadisonSchwarz.IsUnitalMap, Kraus.map, KadisonSchwarz.IsUnitalKraus,
+      Matrix.mul_one] using h_unital
+  simpa [E, Kraus.map, KadisonSchwarz.krausMap] using
+    kadison_schwarz_2positive E hCP.is2PositiveMap hUnital X
