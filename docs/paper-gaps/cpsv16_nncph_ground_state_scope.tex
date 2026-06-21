@@ -98,7 +98,14 @@ strongly by every local term, then
 \leanid{MPSTensor.bntMPSVectorSpan_le_ker_parentHamiltonian_of_forall_annihilates}
 and
 \leanid{MPSTensor.bntMPSVectorSpan_le_ker_parentHamiltonian_of_forall_frustrationFree}.}
-This does not prove the reverse inclusion.
+For a block-diagonal tensor with nonzero weights,
+\leanid{MPSTensor.hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_iff_ker_le_bntMPSVectorSpan}
+now packages the source spanning equation as exactly the reverse containment,
+using this easy inclusion.  Its nearest-neighbor specialization,
+\leanid{MPSTensor.hasNNCPHGroundSpaces_toTensorFromBlocks_iff_forall_isNNCPH_and_ker_le_bntMPSVectorSpan},
+states the all-chain condition as translated two-site commutation together with
+the same reverse containment for every \(N>2\).  The reverse containment itself
+is not proved here.
 
 This still does not prove the full source theorem.  The present declarations do
 not yet prove the named ground-space spanning condition, the three-way
