@@ -60,6 +60,10 @@ clause from Definition 3.9.
 * `MPSTensor.rfp_implies_nncph_ground_state` — the same direction with the
   zero-energy ground-vector equation for the MPS vector included, but without
   the source ground-space spanning assertion.
+* `MPSTensor.hasNNCPHGroundSpaces_iff_forall_isNNCPH_and_groundSpaceSpanning` —
+  the all-chain source condition is equivalently all-chain nearest-neighbor
+  commutation together with the ground-space spanning clause of
+  arXiv:1606.00608, Definition 3.9.
 * `MPSTensor.nncph_implies_rfp` — axiom-backed reverse implication from the
   all-chain NNCPH ground-space condition to RFP.
 
@@ -272,6 +276,30 @@ theorem hasNNCPHGroundSpaces_iff_forall_isNNCPHGroundState_and_groundSpaceSpanni
         h.hasParentHamiltonianGroundSpaceSpanning⟩
   · rintro ⟨hGround, hSpan⟩ N hN
     exact ⟨hGround N hN, hSpan N hN⟩
+
+/-- The all-chain NNCPH ground-space condition is equivalently the all-chain
+nearest-neighbor commutation equations together with the source ground-space
+spanning clause.
+
+For \(N>2\), the zero-energy equation for \(V^{(N)}(B)\) is an unconditional
+consequence of the parent-Hamiltonian construction. It therefore need not be
+assumed separately; the remaining conditions are the length-two commuting
+condition and the spanning equation of arXiv:1606.00608, Definition 3.9.
+
+See arXiv:1606.00608, Definition 3.9 and Theorem 3.10(iii). -/
+theorem hasNNCPHGroundSpaces_iff_forall_isNNCPH_and_groundSpaceSpanning
+    {B : MPSTensor d D}
+    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)} :
+    HasNNCPHGroundSpaces B A ↔
+      (∀ N : ℕ, 2 < N → IsNNCPH B N) ∧
+        HasParentHamiltonianGroundSpaceSpanning B 2 A := by
+  constructor
+  · intro h
+    exact
+      ⟨fun N hN => (h N hN).isNNCPH,
+        h.hasParentHamiltonianGroundSpaceSpanning⟩
+  · rintro ⟨hComm, hSpan⟩ N hN
+    exact ⟨(hComm N hN).isNNCPHGroundState (le_of_lt hN), hSpan N hN⟩
 
 /-- If each BNT vector is killed by the parent Hamiltonian, then their span is
 contained in the parent-Hamiltonian kernel.
