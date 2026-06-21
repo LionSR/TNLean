@@ -36,7 +36,10 @@ Date: 2026-04-08
 
 ## Redundancy / Mathlib Overlap
 
-- The clearest "already in Mathlib" wrappers are in `TNLean/Channel/Schwarz/OperatorMonotone.lean`: `matrix_rpow_le_rpow` is just a specialization of `CFC.rpow_le_rpow`, and `matrix_log_le_log` is a specialization of `CFC.log_le_log`. They are harmless wrappers, but they are not adding new mathematics.
+- The former "already in Mathlib" wrappers in `TNLean/Channel/Schwarz/OperatorMonotone.lean`
+  (`matrix_rpow_le_rpow`, `matrix_log_le_log`) have been removed; the remaining file records
+  Jensen-dependent corollaries rather than exact aliases for `CFC.rpow_le_rpow` or
+  `CFC.log_le_log`.
 - I did not find obvious large re-proofs of existing Mathlib theorems beyond those thin wrappers. Most local linearity lemmas are for project-specific maps, so they are duplication inside TNLean more than duplication of Mathlib.
 
 ## Closable `sorry`s
@@ -106,7 +109,7 @@ Date: 2026-04-08
 | `TNLean/Channel/Schwarz/MultiplicativeDomainFull.lean` | 382 | 0 | 0 | - | 0 | 25 | Repeats basic Kraus-map linearity lemmas already present elsewhere. |
 | `TNLean/Channel/Schwarz/MultiplicativeDomainPowers.lean` | 147 | 0 | 0 | - | 0 | 6 |  |
 | `TNLean/Channel/Schwarz/OperatorConvexity.lean` | 137 | 3 | 0 | - | 9 | 0 | actual sorry TODOs 3 actual `sorry`s; blocked on Mathlib TODOs plus a missing general Jensen theorem for positive maps. |
-| `TNLean/Channel/Schwarz/OperatorMonotone.lean` | 151 | 0 | 0 | - | 0 | 0 | imports actual-sorry module Imports an actual-sorry module. Split the proven wrappers (`matrix_rpow_le_rpow`, `matrix_log_le_log`) into a clean file and quarantine the Jensen-dependent corollaries. |
+| `TNLean/Channel/Schwarz/OperatorMonotone.lean` | 151 | 0 | 0 | - | 0 | 0 | imports actual-sorry module The former exact CFC monotonicity aliases are gone; the remaining issue is quarantine of Jensen-dependent corollaries imported from `OperatorConvexity`. |
 | `TNLean/Channel/Schwarz/PositiveMapProperties.lean` | 195 | 0 | 0 | - | 0 | 11 |  |
 | `TNLean/Channel/Schwarz/PositiveOnAbelian.lean` | 1039 | 0 | 6 | `blockForm_nonneg_of_scalarPSD_of_commuting` 458-731 (274l) | 0 | 59 | split candidate 1k+ lines and one 274-line private lemma. Split diagonal-family machinery from normal-diagonalization/application lemmas. |
 | `TNLean/Channel/Schwarz/SchwarzNormal.lean` | 82 | 0 | 0 | - | 0 | 0 |  |

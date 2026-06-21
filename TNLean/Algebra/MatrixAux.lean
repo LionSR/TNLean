@@ -97,9 +97,7 @@ theorem eq_zero_of_sum_mul_conjTranspose_eq_zero
   have htrace_zero : (B i * (B i)ᴴ).trace = 0 :=
     Complex.ext htrace_re
       (Complex.le_def.mp (Matrix.posSemidef_self_mul_conjTranspose (B i)).trace_nonneg).2.symm
-  have hmul_zero : B i * (B i)ᴴ = 0 :=
-    (Matrix.posSemidef_self_mul_conjTranspose (B i)).trace_eq_zero_iff.mp htrace_zero
-  exact Matrix.self_mul_conjTranspose_eq_zero.mp hmul_zero
+  exact Matrix.trace_mul_conjTranspose_self_eq_zero_iff.mp htrace_zero
 
 /-- If `∑ᵢ Bᵢ† * Bᵢ = 0`, then every `Bᵢ` is zero. -/
 theorem eq_zero_of_sum_conjTranspose_mul_self_eq_zero
