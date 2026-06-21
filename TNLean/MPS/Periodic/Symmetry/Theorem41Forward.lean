@@ -7,8 +7,9 @@ import TNLean.MPS.Periodic.Symmetry.Theorem41Defs
 /-!
 # Theorem 4.1, forward direction
 
-This module contains the forward half of Theorem 4.1 together with the pullback
-lemmas used in its current conditional formalization.
+This module contains the forward half of arXiv:1708.00029, Theorem 4.1
+(`thm:div`), together with the formal pullback tensor \(C\) introduced in
+lines 735--743 of the paper.
 -/
 
 open scoped Matrix BigOperators
@@ -266,18 +267,18 @@ noncomputable def isIrreducibleForm_kraus_isometry
     intro N τ
     exact (hPullbackSame N τ).trans (hBlocksSame N τ)
 
-/-- **Pullback stage of the forward canonicalization roadmap for Theorem 4.1.**
+/-- **Pullback tensor in the forward proof of Theorem 4.1.**
 
 From a `p`-refinement witness `(A, W)` for `B`, the `W`-pullback tensor
 `C τ := ∑_σ W(τ, σ) • B σ` has the same transfer map as `B` and the same MPV
 family as `blockTensor A p`.
 
-This proves the first three steps of the forward-direction condition
-`PRefinementCanonicalization`: construct the pullback, identify its transfer map
-using `transferMap_kraus_isometry`, and rewrite the coefficient-level refinement
-identity as a `SameMPV` statement. The remaining gap is therefore exactly the
-periodic equal-case / canonical-gauge reduction from this `SameMPV` statement to
-a left-canonical root witness. -/
+This is the tensor \(C\) of arXiv:1708.00029, lines 735--743:
+\[
+  C^{i_1,\ldots,i_p}=\sum_i W^{(i_1,\ldots,i_p),i}B^i .
+\]
+The theorem records the formal consequences of this definition before the
+paper applies the equal-case periodic Fundamental Theorem. -/
 theorem pRefinementCanonicalization_pullback
     (B : MPSTensor d D) (p : ℕ)
     (hRefine : IsPRefinable B p) :
@@ -299,15 +300,14 @@ theorem pRefinementCanonicalization_pullback
     _ = mpv (blockTensor A p) τ := by
           simpa [mpv_eq] using (hCoeff N τ).symm
 
-/-- **Pullback stage with irreducible-form input for Theorem 4.1.**
+/-- **The pullback tensor is still in irreducible form II.**
 
 If the refined tensor `B` is already in irreducible form II, then the pullback
 `C τ := ∑_σ W(τ, σ) • B σ` coming from a `p`-refinement witness is again in
 irreducible form II, has the same transfer map as `B`, and has the same MPV
-family as `blockTensor A p`. This isolates the genuinely new input now
-available on `main`: the first stage of the paper's proof preserves the
-periodic block structure of `B`; the remaining forward-direction gap is the
-blocked equal-case / root-reconstruction stage after this theorem. -/
+family as `blockTensor A p`. This formalizes the sentence in arXiv:1708.00029,
+lines 744--745, that \(C\), viewed with \((i_1,\ldots,i_p)\) as one physical
+index, is again in irreducible form II. -/
 theorem pRefinementCanonicalization_pullback_of_irreducibleForm
     (B : MPSTensor d D) (hB : IsIrreducibleForm B) (p : ℕ)
     (hRefine : IsPRefinable B p) :
@@ -380,7 +380,7 @@ def PeripheralEqualCaseRootFromZGauge (d D p : ℕ) : Prop :=
         (∑ i : Fin d, (A' i)ᴴ * A' i = 1) ∧
         transferMap C = transferMap (blockTensor A' p)
 
-/-- **Blocked equal-case/root-reconstruction hypothesis for Theorem 4.1.**
+/-- **Blocked equal-case root hypothesis for Theorem 4.1.**
 
 This Prop isolates exactly the remaining forward input after
 `pRefinementCanonicalization_pullback_of_irreducibleForm`: whenever an
@@ -390,12 +390,10 @@ same blocked transfer map, `E_C = E_{A'^{[p]}}`.
 
 In the paper this is the point where the blocked equal-case Fundamental Theorem
 (source theorem `thm:bdequal`, arXiv:1708.00029, lines 643--656) is combined
-with the blocked-to-root reconstruction that distributes the resulting `Z`-gauge across the cyclic
-sectors of `A`. Formalizing that existence step is the remaining forward
-obstruction, so we keep the resulting existence statement as a separate
-hypothesis. The theorem `peripheralEqualCase_periodicFT_of_sameMPV` below
-shows that this statement follows from the sharper split into blocked
-`Z`-gauge extraction and blocked-to-root reconstruction. -/
+with the phase-distribution construction in lines 765--810, where the scalars
+\(c_{j,\alpha}\) are redistributed to form \(A'_j\) and then
+\(\widetilde A = U^\dagger A' U\). The formal statement is kept as a separate
+hypothesis until that source argument is fully formalized. -/
 def PeripheralEqualCasePeriodicFTOfSameMPV (d D p : ℕ) : Prop :=
   ∀ {A : MPSTensor d D} {C : MPSTensor (blockPhysDim d p) D},
     IsIrreducibleForm C →
@@ -422,7 +420,7 @@ theorem peripheralEqualCase_periodicFT_of_sameMPV
   obtain ⟨m, hm, hZ⟩ := hZGauge (A := A) (C := C) hC hSame
   exact hRoot (A := A) (C := C) (m := m) hC hm hZ
 
-/-- **Canonicalization hypothesis for the forward direction of Theorem 4.1.**
+/-- **Forward root hypothesis for Theorem 4.1.**
 
 This Prop states the analytic content that remains between the
 coefficient-level `IsPRefinable B p` (a trace-level MPV identity) and the
@@ -430,23 +428,20 @@ channel-level conclusion needed to exhibit `E_B` as a `p`-th power: any
 `p`-refinement of `B` can be *canonicalized* to a witness that is both
 left-canonical and produces a matching transfer map under `p`-blocking.
 
-Morally, the canonicalization is produced as follows. Given a witness
-`(A, W)` from `IsPRefinable B p`, form the `W`-pullback tensor
-`C τ := ∑_σ W(τ, σ) · B σ`. The theorems
+In the source proof, this begins with the \(W\)-pullback tensor
+\(C^{i_1,\ldots,i_p}=\sum_i W^{(i_1,\ldots,i_p),i}B^i\)
+from arXiv:1708.00029, lines 735--743. The theorems
 `pRefinementCanonicalization_pullback` and
 `pRefinementCanonicalization_pullback_of_irreducibleForm` now cover this
 first stage, giving `E_C = E_B`, `SameMPV C (blockTensor A p)`, and preserving
 irreducible form II when `B` already has it. The periodic equal-case
 Fundamental Theorem (source theorem `thm:bdequal`, arXiv:1708.00029,
 lines 643--656, available here as the hypothesis `PeriodicEqualCaseFT`) then
-supplies a `Z`-gauge equivalence
-between `C` and `blockTensor A p`, which — combined with a unitary
-canonical-form reduction for irreducible form II and Wolf Theorem 2.18 —
-produces the sought left-canonical witness. Formalizing this remaining second
-stage in Lean still requires supporting theory (canonical unitary gauge, Kraus
-uniqueness), so we expose the end-result predicate as a hypothesis. The theorem
+supplies a `Z`-gauge relation between `C` and `blockTensor A p`. The remaining
+source step is the distribution of this blocked `Z`-phase across the cyclic
+blocks of `A` in lines 765--810. The theorem
 `pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV`
-below shows that this coarse hypothesis follows from the sharper blocked-stage
+shows that this hypothesis follows from the sharper blocked equal-case root
 hypothesis `PeripheralEqualCasePeriodicFTOfSameMPV`. -/
 def PRefinementCanonicalization (d D p : ℕ) : Prop :=
   ∀ {B : MPSTensor d D}, IsIrreducibleForm B → IsPRefinable B p →

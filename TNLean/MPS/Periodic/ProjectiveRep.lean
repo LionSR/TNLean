@@ -7,15 +7,16 @@ import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.CocycleCohomology
 
 /-!
-# Periodic MPS — conditional projective data after Corollary 4.1
+# Periodic MPS — conditional projective representation after the symmetry corollary
 
-This file starts from `MPSTensor.cor_4_1_physical_symmetry_zgauge_explicit`
-(obtained in `MPS/Periodic/Symmetry.lean`) and, under an additional coherence
-hypothesis, constructs a projective representation of the symmetry group `G`
-on the bond space.
-The source paper arXiv:1708.00029, Section 4.2 proves the symmetry-to-`Z`-gauge
-corollary and then says that its consequences will be explored elsewhere; it does not
-prove the scalar cocycle or cohomological interpretation recorded below.
+This file starts from the conditional group-action reformulation
+`MPSTensor.cor_4_1_physical_symmetry_zgauge_explicit`. The source paper
+arXiv:1708.00029, Section 4.2, lines 834--845, proves a symmetry-to-`Z`-gauge
+corollary for a single local unitary and then says that its consequences will be
+explored elsewhere. It does not choose the virtual gauges coherently over a
+group, prove a scalar cocycle, or prove the cohomological interpretation
+recorded below. Under an additional coherence hypothesis, this file constructs
+a projective representation of the symmetry group `G` on the bond space.
 
 The injective analogue is `MPSTensor.virtual_rep_of_symmetric_injective`
 (in `MPS/Symmetry/VirtualRepresentation.lean`): there, gauge uniqueness
@@ -25,17 +26,17 @@ there is a non-trivial `Z`-gauge ambiguity (`Z_g^{m_g} = 1`), so an additional
 analytic input is required to reduce the full rigidity back to a scalar
 cocycle. Following the established repository
 pattern (see `PeriodicEqualCaseFT`), that input is exposed as an explicit
-hypothesis `PeriodicProjectiveRigidity`. The remainder of the projective-
-representation data - the cocycle identity and the construction of a
-`ProjectiveRepresentation` on the bond space - is formalised here.
+hypothesis `PeriodicProjectiveRigidity`. The remaining projective-representation
+conclusions - the cocycle identity and the construction of a
+`ProjectiveRepresentation` on the bond space - are formalized here.
 
 ## Main definitions and results
 
 * `MPSTensor.PeriodicProjectiveRigidity` — the analytic hypothesis recording
   the existence of a compatible family `Y : G → GL (Fin D) ℂ` together with a
   scalar 2-cochain `u : G × G → ℂˣ` satisfying the projective law on the
-  bond space while every `Y g` realises the Corollary-4.1 intertwining with
-  the twisted tensor.
+  bond space, while every `Y g` realizes the pointwise `Z`-gauge intertwining
+  modeled on the symmetry corollary.
 * `MPSTensor.cor_4_1_projective_rep` — the conditional projective-representation
   construction:
   from `PeriodicProjectiveRigidity`, produce a
@@ -68,13 +69,13 @@ variable {d D : ℕ} {G : Type*} [Group G]
 /-- **Periodic projective-representation rigidity hypothesis.**
 
 For an on-site symmetry `U : G →* Mat_d(ℂ)` of a periodic tensor `A`,
-`PeriodicProjectiveRigidity A U` records the coherent choice of the
-`Y`-gauges obtained from Corollary 4.1: there is a family
+`PeriodicProjectiveRigidity A U` records a coherent choice extending the
+pointwise `Z`-gauge conclusion modeled on the source symmetry corollary: there is a family
 `Y : G → GL (Fin D) ℂ` and a scalar 2-cochain `u : G × G → ℂˣ` such that
 
 1. Each `Y g`, together with some `Z`-matrix (satisfying the period, commutation
-   and gauge-intertwining data of Corollary 4.1), realises the `Z`-gauge
-   equivalence of Corollary 4.1 between `A` and the `g`-twisted tensor.
+   and gauge-intertwining conditions), realizes the pointwise `Z`-gauge
+   intertwining between `A` and the `g`-twisted tensor.
 2. The family satisfies the projective multiplication law on the bond space:
    `(Y h) · (Y g) = u(g, h) • Y (g * h)` as matrices.
 
@@ -98,18 +99,18 @@ def PeriodicProjectiveRigidity
 
 /-! ## Projective representation from the rigidity hypothesis -/
 
-/-- **Conditional projective representation from the Corollary 4.1 data.**
+/-- **Conditional projective representation from the group-action reformulation.**
 
-If the `Y_g` family from `cor_4_1_physical_symmetry_zgauge_explicit` can be chosen
-to satisfy the periodic projective-representation rigidity hypothesis, then the
-bond-space gauges assemble into a projective representation of `G`:
-there exist a scalar 2-cochain `ω : G × G → ℂˣ` and a
+If the pointwise virtual gauges in `PeriodicProjectiveRigidity` can be chosen
+coherently, then the bond-space gauges assemble into a projective representation
+of `G`: there exist a scalar 2-cochain `ω : G × G → ℂˣ` and a
 `TNLean.Algebra.ProjectiveRepresentation` on the bond space whose virtual gauges
-still realise the Corollary-4.1 intertwining with the twisted tensors.
+still realize the pointwise `Z`-gauge intertwining with the twisted tensors.
 
-The source paper arXiv:1708.00029, Section 4.2 supplies the per-element
-`Z`-gauge conclusion; the coherence of the family `(Y_g)_{g ∈ G}` is the
-extra hypothesis `PeriodicProjectiveRigidity`.
+The source paper arXiv:1708.00029, Section 4.2, lines 834--845, supplies only
+the `Z`-gauge conclusion for a single local unitary. The coherent family
+`(Y_g)_{g ∈ G}` and the scalar projective law are the extra content of
+`PeriodicProjectiveRigidity`.
 
 The construction uses the *inversion convention* of
 `MPS/Symmetry/VirtualRepresentation.lean`: the virtual representation is
@@ -160,9 +161,9 @@ theorem cor_4_1_projective_rep_cocycle
 
 High-level consequence of `cor_4_1_projective_rep` together with the cocycle
 condition of `cor_4_1_projective_rep_cocycle`: the explicit rigidity hypothesis
-turns the bond-space symmetry data supplied by Corollary 4.1 into a coherent
-projective representation of `G` on the bond space, with factor system satisfying
-the 2-cocycle identity whenever `D > 0`.
+turns the assumed bond-space gauges into a coherent projective representation
+of `G` on the bond space, with factor system satisfying the 2-cocycle identity
+whenever `D > 0`.
 
 The irreducible-form and unitarity hypotheses belong to the theorem producing
 `PeriodicProjectiveRigidity A U`; this theorem records only the resulting
