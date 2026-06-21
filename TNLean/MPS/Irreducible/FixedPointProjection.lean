@@ -232,19 +232,6 @@ end SupportProjLemmas
 
 section FixedPointInvariant
 
-/-- Adjoint identity for dot product: `star x ⬝ᵥ (M *ᵥ y) = star (Mᴴ *ᵥ x) ⬝ᵥ y`.
-
-This auxiliary lemma is intentionally kept local to this file: unlike
-`orthogonalProjection_posSemidef` in `Irreducible/Basic`, this is a small linear-algebra
-rewrite used only in the fixed-point support-projection argument below, and there is no
-second in-repo call site.
--/
-private lemma dotProduct_mulVec_conjTranspose
-    (M : Matrix (Fin D) (Fin D) ℂ)
-    (x y : Fin D → ℂ) :
-    star x ⬝ᵥ (M *ᵥ y) = star (Mᴴ *ᵥ x) ⬝ᵥ y := by
-  rw [Matrix.dotProduct_mulVec, Matrix.star_mulVec, Matrix.conjTranspose_conjTranspose]
-
 /-- If `ρ` is PSD and `E_A(ρ)=ρ`, then `ker ρ` is invariant under each adjoint Kraus operator.
 
 Formally, `ρ *ᵥ x = 0` implies `ρ *ᵥ ((A i)ᴴ *ᵥ x) = 0`.
@@ -269,7 +256,7 @@ private lemma ker_invariant_under_adjoint
     -- reassociate and use the adjoint identity
     have : (A i * ρ * (A i)ᴴ) *ᵥ x = A i *ᵥ (ρ *ᵥ ((A i)ᴴ *ᵥ x)) := by
       simp [Matrix.mulVec_mulVec, Matrix.mul_assoc]
-    rw [this, dotProduct_mulVec_conjTranspose]
+    rw [this, HermitianHelpers.dotProduct_mulVec_conjTranspose]
   have h_each_zero : ∀ i : Fin d,
       star ((A i)ᴴ *ᵥ x) ⬝ᵥ (ρ *ᵥ ((A i)ᴴ *ᵥ x)) = 0 := by
     intro i
