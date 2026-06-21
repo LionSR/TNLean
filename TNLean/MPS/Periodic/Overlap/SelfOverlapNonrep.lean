@@ -129,7 +129,7 @@ lemma offDiag_eigenvector_eq_zero_of_isPeriodic
       have hc := congrArg Matrix.conjTranspose (hShiftLetter b i)
       simp only [Matrix.conjTranspose_mul, (hPproj b).1.eq, (hPproj (b + 1)).1.eq] at hc
       exact hc.symm
-    -- Each Kraus term already carries the projectors: `A i (P a X P b) A iᴴ` is
+    -- Each matrix summand already carries the projectors: `A i (P a X P b) A iᴴ` is
     -- supported on the `(a + 1, b + 1)` block.
     have hterm : ∀ i : Fin d,
         A i * (P a * X * P b) * (A i)ᴴ =
