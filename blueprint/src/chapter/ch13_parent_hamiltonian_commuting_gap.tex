@@ -295,24 +295,33 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     \leanok
     \uses{def:parent_hamiltonian_ground_space_spanning,
         lem:bnt_span_le_parent_hamiltonian_kernel, def:has_nncph_ground_spaces}
-    Let $B=\bigoplus_j\mu_jA_j$, with every $\mu_j\ne0$. Then the source
-    parent-Hamiltonian spanning condition
+    Let $B=\bigoplus_{j=0}^{r-1}\mu_jA_j$, with every $\mu_j\ne0$. Then, for
+    every $N>L$, the source parent-Hamiltonian spanning condition
     \[
         \ker H_L^{(N)}(B)
         =
-        \spn\{V^{(N)}(A_j):j=1,\ldots,g\}
-        \qquad (N>L)
+        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}
     \]
-    is equivalent to the reverse containment
+    is equivalent to the reverse containment, for the same $N$:
     \[
         \ker H_L^{(N)}(B)
         \subseteq
-        \spn\{V^{(N)}(A_j):j=1,\ldots,g\}
-        \qquad (N>L).
+        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}.
     \]
-    In the nearest-neighbor case, the all-chain source condition is therefore
-    equivalent to the translated two-site commutation equations together with
-    this reverse containment for every $N>2$.
+    In the nearest-neighbor case, the all-chain source condition is equivalent
+    to
+    \[
+        \begin{aligned}
+        \operatorname{HasNNCPHGroundSpaces}(B,A)
+        \Longleftrightarrow
+        &\left(\forall N>2,\ \operatorname{IsNNCPH}(B,N)\right)\\
+        &{}\land
+        \left(\forall N>2,\;
+        \ker H_2^{(N)}(B)
+        \subseteq
+        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}\right).
+        \end{aligned}
+    \]
 \end{lemma}
 
 \begin{proof}
@@ -320,14 +329,26 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     The forward direction of the displayed equality gives the containment by
     rewriting the kernel. Conversely, for $N>L$ the easy inclusion above gives
     \[
-        \spn\{V^{(N)}(A_j):j=1,\ldots,g\}
+        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}
         \subseteq
         \ker H_L^{(N)}(B),
     \]
-    and the assumed reverse containment gives equality. For $L=2$, combine
-    this equivalence with the decomposition of the all-chain NNCPH
-    ground-space condition into two-site commutation and the source spanning
-    clause.
+    and the assumed reverse containment gives equality. For $L=2$, the
+    all-chain nearest-neighbor condition decomposes as
+    \[
+        \begin{aligned}
+        \operatorname{HasNNCPHGroundSpaces}(B,A)
+        \Longleftrightarrow
+        &\left(\forall N>2,\ \operatorname{IsNNCPH}(B,N)\right)\\
+        &{}\land
+        \left(\forall N>2,\;
+        \ker H_2^{(N)}(B)
+        \subseteq
+        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}\right).
+        \end{aligned}
+    \]
+    The second conjunct is the reverse containment just identified with the
+    source spanning clause.
 \end{proof}
 
 \begin{theorem}[Renormalization fixed points have commuting nearest-neighbor parent terms]\label{thm:rfp_implies_nncph}

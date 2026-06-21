@@ -9,10 +9,11 @@ import TNLean.MPS.ParentHamiltonian.Commuting
 /-!
 # Ground-space spanning for block-diagonal parent Hamiltonians
 
-This file packages the source ground-space spanning clause from
-arXiv:1606.00608, Definition 3.9, for block-diagonal tensors.  The easy
-inclusion of the BNT span into the parent-Hamiltonian kernel is already proved;
-therefore the source spanning condition is equivalent to the reverse inclusion.
+This file reduces the source ground-space spanning clause from
+arXiv:1606.00608, Definition 3.9, for block-diagonal tensors to the reverse
+inclusion. The easy inclusion of the BNT span into the parent-Hamiltonian kernel
+is already proved; therefore the source spanning condition is equivalent to the
+reverse inclusion.
 -/
 
 open scoped Matrix BigOperators
@@ -24,9 +25,9 @@ variable {d : ℕ}
 /-- For a block-diagonal tensor with nonzero weights, the source parent-Hamiltonian
 ground-space spanning clause is equivalent to the reverse inclusion.
 
-Let \(B=\bigoplus_j\mu_jA_j\), with every \(\mu_j\ne0\).  The inclusion
+Let \(B=\bigoplus_{j=0}^{r-1}\mu_jA_j\), with every \(\mu_j\ne0\). The inclusion
 \[
-  \operatorname{span}\{V^{(N)}(A_j):j=1,\ldots,g\}
+  \operatorname{span}\{V^{(N)}(A_j):j=0,\ldots,r-1\}
   \subseteq \ker H_L^{(N)}(B)
 \]
 is the easy direction, already proved by
@@ -35,7 +36,7 @@ Definition 3.9 spanning equation is reduced to proving, for every \(N>L\),
 \[
   \ker H_L^{(N)}(B)
   \subseteq
-  \operatorname{span}\{V^{(N)}(A_j):j=1,\ldots,g\}.
+  \operatorname{span}\{V^{(N)}(A_j):j=0,\ldots,r-1\}.
 \]
 See arXiv:1606.00608, Definition 3.9, source lines 522--524. -/
 theorem hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_iff_ker_le_bntMPSVectorSpan
