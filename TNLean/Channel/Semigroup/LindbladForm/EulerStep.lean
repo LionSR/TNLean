@@ -421,47 +421,6 @@ private theorem norm_eulerStep_toCLM_le [NeZero D]
               (s * (‖(endEquiv (D := D)) G.toLinearMap‖ +
                 T * ‖(endEquiv (D := D)) (quadMap G)‖))
 
-private theorem norm_pow_sub_pow_le [NeZero D]
-    {A B : sgCLM D} {M : ℝ} (hM : 1 ≤ M) (hA : ‖A‖ ≤ M) (hB : ‖B‖ ≤ M) :
-    ∀ m : ℕ, ‖A ^ m - B ^ m‖ ≤ (m : ℝ) * M ^ m * ‖A - B‖
-  | 0 => by
-      simp only [pow_zero, sub_self, norm_zero, Nat.cast_zero, zero_mul]
-      exact le_rfl
-  | m + 1 => by
-      haveI : NormOneClass (sgCLM D) := by
-        constructor
-        change ‖(ContinuousLinearMap.id ℂ (sgMat D))‖ = 1
-        exact ContinuousLinearMap.norm_id (𝕜 := ℂ) (E := sgMat D)
-      have hm := norm_pow_sub_pow_le hM hA hB m
-      have hsplit : A ^ (m + 1) - B ^ (m + 1) = A ^ m * (A - B) + (A ^ m - B ^ m) * B := by
-        rw [pow_succ, pow_succ, mul_sub, sub_mul]
-        abel
-      rw [hsplit]
-      have hM_nonneg : 0 ≤ M := le_trans (by norm_num) hM
-      have hδ_nonneg : 0 ≤ ‖A - B‖ := norm_nonneg _
-      calc
-        ‖A ^ m * (A - B) + (A ^ m - B ^ m) * B‖ ≤
-            ‖A ^ m * (A - B)‖ + ‖(A ^ m - B ^ m) * B‖ := norm_add_le _ _
-        _ ≤ ‖A ^ m‖ * ‖A - B‖ + ‖A ^ m - B ^ m‖ * ‖B‖ := by
-              gcongr <;> exact norm_mul_le _ _
-        _ ≤ M ^ m * ‖A - B‖ + ((m : ℝ) * M ^ m * ‖A - B‖) * M := by
-              gcongr
-              · have hpowA : ‖A ^ m‖ ≤ ‖A‖ ^ m :=
-                  @norm_pow_le (sgCLM D)
-                    (TNOperatorSpace.instNormedRingMatrixCLM (Fin D)).toSeminormedRing
-                    (instNormOneClassSgCLM (D := D)) A m
-                exact hpowA.trans <|
-                  pow_le_pow_left₀ (show 0 ≤ ‖A‖ from norm_nonneg _) hA _
-        _ = M ^ m * ‖A - B‖ + (m : ℝ) * M ^ (m + 1) * ‖A - B‖ := by
-              ring_nf
-        _ ≤ M ^ (m + 1) * ‖A - B‖ + (m : ℝ) * M ^ (m + 1) * ‖A - B‖ := by
-              have hpowδ : M ^ m * ‖A - B‖ ≤ M ^ (m + 1) * ‖A - B‖ :=
-                mul_le_mul_of_nonneg_right (pow_le_pow_right₀ hM (Nat.le_succ m)) hδ_nonneg
-              nlinarith
-        _ = ((m + 1 : ℕ) : ℝ) * M ^ (m + 1) * ‖A - B‖ := by
-              rw [Nat.cast_add, Nat.cast_one]
-              ring
-
 private theorem generatorDecomp_cp_semigroup (G : GeneratorDecomp D) :
     ∀ t : ℝ, 0 ≤ t → IsCPMap (expSemigroup G.toLinearMap t) := by
   intro t ht
@@ -521,8 +480,8 @@ private theorem generatorDecomp_cp_semigroup (G : GeneratorDecomp D) :
         exact hlocal0.trans <| mul_le_mul_of_nonneg_left hinside (sq_nonneg s)
       have hpow : ‖F ^ (n + 1) - S ^ (n + 1)‖ ≤
           ((n + 1 : ℕ) : ℝ) * (Real.exp (s * C0)) ^ (n + 1) * ‖F - S‖ :=
-        norm_pow_sub_pow_le (D := D) (A := F) (B := S) (M := Real.exp (s * C0))
-          hM hF_le hS_le (n + 1)
+        norm_pow_sub_pow_le_of_norm_le (D := D) (A := F) (B := S)
+          (M := Real.exp (s * C0)) hM hF_le hS_le (n + 1)
       have hMpow : (Real.exp (s * C0)) ^ (n + 1) = Real.exp (t * C0) := by
         dsimp [s]
         rw [← Real.exp_nat_mul]
