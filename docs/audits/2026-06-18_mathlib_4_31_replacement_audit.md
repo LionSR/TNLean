@@ -1216,7 +1216,10 @@ In `TNLean.Channel.KrausFreedom`, the Euclidean-space inner-product instance is
 now given explicitly by `PiLp.innerProductSpace (fun _ : ι => ℂ)`.  This removes
 the former large local synthesis budget around the cached instance and makes the
 finite-dimensional Hilbert-space structure used in the rectangular isometry
-argument explicit.  The remaining local `maxHeartbeats` bound around the
+argument explicit.  A later pass removed the private pass-through abbreviations
+for the Euclidean-space inner-product and finite-dimensional structures; the
+proof now names `PiLp.innerProductSpace` and `EuclideanSpace.basisFun` directly
+at the instance site.  The remaining local `maxHeartbeats` bound around the
 partial-isometry extension theorem was retested under Lean 4.31 and is still
 needed for elaboration.
 
