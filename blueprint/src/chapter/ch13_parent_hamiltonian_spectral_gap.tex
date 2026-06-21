@@ -205,6 +205,49 @@ sufficient stronger hypotheses.
     local projector with membership in $G_L^{\mathrm{ES}}(A)$.
 \end{proof}
 
+\begin{theorem}[Zero energy gives the cyclic local constraints]
+    \label{thm:parent_hamiltonian_kernel_le_chain_ground_space}
+    \lean{MPSTensor.ker_parentHamiltonian_le_chainGroundSpace}
+    \leanok
+    \uses{def:parent_hamiltonian, def:parent_hamiltonian_es,
+        def:chain_ground_space, lem:transported_es_local_projections,
+        lem:local_term_es_kernel_restrictions, rem:projection_geometry_rowsum_identities}
+    Assume $N>0$ and $L\le N$. If a vector $\psi$ has zero energy for the
+    finite periodic parent Hamiltonian,
+    \[
+        H_N(A,L)\psi=0,
+    \]
+    then every cyclic length-$L$ restriction of $\psi$ lies in the local MPS
+    ground space. Equivalently,
+    \[
+        \ker H_N(A,L) \subseteq G_L^{(N)}(A).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Put $P_i=h_{i,\mathrm{ES}}$ and $H=\sum_iP_i$. If $Hv=0$, then
+    \[
+        0
+        =
+        \operatorname{Re}\langle Hv,v\rangle
+        =
+        \sum_i\operatorname{Re}\langle P_i v,v\rangle
+        =
+        \sum_i\|P_i v\|^2 .
+    \]
+    Each summand is nonnegative; hence $\|P_i v\|^2=0$ and therefore
+    $P_i v=0$ for every $i$. Applying this to
+    $H_{N,L}^{\mathrm{ES}}(A)=\sum_i h_{i,\mathrm{ES}}$ gives the vanishing of
+    every Hilbert-space local term. Lemma~\ref{lem:local_term_es_kernel_restrictions}
+    identifies these equations with the conditions: for all $i$ and $\tau$,
+    \[
+        R_{i,\tau}\psi\in G_L(A),
+    \]
+    which are exactly the cyclic-window defining equations of
+    $G_L^{(N)}(A)$.
+\end{proof}
+
 \begin{theorem}[Intersection property for two adjacent local kernels]
     \label{thm:adjacent_local_kernels_ground_space_es}
     \lean{MPSTensor.mem_groundSpaceES_succ_of_adjacent_localTermES_eq_zero}
@@ -348,6 +391,7 @@ sufficient stronger hypotheses.
     \lean{LinearMap.IsSymmetricProjection.re_inner_apply_apply_nonneg_of_commute}
     \lean{LinearMap.IsSymmetricProjection.re_inner_apply_apply_ge_neg_of_norm_apply_le}
     \lean{ProjectionGeometry.re_inner_sum_apply_left}
+    \lean{ProjectionGeometry.apply_eq_zero_of_sum_apply_eq_zero}
     \lean{ProjectionGeometry.re_inner_sum_apply_apply}
     \lean{ProjectionGeometry.sum_sum_eq_diag_add_offdiag}
     \lean{ProjectionGeometry.crossTerm_sum_bound_of_ordered_rowSum}
@@ -365,10 +409,11 @@ sufficient stronger hypotheses.
     finite-sum expansions of
     $\operatorname{Re}\langle (\sum_i P_i)v,v\rangle$ and
     $\operatorname{Re}\langle (\sum_i P_i)v,(\sum_i P_i)v\rangle$; the
-    diagonal/off-diagonal split of the ordered double sum; the aggregate
-    off-diagonal estimate obtained from row sums $\sum_{j\ne i}c_{ij}\le1$; and
-    the corresponding aggregate estimate for the anticommutator martingale
-    condition.
+    conclusion that a vector annihilated by a finite sum of symmetric projections
+    is annihilated by each projection; the diagonal/off-diagonal split of the
+    ordered double sum; the aggregate off-diagonal estimate obtained from row
+    sums $\sum_{j\ne i}c_{ij}\le1$; and the corresponding aggregate estimate for
+    the anticommutator martingale condition.
 \end{remark}
 
 \begin{lemma}[Ordered projection row-sum quadratic-form reduction]
