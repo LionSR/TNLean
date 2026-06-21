@@ -317,6 +317,41 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     asserting the source ground-space spanning condition.
 \end{remark}
 
+\begin{theorem}[Product-pair data and ground-space spanning give all-chain NNCPH]%
+    \label{thm:appendixB_product_pair_has_nncph_ground_spaces}
+    \lean{MPSTensor.ProductPairBridge.hasNNCPHGroundSpaces_of_groundSpaceSpanning}
+    \lean{MPSTensor.rfp_implies_hasNNCPHGroundSpaces_of_appendixBExtraction_of_groundSpaceSpanning}
+    \leanok
+    \uses{rem:product_pair_projectors, def:has_nncph_ground_spaces,
+        def:parent_hamiltonian_ground_space_spanning}
+    Suppose the Appendix~B product-of-pairs data give commuting two-site parent
+    terms for a tensor \(B\). If the nearest-neighbor parent Hamiltonian also
+    satisfies the Definition~\ref{def:parent_hamiltonian_ground_space_spanning}
+    spanning equation with BNT components \(A_1,\ldots,A_g\), then \(B\) satisfies
+    the all-chain nearest-neighbor commuting parent-Hamiltonian ground-space
+    condition of Definition~\ref{def:has_nncph_ground_spaces}.
+
+    In particular, if a normal left-canonical RFP tensor has nonzero bond
+    dimension, the Appendix~B product-of-pairs extraction, and the same
+    ground-space spanning equation, then it satisfies the full all-chain condition in
+    \cite[Theorem~3.10(iii)]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \uses{lem:parent_hamiltonian_ff, def:has_nncph_ground_space}
+    \leanok
+    The product-of-pairs equations give \(h_i h_j=h_j h_i\) for all translated
+    two-site parent terms. Lemma~\ref{lem:parent_hamiltonian_ff} gives
+    \(h_iV^{(N)}(B)=0\). For every \(N>2\), the spanning hypothesis supplies
+    \[
+        \ker H_2^{(N)}(B)
+        =
+        \spn\{V^{(N)}(A_j):j=1,\ldots,g\}
+    \]
+    These are exactly the three clauses in
+    Definition~\ref{def:has_nncph_ground_space}, uniformly in \(N\).
+\end{proof}
+
 \begin{theorem}[All-chain nearest-neighbor commuting parent-Hamiltonian ground spaces imply a renormalization fixed point]\label{thm:nncph_implies_rfp}
     \lean{MPSTensor.nncph_implies_rfp}
     \lean{Axioms.beigi_nncph_to_rfp}
