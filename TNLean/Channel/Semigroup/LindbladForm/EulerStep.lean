@@ -42,8 +42,7 @@ noncomputable section
 variable {D : ℕ}
 
 local instance instEulerNormOneClassMatrixCLM [NeZero D] :
-    @NormOneClass (MatrixCLM (Fin D))
-      (TNOperatorSpace.instNormedRingMatrixCLM (Fin D)).toNorm _ := by
+    NormOneClass (MatrixCLM (Fin D)) := by
   constructor
   change ‖(ContinuousLinearMap.id ℂ (Matrix (Fin D) (Fin D) ℂ))‖ = 1
   exact ContinuousLinearMap.norm_id (𝕜 := ℂ) (E := Matrix (Fin D) (Fin D) ℂ)
@@ -307,10 +306,7 @@ private theorem norm_expSemigroupCLM_sub_one_add_smul_le [NeZero D]
     (A : sgCLM D) {s : ℝ} (hs : 0 ≤ s) :
     ‖expSemigroupCLM A s - (1 + (s : ℂ) • A)‖ ≤ s ^ 2 * ‖A‖ ^ 2 * Real.exp (s * ‖A‖) := by
   have hrem := @norm_exp_sub_one_sub_self_le (sgCLM D)
-    (TNOperatorSpace.instNormedRingMatrixCLM (Fin D))
-    (TNOperatorSpace.instNormedAlgebraComplexMatrixCLM (Fin D))
-    (TNOperatorSpace.instCompleteSpaceMatrixCLM (Fin D))
-    (instNormOneClassSgCLM (D := D))
+    inferInstance inferInstance inferInstance (instNormOneClassSgCLM (D := D))
     (((s : ℂ) • A))
   have hnorm :
       expSemigroupCLM A s - (1 + (s : ℂ) • A) =

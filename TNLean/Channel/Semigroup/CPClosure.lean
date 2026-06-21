@@ -265,7 +265,7 @@ private theorem hasSum_expSemigroup_series
     _ _ _
     ContinuousLinearMap.toNormedRing
     ContinuousLinearMap.toNormedAlgebra
-    (TNOperatorSpace.instCompleteSpaceMatrixCLM (Fin D))
+    inferInstance
     (((t : ℂ) • endEquiv (D := D) L))
 
 /-- If `L` itself is completely positive, then `exp(tL)` is completely positive for all `t ≥ 0`. -/
