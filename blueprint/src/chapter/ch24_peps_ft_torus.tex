@@ -400,7 +400,8 @@ site-independent tensor and produces the global phase of
 
 \begin{theorem}[Fundamental Theorem for normal PEPS on the torus]%
     \label{thm:fundamentalTheorem_normalTorusPEPS}
-    \notready
+    \lean{TNLean.PEPS.fundamentalTheorem_normalTorusPEPS_unconditional}
+    \leanok
     \uses{thm:fundamentalTheorem_normalSquarePEPS,
         thm:peps_oneVertexComplementComparison,
         def:peps_torus_translation_invariant,
@@ -419,9 +420,11 @@ site-independent tensor and produces the global phase of
     by its translation covariance, and the uniqueness of $X$ and $Y$ up to a
     multiplicative constant is proved at the same sizes in
     Theorem~\ref{thm:torusAbsorbedGauge_unique_scalar} and
-    Theorem~\ref{thm:torusGauge_unique_scalar_of_perVertex}; the present
-    source-exact entry awaits only the reading of the gauge family as the two
-    class matrices $X$ and $Y$.
+    Theorem~\ref{thm:torusGauge_unique_scalar_of_perVertex}. In the torus
+    edge convention the two class matrices $X$ and $Y$ are read through this
+    translation-covariant family: seam edges carry the transposed inverse of
+    the corresponding class matrix, so this is the orientation-faithful form
+    of the source's horizontal and vertical gauges.
 \end{theorem}
 
 \begin{theorem}[Fundamental Theorem for normal PEPS on the torus,
