@@ -291,7 +291,6 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
 \begin{lemma}[Kernel containment from chain-space splitting]
     \label{lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting}
     \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan}
-    \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_pgvwc_comparison}
     \leanok
     \uses{thm:parent_hamiltonian_kernel_le_chain_ground_space,
         def:parent_hamiltonian, def:chain_ground_space, def:bnt_span,
@@ -315,11 +314,6 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
         \subseteq
         \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}.
     \]
-    In the finite-length range where the \(C^j,D^j\) comparison of
-    Perez-Garcia, Verstraete, Wolf, and Cirac gives
-    \(\mathcal G_{N,L}(B)=\bigvee_j\mathcal G_{N,L}(A_j)\), the same
-    containment follows with the splitting hypothesis supplied by that
-    comparison.
 \end{lemma}
 
 \begin{proof}
@@ -348,6 +342,62 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
         =
         \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}.
     \]
+\end{proof}
+
+\begin{lemma}[Kernel containment from the PGVWC block comparison]
+    \label{lem:block_diagonal_kernel_to_bnt_span_from_pgvwc_comparison}
+    \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_pgvwc_comparison}
+    \leanok
+    \uses{lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting,
+        lem:bnt_block_diagonal_pgvwc_comparison_ground_space}
+    Let \(B=\bigoplus_{j=0}^{r-1}\mu_jA_j\), with every \(\mu_j\ne0\).
+    Suppose the physical alphabet and all block dimensions are nonempty. Assume
+    that the block family is irreducible, left-canonical, has normalized
+    self-overlap, and has no two blocks gauge-phase equivalent. Suppose also
+    that each \(A_j\) is \(L_0\)-block-injective, that \(L_0>0\), and that
+    \[
+        \sum_a A^j_a(A^j_a)^\dagger=I
+        \qquad (0\le j<r).
+    \]
+    Let \(N>0\), \(L>0\), \(L\le N\), \(L+L_0\le N\), and
+    \[
+        (L_0+1)
+        +(r-1)\bigl((L_0+1)+((L_0+1)+(L_0+1))\bigr)+1
+        \le L.
+    \]
+    Assume the opened-boundary \(C^j,D^j\) comparison: whenever
+    \(\psi\in\mathcal G_{N,L}(B)\) and
+    \(\psi=\Gamma_N^B(\bigoplus_j X_j)\), there are matrices
+    \(C^j_{i,\rho}\) such that, for every boundary-crossing interval \(i\),
+    every \(\rho\), and every \(\beta\),
+    \[
+        A^j_\beta C^j_{i,\rho}
+        =
+        \bigl((\mu_j^N X_j)A^j_\beta\bigr)A^j_\rho .
+    \]
+    If every block chain space is contained in its periodic MPS line,
+    \[
+        \mathcal G_{N,L}(A_j)\subseteq \mathbb C V^{(N)}(A_j)
+        \qquad (0\le j<r),
+    \]
+    then
+    \[
+        \ker H_L^{(N)}(B)
+        \subseteq
+        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:bnt_block_diagonal_pgvwc_comparison_ground_space} gives
+    \[
+        \mathcal G_{N,L}(B)=
+        \bigvee_{j=0}^{r-1}\mathcal G_{N,L}(A_j)
+    \]
+    from the stated block hypotheses and the opened-boundary comparison.
+    Lemma~\ref{lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting}
+    then applies to this equality and to the blockwise containments.
 \end{proof}
 
 \begin{lemma}[Block-diagonal spanning is equivalent to the reverse inclusion]
