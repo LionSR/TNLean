@@ -32,6 +32,16 @@ noncomputable def mpvSubmodule (A : MPSTensor d D) (N : ℕ) :
     Submodule ℂ (NSiteSpace d N) :=
   Submodule.span ℂ {mpv A}
 
+/-- The BNT span of component MPS vectors is the supremum of the corresponding
+one-vector submodules. -/
+theorem iSup_mpvSubmodule_eq_bntMPSVectorSpan
+    {r : ℕ} {dim : Fin r → ℕ}
+    (A : (j : Fin r) → MPSTensor d (dim j)) (N : ℕ) :
+    (⨆ j : Fin r, mpvSubmodule (A j) N) = bntMPSVectorSpan A N := by
+  simpa [bntMPSVectorSpan, mpvSubmodule] using
+    (Submodule.span_range_eq_iSup (R := ℂ)
+      (v := fun j : Fin r => (mpv (A j) : NSiteSpace d N))).symm
+
 /-- The MPS vector is the ground-space map applied to the identity matrix. -/
 theorem mpv_eq_groundSpaceMap_one (A : MPSTensor d D) (N : ℕ) :
     (mpv A : NSiteSpace d N) = groundSpaceMap A N 1 := by
