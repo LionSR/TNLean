@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import Mathlib.LinearAlgebra.DFinsupp
 import TNLean.MPS.ParentHamiltonian.IntersectionProperty
 import TNLean.MPS.ParentHamiltonian.BoundaryMatrixIdentities
 import TNLean.MPS.MPDO.BiCFDerivation.Selectors
@@ -27,39 +28,6 @@ open scoped Matrix BigOperators
 namespace MPSTensor
 
 variable {d D : ℕ}
-
-/-- A vector in the linear sum of finitely many subspaces can be written as a
-sum of vectors from those subspaces. -/
-theorem exists_sum_mem_of_mem_iSup_fin
-    {ι V : Type*} [Fintype ι]
-    [AddCommMonoid V] [Module ℂ V]
-    (p : ι → Submodule ℂ V) {v : V}
-    (hv : v ∈ ⨆ i, p i) :
-    ∃ x : ι → V, (∀ i, x i ∈ p i) ∧ v = ∑ i, x i := by
-  classical
-  refine Submodule.iSup_induction (p := p) (x := v) hv ?_ ?_ ?_
-  · intro i y hy
-    refine ⟨fun k => if k = i then y else 0, ?_, ?_⟩
-    · intro k
-      by_cases h : k = i
-      · subst k
-        simpa using hy
-      · simp [h]
-    · rw [Finset.sum_eq_single i]
-      · simp
-      · intro k _ hk
-        simp [hk]
-      · intro hi
-        exact (hi (Finset.mem_univ i)).elim
-  · refine ⟨fun _ => 0, ?_, by simp⟩
-    intro i
-    exact Submodule.zero_mem _
-  · intro y z hy hz
-    rcases hy with ⟨fy, hfy, rfl⟩
-    rcases hz with ⟨fz, hfz, rfl⟩
-    refine ⟨fun i => fy i + fz i, ?_, by simp [Finset.sum_add_distrib]⟩
-    intro i
-    exact Submodule.add_mem _ (hfy i) (hfz i)
 
 /-- The left-boundary summand in the source block-diagonal intersection proof:
 \[
@@ -364,8 +332,10 @@ theorem pgvwc07_boundary_identities_of_leftBoundaryComponent_mem_iSup
       ∀ j : Fin r, ∀ a b : Fin d, A j b * C j a = A j b * E j * A j a := by
   classical
   obtain ⟨φ, hφmem, hφsum⟩ :=
-    exists_sum_mem_of_mem_iSup_fin
-      (fun j : Fin r => groundSpace (A j) (n + 2)) hmem
+    (Submodule.mem_iSup_iff_exists_finsupp
+      (fun j : Fin r => groundSpace (A j) (n + 2)) ψ).mp hmem
+  have hφsum_univ : ψ = ∑ j : Fin r, φ j := by
+    simpa [Finsupp.sum_fintype] using hφsum.symm
   have hMatrix : ∀ j : Fin r,
       ∃ E : Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
         φ j = groundSpaceMap (A j) (n + 2) E := by
@@ -417,7 +387,7 @@ theorem pgvwc07_boundary_identities_of_leftBoundaryComponent_mem_iSup
       calc
         ψ (Fin.cons a (Fin.snoc w b))
             = (∑ k : Fin r, φ k) (Fin.cons a (Fin.snoc w b)) := by
-              rw [hφsum]
+              rw [hφsum_univ]
         _ = ∑ k : Fin r, φ k (Fin.cons a (Fin.snoc w b)) := by
               simp
         _ = ∑ k : Fin r,
@@ -688,42 +658,51 @@ theorem pgvwc07_mem_iSup_groundSpace_of_trace_decomposition
       (A j) (C j) (Dmat j) (hUnital j) (hCompat j)).2
   exact pgvwc07_sum_leftBoundaryComponents_mem_iSup_groundSpace A C E n hACE
 
-/-- One-step block intersection from block-ground-space restrictions.
-
-Let \(\psi\) be an \((n+2)\)-site vector.  Suppose that fixing the first
-physical index or the last physical index always gives a vector in
+/-- The two block-ground-space restrictions produce boundary matrices with the
+left-boundary expansion
 \[
-  \bigvee_j G_{n+1}(A^j).
+  \psi=\sum_j \alpha_j,\qquad
+  \alpha_j(i_1,\ldots,i_{n+2})
+  =
+  \operatorname{tr}(A^j_{i_{n+2}} C^j_{i_1}
+    A^j_{i_2}\cdots A^j_{i_{n+1}}),
 \]
-Under the common word-span hypothesis and the normalization
+and whose trace decompositions agree:
 \[
-  \sum_a A^j_a A^{j\dagger}_a=I,
+  \sum_j\operatorname{tr}(A^j_b C^j_a A^j_w)
+  =
+  \sum_j\operatorname{tr}(D^j_b A^j_a A^j_w).
 \]
-the vector itself lies in
-\[
-  \bigvee_j G_{n+2}(A^j).
-\]
-This is the restriction form of the open-segment step in
-Theorem 12 of arXiv:quant-ph/0608197, proof lines 1442--1452. -/
-theorem pgvwc07_mem_iSup_groundSpace_of_iSup_restrictions
+This is the corresponding step in arXiv:quant-ph/0608197, Theorem 12,
+proof lines 1442--1452. -/
+theorem pgvwc07_trace_decompositions_of_iSup_restrictions
     {r : ℕ} {dim : Fin r → ℕ}
     (A : (j : Fin r) → MPSTensor d (dim j))
-    {n : ℕ} (hSpan : WordTupleSpanTop A n)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
-    (ψ : NSiteSpace d (n + 2))
+    {n : ℕ} (ψ : NSiteSpace d (n + 2))
     (hLeft : ∀ b : Fin d,
       restrictLast ψ b ∈ ⨆ j : Fin r, groundSpace (A j) (n + 1))
     (hRight : ∀ a : Fin d,
       restrictFirst ψ a ∈ ⨆ j : Fin r, groundSpace (A j) (n + 1)) :
-    ψ ∈ ⨆ j : Fin r, groundSpace (A j) (n + 2) := by
+    ∃ C : (j : Fin r) → Fin d → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+    ∃ Dmat : (j : Fin r) → Fin d → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+      ψ = ∑ j : Fin r, pgvwc07LeftBoundaryComponent (A j) (C j) n ∧
+      ∀ a b : Fin d, ∀ w : Fin n → Fin d,
+        (∑ j : Fin r,
+          Matrix.trace ((A j b * C j a) * evalWord (A j) (List.ofFn w))) =
+        (∑ j : Fin r,
+          Matrix.trace ((Dmat j b * A j a) * evalWord (A j) (List.ofFn w))) := by
   classical
   have hRightDecomp : ∀ a : Fin d,
       ∃ φ : (j : Fin r) → NSiteSpace d (n + 1),
         (∀ j : Fin r, φ j ∈ groundSpace (A j) (n + 1)) ∧
           restrictFirst ψ a = ∑ j : Fin r, φ j := by
     intro a
-    exact exists_sum_mem_of_mem_iSup_fin
-      (fun j : Fin r => groundSpace (A j) (n + 1)) (hRight a)
+    obtain ⟨φ, hφmem, hφsum⟩ :=
+      (Submodule.mem_iSup_iff_exists_finsupp
+        (fun j : Fin r => groundSpace (A j) (n + 1)) (restrictFirst ψ a)).mp
+        (hRight a)
+    refine ⟨fun j => φ j, hφmem, ?_⟩
+    simpa [Finsupp.sum_fintype] using hφsum.symm
   choose φ hφmem hφsum using hRightDecomp
   have hRightMatrix : ∀ j : Fin r, ∀ a : Fin d,
       ∃ C : Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
@@ -739,8 +718,12 @@ theorem pgvwc07_mem_iSup_groundSpace_of_iSup_restrictions
         (∀ j : Fin r, χ j ∈ groundSpace (A j) (n + 1)) ∧
           restrictLast ψ b = ∑ j : Fin r, χ j := by
     intro b
-    exact exists_sum_mem_of_mem_iSup_fin
-      (fun j : Fin r => groundSpace (A j) (n + 1)) (hLeft b)
+    obtain ⟨χ, hχmem, hχsum⟩ :=
+      (Submodule.mem_iSup_iff_exists_finsupp
+        (fun j : Fin r => groundSpace (A j) (n + 1)) (restrictLast ψ b)).mp
+        (hLeft b)
+    refine ⟨fun j => χ j, hχmem, ?_⟩
+    simpa [Finsupp.sum_fintype] using hχsum.symm
   choose χ hχmem hχsum using hLeftDecomp
   have hLeftMatrix : ∀ j : Fin r, ∀ b : Fin d,
       ∃ Dmat : Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
@@ -816,6 +799,27 @@ theorem pgvwc07_mem_iSup_groundSpace_of_iSup_restrictions
             rw [Fin.cons_snoc_eq_snoc_cons]
       _ = ∑ j : Fin r,
         Matrix.trace ((Dmat j b * A j a) * evalWord (A j) (List.ofFn w)) := hLeftEval
+  exact ⟨C, Dmat, hψ, hCoeff⟩
+
+/-- One-step block intersection from block-ground-space restrictions:
+if both one-boundary restrictions of \(\psi\) lie in
+\(\bigvee_j G_{n+1}(A^j)\), then, under the common word-span and unital
+hypotheses, \(\psi\in\bigvee_j G_{n+2}(A^j)\).  This is the restriction form of
+the open-segment step in arXiv:quant-ph/0608197, Theorem 12, proof lines
+1442--1452. -/
+theorem pgvwc07_mem_iSup_groundSpace_of_iSup_restrictions
+    {r : ℕ} {dim : Fin r → ℕ}
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    {n : ℕ} (hSpan : WordTupleSpanTop A n)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    (ψ : NSiteSpace d (n + 2))
+    (hLeft : ∀ b : Fin d,
+      restrictLast ψ b ∈ ⨆ j : Fin r, groundSpace (A j) (n + 1))
+    (hRight : ∀ a : Fin d,
+      restrictFirst ψ a ∈ ⨆ j : Fin r, groundSpace (A j) (n + 1)) :
+    ψ ∈ ⨆ j : Fin r, groundSpace (A j) (n + 2) := by
+  rcases pgvwc07_trace_decompositions_of_iSup_restrictions A ψ hLeft hRight with
+    ⟨C, Dmat, hψ, hCoeff⟩
   exact pgvwc07_mem_iSup_groundSpace_of_trace_decomposition
     A hSpan C Dmat hUnital hCoeff ψ hψ
 

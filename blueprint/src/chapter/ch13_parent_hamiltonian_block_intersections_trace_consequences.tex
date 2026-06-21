@@ -717,11 +717,98 @@ $\bigvee_jG_{n+2}(A^j)$ and to obtain the one-step block-intersection identity.
     \]
 \end{proof}
 
+\begin{lemma}[Trace decompositions from fixed-boundary restrictions]
+    \label{lem:pgvwc07_trace_decompositions_from_block_restrictions}
+    \lean{MPSTensor.pgvwc07_trace_decompositions_of_iSup_restrictions}
+    \leanok
+    Let $A^1,\ldots,A^g$ be block tensors.  If
+    $\psi\in(\C^d)^{\otimes(n+2)}$ satisfies
+    \[
+        \psi(a,-)\in\bigvee_jG_{n+1}(A^j),
+        \qquad
+        \psi(-,b)\in\bigvee_jG_{n+1}(A^j)
+    \]
+    for every physical index $a,b$, then there are matrices
+    $C^j_a$ and $D^j_b$ such that
+    \[
+        \psi=\sum_j\alpha_j,
+        \qquad
+        \alpha_j(i_1,\ldots,i_{n+2})
+        =
+        \tr\!\left(
+        A^j_{i_{n+2}}C^j_{i_1}
+        A^j_{i_2}\cdots A^j_{i_{n+1}}
+        \right),
+    \]
+    and, for every middle word $w$ of length $n$,
+    \[
+        \sum_j\tr\!\left(A^j_bC^j_aA^j_w\right)
+        =
+        \sum_j\tr\!\left(D^j_bA^j_aA^j_w\right).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Choose finite decompositions of the fixed-boundary vectors:
+    \[
+        \psi(a,i_2,\ldots,i_{n+2})
+        =
+        \sum_j
+        \tr\!\left(
+        A^j_{i_2}\cdots A^j_{i_{n+2}}C^j_a
+        \right),
+    \]
+    and
+    \[
+        \psi(i_1,\ldots,i_{n+1},b)
+        =
+        \sum_j
+        \tr\!\left(
+        A^j_{i_1}\cdots A^j_{i_{n+1}}D^j_b
+        \right).
+    \]
+    For every middle word $w$,
+    \[
+        \psi(a,w,b)
+        =
+        \sum_j\tr\!\left(A^j_wA^j_bC^j_a\right)
+        =
+        \sum_j\tr\!\left(A^j_bC^j_aA^j_w\right),
+    \]
+    and the second decomposition gives
+    \[
+        \psi(a,w,b)
+        =
+        \sum_j\tr\!\left(A^j_aA^j_wD^j_b\right)
+        =
+        \sum_j\tr\!\left(D^j_bA^j_aA^j_w\right).
+    \]
+    These two formulas give the displayed equality of trace expressions. The
+    first decomposition also gives
+    \[
+        \psi(i_1,\ldots,i_{n+2})
+        =
+        \sum_j
+        \tr\!\left(
+        A^j_{i_2}\cdots A^j_{i_{n+2}}C^j_{i_1}
+        \right)
+        =
+        \sum_j
+        \tr\!\left(
+        A^j_{i_{n+2}}C^j_{i_1}
+        A^j_{i_2}\cdots A^j_{i_{n+1}}
+        \right),
+    \]
+    by cyclicity of the trace.
+\end{proof}
+
 \begin{lemma}[One-step block intersection from block restrictions]
     \label{lem:block_restrictions_mem_block_ground_spaces}
     \lean{MPSTensor.pgvwc07_mem_iSup_groundSpace_of_iSup_restrictions}
     \leanok
-    \uses{lem:left_boundary_trace_decomposition_mem_block_ground_spaces}
+    \uses{lem:pgvwc07_trace_decompositions_from_block_restrictions,
+        lem:left_boundary_trace_decomposition_mem_block_ground_spaces}
     Let $A^1,\ldots,A^g$ be block tensors with common word-span separation at
     length $n$, and suppose
     \[
