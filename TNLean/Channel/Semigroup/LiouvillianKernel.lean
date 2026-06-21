@@ -384,8 +384,8 @@ private theorem each_commutator_eq_zero_of_sum_eq_zero
     have h_tr_re :
         ((A * F.L j - F.L j * A)ᴴ * (A * F.L j - F.L j * A)).trace.re = 0 :=
       le_antisymm
-        (by linarith [Finset.sum_eq_zero_iff_of_nonneg (fun k _ => h_each_nonneg k)
-            |>.mp h_tr_sum_re j (Finset.mem_univ j)])
+        (le_of_eq <| congrFun (Fintype.sum_eq_zero_iff_of_nonneg
+          (fun k => h_each_nonneg k) |>.mp h_tr_sum_re) j)
         (h_each_nonneg j)
     have h_tr_zero :
         ((A * F.L j - F.L j * A)ᴴ * (A * F.L j - F.L j * A)).trace = 0 :=

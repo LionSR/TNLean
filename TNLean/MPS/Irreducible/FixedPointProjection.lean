@@ -266,8 +266,8 @@ private lemma ker_invariant_under_adjoint
       rw [← map_sum, ← hsum, hqf]
       exact Complex.zero_re
     have hre :=
-        (Finset.sum_eq_zero_iff_of_nonneg (fun j _ => hρ_psd.re_dotProduct_nonneg _)).mp
-          h_sum_zero i (Finset.mem_univ _)
+        congrFun (Fintype.sum_eq_zero_iff_of_nonneg
+          (fun j => hρ_psd.re_dotProduct_nonneg _) |>.mp h_sum_zero) i
     exact Complex.ext hre (hρ_psd.isHermitian.im_star_dotProduct_mulVec_self _)
   intro i
   exact (hρ_psd.dotProduct_mulVec_zero_iff _).mp (h_each_zero i)
