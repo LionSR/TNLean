@@ -212,19 +212,27 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
 
 \begin{proof}
     \leanok
-    Write $R_{i,\tau}$ for the cyclic length-$L$ restriction at site $i$,
-    with the outside configuration fixed by $\tau$. Membership in
-    $G_L^{(N)}(A)$ gives, for every $i$ and $\tau$,
+    Write $R_{i,\eta}\psi$ for the cyclic length-$L$ restriction of $\psi$ at
+    site $i$, with the outside configuration fixed by $\eta$. Membership in
+    $G_L^{(N)}(A)$ gives, for every $i$ and $\eta$,
     \[
-        R_{i,\tau}\psi\in G_L(A).
+        R_{i,\eta}\psi\in G_L(A)=\ker h_L(A).
     \]
-    The local ground-space equation then gives
+    Hence
     \[
-        R_{i,\tau}\psi\in G_L(A)
-        \Longrightarrow
-        h_i(A,L)\psi=0.
+        h_L(A)R_{i,\eta}\psi=0.
     \]
-    These equations for all $i$ are exactly the frustration-free condition.
+    For a full configuration $\sigma$, taking
+    $\eta=\sigma|_{\{i,\ldots,i+L-1\}^c}$ gives
+    \[
+        \bigl(h_i(A,L)\psi\bigr)(\sigma)
+        =
+        \bigl(h_L(A)R_{i,\eta}\psi\bigr)
+            \bigl(\sigma|_{\{i,\ldots,i+L-1\}}\bigr)
+        =
+        0.
+    \]
+    Thus $h_i(A,L)\psi=0$ for every $i$.
 \end{proof}
 
 \begin{lemma}[Zero-energy BNT vectors lie in the parent-Hamiltonian kernel]
