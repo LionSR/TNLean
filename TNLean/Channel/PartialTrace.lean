@@ -30,7 +30,6 @@ Proposition 2.1) and for reduced states on contiguous tensor factors.
 * `Matrix.trace_partialTraceRight`: the full trace is preserved by the general
   right partial trace
 * `Matrix.trace_eq_trace_traceLeft`: `tr(X) = tr(tr_A(X))`
-* `Matrix.trace_eq_trace_traceRight`: `tr(X) = tr(tr_B(X))`
 * `Matrix.traceLeft_kronecker`: `tr_A(A ⊗ B) = tr(A) • B`
 * `Matrix.traceRight_kronecker`: `tr_B(A ⊗ B) = A • tr(B)`
 * `Matrix.traceLeft_one`: `tr_A(1) = d • 1`
@@ -175,12 +174,6 @@ theorem trace_eq_trace_traceLeft (X : Matrix (Fin d × Fin d') (Fin d × Fin d')
   rw [show ∑ i : Fin d × Fin d', X i i =
     ∑ k : Fin d, ∑ j : Fin d', X (k, j) (k, j) from Fintype.sum_prod_type _]
   exact Finset.sum_comm
-
-/-- The full trace equals the trace of the right partial trace: `tr(X) = tr(tr_B(X))`. -/
-theorem trace_eq_trace_traceRight (X : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ) :
-    X.trace = (traceRight X).trace := by
-  simp only [Matrix.trace, Matrix.diag, traceRight_apply]
-  exact Fintype.sum_prod_type _
 
 /-- `traceLeft` is additive. -/
 theorem traceLeft_add (X Y : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ) :
