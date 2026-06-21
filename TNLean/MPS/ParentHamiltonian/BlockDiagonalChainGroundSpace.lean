@@ -19,38 +19,6 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-- A vector in the periodic chain ground space is annihilated by every local
-parent-Hamiltonian term.
-
-This is the local constraint direction in the parent-Hamiltonian construction:
-membership in every cyclic \(L\)-site ground-space window implies the
-frustration-free equations for the translated parent interactions. -/
-theorem isFrustrationFree_of_mem_chainGroundSpace {D : ℕ} (A : MPSTensor d D)
-    {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
-    {ψ : NSiteSpace d N} (hψ : ψ ∈ chainGroundSpace A L N) :
-    IsFrustrationFree A L N ψ := by
-  rw [chainGroundSpace, dif_pos ⟨hN, hLN⟩] at hψ
-  simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ
-  intro i
-  ext σ
-  simp only [localTerm, hLN, ↓reduceDIte, LinearMap.pi_apply, LinearMap.comp_apply,
-    LinearMap.proj_apply, Pi.zero_apply]
-  have hrestrict :
-      (fun τ => ψ (replaceWindow L hLN i σ τ)) =
-        cyclicRestrictₗ hN L i σ ψ := by
-    ext τ
-    rw [cyclicRestrictₗ_apply]
-    have hcfg : replaceWindow L hLN i σ τ = cyclicCfg hN L i τ σ := rfl
-    rw [hcfg]
-  have hmem : (fun τ => ψ (replaceWindow L hLN i σ τ)) ∈ groundSpace A L := by
-    rw [hrestrict]
-    exact hψ i σ
-  have hkill := parentInteraction_apply_mem_groundSpace A L _ hmem
-  change (parentInteraction A L (fun τ => ψ (replaceWindow L hLN i σ τ)))
-    (extractWindow L i σ) = 0
-  rw [hkill]
-  rfl
-
 /-- The periodic chain ground space of a single block is contained in the
 periodic chain ground space of the block-diagonal tensor.
 
