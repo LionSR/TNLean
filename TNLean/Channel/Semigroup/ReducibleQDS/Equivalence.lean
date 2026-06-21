@@ -5,7 +5,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.Channel.Semigroup.ReducibleQDS.FixedDensity
 import TNLean.Channel.Semigroup.ReducibleQDS.GeneratorCompression
 import TNLean.Channel.Semigroup.ReducibleQDS.SubsequenceAnalysis
-import TNLean.Algebra.MatrixAux
 
 /-!
 # Reducibility Definition and Full Equivalence (Wolf Proposition 7.6)
@@ -109,17 +108,5 @@ theorem wolf_prop_7_6_full_equivalence
         (hasRankDeficientKernelElement_of_hasRankDeficientFixedDensity h1)
   · intro h1234
     exact hasRankDeficientFixedDensity_of_hasRankDeficientKernelElement h1234.1
-
-/-! ## Sum-of-squares vanishing lemma -/
-
-/-- If `∑ⱼ Bⱼ Bⱼ† = 0` for square matrices, then each `Bⱼ = 0`.
-
-This is the key algebraic fact needed for the (3) → (4) direction of
-Wolf Proposition 7.6. -/
-theorem sum_conjTranspose_mul_self_eq_zero_imp
-    {r : ℕ} (B : Fin r → Mat)
-    (h : ∑ j, B j * (B j)ᴴ = 0) :
-    ∀ j, B j = 0 :=
-  Matrix.eq_zero_of_sum_mul_conjTranspose_eq_zero B h
 
 end -- noncomputable section
