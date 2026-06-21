@@ -87,6 +87,10 @@ The clearest replacements are:
 - A second site-dependent PEPS span helper for products of two spanning
   families was removed.  Its use now calls Mathlib's bilinear span theorem
   `Submodule.map₂_span_span` through the algebra-submodule product API.
+- The exact-length two-sided MPS word-span theorem no longer performs nested
+  span inductions over the left and right word families.  It now packages
+  `(R, S) ↦ R * X * S` as a bilinear map and applies
+  `Submodule.map₂_span_span`.
 - Two one-use Frobenius submultiplicativity wrappers in the transfer-operator
   gap files were removed.  The proofs now call Mathlib's
   `Matrix.frobenius_norm_mul` directly at the Hilbert-Schmidt estimate.
@@ -2259,6 +2263,26 @@ Focused check:
 
 ```bash
 lake env lean TNLean/PEPS/CycleMPSChainOverlapCapstone.lean
+```
+
+## Exact-length two-sided word-span cleanup, 2026-06-21
+
+`TNLean/Algebra/TracePairing.lean` proves
+`MPSTensor.span_range_evalWord_mul_nonzero_mul_evalWord_eq_top`, the
+exact-length two-sided span statement used in the direct-sum input for MPDO
+derivations.  The old proof introduced the target span as a local submodule
+and then performed two explicit span inductions, first over the left word
+family and then over the right word family.
+
+The proof now defines the bilinear map `(R, S) ↦ R * X * S` and uses
+Mathlib's `Submodule.map₂_span_span` to transport the full exact word span
+through that map.  The remaining topness step still uses the local nonzero
+two-sided matrix span theorem `Matrix.span_range_mul_nonzero_mul_eq_top`.
+
+Focused check:
+
+```bash
+lake env lean TNLean/Algebra/TracePairing.lean
 ```
 
 ## Conclusions
