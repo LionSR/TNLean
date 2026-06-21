@@ -13,65 +13,35 @@ import TNLean.MPS.ParentHamiltonian.RestrictTransport
 /-!
 # Unique ground state for injective MPS parent Hamiltonians
 
-For an injective MPS tensor \(A\) on a periodic chain, the expected parent-Hamiltonian
-ground space is spanned by the MPS vector
+For an injective MPS tensor \(A\) on a periodic chain, the parent-Hamiltonian
+ground space is expected to be spanned by the MPS vector
 \(\sigma \mapsto \operatorname{tr}(A^{\sigma_0} \cdots A^{\sigma_{N-1}})\).
 
 ## Proof outline
 
-For injective \(A\) and lengths \(2 \le N\), \(1<L\le N\), the periodic-chain
-ground space is one-dimensional, spanned by the MPS vector, via open-chain
-build-up and the closure-property step at the periodic boundary:
-
-1. **Open chain**: By iterated application of the intersection property,
-   any state satisfying all local ground-space conditions has the form
-   \(\psi(\sigma)=\operatorname{tr}(A^\sigma X)\) for some boundary
-   matrix \(X \in M_D(\mathbb C)\). This yields a \(D^2\)-dimensional space.
-
-2. **Periodic chain**: The boundary condition obtained when closing the
-   periodic chain constrains \(X\). For injective \(A\), the one-site matrices
-   span \(M_D(\mathbb C)\), so the commutation condition forces \(X\) to be
-   scalar, yielding a one-dimensional ground space spanned by the MPS vector.
-
-## Main results
-
-The periodic-chain ground space `chainGroundSpace A L N` is the intersection of
-the cyclic-window constraints, which the MPS vector satisfies. Reducing those to
-a boundary matrix \(X\) with \(\psi=\Gamma_N(X)\), the closure-property
-comparison at the periodic boundary forces \(X\) scalar: the ground space is
-\(\mathbb C\,V^{(N)}(A)\), also at window length \(L_0+1\) for normal tensors.
-
-## References
-
-* [Cirac--Perez-Garcia--Schuch--Verstraete 2021] arXiv:2011.12127,
-  Section IV.C, lines 1976--2094 (parent Hamiltonian definition and uniqueness
-  argument)
-* [FNW92] Sections 3–4
-* [PGVWC07] arXiv:quant-ph/0608197, Sections 5–6
-
-## Periodic-boundary comparison
-
-The coordinate form of the closure-property ingredient at the periodic boundary
-is the passage from
+The periodic-chain ground space is the intersection of cyclic-window local
+constraints. The open-chain intersection property first gives
+\(\psi(\sigma)=\operatorname{tr}(A^\sigma X)\) for some boundary matrix \(X\).
+Closing the chain then imposes the periodic-boundary comparison
 \[
   A^\mu A^j X=Y^+_{\tau^+_\eta(\mu)}A^j,\qquad
   X A^j A^\mu=A^jY^-_{\tau^-_\eta(\mu)}
 \]
-to
+and hence
 \[
   Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}
 \]
-for the same complementary-site word \(\mu\). The source states the
-closure-property step in arXiv:2011.12127, Section IV.C, lines 2078--2079; the
-displayed equations are the local coordinate form used here.
-The boundary block-window identity supplies the commutation relation for
-\(X\), and the one-sided products then identify the two boundary matrices.
+for the same complementary-site word. If \(A\) is injective, the resulting
+commutation relation forces \(X\) to be scalar. The normal case uses the
+Wielandt span-growth theorem to reach the same fixed-length word-span
+conclusion after blocking.
 
-The open-chain build-up follows the inverting-and-growing-back argument from
-arXiv:2011.12127, Section IV.C, lines 2049--2078.  The normal case also uses the
-Wielandt span-growth theorem to pass from a cumulative span conclusion to the
-fixed-length word-span theorem used to make the open-chain boundary matrix
-scalar.
+## References
+
+* Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:2011.12127, Section IV.C,
+  lines 1976--2094.
+* [FNW92] Sections 3–4.
+* [PGVWC07] arXiv:quant-ph/0608197, Sections 5–6.
 -/
 
 open scoped Matrix BigOperators
@@ -145,6 +115,38 @@ theorem mpv_mem_chainGroundSpace (A : MPSTensor d D) (L N : ℕ)
     rw [hcfg]
   rw [hrestrict]
   exact mpv_window_mem_groundSpace A L N hLN i τ
+
+/-- A vector in the periodic chain ground space is annihilated by every local
+parent-Hamiltonian term.
+
+This is the local constraint direction in the parent-Hamiltonian construction:
+membership in every cyclic \(L\)-site ground-space window implies the
+frustration-free equations for the translated parent interactions. -/
+theorem isFrustrationFree_of_mem_chainGroundSpace (A : MPSTensor d D)
+    {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
+    {ψ : NSiteSpace d N} (hψ : ψ ∈ chainGroundSpace A L N) :
+    IsFrustrationFree A L N ψ := by
+  rw [chainGroundSpace, dif_pos ⟨hN, hLN⟩] at hψ
+  simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ
+  intro i
+  ext σ
+  simp only [localTerm, hLN, ↓reduceDIte, LinearMap.pi_apply, LinearMap.comp_apply,
+    LinearMap.proj_apply, Pi.zero_apply]
+  have hrestrict :
+      (fun τ => ψ (replaceWindow L hLN i σ τ)) =
+        cyclicRestrictₗ hN L i σ ψ := by
+    ext τ
+    rw [cyclicRestrictₗ_apply]
+    have hcfg : replaceWindow L hLN i σ τ = cyclicCfg hN L i τ σ := rfl
+    rw [hcfg]
+  have hmem : (fun τ => ψ (replaceWindow L hLN i σ τ)) ∈ groundSpace A L := by
+    rw [hrestrict]
+    exact hψ i σ
+  have hkill := parentInteraction_apply_mem_groundSpace A L _ hmem
+  change (parentInteraction A L (fun τ => ψ (replaceWindow L hLN i σ τ)))
+    (extractWindow L i σ) = 0
+  rw [hkill]
+  rfl
 
 /-- Every constrained cyclic window of a chain-ground-space vector has a boundary
 matrix representation in the local MPS ground space. -/

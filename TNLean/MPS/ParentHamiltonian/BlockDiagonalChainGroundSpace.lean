@@ -56,6 +56,33 @@ theorem iSup_chainGroundSpace_block_le_toTensorFromBlocks
   exact iSup_le fun j =>
     chainGroundSpace_block_le_toTensorFromBlocks μ A (hμ j) hN hLN
 
+/-- The block MPS vectors have zero energy for the block-diagonal parent
+Hamiltonian.
+
+Let \(B=\bigoplus_j\mu_jA_j\), with every \(\mu_j\ne0\). Since every
+\(V^{(N)}(A_j)\) satisfies the cyclic \(A_j\)-constraints, and the local
+spaces \(G_L(A_j)\) are contained in \(G_L(B)\), the span of the block MPS
+vectors is contained in the kernel of the \(B\)-parent Hamiltonian. This is only
+the easy inclusion in the parent-Hamiltonian ground-space spanning equation;
+the reverse inclusion is the periodic-boundary comparison. -/
+theorem bntMPSVectorSpan_le_ker_parentHamiltonian_toTensorFromBlocks
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (hμ : ∀ j : Fin r, μ j ≠ 0)
+    {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
+    bntMPSVectorSpan A N ≤
+      LinearMap.ker (parentHamiltonian (toTensorFromBlocks (d := d) (μ := μ) A) L N) := by
+  rw [bntMPSVectorSpan]
+  refine Submodule.span_le.mpr ?_
+  rintro _ ⟨j, rfl⟩
+  refine LinearMap.mem_ker.mpr ?_
+  simp only [parentHamiltonian, LinearMap.sum_apply]
+  refine Finset.sum_eq_zero fun i _ => ?_
+  exact isFrustrationFree_of_mem_chainGroundSpace
+    (toTensorFromBlocks (d := d) (μ := μ) A) hN hLN
+    ((chainGroundSpace_block_le_toTensorFromBlocks μ A (hμ j) hN hLN)
+      (mpv_mem_chainGroundSpace (A j) L N hN hLN)) i
+
 /-- Boundary-condition equality for the block-diagonal periodic chain.
 
 Let \(B=\bigoplus_j\mu_jA_j\). If closing the periodic boundary with
