@@ -17,7 +17,7 @@ open scoped Matrix BigOperators
 This file formalizes the periodic fundamental theorem of arXiv:1708.00029 Section 3 and the
 Z-gauge theory used in its equal-case strengthening:
 
-* **Theorem 3.4** (`fundamentalTheorem_periodic_proportional`): If two non-repeating
+* **Theorem 3.4** (`fundamentalTheorem_periodic_proportional`): If two non-repeated
   block families satisfy the periodic overlap dichotomy, their bases of periodic tensors
   match up to a bijection with per-block `RepeatedBlocks` equivalence. (In the paper,
   proportional MPVs imply the dichotomy; here it is a direct hypothesis.)
@@ -274,7 +274,7 @@ theorem peripheralProportionalCase_periodicFT_of_rootFromRescaling
 
 /-- **Theorem 3.4 (Proportional case, arXiv:1708.00029).**
 
-If two non-repeating block families satisfy the periodic overlap dichotomy, then
+If two non-repeated block families satisfy the periodic overlap dichotomy, then
 their bases of periodic tensors match: equal block counts, a bijection, and per-block
 `HetRepeatedBlocks` equivalence.
 
@@ -504,7 +504,7 @@ variable {D₁ D₂ : ℕ}
 
 /-- **Theorem 3.8, Step 1: Block matching.**
 
-If two tensors in irreducible form with non-repeating blocks satisfy the periodic overlap
+If two tensors in irreducible form with non-repeated blocks satisfy the periodic overlap
 dichotomy, their bases of periodic tensors match: equal block counts, a bijection, and
 per-block `HetRepeatedBlocks` equivalence.
 
@@ -527,7 +527,7 @@ theorem fundamentalTheorem_periodic_equalCase_matching
 
 /-- **Scalar component of the equal-case periodic FT (arXiv:1708.00029).**
 
-If two MPS tensors in irreducible form with non-repeating blocks satisfy the periodic
+If two MPS tensors in irreducible form with non-repeated blocks satisfy the periodic
 overlap dichotomy and per-block multiplicity-entry power equality, then:
 
 1. **Block matching**: equal block counts, a bijection, and per-block `HetRepeatedBlocks`.
