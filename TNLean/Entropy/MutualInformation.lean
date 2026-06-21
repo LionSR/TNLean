@@ -266,7 +266,7 @@ theorem mutualInformation_le_log_dim_add_log_dim
       ≤ Real.log dA + Real.log dB := by
   have h_A_dm : Matrix.traceRight ρ_AB ∈ densityMatrices dA := by
     exact ⟨hρ_AB.1.traceRight, by
-      rw [← Matrix.trace_eq_trace_traceRight ρ_AB]
+      rw [Matrix.traceRight, Matrix.trace_partialTraceRight]
       exact hρ_AB.2⟩
   have h_B_dm : Matrix.traceLeft ρ_AB ∈ densityMatrices dB := by
     exact ⟨hρ_AB.1.traceLeft, by

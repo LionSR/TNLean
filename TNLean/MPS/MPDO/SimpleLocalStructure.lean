@@ -288,7 +288,7 @@ rank-one trace matrix (the all-ones matrix). -/
     (hη : EtaStructure ρ_ABC) (k h : Fin hη.m) :
     (ofHayashiMarkov hη).traceMatrix k h = 1 := by
   have hR : (Matrix.traceRight (hη.ρ_right k)).trace = 1 := by
-    rw [← Matrix.trace_eq_trace_traceRight]
+    rw [Matrix.traceRight, Matrix.trace_partialTraceRight]
     exact (hη.hρ_right_dm k).2
   have hL : (Matrix.traceLeft (hη.ρ_left h)).trace = 1 := by
     rw [← Matrix.trace_eq_trace_traceLeft]
