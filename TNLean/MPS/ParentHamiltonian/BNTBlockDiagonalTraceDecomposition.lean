@@ -230,6 +230,81 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_of
     blockDiagonal_boundary_component_chainGroundSpace_of_trace_decomposition_of_injective
       μ A hN hLN X hTraceSpan hBlk hUnital hNlarge C hCoeff
 
+/-- The \(C^j,D^j\) boundary comparison gives periodic single-block states
+from an explicit block-diagonal boundary representation.
+
+Assume the vector has already been written with block-diagonal boundary
+conditions \(X_j\). If, for those same boundary conditions, the source
+boundary comparison
+\[
+  A^j_\beta C^j_{i,\rho}
+  =
+  ((\mu_j^NX_j)A^j_\beta)A^j_\rho
+\]
+holds at each boundary-crossing interval, then the comparison identity implies,
+for every boundary-crossing interval \(i\), outside word \(\rho\), word
+\(\beta\) before the cut, and middle word \(w\),
+\[
+  \sum_j\operatorname{tr}\!\bigl(A^j_\beta C^j_{i,\rho}A^j_w\bigr)
+  =
+  \sum_j\operatorname{tr}\!\bigl(((\mu_j^NX_j)A^j_\beta)
+    A^j_\rho A^j_w\bigr).
+\]
+The trace-decomposition theorem then gives
+\[
+  \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)
+\]
+for every block \(j\).
+
+This is the explicit-boundary form of the block-diagonal boundary-condition
+step in arXiv:2011.12127, Section IV.C, lines 2126--2128, using the
+specialization \(D^j_\beta=(\mu_j^NX_j)A^j_\beta\) from
+arXiv:quant-ph/0608197, Theorem 12, lines 1446--1451.
+
+**Scope restriction (boundary representation):** The block-diagonal boundary
+representation of \(\psi\) is a hypothesis here. Removing this remaining input
+is tracked in issue 2971 and documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
+theorem exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_of_boundary
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    {m L₀ L N : ℕ}
+    (hTraceSpan : WordTupleSpanTop A m)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    (hN : 0 < N) (hLN : L ≤ N)
+    (hNlarge : L + L₀ ≤ N)
+    {ψ : NSiteSpace d N}
+    (hBoundary :
+      ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+        ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+          ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)))
+    (hComparison :
+      ∀ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+        ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+          ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) →
+          ∃ C : ∀ (j : Fin r) (_ : Fin N),
+            (Fin (N - L) → Fin d) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+            ∀ (j : Fin r) (i : Fin N),
+              N < i.val + L →
+                ∀ ρ : Fin (N - L) → Fin d,
+                  ∀ β : Fin (i.val + L - N) → Fin d,
+                    evalWord (A j) (List.ofFn β) * C j i ρ =
+                      (((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
+                        evalWord (A j) (List.ofFn ρ)) :
+    ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+        ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
+      ∀ j : Fin r,
+        groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
+  refine
+    exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_of_boundary
+      μ A hTraceSpan hBlk hUnital hN hLN hNlarge hBoundary ?_
+  intro X hψX
+  obtain ⟨C, hCompat⟩ := hComparison X hψX
+  refine ⟨C, ?_⟩
+  exact blockDiagonal_boundary_trace_decomposition_of_pgvwc_comparison μ A X C hCompat
+
 /-- Source trace decompositions upgrade a block-diagonal boundary representation
 to periodic single-block states.
 
