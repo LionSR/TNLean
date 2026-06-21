@@ -81,6 +81,9 @@ The clearest replacements are:
 - Several PEPS proofs no longer inspect the `(0, 0)` entry of the identity
   matrix to prove nonvanishing.  They use Mathlib's nontrivial matrix-space
   instance and `Units.ne_zero` for invertible matrices.
+- A site-dependent PEPS span-preservation helper was removed.  Its only use now
+  applies Mathlib's `Units.mulRightLinearEquiv`, `Submodule.map_span`, and
+  `Submodule.map_eq_top_iff` directly.
 - Two one-use Frobenius submultiplicativity wrappers in the transfer-operator
   gap files were removed.  The proofs now call Mathlib's
   `Matrix.frobenius_norm_mul` directly at the Hilbert-Schmidt estimate.
@@ -2210,6 +2213,29 @@ lake env lean TNLean/PEPS/CycleMPSChainOverlapCapstone.lean
 lake env lean TNLean/PEPS/CycleMPSOverlapInsertion.lean
 lake env lean TNLean/PEPS/CycleMPSChainOverlapInsertion.lean
 lake env lean TNLean/PEPS/CycleMPSTranslationInvariant.lean
+```
+
+## PEPS right-multiplication span cleanup, 2026-06-21
+
+`TNLean/PEPS/CycleMPSChainOverlapCapstone.lean` had a private helper
+`span_range_mul_right_unit`, proving by induction over spans that right
+multiplication by an invertible matrix preserves a spanning family of square
+matrices.  The helper had a single use in the window-covariance proof.
+
+That use now works directly with Mathlib's linear equivalence for right
+multiplication by a unit:
+
+- `Units.mulRightLinearEquiv`;
+- `Submodule.map_span`;
+- `Submodule.map_eq_top_iff`.
+
+This removes the handwritten span induction and keeps the span transport
+visible at the point where the bond-operator argument needs it.
+
+Focused check:
+
+```bash
+lake env lean TNLean/PEPS/CycleMPSChainOverlapCapstone.lean
 ```
 
 ## Conclusions
