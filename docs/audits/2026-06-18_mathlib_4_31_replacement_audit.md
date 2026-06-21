@@ -98,6 +98,10 @@ The clearest replacements are:
   `Submodule.span_induction` over a spanning word family.  They use
   `LinearMap.ext_on_range` to extend equality of the trace-linear functionals
   to all matrices.
+- Four PEPS cycle-MPS transport and capstone proofs now use Mathlib's
+  submodule image and range API, especially `Submodule.map_span`,
+  `LinearMap.range`, and `LinearMap.ext_on_range`, instead of repeating
+  one-use span inductions.
 - Two one-use Frobenius submultiplicativity wrappers in the transfer-operator
   gap files were removed.  The proofs now call Mathlib's
   `Matrix.frobenius_norm_mul` directly at the Hilbert-Schmidt estimate.
@@ -2337,6 +2341,35 @@ Focused checks:
 ```bash
 lake build TNLean.PEPS.CycleMPSChainArc -q --log-level=info
 lake build TNLean.PEPS.CycleMPSWordTransport -q --log-level=info
+```
+
+## PEPS span-map cleanup, 2026-06-21
+
+Four cycle-MPS PEPS proofs used local span inductions only to express simple
+linear images of spanning families:
+
+- `mul_left_letter_mem_span` in
+  `TNLean/PEPS/CycleMPSWordTransport.lean`;
+- `mul_left_letter_mem_arc_span` in
+  `TNLean/PEPS/CycleMPSChainArc.lean`;
+- `isUnit_of_mul_span` in
+  `TNLean/PEPS/CycleMPSChainOverlapCapstone.lean`;
+- the commutation extension inside `transport_one_eq_smul_one` in
+  `TNLean/PEPS/CycleMPSOverlapCapstone.lean`.
+
+The first two now map the length-`m` word span through left multiplication and
+use `Submodule.map_span`.  The invertibility helper now observes that the
+whole span lies in `LinearMap.range (LinearMap.mulLeft ℂ X)`.  The scalarity
+argument extends commutation from a spanning word family by
+`LinearMap.ext_on_range`, then converts the resulting multiplication equality
+with `commute_iff_eq`.
+
+Focused check:
+
+```bash
+lake build TNLean.PEPS.CycleMPSWordTransport TNLean.PEPS.CycleMPSChainArc \
+  TNLean.PEPS.CycleMPSChainOverlapCapstone TNLean.PEPS.CycleMPSOverlapCapstone \
+  -q --log-level=info
 ```
 
 ## Conclusions
