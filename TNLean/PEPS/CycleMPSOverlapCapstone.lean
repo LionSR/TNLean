@@ -49,14 +49,6 @@ variable {d D : ℕ}
 
 /-! ### Rigidity: equal word products at one length force proportional letters -/
 
-/-- A nonzero-size identity matrix is nonzero. -/
-private theorem matrix_one_ne_zero' (hD : 0 < D) :
-    (1 : Matrix (Fin D) (Fin D) ℂ) ≠ 0 := by
-  intro h
-  have hentry := congrFun (congrFun h ⟨0, hD⟩) ⟨0, hD⟩
-  rw [Matrix.one_apply_eq] at hentry
-  exact one_ne_zero hentry
-
 /-- **The transport of the identity is a nonzero scalar.**  For two tensors
 with matched word transports at lengths `k` and `k + 1`, the transported
 identity commutes with every letter of `C` — its two one-letter extensions
@@ -149,7 +141,8 @@ private theorem transport_one_eq_smul_one {A C : MPSTensor d D} {L k : ℕ}
           exact ⟨evalWord A (List.ofFn τ), hΛk τ⟩
   have hinj : Function.Injective Λk := LinearMap.injective_iff_surjective.mpr hsurj
   refine ⟨c, fun hc0 => ?_, hV⟩
-  apply matrix_one_ne_zero' hD
+  haveI : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
+  apply (show (1 : Matrix (Fin D) (Fin D) ℂ) ≠ 0 from one_ne_zero)
   apply hinj
   rw [hV, hc0, zero_smul, map_zero]
 
@@ -165,7 +158,8 @@ private theorem exists_evalWord_ne_zero {A : MPSTensor d D} {L n : ℕ}
       (Set.range fun σ : Fin n → Fin d => evalWord A (List.ofFn σ)) :=
     hspan ▸ Submodule.mem_top
   obtain ⟨c, hc⟩ := Submodule.mem_span_range_iff_exists_fun ℂ |>.mp h1
-  apply matrix_one_ne_zero' hD
+  haveI : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
+  apply (show (1 : Matrix (Fin D) (Fin D) ℂ) ≠ 0 from one_ne_zero)
   rw [← hc]
   exact Finset.sum_eq_zero fun σ _ => by rw [hall σ, smul_zero]
 
