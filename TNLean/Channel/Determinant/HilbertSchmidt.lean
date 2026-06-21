@@ -138,11 +138,8 @@ theorem sum_stdBasis_mul_conjTranspose :
 lemma eq_zero_of_nonneg_of_sum_le_zero {ι : Type*} [Fintype ι]
     (f : ι → ℝ) (hf : ∀ i, 0 ≤ f i) (hsum : ∑ i, f i ≤ 0) :
     ∀ i, f i = 0 := by
-  intro i
-  have h1 : ∑ i, f i ≥ 0 := Finset.sum_nonneg (fun i _ => hf i)
-  have h2 : ∑ i, f i = 0 := le_antisymm hsum h1
-  have h3 := Finset.sum_eq_zero_iff_of_nonneg (fun i _ => hf i) |>.mp h2
-  exact h3 i (Finset.mem_univ i)
+  have hsum_zero : ∑ i, f i = 0 := le_antisymm hsum (Fintype.sum_nonneg hf)
+  exact fun i => congrFun ((Fintype.sum_eq_zero_iff_of_nonneg hf).mp hsum_zero) i
 
 private lemma matrix_det_norm_one_trace_conjTranspose_mul_self_ge [NeZero d]
     (A : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) (hdet : ‖A.det‖ = 1) :
