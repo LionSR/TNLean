@@ -58,14 +58,6 @@ variable {d D n : ℕ}
 
 /-! ### Spanning helpers -/
 
-/-- A nonzero-size identity matrix is nonzero. -/
-private theorem matrix_one_ne_zero' (hD : 0 < D) :
-    (1 : Matrix (Fin D) (Fin D) ℂ) ≠ 0 := by
-  intro h
-  have hentry := congrFun (congrFun h ⟨0, hD⟩) ⟨0, hD⟩
-  rw [Matrix.one_apply_eq] at hentry
-  exact one_ne_zero hentry
-
 /-- Right multiplication by an invertible matrix preserves spanning. -/
 private theorem span_range_mul_right_unit {ι : Type*}
     {W : ι → Matrix (Fin D) (Fin D) ℂ}
@@ -185,7 +177,8 @@ private theorem exists_arcEval_ne_zero [NeZero n] {A : MPSChainTensor d D n}
       (Set.range fun ρ : Fin m → Fin d => arcEval A s (List.ofFn ρ)) :=
     hspan ▸ Submodule.mem_top
   obtain ⟨c, hc⟩ := Submodule.mem_span_range_iff_exists_fun ℂ |>.mp h1
-  apply matrix_one_ne_zero' hD
+  haveI : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
+  apply (show (1 : Matrix (Fin D) (Fin D) ℂ) ≠ 0 from one_ne_zero)
   rw [← hc]
   exact Finset.sum_eq_zero fun ρ _ => by rw [hall ρ, smul_zero]
 
@@ -379,7 +372,8 @@ private theorem exists_window_covariance [NeZero n] {A B : MPSChainTensor d D n}
     rw [← hc, Matrix.scalar_apply, Matrix.smul_one_eq_diagonal]
   have hc0 : c ≠ 0 := by
     intro h0
-    apply matrix_one_ne_zero' hD
+    haveI : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
+    apply (show (1 : Matrix (Fin D) (Fin D) ℂ) ≠ 0 from one_ne_zero)
     have hzero : ((Xu : (Matrix (Fin D) (Fin D) ℂ)ˣ) : Matrix (Fin D) (Fin D) ℂ) *
         (Z (p + m) : Matrix (Fin D) (Fin D) ℂ) = 0 := by
       rw [hXZ, h0, zero_smul]
