@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import Mathlib.LinearAlgebra.UnitaryGroup
+import TNLean.Algebra.MatrixGramUnitary
 import TNLean.Channel.POVM
-import TNLean.Channel.KrausFreedom
 
 /-!
 # Uniqueness properties of concrete Naimark dilations
@@ -34,15 +34,6 @@ open Matrix Finset BigOperators
 variable {D n : ℕ}
 
 namespace POVM
-
-/-- If two square matrices have the same Gram matrix, then they differ by left
-multiplication by a unitary matrix. -/
-private theorem exists_unitary_mul_eq_of_conjTranspose_mul_eq
-    (B A : Matrix (Fin D) (Fin D) ℂ)
-    (hGram : Bᴴ * B = Aᴴ * A) :
-    ∃ U : Matrix.unitaryGroup (Fin D) ℂ,
-      B = (U : Matrix (Fin D) (Fin D) ℂ) * A := by
-  exact Matrix.exists_unitary_mul_eq_of_conjTranspose_mul_eq B A hGram
 
 /-- Predicate saying that `V` together with the projective measurement `P`
 realizes `E` as a Naimark dilation. -/
@@ -240,7 +231,7 @@ theorem exists_isometry_mul_naimarkIsometry_of_recovery
       _ = E.ops i := hV i
       _ = (E.naimarkKraus i)ᴴ * E.naimarkKraus i := E.naimarkKraus_spec i
   choose U hU using fun i : Fin n =>
-    exists_unitary_mul_eq_of_conjTranspose_mul_eq
+    Matrix.exists_unitary_mul_eq_of_conjTranspose_mul_eq
       (B := naimarkBlock (D := D) (n := n) V i) (A := E.naimarkKraus i) (hGram i)
   refine ⟨sectorwiseUnitary (D := D) U, sectorwiseUnitary_isometry (D := D) U, ?_⟩
   calc
