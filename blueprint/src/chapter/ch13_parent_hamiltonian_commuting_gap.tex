@@ -288,6 +288,69 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     $h_i(B,L)V^{(N)}(A_j)=0$ for every $i$.
 \end{proof}
 
+\begin{lemma}[Block-diagonal spanning is equivalent to the reverse inclusion]
+    \label{lem:block_diagonal_parent_spanning_reverse_inclusion}
+    \lean{MPSTensor.hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_iff_ker_le_bntMPSVectorSpan}
+    \lean{MPSTensor.hasNNCPHGroundSpaces_toTensorFromBlocks_iff_forall_isNNCPH_and_ker_le_bntMPSVectorSpan}
+    \leanok
+    \uses{def:parent_hamiltonian_ground_space_spanning,
+        lem:bnt_span_le_parent_hamiltonian_kernel, def:has_nncph_ground_spaces}
+    Let $B=\bigoplus_{j=0}^{r-1}\mu_jA_j$, with every $\mu_j\ne0$. Then, for
+    every $N>L$, the source parent-Hamiltonian spanning condition
+    \[
+        \ker H_L^{(N)}(B)
+        =
+        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}
+    \]
+    is equivalent to the reverse containment, for the same $N$:
+    \[
+        \ker H_L^{(N)}(B)
+        \subseteq
+        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}.
+    \]
+    In the nearest-neighbor case \(L=2\), the all-chain source condition of
+    Definition~\ref{def:has_nncph_ground_spaces} is equivalent to the
+    conjunction
+    \[
+        \begin{aligned}
+        &\left(\forall N>2,\ \forall i,j\in\{0,\ldots,N-1\},\;
+        h_i(B,2)h_j(B,2)=h_j(B,2)h_i(B,2)\right)\\
+        &{}\land
+        \left(\forall N>2,\;
+        \ker H_2^{(N)}(B)
+        \subseteq
+        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}\right).
+        \end{aligned}
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The forward direction of the displayed equality gives the containment by
+    rewriting the kernel. Conversely, for $N>L$ the easy inclusion above gives
+    \[
+        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}
+        \subseteq
+        \ker H_L^{(N)}(B),
+    \]
+    and the assumed reverse containment gives equality. For $L=2$, the
+    all-chain nearest-neighbor condition of
+    Definition~\ref{def:has_nncph_ground_spaces} decomposes as the conjunction
+    \[
+        \begin{aligned}
+        &\left(\forall N>2,\ \forall i,j\in\{0,\ldots,N-1\},\;
+        h_i(B,2)h_j(B,2)=h_j(B,2)h_i(B,2)\right)\\
+        &{}\land
+        \left(\forall N>2,\;
+        \ker H_2^{(N)}(B)
+        \subseteq
+        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}\right).
+        \end{aligned}
+    \]
+    The second conjunct is the reverse containment just identified with the
+    source spanning clause.
+\end{proof}
+
 \begin{theorem}[Renormalization fixed points have commuting nearest-neighbor parent terms]\label{thm:rfp_implies_nncph}
     \lean{MPSTensor.rfp_implies_nncph}
     \lean{Axioms.rfp_to_nncph_commute}
