@@ -142,7 +142,11 @@ theorem eigenvalue_norm_le_one₂ [NeZero D₁] [NeZero D₂]
   obtain ⟨v, hv_mem, hv_ne⟩ := hμ.exists_hasEigenvector
   have hFv := Module.End.mem_eigenspace_iff.mp hv_mem
   by_contra h_gt; push Not at h_gt
-  have h_pos := frobSq_pos_of_ne_zero v hv_ne
+  have h_pos : 0 < frobSq v := by
+    rw [frobSq]
+    letI : NormedAddCommGroup (Matrix (Fin D₁) (Fin D₂) ℂ) :=
+      Matrix.frobeniusNormedAddCommGroup
+    exact sq_pos_of_ne_zero (norm_ne_zero_iff.mpr hv_ne)
   have h_bound : ∀ n : ℕ, ‖μ‖ ^ (2 * n) ≤ (D₁ : ℝ) ^ 2 := fun n => by
     have h1 := hs_contraction_rect A B v hA_norm hB_norm n
     rw [eigenvector_pow _ v μ hFv n] at h1

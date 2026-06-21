@@ -27,7 +27,7 @@ both norms give the same spectral radius.
 ## Main results
 
 * `MPSTensor.frobSq_trace`: `frobSq X = (trace(X† X)).re`.
-* `MPSTensor.frobSq_eq_zero_iff`, `frobSq_pos_of_ne_zero`, `frobSq_smul`.
+* `MPSTensor.frobSq_smul`: scalar multiplication for `frobSq`.
 * `MPSTensor.norm_matToES_sq`: `‖matToES X‖² = frobSq X`.
 * `MPSTensor.norm_matToES_eq_frobenius_norm`: the Euclidean-space norm of
   `matToES X` is the Frobenius norm of `X`.
@@ -56,13 +56,6 @@ lemma frobSq_eq_sum (X : Matrix (Fin m) (Fin n) ℂ) :
 lemma frobSq_trace (X : Matrix (Fin m) (Fin n) ℂ) :
     frobSq X = (Matrix.trace (Xᴴ * X)).re := by
   rw [frobSq, Matrix.trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq]
-
-lemma frobSq_eq_zero_iff (X : Matrix (Fin m) (Fin n) ℂ) : frobSq X = 0 ↔ X = 0 := by
-  rw [frobSq, sq_eq_zero_iff, norm_eq_zero]
-
-lemma frobSq_pos_of_ne_zero (X : Matrix (Fin m) (Fin n) ℂ) (hX : X ≠ 0) :
-    0 < frobSq X :=
-  sq_pos_of_ne_zero (norm_ne_zero_iff.mpr hX)
 
 lemma frobSq_smul (c : ℂ) (X : Matrix (Fin m) (Fin n) ℂ) :
     frobSq (c • X) = ‖c‖ ^ 2 * frobSq X := by
