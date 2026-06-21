@@ -37,6 +37,58 @@ theorem leftCanonical_smul_of_norm_one (c : ℂ) (hc : ‖c‖ = 1)
       (Complex.normSq_eq_conj_mul_self (z := c)).symm
   rw [hsc, one_smul]
 
+/-- If both `A` and its scalar multiple are left-canonical, then the scalar has
+unit norm.
+
+This is the scalar normalization used in arXiv:1708.00029, Appendix A,
+lines 1082--1084: once sectorwise proportionality has been extracted, the
+left-canonical equations force the proportionality scalar to be a phase. -/
+theorem norm_eq_one_of_leftCanonical_smul [NeZero D] (c : ℂ) (A : MPSTensor d D)
+    (hA : IsLeftCanonical A) (hcA : IsLeftCanonical (fun i => c • A i)) :
+    ‖c‖ = 1 := by
+  unfold IsLeftCanonical at hA hcA
+  have hscaled : (star c * c) • (1 : Matrix (Fin D) (Fin D) ℂ) = 1 := by
+    calc
+      (star c * c) • (1 : Matrix (Fin D) (Fin D) ℂ)
+          = (star c * c) • ∑ i : Fin d, (A i)ᴴ * A i := by rw [hA]
+      _ = ∑ i : Fin d, (c • A i)ᴴ * (c • A i) := by
+        simp only [Matrix.conjTranspose_smul]
+        simp_rw [smul_mul_smul_comm]
+        rw [← Finset.smul_sum]
+      _ = 1 := hcA
+  have hentry :=
+    congrArg (fun M : Matrix (Fin D) (Fin D) ℂ => M 0 0) hscaled
+  have hstar_mul : star c * c = 1 := by
+    simpa [Matrix.smul_apply] using hentry
+  have hnormSq : star c * c = (↑(‖c‖ ^ 2) : ℂ) := by
+    simpa [Complex.normSq_eq_norm_sq] using
+      (Complex.normSq_eq_conj_mul_self (z := c)).symm
+  have hsq_complex : ((‖c‖ ^ 2 : ℝ) : ℂ) = 1 := by
+    rw [← hnormSq, hstar_mul]
+  have hsq_real : ‖c‖ ^ 2 = 1 := by
+    exact Complex.ofReal_injective hsq_complex
+  nlinarith [norm_nonneg c]
+
+/-- Appendix-A scalar normalization in the form used after product-one phase
+extraction.
+
+If \(A^i=(\kappa\xi)B^i\), both tensor families are left-canonical, and
+\(\xi\) already has unit norm, then \(\kappa\) has unit norm.  This isolates
+the normalization step in arXiv:1708.00029, Appendix A, lines 1082--1084, after
+the \(\Omega_u\)-contraction and scalar extraction have produced the sector
+relation. -/
+theorem kappa_norm_eq_one_of_leftCanonical_smul [NeZero D]
+    {κ ξ : ℂ} (hξ : ‖ξ‖ = 1) (A B : MPSTensor d D)
+    (hA : IsLeftCanonical A) (hB : IsLeftCanonical B)
+    (hAB : ∀ i : Fin d, A i = (κ * ξ) • B i) :
+    ‖κ‖ = 1 := by
+  have hscaled : IsLeftCanonical (fun i : Fin d => (κ * ξ) • B i) := by
+    unfold IsLeftCanonical at hA ⊢
+    simpa [hAB] using hA
+  have hκξ : ‖κ * ξ‖ = 1 :=
+    norm_eq_one_of_leftCanonical_smul (κ * ξ) B hB hscaled
+  simpa [norm_mul, hξ] using hκξ
+
 /-- Unit-norm scaling preserves periodicity data. -/
 theorem isPeriodic_smul_of_norm_one
     {m : ℕ} {c : ℂ} (hc : ‖c‖ = 1)
