@@ -32,8 +32,7 @@ variable {D : ℕ}
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
 local instance instSubsequenceNormOneClassMatrixCLM [NeZero D] :
-    @NormOneClass (Mat →L[ℂ] Mat)
-      (TNOperatorSpace.instNormedRingMatrixCLM (Fin D)).toNorm _ := by
+    NormOneClass (Mat →L[ℂ] Mat) := by
   constructor
   change ‖(ContinuousLinearMap.id ℂ Mat)‖ = 1
   exact ContinuousLinearMap.norm_id (𝕜 := ℂ) (E := Mat)
@@ -170,10 +169,7 @@ private theorem norm_expSemigroupCLM_taylor_bound [NeZero D]
       ‖NormedSpace.exp ((s : ℂ) • E) - 1 - (s : ℂ) • E‖ ≤
         ‖((s : ℂ) • E)‖ ^ 2 * Real.exp ‖((s : ℂ) • E)‖ :=
     @norm_exp_sub_one_sub_self_le (Mat →L[ℂ] Mat)
-      (TNOperatorSpace.instNormedRingMatrixCLM (Fin D))
-      (TNOperatorSpace.instNormedAlgebraComplexMatrixCLM (Fin D))
-      (TNOperatorSpace.instCompleteSpaceMatrixCLM (Fin D))
-      (instSubsequenceNormOneClassMatrixCLM (D := D))
+      inferInstance inferInstance inferInstance (instSubsequenceNormOneClassMatrixCLM (D := D))
       ((s : ℂ) • E)
   simp only [expSemigroupCLM] at h ⊢
   have hnorm_smul : ‖(s : ℂ) • E‖ = s * ‖E‖ := by

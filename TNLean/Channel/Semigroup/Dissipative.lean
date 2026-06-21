@@ -204,7 +204,7 @@ theorem expSemigroup_dissipativeDrift_apply
       exact @NormedSpace.exp_add_of_commute (MatrixCLM (Fin D))
         ContinuousLinearMap.toNormedRing
         inferInstance
-        (TNOperatorSpace.instCompleteSpaceMatrixCLM (Fin D))
+        inferInstance
         (x := leftMulCLMAlgHom D (-(t : ℂ) • κ))
         (y := rightMulCLMAlgHom D (MulOpposite.op (-(t : ℂ) • κᴴ)))
         hcomm
