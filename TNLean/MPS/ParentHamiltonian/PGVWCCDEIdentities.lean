@@ -56,7 +56,7 @@ coordinates used here to state the same identity for an opened cyclic interval.
 
 **Local fix (adjoint correction):** The source line writes
 \(E^j=\sum_k C^j_kA^j_k\), while the normalization step uses
-\(\sum_k A^j_kA^{j\dagger}_k=I\). The formal statement uses the adjointed
+\(\sum_k A^j_kA^{j\dagger}_k=I\). The local identity uses the adjointed
 matrix \(E^j=\sum_k C^j_kA^{j\dagger}_k\), as recorded in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem pgvwc07_complementary_word_cde_identities_of_trace_decomposition

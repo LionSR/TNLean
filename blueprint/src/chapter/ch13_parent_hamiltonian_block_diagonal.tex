@@ -139,7 +139,7 @@ by \cite[Theorem~IV.16]{Cirac2021Matrix}.
     $\bigoplus_kX_k$ is $X_j$, giving the displayed sum.
 \end{proof}
 
-\begin{lemma}[One block in a block-diagonal local ground space]
+\begin{lemma}[One block lies in the local parent space of the direct-sum tensor]
     \label{lem:local_ground_space_block_le_assembled}
     \lean{MPSTensor.groundSpace_block_le_toTensorFromBlocks}
     \leanok
@@ -336,7 +336,7 @@ by \cite[Theorem~IV.16]{Cirac2021Matrix}.
     \]
 \end{proof}
 
-\begin{lemma}[Periodic chain vectors decompose in the local block spaces]
+\begin{lemma}[Periodic parent-space vectors decompose in the local block spaces]
     \label{lem:bnt_block_diagonal_open_boundary_decomposition}
     \lean{MPSTensor.exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1}
     \leanok
@@ -377,7 +377,7 @@ by \cite[Theorem~IV.16]{Cirac2021Matrix}.
     decomposition $\psi=\sum_j\psi_j$ with $\psi_j\in G_N(A_j)$.
 \end{proof}
 
-\begin{lemma}[Block-diagonal boundary conditions for periodic chain vectors]
+\begin{lemma}[Block-diagonal boundary conditions for periodic parent-space vectors]
     \label{lem:bnt_block_diagonal_open_boundary_matrices}
     \lean{MPSTensor.exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1}
     \leanok
@@ -427,15 +427,15 @@ The lemma gives
 \[
     \Gamma_N^{A_j}(\mu_j^NX_j)\in G_N(A_j).
 \]
-This is not enough for periodic-boundary membership when a local window crosses
-the chosen cut. The boundary-crossing comparison of
+This is not enough for periodic-boundary membership when a cyclic window crosses
+the chosen cut. The boundary-cut comparison of
 Lemma~\ref{lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
 concerns the separate assertion
 \[
     \Gamma_N^{A_j}(\mu_j^N X_j)\in\mathcal G_{N,L}(A_j).
 \]
 
-\subsection{Boundary-crossing component constraints}\label{subsec:block_diagonal_boundary_crossing}
+\subsection{Cyclic windows at the boundary cut}\label{subsec:block_diagonal_boundary_crossing}
 
 A cyclic length-$L$ window either stays inside the chosen linear interval
 ($i+L\le N$) or crosses the boundary cut ($N<i+L$). The non-wrapping case is
@@ -1228,8 +1228,12 @@ in both cases.
         =
         \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho .
     \]
-    This is the formal word-coordinate counterpart of the source $C^j,D^j$
-    comparison, with $D^j_\beta=(\mu_j^NX_j)A^j_\beta$.
+    This is the cut-adapted form of the source comparison
+    \[
+        A^j_{i_{m+1}}C^j_{i_1}=D^j_{i_{m+1}}A^j_{i_1},
+        \qquad
+        D^j_\beta=(\mu_j^NX_j)A^j_\beta .
+    \]
     Then, for every block $j$,
     \[
         \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).

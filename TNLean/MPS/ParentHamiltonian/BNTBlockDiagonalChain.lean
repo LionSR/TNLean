@@ -373,8 +373,8 @@ theorem
     have hpow : (μ j) ^ N ≠ 0 := pow_ne_zero N (hμ j)
     simpa [X, hY j, hpow] using hφ j
 
-/-- The current normalized BNT formalization gives two inclusions for the
-block-diagonal periodic chain space.
+/-- For normalized BNT blocks, the block-diagonal periodic chain space satisfies
+two inclusions.
 
 Let
 \[

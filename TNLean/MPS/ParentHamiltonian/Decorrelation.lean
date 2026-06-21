@@ -98,10 +98,9 @@ end CommutingProjectors
 We work in an abstract setting with finite-dimensional Hilbert spaces
 \(H_A\), \(H_X\), \(H_B\) and a subspace \(K ≤ H_A ⊗ H_X ⊗ H_B\).
 
-Since the full formalization of the tensor product of Hilbert spaces is
-not yet available in Mathlib, we state the main definitions and the
-equivalence theorem using abstract idempotent endomorphisms on a
-finite-dimensional inner product space.
+Rather than choosing a tensor-product model for finite-dimensional Hilbert
+spaces, we state the main definitions and the equivalence theorem using
+abstract idempotent endomorphisms on a finite-dimensional inner product space.
 -/
 
 section AbstractDecorrelation
