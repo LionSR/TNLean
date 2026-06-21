@@ -93,18 +93,15 @@ private theorem conj_eq_conj_of_span_range {ι : Sort*}
     {P Q P' Q' : Matrix (Fin D) (Fin D) ℂ}
     (h : ∀ i, P * F i * Q = P' * F i * Q') (M : Matrix (Fin D) (Fin D) ℂ) :
     P * M * Q = P' * M * Q' := by
-  have hM : M ∈ Submodule.span ℂ (Set.range F) := hF ▸ Submodule.mem_top
-  induction hM using Submodule.span_induction with
-  | mem x hx =>
-      obtain ⟨i, rfl⟩ := hx
-      exact h i
-  | zero => simp only [Matrix.mul_zero, Matrix.zero_mul]
-  | add x y _ _ hx hy =>
-      rw [Matrix.mul_add, Matrix.add_mul, Matrix.mul_add, Matrix.add_mul,
-        hx, hy]
-  | smul c x _ hx =>
-      rw [Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_smul, Matrix.smul_mul,
-        hx]
+  have hmaps :
+      (LinearMap.mulRight ℂ Q).comp (LinearMap.mulLeft ℂ P) =
+        (LinearMap.mulRight ℂ Q').comp (LinearMap.mulLeft ℂ P') := by
+    apply LinearMap.ext_on_range (v := F) hF
+    intro i
+    simpa [LinearMap.comp_apply, LinearMap.mulLeft_apply, LinearMap.mulRight_apply]
+      using h i
+  simpa [LinearMap.comp_apply, LinearMap.mulLeft_apply, LinearMap.mulRight_apply]
+    using congrArg (fun f => f M) hmaps
 
 /-- Some arc product of a spanning arc family is nonzero. -/
 private theorem exists_arcEval_ne_zero [NeZero n] {A : MPSChainTensor d D n}

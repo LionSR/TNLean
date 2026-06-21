@@ -61,14 +61,15 @@ private theorem conj_eq_conj_of_span {D : ℕ} {S : Set (Matrix (Fin D) (Fin D) 
     (hS : Submodule.span ℂ S = ⊤) {P Q P' Q' : Matrix (Fin D) (Fin D) ℂ}
     (h : ∀ M ∈ S, P * M * Q = P' * M * Q') (M : Matrix (Fin D) (Fin D) ℂ) :
     P * M * Q = P' * M * Q' := by
-  have hM : M ∈ Submodule.span ℂ S := hS ▸ Submodule.mem_top
-  induction hM using Submodule.span_induction with
-  | mem x hx => exact h x hx
-  | zero => simp only [Matrix.mul_zero, Matrix.zero_mul]
-  | add x y _ _ hx hy =>
-      rw [Matrix.mul_add, Matrix.add_mul, Matrix.mul_add, Matrix.add_mul, hx, hy]
-  | smul r x _ hx =>
-      rw [Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_smul, Matrix.smul_mul, hx]
+  have hmaps :
+      (LinearMap.mulRight ℂ Q).comp (LinearMap.mulLeft ℂ P) =
+        (LinearMap.mulRight ℂ Q').comp (LinearMap.mulLeft ℂ P') := by
+    apply LinearMap.ext_on hS
+    intro N hN
+    simpa [LinearMap.comp_apply, LinearMap.mulLeft_apply, LinearMap.mulRight_apply]
+      using h N hN
+  simpa [LinearMap.comp_apply, LinearMap.mulLeft_apply, LinearMap.mulRight_apply]
+    using congrArg (fun f => f M) hmaps
 
 /-- **Proportionality from a shared two-sided conjugation.**  Two invertible
 matrices `Z`, `Z'` with `Z⁻¹ W Z = Z'⁻¹ W Z'` for every matrix `W` differ by

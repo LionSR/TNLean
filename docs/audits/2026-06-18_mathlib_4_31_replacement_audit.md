@@ -91,6 +91,9 @@ The clearest replacements are:
   span inductions over the left and right word families.  It now packages
   `(R, S) ↦ R * X * S` as a bilinear map and applies
   `Submodule.map₂_span_span`.
+- Two PEPS conjugation-extension helpers no longer prove linear-map equality
+  by hand over a spanning set.  They use Mathlib's `LinearMap.ext_on` and
+  `LinearMap.ext_on_range` for equality on a spanning set or range.
 - Two one-use Frobenius submultiplicativity wrappers in the transfer-operator
   gap files were removed.  The proofs now call Mathlib's
   `Matrix.frobenius_norm_mul` directly at the Hilbert-Schmidt estimate.
@@ -2283,6 +2286,30 @@ Focused check:
 
 ```bash
 lake env lean TNLean/Algebra/TracePairing.lean
+```
+
+## PEPS conjugation extension cleanup, 2026-06-21
+
+Two PEPS helpers used explicit `Submodule.span_induction` proofs to extend
+equality of two-sided multiplication maps from a spanning family to every
+matrix:
+
+- `PEPS.conj_eq_conj_of_span` in
+  `TNLean/PEPS/CycleMPSTranslationInvariant.lean`;
+- `MPSChainTensor.conj_eq_conj_of_span_range` in
+  `TNLean/PEPS/CycleMPSChainOverlapCapstone.lean`.
+
+Both helpers now regard `M ↦ P * M * Q` as a linear map and apply Mathlib's
+native extension principles:
+
+- `LinearMap.ext_on` for equality on a spanning set;
+- `LinearMap.ext_on_range` for equality on the range of a spanning family.
+
+Focused checks:
+
+```bash
+lake env lean TNLean/PEPS/CycleMPSTranslationInvariant.lean
+lake env lean TNLean/PEPS/CycleMPSChainOverlapCapstone.lean
 ```
 
 ## Conclusions
