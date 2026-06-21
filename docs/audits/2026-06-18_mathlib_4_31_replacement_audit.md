@@ -128,6 +128,12 @@ The clearest replacements are:
   removed; the two transfer estimates now unfold `frobSq` and use `sq_nonneg`.
 - Two RFP/ZCL wrappers were removed: an unused MPDO implication method that
   repeated `MPOTensor.isRFP_iff_isZCL`, and a one-use cluster-example RFP fact.
+- Five internal commuting-idempotent `LinearMap` helpers in the RFP decorrelation file
+  were removed.  The commuting-parent-Hamiltonian consequences now prove the
+  absorption and complement-commutation identities directly from associativity,
+  `Commute`, and the idempotence hypotheses at their use sites.  The
+  blueprint-facing frustration-free identity remains as the formalized lemma
+  for the corresponding blueprint item.
 - The unused elementary orthogonal-projection witnesses for `0` and `1` were
   removed.  Positivity of an orthogonal projection now passes through Mathlib's
   `IsStarProjection.nonneg` and `Matrix.nonneg_iff_posSemidef`.
@@ -1679,6 +1685,13 @@ pass-throughs:
   specialization of `IsIdempotentElem.iff_eq_zero_or_one`.
 - `LinearMap.comp_idem_of_comm_idem`.  This was the endomorphism-composition
   specialization of `IsIdempotentElem.mul_of_commute`.
+- `LinearMap.idem_comp_left_absorb`, `LinearMap.idem_comp_right_absorb`,
+  `LinearMap.comm_idem_cross_absorb_left`,
+  `LinearMap.comm_idem_cross_absorb_right`, and
+  `LinearMap.complement_comm_of_comm`.  These were local one-file algebra
+  helpers for commuting-parent-Hamiltonian proofs; the use sites now perform
+  the same short calculations directly from `LinearMap.comp_assoc`,
+  `Commute`, and the idempotence hypotheses.
 - `orthogonalProjection_complement_mul` and
   `orthogonalProjection_mul_complement`.  These were the matrix-projection
   specializations of `IsIdempotentElem.one_sub_mul_self` and

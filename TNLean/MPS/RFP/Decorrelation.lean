@@ -14,9 +14,8 @@ needed for the decorrelation ↔ commuting parent Hamiltonian equivalence
 
 Building on the backward direction proved in
 `TNLean.MPS.ParentHamiltonian.Decorrelation`, this file:
-1. Develops the **product algebra** of commuting idempotents — absorption,
-   cross-absorption, complement commutativity, and the frustration-free
-   Hamiltonian identity.
+1. Uses the product algebra of commuting idempotents directly in the
+   commuting-parent-Hamiltonian consequences below.
 2. Extends the `HasCommutingParentHam` properties with absorption, reverse-product,
    complement commutativity, and a ground-space membership characterisation.
 3. Provides `IsDecorrelated` properties — monotonicity and triviality lemmas.
@@ -25,14 +24,10 @@ All results are fully proved (no `sorry`).
 
 ## Main results
 
-### Commuting idempotent algebra (`LinearMap` namespace)
+### Frustration-free algebra
 
-* `idem_comp_left_absorb` — `P ∘ (P ∘ Q) = P ∘ Q`
-* `idem_comp_right_absorb` — `(P ∘ Q) ∘ Q = P ∘ Q`
-* `comm_idem_cross_absorb_left` — `(P ∘ Q) ∘ P = P ∘ Q` when `[P, Q] = 0`
-* `comm_idem_cross_absorb_right` — `Q ∘ (P ∘ Q) = P ∘ Q` when `[P, Q] = 0`
-* `complement_comm_of_comm` — `[P, Q] = 0 → [1 − P, 1 − Q] = 0`
-* `frustration_free_ham_eq` — `(1−P) + (1−Q) − (1−P)∘(1−Q) = 1 − P∘Q`
+* `LinearMap.frustration_free_ham_eq` — `(1−P) + (1−Q) − (1−P)∘(1−Q) =
+  1 − P∘Q`
 
 ### `Decorrelation.HasCommutingParentHam` properties
 
@@ -57,75 +52,26 @@ All results are fully proved (no `sorry`).
 * arXiv:1606.00608, Appendix D, Section D.2 (Definitions D.1–D.2, Proposition D.3)
 -/
 
-/-!
-### Commuting idempotent product algebra
-
-Algebraic lemmas for pairs of commuting idempotent endomorphisms.
-These support the `HasCommutingParentHam` properties below.
--/
-
-section CommutingIdempotentAlgebra
+section FrustrationFreeIdentity
 
 variable {E : Type*} [AddCommGroup E] [Module ℂ E]
 
 namespace LinearMap
 
-/-- Left absorption: `P ∘ (P ∘ Q) = P ∘ Q` when `P` is idempotent. -/
-theorem idem_comp_left_absorb
-    {P Q : E →ₗ[ℂ] E} (hP : P ∘ₗ P = P) :
-    P ∘ₗ (P ∘ₗ Q) = P ∘ₗ Q := by
-  rw [← comp_assoc, hP]
-
-/-- Right absorption: `(P ∘ Q) ∘ Q = P ∘ Q` when `Q` is idempotent. -/
-theorem idem_comp_right_absorb
-    {P Q : E →ₗ[ℂ] E} (hQ : Q ∘ₗ Q = Q) :
-    (P ∘ₗ Q) ∘ₗ Q = P ∘ₗ Q := by
-  rw [comp_assoc, hQ]
-
-/-- Cross absorption (left): `(P ∘ Q) ∘ P = P ∘ Q` when `P` is idempotent
-and `P`, `Q` commute. -/
-theorem comm_idem_cross_absorb_left
-    {P Q : E →ₗ[ℂ] E}
-    (hP : P ∘ₗ P = P) (hcomm : P ∘ₗ Q = Q ∘ₗ P) :
-    (P ∘ₗ Q) ∘ₗ P = P ∘ₗ Q := by
-  rw [comp_assoc, ← hcomm, ← comp_assoc, hP]
-
-/-- Cross absorption (right): `Q ∘ (P ∘ Q) = P ∘ Q` when `Q` is idempotent
-and `P`, `Q` commute. -/
-theorem comm_idem_cross_absorb_right
-    {P Q : E →ₗ[ℂ] E}
-    (hQ : Q ∘ₗ Q = Q) (hcomm : P ∘ₗ Q = Q ∘ₗ P) :
-    Q ∘ₗ (P ∘ₗ Q) = P ∘ₗ Q := by
-  rw [← comp_assoc, ← hcomm, comp_assoc, hQ]
-
-/-- Commuting endomorphisms have commuting complements:
-`[P, Q] = 0 → [1 − P, 1 − Q] = 0`. -/
-theorem complement_comm_of_comm
-    {P Q : E →ₗ[ℂ] E} (hcomm : P ∘ₗ Q = Q ∘ₗ P) :
-    (id - P) ∘ₗ (id - Q) = (id - Q) ∘ₗ (id - P) := by
-  have hPQ : Commute P Q := by
-    change P * Q = Q * P
-    simpa [Module.End.mul_eq_comp] using hcomm
-  have hP_comp : Commute P (id - Q) := (Commute.one_right P).sub_right hPQ
-  have hcomp : Commute (id - P) (id - Q) :=
-    (Commute.one_left (id - Q)).sub_left hP_comp
-  simpa [Module.End.mul_eq_comp] using hcomp.eq
-
-/-- The frustration-free Hamiltonian identity (pure algebra, no commutativity
-needed): `(1 − P) + (1 − Q) − (1 − P) ∘ (1 − Q) = 1 − P ∘ Q`.
+/-- The frustration-free Hamiltonian identity:
+`(1 − P) + (1 − Q) − (1 − P) ∘ (1 − Q) = 1 − P ∘ Q`.
 
 For commuting parent Hamiltonians, this shows that the "Hamiltonian"
 `Q_AX + Q_XB − Q_AX ∘ Q_XB` (with `Q = 1 − P`) equals `1 − P_K`.
 See arXiv:1606.00608, Appendix D, Section D.2. -/
-theorem frustration_free_ham_eq
-    {P Q : E →ₗ[ℂ] E} :
+theorem frustration_free_ham_eq {P Q : E →ₗ[ℂ] E} :
     (id - P) + (id - Q) - (id - P) ∘ₗ (id - Q) = id - P ∘ₗ Q := by
   simp only [comp_sub, sub_comp, comp_id, id_comp]
   abel
 
 end LinearMap
 
-end CommutingIdempotentAlgebra
+end FrustrationFreeIdentity
 
 /-!
 ### Extended `HasCommutingParentHam` properties
@@ -152,31 +98,47 @@ theorem HasCommutingParentHam.pK_idem {P_K : E →ₗ[ℂ] E}
 theorem HasCommutingParentHam.pAX_comp_pK {P_K : E →ₗ[ℂ] E}
     (h : HasCommutingParentHam P_K) :
     h.P_AX ∘ₗ P_K = P_K := by
-  simpa [h.hK] using
-    (LinearMap.idem_comp_left_absorb (P := h.P_AX) (Q := h.P_XB) h.hAX_idem)
+  let P_AX := h.P_AX
+  let P_XB := h.P_XB
+  have hK : P_AX ∘ₗ P_XB = P_K := h.hK
+  have hAX : P_AX ∘ₗ P_AX = P_AX := h.hAX_idem
+  change P_AX ∘ₗ P_K = P_K
+  rw [← hK, ← LinearMap.comp_assoc, hAX, hK]
 
 /-- `P_K ∘ P_XB = P_K`: `P_K` absorbs the XB-projector on the right. -/
 theorem HasCommutingParentHam.pK_comp_pXB {P_K : E →ₗ[ℂ] E}
     (h : HasCommutingParentHam P_K) :
     P_K ∘ₗ h.P_XB = P_K := by
-  simpa [h.hK] using
-    (LinearMap.idem_comp_right_absorb (P := h.P_AX) (Q := h.P_XB) h.hXB_idem)
+  let P_AX := h.P_AX
+  let P_XB := h.P_XB
+  have hK : P_AX ∘ₗ P_XB = P_K := h.hK
+  have hXB : P_XB ∘ₗ P_XB = P_XB := h.hXB_idem
+  change P_K ∘ₗ P_XB = P_K
+  rw [← hK, LinearMap.comp_assoc, hXB, hK]
 
 /-- `P_XB ∘ P_K = P_K`: the XB-projector absorbs `P_K` from the left. -/
 theorem HasCommutingParentHam.pXB_comp_pK {P_K : E →ₗ[ℂ] E}
     (h : HasCommutingParentHam P_K) :
     h.P_XB ∘ₗ P_K = P_K := by
-  simpa [h.hK] using
-    (LinearMap.comm_idem_cross_absorb_right (P := h.P_AX) (Q := h.P_XB)
-      h.hXB_idem h.hcomm)
+  let P_AX := h.P_AX
+  let P_XB := h.P_XB
+  have hK : P_AX ∘ₗ P_XB = P_K := h.hK
+  have hXB : P_XB ∘ₗ P_XB = P_XB := h.hXB_idem
+  have hcomm : P_AX ∘ₗ P_XB = P_XB ∘ₗ P_AX := h.hcomm
+  change P_XB ∘ₗ P_K = P_K
+  rw [← hK, ← LinearMap.comp_assoc, ← hcomm, LinearMap.comp_assoc, hXB, hK]
 
 /-- `P_K ∘ P_AX = P_K`: `P_K` absorbs the AX-projector on the right. -/
 theorem HasCommutingParentHam.pK_comp_pAX {P_K : E →ₗ[ℂ] E}
     (h : HasCommutingParentHam P_K) :
     P_K ∘ₗ h.P_AX = P_K := by
-  simpa [h.hK] using
-    (LinearMap.comm_idem_cross_absorb_left (P := h.P_AX) (Q := h.P_XB)
-      h.hAX_idem h.hcomm)
+  let P_AX := h.P_AX
+  let P_XB := h.P_XB
+  have hK : P_AX ∘ₗ P_XB = P_K := h.hK
+  have hAX : P_AX ∘ₗ P_AX = P_AX := h.hAX_idem
+  have hcomm : P_AX ∘ₗ P_XB = P_XB ∘ₗ P_AX := h.hcomm
+  change P_K ∘ₗ P_AX = P_K
+  rw [← hK, LinearMap.comp_assoc, ← hcomm, ← LinearMap.comp_assoc, hAX, hK]
 
 /-- The reverse product equals `P_K`: `P_XB ∘ P_AX = P_K`.
 Follows from `hK : P_AX ∘ P_XB = P_K` and commutativity. -/
@@ -190,7 +152,15 @@ theorem HasCommutingParentHam.complement_comm {P_K : E →ₗ[ℂ] E}
     (h : HasCommutingParentHam P_K) :
     (LinearMap.id - h.P_AX) ∘ₗ (LinearMap.id - h.P_XB) =
       (LinearMap.id - h.P_XB) ∘ₗ (LinearMap.id - h.P_AX) :=
-  LinearMap.complement_comm_of_comm h.hcomm
+  by
+    have hcomm : Commute h.P_AX h.P_XB := by
+      change h.P_AX * h.P_XB = h.P_XB * h.P_AX
+      simpa [Module.End.mul_eq_comp] using h.hcomm
+    have hP_comp : Commute h.P_AX (LinearMap.id - h.P_XB) :=
+      (Commute.one_right h.P_AX).sub_right hcomm
+    have hcomp : Commute (LinearMap.id - h.P_AX) (LinearMap.id - h.P_XB) :=
+      (Commute.one_left (LinearMap.id - h.P_XB)).sub_left hP_comp
+    simpa [Module.End.mul_eq_comp] using hcomp.eq
 
 /-- The frustration-free Hamiltonian identity for a commuting parent
 Hamiltonian: `Q_AX + Q_XB − Q_AX ∘ Q_XB = id − P_K`. -/
@@ -199,8 +169,13 @@ theorem HasCommutingParentHam.hamiltonian_eq {P_K : E →ₗ[ℂ] E}
     (LinearMap.id - h.P_AX) + (LinearMap.id - h.P_XB) -
       (LinearMap.id - h.P_AX) ∘ₗ (LinearMap.id - h.P_XB) =
       LinearMap.id - P_K := by
-  simpa [h.hK] using
-    (LinearMap.frustration_free_ham_eq (P := h.P_AX) (Q := h.P_XB))
+  let P_AX := h.P_AX
+  let P_XB := h.P_XB
+  have hK : P_AX ∘ₗ P_XB = P_K := h.hK
+  change (LinearMap.id - P_AX) + (LinearMap.id - P_XB) -
+      (LinearMap.id - P_AX) ∘ₗ (LinearMap.id - P_XB) =
+    LinearMap.id - P_K
+  simpa [hK] using (LinearMap.frustration_free_ham_eq (P := P_AX) (Q := P_XB))
 
 /-- Ground-space membership: `P_K v = v` iff both `P_AX v = v` and
 `P_XB v = v`. This is the algebraic form of
