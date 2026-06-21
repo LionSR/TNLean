@@ -106,8 +106,9 @@ private theorem psd_orthogonal_difference_eq_zero
     have hre_sum : ∑ j, (star (e j) ⬝ᵥ Y.mulVec (e j)).re = 0 := by
       have h1 := map_sum Complex.reAddGroupHom (fun j => star (e j) ⬝ᵥ Y.mulVec (e j)) Finset.univ
       rw [← hY_tr_sum, hY_tr] at h1; exact h1.symm
-    have hre_zero := (Finset.sum_eq_zero_iff_of_nonneg (fun j _ => hre_nonneg j)).mp hre_sum
-    intro j; exact Complex.ext (hre_zero j (Finset.mem_univ _)) (him j)
+    have hre_zero := congrFun
+      (Fintype.sum_eq_zero_iff_of_nonneg (fun j => hre_nonneg j) |>.mp hre_sum)
+    intro j; exact Complex.ext (hre_zero j) (him j)
   -- Y.mulVec(e_j) = 0 via dotProduct_mulVec_zero_iff for (A+Y) or (B+Y)
   have hY_mulVec_zero : ∀ j, Y.mulVec (e j) = 0 := by
     intro j; rcases he_ker j with hA_ker | hB_ker

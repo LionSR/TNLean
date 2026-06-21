@@ -79,8 +79,9 @@ private lemma ker_invariant_under_adjoint
     have h_sum_zero :
         ∑ j, RCLike.re (star ((A j)ᴴ *ᵥ x) ⬝ᵥ (ρ *ᵥ ((A j)ᴴ *ᵥ x))) = 0 := by
       rw [← map_sum, ← hsum, hqf]; simp
-    have hre := (Finset.sum_eq_zero_iff_of_nonneg (fun j _ => hρ_psd.re_dotProduct_nonneg _)).mp
-      h_sum_zero i (Finset.mem_univ _)
+    have hre := congrFun
+      (Fintype.sum_eq_zero_iff_of_nonneg (fun j => hρ_psd.re_dotProduct_nonneg _) |>.mp
+        h_sum_zero) i
     exact Complex.ext hre (hρ_psd.isHermitian.im_star_dotProduct_mulVec_self _)
   intro i
   exact (hρ_psd.dotProduct_mulVec_zero_iff _).mp (h_each_zero i)
