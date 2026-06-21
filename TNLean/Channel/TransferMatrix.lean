@@ -119,11 +119,6 @@ theorem transferMatrix_apply
     (i j k l : Fin D) :
     transferMatrix T (j, i) (l, k) = (T (Matrix.single k l 1)) i j := rfl
 
-private lemma sum_smul_single_eq (ρ : Matrix (Fin D) (Fin D) ℂ) :
-    ρ = ∑ k : Fin D, ∑ l : Fin D, ρ k l • Matrix.single k l 1 := by
-  simpa [Matrix.smul_single, smul_eq_mul, mul_one] using
-    (Matrix.matrix_eq_sum_single ρ)
-
 /-! ### Fundamental property: T̂ represents T in the vectorized picture -/
 
 /-- **Key property**: the transfer matrix faithfully represents `T`:
@@ -140,7 +135,9 @@ theorem transferMatrix_mulVec_eq
     Matrix.vec, Fintype.sum_prod_type]
   have key : T ρ = ∑ k, ∑ l, ρ k l • T (Matrix.single k l 1) := by
     conv_lhs =>
-      rw [sum_smul_single_eq ρ]
+      rw [show ρ = ∑ k : Fin D, ∑ l : Fin D, ρ k l • Matrix.single k l 1 by
+        simpa [Matrix.smul_single, smul_eq_mul, mul_one] using
+          (Matrix.matrix_eq_sum_single ρ)]
     simp_rw [map_sum, LinearMap.map_smul]
   rw [key]
   simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
@@ -159,7 +156,11 @@ theorem transferMatrix_comp
   have key : S (T (Matrix.single k l 1)) =
       ∑ a, ∑ b, (T (Matrix.single k l 1)) a b • S (Matrix.single a b 1) := by
     conv_lhs =>
-      rw [sum_smul_single_eq (T (Matrix.single k l 1))]
+      rw [show T (Matrix.single k l 1) =
+          ∑ a : Fin D, ∑ b : Fin D,
+            (T (Matrix.single k l 1)) a b • Matrix.single a b 1 by
+        simpa [Matrix.smul_single, smul_eq_mul, mul_one] using
+          (Matrix.matrix_eq_sum_single (T (Matrix.single k l 1)))]
     simp_rw [map_sum, LinearMap.map_smul]
   rw [key]
   simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
@@ -278,14 +279,18 @@ theorem transferMatrix_tp_iff
     calc Matrix.trace (T X)
         = Matrix.trace (T (∑ k, ∑ l, X k l • Matrix.single k l 1)) := by
             conv_lhs =>
-              rw [sum_smul_single_eq X]
+              rw [show X = ∑ k : Fin D, ∑ l : Fin D, X k l • Matrix.single k l 1 by
+                simpa [Matrix.smul_single, smul_eq_mul, mul_one] using
+                  (Matrix.matrix_eq_sum_single X)]
       _ = ∑ k, ∑ l, X k l • Matrix.trace (T (Matrix.single k l 1)) := by
             simp_rw [map_sum, LinearMap.map_smul, Matrix.trace_sum, Matrix.trace_smul]
       _ = ∑ k, ∑ l, X k l • Matrix.trace (Matrix.single k l (1 : ℂ)) := by
             simp_rw [key]
       _ = Matrix.trace X := by
             simp_rw [← Matrix.trace_smul, ← Matrix.trace_sum]
-            rw [← sum_smul_single_eq X]
+            rw [← show X = ∑ k : Fin D, ∑ l : Fin D, X k l • Matrix.single k l 1 by
+              simpa [Matrix.smul_single, smul_eq_mul, mul_one] using
+                (Matrix.matrix_eq_sum_single X)]
 
 /-- **Proposition 2.6 (Unital via transfer matrix)**: `T` is unital (`T 1 = 1`) iff
 the row-diagonal sums of the transfer matrix give `δ_{ij}`:
@@ -332,13 +337,18 @@ theorem transferMatrix_hermiticityPreserving_iff
       -- this : (T (single k l 1)) j i = starRingEnd ℂ ((T (single l k 1)) i j)
       rw [this, starRingEnd_apply, star_star]
     conv_lhs =>
-      rw [sum_smul_single_eq X]
+      rw [show X = ∑ k : Fin D, ∑ l : Fin D, X k l • Matrix.single k l 1 by
+        simpa [Matrix.smul_single, smul_eq_mul, mul_one] using
+          (Matrix.matrix_eq_sum_single X)]
     simp_rw [map_sum, LinearMap.map_smul, Matrix.conjTranspose_sum,
       Matrix.conjTranspose_smul, basis_eq]
     have hXconj : Xᴴ = ∑ k : Fin D, ∑ l : Fin D,
         star (X l k) • Matrix.single k l 1 := by
       conv_lhs =>
-        rw [sum_smul_single_eq Xᴴ]
+        rw [show Xᴴ = ∑ k : Fin D, ∑ l : Fin D,
+            Xᴴ k l • Matrix.single k l 1 by
+          simpa [Matrix.smul_single, smul_eq_mul, mul_one] using
+            (Matrix.matrix_eq_sum_single Xᴴ)]
       simp_rw [Matrix.conjTranspose_apply]
     rw [hXconj]; simp_rw [map_sum, LinearMap.map_smul]
     rw [Finset.sum_comm]
