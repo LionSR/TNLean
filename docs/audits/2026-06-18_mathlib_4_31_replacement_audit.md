@@ -2233,6 +2233,30 @@ lake env lean TNLean/PEPS/CycleMPSChainOverlapInsertion.lean
 lake env lean TNLean/PEPS/CycleMPSTranslationInvariant.lean
 ```
 
+## Naimark square-Gram adapter cleanup, 2026-06-21
+
+`TNLean/Channel/POVM/Uniqueness.lean` still had a private square-matrix
+specialization of the shared Gram theorem
+`Matrix.exists_unitary_mul_eq_of_conjTranspose_mul_eq`.  The private theorem
+was an exact pass-through:
+
+```lean
+private theorem exists_unitary_mul_eq_of_conjTranspose_mul_eq
+```
+
+It has now been removed.  The Naimark uniqueness proof calls
+`Matrix.exists_unitary_mul_eq_of_conjTranspose_mul_eq` directly at the `choose`
+site, matching the style already used in `TNLean.Channel.KrausFreedom` and
+`TNLean.Channel.OpenSystem`.  Since the file no longer needs any theorem from
+`TNLean.Channel.KrausFreedom`, its import was narrowed to
+`TNLean.Algebra.MatrixGramUnitary`.
+
+Focused check:
+
+```bash
+lake build TNLean.Channel.POVM.Uniqueness -q --log-level=info
+```
+
 ## PEPS right-multiplication span cleanup, 2026-06-21
 
 `TNLean/PEPS/CycleMPSChainOverlapCapstone.lean` had a private helper
