@@ -1186,7 +1186,7 @@ unconditional result.
     \]
 \end{proof}
 
-\begin{lemma}[Per-site proportionality from blocked sector match]%
+\begin{lemma}[Cyclic $\Omega_u$-contraction for blocked sector gauges]%
     \label{lem:sector_tensor_proportional_blocked_match}
     \lean{MPSTensor.sectorTensor_proportional_of_blockedMatch}
     % The source conclusion below is unitary. The tagged Lean declaration currently
@@ -1226,6 +1226,47 @@ unconditional result.
         e^{i\lambda_{u+q}}
         \widetilde B_{u+q}^{i_1}\widetilde B_{u+q+1}^{i_2}
         \cdots\widetilde B_{u+q+m-1}^{i_m}.
+    \]
+    % arXiv:1708.00029 Appendix A: eq:Fu, eq:Omegauprop, eq:resultprop.
+    Choose $N_0$ so that the $N_0$-fold repetition of each cyclic
+    $m$-site sector product is injective. For
+    $\mathbf i=(i_1,\ldots,i_{mN_0})$, form the repeated product
+    \[
+        F_u^{\mathbf i}
+        =
+        \bigl(A_u^{i_1}\cdots A_{u+m-1}^{i_m}\bigr)
+        \cdots
+        \bigl(A_u^{i_{m(N_0-1)+1}}\cdots A_{u+m-1}^{i_{mN_0}}\bigr),
+    \]
+    and choose right inverses $\Omega_u$ satisfying
+    \[
+        \sum_{\mathbf i}(\Omega_u^{\mathbf i})_{\alpha,\beta}
+        (F_u^{\mathbf i})_{\alpha',\beta'}
+        =
+        \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+    \]
+    Apply one right inverse to each inserted repeated product. The contraction is
+    \[
+        A_u^{i_1}F_{u+1}^{\mathbf i_1}
+        A_{u+1}^{i_2}F_{u+2}^{\mathbf i_2}
+        \cdots
+        A_{u+m-1}^{i_m}F_u^{\mathbf i_m}
+        \xrightarrow{\ \Omega_{u+1}\otimes\cdots\otimes\Omega_{u+m-1}
+            \otimes\Omega_u\ }
+        A_u^{i_1}\otimes A_{u+1}^{i_2}\otimes\cdots\otimes A_{u+m-1}^{i_m}.
+    \]
+    Applying the same contraction to the $\widetilde B$ side gives
+    \[
+        A_u^{i_1}\otimes A_{u+1}^{i_2}\otimes\cdots\otimes A_{u+m-1}^{i_m}
+        =
+        e^{i\eta_{u+q}}
+        \widetilde B_{u+q}^{i_1}\otimes\widetilde B_{u+q+1}^{i_2}
+        \otimes\cdots\otimes\widetilde B_{u+q+m-1}^{i_m}.
+    \]
+    Here
+    \[
+        \eta_{u+q}=\lambda_{u+q}(mN_0+1)
+            -N_0\sum_{r\in\mathbb Z_m}\lambda_r.
     \]
     Then there are a phase $\xi$ and a unitary matrix $U$ such that
     $A^i=e^{i\xi}UB^iU^{\dagger}$ for every physical index $i$.
