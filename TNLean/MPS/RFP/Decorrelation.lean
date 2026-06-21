@@ -32,7 +32,6 @@ All results are fully proved (no `sorry`).
 * `comm_idem_cross_absorb_left` — `(P ∘ Q) ∘ P = P ∘ Q` when `[P, Q] = 0`
 * `comm_idem_cross_absorb_right` — `Q ∘ (P ∘ Q) = P ∘ Q` when `[P, Q] = 0`
 * `complement_comm_of_comm` — `[P, Q] = 0 → [1 − P, 1 − Q] = 0`
-* `comm_of_complement_comm` — `[1 − P, 1 − Q] = 0 → [P, Q] = 0`
 * `frustration_free_ham_eq` — `(1−P) + (1−Q) − (1−P)∘(1−Q) = 1 − P∘Q`
 
 ### `Decorrelation.HasCommutingParentHam` properties
@@ -104,23 +103,13 @@ theorem comm_idem_cross_absorb_right
 theorem complement_comm_of_comm
     {P Q : E →ₗ[ℂ] E} (hcomm : P ∘ₗ Q = Q ∘ₗ P) :
     (id - P) ∘ₗ (id - Q) = (id - Q) ∘ₗ (id - P) := by
-  simp only [comp_sub, sub_comp, comp_id, id_comp, hcomm]
-  abel
-
-/-- Commuting complements imply commuting originals:
-`[1 − P, 1 − Q] = 0 → [P, Q] = 0`. -/
-theorem comm_of_complement_comm
-    {P Q : E →ₗ[ℂ] E}
-    (hcomm : (id - P) ∘ₗ (id - Q) = (id - Q) ∘ₗ (id - P)) :
-    P ∘ₗ Q = Q ∘ₗ P := by
-  have expand_l : (id - P) ∘ₗ (id - Q) = id - P - Q + P ∘ₗ Q := by
-    simp only [comp_sub, sub_comp, comp_id, id_comp]; abel
-  have expand_r : (id - Q) ∘ₗ (id - P) = id - Q - P + Q ∘ₗ P := by
-    simp only [comp_sub, sub_comp, comp_id, id_comp]; abel
-  rw [expand_l, expand_r] at hcomm
-  have key : (id : E →ₗ[ℂ] E) - P - Q = id - Q - P := by abel
-  rw [key] at hcomm
-  exact add_left_cancel hcomm
+  have hPQ : Commute P Q := by
+    change P * Q = Q * P
+    simpa [Module.End.mul_eq_comp] using hcomm
+  have hP_comp : Commute P (id - Q) := (Commute.one_right P).sub_right hPQ
+  have hcomp : Commute (id - P) (id - Q) :=
+    (Commute.one_left (id - Q)).sub_left hP_comp
+  simpa [Module.End.mul_eq_comp] using hcomp.eq
 
 /-- The frustration-free Hamiltonian identity (pure algebra, no commutativity
 needed): `(1 − P) + (1 − Q) − (1 − P) ∘ (1 − Q) = 1 − P ∘ Q`.
