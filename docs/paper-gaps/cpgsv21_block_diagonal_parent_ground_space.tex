@@ -244,7 +244,7 @@ vector in the periodic-boundary space $\mathcal K_{N,L}(\widehat A)$, produce
 block-diagonal boundary matrices whose block components again belong to the
 blockwise periodic-boundary spaces.
 
-The present formal boundary isolates the remaining source comparison in local
+The present boundary isolates the remaining source comparison in cut-adapted
 coordinates for boundary-crossing windows.  Suppose
 \begin{align}
   \psi
@@ -255,7 +255,7 @@ coordinates for boundary-crossing windows.  Suppose
 For a cyclic interval beginning at \(i\) and crossing the boundary cut, put
 \(a=i+L-N\).  The word \(\beta\) records the part of the interval before the
 chosen cut, while \(\rho\) records the outside word of length \(N-L\).  These
-are local coordinates for the proof, not names used in the source statement.
+are the blocked words obtained by opening the source boundary-index comparison.
 The conditional theorem assumes that, for every block \(j\) and every such
 outside word \(\rho\), there is a matrix \(E_{j,i,\rho}\) such that for every
 word \(\beta\) of length \(a\),
@@ -283,7 +283,7 @@ as an unconditional hypothesis-free equality theorem in the source range.\footno
 \leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_complementary_identities}.}
 
 The live blueprint records that larger source statement with explicit citations
-and separately marks the local cut coordinates used by the formalization,
+and separates the cut-adapted coordinates from the paper's boundary indices,
 without claiming that the source statement is proved.\footnote{Blueprint locations:
 \path{def:parent_hamiltonian_ground_space_bnt} for the block-diagonal
 periodic-boundary ground space,
@@ -495,7 +495,7 @@ as external inputs.\footnote{Lean declarations:
 and
 \leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition_bnt_c1_span}.}
 
-The word-indexed \(C^j,D^j\) route is closer to the proof of
+The cut-adapted \(C^j,D^j\) route is closer to the proof of
 \cite[Theorem~12]{PerezGarcia2007MPSReps}.
 The words \(\beta\) and \(\rho\) are local word coordinates introduced after
 opening and blocking the cyclic boundary comparison; they reindex the source
