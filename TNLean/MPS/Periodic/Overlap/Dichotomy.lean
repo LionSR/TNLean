@@ -7,8 +7,8 @@ import TNLean.MPS.Periodic.Overlap.Case3
 /-!
 # Periodic overlap dichotomy: main statement
 
-This module contains the final Proposition 3.3 statement and its eventual
-linear-independence corollary.
+This module contains the statement of the source proposition
+`equal-or-orthogonal-generalized` and its eventual linear-independence corollary.
 
 ## Main declarations
 
@@ -19,7 +19,8 @@ linear-independence corollary.
 
 * De las Cuevas, Cirac, Schuch, Perez-Garcia,
   *Irreducible forms of Matrix Product States: Theory and Applications*,
-  arXiv:1708.00029, Proposition 3.3 and Appendix A.
+  arXiv:1708.00029, proposition `equal-or-orthogonal-generalized`
+  and Appendix A.
 -/
 
 open scoped Matrix BigOperators ComplexOrder InnerProductSpace
@@ -29,9 +30,10 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-! ## Main dichotomy (Proposition 3.3) -/
+/-! ## Main dichotomy from `equal-or-orthogonal-generalized` -/
 
-/-- **Periodic overlap dichotomy** (Proposition 3.3 of arXiv:1708.00029).
+/-- **Periodic overlap dichotomy** (arXiv:1708.00029,
+proposition `equal-or-orthogonal-generalized`).
 
 For two periodic tensors `A` and `B` with periods `m_a` and `m_b` in
 irreducible form II, either their overlap decays to zero, or `D_a = D_b` and

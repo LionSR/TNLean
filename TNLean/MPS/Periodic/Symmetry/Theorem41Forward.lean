@@ -389,8 +389,8 @@ irreducible-form blocked tensor `C` has the same MPV family as a blocked root
 same blocked transfer map, `E_C = E_{A'^{[p]}}`.
 
 In the paper this is the point where the blocked equal-case Fundamental Theorem
-(Theorem 3.8 of arXiv:1708.00029) is combined with the blocked-to-root
-reconstruction that distributes the resulting `Z`-gauge across the cyclic
+(source theorem `thm:bdequal`, arXiv:1708.00029, lines 643--656) is combined
+with the blocked-to-root reconstruction that distributes the resulting `Z`-gauge across the cyclic
 sectors of `A`. Formalizing that existence step is the remaining forward
 obstruction, so we keep the resulting existence statement as a separate
 hypothesis. The theorem `peripheralEqualCase_periodicFT_of_sameMPV` below
@@ -437,8 +437,9 @@ Morally, the canonicalization is produced as follows. Given a witness
 `pRefinementCanonicalization_pullback_of_irreducibleForm` now cover this
 first stage, giving `E_C = E_B`, `SameMPV C (blockTensor A p)`, and preserving
 irreducible form II when `B` already has it. The periodic equal-case
-Fundamental Theorem (Theorem 3.8 of arXiv:1708.00029, available here as the
-hypothesis `PeriodicEqualCaseFT`) then supplies a `Z`-gauge equivalence
+Fundamental Theorem (source theorem `thm:bdequal`, arXiv:1708.00029,
+lines 643--656, available here as the hypothesis `PeriodicEqualCaseFT`) then
+supplies a `Z`-gauge equivalence
 between `C` and `blockTensor A p`, which — combined with a unitary
 canonical-form reduction for irreducible form II and Wolf Theorem 2.18 —
 produces the sought left-canonical witness. Formalizing this remaining second
