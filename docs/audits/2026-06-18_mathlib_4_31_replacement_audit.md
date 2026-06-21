@@ -880,7 +880,9 @@ Completed replacements:
 Keep for now:
 
 - Positive-semidefinite kernel lemmas for sums, unless a direct Mathlib theorem
-  is found.
+  is found.  The finite-family zero-sum helper still remains local, but its
+  final pointwise zero conclusion now uses Mathlib's
+  `Matrix.trace_mul_conjTranspose_self_eq_zero_iff` directly.
 - Trace-pairing wrappers only when they are part of TNLean's public
   mathematical vocabulary.  Private equality-form wrappers should use
   `Matrix.ext_iff_trace_mul_left` and `Matrix.ext_iff_trace_mul_right`
