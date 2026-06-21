@@ -393,7 +393,12 @@ Definition 3.9 ground-space spanning equation is supplied for a chosen BNT
 family \(A_j\), then the full all-chain NNCPH ground-space condition holds.
 
 This theorem does not use `Axioms.rfp_to_nncph_commute`; the remaining input is
-exactly the source ground-space spanning clause. -/
+exactly the source ground-space spanning clause.
+
+**Scope restriction (spanning clause assumed):** The source implication proves
+the ground-space spanning equation; this theorem assumes it via
+`HasParentHamiltonianGroundSpaceSpanning`. Documented in
+`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 theorem rfp_implies_hasNNCPHGroundSpaces_of_appendixBExtraction_of_groundSpaceSpanning
     (B : MPSTensor d D) [NeZero D]
     (hRFP : IsRFP B) (hNT : IsNormal B) (hLeft : IsLeftCanonical B)
