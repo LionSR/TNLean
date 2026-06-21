@@ -258,16 +258,52 @@ sufficient stronger hypotheses.
     $G_L^{(N)}(A)$.
 \end{proof}
 
+\begin{lemma}[Cyclic constraints give zero energy]
+    \label{lem:chain_ground_space_le_parent_hamiltonian_kernel}
+    \lean{MPSTensor.chainGroundSpace_le_ker_parentHamiltonian}
+    \leanok
+    \uses{def:parent_hamiltonian, def:chain_ground_space,
+        thm:chain_ground_space_implies_frustration_free}
+    Assume $N>0$ and $L\le N$. Then
+    \[
+        G_L^{(N)}(A)\subseteq \ker H_N(A,L).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    If \(\psi\in G_L^{(N)}(A)\), then every local parent interaction
+    annihilates \(\psi\):
+    \[
+        h_i(A,L)\psi=0\qquad\text{for all }i.
+    \]
+    Summing over all sites gives
+    \[
+        H_N(A,L)\psi=\sum_i h_i(A,L)\psi=0.
+    \]
+\end{proof}
+
+\begin{definition}[Hilbert-space cyclic constraint space]
+    \label{def:chain_ground_space_es}
+    \lean{MPSTensor.chainGroundSpaceES}
+    \leanok
+    \uses{def:chain_ground_space}
+    The Hilbert-space cyclic constraint space is the transport of
+    \(G_L^{(N)}(A)\) by the canonical \(\ell^2\)-identification:
+    \[
+        G_{L,\mathrm{ES}}^{(N)}(A)=e_N^{-1}G_L^{(N)}(A).
+    \]
+\end{definition}
+
 \begin{theorem}[The finite-volume kernel is the cyclic constraint space]
     \label{thm:parent_hamiltonian_kernel_eq_chain_ground_space}
-    \lean{MPSTensor.chainGroundSpace_le_ker_parentHamiltonian}
     \lean{MPSTensor.ker_parentHamiltonian_eq_chainGroundSpace}
-    \lean{MPSTensor.chainGroundSpaceES}
     \lean{MPSTensor.parentHamiltonianGroundSpaceES_eq_chainGroundSpaceES}
     \leanok
     \uses{def:parent_hamiltonian, def:parent_hamiltonian_es,
         def:chain_ground_space, thm:parent_hamiltonian_kernel_le_chain_ground_space,
-        thm:chain_ground_space_implies_frustration_free}
+        lem:chain_ground_space_le_parent_hamiltonian_kernel,
+        def:chain_ground_space_es}
     Assume $N>0$ and $L\le N$. Then
     \[
         \ker H_N(A,L)=G_L^{(N)}(A).
