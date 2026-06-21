@@ -129,17 +129,18 @@ theorem eq_of_trace_mul_evalWord_eq {B : MPSTensor d D} {m : ℕ}
     (h : ∀ ρ : Fin m → Fin d,
       Matrix.trace (M * evalWord B (List.ofFn ρ)) =
         Matrix.trace (N * evalWord B (List.ofFn ρ))) : M = N := by
+  have hmaps :
+      (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulLeft ℂ M) =
+        (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulLeft ℂ N) := by
+    apply LinearMap.ext_on_range
+      (v := fun ρ : Fin m → Fin d => evalWord B (List.ofFn ρ)) (hv := hspan)
+    intro ρ
+    simpa only [Matrix.traceLinearMap_apply, LinearMap.comp_apply,
+      LinearMap.mulLeft_apply] using h ρ
   apply (Matrix.ext_iff_trace_mul_right).2
   intro Q
-  have hQ : Q ∈ Submodule.span ℂ (Set.range fun ρ : Fin m → Fin d =>
-      evalWord B (List.ofFn ρ)) := hspan ▸ Submodule.mem_top
-  induction hQ using Submodule.span_induction with
-  | mem x hx =>
-      obtain ⟨ρ, rfl⟩ := hx
-      exact h ρ
-  | zero => simp
-  | add x y _ _ hx hy => simp [Matrix.mul_add, Matrix.trace_add, hx, hy]
-  | smul c x _ hx => simp [Matrix.trace_smul, hx]
+  simpa only [Matrix.traceLinearMap_apply, LinearMap.comp_apply,
+    LinearMap.mulLeft_apply] using congrArg (fun f => f Q) hmaps
 
 /-! ### The generic transport construction -/
 
