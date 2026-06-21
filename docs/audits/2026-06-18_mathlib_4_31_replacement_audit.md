@@ -1912,10 +1912,12 @@ times the corresponding matrix units.  Mathlib 4.31 already provides this
 statement as `Matrix.matrix_eq_sum_single`; the only local difference was the
 choice to write the summands as `ρ k l • Matrix.single k l 1`.
 
-The private helper remains as the shared expansion used by the transfer-matrix
-proof sites, but its proof now cites `Matrix.matrix_eq_sum_single` directly and
-simplifies by `Matrix.smul_single`, `smul_eq_mul`, and `mul_one` to recover the
-local notation.  The transfer-matrix statements are unchanged.
+The private helper has now been removed.  The transfer-matrix proof sites use
+`Matrix.matrix_eq_sum_single` directly, simplifying by `Matrix.smul_single`,
+`smul_eq_mul`, and `mul_one` only where the local scalar-multiple notation is
+needed.  In the same file, the hand proof of the diagonal expansion of the
+identity matrix was replaced by `Matrix.sum_single_one`.  The transfer-matrix
+statements are unchanged.
 
 ## PSD kernel-zero wrapper cleanup, 2026-06-19
 
