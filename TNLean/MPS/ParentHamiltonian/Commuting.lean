@@ -50,6 +50,9 @@ clause from Definition 3.9.
   `Axioms.rfp_to_nncph_commute`.
 * `MPSTensor.rfp_implies_nncph_ground_state_of_appendixBExtraction` — the same
   conditional theorem with the zero-energy equation for \(V^{(N)}(A)\) included.
+* `MPSTensor.rfp_implies_hasNNCPHGroundSpaces_of_appendixBExtraction_of_groundSpaceSpanning` —
+  the same Appendix B conditional theorem upgraded to the full all-chain
+  Definition 3.9 condition once the ground-space spanning equation is supplied.
 * `MPSTensor.rfp_implies_nncph` — construction of the length-two commutation
   equations in the RFP \(\Longrightarrow\) NNCPH direction, using the
   structural characterization theorem of arXiv:1606.00608, source lines
@@ -322,6 +325,23 @@ theorem ProductPairBridge.isNNCPH {A : MPSTensor d D} (hBridge : ProductPairBrid
     IsNNCPH A N :=
   (hBridge.localProjectors N).isNNCPH
 
+/-- Product-of-pairs data and the ground-space spanning equation give the full
+all-chain nearest-neighbor parent-Hamiltonian condition.
+
+The product-of-pairs data supply the translated length-two commutation
+equations. The usual parent-Hamiltonian frustration-free equation gives
+zero energy of \(V^{(N)}(B)\). The separate hypothesis
+`HasParentHamiltonianGroundSpaceSpanning B 2 A` supplies the remaining
+Definition 3.9 ground-space spanning clause from arXiv:1606.00608,
+source lines 522--524. -/
+theorem ProductPairBridge.hasNNCPHGroundSpaces_of_groundSpaceSpanning
+    {B : MPSTensor d D} (hBridge : ProductPairBridge B)
+    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
+    (hSpan : HasParentHamiltonianGroundSpaceSpanning B 2 A) :
+    HasNNCPHGroundSpaces B A := by
+  intro N hN
+  exact ⟨(hBridge.isNNCPH N).isNNCPHGroundState (le_of_lt hN), hSpan N hN⟩
+
 /-- Conditional internal theorem for Theorem 3.10(i)⟹(iii).
 
 A normal left-canonical RFP tensor has the Appendix B structural form
@@ -363,6 +383,26 @@ theorem rfp_implies_nncph_ground_state_of_appendixBExtraction
     IsNNCPHGroundState A N :=
   (rfp_implies_nncph_of_appendixBExtraction A hRFP hNT hLeft hExtract N).isNNCPHGroundState
     hN
+
+/-- Conditional full source form of Theorem 3.10(i)⟹(iii).
+
+Under the Appendix B product-of-pairs extraction used above, a normal
+left-canonical RFP tensor has the all-chain commutation and zero-energy
+equations for nearest-neighbor parent terms. If, in addition, the
+Definition 3.9 ground-space spanning equation is supplied for a chosen BNT
+family \(A_j\), then the full all-chain NNCPH ground-space condition holds.
+
+This theorem does not use `Axioms.rfp_to_nncph_commute`; the remaining input is
+exactly the source ground-space spanning clause. -/
+theorem rfp_implies_hasNNCPHGroundSpaces_of_appendixBExtraction_of_groundSpaceSpanning
+    (B : MPSTensor d D) [NeZero D]
+    (hRFP : IsRFP B) (hNT : IsNormal B) (hLeft : IsLeftCanonical B)
+    (hExtract : AppendixBProductPairExtraction
+      (AppendixBStructuralData.ofRFP B hNT hRFP hLeft))
+    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
+    (hSpan : HasParentHamiltonianGroundSpaceSpanning B 2 A) :
+    HasNNCPHGroundSpaces B A :=
+  hExtract.toProductPairBridge.hasNNCPHGroundSpaces_of_groundSpaceSpanning hSpan
 
 /-- The commuting condition is symmetric: if `h i j` holds, then `h j i` holds. -/
 theorem IsCommutingParentHam.symm {A : MPSTensor d D} {L N : ℕ}
