@@ -110,6 +110,78 @@ theorem
     _ = evalWord (A j) (List.ofFn β) *
         (E * evalWord (A j) (List.ofFn ρ)) := by rw [Matrix.mul_assoc]
 
+/-- Source trace decompositions and an explicit block-diagonal boundary
+representation give periodic single-block states.
+
+Assume the vector has already been written with block-diagonal boundary
+conditions \(X_j\). If, for those boundary conditions, the boundary-crossing
+trace decompositions of arXiv:quant-ph/0608197, Theorem 12, proof lines
+1436--1456 hold at a simultaneous product-spanning middle-word length, then the
+trace comparison gives
+\[
+  \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)
+\]
+for every block \(j\). In the notation of the source proof, the boundary matrix
+\(D^j_\beta\) has already been specialized to \((\mu_j^NX_j)A^j_\beta\).
+
+This is the explicit-boundary form of the block-diagonal boundary-condition
+step in arXiv:2011.12127, Section IV.C, lines 2126--2128. It does not use the
+simultaneous block-word span at the short boundary-crossing tail length \(N-i\);
+the only span hypothesis is the middle-word product span used to separate the
+trace decompositions.
+
+**Scope restriction (boundary representation and trace decomposition):** The
+block-diagonal boundary representation of \(\psi\) and the displayed trace
+decompositions are hypotheses here. Removing these remaining inputs is tracked
+in issue 2971 and documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
+theorem exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_of_boundary
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    {m L₀ L N : ℕ}
+    (hTraceSpan : WordTupleSpanTop A m)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    (hN : 0 < N) (hLN : L ≤ N)
+    (hNlarge : L + L₀ ≤ N)
+    {ψ : NSiteSpace d N}
+    (hBoundary :
+      ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+        ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+          ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)))
+    (hTrace :
+      ∀ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+        ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+          ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) →
+          ∃ C : ∀ (j : Fin r) (_ : Fin N),
+            (Fin (N - L) → Fin d) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+            ∀ i : Fin N,
+              N < i.val + L →
+                ∀ ρ : Fin (N - L) → Fin d,
+                  ∀ β : Fin (i.val + L - N) → Fin d,
+                    ∀ w : Fin m → Fin d,
+                      (∑ j : Fin r,
+                        Matrix.trace
+                          ((evalWord (A j) (List.ofFn β) * C j i ρ) *
+                            evalWord (A j) (List.ofFn w))) =
+                      (∑ j : Fin r,
+                        Matrix.trace
+                          ((((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β) *
+                              evalWord (A j) (List.ofFn ρ)) *
+                            evalWord (A j) (List.ofFn w)))) :
+    ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+        ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
+      ∀ j : Fin r,
+        groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
+  classical
+  obtain ⟨X, hψX⟩ := hBoundary
+  obtain ⟨C, hCoeff⟩ := hTrace X hψX
+  refine ⟨X, hψX, ?_⟩
+  exact
+    blockDiagonal_boundary_component_chainGroundSpace_of_trace_decomposition_of_injective
+      μ A hN hLN X hTraceSpan hBlk hUnital hNlarge C hCoeff
+
 /-- Source trace decompositions upgrade a block-diagonal boundary representation
 to periodic single-block states.
 
@@ -194,11 +266,9 @@ theorem
   obtain ⟨X, hψX, _hOpen⟩ :=
     exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1
       μ A hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange hψ
-  obtain ⟨C, hCoeff⟩ := hTrace X hψX
-  refine ⟨X, hψX, ?_⟩
   exact
-    blockDiagonal_boundary_component_chainGroundSpace_of_trace_decomposition_of_injective
-      μ A hN hLN X hTraceSpan hBlk hUnital hNlarge C hCoeff
+    exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_of_boundary
+      μ A hTraceSpan hBlk hUnital hN hLN hNlarge ⟨X, hψX⟩ hTrace
 
 /-- BNT normalization gives the common middle-word product span.
 
