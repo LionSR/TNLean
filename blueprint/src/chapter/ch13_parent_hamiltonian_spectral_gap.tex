@@ -258,6 +258,45 @@ sufficient stronger hypotheses.
     $G_L^{(N)}(A)$.
 \end{proof}
 
+\begin{theorem}[The finite-volume kernel is the cyclic constraint space]
+    \label{thm:parent_hamiltonian_kernel_eq_chain_ground_space}
+    \lean{MPSTensor.chainGroundSpace_le_ker_parentHamiltonian}
+    \lean{MPSTensor.ker_parentHamiltonian_eq_chainGroundSpace}
+    \lean{MPSTensor.chainGroundSpaceES}
+    \lean{MPSTensor.parentHamiltonianGroundSpaceES_eq_chainGroundSpaceES}
+    \leanok
+    \uses{def:parent_hamiltonian, def:parent_hamiltonian_es,
+        def:chain_ground_space, thm:parent_hamiltonian_kernel_le_chain_ground_space,
+        thm:chain_ground_space_implies_frustration_free}
+    Assume $N>0$ and $L\le N$. Then
+    \[
+        \ker H_N(A,L)=G_L^{(N)}(A).
+    \]
+    Equivalently, after the canonical Hilbert-space identification,
+    \[
+        \mathcal K_N^{\mathrm{ES}}(A,L)
+        =
+        e_N^{-1}G_L^{(N)}(A),
+    \]
+    where \(\mathcal K_N^{\mathrm{ES}}(A,L)\) is the zero-energy space of
+    \(H_{N,L}^{\mathrm{ES}}(A)\).
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The inclusion
+    \[
+        \ker H_N(A,L)\subseteq G_L^{(N)}(A)
+    \]
+    is Theorem~\ref{thm:parent_hamiltonian_kernel_le_chain_ground_space}. For
+    the converse, a vector in \(G_L^{(N)}(A)\) satisfies all local equations
+    \(h_i(A,L)\psi=0\). Therefore
+    \[
+        H_N(A,L)\psi=\sum_i h_i(A,L)\psi=0.
+    \]
+    The Hilbert-space statement is the same equality transported by \(e_N^{-1}\).
+\end{proof}
+
 \begin{theorem}[Intersection property for two adjacent local kernels]
     \label{thm:adjacent_local_kernels_ground_space_es}
     \lean{MPSTensor.mem_groundSpaceES_succ_of_adjacent_localTermES_eq_zero}

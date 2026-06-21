@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.BlockDiagonalChainGroundSpace
 import TNLean.MPS.ParentHamiltonian.Commuting
+import TNLean.MPS.ParentHamiltonian.KernelChainGroundSpace
 
 /-!
 # Ground-space spanning for block-diagonal parent Hamiltonians
@@ -57,6 +58,68 @@ theorem hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_iff_ker_le_bn
     have hNpos : 0 < N := lt_of_le_of_lt (Nat.zero_le L) hN
     exact bntMPSVectorSpan_le_ker_parentHamiltonian_toTensorFromBlocks
       μ A hμ hNpos (le_of_lt hN)
+
+/-- If the periodic chain constraints for the block-diagonal tensor are already
+the span of the component periodic MPS vectors, then the source
+parent-Hamiltonian ground-space spanning clause follows.
+
+Let \(B=\bigoplus_j\mu_jA_j\), with every \(\mu_j\ne0\). The new input is the
+periodic chain-space equality
+\[
+  \mathcal G_{N,L}(B)=\bigvee_j \mathbb C V^{(N)}(A_j)
+\]
+for every \(N>L\). The finite-volume identity
+\(\ker H_L^{(N)}(B)=\mathcal G_{N,L}(B)\), together with the easy inclusion of
+the BNT span in the kernel, gives the parent-Hamiltonian spanning equation. -/
+theorem hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_chain_eq_iSup_mpv
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (hμ : ∀ j : Fin r, μ j ≠ 0) {L : ℕ}
+    (hChain : ∀ N : ℕ, L < N →
+      chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N =
+        ⨆ j : Fin r, mpvSubmodule (A j) N) :
+    HasParentHamiltonianGroundSpaceSpanning
+      (toTensorFromBlocks (d := d) (μ := μ) A) L A := by
+  rw [hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_iff_ker_le_bntMPSVectorSpan
+    μ A hμ]
+  intro N hN
+  have hNpos : 0 < N := lt_of_le_of_lt (Nat.zero_le L) hN
+  have hLN : L ≤ N := le_of_lt hN
+  rw [ker_parentHamiltonian_eq_chainGroundSpace
+    (toTensorFromBlocks (d := d) (μ := μ) A) hNpos hLN]
+  rw [hChain N hN, iSup_mpvSubmodule_eq_bntMPSVectorSpan]
+
+/-- It is enough to prove the periodic block-diagonal chain-space equality and
+the single-block chain-space equalities.
+
+This theorem isolates the two geometric inputs normally supplied by the
+block-injective parent-Hamiltonian argument:
+\[
+  \mathcal G_{N,L}(B)=\bigvee_j\mathcal G_{N,L}(A_j),
+  \qquad
+  \mathcal G_{N,L}(A_j)=\mathbb C V^{(N)}(A_j).
+\]
+Together they imply the source parent-Hamiltonian ground-space spanning
+equation for \(B=\bigoplus_j\mu_jA_j\). -/
+theorem hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_chain_eq_iSup_chain
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (hμ : ∀ j : Fin r, μ j ≠ 0) {L : ℕ}
+    (hChain : ∀ N : ℕ, L < N →
+      chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N =
+        ⨆ j : Fin r, chainGroundSpace (A j) L N)
+    (hBlock : ∀ N : ℕ, L < N → ∀ j : Fin r,
+      chainGroundSpace (A j) L N = mpvSubmodule (A j) N) :
+    HasParentHamiltonianGroundSpaceSpanning
+      (toTensorFromBlocks (d := d) (μ := μ) A) L A := by
+  refine hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_chain_eq_iSup_mpv
+    μ A hμ ?_
+  intro N hN
+  calc
+    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N =
+        ⨆ j : Fin r, chainGroundSpace (A j) L N := hChain N hN
+    _ = ⨆ j : Fin r, mpvSubmodule (A j) N := by
+      simp [hBlock N hN]
 
 /-- For block-diagonal nearest-neighbor parent Hamiltonians, the all-chain
 source condition is equivalent to all-chain translated parent-term commutation
