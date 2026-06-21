@@ -308,13 +308,13 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
         \subseteq
         \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}.
     \]
-    In the nearest-neighbor case, the all-chain source condition is equivalent
-    to
+    In the nearest-neighbor case \(L=2\), the all-chain source condition of
+    Definition~\ref{def:has_nncph_ground_spaces} is equivalent to the
+    conjunction
     \[
         \begin{aligned}
-        \operatorname{HasNNCPHGroundSpaces}(B,A)
-        \Longleftrightarrow
-        &\left(\forall N>2,\ \operatorname{IsNNCPH}(B,N)\right)\\
+        &\left(\forall N>2,\ \forall i,j\in\{0,\ldots,N-1\},\;
+        h_i(B,2)h_j(B,2)=h_j(B,2)h_i(B,2)\right)\\
         &{}\land
         \left(\forall N>2,\;
         \ker H_2^{(N)}(B)
@@ -334,12 +334,12 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
         \ker H_L^{(N)}(B),
     \]
     and the assumed reverse containment gives equality. For $L=2$, the
-    all-chain nearest-neighbor condition decomposes as
+    all-chain nearest-neighbor condition of
+    Definition~\ref{def:has_nncph_ground_spaces} decomposes as the conjunction
     \[
         \begin{aligned}
-        \operatorname{HasNNCPHGroundSpaces}(B,A)
-        \Longleftrightarrow
-        &\left(\forall N>2,\ \operatorname{IsNNCPH}(B,N)\right)\\
+        &\left(\forall N>2,\ \forall i,j\in\{0,\ldots,N-1\},\;
+        h_i(B,2)h_j(B,2)=h_j(B,2)h_i(B,2)\right)\\
         &{}\land
         \left(\forall N>2,\;
         \ker H_2^{(N)}(B)
