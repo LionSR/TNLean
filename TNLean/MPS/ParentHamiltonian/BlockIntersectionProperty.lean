@@ -658,8 +658,8 @@ theorem pgvwc07_mem_iSup_groundSpace_of_trace_decomposition
       (A j) (C j) (Dmat j) (hUnital j) (hCompat j)).2
   exact pgvwc07_sum_leftBoundaryComponents_mem_iSup_groundSpace A C E n hACE
 
-/-- The two block-ground-space restrictions produce boundary matrices with the
-left-boundary expansion
+/-- The two block-ground-space restrictions produce boundary matrices \(C^j_a\)
+and \(D^j_b\) with the left-boundary expansion
 \[
   \psi=\sum_j \alpha_j,\qquad
   \alpha_j(i_1,\ldots,i_{n+2})
