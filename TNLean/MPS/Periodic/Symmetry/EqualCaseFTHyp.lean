@@ -31,8 +31,8 @@ section PeriodicEqualCaseFTHyp
 variable {d D : ℕ}
 
 /-- Coarse abstract form of the periodic equal-case Fundamental Theorem of MPS,
-motivated by Theorem 3.8 of arXiv:1708.00029 and stated as a Prop for use as
-an explicit hypothesis.
+motivated by the source theorem `thm:bdequal` (arXiv:1708.00029, lines 643--656)
+and stated as a Prop for use as an explicit hypothesis.
 
 Given two tensors of the same physical/bond dimensions in irreducible form that
 generate the same matrix-product-vector family, this hypothesis asserts the existence

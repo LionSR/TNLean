@@ -26,12 +26,13 @@ The supporting modules are:
   implies orthogonality.
 * `TNLean.MPS.Periodic.Overlap.Case3` — equal period with a sector match yields
   repeated blocks.
-* `TNLean.MPS.Periodic.Overlap.Dichotomy` — Proposition 3.3 and eventual
-  linear independence.
+* `TNLean.MPS.Periodic.Overlap.Dichotomy` — the source proposition
+  `equal-or-orthogonal-generalized` and eventual linear independence.
 
 ## References
 
 * De las Cuevas, Cirac, Schuch, Perez-Garcia,
   *Irreducible forms of Matrix Product States: Theory and Applications*,
-  arXiv:1708.00029, Proposition 3.3 and Appendix A.
+  arXiv:1708.00029, proposition `equal-or-orthogonal-generalized`
+  and Appendix A.
 -/
