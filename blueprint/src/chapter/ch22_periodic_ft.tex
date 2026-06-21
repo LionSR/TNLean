@@ -1261,7 +1261,9 @@ unconditional result.
     % Local fix (docs/paper-gaps/1708_periodic_overlap_route_alignment.tex):
     % arXiv:1708.00029, lines 1041--1060, displays $m-1$ inverses although the
     % repetition count and phase formula require one inverse for each inserted product.
-    Apply one right inverse to each inserted repeated product. The contraction is
+    Let $\mathbf i_1,\ldots,\mathbf i_m$ be independent words of length $mN_0$,
+    one for each inserted repeated product. Sum each $\mathbf i_r$ in the
+    contraction by the right-inverse relation for $\Omega_{u+r}$:
     \[
         A_u^{i_1}F_{u+1}^{\mathbf i_1}
         A_{u+1}^{i_2}F_{u+2}^{\mathbf i_2}
@@ -1300,9 +1302,10 @@ unconditional result.
         \cdots
         \widetilde B_{u+q+m-1}^{i_m}\widetilde F_{u+q}^{\mathbf i_m}.
     \]
-    The displayed identity for $\widetilde F_{u+q+r}^{\mathbf i}$ supplies the
-    phase factor $e^{-iN_0\lambda_{u+q+r}}$ when $\Omega_{u+r}$ collapses
-    $F_{u+r}^{\mathbf i}$. Tensoring these identities over $r$ and applying
+    Using the displayed identity with $\mathbf i=\mathbf i_r$, the factor
+    $\widetilde F_{u+q+r}^{\mathbf i_r}$ supplies the phase factor
+    $e^{-iN_0\lambda_{u+q+r}}$ when $\Omega_{u+r}$ collapses
+    $F_{u+r}^{\mathbf i_r}$. Tensoring these identities over $r$ and applying
     $\Omega_{u+1}\otimes\cdots\otimes\Omega_{u+m-1}\otimes\Omega_u$ gives
     \[
         \begin{aligned}
