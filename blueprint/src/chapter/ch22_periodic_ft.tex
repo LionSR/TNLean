@@ -1345,6 +1345,55 @@ unconditional result.
 \begin{proof}
     \notready
     \uses{thm:periodic_overlap_dichotomy, thm:periodic_self_overlap_tendsto}
+    The missing point is not the Gram-matrix argument itself.  It is the
+    sector-match alternative in
+    Theorem~\ref{thm:periodic_overlap_dichotomy}.  In the notation of
+    Appendix~A of \cite{DeLasCuevas2017Irreducible}, after choosing inverses
+    $\Omega_u$ for the injective words $F_u$, the required contraction is
+    \[
+        A_u^{i_1}\otimes A_{u+1}^{i_2}\otimes\cdots
+        \otimes A_{u+m-1}^{i_m}
+        =
+        e^{i\eta_v}
+        B_v^{i_1}\otimes B_{v+1}^{i_2}\otimes\cdots
+        \otimes B_{v+m-1}^{i_m}.
+    \]
+    Applying the same identity after a cyclic translation gives
+    \[
+        e^{i\eta_{v+\ell}}=e^{i\eta_v}
+        \qquad
+        (\ell=0,\ldots,m-1),
+    \]
+    so we write the common phase as $e^{i\eta}$.  The product-tensor identity
+    then gives scalars $\kappa_v$ with
+    \[
+        A_u^i=\kappa_v e^{i\eta/m}B_v^i,
+        \qquad
+        \prod_{v=1}^{m}\kappa_v=1.
+    \]
+    The left-canonical normalization gives $|\kappa_v|=1$; writing
+    $\kappa_v=e^{i(\phi_v-\phi_{v+1})}$ gives, where $q$ is the cyclic
+    offset between the matched sector labels and $v=u+q$,
+    \[
+        P_u A^i P_{u+1}
+        =
+        e^{i\eta/m} e^{i\phi_v}
+        U_v Q_v B^i Q_{v+1} U_{v+1}^{\dagger} e^{-i\phi_{v+1}}.
+    \]
+    Hence, for
+    \[
+        U=\sum_{u=1}^{m}e^{i\phi_{u+q}}P_uU_{u+q}Q_{u+q},
+        \qquad
+        \xi=\eta/m,
+    \]
+    one obtains the global relation
+    \[
+        A^i=e^{i\xi}UB^iU^\dagger.
+    \]
+    % Remaining step: see
+    % docs/paper-gaps/1708_periodic_overlap_route_alignment.tex,
+    % Section ``Remaining Case-3 input''.
+
     Let
     \[
         G_N(j,k)
