@@ -29,8 +29,6 @@ Hilbert--Schmidt norm computations; and an AM--GM argument upgrades
   transpose swaps the indices of a matrix-unit basis element.
 * `ChannelDeterminant.Internal.sum_stdBasis_mul_conjTranspose` — the standard
   basis satisfies `∑_{ij} E_{ij} E_{ij}^† = d • 1`.
-* `ChannelDeterminant.Internal.eq_zero_of_nonneg_of_sum_le_zero` — a finite
-  nonnegative family with total sum at most `0` vanishes termwise.
 * `ChannelDeterminant.Internal.channelDet_norm_one_hs_norm_ge` — determinant
   saturation gives the AM--GM lower bound on the Hilbert--Schmidt norm.
 
@@ -133,13 +131,6 @@ theorem sum_stdBasis_mul_conjTranspose :
             nsmul_eq_mul, mul_one, smul_eq_mul]
     _ = (d : ℂ) • ∑ i : Fin d, Matrix.single i i (1 : ℂ) := by rw [Finset.smul_sum]
     _ = (d : ℂ) • (1 : MatrixAlg d) := by rw [Matrix.sum_single_one]
-
-/-- If a finite family of nonnegative reals has total sum at most `0`, then every term is `0`. -/
-lemma eq_zero_of_nonneg_of_sum_le_zero {ι : Type*} [Fintype ι]
-    (f : ι → ℝ) (hf : ∀ i, 0 ≤ f i) (hsum : ∑ i, f i ≤ 0) :
-    ∀ i, f i = 0 := by
-  have hsum_zero : ∑ i, f i = 0 := le_antisymm hsum (Fintype.sum_nonneg hf)
-  exact fun i => congrFun ((Fintype.sum_eq_zero_iff_of_nonneg hf).mp hsum_zero) i
 
 private lemma matrix_det_norm_one_trace_conjTranspose_mul_self_ge [NeZero d]
     (A : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) (hdet : ‖A.det‖ = 1) :
