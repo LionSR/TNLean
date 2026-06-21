@@ -153,7 +153,7 @@ maps.
     A linear map $E$ is unital if $E(\Id) = \Id$.
 \end{definition}
 
-\begin{theorem}[Kadison--Schwarz for unital two-positive maps]
+\begin{theorem}[Kadison--Schwarz for unital two-positive maps]\label{thm:kadison_schwarz_2positive}
     \lean{kadison_schwarz_2positive}
     \leanok
     \uses{thm:kadison_schwarz}
@@ -173,9 +173,14 @@ maps.
 \begin{theorem}[Kraus-form Kadison--Schwarz as a special case]
     \lean{kadison_schwarz_from_2positive}
     \leanok
-    \uses{thm:kadison_schwarz}
-    The Kraus-map Kadison--Schwarz inequality is recovered from the
-    two-positive formulation.
+    \uses{thm:kadison_schwarz_2positive}
+    Let $K = (K_i)_{i=0}^{d-1}$ be a unital Kraus family, that is,
+    $\sum_i K_i K_i^\dagger = \Id$. Then for all $X \in \MN{D}$,
+    \[
+        \mathcal{K}(X^\dagger X) \ge
+        \mathcal{K}(X)^\dagger \mathcal{K}(X),
+    \]
+    where $\mathcal{K}(Y) = \sum_i K_i Y K_i^\dagger$.
 \end{theorem}
 
 \subsection{Douglas-type factorization lemmas}
