@@ -280,9 +280,10 @@ theorem hasNNCPHGroundSpaces_iff_forall_isNNCPHGroundState_and_groundSpaceSpanni
 nearest-neighbor commutation equations together with the source ground-space
 spanning clause.
 
-For \(N>2\), the zero-energy equation for \(V^{(N)}(B)\) follows from the
-parent-Hamiltonian construction, so it need not be assumed separately once the
-length-two commuting condition and Definition 3.9 spanning equation are given.
+For \(N>2\), the zero-energy equation for \(V^{(N)}(B)\) is an unconditional
+consequence of the parent-Hamiltonian construction. It therefore need not be
+assumed separately; the remaining data are the length-two commuting condition
+and the Definition 3.9 spanning equation.
 
 See arXiv:1606.00608, Definition 3.9 and Theorem 3.10(iii). -/
 theorem hasNNCPHGroundSpaces_iff_forall_isNNCPH_and_groundSpaceSpanning
