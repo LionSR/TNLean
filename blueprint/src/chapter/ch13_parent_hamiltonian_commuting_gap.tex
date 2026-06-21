@@ -202,7 +202,7 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     \lean{MPSTensor.isFrustrationFree_of_mem_chainGroundSpace}
     \leanok
     \uses{def:chain_ground_space, def:is_frustration_free}
-    Let $\psi$ be a vector in the periodic chain ground space
+    Assume $N>0$ and $L\le N$. Let $\psi$ be a vector in the periodic chain ground space
     $G_L^{(N)}(A)$. Then $\psi$ satisfies all local zero-energy equations:
     for every site $i$,
     \[
@@ -212,10 +212,19 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
 
 \begin{proof}
     \leanok
-    Membership in $G_L^{(N)}(A)$ means that every cyclic $L$-site window of
-    $\psi$ lies in the corresponding local ground space. Hence each translated
-    parent term annihilates $\psi$, which is precisely the frustration-free
-    condition.
+    Write $R_{i,\tau}$ for the cyclic length-$L$ restriction at site $i$,
+    with the outside configuration fixed by $\tau$. Membership in
+    $G_L^{(N)}(A)$ gives, for every $i$ and $\tau$,
+    \[
+        R_{i,\tau}\psi\in G_L(A).
+    \]
+    The local ground-space equation then gives
+    \[
+        R_{i,\tau}\psi\in G_L(A)
+        \Longrightarrow
+        h_i(A,L)\psi=0.
+    \]
+    These equations for all $i$ are exactly the frustration-free condition.
 \end{proof}
 
 \begin{lemma}[Zero-energy BNT vectors lie in the parent-Hamiltonian kernel]
@@ -241,7 +250,7 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     \]
     It is enough to assume the local frustration-free equations
     $h_iV^{(N)}(A_j)=0$ for every $i$ and $j$.
-    In the block-diagonal case
+    For $N>0$ and $L\le N$, in the block-diagonal case
     $B=\bigoplus_j\mu_jA_j$, with every $\mu_j\ne0$, the same inclusion
     follows because each local space $G_L(A_j)$ is contained in $G_L(B)$.
     This is the easy inclusion in the source ground-space spanning equation of
