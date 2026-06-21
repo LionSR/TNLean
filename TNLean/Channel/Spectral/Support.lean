@@ -87,7 +87,7 @@ theorem compression_on_support_posDef
   have h_quadform : star w ⬝ᵥ ((V * ρ * Vᴴ) *ᵥ w) = star u ⬝ᵥ (ρ *ᵥ u) := by
     have h1 : (V * ρ * Vᴴ) *ᵥ w = V *ᵥ (ρ *ᵥ u) := by
       simp [u, Matrix.mulVec_mulVec, Matrix.mul_assoc]
-    rw [h1, Matrix.dotProduct_mulVec, Matrix.star_mulVec, Matrix.conjTranspose_conjTranspose]
+    rw [h1, HermitianHelpers.dotProduct_mulVec_conjTranspose (M := V)]
   rw [h_quadform]
   -- Apply the pointwise strict positivity lemma.
   exact hρ.dotProduct_mulVec_pos_of_supportProj_fixed hu_ne hPu

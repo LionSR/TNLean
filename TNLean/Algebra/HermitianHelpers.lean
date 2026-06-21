@@ -145,7 +145,7 @@ namespace HermitianHelpers
 
 /-- Adjoint identity for the matrix-vector dot-product pairing. -/
 theorem dotProduct_mulVec_conjTranspose
-    (M : Matrix (Fin D) (Fin D) ℂ) (x y : Fin D → ℂ) :
+    {m n : ℕ} (M : Matrix (Fin m) (Fin n) ℂ) (x : Fin m → ℂ) (y : Fin n → ℂ) :
     star x ⬝ᵥ (M *ᵥ y) = star (Mᴴ *ᵥ x) ⬝ᵥ y := by
   rw [Matrix.dotProduct_mulVec, Matrix.star_mulVec,
     Matrix.conjTranspose_conjTranspose]
