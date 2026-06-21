@@ -273,8 +273,11 @@ theorem exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_
   obtain ⟨hLe, hIndep⟩ :=
     chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1
       μ A hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange
-  obtain ⟨φ, hφ, hψφ⟩ :=
-    exists_sum_mem_of_mem_iSup_fin (fun j : Fin r => groundSpace (A j) N) (hLe hψ)
+  obtain ⟨φ, hφ, hφsum⟩ :=
+    (Submodule.mem_iSup_iff_exists_finsupp
+      (fun j : Fin r => groundSpace (A j) N) ψ).mp (hLe hψ)
+  have hψφ : ψ = ∑ j : Fin r, φ j := by
+    simpa [Finsupp.sum_fintype] using hφsum.symm
   refine ⟨φ, hφ, hψφ, ?_⟩
   intro φ' hφ' hψφ'
   apply funext
