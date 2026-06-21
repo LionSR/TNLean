@@ -1034,14 +1034,48 @@ a common dilation space.
     trace over the ancilla factor.
 \end{proof}
 
-\begin{remark}[Unitary form]
-    The fully unitary open-system form
-    $T(\rho) = \tr_E(U (\rho \otimes \ketbra{\phi}{\phi})
-        U^\dagger)$ of~\cite[Theorem~2.5]{Wolf2012Quantum} follows from the
-    isometric form by extending the Stinespring isometry $V$ to a unitary
-    $U$ on $\C^D \otimes \C^r$; this uses orthonormal basis extension and
-    is left to a later theorem.
-\end{remark}
+\begin{lemma}[Rectangular Gram equality gives a unitary]
+    \label{lem:exists_unitary_mul_eq_of_gram_eq}
+    \lean{Matrix.exists_unitary_mul_eq_of_conjTranspose_mul_eq}
+    \leanok
+    \uses{}
+    Let $A,B:\C^n\to\C^m$ be linear maps with
+    $B^\dagger B=A^\dagger A$.  Then there is a unitary
+    $U$ on $\C^m$ such that $B=UA$.
+\end{lemma}
+
+\begin{definition}[First environment embedding]
+    \label{def:first_env_embedding}
+    \lean{Matrix.firstEnvEmbedding}
+    \leanok
+    For $r \geq 1$, let $W_0 : \C^D \to \C^D \otimes \C^r$ be the isometry
+    $W_0 x = x \otimes e_0$.
+\end{definition}
+
+\begin{theorem}[Open-system representation, unitary form]
+    \label{thm:channel_exists_stinespring_open_system_unitary}
+    \lean{IsChannel.exists_stinespring_open_system_unitary}
+    \leanok
+    \uses{def:channel, def:partial_trace, def:first_env_embedding}
+    For $D \geq 1$, every quantum channel $T$ on $\C^D$ admits an
+    environment dimension $r \geq 1$ and a unitary
+    $U$ on $\C^D \otimes \C^r$ such that, for every matrix
+    $\rho$ on $\C^D$,
+    \[
+        T(\rho) =
+        \tr_E\!\left(U W_0 \rho W_0^\dagger U^\dagger\right).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:channel_exists_stinespring_open_system_traceRight,
+        lem:exists_unitary_mul_eq_of_gram_eq}
+    Take the isometric open-system representation
+    $T(\rho)=\tr_E(V\rho V^\dagger)$.  Since
+    $V^\dagger V=\Id=W_0^\dagger W_0$, Lemma~\ref{lem:exists_unitary_mul_eq_of_gram_eq}
+    gives a unitary $U$ with $V=UW_0$.  Substituting this identity into the
+    partial trace formula gives the displayed expression.
+\end{proof}
 
 %% =========================================================
 \section{POVMs and Naimark dilation}
