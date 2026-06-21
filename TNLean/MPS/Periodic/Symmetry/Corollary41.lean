@@ -41,15 +41,15 @@ In paper notation, for each `g` there exist matrices `Z_g, Y_g` with `Z_g^{m_g} 
 
 **Source comparison.** The source corollary in arXiv:1708.00029, lines 834--845,
 is stated for a single local unitary \(u\). It concludes that there are a diagonal
-unitary \(Z\) and a unitary \(U\) satisfying
+unitary \(Z\) and a unitary \(U\) satisfying, for every \(i'\),
 \[
   \sum_i u^{i',i} A^i = Z U A^{i'} U^\dagger
 \]
-for every \(i'\) (eq:symm). The statement here is not that corollary verbatim: it
+The statement here is not that corollary verbatim: it
 applies the same idea pointwise to a group representation, assumes the periodic equal-case
-Fundamental Theorem (`thm:bdequal`, lines 643--656) through `PeriodicEqualCaseFT`, and records
-the conclusion in `ZGaugeEquiv` form. The diagonal normalization of \(Z\) and the exact
-eq:symm display are not asserted by this theorem.
+Fundamental Theorem (arXiv:1708.00029, lines 643--656) through `PeriodicEqualCaseFT`, and
+records the conclusion in `ZGaugeEquiv` form. The diagonal normalization of \(Z\) and the
+exact displayed source equation are not asserted by this theorem.
 
 The single-`u` specialization is obtained via
 `zGaugeEquiv_of_isIrreducibleForm_sameMPV_rotatePhysical`.

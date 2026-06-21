@@ -1709,17 +1709,18 @@ unconditional result.
         Z_g\, A^i = Y_g\, \widetilde{A}_g^{\,i}\, Y_g^{-1}
     \]
 
-    The source corollary in
-    \cite[lines~834--845]{DeLasCuevas2017Irreducible} is a
-    statement about a single local unitary. It concludes that, for a local
-    unitary $u$, there are a diagonal unitary $Z$ and a virtual unitary $Y$ such that
-    \[
-        \sum_i u^{i',i} A^i = Z\,Y\,A^{i'}Y^{\dagger}
-    \]
-    for every $i'$. The statement here is a pointwise group-action
-    reformulation using the periodic equal-case Fundamental Theorem as an
-    explicit hypothesis. It does not assert the diagonal normalization of
-    $Z_g$ or the exact displayed source equation.
+    % Source comparison: the source corollary in
+    % \cite[lines~834--845]{DeLasCuevas2017Irreducible} is stated for a single
+    % local unitary. It concludes that, for a local unitary $u$, there are a
+    % diagonal unitary $Z$ and a virtual unitary $Y$ satisfying, for every
+    % physical index $i'$,
+    % \[
+    %     \sum_i u^{i',i} A^i = Z\,Y\,A^{i'}Y^{\dagger}.
+    % \]
+    % The statement here is a pointwise group-action reformulation using the
+    % periodic equal-case Fundamental Theorem as an explicit hypothesis. It does
+    % not assert the diagonal normalization of $Z_g$ or the exact displayed
+    % source equation.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1770,27 +1771,24 @@ unconditional result.
     \label{thm:cor_4_1_projective_rep}
     \lean{MPSTensor.cor_4_1_projective_rep}
     \leanok
-    \uses{cor:cor_4_1_physical_symmetry_zgauge,
-        def:periodic_projective_rigidity}
-    Under the hypotheses of Corollary~\ref{cor:cor_4_1_physical_symmetry_zgauge}
-    together with the periodic projective-rigidity hypothesis
-    (Definition~\ref{def:periodic_projective_rigidity}), the $Y_g$
-    family defines a projective representation of $G$ on the
-    bond space: there exist a scalar $2$-cochain
+    \uses{def:periodic_projective_rigidity}
+    Assume the periodic projective-rigidity hypothesis
+    (Definition~\ref{def:periodic_projective_rigidity}) for the tensor $A$ and
+    the physical action $U$. Then the virtual gauge family supplied by that
+    hypothesis defines a projective representation of $G$ on the bond space:
+    there exist a scalar $2$-cochain
     $\omega : G \times G \to \C^{\times}$ and virtual gauges
     $X : G \to \GL_D(\C)$ satisfying
     \[
         X(g)\, X(h) =  \omega(g, h)\, X(g h),
     \]
     while for each $g$ the matrix $X(g^{-1})$ still realizes the pointwise
-    $\Z_{m_g}$-intertwining of
-    Corollary~\ref{cor:cor_4_1_physical_symmetry_zgauge} between $A$ and the
-    twisted tensor $\widetilde{A}_g$.
+    $\Z_{m_g}$-intertwining, encoded in the rigidity hypothesis, between $A$
+    and the twisted tensor $\widetilde{A}_g$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{cor:cor_4_1_physical_symmetry_zgauge,
-        def:periodic_projective_rigidity}
+    \uses{def:periodic_projective_rigidity}
     Unpack the rigidity hypothesis to extract the family $(Y, u)$ together
     with the pointwise $Z$-gauge intertwiners. Set
     $X(g) := Y(g^{-1})$ and $\omega(g, h) := u(h^{-1}, g^{-1})$. The

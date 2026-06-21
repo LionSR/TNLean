@@ -7,9 +7,8 @@ import TNLean.MPS.Periodic.Symmetry.Theorem41Defs
 /-!
 # Theorem 4.1, forward direction
 
-This module contains the forward half of arXiv:1708.00029, Theorem 4.1
-(`thm:div`), together with the formal pullback tensor \(C\) introduced in
-lines 735--743 of the paper.
+This module contains the forward half of arXiv:1708.00029, Theorem 4.1, together
+with the formal pullback tensor \(C\) introduced in lines 735--743 of the paper.
 -/
 
 open scoped Matrix BigOperators
