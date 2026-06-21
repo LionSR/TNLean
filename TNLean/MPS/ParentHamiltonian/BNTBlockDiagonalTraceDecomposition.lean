@@ -213,10 +213,11 @@ which transitively uses the boundary-condition comparison at boundary-crossing
 windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
 2126--2128. Documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
-derive the \(C^j,D^j,E^j\) boundary-condition comparison from
-arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
-discharge the currently assumed
-trace-decomposition equality. -/
+derive the source boundary-condition comparison for \(C^j\), the specialized
+matrices \(D^j_\beta=(\mu_j^NX_j)A^j_\beta\), and the auxiliary
+\(E^j\)-identities from arXiv:quant-ph/0608197, Theorem 12, proof lines
+1446--1456; then use it to discharge the currently assumed trace-decomposition
+equality. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -365,10 +366,11 @@ which transitively uses the boundary-condition comparison at boundary-crossing
 windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
 2126--2128. Documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
-derive the \(C^j,D^j,E^j\) boundary-condition comparison from
-arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
-discharge the currently assumed
-trace-decomposition equality. -/
+derive the source boundary-condition comparison for \(C^j\), the specialized
+matrices \(D^j_\beta=(\mu_j^NX_j)A^j_\beta\), and the auxiliary
+\(E^j\)-identities from arXiv:quant-ph/0608197, Theorem 12, proof lines
+1446--1456; then use it to discharge the currently assumed trace-decomposition
+equality. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
