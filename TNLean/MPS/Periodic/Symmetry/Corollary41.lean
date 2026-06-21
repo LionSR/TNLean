@@ -7,8 +7,8 @@ import TNLean.MPS.Periodic.Symmetry.EqualCaseFTHyp
 /-!
 # Corollary 4.1 for periodic MPS
 
-This module contains the physical-symmetry-to-virtual-`Z`-gauge statements from
-Section 4.2 of arXiv:1708.00029.
+This module contains conditional reformulations of the physical-symmetry-to-virtual
+\(Z\)-gauge corollary from arXiv:1708.00029, Section 4.2, lines 828--845.
 -/
 
 open scoped Matrix BigOperators
@@ -27,8 +27,7 @@ lemma twistedTensor_eq_rotatePhysical
     (A : MPSTensor d D) (U : G →* Matrix (Fin d) (Fin d) ℂ) (g : G) :
     twistedTensor A U g = rotatePhysical (U g) A := rfl
 
-/-- **Group-representation generalization of the Symmetries corollary
-(arXiv:1708.00029, §"Characterization of symmetries").**
+/-- **Conditional group-action reformulation of the symmetry corollary.**
 
 Let `A` be in irreducible form II and let `U : G →* Mat_d ℂ` be a representation of a
 group `G` on the physical leg, acting unitarily. If `A` is on-site symmetric under `U`
@@ -40,21 +39,22 @@ In paper notation, for each `g` there exist matrices `Z_g, Y_g` with `Z_g^{m_g} 
 `[A^i, Z_g] = 0`, and
 `Z_g · A^i = Y_g · (twistedTensor A U g)^i · Y_g⁻¹`.
 
-**Faithfulness note (generalization + restated conclusion).** The source corollary is
-stated for a *single* local unitary `u` and concludes with a **diagonal** unitary `Z`
-satisfying the explicit relation `∑_i u^{i',i} A^i = Z U A^{i'} U†` (eq:symm). This
-statement (i) *generalizes* the input to an arbitrary group representation `U : G →* …`
-(the single-`u` case is the cyclic-subgroup instance), and (ii) *restates the conclusion*
-in `Z`-gauge-equivalence form with `Z_g` only required periodic (`Z_g^{m_g}=1`) and
-commuting with `A^i`, not literally diagonal, and with the relation written via the gauge
-`Y_g` rather than verbatim eq:symm. It is therefore a faithful generalization, not the
-source corollary verbatim; the diagonal-`Z` normalization and the exact eq:symm form are
-recoverable in the irreducible-form basis but are not part of this statement.
+**Source comparison.** The source corollary in arXiv:1708.00029, lines 834--845,
+is stated for a single local unitary \(u\). It concludes that there are a diagonal
+unitary \(Z\) and a unitary \(U\) satisfying, for every \(i'\),
+\[
+  \sum_i u^{i',i} A^i = Z U A^{i'} U^\dagger
+\]
+The statement here is not that corollary verbatim: it
+applies the same idea pointwise to a group representation, assumes the periodic equal-case
+Fundamental Theorem (arXiv:1708.00029, lines 643--656) through `PeriodicEqualCaseFT`, and
+records the conclusion in `ZGaugeEquiv` form. The diagonal normalization of \(Z\) and the
+exact displayed source equation are not asserted by this theorem.
 
 The single-`u` specialization is obtained via
 `zGaugeEquiv_of_isIrreducibleForm_sameMPV_rotatePhysical`.
 The projective-representation question (a joint factor system on the family `(Y_g)_{g∈G}`)
-is an external downstream problem not supplied by arXiv:1708.00029; see
+is an external mathematical problem not supplied by arXiv:1708.00029; see
 `MPS/Symmetry/VirtualRepresentation.lean` for the analogous injective construction.
 
 The periodic equal-case FT is taken as an explicit hypothesis `hPeriodicEq` (see file
@@ -83,7 +83,7 @@ theorem cor_4_1_physical_symmetry_zgauge
   exact ⟨m, hm_pos, by rw [hRotEq]; exact hZGauge⟩
 
 /-- **A convenient reformulation of `cor_4_1_physical_symmetry_zgauge`** in the form most
-useful for conditional downstream projective-representation arguments: extract the gauge
+useful for conditional projective-representation arguments: extract the gauge
 `Y(g)` and matrix `Z(g)` explicitly. -/
 theorem cor_4_1_physical_symmetry_zgauge_explicit
     (A : MPSTensor d D)

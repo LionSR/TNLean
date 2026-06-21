@@ -1685,7 +1685,7 @@ unconditional result.
 
 \section{Physical symmetries on periodic MPS}\label{sec:periodic_symmetry}
 
-\begin{theorem}[Physical symmetry yields a virtual $Z$-gauge]%
+\begin{theorem}[Conditional group-action $Z$-gauge reformulation of the symmetry corollary]%
     \label{cor:cor_4_1_physical_symmetry_zgauge}
     \lean{MPSTensor.cor_4_1_physical_symmetry_zgauge}
     \leanok
@@ -1708,6 +1708,19 @@ unconditional result.
     \[
         Z_g\, A^i = Y_g\, \widetilde{A}_g^{\,i}\, Y_g^{-1}
     \]
+
+    % Source comparison: the source corollary in
+    % \cite[lines~834--845]{DeLasCuevas2017Irreducible} is stated for a single
+    % local unitary. It concludes that, for a local unitary $u$, there are a
+    % diagonal unitary $Z$ and a virtual unitary $Y$ satisfying, for every
+    % physical index $i'$,
+    % \[
+    %     \sum_i u^{i',i} A^i = Z\,Y\,A^{i'}Y^{\dagger}.
+    % \]
+    % The statement here is a pointwise group-action reformulation using the
+    % periodic equal-case Fundamental Theorem as an explicit hypothesis. It does
+    % not assert the diagonal normalization of $Z_g$ or the exact displayed
+    % source equation.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1736,53 +1749,48 @@ unconditional result.
     $2$-cochain $u : G \times G \to \C^{\times}$ such that
 
     \begin{enumerate}
-        \item every $Y_g$ realises the intertwining from
-              \cite[Corollary~4.1]{DeLasCuevas2017Irreducible} with
-              the twisted tensor $\widetilde{A}_g$ for some accompanying
+        \item every $Y_g$ realizes the pointwise $Z$-gauge intertwining
+              modeled on the symmetry corollary with the twisted tensor
+              $\widetilde{A}_g$ for some accompanying
               $Z_g$ (with $Z_g^{m_g} = \Id$ and $[A^i, Z_g] = 0$); and
         \item the family obeys the projective multiplication law on the
               bond space: $Y_h\, Y_g = u(g, h)\, Y_{gh}$.
     \end{enumerate}
 
-    The first item is the conclusion supplied by
-    \cite[Corollary~4.1]{DeLasCuevas2017Irreducible}. The second item is
-    an additional downstream assumption: after proving the symmetry
-    corollary, the source paper says that its consequences will be
-    explored elsewhere. The injective case reduces this coherence to
-    scalar uniqueness of gauges (cf.~\S\ref{sec:injective_symmetry_cocycle});
-    in the genuinely periodic setting there is a non-trivial
-    $\Z_m$-gauge ambiguity, so coherence of the factor system $u$ is an
-    independent analytic assumption.
+    The source supplies the corresponding intertwining for a single local unitary.
+    The group-indexed coherent choice and the projective multiplication law are
+    additional assumptions: after proving the symmetry corollary, the source
+    paper says that its consequences will be explored elsewhere. The injective
+    case reduces this coherence to scalar uniqueness of gauges
+    (cf.~\S\ref{sec:injective_symmetry_cocycle}); in the genuinely periodic
+    setting there is a non-trivial $\Z_m$-gauge ambiguity, so coherence of the
+    factor system $u$ is an independent analytic assumption.
 \end{definition}
 
-\begin{theorem}[Conditional projective representation from symmetry data]%
+\begin{theorem}[Conditional projective representation from symmetry gauges]%
     \label{thm:cor_4_1_projective_rep}
     \lean{MPSTensor.cor_4_1_projective_rep}
     \leanok
-    \uses{cor:cor_4_1_physical_symmetry_zgauge,
-        def:periodic_projective_rigidity}
-    Under the hypotheses of Corollary~\ref{cor:cor_4_1_physical_symmetry_zgauge}
-    together with the periodic projective-rigidity hypothesis
-    (Definition~\ref{def:periodic_projective_rigidity}), the $Y_g$
-    family defines a projective representation of $G$ on the
-    bond space: there exist a scalar $2$-cochain
+    \uses{def:periodic_projective_rigidity}
+    Assume the periodic projective-rigidity hypothesis
+    (Definition~\ref{def:periodic_projective_rigidity}) for the tensor $A$ and
+    the physical action $U$. Then the virtual gauge family supplied by that
+    hypothesis defines a projective representation of $G$ on the bond space:
+    there exist a scalar $2$-cochain
     $\omega : G \times G \to \C^{\times}$ and virtual gauges
     $X : G \to \GL_D(\C)$ satisfying
     \[
         X(g)\, X(h) =  \omega(g, h)\, X(g h),
     \]
-    while for each $g$ the matrix $X(g^{-1})$ still realises the
-    $\Z_{m_g}$-intertwining from
-    \cite[Corollary~4.1]{DeLasCuevas2017Irreducible} between $A$ and
-    the twisted tensor $\widetilde{A}_g$.
+    while for each $g$ the matrix $X(g^{-1})$ still realizes the pointwise
+    $\Z_{m_g}$-intertwining, encoded in the rigidity hypothesis, between $A$
+    and the twisted tensor $\widetilde{A}_g$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{cor:cor_4_1_physical_symmetry_zgauge,
-        def:periodic_projective_rigidity}
-    Unpack the rigidity hypothesis to extract the family
-    $(Y, u)$ together with the intertwiners from
-    \cite[Corollary~4.1]{DeLasCuevas2017Irreducible}. Set
+    \uses{def:periodic_projective_rigidity}
+    Unpack the rigidity hypothesis to extract the family $(Y, u)$ together
+    with the pointwise $Z$-gauge intertwiners. Set
     $X(g) := Y(g^{-1})$ and $\omega(g, h) := u(h^{-1}, g^{-1})$. The
     projective multiplication law $X(g)\, X(h) = \omega(g, h)\, X(gh)$
     is then exactly the $(h^{-1}, g^{-1})$-instance of the factor-system
@@ -1851,10 +1859,9 @@ unconditional result.
 
 \section{Refinement and divisibility}\label{sec:periodic_refinement}
 
-The next theorem characterises when the matrix-product-vector family of a
-periodic tensor admits a finer description in terms of a smaller-period
-tensor whose blocks have been merged. This was the original motivation
-for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
+The next theorem relates refinement of a matrix-product-vector family to
+divisibility of its transfer map, following
+\cite[Theorem~4.1]{DeLasCuevas2017Irreducible}.
 
 \begin{definition}[$p$-divisible CP map]
     \label{def:p_divisible_channel}
@@ -1870,12 +1877,14 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     \lean{MPSTensor.IsPRefinable}
     \leanok
     \uses{def:mps_tensor, def:blocked_tensor}
-    An MPS tensor $B$ with physical dimension $d$ and bond dimension $D$ is
-    \emph{$p$-refinable} if there exist another such tensor $A$ and an
-    isometry $W : \C^d \to (\C^d)^{\otimes p}$ (encoded as a matrix
-    $W \in M_{d^p \times d}(\C)$ with $W^{\dagger} W = \Id$) such that the
-    $p$-blocked tensor $A^{[p]}$ matches the $W$-image of $B$ at the level
-    of MPV coefficients:
+    Given a tensor $B$, the family $\mc V(B)$ can be \emph{$p$-refined} if
+    there exist another tensor $A$ and an isometry
+    $W : \C^d \to (\C^d)^{\otimes p}$ such that, for every $N$,
+    \[
+        \ket{V_{pN}(A)} = W^{\otimes N}\ket{V_N(B)}.
+    \]
+    Equivalently, after identifying a $p$-letter with an element of
+    $\{0,\ldots,d^p-1\}$, the $p$-blocked tensor $A^{[p]}$ satisfies
     \[
         V^{(N)}(A^{[p]})_\tau
         =
@@ -1885,9 +1894,6 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     \]
     for every $N \in \N$ and every
     $\tau \in \{0,\ldots,d^p-1\}^N$.
-
-    In Dirac notation, this encodes
-    $\ket{V_{pN}(A)} = W^{\otimes N}\, \ket{V_N(B)}$ for all~$N$.
 \end{definition}
 
 \begin{theorem}[Pullback of a refinement witness]
@@ -1895,13 +1901,13 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     \lean{MPSTensor.pRefinementCanonicalization_pullback_of_irreducibleForm}
     \leanok
     \uses{def:irreducible_form, def:p_refinable}
-    Let $B$ be an MPS tensor in irreducible form~II. If $B$ is
-    $p$-refinable, then there exist a tensor $A$, an isometry
+    Let $B$ be an MPS tensor in irreducible form~II. If $\mc V(B)$ can be
+    $p$-refined, then there exist a tensor $A$, an isometry
     $W : \C^d \to (\C^d)^{\otimes p}$, and the pullback tensor
-    $$
+    \[
         C^{\alpha} := \sum_{i=0}^{d-1} W_{\alpha,i} B^i
-        \qquad (\alpha \in \{0,\ldots,d^p-1\})
-    $$
+    \]
+    for $\alpha \in \{0,\ldots,d^p-1\}$,
     such that $C$ is again in irreducible form~II, $\mathcal E_C = \mathcal E_B$,
     and $C$ has the same MPV family as $A^{[p]}$.
 \end{theorem}
