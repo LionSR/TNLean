@@ -407,6 +407,61 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     source spanning clause.
 \end{proof}
 
+\begin{lemma}[Chain-space comparison gives the block-diagonal spanning equation]
+    \label{lem:block_diagonal_chain_space_comparison_parent_spanning}
+    \lean{MPSTensor.hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_chain_eq_iSup_mpv}
+    \lean{MPSTensor.hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_chain_eq_iSup_chain}
+    \leanok
+    \uses{def:parent_hamiltonian_ground_space_spanning,
+        thm:parent_hamiltonian_kernel_eq_chain_ground_space,
+        lem:block_diagonal_parent_spanning_reverse_inclusion,
+        lem:bnt_span_eq_sum_mpv_submodules}
+    Let
+    \[
+        B=\bigoplus_{j=0}^{r-1}\mu_jA_j,
+        \qquad \mu_j\ne0.
+    \]
+    Suppose that, for every \(N>L\),
+    \[
+        G_L^{(N)}(B)
+        =
+        \bigvee_{j=0}^{r-1}\spn\{V^{(N)}(A_j)\}.
+    \]
+    Then the source parent-Hamiltonian spanning equation holds:
+    \[
+        \ker H_N(B,L)
+        =
+        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}.
+    \]
+    It is enough to prove the two equations
+    \[
+        G_L^{(N)}(B)=\bigvee_{j=0}^{r-1}G_L^{(N)}(A_j),
+        \qquad
+        G_L^{(N)}(A_j)=\spn\{V^{(N)}(A_j)\}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The finite-volume identity gives
+    \[
+        \ker H_N(B,L)=G_L^{(N)}(B).
+    \]
+    The assumed chain-space comparison therefore rewrites the kernel as
+    \[
+        \bigvee_{j=0}^{r-1}\spn\{V^{(N)}(A_j)\}.
+    \]
+    The latter supremum is the BNT vector span. Conversely, the easy inclusion
+    of Lemma~\ref{lem:bnt_span_le_parent_hamiltonian_kernel} gives
+    \[
+        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}\subseteq\ker H_N(B,L),
+    \]
+    so the displayed equation is the source spanning clause. If the comparison
+    is first stated as
+    \(G_L^{(N)}(B)=\bigvee_jG_L^{(N)}(A_j)\), the single-block equations
+    \(G_L^{(N)}(A_j)=\spn\{V^{(N)}(A_j)\}\) give the previous hypothesis.
+\end{proof}
+
 \begin{theorem}[Renormalization fixed points have commuting nearest-neighbor parent terms]\label{thm:rfp_implies_nncph}
     \lean{MPSTensor.rfp_implies_nncph}
     \lean{Axioms.rfp_to_nncph_commute}
