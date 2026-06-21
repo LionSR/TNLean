@@ -86,8 +86,8 @@ private lemma exists_eq_one_of_sum_eq_one_sum_sq_eq_one_nonneg
       _ = 0 := by rw [h_sum, h_sq]; norm_num
   have hterm_zero : ∀ i, lam i * (1 - lam i) = 0 := by
     intro i
-    exact (Finset.sum_eq_zero_iff_of_nonneg
-      (fun j _ => hterm_nonneg j)).mp hsum_term i (Finset.mem_univ i)
+    exact congrFun (Fintype.sum_eq_zero_iff_of_nonneg
+      (fun j => hterm_nonneg j) |>.mp hsum_term) i
   have hex : ∃ i, lam i = 1 := by
     by_contra hno
     have hall_zero : ∀ i, lam i = 0 := by
