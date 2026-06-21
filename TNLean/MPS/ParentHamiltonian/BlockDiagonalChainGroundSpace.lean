@@ -19,6 +19,38 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
+/-- A vector in the periodic chain ground space is annihilated by every local
+parent-Hamiltonian term.
+
+This is the local constraint direction in the parent-Hamiltonian construction:
+membership in every cyclic \(L\)-site ground-space window implies the
+frustration-free equations for the translated parent interactions. -/
+theorem isFrustrationFree_of_mem_chainGroundSpace {D : ℕ} (A : MPSTensor d D)
+    {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
+    {ψ : NSiteSpace d N} (hψ : ψ ∈ chainGroundSpace A L N) :
+    IsFrustrationFree A L N ψ := by
+  rw [chainGroundSpace, dif_pos ⟨hN, hLN⟩] at hψ
+  simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ
+  intro i
+  ext σ
+  simp only [localTerm, hLN, ↓reduceDIte, LinearMap.pi_apply, LinearMap.comp_apply,
+    LinearMap.proj_apply, Pi.zero_apply]
+  have hrestrict :
+      (fun τ => ψ (replaceWindow L hLN i σ τ)) =
+        cyclicRestrictₗ hN L i σ ψ := by
+    ext τ
+    rw [cyclicRestrictₗ_apply]
+    have hcfg : replaceWindow L hLN i σ τ = cyclicCfg hN L i τ σ := rfl
+    rw [hcfg]
+  have hmem : (fun τ => ψ (replaceWindow L hLN i σ τ)) ∈ groundSpace A L := by
+    rw [hrestrict]
+    exact hψ i σ
+  have hkill := parentInteraction_apply_mem_groundSpace A L _ hmem
+  change (parentInteraction A L (fun τ => ψ (replaceWindow L hLN i σ τ)))
+    (extractWindow L i σ) = 0
+  rw [hkill]
+  rfl
+
 /-- The periodic chain ground space of a single block is contained in the
 periodic chain ground space of the block-diagonal tensor.
 
@@ -55,6 +87,33 @@ theorem iSup_chainGroundSpace_block_le_toTensorFromBlocks
       chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N := by
   exact iSup_le fun j =>
     chainGroundSpace_block_le_toTensorFromBlocks μ A (hμ j) hN hLN
+
+/-- The block MPS vectors have zero energy for the block-diagonal parent
+Hamiltonian.
+
+Let \(B=\bigoplus_j\mu_jA_j\), with every \(\mu_j\ne0\). Since every
+\(V^{(N)}(A_j)\) satisfies the cyclic \(A_j\)-constraints, and the local
+spaces \(G_L(A_j)\) are contained in \(G_L(B)\), the span of the block MPS
+vectors is contained in the kernel of the \(B\)-parent Hamiltonian. This is only
+the easy inclusion in the parent-Hamiltonian ground-space spanning equation;
+the reverse inclusion is the periodic-boundary comparison. -/
+theorem bntMPSVectorSpan_le_ker_parentHamiltonian_toTensorFromBlocks
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (hμ : ∀ j : Fin r, μ j ≠ 0)
+    {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
+    bntMPSVectorSpan A N ≤
+      LinearMap.ker (parentHamiltonian (toTensorFromBlocks (d := d) (μ := μ) A) L N) := by
+  rw [bntMPSVectorSpan]
+  refine Submodule.span_le.mpr ?_
+  rintro _ ⟨j, rfl⟩
+  refine LinearMap.mem_ker.mpr ?_
+  simp only [parentHamiltonian, LinearMap.sum_apply]
+  refine Finset.sum_eq_zero fun i _ => ?_
+  exact isFrustrationFree_of_mem_chainGroundSpace
+    (toTensorFromBlocks (d := d) (μ := μ) A) hN hLN
+    ((chainGroundSpace_block_le_toTensorFromBlocks μ A (hμ j) hN hLN)
+      (mpv_mem_chainGroundSpace (A j) L N hN hLN)) i
 
 /-- Boundary-condition equality for the block-diagonal periodic chain.
 

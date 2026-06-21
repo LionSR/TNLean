@@ -201,6 +201,7 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     \label{lem:bnt_span_le_parent_hamiltonian_kernel}
     \lean{MPSTensor.bntMPSVectorSpan_le_ker_parentHamiltonian_of_forall_annihilates}
     \lean{MPSTensor.bntMPSVectorSpan_le_ker_parentHamiltonian_of_forall_frustrationFree}
+    \lean{MPSTensor.bntMPSVectorSpan_le_ker_parentHamiltonian_toTensorFromBlocks}
     \leanok
     \uses{def:bnt_span, def:is_frustration_free, def:parent_hamiltonian}
     Let $B$ be a canonical-form tensor with BNT components
@@ -218,6 +219,9 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     \]
     It is enough to assume the local frustration-free equations
     $h_iV^{(N)}(A_j)=0$ for every $i$ and $j$.
+    In the block-diagonal case
+    \(B=\bigoplus_j\mu_jA_j\), with every \(\mu_j\ne0\), the same inclusion
+    follows because each local space \(G_L(A_j)\) is contained in \(G_L(B)\).
     This is the easy inclusion in the source ground-space spanning equation of
     \cite[Definition~3.9]{Cirac2016MPDO_arXiv}; the reverse inclusion is the
     remaining spanning direction.
@@ -235,6 +239,9 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
         =
         0.
     \]
+    For a block-diagonal tensor, the \(A_j\)-chain constraints of
+    \(V^{(N)}(A_j)\) imply the \(B\)-chain constraints, and hence the same
+    local equations.
 \end{proof}
 
 \begin{theorem}[Renormalization fixed points have commuting nearest-neighbor parent terms]\label{thm:rfp_implies_nncph}
