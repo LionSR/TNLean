@@ -253,10 +253,11 @@ private lemma ker_invariant_under_adjoint
     rw [dotProduct_sum]
     congr 1
     ext i
-    -- reassociate and use the adjoint identity
+    -- Reassociate the products and move the left factor across the dot product.
     have : (A i * ρ * (A i)ᴴ) *ᵥ x = A i *ᵥ (ρ *ᵥ ((A i)ᴴ *ᵥ x)) := by
       simp [Matrix.mulVec_mulVec, Matrix.mul_assoc]
-    rw [this, HermitianHelpers.dotProduct_mulVec_conjTranspose]
+    rw [this, Matrix.dotProduct_mulVec, Matrix.star_mulVec,
+      Matrix.conjTranspose_conjTranspose]
   have h_each_zero : ∀ i : Fin d,
       star ((A i)ᴴ *ᵥ x) ⬝ᵥ (ρ *ᵥ ((A i)ᴴ *ᵥ x)) = 0 := by
     intro i

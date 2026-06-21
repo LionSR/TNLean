@@ -3,13 +3,11 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 -- Keep these dependencies explicit here for readability:
--- • `TNLean.Algebra.HermitianHelpers` for shared spectral decomposition helpers
 -- • `TNLean.Channel.Basic` for positive-definiteness results
 -- • `TNLean.Channel.Irreducible.Basic` for irreducibility/projection lemmas
 -- The channel imports are already transitively available through
 -- `TNLean.MPS.CPPrimitive`, but listing them directly makes the local proof
 -- dependencies explicit.
-import TNLean.Algebra.HermitianHelpers
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Basic
 import TNLean.MPS.Core.CPPrimitive
@@ -72,7 +70,8 @@ private lemma ker_invariant_under_adjoint
     congr 1; ext i
     rw [show (A i * ρ * (A i)ᴴ) *ᵥ x = A i *ᵥ (ρ *ᵥ ((A i)ᴴ *ᵥ x)) from by
       simp [Matrix.mulVec_mulVec, Matrix.mul_assoc]]
-    rw [HermitianHelpers.dotProduct_mulVec_conjTranspose]
+    rw [Matrix.dotProduct_mulVec, Matrix.star_mulVec,
+      Matrix.conjTranspose_conjTranspose]
   have h_each_zero : ∀ i : Fin d,
       star ((A i)ᴴ *ᵥ x) ⬝ᵥ (ρ *ᵥ ((A i)ᴴ *ᵥ x)) = 0 := by
     intro i
