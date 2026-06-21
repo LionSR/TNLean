@@ -288,6 +288,51 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     $h_i(B,L)V^{(N)}(A_j)=0$ for every $i$.
 \end{proof}
 
+\begin{lemma}[Kernel containment from chain-space splitting]
+    \label{lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting}
+    \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan}
+    \leanok
+    \uses{thm:parent_hamiltonian_kernel_le_chain_ground_space,
+        def:parent_hamiltonian, def:chain_ground_space, def:bnt_span,
+        def:mpv_submodule, lem:bnt_span_eq_sum_mpv_submodules}
+    Let $B=\bigoplus_{j=0}^{r-1}\mu_jA_j$. Suppose $N>0$, $L\le N$, and
+    the periodic chain constraints for $B$ split into the block constraints:
+    \[
+        \mathcal G_{N,L}(B)
+        \subseteq
+        \bigvee_{j=0}^{r-1}\mathcal G_{N,L}(A_j).
+    \]
+    If every block chain space is contained in its periodic MPS line,
+    \[
+        \mathcal G_{N,L}(A_j)\subseteq \mathbb C V^{(N)}(A_j)
+        \qquad (0\le j<r),
+    \]
+    then the zero-energy space of the parent Hamiltonian is contained in the
+    BNT vector span:
+    \[
+        \ker H_L^{(N)}(B)
+        \subseteq
+        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Theorem~\ref{thm:parent_hamiltonian_kernel_le_chain_ground_space} gives
+    \[
+        \ker H_L^{(N)}(B)\subseteq \mathcal G_{N,L}(B).
+    \]
+    The assumed splitting therefore places every zero-energy vector in
+    $\bigvee_j\mathcal G_{N,L}(A_j)$. The blockwise containments give
+    \[
+        \bigvee_j\mathcal G_{N,L}(A_j)
+        \subseteq
+        \bigvee_j\mathbb C V^{(N)}(A_j),
+    \]
+    and Lemma~\ref{lem:bnt_span_eq_sum_mpv_submodules} identifies the last
+    space with the BNT vector span.
+\end{proof}
+
 \begin{lemma}[Block-diagonal spanning is equivalent to the reverse inclusion]
     \label{lem:block_diagonal_parent_spanning_reverse_inclusion}
     \lean{MPSTensor.hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_iff_ker_le_bntMPSVectorSpan}

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.BlockDiagonalChainGroundSpace
 import TNLean.MPS.ParentHamiltonian.Commuting
+import TNLean.MPS.ParentHamiltonian.KernelChainGroundSpace
 
 /-!
 # Ground-space spanning for block-diagonal parent Hamiltonians
@@ -21,6 +22,49 @@ open scoped Matrix BigOperators
 namespace MPSTensor
 
 variable {d : ℕ}
+
+/-- Zero energy for a block-diagonal parent Hamiltonian lies in the BNT vector
+span once the periodic chain constraints split into the block constraints and
+each block constraint is one-dimensional.
+
+Let \(B=\bigoplus_{j=0}^{r-1}\mu_jA_j\). If
+\[
+  \mathcal G_{N,L}(B)\subseteq\bigvee_j\mathcal G_{N,L}(A_j)
+\]
+and each \(\mathcal G_{N,L}(A_j)\) is contained in
+\(\mathbb C V^{(N)}(A_j)\), then
+\[
+  \ker H_L^{(N)}(B)
+  \subseteq
+  \operatorname{span}\{V^{(N)}(A_j):j=0,\ldots,r-1\}.
+\]
+This is the reduction needed by arXiv:1606.00608, Definition 3.9, after the
+periodic-boundary comparison has supplied the chain-space splitting. -/
+theorem ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
+    (hClose :
+      chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ≤
+        ⨆ j : Fin r, chainGroundSpace (A j) L N)
+    (hBlock :
+      ∀ j : Fin r, chainGroundSpace (A j) L N ≤ mpvSubmodule (A j) N) :
+    LinearMap.ker (parentHamiltonian
+      (toTensorFromBlocks (d := d) (μ := μ) A) L N) ≤
+      bntMPSVectorSpan A N := by
+  intro ψ hψ
+  have hChain :
+      ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N :=
+    ker_parentHamiltonian_le_chainGroundSpace
+      (toTensorFromBlocks (d := d) (μ := μ) A) hN hLN hψ
+  have hSum : ψ ∈ ⨆ j : Fin r, chainGroundSpace (A j) L N :=
+    hClose hChain
+  have hToMpv :
+      (⨆ j : Fin r, chainGroundSpace (A j) L N) ≤
+        ⨆ j : Fin r, mpvSubmodule (A j) N :=
+    iSup_mono hBlock
+  rw [iSup_mpvSubmodule_eq_bntMPSVectorSpan A N] at hToMpv
+  exact hToMpv hSum
 
 /-- For a block-diagonal tensor with nonzero weights, the source parent-Hamiltonian
 ground-space spanning clause is equivalent to the reverse inclusion.
