@@ -71,15 +71,6 @@ private abbrev rightMulCLMAlgHom (D : ℕ) : (Mat D)ᵐᵒᵖ →ₐ[ℂ] Matrix
     ((AlgHom.mulLeftRight ℂ (Mat D)).comp
       (Algebra.TensorProduct.includeRight (R := ℂ) (A := Mat D) (B := (Mat D)ᵐᵒᵖ)))
 
-private theorem leftMulCLM_apply (A ρ : Mat D) :
-    leftMulCLMAlgHom D A ρ = A * ρ := by
-  rfl
-
-private theorem rightMulCLM_apply (A : (Mat D)ᵐᵒᵖ) (ρ : Mat D) :
-    rightMulCLMAlgHom D A ρ = ρ * MulOpposite.unop A := by
-  change ((AlgHom.mulLeftRight ℂ (Mat D)) (1 ⊗ₜ[ℂ] A)) ρ = ρ * MulOpposite.unop A
-  simp [AlgHom.mulLeftRight_apply]
-
 private lemma continuous_leftMulCLMAlgHom :
     Continuous (leftMulCLMAlgHom D) := by
   have h_eq : (leftMulCLMAlgHom D : Mat D → MatrixCLM (Fin D)) =
@@ -87,7 +78,6 @@ private lemma continuous_leftMulCLMAlgHom :
     funext A
     apply ContinuousLinearMap.ext
     intro ρ
-    rw [leftMulCLM_apply]
     rfl
   rw [h_eq]
   exact (ContinuousLinearMap.mul ℂ (Mat D)).continuous
@@ -102,8 +92,9 @@ private lemma continuous_rightMulCLMAlgHom :
     funext A
     apply ContinuousLinearMap.ext
     intro ρ
-    rw [rightMulCLM_apply]
-    rfl
+    change ((AlgHom.mulLeftRight ℂ (Mat D)) (1 ⊗ₜ[ℂ] A)) ρ =
+      ρ * MulOpposite.unop A
+    simp [AlgHom.mulLeftRight_apply]
   rw [h_eq]
   exact (ContinuousLinearMap.mul ℂ (Mat D)).flip.continuous.comp hunop
 
@@ -220,19 +211,25 @@ theorem expSemigroup_dissipativeDrift_apply
     rw [expSemigroupCLM, hsplit, hsum, exp_leftMulCLM, exp_rightMulCLM]
   change expSemigroupCLM (endEquiv (D := D) (dissipativeDrift κ)) t ρ = _
   rw [hκ]
+  let E := NormedSpace.exp (-(t : ℂ) • κ)
   have hconj : NormedSpace.exp (-(t : ℂ) • κᴴ) =
-      (NormedSpace.exp (-(t : ℂ) • κ))ᴴ := by
+      Eᴴ := by
     calc
       NormedSpace.exp (-(t : ℂ) • κᴴ) = NormedSpace.exp (((-(t : ℂ)) • κ)ᴴ) := by
         rw [Matrix.conjTranspose_smul]
         simp
-      _ = (NormedSpace.exp (-(t : ℂ) • κ))ᴴ := Matrix.exp_conjTranspose (A := (-(t : ℂ)) • κ)
+      _ = Eᴴ := Matrix.exp_conjTranspose (A := (-(t : ℂ)) • κ)
   rw [hconj]
   change
-    leftMulCLMAlgHom D (NormedSpace.exp (-(t : ℂ) • κ))
+    leftMulCLMAlgHom D E
       ((rightMulCLMAlgHom D
-        (MulOpposite.op ((NormedSpace.exp (-(t : ℂ) • κ))ᴴ))) ρ) = _
-  rw [rightMulCLM_apply, leftMulCLM_apply]
+        (MulOpposite.op Eᴴ)) ρ) = E * ρ * Eᴴ
+  have hright : (rightMulCLMAlgHom D (MulOpposite.op Eᴴ)) ρ = ρ * Eᴴ := by
+    change ((AlgHom.mulLeftRight ℂ (Mat D)) (1 ⊗ₜ[ℂ] MulOpposite.op Eᴴ)) ρ =
+      ρ * Eᴴ
+    simp [AlgHom.mulLeftRight_apply]
+  rw [hright]
+  change E * (ρ * Eᴴ) = E * ρ * Eᴴ
   simp [Matrix.mul_assoc]
 
 /-- The dissipative drift semigroup is completely positive, with a single Kraus operator
