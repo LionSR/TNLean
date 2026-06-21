@@ -594,8 +594,9 @@ in both cases.
         \rho=\tau_a\cdots\tau_{i-1},\qquad
         \alpha=\sigma_0\cdots\sigma_{N-i-1}.
     \]
-    These are the cut-adapted word coordinates used to compare with the source
-    decompositions involving $C^j_{i_1}$ and $D^j_{i_{m+1}}$.
+    These are the word coordinates obtained by opening the periodic boundary at
+    the chosen cut, in the comparison with the source expressions involving
+    $C^j_{i_1}$ and $D^j_{i_{m+1}}$.
     If
     \[
         \sum_j
@@ -1228,7 +1229,8 @@ in both cases.
         =
         \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho .
     \]
-    This is the cut-adapted form of the source comparison
+    After opening the periodic boundary at the chosen cut, this is the source
+    comparison
     \[
         A^j_{i_{m+1}}C^j_{i_1}=D^j_{i_{m+1}}A^j_{i_1},
         \qquad
@@ -1307,7 +1309,7 @@ in both cases.
     then gives the single-block periodic constraints.
 \end{proof}
 
-\begin{lemma}[Trace-decomposition comparisons give single-block constraints]
+\begin{lemma}[Boundary trace comparisons give single-block constraints]
     \label{lem:block_diagonal_boundary_component_trace_decomposition_injective}
     \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_trace_decomposition_of_injective}
     \leanok
@@ -1360,7 +1362,7 @@ in both cases.
     which gives the periodic-boundary constraint for each block.
 \end{proof}
 
-\begin{lemma}[Trace decompositions with a block-diagonal boundary representation]
+\begin{lemma}[Boundary trace comparisons with a block-diagonal representation]
     \label{lem:block_diagonal_boundary_periodic_components_from_trace_decomposition_boundary}
     \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_of_boundary}
     \leanok
@@ -1401,14 +1403,14 @@ in both cases.
     \leanok
     \uses{lem:block_diagonal_boundary_component_trace_decomposition_injective}
     Choose a block-diagonal boundary representation of $\psi$. For that
-    representation, the trace-decomposition comparison supplies the matrices
+    representation, the boundary trace comparison supplies the matrices
     $C^j_{i,\rho}$. Applying
     Lemma~\ref{lem:block_diagonal_boundary_component_trace_decomposition_injective}
     gives the desired containment
     $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$ for every block $j$.
 \end{proof}
 
-\begin{lemma}[Trace-decomposition comparisons give periodic-boundary single-block states]
+\begin{lemma}[Boundary trace comparisons give periodic-boundary single-block states]
     \label{lem:block_diagonal_boundary_periodic_components_from_trace_decomposition}
     \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1}
     \leanok
@@ -1457,14 +1459,14 @@ in both cases.
         \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right).
     \]
     Lemma~\ref{lem:block_diagonal_boundary_periodic_components_from_trace_decomposition_boundary}
-    applies to this representation and the assumed trace-decomposition
-    comparison. Thus, for every $j$,
+    applies to this representation and the assumed equality of boundary trace
+    expressions. Thus, for every $j$,
     \[
         \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
     \]
 \end{proof}
 
-\begin{lemma}[BNT product span gives trace-decomposition periodic components]
+\begin{lemma}[Basis-of-normal-tensors product span gives boundary-trace periodic components]
     \label{lem:block_diagonal_boundary_periodic_components_from_trace_decomposition_bnt_span}
     \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1_span}
     \leanok
