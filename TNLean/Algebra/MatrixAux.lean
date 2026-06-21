@@ -92,15 +92,12 @@ theorem eq_zero_of_sum_mul_conjTranspose_eq_zero
     rw [← Complex.re_sum, ← Matrix.trace_sum, h]
     simp
   have htrace_re : ((B i * (B i)ᴴ).trace).re = 0 :=
-    le_antisymm
-      (by
-        linarith [Finset.sum_eq_zero_iff_of_nonneg (fun j _ => htrace_nonneg j)
-          |>.mp htrace_sum i (Finset.mem_univ i)])
-      (htrace_nonneg i)
-  have hpsd := Matrix.posSemidef_self_mul_conjTranspose (B i)
+    Finset.sum_eq_zero_iff_of_nonneg (fun j _ => htrace_nonneg j)
+      |>.mp htrace_sum i (Finset.mem_univ i)
   have htrace_zero : (B i * (B i)ᴴ).trace = 0 :=
-    Complex.ext htrace_re (Complex.le_def.mp hpsd.trace_nonneg).2.symm
-  exact Matrix.self_mul_conjTranspose_eq_zero.mp (hpsd.trace_eq_zero_iff.mp htrace_zero)
+    Complex.ext htrace_re
+      (Complex.le_def.mp (Matrix.posSemidef_self_mul_conjTranspose (B i)).trace_nonneg).2.symm
+  exact Matrix.trace_mul_conjTranspose_self_eq_zero_iff.mp htrace_zero
 
 /-- If `∑ᵢ Bᵢ† * Bᵢ = 0`, then every `Bᵢ` is zero. -/
 theorem eq_zero_of_sum_conjTranspose_mul_self_eq_zero
