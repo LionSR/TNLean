@@ -4,7 +4,7 @@
 The periodic ground-space theorem states that, for sufficiently long periodic
 systems, the periodic-boundary ground space of a parent Hamiltonian is generated
 by a basis of normal tensors of the initial tensor
-\(A\)~\cite[Theorem~IV.16]{Cirac2021Matrix}. The lemmas in this subsection are
+$A$~\cite[Theorem~IV.16]{Cirac2021Matrix}. The lemmas in this subsection are
 conditional reductions toward that statement. Their
 hypotheses explicitly include a boundary inclusion, a block-diagonal boundary
 representation, or periodic-boundary membership for the single-block states; in
@@ -12,14 +12,14 @@ the source theorem these conditions are obtained from the boundary-condition
 comparison in the periodic ring. The source proof
 \cite{PerezGarcia2007Matrix} writes this comparison with $C^j_{i_1}$,
 $D^j_{i_{m+1}}$, and the normalized matrix $E^j$; the symbols $\beta$ and
-$\rho$ below are the cut-adapted words obtained after opening the periodic
-cut. In these coordinates the source comparison becomes
+$\rho$ below are the words obtained after opening the periodic boundary at the
+chosen cut. In these coordinates the source comparison becomes
 \[
     A^j_\beta C^j_{i,\rho}
     =
     \bigl(\mu_j^N X_j A^j_\beta\bigr)A^j_\rho,
 \]
-which is the cut-adapted form of
+which is the opened-boundary form of
 $A^j_{i_{m+1}}C^j_{i_1}=D^j_{i_{m+1}}A^j_{i_1}$ with
 $D^j_\beta=(\mu_j^NX_j)A^j_\beta$.
 
@@ -453,7 +453,7 @@ $D^j_\beta=(\mu_j^NX_j)A^j_\beta$.
     Lemma~\ref{lem:bnt_block_diagonal_crossing_pgvwc_comparison_equality}.
 \end{proof}
 
-\begin{lemma}[Trace-decomposition comparisons reduce to periodic-boundary equality]
+\begin{lemma}[Boundary trace comparisons reduce to periodic-boundary equality]
     \label{lem:bnt_block_diagonal_trace_decomposition_equality}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition}
     \leanok
@@ -517,7 +517,7 @@ $D^j_\beta=(\mu_j^NX_j)A^j_\beta$.
     and the internality of the sum of the $G_N(A_j)$.
 \end{proof}
 
-\begin{lemma}[BNT product span gives trace-decomposition ground-space equality]
+\begin{lemma}[Basis-of-normal-tensors product span gives boundary-trace ground-space equality]
     \label{lem:bnt_block_diagonal_trace_decomposition_bnt_span_equality}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition_bnt_c1_span}
     \leanok
