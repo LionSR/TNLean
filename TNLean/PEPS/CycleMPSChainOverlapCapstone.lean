@@ -85,40 +85,6 @@ private theorem isUnit_of_mul_span {ι : Type*} {X : Matrix (Fin D) (Fin D) ℂ}
   obtain ⟨M, hM⟩ := key 1 h1
   exact IsUnit.of_mul_eq_one M hM.symm
 
-/-- Products of two spanning families span. -/
-private theorem span_range_mul_pair {ι κ : Type*}
-    {V : ι → Matrix (Fin D) (Fin D) ℂ} {U : κ → Matrix (Fin D) (Fin D) ℂ}
-    (hV : Submodule.span ℂ (Set.range V) = ⊤)
-    (hU : Submodule.span ℂ (Set.range U) = ⊤) :
-    Submodule.span ℂ (Set.range fun vu : ι × κ => V vu.1 * U vu.2) = ⊤ := by
-  rw [eq_top_iff]
-  intro M _
-  have step1 : ∀ (w : κ), ∀ N ∈ Submodule.span ℂ (Set.range V),
-      N * U w ∈ Submodule.span ℂ
-        (Set.range fun vu : ι × κ => V vu.1 * U vu.2) := by
-    intro w N hN
-    induction hN using Submodule.span_induction with
-    | mem x hx =>
-        obtain ⟨v, rfl⟩ := hx
-        exact Submodule.subset_span ⟨(v, w), rfl⟩
-    | zero => rw [Matrix.zero_mul]; exact Submodule.zero_mem _
-    | add x y _ _ hx hy => rw [Matrix.add_mul]; exact Submodule.add_mem _ hx hy
-    | smul c x _ hx => rw [Matrix.smul_mul]; exact Submodule.smul_mem _ c hx
-  have step2 : ∀ N ∈ Submodule.span ℂ (Set.range V),
-      ∀ W ∈ Submodule.span ℂ (Set.range U),
-      N * W ∈ Submodule.span ℂ
-        (Set.range fun vu : ι × κ => V vu.1 * U vu.2) := by
-    intro N hN W hW
-    induction hW using Submodule.span_induction with
-    | mem x hx =>
-        obtain ⟨w, rfl⟩ := hx
-        exact step1 w N hN
-    | zero => rw [Matrix.mul_zero]; exact Submodule.zero_mem _
-    | add x y _ _ hx hy => rw [Matrix.mul_add]; exact Submodule.add_mem _ hx hy
-    | smul c x _ hx => rw [Matrix.mul_smul]; exact Submodule.smul_mem _ c hx
-  have := step2 M (hV ▸ Submodule.mem_top) 1 (hU ▸ Submodule.mem_top)
-  rwa [Matrix.mul_one] at this
-
 /-- Two two-sided multiplications agreeing on a spanning family agree on
 every matrix. -/
 private theorem conj_eq_conj_of_span_range {ι : Sort*}
@@ -319,14 +285,44 @@ private theorem exists_window_covariance [NeZero n] {A B : MPSChainTensor d D n}
       _ = (Z (p + m) : Matrix (Fin D) (Fin D) ℂ) *
             (arcEval A (p + m) (List.ofFn v) * arcEval A p (List.ofFn u)) *
             (((Z (p + m))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := hword
+  have hAspan_pair : Submodule.span ℂ (Set.range fun vu :
+      (Fin (n - m) → Fin d) × (Fin m → Fin d) =>
+        arcEval A (p + m) (List.ofFn vu.1) * arcEval A p (List.ofFn vu.2)) = ⊤ := by
+    have htop_mul :
+        (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) *
+          (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) = ⊤ := by
+      rw [eq_top_iff]
+      intro M _
+      simpa [Matrix.one_mul] using
+        (Submodule.mul_mem_mul (M := (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)))
+          (N := (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)))
+          (Submodule.mem_top : (1 : Matrix (Fin D) (Fin D) ℂ) ∈
+            (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)))
+          (Submodule.mem_top : M ∈ (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ))))
+    calc Submodule.span ℂ (Set.range fun vu :
+            (Fin (n - m) → Fin d) × (Fin m → Fin d) =>
+              arcEval A (p + m) (List.ofFn vu.1) * arcEval A p (List.ofFn vu.2))
+        = Submodule.span ℂ (Set.image2 (fun M N : Matrix (Fin D) (Fin D) ℂ => M * N)
+            (Set.range fun v : Fin (n - m) → Fin d => arcEval A (p + m) (List.ofFn v))
+            (Set.range fun u : Fin m → Fin d => arcEval A p (List.ofFn u))) := by
+            rw [Set.image2_range]
+      _ = Submodule.span ℂ (Set.range fun v : Fin (n - m) → Fin d =>
+            arcEval A (p + m) (List.ofFn v)) *
+          Submodule.span ℂ (Set.range fun u : Fin m → Fin d => arcEval A p (List.ofFn u)) := by
+            simpa [Submodule.mul_eq_map₂] using
+              (Submodule.map₂_span_span
+                (f := LinearMap.mul ℂ (A := Matrix (Fin D) (Fin D) ℂ))
+                (s := Set.range fun v : Fin (n - m) → Fin d =>
+                  arcEval A (p + m) (List.ofFn v))
+                (t := Set.range fun u : Fin m → Fin d => arcEval A p (List.ofFn u))).symm
+      _ = ⊤ := by
+            rw [hA.arc_span hL hq (p + m), hA.arc_span hL hm p, htop_mul]
   have hconj : ∀ M : Matrix (Fin D) (Fin D) ℂ,
       ((Xu⁻¹ : (Matrix (Fin D) (Fin D) ℂ)ˣ) : Matrix (Fin D) (Fin D) ℂ) * M *
           ((Xu : (Matrix (Fin D) (Fin D) ℂ)ˣ) : Matrix (Fin D) (Fin D) ℂ) =
         (Z (p + m) : Matrix (Fin D) (Fin D) ℂ) * M *
           (((Z (p + m))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) :=
-    conj_eq_conj_of_span_range
-      (span_range_mul_pair (hA.arc_span hL hq (p + m)) (hA.arc_span hL hm p))
-      (fun vu => hconj_fam vu.1 vu.2)
+    conj_eq_conj_of_span_range hAspan_pair (fun vu => hconj_fam vu.1 vu.2)
   -- The bond operator times the far gauge is central, hence a scalar.
   have hcomm : ∀ M : Matrix (Fin D) (Fin D) ℂ,
       Commute M (((Xu : (Matrix (Fin D) (Fin D) ℂ)ˣ) : Matrix (Fin D) (Fin D) ℂ) *
