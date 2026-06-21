@@ -138,6 +138,7 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     \lean{MPSTensor.HasNNCPHGroundSpaces.hasNNCPHGroundSpace}
     \lean{MPSTensor.HasNNCPHGroundSpaces.hasParentHamiltonianGroundSpaceSpanning}
     \lean{MPSTensor.hasNNCPHGroundSpaces_iff_forall_isNNCPHGroundState_and_groundSpaceSpanning}
+    \lean{MPSTensor.hasNNCPHGroundSpaces_iff_forall_isNNCPH_and_groundSpaceSpanning}
     \lean{MPSTensor.IsCommutingParentHam.symm}
     \lean{MPSTensor.IsCommutingParentHam.ham_comm_localTerm}
     \leanok
@@ -163,6 +164,37 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     all-chain ground-vector equations and the nearest-neighbor instance of the
     spanning condition above. This is precisely the condition named in
     Definition~\ref{def:has_nncph_ground_spaces}.
+    Since the displayed zero-energy equation follows from the
+    parent-Hamiltonian construction for $N>2$, independently of the
+    commutation and spanning equations, this is equivalently
+    \[
+        \begin{aligned}
+        &\forall N>2,\quad
+        \left[
+        \begin{array}{l}
+        \forall\, i,j,\quad
+        h_i^{(N)}h_j^{(N)}=h_j^{(N)}h_i^{(N)},\\
+        \forall\, i,\quad
+        h_i^{(N)}V^{(N)}(B)=0,\\
+        \ker H_2^{(N)}(B)
+            =
+            \spn\{V^{(N)}(A_j):j=1,\ldots,g\}
+        \end{array}
+        \right]\\
+        &\qquad\Longleftrightarrow\qquad
+        \left[
+        \begin{array}{l}
+        \forall N>2,\quad
+        \forall\, i,j,\quad
+        h_i^{(N)}h_j^{(N)}=h_j^{(N)}h_i^{(N)},\\
+        \forall N>2,\quad
+        \ker H_2^{(N)}(B)
+            =
+            \spn\{V^{(N)}(A_j):j=1,\ldots,g\}.
+        \end{array}
+        \right]
+        \end{aligned}
+    \]
 \end{remark}
 
 \begin{lemma}[Zero-energy BNT vectors lie in the parent-Hamiltonian kernel]
