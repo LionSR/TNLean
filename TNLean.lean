@@ -196,6 +196,7 @@ import TNLean.Axioms.Beigi
 import TNLean.MPS.ParentHamiltonian.Commuting
 import TNLean.MPS.ParentHamiltonian.Decorrelation
 import TNLean.MPS.ParentHamiltonian.Martingale
+import TNLean.MPS.ParentHamiltonian.KernelChainGroundSpace
 -- The finite-chain uniqueness capstone is not part of this foundational layer.
 -- Downstream files may import it when they need the periodic-chain definitions.
 

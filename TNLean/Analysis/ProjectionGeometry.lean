@@ -121,6 +121,28 @@ theorem re_inner_sum_apply_left (P : ι → E →ₗ[𝕜] E) (v : E) :
   simp only [LinearMap.sum_apply, sum_inner]
   exact map_sum (RCLike.re : 𝕜 →+ ℝ) (fun i => ⟪P i v, v⟫_𝕜) Finset.univ
 
+/-- If a finite sum of symmetric projections annihilates a vector, then each
+projection in the sum annihilates that vector. -/
+theorem apply_eq_zero_of_sum_apply_eq_zero
+    (P : ι → E →ₗ[𝕜] E) (hP : ∀ i, (P i).IsSymmetricProjection)
+    {v : E} (hsum : (∑ i, P i) v = 0) (i : ι) :
+    P i v = 0 := by
+  have hsum_re :
+      (∑ i, RCLike.re (⟪P i v, v⟫_𝕜)) = 0 := by
+    rw [← re_inner_sum_apply_left P v, hsum]
+    simp
+  have hterm_zero :
+      (fun i => RCLike.re (⟪P i v, v⟫_𝕜)) = 0 :=
+    (Fintype.sum_eq_zero_iff_of_nonneg
+      (fun i => (hP i).isPositive.re_inner_nonneg_left v)).mp hsum_re
+  have hterm : RCLike.re (⟪P i v, v⟫_𝕜) = 0 := by
+    simpa using congrFun hterm_zero i
+  have hdiag : RCLike.re (⟪P i v, v⟫_𝕜) = ‖P i v‖ ^ 2 := by
+    rw [← (hP i).re_inner_apply_apply_self v, inner_self_eq_norm_sq]
+  have hnorm_sq : ‖P i v‖ ^ 2 = 0 := by
+    rwa [← hdiag]
+  exact norm_eq_zero.mp (sq_eq_zero_iff.mp hnorm_sq)
+
 /-- The norm-square quadratic form of a finite sum expands into all ordered
 cross terms. -/
 theorem re_inner_sum_apply_apply (P : ι → E →ₗ[𝕜] E) (v : E) :
