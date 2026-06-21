@@ -28,6 +28,54 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
+/-- The \(C^j\) comparison with the boundary expression implies the corresponding
+boundary trace comparison.
+
+For fixed block-diagonal boundary matrices \(X_j\), suppose the opened-boundary
+matrices \(C^j_{i,\rho}\) satisfy
+\[
+  A^j_\beta C^j_{i,\rho}
+  =
+  ((\mu_j^NX_j)A^j_\beta)A^j_\rho
+\]
+at every boundary-crossing interval. Multiplying by the middle word \(A^j_w\),
+taking traces, and summing over \(j\) gives the boundary trace comparison used
+in arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1451. Here
+\((\mu_j^NX_j)A^j_\beta\) plays the role of \(D^j_\beta\) in the source
+proof. -/
+theorem blockDiagonal_boundary_trace_decomposition_of_pgvwc_comparison
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    {m L N : ℕ}
+    (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (C : ∀ (j : Fin r) (_ : Fin N),
+      (Fin (N - L) → Fin d) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (hComparison : ∀ (j : Fin r) (i : Fin N),
+      N < i.val + L →
+        ∀ ρ : Fin (N - L) → Fin d,
+          ∀ β : Fin (i.val + L - N) → Fin d,
+            evalWord (A j) (List.ofFn β) * C j i ρ =
+              (((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
+                evalWord (A j) (List.ofFn ρ)) :
+    ∀ i : Fin N,
+      N < i.val + L →
+        ∀ ρ : Fin (N - L) → Fin d,
+          ∀ β : Fin (i.val + L - N) → Fin d,
+            ∀ w : Fin m → Fin d,
+              (∑ j : Fin r,
+                Matrix.trace
+                  ((evalWord (A j) (List.ofFn β) * C j i ρ) *
+                    evalWord (A j) (List.ofFn w))) =
+              (∑ j : Fin r,
+                Matrix.trace
+                  ((((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β) *
+                      evalWord (A j) (List.ofFn ρ)) *
+                    evalWord (A j) (List.ofFn w))) := by
+  intro i hi ρ β w
+  refine Finset.sum_congr rfl ?_
+  intro j _hj
+  rw [hComparison j i hi ρ β]
+
 /-- Source trace decompositions give the periodic constraints for each block
 under block injectivity.
 
