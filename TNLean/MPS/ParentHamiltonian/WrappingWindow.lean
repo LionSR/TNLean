@@ -40,7 +40,7 @@ proceeds as follows:
 
 ## Main results
 
-The main formal statements show that the two identities
+The main statements show that the two identities
 \[
   A^\mu A^j X = Y_\mu A^j,
   \qquad
