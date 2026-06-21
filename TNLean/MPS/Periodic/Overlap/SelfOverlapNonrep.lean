@@ -52,7 +52,8 @@ same conclusion without the eigenspace-structure theorem:
   $\mathcal E_A^m(U)=U$) of trace zero ($\mathcal E_A$ is trace preserving), so
   `W = 0` by the trace-zero fixed-point vanishing lemma for irreducible transfer
   maps.
-* The single-site shift `P (k+1) * A i = A i * P k` (eq:Auprop) makes
+* The single-site shift `P (k+1) * A i = A i * P k` is the inverse-indexed form
+  of arXiv:1708.00029, eq:Aoffdiag; it makes
   $\mathcal E_A^t(U)$ supported on the `(u + t, v + t)` block, whence
   $P_u\mathcal E_A^t(U)P_v=0$ for $0<t<m$ and $P_uUP_v=U$ at $t=0$; therefore
   $U=P_uWP_v=0$. -/
