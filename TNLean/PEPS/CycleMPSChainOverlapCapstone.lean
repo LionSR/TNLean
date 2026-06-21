@@ -58,31 +58,6 @@ variable {d D n : ℕ}
 
 /-! ### Spanning helpers -/
 
-/-- Right multiplication by an invertible matrix preserves spanning. -/
-private theorem span_range_mul_right_unit {ι : Type*}
-    {W : ι → Matrix (Fin D) (Fin D) ℂ}
-    (hW : Submodule.span ℂ (Set.range W) = ⊤) (U : GL (Fin D) ℂ) :
-    Submodule.span ℂ (Set.range fun i =>
-      W i * (U : Matrix (Fin D) (Fin D) ℂ)) = ⊤ := by
-  rw [eq_top_iff]
-  intro M _
-  have key : ∀ N ∈ Submodule.span ℂ (Set.range W),
-      N * (U : Matrix (Fin D) (Fin D) ℂ) ∈ Submodule.span ℂ
-        (Set.range fun i => W i * (U : Matrix (Fin D) (Fin D) ℂ)) := by
-    intro N hN
-    induction hN using Submodule.span_induction with
-    | mem x hx =>
-        obtain ⟨i, rfl⟩ := hx
-        exact Submodule.subset_span ⟨i, rfl⟩
-    | zero => rw [Matrix.zero_mul]; exact Submodule.zero_mem _
-    | add x y _ _ hx hy => rw [Matrix.add_mul]; exact Submodule.add_mem _ hx hy
-    | smul c x _ hx => rw [Matrix.smul_mul]; exact Submodule.smul_mem _ c hx
-  have hM : M * ((U⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) ∈
-      Submodule.span ℂ (Set.range W) := hW ▸ Submodule.mem_top
-  have := key _ hM
-  rwa [Matrix.mul_assoc, ← Units.val_mul, inv_mul_cancel, Units.val_one,
-    Matrix.mul_one] at this
-
 /-- A matrix whose left multiples of some family span the matrix algebra is
 invertible. -/
 private theorem isUnit_of_mul_span {ι : Type*} {X : Matrix (Fin D) (Fin D) ℂ}
@@ -240,9 +215,27 @@ private theorem exists_window_covariance [NeZero n] {A B : MPSChainTensor d D n}
       _ = arcEval A p (List.ofFn u) * arcEval A (p + m) (List.ofFn v) := by
           rw [hword, hcancel]
   -- The bond operator at the far end.
+  have hBspan_right : Submodule.span ℂ (Set.range fun v : Fin (n - m) → Fin d =>
+      arcEval B (p + m) (List.ofFn v) * (Z p : Matrix (Fin D) (Fin D) ℂ)) = ⊤ := by
+    let e : Matrix (Fin D) (Fin D) ℂ ≃ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
+      (Z p).mulRightLinearEquiv ℂ
+    have hmap :
+        (Submodule.span ℂ (Set.range fun v : Fin (n - m) → Fin d =>
+          arcEval B (p + m) (List.ofFn v))).map (e : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ]
+            Matrix (Fin D) (Fin D) ℂ) =
+          Submodule.span ℂ (Set.range fun v : Fin (n - m) → Fin d =>
+            arcEval B (p + m) (List.ofFn v) * (Z p : Matrix (Fin D) (Fin D) ℂ)) := by
+      rw [Submodule.map_span]
+      congr 1
+      ext M
+      simp [e]
+    rw [← hmap]
+    exact (Submodule.map_eq_top_iff
+      (p := Submodule.span ℂ (Set.range fun v : Fin (n - m) → Fin d =>
+        arcEval B (p + m) (List.ofFn v))) (e := e)).2 (hB.arc_span hL hq (p + m))
   obtain ⟨X, hX1, hX2⟩ := exists_bondOperator_of_intertwine_span
     (hA.arc_span hL hm p)
-    (span_range_mul_right_unit (hB.arc_span hL hq (p + m)) (Z p))
+    hBspan_right
     (fun u : Fin m → Fin d =>
       (((Z p)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) *
         arcEval B p (List.ofFn u))
