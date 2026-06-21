@@ -5,11 +5,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import Mathlib.Analysis.Matrix.PosDef
 
 /-!
-# Hermitian matrix extremal eigenvalues and adjoint identities
+# Hermitian matrix extremal eigenvalues
 
 This file provides lemmas for Hermitian complex matrices over `Fin D`: the
-extremal eigenvalue lemmas, scalar-shift spectral formulae, and the adjoint
-identity for the matrix-vector dot-product pairing.
+extremal eigenvalue lemmas and scalar-shift spectral formulae.
 -/
 
 open scoped Matrix ComplexOrder
@@ -140,14 +139,3 @@ theorem smul_one_sub_hermitian_spectral
           congr 1
           ext i
           simp [Complex.ofReal_sub]
-
-namespace HermitianHelpers
-
-/-- Adjoint identity for the matrix-vector dot-product pairing. -/
-theorem dotProduct_mulVec_conjTranspose
-    {m n : ℕ} (M : Matrix (Fin m) (Fin n) ℂ) (x : Fin m → ℂ) (y : Fin n → ℂ) :
-    star x ⬝ᵥ (M *ᵥ y) = star (Mᴴ *ᵥ x) ⬝ᵥ y := by
-  rw [Matrix.dotProduct_mulVec, Matrix.star_mulVec,
-    Matrix.conjTranspose_conjTranspose]
-
-end HermitianHelpers

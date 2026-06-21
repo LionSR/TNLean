@@ -191,6 +191,11 @@ The clearest replacements are:
   The vector and matrix injectivity statements now live once in
   `TNLean.Wielandt.RankOne.SpanGrowth`, and the rectangular-span proof calls
   that shared statement directly.
+- The adjoint identity for the matrix-vector dot-product pairing was removed
+  from `TNLean.Algebra.HermitianHelpers`.  Its call sites now invoke Mathlib's
+  `Matrix.dotProduct_mulVec`, `Matrix.star_mulVec`, and
+  `Matrix.conjTranspose_conjTranspose` directly, with local right-hand-side
+  rewrites where the proof needs the fully associated vector-matrix product.
 
 There are also important non-replacements.
 
@@ -483,6 +488,18 @@ Recommended action:
 - Prefer local one-line invocations of `Matrix.IsHermitian.spectral_theorem`
   over shared pass-through lemmas for the shaped spectral decomposition.
 - Do not add new local aliases for elementary unitary identities.
+
+Applied dot-product follow-up:
+
+- The local theorem `HermitianHelpers.dotProduct_mulVec_conjTranspose` was
+  removed from `TNLean/Algebra/HermitianHelpers.lean`.  It was an exact
+  pass-through proof by Mathlib's `Matrix.dotProduct_mulVec`,
+  `Matrix.star_mulVec`, and `Matrix.conjTranspose_conjTranspose`.
+- The affected support, fixed-point projection, QPF, irreducibility-growth, and
+  Wielandt primitivity proofs now perform those rewrites at the proof sites.
+  The last of these also uses a local right-hand-side conversion to associate
+  the vector-matrix products in the same order as the positive-definite
+  quadratic-form argument.
 
 ### Determinants, kernels, and characteristic polynomials
 

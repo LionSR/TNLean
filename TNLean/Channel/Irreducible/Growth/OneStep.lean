@@ -2,7 +2,6 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.Algebra.HermitianHelpers
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Schwarz.Basic
 import Mathlib.Tactic.NoncommRing
@@ -78,7 +77,8 @@ theorem posDef_of_ker_subset_irreducible_cp
       congr 1; ext j
       have : (K j * A * (K j)ᴴ) *ᵥ v = K j *ᵥ (A *ᵥ ((K j)ᴴ *ᵥ v)) := by
         simp [Matrix.mulVec_mulVec, Matrix.mul_assoc]
-      rw [this, HermitianHelpers.dotProduct_mulVec_conjTranspose]
+      rw [this, Matrix.dotProduct_mulVec, Matrix.star_mulVec,
+        Matrix.conjTranspose_conjTranspose]
     have h_each : ∀ j : Fin r,
         star ((K j)ᴴ *ᵥ v) ⬝ᵥ (A *ᵥ ((K j)ᴴ *ᵥ v)) = 0 := by
       intro j
