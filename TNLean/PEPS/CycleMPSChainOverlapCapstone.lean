@@ -64,26 +64,18 @@ private theorem isUnit_of_mul_span {ι : Type*} {X : Matrix (Fin D) (Fin D) ℂ}
     {G : ι → Matrix (Fin D) (Fin D) ℂ}
     (hspan : Submodule.span ℂ (Set.range fun v => X * G v) = ⊤) :
     IsUnit X := by
+  have hspan_le :
+      Submodule.span ℂ (Set.range fun v => X * G v) ≤
+        LinearMap.range (LinearMap.mulLeft ℂ X) := by
+    rw [Submodule.span_le]
+    rintro _ ⟨v, rfl⟩
+    exact LinearMap.mem_range_self (LinearMap.mulLeft ℂ X) (G v)
   have h1 : (1 : Matrix (Fin D) (Fin D) ℂ) ∈
-      Submodule.span ℂ (Set.range fun v => X * G v) :=
-    hspan ▸ Submodule.mem_top
-  have key : ∀ N ∈ Submodule.span ℂ (Set.range fun v => X * G v),
-      ∃ M, N = X * M := by
-    intro N hN
-    induction hN using Submodule.span_induction with
-    | mem x hx =>
-        obtain ⟨v, rfl⟩ := hx
-        exact ⟨G v, rfl⟩
-    | zero => exact ⟨0, (Matrix.mul_zero X).symm⟩
-    | add x y _ _ hx hy =>
-        obtain ⟨Mx, rfl⟩ := hx
-        obtain ⟨My, rfl⟩ := hy
-        exact ⟨Mx + My, (Matrix.mul_add X Mx My).symm⟩
-    | smul c x _ hx =>
-        obtain ⟨Mx, rfl⟩ := hx
-        exact ⟨c • Mx, (Matrix.mul_smul X c Mx).symm⟩
-  obtain ⟨M, hM⟩ := key 1 h1
-  exact IsUnit.of_mul_eq_one M hM.symm
+      LinearMap.range (LinearMap.mulLeft ℂ X) :=
+    hspan_le (hspan ▸ Submodule.mem_top)
+  obtain ⟨M, hM⟩ := h1
+  rw [LinearMap.mulLeft_apply] at hM
+  exact IsUnit.of_mul_eq_one M hM
 
 /-- Two two-sided multiplications agreeing on a spanning family agree on
 every matrix. -/

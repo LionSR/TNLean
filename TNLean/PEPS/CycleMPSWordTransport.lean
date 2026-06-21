@@ -59,16 +59,24 @@ private theorem mul_left_letter_mem_span {A : MPSTensor d D} {m : ℕ}
     (i : Fin d) (Q : Matrix (Fin D) (Fin D) ℂ) :
     A i * Q ∈ Submodule.span ℂ (Set.range fun w : Fin (m + 1) → Fin d =>
       evalWord A (List.ofFn w)) := by
+  have hmap :
+      Submodule.map (LinearMap.mulLeft ℂ (A i))
+          (Submodule.span ℂ (Set.range fun u : Fin m → Fin d =>
+            evalWord A (List.ofFn u))) ≤
+        Submodule.span ℂ (Set.range fun w : Fin (m + 1) → Fin d =>
+          evalWord A (List.ofFn w)) := by
+    rw [Submodule.map_span]
+    refine Submodule.span_le.2 ?_
+    rintro _ ⟨_, ⟨u, rfl⟩, rfl⟩
+    change A i * evalWord A (List.ofFn u) ∈
+      Submodule.span ℂ (Set.range fun w : Fin (m + 1) → Fin d =>
+        evalWord A (List.ofFn w))
+    rw [← evalWord_ofFn_cons]
+    exact Submodule.subset_span ⟨Fin.cons i u, rfl⟩
   have hQ : Q ∈ Submodule.span ℂ (Set.range fun u : Fin m → Fin d =>
       evalWord A (List.ofFn u)) := hm ▸ Submodule.mem_top
-  induction hQ using Submodule.span_induction with
-  | mem x hx =>
-      obtain ⟨u, rfl⟩ := hx
-      rw [← evalWord_ofFn_cons]
-      exact Submodule.subset_span ⟨Fin.cons i u, rfl⟩
-  | zero => rw [Matrix.mul_zero]; exact Submodule.zero_mem _
-  | add x y _ _ hx hy => rw [Matrix.mul_add]; exact Submodule.add_mem _ hx hy
-  | smul c x _ hx => rw [mul_smul_comm]; exact Submodule.smul_mem _ c hx
+  simpa only [LinearMap.mulLeft_apply] using
+    hmap (Submodule.mem_map.mpr ⟨Q, hQ, rfl⟩)
 
 /-- **Block injectivity extends to longer blocks.**  If the word products of
 length `L > 0` span the full matrix algebra, so do the word products of any
@@ -294,20 +302,17 @@ theorem exists_evalWordTransport {A C : MPSTensor d D} {n k q : ℕ} (hkq : k + 
     -- family on the right annihilates the identity.
     rw [LinearMap.ker_eq_bot']
     intro M hM
-    have hQ : ∀ Q : Matrix (Fin D) (Fin D) ℂ, M * Q = 0 := by
-      intro Q
-      have hQmem : Q ∈ Submodule.span ℂ (Set.range fun ρ : Fin q → Fin d =>
-          evalWord A (List.ofFn ρ)) := hAq ▸ Submodule.mem_top
-      induction hQmem using Submodule.span_induction with
-      | mem x hx =>
-          obtain ⟨ρ, rfl⟩ := hx
-          rw [← hΨA_apply]
-          exact congrArg (· ρ) hM
-      | zero => rw [Matrix.mul_zero]
-      | add x y _ _ hx hy => rw [Matrix.mul_add, hx, hy, add_zero]
-      | smul c x _ hx => rw [Matrix.mul_smul, hx, smul_zero]
+    have hmul : LinearMap.mulLeft ℂ M = 0 := by
+      apply LinearMap.ext_on_range
+        (v := fun ρ : Fin q → Fin d => evalWord A (List.ofFn ρ)) (hv := hAq)
+      intro ρ
+      have hρ := congrArg (fun f => f ρ) hM
+      simpa only [hΨA_apply, LinearMap.mulLeft_apply, LinearMap.zero_apply,
+        Pi.zero_apply] using hρ
     calc M = M * 1 := (Matrix.mul_one M).symm
-      _ = 0 := hQ 1
+      _ = 0 := by
+        simpa only [LinearMap.mulLeft_apply, LinearMap.zero_apply] using
+          congrArg (fun f => f 1) hmul
   · -- The two pairings match on the spanning window family: both compute the
     -- length-`n` matrix product of the concatenated word.
     intro τ
