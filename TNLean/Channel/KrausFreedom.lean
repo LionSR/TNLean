@@ -95,17 +95,6 @@ private abbrev KrausCoeffSpace (r : ℕ) := EuclideanSpace ℂ (Fin r)
 
 private abbrev KrausEntrySpace (D : ℕ) := EuclideanSpace ℂ (Fin D × Fin D)
 
-/-- The standard inner-product structure on finite-dimensional Euclidean space. -/
-private noncomputable abbrev euclideanIPS (ι : Type*) [Fintype ι] :
-    InnerProductSpace ℂ (EuclideanSpace ℂ ι) :=
-  PiLp.innerProductSpace (fun _ : ι => ℂ)
-
-/-- `EuclideanSpace` is finite-dimensional via its standard basis. -/
-private noncomputable abbrev euclideanFiniteDimensional (ι : Type*) [Fintype ι] :
-    FiniteDimensional ℂ (EuclideanSpace ℂ ι) :=
-  Module.Basis.finiteDimensional_of_finite
-    ((Pi.basisFun ℂ ι).map (EuclideanSpace.equiv ι ℂ).symm.toLinearEquiv)
-
 set_option maxHeartbeats 1600000 in
 -- The partial-isometry extension passes through several nested finite-dimensional choices.
 /-- **Rectangular Kraus freedom** (Wolf Theorem 2.1 item 4, necessary direction):
@@ -177,10 +166,14 @@ theorem kraus_rectangular_freedom
     rw [collapse, collapse] at h_entry
     exact h_entry
   -- ===== Phase 3: Construct the isometry =====
-  letI : InnerProductSpace ℂ (KrausCoeffSpace r₁) := euclideanIPS (Fin r₁)
-  letI : InnerProductSpace ℂ (KrausEntrySpace D) := euclideanIPS (Fin D × Fin D)
-  letI : FiniteDimensional ℂ (KrausCoeffSpace r₁) := euclideanFiniteDimensional (Fin r₁)
-  letI : FiniteDimensional ℂ (KrausEntrySpace D) := euclideanFiniteDimensional (Fin D × Fin D)
+  letI : InnerProductSpace ℂ (KrausCoeffSpace r₁) :=
+    PiLp.innerProductSpace (fun _ : Fin r₁ => ℂ)
+  letI : InnerProductSpace ℂ (KrausEntrySpace D) :=
+    PiLp.innerProductSpace (fun _ : Fin D × Fin D => ℂ)
+  letI : FiniteDimensional ℂ (KrausCoeffSpace r₁) :=
+    (EuclideanSpace.basisFun (Fin r₁) ℂ).toBasis.finiteDimensional_of_finite
+  letI : FiniteDimensional ℂ (KrausEntrySpace D) :=
+    (EuclideanSpace.basisFun (Fin D × Fin D) ℂ).toBasis.finiteDimensional_of_finite
   let fB : KrausEntrySpace D →ₗ[ℂ] KrausCoeffSpace r₁ := Matrix.toEuclideanLin MB
   let fA' : KrausEntrySpace D →ₗ[ℂ] KrausCoeffSpace r₁ := Matrix.toEuclideanLin MA'
   -- Inner product preservation from Gram equality
