@@ -1189,6 +1189,10 @@ unconditional result.
 \begin{lemma}[Per-site proportionality from blocked sector match]%
     \label{lem:sector_tensor_proportional_blocked_match}
     \lean{MPSTensor.sectorTensor_proportional_of_blockedMatch}
+    % The source conclusion below is unitary. The tagged Lean declaration currently
+    % concludes `RepeatedBlocks`, which records an invertible gauge with inverse;
+    % upgrading that statement to a unitary gauge is part of the remaining Case-3
+    % gap in docs/paper-gaps/1708_periodic_overlap_route_alignment.tex.
     \notready
     \uses{lem:sector_match_propagation, def:cyclic_sector_decomp,
         thm:periodic_product_one_phase_extraction, lem:finite_cycle_coboundary}
@@ -1223,8 +1227,8 @@ unconditional result.
         \widetilde B_{u+q}^{i_1}\widetilde B_{u+q+1}^{i_2}
         \cdots\widetilde B_{u+q+m-1}^{i_m}.
     \]
-    Then there are a phase $\xi$ and an invertible matrix $U$ such that
-    $A^i=e^{i\xi}UB^iU^{-1}$ for every physical index $i$.
+    Then there are a phase $\xi$ and a unitary matrix $U$ such that
+    $A^i=e^{i\xi}UB^iU^{\dagger}$ for every physical index $i$.
 \end{lemma}
 
 \begin{theorem}[Sector match yields repeated-block equivalence]%
@@ -1473,7 +1477,7 @@ unconditional result.
                   P_uA^iP_{u+1}
                   =
                   e^{i\xi}e^{i\phi_{u+q}}
-                  U_{u+q}Q_{u+q}B^iQ_{u+q+1}U_{u+q+1}^{-1}
+                  U_{u+q}Q_{u+q}B^iQ_{u+q+1}U_{u+q+1}^{\dagger}
                   e^{-i\phi_{u+q+1}}.
               \]
               In the equal-MPV theorem the proportional phase is absorbed, so
