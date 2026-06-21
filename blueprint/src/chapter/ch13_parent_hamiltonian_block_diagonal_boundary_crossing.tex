@@ -87,9 +87,9 @@ in both cases.
     \leanok
     \uses{def:ground_space_parent, rem:cyclic_window_operators}
     When the window stays inside the chosen linear interval, the boundary matrix
-    remains outside the window. Let $A_{\rm left}$ be the product on the sites
-    before the window and $A_{\rm right}$ the product on the sites after the
-    window. Trace cyclicity
+    remains outside the window. Write
+    $A_{\rm left}=A^j_{\tau_0}\cdots A^j_{\tau_{i-1}}$ and
+    $A_{\rm right}=A^j_{\tau_{i+L}}\cdots A^j_{\tau_{N-1}}$. Trace cyclicity
     gives
     \[
         R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)
@@ -211,10 +211,10 @@ in both cases.
         =
         \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho .
     \]
-    This theorem is the fixed cyclic-interval coordinate form of the
-    Perez-Garcia--Verstraete--Wolf--Cirac comparison
-    $A^j_{i_{m+1}}C^j_{i_1}=D^j_{i_{m+1}}A^j_{i_1}$; it does not assert
-    the full periodic-boundary ground-space statement.
+    % Coordinate form of the Perez-Garcia--Verstraete--Wolf--Cirac comparison
+    % $A^j_{i_{m+1}}C^j_{i_1}=D^j_{i_{m+1}}A^j_{i_1}$ from
+    % \cite[Theorem~12]{PerezGarcia2007Matrix}; this theorem does not assert
+    % the full periodic-boundary ground-space statement.
 \end{theorem}
 
 \begin{proof}
@@ -254,8 +254,7 @@ in both cases.
         R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)
         \in G_L(A_j).
     \]
-    This is the corresponding fixed-interval block-diagonal boundary-condition
-    consequence.
+    % Fixed-window local-membership consequence of the preceding comparison.
 \end{theorem}
 
 \begin{proof}
