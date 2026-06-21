@@ -109,21 +109,18 @@ private theorem transport_one_eq_smul_one {A C : MPSTensor d D} {L k : ℕ}
     induction w with
     | nil => exact Commute.one_left (Λk 1)
     | cons i w ih => exact (hcomm_letter i).mul_left ih
+  have hcomm_maps :
+      LinearMap.mulRight ℂ (Λk 1) = LinearMap.mulLeft ℂ (Λk 1) := by
+    apply LinearMap.ext_on_range
+      (v := fun τ : Fin L → Fin d => evalWord C (List.ofFn τ)) (hv := hCL)
+    intro τ
+    simpa only [LinearMap.mulRight_apply, LinearMap.mulLeft_apply] using
+      (hcomm_word (List.ofFn τ)).eq
   have hcomm : ∀ M : Matrix (Fin D) (Fin D) ℂ, Commute M (Λk 1) := by
     intro M
-    have hM : M ∈ Submodule.span ℂ (Set.range fun τ : Fin L → Fin d =>
-        evalWord C (List.ofFn τ)) := by
-      have hspan : Submodule.span ℂ (Set.range fun τ : Fin L → Fin d =>
-          evalWord C (List.ofFn τ)) = ⊤ := hCL
-      rw [hspan]
-      exact Submodule.mem_top
-    induction hM using Submodule.span_induction with
-    | mem x hx =>
-        obtain ⟨τ, rfl⟩ := hx
-        exact hcomm_word (List.ofFn τ)
-    | zero => exact Commute.zero_left _
-    | add x y _ _ hx hy => exact Commute.add_left hx hy
-    | smul a x _ hx => exact Commute.smul_left hx a
+    exact (commute_iff_eq M (Λk 1)).mpr (by
+      simpa only [LinearMap.mulRight_apply, LinearMap.mulLeft_apply] using
+        congrArg (fun f => f M) hcomm_maps)
   -- A matrix commuting with everything is a scalar.
   obtain ⟨c, hc⟩ := Matrix.mem_range_scalar_iff_commute_single'.mpr
     (fun i j => hcomm (Matrix.single i j 1))
