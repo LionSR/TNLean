@@ -54,9 +54,10 @@ surrogate for the paper's vertical canonical form.
 * `mpv_verticalAssembledTensor_eq_sum`:
   the MPV of the vertical-assembled tensor as a sum over the flattened
   `(block, multiplicity)` index.
-* `sameMPV₂_diagonalTensor_verticalAssembledTensor_of_power_sums`:
-  the diagonal tensor has the same MPV family as the vertical repeated-block
-  assembly once the flattened scalar weights have the required power sums.
+* `sameMPV₂Pos_diagonalTensor_verticalAssembledTensor_of_power_sums`:
+  the diagonal tensor has the same positive-length MPV family as the vertical
+  repeated-block assembly once the flattened scalar weights have the required
+  positive-length power sums.
 
 The full passage from horizontal to vertical canonical form
 (Proposition IV.12 / Proposition 4.13 of arXiv:1606.00608) is still outside
@@ -327,26 +328,28 @@ theorem mpv_verticalAssembledTensor_eq_sum {g : ℕ} (dim : Fin g → ℕ) (mult
   exact Equiv.sum_comp finSigmaFinEquiv.symm
     (fun s : (α : Fin g) × Fin (mult α) => (ω s.1 s.2) ^ N • MPSTensor.mpv (A s.1) σ)
 
-/-- A scalar power-sum identity is exactly the condition under which a block
-assembly with one scalar weight per block has the same MPV family as the
-vertical assembly that repeats each block with several scalar weights. This is
-the flattening step in Proposition IV.12 of arXiv:1606.00608. -/
-theorem sameMPV₂_toTensorFromBlocks_verticalAssembledTensor_of_power_sums
+/-- Positive-length scalar power-sum identities are exactly the condition under
+which a block assembly with one scalar weight per block has the same
+positive-length MPV family as the vertical assembly that repeats each block with
+several scalar weights. This is the positive-length flattening step in
+Proposition IV.12 of arXiv:1606.00608. -/
+theorem sameMPV₂Pos_toTensorFromBlocks_verticalAssembledTensor_of_power_sums
     {g : ℕ} {dim : Fin g → ℕ} (μ : Fin g → ℂ) (mult : Fin g → ℕ)
     (ω : (α : Fin g) → Fin (mult α) → ℂ)
     (A : (α : Fin g) → MPSTensor d (dim α))
-    (hPower : ∀ (α : Fin g) (N : ℕ), (μ α) ^ N = ∑ q : Fin (mult α), (ω α q) ^ N) :
-    MPSTensor.SameMPV₂
+    (hPower : ∀ (α : Fin g) (N : ℕ),
+      0 < N → (μ α) ^ N = ∑ q : Fin (mult α), (ω α q) ^ N) :
+    MPSTensor.SameMPV₂Pos
       (MPSTensor.toTensorFromBlocks (d := d) (μ := μ) A)
       (verticalAssembledTensor dim mult ω A) := by
-  intro N σ
+  intro N hN σ
   rw [MPSTensor.mpv_toTensorFromBlocks_eq_sum, mpv_verticalAssembledTensor_eq_sum]
   calc
     ∑ α : Fin g, (μ α) ^ N • MPSTensor.mpv (A α) σ
         = ∑ α : Fin g, (∑ q : Fin (mult α), (ω α q) ^ N) •
             MPSTensor.mpv (A α) σ := by
           refine Finset.sum_congr rfl fun α _ => ?_
-          rw [hPower α N]
+          rw [hPower α N hN]
     _ = ∑ α : Fin g, ∑ q : Fin (mult α), (ω α q) ^ N • MPSTensor.mpv (A α) σ := by
           refine Finset.sum_congr rfl fun α _ => ?_
           rw [Finset.sum_smul]
@@ -355,22 +358,23 @@ theorem sameMPV₂_toTensorFromBlocks_verticalAssembledTensor_of_power_sums
           exact (Fintype.sum_sigma'
             (fun α q => (ω α q) ^ N • MPSTensor.mpv (A α) σ)).symm
 
-/-- Under a horizontal block decomposition, the diagonal tensor has the same MPV
-family as the vertical repeated-block assembly once the flattened scalar
-weights have the same power sums as the original block weights. This isolates
-the multiplicity-flattening step in Proposition IV.12 of arXiv:1606.00608 from
-the later BNT-normality argument. -/
-theorem sameMPV₂_diagonalTensor_verticalAssembledTensor_of_power_sums
+/-- Under a horizontal block decomposition, the diagonal tensor has the same
+positive-length MPV family as the vertical repeated-block assembly once the
+flattened scalar weights have the same positive-length power sums as the
+original block weights. This isolates the multiplicity-flattening step in
+Proposition IV.12 of arXiv:1606.00608 from the later BNT-normality argument. -/
+theorem sameMPV₂Pos_diagonalTensor_verticalAssembledTensor_of_power_sums
     (M : MPOTensor d D) {g : ℕ} {dim : Fin g → ℕ} (μ : Fin g → ℂ)
     (A : (α : Fin g) → MPSTensor (d * d) (dim α))
     (mult : Fin g → ℕ) (ω : (α : Fin g) → Fin (mult α) → ℂ)
     (hM : MPSTensor.SameMPV₂ M.toMPSTensor
       (MPSTensor.toTensorFromBlocks (d := d * d) (μ := μ) A))
-    (hPower : ∀ (α : Fin g) (N : ℕ), (μ α) ^ N = ∑ q : Fin (mult α), (ω α q) ^ N) :
-    MPSTensor.SameMPV₂
+    (hPower : ∀ (α : Fin g) (N : ℕ),
+      0 < N → (μ α) ^ N = ∑ q : Fin (mult α), (ω α q) ^ N) :
+    MPSTensor.SameMPV₂Pos
       (diagonalTensor M)
       (verticalAssembledTensor dim mult ω (fun α => MPSTensor.diagBlock (A α))) := by
-  intro N σ
+  intro N hN σ
   calc
     MPSTensor.mpv (diagonalTensor M) σ
         = MPSTensor.mpv
@@ -379,8 +383,8 @@ theorem sameMPV₂_diagonalTensor_verticalAssembledTensor_of_power_sums
           exact mpv_diagonalTensor_eq_blocks M μ A hM σ
     _ = MPSTensor.mpv
           (verticalAssembledTensor dim mult ω (fun α => MPSTensor.diagBlock (A α))) σ :=
-        sameMPV₂_toTensorFromBlocks_verticalAssembledTensor_of_power_sums
-          μ mult ω (fun α => MPSTensor.diagBlock (A α)) hPower N σ
+        sameMPV₂Pos_toTensorFromBlocks_verticalAssembledTensor_of_power_sums
+          μ mult ω (fun α => MPSTensor.diagBlock (A α)) hPower N hN σ
 
 /-- **Lemma L** (arXiv:1606.00608, appendix): if two operators act identically
 on the first site of every MPV generated by a canonical-form tensor, then their

@@ -288,7 +288,7 @@
 
 \begin{lemma}[Power-sum flattening of repeated vertical blocks]
     \label{lem:vertical_flattening_power_sums}
-    \lean{MPOTensor.sameMPV₂_toTensorFromBlocks_verticalAssembledTensor_of_power_sums}
+    \lean{MPOTensor.sameMPV₂Pos_toTensorFromBlocks_verticalAssembledTensor_of_power_sums}
     \leanok
     \uses{lem:mpv_vertical_assembled, thm:mpv_decomposition}
     Let $\bigoplus_\alpha \mu_\alpha A_\alpha$ be a block-diagonal MPS tensor,
@@ -298,8 +298,8 @@
     \[
         \mu_\alpha^N=\sum_j \omega_{\alpha j}^N
     \]
-    for every block $\alpha$ and every length $N$, then the two assemblies
-    generate the same matrix product vector family:
+    for every block $\alpha$ and every positive length $N$, then the two
+    assemblies generate the same positive-length matrix product vector family:
     \[
         V^{(N)}\Bigl(\textstyle\bigoplus_\alpha \mu_\alpha A_\alpha\Bigr)
         =
@@ -309,7 +309,7 @@
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:mpv_vertical_assembled, thm:mpv_decomposition}
-    Expanding the left-hand side gives
+    For \(N\ge 1\), expanding the left-hand side gives
     \[
         \sum_\alpha \mu_\alpha^N V^{(N)}(A_\alpha).
     \]
@@ -323,7 +323,7 @@
 
 \begin{lemma}[Diagonal tensor to vertical assembly under power sums]
     \label{lem:diagonal_tensor_vertical_assembly_power_sums}
-    \lean{MPOTensor.sameMPV₂_diagonalTensor_verticalAssembledTensor_of_power_sums}
+    \lean{MPOTensor.sameMPV₂Pos_diagonalTensor_verticalAssembledTensor_of_power_sums}
     \leanok
     \uses{lem:mpv_diagonal_tensor_eq_blocks,
         lem:vertical_flattening_power_sums}
@@ -333,9 +333,10 @@
     \[
         \mu_\alpha^N=\sum_j \omega_{\alpha j}^N
     \]
-    for every block $\alpha$ and every length $N$, then the diagonal tensor
-    $i\mapsto M^{ii}$ has the same matrix product vector family as the vertical
-    assembly of the diagonal restrictions $A_\alpha^{\mathrm{diag}}$:
+    for every block $\alpha$ and every positive length $N$, then the diagonal
+    tensor $i\mapsto M^{ii}$ has the same positive-length matrix product vector
+    family as the vertical assembly of the diagonal restrictions
+    $A_\alpha^{\mathrm{diag}}$:
     \[
         V^{(N)}\bigl(i\mapsto M^{ii}\bigr)
         =
@@ -346,12 +347,23 @@
 \begin{proof}\leanok
     \uses{lem:mpv_diagonal_tensor_eq_blocks,
         lem:vertical_flattening_power_sums}
-    Lemma~\ref{lem:mpv_diagonal_tensor_eq_blocks} identifies the diagonal tensor
-    with the single-weight block assembly
-    $\bigoplus_\alpha \mu_\alpha A_\alpha^{\mathrm{diag}}$. Applying
-    Lemma~\ref{lem:vertical_flattening_power_sums} to the diagonal restrictions
-    replaces this assembly by the repeated vertical assembly with the same power
-    sums.
+    For \(N\ge 1\), Lemma~\ref{lem:mpv_diagonal_tensor_eq_blocks} gives
+    \[
+        V^{(N)}\bigl(i\mapsto M^{ii}\bigr)
+        =
+        V^{(N)}\Bigl(\textstyle\bigoplus_\alpha
+        \mu_\alpha A_\alpha^{\mathrm{diag}}\Bigr).
+    \]
+    Applying Lemma~\ref{lem:vertical_flattening_power_sums} to the diagonal
+    restrictions gives
+    \[
+        V^{(N)}\Bigl(\textstyle\bigoplus_\alpha
+        \mu_\alpha A_\alpha^{\mathrm{diag}}\Bigr)
+        =
+        V^{(N)}\Bigl(\textstyle\bigoplus_\alpha\bigoplus_j
+        \omega_{\alpha j} A_\alpha^{\mathrm{diag}}\Bigr).
+    \]
+    Combining these two equalities proves the claim.
 \end{proof}
 
 \begin{theorem}[Horizontal canonical form implies vertical canonical form]
