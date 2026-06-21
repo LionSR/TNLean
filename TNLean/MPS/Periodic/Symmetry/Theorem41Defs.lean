@@ -8,7 +8,7 @@ import TNLean.MPS.Periodic.Symmetry.EqualCaseFTHyp
 # Theorem 4.1 definitions
 
 This module contains the \(p\)-divisibility and \(p\)-refinement definitions used in
-arXiv:1708.00029, Theorem 4.1 (`thm:div`), lines 717--731.
+arXiv:1708.00029, Theorem 4.1, lines 717--731.
 -/
 
 open scoped Matrix BigOperators
@@ -31,13 +31,13 @@ def IsPDivisibleChannel
   ∃ E' : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ,
     IsChannel E' ∧ E = E' ^ p
 
-/-- **\(p\)-refinement of an MPS family (arXiv:1708.00029, eq:fine).**
+/-- **\(p\)-refinement of an MPS family.**
 
-The matrix product vector family of \(B\) can be \(p\)-refined if there exists another
-tensor \(A\) and an isometry \(W : \mathbb C^d \to (\mathbb C^d)^{\otimes p}\)
-(encoded as a matrix with \(W^\dagger W = 1\)) such that the \(p\)-blocked tensor
-\(A^{[p]}\) matches the \(W^{\otimes N}\)-image of \(B\) at the level of MPV
-coefficients:
+The matrix product vector family of \(B\) can be \(p\)-refined, in this same-bond
+version, if there exists another tensor \(A\) with the same bond dimension as \(B\)
+and an isometry \(W : \mathbb C^d \to (\mathbb C^d)^{\otimes p}\) (encoded as a
+matrix with \(W^\dagger W = 1\)) such that the \(p\)-blocked tensor \(A^{[p]}\)
+matches the \(W^{\otimes N}\)-image of \(B\) at the level of MPV coefficients:
 `coeff (blockTensor A p) (List.ofFn τ) = ∑_σ (∏_k W (τ k) (σ k)) · coeff B (List.ofFn σ)`
 for every length `N` and every `τ : Fin N → Fin (blockPhysDim d p)`.
 
