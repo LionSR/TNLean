@@ -140,12 +140,6 @@ variable {d D₁ D₂ : ℕ}
 
 local notation "V" => Matrix (Fin D₁) (Fin D₂) ℂ
 
-/-- Trace, viewed as a linear functional on the Banach algebra of continuous endomorphisms.
-
-On finite-dimensional spaces this is automatically continuous. -/
-noncomputable def traceCLMRect : (V →L[ℂ] V) →ₗ[ℂ] ℂ :=
-  (LinearMap.trace ℂ V).comp (ContinuousLinearMap.coeLM ℂ)
-
 /-- If `F^n → 0` in operator norm, then `trace(F^n) → 0`. -/
 lemma tendsto_trace_pow_of_tendsto_zero_rect
     (F : V →L[ℂ] V)
@@ -153,15 +147,17 @@ lemma tendsto_trace_pow_of_tendsto_zero_rect
     Tendsto (fun n => LinearMap.trace ℂ V ((F ^ n : V →L[ℂ] V) : V →ₗ[ℂ] V))
       atTop (nhds (0 : ℂ)) := by
   -- continuity of trace on finite-dimensional spaces
-  have hcont : Continuous (traceCLMRect (D₁ := D₁) (D₂ := D₂)) :=
-    LinearMap.continuous_of_finiteDimensional (traceCLMRect (D₁ := D₁) (D₂ := D₂))
+  let traceMap : (V →L[ℂ] V) →ₗ[ℂ] ℂ :=
+    (LinearMap.trace ℂ V).comp (ContinuousLinearMap.coeLM ℂ)
+  have hcont : Continuous traceMap :=
+    LinearMap.continuous_of_finiteDimensional traceMap
   have h := (hcont.tendsto (0 : V →L[ℂ] V)).comp hF
-  have hzero : traceCLMRect (D₁ := D₁) (D₂ := D₂) (0 : V →L[ℂ] V) = 0 := by
-    simp [traceCLMRect]
+  have hzero : traceMap (0 : V →L[ℂ] V) = 0 := by
+    simp [traceMap]
   change Tendsto (((LinearMap.trace ℂ V) ∘
       (fun G : V →L[ℂ] V => G.toLinearMap)) ∘ fun n => F ^ n) atTop
       (nhds (0 : ℂ))
-  simpa [traceCLMRect, ContinuousLinearMap.coeLM, Function.comp_apply, hzero] using h
+  simpa [traceMap, ContinuousLinearMap.coeLM, Function.comp_apply, hzero] using h
 
 /-- If the rectangular mixed transfer map has spectral radius `< 1`, then `mpvOverlap → 0`. -/
 theorem mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one

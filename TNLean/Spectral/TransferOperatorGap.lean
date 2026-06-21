@@ -82,8 +82,8 @@ theorem mixedTransferSpectralRadius_eq (A B : MPSTensor d D) :
 
 /-! ### Frobenius norm squared
 
-The definition and basic lemmas (`frobSq`, `frobSq_eq_zero_iff`,
-`frobSq_pos_of_ne_zero`, `frobSq_smul`, `frobSq_trace`, `matToES`, …) are
+The definition and basic lemmas (`frobSq`, `frobSq_smul`, `frobSq_trace`,
+`matToES`, …) are
 provided by `TNLean.Spectral.FrobeniusNorm` for general rectangular matrices. -/
 
 /-! ### Eigenvector iteration -/
@@ -234,7 +234,11 @@ theorem eigenvalue_norm_le_one [NeZero D]
   obtain ⟨v, hv_mem, hv_ne⟩ := hμ.exists_hasEigenvector
   have hFv := Module.End.mem_eigenspace_iff.mp hv_mem
   by_contra h_gt; push Not at h_gt
-  have h_pos := frobSq_pos_of_ne_zero v hv_ne
+  have h_pos : 0 < frobSq v := by
+    rw [frobSq]
+    letI : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
+      Matrix.frobeniusNormedAddCommGroup
+    exact sq_pos_of_ne_zero (norm_ne_zero_iff.mpr hv_ne)
   have h_bound : ∀ n : ℕ, ‖μ‖ ^ (2 * n) ≤ (D : ℝ) ^ 2 := fun n => by
     have h1 := hs_contraction_mixedTransfer A B v hA_norm hB_norm n
     rw [eigenvector_pow _ v μ hFv n, frobSq_smul, norm_pow] at h1

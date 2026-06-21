@@ -126,6 +126,14 @@ The clearest replacements are:
   their immediate witnesses at the only proof sites where they were used.
 - The Frobenius-square nonnegativity wrapper `MPSTensor.frobSq_nonneg` was
   removed; the two transfer estimates now unfold `frobSq` and use `sq_nonneg`.
+- Two more Frobenius-square wrappers were removed.  The unused
+  `MPSTensor.frobSq_eq_zero_iff` only restated `norm_eq_zero`, and the two
+  uses of `MPSTensor.frobSq_pos_of_ne_zero` now unfold `frobSq` and use
+  `sq_pos_of_ne_zero` with Mathlib's `norm_ne_zero_iff`.
+- Two spectral trace-continuity proof devices were made local to their proofs:
+  `MPSTensor.traceCLM` and `MPSTensor.traceCLMRect` only packaged
+  `LinearMap.trace` composed with `ContinuousLinearMap.coeLM` so that Mathlib's
+  finite-dimensional continuity theorem could be applied once.
 - Two RFP/ZCL wrappers were removed: an unused MPDO implication method that
   repeated `MPOTensor.isRFP_iff_isZCL`, and a one-use cluster-example RFP fact.
 - Five internal commuting-idempotent `LinearMap` helpers in the RFP decorrelation file
@@ -1714,6 +1722,13 @@ pass-throughs:
   standard one-block injectivity theorem.
 - `MPSTensor.frobSq_nonneg`.  This was the immediate square-nonnegativity fact
   for the definition `frobSq X = ‖X‖ ^ 2`.
+- `MPSTensor.frobSq_eq_zero_iff` and `MPSTensor.frobSq_pos_of_ne_zero`.
+  These were exact consequences of the definition `frobSq X = ‖X‖ ^ 2`,
+  Mathlib's `norm_eq_zero` / `norm_ne_zero_iff`, and positivity of a nonzero
+  square.
+- `MPSTensor.traceCLM` and `MPSTensor.traceCLMRect`.  These were one-use
+  proof devices for applying `LinearMap.continuous_of_finiteDimensional` to
+  `LinearMap.trace` after coercing continuous linear maps to linear maps.
 - `MPOTensor.IsRFP.isZCL`.  This was an unused implication method repeating the
   blueprint-facing equivalence `MPOTensor.isRFP_iff_isZCL`.
 - `MPSTensor.clusterBlocked_isRFP`.  This was a one-use restatement of the
