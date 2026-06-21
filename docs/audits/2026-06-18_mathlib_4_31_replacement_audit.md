@@ -186,6 +186,11 @@ The clearest replacements are:
 - The two private Kraus zero-padding sum lemmas are replaced by the shared
   `Fin.sum_castLE_extend_zero`, proved from Mathlib's `Fin.castLEquiv` and the
   standard subtype/filter finite-sum identities.
+- The two Fitting-disjointness consequences for left multiplication by `M^D`
+  in the rank-one and rectangular-span Wielandt files have been consolidated.
+  The vector and matrix injectivity statements now live once in
+  `TNLean.Wielandt.RankOne.SpanGrowth`, and the rectangular-span proof calls
+  that shared statement directly.
 
 There are also important non-replacements.
 
@@ -2126,6 +2131,34 @@ Focused check:
 lake build TNLean.Algebra.FinSum \
   TNLean.Channel.KrausRank \
   TNLean.Channel.KrausFreedom -q --log-level=info
+```
+
+## Wielandt range-power injectivity consolidation, 2026-06-21
+
+`TNLean/Wielandt/RankOne/BoundedWord.lean` and
+`TNLean/Wielandt/RectangularSpan/Growth.lean` both proved the same consequence
+of the Fitting disjointness theorem: if
+`X ∈ range (LinearMap.mulLeft ℂ (M ^ D))` and `M * X = 0`, then `X = 0`.
+The rectangular-span file also carried a private vector form of the same
+argument.
+
+The shared vector statement
+`WielandtRankOne.vec_eq_zero_of_mulVec_eq_zero_of_mem_range_pow` and the shared
+matrix statement
+`WielandtRankOne.matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow` now
+live in `TNLean.Wielandt.RankOne.SpanGrowth`, next to
+`WielandtRankOne.disjoint_ker_range_pow`.  The bi-rectangular and rectangular
+growth arguments use this single source.  This is not a new Mathlib 4.31
+replacement, but it removes a duplicated local proof layer exposed during the
+Mathlib-replacement pass.
+
+Focused check:
+
+```bash
+lake build TNLean.Wielandt.RankOne.SpanGrowth \
+  TNLean.Wielandt.RankOne.BoundedWord \
+  TNLean.Wielandt.RectangularSpan.Growth \
+  TNLean.Wielandt.RectangularSpan.UniversalityAux.NilpIndex -q
 ```
 
 ## Conclusions

@@ -75,8 +75,8 @@ theorem mulLeft_mem_rectSpan_nilpIndex_succ
 and `(A i₀) * X = 0`, then `X = 0`.
 
 Proof: `range(mulLeft ((A i₀)^r)) = range(mulLeft ((A i₀)^D))` by
-`range_mulLeft_pow_nilpIndex_eq`, and the D-th power version is already proved
-in `RectSpanGrowth`. -/
+`range_mulLeft_pow_nilpIndex_eq`, and the D-th power version is the shared
+Fitting-disjointness consequence from `WielandtRankOne`. -/
 private theorem matrix_eq_zero_of_mul_nilpIndex
     (A : MPSTensor d D) (i₀ : Fin d)
     {X : Matrix (Fin D) (Fin D) ℂ}
@@ -85,8 +85,8 @@ private theorem matrix_eq_zero_of_mul_nilpIndex
     (hMX : (A i₀) * X = 0) : X = 0 := by
   have hXD : X ∈ LinearMap.range (LinearMap.mulLeft ℂ ((A i₀) ^ D)) :=
     range_mulLeft_pow_nilpIndex_eq A i₀ ▸ hX
-  exact RectSpanGrowth.matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow
-    A i₀ hXD hMX
+  exact WielandtRankOne.matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow
+    (D := D) (M := A i₀) (X := X) hXD hMX
 
 /-- Linear map sending `rectSpan ((A i₀)^r) A n` to `rectSpan ((A i₀)^r) A (n+1)`
 by left-multiplication with `A i₀`, where `r = nilpIndex`. -/
