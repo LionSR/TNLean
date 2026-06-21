@@ -84,6 +84,9 @@ The clearest replacements are:
 - A site-dependent PEPS span-preservation helper was removed.  Its only use now
   applies Mathlib's `Units.mulRightLinearEquiv`, `Submodule.map_span`, and
   `Submodule.map_eq_top_iff` directly.
+- A second site-dependent PEPS span helper for products of two spanning
+  families was removed.  Its use now calls Mathlib's bilinear span theorem
+  `Submodule.map₂_span_span` through the algebra-submodule product API.
 - Two one-use Frobenius submultiplicativity wrappers in the transfer-operator
   gap files were removed.  The proofs now call Mathlib's
   `Matrix.frobenius_norm_mul` directly at the Hilbert-Schmidt estimate.
@@ -2231,6 +2234,26 @@ multiplication by a unit:
 
 This removes the handwritten span induction and keeps the span transport
 visible at the point where the bond-operator argument needs it.
+
+Focused check:
+
+```bash
+lake env lean TNLean/PEPS/CycleMPSChainOverlapCapstone.lean
+```
+
+## PEPS product-family span cleanup, 2026-06-21
+
+`TNLean/PEPS/CycleMPSChainOverlapCapstone.lean` also had a private helper
+`span_range_mul_pair`, proving by two nested span inductions that if two
+families span the full matrix algebra, then their pairwise products span the
+full matrix algebra.  The helper had a single use, to supply the spanning
+family on which two conjugations agree.
+
+That use now applies Mathlib's bilinear span theorem
+`Submodule.map₂_span_span`, simplified through `Submodule.mul_eq_map₂`, and
+then uses the local full-span hypotheses.  The proof still records explicitly
+that `⊤ * ⊤ = ⊤` for the matrix algebra, but the two handwritten inductions
+over the generating families are gone.
 
 Focused check:
 
