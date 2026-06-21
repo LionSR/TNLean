@@ -1245,6 +1245,17 @@ unconditional result.
         =
         \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
     \]
+    Let $\widetilde F_{u+q}^{\mathbf i}$ denote the same cyclic repeated product
+    formed from the matrices $\widetilde B_{u+q},\ldots,\widetilde B_{u+q+m-1}$.
+    The block identity gives
+    \[
+        F_u^{\mathbf i}
+        =
+        e^{iN_0\lambda_{u+q}}\widetilde F_{u+q}^{\mathbf i}.
+    \]
+    % Local fix (docs/paper-gaps/1708_periodic_overlap_route_alignment.tex):
+    % arXiv:1708.00029, lines 1041--1060, displays $m-1$ inverses although the
+    % repetition count and phase formula require one inverse for each inserted product.
     Apply one right inverse to each inserted repeated product. The contraction is
     \[
         A_u^{i_1}F_{u+1}^{\mathbf i_1}
@@ -1255,13 +1266,35 @@ unconditional result.
             \otimes\Omega_u\ }
         A_u^{i_1}\otimes A_{u+1}^{i_2}\otimes\cdots\otimes A_{u+m-1}^{i_m}.
     \]
-    Applying the same contraction to the $\widetilde B$ side gives
+    The block identity applied to the word with inserted repeated products gives
     \[
-        A_u^{i_1}\otimes A_{u+1}^{i_2}\otimes\cdots\otimes A_{u+m-1}^{i_m}
+        A_u^{i_1}F_{u+1}^{\mathbf i_1}
+        A_{u+1}^{i_2}F_{u+2}^{\mathbf i_2}
+        \cdots
+        A_{u+m-1}^{i_m}F_u^{\mathbf i_m}
         =
+        e^{i\lambda_{u+q}(mN_0+1)}
+        \widetilde B_{u+q}^{i_1}\widetilde F_{u+q+1}^{\mathbf i_1}
+        \widetilde B_{u+q+1}^{i_2}\widetilde F_{u+q+2}^{\mathbf i_2}
+        \cdots
+        \widetilde B_{u+q+m-1}^{i_m}\widetilde F_{u+q}^{\mathbf i_m}.
+    \]
+    Since each $\Omega_{u+r}$ contraction of $\widetilde F_{u+q+r}$ contributes
+    $e^{-iN_0\lambda_{u+q+r}}$, applying
+    $\Omega_{u+1}\otimes\cdots\otimes\Omega_{u+m-1}\otimes\Omega_u$ to both
+    sides gives
+    \[
+        \begin{aligned}
+        A_u^{i_1}\otimes A_{u+1}^{i_2}\otimes\cdots\otimes A_{u+m-1}^{i_m}
+        &=
+        e^{i\lambda_{u+q}(mN_0+1)-iN_0\sum_{r\in\mathbb Z_m}\lambda_r}
+        \widetilde B_{u+q}^{i_1}\otimes\widetilde B_{u+q+1}^{i_2}
+        \otimes\cdots\otimes\widetilde B_{u+q+m-1}^{i_m} \\
+        &=
         e^{i\eta_{u+q}}
         \widetilde B_{u+q}^{i_1}\otimes\widetilde B_{u+q+1}^{i_2}
         \otimes\cdots\otimes\widetilde B_{u+q+m-1}^{i_m}.
+        \end{aligned}
     \]
     Here
     \[
