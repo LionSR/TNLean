@@ -7,19 +7,19 @@ import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalCrossingTrace
 /-!
 # Boundary-condition comparisons for block-diagonal parent spaces
 
-The word-indexed comparison from arXiv:quant-ph/0608197
+The boundary-crossing comparison from arXiv:quant-ph/0608197
 \[
   A^j_\beta C^j_{i,\rho}
   =
   \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho
 \]
-is the local boundary-crossing coordinate form of the \(C^j,D^j\) trace
+is the cut-adapted boundary-crossing form of the \(C^j,D^j\) trace
 comparison from arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1451,
 after specializing \(D^j_\beta\) to \((\mu_j^N X_j)A^j_\beta\). The normalized
 \(E^j\)-calculation then implies the periodic-boundary single-block constraints
 and the finite-range block-diagonal periodic-boundary equality used here.
 
-The source proof writes this comparison with site-indexed matrices
+The source proof writes this comparison with boundary-indexed matrices
 \(C^j_{i_1}\), \(D^j_{i_{m+1}}\), and the derived matrix \(E^j\). The words
 \(\beta\) and \(\rho\) below are cut-adapted coordinates for the same
 periodic-boundary comparison, not additional source terminology.
@@ -36,7 +36,7 @@ boundary representation to periodic single-block states.
 
 Under the normalized BNT hypotheses, every vector in the block-diagonal
 periodic-boundary ground space has block-diagonal boundary conditions \(X_j\). If those
-same boundary conditions satisfy the source comparison, in the word-indexed
+same boundary conditions satisfy the source comparison, in the cut-adapted
 boundary-crossing form
 \[
   A^j_\beta C^j_{i,\rho}
@@ -119,7 +119,7 @@ single-block states.
 Assume the vector \(\psi\in\mathcal G_{N,L}(\oplus_j\mu_jA_j)\) has already
 been written with block-diagonal boundary matrices \(X_j\). If every
 boundary-crossing interval has the simultaneous block-word spanning property,
-then the local constraint produces the word-indexed \(C^j,D^j\) comparison,
+then the local constraint produces the cut-adapted \(C^j,D^j\) comparison,
 and the normalized \(E^j\)-calculation gives
 \[
   \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
@@ -433,7 +433,7 @@ theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_crossing_pgvwc_comparison
 periodic-boundary equality in the finite BNT range.
 
 This theorem assumes the source \(C^j,D^j\) comparison only up to the
-word-indexed matrix identity
+cut-adapted matrix identity
 \[
   A^j_\beta C^j_{i,\rho}
   =
@@ -441,8 +441,8 @@ word-indexed matrix identity
 \]
 for every boundary-crossing interval, local word \(\beta\) before the cut,
 and outside word \(\rho\), with \(D^j_\beta\) already specialized to
-\((\mu_j^NX_j)A^j_\beta\). The words \(\beta\) and \(\rho\) are formal
-word coordinates for the opened boundary comparison; they reindex the source
+\((\mu_j^NX_j)A^j_\beta\). The words \(\beta\) and \(\rho\) are
+cut-adapted coordinates for the opened boundary comparison; they reindex the source
 end-site comparison by blocked words rather than replacing the source indices.
 The normalized \(E^j\)-calculation
 and the block-injective crossing-window argument then give the
@@ -518,7 +518,7 @@ the equality conclusion
   =
   \bigvee_j\mathcal G_{N,L}(A_j),
 \]
-under the assumed word-indexed \(C^j,D^j\) comparison.
+under the assumed cut-adapted \(C^j,D^j\) comparison.
 
 **Scope restriction (length-\(L_0\) injectivity range):** Theorem 12 of
 arXiv:quant-ph/0608197 assumes \(L\ge 3(b-1)(L_0+1)+1\). This theorem is stated in the current BNT
