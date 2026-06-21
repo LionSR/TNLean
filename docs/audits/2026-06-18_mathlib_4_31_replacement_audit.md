@@ -101,9 +101,10 @@ The clearest replacements are:
   finite sum directly at the proof site using `Matrix.one_apply`,
   `Finset.sum_add_distrib`, and Mathlib's if-supported finite-sum
   simplification.  The private lemma `sum_one_smul_eq` was removed.
-- The transfer-matrix coordinate-expansion helper was removed.  The proof
-  sites now cite Mathlib's `Matrix.matrix_eq_sum_single` directly, using
-  `Matrix.smul_single` only to match the local scalar-matrix-unit notation.
+- The transfer-matrix coordinate-expansion helper now cites Mathlib's
+  `Matrix.matrix_eq_sum_single` directly, with `Matrix.smul_single` used only
+  to match the local scalar-matrix-unit notation.  The private helper remains
+  as the shared statement used at the transfer-matrix proof sites.
 - The dissipative-drift right-multiplication algebra hom now comes from
   Mathlib's `AlgHom.mulLeftRight`, composed with
   `Algebra.TensorProduct.includeRight`.  The former hand-written algebra-hom
@@ -1914,7 +1915,7 @@ Those proofs now call `tendsto_nhds_unique` directly, and the helper file was
 removed.  Future proofs that need this limit-uniqueness fact should use the
 Mathlib theorem rather than reintroducing the wrapper.
 
-## Transfer-matrix coordinate expansion cleanup, 2026-06-19; completed 2026-06-21
+## Transfer-matrix coordinate expansion cleanup, 2026-06-19
 
 `TNLean/Channel/TransferMatrix.lean` had a private lemma
 `sum_smul_single_eq` stating that a matrix is the finite sum of its entries
@@ -1922,13 +1923,13 @@ times the corresponding matrix units.  Mathlib 4.31 already provides this
 statement as `Matrix.matrix_eq_sum_single`; the only local difference was the
 choice to write the summands as `ρ k l • Matrix.single k l 1`.
 
-The private helper was first reduced to a local notation adapter and then
-removed.  The transfer-matrix proof sites now cite
-`Matrix.matrix_eq_sum_single` directly, simplifying by `Matrix.smul_single`,
-`smul_eq_mul`, and `mul_one` to match the local scalar-multiple notation.  In
-the same file, the hand proof of the diagonal expansion of the identity matrix
-was replaced by `Matrix.sum_single_one`.  The transfer-matrix statements are
-unchanged.
+The private helper has now been retained as the local notation adapter.  Its
+proof cites `Matrix.matrix_eq_sum_single` directly, simplifying by
+`Matrix.smul_single`, `smul_eq_mul`, and `mul_one` to match the local
+scalar-multiple notation.  The transfer-matrix proof sites share this adapter.
+In the same file, the hand proof of the diagonal expansion of the identity
+matrix was replaced by `Matrix.sum_single_one`.  The transfer-matrix statements
+are unchanged.
 
 ## PSD kernel-zero wrapper cleanup, 2026-06-19
 
