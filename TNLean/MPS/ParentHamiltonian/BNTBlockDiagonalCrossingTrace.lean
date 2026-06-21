@@ -76,7 +76,17 @@ theorem blockDiagonal_boundary_crossing_trace_decomposition_of_sum_mem_iSup
               evalWord (A j) tailWord)) := by
   classical
   obtain ⟨φ, hφmem, hφsum⟩ :=
-    exists_sum_mem_of_mem_iSup_fin (fun j : Fin r => groundSpace (A j) L) hmem
+    (Submodule.mem_iSup_iff_exists_finsupp
+      (fun j : Fin r => groundSpace (A j) L)
+      (∑ j : Fin r,
+        cyclicRestrictₗ hN L i τ
+          (groundSpaceMap (A j) N ((μ j) ^ N • X j)))).mp hmem
+  have hφsum_univ :
+      (∑ j : Fin r, φ j) =
+        ∑ j : Fin r,
+          cyclicRestrictₗ hN L i τ
+            (groundSpaceMap (A j) N ((μ j) ^ N • X j)) := by
+    simpa [Finsupp.sum_fintype] using hφsum
   have hMatrix : ∀ j : Fin r,
       ∃ Cj : Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
         φ j = groundSpaceMap (A j) L Cj := by
@@ -159,7 +169,7 @@ theorem blockDiagonal_boundary_crossing_trace_decomposition_of_sum_mem_iSup
         (∑ j : Fin r,
           cyclicRestrictₗ hN L i τ
             (groundSpaceMap (A j) N ((μ j) ^ N • X j))) σ := by
-            rw [← hφsum]
+            rw [hφsum_univ]
       _ =
         ∑ j : Fin r,
           cyclicRestrictₗ hN L i τ
