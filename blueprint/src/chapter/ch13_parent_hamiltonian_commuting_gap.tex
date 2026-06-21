@@ -197,13 +197,35 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     \]
 \end{remark}
 
+\begin{theorem}[Chain ground-space vectors are frustration-free]
+    \label{thm:chain_ground_space_implies_frustration_free}
+    \lean{MPSTensor.isFrustrationFree_of_mem_chainGroundSpace}
+    \leanok
+    \uses{def:chain_ground_space, def:is_frustration_free}
+    Let $\psi$ be a vector in the periodic chain ground space
+    $G_L^{(N)}(A)$. Then $\psi$ satisfies all local zero-energy equations:
+    for every site $i$,
+    \[
+        h_i(A,L)\psi=0.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Membership in $G_L^{(N)}(A)$ means that every cyclic $L$-site window of
+    $\psi$ lies in the corresponding local ground space. Hence each translated
+    parent term annihilates $\psi$, which is precisely the frustration-free
+    condition.
+\end{proof}
+
 \begin{lemma}[Zero-energy BNT vectors lie in the parent-Hamiltonian kernel]
     \label{lem:bnt_span_le_parent_hamiltonian_kernel}
     \lean{MPSTensor.bntMPSVectorSpan_le_ker_parentHamiltonian_of_forall_annihilates}
     \lean{MPSTensor.bntMPSVectorSpan_le_ker_parentHamiltonian_of_forall_frustrationFree}
     \lean{MPSTensor.bntMPSVectorSpan_le_ker_parentHamiltonian_toTensorFromBlocks}
     \leanok
-    \uses{def:bnt_span, def:is_frustration_free, def:parent_hamiltonian}
+    \uses{def:bnt_span, def:is_frustration_free, def:parent_hamiltonian,
+        thm:chain_ground_space_implies_frustration_free}
     Let $B$ be a canonical-form tensor with BNT components
     $A_1,\ldots,A_g$. If every component vector has zero energy for the
     parent Hamiltonian,
@@ -220,8 +242,8 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     It is enough to assume the local frustration-free equations
     $h_iV^{(N)}(A_j)=0$ for every $i$ and $j$.
     In the block-diagonal case
-    \(B=\bigoplus_j\mu_jA_j\), with every \(\mu_j\ne0\), the same inclusion
-    follows because each local space \(G_L(A_j)\) is contained in \(G_L(B)\).
+    $B=\bigoplus_j\mu_jA_j$, with every $\mu_j\ne0$, the same inclusion
+    follows because each local space $G_L(A_j)$ is contained in $G_L(B)$.
     This is the easy inclusion in the source ground-space spanning equation of
     \cite[Definition~3.9]{Cirac2016MPDO_arXiv}; the reverse inclusion is the
     remaining spanning direction.
@@ -239,9 +261,14 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
         =
         0.
     \]
-    For a block-diagonal tensor, the \(A_j\)-chain constraints of
-    \(V^{(N)}(A_j)\) imply the \(B\)-chain constraints, and hence the same
-    local equations.
+    For a block-diagonal tensor,
+    \[
+        G_L(A_j)\subseteq G_L(B),
+        \qquad
+        V^{(N)}(A_j)\in G_L(A_j)\subseteq G_L(B),
+        \qquad
+        h_iV^{(N)}(A_j)=0.
+    \]
 \end{proof}
 
 \begin{theorem}[Renormalization fixed points have commuting nearest-neighbor parent terms]\label{thm:rfp_implies_nncph}
