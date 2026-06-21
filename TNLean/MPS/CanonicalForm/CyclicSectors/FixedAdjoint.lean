@@ -22,7 +22,7 @@ projections fixed by the adjoint transfer map.
 ## References
 
 * [Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, Appendix A]
-* [De las Cuevas–Cirac–Schuch–Pérez-García, arXiv:1708.00029, eq:Aoffdiag/eq:Auprop]
+* [De las Cuevas–Cirac–Schuch–Pérez-García, arXiv:1708.00029, eq:Aoffdiag]
 * [Wolf, *Quantum Channels & Operations*, Chapter 6]
 -/
 
@@ -180,8 +180,8 @@ shifted by the adjoint transfer map, `𝓔^*(P_{k+1}) = P_k`, the Kraus operator
 `P_{k+1} · A_i = A_i · P_k`.  Summing over the orthogonal grading then gives the
 off-diagonal reconstruction `A_i = ∑_u P_{u+1} · A_i · P_u`.  This is the
 single-site off-diagonal decomposition of a periodic block in arXiv:1708.00029,
-eq:Aoffdiag/eq:Auprop: the compressed-to-global bridge that the cyclic transport
-step contracts.
+eq:Aoffdiag, in inverse-indexed form: the compressed-to-global bridge that the
+cyclic transport step contracts.
 -/
 
 variable {m : ℕ}
@@ -192,7 +192,7 @@ If the orthogonal projections `P` are shifted by the adjoint transfer map,
 `𝓔^*(P_{k+1}) = P_k`, then each Kraus operator carries index `k` to `k+1`:
 `P_{k+1} · A_i = A_i · P_k`.  This is the single-site analogue of the
 fixed-projection commutation `commutes_letters_of_adjoint_fixed_projection`;
-see arXiv:1708.00029, eq:Auprop. -/
+see arXiv:1708.00029, eq:Aoffdiag, in inverse-indexed form. -/
 theorem offDiag_shift_of_adjoint_cyclic_shift [NeZero m]
     (A : MPSTensor d D)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)
