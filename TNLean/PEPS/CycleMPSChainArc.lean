@@ -384,16 +384,17 @@ theorem eq_of_trace_pairing_span {ι : Sort*} {F : ι → Matrix (Fin D) (Fin D)
     (hspan : Submodule.span ℂ (Set.range F) = ⊤)
     {M N : Matrix (Fin D) (Fin D) ℂ}
     (h : ∀ i, Matrix.trace (M * F i) = Matrix.trace (N * F i)) : M = N := by
+  have hmaps :
+      (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulLeft ℂ M) =
+        (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulLeft ℂ N) := by
+    apply LinearMap.ext_on_range (v := F) (hv := hspan)
+    intro i
+    simpa only [Matrix.traceLinearMap_apply, LinearMap.comp_apply,
+      LinearMap.mulLeft_apply] using h i
   apply (Matrix.ext_iff_trace_mul_right).2
   intro Q
-  have hQ : Q ∈ Submodule.span ℂ (Set.range F) := hspan ▸ Submodule.mem_top
-  induction hQ using Submodule.span_induction with
-  | mem x hx =>
-      obtain ⟨i, rfl⟩ := hx
-      exact h i
-  | zero => simp
-  | add x y _ _ hx hy => simp [Matrix.mul_add, Matrix.trace_add, hx, hy]
-  | smul c x _ hx => simp [Matrix.trace_smul, hx]
+  simpa only [Matrix.traceLinearMap_apply, LinearMap.comp_apply,
+    LinearMap.mulLeft_apply] using congrArg (fun f => f Q) hmaps
 
 /-- **Uniqueness of a right factor against a spanning family** — the
 spanning-family form of the uniqueness of the bond operator
