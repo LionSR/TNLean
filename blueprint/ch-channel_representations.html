@@ -4654,6 +4654,9 @@
 
     <a class="icon proof" href="ch-channel_representations.html#lem:exists_unitary_mul_eq_of_gram_eq">#</a>
     
+    <a class="icon proof" href="ch-channel_representations.html#a0000025257"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
     
     
     <button class="modal lean">L∃∀N</button>
@@ -4679,6 +4682,18 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    Let \(A,B:\mathbb {C}^n\to \mathbb {C}^m\) be linear maps with \(B^\dagger B=A^\dagger A\). Then there is a unitary \(U\) on \(\mathbb {C}^m\) such that \(B=UA\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000025257">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  
 
   </div>
 </div>
@@ -4726,12 +4741,91 @@
 
   </div>
 </div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:first_env_embedding_conjTranspose_mul_self">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">16.52</span>
+    <span class="lemma_thmtitle">First environment embedding is an isometry</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-channel_representations.html#lem:first_env_embedding_conjTranspose_mul_self">#</a>
+    
+    <a class="icon proof" href="ch-channel_representations.html#a0000025258"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-channel_representations.html#def:first_env_embedding">Definition 16.51</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.firstEnvEmbedding_conjTranspose_mul_self" class="lean_decl">Matrix.firstEnvEmbedding_conjTranspose_mul_self</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>    The first-environment embedding satisfies \(W_0^\dagger W_0=\mathbb {1}\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000025258">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  
+
+  </div>
+</div>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:channel_exists_stinespring_open_system_unitary">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.52</span>
+    <span class="theorem_thmlabel">16.53</span>
     <span class="theorem_thmtitle">Open-system representation, unitary form</span>
     <div class="thm_header_extras">
 
@@ -4742,7 +4836,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:channel_exists_stinespring_open_system_unitary">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000025257"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000025259"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4767,6 +4861,8 @@
           <li><a href="ch-channel_representations.html#thm:channel_exists_stinespring_open_system_traceRight">Theorem 16.49</a></li>
           
           <li><a href="ch-channel_representations.html#lem:exists_unitary_mul_eq_of_gram_eq">Lemma 16.50</a></li>
+          
+          <li><a href="ch-channel_representations.html#lem:first_env_embedding_conjTranspose_mul_self">Lemma 16.52</a></li>
           
         </ul>
     
@@ -4798,13 +4894,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For \(D \geq 1\), every quantum channel \(T\) on \(\mathbb {C}^D\) admits an environment dimension \(r \geq 1\) and a unitary \(U\) on \(\mathbb {C}^D \otimes \mathbb {C}^r\) such that, for every matrix \(\rho \) on \(\mathbb {C}^D\), </p>
-<div class="displaymath" id="a0000025258">
+<div class="displaymath" id="a0000025260">
   \[  T(\rho ) = \operatorname{tr}_E\! \left(U W_0 \rho W_0^\dagger U^\dagger \right).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000025257">
+<div class="proof_wrapper" id="a0000025259">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4823,7 +4919,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">16.53</span>
+    <span class="definition_thmlabel">16.54</span>
     <span class="definition_thmtitle">Positive operator-valued measure</span>
     <div class="thm_header_extras">
 
@@ -4859,7 +4955,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>  A <em>positive operator-valued measure</em> with \(n\) outcomes on \(\mathbb {C}^D\) is a family \(\{ E_i\} _{i=0}^{n-1}\) of positive semidefinite operators on \(\mathbb {C}^D\) satisfying the resolution of identity </p>
-<div class="displaymath" id="a0000025259">
+<div class="displaymath" id="a0000025261">
   \[  \sum _{i=0}^{n-1} E_i = \mathbb {1}_D.  \]
 </div>
 
@@ -4870,7 +4966,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">16.54</span>
+    <span class="definition_thmlabel">16.55</span>
     <span class="definition_thmtitle">Naimark Kraus square roots</span>
     <div class="thm_header_extras">
 
@@ -4894,7 +4990,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channel_representations.html#def:povm">Definition 16.53</a></li>
+          <li><a href="ch-channel_representations.html#def:povm">Definition 16.54</a></li>
           
         </ul>
     
@@ -4936,7 +5032,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.55</span>
+    <span class="theorem_thmlabel">16.56</span>
     <span class="theorem_thmtitle">Naimark square roots satisfy the Kraus normalization</span>
     <div class="thm_header_extras">
 
@@ -4947,7 +5043,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#lem:naimark_square_root_normalization">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000025260"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000025262"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4963,9 +5059,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channel_representations.html#def:naimark_kraus">Definition 16.54</a></li>
+          <li><a href="ch-channel_representations.html#def:naimark_kraus">Definition 16.55</a></li>
           
-          <li><a href="ch-channel_representations.html#def:povm">Definition 16.53</a></li>
+          <li><a href="ch-channel_representations.html#def:povm">Definition 16.54</a></li>
           
         </ul>
     
@@ -4997,13 +5093,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For a POVM \(\{ E_i\} \) with square roots \(E_i = M_i^\dagger M_i\), one has </p>
-<div class="displaymath" id="a0000025261">
+<div class="displaymath" id="a0000025263">
   \[  \sum _i M_i^\dagger M_i = \mathbb {1}.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000025260">
+<div class="proof_wrapper" id="a0000025262">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5020,7 +5116,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">16.56</span>
+    <span class="definition_thmlabel">16.57</span>
     <span class="definition_thmtitle">Naimark isometry</span>
     <div class="thm_header_extras">
 
@@ -5044,7 +5140,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channel_representations.html#def:naimark_kraus">Definition 16.54</a></li>
+          <li><a href="ch-channel_representations.html#def:naimark_kraus">Definition 16.55</a></li>
           
           <li><a href="ch-channel_representations.html#def:stinespring_v">Definition 16.30</a></li>
           
@@ -5078,7 +5174,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   The <em>Naimark isometry</em> \(V : \mathbb {C}^D \to \mathbb {C}^D \otimes \mathbb {C}^n\) of a POVM is the Stinespring-type construction </p>
-<div class="displaymath" id="a0000025262">
+<div class="displaymath" id="a0000025264">
   \[  V = \sum _{i=0}^{n-1} M_i \otimes |i\rangle , \qquad V_{(a,i),\, k} = (M_i)_{a,k}.  \]
 </div>
 
@@ -5089,7 +5185,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">16.57</span>
+    <span class="definition_thmlabel">16.58</span>
     <span class="definition_thmtitle">Naimark projective measurement</span>
     <div class="thm_header_extras">
 
@@ -5127,7 +5223,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>  The <em>Naimark projectors</em> on \(\mathbb {C}^D \otimes \mathbb {C}^n\) are </p>
-<div class="displaymath" id="a0000025263">
+<div class="displaymath" id="a0000025265">
   \[  P_i = \mathbb {1}_D \otimes |i\rangle \! \langle i|, \qquad (P_i)_{(a,b),(c,d)} = \delta _{a,c} \delta _{b,i} \delta _{d,i}.  \]
 </div>
 
@@ -5138,7 +5234,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.58</span>
+    <span class="theorem_thmlabel">16.59</span>
     <span class="theorem_thmtitle">Naimark isometry condition</span>
     <div class="thm_header_extras">
 
@@ -5149,7 +5245,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:naimark_isometry_isometry">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000025264"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000025266"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5165,9 +5261,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channel_representations.html#def:naimark_isometry">Definition 16.56</a></li>
+          <li><a href="ch-channel_representations.html#def:naimark_isometry">Definition 16.57</a></li>
           
-          <li><a href="ch-channel_representations.html#def:povm">Definition 16.53</a></li>
+          <li><a href="ch-channel_representations.html#def:povm">Definition 16.54</a></li>
           
         </ul>
     
@@ -5202,7 +5298,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000025264">
+<div class="proof_wrapper" id="a0000025266">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5219,7 +5315,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.59</span>
+    <span class="theorem_thmlabel">16.60</span>
     <span class="theorem_thmtitle">Naimark projectors form a projective measurement</span>
     <div class="thm_header_extras">
 
@@ -5230,7 +5326,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:naimark_projection_axioms">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000025265"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000025267"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5246,7 +5342,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channel_representations.html#def:naimark_projection">Definition 16.57</a></li>
+          <li><a href="ch-channel_representations.html#def:naimark_projection">Definition 16.58</a></li>
           
         </ul>
     
@@ -5287,7 +5383,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000025265">
+<div class="proof_wrapper" id="a0000025267">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5304,7 +5400,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.60</span>
+    <span class="theorem_thmlabel">16.61</span>
     <span class="theorem_thmtitle">Naimark dilation</span>
     <div class="thm_header_extras">
 
@@ -5315,7 +5411,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:naimark_recovers_povm">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000025266"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000025268"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5331,15 +5427,15 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channel_representations.html#def:povm">Definition 16.53</a></li>
+          <li><a href="ch-channel_representations.html#def:povm">Definition 16.54</a></li>
           
-          <li><a href="ch-channel_representations.html#def:naimark_isometry">Definition 16.56</a></li>
+          <li><a href="ch-channel_representations.html#def:naimark_isometry">Definition 16.57</a></li>
           
-          <li><a href="ch-channel_representations.html#def:naimark_projection">Definition 16.57</a></li>
+          <li><a href="ch-channel_representations.html#def:naimark_projection">Definition 16.58</a></li>
           
-          <li><a href="ch-channel_representations.html#thm:naimark_isometry_isometry">Theorem 16.58</a></li>
+          <li><a href="ch-channel_representations.html#thm:naimark_isometry_isometry">Theorem 16.59</a></li>
           
-          <li><a href="ch-channel_representations.html#thm:naimark_projection_axioms">Theorem 16.59</a></li>
+          <li><a href="ch-channel_representations.html#thm:naimark_projection_axioms">Theorem 16.60</a></li>
           
         </ul>
     
@@ -5371,13 +5467,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Every POVM \(\{ E_i\} _{i=0}^{n-1}\) arises as a projective measurement on a dilation: for the isometry \(V\) and projectors \(P_i\) above, </p>
-<div class="displaymath" id="a0000025267">
+<div class="displaymath" id="a0000025269">
   \[  E_i = V^\dagger P_i V.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000025266">
+<div class="proof_wrapper" id="a0000025268">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5394,7 +5490,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.61</span>
+    <span class="theorem_thmlabel">16.62</span>
     <span class="theorem_thmtitle">Existential Naimark dilation</span>
     <div class="thm_header_extras">
 
@@ -5405,7 +5501,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:exists_naimark_dilation">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000025268"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000025270"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5421,7 +5517,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channel_representations.html#thm:naimark_recovers_povm">Theorem 16.60</a></li>
+          <li><a href="ch-channel_representations.html#thm:naimark_recovers_povm">Theorem 16.61</a></li>
           
         </ul>
     
@@ -5456,7 +5552,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000025268">
+<div class="proof_wrapper" id="a0000025270">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5473,7 +5569,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">16.62</span>
+    <span class="definition_thmlabel">16.63</span>
     <span class="definition_thmtitle">Naimark dilation as a structure</span>
     <div class="thm_header_extras">
 
@@ -5497,11 +5593,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channel_representations.html#thm:naimark_isometry_isometry">Theorem 16.58</a></li>
+          <li><a href="ch-channel_representations.html#thm:naimark_isometry_isometry">Theorem 16.59</a></li>
           
-          <li><a href="ch-channel_representations.html#thm:naimark_projection_axioms">Theorem 16.59</a></li>
+          <li><a href="ch-channel_representations.html#thm:naimark_projection_axioms">Theorem 16.60</a></li>
           
-          <li><a href="ch-channel_representations.html#thm:naimark_recovers_povm">Theorem 16.60</a></li>
+          <li><a href="ch-channel_representations.html#thm:naimark_recovers_povm">Theorem 16.61</a></li>
           
         </ul>
     
@@ -5541,7 +5637,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.63</span>
+    <span class="theorem_thmlabel">16.64</span>
     <span class="theorem_thmtitle">Canonical dilation satisfies the Naimark dilation axioms</span>
     <div class="thm_header_extras">
 
@@ -5552,7 +5648,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:is_naimark_dilation_naimark">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000025269"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000025271"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5568,9 +5664,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channel_representations.html#def:is_naimark_dilation">Definition 16.62</a></li>
+          <li><a href="ch-channel_representations.html#def:is_naimark_dilation">Definition 16.63</a></li>
           
-          <li><a href="ch-channel_representations.html#thm:naimark_recovers_povm">Theorem 16.60</a></li>
+          <li><a href="ch-channel_representations.html#thm:naimark_recovers_povm">Theorem 16.61</a></li>
           
         </ul>
     
@@ -5605,7 +5701,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000025269">
+<div class="proof_wrapper" id="a0000025271">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5622,7 +5718,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.64</span>
+    <span class="theorem_thmlabel">16.65</span>
     <span class="theorem_thmtitle">Concrete uniqueness for canonical projectors</span>
     <div class="thm_header_extras">
 
@@ -5633,7 +5729,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:naimark_concrete_uniqueness">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000025270"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000025272"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5649,11 +5745,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channel_representations.html#def:naimark_isometry">Definition 16.56</a></li>
+          <li><a href="ch-channel_representations.html#def:naimark_isometry">Definition 16.57</a></li>
           
-          <li><a href="ch-channel_representations.html#def:naimark_projection">Definition 16.57</a></li>
+          <li><a href="ch-channel_representations.html#def:naimark_projection">Definition 16.58</a></li>
           
-          <li><a href="ch-channel_representations.html#thm:naimark_recovers_povm">Theorem 16.60</a></li>
+          <li><a href="ch-channel_representations.html#thm:naimark_recovers_povm">Theorem 16.61</a></li>
           
         </ul>
     
@@ -5688,7 +5784,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000025270">
+<div class="proof_wrapper" id="a0000025272">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5705,7 +5801,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">16.65</span>
+    <span class="definition_thmlabel">16.66</span>
     <span class="definition_thmtitle">POVM from a PSD resolution of identity on a dilation</span>
     <div class="thm_header_extras">
 
@@ -5741,7 +5837,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   Given an isometry \(V : \mathbb {C}^D \to \mathbb {C}^{d'}\) with \(V^\dagger V = \mathbb {1}_D\) and a family \(\{ P_i\} _{i=0}^{n-1}\) of positive semidefinite operators on \(\mathbb {C}^{d'}\) summing to the identity, the pulled-back operators </p>
-<div class="displaymath" id="a0000025271">
+<div class="displaymath" id="a0000025273">
   \[  E_i := V^\dagger P_i V  \]
 </div>
 <p> form a POVM. In particular, any projective measurement on the dilation (a special case of a PSD resolution of identity) pulls back to a POVM. </p>
@@ -5753,7 +5849,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">16.66</span>
+    <span class="definition_thmlabel">16.67</span>
     <span class="definition_thmtitle">Quantum instrument</span>
     <div class="thm_header_extras">
 
@@ -5819,7 +5915,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">16.67</span>
+    <span class="definition_thmlabel">16.68</span>
     <span class="definition_thmtitle">Instrument operations</span>
     <div class="thm_header_extras">
 
@@ -5843,7 +5939,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channel_representations.html#def:instrument">Definition 16.66</a></li>
+          <li><a href="ch-channel_representations.html#def:instrument">Definition 16.67</a></li>
           
         </ul>
     
@@ -5889,7 +5985,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.68</span>
+    <span class="theorem_thmlabel">16.69</span>
     <span class="theorem_thmtitle">Instrument total map is a channel</span>
     <div class="thm_header_extras">
 
@@ -5900,7 +5996,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:instrument_total_is_channel">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000025272"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000025274"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5916,7 +6012,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channel_representations.html#def:instrument">Definition 16.66</a></li>
+          <li><a href="ch-channel_representations.html#def:instrument">Definition 16.67</a></li>
           
           <li><a href="ch-channels.html#def:channel">Definition 4.11</a></li>
           
@@ -5953,7 +6049,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000025272">
+<div class="proof_wrapper" id="a0000025274">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5970,7 +6066,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.69</span>
+    <span class="theorem_thmlabel">16.70</span>
     <span class="theorem_thmtitle">Conservation of probability for instruments</span>
     <div class="thm_header_extras">
 
@@ -5981,7 +6077,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:instrument_sum_probability">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000025273"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000025275"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5997,7 +6093,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channel_representations.html#def:instrument">Definition 16.66</a></li>
+          <li><a href="ch-channel_representations.html#def:instrument">Definition 16.67</a></li>
           
         </ul>
     
@@ -6032,7 +6128,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000025273">
+<div class="proof_wrapper" id="a0000025275">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6049,7 +6145,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.70</span>
+    <span class="theorem_thmlabel">16.71</span>
     <span class="theorem_thmtitle">Non-negativity of instrument probabilities</span>
     <div class="thm_header_extras">
 
@@ -6060,7 +6156,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:instrument_probability_nonneg">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000025274"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000025276"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6076,7 +6172,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channel_representations.html#def:instrument">Definition 16.66</a></li>
+          <li><a href="ch-channel_representations.html#def:instrument">Definition 16.67</a></li>
           
         </ul>
     
@@ -6111,7 +6207,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000025274">
+<div class="proof_wrapper" id="a0000025276">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6126,7 +6222,7 @@
 <h1 id="sec:trace_pairing_expansion">16.8 Trace-pairing expansion in transfer-matrix form</h1>
 
 <p>The trace-pairing expansion separates a linear map into the scalar input pairing, the transfer coefficients, and the output basis element: </p>
-<div class="displaymath" id="a0000025275">
+<div class="displaymath" id="a0000025277">
   \[  T(\rho )=\sum _i\sum _j t_{ij}\, \operatorname{tr}(\sigma _j\rho )\, \sigma _i.  \]
 </div>
 <p> The diagram records the same factorization by closing the input matrix with \(\sigma _j\), weighting the resulting scalar by \(t_{ij}\), and producing the output matrix through \(\sigma _i\): </p>
@@ -6136,7 +6232,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">16.71</span>
+    <span class="definition_thmlabel">16.72</span>
     <span class="definition_thmtitle">Trace-self-dual basis</span>
     <div class="thm_header_extras">
 
@@ -6172,7 +6268,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>  A basis \(\{ \sigma _i\} _i\) of \(M_{D}(\mathbb {C})\) is <em>trace-self-dual</em> when its coordinate functionals are given by trace pairing: </p>
-<div class="displaymath" id="a0000025277">
+<div class="displaymath" id="a0000025279">
   \[  X = \sum _i \operatorname{tr}(\sigma _i X) \sigma _i.  \]
 </div>
 
@@ -6183,7 +6279,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">16.72</span>
+    <span class="definition_thmlabel">16.73</span>
     <span class="definition_thmtitle">Trace-pairing coefficients</span>
     <div class="thm_header_extras">
 
@@ -6207,7 +6303,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channel_representations.html#def:trace_pairing_self_dual_basis">Definition 16.71</a></li>
+          <li><a href="ch-channel_representations.html#def:trace_pairing_self_dual_basis">Definition 16.72</a></li>
           
         </ul>
     
@@ -6239,7 +6335,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   For a linear map \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) and a trace-self-dual basis \(\{ \sigma _i\} \), define coefficients </p>
-<div class="displaymath" id="a0000025278">
+<div class="displaymath" id="a0000025280">
   \[  t_{ij} := \operatorname{tr}(\sigma _i\, T(\sigma _j)).  \]
 </div>
 
@@ -6250,7 +6346,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.73</span>
+    <span class="theorem_thmlabel">16.74</span>
     <span class="theorem_thmtitle">Trace-pairing expansion of a linear map</span>
     <div class="thm_header_extras">
 
@@ -6261,7 +6357,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:linearMap_expand_tracePairing">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000025279"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000025281"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6277,9 +6373,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channel_representations.html#def:trace_pairing_self_dual_basis">Definition 16.71</a></li>
+          <li><a href="ch-channel_representations.html#def:trace_pairing_self_dual_basis">Definition 16.72</a></li>
           
-          <li><a href="ch-channel_representations.html#def:trace_pairing_coeff">Definition 16.72</a></li>
+          <li><a href="ch-channel_representations.html#def:trace_pairing_coeff">Definition 16.73</a></li>
           
         </ul>
     
@@ -6311,13 +6407,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If \(\{ \sigma _i\} \) is trace-self-dual, then every linear map \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) admits the expansion </p>
-<div class="displaymath" id="a0000025280">
+<div class="displaymath" id="a0000025282">
   \[  T(\rho ) = \sum _i \sum _j t_{ij} \operatorname{tr}(\sigma _j \rho ) \sigma _i, \qquad t_{ij} = \operatorname{tr}(\sigma _i T(\sigma _j)).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000025279">
+<div class="proof_wrapper" id="a0000025281">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6337,7 +6433,7 @@
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
 	, Section&#160;2.3
 	]
-</span> discusses two families of normal forms for the transfer-matrix representation of a quantum channel: the <em>singular value decomposition</em> (SVD) and, for qubit channels, the <em>Lorentz normal form</em> obtained by \(\operatorname{SL}(2, \mathbb {C})\) filtering operations. The SVD normal form is proved below. The Lorentz normal form theorem (Theorem&#160;<a href="ch-channel_representations.html#thm:lorentz_normal_form_qubit">16.85</a>) requires the compactness and minimisation argument for \(\operatorname{SL}(2, \mathbb {C})\) filterings in <span class="cite">
+</span> discusses two families of normal forms for the transfer-matrix representation of a quantum channel: the <em>singular value decomposition</em> (SVD) and, for qubit channels, the <em>Lorentz normal form</em> obtained by \(\operatorname{SL}(2, \mathbb {C})\) filtering operations. The SVD normal form is proved below. The Lorentz normal form theorem (Theorem&#160;<a href="ch-channel_representations.html#thm:lorentz_normal_form_qubit">16.86</a>) requires the compactness and minimisation argument for \(\operatorname{SL}(2, \mathbb {C})\) filterings in <span class="cite">
 	[
 	
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
@@ -6349,7 +6445,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.74</span>
+    <span class="theorem_thmlabel">16.75</span>
     <span class="theorem_thmtitle">SVD for positive semidefinite matrices</span>
     <div class="thm_header_extras">
 
@@ -6360,7 +6456,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:svd_posSemidef">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000025281"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000025283"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6388,14 +6484,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>  Every positive semidefinite matrix \(M \in M_{D}(\mathbb {C})\) admits a decomposition </p>
-<div class="displaymath" id="a0000025282">
+<div class="displaymath" id="a0000025284">
   \[  M = U \operatorname{diag}(\sigma ) U^{\dagger },  \]
 </div>
 <p> where \(U \in \mathcal{U}(D)\) is unitary and \(\sigma : \{ 0, \ldots , D-1\}  \to \mathbb {R}_{\ge 0}\) has non-negative entries. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000025281">
+<div class="proof_wrapper" id="a0000025283">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6412,7 +6508,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.75</span>
+    <span class="theorem_thmlabel">16.76</span>
     <span class="theorem_thmtitle">SVD existence for invertible matrices</span>
     <div class="thm_header_extras">
 
@@ -6423,7 +6519,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:svd_of_isUnit">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000025283"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000025285"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6451,14 +6547,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>  Every invertible complex square matrix \(M \in M_{D}(\mathbb {C})\) admits a singular value decomposition </p>
-<div class="displaymath" id="a0000025284">
+<div class="displaymath" id="a0000025286">
   \[  M = U \operatorname{diag}(\sigma ) V^{\dagger },  \]
 </div>
 <p> with \(U, V \in \mathcal{U}(D)\) unitary and \(\sigma _i {\gt} 0\) for all \(i\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000025283">
+<div class="proof_wrapper" id="a0000025285">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6475,7 +6571,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.76</span>
+    <span class="theorem_thmlabel">16.77</span>
     <span class="theorem_thmtitle">SVD representation of a transfer matrix</span>
     <div class="thm_header_extras">
 
@@ -6486,7 +6582,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:transferMatrix_svd_of_isUnit">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000025285"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000025287"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6502,7 +6598,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channel_representations.html#thm:svd_of_isUnit">Theorem 16.75</a></li>
+          <li><a href="ch-channel_representations.html#thm:svd_of_isUnit">Theorem 16.76</a></li>
           
         </ul>
     
@@ -6537,7 +6633,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000025285">
+<div class="proof_wrapper" id="a0000025287">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6545,30 +6641,30 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Direct specialisation of Theorem&#160;<a href="ch-channel_representations.html#thm:svd_of_isUnit">16.75</a> to the index type \(\{ 0,\ldots ,D-1\}  \times \{ 0,\ldots ,D-1\} \) used by the transfer-matrix representation. </p>
+  <p>Direct specialisation of Theorem&#160;<a href="ch-channel_representations.html#thm:svd_of_isUnit">16.76</a> to the index type \(\{ 0,\ldots ,D-1\}  \times \{ 0,\ldots ,D-1\} \) used by the transfer-matrix representation. </p>
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000025286">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000025288">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">16.77</span>
+    <span class="remark_thmlabel">16.78</span>
     <span class="remark_thmtitle">Sorted / unique singular values</span>
     <div class="thm_header_extras">
 
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-channel_representations.html#a0000025286">#</a>
+    <a class="icon proof" href="ch-channel_representations.html#a0000025288">#</a>
     
     
     
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p> Theorem&#160;<a href="ch-channel_representations.html#thm:svd_of_isUnit">16.75</a> produces the singular values as an unordered family, without the usual convention that \(\sigma _{i}\) are sorted in non-increasing order or the statement that they are uniquely determined by \(M\). Downstream applications in <span class="cite">
+  <p> Theorem&#160;<a href="ch-channel_representations.html#thm:svd_of_isUnit">16.76</a> produces the singular values as an unordered family, without the usual convention that \(\sigma _{i}\) are sorted in non-increasing order or the statement that they are uniquely determined by \(M\). Downstream applications in <span class="cite">
 	[
 	
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
@@ -6592,7 +6688,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">16.78</span>
+    <span class="definition_thmlabel">16.79</span>
     <span class="definition_thmtitle">SL-filtering operation</span>
     <div class="thm_header_extras">
 
@@ -6615,7 +6711,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">16.79</span>
+    <span class="definition_thmlabel">16.80</span>
     <span class="definition_thmtitle">Doubly-stochastic map</span>
     <div class="thm_header_extras">
 
@@ -6644,7 +6740,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">16.80</span>
+    <span class="lemma_thmlabel">16.81</span>
     <span class="lemma_thmtitle">Infimum attainment for SL-filterings</span>
     <div class="thm_header_extras">
 
@@ -6667,7 +6763,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.81</span>
+    <span class="theorem_thmlabel">16.82</span>
     <span class="theorem_thmtitle">Generic normal form for CP maps</span>
     <div class="thm_header_extras">
 
@@ -6689,11 +6785,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channel_representations.html#def:sl_filtering">Definition 16.78</a></li>
+          <li><a href="ch-channel_representations.html#def:sl_filtering">Definition 16.79</a></li>
           
-          <li><a href="ch-channel_representations.html#def:doubly_stochastic">Definition 16.79</a></li>
+          <li><a href="ch-channel_representations.html#def:doubly_stochastic">Definition 16.80</a></li>
           
-          <li><a href="ch-channel_representations.html#lem:infimum_is_attained">Lemma 16.80</a></li>
+          <li><a href="ch-channel_representations.html#lem:infimum_is_attained">Lemma 16.81</a></li>
           
         </ul>
     
@@ -6705,7 +6801,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>  Let \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) be a completely positive map whose Choi matrix is positive-definite (equivalently, \(T\) has full Kraus rank). Then there exist SL-filterings \(\Phi _{1}, \Phi _{2}\) such that \(\Phi _{2} \circ T \circ \Phi _{1}\) is doubly-stochastic. <b class="bfseries">Not yet proved</b>—proof blocked on Lemma&#160;<a href="ch-channel_representations.html#lem:infimum_is_attained">16.80</a>. </p>
+  <p>  Let \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) be a completely positive map whose Choi matrix is positive-definite (equivalently, \(T\) has full Kraus rank). Then there exist SL-filterings \(\Phi _{1}, \Phi _{2}\) such that \(\Phi _{2} \circ T \circ \Phi _{1}\) is doubly-stochastic. <b class="bfseries">Not yet proved</b>—proof blocked on Lemma&#160;<a href="ch-channel_representations.html#lem:infimum_is_attained">16.81</a>. </p>
 
   </div>
 </div>
@@ -6714,7 +6810,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">16.82</span>
+    <span class="definition_thmlabel">16.83</span>
     <span class="definition_thmtitle">Diagonal Lorentz normal form</span>
     <div class="thm_header_extras">
 
@@ -6737,7 +6833,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">16.83</span>
+    <span class="definition_thmlabel">16.84</span>
     <span class="definition_thmtitle">Non-diagonal Lorentz normal form</span>
     <div class="thm_header_extras">
 
@@ -6752,7 +6848,7 @@
   </div>
   <div class="definition_thmcontent">
   <p> For a completely positive, trace-preserving qubit channel \(T' : M_{2}(\mathbb {C}) \to M_{2}(\mathbb {C})\), write \(\widehat{T'}\) in the normalized Pauli basis. The channel is in <em>non-diagonal Lorentz normal form</em> when, for some \(x \in [0,1]\), </p>
-<div class="displaymath" id="a0000025287">
+<div class="displaymath" id="a0000025289">
   \[  \widehat{T'} = \begin{pmatrix}  1 
 
 &  0 
@@ -6796,7 +6892,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">16.84</span>
+    <span class="definition_thmlabel">16.85</span>
     <span class="definition_thmtitle">Singular Lorentz normal form</span>
     <div class="thm_header_extras">
 
@@ -6811,7 +6907,7 @@
   </div>
   <div class="definition_thmcontent">
   <p> For a completely positive, trace-preserving qubit channel \(T' : M_{2}(\mathbb {C}) \to M_{2}(\mathbb {C})\), write \(\widehat{T'}\) in the normalized Pauli basis. The channel is in <em>singular Lorentz normal form</em> when </p>
-<div class="displaymath" id="a0000025288">
+<div class="displaymath" id="a0000025290">
   \[  \widehat{T'} = \begin{pmatrix}  1 
 
 &  0 
@@ -6855,7 +6951,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.85</span>
+    <span class="theorem_thmlabel">16.86</span>
     <span class="theorem_thmtitle">Lorentz normal form for qubit channels</span>
     <div class="thm_header_extras">
 
@@ -6877,15 +6973,15 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channel_representations.html#def:sl_filtering">Definition 16.78</a></li>
+          <li><a href="ch-channel_representations.html#def:sl_filtering">Definition 16.79</a></li>
           
-          <li><a href="ch-channel_representations.html#lem:infimum_is_attained">Lemma 16.80</a></li>
+          <li><a href="ch-channel_representations.html#lem:infimum_is_attained">Lemma 16.81</a></li>
           
-          <li><a href="ch-channel_representations.html#def:lorentz_diagonal">Definition 16.82</a></li>
+          <li><a href="ch-channel_representations.html#def:lorentz_diagonal">Definition 16.83</a></li>
           
-          <li><a href="ch-channel_representations.html#def:lorentz_non_diagonal">Definition 16.83</a></li>
+          <li><a href="ch-channel_representations.html#def:lorentz_non_diagonal">Definition 16.84</a></li>
           
-          <li><a href="ch-channel_representations.html#def:lorentz_singular">Definition 16.84</a></li>
+          <li><a href="ch-channel_representations.html#def:lorentz_singular">Definition 16.85</a></li>
           
         </ul>
     
@@ -6897,7 +6993,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>  For every qubit channel \(T : M_{2}(\mathbb {C}) \to M_{2}(\mathbb {C})\), there exist \(\operatorname{SL}(2, \mathbb {C})\)-filterings \(\Phi _{1}, \Phi _{2}\) such that the filtered channel \(T' = \Phi _{2} \circ T \circ \Phi _{1}\) is in one of the three Lorentz normal forms: diagonal, non-diagonal, or singular. <b class="bfseries">Not yet proved</b>—proof blocked on Lemma&#160;<a href="ch-channel_representations.html#lem:infimum_is_attained">16.80</a> and the Lorentz group classification of \(\operatorname{SL}(2, \mathbb {C})\) orbits. </p>
+  <p>  For every qubit channel \(T : M_{2}(\mathbb {C}) \to M_{2}(\mathbb {C})\), there exist \(\operatorname{SL}(2, \mathbb {C})\)-filterings \(\Phi _{1}, \Phi _{2}\) such that the filtered channel \(T' = \Phi _{2} \circ T \circ \Phi _{1}\) is in one of the three Lorentz normal forms: diagonal, non-diagonal, or singular. <b class="bfseries">Not yet proved</b>—proof blocked on Lemma&#160;<a href="ch-channel_representations.html#lem:infimum_is_attained">16.81</a> and the Lorentz group classification of \(\operatorname{SL}(2, \mathbb {C})\) orbits. </p>
 
   </div>
 </div>
@@ -6908,7 +7004,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">16.86</span>
+    <span class="definition_thmlabel">16.87</span>
     <span class="definition_thmtitle">Channel determinant</span>
     <div class="thm_header_extras">
 
@@ -6958,7 +7054,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">16.87</span>
+    <span class="remark_thmlabel">16.88</span>
     <span class="remark_thmtitle">Channel determinant as an operator determinant</span>
     <div class="thm_header_extras">
 
@@ -7000,7 +7096,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">16.88</span>
+    <span class="definition_thmlabel">16.89</span>
     <span class="definition_thmtitle">Unitary channel</span>
     <div class="thm_header_extras">
 
@@ -7046,7 +7142,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.89</span>
+    <span class="theorem_thmlabel">16.90</span>
     <span class="theorem_thmtitle">Unitary channels have determinant one</span>
     <div class="thm_header_extras">
 
@@ -7057,7 +7153,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:channel_det_unitary_eq_one">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000025289"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000025291"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7073,9 +7169,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channel_representations.html#def:channel_det">Definition 16.86</a></li>
+          <li><a href="ch-channel_representations.html#def:channel_det">Definition 16.87</a></li>
           
-          <li><a href="ch-channel_representations.html#def:unitary_channel">Definition 16.88</a></li>
+          <li><a href="ch-channel_representations.html#def:unitary_channel">Definition 16.89</a></li>
           
         </ul>
     
@@ -7112,7 +7208,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000025289">
+<div class="proof_wrapper" id="a0000025291">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7129,7 +7225,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.90</span>
+    <span class="theorem_thmlabel">16.91</span>
     <span class="theorem_thmtitle">Determinant bound for positive trace-preserving maps</span>
     <div class="thm_header_extras">
 
@@ -7140,7 +7236,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:channelDet_norm_le_one">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000025290"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000025292"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7156,7 +7252,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channel_representations.html#def:channel_det">Definition 16.86</a></li>
+          <li><a href="ch-channel_representations.html#def:channel_det">Definition 16.87</a></li>
           
           <li><a href="ch-channels.html#def:positive_map">Definition 4.1</a></li>
           
@@ -7203,7 +7299,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000025290">
+<div class="proof_wrapper" id="a0000025292">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7220,7 +7316,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.91</span>
+    <span class="theorem_thmlabel">16.92</span>
     <span class="theorem_thmtitle">Determinant one iff the channel is unitary</span>
     <div class="thm_header_extras">
 
@@ -7231,7 +7327,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:channelDet_norm_eq_one_iff_unitary">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000025291"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000025293"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7249,13 +7345,13 @@
           
           <li><a href="ch-channels.html#def:channel">Definition 4.11</a></li>
           
-          <li><a href="ch-channel_representations.html#def:channel_det">Definition 16.86</a></li>
+          <li><a href="ch-channel_representations.html#def:channel_det">Definition 16.87</a></li>
           
-          <li><a href="ch-channel_representations.html#def:unitary_channel">Definition 16.88</a></li>
+          <li><a href="ch-channel_representations.html#def:unitary_channel">Definition 16.89</a></li>
           
-          <li><a href="ch-channel_representations.html#thm:channelDet_norm_le_one">Theorem 16.90</a></li>
+          <li><a href="ch-channel_representations.html#thm:channelDet_norm_le_one">Theorem 16.91</a></li>
           
-          <li><a href="ch-channel_representations.html#thm:channel_det_unitary_eq_one">Theorem 16.89</a></li>
+          <li><a href="ch-channel_representations.html#thm:channel_det_unitary_eq_one">Theorem 16.90</a></li>
           
         </ul>
     
@@ -7287,7 +7383,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For a CPTP map \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\), </p>
-<div class="displaymath" id="a0000025292">
+<div class="displaymath" id="a0000025294">
   \[  |\det T| = 1 \iff \exists \,  U \in \mathcal{U}(D),\quad T(\rho ) = U\rho U^\dagger .  \]
 </div>
 <p> This is <span class="cite">
@@ -7300,7 +7396,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000025291">
+<div class="proof_wrapper" id="a0000025293">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7308,7 +7404,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Reverse direction is Theorem&#160;<a href="ch-channel_representations.html#thm:channel_det_unitary_eq_one">16.89</a>. Forward direction: \(|\det T| = 1\) together with \(|\mu | \le 1\) for every eigenvalue \(\mu \) (from trace preservation and positivity) forces every eigenvalue to satisfy \(|\mu | = 1\). Hence \(T\) is bijective. A bijective CPTP map is a \(*\)-automorphism: the Heisenberg dual \(T^*(Y) = \sum _i K_i^\dagger Y K_i\) is unital (since \(T\) is TP), so the Kadison–Schwarz inequality \(T^*(Y^\dagger Y) \ge T^*(Y)^\dagger T^*(Y)\) becomes an equality for every \(Y\). Hence \(T^*\), and therefore \(T\), preserves products. By the Skolem–Noether theorem, every \(*\)-automorphism of \(M_{D}(\mathbb {C})\) has the form \(T(\rho ) = U \rho U^\dagger \) for some unitary \(U\). Kraus freedom then gives \(K_i = c_i U\) with \(\sum _i |c_i|^2 = 1\). </p>
+  <p> Reverse direction is Theorem&#160;<a href="ch-channel_representations.html#thm:channel_det_unitary_eq_one">16.90</a>. Forward direction: \(|\det T| = 1\) together with \(|\mu | \le 1\) for every eigenvalue \(\mu \) (from trace preservation and positivity) forces every eigenvalue to satisfy \(|\mu | = 1\). Hence \(T\) is bijective. A bijective CPTP map is a \(*\)-automorphism: the Heisenberg dual \(T^*(Y) = \sum _i K_i^\dagger Y K_i\) is unital (since \(T\) is TP), so the Kadison–Schwarz inequality \(T^*(Y^\dagger Y) \ge T^*(Y)^\dagger T^*(Y)\) becomes an equality for every \(Y\). Hence \(T^*\), and therefore \(T\), preserves products. By the Skolem–Noether theorem, every \(*\)-automorphism of \(M_{D}(\mathbb {C})\) has the form \(T(\rho ) = U \rho U^\dagger \) for some unitary \(U\). Kraus freedom then gives \(K_i = c_i U\) with \(\sum _i |c_i|^2 = 1\). </p>
 
   </div>
 </div>
