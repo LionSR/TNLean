@@ -40,6 +40,8 @@ attribute [scoped instance]
   Matrix.linftyOpNormedRing
   Matrix.linftyOpNormedAlgebra
 
+open scoped TNOperatorSpace
+
 section MatrixInstances
 
 variable (n : Type*) [Fintype n] [DecidableEq n]
@@ -82,27 +84,20 @@ instance : LinearMap.CompatibleSMul (Matrix n n ℂ) ℂ ℝ ℂ where
 
 end MatrixInstances
 
-@[implicit_reducible] def instNormedAddCommGroupMatrixCLM
-    (n : Type*) [Fintype n] [DecidableEq n] :
-    NormedAddCommGroup (TNLean.MatrixCLM n) :=
-  ContinuousLinearMap.toNormedAddCommGroup
-
-instance instENormedAddCommMonoidMatrixCLM
-    (n : Type*) [Fintype n] [DecidableEq n] :
-    ENormedAddCommMonoid (TNLean.MatrixCLM n) := by
-  letI : NormedAddCommGroup (TNLean.MatrixCLM n) :=
-    instNormedAddCommGroupMatrixCLM n
-  exact NormedAddCommGroup.toENormedAddCommMonoid
-
 @[implicit_reducible] instance (priority := 100) instNormedRingMatrixCLM
     (n : Type*) [Fintype n] [DecidableEq n] :
     NormedRing (TNLean.MatrixCLM n) :=
   ContinuousLinearMap.toNormedRing
 
-instance instIsUniformAddGroupMatrixCLM
+@[implicit_reducible] instance instNormedAlgebraComplexMatrixCLM
     (n : Type*) [Fintype n] [DecidableEq n] :
-    IsUniformAddGroup (TNLean.MatrixCLM n) :=
-  ContinuousLinearMap.isUniformAddGroup
+    NormedAlgebra ℂ (TNLean.MatrixCLM n) :=
+  ContinuousLinearMap.toNormedAlgebra
+
+instance instENormedAddCommMonoidMatrixCLM
+    (n : Type*) [Fintype n] [DecidableEq n] :
+    ENormedAddCommMonoid (TNLean.MatrixCLM n) :=
+  NormedAddCommGroup.toENormedAddCommMonoid
 
 instance instPseudoMetrizableSpaceMatrixCLM
     (n : Type*) [Fintype n] [DecidableEq n] :
@@ -113,55 +108,6 @@ instance instIsTopologicalRingMatrixCLM
     (n : Type*) [Fintype n] [DecidableEq n] :
     IsTopologicalRing (TNLean.MatrixCLM n) :=
   NonUnitalSeminormedRing.toIsTopologicalRing
-
-@[implicit_reducible] instance instNormedSpaceComplexMatrixCLM
-    (n : Type*) [Fintype n] [DecidableEq n] :
-    NormedSpace ℂ (TNLean.MatrixCLM n) :=
-  ContinuousLinearMap.toNormedSpace
-
-instance instIsBoundedSMulComplexMatrixCLM
-    (n : Type*) [Fintype n] [DecidableEq n] :
-    IsBoundedSMul ℂ (TNLean.MatrixCLM n) :=
-  IsBoundedSMul.of_norm_smul_le (fun z T =>
-    (instNormedSpaceComplexMatrixCLM n).norm_smul_le z T)
-
-instance instContinuousSMulComplexMatrixCLM
-    (n : Type*) [Fintype n] [DecidableEq n] :
-    @ContinuousSMul ℂ (TNLean.MatrixCLM n) _ _
-      (@UniformSpace.toTopologicalSpace (TNLean.MatrixCLM n) inferInstance) where
-  continuous_smul := by
-    refine (@ContinuousSMul.of_nhds_zero ℂ (TNLean.MatrixCLM n) _ _ _ _ _ _ _
-      ?_ ?_ ?_).continuous_smul
-    · exact Filter.Tendsto.zero_smul_isBoundedUnder_le
-        (show Tendsto (fun p : ℂ × TNLean.MatrixCLM n => p.1)
-          (𝓝 (0 : ℂ) ×ˢ 𝓝 (0 : TNLean.MatrixCLM n)) (𝓝 (0 : ℂ)) from
-          tendsto_fst)
-        ((show Tendsto (fun p : ℂ × TNLean.MatrixCLM n => p.2)
-          (𝓝 (0 : ℂ) ×ˢ 𝓝 (0 : TNLean.MatrixCLM n))
-          (𝓝 (0 : TNLean.MatrixCLM n)) from tendsto_snd).norm.isBoundedUnder_le)
-    · intro T
-      exact Filter.Tendsto.zero_smul_isBoundedUnder_le
-        (show Tendsto (fun z : ℂ => z) (𝓝 (0 : ℂ)) (𝓝 (0 : ℂ)) from tendsto_id)
-        ((show Tendsto (fun _ : ℂ => T) (𝓝 (0 : ℂ)) (𝓝 T) from
-          tendsto_const_nhds).norm.isBoundedUnder_le)
-    · intro z
-      exact Filter.IsBoundedUnder.smul_tendsto_zero
-        ((show Tendsto (fun _ : TNLean.MatrixCLM n => z)
-          (𝓝 (0 : TNLean.MatrixCLM n)) (𝓝 z) from
-          tendsto_const_nhds).norm.isBoundedUnder_le)
-        (show Tendsto (fun T : TNLean.MatrixCLM n => T)
-          (𝓝 (0 : TNLean.MatrixCLM n)) (𝓝 (0 : TNLean.MatrixCLM n)) from tendsto_id)
-
-@[implicit_reducible] instance instNormedAlgebraComplexMatrixCLM
-    (n : Type*) [Fintype n] [DecidableEq n] :
-    NormedAlgebra ℂ (TNLean.MatrixCLM n) :=
-  ContinuousLinearMap.toNormedAlgebra
-
-@[implicit_reducible] instance instNormedSpaceRealMatrixCLM
-    (n : Type*) [Fintype n] [DecidableEq n] :
-    @NormedSpace ℝ (TNLean.MatrixCLM n) _
-      ContinuousLinearMap.toNormedAddCommGroup.toSeminormedAddCommGroup :=
-  ContinuousLinearMap.toNormedSpace
 
 instance (n : Type*) [Fintype n] [DecidableEq n] :
     ContinuousSMul ℝ (TNLean.MatrixCLM n) where
@@ -201,6 +147,37 @@ instance (n : Type*) [Fintype n] [DecidableEq n] :
 instance (n : Type*) [Fintype n] [DecidableEq n] :
     FiniteDimensional ℂ (TNLean.MatrixCLM n) :=
   (Module.End.toContinuousLinearMap (Matrix n n ℂ)).toLinearEquiv.finiteDimensional
+
+instance (n : Type*) [Fintype n] [DecidableEq n] :
+    IsUniformAddGroup (TNLean.MatrixCLM n) :=
+  ContinuousLinearMap.isUniformAddGroup
+
+instance instContinuousSMulComplexMatrixCLM
+    (n : Type*) [Fintype n] [DecidableEq n] :
+    @ContinuousSMul ℂ (TNLean.MatrixCLM n) _ _
+      (@UniformSpace.toTopologicalSpace (TNLean.MatrixCLM n) inferInstance) where
+  continuous_smul := by
+    refine (@ContinuousSMul.of_nhds_zero ℂ (TNLean.MatrixCLM n) _ _ _ _ _ _ _
+      ?_ ?_ ?_).continuous_smul
+    · exact Filter.Tendsto.zero_smul_isBoundedUnder_le
+        (show Tendsto (fun p : ℂ × TNLean.MatrixCLM n => p.1)
+          (𝓝 (0 : ℂ) ×ˢ 𝓝 (0 : TNLean.MatrixCLM n)) (𝓝 (0 : ℂ)) from
+          tendsto_fst)
+        ((show Tendsto (fun p : ℂ × TNLean.MatrixCLM n => p.2)
+          (𝓝 (0 : ℂ) ×ˢ 𝓝 (0 : TNLean.MatrixCLM n))
+          (𝓝 (0 : TNLean.MatrixCLM n)) from tendsto_snd).norm.isBoundedUnder_le)
+    · intro T
+      exact Filter.Tendsto.zero_smul_isBoundedUnder_le
+        (show Tendsto (fun z : ℂ => z) (𝓝 (0 : ℂ)) (𝓝 (0 : ℂ)) from tendsto_id)
+        ((show Tendsto (fun _ : ℂ => T) (𝓝 (0 : ℂ)) (𝓝 T) from
+          tendsto_const_nhds).norm.isBoundedUnder_le)
+    · intro z
+      exact Filter.IsBoundedUnder.smul_tendsto_zero
+        ((show Tendsto (fun _ : TNLean.MatrixCLM n => z)
+          (𝓝 (0 : TNLean.MatrixCLM n)) (𝓝 z) from
+          tendsto_const_nhds).norm.isBoundedUnder_le)
+        (show Tendsto (fun T : TNLean.MatrixCLM n => T)
+          (𝓝 (0 : TNLean.MatrixCLM n)) (𝓝 (0 : TNLean.MatrixCLM n)) from tendsto_id)
 
 instance (n : Type*) [Fintype n] [DecidableEq n] :
     CompleteSpace (TNLean.MatrixCLM n) :=
