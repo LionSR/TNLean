@@ -175,9 +175,13 @@ private theorem heisenberg_dual_ks_eq_stdBasis [NeZero d]
       simp only [Matrix.trace_sub, Complex.sub_re, Finset.sum_sub_distrib]
     rw [hsum_eq]
     nlinarith [hfirst, hsecond_ge]
+  have hgap_trace_sum_zero : ∑ ij : Fin d × Fin d,
+      (Matrix.trace (Td (e ij * (e ij)ᴴ) - Td (e ij) * (Td (e ij))ᴴ)).re = 0 :=
+    le_antisymm hgap_trace_sum_le (Fintype.sum_nonneg hgap_trace_nonneg)
   have hgap_trace_zero : ∀ ij : Fin d × Fin d,
       (Matrix.trace (Td (e ij * (e ij)ᴴ) - Td (e ij) * (Td (e ij))ᴴ)).re = 0 :=
-    eq_zero_of_nonneg_of_sum_le_zero _ hgap_trace_nonneg hgap_trace_sum_le
+    fun ij => congrFun
+      ((Fintype.sum_eq_zero_iff_of_nonneg hgap_trace_nonneg).mp hgap_trace_sum_zero) ij
   intro ij
   have hpsd := hgap_psd ij
   have htr_re := hgap_trace_zero ij
