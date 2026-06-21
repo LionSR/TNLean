@@ -3,10 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 
+import TNLean.Algebra.HermitianHelpers
 import TNLean.Spectral.MixedTransfer
 import TNLean.Spectral.TraceExpansion
-import TNLean.Wielandt.Primitivity.TracePairing
 import TNLean.Wielandt.Primitivity.PrimitiveBridge
+import TNLean.Wielandt.Primitivity.TracePairing
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.Data.Complex.BigOperators
 import Mathlib.LinearAlgebra.Matrix.Trace
@@ -180,8 +181,20 @@ private theorem eq_zero_of_trace_conjTranspose_mul_posDef_mul_eq_zero
   -- But star(Bv) ⬝ᵥ ρ(Bv) = v†(B†ρB)v = 0
   have : star (B *ᵥ Pi.single j 1) ⬝ᵥ ρ.mulVec (B *ᵥ Pi.single j 1) =
       star (Pi.single j (1 : ℂ)) ⬝ᵥ (Bᴴ * ρ * B).mulVec (Pi.single j 1) := by
-    simp only [star_mulVec, Matrix.dotProduct_mulVec, Matrix.vecMul_vecMul,
-      Matrix.mulVec_mulVec, Matrix.mul_assoc]
+    have hvec : (Bᴴ * ρ * B).mulVec (Pi.single j 1) =
+        Bᴴ *ᵥ (ρ *ᵥ (B *ᵥ Pi.single j 1)) := by
+      rw [Matrix.mulVec_mulVec, Matrix.mulVec_mulVec]
+    calc
+      star (B *ᵥ Pi.single j 1) ⬝ᵥ ρ.mulVec (B *ᵥ Pi.single j 1)
+          = star (Pi.single j (1 : ℂ)) ⬝ᵥ
+              Bᴴ *ᵥ (ρ *ᵥ (B *ᵥ Pi.single j 1)) := by
+                simpa [Matrix.conjTranspose_conjTranspose] using
+                  (HermitianHelpers.dotProduct_mulVec_conjTranspose (M := Bᴴ)
+                    (x := Pi.single j (1 : ℂ))
+                    (y := ρ *ᵥ (B *ᵥ Pi.single j 1))).symm
+      _ = star (Pi.single j (1 : ℂ)) ⬝ᵥ
+            (Bᴴ * ρ * B).mulVec (Pi.single j 1) := by
+              rw [hvec]
   rw [this, hBρB] at hpos
   simp at hpos
 
