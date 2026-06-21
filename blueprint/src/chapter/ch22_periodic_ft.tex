@@ -1245,13 +1245,18 @@ unconditional result.
         =
         \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
     \]
-    Let $\widetilde F_{u+q}^{\mathbf i}$ denote the same cyclic repeated product
-    formed from the matrices $\widetilde B_{u+q},\ldots,\widetilde B_{u+q+m-1}$.
-    The block identity gives
+    Let $\widetilde F_{u+q+r}^{\mathbf i}$ denote the same cyclic repeated
+    product formed from
+    $\widetilde B_{u+q+r},\ldots,\widetilde B_{u+q+r+m-1}$. For every
+    $r\in\mathbb Z_m$, the block identity gives
     \[
-        F_u^{\mathbf i}
+        F_{u+r}^{\mathbf i}
         =
-        e^{iN_0\lambda_{u+q}}\widetilde F_{u+q}^{\mathbf i}.
+        e^{iN_0\lambda_{u+q+r}}\widetilde F_{u+q+r}^{\mathbf i},
+        \qquad
+        \widetilde F_{u+q+r}^{\mathbf i}
+        =
+        e^{-iN_0\lambda_{u+q+r}}F_{u+r}^{\mathbf i}.
     \]
     % Local fix (docs/paper-gaps/1708_periodic_overlap_route_alignment.tex):
     % arXiv:1708.00029, lines 1041--1060, displays $m-1$ inverses although the
@@ -1266,7 +1271,23 @@ unconditional result.
             \otimes\Omega_u\ }
         A_u^{i_1}\otimes A_{u+1}^{i_2}\otimes\cdots\otimes A_{u+m-1}^{i_m}.
     \]
-    The block identity applied to the word with inserted repeated products gives
+    The interleaved word is an $(mN_0+1)$-fold product of $m$-site blocks
+    beginning at the sector $u$:
+    \[
+        \begin{aligned}
+        A_u^{i_1}F_{u+1}^{\mathbf i_1}
+        A_{u+1}^{i_2}F_{u+2}^{\mathbf i_2}
+        \cdots
+        A_{u+m-1}^{i_m}F_u^{\mathbf i_m}
+        &=
+        (A_u^{j_{0,1}}\cdots A_{u+m-1}^{j_{0,m}})
+        \cdots \\
+        &\quad\cdot
+        (A_u^{j_{mN_0,1}}\cdots A_{u+m-1}^{j_{mN_0,m}})
+        \end{aligned}
+    \]
+    for the corresponding physical indices $j_{s,t}$. Applying the block identity
+    at the sector $u$ to each of these $m$-site blocks gives
     \[
         A_u^{i_1}F_{u+1}^{\mathbf i_1}
         A_{u+1}^{i_2}F_{u+2}^{\mathbf i_2}
@@ -1279,10 +1300,10 @@ unconditional result.
         \cdots
         \widetilde B_{u+q+m-1}^{i_m}\widetilde F_{u+q}^{\mathbf i_m}.
     \]
-    Since each $\Omega_{u+r}$ contraction of $\widetilde F_{u+q+r}$ contributes
-    $e^{-iN_0\lambda_{u+q+r}}$, applying
-    $\Omega_{u+1}\otimes\cdots\otimes\Omega_{u+m-1}\otimes\Omega_u$ to both
-    sides gives
+    The displayed identity for $\widetilde F_{u+q+r}^{\mathbf i}$ supplies the
+    phase factor $e^{-iN_0\lambda_{u+q+r}}$ when $\Omega_{u+r}$ collapses
+    $F_{u+r}^{\mathbf i}$. Tensoring these identities over $r$ and applying
+    $\Omega_{u+1}\otimes\cdots\otimes\Omega_{u+m-1}\otimes\Omega_u$ gives
     \[
         \begin{aligned}
         A_u^{i_1}\otimes A_{u+1}^{i_2}\otimes\cdots\otimes A_{u+m-1}^{i_m}
