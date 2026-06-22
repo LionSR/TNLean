@@ -195,8 +195,9 @@ in both cases.
     \leanok
     \uses{lem:block_diagonal_boundary_local_sum_mem,
         lem:block_diagonal_boundary_crossing_trace_decomposition}
-    Assume $0<N$, $L\le N$, and $\mu_j\ne0$ for every block $j$. Let the
-    cyclic interval beginning at $i$ cross the boundary cut, so $N<i+L$. Let
+    Assume that the physical dimension $d$ is positive, $0<N$, $L\le N$, and
+    $\mu_j\ne0$ for every block $j$. Let the cyclic interval beginning at $i$
+    cross the boundary cut, so $N<i+L$. Let
     \[
         \psi\in
         \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right),
@@ -218,8 +219,9 @@ in both cases.
     \leanok
     \uses{lem:block_diagonal_boundary_local_sum_mem,
         lem:block_diagonal_boundary_crossing_trace_decomposition}
-    Choose an outside configuration $\tau$ whose entries between the end of the
-    interval and the cut are the word $\rho$. By the nonzero-weight hypothesis,
+    Since $d>0$, extend the outside word $\rho$ to a full outside configuration
+    $\tau$ whose entries between the end of the interval and the cut are the
+    word $\rho$. By the nonzero-weight hypothesis,
     Lemma~\ref{lem:block_diagonal_boundary_local_sum_mem} applies and puts the
     sum of the corresponding block restrictions in $\bigvee_jG_L(A_j)$. Applying
     Lemma~\ref{lem:block_diagonal_boundary_crossing_trace_decomposition} gives
