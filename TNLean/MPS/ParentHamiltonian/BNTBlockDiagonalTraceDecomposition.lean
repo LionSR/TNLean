@@ -254,8 +254,9 @@ This is the explicit-boundary trace-decomposition step in
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1436--1451, specialized to
 the block-diagonal boundary conditions in arXiv:2011.12127, Section IV.C,
 lines 2126--2128. It records only the fixed wrapped-tail length \(N-i\)
-provided by the local cyclic-window constraint; the separate common-middle-word
-trace theorem keeps its common length \(m\) as an explicit hypothesis.
+provided by the local cyclic-window constraint; the separate middle-word trace
+theorem keeps the common product-spanning length \(m\) as an explicit
+hypothesis.
 
 **Scope restriction (boundary representation):** The block-diagonal boundary
 representation of \(\psi\) is a hypothesis here. Removing this remaining input
