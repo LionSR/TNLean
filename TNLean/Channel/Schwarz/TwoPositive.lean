@@ -298,6 +298,18 @@ theorem IsNPositiveMap.mono {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ} {k :
   ext ip jq
   simp [emb, X', Matrix.reindex_apply, he_castSucc]
 
+omit [DecidableEq n] [Fintype n] in
+/-- If `m ≤ k`, then `k`-positivity implies `m`-positivity.
+
+This is the inclusion direction in Wolf Chapter 3, Equation (3.3):
+the cones of positive maps become larger as the amplification dimension
+decreases. -/
+theorem IsNPositiveMap.mono_of_le {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ} {m k : ℕ}
+    (hmk : m ≤ k) (h : IsNPositiveMap k E) : IsNPositiveMap m E := by
+  exact Nat.le_induction (P := fun k _ => IsNPositiveMap k E → IsNPositiveMap m E)
+    (fun h => h)
+    (fun _ _ ih hk => ih (IsNPositiveMap.mono hk)) k hmk h
+
 omit [DecidableEq n] in
 /-- CP maps are 2-positive. -/
 theorem IsCPMap.is2PositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}

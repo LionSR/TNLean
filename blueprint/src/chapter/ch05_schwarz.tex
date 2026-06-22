@@ -134,6 +134,13 @@ maps.
     Positivity under amplification is monotone in $k$.
 \end{theorem}
 
+\begin{theorem}[$k$-positive implies $m$-positive for $m \le k$]
+    \lean{IsNPositiveMap.mono_of_le}
+    \leanok
+    If a linear map is positive after amplification by $k$ and $m \le k$, then
+    it is positive after amplification by $m$.
+\end{theorem}
+
 \begin{theorem}[Completely positive implies two-positive]
     \lean{IsCPMap.is2PositiveMap}
     \leanok
