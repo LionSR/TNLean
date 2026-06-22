@@ -282,18 +282,17 @@ as an unconditional hypothesis-free equality theorem in the source range.\footno
 \leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_complementary_identities_bnt_c1}, and
 \leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_complementary_identities}.}
 
-The live blueprint records that larger source statement with explicit citations
-and separates these opened-boundary coordinates from the paper's boundary indices,
-without claiming that the source statement is proved.\footnote{Blueprint locations:
-\path{def:parent_hamiltonian_ground_space_bnt} for the block-diagonal
-periodic-boundary ground space,
-\path{lem:isup_chain_ground_space_block_le_assembled} for the forward
-inclusion, \path{thm:block_diagonal_ground_space_intersection} for the
-block-diagonal intersection identity from
-\cite[Theorem~12]{PerezGarcia2007MPSReps},
-\path{thm:parent_ground_space_le_bnt_span} for the parent-ground-space
-containment, and \path{thm:gs_eq_bnt_span} for the final span statement, all in
-\path{blueprint/src/chapter/ch13_parent_hamiltonian_bnt_consequences.tex}.} With this notation,
+The live blueprint records the block-diagonal periodic-boundary ground space,
+the forward inclusion, the block-diagonal intersection identity from
+\cite[Theorem~12]{PerezGarcia2007MPSReps}, the parent-ground-space
+containment, and the final span statement with explicit citations. It also
+separates these opened-boundary coordinates from the paper's boundary indices,
+without claiming that the source statement is proved.
+% Blueprint labels: def:parent_hamiltonian_ground_space_bnt,
+% lem:isup_chain_ground_space_block_le_assembled,
+% thm:block_diagonal_ground_space_intersection,
+% thm:parent_ground_space_le_bnt_span, thm:gs_eq_bnt_span.
+With this notation,
 \begin{align}
   \sum_{j=1}^b\mathcal K_{N,L}(A_j)
   =
@@ -495,10 +494,10 @@ constraint once the block-diagonal boundary representation is fixed: for
 \end{align}
 This fixed-tail statement is recorded as
 \leanid{MPSTensor.blockDiagonal_boundary_crossing_trace_decomposition_of_boundary}.
-It should not be read as the common-middle-word trace hypothesis above: the
-fixed cyclic window gives the wrapped tail length \(N-i\), whereas the
-separating trace-decomposition implication is stated at a common product-span
-length \(m\).
+It should not be read as the middle-word trace hypothesis at a common
+product-spanning length: the fixed cyclic window gives the wrapped tail length
+\(N-i\), whereas the separating trace-decomposition implication is stated at a
+common product-span length \(m\).
 
 In the normalized BNT finite range, this common middle-word span is no longer an
 external assumption. If
