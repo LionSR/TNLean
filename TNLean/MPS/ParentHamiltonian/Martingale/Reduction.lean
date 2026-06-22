@@ -757,7 +757,7 @@ theorem parentHamiltonianES_gap_bound_of_principal_angle_compression
 /-- Uniform gap-bound reduction from an overlap operator-product norm estimate
 with a separate coefficient.
 
-This is the symmetric, source-faithful counterpart of
+This is the symmetric counterpart of
 `parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_le`.  The
 hypothesis is the operator-product norm bound
 \[
@@ -766,11 +766,14 @@ hypothesis is the operator-product norm bound
 that is, a bound on \(\|h_i h_j\|\), rather than the directional compression
 bound \(\|h_i (h_j v)\| \le \eta\,\|h_i v\|\).  The directional bound, holding for
 every \(v\), forces \(h_j\) to preserve \(\ker h_i\); the operator-product bound
-imposes no such constraint, and is the natural form of the principal-angle
-quantity.  Through `re_inner_anticommutator_ge_neg_of_norm_apply_le` it yields the
-symmetric anticommutator estimate of arXiv:2011.12127, Section IV.C, equation
-eq:4:martingale-2, with per-pair coefficient \(\eta\), and hence the same
-finite-overlap martingale gap as the anticommutator route. -/
+imposes no such constraint.  Through `re_inner_anticommutator_ge_neg_of_norm_apply_le`
+it yields the symmetric anticommutator estimate of arXiv:2011.12127, Section
+IV.C, equation eq:4:martingale-2, with per-pair coefficient \(\eta\), and hence
+the same finite-overlap martingale gap as the anticommutator route.  Both this
+operator-product bound and the directional bound are conditional reductions: for
+the overlapping excitation projections \(h_i, h_j\) one has \(\|h_i h_j\| = 1\)
+when the ranges intersect, so neither hypothesis is satisfiable for
+\(\eta < 1\).  See `docs/paper-gaps/cpgsv21_martingale_overlap.tex`. -/
 theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_le
     (A : MPSTensor d D) (L : ℕ) (hL : 1 < L) {γ η : ℝ}
     (hγpos : 0 < γ) (hγle : γ ≤ 1)
@@ -842,9 +845,11 @@ If every overlapping off-diagonal cyclic pair satisfies the operator-product nor
 estimate \(\|h_i (h_j v)\| \le \eta\,\|h_j v\|\) and \(\eta\,2(L-1) < 1\), then the
 Euclidean-space parent Hamiltonians have gap constant \(1 - \eta\,2(L-1)\).  This is
 the symmetric (operator-product) analogue of
-`parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_lt`, and the
-direct conditional entry point for the principal-angle estimate
-\(\|h_i h_j\| < 1/(2(L-1))\). -/
+`parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_lt`.  Like
+that directional reduction, it is conditional: for the overlapping excitation
+projections \(\|h_i h_j\| = 1\) when the ranges intersect, so the hypothesis is
+unsatisfiable for \(\eta < 1\).  See
+`docs/paper-gaps/cpgsv21_martingale_overlap.tex`. -/
 theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_lt
     (A : MPSTensor d D) (L : ℕ) (hL : 1 < L) {η : ℝ}
     (hηnonneg : 0 ≤ η)

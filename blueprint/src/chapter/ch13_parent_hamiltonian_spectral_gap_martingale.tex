@@ -338,6 +338,42 @@
     $\eta=(1-1/(4L))/(2(L-1))$.
 \end{proof}
 
+\begin{theorem}[Gap bound from a cyclic operator-product norm constant]
+    \label{thm:overlap_operator_norm_gap_bound_constant}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_overlap_operator_norm_constant}
+    \leanok
+    \uses{lem:parent_hamiltonian_cyclic_overlap_operator_norm_constant_gap}
+    Let $L>1$. Put $m=2(L-1)$. Suppose there is a constant $\eta\ge0$ with
+    $\eta m<1$ and that, for every $N\ge2L$ and every overlapping off-diagonal pair
+    of cyclic length-$L$ windows,
+    \[
+        \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
+        \le
+        \eta\,\|h_{j,\mathrm{ES}}v\|,
+    \]
+    that is, a bound $\|h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}\|\le\eta$ on the
+    operator-product norm rather than the directional bound of
+    Theorem~\ref{thm:overlap_norm_gap_bound_constant}. Then the parent Hamiltonian
+    has the gap constant $1-\eta m>0$. Concretely, if $N\ge2L$ and
+    $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$, then
+    \[
+        (1-\eta m)\|v\|\le \|H_{N,L}^{\mathrm{ES}}(A)v\|.
+    \]
+    This is a conditional reduction. The local terms
+    $h_{i,\mathrm{ES}}=p_i$ are the \emph{excitation} projections, so
+    $\|h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}\|=1$ whenever the overlapping ranges
+    intersect; the hypothesis is then unsatisfiable for $\eta<1$, and it is not the
+    quantity controlled by the cited principal-angle estimates. The comparison is
+    documented in \path{docs/paper-gaps/cpgsv21_martingale_overlap.tex}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_operator_norm_constant_gap},
+    with $\gamma=1-\eta m$, applies to the displayed operator-product hypothesis and
+    gives $0<1-\eta m$ together with the stated norm lower bound.
+\end{proof}
+
 \begin{theorem}[Conditional spectral gap for MPS parent Hamiltonians]
     \label{thm:parent_hamiltonian_gapped}
     \lean{MPSTensor.parentHamiltonian_gapped}
@@ -386,5 +422,36 @@
 \begin{proof}
     \leanok
     This follows from Theorem~\ref{thm:overlap_norm_gap_bound_constant} by taking
+    $\gamma=1-\eta\,2(L-1)$.
+\end{proof}
+
+\begin{theorem}[Conditional spectral gap from an operator-product norm constant]
+    \label{thm:parent_hamiltonian_gapped_operator_norm_constant}
+    \lean{MPSTensor.parentHamiltonian_gapped_of_overlap_operator_norm_constant}
+    \leanok
+    \uses{thm:overlap_operator_norm_gap_bound_constant}
+    For a tensor $A$ and a range $L>1$, suppose there is a constant
+    $\eta\ge0$ such that $\eta\,2(L-1)<1$ and, for every $N\ge2L$ and every
+    overlapping off-diagonal pair of cyclic length-$L$ windows,
+    \[
+        \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
+        \le
+        \eta\,\|h_{j,\mathrm{ES}}v\|.
+    \]
+    Then there exists $\gamma>0$ such that, for every $N\ge2L$ and every vector
+    $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$,
+    \[
+        \gamma\|v\|\le \|H_{N,L}^{\mathrm{ES}}(A)v\|.
+    \]
+    As in Theorem~\ref{thm:overlap_operator_norm_gap_bound_constant} this is a
+    conditional reduction: the operator-product hypothesis is unsatisfiable for the
+    overlapping excitation projections, where
+    $\|h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}\|=1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This follows from
+    Theorem~\ref{thm:overlap_operator_norm_gap_bound_constant} by taking
     $\gamma=1-\eta\,2(L-1)$.
 \end{proof}

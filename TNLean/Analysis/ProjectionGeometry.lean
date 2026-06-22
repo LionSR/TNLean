@@ -93,11 +93,16 @@ arithmetic--geometric mean inequality `2 ‖P v‖ ‖Q v‖ ≤ ‖P v‖² + �
 
 This is the symmetric counterpart of
 `re_inner_apply_apply_ge_neg_of_norm_apply_le`.  Its hypothesis
-`‖P (Q v)‖ ≤ c ‖Q v‖` is the operator-product norm form of the principal-angle
-quantity (a bound on `‖P Q‖`).  Unlike the directional bound, it does not force
-`Q` to preserve `ker P`: the constraint is vacuous on `ker Q`.  Its conclusion is
-exactly the anticommutator quadratic form `P Q + Q P ≥ -c (P + Q)` of
-arXiv:2011.12127, Section IV.C, equation eq:4:martingale-2. -/
+`‖P (Q v)‖ ≤ c ‖Q v‖` is the operator-product norm form of a bound on `‖P Q‖`.
+Imposed for every `v`, it is equivalent to the operator-norm bound `‖P Q‖ ≤ c`
+(using idempotence of `Q`), so it is not a weaker condition than the directional
+bound: it is exactly as strong as requiring `‖P Q‖ ≤ c`.  The two hypotheses
+differ only in which kernel is left free — the directional bound forces `Q` to
+preserve `ker P`, while this bound does not — but neither is the easier of the
+two, and whenever `range P` and `range Q` share a nonzero vector both force
+`c ≥ 1`.  Its conclusion is exactly the anticommutator quadratic form
+`P Q + Q P ≥ -c (P + Q)` of arXiv:2011.12127, Section IV.C, equation
+eq:4:martingale-2. -/
 theorem re_inner_anticommutator_ge_neg_of_norm_apply_le {P Q : E →ₗ[𝕜] E}
     (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection) {c : ℝ}
     (hc : 0 ≤ c) (hNorm : ∀ v : E, ‖P (Q v)‖ ≤ c * ‖Q v‖) (v : E) :

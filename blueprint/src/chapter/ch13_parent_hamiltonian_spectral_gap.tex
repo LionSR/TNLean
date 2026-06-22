@@ -475,6 +475,7 @@ sufficient stronger hypotheses.
     \lean{LinearMap.IsSymmetricProjection.re_inner_apply_apply_self}
     \lean{LinearMap.IsSymmetricProjection.re_inner_apply_apply_nonneg_of_commute}
     \lean{LinearMap.IsSymmetricProjection.re_inner_apply_apply_ge_neg_of_norm_apply_le}
+    \lean{LinearMap.IsSymmetricProjection.re_inner_anticommutator_ge_neg_of_norm_apply_le}
     \lean{ProjectionGeometry.re_inner_sum_apply_left}
     \lean{ProjectionGeometry.apply_eq_zero_of_sum_apply_eq_zero}
     \lean{ProjectionGeometry.re_inner_sum_apply_apply}
@@ -491,6 +492,11 @@ sufficient stronger hypotheses.
     $P,Q$; the Cauchy--Schwarz conversion from
     $\|P Q v\|\le c\|Pv\|$ to
     $\operatorname{Re}\langle Pv,Qv\rangle\ge -c\operatorname{Re}\langle Pv,v\rangle$;
+    the symmetric variant converting the operator-product bound
+    $\|P Q v\|\le c\|Qv\|$ to the anticommutator estimate
+    $\operatorname{Re}\langle Pv,Qv\rangle+\operatorname{Re}\langle Qv,Pv\rangle
+    \ge -c\bigl(\operatorname{Re}\langle Pv,v\rangle
+    +\operatorname{Re}\langle Qv,v\rangle\bigr)$;
     finite-sum expansions of
     $\operatorname{Re}\langle (\sum_i P_i)v,v\rangle$ and
     $\operatorname{Re}\langle (\sum_i P_i)v,(\sum_i P_i)v\rangle$; the
@@ -1143,6 +1149,60 @@ sufficient stronger hypotheses.
     off-diagonal neighbours in each row, while the non-overlap positivity lemma
     handles disjoint supports. The finite-overlap norm-compression reduction gives
     the quadratic-form estimate with the chosen $\gamma$, and the positive
+    quadratic-form criterion converts it to the norm lower bound. The strict form
+    is the same statement with $\gamma=1-\eta m$.
+\end{proof}
+
+\begin{lemma}[Parent-Hamiltonian gap from a cyclic operator-product norm constant]
+    \label{lem:parent_hamiltonian_cyclic_overlap_operator_norm_constant_gap}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_le}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_lt}
+    \leanok
+    \uses{rem:projection_geometry_rowsum_identities,
+        lem:parent_hamiltonian_finite_overlap_anticommutator_gap,
+        lem:cyclic_window_overlap_cardinality, lem:cyclic_window_nonoverlap_positive,
+        lem:parent_hamiltonian_es_quadratic_reduction}
+    Fix $L>1$, and let $m=2(L-1)$. Suppose uniformly for every $N\ge2L$ and every
+    overlapping off-diagonal pair that
+    \[
+        \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
+        \le \eta\,\|h_{j,\mathrm{ES}}v\|,
+    \]
+    that is, a bound $\|h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}\|\le\eta$ on the
+    operator-product norm. If $\gamma>0$, $\gamma\le1$, and $\eta\le(1-\gamma)/m$,
+    then $0<\gamma$ and, for every admissible $N$ and every
+    $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$,
+    \[
+        \gamma\|v\|\le \|H_{N,L}^{\mathrm{ES}}(A)v\|.
+    \]
+    In particular, if $\eta\ge0$ and $\eta m<1$, then $0<1-\eta m$ and the same
+    norm bound holds with $\gamma=1-\eta m$.
+
+    This is the symmetric (operator-product) counterpart of
+    Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_norm_constant_gap}, obtained
+    from the anticommutator conversion recorded in
+    Remark~\ref{rem:projection_geometry_rowsum_identities}. Like that lemma it is a
+    conditional reduction: the excitation projections satisfy
+    $\|h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}\|=1$ whenever the overlapping ranges
+    intersect, so the hypothesis is unsatisfiable for $\eta<1$. It isolates the
+    finite-row martingale argument once such a bound is supplied; the gap with the
+    cited principal-angle estimates is documented in the paper-gap note
+    \path{docs/paper-gaps/cpgsv21_martingale_overlap.tex}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{rem:projection_geometry_rowsum_identities,
+        lem:parent_hamiltonian_finite_overlap_anticommutator_gap,
+        lem:cyclic_window_overlap_cardinality, lem:cyclic_window_nonoverlap_positive,
+        lem:parent_hamiltonian_es_quadratic_reduction}
+    The overlap-cardinality lemma gives at most $m=2(L-1)$ overlapping
+    off-diagonal neighbours in each row, while the non-overlap positivity lemma
+    handles disjoint supports. The symmetric anticommutator conversion of
+    Remark~\ref{rem:projection_geometry_rowsum_identities} turns the
+    operator-product bound into the per-pair anticommutator estimate with
+    coefficient $\eta$; the anticommutator finite-overlap reduction then gives the
+    quadratic-form estimate with the chosen $\gamma$, and the positive
     quadratic-form criterion converts it to the norm lower bound. The strict form
     is the same statement with $\gamma=1-\eta m$.
 \end{proof}

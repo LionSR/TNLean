@@ -310,23 +310,29 @@ theorem parentHamiltonian_gapped_of_overlap_norm_constant
 /-- Gap bound from a strict overlapping cyclic-window operator-product norm
 coefficient for the MPS parent Hamiltonian.
 
-This is the symmetric, source-faithful counterpart of
+This is the symmetric counterpart of
 `parentHamiltonianES_gap_bound_of_overlap_norm_constant`.  The hypothesis is the
 operator-product norm bound
 \[
   \|p_i (p_j v)\| \le \eta\,\|p_j v\|,
 \]
-i.e. a bound on \(\|p_i p_j\|\), the principal-angle quantity between the two
-overlapping excitation ranges, rather than the directional compression bound
+i.e. a bound on \(\|p_i p_j\|\) for the two overlapping excitation projections,
+rather than the directional compression bound
 \(\|p_i (p_j v)\| \le \eta\,\|p_i v\|\) used by
 `parentHamiltonianES_gap_bound_of_overlap_norm_constant`.  The directional bound,
 required to hold for every \(v\), forces \(p_j\) to preserve \(\ker p_i\); the
 operator-product bound carries no such constraint.  Through the symmetric
-anticommutator reduction
-`re_inner_anticommutator_ge_neg_of_norm_apply_le`, any such bound with
-\(\eta\,2(L-1) < 1\) yields the positive gap constant \(1 - \eta\,2(L-1)\).  The
-comparison with the cited FNW--Nachtergaele--Kastoryano principal-angle estimates
-is recorded in `docs/paper-gaps/cpgsv21_martingale_overlap.tex`. -/
+anticommutator reduction `re_inner_anticommutator_ge_neg_of_norm_apply_le`, any
+such bound with \(\eta\,2(L-1) < 1\) yields the positive gap constant
+\(1 - \eta\,2(L-1)\).
+
+Like `parentHamiltonianES_gap_bound_of_principal_angle_compression`, this is a
+conditional reduction, not an achievable MPS estimate: \(p_i, p_j\) are the
+excitation projections, so when the overlapping excitation ranges share a vector
+one has \(\|p_i p_j\| = 1\) and the hypothesis is unsatisfiable for
+\(\eta < 1\).  The cited FNW--Nachtergaele--Kastoryano estimates control the
+ground-space principal angle \(\|q_i q_j - P\|\), a different quantity; the
+comparison is recorded in `docs/paper-gaps/cpgsv21_martingale_overlap.tex`. -/
 theorem parentHamiltonianES_gap_bound_of_overlap_operator_norm_constant
     (A : MPSTensor d D) (L : ℕ) (hL : 1 < L) {η : ℝ}
     (hηnonneg : 0 ≤ η)
@@ -351,14 +357,17 @@ coefficient.**
 
 For an MPS tensor \(A\) and interaction range \(L > 1\), any uniform overlapping
 cyclic-window estimate \(\|p_i (p_j v)\| \le \eta\,\|p_j v\|\) (a bound on
-\(\|p_i p_j\|\)) with \(0 ≤ η\) and \(η * 2(L-1) < 1\) gives a uniform positive
-lower bound on the parent Hamiltonian, independent of the chain length.
+\(\|p_i p_j\|\)) with \(0 \le \eta\) and \(\eta \cdot 2(L-1) < 1\) gives a uniform
+positive lower bound on the parent Hamiltonian, independent of the chain length.
 
-This is the operator-product (symmetric principal-angle) analogue of
-`parentHamiltonian_gapped_of_overlap_norm_constant`.  Its hypothesis matches the
-symmetric anticommutator estimate of arXiv:2011.12127, Section IV.C, equation
-eq:4:martingale-2, and is the appropriate target when the cited principal-angle
-estimates bound \(\|p_i p_j\|\) for overlapping windows. -/
+This is the operator-product (symmetric) analogue of
+`parentHamiltonian_gapped_of_overlap_norm_constant`.  Its conclusion is the
+anticommutator estimate of arXiv:2011.12127, Section IV.C, equation
+eq:4:martingale-2 with coefficient \(\eta\).  Like
+`parentHamiltonian_gapped_of_overlap_norm_constant`, it is a conditional
+reduction whose hypothesis is unsatisfiable for the overlapping excitation
+projections (\(\|p_i p_j\| = 1\) when the ranges intersect), not an achievable
+MPS target; see `docs/paper-gaps/cpgsv21_martingale_overlap.tex`. -/
 theorem parentHamiltonian_gapped_of_overlap_operator_norm_constant
     (A : MPSTensor d D) (L : ℕ) (hL : 1 < L) {η : ℝ}
     (hηnonneg : 0 ≤ η)
