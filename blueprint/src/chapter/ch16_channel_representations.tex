@@ -1691,8 +1691,8 @@ This section states the existence theorems from
 
 % Lean: Wolf.exists_lorentz_normal_form_qubit
 \begin{theorem}[Lorentz normal form for qubit channels]\label{thm:lorentz_normal_form_qubit}
-    \uses{def:sl_filtering, lem:infimum_is_attained, def:lorentz_diagonal,
-        def:lorentz_non_diagonal, def:lorentz_singular}
+    \uses{def:sl_filtering, thm:exists_normal_form_generic,
+        def:lorentz_diagonal, def:lorentz_non_diagonal, def:lorentz_singular}
     For every qubit channel $T : \MN{2} \to \MN{2}$,
     there exist $\SL(2, \C)$-filterings $\Phi_{1}, \Phi_{2}$ such that
     the filtered channel $T' = \Phi_{2} \circ T \circ \Phi_{1}$ is in one of
