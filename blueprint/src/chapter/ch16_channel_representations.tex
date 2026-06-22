@@ -1577,9 +1577,31 @@ This section states the existence theorems from
     so $\tr(A^{\dagger}A)=\lambda_{1}+\cdots+\lambda_{D}\geq D$.
 \end{proof}
 
+\begin{lemma}[Kronecker Hilbert--Schmidt trace multiplicativity]
+\label{lem:kronecker_hilbert_schmidt_trace}
+    \lean{Matrix.trace_conjTranspose_mul_self_kronecker}
+    \leanok
+    For complex matrices $A$ and $B$ of compatible rectangular sizes,
+    \[
+        \tr\!\left((A\otimes_{k}B)^{\dagger}(A\otimes_{k}B)\right)
+        =
+        \tr(A^{\dagger}A)\,\tr(B^{\dagger}B).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Use
+    $(A\otimes_{k}B)^{\dagger}=A^{\dagger}\otimes_{k}B^{\dagger}$, the mixed
+    product identity for Kronecker products, and
+    $\tr(C\otimes_{k}D)=\tr(C)\tr(D)$. With
+    $C=A^{\dagger}A$ and $D=B^{\dagger}B$, these identities give the equality.
+\end{proof}
+
 % Lean: Wolf.infimum_is_attained
 \begin{lemma}[Infimum attainment for SL-filterings]\label{lem:infimum_is_attained}
-    \uses{lem:posdef_trace_lower_bound, lem:det_amgm_hilbert_schmidt_bound}
+    \uses{lem:posdef_trace_lower_bound, lem:det_amgm_hilbert_schmidt_bound,
+    lem:kronecker_hilbert_schmidt_trace}
     For a positive-definite Choi matrix $\tau$, the infimum of
     $\tr\![(S_{2} \otimes_{k} S_{1}) \tau (S_{2} \otimes_{k} S_{1})^{\dagger}]$
     over $S_{1}, S_{2} \in \MN{D}$ with $\det S_{1} = \det S_{2} = 1$
