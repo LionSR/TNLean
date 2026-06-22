@@ -21,6 +21,8 @@ Extracted from various files for reusability.
   trace identity
 - `Matrix.trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq`: the Hilbert--Schmidt
   trace form of the Frobenius norm
+- `Matrix.PosSemidef.trace_mul_nonneg`: the trace product of two positive
+  semidefinite matrices is nonnegative
 - `Matrix.eq_zero_of_sum_mul_conjTranspose_eq_zero`: a positive sum of squares
   vanishes only if every summand vanishes
 - `Matrix.eq_zero_of_sum_conjTranspose_mul_self_eq_zero`: the conjugate-transpose
@@ -72,6 +74,56 @@ theorem trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq
   · positivity
 
 end FrobeniusTrace
+
+section PosSemidefTrace
+
+variable {n : Type*} [Fintype n]
+
+namespace PosSemidef
+
+/-- The trace product of two positive semidefinite matrices is nonnegative. -/
+theorem trace_mul_nonneg {A B : Matrix n n ℂ}
+    (hA : A.PosSemidef) (hB : B.PosSemidef) :
+    0 ≤ trace (A * B) := by
+  classical
+  let U : Matrix n n ℂ := ↑hB.isHermitian.eigenvectorUnitary
+  let Λ : n → ℂ := fun i => ↑(hB.isHermitian.eigenvalues i)
+  have hspec : B = U * diagonal Λ * Uᴴ := by
+    simpa [U, Λ, Unitary.conjStarAlgAut_apply, star_eq_conjTranspose,
+      Function.comp_def] using hB.isHermitian.spectral_theorem
+  have hUAU_psd : (Uᴴ * A * U).PosSemidef := by
+    simpa only [mul_assoc, conjTranspose_conjTranspose] using
+      hA.mul_mul_conjTranspose_same (B := Uᴴ)
+  have hΛ_nonneg : ∀ i, 0 ≤ Λ i := by
+    intro i
+    change (0 : ℂ) ≤ ↑(hB.isHermitian.eigenvalues i)
+    exact_mod_cast (hB.isHermitian.posSemidef_iff_eigenvalues_nonneg.mp hB i)
+  have htrace_eq :
+      trace (A * B) = trace ((Uᴴ * A * U) * diagonal Λ) := by
+    rw [hspec]
+    calc
+      trace (A * (U * diagonal Λ * Uᴴ))
+          = trace ((A * U) * diagonal Λ * Uᴴ) := by
+              simp [mul_assoc]
+      _ = trace (Uᴴ * (A * U) * diagonal Λ) := by
+              simpa only using (trace_mul_cycle (A * U) (diagonal Λ) Uᴴ)
+      _ = trace ((Uᴴ * A * U) * diagonal Λ) := by
+              simp [mul_assoc]
+  rw [htrace_eq, trace]
+  refine Finset.sum_nonneg ?_
+  intro i _hi
+  have hdiag_nonneg : 0 ≤ (Uᴴ * A * U) i i := hUAU_psd.diag_nonneg
+  change 0 ≤ (((Uᴴ * A * U) * diagonal Λ) i i)
+  have hentry :
+      (((Uᴴ * A * U) * diagonal Λ) i i) = (Uᴴ * A * U) i i * Λ i := by
+    rw [mul_apply]
+    simp [diagonal_apply]
+  rw [hentry]
+  exact mul_nonneg hdiag_nonneg (hΛ_nonneg i)
+
+end PosSemidef
+
+end PosSemidefTrace
 
 section SumSquaresZero
 
