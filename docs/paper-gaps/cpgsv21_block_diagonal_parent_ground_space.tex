@@ -549,6 +549,22 @@ large-length BNT product-span bound: if the boundary-crossing interval begins
 at \(i=N-1\), the required tail length is \(N-i=1\), so it is not supplied by
 the lower bound on \(L\) alone.
 
+The block-diagonal boundary representation itself is not an instance of the
+boundary-crossing comparison. The Lean theorem
+\leanid{MPSTensor.exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1}
+derives it from the span-based one-step intersection identity
+\leanid{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1};
+its block components lie in the open-boundary ground spaces $\mathcal G_N^{A_j}$,
+and its proof does not use the periodic-boundary comparison at boundary-crossing
+windows. The conditional block-diagonal parent-space wrappers therefore hold the
+periodic-boundary comparison only as an explicit hypothesis---a scope
+restriction---rather than as a smuggled dependency. The residual transitive
+source-faithfulness gap carried by those wrappers is the normalized BNT
+product-span input, whose derivation is the normal-range reduction recorded in
+\path{docs/paper-gaps/cpgsv21_normal_range_reduction.tex} (lines 2078--2079 of
+\path{Papers/2011.12127/TN-Review-main.tex}); that gap is independent of the
+periodic-boundary comparison tracked here.
+
 After \href{https://github.com/LionSR/TNLean/issues/2651}{issue \#2651} was
 closed, the remaining source-comparison target is tracked by
 \href{https://github.com/LionSR/TNLean/issues/2971}{issue \#2971}: remove the
