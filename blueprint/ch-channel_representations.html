@@ -6940,10 +6940,15 @@
     <span class="lemma_thmtitle">Infimum attainment for SL-filterings</span>
     <div class="thm_header_extras">
 
+    
+    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
     <a class="icon proof" href="ch-channel_representations.html#lem:infimum_is_attained">#</a>
+    
+    <a class="icon proof" href="ch-channel_representations.html#a0000025405"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
     
     
     <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
@@ -6964,6 +6969,12 @@
           
           <li><a href="ch-channel_representations.html#lem:kronecker_hilbert_schmidt_trace">Lemma 16.83</a></li>
           
+          <li><a href="ch-channel_representations.html#lem:posdef_trace_lower_bound">Lemma 16.81</a></li>
+          
+          <li><a href="ch-channel_representations.html#lem:det_amgm_hilbert_schmidt_bound">Lemma 16.82</a></li>
+          
+          <li><a href="ch-channel_representations.html#lem:kronecker_hilbert_schmidt_trace">Lemma 16.83</a></li>
+          
         </ul>
     
       </div>
@@ -6971,10 +6982,41 @@
 
     
     
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Wolf.infimum_is_attained" class="lean_decl">Wolf.infimum_is_attained</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>  For a positive-definite Choi matrix \(\tau \), the infimum of \(\operatorname{tr}\! [(S_{2} \otimes _{k} S_{1}) \tau (S_{2} \otimes _{k} S_{1})^{\dagger }]\) over \(S_{1}, S_{2} \in M_{D}(\mathbb {C})\) with \(\det S_{1} = \det S_{2} = 1\) is attained. <b class="bfseries">Not yet proved</b>—requires compactness of bounded subsets of \(\operatorname{SL}(D, \mathbb {C})\) and the extreme-value theorem. </p>
+  <p>  For a positive-definite Choi matrix \(\tau \), the infimum of \(\operatorname{tr}\! [(S_{2} \otimes _{k} S_{1}) \tau (S_{2} \otimes _{k} S_{1})^{\dagger }]\) over \(S_{1}, S_{2} \in M_{D}(\mathbb {C})\) with \(\det S_{1} = \det S_{2} = 1\) is attained. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000025405">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Write \(X = S_{2} \otimes _{k} S_{1}\). By the positive-definite trace lower bound (Lemma&#160;<a href="ch-channel_representations.html#lem:posdef_trace_lower_bound">16.81</a>), \(\operatorname{tr}[X \tau X^{\dagger }] \ge \lambda _{\min }(\tau )\, \operatorname{tr}[X^{\dagger }X]\), and by Hilbert–Schmidt multiplicativity (Lemma&#160;<a href="ch-channel_representations.html#lem:kronecker_hilbert_schmidt_trace">16.83</a>), \(\operatorname{tr}[X^{\dagger }X] = \operatorname{tr}[S_{2}^{\dagger }S_{2}]\, \operatorname{tr}[S_{1}^{\dagger }S_{1}]\). The determinant AM–GM estimate (Lemma&#160;<a href="ch-channel_representations.html#lem:det_amgm_hilbert_schmidt_bound">16.82</a>) gives \(\operatorname{tr}[S_{i}^{\dagger }S_{i}] = \| S_{i}\| ^{2} \ge D\) whenever \(\det S_{i} = 1\). Combining, the value dominates \(\lambda _{\min }(\tau )\, D\, \| S_{i}\| ^{2}\) for each factor, so any point whose value is at most the value at the identity lies in a fixed Frobenius ball \(\{ \, \| S\|  \le C\, \} \). Intersecting with the closed set \(\det S = 1\) produces a compact set, on which the continuous trace functional attains its minimum by the extreme-value theorem. A point outside the sublevel set has value larger than the value at the identity, so the minimiser on the compact set is a global minimiser. </p>
 
   </div>
 </div>
@@ -7068,7 +7110,7 @@
   </div>
   <div class="definition_thmcontent">
   <p> For a completely positive, trace-preserving qubit channel \(T' : M_{2}(\mathbb {C}) \to M_{2}(\mathbb {C})\), write \(\widehat{T'}\) in the normalized Pauli basis. The channel is in <em>non-diagonal Lorentz normal form</em> when, for some \(x \in [0,1]\), </p>
-<div class="displaymath" id="a0000025405">
+<div class="displaymath" id="a0000025406">
   \[  \widehat{T'} = \begin{pmatrix}  1 
 
 &  0 
@@ -7127,7 +7169,7 @@
   </div>
   <div class="definition_thmcontent">
   <p> For a completely positive, trace-preserving qubit channel \(T' : M_{2}(\mathbb {C}) \to M_{2}(\mathbb {C})\), write \(\widehat{T'}\) in the normalized Pauli basis. The channel is in <em>singular Lorentz normal form</em> when </p>
-<div class="displaymath" id="a0000025406">
+<div class="displaymath" id="a0000025407">
   \[  \widehat{T'} = \begin{pmatrix}  1 
 
 &  0 
@@ -7373,7 +7415,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:channel_det_unitary_eq_one">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000025407"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000025408"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7428,7 +7470,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000025407">
+<div class="proof_wrapper" id="a0000025408">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7456,7 +7498,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:channelDet_norm_le_one">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000025408"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000025409"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7519,7 +7561,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000025408">
+<div class="proof_wrapper" id="a0000025409">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7547,7 +7589,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:channelDet_norm_eq_one_iff_unitary">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000025409"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000025410"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7603,7 +7645,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For a CPTP map \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\), </p>
-<div class="displaymath" id="a0000025410">
+<div class="displaymath" id="a0000025411">
   \[  |\det T| = 1 \iff \exists \,  U \in \mathcal{U}(D),\quad T(\rho ) = U\rho U^\dagger .  \]
 </div>
 <p> This is <span class="cite">
@@ -7616,7 +7658,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000025409">
+<div class="proof_wrapper" id="a0000025410">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
