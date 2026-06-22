@@ -443,7 +443,8 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
         simp [L, Matrix.mul_assoc]
 
 /-- **Unit pair-index form of Lemma B.1.**  This is the same structural
-decomposition as `rfp_nt_structural_full`, rewritten in the source convention
+decomposition as the isometry theorem above
+(Theorem~\ref{thm:rfp_nt_structural_full}), rewritten in the source convention
 for the pair-index isometry equation
 \[
   \sum_i \overline{(U^i)_{\alpha,\beta}}\,(U^i)_{\alpha',\beta'}
@@ -452,11 +453,16 @@ for the pair-index isometry equation
 \]
 
 The theorem is only a normalization comparison: the diagonal factor is rescaled by
-\(D^{-1/2}\), and the residual tensor by \(D^{1/2}\).  It does not prove the
-source trace condition \(\operatorname{tr}\Lambda=1\), nor the cross-block
-\(\delta_{j,j'}\) orthogonality in arXiv:1606.00608, equation
-`eq:III_isometry`; those are recorded in
-`docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
+\(D^{-1/2}\), and the residual tensor by \(D^{1/2}\).
+
+**Scope restriction (source isometry):** Corollary III.cor3 and the joint
+isometry equation in arXiv:1606.00608, lines 550--554, also include the source
+trace condition \(\operatorname{tr}\Lambda=1\) and cross-block
+\(\delta_{j,j'}\) orthogonality.  Those conclusions are not proved here; this
+theorem only compares the scalar normalization for a single block.  This
+restriction is recorded in `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`.
+Elimination: prove a whole-family isometry form with trace-normalized diagonal
+weights and orthogonality between distinct blocks. -/
 theorem rfp_nt_structural_full_unit_pair (A : MPSTensor d D) [NeZero D]
     (hNT : IsNormal A) (hRFP : IsRFP A)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
@@ -469,7 +475,7 @@ theorem rfp_nt_structural_full_unit_pair (A : MPSTensor d D) [NeZero D]
           if p = q then 1 else 0) ∧
       (∀ i, A i = X * Matrix.diagonal (fun k => (Λ k : ℂ)) * U i * X⁻¹) := by
   classical
-  obtain ⟨X, Λ₀, U₀, hX_det, hΛ₀_pos, hU₀_left, hU₀_pair, hA_eq⟩ :=
+  obtain ⟨X, Λ₀, U₀, hX_det, hΛ₀_pos, _, hU₀_pair, hA_eq⟩ :=
     rfp_nt_structural_full A hNT hRFP hLeft
   let sR : ℝ := Real.sqrt (D : ℝ)
   let s : ℂ := (sR : ℂ)
@@ -590,11 +596,20 @@ theorem rfp_nt_structural_full_blocks {r : ℕ} {dim : Fin r → ℕ}
       (∀ i, A k i = X * Matrix.diagonal (fun j => (Λ j : ℂ)) * U i * X⁻¹) :=
   fun k => rfp_nt_structural_full (A k) (hNT k) (hRFP k) (hLeft k)
 
-/-- Per-block unit pair-index version of `rfp_nt_structural_full_blocks`.
+/-- Per-block unit pair-index form of the isometry canonical form
+(Theorem~\ref{thm:rfp_nt_structural_full_blocks}).
 
-This only changes the pair-index normalization convention; it does not add the
-trace-normalization of the diagonal factors or the cross-block orthogonality
-required by the source theorem. -/
+This only changes the pair-index normalization convention.  In this convention
+the contracted identity is \(D_k I\), not \(I\), so the conclusion records the
+unit pair-index equation and the decomposition but not a contracted-isometry
+equation.
+
+**Scope restriction (source isometry):** Corollary III.cor3 and the joint
+isometry equation in arXiv:1606.00608, lines 550--554, also require
+\(\operatorname{tr}\Lambda_k=1\) and cross-block \(\delta_{j,j'}\)
+orthogonality.  This theorem is only the per-block normalization comparison;
+the full source assertion is recorded as a remaining gap in
+`docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
 theorem rfp_nt_structural_full_blocks_unit_pair {r : ℕ} {dim : Fin r → ℕ}
     [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
     (hNT : ∀ k, IsNormal (A k)) (hRFP : ∀ k, IsRFP (A k))

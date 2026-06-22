@@ -506,10 +506,22 @@ and rates for the single-tensor transfer map $\E_A$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:rfp_nt_structural_full}
-    Apply Theorem~\ref{thm:rfp_nt_structural_full}, then replace
-    $U^i$ by $\sqrt D\,U^i$ and $\Lambda$ by $D^{-1/2}\Lambda$.  The product
-    $\Lambda U^i$ is unchanged, while the pair-index equation loses the factor
-    $D^{-1}$.
+    Apply Theorem~\ref{thm:rfp_nt_structural_full}, then set
+    $\widetilde U^i=\sqrt D\,U^i$ and
+    $\widetilde\Lambda=D^{-1/2}\Lambda$.  Since
+    $\widetilde\Lambda\widetilde U^i=\Lambda U^i$, the decomposition
+    $A^i=X\widetilde\Lambda\widetilde U^iX^{-1}$ still holds.  The
+    pair-index contraction becomes
+    \[
+        \sum_i
+        \overline{(\widetilde U^i)_{\alpha,\beta}}\,
+        (\widetilde U^i)_{\alpha',\beta'}
+        =
+        D\cdot D^{-1}
+        \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}
+        =
+        \delta_{\alpha,\alpha'}\delta_{\beta,\beta'} .
+    \]
 \end{proof}
 
 \begin{theorem}[Per-block isometry canonical form]%
