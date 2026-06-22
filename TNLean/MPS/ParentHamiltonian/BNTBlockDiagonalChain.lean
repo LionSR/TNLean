@@ -101,14 +101,22 @@ Theorem 12 of arXiv:quant-ph/0608197 (proof lines
 separate step of closing the boundaries with block-diagonal boundary
 conditions.
 
-**Unfaithful:** This proof relies on
-`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`, which
-transitively uses the boundary-condition comparison at boundary-crossing windows
-rather than deriving it from arXiv:2011.12127, Section IV.C, lines 2126--2128.
-Documented in `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
-Elimination: derive the \(C^j,D^j,E^j\) boundary-condition comparison from
-arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
-discharge the currently assumed boundary-condition comparison; tracked in issue 2971. -/
+The proof uses only the span-based one-step intersection identity
+`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`, which is
+independent of the boundary-condition comparison at boundary-crossing windows. The
+periodic-boundary upgrade — replacing the open-boundary span \(\bigvee_jG_N(A_j)\)
+by \(\sum_j\mathcal G_{N,L}(A_j)\) — is the separate comparison of
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and
+arXiv:2011.12127, Section IV.C, lines 2126--2128, recorded in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex` (issue 2971).
+
+**Unfaithful:** This proof transitively relies on
+`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`, whose
+normalized BNT product-span input is not yet source-faithful: its derivation uses
+the normal-range reduction of arXiv:2011.12127, Section IV.C, lines 2078--2079,
+documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. This deviation
+is independent of the periodic-boundary comparison at boundary-crossing windows
+tracked in issue 2971. -/
 theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -182,17 +190,25 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital
   · exact groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital
       A hIrr hLeft hOverlap hBlocks hBlk hInj hL₀ hUnital (by omega)
 
-/-- Finite-length block injectivity gives the periodic-boundary inclusion into
+/-- Finite-length block injectivity gives the open-boundary inclusion into
 \(S_N\), and \(S_N\) is an internal direct sum of local block ground spaces.
 
-**Unfaithful:** This proof relies on the finite-length-injectivity inclusion and
-internal-direct-sum conclusions above, which transitively use the
-boundary-condition comparison at boundary-crossing windows rather than deriving
-it from arXiv:2011.12127, Section IV.C, lines 2126--2128. Documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
-derive the \(C^j,D^j,E^j\) boundary-condition comparison from
-arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
-discharge the currently assumed boundary-condition comparison; tracked in issue 2971. -/
+Here \(S_N=\bigvee_jG_N(A_j)\) is the open-boundary span. The proof uses only the
+span-based one-step intersection identity and the block-separation independence,
+both independent of the boundary-condition comparison at boundary-crossing
+windows. The periodic-boundary upgrade replacing \(S_N\) by
+\(\sum_j\mathcal G_{N,L}(A_j)\) is the separate comparison of
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and
+arXiv:2011.12127, Section IV.C, lines 2126--2128, recorded in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex` (issue 2971).
+
+**Unfaithful:** This proof transitively relies on
+`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`, whose
+normalized BNT product-span input is not yet source-faithful: its derivation uses
+the normal-range reduction of arXiv:2011.12127, Section IV.C, lines 2078--2079,
+documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. This deviation
+is independent of the periodic-boundary comparison at boundary-crossing windows
+tracked in issue 2971. -/
 theorem chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -237,15 +253,20 @@ arXiv:quant-ph/0608197, Theorem 12, is a separate boundary-condition
 comparison: one must prove \(\psi_j\in\mathcal G_{N,L}(A_j)\) for the
 block components produced here.
 
-**Unfaithful:** This proof relies on
-`chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1`,
-which transitively uses the boundary-condition comparison at boundary-crossing
-windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
-2126--2128. Documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
-derive the \(C^j,D^j,E^j\) boundary-condition comparison from
-arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
-discharge the currently assumed boundary-condition comparison; tracked in issue 2971. -/
+The decomposition uses only the span-based open-boundary inclusion and
+block-separation independence, both independent of the boundary-condition
+comparison at boundary-crossing windows. That periodic-boundary comparison
+(arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456;
+arXiv:2011.12127, Section IV.C, lines 2126--2128) is recorded in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex` (issue 2971).
+
+**Unfaithful:** This proof transitively relies on
+`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`, whose
+normalized BNT product-span input is not yet source-faithful: its derivation uses
+the normal-range reduction of arXiv:2011.12127, Section IV.C, lines 2078--2079,
+documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. This deviation
+is independent of the periodic-boundary comparison at boundary-crossing windows
+tracked in issue 2971. -/
 theorem exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -315,21 +336,28 @@ displayed boundary matrix. The substantive assertion is the block-diagonal
 representation of \(\psi\). The periodic-boundary upgrade is the separate
 boundary-condition comparison for the cyclic windows crossing the chosen cut.
 
-This proves the displayed statement. The
+This proves the displayed statement, in which the component membership is the
+open-boundary range property \(\Gamma_N^{A_j}(\mu_j^NX_j)\in G_N(A_j)\). The
 boundary-condition comparison in arXiv:quant-ph/0608197, proof lines
 1454--1456, and arXiv:2011.12127, lines 2126--2128, shows, under the
 comparison identities, that these same component
 vectors lie in \(\mathcal G_{N,L}(A_j)\).
 
-**Unfaithful:** This proof relies on
-`exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1`,
-which transitively uses the boundary-condition comparison at boundary-crossing
-windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
-2126--2128. Documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
-derive the \(C^j,D^j,E^j\) boundary-condition comparison from
-arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
-discharge the currently assumed boundary-condition comparison; tracked in issue 2971. -/
+The block-diagonal boundary representation and the open-boundary component
+membership use only the span-based open-boundary inclusion, independently of
+the boundary-condition comparison at boundary-crossing windows. The
+periodic-boundary upgrade to \(\mathcal G_{N,L}(A_j)\) (arXiv:quant-ph/0608197,
+Theorem 12, proof lines 1446--1456; arXiv:2011.12127, Section IV.C, lines
+2126--2128) is the separate step recorded in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex` (issue 2971).
+
+**Unfaithful:** This proof transitively relies on
+`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`, whose
+normalized BNT product-span input is not yet source-faithful: its derivation uses
+the normal-range reduction of arXiv:2011.12127, Section IV.C, lines 2078--2079,
+documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. This deviation
+is independent of the periodic-boundary comparison at boundary-crossing windows
+tracked in issue 2971. -/
 theorem
     exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -440,15 +468,21 @@ and the right-hand local block sum is internal. The separate step from
 arXiv:quant-ph/0608197 is
 to close the boundaries with block-diagonal boundary conditions.
 
-**Unfaithful:** This proof relies on
-`chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1`,
-which transitively uses the boundary-condition comparison at boundary-crossing
-windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
-2126--2128. Documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
-derive the \(C^j,D^j,E^j\) boundary-condition comparison from
-arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
-discharge the currently assumed boundary-condition comparison; tracked in issue 2971. -/
+Both displayed inclusions and the internal-direct-sum conclusion use only the
+span-based open-boundary results, independently of the boundary-condition
+comparison at boundary-crossing windows. The periodic-boundary upgrade
+replacing \(\bigvee_jG_N(A_j)\) by \(\sum_j\mathcal G_{N,L}(A_j)\)
+(arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456;
+arXiv:2011.12127, Section IV.C, lines 2126--2128) is recorded in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex` (issue 2971).
+
+**Unfaithful:** This proof transitively relies on
+`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`, whose
+normalized BNT product-span input is not yet source-faithful: its derivation uses
+the normal-range reduction of arXiv:2011.12127, Section IV.C, lines 2078--2079,
+documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. This deviation
+is independent of the periodic-boundary comparison at boundary-crossing windows
+tracked in issue 2971. -/
 theorem chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -855,15 +889,22 @@ inverting-and-re-growing argument in Perez-Garcia, Verstraete, Wolf, and Cirac
 (arXiv:quant-ph/0608197) and Cirac, Perez-Garcia, Schuch, and Verstraete
 (arXiv:2011.12127), with block-diagonal boundary conditions.
 
-**Unfaithful:** This proof relies on
-`chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1`,
-which transitively uses the boundary-condition comparison at boundary-crossing
-windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
-2126--2128. Documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
-derive the \(C^j,D^j,E^j\) boundary-condition comparison from
-arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
-discharge the currently assumed boundary-condition comparison; tracked in issue 2971. -/
+**Scope restriction (periodic-boundary comparison):** The block-diagonal boundary
+representation whose block components already satisfy the periodic constraints
+\(\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)\) is the explicit hypothesis
+`hBoundary` here. The span-based open-boundary version of this representation is
+proved (its components lie in \(G_N(A_j)\)); the periodic-boundary upgrade is the
+boundary-condition comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines
+1446--1456, and arXiv:2011.12127, Section IV.C, lines 2126--2128, not yet derived
+from the periodic ground-space constraint. Documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; tracked in issue 2971.
+
+**Unfaithful:** This proof transitively relies on
+`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`, whose
+normalized BNT product-span input is not yet source-faithful: its derivation uses
+the normal-range reduction of arXiv:2011.12127, Section IV.C, lines 2078--2079,
+documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. This deviation
+is independent of the periodic-boundary comparison tracked in issue 2971. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_blockBoundary
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -921,15 +962,21 @@ Then
 \]
 and the sum \(\bigvee_jG_N(A_j)\) is internal.
 
-**Unfaithful:** This proof relies on
-`chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1`,
-which transitively uses the boundary-condition comparison at boundary-crossing
-windows rather than deriving it from arXiv:2011.12127, Section IV.C, lines
-2126--2128. Documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
-derive the \(C^j,D^j,E^j\) boundary-condition comparison from
-arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and use it to
-discharge the currently assumed boundary-condition comparison; tracked in issue 2971. -/
+**Scope restriction (periodic-boundary comparison):** The blockwise decomposition
+with periodic components \(\psi_j\in\mathcal G_{N,L}(A_j)\) is the explicit
+hypothesis `hBoundary` here. The span-based open-boundary decomposition is proved
+(its summands lie in \(G_N(A_j)\)); the periodic-boundary upgrade is the
+boundary-condition comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines
+1446--1456, and arXiv:2011.12127, Section IV.C, lines 2126--2128, not yet derived
+from the periodic ground-space constraint. Documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; tracked in issue 2971.
+
+**Unfaithful:** This proof transitively relies on
+`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`, whose
+normalized BNT product-span input is not yet source-faithful: its derivation uses
+the normal-range reduction of arXiv:2011.12127, Section IV.C, lines 2078--2079,
+documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. This deviation
+is independent of the periodic-boundary comparison tracked in issue 2971. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_boundary_decomposition
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
