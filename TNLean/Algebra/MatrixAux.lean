@@ -10,6 +10,8 @@ import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.MeanInequalities
 import Mathlib.LinearAlgebra.Matrix.Charpoly.Eigs
+import Mathlib.LinearAlgebra.Matrix.Kronecker
+import Mathlib.Topology.Instances.Matrix
 
 /-!
 # Auxiliary matrix lemmas
@@ -110,6 +112,22 @@ theorem trace_conjTranspose_mul_self_re_kronecker
           rw [Complex.mul_re, hA_im, hB_im, mul_zero, sub_zero]
 
 end FrobeniusKronecker
+
+section KroneckerContinuity
+
+variable {X R : Type*} [TopologicalSpace X] [TopologicalSpace R] [Mul R] [ContinuousMul R]
+  {m n p q : Type*}
+
+/-- The Kronecker product is jointly continuous in its two arguments. -/
+theorem _root_.Continuous.matrix_kronecker {A : X → Matrix m n R} {B : X → Matrix p q R}
+    (hA : Continuous A) (hB : Continuous B) :
+    Continuous fun x => (A x) ⊗ₖ (B x) := by
+  refine continuous_matrix fun r c => ?_
+  obtain ⟨i₁, i₂⟩ := r
+  obtain ⟨j₁, j₂⟩ := c
+  exact (hA.matrix_elem i₁ j₁).mul (hB.matrix_elem i₂ j₂)
+
+end KroneckerContinuity
 
 section FrobeniusDeterminant
 
