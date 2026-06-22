@@ -658,11 +658,6 @@ theorem choiMatrix_transposeLinearMapComplex_eq_swap (hD : 0 < D) :
     rw [hsingle]
     simp [Matrix.swapMatrix_apply, h]
 
-private noncomputable def finTwoAntisymmVec : Fin 2 × Fin 2 → ℂ
-  | (0, 1) => 1
-  | (1, 0) => -1
-  | _ => 0
-
 private theorem scaled_swap_submatrix_finTwo {D : ℕ} (hD : 2 ≤ D) :
     (((1 / (D : ℂ)) • Matrix.swapMatrix D).submatrix
       (fun p : Fin 2 × Fin 2 => (Fin.castLE hD p.1, Fin.castLE hD p.2))
@@ -673,10 +668,10 @@ private theorem scaled_swap_submatrix_finTwo {D : ℕ} (hD : 2 ≤ D) :
     simp [Matrix.swapMatrix_apply]
 
 private theorem scaled_swap_negative {D : ℕ} :
-    star finTwoAntisymmVec ⬝ᵥ
-        (((1 / (D : ℂ)) • Matrix.swapMatrix 2).mulVec finTwoAntisymmVec) =
+    star Matrix.finTwoAntisymmVec ⬝ᵥ
+        (((1 / (D : ℂ)) • Matrix.swapMatrix 2).mulVec Matrix.finTwoAntisymmVec) =
       (-(2 / (D : ℂ)) : ℂ) := by
-  simp [dotProduct, Matrix.mulVec, Fintype.sum_prod_type, finTwoAntisymmVec,
+  simp [dotProduct, Matrix.mulVec, Fintype.sum_prod_type, Matrix.finTwoAntisymmVec,
     Matrix.swapMatrix_apply]
   ring
 
@@ -698,10 +693,11 @@ theorem transposeLinearMapComplex_not_isCPMap {D : ℕ} (hD : 2 ≤ D) :
     rw [choiMatrix_transposeLinearMapComplex_eq_swap hDpos,
       scaled_swap_submatrix_finTwo hD] at hsub
     exact hsub
-  have hnonneg := (Matrix.posSemidef_iff_dotProduct_mulVec.mp hpsd₂).2 finTwoAntisymmVec
+  have hnonneg := (Matrix.posSemidef_iff_dotProduct_mulVec.mp hpsd₂).2
+    Matrix.finTwoAntisymmVec
   have hneg : ¬ (0 : ℂ) ≤
-      star finTwoAntisymmVec ⬝ᵥ
-        (((1 / (D : ℂ)) • Matrix.swapMatrix 2).mulVec finTwoAntisymmVec) := by
+      star Matrix.finTwoAntisymmVec ⬝ᵥ
+        (((1 / (D : ℂ)) • Matrix.swapMatrix 2).mulVec Matrix.finTwoAntisymmVec) := by
     rw [scaled_swap_negative, RCLike.nonneg_iff]
     norm_num
     have hDreal : (0 : ℝ) < (D : ℝ) := Nat.cast_pos.mpr hDpos
