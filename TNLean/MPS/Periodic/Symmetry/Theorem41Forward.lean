@@ -361,28 +361,25 @@ def PeripheralEqualCaseZGaugeOfSameMPV (d D p : ℕ) : Prop :=
     SameMPV C (blockTensor A p) →
       ∃ m : ℕ, 0 < m ∧ ZGaugeEquiv m C (blockTensor A p)
 
-/-- **Discharge the blocked `Z`-gauge extraction from the periodic equal-case FT.**
+/-- **Scope-restricted blocked `Z`-gauge extraction from the periodic equal-case FT.**
 
-Applying the (standard) periodic equal-case Fundamental Theorem at the blocked
-physical dimension `blockPhysDim d p` is enough to remove the first of the
-two sub-hypotheses introduced in
-`peripheralEqualCase_periodicFT_of_sameMPV`: given a pair of tensors on
-`(blockPhysDim d p, D)` that share an MPV family, the equal-case FT supplies
-a positive period `m` and a `Z_m`-gauge between them. The `IsIrreducibleForm`
-hypothesis on `blockTensor A p` that the equal-case FT would otherwise
-require follows from `isIrreducibleForm_of_sameMPV`: the block structure of
-the irreducible-form tensor `C` transports to `blockTensor A p` since they
-share the same MPV family.
+Applying the periodic equal-case Fundamental Theorem at the blocked physical
+dimension `blockPhysDim d p` gives the blocked `Z`-gauge once both tensors are
+already known to be in irreducible form. The irreducible-form hypothesis for
+`blockTensor A p` is an explicit input here; it is not transported from
+`SameMPV C (blockTensor A p)`.
 
-This theorem therefore replaces the bespoke
-`PeripheralEqualCaseZGaugeOfSameMPV` hypothesis by the canonical periodic
-equal-case FT hypothesis at the blocked dimension, matching the hypothesis
-pattern of `cor_4_1_physical_symmetry_zgauge`. -/
+This theorem is therefore only the equal-case FT application step. The remaining
+canonicalization problem is to construct genuine irreducible-form data for the
+blocked root appearing in the refinement argument. -/
 theorem peripheralEqualCaseZGaugeOfSameMPV_of_periodicEqualCaseFT
-    (hFT : PeriodicEqualCaseFT (blockPhysDim d p) D) :
-    PeripheralEqualCaseZGaugeOfSameMPV d D p := by
-  intro A C hC hSame
-  exact hFT hC (isIrreducibleForm_of_sameMPV hC hSame) hSame
+    (hFT : PeriodicEqualCaseFT (blockPhysDim d p) D)
+    {A : MPSTensor d D} {C : MPSTensor (blockPhysDim d p) D}
+    (hC : IsIrreducibleForm C)
+    (hBlock : IsIrreducibleForm (blockTensor A p))
+    (hSame : SameMPV C (blockTensor A p)) :
+    ∃ m : ℕ, 0 < m ∧ ZGaugeEquiv m C (blockTensor A p) :=
+  hFT hC hBlock hSame
 
 /-- **Blocked-to-root reconstruction from a periodic `Z`-gauge witness.**
 
