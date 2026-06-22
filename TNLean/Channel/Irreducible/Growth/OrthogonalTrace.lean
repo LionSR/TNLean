@@ -39,52 +39,12 @@ variable {D : ℕ}
 
 section OrthogonalTrace
 
-private theorem trace_mul_nonneg_of_posSemidef
-    {A B : Matrix (Fin D) (Fin D) ℂ}
-    (hA : A.PosSemidef) (hB : B.PosSemidef) :
-    0 ≤ Matrix.trace (A * B) := by
-  classical
-  let U : Matrix (Fin D) (Fin D) ℂ := ↑hB.isHermitian.eigenvectorUnitary
-  let Λ : Fin D → ℂ := fun i => ↑(hB.isHermitian.eigenvalues i)
-  have hspec : B = U * Matrix.diagonal Λ * Uᴴ := by
-    simpa [U, Λ, Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose,
-      Function.comp_def] using hB.isHermitian.spectral_theorem
-  have hUAU_psd : (Uᴴ * A * U).PosSemidef := by
-    simpa only [Matrix.mul_assoc, conjTranspose_conjTranspose] using
-      hA.mul_mul_conjTranspose_same (B := Uᴴ)
-  have hΛ_nonneg : ∀ i, 0 ≤ Λ i := by
-    intro i
-    change (0 : ℂ) ≤ ↑(hB.isHermitian.eigenvalues i)
-    exact_mod_cast (hB.isHermitian.posSemidef_iff_eigenvalues_nonneg.mp hB i)
-  have htrace_eq :
-      Matrix.trace (A * B) = Matrix.trace ((Uᴴ * A * U) * Matrix.diagonal Λ) := by
-    rw [hspec]
-    calc
-      Matrix.trace (A * (U * Matrix.diagonal Λ * Uᴴ))
-          = Matrix.trace ((A * U) * Matrix.diagonal Λ * Uᴴ) := by
-              simp [Matrix.mul_assoc]
-      _ = Matrix.trace (Uᴴ * (A * U) * Matrix.diagonal Λ) := by
-              simpa only using (Matrix.trace_mul_cycle (A * U) (Matrix.diagonal Λ) Uᴴ)
-      _ = Matrix.trace ((Uᴴ * A * U) * Matrix.diagonal Λ) := by
-              simp [Matrix.mul_assoc]
-  rw [htrace_eq, Matrix.trace]
-  refine Finset.sum_nonneg ?_
-  intro i hi
-  have hdiag_nonneg : 0 ≤ (Uᴴ * A * U) i i := hUAU_psd.diag_nonneg
-  change 0 ≤ (((Uᴴ * A * U) * Matrix.diagonal Λ) i i)
-  have hentry :
-      (((Uᴴ * A * U) * Matrix.diagonal Λ) i i) = (Uᴴ * A * U) i i * Λ i := by
-    rw [Matrix.mul_apply]
-    simp [Matrix.diagonal_apply]
-  rw [hentry]
-  exact mul_nonneg hdiag_nonneg (hΛ_nonneg i)
-
 private theorem trace_mul_pos_of_posDef_posSemidef_ne_zero
     {A B : Matrix (Fin D) (Fin D) ℂ}
     (hA : A.PosDef) (hB : B.PosSemidef) (hB_ne : B ≠ 0) :
     0 < Matrix.trace (B * A) := by
   have hnonneg : 0 ≤ Matrix.trace (B * A) :=
-    trace_mul_nonneg_of_posSemidef hB hA.posSemidef
+    Matrix.PosSemidef.trace_mul_nonneg hB hA.posSemidef
   have hne : Matrix.trace (B * A) ≠ 0 := by
     intro hzero
     have hzero' : Matrix.trace (A * B) = 0 :=
@@ -141,7 +101,7 @@ theorem orthogonal_trace_pos_of_irreducible_cp
     · have ht_pos : 0 < t := Nat.pos_iff_ne_zero.mpr ht0
       have ht_le : t ≤ n := Nat.lt_succ_iff.mp (Finset.mem_range.mp ht)
       have hterm_nonneg : 0 ≤ Matrix.trace (B * ((E ^ t) A)) :=
-        trace_mul_nonneg_of_posSemidef hB (iterate_posSemidef hCP.isPositiveMap hA t)
+        Matrix.PosSemidef.trace_mul_nonneg hB (iterate_posSemidef hCP.isPositiveMap hA t)
       have hterm_not_pos : ¬ 0 < Matrix.trace (B * ((E ^ t) A)) := by
         intro hpos
         exact hno ⟨t, ht_pos, ht_le, hpos⟩

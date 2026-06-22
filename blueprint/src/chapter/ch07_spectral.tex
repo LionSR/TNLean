@@ -184,6 +184,7 @@ Euclidean space.
 
 \begin{lemma}[Trace formula for Frobenius norm]\label{lem:frob_sq_trace}
     \lean{MPSTensor.frobSq_trace}
+    \lean{Matrix.trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq}
     \leanok
     \uses{def:frob_sq}
     $\|X\|_F^2 = \operatorname{Re}\tr(X^\dagger X)$.
@@ -191,6 +192,26 @@ Euclidean space.
 
 \begin{proof}\leanok
     Expand the matrix product and trace entry by entry.
+\end{proof}
+
+\begin{lemma}[Trace product of positive semidefinite matrices]
+    \label{lem:psd_trace_product_nonneg}
+    \lean{Matrix.PosSemidef.trace_mul_nonneg}
+    \leanok
+    If $A,B \geq 0$, then $\tr(AB) \geq 0$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Write $B=U\Lambda U^\dagger$ with $U$ unitary and $\Lambda$ diagonal. Then
+    \[
+        \tr(AB)
+        =
+        \tr\!\left((U^\dagger A U)\Lambda\right)
+        =
+        \sum_i (U^\dagger A U)_{ii}\Lambda_{ii}
+        \geq 0,
+    \]
+    since $U^\dagger A U\geq 0$ and $\Lambda_{ii}\geq 0$ for every $i$.
 \end{proof}
 
 \begin{definition}[Euclidean-space embedding]\label{def:mat_to_es}
