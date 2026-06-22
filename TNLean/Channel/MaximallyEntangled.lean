@@ -21,6 +21,7 @@ as needed for the Choi–Jamiolkowski isomorphism (Wolf Chapter 2).
   as a function `Fin d × Fin d → ℂ`
 * `Matrix.omegaProj d`: the projector `|Ω⟩⟨Ω|` as a matrix on `Fin d × Fin d`
 * `Matrix.swapMatrix d`: the SWAP operator `F` on `ℂ^d ⊗ ℂ^d`
+* `Matrix.finTwoAntisymmVec`: the antisymmetric vector `|01⟩ - |10⟩`
 
 ## Main results
 
@@ -84,6 +85,13 @@ noncomputable def swapMatrix (d : ℕ) :
 @[simp]
 theorem swapMatrix_apply (i₁ i₂ j₁ j₂ : Fin d) :
     swapMatrix d (i₁, i₂) (j₁, j₂) = if i₁ = j₂ ∧ i₂ = j₁ then 1 else 0 := rfl
+
+/-- The antisymmetric vector `|01⟩ - |10⟩` in `ℂ^2 ⊗ ℂ^2`. -/
+def finTwoAntisymmVec : Fin 2 × Fin 2 → ℂ :=
+  fun
+    | (0, 1) => 1
+    | (1, 0) => -1
+    | _ => 0
 
 /-- `F² = 1`: the SWAP operator is an involution. -/
 theorem swapMatrix_mul_self :

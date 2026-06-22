@@ -212,12 +212,6 @@ theorem wolfExample53_satisfies_schwarz (A : M2) :
     simpa [htranslate] using hB
   simpa [wolfExample53Gap] using hA'
 
-/-- A concrete antisymmetric witness for the non-CP statement. -/
-noncomputable def wolfExample53AntisymmVec : Fin 2 × Fin 2 → ℂ
-  | (0, 1) => 1
-  | (1, 0) => -1
-  | _ => 0
-
 private lemma omegaCoeff_fin2 :
     (((1 : ℂ) / ((2 : ℝ).sqrt : ℂ)) * star ((1 : ℂ) / ((2 : ℝ).sqrt : ℂ))) =
       (1 / 2 : ℂ) := by
@@ -267,10 +261,10 @@ private lemma wolfExample53_choi_apply (i1 i2 j1 j2 : Fin 2) :
 /-- The Choi matrix of `wolfExample53` has a negative expectation value on the
 antisymmetric vector `|01⟩ - |10⟩`, hence is not positive semidefinite. -/
 theorem wolfExample53_choi_negative_antisymm :
-    star wolfExample53AntisymmVec ⬝ᵥ
-        (ChoiJamiolkowski.choiMatrix wolfExample53).mulVec wolfExample53AntisymmVec =
+    star Matrix.finTwoAntisymmVec ⬝ᵥ
+        (ChoiJamiolkowski.choiMatrix wolfExample53).mulVec Matrix.finTwoAntisymmVec =
       (- (1 / 4 : ℂ)) := by
-  simp [dotProduct, Matrix.mulVec, Fintype.sum_prod_type, wolfExample53AntisymmVec,
+  simp [dotProduct, Matrix.mulVec, Fintype.sum_prod_type, Matrix.finTwoAntisymmVec,
     wolfExample53_choi_apply]
   ring
 
@@ -279,10 +273,11 @@ theorem wolfExample53_not_cp : ¬ IsCPMap wolfExample53 := by
   intro hcp
   have hpsd : (ChoiJamiolkowski.choiMatrix wolfExample53).PosSemidef :=
     (ChoiJamiolkowski.cp_iff_choi_posSemidef (D := 2) (T := wolfExample53)).mp hcp
-  have hnonneg := (Matrix.posSemidef_iff_dotProduct_mulVec.mp hpsd).2 wolfExample53AntisymmVec
+  have hnonneg := (Matrix.posSemidef_iff_dotProduct_mulVec.mp hpsd).2
+    Matrix.finTwoAntisymmVec
   have hneg : ¬ (0 : ℂ) ≤
-      star wolfExample53AntisymmVec ⬝ᵥ
-        (ChoiJamiolkowski.choiMatrix wolfExample53).mulVec wolfExample53AntisymmVec := by
+      star Matrix.finTwoAntisymmVec ⬝ᵥ
+        (ChoiJamiolkowski.choiMatrix wolfExample53).mulVec Matrix.finTwoAntisymmVec := by
     rw [wolfExample53_choi_negative_antisymm, RCLike.nonneg_iff]
     norm_num
   exact hneg hnonneg
