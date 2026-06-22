@@ -663,17 +663,14 @@ private noncomputable def finTwoAntisymmVec : Fin 2 × Fin 2 → ℂ
   | (1, 0) => -1
   | _ => 0
 
-private def finTwoToFin {D : ℕ} (hD : 2 ≤ D) : Fin 2 → Fin D :=
-  fun i => ⟨i, by omega⟩
-
 private theorem scaled_swap_submatrix_finTwo {D : ℕ} (hD : 2 ≤ D) :
     (((1 / (D : ℂ)) • Matrix.swapMatrix D).submatrix
-      (fun p : Fin 2 × Fin 2 => (finTwoToFin hD p.1, finTwoToFin hD p.2))
-      (fun p : Fin 2 × Fin 2 => (finTwoToFin hD p.1, finTwoToFin hD p.2))) =
+      (fun p : Fin 2 × Fin 2 => (Fin.castLE hD p.1, Fin.castLE hD p.2))
+      (fun p : Fin 2 × Fin 2 => (Fin.castLE hD p.1, Fin.castLE hD p.2))) =
         (1 / (D : ℂ)) • Matrix.swapMatrix 2 := by
   ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
   fin_cases i₁ <;> fin_cases i₂ <;> fin_cases j₁ <;> fin_cases j₂ <;>
-    simp [finTwoToFin, Matrix.swapMatrix_apply]
+    simp [Matrix.swapMatrix_apply]
 
 private theorem scaled_swap_negative {D : ℕ} :
     star finTwoAntisymmVec ⬝ᵥ
@@ -683,10 +680,10 @@ private theorem scaled_swap_negative {D : ℕ} :
     Matrix.swapMatrix_apply]
   ring
 
-/-- **Wolf Chapter 3, Equation (3.1).** In dimension at least two, matrix
-transposition is not completely positive. The obstruction is the negative
-expectation of the normalized flip operator on the antisymmetric vector
-\(|01\rangle-|10\rangle\). -/
+/-- As a consequence of Wolf Chapter 3, Equation (3.1), matrix transposition is
+not completely positive in dimension at least two. The obstruction is the
+negative expectation of the normalized flip operator on the antisymmetric
+vector \(|01\rangle-|10\rangle\). -/
 theorem transposeLinearMapComplex_not_isCPMap {D : ℕ} (hD : 2 ≤ D) :
     ¬ IsCPMap (Matrix.transposeLinearMapComplex (Fin D)) := by
   intro hcp
@@ -697,7 +694,7 @@ theorem transposeLinearMapComplex_not_isCPMap {D : ℕ} (hD : 2 ≤ D) :
       (T := Matrix.transposeLinearMapComplex (Fin D))).mp hcp
   have hpsd₂ : (((1 / (D : ℂ)) • Matrix.swapMatrix 2)).PosSemidef := by
     have hsub := hpsd.submatrix
-      (fun p : Fin 2 × Fin 2 => (finTwoToFin hD p.1, finTwoToFin hD p.2))
+      (fun p : Fin 2 × Fin 2 => (Fin.castLE hD p.1, Fin.castLE hD p.2))
     rw [choiMatrix_transposeLinearMapComplex_eq_swap hDpos,
       scaled_swap_submatrix_finTwo hD] at hsub
     exact hsub
