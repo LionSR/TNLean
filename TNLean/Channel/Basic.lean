@@ -86,7 +86,7 @@ namespace Matrix
 
 variable (n : Type*)
 
-/-- Matrix transposition as a complex-linear map on $M_n(\mathbb C)$. -/
+/-- Matrix transposition as a complex-linear map on `Matrix n n ℂ`. -/
 def transposeLinearMapComplex : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ :=
   (Matrix.transposeLinearEquiv n n ℂ ℂ).toLinearMap
 
