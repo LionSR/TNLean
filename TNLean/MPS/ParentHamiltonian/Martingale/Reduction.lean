@@ -768,8 +768,8 @@ bound \(\|h_i (h_j v)\| \le \eta\,\|h_i v\|\).  The directional bound, holding f
 every \(v\), forces \(h_j\) to preserve \(\ker h_i\); the operator-product bound
 imposes no such constraint.  Through `re_inner_anticommutator_ge_neg_of_norm_apply_le`
 it yields the symmetric anticommutator estimate of arXiv:2011.12127, Section
-IV.C, equation eq:4:martingale-2, with per-pair coefficient \(\eta\), and hence
-the same finite-overlap martingale gap as the anticommutator route.  Both this
+IV.C, equation (4), with per-pair coefficient \(\eta\), and hence the same
+finite-overlap martingale gap as the anticommutator route.  Both this
 operator-product bound and the directional bound are conditional reductions: for
 the overlapping excitation projections \(h_i, h_j\) one has \(\|h_i h_j\| = 1\)
 when their ranges have a common nonzero vector, so neither hypothesis is
