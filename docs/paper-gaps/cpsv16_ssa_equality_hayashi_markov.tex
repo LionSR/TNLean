@@ -111,7 +111,18 @@ are within reach of the present entropy interface:
   \item invariance of the entropy under a unitary basis change and under
     reindexing of the underlying space, so that the basis change on $\mathcal
     H_B$ and the direct-sum reindexing in~\eqref{eq:qmc} leave every entropy term
-    unchanged.
+    unchanged;
+  \item identification of the three reduced states as partial traces of the
+    block-diagonal state~\eqref{eq:qmc}: tracing out $C$ gives
+    $\rho_{AB} \cong \bigoplus_j p_j\, \rho_{A B_j^{L}} \otimes \rho_{B_j^{R}}$,
+    tracing out $A$ gives
+    $\rho_{BC} \cong \bigoplus_j p_j\, \rho_{B_j^{L}} \otimes \rho_{B_j^{R} C}$,
+    and tracing out $AC$ gives
+    $\rho_{B} \cong \bigoplus_j p_j\, \rho_{B_j^{L}} \otimes \rho_{B_j^{R}}$,
+    where $\rho_{B_j^{L}} = \tr_{A}\rho_{A B_j^{L}}$ and
+    $\rho_{B_j^{R}} = \tr_{C}\rho_{B_j^{R} C}$. These marginal formulas carry the
+    weights and tensor factors through, and they are what feeds the four entropy
+    terms of~\eqref{eq:ssa-eq} into the two additivity lemmas above.
 \end{itemize}
 
 With these three facts the reverse implication is a finite computation; the

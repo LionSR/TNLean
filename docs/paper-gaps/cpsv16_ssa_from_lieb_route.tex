@@ -79,33 +79,45 @@ chain of them. In source order the chain is the following.
     trace-preserving completely positive map $\Lambda$, in particular under the
     partial trace. Monotonicity under the partial trace is the form of DPI used
     below; it follows from joint convexity together with unitary invariance of
-    $D$.
+    $D$ and the ancilla-additivity identity
+    $D(\rho \otimes \tau \,\|\, \sigma \otimes \tau) = D(\rho\,\|\,\sigma)$ for a
+    fixed ancilla state $\tau$. The standard twirling argument writes the partial
+    trace $\tr_C$ as an average of unitary conjugations on $\mathcal H_C$ applied
+    after appending the maximally mixed ancilla $\tau = \mathbf 1_C / d_C$, so all
+    three ingredients --- joint convexity, unitary invariance, and
+    ancilla-additivity --- are needed; joint convexity and unitary invariance
+    alone do not suffice.
   \item \emph{Final assembly.} The inequality~\eqref{eq:ssa} read as a single
     instance of DPI under the partial trace over $C$. Take the reference state
-    $\sigma_{ABC} = \mathbf 1_A \otimes \rho_{BC}$, with the identity
-    $\mathbf 1_A$ on $\mathcal H_A$ and the reduced state $\rho_{BC}$ on
-    $\mathcal H_B \otimes \mathcal H_C$. Since
-    $\log(\mathbf 1_A \otimes \rho_{BC}) = \mathbf 1_A \otimes \log\rho_{BC}$,
+    $\sigma_{ABC} = (\mathbf 1_A / d_A) \otimes \rho_{BC}$, the tensor product of
+    the maximally mixed state $\mathbf 1_A / d_A$ on $\mathcal H_A$
+    ($d_A = \dim \mathcal H_A$) with the reduced state $\rho_{BC}$ on
+    $\mathcal H_B \otimes \mathcal H_C$; this $\sigma_{ABC}$ is a density operator,
+    so it lies in the domain of the relative entropy defined in layer (2). Since
+    $\log\bigl((\mathbf 1_A / d_A) \otimes \rho_{BC}\bigr)
+      = -(\log d_A)\,\mathbf 1_{ABC} + \mathbf 1_A \otimes \log\rho_{BC}$,
     the relative entropy evaluates to
     \begin{align}
-      D(\rho_{ABC} \,\|\, \mathbf 1_A \otimes \rho_{BC})
-        = S(\rho_{BC}) - S(\rho_{ABC}).
+      D\bigl(\rho_{ABC} \,\|\, (\mathbf 1_A / d_A) \otimes \rho_{BC}\bigr)
+        = \log d_A + S(\rho_{BC}) - S(\rho_{ABC}).
     \end{align}
     Applying the partial trace $\Lambda = \tr_C$ sends
     $\rho_{ABC} \mapsto \rho_{AB}$ and
-    $\mathbf 1_A \otimes \rho_{BC} \mapsto \mathbf 1_A \otimes \rho_{B}$, so the
-    image relative entropy is
+    $(\mathbf 1_A / d_A) \otimes \rho_{BC} \mapsto
+    (\mathbf 1_A / d_A) \otimes \rho_{B}$, so the image relative entropy is
     \begin{align}
-      D(\rho_{AB} \,\|\, \mathbf 1_A \otimes \rho_{B})
-        = S(\rho_{B}) - S(\rho_{AB}).
+      D\bigl(\rho_{AB} \,\|\, (\mathbf 1_A / d_A) \otimes \rho_{B}\bigr)
+        = \log d_A + S(\rho_{B}) - S(\rho_{AB}).
     \end{align}
     Monotonicity under $\Lambda$, namely
     $D(\Lambda\rho \,\|\, \Lambda\sigma) \le D(\rho\,\|\,\sigma)$, then reads
-    $S(\rho_{B}) - S(\rho_{AB}) \le S(\rho_{BC}) - S(\rho_{ABC})$, which on
+    $\log d_A + S(\rho_{B}) - S(\rho_{AB}) \le
+     \log d_A + S(\rho_{BC}) - S(\rho_{ABC})$; the common $\log d_A$ cancels,
+    leaving $S(\rho_{B}) - S(\rho_{AB}) \le S(\rho_{BC}) - S(\rho_{ABC})$, which on
     rearrangement is exactly~\eqref{eq:ssa}; equivalently it is the
     nonnegativity of the conditional mutual information $I(A:C\mid B)\ge 0$. The
-    discarded subsystem is $C$ and the reference state carries the identity on
-    the \emph{retained} factor $A$; discarding $A$ instead against
+    discarded subsystem is $C$ and the reference state carries the maximally mixed
+    state on the \emph{retained} factor $A$; discarding $A$ instead against
     $\rho_A \otimes \rho_{BC}$ would only yield subadditivity
     $I(A:BC)\ge 0$, not strong subadditivity.
 \end{enumerate}
@@ -129,8 +141,10 @@ in place. Concretely:
     monotonicity, not Lieb concavity.
   \item Layer (4) is the single consumer of \leanid{lieb_concavity_axiom}: joint
     convexity of $D$ is the entropy-theoretic content of Lieb's theorem.
-  \item Layer (5) packages joint convexity and unitary invariance into the
-    partial-trace monotonicity statement.
+  \item Layer (5) packages joint convexity, unitary invariance, and
+    ancilla-additivity $D(\rho\otimes\tau\,\|\,\sigma\otimes\tau)
+    = D(\rho\,\|\,\sigma)$ into the partial-trace monotonicity statement via the
+    twirling representation of $\tr_C$.
   \item Layer (6) instantiates layer (5) at the tripartite splitting to
     recover~\eqref{eq:ssa}.
 \end{itemize}
