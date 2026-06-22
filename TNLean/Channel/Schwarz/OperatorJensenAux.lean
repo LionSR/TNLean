@@ -12,7 +12,11 @@ import Mathlib.LinearAlgebra.Matrix.PosDef
 
 This file states algebraic lemmas for the finite-POVM / compression route to
 operator Jensen inequalities. The main target is the concave real-power case in
-Wolf Corollary 5.2, but the final Löwner-integral argument is still absent.
+Wolf Corollary 5.2. The Löwner integral representation of `rpow` that this route
+feeds into is now available in Mathlib 4.31
+(`Analysis/SpecialFunctions/ContinuousFunctionalCalculus/Rpow/IntegralRepresentation.lean`),
+so the outstanding gap is the operator Jensen step rather than the integral
+representation; see the status note below.
 
 ## Main statements
 
@@ -38,10 +42,20 @@ Wolf Corollary 5.2, but the final Löwner-integral argument is still absent.
 These lemmas formalize the compression / finite-POVM half of the direct proof
 route for the concave real-power Jensen inequality. The diagonal-inverse formula
 (`povmDiagonal_inv`) and the finite-POVM resolvent inequality
-(`povm_resolvent_inv_le`) are now proved. The remaining unfinished step is the
-Löwner-integral argument that carries the pointwise resolvent inequality
-through the integral representation of `rpow` to discharge
-`posMap_rpow_concave_jensen`.
+(`povm_resolvent_inv_le`) are now proved.
+
+The integral representation that consumes these lemmas is supplied by Mathlib
+4.31: `CFC.exists_measure_nnrpow_eq_integral_cfcₙ_rpowIntegrand₀₁` gives
+`a ^ p = ∫ t in Ioi 0, cfcₙ (Real.rpowIntegrand₀₁ p t) a ∂μ` for `p ∈ (0, 1)`,
+and `CFC.concaveOn_cfc_rpowIntegrand₀₁` records the operator concavity of each
+integrand together with the resolvent form
+`cfc (Real.rpowIntegrand₀₁ p t) a = t ^ (p - 1) • 1 - t ^ p • (t • 1 + a)⁻¹`.
+
+The remaining unfinished step is therefore the operator Jensen inequality for a
+positive subunital map `T` applied to a single integrand,
+`T(cfc (Real.rpowIntegrand₀₁ p t) A) ≤ cfc (Real.rpowIntegrand₀₁ p t) (T A)`,
+together with monotonicity of the matrix-valued integral in the Loewner order;
+combining these and integrating discharges `posMap_rpow_concave_jensen`.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
