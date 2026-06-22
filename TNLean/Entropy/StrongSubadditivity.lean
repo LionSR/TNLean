@@ -45,7 +45,8 @@ no duplicate axiomatization of SSA is introduced.
 
 Replace the sanctioned axiom `_root_.strong_subadditivity` (in
 `TNLean/Axioms/Entropy.lean`) with a proof along the classical route:
-1. Define quantum relative entropy `D(ρ‖σ) = tr(ρ(log ρ − log σ))`.
+1. Use `Entropy.quantumRelativeEntropy`, the trace-log relative entropy
+   `D(ρ‖σ) = Re tr(ρ(log ρ − log σ))`.
 2. Establish Klein's inequality: `D(ρ‖σ) ≥ 0` for density matrices.
 3. Lieb's joint concavity of `(A, B) ↦ tr(Kᴴ Aᵗ K B^{1-t})`.
 4. Monotonicity of the relative entropy under partial trace

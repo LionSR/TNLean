@@ -177,6 +177,84 @@ finite-dimensional quantum systems.
     standard expression $S(\rho) = -\operatorname{tr}(\rho\log\rho)$.
 \end{remark}
 
+\begin{definition}[Quantum relative entropy]\label{def:quantum_relative_entropy}
+    \lean{quantumRelativeEntropy}
+    \leanok
+    For matrices $\rho,\sigma\in \MN{D}$, define the trace-log expression
+    \[
+        D(\rho\Vert\sigma)
+            = \operatorname{Re}\operatorname{tr}\bigl(\rho(\log\rho-\log\sigma)\bigr).
+    \]
+    On the physical domain where $\rho$ is a density matrix and $\sigma$ is
+    positive definite, this is the Umegaki relative entropy.
+\end{definition}
+
+\begin{lemma}[Trace-log splitting for relative entropy]
+    \label{lem:quantum_relative_entropy_trace_split}
+    \lean{quantumRelativeEntropy_eq_trace_mul_log_sub}
+    \leanok
+    \uses{def:quantum_relative_entropy}
+    For matrices $\rho,\sigma\in \MN{D}$,
+    \[
+        D(\rho\Vert\sigma)
+            = \operatorname{Re}\operatorname{tr}(\rho\log\rho)
+              - \operatorname{Re}\operatorname{tr}(\rho\log\sigma).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Expand the matrix product over the difference $\log\rho-\log\sigma$ and use
+    linearity of the trace and of the real part.
+\end{proof}
+
+\begin{lemma}[Relative entropy with identical arguments]
+    \label{lem:quantum_relative_entropy_self}
+    \lean{quantumRelativeEntropy_self}
+    \leanok
+    \uses{def:quantum_relative_entropy}
+    For every matrix $\rho\in \MN{D}$,
+    \[
+        D(\rho\Vert\rho)=0.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    The logarithmic difference $\log\rho-\log\rho$ vanishes.
+\end{proof}
+
+\begin{lemma}[Relative entropy with zero first argument]
+    \label{lem:quantum_relative_entropy_zero_left}
+    \lean{quantumRelativeEntropy_zero_left}
+    \leanok
+    \uses{def:quantum_relative_entropy}
+    For every matrix $\sigma\in \MN{D}$,
+    \[
+        D(0\Vert\sigma)=0.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    The trace-log expression is multiplied on the left by the zero matrix.
+\end{proof}
+
+\begin{theorem}[Relative entropy in entropy form]
+    \label{thm:quantum_relative_entropy_entropy_form}
+    \lean{quantumRelativeEntropy_eq_neg_entropy_sub_trace_mul_log}
+    \leanok
+    \uses{def:quantum_relative_entropy, thm:entropy_eq_neg_trace_mul_log}
+    If $\rho$ is Hermitian, then
+    \[
+        D(\rho\Vert\sigma)
+            = -S(\rho)-\operatorname{Re}\operatorname{tr}(\rho\log\sigma).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Split the definition of $D(\rho\Vert\sigma)$ into its two trace terms and
+    replace the first term by $-S(\rho)$ using the trace-logarithm form of the
+    von Neumann entropy.
+\end{proof}
+
 \begin{theorem}[Entropy is invariant under reindexing]
     \label{thm:entropy_submatrix_equiv}
     \lean{vonNeumannEntropy_submatrix_equiv}
@@ -398,7 +476,8 @@ decomposition, and mutual information. These statements are cited from the
 standard entropy literature and supply the entropy-theoretic input for the
 later MPDO arguments.
 
-\begin{definition}[Entropy formulation of von Neumann entropy]\label{def:entropy_von_neumann_entropy}
+\begin{definition}[Entropy formulation of von Neumann entropy]
+    \label{def:entropy_von_neumann_entropy}
     \lean{Entropy.vonNeumannEntropy}
     \leanok
     \uses{def:von_neumann_entropy}

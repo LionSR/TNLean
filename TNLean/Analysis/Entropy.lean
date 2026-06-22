@@ -20,6 +20,7 @@ the basic quantum entropy infrastructure needed for MPDO / RFP applications.
 ## Main definitions
 
 * `vonNeumannEntropy`: `S(ρ) = ∑ᵢ negMulLog(λᵢ)` where `λᵢ` are eigenvalues
+* `quantumRelativeEntropy`: `D(ρ‖σ) = Re tr(ρ(log ρ - log σ))`
 * `traceA_ABC`, `traceC_ABC`, `traceAC_ABC`: tripartite partial traces
 * `mutualInformation`: `I(A:B) = S(ρ_A) + S(ρ_B) - S(ρ_AB)`
 * `IsSSAEquality`: predicate for equality in strong subadditivity
@@ -142,6 +143,64 @@ theorem vonNeumannEntropy_eq_neg_trace_mul_log
   rw [RCLike.re_eq_complex_re] at htr
   rw [htr, ← Finset.sum_neg_distrib]
   exact Finset.sum_congr rfl fun i _ => by simp only [Real.negMulLog]; ring
+
+open scoped Matrix.Norms.L2Operator in
+/-- **Quantum relative entropy**, in trace-log form.
+
+For matrices `ρ` and `σ` of the same finite dimension, this is the totalized
+trace-log expression
+`D(ρ‖σ) = Re tr(ρ · (log ρ - log σ))`, where the logarithm is `CFC.log`.
+When `ρ` is a density matrix and `σ` is positive definite, this is the usual
+finite-dimensional Umegaki relative entropy.
+
+The definition is total because Mathlib's `CFC.log` is total. The physical
+relative entropy domain is the positive semidefinite / positive definite one;
+outside that domain this declaration is only the algebraic trace-log expression.
+
+Source: standard; blueprint `def:quantum_relative_entropy`. -/
+noncomputable def quantumRelativeEntropy
+    (ρ σ : Matrix n n ℂ) : ℝ :=
+  (Matrix.trace (ρ * (CFC.log ρ - CFC.log σ))).re
+
+open scoped Matrix.Norms.L2Operator in
+/-- The trace-log form of relative entropy split into its two trace terms. -/
+theorem quantumRelativeEntropy_eq_trace_mul_log_sub
+    (ρ σ : Matrix n n ℂ) :
+    quantumRelativeEntropy ρ σ
+      = (Matrix.trace (ρ * CFC.log ρ)).re
+        - (Matrix.trace (ρ * CFC.log σ)).re := by
+  simp [quantumRelativeEntropy, Matrix.mul_sub, Matrix.trace_sub]
+
+open scoped Matrix.Norms.L2Operator in
+/-- A matrix has zero relative entropy with itself. -/
+@[simp] theorem quantumRelativeEntropy_self
+    (ρ : Matrix n n ℂ) :
+    quantumRelativeEntropy ρ ρ = 0 := by
+  simp [quantumRelativeEntropy]
+
+open scoped Matrix.Norms.L2Operator in
+/-- The zero left input has zero trace-log relative entropy. -/
+@[simp] theorem quantumRelativeEntropy_zero_left
+    (σ : Matrix n n ℂ) :
+    quantumRelativeEntropy 0 σ = 0 := by
+  simp [quantumRelativeEntropy]
+
+open scoped Matrix.Norms.L2Operator in
+/-- Relative entropy rewritten using the von Neumann entropy of the first
+argument.
+
+For Hermitian `ρ`,
+`D(ρ‖σ) = -S(ρ) - Re tr(ρ log σ)`. This is the representation used when
+relating the trace-log relative-entropy layer to the eigenvalue definition of
+von Neumann entropy. -/
+theorem quantumRelativeEntropy_eq_neg_entropy_sub_trace_mul_log
+    {ρ σ : Matrix n n ℂ} (hρ : ρ.IsHermitian) :
+    quantumRelativeEntropy ρ σ
+      = -vonNeumannEntropy ρ hρ - (Matrix.trace (ρ * CFC.log σ)).re := by
+  rw [quantumRelativeEntropy_eq_trace_mul_log_sub]
+  have htrace : (Matrix.trace (ρ * CFC.log ρ)).re = -vonNeumannEntropy ρ hρ := by
+    linarith [vonNeumannEntropy_eq_neg_trace_mul_log hρ]
+  rw [htrace]
 
 /-- The von Neumann entropy depends only on the characteristic polynomial: it is
 the `negMulLog`-sum of the (real parts of the) roots of `charpoly`. -/
@@ -337,7 +396,8 @@ theorem vonNeumannEntropy_le_log_rank
   rw [hLHS] at hJensen
   -- `k⁻¹ · S ≤ negMulLog(k⁻¹) = k⁻¹ · log k`, multiply by `k`
   have hrhs : (k : ℝ) * Real.negMulLog ((k : ℝ)⁻¹) = Real.log k := by
-    rw [Real.negMulLog, Real.log_inv, neg_mul_neg, ← mul_assoc, mul_inv_cancel₀ hkR.ne', one_mul]
+    rw [Real.negMulLog, Real.log_inv, neg_mul_neg, ← mul_assoc,
+      mul_inv_cancel₀ hkR.ne', one_mul]
   have hlhs : (k : ℝ) * ((k : ℝ)⁻¹ * vonNeumannEntropy ρ hρ.isHermitian)
       = vonNeumannEntropy ρ hρ.isHermitian := by
     rw [← mul_assoc, mul_inv_cancel₀ hkR.ne', one_mul]
