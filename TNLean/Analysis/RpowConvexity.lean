@@ -92,7 +92,6 @@ lemma convexOn_cfc_rpowIntegrand₁₂ {p t : ℝ} (ht : 0 < t) :
         + (t ^ p • Ring.inverse (algebraMap ℝ A t + x) - algebraMap ℝ A (t ^ (p - 1)))) := by
     intro x hx
     have hxnn : (0 : A) ≤ x := hx
-    have hsa : IsSelfAdjoint x := hxnn.isSelfAdjoint
     have hscalar : rpowIntegrand₁₂ p t
         = fun z => t ^ (p - 2) * z + (t ^ p * (t + z)⁻¹ - t ^ (p - 1)) := by
       funext z
