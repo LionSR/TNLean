@@ -197,7 +197,7 @@ structure AppendixBStructuralData (A : MPSTensor d D) where
   X : Matrix (Fin D) (Fin D) ℂ
   /-- Positive diagonal weights. -/
   Λ : Fin D → ℝ
-  /-- The residual left-canonical tensor family. -/
+  /-- The residual tensor family satisfying the source pair-index isometry. -/
   U : MPSTensor d D
   /-- The change-of-basis matrix is invertible. -/
   hX_det : X.det ≠ 0
