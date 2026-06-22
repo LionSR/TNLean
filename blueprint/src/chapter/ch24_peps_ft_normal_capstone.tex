@@ -1414,6 +1414,59 @@ recorded in the route note
     formalization step.
 \end{proof}
 
+\begin{corollary}[Translation-invariant description of an injective 2D PEPS,
+        uniform bond dimension]%
+    \label{cor:exists_constant_injectivePEPS_of_translationInvariantState}
+    \notready
+    \uses{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState,
+        thm:fundamentalTheorem_PEPS, def:peps_torus_translation_invariant,
+        def:peps_torus_uniform_bond_dim,
+        thm:peps_stateCoeff_translationInvariant}
+    Let \(A\) be an injective PEPS on the discrete torus with orientation-uniform
+    bond dimensions, horizontal dimension \(D_h\) and vertical dimension \(D_v\),
+    and positive bond dimensions.  If the generated state is invariant under all
+    lattice translations \(\tau_{a,b}\), that is, for every translation and every
+    physical configuration \(\sigma\),
+    \[
+        \operatorname{Coeff}_{A}(\sigma\circ\tau_{a,b})
+        =
+        \operatorname{Coeff}_{A}(\sigma),
+    \]
+    then there is an injective torus tensor \(B\), with the same orientation-uniform
+    bond dimensions \(D_h\) and \(D_v\), whose constant (site-independent) family
+    generates the same state:
+    \[
+        \operatorname{Coeff}_{A}(\sigma)
+        =
+        \operatorname{Coeff}_{B}(\sigma)
+        \qquad\text{for every }\sigma.
+    \]
+
+    This is the uniform-bond-dimension target corresponding to the
+    Applications-section 2D corollary of
+    \cite[lines~1892--1894]{Molnar2018NormalPEPS}.  The source additionally
+    concludes that all vertical bond dimensions agree and all horizontal bond
+    dimensions agree; in the present orientation-uniform setting those two
+    clauses have already been built into the bond-dimension type, so they carry
+    no content here.
+\end{corollary}
+\begin{proof}
+    The argument is the one-dimensional construction of
+    Corollary~\ref{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState}
+    applied independently along the horizontal and the vertical lattice
+    translations.  Translation invariance of the state lets one compare \(A\)
+    with each of its translates through the injective PEPS Fundamental Theorem
+    (Theorem~\ref{thm:fundamentalTheorem_PEPS}), producing per-edge gauges along
+    each direction.  Telescoping the horizontal gauges around a row and the
+    vertical gauges around a column, and closing each with the periodic boundary
+    condition, collapses the per-edge gauges to a single virtual operation in
+    each orientation; absorbing them into one site gives the repeated tensor
+    \(B\).  Both the one-dimensional telescoping closure
+    (Corollary~\ref{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState})
+    and its two-directional assembly into a single repeated 2D tensor remain to
+    be formalized.
+\end{proof}
+
 \begin{theorem}[Uniqueness of the injective closed-chain gauge]%
     \label{thm:fundamentalTheorem_injectiveMPSChain_gauge_unique}
     \lean{TNLean.PEPS.fundamentalTheorem_injectiveMPSChain_gauge_unique}
