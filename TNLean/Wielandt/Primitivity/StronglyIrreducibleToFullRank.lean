@@ -420,8 +420,9 @@ This is the key compactness step for the (c) → (b) proof:
 1. **Continuity**: `B ↦ tr(B† ρ B).re` is a continuous real-valued function.
 2. **Compactness**: The unit sphere in `M_D(ℂ)` is compact
    (finite-dimensional over `ℂ` ⇒ `ProperSpace`).
-3. **Positivity on the sphere**: From the positive-definite
-   smallest-eigenvalue trace lower bound.
+3. **Positivity on the sphere**: if `λ = minEigenvalue ρ`, then `λ > 0` and
+   `λ * tr(B B†) ≤ tr(B† ρ B)`. For `B` on the unit sphere, `tr(B B†) > 0`,
+   hence `tr(B† ρ B).re > 0`.
 4. **Minimum exists**: Apply `IsCompact.exists_isMinOn` to get `c = min f(sphere) > 0`.
 5. **Extend by homogeneity**: For `B ≠ 0`, normalize `B' := ‖B‖⁻¹ • B ∈ sphere`,
    then `f(B) = ‖B‖² · f(B') ≥ c · ‖B‖²`.
