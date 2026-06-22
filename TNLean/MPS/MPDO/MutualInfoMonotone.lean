@@ -285,13 +285,6 @@ theorem traceA_mat {d D : ℕ} (M : MPOTensor d D) {N a b c : ℕ} (h3 : a + b +
       append_assoc_cast, append_assoc_cast])]
   rw [collapse_first M (a := a) (b := b + c) (by omega)]
 
-/-- von Neumann entropy congruence in the matrix argument (proof-irrelevant in the
-Hermiticity witness). -/
-theorem vonNeumannEntropy_congr {n : Type*} [Fintype n] [DecidableEq n]
-    {ρ₁ ρ₂ : Matrix n n ℂ} (h : ρ₁ = ρ₂) (hρ₁ : ρ₁.IsHermitian) (hρ₂ : ρ₂.IsHermitian) :
-    vonNeumannEntropy ρ₁ hρ₁ = vonNeumannEntropy ρ₂ hρ₂ := by
-  subst h; rfl
-
 /-- Block entropy is congruent in the block length. -/
 theorem blockEntropy_congr {d D : ℕ} (M : MPOTensor d D) (N : ℕ) {j k : ℕ} (h : j = k)
     (hj : j ≤ N) (hk : k ≤ N) (hM : (mpo M N).PosSemidef) :
