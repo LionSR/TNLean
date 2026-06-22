@@ -15,6 +15,47 @@ In Definition~3.9 the parent-Hamiltonian condition also says that, for
 $N>L$, the ground space is spanned by the periodic MPS vectors associated to
 the BNT components; nearest-neighbor means the specialization $L=2$.
 
+\begin{definition}[Overlapping two-site supports]\label{def:overlapping_two_site_supports}
+    \lean{MPSTensor.axPairCfg}
+    \lean{MPSTensor.xbPairCfg}
+    \lean{MPSTensor.replaceAXCfg}
+    \lean{MPSTensor.replaceXBCfg}
+    \lean{MPSTensor.leftPairLift}
+    \lean{MPSTensor.rightPairLift}
+    \lean{MPSTensor.HasOverlappingTwoSiteCommutation}
+    \lean{MPSTensor.adjacent_twoSite_cyclicWindowsOverlap}
+    \leanok
+    \uses{def:nsite_space_parent, def:cyclic_window_support,
+        def:cyclic_windows_overlap}
+    On a three-site space
+    $\mathcal H_A\otimes\mathcal H_X\otimes\mathcal H_B$, let
+    $Q_{AX}$ and $Q_{XB}$ be two-site projectors. Their local actions on the
+    three-site space are the operators
+    \[
+        (Q_{AX}\psi)(a,x,b)
+        =
+        Q_{AX}\bigl(\alpha,\xi\mapsto\psi(\alpha,\xi,b)\bigr)(a,x),
+    \]
+    and
+    \[
+        (Q_{XB}\psi)(a,x,b)
+        =
+        Q_{XB}\bigl(\xi,\beta\mapsto\psi(a,\xi,\beta)\bigr)(x,b).
+    \]
+    The algebraic part of the overlapping nearest-neighbor commutation
+    condition is
+    \[
+        Q_{AX}^2=Q_{AX},\qquad
+        Q_{XB}^2=Q_{XB},\qquad
+        Q_{AX}Q_{XB}=Q_{XB}Q_{AX}
+    \]
+    after these two local actions are viewed on the common three-site space.
+    This is the local-support part of the parent commuting Hamiltonian condition
+    in \cite[Definition~D.2]{Cirac2016MPDO_arXiv}.  The cyclic windows beginning
+    at $i$ and $i+1$ realize the two supports $AX$ and $XB$, and hence overlap at
+    the middle site.
+\end{definition}
+
 \begin{definition}[Translated parent-term commutation]\label{def:is_commuting_parent_ham}
     \lean{MPSTensor.IsCommutingParentHam}
     \leanok
