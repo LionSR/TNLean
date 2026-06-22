@@ -56,6 +56,32 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     the middle site.
 \end{definition}
 
+\begin{theorem}[Three-site translated parent terms]
+    \label{thm:local_term_two_three_ax_xb_lifts}
+    \lean{MPSTensor.localTerm_two_three_zero_eq_leftPairLift_parentInteraction}
+    \lean{MPSTensor.localTerm_two_three_one_eq_rightPairLift_parentInteraction}
+    \leanok
+    \uses{def:overlapping_two_site_supports, def:local_term_parent}
+    Put \(q(A)=1-P_{G_2(A)}\) for the canonical two-site parent interaction. On
+    the three-site space
+    \(\mathcal H_A\otimes\mathcal H_X\otimes\mathcal H_B\), with sites
+    \(0,1,2\) labelled \(A,X,B\), the two adjacent translated length-two parent
+    interactions are the two local actions
+    \[
+        h^{(3)}_0(A,2)=q(A)_{AX},\qquad
+        h^{(3)}_1(A,2)=q(A)_{XB}.
+    \]
+    This identifies the two translated parent interactions with the two
+    supports appearing in Definition~D.2; it does not assert that they commute.
+\end{theorem}
+
+\begin{proof}\leanok
+    For the first translated term, the length-two window extracts the
+    \(AX\)-coordinates and replacing that window is the same as replacing the
+    \(AX\)-face while leaving \(B\) fixed. For the second translated term, the
+    window extracts the \(XB\)-coordinates and replacement leaves \(A\) fixed.
+\end{proof}
+
 \begin{definition}[Translated parent-term commutation]\label{def:is_commuting_parent_ham}
     \lean{MPSTensor.IsCommutingParentHam}
     \leanok
@@ -669,8 +695,13 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     Appendix~B first gives a cyclic virtual-pair expression; identifying that
     expression with this adjacent-pair formal input is part of the remaining
     factorization theorem.
-    The two-site parent projectors must also be identified with
-    idempotents $p_i$ satisfying
+    On a three-site chain, the two adjacent length-two parent terms are the
+    \(AX\) and \(XB\) actions of the canonical two-site parent interaction.
+    What remains from Appendix~B is to identify the projectors determined by the
+    product-of-pairs form with these canonical parent interactions and to prove
+    \(Q_{AX}Q_{XB}=Q_{XB}Q_{AX}\). For the all-chain statement, the resulting
+    two-site parent projectors must be identified with idempotents \(p_i\)
+    satisfying
     \[
         h_i(A,2)=p_i,\qquad p_i^2=p_i,\qquad p_ip_j=p_jp_i.
     \]
@@ -681,10 +712,7 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     which is the nearest-neighbor commuting conclusion for every finite chain.
     The even-chain factorization and the two-site projector identification are
     the inputs supplied by Appendix~B of \cite{Cirac2016MPDO_arXiv}; given them,
-    the local terms commute.  The three-site $AX/XB$ support maps of
-    Definition~\ref{def:overlapping_two_site_supports} record the local action
-    of the adjacent projectors, but the theorem identifying those projectors with
-    the translated parent terms remains open. Together with
+    the local terms commute. Together with
     Lemma~\ref{lem:parent_hamiltonian_ff}, the product-pair input also gives the
     zero-energy equation for $V^{(N)}(A)$, still without asserting the source
     ground-space spanning condition.

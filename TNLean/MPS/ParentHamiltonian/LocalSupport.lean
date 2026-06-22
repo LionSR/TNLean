@@ -156,6 +156,64 @@ def rightPairLift (Q : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) :
   ext ψ σ
   simp [Module.End.mul_apply]
 
+variable {D : ℕ}
+
+/-- On a three-site window, the translated length-two parent interaction at
+the first site is the \(AX\) lift of the two-site parent interaction. -/
+@[simp]
+theorem localTerm_two_three_zero_eq_leftPairLift_parentInteraction
+    (A : MPSTensor d D) :
+    localTerm A 2 3 (0 : Fin 3) = leftPairLift (parentInteraction A 2) := by
+  ext ω σ
+  have hExtract : extractWindow 2 (0 : Fin 3) σ = axPairCfg σ := by
+    funext j
+    fin_cases j <;> rfl
+  have hPi :
+      ((LinearMap.pi fun τ : Cfg d 2 =>
+          (LinearMap.proj (replaceWindow 2 (by decide : 2 ≤ 3) (0 : Fin 3) σ τ) :
+            NSiteSpace d 3 →ₗ[ℂ] ℂ)) (Pi.single ω (1 : ℂ))) =
+        (fun α : Cfg d 2 =>
+          ((Pi.single ω (1 : ℂ) : NSiteSpace d 3) (replaceAXCfg σ α))) := by
+    funext τ
+    have hWindow :
+        replaceWindow 2 (by decide : 2 ≤ 3) (0 : Fin 3) σ τ =
+          replaceAXCfg σ τ := by
+      funext k
+      fin_cases k <;> rfl
+    change (Pi.single ω (1 : ℂ) : NSiteSpace d 3)
+        (replaceWindow 2 (by decide : 2 ≤ 3) (0 : Fin 3) σ τ) =
+      (Pi.single ω (1 : ℂ) : NSiteSpace d 3) (replaceAXCfg σ τ)
+    rw [hWindow]
+  simp [localTerm, leftPairLift, hExtract, hPi]
+
+/-- On a three-site window, the translated length-two parent interaction at
+the second site is the \(XB\) lift of the two-site parent interaction. -/
+@[simp]
+theorem localTerm_two_three_one_eq_rightPairLift_parentInteraction
+    (A : MPSTensor d D) :
+    localTerm A 2 3 (1 : Fin 3) = rightPairLift (parentInteraction A 2) := by
+  ext ω σ
+  have hExtract : extractWindow 2 (1 : Fin 3) σ = xbPairCfg σ := by
+    funext j
+    fin_cases j <;> rfl
+  have hPi :
+      ((LinearMap.pi fun τ : Cfg d 2 =>
+          (LinearMap.proj (replaceWindow 2 (by decide : 2 ≤ 3) (1 : Fin 3) σ τ) :
+            NSiteSpace d 3 →ₗ[ℂ] ℂ)) (Pi.single ω (1 : ℂ))) =
+        (fun β : Cfg d 2 =>
+          ((Pi.single ω (1 : ℂ) : NSiteSpace d 3) (replaceXBCfg σ β))) := by
+    funext τ
+    have hWindow :
+        replaceWindow 2 (by decide : 2 ≤ 3) (1 : Fin 3) σ τ =
+          replaceXBCfg σ τ := by
+      funext k
+      fin_cases k <;> rfl
+    change (Pi.single ω (1 : ℂ) : NSiteSpace d 3)
+        (replaceWindow 2 (by decide : 2 ≤ 3) (1 : Fin 3) σ τ) =
+      (Pi.single ω (1 : ℂ) : NSiteSpace d 3) (replaceXBCfg σ τ)
+    rw [hWindow]
+  simp [localTerm, rightPairLift, hExtract, hPi]
+
 /-- The algebraic part of the source nearest-neighbor parent-commuting condition
 on one tripartite window.
 
