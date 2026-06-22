@@ -29,10 +29,10 @@ representations of quantum channels.
 The Lorentz-normal-form statements are recorded in
 `TNLean.Channel.LorentzNormalForm`, but the generic normal-form and qubit
 classification proofs are not yet complete.  The compactness/minimisation
-lemma is proved there; the remaining proof obligations are the optimality
-step at the minimiser and the `SL(2, ℂ)` Lorentz-orbit classification.  The
-index mentions those statements by name without importing the unfinished file
-into the default root.
+result is proved there; the remaining proof obligations are the optimality step
+at the minimiser and the SL(2, ℂ) Lorentz-orbit classification.  The index
+mentions those statements by name without importing the unfinished file into the
+default root.
 
 ## Coverage summary
 
@@ -246,7 +246,7 @@ into the default root.
 | Section 2.3 Lorentz normal form (full proof) | Statement formalised
   (`exists_lorentz_normal_form_qubit`);
   compactness/minimisation is proved; proof still needs the generic optimality
-  step and the `SL(2, ℂ)` Lorentz-orbit classification |
+  step and the SL(2, ℂ) Lorentz-orbit classification |
 | Section 2.3 Generic normal form (full proof) | Statement formalised
   (`exists_normal_form_generic`);
   compactness/minimisation is proved; proof still needs the AGM/first-order
