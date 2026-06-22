@@ -82,6 +82,67 @@ theorem re_inner_apply_apply_ge_neg_of_norm_apply_le {P Q : E →ₗ[𝕜] E}
     _ ≤ RCLike.re (⟪P v, P (Q v)⟫_𝕜) := hre_lower
     _ = RCLike.re (⟪P v, Q v⟫_𝕜) := by rw [← hcompress]
 
+/-- Symmetric anticommutator lower bound from an operator-product norm estimate.
+
+For symmetric projections `P` and `Q`, the ordered cross term satisfies
+`Re ⟪P v, Q v⟫ = Re ⟪P v, P (Q v)⟫`.  Hence Cauchy--Schwarz applied with a bound
+`‖P (Q v)‖ ≤ c ‖Q v‖` gives `Re ⟪P v, Q v⟫ ≥ -c ‖P v‖ ‖Q v‖`, and the
+arithmetic--geometric mean inequality `2 ‖P v‖ ‖Q v‖ ≤ ‖P v‖² + ‖Q v‖²`
+(using `0 ≤ c`) turns this into the symmetric anticommutator estimate
+`Re ⟪P v, Q v⟫ + Re ⟪Q v, P v⟫ ≥ -c (Re ⟪P v, v⟫ + Re ⟪Q v, v⟫)`.
+
+This is the symmetric counterpart of
+`re_inner_apply_apply_ge_neg_of_norm_apply_le`.  Its hypothesis
+`‖P (Q v)‖ ≤ c ‖Q v‖` is the operator-product norm form of a bound on `‖P Q‖`.
+Imposed for every `v`, it is equivalent to the operator-norm bound `‖P Q‖ ≤ c`
+(using idempotence of `Q`), so it is not a weaker condition than the directional
+bound: it is exactly as strong as requiring `‖P Q‖ ≤ c`.  The two hypotheses
+differ only in which kernel is left free — the directional bound forces `Q` to
+preserve `ker P`, while this bound does not — but neither is the easier of the
+two, and whenever `range P` and `range Q` share a nonzero vector both force
+`c ≥ 1`.  Its conclusion is exactly the anticommutator quadratic form
+`P Q + Q P ≥ -c (P + Q)` of arXiv:2011.12127, Section IV.C,
+lines 2176-2179. -/
+theorem re_inner_anticommutator_ge_neg_of_norm_apply_le {P Q : E →ₗ[𝕜] E}
+    (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection) {c : ℝ}
+    (hc : 0 ≤ c) (hNorm : ∀ v : E, ‖P (Q v)‖ ≤ c * ‖Q v‖) (v : E) :
+    -c * (RCLike.re (⟪P v, v⟫_𝕜) + RCLike.re (⟪Q v, v⟫_𝕜)) ≤
+      RCLike.re (⟪P v, Q v⟫_𝕜) + RCLike.re (⟪Q v, P v⟫_𝕜) := by
+  have hdiagP : RCLike.re (⟪P v, v⟫_𝕜) = ‖P v‖ ^ 2 := by
+    rw [← hP.re_inner_apply_apply_self v, inner_self_eq_norm_sq]
+  have hdiagQ : RCLike.re (⟪Q v, v⟫_𝕜) = ‖Q v‖ ^ 2 := by
+    rw [← hQ.re_inner_apply_apply_self v, inner_self_eq_norm_sq]
+  have hconj : RCLike.re (⟪Q v, P v⟫_𝕜) = RCLike.re (⟪P v, Q v⟫_𝕜) := by
+    rw [← inner_conj_symm (P v) (Q v), RCLike.conj_re]
+  have hPidem : P (P v) = P v := by
+    simpa [Module.End.mul_apply] using congrArg (fun T : E →ₗ[𝕜] E => T v)
+      hP.isIdempotentElem.eq
+  have hcompress : ⟪P v, Q v⟫_𝕜 = ⟪P v, P (Q v)⟫_𝕜 := by
+    calc
+      ⟪P v, Q v⟫_𝕜 = ⟪P (P v), Q v⟫_𝕜 := by rw [hPidem]
+      _ = ⟪P v, P (Q v)⟫_𝕜 := hP.isSymmetric (P v) (Q v)
+  have hre_lower : -‖⟪P v, P (Q v)⟫_𝕜‖ ≤ RCLike.re (⟪P v, P (Q v)⟫_𝕜) := by
+    have h := RCLike.re_le_norm (-(⟪P v, P (Q v)⟫_𝕜))
+    have h' : -RCLike.re (⟪P v, P (Q v)⟫_𝕜) ≤ ‖⟪P v, P (Q v)⟫_𝕜‖ := by
+      simpa using h
+    exact neg_le.mp h'
+  have hnorm_inner : ‖⟪P v, P (Q v)⟫_𝕜‖ ≤ c * (‖P v‖ * ‖Q v‖) := by
+    calc
+      ‖⟪P v, P (Q v)⟫_𝕜‖ ≤ ‖P v‖ * ‖P (Q v)‖ := norm_inner_le_norm (P v) (P (Q v))
+      _ ≤ ‖P v‖ * (c * ‖Q v‖) :=
+          mul_le_mul_of_nonneg_left (hNorm v) (norm_nonneg (P v))
+      _ = c * (‖P v‖ * ‖Q v‖) := by ring
+  have hcross_lb : -(c * (‖P v‖ * ‖Q v‖)) ≤ RCLike.re (⟪P v, Q v⟫_𝕜) := by
+    calc
+      -(c * (‖P v‖ * ‖Q v‖)) ≤ -‖⟪P v, P (Q v)⟫_𝕜‖ := neg_le_neg hnorm_inner
+      _ ≤ RCLike.re (⟪P v, P (Q v)⟫_𝕜) := hre_lower
+      _ = RCLike.re (⟪P v, Q v⟫_𝕜) := by rw [← hcompress]
+  have hamgm : 2 * (‖P v‖ * ‖Q v‖) ≤ ‖P v‖ ^ 2 + ‖Q v‖ ^ 2 := by
+    nlinarith [sq_nonneg (‖P v‖ - ‖Q v‖)]
+  rw [hconj, hdiagP, hdiagQ]
+  nlinarith [hcross_lb, hamgm, hc,
+    mul_nonneg (norm_nonneg (P v)) (norm_nonneg (Q v))]
+
 /-- Commuting symmetric projections have nonnegative ordered cross terms.
 
 If `P` and `Q` are symmetric projections that commute pointwise, then

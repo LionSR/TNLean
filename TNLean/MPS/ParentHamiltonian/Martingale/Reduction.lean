@@ -136,8 +136,7 @@ theorem parentHamiltonianES_quadratic_form_of_ordered_local_term_bounds
 /-- Fixed-chain martingale quadratic-form estimate from source anticommutator
 row bounds.
 
-arXiv:2011.12127, Section IV.C, equation \(4:\mathrm{martingale}\text{-}2\),
-uses the local estimate
+arXiv:2011.12127, Section IV.C, lines 2176-2179, use the local estimate
 \[
   h_i h_j+h_j h_i \ge -c_{ij}(1-\gamma)(h_i+h_j)
 \]
@@ -208,8 +207,8 @@ theorem parentHamiltonianES_gap_bound_of_ordered_local_term_bounds
 
 /-- Uniform explicit gap-bound reduction from source anticommutator row bounds.
 
-arXiv:2011.12127, Section IV.C, equation \(4:\mathrm{martingale}\text{-}2\),
-states the martingale condition in the anticommutator form
+arXiv:2011.12127, Section IV.C, lines 2176-2179, state the martingale
+condition in the anticommutator form
 \[
   h_i h_j+h_jh_i\ge -c_{ij}(1-\gamma)(h_i+h_j).
 \]
@@ -753,5 +752,146 @@ theorem parentHamiltonianES_gap_bound_of_principal_angle_compression
           ‖parentHamiltonianES A L N v‖ :=
   parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_lt
     A L hL hηnonneg hηlt hOverlapNorm
+
+/-- Uniform gap-bound reduction from an overlap operator-product norm estimate
+with a separate coefficient.
+
+This is the symmetric counterpart of
+`parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_le`.  The
+hypothesis is the operator-product norm bound
+\[
+  \|h_i (h_j v)\| \le \eta\,\|h_j v\|,
+\]
+that is, a bound on \(\|h_i h_j\|\), rather than the directional compression
+bound \(\|h_i (h_j v)\| \le \eta\,\|h_i v\|\).  The directional bound, holding for
+every \(v\), forces \(h_j\) to preserve \(\ker h_i\); the operator-product bound
+imposes no such constraint.  Together with \(\eta \le (1-\gamma)/m\), it gives
+the symmetric anticommutator estimate of arXiv:2011.12127, Section IV.C,
+lines 2176-2179, with per-pair coefficient \((1-\gamma)/m\), and hence the
+same finite-overlap martingale gap as the anticommutator route.  In the strict
+specialization this coefficient is \(\eta\).  Both this
+operator-product bound and the directional bound are conditional reductions: for
+the overlapping excitation projections \(h_i, h_j\) one has \(\|h_i h_j\| = 1\)
+when their ranges have a common nonzero vector, so neither hypothesis is
+satisfiable for \(\eta < 1\) in that case.  Degenerate cases, such as a zero
+excitation projection, are not ruled out by the combinatorics alone.  See
+`docs/paper-gaps/cpgsv21_martingale_overlap.tex`. -/
+theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_le
+    (A : MPSTensor d D) (L : ℕ) (hL : 1 < L) {γ η : ℝ}
+    (hγpos : 0 < γ) (hγle : γ ≤ 1)
+    (hηle : η ≤ (1 - γ) * (((2 * (L - 1) : ℕ) : ℝ)⁻¹))
+    (hOpNorm : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
+      j ∈ Finset.univ.erase i → cyclicWindowsOverlap N L i j →
+        ∀ v : EuclideanSpace ℂ (Cfg d N),
+          ‖localTermES A L i (localTermES A L j v)‖ ≤
+            η * ‖localTermES A L j v‖) :
+    0 < γ ∧
+    ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
+      (v : EuclideanSpace ℂ (Cfg d N)),
+      v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
+        γ * ‖v‖ ≤ ‖parentHamiltonianES A L N v‖ := by
+  refine ⟨hγpos, ?_⟩
+  refine parentHamiltonianES_norm_bound_of_quadratic_form A L hγpos ?_
+  intro N hLN v
+  have hm : 0 < 2 * (L - 1) :=
+    Nat.mul_pos (by decide) (Nat.sub_pos_of_lt hL)
+  have hcoeff_nonneg : 0 ≤ (1 - γ) * (((2 * (L - 1) : ℕ) : ℝ)⁻¹) :=
+    mul_nonneg (by linarith) (by positivity)
+  refine parentHamiltonianES_quadratic_form_of_finite_overlap_anticommutator
+    A L N hγle (cyclicWindowsOverlap N L) hm
+    (fun i => cyclicWindowsOverlap_card_le hLN hL i) ?_ ?_ ?_ v
+  · intro j
+    have hset :
+        ((Finset.univ.erase j).filter (fun i => cyclicWindowsOverlap N L i j)) =
+          ((Finset.univ.erase j).filter (fun i => cyclicWindowsOverlap N L j i)) := by
+      ext i
+      simp only [Finset.mem_filter, Finset.mem_erase, Finset.mem_univ, and_true]
+      rw [cyclicWindowsOverlap_comm N L i j]
+    rw [hset]
+    exact cyclicWindowsOverlap_card_le hLN hL j
+  · intro i j _hij hnot w
+    have hnonneg₁ :
+        0 ≤ (⟪localTermES A L i w, localTermES A L j w⟫_ℂ).re :=
+      localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap A (by omega) hnot w
+    have hnot_symm : ¬ cyclicWindowsOverlap N L j i := by
+      intro hji
+      exact hnot ((cyclicWindowsOverlap_comm N L i j).mpr hji)
+    have hnonneg₂ :
+        0 ≤ (⟪localTermES A L j w, localTermES A L i w⟫_ℂ).re :=
+      localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap A (by omega) hnot_symm w
+    linarith
+  · intro i j hij hoverlap w
+    have hNorm' : ∀ w' : EuclideanSpace ℂ (Cfg d N),
+        ‖localTermES A L i (localTermES A L j w')‖ ≤
+          ((1 - γ) * (((2 * (L - 1) : ℕ) : ℝ)⁻¹)) * ‖localTermES A L j w'‖ := by
+      intro w'
+      exact le_trans (hOpNorm N hLN i j hij hoverlap w')
+        (mul_le_mul_of_nonneg_right hηle (norm_nonneg _))
+    have hanti :=
+      (localTermES_isSymmetricProjection A L i).re_inner_anticommutator_ge_neg_of_norm_apply_le
+        (localTermES_isSymmetricProjection A L j) hcoeff_nonneg hNorm' w
+    calc
+      -(1 - γ) * (((2 * (L - 1) : ℕ) : ℝ)⁻¹) *
+            ((⟪localTermES A L i w, w⟫_ℂ).re +
+              (⟪localTermES A L j w, w⟫_ℂ).re)
+          = -((1 - γ) * (((2 * (L - 1) : ℕ) : ℝ)⁻¹)) *
+              ((⟪localTermES A L i w, w⟫_ℂ).re +
+                (⟪localTermES A L j w, w⟫_ℂ).re) := by ring
+      _ ≤ (⟪localTermES A L i w, localTermES A L j w⟫_ℂ).re +
+            (⟪localTermES A L j w, localTermES A L i w⟫_ℂ).re := hanti
+
+/-- Uniform gap-bound reduction from a strict overlap operator-product norm
+constant.
+
+If every overlapping off-diagonal cyclic pair satisfies the operator-product norm
+estimate \(\|h_i (h_j v)\| \le \eta\,\|h_j v\|\) and \(\eta\,2(L-1) < 1\), then the
+Euclidean-space parent Hamiltonians have gap constant \(1 - \eta\,2(L-1)\).  This is
+the symmetric (operator-product) analogue of
+`parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_lt`.  Like
+that directional reduction, it is conditional: for the overlapping excitation
+projections \(\|h_i h_j\| = 1\) when the ranges intersect, so the hypothesis is
+unsatisfiable for \(\eta < 1\).  See
+`docs/paper-gaps/cpgsv21_martingale_overlap.tex`. -/
+theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_lt
+    (A : MPSTensor d D) (L : ℕ) (hL : 1 < L) {η : ℝ}
+    (hηnonneg : 0 ≤ η)
+    (hηlt : η * (((2 * (L - 1) : ℕ) : ℝ)) < 1)
+    (hOpNorm : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
+      j ∈ Finset.univ.erase i → cyclicWindowsOverlap N L i j →
+        ∀ v : EuclideanSpace ℂ (Cfg d N),
+          ‖localTermES A L i (localTermES A L j v)‖ ≤
+            η * ‖localTermES A L j v‖) :
+    0 < 1 - η * (((2 * (L - 1) : ℕ) : ℝ)) ∧
+    ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
+      (v : EuclideanSpace ℂ (Cfg d N)),
+      v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
+        (1 - η * (((2 * (L - 1) : ℕ) : ℝ))) * ‖v‖ ≤
+          ‖parentHamiltonianES A L N v‖ := by
+  have hm : 0 < 2 * (L - 1) :=
+    Nat.mul_pos (by decide) (Nat.sub_pos_of_lt hL)
+  have hmRpos : 0 < (((2 * (L - 1) : ℕ) : ℝ)) := by
+    exact_mod_cast hm
+  have hγpos : 0 < 1 - η * (((2 * (L - 1) : ℕ) : ℝ)) := by
+    linarith
+  have hγle : 1 - η * (((2 * (L - 1) : ℕ) : ℝ)) ≤ 1 := by
+    have hmul_nonneg : 0 ≤ η * (((2 * (L - 1) : ℕ) : ℝ)) :=
+      mul_nonneg hηnonneg hmRpos.le
+    linarith
+  have hηle :
+      η ≤ (1 - (1 - η * (((2 * (L - 1) : ℕ) : ℝ)))) *
+        (((2 * (L - 1) : ℕ) : ℝ)⁻¹) := by
+    have hmne : (((2 * (L - 1) : ℕ) : ℝ)) ≠ 0 := ne_of_gt hmRpos
+    have hηeq :
+        η = (1 - (1 - η * (((2 * (L - 1) : ℕ) : ℝ)))) *
+          (((2 * (L - 1) : ℕ) : ℝ)⁻¹) := by
+      calc
+        η = η * (((2 * (L - 1) : ℕ) : ℝ) *
+            (((2 * (L - 1) : ℕ) : ℝ)⁻¹)) := by
+              rw [mul_inv_cancel₀ hmne, mul_one]
+        _ = (1 - (1 - η * (((2 * (L - 1) : ℕ) : ℝ)))) *
+            (((2 * (L - 1) : ℕ) : ℝ)⁻¹) := by ring
+    exact le_of_eq hηeq
+  exact parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_le
+    A L hL hγpos hγle hηle hOpNorm
 
 end MPSTensor
