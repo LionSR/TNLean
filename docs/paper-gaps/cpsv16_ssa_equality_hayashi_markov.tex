@@ -46,12 +46,12 @@ quantum-Markov-chain structure of the tripartite state
 In the present development the biconditional
 \eqref{eq:ssa-eq} $\Leftrightarrow$~\eqref{eq:qmc} is asserted as a standalone
 axiom.\footnote{The axiom is \leanid{hayashi_ssa_equality_characterization} in
-\doclink{TNLean/Axioms/Entropy} (\path{TNLean/Axioms/Entropy.lean}, line~238).
+\doclink{TNLean/Axioms/Entropy} (\path{TNLean/Axioms/Entropy.lean}).
 The equality predicate is \leanid{IsSSAEquality} in
-\doclink{TNLean/Analysis/Entropy} (\path{TNLean/Analysis/Entropy.lean},
-line~559), and the right-hand structure is recorded by
+\doclink{TNLean/Analysis/Entropy} (\path{TNLean/Analysis/Entropy.lean}),
+and the right-hand structure is recorded by
 \leanid{HayashiMarkovDecomposition} in \doclink{TNLean/Axioms/Entropy}
-(\path{TNLean/Axioms/Entropy.lean}, line~142), whose fields store the
+(\path{TNLean/Axioms/Entropy.lean}), whose fields store the
 finite decomposition, the unitary basis change, the weights $p_j$, the component
 density operators, and the block-diagonal equality.} It is an external stand-in:
 the characterization is a theorem of Ruskai, of Hayden--Jozsa--Petz--Winter, and
@@ -125,7 +125,7 @@ are within reach of the present entropy interface:
     terms of~\eqref{eq:ssa-eq} into the two additivity lemmas above.
 \end{itemize}
 
-With these three facts the reverse implication is a finite computation; the
+With these four facts the reverse implication is a finite computation; the
 forward implication remains an axiom until recovery-map and Petz theory are
 available.
 

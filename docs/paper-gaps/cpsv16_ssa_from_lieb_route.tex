@@ -31,14 +31,14 @@ partial traces \cite{LiebRuskai1973}.
 In the present development the inequality~\eqref{eq:ssa} is asserted as a
 standalone axiom.\footnote{The axiom is
 \leanid{strong_subadditivity} in \doclink{TNLean/Axioms/Entropy}
-(\path{TNLean/Axioms/Entropy.lean}, line~192). It is stated with the
+(\path{TNLean/Axioms/Entropy.lean}). It is stated with the
 eigenvalue-based entropy $S(\rho) = \sum_i \eta(\lambda_i)$, $\eta(x) = -x\log x$,
 of \doclink{TNLean/Analysis/Entropy}.}
 It is \emph{not} derived from the operator-concavity input that the same
 development already isolates for the Ando--Lieb theory, namely Lieb's joint
 concavity theorem.\footnote{Lieb concavity is the axiom
 \leanid{lieb_concavity_axiom} in \doclink{TNLean/Axioms/OperatorConvexity}
-(\path{TNLean/Axioms/OperatorConvexity.lean}, line~160), consumed by
+(\path{TNLean/Axioms/OperatorConvexity.lean}), consumed by
 \leanid{lieb_concavity} in \doclink{TNLean/Channel/Schwarz/AndoLieb}.}
 The two axioms are therefore logically independent in the current
 formalization: discharging~\eqref{eq:ssa} into a theorem built on Lieb
