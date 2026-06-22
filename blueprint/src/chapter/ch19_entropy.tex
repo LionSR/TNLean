@@ -166,10 +166,15 @@ finite-dimensional quantum systems.
 \end{proof}
 
 \begin{remark}
-    For a density matrix $\rho$ (positive semidefinite with unit trace) the
-    eigenvalues $\lambda_i$ are nonnegative, so $\rho\,\log\rho$ is Hermitian
-    with real trace and the real-part extraction is superfluous: the identity
-    reduces to the standard expression $S(\rho) = -\operatorname{tr}(\rho\log\rho)$.
+    The logarithm is the totalized real logarithm, with
+    $\log x = \log\lvert x\rvert$ and $\log 0 = 0$; both sides of the identity
+    use it on every eigenvalue, so the equality holds for an arbitrary Hermitian
+    matrix. It coincides with the physical entropy $-\operatorname{tr}(\rho\log\rho)$
+    precisely when $\rho$ is positive semidefinite. In that case (a density
+    matrix $\rho$, positive semidefinite with unit trace) the eigenvalues
+    $\lambda_i$ are nonnegative, $\rho\,\log\rho$ is Hermitian with real trace,
+    and the real-part extraction is superfluous: the identity reduces to the
+    standard expression $S(\rho) = -\operatorname{tr}(\rho\log\rho)$.
 \end{remark}
 
 \begin{theorem}[Entropy is invariant under reindexing]

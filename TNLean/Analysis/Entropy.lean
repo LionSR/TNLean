@@ -9,7 +9,7 @@ import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Bas
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import TNLean.Channel.Basic
 import TNLean.Channel.PartialTrace
-import TNLean.Channel.Schwarz.TraceCFC
+import TNLean.Analysis.TraceCFC
 
 /-!
 # Von Neumann entropy, partial traces, and mutual information
@@ -145,6 +145,15 @@ Taking the trace of the latter yields the spectral sum `∑ᵢ λᵢ log λᵢ`,
 negative of `∑ᵢ negMulLog λᵢ`. The zero eigenvalues are handled by the
 convention `0 · log 0 = 0 = negMulLog 0`, so the identity holds for density
 matrices in particular (positive semidefinite, trace `1`).
+
+Both `CFC.log ρ` and `vonNeumannEntropy ρ` are built from Mathlib's `Real.log`,
+which is the *totalized* logarithm: `Real.log x = Real.log |x|` and
+`Real.log 0 = 0`. The two sides therefore use the same convention on every
+eigenvalue, so the equality is an honest identity for an arbitrary Hermitian
+matrix. It coincides with the physical von Neumann entropy `-tr(ρ log ρ)`
+precisely when `ρ` is positive semidefinite, where every eigenvalue is
+nonnegative; for a Hermitian matrix with a negative eigenvalue both sides
+evaluate the totalized log and the common value is not the physical entropy.
 
 Source: standard; blueprint `thm:entropy_eq_neg_trace_mul_log`. -/
 theorem vonNeumannEntropy_eq_neg_trace_mul_log

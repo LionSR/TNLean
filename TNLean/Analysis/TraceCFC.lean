@@ -7,8 +7,11 @@ import Mathlib.Analysis.Matrix.HermitianFunctionalCalculus
 /-!
 # Trace of the continuous functional calculus on a Hermitian matrix
 
-Small auxiliary lemmas used in the `trace_rpow_*` convexity/concavity proofs: the
-trace of `hA.cfc f` equals the sum of `f` over the eigenvalues of `A`.
+Small auxiliary lemmas about the trace of the Hermitian functional calculus: the
+trace of `hA.cfc f` equals the sum of `f` over the eigenvalues of `A`. These are
+used in the `trace_rpow_*` convexity/concavity proofs and in the trace-`log` form
+of the von Neumann entropy. The file imports only Mathlib, so it sits in the
+matrix-analysis layer below both the entropy and operator-convexity modules.
 
 The proof combines the unitary-diagonal form of `Matrix.IsHermitian.cfc`
 (see `Mathlib.Analysis.Matrix.HermitianFunctionalCalculus`) with
