@@ -1502,15 +1502,25 @@ recorded in the route note
         \qquad
         V_{j,k}=R^{(j,k)}_v\bigl(L^{(j,k+1)}_v\bigr)^{-1},
     \]
-    are the residual horizontal and vertical operations, the missing plaquette
-    flatness identity is
+    are the residual horizontal and vertical operations, the horizontal residual
+    acts on \(\mathbb C^{D_h}\) and the vertical residual acts on
+    \(\mathbb C^{D_v}\).  The missing plaquette flatness identity must therefore
+    be stated after placing them on the corner space
+    \(\mathbb C^{D_h}\otimes\mathbb C^{D_v}\).  Equivalently, after the row and
+    column telescopings make \(H_{j,k}=H_k\) and \(V_{j,k}=V_j\), one must prove
     \[
-        H_{j,k}V_{j+1,k}
-        =\lambda_{j,k}\,V_{j,k}H_{j,k+1}
+        (H_k\otimes I_{D_v})(I_{D_h}\otimes V_{j+1})
+        =
+        \lambda_{j,k}\,(I_{D_h}\otimes V_j)(H_{k+1}\otimes I_{D_v})
     \]
-    for nonzero scalars \(\lambda_{j,k}\), together with the analogous scalar
-    closure of the row and column loop products at the periodic seams.  These
-    identities are then absorbed into this single repeated 2D tensor.
+    for nonzero scalars \(\lambda_{j,k}\).  The scalar phases must also close
+    around the two periodic seams,
+    \[
+        \prod_{k\in\mathbb Z/N_v\mathbb Z}\lambda_{j,k}=1,
+        \qquad
+        \prod_{j\in\mathbb Z/N_h\mathbb Z}\lambda_{j,k}=1.
+    \]
+    These identities are then absorbed into this single repeated 2D tensor.
 \end{proof}
 
 \begin{theorem}[Uniqueness of the injective closed-chain gauge]%
