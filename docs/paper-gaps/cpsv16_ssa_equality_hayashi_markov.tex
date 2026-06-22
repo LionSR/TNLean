@@ -112,6 +112,18 @@ are within reach of the present entropy interface:
     reindexing of the underlying space, so that the basis change on $\mathcal
     H_B$ and the direct-sum reindexing in~\eqref{eq:qmc} leave every entropy term
     unchanged;
+  \item naturality of the partial trace under the same middle-system unitary:
+    for example,
+    \[
+      \tr_C\!\bigl((\mathbf 1_A\otimes U_B\otimes\mathbf 1_C)\rho
+      (\mathbf 1_A\otimes U_B^{\dagger}\otimes\mathbf 1_C)\bigr)
+      =
+      (\mathbf 1_A\otimes U_B)\rho_{AB}
+      (\mathbf 1_A\otimes U_B^{\dagger}),
+    \]
+    with the analogous formulas for the $BC$ and $B$ marginals. This is the
+    step that lets the marginals of the unitary-conjugated block-diagonal state
+    replace the four entropy terms of the original state;
   \item identification of the three reduced states as partial traces of the
     block-diagonal state~\eqref{eq:qmc}: tracing out $C$ gives
     $\rho_{AB} \cong \bigoplus_j p_j\, \rho_{A B_j^{L}} \otimes \rho_{B_j^{R}}$,
@@ -125,7 +137,7 @@ are within reach of the present entropy interface:
     terms of~\eqref{eq:ssa-eq} into the two additivity lemmas above.
 \end{itemize}
 
-With these four facts the reverse implication is a finite computation; the
+With these five facts the reverse implication is a finite computation; the
 forward implication remains an axiom until recovery-map and Petz theory are
 available.
 

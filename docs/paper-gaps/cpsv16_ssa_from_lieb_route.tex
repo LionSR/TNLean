@@ -73,7 +73,16 @@ chain of them. In source order the chain is the following.
     the step that consumes Lieb's joint concavity theorem: the concavity of
     $(A,B)\mapsto \tr\!\bigl(K^{\dagger} A^{s} K B^{1-s}\bigr)$ for
     $s\in[0,1]$ yields, in the limit governing the derivative at $s=1$, the
-    convexity of the relative entropy.
+    convexity of the relative entropy. The present formal Lieb axiom is stated
+    for positive definite inputs, whereas the relative-entropy domain in layer
+    (2) allows singular reference states provided
+    $\ker\sigma\subseteq\ker\rho$. Therefore this layer also needs the standard
+    extension from the full-rank case to the support-condition case: replace the
+    pair by strictly positive regularizations, prove convexity there, and pass to
+    the limit using continuity on the common support and lower semicontinuity at
+    the boundary. Without this regularization step, the later support lemma would
+    place the singular pairs in the domain of $D$ but would not yet connect them
+    to the positive-definite Lieb input.
   \item \emph{Data-processing inequality (DPI).} Monotonicity
     $D(\Lambda\rho \,\|\, \Lambda\sigma) \le D(\rho\,\|\,\sigma)$ under every
     trace-preserving completely positive map $\Lambda$, in particular under the
