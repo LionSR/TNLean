@@ -35,6 +35,22 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     if $\tr(E(X)) = \tr(X)$ for all $X$.
 \end{definition}
 
+\begin{theorem}[Transposition is positive and trace-preserving]
+    \label{thm:transpose_positive_trace_preserving}
+    \lean{Matrix.transposeLinearMapComplex_isPositiveMap,
+        Matrix.transposeLinearMapComplex_isTracePreservingMap}
+    \leanok
+    \uses{def:positive_map, def:trace_preserving}
+    The matrix transposition map $\theta(X)=X^T$ on $\MN{D}$ is positive
+    and trace-preserving.
+\end{theorem}
+
+\begin{proof}\leanok
+    If $X \ge 0$, write $X=C^\dagger C$. Then
+    $X^T=C^T\overline C=\overline C^\dagger\overline C$, so $X^T \ge 0$.
+    Trace preservation is the identity $\tr(X^T)=\tr(X)$.
+\end{proof}
+
 \begin{definition}[Completely positive map]\label{def:cp_map}
     \lean{IsCPMap}
     \leanok
