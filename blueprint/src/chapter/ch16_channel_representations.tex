@@ -1506,10 +1506,10 @@ Section~\ref{sec:lorentz_normal_form}.
 This section states the existence theorems from
 \cite[Section~2.3]{Wolf2012Quantum}.
 % The Wolf.* declarations referenced in this section live in
-% TNLean/Channel/LorentzNormalForm.lean, which is not in the root import
-% graph because its core minimisation lemma is still on `sorry`. Declaration
-% tags are omitted here so that checkdecls passes; the Lean names are listed in
-% the per-entry comments below.
+% TNLean/Channel/LorentzNormalForm.lean.  Only the compactness/minimisation
+% lemma is proved at present; declaration tags for the remaining existence
+% theorems are omitted until their proofs are complete.  The Lean names are
+% listed in the per-entry comments below.
 
 % Lean: Wolf.SLFiltering
 \begin{definition}[SL-filtering operation]\label{def:sl_filtering}
@@ -1637,7 +1637,9 @@ This section states the existence theorems from
     is positive-definite (equivalently, $T$ has full Kraus rank). Then there
     exist SL-filterings $\Phi_{1}, \Phi_{2}$ such that
     $\Phi_{2} \circ T \circ \Phi_{1}$ is doubly-stochastic.
-    \textbf{Not yet proved}---proof blocked on Lemma~\ref{lem:infimum_is_attained}.
+    \textbf{Not yet proved}---the compactness/minimisation lemma is proved;
+    the remaining step is the AGM or first-order optimality argument showing
+    that the minimiser is doubly-stochastic.
 \end{theorem}
 
 % Lean: Wolf.IsLorentzDiagonal
@@ -1695,9 +1697,8 @@ This section states the existence theorems from
     there exist $\SL(2, \C)$-filterings $\Phi_{1}, \Phi_{2}$ such that
     the filtered channel $T' = \Phi_{2} \circ T \circ \Phi_{1}$ is in one of
     the three Lorentz normal forms: diagonal, non-diagonal, or singular.
-    \textbf{Not yet proved}---proof blocked on
-    Lemma~\ref{lem:infimum_is_attained} and the Lorentz group classification
-    of $\SL(2, \C)$ orbits.
+    \textbf{Not yet proved}---proof still needs the generic normal form and
+    the Lorentz group classification of $\SL(2, \C)$ orbits.
 \end{theorem}
 
 %% The following sections will not be needed for the fundamental theorem of the matrix product states.

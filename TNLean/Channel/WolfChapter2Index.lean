@@ -27,10 +27,12 @@ This file indexes the formalization of Chapter 2 of Wolf's
 representations of quantum channels.
 
 The Lorentz-normal-form statements are recorded in
-`TNLean.Channel.LorentzNormalForm`, but that file contains the compactness and
-classification proof obligations for Wolf Proposition 2.9. The index mentions
-those statements by name without importing the unfinished file into the
-default root.
+`TNLean.Channel.LorentzNormalForm`, but the generic normal-form and qubit
+classification proofs are not yet complete.  The compactness/minimisation
+lemma is proved there; the remaining proof obligations are the optimality
+step at the minimiser and the `SL(2, ℂ)` Lorentz-orbit classification.  The
+index mentions those statements by name without importing the unfinished file
+into the default root.
 
 ## Coverage summary
 
@@ -198,15 +200,15 @@ default root.
 * `IsLorentzNonDiagonal` — non-diagonal Lorentz normal form (case 2) ✓
 * `IsLorentzSingular` — singular Lorentz normal form (case 3) ✓
 * `Wolf.infimum_is_attained` — **key compactness lemma**: trace minimisation
-  over SL(d, ℂ) filterings attains its infimum ⚠ (stated with `sorry`;
-  requires compactness of bounded SL(n, ℂ) sets)
+  over SL(d, ℂ) filterings attains its infimum ✓
 * `Wolf.exists_normal_form_generic` — **Wolf Proposition 2.9 (generic normal form)**:
   every CP map with full Kraus rank admits SL-filterings making it
-  doubly-stochastic ⚠ (depends on `infimum_is_attained`)
+  doubly-stochastic ⚠ (compactness is proved; the remaining step is the
+  AGM/first-order optimality argument at the minimiser)
 * `Wolf.exists_lorentz_normal_form_qubit` — **Wolf Proposition 2.9/2.11 (Lorentz
   normal form for qubit channels)**: conclusion is a three-way disjunction
   `IsLorentzDiagonal ∨ IsLorentzNonDiagonal ∨ IsLorentzSingular` ⚠
-  (depends on `infimum_is_attained` and Lorentz group classification)
+  (depends on the generic normal form and Lorentz group classification)
 
 ### Formalization
 
@@ -243,11 +245,12 @@ default root.
 |--------|-------|
 | Section 2.3 Lorentz normal form (full proof) | Statement formalised
   (`exists_lorentz_normal_form_qubit`);
-  proof blocked on compactness of bounded SL(n, ℂ) sets (`infimum_is_attained`) —
-  see `LorentzNormalForm.lean` for details |
+  compactness/minimisation is proved; proof still needs the generic optimality
+  step and the `SL(2, ℂ)` Lorentz-orbit classification |
 | Section 2.3 Generic normal form (full proof) | Statement formalised
   (`exists_normal_form_generic`);
-  proof blocked on same compactness lemma |
+  compactness/minimisation is proved; proof still needs the AGM/first-order
+  optimality argument showing the minimiser is doubly-stochastic |
 | Section 2.3 Sorted singular values | Current SVD is unsorted; later uses want sorted values |
 
 ## References
