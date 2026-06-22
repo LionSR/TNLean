@@ -298,6 +298,48 @@ theorem IsNPositiveMap.mono {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ} {k :
   ext ip jq
   simp [emb, X', Matrix.reindex_apply, he_castSucc]
 
+omit [DecidableEq n] [Fintype n] in
+/-- If `m ≤ k`, then `k`-positivity implies `m`-positivity.
+
+This is the inclusion direction in Wolf Chapter 3, Equation (3.3):
+the cones of positive maps become larger as the amplification dimension
+decreases. -/
+theorem IsNPositiveMap.mono_of_le {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ} {m k : ℕ}
+    (hmk : m ≤ k) (h : IsNPositiveMap k E) : IsNPositiveMap m E := by
+  exact Nat.le_induction (P := fun k _ => IsNPositiveMap k E → IsNPositiveMap m E)
+    (fun h => h)
+    (fun _ _ ih hk => ih (IsNPositiveMap.mono hk)) k hmk h
+
+omit [DecidableEq n] [Fintype n] in
+/-- The zero map is `k`-positive. -/
+theorem IsNPositiveMap.zero (k : ℕ) :
+    IsNPositiveMap k (0 : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) := by
+  intro X hX
+  convert (Matrix.PosSemidef.zero : (0 : Matrix (n × Fin k) (n × Fin k) ℂ).PosSemidef)
+    using 1
+  ext ip jq
+  simp
+
+omit [DecidableEq n] [Fintype n] in
+/-- The sum of two `k`-positive maps is `k`-positive. -/
+theorem IsNPositiveMap.add {E F : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ} {k : ℕ}
+    (hE : IsNPositiveMap k E) (hF : IsNPositiveMap k F) : IsNPositiveMap k (E + F) := by
+  intro X hX
+  convert Matrix.PosSemidef.add (hE X hX) (hF X hX) using 1
+  ext ip jq
+  simp
+
+omit [DecidableEq n] [Fintype n] in
+/-- A nonnegative real multiple of a `k`-positive map is `k`-positive. -/
+theorem IsNPositiveMap.smul_nonneg {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ} {k : ℕ}
+    {c : ℝ} (hc : 0 ≤ c) (hE : IsNPositiveMap k E) : IsNPositiveMap k ((c : ℂ) • E) := by
+  intro X hX
+  have hcC : 0 ≤ (c : ℂ) := by
+    exact_mod_cast hc
+  convert (hE X hX).smul hcC using 1
+  ext ip jq
+  simp
+
 omit [DecidableEq n] in
 /-- CP maps are 2-positive. -/
 theorem IsCPMap.is2PositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}

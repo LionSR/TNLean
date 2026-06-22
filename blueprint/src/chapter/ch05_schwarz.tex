@@ -134,6 +134,30 @@ maps.
     Positivity under amplification is monotone in $k$.
 \end{theorem}
 
+\begin{theorem}[$k$-positive implies $m$-positive for $m \le k$]
+    \lean{IsNPositiveMap.mono_of_le}
+    \leanok
+    If a linear map is $k$-positive and $m \le k$, then it is $m$-positive.
+\end{theorem}
+
+\begin{theorem}[Zero map is $k$-positive]
+    \lean{IsNPositiveMap.zero}
+    \leanok
+    The zero map is $k$-positive.
+\end{theorem}
+
+\begin{theorem}[Sums of $k$-positive maps]
+    \lean{IsNPositiveMap.add}
+    \leanok
+    If $E$ and $F$ are $k$-positive, then $E+F$ is $k$-positive.
+\end{theorem}
+
+\begin{theorem}[Nonnegative multiples of $k$-positive maps]
+    \lean{IsNPositiveMap.smul_nonneg}
+    \leanok
+    If $E$ is $k$-positive and $c \ge 0$, then $cE$ is $k$-positive.
+\end{theorem}
+
 \begin{theorem}[Completely positive implies two-positive]
     \lean{IsCPMap.is2PositiveMap}
     \leanok
