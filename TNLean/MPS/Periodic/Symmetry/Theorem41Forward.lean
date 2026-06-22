@@ -372,7 +372,7 @@ equality of MPV families.
 This theorem is therefore only the equal-case FT application step. The remaining
 canonicalization problem is to prove that the blocked root appearing in the
 refinement argument is in irreducible form. -/
-theorem peripheralEqualCaseZGaugeOfSameMPV_of_periodicEqualCaseFT
+theorem zGaugeEquiv_of_periodicEqualCaseFT_of_irreducibleForm
     (p : ℕ) (hFT : PeriodicEqualCaseFT (blockPhysDim d p) D)
     {A : MPSTensor d D} {C : MPSTensor (blockPhysDim d p) D}
     (hC : IsIrreducibleForm C)
