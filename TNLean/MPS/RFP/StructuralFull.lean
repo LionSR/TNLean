@@ -442,6 +442,117 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
       _ = X * Matrix.diagonal (fun k => (Λ k : ℂ)) * U i * X⁻¹ := by
         simp [L, Matrix.mul_assoc]
 
+/-- **Unit pair-index form of Lemma B.1.**  This is the same structural
+decomposition as `rfp_nt_structural_full`, rewritten in the source convention
+for the pair-index isometry equation
+\[
+  \sum_i \overline{(U^i)_{\alpha,\beta}}\,(U^i)_{\alpha',\beta'}
+  =
+  \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+\]
+
+The theorem is only a normalization comparison: the diagonal factor is rescaled by
+\(D^{-1/2}\), and the residual tensor by \(D^{1/2}\).  It does not prove the
+source trace condition \(\operatorname{tr}\Lambda=1\), nor the cross-block
+\(\delta_{j,j'}\) orthogonality in arXiv:1606.00608, equation
+`eq:III_isometry`; those are recorded in
+`docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
+theorem rfp_nt_structural_full_unit_pair (A : MPSTensor d D) [NeZero D]
+    (hNT : IsNormal A) (hRFP : IsRFP A)
+    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
+    ∃ (X : Matrix (Fin D) (Fin D) ℂ) (Λ : Fin D → ℝ)
+      (U : MPSTensor d D),
+      X.det ≠ 0 ∧
+      (∀ k, 0 < Λ k) ∧
+      (∀ p q : Fin D × Fin D,
+        ∑ i : Fin d, star (U i p.1 p.2) * U i q.1 q.2 =
+          if p = q then 1 else 0) ∧
+      (∀ i, A i = X * Matrix.diagonal (fun k => (Λ k : ℂ)) * U i * X⁻¹) := by
+  classical
+  obtain ⟨X, Λ₀, U₀, hX_det, hΛ₀_pos, hU₀_left, hU₀_pair, hA_eq⟩ :=
+    rfp_nt_structural_full A hNT hRFP hLeft
+  let sR : ℝ := Real.sqrt (D : ℝ)
+  let s : ℂ := (sR : ℂ)
+  let Λ : Fin D → ℝ := fun k => Λ₀ k / sR
+  let U : MPSTensor d D := fun i => s • U₀ i
+  have hDpos_nat : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
+  have hDpos : 0 < (D : ℝ) := by
+    exact_mod_cast hDpos_nat
+  have hsR_ne : sR ≠ 0 := by
+    exact Real.sqrt_ne_zero'.2 hDpos
+  have hsR_pos : 0 < sR := by
+    exact Real.sqrt_pos.2 hDpos
+  have hs_ne : s ≠ 0 := by
+    simpa [s] using Complex.ofReal_ne_zero.mpr hsR_ne
+  have hs_star : star s * s = (D : ℂ) := by
+    have hs_sq : sR * sR = (D : ℝ) := by
+      have hnn : 0 ≤ (D : ℝ) := by positivity
+      change Real.sqrt (D : ℝ) * Real.sqrt (D : ℝ) = (D : ℝ)
+      rw [← pow_two]
+      exact Real.sq_sqrt hnn
+    have hs_sq_c := congrArg (fun x : ℝ => (x : ℂ)) hs_sq
+    simpa [s, Complex.ofReal_mul] using hs_sq_c
+  have hD_ne : (D : ℂ) ≠ 0 := by
+    exact_mod_cast (NeZero.ne D)
+  have hdiag :
+      Matrix.diagonal (fun k => (Λ k : ℂ)) =
+        s⁻¹ • Matrix.diagonal (fun k => (Λ₀ k : ℂ)) := by
+    ext a b
+    by_cases hab : a = b
+    · subst hab
+      calc
+        Matrix.diagonal (fun k => (Λ k : ℂ)) a a = ((Λ₀ a / sR : ℝ) : ℂ) := by
+            simp [Λ, Matrix.diagonal]
+        _ = s⁻¹ * (Λ₀ a : ℂ) := by
+            rw [Complex.ofReal_div]
+            simp [s, div_eq_mul_inv, mul_comm]
+        _ = (s⁻¹ • Matrix.diagonal (fun k => (Λ₀ k : ℂ))) a a := by
+            simp [Matrix.diagonal]
+    · simp [Matrix.diagonal, hab]
+  refine ⟨X, Λ, U, hX_det, ?_, ?_, ?_⟩
+  · intro k
+    exact div_pos (hΛ₀_pos k) hsR_pos
+  · intro p q
+    calc
+      ∑ i : Fin d, star (U i p.1 p.2) * U i q.1 q.2
+          = ∑ i : Fin d,
+              (star s * s) * (star (U₀ i p.1 p.2) * U₀ i q.1 q.2) := by
+              refine Finset.sum_congr rfl ?_
+              intro i _
+              simp [U, s, mul_assoc, mul_left_comm, mul_comm]
+      _ = (star s * s) *
+            ∑ i : Fin d, star (U₀ i p.1 p.2) * U₀ i q.1 q.2 := by
+              rw [Finset.mul_sum]
+      _ = (D : ℂ) * (if p = q then (D : ℂ)⁻¹ else 0) := by
+              rw [hs_star, hU₀_pair p q]
+      _ = if p = q then 1 else 0 := by
+              by_cases hpq : p = q
+              · simp [hpq, hD_ne]
+              · simp [hpq]
+  · intro i
+    rw [hA_eq i]
+    let L : Matrix (Fin D) (Fin D) ℂ := Matrix.diagonal (fun k => (Λ k : ℂ))
+    have hdiag' : Matrix.diagonal (fun k => (Λ₀ k : ℂ)) = s • L := by
+      calc
+        Matrix.diagonal (fun k => (Λ₀ k : ℂ)) =
+            (s * s⁻¹) • Matrix.diagonal (fun k => (Λ₀ k : ℂ)) := by
+            simp [hs_ne]
+        _ = s • (s⁻¹ • Matrix.diagonal (fun k => (Λ₀ k : ℂ))) := by
+            simp [smul_smul]
+        _ = s • L := by
+            rw [← hdiag]
+    have hmove : (s • L) * U₀ i = L * (s • U₀ i) := by
+      rw [Matrix.smul_mul, Matrix.mul_smul]
+    calc
+      X * Matrix.diagonal (fun k => (Λ₀ k : ℂ)) * U₀ i * X⁻¹
+          = X * (s • L) * U₀ i * X⁻¹ := by
+              rw [hdiag']
+      _ = X * L * (s • U₀ i) * X⁻¹ := by
+          rw [Matrix.mul_assoc X (s • L) (U₀ i), hmove,
+            ← Matrix.mul_assoc X L (s • U₀ i)]
+      _ = X * Matrix.diagonal (fun k => (Λ k : ℂ)) * U i * X⁻¹ := by
+          simp [L, U]
+
 /-- **Per-block isometry canonical form.** When each block of a multi-block tensor
 is a normal, left-canonical renormalization fixed point, that block admits an
 isometry decomposition A_k^i = X diag(Λ) U^i X⁻¹ with X invertible, Λ positive,
@@ -478,5 +589,23 @@ theorem rfp_nt_structural_full_blocks {r : ℕ} {dim : Fin r → ℕ}
           if p = q then (dim k : ℂ)⁻¹ else 0) ∧
       (∀ i, A k i = X * Matrix.diagonal (fun j => (Λ j : ℂ)) * U i * X⁻¹) :=
   fun k => rfp_nt_structural_full (A k) (hNT k) (hRFP k) (hLeft k)
+
+/-- Per-block unit pair-index version of `rfp_nt_structural_full_blocks`.
+
+This only changes the pair-index normalization convention; it does not add the
+trace-normalization of the diagonal factors or the cross-block orthogonality
+required by the source theorem. -/
+theorem rfp_nt_structural_full_blocks_unit_pair {r : ℕ} {dim : Fin r → ℕ}
+    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
+    (hNT : ∀ k, IsNormal (A k)) (hRFP : ∀ k, IsRFP (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1) :
+    ∀ k, ∃ (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
+      (Λ : Fin (dim k) → ℝ) (U : MPSTensor d (dim k)),
+      X.det ≠ 0 ∧ (∀ j, 0 < Λ j) ∧
+      (∀ p q : Fin (dim k) × Fin (dim k),
+        ∑ i : Fin d, star (U i p.1 p.2) * U i q.1 q.2 =
+          if p = q then 1 else 0) ∧
+      (∀ i, A k i = X * Matrix.diagonal (fun j => (Λ j : ℂ)) * U i * X⁻¹) :=
+  fun k => rfp_nt_structural_full_unit_pair (A k) (hNT k) (hRFP k) (hLeft k)
 
 end MPSTensor
