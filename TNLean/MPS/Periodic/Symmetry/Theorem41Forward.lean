@@ -369,10 +369,13 @@ already known to be in irreducible form. The irreducible-form hypothesis for
 the \(p\)-blocked root is an explicit input here; it is not obtained from
 equality of MPV families.
 
-This theorem is therefore only the equal-case FT application step. The remaining
-canonicalization problem is to prove that the blocked root appearing in the
-refinement argument is in irreducible form. -/
-theorem peripheralEqualCaseZGaugeOfSameMPV_of_periodicEqualCaseFT
+This theorem is therefore only the equal-case FT application step. It does not
+prove the full `PeripheralEqualCaseZGaugeOfSameMPV` hypothesis, since that
+hypothesis does not assume irreducible form for the blocked root. The remaining
+canonicalization work is to prove the missing irreducible-form input for the
+blocked root, and then to distribute the resulting blocked `Z`-phase back to a
+left-canonical root. -/
+theorem zGaugeEquiv_of_periodicEqualCaseFT_of_irreducibleForm
     (p : ℕ) (hFT : PeriodicEqualCaseFT (blockPhysDim d p) D)
     {A : MPSTensor d D} {C : MPSTensor (blockPhysDim d p) D}
     (hC : IsIrreducibleForm C)

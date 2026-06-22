@@ -1979,9 +1979,9 @@ divisibility of its transfer map, following
     between $C$ and $A^{[p]}$.
 \end{definition}
 
-\begin{theorem}[Blocked equal-case Z-gauge extraction from the periodic theorem]
-    \label{thm:peripheral_equalcase_zgauge_sameMPV_of_periodicFT}
-    \lean{MPSTensor.peripheralEqualCaseZGaugeOfSameMPV_of_periodicEqualCaseFT}
+\begin{theorem}[Z-gauge equivalence from the periodic theorem]
+    \label{thm:zgauge_equiv_periodicFT_irreducible_form}
+    \lean{MPSTensor.zGaugeEquiv_of_periodicEqualCaseFT_of_irreducibleForm}
     \leanok
     \uses{thm:periodic_ft, def:irreducible_form, def:blocked_tensor,
         def:same_mpv, def:z_gauge_equiv}
@@ -1990,7 +1990,7 @@ divisibility of its transfer map, following
     both in irreducible form~II, and suppose that they have the same MPV family.
     Then there exists an integer $m \ge 1$ and a $\mathbb Z_m$-gauge equivalence
     between $C$ and $A^{[p]}$.
-    % Scope note: this is only the equal-case application of the periodic
+    % Scope restriction: this is only the equal-case application of the periodic
     % Fundamental Theorem; the irreducible-form hypothesis on $A^{[p]}$ is an
     % explicit assumption, not a consequence of equality of MPV families.
 \end{theorem}
