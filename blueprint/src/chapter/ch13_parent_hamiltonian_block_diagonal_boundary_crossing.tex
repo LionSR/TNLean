@@ -229,6 +229,41 @@ in both cases.
     $\beta\rho\alpha$.
 \end{proof}
 
+\begin{lemma}[Boundary representation gives all fixed-tail boundary traces]
+    \label{lem:block_diagonal_boundary_crossing_trace_decompositions_boundary}
+    \lean{MPSTensor.blockDiagonal_boundary_crossing_trace_decompositions_of_boundary}
+    \leanok
+    \uses{lem:block_diagonal_boundary_crossing_trace_decomposition_boundary}
+    Assume that the physical dimension $d$ is positive, $0<N$, $L\le N$, and
+    $\mu_j\ne0$ for every block $j$. Let
+    \[
+        \psi\in
+        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right),
+        \qquad
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right).
+    \]
+    Then there are matrices $C^j_{i,\rho}$, indexed by the boundary-crossing
+    start $i$ and by an outside word $\rho$ of length $N-L$, such that whenever
+    $N<i+L$,
+    \[
+        \sum_j\tr\!\left(A^j_\beta C^j_{i,\rho}A^j_\alpha\right)
+        =
+        \sum_j
+        \tr\!\left(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_\alpha\right)
+    \]
+    for every word $\beta$ of length $i+L-N$ before the cut and every wrapped
+    tail word $\alpha$ of length $N-i$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_boundary_crossing_trace_decomposition_boundary}
+    Apply
+    Lemma~\ref{lem:block_diagonal_boundary_crossing_trace_decomposition_boundary}
+    to each boundary-crossing start $i$ and each outside word $\rho$, and choose
+    the resulting matrices $C^j_{i,\rho}$.
+\end{proof}
+
 \begin{theorem}[Fixed boundary-crossing $C^j,D^j$ comparison from the local block-sum constraint]
     \label{thm:block_diagonal_boundary_crossing_pgvwc_comparison}
     \lean{MPSTensor.blockDiagonal_boundary_crossing_pgvwc_comparison_of_sum_mem_iSup}
