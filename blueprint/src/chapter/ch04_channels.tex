@@ -129,6 +129,40 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     $E(X)^\dagger=E(X)^\ast=E(X^\ast)=E(X)$.
 \end{proof}
 
+\begin{definition}[Transposition map]\label{def:transposition_map}
+    \lean{transpositionMap}
+    \leanok
+    The \emph{transposition map} $\theta : \MN{D} \to \MN{D}$ sends a matrix to
+    its transpose, $\theta(A) = A^{T}$, where $A^{T}$ is taken with respect to a
+    fixed orthonormal basis, $\langle i | A^{T} | j \rangle = \langle j | A | i
+    \rangle$.
+\end{definition}
+
+\begin{theorem}[Transposition is positive]\label{thm:transposition_positive}
+    \lean{transpositionMap_isPositiveMap}
+    \leanok
+    \uses{def:transposition_map, def:positive_map}
+    The transposition map is positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    If $A \ge 0$ then $A$ is Hermitian with spectral decomposition $A = U D
+    U^\dagger$, where $U$ is unitary and $D$ is diagonal with nonnegative
+    entries. Hence $A^{T} = \overline{U} D U^{T}$, which has the same
+    eigenvalues $D$, so $A^{T} \ge 0$.
+\end{proof}
+
+\begin{theorem}[Transposition is trace-preserving]\label{thm:transposition_trace_preserving}
+    \lean{transpositionMap_isTracePreservingMap}
+    \leanok
+    \uses{def:transposition_map, def:trace_preserving}
+    The transposition map is trace-preserving: $\tr(A^{T}) = \tr(A)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Transposition fixes the diagonal entries of $A$, hence preserves their sum.
+\end{proof}
+
 \begin{definition}[Quantum channel]\label{def:channel}
     \lean{IsChannel}
     \leanok
