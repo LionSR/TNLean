@@ -281,7 +281,7 @@ coefficient.**
 
 For an MPS tensor \(A\) and interaction range \(L > 1\), any uniform
 overlapping cyclic-window estimate
-\(‖p_i p_j v‖ ≤ η ‖p_i v‖\) with \(0 ≤ η\) and \(η * 2(L-1) < 1\) gives a uniform
+\(‖p_i p_j v‖ ≤ η ‖p_i v‖\) with \(0 ≤ η\) and \(η · 2(L-1) < 1\) gives a uniform
 positive lower bound on the parent Hamiltonian, independent of the chain length.
 
 This is the version of `parentHamiltonian_gapped` with an arbitrary compression
