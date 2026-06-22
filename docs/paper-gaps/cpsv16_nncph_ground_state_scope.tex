@@ -111,6 +111,11 @@ This still does not prove the full source theorem.  The present declarations do
 not yet prove the named ground-space spanning condition, the three-way
 equivalence with ZCL, the complete canonical-form hypotheses from the source
 statement, or the Beigi ground-space characterization as an internal theorem.
+For the forward RFP-to-NNCPH direction, the three-site \(AX/XB\) support maps
+are now represented in \leanid{MPSTensor.HasOverlappingTwoSiteCommutation};
+the remaining local step is to identify the Appendix~B product-of-entangled-pairs
+projectors with the translated two-site parent terms and prove the overlapping
+commutation relation for them.
 The reverse theorem now consumes both the explicit BNT relation
 \leanid{MPSTensor.IsBNT} and the named all-chain condition
 \leanid{MPSTensor.HasNNCPHGroundSpaces}, but the implication still depends on
@@ -138,9 +143,11 @@ basis of normal tensors of $A$.\footnote{Tracked by \ghissue{2633}.}
 
 The present formal boundary is therefore: the reverse implication has the
 source ground-space hypothesis, but its proof is still the Beigi axiom; the
-forward implication proves only the commutation and zero-energy equations from
-the already axiomatized commutation direction together with frustration-freeness
-of the MPS vector for the canonical parent interaction.
+forward implication has the source-unit Appendix~B structural datum and the
+three-site \(AX/XB\) support maps, but still lacks the even-chain
+product-of-pairs factorization and the local-projector commutation theorem.
+The axiom-backed theorem still supplies the commutation direction used by the
+unconditional statements.
 
 \bibliographystyle{alpha}
 \bibliography{references}
