@@ -23,6 +23,8 @@ Extracted from various files for reusability.
   trace identity
 - `Matrix.trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq`: the Hilbert--Schmidt
   trace form of the Frobenius norm
+- `Matrix.trace_conjTranspose_mul_self_kronecker`: Hilbert--Schmidt trace-form
+  multiplicativity for Kronecker products
 - `Matrix.card_le_trace_conjTranspose_mul_self_re_of_det_norm_eq_one`: determinant
   AM--GM lower bound for the Hilbert--Schmidt trace form
 - `Matrix.PosSemidef.trace_mul_nonneg`: the trace product of two positive
@@ -34,7 +36,7 @@ Extracted from various files for reusability.
 - `Matrix.PosSemidef.mulVec_eq_zero_left/right`: kernel containment for PSD matrix sums
 -/
 
-open scoped Matrix BigOperators ComplexOrder Matrix.Norms.Frobenius
+open scoped Matrix BigOperators ComplexOrder Kronecker Matrix.Norms.Frobenius
 
 namespace Matrix
 
@@ -78,6 +80,36 @@ theorem trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq
   · positivity
 
 end FrobeniusTrace
+
+section FrobeniusKronecker
+
+variable {m n p q : Type*} [Fintype m] [Fintype n] [Fintype p] [Fintype q]
+
+/-- The Hilbert--Schmidt trace form is multiplicative under Kronecker products. -/
+theorem trace_conjTranspose_mul_self_kronecker
+    (A : Matrix m n ℂ) (B : Matrix p q ℂ) :
+    trace ((A ⊗ₖ B)ᴴ * (A ⊗ₖ B)) = trace (Aᴴ * A) * trace (Bᴴ * B) := by
+  rw [conjTranspose_kronecker]
+  rw [← mul_kronecker_mul (A := Aᴴ) (B := A) (A' := Bᴴ) (B' := B)]
+  rw [trace_kronecker]
+
+/-- The real Hilbert--Schmidt trace form is multiplicative under Kronecker products. -/
+theorem trace_conjTranspose_mul_self_re_kronecker
+    (A : Matrix m n ℂ) (B : Matrix p q ℂ) :
+    (trace ((A ⊗ₖ B)ᴴ * (A ⊗ₖ B))).re =
+      (trace (Aᴴ * A)).re * (trace (Bᴴ * B)).re := by
+  have hA_im : (trace (Aᴴ * A)).im = 0 :=
+    (RCLike.nonneg_iff.mp (posSemidef_conjTranspose_mul_self A).trace_nonneg).2
+  have hB_im : (trace (Bᴴ * B)).im = 0 :=
+    (RCLike.nonneg_iff.mp (posSemidef_conjTranspose_mul_self B).trace_nonneg).2
+  calc
+    (trace ((A ⊗ₖ B)ᴴ * (A ⊗ₖ B))).re =
+        (trace (Aᴴ * A) * trace (Bᴴ * B)).re := by
+          rw [trace_conjTranspose_mul_self_kronecker]
+    _ = (trace (Aᴴ * A)).re * (trace (Bᴴ * B)).re := by
+          rw [Complex.mul_re, hA_im, hB_im, mul_zero, sub_zero]
+
+end FrobeniusKronecker
 
 section FrobeniusDeterminant
 
