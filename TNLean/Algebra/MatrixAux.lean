@@ -8,6 +8,8 @@ import Mathlib.Analysis.Matrix.Normed
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.CStarAlgebra.Matrix
+import Mathlib.Analysis.MeanInequalities
+import Mathlib.LinearAlgebra.Matrix.Charpoly.Eigs
 
 /-!
 # Auxiliary matrix lemmas
@@ -21,6 +23,8 @@ Extracted from various files for reusability.
   trace identity
 - `Matrix.trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq`: the Hilbert--Schmidt
   trace form of the Frobenius norm
+- `Matrix.card_le_trace_conjTranspose_mul_self_re_of_det_norm_eq_one`: determinant
+  AM--GM lower bound for the Hilbert--Schmidt trace form
 - `Matrix.PosSemidef.trace_mul_nonneg`: the trace product of two positive
   semidefinite matrices is nonnegative
 - `Matrix.eq_zero_of_sum_mul_conjTranspose_eq_zero`: a positive sum of squares
@@ -74,6 +78,67 @@ theorem trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq
   · positivity
 
 end FrobeniusTrace
+
+section FrobeniusDeterminant
+
+variable {n : Type*} [Fintype n] [DecidableEq n] [Nonempty n]
+
+/-- **Determinant AM--GM lower bound for the Hilbert--Schmidt trace form.**
+
+If a square complex matrix has determinant of norm one, then the square of its
+Frobenius norm is at least the dimension.  Equivalently,
+`(Fintype.card n : ℝ) ≤ (trace (Aᴴ * A)).re`.
+
+This is the singular-value AM--GM estimate used in Wolf's compactness argument
+for Lorentz normal forms. -/
+theorem card_le_trace_conjTranspose_mul_self_re_of_det_norm_eq_one
+    (A : Matrix n n ℂ) (hdet : ‖A.det‖ = 1) :
+    (Fintype.card n : ℝ) ≤ (trace (Aᴴ * A)).re := by
+  classical
+  let B : Matrix n n ℂ := Aᴴ * A
+  have hBherm : B.IsHermitian := by
+    simpa only [B] using Matrix.isHermitian_conjTranspose_mul_self A
+  have hBpsd : B.PosSemidef := by
+    simpa only [B] using Matrix.posSemidef_conjTranspose_mul_self A
+  have hdetB : Matrix.det B = 1 := by
+    change Matrix.det (Aᴴ * A) = 1
+    rw [Matrix.det_mul, Matrix.det_conjTranspose]
+    have hconj : star A.det * A.det = ((‖A.det‖ ^ 2 : ℝ) : ℂ) := by
+      simpa [Complex.star_def, Complex.normSq_eq_norm_sq] using
+        (Complex.normSq_eq_conj_mul_self (z := A.det)).symm
+    rw [hconj, hdet]
+    norm_num
+  have hprod_eq : ∏ i, hBherm.eigenvalues i = 1 := by
+    have h : Matrix.det B = ∏ i, (hBherm.eigenvalues i : ℂ) :=
+      hBherm.det_eq_prod_eigenvalues
+    rw [hdetB] at h
+    have h' : ((∏ i, hBherm.eigenvalues i : ℝ) : ℂ) = 1 := by
+      simpa only [Complex.ofReal_prod] using h.symm
+    exact_mod_cast h'
+  have hcard_pos : 0 < (Fintype.card n : ℝ) := by
+    exact_mod_cast Fintype.card_pos (α := n)
+  have hamgm : 1 ≤ (∑ i, hBherm.eigenvalues i) / (Fintype.card n : ℝ) := by
+    have hweights_pos : 0 < ∑ _i : n, (1 : ℝ) := by
+      simpa only [Finset.sum_const, Finset.card_univ, nsmul_eq_mul, mul_one] using
+        hcard_pos
+    have h :=
+      Real.geom_mean_le_arith_mean
+        (s := Finset.univ) (w := fun _ => (1 : ℝ))
+        (z := fun i => hBherm.eigenvalues i)
+        (by intro i hi; positivity)
+        hweights_pos
+        (by intro i hi; simpa only using hBpsd.eigenvalues_nonneg i)
+    simpa only [ge_iff_le, Real.rpow_one, hprod_eq, Finset.sum_const,
+      Finset.card_univ, nsmul_eq_mul, mul_one, _root_.mul_inv_rev, Real.one_rpow,
+      one_mul] using h
+  have hsum_ge : (Fintype.card n : ℝ) ≤ ∑ i, hBherm.eigenvalues i :=
+    (one_le_div hcard_pos).mp hamgm
+  have htrace_eq : (trace B).re = ∑ i, hBherm.eigenvalues i := by
+    simpa only [Complex.coe_algebraMap, Complex.re_sum, Complex.ofReal_re] using
+      congrArg Complex.re hBherm.trace_eq_sum_eigenvalues
+  simpa only [B] using hsum_ge.trans_eq htrace_eq.symm
+
+end FrobeniusDeterminant
 
 section PosSemidefTrace
 
