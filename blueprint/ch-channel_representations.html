@@ -6433,7 +6433,7 @@
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
 	, Section&#160;2.3
 	]
-</span> discusses two families of normal forms for the transfer-matrix representation of a quantum channel: the <em>singular value decomposition</em> (SVD) and, for qubit channels, the <em>Lorentz normal form</em> obtained by \(\operatorname{SL}(2, \mathbb {C})\) filtering operations. The SVD normal form is proved below. The Lorentz normal form theorem (Theorem&#160;<a href="ch-channel_representations.html#thm:lorentz_normal_form_qubit">16.86</a>) requires the compactness and minimisation argument for \(\operatorname{SL}(2, \mathbb {C})\) filterings in <span class="cite">
+</span> discusses two families of normal forms for the transfer-matrix representation of a quantum channel: the <em>singular value decomposition</em> (SVD) and, for qubit channels, the <em>Lorentz normal form</em> obtained by \(\operatorname{SL}(2, \mathbb {C})\) filtering operations. The SVD normal form is proved below. The Lorentz normal form theorem (Theorem&#160;<a href="ch-channel_representations.html#thm:lorentz_normal_form_qubit">16.87</a>) requires the compactness and minimisation argument for \(\operatorname{SL}(2, \mathbb {C})\) filterings in <span class="cite">
 	[
 	
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
@@ -6735,12 +6735,80 @@
 
   </div>
 </div>
-<div class="lemma_thmwrapper theorem-style-plain" id="lem:infimum_is_attained">
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:posdef_trace_lower_bound">
   <div class="lemma_thmheading">
     <span class="lemma_thmcaption">
     Lemma
     </span>
     <span class="lemma_thmlabel">16.81</span>
+    <span class="lemma_thmtitle">Positive-definite trace lower bound</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-channel_representations.html#lem:posdef_trace_lower_bound">#</a>
+    
+    <a class="icon proof" href="ch-channel_representations.html#a0000025394"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/posDef_minEigenvalue_mul_trace_conjTranspose_mul_self_le" class="lean_decl">posDef_minEigenvalue_mul_trace_conjTranspose_mul_self_le</a></li>
+          
+          <li><a href="../docs/find/#doc/sub_minEigenvalue_smul_one_posSemidef" class="lean_decl">sub_minEigenvalue_smul_one_posSemidef</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>  Let \(D\geq 1\), let \(M\in M_{D}(\mathbb {C})\) be positive-definite, and let \(\lambda _{\min }(M)\) be its smallest Hermitian eigenvalue. For every \(X\in M_{D}(\mathbb {C})\), </p>
+<div class="displaymath" id="a0000025395">
+  \[  \lambda _{\min }(M)\, \operatorname{tr}(X^{\dagger }X) \leq \operatorname{tr}(XMX^{\dagger }).  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000025394">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The matrix \(M-\lambda _{\min }(M)\mathbb {1}\) is positive semidefinite by the spectral theorem. Since \(X^{\dagger }X\) is also positive semidefinite, the trace product of these two matrices is non-negative. Expanding </p>
+<div class="displaymath" id="a0000025396">
+  \[  \operatorname{tr}\! \left(X^{\dagger }X(M-\lambda _{\min }(M)\mathbb {1})\right)  \]
+</div>
+<p> and cycling the trace gives the displayed inequality. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:infimum_is_attained">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">16.82</span>
     <span class="lemma_thmtitle">Infimum attainment for SL-filterings</span>
     <div class="thm_header_extras">
 
@@ -6750,11 +6818,31 @@
     <a class="icon proof" href="ch-channel_representations.html#lem:infimum_is_attained">#</a>
     
     
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-channel_representations.html#lem:posdef_trace_lower_bound">Lemma 16.81</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
     
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p> For a positive-definite Choi matrix \(\tau \), the infimum of \(\operatorname{tr}\! [(S_{2} \otimes _{k} S_{1}) \tau (S_{2} \otimes _{k} S_{1})^{\dagger }]\) over \(S_{1}, S_{2} \in M_{D}(\mathbb {C})\) with \(\det S_{1} = \det S_{2} = 1\) is attained. <b class="bfseries">Not yet proved</b>—requires compactness of bounded subsets of \(\operatorname{SL}(D, \mathbb {C})\) and the extreme-value theorem. </p>
+  <p>  For a positive-definite Choi matrix \(\tau \), the infimum of \(\operatorname{tr}\! [(S_{2} \otimes _{k} S_{1}) \tau (S_{2} \otimes _{k} S_{1})^{\dagger }]\) over \(S_{1}, S_{2} \in M_{D}(\mathbb {C})\) with \(\det S_{1} = \det S_{2} = 1\) is attained. <b class="bfseries">Not yet proved</b>—requires compactness of bounded subsets of \(\operatorname{SL}(D, \mathbb {C})\) and the extreme-value theorem. </p>
 
   </div>
 </div>
@@ -6763,7 +6851,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.82</span>
+    <span class="theorem_thmlabel">16.83</span>
     <span class="theorem_thmtitle">Generic normal form for CP maps</span>
     <div class="thm_header_extras">
 
@@ -6789,7 +6877,7 @@
           
           <li><a href="ch-channel_representations.html#def:doubly_stochastic">Definition 16.80</a></li>
           
-          <li><a href="ch-channel_representations.html#lem:infimum_is_attained">Lemma 16.81</a></li>
+          <li><a href="ch-channel_representations.html#lem:infimum_is_attained">Lemma 16.82</a></li>
           
         </ul>
     
@@ -6801,7 +6889,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>  Let \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) be a completely positive map whose Choi matrix is positive-definite (equivalently, \(T\) has full Kraus rank). Then there exist SL-filterings \(\Phi _{1}, \Phi _{2}\) such that \(\Phi _{2} \circ T \circ \Phi _{1}\) is doubly-stochastic. <b class="bfseries">Not yet proved</b>—proof blocked on Lemma&#160;<a href="ch-channel_representations.html#lem:infimum_is_attained">16.81</a>. </p>
+  <p>  Let \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) be a completely positive map whose Choi matrix is positive-definite (equivalently, \(T\) has full Kraus rank). Then there exist SL-filterings \(\Phi _{1}, \Phi _{2}\) such that \(\Phi _{2} \circ T \circ \Phi _{1}\) is doubly-stochastic. <b class="bfseries">Not yet proved</b>—proof blocked on Lemma&#160;<a href="ch-channel_representations.html#lem:infimum_is_attained">16.82</a>. </p>
 
   </div>
 </div>
@@ -6810,7 +6898,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">16.83</span>
+    <span class="definition_thmlabel">16.84</span>
     <span class="definition_thmtitle">Diagonal Lorentz normal form</span>
     <div class="thm_header_extras">
 
@@ -6833,7 +6921,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">16.84</span>
+    <span class="definition_thmlabel">16.85</span>
     <span class="definition_thmtitle">Non-diagonal Lorentz normal form</span>
     <div class="thm_header_extras">
 
@@ -6848,7 +6936,7 @@
   </div>
   <div class="definition_thmcontent">
   <p> For a completely positive, trace-preserving qubit channel \(T' : M_{2}(\mathbb {C}) \to M_{2}(\mathbb {C})\), write \(\widehat{T'}\) in the normalized Pauli basis. The channel is in <em>non-diagonal Lorentz normal form</em> when, for some \(x \in [0,1]\), </p>
-<div class="displaymath" id="a0000025394">
+<div class="displaymath" id="a0000025397">
   \[  \widehat{T'} = \begin{pmatrix}  1 
 
 &  0 
@@ -6892,7 +6980,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">16.85</span>
+    <span class="definition_thmlabel">16.86</span>
     <span class="definition_thmtitle">Singular Lorentz normal form</span>
     <div class="thm_header_extras">
 
@@ -6907,7 +6995,7 @@
   </div>
   <div class="definition_thmcontent">
   <p> For a completely positive, trace-preserving qubit channel \(T' : M_{2}(\mathbb {C}) \to M_{2}(\mathbb {C})\), write \(\widehat{T'}\) in the normalized Pauli basis. The channel is in <em>singular Lorentz normal form</em> when </p>
-<div class="displaymath" id="a0000025395">
+<div class="displaymath" id="a0000025398">
   \[  \widehat{T'} = \begin{pmatrix}  1 
 
 &  0 
@@ -6951,7 +7039,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.86</span>
+    <span class="theorem_thmlabel">16.87</span>
     <span class="theorem_thmtitle">Lorentz normal form for qubit channels</span>
     <div class="thm_header_extras">
 
@@ -6975,13 +7063,13 @@
           
           <li><a href="ch-channel_representations.html#def:sl_filtering">Definition 16.79</a></li>
           
-          <li><a href="ch-channel_representations.html#lem:infimum_is_attained">Lemma 16.81</a></li>
+          <li><a href="ch-channel_representations.html#lem:infimum_is_attained">Lemma 16.82</a></li>
           
-          <li><a href="ch-channel_representations.html#def:lorentz_diagonal">Definition 16.83</a></li>
+          <li><a href="ch-channel_representations.html#def:lorentz_diagonal">Definition 16.84</a></li>
           
-          <li><a href="ch-channel_representations.html#def:lorentz_non_diagonal">Definition 16.84</a></li>
+          <li><a href="ch-channel_representations.html#def:lorentz_non_diagonal">Definition 16.85</a></li>
           
-          <li><a href="ch-channel_representations.html#def:lorentz_singular">Definition 16.85</a></li>
+          <li><a href="ch-channel_representations.html#def:lorentz_singular">Definition 16.86</a></li>
           
         </ul>
     
@@ -6993,7 +7081,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>  For every qubit channel \(T : M_{2}(\mathbb {C}) \to M_{2}(\mathbb {C})\), there exist \(\operatorname{SL}(2, \mathbb {C})\)-filterings \(\Phi _{1}, \Phi _{2}\) such that the filtered channel \(T' = \Phi _{2} \circ T \circ \Phi _{1}\) is in one of the three Lorentz normal forms: diagonal, non-diagonal, or singular. <b class="bfseries">Not yet proved</b>—proof blocked on Lemma&#160;<a href="ch-channel_representations.html#lem:infimum_is_attained">16.81</a> and the Lorentz group classification of \(\operatorname{SL}(2, \mathbb {C})\) orbits. </p>
+  <p>  For every qubit channel \(T : M_{2}(\mathbb {C}) \to M_{2}(\mathbb {C})\), there exist \(\operatorname{SL}(2, \mathbb {C})\)-filterings \(\Phi _{1}, \Phi _{2}\) such that the filtered channel \(T' = \Phi _{2} \circ T \circ \Phi _{1}\) is in one of the three Lorentz normal forms: diagonal, non-diagonal, or singular. <b class="bfseries">Not yet proved</b>—proof blocked on Lemma&#160;<a href="ch-channel_representations.html#lem:infimum_is_attained">16.82</a> and the Lorentz group classification of \(\operatorname{SL}(2, \mathbb {C})\) orbits. </p>
 
   </div>
 </div>
@@ -7004,7 +7092,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">16.87</span>
+    <span class="definition_thmlabel">16.88</span>
     <span class="definition_thmtitle">Channel determinant</span>
     <div class="thm_header_extras">
 
@@ -7054,7 +7142,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">16.88</span>
+    <span class="remark_thmlabel">16.89</span>
     <span class="remark_thmtitle">Channel determinant as an operator determinant</span>
     <div class="thm_header_extras">
 
@@ -7096,7 +7184,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">16.89</span>
+    <span class="definition_thmlabel">16.90</span>
     <span class="definition_thmtitle">Unitary channel</span>
     <div class="thm_header_extras">
 
@@ -7142,7 +7230,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.90</span>
+    <span class="theorem_thmlabel">16.91</span>
     <span class="theorem_thmtitle">Unitary channels have determinant one</span>
     <div class="thm_header_extras">
 
@@ -7153,7 +7241,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:channel_det_unitary_eq_one">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000025396"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000025399"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7169,9 +7257,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channel_representations.html#def:channel_det">Definition 16.87</a></li>
+          <li><a href="ch-channel_representations.html#def:channel_det">Definition 16.88</a></li>
           
-          <li><a href="ch-channel_representations.html#def:unitary_channel">Definition 16.89</a></li>
+          <li><a href="ch-channel_representations.html#def:unitary_channel">Definition 16.90</a></li>
           
         </ul>
     
@@ -7208,7 +7296,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000025396">
+<div class="proof_wrapper" id="a0000025399">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7225,7 +7313,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.91</span>
+    <span class="theorem_thmlabel">16.92</span>
     <span class="theorem_thmtitle">Determinant bound for positive trace-preserving maps</span>
     <div class="thm_header_extras">
 
@@ -7236,7 +7324,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:channelDet_norm_le_one">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000025397"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000025400"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7252,7 +7340,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channel_representations.html#def:channel_det">Definition 16.87</a></li>
+          <li><a href="ch-channel_representations.html#def:channel_det">Definition 16.88</a></li>
           
           <li><a href="ch-channels.html#def:positive_map">Definition 4.1</a></li>
           
@@ -7299,7 +7387,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000025397">
+<div class="proof_wrapper" id="a0000025400">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7316,7 +7404,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.92</span>
+    <span class="theorem_thmlabel">16.93</span>
     <span class="theorem_thmtitle">Determinant one iff the channel is unitary</span>
     <div class="thm_header_extras">
 
@@ -7327,7 +7415,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:channelDet_norm_eq_one_iff_unitary">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000025398"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000025401"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7345,13 +7433,13 @@
           
           <li><a href="ch-channels.html#def:channel">Definition 4.11</a></li>
           
-          <li><a href="ch-channel_representations.html#def:channel_det">Definition 16.87</a></li>
+          <li><a href="ch-channel_representations.html#def:channel_det">Definition 16.88</a></li>
           
-          <li><a href="ch-channel_representations.html#def:unitary_channel">Definition 16.89</a></li>
+          <li><a href="ch-channel_representations.html#def:unitary_channel">Definition 16.90</a></li>
           
-          <li><a href="ch-channel_representations.html#thm:channelDet_norm_le_one">Theorem 16.91</a></li>
+          <li><a href="ch-channel_representations.html#thm:channelDet_norm_le_one">Theorem 16.92</a></li>
           
-          <li><a href="ch-channel_representations.html#thm:channel_det_unitary_eq_one">Theorem 16.90</a></li>
+          <li><a href="ch-channel_representations.html#thm:channel_det_unitary_eq_one">Theorem 16.91</a></li>
           
         </ul>
     
@@ -7383,7 +7471,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For a CPTP map \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\), </p>
-<div class="displaymath" id="a0000025399">
+<div class="displaymath" id="a0000025402">
   \[  |\det T| = 1 \iff \exists \,  U \in \mathcal{U}(D),\quad T(\rho ) = U\rho U^\dagger .  \]
 </div>
 <p> This is <span class="cite">
@@ -7396,7 +7484,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000025398">
+<div class="proof_wrapper" id="a0000025401">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7404,7 +7492,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Reverse direction is Theorem&#160;<a href="ch-channel_representations.html#thm:channel_det_unitary_eq_one">16.90</a>. Forward direction: \(|\det T| = 1\) together with \(|\mu | \le 1\) for every eigenvalue \(\mu \) (from trace preservation and positivity) forces every eigenvalue to satisfy \(|\mu | = 1\). Hence \(T\) is bijective. A bijective CPTP map is a \(*\)-automorphism: the Heisenberg dual \(T^*(Y) = \sum _i K_i^\dagger Y K_i\) is unital (since \(T\) is TP), so the Kadison–Schwarz inequality \(T^*(Y^\dagger Y) \ge T^*(Y)^\dagger T^*(Y)\) becomes an equality for every \(Y\). Hence \(T^*\), and therefore \(T\), preserves products. By the Skolem–Noether theorem, every \(*\)-automorphism of \(M_{D}(\mathbb {C})\) has the form \(T(\rho ) = U \rho U^\dagger \) for some unitary \(U\). Kraus freedom then gives \(K_i = c_i U\) with \(\sum _i |c_i|^2 = 1\). </p>
+  <p> Reverse direction is Theorem&#160;<a href="ch-channel_representations.html#thm:channel_det_unitary_eq_one">16.91</a>. Forward direction: \(|\det T| = 1\) together with \(|\mu | \le 1\) for every eigenvalue \(\mu \) (from trace preservation and positivity) forces every eigenvalue to satisfy \(|\mu | = 1\). Hence \(T\) is bijective. A bijective CPTP map is a \(*\)-automorphism: the Heisenberg dual \(T^*(Y) = \sum _i K_i^\dagger Y K_i\) is unital (since \(T\) is TP), so the Kadison–Schwarz inequality \(T^*(Y^\dagger Y) \ge T^*(Y)^\dagger T^*(Y)\) becomes an equality for every \(Y\). Hence \(T^*\), and therefore \(T\), preserves products. By the Skolem–Noether theorem, every \(*\)-automorphism of \(M_{D}(\mathbb {C})\) has the form \(T(\rho ) = U \rho U^\dagger \) for some unitary \(U\). Kraus freedom then gives \(K_i = c_i U\) with \(\sum _i |c_i|^2 = 1\). </p>
 
   </div>
 </div>
