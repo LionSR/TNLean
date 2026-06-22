@@ -1,0 +1,178 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The Strong-Subadditivity Equality Characterization as an External
+Stand-In, and Its One-Directional Hygiene Split}
+\author{}
+\date{2026-06-22}
+
+\begin{document}
+\maketitle
+
+\section{The assertion and its current formal status}
+
+Equality in strong subadditivity,
+\begin{align}
+  S(\rho_{ABC}) + S(\rho_{B}) = S(\rho_{AB}) + S(\rho_{BC}),
+  \tag{SSA$_{=}$}
+  \label{eq:ssa-eq}
+\end{align}
+is characterized by a structural decomposition of the middle subsystem. The
+characterization states that~\eqref{eq:ssa-eq} holds if and only if, after a
+unitary change of basis on $\mathcal H_B$, the middle space decomposes as a
+finite orthogonal direct sum
+\begin{align}
+  \mathcal H_B \;\cong\; \bigoplus_{j} \mathcal H_{B_j^{L}} \otimes
+  \mathcal H_{B_j^{R}},
+\end{align}
+and in this basis the state is block diagonal,
+\begin{align}
+  \rho_{ABC} \;\cong\; \bigoplus_{j} p_j \,
+  \rho_{A B_j^{L}} \otimes \rho_{B_j^{R} C},
+  \tag{QMC}
+  \label{eq:qmc}
+\end{align}
+with probabilities $p_j \ge 0$, $\sum_j p_j = 1$, and density operators
+$\rho_{A B_j^{L}}$, $\rho_{B_j^{R} C}$ on the indicated factors. This is the
+quantum-Markov-chain structure of the tripartite state
+\cite{Ruskai2002, HaydenJozsaPetzWinter2004, Hayashi2006}.
+
+In the present development the biconditional
+\eqref{eq:ssa-eq} $\Leftrightarrow$~\eqref{eq:qmc} is asserted as a standalone
+axiom.\footnote{The axiom is \leanid{hayashi_ssa_equality_characterization} in
+\doclink{TNLean/Axioms/Entropy} (\path{TNLean/Axioms/Entropy.lean}).
+The equality predicate is \leanid{IsSSAEquality} in
+\doclink{TNLean/Analysis/Entropy} (\path{TNLean/Analysis/Entropy.lean}),
+and the right-hand structure is recorded by
+\leanid{HayashiMarkovDecomposition} in \doclink{TNLean/Axioms/Entropy}
+(\path{TNLean/Axioms/Entropy.lean}), whose fields store the
+finite decomposition, the unitary basis change, the weights $p_j$, the component
+density operators, and the block-diagonal equality.} It is an external stand-in:
+the characterization is a theorem of Ruskai, of Hayden--Jozsa--Petz--Winter, and
+of Hayashi, but its proof is not formalized here.
+
+\section{The point at issue: only the forward direction is consumed}
+
+The biconditional has two directions of very different difficulty and very
+different usage.
+
+\paragraph{Forward direction (consumed).}
+The implication \eqref{eq:ssa-eq} $\Rightarrow$~\eqref{eq:qmc} --- equality
+forces the quantum-Markov-chain structure --- is the only direction used
+downstream. Its proof is the deep part of the characterization: it requires
+recovery-map theory and the Petz transpose channel, that is, the analysis of
+when the data-processing inequality for relative entropy is saturated and the
+reconstruction of the discarded subsystem from a recovery map. This recovery-map
+and Petz machinery is absent from the underlying library, which is why the
+forward direction is axiomatized rather than proved.
+
+\paragraph{Reverse direction (tractable, currently unused).}
+The implication \eqref{eq:qmc} $\Rightarrow$~\eqref{eq:ssa-eq} --- a state of the
+block-diagonal product form attains equality --- is elementary by comparison and
+is computed directly from additivity properties of the entropy. For a state of
+the form~\eqref{eq:qmc} the von Neumann entropy decomposes as
+\begin{align}
+  S\!\left(\bigoplus_j p_j\, \omega_j\right)
+  = H(\{p_j\}) + \sum_j p_j\, S(\omega_j),
+  \qquad
+  S(\omega \otimes \tau) = S(\omega) + S(\tau),
+\end{align}
+where $H(\{p_j\}) = -\sum_j p_j \log p_j$ is the Shannon entropy of the weights.
+Substituting~\eqref{eq:qmc} and its three marginals into both sides
+of~\eqref{eq:ssa-eq} and cancelling the matching terms gives the equality with no
+recovery-map input. The reverse direction is therefore provable from
+entropy-additivity sub-lemmas alone, but it is not at present consumed by any
+downstream result.
+
+\section{The one-directional hygiene split}
+
+Because only the forward direction is both deep and used, an optional cleanup
+keeps the axiom boundary minimal: state the axiom as the single forward
+implication \eqref{eq:ssa-eq} $\Rightarrow$~\eqref{eq:qmc}, and prove the reverse
+implication \eqref{eq:qmc} $\Rightarrow$~\eqref{eq:ssa-eq} as a theorem. The full
+biconditional is then recovered by combining the two, but the axiomatic content
+is reduced to exactly the part that genuinely needs the missing theory.
+
+The reverse half needs the following entropy-additivity sub-lemmas, all of which
+are within reach of the present entropy interface:
+
+\begin{itemize}
+  \item additivity over a finite weighted orthogonal direct sum:
+    $S\!\left(\bigoplus_j p_j\,\omega_j\right) = H(\{p_j\}) + \sum_j p_j
+    S(\omega_j)$, i.e.\ the entropy of a block-diagonal state with weights;
+  \item additivity over a tensor factorization:
+    $S(\omega \otimes \tau) = S(\omega) + S(\tau)$;
+  \item invariance of the entropy under a unitary basis change and under
+    reindexing of the underlying space, so that the basis change on $\mathcal
+    H_B$ and the direct-sum reindexing in~\eqref{eq:qmc} leave every entropy term
+    unchanged;
+  \item naturality of the partial trace under the same middle-system unitary:
+    for example,
+    \[
+      \tr_C\!\bigl((\mathbf 1_A\otimes U_B\otimes\mathbf 1_C)\rho
+      (\mathbf 1_A\otimes U_B^{\dagger}\otimes\mathbf 1_C)\bigr)
+      =
+      (\mathbf 1_A\otimes U_B)\rho_{AB}
+      (\mathbf 1_A\otimes U_B^{\dagger}),
+    \]
+    with the analogous formulas for the $BC$ and $B$ marginals. This is the
+    step that lets the marginals of the unitary-conjugated block-diagonal state
+    replace the four entropy terms of the original state;
+  \item identification of the three reduced states as partial traces of the
+    block-diagonal state~\eqref{eq:qmc}: tracing out $C$ gives
+    $\rho_{AB} \cong \bigoplus_j p_j\, \rho_{A B_j^{L}} \otimes \rho_{B_j^{R}}$,
+    tracing out $A$ gives
+    $\rho_{BC} \cong \bigoplus_j p_j\, \rho_{B_j^{L}} \otimes \rho_{B_j^{R} C}$,
+    and tracing out $AC$ gives
+    $\rho_{B} \cong \bigoplus_j p_j\, \rho_{B_j^{L}} \otimes \rho_{B_j^{R}}$,
+    where $\rho_{B_j^{L}} = \tr_{A}\rho_{A B_j^{L}}$ and
+    $\rho_{B_j^{R}} = \tr_{C}\rho_{B_j^{R} C}$. These marginal formulas carry the
+    weights and tensor factors through, and they are what feeds the four entropy
+    terms of~\eqref{eq:ssa-eq} into the two additivity lemmas above.
+\end{itemize}
+
+With these five facts the reverse implication is a finite computation; the
+forward implication remains an axiom until recovery-map and Petz theory are
+available.
+
+\section{Verdict}
+
+The strong-subadditivity equality characterization is an external stand-in for a
+theorem of Ruskai, of Hayden--Jozsa--Petz--Winter, and of Hayashi. Only the
+forward direction, equality implies quantum-Markov-chain structure, is consumed
+downstream, and it is precisely the direction that needs recovery-map and Petz
+theory not present in the library. The reverse direction is an elementary
+consequence of entropy additivity over weighted direct sums and tensor factors
+together with unitary and reindexing invariance, and could be proved now; doing
+so would let the axiom be narrowed to the single load-bearing forward
+implication. Until the recovery-map theory is formalized, the forward direction
+remains the irreducible axiomatic content of this characterization.
+
+\begin{thebibliography}{9}
+
+\bibitem{Ruskai2002}
+  M.~B.~Ruskai,
+  \emph{Inequalities for quantum entropy: a review with conditions for
+  equality},
+  Journal of Mathematical Physics \textbf{43} (2002), 4358--4375.
+
+\bibitem{HaydenJozsaPetzWinter2004}
+  P.~Hayden, R.~Jozsa, D.~Petz, and A.~Winter,
+  \emph{Structure of states which satisfy strong subadditivity of quantum
+  entropy with equality},
+  Communications in Mathematical Physics \textbf{246} (2004), 359--374.
+
+\bibitem{Hayashi2006}
+  M.~Hayashi,
+  \emph{Quantum Information: An Introduction},
+  Springer, 2006; Theorem 5.24.
+
+\end{thebibliography}
+
+\end{document}
