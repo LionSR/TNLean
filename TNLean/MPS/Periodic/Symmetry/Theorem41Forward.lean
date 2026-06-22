@@ -361,6 +361,26 @@ def PeripheralEqualCaseZGaugeOfSameMPV (d D p : ℕ) : Prop :=
     SameMPV C (blockTensor A p) →
       ∃ m : ℕ, 0 < m ∧ ZGaugeEquiv m C (blockTensor A p)
 
+/-- **Scope-restricted blocked `Z`-gauge extraction from the periodic equal-case FT.**
+
+Applying the periodic equal-case Fundamental Theorem at the blocked physical
+dimension `blockPhysDim d p` gives the blocked `Z`-gauge once both tensors are
+already known to be in irreducible form. The irreducible-form hypothesis for
+the \(p\)-blocked root is an explicit input here; it is not obtained from
+equality of MPV families.
+
+This theorem is therefore only the equal-case FT application step. The remaining
+canonicalization problem is to prove that the blocked root appearing in the
+refinement argument is in irreducible form. -/
+theorem peripheralEqualCaseZGaugeOfSameMPV_of_periodicEqualCaseFT
+    (p : ℕ) (hFT : PeriodicEqualCaseFT (blockPhysDim d p) D)
+    {A : MPSTensor d D} {C : MPSTensor (blockPhysDim d p) D}
+    (hC : IsIrreducibleForm C)
+    (hBlock : IsIrreducibleForm (blockTensor A p))
+    (hSame : SameMPV C (blockTensor A p)) :
+    ∃ m : ℕ, 0 < m ∧ ZGaugeEquiv m C (blockTensor A p) :=
+  hFT hC hBlock hSame
+
 /-- **Blocked-to-root reconstruction from a periodic `Z`-gauge witness.**
 
 This Prop isolates the second half of the blocked equal-case argument: once a
