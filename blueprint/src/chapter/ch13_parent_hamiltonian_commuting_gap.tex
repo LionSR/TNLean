@@ -72,14 +72,27 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
         h^{(3)}_1(A,2)=q(A)_{XB}.
     \]
     This identifies the two translated parent interactions with the two
-    supports appearing in Definition~D.2; it does not assert that they commute.
+    supports appearing in \cite[Definition~D.2]{Cirac2016MPDO_arXiv}; it does
+    not assert that they commute.
 \end{theorem}
 
 \begin{proof}\leanok
-    For the first translated term, the length-two window extracts the
-    \(AX\)-coordinates and replacing that window is the same as replacing the
-    \(AX\)-face while leaving \(B\) fixed. For the second translated term, the
-    window extracts the \(XB\)-coordinates and replacement leaves \(A\) fixed.
+    Let \(\sigma=(a,x,b)\) be a three-site configuration. For the first
+    translated term, the length-two window and the corresponding replacement
+    satisfy
+    \[
+        \sigma_{\{0,1\}}=(a,x)=\sigma_{AX},\qquad
+        \sigma^{\{0,1\}\leftarrow(\alpha,\xi)}
+        =(\alpha,\xi,b)=\sigma^{AX\leftarrow(\alpha,\xi)}.
+    \]
+    For the second translated term,
+    \[
+        \sigma_{\{1,2\}}=(x,b)=\sigma_{XB},\qquad
+        \sigma^{\{1,2\}\leftarrow(\xi,\beta)}
+        =(a,\xi,\beta)=\sigma^{XB\leftarrow(\xi,\beta)}.
+    \]
+    Substituting these two pairs of identities into the definition of the
+    translated parent term gives the two displayed equations.
 \end{proof}
 
 \begin{definition}[Translated parent-term commutation]\label{def:is_commuting_parent_ham}
