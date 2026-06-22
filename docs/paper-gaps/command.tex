@@ -1,6 +1,9 @@
 % Shared commands for notes in docs/paper-gaps/.
 
+\DeclareUnicodeCharacter{2080}{\ifmmode{}_{0}\else\textsubscript{0}\fi}
+\DeclareUnicodeCharacter{2081}{\ifmmode{}_{1}\else\textsubscript{1}\fi}
 \DeclareUnicodeCharacter{2082}{\ifmmode{}_{2}\else\textsubscript{2}\fi}
+\DeclareUnicodeCharacter{2099}{\ifmmode{}_{n}\else\textsubscript{n}\fi}
 
 \newcommand{\Lean}{\textsc{Lean}}
 \newcommand{\leanid}[1]{\textsf{\detokenize{#1}}}
