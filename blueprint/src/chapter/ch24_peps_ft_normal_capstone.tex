@@ -1379,8 +1379,9 @@ recorded in the route note
 \begin{corollary}[Translation-invariant description of an injective closed MPS chain,
         uniform bond dimension]%
     \label{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState}
-    \notready
-    \uses{cor:exists_gauge_to_first_of_cyclicShiftInvariantState,
+    \lean{TNLean.PEPS.exists_constant_injectiveMPS_of_cyclicShiftInvariantState}
+    \leanok
+    \uses{cor:fundamentalTheorem_injectiveMPSChain_cyclicShift,
         def:mps_chain_cyclic_shift}
     Let \(A_0,\ldots,A_{n-1}\) be an injective site-dependent closed chain on
     \(n\ge 3\) sites, with one physical dimension \(d\) and one bond dimension
@@ -1402,16 +1403,20 @@ recorded in the route note
     equal; in the present uniform-dimension statement that clause has already
     been built into the setting.
 \end{corollary}
-\begin{proof}
+\begin{proof}\leanok
     Apply Corollary~\ref{cor:fundamentalTheorem_injectiveMPSChain_cyclicShift}
-    to compare the chain with its cyclic shift.  The resulting gauges give the
-    \(L_v,R_v\) expression of
-    Corollary~\ref{cor:exists_gauge_to_first_of_cyclicShiftInvariantState}.
-    The source then uses the identities
-    \(R_vL_{v+1}^{-1}=Z_0^{-1}\) and the cyclic boundary condition to rewrite
-    the whole closed-chain contraction as the contraction of one repeated
-    tensor.  This final repeated-tensor construction is the remaining
-    formalization step.
+    to compare the chain with its cyclic shift, giving one invertible gauge
+    $Z_v$ per bond with $A_{v+1}^i=Z_v\,A_v^i\,Z_{v+1}^{-1}$.  Telescoping
+    the gauges into the running products $P_m=Z_{m-1}\cdots Z_0$ expresses
+    every tensor through the first, $A_m^i=P_m\,(A_0^i Z_0)\,P_{m+1}^{-1}$, so
+    the closed trace collapses to
+    $\operatorname{tr}(B^{\sigma_0}\cdots B^{\sigma_{n-1}} P_n^{-1})$ with the
+    tentative repeated tensor $B=A_0 Z_0$.  Reading the gauge relation across
+    the seam $A_{n+1}\equiv A_0$ shows that the loop product $P_n$ commutes
+    with the full matrix algebra spanned by $B$, hence is a scalar
+    $\lambda\ne 0$.  Since $\mathbb{C}$ is algebraically closed there is an
+    $n$-th root $c^n=\lambda^{-1}$; the rescaled tensor $c\,B$ is still
+    injective and its constant chain generates the same closed state.
 \end{proof}
 
 \begin{theorem}[Uniqueness of the injective closed-chain gauge]%

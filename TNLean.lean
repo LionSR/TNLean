@@ -689,6 +689,9 @@ import TNLean.PEPS.CycleMPSChainOverlapInsertion
 -- The site-dependent closed-chain corollary at n ≥ 2L+1: same-state
 -- window-injective chains are gauge equivalent, one gauge per bond.
 import TNLean.PEPS.CycleMPSChainOverlapCapstone
+-- Translation-invariant description of an injective closed MPS chain by a
+-- single repeated injective tensor (uniform bond dimension).
+import TNLean.PEPS.CycleMPSConstantDescription
 -- The insertion correspondence: same closed-chain state at one length
 -- n ≥ 2L+1 gives conjugate word products at that length.
 import TNLean.PEPS.CycleMPSOverlapInsertion
