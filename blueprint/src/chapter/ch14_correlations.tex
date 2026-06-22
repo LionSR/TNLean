@@ -486,6 +486,44 @@ and rates for the single-tensor transfer map $\E_A$.
     normalization contributes the factor $D^{-1}$ in the pair-index equation.
 \end{proof}
 
+\begin{theorem}[Unit pair-index form for RFP tensors]%
+    \label{thm:rfp_nt_structural_full_unit_pair}
+    \lean{MPSTensor.rfp_nt_structural_full_unit_pair}
+    \leanok
+    \uses{thm:rfp_nt_structural_full}
+    A normal tensor $A$ in canonical form~II that is a renormalization fixed
+    point admits a decomposition $A^i = X \Lambda U^i X^{-1}$, where
+    $\Lambda$ is diagonal positive and
+    \[
+        \sum_i \overline{(U^i)_{\alpha,\beta}}\,
+        (U^i)_{\alpha',\beta'}
+        =
+        \delta_{\alpha,\alpha'}\delta_{\beta,\beta'} .
+    \]
+    This is the unit pair-index convention of
+    \cite[Section~3]{Cirac2016MPDO_arXiv}.  The statement still does not impose
+    the trace-normalization $\tr(\Lambda)=1$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:rfp_nt_structural_full}
+    Apply Theorem~\ref{thm:rfp_nt_structural_full}, then set
+    $\widetilde U^i=\sqrt D\,U^i$ and
+    $\widetilde\Lambda=D^{-1/2}\Lambda$.  Since
+    $\widetilde\Lambda\widetilde U^i=\Lambda U^i$, the decomposition
+    $A^i=X\widetilde\Lambda\widetilde U^iX^{-1}$ still holds.  The
+    pair-index contraction becomes
+    \[
+        \sum_i
+        \overline{(\widetilde U^i)_{\alpha,\beta}}\,
+        (\widetilde U^i)_{\alpha',\beta'}
+        =
+        D\cdot D^{-1}
+        \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}
+        =
+        \delta_{\alpha,\alpha'}\delta_{\beta,\beta'} .
+    \]
+\end{proof}
+
 \begin{theorem}[Per-block isometry canonical form]%
     \label{thm:rfp_nt_structural_full_blocks}
     \lean{MPSTensor.rfp_nt_structural_full_blocks}
@@ -531,6 +569,30 @@ and rates for the single-tensor transfer map $\E_A$.
 \begin{proof}\leanok
     \uses{thm:rfp_nt_structural_full}
     Apply Theorem~\ref{thm:rfp_nt_structural_full} to each block.
+\end{proof}
+
+\begin{theorem}[Per-block unit pair-index form]%
+    \label{thm:rfp_nt_structural_full_blocks_unit_pair}
+    \lean{MPSTensor.rfp_nt_structural_full_blocks_unit_pair}
+    \leanok
+    \uses{thm:rfp_nt_structural_full_unit_pair}
+    Under the hypotheses of
+    Theorem~\ref{thm:rfp_nt_structural_full_blocks}, each block admits a
+    decomposition $A_k^i = X_k \Lambda_k U_k^i X_k^{-1}$ with
+    $\Lambda_k$ diagonal positive and
+    \[
+        \sum_i \overline{(U_k^i)_{\alpha,\beta}}\,
+        (U_k^i)_{\alpha',\beta'}
+        =
+        \delta_{\alpha,\alpha'}\delta_{\beta,\beta'} .
+    \]
+    This is a blockwise unit pair-index comparison. It still does not impose
+    the source trace-normalization of $\Lambda_k$ or the cross-block
+    orthogonality equations for distinct blocks.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:rfp_nt_structural_full_unit_pair}
+    Apply Theorem~\ref{thm:rfp_nt_structural_full_unit_pair} to each block.
 \end{proof}
 
 \begin{theorem}[Canonical-form blocks are injective]\label{thm:rfp_cf_structural}
