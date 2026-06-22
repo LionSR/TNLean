@@ -111,10 +111,10 @@ into
 - a family of chain-level projectors whose values are exactly the nearest-neighbor `localTerm`s.
 
 This is a genuine chain-space construction problem on `NSiteSpace d N`; it is **not** a remaining
-issue about the NNCPH definition itself. The present `AppendixBStructuralData` record still exposes
-only the left-canonical identity for `U`; a proof of the all-even-length factorization may need the
-stronger matrix-entry isometry produced inside `rfp_nt_structural_full` to be exported, or an
-alternative local-support description of the product-pair state.
+issue about the NNCPH definition itself. The present `AppendixBStructuralData` record now exposes
+the unit pair-index isometry for `U` in the source convention. A proof of the all-even-length
+factorization still has to turn that matrix-entry isometry into the repeated two-site amplitude on
+the cyclic chain, or give an equivalent local-support description of the product-pair state.
 
 ## Gap 2 — the forward decorrelation theorem is blocked on tensor locality
 

@@ -61,17 +61,25 @@ Thus the present declaration is not Definition~D.2 itself.  It is the algebraic
 idempotent-product consequence of Definition~D.2 that is sufficient for the
 backward decorrelation implication already proved in the file.
 
+The nearest-neighbor parent-Hamiltonian development now also has a separate
+three-site support layer for the \(AX\) and \(XB\) faces:
+\leanid{MPSTensor.leftPairLift}, \leanid{MPSTensor.rightPairLift}, and
+\leanid{MPSTensor.HasOverlappingTwoSiteCommutation}.  This records the local
+action and commutation equation on the common three-site space, but it still
+does not include the kernel-intersection condition or the orthogonal-projector
+identification required by Definition~D.2.
+
 \section{Elimination plan}
 
-A source-faithful version should introduce the tensor-product setting
-\(\mathcal H_A\otimes\mathcal H_X\otimes\mathcal H_B\), the local subspaces
-\(K_{AX}\) and \(K_{XB}\), and the corresponding orthogonal projectors
-\(Q_{AX}\) and \(Q_{XB}\).  From the source hypotheses it should derive the
+A source-faithful version should build on the existing \(AX/XB\) support layer
+by adding the local subspaces \(K_{AX}\) and \(K_{XB}\), the corresponding
+orthogonal projectors \(Q_{AX}\) and \(Q_{XB}\), and the source
+kernel-intersection equation.  From those hypotheses it should derive the
 idempotent-product declaration above as a lemma, with \(P_K=P_{AXB}\).
 
-After that tensor-product version is available, the blueprint entry for the
-source parent commuting Hamiltonian condition should point to that source-level
-statement.  The current idempotent-product declaration can remain as the
+After that source-level version is available, the blueprint entry for the source
+parent commuting Hamiltonian condition should point to that statement.  The
+current idempotent-product declaration can remain as the
 algebraic lemma used in the backward direction of Proposition~D.3.  The work is
 tracked by \ghissue{2633} and \ghissue{190}.
 
