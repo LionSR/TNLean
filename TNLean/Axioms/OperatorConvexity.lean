@@ -18,11 +18,16 @@ theorem**.
 
 Mathlib 4.31 proves the operator concavity inputs for `x ↦ x ^ p`,
 `0 ≤ p ≤ 1`, and for `log`, via `CFC.concaveOn_rpow` and
-`CFC.concaveOn_log`.  The axioms below remain because those concavity
-statements are not yet accompanied by a Hansen--Pedersen operator Jensen
-theorem for arbitrary positive subunital or unital maps, by operator
-convexity of `x ↦ x ^ p` for `1 ≤ p ≤ 2`, or by Lieb's joint concavity
-theorem.
+`CFC.concaveOn_log`.  It also provides the Löwner integral representation
+`a ^ p = ∫ t in Ioi 0, cfcₙ (Real.rpowIntegrand₀₁ p t) a ∂μ` for
+`p ∈ (0, 1)` (`CFC.exists_measure_nnrpow_eq_integral_cfcₙ_rpowIntegrand₀₁`),
+together with the operator concavity of each integrand
+(`CFC.concaveOn_cfc_rpowIntegrand₀₁`) and its explicit resolvent form
+`cfc (Real.rpowIntegrand₀₁ p t) a = t ^ (p - 1) • 1 - t ^ p • (t • 1 + a)⁻¹`.
+The axioms below remain because those inputs are not yet accompanied by a
+Hansen--Pedersen / Davis--Choi operator Jensen theorem for arbitrary positive
+subunital or unital maps, by operator convexity of `x ↦ x ^ p` for
+`1 ≤ p ≤ 2`, or by Lieb's joint concavity theorem.
 
 ## Axioms
 
@@ -43,31 +48,51 @@ via the spectral theorem and the scalar Jensen inequality.
 ## Status
 
 All four declarations remain axioms.  Mathlib 4.31 supplies the C-star
-functional-calculus concavity inputs for the first and third statements, but
-not the positive-map Jensen theorem needed to obtain the displayed
-inequalities.
+functional-calculus concavity inputs and the Löwner integral representation
+for the first and third statements, but not the positive-map Jensen theorem
+needed to obtain the displayed inequalities.  Earlier status notes recorded
+the integral representation as missing; that is no longer accurate, and the
+sole remaining obstruction for the `rpow` and `log` Jensen axioms is the
+operator Jensen step itself.
 
 The remaining Mathlib or local formalization gaps are:
 
-* General operator Jensen inequality for positive maps.
+* General operator Jensen inequality for positive maps (the
+  Hansen--Pedersen / Davis--Choi inequality `T(f A) ≤ f(T A)` for operator
+  concave `f` with `f 0 ≥ 0` and positive subunital `T`): absent from Mathlib.
+* Monotonicity of the matrix-valued Bochner integral in the Loewner order, and
+  pulling a positive linear map through that integral
+  (`ContinuousLinearMap.integral_comp_comm`): the analytic ingredients of the
+  integral route.
 * `CFC.Rpow.Order`: operator convexity of `rpow` over `[1, 2]`.
 * Lieb concavity integral representation: absent from Mathlib.
 
 ## Proof plan
 
-1. **Concave Jensen for `rpow`, `p ∈ [0, 1]`**: combine
-   `CFC.concaveOn_rpow` with the Hansen--Pedersen block-matrix proof of
-   operator Jensen for positive subunital maps.  The finite-POVM compression
-   half of this route is recorded in
-   `TNLean.Channel.Schwarz.OperatorJensenAux`.
+1. **Concave Jensen for `rpow`, `p ∈ [0, 1]`**: with the integral
+   representation now in Mathlib, the route reduces to the per-integrand
+   bound `T(cfc (rpowIntegrand₀₁ p t) A) ≤ cfc (rpowIntegrand₀₁ p t) (T A)`
+   for each `t > 0`, followed by integration.  Using the resolvent form
+   `cfc (rpowIntegrand₀₁ p t) a = t ^ (p - 1) • 1 - t ^ p • (t • 1 + a)⁻¹`,
+   this per-integrand bound is exactly the operator Jensen inequality for the
+   operator concave integrand (which vanishes at `0`) under a positive
+   subunital map; integrating against the representing measure and pulling `T`
+   through the integral then gives `T(A ^ p) ≤ (T A) ^ p`.  The finite-POVM
+   compression half of this route is recorded in
+   `TNLean.Channel.Schwarz.OperatorJensenAux` (`povm_resolvent_inv_le`).
 2. **Operator convexity of `rpow` for `p ∈ [1, 2]`**: use the
-   decomposition `x^p = x · x^{p-1}` for `p ∈ [1, 2]`, reducing to
-   concavity of `x^{p-1}` for `p - 1 ∈ [0, 1]`.
+   decomposition `x^p = x · x^{p-1}` for `p ∈ [1, 2]` (Mathlib's
+   `rpowIntegrand₁₂`), reducing to concavity of `x^{p-1}` for
+   `p - 1 ∈ [0, 1]` and the same operator Jensen step.
 3. **Concave Jensen for `log`**: combine `CFC.concaveOn_log` with the
-   unital Hansen--Pedersen Jensen theorem.
+   unital operator Jensen theorem.
 4. **Lieb concavity**: requires the integral representation
    `A^s B^{1-s} = (sin πs/π) ∫₀^∞ t^{s-1} A(A+tB)⁻¹ B dt` and
    resolvent monotonicity.
+
+The single missing reusable theorem for items 1--3 is the operator Jensen
+inequality for positive subunital (resp. unital) maps; once it is available,
+the three `rpow`/`log` axioms collapse via the steps above.
 
 ## References
 
