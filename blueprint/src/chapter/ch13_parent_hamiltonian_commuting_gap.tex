@@ -638,6 +638,14 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     \[
         A^i=X\Lambda U^iX^{-1}.
     \]
+    In the source unit pair-index convention, the residual tensor satisfies
+    \[
+        \sum_i
+        \overline{(U^i)_{\alpha,\beta}}\,
+        (U^i)_{\alpha',\beta'}
+        =
+        \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+    \]
     The change of basis does not alter periodic MPS coefficients, so the
     corresponding two-site amplitude is
     \[
@@ -666,9 +674,13 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     which is the nearest-neighbor commuting conclusion for every finite chain.
     The even-chain factorization and the two-site projector identification are
     the inputs supplied by Appendix~B of \cite{Cirac2016MPDO_arXiv}; given them,
-    the local terms commute. Together with Lemma~\ref{lem:parent_hamiltonian_ff},
-    they also give the zero-energy equation for \(V^{(N)}(A)\), still without
-    asserting the source ground-space spanning condition.
+    the local terms commute.  The three-site $AX/XB$ support maps of
+    Definition~\ref{def:overlapping_two_site_supports} record the local action
+    of the adjacent projectors, but the theorem identifying those projectors with
+    the translated parent terms remains open. Together with
+    Lemma~\ref{lem:parent_hamiltonian_ff}, the product-pair input also gives the
+    zero-energy equation for $V^{(N)}(A)$, still without asserting the source
+    ground-space spanning condition.
 \end{remark}
 
 \begin{theorem}[Product-pair data and ground-space spanning give all-chain NNCPH]%
