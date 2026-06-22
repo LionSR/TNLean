@@ -41,7 +41,7 @@ logarithm $\log A$ for $A>0$ are defined by the continuous functional calculus.
 
 \section{The three positive-map Jensen axioms}
 
-\subsection{The assertions}
+\subsection{The assertions}\label{ssec:assertions}
 
 For a positive subunital map $T$ the development asserts the operator Jensen
 inequalities
@@ -120,8 +120,22 @@ positive but not completely positive survives, and the source corollary itself
 is stated for
 positive subunital maps, not for channels: \cite[Corollary~5.2]{Wolf2012Quantum}
 hypothesises a positive map with $T(\mathbf 1)\le\mathbf 1$, which is exactly the
-\leanid{IsPositiveMap} plus subunitality recorded in
-\leanid{cor52_item1_rpow_of_subunital} and its companions.
+\leanid{IsPositiveMap} plus subunitality recorded in the two power companions
+\leanid{cor52_item1_rpow_of_subunital} and
+\leanid{cor52_item2_rpow_of_subunital}.
+
+\paragraph{Local fix (log unitality).}  The logarithmic companion
+\leanid{cor52_item3_log_of_subunital} departs from this subunital hypothesis: it
+assumes $T$ \emph{unital}, $T(\mathbf 1)=\mathbf 1$, rather than $T(\mathbf
+1)\le\mathbf 1$.  This is a deliberate strengthening, not an exact match to the
+subunital form of the source corollary: as recorded in \S\ref{ssec:assertions},
+the subunital logarithmic inequality $T(\log A)\le\log(TA)$ fails because $\log$
+is unbounded below near $0$, so the unital restriction is the mathematically
+correct domain for the logarithmic case.  This is a local fix (a hypothesis
+sharpened to the regime where the inequality holds), documented here so the
+deviation from the verbatim subunital reading of
+\cite[Corollary~5.2]{Wolf2012Quantum} is auditable; the two power companions
+above retain the bare subunital hypothesis.
 
 The partial scaffold already present in the repository for the concave power
 case\footnote{%
@@ -191,7 +205,21 @@ is jointly concave on pairs of positive-definite matrices.  This is the Lieb
 concavity theorem (\cite[Theorem~5.15, the Ando--Lieb functional]{Wolf2012Quantum}),
 the trace functional underlying the Wigner--Yanase--Dyson conjecture.
 
-\subsection{The point at issue}
+\paragraph{Scope restriction (positive-definite versus positive
+semidefinite).}  Wolf's Theorem~5.15 states the Ando--Lieb concavity for
+positive (semidefinite) operators, including singular ones.  The formal axiom
+\leanid{lieb_concavity_axiom} is stated only for positive-\emph{definite} $A,B$
+(its hypotheses are \leanid{Matrix.PosDef}), so it does not yet cover singular
+positive inputs on which the source theorem still applies.  This is a scope
+restriction, not an unfaithful statement: the powers $A^s$ and $B^{1-s}$ and the
+resolvent factors $(L_A+tR_B)^{-1}$ used in the elimination route
+(\S\ref{ssec:lieb-gap}) are most directly defined for invertible $A,B$, and the
+positive-definite case extends to the positive-semidefinite case by continuity.
+The unrestricted source theorem remains unformalized until the axiom is
+discharged for positive semidefinite $A,B$; this is recorded here so the
+restriction is auditable.
+
+\subsection{The point at issue}\label{ssec:lieb-gap}
 
 The matrix identity
 $A^s B^{1-s}=\tfrac{\sin(\pi s)}{\pi}\int_0^\infty t^{s-1}A\,(A+tB)^{-1}B\,\mathrm dt$
