@@ -41,7 +41,7 @@ variable {d D : ℕ}
 
 This is the source-matching form of the MPS parent-Hamiltonian gap reduction.  The
 hypothesis is the anticommutator lower bound appearing in arXiv:2011.12127,
-Section IV.C, equation (4), specialized to overlapping cyclic windows:
+Section IV.C, lines 2176-2179, specialized to overlapping cyclic windows:
 \[
   h_i h_j+h_j h_i
   \ge
@@ -253,7 +253,7 @@ for overlapping off-diagonal pairs implies a uniform gap \(γ>0\), independent
 of the chain length.
 
 This is the public gapped theorem matching the martingale condition in
-arXiv:2011.12127, Section IV.C, equation (4). The MPS-specific proof of the
+arXiv:2011.12127, Section IV.C, lines 2176-2179. The MPS-specific proof of the
 anticommutator estimate remains the open input. -/
 theorem parentHamiltonian_gapped_of_anticommutator
     (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
@@ -363,7 +363,7 @@ positive lower bound on the parent Hamiltonian, independent of the chain length.
 
 This is the operator-product (symmetric) analogue of
 `parentHamiltonian_gapped_of_overlap_norm_constant`.  Its proof passes through
-the anticommutator estimate of arXiv:2011.12127, Section IV.C, equation (4),
+the anticommutator estimate of arXiv:2011.12127, Section IV.C, lines 2176-2179,
 with coefficient \(\eta\), before applying the finite-overlap martingale
 reduction.  Like
 `parentHamiltonian_gapped_of_overlap_norm_constant`, it is a conditional

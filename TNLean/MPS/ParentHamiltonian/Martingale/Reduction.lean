@@ -136,8 +136,7 @@ theorem parentHamiltonianES_quadratic_form_of_ordered_local_term_bounds
 /-- Fixed-chain martingale quadratic-form estimate from source anticommutator
 row bounds.
 
-arXiv:2011.12127, Section IV.C, equation \(4:\mathrm{martingale}\text{-}2\),
-uses the local estimate
+arXiv:2011.12127, Section IV.C, lines 2176-2179, use the local estimate
 \[
   h_i h_j+h_j h_i \ge -c_{ij}(1-\gamma)(h_i+h_j)
 \]
@@ -208,8 +207,8 @@ theorem parentHamiltonianES_gap_bound_of_ordered_local_term_bounds
 
 /-- Uniform explicit gap-bound reduction from source anticommutator row bounds.
 
-arXiv:2011.12127, Section IV.C, equation \(4:\mathrm{martingale}\text{-}2\),
-states the martingale condition in the anticommutator form
+arXiv:2011.12127, Section IV.C, lines 2176-2179, state the martingale
+condition in the anticommutator form
 \[
   h_i h_j+h_jh_i\ge -c_{ij}(1-\gamma)(h_i+h_j).
 \]
@@ -766,10 +765,11 @@ hypothesis is the operator-product norm bound
 that is, a bound on \(\|h_i h_j\|\), rather than the directional compression
 bound \(\|h_i (h_j v)\| \le \eta\,\|h_i v\|\).  The directional bound, holding for
 every \(v\), forces \(h_j\) to preserve \(\ker h_i\); the operator-product bound
-imposes no such constraint.  Through `re_inner_anticommutator_ge_neg_of_norm_apply_le`
-it yields the symmetric anticommutator estimate of arXiv:2011.12127, Section
-IV.C, equation (4), with per-pair coefficient \(\eta\), and hence the same
-finite-overlap martingale gap as the anticommutator route.  Both this
+imposes no such constraint.  Together with \(\eta \le (1-\gamma)/m\), it gives
+the symmetric anticommutator estimate of arXiv:2011.12127, Section IV.C,
+lines 2176-2179, with per-pair coefficient \((1-\gamma)/m\), and hence the
+same finite-overlap martingale gap as the anticommutator route.  In the strict
+specialization this coefficient is \(\eta\).  Both this
 operator-product bound and the directional bound are conditional reductions: for
 the overlapping excitation projections \(h_i, h_j\) one has \(\|h_i h_j\| = 1\)
 when their ranges have a common nonzero vector, so neither hypothesis is
