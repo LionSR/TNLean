@@ -340,14 +340,13 @@ theorem IsNPositiveMap.smul_nonneg {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n �
   ext ip jq
   simp
 
-set_option linter.unusedFintypeInType false in
-set_option linter.unusedDecidableInType false in
+omit [DecidableEq n] [Fintype n] in
 /-- The set of `k`-positive maps is closed.
 
 Wolf Chapter 3, Equation (3.3), treats the `k`-positive maps as closed convex
 cones.  This proves the closedness part for the topology inherited from the
 finite-dimensional space of linear maps. -/
-theorem isClosed_setOf_isNPositiveMap (k : ℕ) :
+theorem isClosed_setOf_isNPositiveMap [Finite n] (k : ℕ) :
     IsClosed {E : Matrix n n ℂ →L[ℂ] Matrix n n ℂ |
       IsNPositiveMap k E.toLinearMap} := by
   classical
