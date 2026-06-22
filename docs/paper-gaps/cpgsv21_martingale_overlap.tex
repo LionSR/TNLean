@@ -279,6 +279,58 @@ proof can instead target the anticommutator form
 \]
 used in \cite[Section~IV.C]{Cirac2021Matrix}.
 
+The development now also records the symmetric operator-product route. Instead of
+the directed bound (N$_\eta$), suppose the operator-product bound
+\[
+    \|p_i (p_j v)\|\le\eta\,\|p_j v\|
+    \tag{O$_\eta$}
+\]
+holds for all $v$, that is, a bound $\|p_i p_j\|\le\eta$ on the norm of the
+product. The identity
+$\operatorname{Re}\langle p_i v,p_j v\rangle
+=\operatorname{Re}\langle p_i v,p_i p_j v\rangle$, Cauchy--Schwarz, and the
+arithmetic--geometric mean inequality give, for $0\le\eta$,
+\[
+    \operatorname{Re}\langle p_i v,p_j v\rangle
+    +\operatorname{Re}\langle p_j v,p_i v\rangle
+    \ge -\eta\bigl(\|p_i v\|^2+\|p_j v\|^2\bigr),
+\]
+which is exactly the symmetric anticommutator estimate with coefficient $\eta$.
+The difference from (N$_\eta$) is which kernel the hypothesis constrains: imposed
+for all $v$, (N$_\eta$) forces $p_j(\ker p_i)\subseteq\ker p_i$, whereas (O$_\eta$)
+imposes no such preservation of $\ker p_i$. Through this conversion any (O$_\eta$)
+with $\eta\,2(L-1)<1$ yields the same positive gap $1-\eta\,2(L-1)$.
+
+This removes the kernel-preservation artefact of (N$_\eta$), but it does not make
+the hypothesis achievable for the MPS application, and (O$_\eta$) must not be
+identified with the cited principal-angle estimate. The symbols $p_i=h_i$ here are
+the \emph{excitation} projections (the local parent-Hamiltonian terms), not the
+ground-space projectors $q_i$ of \S1. The Kastoryano--Lucia quantity
+$\delta(\ell)=\|q_iq_j-P\|$ bounds the principal angle between the two local
+\emph{ground} spaces, while $\|p_ip_j\|$ is the cosine of the smallest principal
+angle between the two \emph{excitation} ranges; these are different quantities. If
+the two overlapping excitation ranges share any nonzero vector then
+$\|p_ip_j\|=1$, so (O$_\eta$) with $\eta<1$ is unsatisfiable, and the target
+$\eta<1/(2(L-1))$ cannot follow from the ground-space intersection estimate without
+an additional quotient or disjointness argument. Like (N$_\eta$), the
+operator-product bound is therefore a \emph{conditional} reduction recorded in the
+formal development, not an achievable source-faithful estimate. The abstract
+conversion is \leanid{re_inner_anticommutator_ge_neg_of_norm_apply_le}; the
+cyclic-window entry points are
+\leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_le}
+and
+\leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_lt},
+with public reformulations
+\leanid{parentHamiltonianES_gap_bound_of_overlap_operator_norm_constant} and
+\leanid{parentHamiltonian_gapped_of_overlap_operator_norm_constant}. The remaining
+MPS-specific task is unchanged: to produce a uniform anticommutator (or
+ground-space principal-angle) estimate for overlapping cyclic windows, using the
+intersection identity $\ker h_i\cap\ker h_j=\ker(h_i+h_j)$ or its restatement
+\leanid{adjacent_localTermES_eq_zero_iff_mem_groundSpaceES_succ}; a uniform
+small bound on $\|p_ip_j\|$ itself is not available in the generic overlapping
+case, since that norm is $1$ whenever the two excitation ranges have a common
+nonzero vector.
+
 \section{Relation to the blueprint}
 
 The blueprint item labelled \path{lem:martingale_mps} in
