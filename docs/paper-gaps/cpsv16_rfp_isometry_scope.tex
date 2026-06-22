@@ -139,10 +139,25 @@ content that the block-pair spaces fit orthogonally inside the physical space.
 The current theorem is a scope restriction.  It is a useful per-block
 consequence of the single-block RFP isometry form, but it is not the full
 isometry assertion of Corollary~III.cor3.  The formal development now exposes
-both the contracted per-block identity $\sum_i (U_k^i)^\dagger U_k^i=I$ and the
-diagonal pair-index orthonormality in the unit source convention.  It still
-omits the source trace-normalization and the cross-block $\delta_{j,j'}$
-orthogonality equations.
+two normalization conventions.  In the $D_k^{-1/2}$ convention the residual
+tensor satisfies the contracted per-block identity
+\[
+  \sum_i (U_k^i)^\dagger U_k^i=I
+\]
+and its pair-index equation has right-hand side
+$D_k^{-1}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}$.  In the rescaled
+unit pair-index convention the residual tensor satisfies
+\[
+  \sum_i
+  \overline{(U_k^i)_{\alpha,\beta}}\,
+  (U_k^i)_{\alpha',\beta'}
+  =
+  \delta_{\alpha,\alpha'}\delta_{\beta,\beta'},
+\]
+while the contracted identity is instead
+$\sum_i (U_k^i)^\dagger U_k^i=D_k I$.  Thus the scalar normalization comparison
+is explicit, but the formal statements still omit the source trace-normalization
+and the cross-block $\delta_{j,j'}$ orthogonality equations.
 
 \bibliographystyle{alpha}
 \bibliography{references}
