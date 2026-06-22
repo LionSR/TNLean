@@ -655,13 +655,20 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
         =
         V^{(2)}(\Lambda U)(a,b).
     \]
-    The product-of-pairs input is the even-chain factorization
+    The adjacent-pair input presently used in the formal statement is the
+    even-chain factorization, for a positive number $n$ of adjacent pairs,
     \[
         V^{(2n)}(A)(\sigma)
         =
         \prod_{p=0}^{n-1}
         \phi_2\bigl(\sigma_{2p},\sigma_{2p+1}\bigr).
     \]
+    The case $n=0$ is not part of this source input: the empty-chain MPV
+    coefficient is the virtual bond dimension, whereas the empty product on the
+    right-hand side is $1$.
+    Appendix~B first gives a cyclic virtual-pair expression; identifying that
+    expression with this adjacent-pair formal input is part of the remaining
+    factorization theorem.
     The two-site parent projectors must also be identified with
     idempotents $p_i$ satisfying
     \[

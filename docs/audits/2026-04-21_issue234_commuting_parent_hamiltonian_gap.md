@@ -112,7 +112,7 @@ into
 
 This is a genuine chain-space construction problem on `NSiteSpace d N`; it is **not** a remaining
 issue about the NNCPH definition itself. The present `AppendixBStructuralData` record now exposes
-the unit pair-index isometry for `U` in the source convention. A proof of the all-even-length
+the unit pair-index isometry for `U` in the source convention. A proof of the positive-even-length
 factorization still has to turn that matrix-entry isometry into the repeated two-site amplitude on
 the cyclic chain, or give an equivalent local-support description of the product-pair state.
 
