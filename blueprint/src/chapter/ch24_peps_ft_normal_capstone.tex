@@ -1419,6 +1419,87 @@ recorded in the route note
     injective and its constant chain generates the same closed state.
 \end{proof}
 
+\begin{corollary}[Translation-invariant description of an injective 2D PEPS,
+        uniform bond dimension]%
+    \label{cor:exists_constant_injectivePEPS_of_translationInvariantState}
+    \notready
+    \uses{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState,
+        thm:fundamentalTheorem_PEPS, def:peps_torus_translation_invariant,
+        def:peps_torus_uniform_bond_dim,
+        thm:peps_stateCoeff_translationInvariant}
+    Let \(A\) be an injective PEPS on the discrete torus with orientation-uniform
+    bond dimensions, horizontal dimension \(D_h\) and vertical dimension \(D_v\),
+    and positive bond dimensions.  If the generated state is invariant under all
+    lattice translations \(\tau_{a,b}\), that is, for every translation and every
+    physical configuration \(\sigma\),
+    \[
+        \operatorname{Coeff}_{A}(\sigma\circ\tau_{a,b})
+        =
+        \operatorname{Coeff}_{A}(\sigma),
+    \]
+    then there is an injective torus tensor \(B\), with the same orientation-uniform
+    bond dimensions \(D_h\) and \(D_v\), whose constant (site-independent) family
+    generates the same state: for every physical configuration \(\sigma\),
+    \[
+        \operatorname{Coeff}_{A}(\sigma)
+        =
+        \operatorname{Coeff}_{B}(\sigma).
+    \]
+
+    This is the uniform-bond-dimension target corresponding to the
+    Applications-section 2D corollary of
+    \cite[lines~1892--1894]{Molnar2018NormalPEPS}.  The source additionally
+    concludes that all vertical bond dimensions agree and all horizontal bond
+    dimensions agree; in the present orientation-uniform setting those two
+    clauses have already been built into the bond-dimension type, so they carry
+    no content here.
+\end{corollary}
+\begin{proof}
+    The source states this corollary without proof, remarking only that the
+    one-dimensional argument extends; the route below is that intended
+    extension.  Write \(A^{(j,k)}\) for the site tensor at lattice position
+    \((j,k)\), with horizontal virtual legs of dimension \(D_h\) and vertical
+    virtual legs of dimension \(D_v\).  Comparing the state with its
+    \(\tau_{1,0}\)-translate through the injective PEPS Fundamental Theorem
+    (Theorem~\ref{thm:fundamentalTheorem_PEPS}) produces, on each horizontal
+    edge, invertible \(D_h\times D_h\) gauges \(X^{(j,k)}_h\) with
+    \[
+        A^{(j+1,k)} = \bigl(X^{(j,k)}_h\bigr)^{-1}\, A^{(j,k)}\, X^{(j+1,k)}_h,
+    \]
+    acting on the two horizontal virtual legs, and comparing with the
+    \(\tau_{0,1}\)-translate produces, on each vertical edge, invertible
+    \(D_v\times D_v\) gauges \(X^{(j,k)}_v\) with
+    \[
+        A^{(j,k+1)} = \bigl(X^{(j,k)}_v\bigr)^{-1}\, A^{(j,k)}\, X^{(j,k+1)}_v.
+    \]
+    Telescoping the horizontal gauges along a row reduces each site to the
+    leftmost one,
+    \[
+        A^{(j,k)} = \bigl(L^{(j,k)}_h\bigr)^{-1}\, A^{(0,k)}\, R^{(j,k)}_h,
+        \qquad
+        L^{(j,k)}_h = X^{(0,k)}_h\cdots X^{(j-1,k)}_h,
+        \quad
+        R^{(j,k)}_h = X^{(1,k)}_h\cdots X^{(j,k)}_h,
+    \]
+    and the periodic boundary condition closes the row product into a single
+    residual virtual operation, the 2D analogue of the one-dimensional identity
+    \(R_vL_{v+1}^{-1}=Z_0^{-1}\):
+    \[
+        R^{(j,k)}_h\,\bigl(L^{(j+1,k)}_h\bigr)^{-1} = \bigl(X^{(0,k)}_h\bigr)^{-1}.
+    \]
+    The same telescoping closes each column, yielding one residual vertical
+    operation.  Absorbing the two residual gauges into the corner site gives a
+    single repeated tensor
+    \[
+        B = \bigl(X^{(0,0)}_v\bigr)^{-1}\,\bigl(X^{(0,0)}_h\bigr)^{-1}\, A^{(0,0)},
+    \]
+    whose constant family generates the same state.  Both the one-dimensional
+    telescoping closure
+    (Corollary~\ref{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState})
+    and its two-directional assembly into this single repeated 2D tensor remain
+    to be formalized.
+\end{proof}
+
 \begin{theorem}[Uniqueness of the injective closed-chain gauge]%
     \label{thm:fundamentalTheorem_injectiveMPSChain_gauge_unique}
     \lean{TNLean.PEPS.fundamentalTheorem_injectiveMPSChain_gauge_unique}
