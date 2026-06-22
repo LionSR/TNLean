@@ -279,6 +279,43 @@ proof can instead target the anticommutator form
 \]
 used in \cite[Section~IV.C]{Cirac2021Matrix}.
 
+The development now also records the symmetric operator-product route, which
+removes the directional point above. Instead of the directed bound (N$_\eta$),
+suppose the operator-product bound
+\[
+    \|p_i (p_j v)\|\le\eta\,\|p_j v\|
+    \tag{O$_\eta$}
+\]
+holds for all $v$, that is, a bound $\|p_i p_j\|\le\eta$ on the norm of the
+product. This is the cosine of the smallest principal angle between the
+overlapping excitation ranges, and it is the quantity the cited principal-angle
+estimates control. The identity
+$\operatorname{Re}\langle p_i v,p_j v\rangle
+=\operatorname{Re}\langle p_i v,p_i p_j v\rangle$, Cauchy--Schwarz, and the
+arithmetic--geometric mean inequality give, for $0\le\eta$,
+\[
+    \operatorname{Re}\langle p_i v,p_j v\rangle
+    +\operatorname{Re}\langle p_j v,p_i v\rangle
+    \ge -\eta\bigl(\|p_i v\|^2+\|p_j v\|^2\bigr),
+\]
+which is exactly the symmetric anticommutator estimate with coefficient $\eta$.
+Unlike (N$_\eta$), the hypothesis (O$_\eta$) imposes no constraint on
+$\ker p_j$: when $p_j v=0$ both sides vanish. Thus (O$_\eta$) with
+$\eta\,2(L-1)<1$ is a satisfiable, source-faithful target, and it yields the
+same positive gap $1-\eta\,2(L-1)$ through the formalized reduction. The abstract
+conversion is \leanid{re_inner_anticommutator_ge_neg_of_norm_apply_le}; the
+cyclic-window entry points are
+\leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_le}
+and
+\leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_lt},
+with public wrappers
+\leanid{parentHamiltonianES_gap_bound_of_overlap_operator_norm_constant} and
+\leanid{parentHamiltonian_gapped_of_overlap_operator_norm_constant}. The
+remaining MPS-specific task is then to bound $\|p_i p_j\|$ uniformly below
+$1/(2(L-1))$ for overlapping cyclic windows, using the intersection identity
+$\ker h_i\cap\ker h_j=\ker(h_i+h_j)$ or its restatement
+\leanid{adjacent_localTermES_eq_zero_iff_mem_groundSpaceES_succ}.
+
 \section{Relation to the blueprint}
 
 The blueprint item labelled \path{lem:martingale_mps} in
