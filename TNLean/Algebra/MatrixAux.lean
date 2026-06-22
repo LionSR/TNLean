@@ -10,6 +10,7 @@ import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.MeanInequalities
 import Mathlib.LinearAlgebra.Matrix.Charpoly.Eigs
+import Mathlib.Topology.Instances.Matrix
 
 /-!
 # Auxiliary matrix lemmas
@@ -34,6 +35,7 @@ Extracted from various files for reusability.
 - `Matrix.eq_zero_of_sum_conjTranspose_mul_self_eq_zero`: the conjugate-transpose
   variant
 - `Matrix.PosSemidef.mulVec_eq_zero_left/right`: kernel containment for PSD matrix sums
+- `Continuous.matrix_kronecker`: joint continuity of the Kronecker product in both factors
 -/
 
 open scoped Matrix BigOperators ComplexOrder Kronecker Matrix.Norms.Frobenius
@@ -304,3 +306,15 @@ theorem mulVec_eq_zero_right
 end Matrix.PosSemidef
 
 end KernelPSD
+
+/-- The Kronecker product is jointly continuous in both of its matrix factors.
+
+This is the entrywise statement: each entry of `A x ⊗ₖ B x` is a product of one
+entry of `A x` and one entry of `B x`, both continuous in `x`. -/
+theorem Continuous.matrix_kronecker {X l m p q : Type*} [TopologicalSpace X]
+    {α : Type*} [TopologicalSpace α] [Mul α] [ContinuousMul α]
+    {A : X → Matrix l m α} {B : X → Matrix p q α}
+    (hA : Continuous A) (hB : Continuous B) :
+    Continuous fun x => (A x) ⊗ₖ (B x) := by
+  refine continuous_matrix fun i j => ?_
+  exact (hA.matrix_elem i.1 j.1).mul (hB.matrix_elem i.2 j.2)
