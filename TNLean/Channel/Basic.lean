@@ -19,7 +19,7 @@ import Mathlib.Topology.Instances.Matrix
 This file defines positive maps, completely positive (CP) maps,
 trace-preserving maps, and quantum channels on `M_D(ℂ)`, together with the
 basic theory of density matrices (compactness, convexity), following
-Chapter 6 of Wolf's lecture notes.
+Chapters 3 and 6 of Wolf's lecture notes.
 
 ## Main results
 
@@ -27,6 +27,9 @@ Chapter 6 of Wolf's lecture notes.
 * `IsCPMap`: a linear map that admits a Kraus representation
 * `IsCPMap.isPositiveMap`: completely positive maps are positive
 * `IsChannel`: completely positive + trace-preserving (CPTP)
+* `Matrix.transposeLinearMapComplex_isPositiveMap`: matrix transposition is positive
+* `Matrix.transposeLinearMapComplex_isTracePreservingMap`: matrix transposition is
+  trace-preserving
 * `IsPositiveMap.map_isHermitian`: positive maps preserve Hermiticity
 * `matrix_isClosed_posSemidef`: the positive semidefinite cone is closed
 * `densityMatrices_isCompact`: the set of density matrices is compact
@@ -35,7 +38,7 @@ Chapter 6 of Wolf's lecture notes.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 6][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapters 3 and 6][Wolf2012QChannels]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
@@ -78,6 +81,30 @@ structure IsChannel (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) : Prop where
   tp : IsTracePreservingMap E
 
 end PositiveMap
+
+namespace Matrix
+
+variable (n : Type*)
+
+/-- Matrix transposition as a complex-linear map on `M_n(ℂ)`. -/
+def transposeLinearMapComplex : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ :=
+  (Matrix.transposeLinearEquiv n n ℂ ℂ).toLinearMap
+
+variable {n : Type*}
+
+/-- Matrix transposition preserves positive semidefinite matrices. -/
+theorem transposeLinearMapComplex_isPositiveMap :
+    IsPositiveMap (transposeLinearMapComplex n) := by
+  intro A hA
+  simpa [transposeLinearMapComplex] using hA.transpose
+
+/-- Matrix transposition preserves the trace. -/
+theorem transposeLinearMapComplex_isTracePreservingMap [Fintype n] :
+    IsTracePreservingMap (transposeLinearMapComplex n) := by
+  intro A
+  simp [transposeLinearMapComplex]
+
+end Matrix
 
 section PositiveMap
 
