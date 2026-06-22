@@ -79,6 +79,37 @@ theorem trace_mul_right_eq_zero_iff {n : Type*} [Fintype n]
       simpa using h N)
   · intro h N; simp [h]
 
+/-- The trace-pairing adjoint of a linear map on matrices.
+
+It is characterized by `trace (traceAdjointMap E ρ * X) = trace (ρ * E X)`. -/
+noncomputable def traceAdjointMap {n : Type*} [Fintype n] [DecidableEq n]
+    (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) :
+    Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ where
+  toFun ρ := Matrix.of fun i j => Matrix.trace (ρ * E (Matrix.single j i 1))
+  map_add' ρ σ := by
+    ext i j
+    simp [Matrix.add_mul]
+  map_smul' c ρ := by
+    ext i j
+    simp
+
+/-- The trace-pairing adjoint satisfies the expected bilinear trace identity. -/
+theorem trace_traceAdjointMap_mul {n : Type*} [Fintype n] [DecidableEq n]
+    (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ)
+    (ρ X : Matrix n n ℂ) :
+    Matrix.trace (traceAdjointMap E ρ * X) = Matrix.trace (ρ * E X) := by
+  classical
+  refine Matrix.induction_on' X ?_ ?_ ?_
+  · simp [traceAdjointMap]
+  · intro X Y hX hY
+    simp [Matrix.mul_add, map_add, hX, hY]
+  · intro i j c
+    have hsingle : Matrix.single i j c = c • Matrix.single i j (1 : ℂ) := by
+      ext a b
+      simp [Matrix.single, smul_eq_mul]
+    rw [hsingle, map_smul, Matrix.mul_smul, Matrix.trace_smul]
+    simp [traceAdjointMap, Matrix.trace_mul_single]
+
 end Matrix
 
 namespace MPSTensor
