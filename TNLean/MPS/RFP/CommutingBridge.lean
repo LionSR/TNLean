@@ -32,13 +32,13 @@ The declarations below separate three mathematical statements:
 * the already formalized Appendix B structural form.
 
 **Scope restriction (overlapping two-site terms):** The three-site support maps
-for the source \(AX\) and \(XB\) windows are now available in
-`TNLean.MPS.ParentHamiltonian.LocalSupport`. What is still missing is the
-Appendix-B theorem identifying the product-of-entangled-pairs parent projectors
-with the translated length-two parent terms and proving their overlapping
-commutation. For this reason commutativity of the translated idempotents is
-still an explicit hypothesis in `HasProductPairLocalProjectors`. Eliminating
-this hypothesis is the product-of-entangled-pairs locality step recorded in
+for the source \(AX\) and \(XB\) windows are represented in
+`TNLean.MPS.ParentHamiltonian.LocalSupport`. The remaining Appendix-B step is to
+identify the product-of-entangled-pairs parent projectors with the translated
+length-two parent terms and prove their overlapping commutation. For this reason
+commutativity of the translated idempotents is an explicit hypothesis in
+`HasProductPairLocalProjectors`. Eliminating this hypothesis is the
+product-of-entangled-pairs locality step recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 -/
 
@@ -112,12 +112,11 @@ theorem HasProductPairMPV.exists_twoSiteAmplitude {A : MPSTensor d D}
 \(p_i\) associated to the adjacent two-site factors on an \(N\)-site chain, with
 \(p_i p_j=p_j p_i\).
 
-**Scope restriction (local projectors):** The formal development now has the
-three-site \(AX/XB\) support maps for adjacent windows. This structure still does
-not construct, from the Appendix-B product-of-entangled-pairs form, the
-chain-level projectors that equal the translated length-two parent terms. The
-projectors are therefore still stated directly as endomorphisms of the full
-\(N\)-site space. -/
+**Scope restriction (local projectors):** The three-site \(AX/XB\) support maps
+for adjacent windows give the local support data. This structure does not
+construct, from the Appendix-B product-of-entangled-pairs form, the chain-level
+projectors that equal the translated length-two parent terms. The projectors are
+therefore stated directly as endomorphisms of the full \(N\)-site space. -/
 structure HasProductPairLocalProjectors (A : MPSTensor d D) (N : ℕ) where
   proj : Fin N → NSiteSpace d N →ₗ[ℂ] NSiteSpace d N
   hidem : ∀ i, proj i * proj i = proj i
