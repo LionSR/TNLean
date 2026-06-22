@@ -230,6 +230,125 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_of
     blockDiagonal_boundary_component_chainGroundSpace_of_trace_decomposition_of_injective
       μ A hN hLN X hTraceSpan hBlk hUnital hNlarge C hCoeff
 
+/-- A boundary-crossing local constraint gives the fixed-tail boundary trace
+comparison once a block-diagonal boundary representation is fixed.
+
+Assume
+\[
+  \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right)
+\]
+and \(\psi\in\mathcal G_{N,L}(\oplus_j\mu_jA_j)\). For a cyclic interval
+starting at \(i\) and crossing the boundary cut, the local constraint on
+\(\psi\) says that the corresponding sum of block restrictions lies in
+\(\bigvee_jG_L(A_j)\). Opening the interval with outside word \(\rho\), the
+fixed-interval trace-decomposition lemma supplies matrices \(C^j_{i,\rho}\)
+such that, for every word \(\beta\) before the cut and every wrapped tail word
+\(w\) of length \(N-i\),
+\[
+  \sum_j\operatorname{tr}(A^j_\beta C^j_{i,\rho}A^j_w)
+  =
+  \sum_j\operatorname{tr}\bigl(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_w\bigr).
+\]
+
+This is the explicit-boundary trace-decomposition step in
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1436--1451, specialized to
+the block-diagonal boundary conditions in arXiv:2011.12127, Section IV.C,
+lines 2126--2128. It records only the fixed wrapped-tail length \(N-i\)
+provided by the local cyclic-window constraint; the separate common-middle-word
+trace theorem keeps its common length \(m\) as an explicit hypothesis.
+
+**Scope restriction (boundary representation):** The block-diagonal boundary
+representation of \(\psi\) is a hypothesis here. Removing this remaining input
+is tracked in issue 2971 and documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
+theorem blockDiagonal_boundary_crossing_trace_decomposition_of_boundary
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hμ : ∀ k : Fin r, μ k ≠ 0)
+    {L N : ℕ} [NeZero d] (hN : 0 < N) (hLN : L ≤ N)
+    {ψ : NSiteSpace d N}
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N)
+    (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (hψX :
+      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+        ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)))
+    (i : Fin N) (hi : N < i.val + L)
+    (ρ : Fin (N - L) → Fin d) :
+    ∃ C : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+      ∀ β : Fin (i.val + L - N) → Fin d,
+        ∀ w : Fin (N - i.val) → Fin d,
+          (∑ j : Fin r,
+            Matrix.trace
+              ((evalWord (A j) (List.ofFn β) * C j) *
+                evalWord (A j) (List.ofFn w))) =
+          (∑ j : Fin r,
+            Matrix.trace
+              ((((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β) *
+                  evalWord (A j) (List.ofFn ρ)) *
+                evalWord (A j) (List.ofFn w))) := by
+  classical
+  let τ : Fin N → Fin d := fun t =>
+    if htail : i.val + L - N ≤ t.val ∧ t.val < i.val then
+      ρ ⟨t.val - (i.val + L - N), by omega⟩
+    else
+      (0 : Fin d)
+  have hρ : (List.ofFn fun k : Fin (N - L) =>
+      τ ⟨i.val + L - N + k.val, by omega⟩) = List.ofFn ρ := by
+    apply List.ext_getElem
+    · simp
+    · intro n hn₁ hn₂
+      simp only [List.getElem_ofFn]
+      have hn : n < N - L := by
+        simpa using hn₂
+      have htail :
+          i.val + L ≤ i.val + L - N + n + N ∧
+            (⟨i.val + L - N + n, by omega⟩ : Fin N) < i := by
+        constructor
+        · omega
+        · change i.val + L - N + n < i.val
+          omega
+      simp [τ, htail]
+  have hmem :
+      (∑ j : Fin r,
+          cyclicRestrictₗ hN L i τ
+            (groundSpaceMap (A j) N ((μ j) ^ N • X j))) ∈
+        ⨆ j : Fin r, groundSpace (A j) L :=
+    blockDiagonal_boundary_cyclicRestrict_sum_mem_iSup_groundSpace
+      μ A hμ hN hLN hψ X hψX i τ
+  obtain ⟨C, hTrace⟩ :=
+    blockDiagonal_boundary_crossing_trace_decomposition_of_sum_mem_iSup
+      μ A hN hLN X i τ hi hmem
+  refine ⟨C, ?_⟩
+  intro β w
+  let σ : Fin L → Fin d := fun k =>
+    if hk : k.val < N - i.val then
+      w ⟨k.val, hk⟩
+    else
+      β ⟨k.val - (N - i.val), by omega⟩
+  have hHead :
+      (List.ofFn fun k : Fin (i.val + L - N) =>
+        σ ⟨N - i.val + k.val, by omega⟩) = List.ofFn β := by
+    apply List.ext_getElem
+    · simp
+    · intro n hn₁ hn₂
+      simp only [List.getElem_ofFn]
+      have hnot : ¬N - i.val + n < N - i.val := by omega
+      simp [σ, hnot]
+  have hMiddle :
+      (List.ofFn fun k : Fin (N - L) =>
+        τ ⟨i.val + L - N + k.val, by omega⟩) = List.ofFn ρ := hρ
+  have hTail :
+      (List.ofFn fun k : Fin (N - i.val) =>
+        σ ⟨k.val, by omega⟩) = List.ofFn w := by
+    apply List.ext_getElem
+    · simp
+    · intro n hn₁ hn₂
+      simp only [List.getElem_ofFn]
+      have hlt : n < N - i.val := by
+        simpa using hn₁
+      simp [σ, hlt]
+  simpa [hHead, hMiddle, hTail, Matrix.mul_assoc] using hTrace σ
+
 /-- The \(C^j,D^j\) boundary comparison gives periodic single-block states
 from an explicit block-diagonal boundary representation.
 

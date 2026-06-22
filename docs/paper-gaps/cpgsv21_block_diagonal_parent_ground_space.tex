@@ -483,6 +483,22 @@ boundary trace expressions gives
 for every block \(j\), without using any span assumption at the short
 boundary-crossing tail length \(N-i\).\footnote{Lean declaration:
 \leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_of_boundary}.}
+At the fixed wrapped-tail length supplied by a single boundary-crossing cyclic
+window, the boundary trace expressions are now derived from the local
+constraint once the block-diagonal boundary representation is fixed: for
+\(N<i+L\), outside word \(\rho\) of length \(N-L\), and wrapped tail word
+\(\alpha\) of length \(N-i\), there are matrices \(C^j_{i,\rho}\) such that
+\begin{align}
+  \sum_j\tr\!\left(A^j_\beta C^j_{i,\rho}A^j_\alpha\right)
+  =
+  \sum_j\tr\!\left((\mu_j^NX_jA^j_\beta)A^j_\rho A^j_\alpha\right).
+\end{align}
+This fixed-tail statement is recorded as
+\leanid{MPSTensor.blockDiagonal_boundary_crossing_trace_decomposition_of_boundary}.
+It should not be read as the common-middle-word trace hypothesis above: the
+fixed cyclic window gives the wrapped tail length \(N-i\), whereas the
+separating trace-decomposition implication is stated at a common product-span
+length \(m\).
 
 In the normalized BNT finite range, this common middle-word span is no longer an
 external assumption. If
