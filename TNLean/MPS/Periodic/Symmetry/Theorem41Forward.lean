@@ -351,10 +351,10 @@ theorem thm_4_1_p_refinement_forward_witness
 This Prop isolates the existence half of the blocked equal-case argument needed
 for Theorem 4.1: whenever an irreducible-form blocked tensor `C` has the same
 MPV family as the \(p\)-blocked tensor `blockTensor A p`, one can extract a
-periodic `Z`-gauge witness between `C` and `blockTensor A p`.
+periodic \(Z\)-gauge witness between `C` and `blockTensor A p`.
 
 Compared with `PeripheralEqualCasePeriodicFTOfSameMPV`, this does **not** yet
-construct the tensor \(\widetilde A\) from arXiv:1708.00029, lines 760--810.
+construct the tensor \(\widetilde A\) from arXiv:1708.00029, lines 765--810.
 It only asserts the blocked equal-case Fundamental Theorem step producing the
 finite-order \(Z\)-factor. -/
 def PeripheralEqualCaseZGaugeOfSameMPV (d D p : ℕ) : Prop :=
@@ -363,10 +363,10 @@ def PeripheralEqualCaseZGaugeOfSameMPV (d D p : ℕ) : Prop :=
     SameMPV C (blockTensor A p) →
       ∃ m : ℕ, 0 < m ∧ ZGaugeEquiv m C (blockTensor A p)
 
-/-- **Scope-restricted blocked `Z`-gauge extraction from the periodic equal-case FT.**
+/-- **Scope-restricted blocked \(Z\)-gauge extraction from the periodic equal-case FT.**
 
 Applying the periodic equal-case Fundamental Theorem at the blocked physical
-dimension `blockPhysDim d p` gives the blocked `Z`-gauge once both tensors are
+dimension `blockPhysDim d p` gives the blocked \(Z\)-gauge once both tensors are
 already known to be in irreducible form. The irreducible-form hypothesis for
 the \(p\)-blocked tensor is an explicit input here; it is not obtained from
 equality of MPV families.
@@ -387,19 +387,21 @@ theorem zGaugeEquiv_of_periodicEqualCaseFT_of_irreducibleForm
     ∃ m : ℕ, 0 < m ∧ ZGaugeEquiv m C (blockTensor A p) :=
   hFT hC hBlock hSame
 
-/-- **Construction of \(\widetilde A\) from a periodic `Z`-gauge witness.**
+/-- **Construction of \(\widetilde A\) from a periodic \(Z\)-gauge witness.**
 
 This Prop isolates the second half of the blocked equal-case argument: once a
-blocked tensor `C` is related to `blockTensor A p` by a periodic `Z`-gauge,
+blocked tensor `C` is related to `blockTensor A p` by a periodic \(Z\)-gauge,
 one can distribute the scalar factors \(c_{j,\alpha}\) across the cyclic
 sectors of `A`, producing a left-canonical tensor whose \(p\)-blocked transfer
 map equals that of `C`.
 
-In the paper this is arXiv:1708.00029, lines 765--810: define
+In the irreducible-form subcase treated in arXiv:1708.00029, lines 765--810, define
 \(A'_j{}^i = \sum_u d_{j,u} P_{j,u} A_j^i\), obtain
 \(A'^{(p)} = Z A^{(p)}\), and then set
 \(\widetilde A = U^\dagger A' U\). The witness called `A'` below is this final
-tensor \(\widetilde A\). -/
+tensor \(\widetilde A\). The formal statement keeps this construction as a
+conditional input for arbitrary `A`; it does not assert the irreducible block
+data of `A` as hypotheses. -/
 def PeripheralEqualCaseRootFromZGauge (d D p : ℕ) : Prop :=
   ∀ {A : MPSTensor d D} {C : MPSTensor (blockPhysDim d p) D} {m : ℕ},
     IsIrreducibleForm C →
@@ -434,14 +436,14 @@ def PeripheralEqualCasePeriodicFTOfSameMPV (d D p : ℕ) : Prop :=
 
 /-- **From \(Z\)-gauge extraction to the \(\widetilde A\) construction.**
 
-If we can first extract a blocked periodic `Z`-gauge from
+If we can first extract a blocked periodic \(Z\)-gauge from
 `SameMPV C (blockTensor A p)` and then carry out the construction of
 \(\widetilde A\) from the corresponding scalars \(c_{j,\alpha}\), then the
 continuation hypothesis
 `PeripheralEqualCasePeriodicFTOfSameMPV` holds.
 
 This splits the blocked equal-case part of the forward proof into two explicit
-obligations: the equal-case `Z`-gauge existence step and the construction of
+obligations: the equal-case \(Z\)-gauge existence step and the construction of
 \(\widetilde A\) described in arXiv:1708.00029, lines 765--810. -/
 theorem peripheralEqualCase_periodicFT_of_sameMPV
     (hZGauge : PeripheralEqualCaseZGaugeOfSameMPV d D p)
@@ -468,7 +470,7 @@ first stage, giving `E_C = E_B`, `SameMPV C (blockTensor A p)`, and preserving
 irreducible form II when `B` already has it. The periodic equal-case
 Fundamental Theorem (source theorem `thm:bdequal`, arXiv:1708.00029,
 lines 643--656, available here as the hypothesis `PeriodicEqualCaseFT`) then
-supplies a `Z`-gauge relation between `C` and `blockTensor A p`. The remaining
+supplies a \(Z\)-gauge relation between `C` and `blockTensor A p`. The remaining
 source step is the construction of \(A'_j\) and
 \(\widetilde A=U^\dagger A' U\) from the scalars \(c_{j,\alpha}\) in
 lines 765--810. The theorem
