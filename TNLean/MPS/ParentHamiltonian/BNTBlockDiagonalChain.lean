@@ -116,7 +116,13 @@ normalized BNT product-span input is not yet source-faithful: its derivation use
 the normal-range reduction of arXiv:2011.12127, Section IV.C, lines 2078--2079,
 documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. This deviation
 is independent of the periodic-boundary comparison at boundary-crossing windows
-tracked in issue 2971. -/
+tracked in issue 2971.
+Elimination: derive the normalized BNT product-span input
+`wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1` from the source periodic-boundary
+coordinate comparison of arXiv:2011.12127, Section IV.C, lines 2078--2079
+(per `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`), discharging the
+`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`
+dependency; tracked in issue 2405. -/
 theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -208,7 +214,13 @@ normalized BNT product-span input is not yet source-faithful: its derivation use
 the normal-range reduction of arXiv:2011.12127, Section IV.C, lines 2078--2079,
 documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. This deviation
 is independent of the periodic-boundary comparison at boundary-crossing windows
-tracked in issue 2971. -/
+tracked in issue 2971.
+Elimination: derive the normalized BNT product-span input
+`wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1` from the source periodic-boundary
+coordinate comparison of arXiv:2011.12127, Section IV.C, lines 2078--2079
+(per `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`), discharging the
+`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`
+dependency; tracked in issue 2405. -/
 theorem chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -266,7 +278,13 @@ normalized BNT product-span input is not yet source-faithful: its derivation use
 the normal-range reduction of arXiv:2011.12127, Section IV.C, lines 2078--2079,
 documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. This deviation
 is independent of the periodic-boundary comparison at boundary-crossing windows
-tracked in issue 2971. -/
+tracked in issue 2971.
+Elimination: derive the normalized BNT product-span input
+`wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1` from the source periodic-boundary
+coordinate comparison of arXiv:2011.12127, Section IV.C, lines 2078--2079
+(per `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`), discharging the
+`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`
+dependency; tracked in issue 2405. -/
 theorem exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -357,7 +375,13 @@ normalized BNT product-span input is not yet source-faithful: its derivation use
 the normal-range reduction of arXiv:2011.12127, Section IV.C, lines 2078--2079,
 documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. This deviation
 is independent of the periodic-boundary comparison at boundary-crossing windows
-tracked in issue 2971. -/
+tracked in issue 2971.
+Elimination: derive the normalized BNT product-span input
+`wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1` from the source periodic-boundary
+coordinate comparison of arXiv:2011.12127, Section IV.C, lines 2078--2079
+(per `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`), discharging the
+`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`
+dependency; tracked in issue 2405. -/
 theorem
     exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -482,7 +506,13 @@ normalized BNT product-span input is not yet source-faithful: its derivation use
 the normal-range reduction of arXiv:2011.12127, Section IV.C, lines 2078--2079,
 documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. This deviation
 is independent of the periodic-boundary comparison at boundary-crossing windows
-tracked in issue 2971. -/
+tracked in issue 2971.
+Elimination: derive the normalized BNT product-span input
+`wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1` from the source periodic-boundary
+coordinate comparison of arXiv:2011.12127, Section IV.C, lines 2078--2079
+(per `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`), discharging the
+`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`
+dependency; tracked in issue 2405. -/
 theorem chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -904,7 +934,13 @@ from the periodic ground-space constraint. Documented in
 normalized BNT product-span input is not yet source-faithful: its derivation uses
 the normal-range reduction of arXiv:2011.12127, Section IV.C, lines 2078--2079,
 documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. This deviation
-is independent of the periodic-boundary comparison tracked in issue 2971. -/
+is independent of the periodic-boundary comparison tracked in issue 2971.
+Elimination: derive the normalized BNT product-span input
+`wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1` from the source periodic-boundary
+coordinate comparison of arXiv:2011.12127, Section IV.C, lines 2078--2079
+(per `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`), discharging the
+`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`
+dependency; tracked in issue 2405. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_blockBoundary
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -976,7 +1012,13 @@ from the periodic ground-space constraint. Documented in
 normalized BNT product-span input is not yet source-faithful: its derivation uses
 the normal-range reduction of arXiv:2011.12127, Section IV.C, lines 2078--2079,
 documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. This deviation
-is independent of the periodic-boundary comparison tracked in issue 2971. -/
+is independent of the periodic-boundary comparison tracked in issue 2971.
+Elimination: derive the normalized BNT product-span input
+`wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1` from the source periodic-boundary
+coordinate comparison of arXiv:2011.12127, Section IV.C, lines 2078--2079
+(per `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`), discharging the
+`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`
+dependency; tracked in issue 2405. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_boundary_decomposition
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))

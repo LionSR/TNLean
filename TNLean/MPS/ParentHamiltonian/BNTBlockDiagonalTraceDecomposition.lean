@@ -539,7 +539,7 @@ block-diagonal boundary conditions of arXiv:2011.12127, lines 2126--2128.
 decomposition `hTrace` is the explicit hypothesis here. The block-diagonal
 boundary representation supplied by
 `exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1`
-is the faithful open-boundary inclusion of arXiv:quant-ph/0608197, Theorem 12 (its
+is the boundary-comparison-free open-boundary inclusion of arXiv:quant-ph/0608197, Theorem 12 (its
 block components lie in \(G_N(A_j)\)) and does not assume the boundary-crossing
 comparison. The periodic-boundary upgrade encoded by `hTrace` — the boundary trace
 comparison with \(D^j_\beta=(\mu_j^NX_j)A^j_\beta\) — is the boundary-condition
@@ -553,7 +553,13 @@ ground-space constraint. Documented in
 normalized BNT product-span input is not yet source-faithful: its derivation uses
 the normal-range reduction of arXiv:2011.12127, Section IV.C, lines 2078--2079,
 documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. This deviation
-is independent of the periodic-boundary comparison tracked in issue 2971. -/
+is independent of the periodic-boundary comparison tracked in issue 2971.
+Elimination: derive the normalized BNT product-span input
+`wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1` from the source periodic-boundary
+coordinate comparison of arXiv:2011.12127, Section IV.C, lines 2078--2079
+(per `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`), discharging the
+`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`
+dependency; tracked in issue 2405. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -621,7 +627,7 @@ with \(D^j_\beta\) specialized to \((\mu_j^NX_j)A^j_\beta\).
 
 **Scope restriction (periodic-boundary comparison):** The boundary trace
 decomposition `hTrace` is the explicit hypothesis here. The block-diagonal
-boundary representation it builds on is the faithful open-boundary inclusion of
+boundary representation it builds on is the boundary-comparison-free open-boundary inclusion of
 arXiv:quant-ph/0608197, Theorem 12, independent of the boundary-crossing
 comparison; the common middle-word span is supplied by the BNT block-separation
 theorem. The periodic-boundary upgrade encoded by `hTrace` — the boundary trace
@@ -636,7 +642,13 @@ ground-space constraint. Documented in
 normalized BNT product-span input is not yet source-faithful: its derivation uses
 the normal-range reduction of arXiv:2011.12127, Section IV.C, lines 2078--2079,
 documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. This deviation
-is independent of the periodic-boundary comparison tracked in issue 2971. -/
+is independent of the periodic-boundary comparison tracked in issue 2971.
+Elimination: derive the normalized BNT product-span input
+`wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1` from the source periodic-boundary
+coordinate comparison of arXiv:2011.12127, Section IV.C, lines 2078--2079
+(per `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`), discharging the
+`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`
+dependency; tracked in issue 2405. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1_span
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -708,7 +720,7 @@ Deriving that equality from the source \(C^j,D^j\) comparison, with
 
 **Scope restriction (periodic-boundary comparison):** The boundary trace
 decomposition `hTrace` is the explicit hypothesis here. The underlying
-block-diagonal boundary representation is the faithful open-boundary inclusion of
+block-diagonal boundary representation is the boundary-comparison-free open-boundary inclusion of
 arXiv:quant-ph/0608197, Theorem 12, independent of the boundary-crossing
 comparison. The periodic-boundary upgrade encoded by `hTrace` — the boundary trace
 comparison with \(D^j_\beta=(\mu_j^NX_j)A^j_\beta\) — is the boundary-condition
@@ -722,7 +734,13 @@ ground-space constraint. Documented in
 normalized BNT product-span input is not yet source-faithful: its derivation uses
 the normal-range reduction of arXiv:2011.12127, Section IV.C, lines 2078--2079,
 documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. This deviation
-is independent of the periodic-boundary comparison tracked in issue 2971. -/
+is independent of the periodic-boundary comparison tracked in issue 2971.
+Elimination: derive the normalized BNT product-span input
+`wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1` from the source periodic-boundary
+coordinate comparison of arXiv:2011.12127, Section IV.C, lines 2078--2079
+(per `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`), discharging the
+`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`
+dependency; tracked in issue 2405. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -785,7 +803,7 @@ Theorem 12, proof lines 1436--1448, with \(D^j_\beta=(\mu_j^NX_j)A^j_\beta\).
 
 **Scope restriction (periodic-boundary comparison):** The boundary trace
 decomposition `hTrace` is the explicit hypothesis here. The underlying
-block-diagonal boundary representation is the faithful open-boundary inclusion of
+block-diagonal boundary representation is the boundary-comparison-free open-boundary inclusion of
 arXiv:quant-ph/0608197, Theorem 12, independent of the boundary-crossing
 comparison; the common middle-word span is supplied by the BNT block-separation
 theorem. The periodic-boundary upgrade encoded by `hTrace` — the boundary trace
@@ -800,7 +818,13 @@ ground-space constraint. Documented in
 normalized BNT product-span input is not yet source-faithful: its derivation uses
 the normal-range reduction of arXiv:2011.12127, Section IV.C, lines 2078--2079,
 documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. This deviation
-is independent of the periodic-boundary comparison tracked in issue 2971. -/
+is independent of the periodic-boundary comparison tracked in issue 2971.
+Elimination: derive the normalized BNT product-span input
+`wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1` from the source periodic-boundary
+coordinate comparison of arXiv:2011.12127, Section IV.C, lines 2078--2079
+(per `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`), discharging the
+`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`
+dependency; tracked in issue 2405. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition_bnt_c1_span
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
