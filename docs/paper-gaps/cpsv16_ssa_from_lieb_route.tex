@@ -1,0 +1,150 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Strong Subadditivity as a Standalone Axiom and Its Lieb-Concavity
+Elimination Route}
+\author{}
+\date{2026-06-22}
+
+\begin{document}
+\maketitle
+
+\section{The assertion and its current formal status}
+
+Strong subadditivity of the von Neumann entropy is the inequality
+\begin{align}
+  S(\rho_{ABC}) + S(\rho_{B}) \le S(\rho_{AB}) + S(\rho_{BC})
+  \tag{SSA}
+  \label{eq:ssa}
+\end{align}
+for every density operator $\rho_{ABC}$ on a tripartite finite-dimensional space
+$\mathcal H_A \otimes \mathcal H_B \otimes \mathcal H_C$, where
+$S(\rho) = -\tr(\rho \log \rho)$ and the reduced operators are the corresponding
+partial traces \cite{LiebRuskai1973}.
+
+In the present development the inequality~\eqref{eq:ssa} is asserted as a
+standalone axiom.\footnote{The axiom is
+\leanid{strong_subadditivity} in \doclink{TNLean/Axioms/Entropy}
+(\path{TNLean/Axioms/Entropy.lean}, line~192). It is stated with the
+eigenvalue-based entropy $S(\rho) = \sum_i \eta(\lambda_i)$, $\eta(x) = -x\log x$,
+of \doclink{TNLean/Analysis/Entropy}.}
+It is \emph{not} derived from the operator-concavity input that the same
+development already isolates for the Ando--Lieb theory, namely Lieb's joint
+concavity theorem.\footnote{Lieb concavity is the axiom
+\leanid{lieb_concavity_axiom} in \doclink{TNLean/Axioms/OperatorConvexity}
+(\path{TNLean/Axioms/OperatorConvexity.lean}, line~160), consumed by
+\leanid{lieb_concavity} in \doclink{TNLean/Channel/Schwarz/AndoLieb}.}
+The two axioms are therefore logically independent in the current
+formalization: discharging~\eqref{eq:ssa} into a theorem built on Lieb
+concavity is open work, not a completed reduction. This note records the
+mathematical route from the one axiom to the other and names the intermediate
+layers that are missing.
+
+\section{The point at issue}
+
+The standard derivation of~\eqref{eq:ssa} factors through the quantum relative
+entropy and its behaviour under coarse-graining. None of the intermediate
+objects is currently available, so the gap is not a single missing lemma but a
+chain of them. In source order the chain is the following.
+
+\begin{enumerate}
+  \item \emph{Entropy bridge.} The identity
+    $S(\rho) = -\tr(\rho \log \rho)$ relating the trace-of-logarithm form to the
+    eigenvalue form $\sum_i \eta(\lambda_i)$ used in the formal definition. This
+    bridge is the prerequisite that makes the trace-functional manipulations of
+    the relative entropy meaningful for the formal entropy, and it is dispatched
+    separately.\footnote{Tracked on \ghissue{784}.}
+  \item \emph{Relative entropy.} The definition
+    \begin{align}
+      D(\rho \,\|\, \sigma) = \tr\bigl(\rho(\log \rho - \log \sigma)\bigr),
+    \end{align}
+    for density operators $\rho,\sigma$ with $\ker\sigma \subseteq \ker\rho$.
+  \item \emph{Klein's inequality.} Nonnegativity $D(\rho\,\|\,\sigma) \ge 0$,
+    with equality exactly when $\rho = \sigma$. This is the order property that
+    makes $D$ a divergence.
+  \item \emph{Joint convexity.} Convexity of
+    $(\rho,\sigma) \mapsto D(\rho\,\|\,\sigma)$ in the pair of arguments. This is
+    the step that consumes Lieb's joint concavity theorem: the concavity of
+    $(A,B)\mapsto \tr\!\bigl(K^{\dagger} A^{s} K B^{1-s}\bigr)$ for
+    $s\in[0,1]$ yields, in the limit governing the derivative at $s=1$, the
+    convexity of the relative entropy.
+  \item \emph{Data-processing inequality (DPI).} Monotonicity
+    $D(\Lambda\rho \,\|\, \Lambda\sigma) \le D(\rho\,\|\,\sigma)$ under every
+    trace-preserving completely positive map $\Lambda$, in particular under the
+    partial trace. Monotonicity under the partial trace is the form of DPI used
+    below; it follows from joint convexity together with unitary invariance of
+    $D$.
+  \item \emph{Final assembly.} The inequality~\eqref{eq:ssa} read as a single
+    instance of DPI. Writing the conditional quantities relative to the maximally
+    mixed state on the system being discarded, strong subadditivity is exactly
+    the statement that tracing out $A$ does not increase the relative entropy of
+    $\rho_{ABC}$ against $\rho_{A}\otimes\rho_{BC}$; equivalently it is the
+    monotonicity of the conditional mutual information $I(A:C\mid B)\ge 0$.
+\end{enumerate}
+
+The mathematical question is therefore not whether~\eqref{eq:ssa} is true --- it
+is a theorem of Lieb and Ruskai --- but which of the layers (2)--(6) must be
+built so that the standalone axiom can be deleted and replaced by a proof whose
+only entropy-side input is the Lieb-concavity axiom already present.
+
+\section{The elimination route}
+
+The route deletes the axiom \leanid{strong_subadditivity} once the chain above is
+in place. Concretely:
+
+\begin{itemize}
+  \item Layer (1) is the entropy bridge and is independent of Lieb concavity;
+    it is the lemma that lets the eigenvalue-based formal entropy be treated as a
+    trace of a matrix logarithm.
+  \item Layers (2) and (3) define the divergence and establish its
+    nonnegativity; they need only the matrix logarithm and its operator
+    monotonicity, not Lieb concavity.
+  \item Layer (4) is the single consumer of \leanid{lieb_concavity_axiom}: joint
+    convexity of $D$ is the entropy-theoretic content of Lieb's theorem.
+  \item Layer (5) packages joint convexity and unitary invariance into the
+    partial-trace monotonicity statement.
+  \item Layer (6) instantiates layer (5) at the tripartite splitting to
+    recover~\eqref{eq:ssa}.
+\end{itemize}
+
+After layer (6) the inequality is a theorem, the standalone axiom is removed, and
+the only remaining entropy-side axiom on this route is the Lieb-concavity axiom.
+The downstream consumers in the stable entropy interface
+\footnote{The stable interface re-exports the inequality from
+\doclink{TNLean/Entropy/StrongSubadditivity}; consumers import it from there and
+not from the axiom module.}
+require no change because the statement they import is unchanged; only its
+justification changes from axiom to theorem.
+
+\section{Verdict}
+
+The strong-subadditivity inequality is presently an axiom that is logically
+disconnected from the Lieb-concavity axiom available in the same repository. The
+elimination route is the classical relative-entropy chain: entropy bridge,
+definition of relative entropy, Klein's inequality, joint convexity (the step
+consuming Lieb concavity), data-processing under the partial trace, and final
+assembly at the tripartite splitting. Until layers (2)--(6) are formalized, the
+standalone axiom records a result the development assumes but does not yet derive
+from its operator-convexity input.
+
+\begin{thebibliography}{9}
+
+\bibitem{LiebRuskai1973}
+  E.~H.~Lieb and M.~B.~Ruskai,
+  \emph{Proof of the strong subadditivity of quantum-mechanical entropy},
+  Journal of Mathematical Physics \textbf{14} (1973), 1938--1941.
+
+\bibitem{Lieb1973Convex}
+  E.~H.~Lieb,
+  \emph{Convex trace functions and the Wigner--Yanase--Dyson conjecture},
+  Advances in Mathematics \textbf{11} (1973), 267--288.
+
+\end{thebibliography}
+
+\end{document}
