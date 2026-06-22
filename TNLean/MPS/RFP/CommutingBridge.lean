@@ -31,13 +31,14 @@ The declarations below separate three mathematical statements:
   idempotents on each finite chain;
 * the already formalized Appendix B structural form.
 
-**Scope restriction (overlapping two-site terms):** The current \(N\)-site state
-space is a function space indexed by configurations. It does not yet expose the
-tensor-product support maps needed to state directly the source relation
-\([\tau_1(P_2),P_2]=0\) for the two overlapping nearest-neighbor terms. For this
-reason commutativity of the translated idempotents is an explicit hypothesis in
+**Scope restriction (overlapping two-site terms):** The three-site support maps
+for the source \(AX\) and \(XB\) windows are represented in
+`TNLean.MPS.ParentHamiltonian.LocalSupport`. The remaining Appendix-B step is to
+identify the product-of-entangled-pairs parent projectors with the translated
+length-two parent terms and prove their overlapping commutation. For this reason
+commutativity of the translated idempotents is an explicit hypothesis in
 `HasProductPairLocalProjectors`. Eliminating this hypothesis is the
-overlapping product-of-entangled-pairs locality step recorded in
+product-of-entangled-pairs locality step recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 -/
 
@@ -111,10 +112,11 @@ theorem HasProductPairMPV.exists_twoSiteAmplitude {A : MPSTensor d D}
 \(p_i\) associated to the adjacent two-site factors on an \(N\)-site chain, with
 \(p_i p_j=p_j p_i\).
 
-**Scope restriction (tensor-product locality):** The current formal state space
-does not yet carry the tensor-product support maps used in the source
-product-of-entangled-pairs argument, so the projectors are stated directly as
-endomorphisms of the full \(N\)-site space. -/
+**Scope restriction (local projectors):** The three-site \(AX/XB\) support maps
+for adjacent windows give the local support data. This structure does not
+construct, from the Appendix-B product-of-entangled-pairs form, the chain-level
+projectors that equal the translated length-two parent terms. The projectors are
+therefore stated directly as endomorphisms of the full \(N\)-site space. -/
 structure HasProductPairLocalProjectors (A : MPSTensor d D) (N : ℕ) where
   proj : Fin N → NSiteSpace d N →ₗ[ℂ] NSiteSpace d N
   hidem : ∀ i, proj i * proj i = proj i
@@ -183,32 +185,28 @@ theorem ProductPairBridge.localTerm_idempotent
 /-! ### Appendix B structural form as the preceding input -/
 
 /-- Structure recording the Appendix B normal-tensor decomposition
-\(A^i=X\Lambda U^iX^{-1}\).
+\(A^i=X\Lambda U^iX^{-1}\) in the source unit pair-index convention.
 
-The theorem `rfp_nt_structural_full` proves existence of this structural form
-from the RFP, normality, and left-canonical hypotheses. The remaining
-product-of-entangled-pairs factorization and parent-term identities must use
-the same \(X,\Lambda,U\). -/
+The theorem `rfp_nt_structural_full_unit_pair` proves existence of this
+structural form from the RFP, normality, and left-canonical hypotheses. The
+remaining product-of-entangled-pairs factorization and parent-term identities
+must use the same \(X,\Lambda,U\). -/
 structure AppendixBStructuralData (A : MPSTensor d D) where
   /-- The virtual-bond change of basis. -/
   X : Matrix (Fin D) (Fin D) ℂ
   /-- Positive diagonal weights. -/
   Λ : Fin D → ℝ
-  /-- The residual left-canonical tensor family. -/
+  /-- The residual tensor family satisfying the source pair-index isometry. -/
   U : MPSTensor d D
   /-- The change-of-basis matrix is invertible. -/
   hX_det : X.det ≠ 0
   /-- The diagonal weights are strictly positive. -/
   hΛ_pos : ∀ k, 0 < Λ k
-  /-- The residual tensor is left-canonical. -/
-  hU_left : ∑ i : Fin d, (U i)ᴴ * U i = 1
-  /-- The residual tensor satisfies the normalized per-block pair-index
-  orthonormality condition. The normalization differs from the source's unit
-  pair-index convention as recorded in
-  `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
+  /-- The residual tensor satisfies the source unit pair-index orthonormality
+  condition from arXiv:1606.00608, lines 550--554, restricted to one block. -/
   hU_pair : ∀ p q : Fin D × Fin D,
     ∑ i : Fin d, star (U i p.1 p.2) * U i q.1 q.2 =
-      if p = q then (D : ℂ)⁻¹ else 0
+      if p = q then 1 else 0
   /-- The original tensor has the Appendix B structural form. -/
   hA_eq : ∀ i, A i = X * Matrix.diagonal (fun k => (Λ k : ℂ)) * U i * X⁻¹
 
@@ -218,15 +216,14 @@ theorem AppendixBStructuralData.exists_ofRFP (A : MPSTensor d D) [NeZero D]
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
     Nonempty (AppendixBStructuralData A) := by
   classical
-  obtain ⟨X, Λ, U, hX_det, hΛ_pos, hU_left, hU_pair, hA_eq⟩ :=
-    rfp_nt_structural_full A hNT hRFP hLeft
+  obtain ⟨X, Λ, U, hX_det, hΛ_pos, hU_pair, hA_eq⟩ :=
+    rfp_nt_structural_full_unit_pair A hNT hRFP hLeft
   exact ⟨
     { X := X
       Λ := Λ
       U := U
       hX_det := hX_det
       hΛ_pos := hΛ_pos
-      hU_left := hU_left
       hU_pair := hU_pair
       hA_eq := hA_eq }⟩
 
@@ -309,7 +306,7 @@ theorem AppendixBStructuralData.mpv_eq_productPairState_one {A : MPSTensor d D}
 /-- The remaining product-of-entangled-pairs input needed after Appendix B.
 
 For a fixed structural form, this captures the two facts that are still not
-produced internally by `rfp_nt_structural_full`: the even-chain MPV must be a
+produced by the Appendix-B structural datum: the even-chain MPV must be a
 repeated copy of the two-site amplitude determined by that same witness, and the
 nearest-neighbor parent projectors on each finite chain must be identified with a
 commuting family attached to these adjacent two-site factors. -/
