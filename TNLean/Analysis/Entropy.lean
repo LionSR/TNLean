@@ -85,6 +85,22 @@ noncomputable def vonNeumannEntropy
     (ρ : Matrix n n ℂ) (hρ : ρ.IsHermitian) : ℝ :=
   ∑ i, negMulLog (hρ.eigenvalues i)
 
+/-- Von Neumann entropy is congruent in the matrix argument. -/
+theorem vonNeumannEntropy_congr {ρ₁ ρ₂ : Matrix n n ℂ} (h : ρ₁ = ρ₂)
+    (hρ₁ : ρ₁.IsHermitian) (hρ₂ : ρ₂.IsHermitian) :
+    vonNeumannEntropy ρ₁ hρ₁ = vonNeumannEntropy ρ₂ hρ₂ := by
+  subst h
+  rfl
+
+/-- The zero matrix has zero von Neumann entropy. -/
+@[simp] theorem vonNeumannEntropy_zero :
+    vonNeumannEntropy (0 : Matrix n n ℂ) Matrix.isHermitian_zero = 0 := by
+  rw [vonNeumannEntropy]
+  have hzero : (Matrix.isHermitian_zero (n := n) (α := ℂ)).eigenvalues = 0 := by
+    exact (Matrix.isHermitian_zero (n := n) (α := ℂ)).eigenvalues_eq_zero_iff.mpr rfl
+  rw [hzero]
+  simp [Real.negMulLog_zero]
+
 /-- The von Neumann entropy depends only on the characteristic polynomial: it is
 the `negMulLog`-sum of the (real parts of the) roots of `charpoly`. -/
 theorem vonNeumannEntropy_eq_charpoly_roots (ρ : Matrix n n ℂ) (hρ : ρ.IsHermitian) :
