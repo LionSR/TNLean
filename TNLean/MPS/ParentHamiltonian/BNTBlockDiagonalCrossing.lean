@@ -810,14 +810,30 @@ This result follows the block-diagonal boundary conditions of arXiv:2011.12127,
 lines 2126--2128, and precedes the final equality in
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1454--1456.
 
-**Unfaithful:** This proof relies on
-`exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1`,
-which uses boundary-crossing comparison hypotheses not derived from
-arXiv:2011.12127, Section IV.C, lines 2126--2128. Documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
-derive the \(C^j,D^j,E^j\) boundary-condition comparison from
-arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and discharge the currently assumed
-complementary-word identity; tracked in issue 2971. -/
+**Scope restriction (periodic-boundary comparison):** The complementary-word
+matrix identities `hIdentity` are the explicit hypothesis here. The block-diagonal
+boundary representation supplied by
+`exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1`
+is the boundary-comparison-free open-boundary inclusion of arXiv:quant-ph/0608197, Theorem 12
+(its block components lie in \(G_N(A_j)\)) and does not assume the
+boundary-crossing comparison. The periodic-boundary upgrade encoded by `hIdentity`
+is the boundary-condition comparison of arXiv:quant-ph/0608197, Theorem 12, proof
+lines 1446--1456, and arXiv:2011.12127, Section IV.C, lines 2126--2128, not yet
+derived from the periodic ground-space constraint. Documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; tracked in issue 2971.
+
+**Unfaithful:** This proof transitively relies on
+`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`, whose
+normalized BNT product-span input is not yet source-faithful: its derivation uses
+the normal-range reduction of arXiv:2011.12127, Section IV.C, lines 2078--2079,
+documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. This deviation
+is independent of the periodic-boundary comparison tracked in issue 2971.
+Elimination: derive the normalized BNT product-span input
+`wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1` from the source periodic-boundary
+coordinate comparison of arXiv:2011.12127, Section IV.C, lines 2078--2079
+(per `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`), discharging the
+`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`
+dependency; tracked in issue 2405. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_complementary_identities_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -874,14 +890,28 @@ the trace-decomposition comparison and the normalized \(E^j\)-calculation; the
 theorem assumes it for every boundary-crossing interval and does not derive the
 comparison.
 
-**Unfaithful:** This proof relies on
-`chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_blockBoundary`,
-which uses boundary-crossing comparison hypotheses not derived from
-arXiv:2011.12127, Section IV.C, lines 2126--2128. Documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. Elimination:
-derive the \(C^j,D^j,E^j\) boundary-condition comparison from
-arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and discharge the currently assumed
-complementary-word identity; tracked in issue 2971. -/
+**Scope restriction (periodic-boundary comparison):** The complementary-word
+matrix identities `hIdentity` are the explicit hypothesis here. The underlying
+block-diagonal boundary representation is the boundary-comparison-free open-boundary inclusion of
+arXiv:quant-ph/0608197, Theorem 12, independent of the boundary-crossing
+comparison. The periodic-boundary upgrade encoded by `hIdentity` is the
+boundary-condition comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines
+1446--1456, and arXiv:2011.12127, Section IV.C, lines 2126--2128, not yet derived
+from the periodic ground-space constraint. Documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; tracked in issue 2971.
+
+**Unfaithful:** This proof transitively relies on
+`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`, whose
+normalized BNT product-span input is not yet source-faithful: its derivation uses
+the normal-range reduction of arXiv:2011.12127, Section IV.C, lines 2078--2079,
+documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. This deviation
+is independent of the periodic-boundary comparison tracked in issue 2971.
+Elimination: derive the normalized BNT product-span input
+`wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1` from the source periodic-boundary
+coordinate comparison of arXiv:2011.12127, Section IV.C, lines 2078--2079
+(per `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`), discharging the
+`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`
+dependency; tracked in issue 2405. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_complementary_identities
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
