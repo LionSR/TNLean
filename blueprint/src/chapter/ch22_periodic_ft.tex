@@ -1940,14 +1940,14 @@ divisibility of its transfer map, following
     $\tau \in \{0,\ldots,d^p-1\}^N$.
 \end{definition}
 
-\begin{theorem}[Pullback of a refinement witness]
+\begin{theorem}[The tensor \(C\) associated to a refinement witness]
     \label{thm:p_refinement_pullback_irreducible_form}
     \lean{MPSTensor.pRefinementCanonicalization_pullback_of_irreducibleForm}
     \leanok
     \uses{def:irreducible_form, def:p_refinable}
     Let $B$ be an MPS tensor in irreducible form~II. If $\mc V(B)$ can be
     $p$-refined, then there exist a tensor $A$, an isometry
-    $W : \C^d \to (\C^d)^{\otimes p}$, and the pullback tensor
+    $W : \C^d \to (\C^d)^{\otimes p}$, and a tensor $C$ defined by
     \[
         C^{\alpha} := \sum_{i=0}^{d-1} W_{\alpha,i} B^i
     \]
@@ -1957,7 +1957,7 @@ divisibility of its transfer map, following
 \end{theorem}
 
 \begin{proof}\leanok
-    Choose $(A,W)$ from the refinement data. The pullback construction gives
+    Choose $(A,W)$ from the refinement data. The definition of $C$ gives
     $\mathcal E_C = \mathcal E_B$ and equality of MPV families between $C$
     and $A^{[p]}$. To see that $C$ is still in irreducible form~II, transport
     each periodic block $B_j$ of $B$ through the same physical isometry $W$.
@@ -1968,13 +1968,14 @@ divisibility of its transfer map, following
     irreducible-form decomposition of $C$.
 \end{proof}
 
-\begin{definition}[Blocked equal-case Z-gauge extraction hypothesis]
+\begin{definition}[$Z$-gauge after applying the blocked equal-case theorem]
     \label{def:peripheral_equalcase_zgauge_sameMPV}
     \lean{MPSTensor.PeripheralEqualCaseZGaugeOfSameMPV}
     \leanok
     \uses{def:irreducible_form, def:blocked_tensor, def:same_mpv, def:z_gauge_equiv}
     Fix $(d,D,p)$. This hypothesis says that whenever a blocked tensor $C$ in
-    irreducible form~II has the same MPV family as a blocked root $A^{[p]}$,
+    irreducible form~II has the same MPV family as the $p$-blocked tensor
+    $A^{[p]}$,
     there exists an integer $m \ge 1$ and a $\mathbb Z_m$-gauge equivalence
     between $C$ and $A^{[p]}$.
 \end{definition}
@@ -1995,77 +1996,84 @@ divisibility of its transfer map, following
     % explicit assumption, not a consequence of equality of MPV families.
 \end{theorem}
 
-\begin{definition}[Blocked-to-root reconstruction hypothesis from Z-gauge]
+\begin{definition}[Construction of $\widetilde A$ from the $Z$-gauge]
     \label{def:peripheral_equalcase_root_from_zgauge}
     \lean{MPSTensor.PeripheralEqualCaseRootFromZGauge}
     \leanok
     \uses{def:irreducible_form, def:blocked_tensor, def:z_gauge_equiv}
     Fix $(d,D,p)$. This hypothesis says that if $m \ge 1$ and a blocked tensor
     $C$ in irreducible form~II is $\mathbb Z_m$-gauge equivalent to $A^{[p]}$,
-    then there exists a tensor $A'$ with
-    $\sum_i (A'^i)^\dagger A'^i = \Id$ and
-    $\mathcal E_C = \mathcal E_{A'^{[p]}}$.
+    then one can construct a tensor $\widetilde A$ with
+    $\sum_i (\widetilde A^i)^\dagger \widetilde A^i = \Id$ and
+    $\mathcal E_C = \mathcal E_{\widetilde A^{[p]}}$.
+    This is the construction in
+    \cite[lines~765--810]{DeLasCuevas2017Irreducible}: for each periodic block
+    $A_j$, the scalars $c_{j,\alpha}$ define matrices $A'_j$, and then
+    $\widetilde A=U^\dagger A' U$.
 \end{definition}
 
-\begin{definition}[Blocked equal-case root hypothesis]
+\begin{definition}[Construction of $\widetilde A$ after the equal-case theorem]
     \label{def:peripheral_equalcase_periodicFT_sameMPV}
     \lean{MPSTensor.PeripheralEqualCasePeriodicFTOfSameMPV}
     \leanok
     \uses{def:irreducible_form, def:blocked_tensor, def:same_mpv}
-    Fix $(d,D,p)$. This states the combined root-existence statement: whenever a
+    Fix $(d,D,p)$. This states the combined construction: whenever a
     blocked tensor $C$ in irreducible form~II has the same MPV family as a
-    blocked root $A^{[p]}$, one can replace $A$ by a left-canonical tensor $A'$
-    with $\mathcal E_C = \mathcal E_{A'^{[p]}}$.
+    $p$-blocked tensor $A^{[p]}$, one can replace $A$ by a left-canonical
+    tensor $\widetilde A$ with
+    $\mathcal E_C = \mathcal E_{\widetilde A^{[p]}}$.
 \end{definition}
 
-\begin{theorem}[Blocked equal-case root from Z-gauge extraction]
+\begin{theorem}[Construction of $\widetilde A$ from $Z$-gauge extraction]
     \label{thm:peripheral_equalcase_sameMPV_zgauge_reduction}
     \lean{MPSTensor.peripheralEqualCase_periodicFT_of_sameMPV}
     \leanok
     \uses{def:peripheral_equalcase_zgauge_sameMPV,
         def:peripheral_equalcase_root_from_zgauge,
         def:peripheral_equalcase_periodicFT_sameMPV}
-    If the blocked equal-case Z-gauge extraction hypothesis and the
-    blocked-to-root reconstruction hypothesis both hold, then the combined
-    blocked equal-case root hypothesis holds.
+    If the blocked equal-case $Z$-gauge extraction hypothesis and the
+    construction of $\widetilde A$ from that $Z$-gauge both hold, then the
+    combined equal-case construction holds.
 \end{theorem}
 
 \begin{proof}\leanok
     Apply the Z-gauge extraction hypothesis to obtain a blocked
     $\mathbb Z_m$-gauge witness between $C$ and $A^{[p]}$, and then apply the
-    reconstruction hypothesis to that witness.
+    construction of $\widetilde A$ to that witness.
 \end{proof}
 
-\begin{theorem}[Reduction to the blocked equal-case root hypothesis]
+\begin{theorem}[Reduction to the blocked equal-case construction]
     \label{thm:p_refinement_forward_equalcase_reduction}
     \lean{MPSTensor.pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV}
     \leanok
     \uses{def:peripheral_equalcase_periodicFT_sameMPV,
         def:irreducible_form, def:p_refinable,
         thm:p_refinement_pullback_irreducible_form}
-    Assume the blocked equal-case root hypothesis. Then every
-    $p$-refinable tensor $B$ in irreducible form~II admits a left-canonical root
-    $A'$ with $\mathcal E_B = \mathcal E_{A'^{[p]}}$.
+    Assume the blocked equal-case construction. Then every
+    $p$-refinable tensor $B$ in irreducible form~II admits a left-canonical
+    tensor $\widetilde A$ with
+    $\mathcal E_B = \mathcal E_{\widetilde A^{[p]}}$.
 \end{theorem}
 
 \begin{proof}\leanok
     Apply Theorem~\ref{thm:p_refinement_pullback_irreducible_form} to the
     refinement witness of $B$. This produces a blocked tensor $C$ in
     irreducible form~II with $\mathcal E_C = \mathcal E_B$ and the same MPV
-    family as $A^{[p]}$. The blocked equal-case root hypothesis then
-    gives a left-canonical tensor $A'$ with
-    $\mathcal E_C = \mathcal E_{A'^{[p]}}$. Combining the two transfer-map
-    identities yields $\mathcal E_B = \mathcal E_{A'^{[p]}}$.
+    family as $A^{[p]}$. The blocked equal-case construction then
+    gives a left-canonical tensor $\widetilde A$ with
+    $\mathcal E_C = \mathcal E_{\widetilde A^{[p]}}$. Combining the two
+    transfer-map identities yields
+    $\mathcal E_B = \mathcal E_{\widetilde A^{[p]}}$.
 \end{proof}
 
-\begin{theorem}[Forward direction from the blocked equal-case root hypothesis]
+\begin{theorem}[Forward direction from the blocked equal-case construction]
     \label{thm:thm_4_1_p_refinement_forward_blocked_equalcase}
     \lean{MPSTensor.thm_4_1_p_refinement_forward_of_peripheralEqualCase_periodicFT_of_sameMPV}
     \leanok
     \uses{def:peripheral_equalcase_periodicFT_sameMPV,
         def:irreducible_form, def:p_refinable, def:p_divisible_channel,
         thm:p_refinement_forward_equalcase_reduction}
-    Assume the blocked equal-case root hypothesis. Then for every tensor
+    Assume the blocked equal-case construction. Then for every tensor
     $B$ in irreducible form~II, $p$-refinability of $B$ implies
     $p$-divisibility of $\mathcal E_B$.
 \end{theorem}
@@ -2079,14 +2087,14 @@ divisibility of its transfer map, following
 
 The following conditional statements separate the refinability--divisibility
 equivalence of \cite[Theorem~4.1]{DeLasCuevas2017Irreducible} from the
-root-construction assumptions used below.
+additional constructions used below.
 
 % Source comparison: arXiv:1708.00029, Theorem 4.1, lines 728--731 asserts
-% the same refinability--divisibility equivalence without additional root
-% hypotheses. The forward left-canonical root construction corresponds to
-% lines 735--810, while the reverse transfer-map root construction corresponds
-% to lines 812--818. The Lean theorem below packages the two proved one-way
-% implications and is therefore conditional on those two root hypotheses.
+% the same refinability--divisibility equivalence without additional
+% hypotheses. The forward construction of \widetilde A corresponds to
+% lines 735--810, while the reverse transfer-map construction corresponds
+% to lines 812--818. The Lean theorem below combines the two proved one-way
+% implications and is therefore conditional on those two hypotheses.
 \begin{theorem}[$p$-refinability iff transfer-map $p$-divisibility, conditional]%
     \label{thm:thm_4_1_p_refinement}
     \lean{MPSTensor.thm_4_1_p_refinement}
@@ -2095,9 +2103,9 @@ root-construction assumptions used below.
         thm:periodic_ft, thm:thm_4_1_p_refinement_forward,
         thm:thm_4_1_p_refinement_reverse}
     Let $B$ be an MPS tensor in irreducible form~II and let $p \ge 1$.
-    Assume the forward left-canonical root hypothesis for
-    refinability $\Rightarrow$ divisibility and the reverse transfer-map root
-    hypothesis for divisibility $\Rightarrow$ refinability. Then $B$ is
+    Assume the forward construction of $\widetilde A$ for
+    refinability $\Rightarrow$ divisibility and the reverse transfer-map
+    construction for divisibility $\Rightarrow$ refinability. Then $B$ is
     $p$-refinable iff its transfer map $\mathcal{E}_B$ is $p$-divisible.
 \end{theorem}
 
@@ -2106,9 +2114,9 @@ root-construction assumptions used below.
     Combine the forward implication
     (Theorem~\ref{thm:thm_4_1_p_refinement_forward}) with the reverse
     implication (Theorem~\ref{thm:thm_4_1_p_refinement_reverse}) into a
-    single biconditional. The forward direction assumes the left-canonical root
-    hypothesis; the reverse direction assumes only the transfer-map root
-    hypothesis. Together they give the full equivalence under those hypotheses.
+    single biconditional. The forward direction assumes the construction of
+    $\widetilde A$; the reverse direction assumes the transfer-map construction.
+    Together they give the full equivalence under those hypotheses.
 \end{proof}
 
 \begin{theorem}[$p$-refinability implies transfer-map $p$-divisibility]%
@@ -2116,20 +2124,22 @@ root-construction assumptions used below.
     \lean{MPSTensor.thm_4_1_p_refinement_forward}
     \leanok
     \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel}
-    Let $B$ be an MPS tensor in irreducible form~II. Assume a left-canonical
-    root hypothesis: every refinement witness gives a tensor $A$ with
-    $\sum_i (A^i)^\dagger A^i = \Id$ and
-    $\mathcal{E}_B = \mathcal{E}_{A^{[p]}}$. Then
+    Let $B$ be an MPS tensor in irreducible form~II. Assume that every
+    refinement witness gives a tensor $\widetilde A$ with
+    $\sum_i (\widetilde A^i)^\dagger \widetilde A^i = \Id$ and
+    $\mathcal{E}_B = \mathcal{E}_{\widetilde A^{[p]}}$. Then
     $p$-refinability of $B$ implies $p$-divisibility of $\mathcal{E}_B$.
 \end{theorem}
 
 \begin{proof}\leanok
-    The left-canonical root hypothesis supplies a witness $A$ with
-    $\sum_i (A^i)^\dagger A^i = \Id$ (left-canonical) and
-    $\mathcal{E}_B = \mathcal{E}_{A^{[p]}}$. The left-canonical property makes
-    $\mathcal{E}_A$ a CPTP channel, and the blocking identity
-    $\mathcal{E}_{A^{[p]}} = (\mathcal{E}_A)^p$ then identifies
-    $\mathcal{E}_B$ with the $p$-th power of the channel $\mathcal{E}_A$.
+    The construction supplies $\widetilde A$ with
+    $\sum_i (\widetilde A^i)^\dagger \widetilde A^i = \Id$ and
+    $\mathcal{E}_B = \mathcal{E}_{\widetilde A^{[p]}}$. The left-canonical
+    property makes $\mathcal{E}_{\widetilde A}$ a CPTP channel, and the
+    blocking identity
+    $\mathcal{E}_{\widetilde A^{[p]}} = (\mathcal{E}_{\widetilde A})^p$
+    then identifies $\mathcal{E}_B$ with the $p$-th power of the channel
+    $\mathcal{E}_{\widetilde A}$.
 \end{proof}
 
 \begin{definition}[Blocked-to-root channel-root hypothesis from Z-gauge]
