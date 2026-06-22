@@ -189,6 +189,44 @@ in both cases.
     gives the second trace expression for the same local coefficient sum.
 \end{proof}
 
+\begin{lemma}[Boundary representation gives fixed-tail boundary traces]
+    \label{lem:block_diagonal_boundary_crossing_trace_decomposition_boundary}
+    \lean{MPSTensor.blockDiagonal_boundary_crossing_trace_decomposition_of_boundary}
+    \leanok
+    \uses{lem:block_diagonal_boundary_local_sum_mem,
+        lem:block_diagonal_boundary_crossing_trace_decomposition}
+    Assume $0<N$, $L\le N$, and $\mu_j\ne0$ for every block $j$. Let the
+    cyclic interval beginning at $i$ cross the boundary cut, so $N<i+L$. Let
+    \[
+        \psi\in
+        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right),
+        \qquad
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right).
+    \]
+    For every outside word $\rho$ of length $N-L$, there are matrices
+    $C^j_{i,\rho}$ such that, for every word $\beta$ of length $i+L-N$ before
+    the cut and every wrapped tail word $\alpha$ of length $N-i$,
+    \[
+        \sum_j\tr\!\left(A^j_\beta C^j_{i,\rho}A^j_\alpha\right)
+        =
+        \sum_j
+        \tr\!\left(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_\alpha\right).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_boundary_local_sum_mem,
+        lem:block_diagonal_boundary_crossing_trace_decomposition}
+    Choose an outside configuration $\tau$ whose entries between the end of the
+    interval and the cut are the word $\rho$. By the nonzero-weight hypothesis,
+    Lemma~\ref{lem:block_diagonal_boundary_local_sum_mem} applies and puts the
+    sum of the corresponding block restrictions in $\bigvee_jG_L(A_j)$. Applying
+    Lemma~\ref{lem:block_diagonal_boundary_crossing_trace_decomposition} gives
+    the displayed trace equality after rewriting the opened cyclic word as
+    $\beta\rho\alpha$.
+\end{proof}
+
 \begin{theorem}[Fixed boundary-crossing $C^j,D^j$ comparison from the local block-sum constraint]
     \label{thm:block_diagonal_boundary_crossing_pgvwc_comparison}
     \lean{MPSTensor.blockDiagonal_boundary_crossing_pgvwc_comparison_of_sum_mem_iSup}
