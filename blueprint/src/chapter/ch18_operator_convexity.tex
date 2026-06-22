@@ -93,6 +93,36 @@ are not developed elsewhere in this document.
     $p\ge 1$ and the convex form of the diagonal Jensen inequality.
 \end{proof}
 
+\section{Operator convexity of real powers}
+
+\begin{theorem}[Operator convexity of $x\mapsto x^p$ on $[1,2]$]%
+    \label{thm:operator_convexOn_rpow}
+    \lean{CFC.convexOn_rpow}
+    \leanok
+    For an element $a$ of a unital C${}^\ast$-algebra and $p\in[1,2]$, the map
+    $a\mapsto a^p$ is convex for the Loewner order on the positive cone:
+    \[
+        (t a+(1-t) b)^p \le t\,a^p+(1-t)\,b^p,
+        \qquad 0\le a,b,\ t\in[0,1].
+    \]
+    This is the convex counterpart of the operator concavity of $x\mapsto x^p$
+    on $[0,1]$.
+\end{theorem}
+
+\begin{proof}\leanok
+    For $p\in(1,2)$ one uses the integral representation
+    $a^p=\int_0^\infty f_{p,s}(a)\,d\mu(s)$ of Carlen
+    \cite[Lemma~2.8]{carlen2010}, whose integrand
+    $f_{p,s}(x)=s^{p-1}\bigl(s^{-1}x+s(s+x)^{-1}-1\bigr)$ is operator convex:
+    it decomposes into a linear term, a nonnegative multiple of the operator
+    convex resolvent $x\mapsto(s\cdot 1+x)^{-1}$, and a constant. Operator
+    convexity is preserved under the Loewner-order Bochner integral. The
+    endpoint $p=1$ is the identity, and $p=2$ is $a\mapsto a^2$, operator
+    convex because
+    $t\,a^2+(1-t)b^2-(ta+(1-t)b)^2=t(1-t)(a-b)^2\ge 0$.
+    See \cite[Chapter~V]{Bhatia1997Matrix}.
+\end{proof}
+
 \section{Operator Jensen inequality for positive maps}
 
 \begin{definition}[Finite-POVM dilation construction]\label{def:operator_jensen_povm_aux}
