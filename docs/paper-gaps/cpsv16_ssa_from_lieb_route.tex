@@ -81,11 +81,33 @@ chain of them. In source order the chain is the following.
     below; it follows from joint convexity together with unitary invariance of
     $D$.
   \item \emph{Final assembly.} The inequality~\eqref{eq:ssa} read as a single
-    instance of DPI. Writing the conditional quantities relative to the maximally
-    mixed state on the system being discarded, strong subadditivity is exactly
-    the statement that tracing out $A$ does not increase the relative entropy of
-    $\rho_{ABC}$ against $\rho_{A}\otimes\rho_{BC}$; equivalently it is the
-    monotonicity of the conditional mutual information $I(A:C\mid B)\ge 0$.
+    instance of DPI under the partial trace over $C$. Take the reference state
+    $\sigma_{ABC} = \mathbf 1_A \otimes \rho_{BC}$, with the identity
+    $\mathbf 1_A$ on $\mathcal H_A$ and the reduced state $\rho_{BC}$ on
+    $\mathcal H_B \otimes \mathcal H_C$. Since
+    $\log(\mathbf 1_A \otimes \rho_{BC}) = \mathbf 1_A \otimes \log\rho_{BC}$,
+    the relative entropy evaluates to
+    \begin{align}
+      D(\rho_{ABC} \,\|\, \mathbf 1_A \otimes \rho_{BC})
+        = S(\rho_{BC}) - S(\rho_{ABC}).
+    \end{align}
+    Applying the partial trace $\Lambda = \tr_C$ sends
+    $\rho_{ABC} \mapsto \rho_{AB}$ and
+    $\mathbf 1_A \otimes \rho_{BC} \mapsto \mathbf 1_A \otimes \rho_{B}$, so the
+    image relative entropy is
+    \begin{align}
+      D(\rho_{AB} \,\|\, \mathbf 1_A \otimes \rho_{B})
+        = S(\rho_{B}) - S(\rho_{AB}).
+    \end{align}
+    Monotonicity under $\Lambda$, namely
+    $D(\Lambda\rho \,\|\, \Lambda\sigma) \le D(\rho\,\|\,\sigma)$, then reads
+    $S(\rho_{B}) - S(\rho_{AB}) \le S(\rho_{BC}) - S(\rho_{ABC})$, which on
+    rearrangement is exactly~\eqref{eq:ssa}; equivalently it is the
+    nonnegativity of the conditional mutual information $I(A:C\mid B)\ge 0$. The
+    discarded subsystem is $C$ and the reference state carries the identity on
+    the \emph{retained} factor $A$; discarding $A$ instead against
+    $\rho_A \otimes \rho_{BC}$ would only yield subadditivity
+    $I(A:BC)\ge 0$, not strong subadditivity.
 \end{enumerate}
 
 The mathematical question is therefore not whether~\eqref{eq:ssa} is true --- it
