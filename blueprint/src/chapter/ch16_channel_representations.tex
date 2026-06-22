@@ -1600,14 +1600,35 @@ This section states the existence theorems from
 
 % Lean: Wolf.infimum_is_attained
 \begin{lemma}[Infimum attainment for SL-filterings]\label{lem:infimum_is_attained}
+    \lean{Wolf.infimum_is_attained}\leanok
     \uses{lem:posdef_trace_lower_bound, lem:det_amgm_hilbert_schmidt_bound,
     lem:kronecker_hilbert_schmidt_trace}
     For a positive-definite Choi matrix $\tau$, the infimum of
     $\tr\![(S_{2} \otimes_{k} S_{1}) \tau (S_{2} \otimes_{k} S_{1})^{\dagger}]$
     over $S_{1}, S_{2} \in \MN{D}$ with $\det S_{1} = \det S_{2} = 1$
-    is attained. \textbf{Not yet proved}---requires compactness of bounded
-    subsets of $\SL(D, \C)$ and the extreme-value theorem.
+    is attained.
 \end{lemma}
+\begin{proof}\leanok
+    \uses{lem:posdef_trace_lower_bound, lem:det_amgm_hilbert_schmidt_bound,
+    lem:kronecker_hilbert_schmidt_trace}
+    Write $X = S_{2} \otimes_{k} S_{1}$. By the positive-definite trace lower
+    bound (Lemma~\ref{lem:posdef_trace_lower_bound}),
+    $\tr[X \tau X^{\dagger}] \ge \lambda_{\min}(\tau)\,\tr[X^{\dagger}X]$, and
+    by Hilbert--Schmidt multiplicativity
+    (Lemma~\ref{lem:kronecker_hilbert_schmidt_trace}),
+    $\tr[X^{\dagger}X] = \tr[S_{2}^{\dagger}S_{2}]\,\tr[S_{1}^{\dagger}S_{1}]$.
+    The determinant AM--GM estimate
+    (Lemma~\ref{lem:det_amgm_hilbert_schmidt_bound}) gives
+    $\tr[S_{i}^{\dagger}S_{i}] = \|S_{i}\|^{2} \ge D$ whenever
+    $\det S_{i} = 1$. Combining, the value dominates
+    $\lambda_{\min}(\tau)\,D\,\|S_{i}\|^{2}$ for each factor, so any point
+    whose value is at most the value at the identity lies in a fixed
+    Frobenius ball $\{\,\|S\| \le C\,\}$. Intersecting with the closed set
+    $\det S = 1$ produces a compact set, on which the continuous trace
+    functional attains its minimum by the extreme-value theorem. A point
+    outside the sublevel set has value larger than the value at the identity,
+    so the minimiser on the compact set is a global minimiser.
+\end{proof}
 
 % Lean: Wolf.exists_normal_form_generic
 \begin{theorem}[Generic normal form for CP maps]\label{thm:exists_normal_form_generic}

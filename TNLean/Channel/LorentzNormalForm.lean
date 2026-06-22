@@ -6,8 +6,13 @@ import TNLean.Channel.Basic
 import TNLean.Channel.TransferMatrix
 import TNLean.Channel.ChoiJamiolkowski
 import TNLean.Channel.NormalForm
+import TNLean.Algebra.HermitianHelpers
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.Matrix.Order
+import Mathlib.Topology.Instances.Matrix
+import Mathlib.Topology.Algebra.Module.FiniteDimension
+import Mathlib.Topology.Order.Compact
+import Mathlib.Topology.MetricSpace.Bounded
 
 /-!
 # Lorentz normal form for quantum channels (Wolf Section 2.3, Propositions 2.8–2.11)
@@ -40,21 +45,34 @@ normal form* — with three canonical representatives.
    Pauli-basis transfer matrix takes one of three canonical forms: diagonal,
    non-diagonal, or singular.
 
-## Dependencies on missing Mathlib infrastructure
+## Compactness / minimisation argument
 
 The compactness / minimisation argument used in the proof of Proposition 2.8 and 2.9
-(over SL(n, ℂ) filterings) is not yet formalised in Mathlib or TNLean.  The
-relevant theorems are therefore stated with `sorry` for the minimisation core.
-See the documentation of `infimum_is_attained` for the precise missing fact.
+(over SL(n, ℂ) filterings) is formalised in `infimum_is_attained`: the trace
+functional is coercive on `{det = 1}`, so a global minimiser exists by the
+extreme value theorem on a compact Frobenius ball.  See the documentation of
+`infimum_is_attained` for the proof outline.
 
 ## References
 
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 2.3][Wolf2012QChannels]
 -/
 
-open scoped Matrix BigOperators ComplexOrder Kronecker
+open scoped Matrix BigOperators ComplexOrder Kronecker Matrix.Norms.Frobenius
 open Matrix Finset
 open ChoiJamiolkowski
+
+/-- The Kronecker product is jointly continuous in both of its matrix factors.
+
+This is the entrywise statement: each entry of `A x ⊗ₖ B x` is a product of one
+entry of `A x` and one entry of `B x`, both continuous in `x`. -/
+theorem Continuous.matrix_kronecker {X l m p q : Type*} [TopologicalSpace X]
+    {α : Type*} [TopologicalSpace α] [Mul α] [ContinuousMul α]
+    {A : X → Matrix l m α} {B : X → Matrix p q α}
+    (hA : Continuous A) (hB : Continuous B) :
+    Continuous fun x => (A x) ⊗ₖ (B x) := by
+  refine continuous_matrix fun i j => ?_
+  exact (hA.matrix_elem i.1 j.1).mul (hB.matrix_elem i.2 j.2)
 
 namespace Wolf
 
@@ -147,55 +165,159 @@ The proof idea (see Wolf Section 2.3):
 5. At the optimum, both partial traces of τ' are proportional to identity,
    giving doubly-stochastic T'.
 
-Step 4 is the compactness/minimisation argument that is **not yet formalised**
-in Mathlib or TNLean.  We state the lemma as `infimum_is_attained` with a
-`sorry` filler.  Step 5 follows from the optimality condition (AGM iteration),
-stated below. -/
+Step 4 is the compactness/minimisation argument, formalised in
+`infimum_is_attained` below.  Step 5 follows from the optimality condition (AGM
+iteration), and is not yet formalised. -/
 
 section GenericNormalForm
 
 variable {D : ℕ}
 
-/-- **Key lemma (not yet formalised).**  For a positive-definite Choi matrix τ,
-the infimum of `tr[(S₂ ⊗ₖ S₁) τ (S₂ ⊗ₖ S₁)†]` over `S₁, S₂` with `det = 1`
-is attained.  That is, the continuous function
-`(S₁, S₂) ↦ tr[(S₂ ⊗ₖ S₁) τ (S₂ ⊗ₖ S₁)†]`
-achieves its minimum on the domain of SL(n, ℂ) × SL(n, ℂ).
+/-- **Key lemma.**  For a positive-definite Choi matrix τ, the infimum of
+`tr[(S₂ ⊗ₖ S₁) τ (S₂ ⊗ₖ S₁)†]` over `S₁, S₂` with `det = 1` is attained.  That
+is, the continuous function `(S₁, S₂) ↦ tr[(S₂ ⊗ₖ S₁) τ (S₂ ⊗ₖ S₁)†]` achieves
+its minimum on the domain of SL(n, ℂ) × SL(n, ℂ).
 
-**Proof sketch** (Wolf Section 2.3).  Throughout, `‖·‖` denotes the Frobenius
+**Proof** (Wolf Section 2.3).  Throughout, `‖·‖` denotes the Frobenius
 (Hilbert–Schmidt) norm `‖M‖² = tr[M M†]`; the coercivity bounds below are false
-for the operator norm (e.g. `‖I‖_op² = 1 < n`).  There exist bounds
-  `0 < λ_min(τ) · ‖S₂ ⊗ₖ S₁‖² ≤ tr[τ'] ≤ tr[τ]`,
-so we may restrict to a bounded subset `{S_i | ‖S_i‖ ≤ C}` inside
-`{S | det S = 1}`.  In finite dimensions this set is compact, and the
-continuous trace functional attains its infimum by the extreme value theorem.
-
-**Available Mathlib facts:** the extreme value theorem is
-`IsCompact.exists_isMinOn` (`Mathlib.Topology.Order.Compact`); finite-dimensional
-Heine–Borel is `Metric.isCompact_of_isClosed_isBounded` (the matrix space is a
-proper space); and `det S = 1` is closed as the preimage of `{1}` under the
-continuous determinant.
-
-**Remaining gap:** the **coercivity bound** that reduces the unbounded
-minimisation over `det = 1` to a compact sublevel set, namely
-`tr[(S₂ ⊗ₖ S₁) τ (S₂ ⊗ₖ S₁)†] ≥ λ_min(τ) · ‖S₂ ⊗ₖ S₁‖²` together with the
-Hilbert–Schmidt multiplicativity `‖S₂ ⊗ₖ S₁‖² = ‖S₂‖² · ‖S₁‖²` and the AM–GM
-determinant bound `det S = 1 ⟹ ‖S‖² ≥ n` (singular values of `S` have product
-`|det S| = 1`, so their squares average at least `1`; hence the value tends to
-`∞` with `‖S‖`).  The positive-definite trace lower bound, Kronecker
-Hilbert--Schmidt multiplicativity, and determinant AM--GM estimate are now
-separate lemmas; what remains is the matrix-analysis estimate combining them
-with the compactness and extreme-value argument. -/
+for the operator norm (e.g. `‖I‖_op² = 1 < n`).  Writing `X = S₂ ⊗ₖ S₁`, the
+smallest-eigenvalue bound `posDef_minEigenvalue_mul_trace_conjTranspose_mul_self_le`
+gives `λ_min(τ) · tr[Xᴴ X] ≤ tr[X τ Xᴴ]`, Hilbert–Schmidt multiplicativity
+`trace_conjTranspose_mul_self_re_kronecker` gives
+`tr[Xᴴ X] = tr[S₂ᴴ S₂] · tr[S₁ᴴ S₁]`, and the determinant AM–GM estimate
+`card_le_trace_conjTranspose_mul_self_re_of_det_norm_eq_one` gives
+`tr[Sᵢᴴ Sᵢ] = ‖Sᵢ‖² ≥ n` whenever `det Sᵢ = 1`.  Combining these,
+`tr[X τ Xᴴ] ≥ λ_min(τ) · n · ‖Sᵢ‖²` for each factor, so any minimiser is confined
+to the bounded set `{S | ‖S‖ ≤ C}`.  Intersecting with the closed set `det S = 1`
+gives a compact set on which the continuous trace functional attains its minimum
+(`IsCompact.exists_isMinOn`); a value outside the sublevel set is automatically
+larger than the value at the identity, so this minimiser is global. -/
 lemma infimum_is_attained
     {τ : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ}
-    (_hτ_posDef : τ.PosDef) :
+    (hτ_posDef : τ.PosDef) :
     ∃ (S₁ S₂ : Matrix (Fin D) (Fin D) ℂ),
       S₁.det = 1 ∧ S₂.det = 1 ∧
       ∀ (T₁ T₂ : Matrix (Fin D) (Fin D) ℂ),
         T₁.det = 1 → T₂.det = 1 →
         (Matrix.trace (((T₂ ⊗ₖ T₁) * τ * ((T₂ ⊗ₖ T₁)ᴴ)))).re ≥
           (Matrix.trace (((S₂ ⊗ₖ S₁) * τ * ((S₂ ⊗ₖ S₁)ᴴ)))).re := by
-  sorry
+  classical
+  -- The degenerate case `D = 0`: all matrices are `0 × 0`, every trace vanishes.
+  rcases Nat.eq_zero_or_pos D with hD | hD
+  · subst hD
+    refine ⟨1, 1, Matrix.det_one, Matrix.det_one, ?_⟩
+    intro T₁ T₂ _ _
+    simp [Matrix.trace, Matrix.diag]
+  haveI : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
+  haveI : Nonempty (Fin D × Fin D) := ⟨(⟨0, hD⟩, ⟨0, hD⟩)⟩
+  haveI : ProperSpace
+      (Matrix (Fin D) (Fin D) ℂ × Matrix (Fin D) (Fin D) ℂ) :=
+    FiniteDimensional.proper_rclike ℂ _
+  -- The functional to minimise, as a function of the pair `(S₁, S₂)`.
+  let g : Matrix (Fin D) (Fin D) ℂ × Matrix (Fin D) (Fin D) ℂ → ℝ :=
+    fun p => (Matrix.trace ((p.2 ⊗ₖ p.1) * τ * ((p.2 ⊗ₖ p.1)ᴴ))).re
+  set lam : ℝ := minEigenvalue hτ_posDef.isHermitian with hlam_def
+  have hlam : 0 < lam := minEigenvalue_pos_of_posDef hτ_posDef.isHermitian hτ_posDef
+  set cardR : ℝ := (Fintype.card (Fin D) : ℝ) with hcardR
+  have hcardR_pos : 0 < cardR := by
+    rw [hcardR]; exact_mod_cast Fintype.card_pos
+  -- Coercivity: the value dominates `λ · ‖S₂‖² · ‖S₁‖²`.
+  have key : ∀ S₁ S₂ : Matrix (Fin D) (Fin D) ℂ,
+      lam * ((Matrix.trace (S₂ᴴ * S₂)).re * (Matrix.trace (S₁ᴴ * S₁)).re) ≤
+        g (S₁, S₂) := by
+    intro S₁ S₂
+    have hle := (Complex.le_def.mp
+      (posDef_minEigenvalue_mul_trace_conjTranspose_mul_self_le hτ_posDef (S₂ ⊗ₖ S₁))).1
+    rw [Complex.re_ofReal_mul, trace_conjTranspose_mul_self_re_kronecker] at hle
+    exact hle
+  -- The bound at the identity confines minimisers to a Frobenius ball.
+  set B : ℝ := g (1, 1) with hB
+  set C : ℝ := Real.sqrt (B / (lam * cardR)) with hC
+  have hbound : ∀ S₁ S₂ : Matrix (Fin D) (Fin D) ℂ, S₁.det = 1 → S₂.det = 1 →
+      g (S₁, S₂) ≤ B → ‖S₁‖ ≤ C ∧ ‖S₂‖ ≤ C := by
+    intro S₁ S₂ h1 h2 hgB
+    have hd1 : ‖S₁.det‖ = 1 := by rw [h1]; simp
+    have hd2 : ‖S₂.det‖ = 1 := by rw [h2]; simp
+    have hn1 : cardR ≤ (Matrix.trace (S₁ᴴ * S₁)).re :=
+      card_le_trace_conjTranspose_mul_self_re_of_det_norm_eq_one S₁ hd1
+    have hn2 : cardR ≤ (Matrix.trace (S₂ᴴ * S₂)).re :=
+      card_le_trace_conjTranspose_mul_self_re_of_det_norm_eq_one S₂ hd2
+    have ht1 : 0 ≤ (Matrix.trace (S₁ᴴ * S₁)).re := hcardR_pos.le.trans hn1
+    have ht2 : 0 ≤ (Matrix.trace (S₂ᴴ * S₂)).re := hcardR_pos.le.trans hn2
+    have hδ : 0 < lam * cardR := mul_pos hlam hcardR_pos
+    -- Bound on `‖S₁‖`.
+    have hsq1 : ‖S₁‖ ^ 2 ≤ B / (lam * cardR) := by
+      have hchain : (lam * cardR) * (Matrix.trace (S₁ᴴ * S₁)).re ≤ B := by
+        calc (lam * cardR) * (Matrix.trace (S₁ᴴ * S₁)).re
+            = lam * (cardR * (Matrix.trace (S₁ᴴ * S₁)).re) := by ring
+          _ ≤ lam * ((Matrix.trace (S₂ᴴ * S₂)).re * (Matrix.trace (S₁ᴴ * S₁)).re) := by
+                exact mul_le_mul_of_nonneg_left
+                  (mul_le_mul_of_nonneg_right hn2 ht1) hlam.le
+          _ ≤ g (S₁, S₂) := key S₁ S₂
+          _ ≤ B := hgB
+      rw [← trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq, le_div_iff₀ hδ, mul_comm]
+      exact hchain
+    have hsq2 : ‖S₂‖ ^ 2 ≤ B / (lam * cardR) := by
+      have hchain : (lam * cardR) * (Matrix.trace (S₂ᴴ * S₂)).re ≤ B := by
+        calc (lam * cardR) * (Matrix.trace (S₂ᴴ * S₂)).re
+            = lam * ((Matrix.trace (S₂ᴴ * S₂)).re * cardR) := by ring
+          _ ≤ lam * ((Matrix.trace (S₂ᴴ * S₂)).re * (Matrix.trace (S₁ᴴ * S₁)).re) := by
+                exact mul_le_mul_of_nonneg_left
+                  (mul_le_mul_of_nonneg_left hn1 ht2) hlam.le
+          _ ≤ g (S₁, S₂) := key S₁ S₂
+          _ ≤ B := hgB
+      rw [← trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq, le_div_iff₀ hδ, mul_comm]
+      exact hchain
+    refine ⟨?_, ?_⟩
+    · rw [hC, ← Real.sqrt_sq (norm_nonneg S₁)]; exact Real.sqrt_le_sqrt hsq1
+    · rw [hC, ← Real.sqrt_sq (norm_nonneg S₂)]; exact Real.sqrt_le_sqrt hsq2
+  -- The compact constraint set.
+  set Kc : Set (Matrix (Fin D) (Fin D) ℂ × Matrix (Fin D) (Fin D) ℂ) :=
+    {p | p.1.det = 1 ∧ p.2.det = 1 ∧ ‖p.1‖ ≤ C ∧ ‖p.2‖ ≤ C} with hKc
+  have hgcont : Continuous g := by
+    have hk : Continuous fun p : Matrix (Fin D) (Fin D) ℂ × Matrix (Fin D) (Fin D) ℂ =>
+        p.2 ⊗ₖ p.1 := Continuous.matrix_kronecker continuous_snd continuous_fst
+    exact Complex.continuous_re.comp
+      ((hk.matrix_mul continuous_const).matrix_mul hk.matrix_conjTranspose).matrix_trace
+  have hclosed : IsClosed Kc := by
+    have c1 : IsClosed {p : Matrix (Fin D) (Fin D) ℂ × Matrix (Fin D) (Fin D) ℂ | p.1.det = 1} :=
+      isClosed_eq continuous_fst.matrix_det continuous_const
+    have c2 : IsClosed {p : Matrix (Fin D) (Fin D) ℂ × Matrix (Fin D) (Fin D) ℂ | p.2.det = 1} :=
+      isClosed_eq continuous_snd.matrix_det continuous_const
+    have c3 : IsClosed {p : Matrix (Fin D) (Fin D) ℂ × Matrix (Fin D) (Fin D) ℂ | ‖p.1‖ ≤ C} :=
+      isClosed_le (continuous_norm.comp continuous_fst) continuous_const
+    have c4 : IsClosed {p : Matrix (Fin D) (Fin D) ℂ × Matrix (Fin D) (Fin D) ℂ | ‖p.2‖ ≤ C} :=
+      isClosed_le (continuous_norm.comp continuous_snd) continuous_const
+    have hset : Kc = {p | p.1.det = 1} ∩ {p | p.2.det = 1} ∩ {p | ‖p.1‖ ≤ C} ∩ {p | ‖p.2‖ ≤ C} := by
+      rw [hKc]; ext p; simp only [Set.mem_inter_iff, Set.mem_setOf_eq]; tauto
+    rw [hset]; exact ((c1.inter c2).inter c3).inter c4
+  have hbdd : Bornology.IsBounded Kc := by
+    refine (Metric.isBounded_closedBall (x := (0 : Matrix (Fin D) (Fin D) ℂ ×
+      Matrix (Fin D) (Fin D) ℂ)) (r := C)).subset ?_
+    intro p hp
+    rw [hKc, Set.mem_setOf_eq] at hp
+    rw [Metric.mem_closedBall]
+    calc dist p 0 = max (dist p.1 0) (dist p.2 0) := Prod.dist_eq
+      _ = max ‖p.1‖ ‖p.2‖ := by rw [dist_zero_right, dist_zero_right]
+      _ ≤ C := max_le hp.2.2.1 hp.2.2.2
+  have hKcompact : IsCompact Kc := Metric.isCompact_of_isClosed_isBounded hclosed hbdd
+  have h11mem : (1, 1) ∈ Kc := by
+    rw [hKc, Set.mem_setOf_eq]
+    obtain ⟨hc1, hc2⟩ := hbound 1 1 Matrix.det_one Matrix.det_one (le_of_eq hB.symm)
+    exact ⟨Matrix.det_one, Matrix.det_one, hc1, hc2⟩
+  obtain ⟨pmin, hpmin_mem, hpmin_min⟩ :=
+    hKcompact.exists_isMinOn ⟨(1, 1), h11mem⟩ hgcont.continuousOn
+  rw [hKc, Set.mem_setOf_eq] at hpmin_mem
+  refine ⟨pmin.1, pmin.2, hpmin_mem.1, hpmin_mem.2.1, ?_⟩
+  intro T₁ T₂ hT₁ hT₂
+  by_cases hcase : g (T₁, T₂) ≤ B
+  · have hmem : (T₁, T₂) ∈ Kc := by
+      rw [hKc, Set.mem_setOf_eq]
+      obtain ⟨hc1, hc2⟩ := hbound T₁ T₂ hT₁ hT₂ hcase
+      exact ⟨hT₁, hT₂, hc1, hc2⟩
+    exact isMinOn_iff.mp hpmin_min (T₁, T₂) hmem
+  · have hpB : g pmin ≤ B := isMinOn_iff.mp hpmin_min (1, 1) h11mem
+    exact le_trans hpB (le_of_lt (not_le.mp hcase))
 
 /-- **Wolf Proposition 2.9: generic normal form for CP maps with full Kraus rank.**
 
