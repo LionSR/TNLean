@@ -94,6 +94,18 @@ end MatrixInstances
     NormedAlgebra ℂ (TNLean.MatrixCLM n) :=
   ContinuousLinearMap.toNormedAlgebra
 
+instance instNormOneClassMatrixCLM
+    (n : Type*) [Fintype n] [DecidableEq n] [Nonempty n] :
+    NormOneClass (TNLean.MatrixCLM n) := by
+  constructor
+  change ‖(ContinuousLinearMap.id ℂ (Matrix n n ℂ))‖ = 1
+  exact ContinuousLinearMap.norm_id (𝕜 := ℂ) (E := Matrix n n ℂ)
+
+instance instNormOneClassMatrixCLMFin
+    (D : ℕ) [NeZero D] : NormOneClass (TNLean.MatrixCLM (Fin D)) := by
+  haveI : Nonempty (Fin D) := Fin.pos_iff_nonempty.mp (NeZero.pos D)
+  infer_instance
+
 instance instENormedAddCommMonoidMatrixCLM
     (n : Type*) [Fintype n] [DecidableEq n] :
     ENormedAddCommMonoid (TNLean.MatrixCLM n) :=

@@ -41,12 +41,6 @@ noncomputable section
 
 variable {D : ℕ}
 
-local instance instEulerNormOneClassMatrixCLM [NeZero D] :
-    NormOneClass (MatrixCLM (Fin D)) := by
-  constructor
-  change ‖(ContinuousLinearMap.id ℂ (Matrix (Fin D) (Fin D) ℂ))‖ = 1
-  exact ContinuousLinearMap.norm_id (𝕜 := ℂ) (E := Matrix (Fin D) (Fin D) ℂ)
-
 section LindbladForms
 
 private abbrev MatChoi (D : ℕ) :=
@@ -232,28 +226,24 @@ theorem cp_semigroup_implies_ccp_generator
 
 /-! ### Euler approximation auxiliary lemmas for CCP → CP -/
 
-private abbrev sgMat (D : ℕ) := Matrix (Fin D) (Fin D) ℂ
-private abbrev sgLM (D : ℕ) := sgMat D →ₗ[ℂ] sgMat D
-private abbrev sgCLM (D : ℕ) := sgMat D →L[ℂ] sgMat D
-
-local instance (priority := 1001) instNormOneClassSgCLM [NeZero D] :
-    NormOneClass (sgCLM D) := by
-  constructor
-  change ‖(ContinuousLinearMap.id ℂ (sgMat D))‖ = 1
-  exact ContinuousLinearMap.norm_id (𝕜 := ℂ) (E := sgMat D)
-
-private def quadMap (G : GeneratorDecomp D) : sgLM D :=
+private def quadMap (G : GeneratorDecomp D) :
+    Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
   Kraus.mapLM (fun _ : Fin 1 => G.κ)
 
-private def eulerStep (G : GeneratorDecomp D) (s : ℝ) : sgLM D :=
-  Kraus.mapLM (fun _ : Fin 1 => (1 : sgMat D) - (s : ℂ) • G.κ) + (s : ℂ) • G.φ
+private def eulerStep (G : GeneratorDecomp D) (s : ℝ) :
+    Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
+  Kraus.mapLM (fun _ : Fin 1 => (1 : Matrix (Fin D) (Fin D) ℂ) - (s : ℂ) • G.κ) +
+    (s : ℂ) • G.φ
 
-private theorem eulerStep_apply (G : GeneratorDecomp D) (s : ℝ) (ρ : sgMat D) :
+private theorem eulerStep_apply (G : GeneratorDecomp D) (s : ℝ)
+    (ρ : Matrix (Fin D) (Fin D) ℂ) :
     eulerStep G s ρ =
       ρ + s • (G.φ ρ + -(G.κ * ρ) + -(ρ * G.κᴴ)) + (s * s) • (G.κ * ρ * G.κᴴ) := by
-  change Kraus.mapLM (fun _ : Fin 1 => (1 : sgMat D) - (s : ℂ) • G.κ) ρ + (s : ℂ) • G.φ ρ =
-    ρ + s • (G.φ ρ + -(G.κ * ρ) + -(ρ * G.κᴴ)) + (s * s) • (G.κ * ρ * G.κᴴ)
-  simp only [Complex.coe_smul, Kraus.mapLM_apply, Kraus.map_apply, Finset.univ_unique,
+  let K : Matrix (Fin D) (Fin D) ℂ := 1 - (s : ℂ) • G.κ
+  change Kraus.mapLM (fun _ : Fin 1 => K) ρ + (s : ℂ) • G.φ ρ =
+    ρ + s • (G.φ ρ + -(G.κ * ρ) + -(ρ * G.κᴴ)) +
+      (s * s) • (G.κ * ρ * G.κᴴ)
+  simp only [K, Complex.coe_smul, Kraus.mapLM_apply, Kraus.map_apply, Finset.univ_unique,
     Fin.default_eq_zero, Fin.isValue, Finset.sum_const, Finset.card_singleton, one_smul,
     sub_eq_add_neg]
   have hconj : (1 + -(s • G.κ))ᴴ = 1 + -(s • G.κᴴ) := by
@@ -285,7 +275,8 @@ private theorem eulerStep_apply (G : GeneratorDecomp D) (s : ℝ) (ρ : sgMat D)
 
 private theorem eulerStep_cp (G : GeneratorDecomp D) {s : ℝ} (hs : 0 ≤ s) :
     IsCPMap (eulerStep G s) := by
-  refine (isCPMap_of_krausMapLM (fun _ : Fin 1 => (1 : sgMat D) - (s : ℂ) • G.κ)).add ?_
+  refine (isCPMap_of_krausMapLM
+    (fun _ : Fin 1 => (1 : Matrix (Fin D) (Fin D) ℂ) - (s : ℂ) • G.κ)).add ?_
   exact G.φ_cp.smul_nonneg hs
 
 private theorem eulerStep_toCLM_eq (G : GeneratorDecomp D) (s : ℝ) :
@@ -303,10 +294,11 @@ private theorem eulerStep_toCLM_eq (G : GeneratorDecomp D) (s : ℝ) :
     Complex.ofReal_mul, Complex.coe_smul, smul_eq_mul, sub_eq_add_neg, pow_two]
 
 private theorem norm_expSemigroupCLM_sub_one_add_smul_le [NeZero D]
-    (A : sgCLM D) {s : ℝ} (hs : 0 ≤ s) :
+    (A : MatrixCLM (Fin D)) {s : ℝ} (hs : 0 ≤ s) :
     ‖expSemigroupCLM A s - (1 + (s : ℂ) • A)‖ ≤ s ^ 2 * ‖A‖ ^ 2 * Real.exp (s * ‖A‖) := by
-  have hrem := @norm_exp_sub_one_sub_self_le (sgCLM D)
-    inferInstance inferInstance inferInstance (instNormOneClassSgCLM (D := D))
+  have hrem := @norm_exp_sub_one_sub_self_le (MatrixCLM (Fin D))
+    inferInstance inferInstance inferInstance
+    (TNOperatorSpace.instNormOneClassMatrixCLMFin D)
     (((s : ℂ) • A))
   have hnorm :
       expSemigroupCLM A s - (1 + (s : ℂ) • A) =
@@ -369,10 +361,6 @@ private theorem norm_eulerStep_toCLM_le [NeZero D]
       Real.exp
         (s * (‖(endEquiv (D := D)) G.toLinearMap‖ +
           T * ‖(endEquiv (D := D)) (quadMap G)‖)) := by
-  haveI : NormOneClass (sgCLM D) := by
-    constructor
-    change ‖(ContinuousLinearMap.id ℂ (sgMat D))‖ = 1
-    exact ContinuousLinearMap.norm_id (𝕜 := ℂ) (E := sgMat D)
   rw [eulerStep_toCLM_eq]
   have hbasic : ‖1 + (s : ℂ) • (endEquiv (D := D)) G.toLinearMap + ((s ^ 2 : ℝ) : ℂ) •
       (endEquiv (D := D)) (quadMap G)‖ ≤
@@ -383,7 +371,7 @@ private theorem norm_eulerStep_toCLM_le [NeZero D]
           (endEquiv (D := D)) (quadMap G)‖ ≤
           ‖1 + (s : ℂ) • (endEquiv (D := D)) G.toLinearMap‖ +
             ‖((s ^ 2 : ℝ) : ℂ) • (endEquiv (D := D)) (quadMap G)‖ := norm_add_le _ _
-      _ ≤ (‖(1 : sgCLM D)‖ + ‖(s : ℂ) • (endEquiv (D := D)) G.toLinearMap‖) +
+      _ ≤ (‖(1 : MatrixCLM (Fin D))‖ + ‖(s : ℂ) • (endEquiv (D := D)) G.toLinearMap‖) +
             ‖((s ^ 2 : ℝ) : ℂ) • (endEquiv (D := D)) (quadMap G)‖ := by
             gcongr
             exact norm_add_le _ _
@@ -425,13 +413,14 @@ private theorem generatorDecomp_cp_semigroup (G : GeneratorDecomp D) :
   · subst hD
     exact isCPMap_finZero _
   · haveI : NeZero D := ⟨hD⟩
-    let approx : ℕ → sgLM D := fun n => (eulerStep G (t / (n + 1))) ^ (n + 1)
+    let approx : ℕ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
+      fun n => (eulerStep G (t / (n + 1))) ^ (n + 1)
     have happrox_cp : ∀ n : ℕ, IsCPMap (approx n) := by
       intro n
       have hs : 0 ≤ t / (n + 1) := by positivity
       exact (eulerStep_cp G hs).pow (n + 1)
-    let Lc : sgCLM D := (endEquiv (D := D)) G.toLinearMap
-    let Qc : sgCLM D := (endEquiv (D := D)) (quadMap G)
+    let Lc : MatrixCLM (Fin D) := (endEquiv (D := D)) G.toLinearMap
+    let Qc : MatrixCLM (Fin D) := (endEquiv (D := D)) (quadMap G)
     let C0 : ℝ := ‖Lc‖ + t * ‖Qc‖
     let C1 : ℝ := ‖Lc‖ ^ 2 * Real.exp (t * ‖Lc‖) + ‖Qc‖
     have hbound : ∀ n : ℕ,
@@ -440,8 +429,8 @@ private theorem generatorDecomp_cp_semigroup (G : GeneratorDecomp D) :
           t ^ 2 * Real.exp (t * C0) * C1 / (n + 1) := by
       intro n
       let s : ℝ := t / (n + 1)
-      let F : sgCLM D := (endEquiv (D := D)) (eulerStep G s)
-      let S : sgCLM D := expSemigroupCLM Lc s
+      let F : MatrixCLM (Fin D) := (endEquiv (D := D)) (eulerStep G s)
+      let S : MatrixCLM (Fin D) := expSemigroupCLM Lc s
       have hs_nonneg : 0 ≤ s := by
         dsimp [s]
         positivity

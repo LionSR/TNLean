@@ -38,12 +38,6 @@ section TrotterEstimates
 
 variable {D : ℕ}
 
-local instance instNormOneClassMatrixCLM [NeZero D] :
-    NormOneClass (MatrixCLM (Fin D)) := by
-  constructor
-  change ‖(ContinuousLinearMap.id ℂ (Matrix (Fin D) (Fin D) ℂ))‖ = 1
-  exact ContinuousLinearMap.norm_id (𝕜 := ℂ) (E := Matrix (Fin D) (Fin D) ℂ)
-
 /-- The norm of an operator exponential is bounded by the scalar exponential of the norm. -/
 theorem norm_exp_le_real_exp_norm {A : Type*}
     [NormedRing A] [NormedAlgebra ℂ A] [CompleteSpace A] [NormOneClass A]
@@ -77,9 +71,9 @@ theorem norm_exp_le_real_exp_norm {A : Type*}
 theorem norm_expSemigroupCLM_le [NeZero D]
     (A : MatrixCLM (Fin D)) (t : ℝ) (ht : 0 ≤ t) :
     ‖expSemigroupCLM A t‖ ≤ Real.exp (t * ‖A‖) := by
-  haveI := instNormOneClassMatrixCLM (D := D)
   have h := @norm_exp_le_real_exp_norm (MatrixCLM (Fin D))
-    inferInstance inferInstance inferInstance (instNormOneClassMatrixCLM (D := D))
+    inferInstance inferInstance inferInstance
+    (TNOperatorSpace.instNormOneClassMatrixCLMFin D)
     (((t : ℂ) • A))
   have habs : |t| = t := abs_of_nonneg ht
   change ‖NormedSpace.exp (((t : ℂ) • A))‖ ≤ Real.exp (t * ‖A‖)
@@ -143,9 +137,8 @@ theorem norm_pow_sub_pow_le_of_norm_le [NeZero D]
               gcongr <;> exact norm_mul_le _ _
         _ ≤ M ^ m * ‖A - B‖ + ((m : ℝ) * M ^ m * ‖A - B‖) * M := by
               gcongr
-              · haveI := instNormOneClassMatrixCLM (D := D)
-                exact (@norm_pow_le (MatrixCLM (Fin D)) inferInstance
-                  (instNormOneClassMatrixCLM (D := D)) A m).trans <|
+              · exact (@norm_pow_le (MatrixCLM (Fin D)) inferInstance
+                    (TNOperatorSpace.instNormOneClassMatrixCLMFin D) A m).trans <|
                   pow_le_pow_left₀ (show 0 ≤ ‖A‖ from norm_nonneg _) hA _
         _ = M ^ m * ‖A - B‖ + (m : ℝ) * M ^ (m + 1) * ‖A - B‖ := by
               ring_nf
