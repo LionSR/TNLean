@@ -18,6 +18,7 @@ import TNLean.Channel.POVM.Uniqueness
 import TNLean.Channel.TransferMatrix
 import TNLean.Channel.WolfProps
 import TNLean.Channel.NormalForm
+import TNLean.Channel.LorentzNormalForm
 
 /-!
 # Wolf Lecture Notes — Chapter 2: Representations
@@ -27,12 +28,11 @@ This file indexes the formalization of Chapter 2 of Wolf's
 representations of quantum channels.
 
 The Lorentz-normal-form statements are recorded in
-`TNLean.Channel.LorentzNormalForm`, but the generic normal-form and qubit
-classification proofs are not yet complete.  The compactness/minimisation
-result is proved there; the remaining proof obligations are the optimality step
-at the minimiser and the SL(2, ℂ) Lorentz-orbit classification.  The index
-mentions those statements by name without importing the unfinished file into the
-default root.
+`TNLean.Channel.LorentzNormalForm`.  The compactness/minimisation result is
+proved there; the remaining proof obligations are the optimality step at the
+minimiser and the SL(2, ℂ) Lorentz-orbit classification.  This index imports
+that file so that the cited formal statements are available from the main
+project import.
 
 ## Coverage summary
 
