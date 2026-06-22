@@ -15,6 +15,18 @@ import TNLean.Algebra.MatrixOperatorSpace
 This file collects Wolf's spectral characterization of irreducibility for
 completely positive maps on `M_D(ℂ)`.
 
+**Wolf Theorem 6.4** states: for a positive map `T` with spectral radius `%`,
+the following are equivalent:
+1. `T` is irreducible.
+2. The spectral radius `%` is a non-degenerate eigenvalue and the corresponding
+   right and left eigenvectors are positive definite, i.e.,
+   `T(X) = %X > 0` and `T*(Y) = %Y > 0`.
+
+The proof of `1 → 2` follows from Theorem 6.3 applied to `T` and `T*`.
+The converse `2 → 1` uses the similarity transformation Eq. (6.34) with
+`c = 1/%` and `C = Y^{-1/2}` to obtain a TP map with PD fixed point, then
+derives a contradiction from a hypothetical invariant projection.
+
 ## Main declarations
 
 * `HasSpectralProperties`:
@@ -32,7 +44,7 @@ completely positive maps on `M_D(ℂ)`.
 ## Formalization note
 
 Wolf states that the spectral-radius eigenvalue is *non-degenerate*.  In the
-current API we formalize exactly the part needed for the irreducibility
+current interface we formalize exactly the part needed for the irreducibility
 argument: any positive-semidefinite right eigenvector for the distinguished
 positive eigenvalue is a scalar multiple of the Perron eigenvector.
 
@@ -48,7 +60,7 @@ variable {D : ℕ}
 
 noncomputable section
 
-/-! ## Small linear-algebra helpers -/
+/-! ## Small linear-algebra auxiliary lemmas -/
 
 private noncomputable def sandwichLinearMap
     (L R : Matrix (Fin D) (Fin D) ℂ) :
@@ -59,18 +71,6 @@ private noncomputable def sandwichLinearMap
   map_smul' a X := by
     simp [Matrix.mul_assoc]
 
-private lemma isOrthogonalProjection_one_sub
-    {P : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsOrthogonalProjection P) :
-    IsOrthogonalProjection (1 - P) := by
-  refine ⟨Matrix.isHermitian_one.sub hP.1, ?_⟩
-  calc
-    (1 - P) * (1 - P) = 1 - P - P + P * P := by
-      noncomm_ring
-    _ = 1 - P := by
-      rw [hP.2]
-      abel
-
 private lemma trace_ne_zero_of_orthogonalProjection_ne_zero
     {P : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsOrthogonalProjection P) (hP_ne : P ≠ 0) :
@@ -78,15 +78,6 @@ private lemma trace_ne_zero_of_orthogonalProjection_ne_zero
   have hP_psd : P.PosSemidef := isOrthogonalProjection_posSemidef hP
   intro htr
   exact hP_ne ((hP_psd.trace_eq_zero_iff).1 htr)
-
-private lemma ne_zero_of_mem_densityMatrices
-    {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hρ : ρ ∈ densityMatrices D) :
-    ρ ≠ 0 := by
-  intro hρ0
-  have htr : Matrix.trace ρ = 1 := hρ.2
-  rw [hρ0, Matrix.trace_zero (Fin D) ℂ] at htr
-  exact zero_ne_one htr
 
 private lemma normalizedProjection_mem_densityMatrices
     {P : Matrix (Fin D) (Fin D) ℂ}
@@ -96,8 +87,7 @@ private lemma normalizedProjection_mem_densityMatrices
   have htrP_ne : Matrix.trace P ≠ 0 := trace_ne_zero_of_orthogonalProjection_ne_zero hP hP_ne
   refine ⟨?_, ?_⟩
   · exact hP_psd.smul (inv_nonneg_of_nonneg hP_psd.trace_nonneg)
-  · change Matrix.trace (((Matrix.trace P)⁻¹) • P) = 1
-    simp [Matrix.trace_smul, htrP_ne]
+  · simp [Matrix.trace_smul, htrP_ne]
 
 private lemma normalizedProjection_corner
     {P : Matrix (Fin D) (Fin D) ℂ}
@@ -147,7 +137,7 @@ private theorem proj_mul_posDef_mul_proj_ne_zero
     Finset.mem_univ, ite_true] at h
   simpa using h
 
-/-! ## Spectral property package -/
+/-! ## Spectral property state -/
 
 /-- A Kraus-witness formulation of the spectral properties in Wolf Theorem 6.4.
 
@@ -306,22 +296,36 @@ theorem isIrreducibleMap_of_channel_posDef_fixedPoint_unique
     rw [Matrix.mul_smul, Matrix.smul_mul, Finset.mul_sum, Finset.sum_mul]
     congr 1
     exact Finset.sum_congr rfl (fun n _ => hcorner_iter n)
+  haveI : TopologicalSpace.PseudoMetrizableSpace (Matrix (Fin D) (Fin D) ℂ) :=
+    PseudoEMetricSpace.pseudoMetrizableSpace
+  haveI : FirstCountableTopology (Matrix (Fin D) (Fin D) ℂ) :=
+    TopologicalSpace.PseudoMetrizableSpace.firstCountableTopology
   obtain ⟨σ, _hσ_mem, φ, hφ_mono, hφ_tendsto⟩ :=
     densityMatrices_isCompact.tendsto_subseq hces_mem
   have hσ_tendsto : Filter.Tendsto
       (fun k => cesaroMean E ρ₀ (φ k + 1))
       Filter.atTop (nhds σ) := by
-    simpa [Function.comp] using hφ_tendsto
+    convert hφ_tendsto using 1
+    ext k
+    rfl
   have hσ_lim : σ ∈ densityMatrices D ∧ E σ = σ :=
     IsChannel.cesaroMean_subseq_limit_fixedPoint (E := E) hE hρ₀_mem
       hφ_mono.tendsto_atTop hσ_tendsto
   have hσ_fix : E σ = σ := hσ_lim.2
-  have hσ_ne : σ ≠ 0 := ne_zero_of_mem_densityMatrices (D := D) hσ_lim.1
+  have hσ_ne : σ ≠ 0 := by
+    intro hσ0
+    have htr : Matrix.trace σ = 1 := hσ_lim.1.2
+    rw [hσ0, Matrix.trace_zero (Fin D) ℂ] at htr
+    exact zero_ne_one htr
   have hcorner_tendsto : Filter.Tendsto
       (fun k => P * cesaroMean E ρ₀ (φ k + 1) * P)
       Filter.atTop (nhds (P * σ * P)) := by
-    exact ((LinearMap.continuous_of_finiteDimensional
-      (sandwichLinearMap (D := D) P P)).tendsto σ).comp hσ_tendsto
+    let corner : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ :=
+      LinearMap.toContinuousLinearMap (sandwichLinearMap (D := D) P P)
+    change Filter.Tendsto
+      ((sandwichLinearMap (D := D) P P) ∘ fun k => cesaroMean E ρ₀ (φ k + 1))
+      Filter.atTop (nhds ((sandwichLinearMap (D := D) P P) σ))
+    simpa [corner] using (corner.continuous.tendsto σ).comp hσ_tendsto
   have hcorner_seq_eq :
       (fun k => P * cesaroMean E ρ₀ (φ k + 1) * P) =
         fun k => cesaroMean E ρ₀ (φ k + 1) := by
@@ -343,15 +347,13 @@ theorem isIrreducibleMap_of_channel_posDef_fixedPoint_unique
   have hρ_corner : P * ρ * P = ρ := by
     have h := congrArg (fun M => (c⁻¹ : ℂ) • M) hρ_corner_scaled
     simpa [smul_smul, hc_ne, Matrix.mul_assoc] using h
-  have hQ_proj : IsOrthogonalProjection (1 - P) := isOrthogonalProjection_one_sub hP_proj
+  have hQ_proj : IsOrthogonalProjection (1 - P) := hP_proj.one_sub
   have hQ_ne : 1 - P ≠ 0 := by
     intro hQ0
     apply hP1
     exact (sub_eq_zero.mp hQ0).symm
-  have _hQP : (1 - P) * P = 0 := by
-    rw [sub_mul, one_mul, hP_proj.2, sub_self]
-  have hPQ : P * (1 - P) = 0 := by
-    rw [mul_sub, mul_one, hP_proj.2, sub_self]
+  have _hQP : (1 - P) * P = 0 := IsIdempotentElem.one_sub_mul_self hP_proj.2
+  have hPQ : P * (1 - P) = 0 := IsIdempotentElem.mul_one_sub_self hP_proj.2
   have hQρQ_zero : (1 - P) * ρ * (1 - P) = 0 := by
     calc
       (1 - P) * ρ * (1 - P)
@@ -362,8 +364,6 @@ theorem isIrreducibleMap_of_channel_posDef_fixedPoint_unique
 
 /-! ## Reverse implication: spectral properties ⇒ irreducible -/
 
--- Lean 4.29 `unusedTactic` linter false-positives on the final `have`/`rw`/`exact` block
-set_option linter.unusedTactic false in
 /-- **Wolf Theorem 6.4, reverse direction** for CP maps.
 
 Starting from a positive-definite right eigenvector and a positive-definite left
@@ -432,10 +432,7 @@ theorem isIrreducibleMap_of_hasSpectralProperties
           = ∑ i : Fin n,
               (S * (d • K i) * S⁻¹) * X * (S * (d • K i) * S⁻¹)ᴴ := by
                 subst B
-                subst A'
-                subst S
-                simp [MPSTensor.transferMap_apply, MPSTensor.tpGauge]
-                rfl
+                simp [MPSTensor.transferMap_apply, MPSTensor.tpGauge, hA'_def, hS_def]
       _ = ∑ i : Fin n,
               (↑r : ℂ)⁻¹ • (S * (K i * (S⁻¹ * X * S⁻¹) * (K i)ᴴ) * S) := by
             refine Finset.sum_congr rfl ?_
@@ -445,7 +442,7 @@ theorem isIrreducibleMap_of_hasSpectralProperties
             rw [← Finset.smul_sum]
       _ = (↑r : ℂ)⁻¹ •
             (S * (∑ i : Fin n, K i * (S⁻¹ * X * S⁻¹) * (K i)ᴴ) * S) := by
-            rw [Matrix.sum_mul_mul]
+            simp only [← Matrix.sum_mul, ← Matrix.mul_sum]
       _ = (↑r : ℂ)⁻¹ • (S * E (S⁻¹ * X * S⁻¹) * S) := by
             rw [hE_eq]
             simp [MPSTensor.transferMap_apply]

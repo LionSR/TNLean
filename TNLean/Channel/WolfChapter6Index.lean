@@ -36,7 +36,7 @@ No new proofs are introduced here; this is a documentation-only index module.
 
 ---
 
-## §6.2 Irreducible maps and Perron–Frobenius theory
+## Section 6.2 Irreducible maps and Perron–Frobenius theory
 
 ### Wolf Theorem 6.2 (Irreducible positive maps) — ITEMS 1,2,4 FORMALIZED
 
@@ -98,7 +98,7 @@ for the Perron–Frobenius eigenvalue.
   Full Cesàro convergence: for every density matrix `ρ`,
   `(1/N) ∑_{t=0}^{N-1} E^[t](ρ) → σ`.
 
-Supporting infrastructure in `TNLean.Channel.Irreducible.Ergodicity`:
+Supporting formalization in `TNLean.Channel.Irreducible.Ergodicity`:
 * `IsChannel.iter_mem_densityMatrices`: iterates of a channel preserve density matrices.
 * `IsChannel.cesaroMean_subseq_limit_fixedPoint`: any subsequential Cesàro limit is
   a density-matrix fixed point (compactness + telescoping argument).
@@ -128,7 +128,7 @@ Uses Brouwer's fixed-point theorem on density matrices (proved in
 * Full Wolf form `T' = c C⁻¹ T(C · C†) C⁻†`:
   `isIrreducibleMap_full_similarity` (and the stronger
   `isIrreducibleMap_similarity_smul`) — `TNLean.Channel.Irreducible.Similarity`
-* Numbered wrapper: `Kraus.wolf_prop_6_6` — `TNLean.Channel.WolfChapter6Wrappers`
+* Numbered theorem: `Kraus.wolf_prop_6_6` — `TNLean.Channel.WolfChapter6Wrappers`
 
 ### Wolf Theorem 6.6 (Peripheral spectrum of irreducible Schwarz maps)
 
@@ -140,7 +140,7 @@ PARTIALLY FORMALIZED in `TNLean.Channel.Peripheral.CyclicDecomposition`.
 
 ---
 
-## §6.3 Primitive maps
+## Section 6.3 Primitive maps
 
 ### Wolf Theorem 6.7 (Primitive maps, 4 equivalent conditions)
 
@@ -148,40 +148,41 @@ PARTIALLY FORMALIZED in `TNLean.Channel.Peripheral.CyclicDecomposition`.
 * `IsPrimitive` — `TNLean.Channel.Peripheral.Spectrum`
 * `isPrimitive_of_compl_eigenvalues_lt_one` / `compl_eigenvalue_norm_lt_one_of_primitive`
 
-Other items: PARTIALLY via spectral gap infrastructure in `TNLean.Spectral.*`.
+Other items: PARTIALLY via transfer-operator gap formalization in `TNLean.Spectral.*`.
 
 ### Wolf Theorem 6.8 (CP primitive maps, Kraus span characterizations)
 
-* `IsPrimitivePaper` — `TNLean.Wielandt.Primitivity.PaperDefinitions`
+* `IsPrimitivePaper` — `TNLean.Wielandt.Primitivity.Definitions`
   (item 3: `Kₘ = M_d(ℂ)` for `m ≥ q`)
-* Pairwise equivalences from Proposition 3 assembly:
+* Pairwise equivalences from Proposition 3:
   * `primitivePaper_iff_hasEventuallyFullKrausRank` / `primitivePaper_iff_stronglyIrreducible`
     (in `TNLean.Wielandt.Primitivity.Equivalence`)
   * `hasEventuallyFullKrausRank_iff_isNormal`
-    (in `TNLean.Wielandt.Primitivity.PaperDefinitions`)
-* Packaged Wolf-facing wrappers:
+    (in `TNLean.Wielandt.Primitivity.Definitions`)
+* Formulated Wolf-facing formulations:
   * `wolf_theorem_6_8_kraus_span`
   * `wolf_theorem_6_8_conjunction`
   (in `TNLean.Wielandt.Primitivity.Equivalence`)
 
 ### Wolf Theorem 6.9 (Quantum Wielandt inequality)
 
-Current paper-facing wrappers live in `TNLean.Wielandt.PaperResults.WielandtInequality`:
+Current formal statements live in `TNLean.Wielandt.Inequality.Bounds`:
 * `qIndex_le_iIndex_of_isPrimitivePaper`
 * `wordSpan_eq_top_of_isPrimitivePaper_of_isUnit` /
   `iIndex_le_of_isPrimitivePaper_of_isUnit`
 * `wordSpan_eq_top_of_isPrimitivePaper_of_noninvertible_eigenvector` /
   `iIndex_le_sq_of_noninvertible_eigenvector`
 
-The auxiliary aperiodicity-based assembly remains in
-`TNLean.Wielandt.QuantumWielandt`; it is not the default paper-facing
-endpoint.
+The positive-definite primitive-to-normal theorem is
+`MPSTensor.isNormal_of_isPrimitiveMPS_with_posDef` in
+`TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank`; it is not the
+Wielandt index bound itself.
 
 ---
 
-## §6.4 Fixed points
+## Section 6.4 Fixed points
 
-### Wolf §6 stationary-support package (Props. 6.9--6.11, Lems. 6.4--6.5)
+### Wolf Section 6 stationary-support state (Propositions 6.9--6.11, Lems. 6.4--6.5)
 
 In `TNLean.Channel.FixedPoint.StationarySupport`:
 
@@ -191,7 +192,7 @@ In `TNLean.Channel.FixedPoint.StationarySupport`:
   fixed point of an irreducible channel.
 * `Channel.stationarySupport_eq_one` — irreducible channels have full
   stationary support.
-* TODO: non-vacuous formalizations of Wolf Prop. 6.9 and Prop. 6.10
+* TODO: non-vacuous formalizations of Wolf Proposition 6.9 and Proposition 6.10
   (`irreducible_iff_support_full`, `stationary_support_minimal`) remain to be
   reinstated.
 
@@ -208,7 +209,7 @@ In `TNLean.Channel.FixedPoint.Algebra`:
 * `Kraus.fixedPoints_in_multiplicativeDomain` — the key intermediate step:
   every fixed point of the adjoint map lies in the multiplicative domain.
 * `Kraus.fixedPoints_starSubalgebra` / `Kraus.mem_fixedPoints_starSubalgebra`
-  — prompt-facing wrapper with Wolf naming convention.
+  — numbered theorem with Wolf naming convention.
 
 ### Wolf Theorem 6.13 (Fixed points and Kraus commutant) — FORMALIZED
 
@@ -223,7 +224,7 @@ In `TNLean.Channel.FixedPoint.Algebra`:
   — the Kraus commutant is the **largest** `*`-subalgebra contained in the
   fixed-point set of the adjoint map.
 * `Kraus.adjointFixedPointsStarSubalgebra_eq_krausCommutantStarSubalgebra`
-  — under the hypotheses of Thm 6.12, the full adjoint fixed-point
+  — under the hypotheses of Theorem 6.12, the full adjoint fixed-point
   `*`-subalgebra coincides with the Kraus commutant.
 
 ### Wolf Theorem 6.10 (Brouwer's fixed point theorem)
@@ -238,7 +239,7 @@ In `TNLean.Channel.FixedPoint.Algebra`:
 ### Wolf Proposition 6.8 (Positive fixed-points)
 
 * `IsChannel.posSemidef_parts_of_hermitian_fixedPoint` — `TNLean.Channel.FixedPoint.Cesaro`
-* Numbered wrapper: `IsChannel.wolf_prop_6_8` — `TNLean.Channel.WolfChapter6Wrappers`
+* Numbered theorem: `IsChannel.wolf_prop_6_8` — `TNLean.Channel.WolfChapter6Wrappers`
 
 ### Wolf Corollary 6.6 (projected support corner) — NOT YET FORMALIZED
 
@@ -297,7 +298,7 @@ In `TNLean.Channel.FixedPoint.ConditionalExpectation`:
   `T*(E_σ(X)) = E_σ(X)` when `T` is TP.
 * `Kraus.scalarConditionalExpectation_isConditionalExpectation` —
   bundles everything into `IsConditionalExpectation` for the scalar case.
-* Numbered wrapper: `Kraus.wolf_theorem_6_15_scalar` —
+* Numbered theorem: `Kraus.wolf_theorem_6_15_scalar` —
   `TNLean.Channel.WolfChapter6Wrappers`.
 
 The general irreducible case with period `h > 1` requires Wedderburn blocks
@@ -305,11 +306,11 @@ The general irreducible case with period `h > 1` requires Wedderburn blocks
 
 ---
 
-## §6.5 Cycles and recurrences
+## Section 6.5 Cycles and recurrences
 
 ### Wolf Theorem 6.16 (Structure of cycles) — PARTIALLY FORMALIZED
 
-* Reusable infrastructure for the permutation-of-blocks direction lives in
+* Reusable formalization for the permutation-of-blocks direction lives in
   `TNLean.Channel.Peripheral.CyclicDecomposition` and
   `TNLean.Channel.Peripheral.Cycles`:
   - `preserves_corner_pow_orderOf_of_perm_decomp` — permutation-of-blocks
@@ -322,11 +323,11 @@ The general irreducible case with period `h > 1` requires Wedderburn blocks
   - `CycleStructure.pow_orderOf_apply_proj` — `(T ^ orderOf σ) (P k) = P k`.
   - `CycleStructure.preserves_corner_pow_orderOf` — `T ^ orderOf σ` preserves
     each corner `P k · M_D(ℂ) · P k`, the corner-preservation half of
-    Thm. 6.16 in its permutation-of-blocks form.
-  - `CycleStructure.ofPermDecomp` — constructor from raw permutation data.
+    Theorem 6.16 in its permutation-of-blocks form.
+  - `CycleStructure.ofPermDecomp` — constructor from explicit permutation data.
 
 * Multi-cycle block-permutation data (disjoint union of cycles with possibly
-  distinct periods) is packaged in `TNLean.Channel.Peripheral.MultiCycleDecomposition`:
+  distinct periods) is formulated in `TNLean.Channel.Peripheral.MultiCycleDecomposition`:
   - `MultiCycleDecomposition T` — bundled data: a finite cycle index `ι`, a
     per-cycle period `period : ι → ℕ` (each nonzero), a projection family
     `P : (c : ι) → Fin (period c) → M_D(ℂ)`, the per-cycle cyclic action
@@ -344,14 +345,14 @@ The general irreducible case with period `h > 1` requires Wedderburn blocks
 * The remaining **existence direction** — that every trace-preserving positive
   Schwarz map admits a `MultiCycleDecomposition` on its asymptotic image, with
   the cycles coming from the Wedderburn decomposition of the fixed-point algebra
-  — depends on Wolf Thm. 6.14 (issues #27 / #360) and is left to future work.
+  — depends on Wolf Theorem 6.14 (issues #27 / #360) and is left to future work.
 
 ---
 
 ## The quantum Perron–Frobenius theorem
 
 * `quantum_perron_frobenius` — `TNLean.QPF.Assembly`
-  Combines existence + positive definiteness + uniqueness (Wolf Thm 6.3).
+  Combines existence + positive definiteness + uniqueness (Wolf Theorem 6.3).
 
 * `injective_transfer_unique_fixed_point'` — same, without `0 < D` hypothesis.
 -/

@@ -124,8 +124,7 @@ theorem peripheralEigenvalues_mul_mem_of_irreducible_unital_of_adjoint_fixedPoin
     isUnit_peripheral_eigenvector K h_unital ρ hρ hfix hIrr X μ hEig_X hμ_norm hX_ne
   have hY_unit : IsUnit Y :=
     isUnit_peripheral_eigenvector K h_unital ρ hρ hfix hIrr Y ν hEig_Y hν_norm hY_ne
-  have hYX_ne : Y * X ≠ 0 := by
-    exact (hY_unit.mul hX_unit).ne_zero
+  have hYX_ne : Y * X ≠ 0 := (hY_unit.mul hX_unit).ne_zero
   -- μ * ν = ν * μ is a peripheral eigenvalue.
   have hEig_prod' : MPSTensor.transferMap (d := d) (D := D) K (Y * X) = (μ * ν) • (Y * X) := by
     rw [mul_comm μ ν]; exact hEig_prod

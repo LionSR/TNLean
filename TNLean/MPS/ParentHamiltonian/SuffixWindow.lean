@@ -11,9 +11,10 @@ import Mathlib.Data.Fin.Tuple.Basic
 # Suffix-window restrictions for parent-Hamiltonian ground spaces
 
 This file introduces restriction maps obtained by fixing a prefix and reading the
-last `L` sites of a state on `K + L` sites. It records the resulting matrix
+last \(L\) sites of a state on \(K + L\) sites. It states the resulting matrix
 identities needed for the open-chain range-reduction argument in
-[CPGSV21, §IV.C].
+[Cirac--Perez-Garcia--Schuch--Verstraete 2021, arXiv:2011.12127,
+Section IV.C, lines 2049--2094].
 
 ## Main results
 
@@ -23,11 +24,12 @@ identities needed for the open-chain range-reduction argument in
 - `MPSTensor.groundSpace_inTailGround` — a ground-space state restricts to
   ground-space states on every suffix slice
 - `MPSTensor.exists_left_tail_compatibility` — extract matrices satisfying
-  `Z j * evalWord A (List.ofFn u) = A j * Y u`
+  \(Z_j A^u = A_j Y_u\)
 
 ## References
 
-* [CPGSV21] arXiv:2011.12127, lines 2049–2078
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2021] arXiv:2011.12127,
+  Section IV.C, lines 2049--2078
 -/
 
 open scoped Matrix
@@ -36,8 +38,8 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- Suffix restriction: fixing a prefix `u : Fin K → Fin d` and keeping the last
-`L` sites of a state on `K + L` sites. -/
+/-- Suffix restriction: fixing a prefix \(u\) and keeping the last
+\(L\) sites of a state on \(K + L\) sites. -/
 def tailRestrictₗ {d K L : ℕ} (u : Fin K → Fin d) :
     NSiteSpace d (K + L) →ₗ[ℂ] NSiteSpace d L where
   toFun ψ := fun σ => ψ (Fin.append u σ)
@@ -62,8 +64,8 @@ restricting the last site and then fixing the prefix. -/
   simp only [restrictLast_apply, tailRestrictₗ_apply]
   rw [Fin.append_snoc]
 
-/-- Restricting a ground-space vector of length `L + 1` by fixing the last site
-produces the expected boundary matrix `A j * X`. -/
+/-- Restricting a ground-space vector of length \(L + 1\) by fixing the last site
+produces the expected boundary matrix \(A_j X\). -/
 @[simp] theorem restrictLast_groundSpaceMap (A : MPSTensor d D) {L : ℕ}
     (j : Fin d) (X : Matrix (Fin D) (Fin D) ℂ) :
     restrictLast (groundSpaceMap A (L + 1) X) j = groundSpaceMap A L (A j * X) := by
@@ -72,7 +74,23 @@ produces the expected boundary matrix `A j * X`. -/
   rw [evalWord_ofFn_snoc]
   simp [Matrix.mul_assoc]
 
-/-- If the length-`L` word span is all of `M_D`, then `groundSpaceMap A L` is
+/-- Restricting a ground-space vector of length \(L + 1\) by fixing the first site
+produces the expected boundary matrix \(X A_i\). -/
+@[simp] theorem restrictFirst_groundSpaceMap (A : MPSTensor d D) {L : ℕ}
+    (i : Fin d) (X : Matrix (Fin D) (Fin D) ℂ) :
+    restrictFirst (groundSpaceMap A (L + 1) X) i = groundSpaceMap A L (X * A i) := by
+  ext σ
+  simp only [restrictFirst_apply, groundSpaceMap_apply, evalWord_ofFn_cons]
+  calc
+    Matrix.trace ((A i * evalWord A (List.ofFn σ)) * X)
+        = Matrix.trace (X * (A i * evalWord A (List.ofFn σ))) := by
+            rw [Matrix.trace_mul_comm]
+    _ = Matrix.trace ((X * A i) * evalWord A (List.ofFn σ)) := by
+          rw [Matrix.mul_assoc]
+    _ = Matrix.trace (evalWord A (List.ofFn σ) * (X * A i)) := by
+          rw [Matrix.trace_mul_comm]
+
+/-- If the length-\(L\) word span is all of \(M_D\), then `groundSpaceMap A L` is
 injective. -/
 theorem groundSpaceMap_injective_of_wordSpan_eq_top {A : MPSTensor d D} {L : ℕ}
     (hwordL : wordSpan A L = ⊤) :
@@ -86,7 +104,7 @@ theorem groundSpaceMap_injective_of_wordSpan_eq_top {A : MPSTensor d D} {L : ℕ
   have hXY' := congrArg (fun ψ => ψ (decodeBlock d L (σ 0))) hXY
   simpa [groundSpaceMap_apply, blockTensor, wordOfBlock, decodeBlock] using hXY'
 
-/-- Block injectivity at length `L` implies injectivity of `groundSpaceMap A L`. -/
+/-- Block injectivity at length \(L\) implies injectivity of `groundSpaceMap A L`. -/
 theorem groundSpaceMap_injective_of_isNBlkInjective {A : MPSTensor d D} {L : ℕ}
     (hInj : IsNBlkInjective A L) :
     Function.Injective (groundSpaceMap A L) :=
@@ -115,8 +133,8 @@ form, with the prefix word moved to the right boundary matrix by trace cyclicity
     _ = groundSpaceMap A L (X * evalWord A (List.ofFn u)) σ := by
           simp [groundSpaceMap_apply]
 
-/-- A state on `K + L` sites lies in the tail ground condition if every fixed
-prefix gives an `L`-site ground-space vector. -/
+/-- A state on \(K + L\) sites lies in the tail ground condition if every fixed
+prefix gives an \(L\)-site ground-space vector. -/
 def InTailGround (A : MPSTensor d D) (K L : ℕ) (ψ : NSiteSpace d (K + L)) : Prop :=
   ∀ u : Fin K → Fin d, tailRestrictₗ u ψ ∈ groundSpace A L
 
@@ -133,7 +151,7 @@ theorem groundSpace_inTailGround (A : MPSTensor d D) (K L : ℕ)
 
 /-- From the long left-window condition and the suffix-window condition, extract
 boundary matrices satisfying the common overlap identity
-`Z j * evalWord A (List.ofFn u) = A j * Y u`. -/
+\(Z_j A^u = A_j Y_u\). -/
 theorem exists_left_tail_compatibility {A : MPSTensor d D} {K L₀ : ℕ}
     (hInj : IsNBlkInjective A L₀) {ψ : NSiteSpace d (K + L₀ + 1)}
     (hLeft : InLeftGround A (K + L₀) ψ)

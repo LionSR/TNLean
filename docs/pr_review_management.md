@@ -22,28 +22,42 @@ pinned: true
 5. If unaddressed comments exist: do NOT merge. Either fix first or flag to user.
 6. Present summary to user and let them decide.
 
-## Mathlib-style PR and Documentation Standards (from docs/pr-review.md and docs/doc.md)
+## Mathlib-style PR and Documentation Standards (from docs/MATHLIB_pr-review.md and docs/MATHLIB_doc.md)
 
 PRs should follow the mathlib review checklist — review for: **style**, **documentation**, **location**, **improvements**, and **library integration**.
 
-### Documentation (docs/doc.md)
+### Documentation (docs/MATHLIB_doc.md)
 - Every file needs: copyright header, imports, module docstring with `/-! -/`
 - Module docstring sections (in order): Main definitions, Main statements, Notation, Implementation notes, References, Tags
 - Every `def` must have a docstring. Theorems encouraged. Use backticks for Lean names, LaTeX for math.
 - Sectioning comments `/-! ### Section title -/` for structure within files
 - References should use BibTeX entries
 
-### PR title and description convention
-@codex and @claude generate inconsistent PR titles. Unify before merging:
-- **Title format**: `type(scope): description` — e.g. `feat(Wolf Ch6): add conditional expectation (Thm 6.15)`
-- **Types**: `feat` (new formalization), `fix` (bug/correctness fix), `docs` (documentation only), `style` (formatting/naming), `refactor` (restructure without changing behavior), `ci` (CI/workflow changes)
-- **Scope**: paper tag or chapter — `Wolf Ch2`, `Wolf Ch6`, `1804.04964`, `1708.00029`, `MPS/Chain`, `PEPS`, etc. No brackets.
-- **Description**: lowercase, imperative mood, concise. Reference theorem/proposition numbers where applicable.
-- **Body**: should have `### Motivation` and `### Description` sections. Reference the issue number. List files changed.
-- **Clean up bot-generated titles** before merging — codex/claude often produce verbose or inconsistent titles like `[PR #165 follow-up] BlockedChainFT style cleanups and term-mode endpoint`. Rename to e.g. `style(MPS/Chain): BlockedChainFT term-mode endpoint and naming cleanup`.
+### PR and issue title conventions
+@codex, @claude, and @deepseek can generate inconsistent titles. Unify before merging:
+- **Title format**: `type(scope): description`, for example
+  `feat(Wolf Chapter 6): add conditional expectation (Theorem 6.15)`.
+- **Types**: `feat` (new formalization), `fix` (mathematical or proof correction),
+  `doc` (documentation only), `style` (formatting, naming, prose, or title
+  cleanup), `refactor` (restructure without changing mathematical content),
+  `ci` (CI/workflow changes), `chore` (dependencies or linting).
+- **Scope**: paper tag or chapter, such as `Wolf Chapter 2`, `Wolf Chapter 6`,
+  `1804.04964`, `1708.00029`, `MPS/Chain`, or `PEPS`. No brackets.
+- **Description**: lowercase, imperative mood, concise. Reference
+  theorem/proposition numbers where applicable.
+- **Body**: should have `### Motivation`, `### Description`, and
+  `### Testing` sections. Reference the issue number. List files changed.
+- **Clean up bot-generated titles** before merging. Codex, Claude, and DeepSeek often produce
+  verbose or inconsistent titles like `[PR #165 follow-up] BlockedChainFT style
+  cleanups and term-mode endpoint`. Rename to, for example,
+  `style(MPS/Chain): BlockedChainFT term-mode endpoint and naming cleanup`.
+- **Issue titles**: do not use PR prefixes. Use plain mathematical titles such
+  as `Wolf Chapter 6: fixed-point decomposition for Schwarz maps`,
+  `MPS/CanonicalForm: assemble cyclic sectors at a common blocking length`, or
+  `Tracking: Wolf Chapter 6 spectral properties`.
 
-### Review checklist (docs/pr-review.md)
-- **Style**: code formatting, naming conventions (`naming.html`), PR title/description informative
+### Review checklist (docs/MATHLIB_pr-review.md)
+- **Style**: code formatting, naming conventions (`MATHLIB_naming.md`), PR title/description informative
 - **Documentation**: docstrings on defs, cross-references, proof sketches in comments for complex proofs, warnings for restricted-use code
 - **Location**: declarations in right files, no duplicate results, imports not too heavy, files not too long (>1000 lines → split)
 - **Improvements**: split long proofs into lemmas, use better tactics for readability, simplify proof structure
@@ -89,13 +103,13 @@ Interpretation:
 Three SEPARATE places comments live on a PR. Must check ALL three.
 
 ### 1. Inline review comments (on specific diff lines)
-- **What**: Bugbot (cursor[bot]), Copilot, Codex (chatgpt-codex-connector), and Claude inline findings on specific lines
+- **What**: Bugbot (cursor[bot]), Copilot, Codex (chatgpt-codex-connector), Claude, and DeepSeek inline findings on specific lines
 - **API**: `gh api repos/OWNER/REPO/pulls/N/comments`
 - **NOT returned by**: `gh pr view --json comments` or `--json reviews`
 - **Key fields**: `path`, `line`, `body`, `user.login`, `in_reply_to_id`
 
 ### 2. PR-level comments (conversation thread)
-- **What**: Claude review summaries, human comments, @codex/@claude responses
+- **What**: Claude or DeepSeek review summaries, human comments, @codex/@claude/@deepseek responses
 - **API**: `gh api repos/OWNER/REPO/issues/N/comments` OR `gh pr view N --json comments`
 - **Key fields**: `body`, `author.login`, `createdAt`
 - **Watch for**: Claude sometimes embeds inline-style nits here when it can't post inline
@@ -123,80 +137,65 @@ gh api "repos/$REPO/pulls/$PR/reviews" --jq '.[] | "REVIEW [\(.user.login)] stat
 2. Verify they exist on main or in another open PR
 3. If unique content would be lost, note it in the close comment and create a tracking issue
 
-## How @codex and @claude Respond
+## Auto-Fix and Mention Protocol
 
-### @codex/@claude only trigger from COMMENTS, not issue/PR body
-Putting `@codex` or `@claude` in the body text when creating an issue does nothing. They only trigger from **comments** posted after creation. Must post a separate comment to activate them.
+### Auto-fix labels control review repair
 
-### Issue comments vs PR comments — critical distinction
+The active review-repair loop is label-gated. A pull request with
+`auto-fix-claude` or `auto-fix-codex` is already assigned to the corresponding
+auto-fix workflow. Do not add `@claude auto fix`, `@chatgpt auto fix`, or
+`@deepseek auto fix` trigger comments to a PR that already has one of these
+labels.
+Do not use PR replies as an auto-fix control surface for labeled PRs.
 
-| Where you post | @codex behavior | @claude behavior |
-|---|---|---|
-| **Issue comment** | Creates a **new branch from main**, writes code from scratch. Cannot see any existing PR branch. | Creates a **new branch from main**, writes code from scratch. Same as codex. |
-| **PR comment** | Runs a cloud task on the PR's diff. **CAN push fix commits** to the branch (confirmed: pushed to #215, #214, #213, #200, #198, #133). Sometimes fails with "Codex couldn't complete this request" (#212, #211, #206, #201, #196, #167, #91). Also posts review comments. Works on `]` branches! | Checks out **that PR's branch**, can push fix commits to it. BUT fails on branches with `]` in the name (all codex branches) due to `claude-code-action` branch name validation. |
-| **Merged PR comment** | May trigger but no useful effect. | May trigger but no useful effect. |
+In particular, a PR reply such as `@claude auto fix ...` is not the
+label-gated auto-fix trigger. The explicit mention starts the ordinary
+mention-handler lane, which can duplicate work or race the labeled auto-fix
+workflow. The words `auto fix` without a mention do nothing.
 
-### Key implications
-1. **@codex on issues = fresh start from main.** It will never see the existing PR's code. Good for: creating replacement PRs. Bad for: reviewing or fixing existing PRs.
-2. **@claude on PRs = works on that branch.** Good for: pushing fix commits to an existing PR. Bad for: codex branches (name has `]`).
-3. **Neither can rebase.** Must do locally.
-4. **@codex cannot fetch other branches.** Sandboxed environment blocks `git fetch` (HTTP 403). Asking it to "review branch X" or "push to branch Y" will always fail.
+Use the labels this way:
 
-### Why @claude fails on codex branches — confirmed root cause
-Codex auto-generates branch names from the issue title: `codex/github-mention-{ISSUE_TITLE_SLUG}-{RANDOM}`. Our issue titles use `[brackets]` like `[Wolf Ch6]` or `[1804.04964]`, so `]` flows into the branch name.
-
-The `anthropics/claude-code-action` **explicitly validates branch names** and rejects any containing git special characters `~^:?*[\]`. The exact error:
-```
-Action failed with error: Invalid branch name: "codex/github-mention-wolf-ch5]-schwarz-implies-normal/subnormal-r2wysl".
-Branch names cannot contain control characters, spaces, or special git characters (~^:?*[\]).
-```
-
-This means **every PR created by @codex from a bracket-titled issue → @claude will always fail**. All 30 of our open issues have brackets in their titles.
-
-**The root cause is our issue naming convention.** All 30 open issues use `[brackets]` in titles (e.g. `[Wolf Ch6]`, `[1804.04964]`). Codex strips the `[` but keeps the `]` in the branch slug.
-
-**Solutions:**
-- **ADOPTED: Bracket-free issue naming convention.** Use `Wolf Ch6 —` or `1804.04964 —` instead of `[Wolf Ch6]` or `[1804.04964]`. This prevents `]` from appearing in codex branch names, making them @claude-compatible. Apply to all new issues going forward; existing issues can be renamed as needed.
-- Fix locally (checkout branch, make changes, push) — still needed for existing `]` branches
-- Ask @codex on the issue to create a fresh replacement PR from main (new branch, new PR)
-- @codex on the PR can still run reviews (reads the diff, doesn't need to checkout the branch)
-
-### @codex on issues always creates NEW PRs — causes PR proliferation
-Every @codex trigger on an issue creates a new branch from main → new PR. It CANNOT push to an existing PR's branch. This leads to chains like: PR #162 (original) → Issue #205 (nit) → PR #216 (new PR for a 2-line fix). Or: PR #200 → PR #208, PR #201 → PR #210, PR #165 → PR #215, etc.
-
-**To keep work on the SAME PR branch, use @claude on the PR** (not @codex on an issue). @claude pushes directly to the PR branch. Only falls back to @codex-on-issue when @claude can't work (] branches).
-
-### @codex produces tiny PRs — calibrate task size
-Codex tends to produce very small PRs (6-60 lines) even when asked for substantial work. Examples from 2026-03-24: PR #206 was 6 lines, #207 was 18 lines, #213 was 45 lines. This means:
-- **Don't split tasks too finely** for @codex — it will produce trivially small PRs that create review overhead disproportionate to their value.
-- **Bundle related tasks** into single issue comments (e.g., "fix items 1-5" not 5 separate issues).
-- **For substantial formalization work**, do it locally or in a single orchestrated session rather than farming out to @codex on GitHub.
-
-### What ACTUALLY works
-| Scenario | Solution |
+| Situation | Action |
 |---|---|
-| **Fix** a PR on **any branch** | **@codex on the PR comment** — CAN push fix commits even to `]` branches. Sometimes fails ("couldn't complete"), retry if needed. |
-| **Fix** a PR on a **claude branch** (no `]`) | **@claude on the PR comment** — also pushes directly. Preferred when it works (more reliable than codex). |
-| **Review** a PR (any branch) | @codex on PR comment, or Bugbot/claude-review CI (automated), or locally. |
-| **Rebase** a conflicting PR | Do it locally — neither @codex nor @claude can rebase |
-| **Add new code** related to an issue | @codex or @claude on the issue — both create new branches from main |
+| PR has `auto-fix-claude` or `auto-fix-codex` | Leave the PR to the labeled workflow; monitor checks and review threads. |
+| PR has unresolved, non-outdated line-level review threads and needs mechanical repair | Add the appropriate PR label, then wait for the workflow. |
+| PR only has PR-level comments or review-summary comments | Fix locally, or open a separate issue/mention task if a new branch is intended; the auto-fix label has no review thread to consume. |
+| Labeled workflow reaches its iteration cap, fails, or stalls | Remove or keep the label deliberately, then fix locally or open a narrow follow-up issue. |
+| PR needs a human mathematical decision | Do not ask auto-fix to decide it; comment with the mathematical obstruction or fix locally. |
 
-### Preferred workflow for fixing review comments
-**Always fix on the SAME PR.** No new PRs, no new issues for nits.
+The auto-fix labels are PR-only controls. Adding them to issues does not start
+the review-fix loop. See `docs/ci-automation.md` for the workflow details.
 
-1. PR gets review comments → **@codex on that PR** to fix (works on any branch, including `]`)
-2. For clean branches (no `]`) → can also use **@claude on that PR** (more reliable)
-3. Gets new comments after fix → repeat on the same PR
-4. All comments addressed → merge
+### When to use direct mentions
 
-**Do NOT create issues for nits on existing PRs.** That triggers @codex on the issue which creates a new replacement PR every time, causing proliferation.
+Direct `@claude`, `@chatgpt`, and `@deepseek` mentions are separate from
+labeled auto-fix.
+Use them only for a new delegated task where a separate branch or explicit
+one-off answer is intended.
+They are not a repair mechanism for a PR that is already on the auto-fix label
+lane.
 
-If @codex fails ("couldn't complete") → retry once. If still fails → fix locally.
+Opening an issue whose body contains `@claude`, `@chatgpt`, or `@deepseek` can
+trigger the mention handler, but editing an existing issue body later does not
+reliably create a new task. Post a new issue comment when an existing issue
+should start a mention-handler task. For new issue-based work, mention comments
+create fresh work from `main`, so do not use them for ordinary nits on an
+existing PR branch.
+The DeepSeek mention path is mention-only: it uses `deepseek/issue-<number>-...`
+branches for issue-created work and does not add an auto-fix label.
 
-### @codex "committed but not pushed" — don't retry, ask user to click portal
-When @codex says it committed (gives a SHA) but the commit isn't on the branch, the fix exists in the Codex cloud sandbox. **Do NOT retry** — that would create duplicate work. Instead, ask the user to click the Codex portal link (the "View task →" URL in the response) to push the commit. Only retry if the portal link doesn't work.
+### Branch-name caveat for mention handlers
 
-**This applies to ALL @codex triggers** — both issue comments (which create new PRs) and PR comments (which push fix commits). In all cases, the user must click the portal link to finalize. Collect all pending portal links and present them in a batch so the user can click them all at once.
+Old bracketed issue titles such as `[Wolf Chapter 6] ...` can put `]` into bot
+branch names. Some mention-handler checkouts reject such branch names. New
+issues should keep titles bracket-free, for example `Wolf Chapter 6: ...`.
+
+### Task-size calibration
+
+Mention-handler agents tend to produce small PRs. Bundle related source-facing
+formula or prose repairs into a single issue comment rather than opening many
+tiny tasks. For substantial formalization work, prefer a local branch or an
+explicitly scoped issue whose output is one reviewable PR.
 
 ## PR Follow-up Wisdom
 
@@ -204,28 +203,19 @@ When @codex says it committed (gives a SHA) but the commit isn't on the branch, 
 1. **Get the full open PR list** — `gh pr list --state open`
 2. **For EACH PR**, check all 3 comment types (inline, PR-level, reviews) using the script above
 3. **Identify what's unresolved** — don't just count comments, READ them
-4. **Post the follow-up ON THE PR itself** — not on a separate issue
-5. **Always post an actionable fix REQUEST, not just a status report.** End with "Please fix and push." Don't just restate the issues — ask @codex/@claude to address them.
-6. **Use @claude on the PR** for clean branches (pushes fix directly, same branch)
-7. **For `]` branches**, post @codex fix request on the PR (it can't push but confirms the issue and keeps it actionable). Also document what needs local fixing.
-7. **Don't create issues for nits** — that spawns new PRs via @codex, causing proliferation
-8. **Merge clean PRs immediately** — don't let them sit. If ALL comments from ALL reviewers (Bugbot, Claude, Codex, Copilot, humans) are addressed, CI green, no unresolved inline/PR-level/review comments across all 3 endpoints → merge right away. No reason to batch or delay.
-
-### @codex on PR comments: push vs no-push
-@codex sometimes describes changes in a "Summary" response but **does not actually push**. Always verify by checking commit count (`gh api repos/OWNER/REPO/pulls/N/commits | jq length`). If commit count didn't increase, the fix was not applied.
-
-**The user may need to manually click "Update branch" in the Codex web portal** to apply the changes. If @codex says it finished but no commits appear on the PR branch, remind the user to check the Codex portal and click to update.
-
-Also: @codex sometimes gives **superficial "no major issues" review responses** (e.g., "Didn't find any major issues. Breezy!"). These are NOT thorough reviews. Don't count them as "reviewed." The automated `claude-review` CI and `Cursor Bugbot` CI are far more reliable.
+4. **Respect existing auto-fix labels** — if the PR has an auto-fix label, do not post another mention-trigger request; wait for the labeled workflow or fix locally after it fails/stalls.
+5. **Use labels only for review threads** — if the PR has no auto-fix label and has mechanical unresolved line-level review threads, add the appropriate auto-fix label.
+6. **Handle PR-level comments separately** — if the comments are PR-level, review-summary, or require mathematical judgment, fix locally or write a precise issue comment explaining the obstruction.
+7. **Merge clean PRs immediately** — don't let them sit. If ALL comments from ALL reviewers (Bugbot, Claude, Codex, Copilot, humans) are addressed, CI green, no unresolved inline/PR-level/review comments across all 3 endpoints → merge right away. No reason to batch or delay.
 
 ### After any fix commit, wait for CI + re-review
-Bugbot and claude-review CI run on every new commit. After @codex pushes a fix, **wait for CI to complete** and check for NEW inline comments before declaring the PR ready. Don't assume the fix is clean — the fix itself may introduce new issues (seen repeatedly).
+Bugbot and claude-review CI run on every new commit. After a local or auto-fix
+commit, wait for CI to complete and check for new inline comments before
+declaring the PR ready.
 
 ### Superseded PR chains — don't close prematurely
-When @codex creates a replacement PR (e.g., #200 → #208), the replacement often has its OWN issues. Don't close the original until the replacement is actually clean and ready. Keep both open and track the chain.
-
-### The `]` branch situation
-Most existing PRs have `]` in branch names. @claude can't fix them. **But @codex on the PR CAN push fixes** (confirmed working on 6 PRs). @codex sometimes fails ("couldn't complete") — retry in that case. If @codex also fails repeatedly, fix locally.
+When a replacement PR exists, the replacement often has its own issues. Do not
+close the original until the replacement is clean, linked, and ready.
 
 ### Bugbot feedback loops on complex PRs
 Bugbot (Cursor) runs on every new commit. Fixing one round of Bugbot issues can trigger a new round of different issues on the fix commit (seen on PR #163: 4 issues → fix → 3 new issues → fix → 3 more new issues). Budget for multiple rounds, or batch all fixes in one commit.
@@ -269,9 +259,9 @@ Formalization PRs routinely merge without updating the blueprint. This creates d
 **Ask for MORE per issue** — @codex finishes fast and produces small PRs. Bundle more declarations into each sync issue to reduce PR overhead.
 
 ### Current sync issues (2026-03-24)
-- #217 → PR #220: Ch04 channels (Kraus converse, trace pairing)
-- #218 → PR #222: Ch06 spectral (Thm 6.2 item 3, Thm 6.8 wrappers, Thm 6.15)
-- #219 → PR #221: Ch02 MPS periodic + Ch11 assembly Z-gauge
+- #217 → PR #220: Chapter 04 channels (Kraus converse, trace pairing)
+- #218 → PR #222: Chapter 06 spectral (Theorem 6.2 item 3, Theorem 6.8 wrappers, Theorem 6.15)
+- #219 → PR #221: Chapter 02 MPS periodic + Chapter 11 assembly Z-gauge
 
 ## What Went Wrong — Session 2026-03-23
 

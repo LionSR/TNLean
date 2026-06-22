@@ -1,0 +1,113 @@
+%% =========================================================
+%% Supplement: entropy corollaries in the trivial-middle case
+%% =========================================================
+%%
+%% Source: [Wolf2012QChannels], see also Chapter~\ref{ch:entropy}.
+
+\section{Trivial-factor corollaries}
+
+The partial traces and von~Neumann entropy are introduced in
+Chapter~\ref{ch:entropy}. This supplement collects elementary
+trace-preservation identities and the dimension-1 entropy bound that
+follow directly from those definitions. They are listed as separate
+results because each proof requires only unfolding definitions and
+re-indexing finite sums.
+
+%% The A-, C-, and AC-partial-trace identities are stated as a
+%% complete set of standard results. The AC variant is the one
+%% consumed downstream (subadditivity from SSA with trivial middle
+%% B in StrongSubadditivity.lean).
+
+
+\begin{theorem}[Partial trace over $A$ preserves the full trace]
+    \label{thm:trace_tracea_abc}
+    \lean{Matrix.trace_eq_trace_traceA_ABC}
+    \leanok
+    \uses{def:traceA_ABC}
+    For any tripartite matrix $\rho_{ABC}$,
+    \[
+        \tr(\rho_{ABC}) = \tr(\tr_A(\rho_{ABC})).
+    \]
+\end{theorem}
+
+%% Stated for completeness; the AC variant is the one consumed downstream.
+\begin{proof}\leanok
+    Unfolding the definitions,
+    \[
+        \tr(\tr_A(\rho_{ABC}))
+        = \sum_{b,c} \sum_{a}
+        (\rho_{ABC})_{(a,b,c)(a,b,c)}
+        = \tr(\rho_{ABC}).
+    \]
+\end{proof}
+
+
+\begin{theorem}[Partial trace over $C$ preserves the full trace]
+    \label{thm:trace_tracec_abc}
+    \lean{Matrix.trace_eq_trace_traceC_ABC}
+    \leanok
+    \uses{def:traceC_ABC}
+    For any tripartite matrix $\rho_{ABC}$,
+    \[
+        \tr(\rho_{ABC}) = \tr(\tr_C(\rho_{ABC})).
+    \]
+\end{theorem}
+
+%% Stated for completeness; the AC variant is the one consumed downstream.
+\begin{proof}\leanok
+    Unfolding the definitions,
+    \[
+        \tr(\tr_C(\rho_{ABC}))
+        = \sum_{a,b} \sum_{c}
+        (\rho_{ABC})_{(a,b,c)(a,b,c)}
+        = \tr(\rho_{ABC}).
+    \]
+\end{proof}
+
+
+\begin{theorem}[Partial trace over $AC$ preserves the full trace]
+    \label{thm:trace_traceac_abc}
+    \lean{Matrix.trace_eq_trace_traceAC_ABC}
+    \leanok
+    \uses{def:traceAC_ABC}
+    For any tripartite matrix $\rho_{ABC}$,
+    \[
+        \tr(\rho_{ABC}) = \tr(\tr_{AC}(\rho_{ABC})).
+    \]
+\end{theorem}
+
+%% This lemma is used in StrongSubadditivity.lean to derive
+%% subadditivity from SSA with trivial middle subsystem B.
+\begin{proof}\leanok
+    Unfolding the definitions and interchanging the outer sums,
+    \[
+        \tr(\tr_{AC}(\rho_{ABC}))
+        = \sum_{b} \sum_{a,c}
+        (\rho_{ABC})_{(a,b,c)(a,b,c)}
+        = \tr(\rho_{ABC}).
+    \]
+\end{proof}
+
+
+\begin{theorem}[Entropy vanishes in dimension $1$]
+    \label{thm:entropy_fin_one_zero}
+    \lean{Entropy.vonNeumannEntropy_eq_zero_of_fin_one}
+    \leanok
+    \uses{def:entropy_von_neumann_entropy}
+    If $\rho \in \MN{1}$ is Hermitian and $\tr(\rho) = 1$, then
+    \[
+        S(\rho) = 0.
+    \]
+\end{theorem}
+
+%% This lemma is used in StrongSubadditivity.lean (together with
+%% trace_eq_trace_traceAC_ABC) to derive subadditivity from SSA.
+\begin{proof}\leanok
+    The unique eigenvalue equals the trace, hence equals $1$, and
+    $-1 \cdot \log 1 = 0$:
+    \[
+        \lambda_0 = \tr(\rho) = 1,
+        \qquad
+        S(\rho) = -\lambda_0 \log \lambda_0 = -1 \cdot \log 1 = 0.
+    \]
+\end{proof}

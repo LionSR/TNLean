@@ -1,0 +1,1925 @@
+%% =========================================================
+%% Chapter: Quantum Dynamical Semigroups and GKSL Generators
+%% Wolf reference: Chapter 7
+%% =========================================================
+
+\chapter{Quantum Dynamical Semigroups}
+\label{ch:semigroup}
+
+This chapter develops the theory of one-parameter semigroups of quantum
+channels and characterizes their generators via the
+GKSL (Gorini--Kossakowski--Sudarshan--Lindblad) theorem,
+following~\cite[Chapter~7]{Wolf2012Quantum}.
+
+Section~\ref{sec:semigroup_defs} establishes definitions and
+the basic exponential form
+(Proposition~\ref{thm:continuousDynSemigroup_eq_exp_ch12}).
+Section~\ref{sec:perturbation} gives the Duhamel formula and
+perturbation bound.
+Section~\ref{sec:gksl_generators} develops the generator theory
+and proves the GKSL theorem.
+
+%% ---------------------------------------------------------
+\section{Dynamical semigroups and the exponential form}
+\label{sec:semigroup_defs}
+%% ---------------------------------------------------------
+
+\begin{definition}[Dynamical semigroup]\label{def:dyn_semigroup_ch12}
+    \lean{IsDynSemigroup}\leanok
+    A family of linear maps
+    $T : \R \to (\MN{D} \to_{\ell} \MN{D})$
+    is a \emph{dynamical semigroup} if
+    \begin{enumerate}
+        \item (semigroup law) $T_{t+s} = T_t \circ T_s$
+              for all $t,s \ge 0$; and
+        \item (initial condition) $T_0 = \id$.
+    \end{enumerate}
+    This is \cite[Equation~(7.1)]{Wolf2012Quantum}.
+\end{definition}
+
+\begin{definition}[Continuous dynamical semigroup]\label{def:continuous_dyn_semigroup_ch12}
+    \lean{IsContinuousDynSemigroup}\leanok
+    \uses{def:dyn_semigroup_ch12}
+    A dynamical semigroup $T$ is \emph{norm-continuous} if the map
+    $t \mapsto T_t$ is continuous in the operator norm topology.
+    In finite dimension this coincides with strong continuity.
+\end{definition}
+
+\begin{definition}[Exponential semigroup]\label{def:exp_semigroup_ch12}
+    \lean{expSemigroup, expSemigroupCLM}\leanok
+    Given a generator $L \in \mathrm{End}_{\C}(\MN{D})$, the
+    \emph{exponential semigroup} is
+    \[
+        T_t := e^{tL} = \sum_{k=0}^{\infty} \frac{(tL)^k}{k!}.
+    \]
+\end{definition}
+
+\begin{theorem}[Semigroup law for the exponential]\label{thm:expSemigroupCLM_add_ch12}
+    \lean{expSemigroupCLM_add, expSemigroup_comp}\leanok
+    \uses{def:exp_semigroup_ch12}
+    For all $t,s \in \R$,
+    $e^{(t+s)L} = e^{tL} \cdot e^{sL}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Since $(t \cdot L)$ commutes with $(s \cdot L)$, this follows from
+    the exponential addition formula for commuting elements in a
+    Banach algebra.
+\end{proof}
+
+\begin{theorem}[Exponential semigroup at time $0$]
+    \label{thm:expSemigroupCLM_zero_ch12}
+    \lean{expSemigroupCLM_zero}\leanok
+    \uses{def:exp_semigroup_ch12}
+    The continuous-linear-map exponential satisfies $e^{0L} = \Id$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The exponential of the zero endomorphism is the identity.
+\end{proof}
+
+\begin{theorem}[Continuity of the exponential semigroup]\label{thm:expSemigroupCLM_continuous_ch12}
+    \lean{expSemigroupCLM_continuous, expSemigroup_isContinuousDynSemigroup}\leanok
+    \uses{def:exp_semigroup_ch12}
+    The map $t \mapsto e^{tL}$ is continuous in the operator norm topology.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The exponential is analytic (convergence radius $= \infty$), hence
+    continuous.
+\end{proof}
+
+\begin{theorem}[Derivative of the exponential semigroup]\label{thm:hasDerivAt_expSemigroupCLM_ch12}
+    \lean{hasDerivAt_expSemigroupCLM}\leanok
+    \uses{def:exp_semigroup_ch12}
+    For all $t \in \R$,
+    \[
+        \frac{d}{dt} e^{tL} = e^{tL} \cdot L.
+    \]
+    This is \cite[Equation~(7.2)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Chain rule applied to the composition
+    $\R \xrightarrow{t \mapsto t \cdot L} \mathrm{End}(\MN{D})
+        \xrightarrow{\exp} \mathrm{End}(\MN{D})$.
+\end{proof}
+
+\begin{theorem}[Derivative at the origin]
+    \label{thm:hasDerivAt_expSemigroupCLM_zero_ch12}
+    \lean{hasDerivAt_expSemigroupCLM_zero}\leanok
+    \uses{thm:hasDerivAt_expSemigroupCLM_ch12, thm:expSemigroupCLM_zero_ch12}
+    One has
+    \[
+        \left.\frac{d}{dt} e^{tL}\right|_{t=0} = L.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This is Theorem~\ref{thm:hasDerivAt_expSemigroupCLM_ch12} at $t=0$ together with
+    Theorem~\ref{thm:expSemigroupCLM_zero_ch12}.
+\end{proof}
+
+\begin{theorem}[Generator uniqueness]\label{thm:generator_unique_ch12}
+    \lean{generator_unique}\leanok
+    \uses{def:exp_semigroup_ch12}
+    If $e^{tL} = e^{tL'}$ for all $t \ge 0$, then $L = L'$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Both semigroups agree on $[0,\infty)$, so their derivatives within
+    $[0,\infty)$ at $t=0$ agree.
+    Since $[0,\infty)$ has unique differentials at~$0$, $L = L'$.
+\end{proof}
+
+\begin{theorem}[CLM and linear-map forms coincide]
+    \label{thm:expSemigroup_toCLM_ch12}
+    \lean{expSemigroup_toCLM}\leanok
+    \uses{def:exp_semigroup_ch12}
+    The linear-map exponential semigroup and the continuous-linear-map exponential
+    semigroup agree under the canonical identification of endomorphisms with continuous
+    linear endomorphisms.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This is a direct unpacking of the definition of the linear-map exponential semigroup.
+\end{proof}
+
+\begin{theorem}[Pointwise derivative formula]
+    \label{thm:hasDerivAt_expSemigroup_apply_ch12}
+    \lean{hasDerivAt_expSemigroup_apply}\leanok
+    \uses{thm:hasDerivAt_expSemigroupCLM_ch12, thm:expSemigroup_toCLM_ch12}
+    For every $X \in \MN{D}$ and every $t \in \R$,
+    \[
+        \frac{d}{dt}(e^{tL}(X)) = e^{tL}(L(X)).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Evaluate the derivative of the continuous-linear-map semigroup at $X$ and transport the
+    statement through Theorem~\ref{thm:expSemigroup_toCLM_ch12}.
+\end{proof}
+
+\begin{theorem}[Linear-map exponential semigroup at time $0$]
+    \label{thm:expSemigroup_zero_ch12}
+    \lean{expSemigroup_zero}\leanok
+    \uses{thm:expSemigroup_toCLM_ch12, thm:expSemigroupCLM_zero_ch12}
+    The linear-map exponential semigroup satisfies $e^{0L} = \Id$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Transport Theorem~\ref{thm:expSemigroupCLM_zero_ch12} through
+    Theorem~\ref{thm:expSemigroup_toCLM_ch12}.
+\end{proof}
+
+\begin{theorem}[Exponential semigroup as a dynamical semigroup]
+    \label{thm:expSemigroup_isDynSemigroup_ch12}
+    \lean{expSemigroup_isDynSemigroup}\leanok
+    \uses{def:dyn_semigroup_ch12, thm:expSemigroup_toCLM_ch12,
+        thm:expSemigroup_zero_ch12, thm:expSemigroupCLM_add_ch12}
+    The family $t \mapsto e^{tL}$ satisfies the semigroup law and the initial
+    condition, hence is a dynamical semigroup.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Transport the continuous-linear-map semigroup law from
+    Theorem~\ref{thm:expSemigroupCLM_add_ch12} through
+    Theorem~\ref{thm:expSemigroup_toCLM_ch12}; the initial condition is
+    Theorem~\ref{thm:expSemigroup_zero_ch12}.
+\end{proof}
+
+\begin{theorem}[Every continuous semigroup is exponential]
+    \label{thm:continuousDynSemigroup_eq_exp_ch12}
+    \lean{continuousDynSemigroup_eq_exp}\leanok
+    \uses{def:continuous_dyn_semigroup_ch12, def:exp_semigroup_ch12}
+    Every norm-continuous dynamical semigroup $T$ on $\MN{D}$ is
+    of the form
+    \[
+        T_t = e^{tL}
+    \]
+    for some generator $L \in \mathrm{End}_{\C}(\MN{D})$ and every $t \ge 0$.
+    This is \cite[Proposition~7.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Since $T_0 = \Id$ and $T$ is continuous, the integral
+    $M_\varepsilon = \int_0^\varepsilon T_s\,ds$ is invertible for small
+    $\varepsilon > 0$.
+    Using the semigroup property,
+    $T_t = M_\varepsilon^{-1}(M_{t+\varepsilon} - M_t)$
+    is differentiable for $t \ge 0$.
+    ODE uniqueness then gives $T_t = e^{tL}$ for all $t \ge 0$.
+\end{proof}
+
+%% ---------------------------------------------------------
+\section{Perturbation theory}
+\label{sec:perturbation}
+%% ---------------------------------------------------------
+
+\begin{theorem}[Duhamel formula]\label{thm:duhamel_formula_ch12}
+    \lean{duhamel_formula}\leanok
+    \uses{def:exp_semigroup_ch12, thm:hasDerivAt_expSemigroupCLM_ch12}
+    Let $\Delta = L' - L$. For $t \ge 0$,
+    \[
+        e^{tL'} - e^{tL}
+        = \int_0^t e^{(t-s)L} \Delta\,e^{sL'}\,ds.
+    \]
+    This is \cite[Lemma~7.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Define $f(s) = e^{(t-s)L} e^{sL'}$.
+    Then $f'(s) = e^{(t-s)L} \Delta\,e^{sL'}$
+    (Theorem~\ref{thm:hasDerivAt_expSemigroupCLM_ch12}),
+    and $e^{tL'} - e^{tL} = f(t) - f(0) = \int_0^t f'(s)\,ds$.
+\end{proof}
+
+\begin{theorem}[Perturbation bound]\label{thm:perturbation_bound_ch12}
+    \lean{perturbation_bound}\leanok
+    \uses{thm:duhamel_formula_ch12}
+    For $t \ge 0$,
+    \[
+        \bigl\|e^{tL'} - e^{tL}\bigr\|
+        \le t\,\|\Delta\|
+        \cdot \sup_{s \in [0,t]}\|e^{sL}\|
+        \cdot \sup_{s \in [0,t]}\|e^{sL'}\|,
+    \]
+    where $\Delta = L' - L$.
+    This is \cite[Corollary~7.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Apply the triangle inequality and submultiplicativity of the
+    operator norm to the Duhamel integral
+    (Theorem~\ref{thm:duhamel_formula_ch12}).
+\end{proof}
+
+\begin{corollary}[Perturbation bound under unit-norm control]
+    \label{cor:perturbation_bound_unit_norm_ch12}
+    \lean{perturbation_bound_unit_norm}\leanok
+    \uses{thm:perturbation_bound_ch12}
+    For $t \ge 0$, if $\|e^{sL}\| \le 1$ and $\|e^{sL'}\| \le 1$ for every
+    $s \in [0,t]$, then
+    \[
+        \|e^{tL'} - e^{tL}\| \le t\,\|L' - L\|.
+    \]
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    Apply Theorem~\ref{thm:perturbation_bound_ch12} and bound both suprema by $1$.
+\end{proof}
+
+\begin{lemma}[Dyson-series summability from factorial majorant]
+    \label{lem:summable_dyson_factorial_ch12}
+    \lean{summable_dysonTerm_of_factorial_bound}\leanok
+    Assume a factorial majorant of Dyson--Phillips iterates:
+    \[
+        \|D_n(t)\|
+        \le M\,\frac{(t\,\|L'-L\|\,M)^n}{n!}.
+    \]
+    Then the Dyson series is summable in operator norm.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    This is the Weierstrass M-test step, using the scalar convergence of
+    $\sum_n a^n/n!$ and lifting via norm-bounded summability.
+\end{proof}
+
+\begin{theorem}[Factorial norm bound for Dyson iterates]
+    \label{thm:norm_dysonTerm_le_ch12}
+    \lean{norm_dysonTerm_le}\leanok
+    \uses{def:exp_semigroup_ch12}
+    For $s \in [0,t]$ and $M = \sup_{u \in [0,t]} \|e^{uL}\|$,
+    \[
+        \|\widetilde{T}^{(n)}_s\|
+        \le M\,\frac{(s\,\|\Delta\|\,M)^n}{n!}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:exp_semigroup_ch12}
+    Induction on $n$. The base case uses the semigroup supremum bound.
+    The inductive step bounds the integrand pointwise by
+    $M\|\Delta\| \cdot M(u\|\Delta\|M)^n/n!$ and integrates
+    $\int_0^s u^n\,du = s^{n+1}/(n+1)$, recovering the factorial.
+\end{proof}
+
+\begin{corollary}[Dyson series summability]
+    \label{cor:summable_dysonTerm_ch12}
+    \lean{summable_dysonTerm}\leanok
+    \uses{thm:norm_dysonTerm_le_ch12}
+    The Dyson--Phillips series $\sum_n \widetilde{T}^{(n)}_t$
+    converges in operator norm for every $t \ge 0$.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{thm:norm_dysonTerm_le_ch12, lem:summable_dyson_factorial_ch12}
+    Compose the factorial norm bound
+    (Theorem~\ref{thm:norm_dysonTerm_le_ch12}) with the
+    Weierstrass M-test step
+    (Lemma~\ref{lem:summable_dyson_factorial_ch12}).
+\end{proof}
+
+\begin{corollary}[Factorial norm bound at the final time]
+    \label{cor:norm_dysonTerm_le_at_ch12}
+    \lean{norm_dysonTerm_le_at}\leanok
+    \uses{thm:norm_dysonTerm_le_ch12}
+    For $t \ge 0$, setting $s=t$ in Theorem~\ref{thm:norm_dysonTerm_le_ch12}
+    gives
+    \[
+        \|\widetilde{T}^{(n)}_t\|
+        \le M\,\frac{(t\,\|\Delta\|\,M)^n}{n!},
+    \]
+    where $M = \sup_{u \in [0,t]} \|e^{uL}\|$.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    This is the special case $s=t$ of Theorem~\ref{thm:norm_dysonTerm_le_ch12}.
+\end{proof}
+
+\begin{theorem}[Continuity of Dyson iterates]
+    \label{thm:dysonTerm_continuous_ch12}
+    \lean{dysonTerm_continuous}\leanok
+    \uses{def:exp_semigroup_ch12}
+    Each Dyson iterate $t \mapsto \widetilde{T}^{(n)}_t$ is continuous
+    in the time parameter.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:exp_semigroup_ch12}
+    By induction on $n$. The base case is continuity of the matrix
+    exponential. For the inductive step, the parametric integral
+    $t\mapsto \int_0^t e^{(t-s)L} \Delta\,\widetilde{T}^{(n)}_s\,ds$
+    is continuous by the continuous-parameter primitive theorem;
+    the pasting lemma extends this to all of $\mathbb{R}$ since
+    $\widetilde{T}^{(n+1)}_t = 0$ for $t \le 0$.
+\end{proof}
+
+\begin{theorem}[Factorial bound on the Dyson remainder]
+    \label{thm:norm_dysonRemainder_le_ch12}
+    \lean{norm_dysonRemainder_le}\leanok
+    \uses{thm:duhamel_formula_ch12, thm:norm_dysonTerm_le_ch12}
+    For $s \in [0,t]$, $M = \sup_{u \in [0,t]}\|e^{uL}\|$,
+    and $M' = \sup_{u \in [0,t]}\|e^{uL'}\|$:
+    \[
+        \bigl\|T'_s - \textstyle\sum_{n < N}\widetilde{T}^{(n)}_s\bigr\|
+        \le M'\,\frac{(s\,\|\Delta\|\,M)^N}{N!}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:duhamel_formula_ch12, thm:norm_dysonTerm_le_ch12,
+        thm:dysonTerm_continuous_ch12}
+    Induction on $N$. The base case is the semigroup supremum bound.
+    The inductive step uses the telescoping remainder identity
+    $R_{N+1}(s) = \int_0^s e^{(s-u)L} \Delta\,R_N(u)\,du$
+    (derived from the Duhamel formula), bounds the integrand
+    pointwise, and integrates to recover the factorial.
+\end{proof}
+
+\begin{theorem}[Dyson series identity {\cite[Equation~(7.13)]{Wolf2012Quantum}}]
+    \label{thm:dyson_series_eq_ch12}
+    \lean{dyson_series_eq}\leanok
+    \uses{thm:norm_dysonRemainder_le_ch12, cor:summable_dysonTerm_ch12}
+    For $t \ge 0$, the Dyson--Phillips series equals the perturbed
+    semigroup:
+    \[
+        \sum_{n=0}^{\infty} \widetilde{T}^{(n)}_t = e^{tL'}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:norm_dysonRemainder_le_ch12, cor:summable_dysonTerm_ch12}
+    The partial-sum remainder
+    $\|e^{tL'} - \sum_{n<N}\widetilde{T}^{(n)}_t\|
+        \le M'\,(t\|\Delta\|M)^N/N!$
+    tends to zero as $N \to \infty$, since $c^N/N! \to 0$ for any
+    constant $c$. Together with the summability of the series
+    (Corollary~\ref{cor:summable_dysonTerm_ch12}), this identifies
+    the sum via uniqueness of limits.
+\end{proof}
+
+\begin{corollary}[Tsum form of the Dyson series]
+    \label{cor:tsum_dysonTerm_eq_ch12}
+    \lean{tsum_dysonTerm_eq}\leanok
+    \uses{thm:dyson_series_eq_ch12}
+    $\sum_{n=0}^{\infty} \widetilde{T}^{(n)}_t = e^{tL'}$
+    (tsum form).
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{thm:dyson_series_eq_ch12}
+    Immediate from Theorem~\ref{thm:dyson_series_eq_ch12}.
+\end{proof}
+
+%% ---------------------------------------------------------
+\section{GKSL/Lindblad generators}
+\label{sec:gksl_generators}
+%% ---------------------------------------------------------
+
+This section characterizes generators of semigroups of completely
+positive and trace-preserving maps.
+The central result is the GKSL theorem
+(Theorem~\ref{thm:gksl_iff_lindblad}),
+which shows that such generators have the standard Lindblad form.
+
+\subsection{Generator decomposition and conditional complete positivity}
+
+\begin{definition}[Generator decomposition]\label{def:generator_decomp}
+    \lean{GeneratorDecomp}\leanok
+    A \emph{generator decomposition} consists of a completely positive map
+    $\phi : \MN{d} \to \MN{d}$ and a matrix $\kappa \in \MN{d}$, defining
+    the linear map
+    \[
+        L(\rho) = \phi(\rho) - \kappa\rho - \rho\kappa^\dagger.
+    \]
+    This is \cite[Equation~(7.14)]{Wolf2012Quantum}.
+\end{definition}
+
+\begin{definition}[Conditional complete positivity]\label{def:is_ccp}
+    \lean{IsCCP}\leanok
+    \uses{def:generator_decomp}
+    A linear map $L : \MN{d} \to \MN{d}$ is \emph{conditionally
+        completely positive} (CCP) if it admits a generator decomposition,
+    i.e.\ there exist a CP map $\phi$ and a matrix $\kappa$ such that
+    $L(\rho) = \phi(\rho) - \kappa\rho - \rho\kappa^\dagger$.
+    This is condition~1 of \cite[Proposition~7.2]{Wolf2012Quantum}.
+\end{definition}
+
+\begin{definition}[Trace-annihilating map]\label{def:is_trace_annihilating}
+    \lean{IsTraceAnnihilating}\leanok
+    A linear map $L : \MN{d} \to \MN{d}$ is \emph{trace-annihilating} if
+    $\tr(L(\rho)) = 0$ for all $\rho \in \MN{d}$.
+    This is the infinitesimal version of trace preservation.
+\end{definition}
+
+\begin{definition}[Trace constraint]\label{def:is_trace_constraint}
+    \lean{GeneratorDecomp.isTraceConstraint}\leanok
+    \uses{def:generator_decomp}
+    A generator decomposition $(\phi, \kappa)$ satisfies the
+    \emph{trace constraint} if $\phi^*(\Id) = \kappa + \kappa^\dagger$,
+    where $\phi^*$ is the Hilbert--Schmidt adjoint.
+    This is the condition in \cite[Equation~(7.20)]{Wolf2012Quantum}.
+\end{definition}
+
+\begin{theorem}[Trace constraint implies trace-annihilating]
+    \label{thm:traceAnnihilating_of_traceConstraint}
+    \lean{GeneratorDecomp.traceAnnihilating_of_traceConstraint}\leanok
+    \uses{def:generator_decomp, def:is_trace_annihilating,
+        def:is_trace_constraint}
+    If $(\phi, \kappa)$ satisfies $\phi^*(\Id) = \kappa + \kappa^\dagger$,
+    then $L(\rho) = \phi(\rho) - \kappa\rho - \rho\kappa^\dagger$ is
+    trace-annihilating.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Let $\phi(\rho) = \sum_i K_i \rho K_i^\dagger$.
+    By the cyclic property of trace,
+    $\tr(L(\rho))
+        = \tr((\sum_i K_i^\dagger K_i)\rho)
+        - \tr(\kappa\rho)
+        - \tr(\kappa^\dagger\rho)
+        = \tr((\kappa + \kappa^\dagger)\rho)
+        - \tr(\kappa\rho) - \tr(\kappa^\dagger\rho) = 0$.
+\end{proof}
+
+\subsection{The Lindblad form}
+
+\begin{definition}[Lindblad form]\label{def:lindblad_form}
+    \lean{LindbladForm}\leanok
+    A \emph{Lindblad form} consists of a Hermitian matrix $H = H^\dagger$
+    (the Hamiltonian) and a family of matrices $\{L_j\}_{j=0}^{r-1}$
+    (the Lindblad operators), defining the linear map
+    \[
+        L(\rho)
+        = i[\rho, H]
+        + \sum_{j} \Bigl(        L_j \rho L_j^\dagger
+        - \tfrac{1}{2}\{L_j^\dagger L_j, \rho\}_+
+        \Bigr),
+    \]
+    where $[A,B] = AB - BA$ and $\{A,B\}_+ = AB + BA$.
+    This is \cite[Equation~(7.21)]{Wolf2012Quantum}.
+\end{definition}
+
+\begin{theorem}[Lindblad form is trace-annihilating]
+    \label{thm:lindbladForm_isTraceAnnihilating}
+    \lean{LindbladForm.isTraceAnnihilating}\leanok
+    \uses{def:lindblad_form, def:is_trace_annihilating}
+    Every Lindblad form defines a trace-annihilating linear map.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The Hamiltonian part satisfies
+    $\tr(i[\rho,H]) = 0$ by the cyclic property.
+    Each dissipator term satisfies
+    $\tr(L_j \rho L_j^\dagger) = \tr(L_j^\dagger L_j \rho)
+        = \tr(\rho L_j^\dagger L_j)$,
+    so the three terms sum to zero.
+\end{proof}
+
+\begin{theorem}[Lindblad form equals generator decomposition]
+    \label{thm:lindbladForm_eq_generatorDecomp}
+    \lean{LindbladForm.toLinearMap_eq_generatorDecomp}\leanok
+    \uses{def:lindblad_form, def:generator_decomp}
+    A Lindblad form with Hamiltonian $H$ and operators $\{L_j\}$ defines
+    the same linear map as the generator decomposition $(\phi, \kappa)$
+    with $\phi(\rho) = \sum_j L_j \rho L_j^\dagger$ and
+    $\kappa = iH + \frac{1}{2}\sum_j L_j^\dagger L_j$.
+    This is \cite[Equation~(7.24)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Compute $\kappa^\dagger = -iH + \frac{1}{2}\sum_j L_j^\dagger L_j$
+    using $H^\dagger = H$ and $(A^\dagger A)^\dagger = A^\dagger A$.
+    Setting $S = \sum_j L_j^\dagger L_j$, expand
+    $\phi(\rho) - \kappa\rho - \rho\kappa^\dagger
+        = \sum_j L_j\rho L_j^\dagger - iH\rho - \tfrac{1}{2}S\rho
+        + i\rho H - \tfrac{1}{2}\rho S$,
+    which is $i[\rho,H] + \sum_j(L_j\rho L_j^\dagger
+        - \tfrac{1}{2}L_j^\dagger L_j\rho - \tfrac{1}{2}\rho L_j^\dagger L_j)$.
+\end{proof}
+
+\begin{theorem}[Lindblad form is CCP]
+    \label{thm:lindbladForm_isCCP}
+    \lean{LindbladForm.isCCP}\leanok
+    \uses{def:lindblad_form, def:is_ccp}
+    Every Lindblad form defines a conditionally completely positive map.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:lindbladForm_eq_generatorDecomp}
+    By Theorem~\ref{thm:lindbladForm_eq_generatorDecomp}, the Lindblad
+    form equals a generator decomposition with $\phi$ CP.
+\end{proof}
+
+\begin{definition}[Commutator form of Lindblad equation]\label{def:commutator_form}
+    \lean{LindbladForm.commutatorForm}\leanok
+    \uses{def:lindblad_form}
+    The \emph{commutator form} of the Lindblad equation writes
+    the generator as
+    \[
+        L(\rho)
+        = i[\rho, H]
+        + \tfrac{1}{2}\sum_{j}
+        \bigl([L_j, \rho L_j^\dagger]
+        + [L_j\rho,\,L_j^\dagger]\bigr),
+    \]
+    where $[A,B] = AB - BA$.
+    This is \cite[Equation~(7.22)]{Wolf2012Quantum}.
+\end{definition}
+
+\begin{theorem}[Commutator form equals standard Lindblad form]
+    \label{thm:commutatorForm_eq_toLinearMap}
+    \lean{LindbladForm.commutatorForm_eq_toLinearMap}\leanok
+    \uses{def:commutator_form, def:lindblad_form}
+    The commutator form (Definition~\ref{def:commutator_form}) defines
+    the same linear map as the standard Lindblad form
+    (Definition~\ref{def:lindblad_form}).
+\end{theorem}
+
+\begin{proof}\leanok
+    Expanding the commutator brackets
+    $[L_j, \rho L_j^\dagger]$ and $[L_j\rho, L_j^\dagger]$
+    yields the standard dissipator terms.
+\end{proof}
+
+\subsection{Characterization of conditional complete positivity}
+
+\begin{theorem}[Conditional complete positivity implies projected Choi positivity]
+    \label{thm:ccp_implies_choi_projected}
+    \lean{ccp_implies_choi_projected_posSemidef}\leanok
+    \uses{def:is_ccp}
+    If $L$ is CCP and $P = \Id - \ketbra{\Omega}{\Omega}$, then
+    \[
+        P((L \otimes \id)(\ketbra{\Omega}{\Omega}))P \ge 0.
+    \]
+    This is \cite[Proposition~7.2]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Write $L(\rho) = \phi(\rho) - \kappa\rho - \rho\kappa^\dagger$.
+    The left- and right-multiplication terms are annihilated by $P$, so the
+    projected Choi matrix reduces to the projected Choi matrix of $\phi$, which
+    is positive.
+\end{proof}
+
+\begin{theorem}[Projected Choi positivity implies conditional complete positivity]
+    \label{thm:choi_projected_implies_ccp}
+    \lean{choi_projected_posSemidef_implies_ccp}\leanok
+    \uses{def:is_ccp}
+    If $L$ is Hermiticity-preserving and
+    $P((L \otimes \id)(\ketbra{\Omega}{\Omega}))P \ge 0$
+    where $P = \Id - \ketbra{\Omega}{\Omega}$,
+    then $L$ is CCP.
+    This is \cite[Proposition~7.2]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Decompose the Hermitian Choi matrix as
+    $\tau_L = Q - \ket{\psi}\bra{\Omega} - \ket{\Omega}\bra{\psi}$
+    with $Q \ge 0$ supported on $\ket{\Omega}^\perp$.
+    The Choi--Jamiolkowski isomorphism applied to $Q$ gives
+    the CP map $\phi$, and
+    $(\kappa \otimes \Id)\ket{\Omega} = \ket{\psi}$ defines $\kappa$.
+\end{proof}
+
+\subsection{Completely positive semigroups and conditionally completely positive generators}
+
+\begin{theorem}[CP semigroups have CCP generators]
+    \label{thm:cp_semigroup_implies_ccp}
+    \lean{cp_semigroup_implies_ccp_generator}\leanok
+    \uses{def:cp_map, def:is_ccp, def:exp_semigroup_ch12}
+    If $e^{tL}$ is CP for all $t \ge 0$, then $L$ is CCP.
+    This is \cite[Proposition~7.3]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:choi_projected_implies_ccp}
+    From $(e^{tL} \otimes \id)(\ketbra{\Omega}{\Omega}) \ge 0$,
+    expand at infinitesimal $t$ and project onto $P$ to get
+    $P(L\otimes\id)(\ketbra{\Omega}{\Omega})P \ge 0$.
+    Then Theorem~\ref{thm:choi_projected_implies_ccp} gives CCP.
+\end{proof}
+
+\begin{theorem}[CCP generators yield CP semigroups]
+    \label{thm:ccp_implies_cp_semigroup}
+    \lean{ccp_generator_implies_cp_semigroup}\leanok
+    \uses{def:cp_map, def:is_ccp, def:exp_semigroup_ch12}
+    If $L$ is CCP, then $e^{tL}$ is CP for all $t \ge 0$.
+    This is \cite[Proposition~7.3]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Approximate $e^{tL}$ by the completely positive Euler steps
+    \[
+        \rho \mapsto (\Id - h\kappa)\rho(\Id - h\kappa)^\dagger + h\phi(\rho),
+        \qquad h = \frac{t}{n+1}.
+    \]
+    Each step is CP, hence so are its powers. These powers converge in operator
+    norm to $e^{tL}$, and the cone of CP maps is closed.
+\end{proof}
+
+\begin{theorem}[CP semigroups iff CCP generators]
+    \label{thm:cp_semigroup_iff_ccp}
+    \lean{cp_semigroup_iff_ccp_generator}\leanok
+    \uses{def:cp_map, def:is_ccp, def:exp_semigroup_ch12}
+    $e^{tL}$ is CP for all $t \ge 0$ if and only if $L$ is CCP.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cp_semigroup_implies_ccp, thm:ccp_implies_cp_semigroup}
+    Combine Theorems~\ref{thm:cp_semigroup_implies_ccp}
+    and~\ref{thm:ccp_implies_cp_semigroup}.
+\end{proof}
+
+\subsection{Freedom in generator representation}
+
+\begin{theorem}[Traceless Kraus operators exist]
+    \label{thm:exists_traceless_kraus_shift}
+    \lean{exists_traceless_kraus_shift}\leanok
+    Assume $d > 0$. Given any Kraus operators $\{K_j\}$, there exist $c_j \in \C$
+    such that $K_j' = K_j + c_j \Id$ is traceless.
+    This is part of \cite[Proposition~7.4]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Set $c_j = -\tr(K_j)/d$.
+\end{proof}
+
+\begin{theorem}[Shift invariance of generators]
+    \label{thm:generator_shift_invariance}
+    \lean{generator_shift_invariance}\leanok
+    If $K_j' = K_j + c_j \Id$ and $\kappa'$ is adjusted per
+    \cite[Equation~(7.19)]{Wolf2012Quantum},
+    then $(\phi', \kappa')$ and $(\phi, \kappa)$ define the same generator.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Direct algebraic expansion.
+\end{proof}
+
+\subsection{Uniqueness of the traceless Lindblad form}
+
+\begin{definition}[Traceless Kraus operators]\label{def:has_traceless_kraus}
+    \lean{LindbladForm.HasTracelessKraus}\leanok
+    \uses{def:lindblad_form}
+    A Lindblad form has \emph{traceless Kraus operators} if
+    $\tr(L_j) = 0$ for every $j$.
+\end{definition}
+
+\begin{theorem}[Uniqueness of the completely positive part]
+    \label{thm:generatorDecomp_traceless_unique_phi}
+    \lean{generatorDecomp_traceless_unique_phi}\leanok
+    \uses{def:lindblad_form, def:has_traceless_kraus, def:generator_decomp}
+    If two Lindblad forms $F, F'$ induce the same generator and
+    both have traceless Kraus operators, then their CP parts agree:
+    $\phi = \phi'$.
+    This is part of \cite[Proposition~7.4(2)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Compare projected Choi matrices and use Choi injectivity.
+\end{proof}
+
+\begin{theorem}[Uniqueness of the drift term modulo phase]
+    \label{thm:generatorDecomp_traceless_unique_kappa}
+    \lean{generatorDecomp_traceless_unique_kappa_modPhase}\leanok
+    \uses{def:lindblad_form, def:has_traceless_kraus, def:generator_decomp,
+        thm:generatorDecomp_traceless_unique_phi}
+    If two Lindblad forms $F, F'$ induce the same generator and
+    both have traceless Kraus operators, then their drift matrices
+    differ by an imaginary scalar: $\kappa' = \kappa + i\lambda\,\Id$
+    for some $\lambda \in \R$.
+    This is part of \cite[Proposition~7.4(2)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:generatorDecomp_traceless_unique_phi}
+    After identifying $\phi = \phi'$
+    (Theorem~\ref{thm:generatorDecomp_traceless_unique_phi}),
+    the generator equality forces
+    $\Delta\kappa \cdot \rho + \rho \cdot (\Delta\kappa)^\dagger = 0$
+    for all~$\rho$. Setting $\rho = \Id$ gives $\Delta\kappa + (\Delta\kappa)^\dagger = 0$
+    (skew-Hermiticity), which converts the equation to
+    $[\Delta\kappa, \rho] = 0$ for all~$\rho$.
+    The scalar commutant lemma gives $\Delta\kappa = c \cdot \Id$,
+    and skew-Hermiticity forces $c = i\lambda$ for some $\lambda \in \R$.
+\end{proof}
+
+\begin{theorem}[Combined uniqueness of the traceless Lindblad form]
+    \label{thm:generatorDecomp_traceless_unique}
+    \lean{generatorDecomp_traceless_unique}\leanok
+    \uses{thm:generatorDecomp_traceless_unique_phi,
+        thm:generatorDecomp_traceless_unique_kappa}
+    If two Lindblad forms $F, F'$ induce the same generator and
+    both have traceless Kraus operators, then $\phi = \phi'$ and
+    $\kappa' = \kappa + i\lambda\,\Id$ for some $\lambda \in \R$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:generatorDecomp_traceless_unique_phi,
+        thm:generatorDecomp_traceless_unique_kappa}
+    Combine Theorems~\ref{thm:generatorDecomp_traceless_unique_phi}
+    and~\ref{thm:generatorDecomp_traceless_unique_kappa}.
+\end{proof}
+
+\subsection{Trace-annihilation and trace preservation}
+
+\begin{theorem}[Trace-annihilating generators yield trace-preserving semigroups]
+    \label{thm:ta_implies_tp_semigroup}
+    \lean{isTracePreservingMap_expSemigroup_of_isTraceAnnihilating}\leanok
+    \uses{def:is_trace_annihilating, def:trace_preserving, def:exp_semigroup_ch12}
+    If $L$ is trace-annihilating, then $e^{tL}$ is trace-preserving for every
+    $t \in \R$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For fixed $\rho$, the function $f(t) = \tr(e^{tL}(\rho))$ has derivative
+    $f'(t) = \tr(L(e^{tL}(\rho))) = 0$, so $f$ is constant and
+    $\tr(e^{tL}(\rho)) = f(t) = f(0) = \tr(\rho)$.
+\end{proof}
+
+\begin{theorem}[Trace-preserving semigroups have trace-annihilating generators]
+    \label{thm:tp_semigroup_implies_ta}
+    \lean{isTraceAnnihilating_of_isTracePreservingMap_semigroup}\leanok
+    \uses{def:is_trace_annihilating, def:trace_preserving, def:exp_semigroup_ch12}
+    If $e^{tL}$ is trace-preserving for every $t \ge 0$, then $L$ is
+    trace-annihilating.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Differentiate the identity $\tr(e^{tL}(\rho)) = \tr(\rho)$ at $t = 0$
+    from the right.
+\end{proof}
+
+\subsection{The GKSL/Lindblad theorem}
+
+\begin{definition}[GKSL generator]\label{def:is_gksl_generator}
+    \lean{IsGKSLGenerator}\leanok
+    \uses{def:channel, def:exp_semigroup_ch12}
+    A linear map $L : \MN{d} \to \MN{d}$ is a \emph{GKSL generator}
+    if $e^{tL}$ is a quantum channel (CPTP) for all $t \ge 0$.
+\end{definition}
+
+\begin{theorem}[A trace-constrained generator decomposition gives a GKSL generator]
+    \label{thm:gksl_of_generatorDecomp}
+    \lean{gksl_of_generatorDecomp_with_traceConstraint}\leanok
+    \uses{def:cp_map, def:is_gksl_generator, def:generator_decomp,
+        def:is_trace_constraint}
+    If $L(\rho) = \phi(\rho) - \kappa\rho - \rho\kappa^\dagger$ with
+    $\phi$ CP and $\phi^*(\Id) = \kappa + \kappa^\dagger$,
+    then $L$ is a GKSL generator.
+    This is \cite[Theorem~7.1, Equation~(7.20)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ccp_implies_cp_semigroup, thm:traceAnnihilating_of_traceConstraint,
+        thm:ta_implies_tp_semigroup}
+    CP follows from Theorem~\ref{thm:ccp_implies_cp_semigroup}.
+    The trace constraint implies trace-annihilation by
+    Theorem~\ref{thm:traceAnnihilating_of_traceConstraint}, so
+    Theorem~\ref{thm:ta_implies_tp_semigroup} gives trace preservation.
+\end{proof}
+
+\begin{theorem}[GKSL generators admit a trace-constrained generator decomposition]
+    \label{thm:generatorDecomp_of_gksl}
+    \lean{generatorDecomp_of_gksl}\leanok
+    \uses{def:cp_map, def:is_gksl_generator, def:generator_decomp, def:is_trace_constraint}
+    If $L$ is a GKSL generator, then there exist a CP map $\phi$ and a matrix
+    $\kappa$ such that
+    \[
+        L(\rho) = \phi(\rho) - \kappa\rho - \rho\kappa^\dagger
+    \]
+    and $\phi^*(\Id) = \kappa + \kappa^\dagger$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cp_semigroup_implies_ccp, thm:tp_semigroup_implies_ta}
+    Apply Theorem~\ref{thm:cp_semigroup_implies_ccp} to obtain a CCP
+    decomposition. Then apply Theorem~\ref{thm:tp_semigroup_implies_ta} to the
+    trace-preserving part of the semigroup and rewrite the resulting
+    trace-annihilation condition as $\phi^*(\Id) = \kappa + \kappa^\dagger$.
+\end{proof}
+
+\begin{theorem}[GKSL iff conditional complete positivity and trace annihilation]
+    \label{thm:gksl_iff_ccp_ta}
+    \lean{gksl_iff_ccp_and_traceAnnihilating}\leanok
+    \uses{def:is_gksl_generator, def:is_ccp, def:is_trace_annihilating}
+    $L$ is a GKSL generator if and only if $L$ is CCP and
+    trace-annihilating.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cp_semigroup_implies_ccp, thm:ccp_implies_cp_semigroup,
+        thm:ta_implies_tp_semigroup, thm:tp_semigroup_implies_ta}
+    Forward: apply Theorem~\ref{thm:cp_semigroup_implies_ccp} to the CP part and
+    Theorem~\ref{thm:tp_semigroup_implies_ta} to the TP part.
+    Reverse: combine Theorem~\ref{thm:ccp_implies_cp_semigroup} with
+    Theorem~\ref{thm:ta_implies_tp_semigroup}.
+\end{proof}
+
+\begin{theorem}[GKSL iff Lindblad form]
+    \label{thm:gksl_iff_lindblad}
+    \lean{gksl_iff_lindbladForm}\leanok
+    \uses{def:is_gksl_generator, def:lindblad_form}
+    $L$ is a GKSL generator if and only if
+    \[
+        L(\rho)
+        = i[\rho, H]
+        + \sum_j \Bigl(        L_j \rho L_j^\dagger
+        - \tfrac{1}{2}\{L_j^\dagger L_j, \rho\}_+
+        \Bigr)
+    \]
+    with $H = H^\dagger$.
+    This is \cite[Theorem~7.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:generatorDecomp_of_gksl, thm:gksl_iff_ccp_ta,
+        thm:lindbladForm_eq_generatorDecomp, thm:lindbladForm_isCCP,
+        thm:lindbladForm_isTraceAnnihilating,
+        thm:exists_traceless_kraus_shift}
+    Forward: apply Theorem~\ref{thm:generatorDecomp_of_gksl} to write
+    $L(\rho) = \phi(\rho) - \kappa\rho - \rho\kappa^\dagger$ with trace
+    constraint. Then choose traceless Kraus operators by
+    Theorem~\ref{thm:exists_traceless_kraus_shift} and rewrite $\kappa$ as
+    $iH + \frac{1}{2}\phi^*(\Id)$; Theorem~\ref{thm:lindbladForm_eq_generatorDecomp}
+    gives the Lindblad formula.
+    Reverse: Theorems~\ref{thm:lindbladForm_isCCP}
+    and~\ref{thm:lindbladForm_isTraceAnnihilating} show that every Lindblad form
+    satisfies the right-hand side of Theorem~\ref{thm:gksl_iff_ccp_ta}.
+\end{proof}
+
+\subsection{Kossakowski matrix form}
+
+\begin{definition}[Kossakowski form]\label{def:kossakowski_form}
+    \lean{KossakowskiForm}\leanok
+    A \emph{Kossakowski form} consists of $H = H^\dagger$, a finite family
+    of matrices $\{F_k\}_{k=0}^{n-1}$, and a positive semidefinite matrix
+    $C \in \MN{n}$, defining
+    \[
+        L(\rho)
+        = i[\rho, H]
+        + \tfrac{1}{2}\sum_{k,l} C_{lk}\bigl(    [F_k, \rho F_l^\dagger] + [F_k\rho, F_l^\dagger]
+        \bigr).
+    \]
+    In Wolf's formula one takes $\{F_k\}$ to be a basis of traceless matrices;
+    here we keep only the algebraic data needed for the conversion to
+    Lindblad form.
+\end{definition}
+
+\begin{theorem}[Kossakowski form iff Lindblad form]
+    \label{thm:kossakowski_iff_lindblad}
+    \lean{kossakowski_iff_lindblad}\leanok
+    \uses{def:kossakowski_form, def:lindblad_form}
+    A linear map admits a Kossakowski form iff it admits a Lindblad form.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Forward: diagonalize $C = B^\dagger B$ and set
+    $L_j = \sum_k B_{jk} F_k$.
+    Reverse: keep the same Hamiltonian and family $F_k = L_k$, and take
+    $C = \Id$.
+\end{proof}
+
+%% ---------------------------------------------------------
+\section{Primitivity and irreducibility of QDS}
+\label{sec:qds_primitivity}
+%% ---------------------------------------------------------
+
+%% Source: \cite[Section~7.1, Proposition~7.5]{Wolf2012Quantum}.
+\subsection{Auxiliary spectral and semigroup lemmas}
+
+\begin{definition}[Quantum dynamical semigroup]
+    \label{def:is_quantum_dyn_semigroup_ch12}
+    \lean{IsQuantumDynSemigroup}\leanok
+    \uses{def:continuous_dyn_semigroup_ch12, def:channel}
+    A quantum dynamical semigroup is a norm-continuous dynamical semigroup whose
+    time slices are quantum channels for every $t \ge 0$.
+\end{definition}
+
+\begin{theorem}[Semigroup power identity]
+    \lean{semigroup_pow}\leanok
+    \uses{def:exp_semigroup_ch12}
+    For $t\ge 0$ and $n\in\N$, one has
+    $T_{nt} = (T_t)^n$.
+\end{theorem}
+
+\begin{lemma}[Density matrices are nonzero]
+    \lean{ne_zero_of_mem_densityMatrices'}\leanok
+    Every density matrix is nonzero.
+\end{lemma}
+
+\begin{theorem}[Compression invariance is stable under powers]
+    \lean{compression_preserved_by_pow}\leanok
+    If a corner compression is invariant under $E$, it remains invariant under
+    every power $E^n$.
+\end{theorem}
+
+\begin{theorem}[Generator eigenvectors along the exponential semigroup]
+    \lean{expSemigroup_apply_eigenvector}\leanok
+    If $L(X)=\mu X$, then
+    $e^{tL}(X)=e^{t\mu}X$ for all $t\in\R$.
+\end{theorem}
+
+\begin{theorem}[Spectral mapping for semigroup generators]
+    \lean{eigenvalue_exp_of_eigenvalue_generator}\leanok
+    If $\mu$ is in the spectrum of $L$, then $e^{t\mu}$ is in the spectrum
+    of $e^{tL}$.
+\end{theorem}
+
+\begin{theorem}[Root-of-unity rigidity for phases]
+    \lean{eq_zero_of_exp_mul_I_isRootOfUnity}\leanok
+    If $e^{it\theta}$ is a root of unity for every $t>0$, then $\theta=0$.
+\end{theorem}
+
+\begin{theorem}[Peripheral generator eigenvalues are purely imaginary]
+    \lean{re_eq_zero_of_peripheral_generator}\leanok
+    Peripheral spectral points of the generator have vanishing real part.
+\end{theorem}
+
+\begin{theorem}[Peripheral cardinality bound]
+    \lean{peripheral_card_le_finrank}\leanok
+    The number of peripheral eigenvalues is bounded by $\dim(\MN{D})$.
+\end{theorem}
+
+\begin{theorem}[Bounded order under peripheral power-closure]
+    \lean{bounded_root_of_peripheral_closed_powers}\leanok
+    If all powers of a peripheral eigenvalue remain peripheral, then some
+    positive power not exceeding $\dim(\MN{D})$ equals $1$.
+\end{theorem}
+
+\begin{theorem}[Peripheral powers stay peripheral under irreducibility]
+    \lean{peripheral_powers_closed_of_irreducible_channel_with_fixed}\leanok
+    For an irreducible channel with faithful fixed point, every power of a
+    peripheral eigenvalue is again peripheral.
+\end{theorem}
+
+\begin{theorem}[Spectral-radius criterion from eigenvalue bounds]
+    \lean{spectralRadius_lt_one_of_eigenvalues_lt_one}\leanok
+    If all eigenvalues satisfy $|\lambda|<1$, then the spectral radius is $<1$.
+\end{theorem}
+
+\begin{theorem}[Primitive powers annihilate trace-zero matrices]
+    \label{thm:primitive_channel_pow_tendsto_zero_ch12}
+    \lean{primitive_channel_pow_tendsto_zero_of_trace_zero}\leanok
+    If $E$ is an irreducible primitive channel with faithful fixed density $\sigma$,
+    then $E^n(X) \to 0$ for every matrix $X$ with $\tr(X)=0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Decompose $E^n$ into the fixed-point projection and its complementary part.
+    On the complement, every eigenvalue has modulus $<1$, so the complementary powers
+    tend to $0$; the trace-zero hypothesis removes the fixed-point component.
+\end{proof}
+
+\begin{theorem}[Fixed points of an irreducible channel are trace multiples]
+    \label{thm:fixedPoint_eq_trace_smul_irreducible_channel_ch12}
+    \lean{fixedPoint_eq_trace_smul_of_irreducible_channel}\leanok
+    If $E$ is an irreducible channel with faithful fixed density $\sigma$, then every
+    nonzero fixed point $V$ of $E$ satisfies $V = \tr(V) \sigma$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Subtract the trace multiple $\tr(V) \sigma$ and apply the vanishing theorem for
+    trace-zero fixed points of an irreducible channel.
+\end{proof}
+
+\begin{corollary}[Nonzero fixed points have nonzero trace]
+    \label{cor:trace_ne_zero_fixedpoint_irreducible_channel_ch12}
+    \lean{trace_ne_zero_of_nonzero_fixedPoint_of_irreducible_channel}\leanok
+    Every nonzero fixed point of an irreducible channel has nonzero trace.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    Otherwise the preceding theorem would force the fixed point to vanish.
+\end{proof}
+
+\begin{theorem}[Peripheral eigenvectors become periodic fixed points]
+    \label{thm:peripheral_power_fixed_eigenvector_ch12}
+    \lean{exists_power_fixed_eigenvector_of_peripheral}\leanok
+    For every positive time $t$, a quantum dynamical semigroup irreducible at every
+    positive time has the following property: every peripheral eigenvalue $\mu$ of $T_t$
+    admits a nonzero eigenvector $V$ and a positive integer $p$ such that
+    $T_t(V)=\mu V$ and $T_{pt}(V)=V$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Peripheral powers remain peripheral for an irreducible channel with faithful fixed point.
+    The bounded-order lemma then gives $\mu^p=1$, and the semigroup power identity turns the
+    eigenvector equation for $T_t$ into a fixed-point equation for $T_{pt}$.
+\end{proof}
+
+\begin{theorem}[Peripheral eigenvectors with nonzero trace]
+    \label{thm:peripheral_trace_ne_zero_eigenvector_ch12}
+    \lean{exists_trace_ne_zero_eigenvector_of_peripheral}\leanok
+    For every positive time $t$, under the same hypotheses every peripheral eigenvalue
+    of $T_t$ has a nonzero eigenvector with nonzero trace.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peripheral_power_fixed_eigenvector_ch12}
+    Apply Theorem~\ref{thm:peripheral_power_fixed_eigenvector_ch12} and then use the previous
+    corollary at the irreducible time $pt$.
+\end{proof}
+
+\begin{theorem}[Trace-preserving eigenvectors force eigenvalue $1$]
+    \label{thm:eigenvalue_eq_one_trace_preserving_eigenvector_ch12}
+    \lean{eigenvalue_eq_one_of_trace_preserving_eigenvector}\leanok
+    If $E$ is trace-preserving, $E(V)=\mu V$, and $\tr(V) \ne 0$, then $\mu = 1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Take traces in $E(V)=\mu V$ and use trace preservation.
+\end{proof}
+
+\begin{theorem}[Peripheral collapse under irreducibility at all times]
+    \label{thm:peripheral_eq_one_irreducible_all_ch12}
+    \lean{peripheral_eq_one_of_irreducible_all}\leanok
+    If a quantum dynamical semigroup is irreducible at every positive time, then every
+    peripheral eigenvalue of every positive-time slice equals $1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:eigenvalue_eq_one_trace_preserving_eigenvector_ch12,
+        thm:peripheral_trace_ne_zero_eigenvector_ch12}
+    Combine Theorem~\ref{thm:peripheral_trace_ne_zero_eigenvector_ch12} with
+    Theorem~\ref{thm:eigenvalue_eq_one_trace_preserving_eigenvector_ch12}.
+\end{proof}
+
+\begin{theorem}[Primitivity from irreducibility at all times]
+    \label{thm:primitive_of_irreducible_all_ch12}
+    \lean{primitive_of_irreducible_all}\leanok
+    If a quantum dynamical semigroup is irreducible at every positive time, then every
+    positive-time slice is primitive.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peripheral_eq_one_irreducible_all_ch12}
+    The unique faithful fixed density gives the one-dimensional peripheral spectrum criterion,
+    and Theorem~\ref{thm:peripheral_eq_one_irreducible_all_ch12} collapses the peripheral set
+    to $\{1\}$.
+\end{proof}
+
+\begin{remark}[Semigroup irreducible/primitive equivalence]\leanok
+    The semigroup analog of the irreducible/primitive equivalence
+    starts from one irreducible time slice, constructs a primitive
+    smaller time step, and lifts the conclusion to the full semigroup
+    (Theorems~\ref{thm:irreducible_semigroup_implies_primitive}
+    and~\ref{thm:qds_irreducible_iff_primitive}).
+\end{remark}
+
+\begin{remark}[Reduction to a smaller time step for semigroups]\leanok
+    Starting from one irreducible time $t_0$, we construct a
+    positive time step $u=t_0/N$ with
+    $T_{t_0}=(T_u)^N$, prove peripheral eigenvalue collapse at time~$u$,
+    and deduce primitivity of $T_u$.
+\end{remark}
+
+\begin{theorem}[The stationary density is fixed for all times]
+    \label{thm:fixed_density_fixed_for_all_times_ch12}
+    \lean{fixed_density_fixed_for_all_times_of_irreducible_time}\leanok
+    If $t_0 > 0$, $T_{t_0}$ is irreducible, and $\sigma$ is its unique fixed density
+    matrix, then $T_u(\sigma)=\sigma$ for every $u \ge 0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By semigroup commutativity, $T_{t_0}(T_u(\sigma)) = T_u(T_{t_0}(\sigma)) = T_u(\sigma)$,
+    and uniqueness of the fixed density at time $t_0$ identifies $T_u(\sigma)$ with $\sigma$.
+\end{proof}
+
+\begin{theorem}[Fixed points at the irreducible time are trace multiples]
+    \label{thm:fixedPoint_eq_trace_smul_at_irreducible_time_ch12}
+    \lean{fixedPoint_eq_trace_smul_at_irreducible_time}\leanok
+    If $T_{t_0}$ is irreducible with faithful fixed density $\sigma$, then every fixed point
+    $V$ of $T_{t_0}$ satisfies $V = \tr(V) \sigma$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This is the fixed-point trace-scalar theorem for the irreducible channel $T_{t_0}$.
+\end{proof}
+
+\begin{definition}[Residual slice index]
+    \label{def:residual_slice_index_ch12}
+    \lean{residualSliceIndex}\leanok
+    For $u \ge 0$ and $s > 0$, the residual slice index is
+    \[
+        m_n = \left\lfloor \frac{nu}{s} \right\rfloor.
+    \]
+\end{definition}
+
+\begin{definition}[Residual slice time]
+    \label{def:residual_slice_time_ch12}
+    \lean{residualSliceTime}\leanok
+    For $u \ge 0$ and $s > 0$, the residual slice time is the remainder
+    \[
+        r_n = s\,\mathrm{fract}\!\left(\frac{nu}{s}\right).
+    \]
+\end{definition}
+
+\begin{theorem}[Residual slice decomposition]
+    \label{thm:residual_slice_decomp_ch12}
+    \lean{residualSliceTime_mem_Icc, residualSlice_decomp}\leanok
+    \uses{def:residual_slice_index_ch12, def:residual_slice_time_ch12}
+    For $u \ge 0$ and $s > 0$, one has $r_n \in [0,s]$ and
+    \[
+        nu = m_n s + r_n.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This is the floor-plus-fraction decomposition of $nu/s$, multiplied by $s$.
+\end{proof}
+
+\begin{theorem}[A residual slice can vanish]
+    \label{thm:exists_residual_time_eq_zero_ch12}
+    \lean{exists_residual_time_eq_zero_of_fixedPoint}\leanok
+    \uses{def:residual_slice_time_ch12, thm:residual_slice_decomp_ch12}
+    Suppose $u \ge 0$ and $s > 0$, and that $T_s(\delta)=\delta$ and
+    $T_{nu}(\delta) \to 0$ as $n \to \infty$.
+    Then there exists $a \in [0,s]$ such that $T_a(\delta)=0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The residual slice times lie in the compact interval $[0,s]$, so a subsequence converges
+    to some $a \in [0,s]$. The residual decomposition rewrites $T_{nu}(\delta)$ in terms of
+    $T_{r_n}(\delta)$, and continuity of the semigroup identifies the limit with $T_a(\delta)$.
+\end{proof}
+
+\begin{theorem}[Reduced-time eigenvector has nonzero trace]
+    \label{thm:exists_trace_ne_zero_eigenvector_of_fraction_slice_ch12}
+    \lean{exists_trace_ne_zero_eigenvector_of_fraction_slice}\leanok
+    Under the reduced-time hypotheses
+    $T_{t_0} = (T_u)^{(\dim \MN{D})!}$, if
+    $\mu$ is a peripheral eigenvalue of $T_u$, then $T_u$ admits a
+    $\mu$-eigenvector with nonzero trace.
+\end{theorem}
+
+\begin{theorem}[Peripheral collapse at the reduced time step]
+    \label{thm:peripheral_eq_one_of_fraction_slice_ch12}
+    \lean{peripheral_eq_one_of_fraction_slice}\leanok
+    Under the same hypotheses, every peripheral eigenvalue of $T_u$
+    equals $1$.
+\end{theorem}
+
+\begin{theorem}[Primitivity at the reduced time step]
+    \label{thm:primitive_of_fraction_slice_ch12}
+    \lean{primitive_of_fraction_slice}\leanok
+    Under the same hypotheses, $T_u$ is primitive.
+\end{theorem}
+
+\begin{theorem}[Irreducibility descends to a reduced time step]
+    \label{thm:irreducible_of_fraction_slice_ch12}
+    \lean{irreducible_of_fraction_slice}\leanok
+    If $T_{t_0} = (T_u)^N$ and $T_{t_0}$ is irreducible, then $T_u$ is irreducible.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Any invariant compression for $T_u$ remains invariant under powers, hence also for
+    $T_{t_0}$; irreducibility of $T_{t_0}$ rules this out.
+\end{proof}
+
+\begin{theorem}[Existence of an irreducible reduced time step]
+    \label{thm:exists_irreducible_fraction_slice_ch12}
+    \lean{exists_irreducible_fraction_slice}\leanok
+    If $t_0 > 0$, $T_{t_0}$ is irreducible, and $\sigma$ is fixed for all times,
+    then there exists a positive time step $u$ such that
+    \[
+        T_{t_0} = (T_u)^{(\dim \MN{D})!},
+    \]
+    the slice $T_u$ is a channel, $T_u$ is irreducible, and $T_u(\sigma)=\sigma$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:irreducible_of_fraction_slice_ch12}
+    Take $u = t_0 / N$ with $N = (\dim \MN{D})!$. The semigroup power identity gives the
+    factorization of $T_{t_0}$, channelity comes from the semigroup hypotheses, and
+    Theorem~\ref{thm:irreducible_of_fraction_slice_ch12} gives irreducibility of $T_u$.
+\end{proof}
+
+\begin{theorem}[Fixed points of the primitive reduced time step are trace-scalars]
+    \label{thm:fixedPoint_eq_trace_smul_of_primitive_slice_ch12}
+    \lean{fixedPoint_eq_trace_smul_of_primitive_slice}\leanok
+    If $T_u$ is primitive and $\sigma$ is the common fixed density, then
+    every fixed point of any positive-time slice $T_s$ has the form
+    $\tau = \tr(\tau) \sigma$.
+\end{theorem}
+
+\begin{theorem}[Existence of a primitive reduced time step]
+    \label{thm:exists_primitive_fraction_slice_ch12}
+    \lean{exists_primitive_fraction_slice}\leanok
+    If $T_{t_0}$ is irreducible for some $t_0>0$, then there exists a
+    positive reduced time step $u$ such that $T_u$ is primitive.
+\end{theorem}
+
+
+\begin{theorem}[Irreducibility propagates to all positive times]
+    \label{thm:irreducible_all_of_irreducible_time_ch12}
+    \lean{irreducible_all_of_irreducible_time}\leanok
+    \uses{def:is_quantum_dyn_semigroup_ch12,
+        thm:fixed_density_fixed_for_all_times_ch12,
+        thm:fixedPoint_eq_trace_smul_at_irreducible_time_ch12,
+        thm:exists_primitive_fraction_slice_ch12,
+        thm:fixedPoint_eq_trace_smul_of_primitive_slice_ch12}
+    If $T_{t_0}$ is irreducible for some $t_0 > 0$, then every positive-time slice $T_s$ is
+    irreducible.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Let $\sigma$ be the unique faithful fixed density of $T_{t_0}$. By
+    Theorem~\ref{thm:fixed_density_fixed_for_all_times_ch12}, it is fixed for all times, and
+    Theorem~\ref{thm:fixedPoint_eq_trace_smul_at_irreducible_time_ch12} makes the fixed-point
+    space of $T_{t_0}$ one-dimensional. Choose a primitive reduced time step by
+    Theorem~\ref{thm:exists_primitive_fraction_slice_ch12}; then the trace-scalar description
+    of fixed points from Theorem~\ref{thm:fixedPoint_eq_trace_smul_of_primitive_slice_ch12}
+    gives the uniqueness criterion for irreducibility at every positive time.
+\end{proof}
+
+\begin{theorem}[An irreducible semigroup is primitive]
+    \label{thm:irreducible_semigroup_implies_primitive}
+    \lean{irreducible_semigroup_implies_primitive}\leanok
+    \uses{def:is_quantum_dyn_semigroup_ch12,
+        thm:irreducible_all_of_irreducible_time_ch12,
+        thm:primitive_of_irreducible_all_ch12}
+    Let $T_t = e^{tL}$ be a quantum dynamical semigroup.
+    If $T_{t_0}$ is irreducible for some $t_0 > 0$, then
+    $T_t$ is primitive (and irreducible) for every $t > 0$.
+    This is \cite[Proposition~7.5]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    First apply Theorem~\ref{thm:irreducible_all_of_irreducible_time_ch12} to propagate
+    irreducibility from the single time $t_0$ to every positive time. Then apply
+    Theorem~\ref{thm:primitive_of_irreducible_all_ch12} to conclude primitivity of every
+    positive-time slice.
+\end{proof}
+
+\begin{theorem}[Irreducibility iff primitivity for a quantum dynamical semigroup]
+    \label{thm:qds_irreducible_iff_primitive}
+    \lean{qds_irreducible_iff_primitive}\leanok
+    \uses{thm:irreducible_semigroup_implies_primitive}
+    For a quantum dynamical semigroup $T_t = e^{tL}$:
+    \[
+        (\exists\, t_0 > 0,\ T_{t_0}\ \text{irreducible})
+        \iff
+        (\forall\, t > 0,\ T_t\ \text{primitive and irreducible}).
+    \]
+    This is \cite[Proposition~7.5]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:irreducible_semigroup_implies_primitive}
+    Forward: apply Theorem~\ref{thm:irreducible_semigroup_implies_primitive}.
+    Reverse: take $t_0 = 1$ (or any positive time); the right-hand side
+    already includes irreducibility of $T_t$ for every $t>0$.
+\end{proof}
+
+%% ---------------------------------------------------------
+\section{Kernel of the adjoint Liouvillian}
+\label{sec:liouvillian_kernel}
+%% ---------------------------------------------------------
+
+%% Source: \cite[Section~7.1, Theorem~7.2]{Wolf2012Quantum}.
+
+\begin{definition}[Faithful stationary state]
+    \label{def:has_faithful_stationary_state_ch12}
+    \lean{HasFaithfulStationaryState}\leanok
+    A generator $L$ has a faithful stationary state if there exists a positive definite
+    density matrix $\rho_0$ with $L(\rho_0)=0$.
+\end{definition}
+
+\begin{definition}[Adjoint dissipator]
+    \label{def:adjoint_dissipator_ch12}
+    \lean{LindbladForm.adjointDissipator}\leanok
+    \uses{def:lindblad_form}
+    For a Lindblad operator $L_j$, the adjoint dissipator on observables is
+    \[
+        \mathcal{D}_{L_j}^*(A)
+        = L_j^\dagger A L_j
+        - \tfrac12 L_j^\dagger L_j A
+        - \tfrac12 A L_j^\dagger L_j.
+    \]
+\end{definition}
+
+\begin{definition}[Adjoint generator]
+    \label{def:adjoint_generator_ch12}
+    \lean{LindbladForm.toAdjointLinearMap}\leanok
+    \uses{def:lindblad_form, def:adjoint_dissipator_ch12}
+    The adjoint generator of a Lindblad form is
+    \[
+        L^*(A) = i[H,A] + \sum_j \mathcal{D}_{L_j}^*(A).
+    \]
+\end{definition}
+
+\begin{theorem}[Trace-pairing characterization of the adjoint generator]
+    \label{thm:trace_pairing_adjoint_generator_ch12}
+    \lean{LindbladForm.trace_mul_toAdjointLinearMap_eq_trace_toLinearMap_mul}\leanok
+    \uses{def:adjoint_generator_ch12, def:lindblad_form}
+    For every density matrix $\rho$ and every observable $A$,
+    \[
+        \tr(\rho\,L^*(A)) = \tr(L(\rho)\,A).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Expand the Schr\"odinger and Heisenberg formulas and apply cyclicity of the trace term by term.
+\end{proof}
+
+\begin{definition}[Commutant of the Lindblad data]
+    \label{def:commutant_ch12}
+    \lean{LindbladForm.commutant}\leanok
+    \uses{def:lindblad_form}
+    The commutant of a Lindblad form is the set of matrices commuting with $H$,
+    with every Lindblad operator $L_j$, and with every adjoint $L_j^\dagger$.
+\end{definition}
+
+\begin{definition}[Adjoint kernel]
+    \label{def:adjoint_kernel_ch12}
+    \lean{LindbladForm.adjointKernel}\leanok
+    \uses{def:adjoint_generator_ch12}
+    The adjoint kernel is the set of observables $A$ satisfying $L^*(A)=0$.
+\end{definition}
+
+\begin{theorem}[Commutant lies in the adjoint kernel]
+    \label{thm:commutant_subset_adjointKernel_ch12}
+    \lean{LindbladForm.mem_adjointKernel_of_mem_commutant,
+        LindbladForm.commutant_subset_adjointKernel}\leanok
+    \uses{def:adjoint_generator_ch12, def:commutant_ch12, def:adjoint_kernel_ch12}
+    If an observable commutes with $H$, with every $L_j$, and with every
+    $L_j^\dagger$, then it lies in $\ker(L^*)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The Hamiltonian commutator term vanishes, and each adjoint dissipator
+    $\mathcal{D}_{L_j}^*(A)$ is zero under the commutation hypotheses.
+\end{proof}
+
+\begin{theorem}[Adjoint kernel lies in the commutant]
+    \label{thm:adjointKernel_eq_commutant}
+    \lean{LindbladForm.mem_commutant_of_mem_adjointKernel_of_hasFaithfulStationaryState}\leanok
+    \uses{def:lindblad_form, def:has_faithful_stationary_state_ch12,
+        def:commutant_ch12, def:adjoint_kernel_ch12}
+    Let $L$ be a GKSL generator in Lindblad form with Hamiltonian $H$
+    and Lindblad operators $\{L_j\}$.
+    Define the adjoint generator $L^*$ by
+    $\operatorname{tr}(\rho\,L^*(A)) = \operatorname{tr}(L(\rho)\,A)$.
+    If $L$ has a faithful stationary state $\rho_0 > 0$ with $L(\rho_0) = 0$,
+    then for any $A$:
+    \[
+        L^*(A) = 0
+        \implies
+        [A,H] = [A,L_j] = [A,L_j^\dagger] = 0\ \forall j.
+    \]
+    That is, $\ker(L^*) \subseteq \{H, L_j, L_j^\dagger\}'$.
+    This is \cite[Theorem~7.2]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    From $L^*(A) = 0$ and $L^*(A^\dagger) = 0$, compute
+    $L^*(A^\dagger A) = \sum_j [A, L_j]^\dagger [A, L_j]$.
+    Faithfulness of $\rho_0$ and $\operatorname{tr}(\rho_0 L^*(A^\dagger A)) = 0$
+    force $[A, L_j] = 0$ for all $j$.
+    Similarly $[A, L_j^\dagger] = 0$, and then $L^*(A) = 0$ directly gives
+    $[A, H] = 0$.
+\end{proof}
+
+\begin{theorem}[Adjoint kernel equals the commutant]
+    \label{thm:adjointKernel_eq_commutant_full}
+    \lean{LindbladForm.adjointKernel_eq_commutant_of_hasFaithfulStationaryState}\leanok
+    \uses{thm:adjointKernel_eq_commutant, def:commutant_ch12, def:adjoint_kernel_ch12}
+    Under the same hypotheses as
+    Theorem~\ref{thm:adjointKernel_eq_commutant},
+    \[
+        \ker(L^*) = \{H, L_j, L_j^\dagger\}',
+    \]
+    i.e.\ the adjoint kernel equals the commutant of $\{H, L_j, L_j^\dagger\}$.
+    This is \cite[Theorem~7.2]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:adjointKernel_eq_commutant}
+    The inclusion $\supseteq$ is the easy direction
+    (commutant elements are in the kernel by a direct calculation).
+    The reverse $\subseteq$ is
+    Theorem~\ref{thm:adjointKernel_eq_commutant}.
+\end{proof}
+
+%% ---------------------------------------------------------
+\section{Reducibility of quantum dynamical semigroups}
+\label{sec:qds_reducibility}
+%% ---------------------------------------------------------
+
+%% Source: \cite[Section~7.1.2, Proposition~7.6]{Wolf2012Quantum}.
+
+The four equivalent reducibility conditions of
+\cite[Proposition~7.6]{Wolf2012Quantum} are as follows.
+
+\begin{definition}[Nontrivial projection]
+    \label{def:is_nontrivial_projection_ch12}
+    \lean{IsNontrivialProjection}\leanok
+    A projection is nontrivial if it is orthogonal and neither $0$ nor $\Id$.
+\end{definition}
+
+\begin{definition}[Rank-deficient fixed density]\label{def:has_rank_deficient_fixed_density}
+    \lean{HasRankDeficientFixedDensity}\leanok
+    \uses{def:is_nontrivial_projection_ch12, def:exp_semigroup_ch12}
+    Condition~(1): there exists a density matrix $\rho_0$ with nontrivial
+    kernel such that $e^{tL}(\rho_0) = \rho_0$ for all $t \ge 0$.
+\end{definition}
+
+\begin{definition}[Rank-deficient kernel element]\label{def:has_rank_deficient_kernel_element}
+    \lean{HasRankDeficientKernelElement}\leanok
+    \uses{def:is_nontrivial_projection_ch12}
+    Condition~(2): there exists a density matrix $\rho_0$ with nontrivial
+    kernel satisfying $L(\rho_0) = 0$.
+\end{definition}
+
+\begin{definition}[Invariant compression]\label{def:has_invariant_compression}
+    \lean{HasInvariantCompression}\leanok
+    \uses{def:is_nontrivial_projection_ch12, def:exp_semigroup_ch12}
+    Condition~(3): there exists a nontrivial orthogonal projector $P$ such
+    that $e^{tL}(P \MN{D} P) \subseteq P \MN{D} P$ for all $t \ge 0$.
+\end{definition}
+
+\begin{definition}[Block-upper-triangular Lindblad form]
+    \label{def:has_block_upper_triangular_lindblad}
+    \lean{HasBlockUpperTriangularLindblad}\leanok
+    \uses{def:is_nontrivial_projection_ch12, def:lindblad_form}
+    Condition~(4): there exists a nontrivial projector $P$ and a Lindblad form
+    $(H, \{L_j\})$ for $L$ such that $(1-P)L_j P = 0$ and
+    $(1-P)\kappa P = 0$ for all $j$, where
+    $\kappa = iH + \frac{1}{2}\sum_j L_j^\dagger L_j$.
+\end{definition}
+
+\begin{definition}[Generator-preserved compression]
+    \label{def:generator_preserves_compression_ch12}
+    \lean{GeneratorPreservesCompression}\leanok
+    \uses{def:has_invariant_compression}
+    For a projection $P$, the generator preserves the compression $P M_d(\C) P$ if
+    \[
+        P\,L(PXP)\,P = L(PXP)
+    \]
+    for every $X \in M_d(\C)$.
+\end{definition}
+
+\begin{definition}[Reducible quantum dynamical semigroup]
+    \label{def:is_reducible_qds_ch12}
+    \lean{IsReducibleQDS}\leanok
+    \uses{def:has_invariant_compression}
+    A quantum dynamical semigroup is reducible if it has a nontrivial invariant compression.
+\end{definition}
+
+\begin{theorem}[Semigroup invariance implies generator invariance]
+    \label{thm:generator_preserves_compression_from_semigroup_ch12}
+    \lean{generatorPreservesCompression_of_semigroupPreservesCompression}\leanok
+    \uses{def:generator_preserves_compression_ch12, def:has_invariant_compression}
+    If the semigroup preserves $P M_d(\C) P$ for all non-negative times, then the generator
+    preserves the same compression.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Differentiate the identity $P e^{tL}(PXP) P = e^{tL}(PXP)$ at $t=0$.
+\end{proof}
+
+\begin{theorem}[Generator invariance implies semigroup invariance]
+    \label{thm:semigroup_preserves_compression_from_generator_ch12}
+    \lean{semigroup_preserves_compression_of_generator}\leanok
+    \uses{def:generator_preserves_compression_ch12, def:has_invariant_compression}
+    If the generator preserves $P M_d(\C) P$, then so does the exponential semigroup
+    $e^{tL}$ for every $t \ge 0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Apply the compression map termwise to the exponential series. Every iterate of $L$
+    preserves the compression, so the whole series does as well.
+\end{proof}
+
+\begin{theorem}[Reducibility as a generator-level criterion]
+    \label{thm:isReducibleQDS_iff_generator_preserves_compression_ch12}
+    \lean{isReducibleQDS_iff_generator_preserves_compression}\leanok
+    \uses{def:is_reducible_qds_ch12, def:generator_preserves_compression_ch12}
+    A quantum dynamical semigroup is reducible if and only if its generator preserves some
+    nontrivial compression.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:generator_preserves_compression_from_semigroup_ch12,
+        thm:semigroup_preserves_compression_from_generator_ch12}
+    Combine Theorems~\ref{thm:generator_preserves_compression_from_semigroup_ch12}
+    and~\ref{thm:semigroup_preserves_compression_from_generator_ch12}.
+\end{proof}
+
+\begin{theorem}[Rank-deficient fixed densities and kernel elements]
+    \label{thm:wolf_prop_7_6_one_iff_two}
+    \lean{wolf_prop_7_6_one_iff_two}\leanok
+    \uses{def:has_rank_deficient_fixed_density,
+        def:has_rank_deficient_kernel_element}
+    A rank-deficient density matrix is a fixed point of $e^{tL}$ for all
+    $t \ge 0$ if and only if it lies in $\ker L$.
+    This is \cite[Proposition~7.6, (1)$\Leftrightarrow$(2)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The equivalence $L(\rho) = 0 \iff e^{tL}(\rho) = \rho$ for all $t \ge 0$
+    follows from the generator--semigroup correspondence: differentiate
+    at $t=0$ for the forward direction, and exponentiate for the reverse.
+\end{proof}
+
+\begin{theorem}[A rank-deficient fixed density yields an invariant compression]
+    \label{thm:wolf_prop_7_6_one_implies_three}
+    \lean{wolf_prop_7_6_one_implies_three}\leanok
+    \uses{def:has_rank_deficient_fixed_density,
+        def:has_invariant_compression, def:is_gksl_generator}
+    If $L$ is a GKSL generator and there exists a rank-deficient fixed
+    density matrix, then the semigroup preserves a nontrivial compression.
+    This is \cite[Proposition~7.6, (1)$\Rightarrow$(3)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Let $\rho_0$ be a rank-deficient fixed density.
+    Let $P$ be the support projection of $\rho_0$.
+    Since $\rho_0$ is rank-deficient, $P \neq \Id$;
+    since $\rho_0 \neq 0$, $P \neq 0$.
+    Channel positivity and trace preservation force $e^{tL}$ to
+    preserve $P \MN{D} P$.
+\end{proof}
+
+\begin{theorem}[Invariant compression yields block-upper-triangular Lindblad data]
+    \label{thm:hasBlockUpperTriangularLindblad_of_hasInvariantCompression_ch12}
+    \lean{hasBlockUpperTriangularLindblad_of_hasInvariantCompression}\leanok
+    \uses{def:has_invariant_compression, def:has_block_upper_triangular_lindblad,
+        def:is_gksl_generator, def:generator_preserves_compression_ch12}
+    If a GKSL generator preserves a nontrivial compression, then its Lindblad data can be chosen
+    block-upper-triangular with respect to that compression.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:generator_preserves_compression_from_semigroup_ch12}
+    First pass from semigroup invariance to generator invariance by
+    Theorem~\ref{thm:generator_preserves_compression_from_semigroup_ch12}. The generator-level
+    vanishing condition forces $(1-P)L_jP = 0$ and $(1-P)\kappa P = 0$ through the sum-of-squares
+    identity.
+\end{proof}
+
+\begin{theorem}[Block-upper-triangular Lindblad data yield invariant compression]
+    \label{thm:hasInvariantCompression_of_hasBlockUpperTriangularLindblad_ch12}
+    \lean{hasInvariantCompression_of_hasBlockUpperTriangularLindblad}\leanok
+    \uses{def:has_invariant_compression, def:has_block_upper_triangular_lindblad,
+        def:generator_preserves_compression_ch12}
+    If the Lindblad data are block-upper-triangular with respect to a nontrivial projection,
+    then the associated semigroup preserves that compression.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:semigroup_preserves_compression_from_generator_ch12}
+    The block-upper-triangular relations imply generator-level compression invariance; then apply
+    Theorem~\ref{thm:semigroup_preserves_compression_from_generator_ch12}.
+\end{proof}
+
+\begin{theorem}[Invariant compression and triangular Lindblad data]
+    \label{thm:wolf_prop_7_6_three_iff_four}
+    \lean{wolf_prop_7_6_three_implies_four, wolf_prop_7_6_four_implies_three}\leanok
+    \uses{def:has_invariant_compression,
+        def:has_block_upper_triangular_lindblad, def:is_gksl_generator}
+    For a GKSL generator $L$, the semigroup preserves a nontrivial
+    compression if and only if the Lindblad data can be chosen
+    block-upper-triangular.
+    This is \cite[Proposition~7.6, (3)$\Leftrightarrow$(4)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:hasBlockUpperTriangularLindblad_of_hasInvariantCompression_ch12,
+        thm:hasInvariantCompression_of_hasBlockUpperTriangularLindblad_ch12}
+    Combine Theorems~\ref{thm:hasInvariantCompression_of_hasBlockUpperTriangularLindblad_ch12}
+    and~\ref{thm:hasBlockUpperTriangularLindblad_of_hasInvariantCompression_ch12}.
+\end{proof}
+
+\begin{theorem}[Triangular Lindblad data give deficient kernels]
+    \label{thm:blockUpperTriangular_implies_rankDeficient}
+    \lean{hasRankDeficientKernelElement_of_hasBlockUpperTriangularLindblad}\leanok
+    \uses{def:has_block_upper_triangular_lindblad,
+        def:has_rank_deficient_kernel_element, def:is_gksl_generator}
+    If the Lindblad data of a GKSL generator are block-upper-triangular
+    with respect to some nontrivial projector $P$,
+    then there exists a density matrix $\rho_0$ with nontrivial kernel
+    satisfying $L(\rho_0) = 0$.
+    This is \cite[Proposition~7.6, (4)$\Rightarrow$(2)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The block-upper-triangular structure implies $L$ preserves the
+    compression $P M_d(\C) P$.
+    Therefore the semigroup $e^{tL}$ also preserves $P M_d(\C) P$
+    for all $t \ge 0$.
+    By the Brouwer fixed-point theorem, $e^{(1/m)L}$ has a fixed
+    density matrix $\rho_m$ supported in $P M_d(\C) P$ for each $m$.
+    Passing to a subsequential limit gives a density matrix
+    $\rho_0$ with $P \rho_0 P = \rho_0$ and $L(\rho_0) = 0$.
+    Since $P \neq \Id$, the matrix $\rho_0$ has nontrivial kernel.
+\end{proof}
+
+\begin{theorem}[Equivalent formulations of reducibility]
+    \label{thm:wolf_prop_7_6_full}
+    \lean{wolf_prop_7_6_full_equivalence}\leanok
+    \uses{def:is_gksl_generator, def:has_rank_deficient_fixed_density,
+        def:has_rank_deficient_kernel_element,
+        def:has_invariant_compression,
+        def:has_block_upper_triangular_lindblad}
+    For a GKSL generator $L : \MN{D} \to \MN{D}$, the four conditions
+    \begin{enumerate}
+        \item rank-deficient fixed density,
+        \item rank-deficient kernel element,
+        \item invariant compression, and
+        \item block-upper-triangular Lindblad form
+    \end{enumerate}
+    are equivalent.
+    This is \cite[Proposition~7.6]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:wolf_prop_7_6_one_iff_two,
+        thm:wolf_prop_7_6_one_implies_three,
+        thm:wolf_prop_7_6_three_iff_four,
+        thm:blockUpperTriangular_implies_rankDeficient}
+    The cycle (1)$\leftrightarrow$(2), (1)$\to$(3),
+    (3)$\leftrightarrow$(4), and (4)$\to$(2) closes
+    the equivalence chain.
+\end{proof}
+
+%% Source: \cite[Corollary~7.2]{Wolf2012Quantum}.
+
+\subsection{Sufficient conditions for non-reducibility}
+\label{sec:cor_7_2_sufficient_conditions}
+
+\begin{definition}[Lindblad span]\label{def:lindblad_span}
+    \lean{lindbladSpan}\leanok
+    \uses{def:lindblad_form}
+    The $\C$-linear span of the Lindblad operators $\{L_j\}$.
+\end{definition}
+
+\begin{definition}[Hermitian-closed Lindblad span]\label{def:is_lindblad_span_hermitian_closed}
+    \lean{IsLindbladSpanHermitianClosed}\leanok
+    \uses{def:lindblad_span}
+    The span of the Lindblad operators is closed under Hermitian conjugation,
+    i.e.\ it forms a $*$-subspace of $M_d(\C)$.
+\end{definition}
+
+\begin{definition}[Trivial Lindblad commutant]\label{def:has_lindblad_span_trivial_commutant}
+    \lean{HasLindbladSpanTrivialCommutant}\leanok
+    \uses{def:lindblad_form}
+    The commutant of the Lindblad family $\{L_j\}'$ equals $\C \cdot \Id$,
+    i.e.\ the Lindblad operators act irreducibly on $M_d(\C)$.
+\end{definition}
+
+\begin{definition}[Kossakowski rank]\label{def:kossakowski_rank}
+    \lean{kossakowskiRank}\leanok
+    \uses{def:lindblad_form}
+    The minimal number of Lindblad operators across all GKSL representations
+    of $L$, which equals the rank of the Kossakowski matrix in the
+    orthonormal-basis representation.
+\end{definition}
+
+\begin{theorem}[$\kappa$ block vanishing from generator compression]%
+    \label{thm:kappa_block_generator_compression}
+    \lean{kappa_block_of_generatorPreservesCompression}\leanok
+    \uses{def:lindblad_form, def:has_block_upper_triangular_lindblad}
+    Let $(H, \{L_j\})$ be a Lindblad form with
+    $\kappa = iH + \tfrac{1}{2}\sum_j L_j^\dagger L_j$, and let $P$ be an
+    orthogonal projection such that the generator preserves the compression
+    $P M_d(\C) P$.
+    If $(1-P) L_j P = 0$ for every $j$, then $(1-P) \kappa P = 0$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:lindblad_form}
+    From $L = \varphi - \kappa(\cdot) - (\cdot)\kappa^\dagger$ and
+    $(1-P)L(P) = 0$: the $(1-P)\varphi(P)$ term vanishes because each
+    $(1-P)L_j P = 0$, and the $(1-P)(P\kappa^\dagger)$ term vanishes
+    because $(1-P)P = 0$. What remains is $(1-P)\kappa P = 0$.
+\end{proof}
+
+\begin{theorem}[Full algebra generation forbids block-upper-triangular form]%
+    \label{thm:full_algebra_gen_no_block_ut}
+    \lean{full_algebra_generation_implies_no_blockUpperTriangular}\leanok
+    \uses{def:lindblad_form, def:has_block_upper_triangular_lindblad,
+        thm:kappa_block_generator_compression}
+    Let $(H, \{L_j\})$ be a Lindblad form.
+    If the algebra generated by $\{L_j\}$ and $\kappa$ is the entire
+    matrix algebra $M_d(\C)$, then the Lindblad data do not admit a
+    block-upper-triangular decomposition.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:kappa_block_generator_compression}
+    Assume for contradiction that a block-upper-triangular decomposition
+    exists with nontrivial projection $P$.
+    By Theorem~\ref{thm:kappa_block_generator_compression},
+    $(1-P)\kappa P = 0$.
+    Induction on elements of the subalgebra shows
+    $(1-P)A P = 0$ for every generator. Since the generated algebra is
+    all of $M_d(\C)$, every matrix satisfies $(1-P)AP = 0$, forcing
+    $P = 0$ or $P = \Id$ --- a contradiction.
+\end{proof}
+
+\begin{theorem}[Hermitian span with trivial commutant forbids triangular form]%
+    \label{thm:herm_span_trivial_commutant_no_block_ut}
+    \lean{hermitian_span_trivial_commutant_implies_no_blockUpperTriangular}\leanok
+    \uses{def:lindblad_form, def:is_lindblad_span_hermitian_closed,
+        def:has_lindblad_span_trivial_commutant,
+        def:has_block_upper_triangular_lindblad}
+    If the Lindblad span is closed under Hermitian conjugation and its
+    commutant is $\C \cdot \Id$, then the Lindblad data do not admit a
+    block-upper-triangular decomposition.
+\end{theorem}
+\begin{proof}\leanok
+    Assume for contradiction that a block-upper-triangular decomposition
+    exists with nontrivial projection $P$. The block vanishing
+    $(1-P)L_j P = 0$ and Hermitian closure give $P L_j (1-P) = 0$ as
+    well, so $[P, L_j] = 0$ for all $j$. But then $P$ lies in the
+    commutant of the Lindblad span, contradicting triviality.
+\end{proof}
+
+\begin{theorem}[Large Kossakowski rank forbids block-upper-triangular form]
+    \label{thm:large_kossakowski_rank_no_block_ut_ch12}
+    \lean{large_kossakowski_rank_implies_no_blockUpperTriangular}\leanok
+    \uses{def:kossakowski_rank, def:has_block_upper_triangular_lindblad}
+    If the Kossakowski rank satisfies
+    \[
+        \operatorname{rank}(C) + d \ge d^2 + 1,
+    \]
+    then no block-upper-triangular Lindblad form exists.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    A block-upper-triangular traceless Lindblad family lies in a proper subspace whose dimension is
+    at most $d^2-d$. The formal rank minimization argument then contradicts the large-rank bound.
+\end{proof}
+
+\begin{theorem}[No block-upper-triangular Lindblad form implies non-reducibility]
+    \label{thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
+    \lean{not_isReducibleQDS_of_no_blockUpperTriangular_lindblad}\leanok
+    \uses{def:is_reducible_qds_ch12, def:has_block_upper_triangular_lindblad,
+        thm:hasBlockUpperTriangularLindblad_of_hasInvariantCompression_ch12}
+    If a GKSL generator admits no block-upper-triangular Lindblad form, then the associated
+    quantum dynamical semigroup is not reducible.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    A reducible semigroup would have an invariant compression, and
+    Theorem~\ref{thm:hasBlockUpperTriangularLindblad_of_hasInvariantCompression_ch12}
+    would then produce a block-upper-triangular Lindblad form.
+\end{proof}
+
+\begin{theorem}[Full algebra generation implies non-reducibility]
+    \label{thm:not_isReducible_of_generates_full_algebra}
+    \lean{not_isReducible_of_generates_full_algebra}\leanok
+    \uses{def:is_gksl_generator, def:lindblad_form,
+        thm:full_algebra_gen_no_block_ut,
+        thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
+    If the algebra generated by $\{L_j\}$ and $\kappa$ is the entire
+    matrix algebra $M_d(\C)$, then the QDS is not reducible.
+    This is \cite[Corollary~7.2(1)]{Wolf2012Quantum}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:full_algebra_gen_no_block_ut,
+        thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
+    By Theorem~\ref{thm:full_algebra_gen_no_block_ut}, no block-upper-triangular
+    decomposition exists. Then apply
+    Theorem~\ref{thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}.
+\end{proof}
+
+\begin{theorem}[Hermitian span and trivial commutant imply non-reducibility]
+    \label{thm:not_isReducible_of_hermitian_span_trivial_commutant}
+    \lean{not_isReducible_of_hermitian_span_trivial_commutant}\leanok
+    \uses{def:is_gksl_generator, def:is_lindblad_span_hermitian_closed,
+        def:has_lindblad_span_trivial_commutant,
+        thm:herm_span_trivial_commutant_no_block_ut,
+        thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
+    If the Lindblad span is Hermitian-closed and its commutant is trivial,
+    then the QDS is not reducible.
+    This is \cite[Corollary~7.2(2)]{Wolf2012Quantum}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:herm_span_trivial_commutant_no_block_ut,
+        thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
+    By Theorem~\ref{thm:herm_span_trivial_commutant_no_block_ut}, no
+    block-upper-triangular decomposition exists. Then apply
+    Theorem~\ref{thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}.
+\end{proof}
+
+\begin{theorem}[Large Kossakowski rank implies non-reducibility]
+    \label{thm:not_isReducible_of_kossakowski_rank_ge}
+    \lean{not_isReducible_of_kossakowski_rank_ge}\leanok
+    \uses{def:is_gksl_generator, def:kossakowski_rank,
+        thm:large_kossakowski_rank_no_block_ut_ch12,
+        thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
+    If $\rank(C) > d^2 - d$, then the QDS is not reducible.
+    This is \cite[Corollary~7.2(3)]{Wolf2012Quantum}.
+\end{theorem}
+\begin{proof}\leanok
+    The rank hypothesis rules out block-upper-triangular Lindblad data by
+    Theorem~\ref{thm:large_kossakowski_rank_no_block_ut_ch12}. Then apply
+    Theorem~\ref{thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}.
+\end{proof}

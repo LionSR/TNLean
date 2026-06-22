@@ -19,10 +19,10 @@ open scoped Matrix
 
 namespace MPSTensor
 
-/-! ## Section 8f½: NilpIndex growth infrastructure
+/-! ## Section 8f½: NilpIndex growth lemmas
 
-The growth infrastructure in Section 8 (left-step membership, injectivity,
-finrank monotonicity, surjectivity) was proved for `P = (A i₀)^D`.
+The growth lemmas in Section 8 (left-step membership, injectivity,
+finrank monotonicity, surjectivity) were proved for `P = (A i₀)^D`.
 Here we prove the analogous results for `P = (A i₀)^r` where `r = nilpIndex`.
 
 The key observation: since `range((A i₀)^r) = range((A i₀)^D)` (by
@@ -71,71 +71,22 @@ theorem mulLeft_mem_rectSpan_nilpIndex_succ
         simpa [M₀] using congrArg (fun Z => Z * M) hcomm.symm
     _ = M₀ * ((A i₀ ^ r) * M) := by simp [Matrix.mul_assoc]
 
-/-- Every element of `rectSpan ((A i₀)^r) A n` lies in `range(mulLeft ((A i₀)^r))`. -/
-private theorem mem_range_mulLeft_nilpIndex
-    (A : MPSTensor d D) (i₀ : Fin d) {n : ℕ}
-    {X : Matrix (Fin D) (Fin D) ℂ}
-    (hX : X ∈ rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n) :
-    X ∈ LinearMap.range (LinearMap.mulLeft ℂ
-      ((A i₀) ^ nilpIndex (toLin' (A i₀)))) := by
-  obtain ⟨M, _, rfl⟩ := Submodule.mem_map.mp hX
-  exact ⟨M, by simp [LinearMap.mulLeft_apply]⟩
-
 /-- Matrix-level injectivity for the nilpIndex power: if `X ∈ range(mulLeft ((A i₀)^r))`
 and `(A i₀) * X = 0`, then `X = 0`.
 
 Proof: `range(mulLeft ((A i₀)^r)) = range(mulLeft ((A i₀)^D))` by
-`range_mulLeft_pow_nilpIndex_eq`, and the D-th power version is already proved
-in `RectSpanGrowth`. -/
+`range_mulLeft_pow_nilpIndex_eq`, and the D-th power version is the shared
+Fitting-disjointness consequence from `WielandtRankOne`. -/
 private theorem matrix_eq_zero_of_mul_nilpIndex
     (A : MPSTensor d D) (i₀ : Fin d)
     {X : Matrix (Fin D) (Fin D) ℂ}
     (hX : X ∈ LinearMap.range (LinearMap.mulLeft ℂ
       ((A i₀) ^ nilpIndex (toLin' (A i₀)))))
     (hMX : (A i₀) * X = 0) : X = 0 := by
-  -- X ∈ range(mulLeft ((A i₀)^r)) = range(mulLeft ((A i₀)^D))
   have hXD : X ∈ LinearMap.range (LinearMap.mulLeft ℂ ((A i₀) ^ D)) :=
     range_mulLeft_pow_nilpIndex_eq A i₀ ▸ hX
-  -- Now use the column-based injectivity from the D-th power
-  -- Same proof as matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow'
-  classical
-  have hcols : ∀ j : Fin D, X.col j ∈
-      LinearMap.range (Matrix.toLin' ((A i₀) ^ D)) := by
-    have := (mem_range_mulLeft_iff_cols (D := D) (P := (A i₀) ^ D) (M := X)).1 hXD
-    simpa using this
-  set f : End ℂ (Fin D → ℂ) := toLin' (A i₀)
-  have hdisj : Disjoint (LinearMap.ker f)
-      (LinearMap.range (f ^ D)) := by
-    have hker_le : LinearMap.ker f ≤
-        End.maxGenEigenspace f (0 : ℂ) := by
-      intro x hx
-      refine (End.mem_maxGenEigenspace f (0 : ℂ) x).2 ⟨1, ?_⟩
-      simpa using (LinearMap.mem_ker.mp hx)
-    have hindep : iSupIndep (End.maxGenEigenspace f) :=
-      independent_maxGenEigenspace f
-    have hdisj0 : Disjoint (End.maxGenEigenspace f (0 : ℂ))
-        (⨆ (μ : ℂ) (_ : μ ≠ (0 : ℂ)), End.maxGenEigenspace f μ) := hindep 0
-    simpa [WielandtRankOne.range_pow_eq_iSup_maxGenEigenspace_ne_zero
-      (D := D) f] using Disjoint.mono_left hker_le hdisj0
-  have hcol0 : ∀ j : Fin D, X.col j = 0 := by
-    intro j
-    have hcolKilled : (A i₀) *ᵥ (X.col j) = 0 := by
-      have : ((A i₀) * X).col j = 0 := by
-        simpa using congrArg (fun Z : Matrix (Fin D) (Fin D) ℂ => Z.col j) hMX
-      simpa [col_mul (P := A i₀) (X := X) (j := j)] using this
-    have hv : X.col j ∈ LinearMap.range (f ^ D) := by
-      simpa [f, Matrix.toLin'_pow] using hcols j
-    have hker : X.col j ∈ LinearMap.ker f := by
-      refine LinearMap.mem_ker.mpr ?_
-      simpa [f, Matrix.toLin'_apply] using hcolKilled
-    have : X.col j ∈ (⊥ : Submodule ℂ (Fin D → ℂ)) :=
-      hdisj.eq_bot ▸ ⟨hker, hv⟩
-    simpa using this
-  apply Matrix.ext_col
-  intro j
-  have hzero : (0 : Matrix (Fin D) (Fin D) ℂ).col j = (0 : Fin D → ℂ) := by
-    ext i; simp [Matrix.col_apply]
-  simp [hcol0 j, hzero]
+  exact WielandtRankOne.matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow
+    (D := D) (M := A i₀) (X := X) hXD hMX
 
 /-- Linear map sending `rectSpan ((A i₀)^r) A n` to `rectSpan ((A i₀)^r) A (n+1)`
 by left-multiplication with `A i₀`, where `r = nilpIndex`. -/
@@ -157,11 +108,16 @@ private theorem rectSpan_nilpIndex_leftStep_injective
   have hmat : (A i₀) * x.1 = (A i₀) * y.1 := congrArg Subtype.val hxy
   have hz : (A i₀) * (x.1 - y.1) = 0 := by
     simpa [Matrix.mul_sub, sub_eq_zero] using hmat
+  have hrect_le_range : rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n ≤
+      LinearMap.range (LinearMap.mulLeft ℂ
+        ((A i₀) ^ nilpIndex (toLin' (A i₀)))) := by
+    rw [rectSpan]
+    exact LinearMap.map_le_range
   have hzRange : (x.1 - y.1) ∈ LinearMap.range (LinearMap.mulLeft ℂ
       ((A i₀) ^ nilpIndex (toLin' (A i₀)))) :=
     Submodule.sub_mem _
-      (mem_range_mulLeft_nilpIndex A i₀ x.2)
-      (mem_range_mulLeft_nilpIndex A i₀ y.2)
+      (hrect_le_range x.2)
+      (hrect_le_range y.2)
   have hzero : x.1 - y.1 = 0 :=
     matrix_eq_zero_of_mul_nilpIndex A i₀ hzRange hz
   exact Subtype.ext (by simpa [sub_eq_zero] using hzero)
@@ -186,7 +142,7 @@ theorem rectSpan_nilpIndex_finrank_le
     _ = D * ((A i₀) ^ D).rank := by
         rw [rank_pow_nilpIndex_eq A i₀]
 
-/-- **NilpIndex pigeonhole**: there exists `n₀ ≤ D * D̃` with consecutive finrank
+/-- **NilpIndex pigeonhole**: there exists `n₀ ≤ D * D'` with consecutive finrank
 equality for the nilpIndex rectSpan. -/
 theorem exists_finrank_eq_succ_of_rectSpan_nilpIndex
     (A : MPSTensor d D) (i₀ : Fin d) :
@@ -213,7 +169,7 @@ theorem rectSpanNilpIndexLeftStep_surjective_of_finrank_eq
     (rectSpan_nilpIndex_leftStep_injective A i₀ n)
 
 /-- **Ceiling permanence**: once the finrank of `rectSpan ((A i₀)^r) A n` reaches
-the ceiling `D * D̃`, it stays there for all subsequent levels.
+the ceiling `D * D'`, it stays there for all subsequent levels.
 
 The argument: finrank at ceiling → rectSpan = range → finrank = ceiling. Since
 finrank is non-decreasing and bounded by ceiling, it stays at ceiling. -/
@@ -242,7 +198,7 @@ theorem rectSpan_nilpIndex_finrank_ceiling_permanent
 
 /-- **At ceiling, rectSpan equals full range.**
 
-When the finrank reaches `D * D̃`, the rectSpan at that level equals
+When the finrank reaches `D * D'`, the rectSpan at that level equals
 `range(mulLeft ((A i₀)^r))`. -/
 theorem rectSpan_nilpIndex_eq_range_of_finrank_eq_ceiling
     (A : MPSTensor d D) (i₀ : Fin d) (n : ℕ)

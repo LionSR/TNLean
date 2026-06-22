@@ -10,7 +10,7 @@ import Mathlib.RingTheory.Idempotents
 
 Mathlib's `IsIdempotentElem.Corner` already provides the `Semiring` / `Ring` structure on the
 subsemigroup `Set.range (P * · * P)` for an idempotent `P`, with unit `P`. For the matrix
-corners appearing in the support-projection route for Wolf Cor. 6.6 we additionally need:
+corners appearing in the support-projection route for Wolf Corollary 6.6 we additionally need:
 
 * a `ℂ`-module and `ℂ`-algebra structure on the corner;
 * star, `StarRing`, and `StarModule ℂ` structures when `P` is self-adjoint;
@@ -22,7 +22,7 @@ equivalence `cornerSubmodule P ≃ₗ[ℂ] IsIdempotentElem.Corner hP`.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Cor. 6.6].
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Corollary 6.6].
 -/
 
 open scoped Matrix ComplexOrder BigOperators
@@ -32,17 +32,12 @@ namespace MatrixCorner
 
 variable {D : ℕ} {P : Matrix (Fin D) (Fin D) ℂ}
 
-private lemma mem_corner_iff_matrix (hP : IsIdempotentElem P)
-    (X : Matrix (Fin D) (Fin D) ℂ) :
-    X ∈ Subsemigroup.corner P ↔ P * X = X ∧ X * P = X :=
-  Subsemigroup.mem_corner_iff hP
-
 /-! ### `ℂ`-linear structure -/
 
 instance instSMulComplexCorner (hP : IsIdempotentElem P) : SMul ℂ hP.Corner where
   smul c X := ⟨c • X.1, by
-    obtain ⟨hL, hR⟩ := (mem_corner_iff_matrix hP X.1).mp X.2
-    refine (mem_corner_iff_matrix hP _).mpr ⟨?_, ?_⟩
+    obtain ⟨hL, hR⟩ := (Subsemigroup.mem_corner_iff hP).mp X.2
+    refine (Subsemigroup.mem_corner_iff hP).mpr ⟨?_, ?_⟩
     · rw [Matrix.mul_smul, hL]
     · rw [smul_mul_assoc, hR]⟩
 
@@ -65,7 +60,7 @@ instance instModuleComplexCorner (hP : IsIdempotentElem P) : Module ℂ hP.Corne
 /-- The algebra map `ℂ → hP.Corner` sending `c` to `c • P`. -/
 noncomputable def cornerAlgebraMap (hP : IsIdempotentElem P) : ℂ →+* hP.Corner where
   toFun c := ⟨c • P, by
-    refine (mem_corner_iff_matrix hP _).mpr ⟨?_, ?_⟩
+    refine (Subsemigroup.mem_corner_iff hP).mpr ⟨?_, ?_⟩
     · rw [Matrix.mul_smul, hP.eq]
     · rw [smul_mul_assoc, hP.eq]⟩
   map_one' := Subtype.ext (one_smul ℂ P)
@@ -83,12 +78,12 @@ noncomputable instance instAlgebraComplexCorner (hP : IsIdempotentElem P) :
   algebraMap := cornerAlgebraMap hP
   commutes' c X := by
     apply Subtype.ext
-    obtain ⟨hL, hR⟩ := (mem_corner_iff_matrix hP X.1).mp X.2
+    obtain ⟨hL, hR⟩ := (Subsemigroup.mem_corner_iff hP).mp X.2
     change (c • P) * X.1 = X.1 * (c • P)
     rw [smul_mul_assoc, Matrix.mul_smul, hL, hR]
   smul_def' c X := by
     apply Subtype.ext
-    obtain ⟨hL, _⟩ := (mem_corner_iff_matrix hP X.1).mp X.2
+    obtain ⟨hL, _⟩ := (Subsemigroup.mem_corner_iff hP).mp X.2
     change c • X.1 = (c • P) * X.1
     rw [smul_mul_assoc, hL]
 
@@ -107,8 +102,8 @@ variable (hP : IsIdempotentElem P) (hPstar : Pᴴ = P)
 /-- Star on `hP.Corner` given self-adjointness of `P`. -/
 @[reducible] noncomputable def cornerStar : Star hP.Corner where
   star X := ⟨X.1ᴴ, by
-    obtain ⟨hL, hR⟩ := (mem_corner_iff_matrix hP X.1).mp X.2
-    refine (mem_corner_iff_matrix hP _).mpr ⟨?_, ?_⟩
+    obtain ⟨hL, hR⟩ := (Subsemigroup.mem_corner_iff hP).mp X.2
+    refine (Subsemigroup.mem_corner_iff hP).mpr ⟨?_, ?_⟩
     · calc P * X.1ᴴ = Pᴴ * X.1ᴴ := by rw [hPstar]
         _ = (X.1 * P)ᴴ := by rw [← Matrix.conjTranspose_mul]
         _ = X.1ᴴ := by rw [hR]
@@ -173,7 +168,7 @@ lemma cornerSubmodule_mem_iff_mem_corner
     have h' : P * X * P = X := h
     exact ⟨X, by simp [h']⟩
   · intro h
-    obtain ⟨hL, hR⟩ := (mem_corner_iff_matrix hP X).mp h
+    obtain ⟨hL, hR⟩ := (Subsemigroup.mem_corner_iff hP).mp h
     change P * X * P = X
     rw [Matrix.mul_assoc, hR, hL]
 

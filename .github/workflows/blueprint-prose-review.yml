@@ -1,0 +1,98 @@
+name: Blueprint Sync & Prose Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review, reopened]
+    paths:
+      - "TNLean/**/*.lean"
+      - "TNLean.lean"
+      - "blueprint/src/**/*.tex"
+
+concurrency:
+  group: blueprint-prose-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  blueprint-and-prose:
+    # Repository variable kill switch:
+    #   CLAUDE_REVIEW_ENABLED=false disables Claude-powered blueprint/prose review.
+    #   unset or any other value preserves the default enabled behavior.
+    if: vars.CLAUDE_REVIEW_ENABLED != 'false'
+    runs-on: ubuntu-latest
+    env:
+      CLAUDE_CODE_PROVIDER: ${{ vars.CLAUDE_CODE_PROVIDER || 'anthropic' }}
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+      DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+      ANTHROPIC_BASE_URL: ${{ vars.ANTHROPIC_BASE_URL }}
+      CLAUDE_OPUS_MODEL: ${{ vars.CLAUDE_OPUS_MODEL }}
+      CLAUDE_SONNET_MODEL: ${{ vars.CLAUDE_SONNET_MODEL }}
+    permissions:
+      contents: read
+      pull-requests: write
+      actions: read
+      issues: write
+      id-token: write
+
+    steps:
+      - name: Check Claude review switch
+        id: claude-switch
+        env:
+          CLAUDE_REVIEW_ENABLED: ${{ vars.CLAUDE_REVIEW_ENABLED }}
+        run: |
+          if [ "$CLAUDE_REVIEW_ENABLED" = "false" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "::notice::Skipping Claude blueprint/prose review: CLAUDE_REVIEW_ENABLED=false"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check if head commit is a bot auto-fix
+        if: steps.claude-switch.outputs.skip != 'true'
+        id: bot-check
+        uses: actions/github-script@v8
+        with:
+          script: |
+            // Skip review for auto-fix bot commits to avoid the
+            // review → auto-fix → review ping-pong cascade.
+            const { data: commit } = await github.rest.repos.getCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: context.payload.pull_request.head.sha
+            });
+            const msg = commit.commit.message;
+            const isBot = /^\[claude-(auto|review)-fix\]/.test(msg);
+            core.setOutput('skip', isBot ? 'true' : 'false');
+            if (isBot) core.notice(`Skipping prose review for bot-fix commit: ${msg.split('\n')[0]}`);
+
+      - name: Checkout repository
+        if: steps.claude-switch.outputs.skip != 'true' && steps.bot-check.outputs.skip != 'true'
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - name: Checkout trusted automation
+        if: steps.claude-switch.outputs.skip != 'true' && steps.bot-check.outputs.skip != 'true'
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+          path: .trusted-actions
+          fetch-depth: 1
+
+      - name: Run Blueprint Sync & Prose Review
+        if: steps.claude-switch.outputs.skip != 'true' && steps.bot-check.outputs.skip != 'true'
+        id: blueprint-prose-review
+        uses: LionSR/agent-ci-actions@v1
+        with:
+          provider: ${{ env.CLAUDE_CODE_PROVIDER }}
+          model-tier: sonnet
+          system-prompt-file: .trusted-actions/.github/prompts/blueprint-prose-review-system-prompt.md
+          allowed_tools_preset: blueprint-prose-review
+          allowed_tools_preset_map_file: .trusted-actions/.github/allowed-tools.json
+          allowed-bots: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
+          claude-prompt-file: .trusted-actions/.github/prompts/blueprint-prose-review-prompt.md
+          claude-prompt-context: |
+            PR number: ${{ github.event.pull_request.number }}
+            Repository: ${{ github.repository }}
+            Repository owner: ${{ github.repository_owner }}
+            Repository name: ${{ github.event.repository.name }}
+            Event: ${{ github.event.action }}

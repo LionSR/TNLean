@@ -2,8 +2,6 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.Algebra.HermitianHelpers
-import TNLean.Algebra.MatrixAux
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Schwarz.Basic
 import Mathlib.Tactic.NoncommRing
@@ -28,7 +26,7 @@ i.e. $A$ is positive definite.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2, Thm 6.2
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2, Theorem 6.2
   item 2][Wolf2012QChannels]
 
 ## Tags
@@ -45,7 +43,7 @@ variable {D : ℕ}
 
 section OneStep
 
-/-- **Structural lemma (Wolf Thm 6.2, (1)→(2), key step)**:
+/-- **Structural lemma (Wolf Theorem 6.2, (1)→(2), key step)**:
 If `E` is an irreducible CP map and `A` is PSD, nonzero, with
 `ker(A) ⊆ ker(E(A))`, then `A` is positive definite.
 
@@ -79,7 +77,8 @@ theorem posDef_of_ker_subset_irreducible_cp
       congr 1; ext j
       have : (K j * A * (K j)ᴴ) *ᵥ v = K j *ᵥ (A *ᵥ ((K j)ᴴ *ᵥ v)) := by
         simp [Matrix.mulVec_mulVec, Matrix.mul_assoc]
-      rw [this, HermitianHelpers.dotProduct_mulVec_conjTranspose]
+      rw [this, Matrix.dotProduct_mulVec, Matrix.star_mulVec,
+        Matrix.conjTranspose_conjTranspose]
     have h_each : ∀ j : Fin r,
         star ((K j)ᴴ *ᵥ v) ⬝ᵥ (A *ᵥ ((K j)ᴴ *ᵥ v)) = 0 := by
       intro j
@@ -89,8 +88,8 @@ theorem posDef_of_ker_subset_irreducible_cp
             star ((K j')ᴴ *ᵥ v) ⬝ᵥ (A *ᵥ ((K j')ᴴ *ᵥ v))).re = 0 := by
           rw [← hsum]; simp [hqf_EA]
         rwa [Complex.re_sum] at this
-      have hre := (Finset.sum_eq_zero_iff_of_nonneg
-        (fun j' _ => hA_psd.re_dotProduct_nonneg _)).mp h_sum_re j (Finset.mem_univ _)
+      have hre := congrFun (Fintype.sum_eq_zero_iff_of_nonneg
+        (fun j' => hA_psd.re_dotProduct_nonneg _) |>.mp h_sum_re) j
       exact Complex.ext hre (hA_psd.isHermitian.im_star_dotProduct_mulVec_self _)
     exact (hA_psd.dotProduct_mulVec_zero_iff _).mp (h_each i)
   -- Step 2: Construct support projection Q = U * diag(sgn(λ)) * U†
@@ -105,8 +104,12 @@ theorem posDef_of_ker_subset_irreducible_cp
   set U : Matrix (Fin D) (Fin D) ℂ := ↑hH.eigenvectorUnitary
   set sgnEig : Fin D → ℂ := fun i => if 0 < hH.eigenvalues i then 1 else 0
   set Q := U * Matrix.diagonal sgnEig * Uᴴ with hQ_def
-  have hUU : Uᴴ * U = 1 := eig_conj_mul hH
-  have hUU' : U * Uᴴ = 1 := eig_mul_conj hH
+  have hUU : Uᴴ * U = 1 := by
+    simpa [U, Matrix.star_eq_conjTranspose] using
+      Matrix.UnitaryGroup.star_mul_self hH.eigenvectorUnitary
+  have hUU' : U * Uᴴ = 1 := by
+    simpa [U, Matrix.star_eq_conjTranspose] using
+      (Unitary.mul_star_self_of_mem hH.eigenvectorUnitary.prop)
   have hsgnEig_star : star sgnEig = sgnEig := by
     ext i; simp only [sgnEig, Pi.star_apply]; split <;> simp
   have hsgnEig_sq : ∀ i, sgnEig i * sgnEig i = sgnEig i := by
@@ -129,11 +132,14 @@ theorem posDef_of_ker_subset_irreducible_cp
         ← Matrix.mul_assoc Uᴴ U, hUU, Matrix.one_mul,
         ← Matrix.mul_assoc (Matrix.diagonal sgnEig), Matrix.diagonal_mul_diagonal,
         show (fun i => sgnEig i * sgnEig i) = sgnEig from funext hsgnEig_sq]
-  have hQ1Q : Q * (1 - Q) = 0 := by rw [mul_sub, mul_one, hQ_idem, sub_self]
+  have hQ1Q : Q * (1 - Q) = 0 := IsIdempotentElem.mul_one_sub_self hQ_idem
   have hQ_proj : IsOrthogonalProjection Q := ⟨hQ_herm, hQ_idem⟩
+  have hA_spectral :
+      A = U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ := by
+    simpa [U, Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose,
+      Function.comp_def] using hH.spectral_theorem
   -- Q * A = A
   have hQA : Q * A = A := by
-    have hA_spectral := spectral_decomp_eq hH
     rw [hA_spectral, hQ_def,
         Matrix.mul_assoc, Matrix.mul_assoc, Matrix.mul_assoc,
         ← Matrix.mul_assoc Uᴴ U, hUU, Matrix.one_mul,
@@ -157,7 +163,7 @@ theorem posDef_of_ker_subset_irreducible_cp
     set w := Uᴴ *ᵥ v
     have hΛw : Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) *ᵥ w = 0 := by
       have hAv : (U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ) *ᵥ v = 0 :=
-        spectral_decomp_eq hH ▸ hv
+        hA_spectral ▸ hv
       have hUΛw : U *ᵥ (Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) *ᵥ w) = 0 := by
         rw [Matrix.mulVec_mulVec, show w = Uᴴ *ᵥ v from rfl, Matrix.mulVec_mulVec]; exact hAv
       have : Uᴴ *ᵥ (U *ᵥ (Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) *ᵥ w)) = 0 := by
@@ -188,9 +194,12 @@ theorem posDef_of_ker_subset_irreducible_cp
         hQ_herm.eq, Matrix.conjTranspose_zero] at this
       rwa [← Matrix.mul_assoc] at this
     suffices h_vec : ∀ v, (Q * (K i)ᴴ * (1 - Q)) *ᵥ v = 0 by
-      ext a b; simpa only [zero_apply, mulVec, dotProduct, Pi.single_apply, mul_ite, mul_one,
-        mul_zero, sum_ite_eq', mem_univ, ↓reduceIte, Pi.zero_apply] using
-        congr_fun (h_vec (Pi.single b 1)) a
+      ext a b
+      change (Q * (K i)ᴴ * (1 - Q)) a b = 0
+      have h_entry := congr_fun (h_vec (Pi.single b 1)) a
+      change ((Q * (K i)ᴴ * (1 - Q)) *ᵥ Pi.single b 1) a = 0 at h_entry
+      simpa only [mulVec, dotProduct, Pi.single_apply, mul_ite, mul_one,
+        mul_zero, sum_ite_eq', mem_univ, ↓reduceIte] using h_entry
     intro v
     rw [show (Q * (K i)ᴴ * (1 - Q)) *ᵥ v = Q *ᵥ ((K i)ᴴ *ᵥ ((1 - Q) *ᵥ v)) from by
       simp only [Matrix.mul_assoc, Matrix.mulVec_mulVec]]

@@ -12,7 +12,7 @@ open scoped Matrix BigOperators
 # Periodic MPS definitions
 
 This file introduces the basic periodic MPS predicates and equivalence relations
-used by the periodic form theory (arXiv:1708.00029, §2.1).
+used by the periodic form theory (arXiv:1708.00029, Section 2.1).
 -/
 
 namespace MPSTensor
@@ -42,45 +42,21 @@ abbrev SameState (A B : PeriodicMPSTensor (d := d) (D := D) m) : Prop :=
 abbrev GaugeEquiv (A B : PeriodicMPSTensor (d := d) (D := D) m) : Prop :=
   MPSChainTensor.GaugeEquiv A B
 
-theorem SameState.refl (A : PeriodicMPSTensor (d := d) (D := D) m) : SameState A A :=
-  MPSChainTensor.SameState.refl A
-
-theorem SameState.symm {A B : PeriodicMPSTensor (d := d) (D := D) m}
-    (h : SameState A B) : SameState B A :=
-  MPSChainTensor.SameState.symm h
-
-theorem SameState.trans {A B C : PeriodicMPSTensor (d := d) (D := D) m}
-    (hAB : SameState A B) (hBC : SameState B C) :
-    SameState A C :=
-  MPSChainTensor.SameState.trans hAB hBC
-
-instance instEquivalenceSameState :
+def instEquivalenceSameState :
     Equivalence (SameState (d := d) (D := D) (m := m)) where
   -- `Equivalence` is a structure (not a class): this is a convenience bundle,
   -- not intended to be found via typeclass search.
-  refl := SameState.refl
-  symm := SameState.symm
-  trans := SameState.trans
+  refl := MPSChainTensor.SameState.refl
+  symm := MPSChainTensor.SameState.symm
+  trans := MPSChainTensor.SameState.trans
 
-theorem GaugeEquiv.refl (A : PeriodicMPSTensor (d := d) (D := D) m) : GaugeEquiv A A :=
-  MPSChainTensor.GaugeEquiv.refl A
-
-theorem GaugeEquiv.symm {A B : PeriodicMPSTensor (d := d) (D := D) m}
-    (h : GaugeEquiv A B) : GaugeEquiv B A :=
-  MPSChainTensor.GaugeEquiv.symm h
-
-theorem GaugeEquiv.trans {A B C : PeriodicMPSTensor (d := d) (D := D) m}
-    (hAB : GaugeEquiv A B) (hBC : GaugeEquiv B C) :
-    GaugeEquiv A C :=
-  MPSChainTensor.GaugeEquiv.trans hAB hBC
-
-instance instEquivalenceGaugeEquiv :
+def instEquivalenceGaugeEquiv :
     Equivalence (GaugeEquiv (d := d) (D := D) (m := m)) where
   -- `Equivalence` is a structure (not a class): this is a convenience bundle,
   -- not intended to be found via typeclass search.
-  refl := GaugeEquiv.refl
-  symm := GaugeEquiv.symm
-  trans := GaugeEquiv.trans
+  refl := MPSChainTensor.GaugeEquiv.refl
+  symm := MPSChainTensor.GaugeEquiv.symm
+  trans := MPSChainTensor.GaugeEquiv.trans
 
 end PeriodicMPSTensor
 
@@ -92,7 +68,7 @@ def IsLeftCanonical (A : MPSTensor d D) : Prop :=
 peripheral spectrum equal to the `m`-th roots of unity, positivity of `m`,
 and existence of a primitive `m`-th root.
 
-This is the periodic analogue of primitivity data in arXiv:1708.00029, §2.1. -/
+This is the periodic analogue of primitivity data in arXiv:1708.00029, Section 2.1. -/
 structure IsPeriodic (m : ℕ) (A : MPSTensor d D) : Prop where
   /-- No nontrivial invariant projection. -/
   irreducible : IsIrreducibleTensor A
@@ -142,14 +118,15 @@ structure IsIrreducibleForm (A : MPSTensor d D) where
   dim : Fin r → ℕ
   /-- Block tensors. -/
   blocks : (k : Fin r) → MPSTensor d (dim k)
-  /-- Positive complex weights. -/
+  /-- Complex weights, written as positive real scalars. -/
   μ : Fin r → ℂ
   /-- Every block is periodic with period `period k`. -/
   period : Fin r → ℕ
   /-- Periodicity of each block. -/
   periodic : ∀ k, IsPeriodic (period k) (blocks k)
-  /-- Weights are strictly positive real scalars (embedded in `ℂ`). -/
-  weight_pos : ∀ k, 0 < (μ k).re
+  /-- Weights are strictly positive real scalars (embedded in `ℂ`).
+  arXiv:1708.00029, lines 252--261, convention \(\mu_j>0\). -/
+  weight_pos : ∀ k, 0 < (μ k).re ∧ (μ k).im = 0
   /-- Reassembled block tensor generates the same MPV family. -/
   sameMPV : SameMPV₂ A (toTensorFromBlocks (d := d) (μ := μ) blocks)
 
@@ -228,9 +205,7 @@ theorem RepeatedBlocks.symm {A B : MPSTensor d D}
     (h : RepeatedBlocks A B) : RepeatedBlocks B A := by
   rcases h with ⟨ξ, Y, hξ, hY⟩
   have hξ_ne : ξ ≠ 0 := by
-    intro h0
-    have : ‖ξ‖ = 0 := by simp [h0]
-    linarith [hξ]
+    intro h0; simp [h0] at hξ
   refine ⟨ξ⁻¹, Y⁻¹, by simp [norm_inv, hξ], ?_⟩
   intro i
   have hYi := hY i
@@ -274,7 +249,7 @@ private lemma evalWord_leftMul_of_commute
   | [] => by simp [evalWord]
   | i :: w => by
       have hCommZi : Commute Z (A i) := by
-        simpa [Commute] using hcomm i
+        exact hcomm i
       have hCommPow : A i * Z ^ w.length = Z ^ w.length * A i :=
         (hCommZi.symm.pow_right w.length).eq
       calc

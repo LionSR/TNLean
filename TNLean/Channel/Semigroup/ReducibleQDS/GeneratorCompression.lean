@@ -3,10 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Algebra.MatrixOperatorSpace
+import TNLean.Algebra.MatrixAux
 import TNLean.Channel.Semigroup.ReducibleQDS.Defs
 
 /-!
-# Generator-Level Compression Preservation (Wolf Prop 7.6, (3) ↔ (4))
+# Generator-Level Compression Preservation (Wolf Proposition 7.6, (3) ↔ (4))
 
 This file proves that the semigroup-level invariant compression implies
 block-upper-triangular Lindblad form ((3) → (4)), and vice versa ((4) → (3)).
@@ -15,25 +16,15 @@ block-upper-triangular Lindblad form ((3) → (4)), and vice versa ((4) → (3))
 open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace
 open Matrix Finset TNLean
 
+attribute [local instance 1001]
+  Matrix.linftyOpNormedAddCommGroup
+  Matrix.linftyOpNormedSpace
+
 noncomputable section
 
 variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
-
-/-! ## Projection complement lemmas -/
-
-/-- `(1 - P) * P = 0` for an orthogonal projection `P`. -/
-theorem orthogonalProjection_complement_mul
-    {P : Mat} (hP : IsOrthogonalProjection P) :
-    (1 - P) * P = 0 := by
-  rw [sub_mul, one_mul, hP.2, sub_self]
-
-/-- `P * (1 - P) = 0` for an orthogonal projection `P`. -/
-theorem orthogonalProjection_mul_complement
-    {P : Mat} (hP : IsOrthogonalProjection P) :
-    P * (1 - P) = 0 := by
-  rw [mul_sub, mul_one, hP.2, sub_self]
 
 /-! ## (3) → (4): Invariant compression → block-upper-triangular Lindblad
 
@@ -43,15 +34,15 @@ then the Lindblad operators and κ must be block-upper-triangular.
 
 /-- If the generator preserves the compression, then all Lindblad operators
 are block-upper-triangular: `(1-P)*Lⱼ*P = 0` for every `j`. This is the
-key algebraic step in Wolf Prop 7.6. -/
+key algebraic step in Wolf Proposition 7.6. -/
 theorem lindblad_block_of_generatorPreservesCompression
     {P : Mat} (hP : IsOrthogonalProjection P) (F : LindbladForm D)
     (hgen : GeneratorPreservesCompression F.toLinearMap P) :
     ∀ j : Fin F.r, (1 - P) * F.L j * P = 0 := by
   have hPP : P * P = P := hP.2
   have hP_herm : Pᴴ = P := hP.1
-  have hQP := orthogonalProjection_complement_mul hP
-  have hPQ := orthogonalProjection_mul_complement hP
+  have hQP := IsIdempotentElem.one_sub_mul_self hP.2
+  have hPQ := IsIdempotentElem.mul_one_sub_self hP.2
   have hLP_compress : P * F.toLinearMap P * P = F.toLinearMap P := by
     have h1 := hgen 1; simp only [mul_one] at h1; rwa [hPP] at h1
   have hQ_LP : (1 - P) * F.toLinearMap P = 0 := by
@@ -92,18 +83,18 @@ theorem lindblad_block_of_generatorPreservesCompression
               rw [← Matrix.mul_assoc, hPP]
       _ = (1 - P) * (F.L j * P * (F.L j)ᴴ) * (1 - P) := by
               simp [Matrix.mul_assoc]
-  exact eq_zero_of_sum_mul_conjTranspose_eq_zero _ hsum_zero
+  exact Matrix.eq_zero_of_sum_mul_conjTranspose_eq_zero _ hsum_zero
 
 /-- If the generator preserves the compression and all Lindblad operators
 satisfy `(1-P)*Lⱼ*P = 0`, then the effective Hamiltonian `κ` also satisfies
-`(1-P)*κ*P = 0`. This is a shared step used in both Wolf Prop 7.6 and
-Cor 7.2(1). -/
+`(1-P)*κ*P = 0`. This is a shared step used in both Wolf Proposition 7.6 and
+Corollary 7.2(1). -/
 theorem kappa_block_of_generatorPreservesCompression
     {P : Mat} (hP : IsOrthogonalProjection P) (F : LindbladForm D)
     (hgen : GeneratorPreservesCompression F.toLinearMap P)
     (hblock : ∀ j : Fin F.r, (1 - P) * F.L j * P = 0) :
     (1 - P) * F.toGeneratorDecomp.κ * P = 0 := by
-  have hQP := orthogonalProjection_complement_mul hP
+  have hQP := IsIdempotentElem.one_sub_mul_self hP.2
   have hLP_compress : P * F.toLinearMap P * P = F.toLinearMap P := by
     have h1 := hgen 1; simp only [mul_one] at h1; rwa [hP.2] at h1
   have hQ_LP : (1 - P) * F.toLinearMap P = 0 := by
@@ -144,6 +135,8 @@ theorem generatorPreservesCompression_of_semigroupPreservesCompression
     simp [expSemigroup_zero] at h
     exact h.hasDerivWithinAt
   -- The compression map M ↦ P * M * P is a continuous ℝ-linear map
+  letI : NormedAddCommGroup Mat := Matrix.linftyOpNormedAddCommGroup
+  letI : NormedSpace ℝ Mat := Matrix.linftyOpNormedSpace
   let compress : Mat →ₗ[ℝ] Mat :=
     { toFun := fun M => P * M * P
       map_add' := by
@@ -156,7 +149,7 @@ theorem generatorPreservesCompression_of_semigroupPreservesCompression
     rfl
   -- Build a CLM from compress
   let compressCLM : Mat →L[ℝ] Mat :=
-    ⟨compress, LinearMap.continuous_of_finiteDimensional compress⟩
+    LinearMap.toContinuousLinearMap compress
   -- compressCLM applied to anything gives P * · * P
   have hclm_eq : ∀ M : Mat, compressCLM M = P * M * P := hcompress_apply
   -- g(t) := P * f(t) * P has derivative P * L(Y) * P at t = 0
@@ -166,13 +159,12 @@ theorem generatorPreservesCompression_of_semigroupPreservesCompression
     have hcomp := compressCLM.hasFDerivAt.comp_hasDerivWithinAt (x := (0 : ℝ)) hd_f
     simp only [Function.comp_def] at hcomp
     -- hcomp : HasDerivWithinAt (fun x => compressCLM (exp L x Y)) (compressCLM (L Y)) ...
-    -- We need to rewrite compressCLM to P * · * P
-    have h1 : (fun u => compressCLM (expSemigroup L u Y)) =
-        (fun u => P * (expSemigroup L u Y) * P) :=
-      funext (fun u => hclm_eq _)
-    have h2 : compressCLM (L Y) = P * (L Y) * P := hclm_eq _
-    rw [h1, h2] at hcomp
-    exact hcomp
+    -- Replace the compressed function and derivative by their matrix expression.
+    have hcomp' : HasDerivWithinAt
+        (fun u : ℝ => P * (expSemigroup L u Y) * P) (compressCLM (L Y)) (Set.Ici 0) 0 :=
+      hcomp.congr (fun u _hu => (hclm_eq (expSemigroup L u Y)).symm)
+        (hclm_eq (expSemigroup L 0 Y)).symm
+    exact hcomp'.congr_deriv (hclm_eq _)
   -- g(t) = f(t) for all t ≥ 0 (hypothesis)
   have heq : ∀ t ∈ Set.Ici (0 : ℝ),
       P * (expSemigroup L t Y) * P = expSemigroup L t Y :=
@@ -218,8 +210,8 @@ theorem generator_preserves_compression_of_blockUpperTriangular
   set κ : Mat := Complex.I • F.H + (1/2 : ℂ) • ∑ j : Fin F.r, (F.L j)ᴴ * F.L j
   have hPP : P * P = P := hP.2
   have hP_herm : Pᴴ = P := hP.1
-  have hQP := orthogonalProjection_complement_mul hP
-  have hPQ := orthogonalProjection_mul_complement hP
+  have hQP := IsIdempotentElem.one_sub_mul_self hP.2
+  have hPQ := IsIdempotentElem.mul_one_sub_self hP.2
   have hL_block_ct : ∀ j : Fin F.r, P * (F.L j)ᴴ * (1 - P) = 0 := by
     intro j
     have h := congrArg Matrix.conjTranspose (hL_block j)
@@ -315,7 +307,7 @@ theorem semigroup_preserves_compression_of_generator
   have hcompress : ∀ M : Mat, compress M = P * M * P := fun M => by
     simp [compress, LinearMap.mulLeft, LinearMap.mulRight, Matrix.mul_assoc]
   let compressCLM : Mat →L[ℂ] Mat :=
-    ⟨compress, LinearMap.continuous_of_finiteDimensional compress⟩
+    LinearMap.toContinuousLinearMap compress
   have hcompress_clm : ∀ M : Mat, compressCLM M = P * M * P := hcompress
   letI : CompleteSpace (Mat →L[ℂ] Mat) :=
     FiniteDimensional.complete ℂ (Mat →L[ℂ] Mat)
@@ -326,7 +318,23 @@ theorem semigroup_preserves_compression_of_generator
   have heval_sum : HasSum (fun n : ℕ => (((Nat.factorial n : ℂ)⁻¹) • ((t : ℂ) • E) ^ n) Y)
       (expSemigroup L t Y) := by
     have h := ev_Y.hasSum hexp_sum
-    convert h using 1
+    have h' : HasSum
+        (fun n : ℕ => (((Nat.factorial n : ℂ)⁻¹) • ((t : ℂ) • E) ^ n) Y)
+        (ev_Y (NormedSpace.exp ((t : ℂ) • E))) := by
+      refine HasSum.congr_fun h ?_
+      intro n
+      change ((Nat.factorial n : ℂ)⁻¹) • (((t : ℂ) • E) ^ n) Y =
+        ((Nat.factorial n : ℂ)⁻¹) • (((t : ℂ) • E) ^ n) Y
+      rfl
+    have hlim :
+        ev_Y (NormedSpace.exp ((t : ℂ) • E)) = expSemigroup L t Y := by
+      change (expSemigroupCLM E t) Y = expSemigroup L t Y
+      rw [show E = endEquiv L by rfl]
+      rw [← expSemigroup_toCLM L t]
+      change (LinearMap.toContinuousLinearMap (expSemigroup L t)) Y =
+        expSemigroup L t Y
+      rfl
+    exact hlim ▸ h'
   have hcomp_sum : HasSum
       (fun n : ℕ => compressCLM ((((Nat.factorial n : ℂ)⁻¹) • ((t : ℂ) • E) ^ n) Y))
       (compressCLM (expSemigroup L t Y)) :=
@@ -357,7 +365,7 @@ theorem semigroup_preserves_compression_of_generator
     calc
       compressCLM ((((Nat.factorial n : ℂ)⁻¹) • ((t : ℂ) • E) ^ n) Y)
           = ((Nat.factorial n : ℂ)⁻¹) • compressCLM ((((t : ℂ) • E) ^ n) Y) := by
-              simp [ContinuousLinearMap.smul_apply]
+              simp
       _ = ((Nat.factorial n : ℂ)⁻¹) • compressCLM ((t : ℂ) ^ n • (L ^ n) Y) := by
               rw [hpow_apply]
       _ = ((Nat.factorial n : ℂ)⁻¹ * (t : ℂ) ^ n) • compressCLM ((L ^ n) Y) := by
@@ -367,7 +375,7 @@ theorem semigroup_preserves_compression_of_generator
               rw [hpow_apply]
               simp [smul_smul]
       _ = (((Nat.factorial n : ℂ)⁻¹) • ((t : ℂ) • E) ^ n) Y := by
-              simp [ContinuousLinearMap.smul_apply]
+              simp
   have hsame_sum : HasSum (fun n : ℕ => (((Nat.factorial n : ℂ)⁻¹) • ((t : ℂ) • E) ^ n) Y)
       (compressCLM (expSemigroup L t Y)) := by
     rwa [show (fun n => compressCLM ((((Nat.factorial n : ℂ)⁻¹) • ((t : ℂ) • E) ^ n) Y)) =

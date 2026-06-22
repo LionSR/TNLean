@@ -72,12 +72,8 @@ theorem eq_nearestPoint_of_mem_of_norm_eq_iInf
   have hv : inner ℝ (u - v) (p - v) ≤ 0 :=
     (norm_eq_iInf_iff_real_inner_le_zero hK_convex hvK).1 hvmin p hpK
   have hv' : 0 ≤ inner ℝ (u - v) (v - p) := by
-    have hneg : 0 ≤ inner ℝ (u - v) (-(p - v)) := by
-      rw [inner_neg_right]
-      exact neg_nonneg.mpr hv
-    have hsub : -(p - v) = v - p := by
-      abel
-    rwa [hsub] at hneg
+    rw [show v - p = -(p - v) from (neg_sub p v).symm, inner_neg_right]
+    exact neg_nonneg.mpr hv
   have hle : inner ℝ (v - p) (v - p) ≤ 0 := by
     have hrewrite : inner ℝ (v - p) (v - p) =
         inner ℝ (u - p) (v - p) - inner ℝ (u - v) (v - p) := by
@@ -109,13 +105,9 @@ theorem nearestPoint_eq_self
     refine ⟨0, ?_⟩
     rintro _ ⟨w, rfl⟩
     exact norm_nonneg _
-  have hle : (⨅ w : K, ‖u - w‖) ≤ ‖u - (⟨u, huK⟩ : K)‖ := by
-    exact ciInf_le hbdd ⟨u, huK⟩
-  have hle0 : (⨅ w : K, ‖u - w‖) ≤ 0 := by
-    simpa using hle
-  have h0le : 0 ≤ (⨅ w : K, ‖u - w‖) := by
-    exact le_ciInf fun w => norm_nonneg _
-  have hEq : (⨅ w : K, ‖u - w‖) = 0 := le_antisymm hle0 h0le
+  have hEq : (⨅ w : K, ‖u - w‖) = 0 :=
+    le_antisymm (by simpa using ciInf_le hbdd ⟨u, huK⟩)
+      (le_ciInf fun w => norm_nonneg _)
   simp [hEq]
 
 theorem dist_nearestPoint_nearestPoint_le
@@ -129,12 +121,8 @@ theorem dist_nearestPoint_nearestPoint_le
     have h : inner ℝ (u - p) (q - p) ≤ 0 :=
       inner_sub_nearestPoint_nonpos K hK_nonempty hK_complete hK_convex u q
         (nearestPoint_mem K hK_nonempty hK_complete hK_convex v)
-    have hneg : 0 ≤ inner ℝ (u - p) (-(q - p)) := by
-      rw [inner_neg_right]
-      exact neg_nonneg.mpr h
-    have hsub : -(q - p) = p - q := by
-      abel
-    rwa [hsub] at hneg
+    rw [show p - q = -(q - p) from (neg_sub q p).symm, inner_neg_right]
+    exact neg_nonneg.mpr h
   have hqp_nonpos : inner ℝ (v - q) (p - q) ≤ 0 :=
     inner_sub_nearestPoint_nonpos K hK_nonempty hK_complete hK_convex v p
       (nearestPoint_mem K hK_nonempty hK_complete hK_convex u)

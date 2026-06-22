@@ -13,15 +13,15 @@ import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Ord
 /-!
 # Operator-monotone corollaries for subunital positive maps
 
-Mathlib already proves operator monotonicity of `x ↦ x^p` for `p ∈ [0,1]` and of
-`log`. This file records those matrix-specialized lemmas and proves Wolf
-Corollary 5.2 from the operator Jensen inequality
-(`OperatorConvexity.lean`).
+Mathlib already proves operator monotonicity of `x ↦ x^p` for `p ∈ [0,1]` and
+of `log`, through `CFC.rpow_le_rpow` and `CFC.log_le_log`. This file uses the
+same functional-calculus setting to prove Wolf Corollary 5.2 from the operator
+Jensen inequality (`OperatorConvexity.lean`).
 
-**Status note:** The Cor. 5.2 theorems in this file depend on Jensen-type lemmas
-imported from `OperatorConvexity.lean` that are currently `sorry` placeholders.
-They should be understood as conditional on those axioms and are not yet fully
-verified Lean theorems.
+**Status note:** The Corollary 5.2 theorems in this file depend on Jensen-type lemmas
+imported from `OperatorConvexity.lean` that are proved from four explicit
+operator-Jensen and Lieb concavity axioms. They should be understood as conditional
+on those matrix-analysis inputs and are not yet derived from Mathlib theorems alone.
 
 ### Proof strategy for Corollary 5.2
 
@@ -53,31 +53,8 @@ private local instance instOperatorMonotoneNormedRing : NormedRing Mat :=
   Matrix.instL2OpNormedRing
 private local instance instOperatorMonotoneNormedAlgebra : NormedAlgebra ℂ Mat :=
   Matrix.instL2OpNormedAlgebra
-private local instance instOperatorMonotoneCStarRing : CStarRing Mat :=
-  Matrix.instCStarRing
-private local instance instOperatorMonotonePartialOrder : PartialOrder Mat :=
-  Matrix.instPartialOrder
-private local instance instOperatorMonotoneStarOrderedRing : StarOrderedRing Mat :=
-  Matrix.instStarOrderedRing
-private local instance instOperatorMonotoneNonnegSpectrumClass : NonnegSpectrumClass ℝ Mat :=
-  Matrix.instNonnegSpectrumClass
-private local instance instOperatorMonotoneCStarAlgebra : CStarAlgebra Mat :=
-  CStarAlgebra.mk
 
-/-- Matrix-specialized operator monotonicity of `x ↦ x^p` for `p ∈ [0,1]`. -/
-theorem matrix_rpow_le_rpow
-    {A B : Mat} {p : ℝ} (hp : p ∈ Set.Icc (0 : ℝ) 1) (hAB : A ≤ B) :
-    A ^ p ≤ B ^ p := by
-  simpa using (CFC.rpow_le_rpow (A := Mat) hp hAB)
-
-/-- Matrix-specialized operator monotonicity of `log` on positive definite matrices. -/
-theorem matrix_log_le_log
-    {A B : Mat} (hAB : A ≤ B) (hA : A.PosDef) :
-    CFC.log A ≤ CFC.log B := by
-  exact CFC.log_le_log (A := Mat) hAB
-    (ha := Matrix.isStrictlyPositive_iff_posDef.mpr hA)
-
-/-- Wolf Cor. 5.2(1) in matrix form.
+/-- Wolf Corollary 5.2(1) in matrix form.
 
 For a positive subunital map `T`, `p ≥ 1`, and `A ≥ 0`:
   `T(A) ≤ (T(A ^ p)) ^ (1/p)`.
@@ -104,7 +81,7 @@ theorem IsPositiveMap.cor52_item1_rpow_of_subunital
   rw [hcomp] at hJ
   exact hJ
 
-/-- Wolf Cor. 5.2(2) in matrix form.
+/-- Wolf Corollary 5.2(2) in matrix form.
 
 For a positive subunital map `T`, `p ∈ [1/2, 1]`, and positive-definite `A`:
   `(T(A ^ p)) ^ (1/p) ≤ T(A)`.
@@ -134,7 +111,7 @@ theorem IsPositiveMap.cor52_item2_rpow_of_subunital
   rw [hcomp] at hJ
   exact hJ
 
-/-- Wolf Cor. 5.2(3) in matrix form.
+/-- Wolf Corollary 5.2(3) in matrix form.
 
 For a positive **unital** map `T` and positive-definite `A`:
   `T(log A) ≤ log(T A)`.

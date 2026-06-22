@@ -1,0 +1,669 @@
+\chapter{Exponential Decay of Correlations}\label{ch:correlations}
+
+This chapter derives the transfer-matrix expression for thermodynamic-limit
+correlators of a normal MPS and the resulting exponential decay estimate.
+The key mechanism is spectral: after removing the leading eigenvalue
+contribution, the connected part is governed by subleading eigenvalues of the
+transfer map.
+
+When the MPS tensor generates a parent Hamiltonian
+(Chapter~\ref{ch:parent_hamiltonian}), the correlator quantifies spatial
+correlations in the ground state. The exponential decay rate is set by the
+spectral properties of the transfer map, i.e.\ by the modulus of its
+subleading eigenvalues.
+
+The spectral analysis of the transfer map and the mixed transfer operator,
+including the eigenvalue bound $\rho(F_{AB}) \le 1$, the strict
+transfer-operator gap $\rho(F_{AB}) < 1$ for non-equivalent blocks, and the resulting
+overlap decay, is developed in Chapter~\ref{ch:spectral}. This chapter
+focuses on the \emph{correlator} side: one-point and two-point expectations,
+their spectral decomposition, and quantitative bounds on decay rates.
+
+\section{Connected correlators from the transfer map}
+
+\begin{definition}[One-point expectation]\label{def:one_point_expectation}
+    \lean{MPSTensor.onePointExpectation}
+    \leanok
+    \uses{def:transfer_map, thm:qpf}
+    Fix an MPS tensor and a right fixed point of its transfer map.
+    Write the tensor as $A$ and the fixed point as $\rho^R$.
+    Under the hypotheses of Theorem~\ref{thm:qpf}, that fixed point exists
+    and is unique up to scaling; we normalize it so that $\tr(\rho^R)=1$.
+    For a local observable $X \in \MN{D}$ define
+    \[
+        \langle X_0 \rangle := \tr(X\rho^R).
+    \]
+\end{definition}
+
+\begin{definition}[Two-point expectation at distance $n$]\label{def:two_point_expectation}
+    \lean{MPSTensor.twoPointExpectation}
+    \leanok
+    \uses{def:transfer_map, def:one_point_expectation}
+    For observables $X,Y \in \MN{D}$ and $n\ge 0$,
+    \[
+        \langle X_0 Y_n \rangle
+        := \tr\!\left(Y\,\E_A^n(X\rho^R)\right).
+    \]
+    Equivalently: insert $X$ at site $0$, propagate by $\E_A^n$, then insert
+    $Y$ and take the trace.
+    \begin{center}
+        \TNTwoPointCorrelator
+    \end{center}
+\end{definition}
+
+\begin{definition}[Connected correlator]\label{def:connected_correlator}
+    \lean{MPSTensor.connectedCorrelator}
+    \leanok
+    \uses{def:two_point_expectation, def:one_point_expectation}
+    The connected two-point function is
+    \[
+        C(X,Y;n) := \langle X_0Y_n\rangle - \langle X_0\rangle\langle Y_0\rangle.
+    \]
+\end{definition}
+
+\section{Spectral expansion and exponential decay}
+
+\begin{theorem}[Sum of exponentials (spectral expansion interface)]%
+    \label{thm:correlator_sum_exponentials}
+    \lean{MPSTensor.connectedCorrelator_eq_sum}
+    \leanok
+    \uses{def:connected_correlator}
+    If coefficients $c_j\in\C$ and eigenvalues $\lambda_j\in\C$
+    ($j=1,\dots,D^2-1$) satisfy, for all $n\ge 0$,
+    \[
+        C(X,Y;n) = \sum_{j=1}^{D^2-1} c_j\,\lambda_j^n,
+    \]
+    then the connected correlator equals the stated sum of exponentials.
+    The source~\cite[Section~II.B.3]{Cirac2021Matrix} states that the connected
+    correlator is a sum of $D^2-1$ pure exponentials
+    $C(X,Y;n) = \sum_{j\ge 2}^{D^2} c_{XY}(j)\lambda_j^n$,
+    which always exists for a normal MPS via the transfer-map spectral decomposition.
+    % Constructing $c_j,\lambda_j$ from $\E_A$ is tracked in Issue~\#1447.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Given the expansion hypothesis, the equality is immediate.
+    The source~\cite[Section~II.B.3]{Cirac2021Matrix} derives this expansion
+    from the spectral decomposition of $\E_A^n$ restricted to the
+    complement of the fixed-point eigenspace: the leading eigenvalue
+    $\lambda_1=1$ contributes $\langle X_0\rangle\langle Y_0\rangle$,
+    which is subtracted in the connected correlator, leaving the sum
+    over subleading eigenvalues.
+    % Constructing the eigendecomposition coefficients from $\E_A$
+    % is tracked in Issue~\#1447.
+\end{proof}
+
+\begin{theorem}[Exponential decay bound (interface)]%
+    \label{thm:correlator_exponential_bound}
+    \lean{MPSTensor.connectedCorrelator_bound}
+    \leanok
+    \uses{def:connected_correlator}
+    If a constant $C_{XY}\in\R$ and $\lambda_2\in\C$ satisfy, for all $n\ge 0$,
+    \[
+        |C(X,Y;n)| \le C_{XY}\,|\lambda_2|^n,
+    \]
+    then the connected correlator satisfies that exponential decay bound.
+    The source~\cite[Section~II.B.3]{Cirac2021Matrix} obtains this by combining
+    the sum-of-exponentials expansion with the triangle inequality, and
+    Sec.~4 provides the transfer-map gap condition $|\lambda_j|<1$ for the
+    subleading eigenvalues.
+    % Extracting $C_{XY}$ and $\lambda_2$ from the transfer-map spectrum
+    % is tracked in Issue~\#1447.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Given the bound hypothesis, the estimate is immediate.
+    The source~\cite[Section~II.B.3]{Cirac2021Matrix} obtains this bound
+    by applying the triangle inequality to the sum-of-exponentials
+    expansion and using the transfer-map gap condition
+    $|\lambda_j|\le|\lambda_2|<1$ for all subleading eigenvalues.
+    % Deriving the bound from the eigendecomposition of $\E_A$
+    % is tracked in Issue~\#1447.
+\end{proof}
+
+\begin{remark}[Transfer-map spectral hypothesis]%
+    \label{rem:spectral_hypothesis}
+    \uses{thm:correlator_exponential_bound, thm:primitive_compl_lt_one,
+        thm:transfer_operator_gap_irr_tp, thm:transfer_map_gap_wielandt}
+    The hypothesis ``$|\lambda_2| < 1$'' in
+    Theorem~\ref{thm:correlator_exponential_bound} is a transfer-map gap
+    condition: all non-leading eigenvalues of $\E_A$ lie strictly inside the
+    unit disk. It is distinct from the Hamiltonian spectral gap of
+    Chapter~\ref{ch:parent_hamiltonian}.
+    The complementary transfer-map gap $\rho(\E_A - P) < 1$ is established for
+    primitive channels
+    (Theorem~\ref{thm:primitive_compl_lt_one}, Chapter~\ref{ch:channels}).
+    The mixed-transfer gap needed for block separation is supplied for
+    irreducible trace-preserving tensors
+    (Theorem~\ref{thm:transfer_operator_gap_irr_tp}), and quantitative single-tensor
+    transfer-map bounds for injective tensors are recorded in
+    Theorem~\ref{thm:transfer_map_gap_wielandt}.
+    Thus the analytical input needed to make
+    Theorems~\ref{thm:correlator_sum_exponentials}
+    and~\ref{thm:correlator_exponential_bound} unconditional is already
+    present; what remains is extracting the spectral expansion coefficients
+    $c_j,\lambda_j$ from the eigendecomposition of $\E_A$
+    (Issue~\#1447).
+\end{remark}
+
+\begin{definition}[Correlation length]\label{def:correlation_length}
+    \lean{MPSTensor.correlationLength}
+    \leanok
+    \uses{def:transfer_map}
+    The correlation length associated with a subleading eigenvalue
+    $\lambda_2$ of the transfer map ($|\lambda_2|<1$) is
+    \[
+        \xi := -\frac{1}{\log|\lambda_2|}.
+    \]
+\end{definition}
+
+\begin{lemma}[Correlation length is positive]\label{lem:correlation_length_pos}
+    \lean{MPSTensor.correlationLength_pos}
+    \leanok
+    \uses{def:correlation_length}
+    If $|\lambda_2| < 1$ and $\lambda_2 \ne 0$, then $\xi > 0$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Since $0 < |\lambda_2| < 1$, we have $\log|\lambda_2| < 0$, so
+    $\xi = -1/\log|\lambda_2| > 0$.
+\end{proof}
+
+\section{Quantitative transfer-map gap bounds}
+
+The transfer-map gap theorems in Chapter~\ref{ch:channels} establish
+$\rho(\E_A - P) < 1$ for primitive channels qualitatively. This section
+gives the \emph{quantitative} refinements with explicit constants
+and rates for the single-tensor transfer map $\E_A$.
+
+\begin{theorem}[Exponential convergence of injective primitive channels]%
+    \label{thm:exponential_convergence_primitive}
+    \lean{MPSTensor.exponential_convergence_of_primitive}
+    \leanok
+    \uses{thm:primitive_compl_lt_one, def:fixed_point_proj,
+        thm:primitive_overlap}
+    Fix an injective, trace-preserving MPS tensor $A$ with positive
+    definite fixed point $\rho$.
+    Let
+    \[
+        P(X) = \frac{\tr(X)}{\tr(\rho)}\rho
+    \]
+    be the corresponding fixed-point projection.
+    Then there exist $C > 0$ and $0 < \delta \le 1$ such that for all
+    $n \ge 0$ and $X \in \MN{D}$,
+    \[
+        \|\E_A^n(X) - P(X)\|
+        \le  C\,(1-\delta)^n\,\|X\|.
+    \]
+    The transfer-map gap $\delta$ exists by primitivity
+    (Theorem~\ref{thm:primitive_compl_lt_one}, the complementary transfer-map gap).
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Injectivity implies primitivity of the transfer map.
+    The complementary spectral radius $\rho(\E_A - P) < 1$ then follows from
+    the primitive transfer-map gap theorem for the complementary map.
+    The Gelfand formula yields a
+    geometric bound $\|\,(\E_A - P)^n\| \le C\,(1-\delta)^n$ for suitable
+    constants, giving the claimed estimate.
+\end{proof}
+
+\begin{theorem}[Correlation length bound]\label{thm:correlation_length_bound}
+    \lean{MPSTensor.correlation_length_bound}
+    \leanok
+    \uses{def:correlation_length, thm:exponential_convergence_primitive,
+        def:injective}
+    For an injective trace-preserving MPS tensor, there exist
+    $C > 0$ and $\xi > 0$ such that for all $n \ge 0$ and all
+    traceless $X \in \MN{D}$ (i.e.\ $\tr(X) = 0$),
+    \[
+        \|\E_A^n(X)\|
+        \le  C\,e^{-n/\xi} \|X\|.
+    \]
+    Traceless matrices lie in $\ker P$, where $P$ is the fixed-point
+    projection. Since $\E_A - P$ has spectral radius strictly less
+    than~$1$, the Gelfand formula gives exponential decay at rate
+    $\xi = -1/\log\rho(\E_A - P)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For traceless $X$ we have $P(X) = 0$, so $\E_A^n(X) = (\E_A - P)^n(X)$.
+    The exponential convergence theorem gives a geometric bound
+    $C\,(1-\delta)^n\,\|X\|$. Rewriting $(1-\delta)^n = e^{-n/\xi}$ with
+    $\xi = -1/\log(1-\delta)$ yields the claimed estimate.
+\end{proof}
+
+\begin{theorem}[Transfer-map gap from injectivity]%
+    \label{thm:transfer_map_gap_wielandt}
+    \lean{MPSTensor.transfer_map_gap_of_injective}
+    \leanok
+    \uses{thm:transfer_operator_gap}
+    For an injective trace-preserving MPS tensor, there exists
+    $\delta > 0$ such that every eigenvalue $\mu \neq 1$ of the
+    transfer map satisfies $|\mu| \le 1 - \delta$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Injectivity implies eventual full Kraus rank. This yields primitivity,
+    hence a complementary transfer-map gap. Since the transfer map has
+    only finitely many eigenvalues, one may choose a uniform
+    $\delta > 0$ separating $1$ from the remaining spectrum.
+\end{proof}
+
+\section{Relation to parent Hamiltonians}
+
+\begin{remark}\label{rem:correlations_parent_hamiltonian}
+    \uses{def:parent_hamiltonian, lem:parent_hamiltonian_annihilates,
+        def:correlation_length, thm:correlator_exponential_bound}
+    When the MPS tensor $A$ generates a parent Hamiltonian $H_N(A,L)$
+    (Definition~\ref{def:parent_hamiltonian}) whose ground state is the
+    matrix product vector (Lemma~\ref{lem:parent_hamiltonian_annihilates}),
+    the exponential decay bound
+    (Theorem~\ref{thm:correlator_exponential_bound}) shows that ground-state
+    correlations decay with a finite correlation length $\xi$.
+\end{remark}
+
+\section{Renormalization fixed points and zero correlation length}
+
+\begin{definition}[Renormalization fixed point]\label{def:is_rfp}
+    \lean{MPSTensor.IsRFP}
+    \leanok
+    \uses{def:transfer_map}
+    An MPS tensor $A$ is a \emph{renormalization fixed point} (RFP) when its
+    transfer map is idempotent, $\E_A \circ \E_A = \E_A$.
+    See \cite[Definition~3.2]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Kraus-isometry criterion for RFP]\label{thm:kraus_isometry_implies_rfp}
+    \lean{MPSTensor.isRFP_of_kraus_isometry}
+    \leanok
+    \uses{def:is_rfp}
+    Suppose there exists an isometry
+    $V : \C^d \to \C^{d^2}$, written as coefficients $V_{(i_1,i_2),j}$, such
+    that
+    \begin{equation}\label{eq:corr_kraus_isometry_decomp}
+        A^{i_1} A^{i_2} = \sum_{j=0}^{d-1} V_{(i_1,i_2),j} A^j
+    \end{equation}
+    for all $i_1,i_2 \in \{0,\ldots,d-1\}$.
+    Then $A$ is a renormalization fixed point.
+    This is the backward direction of \cite[Theorem~3.1]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}\leanok
+    Expanding $\E_A^2$ gives a double Kraus sum indexed by pairs $(i_1,i_2)$.
+    Substituting the decomposition~(\ref{eq:corr_kraus_isometry_decomp}) and
+    using the isometry relation
+    $V^\dagger V = 1$ collapses the double sum to the single Kraus family
+    $\{A^j\}$, hence $\E_A^2 = \E_A$.
+\end{proof}
+
+\begin{theorem}[Renormalization-fixed-point characterization]%
+    \label{thm:renormalization_flow}
+    \lean{MPSTensor.isRFP_iff_kraus_isometry}
+    \leanok
+    \uses{def:is_rfp, thm:kraus_isometry_implies_rfp}
+    An MPS tensor $A$ is a renormalization fixed point if and only if there
+    exists an isometry $V : \C^d \to \C^{d^2}$, written as coefficients
+    $V_{(i_1,i_2),j}$ with $V^\dagger V = 1$, such that
+    \begin{equation}\label{eq:corr_AA_isometry}
+        A^{i_1} A^{i_2} = \sum_{j=0}^{d-1} V_{(i_1,i_2),j} A^j
+    \end{equation}
+    for all $i_1,i_2 \in \{0,\ldots,d-1\}$.
+    This is \cite[Theorem~3.1]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:kraus_isometry_implies_rfp, thm:kraus_rectangular_freedom'}
+    The backward implication is
+    Theorem~\ref{thm:kraus_isometry_implies_rfp}. For the forward implication,
+    expanding $\E_A^2 = \E_A$ as a Kraus sum gives, for every $X$,
+    \[
+        \sum_{i_1,i_2}(A^{i_1} A^{i_2})\,X\,(A^{i_1} A^{i_2})^\dagger
+        = \sum_j A^j\,X\,(A^j)^\dagger .
+    \]
+    Theorem~\ref{thm:kraus_rectangular_freedom'} then supplies the isometry $V$
+    relating the two Kraus families.
+\end{proof}
+
+\begin{definition}[Single-block local orthogonality convention]%
+    \label{def:is_locally_orthogonal}
+    \lean{MPSTensor.IsLocallyOrthogonal}
+    \leanok
+    \uses{def:is_rfp}
+    For the single-block convention used here, local orthogonality means
+    \[
+        \E_A^2=\E_A .
+    \]
+    The source local-orthogonality condition for a BNT family is instead the
+    collection of mixed-sector equations for distinct components,
+    \[
+        \E_{j,j'}=0.
+    \]
+    Thus this definition records the one-block idempotence convention.
+\end{definition}
+
+\begin{definition}[BNT local orthogonality]%
+    \label{def:is_bnt_locally_orthogonal}
+    \lean{MPSTensor.IsBNTLocallyOrthogonal}
+    \leanok
+    \uses{def:mixed_transfer_rect}
+    Let $(A_j)_j$ be the BNT components of a tensor in canonical form. The
+    family is \emph{locally orthogonal} when, for every pair of distinct
+    components,
+    \[
+        \E_{j,j'}=\sum_i A_j^i\otimes \overline{A_{j'}^i}=0.
+    \]
+    This is the mixed-sector condition of
+    \cite[Definition~3.5]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[BNT zero correlation length]\label{def:is_bnt_zcl}
+    \lean{MPSTensor.IsBNTZCL}
+    \leanok
+    \uses{def:bnt_cpsv, def:is_cid, def:is_bnt_locally_orthogonal}
+    Let $(A_j)_j$ be a basis of normal tensors for $A$. The BNT
+    zero-correlation-length condition is that
+    \[
+        \operatorname{CID}(A)
+    \]
+    and, for every pair of distinct BNT components,
+    \[
+        \E_{j,j'}=0.
+    \]
+    This is \cite[Definition~3.6]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[RFP normal tensor is injective]\label{thm:rfp_nt_injective}
+    \lean{MPSTensor.rfp_nt_structural}
+    \leanok
+    \uses{def:is_rfp, def:normal, def:injective}
+    If $A$ is a nonzero normal RFP tensor, then $A$ is injective.
+\end{theorem}
+\begin{proof}\leanok
+    The RFP condition $\E_A^2 = \E_A$ implies that the cumulative span
+    $\spn\{A^w : |w| \le n\}$ stabilises after one step.
+    Since $A$ is normal (hence has an injective blocked form),
+    the one-step span already equals $\MN{D}$, so $A$ is injective.
+\end{proof}
+
+\begin{theorem}[Left-canonical normal RFP tensor is injective]%
+    \label{thm:rfp_nt_structural_of_left_canonical}
+    \lean{MPSTensor.rfp_nt_structural_of_leftCanonical}
+    \leanok
+    \uses{def:is_rfp, def:normal, def:injective}
+    Assume $D > 0$. Let $A$ be a normal renormalization fixed point such that
+    \[
+        \sum_i (A^i)^\dagger A^i = \Id.
+    \]
+    Then $A$ is injective.
+    This is the left-canonical injectivity step in
+    \cite[Appendix~B]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:rfp_nt_injective}
+    The normalization $\sum_i (A^i)^\dagger A^i = \Id$ forces at least one
+    matrix $A^i$ to be nonzero, since otherwise the left-hand side would
+    vanish. Hence $A$ is a nonzero normal renormalization fixed point, and
+    Theorem~\ref{thm:rfp_nt_injective} applies.
+\end{proof}
+
+\begin{theorem}[Unitary diagonal fixed point for a left-canonical normal RFP]%
+    \label{thm:rfp_nt_cfii_diagonal_fixed_point}
+    \lean{MPSTensor.rfp_nt_cfii_diagonal_fixedPoint}
+    \leanok
+    \uses{def:is_rfp, def:normal, def:transfer_map}
+    Assume $D > 0$. Let $A$ be a normal renormalization fixed point such that
+    \[
+        \sum_i (A^i)^\dagger A^i = \Id.
+    \]
+    Then there exist a unitary $U$ and a diagonal positive definite matrix
+    $\Lambda$ such that, for $B^i := U^\dagger A^i U$,
+    \[
+        \sum_i (B^i)^\dagger B^i = \Id
+        \qquad\text{and}\qquad
+        \E_B(\Lambda) = \Lambda.
+    \]
+    This is the diagonal fixed-point reduction in
+    \cite[Appendix~B]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:rfp_nt_structural_of_left_canonical, thm:injective_irreducible,
+        thm:form_II}
+    By Theorem~\ref{thm:rfp_nt_structural_of_left_canonical}, the tensor $A$
+    is injective. Therefore its transfer map is irreducible, and hence $A$ is
+    irreducible as a tensor. Applying Theorem~\ref{thm:form_II} gives a
+    unitary conjugate $B$ for which the trace-preserving normalization remains
+    valid and a diagonal positive definite matrix $\Lambda$ with
+    $\E_B(\Lambda) = \Lambda$.
+\end{proof}
+
+\begin{theorem}[Rank-one classification for RFP transfer maps]%
+    \label{thm:transferMap_eq_fixedPointProj_of_isRFP_injective}
+    \lean{MPSTensor.transferMap_eq_fixedPointProj_of_isRFP_injective}
+    \leanok
+    \uses{def:is_rfp, def:injective, def:fixed_point_proj,
+        thm:exponential_convergence_primitive}
+    Let $A$ be an injective left-canonical RFP tensor with positive-definite
+    fixed point $\rho$ of the transfer map $\E_A$. Then
+    $\E_A = P_\rho$, where $P_\rho(X) = \frac{\tr(X)}{\tr(\rho)} \rho$
+    is the rank-one fixed-point projection.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:exponential_convergence_primitive}
+    The exponential convergence bound gives
+    $\lVert \E_A^n(X) - P_\rho(X)\rVert \le C(1-\delta)^n\lVert X\rVert$.
+    Idempotence of $\E_A$ implies $\E_A^{n+1} = \E_A$ for all $n \ge 0$,
+    so $\lVert \E_A(X) - P_\rho(X)\rVert \le C(1-\delta)^{n+1}\lVert X\rVert$
+    for all $n$. Taking $n \to \infty$ gives $\E_A = P_\rho$.
+\end{proof}
+
+\begin{theorem}[Full structural form for RFP tensors]%
+    \label{thm:rfp_nt_structural_full}
+    \lean{MPSTensor.rfp_nt_structural_full}
+    \leanok
+    \uses{thm:rfp_nt_structural_of_left_canonical,
+        thm:rfp_nt_cfii_diagonal_fixed_point,
+        thm:transferMap_eq_fixedPointProj_of_isRFP_injective}
+    A normal tensor $A$ in canonical form~II that is a renormalization fixed
+    point admits a decomposition $A^i = X \Lambda U^i X^{-1}$, where
+    $\Lambda$ is diagonal positive, $\sum_i (U^i)^\dagger U^i=I$, and
+    \[
+        \sum_i \overline{(U^i)_{\alpha,\beta}}\,
+        (U^i)_{\alpha',\beta'}
+        =
+        D^{-1}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'} .
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Combine the diagonal fixed-point reduction with the rank-one
+    classification of injective left-canonical RFP tensors. One then writes the
+    resulting rank-one projector in a normalized matrix-unit Kraus form,
+    applies Kraus freedom to identify the pair-index coefficients, and
+    transports the decomposition back through the conjugation. The matrix-unit
+    normalization contributes the factor $D^{-1}$ in the pair-index equation.
+\end{proof}
+
+\begin{theorem}[Per-block isometry canonical form]%
+    \label{thm:rfp_nt_structural_full_blocks}
+    \lean{MPSTensor.rfp_nt_structural_full_blocks}
+    \leanok
+    \uses{thm:rfp_nt_structural_full}
+    When each block $A_k$ of a multi-block tensor is a normal, left-canonical
+    renormalization fixed point, that block admits the isometry decomposition
+    $A_k^i = X_k \Lambda_k U_k^i X_k^{-1}$, with $X_k$ invertible, $\Lambda_k$
+    diagonal positive, and $U_k = (U_k^i)$ satisfies
+    $\sum_i (U_k^i)^\dagger U_k^i = I$ and the pair-index orthonormality
+    condition
+    \[
+        \sum_i \overline{(U_k^i)_{\alpha,\beta}}\,
+        (U_k^i)_{\alpha',\beta'}
+        =
+        D_k^{-1}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'} .
+    \]
+    This is the blockwise form of the isometry canonical form
+    (Theorem~\ref{thm:rfp_nt_structural_full}); see
+    \cite[Section~3]{Cirac2016MPDO_arXiv}. The source additionally imposes the
+    normalization $\tr(\Lambda_k) = 1$; the statement here gives positive
+    $\Lambda_k$ without it. That normalization is genuine rather than a
+    conjugation gauge, since rescaling $\Lambda_k \mapsto \Lambda_k/\tr(\Lambda_k)$
+    factors out as an overall scalar on $A_k^i$ (conjugation by $X_k$ preserves
+    the scale); the statement is thus the un-normalized isometry form.
+    \emph{Scope restriction (source isometry).} Corollary~III.cor3 also
+    invokes the joint isometry condition
+    \[
+        \sum_i (U_k^i)_{\alpha,\beta}\,
+            \overline{(U_\ell^i)_{\alpha',\beta'}}
+        =
+        \delta_{k,\ell}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+    \]
+    The theorem above records the contracted per-block condition
+    $\sum_i (U_k^i)^\dagger U_k^i=I$ and the diagonal pair-index equation with
+    right-hand side
+    $D_k^{-1}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}$. It does not impose
+    the trace-normalization
+    $\tr(\Lambda_k)=1$, and it does not include the cross-block equations for
+    $k\ne\ell$. This restriction is recorded in
+    \path{docs/paper-gaps/cpsv16_rfp_isometry_scope.tex}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:rfp_nt_structural_full}
+    Apply Theorem~\ref{thm:rfp_nt_structural_full} to each block.
+\end{proof}
+
+\begin{theorem}[Canonical-form blocks are injective]\label{thm:rfp_cf_structural}
+    \lean{MPSTensor.rfp_cf_structural}
+    \leanok
+    \uses{def:is_canonical_form, def:injective}
+    For a family of tensors in canonical form, every block is injective.
+    This is a direct projection of the injectivity field of the canonical-form
+    predicate; see \cite[Section~2.3]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}\leanok
+    Immediate from the \texttt{block\_injective} field of
+    \texttt{IsCanonicalForm}.
+\end{proof}
+
+
+\begin{theorem}[RG flow convergence for canonical-form tensors]%
+    \label{thm:rg_flow_converges_of_cf}
+    \lean{MPSTensor.rg_flow_converges_of_cf}
+    \leanok
+    \uses{def:is_canonical_form, def:transfer_map, def:fixed_point_proj,
+        thm:exponential_convergence_primitive}
+    For a tensor in canonical form with blocks $(A_k)$ and weights $(\mu_k)$,
+    the iterated blocking $\E_{A_k}^{2^n}$ converges pointwise to an
+    idempotent linear map $\E_\infty$ as $n\to\infty$.
+    That is, there exists $\E_\infty$ with $\E_\infty^2 = \E_\infty$ such that
+    $\E_{A_k}^{2^n}(\rho) \to \E_\infty(\rho)$ for all density matrices $\rho$.
+    This is \cite[Appendix~B]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}\leanok
+    Each block is injective and left-canonical, so its transfer map is a
+    primitive channel with a unique positive-definite fixed point $\rho_0$.
+    The exponential convergence bound
+    $\lVert \E^n(X) - P(X)\rVert \le C(1-\delta)^n \lVert X\rVert$
+    (Theorem~\ref{thm:exponential_convergence_primitive}) then gives
+    pointwise convergence $\E^n(X)\to P(X)$, and composing with the
+    subsequence $2^n\to\infty$ yields the result.
+    The witness $\E_\infty = P$ is the rank-one fixed-point projection,
+    which is idempotent.
+\end{proof}
+
+\begin{remark}\label{rem:zero_correlation_length}
+    \uses{thm:spectral_radius_le_one, def:correlation_length, def:is_rfp}
+    When the transfer map is idempotent ($\E^2=\E$), connected correlations become
+    separation-independent for all separations $n \ge 1$.
+    Informally, this corresponds to zero correlation length ($\xi=0$).
+    The full spectral equivalence (idempotence iff vanishing subleading spectrum)
+    is deferred here.
+\end{remark}
+
+\begin{definition}[Correlations independent of distance]\label{def:is_cid}
+    \lean{MPSTensor.IsCID}
+    \leanok
+    \uses{def:connected_correlator}
+    For a positive definite right fixed point $\rho^R > 0$, an MPS tensor has
+    \emph{correlations independent of distance} (CID) when for all local
+    observables $X$ and $Y$ and all separations $n,m \ge 1$,
+    \[
+        C(X,Y;n) = C(X,Y;m).
+    \]
+\end{definition}
+
+\begin{definition}[Zero correlation length]\label{def:is_zcl}
+    \lean{MPSTensor.IsZCL}
+    \leanok
+    \uses{def:is_locally_orthogonal, def:is_bnt_zcl, def:is_cid}
+    In the single-block convention, an MPS tensor has \emph{zero correlation
+        length} when
+    \[
+        \E_A^2=\E_A
+        \qquad\text{and}\qquad
+        \operatorname{CID}(A)
+    \]
+    both hold. The source definition is the BNT condition in
+    Definition~\ref{def:is_bnt_zcl}.
+\end{definition}
+
+\begin{theorem}[CID implies RFP]\label{thm:isCID_implies_isRFP}
+    \lean{MPSTensor.isCID_implies_isRFP}
+    \leanok
+    \uses{def:is_cid, def:is_rfp, def:transfer_map}
+    If an MPS tensor admits a positive definite right fixed point of its
+    transfer map and has correlations independent of distance, then
+    its transfer map is idempotent.
+    This is the reverse direction of \cite[Theorem~3.8]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}\leanok
+    Trace nondegeneracy and invertibility of the fixed point reduce
+    idempotence to equality of the connected correlator at separations
+    $n=2$ and $n=1$.
+\end{proof}
+
+\begin{theorem}[Zero correlation length iff idempotent transfer]%
+    \label{thm:zcl_iff_idempotent_transfer}
+    \lean{MPSTensor.zcl_iff_idempotent_transfer}
+    \leanok
+    \uses{def:is_rfp, def:is_cid, def:is_locally_orthogonal}
+    Under the single-block convention above,
+    \[
+        \bigl(\E_A^2=\E_A \ \text{and}\ \operatorname{CID}(A)\bigr)
+        \quad\Longleftrightarrow\quad
+        \E_A^2=\E_A .
+    \]
+    This is the idempotence/CID part of
+    \cite[Theorem~3.8]{Cirac2016MPDO_arXiv}. The full source theorem for
+    canonical-form tensors also uses Definition~\ref{def:is_bnt_zcl}.
+\end{theorem}
+\begin{proof}\leanok
+    The forward direction extracts the idempotence hypothesis. The reverse uses
+    $\E^n = \E$ for $n \ge 1$ to show the connected correlator is
+    separation-independent.
+\end{proof}
+
+\begin{theorem}[Single-block RFP iff ZCL inside a canonical form]%
+    \label{thm:rfp_iff_zcl}
+    \lean{MPSTensor.rfp_iff_zcl}
+    \leanok
+    \uses{def:is_canonical_form, def:is_rfp, def:is_zcl}
+    Let $A^i=\bigoplus_k \mu_k A_k^i$ be a tensor in canonical form. For each
+    $k$, the tensor $A_k$ is a renormalization fixed point if and only if
+    $A_k$ has zero correlation length.
+
+    This is the single-block consequence of
+    \cite[Theorem~3.10]{Cirac2016MPDO_arXiv}. The ZCL condition in the source
+    theorem is the BNT-family condition: CID together with the local
+    orthogonality equations
+    \[
+        \mathbb E_{j,j'}=0 \qquad (j\ne j'),
+    \]
+    as in Definition~\ref{def:is_bnt_zcl}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:zcl_iff_idempotent_transfer}
+    Apply Theorem~\ref{thm:zcl_iff_idempotent_transfer} to the chosen
+    canonical-form block.
+\end{proof}

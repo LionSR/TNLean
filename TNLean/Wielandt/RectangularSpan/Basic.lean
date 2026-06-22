@@ -12,20 +12,19 @@ import TNLean.Wielandt.RectangularSpan.Ranges
 import Mathlib.Data.Fin.Tuple.Basic
 
 /-!
-# Rectangular Span Foundations and Lemma 2(b) Assembly
+# Rectangular Span Foundations: Lemma 2(b) (conditional and blocked fixed-length matrix spanning)
 
-This module contains the foundational rectangular-span API used in the Wielandt
+This module contains the foundational rectangular-span theory used in the Wielandt
 bound: blocking preserves normality, blocked eigenvector transfer, the basic
 one-sided and cumulative rectangular spans, and the conditional and blocked
-assembly steps for Lemma 2(b).
+fixed-length matrix spanning theorems for Lemma 2(b).
 
-The later growth, stabilization, universality, and sharp quantitative backends
+The later growth, stabilization, universality, and sharp quantitative theorems
 live in `TNLean.Wielandt.RectangularSpan.Growth` and
 `TNLean.Wielandt.RectangularSpan.Universality`.
 
 ## Main results
 
-- `wordSpan_top_of_mul`
 - `isNormal_blockTensor`
 - `blockTensor_single_eigenvector`
 - `encodeBlock`, `blockTensor_apply_encodeBlock`
@@ -40,40 +39,7 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ## Section 1: wordSpan at multiples -/
-
-/-- Helper: ⊤ * ⊤ = ⊤ for submodules of the matrix algebra. -/
-private theorem top_mul_top_eq_top :
-    (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) *
-    (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) = ⊤ := by
-  apply eq_top_iff.mpr
-  intro M _
-  rw [show M = M * 1 by simp]
-  exact Submodule.mul_mem_mul Submodule.mem_top Submodule.mem_top
-
-/-- If `wordSpan A N = ⊤`, then `wordSpan A (k * N) = ⊤` for any `k ≥ 1`. -/
-theorem wordSpan_top_of_mul (A : MPSTensor d D) {N : ℕ}
-    (htop : wordSpan A N = ⊤) :
-    ∀ k : ℕ, 1 ≤ k → wordSpan A (k * N) = ⊤ := by
-  intro k hk
-  induction k with
-  | zero => omega
-  | succ k ih =>
-    by_cases hk0 : k = 0
-    · simp [hk0, htop]
-    · have hkge : 1 ≤ k := Nat.one_le_iff_ne_zero.mpr hk0
-      have hih : wordSpan A (k * N) = ⊤ := ih hkge
-      have hmul : wordSpan A (k * N) * wordSpan A N ≤ wordSpan A (k * N + N) :=
-        wordSpan_mul_le A (k * N) N
-      have htoptop : wordSpan A (k * N) * wordSpan A N = ⊤ := by
-        rw [hih, htop]; exact top_mul_top_eq_top
-      have hle : (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) ≤ wordSpan A (k * N + N) := by
-        rw [← htoptop]; exact hmul
-      have hlen : k * N + N = (k + 1) * N := by ring
-      rw [hlen] at hle
-      exact eq_top_iff.mpr hle
-
-/-! ## Section 2: Blocking preserves normality -/
+/-! ## Section 1: Blocking preserves normality -/
 
 /-- A word evaluation of length `(n+1)*L` factors as a product of a length-L evaluation
 and a length-`n*L` evaluation.
@@ -148,11 +114,9 @@ theorem wordSpan_le_wordSpan_blockTensor (A : MPSTensor d D) (L n : ℕ) :
     rw [hfactor]
     -- First factor: evalWord A (List.ofFn σ₀) is a single blocked Kraus operator
     set B := blockTensor (d := d) (D := D) A L
-    set σ₀_enc := (Fintype.equivFin (Fin L → Fin d)) σ₀
+    set σ₀_enc := Fin.cast (blockPhysDim_eq_pow d L).symm (finFunctionFinEquiv σ₀)
     have hfirst_eq : evalWord A (List.ofFn σ₀) = B σ₀_enc := by
-      simp only [B, blockTensor, wordOfBlock, decodeBlock, σ₀_enc]
-      congr 1
-      simp [Equiv.symm_apply_apply]
+      simp [B, blockTensor, wordOfBlock, decodeBlock, σ₀_enc, Fin.cast_cast]
     have hfirst : evalWord A (List.ofFn σ₀) ∈ wordSpan B 1 := by
       rw [hfirst_eq]
       apply Submodule.subset_span
@@ -188,12 +152,12 @@ theorem isNormal_blockTensor (A : MPSTensor d D) (L : ℕ) (hL : 0 < L)
     eq_top_iff.mpr (htopNL ▸ hle)
   exact ⟨N₀, (wordSpan_eq_top_iff_isNBlkInjective _ N₀).mp hBtop⟩
 
-/-! ## Section 3: Eigenvector for blocked tensor -/
+/-! ## Section 2: Eigenvector for blocked tensor -/
 
 /-- Encoding a function `σ₀ : Fin L → Fin d` as a blocked index. -/
 noncomputable def encodeBlock (d L : ℕ) (σ₀ : Fin L → Fin d) :
     Fin (blockPhysDim d L) :=
-  (Fintype.equivFin (Fin L → Fin d)) σ₀
+  Fin.cast (blockPhysDim_eq_pow d L).symm (finFunctionFinEquiv σ₀)
 
 /-- The Kraus operator of the blocked tensor at the encoded index
 equals the word evaluation. -/
@@ -202,9 +166,7 @@ theorem blockTensor_apply_encodeBlock (A : MPSTensor d D) (L : ℕ)
     (blockTensor (d := d) (D := D) A L) (encodeBlock d L σ₀) =
       evalWord A (List.ofFn σ₀) := by
   classical
-  simp only [blockTensor, wordOfBlock, decodeBlock, encodeBlock]
-  congr 1
-  simp [Equiv.symm_apply_apply]
+  simp [blockTensor, wordOfBlock, decodeBlock, encodeBlock, Fin.cast_cast]
 
 /-- **Word eigenvector → single-index eigenvector of the blocked tensor.** -/
 theorem blockTensor_single_eigenvector (A : MPSTensor d D)
@@ -220,7 +182,7 @@ theorem blockTensor_transpose_encodeBlock (A : MPSTensor d D) (L : ℕ)
       (evalWord A (List.ofFn σ₀))ᵀ := by
   rw [blockTensor_apply_encodeBlock]
 
-/-! ## Section 4: Rectangular span -/
+/-! ## Section 3: Rectangular span -/
 
 /-- The **rectangular span** is the image of `wordSpan A n` under
 left-multiplication by a fixed matrix `P`. -/
@@ -243,12 +205,10 @@ theorem rectSpan_finrank_le (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D)
     Module.finrank ℂ (rectSpan P A n) ≤ D ^ 2 := by
   calc Module.finrank ℂ (rectSpan P A n)
       ≤ Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) := Submodule.finrank_le _
-    _ = Fintype.card (Fin D) * Fintype.card (Fin D) *
-        Module.finrank ℂ ℂ := Module.finrank_matrix ℂ ℂ _ _
-    _ = D * D * 1 := by simp [Fintype.card_fin, Module.finrank_self]
-    _ = D ^ 2 := by ring
+    _ = D ^ 2 := by
+          rw [Module.finrank_matrix, Fintype.card_fin, Module.finrank_self, mul_one]; ring
 
-/-! ## Section 5: Cumulative rectangular span -/
+/-! ## Section 4: Cumulative rectangular span -/
 
 /-- The **cumulative rectangular span**: image of `cumulativeSpan` under left-mult by P. -/
 noncomputable def cumulativeRectSpan (P : Matrix (Fin D) (Fin D) ℂ)
@@ -275,10 +235,8 @@ theorem cumulativeRectSpan_finrank_le
     Module.finrank ℂ (cumulativeRectSpan P A n) ≤ D ^ 2 := by
   calc Module.finrank ℂ (cumulativeRectSpan P A n)
       ≤ Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) := Submodule.finrank_le _
-    _ = Fintype.card (Fin D) * Fintype.card (Fin D) *
-        Module.finrank ℂ ℂ := Module.finrank_matrix ℂ ℂ _ _
-    _ = D * D * 1 := by simp [Fintype.card_fin, Module.finrank_self]
-    _ = D ^ 2 := by ring
+    _ = D ^ 2 := by
+          rw [Module.finrank_matrix, Fintype.card_fin, Module.finrank_self, mul_one]; ring
 
 /-- When `cumulativeSpan A n = ⊤`, the cumulative rectangular span equals `range(mulLeft P)`. -/
 theorem cumulativeRectSpan_eq_range_of_cumulativeSpan_eq_top
@@ -294,9 +252,9 @@ theorem cumulativeRectSpan_eq_range_of_isNormal [NeZero D]
   cumulativeRectSpan_eq_range_of_cumulativeSpan_eq_top P A
     (cumulativeSpan_eq_top A hN)
 
-/-! ## Section 6: Conditional assembly (Lemma 2(b)) -/
+/-! ## Section 5: Conditional fixed-length matrix spanning (Lemma 2(b)) -/
 
-/-- **Lemma 2(b) conditional assembly.**
+/-- **Lemma 2(b) conditional fixed-length matrix spanning.**
 
 If `IsNormal A`, and we have single-index eigenvectors (column and row)
 and a rank-one element in bounded `wordSpan`, then `wordSpan = ⊤`.
@@ -328,9 +286,9 @@ theorem wielandt_lemma2b_conditional [NeZero D]
   exact wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOne
     A φ ψ hVecSpread hRankOne hRowSpread
 
-/-! ## Section 7: Blocked assembly -/
+/-! ## Section 6: Blocked fixed-length matrix spanning -/
 
-/-- **Assembly at the blocked level.**
+/-- **Fixed-length matrix spanning at the blocked level.**
 
 Reduces the Wielandt bound to producing a rank-one element in the word
 span of the **blocked** tensor. The blocking period `L` absorbs the
@@ -368,7 +326,7 @@ theorem wielandt_blocked_assembly [NeZero D]
     exact heigψ
   -- B is normal
   have hNormalB : IsNormal B := isNormal_blockTensor A L hL hNormal
-  -- Apply the conditional assembly to B
+  -- Apply the conditional fixed-length matrix spanning lemma to B
   have hBtop : wordSpan B ((D - 1) + (m_blocked + (D - 1))) = ⊤ :=
     wielandt_lemma2b_conditional B hNormalB i₀ μ hμ φ hφ heigφ_B i₁ ν hν ψ hψ
       heigψ_B hRankOne

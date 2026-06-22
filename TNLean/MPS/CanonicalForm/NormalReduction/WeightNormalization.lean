@@ -1,0 +1,333 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+-/
+import TNLean.MPS.CanonicalForm.NormalReduction.TPGauge
+
+/-!
+# Positive-weight normalization for the PGVWC07 witness
+
+This module records the finite-family scalar normalization of the positive
+weights in the positive-length PGVWC07 canonical-form witness.
+
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, proof
+lines 765--766, says that the spectral radius may be normalized without loss
+of generality.  The theorem below proves the finite positive-weight part of
+that convention: divide all weights by their largest value, so that every
+normalized weight has norm at most one and one has norm one.  The statement
+also records the global scalar factor on every positive-length MPV
+coefficient.
+
+The canonical-form existence theorem is stated with positive-length equality
+after a positive global rescaling of the original tensor.  This file also
+records the complementary explicit statement for the branch in which the family
+of nonzero blocks is empty, so that no positive-length nonzero MPV coefficient
+remains to normalize.  The convention is recorded in
+`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`.
+-/
+
+open scoped Matrix ComplexOrder
+
+namespace MPSTensor
+
+variable {d D : ℕ}
+
+/-- Normalize the positive weights in a nonempty PGVWC07 positive-length
+witness by their largest value.
+
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, proof
+lines 765--766, says that the spectral radius may be normalized without loss
+of generality.  This theorem records the corresponding scalar convention for
+the positive-length witness: after dividing all weights by their maximum, every
+new weight has norm at most one and one weight has norm one.  The conclusion
+also records the global factor `scale ^ N` on length-`N` MPV coefficients. -/
+theorem PGVWC07PositiveLengthWitness.exists_weight_normalization
+    {A : MPSTensor d D} (W : PGVWC07PositiveLengthWitness (d := d) (D := D) A)
+    (hr : 0 < W.r) :
+    ∃ (scale : ℝ) (ν : Fin W.r → ℂ),
+      0 < scale ∧
+      (∀ k, ∃ a : ℝ, 0 < a ∧ ν k = (a : ℂ)) ∧
+      (∀ k, ‖ν k‖ ≤ 1) ∧
+      (∃ k, ‖ν k‖ = 1) ∧
+      (∀ k, W.weights k = (scale : ℂ) * ν k) ∧
+      (∀ (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d,
+        mpv A σ =
+          (scale : ℂ) ^ N *
+            mpv (toTensorFromBlocks (d := d) (μ := ν) W.blocks) σ) := by
+  classical
+  letI : Nonempty (Fin W.r) := ⟨⟨0, hr⟩⟩
+  let a : Fin W.r → ℝ := fun k => Classical.choose (W.weight_pos k)
+  have ha_pos : ∀ k, 0 < a k := by
+    intro k
+    exact (Classical.choose_spec (W.weight_pos k)).1
+  have ha_weight : ∀ k, W.weights k = (a k : ℂ) := by
+    intro k
+    exact (Classical.choose_spec (W.weight_pos k)).2
+  have hImageNonempty : (Finset.univ.image a).Nonempty :=
+    (Finset.univ_nonempty : (Finset.univ : Finset (Fin W.r)).Nonempty).image a
+  let scale : ℝ := (Finset.univ.image a).max' hImageNonempty
+  have hle : ∀ k, a k ≤ scale := by
+    intro k
+    exact Finset.le_max' _ _ (by simp [a])
+  have hscale_pos : 0 < scale := by
+    let k0 : Fin W.r := ⟨0, hr⟩
+    exact lt_of_lt_of_le (ha_pos k0) (hle k0)
+  have hscale_mem : scale ∈ Finset.univ.image a := by
+    exact Finset.max'_mem _ _
+  obtain ⟨kmax, _, hkmax⟩ := Finset.mem_image.mp hscale_mem
+  let ν : Fin W.r → ℂ := fun k => (((a k / scale) : ℝ) : ℂ)
+  have hscale_ne : scale ≠ 0 := ne_of_gt hscale_pos
+  have hweight_eq : ∀ k, W.weights k = (scale : ℂ) * ν k := by
+    intro k
+    calc
+      W.weights k = (a k : ℂ) := ha_weight k
+      _ = (scale : ℂ) * (((a k / scale : ℝ) : ℂ)) := by
+            rw [← Complex.ofReal_mul]
+            have hmul : scale * (a k / scale) = a k := by
+              field_simp [hscale_ne]
+            rw [hmul]
+      _ = (scale : ℂ) * ν k := rfl
+  refine ⟨scale, ν, hscale_pos, ?_, ?_, ?_, hweight_eq, ?_⟩
+  · intro k
+    exact ⟨a k / scale, div_pos (ha_pos k) hscale_pos, rfl⟩
+  · intro k
+    have hdiv_le : a k / scale ≤ 1 := (div_le_one hscale_pos).mpr (hle k)
+    calc
+      ‖ν k‖ = |a k| / |scale| := by simp [ν]
+      _ = a k / scale := by rw [abs_of_pos (ha_pos k), abs_of_pos hscale_pos]
+      _ ≤ 1 := hdiv_le
+  · refine ⟨kmax, ?_⟩
+    have hratio : a kmax / scale = 1 := by
+      rw [hkmax]
+      exact div_self hscale_ne
+    calc
+      ‖ν kmax‖ = |a kmax| / |scale| := by simp [ν]
+      _ = a kmax / scale := by
+        rw [abs_of_pos (ha_pos kmax), abs_of_pos hscale_pos]
+      _ = 1 := hratio
+  · intro N hN σ
+    calc
+      mpv A σ = mpv (toTensorFromBlocks (d := d) (μ := W.weights) W.blocks) σ :=
+        W.sameMPV_pos N hN σ
+      _ = mpv (toTensorFromBlocks (d := d) (μ := fun k => (scale : ℂ) * ν k)
+            W.blocks) σ := by
+          have hfun : W.weights = fun k => (scale : ℂ) * ν k := funext hweight_eq
+          rw [hfun]
+      _ = (scale : ℂ) ^ N *
+            mpv (toTensorFromBlocks (d := d) (μ := ν) W.blocks) σ :=
+          mpv_toTensorFromBlocks_weight_mul_left (d := d) (c := (scale : ℂ))
+            (μ := ν) W.blocks σ
+
+/-- A nonzero positive-length MPV coefficient forces the PGVWC07 witness to
+have at least one block.
+
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, lines
+742--763, describes the nonzero canonical-form blocks.  In the positive-length
+witness, an empty block family would make the weighted nonzero-block tensor
+have zero positive-length MPV coefficients.  Thus a tensor with a nonzero
+positive-length coefficient has a nonempty witness. -/
+theorem PGVWC07PositiveLengthWitness.block_count_pos_of_exists_ne_zero_mpv
+    {A : MPSTensor d D} (W : PGVWC07PositiveLengthWitness (d := d) (D := D) A)
+    (hA : ∃ (N : ℕ), 0 < N ∧ ∃ σ : Fin N → Fin d, mpv A σ ≠ 0) :
+    0 < W.r := by
+  classical
+  obtain ⟨N, hN, σ, hσ⟩ := hA
+  by_contra hnot
+  have hr0 : W.r = 0 := Nat.eq_zero_of_not_pos hnot
+  have hblock :
+      mpv (toTensorFromBlocks (d := d) (μ := W.weights) W.blocks) σ = 0 := by
+    haveI : IsEmpty (Fin W.r) := by
+      rw [hr0]
+      infer_instance
+    rw [mpv_toTensorFromBlocks_eq_sum]
+    simp
+  have hAeq : mpv A σ = 0 := by
+    calc
+      mpv A σ =
+          mpv (toTensorFromBlocks (d := d) (μ := W.weights) W.blocks) σ :=
+            W.sameMPV_pos N hN σ
+      _ = 0 := hblock
+  exact hσ hAeq
+
+/-- Normalized PGVWC07 canonical-form blocks with exact positive-length MPV
+equality after the global tensor rescaling.
+
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, proof
+lines 765--766, says that the spectral radius may be normalized without loss
+of generality.  This theorem records the exact-coefficient version of that
+convention: for a tensor with a nonzero positive-length MPV coefficient, the
+finite positive weights may be divided by their maximum, and the original
+tensor may be divided by the same positive scalar.  After this global tensor
+rescaling, the normalized block tensor has exactly the same positive-length MPV
+coefficients. -/
+theorem exists_pgvwc07_normalized_exact_form_after_rescaling_of_exists_ne_zero_mpv
+    (A : MPSTensor d D)
+    (hA : ∃ (N : ℕ), 0 < N ∧ ∃ σ : Fin N → Fin d, mpv A σ ≠ 0) :
+    ∃ (scale : ℝ) (r : ℕ) (dim : Fin r → ℕ)
+      (ν : Fin r → ℂ)
+      (blocks : (k : Fin r) → MPSTensor d (dim k)),
+      0 < scale ∧
+      0 < r ∧
+      (∀ k,
+        ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+          Λ.PosDef ∧
+          Λ.IsDiag ∧
+          (∑ i : Fin d, blocks k i * (blocks k i)ᴴ = 1) ∧
+          transferMap (d := d) (D := dim k) (fun i => (blocks k i)ᴴ) Λ = Λ) ∧
+      (∀ k,
+        ∀ X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+          transferMap (d := d) (D := dim k) (blocks k) X = X →
+            ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) ∧
+      (∀ k, ∃ a : ℝ, 0 < a ∧ ν k = (a : ℂ)) ∧
+      (∀ k, ‖ν k‖ ≤ 1) ∧
+      (∃ k, ‖ν k‖ = 1) ∧
+      (∀ k, 0 < dim k) ∧
+      SameMPV₂Pos
+        (fun i => (((scale : ℂ)⁻¹) • A i))
+        (toTensorFromBlocks (d := d) (μ := ν) blocks) ∧
+      ∑ k : Fin r, dim k ≤ D := by
+  classical
+  obtain ⟨W⟩ := exists_pgvwc07_positiveLengthWitness (d := d) (D := D) A
+  have hr : 0 < W.r := W.block_count_pos_of_exists_ne_zero_mpv hA
+  obtain ⟨scale, ν, hscale_pos, hν_pos, hν_le, hν_unit, _hweight, hMPV⟩ :=
+    W.exists_weight_normalization hr
+  have hscale_ne : (scale : ℂ) ≠ 0 := by
+    exact_mod_cast (ne_of_gt hscale_pos)
+  refine ⟨scale, W.r, W.dim, ν, W.blocks, hscale_pos, hr, W.dual_fixed,
+    W.scalar_fixed, hν_pos, hν_le, hν_unit, W.dim_pos, ?_, W.bondDim_le⟩
+  intro N hN σ
+  have hpow : ((scale : ℂ) ^ N)⁻¹ * (scale : ℂ) ^ N = 1 := by
+    simp [pow_ne_zero N hscale_ne]
+  calc
+    mpv (fun i => (((scale : ℂ)⁻¹) • A i)) σ
+        = ((scale : ℂ)⁻¹) ^ N * mpv A σ := mpv_smul ((scale : ℂ)⁻¹) A σ
+    _ = ((scale : ℂ)⁻¹) ^ N *
+          ((scale : ℂ) ^ N *
+            mpv (toTensorFromBlocks (d := d) (μ := ν) W.blocks) σ) := by
+        rw [hMPV N hN σ]
+    _ = (((scale : ℂ)⁻¹) ^ N * (scale : ℂ) ^ N) *
+          mpv (toTensorFromBlocks (d := d) (μ := ν) W.blocks) σ := by
+        ring
+    _ = mpv (toTensorFromBlocks (d := d) (μ := ν) W.blocks) σ := by
+        simp [hpow]
+
+/-- Arbitrary-input zero/nonzero dichotomy for the exact rescaled PGVWC07
+canonical-form statement.
+
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, lines
+742--763 and proof lines 765--766.  Either every positive-length MPV coefficient
+vanishes, or, after a positive global rescaling of the original tensor, the
+normalized PGVWC07 block tensor has exactly the same positive-length MPV
+coefficients.
+
+This theorem keeps the zero positive-length branch explicit.  The following
+theorem combines the two branches as the arbitrary-input positive-length
+canonical-form statement. -/
+theorem exists_pgvwc07_normalized_exact_form_after_rescaling_or_forall_pos_mpv_eq_zero
+    (A : MPSTensor d D) :
+    (∀ (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d, mpv A σ = 0) ∨
+    ∃ (scale : ℝ) (r : ℕ) (dim : Fin r → ℕ)
+      (ν : Fin r → ℂ)
+      (blocks : (k : Fin r) → MPSTensor d (dim k)),
+      0 < scale ∧
+      0 < r ∧
+      (∀ k,
+        ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+          Λ.PosDef ∧
+          Λ.IsDiag ∧
+          (∑ i : Fin d, blocks k i * (blocks k i)ᴴ = 1) ∧
+          transferMap (d := d) (D := dim k) (fun i => (blocks k i)ᴴ) Λ = Λ) ∧
+      (∀ k,
+        ∀ X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+          transferMap (d := d) (D := dim k) (blocks k) X = X →
+            ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) ∧
+      (∀ k, ∃ a : ℝ, 0 < a ∧ ν k = (a : ℂ)) ∧
+      (∀ k, ‖ν k‖ ≤ 1) ∧
+      (∃ k, ‖ν k‖ = 1) ∧
+      (∀ k, 0 < dim k) ∧
+      SameMPV₂Pos
+        (fun i => (((scale : ℂ)⁻¹) • A i))
+        (toTensorFromBlocks (d := d) (μ := ν) blocks) ∧
+      ∑ k : Fin r, dim k ≤ D := by
+  classical
+  by_cases hA : ∃ (N : ℕ), 0 < N ∧ ∃ σ : Fin N → Fin d, mpv A σ ≠ 0
+  · exact Or.inr
+      (exists_pgvwc07_normalized_exact_form_after_rescaling_of_exists_ne_zero_mpv A hA)
+  · refine Or.inl ?_
+    intro N hN σ
+    by_contra hσ
+    exact hA ⟨N, hN, σ, hσ⟩
+
+/-- Exact positive-length PGVWC07 canonical-form witness, allowing the empty
+nonzero-block family in the zero positive-length branch.
+
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, lines
+742--763, is a theorem about finite rings of positive length.  The preceding
+dichotomy separates the case in which all positive-length MPV coefficients
+vanish.  This theorem records the corresponding positive-length convention for
+that branch: the nonzero-block family is empty.  Thus the positive-weight,
+unital, scalar-fixed-point, and dual-diagonal requirements are vacuous in the
+zero branch, while the positive-length MPV equality is exact after the same
+global rescaling convention used in the nonzero branch.
+
+When the block family is nonempty, at least one normalized weight has norm
+one.  This is the precise replacement for the unit-weight conclusion in the
+zero branch, where no positive block exists. -/
+theorem exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty
+    (A : MPSTensor d D) :
+    ∃ (scale : ℝ) (r : ℕ) (dim : Fin r → ℕ)
+      (ν : Fin r → ℂ)
+      (blocks : (k : Fin r) → MPSTensor d (dim k)),
+      0 < scale ∧
+      (∀ k,
+        ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+          Λ.PosDef ∧
+          Λ.IsDiag ∧
+          (∑ i : Fin d, blocks k i * (blocks k i)ᴴ = 1) ∧
+          transferMap (d := d) (D := dim k) (fun i => (blocks k i)ᴴ) Λ = Λ) ∧
+      (∀ k,
+        ∀ X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+          transferMap (d := d) (D := dim k) (blocks k) X = X →
+            ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) ∧
+      (∀ k, ∃ a : ℝ, 0 < a ∧ ν k = (a : ℂ)) ∧
+      (∀ k, ‖ν k‖ ≤ 1) ∧
+      (0 < r → ∃ k, ‖ν k‖ = 1) ∧
+      (∀ k, 0 < dim k) ∧
+      SameMPV₂Pos
+        (fun i => (((scale : ℂ)⁻¹) • A i))
+        (toTensorFromBlocks (d := d) (μ := ν) blocks) ∧
+      ∑ k : Fin r, dim k ≤ D := by
+  classical
+  rcases exists_pgvwc07_normalized_exact_form_after_rescaling_or_forall_pos_mpv_eq_zero
+      (d := d) (D := D) A with hZero | hNonzero
+  · let dim : Fin 0 → ℕ := fun k => Fin.elim0 k
+    let ν : Fin 0 → ℂ := fun k => Fin.elim0 k
+    let blocks : (k : Fin 0) → MPSTensor d (dim k) := fun k => Fin.elim0 k
+    refine ⟨1, 0, dim, ν, blocks, zero_lt_one, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+    · intro k
+      exact Fin.elim0 k
+    · intro k
+      exact Fin.elim0 k
+    · intro k
+      exact Fin.elim0 k
+    · intro k
+      exact Fin.elim0 k
+    · intro hr
+      exact (Nat.not_lt_zero 0 hr).elim
+    · intro k
+      exact Fin.elim0 k
+    · intro N hN σ
+      calc
+        mpv (fun i => (((1 : ℂ)⁻¹) • A i)) σ = mpv A σ := by simp
+        _ = 0 := hZero N hN σ
+        _ = mpv (toTensorFromBlocks (d := d) (μ := ν) blocks) σ := by
+          rw [mpv_toTensorFromBlocks_eq_sum]
+          simp [ν, blocks]
+    · simp [dim]
+  · rcases hNonzero with
+      ⟨scale, r, dim, ν, blocks, hscale_pos, hr, hdual, hscalar, hν_pos,
+        hν_le, hν_unit, hdim_pos, hMPV, hbond⟩
+    exact ⟨scale, r, dim, ν, blocks, hscale_pos, hdual, hscalar, hν_pos,
+      hν_le, fun _ => hν_unit, hdim_pos, hMPV, hbond⟩
+
+end MPSTensor

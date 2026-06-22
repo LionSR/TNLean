@@ -1,6 +1,6 @@
 import TNLean.MPS.BNT.Basic
 import TNLean.MPS.FundamentalTheorem.Proportional
-import TNLean.Spectral.SpectralGapRect
+import TNLean.Spectral.TransferOperatorGapRect
 import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.Overlap.CastLemmas
 import TNLean.MPS.Overlap.CastDecay
@@ -14,9 +14,8 @@ import Mathlib.LinearAlgebra.Dimension.Constructions
 # Permutation rigidity for basis-of-normal-tensors (BNT) decompositions — simplified
 (primitive branch)
 
-This is a *simpler* alternative to `BNTPermutation.lean`, implementing the
-permutation/phase-rigidity step for families satisfying the basis-of-normal-tensors (BNT)
-condition in the
+This module proves the span-equality version of the permutation/phase-rigidity step for
+families satisfying the basis-of-normal-tensors (BNT) condition in the
 primitive (aperiodic) branch of the Fundamental Theorem of MPS (Theorem 4.4 of
 arXiv:2011.12127).
 
@@ -181,6 +180,8 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
     -- GA det eventually nonzero.
     have hGA_det_tendsto : Tendsto (fun N => (GA N).det) atTop (nhds (1 : ℂ)) := by
       have := (continuous_id.matrix_det.tendsto (1 : Matrix (Fin g) (Fin g) ℂ)).comp hGA_tendsto
+      change Tendsto ((fun M : Matrix (Fin g) (Fin g) ℂ => M.det) ∘ GA)
+        atTop (nhds (1 : ℂ))
       simpa only [Function.id_def, Matrix.det_one] using this
     --
     have hGA_det_ne : ∀ᶠ N in atTop, (GA N).det ≠ 0 :=
@@ -196,7 +197,7 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
         simpa only [mul_zero] using (hGA_inv_entry i k).mul (hall_inner k)
       have hsum : Tendsto (fun N => ∑ k : Fin g, (GA N)⁻¹ i k * v N k) atTop (nhds (0 : ℂ)) := by
         simpa only [Finset.sum_const_zero] using
-          tendsto_finset_sum Finset.univ (fun k _ => hterm k)
+          tendsto_finsetSum Finset.univ (fun k _ => hterm k)
       have hev : ∀ᶠ N in atTop, u N i = ∑ k : Fin g, (GA N)⁻¹ i k * v N k := by
         filter_upwards [hGA_det_ne, Filter.eventually_atTop.2 ⟨N0, fun N h => h⟩]
           with N hdetN hN0N
@@ -217,12 +218,15 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
       have hprod : ∀ i : Fin g,
           Tendsto (fun N => starRingEnd ℂ (u N i) * v N i) atTop (nhds (0 : ℂ)) := by
         intro i
+        change Tendsto
+          (fun N => star (u N i) * mpvInner (d := d) (A i) (B j) N)
+          atTop (nhds (0 : ℂ))
         simpa only [star_zero, zero_mul] using
           (hu_tendsto_zero i).star.mul (hall_inner i)
       have hsum : Tendsto (fun N => ∑ i : Fin g, starRingEnd ℂ (u N i) * v N i)
           atTop (nhds (0 : ℂ)) := by
         simpa only [Finset.sum_const_zero] using
-          tendsto_finset_sum Finset.univ (fun i _ => hprod i)
+          tendsto_finsetSum Finset.univ (fun i _ => hprod i)
       have hev : ∀ᶠ N in atTop, mpvInner (d := d) (B j) (B j) N =
           ∑ i : Fin g, starRingEnd ℂ (u N i) * v N i := by
         filter_upwards [Filter.eventually_atTop.2 ⟨N0, fun N h => h⟩] with N hN0N
@@ -316,29 +320,25 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
     -- Cross overlap.
     have hCross_eq : ∀ N : ℕ,
         mpvOverlap (d := d) (B j1) (B j2) N =
-        (ζ1 * starRingEnd ℂ ζ2) ^ N *
-          mpvOverlap (d := d) (A (f j1)) (A (f j1)) N := by
-      intro N
-      simp only [mpvOverlap]
-      simp_rw [hmpv1 N, hmpv2 N, star_mul, star_pow]
-      simp_rw [show star ζ2 = starRingEnd ℂ ζ2 from rfl]
-      simp_rw [show ∀ (x : Cfg d N),
-        ζ1 ^ N * mpv (A (f j1)) x * (star (mpv (A (f j1)) x) * (starRingEnd ℂ ζ2) ^ N) =
-        ζ1 ^ N * (starRingEnd ℂ ζ2) ^ N * (mpv (A (f j1)) x * star (mpv (A (f j1)) x)) from
-        fun x => by ring]
-      rw [← Finset.mul_sum, mul_pow]
+        (ζ1 * star ζ2) ^ N *
+          mpvOverlap (d := d) (A (f j1)) (A (f j1)) N :=
+      mpvOverlap_cross_scale_of_mpv_eq_pow_mul
+        (A := A (f j1)) (B1 := B j1) (B2 := B j2) (ζ1 := ζ1) (ζ2 := ζ2)
+        hmpv1 hmpv2
     --
-    have hNormζ : ‖ζ1 * starRingEnd ℂ ζ2‖ = 1 := by
-      rw [norm_mul, RCLike.norm_conj, hζ1_norm, hζ2_norm, mul_one]
+    have hNormζ : ‖ζ1 * star ζ2‖ = 1 := by
+      have hζ2_star : ‖star ζ2‖ = ‖ζ2‖ := by
+        simp
+      rw [norm_mul, hζ2_star, hζ1_norm, hζ2_norm, mul_one]
     --
     have hCross_norm_one :
         Tendsto (fun N => ‖mpvOverlap (d := d) (B j1) (B j2) N‖) atTop (nhds 1) := by
       have heq : (fun N => ‖mpvOverlap (d := d) (B j1) (B j2) N‖) =
-          fun N => ‖(ζ1 * starRingEnd ℂ ζ2) ^ N‖ *
+          fun N => ‖(ζ1 * star ζ2) ^ N‖ *
             ‖mpvOverlap (d := d) (A (f j1)) (A (f j1)) N‖ := by
         ext N; rw [hCross_eq, norm_mul]
       rw [heq]
-      have : (fun N => ‖(ζ1 * starRingEnd ℂ ζ2) ^ N‖ *
+      have : (fun N => ‖(ζ1 * star ζ2) ^ N‖ *
           ‖mpvOverlap (d := d) (A (f j1)) (A (f j1)) N‖) =
           fun N => 1 * ‖mpvOverlap (d := d) (A (f j1)) (A (f j1)) N‖ := by
         ext N; rw [norm_pow, hNormζ, one_pow]
@@ -366,11 +366,11 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
 end MPSTensor
 
 /-!
-## Fundamental Theorem — Thm 4.4, span-equality formulation (variable block count)
+## Permutation rigidity from equal spans
 
 This section applies the permutation-rigidity lemma for BNT decompositions
 (`MPSTensor.exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho` above) into a more
-general **paper-style** statement where the two BNT families may have **different**
+general auxiliary statement where the two BNT families may have **different**
 numbers of blocks (`gA ≠ gB`).
 
 The key new ingredient is a proof that the equal-span hypothesis forces
@@ -397,14 +397,14 @@ entangled pair states*, Rev. Mod. Phys. **93** (2021) 045003; arXiv:2011.12127.
 namespace MPSTensor
 
 /--
-**Thm 4.4 (primitive, basis-of-normal-tensors permutation step), span-equality formulation.**
+**Primitive basis-of-normal-tensors permutation step, span-equality formulation.**
 
 Two BNT-like families with possibly different numbers of blocks `gA`, `gB`
 that are injective, normalised, asymptotically orthonormal, and span the same
 MPV subspace at every system size must have `gA = gB` and agree blockwise up to
 a permutation, dimension equality, and gauge-phase equivalence.
 -/
-theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho
+lemma exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho
     {d gA gB : ℕ}
     {dimA : Fin gA → ℕ} {dimB : Fin gB → ℕ}
     [∀ j, NeZero (dimA j)] [∀ j, NeZero (dimB j)]

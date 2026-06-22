@@ -32,7 +32,7 @@ then directly implies `E(X†Y) = E(X)†E(Y)` for all `Y`.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 5, Theorem 5.7][Wolf2012QChannels]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
@@ -41,35 +41,6 @@ open Matrix Finset Complex KadisonSchwarz
 variable {d D : ℕ}
 
 namespace KadisonSchwarz
-
-/-! ## Helper lemmas -/
-
-section Helpers
-
-/-- Trace of `krausMap` equals trace of the original matrix times ∑ Kᵢ† Kᵢ. When TP, this
-equals the original trace. -/
-private theorem trace_krausMap_of_tp (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (h_tp : IsTPKraus K)
-    (X : Matrix (Fin D) (Fin D) ℂ) :
-    trace (krausMap K X) = trace X := by
-  simp only [krausMap, trace_sum]
-  conv_lhs => arg 2; ext i; rw [Matrix.trace_mul_cycle]
-  rw [← trace_sum, ← Finset.sum_mul, show ∑ i : Fin d, (K i)ᴴ * K i = 1 from h_tp, one_mul]
-
-/-- The conjugate transpose of `krausMap K X` is `krausMap K (X†)`. -/
-private theorem krausMap_conjTranspose (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (X : Matrix (Fin D) (Fin D) ℂ) :
-    (krausMap K X)ᴴ = krausMap K Xᴴ := by
-  simp only [krausMap, conjTranspose_sum, conjTranspose_mul, conjTranspose_conjTranspose,
-    mul_assoc]
-
-/-- `krausMap` is linear: `krausMap K (μ • X) = μ • krausMap K X`. -/
-private theorem krausMap_smul (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (μ : ℂ) (X : Matrix (Fin D) (Fin D) ℂ) :
-    krausMap K (μ • X) = μ • krausMap K X := by
-  simp only [krausMap, smul_mul_assoc, mul_smul_comm, Finset.smul_sum]
-
-end Helpers
 
 /-! ## KS equality for peripheral eigenvectors -/
 
@@ -104,8 +75,7 @@ theorem ks_equality_of_peripheral_eigenvector (K : Fin d → Matrix (Fin D) (Fin
       -- i.e., star μ * μ * trace(X†X) = trace(X†X)
       rw [smul_smul]
       have hμ_norm : star μ * μ = 1 := by
-        rw [Complex.star_def, ← Complex.normSq_eq_conj_mul_self]
-        simp [Complex.normSq_eq_norm_sq, hμ]
+        rw [← starRingEnd_apply, Complex.conj_mul', hμ]; simp
       rw [hμ_norm, one_smul]
     rw [h1, h2, sub_self]
   -- PSD + trace 0 → gap = 0
@@ -116,26 +86,6 @@ end KSEquality
 /-! ## Kraus-level decomposition of the KS gap -/
 
 section KSGapDecomposition
-
-/-- If `∑ᵢ Rᵢ† Rᵢ = 0`, then each `Rᵢ = 0`. -/
-private lemma each_zero_of_sum_conjTranspose_mul_self_zero
-    (R : Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (h : ∑ i : Fin d, (R i)ᴴ * R i = 0) :
-    ∀ i : Fin d, R i = 0 := by
-  intro i
-  have h_psd_i := Matrix.posSemidef_conjTranspose_mul_self (R i)
-  have h_each_nonneg : ∀ j, 0 ≤ ((R j)ᴴ * R j).trace.re :=
-    fun j => (Complex.le_def.mp (Matrix.posSemidef_conjTranspose_mul_self (R j)).trace_nonneg).1
-  have h_tr_sum_re : (∑ j : Fin d, ((R j)ᴴ * R j).trace.re) = 0 := by
-    rw [← Complex.re_sum, ← Matrix.trace_sum, h]; simp
-  have h_tr_re : ((R i)ᴴ * R i).trace.re = 0 :=
-    le_antisymm
-      (by linarith [Finset.sum_eq_zero_iff_of_nonneg (fun j _ => h_each_nonneg j)
-            |>.mp h_tr_sum_re i (Finset.mem_univ i)])
-      (h_each_nonneg i)
-  have h_tr_zero : ((R i)ᴴ * R i).trace = 0 :=
-    Complex.ext h_tr_re (Complex.le_def.mp h_psd_i.trace_nonneg).2.symm
-  exact Matrix.conjTranspose_mul_self_eq_zero.mp (h_psd_i.trace_eq_zero_iff.mp h_tr_zero)
 
 /-- **KS gap decomposition**. The Kadison-Schwarz gap decomposes as a sum of
 squares at the Kraus-operator level:
@@ -180,7 +130,7 @@ theorem ks_gap_eq_sum_squares (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
   -- Now use: ∑ KᵢX†Kᵢ† = E(X†) = E(X)†
   have hEXconj : ∑ i : Fin d, K i * Xᴴ * (K i)ᴴ = (E X)ᴴ := by
     change E Xᴴ = (E X)ᴴ
-    exact (krausMap_conjTranspose K X).symm
+    exact krausMap_conjTranspose K X
   -- And: E(X)† * (∑ KᵢKᵢ†) = E(X)† since ∑ KᵢKᵢ† = I
   have hunit : (∑ i : Fin d, (E X)ᴴ * K i * (K i)ᴴ) = (E X)ᴴ := by
     simp_rw [mul_assoc]
@@ -209,7 +159,7 @@ theorem kraus_commute_of_ks_equality (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     rw [h_gap] at this
     exact this
   -- Each term is zero
-  have h_each := each_zero_of_sum_conjTranspose_mul_self_zero
+  have h_each := Matrix.eq_zero_of_sum_conjTranspose_mul_self_eq_zero
     (fun i => X * (K i)ᴴ - (K i)ᴴ * krausMap K X) h_sum_zero
   intro i
   exact sub_eq_zero.mp (h_each i)
@@ -220,7 +170,7 @@ end KSGapDecomposition
 
 section MultiplicativeDomain
 
-/-- **Left multiplicative domain** (Wolf, Proposition 6.7).
+/-- **Left multiplicative domain** (Wolf, Chapter 5, Theorem 5.7).
 
 If `E` is unital and the KS gap vanishes at `X` (i.e., `E(X†X) = E(X)†E(X)`),
 then `E(X†Y) = E(X)†E(Y)` for all `Y`.

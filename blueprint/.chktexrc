@@ -1,0 +1,27 @@
+## ChkTeX policy for blueprint sources.
+##
+## The blueprint tree predates this lint gate. The warning classes below are
+## known pre-existing style classes in blueprint/src; keeping the list here
+## makes the enforced chktex policy reproducible and lets us unmute classes
+## deliberately as follow-up cleanup PRs land.
+
+CmdLine
+{
+  -n 1   # Command terminated with space (common for blueprint macros).
+  -n 2   # Non-breaking-space heuristics.
+  -n 3   # Parenthesized exponent/grouping heuristic.
+  -n 7   # Accent command heuristic.
+  -n 8   # Dash-length heuristic.
+  -n 9   # Optional-argument bracket heuristic.
+  -n 12  # Interword-spacing heuristic.
+  -n 13  # Intersentence-spacing heuristic.
+  -n 17  # Bracket-balance heuristic; noisy in blueprint macro arguments.
+  -n 18  # Quote-style heuristic.
+  -n 24  # Page-reference spacing heuristic.
+  -n 25  # Brace-insertion heuristic.
+  -n 36  # Space-before-parenthesis heuristic.
+  -n 38  # Punctuation-before-quotes heuristic.
+  -n 39  # Double-space heuristic.
+  -n 40  # Punctuation around inline math heuristic.
+  -n 45  # Display-math delimiter heuristic.
+}

@@ -3,29 +3,29 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 
-import TNLean.Wielandt.Primitivity.PaperDefinitions
+import TNLean.Wielandt.Primitivity.Definitions
 import TNLean.Wielandt.Primitivity.Normal
 import TNLean.MPS.CanonicalForm.Reduction
-import TNLean.MPS.Overlap.PeripheralToSpectralGap
+import TNLean.MPS.Overlap.PeripheralToTransferMapGap
 import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
 import Mathlib.Analysis.InnerProductSpace.Positive
 import Mathlib.Analysis.Matrix.Spectrum
 
 /-!
-# Proposition 3, (a) → (c): Helper lemmas (Parts 1–8)
+# Proposition 3, (a) → (c): Auxiliary lemmas (Parts 1–8)
 
-This file develops the foundational helper lemmas (Parts 1–8) toward the (a)→(c)
+This file develops the foundational auxiliary lemmas (Parts 1–8) toward the (a)→(c)
 direction of Proposition 3 from arXiv:0909.5347:
 **IsPrimitivePaper A → IsStronglyIrreduciblePaper A**.
 
-The spectral-perturbation machinery and concluding theorems (Parts 9–14) are in
+The spectral-perturbation argument and concluding theorems (Parts 9–14) are in
 `TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducibleAux`.
 
-For the packaged public Proposition 3 API, prefer
+For the public Proposition 3 formulation, prefer
 `TNLean.Wielandt.Primitivity.Equivalence`; this file is retained for specialized
 access to the intermediate lemmas used in the (a)→(c) proof.
 
-## Proof strategy (following Wolf Ch6 / arXiv:0909.5347)
+## Proof strategy (following Wolf Chapter 6 / arXiv:0909.5347)
 
 1. **Sandwich identity** (`sandwich_vecMulVec`): `M * |φ⟩⟨φ| * M† = |Mφ⟩⟨Mφ|`.
 2. **Transfer map on rank-one** (`transferMap_pow_rankOne_eq_sum`): Expands
@@ -38,7 +38,7 @@ access to the intermediate lemmas used in the (a)→(c) proof.
 ## References
 
 - [Sanz, Pérez-García, Wolf, Cirac, arXiv:0909.5347], Proposition 3
-- Wolf, *Quantum Channels & Operations: Guided Tour*, §6.4
+- Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.4
 -/
 
 open scoped Matrix ComplexOrder BigOperators
@@ -103,7 +103,6 @@ theorem posDef_sum_vecMulVec_of_span_eq_top {ι : Type*} [Fintype ι]
         congr 1; ext i
         -- Goal: star x ⬝ᵥ (op(star v ⬝ᵥ x) • v) = ↑‖star x ⬝ᵥ v‖²
         -- Simplify MulOpposite scalar action to multiplication
-        change star x ⬝ᵥ (MulOpposite.op (star (v i) ⬝ᵥ x) • v i) = _
         rw [show MulOpposite.op (star (v i) ⬝ᵥ x) • v i =
             (star (v i) ⬝ᵥ x) • v i from by
           ext j; simp [MulOpposite.smul_eq_mul_unop, mul_comm]]
@@ -203,7 +202,7 @@ private theorem transferMap_pow_rankOne_posSemidef
 
 /-- **A nonzero PSD fixed point of a paper-primitive transfer map is positive definite.**
 
-This is the crucial step in Proposition 3 (a)→(c) of arXiv:0909.5347.
+This is the positivity step in Proposition 3 (a)→(c) of arXiv:0909.5347.
 The proof uses the decomposition of PSD matrices into sums of outer products
 and the positivity-improving property of primitive transfer maps.
 
@@ -251,7 +250,7 @@ theorem posDef_fixedPoint_of_isPrimitivePaper
 
 /-! ## Part 6: Positivity-improving map and fixed-point contradiction lemmas
 
-These lemmas form the contradiction machinery for the paper's case analysis
+These lemmas form the contradiction argument for the paper's case analysis
 in the proof of `IsPrimitivePaper A → IsPeripherallyPrimitive A`.
 
 **Paper context** (arXiv:0909.5347 Proposition 3, (a)→(c)):
@@ -470,36 +469,6 @@ private lemma evalWord_mulVec_mem_range_of_proj {P : Matrix (Fin D) (Fin D) ℂ}
   rw [Matrix.mul_assoc] at h
   exact h.symm
 
-/-- If an idempotent square matrix `P` over `ℂ` has range = ⊤ (as mulVecLin), then `P = 1`. -/
-private lemma eq_one_of_idempotent_range_eq_top
-    {P : Matrix (Fin D) (Fin D) ℂ}
-    (hP_idem : P * P = P)
-    (hP_range : LinearMap.range (Matrix.mulVecLin P) = ⊤) :
-    P = 1 := by
-  -- From surjectivity + idempotence: P *ᵥ v = v for all v
-  have hP_surj := (LinearMap.range_eq_top (f := Matrix.mulVecLin P)).mp hP_range
-  have h_fix : ∀ v : Fin D → ℂ, P *ᵥ v = v := by
-    intro v
-    obtain ⟨w, hw⟩ := hP_surj v
-    rw [Matrix.mulVecLin_apply] at hw
-    calc P *ᵥ v = P *ᵥ (P *ᵥ w) := by rw [hw]
-      _ = (P * P) *ᵥ w := by rw [Matrix.mulVec_mulVec]
-      _ = P *ᵥ w := by rw [hP_idem]
-      _ = v := hw
-  -- From P *ᵥ v = v for all v, we get P = 1
-  -- Use P * M = M for all M, then take M = 1
-  have h_mul_eq : ∀ (M : Matrix (Fin D) (Fin D) ℂ), P * M = M := by
-    intro M
-    ext i j
-    -- (P * M) i j = ∑ k, P i k * M k j
-    -- M i j = (h_fix (M · j)) says P *ᵥ (M · j) = M · j
-    have := congr_fun (h_fix (fun k => M k j)) i
-    simp only [Matrix.mulVec, dotProduct] at this
-    simp only [Matrix.mul_apply]
-    exact this
-  have := h_mul_eq 1
-  rwa [mul_one] at this
-
 /-- A nontrivial invariant projection witnesses failure of paper-primitivity. -/
 private lemma vectorSpreadSpan_ne_top_of_hasInvariantProj
     (A : MPSTensor d D)
@@ -526,16 +495,31 @@ private lemma vectorSpreadSpan_ne_top_of_hasInvariantProj
   refine ⟨φ, hφ_ne, ?_⟩
   -- Show vectorSpreadSpan A φ q ≤ range(P·) < ⊤
   intro h_eq_top
+  have hP_range : LinearMap.range (Matrix.mulVecLin P) = ⊤ := by
+    apply le_antisymm le_top
+    -- ⊤ ≤ range(P·), using vectorSpreadSpan ⊆ range(P·) and vectorSpreadSpan = ⊤
+    rw [← h_eq_top, vectorSpreadSpan, Submodule.span_le]
+    intro v hv
+    obtain ⟨σ, rfl⟩ := hv
+    exact evalWord_mulVec_mem_range_of_proj hP_idem A hinv φ hφ_range (List.ofFn σ)
+  have hP_proj :
+      LinearMap.IsProj (LinearMap.range (Matrix.mulVecLin P)) (Matrix.mulVecLin P) := by
+    refine ⟨LinearMap.mem_range_self _, ?_⟩
+    intro v hv
+    obtain ⟨w, hw⟩ := LinearMap.mem_range.mp hv
+    rw [← hw]
+    change P *ᵥ (P *ᵥ w) = P *ᵥ w
+    rw [Matrix.mulVec_mulVec, hP_idem]
   apply hP_ne1
-  -- From h_eq_top: range(P·) = ⊤, so P is surjective, so P = 1
-  apply eq_one_of_idempotent_range_eq_top hP_idem
-  -- Show range(P *ᵥ ·) = ⊤
-  apply le_antisymm (le_top)
-  -- ⊤ ≤ range(P·), using vectorSpreadSpan ⊆ range(P·) and vectorSpreadSpan = ⊤
-  rw [← h_eq_top, vectorSpreadSpan, Submodule.span_le]
-  intro v hv
-  obtain ⟨σ, rfl⟩ := hv
-  exact evalWord_mulVec_mem_range_of_proj hP_idem A hinv φ hφ_range (List.ofFn σ)
+  ext i j
+  have hj :
+      Pi.single j (1 : ℂ) ∈ LinearMap.range (Matrix.mulVecLin P) := by
+    rw [hP_range]
+    exact Submodule.mem_top
+  have hfix := (LinearMap.IsProj.mem_iff_map_id hP_proj).mp hj
+  have := congr_fun hfix i
+  simpa [Matrix.mulVec, dotProduct, Pi.single_apply, Finset.sum_ite_eq',
+    Finset.mem_univ, Matrix.one_apply] using this
 
 /-- **Paper-primitivity implies irreducibility of the tensor.**
 

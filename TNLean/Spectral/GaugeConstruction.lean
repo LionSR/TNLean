@@ -5,79 +5,28 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.Spectral.MixedTransfer
 import TNLean.Channel.FixedPoint.CanonicalGauge
 import TNLean.Channel.Schwarz.Basic
-import TNLean.Algebra.MatrixAux
 
 import Mathlib.Data.Matrix.Block
+import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Normed
+import Mathlib.LinearAlgebra.Dimension.Finrank
+import Mathlib.LinearAlgebra.Matrix.ToLin
 
 /-!
-# Shared gauge-construction infrastructure for spectral-gap rigidity
+# Gauge construction for transfer-operator gap rigidity
 
-This module factors out the common "modulus-one eigenvector gives intertwining"
-core used by the spectral-gap rigidity arguments.  The shared pattern is:
-
-1. gauge both tensors to left-canonical / unital form;
-2. transport the mixed-transfer eigenvector into that gauge;
-3. block-embed the transported eigenvector into a unital Kraus map;
-4. use weighted Kadison--Schwarz equality to obtain Kraus-level intertwining;
-5. feed the intertwining identities into the file-specific endgames.
+For tensors $A$ and $B$, a mixed-transfer eigenvector with $|\lambda|=1$
+can be transported through left-canonical gauges.  After embedding the
+transported matrix into a block Kraus map, equality in the weighted
+Kadison--Schwarz inequality gives intertwining relations between the
+gauged Kraus operators.  This is the common argument in Wolf Theorem 6.6
+(peripheral spectrum of irreducible Schwarz maps) and PerezGarcia2007
+Lemma 5 (strict mixed-transfer-operator gap for distinct MPS blocks).
 -/
 
 open scoped Matrix Matrix.Norms.Operator MatrixOrder ComplexOrder BigOperators
 
 attribute [local instance] Matrix.linftyOpNormedAddCommGroup Matrix.linftyOpNormedSpace
-
-/-! ### ContinuousLinearMap endomorphism infrastructure
-
-These definitions provide the analytic structure on `Matrix (Fin m) (Fin n) ℂ →L[ℂ] …`
-needed by the spectral-radius arguments. They are activated locally via
-`attribute [local instance]` in each consumer file. -/
-
-section CLMInstances
-open scoped Matrix.Norms.Frobenius
-
-private noncomputable abbrev endEquivMatrixCLM (m n : ℕ) :
-    (Matrix (Fin m) (Fin n) ℂ →ₗ[ℂ] Matrix (Fin m) (Fin n) ℂ) ≃ₐ[ℂ]
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  Module.End.toContinuousLinearMap (Matrix (Fin m) (Fin n) ℂ)
-
-@[reducible] def instGCFiniteDimensionalMatrixCLM (m n : ℕ) :
-    FiniteDimensional ℂ
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  (endEquivMatrixCLM m n).toLinearEquiv.finiteDimensional
-
-@[reducible] noncomputable def instGCNormedAddCommGroupMatrixCLM (m n : ℕ) :
-    NormedAddCommGroup
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  by infer_instance
-
-@[reducible] noncomputable def instGCNormedRingMatrixCLM (m n : ℕ) :
-    NormedRing
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  by
-    letI := instGCNormedAddCommGroupMatrixCLM m n
-    infer_instance
-
-set_option maxSynthPendingDepth 6 in
-@[reducible] noncomputable def instGCNormedAlgebraMatrixCLM (m n : ℕ) :
-    NormedAlgebra ℂ
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
-  by
-    letI := instGCNormedAddCommGroupMatrixCLM m n
-    letI := instGCNormedRingMatrixCLM m n
-    infer_instance
-
-@[reducible] def instGCCompleteSpaceMatrixCLM (m n : ℕ) :
-    @CompleteSpace
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ)
-      (instGCNormedAddCommGroupMatrixCLM m n).toPseudoMetricSpace.toUniformSpace :=
-  by
-    letI := instGCFiniteDimensionalMatrixCLM m n
-    letI := instGCNormedAddCommGroupMatrixCLM m n
-    exact FiniteDimensional.complete ℂ
-      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ)
-
-end CLMInstances
 
 namespace MPSTensor
 
@@ -136,7 +85,8 @@ theorem ker_all_of_inj {D₁ D₂ : ℕ}
 /-- If `X ≠ 0` and `ker X` is invariant under all matrices, then `X` is injective. -/
 theorem injective_of_ker_all [NeZero D₂]
     (X : Matrix (Fin D₁) (Fin D₂) ℂ) (hX : X ≠ 0)
-    (h_all : ∀ M : Matrix (Fin D₂) (Fin D₂) ℂ, ∀ v, X *ᵥ v = 0 → X *ᵥ (M *ᵥ v) = 0) :
+    (h_all : ∀ M : Matrix (Fin D₂) (Fin D₂) ℂ,
+        ∀ v, X *ᵥ v = 0 → X *ᵥ (M *ᵥ v) = 0) :
     ∀ v : Fin D₂ → ℂ, X *ᵥ v = 0 → v = 0 := by
   intro v hv
   by_contra hv_ne
@@ -219,25 +169,6 @@ theorem isInjective_conjugate {D : ℕ}
       _ = Submodule.map φ ⊤ := by rw [hT]
       _ = ⊤ := by rw [Submodule.map_top]; exact LinearMap.range_eq_top.2 hφ_surj
   exact this
-
-/-- Complex conjugation preserves unit modulus. -/
-lemma norm_starRingEnd_eq_one {μ : ℂ} (hμ : ‖μ‖ = 1) :
-    ‖(starRingEnd ℂ) μ‖ = 1 := by
-  simpa [Complex.norm_conj] using hμ
-
-/-- Scalar multiplication by a unit-modulus complex number preserves `N * Nᴴ`. -/
-lemma smul_mul_conjTranspose_of_norm_eq_one {m n : ℕ}
-    (μ : ℂ) (hμ : ‖μ‖ = 1) (N : Matrix (Fin m) (Fin n) ℂ) :
-    (μ • N) * (μ • N)ᴴ = N * Nᴴ := by
-  have hμ_star_mul : star μ * μ = 1 := by
-    rw [Complex.star_def, ← Complex.normSq_eq_conj_mul_self]
-    simp only [Complex.normSq_eq_norm_sq, hμ, one_pow, Complex.ofReal_one]
-  calc
-    (μ • N) * (μ • N)ᴴ = (star μ * μ) • (N * Nᴴ) := by
-      simp only [Matrix.conjTranspose_smul, Matrix.smul_mul, Matrix.mul_smul, smul_smul]
-    _ = N * Nᴴ := by
-      rw [hμ_star_mul]
-      simp only [one_smul]
 
 /-- Shared block-KS core: transporting a modulus-one mixed-transfer eigenvector to canonical
 gauges produces Kraus-level intertwining relations for the gauged tensors. -/
@@ -426,7 +357,8 @@ theorem gauged_intertwining_core
         Matrix.fromBlocks_smul]
     have h_eq := hL ▸ hR ▸ h'
     exact (Matrix.fromBlocks_inj.1 h_eq).2.1
-  have hμ_conj : ‖(starRingEnd ℂ) μ‖ = 1 := norm_starRingEnd_eq_one hμ
+  have hμ_conj : ‖(starRingEnd ℂ) μ‖ = 1 := by
+    simpa [Complex.norm_conj] using hμ
   have hEigMstar : Kraus.map K Mᴴ = (starRingEnd ℂ μ) • Mᴴ := by
     calc
       Kraus.map K Mᴴ = (Kraus.map K M)ᴴ := by
@@ -477,6 +409,9 @@ theorem self_mul_conjTranspose_fixed_of_intertwining
     (hInter : ∀ i : Fin d, A i * X = μ • X * B i)
     (hμ : ‖μ‖ = 1) :
     transferMap A (X * Xᴴ) = X * Xᴴ := by
+  have hμ_star_mul : star μ * μ = 1 := by
+    simpa [Complex.normSq_eq_norm_sq, hμ] using
+      (Complex.normSq_eq_conj_mul_self (z := μ)).symm
   have hterm :
       ∀ i : Fin d, A i * (X * Xᴴ) * (A i)ᴴ = X * (B i * (B i)ᴴ) * Xᴴ := by
     intro i
@@ -488,7 +423,14 @@ theorem self_mul_conjTranspose_fixed_of_intertwining
       _ = (μ • (X * B i)) * (μ • (X * B i))ᴴ := by
         simp only [hAX]
       _ = (X * B i) * (X * B i)ᴴ := by
-        simpa using smul_mul_conjTranspose_of_norm_eq_one μ hμ (X * B i)
+        calc
+          (μ • (X * B i)) * (μ • (X * B i))ᴴ =
+              (star μ * μ) • ((X * B i) * (X * B i)ᴴ) := by
+                simp only [Matrix.conjTranspose_smul, Matrix.smul_mul, Matrix.mul_smul,
+                  smul_smul]
+          _ = (X * B i) * (X * B i)ᴴ := by
+                rw [hμ_star_mul]
+                simp only [one_smul]
       _ = X * (B i * (B i)ᴴ) * Xᴴ := by
         simp only [Matrix.conjTranspose_mul, Matrix.mul_assoc]
   calc
@@ -497,8 +439,7 @@ theorem self_mul_conjTranspose_fixed_of_intertwining
     _ = ∑ i : Fin d, X * (B i * (B i)ᴴ) * Xᴴ := by
       simp only [hterm]
     _ = X * (∑ i : Fin d, B i * (B i)ᴴ) * Xᴴ := by
-      simpa using
-        (Matrix.sum_mul_mul (L := X) (R := Xᴴ) (M := fun i : Fin d => B i * (B i)ᴴ))
+      simp only [← Matrix.sum_mul, ← Matrix.mul_sum]
     _ = X * Xᴴ := by
       simp only [hB_unital, Matrix.mul_one]
 
@@ -539,8 +480,7 @@ theorem ungauge_transfer_fixedPoint
     _ = ∑ i : Fin d, S * (A' i * σ * (A' i)ᴴ) * Sᴴ := by
       simp only [hterm]
     _ = S * (∑ i : Fin d, A' i * σ * (A' i)ᴴ) * Sᴴ := by
-      simpa using
-        (Matrix.sum_mul_mul (L := S) (R := Sᴴ) (M := fun i : Fin d => A' i * σ * (A' i)ᴴ))
+      simp only [← Matrix.sum_mul, ← Matrix.mul_sum]
     _ = S * transferMap A' σ * Sᴴ := by
       simp only [A', transferMap_apply]
     _ = S * σ * Sᴴ := by rw [hσ]
@@ -588,7 +528,7 @@ theorem isUnit_det_of_self_mul_conjTranspose_scalar [NeZero D]
         simp only [smul_smul, inv_mul_cancel₀ hc, one_smul]
   exact Matrix.isUnit_det_of_right_inverse hX_right_inv
 
-/-- Generic square endgame: once the gauged intertwiner is invertible, it upgrades to
+/-- Generic square gauge construction: once the gauged intertwiner is invertible, it upgrades to
 gauge-phase equivalence for the original tensors. -/
 theorem gaugePhaseEquiv_of_gauged_intertwining [NeZero D]
     (A B : MPSTensor d D)
@@ -668,8 +608,8 @@ theorem gaugePhaseEquiv_of_gauged_intertwining [NeZero D]
     simp only [A', gaugeTensor, Ymat, Yinv, Matrix.mul_assoc]
   simpa [Ygl] using this
 
-/-- Generic rectangular endgame: the two intertwining relations force equality of dimensions
-once both gauged tensor families are injective. -/
+/-- Generic rectangular dimension comparison: the two intertwining relations force equality of
+dimensions once both gauged tensor families are injective. -/
 theorem dim_eq_of_gauged_intertwining [NeZero D₁] [NeZero D₂]
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (X : Matrix (Fin D₁) (Fin D₂) ℂ) (μ : ℂ)
@@ -684,9 +624,19 @@ theorem dim_eq_of_gauged_intertwining [NeZero D₁] [NeZero D₂]
       simp only [Matrix.mulVec_mulVec]
     rw [this, hInter1 k, Matrix.smul_mulVec, ← Matrix.mulVec_mulVec,
       hv, Matrix.mulVec_zero, smul_zero]
-  have h_D₂_le : D₂ ≤ D₁ :=
-    Matrix.dim_le_of_mulVec_injective X
-      (injective_of_ker_all X hX (ker_all_of_inj B hB X hker_X))
+  have h_D₂_le : D₂ ≤ D₁ := by
+    have hXinj : ∀ v : Fin D₂ → ℂ, X *ᵥ v = 0 → v = 0 :=
+      injective_of_ker_all X hX (ker_all_of_inj B hB X hker_X)
+    let f : (Fin D₂ → ℂ) →ₗ[ℂ] (Fin D₁ → ℂ) := Matrix.toLin' X
+    have hf_inj : Function.Injective f := by
+      intro u v huv
+      have hsub : f (u - v) = 0 := by
+        rw [map_sub, huv, sub_self]
+      exact sub_eq_zero.mp <| hXinj (u - v) (by simpa [f, Matrix.toLin'_apply] using hsub)
+    have hfinrank :
+        Module.finrank ℂ (Fin D₂ → ℂ) ≤ Module.finrank ℂ (Fin D₁ → ℂ) :=
+      LinearMap.finrank_le_finrank_of_injective hf_inj
+    simpa [Module.finrank_fintype_fun_eq_card, Fintype.card_fin] using hfinrank
   have hXh_ne : Xᴴ ≠ 0 := by
     intro h
     apply hX
@@ -703,9 +653,19 @@ theorem dim_eq_of_gauged_intertwining [NeZero D₁] [NeZero D₂]
       simp only [Matrix.mulVec_mulVec]
     rw [this, hInter2h k, Matrix.smul_mulVec, ← Matrix.mulVec_mulVec,
       hv, Matrix.mulVec_zero, smul_zero]
-  have h_D₁_le : D₁ ≤ D₂ :=
-    Matrix.dim_le_of_mulVec_injective Xᴴ
-      (injective_of_ker_all Xᴴ hXh_ne (ker_all_of_inj A hA Xᴴ hker_Xh))
+  have h_D₁_le : D₁ ≤ D₂ := by
+    have hXhinj : ∀ v : Fin D₁ → ℂ, Xᴴ *ᵥ v = 0 → v = 0 :=
+      injective_of_ker_all Xᴴ hXh_ne (ker_all_of_inj A hA Xᴴ hker_Xh)
+    let f : (Fin D₁ → ℂ) →ₗ[ℂ] (Fin D₂ → ℂ) := Matrix.toLin' Xᴴ
+    have hf_inj : Function.Injective f := by
+      intro u v huv
+      have hsub : f (u - v) = 0 := by
+        rw [map_sub, huv, sub_self]
+      exact sub_eq_zero.mp <| hXhinj (u - v) (by simpa [f, Matrix.toLin'_apply] using hsub)
+    have hfinrank :
+        Module.finrank ℂ (Fin D₁ → ℂ) ≤ Module.finrank ℂ (Fin D₂ → ℂ) :=
+      LinearMap.finrank_le_finrank_of_injective hf_inj
+    simpa [Module.finrank_fintype_fun_eq_card, Fintype.card_fin] using hfinrank
   exact le_antisymm h_D₁_le h_D₂_le
 
 end MPSTensor

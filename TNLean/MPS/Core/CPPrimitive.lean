@@ -3,6 +3,7 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Core.Transfer
+import TNLean.Algebra.MatrixAux
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Schwarz.KadisonSchwarz
 
@@ -15,10 +16,9 @@ variable {d D : ℕ}
 /-! ## MPS injectivity implies irreducibility of the transfer map
 
 The general definitions (`IsOrthogonalProjection`, `IsIrreducibleMap`,
-`HasUniqueFixedPoint`) and the supporting matrix-algebra lemmas
-(`diagonal_mul_conjTranspose_eq_normSq_sum`,
-`eq_zero_of_sum_mul_conjTranspose_eq_zero`) live in
-`TNLean.Channel.Irreducible.Basic`.
+`HasUniqueFixedPoint`) are stated in `TNLean.Channel.Irreducible.Basic`. The
+supporting sum-of-squares matrix lemma
+`Matrix.eq_zero_of_sum_mul_conjTranspose_eq_zero` is stated in `TNLean.Algebra.MatrixAux`.
 
 This file proves the MPS-specific connection: injectivity of an MPS tensor
 implies irreducibility of its transfer map.
@@ -38,7 +38,7 @@ private lemma invariance_implies_complement_zero (A : MPSTensor d D)
     (hInv : ∀ X, P * transferMap (d := d) (D := D) A (P * X * P) * P =
                   transferMap (d := d) (D := D) A (P * X * P)) :
     ∀ i : Fin d, (1 - P) * A i * P = 0 := by
-  have h1P : (1 - P) * P = 0 := by rw [sub_mul, one_mul, hProj.2, sub_self]
+  have h1P : (1 - P) * P = 0 := IsIdempotentElem.one_sub_mul_self hProj.2
   -- (1-P)*E(PXP) = 0 for all X
   have h_vanish : ∀ X, (1 - P) * transferMap (d := d) (D := D) A (P * X * P) = 0 := by
     intro X
@@ -63,7 +63,7 @@ private lemma invariance_implies_complement_zero (A : MPSTensor d D)
     simp_rw [key, ← Finset.sum_mul, ← Finset.mul_sum]
     rw [show ∑ i : Fin d, A i * P * (A i)ᴴ = transferMap (d := d) (D := D) A P from by
       rw [transferMap_apply], h_EP, zero_mul]
-  exact eq_zero_of_sum_mul_conjTranspose_eq_zero _ h_sum_zero
+  exact Matrix.eq_zero_of_sum_mul_conjTranspose_eq_zero _ h_sum_zero
 
 /-! #### The main irreducibility theorem -/
 

@@ -7,8 +7,8 @@ import TNLean.MPS.Periodic.Symmetry.EqualCaseFTHyp
 /-!
 # Theorem 4.1 definitions
 
-This module contains the `p`-divisibility and `p`-refinement definitions used in
-Theorem 4.1 of arXiv:1708.00029.
+This module contains the \(p\)-divisibility and \(p\)-refinement definitions used in
+arXiv:1708.00029, Theorem 4.1, lines 717--731.
 -/
 
 open scoped Matrix BigOperators
@@ -21,26 +21,28 @@ section Theorem41
 
 variable {d D : ℕ}
 
-/-- **`p`-divisibility of a CP linear endomorphism.**
+/-- **\(p\)-divisibility of a transfer map.**
 
-A linear endomorphism `E` of `Mat_D ℂ` is *`p`-divisible* if it equals the `p`-fold
-composition of some CPTP map `E'`. This is the channel-theoretic notion appearing in
-arXiv:1708.00029, §4.1. -/
+A linear endomorphism \(E\) of \(M_D(\mathbb C)\) is \(p\)-divisible if it equals the
+\(p\)-fold composition of some trace-preserving completely positive map \(E'\). This is
+the definition in arXiv:1708.00029, lines 717--718. -/
 def IsPDivisibleChannel
     (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) (p : ℕ) : Prop :=
   ∃ E' : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ,
     IsChannel E' ∧ E = E' ^ p
 
-/-- **`p`-refinement of an MPS tensor (arXiv:1708.00029, §4.1, Eq. (4.1)).**
+/-- **\(p\)-refinement of an MPS family.**
 
-`B : MPSTensor d D` admits a `p`-refinement if there exists another tensor
-`A : MPSTensor d D` and an isometry `W : ℂ^d → (ℂ^d)^{⊗p}` (encoded as a matrix
-`Matrix (Fin (blockPhysDim d p)) (Fin d) ℂ` with `Wᴴ * W = 1`) such that the `p`-blocked
-`A` matches the `W`-image of `B` at the level of MPV coefficients:
+The matrix product vector family of \(B\) can be \(p\)-refined, in this same-bond
+version, if there exists another tensor \(A\) with the same bond dimension as \(B\)
+and an isometry \(W : \mathbb C^d \to (\mathbb C^d)^{\otimes p}\) (encoded as a
+matrix with \(W^\dagger W = 1\)) such that the \(p\)-blocked tensor \(A^{[p]}\)
+matches the \(W^{\otimes N}\)-image of \(B\) at the level of MPV coefficients:
 `coeff (blockTensor A p) (List.ofFn τ) = ∑_σ (∏_k W (τ k) (σ k)) · coeff B (List.ofFn σ)`
 for every length `N` and every `τ : Fin N → Fin (blockPhysDim d p)`.
 
-In paper notation, this encodes `|V_{pN}(A)⟩ = W^{⊗N} |V_N(B)⟩` for every `N`. -/
+In the paper notation of arXiv:1708.00029, lines 719--724, this encodes
+\(|V_{pN}(A)\rangle = W^{\otimes N}|V_N(B)\rangle\) for every \(N\). -/
 def IsPRefinable (B : MPSTensor d D) (p : ℕ) : Prop :=
   ∃ (A : MPSTensor d D)
     (W : Matrix (Fin (blockPhysDim d p)) (Fin d) ℂ),

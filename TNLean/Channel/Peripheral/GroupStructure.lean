@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Peripheral.CyclicDecomposition
-import TNLean.Algebra.MatrixAux
 import Mathlib.RingTheory.RootsOfUnity.Basic
 import Mathlib.GroupTheory.SpecificGroups.Cyclic
 import Mathlib.Analysis.Matrix.Spectrum
@@ -41,7 +40,7 @@ The proof combines three ingredients that already exist:
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2, Thm 6.6]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2, Theorem 6.6]
 * [Evans, Høegh-Krohn, *Spectral properties of positive maps*, 1978]
 -/
 
@@ -67,19 +66,7 @@ quantum channels:
   divides the bond dimension `D`.
 -/
 
-/-! ## Helper lemmas for the divisibility proof -/
-
-/-- The transfer map preserves the matrix trace when the Kraus family is trace-preserving
-(i.e., `∑ᵢ Kᵢ† Kᵢ = I`). -/
-private lemma trace_transferMap_of_tp
-    {r : ℕ}
-    (K : Fin r → MatrixAlg D)
-    (hTP : KadisonSchwarz.IsTPKraus (d := r) (D := D) K)
-    (X : MatrixAlg D) :
-    Matrix.trace (MPSTensor.transferMap (d := r) (D := D) K X) = Matrix.trace X := by
-  simp only [MPSTensor.transferMap_apply, Matrix.trace_sum]
-  conv_lhs => arg 2; ext i; rw [Matrix.trace_mul_cycle]
-  rw [← Matrix.trace_sum, ← Finset.sum_mul, hTP, one_mul]
+/-! ## Auxiliary lemmas for the divisibility proof -/
 
 /-- The trace of an orthogonal projection (Hermitian idempotent matrix) over `ℂ` is a natural
 number — it equals the number of unit eigenvalues. -/
@@ -102,8 +89,8 @@ private lemma exists_natCast_eq_trace_of_orthogonal_projection
           (conjStarAlgAut ℂ _ hH.eigenvectorUnitary)
             (Matrix.diagonal (RCLike.ofReal ∘ hH.eigenvalues)) *
           (conjStarAlgAut ℂ _ hH.eigenvectorUnitary)
-            (Matrix.diagonal (RCLike.ofReal ∘ hH.eigenvalues)) := by
-        exact congr_arg₂ (· * ·) hspec hspec
+            (Matrix.diagonal (RCLike.ofReal ∘ hH.eigenvalues)) :=
+        congr_arg₂ (· * ·) hspec hspec
       rw [this, ← map_mul, Matrix.diagonal_mul_diagonal]
       congr 1; ext j; simp [Function.comp, sq]
     -- P * P = P, so diag(λ²) = diag(λ), hence λ_i² = λ_i
@@ -151,7 +138,11 @@ private lemma period_dvd_dim_of_cyclic_projections
     (hcyclic : ∀ k, MPSTensor.transferMap (d := r) (D := D) K (P (k + 1)) = P k) :
     m ∣ D := by
   set E := MPSTensor.transferMap (d := r) (D := D) K
-  have htrace_pres := trace_transferMap_of_tp K hTP
+  have htrace_pres :
+      ∀ X : MatrixAlg D, Matrix.trace (E X) = Matrix.trace X := by
+    intro X
+    simpa [E, MPSTensor.transferMap_apply, KadisonSchwarz.krausMap] using
+      (KadisonSchwarz.trace_krausMap_of_tp (D := D) K hTP X)
   have htrace_step : ∀ k : Fin m, Matrix.trace (P k) = Matrix.trace (P (k + 1)) := by
     intro k
     calc Matrix.trace (P k)
@@ -259,7 +250,7 @@ theorem peripheral_eigenvalues_closed_under_mul
 
 /-- **Peripheral eigenvalues are closed under inversion.**
 
-For `|α| = 1`, we have `α⁻¹ = ᾱ`, and `U_α†` is the eigenvector. -/
+For `|α| = 1`, we have `α⁻¹ = α'`, and `U_α†` is the eigenvector. -/
 theorem peripheral_eigenvalues_closed_under_inv
     {r : ℕ} [NeZero D]
     (K : Fin r → MatrixAlg D)
@@ -274,10 +265,10 @@ theorem peripheral_eigenvalues_closed_under_inv
   · -- HasEigenvalue for α⁻¹: Uα† is the eigenvector
     obtain ⟨Uα, hUα⟩ := MPSTensor.exists_peripheral_unitary_of_irreducible_schwarz
       K hUnital ρ hρ hρfix hIrr hα
-    -- E(Uα†) = (E(Uα))† = (α · Uα)† = ᾱ · Uα† = α⁻¹ · Uα†
+    -- E(Uα†) = (E(Uα))† = (α · Uα)† = α' · Uα† = α⁻¹ · Uα†
     have hUα_map : Kraus.map K (Uα : MatrixAlg D) = α • (Uα : MatrixAlg D) := by
       simpa [Kraus.map, MPSTensor.transferMap_apply] using hUα
-    -- ᾱ = α⁻¹ when |α| = 1
+    -- α' = α⁻¹ when |α| = 1
     have hconj_eq_inv : starRingEnd ℂ α = α⁻¹ :=
       (Complex.inv_eq_conj hα.2).symm
     have hmap_conj : Kraus.map K (Uα : MatrixAlg D)ᴴ =
@@ -310,7 +301,7 @@ The proof strategy uses Mathlib's `rootsOfUnity.isCyclic`:
    `CyclicDecomposition.lean`.
 -/
 
-/-- **The peripheral eigenvalues form a cyclic group** (Wolf Thm 6.6, without divisibility).
+/-- **The peripheral eigenvalues form a cyclic group** (Wolf Theorem 6.6, without divisibility).
 
 The peripheral eigenvalues form a finite subset of `ℂ`, contain `1`, and are
 closed under multiplication and inversion, so they form a finite subgroup of
@@ -416,8 +407,8 @@ theorem peripheral_eigenvalues_cyclic_structure
       have hg_eq : (⟨u, hu_mem⟩ : ↥periphSubgroup) = g ^ z := hz.symm
       have hg_mod : g ^ z = g ^ (z % ↑m).toNat := by
         have hm_ne : (m : ℤ) ≠ 0 := Int.natCast_ne_zero.mpr (by omega)
-        have hmod_cast : z % ↑m = ↑(z % ↑m).toNat := by
-          exact (Int.toNat_of_nonneg (Int.emod_nonneg z hm_ne)).symm
+        have hmod_cast : z % ↑m = ↑(z % ↑m).toNat :=
+          (Int.toNat_of_nonneg (Int.emod_nonneg z hm_ne)).symm
         conv_lhs => rw [← zpow_mod_orderOf g z, hg_order]
         rw [hmod_cast, zpow_natCast]
         rfl
@@ -437,15 +428,15 @@ theorem peripheral_eigenvalues_cyclic_structure
     · -- (⊇): each γ^k is a peripheral eigenvalue
       rintro ⟨k, rfl⟩
       -- g^k ∈ periphSubgroup, so (g^k).val.val ∈ peripheralEigenvalues E
-      have hgk_sub : (g ^ (k : ℕ)).val ∈ periphSubgroup := by
-        exact (g ^ (k : ℕ)).property
+      have hgk_sub : (g ^ (k : ℕ)).val ∈ periphSubgroup :=
+        (g ^ (k : ℕ)).property
       change ((g.val : ℂ)) ^ (k : ℕ) ∈ peripheralEigenvalues E
       have : ((g ^ (k : ℕ)).val : ℂ) ∈ peripheralEigenvalues E := hgk_sub
       simp only [SubgroupClass.coe_pow, Units.val_pow_eq_pow_val] at this
       exact this
   exact ⟨m, γ, hm_pos, hγ_prim, hset_eq⟩
 
-/-- **The peripheral eigenvalues form a cyclic group** (Wolf Thm 6.6).
+/-- **The peripheral eigenvalues form a cyclic group** (Wolf Theorem 6.6).
 
 Combines `peripheral_eigenvalues_cyclic_structure` (cyclic group without
 trace-preservation) with `channel_period_divides_dim` to additionally
@@ -487,7 +478,7 @@ theorem peripheral_eigenvalues_form_cyclic_group
     exact period_dvd_dim_of_cyclic_projections K hTP P hPproj hPsum hcyclic
   exact ⟨m, γ, hm_pos, hγ_prim, hm_dvd, hset_eq⟩
 
-/-- **Each peripheral eigenvalue has multiplicity 1** (Wolf Thm 6.6).
+/-- **Each peripheral eigenvalue has multiplicity 1** (Wolf Theorem 6.6).
 
 Follows from `fixed_eq_scalar_of_irreducible_unital` in
 `CyclicDecomposition.lean`: if `E(X) = X` with `E` irreducible and unital,

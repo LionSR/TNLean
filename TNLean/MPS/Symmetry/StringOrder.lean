@@ -12,12 +12,12 @@ import TNLean.Algebra.CocycleCohomology
 
 This file proves the main equivalence theorems relating string order,
 local symmetry, and spectral radius for injective MPS tensors, together
-with the SPT phase classification results.
+with the SPT phase labels and the string-order universality results.
 
-The core definitions (twisted transfer map, string order parameter, conditions
-C1/C2/C3 and their equivalences) live in `TNLean.MPS.Symmetry.StringOrderDefs`.
-The auxiliary TP-gauge lemmas and long supporting proofs live in
-`TNLean.MPS.Symmetry.StringOrderAux`.
+The core definitions — the twisted transfer map, string order parameter, and
+conditions C1/C2/C3 with their equivalences — are imported from companion
+modules.  This file proves the main spectral, local-symmetry, and
+string-order universality theorems that use them.
 
 ## Main definitions
 
@@ -35,13 +35,17 @@ The auxiliary TP-gauge lemmas and long supporting proofs live in
   ρ(ℰ_u) = 1
 * `MPSTensor.hasStringOrder_of_symmetric_injective` — string order holds
   universally for injective symmetric MPS with canonical FCS data
-* `MPSTensor.stringOrder_invariant_of_samePhase` — string order is an
-  SPT-phase invariant
+* `MPSTensor.hasStringOrder_iff_of_symmetric_injective` — string order
+  existence agrees for any two injective symmetric tensors, so it does not
+  separate SPT phases
 
 ## References
 
 * Pérez-García, Wolf, Sanz, Verstraete, Cirac, arXiv:0802.0447 (PRL 2008)
-* Chen, Gu, Wen, Phys. Rev. B 83, 035107 (2011) — SPT classification
+* Chen, Gu, Wen, Phys. Rev. B 83, 035107 (2011), arXiv:1008.3745 — SPT
+  classification (not formalized here)
+* Schuch, Pérez-García, Cirac, Phys. Rev. B 84, 165139 (2011),
+  arXiv:1010.3732, Section II.F — SPT classification (not formalized here)
 -/
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
@@ -58,11 +62,10 @@ section MainTheorems
 for an injective pure FCS, every eigenvalue of the twisted
 transfer map `ℰ_u` has modulus at most `1`.
 
-The proof follows a TP-gauge reduction: rewrite `ℰ_u` as a mixed
-transfer map, pass to a common positive-definite fixed point of the
-adjoint channels, gauge both Kraus families into trace-preserving
-form, and invoke the existing mixed-transfer eigenvalue bound
-`eigenvalue_norm_le_one`. -/
+The proof rewrites `ℰ_u` as a mixed transfer map, passes to a common
+positive-definite fixed point of the adjoint channels, gauges both
+Kraus families to trace-preserving form, and applies the mixed-transfer
+eigenvalue bound `eigenvalue_norm_le_one`. -/
 theorem twistedTransfer_spectralRadius_le_one
     (A : MPSTensor d D)
     (hA : IsInjective A)
@@ -91,8 +94,8 @@ theorem twistedTransfer_spectralRadius_le_one
 
 /-- A modulus-one eigenvalue of the twisted transfer map forces the twisted
 companion tensor to be gauge-phase equivalent to the original tensor. The proof
-reuses the irreducible TP mixed-transfer rigidity theorem after passing both
-families to a common TP gauge. -/
+passes both families to a common trace-preserving gauge and applies the
+irreducible mixed-transfer rigidity theorem. -/
 theorem twistedTransfer_modulus_one_implies_gaugePhase
     (A : MPSTensor d D)
     (hA : IsInjective A)
@@ -141,9 +144,10 @@ theorem twistedTransfer_modulus_one_implies_gaugePhase
     hGauge'
     (gaugeEquiv_tpGauge (A := setup.B) (ρ := setup.σ) setup.hσ_pd)
 
-/-- A non-decaying string-order parameter forces the twisted companion family to be
-gauge-phase equivalent to the original tensor. This identifies the modulus-one
-peripheral spectrum needed for the mixed-transfer rigidity argument. -/
+/-- If string order exists for `u`, then the twisted companion family is gauge-phase
+equivalent to the original tensor.  The proof extracts a modulus-one peripheral
+eigenvalue from the non-decaying boundary sequence and applies the mixed-transfer
+rigidity theorem. -/
 theorem gaugePhaseEquiv_twisted_of_hasStringOrder
     (A : MPSTensor d D)
     (hA : IsInjective A)
@@ -159,13 +163,21 @@ theorem gaugePhaseEquiv_twisted_of_hasStringOrder
   haveI : NeZero D := ⟨hD⟩
   let V := Matrix (Fin D) (Fin D) ℂ
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
-  let F' : V →L[ℂ] V := Φ (twistedTransferMap A u)
+  let F' : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ :=
+    (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+      (twistedTransferMap A u)
   obtain ⟨X, Y, hnot0⟩ := not_tendsto_zero_of_hasStringOrder A u Λ hSO
   have hsr_ge : spectralRadius ℂ F' ≥ 1 := by
     have hsr_not_lt : ¬ spectralRadius ℂ F' < 1 := by
       intro hlt
+      have hlt' :
+          spectralRadius ℂ
+            ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+              (A.twistedTransferMap u)) < 1 := by
+        change spectralRadius ℂ F' < 1
+        exact hlt
       exact hnot0 (stringOrderBoundaryParam_tendsto_zero_of_spectralRadius_lt_one
-        A u Λ X Y <| by simpa [F'] using hlt)
+        A u Λ X Y hlt')
     exact le_of_not_gt hsr_not_lt
   haveI : Nontrivial V := by
     haveI : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
@@ -182,9 +194,11 @@ theorem gaugePhaseEquiv_twisted_of_hasStringOrder
     hcompact.exists_isMaxOn hF'_nonempty continuous_nnnorm.continuousOn
   have hμ_rad : (‖μ‖₊ : ENNReal) = spectralRadius ℂ F' := by
     exact le_antisymm (le_iSup₂ (α := ENNReal) μ hμ_spec) (iSup₂_le <| mod_cast hμ_max)
-  have hμ_spec_end : μ ∈ spectrum ℂ (twistedTransferMap A u) := by
-    rw [← AlgEquiv.spectrum_eq Φ]
+  have hμ_spec_Φ : μ ∈ spectrum ℂ (Φ (twistedTransferMap A u)) := by
+    change μ ∈ spectrum ℂ F'
     exact hμ_spec
+  have hμ_spec_end : μ ∈ spectrum ℂ (twistedTransferMap A u) := by
+    simpa [AlgEquiv.spectrum_eq Φ (twistedTransferMap A u)] using hμ_spec_Φ
   have hμ_ev : Module.End.HasEigenvalue (twistedTransferMap A u) μ :=
     Module.End.hasEigenvalue_iff_mem_spectrum.mpr hμ_spec_end
   obtain ⟨X, hX_mem, hX_ne⟩ := hμ_ev.exists_hasEigenvector
@@ -219,18 +233,9 @@ lemma hasStringOrder_of_localSymmetry
       ∀ L : ℕ, ((twistedTransferMap A u) ^ L) V = μ ^ L • V := by
     intro L
     induction L with
-    | zero =>
-        simp
+    | zero => simp
     | succ n ih =>
-        calc
-          ((twistedTransferMap A u) ^ (n + 1)) V
-              = twistedTransferMap A u (((twistedTransferMap A u) ^ n) V) := by
-                  simp [pow_succ']
-          _ = twistedTransferMap A u (μ ^ n • V) := by rw [ih]
-          _ = μ ^ n • twistedTransferMap A u V := by simp
-          _ = μ ^ n • (μ • V) := by rw [hEig]
-          _ = μ ^ (n + 1) • V := by
-                simp [pow_succ, smul_smul, mul_comm]
+        rw [pow_succ', Module.End.mul_apply, ih, map_smul, hEig, smul_smul, ← pow_succ]
   refine ⟨Vᴴ, V, (1 / 2 : ℝ), by norm_num, ?_⟩
   intro L
   have hparam :
@@ -240,10 +245,8 @@ lemma hasStringOrder_of_localSymmetry
           = Matrix.trace (Λ * Vᴴ * (((twistedTransferMap A u) ^ L) V)) := by
               simp [stringOrderBoundaryParam, twistedTransferIter]
       _ = Matrix.trace (Λ * Vᴴ * (μ ^ L • V)) := by rw [hpow L]
-      _ = Matrix.trace ((μ ^ L) • (Λ * (Vᴴ * V))) := by
-            simp [Matrix.mul_assoc]
-      _ = μ ^ L * Matrix.trace (Λ * (Vᴴ * V)) := by
-            simp [Matrix.trace_smul]
+      _ = Matrix.trace ((μ ^ L) • (Λ * (Vᴴ * V))) := by simp [Matrix.mul_assoc]
+      _ = μ ^ L * Matrix.trace (Λ * (Vᴴ * V)) := by simp [Matrix.trace_smul]
       _ = μ ^ L := by simp [hV', hΛtr]
   have hnorm_pow : ‖μ ^ L‖ = 1 := by
     simp [norm_pow, hμ]
@@ -253,9 +256,9 @@ lemma hasStringOrder_of_localSymmetry
     _ = ‖μ ^ L‖ := by rw [hnorm_pow]
     _ = ‖stringOrderBoundaryParam A u Λ Vᴴ V L‖ := by rw [hparam]
 
-/-- A modulus-one twisted-transfer eigenpair yields the paper's local-symmetry
-virtual witness once the stationary boundary state is fixed by the adjoint
-transfer channel. -/
+/-- A modulus-one twisted-transfer eigenpair yields a local-symmetry virtual
+intertwiner, provided the stationary boundary state is a fixed point of the
+adjoint transfer channel. -/
 private theorem localSymmetry_of_twistedTransfer_eigen
     (A : MPSTensor d D)
     (hA : IsInjective A)
@@ -283,14 +286,13 @@ private theorem localSymmetry_of_twistedTransfer_eigen
 state, `u` is a local symmetry if and only if the twisted transfer
 map `ℰ_u` has a unitary eigenvector with unit-modulus eigenvalue.
 
-The right-hand side is the witness form of `ρ(ℰ_u) = 1`:
-combined with `twistedTransfer_spectralRadius_le_one` (all
-eigenvalues satisfy `|λ| ≤ 1`), existence of an eigenvalue with
-`|μ| = 1` is equivalent to `spectralRadius(ℰ_u) = 1`.
+Combined with `twistedTransfer_spectralRadius_le_one` (all eigenvalues
+satisfy `|λ| ≤ 1`), the existence of an eigenvalue with `|μ| = 1` is
+equivalent to `spectralRadius(ℰ_u) = 1`.
 
-Here `IsLocalSymmetry` is formalized in the virtual form supplied by
-Lemma 1 of the paper, and the theorem assumes the canonical fixed-point
-hypothesis `transferMap A† Λ = Λ` needed to recover `V† Λ V = Λ`. -/
+The theorem states the equivalence in the virtual form supplied by
+Lemma 1 of the paper, and assumes the canonical fixed-point hypothesis
+`transferMap A† Λ = Λ` needed to conclude `V† Λ V = Λ`. -/
 theorem localSymmetry_iff_spectralRadius_one
     (A : MPSTensor d D)
     (hA : IsInjective A)
@@ -325,9 +327,12 @@ theorem localSymmetry_iff_spectralRadius_one
 /-- **Theorem 1** (arXiv:0802.0447, virtual-boundary form): String order
 exists for a pure canonical FCS if and only if `u` is a local symmetry.
 
-The Lean definition `HasStringOrder A u Λ` packages the paper's endpoint
-operators `x,y` as arbitrary virtual boundary matrices `X,Y`, so the theorem is
-stated directly at the transfer-matrix level. -/
+The definition `HasStringOrder A u Λ` encodes the paper's boundary operators
+`x,y` as arbitrary virtual boundary matrices `X,Y`, so the theorem is
+stated directly at the transfer-matrix level; see the scope restriction on
+`HasStringOrder` and
+`docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex` for the
+comparison with the paper's physical-endpoint form. -/
 theorem stringOrder_iff_localSymmetry
     (A : MPSTensor d D)
     (hA : IsInjective A)
@@ -353,13 +358,14 @@ theorem stringOrder_iff_localSymmetry
 
 /-- **Virtual symmetry from string order**: If string order exists
 for `u`, then there exists a virtual unitary `V` and a
-unit-modulus scalar `μ` satisfying a phased intertwining relation
+unit-modulus scalar `μ` satisfying the phased intertwining relation
 `∑_j u_{ij} A_j = μ • (V A_i V†)`.
 
 The phase `μ` is necessary: for `u = e^{iθ} · 1` (a global
-phase), string order holds but `CondC1` (without phase) would
-force `e^{iθ} = 1`. The phased form matches the projective
-symmetry statement from `VirtualRepresentation.lean`. -/
+phase factor on the physical index), string order holds but the
+un-phased intertwining relation would force `e^{iθ} = 1`.
+The phased form is the same relation that the virtual representation
+theorem produces from on-site symmetry data. -/
 theorem virtualUnitary_of_stringOrder
     (A : MPSTensor d D)
     (hA : IsInjective A)
@@ -378,23 +384,32 @@ theorem virtualUnitary_of_stringOrder
 
 end MainTheorems
 
-/-! ### SPT phase classification
+/-! ### SPT phase labels and string-order universality
 
-Two injective symmetric MPS tensors are in the same SPT phase when their virtual
-representation cocycles are cohomologous.  The main result of this section is that
-string order is an invariant of the SPT phase: for canonical finitely correlated
-states, the virtual representation gauge matrix is always a fixed point of the
-twisted transfer map (eigenvalue 1), so `HasStringOrder` holds universally and the
-phase-invariance `↔` is immediate.
+Two injective symmetric MPS tensors are defined to be in the same SPT phase
+when their virtual representation cocycles are cohomologous.  The
+classification theorem identifying this label with phase equivalence under
+symmetric gapped paths (Chen–Gu–Wen, arXiv:1008.3745; Schuch–Pérez-García–
+Cirac, arXiv:1010.3732, Section II.F) is not formalized here.
+
+The main result of this section is that string order holds universally for
+injective symmetric tensors with canonical FCS data: the virtual
+representation gauge matrix is always a fixed point of the twisted transfer
+map (eigenvalue 1), so string order holds for every group element.
+Existence of string order is therefore a symmetry diagnostic; it does not
+separate SPT phases.
 
 ### References
 
 * Chen, Gu, Wen, *Classification of gapped symmetric phases in one-dimensional
-  spin systems*, Phys. Rev. B 83, 035107 (2011)
+  spin systems*, Phys. Rev. B 83, 035107 (2011), arXiv:1008.3745
+* Schuch, Pérez-García, Cirac, *Classifying quantum phases using matrix
+  product states and projected entangled pair states*, Phys. Rev. B 84,
+  165139 (2011), arXiv:1010.3732
 * Pérez-García et al., arXiv:0802.0447
 -/
 
-section SPTDetection
+section SPTLabels
 
 open TNLean.Algebra
 
@@ -402,8 +417,13 @@ variable {G : Type*} [Group G]
 
 /-- Two MPS tensors with the same on-site symmetry are in the **same SPT phase** if
 there exist virtual representation cocycles that intertwine the respective tensors
-and are cohomologous.  This is the topological invariant classifying
-symmetry-protected topological phases in one dimension (Chen–Gu–Wen 2011). -/
+and are cohomologous.
+
+The cocycle-class label is taken here as the *definition* of SPT-phase
+equality.  Its identification with phase equivalence under symmetric gapped
+paths is the classification theorem of Chen–Gu–Wen (arXiv:1008.3745) and
+Schuch–Pérez-García–Cirac (arXiv:1010.3732, Section II.F), which is not
+formalized in this development. -/
 def IsSameSPTPhase (A B : MPSTensor d D)
     (U : G →* Matrix (Fin d) (Fin d) ℂ) : Prop :=
   ∃ (ωA ωB : ScalarCocycle G)
@@ -489,12 +509,10 @@ private lemma twistedTransfer_virtual_rep_fixed
 /-- For an injective symmetric MPS with canonical FCS data and unitary on-site
 representation, `HasStringOrder` holds universally for every group element.
 
-The proof chains:
-1. Virtual rep gives an eigenvector of twisted transfer with eigenvalue 1
-2. `twistedTransfer_modulus_one_implies_gaugePhase` gives gauge-phase equivalence
-3. `virtualUnitary_of_gaugePhaseEquiv_twisted` normalizes to a unitary intertwining
-4. `boundaryState_invariant_of_virtualUnitary` shows the unitary preserves `Λ`
-5. `hasStringOrder_of_localSymmetry` closes the argument -/
+The virtual representation provides an eigenvector of the twisted transfer map
+with eigenvalue 1.  From this, the spectral-radius and rigidity theorems yield a
+virtual unitary intertwining relation.  Boundary-state invariance and the
+local-symmetry-to-string-order implication complete the proof. -/
 theorem hasStringOrder_of_symmetric_injective
     (A : MPSTensor d D)
     (hA : IsInjective A)
@@ -540,18 +558,20 @@ theorem hasStringOrder_of_symmetric_injective
   exact hasStringOrder_of_localSymmetry A (U g) Λ hΛtr hNorm
     ⟨W, μ, hW, hW', hμ, hΛinv, hC1μ⟩
 
-/-- **String order is an SPT-phase invariant.**  If two injective MPS tensors
-are both on-site symmetric under the same representation `U` and satisfy
-the canonical normalisation hypotheses, then string order for any group
-element `g` holds for one iff it holds for the other.
+/-- **String order existence agrees for any two injective symmetric tensors.**
+If two injective MPS tensors are both on-site symmetric under the same
+representation `U` and satisfy the canonical normalisation hypotheses, then
+string order for any group element `g` holds for one iff it holds for the
+other: both sides hold unconditionally, by the universality of string order
+for injective symmetric tensors.
 
-In the SPT classification context, `IsSameSPTPhase A B U` implies
-`IsOnSiteSymmetric` for both tensors (via
-`IsSameSPTPhase.isOnSiteSymmetric_left/right`), so this theorem applies
-to tensors in the same phase.  The statement is kept in terms of
-`IsOnSiteSymmetric` directly so the hypotheses match what the proof
-actually uses. -/
-theorem stringOrder_invariant_of_samePhase
+In particular, existence of string order does not separate SPT phases.
+Tensors in the same SPT phase (`IsSameSPTPhase`) are on-site symmetric, so
+the equivalence applies to them, but it applies equally to symmetric
+tensors in different phases; the invariant that separates phases is the
+cocycle class, not string order.  The hypotheses are stated as on-site
+symmetry directly, matching what the proof uses. -/
+theorem hasStringOrder_iff_of_symmetric_injective
     (A B : MPSTensor d D)
     (hA : IsInjective A) (hB : IsInjective B)
     (U : G →* Matrix (Fin d) (Fin d) ℂ)
@@ -567,11 +587,12 @@ theorem stringOrder_invariant_of_samePhase
     (hNormB : transferMap B 1 = 1) :
     ∀ g : G, HasStringOrder A (U g) Λ_A ↔ HasStringOrder B (U g) Λ_B := by
   intro g
-  exact ⟨fun _ => hasStringOrder_of_symmetric_injective B hB U
-              hSymmB hUnitary g Λ_B hΛBpos hΛBtr hΛBfix hNormB,
-         fun _ => hasStringOrder_of_symmetric_injective A hA U
-              hSymmA hUnitary g Λ_A hΛApos hΛAtr hΛAfix hNormA⟩
+  exact iff_of_true
+    (hasStringOrder_of_symmetric_injective A hA U hSymmA hUnitary g Λ_A
+      hΛApos hΛAtr hΛAfix hNormA)
+    (hasStringOrder_of_symmetric_injective B hB U hSymmB hUnitary g Λ_B
+      hΛBpos hΛBtr hΛBfix hNormB)
 
-end SPTDetection
+end SPTLabels
 
 end MPSTensor

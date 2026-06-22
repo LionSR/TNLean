@@ -1,19 +1,36 @@
 #!/usr/bin/env bash
 # Shared deploy logic for pushing to gh-pages branch.
-# Usage: ./scripts/deploy-to-gh-pages.sh [--with-docs] [--ci]
+# Usage: ./scripts/deploy-to-gh-pages.sh [--with-docs] [--ci] [--badges-dir DIR] [--badges-only]
 #
 # --with-docs   Also deploy API docs from docbuild/.lake/build/doc (fails if missing)
 # --ci          Use github-actions[bot] as committer instead of local git config
+# --badges-dir DIR  Use pre-generated badge JSON from DIR instead of regenerating
+# --badges-only     Only deploy badges (skip blueprint, homepage, docs, paper-gaps)
 set -euo pipefail
 
 WITH_DOCS=false
 CI_MODE=false
+BADGES_DIR=""
+BADGES_ONLY=false
+BADGES_DIR_NEXT=false
 for arg in "$@"; do
+  if [ "$BADGES_DIR_NEXT" = true ]; then
+    BADGES_DIR="$arg"
+    BADGES_DIR_NEXT=false
+    continue
+  fi
   case $arg in
     --with-docs) WITH_DOCS=true ;;
     --ci) CI_MODE=true ;;
+    --badges-only) BADGES_ONLY=true ;;
+    --badges-dir) BADGES_DIR_NEXT=true ;;
   esac
 done
+
+if [ "$BADGES_DIR_NEXT" = true ]; then
+  echo "::error::--badges-dir requires a path argument"
+  exit 1
+fi
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 WORK_DIR="$(mktemp -d)"
@@ -27,12 +44,39 @@ else
 fi
 git clone --branch gh-pages --single-branch --depth 1 "$REPO_URL" "$WORK_DIR/site"
 
+if [ "$BADGES_ONLY" = true ]; then
+  echo "==> Badges-only mode: skipping blueprint, homepage, docs, paper-gaps"
+
+  # Deploy pre-generated badges
+  if [ -n "$BADGES_DIR" ]; then
+    echo "==> Copying pre-generated badges from $BADGES_DIR..."
+    json_count=$(find "$BADGES_DIR" -maxdepth 1 -name "*.json" 2>/dev/null | wc -l | tr -d ' ')
+    if [ "$json_count" -eq 0 ]; then
+      echo "::error::No badge JSON files found in $BADGES_DIR — refusing to deploy empty badges directory"
+      exit 1
+    fi
+    rm -rf "$WORK_DIR/site/badges"
+    mkdir -p "$WORK_DIR/site/badges"
+    cp "$BADGES_DIR"/*.json "$WORK_DIR/site/badges/"
+  else
+    # Fall back to regenerating badges live
+    echo "==> Regenerating badge endpoints..."
+    mkdir -p "$WORK_DIR/site/badges"
+    python3 "$REPO_ROOT/scripts/write_badges.py" "$WORK_DIR/site/badges"
+  fi
+else
+
 # Update blueprint
 echo "==> Updating blueprint..."
 rm -rf "$WORK_DIR/site/blueprint"
 mkdir -p "$WORK_DIR/site/blueprint"
 cp -r "$REPO_ROOT/blueprint/web/"* "$WORK_DIR/site/blueprint/"
-cp "$REPO_ROOT/blueprint/print/print.pdf" "$WORK_DIR/site/blueprint.pdf" 2>/dev/null || true
+if [ ! -f "$REPO_ROOT/blueprint/print/print.pdf" ]; then
+  echo "::error::Blueprint PDF not found at blueprint/print/print.pdf"
+  echo "Run 'cd blueprint && leanblueprint pdf' before deploying."
+  exit 1
+fi
+cp "$REPO_ROOT/blueprint/print/print.pdf" "$WORK_DIR/site/blueprint.pdf"
 
 # Update homepage (remove all homepage files first, then copy fresh)
 echo "==> Updating homepage..."
@@ -41,6 +85,11 @@ rm -rf "$WORK_DIR/site/_layouts" "$WORK_DIR/site/assets" \
        "$WORK_DIR/site/404.html" "$WORK_DIR/site/Gemfile" \
        "$WORK_DIR/site/badges"
 cp -r "$REPO_ROOT/home_page/"* "$WORK_DIR/site/"
+
+# Regenerate badge endpoints directly into the site so published JSON reflects
+# current sorry/axiom counts and toolchain versions, not committed (stale) values.
+echo "==> Regenerating badge endpoints..."
+python3 "$REPO_ROOT/scripts/write_badges.py" "$WORK_DIR/site/badges"
 
 # Update API docs (only with --with-docs)
 if [ "$WITH_DOCS" = true ]; then
@@ -53,6 +102,41 @@ if [ "$WITH_DOCS" = true ]; then
   rm -rf "$WORK_DIR/site/docs"
   cp -r "$REPO_ROOT/docbuild/.lake/build/doc" "$WORK_DIR/site/docs"
 fi
+
+# Update paper-gap PDFs (only if built)
+echo "==> Updating paper-gap PDFs..."
+shopt -s nullglob
+GAP_PDFS=("$REPO_ROOT"/docs/paper-gaps/*.pdf)
+if [ ${#GAP_PDFS[@]} -gt 0 ]; then
+  rm -rf "$WORK_DIR/site/paper-gaps"
+  mkdir -p "$WORK_DIR/site/paper-gaps"
+  cp "${GAP_PDFS[@]}" "$WORK_DIR/site/paper-gaps/"
+  {
+    echo "<!doctype html>"
+    echo "<html lang=\"en\">"
+    echo "<head>"
+    echo "  <meta charset=\"utf-8\">"
+    echo "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
+    echo "  <title>TNLean paper-gap notes</title>"
+    echo "</head>"
+    echo "<body>"
+    echo "  <h1>TNLean paper-gap notes</h1>"
+    echo "  <ul>"
+    for pdf in "${GAP_PDFS[@]}"; do
+      name="$(basename "$pdf")"
+      echo "    <li><a href=\"$name\">$name</a></li>"
+    done
+    echo "  </ul>"
+    echo "</body>"
+    echo "</html>"
+  } > "$WORK_DIR/site/paper-gaps/index.html"
+  echo "Copied ${#GAP_PDFS[@]} paper-gap PDFs"
+else
+  echo "No paper-gap PDFs found; keeping existing site content"
+fi
+shopt -u nullglob
+
+fi  # end of if-not-BADGES_ONLY
 
 # Commit and push
 echo "==> Committing and pushing..."
@@ -70,6 +154,7 @@ if git diff --cached --quiet; then
 else
   MSG="Update blueprint"
   [ "$WITH_DOCS" = true ] && MSG="Full docs update"
+  [ "$BADGES_ONLY" = true ] && MSG="Update badge endpoints"
   git commit -m "$MSG ($(date -u '+%Y-%m-%d %H:%M UTC'))"
   git push origin gh-pages
   echo "==> Deployed!"

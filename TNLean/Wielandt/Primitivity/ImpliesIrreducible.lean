@@ -15,7 +15,7 @@ has no nontrivial invariant orthogonal projection, i.e., it is an irreducible te
 * `isIrreducibleTensor_of_isPrimitiveMPS_of_posDef`:
   `IsPrimitiveMPS A ρ → ρ.PosDef → IsIrreducibleTensor A`
 
-This is the irreducibility half of the later primitive-to-normal bridge: the
+This is the irreducibility half of the later primitive-to-normal implication: the
 complementary aperiodicity input is recovered from strong irreducibility
 (peripheral spectrum `{1}`) in `ImpliesStronglyIrreducible.lean` /
 `StronglyIrreducibleToFullRank.lean`.
@@ -23,7 +23,7 @@ complementary aperiodicity input is recovered from strong irreducibility
 ## References
 
 - Sanz, Pérez-García, Wolf, Cirac, arXiv:0909.5347, Proposition 3
-- Cirac, Pérez-García, Schuch, Verstraete, arXiv:1606.00608, §2.3
+- Cirac, Pérez-García, Schuch, Verstraete, arXiv:1606.00608, Section 2.3
 -/
 
 open scoped Matrix ComplexOrder BigOperators
@@ -116,7 +116,9 @@ private theorem transferMap_pow_tendsto
   -- Evaluate at σ to get pointwise convergence
   have heval := (ContinuousLinearMap.apply ℂ (Matrix (Fin D) (Fin D) ℂ) σ).continuous.tendsto
     (0 : (Matrix (Fin D) (Fin D) ℂ) →L[ℂ] (Matrix (Fin D) (Fin D) ℂ))
-  rw [map_zero] at heval
+  change Tendsto
+    (fun T : (Matrix (Fin D) (Fin D) ℂ) →L[ℂ] (Matrix (Fin D) (Fin D) ℂ) => T σ)
+    (nhds 0) (nhds (0 : Matrix (Fin D) (Fin D) ℂ)) at heval
   have hconv := heval.comp hN_clm
   -- Convert ContinuousLinearMap powers to LinearMap powers
   suffices hsuff : ∀ n,

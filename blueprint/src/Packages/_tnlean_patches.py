@@ -28,10 +28,12 @@ The remaining local fixes are:
 from __future__ import annotations
 
 import io
+import os
 import pickle
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
+from _tnlean_utils import stringify_tex_item as _stringify_tex_item
 from leanblueprint.Packages import blueprint as _blueprint
 import plasTeX.Packages.natbib as _natbib
 from plasTeX import Base, Command
@@ -39,20 +41,12 @@ from plastexdepgraph.Packages import depgraph as _depgraph
 
 
 _HISTORICAL_DECL_REPLACEMENTS = {
-    # These two names were observed in #398 with underscores stripped by a
+    # These names were observed in #398 with underscores stripped by a
     # plasTeX parsing corner case. The generic string coercion below avoids the
     # common failure mode; this mapping is kept as a narrow last-resort guard.
-    "MPSTensor.weakFundamentalTheoremconditional":
-        "MPSTensor.weakFundamentalTheorem_conditional",
     "MPSTensor.exponentialconvergenceofprimitive":
         "MPSTensor.exponential_convergence_of_primitive",
 }
-
-
-def _stringify_tex_item(obj: Any) -> str:
-    """Extract a stable string from a plasTeX token/list item."""
-
-    return getattr(obj, "source", getattr(obj, "textContent", str(obj))).strip()
 
 
 # --- natbib patch ---------------------------------------------------------
@@ -83,6 +77,89 @@ _natbib.bibliography.loadBibliographyFile = _patched_load_bibliography_file
 # ``_natbib`` directly is ineffective because plasTeX has already scanned
 # ``natbib`` by the time this file executes.
 bibitem = _natbib.thebibliography.bibitem
+
+
+def _fallback_citation(self, *, parenthetical: bool, include_prenote: bool):
+    """Render unresolved natbib citations without producing bare ``()``.
+
+    The ordering mirrors the corresponding natbib citation shape for the
+    citation forms used here: natbib's prenote object, citation text, and
+    natbib's postnote object. The note objects already include their configured
+    spacing and separator.
+    """
+
+    keys = [_stringify_tex_item(key) for key in self.attributes.get("bibkeys", [])]
+    if os.environ.get("TNLEAN_FAIL_ON_CITATION_FALLBACK"):
+        raise RuntimeError(f"unexpected unresolved natbib citation fallback: {keys}")
+
+    res = self.ownerDocument.createDocumentFragment()
+    punctuation = getattr(self, "punctuation", {}) or {}
+    citesep = punctuation.get("citesep", punctuation.get("sep", ", "))
+    text = citesep.join(keys) if keys else "unresolved citation"
+
+    if parenthetical:
+        res.append(punctuation.get("open", "("))
+    if include_prenote:
+        res.append(self.prenote)
+    res.append(text)
+    res.append(self.postnote)
+    if parenthetical:
+        res.append(punctuation.get("close", ")"))
+    return res
+
+
+def _cite_uses_parenthetical_fallback(self) -> bool:
+    return bool(self.prenote or self.postnote)
+
+
+def _has_unresolved_bibitems(self) -> bool:
+    bibitems = self.bibitems
+    if not bibitems:
+        return True
+    if self.isNumeric():
+        return any(getattr(item, "bibcite", None) is None for item in bibitems)
+    return any(
+        getattr(item, "bibcite", None) is None
+        or getattr(item.bibcite, "attributes", None) is None
+        for item in bibitems
+    )
+
+
+def _wrap_natbib_citation(
+    cls, *, parenthetical: bool | Callable[[Any], bool], include_prenote: bool = True
+) -> None:
+    original = cls.citation
+
+    def citation(self, *args, **kwargs):
+        if _has_unresolved_bibitems(self):
+            use_parentheses = (
+                parenthetical(self) if callable(parenthetical) else parenthetical
+            )
+            return _fallback_citation(
+                self,
+                parenthetical=use_parentheses,
+                include_prenote=include_prenote,
+            )
+        return original(self, *args, **kwargs)
+
+    cls.citation = citation
+
+
+# Capitalized, ``*full``, and alias variants delegate to these patched
+# ``citation`` methods.
+for _cls, _parenthetical, _include_prenote in (
+    (_natbib.cite, _cite_uses_parenthetical_fallback, True),
+    (_natbib.citep, True, True),
+    (_natbib.citet, False, True),
+    (_natbib.citealt, False, True),
+    (_natbib.citealp, False, True),
+    (_natbib.citeauthor, False, False),
+    (_natbib.citeyear, False, False),
+    (_natbib.citeyearpar, True, True),
+):
+    _wrap_natbib_citation(
+        _cls, parenthetical=_parenthetical, include_prenote=_include_prenote
+    )
 
 
 # --- leanblueprint patch --------------------------------------------------

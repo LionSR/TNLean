@@ -1,0 +1,390 @@
+\subsection{Martingale gap consequences}\label{subsec:spectral_gap_martingale}
+
+\begin{theorem}[Martingale criterion for spectral gap]\label{thm:martingale_criterion}
+    \notready
+    \uses{def:is_frustration_free, lem:quadratic_form_to_norm_bound}
+    Consider a frustration-free Hamiltonian
+    \[
+        H = \sum_{i=1}^n h_i
+    \]
+    with projector interaction terms ($h_i^2 = h_i$).
+    Suppose that for every unordered pair $\{i,j\}$ of overlapping terms there
+    exist constants $c_{\{i,j\}} \ge 0$ and $\gamma > 0$ satisfying
+    \begin{equation}\label{eq:ph_martingale_condition}
+        h_i h_j + h_j h_i
+        \ge -c_{\{i,j\}}(1-\gamma)(h_i + h_j),
+    \end{equation}
+    and suppose further that the coefficients attached to the terms overlapping
+    $h_i$ satisfy
+    \[
+        \sum_{\substack{j\ne i\\ \{i,j\}\text{ overlapping}}}c_{\{i,j\}}\le1
+    \]
+    for every $i$.
+    Then the smallest nonzero eigenvalue of $H$ satisfies
+    $\lambda_{\min}^+(H) \ge \gamma$.
+\end{theorem}
+
+\begin{proof}
+    \notready
+    The relevant geometry is a family of translated length-$L$ projector
+    windows on the ring; two terms $h_i$ and $h_j$ interact only when their
+    supports overlap, equivalently when the cyclic distance $d_N(i,j)$ is
+    smaller than $L$.
+    From $h_i^2 = h_i$,
+    \[
+        H^2 = \sum_i h_i + \sum_{\substack{i < j \\ \text{overlapping}}}
+        (h_i h_j + h_j h_i) + \sum_{\substack{i < j \\ \text{non-overlapping}}}
+        (h_i h_j + h_j h_i).
+    \]
+    Non-overlapping projectors commute ($h_i h_j = h_j h_i$), so their
+    product $h_i h_j$ is itself a projector and hence PSD; thus the last
+    sum is $\ge 0$.
+    For the overlapping sum, the martingale condition~(\ref{eq:ph_martingale_condition}) gives
+    $h_i h_j + h_j h_i \ge -c_{\{i,j\}}(1-\gamma)(h_i + h_j)$.
+    Summing over unordered pairs $\{i,j\}$:
+    \[
+        \sum_{\{i,j\}, \text{overlap}} (h_i h_j + h_j h_i)
+        \ge -(1-\gamma) \sum_{\{i,j\}, \text{overlap}}
+        c_{\{i,j\}}(h_i + h_j).
+    \]
+    Collecting terms for each $h_i$:
+    \[
+        \sum_{\{i,j\}, \text{overlap}} c_{\{i,j\}}(h_i + h_j)
+        = \sum_i \Bigl(\sum_{\substack{j \ne i \\ \text{overlap}}}
+        c_{\{i,j\}}\Bigr) h_i
+        \le H,
+    \]
+    where the last inequality uses the row-sum hypothesis
+    $\sum_{\substack{j\ne i\\ \{i,j\}\text{ overlapping}}}c_{\{i,j\}}\le1$.
+    Combining, $H^2 \ge H - (1-\gamma)H = \gamma H$.
+    For any eigenvector with $H\psi = \lambda\psi$ and $\lambda > 0$,
+    this gives $\lambda^2 \ge \gamma\lambda$, hence
+    $\lambda \ge \gamma$~\cite{Kastoryano2018Martingale}.
+\end{proof}
+
+\begin{lemma}[MPS anticommutator input for the martingale condition]\label{lem:martingale_mps}
+    \notready
+    \uses{thm:martingale_criterion, def:parent_interaction,
+        def:local_term_parent, thm:ground_space_intersection, def:injective}
+    Let $A$ be injective and fix an interaction range $L \ge 2$ as in
+    Definition~\ref{def:parent_interaction}. Let $h_L(A) := \Pi_{G_L(A)^\perp}$
+    be the $L$-site parent interaction, and for each chain length and site $i$
+    let $h_i$ denote its translate as in Definition~\ref{def:local_term_parent}.
+    For every pair of overlapping terms $h_i$ and $h_j$ with
+    $0 < d_N(i,j) < L$, where $d_N(i,j) := \min(|i-j|,\, N-|i-j|)$ is the
+    cyclic distance on the ring (i.e.\ whose $L$-site supports share at
+    least one site under periodic boundary conditions), the source martingale
+    argument asks for constants $c_{\{i,j\}}$ and $\gamma > 0$, independent of
+    $N$, for which the martingale condition of
+    Theorem~\ref{thm:martingale_criterion} holds.
+    Cirac--Perez-Garcia--Schuch--Verstraete~\cite[Section~IV.C]{Cirac2021Matrix}
+    use the martingale estimate
+    \[
+        h_i h_j+h_j h_i \ge -c_{ij}(1-\gamma)(h_i+h_j)
+    \]
+    and interpret it as a lower bound on the smallest non-zero principal angle
+    between the local ground spaces $\ker h_i$ and $\ker h_j$. In the
+    Hilbert-space formulation above, the source condition is the corresponding
+    quadratic-form inequality
+    \[
+        \operatorname{Re}\langle h_i v,h_jv\rangle
+        +\operatorname{Re}\langle h_j v,h_iv\rangle
+        \ge
+        -c_{ij}(1-\gamma)
+        \bigl(\operatorname{Re}\langle h_i v,v\rangle
+        +\operatorname{Re}\langle h_j v,v\rangle\bigr),
+    \]
+    with row-summable coefficients. Lemma~\ref{lem:parent_hamiltonian_anticommutator_rowsum_gap}
+    gives the implication from this anticommutator estimate to the spectral gap. A
+    directed norm-compression estimate, independent of $N$, such as
+    \[
+        \|h_i h_j v\|\le \eta\|h_i v\|,
+        \qquad \eta\,2(L-1)<1,
+    \]
+    for every overlapping off-diagonal pair is a sufficient stronger hypothesis;
+    Theorem~\ref{thm:overlap_norm_gap_bound_constant} records that consequence.
+    (When $L = 1$ the interaction terms have disjoint supports, so there are no
+    overlapping pairs and the spectral gap follows directly without the
+    martingale argument.)
+\end{lemma}
+
+\begin{proof}
+    \uses{thm:ground_space_intersection, def:injective}
+    \notready
+    The cited martingale paragraph compares the anticommutator estimate with
+    principal angles between the local ground spaces. If
+    $q_i:=I-h_i$ and $q_j:=I-h_j$ denote the corresponding ground-space
+    projectors, the Kastoryano--Lucia estimate cited there concerns
+    \[
+        \delta(\ell)=\|q_iq_j-P\|,
+    \]
+    where $P$ projects onto
+    $\ker(h_i+h_j)=\ker h_i\cap\ker h_j$ and $\ell$ is the overlap length.
+    What remains is to derive the anticommutator estimate above, with its
+    blocking convention and constants, for the cyclic-window local terms. The
+    intersection property identifies $\ker h_i\cap\ker h_j$ with the parent ground
+    space on the union of the two windows, but it does not by itself supply this
+    numerical inequality. The directed excitation-projection estimate
+    \[
+        \|h_i h_j v\|\le \eta\|h_i v\|,
+        \qquad \eta\,2(L-1)<1.
+    \]
+    remains useful as a sufficient strengthening of the source condition.
+
+    \emph{Row-sum bound.}
+    Since $L \ge 2$, each site $i$ overlaps with at most $2(L-1)$
+    neighbours (those $j$ with $0 < d_N(i,j) < L$).
+    Set $c_{\{i,j\}} := \tfrac{1}{2(L-1)}$ for every unordered overlapping
+    pair and $c_{\{i,j\}} := 0$ otherwise. These constants depend only on the
+    cyclic distance $d_N(i,j)$.
+    Then
+    $\sum_{\substack{j\ne i\\ \{i,j\}\text{ overlapping}}}c_{\{i,j\}}
+        \le 2(L-1)\cdot\tfrac{1}{2(L-1)} = 1$,
+    satisfying the row-sum hypothesis of
+    Theorem~\ref{thm:martingale_criterion}.
+
+    \emph{Anticommutator constant.}
+    It remains to compare the cited principal-angle estimates with the
+    cyclic-window anticommutator statement
+    \[
+        h_i h_j+h_jh_i
+        \ge
+        -c_{\{i,j\}}(1-\gamma)(h_i+h_j).
+    \]
+    If this estimate is obtained with the displayed row-summable coefficients,
+    Lemma~\ref{lem:parent_hamiltonian_anticommutator_rowsum_gap} gives the gap.
+    A sufficient stronger route is the norm-compression statement
+    \[
+        \|h_i h_j v\|\le \eta\|h_i v\|,
+        \qquad \eta\,2(L-1)<1.
+    \]
+    If such an $\eta$ is obtained, Theorem~\ref{thm:overlap_norm_gap_bound_constant}
+    gives the gap constant $1-\eta\,2(L-1)$. The frequently displayed
+    fixed-coefficient compression form is the specialization with
+    \[
+        \eta=\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)},
+        \qquad
+        1-\eta\,2(L-1)=\frac{1}{4L}.
+    \]
+    In the corresponding anticommutator form the martingale condition is
+    \[
+        h_i h_j + h_j h_i
+        \ge
+        -\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}(h_i+h_j)
+    \]
+    for every overlapping off-diagonal pair, and a sufficient one-sided
+    strengthening is
+    \[
+        \|h_i h_j v\|
+        \le
+        \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}\|h_i v\|.
+    \]
+    A qualitative statement that the relevant smallest non-zero principal angles
+    are positive is not by itself enough: the martingale reduction needs a
+    numerical anticommutator bound with row-summable coefficients, or a stronger
+    norm-compression bound with $\eta\,2(L-1)<1$. Thus the remaining comparison is
+    whether the principal-angle estimates cited in
+    \cite{Fannes1992Finitely, Nachtergaele1996Spectral,
+        Kastoryano2018Martingale} supply such a cyclic-window estimate, with
+    constants independent of $N$, under the convention used here.
+    % Paper-gap note: docs/paper-gaps/cpgsv21_martingale_overlap.tex.
+\end{proof}
+
+\begin{theorem}[Gap bound from cyclic overlap compression]
+    \label{thm:overlap_norm_gap_bound}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_overlap_norm_bound}
+    \leanok
+    \uses{def:parent_ground_space_es, def:parent_hamiltonian_es,
+        thm:parent_ground_space_es_kernel,
+        rem:euclidean_local_projector_ingredients,
+        lem:local_term_es_average,
+        lem:transported_es_positive,
+        lem:transported_es_local_projections,
+        lem:transported_es_nonoverlap_positive,
+        lem:parent_hamiltonian_es_quadratic_reduction,
+        lem:parent_hamiltonian_ordered_rowsum_gap,
+        lem:parent_hamiltonian_finite_overlap_ordered_cross_term_quadratic,
+        lem:parent_hamiltonian_finite_overlap_ordered_cross_term_gap,
+        lem:cyclic_window_overlap_cardinality,
+        lem:cyclic_window_nonoverlap_positive,
+        lem:parent_hamiltonian_cyclic_window_ordered_cross_term_gap,
+        lem:parent_hamiltonian_cyclic_overlap_ordered_cross_term_gap,
+        lem:parent_hamiltonian_cyclic_overlap_norm_gap,
+        thm:overlap_norm_gap_bound_constant}
+    Let $A$ be a tensor and let $L>1$. Suppose that, for every $N\ge2L$ and
+    every overlapping off-diagonal pair of cyclic length-$L$ windows,
+    \[
+        \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
+        \le
+        \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}
+        \|h_{i,\mathrm{ES}}v\|.
+    \]
+    Then the parent Hamiltonian has the explicit gap constant
+    \[
+        \gamma_{L} := \frac{1}{4L} > 0.
+    \]
+    Concretely, if $N \ge 2L$ and
+    $v \in (\mathcal G_{N,L}^{\mathrm{ES}}(A))^{\perp}$, then
+    \[
+        \gamma_{L} \|v\| \le \|H_{N,L}^{\mathrm{ES}}(A) v\|.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The local averaging, positivity, and symmetric-projection statements are now
+    established in Lemmas~\ref{lem:local_term_es_average},
+    \ref{lem:transported_es_positive}, and~\ref{lem:transported_es_local_projections}.
+    Lemma~\ref{lem:parent_hamiltonian_es_quadratic_reduction} reduces the present
+    theorem to the remaining MPS-specific task: deriving the uniform
+    quadratic-form estimate. Lemma~\ref{lem:parent_hamiltonian_ordered_rowsum_gap}
+    establishes the finite-sum algebra from ordered cross-term row bounds, while
+    Lemma~\ref{lem:parent_hamiltonian_anticommutator_rowsum_gap} records the
+    source anticommutator martingale condition. Lemmas~\ref{lem:parent_hamiltonian_finite_overlap_ordered_cross_term_quadratic}
+    and~\ref{lem:parent_hamiltonian_finite_overlap_ordered_cross_term_gap} state the
+    common finite-overlap ordered-cross-term specialization with $m=2(L-1)$.
+    Lemma~\ref{lem:transported_es_nonoverlap_positive} supplies the non-overlap
+    positivity statement for site-disjoint windows, and
+    Lemma~\ref{lem:cyclic_window_nonoverlap_positive} translates this to the
+    concrete support-disjoint cyclic windows.
+    Lemma~\ref{lem:cyclic_window_overlap_cardinality} gives the finite-overlap
+    row-cardinality bound.
+    Lemma~\ref{lem:parent_hamiltonian_cyclic_window_ordered_cross_term_gap} combines
+    these results with the finite-overlap reduction, so the only additional
+    input is the ordered anticommutator or cross-term estimate for overlapping
+    cyclic windows.
+    Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_ordered_cross_term_gap} states the
+    same overlap-only formulation, and
+    Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_norm_gap} states a sufficient
+    norm-compression formulation. Equivalently, this is the
+    constant-compression theorem below with
+    \[
+        \eta =
+        \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}.
+    \]
+    Since
+    \[
+        1-\eta\,2(L-1)=\frac{1}{4L},
+    \]
+    the displayed hypothesis gives the stated lower bound with
+    $\gamma_L=1/(4L)$.
+\end{proof}
+
+\begin{theorem}[Gap bound from a cyclic anticommutator estimate]
+    \label{thm:anticommutator_gap_bound}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_anticommutator}
+    \leanok
+    \uses{lem:parent_hamiltonian_cyclic_overlap_anticommutator_gap}
+    Let \(L>1\). Suppose that for every \(N\ge2L\) and every overlapping
+    off-diagonal pair of cyclic length-\(L\) windows,
+    \[
+        h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}
+        + h_{j,\mathrm{ES}}h_{i,\mathrm{ES}}
+        \ge
+        -\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}
+          (h_{i,\mathrm{ES}}+h_{j,\mathrm{ES}})
+    \]
+    in quadratic form. Then the parent Hamiltonian has the explicit gap
+    constant
+    \[
+        \gamma_L := \frac{1}{4L}>0.
+    \]
+    Concretely, if \(N\ge2L\) and
+    \(v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp\), then
+    \[
+        \gamma_L\|v\|\le \|H_{N,L}^{\mathrm{ES}}(A)v\|.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This is Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_anticommutator_gap}
+    stated as the public conditional gap theorem, with the anticommutator
+    inequality retained as an explicit hypothesis.
+\end{proof}
+
+\begin{theorem}[Gap bound from a strict cyclic compression constant]
+    \label{thm:overlap_norm_gap_bound_constant}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_overlap_norm_constant}
+    \leanok
+    \uses{lem:parent_hamiltonian_cyclic_overlap_norm_constant_gap}
+    Let $L>1$. Put $m=2(L-1)$. Suppose that there is a constant $\eta\ge0$
+    such that $\eta m<1$, and suppose that, for every
+    $N\ge2L$ and every overlapping off-diagonal pair of cyclic length-$L$
+    windows,
+    \[
+        \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
+        \le
+        \eta\,\|h_{i,\mathrm{ES}}v\|.
+    \]
+    Then the parent Hamiltonian has the gap constant $1-\eta m>0$. Concretely,
+    if $N\ge2L$ and $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$, then
+    \[
+        (1-\eta m)\|v\|\le \|H_{N,L}^{\mathrm{ES}}(A)v\|.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_norm_constant_gap}, with
+    $\gamma=1-\eta m$, applies to the displayed hypothesis
+    \[
+        \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
+        \le
+        \eta\,\|h_{i,\mathrm{ES}}v\|.
+    \]
+    It gives $0<1-\eta m$ and the stated norm lower bound.
+    The preceding fixed-coefficient theorem is the specialization
+    $\eta=(1-1/(4L))/(2(L-1))$.
+\end{proof}
+
+\begin{theorem}[Conditional spectral gap for MPS parent Hamiltonians]
+    \label{thm:parent_hamiltonian_gapped}
+    \lean{MPSTensor.parentHamiltonian_gapped}
+    \lean{MPSTensor.parentHamiltonian_gapped_of_anticommutator}
+    \leanok
+    \uses{thm:anticommutator_gap_bound, thm:overlap_norm_gap_bound}
+    For a tensor $A$ and a range $L > 1$, assume either the cyclic-window
+    anticommutator estimate of Theorem~\ref{thm:anticommutator_gap_bound} or the
+    stronger overlapping cyclic-window norm-compression estimate of
+    Theorem~\ref{thm:overlap_norm_gap_bound}. Then there exists $\gamma > 0$ such
+    that for every $N \ge 2L$ and every vector
+    $v \in (\mathcal G_{N,L}^{\mathrm{ES}}(A))^{\perp}$ one has
+    \[
+        \gamma \|v\| \le \|H_{N,L}^{\mathrm{ES}}(A) v\|.
+    \]
+    By Lemma~\ref{lem:quadratic_form_to_norm_bound}, this implies the usual
+    uniform lower bound on every nonzero eigenvalue of the parent Hamiltonian.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This follows immediately from the corresponding explicit theorem by taking
+    $\gamma$ to be the constant produced there.
+\end{proof}
+
+\begin{theorem}[Conditional spectral gap from a strict cyclic compression constant]
+    \label{thm:parent_hamiltonian_gapped_constant}
+    \lean{MPSTensor.parentHamiltonian_gapped_of_overlap_norm_constant}
+    \leanok
+    \uses{thm:overlap_norm_gap_bound_constant}
+    For a tensor $A$ and a range $L>1$, suppose there is a constant
+    $\eta\ge0$ such that $\eta\,2(L-1)<1$ and, for every $N\ge2L$ and every
+    overlapping off-diagonal pair of cyclic length-$L$ windows,
+    \[
+        \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
+        \le
+        \eta\,\|h_{i,\mathrm{ES}}v\|.
+    \]
+    Then there exists $\gamma>0$ such that, for every $N\ge2L$ and every vector
+    $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$,
+    \[
+        \gamma\|v\|\le \|H_{N,L}^{\mathrm{ES}}(A)v\|.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This follows from Theorem~\ref{thm:overlap_norm_gap_bound_constant} by taking
+    $\gamma=1-\eta\,2(L-1)$.
+\end{proof}

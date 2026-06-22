@@ -27,7 +27,8 @@ product algebra automorphism, then applies the block-permutation decomposition t
 ## References
 
 * [PerezGarcia2007String] Pérez-García, Verstraete, Wolf, Cirac (quant-ph/0608197)
-* [Cirac2017MPS] De las Cuevas, Schuch, Pérez-García, Cirac (arXiv:2011.12127)
+* [CPSV21] Cirac, Pérez-García, Schuch, Verstraete,
+  *Matrix product states and projected entangled pair states*, arXiv:2011.12127.
 -/
 
 open scoped Matrix BigOperators
@@ -246,11 +247,15 @@ theorem piTrace_mul_right_eq_zero
       ∑ k, Matrix.trace (M k * N k) = 0) :
     M = 0 := by
   classical
-  funext k; apply trace_mul_right_eq_zero; intro N_k
+  funext k
+  apply (Matrix.ext_iff_trace_mul_right (A := M k) (B := 0)).2
+  intro N_k
   have := h (Function.update 0 k N_k)
-  rwa [Finset.sum_eq_single k
-    (fun j _ hj => by rw [Function.update_of_ne hj, Pi.zero_apply, mul_zero, Matrix.trace_zero])
-    (fun hk => absurd (Finset.mem_univ k) hk), Function.update_self] at this
+  have htrace : Matrix.trace (M k * N_k) = 0 := by
+    rwa [Finset.sum_eq_single k
+      (fun j _ hj => by rw [Function.update_of_ne hj, Pi.zero_apply, mul_zero, Matrix.trace_zero])
+      (fun hk => absurd (Finset.mem_univ k) hk), Function.update_self] at this
+  simpa using htrace
 
 end PiTraceNondeg
 

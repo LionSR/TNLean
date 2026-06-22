@@ -1,0 +1,150 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Rate-Quantified BNT Cross-Overlap Decay\\
+       on the \leanid{SectorBNT} Sector Surface}
+\author{}
+\date{2026-05-13}
+
+\begin{document}
+\maketitle
+
+\section{Notation}
+
+Fix a sector decomposition $P$ with basis blocks
+$\{P.\mathtt{basis}\,j\}_{j=0}^{g-1}$ and a spectral level
+$\lambda_j\in\mathbb C\setminus\{0\}$ with
+$|\lambda_0|>|\lambda_1|>\cdots>|\lambda_{g-1}|$ and
+$|\lambda_0|=1$. The bilinear cross-overlap between basis blocks
+$j$ and $k$ at length $N$ is
+\begin{align}
+    O_{j,k}(N) := 
+    \mathtt{mpvOverlap}\bigl(P.\mathtt{basis}\,j,
+                             P.\mathtt{basis}\,k\bigr)(N)
+    = \sum_{\sigma}\mathtt{mpv}(P.\mathtt{basis}\,j)(\sigma)
+                     \overline{\mathtt{mpv}(P.\mathtt{basis}\,k)(\sigma)},
+\end{align}
+written \leanid{mpvOverlap} in the formalization.\footnote{%
+    Declaration \leanid{MPSTensor.mpvOverlap} in
+    \doclink{TNLean/MPS/Overlap/Basic}.}
+
+For every ordered pair $j\ne k$ we are interested in a geometric
+bound
+\begin{align}
+    |O_{j,k}(N)| \le C_{j,k} \eta_{j,k}^N
+    \qquad(\forall N\in\mathbb N),
+    \label{eq:rate}
+\end{align}
+with $C_{j,k}\ge 0$ and a rate $\eta_{j,k}\in[0,1)$.
+
+\section{Cited assertion}
+
+The Step~1 argument in the proof of Theorem~\texttt{thm1}
+\cite[line~1182]{Cirac2016MPDO_arXiv} relies on
+$O_{j,k_0}(N)\to 0$ for $j\ne k_0$ to discard
+cross-overlap terms when projecting an assembled BNT identity onto a
+distinguished basis block $V^{(N)}(P.\mathtt{basis}\,k_0)$. The
+qualitative limit is implicit in the BNT structure: distinct normal
+blocks satisfy
+\begin{align}
+    O_{j,k}(N)\xrightarrow[N\to\infty]{} 0
+    \qquad(j\ne k).
+    \label{eq:qual}
+\end{align}
+The argument as written does not quantify the rate of decay in
+\eqref{eq:qual}.
+
+Definition~4.2 of~\cite{Cirac2021Matrix} packages
+\eqref{eq:qual} indirectly under \emph{eventual linear independence} of
+the basis MPVs and does not state a rate. The formalization records this
+eventual linear-independence input in the shared sector-decomposition
+infrastructure,\footnote{%
+    \doclink{TNLean/MPS/SharedInfra/SectorDecomposition}.}
+while \eqref{eq:qual} is provided pointwise by
+\leanid{MPSTensor.mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP}.\footnote{%
+    \doclink{TNLean/MPS/Overlap/CastDecay}.}
+Neither source equips $\eta_{j,k}$ with a quantitative relation
+to the spectral weight ratios.
+
+\section{The retired rate hypothesis}
+
+An earlier formal route introduced an explicit rate hypothesis on a
+sector decomposition $P$ and a chosen spectral level
+$\lambda:\mathrm{Fin}\,P.\mathtt{basisCount}\to\mathbb C$.  That route
+has since been retired together with the per-block-projection layer.  The
+mathematical hypothesis it was trying to isolate remains the following:
+there should exist non-negative families $C,\eta$ such that for every
+$j\ne k$,
+\begin{align}
+    0\le C_{j,k},\quad 0\le\eta_{j,k}<1,
+        \qquad
+    \eta_{j,k}\cdot|\lambda_j/\lambda_k|<1,
+    \label{eq:hyp}
+\end{align}
+together with the geometric bound~\eqref{eq:rate} for all $N$.
+
+The surviving \leanid{SectorBNT} surface does not package such constants.
+It keeps the raw BNT weights in \leanid{SectorDecomposition} and records
+qualitative consequences in
+\doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/Api}: the raw power-sum
+coefficient identity \leanid{SectorDecomposition.coeff_eq_sum_weight_pow},
+within-family cross-decay
+\leanid{MPSTensor.IsBNTCanonicalForm.cross_overlap_basis_tendsto_zero}, the
+combined-family linear-independence criterion
+\leanid{MPSTensor.IsBNTCanonicalForm.combined_family_eventually_li}, and the
+modulus-free non-vanishing coefficient statement
+\leanid{MPSTensor.IsBNTCanonicalForm.coeff_not_eventually_zero}.  None of
+these declarations supplies the constants in~\eqref{eq:hyp}.
+
+\section{Where such a hypothesis would be needed}
+
+The retired per-block-projection route carried an abstract hypothesis
+excluding asymptotic cancellation of the assembled overlap against a
+chosen projection block~$k_0$.  The obstruction analysis in
+\path{docs/audits/2026-05-13_cpsv16_ft_path_beta_pr2_5_design.md} shows that
+for a non-dominant $k_0$ the discharge requires, after isolating
+$V^{(N)}(P.\mathtt{basis}\,k_0)$ on the right and renormalising by
+$\lambda_{k_0}^N$, that every $j\ne k_0$ contribute a term whose modulus
+is bounded by
+\begin{align}
+    |O_{j,k_0}(N)|\cdot|\lambda_j/\lambda_{k_0}|^N
+    \le C_{j,k_0}(\eta_{j,k_0}\cdot|\lambda_j/\lambda_{k_0}|)^N.
+    \label{eq:product}
+\end{align}
+The right-hand side of~\eqref{eq:product} converges to $0$ exactly when
+\eqref{eq:hyp} holds. The qualitative limit~\eqref{eq:qual} alone
+gives $\eta_{j,k_0}<1$ but not the comparison
+$\eta_{j,k_0}\cdot|\lambda_j/\lambda_{k_0}|<1$, which is the
+content of the new hypothesis.
+
+\section{Classification}
+
+\emph{Open gap.}  The rate condition~\eqref{eq:hyp} is a structural input
+beyond what \cite[\S II]{Cirac2016MPDO_arXiv} and
+\cite[Definition~4.2]{Cirac2021Matrix} make explicit. Its rate is
+in principle derivable from the spectral gap of the mixed transfer
+operator that powers
+\leanid{mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP},
+but the compatibility inequality
+$\eta_{j,k}\cdot|\lambda_j/\lambda_k|<1$ is not implied by the
+BNT structure and must be either imposed or established analytically.
+
+The analytic derivation from the transfer matrix spectral gap is the
+subject of \emph{Option~2} in the design memo
+\path{docs/audits/2026-05-13_cpsv16_ft_path_beta_pr2_5_design.md} and is
+not addressed in this note. The current \leanid{SectorBNT} route instead
+keeps the coefficient comparison and the combined-family linear
+independence in \path{TNLean/MPS/FundamentalTheorem/SectorBNT}; any future
+rate-quantified argument should be stated against that surviving surface,
+not against the retired per-block-projection layer.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

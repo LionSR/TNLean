@@ -58,17 +58,16 @@ theorem fundamentalTheorem_singleBlock {A B : MPSTensor d D}
       rcases skolemNoether_matrix f with ⟨X, hX⟩
       refine ⟨X, fun i => ?_⟩
       -- `B i = T (A i) = f (A i) = X * A i * X⁻¹`.
-      have hfi : f (A i) = B i := by simpa [f, fHom] using hT i
+      have hfi : f (A i) = B i := by
+        change fHom (A i) = B i
+        change T (A i) = B i
+        exact hT i
       simpa [hfi] using hX (A i)
 
 /-- For injective `A`, MPV equality with any `B` is equivalent to gauge equivalence. -/
 theorem sameMPV_iff_gaugeEquiv_of_injective {A B : MPSTensor d D}
     (hA : IsInjective A) :
-    SameMPV A B ↔ GaugeEquiv A B := by
-  constructor
-  · intro hAB
-    exact fundamentalTheorem_singleBlock hA hAB
-  · intro hAB
-    exact GaugeEquiv.sameMPV hAB
+    SameMPV A B ↔ GaugeEquiv A B :=
+  ⟨fundamentalTheorem_singleBlock hA, GaugeEquiv.sameMPV⟩
 
 end MPSTensor

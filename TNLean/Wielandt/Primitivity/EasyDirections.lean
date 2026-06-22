@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 
-import TNLean.Wielandt.Primitivity.PaperDefinitions
+import TNLean.Wielandt.Primitivity.Definitions
 import TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan
 
 /-!
@@ -44,7 +44,7 @@ The full circular equivalence and `Iff` statements are assembled in `Primitivity
 
 - [Sanz, Pérez-García, Wolf, Cirac, *A quantum version of Wielandt's inequality*,
   arXiv:0909.5347](https://arxiv.org/abs/0909.5347), Proposition 3
-- Wolf, *Quantum Channels & Operations: Guided Tour*, §6.4
+- Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.4
 -/
 
 open scoped Matrix ComplexOrder BigOperators

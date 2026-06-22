@@ -7,9 +7,9 @@ import Mathlib.Logic.Equiv.Fin.Basic
 /-!
 # Block-triangular trace invariance for MPS tensors
 
-This file records the observation that strict upper-right blocks do not affect
-word traces of block upper-triangular tensors. It defines block-sum and
-reindexing helpers and proves `sameMPV_upperFin_diagFin`, reducing an
+This file proves that strict upper-right blocks do not affect word traces of
+block upper-triangular tensors. It defines block-sum and reindexing maps and
+proves `sameMPV_upperFin_diagFin`, reducing an
 upper-triangular tensor to its block-diagonal part.
 -/
 
@@ -69,7 +69,7 @@ lemma trace_fromBlocks_upper (X : Matrix (Fin n) (Fin n) ℂ)
 
 /-- For any word `w`, evaluating `upperSum` gives an upper-triangular block matrix.
 
-We record the (inessential) upper-right block in an auxiliary recursion `UR`. -/
+The (inessential) upper-right block is carried by an auxiliary recursion `UR`. -/
 lemma evalWord_upperSum_is_fromBlocks
     (A11 : Fin d → Matrix (Fin n) (Fin n) ℂ)
     (A12 : Fin d → Matrix (Fin n) (Fin m) ℂ)
@@ -143,14 +143,24 @@ lemma mpv_upperFin_eq_mpv_diagFin
       MPSTensor.evalWord (upperFin (d := d) (n := n) (m := m) A11 A12 A22) w =
         Matrix.reindex e e
           (_root_.evalWord (upperSum (d := d) (n := n) (m := m) A11 A12 A22) w) := by
-    simpa [upperFin, e] using
+    change MPSTensor.evalWord
+        (fun i => Matrix.reindex e e
+          (upperSum (d := d) (n := n) (m := m) A11 A12 A22 i)) w =
+        Matrix.reindex e e
+          (_root_.evalWord (upperSum (d := d) (n := n) (m := m) A11 A12 A22) w)
+    exact
       (MPSTensor.evalWord_reindex (d := d) (D := n + m) (e := e)
         (A := upperSum (d := d) (n := n) (m := m) A11 A12 A22) w)
   have hDiagEval :
       MPSTensor.evalWord (diagFin (d := d) (n := n) (m := m) A11 A22) w =
         Matrix.reindex e e
           (_root_.evalWord (diagSum (d := d) (n := n) (m := m) A11 A22) w) := by
-    simpa [diagFin, e] using
+    change MPSTensor.evalWord
+        (fun i => Matrix.reindex e e
+          (diagSum (d := d) (n := n) (m := m) A11 A22 i)) w =
+        Matrix.reindex e e
+          (_root_.evalWord (diagSum (d := d) (n := n) (m := m) A11 A22) w)
+    exact
       (MPSTensor.evalWord_reindex (d := d) (D := n + m) (e := e)
         (A := diagSum (d := d) (n := n) (m := m) A11 A22) w)
   -- Reduce to the Sum-index trace identity.

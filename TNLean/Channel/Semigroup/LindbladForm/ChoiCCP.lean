@@ -13,8 +13,8 @@ This file proves the Choi-side characterization of CCP maps.
 
 ## Main results
 
-* `ccp_implies_choi_projected_posSemidef` — **Prop 7.2** (CCP → projected Choi PSD).
-* `choi_projected_posSemidef_implies_ccp` — **Prop 7.2** (projected Choi PSD → CCP).
+* `ccp_implies_choi_projected_posSemidef` — **Proposition 7.2** (CCP → projected Choi PSD).
+* `choi_projected_posSemidef_implies_ccp` — **Proposition 7.2** (projected Choi PSD → CCP).
 -/
 
 open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace
@@ -26,7 +26,7 @@ variable {D : ℕ}
 
 section LindbladForms
 
-/-! ## Prop 7.2: Characterization of CCP (Wolf Proposition 7.2) -/
+/-! ## Proposition 7.2: Characterization of CCP (Wolf Proposition 7.2) -/
 
 /-- **Wolf Proposition 7.2 (direction 1 → 2)**: If `L = φ(·) - κ(·) - (·)κ†` with `φ` CP,
 then the projected Choi matrix `P τ_L P` is positive semidefinite, where
@@ -76,8 +76,8 @@ theorem choi_projected_posSemidef_implies_ccp
     let α : ℂ := star ω ⬝ᵥ u
     let a : Fin D × Fin D → ℂ := -u + ((1 / 2 : ℂ) * α) • ω
     let c : ℂ := (1 : ℂ) / ((D : ℝ).sqrt : ℂ)
-    have hsqrtD : (((D : ℝ).sqrt : ℂ)) ≠ 0 := by
-      exact Complex.ofReal_ne_zero.mpr <| Real.sqrt_ne_zero'.2
+    have hsqrtD : (((D : ℝ).sqrt : ℂ)) ≠ 0 :=
+      Complex.ofReal_ne_zero.mpr <| Real.sqrt_ne_zero'.2
         (by exact_mod_cast Nat.pos_of_ne_zero hD)
     have hc : c ≠ 0 := by
       dsimp [c]
@@ -116,7 +116,8 @@ theorem choi_projected_posSemidef_implies_ccp
         ring
       have hBstar : Bᴴ = X - Complex.I • Y := by
         have htmp := congrArg Matrix.conjTranspose hB
-        simpa [Matrix.conjTranspose_add, Matrix.conjTranspose_smul, hX_herm.eq, hY_herm.eq]
+        simpa [Matrix.conjTranspose_add, Matrix.conjTranspose_smul, hX_herm.eq, hY_herm.eq,
+          sub_eq_add_neg]
           using htmp
       have hLBstar : L (Bᴴ) = L X - Complex.I • L Y := by
         rw [hBstar, map_sub]

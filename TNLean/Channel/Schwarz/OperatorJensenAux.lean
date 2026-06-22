@@ -10,14 +10,18 @@ import Mathlib.LinearAlgebra.Matrix.PosDef
 /-!
 # Finite-POVM compression lemmas for operator Jensen
 
-This file records algebraic lemmas for the finite-POVM / compression route to
+This file states algebraic lemmas for the finite-POVM / compression route to
 operator Jensen inequalities. The main target is the concave real-power case in
-Wolf Corollary 5.2, but the final Löwner-integral packaging is still absent.
+Wolf Corollary 5.2. The Löwner integral representation of `rpow` that this route
+feeds into is now available in Mathlib 4.31
+(`Analysis/SpecialFunctions/ContinuousFunctionalCalculus/Rpow/IntegralRepresentation.lean`),
+so the outstanding gap is the operator Jensen step rather than the integral
+representation; see the status note below.
 
 ## Main statements
 
 - `inverse_compression_le`: inverse of a compression is bounded by the
-  compression of the inverse.
+  compression of the inverse (Hansen--Pedersen for `x ↦ x⁻¹`).
 - `povmIsometry`: the isometric dilation attached to a finite PSD family and its
   defect block.
 - `povmIsometry_star_mul`: the dilation is an isometry.
@@ -26,13 +30,32 @@ Wolf Corollary 5.2, but the final Löwner-integral packaging is still absent.
 - `povm_sum_add_defect`: the POVM family plus defect block sums to the identity.
 - `povmDiagonal_posDef`: positivity of the scalar block-diagonal matrix used in
   the resolvent step.
+- `povmDiagonal_inv`: explicit inverse of the scalar block-diagonal matrix when
+  all block weights are nonzero.
+- `povmIsometry_compress_diagonal_inv`: compressing the inverse of the
+  block-diagonal matrix yields the weighted sum of reciprocals.
+- `povm_resolvent_inv_le`: the finite-POVM resolvent inequality, the key
+  algebraic step toward the concave real-power Jensen inequality.
 
 ## Status
 
 These lemmas formalize the compression / finite-POVM half of the direct proof
-route for the concave real-power Jensen inequality. The remaining unfinished
-step is the explicit diagonal-inverse rewrite together with the final algebraic
-rearrangement to the resolvent inequality.
+route for the concave real-power Jensen inequality. The diagonal-inverse formula
+(`povmDiagonal_inv`) and the finite-POVM resolvent inequality
+(`povm_resolvent_inv_le`) are now proved.
+
+The integral representation that consumes these lemmas is supplied by Mathlib
+4.31: `CFC.exists_measure_nnrpow_eq_integral_cfcₙ_rpowIntegrand₀₁` gives
+`a ^ p = ∫ t in Ioi 0, cfcₙ (Real.rpowIntegrand₀₁ p t) a ∂μ` for `p ∈ (0, 1)`,
+and `CFC.concaveOn_cfc_rpowIntegrand₀₁` records the operator concavity of each
+integrand together with the resolvent form
+`cfc (Real.rpowIntegrand₀₁ p t) a = t ^ (p - 1) • 1 - t ^ p • (t • 1 + a)⁻¹`.
+
+The remaining unfinished step is therefore the operator Jensen inequality for a
+positive subunital map `T` applied to a single integrand,
+`T(cfc (Real.rpowIntegrand₀₁ p t) A) ≤ cfc (Real.rpowIntegrand₀₁ p t) (T A)`,
+together with monotonicity of the matrix-valued integral in the Loewner order;
+combining these and integrating discharges `posMap_rpow_concave_jensen`.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
@@ -68,8 +91,8 @@ lemma inverse_compression_le
   have hBlock : (Matrix.fromBlocks Y⁻¹ W Wᴴ (Wᴴ * Y * W)).PosSemidef := by
     exact (Matrix.PosDef.fromBlocks₁₁ (B := W) (D := Wᴴ * Y * W) hY.inv).2 <| by
       simpa using (Matrix.PosSemidef.zero : (0 : Matrix m m ℂ).PosSemidef)
-  have hSchur : (Y⁻¹ - W * (Wᴴ * Y * W)⁻¹ * Wᴴ).PosSemidef := by
-    exact (Matrix.PosDef.fromBlocks₂₂ (A := Y⁻¹) (B := W) hD).1 hBlock
+  have hSchur : (Y⁻¹ - W * (Wᴴ * Y * W)⁻¹ * Wᴴ).PosSemidef :=
+    (Matrix.PosDef.fromBlocks₂₂ (A := Y⁻¹) (B := W) hD).1 hBlock
   rw [Matrix.le_iff]
   have hConj : (Wᴴ * (Y⁻¹ - W * (Wᴴ * Y * W)⁻¹ * Wᴴ) * W).PosSemidef :=
     Matrix.PosSemidef.conjTranspose_mul_mul_same hSchur W
@@ -230,10 +253,94 @@ lemma povmDiagonal_posDef (w : ι → ℝ) {t : ℝ}
     cases a with
     | inl ip =>
         rcases ip with ⟨i, p⟩
-        simpa [d, Complex.lt_def] using hw i
+        simpa [d] using (RCLike.pos_iff.mpr ⟨hw i, rfl⟩ : (0 : ℂ) < (w i : ℂ))
     | inr p =>
-        simpa [d, Complex.lt_def] using ht
+        simpa [d] using (RCLike.pos_iff.mpr ⟨ht, rfl⟩ : (0 : ℂ) < (t : ℂ))
   simpa [povmDiagonal, d] using hdiag
+
+/-- The inverse of the scalar block-diagonal matrix `povmDiagonal w t`, assuming
+all block weights and the defect scalar are nonzero. -/
+lemma povmDiagonal_inv (w : ι → ℝ) (t : ℝ) (hw : ∀ i, w i ≠ 0) (ht : t ≠ 0) :
+    (povmDiagonal (D := D) w t)⁻¹ =
+      povmDiagonal (D := D) (fun i => (w i)⁻¹) (t⁻¹) := by
+  refine Matrix.inv_eq_right_inv ?_
+  unfold povmDiagonal
+  rw [Matrix.diagonal_mul_diagonal, ← Matrix.diagonal_one]
+  congr 1
+  funext a
+  rcases a with ⟨i, _⟩ | _
+  · change ((w i : ℝ) : ℂ) * (((w i)⁻¹ : ℝ) : ℂ) = 1
+    rw [← Complex.ofReal_mul, mul_inv_cancel₀ (hw i), Complex.ofReal_one]
+  · change ((t : ℝ) : ℂ) * (((t)⁻¹ : ℝ) : ℂ) = 1
+    rw [← Complex.ofReal_mul, mul_inv_cancel₀ ht, Complex.ofReal_one]
+
+/-- Compressing the inverse of `povmDiagonal w t` by the POVM dilation. -/
+lemma povmIsometry_compress_diagonal_inv
+    {C : ι → MatD} {S : MatD} (w : ι → ℝ) (t : ℝ)
+    (hw : ∀ i, w i ≠ 0) (ht : t ≠ 0) :
+    (povmIsometry C S)ᴴ * (povmDiagonal (D := D) w t)⁻¹ * povmIsometry C S =
+      (∑ i, (w i)⁻¹ • (C i * (C i)ᴴ)) + t⁻¹ • (S * Sᴴ) := by
+  rw [povmDiagonal_inv w t hw ht]
+  exact povmIsometry_compress_diagonal (fun i => (w i)⁻¹) t⁻¹
+
+omit [DecidableEq ι] in
+/-- **Finite-POVM resolvent inequality.**
+
+Let `C_i` be a finite family of matrices defining POVM elements `B_i = C_i * (C_i)ᴴ`,
+let `S` be the defect satisfying `S * Sᴴ = 1 - ∑ B_i`, let `w_i ≥ 0` be spectral weights,
+and let `t > 0`. Then
+
+`(∑ w_i • B_i + t • 1)⁻¹ ≤ ∑ (w_i + t)⁻¹ • B_i + t⁻¹ • (S * Sᴴ)`.
+
+This is the key resolvent inequality that feeds into the Löwner-integral
+representation of `rpow` and is the foundational algebraic step for the
+direct finite-POVM proof of the concave real-power Jensen inequality
+(Wolf Corollary 5.2). -/
+lemma povm_resolvent_inv_le
+    {C : ι → MatD} {S : MatD} (wgt : ι → ℝ) (hwgt : ∀ i, 0 ≤ wgt i) (t : ℝ) (ht_pos : 0 < t)
+    (hdef : S * Sᴴ = 1 - ∑ i, C i * (C i)ᴴ) :
+    ((∑ i, wgt i • (C i * (C i)ᴴ)) + t • (1 : MatD))⁻¹ ≤
+      (∑ i, (wgt i + t)⁻¹ • (C i * (C i)ᴴ)) + t⁻¹ • (S * Sᴴ) := by
+  classical
+  -- Build the positive definite block-diagonal matrix with entries wgt_i + t and t
+  let y : ι → ℝ := fun i => wgt i + t
+  have hy_pos : ∀ i, 0 < y i := by
+    intro i
+    dsimp [y]
+    linarith [hwgt i, ht_pos]
+  have hy_ne : ∀ i, y i ≠ 0 := fun i => by linarith [hy_pos i]
+  have ht_ne : t ≠ 0 := by linarith
+  let Y : AuxMat := povmDiagonal (D := D) y t
+  have hY_posDef : Matrix.PosDef Y :=
+    povmDiagonal_posDef (w := y) ht_pos (fun i => hy_pos i)
+  let W : IsoMat := povmIsometry C S
+  have hW_isom : Wᴴ * W = (1 : MatD) :=
+    povmIsometry_star_mul hdef
+  have h_compress : Wᴴ * Y * W = (∑ i, y i • (C i * (C i)ᴴ)) + t • (S * Sᴴ) :=
+    povmIsometry_compress_diagonal y t
+  have h_compress_inv : Wᴴ * Y⁻¹ * W = (∑ i, (y i)⁻¹ • (C i * (C i)ᴴ)) + t⁻¹ • (S * Sᴴ) :=
+    povmIsometry_compress_diagonal_inv y t hy_ne ht_ne
+  -- The core inverse compression inequality
+  have h_inv_le : (Wᴴ * Y * W)⁻¹ ≤ Wᴴ * Y⁻¹ * W :=
+    Matrix.PosDef.inverse_compression_le hY_posDef hW_isom
+  -- LHS simplification
+  have hLHS : (Wᴴ * Y * W) = (∑ i, wgt i • (C i * (C i)ᴴ)) + t • (1 : MatD) := by
+    rw [h_compress]
+    have h1 : (∑ i : ι, y i • (C i * (C i)ᴴ)) =
+        (∑ i : ι, wgt i • (C i * (C i)ᴴ)) + (∑ i : ι, t • (C i * (C i)ᴴ)) := by
+      rw [← Finset.sum_add_distrib]
+      exact Finset.sum_congr rfl fun i _ => add_smul (wgt i) t (C i * (C i)ᴴ)
+    have h2 : (∑ i : ι, t • (C i * (C i)ᴴ)) = t • (∑ i : ι, C i * (C i)ᴴ) :=
+      (Finset.smul_sum).symm
+    have h3 : t • (∑ i : ι, C i * (C i)ᴴ) + t • (S * Sᴴ)
+        = t • ((∑ i : ι, C i * (C i)ᴴ) + S * Sᴴ) :=
+      (smul_add t _ _).symm
+    rw [h1, add_assoc, h2, h3, povm_sum_add_defect hdef]
+  -- RHS simplification: (y i)⁻¹ = (wgt i + t)⁻¹ (definitionally)
+  have hRHS : Wᴴ * Y⁻¹ * W = (∑ i, (wgt i + t)⁻¹ • (C i * (C i)ᴴ)) + t⁻¹ • (S * Sᴴ) :=
+    h_compress_inv
+  rw [hLHS, hRHS] at h_inv_le
+  exact h_inv_le
 
 end POVM
 

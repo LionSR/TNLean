@@ -9,8 +9,8 @@ import TNLean.Channel.FixedPoint.Algebra
 /-!
 # Kernel of the Liouvillian — Wolf Theorem 7.2
 
-This file begins the formalization of Wolf Theorem 7.2 on the kernel of the
-Liouvillian. For a Lindblad form
+This file formalizes the faithful-stationary-state kernel/commutant statement
+from Wolf Theorem 7.2. For a Lindblad form
 
 $$
 L(\rho) = i(\rho H - H \rho) + \sum_j \left(L_j \rho L_j^\dagger -
@@ -282,7 +282,7 @@ private theorem κ_add_conjTranspose_κ (F : LindbladForm D) :
   rw [h2, ← two_smul ℂ ((2 : ℂ)⁻¹ • S), smul_smul]
   norm_num
 
-/-- **Lindblad identity** (Wolf Eq. 7.27 variant).
+/-- **Lindblad identity** (Wolf Equation 7.27 variant).
 
 For any `A` in the adjoint kernel of a Lindblad form `F`, we have
 `F.toAdjointLinearMap (Aᴴ * A) = ∑ⱼ (A * F.L j − F.L j * A)ᴴ * (A * F.L j − F.L j * A)`.
@@ -374,8 +374,9 @@ private theorem each_commutator_eq_zero_of_sum_eq_zero
     have h_psd_j := Matrix.posSemidef_conjTranspose_mul_self (A * F.L j - F.L j * A)
     have h_each_nonneg : ∀ k : Fin F.r,
         0 ≤ ((A * F.L k - F.L k * A)ᴴ * (A * F.L k - F.L k * A)).trace.re :=
-      fun k => (Complex.le_def.mp
-        (Matrix.posSemidef_conjTranspose_mul_self (A * F.L k - F.L k * A)).trace_nonneg).1
+      fun k => (RCLike.nonneg_iff.mp
+        (Matrix.posSemidef_conjTranspose_mul_self
+          (A * F.L k - F.L k * A)).trace_nonneg).1
     have h_tr_sum_re :
         (∑ k : Fin F.r,
           ((A * F.L k - F.L k * A)ᴴ * (A * F.L k - F.L k * A)).trace.re) = 0 := by
@@ -383,18 +384,18 @@ private theorem each_commutator_eq_zero_of_sum_eq_zero
     have h_tr_re :
         ((A * F.L j - F.L j * A)ᴴ * (A * F.L j - F.L j * A)).trace.re = 0 :=
       le_antisymm
-        (by linarith [Finset.sum_eq_zero_iff_of_nonneg (fun k _ => h_each_nonneg k)
-            |>.mp h_tr_sum_re j (Finset.mem_univ j)])
+        (le_of_eq <| congrFun (Fintype.sum_eq_zero_iff_of_nonneg
+          (fun k => h_each_nonneg k) |>.mp h_tr_sum_re) j)
         (h_each_nonneg j)
     have h_tr_zero :
         ((A * F.L j - F.L j * A)ᴴ * (A * F.L j - F.L j * A)).trace = 0 :=
-      Complex.ext h_tr_re (Complex.le_def.mp h_psd_j.trace_nonneg).2.symm
-    exact Matrix.conjTranspose_mul_self_eq_zero.mp (h_psd_j.trace_eq_zero_iff.mp h_tr_zero)
+      Complex.ext h_tr_re (RCLike.nonneg_iff.mp h_psd_j.trace_nonneg).2
+    exact Matrix.trace_conjTranspose_mul_self_eq_zero_iff.mp h_tr_zero
   exact sub_eq_zero.mp hj
 
 /-- Wolf Theorem 7.2, faithful direction.
 
-The proof uses the direct algebraic approach (Wolf Eq. 7.27):
+The proof uses the direct algebraic approach (Wolf Equation 7.27):
 
 1. From `L*(A) = 0`, derive `L*(Aᴴ) = 0` (conjugation property).
 2. Prove the **Lindblad identity**: `L*(Aᴴ A) = Σⱼ [A, Lⱼ]ᴴ [A, Lⱼ]`.
@@ -470,8 +471,8 @@ theorem mem_commutant_of_mem_adjointKernel_of_hasFaithfulStationaryState
   rw [mem_commutant]
   exact ⟨hHA, fun j => ⟨hAL j, hALstar j⟩⟩
 
-/-- Wolf Theorem 7.2 with the current formalization status: under a faithful
-stationary state, the adjoint kernel equals the commutant. -/
+/-- Wolf Theorem 7.2: under a faithful stationary state, the adjoint kernel equals
+the commutant. -/
 theorem adjointKernel_eq_commutant_of_hasFaithfulStationaryState
     (F : LindbladForm D)
     (hstat : HasFaithfulStationaryState (D := D) F.toLinearMap) :

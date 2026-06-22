@@ -30,7 +30,7 @@ variable {D : ℕ}
 
 section LindbladForms
 
-/-! ## The Lindblad form (Wolf Eq. 7.21) -/
+/-! ## The Lindblad form (Wolf Equation 7.21) -/
 
 /-- A **Lindblad form** specifying the standard GKSL generator:
 ```
@@ -88,23 +88,7 @@ def LindbladForm.toLinearMap (F : LindbladForm D) :
     congr 1
     congr 1 <;> ring_nf
 
-/-- Each dissipator term has trace zero. -/
-private lemma trace_dissipator_eq_zero (Lop : Matrix (Fin D) (Fin D) ℂ)
-    (ρ : Matrix (Fin D) (Fin D) ℂ) :
-    trace (dissipator Lop ρ) = 0 := by
-  simp only [dissipator]
-  rw [trace_sub, trace_sub, trace_smul, trace_smul]
-  -- tr(L ρ L†) = tr(L† L ρ) by cyclic property
-  have h1 : trace (Lop * ρ * Lopᴴ) = trace (Lopᴴ * Lop * ρ) := by
-    rw [Matrix.trace_mul_cycle, Matrix.mul_assoc]
-  -- tr(L† L ρ) = tr(ρ L† L) by cyclic property
-  have h2 : trace (Lopᴴ * Lop * ρ) = trace (ρ * (Lopᴴ * Lop)) := by
-    rw [Matrix.trace_mul_comm]
-  rw [h1, h2]
-  simp only [one_div, smul_eq_mul]
-  ring
-
-/-- The Lindblad form is trace-annihilating (Wolf Eq. 7.21 preserves trace). -/
+/-- The Lindblad form is trace-annihilating (Wolf Equation 7.21 preserves trace). -/
 theorem LindbladForm.isTraceAnnihilating (F : LindbladForm D) :
     IsTraceAnnihilating F.toLinearMap := by
   intro ρ
@@ -117,13 +101,22 @@ theorem LindbladForm.isTraceAnnihilating (F : LindbladForm D) :
   rw [hH, zero_add]
   -- Dissipative part
   rw [Matrix.trace_sum]
-  exact Finset.sum_eq_zero (fun j _ => trace_dissipator_eq_zero (F.L j) ρ)
+  exact Finset.sum_eq_zero fun j _ => by
+    simp only [dissipator]
+    rw [trace_sub, trace_sub, trace_smul, trace_smul]
+    have h1 : trace (F.L j * ρ * (F.L j)ᴴ) = trace ((F.L j)ᴴ * F.L j * ρ) := by
+      rw [Matrix.trace_mul_cycle, Matrix.mul_assoc]
+    have h2 : trace ((F.L j)ᴴ * F.L j * ρ) = trace (ρ * ((F.L j)ᴴ * F.L j)) := by
+      rw [Matrix.trace_mul_comm]
+    rw [h1, h2]
+    simp only [one_div, smul_eq_mul]
+    ring
 
-/-! ## Lindblad form ↔ generator decomposition (Wolf Eq. 7.20–7.21) -/
+/-! ## Lindblad form ↔ generator decomposition (Wolf Equation 7.20–7.21) -/
 
 /-- A Lindblad form gives rise to a generator decomposition where
 `φ(ρ) = Σⱼ Lⱼ ρ Lⱼ†` and `κ = iH + ½ Σⱼ Lⱼ†Lⱼ`.
-This is Wolf Eq. (7.24). -/
+This is Wolf Equation (7.24). -/
 def LindbladForm.toGeneratorDecomp (F : LindbladForm D) :
     GeneratorDecomp D where
   φ := {
@@ -139,7 +132,7 @@ def LindbladForm.toGeneratorDecomp (F : LindbladForm D) :
   φ_cp := ⟨F.r, F.L, fun X => rfl⟩
 
 /-- The Lindblad form and its generator decomposition define the same linear map.
-This verifies the algebraic identity of Wolf Eq. (7.21) = Eq. (7.20). -/
+This verifies the algebraic identity of Wolf Equation (7.21) = Equation (7.20). -/
 theorem LindbladForm.toLinearMap_eq_generatorDecomp (F : LindbladForm D) :
     F.toLinearMap = F.toGeneratorDecomp.toLinearMap := by
   -- Work at the LinearMap level; use suffices to show equality for all ρ
@@ -158,10 +151,8 @@ theorem LindbladForm.toLinearMap_eq_generatorDecomp (F : LindbladForm D) :
     rw [conjTranspose_add, conjTranspose_smul, conjTranspose_smul,
       F.H_hermitian, hS_herm]
     congr 1
-    · change star Complex.I • F.H = -Complex.I • F.H
-      rw [Complex.star_def, Complex.conj_I, neg_smul]
-    · change star (1 / 2 : ℂ) • S = (1 / 2 : ℂ) • S
-      simp only [one_div, star_inv₀, star_ofNat]
+    · rw [Complex.star_def, Complex.conj_I, neg_smul]
+    · simp only [one_div, star_inv₀, star_ofNat]
   rw [hκ_conj]
   -- Expand dissipator
   simp only [dissipator]
@@ -192,7 +183,7 @@ theorem LindbladForm.isCCP (F : LindbladForm D) :
   rw [F.toLinearMap_eq_generatorDecomp]
   exact F.toGeneratorDecomp.isCCP
 
-/-! ## Commutator form of the Lindblad equation (Wolf Eq. 7.22) -/
+/-! ## Commutator form of the Lindblad equation (Wolf Equation 7.22) -/
 
 /-- Expanding the commutator brackets in the double-commutator form gives the
 standard dissipator for a single Lindblad operator:
@@ -217,7 +208,7 @@ private lemma commutator_form_eq_toLinearMap_apply (F : LindbladForm D)
   rw [Finset.smul_sum]
   exact Finset.sum_congr rfl (fun j _ => commutator_dissipator_eq (F.L j) ρ)
 
-/-- The **commutator form** of the Lindblad equation (Wolf Eq. 7.22):
+/-- The **commutator form** of the Lindblad equation (Wolf Equation 7.22):
 ```
   L(ρ) = i[ρ, H] + ½ Σⱼ ([Lⱼ, ρ Lⱼ†] + [Lⱼ ρ, Lⱼ†])
 ```
@@ -240,8 +231,8 @@ def LindbladForm.commutatorForm (F : LindbladForm D) :
     simp only [RingHom.id_apply, commutator_form_eq_toLinearMap_apply]
     exact F.toLinearMap.map_smul c ρ
 
-/-- The commutator form (Wolf Eq. 7.22) equals the standard Lindblad form
-(Wolf Eq. 7.21). This is a purely algebraic identity: expanding the commutators
+/-- The commutator form (Wolf Equation 7.22) equals the standard Lindblad form
+(Wolf Equation 7.21). This is a purely algebraic identity: expanding the commutators
 `[Lⱼ, ρ Lⱼ†]` and `[Lⱼ ρ, Lⱼ†]` gives the standard dissipator terms. -/
 theorem LindbladForm.commutatorForm_eq_toLinearMap (F : LindbladForm D) :
     F.commutatorForm = F.toLinearMap := by

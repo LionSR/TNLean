@@ -1,0 +1,54 @@
+\chapter{Parent Hamiltonians}\label{ch:parent_hamiltonian}
+
+For a translation-invariant matrix product state with tensor $A$, the
+\emph{parent Hamiltonian} is the translation-invariant sum of local terms, each
+the orthogonal projector onto the complement of the length-$L$ local space
+$G_L(A) = \mathrm{im}(\Gamma_L)$. This is the space $\mathcal G_L^A$ of
+\cite{PerezGarcia2007Matrix}; we write
+$\Gamma_L(X)(\sigma) = \tr(A^\sigma X)$, which is the same as the source
+convention $\tr(XA^\sigma)$ by cyclicity of the trace. We follow the
+construction of \cite{PerezGarcia2007Matrix} and
+\cite{Cirac2021Matrix}, identifying the $N$-site space with functions on the
+computational basis,
+\[
+    \{0,\ldots,d{-}1\}^N \to \C,
+\]
+rather than as an explicit tensor product.
+
+The chapter establishes the ground-space structure in increasing generality. For
+an injective tensor, when $N\ge2$ and $1<L\le N$, the parent Hamiltonian is
+frustration-free and the periodic MPS vector $V^{(N)}(A)$ is its unique ground
+state, obtained from the intersection property of the local ground spaces. For a
+normal tensor the corresponding conclusion follows, under the stated
+closure-property and length hypotheses, from the inverting-and-growing-back
+argument at the injectivity length.
+The nearest-neighbor section separates the translated parent-term commutation
+and zero-energy equations for $V^{(N)}(A)$ from the source ground-space spanning
+clause in the pure-state theorem relating renormalization fixed points, zero
+correlation length, and nearest-neighbor commuting parent Hamiltonians in
+\cite{Cirac2016MPDO_arXiv}. The spectral-gap section records the source
+anticommutator martingale condition for overlapping local terms, together with
+cyclic norm-compression estimates as sufficient stronger hypotheses. For a tensor
+in block-injective canonical form
+$A^i = \bigoplus_j \mu_j A_j^i$ with a basis of normal tensors $\{A_j\}$,
+\cite[Theorem~IV.16]{Cirac2021Matrix}
+and \cite[Theorem~12]{PerezGarcia2007Matrix} state that the periodic
+parent-Hamiltonian ground space is spanned by the vectors
+$\{V^{(N)}(A_j)\}$. The sections below record the open-segment recursion and the
+intersection and closure steps, together with separate conditional statements
+for the block-diagonal boundary-condition comparison in the periodic ring.
+
+\input{chapter/ch13_parent_hamiltonian_injective_ground_spaces}
+\input{chapter/ch13_parent_hamiltonian_injective_boundary}
+\input{chapter/ch13_parent_hamiltonian_normal_boundary}
+\input{chapter/ch13_parent_hamiltonian_normal_closing}
+\input{chapter/ch13_parent_hamiltonian_normal_closing_reverse}
+\input{chapter/ch13_parent_hamiltonian_commuting_gap}
+\input{chapter/ch13_parent_hamiltonian_decorrelation}
+\input{chapter/ch13_parent_hamiltonian_spectral_gap}
+\input{chapter/ch13_parent_hamiltonian_block_intersections}
+\input{chapter/ch13_parent_hamiltonian_block_intersections_trace_consequences}
+\input{chapter/ch13_parent_hamiltonian_block_diagonal}
+\input{chapter/ch13_parent_hamiltonian_block_diagonal_boundary_crossing}
+\input{chapter/ch13_parent_hamiltonian_block_diagonal_chain_equality}
+\input{chapter/ch13_parent_hamiltonian_bnt_consequences}

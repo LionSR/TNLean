@@ -1,0 +1,1287 @@
+\chapter{Concrete Examples}\label{ch:examples}
+
+This chapter collects concrete MPS tensors from
+\cite[Section~III]{Cirac2021Matrix}. Each example is specified by its
+physical dimension~$d$, bond dimension~$D$, and explicit matrix
+family~$\{A^i\}$. Key structural properties (injectivity, RFP status,
+symmetry) are stated for each tensor.
+
+%% ===================================================================
+\section{The GHZ state}\label{sec:ghz}
+%% ===================================================================
+
+The Greenberger--Horne--Zeilinger (GHZ) state is the prototypical
+non-injective, renormalization-fixed-point MPS.
+
+\begin{definition}[GHZ tensor]\label{def:ghz_tensor}
+    \lean{MPSTensor.ghzTensor}
+    \leanok
+    \uses{def:mps_tensor}
+    Set $d = D = 2$. The GHZ tensor is the family
+    $\{A^0, A^1\} \subset \MN{2}$ defined by
+    \[
+        A^0 = \ketbra{0}{0} = \diag(1,0),
+        \qquad
+        A^1 = \ketbra{1}{1} = \diag(0,1).
+    \]
+    For a system of $N$ sites the resulting MPV is the GHZ state
+    \[
+        \ket{\mathrm{GHZ}_N}
+        = \ket{0}^{\otimes N} + \ket{1}^{\otimes N}.
+    \]
+\end{definition}
+
+\begin{definition}[Two-site computational vector]\label{def:two_site_ket}
+    \lean{MPSTensor.twoSiteKet}
+    \leanok
+    For $a,b\in\{0,1\}$, the vector
+    \[
+        \ket{ab}\in(\{0,1\}^{2}\to\C)
+    \]
+    is the indicator of the configuration
+    \[
+        (\sigma_1,\sigma_2)=(a,b).
+    \]
+\end{definition}
+
+\begin{definition}[Constant product vector]\label{def:constant_ket}
+    \lean{MPSTensor.constantKet}
+    \leanok
+    For $a\in\{0,1\}$ and $N\ge0$,
+    \[
+        \ket{a}^{\otimes N}(\sigma_1,\ldots,\sigma_N)
+        =
+        \begin{cases}
+            1, & (\sigma_1,\ldots,\sigma_N)=(a,\ldots,a), \\
+            0, & \text{otherwise}.
+        \end{cases}
+    \]
+\end{definition}
+
+\begin{theorem}[GHZ transfer map is idempotent]\label{thm:ghz_transfer_idempotent}
+    \lean{MPSTensor.ghz_transferMap_idempotent}
+    \leanok
+    \uses{def:ghz_tensor, def:transfer_map}
+    The transfer map of the GHZ tensor satisfies $\E_A^2 = \E_A$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The transfer map acts by
+    $\E_A(X)_{ij} = \delta_{ij} X_{ij}$
+    (extraction of the diagonal).
+    This operation is idempotent.
+\end{proof}
+
+\begin{theorem}[GHZ tensor is an RFP]\label{thm:ghz_is_rfp}
+    \lean{MPSTensor.ghz_isRFP}
+    \leanok
+    \uses{def:ghz_tensor, def:is_rfp, thm:ghz_transfer_idempotent}
+    The GHZ tensor is a renormalization fixed point.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ghz_transfer_idempotent}
+    Immediate from Theorem~\ref{thm:ghz_transfer_idempotent}.
+\end{proof}
+
+\begin{theorem}[GHZ tensor is not injective]\label{thm:ghz_not_injective}
+    \lean{MPSTensor.ghz_not_isInjective}
+    \leanok
+    \uses{def:ghz_tensor, def:injective}
+    The GHZ tensor is not injective: $\spn_{\C}\{A^0, A^1\}$ is the
+    two-dimensional space of diagonal matrices in~$\MN{2}$, which does
+    not equal~$\MN{2}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Every element of $\spn_{\C}\{A^0, A^1\}$ has zero off-diagonal
+    entries, so the matrix with all entries equal to~$1$ is not in the
+    span.
+\end{proof}
+
+\begin{theorem}[$\Z_2$ on-site symmetry of the GHZ tensor]\label{thm:ghz_z2_symmetric}
+    \lean{MPSTensor.ghz_isOnSiteSymmetric_Z2}
+    \leanok
+    \uses{def:ghz_tensor, def:on_site_symmetric}
+    Let $\Z_2 = \{1, \sigma_x\}$ act on $\C^2$ by the Pauli-$X$
+    matrix~$\sigma_x$. The GHZ tensor is on-site symmetric under this
+    action: for each $g \in \Z_2$, the twisted tensor $\widetilde A_g$
+    defines the same MPV family as $A$, i.e.\ $\mc V(A)=\mc V(\widetilde
+        A_g)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The identity element is trivial. For the generator
+    $g = \sigma_x$, the twisted tensor satisfies
+    $\widetilde A_g^i = A^{1-i}$, i.e.\ the two matrices are swapped.
+    Conjugation by $\sigma_x$ implements the same swap, giving
+    gauge equivalence and hence the same MPV family.
+\end{proof}
+
+\begin{definition}[Virtual $\Z_2$ representation of the GHZ tensor]\label{def:ghz_virtual_z2_action}
+    \lean{MPSTensor.ghzVirtualZ2Action}
+    \leanok
+    \uses{def:ghz_tensor}
+    The virtual $\Z_2$ representation on the bond space is the homomorphism
+    $\Z_2 \to \MN{2}$ sending the identity to $I$ and the generator to
+    $\sigma_z = \diag(1, -1)$.
+\end{definition}
+
+\begin{theorem}[Virtual $\Z_2$ symmetry of the GHZ tensor]\label{thm:ghz_virtual_z2}
+    \lean{MPSTensor.ghz_virtual_Z2_symmetric}
+    \leanok
+    \uses{def:ghz_tensor, def:ghz_virtual_z2_action}
+    The matrix $\sigma_z$ commutes with every GHZ matrix $A^i$.  A non-scalar
+    matrix commuting with all $A^i$ is the hallmark of a non-injective
+    ($\Z_2$-injective) tensor: the on-site symmetry of
+    Theorem~\ref{thm:ghz_z2_symmetric} swaps the two one-dimensional injective
+    blocks $A^0 \leftrightarrow A^1$, while $\sigma_z$ acts on each block by a
+    phase.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Both $A^0$ and $A^1$ are diagonal, so each commutes with the diagonal
+    matrix $\sigma_z$.
+\end{proof}
+
+\begin{theorem}[GHZ order parameter is a transfer-map fixed point]\label{thm:ghz_order_param}
+    \lean{MPSTensor.ghz_orderParam_fixed}
+    \leanok
+    \uses{def:ghz_tensor, def:transfer_map}
+    The order-parameter operator $\sigma_z$ is a fixed point of the GHZ transfer
+    map, $\E_A(\sigma_z) = \sigma_z$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Since $\E_A(X) = \sum_i A^i X (A^i)^{\dagger}$ and both $A^i$ are diagonal,
+    the claim is the entrywise computation $\E_A(\sigma_z) = \sigma_z$.
+\end{proof}
+
+\begin{remark}
+    A primitive (injective) tensor has a one-dimensional transfer-map
+    fixed-point space, spanned by a positive matrix that equals the identity only
+    in a normalized gauge.  That the GHZ transfer map fixes the additional
+    non-scalar operator $\sigma_z$ is the transfer-matrix signature of the extra
+    non-decaying mode behind its long-range ferromagnetic correlations.
+\end{remark}
+
+\begin{theorem}[GHZ zero correlation length]\label{thm:ghz_zcl}
+    \lean{MPSTensor.ghz_isZCL}
+    \leanok
+    \uses{def:is_zcl, thm:ghz_is_rfp, thm:zcl_iff_idempotent_transfer}
+    The GHZ tensor has zero correlation length: its idempotent transfer map
+    (Theorem~\ref{thm:ghz_is_rfp}) gives correlations independent of the
+    separation.  This contrasts with the AKLT state
+    (Theorem~\ref{thm:aklt_correlation_length}), whose subleading eigenvalue
+    $-\tfrac13$ produces a finite correlation length $1/\log 3$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:zcl_iff_idempotent_transfer, thm:ghz_is_rfp}
+    Immediate from the idempotence of the GHZ transfer map and the equivalence
+    of zero correlation length with transfer-map idempotence
+    (Theorem~\ref{thm:zcl_iff_idempotent_transfer}).
+\end{proof}
+
+%% ===================================================================
+\section{The AKLT state}\label{sec:aklt}
+%% ===================================================================
+
+The Affleck--Kennedy--Lieb--Tasaki (AKLT) state is the canonical
+example of a normal (block-injective) MPS with non-trivial
+symmetry-protected topological (SPT) order.
+
+\begin{definition}[AKLT tensor]\label{def:aklt_tensor}
+    \lean{MPSTensor.akltTensor}
+    \leanok
+    \uses{def:mps_tensor}
+    Set $d = 3$ (spin-1) and $D = 2$. The AKLT tensor is the family
+    $\{A^0, A^1, A^2\} \subset \MN{2}$ defined via the Pauli matrices by
+    \[
+        A^0 = \frac{1}{\sqrt{3}} \sigma_z,
+        \qquad
+        A^1 = \frac{\sqrt{2}}{\sqrt{3}} \ketbra{0}{1},
+        \qquad
+        A^2 = -\frac{\sqrt{2}}{\sqrt{3}} \ketbra{1}{0},
+    \]
+    where
+    $\sigma_z = \ketbra{0}{0} - \ketbra{1}{1}$,
+    so equivalently $A^1 = \frac{1}{\sqrt{3}} \sigma_+$ and
+    $A^2 = -\frac{1}{\sqrt{3}} \sigma_-$ for
+    $\sigma_+ = \sqrt{2} \ketbra{0}{1}$ and
+    $\sigma_- = \sqrt{2} \ketbra{1}{0}$.
+    Equivalently, the matrices are the Clebsch--Gordan coefficients
+    coupling spin-$1$ and spin-$\tfrac12$ to spin-$\tfrac12$.
+\end{definition}
+
+\begin{theorem}[AKLT tensor is not injective]\label{thm:aklt_not_injective}
+    \lean{MPSTensor.aklt_not_isInjective}
+    \leanok
+    \uses{def:aklt_tensor, def:injective}
+    The AKLT tensor is not injective at a single site:
+    $\spn_{\C}\{A^0, A^1, A^2\}$ is the three-dimensional space of
+    traceless matrices $\mathfrak{sl}(2,\C)$, which is a proper
+    subspace of~$\MN{2}$.
+\end{theorem}
+
+\begin{theorem}[AKLT tensor is normal]\label{thm:aklt_normal}
+    \lean{MPSTensor.aklt_isNormal}
+    \leanok
+    \uses{def:aklt_tensor, def:transfer_map}
+    The transfer map of the AKLT tensor has a unique eigenvalue of
+    maximal modulus (a simple spectral-radius eigenvalue); in
+    particular the AKLT tensor is normal. Concretely, the
+    length-$2$ blocked tensor is injective.
+\end{theorem}
+
+\begin{theorem}[$\Z_2 \times \Z_2$ on-site symmetry of the AKLT tensor]\label{thm:aklt_z2z2_symmetric}
+    \lean{MPSTensor.aklt_isOnSiteSymmetric_Z2Z2}
+    \leanok
+    \uses{def:aklt_tensor, def:on_site_symmetric}
+    The AKLT tensor is on-site symmetric under the $\Z_2 \times \Z_2$ subgroup
+    of $\mathrm{SO}(3)$ generated by two commuting $\pi$-rotations about
+    orthogonal axes, acting on the spin-$1$ physical index.
+\end{theorem}
+
+\begin{theorem}[Anticommuting virtual gauges of the AKLT symmetry]\label{thm:aklt_gauge_anticomm}
+    \lean{MPSTensor.aklt_gauge_anticomm}
+    \leanok
+    The two virtual matrices that implement the symmetry of
+    Theorem~\ref{thm:aklt_z2z2_symmetric}, namely $i\sigma_y$ and $\sigma_z$,
+    anticommute.
+\end{theorem}
+
+\begin{definition}[AKLT factor system]\label{def:aklt_omega}
+    \lean{MPSTensor.akltOmega}
+    \leanok
+    \uses{def:aklt_tensor}
+    The AKLT factor system on $\Z_2 \times \Z_2$ is
+    $\omega(g,h) = (-1)^{(g_1 + g_2)\,h_1}$ (the value $-1$ when $g_1 + g_2 = 1$
+    and $h_1 = 1$, and $1$ otherwise).  It is the factor system of the explicit
+    projective representation with virtual gauges $i\sigma_y$ and $\sigma_z$; the
+    diagonal term $g_1 h_1$ relative to the cluster case reflects
+    $(i\sigma_y)^2 = -I$.
+\end{definition}
+
+\begin{lemma}[AKLT commutator phase]\label{lem:aklt_comm_phase_neg_one}
+    \lean{MPSTensor.aklt_commPhase_eq_neg_one}
+    \leanok
+    \uses{def:aklt_omega, def:comm_phase}
+    The commutator phase of the AKLT factor system on the two generators is $-1$.
+\end{lemma}
+
+\begin{theorem}[The AKLT factor system is a $2$-cocycle]\label{thm:aklt_omega_cocycle}
+    \lean{MPSTensor.akltOmega_isCocycle}
+    \leanok
+    \uses{def:is_cocycle, def:aklt_omega}
+    The AKLT factor system is a genuine $2$-cocycle, being the factor system of an
+    explicit projective representation, so it represents an element of
+    $H^2(\Z_2 \times \Z_2, \mathrm{U}(1))$.
+\end{theorem}
+
+\begin{theorem}[The AKLT $\Z_2 \times \Z_2$ phase is non-trivial]\label{thm:aklt_nontrivial_spt}
+    \lean{MPSTensor.aklt_isNontrivialSPT}
+    \leanok
+    \uses{def:nontrivial_class, thm:nontrivial_of_comm_phase, lem:aklt_comm_phase_neg_one}
+    The AKLT factor system (Theorem~\ref{thm:aklt_omega_cocycle}), built from the
+    anticommuting gauges $i\sigma_y$ and $\sigma_z$
+    (Theorem~\ref{thm:aklt_gauge_anticomm}), is not a coboundary: its commutator
+    phase on the two generators is $-1$.  Its class in
+    $H^2(\Z_2 \times \Z_2, \mathrm{U}(1)) \cong \Z_2$ is therefore non-trivial,
+    so the AKLT chain realizes a non-trivial SPT phase rather than a trivial
+    product state.
+\end{theorem}
+
+\begin{remark}\label{rem:aklt_z2z2_spt}
+    This $\Z_2 \times \Z_2$ is the smallest subgroup of $\mathrm{SO}(3)$ that
+    still carries a non-trivial $2$-cocycle.  That minimality, and the full
+    continuous classification over $\mathrm{SO}(3)$, are not formalized
+    (Remark~\ref{rem:aklt_so3_spt}).
+\end{remark}
+
+\begin{definition}[Blocked AKLT tensor]\label{def:aklt_blocked}
+    \lean{MPSTensor.akltBlocked}
+    \leanok
+    \uses{def:aklt_tensor, def:blocked_tensor}
+    The length-$2$ blocked AKLT tensor groups two physical sites into one, with
+    blocked physical dimension $9 = 3^2$ and the same bond dimension $D = 2$.
+\end{definition}
+
+\begin{definition}[Blocked $\Z_2 \times \Z_2$ on-site action]%
+    \label{def:aklt_blocked_z2z2_action}
+    \lean{MPSTensor.akltBlockedZ2Z2Action}
+    \leanok
+    \uses{thm:aklt_z2z2_symmetric, def:blocked_tensor}
+    The length-$2$ blocked on-site action of $\Z_2 \times \Z_2$ on the
+    $9$-dimensional blocked physical space is the Kronecker square
+    \[
+        g \longmapsto P_g \otimes P_g
+    \]
+    of the single-site spin-$1$ $\pi$-rotation representation $P_g$ that
+    implements the symmetry of Theorem~\ref{thm:aklt_z2z2_symmetric}.  Identifying
+    the blocked physical index with the pair of single-site indices, the entry of
+    $P_g \otimes P_g$ at $(i_1 i_2, j_1 j_2)$ is the product
+    $(P_g)_{i_1 j_1} (P_g)_{i_2 j_2}$ over the two grouped sites.  This is the
+    on-site action that makes the blocked twist agree with blocking the
+    single-site twist.
+\end{definition}
+
+\begin{theorem}[The blocked AKLT tensor is injective]\label{thm:aklt_blocked_injective}
+    \lean{MPSTensor.akltBlocked_isInjective}
+    \leanok
+    \uses{def:aklt_blocked, def:injective}
+    The length-$2$ blocked AKLT tensor is injective: its nine matrices span
+    $\MN{2}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:aklt_normal}
+    This is the blocked-tensor form of the normality of the single-site tensor
+    (Theorem~\ref{thm:aklt_normal}): the single-site tensor is $2$-block
+    injective, which is exactly injectivity of its length-$2$ blocking.
+\end{proof}
+
+\begin{theorem}[$\Z_2 \times \Z_2$ on-site symmetry of the blocked AKLT tensor]\label{thm:aklt_blocked_z2z2_symmetric}
+    \lean{MPSTensor.aklt_blocked_isOnSiteSymmetric_Z2Z2}
+    \leanok
+    \uses{def:aklt_blocked, def:aklt_blocked_z2z2_action, def:on_site_symmetric,
+        thm:aklt_z2z2_symmetric}
+    The length-$2$ blocked AKLT tensor is on-site symmetric under
+    $\Z_2 \times \Z_2$, with each group element acting by the Kronecker square
+    $P_g \otimes P_g$ of the corresponding single-site spin-$1$ $\pi$-rotation
+    $P_g$ (Definition~\ref{def:aklt_blocked_z2z2_action}).
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:aklt_z2z2_symmetric}
+    Writing $A$ for the single-site tensor and $A^{[2]}$ for its length-$2$
+    blocking, twisting the blocked tensor by $P_g \otimes P_g$ equals blocking the
+    twisted single-site tensor,
+    \[
+        \bigl(A^{[2]}\bigr)^{P_g \otimes P_g}
+            = \bigl(A^{P_g}\bigr)^{[2]},
+    \]
+    where the superscript denotes the twist.  Since the single-site tensor is
+    symmetric, $A^{P_g}$ has the same matrix product vector family as $A$
+    (Theorem~\ref{thm:aklt_z2z2_symmetric}), and blocking preserves the matrix
+    product vector family, so $\bigl(A^{[2]}\bigr)^{P_g \otimes P_g}$ has the same
+    matrix product vector family as $A^{[2]}$.
+\end{proof}
+
+\begin{theorem}[The single-site $\Z_2 \times \Z_2$ action is unitary]\label{thm:aklt_unitary_z2z2}
+    \lean{MPSTensor.aklt_isUnitary_Z2Z2}
+    \leanok
+    \uses{thm:aklt_z2z2_symmetric}
+    Each single-site spin-$1$ $\pi$-rotation matrix $P_g$ of the
+    $\Z_2 \times \Z_2$ action is unitary: $P_g P_g^\dagger = \Id$.
+\end{theorem}
+
+\begin{theorem}[The AKLT state has string order under its $\Z_2 \times \Z_2$ symmetry]\label{thm:aklt_string_order}
+    \lean{MPSTensor.aklt_hasStringOrder}
+    \leanok
+    \uses{def:has_string_order, def:aklt_blocked, def:aklt_blocked_z2z2_action}
+    For every element $g$ of $\Z_2 \times \Z_2$, the length-$2$ blocked AKLT
+    tensor has string order in the sense of
+    Definition~\ref{def:has_string_order} for the twist by $g$, with the
+    maximally mixed boundary state $\Lambda = \tfrac{1}{2}\Id$ as its stationary
+    boundary state.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:has_string_order_of_symmetric_injective, thm:aklt_blocked_injective,
+        thm:aklt_blocked_z2z2_symmetric, thm:aklt_unitary_z2z2, def:transfer_map}
+    The blocked tensor is injective (Theorem~\ref{thm:aklt_blocked_injective}) and
+    on-site symmetric under $\Z_2 \times \Z_2$
+    (Theorem~\ref{thm:aklt_blocked_z2z2_symmetric}), and each group element acts by
+    a real symmetric involutive matrix, hence unitarily.  The maximally mixed
+    state $\Lambda = \tfrac{1}{2}\Id$ is positive definite and has trace~$1$.  The
+    single-site AKLT matrices satisfy $\sum_i A^i (A^i)^\dagger = \Id$ and
+    $\sum_i (A^i)^\dagger A^i = \Id$.  These identities propagate to the length-$2$
+    blocked tensor $A^{[2]}$ whose matrices are the products $A^{i_1} A^{i_2}$: the
+    blocked transfer map is unital,
+    \[
+        \E_{A^{[2]}}(\Id)
+            = \sum_{i_1, i_2} A^{i_1} A^{i_2} (A^{i_2})^\dagger (A^{i_1})^\dagger
+            = \Id,
+    \]
+    and $\Lambda = \tfrac{1}{2}\Id$ is a fixed point of the adjoint transfer map,
+    \[
+        \E_{A^{[2]}}^\dagger(\Lambda)
+            = \sum_{i_1, i_2}
+                (A^{i_2})^\dagger (A^{i_1})^\dagger\, \Lambda\, A^{i_1} A^{i_2}
+            = \Lambda .
+    \]
+    The first identity sums the right-canonical relation
+    $\sum_i A^i (A^i)^\dagger = \Id$ over the inner letter and then the outer; the
+    second sums the left-canonical relation $\sum_i (A^i)^\dagger A^i = \Id$ over
+    the outer letter and then the inner, using $\Lambda = \tfrac{1}{2}\Id$.  These
+    are exactly the hypotheses of
+    Theorem~\ref{thm:has_string_order_of_symmetric_injective}, which then yields
+    string order for every $g$.  Like the cluster state, the AKLT state is an
+    explicit witness of that criterion, sharing the same virtual-boundary caveat on
+    the string order parameter.
+\end{proof}
+
+\begin{definition}[Cartesian AKLT tensor]\label{def:aklt_cartesian}
+    \lean{MPSTensor.akltCartesian}
+    \leanok
+    \uses{def:mps_tensor}
+    The Cartesian presentation of the AKLT tensor has $d = 3$, $D = 2$, and
+    $A^x = \sigma_x$, $A^y = \sigma_y$, $A^z = \sigma_z$, the three Pauli
+    matrices.  This is the rotationally natural form used in
+    \cite{Cirac2021Matrix} (around line~1159); it is the AKLT state in the
+    Cartesian basis of the spin-$1$ site, the counterpart of the
+    $|m\rangle$-basis form of Definition~\ref{def:aklt_tensor}.
+\end{definition}
+
+\begin{theorem}[The spin-$\tfrac12$ cover is surjective onto $\mathrm{SO}(3)$]\label{thm:su2_so3_surjective}
+    \lean{MPSTensor.spinHalfCover_surjective_onto_SO3}
+    \leanok
+    Every rotation $R \in \mathrm{SO}(3)$ is realized by conjugating the Pauli
+    vector by some $U \in \mathrm{SU}(2)$: there is $U \in \mathrm{SU}(2)$ with
+    $\bigl(\tfrac12 \tr(\sigma_i\, U \sigma_j U^{-1})\bigr)_{ij} = R$.
+    Equivalently, the adjoint double cover $\mathrm{SU}(2)\to\mathrm{SO}(3)$ is
+    surjective.  The proof factors $R = R_z(\alpha)\,R_x(\beta)\,R_z(\gamma)$ by
+    its $ZXZ$ Euler decomposition and maps each coordinate rotation to an explicit
+    $\mathrm{SU}(2)$ generator:
+    $\diag(e^{-i\theta/2}, e^{i\theta/2}) \mapsto R_z(\theta)$ and
+    $\bigl(\begin{smallmatrix}\cos\frac\beta2 & -i\sin\frac\beta2 \\
+                -i\sin\frac\beta2 & \cos\frac\beta2\end{smallmatrix}\bigr) \mapsto R_x(\beta)$.
+\end{theorem}
+
+\begin{theorem}[$\mathrm{SO}(3)$ on-site symmetry of the AKLT tensor]\label{thm:aklt_so3_symmetric}
+    \lean{MPSTensor.aklt_isOnSiteSymmetric_SO3}
+    \leanok
+    \uses{def:aklt_cartesian, def:on_site_symmetric, thm:su2_so3_surjective}
+    The Cartesian AKLT tensor is on-site symmetric under the spin-$1$ (defining)
+    representation of $\mathrm{SO}(3)$ on the physical index.
+\end{theorem}
+
+\begin{remark}\label{rem:aklt_so3_spt}
+    The bond index carries the projective spin-$\tfrac12$ representation: the
+    gauge for a rotation is either of its two $\mathrm{SU}(2)$ preimages, so the
+    assignment is a representation only up to sign and factors through the double
+    cover $\mathrm{SU}(2)\to\mathrm{SO}(3)$.  Its class is the non-trivial element
+    of $H^2(\mathrm{SO}(3),\mathrm{U}(1))\cong\Z_2$, witnessing the SPT phase.
+    % Maintainer note: the cohomological classification above (the class in
+    % H^2(SO(3),U(1))) needs continuous group cohomology of SO(3) and is not
+    % formalized; the obstruction is recorded in
+    % docs/paper-gaps/rmp_aklt_continuous_rotation_gap.tex.
+\end{remark}
+
+%% ===================================================================
+\subsection{Correlation length}\label{subsec:aklt_correlation_length}
+%% ===================================================================
+
+The AKLT state is the canonical example of a finite correlation length.  Its
+transfer map has leading eigenvalue $1$ and a single subleading eigenvalue
+$-\tfrac13$ of multiplicity three; the three Pauli matrices are the subleading
+eigenvectors and the identity is the leading one.  The subleading modulus
+$\tfrac13$ gives the correlation length $\xi = 1/\log 3$, and connected
+correlations decay as $(\tfrac13)^n$.
+
+\begin{theorem}[Pauli eigenvectors of the AKLT transfer map]\label{thm:aklt_pauli_eigenvectors}
+    \lean{MPSTensor.aklt_transferMap_sigmaZ, MPSTensor.aklt_transferMap_sigmaX,
+        MPSTensor.aklt_transferMap_sigmaY}
+    \leanok
+    \uses{def:aklt_tensor, def:transfer_map}
+    Each of the three Pauli matrices $\sigma_x$, $\sigma_y$, $\sigma_z$ is an
+    eigenvector of the AKLT transfer map with eigenvalue $-\tfrac13$:
+    \[
+        \E_A(\sigma_k) = -\tfrac13\, \sigma_k, \qquad k \in \{x, y, z\}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Each identity is an entrywise computation from the AKLT matrices, using
+    $(\sqrt{3})^2 = 3$ and $(\sqrt{2})^2 = 2$ to clear the prefactors.
+\end{proof}
+
+\begin{theorem}[Subleading eigenvalue of the AKLT transfer map]\label{thm:aklt_subleading_eigenvalue}
+    \lean{MPSTensor.aklt_transferMap_hasEigenvalue_one,
+        MPSTensor.aklt_transferMap_hasEigenvalue_neg_third,
+        MPSTensor.aklt_subleading_norm,
+        MPSTensor.aklt_transferMap_one}
+    \leanok
+    \uses{thm:aklt_pauli_eigenvectors}
+    The value $1$ is the leading eigenvalue of the AKLT transfer map, with the
+    identity $\Id$ as eigenvector, and $-\tfrac13$ is a subleading eigenvalue,
+    with $\sigma_z$ as eigenvector.  The subleading modulus is therefore
+    $\tfrac13$.
+\end{theorem}
+
+\begin{theorem}[AKLT correlation length]\label{thm:aklt_correlation_length}
+    \lean{MPSTensor.aklt_correlationLength_eq, MPSTensor.aklt_correlationLength_pos}
+    \leanok
+    \uses{def:correlation_length, thm:aklt_subleading_eigenvalue}
+    The AKLT correlation length, computed from the subleading eigenvalue
+    $\lambda_2 = -\tfrac13$, equals
+    \[
+        \xi = -\frac{1}{\log |\lambda_2|} = \frac{1}{\log 3}.
+    \]
+    It is finite and positive.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:correlation_length_pos}
+    The subleading modulus is $|{-\tfrac13}| = \tfrac13$, so rewriting the
+    correlation length at $\lambda_2 = -\tfrac13$ gives
+    $\xi = -1/\log\tfrac13 = 1/\log 3$.  Since $0 < \tfrac13 < 1$, positivity is
+    the specialization of Lemma~\ref{lem:correlation_length_pos} to
+    $\lambda_2 = -\tfrac13$.
+\end{proof}
+
+%% ===================================================================
+\section{The Majumdar--Ghosh state}\label{sec:majumdar_ghosh}
+%% ===================================================================
+
+The Majumdar--Ghosh state is the exact dimer ground state of the spin-$\tfrac12$
+chain
+$H=\sum \boldsymbol{S}_i\cdot\boldsymbol{S}_{i+1}
++\tfrac12\sum\boldsymbol{S}_i\cdot\boldsymbol{S}_{i+2}$.
+On an even periodic chain it is the symmetric superposition of the two
+nearest-neighbour singlet coverings $(1,2)(3,4)\cdots$ and
+$(2,3)(4,5)\cdots(N,1)$, the one-dimensional analogue of a
+resonating valence-bond state.
+
+\begin{definition}[Majumdar--Ghosh tensor]\label{def:majumdar_ghosh_tensor}
+    \lean{MPSTensor.majumdarGhoshTensor}
+    \leanok
+    \uses{def:mps_tensor}
+    Set $d = 2$ (spin-$\tfrac12$) and $D = 3$. The Majumdar--Ghosh tensor is
+    the family $\{A^0, A^1\} \subset \MN{3}$ defined by
+    \[
+        A^0 =
+        \begin{pmatrix} 0 & 1 & 0 \\ 0 & 0 & 0 \\ \tfrac1{\sqrt2} & 0 & 0 \end{pmatrix},
+        \qquad
+        A^1 =
+        \begin{pmatrix} 0 & 0 & 1 \\ -\tfrac1{\sqrt2} & 0 & 0 \\ 0 & 0 & 0 \end{pmatrix}.
+    \]
+    The three bond levels are the two spin-$\tfrac12$ values of an open singlet
+    partner together with the closed inter-dimer link; the relative sign
+    $-\tfrac1{\sqrt2}$ is the antisymmetry of the singlet.  The equality between
+    the matrix product vectors of these matrices and the even-ring dimer
+    superposition, with normalization and cyclic convention fixed, is a separate
+    verification, not part of this definition.
+\end{definition}
+
+\begin{theorem}[Majumdar--Ghosh tensor is in left-canonical form]%
+\label{thm:majumdar_ghosh_left_canonical}
+    \lean{MPSTensor.majumdarGhosh_left_canonical}
+    \leanok
+    \uses{def:majumdar_ghosh_tensor}
+    The Majumdar--Ghosh tensor is isometric: $(A^0)^\dagger A^0 + (A^1)^\dagger A^1
+    = \mathbb 1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Direct multiplication of the two displayed matrices gives
+    $(A^0)^\dagger A^0=\diag(\tfrac12,1,0)$ and
+    $(A^1)^\dagger A^1=\diag(\tfrac12,0,1)$.
+\end{proof}
+
+\begin{theorem}[Transfer map of the Majumdar--Ghosh tensor]%
+\label{thm:majumdar_ghosh_transfer}
+    \lean{MPSTensor.majumdarGhosh_transferMap_one}
+    \leanok
+    \uses{def:majumdar_ghosh_tensor, def:transfer_map}
+    The transfer map of the Majumdar--Ghosh tensor sends the identity to the
+    diagonal matrix $\E_A(\mathbb 1) = \diag(2, \tfrac12, \tfrac12)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Substitute the two matrices in
+    $\E_A(\mathbb 1)=A^0(A^0)^\dagger+A^1(A^1)^\dagger$ and multiply.
+\end{proof}
+
+\begin{theorem}[Majumdar--Ghosh tensor is not injective]%
+\label{thm:majumdar_ghosh_not_injective}
+    \lean{MPSTensor.majumdarGhosh_not_isInjective}
+    \leanok
+    \uses{def:majumdar_ghosh_tensor, def:injective}
+    The Majumdar--Ghosh tensor is not injective: every element of
+    $\spn_{\C}\{A^0, A^1\}$ has vanishing $(2,2)$ entry, so the span is a proper
+    subspace of~$\MN{3}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The matrix unit $E_{22}$ has nonzero $(2,2)$ entry, while every linear
+    combination of $A^0$ and $A^1$ has zero $(2,2)$ entry.
+\end{proof}
+
+\begin{theorem}[Majumdar--Ghosh tensor is not normal]%
+\label{thm:majumdar_ghosh_not_normal}
+    \lean{MPSTensor.majumdarGhosh_not_isNormal}
+    \leanok
+    \uses{def:majumdar_ghosh_tensor, def:normal}
+    The Majumdar--Ghosh tensor is not normal: no blocking length makes the
+    products of that length span the full matrix algebra~$\MN{3}$.  This
+    non-normality is the algebraic signature expected from the two-periodic
+    dimer-covering structure.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The bond carries a two-periodic grading with complementary support sets
+    $\{(0,1),(0,2),(1,0),(2,0)\}$ and $\{(0,0),(1,1),(1,2),(2,1),(2,2)\}$ that
+    are exchanged by left multiplication with a generator. Let $E_{ij}$ denote
+    the $(i,j)$ matrix unit. Then, for every blocking length $N$,
+    \begin{align*}
+        N\text{ odd}
+        &\Rightarrow
+        \bigl(\forall w,\ |w|=N \Rightarrow (A^w)_{22}=0\bigr)
+        \Rightarrow
+        E_{22}\notin\spn_{\C}\{A^w: |w|=N\},\\
+        N\text{ even}
+        &\Rightarrow
+        \bigl(\forall w,\ |w|=N \Rightarrow (A^w)_{10}=0\bigr)
+        \Rightarrow
+        E_{10}\notin\spn_{\C}\{A^w: |w|=N\}.
+    \end{align*}
+    Hence no fixed-length word span is all of $\MN{3}$.
+\end{proof}
+
+\begin{remark}\label{rem:majumdar_ghosh_bond_dimension}
+    The review writes the tensor in the valence-bond shorthand
+    $A = [\ket0((02|+(20|) + \ket1((12|+(21|)]\otimes Y$ with the singlet
+    $Y = \left(\begin{smallmatrix}0 & -1 \\ 1 & 0\end{smallmatrix}\right)$.  Read
+    literally as $(ab| = \ketbra{a}{b}$ on a separate three-level factor tensored
+    with the two-level singlet space, that shorthand would describe a
+    six-dimensional bond. Its two-site contractions do not have the singlet-pair
+    support pattern: same-letter traces can be nonzero while opposite-letter
+    traces vanish. The shorthand is therefore treated here as a schematic of the
+    valence-bond construction: contracting the singlet $Y$ leaves a matrix
+    product operator on a three-dimensional bond, with the antisymmetry of $Y$
+    supplying the relative sign. The contracted tensor is the $D = 3$
+    representative in Definition~\ref{def:majumdar_ghosh_tensor}. The
+    source-notation gap and the missing matrix-product-vector identification are
+    recorded in \path{docs/paper-gaps/rmp_majumdar_ghosh_tensor_gap.tex}.
+\end{remark}
+
+%% ===================================================================
+\section{The W state}\label{sec:w_state}
+%% ===================================================================
+
+The W state on $N$ sites is the single-excitation symmetric state
+\[
+    \ket{W_N}
+    = \ket{10\cdots0} + \ket{010\cdots0} + \cdots + \ket{0\cdots01},
+\]
+the equal-weight superposition of all configurations with exactly one
+excitation. Unlike the preceding examples it has no translation-invariant
+representation with bond dimension bounded independently of $N$; it is
+presented with open boundary conditions, where the matrix product is closed by a
+left and a right boundary vector rather than by a trace.
+
+\begin{definition}[Open-boundary contraction]\label{def:open_coeff}
+    \lean{MPSTensor.openCoeff}
+    \leanok
+    \uses{def:mps_tensor, def:eval_word}
+    For a tensor $A$ with bond dimension $D$, a left boundary covector
+    $v_L\in\C^D$, a right boundary vector $v_R\in\C^D$, and a word
+    $w=(i_1,\ldots,i_k)$, the open-boundary contraction is the bilinear pairing
+    \[
+        (v_L|\, A^{i_1} A^{i_2}\cdots A^{i_k}\, |v_R)
+        = v_L^{\mathsf T}\,\bigl(A^{i_1}\cdots A^{i_k}\bigr)\, v_R.
+    \]
+\end{definition}
+
+\begin{definition}[Open-boundary state]\label{def:open_state}
+    \lean{MPSTensor.openState}
+    \leanok
+    \uses{def:open_coeff}
+    The open-boundary state on $N$ sites assigns to each configuration
+    $\sigma=(\sigma_1,\ldots,\sigma_N)$ the amplitude
+    $(v_L|\, A^{\sigma_1}\cdots A^{\sigma_N}\, |v_R)$.
+\end{definition}
+
+\begin{definition}[W tensor and boundary vectors]\label{def:w_tensor}
+    \lean{MPSTensor.wTensor}
+    \lean{MPSTensor.wLeftBoundary}
+    \lean{MPSTensor.wRightBoundary}
+    \leanok
+    \uses{def:mps_tensor}
+    Set $d = D = 2$. The W tensor is the site-independent family
+    \[
+        A^0 = \begin{pmatrix}1&0\\0&1\end{pmatrix},
+        \qquad
+        A^1 = \begin{pmatrix}0&1\\0&0\end{pmatrix},
+    \]
+    with left boundary covector $(l|=(0|$ and right boundary vector $|r)=|1)$.
+    Here $A^1$ is the single raising operator: it sends $|1)\mapsto|0)$ and
+    annihilates $|0)$, and squares to zero.
+\end{definition}
+
+\begin{definition}[W-state indicator]\label{def:w_indicator}
+    \lean{MPSTensor.wIndicator}
+    \leanok
+    For $N\ge0$, the W-state amplitude is the indicator of the
+    single-excitation configurations:
+    \[
+        \ket{W_N}(\sigma_1,\ldots,\sigma_N)
+        =
+        \begin{cases}
+            1, & \text{exactly one } \sigma_j = 1, \\
+            0, & \text{otherwise}.
+        \end{cases}
+    \]
+\end{definition}
+
+\begin{theorem}[The open-boundary contraction is the W state]%
+\label{thm:w_state_identification}
+    \lean{MPSTensor.wTensor_openState_eq_wIndicator}
+    \leanok
+    \uses{def:w_tensor, def:open_state, def:w_indicator}
+    For every $N$, the open-boundary state of the W tensor with boundary
+    vectors $(0|$ and $|1)$ equals the W state:
+    \[
+        \ket{W_N}
+        = \sum_{\sigma} (0|\, A^{\sigma_1} \cdots A^{\sigma_N}\, |1)\,
+          \ket{\sigma}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:w_tensor, def:open_state}
+    Because $A^0$ is the identity and $A^1$ is the raising operator with
+    $A^1 A^1 = 0$, the ordered product $A^{\sigma_1}\cdots A^{\sigma_N}$ depends
+    only on the number of excitations of $\sigma$: it is the identity with no
+    excitation, the raising operator with one excitation, and zero with two or
+    more. Reading off the $(0,1)$ matrix element against the boundary vectors
+    therefore gives $1$ on the single-excitation configurations and $0$
+    elsewhere, which is the W-state amplitude.
+\end{proof}
+
+\begin{theorem}[Three-site single excitations]%
+\label{thm:w_state_three_excited}
+    \lean{MPSTensor.wState_three_excitedAt}
+    \lean{MPSTensor.wState_three_vacuum}
+    \lean{MPSTensor.wState_three_double}
+    \leanok
+    \uses{thm:w_state_identification}
+    On three sites, each of the three single-excitation configurations
+    $\ket{100}$, $\ket{010}$, $\ket{001}$ receives W-state amplitude $1$, while
+    the vacuum $\ket{000}$ and the doubly-excited $\ket{110}$ receive
+    amplitude $0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:w_state_identification}
+    Direct instances of Theorem~\ref{thm:w_state_identification}: the excitation
+    count is one in the first three cases and zero or two in the others.
+\end{proof}
+
+\begin{remark}[No fixed-bond translation-invariant family]%
+\label{rem:w_state_ti_bound}
+    \uses{def:w_tensor}
+    The open-boundary representation above is not translation invariant: the
+    chain is closed by boundary vectors, not by a trace. The review observes
+    that there is no translation-invariant representation whose bond dimension
+    is bounded independently of $N$: any translation-invariant matrix product
+    state equal to $\ket{W_N}$ must have bond dimension growing with $N$,
+    satisfying a bound of the form
+    $D^3\log D = \Omega(N)$. The review obtains this by combining the matrix
+    product state representation theory of \cite{PerezGarcia2007Matrix} with
+    the quantitative quantum Wielandt inequality. That asymptotic lower bound is
+    not formalized here; it is recorded as a deferred result in
+    \path{docs/paper-gaps/rmp_w_state_ti_bound.tex}.
+\end{remark}
+
+%% ===================================================================
+\section{The cluster state}\label{sec:cluster}
+%% ===================================================================
+
+The cluster state is a universal resource for measurement-based quantum
+computation and provides another example of a non-trivial SPT phase.
+
+\begin{definition}[Cluster-state tensor]\label{def:cluster_tensor}
+    \lean{MPSTensor.clusterTensor}
+    \leanok
+    \uses{def:mps_tensor}
+    Set $d = D = 2$. The cluster-state tensor is the family
+    $\{A^0, A^1\} \subset \MN{2}$ defined by
+    \[
+        A^0 = \ketbra{+}{0}
+        = \frac{1}{\sqrt{2}}
+        \begin{pmatrix} 1 & 0 \\ 1 & 0 \end{pmatrix},
+        \qquad
+        A^1 = \ketbra{-}{1}
+        = \frac{1}{\sqrt{2}}
+        \begin{pmatrix} 0 & 1 \\ 0 & -1 \end{pmatrix},
+    \]
+    where $\ket{\pm} = \tfrac{1}{\sqrt{2}}(\ket{0} \pm \ket{1})$.
+    The review~\cite{Cirac2021Matrix} writes the reflected convention
+    $A^0 = \ketbra{0}{+}$, $A^1 = \ketbra{1}{-}$; the transpose taken
+    here is the same state read in the opposite direction and carries the
+    same SPT order.
+\end{definition}
+
+\begin{theorem}[Cluster-state tensor is not injective]\label{thm:cluster_not_injective}
+    \lean{MPSTensor.cluster_not_isInjective}
+    \leanok
+    \uses{def:cluster_tensor, def:injective}
+    The cluster-state tensor is not injective:
+    $\spn_{\C}\{A^0, A^1\} = \spn_{\C}\{\ketbra{+}{0}, \ketbra{-}{1}\}$
+    has dimension~$2$, not $\dim \MN{2} = 4$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:cluster_tensor}
+    Both $A^0$ and $A^1$ are rank-one matrices with linearly
+    independent column spaces, so they are linearly independent.
+    Their span is two-dimensional, which is strictly less than
+    $\dim \MN{2} = 4$.
+\end{proof}
+
+\begin{theorem}[Cluster-state tensor is normal]\label{thm:cluster_normal}
+    \lean{MPSTensor.cluster_isNBlkInjective_two}
+    \leanok
+    \uses{def:cluster_tensor, def:injective}
+    Although the cluster-state tensor is not injective at a single site, its
+    length-$2$ blocking is injective: the four length-$2$ products span
+    $\MN{2}$. In particular the cluster-state tensor is normal.
+\end{theorem}
+
+\begin{remark}\label{rem:cluster_injective_blocked}
+    Although the cluster-state tensor is not injective at length~$1$,
+    the length-$2$ blocked tensor is injective. Using
+    $\braket{0}{\pm} = \tfrac{1}{\sqrt{2}}$,
+    $\braket{1}{+} = \tfrac{1}{\sqrt{2}}$, and
+    $\braket{1}{-} = -\tfrac{1}{\sqrt{2}}$, the
+    four products $A^{ij} = A^i A^j$ are
+    \begin{equation}\label{eq:ex_cluster_blocked_products}
+        A^{00} = \tfrac{1}{\sqrt{2}}\ketbra{+}{0},\quad
+        A^{01} = \tfrac{1}{\sqrt{2}}\ketbra{+}{1},\quad
+        A^{10} = \tfrac{1}{\sqrt{2}}\ketbra{-}{0},\quad
+        A^{11} = -\tfrac{1}{\sqrt{2}}\ketbra{-}{1}.
+    \end{equation}
+    Since $\{\ket{+},\ket{-}\}$ and $\{\bra{0},\bra{1}\}$ are bases,
+    these four rank-one matrices are linearly independent and
+    span~$\MN{2}$.
+\end{remark}
+
+\begin{theorem}[$\Z_2 \times \Z_2$ on-site symmetry of the blocked cluster-state tensor]\label{thm:cluster_z2z2_symmetric}
+    \lean{MPSTensor.cluster_isOnSiteSymmetric_Z2Z2}
+    \leanok
+    \uses{def:cluster_tensor, def:on_site_symmetric}
+    The length-$2$ blocked cluster-state tensor is on-site symmetric
+    under $\Z_2 \times \Z_2$. The two generators act on the
+    $4$-dimensional blocked physical space $(\C^2)^{\otimes 2}$ by
+    $\sigma_x \otimes I$ and $I \otimes \sigma_x$,
+    which commute and each square to the identity, defining a linear
+    representation of $\Z_2 \times \Z_2$.
+\end{theorem}
+
+\begin{theorem}[Anticommuting virtual gauges of the cluster-state symmetry]\label{thm:cluster_gauge_anticomm}
+    \lean{MPSTensor.cluster_gauge_anticomm}
+    \leanok
+    The virtual matrices implementing the two generators of
+    Theorem~\ref{thm:cluster_z2z2_symmetric}, namely $V_1 = \sigma_z$ and
+    $V_2 = \sigma_x$, anticommute ($V_1 V_2 = -V_2 V_1$).
+\end{theorem}
+
+\begin{definition}[Cluster-state factor system]\label{def:cluster_omega}
+    \lean{MPSTensor.clusterOmega}
+    \leanok
+    \uses{def:cluster_tensor}
+    The cluster-state factor system on $\Z_2 \times \Z_2$ is
+    $\omega(g,h) = (-1)^{g_2\,h_1}$ (the value $-1$ when $g_2 = 1$ and $h_1 = 1$,
+    and $1$ otherwise).  It is the factor system of the explicit projective
+    representation with virtual gauges $\sigma_z$ and $\sigma_x$, both squaring to
+    the identity, so there is no diagonal term.
+\end{definition}
+
+\begin{lemma}[Cluster-state commutator phase]\label{lem:cluster_comm_phase_neg_one}
+    \lean{MPSTensor.cluster_commPhase_eq_neg_one}
+    \leanok
+    \uses{def:cluster_omega, def:comm_phase}
+    The commutator phase of the cluster-state factor system on the two generators
+    is $-1$.
+\end{lemma}
+
+\begin{theorem}[The cluster-state factor system is a $2$-cocycle]\label{thm:cluster_omega_cocycle}
+    \lean{MPSTensor.clusterOmega_isCocycle}
+    \leanok
+    \uses{def:is_cocycle, def:cluster_omega}
+    The cluster-state factor system is a genuine $2$-cocycle, being the factor
+    system of an explicit projective representation, so it represents an element
+    of $H^2(\Z_2 \times \Z_2, \mathrm{U}(1))$.
+\end{theorem}
+
+\begin{theorem}[The cluster-state $\Z_2 \times \Z_2$ phase is non-trivial]\label{thm:cluster_nontrivial_spt}
+    \lean{MPSTensor.cluster_isNontrivialSPT}
+    \leanok
+    \uses{def:nontrivial_class, thm:nontrivial_of_comm_phase, lem:cluster_comm_phase_neg_one}
+    The cluster-state factor system (Theorem~\ref{thm:cluster_omega_cocycle}),
+    built from the anticommuting gauges $\sigma_z$ and $\sigma_x$
+    (Theorem~\ref{thm:cluster_gauge_anticomm}), is not a coboundary: its
+    commutator phase on the two generators is $-1$.  Its class in
+    $H^2(\Z_2 \times \Z_2, \mathrm{U}(1)) \cong \Z_2$ is therefore non-trivial, so
+    the cluster state realizes a non-trivial SPT phase.
+\end{theorem}
+
+\begin{theorem}[The cluster state has string order under its $\Z_2 \times \Z_2$ symmetry]\label{thm:cluster_string_order}
+    \lean{MPSTensor.cluster_hasStringOrder}
+    \leanok
+    \uses{def:has_string_order, def:cluster_tensor}
+    For every element $g$ of $\Z_2 \times \Z_2$, the length-$2$ blocked cluster-state
+    tensor has string order in the sense of
+    Definition~\ref{def:has_string_order} for the twist by $g$, with the
+    maximally mixed boundary state $\Lambda = \tfrac{1}{2}\Id$ as its stationary
+    boundary state.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:has_string_order_of_symmetric_injective, thm:cluster_z2z2_symmetric,
+        rem:cluster_injective_blocked}
+    The blocked tensor is injective (Remark~\ref{rem:cluster_injective_blocked})
+    and on-site symmetric under $\Z_2 \times \Z_2$
+    (Theorem~\ref{thm:cluster_z2z2_symmetric}), and each group element acts by a
+    real symmetric involutive permutation matrix, hence unitarily.  The
+    maximally mixed state $\Lambda = \tfrac{1}{2}\Id$ is positive definite and
+    has trace~$1$.  The four blocked matrices in
+    (\ref{eq:ex_cluster_blocked_products}) satisfy
+    $\sum_i A^i (A^i)^\dagger = \Id$ and $\sum_i (A^i)^\dagger A^i = \Id$, so the
+    transfer map is unital and $\Lambda$ is a fixed point of the adjoint transfer
+    map.  These are exactly the hypotheses of
+    Theorem~\ref{thm:has_string_order_of_symmetric_injective}, which then yields
+    string order for every $g$.  The cluster state is thus the first explicit
+    witness of that criterion.
+\end{proof}
+
+\begin{theorem}[Blocked cluster transfer map is idempotent]\label{thm:cluster_blocked_idempotent}
+    \lean{MPSTensor.clusterBlocked_transferMap_idempotent,
+        MPSTensor.clusterBlocked_transferMap_apply}
+    \leanok
+    \uses{def:cluster_tensor, def:transfer_map}
+    The length-$2$ blocked cluster transfer map satisfies $\E_A^2 = \E_A$.  In
+    closed form it sends every $X$ to the scalar $(X_{00} + X_{11})/2$ times the
+    identity, so its image is one-dimensional.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The single-site cluster transfer map is not idempotent, but the four blocked
+    matrices give the closed form $\E_A(X) = \tfrac12 (X_{00} + X_{11})\,\Id$,
+    which is manifestly idempotent.
+\end{proof}
+
+\begin{theorem}[Cluster zero correlation length]\label{thm:cluster_zcl}
+    \lean{MPSTensor.clusterBlocked_isZCL}
+    \leanok
+    \uses{def:is_zcl, thm:cluster_blocked_idempotent, thm:zcl_iff_idempotent_transfer}
+    The length-$2$ blocked cluster tensor has zero correlation length: its
+    idempotent transfer map (Theorem~\ref{thm:cluster_blocked_idempotent}) gives
+    correlations independent of the separation.  Like the GHZ state, and unlike
+    the AKLT state, the cluster state is a renormalization fixed point with zero
+    correlation length.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:zcl_iff_idempotent_transfer, thm:cluster_blocked_idempotent}
+    Immediate from the idempotence of the blocked cluster transfer map and the
+    equivalence of zero correlation length with transfer-map idempotence
+    (Theorem~\ref{thm:zcl_iff_idempotent_transfer}).
+\end{proof}
+
+%% ===================================================================
+\section{Parent Hamiltonian statements for the examples}\label{sec:example_parent_hamiltonians}
+%% ===================================================================
+
+The parent-Hamiltonian construction of \cite[lines~1988--2000]{Cirac2021Matrix}
+is recorded here in the form
+\[
+    \mathcal G_L(A)=
+    \left\{
+    \sum_{i_1,\ldots,i_L}
+    \tr(A^{i_1}\cdots A^{i_L}X)
+    \ket{i_1\cdots i_L}
+    : X\in \MN{D}
+    \right\}.
+\]
+Thus
+\[
+    \ker h_L=\mathcal G_L(A),
+    \qquad
+    H_N^{(L)}=\sum_i (h_L)_i .
+\]
+We write
+\[
+    \operatorname{GS}(H)=\ker(H-E_0(H)I)
+\]
+for the ground eigenspace.
+
+\begin{theorem}[GHZ two-site parent space]\label{thm:ghz_ground_space_two}
+    \lean{MPSTensor.ghz_groundSpace_two_eq_span}
+    \leanok
+    \uses{def:ghz_tensor, def:ground_space_parent, def:two_site_ket}
+    For the GHZ tensor $A$ of Definition~\ref{def:ghz_tensor},
+    \[
+        \mathcal G_2(A)
+        =
+        \spn_{\C}\{\ket{00},\ket{11}\}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:ghz_tensor, def:ground_space_map, def:ground_space_parent,
+        def:two_site_ket}
+    By definition,
+    \[
+        \Gamma_2(X)(\sigma_1,\sigma_2)
+        =
+        \tr(A^{\sigma_1}A^{\sigma_2}X).
+    \]
+    For the GHZ matrices
+    $A^0=\diag(1,0)$ and $A^1=\diag(0,1)$,
+    whenever $\sigma_1\ne\sigma_2$,
+    \[
+        A^{\sigma_1}A^{\sigma_2}=0.
+    \]
+    Hence
+    \[
+        \Gamma_2(X)
+        =
+        X_{00}\ket{00}+X_{11}\ket{11},
+    \]
+    and the image of~$\Gamma_2$ is
+    $\spn_{\C}\{\ket{00},\ket{11}\}$.
+\end{proof}
+
+\begin{theorem}[Constant GHZ product vectors satisfy the cyclic constraints]
+    \label{thm:constant_ket_mem_ghz_chain_ground_space}
+    \lean{MPSTensor.constantKet_mem_ghz_chainGroundSpace}
+    \leanok
+    \uses{def:ghz_tensor, def:chain_ground_space, def:constant_ket,
+        thm:ghz_ground_space_two}
+    For $N\ge2$ and $a\in\{0,1\}$,
+    \[
+        \ket{a}^{\otimes N}\in\mathcal G_{N,2}(A_{\mathrm{GHZ}}).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ghz_ground_space_two}
+    For a cyclic nearest-neighbour window and outside assignment $\tau$, set
+    \[
+        R_{i,\tau}
+        :=
+        \left.\ket{a}^{\otimes N}\right|_{[i,i+1],\tau}.
+    \]
+    For $b,c\in\{0,1\}$ with $b\ne c$, the completed configuration is not
+    constant, hence
+    \[
+        R_{i,\tau}(b,c)=0.
+    \]
+    Therefore
+    \[
+        R_{i,\tau}
+        \in
+        \{v:v(0,1)=v(1,0)=0\}
+        =
+        \spn_{\C}\{\ket{00},\ket{11}\}
+        =
+        \mathcal G_2(A_{\mathrm{GHZ}}),
+    \]
+    so $\ket{a}^{\otimes N}\in\mathcal G_{N,2}(A_{\mathrm{GHZ}})$.
+\end{proof}
+
+\begin{theorem}[GHZ periodic nearest-neighbour ground space]
+    \label{thm:ghz_chain_ground_space_two}
+    \lean{MPSTensor.ghz_chainGroundSpace_two_eq_constant_span}
+    \leanok
+    \uses{def:ghz_tensor, def:chain_ground_space, def:constant_ket,
+        thm:ghz_ground_space_two}
+    For $N\ge2$, the common nearest-neighbour cyclic ground space of the GHZ
+    tensor satisfies
+    \[
+        \mathcal G_{N,2}(A_{\mathrm{GHZ}})
+        =
+        \spn_{\C}\{
+        \ket{0}^{\otimes N},
+        \ket{1}^{\otimes N}
+        \}.
+    \]
+    This is the cyclic-window form of the two-fold degeneracy in
+    \cite[line~2205]{Cirac2021Matrix}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ghz_ground_space_two,
+        thm:constant_ket_mem_ghz_chain_ground_space}
+    Let $\psi\in\mathcal G_{N,2}(A_{\mathrm{GHZ}})$.  For every cyclic
+    nearest-neighbour window and outside assignment $\tau$,
+    \[
+        \left.\psi\right|_{[i,i+1],\tau}
+        \in
+        \mathcal G_2(A_{\mathrm{GHZ}})
+        =
+        \spn_{\C}\{\ket{00},\ket{11}\}.
+    \]
+    Taking the outside assignment from the word $\sigma$ gives
+    \[
+        \left.\psi\right|_{[i,i+1],\sigma}(\sigma_i,\sigma_{i+1})
+        =
+        \psi(\sigma).
+    \]
+    Hence a mixed nearest-neighbour word has zero coefficient:
+    \[
+        \sigma_i\ne\sigma_{i+1}
+        \quad\Longrightarrow\quad
+        \psi(\sigma)=0.
+    \]
+    A nonconstant binary cyclic word has a mixed edge,
+    \[
+        \sigma\notin\{(0,\ldots,0),(1,\ldots,1)\}
+        \quad\Longrightarrow\quad
+        \exists i,\ \sigma_i\ne\sigma_{i+1}.
+    \]
+    Therefore
+    \[
+        \psi
+        =
+        \psi(0,\ldots,0)\ket{0}^{\otimes N}
+        +
+        \psi(1,\ldots,1)\ket{1}^{\otimes N}.
+    \]
+    Conversely, Theorem~\ref{thm:constant_ket_mem_ghz_chain_ground_space} gives
+    \[
+        \ket{0}^{\otimes N},\ \ket{1}^{\otimes N}
+        \in
+        \mathcal G_{N,2}(A_{\mathrm{GHZ}}),
+    \]
+    and hence their span lies in $\mathcal G_{N,2}(A_{\mathrm{GHZ}})$.
+\end{proof}
+
+\begin{remark}[GHZ parent interaction]\label{rem:ghz_parent_interaction}
+    For the GHZ tensor of Definition~\ref{def:ghz_tensor},
+    \[
+        \mathcal G_2(A)
+        =
+        \spn\{\ket{00},\ket{11}\},
+        \qquad
+        h_{\mathrm{GHZ}}
+        =
+        \ketbra{01}{01}+\ketbra{10}{10}
+        =
+        I-\ketbra{00}{00}-\ketbra{11}{11}.
+    \]
+    The periodic nearest-neighbour parent Hamiltonian therefore satisfies
+    \[
+        H_{\mathrm{GHZ},N}
+        =
+        \sum_i (h_{\mathrm{GHZ}})_i,
+        \qquad
+        \ker H_{\mathrm{GHZ},N}
+        =
+        \spn\{\ket{0}^{\otimes N},\ket{1}^{\otimes N}\},
+    \]
+    using the cyclic-window equality
+    \[
+        \mathcal G_{N,2}(A_{\mathrm{GHZ}})
+        =
+        \spn\{\ket{0}^{\otimes N},\ket{1}^{\otimes N}\}
+    \]
+    from Theorem~\ref{thm:ghz_chain_ground_space_two}.
+    This is the ferromagnetic Ising parent Hamiltonian
+    \cite[lines~1194--1196 and line~2205]{Cirac2021Matrix};
+    see also \cite[Section~3]{FernandezGonzalez2015Uncle} for the displayed
+    two-site space and interaction.
+\end{remark}
+
+\begin{remark}[Cluster-state stabilizer convention]\label{rem:cluster_stabilizer_convention}
+    The one-dimensional cluster tensor in Definition~\ref{def:cluster_tensor}
+    is the reflected convention of the tensor displayed in
+    \cite[lines~2364--2369]{Cirac2021Matrix}.  The sourced stabilizer is
+    \[
+        K_i^{ZXZ}
+        =
+        \sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2}.
+    \]
+    The corresponding positive parent interaction is
+    \[
+        h_i^{ZXZ}
+        =
+        \frac12(I-K_i^{ZXZ}),
+        \qquad
+        H_{\mathrm{cl},N}^{ZXZ}
+        =
+        \sum_i h_i^{ZXZ},
+        \qquad
+        \dim \ker H_{\mathrm{cl},N}^{ZXZ}=1
+    \]
+    \cite[local TeX lines~374--387]{PerezGarcia2007Matrix}.  Thus an $XZX$ formula
+    should be used for this tensor only after establishing an equivalence such as
+    \[
+        U H_{\mathrm{cl},N}^{ZXZ} U^\dagger
+        =
+        H_{\mathrm{cl},N}^{XZX}
+        \quad\text{or}\quad
+        T H_{\mathrm{cl},N}^{ZXZ} T^{-1}
+        =
+        H_{\mathrm{cl},N}^{XZX}.
+    \]
+\end{remark}
+
+\begin{remark}[AKLT parent Hamiltonian and edge modes]\label{rem:aklt_parent_hamiltonian}
+    For the AKLT tensor of Definition~\ref{def:aklt_tensor}, with
+    $\mathcal G_{[a,b]}$ denoting the local ground space on sites
+    $a,\ldots,b$,
+    \[
+        L_0=2,
+        \qquad
+        \mathcal G_{[1,2]}\cap \mathcal G_{[2,3]}=\mathcal G_{[1,3]}
+    \]
+    \cite[line~2095]{Cirac2021Matrix}.  The displayed local spin-chain
+    Hamiltonian is
+    \[
+        H_{\mathrm{AKLT},N}
+        =
+        \sum_i
+        \left(
+        \vec S_i\cdot\vec S_{i+1}
+        +\frac13(\vec S_i\cdot\vec S_{i+1})^2
+        \right),
+    \]
+    up to an additive constant
+    \cite[local TeX lines~340--349]{PerezGarcia2007Matrix};
+    \cite[lines~2126--2130]{Schuch2011Phases}.  The spin-$2$ projector form
+    is related to the polynomial Hamiltonian by the spin-addition identity
+    \[
+        P^{(2)}_{i,i+1}
+        =
+        \frac12
+        \left(
+        \vec S_i\cdot\vec S_{i+1}
+        +\frac13(\vec S_i\cdot\vec S_{i+1})^2
+        +\frac23 I
+        \right)
+    \]
+    for two spin-$1$ particles.  For open boundary conditions,
+    \[
+        \dim \operatorname{GS}(H_{\mathrm{AKLT},N}^{\mathrm{open}})=4,
+        \qquad
+        \dim\bigl(\operatorname{GS}(H_{\mathrm{AKLT},N}^{\mathrm{open}})
+        \cap \mathcal H_{S=0}\bigr)=1
+    \]
+    \cite[lines~1169--1174]{Cirac2021Matrix}.
+\end{remark}

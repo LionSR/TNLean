@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 
 import TNLean.Wielandt.RectangularSpan.Growth
+import TNLean.MPS.Core.RepeatedWord
 
 /-!
 # Rectangular span universality auxiliary lemmas: rank-one and eigenvector parts
@@ -30,7 +31,7 @@ Combined with the stabilization results from Section 8b showing
 `rectSpan P A n = range(mulLeft P)`, this yields the key universality statement:
 for every `ψ`, `vecMulVec φ ψ ∈ rectSpan P A n`.
 
-This is the backend engine for the exact Lemma 2(b) of arXiv:0909.5347: once the
+This is the core implication behind the exact Lemma 2(b) of arXiv:0909.5347: once the
 one-sided rectangular span stabilizes to the full range, every rank-one matrix
 `|φ⟩⟨ψ|` with `φ` in the range of the D-th power projection lands in
 `rectSpan ⊆ wordSpan`.
@@ -54,8 +55,8 @@ theorem vecMulVec_mem_range_mulLeft_of_mem_range_toLin
     (hφ : φ ∈ LinearMap.range (Matrix.toLin' P)) (ψ : Fin D → ℂ) :
     vecMulVec φ ψ ∈ LinearMap.range (LinearMap.mulLeft ℂ P) := by
   obtain ⟨v, rfl⟩ := LinearMap.mem_range.mp hφ
-  refine ⟨vecMulVec v ψ, ?_⟩
-  simp only [Matrix.toLin'_apply, LinearMap.mulLeft_apply, mul_vecMulVec]
+  simpa only [Matrix.toLin'_apply, LinearMap.mulLeft_apply, mul_vecMulVec] using
+    LinearMap.mem_range_self (LinearMap.mulLeft ℂ P) (vecMulVec v ψ)
 
 /-- **Rank-one universality from stabilized rectangular span.**
 
@@ -138,16 +139,6 @@ open Matrix
 
 variable {d D : ℕ}
 
-/-- `evalWord A` on a replicated single letter gives a matrix power.
-
-This is a local copy of `evalWord_replicate` from `BlockSeparation.lean`,
-reproved to avoid adding an import. -/
-private theorem evalWord_replicate_eq_pow (A : MPSTensor d D) (i : Fin d) (L : ℕ) :
-    evalWord A (List.replicate L i) = (A i) ^ L := by
-  induction L with
-  | zero => simp
-  | succ n ih => rw [List.replicate_succ, evalWord, ih, pow_succ']
-
 /-- **The D-th power of a Kraus operator lies in wordSpan A D.**
 
 The matrix `(A i₀)^D` equals `evalWord A [i₀, …, i₀]` (D copies), which is a
@@ -158,13 +149,13 @@ This is the "power membership" ingredient needed by
 theorem pow_mem_wordSpan (A : MPSTensor d D) (i₀ : Fin d) :
     (A i₀) ^ D ∈ wordSpan A D := by
   have h := evalWord_mem_wordSpan A (List.replicate D i₀)
-  rwa [evalWord_replicate_eq_pow, List.length_replicate] at h
+  rwa [evalWord_replicate, List.length_replicate] at h
 
 /-- **More general power membership**: `(A i₀)^k ∈ wordSpan A k` for any `k`. -/
 theorem pow_mem_wordSpan' (A : MPSTensor d D) (i₀ : Fin d) (k : ℕ) :
     (A i₀) ^ k ∈ wordSpan A k := by
   have h := evalWord_mem_wordSpan A (List.replicate k i₀)
-  rwa [evalWord_replicate_eq_pow, List.length_replicate] at h
+  rwa [evalWord_replicate, List.length_replicate] at h
 
 /-- Iterating the eigenvalue equation: if `M *ᵥ φ = μ • φ`, then `M^k *ᵥ φ = μ^k • φ`.
 
@@ -214,7 +205,7 @@ theorem eigenvector_mem_range_toLin_pow'
   rw [Matrix.toLin'_apply, Matrix.mulVec_smul, hpow, smul_smul,
       ← mul_pow, inv_mul_cancel₀ hμ, one_pow, one_smul]
 
-/-! ### Combined packaging: eigenvector rank-one in wordSpan -/
+/-! ### Combining eigenvector range data with rectangular span universality -/
 
 /-- **Eigenvector rank-one matrices land in `wordSpan` via stabilized `rectSpan`.**
 
@@ -250,8 +241,8 @@ Under `IsNormal A` and with an eigenvector `A i₀ *ᵥ φ = μ • φ` (`μ ≠
 there exists `n` such that for **every** `ψ`,
 `vecMulVec φ ψ ∈ wordSpan A (D + n)`.
 
-This is the backend theorem that directly feeds into the paper's Lemma 2(b)
-conditional assembly. -/
+This is the theorem that directly feeds into the paper's Lemma 2(b) conditional
+fixed-length matrix spanning. -/
 theorem exists_wordSpan_forall_vecMulVec_eigenvector
     (A : MPSTensor d D) (i₀ : Fin d) (hN : IsNormal A)
     {φ : Fin D → ℂ} {μ : ℂ} (hμ : μ ≠ 0)

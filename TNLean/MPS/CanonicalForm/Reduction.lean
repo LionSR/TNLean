@@ -10,7 +10,21 @@ open scoped Matrix BigOperators
 # Iterated invariant-projection splitting: irreducible block decomposition
 
 This module implements the "iterate until all blocks are irreducible" step from
-Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, §2.3 (around eq. `\label{eq:II_Aiplusk1}`).
+Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, lines 201–219
+(the display labelled eq:II_Aiplusk1 is at lines 214–218).
+It also corresponds to the invariant-subspace splitting used inside
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical,
+lines 765–833.
+The source proof is ordered as follows: lines 765–770 handle spectral-radius
+normalization and the full-rank fixed-point gauge; lines 771–783 derive the
+invariant support from a singular positive fixed point; lines 785–815 split the
+finite-ring trace over that support and its orthogonal complement; lines 816–826
+iterate the split and use a non-scalar fixed point to force uniqueness of the
+identity fixed point.  This file formalizes only the abstract splitting once an
+invariant projection is available; a faithful proof of the full theorem must
+also derive that projection from the singular positive fixed-point argument in
+lines 771–783 and then compose the dual fixed-point diagonalization in
+lines 827–832.
 
 Starting from an arbitrary MPS tensor `A : MPSTensor d D`, we iteratively apply
 `MPSTensor.exists_twoBlock_decomp_of_lowerZero_strict` — which produces two blocks each with
@@ -27,12 +41,18 @@ orthogonal projections. Strong induction on `D` guarantees termination.
 * Periodicity removal / Perron–Frobenius normalization.
 * Gauge normalization (CFII, left-canonical gauge).
 * Blocking to remove periodicity.
+* The positive weights, unital block orientation, diagonal full-rank dual fixed
+  points, uniqueness of the identity fixed point, and total bond-dimension bound
+  in Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical,
+  lines 742–763.
 These are separate steps in the canonical-form construction.
 
 ## References
 
-* Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, §2.3, eq. II_Aiplusk1.
-* Perez-Garcia et al., quant-ph/0608197, Thm. 3, lines 769–803.
+* Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, lines 201–219,
+  with eq:II_Aiplusk1 at lines 214–218.
+* Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical,
+  proof lines 765–833.
 -/
 
 namespace MPSTensor
@@ -53,6 +73,22 @@ def HasInvariantProj (A : MPSTensor d D) : Prop :=
 This is the "irreducible" condition used in the canonical-form reduction. -/
 def IsIrreducibleTensor (A : MPSTensor d D) : Prop :=
   ¬ HasInvariantProj A
+
+/-- Nonzero scalar rescaling preserves tensor irreducibility. -/
+theorem isIrreducibleTensor_smul
+    {c : ℂ} (hc : c ≠ 0) (A : MPSTensor d D) (hIrr : IsIrreducibleTensor A) :
+    IsIrreducibleTensor (fun i => c • A i) := by
+  intro hHas
+  apply hIrr
+  rcases hHas with ⟨P, hPproj, hP0, hP1, hLower⟩
+  refine ⟨P, hPproj, hP0, hP1, ?_⟩
+  intro i
+  have h : c • ((1 - P) * A i * P) = 0 := by
+    calc
+      c • ((1 - P) * A i * P) = (1 - P) * (c • A i) * P := by
+        simp [Matrix.mul_assoc]
+      _ = 0 := hLower i
+  exact (smul_eq_zero.mp h).resolve_left hc
 
 /-! ## Auxiliary lemmas about casts and MPVs -/
 
@@ -77,10 +113,16 @@ end CastLemmas
 private lemma mpv_twoBlockTensor_eq {n m : ℕ} (A₁ : MPSTensor d n) (A₂ : MPSTensor d m)
     {N : ℕ} (σ : Fin N → Fin d) :
     mpv (twoBlockTensor A₁ A₂) σ = mpv A₁ σ + mpv A₂ σ := by
+  classical
+  have h :=
+    mpv_toTensorFromBlocks_eq_sum (d := d) (r := 2) (dim := ![n, m])
+      (μ := fun _ => (1 : ℂ))
+      (A := twoBlockBlocks (d := d) (n := n) (m := m) A₁ A₂) (σ := σ)
   have h' : mpv (twoBlockTensor A₁ A₂) σ =
       ∑ k : Fin 2, (1 : ℂ) ^ N • mpv (twoBlockBlocks A₁ A₂ k) σ := by
-    simpa [twoBlockTensor] using
-      mpv_toTensorFromBlocks_eq_sum (d := d) (μ := fun _ => (1 : ℂ)) (A := twoBlockBlocks A₁ A₂) σ
+    convert h using 1
+    · simp [mpv, twoBlockTensor]
+      rfl
   calc mpv (twoBlockTensor A₁ A₂) σ
       = ∑ k : Fin 2, (1 : ℂ) ^ N • mpv (twoBlockBlocks A₁ A₂ k) σ := h'
     _ = ((1 : ℂ) ^ N • mpv (twoBlockBlocks A₁ A₂ 0) σ) +
@@ -88,12 +130,21 @@ private lemma mpv_twoBlockTensor_eq {n m : ℕ} (A₁ : MPSTensor d n) (A₂ : M
         simp [Fin.sum_univ_succ]
         rfl
     _ = mpv A₁ σ + mpv A₂ σ := by
-        simp only [one_pow, one_smul, twoBlockBlocks, Fin.cases_zero, Fin.cases_succ]
-        rfl
+        have h0 :
+            (1 : ℂ) ^ N • mpv (twoBlockBlocks A₁ A₂ 0) σ =
+              mpv A₁ σ := by
+          simp [twoBlockBlocks]
+        have h1 :
+            (1 : ℂ) ^ N • mpv (twoBlockBlocks A₁ A₂ (Fin.succ 0)) σ =
+              mpv A₂ σ := by
+          simp only [one_pow, one_smul, twoBlockBlocks, Fin.cases_succ, Fin.cases_zero]
+          rfl
+        simp only [h0, h1]
 
 /-! ## Main theorem: iterated irreducible block decomposition -/
 
-/-- **Iterated invariant-projection splitting** (Cirac–Pérez-García–Schuch–Verstraete §2.3).
+/-- **Iterated invariant-projection splitting**
+(Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, lines 201–219).
 
 Every MPS tensor `A : MPSTensor d D` is `SameMPV₂`-equivalent to a block-diagonal tensor
 `toTensorFromBlocks (μ ≡ 1) blocks` whose every block is irreducible (has no nontrivial invariant
@@ -103,13 +154,23 @@ The proof proceeds by strong induction on `D`: in the inductive step, `HasInvari
 nontrivial invariant projection `P`, which we use via
 `exists_twoBlock_decomp_of_lowerZero_strict` to split `A` into two blocks of *strictly smaller*
 bond dimension, then apply the induction hypothesis to each block.
+
+**Scope restriction (translation-invariant canonical-form proof step):** This
+theorem proves only the recursive invariant-projection splitting from the proof of
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical,
+lines 771–826. It does not prove the full
+source theorem's positive weights, unital normalization, diagonal full-rank dual
+fixed points, or final bond-dimension bound; it also does not perform the
+dual-map diagonalization of lines 827–832. The remaining source boundary is
+recorded in
+`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`.
 -/
 theorem exists_irreducible_blockDecomp (A : MPSTensor d D) :
     ∃ r : ℕ, ∃ dim : Fin r → ℕ,
     ∃ blocks : (k : Fin r) → MPSTensor d (dim k),
       (∀ k, IsIrreducibleTensor (blocks k)) ∧
       SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks) := by
-  -- Package the statement for all tensors of a given bond dimension (for strong induction).
+  -- Formulate the statement for all tensors of a given bond dimension (for strong induction).
   suffices h : ∀ (D : ℕ) (A : MPSTensor d D),
       ∃ r : ℕ, ∃ dim : Fin r → ℕ,
       ∃ blocks : (k : Fin r) → MPSTensor d (dim k),

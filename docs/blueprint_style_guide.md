@@ -1,16 +1,41 @@
 # Blueprint Style Guide & Lessons Learned
 
 ## Core Philosophy
-The blueprint is a **bridge between the mathematics and the Lean formalization**. A reader should be able to read a blueprint entry and immediately understand the corresponding Lean declaration. Conversely, someone reading the Lean code should find the blueprint proof sketch faithful to what the code actually does.
+The blueprint links the mathematics to its Lean formalization. A reader should be able to read a blueprint entry and immediately understand the corresponding Lean declaration. Conversely, someone reading the Lean code should find the blueprint proof sketch faithful to what the code actually does.
 
 ## General Principles
 1. **Blueprint ↔ Lean must match.** Every `\lean{X}` tag must correspond to an actual Lean declaration. Every proof sketch must match what the Lean proof actually does — not a hand-wavy version of it.
 2. **Standalone.** `blueprint/` and `slides/` are independent — no cross-references, no shared files. Each has its own macros, its own `references.bib`.
-3. **Mathematical language only — zero Lean jargon.** No Lean identifiers in prose (no `evalWord_gauge`, no `mpvState(A, N)`, no `rintro ⟨X, hX⟩`). The `\lean{...}` tag is the link; the body text is standard mathematics. If you can't say it in math, rewrite it.
+3. **Mathematical language only — zero Lean jargon.** See [`prose_style.md`](prose_style.md) Section 1 for the full rule and examples; in short, the `\lean{...}` tag is the link, the body text is standard mathematics.
 4. **No filler prose.** Only precise definitions, theorem statements, and proof sketches. No "this is important because..." or "the transfer map governs the spectral theory...".
 5. **Cite non-trivial things.** Basic definitions (MPS tensor, MPV) don't need citations. Important results and non-obvious definitions should cite the source paper.
 6. **Don't invent terminology or notation.** Don't create ad-hoc notation like `⟨·,·⟩^ip` when standard notation exists. Don't name things that the literature doesn't name. If Lean calls it `IsInjective`, the blueprint says "injective" — not "Condition C1".
-7. **Match Lean's theorem/lemma/def exactly.** If Lean says `theorem X`, use `\begin{theorem}`. If Lean says `lemma X`, use `\begin{lemma}`. Never use `\begin{proposition}` (Lean has no `proposition` keyword). Label prefix: `thm:` for theorem, `lem:` for lemma, `def:` for definition.
+7. **Do not use external theorem numbers as titles.** Theorem, lemma, and
+   definition headings should name the mathematical content. Put external
+   numbering in the body with a full citation, e.g.
+   `This is \cite[Theorem~4.1]{...}`. Do not write headings such as
+   `Theorem 4.1` unless the source is also named and the title remains
+   mathematically descriptive.
+8. **Match Lean's theorem/lemma/def exactly.** If Lean says `theorem X`, use `\begin{theorem}`. If Lean says `lemma X`, use `\begin{lemma}`. Never use `\begin{proposition}` (Lean has no `proposition` keyword). Label prefix: `thm:` for theorem, `lem:` for lemma, `def:` for definition.
+9. **Do not put prose quantifiers at the edge of displayed equations.** Avoid
+   `\qquad \text{for all ...}` and similar tails in displays. State the
+   quantifier in the surrounding sentence, or use mathematical quantifier
+   notation when it is part of the formula. See [`prose_style.md`](prose_style.md)
+   for the full rule and examples.
+10. **Paper source first.** When a theorem, lemma, or proof sketch formalizes a
+    cited result, compare against the paper source before introducing local names.
+    Use the source notation and display the defining equations whenever possible.
+    If Lean proves an auxiliary reformulation, state the source result first.
+    Put maintainer-only proof-status notes in LaTeX comments, not displayed
+    mathematical prose. The explicit proof-status markers in
+    [`prose_style.md`](prose_style.md) are for Lean docstrings and comments, not
+    blueprint-visible paragraphs.
+11. **Proofs are carried by formulas.** For mathematical proof sketches,
+    especially tensor-network and overlap arguments, state the main equations
+    explicitly instead of replacing them by verbal paraphrase. Short equations
+    should usually be inline with `$...$`; use displayed equations only when the
+    expression is long or when several implications must be compared. Avoid
+    long paragraphs whose only mathematical content is described in words.
 
 ## Proof Sketches Must Match Lean
 This is the most important rule. Every proof in the blueprint must faithfully describe what the Lean proof does:
@@ -20,9 +45,27 @@ This is the most important rule. Every proof in the blueprint must faithfully de
 - **Don't hand-wave where Lean is specific.** "Standard argument" is not acceptable if Lean uses three specific lemmas. Name them.
 - **Don't be more specific than Lean.** If Lean uses `simp` to close a goal, a one-line sketch is fine.
 - **`\uses` in proofs must be accurate.** Only list what the proof actually uses, not what the statement mentions. If the proof uses `lem:eval_word_gauge` but the statement mentions `def:gauge_equiv`, the proof's `\uses` should list the lemma, not the definition (unless the proof also directly unfolds the definition).
+- **Do not present local auxiliary routes as source mathematics.** If a proof uses
+  a formal auxiliary lemma not stated in the cited source, name the mathematical
+  assertion it proves. Put maintainer-only proof-status notes in LaTeX comments.
+  Do not introduce visible note labels such as `Formalization note.` in
+  blueprint prose.
+  If the auxiliary route is no longer used by the checked proof, delete the entry
+  rather than keeping an unmotivated theorem-like statement in the blueprint.
+- **Write tensor-network proofs with equations.** When a tensor-network proof
+  applies injectivity, inserts a boundary tensor, or compares two contractions,
+  introduce notation such as $P_i$, $\mathcal C_I$, or $X$ and write the
+  implication being used. A sketch like "apply injectivity twice" is not enough
+  when the paper proof distinguishes regions, boundaries, or inserted matrices.
+  Display the sequence of equalities or kernel implications that carries the
+  argument.
 
 ## Notation Consistency
 Notation must be **internally consistent** across the entire blueprint and **close to what the Lean code expresses**:
+
+- Use `$...$` for inline mathematics in new blueprint prose. Do not mix `$...$`
+  and `\(...\)` inside a newly edited paragraph; when touching an existing
+  paragraph, prefer converting the local inline math to `$...$`.
 
 - **Indices**: 0 to d−1 (matching `Fin d` in Lean), not 1 to d
 - **Word evaluation**: $A^w$ for a word $w = (i_1, \ldots, i_L)$. The result is $A^{i_1} \cdots A^{i_L} \in \MN{D}$.
@@ -40,41 +83,30 @@ Notation must be **internally consistent** across the entire blueprint and **clo
 - **DeclareMathOperator subscripts**: always use braces: `\spn_{\C}` not `\spn_\C`.
 - **Macros** (in `macros/common.tex`): `\C`, `\R`, `\N`, `\Z`, `\E`, `\Id`, `\MD`, `\MN{D}`, `\GL`, `\tr`, `\spn`, `\ket{·}`, `\bra{·}`, `\braket{·}{·}`, `\ketbra{·}{·}`, `\mc{·}`
 
-## What NOT to Put in the Blueprint
-- **Lean identifier names in math text.** Write "the word evaluation $A^w$", never "the `evalWord` of $A$" or "$\mathrm{evalWord}(A, w)$". The `\lean{MPSTensor.evalWord}` tag handles the linking.
-- **Implementation details.** Don't say "bundled as an element of the Euclidean space" or "using `EuclideanSpace.equiv`". Describe the mathematical object.
-- **Ad-hoc notation.** Don't invent superscripts like $\langle \cdot, \cdot \rangle^{\mathrm{ip}}$ to distinguish from existing notation. Use standard conventions or define new notation explicitly if truly needed.
-- **Function-call syntax.** Don't write $\mathrm{mpv}(A^{[L]}, \sigma)$. Write $V^{(N)}(A^{[L]})_\sigma$ using the established component notation.
-- **Redundant definitions.** If two blueprint definitions describe the same mathematical object (e.g., MPV as a ket vector vs MPV as a Hilbert-space element), make one a remark or consolidate them. Each definition should introduce genuinely new mathematical content.
-- **Lean namespace prefixes in prose.** Don't write "the `MPSTensor.transferMap`" — write "the transfer map $\E_A$".
+## Prose conventions, banned language, and "no Lean jargon"
 
-## Banned AI/Software Language (enforced in both blueprint AND Lean code)
-The blueprint reads as a **mathematical document**, not software documentation. The following patterns are banned in ALL reader-facing text (section titles, theorem names, proof sketches, remarks, chapter preambles) and in ALL Lean docstrings, comments, and section names:
+The rules for prose tone, the no-Lean-jargon-in-blueprint requirement, and the full
+banned-language tables (software-engineering jargon and LLM writing patterns) live
+in their own document:
 
-### Banned terms → replacements:
-| Banned | Use instead |
-|--------|------------|
-| "Assembly" (as section/chapter title) | "Proof of [theorem]", "Construction", "Composition" |
-| "Pipeline" | "reduction", "construction", "proof chain" |
-| "Bridge" (as noun for a connection) | "connection", name by mathematical content |
-| "Handoff" / "hand off" | "transition", "continuation", or drop entirely |
-| "In this blueprint" / "Within this blueprint" | "here", "in what follows", or omit |
-| "Honest" (as adjective for rigorous) | "exact", "faithful", "unconditional", "complete" |
-| "Glue layer" | "intermediate construction", "connecting results" |
-| "Re-export" / "reexport" | "provides", "re-states" |
-| "Wiring" / "wire up" | "connecting", "composing", "combining" |
-| "Package" (as noun for a data bundle) | "form", "data", "structure" |
-| "Stored as an extra field" | "appears as a separate assumption" |
-| "Sorry-free" | acceptable only in Lean-specific technical context |
-| "Physics-oriented" | describe the mathematical property instead |
-| "[X] respects [Y]" (for equivariance) | "Multiplicativity of [X]", "[X] is equivariant under [Y]" |
+> **See [`prose_style.md`](prose_style.md) for the authoritative prose style guide.**
 
-### Additional rules:
-- **"Assembly" in Lean identifiers**: acceptable ONLY for `wielandt_blocked_assembly` and similar mathematical theorem names where "assembly" describes the mathematical step (assembling rank-one elements). NOT acceptable for file-organizational names.
-- **"Assembly" in file names**: `Assembly.lean` and `QPF/Assembly.lean` are grandfathered (renaming cascades through too many imports). New files should use mathematical names.
-- **Section names in Lean**: use mathematical terms (`section PerronFrobenius`, `section GaugeConstruction`, `section FinalConstruction`), not organizational terms (`section Assembly`, `section Pipeline`).
-- **Internal LaTeX labels** (e.g., `\label{ch:assembly}`, `\label{thm:pipeline_handoff}`) are not reader-facing and need not be renamed if doing so would break cross-references. But NEW labels should follow the standard.
-- **Definitions that are actually theorems**: if a statement asserts a mathematical fact (e.g., "X is a subalgebra"), it must be `\begin{theorem}`, not `\begin{definition}`. Definitions introduce new objects; theorems prove properties.
+That document covers:
+
+1. **No Lean jargon in the leanblueprint** — the `\lean{...}` tag is the link to
+   the formalization; blueprint prose must read as standard mathematics with no
+   Lean identifiers, namespaces, or tactic syntax.
+2. **Banned software-engineering terms → replacements** (e.g. "pipeline",
+   "boilerplate", "wrapper", "hook", "API" / "endpoint" in prose, "utility" /
+   "helper" as nouns).
+3. **Banned LLM writing patterns → replacements** (e.g. "leverage", "delve into",
+   "tapestry", "shed light on", "testament to", filler "moreover" / "furthermore").
+4. **Additional rules** about `Assembly`/`Pipeline` grandfathering, Lean section
+   naming, and definitions-vs-theorems.
+
+These rules apply to ALL reader-facing text — blueprint `.tex` files AND Lean
+docstrings, sectioning comments, and `section`/`namespace` names — and are
+enforced by the dedicated `Blueprint Sync & Prose Review` CI workflow.
 
 ## `\uses` Dependency Guidelines
 - **Statement `\uses`**: list only what's needed to *state* the result (typically definitions of the objects involved). Keep minimal — transitive deps are automatic.
@@ -86,6 +118,24 @@ The blueprint reads as a **mathematical document**, not software documentation. 
 - `content.tex` is a router: `\input{chapter/ch01_intro}` etc.
 - Each chapter is a separate file in `chapter/`
 - Definitions/theorems numbered within chapters: `\newtheorem{theorem}{Theorem}[chapter]`
+
+Tensor-network diagram conventions are recorded separately in
+[`docs/tn_diagram_grammar.md`](tn_diagram_grammar.md).
+
+The tensor-network TikZ layer is split into private drawing primitives and a
+public mathematical vocabulary. The private primitives live in
+`blueprint/src/macros/tn_core.tex`; that file defines the common glyphs,
+lengths, and atomic drawing commands. Chapter-facing diagrams are defined in
+`blueprint/src/macros/tn_print.tex` and should be named by the mathematical
+move they depict. The web renderer in `blueprint/src/Packages/tn_diagrams.py`
+uses the same public commands and treats both TeX files as part of the diagram
+source.
+
+PEPS blueprint statements should keep the relevant tensor-network diagram
+attached to the theorem, lemma, or definition whose content it depicts. If the
+source paper proves a step by a diagrammatic equality or a blocked-region
+picture, the blueprint entry should contain the corresponding TikZ diagram and
+the proof sketch should name the regions or inserted tensors appearing in it.
 
 ## Lean Blueprint Macros
 - `\lean{Namespace.DeclName}` — links to Lean declaration
@@ -124,8 +174,17 @@ leanblueprint all     # pdf + web + checkdecls
 ```
 
 ## Fact-Check Lessons
-- **Ch 2**: `mpv` in Lean returns a scalar (the σ-component), NOT a ket vector. The ket is `mpvState`. Blueprint presents the ket form (standard physics) but `\lean{MPSTensor.mpv}` points to the component function — this is acceptable as long as it's clear.
-- **Ch 2**: Overlap and inner product differ by conjugation. Lean: `mpvOverlap A B N = star (mpvInner A B N)`. The overlap sums $V_\sigma \overline{W_\sigma}$; the inner product sums $\overline{V_\sigma} W_\sigma$.
-- **Ch 4**: KS inequality is for UNITAL maps, not TP. HS contraction requires BOTH.
-- **Ch 4**: `kraus_commute_of_ks_equality` proves $X K_i^\dagger = K_i^\dagger E(X)$, not Kraus commutation with a unitary.
-- **Ch 4**: Wolf citations: Eq (5.2) for KS; Prop 6.1 spectral radius; Prop 6.2 trivial Jordan; Thm 6.6 irreducibility; Prop 6.8 Hermitian FP; Thm 6.11 primitive; Thm 6.13 Cesàro.
+- **Chapter 2**: `mpv` in Lean returns a scalar (the σ-component), NOT a ket vector. The ket is `mpvState`. Blueprint presents the ket form (standard physics) but `\lean{MPSTensor.mpv}` points to the component function — this is acceptable as long as it's clear.
+- **Chapter 2**: Overlap and inner product differ by conjugation. Lean: `mpvOverlap A B N = star (mpvInner A B N)`. The overlap sums $V_\sigma \overline{W_\sigma}$; the inner product sums $\overline{V_\sigma} W_\sigma$.
+- **Chapter 4**: KS inequality is for UNITAL maps, not TP. HS contraction requires BOTH.
+- **Chapter 4**: `kraus_commute_of_ks_equality` proves $X K_i^\dagger = K_i^\dagger E(X)$, not Kraus commutation with a unitary.
+- **Chapter 4**: Wolf citations (verified against the PDF, 2026-06): Equation (5.2) = Kadison–Schwarz; Proposition 6.1 = spectral radius; Theorem 6.2(1) = irreducibility definition; Theorem 6.7 = primitive maps; Proposition 6.8 = positive (Hermitian) fixed points; Theorem 6.11 = stationary states (Brouwer); Theorem 6.12 = fixed-point $*$-algebra; Theorem 6.13 = fixed points and Kraus commutant.
+
+## Citing external sources (verified conventions)
+
+External theorem/equation numbers were cross-checked against the **PDF-converted text** (never the LaTeX source, which can be inaccurate). Wolf per-chapter PDFs live in `Notes/WolfNotePDF/`; paper sources are the arXiv PDFs.
+
+- **Wolf** (`Wolf2012Quantum`): sub-parts use a **parenthetical** form with no word — `Theorem~6.2(1)`, `Corollary~7.2(3)`, `Theorem~2.1(4)`, `Lemma~6.3(b)` — matching Wolf's bare `1. 2. 3.` enumeration. Spell out environment words (`Lemma~`, `Equations~`; never `Lem.`/`Eqs.`). Implications: `Proposition~7.6, (1)$\Rightarrow$(3)` / `$\Leftrightarrow$`.
+- **MPDO paper** is cited on the **arXiv preprint** key `Cirac2016MPDO_arXiv` with **Arabic** numbers (Theorem 2.10 = proportional FT, Corollary 2.11 = equal FT, Theorem 4.14(ii) = MPDO structure, Section 2.3 = canonical forms). The published-Annals key `Cirac2017MPDO_AnnPhys` (Roman II.1/IV.13) is **not** used in citations — its numbering is not locally verifiable.
+- **CPGSV21** (`Cirac2021Matrix`, RMP) uses **Roman** numbering exclusively (Theorem IV.4 = proportional FT, Corollary IV.5 = equal FT, Theorem IV.16 = ground-space generation, Definition IV.2 = basis of normal tensors, Section II.B.3 = correlations). It has a single appendix (A); do not cite an "Appendix B" to it.
+- **PGVWC07** (`PerezGarcia2007Matrix`): Theorem 4 = TI canonical form, Theorem 5 = periodic decomposition, Lemma 3 = matrix-span lemma. Cite resolved numbers, never internal `\label`s (`Th:TIcanonical`, etc.).

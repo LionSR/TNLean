@@ -9,7 +9,7 @@ import TNLean.Channel.Peripheral.Spectrum
 /-!
 # Conjugation and spectrum
 
-This file records that eigenvalues (hence also peripheral eigenvalues on the unit
+This file states that eigenvalues (hence also peripheral eigenvalues on the unit
 circle) are invariant under conjugation (similarity) by a linear equivalence.
 
 These lemmas are used when transporting peripheral-spectrum statements across a

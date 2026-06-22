@@ -20,7 +20,7 @@ namespace MPSTensor
 
 /-! ## Section 8e: Quantitative ceiling for one-sided rectangular span
 
-This section provides the quantitative dimension-counting infrastructure for the
+This section provides the quantitative dimension-counting lemmas for the
 exact Lemma 2(b) bound. The key results are:
 
 1. **Initial dimension**: `rectSpan P A 0` has finrank 1 when `P ≠ 0` (it equals `span{P}`).
@@ -36,7 +36,7 @@ to give the quantitative stage bound on the Wolf/paper path toward `D²-D+1`.
 
 ### References
 - arXiv:0909.5347, Lemma 2(b)
-- Wolf, "Quantum Channels & Operations", §6.2.4
+- Wolf, "Quantum Channels & Operations", Section 6.2.4
 -/
 
 section QuantitativeCeiling
@@ -47,28 +47,11 @@ variable {d D : ℕ}
 
 /-! ### Part 1: Initial dimension of rectSpan -/
 
-/-- `wordSpan A 0 = span{1}`: words of length 0 consist only of the identity. -/
-private theorem wordSpan_zero_eq (A : MPSTensor d D) :
-    wordSpan A 0 = Submodule.span ℂ {(1 : Matrix (Fin D) (Fin D) ℂ)} := by
-  -- wordSpan A 0 = span of {evalWord A (List.ofFn σ) : σ : Fin 0 → Fin d}
-  -- There is exactly one function Fin 0 → Fin d (the empty function),
-  -- and evalWord of an empty list is 1.
-  apply le_antisymm
-  · apply Submodule.span_le.mpr
-    rintro M ⟨σ, rfl⟩
-    have hempty : List.ofFn σ = ([] : List (Fin d)) := List.ofFn_eq_nil_iff.mpr rfl
-    simp only [hempty, evalWord]
-    exact Submodule.subset_span rfl
-  · apply Submodule.span_le.mpr
-    rintro M (rfl : M = 1)
-    have := evalWord_mem_wordSpan A ([] : List (Fin d))
-    simpa [evalWord] using this
-
 /-- `rectSpan P A 0 = span{P}`: the level-0 rectangular span is just the 1-D subspace
 spanned by `P` (since `wordSpan A 0 = span{1}`). -/
 theorem rectSpan_zero_eq_span (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D) :
     rectSpan P A 0 = Submodule.span ℂ {P} := by
-  simp only [rectSpan, wordSpan_zero_eq]
+  simp only [rectSpan, wordSpan_zero]
   rw [Submodule.map_span]
   congr 1
   ext M
@@ -232,14 +215,14 @@ theorem finrank_range_mulLeft_pow_le_sq (A : MPSTensor d D) (i₀ : Fin d) :
       ≤ D * D := Nat.mul_le_mul_left D (rank_pow_le A i₀)
     _ = D ^ 2 := by ring
 
-/-! ### Part 6: Parametric assembly — toward exact Lemma 2(b)
+/-! ### Part 6: Parametric rectangular span — toward exact Lemma 2(b)
 
-The parametric assembly theorem combines:
+The parametric rectangular span theorem combines:
 1. Power membership: `(A i₀)^D ∈ wordSpan A D`
 2. Eigenvector in range: `φ ∈ range(toLin' ((A i₀)^D))`
 3. Stabilization: `rectSpan ((A i₀)^D) A n₀ = range(mulLeft ((A i₀)^D))`
 4. Transfer: `vecMulVec φ ψ ∈ wordSpan A (D + n₀)`
-5. Conditional assembly: `wordSpan A (D + n₀ + 2(D-1)) = ⊤`
+5. Conditional fixed-length matrix spanning: `wordSpan A (D + n₀ + 2(D-1)) = ⊤`
 
 into a single theorem parameterized by the stabilization witness `n₀`.
 
@@ -247,7 +230,7 @@ When the Wielandt inductive bound is available (giving `n₀ ≤ D² - 3D + 3`),
 this yields `wordSpan A (D² - D + 1) = ⊤`.
 -/
 
-/-- **Parametric Lemma 2(b) assembly.**
+/-- **Parametric Lemma 2(b) (rectangular span).**
 
 Given the full eigenvector/row-eigenvector setup AND a stabilization witness `n₀`
 such that `rectSpan ((A i₀)^D) A n₀ = range(mulLeft ((A i₀)^D))`, we get:
@@ -257,9 +240,10 @@ such that `rectSpan ((A i₀)^D) A n₀ = range(mulLeft ((A i₀)^D))`, we get:
 i.e., the word span at length `D + n₀ + 2D - 2` is the full matrix algebra.
 
 ### Proof strategy
-1. Eigenvector `φ` lies in `range(toLin' ((A i₀)^D))` → for all `ψ`, `vecMulVec φ ψ ∈ rectSpan`
+1. Eigenvector `φ` lies in `range(toLin' ((A i₀)^D))`, so for all `ψ`,
+   `vecMulVec φ ψ ∈ rectSpan`.
 2. `rectSpan` stabilized at `n₀` → `vecMulVec φ ψ ∈ wordSpan A (D + n₀)`
-3. Apply conditional assembly (eigenvector spreading + row spreading)
+3. Apply conditional fixed-length matrix spanning (eigenvector spreading + row spreading)
 4. Output: `wordSpan A ((D-1) + ((D + n₀) + (D-1))) = ⊤`
 
 This simplifies to `wordSpan A (3D + n₀ - 2) = ⊤`.
@@ -268,14 +252,14 @@ The hypothesis `n₀` is the key degree of freedom. Different bounds on `n₀`
 give different final bounds:
 - `n₀ = D² - 2D + 2` (normality witness): gives `D² + D = ⊤` (coarse)
 - `n₀ = D² - 4D + 3` (from induction on D): gives `D² - D + 1 = ⊤` (sharp) -/
-theorem wielandt_parametric_assembly [NeZero D]
+theorem wielandt_parametric_span [NeZero D]
     (A : MPSTensor d D)
     (hNormal : IsNormal (d := d) (D := D) A)
     -- Column eigenvector
     (i₀ : Fin d) (μ : ℂ) (hμ : μ ≠ 0)
     (φ : Fin D → ℂ) (hφ : φ ≠ 0)
     (heigφ : A i₀ *ᵥ φ = μ • φ)
-    -- Row eigenvector (for the conditional assembly)
+    -- Row eigenvector (for the conditional fixed-length matrix spanning)
     (i₁ : Fin d) (ν : ℂ) (hν : ν ≠ 0)
     (ψ₀ : Fin D → ℂ) (hψ₀ : ψ₀ ≠ 0)
     (heigψ : (A i₁)ᵀ *ᵥ ψ₀ = ν • ψ₀)
@@ -287,7 +271,7 @@ theorem wielandt_parametric_assembly [NeZero D]
   -- Step 1: vecMulVec φ ψ₀ ∈ wordSpan A (D + n₀)
   have hRankOne : vecMulVec φ ψ₀ ∈ wordSpan A (D + n₀) :=
     vecMulVec_eigenvector_mem_wordSpan A i₀ hμ heigφ hstab ψ₀
-  -- Step 2: Apply conditional assembly
+  -- Step 2: Apply conditional fixed-length matrix spanning
   exact wielandt_lemma2b_conditional A hNormal i₀ μ hμ φ hφ heigφ
     i₁ ν hν ψ₀ hψ₀ heigψ hRankOne
 
@@ -308,7 +292,7 @@ theorem wielandt_length_from_stabilization [NeZero D]
     (hstab : rectSpan ((A i₀) ^ D) A n₀ =
              LinearMap.range (LinearMap.mulLeft ℂ ((A i₀) ^ D))) :
     wordSpan A (3 * D + n₀ - 2) = ⊤ := by
-  have htop := wielandt_parametric_assembly A hNormal i₀ μ hμ φ hφ heigφ
+  have htop := wielandt_parametric_span A hNormal i₀ μ hμ φ hφ heigφ
     i₁ ν hν ψ₀ hψ₀ heigψ hstab
   have hlen : 3 * D + n₀ - 2 = (D - 1) + ((D + n₀) + (D - 1)) := by omega
   rwa [hlen]

@@ -1,0 +1,110 @@
+name: DeepSeek Code (Lean)
+
+# Mention-driven DeepSeek responder. This uses the shared Claude Code wrapper
+# in explicit DeepSeek provider mode; it is separate from claude.yml so
+# maintainers can choose the provider by writing @deepseek.
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+  issues:
+    types: [opened, assigned]
+  pull_request_review:
+    types: [submitted]
+
+concurrency:
+  group: bot-respond-${{ github.event.issue.number || github.event.pull_request.number || github.event.comment.id }}
+  cancel-in-progress: false
+
+env:
+  GH_TOKEN: ${{ secrets.BOT_PAT || secrets.GITHUB_TOKEN }}
+
+jobs:
+  deepseek:
+    # Skip when:
+    #   - repository variable DEEPSEEK_MENTION_ENABLED is exactly "false";
+    #   - sender is a bot;
+    #   - the triggering author lacks write access; or
+    #   - the same trigger also asks @claude or @chatgpt, in which case the
+    #     provider-specific workflow named by that mention handles the request.
+    if: |
+      vars.DEEPSEEK_MENTION_ENABLED != 'false' &&
+      github.event.sender.type != 'Bot' && (
+        (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@deepseek') && !contains(github.event.comment.body, '@claude') && !contains(github.event.comment.body, '@chatgpt') && contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)) ||
+        (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@deepseek') && !contains(github.event.comment.body, '@claude') && !contains(github.event.comment.body, '@chatgpt') && contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)) ||
+        (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@deepseek') && !contains(github.event.review.body, '@claude') && !contains(github.event.review.body, '@chatgpt') && contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.review.author_association)) ||
+        (github.event_name == 'issues' && (contains(github.event.issue.body, '@deepseek') || contains(github.event.issue.title, '@deepseek')) && !(contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')) && !(contains(github.event.issue.body, '@chatgpt') || contains(github.event.issue.title, '@chatgpt')) && contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association))
+      )
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+      DEEPSEEK_BASE_URL: ${{ vars.DEEPSEEK_BASE_URL || 'https://api.deepseek.com/anthropic' }}
+      DEEPSEEK_OPUS_MODEL: ${{ vars.DEEPSEEK_OPUS_MODEL }}
+      DEEPSEEK_SONNET_MODEL: ${{ vars.DEEPSEEK_SONNET_MODEL }}
+
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+      actions: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+          token: ${{ env.GH_TOKEN }}
+
+      - name: Set up Lean toolchain and cache
+        uses: texra-ai/lean-env-action@v1
+
+      - name: Install blueprint TeX stack
+        uses: texra-ai/lean-env-action/blueprint-system-deps@v1
+
+      - name: Install leanblueprint
+        uses: texra-ai/lean-env-action/leanblueprint@v1
+
+      - name: Run DeepSeek Code
+        id: deepseek
+        uses: LionSR/agent-ci-actions@v1
+        with:
+          provider: deepseek
+          model-tier: opus
+          deepseek-api-key: ${{ secrets.DEEPSEEK_API_KEY }}
+          deepseek-base-url: ${{ env.DEEPSEEK_BASE_URL }}
+          deepseek-opus-model: ${{ env.DEEPSEEK_OPUS_MODEL }}
+          deepseek-sonnet-model: ${{ env.DEEPSEEK_SONNET_MODEL }}
+          allowed-bots: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
+          branch-name-template: "deepseek/{{entityType}}-{{entityNumber}}-{{description}}"
+          allowed_tools_preset: claude-interactive
+          allowed_tools_preset_map_file: .github/allowed-tools.json
+
+          additional-permissions: |
+            actions: read
+
+          plugin_marketplaces: 'https://github.com/leanprover/skills.git'
+          plugins: 'lean@leanprover'
+          system-prompt-file: .github/prompts/claude-code-system-prompt.md
+
+      - name: Auto-create PR for completed issue work
+        if: |
+          !cancelled() &&
+          steps.deepseek.outcome == 'success' &&
+          (github.event_name == 'issues' ||
+           (github.event_name == 'issue_comment' && !github.event.issue.pull_request))
+        uses: LionSR/agent-ci-actions/auto-create-issue-pr@v1
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          repo: ${{ github.repository }}
+          branch-prefix: 'deepseek/issue-'
+          creator-name: 'DeepSeek Code action'
+          autofix-label: ''
+          event-name: ${{ github.event_name }}
+          comment-body: ${{ github.event.comment.body || '' }}
+          issue-body: ${{ github.event.issue.body || '' }}
+          issue-title: ${{ github.event.issue.title || '' }}
+          gh-token: ${{ env.GH_TOKEN }}

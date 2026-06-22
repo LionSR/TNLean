@@ -6,7 +6,7 @@ import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Core.Transfer
 import TNLean.Channel.KrausFreedom
 import TNLean.Channel.KrausRepresentation
-import TNLean.Spectral.SpectralGap
+import TNLean.Spectral.TransferOperatorGap
 import Mathlib.Analysis.Matrix.Order
 
 /-!
@@ -16,8 +16,10 @@ This file collects the core definitions for the string-order / local-symmetry
 theory of Pérez-García, Wolf, Sanz, Verstraete, Cirac (arXiv:0802.0447):
 
 * The **twisted transfer map** `ℰ_u` and its iterates.
-* The **string order parameter** `R_L(u)` and its boundary refinement.
-* **Local symmetry** and **HasStringOrder** conditions.
+* The **string order parameter** `R_L(u)`, its boundary refinement, and the
+  physical-endpoint transfer-form correlator.
+* **Local symmetry**, the virtual-boundary string-order condition, and the
+  physical-endpoint string-order condition.
 * **Conditions C1/C2/C3** and their equivalences.
 
 The main equivalence theorems live in `TNLean.MPS.Symmetry.StringOrder`.
@@ -29,6 +31,12 @@ The main equivalence theorems live in `TNLean.MPS.Symmetry.StringOrder`.
 -/
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
+
+attribute [local instance]
+  ContinuousLinearMap.toNormedAddCommGroup
+  ContinuousLinearMap.toNormedRing
+  ContinuousLinearMap.toSeminormedRing
+  ContinuousLinearMap.toNormedAlgebra
 
 namespace MPSTensor
 
@@ -54,6 +62,8 @@ noncomputable def twistedTransferMap (A : MPSTensor d D)
       ((LinearMap.mulLeft ℂ (A n)).comp
         (LinearMap.mulRight ℂ (A n')ᴴ))
 
+/-- The twisted transfer map acts on $X$ by
+$\mathcal{E}_u(X) = \sum_{n, n'} u_{n' n}\, A_n X A_{n'}^{\dagger}$. -/
 @[simp]
 lemma twistedTransferMap_apply (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ)
@@ -115,12 +125,15 @@ noncomputable def twistedTransferIter (A : MPSTensor d D)
       Matrix (Fin D) (Fin D) ℂ :=
   (twistedTransferMap A u) ^ N
 
+/-- The zeroth iterate of the twisted transfer map is the identity. -/
 @[simp]
 lemma twistedTransferIter_zero (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ) :
     twistedTransferIter A u 0 = LinearMap.id :=
   pow_zero _
 
+/-- The `(N+1)`-th iterate of the twisted transfer map is the twisted transfer
+map composed with the `N`-th iterate: `ℰ_u^{N+1} = ℰ_u ∘ ℰ_u^N`. -/
 lemma twistedTransferIter_succ (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ) (N : ℕ) :
     twistedTransferIter A u (N + 1) =
@@ -136,74 +149,76 @@ state `Λ`:
 $$R_L(u) = \mathrm{tr}(\Lambda \cdot \mathcal{E}_u^L(\mathbf{1}))$$
 
 This measures the overlap `⟨ψ_L | u^{⊗L} | ψ_L⟩` in the
-transfer-matrix formalism (Eq. (5) of arXiv:0802.0447). -/
+transfer-matrix formalism (arXiv:0802.0447, display `RL`, lines 380–384;
+transfer form as in display `SOPMP`, lines 176–181). -/
 noncomputable def stringOrderParam (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (Λ : Matrix (Fin D) (Fin D) ℂ) (L : ℕ) : ℂ :=
   Matrix.trace (Λ * twistedTransferIter A u L 1)
 
-/-- `stringOrderParam` is the weighted trace pairing of the `L`-th mixed-transfer
-iterate for `A` and the twisted Kraus companion family. -/
-private lemma stringOrderParam_eq_trace_mixedTransfer (A : MPSTensor d D)
-    (u : Matrix (Fin d) (Fin d) ℂ)
-    (Λ : Matrix (Fin D) (Fin D) ℂ) (L : ℕ) :
-    stringOrderParam A u Λ L =
-      Matrix.trace
-        (Λ * (((mixedTransferMap A (twistedMixedCompanion A u)) ^ L) 1)) := by
-  simp only [stringOrderParam, twistedTransferIter,
-    twistedTransferMap_eq_mixedTransfer]
+/-! ### Physical endpoint string correlator -/
 
-/-- For a unital transfer map and trace-one boundary state, the untwisted string
-order parameter is constantly `1`. -/
-private lemma stringOrderParam_one_eq_one
-    (A : MPSTensor d D)
+/-- The transfer-form string correlator with physical endpoint operators.
+
+For physical operators \(x,y\), a twist \(u\), and a boundary state \(\Lambda\),
+this is
+\[
+  S_N(x,y,u)
+    = \operatorname{tr}\!\left(\Lambda\,
+        \mathcal E_x\,\mathcal E_u^N\,\mathcal E_y(\mathbf 1)\right).
+\]
+
+Source: arXiv:0802.0447, display `SOPMP`, lines 176--181. -/
+noncomputable def physicalStringOrderParam (A : MPSTensor d D)
     (Λ : Matrix (Fin D) (Fin D) ℂ)
-    (hΛtr : Matrix.trace Λ = 1)
-    (hNorm : transferMap A 1 = 1) (L : ℕ) :
-    stringOrderParam A 1 Λ L = 1 := by
-  have hpow_one :
-      ((transferMap A) ^ L) (1 : Matrix (Fin D) (Fin D) ℂ) = 1 := by
-    induction L with
-    | zero =>
-        rfl
-    | succ n ih =>
-        calc
-          ((transferMap A) ^ (n + 1)) (1 : Matrix (Fin D) (Fin D) ℂ)
-              = transferMap A (((transferMap A) ^ n) 1) := by
-                  simp only [pow_succ', Module.End.mul_apply]
-          _ = transferMap A 1 := by rw [ih]
-          _ = 1 := hNorm
-  have htwisted_pow_one :
-      ((twistedTransferMap A 1) ^ L) (1 : Matrix (Fin D) (Fin D) ℂ) = 1 := by
-    have htwisted_eq : twistedTransferMap A 1 = transferMap A := by
-      ext X i j
-      exact congrArg (fun M => M i j) (twistedTransferMap_one (A := A) X)
-    simpa only [htwisted_eq] using hpow_one
-  simp only [stringOrderParam, twistedTransferIter, htwisted_pow_one, hΛtr,
-    Matrix.mul_one]
+    (x y u : Matrix (Fin d) (Fin d) ℂ) (N : ℕ) : ℂ :=
+  Matrix.trace
+    (Λ * twistedTransferMap A x
+      (twistedTransferIter A u N (twistedTransferMap A y 1)))
+
+/-- The fixed-choice physical string-order condition for \(x,y,u\): the
+absolute value of the physical string correlator has a positive limit.
+
+Source: arXiv:0802.0447, display `SOP`, lines 112--122. -/
+def HasPhysicalStringOrderWith (A : MPSTensor d D)
+    (Λ : Matrix (Fin D) (Fin D) ℂ)
+    (x y u : Matrix (Fin d) (Fin d) ℂ) : Prop :=
+  ∃ s : ℝ, 0 < s ∧
+    Filter.Tendsto (fun N : ℕ => ‖physicalStringOrderParam A Λ x y u N‖)
+      Filter.atTop (nhds s)
+
+/-- The source string-order predicate with physical endpoint operators.
+
+There is a nontrivial physical unitary \(u\) and physical endpoint operators
+\(x,y\) such that the physical string correlator has positive limiting
+absolute value.
+
+Source: arXiv:0802.0447, display `SOP`, lines 112--122.  The comparison with
+the virtual-boundary predicate `HasStringOrder` is not part of this definition;
+it is the endpoint-realizability theorem still tracked by
+`docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex`. -/
+def HasPhysicalStringOrder (A : MPSTensor d D)
+    (Λ : Matrix (Fin D) (Fin D) ℂ) : Prop :=
+  ∃ u x y : Matrix (Fin d) (Fin d) ℂ,
+    u * uᴴ = 1 ∧ u ≠ 1 ∧ HasPhysicalStringOrderWith A Λ x y u
 
 /-! ### Boundary string order and local symmetry -/
 
 /-- The virtual-boundary version of the string-order expression:
 `tr(Λ X ℰ_u^L(Y))`.
 
-This absorbs the paper's endpoint operators `x,y` into arbitrary
-virtual boundary matrices `X,Y`. For injective tensors, sufficiently
-long physical boundary insertions span all such virtual boundaries,
-so this is the right reusable formalization of the paper's boundary
-criterion. -/
+This replaces the paper's physical endpoint operators `x, y`
+(arXiv:0802.0447, display `SOP`, lines 112–122) by arbitrary virtual
+boundary matrices `X, Y`.  A physical endpoint expands to a particular
+virtual boundary matrix in the transfer picture (display `SOPMP`, lines
+176–181); conversely the paper argues (lines 278–296) that for injective
+tensors, endpoint operators on sufficiently many sites reach every
+virtual matrix.  Neither direction of that comparison is formalized; see
+`docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex`. -/
 noncomputable def stringOrderBoundaryParam (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (Λ X Y : Matrix (Fin D) (Fin D) ℂ) (L : ℕ) : ℂ :=
   Matrix.trace (Λ * X * twistedTransferIter A u L Y)
-
-/-- The original one-sided string-order parameter is the boundary expression with
-trivial boundaries `X = Y = 1`. -/
-private lemma stringOrderBoundaryParam_one_one (A : MPSTensor d D)
-    (u : Matrix (Fin d) (Fin d) ℂ)
-    (Λ : Matrix (Fin D) (Fin D) ℂ) (L : ℕ) :
-    stringOrderBoundaryParam A u Λ 1 1 L = stringOrderParam A u Λ L := by
-  simp only [stringOrderBoundaryParam, stringOrderParam, Matrix.mul_one]
 
 /-- If the continuous linear operator underlying the twisted transfer map has
 spectral radius `< 1`, then every virtual-boundary string-order sequence tends
@@ -218,43 +233,70 @@ lemma stringOrderBoundaryParam_tendsto_zero_of_spectralRadius_lt_one
           (twistedTransferMap A u)) < 1) :
     Filter.Tendsto (fun L => stringOrderBoundaryParam A u Λ X Y L)
       Filter.atTop (nhds 0) := by
-  let V := Matrix (Fin D) (Fin D) ℂ
-  let F' : V →L[ℂ] V :=
-    (Module.End.toContinuousLinearMap V) (twistedTransferMap A u)
-  haveI : FiniteDimensional ℂ (V →L[ℂ] V) :=
-    (Module.End.toContinuousLinearMap V).toLinearEquiv.finiteDimensional
-  have hpow : Filter.Tendsto (fun L => F' ^ L) Filter.atTop (nhds 0) := by
-    let hFinite : FiniteDimensional ℂ (V →L[ℂ] V) :=
-      (Module.End.toContinuousLinearMap V).toLinearEquiv.finiteDimensional
-    letI : FiniteDimensional ℂ (V →L[ℂ] V) := hFinite
-    let hComplete : CompleteSpace (V →L[ℂ] V) := FiniteDimensional.complete ℂ (V →L[ℂ] V)
-    exact @pow_tendsto_zero_of_spectralRadius_lt_one (V →L[ℂ] V)
-      inferInstance hComplete inferInstance F' <| by
-        simpa only [F'] using hsr
-  have hEval := (ContinuousLinearMap.apply ℂ V Y).continuous.tendsto (0 : V →L[ℂ] V)
-  rw [map_zero] at hEval
+  let F' : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ :=
+    (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) (twistedTransferMap A u)
+  letI : NormedAddCommGroup
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    ContinuousLinearMap.toNormedAddCommGroup
+  letI : SeminormedRing
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    ContinuousLinearMap.toSeminormedRing
+  letI : NormedRing
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    ContinuousLinearMap.toNormedRing
+  letI : NormedSpace ℂ
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    ContinuousLinearMap.toNormedSpace
+  letI : NormedAlgebra ℂ
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    ContinuousLinearMap.toNormedAlgebra
+  haveI : FiniteDimensional ℂ
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    (Module.End.toContinuousLinearMap
+      (Matrix (Fin D) (Fin D) ℂ)).toLinearEquiv.finiteDimensional
+  have hComplete : CompleteSpace
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    FiniteDimensional.complete ℂ
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
+  letI : CompleteSpace
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) := hComplete
+  have hsrF : spectralRadius ℂ F' < 1 := by
+    change spectralRadius ℂ
+      (((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+        (twistedTransferMap A u)) :
+          Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) < 1
+    simpa using hsr
+  have hpow : Filter.Tendsto (fun L => F' ^ L) Filter.atTop (nhds 0) :=
+    @pow_tendsto_zero_of_spectralRadius_lt_one
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
+      ContinuousLinearMap.toNormedRing hComplete ContinuousLinearMap.toNormedAlgebra F' hsrF
   have hIter0 :
       Filter.Tendsto (fun L => ((twistedTransferMap A u) ^ L) Y)
         Filter.atTop (nhds 0) := by
     have hEval0 : Filter.Tendsto (fun L => (F' ^ L) Y) Filter.atTop (nhds 0) :=
-      hEval.comp hpow
+      ((ContinuousLinearMap.apply ℂ (Matrix (Fin D) (Fin D) ℂ) Y).continuous.tendsto
+        (0 : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)).comp hpow
     refine hEval0.congr' ?_
     filter_upwards with L
     have hpow_eq :
-        (((Module.End.toContinuousLinearMap V) (twistedTransferMap A u)) ^ L) =
-          (Module.End.toContinuousLinearMap V) ((twistedTransferMap A u) ^ L) := by
-      exact (map_pow (Module.End.toContinuousLinearMap V) (twistedTransferMap A u) L).symm
+        (((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+          (twistedTransferMap A u)) ^ L) =
+          (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+            ((twistedTransferMap A u) ^ L) := by
+      exact (map_pow (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+        (twistedTransferMap A u) L).symm
     exact congrArg (fun T => T Y) hpow_eq
-  let φ : V →ₗ[ℂ] ℂ :=
-    (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp
-      ((LinearMap.mulLeft ℂ Λ).comp (LinearMap.mulLeft ℂ X))
-  have hφ_cont : Continuous φ := LinearMap.continuous_of_finiteDimensional φ
+  let φ : Matrix (Fin D) (Fin D) ℂ →L[ℂ] ℂ :=
+    LinearMap.toContinuousLinearMap <|
+      (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp
+        ((LinearMap.mulLeft ℂ Λ).comp (LinearMap.mulLeft ℂ X))
   have hφ0 :
       Filter.Tendsto (fun L => φ (((twistedTransferMap A u) ^ L) Y))
         Filter.atTop (nhds (φ 0)) :=
-    hφ_cont.continuousAt.tendsto.comp hIter0
+    (φ.continuous.tendsto 0).comp hIter0
   simpa only [map_zero, stringOrderBoundaryParam, twistedTransferIter, φ,
-    Matrix.mul_assoc] using hφ0
+    LinearMap.coe_toContinuousLinearMap', LinearMap.comp_apply, LinearMap.mulLeft_apply,
+    Matrix.traceLinearMap_apply, Matrix.mul_assoc] using hφ0
 
 /-- Local symmetry in the virtual FCS language of the paper: there is a unitary
 virtual intertwiner satisfying the phased covariance relation and preserving the
@@ -269,8 +311,15 @@ def IsLocalSymmetry (A : MPSTensor d D)
       ∑ j : Fin d, u i j • A j = μ • (V * A i * Vᴴ)
 
 /-- String order exists if some virtual boundary pair produces a uniformly
-non-decaying twisted-transfer overlap. This is the matrix-level version of the
-paper's endpoint-operator criterion. -/
+non-decaying twisted-transfer overlap.
+
+**Scope restriction (virtual boundary witnesses):** the source definition
+(arXiv:0802.0447, display `SOP`, lines 112–122) quantifies existentially
+over a local unitary `u ≠ 1` and *physical* endpoint operators `x, y`, and
+requires a positive limit `lim_{N→∞} |S_N| > 0`; this definition fixes the
+twist `u`, quantifies over *virtual* boundary matrices `X, Y`, and requires
+a lower bound uniform in the length.  The deviation is recorded in
+`docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex`. -/
 def HasStringOrder (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (Λ : Matrix (Fin D) (Fin D) ℂ) : Prop :=
@@ -312,7 +361,7 @@ $$\sum_j u_{ij} A^j = V A^i V^\dagger$$
 
 This states that the on-site unitary `u` is intertwined by the
 virtual unitary `V` at the level of individual MPS matrices.
-(Eq. from Lemma 1 of arXiv:0802.0447, reformulated.) -/
+(Equation from Lemma 1 of arXiv:0802.0447, reformulated.) -/
 def CondC1 : Prop :=
   ∀ i : Fin d,
     ∑ j : Fin d, u i j • A j = V * A i * Vᴴ
@@ -326,14 +375,10 @@ def CondC2 : Prop :=
     transferMap A (V * X * Vᴴ) =
       V * transferMap A X * Vᴴ
 
-/-- **Condition C3** (doubled transfer matrix commutation):
+/-- **Condition C3** (doubled transfer-matrix commutation):
 The doubled transfer matrix `E = ∑_j A_j ⊗ Ā_j` commutes with
-`V ⊗ V̄`.
-
-We express this via the transfer-map channel written in the
-`twistedTransferMap` formalism (with twist `u = 1`):
-`ℰ = ℰ_1`. In channel form this is
-`V ℰ(X) V† = ℰ(V X V†)`, i.e. `[E, V ⊗ V̄] = 0`. -/
+`V ⊗ V'`.  In the transfer-map language (with twist `u = 1`), this is
+`V ℰ_1(X) V† = ℰ_1(V X V†)`. -/
 def CondC3 : Prop :=
   ∀ X : Matrix (Fin D) (Fin D) ℂ,
     V * twistedTransferMap A 1 X * Vᴴ =
@@ -349,17 +394,15 @@ variable {A : MPSTensor d D}
     {u : Matrix (Fin d) (Fin d) ℂ}
     {V : Matrix (Fin D) (Fin D) ℂ}
 
-/-- C2 ↔ C3: Transfer-map covariance is equivalent to doubled
+/-- C2 ↔ C3: Transfer-map covariance is equivalent to doubled-operator
 commutation.
 
-Both sides express the same identity
-`∑_i A_i (V X V†) A_i† = V (∑_i A_i X A_i†) V†`. C2 reads
-right-to-left and C3 rearranges the left side using conjugated
-Kraus operators `V A_i V†`.
-
-Note: This equivalence holds for any `V`, not just unitaries,
-since `CondC2` and `CondC3` are literally `∀ X, P = Q` vs
-`∀ X, Q = P`. -/
+Both conditions express the identity
+`∑_i A_i (V X V†) A_i† = V (∑_i A_i X A_i†) V†`.
+The two formulations are mutual converses: `CondC2` states
+`ℰ(V X V†) = V ℰ(X) V†`, while `CondC3` with `u = 1` states
+`V ℰ(X) V† = ℰ(V X V†)`.  The equivalence holds for any `V`,
+not just unitaries. -/
 theorem condC2_iff_condC3 :
     CondC2 A V ↔ CondC3 A V := by
   simp only [CondC2, CondC3, twistedTransferMap_one]
@@ -392,7 +435,7 @@ theorem condC1_imp_condC2
     (hC1 : CondC1 A u V) :
     CondC2 A V := by
   have hVc : Vᴴ * V = 1 := mul_eq_one_comm.mp hV
-  -- Helper: Vᴴ * (V * Z) = Z (cancel VᴴV in right-associated form)
+  -- Auxiliary: Vᴴ * (V * Z) = Z (cancel VᴴV in right-associated form)
   have hc : ∀ Z : Matrix (Fin D) (Fin D) ℂ, Vᴴ * (V * Z) = Z :=
     fun Z => by rw [← Matrix.mul_assoc, hVc, Matrix.one_mul]
   intro X
@@ -420,11 +463,9 @@ then there exists a unitary `u` satisfying C1.
 
 This is the reverse direction of `condC1_imp_condC2`, completing
 the equivalence C1 ↔ C2 for injective MPS (Lemma 1 of
-arXiv:0802.0447). The present formal proof is slightly stronger
-than the paper-facing statement: it derives C1 from C2 by
-identifying `V A_i V†` as an alternative Kraus family for the same
-channel and applying rectangular Kraus freedom, so the explicit
-injectivity hypothesis is retained only to match the paper's API. -/
+arXiv:0802.0447).  The proof identifies `V A_i V†` as an alternative
+Kraus family for the same channel and applies rectangular Kraus
+freedom. -/
 theorem condC2_imp_condC1_of_injective
     (_hA : IsInjective A)
     (hV : V * Vᴴ = 1)

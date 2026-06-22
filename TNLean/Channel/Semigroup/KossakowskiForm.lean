@@ -9,7 +9,7 @@ import TNLean.Channel.Semigroup.LindbladForm
 # Kossakowski Matrix Form — Wolf Theorem 7.1, Form (ii)
 
 This file defines the Kossakowski matrix form of a quantum dynamical semigroup
-generator (Wolf Eq. 7.23) and proves its equivalence with the Lindblad form.
+generator (Wolf Equation 7.23) and proves its equivalence with the Lindblad form.
 
 ## Main definitions
 
@@ -19,14 +19,14 @@ generator (Wolf Eq. 7.23) and proves its equivalence with the Lindblad form.
 
 ## Main results
 
-* `kossakowski_iff_lindblad` — **Thm 7.1 (ii ↔ i)**: Kossakowski ↔ Lindblad form.
+* `kossakowski_iff_lindblad` — **Theorem 7.1 (ii ↔ i)**: Kossakowski ↔ Lindblad form.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §7.1.2, Thm 7.1, Eq. 7.23]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 7.1.2, Theorem 7.1, Equation 7.23]
 -/
 
-open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNMatrixCFC TNOperatorSpace
+open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace
 open Matrix TNLean
 
 noncomputable section
@@ -35,13 +35,13 @@ variable {D : ℕ}
 
 section KossakowskiForms
 
-/-! ## Wolf Theorem 7.1, Form (ii): Kossakowski matrix form (Eq. 7.23) -/
+/-! ## Wolf Theorem 7.1, Form (ii): Kossakowski matrix form (Equation 7.23) -/
 
-/-- The **Kossakowski form** of a generator (Wolf Eq. 7.23):
+/-- The **Kossakowski form** of a generator (Wolf Equation 7.23):
 `L(ρ) = i[ρ,H] + ½ Σ_{k,l} C_{kl} ([F_k, ρ F_l†] + [F_k ρ, F_l†])`
 where `C ≥ 0` is the Kossakowski matrix and `F` is the chosen family of
 matrices. In the paper this family is a basis of traceless matrices; the
-current structure records only the data used in the algebraic conversion to
+current structure states only the data used in the algebraic conversion to
 Lindblad form. -/
 structure KossakowskiForm (D : ℕ) where
   /-- The number of matrices in the chosen family `F`. -/
@@ -115,26 +115,10 @@ def KossakowskiForm.toLinearMap (K : KossakowskiForm D) :
     congr 1
     congr 1 <;> ring_nf
 
-/-! ### Helpers for Kossakowski ↔ Lindblad conversion -/
-
-/-- Collapsing a sum weighted by the identity matrix:
-`∑_l (1 : Matrix) l k • f(l) = f(k)`. -/
-private lemma sum_one_smul_eq {n : ℕ}
-    {M : Type*} [AddCommMonoid M] [Module ℂ M]
-    (k : Fin n) (f : Fin n → M) :
-    ∑ l : Fin n,
-      (1 : Matrix (Fin n) (Fin n) ℂ) l k • f l = f k := by
-  simp only [Matrix.one_apply]
-  have : ∀ l : Fin n,
-      (if l = k then (1 : ℂ) else 0) • f l =
-      if l = k then f l else 0 := by
-    intro l; split_ifs <;> simp
-  simp_rw [this]
-  exact (Finset.sum_ite_eq' _ k (fun l => f l)).trans
-    (by simp)
+/-! ### Auxiliary lemmas for Kossakowski ↔ Lindblad conversion -/
 
 /-- The dissipator equals ½ of the Kossakowski commutator sum
-(for a single operator). This bridges the two forms. -/
+(for a single operator). This connects the two forms. -/
 private lemma dissipator_eq_half_kossakowski
     (Lop ρ : Matrix (Fin D) (Fin D) ℂ) :
     dissipator Lop ρ = (1/2 : ℂ) • (
@@ -147,16 +131,6 @@ private lemma dissipator_eq_half_kossakowski
   -- Both sides now use left-associative products.
   -- This is a ℂ-module identity: a-(1/2)b-(1/2)c = (1/2)((a-b)+(a-c))
   module
-
-/-- The PSD factorization: for `C ≥ 0`, `√C† * √C = C`. -/
-private lemma posSemidef_sqrt_factorization {n : ℕ}
-    (C : Matrix (Fin n) (Fin n) ℂ) (hC : C.PosSemidef) :
-    (CFC.sqrt C)ᴴ * CFC.sqrt C = C := by
-  have hC_nonneg : 0 ≤ C := Matrix.nonneg_iff_posSemidef.mpr hC
-  have hsqrt_psd : (CFC.sqrt C).PosSemidef :=
-    Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg C)
-  rw [hsqrt_psd.isHermitian.eq]
-  simpa using CFC.sqrt_mul_sqrt_self C hC_nonneg
 
 /-- Bilinear sum identity: `Σⱼ (Σₖ B_{jk}•Fₖ) * M * (Σₖ B_{jk}•Fₖ)†`
 equals `Σₖₗ (B†B)_{lk} • (Fₖ * M * Fₗ†)`. Used in Kossakowski ↔ Lindblad. -/
@@ -192,7 +166,7 @@ private lemma adj_kraus_sum_eq_double_sum {n : ℕ}
 
 /-- The Kossakowski form is equivalent to the Lindblad form:
 diagonalizing `C = M†M` converts between the two.
-(Wolf proof of Thm 7.1, last paragraph) -/
+(Wolf proof of Theorem 7.1, last paragraph) -/
 theorem kossakowski_iff_lindblad
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
     (∃ K : KossakowskiForm D, L = K.toLinearMap) ↔
@@ -202,7 +176,13 @@ theorem kossakowski_iff_lindblad
     rintro ⟨KF, hKF⟩
     let B : Matrix (Fin KF.n) (Fin KF.n) ℂ := CFC.sqrt KF.C
     have hB : KF.C = Bᴴ * B := by
-      simpa [B] using (posSemidef_sqrt_factorization KF.C KF.C_posSemidef).symm
+      have hC_nonneg : 0 ≤ KF.C :=
+        Matrix.nonneg_iff_posSemidef.mpr KF.C_posSemidef
+      have hsqrt_psd : (CFC.sqrt KF.C).PosSemidef :=
+        Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg KF.C)
+      change KF.C = (CFC.sqrt KF.C)ᴴ * CFC.sqrt KF.C
+      rw [hsqrt_psd.isHermitian.eq]
+      simpa using (CFC.sqrt_mul_sqrt_self KF.C hC_nonneg).symm
     -- Define Lindblad operators: `Lⱼ = Σₖ B_{jk} • Fₖ`
     refine ⟨⟨KF.n, KF.H, fun j => ∑ k, B j k • KF.F k, KF.H_hermitian⟩, ?_⟩
     rw [hKF]
@@ -266,7 +246,7 @@ theorem kossakowski_iff_lindblad
     apply Finset.sum_congr rfl
     intro k _
     symm
-    exact sum_one_smul_eq k _
+    simp [kossakowskiTerm, Matrix.one_apply, Finset.sum_add_distrib]
 
 end KossakowskiForms
 

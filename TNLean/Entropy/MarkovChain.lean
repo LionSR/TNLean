@@ -7,7 +7,7 @@ import TNLean.Entropy.StrongSubadditivity
 /-!
 # SSA equality and quantum Markov-chain structure
 
-This module records the sanctioned axiom
+This module states the sanctioned axiom
 `_root_.hayashi_ssa_equality_characterization` from
 `TNLean/Axioms/Entropy.lean` in the `Entropy` namespace.
 
@@ -21,26 +21,28 @@ subsystem `B`: after a unitary change of basis on `B`, the Hilbert space of
 block-diagonal direct sum `⊕_j p_j (ρ_{A B_jᴸ} ⊗ ρ_{B_jᴿ C})`.
 
 The actual proof is intentionally deferred to the sanctioned axiom in
-`TNLean.Axioms.Entropy`; this file provides only theorem wrappers and the
-abbreviation used for the decomposition record in the `Entropy` namespace.
+`TNLean.Axioms.Entropy`; this file provides only the named formulations and
+the namespace abbreviation for the quantum-Markov-chain decomposition.
 
 ## Main declarations
 
 * `Entropy.QuantumMarkovDecomposition` — abbreviation for
   `_root_.HayashiMarkovDecomposition`.
-* `Entropy.ssaEquality_iff_exists_quantumMarkovDecomposition` — theorem wrapper
-  around `_root_.hayashi_ssa_equality_characterization`.
+* `Entropy.ssaEquality_iff_exists_quantumMarkovDecomposition` — theorem statement of
+  the sanctioned equivalence `_root_.hayashi_ssa_equality_characterization`.
 * `Entropy.exists_quantumMarkovDecomposition_of_ssaEquality` — forward
   direction.
 * `Entropy.isSSAEquality_of_quantumMarkovDecomposition` — reverse direction.
 
 ## References
 
-* Hayashi, J. Phys. A: Math. Gen. 37 (2004) L205--L208
+* Hayashi, *Quantum Information: An Introduction*, Springer 2006, Theorem 5.24
 * Ruskai, "Inequalities for quantum entropy: A review with conditions for
   equality", JMP 43, 4358 (2002)
 * Hayden, Jozsa, Petz, Winter, Commun. Math. Phys. 246, 359--374 (2004)
 * arXiv:1606.00608 Appendix C (the downstream target of issue #632 / #236)
+* Blueprint `def:entropy_quantum_markov_decomposition`,
+  `thm:entropy_ssa_equality_quantum_markov`
 -/
 
 open scoped Matrix ComplexOrder
@@ -52,8 +54,10 @@ section MarkovChain
 
 variable {dA dB dC : ℕ}
 
-/-- Namespaced abbreviation for the quantum-Markov-chain decomposition witness
-associated to equality in strong subadditivity. -/
+/-- Namespace abbreviation for the quantum-Markov-chain decomposition witness
+associated to equality in strong subadditivity.
+
+Source: blueprint `def:entropy_quantum_markov_decomposition`. -/
 abbrev QuantumMarkovDecomposition
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ) : Type :=
@@ -62,9 +66,11 @@ abbrev QuantumMarkovDecomposition
 /-- Equality in strong subadditivity is equivalent to the existence of a
 quantum-Markov-chain decomposition on the middle subsystem.
 
-This is a theorem wrapper around the sanctioned axiom
+This is a statement of the sanctioned axiom
 `_root_.hayashi_ssa_equality_characterization`; no new axiom is introduced by
-this file. -/
+this file.
+
+Source: blueprint `thm:entropy_ssa_equality_quantum_markov`. -/
 theorem ssaEquality_iff_exists_quantumMarkovDecomposition
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ)

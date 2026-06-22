@@ -25,19 +25,21 @@ the eigenvalues on the unit circle.
 
 ## Main results
 
-* `hasEigenvalue_one_of_fixedPoint` — fixed point gives eigenvalue 1
 * `one_mem_peripheralEigenvalues` — 1 is a peripheral eigenvalue
 * `peripheralEigenvalues_finite` — peripheral eigenvalues are finite
 * `isRootOfUnity_of_finite_powers` — pigeonhole for roots of unity
 * `peripheral_isRootOfUnity_of_pow_eigenvalue` — powers-are-eigenvalues ⟹ root of unity
 * `isPrimitive_iff_period_one` — primitive ↔ period = 1
-* `isPrimitive_of_compl_eigenvalues_lt_one` — spectral gap → primitive
-* `compl_eigenvalue_norm_lt_one_of_primitive` — primitive → spectral gap
+* `isPrimitive_of_compl_eigenvalues_lt_one` — complementary transfer-map gap → primitive
+* `compl_eigenvalue_norm_lt_one_of_primitive` — primitive → complementary transfer-map gap
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2–6.3, Thm 6.6][Wolf2012QChannels]
-* [arXiv:2011.12127, §IV — peripheral spectrum structure]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2,
+  Theorem 6.6 (peripheral spectrum of irreducible Schwarz maps)][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.3,
+  Theorem 6.7 (primitive maps)][Wolf2012QChannels]
+* [arXiv:2011.12127, Section IV — peripheral spectrum structure]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators NNReal ENNReal
@@ -70,38 +72,12 @@ theorem hasEigenvalue_of_eigenvector_eq
   Module.End.hasEigenvalue_of_hasEigenvector
     (Module.End.hasEigenvector_iff.mpr ⟨Module.End.mem_eigenspace_iff.mpr hfx, hne⟩)
 
-/-- If `E(ρ) = ρ` with `ρ ≠ 0`, then 1 is an eigenvalue of `E`. -/
-theorem hasEigenvalue_one_of_fixedPoint
-    {V : Type*} [AddCommGroup V] [Module ℂ V]
-    (E : V →ₗ[ℂ] V) (ρ : V) (hfix : E ρ = ρ) (hne : ρ ≠ 0) :
-    Module.End.HasEigenvalue E 1 :=
-  hasEigenvalue_of_eigenvector_eq E 1 ρ (by simp [hfix]) hne
-
 /-- `1` is always a peripheral eigenvalue when a fixed point exists. -/
 theorem one_mem_peripheralEigenvalues
     {V : Type*} [AddCommGroup V] [Module ℂ V]
     (E : V →ₗ[ℂ] V) (ρ : V) (hfix : E ρ = ρ) (hne : ρ ≠ 0) :
     (1 : ℂ) ∈ peripheralEigenvalues E :=
-  ⟨hasEigenvalue_one_of_fixedPoint E ρ hfix hne, by simp⟩
-
-/-- Powers of a unit-norm complex number have norm 1. -/
-theorem norm_pow_eq_one_of_norm_eq_one {μ : ℂ} (hμ : ‖μ‖ = 1) (n : ℕ) :
-    ‖μ ^ n‖ = 1 := by rw [norm_pow, hμ, one_pow]
-
-/-- Inverse of unit-norm is unit-norm. -/
-theorem norm_inv_eq_one_of_norm_eq_one {μ : ℂ} (hμ : ‖μ‖ = 1) :
-    ‖μ⁻¹‖ = 1 := by rw [norm_inv, hμ, inv_one]
-
-/-- Unit-norm complex number is nonzero. -/
-theorem ne_zero_of_norm_eq_one {μ : ℂ} (hμ : ‖μ‖ = 1) : μ ≠ 0 := by
-  intro h; simp [h] at hμ
-
-/-- Definitional helper: peripheral eigenvalues lie on the unit circle. -/
-theorem peripheralEigenvalues_subset_unit_circle
-    {V : Type*} [AddCommGroup V] [Module ℂ V]
-    (f : V →ₗ[ℂ] V) :
-    peripheralEigenvalues f ⊆ {μ : ℂ | ‖μ‖ = 1} :=
-  fun _ hμ => hμ.2
+  ⟨hasEigenvalue_of_eigenvector_eq E 1 ρ (by simp [hfix]) hne, by simp⟩
 
 /-- In finite dimensions, the peripheral eigenvalue set is finite. -/
 theorem peripheralEigenvalues_finite
@@ -129,7 +105,9 @@ theorem isRootOfUnity_of_finite_powers (μ : ℂ) (hμ : ‖μ‖ = 1)
     fun hinj => Set.infinite_range_of_injective hinj hrange_fin
   simp only [Function.Injective, not_forall] at hninj
   obtain ⟨n₁, n₂, heq, hne⟩ := hninj
-  have hμ_ne : μ ≠ 0 := ne_zero_of_norm_eq_one hμ
+  have hμ_ne : μ ≠ 0 := by
+    rw [← norm_ne_zero_iff, hμ]
+    norm_num
   rcases Nat.lt_or_gt_of_ne hne with h | h
   · exact ⟨n₂ - n₁, Nat.sub_pos_of_lt h,
       mul_left_cancel₀ (pow_ne_zero _ hμ_ne) (by
@@ -138,27 +116,41 @@ theorem isRootOfUnity_of_finite_powers (μ : ℂ) (hμ : ‖μ‖ = 1)
       mul_left_cancel₀ (pow_ne_zero _ hμ_ne) (by
         rw [← pow_add, Nat.add_sub_cancel' h.le, mul_one]; exact heq)⟩
 
-/-- **Peripheral eigenvalues with powers-are-eigenvalues property are roots of unity.**
+/-- **Peripheral eigenvalues with positive powers that are eigenvalues are roots of unity.**
 This is the combinatorial core of **Wolf Theorem 6.6** (Peripheral spectrum of
 irreducible Schwarz maps), item 1: the peripheral spectrum forms a cyclic group
 `{exp(2πik/m)}_{k ∈ ℤ_m}`. For irreducible CPTP maps, the multiplicative domain
-theory ensures that powers of peripheral eigenvalues remain eigenvalues. -/
+theory ensures that positive powers of peripheral eigenvalues remain eigenvalues. -/
 theorem peripheral_isRootOfUnity_of_pow_eigenvalue
     {V : Type*} [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V]
     (E : V →ₗ[ℂ] V)
     (μ : ℂ) (hμ_norm : ‖μ‖ = 1)
-    (hpow : ∀ n : ℕ, Module.End.HasEigenvalue E (μ ^ n)) :
+    (hpow : ∀ n : ℕ, 0 < n → Module.End.HasEigenvalue E (μ ^ n)) :
     ∃ p : ℕ, 0 < p ∧ μ ^ p = 1 := by
+  have hfin_pos : Set.Finite {z : ℂ | ∃ n : ℕ, z = μ ^ (n + 1)} := by
+    apply Set.Finite.subset (Module.End.finite_hasEigenvalue E)
+    intro z hz
+    rcases hz with ⟨n, rfl⟩
+    exact hpow (n + 1) (Nat.succ_pos n)
   apply isRootOfUnity_of_finite_powers μ hμ_norm
-  apply Set.Finite.subset (Module.End.finite_hasEigenvalue E)
-  intro z ⟨n, hz⟩; rw [hz]; exact hpow n
+  refine (hfin_pos.insert 1).subset ?_
+  intro z hz
+  rcases hz with ⟨n, rfl⟩
+  cases n with
+  | zero => simp
+  | succ n =>
+      simp only [Set.mem_insert_iff, Set.mem_setOf_eq]
+      right
+      exact ⟨n, rfl⟩
 
 /-- **Explicit bound**: among `μ^0, ..., μ^n`, a repeat gives a root of unity. -/
 theorem isRootOfUnity_of_norm_one_of_finite_orbit (μ : ℂ) (hμ : ‖μ‖ = 1)
     (n : ℕ) (hrepeat : ∃ i j : ℕ, i < j ∧ j ≤ n ∧ μ ^ i = μ ^ j) :
     ∃ p : ℕ, 0 < p ∧ p ≤ n ∧ μ ^ p = 1 := by
   obtain ⟨i, j, hij, hjn, heq⟩ := hrepeat
-  have hμ_ne : μ ≠ 0 := ne_zero_of_norm_eq_one hμ
+  have hμ_ne : μ ≠ 0 := by
+    rw [← norm_ne_zero_iff, hμ]
+    norm_num
   exact ⟨j - i, Nat.sub_pos_of_lt hij, (Nat.sub_le j i).trans hjn,
     mul_left_cancel₀ (pow_ne_zero _ hμ_ne) (by
       rw [← pow_add, Nat.add_sub_cancel' hij.le, mul_one]; exact heq.symm)⟩
@@ -200,7 +192,9 @@ theorem isPrimitive_of_unique_norm_one
     IsPrimitive E := by
   ext μ; constructor
   · intro ⟨hev, hnorm⟩; exact huniq μ hev hnorm
-  · intro h; subst h; exact ⟨hasEigenvalue_one_of_fixedPoint E ρ hfix hne, by simp⟩
+  · intro h
+    subst h
+    exact ⟨hasEigenvalue_of_eigenvector_eq E 1 ρ (by simp [hfix]) hne, by simp⟩
 
 /-- **Primitive ↔ period = 1.** -/
 theorem isPrimitive_iff_period_one
@@ -234,12 +228,12 @@ theorem isPrimitive_iff_period_one
 
 end ChannelPeriod
 
-/-! ## Part 5: Spectral gap ↔ primitivity -/
+/-! ## Part 5: Complementary transfer-map gap ↔ primitivity -/
 
-section SpectralGap
+section ComplementaryTransferMapGap
 
-/-- **Spectral gap → primitive**: if all eigenvalues of `E - P` have norm < 1,
-then 1 is the only peripheral eigenvalue of E.
+/-- **Complementary transfer-map gap → primitive**: if all eigenvalues of `E - P`
+have norm < 1, then 1 is the only peripheral eigenvalue of E.
 
 Key idea: for `μ ≠ 1`, trace preservation forces eigenvectors to have trace 0,
 so they lie in ker(P), making μ an eigenvalue of `E - P`. -/
@@ -279,8 +273,9 @@ theorem isPrimitive_of_compl_eigenvalues_lt_one
   have := hcompl μ (hasEigenvalue_of_eigenvector_eq _ μ X hNX hX_ne)
   linarith [hμ_norm.symm ▸ this]
 
-/-- **Primitive → spectral gap (eigenvalue level)**: if E is primitive, TP, and
-all eigenvalues of E have norm ≤ 1, then eigenvalues of `E - P` have norm < 1. -/
+/-- **Primitive → complementary transfer-map gap (eigenvalue level)**: if E is
+primitive, TP, and all eigenvalues of E have norm ≤ 1, then eigenvalues of
+`E - P` have norm < 1. -/
 theorem compl_eigenvalue_norm_lt_one_of_primitive
     (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (_hfix : E ρ = ρ) (_hne : ρ ≠ 0)
@@ -332,18 +327,18 @@ theorem compl_eigenvalue_norm_lt_one_of_primitive
       exact this
     exact (mul_eq_zero.mp h1).resolve_right htrX
 
-end SpectralGap
+end ComplementaryTransferMapGap
 
 /-! ## Part 6: Connection to MPS primitivity
 
 The peripheral spectrum framework connects to MPS theory via:
 
 1. Transfer map `E_A(X) = ∑ᵢ Aᵢ X Aᵢ†` is trace-preserving when `∑ᵢ Aᵢ† Aᵢ = I`.
-2. By `Spectral/SpectralGap.lean`, eigenvalues satisfy `‖μ‖ ≤ 1`.
+2. By `Spectral/TransferOperatorGap.lean`, eigenvalues satisfy `‖μ‖ ≤ 1`.
 3. `IsPrimitiveMPS` requires `spectralRadius(E - P) < 1`, which by
    `compl_eigenvalue_norm_lt_one_of_primitive` is equivalent to `IsPrimitive E`.
 4. For irreducible CPTP maps, multiplicative domain theory
    (`Channel/MultiplicativeDomain.lean`) shows peripheral eigenvectors are in the
    multiplicative domain ⟹ powers of eigenvalues remain eigenvalues ⟹
-   `peripheral_isRootOfUnity_of_pow_eigenvalue` gives roots of unity (Wolf Thm 6.6).
+   `peripheral_isRootOfUnity_of_pow_eigenvalue` gives roots of unity (Wolf Theorem 6.6).
 -/

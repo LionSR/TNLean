@@ -25,11 +25,11 @@ than `D` as the power exponent. Key savings:
 
 1. `range((A i₀)^r) = range((A i₀)^D)` (range stabilizes at nilpIndex)
 2. `(A i₀)^r ∈ wordSpan A r` (costs only `r`, not `D`)
-3. When `r ≥ 1`: `D · D̃ + r ≤ D² - D + 1`
+3. When `r ≥ 1`: `D · D' + r ≤ D² - D + 1`
 
 ### References
 - arXiv:0909.5347, Lemma 2(b) (exact bound D²-D+1)
-- Wolf, "Quantum Channels & Operations", §6.2.4
+- Wolf, "Quantum Channels & Operations", Section 6.2.4
 -/
 
 section SharpDirectRoute
@@ -94,26 +94,14 @@ theorem range_mulLeft_pow_nilpIndex_eq
       (LinearMap.mulLeft ℂ ((A i₀) ^ D)) := by
   set f := toLin' (A i₀)
   set r := nilpIndex f
-  have hfr := finrank_range_mulLeft ((A i₀) ^ r)
-  have hfD := finrank_range_mulLeft ((A i₀) ^ D)
-  rw [rank_pow_nilpIndex_eq A i₀] at hfr
-  apply Submodule.eq_of_le_of_finrank_eq
-  · intro X hX
-    obtain ⟨M, rfl⟩ := LinearMap.mem_range.mp hX
-    simp only [LinearMap.mulLeft_apply]
-    rw [mem_range_mulLeft_iff_cols]
-    intro j; rw [col_mul]
-    have hrange_eq :
-        LinearMap.range (toLin' ((A i₀) ^ r)) =
-          LinearMap.range (toLin' ((A i₀) ^ D)) := by
-      rw [toLin'_pow, toLin'_pow]
-      exact (range_pow_eq_of_nilpIndex_le f
-        (nilpIndex_le_D' f)).symm
-    exact hrange_eq ▸
-      (⟨M.col j, by rw [toLin'_apply]⟩ :
-        ((A i₀) ^ r) *ᵥ (M.col j) ∈
-          LinearMap.range (toLin' ((A i₀) ^ r)))
-  · omega
+  have hrange_eq :
+      LinearMap.range (f ^ r) =
+        LinearMap.range (f ^ D) :=
+    (range_pow_eq_of_nilpIndex_le f
+      (nilpIndex_le_D' f)).symm
+  rw [range_mulLeft_eq_pi, range_mulLeft_eq_pi]
+  ext M
+  simp [colRangeSubmodule, f, toLin'_pow, hrange_eq]
 
 /-- Eigenvector in range of `toLin' ((A i₀)^r)`. -/
 theorem eigenvector_mem_range_toLin_pow_nilpIndex
@@ -223,7 +211,7 @@ theorem sharp_bound_le (A : MPSTensor d D)
     _ = D * D := Nat.sub_add_cancel hDs_le_DD
 
 /-- **Conditional sharp Lemma 2(b)**: given rectSpan
-stabilization within `D * D̃` steps,
+stabilization within `D * D'` steps,
 `∀ ψ, vecMulVec φ ψ ∈ cumulativeSpan A (D²-D+1)`. -/
 theorem vecMulVec_eigenvector_sharp_of_rectSpan
     (A : MPSTensor d D) (i₀ : Fin d)
@@ -256,8 +244,12 @@ theorem vecMulVec_eigenvector_sharp_of_rectSpan
           sharp_bound_le A i₀ hNotInv
   exact wordSpan_le_cumulativeSpan A hbound hmem
 
-/-- **Parametric sharp assembly via nilpIndex.** -/
-theorem wielandt_sharp_parametric_assembly [NeZero D]
+/-- **Parametric sharp word-span saturation via nilpotent index.**
+
+Given eigenvectors and a `rectSpan` stabilization at step `n₀`
+(with the initial matrix `(A i₀) ^ nilpIndex (toLin' (A i₀))`),
+produces `wordSpan A N = ⊤` for `N = (D-1) + (nilpIndex + n₀) + (D-1)`. -/
+theorem wielandt_sharp_parametric_span [NeZero D]
     (A : MPSTensor d D)
     (hNormal : IsNormal (d := d) (D := D) A)
     (i₀ : Fin d) (μ : ℂ) (hμ : μ ≠ 0)

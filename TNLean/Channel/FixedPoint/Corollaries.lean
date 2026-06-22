@@ -28,10 +28,10 @@ $\rho^{-1/2} \Fix(T) \rho^{-1/2}$ is a `StarSubalgebra` of `M_D(\mathbb{C})`.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Cor. 6.7, §6.4]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Corollary 6.7, Section 6.4]
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder TNMatrixCFC BigOperators
+open scoped Matrix ComplexOrder MatrixOrder BigOperators
 open Matrix Finset Complex
 
 namespace Kraus
@@ -110,8 +110,8 @@ theorem isUnital_rightCanonicalGauge
     (K : Fin d → Mat) {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : map K ρ = ρ) :
     IsUnital (rightCanonicalGauge K ρ) := by
   set S : Mat := CFC.sqrt ρ
-  have hS_det : S.det ≠ 0 := by
-    exact (MPSTensor.isUnit_det_cfc_sqrt_of_posDef (D := D) ρ hρ).ne_zero
+  have hS_det : S.det ≠ 0 :=
+    (MPSTensor.isUnit_det_cfc_sqrt_of_posDef (D := D) ρ hρ).ne_zero
   have hS_herm : Sᴴ = S := by
     simpa [S] using MPSTensor.conjTranspose_cfc_sqrt (D := D) ρ
   have hSS : S * Sᴴ = ρ := by
@@ -160,8 +160,8 @@ theorem adjointMap_rightCanonicalGauge_fixedPoint
       adjointMap (fun i => S⁻¹ * K i * S) (S * S)
           = ∑ i : Fin d, (S⁻¹ * K i * S)ᴴ * (S * S) * (S⁻¹ * K i * S) := by
               simp [adjointMap]
-      _ = ∑ i : Fin d, S * (K i)ᴴ * K i * S := by
-            exact Finset.sum_congr rfl (fun i _ => h_term i)
+      _ = ∑ i : Fin d, S * (K i)ᴴ * K i * S :=
+            Finset.sum_congr rfl (fun i _ => h_term i)
       _ = (∑ i : Fin d, S * ((K i)ᴴ * K i)) * S := by
             simp [Matrix.mul_assoc, Finset.sum_mul]
       _ = S * (∑ i : Fin d, (K i)ᴴ * K i) * S := by

@@ -7,7 +7,7 @@ import TNLean.Channel.Semigroup.ReducibleQDS.GeneratorCompression
 import TNLean.Channel.Semigroup.ReducibleQDS.SubsequenceAnalysis
 
 /-!
-# Reducibility Definition and Full Equivalence (Wolf Prop 7.6)
+# Reducibility Definition and Full Equivalence (Wolf Proposition 7.6)
 
 This file defines `IsReducibleQDS` and proves the full four-way equivalence
 of Wolf Proposition 7.6.
@@ -30,7 +30,7 @@ orthogonal projection `P` such that `T_t` preserves the compressed algebra
 
 Note: for a single map, `IsIrreducibleMap` checks that no nontrivial `P`
 satisfies `P E(PXP) P = E(PXP)` for all `X`. Here we require this for ALL
-`T_t` simultaneously, which by Prop 7.6 is equivalent to requiring it for
+`T_t` simultaneously, which by Proposition 7.6 is equivalent to requiring it for
 the generator `L`. -/
 def IsReducibleQDS (L : Mat →ₗ[ℂ] Mat) : Prop :=
   HasInvariantCompression L
@@ -90,7 +90,7 @@ theorem wolf_prop_7_6_three_implies_two
     (hasBlockUpperTriangularLindblad_of_hasInvariantCompression hGKSL h)
 
 /-- **Wolf Proposition 7.6 (full equivalence)**: For a GKSL generator `L`, the
-four reducibility conditions are equivalent. We package the result by taking
+four reducibility conditions are equivalent. We state the result by taking
 condition (1) as the base condition. -/
 theorem wolf_prop_7_6_full_equivalence
     {L : Mat →ₗ[ℂ] Mat}
@@ -108,18 +108,5 @@ theorem wolf_prop_7_6_full_equivalence
         (hasRankDeficientKernelElement_of_hasRankDeficientFixedDensity h1)
   · intro h1234
     exact hasRankDeficientFixedDensity_of_hasRankDeficientKernelElement h1234.1
-
-/-! ## Sum-of-squares vanishing lemma -/
-
-/-- If `∑ⱼ Bⱼ Bⱼ† = 0` for square matrices, then each `Bⱼ = 0`.
-
-This is the key algebraic fact needed for the (3) → (4) direction of
-Wolf Proposition 7.6. The proof delegates to the existing
-`eq_zero_of_sum_mul_conjTranspose_eq_zero` from `Channel.Irreducible.Basic`. -/
-theorem sum_conjTranspose_mul_self_eq_zero_imp
-    {r : ℕ} (B : Fin r → Mat)
-    (h : ∑ j, B j * (B j)ᴴ = 0) :
-    ∀ j, B j = 0 :=
-  eq_zero_of_sum_mul_conjTranspose_eq_zero B h
 
 end -- noncomputable section

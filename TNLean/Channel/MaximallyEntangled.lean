@@ -5,14 +5,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Data.Complex.Basic
-import Mathlib.Data.Real.Sqrt
+import Mathlib.Analysis.Real.Sqrt
+import Mathlib.Algebra.Ring.Idempotent
 
 /-!
 # Maximally entangled state and SWAP operator
 
 This file defines the maximally entangled state vector `Ω` and the outer product
 `Ω_proj = |Ω⟩⟨Ω|`, as well as the SWAP operator `F` on the tensor product space,
-as needed for the Choi–Jamiolkowski isomorphism (Wolf Ch. 2).
+as needed for the Choi–Jamiolkowski isomorphism (Wolf Chapter 2).
 
 ## Main definitions
 
@@ -173,25 +174,6 @@ theorem omegaProj_mul_self :
   · have hd0 : d = 0 := Nat.eq_zero_of_not_pos hd
     subst hd0
     exact Subsingleton.elim _ _
-
-theorem one_sub_omegaProj_conjTranspose :
-    (((1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) - omegaProj d)ᴴ) =
-      (1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) - omegaProj d := by
-  simp [omegaProj_conjTranspose]
-
-theorem one_sub_omegaProj_mul_omegaProj :
-    ((1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) - omegaProj d) * omegaProj d = 0 := by
-  rw [sub_mul, one_mul, omegaProj_mul_self, sub_self]
-
-theorem omegaProj_mul_one_sub_omegaProj :
-    omegaProj d * ((1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) - omegaProj d) = 0 := by
-  rw [mul_sub, mul_one, omegaProj_mul_self, sub_self]
-
-theorem one_sub_omegaProj_mul_self :
-    ((1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) - omegaProj d) *
-        ((1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) - omegaProj d) =
-      (1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) - omegaProj d := by
-  rw [sub_mul, one_mul, omegaProj_mul_one_sub_omegaProj, sub_zero]
 
 theorem omegaProj_mulVec_omegaVec :
     omegaProj d *ᵥ omegaVec d = omegaVec d := by

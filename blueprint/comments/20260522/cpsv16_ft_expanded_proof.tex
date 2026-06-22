@@ -1,0 +1,772 @@
+
+\documentclass{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage{longtable}
+
+\newcommand{\leanid}[1]{\texttt{#1}}
+\newcommand{\paperref}[1]{\textit{[CPSV16 #1]}}
+\newcommand{\gap}[1]{\textcolor{red}{\textbf{GAP:} #1}}
+
+\theoremstyle{plain}
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+
+\title{Expanded Source-Faithful Proof of the CPSV16 Fundamental Theorem of MPV\\
+       (Annotated with Lean realizations and remaining gaps)}
+\author{}
+\date{2026-05-13}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+    This document is a step-by-step expansion of the proof of the Fundamental
+    Theorem of MPV (CPSV16, arXiv:1606.00608v4, Appendix~A, p.~32), annotated
+    with the Lean realizations that exist in TNLean and with explicit markers
+    for remaining gaps. It supersedes the trimmed
+    \path{blueprint/src/chapter/ch11_fundamental_theorem_proof.tex}, which
+    still reflects the wrong-direction architecture retired in PR \#1639.
+
+    Each step is presented in three layers:
+    \begin{enumerate}
+        \item the paper's mathematical claim (with line reference),
+        \item the algebraic content expanded to the level needed for formalization,
+        \item the Lean realization (lemma name + file:line) or \gap{...} marker.
+    \end{enumerate}
+
+    The companion definition audit
+    (\path{docs/audits/2026-05-13_cpsv16_ft_definition_audit.md}) records which
+    underlying Lean definitions are paper-faithful and which are restricted.
+\end{abstract}
+
+\tableofcontents
+
+\section{Setup and notation}
+\label{sec:setup}
+
+\paragraph{The MPV and its transfer operator.}
+For a tensor $A$ specified by $D \times D$ matrices $\{A^i\}_{i=1}^d$, the
+translationally invariant matrix-product vector (MPV) at length $N$ is
+\begin{align}
+    |V^{(N)}(A)\rangle
+    = \sum_{i_1,\ldots,i_N=1}^{d} \tr(A^{i_1} \cdots A^{i_N})
+    |i_1, \ldots, i_N\rangle,
+    \label{eq:mpv-def}
+\end{align}
+and the associated transfer operator on $D \times D$ matrices is
+$\mathcal{E}_A(X) = \sum_i A^i X (A^i)^\dagger$. A tensor $A$ is
+\emph{normal} (NT) iff $\mathcal{E}_A$ is a primitive completely positive
+map; the corresponding $|V^{(N)}(A)\rangle$ is then a normal MPV (NMPV).
+
+\paragraph{Canonical form (CF) of CPSV16 \paperref{p.~5--9}.}
+A tensor in CF decomposes as a direct sum of normal blocks,
+\begin{align}
+    A^i = \bigoplus_{k=1}^{r} \mu_k\, A_k^i,
+    \label{eq:cf-def}
+\end{align}
+with each $A_k$ normal and the $\mu_k$ scaled so that every block transfer
+operator $\mathcal{E}_k$ has spectral radius~$1$. A \emph{basis of normal
+    tensors} (BNT) for $A$ is a family $\{A_j\}_{j=1}^{g}$ of NTs satisfying
+\paperref{Definition~2.6}: (i) $|V^{(N)}(A)\rangle$ is a linear combination
+of $\{|V^{(N)}(A_j)\rangle\}_j$ for every $N$, and (ii) the family is
+linearly independent for all $N \ge N_0$. \paperref{Proposition~2.7~(ii)}
+adds the minimality property: no two distinct $A_j, A_{j'}$ are
+phase-equivalent.
+
+\paragraph{The BNT decomposition, eq.~(20a) \paperref{p.~9}.}
+For each $A$ in CF with BNT $\{A_j\}$, there is a non-singular intertwiner
+$X$ and diagonal matrices $M_j = \diag(\mu_{j,1}, \ldots, \mu_{j,r_j})$
+with unit-modulus entries such that
+\begin{align}
+    A^i = X\,\left(\,\bigoplus_{j=1}^{g} M_j \otimes A_j^i\,\right)\,X^{-1}.
+    \label{eq:bnt-tensor-decomp}
+\end{align}
+Taking traces of products and using cyclicity gives the MPV-level
+decomposition
+\begin{align}
+    |V^{(N)}(A)\rangle
+    = \sum_{j=1}^{g} \left(\sum_{q=1}^{r_j} \mu_{j,q}^N\right)
+    |V^{(N)}(A_j)\rangle.
+    \label{eq:bnt-mpv-decomp}
+\end{align}
+The coefficient $\sum_q \mu_{j,q}^N$ is a finite sum of $N$th powers of
+unit-modulus complex numbers, indexed by an internal multiplicity
+$r_j \ge 1$ invisible at the MPV level but load-bearing in asymptotic
+estimates.
+
+\paragraph{Our Lean canonical form: one-copy-per-sector.}
+The Lean type-class \leanid{IsCanonicalFormBNT}
+(\path{TNLean/MPS/BNT/Construction.lean:96--104}, abbreviated CFBNT below)
+restricts to the special case $r_j = 1$ for all $j$ and imposes the
+strict-modulus ordering
+\begin{align}
+    \leanid{mu\_strict\_anti}: \quad
+    \|\mu_0\| > \|\mu_1\| > \cdots > \|\mu_{r-1}\|.
+\end{align}
+Combined with the dominant normalization \leanid{mu\_dom\_norm\_one}
+(\path{TNLean/MPS/BNT/Construction.lean:192--198}), this forces $\|\mu_0\|
+    = 1$ and $\|\mu_k\| < 1$ strictly for $k > 0$. The MPV
+expansion~\eqref{eq:bnt-mpv-decomp} therefore reduces to
+\begin{align}
+    |V^{(N)}(A)\rangle = \sum_{j=0}^{r-1} \mu_j^N\, |V^{(N)}(A_j)\rangle,
+    \label{eq:bnt-mpv-decomp-restricted}
+\end{align}
+with each non-leading coefficient $\mu_j^N$ ($j > 0$) decaying
+geometrically. As we shall see in Section~\ref{sec:fundamental-theorem},
+this collapse is precisely what breaks the paper's per-block projection
+argument for $k_0 > 0$.
+
+\paragraph{Lean realizations.}
+The core definitions are: \leanid{MPSTensor.mpv} and
+\leanid{MPSTensor.mpvState} (realizations of~\eqref{eq:mpv-def} and its
+unnormalized form); \leanid{MPSTensor.mpvOverlap} (the unnormalized inner
+product); \leanid{MPSTensor.toTensorFromBlocks} (the constructor
+realizing~\eqref{eq:cf-def}); \leanid{MPSTensor.IsCanonicalFormBNT}; the
+per-tensor BNT-LI hypothesis \leanid{MPSTensor.IsBNT}; and
+\leanid{MPSTensor.GaugePhaseEquiv}, the relation $B^i = e^{i\phi} X A^i
+    X^{-1}$. The narrowings induced by \leanid{mu\_strict\_anti} are
+catalogued in
+\path{docs/audits/2026-05-13_cpsv16_ft_definition_audit.md} and
+\path{docs/paper-gaps/ft_one_copy_scope_restriction.tex}.
+
+\section{Lemma A.2 (the per-pair dichotomy)}
+\label{sec:lemma-A2}
+
+\paperref{Appendix~A, p.~29--30}.
+
+\begin{lemma}[Lemma~A.2]
+    Let $A, B$ be normal tensors with bond dimensions $D_A, D_B$ and the same
+    physical dimension $d$. Define the normalized overlap
+    \begin{align}
+        O_{A,B}(N) :=
+        \frac{\langle V^{(N)}(A) \mid V^{(N)}(B) \rangle}
+        {\bigl\|V^{(N)}(A)\bigr\| \bigl\|V^{(N)}(B)\bigr\|}.
+        \label{eq:overlap-def}
+    \end{align}
+    Then $|O_{A,B}(N)|$ converges to either $0$ or $1$. In the limit-$1$
+    case, $D_A = D_B$ and there exist a unitary
+    $X \in \mathbb{C}^{D_A \times D_A}$ and a unit-modulus phase
+    $\zeta \in \mathbb{C}$ with
+    \begin{align}
+        B^i = \zeta\, X\, A^i\, X^{-1}, \qquad i = 1, \ldots, d.
+        \label{eq:gauge-phase-eq}
+    \end{align}
+\end{lemma}
+
+\paragraph{Proof outline.}
+Write the unnormalized overlap as $\tr(\mathcal{F}_{B,A}^N)$, where
+$\mathcal{F}_{B,A}(X) = \sum_i B^i X (A^i)^\dagger$ is the mixed transfer
+operator. Cauchy--Schwarz on the trace pairing yields
+\begin{align}
+    |\tr(\mathcal{F}_{B,A}^N)|^2
+    \le \tr(\mathcal{E}_A^N(\mathbf{1})) \tr(\mathcal{E}_B^N(\mathbf{1})).
+\end{align}
+Equality in the limit forces the spectral radius of $\mathcal{F}_{B,A}$
+to equal~$1$; let $X$ be a corresponding eigenvector and $\zeta$ the
+phase, so $\sum_i B^i X (A^i)^\dagger = \zeta X$ with $|\zeta| = 1$.
+Multiplying by its adjoint and summing over $i$ gives
+\begin{align}
+    \sum_i A^i\, X^\dagger X\, (A^i)^\dagger = X^\dagger X,
+\end{align}
+i.e., $X^\dagger X$ is a fixed point of the unital primitive map
+$\mathcal{E}_A^* : Y \mapsto \sum_i (A^i)^\dagger Y A^i$. Primitivity
+forces $X^\dagger X = c\,\mathbf{1}_{D_A}$ with $c > 0$; rescaling
+$X \mapsto c^{-1/2} X$ makes $X$ an isometry. The symmetric argument
+($A \leftrightarrow B$) shows $X$ is unitary and $D_A = D_B$. A
+kernel/primitivity argument upgrades the eigenvalue equation to the
+pointwise gauge-phase identity~\eqref{eq:gauge-phase-eq}. If the
+limit-$1$ case fails, the strict spectral gap of $\mathcal{F}_{B,A}$
+drives $|O_{A,B}(N)| \to 0$ exponentially.
+
+\textbf{REVIEWER NOTE:} The paper's phrasing of the $X^\dagger X$ step
+elides the rescaling, writing ``$\sum_i A^{i\dagger}_a X^\dagger X
+    A^i_a = X^\dagger X = \mathbf{1}$'' as if normalization were automatic.
+The analysis memo~\S7(ii) recommends carrying the conclusion as
+$X^\dagger X = c\,\mathbf{1}$ throughout and rescaling at the end; the
+Lean development should follow this.
+
+\paragraph{Lean realizations.}
+\begin{itemize}
+    \item Dimension-mismatch direction:
+          \leanid{MPSTensor.mpvOverlap\_tendsto\_zero\_of\_dim\_ne}.
+    \item Not-gauge-phase-equivalent direction:
+          \leanid{MPSTensor.mpvOverlap\_tendsto\_zero\_of\_not\_gaugePhaseEquiv\_cast\_left}.
+    \item Self-overlap scale dichotomy:
+          \leanid{MPSTensor.mpvOverlap\_self\_scale\_of\_mpv\_eq\_pow\_mul}
+          and \leanid{MPSTensor.norm\_eq\_one\_of\_selfOverlap\_scale}.
+    \item Limit-$1$ to gauge-phase extraction:
+          \leanid{MPSTensor.gaugePhaseEquiv\_of\_nondecaying\_overlap\_CFBNT}
+          in \path{Full/NondecayingPartnerUnique.lean:63}.
+\end{itemize}
+
+\section{Corollary A.3 (overlap limit-1 implies exact phase equality)}
+\label{sec:cor-A3}
+
+\paperref{Appendix~A, p.~31}.
+
+\begin{corollary}[Corollary~A.3]
+    Let $A, B$ be normal with $D_A = D_B$ and $|O_{A,B}(N)| \to 1$. Then
+    there exists a unit-modulus phase $\zeta$ such that, for every $N \ge 1$,
+    \begin{align}
+        |V^{(N)}(B)\rangle = \zeta^N\,|V^{(N)}(A)\rangle.
+        \label{eq:phase-equality}
+    \end{align}
+\end{corollary}
+
+\paragraph{Outline.}
+Lemma~A.2 yields a unitary $X$ and phase $\zeta$ with $B^i = \zeta X A^i
+    X^{-1}$. Substituting into~\eqref{eq:mpv-def} and using cyclicity of the
+trace (the $X X^{-1}$ pairs cancel),
+\begin{align}
+    \tr(B^{i_1} \cdots B^{i_N}) = \zeta^N\,\tr(A^{i_1} \cdots A^{i_N}),
+\end{align}
+which gives~\eqref{eq:phase-equality} after summing over computational
+basis labels.
+
+\paragraph{Lean realization.}
+\leanid{MPSTensor.exists\_phase\_mpvState\_eq\_smul\_of\_nondecaying\_overlap\_CFBNT}
+in \path{Full/NondecayingPartnerUnique.lean:100}, returning $\zeta$ with
+$\|\zeta\| = 1$ and $\leanid{mpvState}(B,N) = \zeta^N \cdot
+    \leanid{mpvState}(A,N)$ for all $N$.
+
+\section{Corollary A.4 / Lemma A.5 (orthogonal-in-limit implies LI)}
+\label{sec:lemma-A4}
+
+\paperref{Appendix~A, p.~31}.
+
+\begin{corollary}[Corollary~A.4]
+    Let $\{V_j^{(N)}\}_{j=1}^{g}$ be a finite family of NMPVs whose pairwise
+    normalized overlaps tend to $\delta_{j,j'}$ as $N \to \infty$. Then the
+    family is linearly independent for all sufficiently large $N$.
+\end{corollary}
+
+\paragraph{Outline.}
+The Gram matrix $G_N$ of normalized overlaps converges entrywise to the
+identity, hence $\det G_N \to 1$, so $\det G_N \neq 0$ for all $N \ge N_0$.
+
+\paragraph{The companion non-decay fact.}
+Step~1 of the Fundamental Theorem proof relies on a separate ingredient
+already implicit in CPSV16: that the BNT coefficient $\sum_q \mu_{j,q}^N$
+in~\eqref{eq:bnt-mpv-decomp} does not tend to zero. We extract this as a
+standalone fact, following analysis memo~\S7(i).
+
+\begin{lemma}[Vandermonde non-decay]
+    \label{lem:vandermonde-non-decay}
+    Let $\{\mu_q\}_{q=1}^{r}$ be distinct nonzero complex numbers with
+    $|\mu_q| = 1$. Then $S_N := \sum_{q=1}^{r} \mu_q^N$ does not tend to
+    zero as $N \to \infty$; in fact $\limsup_N |S_N| > 0$.
+\end{lemma}
+
+\paragraph{Proof.}
+For any $N^* \in \mathbb{N}$, the vector
+$(S_{N^*}, S_{N^*+1}, \ldots, S_{N^* + r - 1})^T$ equals $V_{N^*}
+    \cdot \mathbf{1}_r$, where
+\begin{align}
+    V_{N^*} = V \cdot \diag(\mu_1^{N^*}, \ldots, \mu_r^{N^*})
+\end{align}
+and $V$ is the (constant) Vandermonde matrix on $(\mu_1, \ldots, \mu_r)$,
+invertible because the $\mu_q$ are distinct. The diagonal factor has
+unit-modulus entries, so $V_{N^*}^{-1}$ is bounded uniformly in $N^*$.
+If $S_N \to 0$, then for $N^*$ large, $\|V_{N^*} \mathbf{1}_r\|$ is
+small, forcing $\|\mathbf{1}_r\|$ small via the bound on
+$\|V_{N^*}^{-1}\|$. But $\|\mathbf{1}_r\| = \sqrt{r}$ is constant.
+Contradiction.\hfill$\square$
+
+\paragraph{Lean realizations.}
+\begin{itemize}
+    \item Asymptotic-orthonormal $\Rightarrow$ eventual LI:
+          \leanid{MPSTensor.eventually\_linearIndependent\_of\_two\_family\_overlap\_tendsto\_orthonormal},
+          specialized as the source-faithful Corollary~\texttt{Lem1}
+          forms \leanid{eventually\_linearIndependent\_all\_left\_single\_right\_of\_all\_overlaps\_decay\_CFBNT}
+          and \leanid{*\_all\_right\_single\_left\_*}
+          (\path{Full/NondecayingOverlap.lean:709, 768}).
+    \item Per-tensor BNT-LI axiom: \leanid{IsBNT.eventually\_li}.
+    \item Vandermonde non-decay (Lemma~\ref{lem:vandermonde-non-decay}):
+          \gap{No Lean realization. Needed only for the general
+              (multi-copy) CPSV16 FT, tracked under issue~\#1562; in
+              the current restricted scope ($r_j = 1$) the
+              coefficient~\eqref{eq:bnt-mpv-decomp-restricted} is a
+              single power and Vandermonde non-decay does not apply.}
+\end{itemize}
+
+\section{Theorem (Fundamental Theorem of MPV, the paper's argument)}
+\label{sec:fundamental-theorem}
+
+\paperref{Appendix~A, p.~32}.
+
+\begin{theorem}[Fundamental Theorem of MPV]
+    Let $A, B$ be tensors in CF with BNTs $\{A_j\}_{j=1}^{g_a}$ and
+    $\{B_k\}_{k=1}^{g_b}$. Assume that $|V^{(N)}(A)\rangle$ and
+    $|V^{(N)}(B)\rangle$ are proportional for every~$N$. Then $g_a = g_b
+        =: g$, and there exist a permutation $\pi \in S_g$, phases $\{\phi_k\}$,
+    and non-singular intertwiners $\{X_k\}$ with
+    \begin{align}
+        B_k^i = e^{i\phi_k}\, X_k\, A_{\pi(k)}^i\, X_k^{-1},
+        \qquad k = 1, \ldots, g.
+    \end{align}
+\end{theorem}
+
+Following analysis memo~\S4.2, the paper's proof is a per-block existence
+argument plus a per-tensor minimality (injectivity) argument, \emph{not}
+a peel-induction.
+
+\subsection{Step 1 --- Per-block overlap projection}
+\label{sec:step1}
+
+\paragraph{Claim.}
+For each fixed BNT block $B_{k_0}$, there exists $j$ such that
+$\langle V^{(N)}(B_{k_0}) \mid V^{(N)}(A_j) \rangle \not\to 0$.
+
+\paragraph{Proof.}
+Assume the contrary,
+\begin{align}
+    \forall j,\quad
+    \langle V^{(N)}(B_{k_0}) \mid V^{(N)}(A_j) \rangle
+    \xrightarrow[N\to\infty]{} 0.
+    \tag{hAllDecay}
+    \label{eq:hAllDecay}
+\end{align}
+Write the proportionality as $|V^{(N)}(A)\rangle = \lambda_N
+    |V^{(N)}(B)\rangle$ and substitute the BNT decomposition
+\eqref{eq:bnt-mpv-decomp} on both sides:
+\begin{align}
+    \sum_{j} \left(\sum_q \mu_{j,q}^N\right) |V^{(N)}(A_j)\rangle
+    = \lambda_N \sum_{k} \left(\sum_q \nu_{k,q}^N\right) |V^{(N)}(B_k)\rangle.
+    \label{eq:bnt-proportional}
+\end{align}
+Take the inner product with $|V^{(N)}(B_{k_0})\rangle$.
+
+\emph{LHS.} Each cross-overlap $\langle V(B_{k_0})|V(A_j)\rangle$ tends
+to zero by~\eqref{eq:hAllDecay}, and each coefficient $\sum_q \mu_{j,q}^N$
+is bounded (a finite sum of unit-modulus numbers). Hence
+$\mathrm{LHS}_N \to 0$.
+
+\emph{RHS.} By Corollary~A.4 applied to the BNT-B family, the
+cross-overlaps $\langle V(B_{k_0})|V(B_k)\rangle$ for $k \neq k_0$ decay
+to zero (up to bounded norm factors), so only $k = k_0$ survives
+asymptotically:
+\begin{align}
+    \mathrm{RHS}_N
+    = \lambda_N \left(\sum_q \nu_{k_0,q}^N\right)
+    \langle V^{(N)}(B_{k_0}) \mid V^{(N)}(B_{k_0}) \rangle + o(1).
+\end{align}
+The self-overlap converges to a finite positive limit $\rho_{B_{k_0}} >
+    0$; $\lambda_N$ is bounded above and below (both MPV norms converge to
+finite positive limits); and Lemma~\ref{lem:vandermonde-non-decay}
+ensures $\limsup_N |\sum_q \nu_{k_0,q}^N| > 0$. Therefore
+$\limsup_N |\mathrm{RHS}_N| > 0$, contradicting
+$\mathrm{LHS}_N \to 0$.\hfill$\square$
+
+\paragraph{Where the paper's argument breaks under our restriction.}
+Under \leanid{IsCanonicalFormBNT}, the multiplicity $r_{B,k_0} = 1$
+collapses $\sum_q \nu_{k_0,q}^N$ to the single power
+$\nu_{k_0}^N = \mu_{B,k_0}^N$. The strict-modulus axiom forces
+$|\mu_{B,k_0}| < 1$ for every $k_0 > 0$, so this coefficient decays
+geometrically. The RHS then satisfies $|\mathrm{RHS}_N| \to 0$ as well,
+and the contradiction evaporates: both sides decay, and the paper's
+argument fails to produce a non-decaying partner for non-leading
+$B_{k_0}$. For $k_0 = 0$ we have $|\mu_{B,0}| = 1$ by
+\leanid{mu\_dom\_norm\_one}, and the argument transfers cleanly.
+
+\textbf{REVIEWER NOTE:} A natural rescue is to project against
+$|V^{(N)}(B_{k_0})\rangle$ itself and normalize by $\mu_{B,k_0}^N$,
+as suggested by analysis memo~\S6 and audit~Route~(a)
+(\path{docs/audits/2026-05-13_cpsv16_ft_paper_vs_code_structural_map.md}~\S5).
+However, under \leanid{mu\_strict\_anti}, dividing by $\mu_{B,k_0}^N$
+amplifies the lower-$k$ $B$-side contributions
+($|\mu_{B,k}/\mu_{B,k_0}| > 1$ for $k < k_0$), so the diagonal-collapse
+that works for $k_0 = 0$ does not transfer to non-leading $k_0$. The
+discharge-plan memo~\S5.2--5.3 concludes that Route~(a) is
+mathematically inadequate in the restricted surface for $k_0 \neq 0$,
+making Plan~A (Section~\ref{sec:step1-prime}) the preferred route.
+
+\paragraph{Lean realizations.}
+\begin{itemize}
+    \item Leading-block case: \emph{proved} as
+          \leanid{MPSTensor.dominant\_projection\_contradictions\_of\_eventuallyNonzeroProportionalMPV2\_CFBNT}
+          in \path{Full/ProportionalDominant.lean:850}.
+    \item General $k_0$: \emph{open}, sorries at
+          \path{Full/NondecayingOverlap.lean:849, 886}
+          (\leanid{fixed\_right\_all\_overlaps\_decay\_false\_*} and
+          \leanid{fixed\_left\_*}).
+          \gap{Discharge via Plan~A (Section~\ref{sec:step1-prime}).}
+\end{itemize}
+
+\subsection{Step 1' --- Plan A workaround for our restricted CF}
+\label{sec:step1-prime}
+
+\paragraph{Strategy.}
+Mirror the equal-MPV proof
+\leanid{exists\_nondecaying\_overlap\_of\_sameMPV2\_CFBNT}
+(\path{Full/NondecayingOverlap.lean:82}): handle the leading block via
+Step~1 (which works for $k_0 = 0$), extract an exact phase relation via
+Corollary~A.3, strip the matched leading pair from the proportionality,
+and recurse on $r_A + r_B$.
+
+\paragraph{The stripping step needs an exact identity.}
+Step~1 (leading) plus uniqueness gives the dominant phase relation
+\begin{align}
+    |V^{(N)}(B_0)\rangle = \zeta^N\,|V^{(N)}(A_0)\rangle
+    \qquad \forall N
+    \label{eq:dominant-phase-relation}
+\end{align}
+for a unit-modulus $\zeta$. Under
+\leanid{EventuallyNonzeroProportionalMPV2}, there is a scalar sequence
+$c_N \neq 0$ such that, cofinitely in $N$,
+\begin{align}
+    \sum_{j=0}^{r_A-1} \mu_{A,j}^N\,|V^{(N)}(A_j)\rangle
+    = c_N \sum_{k=0}^{r_B-1} \mu_{B,k}^N\,|V^{(N)}(B_k)\rangle.
+    \label{eq:proportional-restricted}
+\end{align}
+Substituting \eqref{eq:dominant-phase-relation} and rearranging,
+\begin{align}
+    (\mu_{A,0}^N - c_N\,\mu_{B,0}^N\,\zeta^N) |V^{(N)}(A_0)\rangle
+                                                           {} + {} \sum_{j=1}^{r_A-1} \mu_{A,j}^N\, |V^{(N)}(A_j)\rangle
+    = c_N\,\sum_{k=1}^{r_B-1} \mu_{B,k}^N\,|V^{(N)}(B_k)\rangle.
+    \label{eq:rearranged}
+\end{align}
+To strip the leading pair and obtain a clean tail identity, we need the
+\emph{exact} eventual coefficient identity
+\begin{align}
+    \mu_{A,0}^N = c_N\,\mu_{B,0}^N\,\zeta^N
+    \qquad \text{for all $N$ in a cofinite set}.
+    \label{eq:exact-leading-coefficient}
+\end{align}
+The currently available
+\leanid{exists\_dominant\_adjusted\_scalar\_tendsto\_norm\_one\_*}
+(\path{Full/ProportionalDominant.lean:536}) only gives norm-convergence
+to $1$ of $c_N\,(\mu_{B,0}\zeta/\mu_{A,0})^N$; the equal-MPV upgrade
+trick \leanid{eq\_one\_of\_pow\_tendsto\_nhds\_one} requires $c_N
+    \equiv 1$ and does not apply directly. The substeps below address this
+gap.
+
+\paragraph{Substep 1 --- Non-decaying partner for $A_0$.}
+By the symmetric form of Step~1 applied to the leading $A$-block,
+there exists $k_0$ with $\langle V^{(N)}(A_0) \mid V^{(N)}(B_{k_0})
+    \rangle \not\to 0$.
+\gap{Confirm the left-projection conjunct of
+    \leanid{dominant\_projection\_contradictions\_*}; if absent, expose as
+    a \texttt{\_left} companion. $\sim 20$ lines.}
+
+\paragraph{Substep 2 --- Uniqueness: $A_0$'s partner is $B_0$.}
+Suppose $\langle V(A_0)|V(B_{k_0})\rangle \not\to 0$ with $k_0 > 0$.
+Lemma~A.2 + Corollary~A.3 give a unitary $X$ with $B_{k_0}^i = \zeta_0
+    X A_0^i X^{-1}$, whence $\|\mu_{B,k_0}\| = \|\mu_{A,0}\| = 1$ (unitary
+conjugation preserves the transfer-operator spectrum). But
+\leanid{mu\_strict\_anti} forces $\|\mu_{B,k_0}\| < 1$ for $k_0 > 0$,
+contradiction. Hence $k_0 = 0$.
+\gap{Recreate the deleted lemma
+    \leanid{leading\_right\_nondecaying\_partner\_eq\_leading\_left\_of\_eventuallyNonzeroProportionalMPV2\_CFBNT}
+    (and its mirror). The statement was correct; only its previous consumer
+    was orphan scaffolding. $\sim 40$ lines.}
+
+\paragraph{Substep 3 --- Off-diagonal cross-overlap decay.}
+For every $k > 0$,
+\begin{align}
+    \langle V^{(N)}(A_0)\mid V^{(N)}(B_k)\rangle
+    \xrightarrow[N\to\infty]{} 0.
+    \label{eq:A0-Bk-decay}
+\end{align}
+By substep~2, $A_0$'s unique non-decaying partner is $B_0$; gauge
+equivalence with any $B_k$ ($k > 0$) would force $\|\mu_{B,k}\| =
+    \|\mu_{A,0}\| = 1$, contradicting strict-modulus. Apply
+\leanid{mpvOverlap\_tendsto\_zero\_of\_not\_gaugePhaseEquiv\_cast\_left}.
+\gap{Statement
+    \leanid{nondominant\_cross\_overlap\_with\_leading\_tendsto\_zero}.
+    Adapts equal-case lines~437--448 of
+    \leanid{exists\_nondecaying\_overlap\_of\_sameMPV2\_CFBNT}. $\sim 30$
+    lines.}
+
+\paragraph{Substep 4 --- Exact coefficient identity (load-bearing).}
+This is the new mathematical content of Plan~A. Write
+\eqref{eq:rearranged} as
+\begin{align}
+    \alpha_0(N)\,|V^{(N)}(A_0)\rangle + \sum_{j=1}^{r_A-1} \alpha_j(N)\,|V^{(N)}(A_j)\rangle = R(N),
+    \label{eq:bnt-A-side}
+\end{align}
+with
+$\alpha_0(N) := \mu_{A,0}^N - c_N\,\mu_{B,0}^N\,\zeta^N$,
+$\alpha_j(N) := \mu_{A,j}^N$ for $j \ge 1$, and
+$R(N) := c_N\,\sum_{k=1}^{r_B-1} \mu_{B,k}^N\,|V^{(N)}(B_k)\rangle$.
+
+\emph{BNT-A LI invocation.} The family $\{|V^{(N)}(A_j)\rangle\}_j$ is
+eventually linearly independent (\leanid{IsBNT.eventually\_li}). The
+asymptotic Gram matrix $G_N = (\langle V(A_j)|V(A_{j'})\rangle)_{j,j'}$
+converges to $\diag(\rho_{A_0}, \ldots, \rho_{A_{r_A-1}})$ with all
+diagonal entries positive (BNT-A pairwise asymptotic orthogonality),
+so $G_N^{-1}$ exists for $N$ large with bounded norm. Projecting
+\eqref{eq:bnt-A-side} onto each $V(A_{j'})$ yields the linear system
+\begin{align}
+    G_N \cdot (\alpha_0(N), \ldots, \alpha_{r_A-1}(N))^T
+    = (\langle V(A_{j'})|R(N)\rangle)_{j'=0}^{r_A-1}.
+\end{align}
+
+\emph{Right-hand side decays.} For the $j' = 0$ component,
+\begin{align}
+    \langle V(A_0)|R(N)\rangle
+    = c_N\,\sum_{k=1}^{r_B-1} \mu_{B,k}^N\,\langle V(A_0)|V(B_k)\rangle.
+\end{align}
+Each cross-overlap $\langle V(A_0)|V(B_k)\rangle \to 0$ by substep~3;
+$|\mu_{B,k}|^N$ is bounded (in fact $\to 0$ for $k > 0$); $c_N$ is
+bounded by the adjusted-scalar norm bound. So $\langle V(A_0)|R(N)
+    \rangle \to 0$. For $j' \ge 1$, the analogous projection involves
+$\langle V(A_{j'})|V(B_k)\rangle$, which decays for every $k$ that is
+not the unique gauge-phase-equivalent partner $B_{k(j')}$ of $A_{j'}$
+(if any); when such a partner exists, the corresponding term equals
+$c_N\,\mu_{B,k(j')}^N\,\zeta_{j'}^N\,\langle V(A_{j'})|V(A_{j'})\rangle$
+which, paired against the diagonal Gram entry, contributes
+controllably.
+
+\emph{Exact-for-large-$N$ upgrade.} Inverting via $G_N^{-1}$ and
+focusing on the $V(A_0)$-coefficient, we obtain $\alpha_0(N) \to 0$.
+This is only an asymptotic statement; the exact-for-large-$N$ upgrade
+requires the additional discrete-structure argument: the deviation
+$\delta_N := c_N\,\mu_{B,0}^N\,\zeta^N / \mu_{A,0}^N - 1$ satisfies
+$\delta_N \|V^{(N)}(A_0)\|^2 = -\mu_{A,0}^{-N} \langle V(A_0)|R(N)
+    \rangle$, and the RHS decays at rate at most $|\mu_{A,r_A-1}|^N$
+(the slowest among $\{|\mu_{B,k}/\mu_{A,0}|\}_{k\ge 1} = \{|\mu_{B,k}|\}_{k\ge 1}$,
+all~$<1$). Combined with the algebraic constraint that $c_N$ is the
+unique proportionality scalar extracted from
+\eqref{eq:proportional-restricted}, $\delta_N$ is constrained to a
+discrete set whose nonzero elements have minimal modulus $\gtrsim
+    |\mu_{A,r_A-1}|^N$. Exponential decay below this floor forces
+$\delta_N = 0$ for $N$ large, yielding
+\eqref{eq:exact-leading-coefficient}.
+
+\textbf{REVIEWER NOTE:} The analysis memo~\S4.2 treats the exact
+identity as a direct consequence of BNT-A LI plus boundedness of $c_N$;
+the discharge-plan memo~\S4.3 identifies three candidate routes
+(discreteness + rate; projection + BNT-A LI; rescale to equal-MPV) and
+flags that BNT-A LI alone gives only asymptotic vanishing, not
+exact-for-large-$N$. The presentation above adopts the discharge-plan
+analysis: BNT-A LI delivers $\alpha_0(N) \to 0$, and the discrete /
+rate argument promotes this to eventual equality. The two memos thus
+agree on the conclusion but differ on the proof skeleton; the Lean
+realization should follow the discharge-plan route to avoid the
+``BNT-LI implies exact-for-large-$N$'' lacuna.
+
+\gap{Statement
+    \leanid{exact\_leading\_coefficient\_eventually\_eq\_of\_eventuallyNonzeroProportionalMPV2\_CFBNT}:
+    $\forall^{\mathrm{cof}} N,\ \mu_{A,0}^N = c_N\,(\mu_{B,0}\zeta)^N$.
+    Estimated $\sim 80$--$120$ lines for the hybrid projection +
+    discrete-structure proof. Pre-requisites: substeps~1--3.}
+
+\paragraph{Substep 5 --- Tail proportionality.}
+Plugging~\eqref{eq:exact-leading-coefficient} into~\eqref{eq:rearranged}
+makes the $V(A_0)$-coefficient vanish, leaving the tail-only identity
+\begin{align}
+    \sum_{j=1}^{r_A-1} \mu_{A,j}^N\,|V^{(N)}(A_j)\rangle
+    = c_N\,\sum_{k=1}^{r_B-1} \mu_{B,k}^N\,|V^{(N)}(B_k)\rangle.
+    \label{eq:tail-proportional}
+\end{align}
+This is exactly
+\leanid{EventuallyNonzeroProportionalMPV2} on the $(r_A-1, r_B-1)$
+tails with the same $c_N$. The packaging is
+\leanid{eventuallyNonzeroProportionalMPV2\_tail\_succ\_of\_total\_and\_selected}
+in \path{Full/ProportionalExpansion.lean:568}.
+\gap{Adapter wiring between substep~4 output and the existing
+    tail-peeling lemma. $\sim 30$ lines.}
+
+\paragraph{Substep 6 --- Tail BNT inheritance.}
+The tail families inherit CFBNT structure (strict-modulus restricts;
+dominant normalization shifts to $\mu_{A,1}, \mu_{B,1}$; cross-overlap
+decay restricts). Provided by
+\leanid{isCanonicalFormBNT\_tail\_succ} and \leanid{*\_succAbove}
+(\path{Full/NondecayingOverlap.lean:636, 675}), used unchanged from
+the equal-MPV proof.
+
+\paragraph{Assembling the recursion.}
+Combine substeps~1--6 with strong induction on $r_A + r_B$. Base case
+($r_B = 1$ or $r_A = 1$): the deleted singleton lemmas at
+\path{Full/FixedBlockSingleton.lean} (retired in PR~\#1639) used
+\leanid{eventually\_linearIndependent\_all\_left\_single\_right\_*}
+directly.
+\gap{Recreate \leanid{*\_finOne\_*} base cases as needed
+    ($\sim 100$ lines total), then write the induction
+    \leanid{exists\_nondecaying\_overlap\_of\_eventuallyNonzeroProportionalMPV2\_CFBNT}
+    ($\sim 150$ lines, transposing
+    \leanid{exists\_nondecaying\_overlap\_of\_sameMPV2\_CFBNT}).}
+
+\subsection{Step 2 --- Corollary~A.3 upgrade}
+\label{sec:step2}
+
+From Step~1 (proportional), each $k$ has some $j_k$ with $\langle
+    V(B_k)|V(A_{j_k})\rangle \not\to 0$. Lemma~A.2 forces
+$|O_{B_k, A_{j_k}}(N)| \to 1$; Corollary~A.3 gives, for every $N$,
+$|V^{(N)}(B_k)\rangle = e^{i\phi_k N}|V^{(N)}(A_{j_k})\rangle$.
+
+\paragraph{Lean realization.}
+\leanid{MPSTensor.exists\_phase\_mpvState\_eq\_smul\_of\_nondecaying\_overlap\_CFBNT}
+(\path{Full/NondecayingPartnerUnique.lean:100}). Reuse without
+modification.
+
+\subsection{Step 3 --- Tensor-level gauge-phase equivalence}
+\label{sec:step3}
+
+The second clause of Lemma~A.2 promotes the MPV phase equality to the
+tensor identity $B_k^i = e^{i\phi_k}\,X_k\,A_{j_k}^i\,X_k^{-1}$.
+
+\paragraph{Lean realization.}
+\leanid{MPSTensor.gaugePhaseEquiv\_of\_nondecaying\_overlap\_CFBNT}
+(\path{Full/NondecayingPartnerUnique.lean:63}). The contrapositive
+\leanid{mpvOverlap\_tendsto\_zero\_of\_not\_gaugePhaseEquiv\_cast\_left}
+is used for the injectivity step. Reuse without modification.
+
+\subsection{Step 4 --- Injectivity of the matching map}
+\label{sec:step4}
+
+If $j_k = j_{k'}$ for $k \neq k'$, then $|V^{(N)}(B_k)\rangle =
+    e^{i(\phi_k - \phi_{k'})N}|V^{(N)}(B_{k'})\rangle$, so $B_k$ and
+$B_{k'}$ are phase-equivalent BNT elements of~$B$; this contradicts
+the BNT minimality \paperref{Proposition~2.7~(ii)}. Hence
+$k \mapsto j_k$ is injective and $g_a \ge g_b$.
+
+\paragraph{Lean realization.}
+The BNT minimality field is
+\leanid{IsCanonicalFormBNT.blocks\_not\_equiv}, with the
+cross-overlap-decay consequence
+\leanid{IsCanonicalFormBNT.cross\_overlap\_tendsto\_zero}. The
+assembled equal-MPV injectivity sub-blocks \leanid{hfA\_inj},
+\leanid{hgB\_inj} inside \leanid{blocks\_match\_of\_sameMPV2\_CFBNT}
+(\path{Full/BlocksMatch.lean:160--264}) are the template.
+\gap{Transpose to \leanid{blocks\_match\_of\_eventuallyNonzeroProportionalMPV2\_CFBNT};
+    $c_N$ drops out in internal $B$-side comparisons. $\sim 100$ lines.}
+
+\subsection{Step 5 --- Symmetric swap}
+\label{sec:step5}
+
+Exchange $A \leftrightarrow B$ (and replace $\lambda_N$ by
+$\lambda_N^{-1}$) and repeat Steps~1--4. Combined with Step~4, this
+gives $g_a = g_b$ and assembles part~(ii) of the theorem. The
+swap is structurally identical to the equal-MPV pair $(fA, gB)$
+constructions at \path{Full/BlocksMatch.lean:135, 269} and is folded
+into the proportional matching lemma of Step~4.
+
+\section{Recovery roadmap}
+\label{sec:roadmap}
+
+The table below aggregates the substeps of Section~\ref{sec:step1-prime}
+and the closing Steps~2--5. Existing-Lean references cite the
+post-PR-\#1639 state. Line counts are upper estimates for the new Lean
+code.
+
+\begin{longtable}{p{1.7cm}|p{3.7cm}|p{3.8cm}|p{4.0cm}|p{1.0cm}}
+    \hline
+    \textbf{Substep}                                     & \textbf{Existing Lean}                                                                                                                   & \textbf{New lemma name} & \textbf{One-line plan} & \textbf{Est. lines} \\
+    \hline\endhead
+    1
+                                                         & \leanid{dominant\_projection\_contradictions\_*} (\path{ProportionalDominant.lean:850})
+                                                         & \leanid{*\_dominant\_left\_*} (if not already a conjunct)
+                                                         & Confirm or factor out the left-side projection contradiction.
+                                                         & 20                                                                                                                                                                                                                \\
+    \hline
+    2
+                                                         & (deleted in PR \#1639)
+                                                         & \leanid{leading\_right\_nondecaying\_partner\_eq\_leading\_left\_of\_eventuallyNonzeroProportionalMPV2\_CFBNT} + mirror
+                                                         & Lemma~A.2 + Corollary~A.3 + \leanid{mu\_strict\_anti} force partner = leading.
+                                                         & 40                                                                                                                                                                                                                \\
+    \hline
+    3
+                                                         & \leanid{mpvOverlap\_tendsto\_zero\_of\_not\_gaugePhaseEquiv\_cast\_left}
+                                                         & \leanid{nondominant\_cross\_overlap\_with\_leading\_tendsto\_zero}
+                                                         & Not-GPE direction of Lemma~A.2 for each $(A_0, B_k)$, $k > 0$.
+                                                         & 30                                                                                                                                                                                                                \\
+    \hline
+    4
+                                                         & \leanid{exists\_dominant\_adjusted\_scalar\_tendsto\_norm\_one\_*} (\path{ProportionalDominant.lean:536}); \leanid{IsBNT.eventually\_li}
+                                                         & \leanid{exact\_leading\_coefficient\_eventually\_eq\_of\_eventuallyNonzeroProportionalMPV2\_CFBNT}
+                                                         & Hybrid: BNT-A LI on \eqref{eq:rearranged} via Gram inversion + discrete-rate upgrade.
+                                                         & 80--120                                                                                                                                                                                                           \\
+    \hline
+    5
+                                                         & \leanid{eventuallyNonzeroProportionalMPV2\_tail\_succ\_of\_total\_and\_selected} (\path{ProportionalExpansion.lean:568})
+                                                         & (adapter only)
+                                                         & Wire substep~4 output into existing tail-peeling lemma.
+                                                         & 30                                                                                                                                                                                                                \\
+    \hline
+    6
+                                                         & \leanid{isCanonicalFormBNT\_tail\_succ}, \leanid{*\_succAbove} (\path{NondecayingOverlap.lean:636, 675})
+                                                         & (none)
+                                                         & Reuse the equal-MPV tail-CFBNT inheritance lemmas.
+                                                         & 0                                                                                                                                                                                                                 \\
+    \hline
+    Step~1 base
+                                                         & (deleted in PR \#1639)
+                                                         & \leanid{*\_finOne\_*} (two sides)
+                                                         & Recreate $r_B = 1$ / $r_A = 1$ base cases using \leanid{eventually\_linearIndependent\_all\_left\_single\_right\_*}.
+                                                         & 100                                                                                                                                                                                                               \\
+    \hline
+    Step~1 induction
+                                                         & \leanid{exists\_nondecaying\_overlap\_of\_sameMPV2\_CFBNT} (\path{NondecayingOverlap.lean:82})
+                                                         & \leanid{exists\_nondecaying\_overlap\_of\_eventuallyNonzeroProportionalMPV2\_CFBNT}
+                                                         & Strong induction on $r_A + r_B$, transposed from equal-MPV.
+                                                         & 150                                                                                                                                                                                                               \\
+    \hline
+    Step~2
+                                                         & \leanid{exists\_phase\_mpvState\_eq\_smul\_of\_nondecaying\_overlap\_CFBNT}
+                                                         & (none)
+                                                         & Reuse.
+                                                         & 0                                                                                                                                                                                                                 \\
+    \hline
+    Step~3
+                                                         & \leanid{gaugePhaseEquiv\_of\_nondecaying\_overlap\_CFBNT}
+                                                         & (none)
+                                                         & Reuse.
+                                                         & 0                                                                                                                                                                                                                 \\
+    \hline
+    Step~4
+                                                         & \leanid{IsCanonicalFormBNT.blocks\_not\_equiv}; \leanid{hfA\_inj}, \leanid{hgB\_inj} template
+                                                         & \leanid{blocks\_match\_of\_eventuallyNonzeroProportionalMPV2\_CFBNT}
+                                                         & Transpose equal-MPV \leanid{blocks\_match\_*} with $c_N$ inserted.
+                                                         & 100                                                                                                                                                                                                               \\
+    \hline
+    Step~5
+                                                         & (symmetric of Step~4)
+                                                         & (folded in)
+                                                         & Symmetric swap inside the matching lemma.
+                                                         & 0                                                                                                                                                                                                                 \\
+    \hline
+    \multicolumn{4}{r|}{\textbf{Total estimate (high):}} & \textbf{570}                                                                                                                                                                                                      \\
+    \multicolumn{4}{r|}{\textbf{Total estimate (low):}}  & \textbf{530}                                                                                                                                                                                                      \\
+    \hline
+\end{longtable}
+
+\paragraph{Gating substep.}
+Substep~4 is the gating mathematical novelty; once discharged, the
+remainder is mechanical transposition from the equal-MPV proof.
+
+\paragraph{Comparison to earlier estimates.}
+The discharge-plan memo~\S7.3 estimated $\sim 200$--$300$ lines for
+Plan~A. The table's $\sim 530$--$570$ range is larger because it
+explicitly includes the recreation of base cases
+(\path{FixedBlockSingleton.lean}), substep~2 partner-uniqueness
+(\path{LeadingPartner.lean}; both deleted in PR~\#1639), and the
+substep~3 cross-decay lemma, which the earlier estimate folded into
+substep~4. The two ranges are consistent if those bookkeeping items
+are counted at the lower end.
+
+\section{References}
+
+\begin{itemize}
+    \item Cirac--P\'erez-Garc\'ia--Schuch--Verstraete, \textit{Matrix
+              Product Density Operators: Renormalization Fixed Points and
+              Boundary Theories}, Ann.~Phys.~\textbf{378} (2017);
+          arXiv:1606.00608v4.
+    \item P\'erez-Garc\'ia--Verstraete--Wolf--Cirac, \textit{Matrix
+              Product State Representations}, Quantum Inf.~Comput.~\textbf{7}
+          (2007); arXiv:quant-ph/0608197.
+    \item CPSV21 (review article), Rev.~Mod.~Phys.~\textbf{93} (2021);
+          arXiv:2011.12127.
+    \item TNLean audit memos
+          \path{docs/audits/2026-05-13_cpsv16_ft_paper_vs_code_structural_map.md},
+          \path{docs/audits/2026-05-13_cpsv16_ft_sorry_discharge_plan.md},
+          \path{docs/audits/2026-05-13_cpsv16_ft_deletion_candidates_and_archaeology.md},
+          \path{blueprint/comments/20260522/cpsv16_fundamental_theorem_analysis.md}.
+\end{itemize}
+
+\end{document}

@@ -4,56 +4,66 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Basic
 import TNLean.Channel.KrausRepresentation
+import TNLean.Channel.KrausFreedom
 import Mathlib.Data.Matrix.Basis
 import Mathlib.Tactic.LinearCombination
 import Mathlib.Algebra.BigOperators.Ring.Finset
 
 /-!
-# Wolf Chapter 2 representation corollaries (Props 2.2–2.4)
+# Wolf Chapter 2 representation corollaries (Propositions 2.2–2.4)
 
 This file formalises the remaining Chapter 2 representation corollaries from
 Wolf's *Quantum Channels & Operations: Guided Tour*:
 
-* **Prop 2.2** — every sesquilinear sandwich `A * X * Bᴴ` decomposes as a
+* **Proposition 2.2** — every sesquilinear sandwich `A * X * Bᴴ` decomposes as a
   signed complex combination of four CP-sandwich terms (polarization
   identity). Any linear map expressible as `∑ᵢ Aᵢ * X * Bᵢᴴ` is therefore
   a complex linear combination of CP maps.
-* **Prop 2.3** — no information without disturbance: any linear map fixing
+* **Proposition 2.3** — no information without disturbance: any linear map fixing
   every rank-one self-outer-product is the identity. In particular, a
   quantum channel that leaves every pure state invariant is the identity.
-* **Prop 2.4** (sufficient direction) — equivalence of ensembles: two
-  pure-state ensembles related by an isometric mixing matrix yield the same
-  density operator, matching the Hughston–Jozsa–Wootters characterization.
-  The converse (necessity) requires Schmidt/purification machinery not yet
-  available in the repository.
+* **Proposition 2.4** — equivalence of ensembles (Hughston–Jozsa–Wootters, Wolf Eq. (2.10)): two
+  pure-state ensembles are related by an isometric mixing matrix iff they
+  induce the same density operator. Both directions are formalised.
 
 ## Main results
 
-* `WolfProps.polarization_sandwich` — Prop 2.2 as a polarization identity.
-* `WolfProps.cp_decomposition_of_sandwich_sum` — Prop 2.2 corollary: every
+* `WolfProps.polarization_sandwich` — Proposition 2.2 as a polarization identity.
+* `WolfProps.cp_decomposition_of_sandwich_sum` — Proposition 2.2 corollary: every
   `∑ᵢ Aᵢ * X * Bᵢᴴ` is a signed ℂ-linear combination of CP maps.
 * `WolfProps.vecMulVec_star_eq_polarization` — polarization of rank-one
   outer products into rank-one self-outer-products.
-* `WolfProps.linearMap_eq_id_of_fixes_rankOne` — Prop 2.3 (linear-algebra
+* `WolfProps.linearMap_eq_id_of_fixes_rankOne` — Proposition 2.3 (linear-algebra
   form): a linear map fixing every `vecMulVec v (star v)` is the identity.
-* `WolfProps.channel_eq_id_of_fixes_pureStates` — Prop 2.3 (channel form):
+* `WolfProps.channel_eq_id_of_fixes_pureStates` — Proposition 2.3 (channel form):
   a quantum channel fixing every pure-state projector is the identity.
-* `WolfProps.pureEnsembleDensity_eq_of_isometric_mixing` — Prop 2.4
+* `WolfProps.pureEnsembleDensity_eq_of_isometric_mixing` — Proposition 2.4
   (sufficient direction): isometric mixing preserves the density operator.
+* `WolfProps.exists_isometric_mixing_of_pureEnsembleDensity_eq` — Proposition 2.4
+  (necessary direction, HJW converse): equal densities force an isometric
+  mixing matrix between the two ensembles.
+* `WolfProps.pureEnsembleDensity_eq_iff_exists_isometric_mixing` — Proposition 2.4
+  stated as an iff.
 
 ## Design notes
 
-The Prop 2.2 polarization is proved at the entry level by reducing to a
+The Proposition 2.2 polarization is proved at the entry level by reducing to a
 scalar polarization identity in `ℂ` (which is closed by
-`linear_combination`). The Prop 2.3 reduction chain exploits the fact that
+`linear_combination`). The Proposition 2.3 reduction chain exploits the fact that
 rank-one outer products span `M_D(ℂ)` over `ℂ`, obtained by specializing
-the rank-one polarization to standard-basis vectors. The Prop 2.4 proof
-is a direct algebraic computation matching the abstract Kraus-freedom
-sufficient-direction lemma `kraus_same_map_of_isometry_combination`.
+the rank-one polarization to standard-basis vectors. The Proposition 2.4
+sufficient direction is a direct algebraic computation matching the
+abstract Kraus-freedom sufficient-direction lemma
+`kraus_same_map_of_isometry_combination`; the HJW converse reduces to
+`kraus_rectangular_freedom'` by embedding each state vector as the `0`-th
+column of a `D × D` matrix (with zeros elsewhere). The density equality
+`ρ_ψ = ρ_φ` then forces the embedded Kraus families to define the same
+CP sandwich `X ↦ X_{0 0} · ρ`, and reading column `0` of the resulting
+rectangular isometry recovers the vector relation `ψᵢ = ∑ⱼ Vᵢⱼ · φⱼ`.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Props 2.2–2.4][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Propositions 2.2–2.4][Wolf2012QChannels]
 -/
 
 open scoped Matrix
@@ -66,7 +76,7 @@ namespace WolfProps
 /-! ### Scalar polarization -/
 
 /-- Scalar polarization identity used entry-wise to prove the sandwich
-polarization (Prop 2.2). For any four complex numbers `α β γ δ`,
+polarization (Proposition 2.2). For any four complex numbers `α β γ δ`,
 
   `4 · α · (star δ) = (α+β)(star γ + star δ) - (α-β)(star γ - star δ)
      + I · (α + I·β)(star γ - I·star δ) - I · (α - I·β)(star γ + I·star δ).`
@@ -83,15 +93,9 @@ private theorem scalar_polarization (α β γ δ : ℂ) :
   have hI : Complex.I * Complex.I = -1 := Complex.I_mul_I
   linear_combination (2 * α * star δ - 2 * β * star γ) * hI
 
-/-- Scalar lemma: `star Complex.I = -Complex.I`. Thin alias around
-`Complex.conj_I` (star on `ℂ` coincides with `conj`) supplied so it can
-be used inside `simp only` calls that operate on `star` syntactically. -/
-private theorem star_I_eq_neg_I : (star Complex.I : ℂ) = -Complex.I :=
-  Complex.conj_I
+/-! ### Sandwich polarization (Proposition 2.2 core identity) -/
 
-/-! ### Sandwich polarization (Prop 2.2 core identity) -/
-
-/-- **Prop 2.2 (Wolf), polarization form**. The sesquilinear sandwich
+/-- **Proposition 2.2 (Wolf), polarization form**. The sesquilinear sandwich
 `A * X * Bᴴ` decomposes as a signed ℂ-linear combination of four
 CP-sandwich terms `K X Kᴴ`:
 
@@ -120,7 +124,8 @@ theorem polarization_sandwich (A B X : Matrix (Fin D) (Fin D) ℂ) :
               star (A b x - Complex.I * B b x)) := by
     intro x i
     have h := scalar_polarization (A a i) (B a i) (A b x) (B b x)
-    simp only [star_add, star_sub, StarMul.star_mul, star_I_eq_neg_I]
+    simp only [star_add, star_sub, StarMul.star_mul,
+      (show (star Complex.I : ℂ) = -Complex.I from Complex.conj_I)]
     linear_combination (X i x) * h
   calc ∑ x : Fin D, ∑ i : Fin D, 4 * (A a i * X i x * star (B b x))
       = ∑ x : Fin D, ∑ i : Fin D,
@@ -134,7 +139,7 @@ theorem polarization_sandwich (A B X : Matrix (Fin D) (Fin D) ℂ) :
           Finset.sum_congr rfl fun _ _ => pw _ _
     _ = _ := by simp only [Finset.sum_sub_distrib, Finset.sum_add_distrib]
 
-/-- **Prop 2.2 (Wolf), CP-decomposition form**. Every map expressible as
+/-- **Proposition 2.2 (Wolf), CP-decomposition form**. Every map expressible as
 `T(X) = ∑ᵢ Aᵢ * X * Bᵢᴴ` has the explicit ℂ-linear CP-decomposition
 
   `4 • T(X) = ∑ᵢ (Aᵢ+Bᵢ) X (Aᵢ+Bᵢ)ᴴ - ∑ᵢ (Aᵢ-Bᵢ) X (Aᵢ-Bᵢ)ᴴ
@@ -155,7 +160,7 @@ theorem cp_decomposition_of_sandwich_sum
   simp only [Finset.smul_sum, ← Finset.sum_sub_distrib, ← Finset.sum_add_distrib]
   exact Finset.sum_congr rfl fun i _ => polarization_sandwich (A i) (B i) X
 
-/-! ### Prop 2.3: no information without disturbance -/
+/-! ### Proposition 2.3: no information without disturbance -/
 
 /-- **Rank-one polarization identity**: every outer product `u · star v`
 is a signed ℂ-linear combination of four rank-one self-outer-products. -/
@@ -172,7 +177,8 @@ theorem vecMulVec_star_eq_polarization (u v : Fin D → ℂ) :
     Matrix.add_apply, Pi.add_apply, Pi.sub_apply, Pi.smul_apply,
     Pi.star_apply, smul_eq_mul]
   have h := scalar_polarization (u a) (v a) (u b) (v b)
-  simp only [star_add, star_sub, StarMul.star_mul, star_I_eq_neg_I]
+  simp only [star_add, star_sub, StarMul.star_mul,
+    (show (star Complex.I : ℂ) = -Complex.I from Complex.conj_I)]
   linear_combination h
 
 /-- Linear maps fixing rank-one self-outer-products also fix generic rank-one
@@ -198,7 +204,7 @@ section Prop23
 
 variable (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
 
-/-- **Prop 2.3 (Wolf), linear-algebra form**: a linear map fixing every
+/-- **Proposition 2.3 (Wolf), linear-algebra form**: a linear map fixing every
 rank-one self-outer-product `vecMulVec v (star v)` is the identity map.
 
 This captures "no information without disturbance" at the algebra level:
@@ -232,7 +238,7 @@ theorem linearMap_eq_id_of_fixes_rankOne
         T_fixes_vecMulVec_star_of_fixes_self (D := D) T hT (Pi.single i (1 : ℂ))
           (Pi.single j (1 : ℂ))]
 
-/-- **Prop 2.3 (Wolf), pure-state form**: any linear map (in particular any
+/-- **Proposition 2.3 (Wolf), pure-state form**: any linear map (in particular any
 quantum channel) leaving every pure-state projector `vecMulVec v (star v)`
 invariant is the identity. This is the standard "no information without
 disturbance" statement in quantum information theory, phrased directly in
@@ -245,7 +251,7 @@ theorem channel_eq_id_of_fixes_pureStates
 
 end Prop23
 
-/-! ### Prop 2.4: equivalence of ensembles (sufficient direction) -/
+/-! ### Proposition 2.4: equivalence of ensembles (sufficient direction) -/
 
 /-- The density operator associated to a pure-state (unnormalized) ensemble
 `{ψᵢ}`: the sum of rank-one projectors `∑ᵢ |ψᵢ⟩⟨ψᵢ|`. The weights `pᵢ`
@@ -259,14 +265,14 @@ noncomputable def pureEnsembleDensity
     Matrix (Fin D) (Fin D) ℂ :=
   ∑ i, Matrix.vecMulVec (ψ i) (star (ψ i))
 
-/-- **Prop 2.4 (Wolf), sufficient direction** (Hughston–Jozsa–Wootters).
+/-- **Proposition 2.4 (Wolf), sufficient direction** (Hughston–Jozsa–Wootters).
 If two pure-state ensembles `{ψᵢ}_{i ∈ ι₁}` and `{φⱼ}_{j ∈ ι₂}` are related
 by an isometric mixing matrix `V : Matrix ι₁ ι₂ ℂ` (that is, `Vᴴ V = 1` and
 `ψᵢ = ∑ⱼ Vᵢⱼ • φⱼ`), then they induce the same density operator.
 
-The converse (necessity) — extracting such an isometry from equal density
-operators — requires Schmidt-decomposition machinery currently absent from
-the repository; see `TNLean/Channel/WolfChapter2Index.lean`. -/
+The converse (necessity) is
+`exists_isometric_mixing_of_pureEnsembleDensity_eq`, and both directions
+are stated as `pureEnsembleDensity_eq_iff_exists_isometric_mixing`. -/
 theorem pureEnsembleDensity_eq_of_isometric_mixing
     {ι₁ ι₂ : Type*} [Fintype ι₁] [Fintype ι₂] [DecidableEq ι₂]
     (ψ : ι₁ → (Fin D → ℂ)) (φ : ι₂ → (Fin D → ℂ))
@@ -314,5 +320,149 @@ theorem pureEnsembleDensity_eq_of_isometric_mixing
           · simp
           · intro j' _ hj; simp [show j' ≠ j from hj]
           · simp
+
+/-- **Proposition 2.4 (Wolf), necessary direction** (Hughston–Jozsa–Wootters
+converse). If two pure-state ensembles `{ψᵢ}_{i ∈ ι₁}` and
+`{φⱼ}_{j ∈ ι₂}` induce the same pure-ensemble density operator and
+`card ι₂ ≤ card ι₁`, then there exists a tall isometric mixing matrix
+`V : Matrix ι₁ ι₂ ℂ` with `Vᴴ V = 1` satisfying
+`ψᵢ = ∑ⱼ Vᵢⱼ • φⱼ`.
+
+The cardinality hypothesis is what makes `V` a tall isometry
+(`Vᴴ V = 1`, i.e. orthonormal columns). The symmetric case
+`card ι₁ ≤ card ι₂` is obtained by swapping the roles of `ψ` and `φ`.
+
+The proof reduces to rectangular Kraus freedom
+`kraus_rectangular_freedom'`. Embed each vector `ψᵢ`, `φⱼ` as the
+`0`-th column of a `D × D` matrix (zeros elsewhere). For any square
+input `X`, the embedded Kraus sandwiches evaluate entry-wise to
+`X_{0 0} • ρ`; the density equality therefore forces the two Kraus
+families to define the same CP map. Rectangular Kraus freedom supplies
+an isometry `V` relating them, and reading off column `0` of
+`Kᵢ = ∑ⱼ Vᵢⱼ • Lⱼ` recovers the vector relation. -/
+theorem exists_isometric_mixing_of_pureEnsembleDensity_eq
+    {ι₁ ι₂ : Type*} [Fintype ι₁] [Fintype ι₂] [DecidableEq ι₂]
+    (ψ : ι₁ → (Fin D → ℂ)) (φ : ι₂ → (Fin D → ℂ))
+    (hρ : pureEnsembleDensity ψ = pureEnsembleDensity φ)
+    (hCard : Fintype.card ι₂ ≤ Fintype.card ι₁) :
+    ∃ V : Matrix ι₁ ι₂ ℂ, Vᴴ * V = 1 ∧
+      ∀ i, ψ i = fun a => ∑ j, V i j * φ j a := by
+  -- Any inhabitant of `Fin D` yields the canonical column-`0` index. Factored
+  -- out once since the same `⟨0, _⟩` witness is needed both when forming the
+  -- CP-sandwich equality and when reading off column `0` of the resulting
+  -- rectangular isometry; bundling the `0 < D` derivation into a single `Fin D`
+  -- auxiliary lemma avoids rebuilding `Nat.pos_of_ne_zero` at each call site.
+  let c₀_of : Fin D → Fin D :=
+    fun a => ⟨0, Nat.pos_of_ne_zero (fun hDeq => (hDeq ▸ a).elim0)⟩
+  -- Embed each vector as the `0`-th column of a `D × D` matrix. Pattern-match
+  -- on the underlying `Nat` of `Fin D` so no `0 < D` hypothesis is needed to
+  -- form the column index, and the match reduces definitionally at `⟨0, _⟩`.
+  let K : ι₁ → Matrix (Fin D) (Fin D) ℂ :=
+    fun i => Matrix.of
+      (fun a c => match c with | ⟨0, _⟩ => ψ i a | ⟨_ + 1, _⟩ => 0)
+  let L : ι₂ → Matrix (Fin D) (Fin D) ℂ :=
+    fun j => Matrix.of
+      (fun a c => match c with | ⟨0, _⟩ => φ j a | ⟨_ + 1, _⟩ => 0)
+  have hK_apply : ∀ i a c,
+      K i a c = match c with | ⟨0, _⟩ => ψ i a | ⟨_ + 1, _⟩ => 0 :=
+    fun _ _ _ => rfl
+  have hL_apply : ∀ j a c,
+      L j a c = match c with | ⟨0, _⟩ => φ j a | ⟨_ + 1, _⟩ => 0 :=
+    fun _ _ _ => rfl
+  -- Auxiliary lemma: collapse a single-column Kraus sandwich `(M * X * Mᴴ)` at
+  -- entry `(a, b)` for any single vector `v` with column-`0` encoding.
+  -- Applied to each summand below for both the `ψ` and `φ` families.
+  have sandwich_entry : ∀ (v : Fin D → ℂ) (M : Matrix (Fin D) (Fin D) ℂ)
+      (hM : ∀ a c, M a c = match c with | ⟨0, _⟩ => v a | ⟨_ + 1, _⟩ => 0)
+      (X : Matrix (Fin D) (Fin D) ℂ) (a b : Fin D) (hD : 0 < D),
+      (M * X * Mᴴ) a b = v a * X ⟨0, hD⟩ ⟨0, hD⟩ * star (v b) := by
+    intro v M hM X a b hD
+    set c₀ : Fin D := ⟨0, hD⟩
+    simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, hM]
+    have inner_c : ∀ d,
+        (∑ c, (match c with | ⟨0, _⟩ => v a | ⟨_ + 1, _⟩ => (0 : ℂ)) * X c d) =
+          v a * X c₀ d := by
+      intro d
+      -- `rw` closes the main equality via its `rfl` finisher: at `c₀ = ⟨0, _⟩`
+      -- the `match` reduces definitionally. Only the two side conditions of
+      -- `Finset.sum_eq_single` remain.
+      rw [Finset.sum_eq_single c₀]
+      · intro c _ hcne
+        obtain ⟨c, hc⟩ := c
+        cases c with
+        | zero => exact absurd rfl hcne
+        | succ _ => simp
+      · intro h; exact absurd (Finset.mem_univ _) h
+    simp_rw [inner_c]
+    rw [Finset.sum_eq_single c₀]
+    · intro d _ hdne
+      obtain ⟨d, hd⟩ := d
+      cases d with
+      | zero => exact absurd rfl hdne
+      | succ _ => simp
+    · intro h; exact absurd (Finset.mem_univ _) h
+  -- The two embedded Kraus families define the same CP sandwich map.
+  have hKraus : ∀ X : Matrix (Fin D) (Fin D) ℂ,
+      ∑ i, K i * X * (K i)ᴴ = ∑ j, L j * X * (L j)ᴴ := by
+    intro X
+    ext a b
+    -- `a : Fin D` produces the column-`0` witness via `c₀_of`.
+    let c₀ : Fin D := c₀_of a
+    -- Compute each side as `X c₀ c₀ * ρ_v a b`, then use `hρ`.
+    have lhs_eq : (∑ i, K i * X * (K i)ᴴ) a b =
+        X c₀ c₀ * (pureEnsembleDensity ψ) a b := by
+      rw [Matrix.sum_apply]
+      have each_i : ∀ i, (K i * X * (K i)ᴴ) a b =
+          ψ i a * X c₀ c₀ * star (ψ i b) :=
+        fun i => sandwich_entry (ψ i) (K i) (hK_apply i) X a b c₀.isLt
+      simp_rw [each_i]
+      simp only [pureEnsembleDensity, Matrix.sum_apply, Matrix.vecMulVec_apply,
+        Pi.star_apply, Finset.mul_sum]
+      refine Finset.sum_congr rfl (fun i _ => ?_)
+      ring
+    have rhs_eq : (∑ j, L j * X * (L j)ᴴ) a b =
+        X c₀ c₀ * (pureEnsembleDensity φ) a b := by
+      rw [Matrix.sum_apply]
+      have each_j : ∀ j, (L j * X * (L j)ᴴ) a b =
+          φ j a * X c₀ c₀ * star (φ j b) :=
+        fun j => sandwich_entry (φ j) (L j) (hL_apply j) X a b c₀.isLt
+      simp_rw [each_j]
+      simp only [pureEnsembleDensity, Matrix.sum_apply, Matrix.vecMulVec_apply,
+        Pi.star_apply, Finset.mul_sum]
+      refine Finset.sum_congr rfl (fun j _ => ?_)
+      ring
+    rw [lhs_eq, rhs_eq, hρ]
+  -- Apply rectangular Kraus freedom to extract the isometry `V`.
+  obtain ⟨V, hV_iso, hV_decomp⟩ := kraus_rectangular_freedom' K L hKraus hCard
+  refine ⟨V, hV_iso, ?_⟩
+  intro i
+  funext a
+  let c₀ : Fin D := c₀_of a
+  -- At `c₀ = ⟨0, _⟩` both match branches reduce definitionally, so
+  -- `K i a c₀ = ψ i a` and `L j a c₀ = φ j a` hold by `rfl`.
+  have hKic₀ : K i a c₀ = ψ i a := rfl
+  have hLjc₀ : ∀ j, L j a c₀ = φ j a := fun _ => rfl
+  -- Read off the `(a, c₀)` entry of `K i = ∑ j, V i j • L j`.
+  have h_entry := congr_fun (congr_fun (hV_decomp i) a) c₀
+  rw [hKic₀] at h_entry
+  simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul, hLjc₀] at h_entry
+  exact h_entry
+
+/-- **Proposition 2.4 (Wolf), Hughston–Jozsa–Wootters equivalence**. Two
+pure-state ensembles `{ψᵢ}_{i ∈ ι₁}` and `{φⱼ}_{j ∈ ι₂}` with
+`card ι₂ ≤ card ι₁` induce the same pure-ensemble density operator iff
+they are related by a tall isometric mixing matrix
+`V : Matrix ι₁ ι₂ ℂ` with `Vᴴ V = 1` and `ψᵢ = ∑ⱼ Vᵢⱼ • φⱼ`. -/
+theorem pureEnsembleDensity_eq_iff_exists_isometric_mixing
+    {ι₁ ι₂ : Type*} [Fintype ι₁] [Fintype ι₂] [DecidableEq ι₂]
+    (ψ : ι₁ → (Fin D → ℂ)) (φ : ι₂ → (Fin D → ℂ))
+    (hCard : Fintype.card ι₂ ≤ Fintype.card ι₁) :
+    pureEnsembleDensity ψ = pureEnsembleDensity φ ↔
+      ∃ V : Matrix ι₁ ι₂ ℂ, Vᴴ * V = 1 ∧
+        ∀ i, ψ i = fun a => ∑ j, V i j * φ j a :=
+  ⟨fun hρ =>
+    exists_isometric_mixing_of_pureEnsembleDensity_eq ψ φ hρ hCard,
+   fun ⟨V, hV, hψ⟩ =>
+    pureEnsembleDensity_eq_of_isometric_mixing ψ φ V hV hψ⟩
 
 end WolfProps

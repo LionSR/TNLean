@@ -1,0 +1,149 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\input{command}
+
+\title{PGWSVC08 String Order: Physical Endpoints versus Virtual Boundary
+  Witnesses}
+\author{}
+\date{2026-06-11}
+
+\begin{document}
+\maketitle
+
+\section{The source statement}
+
+The string-order paper~\cite{PerezGarcia2008StringOrder} defines string
+order for a translationally invariant state $\Psi$ by the existence of a
+local unitary $u \ne \mathbb 1$ and local operators $x, y$ (hermitian
+without loss of generality) acting on the physical sites flanking the
+string, such that
+\begin{align}
+  \lim_{N\to\infty} |S_N(x,y,u,\Psi)| > 0,
+  \qquad
+  S_N(x,y,u,\Psi) := \langle\Psi|\, x \otimes u^{\otimes N} \otimes y\,
+  |\Psi\rangle.
+  \tag{\path{SOP}}
+\end{align}%
+\footnote{Source: \cite[lines~112--122]{PerezGarcia2008StringOrder},
+  local file \path{Papers/0802.0447/StringOrder-v10.tex}.  A footnote of
+  the source (lines~124--127) asserts, by citation to
+  Verstraete--Mart{\'i}n-Delgado--Cirac, Phys.\ Rev.\ Lett.\ 92, 087201,
+  that an ``alternative but equivalent'' definition gives the endpoints
+  access to the virtual levels; the source does not prove this
+  equivalence.}
+Both the unitary and the endpoint operators are existentially
+quantified; the fixed-endpoint string order parameter of the
+Haldane-chain literature is the historical special case.  For a pure
+finitely correlated state the correlator takes the transfer form
+\begin{align}
+  S_N(x,y,u,\Psi_\infty)
+  = \tr\bigl[\Lambda\, \mathcal E_x\, \mathcal E_u^N\, \mathcal E_y
+  (\mathbb 1)\bigr],
+  \tag{\path{SOPMP}}
+\end{align}%
+\footnote{Source: \cite[lines~176--181]{PerezGarcia2008StringOrder}.}
+where $\mathcal E_x, \mathcal E_y$ are the transfer maps twisted by the
+endpoint operators.  The source's Theorem~1 then states: a pure
+finitely correlated state has string order if and only if there exist a
+unitary $\tilde u \ne \mathbb 1$, a matrix $V$, and indices $n, m$ with
+\begin{align}
+  \mathcal E_{\tilde u}(V) = V,
+  \qquad
+  \tr(V \Lambda A_n A_m^\dagger) \ne 0.
+  \tag{\path{Th1}}
+\end{align}%
+\footnote{Source: \cite[lines~270--276]{PerezGarcia2008StringOrder}.
+  The second condition is the realizability of the endpoint by the
+  single-site operator $x = |n\rangle\langle m|$ with
+  $y = x^\dagger \tilde u$, per the reduction at lines~257--268.}
+Immediately afterwards (lines~278--296) the source shows that the second
+condition can be dropped when $x$ and $y$ are products of observables on
+$D^2$ spins: the spans
+$S_m := \operatorname{span}\{A_{n_1}\cdots A_{n_m} A_{m_m}^\dagger
+\cdots A_{m_1}^\dagger\}$ grow strictly until they exhaust the full
+matrix algebra $M_D(\mathbb C)$, so endpoint operators on sufficiently
+many physical sites reach every $D \times D$ matrix.
+
+\section{The formalized physical and virtual forms}
+
+The transfer-form physical correlator is now a formal definition:
+\[
+  S_N(x,y,u)
+  = \tr\bigl[\Lambda\, \mathcal E_x\, \mathcal E_u^N\, \mathcal E_y
+  (\mathbb 1)\bigr].
+\]
+\footnote{\leanid{MPSTensor.physicalStringOrderParam},
+  \path{TNLean/MPS/Symmetry/StringOrderDefs.lean}.}
+The source-style existential predicate is also formalized: there exist a
+unitary $u\ne \mathbb 1$, physical endpoint operators $x,y$, and a
+number $s>0$ such that $|S_N(x,y,u)|\to s$.\footnote{\leanid{MPSTensor.HasPhysicalStringOrder},
+  same file.}
+
+The main theorems presently use a virtual-boundary form.  The boundary
+string-order expression is
+$\tr(\Lambda X\, \mathcal E_u^L(Y))$ with arbitrary
+$X, Y \in M_D(\mathbb C)$,\footnote{\leanid{MPSTensor.stringOrderBoundaryParam},
+  \path{TNLean/MPS/Symmetry/StringOrderDefs.lean}.} and string order is
+the existence of such $X, Y$ together with a constant $c > 0$ bounding
+$\lVert \tr(\Lambda X\, \mathcal E_u^L(Y)) \rVert$ from below at every
+length $L$.\footnote{\leanid{MPSTensor.HasStringOrder}, same file.}  The
+equivalence of string order with local symmetry, and the universality of
+string order for injective on-site-symmetric tensors with canonical
+normalisations, are proved for this virtual
+form.\footnote{\leanid{MPSTensor.stringOrder_iff_localSymmetry},
+  \leanid{MPSTensor.hasStringOrder_of_symmetric_injective},
+  \leanid{MPSTensor.hasStringOrder_iff_of_symmetric_injective},
+  \path{TNLean/MPS/Symmetry/StringOrder.lean}.}
+
+The virtual statement differs from the physical source statement in four ways.
+
+\begin{enumerate}
+  \item \emph{Physical versus virtual endpoints.}  The source
+        quantifies over physical operators $x, y$ of bounded site
+        support; the formal definition quantifies over arbitrary virtual
+        matrices $X, Y$.  A physical endpoint expands to a particular
+        virtual matrix in the transfer picture, and the source's span
+        argument (lines~278--296) provides the converse for injective
+        tensors, but no formal statement connects the two notions.
+  \item \emph{Limit versus uniform bound.}  The source requires a
+        positive limit $\lim_{N\to\infty} |S_N| > 0$; the formal
+        definition requires a lower bound uniform in the length.  A
+        sequence with positive limit can vanish at finitely many small
+        lengths and so fail the uniform bound for that witness pair.
+  \item \emph{Left boundary form.}  The source's left endpoint acts
+        through the adjoint channel, $\mathcal E_x^\dagger(\Lambda)$;
+        the formal expression multiplies, $\Lambda X$.  These have the
+        same expressive range when $\Lambda$ is positive definite, as it
+        is in all theorems concerned, but the formal expression is not
+        the literal transfer form of the source.
+  \item \emph{Fixed versus existential twist.}  The source's ``has
+        string order'' quantifies existentially over the unitary $u$;
+        the formal predicate fixes $u$ as a parameter, in the style of
+        the source's Theorem~2.  The formal version is the finer
+        statement, and the existential form is recoverable from it.
+\end{enumerate}
+
+\section{Verdict}
+
+The virtual-boundary reformulation is mathematically sound, and for the
+injective tensors that all concerned theorems treat, the existential
+physical-endpoint and existential virtual-boundary criteria are
+equivalent by the source's own span argument.  The physical correlator
+and the positive-limit source predicate are now formal definitions, but
+that equivalence is still the part with no formal counterpart: the
+development proves its string-order theorems for the virtual form only.
+Elimination: prove the realizability of virtual boundary matrices by
+physical endpoint operators for injective tensors (a starting point is the
+single-site realization
+\leanid{MPSTensor.physRealize}\footnote{\path{TNLean/MPS/Chain/VirtualInsertion.lean},
+  currently not imported by the string-order files.}), and derive the
+source-faithful Theorem~1; tracked in \ghissue{2660}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

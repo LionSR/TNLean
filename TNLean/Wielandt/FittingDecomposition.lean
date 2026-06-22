@@ -58,7 +58,9 @@ theorem isNilpotent_restrict_maxGenEigenspace_zero
   have h := End.isNilpotent_restrict_maxGenEigenspace_sub_algebraMap f 0
   simp only [map_zero, sub_zero] at h
   obtain ⟨k, hk⟩ := h
-  exact ⟨k, by ext ⟨v, hv⟩; exact congr_arg Subtype.val (LinearMap.congr_fun hk ⟨v, hv⟩)⟩
+  exact ⟨k, by
+    ext ⟨v, hv⟩
+    exact congr_arg Subtype.val (LinearMap.congr_fun hk ⟨v, hv⟩)⟩
 
 theorem isUnit_restrict_maxGenEigenspace_of_ne_zero
     {K : Type*} {V : Type*}
@@ -78,13 +80,15 @@ theorem isUnit_restrict_maxGenEigenspace_of_ne_zero
     exact W.sub_mem (hf_maps hx) (ha_maps hx)
   have hnil : IsNilpotent (N.restrict hN_maps) := by
     obtain ⟨k, hk⟩ := End.isNilpotent_restrict_maxGenEigenspace_sub_algebraMap f μ
-    exact ⟨k, by ext ⟨v, hv⟩; exact congr_arg Subtype.val (LinearMap.congr_fun hk ⟨v, hv⟩)⟩
+    exact ⟨k, by
+      ext ⟨v, hv⟩
+      exact congr_arg Subtype.val (LinearMap.congr_fun hk ⟨v, hv⟩)⟩
   have ha_apply : ∀ (v : V), a v = μ • v := fun v => by
     change (algebraMap K (End K V) μ) v = μ • v
     rw [Module.algebraMap_end_eq_smul_id, LinearMap.smul_apply, LinearMap.id_apply]
   have ha_restrict_eq : a.restrict ha_maps = algebraMap K (End K ↥W) μ := by
     ext ⟨v, hv⟩
-    simp only [ha_apply, LinearMap.restrict_coe_apply,
+    simp only [ha_apply, LinearMap.coe_restrict_apply,
       Module.algebraMap_end_eq_smul_id, LinearMap.smul_apply, LinearMap.id_apply,
       SetLike.val_smul]
   have ha_unit : IsUnit (a.restrict ha_maps) := by
@@ -112,21 +116,6 @@ theorem nilpotent_pow_eq_zero_of_finrank
 
 /-! ### Part 4–5: Eigenspace decomposition and structure -/
 
-theorem iSup_maxGenEigenspace_eq_top
-    {K : Type*} {V : Type*}
-    [Field K] [AddCommGroup V] [Module K V]
-    [IsAlgClosed K] [FiniteDimensional K V]
-    (f : End K V) :
-    ⨆ μ, f.maxGenEigenspace μ = ⊤ :=
-  End.iSup_maxGenEigenspace_eq_top f
-
-theorem independent_maxGenEigenspace
-    {K : Type*} {V : Type*}
-    [Field K] [AddCommGroup V] [Module K V]
-    (f : End K V) :
-    iSupIndep f.maxGenEigenspace :=
-  End.independent_maxGenEigenspace f
-
 structure FittingDecomposition
     {K : Type*} {V : Type*}
     [Field K] [AddCommGroup V] [Module K V]
@@ -145,8 +134,8 @@ theorem fittingDecomposition
     (f : End K V) : FittingDecomposition f where
   hNilpNilpotent := isNilpotent_restrict_maxGenEigenspace_zero f
   hInvertible μ hμ := isUnit_restrict_maxGenEigenspace_of_ne_zero f μ hμ
-  hSpan := iSup_maxGenEigenspace_eq_top f
-  hIndep := independent_maxGenEigenspace f
+  hSpan := End.iSup_maxGenEigenspace_eq_top f
+  hIndep := End.independent_maxGenEigenspace f
 
 theorem nilpotent_pow_eq_zero_on_maxGenEigenspace_zero
     {K : Type*} {V : Type*}
@@ -201,22 +190,6 @@ theorem ker_pow_nilpIndex_eq_ker_pow_finrank
   rw [← maxGenEigenspace_zero_eq_ker_pow_nilpIndex f,
       End.maxGenEigenspace_eq_genEigenspace_finrank f 0, End.genEigenspace_zero_nat]
 
-/-- Kernel monotonicity: if `n ≤ m`, then `ker(f^n) ≤ ker(f^m)`. -/
-private theorem ker_pow_mono
-    {K : Type*} {V : Type*}
-    [CommRing K] [AddCommGroup V] [Module K V]
-    (f : End K V) {n m : ℕ} (h : n ≤ m) :
-    LinearMap.ker (f ^ n) ≤ LinearMap.ker (f ^ m) := by
-  intro v hv
-  rw [LinearMap.mem_ker] at hv ⊢
-  obtain ⟨d, rfl⟩ := Nat.exists_eq_add_of_le h
-  -- f^(n+d) v = (f^n * f^d) v = f^n (f^d v)... wrong direction
-  -- We need: f^(n+d) v = f^d (f^n v) = f^d 0 = 0
-  -- Use: n+d = d+n, then f^(d+n) = f^d * f^n, so f^(d+n) v = f^d (f^n v)
-  rw [show n + d = d + n from by omega, pow_add]
-  change (f ^ d) ((f ^ n) v) = 0
-  rw [hv, map_zero]
-
 /-- Kernel stabilization at nilpIndex: `ker(f^k) = ker(f^(nilpIndex f))` for `k ≥ nilpIndex f`. -/
 theorem ker_pow_eq_of_nilpIndex_le
     {K : Type*} {V : Type*}
@@ -230,7 +203,9 @@ theorem ker_pow_eq_of_nilpIndex_le
     rw [End.mem_maxGenEigenspace]
     exact ⟨k, by simp only [zero_smul, sub_zero]; exact LinearMap.mem_ker.mp hv⟩
   · -- ker(f^(nilpIndex f)) ≤ ker(f^k): kernel monotonicity
-    exact ker_pow_mono f hk
+    obtain ⟨d, rfl⟩ := Nat.exists_eq_add_of_le hk
+    rw [show nilpIndex f + d = d + nilpIndex f from by omega, pow_add]
+    exact LinearMap.ker_le_ker_comp (f ^ nilpIndex f) (f ^ d)
 
 /-- Range anti-monotonicity: if `n ≤ m`, then `range(f^m) ≤ range(f^n)`. -/
 theorem range_pow_antitone
@@ -338,7 +313,8 @@ theorem nilpIndex_le_finrank_maxGenEigenspace_zero
   -- Step 3: ker(f^s) = ker(f^(s+1))
   have hstab : LinearMap.ker (f ^ s) = LinearMap.ker (f ^ s.succ) := by
     apply le_antisymm
-    · exact ker_pow_mono f (Nat.le_succ s)
+    · rw [show s.succ = 1 + s from by omega, pow_add]
+      exact LinearMap.ker_le_ker_comp (f ^ s) (f ^ 1)
     · calc LinearMap.ker (f ^ s.succ)
           ≤ f.maxGenEigenspace 0 := by
             rw [End.maxGenEigenspace_eq_genEigenspace_finrank f 0, End.genEigenspace_zero_nat]

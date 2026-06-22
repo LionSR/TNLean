@@ -7,18 +7,18 @@ import TNLean.Channel.Semigroup.ReducibleQDS
 /-!
 # Wolf Corollary 7.2 — Sufficient conditions for non-reducibility
 
-This module records three standard sufficient-condition patterns from
-Wolf Corollary 7.2, each funneled through the already formalized bridge
+This module states three standard sufficient-condition patterns from
+Wolf Corollary 7.2, each using the already formalized implication
 
 `¬ HasBlockUpperTriangularLindblad L → ¬ IsReducibleQDS L`.
 
 The conversion from each algebraic hypothesis to
-`¬ HasBlockUpperTriangularLindblad` is recorded as helper theorems
-(`*_implies_no_blockUpperTriangular`) so downstream files can use uniform
+`¬ HasBlockUpperTriangularLindblad` is stated as auxiliary lemmas
+(`*_implies_no_blockUpperTriangular`) so later files can use uniform
 non-reducibility consequences.
 -/
 
-open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace TNMatrixCFC
+open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace
 open Matrix Finset Module
 
 noncomputable section
@@ -49,7 +49,7 @@ def HasLindbladSpanTrivialCommutant (F : LindbladForm D) : Prop :=
 
 /-- The minimal number of Lindblad operators across all GKSL representations
 of `L`.  This equals the rank of the Kossakowski matrix in the
-orthonormal-basis representation (Wolf §7.1). -/
+orthonormal-basis representation (Wolf Section 7.1). -/
 def kossakowskiRank (L : Mat →ₗ[ℂ] Mat) : ℕ :=
   sInf {n : ℕ | ∃ F : LindbladForm D, F.toLinearMap = L ∧ F.r = n}
 
@@ -82,14 +82,8 @@ private theorem not_isNontrivialProjection_of_eq_smul_one
     have hc : c * c = c := by
       have h00 := congrFun (congrFun hIdem 0) 0
       simpa using h00
-    have hc01 : c = 0 ∨ c = 1 := by
-      have hfac : c * (c - 1) = 0 := by
-        calc
-          c * (c - 1) = c * c - c := by ring
-          _ = 0 := by rw [hc, sub_self]
-      rcases mul_eq_zero.mp hfac with hc0 | hc1
-      · exact Or.inl hc0
-      · exact Or.inr (sub_eq_zero.mp hc1)
+    have hc01 : c = 0 ∨ c = 1 :=
+      IsIdempotentElem.iff_eq_zero_or_one.mp hc
     rcases hc01 with hc0 | hc1
     · exact hP_nt.2.1 (by rw [hP, hc0, zero_smul])
     · exact hP_nt.2.2 (by rw [hP, hc1, one_smul])
@@ -98,7 +92,7 @@ private theorem lower_left_block_vanishes_on_adjoin
     {P : Mat} (hP : IsOrthogonalProjection P) (S : Set Mat)
     (hS : ∀ A : Mat, A ∈ S → (1 - P) * A * P = 0) :
     ∀ A : Mat, A ∈ Algebra.adjoin ℂ S → (1 - P) * A * P = 0 := by
-  have hQP := orthogonalProjection_complement_mul hP
+  have hQP := IsIdempotentElem.one_sub_mul_self hP.2
   have hblock_mul :
       ∀ A B : Mat,
         (1 - P) * A * P = 0 →
@@ -196,8 +190,8 @@ theorem hermitian_span_trivial_commutant_implies_no_blockUpperTriangular
     abel
   have hcommP : ∀ j : Fin F.r, P * F.L j = F.L j * P := by
     intro j
-    have hLj_mem : F.L j ∈ lindbladSpan F := by
-      exact Submodule.subset_span ⟨j, rfl⟩
+    have hLj_mem : F.L j ∈ lindbladSpan F :=
+      Submodule.subset_span ⟨j, rfl⟩
     have hLj_star_mem : (F.L j)ᴴ ∈ lindbladSpan F := hHerm _ hLj_mem
     have hPAQ : P * F.L j * (1 - P) = 0 := by
       have hct := congrArg Matrix.conjTranspose (hblock_span _ hLj_star_mem)
@@ -283,8 +277,8 @@ private theorem exists_lindblad_form_rank_le_finrank
     simp only [Submodule.coe_sum, Submodule.coe_smul] at hval
     exact hval
   -- Gram matrix C = α†α is PSD
-  have hC_psd : (αᴴ * α).PosSemidef := by
-    exact Matrix.posSemidef_conjTranspose_mul_self α
+  have hC_psd : (αᴴ * α).PosSemidef :=
+    Matrix.posSemidef_conjTranspose_mul_self α
   -- Factor C = B†B where B = √C
   set B := CFC.sqrt (αᴴ * α)
   have hC_factor : (αᴴ * α) = Bᴴ * B := by
@@ -649,7 +643,8 @@ private theorem finrank_traceless_blockUT_add_D_le
   have hφ_apply : ∀ M : Mat, φ M = (1 - P) * (M * P) := by
     intro M; rfl
   have hφ_one : φ (1 : Mat) = 0 := by
-    rw [hφ_apply, Matrix.one_mul]; exact orthogonalProjection_complement_mul hP.1
+    rw [hφ_apply, Matrix.one_mul]
+    exact IsIdempotentElem.one_sub_mul_self hP.1.2
   have h_sup : K_φ ⊔ K_τ = ⊤ := by
     simpa [φ, τ, K_φ, K_τ] using
       ker_sup_traceless_eq_top_of_one_mem_ker φ hφ_one hD_ne
@@ -712,7 +707,7 @@ private theorem exists_traceless_blockUT_lindblad_form
   obtain ⟨c, hc⟩ := exists_traceless_kraus_shift G.L
   -- Shifted operators L'_j = G.L j + c_j · I
   set L' : Fin G.r → Mat := fun j => G.L j + c j • (1 : Mat) with hL'_def
-  -- Shifted Hamiltonian: H' = G.H - (I/2)·(Σ c̄ⱼ Lⱼ - Σ cⱼ Lⱼ†)
+  -- Shifted Hamiltonian: H' = G.H - (I/2)·(Σ c'ⱼ Lⱼ - Σ cⱼ Lⱼ†)
   set Δ : Mat := ∑ j : Fin G.r,
     (starRingEnd ℂ (c j) • G.L j - c j • (G.L j)ᴴ) with hΔ_def
   set H' : Mat := G.H - (Complex.I / 2) • Δ with hH'_def
@@ -756,7 +751,7 @@ private theorem exists_traceless_blockUT_lindblad_form
         have : Complex.I * (Complex.I / 2) = -(1/2 : ℂ) := by
           field_simp; rw [Complex.I_sq]
         rw [this, neg_smul, sub_neg_eq_add]
-      -- Step 2: ½Σ L'†L' = ½Σ G.L†G.L + ½Σ c̄ G.L + ½Σ c G.L† + ½Σ|c|² I
+      -- Step 2: ½Σ L'†L' = ½Σ G.L†G.L + ½Σ c' G.L + ½Σ c G.L† + ½Σ|c|² I
       have h_adj : (1/2 : ℂ) • ∑ j : Fin G.r, (L' j)ᴴ * L' j =
           (1/2 : ℂ) • ∑ j, (G.L j)ᴴ * G.L j +
           (1/2 : ℂ) • ∑ j, starRingEnd ℂ (c j) • G.L j +
@@ -773,7 +768,7 @@ private theorem exists_traceless_blockUT_lindblad_form
       rw [h_iH', h_adj, hΔ_def, Finset.smul_sum]
       simp_rw [smul_sub]
       simp_rw [Finset.sum_sub_distrib]
-      -- The key cancellation: ½Σc̄L - ½ΣcL† + ½Σc̄L + ½ΣcL† = Σc̄L
+      -- The key cancellation: ½Σc'L - ½ΣcL† + ½Σc'L + ½ΣcL† = Σc'L
       have hcancel :
           (∑ x, (1 / 2 : ℂ) • starRingEnd ℂ (c x) • G.L x -
            ∑ x, (1 / 2 : ℂ) • c x • (G.L x)ᴴ) +
@@ -781,7 +776,7 @@ private theorem exists_traceless_blockUT_lindblad_form
            (1 / 2 : ℂ) • ∑ j, c j • (G.L j)ᴴ) =
           ∑ i, starRingEnd ℂ (c i) • G.L i := by
         rw [← Finset.smul_sum, ← Finset.smul_sum]
-        -- ½Σc̄L - ½ΣcL† + ½Σc̄L + ½ΣcL† = Σc̄L
+        -- ½Σc'L - ½ΣcL† + ½Σc'L + ½ΣcL† = Σc'L
         module
       -- Now assemble
       have : κ_shift = κ_old +
@@ -789,17 +784,17 @@ private theorem exists_traceless_blockUT_lindblad_form
           (1 / 2 : ℂ) • ∑ i, (starRingEnd ℂ (c i) * c i) • (1 : Mat) := rfl
       rw [this]; clear this
       -- Group the sums on the LHS
-      -- LHS = iG.H + (½Σc̄L - ½ΣcL†) + ½ΣG.L†G.L + ½Σc̄L + ½ΣcL† + ½Σ|c|²I
-      -- = iG.H + ½ΣG.L†G.L + (½Σc̄L - ½ΣcL† + ½Σc̄L + ½ΣcL†) + ½Σ|c|²I
-      -- = iG.H + ½ΣG.L†G.L + Σc̄L + ½Σ|c|²I
-      -- = κ_old + Σc̄L + ½Σ|c|²I
+      -- LHS = iG.H + (½Σc'L - ½ΣcL†) + ½ΣG.L†G.L + ½Σc'L + ½ΣcL† + ½Σ|c|²I
+      -- = iG.H + ½ΣG.L†G.L + (½Σc'L - ½ΣcL† + ½Σc'L + ½ΣcL†) + ½Σ|c|²I
+      -- = iG.H + ½ΣG.L†G.L + Σc'L + ½Σ|c|²I
+      -- = κ_old + Σc'L + ½Σ|c|²I
       have hκ_old_eq : κ_old = Complex.I • G.H +
           (1 / 2 : ℂ) • ∑ j, (G.L j)ᴴ * G.L j := rfl
       rw [hκ_old_eq]
       -- Use hcancel to rewrite
-      -- LHS: iG.H + (½Σc̄L - ½ΣcL†) + (½ΣG.L†G.L + ½Σc̄L + ½ΣcL† + ½Σ|c|²I)
-      -- Group (½Σc̄L - ½ΣcL†) + (½Σc̄L + ½ΣcL†) = Σc̄L using hcancel
-      -- Then LHS = iG.H + ½ΣG.L†G.L + Σc̄L + ½Σ|c|²I = RHS
+      -- LHS: iG.H + (½Σc'L - ½ΣcL†) + (½ΣG.L†G.L + ½Σc'L + ½ΣcL† + ½Σ|c|²I)
+      -- Group (½Σc'L - ½ΣcL†) + (½Σc'L + ½ΣcL†) = Σc'L using hcancel
+      -- Then LHS = iG.H + ½ΣG.L†G.L + Σc'L + ½Σ|c|²I = RHS
       -- Set abbreviations for readability
       set A := Complex.I • G.H
       set B := ∑ x, (1 / 2 : ℂ) • starRingEnd ℂ (c x) • G.L x -
@@ -831,7 +826,7 @@ private theorem exists_traceless_blockUT_lindblad_form
       simp only [LinearMap.mulLeft_apply, LinearMap.mulRight_apply]
       rw [hL'_def]
       simp only [Matrix.mul_add, Matrix.add_mul, smul_mul_assoc, mul_smul_comm]
-      rw [Matrix.one_mul, orthogonalProjection_complement_mul hP.1, smul_zero, add_zero]
+      rw [Matrix.one_mul, IsIdempotentElem.one_sub_mul_self hP.1.2, smul_zero, add_zero]
       rw [← Matrix.mul_assoc]
       exact hBlock j
     · -- Traceless
@@ -839,7 +834,7 @@ private theorem exists_traceless_blockUT_lindblad_form
       exact hc j
 
 /-- Condition (3): Kossakowski rank `> D * D` forbids block-upper-triangular
-Lindblad decompositions (Wolf Cor. 7.2(3)).
+Lindblad decompositions (Wolf Corollary 7.2(3)).
 
 The hypothesis is stated using addition (`rank + D ≥ D ^ 2 + 1`) to avoid
 natural-number subtraction issues; this is equivalent to `rank > D * D`. -/

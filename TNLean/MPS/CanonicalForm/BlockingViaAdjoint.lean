@@ -18,9 +18,9 @@ namespace MPSTensor
 open Matrix Finset Complex
 
 /-!
-## Helper lemmas: adjoint eigenvalues and primitivity
+## Auxiliary lemmas: adjoint eigenvalues and primitivity
 
-We need a small bridge between the peripheral spectrum of a linear map and that of its adjoint.
+We need a small connection between the peripheral spectrum of a linear map and that of its adjoint.
 For finite-dimensional complex inner product spaces, eigenvalues of `E.adjoint` are complex
 conjugates of eigenvalues of `E`.
 
@@ -103,12 +103,12 @@ theorem Module.End.hasEigenvalue_adjoint_iff (E : V →ₗ[ℂ] V) (μ : ℂ) :
     -- We rewrite it symmetrically below.)
     calc
       E.adjoint.charpoly
-          = (LinearMap.toMatrix v.toBasis v.toBasis E.adjoint).charpoly := by
-              exact hEadj.symm
+          = (LinearMap.toMatrix v.toBasis v.toBasis E.adjoint).charpoly :=
+              hEadj.symm
       _ = ((LinearMap.toMatrix v.toBasis v.toBasis E)ᴴ).charpoly := by
             rw [hMatAdj]
-      _ = (LinearMap.toMatrix v.toBasis v.toBasis E).charpoly.map (starRingEnd ℂ) := by
-            exact Matrix.charpoly_conjTranspose (M := LinearMap.toMatrix v.toBasis v.toBasis E)
+      _ = (LinearMap.toMatrix v.toBasis v.toBasis E).charpoly.map (starRingEnd ℂ) :=
+            Matrix.charpoly_conjTranspose (M := LinearMap.toMatrix v.toBasis v.toBasis E)
       _ = E.charpoly.map (starRingEnd ℂ) := by
             rw [hE]
   -- Now compare roots using `Polynomial.isRoot_map_iff`.
@@ -209,27 +209,14 @@ variable {d D : ℕ}
 
 noncomputable section
 
-/-- Positive-definiteness of the identity matrix, used to make the Frobenius inner product
-nondegenerate. -/
-private lemma frobenius_posDef_one :
-    (1 : Matrix (Fin D) (Fin D) ℂ).PosDef := by
-  classical
-  simpa only using (Matrix.PosDef.one (n := Fin D) (R := ℂ))
-
 -- Frobenius norm / inner product from the weight matrix `1`.
 local instance : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
-  Matrix.toMatrixNormedAddCommGroup (n := Fin D) (𝕜 := ℂ) 1 frobenius_posDef_one
+  Matrix.toMatrixNormedAddCommGroup (n := Fin D) (𝕜 := ℂ) 1
+    (Matrix.PosDef.one (n := Fin D) (R := ℂ))
 
 local instance : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
-  Matrix.toMatrixInnerProductSpace (n := Fin D) (𝕜 := ℂ) 1 frobenius_posDef_one.posSemidef
-
-/-- Under the Frobenius inner product induced by the weight matrix `1`, we have
-`⟪X, Y⟫ = trace (Y * Xᴴ)`. -/
-private lemma inner_eq_trace (X Y : Matrix (Fin D) (Fin D) ℂ) :
-    inner ℂ X Y = Matrix.trace (Y * Xᴴ) := by
-  -- `rfl` gives `trace (Y * 1 * Xᴴ)`.
-  simpa only [mul_one] using
-    (show inner ℂ X Y = Matrix.trace (Y * (1 : Matrix (Fin D) (Fin D) ℂ) * Xᴴ) from rfl)
+  Matrix.toMatrixInnerProductSpace (n := Fin D) (𝕜 := ℂ) 1
+    (Matrix.PosDef.one (n := Fin D) (R := ℂ)).posSemidef
 
 /-- The adjoint of `transferMap A` (Frobenius inner product) is the transfer map of the
 conjugate-transposed Kraus family. -/
@@ -242,8 +229,11 @@ lemma transferMap_conjTranspose_eq_adjoint (A : MPSTensor d D) :
       (B := transferMap (d := d) (D := D) A)).2 ?_
   intro X Y
   -- Reduce to a trace identity using the definition of the Frobenius inner product.
-  -- `simp only [inner_eq_trace]` rewrites ⟪·,·⟫ to Matrix.trace without unfolding transferMap.
-  simp only [inner_eq_trace]
+  change Matrix.trace (Y * (1 : Matrix (Fin D) (Fin D) ℂ) *
+      (transferMap (d := d) (D := D) K X)ᴴ) =
+    Matrix.trace (transferMap (d := d) (D := D) A Y *
+      (1 : Matrix (Fin D) (Fin D) ℂ) * Xᴴ)
+  simp only [mul_one]
   -- Rewrite the conjugate transpose of a Kraus map.
   have hconj : (transferMap (d := d) (D := D) K X)ᴴ = transferMap (d := d) (D := D) K (Xᴴ) := by
     classical
@@ -274,12 +264,30 @@ lemma transferMap_conjTranspose_eq_adjoint (A : MPSTensor d D) :
       _ = Matrix.trace (transferMap (d := d) (D := D) A Y * Xᴴ) := by
             rw [hadj]
 
+/-- The Frobenius adjoint of `transferMap A` is the Kraus adjoint map of `A`,
+viewed as a linear map. This is the linear-map form of
+`transferMap_conjTranspose_eq_adjoint`. -/
+lemma transferMap_adjoint_eq_adjointMapLM (A : MPSTensor d D) :
+    (transferMap A).adjoint = Kraus.adjointMapLM A := by
+  refine LinearMap.ext fun X => ?_
+  have h := congrArg (fun F => F X)
+    (transferMap_conjTranspose_eq_adjoint (A := A)).symm
+  simpa [transferMap_apply, Kraus.adjointMapLM_apply, Kraus.adjointMap,
+    Matrix.conjTranspose_conjTranspose, Matrix.mul_assoc] using h
+
+/-- Pointwise form of `transferMap_adjoint_eq_adjointMapLM`. -/
+@[simp] lemma transferMap_adjoint_apply_eq_adjointMap (A : MPSTensor d D)
+    (X : Matrix (Fin D) (Fin D) ℂ) :
+    (transferMap A).adjoint X = Kraus.adjointMap A X := by
+  rw [transferMap_adjoint_eq_adjointMapLM]
+  exact Kraus.adjointMapLM_apply A X
+
 end
 
 end TransferAdjoint
 
 /-!
-## Main theorem: periodicity removal by blocking (preferred live route)
+## Main theorem: periodicity removal by blocking
 
 This is the maintained Appendix-A blocking argument. Starting from a
 left-canonical / trace-preserving tensor, we pass to the
@@ -390,20 +398,5 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
   -- `transferMap (blockTensor A p) = (transferMap A) ^ p`.
   -- Then use `hprim_pow`.
   simpa only [MPSTensor.transferMap_blockTensor (A := A) (L := p)] using hprim_pow
-
-/-- Preferred alias for `exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor`
-using the project's left-canonical terminology. -/
-theorem exists_blockTensor_isPrimitive_of_leftCanonical_of_isIrreducibleTensor
-    {d D : ℕ} [NeZero D]
-    (A : MPSTensor d D)
-    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hIrrT : IsIrreducibleTensor (d := d) (D := D) A)
-    (hDpos : 0 < D) :
-    ∃ p : ℕ, 0 < p ∧
-      _root_.IsPrimitive
-        (transferMap (d := blockPhysDim d p) (D := D)
-          (blockTensor (d := d) (D := D) A p)) := by
-  simpa only using exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
-    (A := A) hLeft hIrrT hDpos
 
 end MPSTensor

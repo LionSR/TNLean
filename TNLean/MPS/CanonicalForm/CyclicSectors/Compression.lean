@@ -26,12 +26,13 @@ multiplicative, and star-preserving identities.
 
 ## Main declarations
 
+* `exists_compressedTensor_of_supported_projection_with_letter`
 * `exists_compressedTensor_of_supported_projection`
 
 ## References
 
 * [Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, Appendix A]
-* [Wolf, *Quantum Channels & Operations*, Ch. 6]
+* [Wolf, *Quantum Channels & Operations*, Chapter 6]
 -/
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
@@ -44,15 +45,6 @@ variable {d D : ℕ}
 section Compression
 
 variable {P : MatrixAlg D}
-
-/-- Conjugate transpose commutes with `Matrix.reindexLinearEquiv` on square matrices when both
-index equivalences agree. -/
-private lemma reindexLinearEquiv_conjTranspose
-    {α β : Type*} (e : α ≃ β) (M : Matrix α α ℂ) :
-    Matrix.reindexLinearEquiv ℂ ℂ e e Mᴴ =
-      (Matrix.reindexLinearEquiv ℂ ℂ e e M)ᴴ := by
-  change Matrix.reindex e e Mᴴ = (Matrix.reindex e e M)ᴴ
-  rw [Matrix.conjTranspose_reindex]
 
 /-- Word evaluation of the unitary-conjugated tensor. -/
 private lemma evalWord_conj_unitary
@@ -80,22 +72,22 @@ private lemma evalWord_conj_unitary
 
 /-- Compress a tensor supported on an orthogonal projection to the corresponding sector bond
 space.  The compressed tensor has the same sector MPVs and inherits the left-canonical equation.
+Moreover, the compression equivalence sends each compressed letter back to the
+ambient supported letter.
 
-Exposes the **compression linear equivalence** `φ : M_n(ℂ) ≃ₗ[ℂ] cornerSubmodule P`
-together with the **intertwining identity**
-`(φ (transferMap Cᴴ X)).1 = transferMap Aᴴ ((φ X).1)`.  The underlying linear map is the
-spectral corner-compression built from `Matrix.IsHermitian.eigenvectorUnitary`; exposing it
-as a `LinearEquiv` lets downstream callers transport the corner restriction of the adjoint
-transfer map into the compressed matrix algebra (and transport corner-level irreducibility
-back via conjugation).  The linear map is an isometry for the canonical inner products; the
-isometry property is witnessed separately where needed. -/
-theorem exists_compressedTensor_of_supported_projection
+The theorem also records the compression isomorphism from the compressed matrix
+algebra onto the corner subspace.  This isomorphism intertwines the compressed
+adjoint transfer map with the ambient adjoint transfer map restricted to the
+corner.  The strengthened form returns a rectangular support isometry
+V : ℂ^n → ℂ^D with Vᴴ V = 1, V Vᴴ = P, and φ(X) = V X Vᴴ. -/
+theorem exists_compressedTensor_of_supported_projection_with_letter_and_isometry
     (A : MPSTensor d D) (P : MatrixAlg D)
     (hP : IsOrthogonalProjection P)
     (hSupp : ∀ i : Fin d, P * A i * P = A i)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = P) :
     ∃ (n : ℕ) (C : MPSTensor d n)
-      (φ : Matrix (Fin n) (Fin n) ℂ ≃ₗ[ℂ] cornerSubmodule P),
+      (φ : Matrix (Fin n) (Fin n) ℂ ≃ₗ[ℂ] cornerSubmodule P)
+      (V : Matrix (Fin D) (Fin n) ℂ),
       ((n : ℂ) = Matrix.trace P) ∧
       (∑ i : Fin d, (C i)ᴴ * C i = 1) ∧
       (∀ (N : ℕ) (σ : Fin N → Fin d),
@@ -105,7 +97,11 @@ theorem exists_compressedTensor_of_supported_projection
           transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ((φ X).1)) ∧
       (∀ X Y : Matrix (Fin n) (Fin n) ℂ,
         (φ (X * Y)).1 = (φ X).1 * (φ Y).1) ∧
-      (∀ X : Matrix (Fin n) (Fin n) ℂ, (φ Xᴴ).1 = ((φ X).1)ᴴ) := by
+      (∀ X : Matrix (Fin n) (Fin n) ℂ, (φ Xᴴ).1 = ((φ X).1)ᴴ) ∧
+      (∀ i : Fin d, (φ (C i)).1 = A i) ∧
+      Vᴴ * V = 1 ∧
+      V * Vᴴ = P ∧
+      (∀ X : Matrix (Fin n) (Fin n) ℂ, (φ X).1 = V * X * Vᴴ) := by
   classical
   -- Spectral diagonalization of P
   let hHerm : P.IsHermitian := hP.1
@@ -115,7 +111,7 @@ theorem exists_compressedTensor_of_supported_projection
     by simpa [Matrix.star_eq_conjTranspose] using Unitary.mul_star_self_of_mem U.prop
   have hU'U : Umatᴴ * Umat = 1 :=
     by simpa [Matrix.star_eq_conjTranspose] using Matrix.UnitaryGroup.star_mul_self U
-  -- Helper: trace invariance under unitary conjugation
+  -- Trace invariance under unitary conjugation
   have trace_conj (M : MatrixAlg D) : Matrix.trace (Umatᴴ * M * Umat) = Matrix.trace M := by
     rw [Matrix.mul_assoc, Matrix.trace_mul_comm Umatᴴ (M * Umat),
       Matrix.mul_assoc, hUU, Matrix.mul_one]
@@ -123,7 +119,9 @@ theorem exists_compressedTensor_of_supported_projection
   let f : Fin D → ℂ := fun j => (↑(hHerm.eigenvalues j) : ℂ)
   have hPdiag_eq : Pdiag = Matrix.diagonal f := by
     have h := hHerm.conjStarAlgAut_star_eigenvectorUnitary
-    simpa [Pdiag, f, Unitary.conjStarAlgAut_star_apply] using h
+    change (star (↑hHerm.eigenvectorUnitary : MatrixAlg D) * P *
+        (↑hHerm.eigenvectorUnitary : MatrixAlg D)) = Matrix.diagonal f
+    simpa [f, Function.comp_def, Unitary.conjStarAlgAut_star_apply] using h
   have hPdiag_idem : Pdiag * Pdiag = Pdiag := by
     change Umatᴴ * P * Umat * (Umatᴴ * P * Umat) = Umatᴴ * P * Umat
     calc
@@ -139,7 +137,7 @@ theorem exists_compressedTensor_of_supported_projection
     have hfun : (fun k => f k * f k) = f := by
       apply Matrix.diagonal_injective
       simpa [Matrix.diagonal_mul_diagonal] using hDiag_idem
-    exact mul_self_eq_self_or_eq_one (f j) (congrFun hfun j)
+    exact IsIdempotentElem.iff_eq_zero_or_one.mp (congrFun hfun j)
   -- Index splitting
   let p : Fin D → Prop := fun j => f j = 1
   haveI : DecidablePred p := fun _ => inferInstance
@@ -153,7 +151,8 @@ theorem exists_compressedTensor_of_supported_projection
   let B : MPSTensor d D := fun i => Umatᴴ * A i * Umat
   -- Algebra isomorphism for reindexing (renamed to avoid clashing with the
   -- returned `φ` below).
-  let rAlg : MatrixAlg D ≃ₐ[ℂ] Matrix (S ⊕ T) (S ⊕ T) ℂ := Matrix.reindexAlgEquiv ℂ ℂ eST
+  let rAlg : MatrixAlg D ≃ₐ[ℂ] Matrix (S ⊕ T) (S ⊕ T) ℂ :=
+    Matrix.reindexAlgEquiv ℂ ℂ eST
   let P0 : Matrix (S ⊕ T) (S ⊕ T) ℂ :=
     Matrix.fromBlocks (1 : Matrix S S ℂ) 0 0 (0 : Matrix T T ℂ)
   -- Pdiag in S⊕T basis
@@ -168,7 +167,8 @@ theorem exists_compressedTensor_of_supported_projection
         | inl s' =>
             by_cases h : s = s'
             · subst h
-              simpa [p, P0] using s.2
+              have hs : (Equiv.sumCompl p) (Sum.inl s) = s.1 := rfl
+              simpa [P0, p, eST, hs] using s.2
             · simp [P0, Matrix.fromBlocks_apply₁₁, h]
         | inr t =>
             simp [P0, Matrix.fromBlocks_apply₁₂]
@@ -179,7 +179,8 @@ theorem exists_compressedTensor_of_supported_projection
         | inr t' =>
             by_cases h : t = t'
             · subst h
-              simpa [p, P0] using hfT t
+              have ht : (Equiv.sumCompl p) (Sum.inr t) = t.1 := rfl
+              simpa [P0, p, eST, ht] using hfT t
             · simp [P0, Matrix.fromBlocks_apply₂₂, h]
   -- B_i is Pdiag-supported
   have hBsupp : ∀ i : Fin d, Pdiag * B i * Pdiag = B i := by
@@ -275,7 +276,24 @@ theorem exists_compressedTensor_of_supported_projection
   let cornerEmbed : Matrix (Fin n) (Fin n) ℂ ≃ₗ[ℂ] cornerSubmodule P :=
     cornerCompressionLinearEquiv (P := P) (Pdiag := Pdiag) Umat eST eS P0 hP0_def
       hP_decomp hPdiag_UPU hPdiag_std_lin hPdiag_back hU'U hUU
-  refine ⟨n, C, cornerEmbed, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  let V : Matrix (Fin D) (Fin n) ℂ := cornerCompressionIsometry Umat eST eS
+  have hV_iso : Vᴴ * V = 1 := by
+    exact cornerCompressionIsometry_conjTranspose_mul Umat eST eS hU'U
+  have hExpand_one : cornerCompressionExpand Umat eST eS 1 = P :=
+    cornerCompressionExpand_one (P := P) (Pdiag := Pdiag) Umat eST eS P0 hP0_def
+      hP_decomp hPdiag_back
+  have hV_range : V * Vᴴ = P := by
+    have h := cornerCompressionExpand_eq_isometry Umat eST eS
+      (1 : Matrix (Fin n) (Fin n) ℂ)
+    rw [hExpand_one] at h
+    simpa [V] using h.symm
+  have hEmbed_eq_V :
+      ∀ X : Matrix (Fin n) (Fin n) ℂ, (cornerEmbed X).1 = V * X * Vᴴ := by
+    intro X
+    change expand X = V * X * Vᴴ
+    simpa [V] using cornerCompressionExpand_eq_isometry Umat eST eS X
+  refine ⟨n, C, cornerEmbed, V, ?_, ?_, ?_, ?_, ?_, ?_, ?_, hV_iso, hV_range,
+    hEmbed_eq_V⟩
   -- (1) Trace identity: n = tr P
   · exact htrace
   -- (2) TP condition: ∑ C_i† C_i = 1
@@ -321,7 +339,7 @@ theorem exists_compressedTensor_of_supported_projection
         simp only [show ∀ i, rAlg (B i) = X i from fun i => rfl] at h0
         -- Now use the fact that rAlg preserves star/conjTranspose
         rw [hPdiag_std] at h0
-        convert h0 using 1
+        simpa [hφ_ct] using h0
       -- Substitute block form X_i = fromBlocks(B11_i, 0, 0, 0)
       have hblock : ∀ i, (X i)ᴴ * X i =
           Matrix.fromBlocks ((B11 i)ᴴ * B11 i) 0 0 (0 : Matrix T T ℂ) := by
@@ -336,12 +354,13 @@ theorem exists_compressedTensor_of_supported_projection
       -- RHS of h1: P0 (inl s) (inl s') = 1 s s'
       -- h1 : (∑ x, fromBlocks((B11 x)† * B11 x, 0, 0, 0))(inl s)(inl s') = 1 s s'
       -- goal : (∑ i, (B11 i)† * B11 i) s s' = 1 s s'
-      exact congrFun (congrFun (show ∑ i : Fin d, (B11 i)ᴴ * B11 i = (1 : Matrix S S ℂ) from by
+      have hsum : ∑ i : Fin d, (B11 i)ᴴ * B11 i = (1 : Matrix S S ℂ) := by
         ext s1 s2
         have h2 := congrFun (congrFun h (Sum.inl s1)) (Sum.inl s2)
         simp only [P0, Matrix.fromBlocks_apply₁₁, Matrix.sum_apply,
           Matrix.fromBlocks_apply₁₁] at h2
-        rwa [Matrix.sum_apply]) s) s'
+        rwa [Matrix.sum_apply]
+      exact congrFun (congrFun hsum s) s'
     -- Transport to Fin n
     have hterm : ∀ i, (C i)ᴴ * C i = Matrix.reindex eS eS ((B11 i)ᴴ * B11 i) := by
       intro i
@@ -462,7 +481,8 @@ theorem exists_compressedTensor_of_supported_projection
     have htr_conj : Matrix.trace (Pdiag * evalWord B w) =
         Matrix.trace (P * evalWord A (List.ofFn σ)) := by
       have hEvalB := evalWord_conj_unitary A U (List.ofFn σ)
-      rw [show (fun i => (↑U : MatrixAlg D)ᴴ * A i * (↑U : MatrixAlg D)) = B from rfl] at hEvalB
+      rw [show (fun i => (↑U : MatrixAlg D)ᴴ * A i * (↑U : MatrixAlg D)) = B
+        from rfl] at hEvalB
       rw [hEvalB]
       change
         Matrix.trace (Umatᴴ * P * Umat * (Umatᴴ * evalWord A (List.ofFn σ) * Umat)) =
@@ -493,7 +513,8 @@ theorem exists_compressedTensor_of_supported_projection
     -- Abbreviations for readability.
     set M' : Matrix S S ℂ := Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm Z
     set F : Matrix (S ⊕ T) (S ⊕ T) ℂ :=
-      Matrix.fromBlocks M' (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ) with hF_def
+      Matrix.fromBlocks M'
+        (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ) with hF_def
     set G : MatrixAlg D := Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm F
     -- `expand Z = Umat * G * Umatᴴ`.
     have hexpand_Z : expand Z = Umat * G * Umatᴴ := hexpand_def Z
@@ -529,7 +550,8 @@ theorem exists_compressedTensor_of_supported_projection
             eS.symm eS.symm eS.symm ((C i)ᴴ) Z]
       have hCt_reindex :
           Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm ((C i)ᴴ) = (B11 i)ᴴ := by
-        rw [reindexLinearEquiv_conjTranspose, hExM_C]
+        change Matrix.reindex eS.symm eS.symm ((C i)ᴴ) = (B11 i)ᴴ
+        simpa [Matrix.conjTranspose_reindex] using congrArg (fun M => Mᴴ) hExM_C
       rw [hCt_reindex, hExM_C]
     -- Block identity: fromBlocks ((B11 i)ᴴ * M' * B11 i) 0 0 0 = (X i)ᴴ * F * X i.
     have hF_letter :
@@ -556,7 +578,8 @@ theorem exists_compressedTensor_of_supported_projection
             eST.symm eST.symm eST.symm ((X i)ᴴ) F]
       have hXct_reindex :
           Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm ((X i)ᴴ) = (B i)ᴴ := by
-        rw [reindexLinearEquiv_conjTranspose, hExST_X]
+        change Matrix.reindex eST.symm eST.symm ((X i)ᴴ) = (B i)ᴴ
+        simpa [Matrix.conjTranspose_reindex] using congrArg (fun M => Mᴴ) hExST_X
       rw [hXct_reindex, hExST_X]
     -- Compute RHS = Umat * ((B i)ᴴ * G * B i) * Umatᴴ.
     have hRHS :
@@ -577,6 +600,95 @@ theorem exists_compressedTensor_of_supported_projection
   · intro X
     change expand Xᴴ = (expand X)ᴴ
     exact (cornerCompressionExpand_conjTranspose Umat eST eS X).symm
+  -- (7) Letter expansion: φ(C_i) is the original supported ambient letter.
+  · intro i
+    change expand (C i) = A i
+    have hExM_C : Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm (C i) = B11 i := by
+      change Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm
+        (Matrix.reindexLinearEquiv ℂ ℂ eS eS (B11 i)) = B11 i
+      rw [Matrix.reindexLinearEquiv_comp_apply, Equiv.self_trans_symm,
+        Matrix.reindexLinearEquiv_refl_refl]
+      rfl
+    have hExST_X : Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm (X i) = B i := by
+      have hXi_eq : X i = Matrix.reindexLinearEquiv ℂ ℂ eST eST (B i) := rfl
+      rw [hXi_eq, Matrix.reindexLinearEquiv_comp_apply, Equiv.self_trans_symm,
+        Matrix.reindexLinearEquiv_refl_refl]
+      rfl
+    have hBlockBack :
+        Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm
+            (Matrix.fromBlocks
+              (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm (C i))
+              (0 : Matrix S T ℂ) (0 : Matrix T S ℂ) (0 : Matrix T T ℂ)) =
+          B i := by
+      rw [hExM_C, ← hX_block i]
+      exact hExST_X
+    have hA_i : A i = Umat * B i * Umatᴴ := by
+      change A i = Umat * (Umatᴴ * A i * Umat) * Umatᴴ
+      calc
+        A i = (Umat * Umatᴴ) * A i * (Umat * Umatᴴ) := by rw [hUU]; simp
+        _ = Umat * (Umatᴴ * A i * Umat) * Umatᴴ := by simp [Matrix.mul_assoc]
+    calc
+      expand (C i) = Umat * B i * Umatᴴ := by
+        rw [hexpand_def, hBlockBack]
+      _ = A i := hA_i.symm
+
+/-- Compress a tensor supported on an orthogonal projection to the corresponding sector bond
+space.  The compressed tensor has the same sector MPVs and inherits the left-canonical equation.
+Moreover, the compression equivalence sends each compressed letter back to the
+ambient supported letter.
+
+This is the projection of
+`exists_compressedTensor_of_supported_projection_with_letter_and_isometry` that
+forgets the support isometry. -/
+theorem exists_compressedTensor_of_supported_projection_with_letter
+    (A : MPSTensor d D) (P : MatrixAlg D)
+    (hP : IsOrthogonalProjection P)
+    (hSupp : ∀ i : Fin d, P * A i * P = A i)
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = P) :
+    ∃ (n : ℕ) (C : MPSTensor d n)
+      (φ : Matrix (Fin n) (Fin n) ℂ ≃ₗ[ℂ] cornerSubmodule P),
+      ((n : ℂ) = Matrix.trace P) ∧
+      (∑ i : Fin d, (C i)ᴴ * C i = 1) ∧
+      (∀ (N : ℕ) (σ : Fin N → Fin d),
+        mpv C σ = Matrix.trace (P * evalWord A (List.ofFn σ))) ∧
+      (∀ X : Matrix (Fin n) (Fin n) ℂ,
+        (φ (transferMap (d := d) (D := n) (fun i => (C i)ᴴ) X)).1 =
+          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ((φ X).1)) ∧
+      (∀ X Y : Matrix (Fin n) (Fin n) ℂ,
+        (φ (X * Y)).1 = (φ X).1 * (φ Y).1) ∧
+      (∀ X : Matrix (Fin n) (Fin n) ℂ, (φ Xᴴ).1 = ((φ X).1)ᴴ) ∧
+      (∀ i : Fin d, (φ (C i)).1 = A i) := by
+  obtain ⟨n, C, φ, _V, hdim, hCtp, hCmpv, hIntertwine, hMul, hStar, hLetter,
+    _hV_iso, _hV_range, _hEmbed_eq_V⟩ :=
+    exists_compressedTensor_of_supported_projection_with_letter_and_isometry A P hP hSupp hTP
+  exact ⟨n, C, φ, hdim, hCtp, hCmpv, hIntertwine, hMul, hStar, hLetter⟩
+
+/-- Compress a tensor supported on an orthogonal projection to the corresponding sector bond
+space.  The compressed tensor has the same sector MPVs and inherits the left-canonical equation.
+
+This is the projection of
+`exists_compressedTensor_of_supported_projection_with_letter` that forgets the
+letter-expansion identity. -/
+theorem exists_compressedTensor_of_supported_projection
+    (A : MPSTensor d D) (P : MatrixAlg D)
+    (hP : IsOrthogonalProjection P)
+    (hSupp : ∀ i : Fin d, P * A i * P = A i)
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = P) :
+    ∃ (n : ℕ) (C : MPSTensor d n)
+      (φ : Matrix (Fin n) (Fin n) ℂ ≃ₗ[ℂ] cornerSubmodule P),
+      ((n : ℂ) = Matrix.trace P) ∧
+      (∑ i : Fin d, (C i)ᴴ * C i = 1) ∧
+      (∀ (N : ℕ) (σ : Fin N → Fin d),
+        mpv C σ = Matrix.trace (P * evalWord A (List.ofFn σ))) ∧
+      (∀ X : Matrix (Fin n) (Fin n) ℂ,
+        (φ (transferMap (d := d) (D := n) (fun i => (C i)ᴴ) X)).1 =
+          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ((φ X).1)) ∧
+      (∀ X Y : Matrix (Fin n) (Fin n) ℂ,
+        (φ (X * Y)).1 = (φ X).1 * (φ Y).1) ∧
+      (∀ X : Matrix (Fin n) (Fin n) ℂ, (φ Xᴴ).1 = ((φ X).1)ᴴ) := by
+  obtain ⟨n, C, φ, hdim, hCtp, hCmpv, hIntertwine, hMul, hStar, _hLetter⟩ :=
+    exists_compressedTensor_of_supported_projection_with_letter A P hP hSupp hTP
+  exact ⟨n, C, φ, hdim, hCtp, hCmpv, hIntertwine, hMul, hStar⟩
 
 end Compression
 

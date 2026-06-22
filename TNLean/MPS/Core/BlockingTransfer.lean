@@ -38,10 +38,10 @@ theorem transferMap_blockTensor_apply
   simp only [transferMap_apply, blockTensor, wordOfBlock]
   -- Reindex the blocked sum by the equivalence `Fin (blockPhysDim d L) ≃ (Fin L → Fin d)`.
   let e : Fin (blockPhysDim d L) ≃ (Fin L → Fin d) :=
-    (Fintype.equivFin (Fin L → Fin d)).symm
+    decodeBlockEquiv d L
   -- After rewriting `decodeBlock` in terms of `e`, `Fintype.sum_equiv` is exactly the desired
   -- reindexing statement.
-  simpa [decodeBlock, e, blockPhysDim] using
+  simpa [decodeBlockEquiv_apply, e] using
     (Fintype.sum_equiv e
       (f := fun i =>
         evalWord A (List.ofFn (e i)) * X * (evalWord A (List.ofFn (e i)))ᴴ)
@@ -87,7 +87,7 @@ theorem transferMap_blockTensor_fixedPoint
   -- Now rewrite the blocked transfer map as an iterate.
   simpa [transferMap_blockTensor_apply (A := A) (L := L) (X := X)] using hpow
 
-/-- Iterated physical blocking is compatible with one-shot blocking by the multiplied period,
+/-- Iterated physical blocking is compatible with direct blocking by the multiplied period,
 at the transfer-map level:
 `transferMap(block(block(A, m), n)) = transferMap(block(A, m * n))`. -/
 theorem transferMap_blockTensor_mul

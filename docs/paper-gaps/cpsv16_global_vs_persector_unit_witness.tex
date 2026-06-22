@@ -1,0 +1,175 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\input{./command}
+
+\title{Global and Per-Sector Unit-Weight Witnesses in the CPSV16 BNT Argument}
+\author{}
+\date{2026-05-30}
+
+\begin{document}
+\maketitle
+
+\section{The source normalization}
+
+Cirac--Perez-Garcia--Schuch--Verstraete 2016 normalizes the raw coefficients in
+the basis-of-normal-tensors (BNT) expansion by a single global condition.
+Section II.C, line 246 states the condition for the one-index canonical-form
+coefficients \(\mu_k\).  The BNT display at lines 287--289 then refines this
+index into a sector index and a copy index.  In the resulting two-layer
+notation
+\[
+  A^i =
+  \bigoplus_{j=1}^{g}\bigoplus_{q=1}^{r_j}
+  \mu_{j,q} X_{j,q} A_j^i X_{j,q}^{-1},
+\]
+the source assumes
+\[
+  |\mu_{j,q}| \le 1 \quad \text{for all } (j,q),
+  \qquad
+  |\mu_{j_\ast,q_\ast}| = 1 \quad \text{for some } (j_\ast,q_\ast).
+\]
+This is the same normalization, expressed after the two-layer BNT refinement.
+
+Thus the paper-level canonical form does not state that every BNT sector
+\(j\) contains a copy \(q\) of modulus one.  A sector may contain only strictly
+subunit copy weights, while some other sector carries the global unit witness.
+
+\section{The formal boundary}
+
+The formal predicate \leanid{MPSTensor.IsBNTCanonicalForm} records the source
+normalization faithfully: it has a bound on all copy weights and a single
+global unit-weight witness.  It does not contain the per-sector condition
+\[
+  \forall j,\ \exists q,\ |\mu_{j,q}| = 1.
+\]
+
+Several full-basis matching and global-gauge theorems formerly assumed this
+per-sector condition explicitly.  The condition was the price of the
+\emph{asymptotic} matching route, which applied the Cesaro non-decay lemma
+sector by sector in the CPSV16 Appendix MPV line-1182 matching argument: a
+strictly subunit sector coefficient \(c^{(j)}_N=\sum_q \mu_{j,q}^N\) tends to
+zero, so it is invisible to a projection onto a single sector unless that sector
+carries a unit-modulus copy.
+
+This restriction has since been removed.  The exact linear-independence matcher
+replaces the asymptotic projection: at a fixed sufficiently large length, BNT
+linear independence detects whether a sector coefficient vanishes, and
+\leanid{MPSTensor.IsBNTCanonicalForm.coeff_not_eventually_zero} shows that
+\(c^{(j)}_N\) is nonzero infinitely often for \emph{any} nonzero copy weights,
+with no modulus assumption.  The matching and global-gauge declarations
+therefore carry exactly the source hypothesis set (BNT canonical form, with
+proportional or equal MPVs) and no longer impose the per-sector unit-weight
+condition.
+
+\section{Equal-modulus declaration path}
+
+The current formal assembly is organized through
+\path{TNLean/MPS/FundamentalTheorem/SectorBNT/}.  There is no separate
+\path{TNLean/MPS/FundamentalTheorem/Multi/} assembly directory on the current
+main branch.
+
+The equal-modulus question is logically separate from the per-sector
+unit-witness restriction above.  The current SectorBNT coefficient comparison
+works with raw sector coefficients
+\[
+  c_N^{(j)} = \sum_q \mu_{j,q}^N
+\]
+and the copy weights are recovered from these coefficients by the finite
+power-sum argument.  Equal-modulus copies such as the two copies in
+\(C \oplus (-C)\), and unequal-modulus copies such as \(C \oplus (1/2)C\),
+are both represented by the raw two-layer SectorBNT formulation.
+
+The declaration path is as follows.
+\begin{itemize}
+  \item \leanid{MPSTensor.IsBNTCanonicalForm} records the raw copy weights
+        \(\mu_{j,q}\), their coefficient sums, the bound
+        \(|\mu_{j,q}| \le 1\), and the single global unit witness.  It imposes
+        neither a strict ordering of the moduli nor an equal-modulus layer.
+  \item Sectorwise non-decay is supplied, with no modulus assumption, by
+        \begin{center}
+        {\small\leanid{MPSTensor.IsBNTCanonicalForm.coeff_not_eventually_zero}},
+        \end{center}
+        which shows the raw coefficient sum is nonzero infinitely often for any
+        nonzero copy weights.
+  \item Eventual equality of the sector coefficient sequences is converted into
+        equality of copy weights by
+        \leanid{MPSTensor.matched_sector_weight_multiset_eq} and
+        \leanid{MPSTensor.matched_sector_weight_equiv}, using the finite
+        power-sum recovery theorem
+        \begin{center}
+        {\small\leanid{Matrix.sum_pow_eq_implies_card_eq_and_multiset_eq_of_le_max_card}}.
+        \end{center}
+  \item \leanid{MPSTensor.SectorBNTCopyWeightMatching.of_coeff_identity}
+        packages this recovery into the copy-weight matching used by the
+        proportional global-gauge theorem.
+  \item In the equal-MPV path, the declarations
+        \begin{center}
+        {\small\leanid{MPSTensor.ft_sector_bnt_equal_sector_data}}\\
+        {\small\leanid{MPSTensor.ft_sector_bnt_equal_global_gauge}}\\
+        {\small\leanid{MPSTensor.ft_sector_bnt_equal_mps_gaugeEquiv_literal}}
+        \end{center}
+        use the same coefficient-to-copy-weight step.
+\end{itemize}
+
+Thus equal-modulus examples such as \(C \oplus (-C)\) are handled by the raw
+coefficient comparison and finite power-sum recovery after sector matching.  No
+theorem in this SectorBNT declaration path assumes a strict ordering of the
+copy-weight moduli.
+
+The extra hypothesis that once distinguished these statements from the source
+was not strictness of moduli but the per-sector existence of a unit-modulus copy
+weight, which is stronger than the single global unit witness stated in CPSV16
+line 246.  As described in the next section, that hypothesis has been eliminated
+by the exact linear-independence matcher, so only the single global unit witness
+remains.
+
+\section{How the restriction was eliminated}
+
+The restriction is removed by the second of the two strategies above, in its
+exact form.  Rather than projecting asymptotically onto a single sector, the
+matching works at a fixed sufficiently large length.  The \(P\)-sectors are
+split into those whose overlap decays against every \(Q\)-sector and the rest;
+each non-decaying sector is rewritten as an exact scalar multiple of its matched
+\(Q\)-sector, and the residual is a single linear combination over the combined
+BNT family, which is eventually linearly independent.  Linear independence at a
+fixed length forces every coefficient to vanish, so any putatively unmatched
+sector would have \(c^{(j_0)}_N=0\) for all large \(N\), contradicting
+\leanid{MPSTensor.IsBNTCanonicalForm.coeff_not_eventually_zero}.  No power of a
+copy weight is required to have modulus one, and no Cesaro projection or
+coefficient limit is taken.  The proportional case is identical except that the
+proportionality scalar \(c_N\) rescales only the aggregate \(Q\)-side
+coefficients, never the isolated target \(P\)-coefficient.
+
+The matcher is \leanid{MPSTensor.exists_block_match_exact} for the equal case
+and \leanid{MPSTensor.exists_block_match_exact_of_eventuallyProportional} for the
+proportional case.  Consequently the BNT sector-matching declarations are no
+longer scope-restricted: they carry exactly the source hypothesis set and may be
+cited as the CPSV16 theorem and corollary on the BNT canonical-form surface.
+
+\section{Affected declarations}
+
+The following declarations \emph{formerly} carried the additional per-sector
+unit-modulus hypothesis and no longer do:
+\begin{itemize}
+  \item \leanid{MPSTensor.forall_k_exists_j_nondecaying_overlap_of_sameMPV},
+  \item \leanid{MPSTensor.bijective_match_of_sameMPV},
+  \item \leanid{MPSTensor.ft_sector_bnt_proportional_sector_match_witnesses},
+  \item \leanid{MPSTensor.ft_sector_bnt_proportional_global_gauge_of_copy_weight_matching},
+  \item \leanid{MPSTensor.ft_sector_bnt_proportional_global_gauge_of_coeff_identity},
+  \item \leanid{MPSTensor.ft_sector_bnt_equal_global_gauge},
+  \item \leanid{MPSTensor.ft_sector_bnt_equal_mps_gaugeEquiv_literal}.
+\end{itemize}
+
+The faithful structural normalization remains the global unit-weight field
+\path{MPSTensor.IsBNTCanonicalForm.weight_unit_exists} in
+\path{TNLean/MPS/FundamentalTheorem/SectorBNT/Basic.lean}; the source assumes
+only this single global witness, which the exact matcher is now content with.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

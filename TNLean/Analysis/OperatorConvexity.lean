@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Schwarz.DiagonalJensen
-import TNLean.Channel.Schwarz.TraceCFC
+import TNLean.Analysis.TraceCFC
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Order
@@ -21,23 +21,22 @@ This module proves the trace convexity and concavity of the map
 
 Both statements were previously axiomatized in `TNLean.Axioms.OperatorConvexity`
 (as `trace_rpow_concave_axiom` / `trace_rpow_convex_axiom`); this module
-discharges them using the matrix-analysis helpers
-`Matrix.IsHermitian.trace_cfc_eq_sum_re` (from `TNLean/Channel/Schwarz/TraceCFC.lean`)
+discharges them using the matrix-analysis lemmas
+`Matrix.IsHermitian.trace_cfc_eq_sum_re` (from `TNLean/Analysis/TraceCFC.lean`)
 and `Matrix.diagonal_jensen_of_convexOn`
 (from `TNLean/Channel/Schwarz/DiagonalJensen.lean`).
 
 ## Proof sketch
 
-The common scaffolding is factored into the private helper
-`trace_cfc_convex_bound`, which takes a convex `f : ℝ → ℝ` on `[0, ∞)` and
-proves the CFC-level trace inequality. The top-level theorems are then thin
-wrappers:
+The common reduction is the private lemma `trace_cfc_convex_bound`, which takes
+a convex `f : ℝ → ℝ` on `[0, ∞)` and proves the CFC-level trace inequality. The
+top-level theorems are then the two real-power specialisations:
 
-* `trace_rpow_convex` applies the helper directly to `f = fun x => x^p`.
-* `trace_rpow_concave` applies the helper to `-f` and uses
-  `IsHermitian.cfc_neg` plus `trace_neg` to flip signs.
+* `trace_rpow_convex` applies the lemma directly to `f = fun x => x^p`.
+* `trace_rpow_concave` applies the lemma to `-f` and uses
+  Mathlib's abstract `cfc_neg` plus `trace_neg` to flip signs.
 
-Internally the helper:
+Internally the convexity lemma:
 
 1. Rewrites `Re Tr(hH.cfc f) = ∑ⱼ f(μⱼ)` via `trace_cfc_eq_sum_re`, where
    `{ψⱼ}` is the eigenbasis of `A := t • A₁ + (1 − t) • A₂` and `μⱼ` its
@@ -54,8 +53,8 @@ Internally the helper:
 
 ## References
 
-* [Bhatia, *Matrix Analysis*, Ch. V]
-* [Wolf, *Quantum Channels & Operations*, Thm. 5.17 and subsequent corollary]
+* [Bhatia, *Matrix Analysis*, Chapter V]
+* [Wolf, *Quantum Channels & Operations*, Theorem 5.17 and subsequent corollary]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
@@ -111,39 +110,6 @@ theorem IsHermitian.sum_dotProduct_eigenvectorBasis_eq_trace
               exact Unitary.mul_star_self_of_mem hM.eigenvectorUnitary.prop]
             rw [one_mul]
 
-/-- **CFC commutes with negation on a Hermitian matrix.**
-
-For any `f : ℝ → ℝ`, `hA.cfc (fun x => -f x) = -(hA.cfc f)`.
-
-NOTE: the proof reaches through `IsHermitian.cfc_eq` to the abstract
-`cfc` (where `cfc_neg` lives). If Mathlib refactors the link between
-`IsHermitian.cfc` and the abstract CFC, this bridge may need updating. -/
-theorem IsHermitian.cfc_neg {A : Matrix n n 𝕜} (hA : A.IsHermitian) (f : ℝ → ℝ) :
-    hA.cfc (fun x => -f x) = -(hA.cfc f) := by
-  rw [← hA.cfc_eq, ← hA.cfc_eq, _root_.cfc_neg f A]
-
-/-- **Diagonal Jensen for a concave function.**
-
-The concave companion of `Matrix.diagonal_jensen_of_convexOn`:
-for a concave `f : ℝ → ℝ` on `[0, ∞)`, PSD `A`, and unit vector `v`,
-`(star v ⬝ᵥ hA.1.cfc f *ᵥ v).re ≤ f ((star v ⬝ᵥ A *ᵥ v).re)`. -/
-theorem diagonal_jensen_of_concaveOn
-    {f : ℝ → ℝ} (hf : ConcaveOn ℝ (Set.Ici (0 : ℝ)) f)
-    {A : Matrix n n ℂ} (hA : A.PosSemidef)
-    {v : n → ℂ} (hv : star v ⬝ᵥ v = (1 : ℂ)) :
-    (star v ⬝ᵥ (hA.1.cfc f *ᵥ v)).re ≤ f ((star v ⬝ᵥ (A *ᵥ v)).re) := by
-  -- Apply convex Jensen to `-f` and unpack via `IsHermitian.cfc_neg`.
-  have hnegf : ConvexOn ℝ (Set.Ici (0 : ℝ)) (fun x => -f x) := hf.neg
-  have hconv := diagonal_jensen_of_convexOn (f := fun x => -f x) hnegf hA hv
-  rw [IsHermitian.cfc_neg hA.1 f] at hconv
-  -- `(star v ⬝ᵥ (-X) *ᵥ v).re = -(star v ⬝ᵥ X *ᵥ v).re`
-  have hnegmul : ∀ X : Matrix n n ℂ,
-      (star v ⬝ᵥ ((-X) *ᵥ v)).re = -(star v ⬝ᵥ X *ᵥ v).re := by
-    intro X
-    rw [Matrix.neg_mulVec, dotProduct_neg, Complex.neg_re]
-  rw [hnegmul] at hconv
-  linarith
-
 end Matrix
 
 namespace TNLean
@@ -158,18 +124,8 @@ private local instance instTROCNormedRing : NormedRing Mat :=
   Matrix.instL2OpNormedRing
 private local instance instTROCNormedAlgebra : NormedAlgebra ℂ Mat :=
   Matrix.instL2OpNormedAlgebra
-private local instance instTROCCStarRing : CStarRing Mat :=
-  Matrix.instCStarRing
-private local instance instTROCPartialOrder : PartialOrder Mat :=
-  Matrix.instPartialOrder
-private local instance instTROCStarOrderedRing : StarOrderedRing Mat :=
-  Matrix.instStarOrderedRing
-private local instance instTROCNonnegSpectrumClass : NonnegSpectrumClass ℝ Mat :=
-  Matrix.instNonnegSpectrumClass
-private local instance instTROCCStarAlgebra : CStarAlgebra Mat :=
-  CStarAlgebra.mk
 
-/-- Bridge: for `0 ≤ A` (Loewner) in `Mat` and a Hermitian proof `hH`,
+/-- For `0 ≤ A` (Loewner) in `Mat` and a Hermitian proof `hH`,
 `A^p = hH.cfc (fun x => x^p)`. Taking `hH` as an explicit argument ensures
 the CFC in the conclusion matches the caller's chosen Hermitian proof. -/
 private lemma rpow_eq_cfc_power {A : Mat} (hA : 0 ≤ A) (hH : A.IsHermitian) (p : ℝ) :
@@ -177,46 +133,18 @@ private lemma rpow_eq_cfc_power {A : Mat} (hA : 0 ≤ A) (hH : A.IsHermitian) (p
   rw [CFC.rpow_eq_cfc_real (a := A) (y := p) hA]
   exact hH.cfc_eq _
 
-/-- Expand `(t • A) *ᵥ v` to `(t : ℂ) • (A *ᵥ v)` without relying on
-`Matrix.smul_mulVec`, which fails to unify due to an elaboration quirk in
-the real-scalar instance chain on `Matrix _ _ ℂ`. -/
-private lemma mulVec_smul_eq (t : ℝ) (A : Mat) (v : Fin D → ℂ) :
-    (t • A : Mat) *ᵥ v = ((t : ℝ) : ℂ) • (A *ᵥ v) := by
-  funext i
-  simp only [Pi.smul_apply, Matrix.mulVec, dotProduct, Matrix.smul_apply,
-    Complex.real_smul, smul_eq_mul]
-  rw [Finset.mul_sum]
-  refine Finset.sum_congr rfl (fun j _ => ?_)
-  ring
+private lemma hermitian_cfc_neg {A : Mat} (hH : A.IsHermitian) (f : ℝ → ℝ) :
+    hH.cfc (fun x => -f x) = -(hH.cfc f) := by
+  rw [← hH.cfc_eq, ← hH.cfc_eq, _root_.cfc_neg f]
 
-private lemma psd_smul_real
-    {A : Mat} (hA : A.PosSemidef) {t : ℝ} (ht : 0 ≤ t) :
-    (t • A).PosSemidef := by
-  refine PosSemidef.of_dotProduct_mulVec_nonneg ?_ ?_
-  · exact hA.1.smul (IsSelfAdjoint.of_nonneg ht)
-  · intro v
-    rw [mulVec_smul_eq, dotProduct_smul, smul_eq_mul]
-    have hnn : (0 : ℂ) ≤ star v ⬝ᵥ A *ᵥ v := hA.dotProduct_mulVec_nonneg v
-    have ht_ℂ : (0 : ℂ) ≤ ((t : ℝ) : ℂ) := by
-      rw [Complex.le_def]; exact ⟨by simpa, by simp⟩
-    exact mul_nonneg ht_ℂ hnn
-
-/-- Helper: `(t • A₁ + (1 − t) • A₂).PosSemidef` when `A₁, A₂` are PSD
-and `t, 1 − t ≥ 0`. -/
-private lemma posSemidef_convex_combination
-    {A₁ A₂ : Mat} (h₁ : A₁.PosSemidef) (h₂ : A₂.PosSemidef)
-    {t : ℝ} (ht₀ : 0 ≤ t) (ht₁ : 0 ≤ 1 - t) :
-    (t • A₁ + (1 - t) • A₂).PosSemidef :=
-  (psd_smul_real h₁ ht₀).add (psd_smul_real h₂ ht₁)
-
-/-- **Shared scaffolding for trace convex/concave bounds on matrix CFC.**
+/-- **Trace convexity bound for the continuous functional calculus.**
 
 For a convex `f : ℝ → ℝ` on `[0, ∞)` and PSD matrices `A₁, A₂` with
 `t ∈ [0, 1]`, the real trace of `f` applied (via the Hermitian CFC) to the
 convex combination is bounded above by the convex combination of traces.
 
 Used by `trace_rpow_convex` directly and by `trace_rpow_concave` through
-negation (via `IsHermitian.cfc_neg`). -/
+negation (via Mathlib's abstract `cfc_neg`). -/
 private lemma trace_cfc_convex_bound
     {f : ℝ → ℝ} (hconvex : ConvexOn ℝ (Set.Ici (0 : ℝ)) f)
     {A₁ A₂ : Mat} (hA₁ : A₁.PosSemidef) (hA₂ : A₂.PosSemidef)
@@ -255,8 +183,11 @@ private lemma trace_cfc_convex_bound
     have hright : star (ψ j) ⬝ᵥ A *ᵥ ψ j
         = (t : ℂ) * (star (ψ j) ⬝ᵥ A₁ *ᵥ ψ j)
           + ((1 - t : ℝ) : ℂ) * (star (ψ j) ⬝ᵥ A₂ *ᵥ ψ j) := by
-      rw [hA_eq, Matrix.add_mulVec, dotProduct_add,
-        mulVec_smul_eq t A₁, mulVec_smul_eq (1 - t) A₂,
+      rw [hA_eq, Matrix.add_mulVec, dotProduct_add]
+      rw [show (t • A₁ : Mat) = (t : ℂ) • A₁ by ext i k; simp [Complex.real_smul]]
+      rw [show ((1 - t) • A₂ : Mat) = ((1 - t : ℝ) : ℂ) • A₂ by
+        ext i k; simp [Complex.real_smul]]
+      rw [Matrix.smul_mulVec, Matrix.smul_mulVec,
         dotProduct_smul, dotProduct_smul, smul_eq_mul, smul_eq_mul]
     have heq := hleft.symm.trans hright
     have hre := congrArg Complex.re heq
@@ -314,7 +245,7 @@ private lemma trace_cfc_convex_bound
   rw [hsum_re (hA₁.1.cfc f), hsum_re (hA₂.1.cfc f)] at hR
   linarith [hR ▸ hsum_right]
 
-/-- **Trace concavity of `rpow`** for `p ∈ [0, 1]` (Bhatia, Ch. V; Wolf Thm. 5.17).
+/-- **Trace concavity of `rpow`** for `p ∈ [0, 1]` (Bhatia, Chapter V; Wolf Theorem 5.17).
 
 For PSD matrices `A₁, A₂` and `t ∈ [0, 1]`:
 `t · Re Tr(A₁^p) + (1 − t) · Re Tr(A₂^p) ≤
@@ -330,7 +261,7 @@ theorem trace_rpow_concave
   have hPSD₁ : A₁.PosSemidef := hA₁.posSemidef
   have hPSD₂ : A₂.PosSemidef := hA₂.posSemidef
   have hPSD : (t • A₁ + (1 - t) • A₂).PosSemidef :=
-    posSemidef_convex_combination hPSD₁ hPSD₂ ht₀ h1mt
+    (hPSD₁.smul ht₀).add (hPSD₂.smul h1mt)
   set f : ℝ → ℝ := fun x => x ^ p with hf_def
   -- `-f` is convex on `[0, ∞)` since `f` is concave there.
   have hconcave : ConcaveOn ℝ (Set.Ici (0 : ℝ)) f := Real.concaveOn_rpow hp.1 hp.2
@@ -338,14 +269,14 @@ theorem trace_rpow_concave
   have hbound := trace_cfc_convex_bound hconvex_neg hPSD₁ hPSD₂ ht₀ h1mt hPSD
   -- Unfold `cfc (-f)` on each Hermitian to `-(cfc f)` and push the minus
   -- through `trace.re`.
-  rw [IsHermitian.cfc_neg hPSD.1 f, IsHermitian.cfc_neg hPSD₁.1 f,
-    IsHermitian.cfc_neg hPSD₂.1 f] at hbound
+  rw [hermitian_cfc_neg hPSD.1 f, hermitian_cfc_neg hPSD₁.1 f,
+    hermitian_cfc_neg hPSD₂.1 f] at hbound
   simp only [Matrix.trace_neg, Complex.neg_re, mul_neg] at hbound
   rw [rpow_eq_cfc_power hA₁ hPSD₁.1, rpow_eq_cfc_power hA₂ hPSD₂.1,
     rpow_eq_cfc_power hPSD.nonneg hPSD.1]
   linarith
 
-/-- **Trace convexity of `rpow`** for `p ∈ [1, 2]` (Bhatia, Ch. V; Wolf Thm. 5.17).
+/-- **Trace convexity of `rpow`** for `p ∈ [1, 2]` (Bhatia, Chapter V; Wolf Theorem 5.17).
 
 For PSD matrices `A₁, A₂` and `t ∈ [0, 1]`:
 `Re Tr((t • A₁ + (1 − t) • A₂)^p) ≤
@@ -364,7 +295,7 @@ theorem trace_rpow_convex
   have hPSD₁ : A₁.PosSemidef := hA₁.posSemidef
   have hPSD₂ : A₂.PosSemidef := hA₂.posSemidef
   have hPSD : (t • A₁ + (1 - t) • A₂).PosSemidef :=
-    posSemidef_convex_combination hPSD₁ hPSD₂ ht₀ h1mt
+    (hPSD₁.smul ht₀).add (hPSD₂.smul h1mt)
   have hconvex : ConvexOn ℝ (Set.Ici (0 : ℝ)) (fun x : ℝ => x ^ p) := convexOn_rpow hp.1
   have hbound := trace_cfc_convex_bound hconvex hPSD₁ hPSD₂ ht₀ h1mt hPSD
   rw [rpow_eq_cfc_power hA₁ hPSD₁.1, rpow_eq_cfc_power hA₂ hPSD₂.1,

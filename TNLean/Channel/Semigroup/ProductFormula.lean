@@ -7,9 +7,9 @@ import TNLean.Channel.Semigroup.Basic
 import Mathlib.Analysis.SpecificLimits.Normed
 
 /-!
-# Preliminary analytic helpers for Lie--Trotter arguments
+# Preliminary analytic auxiliary lemmas for Lie--Trotter arguments
 
-This file records the basic operator-norm estimates and algebraic identities
+This file states the basic operator-norm estimates and algebraic identities
 needed for finite-dimensional product-formula arguments on `End(M_D(ℂ))`.
 
 ## Main results
@@ -28,14 +28,21 @@ convergence theorem, but that convergence statement itself is not yet included
 here.
 -/
 
-open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace
+open scoped Matrix Matrix.Norms.Operator ComplexOrder BigOperators NNReal MatrixOrder
+open scoped TNOperatorSpace
 open Matrix TNLean
 
 noncomputable section
 
-section ProductFormulaHelpers
+section TrotterEstimates
 
 variable {D : ℕ}
+
+local instance instNormOneClassMatrixCLM [NeZero D] :
+    NormOneClass (MatrixCLM (Fin D)) := by
+  constructor
+  change ‖(ContinuousLinearMap.id ℂ (Matrix (Fin D) (Fin D) ℂ))‖ = 1
+  exact ContinuousLinearMap.norm_id (𝕜 := ℂ) (E := Matrix (Fin D) (Fin D) ℂ)
 
 /-- The norm of an operator exponential is bounded by the scalar exponential of the norm. -/
 theorem norm_exp_le_real_exp_norm {A : Type*}
@@ -70,9 +77,15 @@ theorem norm_exp_le_real_exp_norm {A : Type*}
 theorem norm_expSemigroupCLM_le [NeZero D]
     (A : MatrixCLM (Fin D)) (t : ℝ) (ht : 0 ≤ t) :
     ‖expSemigroupCLM A t‖ ≤ Real.exp (t * ‖A‖) := by
-  have h := norm_exp_le_real_exp_norm (((t : ℂ) • A))
+  haveI := instNormOneClassMatrixCLM (D := D)
+  have h := @norm_exp_le_real_exp_norm (MatrixCLM (Fin D))
+    inferInstance inferInstance inferInstance (instNormOneClassMatrixCLM (D := D))
+    (((t : ℂ) • A))
   have habs : |t| = t := abs_of_nonneg ht
-  simpa [expSemigroupCLM, norm_smul, Complex.norm_real, Real.norm_eq_abs, habs] using h
+  change ‖NormedSpace.exp (((t : ℂ) • A))‖ ≤ Real.exp (t * ‖A‖)
+  rw [show ‖((t : ℂ) • A)‖ = t * ‖A‖ by
+    simp [norm_smul, Real.norm_eq_abs, habs]] at h
+  exact h
 
 /-- A single Lie--Trotter step has the expected operator-norm bound. -/
 theorem norm_trotter_step_le [NeZero D]
@@ -130,13 +143,15 @@ theorem norm_pow_sub_pow_le_of_norm_le [NeZero D]
               gcongr <;> exact norm_mul_le _ _
         _ ≤ M ^ m * ‖A - B‖ + ((m : ℝ) * M ^ m * ‖A - B‖) * M := by
               gcongr
-              · exact norm_pow_le _ _ |>.trans <|
+              · haveI := instNormOneClassMatrixCLM (D := D)
+                exact (@norm_pow_le (MatrixCLM (Fin D)) inferInstance
+                  (instNormOneClassMatrixCLM (D := D)) A m).trans <|
                   pow_le_pow_left₀ (show 0 ≤ ‖A‖ from norm_nonneg _) hA _
         _ = M ^ m * ‖A - B‖ + (m : ℝ) * M ^ (m + 1) * ‖A - B‖ := by
               ring_nf
         _ ≤ M ^ (m + 1) * ‖A - B‖ + (m : ℝ) * M ^ (m + 1) * ‖A - B‖ := by
-              have hpowδ : M ^ m * ‖A - B‖ ≤ M ^ (m + 1) * ‖A - B‖ := by
-                exact mul_le_mul_of_nonneg_right (pow_le_pow_right₀ hM (Nat.le_succ m)) hδ_nonneg
+              have hpowδ : M ^ m * ‖A - B‖ ≤ M ^ (m + 1) * ‖A - B‖ :=
+                mul_le_mul_of_nonneg_right (pow_le_pow_right₀ hM (Nat.le_succ m)) hδ_nonneg
               nlinarith
         _ = ((m + 1 : ℕ) : ℝ) * M ^ (m + 1) * ‖A - B‖ := by
               rw [Nat.cast_add, Nat.cast_one]
@@ -169,8 +184,8 @@ theorem norm_trotter_pow_sub_exp_le_of_step [NeZero D]
       gcongr
       exact norm_add_le A B
     exact hS_le0.trans <| by gcongr
-  have hM : 1 ≤ Real.exp (s * (‖A‖ + ‖B‖)) := by
-    exact Real.one_le_exp (mul_nonneg hs_nonneg (add_nonneg (norm_nonneg _) (norm_nonneg _)))
+  have hM : 1 ≤ Real.exp (s * (‖A‖ + ‖B‖)) :=
+    Real.one_le_exp (mul_nonneg hs_nonneg (add_nonneg (norm_nonneg _) (norm_nonneg _)))
   have hpow : ‖E ^ (n + 1) - S ^ (n + 1)‖ ≤
       ((n + 1 : ℕ) : ℝ) * (Real.exp (s * (‖A‖ + ‖B‖))) ^ (n + 1) * ‖E - S‖ := by
     exact norm_pow_sub_pow_le_of_norm_le (D := D) (A := E) (B := S)
@@ -277,6 +292,6 @@ theorem lie_trotter_suzuki_bound_of_step [NeZero D]
           Real.exp ((((n + 2 : ℕ) : ℝ) / (n + 1)) * t * (‖A‖ + ‖B‖)) := by
             ring
 
-end ProductFormulaHelpers
+end TrotterEstimates
 
 end -- noncomputable section

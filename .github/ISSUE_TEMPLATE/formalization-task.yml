@@ -1,13 +1,22 @@
 name: Formalization Task
 description: A specific theorem, definition, or lemma to formalize in Lean
+title: "<area>: <mathematical result or construction>"
 labels: ["formalization"]
 body:
+  - type: markdown
+    attributes:
+      value: |
+        Use a plain mathematical title, for example
+        `Wolf Ch6: peripheral spectrum of irreducible Schwarz maps`.
+        Do not begin an issue title with `formalization(...)`, `feat(...)`,
+        `fix(...)`, or `doc(...)`.
+
   - type: input
     id: statement
     attributes:
       label: Mathematical statement
-      description: Name and source of the result to formalize
-      placeholder: "e.g., Wolf Thm 6.15: conditional expectation from faithful fixed point"
+      description: State the theorem, definition, or lemma in mathematical language.
+      placeholder: "e.g., Wolf Thm 6.15: faithful fixed points yield a conditional expectation"
     validations:
       required: true
 
@@ -15,8 +24,27 @@ body:
     id: reference
     attributes:
       label: Reference
-      description: Paper or textbook citation
+      description: >-
+        Paper, textbook, or blueprint citation, including theorem/lemma label
+        if available.
       placeholder: "e.g., arXiv:1804.04964 Theorem 3.2, Wolf Lecture Notes Prop 7.4"
+    validations:
+      required: true
+
+  - type: textarea
+    id: source_location
+    attributes:
+      label: Source location and quotation
+      description: >-
+        When the source is in this repository, give a file path, line range,
+        theorem/lemma/equation label when available, and a short quotation of
+        the mathematical claim. Use a precise paraphrase only when the source is
+        not available as repository text.
+      placeholder: |
+        - Source: `blueprint/src/chapter/ch07_spectral.tex:142-148`
+        - Label: `thm:peripheral-fixed-point`
+        - Quote: "The peripheral fixed points form a finite-dimensional
+          C*-algebra under the stated hypotheses."
     validations:
       required: true
 
@@ -33,9 +61,10 @@ body:
     id: dependencies
     attributes:
       label: Dependencies
-      description: Existing Lean declarations or issues this depends on
+      description: Existing formalized results, blueprint entries, or issues this depends on
       placeholder: |
         - `MPSTensor.transferMap` (exists)
+        - `blueprint/src/chapter/ch07_spectral.tex:118`
         - #191 (ground space definitions, in progress)
     validations:
       required: false
@@ -44,8 +73,12 @@ body:
     id: sketch
     attributes:
       label: Proof sketch / approach
-      description: Brief outline of the formalization strategy
-      placeholder: Optional
+      description: >-
+        Brief mathematical proof sketch, with the main lemmas or reductions
+        expected.
+      placeholder: |
+        Reduce to the finite-dimensional spectral decomposition, identify the
+        fixed-point projection, and apply the cited conditional-expectation theorem.
     validations:
       required: false
 
@@ -53,7 +86,10 @@ body:
     id: tracking
     attributes:
       label: Tracking issue
-      description: Parent tracking issue if applicable
+      description: >-
+        Parent tracking issue if applicable. After creation, attach this issue
+        through GitHub's native Sub-issues panel rather than a Markdown
+        checklist.
       placeholder: "e.g., #190"
     validations:
       required: false

@@ -10,7 +10,7 @@ import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unital
 /-!
 # Order and spectral interval properties of positive maps
 
-This file records two basic consequences of positivity used in Wolf's discussion
+This file states two basic consequences of positivity used in Wolf's discussion
 of Schwarz inequalities:
 
 * `IsPositiveMap.map_le_map`: positivity implies monotonicity for the matrix
@@ -51,8 +51,7 @@ theorem IsPositiveMap.map_le_map
     (hT : IsPositiveMap T) (hAB : A ≤ B) : T A ≤ T B := by
   classical
   letI := Fintype.ofFinite m
-  rw [Matrix.le_iff] at hAB ⊢
-  simpa [map_sub] using hT (B - A) hAB
+  exact hT.toPositiveLinearMap.monotone hAB
 
 /-- Positive maps preserve adjoints. -/
 theorem IsPositiveMap.map_conjTranspose
@@ -61,44 +60,10 @@ theorem IsPositiveMap.map_conjTranspose
     T Aᴴ = (T A)ᴴ := by
   classical
   letI := Fintype.ofFinite m
-  let B : Matrix m m ℂ := (1 / 2 : ℝ) • (A + Aᴴ)
-  let C : Matrix m m ℂ := (1 / 2 : ℝ) • (Complex.I • (Aᴴ - A))
-  have hB : B.IsHermitian := by
-    ext i j
-    simp [B, add_comm]
-  have hC : C.IsHermitian := by
-    ext i j
-    simp [C, sub_eq_add_neg, add_comm]
-  have hmulI (z : ℂ) : Complex.I * ((2 : ℂ)⁻¹ * (Complex.I * z)) = -((2 : ℂ)⁻¹ * z) := by
-    calc
-      Complex.I * ((2 : ℂ)⁻¹ * (Complex.I * z)) = (Complex.I * Complex.I) * ((2 : ℂ)⁻¹ * z) := by
-        ring
-      _ = -((2 : ℂ)⁻¹ * z) := by norm_num [Complex.I_sq]
-  have hIC : Complex.I • C = (1 / 2 : ℝ) • (A - Aᴴ) := by
-    ext i j
-    simp [C, sub_eq_add_neg, mul_add, hmulI, add_comm]
-  have hNegIC : -(Complex.I • C) = (1 / 2 : ℝ) • (Aᴴ - A) := by
-    rw [hIC]
-    ext i j
-    simp [sub_eq_add_neg]
-    ring
-  have hA_decomp : A = B + Complex.I • C := by
-    rw [hIC]
-    ext i j
-    simp [B, sub_eq_add_neg]
-    ring
-  have hAstar_decomp : Aᴴ = B - Complex.I • C := by
-    rw [sub_eq_add_neg, hNegIC]
-    ext i j
-    simp [B, sub_eq_add_neg]
-    ring
-  have hTB : (T B).IsHermitian := hT.map_isHermitian hB
-  have hTC : (T C).IsHermitian := hT.map_isHermitian hC
-  have hTA_decomp : T A = T B + Complex.I • T C := by
-    rw [hA_decomp]
-    simp
-  rw [hAstar_decomp, hTA_decomp]
-  simp [sub_eq_add_neg, hTB.eq, hTC.eq, Matrix.conjTranspose_add, Matrix.conjTranspose_smul]
+  letI := Classical.decEq m
+  letI : CStarAlgebra (Matrix m m ℂ) := matrixCStarAlgebra m
+  change hT.toPositiveLinearMap Aᴴ = (hT.toPositiveLinearMap A)ᴴ
+  simpa [Matrix.star_eq_conjTranspose] using map_star hT.toPositiveLinearMap A
 
 /-- A block diagonal matrix with PSD diagonal blocks is PSD. -/
 theorem Matrix.PosSemidef.fromBlocks_diag
@@ -150,7 +115,6 @@ theorem IsPositiveMap.image_bounded
     have hEq : (b : ℝ) • I - T ((b : ℝ) • I) = (b : ℝ) • (I - T I) := by
       ext i j
       simp [I, sub_eq_add_neg]
-      ring
     rw [hEq]
     exact hSub_psd.smul hb0
   refine ⟨?_, ?_⟩
@@ -161,7 +125,7 @@ theorem IsPositiveMap.image_bounded
       T A ≤ T ((b : ℝ) • I) := hT.map_le_map hb
       _ ≤ (b : ℝ) • I := hUpperScalar
 
-/-- Wolf Eq. 5.21 in matrix form: a positive subunital map sends the real spectrum of a
+/-- Wolf Equation 5.21 in matrix form: a positive subunital map sends the real spectrum of a
 Hermitian matrix into the same interval `[a,b]`, provided `0 ∈ [a,b]`. -/
 theorem IsPositiveMap.spectrum_contractivity
     {T : Mat →ₗ[ℂ] Mat} {A : Mat} {a b : ℝ}
@@ -175,13 +139,13 @@ theorem IsPositiveMap.spectrum_contractivity
   have hTA : (T A).IsHermitian := hT.map_isHermitian hA
   have hTA_sa : IsSelfAdjoint (T A) := isSelfAdjoint_iff.mpr hTA
   have hLowerA : (a : ℝ) • I ≤ A := by
-    have hLowerA' : algebraMap ℝ Mat a ≤ A := by
-      exact algebraMap_le_of_le_spectrum (a := A) (r := a) (ha := hA_sa)
+    have hLowerA' : algebraMap ℝ Mat a ≤ A :=
+      algebraMap_le_of_le_spectrum (a := A) (r := a) (ha := hA_sa)
         (fun x hx => (hSpec hx).1)
     simpa [I, Algebra.algebraMap_eq_smul_one] using hLowerA'
   have hUpperA : A ≤ (b : ℝ) • I := by
-    have hUpperA' : A ≤ algebraMap ℝ Mat b := by
-      exact le_algebraMap_of_spectrum_le (a := A) (r := b) (ha := hA_sa)
+    have hUpperA' : A ≤ algebraMap ℝ Mat b :=
+      le_algebraMap_of_spectrum_le (a := A) (r := b) (ha := hA_sa)
         (fun x hx => (hSpec hx).2)
     simpa [I, Algebra.algebraMap_eq_smul_one] using hUpperA'
   obtain ⟨hLowerTA, hUpperTA⟩ := hT.image_bounded hSub ha0 hb0 hLowerA hUpperA

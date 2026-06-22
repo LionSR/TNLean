@@ -23,8 +23,9 @@ if `‖L‖ < 1`, then `R(1,L) = ∑ₙ L^n`. -/
 theorem resolvent_one_neumann
     (L : MatrixCLM (Fin D)) (hL : ‖L‖ < 1) :
     resolvent L (1 : ℂ) = ∑' n : ℕ, L ^ n := by
-  simpa [resolvent, Algebra.algebraMap_eq_smul_one, one_smul] using
-    (NormedRing.inverse_one_sub L hL)
+  rw [resolvent, Algebra.algebraMap_eq_smul_one, one_smul]
+  change Ring.inverse (1 - L) = ∑' n : ℕ, L ^ n
+  exact (hasSum_geom_series_inverse L hL).tsum_eq.symm
 
 /-- Euler resolvent step `(λ R(λ,L))`. -/
 def eulerResolventStep (L : MatrixCLM (Fin D)) (lam : ℂ) : MatrixCLM (Fin D) :=
@@ -34,7 +35,8 @@ def eulerResolventStep (L : MatrixCLM (Fin D)) (lam : ℂ) : MatrixCLM (Fin D) :
 def eulerResolventApprox (L : MatrixCLM (Fin D)) (t : ℝ) (n : ℕ) : MatrixCLM (Fin D) :=
   (eulerResolventStep L ((n : ℂ) / (t : ℂ))) ^ n
 
-/-- Axiomatized Euler limit statement (Wolf Eq. (7.9)) in the present finite-dimensional setting. -/
+/-- Axiomatized Euler limit statement (Wolf Equation (7.9)) in the present
+finite-dimensional setting. -/
 def HasEulerResolventLimit (L : MatrixCLM (Fin D)) (t : ℝ) : Prop :=
   Filter.Tendsto (fun n : ℕ => eulerResolventApprox L t n) Filter.atTop
     (nhds (expSemigroupCLM L t))

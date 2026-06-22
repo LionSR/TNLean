@@ -40,12 +40,16 @@ tools:
   edit:
 
 safe-outputs:
+  report-failure-as-issue: false
   create-pull-request:
-    title-prefix: "[docs-sync] "
+    title-prefix: "doc(blueprint): "
     labels: [documentation, automation]
     if-no-changes: "warn"
     expires: 7d
+    allowed-files: [README.md, docs/**, blueprint/**]
+    protected-files: fallback-to-issue
   noop:
+    report-as-issue: false
   missing-data:
 ---
 
@@ -75,6 +79,9 @@ Use `TNLean/` and recent git history as the source of truth for current implemen
 4. Keep edits minimal, factual, and specific.
 5. Do not modify code files unless required to fix broken docs tooling references (prefer doc-only changes).
 6. Ensure all changed files are documentation and/or blueprint artifacts.
+7. Do not modify assistant instruction or workflow files such as `CLAUDE.md`,
+   `AGENTS.md`, `.github/`, or `.agents/`. If those files appear stale, call
+   `missing-data` and explain the needed human review instead of opening a PR.
 
 ## Pull request requirements
 
@@ -83,6 +90,9 @@ When you make updates, create a PR that includes:
 - A concise summary of what was out of sync
 - Which documentation/blueprint files were updated
 - Why those updates were needed based on recent code changes
+- For mathematical content, cite the relevant theorem label, blueprint entry,
+  paper reference, or Lean declaration rather than using local shorthand
+- Avoid AI vocabulary and software-process metaphors when describing mathematics
 
 If no updates are needed, call `noop` with a short explanation of what you checked.
 

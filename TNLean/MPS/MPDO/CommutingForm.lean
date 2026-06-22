@@ -8,16 +8,16 @@ import TNLean.MPS.ParentHamiltonian.Defs
 /-!
 # Commuting-form and GSNNCH data for simple MPDOs
 
-This file records the commuting-form side of the simple MPDO story from
-arXiv:1606.00608 §4.4 and Appendix C.2.
+This file states the commuting-form side of the simple MPDO story from
+arXiv:1606.00608 Section 4.4 and Appendix C.2.
 
 For an `N`-site operator `ρ`, a commuting-form witness consists of a positive
 semidefinite two-site matrix `B`, together with proofs that its translated
 copies on the periodic chain pairwise commute and that their product
 reproduces `ρ` up to a positive scalar. This is the projector-limit version of
-Definition 4.8 (GSNNCH). The actual entropy-side derivation
-`SAL ⟹ HasCommutingForm` is not yet formalized here; it is isolated as the
-upstream missing theorem recorded in the accompanying audit for issue #782.
+the commuting-form definition in arXiv:1606.00608. The actual entropy-side derivation
+`SAL ⟹ HasCommutingForm` is not yet formalized here; this file starts from the
+commuting-form witness and proves the GSNNCH equivalence built from that data.
 
 ## Main declarations
 
@@ -33,7 +33,8 @@ upstream missing theorem recorded in the accompanying audit for issue #782.
 
 ## References
 
-* [CPGSV17] arXiv:1606.00608, Definition 4.8 and Appendix C.2 Proposition C.6
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
+  Section 4.4 and Appendix C.2
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -61,9 +62,8 @@ def AgreesOutsideWindow (L : ℕ) {N : ℕ} (hLN : L ≤ N) (i : Fin N)
 acting as the given local matrix on the window and as the identity on the
 complement. -/
 noncomputable def embedLocalOperator (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
-    (B : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) : ChainOperator d N := by
-  classical
-  exact Matrix.of fun σ τ =>
+    (B : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) : ChainOperator d N :=
+  Matrix.of fun σ τ =>
     if AgreesOutsideWindow (d := d) L hLN i σ τ then
       B (MPSTensor.extractWindow L i σ) (MPSTensor.extractWindow L i τ)
     else 0
@@ -73,16 +73,15 @@ noncomputable def embedLocalOperator (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
     embedLocalOperator (d := d) L N hLN i B σ τ =
       if AgreesOutsideWindow (d := d) L hLN i σ τ then
         B (MPSTensor.extractWindow L i σ) (MPSTensor.extractWindow L i τ)
-      else 0 := by
-  classical
+      else 0 :=
   rfl
 
-/-- Chain-level commuting-form data for Proposition C.6.
+/-- Chain-level commuting-form data for the simple-MPDO theorem.
 
-The current record stores the translation-invariant two-site factor `B` together
+The current structure stores the translation-invariant two-site factor `B` together
 with chain-level commutativity of its translated copies. The intended
 nearest-neighbor support is encoded by `embedLocalOperator`; no separate
-factorization API is required downstream. -/
+factorization structure is required later. -/
 structure CommutingFormData (d N : ℕ) where
   /-- The theorem only makes sense for genuine nearest-neighbor chains. -/
   hN : 2 ≤ N
@@ -112,8 +111,7 @@ noncomputable def bondAt (data : CommutingFormData d N) (i : Fin N) :
     data.bondAt i σ τ =
       if AgreesOutsideWindow (d := d) 2 data.hN i σ τ then
         data.bond (MPSTensor.extractWindow 2 i σ) (MPSTensor.extractWindow 2 i τ)
-      else 0 := by
-  classical
+      else 0 :=
   rfl
 
 theorem bondAt_comm (data : CommutingFormData d N) (i j : Fin N) :
@@ -125,7 +123,7 @@ natural order of `Fin N`. -/
 noncomputable def product (data : CommutingFormData d N) : ChainOperator d N :=
   (List.ofFn fun i : Fin N => data.bondAt i).prod
 
-/-- The commuting-form datum realizes `ρ` when `ρ` equals the commuting product
+/-- The commuting-form witness realizes `ρ` when `ρ` equals the commuting product
 up to a positive real normalization factor. -/
 def Realizes (data : CommutingFormData d N) (ρ : ChainOperator d N) : Prop :=
   ∃ c : ℝ, 0 < c ∧ ρ = (c : ℂ) • data.product
@@ -139,14 +137,14 @@ def HasCommutingForm (M : MPOTensor d D) : Prop :=
   ∀ N : ℕ, 2 ≤ N →
     ∃ data : CommutingFormData d N, data.Realizes (mpo M N)
 
-/-- A GSNNCH witness at chain length `N`: a commuting-form datum together with
+/-- A GSNNCH witness at chain length `N`: a commuting-form witness together with
 its positive normalization constant.
 
-This records Definition 4.8 in the equivalent positive-operator form
+This states the commuting-form definition in the equivalent positive-operator form
 `ρ⁽ᴺ⁾ = c ∏ᵢ B_{i,i+1}`, where `c > 0` and the translated bond operators
 commute pairwise. The paper's exponential form is recovered by taking
 `B_{i,i+1} = e^{-h_{i,i+1}}` or, more generally, by the projector-limit
-convention explained immediately after Definition 4.8. -/
+convention following that definition. -/
 structure GSNNCHData (d N : ℕ) where
   /-- The underlying commuting-form data. -/
   form : CommutingFormData d N
@@ -165,9 +163,8 @@ noncomputable def state (data : GSNNCHData d N) : ChainOperator d N :=
 
 /-- Every GSNNCH witness gives back the underlying commuting-form realization. -/
 theorem realizes_form_state (data : GSNNCHData d N) :
-    data.form.Realizes data.state := by
-  refine ⟨data.normalization, data.normalization_pos, ?_⟩
-  rfl
+    data.form.Realizes data.state :=
+  ⟨data.normalization, data.normalization_pos, rfl⟩
 
 end GSNNCHData
 
@@ -176,7 +173,7 @@ def IsGSNNCHAt {d N : ℕ} (ρ : ChainOperator d N) : Prop :=
   ∃ data : GSNNCHData d N, ρ = data.state
 
 /-- Global GSNNCH predicate for an MPO tensor: every chain length `N ≥ 2`
-produces a GSNNCH operator in the sense of Definition 4.8. -/
+produces a GSNNCH operator in the sense of the commuting-form definition. -/
 def IsGSNNCH (M : MPOTensor d D) : Prop :=
   ∀ N : ℕ, 2 ≤ N → IsGSNNCHAt (mpo M N)
 
@@ -198,17 +195,15 @@ theorem isGSNNCHAt_of_realizes (data : CommutingFormData d N)
     {ρ : ChainOperator d N} (hρ : data.Realizes ρ) : IsGSNNCHAt ρ := by
   rcases hρ with ⟨c, hc, hρ⟩
   refine ⟨data.toGSNNCHData c hc, ?_⟩
-  simpa [GSNNCHData.state] using hρ
+  simpa [GSNNCHData.state, toGSNNCHData] using hρ
 
 end CommutingFormData
 
 theorem isGSNNCHAt_iff_exists_commutingForm {d N : ℕ} (ρ : ChainOperator d N) :
     IsGSNNCHAt ρ ↔ ∃ data : CommutingFormData d N, data.Realizes ρ := by
   constructor
-  · rintro ⟨data, hρ⟩
-    refine ⟨data.form, ?_⟩
-    rw [hρ]
-    exact data.realizes_form_state
+  · rintro ⟨data, rfl⟩
+    exact ⟨data.form, data.realizes_form_state⟩
   · rintro ⟨data, hρ⟩
     exact data.isGSNNCHAt_of_realizes hρ
 
@@ -219,20 +214,15 @@ theorem isGSNNCH_of_hasCommutingForm {M : MPOTensor d D}
   exact data.isGSNNCHAt_of_realizes hdata
 
 theorem hasCommutingForm_of_isGSNNCH {M : MPOTensor d D}
-    (hM : IsGSNNCH M) : HasCommutingForm M := by
-  intro N hN
-  rcases (isGSNNCHAt_iff_exists_commutingForm (mpo M N)).mp (hM N hN) with
-    ⟨data, hdata⟩
-  exact ⟨data, hdata⟩
+    (hM : IsGSNNCH M) : HasCommutingForm M := fun N hN =>
+  (isGSNNCHAt_iff_exists_commutingForm (mpo M N)).mp (hM N hN)
 
 theorem isGSNNCH_iff_hasCommutingForm (M : MPOTensor d D) :
-    IsGSNNCH M ↔ HasCommutingForm M := by
-  constructor
-  · exact hasCommutingForm_of_isGSNNCH
-  · exact isGSNNCH_of_hasCommutingForm
+    IsGSNNCH M ↔ HasCommutingForm M :=
+  ⟨hasCommutingForm_of_isGSNNCH, isGSNNCH_of_hasCommutingForm⟩
 
-/-- The GSNNCH branch of Theorem 4.9, bundled together with MPO zero
-correlation length. -/
+/-- The GSNNCH-with-zero-correlation-length branch of the simple-MPDO
+equivalence. -/
 def IsGSNNCHWithZCL (M : MPOTensor d D) : Prop :=
   IsGSNNCH M ∧ IsZCL M
 

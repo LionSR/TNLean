@@ -2,13 +2,13 @@
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.Channel.Basic
+import TNLean.Channel.Schwarz.Basic
 
 /-!
 # Kadison–Schwarz inequality for completely positive maps
 
-The **Kadison–Schwarz inequality** (Wolf, Proposition 6.4) states that for any
-**unital** completely positive map `E`, we have
+The **Kadison–Schwarz inequality** (Wolf, Chapter 5, Equation (5.2)) states that
+for any **unital** completely positive map `E`, we have
 `E(X† X) ≥ E(X)† E(X)` in the Loewner order.
 
 This file also proves the Hilbert–Schmidt contraction property.
@@ -21,7 +21,8 @@ This file also proves the Hilbert–Schmidt contraction property.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Proposition 6.4][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 5,
+  Equation (5.2)][Wolf2012QChannels]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
@@ -59,31 +60,10 @@ def IsTPKraus (K : Fin d → Matrix (Fin D) (Fin D) ℂ) : Prop :=
 @[simp] theorem isTPKraus_iff (K : Fin d → Matrix (Fin D) (Fin D) ℂ) :
     IsTPKraus K ↔ ∑ i : Fin d, (K i)ᴴ * K i = 1 := Iff.rfl
 
-/-- Alias: unital Kraus families are right-canonical. -/
-abbrev IsRightCanonicalKraus (K : Fin d → Matrix (Fin D) (Fin D) ℂ) : Prop :=
-  IsUnitalKraus K
-
-/-- Alias: trace-preserving Kraus families are left-canonical. -/
-abbrev IsLeftCanonicalKraus (K : Fin d → Matrix (Fin D) (Fin D) ℂ) : Prop :=
-  IsTPKraus K
-
-@[simp] theorem isRightCanonicalKraus_iff (K : Fin d → Matrix (Fin D) (Fin D) ℂ) :
-    IsRightCanonicalKraus K ↔ IsUnitalKraus K :=
-  Iff.rfl
-
-@[simp] theorem isLeftCanonicalKraus_iff (K : Fin d → Matrix (Fin D) (Fin D) ℂ) :
-    IsLeftCanonicalKraus K ↔ IsTPKraus K :=
-  Iff.rfl
-
 /-- If the Kraus operators satisfy `∑ Kᵢ Kᵢ† = I`, then `krausMap K 1 = 1`. -/
 theorem krausMap_one_of_unital (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (h : IsUnitalKraus K) : krausMap K 1 = 1 := by
   simp only [krausMap, mul_one]; exact h
-
-/-- Right-canonical alias of `krausMap_one_of_unital`. -/
-theorem krausMap_one_of_rightCanonical (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (h : IsRightCanonicalKraus K) : krausMap K 1 = 1 :=
-  krausMap_one_of_unital K h
 
 /-- If the Kraus operators satisfy `∑ Kᵢ† Kᵢ = I`, then the adjoint map is unital:
 `krausAdjointMap K 1 = 1`. -/
@@ -91,29 +71,43 @@ theorem krausAdjointMap_one_of_TP (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (h : IsTPKraus K) : krausAdjointMap K 1 = 1 := by
   simp only [krausAdjointMap, mul_one]; exact h
 
-/-- Left-canonical alias of `krausAdjointMap_one_of_TP`. -/
-theorem krausAdjointMap_one_of_leftCanonical (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (h : IsLeftCanonicalKraus K) : krausAdjointMap K 1 = 1 :=
-  krausAdjointMap_one_of_TP K h
+/-- A trace-preserving Kraus family preserves the matrix trace. -/
+theorem trace_krausMap_of_tp (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
+    (h_tp : IsTPKraus K)
+    (X : Matrix (Fin D) (Fin D) ℂ) :
+    trace (krausMap K X) = trace X := by
+  simp only [krausMap, trace_sum]
+  conv_lhs => arg 2; ext i; rw [Matrix.trace_mul_cycle]
+  rw [← trace_sum, ← Finset.sum_mul, show ∑ i : Fin d, (K i)ᴴ * K i = 1 from h_tp,
+    one_mul]
 
-/-- The adjoint Kraus map equals the Kraus map with conjugate-transposed operators. -/
-private theorem krausAdjointMap_eq (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (Y) :
-    krausAdjointMap K Y = krausMap (fun i => (K i)ᴴ) Y := by
-  simp [krausAdjointMap, krausMap, conjTranspose_conjTranspose]
+/-- The Kadison-Schwarz Kraus map commutes with conjugate transpose. -/
+theorem krausMap_conjTranspose (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
+    (X : Matrix (Fin D) (Fin D) ℂ) :
+    krausMap K Xᴴ = (krausMap K X)ᴴ := by
+  simpa [krausMap, Kraus.map] using (Kraus.map_conjTranspose (K := K) X).symm
+
+/-- The conjugate transpose of a Kadison-Schwarz Kraus map. -/
+theorem conjTranspose_krausMap (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
+    (X : Matrix (Fin D) (Fin D) ℂ) :
+    (krausMap K X)ᴴ = krausMap K Xᴴ := by
+  simpa [krausMap, Kraus.map] using Kraus.map_conjTranspose (K := K) X
 
 /-- The conjugate-transposed operators of a TP family form a unital family. -/
-private theorem isUnitalKraus_conjTranspose (h : IsTPKraus K) :
-    IsUnitalKraus (fun i => (K i)ᴴ) := by
+theorem isUnitalKraus_conjTranspose {K : Fin d → Matrix (Fin D) (Fin D) ℂ}
+    (h : IsTPKraus (d := d) (D := D) K) :
+    IsUnitalKraus (d := d) (D := D) (fun i => (K i)ᴴ) := by
   change ∑ i, (K i)ᴴ * ((K i)ᴴ)ᴴ = 1
   simp only [conjTranspose_conjTranspose]; exact h
 
 /-- The conjugate-transposed operators of a unital family form a TP family. -/
-private theorem isTPKraus_conjTranspose (h : IsUnitalKraus K) :
-    IsTPKraus (fun i => (K i)ᴴ) := by
+theorem isTPKraus_conjTranspose {K : Fin d → Matrix (Fin D) (Fin D) ℂ}
+    (h : IsUnitalKraus (d := d) (D := D) K) :
+    IsTPKraus (d := d) (D := D) (fun i => (K i)ᴴ) := by
   change ∑ i, ((K i)ᴴ)ᴴ * (K i)ᴴ = 1
   simp only [conjTranspose_conjTranspose]; exact h
 
-/-- **Kadison-Schwarz inequality** (Wolf, Proposition 6.4).
+/-- **Kadison-Schwarz inequality** (Wolf, Chapter 5, Equation (5.2)).
 
 For a unital CP map `E(X) = ∑ᵢ Kᵢ X Kᵢ†` with `∑ᵢ Kᵢ Kᵢ† = I`,
 we have `E(X† X) ≥ E(X)† E(X)` in the Loewner order, i.e.,
@@ -187,8 +181,8 @@ theorem kadison_schwarz_adjoint (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (h_tp : IsTPKraus K)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     (krausAdjointMap K (Xᴴ * X) - (krausAdjointMap K X)ᴴ * krausAdjointMap K X).PosSemidef := by
-  simp only [krausAdjointMap_eq]
-  exact kadison_schwarz _ (isUnitalKraus_conjTranspose h_tp) X
+  simpa [krausAdjointMap, krausMap, conjTranspose_conjTranspose] using
+    kadison_schwarz (fun i => (K i)ᴴ) (isUnitalKraus_conjTranspose h_tp) X
 
 /-- **Kadison-Schwarz in Loewner order** (≤ formulation).
 
@@ -216,28 +210,8 @@ theorem hilbertSchmidt_contraction (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
   have h_nonneg := (kadison_schwarz K h_unital X).trace_nonneg
   rw [trace_sub] at h_nonneg
   have h_pres : trace (krausMap K (Xᴴ * X)) = trace (Xᴴ * X) := by
-    simp only [krausMap, trace_sum]
-    conv_lhs => arg 2; ext i; rw [Matrix.trace_mul_cycle]
-    rw [← trace_sum, ← Finset.sum_mul, show ∑ i : Fin d, (K i)ᴴ * K i = 1 from h_tp, one_mul]
+    exact trace_krausMap_of_tp K h_tp (Xᴴ * X)
   rw [h_pres] at h_nonneg
   exact le_of_sub_nonneg h_nonneg
-
-/-- **HS contraction for the adjoint channel** (MPS version).
-
-If `∑ Kᵢ† Kᵢ = I` (TP / left-canonical) and `∑ Kᵢ Kᵢ† = I`
-(unital / right-canonical), then the adjoint map
-`E*(X) = ∑ Kᵢ† X Kᵢ` contracts the Hilbert-Schmidt norm:
-`tr(E*(X)† E*(X)) ≤ tr(X† X)`.
-
-Note: both conditions are needed — Kadison-Schwarz uses unitality of E*
-(which follows from TP of E), while the trace computation uses TP of E*
-(which requires unitality of E). -/
-theorem hilbertSchmidt_contraction_adjoint (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (h_tp : IsTPKraus K) (h_unital : IsUnitalKraus K)
-    (X : Matrix (Fin D) (Fin D) ℂ) :
-    trace ((krausAdjointMap K X)ᴴ * krausAdjointMap K X) ≤ trace (Xᴴ * X) := by
-  simp only [krausAdjointMap_eq]
-  exact hilbertSchmidt_contraction _ (isUnitalKraus_conjTranspose h_tp)
-    (isTPKraus_conjTranspose h_unital) X
 
 end KadisonSchwarz

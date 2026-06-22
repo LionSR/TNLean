@@ -12,7 +12,7 @@ import TNLean.MPS.Core.BlockingInfrastructure
 # Basic projection word lemmas for cyclic-sector decompositions
 
 This file contains the projection-word identities used throughout the
-cyclic-sector normalization pipeline.
+cyclic-sector normalization argument.
 
 ## Main declarations
 

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.RFP.Defs
 import TNLean.MPS.Core.CPPrimitive
-import TNLean.MPS.BNT.Construction
+import TNLean.PiAlgebra.CanonicalFormSepAux
 import TNLean.MPS.Irreducible.FormII
 import TNLean.Spectral.QuantitativeGap
 
@@ -12,7 +12,7 @@ import TNLean.Spectral.QuantitativeGap
 # Structural form of RFP tensors
 
 This file states the structural characterisation theorems for MPS tensors
-that are renormalization fixed points, following arXiv:1606.00608 §3.4
+that are renormalization fixed points, following arXiv:1606.00608 Section 3.4
 (Cirac–Pérez-García–Schuch–Verstraete) and Appendix B.
 
 ## Main results
@@ -24,7 +24,6 @@ that are renormalization fixed points, following arXiv:1606.00608 §3.4
 * `rfp_nt_cfii_diagonal_fixedPoint`: Appendix B / CFII reduction step — after unitary
   conjugation, a left-canonical normal RFP tensor has a diagonal positive-definite fixed point
 * `rfp_cf_structural`: each canonical-form block is injective
-* `rfp_bnt_structural`: each BNT block is injective
 
 ## Proof strategy
 
@@ -168,10 +167,8 @@ private theorem exists_nonzero_of_leftCanonical [DecidableEq (Fin D)] [NeZero D]
   push Not at hA
   have hsum : ∑ i : Fin d, (A i)ᴴ * A i = 0 := by
     simp [hA]
-  have h1 : (1 : Mat) = 0 := by
-    rw [hLeft] at hsum
-    exact hsum
-  exact (one_ne_zero : (1 : Mat) ≠ 0) h1
+  rw [hLeft] at hsum
+  exact one_ne_zero hsum
 
 /-- Appendix B precursor without a separate nonzero side condition:
 for a left-canonical normal RFP tensor, the one-site Kraus span is already all of `M_D(ℂ)`. -/
@@ -185,7 +182,7 @@ theorem rfp_nt_structural_of_leftCanonical [DecidableEq (Fin D)] [NeZero D]
 /-- Appendix B / CFII reduction step:
 after unitary conjugation, a left-canonical normal RFP tensor has a diagonal
 positive-definite fixed point for its transfer map. -/
-theorem rfp_nt_cfii_diagonal_fixedPoint [DecidableEq (Fin D)] [NeZero D]
+theorem rfp_nt_cfii_diagonal_fixedPoint [NeZero D]
     (A : MPSTensor d D)
     (hNT : IsNormal A) (hRFP : IsRFP A)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
@@ -202,7 +199,7 @@ theorem rfp_nt_cfii_diagonal_fixedPoint [DecidableEq (Fin D)] [NeZero D]
   have hIrrTensor : IsIrreducibleTensor (d := d) (D := D) A :=
     isIrreducibleTensor_of_isIrreducibleMap A hIrrMap
   have hD : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
-  exact exists_unitary_diag_posDef_fixedPoint_of_leftCanonical_of_isIrreducibleTensor
+  exact exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
     (d := d) (D := D) A hLeft hIrrTensor hD
 
 /-- **Rank-one classification** (arXiv:1606.00608, Appendix B): for an injective
@@ -255,12 +252,5 @@ theorem rfp_cf_structural {r : ℕ} {dim : Fin r → ℕ}
     (hCF : IsCanonicalForm μ A) :
     ∀ k, IsInjective (A k) :=
   hCF.block_injective
-
-/-- BNT blocks are already injective, so the same precursor applies blockwise. -/
-theorem rfp_bnt_structural {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
-    (hCF : IsCanonicalFormBNT μ A) :
-    ∀ k, IsInjective (A k) :=
-  hCF.toIsCanonicalForm.block_injective
 
 end MPSTensor

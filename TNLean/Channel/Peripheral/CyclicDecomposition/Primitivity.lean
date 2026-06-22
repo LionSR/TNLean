@@ -21,7 +21,7 @@ peripheral-spectrum development.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Thm. 6.6, Thm. 6.16]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 6.6, Theorem 6.16]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
@@ -88,8 +88,8 @@ theorem preserves_corner_pow_of_cyclic_decomp
                   congr 1
                   calc
                     T (P (cyclicIndex k n + 1) * X * P (cyclicIndex k n + 1))
-                        = T (P (cyclicIndex k n + 1) * X) * T (P (cyclicIndex k n + 1)) := by
-                            exact hMulRight (cyclicIndex k n + 1) (P (cyclicIndex k n + 1) * X)
+                        = T (P (cyclicIndex k n + 1) * X) * T (P (cyclicIndex k n + 1)) :=
+                            hMulRight (cyclicIndex k n + 1) (P (cyclicIndex k n + 1) * X)
                     _ = (T (P (cyclicIndex k n + 1)) * T X) * T (P (cyclicIndex k n + 1)) := by
                             rw [hMulLeft (cyclicIndex k n + 1) X]
                     _ = P (cyclicIndex k n) * T X * P (cyclicIndex k n) := by
@@ -160,8 +160,8 @@ theorem isPrimitive_restriction_of_cyclic_decomp
     rw [hperiph]
     exact ⟨0, by simp only [Fin.coe_ofNat_eq_mod, Nat.zero_mod, pow_zero]⟩
   rcases hone_mem.1.exists_hasEigenvector with ⟨ρ, hρeig⟩
-  have hρ_fix : T ρ = ρ := by
-    exact (Module.End.HasEigenvector.apply_eq_smul hρeig).trans (by simp only [one_smul])
+  have hρ_fix : T ρ = ρ :=
+    (Module.End.HasEigenvector.apply_eq_smul hρeig).trans (by simp only [one_smul])
   have hρ_ne : ρ ≠ 0 := (Module.End.hasEigenvector_iff.mp hρeig).2
   have hper_pow : ∀ μ : ℂ, μ ∈ peripheralEigenvalues T → μ ^ m = 1 := by
     intro μ hμ
@@ -204,7 +204,8 @@ theorem isPrimitive_restriction_of_cyclic_decomp
       cornerRestriction (P k) (T ^ m) (hInv k) ⟨P k, hPk_corner k⟩ = ⟨P k, hPk_corner k⟩ := by
     intro k
     apply Subtype.ext
-    simpa using hPk_fix k
+    change (T ^ m) (P k) = P k
+    exact hPk_fix k
   have hcorner_ne : ∀ k : Fin m, (⟨P k, hPk_corner k⟩ : cornerSubmodule (P k)) ≠ 0 := by
     intro k hzero
     apply hPne k
@@ -249,7 +250,7 @@ variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 omit [Fintype ι] [DecidableEq ι] in
 /-- Permutation-based variant of `preserves_corner_pow_of_cyclic_decomp`.
 
-This isolates the part of Wolf Thm. 6.16 that only needs a permutation action on blocks:
+This isolates the part of Wolf Theorem 6.16 that only needs a permutation action on blocks:
 if `T` permutes a family of sector projections via a permutation `σ`, then the `orderOf σ`-th
 iterate preserves each sector corner. -/
 theorem preserves_corner_pow_orderOf_of_perm_decomp
@@ -285,8 +286,8 @@ theorem preserves_corner_pow_orderOf_of_perm_decomp
                   congr 1
                   calc
                     T (P (σ ((σ ^ n) k)) * X * P (σ ((σ ^ n) k))
-                        ) = T (P (σ ((σ ^ n) k)) * X) * T (P (σ ((σ ^ n) k))) := by
-                              exact hMulRight (σ ((σ ^ n) k)) (P (σ ((σ ^ n) k)) * X)
+                        ) = T (P (σ ((σ ^ n) k)) * X) * T (P (σ ((σ ^ n) k))) :=
+                              hMulRight (σ ((σ ^ n) k)) (P (σ ((σ ^ n) k)) * X)
                     _ = (T (P (σ ((σ ^ n) k))) * T X) * T (P (σ ((σ ^ n) k))) := by
                           rw [hMulLeft (σ ((σ ^ n) k)) X]
                     _ = P ((σ ^ n) k) * T X * P ((σ ^ n) k) := by

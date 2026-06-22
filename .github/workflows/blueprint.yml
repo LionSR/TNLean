@@ -10,7 +10,9 @@ on:
       - 'lean-toolchain'
       - 'lake-manifest.json'
       - 'blueprint/src/**'
+      - '.github/workflows/blueprint.yml'
       - 'home_page/**'
+      - 'scripts/blueprint_bibtex.py'
       - 'scripts/write_badges.py'
   workflow_dispatch:
 
@@ -30,29 +32,50 @@ jobs:
       - name: Checkout project
         uses: actions/checkout@v6
 
-      - name: Install Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
       - name: Install system dependencies
-        run: sudo apt-get update && sudo apt-get install -y graphviz libgraphviz-dev texlive-binaries
+        uses: texra-ai/lean-env-action/blueprint-system-deps@v1
 
       - name: Install leanblueprint
-        run: pip install leanblueprint
+        uses: texra-ai/lean-env-action/leanblueprint@v1
+
+      - name: Check tensor-network diagram macros
+        run: |
+          cd blueprint/src
+          PYTHONPATH=Packages python3 Packages/tn_diagrams.py \
+            --check \
+            --check-peps-usage \
+            --smoke-render
 
       - name: Write status badges
         run: python3 scripts/write_badges.py
 
+      - name: Build blueprint bibliography
+        run: python3 scripts/blueprint_bibtex.py
+
       - name: Build blueprint
         run: |
           set -o pipefail
-          leanblueprint web 2>&1 | tee /tmp/blueprint-output.txt
-          if grep -q "^ERROR:" /tmp/blueprint-output.txt; then
+          tmp_output_file="$(mktemp)"
+
+          leanblueprint pdf
+
+          set +o pipefail
+          leanblueprint web 2>&1 | tee "$tmp_output_file"
+          cmd_status=${PIPESTATUS[0]}
+          set -o pipefail
+
+          if grep -q "^ERROR:" "$tmp_output_file"; then
             echo "::warning::Blueprint has unresolved labels (see ERROR lines above)"
           fi
-          if grep -q "WARNING: File not found:" /tmp/blueprint-output.txt; then
+          if grep -q "WARNING: File not found:" "$tmp_output_file"; then
             echo "::error::Blueprint has missing files (see WARNING lines above)"
+            exit 1
+          fi
+          if [ "$cmd_status" -ne 0 ]; then
+            exit "$cmd_status"
+          fi
+          if grep -R "TikZ SVG unavailable" blueprint/web --include='*.html'; then
+            echo "::error::Blueprint contains unrendered TikZ SVG placeholders"
             exit 1
           fi
 

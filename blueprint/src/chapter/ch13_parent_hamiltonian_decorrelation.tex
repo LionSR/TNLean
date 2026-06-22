@@ -1,0 +1,351 @@
+\section{Decorrelation and the idempotent-product parent-commuting condition}%
+\label{sec:decorrelation}
+
+This section develops the idempotent-product formulation used for the
+decorrelation implication from Appendix~D. It is not the full source condition.
+In Appendix~D.2 of
+\cite{Cirac2016MPDO_arXiv}, the parent commuting Hamiltonian condition is stated
+for local projectors $Q_{AX}$ and $Q_{XB}$ with
+\[
+    [Q_{AX},Q_{XB}]=0,\qquad
+    K_{AXB}=(K_{AX}\otimes H_B)\cap(H_A\otimes K_{XB}).
+\]
+Writing $P_{AX}=1-Q_{AX}$ and $P_{XB}=1-Q_{XB}$ gives, for the idempotent
+$P_K$ used below, the identity $P_{AX}P_{XB}=P_K$. The definition below records
+this idempotent-product consequence, not the tensor-product locality,
+orthogonal-projector, or ground-space-intersection hypotheses of Appendix~D.2.
+% Scope restriction: this section keeps the idempotent-product consequence
+% and not the tensor-product locality or orthogonal-projector hypotheses of the
+% source definition. See
+% docs/paper-gaps/cpsv16_parent_commuting_hamiltonian_scope.tex.
+
+\begin{definition}[Decorrelation]\label{def:is_decorrelated}
+    \lean{Decorrelation.IsDecorrelated}
+    \leanok
+    Given an endomorphism $P_K$ and sets of observables $\mathcal{O}_A$,
+    $\mathcal{O}_B$, regions $A$ and $B$ are \emph{decorrelated} w.r.t.\ $K$
+    when
+    $P_K \circ O_A \circ (1 - P_K) \circ O_B \circ P_K = 0$
+    for all $O_A \in \mathcal{O}_A$, $O_B \in \mathcal{O}_B$.
+\end{definition}
+
+\begin{definition}[Idempotent-product parent-commuting structure]\label{def:has_commuting_parent_ham}
+    \lean{Decorrelation.HasCommutingParentHam}
+    \leanok
+    The structure used below records only the idempotent-product
+    consequence of the parent commuting Hamiltonian condition of
+    \cite[Appendix~D.2]{Cirac2016MPDO_arXiv}. It consists of commuting
+    idempotent endomorphisms $P_{AX}$ and $P_{XB}$ such that, for the
+    idempotent $P_K$ associated to $K$,
+    \[
+        P_{AX}\circ P_{XB}=P_K.
+    \]
+    In the source, this is the equation obtained from local projectors
+    $Q_{AX}$ and $Q_{XB}$ satisfying $[Q_{AX},Q_{XB}]=0$ and
+    $K_{AXB}=(K_{AX}\otimes H_B)\cap(H_A\otimes K_{XB})$.
+    % Scope restriction: this definition records only the idempotent-product
+    % part of the source condition. See
+    % docs/paper-gaps/cpsv16_parent_commuting_hamiltonian_scope.tex.
+\end{definition}
+
+\begin{theorem}[Idempotence gives tautological idempotent-product data]%
+    \label{thm:has_commuting_parent_ham_of_idem}
+    \lean{Decorrelation.HasCommutingParentHam.ofIdem}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    If
+    \[
+        P_K \circ P_K = P_K,
+    \]
+    then $P_K$ has idempotent-product data.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    Take $P_{AX} = P_{XB} = P_K$. Their commutativity is immediate, and the
+    product identity is exactly the assumed idempotence of $P_K$.
+\end{proof}
+
+\begin{lemma}[Cancellation for commuting idempotents]
+    \label{lem:comp_complement_comm_zero}
+    \lean{LinearMap.comp_complement_comm_zero}
+    \leanok
+    If $P$ and $Q$ are commuting idempotents, then
+    \[
+        Q \circ (1 - P \circ Q) \circ P = 0.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The cancellation is the computation
+    \[
+        Q(1-PQ)P
+        =
+        QP-QPQP
+        =
+        QP-QPPQ
+        =
+        QP-QP
+        =
+        0,
+    \]
+    using commutativity and idempotence.
+\end{proof}
+
+\begin{theorem}[Idempotence of the product projector]%
+    \label{thm:pk_idem}
+    \lean{Decorrelation.HasCommutingParentHam.pK_idem}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    If $P_K = P_{AX} \circ P_{XB}$ is idempotent-product data, then
+    \[
+        P_K \circ P_K = P_K.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    Since $P_{AX}$ and $P_{XB}$ are idempotent and commute, their product
+    $P_{AX} \circ P_{XB}$ is idempotent. Substituting
+    $P_K = P_{AX} \circ P_{XB}$ gives the claim.
+\end{proof}
+
+\begin{theorem}[Absorption by the left projector]%
+    \label{thm:pAX_comp_pK}
+    \lean{Decorrelation.HasCommutingParentHam.pAX_comp_pK}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    If $P_K = P_{AX} \circ P_{XB}$ is idempotent-product data, then
+    \[
+        P_{AX} \circ P_K = P_K.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    Using $P_K = P_{AX} \circ P_{XB}$ and the idempotence of $P_{AX}$,
+    \[
+        P_{AX} \circ P_K
+        = P_{AX} \circ P_{AX} \circ P_{XB}
+        = P_{AX} \circ P_{XB}
+        = P_K.
+    \]
+\end{proof}
+
+\begin{theorem}[Absorption by the right projector]%
+    \label{thm:pK_comp_pXB}
+    \lean{Decorrelation.HasCommutingParentHam.pK_comp_pXB}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    If $P_K = P_{AX} \circ P_{XB}$ is idempotent-product data, then
+    \[
+        P_K \circ P_{XB} = P_K.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    Using $P_K = P_{AX} \circ P_{XB}$ and the idempotence of $P_{XB}$,
+    \[
+        P_K \circ P_{XB}
+        = P_{AX} \circ P_{XB} \circ P_{XB}
+        = P_{AX} \circ P_{XB}
+        = P_K.
+    \]
+\end{proof}
+
+\begin{theorem}[Cross-absorption by the right projector]%
+    \label{thm:pXB_comp_pK}
+    \lean{Decorrelation.HasCommutingParentHam.pXB_comp_pK}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    If $P_K = P_{AX} \circ P_{XB}$ is idempotent-product data, then
+    \[
+        P_{XB} \circ P_K = P_K.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    By commutativity,
+    $P_{XB} \circ P_K = P_{XB} \circ P_{AX} \circ P_{XB}
+        = P_{AX} \circ P_{XB} \circ P_{XB}$, and idempotence of $P_{XB}$
+    yields $P_{XB} \circ P_K = P_K$.
+\end{proof}
+
+\begin{theorem}[Cross-absorption by the left projector]%
+    \label{thm:pK_comp_pAX}
+    \lean{Decorrelation.HasCommutingParentHam.pK_comp_pAX}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    If $P_K = P_{AX} \circ P_{XB}$ is idempotent-product data, then
+    \[
+        P_K \circ P_{AX} = P_K.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    By commutativity,
+    $P_K \circ P_{AX} = P_{AX} \circ P_{XB} \circ P_{AX}
+        = P_{AX} \circ P_{AX} \circ P_{XB}$, and idempotence of $P_{AX}$
+    yields $P_K \circ P_{AX} = P_K$.
+\end{proof}
+
+\begin{theorem}[Reverse product identity]%
+    \label{thm:reverse_product}
+    \lean{Decorrelation.HasCommutingParentHam.reverse_product}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    If $P_K = P_{AX} \circ P_{XB}$ is idempotent-product data, then
+    \[
+        P_{XB} \circ P_{AX} = P_K.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    This is immediate from commutativity of $P_{AX}$ and $P_{XB}$ together
+    with the identity $P_{AX} \circ P_{XB} = P_K$.
+\end{proof}
+
+\begin{theorem}[Commuting complementary projectors]%
+    \label{thm:complement_comm}
+    \lean{Decorrelation.HasCommutingParentHam.complement_comm}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    If $P_K = P_{AX} \circ P_{XB}$ is idempotent-product data and
+    \[
+        Q_{AX} = 1 - P_{AX}, \qquad Q_{XB} = 1 - P_{XB},
+    \]
+    then
+    \[
+        Q_{AX} \circ Q_{XB} = Q_{XB} \circ Q_{AX}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    Expanding both products and using $P_{AX} \circ P_{XB}
+        = P_{XB} \circ P_{AX}$ shows that the complementary projectors commute.
+\end{proof}
+
+\begin{theorem}[Idempotent-product data imply decorrelation]%
+    \label{thm:commuting_ham_is_decorrelated}
+    \lean{Decorrelation.commutingHam_isDecorrelated}
+    \leanok
+    \uses{def:is_decorrelated, def:has_commuting_parent_ham}
+    If $P_{AX}$ and $P_{XB}$ are idempotent endomorphisms satisfying
+    $P_{AX} \circ P_{XB} = P_K$ and
+    $P_{AX} \circ P_{XB} = P_{XB} \circ P_{AX}$, and
+    $A$-observables commute with $P_{XB}$ while $B$-observables commute
+    with $P_{AX}$, then regions $A$ and $B$ are decorrelated w.r.t.\ $K$.
+    This is the idempotent-product form of the backward direction of
+    \cite[Appendix~D, Section~D.2, Proposition~D.3]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:comp_complement_comm_zero}
+    The key identity is $P_{XB} \circ (1 - P_{AX} \circ P_{XB}) \circ P_{AX} = 0$.
+    Substituting $P_K = P_{AX} \circ P_{XB}$ and using
+    $O_A \circ P_{XB} = P_{XB} \circ O_A$ and
+    $O_B \circ P_{AX} = P_{AX} \circ O_B$ gives
+    \[
+        P_K \circ O_A \circ (1 - P_K) \circ O_B \circ P_K
+        = P_{AX} \circ O_A \circ
+          \bigl[P_{XB} \circ (1 - P_{AX} \circ P_{XB}) \circ P_{AX}\bigr]
+          \circ O_B \circ P_{XB} = 0.
+    \]
+\end{proof}
+
+\begin{theorem}[Decorrelating idempotent-product data]%
+    \label{thm:has_commuting_parent_ham_is_decorrelated}
+    \lean{Decorrelation.HasCommutingParentHam.isDecorrelated}
+    \leanok
+    \uses{thm:commuting_ham_is_decorrelated, def:has_commuting_parent_ham, def:is_decorrelated}
+    Corollary of Theorem~\ref{thm:commuting_ham_is_decorrelated}: if
+    $P_K$ has idempotent-product data, the $A$-observables
+    commute with $P_{XB}$, and the $B$-observables commute with $P_{AX}$, then
+    regions $A$ and $B$ are decorrelated w.r.t.\ $K$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:commuting_ham_is_decorrelated}
+    Apply Theorem~\ref{thm:commuting_ham_is_decorrelated} to the witnessing
+    endomorphisms $P_{AX}$ and $P_{XB}$ supplied by the idempotent-product data.
+\end{proof}
+
+\begin{lemma}[Frustration-free identity]\label{lem:frustration_free_ham_eq}
+    \lean{LinearMap.frustration_free_ham_eq}
+    \leanok
+    For any endomorphisms $P$ and $Q$,
+    \[
+        (1-P) + (1-Q) - (1-P)\circ(1-Q) = 1 - P\circ Q.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Expanding the left-hand side and cancelling gives the result.
+\end{proof}
+
+\begin{theorem}[Idempotent-product Hamiltonian identity]%
+    \label{thm:hamiltonian_eq}
+    \lean{Decorrelation.HasCommutingParentHam.hamiltonian_eq}
+    \leanok
+    \uses{def:has_commuting_parent_ham, lem:frustration_free_ham_eq}
+    If $P_K = P_{AX} \circ P_{XB}$ is idempotent-product data, then
+    \[
+        Q_{AX} + Q_{XB} - Q_{AX} \circ Q_{XB} = 1 - P_K,
+    \]
+    where $Q_{AX} = 1 - P_{AX}$ and $Q_{XB} = 1 - P_{XB}$ are the
+    complementary projectors.
+    This is the algebraic identity obtained from the complementary projectors
+    in \cite[Appendix~D, Section~D.2]{Cirac2016MPDO_arXiv}; it is not the full
+    source parent commuting Hamiltonian condition.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:frustration_free_ham_eq}
+    Applying Lemma~\ref{lem:frustration_free_ham_eq} to $P_{AX}$ and
+    $P_{XB}$, and substituting $P_{AX} \circ P_{XB} = P_K$.
+\end{proof}
+
+\begin{theorem}[Ground-space membership]\label{thm:mem_ground_iff}
+    \lean{Decorrelation.HasCommutingParentHam.mem_ground_iff}
+    \leanok
+    \uses{def:has_commuting_parent_ham}
+    If $P_K = P_{AX} \circ P_{XB}$ is idempotent-product data, then
+    \[
+        P_K v = v
+        \quad\Longleftrightarrow\quad
+        P_{AX} v = v \text{ and }  P_{XB} v = v.
+    \]
+    This is the algebraic consequence corresponding to equation~(D.2) from
+    \cite{Cirac2016MPDO_arXiv}:
+    $K_{AXB} = (K_{AX} \otimes H_B) \cap (H_A \otimes K_{XB})$.
+    The source equation itself also carries the tensor-product local-subspace
+    hypotheses.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:has_commuting_parent_ham, thm:pAX_comp_pK, thm:pXB_comp_pK}
+    ($\Rightarrow$) If $P_K v = v$, then $P_{AX}(P_K v) = (P_{AX} \circ P_K) v
+        = P_K v = v$ by left absorption, and similarly for $P_{XB}$.
+
+    ($\Leftarrow$) If $P_{AX} v = v$ and $P_{XB} v = v$, then
+    $P_K v = (P_{AX} \circ P_{XB}) v = P_{AX}(P_{XB} v) = P_{AX} v = v$.
+\end{proof}

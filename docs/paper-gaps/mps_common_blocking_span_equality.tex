@@ -1,0 +1,234 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Common Blocking and Span Equality in the Non-periodic MPS Fundamental Theorem}
+\author{}
+\date{2026-04-30}
+
+\begin{document}
+\maketitle
+
+\section{The compressed source argument}
+
+The proof of the non-periodic matrix product state fundamental theorem passes
+from arbitrary tensors with the same matrix product vectors to
+basis-of-normal-tensors comparison data. The source argument is the MPDO
+canonical-form paper \cite{Cirac2016MPDO_arXiv,Cirac2017MPDO_AnnPhys}, together
+with the later review \cite{Cirac2021Matrix}.\footnote{For traceability, this
+note corresponds to \href{https://github.com/LionSR/TNLean/issues/1047}{issue \#1047}.}
+The cited papers are not being questioned. The point is that a formal proof has
+to separate several canonical-form steps which are compressed in the source
+prose.
+
+For a tensor $A=(A^i)_{i=1}^d$, the source paper defines the matrix product
+vectors by
+\[
+  |V^{(N)}(A)\rangle
+  = \sum_{i_1,\ldots,i_N=1}^d
+      \operatorname{tr}(A^{i_1}\cdots A^{i_N})
+      |i_1\rangle\otimes\cdots\otimes |i_N\rangle,
+\]
+for $N=1,2,3,\ldots$ \cite[definition of the matrix product vector family,
+lines~130--138]{Cirac2016MPDO_arXiv}.
+After removing invariant subspaces, the same paper writes the tensor in block form
+\[
+  A^i = \bigoplus_{k=1}^r \mu_k A_k^i,
+\]
+allowing zero blocks and scaling the nonzero blocks so that their transfer maps
+have spectral radius one. Each nonzero irreducible block may still have peripheral
+period. Blocking by a common multiple of the periods removes that periodicity
+\cite[lines~214--231]{Cirac2016MPDO_arXiv}. The review follows the same
+canonical-form argument \cite[lines~1798--1820]{Cirac2021Matrix}.
+
+The later comparison is made through bases of normal tensors. A basis of normal
+tensors is a minimal family $(A_j)_{j=1}^g$ of normal tensors such that every
+matrix product vector of $A$ is a linear combination of the matrix product vectors
+of the $A_j$, and such that those vectors are eventually linearly independent.
+Equivalently, every normal block in the canonical form is a phase times a gauge
+transform of exactly one basis tensor, with the family chosen minimally
+\cite[Proposition~\texttt{prop:char-BNT}, lines~271--280]{Cirac2016MPDO_arXiv}.
+The review states the same characterization
+\cite[Proposition~\texttt{prop:char-BNT}, lines~1846--1859]{Cirac2021Matrix}.
+For a tensor in canonical form one then has an expansion
+\[
+  |V^{(N)}(A)\rangle
+    = \sum_{j=1}^g \left(\sum_{q=1}^{r_j} \mu_{j,q}^N\right)
+        |V^{(N)}(A_j)\rangle.
+\]
+This is the basis-of-normal-tensors expansion used in the equal-case proof
+\cite[lines~283--302]{Cirac2016MPDO_arXiv}. The review uses the same expansion
+\cite[lines~1864--1885]{Cirac2021Matrix}.
+
+Injectivity enters at a different point. The source first defines injective and
+block-injective canonical form, and then invokes the quantum Wielandt theorem to
+say that, after a bounded further blocking, every normal tensor becomes injective
+\cite[lines~317--332]{Cirac2016MPDO_arXiv}. The review records the corresponding
+$3D^5$ bound for block-injective canonical form
+\cite[lines~2120--2124]{Cirac2021Matrix}.
+This step is not the same as period removal: period removal gives primitive normal
+blocks, while the overlap-rigidity arguments used later require one-site
+injectivity, or an explicit replacement after further blocking.
+
+Finally, the source comparison for the equal case is compact. Equality or
+proportionality of the matrix product vector families first matches the two bases
+of normal tensors by phase and gauge. After relabeling, the coefficient
+multiplicities are compared through the power sums
+\[
+  \sum_{q=1}^{r_{a,j}} \mu_{j,q}^N
+  = \sum_{q=1}^{r_{b,j}} (\nu_{j,q}e^{i\phi_j})^N,
+  \qquad \text{for all } j \text{ and } N.
+\]
+The elementary power-sum lemma then recovers the multiplicities and the weights,
+and the blockwise gauges are assembled into the global conjugating matrix
+\cite[lines~1181--1192]{Cirac2016MPDO_arXiv}. The review states the resulting
+proportional and equal MPV fundamental theorems in the same form
+\cite[lines~1891--1900]{Cirac2021Matrix}.
+
+\section{The formal argument}
+
+The formal equality relation \leanid{SameMPV}\textsubscript{2} compares matrix product
+vector coefficients for all finite words, including the empty word.
+This convention is stronger than the positive-length family in the source
+definition. An all-zero block of bond dimension $D_0$ contributes nothing at
+positive length, but it contributes $D_0$ at length zero, because the empty product
+has trace $D_0$. Consequently the formal proof separates the zero-tail
+contribution from the nonzero part, proves positive-length equality for the
+nonzero parts, and records the exact $N=0$ identity separately.\footnote{See
+the zero-block separation section of the canonical-form chapter and the
+corresponding zero-tail formalization in
+\path{TNLean/MPS/CanonicalForm/SectorComparison/CommonSectorData.lean} and
+\path{TNLean/MPS/CanonicalForm/SectorComparison/CommonSectorTransport.lean}.}
+
+The common blocking step is also more explicit. For a single family of blocks,
+the source phrase ``block by the least common multiple of the periods'' hides no
+mathematical difficulty. In the two-tensor comparison, however, the formal proof
+must choose one positive physical blocking length for both sides. For each
+original block with period-removal length $m_k$, the common length is written as
+$p=m_k e_k$. The tensor obtained by first blocking by $m_k$ and then by $e_k$
+has physical labels given by nested words, while the tensor obtained by
+blocking once by $p$ has physical labels in the alphabet of words of length $p$.
+The formal statement therefore keeps the relabeling between these two alphabets as
+part of the statement.\footnote{The common-sector data and the relabeling results
+are recorded in \path{blueprint/src/chapter/ch09_canonical.tex:1645--1824} and
+\path{blueprint/src/chapter/ch09_canonical.tex:3230--3284}. The main formal
+statement is
+\texttt{MPSTensor.fundamentalTheorem\_after\_blocking\_commonLength\_commonSector},
+with the one-sided relabeling-compatible zero-tail statement
+\texttt{MPSTensor.zeroTail\_commonFlat\_of\_reindexed}; see
+\path{TNLean/MPS/CanonicalForm/SectorComparison/CommonSectorData.lean} and
+\path{TNLean/MPS/CanonicalForm/SectorComparison/CommonSectorTransport.lean}.}
+This is why the canonical-form theorem supplies relabeled common-sector
+families and a conditional label-compatibility statement, rather than immediately
+replacing every canonical nonzero part after blocking by its flattened sector tensor.
+
+The formal comparison theorems downstream now use the coefficient-comparison route
+for BNT sectors. The live data are the matched-sector phase relation, the
+coefficient identities extracted from eventual linear independence, the
+copy-weight matching obtained from the power sums, and the block-diagonal global
+gauge. Any additional Wielandt blocking needed for one-site injectivity is a
+separate refinement for arguments that require injective blocks; it is not part of
+the current coefficient-comparison theorem.\footnote{The final comparison route is
+recorded in \path{blueprint/src/chapter/ch11_fundamental_theorem_proof.tex:31--460}.}
+
+The paper's compact BNT matching and power-sum comparison is no longer represented
+by the removed comparison lemmas from the former span-based route. The
+current formal comparison follows the source proof more directly: matched BNT
+sectors give the phase relation
+\[
+  V^{(N)}(Q_k)_\sigma
+    = \zeta_k^N V^{(N)}(P_{\beta(k)})_\sigma,
+\]
+eventual linear independence gives the coefficient identities
+\[
+  c_N^{(\beta(k))}(P)=\zeta_k^N c_N^{(k)}(Q),
+\]
+Newton--Girard power-sum comparison recovers the copy weights, and the matched
+block gauges assemble into the direct-sum global gauge.\footnote{See
+\path{blueprint/src/chapter/ch11_fundamental_theorem_proof.tex:31--460},
+especially the sector coefficient identity, copy-weight matching, and assembled
+global-gauge entries. The corresponding formal
+objects live in
+\path{TNLean/MPS/FundamentalTheorem/SectorBNT/CoeffIdentity.lean},
+\path{TNLean/MPS/FundamentalTheorem/SectorBNT/CopyWeightMatching.lean},
+\path{TNLean/MPS/FundamentalTheorem/SectorBNT/Fundamental.lean}, and
+\path{TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean}.
+The removed comparison lemmas from the former span-based route are no longer used
+in the final comparison chapter; the remaining proof follows this
+coefficient-comparison route.}
+The coefficient-identity and copy-weight lemmas state precisely what comparison
+data are needed; the proportional case still requires the coefficient comparison
+for the phases supplied by the sector matching theorem.
+
+\section{Why these distinctions belong together}
+
+These distinctions are coupled in the single conversion from an arbitrary equality
+of MPV families to the hypotheses of the BNT sector-comparison theorem. The
+zero-tail convention determines what is known at length zero after each blocking.
+The common blocking construction determines the physical alphabet and the relabeled
+sector families to which the coefficient comparison applies. Any later injectivity
+refinement is reserved for separate arguments, such as overlap-rigidity
+statements that require one-site injective blocks; it is not a hypothesis of the
+SectorBNT coefficient route. The matched-sector coefficient identities and
+copy-weight data are constructed for the relabeled nonzero-sector families, not
+for an earlier family before the common-alphabet relabeling.
+
+For this reason common blocking and coefficient comparison should be kept in one
+account. The formal proof needs the whole chain: remove the zero tail, choose one
+common physical blocking length, account for the word-relabeling, keep later
+overlap-rigidity requirements separate, and turn BNT matching data into the
+sector coefficient identities and copy-weight equations used by the final gauge
+comparison.
+The blueprint states this chain as the connection between the canonical-form
+chapter and the final comparison chapter.\footnote{See
+\path{blueprint/src/chapter/ch11_fundamental_theorem_proof.tex:539--629} for the
+current equal and proportional BNT canonical-form statements. The proportional
+global gauge remains conditional on the coefficient identity recorded at
+\path{blueprint/src/chapter/ch11_fundamental_theorem_proof.tex:361--388}; the
+equal case uses
+\path{blueprint/src/chapter/ch11_fundamental_theorem_proof.tex:503--537}.}
+
+This note should also not be read as a claim that the same-side equal-norm scalar
+obstruction discussed in the broader fundamental-theorem work is a flaw in the
+CPSV or CPGSV arguments. That obstruction corrected an over-strong formal statement
+which tried to identify an equal-norm class with a single basis tensor. The BNT
+expansion in the papers already allows multiple basis tensors and multiplicities.
+The formal argument therefore moved from naive norm-class grouping to phase-class
+sector decompositions and common-cover data.
+
+\section{Conclusion}
+
+The conclusion is that the cited papers compress several standard canonical-form
+operations; no counterexample is claimed. Zero or nilpotent contributions are
+invisible to positive-length MPVs, periods are removed by blocking, injectivity is
+obtained by a later Wielandt-type blocking, BNT bases are matched by phase and
+gauge, and coefficient multiplicities are recovered from power sums. The formal
+development exposes these operations as separate statements because the formal MPV
+relation includes the empty word, the two sides must be placed over one explicitly
+relabeled alphabet after blocking, and the downstream comparison theorem constructs
+matched-sector coefficient identities and copy-weight equations after this
+relabeling.
+
+Thus the comparison gives neither a counterexample nor a theorem-level source
+error. It explains why the formal proof cannot compress the argument into a
+single invocation of the BNT uniqueness theorem. The relevant comparison points are
+zero-tail cancellation, common primitive block construction, common blocking,
+zero-tail transport, matched-sector coefficient identities, copy-weight matching,
+and iterated-blocking relabeling.\footnote{For traceability, these are recorded in
+\href{https://github.com/LionSR/TNLean/issues/652}{issue \#652},
+\href{https://github.com/LionSR/TNLean/issues/942}{issue \#942},
+\href{https://github.com/LionSR/TNLean/issues/969}{issue \#969},
+\href{https://github.com/LionSR/TNLean/issues/970}{issue \#970},
+\href{https://github.com/LionSR/TNLean/issues/971}{issue \#971},
+\href{https://github.com/LionSR/TNLean/issues/944}{issue \#944}, and
+\href{https://github.com/LionSR/TNLean/issues/990}{issue \#990}.}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

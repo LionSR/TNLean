@@ -47,9 +47,9 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ## Helper lemmas -/
+/-! ## Linear-algebra lemmas -/
 
-section Helpers
+section LinearAlgebraLemmas
 
 /-- An eigenvector with nonzero eigenvalue lies in the range of the matrix. -/
 theorem mem_range_toLin'_of_eigenvector
@@ -147,15 +147,6 @@ private noncomputable def blockedTensorRangeData
       (mem_range_vecMulLinear_pow_of_transpose_eigenvector
         (M := evalWord A (List.ofFn τ₀)) (ψ := ψ) (ν := ν) hν heigψ)
 
-private theorem BlockedTensorRangeData.rankOne_mem_range
-    {A : MPSTensor d D} {L : ℕ} {σ₀ τ₀ : Fin L → Fin d}
-    {φ ψ : Fin D → ℂ}
-    (data : BlockedTensorRangeData (d := d) (D := D) A L σ₀ τ₀ φ ψ) :
-    Matrix.vecMulVec φ ψ ∈
-      LinearMap.range ((LinearMap.mulLeft ℂ data.P).comp (LinearMap.mulRight ℂ data.Q)) := by
-  exact vecMulVec_mem_range_mulLeft_mulRight
-    data.P data.Q φ ψ data.hφ_range data.hψ_range
-
 private theorem BlockedTensorRangeData.rankOne_mem_cumulativeSpan_of_cumulativeSpan_eq_top
     {A : MPSTensor d D} {L : ℕ} {σ₀ τ₀ : Fin L → Fin d}
     {φ ψ : Fin D → ℂ}
@@ -179,7 +170,8 @@ private theorem BlockedTensorRangeData.rankOne_mem_wordSpan_of_wordSpan_eq_top
       (d := blockPhysDim d L) (D := D) data.P data.Q data.B htop]
     exact biRectSpan_le_wordSpan (d := blockPhysDim d L) (D := D)
       data.B data.P data.Q data.hP data.hQ
-  exact hrange_le data.rankOne_mem_range
+  exact hrange_le (vecMulVec_mem_range_mulLeft_mulRight
+    data.P data.Q φ ψ data.hφ_range data.hψ_range)
 
 private theorem BlockedTensorRangeData.rankOne_mem_wordSpan_of_cumulativeSpan_eq_top_of_aperiodic
     {A : MPSTensor d D} {L : ℕ} {σ₀ τ₀ : Fin L → Fin d}
@@ -190,9 +182,11 @@ private theorem BlockedTensorRangeData.rankOne_mem_wordSpan_of_cumulativeSpan_eq
     Matrix.vecMulVec φ ψ ∈ wordSpan data.B (D + N + D) := by
   exact (range_comp_le_wordSpan_of_cumulativeSpan_eq_top_of_aperiodic
     (d := blockPhysDim d L) (D := D)
-    data.B data.P data.Q data.hP data.hQ hcs hone) data.rankOne_mem_range
+    data.B data.P data.Q data.hP data.hQ hcs hone)
+    (vecMulVec_mem_range_mulLeft_mulRight
+      data.P data.Q φ ψ data.hφ_range data.hψ_range)
 
-end Helpers
+end LinearAlgebraLemmas
 
 /-! ## Nonzero-trace word extraction from a full word span -/
 
@@ -269,7 +263,7 @@ section RankOneExtraction
 /-- **Full rank-one extraction for Wielandt Lemma 2(b).**
 
 Under a positive normality witness `N₀ ≥ 1`, produces all data for the blocked
-assembly theorem:
+fixed-length matrix spanning theorem:
 - word functions `σ₀`, `τ₀` of length `N₀` with eigenvector conditions,
 - `vecMulVec φ ψ ∈ wordSpan (blockTensor A N₀) (D + N₀ + D)`.
 
@@ -339,12 +333,13 @@ section WielandtLemma2b
 For any `IsNormal` MPS tensor `A` with `[NeZero D]`, there exists `N` such that
 `wordSpan A N = ⊤`.
 
-This combines the rank-one extraction with the blocked assembly theorem.
+This combines the rank-one extraction with the blocked fixed-length matrix spanning theorem.
 
 - When `N₀ = 0`: `wordSpan A 0 = ⊤` directly.
 - When `N₀ ≥ 1`: writing `B := blockTensor A N₀`, the rank-one extraction gives
   `vecMulVec φ ψ ∈ wordSpan B (D + N₀ + D)`, where the middle `N₀` is the
-  blocked-tensor full-span witness `wordSpan B N₀ = ⊤`; the blocked assembly then
+  blocked-tensor full-span witness `wordSpan B N₀ = ⊤`; the blocked
+  fixed-length matrix spanning then
   produces `wordSpan A ((4D - 2 + N₀) * N₀) = ⊤`.
 
 The bound `N = (4D - 2 + N₀) * N₀` is coarse. -/
@@ -367,12 +362,12 @@ theorem wielandt_lemma2b [NeZero D]
 
 end WielandtLemma2b
 
-/-! ## Rank-one extraction with external eigenvectors -/
+/-! ## Parametrized rank-one extraction lemmas -/
 
 section ExternalEigenvectors
 
-/-- **Rank-one element in a bounded cumulative span of the blocked tensor, given external
-word eigenvectors and a cumulative spanning witness.**
+/-- **Rank-one element in a bounded cumulative span of the blocked tensor, from supplied
+word-eigenvector data and a cumulative spanning witness.**
 
 This is the cumulative analogue of the later exact-word-span result: the manufactured rank-one
 matrix lies in `T_{D + N + D}` of the blocked tensor as soon as `T_N` is already full. -/
@@ -427,7 +422,8 @@ theorem exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors_of_cumulative
   simpa [data.hB] using
     data.rankOne_mem_wordSpan_of_cumulativeSpan_eq_top_of_aperiodic hcsB honeB
 
-/-- **Rank-one element in the word span of the blocked tensor, given external eigenvectors.**
+/-- **Rank-one element in the word span of the blocked tensor, from supplied word-eigenvector
+data.**
 
 Given:
 - A blocking length `L > 0` and eigenvector data (word functions `σ₀`, `τ₀`, eigenvectors
@@ -469,34 +465,6 @@ theorem exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors
     (wordSpan_eq_top_iff_isNBlkInjective data.B N₁).mpr hN₁
   exact ⟨D + N₁ + D, by
     simpa [data.hB] using data.rankOne_mem_wordSpan_of_wordSpan_eq_top hBtop⟩
-
-/-- **Wielandt Lemma 2(b) blocked assembly — unconditional version with external eigenvectors.**
-
-Given word eigenvectors of length `L` with nonzero eigenvalues and `IsNormal A`,
-produces `wordSpan A N = ⊤` for an explicit `N`.
-
-This eliminates the `hRankOne` hypothesis from `wielandt_blocked_assembly` by
-using `exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors` to internally
-produce the rank-one element. -/
-theorem wielandt_blocked_assembly_complete [NeZero D]
-    (A : MPSTensor d D)
-    (L : ℕ) (hL : 0 < L)
-    (σ₀ τ₀ : Fin L → Fin d)
-    (φ ψ : Fin D → ℂ)
-    (hφ : φ ≠ 0) (hψ : ψ ≠ 0)
-    (μ ν : ℂ) (hμ : μ ≠ 0) (hν : ν ≠ 0)
-    (heigφ : evalWord A (List.ofFn σ₀) *ᵥ φ = μ • φ)
-    (heigψ : (evalWord A (List.ofFn τ₀))ᵀ *ᵥ ψ = ν • ψ)
-    (hNormal : IsNormal A) :
-    ∃ N : ℕ, wordSpan A N = ⊤ := by
-  -- Step 1: Get the rank-one element in the blocked word span
-  obtain ⟨m_blocked, hRankOne⟩ :=
-    exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors
-      A L hL σ₀ τ₀ φ ψ μ ν hμ hν heigφ heigψ hNormal
-  -- Step 2: Apply the conditional assembly
-  exact ⟨(D - 1 + (m_blocked + (D - 1))) * L,
-    wielandt_blocked_assembly A hNormal L hL σ₀ φ hφ μ hμ heigφ
-      τ₀ ψ hψ ν hν heigψ hRankOne⟩
 
 end ExternalEigenvectors
 

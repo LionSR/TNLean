@@ -9,26 +9,21 @@ import TNLean.MPS.Chain.TranslationInvariance
 /-!
 # TI Reduction Corollary (Section 5, arXiv:1804.04964)
 
-Given two constant (TI) chains with the same combined tensor span, the
-Fundamental Theorem forces them to be gauge equivalent via a single matrix.
-
-More precisely: given a constant (TI) chain `fun _ => A` with `A` injective, and
-another constant chain `fun _ => B` whose combined tensor generates the same MPV
-family, the Fundamental Theorem gives a single gauge `X ∈ GL(D,ℂ)` such that
-`B i = X * A i * X⁻¹` for all `i`. In particular, `B` is also injective (gauge
-equivalent to an injective tensor), so within this constant-chain setting one
-can pass to a TI injective description.
+For constant (translation-invariant) chains `(A, …, A)` and `(B, …, B)` with
+`A` injective, `SameMPV` on the combined tensors gives
+$B^i = X A^i X^{-1}$ for a single `X ∈ GL(D, ℂ)`, so `B` is injective.
 
 ## Main results
 
-* `ti_reduction_corollary` — from `SameMPV` on combined tensors: TI gauge
-  equivalence plus injectivity of `B`.
-* `ti_reduction_of_sameState` — from `SameState` (via the blocking bridge
-  hypothesis): same conclusion.
+* `ti_reduction_corollary` — from `SameMPV` on combined tensors
+* `ti_reduction_of_sameState` — from `SameState` via the blocking connection hypothesis
 
 ## References
 
-* [arXiv:1804.04964](https://arxiv.org/abs/1804.04964), Section 5
+* [MGSPSC18] Molnar, Garre-Rubio, Pérez-García, Schuch, Cirac,
+  *Normal projected entangled pair states generating the same state*,
+  arXiv:1804.04964, Section 5 (Applications — translation invariance reduction).
+  Source: `Papers/1804.04964/`
 -/
 
 open scoped Matrix
@@ -37,14 +32,11 @@ namespace MPSChainTensor
 
 variable {d D n : ℕ}
 
-/-- **TI Reduction Corollary** (Section 5, arXiv:1804.04964).
+/-- **TI Reduction Corollary**.
 
-For constant (TI) chains `fun _ => A` and `fun _ => B` with `A` injective, if
-their combined tensors generate the same MPV family, then `B` is gauge
-equivalent to `A` via a single invertible matrix, and `B` is also injective.
-
-This shows that translation invariance of the state forces translation
-invariance of the tensor description (up to gauge). -/
+If `A` is injective and the constant chains `(A, …, A)` and `(B, …, B)` satisfy
+`SameMPV` on their combined tensors, then `B` is gauge equivalent to `A` and
+`B` is injective. -/
 theorem ti_reduction_corollary
     (A B : MPSTensor d D)
     (hn : 0 < n)
@@ -56,15 +48,13 @@ theorem ti_reduction_corollary
       B i = (X : Matrix _ _ ℂ) * A i * ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ)) ∧
     MPSTensor.IsInjective B := by
   obtain ⟨X, hGauge⟩ := ti_tensors_single_gauge A B hn hA hMPV
-  constructor
-  · exact ⟨X, hGauge⟩
-  · exact MPSTensor.isInjective_of_gaugeEquiv hA ⟨X, hGauge⟩
+  exact ⟨⟨X, hGauge⟩, MPSTensor.isInjective_of_gaugeEquiv hA ⟨X, hGauge⟩⟩
 
-/-- **TI Reduction from SameState** (via blocking bridge hypothesis).
+/-- **TI Reduction from SameState**.
 
-The same conclusion as `ti_reduction_corollary`, but starting from fixed-length
-`SameState` (trace agreement at chain length `n`) and the blocking bridge
-hypothesis that upgrades this to `SameMPV` on combined tensors. -/
+Same conclusion as `ti_reduction_corollary`, from fixed-length `SameState`
+at chain length `n ≥ 3` using the blocking connection hypothesis
+`SameStateBridgeHyp`. -/
 theorem ti_reduction_of_sameState
     (hBridge : SameStateBridgeHyp d D)
     (A B : MPSTensor d D)

@@ -1,0 +1,1339 @@
+\section{Edge Kernels and Gauge Transport}\label{sec:peps_edge_kernel_gauges}
+
+When the endpoint tensors are injective, a matrix inserted on the bond $e$ is
+realized by a physical operation on a neighbouring physical leg, and conversely.
+This sets up an isomorphism between the bond-$e$ matrix algebra of $A$ and that
+of $B$, which by the Skolem--Noether theorem is conjugation by an invertible
+matrix $X_e$, the edge gauge: for every physical configuration $\sigma$ and bond
+matrix $M$,
+\[
+    C_A(e,\sigma,M)=C_B(e,\sigma,\,X_e\,M\,X_e^{-1}).
+\]
+Collecting the $X_e$ over all edges and reconciling them on the shared bonds
+produces the global gauge family that relates the two tensors.
+
+\begin{definition}[Finite kernel descent datum]%
+    \label{def:peps_finiteRegionKernelDescent}
+    \lean{TNLean.PEPS.FiniteRegionKernelDescent}
+    \leanok
+    Let $V$ be a vertex type with decidable equality. A finite kernel descent
+    datum is a predicate $K$ on finite subsets $S\subseteq V$ together with
+    implications
+    \[
+        j\in S \quad\Longrightarrow\quad K(S)\Longrightarrow K(S\setminus\{j\}).
+    \]
+    In the edge-blocking proof, $K(S)$ is the assertion that the boundary
+    coefficients $c_{\rho}$, with the virtual indices exposed at that stage,
+    give zero after the tensors in $S$ have been contracted.
+\end{definition}
+
+\begin{lemma}[Finite descent of kernel conditions]%
+    \label{lem:peps_finiteRegionKernelDescent}
+    \lean{TNLean.PEPS.FiniteRegionKernelDescent.descend_to_empty}
+    \lean{TNLean.PEPS.FiniteRegionKernelDescent.descend}
+    \leanok
+    \uses{def:peps_finiteRegionKernelDescent}
+    For a finite kernel descent datum and any finite $R\subseteq V$,
+    \[
+        K(R)\Longrightarrow K(\varnothing).
+    \]
+    More generally, if $K(\varnothing)\Longrightarrow Q$, then
+    $K(R)\Longrightarrow Q$.
+\end{lemma}
+\begin{proof}\leanok
+    Induct on the finite set $R$. If $R=\varnothing$, there is nothing to
+    prove. Otherwise write $R=S\cup\{j\}$ with $j\notin S$. The deletion
+    implication gives $K(R)\Longrightarrow K(S)$, and the induction hypothesis
+    gives $K(S)\Longrightarrow K(\varnothing)$.
+\end{proof}
+
+\begin{definition}[Edge-middle kernel descent data]%
+    \label{def:peps_edgeMiddleKernelDescentData}
+    \lean{TNLean.PEPS.EdgeMiddleBoundaryLabel,
+        TNLean.PEPS.EdgeMiddleKernelDescentData}
+    \leanok
+    \uses{def:peps_edgeMiddleTensorFamily,
+        def:peps_finiteRegionKernelDescent}
+    Let $e=(u,v)$ and $M_e=V\setminus\{u,v\}$. An edge-middle kernel descent
+    datum is indexed by boundary labels $\rho$ consisting of the two residual
+    endpoint configurations. It assigns to every finitely supported coefficient
+    family $c=(c_{\rho})_{\rho}$ a finite kernel descent datum $K_c(S)$ such that
+    \[
+        \left(\forall\tau,
+        \sum_{\rho}c_{\rho}
+        T_{A,M_e}^{\rho}(\tau)=0\right)
+        \Longrightarrow K_c(M_e),
+    \]
+    and
+    \[
+        K_c(\varnothing)\Longrightarrow \forall\rho, c_{\rho}=0.
+    \]
+\end{definition}
+
+\begin{theorem}[Kernel descent gives edge-middle injectivity]%
+    \label{thm:peps_edgeMiddleTensorInjective_of_kernelDescent}
+    \lean{TNLean.PEPS.EdgeMiddleKernelDescentData.edgeMiddleTensorInjective,
+        TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_of_kernelDescent}
+    \leanok
+    \uses{def:peps_edgeMiddleKernelDescentData,
+        lem:peps_finiteRegionKernelDescent,
+        thm:peps_edgeBlockedThreeSiteInjective_of_middle}
+    Let $e=(u,v)$ and $M_e=V\setminus\{u,v\}$. If an edge-middle kernel descent
+    datum is given, then $T_{A,M_e}$ is injective. Consequently, if $A$ is
+    vertex-injective, the edge-blocked three-site chain at $e$ is injective.
+\end{theorem}
+\begin{proof}\leanok
+    Let $c=(c_{\rho})_{\rho}$ be a finite linear relation among the middle
+    tensor vectors:
+    \[
+        \forall\tau,
+        \sum_{\rho}c_{\rho}
+        T_{A,M_e}^{\rho}(\tau)=0.
+    \]
+    The initial part of the descent datum gives $K_c(M_e)$. The finite descent
+    lemma gives $K_c(M_e)\Longrightarrow K_c(\varnothing)$, and the terminal
+    part gives $\forall\rho, c_{\rho}=0$. Thus every finite relation is
+    trivial, which is $\operatorname{inj}(T_{A,M_e})$. Vertex injectivity at
+    $u$ and $v$ gives $\operatorname{inj}(T_{A,u})$ and
+    $\operatorname{inj}(T_{A,v})$; the edge-blocked three-site injectivity at
+    $e$ follows.
+\end{proof}
+
+\begin{theorem}[Edge blocking preserves injectivity]%
+    \label{thm:peps_edgeBlockedThreeSiteInjective}
+    \lean{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}
+    \leanok
+    \uses{def:IsVertexInjective, def:peps_edgeBlockedThreeSiteInjective,
+        thm:peps_edgeMiddleTensorInjective_of_kernelDescent,
+        lem:peps_localCoeff_eq_zero_of_contract_zero,
+        lem:peps_not_edgeMiddleTensorInjective_of_isEmpty}
+    For a tensor map or blocked tensor family $T$, write
+    $\operatorname{inj}(T)$ for the assertion that $T$ is injective. If $A$
+    is vertex-injective and every bond dimension is positive, then for every
+    edge $e=(u,v)$,
+    \[
+        \operatorname{inj}(T_{A,u}),\qquad
+        \operatorname{inj}(T_{A,V\setminus\{u,v\}}),\qquad
+        \operatorname{inj}(T_{A,v}).
+    \]
+    Here $T_{A,u}$ and $T_{A,v}$ are the two endpoint tensor maps, and
+    $T_{A,V\setminus\{u,v\}}$ is the blocked middle tensor family. This is the
+    precise assertion after the edge-blocking diagram in
+    \cite[Section~3]{Molnar2018NormalPEPS}. The positive-bond hypothesis is the
+    source's standing assumption that injective PEPS have nonzero virtual bond
+    spaces. Without it, an empty complement configuration space can make the
+    middle tensor vanish identically;
+    Lemmas~\ref{lem:peps_edgeMiddleTensorFamily_eq_zero_of_isEmpty}
+    and~\ref{lem:peps_not_edgeMiddleTensorInjective_of_isEmpty} record
+    this obstruction.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_edgeMiddleTensorInjective_of_kernelDescent,
+        lem:peps_localCoeff_eq_zero_of_contract_zero}
+    Fix $e=(u,v)$ and put $M_e=V\setminus\{u,v\}$. From vertex injectivity,
+    construct the edge-middle descent datum required by
+    Theorem~\ref{thm:peps_edgeMiddleTensorInjective_of_kernelDescent}: for each
+    finite relation
+    \[
+        \forall \tau,
+        \sum_{\rho} c_{\rho}\,T_{A,M_e}^{\rho}(\tau)=0,
+    \]
+    the associated conditions $K_c(S)$ satisfy $K_c(M_e)$,
+    $j\in S\Longrightarrow K_c(S)\Longrightarrow K_c(S\setminus\{j\})$, and
+    $K_c(\varnothing)\Longrightarrow \forall\rho, c_{\rho}=0$. The descent
+    implication is the local contraction identity: for $j\in S$, vertex
+    injectivity at $j$ gives a left inverse $L_j$, and applying $L_j$ to the
+    relation contracts away that tensor,
+    \[
+        j\in S, K_c(S)\quad\stackrel{L_j}{\Longrightarrow}\quad
+        K_c(S\setminus\{j\}).
+    \]
+    The contraction at $j$ uses the factorization
+    \[
+        \mathcal C_e
+        \cong
+        \mathcal V_j
+        \times
+        \prod_{\substack{f\ne e\\ f\not\ni j}}
+        \{0,\ldots,\dim A_f-1\},
+    \]
+    where $\mathcal C_e$ is the complement virtual-configuration space for
+    the distinguished edge $e$ and $\mathcal V_j$ is the local virtual
+    configuration space at $j$. The terminal step
+    $K_c(\varnothing)\Longrightarrow \forall\rho, c_{\rho}=0$ isolates each
+    boundary coefficient by surjectivity of the boundary labelling, which is
+    where the positive bond dimensions are used to fill the interior virtual
+    indices of a witness configuration.
+    The kernel descent theorem gives $\operatorname{inj}(T_{A,M_e})$. The same
+    theorem, together with vertex injectivity at $u$ and $v$, gives
+    $\operatorname{inj}(T_{A,u})$, $\operatorname{inj}(T_{A,M_e})$, and
+    $\operatorname{inj}(T_{A,v})$ as the edge-blocked three-site injectivity
+    assertion.
+\end{proof}
+
+\begin{theorem}[Local virtual insertion realized physically on either endpoint]%
+    \label{thm:peps_virtualInsertionPhysicalRealization}
+    \lean{TNLean.PEPS.edgeVirtualInsertionPhysicalRealization}
+    \leanok
+    \uses{def:IsVertexInjective, def:peps_localIncidentMatrixOp,
+        thm:peps_localIncidentMatrixOp_physicalRealization}
+    Let $A$ be vertex-injective and let $e=(u,v)$ be an edge. For every
+    matrix $M$ on the bond space of $e$, the one-leg virtual action induced
+    by $M$ on the local tensor at $u$, and likewise at $v$, is realized by
+    a physical operator on that endpoint's physical space.
+    \begin{center}
+        \TNPEPSInsertionPhysicalRealization
+    \end{center}
+
+    % This is the local endpoint part of Molnar2018NormalPEPS, Section 3. The corresponding
+    % coefficient identity is
+    % thm:peps_edgeInsertedCoeff_endpointPhysicalRealization.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the one-edge realization theorem to the two endpoint incidences of
+    the distinguished edge.
+\end{proof}
+
+\begin{theorem}[Left-endpoint projected recovery]%
+    \label{thm:peps_edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
+    \lean{TNLean.PEPS.edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
+    \leanok
+    \uses{thm:peps_localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq,
+        def:peps_localIncidentMatrixOp}
+    Let $e=(u,v)$. A physical operator at the left endpoint pulls back to
+    the one-edge virtual action of $M^{\mathsf T}$ if and only if its
+    compressed physical action is the canonical realization of that
+    one-edge virtual action.
+\end{theorem}
+\begin{proof}\leanok
+    This is the projected local recovery equivalence applied to the left
+    incident edge of $e$, with the transpose convention used by the
+    left-endpoint coefficient identity.
+\end{proof}
+
+\begin{theorem}[Right-endpoint projected recovery]%
+    \label{thm:peps_edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
+    \lean{TNLean.PEPS.edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
+    \leanok
+    \uses{thm:peps_localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq,
+        def:peps_localIncidentMatrixOp}
+    Let $e=(u,v)$. A physical operator at the right endpoint pulls back to
+    the one-edge virtual action of $M$ if and only if its compressed physical
+    action is the canonical realization of that one-edge virtual action.
+\end{theorem}
+\begin{proof}\leanok
+    This is the projected local recovery equivalence applied to the right
+    incident edge of $e$.
+\end{proof}
+
+\begin{theorem}[Endpoint recovery of a common virtual insertion]%
+    \label{thm:peps_edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}
+    \lean{TNLean.PEPS.edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}
+    \leanok
+    \uses{thm:peps_edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq,
+        thm:peps_edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
+    Let $e=(u,v)$. If
+    $P_uO_1P_u=\Phi_uT_{u,e}(M^{\mathsf T})\Psi_u$ and
+    $P_vO_2P_v=\Phi_vT_{v,e}(M)\Psi_v$, then
+    $\Psi_uO_1\Phi_u=T_{u,e}(M^{\mathsf T})$ and
+    $\Psi_vO_2\Phi_v=T_{v,e}(M)$.
+    Here $T_{w,e}(N)$ denotes the virtual operator on the legs incident to $w$
+    which acts by $N$ on the leg belonging to $e$ and by the identity on the
+    other incident legs.
+\end{theorem}
+\begin{proof}\leanok
+    The endpoint equivalences give
+    $P_uO_1P_u=\Phi_uT_{u,e}(M^{\mathsf T})\Psi_u
+        \iff \Psi_uO_1\Phi_u=T_{u,e}(M^{\mathsf T})$
+    and
+    $P_vO_2P_v=\Phi_vT_{v,e}(M)\Psi_v
+        \iff \Psi_vO_2\Phi_v=T_{v,e}(M)$.
+    The two hypotheses are the left sides of these equivalences.
+\end{proof}
+
+\begin{theorem}[Endpoint physical-to-virtual recovery under image preservation]%
+    \label{thm:peps_edgePhysicalToVirtualInsertion_of_projected_realization_eq}
+    \lean{TNLean.PEPS.edgePhysicalToVirtualInsertion_of_projected_realization_eq}
+    \leanok
+    \uses{thm:peps_edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq,
+        thm:peps_localVirtualOpOfPhysicalOp_realizes_of_projector}
+    Let $e=(u,v)$. Suppose that
+    $P_uO_1P_u=\Phi_uT_{u,e}(M^{\mathsf T})\Psi_u$ and
+    $P_vO_2P_v=\Phi_vT_{v,e}(M)\Psi_v$. Suppose also that
+    $O_1$ maps the image of $\Phi_u$ into itself and $O_2$ maps the image of
+    $\Phi_v$ into itself. Then
+    \[
+        O_1\Phi_u=\Phi_uT_{u,e}(M^{\mathsf T}),
+        \qquad
+        O_2\Phi_v=\Phi_vT_{v,e}(M).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    The preceding endpoint theorem identifies the two virtual pullbacks with
+    the one-edge actions of $M^{\mathsf T}$ and $M$. The pullback
+    specification gives the projected physical actions, and the
+    image-preservation hypotheses remove the endpoint projectors.
+\end{proof}
+
+\begin{theorem}[Right-endpoint physical realization of the inserted coefficient]%
+    \label{thm:peps_edgeInsertedCoeff_rightPhysicalRealization}
+    \lean{TNLean.PEPS.edgeInsertedCoeff_eq_sum_right_physicalRealization}
+    \leanok
+    \uses{def:peps_edgeInsertedCoeff,
+        def:peps_edgeBoundaryRightIndexEquivInsertedBoundaryConfig,
+        thm:peps_localTensorMap_localIncidentMatrixOp_single}
+    Let $e=(u,v)$ and let $\sigma$ be a physical configuration. If a physical
+    operator on $v$ realizes the one-edge virtual matrix action on the
+    distinguished incident edge, then the inserted-edge coefficient at
+    $\sigma$ is obtained by leaving the left endpoint and open middle
+    contraction explicit and applying that physical operator to the right
+    endpoint tensor.
+\end{theorem}
+\begin{proof}\leanok
+    Expand the physical realization on a basis local configuration at the
+    right endpoint. The resulting sum over the right bond index is then
+    reindexed together with the ordinary edge-boundary data.
+\end{proof}
+
+\begin{theorem}[Left-endpoint physical realization of the inserted coefficient]%
+    \label{thm:peps_edgeInsertedCoeff_leftPhysicalRealization}
+    \lean{TNLean.PEPS.edgeInsertedCoeff_eq_sum_left_physicalRealization}
+    \leanok
+    \uses{def:peps_edgeInsertedCoeff,
+        def:peps_edgeBoundaryLeftIndexEquivInsertedBoundaryConfig,
+        thm:peps_localTensorMap_localIncidentMatrixOp_single}
+    Let $e=(u,v)$ and let $\sigma$ be a physical configuration. If a physical
+    operator on $u$ realizes the one-edge virtual action of $M^{\mathsf T}$ on
+    the distinguished incident edge, then the inserted-edge coefficient for
+    $M$ at $\sigma$ is obtained by applying that physical operator to the left
+    endpoint tensor and leaving the open middle contraction and the right
+    endpoint explicit.
+\end{theorem}
+\begin{proof}\leanok
+    Expand the physical realization on a basis local configuration at the left
+    endpoint. The transpose converts the ordinary right bond index and the new
+    left bond index into the coefficient $M_{ij}$; the resulting finite sum
+    is then reindexed with the ordinary edge-boundary data.
+\end{proof}
+
+\begin{theorem}[Endpoint physical realizations of the inserted coefficient]%
+    \label{thm:peps_edgeInsertedCoeff_endpointPhysicalRealization}
+    \lean{TNLean.PEPS.edgeInsertedCoeff_endpointPhysicalRealization}
+    \leanok
+    \uses{thm:peps_localIncidentMatrixOp_physicalRealization,
+        thm:peps_edgeInsertedCoeff_leftPhysicalRealization,
+        thm:peps_edgeInsertedCoeff_rightPhysicalRealization}
+    If the PEPS tensor is vertex-injective, then for every physical
+    configuration $\sigma$, each inserted edge matrix is realized by physical
+    operators at the endpoint tensors: the left endpoint realizes
+    $M^{\mathsf T}$, the right endpoint realizes $M$, and both realizations
+    reproduce the same inserted-edge coefficient at $\sigma$ in the
+    edge-centered three-site decomposition.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the local physical-realization theorem at the two endpoints and then
+    use the two coefficient identities above.
+\end{proof}
+
+\begin{theorem}[Equal neighboring physical actions recover a virtual insertion]%
+    \label{thm:peps_physical_to_virtual_insertion}
+    \lean{TNLean.PEPS.physical_to_virtual_insertion}
+    \leanok
+    \uses{def:peps_edgeBlockedThreeSiteInjective, def:peps_edgeBoundaryConfig,
+        def:peps_edgeLeftLocalConfig, def:peps_edgeRightLocalConfig,
+        def:peps_edgeOpenMiddleWeight, def:peps_localTensorMap,
+        def:peps_localIncidentMatrixOp}
+    Let $e=(u,v)$. Assume that the edge-blocked three-site chain at $e$ is
+    injective and that every virtual bond has positive dimension. Let $O_1,O_2$
+    be physical operators at the endpoint tensors, and
+    write $\Phi_u,\Phi_v$ for the two local tensor maps. Suppose that, for every
+    physical configuration $\sigma$,
+    \[
+        \sum_{\beta}
+        O_1(A_u(\beta_u))_{\sigma_u}
+        C_{\mathrm{mid}}(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})
+        A_v(\beta_v)_{\sigma_v}
+        =
+        \sum_{\beta}
+        A_u(\beta_u)_{\sigma_u}
+        C_{\mathrm{mid}}(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})
+        O_2(A_v(\beta_v))_{\sigma_v}.
+    \]
+    Then
+    \[
+        \exists M\in\MN{D(e)},\qquad
+        O_1\Phi_u=\Phi_uT_{u,e}(M^{\mathsf T}),
+        \qquad
+        O_2\Phi_v=\Phi_vT_{v,e}(M).
+    \]
+    The same implication is represented diagrammatically by the
+    $O_1,O_2\mapsto W$ step:
+    \begin{center}
+        \TNPEPSPhysicalToVirtualInsertion
+    \end{center}
+    This is the converse part of the insertion-algebra lemma in
+    \cite[Section~3]{Molnar2018NormalPEPS}, where the recovered matrix is
+    denoted $W$.
+\end{theorem}
+\begin{proof}\leanok
+    Contracting the middle block out of the hypothesis leaves a bond-contracted
+    identity between the two endpoint tensors, holding for every residual
+    boundary configuration. Inverting the right endpoint of this identity writes
+    the action of $O_1$ on a left tensor vector as a bond-indexed combination of
+    left tensor vectors with the same residual; the combining coefficients are
+    read at a fixed reference right residual and define $M$. Inverting the left
+    endpoint writes the action of $O_2$ on a right tensor vector as a bond-indexed
+    combination of right tensor vectors. The left inverse identifies the two
+    coefficient families, which is the source step $V=W$, so the right-endpoint
+    combination is also governed by $M$. The reference residuals exist because
+    every virtual bond has positive dimension.
+\end{proof}
+
+\begin{theorem}[Injectivity of an inserted edge coefficient]%
+    \label{thm:peps_edgeInsertedCoeff_injective}
+    \lean{TNLean.PEPS.edgeInsertedCoeff_injective}
+    \leanok
+    \uses{def:peps_edgeBlockedThreeSiteInjective, def:peps_edgeInsertedCoeff,
+        thm:peps_edgeInsertedCoeff_leftPhysicalRealization,
+        thm:peps_edgeInsertedCoeff_rightPhysicalRealization,
+        thm:peps_physical_to_virtual_insertion}
+    Let the edge-blocked three-site chain of \(B\) at \(e\) be injective, and
+    assume every virtual bond of \(B\) has positive dimension.  If two matrices
+    \(M,M'\in\MN{D_B(e)}\) give the same inserted coefficient at every physical
+    configuration,
+    \[
+        \forall\sigma,\qquad
+        C_B(e,\sigma,M)=C_B(e,\sigma,M'),
+    \]
+    then \(M=M'\).
+\end{theorem}
+
+\begin{proof}\leanok
+    Realize \(M\) on the right endpoint and \(M'^{\mathsf T}\) on the left
+    endpoint.  The endpoint realizations and the equality
+    $C_B(e,\sigma,M)=C_B(e,\sigma,M')$ give, for every physical configuration
+    $\sigma$,
+    \[
+        \sum_{\beta}
+        O_1(B_u(\beta_u))_{\sigma_u}\,
+        C_{\mathrm{mid}}^B(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})\,
+        (B_v(\beta_v))_{\sigma_v}
+        =
+        \sum_{\beta}
+        (B_u(\beta_u))_{\sigma_u}\,
+        C_{\mathrm{mid}}^B(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})\,
+        O_2(B_v(\beta_v))_{\sigma_v}.
+    \]
+    Theorem~\ref{thm:peps_physical_to_virtual_insertion} gives a single virtual
+    matrix realizing both endpoint operators.  Endpoint uniqueness then
+    identifies this matrix with \(M\) and with \(M'\).
+\end{proof}
+
+\begin{definition}[Edge-blocked insertion algebra correspondence]%
+    \label{def:peps_edgeBlockedInsertionAlgebraIsomorphism_property}
+    \lean{TNLean.PEPS.IsEdgeBlockedInsertionAlgebraIsomorphism}
+    \leanok
+    \uses{def:peps_edgeInsertedCoeff}
+    For two PEPS tensors $A$ and $B$ and an edge $e$, this property is
+    \[
+        \exists \Phi_e:\MN{D_A(e)}
+        \simeq_{\mathrm{alg}}
+        \MN{D_B(e)},\qquad
+        \forall \sigma,\ \forall X\in\MN{D_A(e)},\quad
+        C_A(e,\sigma,X)=C_B(e,\sigma,\Phi_e(X)).
+    \]
+\end{definition}
+
+\begin{theorem}[Edge-blocked insertion algebra isomorphism]%
+    \label{thm:peps_edgeBlockedInsertionAlgebraIsomorphism}
+    \lean{TNLean.PEPS.isEdgeBlockedInsertionAlgebraIsomorphism}
+    \leanok
+    \uses{def:peps_edgeBlockedInsertionAlgebraIsomorphism_property,
+        thm:peps_edgeBlockedThreeSiteInjective,
+        thm:peps_virtualInsertionPhysicalRealization,
+        thm:peps_edgeInsertedCoeff_endpointPhysicalRealization,
+        thm:peps_edgeInsertedCoeff_injective,
+        thm:peps_physical_to_virtual_insertion,
+        thm:peps_sameState_edgeBlockedCoeff_eq, def:peps_edgeInsertedCoeff}
+    Suppose the two edge-blocked three-site chains associated to $A$ and $B$ at
+    the edge $e$ are injective, suppose every virtual bond of $A$ and $B$ has
+    positive dimension, and suppose the two PEPS tensors define the same state.
+    % Scope restriction: the unrestricted Section 3 statement requires deriving
+    % positive bond dimensions from injectivity; see
+    % docs/paper-gaps/peps_injective_ft_section3_route.tex.
+    Then
+    \[
+        \exists \Phi_e:\MN{D_A(e)}
+        \simeq_{\mathrm{alg}}
+        \MN{D_B(e)},\qquad
+        \forall \sigma,\ \forall X\in\MN{D_A(e)},\quad
+        C_A(e,\sigma,X)=C_B(e,\sigma,\Phi_e(X)).
+    \]
+    This is the edge-blocked form of the algebra isomorphism $X\mapsto Y$ in
+    \cite[Section~3]{Molnar2018NormalPEPS}:
+    \begin{center}
+        \TNPEPSThreeSiteInsertionComparison
+    \end{center}
+\end{theorem}
+\begin{proof}\leanok
+    For a matrix $X\in\MN{D_A(e)}$, realize the insertion of $X$ at the two
+    endpoints of the first edge-blocked chain by physical operators $O_1,O_2$.
+    Write $C_{\mathrm{mid}}^A$ and $C_{\mathrm{mid}}^B$ for the open middle
+    weights of the two edge-blocked chains. For every physical configuration
+    $\sigma$, endpoint realization of $X$ and equality of the PEPS states give
+    \[
+        C_A(e,\sigma,X)
+        =
+        \sum_{\beta}
+        O_1(A_u(\beta_u))_{\sigma_u}\,
+        C_{\mathrm{mid}}^A(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})\,
+        (A_v(\beta_v))_{\sigma_v}
+        =
+        \sum_{\beta}
+        O_1(B_u(\beta_u))_{\sigma_u}\,
+        C_{\mathrm{mid}}^B(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})\,
+        (B_v(\beta_v))_{\sigma_v}
+    \]
+    and
+    \[
+        C_A(e,\sigma,X)
+        =
+        \sum_{\beta}
+        (A_u(\beta_u))_{\sigma_u}\,
+        C_{\mathrm{mid}}^A(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})\,
+        O_2(A_v(\beta_v))_{\sigma_v}
+        =
+        \sum_{\beta}
+        (B_u(\beta_u))_{\sigma_u}\,
+        C_{\mathrm{mid}}^B(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})\,
+        O_2(B_v(\beta_v))_{\sigma_v}.
+    \]
+    Therefore, for every physical configuration $\sigma$,
+    \[
+        \sum_{\beta}
+        O_1(B_u(\beta_u))_{\sigma_u}\,
+        C_{\mathrm{mid}}^B(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})\,
+        (B_v(\beta_v))_{\sigma_v}
+        =
+        \sum_{\beta}
+        (B_u(\beta_u))_{\sigma_u}\,
+        C_{\mathrm{mid}}^B(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})\,
+        O_2(B_v(\beta_v))_{\sigma_v}.
+    \]
+    The positive-bond physical-to-virtual recovery applied to the second
+    edge-blocked chain gives a matrix $Y\in\MN{D_B(e)}$ such that, for every
+    physical configuration $\sigma$,
+    \[
+        C_A(e,\sigma,X)=C_B(e,\sigma,Y).
+    \]
+    Thus $X\mapsto Y$ gives the required coefficient correspondence.  Denote
+    this correspondence by $T$.  For every physical configuration $\sigma$,
+    \[
+        \begin{aligned}
+            C_B(e,\sigma,T(X+X'))
+             & =
+            C_A(e,\sigma,X+X')
+            =
+            C_A(e,\sigma,X)+C_A(e,\sigma,X') \\
+             & =
+            C_B(e,\sigma,T(X)+T(X')),
+        \end{aligned}
+    \]
+    and similarly \(T(cX)=cT(X)\).  The multiplicative identity is read from
+    the inserted two-endpoint realization:
+    \[
+        C_B(e,\sigma,T(XX'))
+        =
+        C_A(e,\sigma,XX')
+        =
+        C_B(e,\sigma,T(X)T(X')).
+    \]
+    The unit satisfies
+    \[
+        C_B(e,\sigma,T(1))=C_A(e,\sigma,1)=C_B(e,\sigma,1).
+    \]
+    Theorem~\ref{thm:peps_edgeInsertedCoeff_injective} identifies the inserted
+    matrices in these coefficient identities.  Exchanging $A$ and $B$ gives the
+    inverse correspondence, hence a $\C$-algebra isomorphism.
+\end{proof}
+
+\begin{theorem}[Matrix-algebra isomorphisms preserve size]%
+    \label{thm:matrixAlgEquiv_fin_eq}
+    \lean{MPSTensor.matrixAlgEquiv_fin_eq}
+    \leanok
+    If the full matrix algebras $\MN{D}$ and $\MN{E}$ are isomorphic as
+    $\C$-algebras, then $D = E$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The isomorphism preserves complex vector-space dimension, and $\dim_{\C}
+        \MN{D} = D^2$, $\dim_{\C} \MN{E} = E^2$, so $D = E$.
+\end{proof}
+
+\begin{theorem}[Matrix-algebra isomorphisms are inner after identifying size]%
+    \label{thm:matrixAlgEquiv_inner_of_fin}
+    \lean{MPSTensor.matrixAlgEquiv_inner_of_fin}
+    \leanok
+    \uses{thm:matrixAlgEquiv_fin_eq, thm:skolem_noether}
+    Let $\varphi : \MN{D} \to \MN{E}$ be a $\C$-algebra isomorphism. Then
+    $D = E$; let $h$ denote this equality and $\iota_h : \MN{D} \to \MN{E}$ the
+    canonical index-relabelling isomorphism. There is $X \in \GL_{E}(\C)$ with
+    $\varphi(M) = X\,\iota_h(M)\,X^{-1}$ for all $M \in \MN{D}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    By Theorem~\ref{thm:matrixAlgEquiv_fin_eq}, $D = E$, so $\iota_h$ is defined.
+    Then $\varphi \circ \iota_h^{-1}$ is a $\C$-algebra automorphism of $\MN{E}$,
+    and Skolem--Noether (Theorem~\ref{thm:skolem_noether}) gives $X \in
+        \GL_{E}(\C)$ with $(\varphi \circ \iota_h^{-1})(N) = X N X^{-1}$; evaluating
+    at $N = \iota_h(M)$ gives $\varphi(M) = X\,\iota_h(M)\,X^{-1}$.
+\end{proof}
+
+\begin{theorem}[Edge gauge from the insertion algebra isomorphism]%
+    \label{thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism}
+    \lean{TNLean.PEPS.edgeGaugeFromInsertionAlgebraIsomorphism}
+    \leanok
+    \uses{thm:matrixAlgEquiv_inner_of_fin}
+    Suppose the edge insertion correspondence is a $\C$-algebra isomorphism
+    between the two full matrix algebras on the chosen bond. Then the two bond
+    dimensions on that edge are equal. If $h_e:D_A(e)=D_B(e)$ is this
+    equality, and if
+    $\phi_{h_e}:\MN{D_A(e)}\to\MN{D_B(e)}$ is the induced algebra
+    isomorphism, then the insertion correspondence is
+    $Y=Z_e\,\phi_{h_e}(X)\,Z_e^{-1}$ for an invertible edge matrix $Z_e$.
+    \begin{center}
+        \TNGaugeConjugation{Z_e}{\phi_{h_e}(X)}{Z_e^{-1}}
+    \end{center}
+    This is the finite-dimensional matrix-algebra step in
+    \cite[Section~3]{Molnar2018NormalPEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply Theorem~\ref{thm:matrixAlgEquiv_inner_of_fin} to the full matrix
+    algebras determined by the two edge bond spaces.
+\end{proof}
+
+\begin{theorem}[Per-edge gauge family from insertion algebra isomorphisms]%
+    \label{thm:peps_exists_edgeGaugeFamily}
+    \lean{TNLean.PEPS.exists_edgeGaugeFamily}
+    \leanok
+    \uses{thm:peps_edgeBlockedThreeSiteInjective,
+        thm:peps_edgeBlockedInsertionAlgebraIsomorphism,
+        thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism}
+    Let $A$ and $B$ be vertex-injective PEPS tensors with the same PEPS state.
+    Suppose the corresponding virtual bond dimensions are equal and every
+    virtual bond of $A$ has positive dimension. Then there is a family
+    $X_e\in\GL(D_A(e))$ such that, for every edge $e$, there is a
+    $\C$-algebra isomorphism
+    \[
+        \Phi_e:\MN{D_A(e)}\longrightarrow\MN{D_B(e)}
+    \]
+    satisfying, for every physical configuration $\sigma$ and matrix $M$,
+    \[
+        C_A(e,\sigma,M)=C_B(e,\sigma,\Phi_e(M)),
+    \]
+    and, writing $\phi_{h_e}:\MN{D_A(e)}\to\MN{D_B(e)}$ for the algebra
+    isomorphism induced by the dimension equality on $e$,
+    \[
+        \Phi_e(M)=\phi_{h_e}\!\left(X_eMX_e^{-1}\right).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Vertex injectivity and positivity give edge-blocked three-site injectivity
+    for $A$ and $B$ at each edge. Theorem~\ref{thm:peps_edgeBlockedInsertionAlgebraIsomorphism}
+    gives the algebra isomorphism $\Phi_e$ preserving inserted coefficients.
+    Theorem~\ref{thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism} realizes
+    $\Phi_e$ by conjugation, and the bond-dimension equality transports the
+    conjugating matrix to the $A$-side bond.
+\end{proof}
+
+% Specializations of the per-edge gauge to the translated interior edges of the
+% open square lattice, where the gauge comes from a one-edge blocking datum.
+
+\begin{theorem}[Per-edge gauge at a translated horizontal interior edge]%
+    \label{thm:peps_exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge}
+    \lean{TNLean.PEPS.exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge}
+    \leanok
+    \uses{lem:peps_normalSquareHorizontalTranslatedEdge_blockingData}
+    Let $A$ and $B$ be normal PEPS on the open $W\times H$ square lattice that
+    satisfy the rectangular-injectivity hypotheses with union closure, have
+    positive physical dimension $d>0$, have equal and everywhere-positive virtual
+    bond dimensions, and define the same PEPS state. Fix a translated horizontal
+    interior frame with two rows and two
+    columns of margin, that is $2\le x_0$, $2\le y_0$, $x_0+8\le W$, and
+    $y_0+8\le H$, and let $e$ be the distinguished horizontal edge of that frame.
+    Then the bond dimensions agree on $e$, $D_A(e)=D_B(e)$, and there are an
+    invertible edge matrix $Z\in\GL(D_B(e))$ and a forward map $\mathrm{fwd}$
+    given by the conjugation
+    \[
+        \mathrm{fwd}(M)=Z\,\phi_{h_e}(M)\,Z^{-1},
+    \]
+    where $\phi_{h_e}:\MN{D_A(e)}\to\MN{D_B(e)}$ is the reindexing induced by the
+    bond-dimension equality on $e$. No single-vertex injectivity is used; the
+    only injectivity hypotheses are the blocked-region injectivities of the
+    interior blocking data and the red and host injectivities of $B$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The translated horizontal frame supplies, for both $A$ and $B$, the one-edge
+    interior blocking datum. Because the red, blue, and complementary blocks are
+    coordinate regions, independent of the tensor, the two data share them,
+    \[
+        R_A = R_B,\qquad B_A = B_B,\qquad C_A = C_B,
+    \]
+    and the distinguished edge $e$ is the unique crossing edge of the red and
+    blue blocks. Applying the per-edge gauge construction from a one-edge
+    blocking datum to the two blocking data yields the bond-dimension equality on
+    $e$ and the conjugating gauge $Z$.
+\end{proof}
+
+\begin{theorem}[Per-edge gauge at a translated vertical interior edge]%
+    \label{thm:peps_exists_regionEdgeGauge_normalSquareVerticalTranslatedEdge}
+    \lean{TNLean.PEPS.exists_regionEdgeGauge_normalSquareVerticalTranslatedEdge}
+    \leanok
+    \uses{lem:peps_normalSquareVerticalTranslatedEdge_blockingData}
+    The rotated counterpart of
+    Theorem~\ref{thm:peps_exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge}.
+    Under the same hypotheses on $A$ and $B$, for a translated vertical interior
+    frame with two rows and two columns of margin, that is $2\le x_0$,
+    $2\le y_0$, $x_0+8\le W$, and $y_0+8\le H$, with distinguished vertical
+    edge $e$, the bond dimensions agree on $e$, $D_A(e)=D_B(e)$, and there are an
+    invertible edge matrix $Z\in\GL(D_B(e))$ and a forward map $\mathrm{fwd}$
+    given by the conjugation
+    $\mathrm{fwd}(M)=Z\,\phi_{h_e}(M)\,Z^{-1}$, with
+    $\phi_{h_e}:\MN{D_A(e)}\to\MN{D_B(e)}$ the reindexing induced by the
+    bond-dimension equality on $e$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The vertical translated frame, the horizontal frame rotated by a quarter
+    turn, likewise supplies for both $A$ and $B$ the shared one-edge interior
+    blocking datum,
+    \[
+        R_A = R_B,\qquad B_A = B_B,\qquad C_A = C_B,
+    \]
+    with the distinguished vertical edge $e$ as the unique crossing edge of the
+    red and blue blocks. Applying the per-edge gauge construction from a one-edge
+    blocking datum to the two blocking data yields the bond-dimension equality on
+    $e$ and the conjugating gauge $Z$.
+\end{proof}
+
+\begin{definition}[Factorized local gauge datum]%
+    \label{def:peps_hasFactorizedLocalGauge}
+    \lean{TNLean.PEPS.HasFactorizedLocalGauge}
+    \leanok
+    \uses{def:peps_localTensorMap, def:peps_localLeftInverse}
+    Fix $A$, $B$, a bond-dimension equality, and a vertex $v$. Let
+    $\mathcal T^A_v$ be the local tensor map of $A$, let $L^A_v$ be the
+    chosen left inverse of $\mathcal T^A_v$, and let
+    $\Pi^A_v=\mathcal T^A_vL^A_v$. The factorized local gauge datum consists
+    of the following two identities for local virtual configurations
+    $\eta,\eta'$:
+    \[
+        \Pi^A_v B_v(\eta,-)=B_v(\eta,-),
+        \qquad
+        L^A_vB_v(\eta,-)(\eta')
+        =
+        \prod_{e\ni v}X_e(\eta_e,\eta'_e),
+    \]
+    with $X_e\in\GL(D_A(e))$ on each incident edge. This is the local output
+    required from the blocked-middle reduction in
+    \cite[Section~3]{Molnar2018NormalPEPS}.
+\end{definition}
+
+\begin{definition}[Blocked-middle local gauge formula]%
+    \label{def:peps_blockedMiddleGaugeFormula}
+    \lean{TNLean.PEPS.BlockedMiddleGaugeFormula}
+    \leanok
+    The blocked-middle local gauge formula at $v$ is the assertion that there
+    are matrices $X_e\in\GL(D_A(e))$, one on each incident edge, such that for
+    all local virtual configurations $\eta$ and physical indices $\sigma$,
+    \[
+        B_v(\eta,\sigma)
+        =
+        \sum_{\eta'}
+        \left(\prod_{e\ni v}X_e(\eta_e,\eta'_e)\right)A_v(\eta',\sigma).
+    \]
+\end{definition}
+
+\begin{theorem}[Blocked-middle formula implies factorized local gauge]%
+    \label{thm:peps_hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula}
+    \lean{TNLean.PEPS.hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula}
+    \leanok
+    \uses{def:peps_blockedMiddleGaugeFormula, def:peps_hasFactorizedLocalGauge}
+    If the blocked-middle local gauge formula holds at $v$ with matrices
+    $X_e$, then the factorized local gauge datum holds at $v$ with the same
+    matrices.
+    % Open: derive the displayed blocked-middle formula from equality of PEPS
+    % states by the edge-centred three-site reduction.
+\end{theorem}
+\begin{proof}\leanok
+    For fixed $\eta$, set
+    $c_\eta(\eta')=\prod_{e\ni v}X_e(\eta_e,\eta'_e)$. The displayed
+    blocked-middle formula is precisely
+    $B_v(\eta,-)=\mathcal T^A_vc_\eta$. Hence
+    \[
+        \Pi^A_vB_v(\eta,-)
+        =
+        \Pi^A_v\mathcal T^A_vc_\eta
+        =
+        \mathcal T^A_vc_\eta
+        =
+        B_v(\eta,-),
+    \]
+    and
+    \[
+        L^A_vB_v(\eta,-)(\eta')
+        =
+        L^A_v\mathcal T^A_vc_\eta(\eta')
+        =
+        c_\eta(\eta')
+        =
+        \prod_{e\ni v}X_e(\eta_e,\eta'_e).
+    \]
+\end{proof}
+
+\begin{theorem}[Blocked-middle formula gives a local gauge formula]%
+    \label{thm:peps_localGauge_exists_of_blockedMiddleGaugeFormula}
+    \lean{TNLean.PEPS.localGauge_exists_of_blockedMiddleGaugeFormula}
+    \leanok
+    \uses{def:peps_blockedMiddleGaugeFormula,
+        thm:peps_hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula,
+        thm:localGauge_exists}
+    Suppose that the edge-centred three-site reduction supplies invertible
+    matrices $X_e$ on the incident edges of $v$ such that, for all local virtual
+    configurations $\eta$ and physical indices $\sigma$,
+    \[
+        B_v(\eta,\sigma)
+        =
+        \sum_{\eta'}
+        \left(\prod_{e\ni v} X_e(\eta_e,\eta'_e)\right)A_v(\eta',\sigma).
+    \]
+    Then the same family $X_e$ is a local gauge at $v$:
+    \begin{center}
+        \TNPEPSBlockedMiddleLocalGaugeFormula
+    \end{center}
+    % Open: derive the blocked-middle formula from SameState
+    % by the edge-centred three-site reduction.
+\end{theorem}
+\begin{proof}\leanok
+    By the preceding theorem,
+    $L^A_vB_v(\eta,-)(\eta')=\prod_{e\ni v}X_e(\eta_e,\eta'_e)$. Since
+    $\Pi^A_vB_v(\eta,-)=B_v(\eta,-)$ and
+    $\Pi^A_v=\mathcal T^A_vL^A_v$,
+    \[
+        B_v(\eta,\sigma)
+        =
+        \sum_{\eta'}L^A_vB_v(\eta,-)(\eta')A_v(\eta',\sigma)
+        =
+        \sum_{\eta'}
+        \left(\prod_{e\ni v}X_e(\eta_e,\eta'_e)\right)A_v(\eta',\sigma).
+    \]
+\end{proof}
+
+\begin{theorem}[Absorbing edge gauges into the second PEPS]%
+    \label{thm:peps_edge_gauge_absorption}
+    \lean{TNLean.PEPS.edge_gauge_absorption}
+    \leanok
+    \uses{def:peps_absorbEdgeGauges, thm:peps_absorbEdgeGauges_bondDim,
+        thm:peps_absorbEdgeGauges_component}
+    Given edge gauges $X_e$, set $\widetilde B=B^X$. Then
+    $D_{\widetilde B}=D_B$ and, for every vertex $v$,
+    $\widetilde B_v(\eta,\sigma)=
+        \sum_{\eta'}(\prod_{ie}M_{ie}(\eta(ie),\eta'(ie)))B_v(\eta',\sigma)$,
+    where $M_{ie}=X_e$ or $M_{ie}=(X_e^{-1})^t$ according to the orientation of
+    the endpoint $ie$.
+    \begin{center}
+        \TNPEPSEdgeGaugeAbsorption
+    \end{center}
+    After this absorption, arbitrary insertions of the same matrix on the same
+    edge are compared in the first PEPS and the modified second PEPS.
+\end{theorem}
+\begin{proof}\leanok
+    With $\widetilde B=B^X$, Theorem~\ref{thm:peps_absorbEdgeGauges_bondDim}
+    gives $D_{\widetilde B}=D_B$, and
+    Theorem~\ref{thm:peps_absorbEdgeGauges_component} gives
+    $\widetilde B_v(\eta,\sigma)=
+        \sum_{\eta'}(\prod_{ie}M_{ie}(\eta(ie),\eta'(ie)))B_v(\eta',\sigma)$.
+\end{proof}
+
+\begin{definition}[Post-absorption inserted-edge comparison]%
+    \label{def:peps_postAbsorptionEdgeInsertionEquality}
+    \lean{TNLean.PEPS.PostAbsorptionEdgeInsertionEquality}
+    \leanok
+    \uses{def:peps_edgeInsertedCoeff}
+    For tensor families $A,\widetilde B$, the post-absorption comparison holds
+    when $h:D_A=D_{\widetilde B}$ and the following equality holds. For each
+    edge $e$, write
+    $\phi_{h_e}:\MN{D_A(e)}
+        \to\MN{D_{\widetilde B}(e)}$ for the matrix-algebra
+    transport induced by $h_e:D_A(e)=D_{\widetilde B}(e)$. Then, for every
+    matrix $X\in\MN{D_A(e)}$ and every physical configuration
+    $\sigma$,
+    \[
+        C_A(e,X;\sigma)
+        =
+        C_{\widetilde B}(e,\phi_{h_e}(X);\sigma).
+    \]
+\end{definition}
+
+\begin{theorem}[Post-absorption edge insertion equality]%
+    \label{thm:peps_postAbsorptionEdgeInsertionEquality}
+    \lean{TNLean.PEPS.post_absorption_edge_insertion_equality}
+    \leanok
+    \uses{thm:peps_edge_gauge_absorption,
+        def:peps_postAbsorptionEdgeInsertionEquality}
+    Let $A$ and $B$ be vertex-injective PEPS with the same state, assume every
+    bond dimension is positive, and assume the bond-dimension equality
+    $h:D_A=D_B$. After the edge gauges have been
+    absorbed into the second tensor family, there are gauges $Z_e$ and
+    $\widetilde B=B^Z$ such that $D_{\widetilde B}=D_A$ and, for every edge
+    $e$, write $\phi_{h_e}:\MN{D_A(e)}\to\MN{D_{\widetilde B}(e)}$ for the
+    matrix-algebra transport induced by the corresponding equality
+    $h_e:D_A(e)=D_{\widetilde B}(e)$. Then, for every matrix
+    $X\in\MN{D_A(e)}$ and every physical configuration $\sigma$,
+    \[
+        C_A(e,X;\sigma)
+        =
+        C_{\widetilde B}(e,\phi_{h_e}(X);\sigma),
+    \]
+    Diagrammatically, this is the equality
+    \begin{center}
+        \TNPEPSEdgeInsertionEquality
+    \end{center}
+    from \cite[Section~3, lines 1037--1065]{Molnar2018NormalPEPS}. The
+    positive-bond hypothesis is the source's standing assumption that injective
+    PEPS have nonzero virtual bond spaces; it is needed because the edge gauges
+    come from blocking the PEPS around each edge into a three-site injective
+    chain.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_exists_edgeGaugeFamily, thm:peps_edge_gauge_absorption,
+        def:peps_postAbsorptionEdgeInsertionEquality}
+    Block the PEPS around each edge into a three-site injective chain and compare
+    the matched matrix insertions: this assigns to every edge an invertible bond
+    matrix $X_e$ realizing the insertion-algebra transport as conjugation. Absorb
+    the transpose of $X_e$ into the second tensor family on that edge. The
+    open-edge gauge action then conjugates each inserted matrix by the transpose
+    of the absorbed gauge, while the insertion-algebra transport conjugates by
+    $X_e$; the two conjugations agree because the absorbed gauge is the transpose
+    of $X_e$, giving the post-absorption insertion equality.
+\end{proof}
+
+\begin{theorem}[Local gauge extraction]%
+    \label{thm:localGauge_exists}
+    \lean{TNLean.PEPS.localGauge_exists}
+    \lean{TNLean.PEPS.localGauge_exists_of_factorizedLocalGauge}
+    \leanok
+    \uses{def:peps_hasFactorizedLocalGauge}
+    Under the factorized local gauge hypothesis, the local gauge formula follows.
+    What remains open is to upgrade equality of the edge-blocked coefficients to
+    the blocked-middle formula using the corresponding three-site
+    injective-chain argument. The physical-realization and physical-to-virtual
+    steps in that argument are recorded separately as
+    Theorems~\ref{thm:peps_virtualInsertionPhysicalRealization} and
+    \ref{thm:peps_physical_to_virtual_insertion}.
+    After Theorem~\ref{thm:peps_postAbsorptionEdgeInsertionEquality} supplies
+    the factorized local gauge hypothesis, injectivity on the star neighborhood
+    provides a left inverse that isolates the local edge gauges:
+    \begin{center}
+        \TNPEPSLocalGaugeExtraction
+    \end{center}
+\end{theorem}
+\begin{proof}\leanok
+    The factorized local gauge datum already supplies the incident-edge
+    invertible matrices and the factorized local coefficient identity.
+\end{proof}
+
+\begin{theorem}[Gauge consistency]%
+    \label{thm:gaugeConsistency}
+    \lean{TNLean.PEPS.gaugeConsistency}
+    \leanok
+    \uses{thm:peps_exists_edgeGaugeFamily,
+        thm:peps_postAbsorptionEdgeInsertionEquality,
+        thm:localGauge_exists, def:gaugeVertex}
+    Suppose $A$ and $B$ are vertex-injective PEPS tensors with the same PEPS
+    state, that the corresponding virtual bond dimensions are equal, that
+    every virtual bond of $A$ has positive dimension, and that the graph is
+    connected. The connectivity assumption is necessary: on a disconnected
+    graph the per-vertex scalars produced by the reduction below cannot be
+    absorbed into edge gauges, since on the empty graph on two vertices the
+    products of the vertex scalars can agree while no edge gauge relates the two
+    tensors.
+    Choose an edge $e=(u,v)$ and block all other vertices into one middle
+    tensor. The three resulting tensors form an injective chain, so the
+    one-dimensional injective comparison assigns an invertible matrix to the
+    edge $e$. Repeating this for every edge and absorbing these matrices into
+    the second tensor family gives the post-absorption insertion equality of
+    \cite[Section~3]{Molnar2018NormalPEPS}: for every edge and every matrix,
+    inserting that matrix on the edge in the first PEPS gives the same state as
+    inserting it on the same edge in the modified second PEPS. Applying the
+    local extraction at each vertex then gives one edge gauge family whose
+    endpoint actions transform the first tensor family into the second:
+    \begin{center}
+        \TNPEPSGlobalConsistency
+    \end{center}
+\end{theorem}
+\begin{proof}\leanok
+    Absorbing the edge gauges into the second tensor family gives the
+    post-absorption insertion equality. On each vertex with an incident edge,
+    the one-vertex-versus-complement comparison supplies a nonzero scalar
+    relating the first tensor to the absorbed second tensor. Because the state
+    is nonzero, these per-vertex scalars multiply to one, so on the connected
+    graph a spanning-tree construction realizes their reciprocals as the
+    oriented incidence product of one edge-scalar family. Folding those scalars
+    into the inverse of the absorbed edge gauges produces the global gauge. On a
+    one-vertex graph there are no edges and the gauge is trivial.
+\end{proof}
+
+\begin{remark}
+    The PEPS diagrams in this section record the gauge steps used in
+    \cite[Section~3]{Molnar2018NormalPEPS}. The edge-orientation and
+    vertex-action diagrams fix the endpoint convention for the edge gauges
+    obtained by blocking the PEPS to a three-site injective MPS. The
+    cancellation diagram is the converse contracted identity: inserting
+    opposite endpoint actions on an internal edge leaves the PEPS coefficient
+    unchanged. The edge-gauge absorption diagram records the formation of
+    $\widetilde B$ before the post-absorption insertion equality. The
+    local-extraction diagram summarizes the comparison of
+    one-site-enlarged injective regions with injective complements, after the
+    edge gauges have been absorbed into $\tilde{B}$. The global-consistency
+    diagram summarizes repeating the edge blocking over all edges, so the two
+    endpoint actions on a shared edge are one edge gauge. The
+    two-injective-tensor diagram records the two-block comparison from
+    \cite[Section~3]{Molnar2018NormalPEPS}, and the final
+    one-vertex-complement diagram records its application to one vertex and its
+    complement. These pictures use the
+    blueprint tensor-dot convention, but each one is attached to the same
+    contraction, insertion, or blocking step as the corresponding argument in
+    the paper.
+\end{remark}
+
+\begin{definition}[Left-identity three-leg residual form]%
+    \label{def:peps_threeLegLeftIdentityForm}
+    \lean{TNLean.PEPS.threeLegLeftIdentityForm}
+    \leanok
+    For three virtual leg spaces $\alpha,\beta,\gamma$ and an endomorphism
+    $Z$ of $\beta\otimes\gamma$, define the induced endomorphism of
+    $\alpha\otimes\beta\otimes\gamma$ by acting as the identity on the
+    $\alpha$ leg and as $Z$ on the remaining two legs. This is the
+    $I_\alpha\otimes Z$ form appearing after the first tensor is inverted in
+    \cite[Section~3]{Molnar2018NormalPEPS}.
+\end{definition}
+
+\begin{definition}[Right-identity three-leg residual form]%
+    \label{def:peps_threeLegRightIdentityForm}
+    \lean{TNLean.PEPS.threeLegRightIdentityForm}
+    \leanok
+    For an endomorphism $U$ of $\alpha\otimes\beta$, define the induced
+    endomorphism of $\alpha\otimes\beta\otimes\gamma$ by acting as $U$ on the
+    first two legs and as the identity on the $\gamma$ leg. This is the
+    $U\otimes I_\gamma$ form in \cite[Section~3]{Molnar2018NormalPEPS}.
+\end{definition}
+
+\begin{definition}[Middle-identity three-leg residual form]%
+    \label{def:peps_threeLegMiddleIdentityForm}
+    \lean{TNLean.PEPS.threeLegMiddleIdentityForm}
+    \leanok
+    For an endomorphism $W$ of $\alpha\otimes\gamma$, define the induced
+    endomorphism of $\alpha\otimes\beta\otimes\gamma$ by acting as $W$ on the
+    outer two legs and as the identity on the middle $\beta$ leg. This is the
+    third residual form in \cite[Section~3]{Molnar2018NormalPEPS}.
+\end{definition}
+
+\begin{theorem}[Scalar reduction of the residual two-tensor gauges]%
+    \label{thm:peps_twoInjectiveGaugeScalarReduction}
+    \lean{TNLean.PEPS.threeLeg_residual_forms_scalar}
+    \leanok
+    \uses{def:peps_threeLegLeftIdentityForm,
+        def:peps_threeLegRightIdentityForm,
+        def:peps_threeLegMiddleIdentityForm}
+    In the proof of the generalized two-injective-tensor comparison, applying
+    the inverse of the second injective tensor leaves three possible virtual
+    operators on the exposed legs of the first tensor:
+    \begin{center}
+        \TNPEPSTwoInjectiveGaugeScalarReduction
+    \end{center}
+    Inverting the first injective tensor then shows that the corresponding
+    residual operator on the three exposed virtual legs has the three
+    decompositions
+    \[
+        \sum_i I\otimes Z_i^{(1)}\otimes Z_i^{(2)}
+        =
+        \sum_i U_i^{(1)}\otimes U_i^{(2)}\otimes I
+        =
+        \sum_i W_i^{(1)}\otimes I\otimes W_i^{(2)}
+    \]
+    Equivalently, for nonzero virtual leg spaces $\alpha,\beta,\gamma$, if one
+    endomorphism of $\alpha\otimes\beta\otimes\gamma$ lies simultaneously in
+    the three subspaces $I_\alpha\otimes \operatorname{End}(\beta\otimes\gamma)$,
+    $\operatorname{End}(\alpha\otimes\beta)\otimes I_\gamma$, and the analogous
+    subspace with $I_\beta$ in the middle leg, then it is a scalar multiple of
+    the identity. Thus the residual virtual operators are scalar multiples of
+    the identity. This is the scalar step in the proof of
+    \cite[Section~3]{Molnar2018NormalPEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    Write the common operator as $T$. The equality
+    $T=I_\alpha\otimes Z=U\otimes I_\gamma$ gives, for all indices,
+    \[
+        \delta_{aa'} Z_{bc,b'c'}
+        =
+        U_{ab,a'b'}\delta_{cc'}.
+    \]
+    If $c\neq c'$, the right hand side is zero; choosing $a=a'$ gives
+    $Z_{bc,b'c'}=0$. Hence $Z$ is diagonal in the $\gamma$-index. Similarly,
+    the equality $T=I_\alpha\otimes Z=W_{\alpha\gamma}\otimes I_\beta$ gives
+    \[
+        \delta_{aa'} Z_{bc,b'c'}
+        =
+        W_{ac,a'c'}\delta_{bb'} ,
+    \]
+    so $Z_{bc,b'c'}=0$ whenever $b\neq b'$. Thus $Z_{bc,b'c'}=0$ unless
+    $b=b'$ and $c=c'$.
+
+    It remains to compare the surviving diagonal entries. From
+    $\delta_{aa'}Z_{bc,bc}=U_{ab,a'b}$, the value
+    $Z_{bc,bc}$ is independent of $c$. From the middle-identity equality it is
+    also independent of $b$. Therefore $Z=\lambda I_{\beta\otimes\gamma}$.
+    Substitution into
+    \[
+        I_\alpha\otimes Z
+        =
+        U\otimes I_\gamma
+        =
+        W_{\alpha\gamma}\otimes I_\beta
+    \]
+    gives $U=\lambda I_{\alpha\otimes\beta}$ and
+    $W_{\alpha\gamma}=\lambda I_{\alpha\otimes\gamma}$.
+\end{proof}
+
+\begin{theorem}[Many-leg scalar extraction]%
+    \label{thm:peps_piProductFormsScalar}
+    \lean{TNLean.PEPS.piProduct_forms_scalar}
+    \leanok
+    Let a finite family of legs be given, each a nonzero finite index set, with
+    invertible matrices $M_i$ and $N_i$ on each leg. If
+    \[
+        \prod_i (M_i)_{p_i q_i} = \prod_i (N_i)_{p_i q_i}
+    \]
+    for every configuration pair $(p,q)$, then there are nonzero scalars $c_i$
+    with $M_i = c_i N_i$ for each leg and $\prod_i c_i = 1$.
+\end{theorem}
+\begin{proof}\leanok
+    Each $N_i$ is invertible, so each of its rows has a nonzero entry; pick a
+    reference configuration $(p^0,q^0)$ on which every $(N_i)_{p^0_i q^0_i}$ is
+    nonzero. The product identity at $(p^0,q^0)$ then makes every
+    $(M_i)_{p^0_i q^0_i}$ nonzero as well. Fix a leg $i$ and a pair $(a,b)$, and
+    apply the identity to the configuration that agrees with the reference
+    except at leg $i$, where it takes $(a,b)$. Splitting off leg $i$ gives
+    \[
+        (M_i)_{ab}\, K_i = (N_i)_{ab}\, L_i ,
+    \]
+    where $K_i,L_i$ are the products of the other legs at the reference, both
+    nonzero. The reference identity at leg $i$ relates $K_i$ and $L_i$, and
+    eliminating them yields $(M_i)_{ab} = c_i (N_i)_{ab}$ with
+    $c_i = (M_i)_{p^0_i q^0_i}/(N_i)_{p^0_i q^0_i}$, independent of $(a,b)$.
+    Taking the product of the scalars over all legs and using the reference
+    identity gives $\prod_i c_i = 1$.
+\end{proof}
+
+\begin{theorem}[Pointwise product cancellation for two injective blocks]%
+    \label{thm:peps_twoBlockPointwiseProductCancellation}
+    \lean{TNLean.PEPS.twoBlockReciprocalScalarProportional_of_pointwise_mul_eq}
+    \leanok
+    Let $A_1,A_2,B_1,B_2$ be tensors with matching external,
+    shared-boundary, and physical index sets. Assume that the two external
+    boundary spaces and the shared-boundary configuration space are nonempty,
+    and that $A_1$ and $A_2$ are injective. Suppose that, for every pair of
+    external indices, every pair of shared-boundary configurations, and every
+    pair of physical indices,
+    \[
+        A_1(\eta_1,\mu,\sigma_1)A_2(\eta_2,\nu,\sigma_2)
+        =
+        B_1(\eta_1,\mu,\sigma_1)B_2(\eta_2,\nu,\sigma_2).
+    \]
+    Then there exists $\lambda\in\C^\times$ such that
+    \[
+        A_1=\lambda B_1,\qquad
+        A_2=\lambda^{-1}B_2.
+    \]
+\end{theorem}
+% This theorem is the rank-one cancellation step once
+% \cite[Section~3]{Molnar2018NormalPEPS} has been reduced to pointwise product
+% equality of separated coefficients.
+\begin{proof}\leanok
+    Choose external and shared-boundary indices, and use injectivity of
+    $A_1$ and $A_2$ to choose physical indices for which the two chosen
+    coefficients are nonzero. The product equality then shows that the
+    corresponding coefficients of $B_1$ and $B_2$ are also nonzero. Define
+    \[
+        \lambda =
+        \frac{B_2(\eta_2^0,\nu^0,\sigma_2^0)}
+        {A_2(\eta_2^0,\nu^0,\sigma_2^0)}.
+    \]
+    For every $(\eta_1,\mu,\sigma_1)$, the product identity with
+    $(\eta_2^0,\nu^0,\sigma_2^0)$ fixed gives
+    \[
+        A_1(\eta_1,\mu,\sigma_1)
+        A_2(\eta_2^0,\nu^0,\sigma_2^0)
+        =
+        B_1(\eta_1,\mu,\sigma_1)
+        B_2(\eta_2^0,\nu^0,\sigma_2^0).
+    \]
+    Dividing by $A_2(\eta_2^0,\nu^0,\sigma_2^0)\ne0$ gives
+    $A_1=\lambda B_1$. Fixing $(\eta_1^0,\mu^0,\sigma_1^0)$ and substituting
+    $A_1=\lambda B_1$ into the product identity gives
+    \[
+        \lambda\, B_1(\eta_1^0,\mu^0,\sigma_1^0)
+        A_2(\eta_2,\nu,\sigma_2)
+        =
+        B_1(\eta_1^0,\mu^0,\sigma_1^0) B_2(\eta_2,\nu,\sigma_2).
+    \]
+    Dividing by $B_1(\eta_1^0,\mu^0,\sigma_1^0)\ne0$ gives
+    $A_2=\lambda^{-1}B_2$.
+\end{proof}
+
+\begin{definition}[Matrix unit for coefficient extraction]%
+    \label{def:peps_matrixUnit}
+    \lean{TNLean.PEPS.matrixUnit}
+    \leanok
+    For indices $i$ and $j$, let $E_{ij}$ denote the matrix whose only
+    nonzero entry is the $(i,j)$ entry, where it is equal to $1$.
+\end{definition}
+
+\begin{theorem}[Coefficient extraction for one shared bond]%
+    \label{thm:peps_twoBlockInsertedCoeff_singletonBond}
+    \lean{TNLean.PEPS.twoBlockInsertedCoeff_singletonBond_single}
+    \leanok
+    \uses{def:peps_matrixUnit}
+    Suppose that the two blocks share a single virtual bond. Then inserting
+    the matrix unit $E_{\mu,\nu}$ in that bond extracts the corresponding
+    product of tensor coefficients:
+    \[
+        C_{A_1,A_2}(b,E_{\mu,\nu};\eta_1,\eta_2,\sigma_1,\sigma_2)
+        =
+        A_1(\eta_1,\mu,\sigma_1)A_2(\eta_2,\nu,\sigma_2).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Since there is only one shared bond, the condition that the two shared
+    configurations agree away from the distinguished bond is vacuous, and
+    \[
+        C_{A_1,A_2}(b,E_{\mu,\nu};\eta_1,\eta_2,\sigma_1,\sigma_2)
+        =
+        \sum_{\mu',\nu'}
+        (E_{\mu,\nu})_{\mu'(b),\nu'(b)}
+        A_1(\eta_1,\mu',\sigma_1)A_2(\eta_2,\nu',\sigma_2).
+    \]
+    The entries of the matrix unit satisfy
+    \[
+        (E_{\mu,\nu})_{i,j}=\delta_{i,\mu(b)}\delta_{j,\nu(b)}.
+    \]
+    Thus the only nonzero summand is the one with
+    $(\mu',\nu')=(\mu,\nu)$.
+\end{proof}
+
+\begin{theorem}[One-bond two-injective comparison]%
+    \label{thm:peps_twoInjectiveTensorInsertionComparison_singletonBond}
+    \lean{TNLean.PEPS.two_injective_tensor_insertion_comparison_singletonBond}
+    \leanok
+    \uses{thm:peps_twoBlockInsertedCoeff_singletonBond,
+        thm:peps_twoBlockPointwiseProductCancellation}
+    Suppose that the two injective blocks have exactly one shared virtual
+    bond and nonempty external boundary spaces. If all matrix insertions on
+    that bond give equal two-block coefficients for the pairs
+    $(A_1,A_2)$ and $(B_1,B_2)$, then there exists
+    $\lambda\in\C^\times$ such that
+    \[
+        A_1=\lambda B_1,\qquad
+        A_2=\lambda^{-1}B_2.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Insert the matrix unit $E_{\mu,\nu}$ and use the coefficient-extraction
+    theorem to obtain the pointwise product equality
+    \[
+        A_1(\eta_1,\mu,\sigma_1)A_2(\eta_2,\nu,\sigma_2)
+        =
+        B_1(\eta_1,\mu,\sigma_1)B_2(\eta_2,\nu,\sigma_2)
+    \]
+    for all indices. The pointwise product cancellation theorem gives the
+    reciprocal scalar proportionality.
+\end{proof}
+
+\begin{theorem}[Generalized two-injective-tensor comparison]%
+    \label{thm:peps_twoInjectiveTensorInsertionComparison}
+    \lean{TNLean.PEPS.two_injective_tensor_insertion_comparison}
+    \lean{TNLean.PEPS.SameAwayFromBond, TNLean.PEPS.twoBlockInsertedCoeff}
+    \lean{TNLean.PEPS.IsTwoBlockInjective, TNLean.PEPS.SameTwoBlockInsertions}
+    \lean{TNLean.PEPS.TwoBlockScalarProportional}
+    \lean{TNLean.PEPS.TwoBlockReciprocalScalarProportional}
+    \leanok
+    \uses{thm:peps_twoInjectiveGaugeScalarReduction}
+    Let $A_1,A_2,B_1,B_2$ be injective tensors with the same shared virtual
+    bonds and nonempty external boundary spaces, and assume that there is at
+    least one shared virtual bond. For the set $\mathcal B$ of shared bonds, a
+    bond $b\in\mathcal B$, and $X\in\MN{D_b}$, set
+    \[
+        C_{A_1,A_2}(b,X;\eta_1,\eta_2,\sigma_1,\sigma_2)
+        =
+        \sum_{\substack{\mu,\nu\\
+        \mu|_{\mathcal B\setminus\{b\}}
+        =\nu|_{\mathcal B\setminus\{b\}}}}
+        X_{\mu_b,\nu_b}
+        A_1(\eta_1,\mu,\sigma_1)A_2(\eta_2,\nu,\sigma_2).
+    \]
+    Assume
+    $C_{A_1,A_2}(b,X;\eta_1,\eta_2,\sigma_1,\sigma_2)
+        =C_{B_1,B_2}(b,X;\eta_1,\eta_2,\sigma_1,\sigma_2)$ for every
+    $b,X,\eta_1,\eta_2,\sigma_1,\sigma_2$:
+    \begin{center}
+        \TNPEPSTwoInjectiveTensorInsertionComparison
+    \end{center}
+    Then
+    \[
+        \exists \lambda\in\C^\times,\qquad
+        A_1=\lambda B_1,\qquad
+        A_2=\lambda^{-1}B_2.
+    \]
+    This is the blueprint form of the two-injective tensor comparison in
+    \cite[Section~3]{Molnar2018NormalPEPS}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Putting $X=I_{D_b}$ on every shared bond contracts all bonds diagonally and,
+    by the insertion equality, equates the two fully contracted states. Writing
+    each contracted state as a bipartite operator with the linearly independent
+    Schmidt families supplied by injectivity, the operator-Schmidt uniqueness of
+    \cite[Section~3]{Molnar2018NormalPEPS} produces an invertible gauge $g$ on the
+    shared-bond configurations with
+    \[
+        A_1(\eta_1,\mu,\sigma_1)=\sum_\nu g_{\mu,\nu}B_1(\eta_1,\nu,\sigma_1),
+        \qquad
+        B_2(\eta_2,\nu,\sigma_2)=\sum_\mu g_{\mu,\nu}A_2(\eta_2,\mu,\sigma_2).
+    \]
+    Substitute both gauge equations into the insertion equality for the
+    matrix unit $X=E_{p,q}$ on a single bond $b$, which frees that bond and
+    contracts the others. Separating the linearly independent families $B_1$ and
+    $A_2$ gives, for every bond $b$, every pair of endpoints $p,q$, and all
+    configurations $\nu,\rho$,
+    \begin{equation}\label{eq:peps_residual_equality}
+        [\rho_b=q]\,g_{\rho^{b\to p},\nu}=[\nu_b=p]\,g_{\rho,\nu^{b\to q}},
+    \end{equation}
+    where $\rho^{b\to p}$ replaces the value of $\rho$ at $b$ by $p$. This is the
+    bond-wise form of the residual identity of
+    \cite[Section~3]{Molnar2018NormalPEPS}, where it is packaged as the equality
+    $I_\alpha\otimes Z=U\otimes I_\gamma=W_{\alpha\gamma}\otimes I_\beta$ of the
+    three residual gauges $Z$, $U$, $W$
+    (Theorem~\ref{thm:peps_twoInjectiveGaugeScalarReduction}). Reading
+    \eqref{eq:peps_residual_equality} at the two endpoint choices shows that $g$
+    vanishes whenever two configurations differ at a bond and that its diagonal
+    value is invariant under changing any single bond. Hence $g=\lambda I$ for a
+    scalar $\lambda$, and invertibility forces $\lambda\neq0$.
+
+    Reinserting $g=\lambda I$ into the two gauge equations gives
+    $A_1=\lambda B_1$ and $B_2=\lambda A_2$, that is
+    $A_2=\lambda^{-1}B_2$.
+\end{proof}

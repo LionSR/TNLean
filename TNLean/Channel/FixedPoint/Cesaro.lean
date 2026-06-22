@@ -9,7 +9,7 @@ import TNLean.Channel.Basic
 
 This file proves that every quantum channel (CPTP map) on `M_D(ℂ)` has a nonzero
 PSD fixed point, using the Cesàro mean / Markov-Kakutani argument. It also states
-the decomposition of Hermitian fixed points (Wolf Prop 6.8).
+the decomposition of Hermitian fixed points (Wolf Proposition 6.8).
 
 Note: the proofs only use positivity + trace-preservation (not full CP), but the
 statements are for channels (`IsChannel`) which carry a CP hypothesis.
@@ -26,7 +26,7 @@ statements are for channels (`IsChannel`) which carry a CP hypothesis.
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 6][Wolf2012QChannels]
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder TNMatrixCFC
+open scoped Matrix ComplexOrder MatrixOrder
 open Matrix Finset
 
 variable {D : ℕ}
@@ -100,14 +100,15 @@ private theorem psd_orthogonal_difference_eq_zero
   -- Sum of nonneg reals = 0 ⟹ each = 0
   have hY_diag_zero : ∀ j, star (e j) ⬝ᵥ Y.mulVec (e j) = 0 := by
     have him : ∀ j, (star (e j) ⬝ᵥ Y.mulVec (e j)).im = 0 :=
-      fun j => (Complex.nonneg_iff.mp (hY_nonneg j)).2.symm
+      fun j => (RCLike.nonneg_iff.mp (hY_nonneg j)).2
     have hre_nonneg : ∀ j, 0 ≤ (star (e j) ⬝ᵥ Y.mulVec (e j)).re :=
-      fun j => (Complex.nonneg_iff.mp (hY_nonneg j)).1
+      fun j => (RCLike.nonneg_iff.mp (hY_nonneg j)).1
     have hre_sum : ∑ j, (star (e j) ⬝ᵥ Y.mulVec (e j)).re = 0 := by
       have h1 := map_sum Complex.reAddGroupHom (fun j => star (e j) ⬝ᵥ Y.mulVec (e j)) Finset.univ
       rw [← hY_tr_sum, hY_tr] at h1; exact h1.symm
-    have hre_zero := (Finset.sum_eq_zero_iff_of_nonneg (fun j _ => hre_nonneg j)).mp hre_sum
-    intro j; exact Complex.ext (hre_zero j (Finset.mem_univ _)) (him j)
+    have hre_zero := congrFun
+      (Fintype.sum_eq_zero_iff_of_nonneg (fun j => hre_nonneg j) |>.mp hre_sum)
+    intro j; exact Complex.ext (hre_zero j) (him j)
   -- Y.mulVec(e_j) = 0 via dotProduct_mulVec_zero_iff for (A+Y) or (B+Y)
   have hY_mulVec_zero : ∀ j, Y.mulVec (e j) = 0 := by
     intro j; rcases he_ker j with hA_ker | hB_ker
@@ -228,7 +229,7 @@ theorem cesaroMean_telescope (X : Matrix (Fin D) (Fin D) ℂ) (N : ℕ) (_hN : 0
 
 /-- **Existence of PSD fixed point for channels** (Cesàro mean argument).
 This is an alternative proof of **Wolf Theorem 6.11** (Stationary states)
-that avoids Brouwer's fixed point theorem (Wolf Thm 6.10) entirely.
+that avoids Brouwer's fixed point theorem (Wolf Theorem 6.10) entirely.
 
 Every trace-preserving positive map on `M_D(ℂ)` with `D > 0` has a
 nonzero PSD fixed point.
@@ -280,16 +281,20 @@ theorem IsChannel.exists_posSemidef_fixedPoint
         Finset.sum_const, Finset.card_range, nsmul_eq_mul, mul_one, one_div]
       exact inv_mul_cancel₀ (Nat.cast_ne_zero.mpr (by omega))
   -- Step 4: Extract convergent subsequence by compactness
+  haveI : FirstCountableTopology (Matrix (Fin D) (Fin D) ℂ) := by
+    change FirstCountableTopology (Fin D → Fin D → ℂ)
+    infer_instance
   obtain ⟨ρ, hρ_mem, φ, hφ_mono, hφ_tendsto⟩ :=
     densityMatrices_isCompact.tendsto_subseq hσ_mem
   -- Step 5: ρ is PSD with trace 1
   have hρ_psd : ρ.PosSemidef := hρ_mem.1
   have hρ_tr : trace ρ = 1 := hρ_mem.2
   -- Step 6: Show E(ρ) = ρ via telescoping + convergence
-  have hE_cont : Continuous E := LinearMap.continuous_of_finiteDimensional E
+  let E' : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ :=
+    LinearMap.toContinuousLinearMap E
   -- σ ∘ φ → ρ, E ∘ σ ∘ φ → E(ρ)
-  have h_Eσ : Filter.Tendsto (E ∘ σ ∘ φ) Filter.atTop (nhds (E ρ)) :=
-    (hE_cont.tendsto ρ).comp hφ_tendsto
+  have h_Eσ : Filter.Tendsto (E ∘ σ ∘ φ) Filter.atTop (nhds (E ρ)) := by
+    simpa [E'] using (E'.continuous.tendsto ρ).comp hφ_tendsto
   -- (E(σ(φ k)) - σ(φ k)) → E(ρ) - ρ
   have h_diff : Filter.Tendsto (fun k => (E ∘ σ ∘ φ) k - (σ ∘ φ) k)
       Filter.atTop (nhds (E ρ - ρ)) :=

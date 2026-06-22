@@ -1,0 +1,148 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The NNCPH ground-state clause in Cirac--Perez-Garcia--Schuch--Verstraete 2016}
+\author{}
+\date{2026-06-12}
+
+\begin{document}
+\maketitle
+
+\section{Source statement}
+
+The pure-state main theorem of \cite{Cirac2016MPDO_arXiv} states that, for a
+tensor $A$ in canonical form generating a family of MPS, the following
+conditions are equivalent:\footnote{Local source:
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:534--540}, label
+\path{thm:main-MPS}.}
+\begin{align}
+  \mathrm{RFP}(A),\qquad
+  \mathrm{ZCL}(A),\qquad
+  \forall N>2,\; |V^{(N)}(A)\rangle
+  \text{ is a ground state of a NNCPH}.
+\end{align}
+The formal implication below is stated for $N\ge2$; it therefore includes the
+extra endpoint $N=2$.
+The preceding definition constructs
+\begin{align}
+  H_L^{(N)}=\sum_{j=0}^{N-1}\tau_j(P_L^\perp)
+\end{align}
+and says that a commuting parent Hamiltonian satisfies
+\begin{align}
+  [\tau_j(P_L),P_L]=0,\qquad j=1,\ldots,L-1.
+\end{align}
+A nearest-neighbor parent Hamiltonian has $L=2$.\footnote{Local source:
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:517--524}.}
+For $L=2$, write
+\begin{align}
+  h_i=\tau_i(P_2^\perp)
+\end{align}
+for the translated two-site interaction. Under the periodic translation
+convention, the source commutation relation $[\tau_1(P_2),P_2]=0$ is the
+nearest-neighbor instance of the commutation relation for $h_i$ after passing to
+orthogonal complements; disjoint translated two-site terms commute by locality.
+
+\section{Formal boundary}
+
+With $h_i=\tau_i(P_2^\perp)$ as above, the current predicate
+\leanid{MPSTensor.IsNNCPH} records the resulting length-two commutation equation
+\begin{align}
+  h_i h_j = h_j h_i
+  \qquad (i,j\in\{0,\ldots,N-1\}).
+\end{align}
+The predicate
+\leanid{MPSTensor.IsNNCPHGroundState} adds the following frustration-free
+ground-vector equation for the same translated length-two interaction:
+\begin{align}
+  h_i\,V^{(N)}(A)=0
+  \qquad (i\in\{0,\ldots,N-1\}).
+\end{align}
+Thus it records the annihilation part of the ground-state clause of
+Theorem~3.10(iii) for the canonical projector parent interaction used in the
+formal development. The source definition of a parent Hamiltonian also requires
+the whole ground-state subspace to be spanned by the periodic MPS vectors for
+$N>L$. That spanning condition is now named separately as
+\leanid{MPSTensor.HasParentHamiltonianGroundSpaceSpanning}; it is not part of
+\leanid{MPSTensor.IsNNCPHGroundState}. The fixed-chain predicate
+\leanid{MPSTensor.HasNNCPHGroundSpace} packages the commutation equation, the
+zero-energy equation, and the spanning equation
+\begin{align}
+  \ker H_2^{(N)}(B)
+  =
+  \operatorname{span}\{V^{(N)}(A_j):j=1,\ldots,g\}.
+\end{align}
+The source theorem should use the all-chain predicate
+\leanid{MPSTensor.HasNNCPHGroundSpaces}, which quantifies this fixed-chain
+condition over \(N>2\). The predicate is only a named condition; it does not
+prove that the spanning equation holds for any concrete canonical-form tensor.
+The equivalence
+\leanid{MPSTensor.hasNNCPHGroundSpaces_iff_forall_isNNCPHGroundState_and_groundSpaceSpanning}
+records this separation formally: the all-chain source condition is exactly the
+all-chain ground-vector equations together with the nearest-neighbor instance of
+the ground-space spanning clause.
+The easy inclusion in the spanning equation is now recorded: if each component
+vector \(V^{(N)}(A_j)\) is annihilated by the parent Hamiltonian, or more
+strongly by every local term, then
+\begin{align}
+  \operatorname{span}\{V^{(N)}(A_j):j=1,\ldots,g\}
+  \subseteq
+  \ker H_L^{(N)}(B).
+\end{align}
+\footnote{Formal locations:
+\leanid{MPSTensor.bntMPSVectorSpan_le_ker_parentHamiltonian_of_forall_annihilates}
+and
+\leanid{MPSTensor.bntMPSVectorSpan_le_ker_parentHamiltonian_of_forall_frustrationFree}.}
+For a block-diagonal tensor with nonzero weights,
+\leanid{MPSTensor.hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_iff_ker_le_bntMPSVectorSpan}
+now reduces the source spanning equation to exactly the reverse containment,
+using this easy inclusion.  Its nearest-neighbor specialization,
+\leanid{MPSTensor.hasNNCPHGroundSpaces_toTensorFromBlocks_iff_forall_isNNCPH_and_ker_le_bntMPSVectorSpan},
+states the all-chain condition as translated two-site commutation together with
+the same reverse containment for every \(N>2\).  The reverse containment itself
+is not proved here.
+
+This still does not prove the full source theorem.  The present declarations do
+not yet prove the named ground-space spanning condition, the three-way
+equivalence with ZCL, the complete canonical-form hypotheses from the source
+statement, or the Beigi ground-space characterization as an internal theorem.
+The reverse theorem now consumes both the explicit BNT relation
+\leanid{MPSTensor.IsBNT} and the named all-chain condition
+\leanid{MPSTensor.HasNNCPHGroundSpaces}, but the implication still depends on
+the axiom \leanid{Axioms.beigi_nncph_to_rfp}. The RFP-to-NNCPH direction still
+depends on \leanid{Axioms.rfp_to_nncph_commute}.
+
+\section{Elimination plan}
+
+A source-faithful formalization should replace the axiom-backed implications by
+proved theorems and state the three-way equivalence for canonical-form tensors,
+including the spanning condition in the parent-Hamiltonian ground-space clause:
+\begin{align}
+  \mathrm{RFP}(A)
+  \Longleftrightarrow
+  \mathrm{ZCL}(A)
+  \Longleftrightarrow
+  \forall N>2,\; |V^{(N)}(A)\rangle
+  \text{ is a ground state of a NNCPH}.
+\end{align}
+The forward implication can use the product-of-entangled-pairs form in the proof
+of Theorem~3.11.  The reverse implication must internalize Beigi's
+one-dimensional nearest-neighbor commuting-Hamiltonian ground-space
+classification and identify the resulting locally orthogonal states with the
+basis of normal tensors of $A$.\footnote{Tracked by \ghissue{2633}.}
+
+The present formal boundary is therefore: the reverse implication has the
+source ground-space hypothesis, but its proof is still the Beigi axiom; the
+forward implication proves only the commutation and zero-energy equations from
+the already axiomatized commutation direction together with frustration-freeness
+of the MPS vector for the canonical parent interaction.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

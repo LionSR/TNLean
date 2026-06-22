@@ -13,7 +13,7 @@ variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-/-! ## Prop 7.5: Irreducibility implies primitivity for QDS -/
+/-! ## Proposition 7.5: Irreducibility implies primitivity for QDS -/
 
 theorem primitive_channel_pow_tendsto_zero_of_trace_zero [NeZero D]
     (E : Mat →ₗ[ℂ] Mat) (hE : IsChannel E) (hIrr : IsIrreducibleMap E)
@@ -43,7 +43,8 @@ theorem primitive_channel_pow_tendsto_zero_of_trace_zero [NeZero D]
       (hEval.tendsto 0).comp hpow0
     refine hEvalT.congr' ?_
     filter_upwards [] with n
-    exact toContinuousLinearMap_pow_apply (D := D) (E - P) X n
+    rw [(map_pow (Module.End.toContinuousLinearMap Mat) (E - P) n).symm]
+    rfl
   have hPX : P X = 0 := by
     simp [P, fixedPointProj, htrX]
   refine hNpow0.congr' ?_
@@ -121,7 +122,7 @@ theorem exists_power_fixed_eigenvector_of_peripheral
   have hpt_eq : T (↑p * t) = (T t) ^ p :=
     semigroup_pow T hT.semigroup.semigroup t (le_of_lt ht) p
   refine ⟨p, hp_pos, V, hV_ne, hEV, ?_⟩
-  rw [hpt_eq, pow_apply_eigenvector (T t) V μ p hEV, hμp, one_smul]
+  rw [hpt_eq, hV.pow_apply p, hμp, one_smul]
 
 /-- A trace-nonzero eigenvector exists for peripheral eigenvalues of an irreducible QDS. -/
 theorem exists_trace_ne_zero_eigenvector_of_peripheral
@@ -295,7 +296,8 @@ theorem residualSlice_limit_zero_of_fixedPoint
   have hδ_cont : Continuous (fun t : ℝ => T t δ) := by
     have hEval : Continuous (fun A : Mat →L[ℂ] Mat => A δ) :=
       (ContinuousLinearMap.apply ℂ Mat δ).continuous
-    simpa using hEval.comp hT.semigroup.continuous
+    change Continuous ((fun A : Mat →L[ℂ] Mat => A δ) ∘ fun t : ℝ => endEquiv (T t))
+    exact hEval.comp hT.semigroup.continuous
   have hsub_decay : Filter.Tendsto (fun k : ℕ => T ((↑(φ k) : ℝ) * u) δ)
       Filter.atTop (nhds 0) :=
     hδ_decay.comp φ.strictMono.tendsto_atTop
@@ -303,8 +305,8 @@ theorem residualSlice_limit_zero_of_fixedPoint
       Filter.atTop (nhds (T a δ)) :=
     (hδ_cont.tendsto a).comp hφtendsto
   have hsub_res_zero : Filter.Tendsto (fun k : ℕ => T (residualSliceTime u s (φ k)) δ)
-      Filter.atTop (nhds 0) := by
-    exact hsub_decay.congr' (Filter.Eventually.of_forall (fun k => hres_eq (φ k)))
+      Filter.atTop (nhds 0) :=
+    hsub_decay.congr' (Filter.Eventually.of_forall (fun k => hres_eq (φ k)))
   exact tendsto_nhds_unique hsub_res hsub_res_zero
 
 /-- By compactness of `[0, s]`, the residual slice times admit a convergent subsequence
@@ -405,8 +407,8 @@ theorem exists_trace_ne_zero_eigenvector_of_fraction_slice
   have hX_fix_t₀ : T t₀ X = X := by
     calc
       T t₀ X = ((T u) ^ Nat.factorial (Module.finrank ℂ Mat)) X := by rw [hTt₀_eq_pow]
-      _ = μ ^ Nat.factorial (Module.finrank ℂ Mat) • X := by
-        exact pow_apply_eigenvector (T u) X μ (Nat.factorial (Module.finrank ℂ Mat)) hX_eig
+      _ = μ ^ Nat.factorial (Module.finrank ℂ Mat) • X :=
+        hXev.pow_apply (Nat.factorial (Module.finrank ℂ Mat))
       _ = X := by simp [hμN]
   have hX_span : X = Matrix.trace X • σ := hfixed_1d X hX_fix_t₀
   have : X = 0 := by simpa [htrX] using hX_span

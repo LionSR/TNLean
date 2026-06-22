@@ -2,14 +2,11 @@
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.Algebra.MatrixFunctionalCalculus
-
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.Matrix.Spectrum
 import Mathlib.Analysis.Matrix.Normed
-import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
-import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.PosPart.Basic
+import Mathlib.Analysis.CStarAlgebra.PositiveLinearMap
 import Mathlib.Analysis.RCLike.Lemmas
 import Mathlib.Topology.Algebra.Module.FiniteDimension
 import Mathlib.Topology.Sequences
@@ -31,6 +28,7 @@ Chapter 6 of Wolf's lecture notes.
 * `IsCPMap.isPositiveMap`: completely positive maps are positive
 * `IsChannel`: completely positive + trace-preserving (CPTP)
 * `IsPositiveMap.map_isHermitian`: positive maps preserve Hermiticity
+* `matrix_isClosed_posSemidef`: the positive semidefinite cone is closed
 * `densityMatrices_isCompact`: the set of density matrices is compact
 * `densityMatrices_isConvex`: the set of density matrices is convex
 * `IsChannel.map_densityMatrices`: channels map density matrices to density matrices
@@ -40,8 +38,8 @@ Chapter 6 of Wolf's lecture notes.
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 6][Wolf2012QChannels]
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder TNMatrixCFC
-open Matrix Finset TNLean
+open scoped Matrix ComplexOrder MatrixOrder
+open Matrix Finset
 
 /-! ## Positive maps -/
 
@@ -104,23 +102,28 @@ section PositiveMapHermitian
 
 variable {n : Type*} [Finite n]
 
-/-- Positive maps preserve Hermiticity.
+/-- A positive matrix map is a positive linear map: if `A ≤ B`, then `E A ≤ E B`. -/
+def IsPositiveMap.toPositiveLinearMap
+    {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ} (hE : IsPositiveMap E) :
+    Matrix n n ℂ →ₚ[ℂ] Matrix n n ℂ := by
+  classical
+  letI := Fintype.ofFinite n
+  exact
+    { toLinearMap := E
+      monotone' := by
+        intro A B hAB
+        rw [Matrix.le_iff] at hAB ⊢
+        simpa [map_sub] using hE (B - A) hAB }
 
-Proof: decompose `X = X⁺ - X⁻` using the CFC positive/negative parts.
-Both parts are PSD, so `E(X⁺)` and `E(X⁻)` are PSD (hence Hermitian),
-and `E(X) = E(X⁺) - E(X⁻)` is a difference of Hermitian matrices. -/
+/-- Positive maps preserve Hermiticity. -/
 theorem IsPositiveMap.map_isHermitian
     {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
     (hE : IsPositiveMap E) {X : Matrix n n ℂ} (hX : X.IsHermitian) :
     (E X).IsHermitian := by
   classical
   letI := Fintype.ofFinite n
-  letI := Classical.decEq n
-  have h_decomp := CFC.posPart_sub_negPart X (isSelfAdjoint_iff.mpr hX)
-  have h_pos_psd := Matrix.nonneg_iff_posSemidef.mp (CFC.posPart_nonneg X)
-  have h_neg_psd := Matrix.nonneg_iff_posSemidef.mp (CFC.negPart_nonneg X)
-  rw [show E X = E (X⁺) - E (X⁻) by conv_lhs => rw [← h_decomp]; simp [map_sub]]
-  exact (hE _ h_pos_psd).isHermitian.sub (hE _ h_neg_psd).isHermitian
+  exact IsSelfAdjoint.isHermitian
+    (map_isSelfAdjoint hE.toPositiveLinearMap X hX.isSelfAdjoint)
 
 end PositiveMapHermitian
 
@@ -139,35 +142,22 @@ def densityMatrices (D : ℕ) : Set (Matrix (Fin D) (Fin D) ℂ) :=
 @[simp] lemma mem_densityMatrices {ρ : Matrix (Fin D) (Fin D) ℂ} :
     ρ ∈ densityMatrices D ↔ ρ.PosSemidef ∧ trace ρ = 1 := Iff.rfl
 
-/-! ### Auxiliary lemmas for closedness -/
-
-/-- The set of nonneg complex numbers (those with `0 ≤ z` in `ComplexOrder`) is closed. -/
-private lemma isClosed_complex_nonneg : IsClosed {z : ℂ | 0 ≤ z} := by
-  have : {z : ℂ | 0 ≤ z} = {z | 0 ≤ z.re ∧ z.im = 0} := by
-    ext z; simp [Complex.nonneg_iff, eq_comm]
-  rw [this]
-  exact (isClosed_le continuous_const Complex.continuous_re).inter
-    (isClosed_eq Complex.continuous_im continuous_const)
-
 /-- The quadratic form `X ↦ star v ⬝ᵥ X.mulVec v` is continuous. -/
-private lemma continuous_quadraticForm (v : Fin D → ℂ) :
-    Continuous (fun X : Matrix (Fin D) (Fin D) ℂ => star v ⬝ᵥ X.mulVec v) :=
+private lemma continuous_quadraticForm {m : Type*} [Fintype m] (v : m → ℂ) :
+    Continuous (fun X : Matrix m m ℂ => star v ⬝ᵥ X.mulVec v) :=
   Continuous.dotProduct continuous_const (Continuous.matrix_mulVec continuous_id continuous_const)
 
 /-! ### Auxiliary lemmas for boundedness -/
 
-/-- For a nonneg complex number `z` (in `ComplexOrder`), `‖z‖ = z.re`. -/
-private lemma norm_of_complex_nonneg {z : ℂ} (hz : 0 ≤ z) : ‖z‖ = z.re := by
-  obtain ⟨h_re, h_im⟩ := Complex.nonneg_iff.mp hz
-  rw [Complex.norm_eq_sqrt_sq_add_sq, h_im.symm, zero_pow (by norm_num : 2 ≠ 0),
-    add_zero, Real.sqrt_sq h_re]
-
 /-- For PSD `X`, each diagonal entry norm is bounded by the trace norm. -/
 private lemma posSemidef_diag_norm_le_trace_norm {X : Matrix (Fin D) (Fin D) ℂ}
     (hX : X.PosSemidef) (i : Fin D) : ‖X i i‖ ≤ ‖trace X‖ := by
-  rw [norm_of_complex_nonneg hX.diag_nonneg, norm_of_complex_nonneg hX.trace_nonneg,
+  rw [show ‖X i i‖ = (X i i).re from by
+      simpa using congrArg Complex.re (Complex.norm_of_nonneg' hX.diag_nonneg),
+    show ‖trace X‖ = (trace X).re from by
+      simpa using congrArg Complex.re (Complex.norm_of_nonneg' hX.trace_nonneg),
     show (trace X).re = ∑ j : Fin D, (X j j).re from by simp [Matrix.trace, Matrix.diag]]
-  exact single_le_sum (fun j _ => (Complex.nonneg_iff.mp (hX.diag_nonneg (i := j))).1)
+  exact single_le_sum (fun j _ => (RCLike.nonneg_iff.mp (hX.diag_nonneg (i := j))).1)
     (mem_univ i)
 
 /-- For PSD `X = Bᴴ * B`, the entry `(Bᴴ * B) i j` equals an inner product of column vectors. -/
@@ -212,7 +202,8 @@ private lemma posSemidef_entry_norm_le_trace_norm {X : Matrix (Fin D) (Fin D) �
   set v := WithLp.toLp (p := 2) (fun k : Fin D => B k j)
   have sq_le_trace : ∀ k, ‖WithLp.toLp (p := 2) (fun l : Fin D => B l k)‖ ^ 2
       ≤ ‖trace (Bᴴ * B)‖ := fun k => by
-    rw [col_norm_sq_eq_diag, ← norm_of_complex_nonneg hX'.diag_nonneg]
+    rw [col_norm_sq_eq_diag, ← show ‖(Bᴴ * B) k k‖ = ((Bᴴ * B) k k).re from by
+      simpa using congrArg Complex.re (Complex.norm_of_nonneg' hX'.diag_nonneg)]
     exact posSemidef_diag_norm_le_trace_norm hX' k
   calc ‖inner (𝕜 := ℂ) u v‖
       ≤ ‖u‖ * ‖v‖ := norm_inner_le_norm ..
@@ -241,24 +232,35 @@ theorem posSemidef_trace_bounded_isBounded (c : ℝ) :
   simp_rw [show (2 : ℝ) = ((2 : ℕ) : ℝ) from by norm_num, Real.rpow_natCast]
   calc ∑ i : Fin D, ∑ j : Fin D, ‖X i j‖ ^ 2
       ≤ ∑ _i : Fin D, ∑ _j : Fin D, c ^ 2 :=
-        sum_le_sum fun i _ => sum_le_sum fun j _ => pow_le_pow_left₀ (norm_nonneg _) (hentry i j) 2
+        sum_le_sum fun i _ => sum_le_sum fun j _ =>
+          pow_le_pow_left₀ (norm_nonneg _) (hentry i j) 2
     _ = (↑D * c) ^ 2 := by simp [sum_const]; ring
 
-/-- The PSD cone is closed.
+/-- The PSD cone is closed for matrices over any finite index type.
 
 Proof: `PosSemidef X ↔ X.IsHermitian ∧ ∀ v, 0 ≤ star v ⬝ᵥ X.mulVec v`.
 - `{X | X.IsHermitian}` is closed (continuous `conjTranspose`).
 - Each `{X | 0 ≤ star v ⬝ᵥ X.mulVec v}` is closed (preimage of closed
   nonneg cone under continuous quadratic form). -/
-theorem isClosed_posSemidef :
-    IsClosed {X : Matrix (Fin D) (Fin D) ℂ | X.PosSemidef} := by
-  have : {X : Matrix (Fin D) (Fin D) ℂ | X.PosSemidef}
-    = {X | X.IsHermitian} ∩ ⋂ (v : Fin D → ℂ), {X | 0 ≤ star v ⬝ᵥ X.mulVec v} := by
-    ext X; simp only [Set.mem_setOf_eq, Set.mem_inter_iff, Set.mem_iInter,
+theorem matrix_isClosed_posSemidef {m : Type*} [Finite m] :
+    IsClosed {X : Matrix m m ℂ | X.PosSemidef} := by
+  classical
+  letI := Fintype.ofFinite m
+  have : {X : Matrix m m ℂ | X.PosSemidef}
+      = {X | X.IsHermitian} ∩
+        ⋂ (v : m → ℂ), {X | 0 ≤ star v ⬝ᵥ X.mulVec v} := by
+    ext X
+    simp only [Set.mem_setOf_eq, Set.mem_inter_iff, Set.mem_iInter,
       Matrix.posSemidef_iff_dotProduct_mulVec]
   rw [this]
   exact (isClosed_eq continuous_star continuous_id).inter
-    (isClosed_iInter fun v => isClosed_complex_nonneg.preimage (continuous_quadraticForm v))
+    (isClosed_iInter fun v =>
+      (isClosed_le continuous_const continuous_id).preimage (continuous_quadraticForm v))
+
+/-- The PSD cone is closed on `Fin D`-indexed matrices. -/
+theorem isClosed_posSemidef :
+    IsClosed {X : Matrix (Fin D) (Fin D) ℂ | X.PosSemidef} :=
+  matrix_isClosed_posSemidef
 
 /-- The set of density matrices is compact (Heine-Borel).
 

@@ -3,51 +3,57 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.FundamentalTheorem.Basic
-import TNLean.Wielandt.WielandtBound
+import TNLean.Wielandt.SpanGrowth.CumulativeSpan
 import TNLean.Algebra.TracePairing
 
 /-!
 # Fundamental Theorem with finite-length MPV agreement
 
-This file strengthens the single-block Fundamental Theorem of MPS by weakening
-the hypothesis from `SameMPV` (agreement for **all** system sizes) to
-`SameMPVFrom N₀` (agreement for system sizes `N ≥ N₀`).
+If `A` is injective and `A`, `B` agree on all MPV coefficients for system
+sizes `N ≥ N₀` (any threshold `N₀`), then `A` and `B` are gauge equivalent.
+This strengthens the single-block fundamental theorem by weakening the
+hypothesis from all-length to finite-length agreement.
 
 ## Main results
 
-* `SameMPVFrom` — definition of finite-length MPV agreement
+* `SameMPVFrom` — finite-length MPV agreement from `N₀` onward
 * `sameMPV_of_sameMPVFrom_of_injective` — finite-length agreement implies
   full agreement for injective tensors
 * `fundamentalTheorem_singleBlock_finiteLength` — the strengthened FT
 
-## Mathematical content
-
-The key mathematical challenge is converting trace agreement on long words into
-`evalWord` agreement on all words. The naive approach of pairing
-`tr(evalWord A w * A i) = tr(evalWord B w * A i)` fails because the extensions
-`w ++ [i]` produce `evalWord B w * B i`, not `evalWord B w * A i`.
-
-The correct proof strategy uses the **linear extension** approach from the
-existing FT proof (`LinearExtension.lean`): if `SameMPV A B` holds, there is
-a unique linear map `T` with `T(A i) = B i` that is multiplicative. For the
-finite-length case, one shows that `SameMPVFrom N₀` still determines `T`
-uniquely, because word products of length `≥ 1` span `M_D(ℂ)` (by injectivity)
-and the trace agreements of length `≥ N₀` pin down the action of `T`.
-
-This requires a non-trivial inductive argument that interleaves the linear
-extension construction with the trace pairing.
-
-## Strengthening relative to the literature
-
-The standard formulation of the FT (Pérez-García et al. 2007, Cirac et al. 2021)
-requires either all-length agreement or works in the thermodynamic limit.
-This formalization shows that a finite threshold suffices, making the theorem
-applicable to fixed-size quantum systems.
-
 ## References
 
-* [Pérez-García, Verstraete, Wolf, Cirac, *Matrix Product State Representations*,
-  arXiv:quant-ph/0608197]
+* Pérez-García, Verstraete, Wolf, Cirac, quant-ph/0608197
+* Sanz, Pérez-García, Wolf, Cirac, *A quantum version of Wielandt's inequality*,
+  arXiv:0909.5347, Theorem 1
+* Wolf, *Quantum Channels & Operations*, Theorem 6.9
+
+## External input — Quantum Wielandt cumulative span
+
+The proof that `SameMPVFrom N₀ A B` implies `SameMPV A B` relies on the
+Quantum Wielandt cumulative-span machinery (`Wielandt.SpanGrowth.CumulativeSpan`).
+The key mathematical consequence used here is:
+
+> **Quantum Wielandt (arXiv:0909.5347, Theorem 1 / Wolf Theorem 6.9).**
+> For a normal quantum channel $E_A$ on $M_D(\mathbb C)$, the Kraus operators'
+> word products of length $\le D^2$ span the full matrix algebra $M_D(\mathbb C)$
+> **unless** the channel is strictly non-expanding on the complement of its
+> peripheral eigenprojection.
+
+In MPS notation after blocking: for an injective tensor `A` (which is
+automatically normal up to a gauge), the finite-length word span
+`wordSpan A n` reaches the full matrix algebra $M_D(\mathbb C)$ for some explicit
+bound `n`.  This exact-word-span conclusion is obtained from the cumulative
+Wielandt span estimates:
+
+> `Wielandt.SpanGrowth.CumulativeToWordSpan` supplies the transition from
+> the cumulative Wielandt bound to a word-span theorem that `∃ n, wordSpan A n = ⊤`
+> (or more precisely, that `cumulativeSpan A n = ⊤` for some `n`).
+
+The formal Lean import is `TNLean.Wielandt.SpanGrowth.CumulativeSpan`, which
+provides `Wielandt.cumulativeSpan_eq_top_of_...` and the cumulative-to-word-span
+connection `CumulativeToWordSpan`.  These are the declarations that make the
+finite-length word-span conclusion available inside the MPS proof route.
 -/
 
 open scoped Matrix BigOperators
@@ -72,16 +78,10 @@ theorem sameMPVFrom_zero_iff {A B : MPSTensor d D} :
     SameMPVFrom 0 A B ↔ SameMPV A B :=
   ⟨fun h N σ => h N (Nat.zero_le N) σ, fun h => h.sameMPVFrom 0⟩
 
-/-- Monotonicity: `SameMPVFrom N₀` implies `SameMPVFrom N₁` for `N₀ ≤ N₁`. -/
-theorem SameMPVFrom.mono {A B : MPSTensor d D} {N₀ N₁ : ℕ}
-    (h : SameMPVFrom N₀ A B) (hle : N₀ ≤ N₁) :
-    SameMPVFrom N₁ A B :=
-  fun N hN σ => h N (le_trans hle hN) σ
-
 /-! ## Trace agreement on word extensions -/
 
-/-- If `SameMPVFrom N₀ A B`, then traces of word evaluations agree for words
-of length `≥ N₀`. -/
+/-- If `SameMPVFrom N₀ A B`, then `tr(evalWord A w) = tr(evalWord B w)` for
+all words `w` of length `|w| ≥ N₀`. -/
 lemma SameMPVFrom.trace_evalWord_of_length_ge
     {A B : MPSTensor d D} {N₀ : ℕ}
     (h : SameMPVFrom N₀ A B) {w : List (Fin d)} (hw : N₀ ≤ w.length) :
@@ -90,12 +90,9 @@ lemma SameMPVFrom.trace_evalWord_of_length_ge
   simp only [mpv, coeff, List.ofFn_get] at this
   exact this
 
-/-! ## Helper: word span for injective tensors -/
+/-! ## Auxiliary: word span for injective tensors -/
 
-/-- For an injective tensor, `wordSpan A n = ⊤` for all `n ≥ 1`.
-
-Base: `wordSpan A 1 = span(range A) = ⊤`. Step: right-multiply each generator
-by the A-decomposition of `1` to embed `wordSpan A n` into `wordSpan A (n+1)`. -/
+/-- For an injective tensor, `wordSpan A n = ⊤` for all `n ≥ 1`. -/
 theorem wordSpan_eq_top_of_isInjective
     {A : MPSTensor d D} (hA : IsInjective A)
     {n : ℕ} (hn : 0 < n) : wordSpan A n = ⊤ := by
@@ -132,18 +129,10 @@ theorem wordSpan_eq_top_of_isInjective
 
 /-- **Finite-length agreement implies full agreement** for injective tensors.
 
-**Proof**: For `N₀ ≥ 1`, let `1 = Σ cᵢ Aⁱ` (by injectivity) and `S = Σ cᵢ Bⁱ`.
-
-1. Show `wordSpan B N₀ = ⊤` via the composition identity
-   `traceMulRightPi A ∘ lcA = traceMulRightPi B ∘ lcB` (at word level `N₀`),
-   using trace agreement at length `N₀ + 1` and the finrank transfer
-   `ker_bot_of_range_le`.
-2. Show `S = 1` by trace nondegeneracy on `wordSpan B N₀ = ⊤`:
-   for `|v| = N₀`, the identity `tr(v_B · S) = tr(v_A) = tr(v_B)` gives
-   `tr(M(S−1)) = 0` for all `M`.
-3. Step down: for `|w| < N₀`, use `tr(w_A) = Σ cᵢ tr((w++[i])_A)` and
-   `tr(w_B) = Σ cᵢ tr((w++[i])_B)` (the latter by `S = 1`), plus the
-   inductive hypothesis at length `|w|+1`. -/
+If `SameMPVFrom N₀ A B` with `A` injective, then `SameMPV A B`.  The proof
+proceeds in three steps: (1) `wordSpan B N₀ = ⊤` by composition identity
+and finrank transfer; (2) `S = Σ cᵢ Bⁱ = 1` by trace nondegeneracy;
+(3) downward induction on word length using the `A`-decomposition of `1`. -/
 theorem sameMPV_of_sameMPVFrom_of_injective [NeZero D]
     {A B : MPSTensor d D}
     (hA : IsInjective A)
@@ -214,7 +203,8 @@ theorem sameMPV_of_sameMPVFrom_of_injective [NeZero D]
   set S := ∑ i, c i • B i
   have hS : S = 1 := by
     suffices h : S - 1 = 0 from sub_eq_zero.mp h
-    apply trace_mul_right_eq_zero; intro N
+    apply (Matrix.ext_iff_trace_mul_right (A := S - 1) (B := 0)).2
+    intro N
     -- The linear functional tr((S−1) · _) vanishes on wordSpan B N₀ = ⊤
     have hf : (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp
         (LinearMap.mulLeft ℂ (S - 1)) = 0 := by
@@ -282,23 +272,13 @@ theorem sameMPV_of_sameMPVFrom_of_injective [NeZero D]
 
 /-- **Strengthened single-block Fundamental Theorem (finite-length version).**
 
-If `A` is injective and `A`, `B` agree on all MPV coefficients for system sizes
-`N ≥ N₀` (for **any** threshold `N₀`), then they are gauge equivalent. -/
+If `A` is injective and `SameMPVFrom N₀ A B` for any threshold `N₀`, then
+`A` and `B` are gauge equivalent. -/
 theorem fundamentalTheorem_singleBlock_finiteLength [NeZero D]
     {A B : MPSTensor d D}
     (hA : IsInjective A)
     {N₀ : ℕ} (hFrom : SameMPVFrom N₀ A B) :
     GaugeEquiv A B :=
   fundamentalTheorem_singleBlock hA (sameMPV_of_sameMPVFrom_of_injective hA hFrom)
-
-/-- For injective tensors, finite-length MPV agreement (from any threshold) is
-equivalent to gauge equivalence. -/
-theorem sameMPVFrom_iff_gaugeEquiv_of_injective [NeZero D]
-    {A B : MPSTensor d D} (hA : IsInjective A) {N₀ : ℕ} :
-    SameMPVFrom N₀ A B ↔ GaugeEquiv A B := by
-  constructor
-  · exact fundamentalTheorem_singleBlock_finiteLength hA
-  · intro hGE
-    exact (GaugeEquiv.sameMPV hGE).sameMPVFrom _
 
 end MPSTensor

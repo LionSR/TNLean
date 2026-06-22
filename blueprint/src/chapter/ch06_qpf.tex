@@ -1,0 +1,848 @@
+\chapter{Perron--Frobenius Theory for Channels and Transfer Maps}\label{ch:qpf}
+
+This chapter establishes the Perron--Frobenius theory:
+existence, positive definiteness, and uniqueness of
+fixed points for injective and irreducible transfer maps, canonical
+gauge constructions, ergodicity of irreducible channels, the
+spectral-radius identification of Perron eigenvalues, and Wolf's
+spectral characterization of irreducibility.
+The conceptual source is Wolf's treatment of irreducible positive
+maps~\cite[Chapter~6, especially Theorems~6.2--6.5 and Corollary~6.3]{Wolf2012Quantum}
+and~\cite{Evans1978Spectral}.
+
+\begin{theorem}[Brouwer fixed point on density matrices]%
+    \label{thm:brouwer_density_matrices}
+    \lean{brouwer_fixedPoint_densityMatrices}
+    \lean{fixedPoint_of_compact_retract, fixedPoint_of_compact_retract_fin}
+    \lean{exists_fixedPoint_closedCube, exists_fixedPoint_unitCube}
+    \leanok
+    \uses{def:density_matrices, thm:density_compact}
+    Let $D > 0$. Every continuous map from the compact convex set of
+    density matrices in $\MN{D}$ to itself has a fixed point.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The proof starts from Brouwer's theorem for products of simplices,
+    transfers it to closed cubes, and then to compact retracts of
+    finite-dimensional real normed spaces. The density-matrix set is
+    such a compact retract, using the explicit density retraction.
+\end{proof}
+
+\section{Positive definiteness}
+
+\begin{remark}\leanok
+    Wolf's general theory treats irreducible positive maps first
+    (\cite[Theorem~6.2]{Wolf2012Quantum}), then derives non-degeneracy
+    and positive definiteness (\cite[Theorem~6.3]{Wolf2012Quantum}).
+    The injective-tensor version (Theorem~\ref{thm:psd_fp_pd}) uses
+    a shorter direct kernel argument; the irreducible
+    CP-map version (Theorem~\ref{thm:psd_fp_pd_irred}) follows
+    via the support-projection argument of~\cite[Theorem~6.2]{Wolf2012Quantum}.
+\end{remark}
+
+\begin{theorem}[PSD fixed point is positive definite]\label{thm:psd_fp_pd}
+    \lean{MPSTensor.posSemidef_fixedPoint_isPosDef}
+    \leanok
+    \uses{def:injective, def:transfer_map}
+    Let $A$ be an injective MPS tensor and let $\rho \ge 0$,
+    $\rho \neq 0$, be a fixed point of the transfer map
+    $\E_A(\rho) = \rho$.
+    Then $\rho$ is positive definite.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Suppose $v^\dagger \rho v = 0$ for some $v \neq 0$.
+    Since $\rho \ge 0$, this implies $\rho v = 0$.
+    The fixed-point equation gives
+    $v^\dagger \rho v = \sum_i ((A^i)^\dagger v)^\dagger
+        \rho ((A^i)^\dagger v)$.
+    Each term is non-negative; if the sum is zero, then
+    $\rho (A^i)^\dagger v = 0$ for all~$i$:
+    the kernel of $\rho$ is invariant under all $(A^i)^\dagger$.
+    Since the $\{A^i\}$ span $\MN{D}$, we have $\rho M v = 0$
+    for every matrix $M$. Given any vector $w$, choose $M$ with
+    $M v = w$. Then $\rho w = 0$ for every $w$, so $\rho = 0$,
+    contradicting $\rho \neq 0$.
+    In~\cite[Theorem~6.3(2)]{Wolf2012Quantum},
+    the same conclusion is reached via the
+    growth condition $(\Id + \E_A)^{D-1}(\rho) > 0$
+    of~\cite[Theorem~6.2, condition~(2)]{Wolf2012Quantum};
+    here the direct kernel argument is shorter under
+    injectivity.
+\end{proof}
+
+\begin{theorem}[PSD fixed point is positive definite --- irreducible version]\label{thm:psd_fp_pd_irred}
+    \lean{MPSTensor.posSemidef_fixedPoint_isPosDef_of_irreducible}
+    \leanok
+    \uses{def:irreducible_cp, def:transfer_map}
+    If $\E_A$ is irreducible and $\rho \ge 0$, $\rho \neq 0$
+    is a fixed point, then $\rho$ is positive definite.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:irreducible_cp}
+    Suppose $\rho$ is not positive definite.
+    Then $\rho$ has a nontrivial kernel; let $Q$ be the
+    orthogonal projection onto the support of $\rho$
+    (the complement of the kernel).
+    A direct computation using the fixed-point equation
+    $\E_A(\rho) = \rho$ shows that $Q$ is an invariant
+    projection for $\E_A$: it satisfies
+    $Q \E_A(Q X Q) Q = \E_A(Q X Q)$ for all~$X$.
+    By irreducibility of $\E_A$
+    (Definition~\ref{def:irreducible_cp}),
+    every invariant projection is $0$ or $\Id$.
+    If $Q = 0$ then $\rho = 0$, contradicting $\rho \neq 0$.
+    If $Q = \Id$ then $\rho$ is positive definite,
+    contradicting our assumption.
+    Hence $\rho$ must be positive definite.
+    This is the support-projection direction
+    of~\cite[Theorem~6.2(1)]{Wolf2012Quantum}.
+\end{proof}
+
+\begin{theorem}[Orthogonal trace condition]\label{thm:orthogonal_trace_cond}
+    \lean{orthogonal_trace_pos_of_irreducible_cp}
+    \leanok
+    \uses{def:irreducible_cp}
+    Let $E$ be an irreducible completely positive map on $\MN{D}$,
+    and let $A, B \ge 0$ be nonzero positive semidefinite matrices
+    with $\tr(B A) = 0$.
+    Then there exists $t$ with $1 \le t \le D - 1$ such that
+    \[
+        \tr(B \cdot E^t(A)) > 0.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The growth theorem for irreducible CP maps
+    (\cite[Theorem~6.2(2)]{Wolf2012Quantum}) gives
+    $(\Id + E)^{D-1}(A) > 0$ (positive definite).
+    Since $B \ge 0$ is nonzero,
+    $\tr(B \cdot (\Id + E)^{D-1}(A)) > 0$.
+    Expanding by the binomial theorem:
+    \[
+        \tr\left(B \cdot \sum_{k=0}^{D-1} \tbinom{D-1}{k} E^k(A)\right) > 0.
+    \]
+    Each term $\tr(B \cdot E^k(A)) \ge 0$ since both factors are PSD.
+    The $k = 0$ term vanishes by hypothesis
+    ($\tr(B A) = 0$).
+    Hence at least one $k \in \{1, \ldots, D-1\}$ contributes
+    a strictly positive term.
+    This is~\cite[Theorem~6.2(4)]{Wolf2012Quantum}:
+    item~(2) (growth condition) implies item~(4)
+    by a binomial expansion and PSD positivity argument.
+\end{proof}
+
+\section{Uniqueness}
+
+\begin{theorem}[Uniqueness of PSD fixed point]\label{thm:psd_fp_unique}
+    \lean{MPSTensor.posSemidef_fixedPoint_unique}
+    \leanok
+    \uses{def:injective, def:transfer_map}
+    Let $A$ be an injective MPS tensor.
+    If $\rho, \sigma \ge 0$ are both nonzero fixed points of
+    $\E_A$, then $\sigma = c \rho$ for some $c \in \C$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:psd_fp_pd}
+    Both $\rho$ and $\sigma$ are positive definite by
+    Theorem~\ref{thm:psd_fp_pd}.
+    Write $\rho = S S^\dagger$ via a spectral square root and set
+    $H = (S^\dagger)^{-1} \sigma S^{-1}$, which is Hermitian
+    and positive definite.
+    Let $c_0$ be the minimal eigenvalue of~$H$.
+    Then $\tau := \sigma - c_0 \rho$ is a PSD fixed point
+    which is \emph{not} positive definite
+    (it has a zero eigenvalue by construction of~$c_0$).
+    By Theorem~\ref{thm:psd_fp_pd}, $\tau$ must be zero,
+    giving $\sigma = c_0 \rho$.
+    In~\cite[Theorem~6.3, item~2]{Wolf2012Quantum} uniqueness is proved
+    via the growth condition of~\cite[Theorem~6.2]{Wolf2012Quantum};
+    the same minimal-eigenvalue argument applies here, using the
+    injective-tensor positive-definiteness
+    (Theorem~\ref{thm:psd_fp_pd}) in place of the growth condition.
+\end{proof}
+
+\begin{remark}\leanok
+    The proof produces a positive real scalar $c_0 > 0$:
+    it is the minimal eigenvalue of the positive definite Hermitian
+    matrix $H = (S^\dagger)^{-1} \sigma S^{-1}$.
+\end{remark}
+
+\begin{theorem}[Irreducible fixed-point uniqueness]\label{thm:psd_fp_unique_irred}
+    \lean{MPSTensor.posSemidef_fixedPoint_unique_of_irreducible}
+    \leanok
+    \uses{def:irreducible_cp, def:transfer_map, thm:psd_fp_pd_irred}
+    Let $A$ be an MPS tensor whose transfer map is irreducible.
+    If $\rho,\sigma\ge 0$ are fixed points of $\E_A$, and if
+    $\rho$ is nonzero, then $\sigma=c\rho$ for some scalar $c$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The irreducible positive-definiteness theorem
+    (Theorem~\ref{thm:psd_fp_pd_irred}) upgrades every nonzero positive
+    semidefinite fixed point to a positive definite one. The same minimal
+    eigenvalue argument used in Theorem~\ref{thm:psd_fp_unique} then applies.
+\end{proof}
+
+\begin{theorem}[Uniqueness of positive eigenvalue for irreducible CP maps]%
+    \label{thm:eigenvalue_unique_irred}
+    \lean{eigenvalue_unique_of_irreducible_cp}
+    \leanok
+    \uses{def:irreducible_cp}
+    Let $D \ge 1$ and let $E$ be an irreducible completely positive map
+    on $\MN{D}$.
+    Suppose $\rho, \sigma \ge 0$ are nonzero positive semidefinite matrices
+    satisfying $E(\rho) = r_1 \rho$ and $E(\sigma) = r_2 \sigma$
+    for real scalars $r_1, r_2 > 0$.
+    Then $r_1 = r_2$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:pf_eigenvector_existence, thm:psd_fp_pd_irred}
+    Extract Kraus operators $K$ for $E$.
+    Irreducibility of $E$ passes to the adjoint transfer map
+    $E^\dagger(\,\cdot\,) = \sum_i K_i^\dagger\,(\,\cdot\,)\,K_i$,
+    which is a positive CP map.
+    The Perron--Frobenius existence theorem
+    (Theorem~\ref{thm:pf_eigenvector_existence}) together with the
+    irreducible positive-definiteness upgrade
+    (Theorem~\ref{thm:psd_fp_pd_irred}) gives a positive definite
+    eigenvector $\tau > 0$ with eigenvalue $t > 0$:
+    $E^\dagger(\tau) = t\,\tau$.
+    For any nonzero PSD $X$ with $E(X) = s X$,
+    the trace pairing identity yields
+    \[
+        s \cdot \tr(\tau X)
+        = \tr(\tau \cdot E(X))
+        = \tr(E^\dagger(\tau) \cdot X)
+        = t \cdot \tr(\tau X).
+    \]
+    Since $\tau > 0$ and $X \ge 0$, $X \neq 0$,
+    the scalar $\tr(\tau X) > 0$, so $s = t$.
+    Applying this to both $(\rho, r_1)$ and $(\sigma, r_2)$
+    gives $r_1 = t = r_2$.
+    This is~\cite[Theorem~6.3, item~3]{Wolf2012Quantum}, the
+    non-degeneracy of the spectral-radius eigenvalue for irreducible
+    CP maps; the proof follows Wolf's dual-map trace argument.
+\end{proof}
+
+\section{Existence and the Perron--Frobenius theorem}
+
+\begin{theorem}[Existence of PSD fixed point]\label{thm:psd_fp_exists}
+    \lean{MPSTensor.exists_posSemidef_fixedPoint}
+    \leanok
+    \uses{def:transfer_map}
+    Assume $D \ge 1$. Let $A$ be an MPS tensor with
+    $\sum_i (A^i)^\dagger A^i = \Id$ (so that $\E_A$ is
+    trace-preserving).
+    Then there exists $\rho \ge 0$, $\rho \neq 0$,
+    with $\E_A(\rho) = \rho$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:transfer_channel, thm:cesaro_fixedpoint}
+    Under the normalization $\sum_i (A^i)^\dagger A^i = \Id$,
+    the transfer map is a quantum channel
+    (Theorem~\ref{thm:transfer_channel}).
+    The Ces\`aro fixed-point theorem
+    (Theorem~\ref{thm:cesaro_fixedpoint}) then provides the
+    fixed point; injectivity is not needed for this step.
+\end{proof}
+
+\begin{theorem}[Quantum Perron--Frobenius]\label{thm:qpf}
+    \lean{MPSTensor.quantum_perron_frobenius}
+    \leanok
+    \uses{def:injective, def:transfer_map}
+    Assume $D \ge 1$. Let $A$ be an injective MPS tensor with
+    $\sum_i (A^i)^\dagger A^i = \Id$.
+    Then the transfer map $\E_A$ has a unique PSD fixed point
+    $\rho$ (up to scaling), and $\rho$ is positive definite.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:psd_fp_exists, thm:psd_fp_pd, thm:psd_fp_unique}
+    Combine Theorems~\ref{thm:psd_fp_exists},~\ref{thm:psd_fp_pd},
+    and~\ref{thm:psd_fp_unique}.
+\end{proof}
+
+\begin{theorem}[Quantum Perron--Frobenius for irreducible transfer maps]
+    \label{thm:qpf_irreducible}
+    \lean{MPSTensor.quantum_perron_frobenius_irreducible}
+    \leanok
+    \uses{def:irreducible_cp, def:transfer_map, thm:psd_fp_exists,
+        thm:psd_fp_pd_irred, thm:psd_fp_unique_irred}
+    Assume $D\ge 1$. Let $A$ be an MPS tensor such that its transfer map is
+    irreducible and $\sum_i (A^i)^\dagger A^i=\Id$ (so that $\E_A$ is
+    trace-preserving).
+    Then $\E_A$ has a unique positive definite fixed point, up to scalar
+    multiple.
+\end{theorem}
+
+\begin{proof}\leanok
+    Existence is the channel fixed-point theorem
+    (Theorem~\ref{thm:psd_fp_exists}). Irreducibility upgrades the fixed point
+    to positive definite, and Theorem~\ref{thm:psd_fp_unique_irred} gives
+    uniqueness up to scalar multiple.
+\end{proof}
+
+\section{Right- and left-canonical gauges}
+
+\begin{theorem}[Right-canonical (unital) gauge]\label{thm:right_canonical_gauge}
+    \lean{gauged_unital}
+    \leanok
+    Let $\E_A(\rho) = \rho$ and let $S$ be an invertible matrix with
+    $S S^\dagger = \rho$.
+    Define the gauged operators $A'^i = S^{-1} A^i S$.
+    Then $\sum_i A'^i (A'^i)^\dagger = \Id$, i.e.\ the gauged
+    Kraus map is unital. This is the right-canonical normalization.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Expand each summand:
+    $(S^{-1} A^i S)(S^{-1} A^i S)^\dagger
+        = S^{-1} A^i \underbrace{S S^\dagger}_{\rho} (A^i)^\dagger (S^\dagger)^{-1}$.
+    Summing over $i$ and using $\sum_i A^i \rho (A^i)^\dagger = \rho$
+    gives $S^{-1} \rho (S^\dagger)^{-1}
+        = S^{-1} S S^\dagger (S^\dagger)^{-1} = \Id$.
+\end{proof}
+
+\begin{theorem}[Left-canonical (trace-preserving) gauge]\label{thm:left_canonical_gauge}
+    \lean{gauged_tracePreserving}
+    \leanok
+    Let $\sigma$ be a fixed point of the adjoint transfer map
+    $\sum_i (A^i)^\dagger \sigma A^i = \sigma$,
+    and let $S$ be invertible with $S^\dagger S = \sigma$.
+    Define $A'^i = S A^i S^{-1}$.
+    Then $\sum_i (A'^i)^\dagger A'^i = \Id$, i.e.\ the gauged
+    Kraus map is trace-preserving. This is the left-canonical
+    normalization.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Expand each summand:
+    $(S A^i S^{-1})^\dagger (S A^i S^{-1})
+        = (S^\dagger)^{-1} (A^i)^\dagger \underbrace{S^\dagger S}_{\sigma} A^i S^{-1}$.
+    Summing over $i$ and using $\sum_i (A^i)^\dagger \sigma A^i = \sigma$
+    gives $(S^\dagger)^{-1} \sigma S^{-1}
+        = (S^\dagger)^{-1} S^\dagger S S^{-1} = \Id$.
+\end{proof}
+
+\begin{theorem}[Square-root trace-preserving gauge from an adjoint fixed point]%
+    \label{thm:tp_gauge_from_adjoint_fixed}
+    \lean{MPSTensor.tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint}
+    \leanok
+    \uses{def:transfer_map}
+    Let $\sigma$ be positive definite and satisfy
+    $\sum_i (A^i)^\dagger \sigma A^i = \sigma$.
+    Define
+    \[
+        B^i = \sigma^{1/2} A^i \sigma^{-1/2}.
+    \]
+    Then $B$ is trace-preserving:
+    $\sum_i (B^i)^\dagger B^i = \Id$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Since $\sigma^{1/2}$ is self-adjoint and
+    $\sigma^{1/2}\sigma^{1/2}=\sigma$, each summand becomes
+    $(\sigma^{1/2})^{-1}\,(A^i)^\dagger\sigma A^i\,\sigma^{-1/2}$.
+    Summing over $i$ and using the fixed-point equation leaves
+    $(\sigma^{1/2})^{-1}\sigma\sigma^{-1/2}=\Id$.
+\end{proof}
+
+\begin{lemma}[Square-root trace-preserving gauge is a gauge equivalence]%
+    \label{lem:tp_gauge_equiv}
+    \lean{MPSTensor.gaugeEquiv_tpGauge}
+    \leanok
+    \uses{def:gauge_equiv}
+    If $\sigma$ is positive definite and
+    $B^i=\sigma^{1/2}A^i\sigma^{-1/2}$, then $A$ and $B$ are
+    gauge-equivalent.
+\end{lemma}
+
+\begin{proof}\leanok
+    The gauge matrix is $\sigma^{1/2}$, which is invertible because
+    $\sigma$ is positive definite.
+\end{proof}
+
+\begin{remark}\leanok
+    The right-canonical gauge of Theorem~\ref{thm:right_canonical_gauge}
+    and the left-canonical gauge of Theorem~\ref{thm:left_canonical_gauge}
+    are generally different similarity transforms: one is built from a fixed point
+    of $\E_A$, the other from a fixed point of the adjoint transfer map.
+    This section does not claim that a single gauge makes the transfer map
+    simultaneously unital and trace-preserving.
+\end{remark}
+
+\section{Similarity preserves irreducibility}
+
+\begin{lemma}[Similarity transform preserves irreducibility]%
+    \label{lem:similarity_irred}
+    \lean{isIrreducibleMap_full_similarity}
+    \leanok
+    \uses{def:irreducible_cp}
+    Let $E$ be an irreducible completely positive map on $\MN{D}$,
+    let $C \in \MN{D}$ be invertible ($\det C \neq 0$), and let
+    $c > 0$.
+    Define the similarity-transformed map
+    \[
+        E'(X) = c \cdot C^{-1}\, E\!(C\,X\,C^\dagger)\,(C^\dagger)^{-1}.
+    \]
+    Then $E'$ is also irreducible.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:irreducible_cp}
+    Suppose $Q$ is an invariant projection for $E'$:
+    $Q \neq 0$, $Q \neq \Id$, and
+    $(\Id - Q) E'(Q X Q) Q = 0$ for all~$X$.
+    Setting $R = C Q C^\dagger$, the support projection~$P$ of $R$
+    is an invariant projection for $E$.
+    Irreducibility of $E$ forces $P = 0$ or $P = \Id$.
+    The invertibility of $C$ then forces $Q = 0$ or $Q = \Id$,
+    a contradiction.
+    This is the full similarity version of~\cite[Proposition~6.6]{Wolf2012Quantum};
+    the scalar case ($C = \Id$) gives the scaling result stated next.
+\end{proof}
+
+\begin{lemma}[Similarity is an involution]%
+    \label{lem:similarity_involution}
+    \lean{similarityMap_similarityMap_inv}
+    \leanok
+    For any invertible $C \in \MN{D}$ and any linear map $E$ on $\MN{D}$,
+    the similarity transforms by $C$ and $C^{-1}$ compose to the identity:
+    \[
+        X \mapsto C(C^{-1}\, E(C\,X\,C^\dagger)\,(C^\dagger)^{-1})\,C^\dagger
+        = E(X).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Direct computation: the inner conjugation
+    $C \cdot (C^{-1} X (C^\dagger)^{-1}) \cdot C^\dagger$ collapses to $X$
+    using $C C^{-1} = \Id$ and $(C^\dagger)^{-1} C^\dagger = \Id$, and the
+    outer conjugation by $C (\cdot) C^\dagger$ then cancels the inner
+    $C^{-1} (\cdot) (C^\dagger)^{-1}$ on $E(X)$ for the same reason.
+\end{proof}
+
+\begin{lemma}[Irreducibility is invariant under similarity]%
+    \label{lem:similarity_irred_iff}
+    \lean{isIrreducibleMap_similarity_iff}
+    \leanok
+    \uses{def:irreducible_cp, lem:similarity_irred, lem:similarity_involution}
+    For any invertible $C \in \MN{D}$ and any linear map $E$ on $\MN{D}$,
+    the similarity transform
+    $X \mapsto C^{-1}\, E(C\,X\,C^\dagger)\,(C^\dagger)^{-1}$
+    is irreducible if and only if $E$ is.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:similarity_irred, lem:similarity_involution}
+    The forward direction follows from Lemma~\ref{lem:similarity_irred}
+    applied with the inverse $C^{-1}$ (whose determinant is also nonzero):
+    if the similarity transform of $E$ by $C$ is irreducible, then so is its
+    similarity transform by $C^{-1}$, which equals $E$ by
+    Lemma~\ref{lem:similarity_involution}. The reverse direction is
+    Lemma~\ref{lem:similarity_irred} itself (with $c = 1$).
+\end{proof}
+
+\begin{theorem}[Scaling preserves irreducibility]%
+    \label{thm:irred_map_smul}
+    \lean{isIrreducibleMap_smul}
+    \leanok
+    \uses{def:irreducible_cp}
+    If $E$ is an irreducible map and $c \neq 0$, then $c E$
+    is also irreducible.
+    This is the scalar special case ($C = \Id$) of~\cite[Proposition~6.6]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    An invariant projection for $c E$ is an invariant projection
+    for $E$ (scale out the nonzero constant from the commutation
+    relation).
+\end{proof}
+
+\section{Perron--Frobenius eigenvector existence}%
+\label{sec:pf_eigenvector}
+
+This section establishes the existence of a positive definite
+eigenvector for the adjoint transfer map of an irreducible MPS
+tensor, and uses it to construct a TP-gauge normalization.
+The PSD-eigenvector step corresponds to~\cite[Theorem~6.5]{Wolf2012Quantum}
+(general positive maps) and~\cite{Evans1978Spectral}; the upgrade to positive
+definiteness uses the irreducible-map theory of~\cite[Theorem~6.3]{Wolf2012Quantum}.
+The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
+
+\begin{theorem}[PSD eigenvector for positive maps]%
+    \label{thm:pf_eigenvector_existence}
+    \lean{exists_posSemidef_eigenvector}
+    \leanok
+    \uses{def:positive_map}
+    Let $E : \MN{D} \to \MN{D}$ be a positive linear map with
+    $D > 0$, and assume that $E(\sigma) \neq 0$ for every nonzero
+    PSD matrix $\sigma$.
+    Then there exist a nonzero PSD matrix $\rho$ and a positive
+    real $r > 0$ such that $E(\rho) = r \rho$.
+
+    This is the finite-dimensional Perron--Frobenius theorem for
+    positive maps on matrix algebras
+    (\cite[Theorem~6.5]{Wolf2012Quantum}; see also~\cite{Evans1978Spectral}).
+    The proof applies Brouwer's fixed-point theorem to the
+    normalization map $\rho \mapsto E(\rho) / \tr(E(\rho))$ on the
+    compact convex set of density matrices.
+\end{theorem}
+
+\begin{theorem}[Adjoint transfer map is nonzero]%
+    \label{thm:adjoint_transfer_ne_zero}
+    \lean{MPSTensor.adjointTransferMap_ne_zero_of_nonzero}
+    \leanok
+    \uses{def:transfer_map}
+    If some Kraus operator $A^i \neq 0$, then the adjoint transfer
+    map $\E_A^\dagger(X) = \sum_i (A^i)^\dagger X A^i$ is nonzero.
+\end{theorem}
+
+\begin{proof}\leanok
+    If $\E_A^\dagger = 0$ then $\E_A^\dagger(\Id) = 0$,
+    so $\sum_i (A^i)^\dagger A^i = 0$.
+    Since each summand $(A^i)^\dagger A^i$ is PSD,
+    each $(A^i)^\dagger = 0$ and hence each $A^i = 0$.
+\end{proof}
+
+\begin{theorem}[Positive-definite adjoint eigenvector for irreducible tensors]%
+    \label{thm:posDef_adjoint_eigenvector}
+    \lean{MPSTensor.exists_posDef_adjoint_eigenvector}
+    \leanok
+    \uses{def:irreducible_tensor, def:transfer_map}
+    Let $A$ be an irreducible MPS tensor with $D > 0$
+    and some $A^i \neq 0$.
+    Then there exist a positive definite matrix~$\sigma$
+    and a positive real $r > 0$ such that
+    $\E_A^\dagger(\sigma) = r \sigma$.
+
+    This combines the general PF existence
+    (\cite[Theorem~6.5]{Wolf2012Quantum}) with the
+    irreducible upgrade to positive definiteness
+    (\cite[Theorem~6.3(2)]{Wolf2012Quantum});
+    the application to the adjoint transfer map follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:pf_eigenvector_existence, thm:irred_map_smul,
+        thm:adjoint_transfer_ne_zero, thm:psd_fp_pd_irred}
+    By Theorem~\ref{thm:adjoint_transfer_ne_zero},
+    $\E_A^\dagger \neq 0$.
+    Since $\E_A^\dagger(X) = \sum_i (A^i)^\dagger X A^i$ is a
+    Kraus map, it is positive. Irreducibility of $A$ transfers to the
+    adjoint transfer map. More precisely: if $P$ is invariant for
+    $\E_A$ (i.e.\ $(\Id - P)K_i P = 0$ for all Kraus operators $K_i$),
+    then taking adjoints gives $P K_i^\dagger (\Id - P) = 0$, which
+    means $\Id - P$ is invariant for $\E_A^\dagger$. Hence $\E_A$
+    is irreducible if and only if $\E_A^\dagger$ is irreducible, and
+    together with $\E_A^\dagger \neq 0$ this implies
+    $\E_A^\dagger(\tau) \neq 0$ for every nonzero PSD matrix $\tau$.
+    Hence Theorem~\ref{thm:pf_eigenvector_existence} applies to
+    $\E_A^\dagger$, giving $\sigma_0 \ge 0$ (PSD, nonzero)
+    and $r > 0$ with $\E_A^\dagger(\sigma_0) = r \sigma_0$.
+    Rescale: set $T^i = r^{-1/2} (A^i)^\dagger$.
+    Then $\E_T(\sigma_0) = \sigma_0$,
+    and $\E_T$ is irreducible
+    (by Theorem~\ref{thm:irred_map_smul},
+    since irreducibility of $\E_A$ transfers to the
+    adjoint and is preserved under scaling).
+    Since $\E_T$ is irreducible with a PSD fixed point,
+    the positive-definiteness upgrade
+    (Theorem~\ref{thm:psd_fp_pd_irred})
+    gives $\sigma_0$ positive definite.
+\end{proof}
+
+\begin{theorem}[TP-gauge existence for irreducible tensors]%
+    \label{thm:tp_data_irreducible}
+    \lean{MPSTensor.exists_tp_data_of_irreducible}
+    \leanok
+    \uses{def:irreducible_tensor, def:gauge_equiv}
+    Let $A$ be an irreducible MPS tensor with $D > 0$
+    and some $A^i \neq 0$.
+    Then there exist a positive real~$r$, a positive definite
+    matrix~$\sigma$, and a gauge-equivalent tensor~$B$ such that
+    \[
+        B^i = \sigma^{1/2} \cdot (r^{-1/2} A^i) \cdot \sigma^{-1/2}
+    \]
+    is trace-preserving:
+    $\sum_i (B^i)^\dagger B^i = \Id$.
+
+    This is the ``spectral rescaling $+$ TP gauge'' step of~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
+    The similarity is generally non-unitary.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:posDef_adjoint_eigenvector, thm:tp_gauge_from_adjoint_fixed,
+        lem:tp_gauge_equiv}
+    By Theorem~\ref{thm:posDef_adjoint_eigenvector},
+    obtain $\sigma$ positive definite and $r > 0$ with
+    $\E_A^\dagger(\sigma) = r \sigma$.
+    Set $c = r^{-1/2}$ and $A'^i = c A^i$.
+    Then $\E_{A'}^\dagger(\sigma) = \sigma$.
+    By the square-root trace-preserving gauge construction
+    (Theorem~\ref{thm:tp_gauge_from_adjoint_fixed}),
+    $B^i = \sigma^{1/2} A'^i \sigma^{-1/2}$
+    satisfies $\sum_i (B^i)^\dagger B^i = \Id$.
+    Lemma~\ref{lem:tp_gauge_equiv} gives the required gauge equivalence.
+\end{proof}
+
+\begin{theorem}[Unital-gauge existence for irreducible tensors]%
+    \label{thm:unital_data_irreducible}
+    \lean{MPSTensor.exists_unital_data_of_irreducible}
+    \leanok
+    \uses{def:irreducible_tensor}
+    Let $A$ be an irreducible MPS tensor with $D > 0$
+    and some $A^i \neq 0$.
+    Then there exist a positive real~$r$, a positive definite
+    matrix~$\rho$, and a gauge-equivalent tensor~$B$ such that
+    \[
+        B^i = r^{-1/2}\rho^{-1/2}A^i\rho^{1/2}
+    \]
+    is unital:
+    $\sum_i B^i(B^i)^\dagger = \Id$.
+
+    This is the Perron--Frobenius unital-gauge orientation used in
+    \cite[Theorem~4, lines~765--770]{PerezGarcia2007Matrix},
+    stated for one irreducible nonzero block.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:posDef_adjoint_eigenvector, thm:unital_gauge_of_pd_fixed_point}
+    Apply Theorem~\ref{thm:posDef_adjoint_eigenvector} to the
+    conjugate-transposed Kraus family. Irreducibility transfers to that
+    family, and the nonzero Kraus hypothesis is preserved by taking adjoints.
+    Translating the resulting adjoint eigenvector equation back gives
+    $\E_A(\rho)=r\rho$ with $\rho$ positive definite and $r>0$. The unital
+    gauge theorem then gives the displayed unital representative, and the
+    same square-root similarity gives gauge equivalence to $r^{-1/2}A$.
+\end{proof}
+
+\section{Exponential positivity for irreducible CP maps}
+
+\begin{theorem}[Exponential truncation is positive definite]
+    \label{thm:exp_truncation_pd_irred}
+    \lean{exp_truncation_posDef_of_irreducible_cp}
+    \leanok
+    \uses{def:irreducible_cp}
+    Let $E$ be an irreducible completely positive map on $\MN{D}$,
+    let $A \ge 0$ be nonzero, and let $t > 0$.
+    Then the finite exponential truncation
+    \[
+        \sum_{k=0}^{D-1} \frac{t^k}{k!} E^k(A)
+    \]
+    is positive definite.
+    This is the finite-sum core of~\cite[Theorem~6.2(3)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:orthogonal_trace_cond}
+    If a nonzero vector $v$ annihilated this quadratic form, then every term
+    $E^k(A)$ with $0 \le k \le D-1$ would annihilate $v$.
+    The growth theorem for irreducible CP maps
+    (that is, $(\Id + E)^{D-1}(A) > 0$ for irreducible $E$ and nonzero
+    PSD $A$, as established in the proof of
+    Theorem~\ref{thm:orthogonal_trace_cond}) then forces
+    $(\Id + E)^{D-1}(A)$ to annihilate $v$, contradicting its positive
+    definiteness.
+\end{proof}
+
+\begin{theorem}[Exponential positivity for irreducible CP maps]
+    \label{thm:exp_pd_irred}
+    \lean{exp_posDef_of_irreducible_cp}
+    \leanok
+    \uses{def:irreducible_cp, thm:exp_truncation_pd_irred}
+    Let $E$ be an irreducible completely positive map on $\MN{D}$,
+    let $A \ge 0$ be nonzero, and let $t > 0$.
+    Then
+    \[
+        \exp(tE)(A) = \sum_{k=0}^{\infty} \frac{t^k}{k!} E^k(A)
+    \]
+    is positive definite.
+    This is~\cite[Theorem~6.2(3)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By Theorem~\ref{thm:exp_truncation_pd_irred}, the first $D$ terms already
+    form a positive definite matrix.
+    Every remaining term is positive semidefinite, so the full exponential
+    series is the sum of a positive definite matrix and a positive semidefinite
+    tail.
+\end{proof}
+
+\section{Ergodicity of irreducible channels}
+
+\begin{theorem}[Unique density-matrix fixed point for an irreducible channel]
+    \label{thm:channel_density_fp_irred}
+    \lean{IsChannel.exists_unique_density_fixedPoint_of_irreducible}
+    \leanok
+    \uses{def:channel, def:irreducible_cp}
+    Let $E$ be an irreducible quantum channel on $\MN{D}$ with $D > 0$.
+    Then there exists a unique density matrix $\sigma$ such that $E(\sigma) = \sigma$.
+    Moreover $\sigma$ is positive definite.
+    This is the qualitative form of~\cite[Corollary~6.3]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cesaro_fixedpoint}
+    Every Ces\`aro mean of a density matrix stays inside the compact convex set
+    of density matrices, so a subsequence converges.
+    Its limit is a fixed point by the telescoping argument, positive
+    definiteness follows from irreducibility, and uniqueness comes from the
+    uniqueness of positive semidefinite Perron eigenvectors at eigenvalue~$1$.
+\end{proof}
+
+\begin{theorem}[Ces\`aro convergence for irreducible channels]
+    \label{thm:channel_cesaro_irred}
+    \lean{IsChannel.cesaroMean_tendsto_of_irreducible}
+    \leanok
+    \uses{def:channel, def:irreducible_cp, def:cesaro_mean,
+        thm:channel_density_fp_irred}
+    Let $E$ be an irreducible quantum channel on $\MN{D}$ with $D > 0$,
+    and let $\rho$ be any density matrix.
+    Then the Ces\`aro means
+    \[
+        \frac{1}{N} \sum_{n=0}^{N-1} E^n(\rho)
+    \]
+    converge to the unique positive definite density-matrix fixed point of~$E$.
+    This is~\cite[Corollary~6.3]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Every subsequential limit of the Ces\`aro means is again a density-matrix
+    fixed point.
+    By Theorem~\ref{thm:channel_density_fp_irred}, there is only one such
+    fixed point, so every convergent subsequence has the same limit.
+    Compactness then forces the whole sequence to converge to that limit.
+\end{proof}
+
+\section{Spectral radius at the Perron eigenvalue}
+
+\begin{theorem}[Spectral radius is the Perron eigenvalue]
+    \label{thm:spectral_radius_pf_irred}
+    \lean{spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp}
+    \leanok
+    \uses{def:irreducible_cp}
+    Let $E$ be an irreducible completely positive map on $\MN{D}$.
+    Suppose $\rho > 0$ and $E(\rho) = r \rho$ with $r > 0$.
+    Then the spectral radius of $E$ is $r$.
+    This is~\cite[Theorem~6.3(4)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Choose a positive definite eigenvector for the adjoint map with the same
+    eigenvalue, gauge by its square root, and rescale by $r^{-1}$.
+    The resulting map is trace-preserving and has a positive definite fixed
+    point, so $1$ is an eigenvalue. The spectral radius of a trace-preserving
+    map $F$ satisfies $\rho(F) \le 1$, since $\tr(F^n(X)) = \tr(X)$ for all
+    $n$ bounds the growth of iterates. Hence its spectral radius is~$1$.
+    Undoing the similarity and scalar rescaling recovers the spectral radius
+    of~$E$.
+\end{proof}
+
+\begin{theorem}[Real spectral-radius identity]
+    \label{thm:spectral_radius_real_pf_irred}
+    \lean{spectralRadius_toReal_eq_of_posDef_eigenvector_of_irreducible_cp}
+    \leanok
+    \uses{thm:spectral_radius_pf_irred}
+    Under the hypotheses of Theorem~\ref{thm:spectral_radius_pf_irred}, the
+    real-valued spectral radius of $E$ is also equal to~$r$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This is the real-valued reformulation of
+    Theorem~\ref{thm:spectral_radius_pf_irred}.
+\end{proof}
+
+\section{Spectral characterization of irreducibility}
+
+\begin{definition}[Spectral properties]
+    \label{def:has_spectral_properties}
+    \lean{HasSpectralProperties}
+    \leanok
+    \uses{def:cp_map}
+    A completely positive map $E$ on $\MN{D}$ has the \emph{spectral properties}
+    of~\cite[Theorem~6.4]{Wolf2012Quantum} if there exist a positive real number $r$,
+    a positive definite right eigenvector $\rho$, and a positive definite left
+    eigenvector $\sigma$ for the adjoint map such that
+    $E(\rho) = r \rho$, $E^\dagger(\sigma) = r \sigma$, every positive semidefinite
+    right eigenvector for eigenvalue $r$ is a scalar multiple of $\rho$, and the
+    spectral radius of $E$ is equal to~$r$.
+\end{definition}
+
+\begin{theorem}[Irreducibility gives the spectral properties]
+    \label{thm:has_spectral_properties_irred}
+    \lean{hasSpectralProperties_of_irreducible_cp}
+    \leanok
+    \uses{def:has_spectral_properties, def:irreducible_cp}
+    Every nonzero irreducible completely positive map on $\MN{D}$ has the
+    spectral properties of Definition~\ref{def:has_spectral_properties}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:spectral_radius_pf_irred}
+    Combine Perron--Frobenius existence for the map and its adjoint with the
+    uniqueness theorem for positive semidefinite Perron eigenvectors and the
+    spectral-radius identity of
+    Theorem~\ref{thm:spectral_radius_pf_irred}.
+\end{proof}
+
+\begin{theorem}[Spectral properties imply irreducibility]
+    \label{thm:irred_from_spectral_properties}
+    \lean{isIrreducibleMap_of_hasSpectralProperties}
+    \leanok
+    \uses{def:has_spectral_properties}
+    If a completely positive map on $\MN{D}$ has the spectral properties of
+    Definition~\ref{def:has_spectral_properties}, then it is irreducible.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Gauge by the positive definite left eigenvector and rescale by the Perron
+    eigenvalue to obtain a trace-preserving map with a positive definite fixed
+    point.
+    A nontrivial invariant projection would then produce, by Ces\`aro averaging in
+    its corner algebra, a second positive semidefinite fixed point not proportional
+    to the Perron vector, contradicting the uniqueness clause in
+    Definition~\ref{def:has_spectral_properties}.
+\end{proof}
+
+\begin{theorem}[Irreducibility iff the spectral properties hold]
+    \label{thm:irred_iff_spectral_properties}
+    \lean{isIrreducibleMap_iff_spectral_properties}
+    \leanok
+    \uses{def:has_spectral_properties, def:irreducible_cp,
+        thm:has_spectral_properties_irred, thm:irred_from_spectral_properties}
+    Let $E$ be a nonzero completely positive map on $\MN{D}$.
+    Then $E$ is irreducible if and only if it has the spectral properties of
+    Definition~\ref{def:has_spectral_properties}.
+    This is~\cite[Theorem~6.4]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Combine Theorems~\ref{thm:has_spectral_properties_irred}
+    and~\ref{thm:irred_from_spectral_properties}.
+\end{proof}

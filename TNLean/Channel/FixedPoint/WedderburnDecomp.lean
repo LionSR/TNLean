@@ -15,7 +15,7 @@ This file states the Wedderburn--Artin decomposition for the fixed-point
 
 Every finite-dimensional `*`-subalgebra of `M_D(ℂ)` decomposes as a direct sum
 of full matrix algebras (over ℂ, since ℂ is algebraically closed). Concretely,
-Wolf Eq. (1.39) gives the embedding
+Wolf Equation (1.39) gives the embedding
 
     B = U (0 ⊕ ⊕_k M_{d_k} ⊗ 1_{m_k}) U†
 
@@ -42,15 +42,14 @@ The proof chain is:
    Wedderburn--Artin decomposition — available in Mathlib via
    `IsSemisimpleRing.exists_algEquiv_pi_matrix_of_isAlgClosed`.
 
-The concrete unitary block-diagonal embedding (Wolf Eq. 1.39) and the
-conditional expectation form with density operators ρ_k (Wolf Eq. 1.40)
-require additional representation-theoretic results and are deferred
-to future work.
+The concrete unitary block-diagonal embedding and the conditional expectation
+form with density operators ρ_k (Wolf Equations 1.39–1.40) require additional
+representation-theoretic results and are deferred to future work.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Thm 6.14, §6.4]
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Eq. 1.39–1.40, §1]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 6.14, Section 6.4]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Equations 1.39–1.40, Section 1]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators Matrix.Norms.L2Operator
@@ -83,7 +82,9 @@ finite-dimensional ℂ-algebra, being a subalgebra of `M_D(ℂ)`.
 
 This is a type alias for the subtype
 `↥(adjointFixedPointsStarSubalgebra K h_tp hρ hρ_fix)`. -/
-abbrev FixedPointAlgebra :=
+abbrev FixedPointAlgebra
+    (K : Fin d → Mat) (h_tp : IsTP K) {ρ : Mat}
+    (hρ : ρ.PosDef) (hρ_fix : map K ρ = ρ) : Type _ :=
   ↥(adjointFixedPointsStarSubalgebra (d := d) (D := D) K h_tp hρ hρ_fix)
 
 /-- Every finite-dimensional `*`-subalgebra of `M_D(ℂ)` is a semisimple ring. -/
@@ -155,7 +156,7 @@ theorem fixedPointAlgebra_wedderburnArtin
 
 end AbstractDecomp
 
-/-! ## Concrete block-diagonal embedding (Wolf Eq. 1.39) -/
+/-! ## Concrete block-diagonal embedding (Wolf Equations 1.39–1.40) -/
 
 section ConcreteDecomp
 
@@ -165,7 +166,7 @@ to witness that the algebra is unitarily conjugate to
 `0 ⊕ ⊕_k M_{d_k} ⊗ 1_{m_k}`
 inside the ambient matrix algebra.
 
-This corresponds to Wolf Eq. (1.39). Since this declaration is a `structure`,
+This corresponds to Wolf Equation (1.39). Since this declaration is a `structure`,
 it stores decomposition data; the proposition asserting existence of such a
 decomposition is `Nonempty (IsWedderburnBlockDecomp S)`.
 
@@ -189,7 +190,7 @@ structure IsWedderburnBlockDecomp
   /-- The multiplicities are nondegenerate. -/
   multDim_pos : ∀ i, 0 < multDim i
   /-- The total size of the matrix blocks does not exceed `D`
-  (equivalently, there is some complementary dimension not recorded here). -/
+  (equivalently, there is some complementary dimension not stated here). -/
   dim_le : ∑ i : Fin numBlocks, blockDim i * multDim i ≤ D
   /-- The subalgebra is ℂ-algebra isomorphic to the product of matrix blocks.
   This field ties the decomposition data to `S`. -/
@@ -212,9 +213,9 @@ structure IsWedderburnBlockDecomp
 -- eventually be moved to `TNLean/Algebra/WedderburnArtin.lean` or similar.
 
 /-- Every finite-dimensional `*`-subalgebra of `M_D(ℂ)` admits a Wedderburn
-block decomposition (Wolf Eq. 1.39).
+block decomposition (Wolf Equations 1.39–1.40).
 
-The current `IsWedderburnBlockDecomp` structure records the abstract
+The current `IsWedderburnBlockDecomp` structure states the abstract
 Wedderburn--Artin product decomposition, multiplicities set to `1`, and the
 ambient dimension bound. The unitary block-diagonal intertwiner is still
 deferred in the structure TODO above. -/
@@ -338,28 +339,5 @@ theorem adjointFixedPoints_wedderburnDecomp
   starSubalgebra_hasWedderburnBlockDecomp _
 
 end ConcreteDecomp
-
-/-! ## Dimension constraints -/
-
-section DimConstraints
-
-/-- In any Wedderburn block decomposition of the fixed-point algebra, the
-weighted sum of block dimensions and multiplicities is at most `D`.
-
-Concretely, if the decomposition has simple summands `M_{d_k}(ℂ)` with
-multiplicities `m_k`, then the parameters satisfy `Σ_k d_k * m_k ≤ D`. This
-is exactly the ambient-dimension constraint recorded in
-`IsWedderburnBlockDecomp.dim_le`.
-
-This is a convenience accessor for `IsWedderburnBlockDecomp.dim_le`. -/
-theorem wedderburnBlockDims_sum_le
-    (K : Fin d → Mat) (h_tp : IsTP K) {ρ : Mat}
-    (hρ : ρ.PosDef) (hρ_fix : map K ρ = ρ) :
-    ∀ (w : IsWedderburnBlockDecomp
-        (adjointFixedPointsStarSubalgebra (d := d) (D := D) K h_tp hρ hρ_fix)),
-      ∑ i : Fin w.numBlocks, w.blockDim i * w.multDim i ≤ D :=
-  fun w => w.dim_le
-
-end DimConstraints
 
 end Kraus

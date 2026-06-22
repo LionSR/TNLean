@@ -11,7 +11,7 @@ import Mathlib.LinearAlgebra.Matrix.Kronecker
 # MPO, MPDO, and LPDO — basic definitions
 
 This file introduces the core tensor types and predicates for mixed-state
-tensor networks, following arXiv:1606.00608 §4 (Cirac–Pérez-García–Schuch–
+tensor networks, following arXiv:1606.00608 Section 4 (Cirac–Pérez-García–Schuch–
 Verstraete):
 
 * **MPO** (Matrix Product Operator): a 4-index tensor `MPOTensor d D` with
@@ -41,7 +41,7 @@ Verstraete):
 
 ## References
 
-* [CPGSV17] arXiv:1606.00608, §4.1–4.3
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, Section 4.1–4.3
 * [VGRC04] Verstraete, Garcia-Ripoll, Cirac, PRL 93, 207204 (2004)
 * [ZV04] Zwolak, Vidal, PRL 93, 207205 (2004)
 -/
@@ -49,12 +49,13 @@ Verstraete):
 open scoped Matrix ComplexOrder BigOperators Kronecker
 open Matrix Finset
 
-/-- A (periodic, translation-invariant) **Matrix Product Operator** tensor:
-a family of `D × D` matrices indexed by a ket index `i` and a bra index `j`,
-both in `Fin d`.
+/-- A **Matrix Product Operator** tensor:
+a family of `D × D` matrices `M^{ij}` indexed by a ket index `i` and a bra
+index `j`, both in `Fin d`.
 
-Equivalently, this is an MPS tensor with doubled physical index `Fin d × Fin d`,
-but we keep both indices explicit for clarity. -/
+This is equivalent to an MPS tensor with doubled physical index `Fin d × Fin d`;
+we keep both indices explicit following the notation of
+arXiv:1606.00608, Section 4. -/
 abbrev MPOTensor (d D : ℕ) := Fin d → Fin d → Matrix (Fin D) (Fin D) ℂ
 
 namespace MPOTensor
@@ -63,9 +64,9 @@ variable {d D : ℕ}
 
 /-! ### Conversion to MPS tensor with doubled physical index -/
 
-/-- View an MPO tensor as an MPS tensor with doubled physical index
-`Fin (d * d)`, where `Fin.divNat` gives the ket index and `Fin.modNat`
-gives the bra index. -/
+/-- The doubled-index MPS view: `(toMPSTensor M)_{(i,j)} = M^{ij}`,
+identifying `Fin d × Fin d` with `Fin (d * d)` via the standard product encoding
+(`Fin.divNat` = ket, `Fin.modNat` = bra). -/
 def toMPSTensor (M : MPOTensor d D) : MPSTensor (d * d) D :=
   fun ij => M (ij.divNat) (ij.modNat)
 
@@ -98,6 +99,38 @@ lemma evalWord_ofFn (M : MPOTensor d D) {N : ℕ} (σ τ : Fin N → Fin d) :
       simp only [List.ofFn_succ, evalWord_cons, List.prod_cons]
       congr 1
       exact ih (σ ∘ Fin.succ) (τ ∘ Fin.succ)
+
+/-- `evalWord` is multiplicative under concatenation of equal-length bra/ket
+prefixes: splitting both words at the same position factors the matrix product.
+-/
+theorem evalWord_append (M : MPOTensor d D) :
+    ∀ (l₁ k₁ l₂ k₂ : List (Fin d)), l₁.length = k₁.length →
+      evalWord M (l₁ ++ l₂) (k₁ ++ k₂) = evalWord M l₁ k₁ * evalWord M l₂ k₂ := by
+  intro l₁
+  induction l₁ with
+  | nil =>
+      intro k₁ l₂ k₂ h
+      rw [List.length_nil, eq_comm, List.length_eq_zero_iff] at h
+      subst h
+      simp [evalWord]
+  | cons i is ih =>
+      intro k₁ l₂ k₂ h
+      cases k₁ with
+      | nil => simp at h
+      | cons j js =>
+          simp only [List.cons_append, evalWord_cons]
+          rw [ih js l₂ k₂ (by simpa using h), Matrix.mul_assoc]
+
+/-- **Cyclicity of the closed MPO word trace.** Moving the first bra/ket letter
+to the end of both words leaves the trace of the matrix product unchanged, since
+`tr(M^{ab} \, P) = tr(P \, M^{ab})`. This is the translation invariance of the
+periodic MPDO at the level of a single shift. -/
+theorem trace_evalWord_cons_eq_append (M : MPOTensor d D)
+    (a b : Fin d) (l k : List (Fin d)) (h : l.length = k.length) :
+    Matrix.trace (evalWord M (a :: l) (b :: k))
+      = Matrix.trace (evalWord M (l ++ [a]) (k ++ [b])) := by
+  rw [evalWord_cons, evalWord_append M l k [a] [b] h, evalWord_cons, evalWord_nil,
+    mul_one, Matrix.trace_mul_comm]
 
 /-! ### The MPO operator family -/
 
@@ -161,27 +194,21 @@ theorem transferMap_pos (M : MPOTensor d D)
 it generates positive semidefinite operators for all system sizes:
 `ρ^{(N)}(M) ≥ 0` for all `N`.
 
-See arXiv:1606.00608, §4. -/
+See arXiv:1606.00608, Section 4. -/
 def IsMPDO (M : MPOTensor d D) : Prop :=
   ∀ N : ℕ, (mpo M N).PosSemidef
 
 /-! ### LPDO: local purification -/
 
 /-- An MPO tensor `M` is an **LPDO** (Locally Purifiable Density Operator) if
-there exists a purifying MPS tensor `A` with ancilla/Kraus dimension `dK`
-and inner bond dimension `D'`, together with an equivalence
-`Fin D ≃ Fin D' × Fin D'`, such that
+there exist a Kraus dimension `dK`, an inner bond dimension `D'`, a purifying
+family `A^{(i,k)} ∈ M_{D'}(ℂ)` for `i ∈ Fin d`, `k ∈ Fin dK`, and a bond-space
+identification `e : Fin D ≃ Fin D' × Fin D'` such that
 
-  `M^{ij} = ∑_k A^{(i,k)} ⊗ₖ conj(A^{(j,k)})`
+  `M^{ij} = (∑_{k} A^{(i,k)} ⊗ₖ (A^{(j,k)})^*).submatrix ↑e ↑e`
 
-where `⊗ₖ` is the Kronecker product and `conj` denotes entrywise complex
-conjugation, and where the resulting matrix on `Fin D' × Fin D'` is
-reindexed back to `Fin D` via the chosen equivalence `e` (implemented by
-`.submatrix ↑e ↑e`). This is the local purification condition following
-arXiv:1606.00608 §4.3 (Cirac–Pérez-García–Schuch–Verstraete), where the
-auxiliary purification space factors as a tensor product.
-
-Not every MPDO is an LPDO (De las Cuevas et al. 2016). -/
+for all `i, j`, where `(·)^*` is entrywise complex conjugation and `⊗ₖ` is the
+Kronecker product. See arXiv:1606.00608, Section 4.3. -/
 def IsLPDO (M : MPOTensor d D) : Prop :=
   ∃ (dK D' : ℕ) (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
     (e : Fin D ≃ Fin D' × Fin D'),
@@ -249,7 +276,7 @@ decomposes as `ρ^{(N)} = ∑_κ |ψ_κ⟩⟨ψ_κ|` where each `ψ_κ` is an MP
 vector built from the purifying tensor, giving a manifestly PSD sum of
 rank-1 positive semidefinite matrices.
 
-See arXiv:1606.00608, §4.3. -/
+See arXiv:1606.00608, Section 4.3. -/
 theorem IsLPDO.isMPDO {M : MPOTensor d D} (h : IsLPDO M) : IsMPDO M := by
   obtain ⟨dK, D', A, e, hM⟩ := h
   intro N
@@ -275,13 +302,22 @@ theorem IsLPDO.isMPDO {M : MPOTensor d D} (h : IsLPDO M) : IsMPDO M := by
   simp_rw [Matrix.trace_kronecker]
   -- trace of entrywise conjugate = conjugate of trace: trace(A.map star) = star(trace A)
   simp_rw [← AddMonoidHom.map_trace (starRingEnd ℂ)]
-  -- Push σ τ application inside the sum on the RHS, expand vecMulVec
-  erw [Fintype.sum_apply σ, Fintype.sum_apply τ]; congr 1
+  -- Evaluate the entries of the finite sum of rank-one matrices.
+  simp only [Matrix.sum_apply, Matrix.vecMulVec_apply, Pi.star_apply, starRingEnd_apply]
 
 /-! ### MPDO renormalization fixed points -/
 
-/-- An MPO tensor is an MPDO renormalization fixed point when its transfer map
-is idempotent. -/
+/-- `IsRFP M` is the MPO transfer-map **idempotence** condition `E_M ∘ E_M = E_M`
+(definitionally `IsZCL M`, the zero-correlation-length characterization).
+
+This is *not* the paper's MPDO renormalization-fixed-point Definition 4.1
+(paper label RFPMixedTS, arXiv:1606.00608 line 657: existence of two
+trace-preserving CP maps T and S on the physical indices). Idempotence coincides
+with Definition 4.1 only in the pure (MPS) case. For general MPDO, Definition 4.1
+is strictly stronger:
+it implies idempotence/ZCL (Theorem 4.9, i ⟹ ii, gives ZCL and SAL), but ZCL alone
+does not imply it (line 786). Definition 4.1 is stated as `MPOTensor.IsRFPViaTS`;
+the theorem deriving idempotence from it is future work (#826, #237). -/
 def IsRFP (M : MPOTensor d D) : Prop :=
   transferMap M ∘ₗ transferMap M = transferMap M
 

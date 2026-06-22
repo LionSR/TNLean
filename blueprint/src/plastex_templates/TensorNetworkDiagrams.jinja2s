@@ -1,0 +1,77 @@
+name: TNTikZDiagram
+{{ obj.tn_svg_html }}
+
+name: TNMPSLocal TNMPSWord TNMPV TNBlocking TNMPVOverlap TNTransferMap TNMPOCell TNMPOChain
+{{ obj.tn_svg_html }}
+
+name: TNGaugeConjugation TNPhysicalRealization TNLinearTwist
+{{ obj.tn_svg_html }}
+
+name: TNPermutationTwistLabeled TNPermutationTwist TNTwistedTransfer
+{{ obj.tn_svg_html }}
+
+name: TNCondCOne TNCondCTwo TNStringOrderParameter TNVirtualInsertion
+{{ obj.tn_svg_html }}
+
+name: TNInternalTraceInsertion TNExternalTraceInsertion TNBoundaryRegrow
+{{ obj.tn_svg_html }}
+
+name: TNLocalEqualityStep TNPeriodicGauge TNGroundSpaceMap
+{{ obj.tn_svg_html }}
+
+name: TNPEPSEdgeGaugeOrientation TNPEPSGaugeVertexAction
+{{ obj.tn_svg_html }}
+
+name: TNPEPSGaugeCancellation TNPEPSBlockedMiddleLocalGaugeFormula
+{{ obj.tn_svg_html }}
+
+name: TNPEPSLocalGaugeExtraction TNPEPSGlobalConsistency
+{{ obj.tn_svg_html }}
+
+name: TNPEPSEdgeBlockingReduction TNPEPSEdgeInsertedCoeff
+{{ obj.tn_svg_html }}
+
+name: TNPEPSThreeSiteInsertionComparison TNPEPSInsertionPhysicalRealization
+{{ obj.tn_svg_html }}
+
+name: TNPEPSPhysicalToVirtualInsertion TNPEPSEdgeInsertionEquality
+{{ obj.tn_svg_html }}
+
+name: TNPEPSEdgeGaugeAbsorption TNPEPSTwoInjectiveTensorInsertionComparison
+{{ obj.tn_svg_html }}
+
+name: TNPEPSTwoInjectiveGaugeScalarReduction TNPEPSOneVertexComplementComparison
+{{ obj.tn_svg_html }}
+
+name: TNPEPSInjectiveRegionUnion TNPEPSInjectiveRegionUnionProof
+{{ obj.tn_svg_html }}
+
+name: TNPEPSNormalEdgeBlockingHypotheses
+{{ obj.tn_svg_html }}
+
+name: TNPEPSNormalRectangleCover TNPEPSNormalEdgeComplementTopCollar
+{{ obj.tn_svg_html }}
+
+name: TNPEPSNormalOneSiteSeparation TNPEPSNormalRegionsRS
+{{ obj.tn_svg_html }}
+
+name: TNPEPSNormalRegionT TNPEPSNormalEdgeBlockingReduction
+{{ obj.tn_svg_html }}
+
+name: TNPEPSTINormalGaugeAbsorption TNPEPSNormalBlockingHypotheses
+{{ obj.tn_svg_html }}
+
+name: TNPEPSLatticeState TNPEPSLocalTensorStar TNPEPSVertexInjectivityMap
+{{ obj.tn_svg_html }}
+
+name: TNPEPSStateContraction TNPEPSTorusGeometry TNPEPSVertexScalarBalance
+{{ obj.tn_svg_html }}
+
+name: TNKrausMap TNStinespring
+{{ obj.tn_svg_html }}
+
+name: TNChoiMatrix TNTransferMapTracePairing
+{{ obj.tn_svg_html }}
+
+name: TNTwoPointCorrelator
+{{ obj.tn_svg_html }}

@@ -1,0 +1,398 @@
+\section{Zero correlation length}
+
+\begin{definition}[Physical-trace transfer]
+    \label{def:mpo_physical_trace_transfer}
+    \lean{MPOTensor.physTraceTransfer}
+    \leanok
+    \uses{def:mpo_tensor}
+    The physical-trace transfer of an MPO tensor $M$ is the virtual matrix
+    obtained by contracting the ket and bra physical legs of one tensor:
+    \[
+        \mathcal T_M=\sum_i M^{ii}.
+    \]
+    % Gap documented in docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex.
+    This is the transfer object appearing in the zero-correlation-length
+    condition of \cite[Definition~4.2, lines~736--741]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Source zero correlation length for MPO tensors]
+    \label{def:mpo_source_zcl}
+    \lean{MPOTensor.IsSourceZCL}
+    \leanok
+    \uses{def:mpo_physical_trace_transfer}
+    An MPO tensor has source zero correlation length when, for some real number
+    $\lambda>0$,
+    \[
+        \mathcal T_M\ne 0
+        \quad\text{and}\quad
+        \mathcal T_M^2=\lambda\,\mathcal T_M
+    \]
+    hold. The nonzero condition excludes the degenerate zero transfer, and the
+    positive scalar makes the condition invariant under rescaling of $M$.
+\end{definition}
+
+\begin{theorem}[Literal physical-trace idempotence gives source ZCL]
+    \label{thm:mpo_source_zcl_of_physical_trace_idempotent}
+    \lean{MPOTensor.isSourceZCL_of_physTraceTransfer_sq}
+    \leanok
+    \uses{def:mpo_source_zcl, def:mpo_physical_trace_transfer}
+    If $\mathcal T_M\ne0$ and $\mathcal T_M^2=\mathcal T_M$, then $M$ has
+    source zero correlation length.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This is the preceding definition with $\lambda=1$.
+\end{proof}
+
+\begin{lemma}[Normalized transfer is idempotent under source zero correlation length]
+    \label{lem:mpo_source_zcl_normalized_idempotent}
+    \lean{MPOTensor.IsSourceZCL.normalized_idempotent}
+    \leanok
+    \uses{def:mpo_source_zcl}
+    If $M$ has source zero correlation length, then there exists $\lambda>0$
+    such that $\lambda^{-1}\mathcal T_M$ is idempotent.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    From source zero correlation length, choose $\lambda>0$ with
+    $\mathcal T_M^2=\lambda\,\mathcal T_M$. Then
+    \[
+        (\lambda^{-1}\mathcal T_M)^2
+        =
+        \lambda^{-2}\mathcal T_M^2
+        =
+        \lambda^{-1}\mathcal T_M .
+    \]
+\end{proof}
+
+\begin{definition}[Doubled-index transfer idempotence for MPO tensors]%
+    \label{def:mpo_is_zcl}
+    \lean{MPOTensor.IsZCL}
+    \leanok
+    \uses{def:mpo_transfer_map}
+    An MPO tensor $M$ satisfies the doubled-index transfer condition when its
+    completely positive transfer map is idempotent:
+    \[
+        \E_M \circ \E_M = \E_M.
+    \]
+    % Gap documented in docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex.
+    This is the condition obtained from the doubled-index MPS view. It is not
+    the physical-trace condition of Definition~\ref{def:mpo_source_zcl}.
+\end{definition}
+
+\begin{theorem}[Doubled-index transfer idempotence iff MPS RFP]%
+    \label{thm:mpo_is_zcl_iff_to_mps_rfp}
+    \lean{MPOTensor.isZCL_iff_toMPSTensor_isRFP}
+    \leanok
+    \uses{def:mpo_is_zcl, def:mpo_to_mps, def:is_rfp, lem:mpo_transfer_eq_mps}
+    An MPO tensor satisfies the doubled-index transfer condition if and only if
+    its doubled-index MPS view is a renormalization fixed point.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By Lemma~\ref{lem:mpo_transfer_eq_mps}, the transfer map of $M$ agrees with
+    the transfer map of its doubled-index MPS view. Thus
+    $\E_M \circ \E_M = \E_M$ holds exactly when the transfer map of
+    that doubled-index MPS tensor is idempotent, which is the RFP condition.
+\end{proof}
+
+\section{Purification fixed points}
+
+\begin{definition}[Purifying spin--ancilla tensor]
+    \label{def:mpdo_purification_tensor}
+    \lean{MPOTensor.purificationTensor}
+    \leanok
+    \uses{def:mps_tensor}
+    Given matrices $A^{(i,k)}$ with a spin index $i$ and an ancillary index $k$,
+    the associated MPS tensor on the product physical space is
+    \[
+        \widehat A^{(i,k)}=A^{(i,k)} .
+    \]
+    This is the tensor whose finite-chain vector appears in the purification
+    formula of \cite[lines~744--751]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Ancillary trace of a purifying MPS]
+    \label{def:mpdo_purification_density}
+    \lean{MPOTensor.purificationDensity}
+    \leanok
+    \uses{def:mpdo_purification_tensor, def:mpv}
+    For a purifying spin--ancilla tensor $A$, the reduced spin density matrix is
+    defined by
+    \[
+        \bigl[\rho^{(N)}_p(A)\bigr]_{\sigma,\tau}
+        =
+        \sum_{\kappa}
+        \psi_A(\sigma,\kappa)\,
+        \overline{\psi_A(\tau,\kappa)},
+    \]
+    where
+    \[
+        \psi_A(\sigma,\kappa)
+        =
+        \operatorname{tr}\!\left(
+            A^{(\sigma_0,\kappa_0)}
+            A^{(\sigma_1,\kappa_1)}
+            \cdots
+            A^{(\sigma_{N-1},\kappa_{N-1})}
+        \right).
+    \]
+    This is the coefficient form of the ancillary trace in
+    \cite[eq.~\textup{(4.7)}, line~751]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Single-site ancillary trace map]
+    \label{def:mpdo_ancillary_trace_map}
+    \lean{MPOTensor.ancillaryTraceMap}
+    \leanok
+    For a matrix $X$ on the spin--ancilla space, the ancillary trace map is
+    \[
+        \bigl[\operatorname{tr}_a(X)\bigr]_{ij}
+        =
+        \sum_k X_{(i,k),(j,k)} .
+    \]
+    This is the one-site trace over ancillary degrees of freedom appearing in
+    \cite[lines~751 and~761--764]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[The ancillary trace is trace-preserving completely positive]
+    \label{thm:mpdo_ancillary_trace_map_is_kraus_cptp}
+    \lean{MPOTensor.ancillaryTraceMap_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_ancillary_trace_map, def:is_kraus_cptp}
+    For every ancillary dimension, the one-site ancillary trace map is
+    trace-preserving and completely positive.
+\end{theorem}
+\begin{proof}
+    \leanok
+    For each ancillary label \(k\), let \(V_k\) be the projection from the
+    spin--ancilla space onto the spin space with fixed ancillary label:
+    \[
+        (V_k)_{i,(j,\ell)}
+        =
+        \begin{cases}
+            1, & i=j\text{ and }k=\ell,\\
+            0, & \text{otherwise}.
+        \end{cases}
+    \]
+    Then
+    \[
+        (V_k X V_k^\dagger)_{ij}=X_{(i,k),(j,k)},
+    \]
+    so summing over \(k\) gives the ancillary trace. The identity resolution is
+    entrywise:
+    \[
+        \sum_k (V_k^\dagger V_k)_{(i,k'),(j,\ell')}
+        =
+        \delta_{ij}\delta_{k'\ell'} .
+    \]
+    Thus the operators \(V_k\) form a trace-preserving Kraus family for the
+    ancillary trace.
+\end{proof}
+
+\begin{definition}[Global purification equation]
+    \label{def:mpdo_global_purification_equation}
+    \lean{MPOTensor.HasGlobalPurificationEquation}
+    \leanok
+    \uses{def:mpo_family, def:mpdo_purification_density}
+    An MPO tensor $M$ satisfies the global purification equation with a
+    purifying tensor $A$ if, for every positive length $N$,
+    \[
+        \rho^{(N)}(M)=\rho^{(N)}_p(A).
+    \]
+    Equivalently,
+    \[
+        \rho^{(N)}(M)
+        =
+        \operatorname{tr}_a
+        \bigl(
+            |\Psi^{(N)}(A)\rangle\langle\Psi^{(N)}(A)|
+        \bigr),
+        \qquad N>0,
+    \]
+    as in \cite[line~751]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Trace-preserving spin reduction]
+    \label{def:mpdo_has_trace_preserving_spin_reduction}
+    \lean{MPOTensor.HasTracePreservingSpinReduction}
+    \leanok
+    \uses{def:mpdo_ancillary_trace_map, def:is_kraus_cptp}
+    The spin reduction obtained by tracing the ancillary index is
+    trace-preserving and completely positive when
+    \[
+        \operatorname{tr}_a
+        \quad\text{is a tpCPM}.
+    \]
+    This is the structure described immediately after Definition~4.4 in
+    \cite[lines~761--764]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{corollary}[Trace-preserving spin reduction of the ancillary trace]
+    \label{cor:mpdo_has_trace_preserving_spin_reduction}
+    \lean{MPOTensor.hasTracePreservingSpinReduction}
+    \leanok
+    \uses{def:mpdo_has_trace_preserving_spin_reduction,
+        thm:mpdo_ancillary_trace_map_is_kraus_cptp}
+    For every ancillary dimension, the spin reduction obtained by tracing the
+    ancillary index is trace-preserving and completely positive.
+\end{corollary}
+\begin{proof}
+    \leanok
+    This is exactly
+    Theorem~\ref{thm:mpdo_ancillary_trace_map_is_kraus_cptp}, unpacked through
+    Definition~\ref{def:mpdo_has_trace_preserving_spin_reduction}.
+\end{proof}
+
+\begin{definition}[Purification RFP witness]
+    \label{def:mpdo_purification_rfp_witness}
+    \lean{MPOTensor.HasPurificationRFPWitness}
+    \leanok
+    \uses{def:mpdo_global_purification_equation, def:is_rfp}
+    An MPO tensor $M$ has a purification RFP witness if it satisfies the global
+    purification equation for some purifying spin--ancilla tensor $A$, and
+    $\widehat A$ is a pure-state renormalization fixed point:
+    \[
+        \E_{\widehat A}\circ\E_{\widehat A}=\E_{\widehat A}.
+    \]
+    This is the content of Definition~4.4 of
+    \cite[lines~756--764]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Purification RFP]
+    \label{def:mpdo_is_prfp}
+    \lean{MPOTensor.IsPRFP}
+    \leanok
+    \uses{def:mpdo_purification_rfp_witness}
+    An MPO tensor is a purification renormalization fixed point if it has a
+    purification RFP witness. Equivalently, it admits a purifying tensor $A$
+    satisfying
+    \[
+        \rho^{(N)}(M)
+        =
+        \operatorname{tr}_a
+        \bigl(
+            |\Psi^{(N)}(A)\rangle\langle\Psi^{(N)}(A)|
+        \bigr)
+        \quad\text{for all }N>0,
+    \]
+    and $\widehat A$ is a pure-state renormalization fixed point. This is
+    Definition~4.4 of \cite[lines~756--764]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Trace-preserving spin reduction for a purification RFP]
+    \label{def:mpdo_prfp_trace_preserving_spin_reduction}
+    \lean{MPOTensor.IsPRFPWithTracePreservingSpinReduction}
+    \leanok
+    \uses{def:mpdo_is_prfp, cor:mpdo_has_trace_preserving_spin_reduction}
+    A purification RFP is viewed together with trace-preserving spin reduction
+    by applying Corollary~\ref{cor:mpdo_has_trace_preserving_spin_reduction} to
+    the ancillary trace map appearing in its purification equation. This records
+    the structure obtained after tracing the ancillary indices in
+    \cite[lines~761--764]{Cirac2016MPDO_arXiv}, without adding a separate
+    hypothesis to Definition~4.4.
+\end{definition}
+
+\begin{definition}[Local purification RFP condition]\label{def:is_local_purification_rfp}
+    \lean{MPOTensor.IsLocalPurificationRFP}
+    \leanok
+    \uses{def:lpdo, def:is_rfp}
+    An MPO tensor $M$ satisfies the local purification RFP condition if it is an
+    LPDO whose purifying tensor $A$, viewed as a matrix product state tensor on
+    the combined spin--ancilla index, is a pure-state renormalization fixed point.
+    Thus
+    \[
+        M^{ij}
+        =
+        \left(\sum_{k} A^{(i,k)} \otimes \overline{A^{(j,k)}}\right)_{e,e}.
+    \]
+    This local condition is motivated by the purification tensor formula
+    \cite[lines~744--747]{Cirac2016MPDO_arXiv}, but it is a one-site
+    tensor-level condition rather than the global finite-chain definition in
+    Definition~\ref{def:mpdo_global_purification_equation}.
+\end{definition}
+
+\begin{theorem}[A local purification RFP generates MPDOs]
+    \label{thm:local_purification_rfp_is_mpdo}
+    \lean{MPOTensor.IsLocalPurificationRFP.isMPDO}
+    \leanok
+    \uses{def:is_local_purification_rfp, def:mpdo, thm:lpdo_is_mpdo}
+    Every tensor satisfying the local purification RFP condition generates
+    matrix product density operators.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:lpdo_is_mpdo}
+    Dropping the renormalization-fixed-point condition on the purifying tensor
+    leaves the local purification structure, so $M$ is an LPDO; the conclusion
+    follows from Theorem~\ref{thm:lpdo_is_mpdo}.
+\end{proof}
+
+\begin{theorem}[Local purification RFP does not imply doubled-index idempotence]
+    \label{thm:local_purification_rfp_not_zcl}
+    \lean{MPOTensor.exists_isLocalPurificationRFP_not_isZCL}
+    \leanok
+    \uses{def:is_local_purification_rfp, def:mpo_is_zcl}
+    There is an MPO tensor satisfying the local purification RFP condition for
+    which the literal transfer-map idempotence $\E_M\circ\E_M=\E_M$ fails.
+\end{theorem}
+
+% Counterexample analysed in docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex.
+\begin{proof}\leanok
+    Take the diagonal purification at $d=d_K=2$ and $D=D'=1$ with amplitudes
+    $A=[\tfrac{1}{\sqrt2},0,0,\tfrac{1}{\sqrt2}]$. The purifying tensor is a
+    pure-state renormalization fixed point, since $\sum|A|^2=1$ makes its transfer
+    map the identity. The ancilla contraction
+    \[
+        M^{ij}=\sum_k A^{(i,k)}\,\overline{A^{(j,k)}}
+    \]
+    gives the scalar entries $M^{00}=M^{11}=\tfrac12$ (off-diagonal $0$), so the
+    induced transfer map is $\tfrac12\cdot\mathrm{id}$ and
+    $\E_M\circ\E_M=\tfrac14\cdot\mathrm{id}\neq\E_M$. The trace contraction has
+    dropped the leading eigenvalue from $1$ to $\tfrac12$; the literal
+    zero-correlation-length condition is therefore strictly stronger than the
+    source's normalized one.
+\end{proof}
+
+\begin{lemma}[Physical-trace transfer of the maximally mixed witness]
+    \label{lem:phys_trace_transfer_witnessM}
+    \lean{MPOTensor.physTraceTransfer_witnessM}
+    \leanok
+    \uses{def:mpo_physical_trace_transfer}
+    For the maximally mixed witness $M_{\mathrm w}$, closing the ket and bra
+    physical legs gives
+    \[
+        \mathcal T_{M_{\mathrm w}}
+        =
+        M_{\mathrm w}^{00}+M_{\mathrm w}^{11}
+        =
+        \tfrac12+\tfrac12
+        =
+        1 .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    This is the direct computation of the two nonzero diagonal entries of the
+    witness tensor.
+\end{proof}
+
+\begin{theorem}[The maximally mixed witness has source zero correlation length]
+    \label{thm:witness_source_zcl}
+    \lean{MPOTensor.isSourceZCL_witnessM}
+    \leanok
+    \uses{def:mpo_source_zcl, thm:local_purification_rfp_not_zcl}
+    The maximally mixed witness $M_{\mathrm w}$ has source zero correlation
+    length.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:phys_trace_transfer_witnessM,
+        thm:mpo_source_zcl_of_physical_trace_idempotent}
+    Lemma~\ref{lem:phys_trace_transfer_witnessM} gives
+    $\mathcal T_{M_{\mathrm w}}=1$. The identity is nonzero and idempotent, so
+    source zero correlation length holds with $\lambda = 1$.
+\end{proof}

@@ -1,7 +1,15 @@
 name: Bug Report
 description: Report a broken proof, type error, sorry regression, or CI failure
+title: "<area>: <broken theorem, proof, or workflow>"
 labels: ["bug"]
 body:
+  - type: markdown
+    attributes:
+      value: |
+        Use a plain title naming the affected mathematical or workflow area, for example
+        `Wolf Ch6: fixed-point decomposition no longer builds`.
+        Keep issue titles bracket-free and do not use PR prefixes such as `fix(...)`.
+
   - type: input
     id: file
     attributes:
@@ -15,7 +23,7 @@ body:
     id: description
     attributes:
       label: Description
-      description: What is broken? Include error messages or sorry locations.
+      description: What is broken? Include error messages, sorry locations, or the affected mathematical statement.
       placeholder: |
         `lake build` fails with:
         ```
@@ -25,10 +33,21 @@ body:
       required: true
 
   - type: textarea
+    id: mathematical_context
+    attributes:
+      label: Mathematical context
+      description: Give the theorem, definition, blueprint entry, or paper reference affected, if applicable.
+      placeholder: |
+        The failure affects the formalization of Wolf Prop. 6.7 in
+        `blueprint/src/chapter/ch07_spectral.tex:88`.
+    validations:
+      required: false
+
+  - type: textarea
     id: expected
     attributes:
       label: Expected behavior
-      description: What should happen instead?
+      description: What should the statement, proof, or build do instead?
     validations:
       required: false
 

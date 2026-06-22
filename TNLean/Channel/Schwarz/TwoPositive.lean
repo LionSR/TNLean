@@ -56,7 +56,7 @@ so the theorem here applies strictly beyond the CP case.
   operator algebras*, Ann. Math. 56 (1952)]
 * [Choi, *A Schwarz inequality for positive linear maps on C*-algebras*,
   Illinois J. Math. 18 (1974)]
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §5.1]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 5.1]
 * [Størmer, *Positive linear maps of operator algebras*, Springer (2013)]
 -/
 
@@ -66,28 +66,26 @@ open Matrix Finset
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
 private noncomputable def finTwoSumEquiv (α : Type*) : α × Fin 2 ≃ α ⊕ α :=
-  (((Equiv.prodCongr (Equiv.refl α)
-      ((finSumFinEquiv : Fin 1 ⊕ Fin 1 ≃ Fin 2).symm)).trans
-    (Equiv.prodSumDistrib α (Fin 1) (Fin 1))).trans
-    (Equiv.sumCongr (Equiv.prodUnique α (Fin 1)) (Equiv.prodUnique α (Fin 1))))
+  ((Equiv.prodCongr (Equiv.refl α) finTwoEquiv).trans (Equiv.prodComm α Bool)).trans
+    (Equiv.boolProdEquivSum α)
 
 @[simp] private theorem finTwoSumEquiv_apply_zero {α : Type*} (a : α) :
     finTwoSumEquiv α (a, 0) = Sum.inl a := by
-  change Sum.map Prod.fst Prod.fst
-      ((Equiv.prodSumDistrib α (Fin 1) (Fin 1))
-        (a, ((finSumFinEquiv : Fin 1 ⊕ Fin 1 ≃ Fin 2).symm 0))) = Sum.inl a
-  rw [show (0 : Fin 2) = Fin.castSucc (0 : Fin 1) by rfl]
-  rw [finSumFinEquiv_symm_apply_castSucc]
-  simp
+  simp [finTwoSumEquiv, finTwoEquiv]
 
 @[simp] private theorem finTwoSumEquiv_apply_one {α : Type*} (a : α) :
     finTwoSumEquiv α (a, 1) = Sum.inr a := by
-  change Sum.map Prod.fst Prod.fst
-      ((Equiv.prodSumDistrib α (Fin 1) (Fin 1))
-        (a, ((finSumFinEquiv : Fin 1 ⊕ Fin 1 ≃ Fin 2).symm 1))) = Sum.inr a
-  rw [show (1 : Fin 2) = Fin.last 1 by rfl]
-  rw [finSumFinEquiv_symm_last]
-  simp
+  simp [finTwoSumEquiv, finTwoEquiv]
+
+@[simp] private theorem finTwoSumEquiv_symm_inl {α : Type*} (a : α) :
+    (finTwoSumEquiv α).symm (Sum.inl a) = (a, 0) := by
+  rw [Equiv.symm_apply_eq]
+  exact finTwoSumEquiv_apply_zero a
+
+@[simp] private theorem finTwoSumEquiv_symm_inr {α : Type*} (a : α) :
+    (finTwoSumEquiv α).symm (Sum.inr a) = (a, 1) := by
+  rw [Equiv.symm_apply_eq]
+  exact finTwoSumEquiv_apply_one a
 
 /-! ## Definitions of n-positivity -/
 
@@ -99,10 +97,10 @@ identification, and the ampliation acts blockwise:
 `(E ⊗ id_k)(X)_{ij} = E(X_{ij})` for block indices `i, j ∈ Fin k`.
 
 **Encoding choice**: We use a blockwise `Matrix.of` encoding rather than
-`TensorProduct` because it avoids the overhead of tensor product API and
+`TensorProduct` because it avoids the overhead of tensor product interface and
 matches the block-matrix arguments used in `KadisonSchwarz.lean`. A
 `TensorProduct`-based definition would be closer to the mathematical
-definition but would require additional infrastructure to connect with the
+definition but would require additional formalization to connect with the
 existing Kraus-based proofs.
 
 **Index convention**: We use `(n × Fin k)` indexing where `n` is the inner
@@ -128,8 +126,8 @@ private theorem posSemidef_fromBlocks_zero_zero
   let fg := Finsupp.sumFinsuppEquivProdFinsupp x
   let xL : m →₀ ℂ := fg.1
   let xR : o →₀ ℂ := fg.2
-  have hx : x = Finsupp.sumElim xL xR := by
-    exact (Finsupp.sumFinsuppEquivProdFinsupp.symm_apply_apply x).symm
+  have hx : x = Finsupp.sumElim xL xR :=
+    (Finsupp.sumFinsuppEquivProdFinsupp.symm_apply_apply x).symm
   rw [hx, Finsupp.sumElim_eq_add, Finsupp.sum_add_index']
   · have hRight :
         (Finsupp.mapDomain Sum.inr xR).sum (fun i xi =>
@@ -325,7 +323,10 @@ theorem Is2PositiveMap.isPositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n 
     simpa [X', Matrix.reindex_apply] using hdiag.submatrix e
   have hY' := h X' hX'
   let emb : n → n × Fin 2 := fun i => (i, 0)
-  simpa [emb, X', Matrix.reindex_apply] using hY'.submatrix emb
+  convert hY'.submatrix emb using 1
+  ext i j
+  simp [emb, X', Matrix.reindex_apply, e]
+  rfl
 
 /-! ## Kadison–Schwarz for 2-positive maps -/
 
@@ -406,10 +407,14 @@ theorem kadison_schwarz_2positive
           (((E X)ᴴ)ᴴ) (1 : Matrix n n ℂ) := by
     ext ip jq
     rcases ip with i | i <;> rcases jq with j | j
-    · simpa [Matrix.reindex_apply] using congr_fun (congr_fun (hEBlock 0 0) i) j
-    · simpa [Matrix.reindex_apply] using congr_fun (congr_fun (hEBlock 0 1) i) j
-    · simpa [Matrix.reindex_apply] using congr_fun (congr_fun (hEBlock 1 0) i) j
-    · simpa [Matrix.reindex_apply] using congr_fun (congr_fun (hEBlock 1 1) i) j
+    · convert congr_fun (congr_fun (hEBlock 0 0) i) j using 1 <;>
+        simp [Matrix.reindex_apply, e]
+    · convert congr_fun (congr_fun (hEBlock 0 1) i) j using 1 <;>
+        simp [Matrix.reindex_apply, e]
+    · convert congr_fun (congr_fun (hEBlock 1 0) i) j using 1 <;>
+        simp [Matrix.reindex_apply, e]
+    · convert congr_fun (congr_fun (hEBlock 1 1) i) j using 1 <;>
+        simp [Matrix.reindex_apply, e]
   have hBlockPsD :
       (Matrix.fromBlocks (E (Xᴴ * X)) ((E X)ᴴ)
         (((E X)ᴴ)ᴴ) (1 : Matrix n n ℂ)).PosSemidef := by
@@ -423,19 +428,21 @@ theorem kadison_schwarz_2positive
     (Matrix.PosDef.fromBlocks₂₂ (A := E (Xᴴ * X)) (B := (E X)ᴴ)
       (D := (1 : Matrix n n ℂ)) Matrix.PosDef.one).1 hBlockPsD
 
-/-- The existing Kraus-based Kadison-Schwarz inequality.
+/-- The Kraus-based Kadison-Schwarz inequality as a consequence of 2-positivity.
 
-This theorem still delegates to the direct proof in `KadisonSchwarz.lean`.
-A follow-up cleanup can reroute it through
-`IsCPMap → Is2PositiveMap → kadison_schwarz_2positive`
-to make the logical subsumption explicit. -/
+The Kraus map is completely positive, hence 2-positive, and the unital Kraus
+condition is exactly unitality of the associated linear map. -/
 theorem kadison_schwarz_from_2positive
     {d D : ℕ}
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (h_unital : KadisonSchwarz.IsUnitalKraus K)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     (KadisonSchwarz.krausMap K (Xᴴ * X) -
-      (KadisonSchwarz.krausMap K X)ᴴ * KadisonSchwarz.krausMap K X).PosSemidef :=
-  -- TODO (#22): reroute through kadison_schwarz_2positive via
-  -- IsCPMap → Is2PositiveMap → kadison_schwarz_2positive.
-  KadisonSchwarz.kadison_schwarz K h_unital X
+      (KadisonSchwarz.krausMap K X)ᴴ * KadisonSchwarz.krausMap K X).PosSemidef := by
+  let E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ := Kraus.mapLM K
+  have hCP : IsCPMap E := ⟨d, K, fun _ => rfl⟩
+  have hUnital : KadisonSchwarz.IsUnitalMap E := by
+    simpa [E, KadisonSchwarz.IsUnitalMap, Kraus.map, KadisonSchwarz.IsUnitalKraus,
+      Matrix.mul_one] using h_unital
+  simpa [E, Kraus.map, KadisonSchwarz.krausMap] using
+    kadison_schwarz_2positive E hCP.is2PositiveMap hUnital X

@@ -1,0 +1,560 @@
+%% =========================================================
+%% Chapter: Quantum Entropy
+%% Von Neumann entropy, strong subadditivity, and mutual information.
+%% =========================================================
+
+\chapter{Quantum Entropy}\label{ch:entropy}
+
+This chapter develops the von Neumann entropy and its basic properties for
+finite-dimensional quantum systems.
+
+\section{Von Neumann entropy}
+
+\begin{definition}[Von Neumann entropy]\label{def:von_neumann_entropy}
+    \lean{vonNeumannEntropy}
+    \leanok
+    For a Hermitian matrix $\rho \in \MN{D}$ with eigenvalues
+    $\lambda_0, \ldots, \lambda_{D-1}$, the \emph{von Neumann entropy} is
+    \[
+        S(\rho) = -\sum_{i=0}^{D-1} \lambda_i \log \lambda_i,
+    \]
+    where $0 \log 0 := 0$.
+\end{definition}
+
+\begin{lemma}[Entropy respects equality]\label{lem:entropy_congr}
+    \lean{vonNeumannEntropy_congr}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    If two Hermitian matrices are equal, then their von Neumann entropies are
+    equal.
+\end{lemma}
+
+\begin{proof}\leanok
+    Substitute the equality of the matrices in the defining eigenvalue sum.
+\end{proof}
+
+\begin{lemma}[Entropy of the zero matrix]\label{lem:entropy_zero}
+    \lean{vonNeumannEntropy_zero}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    The zero matrix has zero von Neumann entropy:
+    \[
+        S(0)=0.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    All eigenvalues of the zero matrix are zero, and $0\log 0=0$.
+\end{proof}
+
+\begin{theorem}[Entropy is non-negative]\label{thm:entropy_nonneg}
+    \lean{vonNeumannEntropy_nonneg}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    For any density matrix $\rho$, $S(\rho) \ge 0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Each eigenvalue $\lambda_i$ of a density matrix satisfies
+    $0 \le \lambda_i \le 1$, and $-x \log x \ge 0$ on $[0, 1]$.
+    \uses{thm:density_eigenvalues_le_one}
+\end{proof}
+
+\begin{lemma}[Eigenvalue sum]\label{lem:density_eigenvalues_sum}
+    \lean{densityMatrices_eigenvalues_sum_one}
+    \leanok
+    The eigenvalues of a density matrix sum to $1$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Follows from $\tr(\rho) = \sum_i \lambda_i = 1$.
+\end{proof}
+
+\begin{theorem}[Eigenvalue bound]\label{thm:density_eigenvalues_le_one}
+    \lean{densityMatrices_eigenvalues_le_one}
+    \leanok
+    \uses{lem:density_eigenvalues_sum}
+    Each eigenvalue of a density matrix lies in $[0, 1]$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Non-negativity comes from positive semidefiniteness. The upper bound
+    follows because the eigenvalues are non-negative and sum to $1$.
+\end{proof}
+
+\begin{theorem}[Entropy upper bound]\label{thm:entropy_le_log_dim}
+    \lean{vonNeumannEntropy_le_log_dim}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    For a density matrix $\rho \in \MN{D}$ with $D \ge 1$,
+    \[
+        S(\rho) \le \log D.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    By Jensen's inequality applied to the concave function $-x \log x$,
+    the entropy is maximized when all eigenvalues equal $1/D$.
+    \uses{lem:density_eigenvalues_sum, thm:density_eigenvalues_le_one}
+\end{proof}
+
+\begin{theorem}[Entropy bounded by log of rank]\label{thm:entropy_le_log_rank}
+    \lean{vonNeumannEntropy_le_log_rank}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    For a density matrix $\rho$ of rank $r$,
+    \[
+        S(\rho) \le \log r.
+    \]
+    This refines the dimension bound: only the nonzero eigenvalues contribute to
+    the entropy, and there are exactly $r$ of them.
+\end{theorem}
+
+\begin{proof}\leanok
+    The entropy is the $-x\log x$ sum over all eigenvalues; the $D-r$ zero
+    eigenvalues contribute nothing. Jensen's inequality applied to $-x\log x$
+    over the $r$ nonzero eigenvalues, with uniform weights $1/r$, gives
+    $S(\rho) \le \log r$, the maximum attained when each nonzero eigenvalue
+    equals $1/r$. The rank equals the number of nonzero eigenvalues of the
+    Hermitian matrix $\rho$.
+    \uses{lem:density_eigenvalues_sum, thm:density_eigenvalues_le_one}
+\end{proof}
+
+\begin{lemma}[Entropy from characteristic polynomial roots]
+    \label{lem:entropy_charpoly_roots}
+    \lean{vonNeumannEntropy_eq_charpoly_roots}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    The von Neumann entropy of a Hermitian matrix is the $-x\log x$ sum over the
+    real parts of the roots of its characteristic polynomial $\chi_\rho$:
+    \[
+        S(\rho) = \sum_{\lambda \in \mathrm{roots}(\chi_\rho)}
+        \bigl({-}\operatorname{Re}(\lambda)\, \log \operatorname{Re}(\lambda)\bigr).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    The eigenvalues of a Hermitian matrix are exactly the roots of its
+    characteristic polynomial, counted with multiplicity, so the eigenvalue sum
+    defining $S(\rho)$ equals the displayed sum over roots.
+\end{proof}
+
+\begin{theorem}[Trace-logarithm form of the entropy]
+    \label{thm:entropy_eq_neg_trace_mul_log}
+    \lean{vonNeumannEntropy_eq_neg_trace_mul_log}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    Let $\rho$ be a Hermitian matrix and let $\log\rho$ be its logarithm defined
+    through the functional calculus. Then
+    \[
+        S(\rho) = -\operatorname{Re}\bigl(\operatorname{tr}(\rho\,\log\rho)\bigr).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:von_neumann_entropy}
+    A Hermitian matrix and its logarithm are simultaneously diagonalized by a
+    unitary $U$ with $\rho = U\operatorname{diag}(\lambda_i)U^*$, so
+    \[
+        \operatorname{tr}(\rho\,\log\rho)
+            = \operatorname{tr}\!\bigl(U\operatorname{diag}(\lambda_i\log\lambda_i)U^*\bigr)
+            = \sum_i \lambda_i\log\lambda_i.
+    \]
+    Its negative is $\sum_i\bigl({-}\lambda_i\log\lambda_i\bigr) = S(\rho)$. Zero
+    eigenvalues contribute nothing under the convention $0\log 0 = 0$, so no
+    full-support assumption is required.
+\end{proof}
+
+\begin{remark}
+    The logarithm is the totalized real logarithm, with
+    $\log x = \log\lvert x\rvert$ and $\log 0 = 0$; both sides of the identity
+    use it on every eigenvalue, so the equality holds for an arbitrary Hermitian
+    matrix. It coincides with the physical entropy $-\operatorname{tr}(\rho\log\rho)$
+    precisely when $\rho$ is positive semidefinite. In that case (a density
+    matrix $\rho$, positive semidefinite with unit trace) the eigenvalues
+    $\lambda_i$ are nonnegative, $\rho\,\log\rho$ is Hermitian with real trace,
+    and the real-part extraction is superfluous: the identity reduces to the
+    standard expression $S(\rho) = -\operatorname{tr}(\rho\log\rho)$.
+\end{remark}
+
+\begin{theorem}[Entropy is invariant under reindexing]
+    \label{thm:entropy_submatrix_equiv}
+    \lean{vonNeumannEntropy_submatrix_equiv}
+    \leanok
+    \uses{def:von_neumann_entropy, lem:entropy_charpoly_roots}
+    Let $\rho$ be a Hermitian matrix indexed by a finite set $J$, and let
+    $e : I \to J$ be a bijection from a finite set $I$. The reindexed matrix on
+    $I$ with entries $\rho_{e(i)\,e(j)}$ has the same von Neumann entropy as
+    $\rho$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:entropy_charpoly_roots}
+    By Lemma~\ref{lem:entropy_charpoly_roots} the entropy depends only on the
+    characteristic polynomial. Reindexing conjugates $\rho$ by a permutation
+    matrix, so
+    \[
+        \chi_{(\rho_{e(i)\,e(j)})} = \chi_\rho,
+    \]
+    and the entropies coincide.
+\end{proof}
+
+\begin{lemma}[Cyclic invariance of the charpoly-root entropy sum]
+    \label{lem:charpoly_root_entropy_cyclic_swap}
+    \lean{charpoly_roots_negMulLog_re_mul_comm}
+    \leanok
+    Let $A \in M_{m \times n}(\mathbb{C})$ and
+    $B \in M_{n \times m}(\mathbb{C})$. Then the charpoly-root entropy sum is
+    invariant under the cyclic swap $AB \mapsto BA$:
+    \[
+        \sum_{\lambda \in \mathrm{roots}(\chi_{AB})}
+        \bigl({-}\operatorname{Re}(\lambda)\log\operatorname{Re}(\lambda)\bigr)
+        =
+        \sum_{\mu \in \mathrm{roots}(\chi_{BA})}
+        \bigl({-}\operatorname{Re}(\mu)\log\operatorname{Re}(\mu)\bigr),
+    \]
+    with roots counted with algebraic multiplicity.
+\end{lemma}
+
+\begin{proof}\leanok
+    The rectangular characteristic-polynomial identity gives
+    \[
+        X^n \chi_{AB} = X^m \chi_{BA}.
+    \]
+    Thus the two characteristic polynomials have the same nonzero roots, with
+    multiplicity; the additional zero roots contribute nothing because
+    $0\log 0=0$.
+\end{proof}
+
+\begin{theorem}[Entropy of $AB$ equals entropy of $BA$]
+    \label{thm:entropy_mul_comm}
+    \lean{vonNeumannEntropy_mul_comm}
+    \leanok
+    \uses{lem:entropy_charpoly_roots, lem:charpoly_root_entropy_cyclic_swap}
+    For matrices $A \in M_{m \times n}(\mathbb{C})$ and
+    $B \in M_{n \times m}(\mathbb{C})$ such that $AB$ and $BA$ are Hermitian,
+    \[
+        S(AB) = S(BA).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:entropy_charpoly_roots, lem:charpoly_root_entropy_cyclic_swap}
+    By Lemma~\ref{lem:entropy_charpoly_roots}, the entropy of a Hermitian matrix
+    is its charpoly-root entropy sum. Lemma~\ref{lem:charpoly_root_entropy_cyclic_swap}
+    identifies these two sums for $AB$ and $BA$.
+\end{proof}
+
+\section{Tripartite partial traces}
+
+\begin{definition}[Partial trace over $A$]\label{def:traceA_ABC}
+    \lean{Matrix.traceA_ABC}
+    \leanok
+    For a tripartite matrix $\rho_{ABC}$ on
+    $\mathbb{C}^{d_A} \otimes \mathbb{C}^{d_B} \otimes \mathbb{C}^{d_C}$,
+    the partial trace over $A$ is
+    \[
+        (\tr_A \rho_{ABC})_{(b_1, c_1)(b_2, c_2)}
+        = \sum_{a=0}^{d_A - 1} (\rho_{ABC})_{(a, b_1, c_1)(a, b_2, c_2)}.
+    \]
+\end{definition}
+
+\begin{definition}[Partial trace over $C$]\label{def:traceC_ABC}
+    \lean{Matrix.traceC_ABC}
+    \leanok
+    The partial trace over $C$:
+    \[
+        (\tr_C \rho_{ABC})_{(a_1, b_1)(a_2, b_2)}
+        = \sum_{c=0}^{d_C - 1} (\rho_{ABC})_{(a_1, b_1, c)(a_2, b_2, c)}.
+    \]
+\end{definition}
+
+\begin{definition}[Partial trace over $AC$]\label{def:traceAC_ABC}
+    \lean{Matrix.traceAC_ABC}
+    \leanok
+    The partial trace over $A$ and $C$:
+    \[
+        (\tr_{AC} \rho_{ABC})_{b_1 b_2}
+        = \sum_{a=0}^{d_A - 1} \sum_{c=0}^{d_C - 1}
+        (\rho_{ABC})_{(a, b_1, c)(a, b_2, c)}.
+    \]
+\end{definition}
+
+\begin{lemma}[Partial trace preserves Hermiticity]\label{lem:trace_isHermitian}
+    \lean{Matrix.traceA_ABC_isHermitian}
+    \leanok
+    \uses{def:traceA_ABC, def:traceC_ABC, def:traceAC_ABC}
+    If $\rho_{ABC}$ is Hermitian, then $\tr_A(\rho_{ABC})$,
+    $\tr_C(\rho_{ABC})$, and $\tr_{AC}(\rho_{ABC})$ are all Hermitian.
+    The same holds for bipartite partial traces $\tr_A(\rho_{AB})$ and
+    $\tr_B(\rho_{AB})$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Follows from $\overline{\rho_{ji}} = \rho_{ij}$ applied entry-wise
+    inside the summation defining each partial trace.
+\end{proof}
+
+\section{Strong subadditivity}
+
+\begin{theorem}[Strong subadditivity]\label{thm:strong_subadditivity}
+    \lean{strong_subadditivity}
+    \notready
+    \uses{def:von_neumann_entropy, def:traceA_ABC, def:traceC_ABC, def:traceAC_ABC}
+    For a tripartite density matrix $\rho_{ABC}$,
+    \[
+        S(\rho_{ABC}) + S(\rho_B)
+        \le S(\rho_{AB}) + S(\rho_{BC}).
+    \]
+\end{theorem}
+
+\begin{definition}[SSA equality]\label{def:ssa_equality}
+    \lean{IsSSAEquality}
+    \leanok
+    \uses{def:von_neumann_entropy, def:traceA_ABC, def:traceC_ABC, def:traceAC_ABC}
+    A tripartite density matrix $\rho_{ABC}$ satisfies
+    \emph{SSA equality} if
+    \[
+        S(\rho_{ABC}) + S(\rho_B) = S(\rho_{AB}) + S(\rho_{BC}).
+    \]
+\end{definition}
+
+\begin{definition}[Quantum Markov decomposition]\label{def:hayashi_markov_decomposition}
+    \lean{HayashiMarkovDecomposition}
+    \leanok
+    \uses{def:ssa_equality}
+    A \emph{Hayashi Markov decomposition} of a tripartite state $\rho_{ABC}$
+    consists of a finite direct-sum decomposition
+    \[
+        H_B \cong \bigoplus_j H_{B_j^L} \otimes H_{B_j^R},
+    \]
+    together with a unitary change of basis on $B$, a probability vector
+    $(p_j)_j$, and density matrices $\rho_{A B_j^L}$ and $\rho_{B_j^R C}$ such
+    that, in the adapted basis, the state becomes
+    \[
+        \bigoplus_j p_j\, \rho_{A B_j^L} \otimes \rho_{B_j^R C}.
+    \]
+    The terminology follows Hayashi's presentation of quantum Markov
+    structure~\cite{Hayashi2006QuantumInformation}; the block decomposition
+    used by the MPDO argument is the structure theorem of
+    \cite{Hayden2004Structure}.
+\end{definition}
+
+\begin{theorem}[Hayashi SSA-equality characterization]
+    \label{thm:hayashi_ssa_equality_characterization}
+    \lean{hayashi_ssa_equality_characterization}
+    \notready
+    \uses{def:ssa_equality, def:hayashi_markov_decomposition}
+    For a tripartite density matrix $\rho_{ABC}$,
+    \[
+        S(\rho_{ABC}) + S(\rho_B) = S(\rho_{AB}) + S(\rho_{BC})
+    \]
+    holds if and only if $\rho_{ABC}$ admits a quantum Markov decomposition on
+    the middle subsystem $B$.
+
+    This equality criterion is cited here as an input for the later MPDO arguments.
+    It is the equality criterion needed by Appendix~C of arXiv:1606.00608.
+    The equality conditions are reviewed in
+    \cite{Hayashi2006QuantumInformation, Ruskai2002Inequalities};
+    the structural block-decomposition formulation used for MPDOs appears in
+    \cite{Hayden2004Structure}.
+\end{theorem}
+
+\section{Mutual information}
+
+\begin{definition}[Mutual information]\label{def:mutual_information}
+    \lean{mutualInformation}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    The \emph{quantum mutual information} of a bipartite state
+    $\rho_{AB}$ is
+    \[
+        I(A{:}B) = S(\rho_A) + S(\rho_B) - S(\rho_{AB}).
+    \]
+\end{definition}
+
+\begin{theorem}[Mutual information is non-negative]\label{thm:mutual_information_nonneg}
+    \lean{Entropy.mutualInformation_ssa_trivial_B_nonneg}
+    \leanok
+    \uses{def:mutual_information, thm:strong_subadditivity}
+    For any bipartite density matrix $\rho_{AB}$,
+    $I(A{:}B) \ge 0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:strong_subadditivity}
+    Apply strong subadditivity (Theorem~\ref{thm:strong_subadditivity})
+    with trivial $B$ (one-dimensional middle system).
+    The SSA inequality $S(\rho_{ABC}) + S(\rho_B) \le S(\rho_{AB}) + S(\rho_{BC})$
+    reduces to subadditivity $S(\rho_{AC}) \le S(\rho_A) + S(\rho_C)$,
+    which gives $I(A{:}C) \ge 0$.
+\end{proof}
+
+\section{Entropy formulations}
+
+This section states the entropy formulations used later in the
+development: von Neumann entropy, strong subadditivity, quantum Markov
+decomposition, and mutual information. These statements are cited from the
+standard entropy literature and supply the entropy-theoretic input for the
+later MPDO arguments.
+
+\begin{definition}[Entropy formulation of von Neumann entropy]\label{def:entropy_von_neumann_entropy}
+    \lean{Entropy.vonNeumannEntropy}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    This formulation has the same value
+    $S(\rho) = -\sum_i \lambda_i \log \lambda_i$ as in
+    Definition~\ref{def:von_neumann_entropy}.
+\end{definition}
+
+\begin{theorem}[Entropy formulation of strong subadditivity]\label{thm:entropy_strong_subadditivity}
+    \lean{Entropy.strongSubadditivity}
+    \leanok
+    \uses{def:entropy_von_neumann_entropy, def:traceA_ABC, def:traceC_ABC, def:traceAC_ABC}
+    For any tripartite density matrix $\rho_{ABC}$ on
+    $A \otimes B \otimes C$,
+    \[
+        S(\rho_{ABC}) + S(\rho_B) \le S(\rho_{AB}) + S(\rho_{BC}).
+    \]
+    This formulation introduces no new axiom: it is the same
+    strong-subadditivity statement as
+    Theorem~\ref{thm:strong_subadditivity}. The underlying axiom's
+    proof in \cite{LiebRuskai1973Proof} is deferred to the umbrella entropy
+    issue.
+\end{theorem}
+
+\begin{definition}[Entropy formulation of quantum Markov decomposition]
+    \label{def:entropy_quantum_markov_decomposition}
+    \lean{Entropy.QuantumMarkovDecomposition}
+    \leanok
+    \uses{def:hayashi_markov_decomposition}
+    This is the entropy formulation of the Hayashi Markov
+    decomposition from Definition~\ref{def:hayashi_markov_decomposition}.
+\end{definition}
+
+\begin{theorem}[SSA equality iff quantum Markov decomposition]
+    \label{thm:entropy_ssa_equality_quantum_markov}
+    \lean{Entropy.ssaEquality_iff_exists_quantumMarkovDecomposition}
+    \leanok
+    \uses{def:ssa_equality, def:entropy_quantum_markov_decomposition,
+        thm:hayashi_ssa_equality_characterization}
+    For any tripartite density matrix $\rho_{ABC}$, equality in strong
+    subadditivity holds if and only if $\rho_{ABC}$ admits a quantum
+    Markov decomposition on the middle subsystem $B$.
+
+    This formulation introduces no new axiom: it is the same equality
+    criterion as Theorem~\ref{thm:hayashi_ssa_equality_characterization}.
+\end{theorem}
+
+\begin{definition}[Entropy formulation of mutual information]\label{def:entropy_mutual_information}
+    \lean{Entropy.mutualInformation}
+    \leanok
+    \uses{def:entropy_von_neumann_entropy}
+    This formulation has the same value
+    $I(A{:}B) = S(\rho_A) + S(\rho_B) - S(\rho_{AB})$
+    as in Definition~\ref{def:mutual_information}.
+\end{definition}
+
+\begin{theorem}[Subadditivity from trivial-middle SSA]\label{thm:entropy_subadditivity_trivial_B}
+    \lean{Entropy.subadditivity_ssa_trivial_B}
+    \leanok
+    \uses{def:entropy_von_neumann_entropy, def:traceA_ABC, def:traceC_ABC}
+    For a tripartite density matrix $\rho_{ABC}$ with
+    $\dim B = 1$,
+    \[
+        S(\rho_{ABC}) \le S(\rho_{AB}) + S(\rho_{BC}).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply Theorem~\ref{thm:entropy_strong_subadditivity} with
+    one-dimensional middle subsystem. The reduced middle state has
+    trace $1$ by Theorem~\ref{thm:trace_traceac_abc}, hence its entropy
+    vanishes by Theorem~\ref{thm:entropy_fin_one_zero}.
+    \uses{thm:entropy_strong_subadditivity, thm:trace_traceac_abc, thm:entropy_fin_one_zero}
+\end{proof}
+
+\section{Mutual information: monotonicity and area-law bound}
+
+The two inequalities below are the downstream MPDO-facing consequences
+of the entropy inequalities in this chapter. The monotonicity inequality
+is the strong-subadditivity content underlying the MPDO mutual-information
+monotonicity $I_L \le I_{L+1}$
+(arXiv:1606.00608, Proposition~C.1); the elementary area-law bound is
+the single-site entropy bound underlying the MPDO area-law bound
+$I_L \le 4\log D$ (arXiv:1606.00608, cited from the Wolf area-law
+bound). Both inequalities follow directly from strong subadditivity
+(taken as an axiom) and the single-system $S(\rho) \le \log D$ bound; neither
+introduces a new axiom.
+
+\begin{theorem}[Entropy nonnegativity for finite index sets]
+    \label{thm:entropy_nonneg_finite_index}
+    \lean{Entropy.vonNeumannEntropy_nonneg_of_posSemidef_trace_one}
+    \leanok
+    \uses{def:entropy_von_neumann_entropy}
+    For any PSD Hermitian matrix $\rho$ with $\tr(\rho) = 1$ on an
+    arbitrary finite index set, $S(\rho) \ge 0$. This is the
+    analog of Theorem~\ref{thm:entropy_nonneg} for arbitrary finite
+    index sets: it does
+    not require the index set to be $\Fin{D}$, so it applies to
+    bipartite density matrices on
+    $\mathbb{C}^{d_A} \otimes \mathbb{C}^{d_B}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The eigenvalues of a PSD matrix are non-negative, and eigenvalues
+    of a trace-$1$ Hermitian matrix with non-negative eigenvalues are
+    bounded above by $1$ (each single eigenvalue is at most the total
+    sum). Apply $x\log x \le 0$ on $[0, 1]$ pointwise and sum.
+\end{proof}
+
+\begin{theorem}[Mutual information is monotone under enlargement]
+    \label{thm:mutual_information_monotone_tripartite}
+    \lean{Entropy.mutualInformation_monotone_tripartite}
+    \leanok
+    \uses{def:entropy_mutual_information, def:entropy_von_neumann_entropy,
+        def:traceA_ABC, def:traceC_ABC, def:traceAC_ABC,
+        thm:entropy_strong_subadditivity}
+    For any tripartite density matrix $\rho_{ABC}$ on
+    $A \otimes B \otimes C$,
+    \[
+        I(A{:}B)_{\tr_C \rho_{ABC}} \le  I(A{:}BC)_{\rho_{ABC}},
+    \]
+    where the left-hand side is the bipartite mutual information of
+    the reduced state $\rho_{AB} = \tr_C(\rho_{ABC})$ and the
+    right-hand side is evaluated by expanding
+    $I(A{:}BC) = S(\rho_A) + S(\rho_{BC}) - S(\rho_{ABC})$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:entropy_strong_subadditivity}
+    Expanding both sides in entropy form and cancelling the common
+    $S(\rho_A)$ term, the inequality reduces to strong subadditivity
+    $S(\rho_{ABC}) + S(\rho_B) \le S(\rho_{AB}) + S(\rho_{BC})$. The
+    bipartite $B$-reduced state of $\rho_{AB}$ matches the tripartite
+    $B$-reduced state $\tr_{AC}(\rho_{ABC})$, ensuring the $S(\rho_B)$
+    term is the one supplied by Theorem~\ref{thm:entropy_strong_subadditivity}.
+\end{proof}
+
+\begin{theorem}[Elementary area-law bound on mutual information]
+    \label{thm:mutual_information_le_log_dim_add_log_dim}
+    \lean{Entropy.mutualInformation_le_log_dim_add_log_dim}
+    \leanok
+    \uses{def:entropy_mutual_information, thm:entropy_le_log_dim,
+        thm:entropy_nonneg_finite_index}
+    For a bipartite density matrix $\rho_{AB}$ on
+    $\mathbb{C}^{d_A} \otimes \mathbb{C}^{d_B}$ with $d_A, d_B \ge 1$
+    whose single-system reduced states are obtained by partial trace,
+    \[
+        I(A{:}B) \le  \log d_A + \log d_B.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:entropy_le_log_dim, thm:entropy_nonneg_finite_index}
+    The reduced states are density matrices because partial trace preserves
+    positivity and trace. Combine $S(\rho_A) \le \log d_A$ and
+    $S(\rho_B) \le \log d_B$ (Theorem~\ref{thm:entropy_le_log_dim})
+    with $S(\rho_{AB}) \ge 0$
+    (Theorem~\ref{thm:entropy_nonneg_finite_index}).
+\end{proof}

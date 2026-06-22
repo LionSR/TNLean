@@ -28,6 +28,8 @@ Notes/Wolf/build/
 
 # Compiled PDFs (regenerable)
 presentation*.pdf
+docs/paper-gaps/*.pdf
+docs/paper-gaps/*.dvi
 
 # OS junk
 .DS_Store
@@ -57,6 +59,7 @@ blueprint/web/
 blueprint/print/
 blueprint/lean_decls
 blueprint/src/web.paux
+blueprint/src/.tn_svg_cache/
 blueprint/src/*.xdv
 blueprint/src/ch13_more-*.png
 blueprint/src/Packages/__pycache__/
@@ -75,3 +78,7 @@ External/**/lake-manifest.json
 
 MeetingNotes/
 .worktrees/
+scripts/__pycache__/
+
+Draft/
+Draft_OLD/

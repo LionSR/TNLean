@@ -1,0 +1,63 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\input{command}
+
+\title{Phase-Normalized Weights in the Normal-Canonical Implication to Irreducible Form}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{The assertion}
+
+The periodic-MPS paper states that normal tensors are precisely periodic
+tensors of period \(1\), and that when all blocks in the irreducible
+decomposition are normal the decomposition is the canonical form in the sense of
+Ci15.\footnote{\cite[Section~II]{DeLasCuevas2017Irreducible}; the local source
+passage is arXiv:1708.00029, lines 258--271.}
+In the same paragraph the irreducible-form weights are fixed by the convention
+\(\mu_j>0\).
+
+The blueprint records the corresponding implication: a normal canonical block family
+assembles to an irreducible-form tensor whose periods are all equal to \(1\).
+
+\section{The formal statements}
+
+The formal predicate for irreducible form records the paper's positive-weight
+convention: \(\operatorname{Re}\mu_j>0\) and \(\operatorname{Im}\mu_j=0\).
+The formal predicate for normal canonical block hypotheses, inherited from the
+non-periodic canonical-form formulation, assumes only that the complex weights
+are nonzero and ordered by modulus.
+
+The paper introduces a minimal non-repeated basis of periodic tensors later in
+Section~II. That basis condition is separate from the irreducible-form
+definition considered here.
+
+The formalization now proves the phase-normalized construction.  From a normal
+canonical block family with nonzero complex weights \(\mu_j\), it replaces
+\(\mu_j\) by \(|\mu_j|\) and \(A_j\) by \((\mu_j/|\mu_j|)A_j\).  The assembled
+tensor has the same matrix-product-vector family, the irreducible-form weights
+are positive real numbers, and all periods are \(1\).\footnote{Formal
+declarations:
+\leanid{MPSTensor.toIsIrreducibleFormOfPhaseNormalized} and
+\leanid{MPSTensor.toIsIrreducibleFormOfPhaseNormalized_period_eq_one} in
+\doclink{TNLean/MPS/Periodic/NormalCanonicalPeriodOne.lean}.}
+
+\section{Conclusion}
+
+This note is now a record of the resolved discrepancy.  The paper's
+irreducible-form convention uses positive weights, and the formalization
+supplies the phase-normalization step needed to pass from the local
+normal-canonical predicate, whose weights are nonzero complex numbers, to that
+positive-weight convention without changing the represented
+matrix-product-vector family.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

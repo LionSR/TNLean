@@ -7,7 +7,7 @@ import TNLean.Channel.FixedPoint.ConditionalExpectation
 import TNLean.Channel.Irreducible.Similarity
 
 /-!
-# Wolf Chapter 6 wrappers for key propositions/theorems
+# Wolf Chapter 6: numbered theorem statements
 
 This module provides stable theorem names that mirror Wolf's numbering for
 results already formalized elsewhere:
@@ -25,7 +25,7 @@ namespace Kraus
 variable {d D : ℕ}
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-/-- Wolf Proposition 6.6 wrapper: full similarity preserves irreducibility. -/
+/-- Wolf Proposition 6.6: full similarity preserves irreducibility. -/
 theorem wolf_prop_6_6
     [NeZero D]
     (E : Mat →ₗ[ℂ] Mat)
@@ -35,7 +35,7 @@ theorem wolf_prop_6_6
     IsIrreducibleMap ((c : ℂ) • similarityMap (D := D) C E) :=
   isIrreducibleMap_full_similarity (D := D) hc hC hIrr
 
-/-- Wolf Theorem 6.15 wrapper: scalar fixed-point conditional expectation. -/
+/-- Wolf Theorem 6.15: scalar fixed-point conditional expectation. -/
 theorem wolf_theorem_6_15_scalar
     [NeZero D]
     (K : Fin d → Mat) (h_tp : IsTP K)
@@ -53,7 +53,7 @@ namespace IsChannel
 
 variable {d : ℕ}
 
-/-- Wolf Proposition 6.8 wrapper: Hermitian fixed points decompose into
+/-- Wolf Proposition 6.8: Hermitian fixed points decompose into
 positive-semidefinite fixed points. -/
 theorem wolf_prop_6_8
     [NeZero d]

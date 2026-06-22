@@ -6,68 +6,71 @@ import Mathlib.Data.Complex.Basic
 import Mathlib.Data.Matrix.Basic
 
 /-!
-# Periodic Z-gauge helpers
+# Periodic Z-gauge construction
 
 This file contains the standalone Z-gauge matrix constructions used in the
 periodic equal-case fundamental theorem of arXiv:1708.00029. The declarations
-were moved out of `MPS/FundamentalTheorem/SectorDecomposition.lean` to complete
-the Gemma split between the general fundamental-theorem stack and the periodic
-§3–§4 infrastructure.
+are separated from the non-periodic fundamental theorem theory to isolate the
+Section 3–Section 4 periodic constructions.
+
+The generic diagonal construction takes two matched multiplicity lists `μ` and `ν`
+and produces a diagonal matrix satisfying `Z * diag(ν) = diag(μ)`. In the source
+proof, this orientation is obtained by taking `ν` to be the `R_j` multiplicity
+entries and `μ` to be the correspondingly ordered `S_j` multiplicity entries;
+the opposite order gives the inverse gauge.
 -/
 
 open scoped Matrix
 
 namespace MPSTensor
 
-/-- Entrywise ratio used in the periodic Z-gauge construction. -/
+/-- Entrywise ratio used in the periodic Z-gauge construction. With the source-paper
+orientation, `ν` is the old multiplicity entry and `μ` is the matched target entry. -/
 noncomputable def zGaugeEntry (μ ν : ℂ) : ℂ := μ / ν
 
 /-- If `μ^m = ν^m` and `ν ≠ 0`, then `(μ/ν)^m = 1`. -/
 theorem zGaugeEntry_pow_eq_one_of_pow_eq
     {m : ℕ} {μ ν : ℂ} (hpow : μ ^ m = ν ^ m) (hν : ν ≠ 0) :
     (zGaugeEntry μ ν) ^ m = 1 := by
-  dsimp [zGaugeEntry]
-  rw [div_pow, hpow, div_self]
-  exact pow_ne_zero m hν
+  simp only [zGaugeEntry, div_pow, hpow, div_self (pow_ne_zero m hν)]
 
-/-- The ratio defining the Z-gauge rescales `ν` back to `μ`. -/
+/-- The ratio defining the Z-gauge rescales the denominator entry `ν` to the
+matched target entry `μ`. -/
 theorem zGaugeEntry_mul_right {μ ν : ℂ} (hν : ν ≠ 0) :
     zGaugeEntry μ ν * ν = μ := by
-  dsimp [zGaugeEntry]
-  rw [div_eq_mul_inv, mul_assoc, inv_mul_cancel₀ hν, mul_one]
+  unfold zGaugeEntry
+  exact div_mul_cancel₀ μ hν
 
 section ZGaugeDiagonal
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
-/-- Diagonal matrix implementing the periodic Z-gauge from a matched list of weights. -/
+/-- Diagonal matrix implementing the periodic Z-gauge from matched multiplicity entries. -/
 noncomputable def zGaugeDiagonal (μ ν : n → ℂ) : Matrix n n ℂ :=
   Matrix.diagonal (fun i => zGaugeEntry (μ i) (ν i))
 
-/-- If matched weights have equal `m`-th powers and the denominator weights are nonzero, then
-the associated Z-gauge diagonal satisfies `Z^m = 1`. -/
+/-- If matched multiplicity entries have equal `m`-th powers and the denominator entries
+are nonzero, then the associated Z-gauge diagonal satisfies `Z^m = 1`. -/
 theorem zGaugeDiagonal_pow_eq_one
     (m : ℕ) (μ ν : n → ℂ)
     (hpow : ∀ i, μ i ^ m = ν i ^ m)
     (hν : ∀ i, ν i ≠ 0) :
     zGaugeDiagonal (n := n) μ ν ^ m = 1 := by
-  ext i j
-  by_cases hij : i = j
-  · subst hij
-    simp [zGaugeDiagonal, Matrix.diagonal_pow,
-      zGaugeEntry_pow_eq_one_of_pow_eq (hpow i) (hν i)]
-  · simp [zGaugeDiagonal, Matrix.diagonal_pow, hij]
+  simp only [zGaugeDiagonal, Matrix.diagonal_pow, Pi.pow_def]
+  congr 1; ext i
+  exact zGaugeEntry_pow_eq_one_of_pow_eq (hpow i) (hν i)
 
-/-- Pointwise form of `Z * diag(ν) = diag(μ)` for the periodic Z-gauge. -/
+/-- Pointwise form of `Z * diag(ν) = diag(μ)` for the periodic Z-gauge.
+
+For the paper's equal-case orientation, instantiate `ν` with the source-side
+`R_j` entries and `μ` with the matched target-side `S_j` entries. -/
 theorem zGaugeDiagonal_mul_diagonal
     (μ ν : n → ℂ)
     (hν : ∀ i, ν i ≠ 0) :
     zGaugeDiagonal (n := n) μ ν * Matrix.diagonal ν = Matrix.diagonal μ := by
-  ext i j
-  by_cases hij : i = j
-  · subst hij
-    simp [zGaugeDiagonal, zGaugeEntry_mul_right (hν i)]
-  · simp [zGaugeDiagonal, hij]
+  simp only [zGaugeDiagonal, Matrix.diagonal_mul_diagonal]
+  congr 1; funext i
+  exact zGaugeEntry_mul_right (hν i)
 
 end ZGaugeDiagonal
 

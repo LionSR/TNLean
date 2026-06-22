@@ -11,7 +11,7 @@ import TNLean.Channel.KrausFreedom
 # Pure-state renormalization fixed point (RFP) — definitions
 
 This file defines the notion of a **renormalization fixed point** (RFP) for a
-pure MPS tensor, following arXiv:1606.00608 §3.1
+pure MPS tensor, following arXiv:1606.00608 Section 3.1
 (Cirac–Pérez-García–Schuch–Verstraete).
 
 The key definition is `IsRFP A`, which says that the completely positive map
@@ -31,11 +31,6 @@ transfer map is idempotent as a linear map, i.e. `E_A ∘ E_A = E_A`.
 See arXiv:1606.00608, Definition 3.2. -/
 def IsRFP (A : MPSTensor d D) : Prop :=
   transferMap A ∘ₗ transferMap A = transferMap A
-
-/-- The idempotence equation packaged as a projection lemma. -/
-theorem IsRFP.idempotent {A : MPSTensor d D} (h : IsRFP A) :
-    transferMap A ∘ₗ transferMap A = transferMap A :=
-  h
 
 /-- The backward direction of the RFP ↔ Kraus-isometry characterisation
 (arXiv:1606.00608, Theorem 3.1): if the Kraus operators of an MPS tensor
@@ -109,7 +104,7 @@ rectangular isometry `V` with `V†V = 1`.
 
 **Backward direction**: proved as `isRFP_of_kraus_isometry`.
 
-See arXiv:1606.00608, Theorem 3.1 and Wolf Thm 2.1 item 4. -/
+See arXiv:1606.00608, Theorem 3.1 and Wolf Theorem 2.1 item 4. -/
 theorem isRFP_iff_kraus_isometry (A : MPSTensor d D) :
     IsRFP A ↔
       ∃ V : Matrix (Fin d × Fin d) (Fin d) ℂ,
@@ -137,7 +132,7 @@ theorem isRFP_iff_kraus_isometry (A : MPSTensor d D) :
       simp_rw [Finset.mul_sum, Finset.sum_mul]
       apply Finset.sum_congr rfl; intro i₂ _
       rw [Matrix.conjTranspose_mul]; simp only [Matrix.mul_assoc]
-    -- Step 2: Apply rectangular Kraus freedom (Wolf Thm 2.1 item 4).
+    -- Step 2: Apply rectangular Kraus freedom (Wolf Theorem 2.1 item 4).
     obtain ⟨V, hV_iso, hV_decomp⟩ := kraus_rectangular_freedom'
       (fun p : Fin d × Fin d => A p.1 * A p.2) A hmap
       (by simp only [Fintype.card_fin, Fintype.card_prod]; exact Nat.le_mul_self d)
@@ -145,14 +140,5 @@ theorem isRFP_iff_kraus_isometry (A : MPSTensor d D) :
   · -- Backward direction: proved as `isRFP_of_kraus_isometry`
     rintro ⟨V, hV, hprod⟩
     exact isRFP_of_kraus_isometry A V hV hprod
-
-/-- Backwards-compatible name for `isRFP_iff_kraus_isometry`. -/
-theorem isRFP_iff_kraus (A : MPSTensor d D) :
-    IsRFP A ↔
-      ∃ V : Matrix (Fin d × Fin d) (Fin d) ℂ,
-        V.conjTranspose * V = 1 ∧
-        ∀ i₁ i₂ : Fin d,
-          A i₁ * A i₂ = ∑ j : Fin d, V (i₁, i₂) j • A j :=
-  isRFP_iff_kraus_isometry A
 
 end MPSTensor

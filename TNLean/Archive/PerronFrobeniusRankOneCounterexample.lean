@@ -21,7 +21,7 @@ The standalone matrix statement
     `Matrix.IsPrimitive T → Matrix.TracePowersConstant T → HasRankOneFactorization T`
 
 corresponding to `Matrix.PrimitiveTracePowersConstantImpliesRankOne` in
-`TNLean/MPS/MPDO/SimpleLocalStructure.lean` is **false** for a general
+`TNLean/Algebra/PerronFrobenius/RankOne.lean` is **false** for a general
 primitive nonnegative real matrix. This module exhibits an explicit `3 × 3`
 nonnegative primitive matrix `T` with
 

@@ -15,7 +15,8 @@ import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
 # Peripheral eigenvalues closed under powers (fixed-point version)
 
 This file contains the preferred live formulation of peripheral-spectrum
-closure under powers.
+closure under powers, following the proof structure of Wolf Theorem 6.6
+(peripheral spectrum of irreducible Schwarz maps).
 
 Instead of assuming both unitality and trace preservation, we work with a
 unital Kraus family together with a **positive definite fixed point of the
@@ -23,11 +24,12 @@ adjoint map** (a faithful invariant state).
 
 The key new input is the weighted Kadison–Schwarz equality
 `Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint` from
-`TNLean/Channel/Schwarz/Basic.lean`.
+`TNLean/Channel/Schwarz/Basic.lean`, which corresponds to Wolf Theorem 5.3
+(the equality case of the Kadison–Schwarz inequality for peripheral
+eigenvectors).
 
-The older special-case wrapper `TNLean/Archive/PeripheralClosure.lean` is
-retained only for compatibility and is intentionally off the stable root
-import surface.
+The older special-case formulation that assumed both unitality and trace
+preservation has been removed from the maintained theorem surface.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
@@ -35,8 +37,8 @@ open Matrix Finset Complex
 
 namespace KadisonSchwarz
 
-/-- Bridge between the `KadisonSchwarz.IsUnitalKraus` and `Kraus.IsUnital` APIs.
-Both express `∑ᵢ Kᵢ Kᵢ† = I` but live in different namespaces. -/
+/-- Connection between the `KadisonSchwarz.IsUnitalKraus` and `Kraus.IsUnital`
+interfaces. Both express `∑ᵢ Kᵢ Kᵢ† = I` but live in different namespaces. -/
 theorem IsUnitalKraus.toIsUnital {d D : ℕ}
     {K : Fin d → Matrix (Fin D) (Fin D) ℂ}
     (h : IsUnitalKraus (d := d) (D := D) K) : Kraus.IsUnital K := by
@@ -74,9 +76,9 @@ theorem isUnit_peripheral_eigenvector
         = (KadisonSchwarz.krausMap (d := d) (D := D) K X)ᴴ
             * KadisonSchwarz.krausMap (d := d) (D := D) K X := by
     simpa [Kraus.map, KadisonSchwarz.krausMap] using hKS_map
-  have hμ_star_mul : star μ * μ = 1 := by
-    rw [Complex.star_def, ← Complex.normSq_eq_conj_mul_self]
-    simp [Complex.normSq_eq_norm_sq, hμ]
+  have hμ_starRingEnd_mul : ((starRingEnd ℂ) μ) * μ = 1 := by
+    simpa [Complex.normSq_eq_norm_sq, hμ] using
+      (Complex.normSq_eq_conj_mul_self (z := μ)).symm
   have hfix_kraus : KadisonSchwarz.krausMap (d := d) (D := D) K (Xᴴ * X) = Xᴴ * X := by
     calc
       KadisonSchwarz.krausMap (d := d) (D := D) K (Xᴴ * X)
@@ -86,8 +88,6 @@ theorem isUnit_peripheral_eigenvector
       _ = (star μ * μ) • (Xᴴ * X) := by
             simp [conjTranspose_smul, smul_smul, mul_comm]
       _ = Xᴴ * X := by
-            have hμ_starRingEnd_mul : ((starRingEnd ℂ) μ) * μ = 1 := by
-              simpa [Complex.star_def] using hμ_star_mul
             simp [hμ_starRingEnd_mul]
   have hfix_transfer : MPSTensor.transferMap (d := d) (D := D) K (Xᴴ * X) = Xᴴ * X := by
     simpa [MPSTensor.transferMap_apply, KadisonSchwarz.krausMap] using hfix_kraus
@@ -174,12 +174,13 @@ theorem peripheralEigenvalues_pow_mem_of_irreducible_unital_of_adjoint_fixedPoin
     refine Module.End.hasEigenvalue_of_hasEigenvector (x := X ^ n) ?_
     refine (Module.End.hasEigenvector_iff.mpr ?_)
     exact ⟨(Module.End.mem_eigenspace_iff).2 hpow_transfer, hXpow_ne⟩
-  refine ⟨hEigPow_transfer, norm_pow_eq_one_of_norm_eq_one hμ_norm n⟩
+  refine ⟨hEigPow_transfer, ?_⟩
+  simp [norm_pow, hμ_norm]
 
 /-- For irreducible unital Kraus maps with a positive definite adjoint fixed point,
 all peripheral eigenvalues are roots of unity.
 
-This is a thin wrapper around `peripheral_isRootOfUnity_of_closed_powers`. -/
+This is a direct formulation around `peripheral_isRootOfUnity_of_closed_powers`. -/
 theorem peripheral_isRootOfUnity_of_irreducible_unital_of_adjoint_fixedPoint
     {d D : ℕ} [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
@@ -200,6 +201,7 @@ theorem peripheral_isRootOfUnity_of_irreducible_unital_of_adjoint_fixedPoint
     peripheralEigenvalues_pow_mem_of_irreducible_unital_of_adjoint_fixedPoint
       (K := K) h_unital ρ hρ hfix hIrr
   exact peripheral_isRootOfUnity_of_closed_powers
-    (E := MPSTensor.transferMap (d := d) (D := D) K) hclosed μ hμ
+    (E := MPSTensor.transferMap (d := d) (D := D) K)
+    (fun ν hν n _hn => hclosed ν hν n) μ hμ
 
 end MPSTensor

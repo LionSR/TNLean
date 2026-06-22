@@ -3,13 +3,11 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 -- Keep these dependencies explicit here for readability:
--- • `TNLean.Algebra.HermitianHelpers` for shared spectral decomposition helpers
--- • `TNLean.Channel.Basic` for the positive-definiteness API
+-- • `TNLean.Channel.Basic` for positive-definiteness results
 -- • `TNLean.Channel.Irreducible.Basic` for irreducibility/projection lemmas
 -- The channel imports are already transitively available through
 -- `TNLean.MPS.CPPrimitive`, but listing them directly makes the local proof
 -- dependencies explicit.
-import TNLean.Algebra.HermitianHelpers
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Basic
 import TNLean.MPS.Core.CPPrimitive
@@ -39,7 +37,8 @@ instead of `IsInjective A`.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2, Thm 6.3 item 2][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2,
+  Theorem 6.3 item 2][Wolf2012QChannels]
 * [Evans, Høegh-Krohn, *Spectral properties of positive maps*, 1978][Evans1978Spectral]
 -/
 
@@ -53,13 +52,6 @@ variable {d D : ℕ}
 
 section PosDef
 
-private lemma mulVec_eq_zero_of_quadForm_eq_zero
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef)
-    (x : Fin D → ℂ) (hx : star x ⬝ᵥ (ρ *ᵥ x) = 0) :
-    ρ *ᵥ x = 0 := by
-  classical
-  exact (hρ.dotProduct_mulVec_zero_iff x).mp hx
-
 private lemma ker_invariant_under_adjoint
     (A : MPSTensor d D)
     (ρ : Matrix (Fin D) (Fin D) ℂ)
@@ -71,23 +63,27 @@ private lemma ker_invariant_under_adjoint
   have hqf : star x ⬝ᵥ (ρ *ᵥ x) = 0 := by simp [hx]
   have hsum : star x ⬝ᵥ (ρ *ᵥ x) =
       ∑ i : Fin d, star ((A i)ᴴ *ᵥ x) ⬝ᵥ (ρ *ᵥ ((A i)ᴴ *ᵥ x)) := by
-    conv_lhs => rw [show ρ *ᵥ x = (transferMap (d := d) (D := D) A ρ) *ᵥ x from by rw [hρ_fix]]
+    conv_lhs =>
+      rw [show ρ *ᵥ x = (transferMap (d := d) (D := D) A ρ) *ᵥ x from by rw [hρ_fix]]
     simp only [transferMap_apply, Matrix.sum_mulVec]
     rw [dotProduct_sum]
     congr 1; ext i
     rw [show (A i * ρ * (A i)ᴴ) *ᵥ x = A i *ᵥ (ρ *ᵥ ((A i)ᴴ *ᵥ x)) from by
       simp [Matrix.mulVec_mulVec, Matrix.mul_assoc]]
-    rw [HermitianHelpers.dotProduct_mulVec_conjTranspose]
+    rw [Matrix.dotProduct_mulVec, Matrix.star_mulVec,
+      Matrix.conjTranspose_conjTranspose]
   have h_each_zero : ∀ i : Fin d,
       star ((A i)ᴴ *ᵥ x) ⬝ᵥ (ρ *ᵥ ((A i)ᴴ *ᵥ x)) = 0 := by
     intro i
-    have h_sum_zero : ∑ j, RCLike.re (star ((A j)ᴴ *ᵥ x) ⬝ᵥ (ρ *ᵥ ((A j)ᴴ *ᵥ x))) = 0 := by
+    have h_sum_zero :
+        ∑ j, RCLike.re (star ((A j)ᴴ *ᵥ x) ⬝ᵥ (ρ *ᵥ ((A j)ᴴ *ᵥ x))) = 0 := by
       rw [← map_sum, ← hsum, hqf]; simp
-    have hre := (Finset.sum_eq_zero_iff_of_nonneg (fun j _ => hρ_psd.re_dotProduct_nonneg _)).mp
-      h_sum_zero i (Finset.mem_univ _)
+    have hre := congrFun
+      (Fintype.sum_eq_zero_iff_of_nonneg (fun j => hρ_psd.re_dotProduct_nonneg _) |>.mp
+        h_sum_zero) i
     exact Complex.ext hre (hρ_psd.isHermitian.im_star_dotProduct_mulVec_self _)
   intro i
-  exact mulVec_eq_zero_of_quadForm_eq_zero ρ hρ_psd _ (h_each_zero i)
+  exact (hρ_psd.dotProduct_mulVec_zero_iff _).mp (h_each_zero i)
 
 private lemma ker_contains_all_of_span
     (A : MPSTensor d D) (hA : IsInjective A)
@@ -110,7 +106,7 @@ private lemma ker_contains_all_of_span
   | smul c a _ ha =>
     simp [Matrix.conjTranspose_smul, Matrix.smul_mulVec, Matrix.mulVec_smul, ha]
 
-/-- **Positive definiteness from injectivity** (Wolf Thm 6.3(2)):
+/-- **Positive definiteness from injectivity** (Wolf Theorem 6.3(2)):
 If `A` is injective and `ρ` is a nonzero PSD fixed point of the transfer map,
 then `ρ` is positive definite. -/
 theorem posSemidef_fixedPoint_isPosDef
@@ -126,7 +122,7 @@ theorem posSemidef_fixedPoint_isPosDef
   suffices h_ne : star x ⬝ᵥ (ρ *ᵥ x) ≠ 0 from
     lt_of_le_of_ne h_nonneg (Ne.symm h_ne)
   intro h_zero
-  have h_ker := mulVec_eq_zero_of_quadForm_eq_zero ρ hρ_psd x h_zero
+  have h_ker := (hρ_psd.dotProduct_mulVec_zero_iff x).mp h_zero
   have h_inv := ker_invariant_under_adjoint A ρ hρ_psd hρ_fix x h_ker
   have h_all := ker_contains_all_of_span A hA ρ x h_inv
   have h_surj : ∀ v : Fin D → ℂ, ρ *ᵥ v = 0 := by
@@ -134,7 +130,8 @@ theorem posSemidef_fixedPoint_isPosDef
     have ⟨k, hk⟩ : ∃ k, x k ≠ 0 := by
       by_contra h_all_zero; push Not at h_all_zero
       exact hx (funext h_all_zero)
-    let M : Matrix (Fin D) (Fin D) ℂ := Matrix.of (fun i j => if j = k then v i * (x k)⁻¹ else 0)
+    let M : Matrix (Fin D) (Fin D) ℂ :=
+      Matrix.of (fun i j => if j = k then v i * (x k)⁻¹ else 0)
     have hMx : M *ᵥ x = v := by
       ext i
       simp only [M, Matrix.mulVec, dotProduct, Matrix.of_apply]
@@ -150,7 +147,7 @@ theorem posSemidef_fixedPoint_isPosDef
     simpa [Finset.sum_ite_eq, Finset.mem_univ] using h
   exact hρ_ne h_rho_zero
 
-/-- Corollary for the irreducibility-based formulation (still Wolf Thm 6.3(2),
+/-- Corollary for the irreducibility-based formulation (still Wolf Theorem 6.3(2),
 but with `IsIrreducibleMap E` instead of `IsInjective A`). -/
 theorem posSemidef_fixedPoint_isPosDef_of_irreducible
     (A : MPSTensor d D)
@@ -171,8 +168,12 @@ theorem posSemidef_fixedPoint_isPosDef_of_irreducible
   set U : Matrix (Fin D) (Fin D) ℂ := ↑hH.eigenvectorUnitary
   set sgnEig : Fin D → ℂ := fun i => if 0 < hH.eigenvalues i then 1 else 0
   set Q := U * Matrix.diagonal sgnEig * Uᴴ with hQ_def
-  have hUU : Uᴴ * U = 1 := eig_conj_mul hH
-  have hUU' : U * Uᴴ = 1 := eig_mul_conj hH
+  have hUU : Uᴴ * U = 1 := by
+    simpa [U, Matrix.star_eq_conjTranspose] using
+      Matrix.UnitaryGroup.star_mul_self hH.eigenvectorUnitary
+  have hUU' : U * Uᴴ = 1 := by
+    simpa [U, Matrix.star_eq_conjTranspose] using
+      (Unitary.mul_star_self_of_mem hH.eigenvectorUnitary.prop)
   have hsgnEig_star : star sgnEig = sgnEig := by
     ext i; simp only [sgnEig, Pi.star_apply]; split <;> simp
   have hsgnEig_sq : ∀ i, sgnEig i * sgnEig i = sgnEig i := by
@@ -195,11 +196,14 @@ theorem posSemidef_fixedPoint_isPosDef_of_irreducible
         ← Matrix.mul_assoc Uᴴ U, hUU, Matrix.one_mul,
         ← Matrix.mul_assoc (Matrix.diagonal sgnEig), Matrix.diagonal_mul_diagonal,
         show (fun i => sgnEig i * sgnEig i) = sgnEig from funext hsgnEig_sq]
-  have hQ1Q : Q * (1 - Q) = 0 := by rw [mul_sub, mul_one, hQ_idem, sub_self]
-  have h1QQ : (1 - Q) * Q = 0 := by rw [sub_mul, one_mul, hQ_idem, sub_self]
+  have hQ1Q : Q * (1 - Q) = 0 := IsIdempotentElem.mul_one_sub_self hQ_idem
+  have h1QQ : (1 - Q) * Q = 0 := IsIdempotentElem.one_sub_mul_self hQ_idem
   have hQ_proj : IsOrthogonalProjection Q := ⟨hQ_herm, hQ_idem⟩
+  have hρ_spectral :
+      ρ = U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ := by
+    simpa [U, Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose,
+      Function.comp_def] using hH.spectral_theorem
   have hQρ : Q * ρ = ρ := by
-    have hρ_spectral := spectral_decomp_eq hH
     rw [hρ_spectral, hQ_def,
         Matrix.mul_assoc, Matrix.mul_assoc, Matrix.mul_assoc,
         ← Matrix.mul_assoc Uᴴ U, hUU, Matrix.one_mul,
@@ -219,8 +223,9 @@ theorem posSemidef_fixedPoint_isPosDef_of_irreducible
     intro v hv
     set w := Uᴴ *ᵥ v
     have hΛw : Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) *ᵥ w = 0 := by
-      have hρv : (U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ) *ᵥ v = 0 :=
-        spectral_decomp_eq hH ▸ hv
+      have hρv :
+          (U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ) *ᵥ v = 0 :=
+        hρ_spectral ▸ hv
       set Λ := Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ))
       have hUΛw : U *ᵥ (Λ *ᵥ w) = 0 := by
         rw [Matrix.mulVec_mulVec, show w = Uᴴ *ᵥ v from rfl, Matrix.mulVec_mulVec]; exact hρv

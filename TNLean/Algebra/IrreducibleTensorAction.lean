@@ -31,7 +31,7 @@ noncomputable section
 
 If a nontrivial `A`-invariant submodule `W` existed, its orthogonal projection would give a
 nontrivial invariant orthogonal projection matrix, contradicting `IsIrreducibleTensor`. -/
-theorem isIrreducibleAction_of_isIrreducibleTensor
+lemma isIrreducibleAction_of_isIrreducibleTensor
     {d D : ℕ} (A : MPSTensor d D)
     (hIrrT : IsIrreducibleTensor (d := d) (D := D) A) :
     IsIrreducibleAction (d := d) (D := D) A := by
@@ -68,12 +68,14 @@ theorem isIrreducibleAction_of_isIrreducibleTensor
     have huW' : (A i).mulVec u ∈ W := hW i u huW
     have : e.toLinearMap ((A i).mulVec u) ∈ W' :=
       Submodule.mem_map_of_mem (f := e.toLinearMap) huW'
-    simpa [W', Matrix.toEuclideanLin, e] using this
+    convert this using 1
+    rw [Matrix.toEuclideanLin, Matrix.toLpLin_apply]
+    rfl
   -- The matrix `P` is Hermitian.
   have hHerm : P.IsHermitian := by
     have hSymm : (Matrix.toEuclideanLin P).IsSymmetric := by
       simpa [P, p'] using (Submodule.starProjection_isSymmetric (K := W'))
-    exact (Matrix.isHermitian_iff_isSymmetric (A := P) (𝕜 := ℂ) (n := Fin D)).2 hSymm
+    exact (Matrix.isSymmetric_toEuclideanLin_iff (A := P) (𝕜 := ℂ) (n := Fin D)).mp hSymm
   -- The matrix `P` is idempotent.
   have hPP : P * P = P := by
     apply (Matrix.toEuclideanLin : Matrix (Fin D) (Fin D) ℂ ≃ₗ[ℂ] E →ₗ[ℂ] E).injective
@@ -121,7 +123,7 @@ theorem isIrreducibleAction_of_isIrreducibleTensor
     apply (Matrix.toEuclideanLin : Matrix (Fin D) (Fin D) ℂ ≃ₗ[ℂ] E →ₗ[ℂ] E).injective
     apply LinearMap.ext
     intro x
-    -- Expand the triple product using the `Matrix.toLpLin` API.
+    -- Expand the triple product using the `Matrix.toLpLin` linear equivalence.
     simp [Matrix.toEuclideanLin]
     -- Show the intermediate vector lies in `W'`.
     have hP_lin : Matrix.toEuclideanLin P = p'.toLinearMap := by

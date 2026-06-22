@@ -2,7 +2,6 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.Algebra.MatrixAux
 import TNLean.Channel.Schwarz.Basic
 
 /-!
@@ -14,7 +13,7 @@ irreducible completely positive maps (Wolf Theorem 6.2, item 2).
 This file collects the purely positive-map preservation facts about the operator
 `id + E` on $M_D(\mathbb{C})$: if $E$ is a positive map, then applying
 `id + E` to a PSD matrix keeps it PSD and nonzero, and turns a PosDef matrix
-into a PosDef matrix. It also records an algebraic expansion of `(id + E)^n` as
+into a PosDef matrix. It also states an algebraic expansion of `(id + E)^n` as
 a binomial sum, together with the positivity-preservation of the iterate `E^n`.
 
 ## Main statements
@@ -27,7 +26,7 @@ a binomial sum, together with the positivity-preservation of the iterate `E^n`.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2][Wolf2012QChannels]
 
 ## Tags
 

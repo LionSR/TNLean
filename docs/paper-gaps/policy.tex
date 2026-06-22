@@ -1,0 +1,131 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Policy for Paper-Gap Notes}
+\author{}
+\date{2026-05-12}
+
+\begin{document}
+\maketitle
+
+\section{Purpose}
+
+A paper-gap note records a mathematical discrepancy between a cited source and
+the statement, proof, or route used in the formal development. The source
+itself should remain intact. If a proof seems to require a hypothesis not
+present in the article, a different scalar, a different normalization, or a
+replacement theorem from the formal library, the change should be explained in a
+separate note under \path{docs/paper-gaps/}.
+
+The note is a mathematical document first. It should be readable by a
+mathematician or mathematical physicist who has not read the corresponding
+issue or pull request. Traceability data such as formal declaration names,
+source-file paths, GitHub issues, and line ranges should support the exposition,
+usually in footnotes, rather than govern the exposition.
+
+\section{When a note is needed}
+
+A note is needed when the formal statement is not literally the cited
+statement. The common case is an implication in the paper,
+\begin{align}
+    \mathcal H \Longrightarrow C,
+    \tag{\path{source}}
+\end{align}
+while the formal proof establishes only
+\begin{align}
+    \mathcal H\wedge\mathcal K \Longrightarrow C.
+    \tag{\path{formal}}
+\end{align}
+The condition $\mathcal K$ must then be accounted for. Either it is derived
+from $\mathcal H$, it is a harmless local correction, or the formal theorem is
+a restricted theorem and should be marked as such.
+
+A note is also needed when the proof is mathematically different even though
+the final conclusion is the same. For example, a source proof might identify a
+coefficient by a finite power-sum identity,
+\begin{align}
+    \sum_{q=1}^{r_a}\mu_q^N
+    =\sum_{q=1}^{r_b}\nu_q^N
+    \qquad (1\leq N\leq m),
+\end{align}
+whereas the formal route might use convergence of a sequence. These are
+different mechanisms, and the note should say which hypotheses each mechanism
+uses.
+
+\section{Form of the note}
+
+The note should introduce the relevant notation before using it. It should
+state the cited assertion in the special case under discussion, then display the
+formal or corrected statement, and finally compare the hypotheses and
+conclusions. Long quotations are usually unnecessary; a precise citation and
+the mathematical formula are better.
+
+Displayed equations should carry the calculation. Use \verb|align| for
+displayed formulae in these notes, especially for multi-line arguments:
+\begin{align}
+    V^{(N)}(A) &= c_N V^{(N)}(B),\\
+    \langle V^{(N)}(B_k),V^{(N)}(A_j)\rangle
+               &\xrightarrow[N\to\infty]{}0,\\
+    \dim\operatorname{span}
+    \left(\{V^{(N)}(A_j)\}_j\cup\{V^{(N)}(B_k)\}\right)
+               &= r_A+1.
+\end{align}
+The contradiction should then be explained in prose, for instance by saying
+which nonzero coefficient is forced to vanish.
+Source tags belong on the right-hand side of the displayed line, using
+\verb|\tag| when a tag is needed. Short definitions may remain inline when the
+sentence is clearer that way.
+
+Formal identifiers should be written with \verb|\leanid| and should usually
+appear in footnotes. For example, the prose may say that the formal theorem is
+the same-dimensional gauge-phase component of a source lemma, and the footnote
+may identify the declaration.\footnote{Formal declaration:
+    \leanid{MPSTensor.gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP}
+    in \doclink{TNLean/MPS/FundamentalTheorem/Proportional}.}
+Do not put formal identifiers in displayed equations unless the mathematical
+object itself is a formal declaration.
+
+\section{Shared commands}
+
+All notes in this directory should load \path{docs/paper-gaps/command.tex}.
+Shared notation belongs there. In particular,
+\begin{align}
+    \tr(X),\qquad \leanid{someDeclaration}
+\end{align}
+should be produced by the shared commands \verb|\tr| and \verb|\leanid| rather
+than by local redefinitions in each note. This keeps the documents visually
+consistent and avoids contradictory local conventions.
+
+\section{Classification}
+
+The conclusion of a note should give a verdict. The usual classifications are:
+a notational clarification, a local correction, a scope restriction, an
+unfaithful theorem, or an open gap. The classification should follow the
+mathematics, not the amount of formal work required.
+
+A local correction records a small adjustment whose corrected statement is still
+available in the cited argument. A scope restriction records a theorem proved
+only in a special case of the source theorem. An unfaithful theorem is more
+serious: it relies on a hypothesis or intermediate result that the cited source
+does not provide. Such a theorem must carry an in-source marker pointing to the
+paper-gap note.
+
+\section{Revision}
+
+A note may begin provisionally, but revisions should keep it as a coherent
+account of the present mathematical understanding. It should not become a
+chronological log. If later work proves that $\mathcal K$ follows from
+$\mathcal H$, the note should be rewritten to show that derivation. If later
+work confirms that the extra hypothesis is unavoidable, the note should state
+the restricted theorem explicitly.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

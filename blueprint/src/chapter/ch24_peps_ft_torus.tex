@@ -1,0 +1,1476 @@
+\section{Torus Normal PEPS}\label{sec:peps_torus}
+
+A translationally invariant PEPS lives on a torus: a finite square lattice whose
+opposite boundaries are identified, so that the two coordinates are read modulo
+the periods $n$ and $m$.
+\begin{center}
+    \TNPEPSTorusGeometry
+\end{center}
+Translations act on the vertices and edges. Transporting a tensor along a graph
+isomorphism $\phi$ relabels its coefficients by
+$\operatorname{Coeff}_{A^\phi}(\sigma)=\operatorname{Coeff}_A(\sigma\circ\phi)$,
+so two tensors generating the same state still do after transport. This is the
+setting in which the normal Fundamental Theorem specializes to a single
+site-independent tensor and produces the global phase of
+\cite[Theorem~3]{Molnar2018NormalPEPS}.
+
+\begin{definition}[Torus geometry and translations]%
+    \label{def:peps_torus_geometry_translation}
+    \lean{TNLean.PEPS.TorusVertex}
+    \lean{TNLean.PEPS.torusGraph}
+    \lean{TNLean.PEPS.torusGraph_adj_right}
+    \lean{TNLean.PEPS.torusGraph_adj_up}
+    \lean{TNLean.PEPS.Edge.map}
+    \lean{TNLean.PEPS.Edge.equiv}
+    \lean{TNLean.PEPS.IncidentEdge.equiv}
+    \lean{TNLean.PEPS.translateEquiv}
+    \lean{TNLean.PEPS.translate}
+    \lean{TNLean.PEPS.translateEdge}
+    \lean{TNLean.PEPS.translateEdge_isHorizontal}
+    \lean{TNLean.PEPS.translateEdge_isVertical}
+    \lean{TNLean.PEPS.translateIncidentEdge}
+    \leanok
+    The discrete $n\times m$ torus has vertex set $\Z/n\Z\times\Z/m\Z$.
+    Its graph joins $(x,y)$ to $(x+1,y)$ and to $(x,y+1)$, with the
+    coordinates read cyclically. Translation by $(a,b)$ is the graph
+    automorphism
+    \[
+        \tau_{a,b}(x,y)=(x+a,y+b).
+    \]
+    The induced action on edges sends an edge with unordered endpoint pair
+    $\{u,v\}$ to the edge with unordered endpoint pair
+    $\{\tau_{a,b}(u),\tau_{a,b}(v)\}$; in particular it preserves the
+    horizontal and vertical orientation classes. For a general graph
+    isomorphism $\phi:G\simeq G'$, the same endpoint action gives a
+    bijection on edges and a bijection from the edges incident to $v$ to
+    the edges incident to $\phi(v)$.
+\end{definition}
+
+\begin{definition}[Transport of a PEPS tensor]%
+    \label{def:peps_tensor_transport}
+    \lean{TNLean.PEPS.Tensor.transport}
+    \lean{TNLean.PEPS.Tensor.transport_bondDim}
+    \leanok
+    \uses{def:peps_tensor, def:peps_torus_geometry_translation}
+    Let $\phi:G\simeq G'$ be a graph isomorphism. The transported tensor
+    $A^\phi$ on $G'$ has bond dimension
+    \[
+        D^\phi_{e'}=D_{\phi^{-1}(e')}
+    \]
+    at every edge $e'$ of $G'$. Its local tensor at $w\in G'$ is the local
+    tensor of $A$ at $\phi^{-1}(w)$, with virtual indices moved through the
+    incident-edge bijection induced by $\phi$.
+\end{definition}
+
+\begin{theorem}[State coefficient under transport]%
+    \label{thm:peps_stateCoeff_transport}
+    \lean{TNLean.PEPS.stateCoeff_transport}
+    \leanok
+    \uses{def:peps_stateCoeff, def:peps_tensor_transport}
+    For every graph isomorphism $\phi:G\simeq G'$ and every physical
+    configuration $\sigma$ on the vertices of $G'$,
+    \[
+        \operatorname{Coeff}_{A^\phi}(\sigma)
+        =
+        \operatorname{Coeff}_{A}(\sigma\circ\phi).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    The edge bijection induced by $\phi$ identifies virtual configurations
+    of $A^\phi$ with virtual configurations of $A$. After this change of
+    summation variables, the local factor at $w\in G'$ becomes the local
+    factor of $A$ at $\phi^{-1}(w)$. Reindexing the finite product over
+    vertices by $\phi$ gives the displayed coefficient equality.
+\end{proof}
+
+\begin{theorem}[Transport preserves equality of PEPS states]%
+    \label{thm:peps_sameState_transport}
+    \lean{TNLean.PEPS.SameState.transport}
+    \leanok
+    \uses{def:peps_same_state, thm:peps_stateCoeff_transport}
+    If two PEPS tensors on $G$ have equal state coefficients for every
+    physical configuration, then their transports along any graph
+    isomorphism $\phi:G\simeq G'$ have equal state coefficients for every
+    physical configuration on $G'$.
+\end{theorem}
+\begin{proof}\leanok
+    By Theorem~\ref{thm:peps_stateCoeff_transport},
+    \[
+        \operatorname{Coeff}_{A^\phi}(\sigma)
+        =
+        \operatorname{Coeff}_{A}(\sigma\circ\phi)
+        =
+        \operatorname{Coeff}_{B}(\sigma\circ\phi)
+        =
+        \operatorname{Coeff}_{B^\phi}(\sigma),
+    \]
+    where the middle equality is the assumed equality of state coefficients.
+\end{proof}
+
+\begin{definition}[Translation-invariant torus tensor]%
+    \label{def:peps_torus_translation_invariant}
+    \lean{TNLean.PEPS.IsTorusTranslationInvariant}
+    \leanok
+    \uses{def:peps_tensor_transport, def:peps_torus_geometry_translation}
+    A PEPS tensor $A$ on the discrete torus is translation invariant if
+    \[
+        A^{\tau_{a,b}} = A
+    \]
+    for every translation $\tau_{a,b}$. This formalizes the setting of
+    \cite[Theorem~3]{Molnar2018NormalPEPS}, where one tensor is repeated at
+    every site of a periodic lattice.
+\end{definition}
+
+\begin{theorem}[State coefficient of a translation-invariant torus tensor]%
+    \label{thm:peps_stateCoeff_translationInvariant}
+    \lean{TNLean.PEPS.stateCoeff_translationInvariant}
+    \leanok
+    \uses{def:peps_torus_translation_invariant,
+        thm:peps_stateCoeff_transport}
+    If $A$ is translation invariant on the discrete torus, then for every
+    translation $\tau_{a,b}$ and every physical configuration $\sigma$,
+    \[
+        \operatorname{Coeff}_{A}(\sigma\circ\tau_{a,b})
+        =
+        \operatorname{Coeff}_{A}(\sigma).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Theorem~\ref{thm:peps_stateCoeff_transport} gives
+    \[
+        \operatorname{Coeff}_{A}(\sigma\circ\tau_{a,b})
+        =
+        \operatorname{Coeff}_{A^{\tau_{a,b}}}(\sigma)
+        =
+        \operatorname{Coeff}_{A}(\sigma),
+    \]
+    where the second equality substitutes $A^{\tau_{a,b}}=A$ from translation
+    invariance.
+\end{proof}
+
+\begin{definition}[Orientation-uniform bond dimensions on the torus]%
+    \label{def:peps_torus_uniform_bond_dim}
+    \lean{TNLean.PEPS.torusRightEdge}
+    \lean{TNLean.PEPS.torusUpEdge}
+    \lean{TNLean.PEPS.TorusUniformBondDim}
+    \leanok
+    \uses{def:peps_torus_geometry_translation}
+    A bond-dimension function on the torus is orientation-uniform with
+    horizontal dimension $D_h$ and vertical dimension $D_v$ if, for every
+    horizontal edge $e_h$ and every vertical edge $e_v$,
+    \[
+        D_{e_h}=D_h,
+        \qquad
+        D_{e_v}=D_v.
+    \]
+    The reference horizontal edge is the right edge at the origin, and the
+    reference vertical edge is the up edge at the origin.
+\end{definition}
+
+\begin{theorem}[Translation invariance gives orientation-uniform bond dimensions]%
+    \label{thm:peps_torusUniformBondDim_of_translationInvariant}
+    \lean{TNLean.PEPS.translateEdge_eq_map}
+    \lean{TNLean.PEPS.bondDim_translateEdge_of_translationInvariant}
+    \lean{TNLean.PEPS.isHorizontalTorusEdge_eq_rightEdge}
+    \lean{TNLean.PEPS.isVerticalTorusEdge_eq_upEdge}
+    \lean{TNLean.PEPS.translateEdge_torusRightEdge}
+    \lean{TNLean.PEPS.translateEdge_torusUpEdge}
+    \lean{TNLean.PEPS.bondDim_torusRightEdge_const}
+    \lean{TNLean.PEPS.bondDim_torusUpEdge_const}
+    \lean{TNLean.PEPS.torusUniformBondDim_of_translationInvariant}
+    \leanok
+    \uses{def:peps_torus_translation_invariant,
+        def:peps_torus_uniform_bond_dim}
+    If $A$ is translation invariant on the discrete torus, then its bond
+    dimensions are orientation-uniform. Explicitly, with
+    $D_h=D_{e_h}$ at the reference right edge $e_h$ and
+    $D_v=D_{e_v}$ at the reference up edge $e_v$, for every horizontal
+    edge $f_h$ and every vertical edge $f_v$,
+    \[
+        D_{f_h}=D_h,
+        \qquad
+        D_{f_v}=D_v.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Translation invariance gives $A^{\tau_{a,b}}=A$, hence
+    $D_A(\tau_{a,b}(e))=D_A(e)$ for every edge $e$. Every horizontal edge
+    $f_h$ has the form $f_h=\tau_{a,b}(e_h)$ for a translate of the reference
+    right edge, so
+    \[
+        D_{f_h}
+        =
+        D_A(\tau_{a,b}(e_h))
+        =
+        D_A(e_h)
+        =
+        D_h.
+    \]
+    The same argument with the reference up edge gives $D_{f_v}=D_v$.
+\end{proof}
+
+\input{chapter/ch24_peps_ft_torus_row_cut_obstruction}
+
+\paragraph{Staircase-window geometry for a reference edge.}
+
+\begin{lemma}[Left endpoint of the staircase reference edge]%
+    \label{lem:peps_reference_edge_left_endpoint_staircase_window}
+    \lean{TNLean.PEPS.referenceEdge_leftEndpoint_mem_staircaseWindow}
+    \leanok
+    Let $L,K>0$, let $s=(a,b)$ be a staircase corner on the torus, and assume
+    $a+2L\le n$ and $2K\le m$. Let $e$ be the horizontal reference edge
+    from $(a+L-1,b+K-1)$ to $(a+L,b+K-1)$, and let $W_j$ be the $j$th
+    staircase window based at $s$. Then the left endpoint
+    \[
+        u=(a+L-1,b+K-1)
+    \]
+    lies in $W_j$ if and only if $1\le j$.
+\end{lemma}
+\begin{proof}\leanok
+    The endpoint formula gives the two coordinate distances from the corner:
+    the column distance is $L-1$ and the row distance is $K-1$. Substituting
+    these distances into the staircase-window membership criterion gives exactly
+    $1\le j$.
+\end{proof}
+
+\begin{lemma}[Right endpoint of the staircase reference edge]%
+    \label{lem:peps_reference_edge_right_endpoint_staircase_window}
+    \lean{TNLean.PEPS.referenceEdge_rightEndpoint_mem_staircaseWindow}
+    \leanok
+    In the same notation, the right endpoint
+    \[
+        w=(a+L,b+K-1)
+    \]
+    lies in $W_j$ if and only if $j<L$.
+\end{lemma}
+\begin{proof}\leanok
+    The right endpoint has column distance $L$ and row distance $K-1$ from
+    $s$. The row condition is automatic, while the column band contains this
+    distance precisely for $j<L$.
+\end{proof}
+
+\begin{lemma}[Boundary windows for the staircase reference edge]%
+    \label{lem:peps_reference_edge_boundary_windows}
+    \lean{TNLean.PEPS.isRegionBoundaryEdge_staircaseWindow_referenceEdge}
+    \leanok
+    \uses{lem:peps_reference_edge_left_endpoint_staircase_window,
+        lem:peps_reference_edge_right_endpoint_staircase_window}
+    If $j=0$ or $L\le j$, then the reference edge $e$ is a boundary edge
+    of $W_j$: exactly one of its two endpoints lies in the window.
+\end{lemma}
+\begin{proof}\leanok
+    For $j=0$, Lemmas~\ref{lem:peps_reference_edge_left_endpoint_staircase_window}
+    and~\ref{lem:peps_reference_edge_right_endpoint_staircase_window} show that
+    only $w$ lies in $W_j$. For $L\le j$, the same two endpoint tests show
+    that only $u$ lies in $W_j$.
+\end{proof}
+
+\begin{lemma}[Interior windows for the staircase reference edge]%
+    \label{lem:peps_reference_edge_interior_windows}
+    \lean{TNLean.PEPS.referenceEdge_endpoints_mem_staircaseWindow_of_interior}
+    \leanok
+    \uses{lem:peps_reference_edge_left_endpoint_staircase_window,
+        lem:peps_reference_edge_right_endpoint_staircase_window}
+    If $1\le j<L$, then both endpoints of $e$ lie in $W_j$.
+\end{lemma}
+\begin{proof}\leanok
+    The left-endpoint criterion gives $u\in W_j$ from $1\le j$, and the
+    right-endpoint criterion gives $w\in W_j$ from $j<L$.
+\end{proof}
+
+\begin{lemma}[Interior windows are not boundary windows]%
+    \label{lem:peps_reference_edge_not_boundary_interior_windows}
+    \lean{TNLean.PEPS.not_isRegionBoundaryEdge_staircaseWindow_referenceEdge_of_interior}
+    \leanok
+    \uses{lem:peps_reference_edge_interior_windows}
+    If $1\le j<L$, then $e$ is not a boundary edge of $W_j$.
+\end{lemma}
+\begin{proof}\leanok
+    By Lemma~\ref{lem:peps_reference_edge_interior_windows}, both endpoints of
+    $e$ lie in $W_j$. The definition of a boundary edge requires exactly one
+    endpoint in the region, so $e$ is not a boundary edge of $W_j$.
+\end{proof}
+
+\subsection{Staircase patch geometry}
+\label{subsec:peps_torus_staircase_patch_geometry}
+
+\begin{definition}[Horizontal staircase patch and its corner]
+    \label{def:peps_horizontal_staircase_patch}
+    \lean{TNLean.PEPS.horizontalStaircasePatch}
+    \lean{TNLean.PEPS.horizontalStaircaseLeftWindow}
+    \lean{TNLean.PEPS.horizontalStaircaseRightWindow}
+    \lean{TNLean.PEPS.horizontalStaircaseEndPair}
+    \lean{TNLean.PEPS.horizontalStaircaseCorner}
+    \lean{TNLean.PEPS.horizontalStaircaseCompletedCorner}
+    \leanok
+    \uses{def:peps_torus_geometry_translation}
+    Fix a horizontal reference edge and write the staircase corner as
+    $s=(a,b)$.  For coordinate intervals write
+    \[
+        I(u,v)=\{t\mid u\le t<v\}.
+    \]
+    The two end windows of the overlapping-window chain are
+    \[
+        W_{\mathrm{left}}=I(a,a+L)\times I(b,b+K),
+        \qquad
+        W_{\mathrm{right}}
+        =I(a+L,a+2L)\times I(b+K-1,b+2K-1).
+    \]
+    Their end pair is $S=W_{\mathrm{left}}\cup W_{\mathrm{right}}$.  The
+    staircase patch is the union
+    \[
+        P=
+        \bigl(I(a,a+2L)\times I(b+K-1,b+2K-1)\bigr)
+        \cup
+        \bigl(I(a,a+L)\times I(b,b+2K-1)\bigr),
+    \]
+    and the corner cut out by the two end windows is
+    \[
+        C=I(a,a+L)\times I(b+K,b+2K-1).
+    \]
+    Completing $C$ by one row gives the $L\times K$ rectangle
+    \[
+        \widehat C=I(a,a+L)\times I(b+K,b+2K).
+    \]
+    These cyclic rectangles are the regions used in the staircase chaining and
+    corner-stripping step of
+    \cite[proof sketch, lines~2320--2445]{Molnar2018NormalPEPS}.
+\end{definition}
+
+\begin{lemma}[The staircase end windows are disjoint]
+    \label{lem:peps_horizontal_staircase_end_pair_disjoint}
+    \lean{TNLean.PEPS.horizontalStaircaseEndPair_disjoint}
+    \leanok
+    \uses{def:peps_horizontal_staircase_patch}
+    If $2L\le W$, then the two end windows of the horizontal staircase are
+    disjoint:
+    \[
+        W_{\mathrm{left}}\cap W_{\mathrm{right}}=\varnothing.
+    \]
+\end{lemma}
+\begin{proof}
+    \leanok
+    Their horizontal coordinate intervals are $I(a,a+L)$ and $I(a+L,a+2L)$.
+    The bound $2L\le W$ prevents wraparound overlap.
+\end{proof}
+
+\begin{lemma}[Injectivity of the staircase end windows and completed corner]
+    \label{lem:peps_horizontal_staircase_window_injectivity}
+    \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.horizontalStaircaseLeftWindow_injective}
+    \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.horizontalStaircaseRightWindow_injective}
+    \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.horizontalStaircaseCompletedCorner_injective}
+    \leanok
+    \uses{def:peps_horizontal_staircase_patch}
+    Under the one-orientation $L\times K$ torus-window injectivity hypotheses,
+    the two end windows and the completed corner are injective regions:
+    \[
+        W_{\mathrm{left}},\quad W_{\mathrm{right}},\quad \widehat C
+        \quad\text{are injective.}
+    \]
+\end{lemma}
+\begin{proof}
+    \leanok
+    Each of the three regions is an $L\times K$ cyclic rectangle, so the
+    window-injectivity hypothesis applies directly.
+\end{proof}
+
+\begin{lemma}[Patch decomposition by the end pair and the corner]
+    \label{lem:peps_horizontal_staircase_patch_decomposition}
+    \lean{TNLean.PEPS.horizontalStaircaseCorner_disjoint_endPair}
+    \lean{TNLean.PEPS.horizontalStaircasePatch_eq_endPair_union_corner}
+    \lean{TNLean.PEPS.horizontalStaircasePatch_sdiff_endPair}
+    \leanok
+    \uses{def:peps_horizontal_staircase_patch,
+        lem:peps_horizontal_staircase_end_pair_disjoint}
+    If $L,K>0$, $2L\le W$, and $2K\le H$, then the corner is disjoint from
+    the end pair and the patch decomposes as
+    \[
+        P=S\cup C,
+        \qquad
+        P\setminus S=C.
+    \]
+\end{lemma}
+\begin{proof}
+    \leanok
+    In the no-wraparound rectangle, the rows and columns of the two end
+    windows and the corner are the displayed intervals above.  The interval
+    calculation gives the disjointness and identifies every point of $P$ with
+    either an end-window point or a corner point.
+\end{proof}
+
+\begin{theorem}[Fundamental Theorem for normal PEPS on the torus]%
+    \label{thm:fundamentalTheorem_normalTorusPEPS}
+    \lean{TNLean.PEPS.fundamentalTheorem_normalTorusPEPS_unconditional}
+    \lean{TNLean.PEPS.torusAbsorbedGauge_unique_scalar}
+    \lean{TNLean.PEPS.torusCovariantAbsorbedGauge_unique_classScalar}
+    \lean{TNLean.PEPS.torusGauge_unique_scalar_of_perVertex}
+    \leanok
+    \uses{thm:fundamentalTheorem_normalSquarePEPS,
+        thm:peps_oneVertexComplementComparison,
+        def:peps_torus_translation_invariant,
+        thm:peps_torusUniformBondDim_of_translationInvariant,
+        def:GaugeEquivPEPS}
+    Let $A$ and $B$ be translationally invariant normal PEPS on the discrete
+    torus such that every $2\times 3$ and $3\times 2$ region is injective. If
+    they generate the same state on an $n\times m$ region with $n,m\geq 7$, then
+    they are related by horizontal and vertical gauges $X,Y$, up to a scalar
+    $\lambda$ satisfying $\lambda^{nm}=1$, and $X$ and $Y$ are unique up to a
+    multiplicative constant. This is
+    \cite[Theorem~3]{Molnar2018NormalPEPS} on the torus geometry, where every
+    edge is interior and translation acts freely.
+    Theorem~\ref{thm:fundamentalTheorem_normalTorusPEPS_unconditional} proves
+    this at the source's sizes $n,m\geq 7$ with the gauge family described
+    by its translation covariance, and the uniqueness of $X$ and $Y$ up to a
+    multiplicative constant is proved at the same sizes in
+    Theorem~\ref{thm:torusAbsorbedGauge_unique_scalar} per edge,
+    Theorem~\ref{thm:torusCovariantAbsorbedGauge_unique_classScalar} on the
+    two orientation classes, and
+    Theorem~\ref{thm:torusGauge_unique_scalar_of_perVertex} against the
+    per-vertex relation. In the torus
+    edge convention the two class matrices $X$ and $Y$ are read through this
+    translation-covariant family: seam edges carry the transposed inverse of
+    the corresponding class matrix, so this is the orientation-faithful form
+    of the source's horizontal and vertical gauges.
+\end{theorem}
+
+\begin{theorem}[Fundamental Theorem for normal PEPS on the torus,
+        translation-covariant form]%
+    \label{thm:fundamentalTheorem_normalTorusPEPS_unconditional}
+    \lean{TNLean.PEPS.fundamentalTheorem_normalTorusPEPS_unconditional}
+    \leanok
+    \uses{thm:fundamentalTheorem_normalSquarePEPS,
+        thm:peps_oneVertexComplementComparison,
+        thm:peps_sameState_transport,
+        thm:peps_stateCoeff_translationInvariant,
+        thm:peps_torusUniformBondDim_of_translationInvariant,
+        def:GaugeEquivPEPS}
+    Let $A$ and $B$ be translationally invariant PEPS tensors on the discrete
+    $n\times m$ torus with $n,m\geq 7$, with positive physical dimension, equal
+    and positive bond dimensions,
+    generating the same state, and such that every contiguous $2\times 3$ and
+    $3\times 2$ coordinate rectangle of either tensor is injective. Then there
+    are a family of invertible matrices, one on each edge, carried onto each
+    edge by the torus translations from a single matrix on a reference
+    horizontal edge and a single matrix on a reference vertical edge, and a
+    single scalar $\lambda$ with $\lambda^{nm}=1$, such that at every site the
+    tensor $A$ equals $\lambda$ times the gauge action of the family on $B$.
+    The family also realizes the absorbed inserted-coefficient equality at
+    every edge: inserting any matrix on an edge of $A$ gives the same
+    coefficient as inserting it on the corresponding edge of the gauge-absorbed
+    $B$.
+    This is \cite[Theorem~3]{Molnar2018NormalPEPS} on the torus at the source's
+    sizes $n,m\geq 7$, with the horizontal and vertical gauges $X$, $Y$
+    described by translation covariance: the stored orientation of a
+    wraparound edge is reversed, so on the seam the family carries the
+    transposed inverse of the class matrix, and a family that is literally one
+    matrix per orientation class cannot realize the absorbed equality there.
+    The translation covariance of the family, with the scalar $\lambda$ kept
+    separate rather than absorbed, realizes the remark of
+    \cite{Molnar2018NormalPEPS} following the general normal theorem: for a
+    translationally invariant system the gauges are also translationally
+    invariant, provided the proportionality constants are not absorbed into
+    the gauges.
+    The uniqueness of $X$ and $Y$ up to a multiplicative constant is not part
+    of this statement; the uniqueness clause is
+    Theorem~\ref{thm:torusAbsorbedGauge_unique_scalar} (per edge, against the
+    absorbed equality), Theorem~\ref{thm:torusCovariantAbsorbedGauge_unique_classScalar}
+    (one constant per orientation class), and
+    Theorem~\ref{thm:torusGauge_unique_scalar_of_perVertex} (against the
+    per-vertex relation itself).
+    \begin{proof}
+        \leanok
+        \uses{lem:peps_injectiveRegion_union_pos}
+        The union closure of injective regions follows from the positive bond
+        dimensions and Lemma~\ref{lem:peps_injectiveRegion_union_pos}. The
+        reference blockings are anchored against the far seam: the removed
+        blocks keep a margin of at least two rows and columns below and to
+        the left and end exactly at the seam above and to the right, so the
+        complementary region decomposes into wraparound-free rectangular
+        bands on every torus with $n,m\geq 7$. The
+        coherent blocking frames at every edge produce per-edge gauges, whose
+        absorption into $B$ gives the absorbed inserted-coefficient equality at
+        every edge; the absorbing family is built by transporting one reference
+        gauge per orientation class, so it commutes with the torus
+        translations. A gauge preserves blocked-region linear independence, so
+        the region comparison applies to the gauge-absorbed tensor: comparing
+        the corner region with its one-site completion yields proportionality
+        scalars $c_R$ and $c_S$ such that, with $\lambda=c_S/c_R$,
+        \[
+            A_v(\eta,\sigma)
+            =
+            \lambda\,
+            \bigl(\text{gauge action of }X\text{ on }B\bigr)_v(\eta,\sigma).
+        \]
+        Translation covariance carries the same scalars to every site. Taking
+        the product over all vertices and using the invariance of the closed
+        state coefficient gives
+        \[
+            \lambda^{nm}=1.
+        \]
+    \end{proof}
+\end{theorem}
+
+\begin{corollary}[Torus scalar condition from the per-vertex two-block proportionalities]%
+    \label{cor:peps_lambda_pow_card_torus_eq_one_of_twoBlockProportional}
+    \lean{TNLean.PEPS.lambda_pow_card_torus_eq_one_of_twoBlockProportional}
+    \leanok
+    \uses{cor:peps_component_eq_gaugeVertex_of_twoBlockProportional}
+    Let $A$ and $B$ be PEPS tensors on the discrete $n\times m$ torus with $n,m>1$,
+    with equal bond dimensions and positive bond dimensions, generating the same
+    state, and let $X$ be a family of invertible matrices, one on each edge. Suppose
+    that at every site $v$ a region $R_v$ not containing $v$ is supplied together with
+    the two two-block scalar proportionalities of the blocked weights of $A$ and of
+    the gauge-absorbed second tensor over $R_v$ and over $R_v\cup\{v\}$, with ratios
+    $c_R(v)$ and $c_S(v)$ satisfying $c_R(v)\ne 0$ and whose quotient
+    $c_S(v)/c_R(v)$ is a single scalar $\lambda$ independent of $v$, and with the
+    gauge-absorbed region block linearly independent. If, in addition, a single
+    comparison region whose block and complement block are both blocked-tensor
+    injective is supplied, then $\lambda$ raised to the number of torus sites is one:
+    \[
+        \lambda^{nm}=1.
+    \]
+\end{corollary}
+\begin{proof}\leanok
+    At each of the $nm$ sites $v$ the inserted-site scalar extraction of
+    Corollary~\ref{cor:peps_component_eq_gaugeVertex_of_twoBlockProportional} turns
+    the two two-block proportionalities into the per-vertex gauge relation
+    \[
+        A_v(\eta,\sigma)
+        =
+        \lambda\,\widetilde B_v(\eta,\sigma),
+    \]
+    where $\widetilde B_v$ is the gauge action of $X$ on $B$ at $v$. Contracting
+    both sides over the whole torus pulls one factor of $\lambda$ out of each of
+    the $nm$ sites, so the closed torus contractions of $A$ and of $\widetilde B$
+    satisfy
+    \[
+        \langle A\rangle_{\mathrm{torus}}
+        =
+        \lambda^{nm}\,\langle \widetilde B\rangle_{\mathrm{torus}}.
+    \]
+    The single comparison region and its complement being injective makes this
+    common torus contraction nonzero; by hypothesis the quotient
+    $c_S(v)/c_R(v)$ is the same scalar $\lambda$ at every site, so
+    $\lambda^{nm}=1$.
+\end{proof}
+
+\begin{theorem}[Per-edge uniqueness of the torus gauge up to a constant]%
+    \label{thm:torusAbsorbedGauge_unique_scalar}
+    \lean{TNLean.PEPS.torusAbsorbedGauge_unique_scalar}
+    \leanok
+    \uses{def:applyGauge, def:peps_edgeInsertedCoeff}
+    Let $A$ and $B$ be translationally invariant PEPS tensors on the discrete
+    $n\times m$ torus with $n,m\geq 7$, with positive physical dimension,
+    equal and positive bond dimensions, generating the same state, and such
+    that every contiguous
+    $2\times 3$ and $3\times 2$ coordinate rectangle of either tensor is
+    injective.  Let $X$ and $X'$ be two families of invertible matrices, one
+    on each edge of the torus, and let $e$ be an edge at which both families
+    realize the absorbed inserted-coefficient equality: inserting any matrix
+    on the edge $e$ of $A$ gives the same coefficient as inserting it on the
+    edge $e$ of the gauge-absorbed $B$, for every physical configuration.
+    Then the two families are proportional at $e$: $X'_e = c\cdot X_e$ for a
+    nonzero scalar $c$.
+    This is the uniqueness clause of \cite[Theorem~3]{Molnar2018NormalPEPS}
+    read at one edge, at the source's sizes $n,m\geq 7$ as in
+    Theorem~\ref{thm:fundamentalTheorem_normalTorusPEPS_unconditional}; the
+    source proves it through the determinacy of the conjugator in the
+    isomorphism lemma, whose realizing matrix is unique up to a multiplicative
+    constant.
+    \begin{proof}
+        \leanok
+        \uses{lem:peps_injectiveRegion_union_pos}
+        The rectangle hypotheses produce, along the orientation class of $e$,
+        a comparison region having $e$ as its single boundary edge on which
+        the second tensor and its complement are injective; the union closure
+        of injective regions follows from the positive bond dimensions and
+        Lemma~\ref{lem:peps_injectiveRegion_union_pos}.  The bare-edge
+        absorbed equality of each family lifts to the region
+        inserted-coefficient identity over this region, with the inserted
+        matrix conjugated by the orientation-adapted absorption of the
+        family's matrix at $e$.  The region-insertion transfer map is
+        determined by this identity, so both orientation-adapted absorbing
+        matrices induce the same conjugation on every bond matrix:
+        \[
+            X_{\mathrm{abs}}\,N\,X_{\mathrm{abs}}^{-1}
+            =
+            X'_{\mathrm{abs}}\,N\,\bigl(X'_{\mathrm{abs}}\bigr)^{-1}
+            \qquad\text{for every bond matrix }N.
+        \]
+        A matrix commuting with the full bond matrix algebra is a scalar
+        multiple of the identity, so $X'_{\mathrm{abs}}=c\,X_{\mathrm{abs}}$
+        for some $c\ne0$. Unwinding the orientation adaptation gives
+        $X'_e=c\cdot X_e$.
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}[Class constancy of the gauge comparison scalars]%
+    \label{thm:torusCovariantAbsorbedGauge_unique_classScalar}
+    \lean{TNLean.PEPS.torusCovariantAbsorbedGauge_unique_classScalar}
+    \leanok
+    \uses{def:applyGauge, def:peps_edgeInsertedCoeff}
+    Let $A$, $B$, $X$, $X'$ be as in
+    Theorem~\ref{thm:torusAbsorbedGauge_unique_scalar}, with both families
+    realizing the absorbed inserted-coefficient equality at every edge, and
+    suppose moreover that both families are translation covariant: the matrix
+    at any translate of an edge is the matrix at the edge, transposed-inverted
+    exactly when the translation swaps the stored endpoint order.  Then there
+    are nonzero scalars $c_h$ and $c_v$ such that on every horizontal edge
+    stored in the natural cyclic order (the stored second endpoint is the
+    cyclic right neighbour of the first) $X'_e = c_h\cdot X_e$, on every
+    horizontal edge wrapping the seam (stored with swapped endpoints)
+    $X'_e = c_h^{-1}\cdot X_e$, and likewise on the vertical class with $c_v$.
+    The inversion on the seam is forced by the ordered-edge convention: the
+    covariance carries the transposed inverse of the class matrix onto a seam
+    edge, and the transposed inverse of a proportionality inverts its
+    constant.  A single constant on the whole class is therefore not the true
+    statement in this convention; this is the class form of the uniqueness
+    clause of \cite[Theorem~3]{Molnar2018NormalPEPS}.
+    \begin{proof}
+        \leanok
+        \uses{thm:torusAbsorbedGauge_unique_scalar}
+        The constants are the per-edge scalars of
+        Theorem~\ref{thm:torusAbsorbedGauge_unique_scalar} at the two
+        reference edges.  Every edge of a class is the translate of its
+        reference edge by a unique translation $\tau$. At an interior edge,
+        covariance gives $X_e=\tau\cdot X_{\mathrm{ref}}$, hence
+        \[
+            X'_e
+            =
+            \tau\cdot X'_{\mathrm{ref}}
+            =
+            \tau\cdot(c_h\,X_{\mathrm{ref}})
+            =
+            c_h\,(\tau\cdot X_{\mathrm{ref}})
+            =
+            c_h\,X_e.
+        \]
+        At a seam edge, covariance gives $X_e=(X_{\mathrm{ref}})^{-\top}$,
+        hence
+        \[
+            X'_e
+            =
+            (X'_{\mathrm{ref}})^{-\top}
+            =
+            (c_h\,X_{\mathrm{ref}})^{-\top}
+            =
+            c_h^{-1}(X_{\mathrm{ref}})^{-\top}
+            =
+            c_h^{-1}X_e.
+        \]
+        The marker $e_{1,x}+1=e_{2,x}$ distinguishes the two branches, and the
+        vertical class is identical with $c_v$ in place of $c_h$.
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}[Uniqueness of the gauges against the per-vertex relation]%
+    \label{thm:torusGauge_unique_scalar_of_perVertex}
+    \lean{TNLean.PEPS.torusGauge_unique_scalar_of_perVertex}
+    \leanok
+    \uses{def:gaugeVertex, def:applyGauge}
+    Let $A$ and $B$ be translationally invariant PEPS tensors on the discrete
+    $n\times m$ torus with $n,m\geq 7$, with positive physical dimension,
+    equal and positive bond dimensions, generating the same state, and such
+    that every contiguous
+    $2\times 3$ and $3\times 2$ coordinate rectangle of either tensor is
+    injective.  Suppose the families $X$ and $X'$ of invertible matrices, one
+    on each edge, each realize the per-vertex relation of
+    Theorem~\ref{thm:fundamentalTheorem_normalTorusPEPS_unconditional}: at
+    every site the tensor $A$ equals $\lambda$ (respectively $\lambda'$)
+    times the gauge action of the family on $B$, with $\lambda^{nm} = 1$
+    (respectively $\lambda'^{nm} = 1$).  Then the two families are
+    proportional at every edge: $X'_e = c\cdot X_e$ for a nonzero scalar $c$
+    depending on the edge.
+    This is the uniqueness clause of \cite[Theorem~3]{Molnar2018NormalPEPS}
+    read against the displayed relation $B = \lambda\cdot(X,Y)A$ itself, at
+    the source's sizes $n,m\geq 7$.
+    \begin{proof}
+        \leanok
+        \uses{thm:torusAbsorbedGauge_unique_scalar,
+            def:peps_edgeInsertedCoeff}
+        The inserted-edge coefficient is multilinear in the site tensors, one
+        factor per site, so the per-vertex relation scales every inserted
+        coefficient by $\lambda^{nm} = 1$: each family realizes the absorbed
+        inserted-coefficient equality at every edge.
+        Theorem~\ref{thm:torusAbsorbedGauge_unique_scalar} then gives the
+        proportionality at each edge.
+    \end{proof}
+\end{theorem}
+
+\subsection{Overlapping-window corner cancellation}
+\label{subsec:peps_torus_overlap_corner_cancellation}
+
+\begin{definition}[Corner extension of a region insert]
+    \label{def:peps_corner_extension}
+    \lean{TNLean.PEPS.nestedThreeBlockGeometry}
+    \lean{TNLean.PEPS.bareExtendInsert}
+    \lean{TNLean.PEPS.extendInsert}
+    \leanok
+    Let $R\subseteq S$ be regions in a finite graph, and let $C$ be a region
+    insert on $R$.  Write $\Phi_{R,S}$ for the coefficient obtained by
+    contracting the added block $S\setminus R$ between the boundary of $R$ and
+    the boundary of $S$.  The bare corner extension is
+    \[
+        \overline{\operatorname{Ext}}_{R\subseteq S}(C)_{\nu,\sigma}
+        =
+        \sum_{\mu\in \partial R}
+        C_{\mu,\sigma|_R}\,
+        \Phi_{R,S}\bigl(\mu,\sigma|_{S\setminus R},\nu\bigr).
+    \]
+    The normalized corner extension of $C$ from $R$ to $S$ is the region insert
+    \[
+        \operatorname{Ext}_{R\subseteq S}(C)_{\nu,\sigma}
+        =
+        P_{V\setminus S}^{-1}
+        \sum_{\mu\in \partial R}
+        C_{\mu,\sigma|_R}\,
+        \Phi_{R,S}\bigl(\mu,\sigma|_{S\setminus R},\nu\bigr),
+    \]
+    where $P_{V\setminus S}$ is the product of bond dimensions over the edges
+    not crossing the boundary of $V\setminus S$.  This is the open-boundary
+    form of the extension used in the overlapping-window proof sketch of
+    \cite[Section~4, proof of Theorem~3]{Molnar2018NormalPEPS}.
+\end{definition}
+
+\begin{theorem}[State preservation under corner extension]
+    \label{thm:peps_corner_extension_state_preserves}
+    \lean{TNLean.PEPS.deformedRegionState_extend}
+    \leanok
+    \uses{def:peps_corner_extension}
+    If all bond dimensions are positive, then corner extension from
+    $R\subseteq S$ preserves the deformed region state:
+    \[
+        \Psi_{A,R,C}
+        =
+        \Psi_{A,S,\operatorname{Ext}_{R\subseteq S}(C)}.
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    Expanding the deformed state on $S$ separates the added block
+    $S\setminus R$ from the complement $V\setminus S$.  The corner-extension
+    sum contracts the added block first, giving the pointwise identity
+    \[
+        \Psi_{A,S,\operatorname{Ext}_{R\subseteq S}(C)}(\tau)
+        =
+        P_{V\setminus S}^{-1}\,P_{V\setminus S}\,
+        \Psi_{A,R,C}(\tau)
+        =
+        \Psi_{A,R,C}(\tau).
+    \]
+\end{proof}
+
+\begin{theorem}[Consecutive horizontal windows have equal corner extensions]
+    \label{thm:peps_horizontal_consecutive_window_extend_eq}
+    \lean{TNLean.PEPS.horizontalConsecutiveWindow_extend_eq}
+    \leanok
+    \uses{def:peps_corner_extension,
+        thm:peps_corner_extension_state_preserves}
+    Assume the one-orientation $L\times K$ window-injectivity hypotheses,
+    union closure for injective regions, positive bond dimensions, and the
+    bounds
+    \[
+        2\le L,\qquad 2\le K,\qquad 2L+1\le W,\qquad 2K+1\le H.
+    \]
+    Suppose two horizontally consecutive $L\times K$ windows carry inserts
+    $C_1$ and $C_2$ whose deformed states agree.  Let $U$ be their
+    $(L+1)\times K$ union.  Then their extensions to $U$ agree:
+    \[
+        \operatorname{Ext}_{W_1\subseteq U}(C_1)
+        =
+        \operatorname{Ext}_{W_2\subseteq U}(C_2).
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    Theorem~\ref{thm:peps_corner_extension_state_preserves} rewrites each
+    single-window deformed state as the deformed state on $U$ with the
+    corresponding extended insert:
+    \[
+        \Psi_{A,U,\operatorname{Ext}_{W_1\subseteq U}(C_1)}
+        =
+        \Psi_{A,W_1,C_1}
+        =
+        \Psi_{A,W_2,C_2}
+        =
+        \Psi_{A,U,\operatorname{Ext}_{W_2\subseteq U}(C_2)}.
+    \]
+    Since $U$ is injective, equality of the two $U$-states implies equality
+    of the two inserts:
+    \[
+        \Psi_{A,U,\operatorname{Ext}_{W_1\subseteq U}(C_1)}
+        =
+        \Psi_{A,U,\operatorname{Ext}_{W_2\subseteq U}(C_2)}
+        \quad\Longrightarrow\quad
+        \operatorname{Ext}_{W_1\subseteq U}(C_1)
+        =
+        \operatorname{Ext}_{W_2\subseteq U}(C_2).
+    \]
+\end{proof}
+
+\input{chapter/ch24_peps_ft_torus_bond_uniform}
+
+\begin{theorem}[Patch-extended equality of the staircase end windows]
+    \label{thm:peps_horizontal_staircase_patch_extend_eq}
+    \lean{TNLean.PEPS.horizontalStaircase_patch_extend_eq}
+    \leanok
+    \uses{def:peps_horizontal_staircase_patch,
+        thm:peps_corner_extension_state_preserves}
+    Assume positive bond dimensions and the bounds
+    \[
+        0<L,\qquad 0<K,\qquad 2L\le W,\qquad 2K\le H.
+    \]
+    If the deformed states of the two end-window inserts agree, then their
+    extensions to the staircase patch $P$ have equal deformed states:
+    \[
+        \Psi_{A,P,\operatorname{Ext}_{W_{\mathrm{right}}\subseteq P}(C_0)}
+        =
+        \Psi_{A,P,\operatorname{Ext}_{W_{\mathrm{left}}\subseteq P}(C_{\mathrm{end}})}.
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    Applying Theorem~\ref{thm:peps_corner_extension_state_preserves} to each
+    end window gives
+    \[
+        \Psi_{A,P,\operatorname{Ext}_{W_{\mathrm{right}}\subseteq P}(C_0)}
+        =
+        \Psi_{A,W_{\mathrm{right}},C_0}
+        =
+        \Psi_{A,W_{\mathrm{left}},C_{\mathrm{end}}}
+        =
+        \Psi_{A,P,\operatorname{Ext}_{W_{\mathrm{left}}\subseteq P}(C_{\mathrm{end}})},
+    \]
+    where the middle equality is the hypothesis.
+\end{proof}
+
+% The end-pair stripping under full complement injectivity has been retired: at the
+% corollary's minimal size $V\setminus S$ is not blocked-tensor injective, so its hypothesis
+% is not derivable.  The faithful Step~3 is the open-boundary shared-corner cancellation
+% \ref{thm:peps_staircase_pair_insert_eq_open}, which inverts only the injective completed
+% corner $Q$ and never $V\setminus S$.
+
+\begin{lemma}[Two-block merge collapse]
+    \label{lem:peps_two_block_merge_collapse}
+    \lean{TNLean.PEPS.mergeCollapse2}
+    \leanok
+    Let $B_1,K_1\subseteq V\setminus T$ and $B_2,H_2\subseteq T$.  Fix
+    boundary data $c_1$ on $V\setminus K_1$ and $c_2$ on $H_2$, and physical
+    labels $\sigma_1$ on $B_1$ and $\sigma_2$ on $B_2$.  Set
+    \[
+        F_1(\xi)=\prod_{x\in B_1}A_x(\xi|_{\partial x},\sigma_1(x)),
+        \qquad
+        F_2(\xi)=\prod_{x\in B_2}A_x(\xi|_{\partial x},\sigma_2(x)).
+    \]
+    Then the
+    boundary-compatible double sum collapses to the multiplicity of the
+    interior bonds of $T$ times the single merged sum:
+    \[
+        \sum_{\substack{
+            \zeta_2|_{\partial(V\setminus K_1)}=c_1,\;
+            \zeta_1|_{\partial H_2}=c_2\\
+            \zeta_1|_{\partial T}=\zeta_2|_{\partial T}}}
+        F_1(\zeta_2)F_2(\zeta_1)
+        =
+        P_T
+        \sum_{\substack{
+            \eta|_{\partial(V\setminus K_1)}=c_1,\;
+            \eta|_{\partial H_2}=c_2}}
+        F_1(\eta)F_2(\eta).
+    \]
+\end{lemma}
+\begin{proof}
+    \leanok
+    Each merged configuration has exactly $P_T$ preimages, indexed by the
+    virtual bonds strictly inside $T$.  Since $B_1$ and $K_1$ lie outside
+    $T$, while $B_2$ and $H_2$ lie inside $T$, the two products and the two
+    boundary conditions are unchanged under the merge.
+\end{proof}
+
+\begin{theorem}[Composition of corner-extension coefficient kernels]
+    \label{thm:peps_corner_extension_coefficient_composition}
+    \lean{TNLean.PEPS.threeBlockBlueCoeff_comp}
+    \leanok
+    \uses{def:peps_corner_extension, lem:peps_two_block_merge_collapse}
+    For nested regions $R\subseteq S\subseteq P$, the coefficient kernels
+    satisfy
+    \[
+        \sum_{\nu\in\partial S}
+        \Phi_{R,S}\bigl(\mu,\sigma|_{S\setminus R},\nu\bigr)
+        \Phi_{S,P}\bigl(\nu,\sigma|_{P\setminus S},\omega\bigr)
+        =
+        P_{V\setminus S}\,
+        \Phi_{R,P}\bigl(\mu,\sigma|_{P\setminus R},\omega\bigr).
+    \]
+    This is the two-block merge collapse in the proof of
+    \cite[Section~4, proof of Theorem~3]{Molnar2018NormalPEPS}.
+\end{theorem}
+
+\begin{theorem}[Linearity and transitivity of corner extension]
+    \label{thm:peps_corner_extension_linear_transitive}
+    \lean{TNLean.PEPS.bareExtendInsert_const_smul}
+    \lean{TNLean.PEPS.extendInsert_const_smul}
+    \lean{TNLean.PEPS.extendInsert_add}
+    \lean{TNLean.PEPS.extendInsert_sub}
+    \lean{TNLean.PEPS.bareExtendInsert_trans}
+    \lean{TNLean.PEPS.extendInsert_trans}
+    \leanok
+    \uses{def:peps_corner_extension,
+        thm:peps_corner_extension_coefficient_composition}
+    The corner extension is linear in the inserted boundary coefficients.  For
+    nested regions $R\subseteq S\subseteq P$, the bare extension satisfies
+    \[
+        \overline{\operatorname{Ext}}_{S\subseteq P}
+        \bigl(\overline{\operatorname{Ext}}_{R\subseteq S}(C)\bigr)
+        =
+        P_{V\setminus S}\,
+        \overline{\operatorname{Ext}}_{R\subseteq P}(C)
+    \]
+    without a positivity assumption.  If all bond dimensions are positive, the
+    normalized corner extension is transitive:
+    \[
+        \operatorname{Ext}_{S\subseteq P}
+        \bigl(\operatorname{Ext}_{R\subseteq S}(C)\bigr)
+        =
+        \operatorname{Ext}_{R\subseteq P}(C).
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    The scalar and additive laws follow from the defining sum.  For
+    transitivity, substitute
+    Theorem~\ref{thm:peps_corner_extension_coefficient_composition} into the
+    defining sum.  This gives the bare formula, and the factors
+    $P_{V\setminus S}$ cancel in the normalized extension.
+\end{proof}
+
+\begin{definition}[Assembly of subregion physical configurations]
+    \label{def:peps_assemble_subregion_physical_config}
+    \lean{TNLean.PEPS.assembleSubRegionσ}
+    \leanok
+    If $R\subseteq S$, a physical configuration on $R$ and a physical
+    configuration on $S\setminus R$ assemble to a physical configuration on
+    $S$:
+    \[
+        \operatorname{As}_{R,S}(\sigma_R,\sigma_Q)(v)
+        =
+        \begin{cases}
+        \sigma_R(v), & v\in R,\\
+        \sigma_Q(v), & v\in S\setminus R.
+        \end{cases}
+    \]
+\end{definition}
+
+\begin{theorem}[Restrictions of assembled subregion configurations]
+    \label{thm:peps_assemble_subregion_physical_config_restricts}
+    \lean{TNLean.PEPS.restrictSubRegionσ_assembleSubRegionσ}
+    \lean{TNLean.PEPS.restrictSubRegionσ_sdiff_assembleSubRegionσ}
+    \leanok
+    \uses{def:peps_assemble_subregion_physical_config}
+    The two restrictions recover the original configurations:
+    \[
+        \operatorname{As}_{R,S}(\sigma_R,\sigma_Q)|_R=\sigma_R,
+        \qquad
+        \operatorname{As}_{R,S}(\sigma_R,\sigma_Q)|_{S\setminus R}=\sigma_Q.
+    \]
+\end{theorem}
+
+\begin{theorem}[Kernel triviality of corner extension from the added block]
+    \label{thm:peps_extend_insert_kernel_trivial_added_injective}
+    \lean{TNLean.PEPS.extendInsert_kernel_trivial_of_addedInjective}
+    \leanok
+    \uses{def:peps_corner_extension,
+        def:peps_assemble_subregion_physical_config,
+        thm:peps_assemble_subregion_physical_config_restricts}
+    Let $R\subseteq S$ be finite regions.  Suppose that all bond dimensions are
+    positive and that the added block $Q=S\setminus R$ is blocked-tensor
+    injective.  If a region insert $C$ on $R$ has zero corner extension,
+    \[
+        \operatorname{Ext}_{R\subseteq S}(C)=0,
+    \]
+    then $C=0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Since all bond dimensions are positive, $P_{V\setminus S}\ne 0$.
+    Thus $\operatorname{Ext}_{R\subseteq S}(C)=0$ is equivalent to
+    $\overline{\operatorname{Ext}}_{R\subseteq S}(C)=0$.  Fix the physical
+    configuration $\sigma_R$ on $R$.  Let
+    \[
+        \rho:\partial R \simeq \partial(V\setminus R)
+        \qquad\text{and}\qquad
+        \tau:\partial S \simeq \partial(V\setminus S)
+    \]
+    be the complement-boundary bijections, and define
+    \[
+        c_\eta=C_{\rho^{-1}(\eta),\sigma_R}
+        \qquad(\eta\in \partial(V\setminus R)).
+    \]
+    Evaluating the bare zero extension at
+    $\operatorname{As}_{R,S}(\sigma_R,\sigma_Q)$ gives, for every added-block
+    configuration $\sigma_Q$ and every boundary value
+    $\omega\in\partial(V\setminus S)$,
+    \[
+        \sum_{\eta\in\partial(V\setminus R)}
+        c_\eta\,\Phi_{R,S}(\rho^{-1}(\eta),\sigma_Q,\tau^{-1}(\omega))=0.
+    \]
+    For each outer boundary value $\omega$ and each boundary value $\beta$ of $Q$,
+    define
+    \[
+        f_\omega(\beta)
+        =
+        \sum_{\eta\in\partial(V\setminus R)}
+        c_\eta\,
+        \mathbf 1_{\{\exists q:\,
+            \partial_{V\setminus R}q=\eta,\,
+            \partial_{V\setminus S}q=\omega,\,
+            \partial_Qq=\beta\}}.
+    \]
+    Let $\Gamma$ be the product of bond dimensions on the crossing edges
+    separated when the $Q$-block is read first.  Unfolding $\Phi_{R,S}$ as a sum
+    over the blocked weights of $Q$ gives, for every $\sigma_Q$,
+    \[
+    \begin{aligned}
+        (T_Q f_\omega)(\sigma_Q)
+        &=
+        \sum_{\beta\in\partial Q} f_\omega(\beta)\,W_Q(\beta,\sigma_Q) \\
+        &=
+        \sum_{\beta\in\partial Q}
+        \left(
+        \sum_{\eta\in\partial(V\setminus R)}
+        c_\eta\,
+        \mathbf 1_{\{\exists q:\,
+            \partial_{V\setminus R}q=\eta,\,
+            \partial_{V\setminus S}q=\omega,\,
+            \partial_Qq=\beta\}}
+        \right) W_Q(\beta,\sigma_Q) \\
+        &=
+        \Gamma
+        \sum_{\eta\in\partial(V\setminus R)}
+        c_\eta\,\Phi_{R,S}(\rho^{-1}(\eta),\sigma_Q,\tau^{-1}(\omega))
+        =
+        0.
+    \end{aligned}
+    \]
+    Hence $T_Q(f_\omega)=0$.  Injectivity of the blocked tensor of $Q$ gives
+    \[
+        T_Q(f_\omega)=0 \Longrightarrow f_\omega=0.
+    \]
+    Now fix $\mu\in\partial R$.  Positivity of bond dimensions gives a global
+    virtual configuration $q$ whose residual boundary on $V\setminus R$ is
+    $\rho(\mu)$.  Set
+    \[
+        \omega=\partial_{V\setminus S}q,\qquad
+        \beta=\partial_Q q.
+    \]
+    Evaluating $f_\omega=0$ at $\beta$, the residual-boundary uniqueness identity
+    leaves only the term $\eta=\rho(\mu)$:
+    \[
+        0
+        =
+        f_\omega(\beta)
+        =
+        c_{\rho(\mu)}\cdot 1
+        =
+        C_{\mu,\sigma_R}.
+    \]
+    Since $\sigma_R$ and $\mu$ were arbitrary, $C=0$.
+\end{proof}
+
+\begin{theorem}[Cancellation of a shared injective corner]
+    \label{thm:peps_extend_insert_cancel_added_injective}
+    \lean{TNLean.PEPS.extendInsert_cancel_addedInjective}
+    \leanok
+    \uses{thm:peps_corner_extension_linear_transitive,
+        thm:peps_extend_insert_kernel_trivial_added_injective}
+    Let $R\subseteq S$, and suppose that all bond dimensions are positive and
+    that $S\setminus R$ is blocked-tensor injective.  If two inserts on $R$
+    have the same corner extension to $S$,
+    \[
+        \operatorname{Ext}_{R\subseteq S}(C_1)
+        =
+        \operatorname{Ext}_{R\subseteq S}(C_2),
+    \]
+    then $C_1=C_2$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    By linearity,
+    \[
+        \operatorname{Ext}_{R\subseteq S}(C_1-C_2)=0.
+    \]
+    Theorem~\ref{thm:peps_extend_insert_kernel_trivial_added_injective}
+    applied to the added block $S\setminus R$ gives $C_1-C_2=0$, hence
+    $C_1=C_2$.
+\end{proof}
+
+\begin{theorem}[Staircase-pair cancellation on the torus]
+    \label{thm:peps_staircase_pair_cancel}
+    \lean{TNLean.PEPS.staircasePair_cancel}
+    \leanok
+    \uses{thm:peps_extend_insert_cancel_added_injective}
+    Let the torus have width $W$ and height $H$, with $1<W$ and $1<H$.
+    Let $S$ be the staircase end pair around a horizontal edge, with seam
+    dimensions $L$ and $K$, and let $Q$ be the completed corner rectangle.
+    Assume the size bounds
+    \[
+        2L\le W,\qquad 2K\le H,
+    \]
+    that $Q$ is blocked-tensor injective, and that all bond dimensions are
+    positive.
+    If two inserts $X$ and $Y$ on $S$ have equal extensions to $S\cup Q$,
+    \[
+        \operatorname{Ext}_{S\subseteq S\cup Q}(X)
+        =
+        \operatorname{Ext}_{S\subseteq S\cup Q}(Y),
+    \]
+    then $X=Y$.  Thus the injective completed corner can be cancelled from an
+    open-boundary equality, without assuming injectivity of the torus
+    complement of $S$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The size bounds imply that the staircase end pair is disjoint from the
+    completed corner, and therefore
+    \[
+        (S\cup Q)\setminus S=Q.
+    \]
+    The claimed equality is exactly
+    Theorem~\ref{thm:peps_extend_insert_cancel_added_injective} applied to the
+    inclusion $S\subseteq S\cup Q$.
+\end{proof}
+
+\subsection{Single-bond peeling and the window witness}
+\label{subsec:peps_torus_single_bond_peeling_window_witness}
+
+\begin{definition}[Reference edge of the horizontal staircase]
+    \label{def:peps_horizontal_staircase_reference_edge}
+    \lean{TNLean.PEPS.horizontalStaircaseReferenceEdge}
+    \leanok
+    \uses{def:peps_horizontal_staircase_patch}
+    In the staircase coordinates $s=(a,b)$, the reference edge is the
+    horizontal edge joining
+    \[
+        (a+L-1,b+K-1)
+        \quad\text{to}\quad
+        (a+L,b+K-1).
+    \]
+    It is the edge between the left and right end windows.
+\end{definition}
+
+\begin{theorem}[The reference edge is the unique crossing of the two end windows]
+    \label{thm:peps_horizontal_staircase_reference_edge_crossing}
+    \lean{TNLean.PEPS.isCrossingEdge_horizontalStaircaseEndWindows}
+    \lean{TNLean.PEPS.isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge}
+    \lean{TNLean.PEPS.isRegionBoundaryEdge_horizontalStaircaseRightWindow_referenceEdge}
+    \lean{TNLean.PEPS.not_isRegionBoundaryEdge_horizontalStaircaseEndPair_referenceEdge}
+    \leanok
+    \uses{def:peps_horizontal_staircase_reference_edge,
+        def:peps_horizontal_staircase_patch}
+    Assume
+    \[
+        1<W,\qquad 1<H,\qquad 0<L,\qquad 0<K,\qquad 1\le a,\qquad
+        a+2L\le W,\qquad b+2K-1\le H.
+    \]
+    Then an edge crosses from the left end window to the right end window if
+    and only if it is the reference edge $e$:
+    \[
+        f\in\partial W_{\mathrm{left}}\cap\partial W_{\mathrm{right}}
+        \quad\Longleftrightarrow\quad
+        f=e.
+    \]
+    Thus $e$ is a boundary edge of each end window, but both endpoints of $e$
+    lie in the end pair $S$, so $e\notin\partial S$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The endpoint calculation identifies $e$ with the unique horizontal edge
+    joining the two displayed rectangles.  Since one endpoint lies in
+    $W_{\mathrm{left}}$ and the other lies in $W_{\mathrm{right}}$, the same
+    edge is internal to their union $S$.
+\end{proof}
+
+\begin{lemma}[Boundary edges of the end pair come from the end windows]
+    \label{lem:peps_horizontal_staircase_end_pair_boundary_from_windows}
+    \lean{TNLean.PEPS.isRegionBoundaryEdge_endPair_of_leftWindow}
+    \lean{TNLean.PEPS.isRegionBoundaryEdge_endPair_of_rightWindow}
+    \lean{TNLean.PEPS.isRegionBoundaryEdge_window_of_endPair}
+    \lean{TNLean.PEPS.ne_referenceEdge_of_isRegionBoundaryEdge_endPair}
+    \leanok
+    \uses{thm:peps_horizontal_staircase_reference_edge_crossing}
+    Under the bounds
+    \[
+        1<W,\qquad 1<H,\qquad 0<L,\qquad 0<K,\qquad 1\le a,\qquad
+        a+2L\le W,\qquad b+2K-1\le H,
+    \]
+    a boundary edge of the end pair is a boundary edge of one of the two end
+    windows, and it is not the reference edge.  Conversely, any boundary edge
+    of one end window other than $e$ is a boundary edge of $S$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    A boundary edge of $S$ has one endpoint in $S$; that endpoint lies in one
+    of the two end windows.  The other endpoint is outside $S$, hence outside
+    that window.  Conversely, a boundary edge of one window which is not $e$
+    cannot enter the other window, because $e$ is the unique crossing edge.
+\end{proof}
+
+\begin{theorem}[Boundary of the staircase end pair]
+    \label{thm:peps_horizontal_staircase_end_pair_boundary}
+    \lean{TNLean.PEPS.eq_referenceEdge_of_isRegionBoundaryEdge_both_endWindows}
+    \lean{TNLean.PEPS.isRegionBoundaryEdge_endPair_iff}
+    \lean{TNLean.PEPS.isRegionBoundaryEdge_endPair_exactlyOne_window}
+    \leanok
+    \uses{lem:peps_horizontal_staircase_end_pair_boundary_from_windows}
+    Under the bounds
+    \[
+        1<W,\qquad 1<H,\qquad 0<L,\qquad 0<K,\qquad 1\le a,\qquad
+        a+2L\le W,\qquad b+2K-1\le H,
+    \]
+    an edge is a boundary edge of the staircase end pair $S$ if and only if it
+    is a boundary edge of one of the two end windows and is not the reference
+    edge:
+    \[
+        f\in\partial S
+        \quad\Longleftrightarrow\quad
+        \bigl(f\in\partial W_{\mathrm{left}}
+        \quad\text{or}\quad
+        f\in\partial W_{\mathrm{right}}\bigr)
+        \ \text{and}\ f\ne e.
+    \]
+    Moreover each edge in $\partial S$ lies on exactly one of the two window
+    boundaries.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:peps_horizontal_staircase_end_pair_boundary_from_windows}
+    gives both implications.  If an edge lay on both end-window boundaries,
+    the unique-crossing theorem would identify it with $e$, which is not a
+    boundary edge of $S$.
+\end{proof}
+
+\begin{lemma}[Complement split for an end window]
+    \label{lem:peps_horizontal_staircase_end_window_complement_split}
+    \lean{TNLean.PEPS.horizontalStaircaseEndPair_sdiff_leftWindow}
+    \lean{TNLean.PEPS.horizontalStaircaseEndPair_sdiff_rightWindow}
+    \lean{TNLean.PEPS.compl_leftWindow_eq_rightWindow_union_complEndPair}
+    \lean{TNLean.PEPS.compl_rightWindow_eq_leftWindow_union_complEndPair}
+    \leanok
+    \uses{def:peps_horizontal_staircase_patch,
+        lem:peps_horizontal_staircase_end_pair_disjoint}
+    If $2L\le W$, the complement of either end window splits as the opposite
+    end window and the complement of the end pair:
+    \[
+        V\setminus W_{\mathrm{left}}
+        =
+        W_{\mathrm{right}}\cup (V\setminus S),
+        \qquad
+        V\setminus W_{\mathrm{right}}
+        =
+        W_{\mathrm{left}}\cup (V\setminus S).
+    \]
+\end{lemma}
+\begin{proof}
+    \leanok
+    Since the two end windows are disjoint and
+    $S=W_{\mathrm{left}}\cup W_{\mathrm{right}}$, removing one window from
+    $S$ leaves the other.  Splitting $V\setminus W$ through the inclusion
+    $W\subseteq S$ gives the displayed decompositions.
+\end{proof}
+
+\begin{theorem}[The reference edge bounds the two end windows]
+    \label{thm:peps_staircase_end_reference_edge_boundary}
+    \lean{TNLean.PEPS.isRegionBoundaryEdge_staircaseWindow_zero_referenceEdge}
+    \lean{TNLean.PEPS.isRegionBoundaryEdge_staircaseWindow_last_referenceEdge}
+    \leanok
+    Let the torus have width $W$ and height $H$, with $1<H$.
+    Let $e$ be the horizontal reference edge of a staircase window family with
+    dimensions $L,K$ and lower-left coordinate $(a,b)$.  Suppose
+    \[
+        0<L,\qquad 0<K,\qquad 1\le a,\qquad
+        a+2L\le W,\qquad b+2K-1\le H.
+    \]
+    Then $e$ is a boundary edge of the first staircase window $W_0$ and of the
+    last staircase window $W_{L+K-1}$:
+    \[
+        e\in\partial W_0,
+        \qquad
+        e\in\partial W_{L+K-1}.
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    The first staircase window is the right end window, and the last
+    staircase window is the left end window:
+    \[
+        W_0=W_{\mathrm{right}},
+        \qquad
+        W_{L+K-1}=W_{\mathrm{left}}.
+    \]
+    The reference edge is a boundary edge of these two end windows by their
+    defining geometry.
+\end{proof}
+
+\begin{theorem}[Open-boundary equality on the staircase end pair]
+    \label{thm:peps_staircase_pair_insert_eq_open}
+    \lean{TNLean.PEPS.staircasePair_insert_eq_open}
+    \leanok
+    \uses{thm:peps_staircase_pair_cancel,
+        thm:peps_corner_extension_linear_transitive}
+    Let $S=W_0\cup W_{L+K-1}$ be the staircase end pair.  Suppose that the
+    one-orientation $L\times K$ window injectivity hypotheses hold for a
+    tensor $B$, unions of injective regions are injective, all bond dimensions
+    of $B$ are positive, and
+    \[
+        2\le L,\qquad 2\le K,\qquad
+        2L+1\le W,\qquad 2K+1\le H.
+    \]
+    If $C_j$ are inserts on the staircase windows whose deformed states all
+    equal one common state, then the two end-window inserts have equal corner
+    extensions to $S$:
+    \[
+        \operatorname{Ext}_{W_0\subseteq S}(C_0)
+        =
+        \operatorname{Ext}_{W_{L+K-1}\subseteq S}(C_{L+K-1}).
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    The consecutive-window equalities are composed across the staircase patch.
+    Both sides are then extended through the completed corner, and
+    transitivity of corner extension rewrites the two extension chains.  The
+    completed corner is an injective $L\times K$ window, so
+    Theorem~\ref{thm:peps_staircase_pair_cancel} cancels it and leaves the
+    equality on the end pair $S$.
+\end{proof}
+
+\begin{theorem}[Single-bond peeling of the staircase end equality]
+    \label{thm:peps_regionInsertedCoeff_endWindows_eq_of_staircase}
+    \lean{TNLean.PEPS.regionInsertedCoeff_endWindows_eq_of_staircase}
+    \leanok
+    \uses{def:peps_bond_inserted_region_insert,
+        thm:peps_regionInsertedCoeff_eq_extendInsert_bondInserted,
+        thm:peps_staircase_end_reference_edge_boundary,
+        thm:peps_staircase_pair_insert_eq_open}
+    Let the torus have width $W$ and height $H$.
+    Suppose that the one-orientation $L\times K$ window injectivity
+    hypotheses hold for a tensor $B$, unions of injective regions are
+    injective, and all bond dimensions of $B$ are positive.  Assume
+    \[
+        2\le L,\qquad 2\le K,\qquad 1\le a,\qquad
+        a+2L\le W,\qquad b+2K-1\le H,
+    \]
+    and
+    \[
+        2L+1\le W,\qquad 2K+1\le H.
+    \]
+    Let $C_j$ be inserts on the staircase windows $W_j$ whose deformed states
+    all equal one common state.  Suppose that
+    \[
+        C_0=I_{B,W_0,e,M},
+        \qquad
+        C_{L+K-1}=I_{B,W_{L+K-1},e,M'}.
+    \]
+    Then for every global physical configuration $\sigma$,
+    \[
+        C_B\bigl(W_0,e,M;\sigma|_{W_0},\sigma|_{V\setminus W_0}\bigr)
+        =
+        C_B\bigl(W_{L+K-1},e,M';
+            \sigma|_{W_{L+K-1}},\sigma|_{V\setminus W_{L+K-1}}\bigr).
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    Theorem~\ref{thm:peps_regionInsertedCoeff_eq_extendInsert_bondInserted}
+    rewrites the two displayed coefficients as the deformed states on the
+    staircase end pair of the two corner-extended inserts:
+    \[
+        C_B(W_0,e,M;\sigma|_{W_0},\sigma|_{V\setminus W_0})
+        =
+        \Psi_{B,S,\operatorname{Ext}_{W_0\subseteq S}(C_0)}(\sigma),
+    \]
+    and
+    \[
+        C_B(W_{L+K-1},e,M';
+            \sigma|_{W_{L+K-1}},\sigma|_{V\setminus W_{L+K-1}})
+        =
+        \Psi_{B,S,
+        \operatorname{Ext}_{W_{L+K-1}\subseteq S}(C_{L+K-1})}(\sigma).
+    \]
+    The open-boundary equality on the staircase end pair gives
+    \[
+        \operatorname{Ext}_{W_0\subseteq S}(C_0)
+        =
+        \operatorname{Ext}_{W_{L+K-1}\subseteq S}(C_{L+K-1}),
+    \]
+    and hence the two coefficients are equal.
+\end{proof}
+
+\input{chapter/ch24_peps_ft_torus_window_peel4}
+
+\begin{definition}[Window-region coefficient-identity witness]
+    \label{def:peps_window_edge_coeff_identity_witness}
+    \lean{TNLean.PEPS.windowEdgeCoeffIdentityWitness}
+    \leanok
+    \uses{def:peps_regionInsertedCoeff,
+        thm:peps_staircase_end_reference_edge_boundary}
+    Let $W$ be the left end window of a horizontal staircase with parameters
+    $(L,K)$ and lower-left coordinate $(a,b)$, and let $e$ be its reference
+    edge.  Suppose that
+    \[
+        0<L,\qquad 0<K,\qquad
+        1\le a,\qquad
+        a+2L\le W_{\mathrm{torus}},\qquad
+        b+2K-1\le H_{\mathrm{torus}}.
+    \]
+    Then $e\in\partial W$.  Suppose also that the blocked tensors of $B$ on
+    $W$ and $V\setminus W$ are injective, that all bond dimensions of $B$ are
+    positive, and that the bond dimensions of $A$ and $B$ at $e$ are
+    identified by $\iota_e:\MN{D_A(e)}\simeq\MN{D_B(e)}$.  If
+    $Z\in\GL(D_B(e))$ satisfies, for every matrix $M$ and physical
+    configurations $\sigma,\tau$,
+    \[
+        C_A(W,e,M;\sigma,\tau)
+        =
+        C_B(W,e,Z\,\iota_e(M)\,Z^{-1};\sigma,\tau),
+    \]
+    then these objects form the coefficient-identity witness at $e$ with
+    witness region $W$ and with both gauge entries equal to $Z$.
+\end{definition}
+
+\begin{definition}[Window-region witness from window injectivity]
+    \label{def:peps_window_edge_coeff_identity_witness_of_hypotheses}
+    \lean{TNLean.PEPS.windowEdgeCoeffIdentityWitness_of_hypotheses}
+    \leanok
+    \uses{def:peps_window_edge_coeff_identity_witness}
+    Let $W$ be the left end window around the reference edge $e$, placed with
+    lower-left coordinate $(a,b)$.  Suppose that every cyclic $L\times K$
+    window of $B$ is blocked-tensor injective, unions of injective regions are
+    injective, all bond dimensions of $B$ are positive, and
+    \[
+        2\le L,\qquad 2\le K,\qquad
+        2L+1\le W_{\mathrm{torus}},\qquad
+        2K+1\le H_{\mathrm{torus}},
+    \]
+    with
+    \[
+        1\le a,\qquad
+        a+2L\le W_{\mathrm{torus}},\qquad
+        b+2K-1\le H_{\mathrm{torus}}.
+    \]
+    Suppose also that the bond dimensions of $A$ and $B$ at $e$ are
+    identified by $\iota_e:\MN{D_A(e)}\simeq\MN{D_B(e)}$, and let
+    $Z\in\GL(D_B(e))$.  If the conjugation identity
+    \[
+        C_A(W,e,M;\sigma,\tau)
+        =
+        C_B(W,e,Z\,\iota_e(M)\,Z^{-1};\sigma,\tau)
+    \]
+    holds for every $M,\sigma,\tau$, then the coefficient-identity witness of
+    Definition~\ref{def:peps_window_edge_coeff_identity_witness} is obtained
+    for the region $W$.  The hypotheses supply the injectivity of both $W$ and
+    its complement at the minimal torus size.
+\end{definition}
+
+\input{chapter/ch24_peps_ft_torus_window_realizes}
+\input{chapter/ch24_peps_ft_torus_bond_local}

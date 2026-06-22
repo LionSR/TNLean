@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.FixedPoint.Algebra
 import TNLean.Channel.Semigroup.CPClosure
-import TNLean.Algebra.MatrixFunctionalCalculus
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
 import Mathlib.Analysis.Matrix.Order
 
@@ -23,7 +22,7 @@ Wedderburn block decomposition from Wolf Theorem 6.14 (issue #27).
 
 ## Main results
 
-* `IsConditionalExpectation`: predicate recording that a linear map is
+* `IsConditionalExpectation`: predicate stating that a linear map is
   idempotent, unital, maps into a `StarSubalgebra`, and fixes it pointwise.
   Defined generically over any `StarAlgebra` for upstream compatibility.
 * `scalarConditionalExpectation`: the linear map `X ↦ (tr(σX)/tr(σ)) • 1`.
@@ -50,10 +49,10 @@ Wedderburn block decomposition from Wolf Theorem 6.14 (issue #27).
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Thm 6.15, §6.4]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 6.15, Section 6.4]
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder BigOperators TNMatrixCFC
+open scoped Matrix ComplexOrder MatrixOrder BigOperators
 open Matrix Finset Complex
 
 namespace Kraus
@@ -189,15 +188,6 @@ theorem scalarConditionalExpectation_mem_adjointFixedPoints
 
 /-! ## Complete positivity and weighted trace preservation -/
 
-/-- A helper identity: `∑ j, single j j c = c • 1` for `c : ℂ`.
-
-The sum of diagonal basis matrices with a common scalar equals that scalar
-times the identity. -/
-private lemma sum_single_diag_const {D : ℕ} (c : ℂ) :
-    (∑ j : Fin D, Matrix.single j j c : Matrix (Fin D) (Fin D) ℂ) =
-      c • (1 : Matrix (Fin D) (Fin D) ℂ) := by
-  rw [Matrix.sum_single_eq_diagonal, Matrix.smul_one_eq_diagonal]
-
 /-- **Wolf Corollary 6.6, CP part.**
 
 The scalar conditional expectation `E_σ` is completely positive whenever `σ`
@@ -265,8 +255,8 @@ theorem scalarConditionalExpectation_isCPMap
                 (fun i => (S * X * S) i i) Finset.univ).symm
       _ = ∑ j : Fin D, Matrix.single j j (Matrix.trace (S * X * S)) := by
             simp [Matrix.trace, Matrix.diag]
-      _ = (Matrix.trace (S * X * S)) • (1 : Mat) :=
-            sum_single_diag_const (D := D) (Matrix.trace (S * X * S))
+      _ = (Matrix.trace (S * X * S)) • (1 : Mat) := by
+            rw [Matrix.sum_single_eq_diagonal, Matrix.smul_one_eq_diagonal]
       _ = (Matrix.trace (σ * X)) • (1 : Mat) := by
             congr 1
             calc Matrix.trace (S * X * S)
@@ -279,12 +269,10 @@ theorem scalarConditionalExpectation_isCPMap
   have hcpK : IsCPMap (Kraus.mapLM K) := isCPMap_of_krausMapLM K
   -- Rewrite `scalarConditionalExpectation σ` as `(σ.trace.re)⁻¹ • Kraus.mapLM K`.
   have htr_nn : (0 : ℂ) ≤ σ.trace := Matrix.PosSemidef.trace_nonneg hσ
-  have htr_re_nn : (0 : ℝ) ≤ σ.trace.re := (Complex.nonneg_iff.mp htr_nn).1
-  have htr_im : σ.trace.im = 0 := (Complex.nonneg_iff.mp htr_nn).2.symm
-  have htr_eq : ((σ.trace.re : ℝ) : ℂ) = σ.trace := by
-    apply Complex.ext
-    · simp
-    · simp [htr_im]
+  have htr_re_nn : (0 : ℝ) ≤ σ.trace.re := (RCLike.nonneg_iff.mp htr_nn).1
+  have htr_eq : ((σ.trace.re : ℝ) : ℂ) = σ.trace :=
+    (RCLike.ofReal_eq_re_of_isSelfAdjoint
+      (IsSelfAdjoint.of_nonneg htr_nn)).mp rfl
   -- `scalarConditionalExpectation σ = ((σ.trace.re)⁻¹ : ℂ) • Kraus.mapLM K`.
   have hrw : scalarConditionalExpectation σ =
       (((σ.trace.re : ℝ)⁻¹ : ℝ) : ℂ) • Kraus.mapLM K := by

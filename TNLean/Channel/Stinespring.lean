@@ -7,11 +7,11 @@ import TNLean.Channel.KrausRepresentation
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 
 /-!
-# Stinespring representation theorem (Wolf Ch. 2, Thm 2.2)
+# Stinespring representation theorem (Wolf Section 2.1, Theorem 2.2)
 
 This file states and proves the Stinespring dilation theorem:
 every completely positive map can be written as `T*(A) = V†(A ⊗ 𝟙)V`
-for an explicit isometry `V` constructed from the Kraus operators.
+for an explicit isometry `V` constructed from the Kraus operators (Wolf Eq. (2.11)).
 
 ## Main definitions
 
@@ -20,7 +20,7 @@ for an explicit isometry `V` constructed from the Kraus operators.
 * `stinespringV_apply`: entrywise evaluation lemma for `stinespringV`
 * `stinespringPi`: the concrete finite-dimensional representation `π(A) = A ⊗ 𝟙_r`
 
-## Main results (Wolf Thm 2.2)
+## Main results (Wolf Theorem 2.2)
 
 * `stinespringV_conjTranspose_mul` — `V†V = ∑ⱼ Kⱼ†Kⱼ`
 * `stinespringV_isometry_iff_kraus_normalized` — `V†V = 𝟙` ↔ `∑ⱼ Kⱼ†Kⱼ = 𝟙`
@@ -31,7 +31,7 @@ for an explicit isometry `V` constructed from the Kraus operators.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Thm 2.2][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 2.2][Wolf2012QChannels]
 -/
 
 open scoped Matrix
@@ -66,7 +66,7 @@ theorem stinespringV_conjTranspose_mul {r : ℕ}
     Fintype.sum_prod_type, Matrix.sum_apply]
   exact Finset.sum_comm
 
-/-- **Stinespring isometry condition** (Wolf Thm 2.2):
+/-- **Stinespring isometry condition** (Wolf Theorem 2.2):
 `V†V = 𝟙` if and only if `∑ⱼ Kⱼ†Kⱼ = 𝟙`, i.e., the Kraus operators are normalized
 (equivalently, the map is trace-preserving). -/
 theorem stinespringV_isometry_iff_kraus_normalized {r : ℕ}
@@ -77,7 +77,7 @@ theorem stinespringV_isometry_iff_kraus_normalized {r : ℕ}
 
 /-! ### Stinespring representation of the dual and Schrödinger maps -/
 
-/-- **Stinespring representation, Heisenberg picture** (Wolf Thm 2.2):
+/-- **Stinespring representation, Heisenberg picture** (Wolf Theorem 2.2, Eq. (2.11)):
 
   `T*(A) = V† (A ⊗ 𝟙_r) V`
 
@@ -99,7 +99,79 @@ theorem stinespring_dual_representation {r : ℕ}
     mul_ite, mul_one, mul_zero, Finset.sum_ite_eq', Finset.mem_univ, ite_true]
   rw [Finset.sum_comm]
 
-/-- **Stinespring representation, Schrödinger picture** (Wolf Thm 2.2):
+/-! ### Finite-index Stinespring compression lemmas -/
+
+/-- The Stinespring matrix for a Kraus family indexed by an arbitrary finite type.
+
+This is the same coordinate construction as `stinespringV`; the latter is kept
+`Fin`-indexed because most channel declarations use a natural number as Kraus
+rank. Wolf's Radon--Nikodym theorem for instruments naturally groups Kraus
+operators by a finite outcome type. -/
+noncomputable def stinespringVGen {η : Type*}
+    (K : η → Matrix (Fin D) (Fin D) ℂ) :
+    Matrix (Fin D × η) (Fin D) ℂ :=
+  fun ⟨i, j⟩ k => K j i k
+
+@[simp]
+theorem stinespringVGen_apply {η : Type*}
+    (K : η → Matrix (Fin D) (Fin D) ℂ) (i : Fin D) (j : η) (k : Fin D) :
+    stinespringVGen K (i, j) k = K j i k := rfl
+
+/-- Stinespring dual representation for a Kraus family indexed by an arbitrary
+finite type. -/
+theorem stinespring_dual_representation_gen {η : Type*} [Fintype η] [DecidableEq η]
+    (K : η → Matrix (Fin D) (Fin D) ℂ) (A : Matrix (Fin D) (Fin D) ℂ) :
+    (stinespringVGen K)ᴴ *
+      (kroneckerMap (· * ·) A (1 : Matrix η η ℂ)) *
+      stinespringVGen K =
+      ∑ j : η, (K j)ᴴ * A * K j := by
+  ext a b
+  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply,
+    stinespringVGen_apply, kroneckerMap_apply, Matrix.one_apply,
+    Matrix.sum_apply, Fintype.sum_prod_type,
+    mul_ite, mul_one, mul_zero, Finset.sum_ite_eq', Finset.mem_univ, ite_true]
+  exact Finset.sum_comm
+
+/-- A linear combination of Kraus blocks is obtained by left-multiplying the
+Stinespring matrix by `1 ⊗ C`. -/
+theorem stinespringVGen_linear_combination
+    {η : Type*}
+    (K : Fin r → Matrix (Fin D) (Fin D) ℂ)
+    (C : Matrix η (Fin r) ℂ) :
+    stinespringVGen (fun α : η => ∑ j : Fin r, C α j • K j) =
+      Matrix.kroneckerMap (· * ·) (1 : Matrix (Fin D) (Fin D) ℂ) C *
+        stinespringV K := by
+  ext x b
+  rcases x with ⟨a, α⟩
+  simp only [stinespringVGen_apply, stinespringV_apply, Matrix.sum_apply,
+    Matrix.smul_apply, smul_eq_mul, Matrix.mul_apply, Matrix.kroneckerMap_apply,
+    Matrix.one_apply, Fintype.sum_prod_type]
+  rw [Finset.sum_eq_single a]
+  · simp
+  · intro a' _ ha'
+    have haa' : a ≠ a' := fun h => ha' h.symm
+    simp [haa']
+  · intro h
+    exact absurd (Finset.mem_univ a) h
+
+/-- The Kronecker identity
+`A ⊗ (CᴴC) = (𝟙 ⊗ C)ᴴ (A ⊗ 𝟙)(𝟙 ⊗ C)` for an arbitrary finite row type. -/
+theorem Matrix.kroneckerMap_conjTranspose_mul_kroneckerMap_gen
+    {η : Type*} [Fintype η] [DecidableEq η]
+    (A : Matrix (Fin D) (Fin D) ℂ) (C : Matrix η (Fin r) ℂ) :
+    (Matrix.kroneckerMap (· * ·) (1 : Matrix (Fin D) (Fin D) ℂ) C)ᴴ *
+        Matrix.kroneckerMap (· * ·) A (1 : Matrix η η ℂ) *
+        Matrix.kroneckerMap (· * ·) (1 : Matrix (Fin D) (Fin D) ℂ) C =
+      Matrix.kroneckerMap (· * ·) A (Cᴴ * C) := by
+  rw [Matrix.conjTranspose_kronecker]
+  rw [show (1 : Matrix (Fin D) (Fin D) ℂ)ᴴ = 1 from Matrix.conjTranspose_one]
+  rw [← Matrix.mul_kronecker_mul (A := (1 : Matrix (Fin D) (Fin D) ℂ)) (B := A)
+      (A' := Cᴴ) (B' := (1 : Matrix η η ℂ))]
+  rw [← Matrix.mul_kronecker_mul (A := (1 * A : Matrix (Fin D) (Fin D) ℂ))
+      (B := (1 : Matrix (Fin D) (Fin D) ℂ)) (A' := Cᴴ * 1) (B' := C)]
+  simp
+
+/-- **Stinespring representation, Schrödinger picture** (Wolf Theorem 2.2):
 
   `T(ρ)_{ij} = ∑_k (V ρ V†)_{(i,k),(j,k)} = tr_r(V ρ V†)`
 
@@ -152,7 +224,7 @@ theorem stinespringPi_conjTranspose {r : ℕ}
   convert Matrix.conjTranspose_kronecker (x := A) (y := (1 : Matrix (Fin r) (Fin r) ℂ)) using 1
   simp
 
-/-- **Stinespring dilation (existential form, Wolf Thm 2.2)**:
+/-- **Stinespring dilation (existential form, Wolf Theorem 2.2)**:
 every CP map `E` admits an ancilla dimension `r`, a Kraus family `K`,
 and the concrete `*`-representation `π(A) = A ⊗ 𝟙_r` such that
 `E(A) = V† π(A) V` with `V = stinespringV K`.

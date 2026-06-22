@@ -39,7 +39,8 @@ theorem gauge_unique_up_to_scalar {A B : MPSTensor d D} (hA : IsInjective A)
         intro i
         have hXY :
             (X : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) * A i *
-              ((X⁻¹ : GL (Fin (Nat.succ D')) ℂ) : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ)
+              ((X⁻¹ : GL (Fin (Nat.succ D')) ℂ) :
+                Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ)
               =
             (Y : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) * A i *
               ((Y⁻¹ : GL (Fin (Nat.succ D')) ℂ) :
@@ -60,12 +61,7 @@ theorem gauge_unique_up_to_scalar {A B : MPSTensor d D} (hA : IsInjective A)
       have hc_ne : c ≠ 0 := by
         intro hc0
         have hZ0 : (Z : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) = 0 := by
-          calc
-            (Z : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ)
-                = Matrix.scalar (Fin (Nat.succ D')) c := hc
-            _ = 0 := by
-                ext i j
-                simp [hc0]
+          rw [hc]; ext i j; simp [hc0]
         have hmul :
             (Z : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) *
                 (((Z⁻¹ : GL (Fin (Nat.succ D')) ℂ) :
@@ -94,14 +90,22 @@ theorem gauge_unique_up_to_scalar {A B : MPSTensor d D} (hA : IsInjective A)
               (X : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) := by
               simp
 
-/-- A Same-MPV corollary: after obtaining any two gauges from the single-block FT,
-they are unique up to a nonzero scalar. -/
+/-- Gauge uniqueness for tensors with identical matrix product vector families: after
+obtaining any two gauges from the single-block fundamental theorem, they are unique up
+to a nonzero scalar.
+
+Although the hypothesis that $A$ and $B$ generate the same matrix product vector
+family is not needed for the conclusion — gauge uniqueness follows from
+injectivity alone, together with the two gauge equations $B_i = X A_i X^{-1}$
+and $B_i = Y A_i Y^{-1}$ — it is retained to match the blueprint statement
+faithfully. -/
 theorem gauge_unique_up_to_scalar_of_sameMPV {A B : MPSTensor d D}
     (hA : IsInjective A) (_hAB : SameMPV A B)
     {X Y : GL (Fin D) ℂ}
     (hX : ∀ i, B i = X * A i * X⁻¹)
     (hY : ∀ i, B i = Y * A i * Y⁻¹) :
-    ∃ u : Units ℂ, (Y : Matrix (Fin D) (Fin D) ℂ) = (u : ℂ) • (X : Matrix (Fin D) (Fin D) ℂ) :=
+    ∃ u : Units ℂ,
+      (Y : Matrix (Fin D) (Fin D) ℂ) = (u : ℂ) • (X : Matrix (Fin D) (Fin D) ℂ) :=
   gauge_unique_up_to_scalar hA hX hY
 
 end MPSTensor

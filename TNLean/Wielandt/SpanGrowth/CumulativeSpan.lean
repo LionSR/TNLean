@@ -212,11 +212,8 @@ theorem cumulativeSpan_finrank_le (A : MPSTensor d D) (n : ℕ) :
   calc Module.finrank ℂ (cumulativeSpan A n)
       ≤ Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) :=
         Submodule.finrank_le _
-    _ = Fintype.card (Fin D) * Fintype.card (Fin D) *
-        Module.finrank ℂ ℂ := Module.finrank_matrix ℂ ℂ _ _
-    _ = D * D * 1 := by
-        simp [Fintype.card_fin, Module.finrank_self]
-    _ = D ^ 2 := by ring
+    _ = D ^ 2 := by rw [Module.finrank_matrix, Fintype.card_fin,
+            Module.finrank_self, mul_one]; ring
 
 /-- If T_n < T_{n+1} (strict inclusion), dim(T_{n+1}) > dim(T_n).
 Uses Mathlib's `Submodule.finrank_lt_finrank_of_lt`.
@@ -265,5 +262,32 @@ theorem wordSpan_zero (A : MPSTensor d D) :
     simp
   · intro hx
     exact ⟨Fin.elim0, by simp [hx]⟩
+
+/-- Zero-length word products do not span a matrix algebra of dimension at
+least two. -/
+theorem wordSpan_zero_ne_top_of_two_le [NeZero D]
+    (A : MPSTensor d D) (hD : 2 ≤ D) :
+    wordSpan A 0 ≠ (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) := by
+  intro h
+  have h1 : Module.finrank ℂ (wordSpan A 0) = 1 := by
+    rw [wordSpan_zero, finrank_span_singleton one_ne_zero]
+  rw [h, finrank_top] at h1
+  simp only [Module.finrank_matrix, Fintype.card_fin,
+    Module.finrank_self, mul_one] at h1
+  have hfour : 2 * 2 ≤ D * D := Nat.mul_le_mul hD hD
+  omega
+
+/-- If the zero-length word products span the full matrix algebra, then the
+bond dimension is one. -/
+theorem bondDim_eq_one_of_isNBlkInjective_zero [NeZero D]
+    (A : MPSTensor d D) (hA : IsNBlkInjective A 0) :
+    D = 1 := by
+  by_contra hD_ne
+  have hD_pos : 0 < D := NeZero.pos D
+  have hD_ge : 2 ≤ D := by omega
+  have htop : wordSpan A 0 =
+      (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) :=
+    (wordSpan_eq_top_iff_isNBlkInjective A 0).mpr hA
+  exact wordSpan_zero_ne_top_of_two_le A hD_ge htop
 
 end MPSTensor

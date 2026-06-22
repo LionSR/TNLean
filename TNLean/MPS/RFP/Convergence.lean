@@ -3,20 +3,22 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Core.Transfer
-import TNLean.MPS.BNT.Construction
-import TNLean.Spectral.SpectralGap
+import TNLean.PiAlgebra.CanonicalFormSepAux
+import TNLean.Spectral.TransferOperatorGap
 import TNLean.Spectral.QuantitativeGap
 import TNLean.MPS.RFP.Defs
 
 /-!
 # RG flow convergence for canonical-form MPS tensors
 
-This file states the convergence result for the renormalization-group (RG) flow
-applied to MPS tensors in canonical form, following arXiv:1606.00608, Appendix B
-(Cirac–Pérez-García–Schuch–Verstraete).
+This file proves the convergence result for the renormalization-group (RG) flow
+applied to MPS tensors in canonical form. The proof follows the transfer-map gap
+argument from arXiv:1606.00608, Appendix B, lines 1211--1244; see also the
+transfer-matrix and RGFP discussion in arXiv:2011.12127, lines 433--442 and
+870--892.
 
 For a CF tensor, the transfer matrix decomposes as
-`E' = ⊕_{j,j'} μ_{j,q} μ̄_{j',q'} E_{j,j'}`.
+`E' = ⊕_{j,j'} μ_{j,q} μ'_{j',q'} E_{j,j'}`.
 Off-diagonal blocks `E_{j,j'}` (j ≠ j') have spectral radius < 1 and decay.
 Diagonal blocks `E_{j,j}` have a unique magnitude-1 eigenvalue. So `E'^N`
 converges to an idempotent (the RFP).
@@ -24,9 +26,24 @@ converges to an idempotent (the RFP).
 ## Main result
 
 * `rg_flow_converges_of_cf`: the sequence of blocked transfer maps converges
-  to an idempotent for any canonical-form tensor.
+  pointwise to an idempotent for any canonical-form tensor. The proof uses the
+  exponential transfer-map gap bound to squeeze the difference
+  `E^n X - P X` to zero, then composes with the subsequence `2^n → ∞`.
 
-TODO: formalize the convergence in operator norm.
+## References
+
+* [CPGSV21] Cirac, Pérez-García, Schuch, Verstraete,
+  *Matrix Product States and Projected Entangled Pair States*,
+  Rev. Mod. Phys. 93 (2021), arXiv:2011.12127.
+  Lines 433--442 (transfer matrix and correlations) and lines 870--892
+  (renormalization fixed points for MPS).
+  Source: `Papers/2011.12127/`
+* [CPSV16] Cirac, Pérez-García, Schuch, Verstraete,
+  *Matrix Product Density Operators: Renormalization Fixed Points
+  and Boundary Theories*, arXiv:1606.00608.
+  Appendix B, lines 1211--1244 (RFP as idempotent limit for canonical-form
+  tensors) and lines 1264--1268 (finite power-sum nonvanishing estimate).
+  Source: `Papers/1606.00608/`
 -/
 
 open scoped Matrix ComplexOrder
@@ -35,13 +52,14 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- **Appendix B** (arXiv:1606.00608): For a tensor in canonical form, the
-iterated blocking `E^{2^n}` converges to an idempotent transfer map.
+/-- **Appendix B** (arXiv:1606.00608, lines 1211--1244): For a tensor in
+canonical form, the iterated blocking `E^{2^n}` converges to an idempotent
+transfer map.
 
 The convergence is entry-wise on the `D² × D²` transfer matrix space:
 `∀ ρ, (E^{2^n}) ρ → E_∞ ρ` where `E_∞ ∘ E_∞ = E_∞`.
 
-The proof uses the spectral gap: for each block `k`, injectivity implies
+The proof uses the transfer-map gap: for each block `k`, injectivity implies
 primitivity of the transfer map, giving `E^n = P + N^n` where `P` is the
 fixed-point projection (idempotent) and `N = E - P` has spectral radius `< 1`.
 The exponential bound `‖E^n X - P X‖ ≤ C(1-δ)^n ‖X‖` from

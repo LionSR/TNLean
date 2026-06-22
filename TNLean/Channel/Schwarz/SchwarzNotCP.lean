@@ -8,7 +8,7 @@ import Mathlib.LinearAlgebra.Matrix.Trace
 /-!
 # Wolf Example 5.3: a Schwarz map which is not completely positive
 
-This file records the concrete map from Wolf, Example 5.3,
+This file states the concrete map from Wolf, Example 5.3,
 
 $$T_*(A) = \frac{1}{2} A^T + \frac{1}{4} \operatorname{tr}(A) I,$$
 
@@ -31,14 +31,6 @@ open scoped Matrix ComplexOrder MatrixOrder
 open Matrix Finset
 
 local notation "M2" => Matrix (Fin 2) (Fin 2) ℂ
-
-private lemma complex_one_half_nonneg : (0 : ℂ) ≤ (1 / 2 : ℂ) := by
-  rw [Complex.nonneg_iff]
-  norm_num
-
-private lemma complex_one_quarter_nonneg : (0 : ℂ) ≤ (1 / 4 : ℂ) := by
-  rw [Complex.nonneg_iff]
-  norm_num
 
 /-- Wolf Example 5.3: the linear map
 `T_*(A) = (1/2) A^T + (1/4) tr(A) I` on `M₂(ℂ)`. -/
@@ -69,12 +61,12 @@ noncomputable def wolfExample53 : M2 →ₗ[ℂ] M2 where
 transpose and trace-times-identity. -/
 theorem wolfExample53_isPositive : IsPositiveMap wolfExample53 := by
   intro A hA
-  have htranspose : ((1 / 2 : ℂ) • Aᵀ).PosSemidef := by
-    exact hA.transpose.smul complex_one_half_nonneg
+  have htranspose : ((1 / 2 : ℂ) • Aᵀ).PosSemidef :=
+    hA.transpose.smul (by positivity)
   have htraceId : ((1 / 4 : ℂ) • (Matrix.trace A • (1 : M2))).PosSemidef := by
-    have htrace : ((Matrix.trace A) • (1 : M2)).PosSemidef := by
-      exact Matrix.PosSemidef.one.smul hA.trace_nonneg
-    exact htrace.smul complex_one_quarter_nonneg
+    have htrace : ((Matrix.trace A) • (1 : M2)).PosSemidef :=
+      Matrix.PosSemidef.one.smul hA.trace_nonneg
+    exact htrace.smul (by positivity)
   simpa [wolfExample53] using htranspose.add htraceId
 
 private noncomputable def wolfExample53Gap (A : M2) : M2 :=
@@ -172,8 +164,8 @@ private lemma wolfExample53Gap_eq_of_trace_zero (A : M2) (htr : Matrix.trace A =
             simp [smul_smul]
       _ = (1 / 4 : ℂ) • ((A * Aᴴ)ᵀ) := by
             rw [hquarter]
-            have hmulT : (A * Aᴴ)ᵀ = (Aᴴ)ᵀ * Aᵀ := by
-              exact Matrix.transpose_mul A Aᴴ
+            have hmulT : (A * Aᴴ)ᵀ = (Aᴴ)ᵀ * Aᵀ :=
+              Matrix.transpose_mul A Aᴴ
             rw [hmulT]
   calc
     wolfExample53Gap A = wolfExample53 (Aᴴ * A) - (1 / 4 : ℂ) • ((A * Aᴴ)ᵀ) := by
@@ -188,17 +180,18 @@ private lemma wolfExample53Gap_eq_of_trace_zero (A : M2) (htr : Matrix.trace A =
 private lemma wolfExample53Gap_posSemidef_of_trace_zero (A : M2) (htr : Matrix.trace A = 0) :
     (wolfExample53Gap A).PosSemidef := by
   rw [wolfExample53Gap_eq_of_trace_zero A htr]
-  have h1 : ((1 / 2 : ℂ) • (Aᴴ * A)ᵀ).PosSemidef := by
-    exact (Matrix.posSemidef_conjTranspose_mul_self A).transpose.smul complex_one_half_nonneg
-  have h2base : (Matrix.trace (A * Aᴴ) • (1 : M2) - A * Aᴴ).PosSemidef := by
-    exact trace_smul_one_sub_posSemidef_of_posSemidef (A * Aᴴ)
+  have h1 : ((1 / 2 : ℂ) • (Aᴴ * A)ᵀ).PosSemidef :=
+    (Matrix.posSemidef_conjTranspose_mul_self A).transpose.smul
+      (by positivity)
+  have h2base : (Matrix.trace (A * Aᴴ) • (1 : M2) - A * Aᴴ).PosSemidef :=
+    trace_smul_one_sub_posSemidef_of_posSemidef (A * Aᴴ)
       (Matrix.posSemidef_self_mul_conjTranspose A)
   have htrace : Matrix.trace (Aᴴ * A) = Matrix.trace (A * Aᴴ) := by
     simpa using Matrix.trace_mul_comm Aᴴ A
   have h2 : ((1 / 4 : ℂ) • ((Matrix.trace (Aᴴ * A) • (1 : M2) - A * Aᴴ)ᵀ)).PosSemidef := by
     have h2' : ((Matrix.trace (Aᴴ * A) • (1 : M2) - A * Aᴴ)ᵀ).PosSemidef := by
       simpa [htrace] using h2base.transpose
-    exact h2'.smul complex_one_quarter_nonneg
+    exact h2'.smul (by positivity)
   exact h1.add h2
 
 /-- Wolf Example 5.3 satisfies the Schwarz inequality.
@@ -290,6 +283,6 @@ theorem wolfExample53_not_cp : ¬ IsCPMap wolfExample53 := by
   have hneg : ¬ (0 : ℂ) ≤
       star wolfExample53AntisymmVec ⬝ᵥ
         (ChoiJamiolkowski.choiMatrix wolfExample53).mulVec wolfExample53AntisymmVec := by
-    rw [wolfExample53_choi_negative_antisymm, Complex.nonneg_iff]
+    rw [wolfExample53_choi_negative_antisymm, RCLike.nonneg_iff]
     norm_num
   exact hneg hnonneg

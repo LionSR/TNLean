@@ -6,51 +6,74 @@ import TNLean.MPS.ParentHamiltonian.Basic
 import TNLean.MPS.ParentHamiltonian.BlockStrip
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
 import TNLean.MPS.FundamentalTheorem.FiniteLength
+import TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan
 
 /-!
-# Wrapping window argument for periodic MPS chains
+# Periodic boundary closure for MPS chains
 
-This file proves that the boundary matrix `X` arising from the open-chain
-intersection property must commute with all generators `A_j` of an injective
-MPS tensor on a periodic chain.
+This file proves that the boundary matrix \(X\) arising from the open-chain
+intersection property commutes with all one-site matrices \(A_j\) of an
+injective MPS tensor on a periodic chain.
 
 ## Proof strategy
 
-On a periodic chain of `N` sites with window size `L`, the last cyclic window
-wraps around from position `N-1` back to the first `L-1` sites. The proof
+On a periodic chain of \(N\) sites with window size \(L\), the boundary-crossing
+cyclic window starts at position \(N-1\) and contains the first \(L-1\) sites. The proof
 proceeds as follows:
 
-1. **Cyclic config decomposition** (`cyclicCfg_last_eq`, `cyclicCfg_window_site`,
-   `cyclicCfg_complement_site`): At the wrapping position `N-1`, the cyclic
-   configuration decomposes into window sites `σ_w(0), σ_w(1), …, σ_w(L-1)`
-   (wrapping around) and complement sites from `τ`.
+1. At the boundary-crossing position \(N-1\), the cyclic configuration separates into
+   the \(L\) sites of the boundary-crossing support and the complementary
+   sites labelled by \(\tau\).
 
-2. **Snoc factorization** (`evalWord_cyclicCfg_snoc`, `init_evalWord_split`):
-   The product `evalWord A (cyclicCfg ...)` factors as
-   `evalWord(tail) * evalWord(complement) * A(σ_w(0))`, enabling trace rotation.
+2. The corresponding word product factors as
+   \(A^{\mathrm{tail}}A^{\mathrm{comp}}A^{\sigma_0}\), so trace cyclicity
+   rotates the tensor at the periodic boundary.
 
-3. **Trace rotation** (`wrapping_window_matEq`): Using `tr(P * Q) = tr(Q * P)`,
-   we rotate the wrapping boundary to obtain a matrix equation
-   `X * evalWord(σ_tail) * evalWord(complement) = evalWord(σ_tail) * Y_τ`
-   for all window tails `σ_tail` and background configs `τ`.
+3. The rotation gives an identity of the form
+   \(X A^{\mathrm{tail}}A^{\mathrm{comp}}
+     = A^{\mathrm{tail}}Y_\tau\)
+   for every boundary tail and every condition on the complementary sites.
 
-4. **Spanning extension** (`boundary_matrix_commutes`): Since
-   `wordSpan A (L-1) = ⊤` for injective `A`, the equation extends from
-   `evalWord(σ_tail)` to all matrices `M₁`, yielding `[X, M₁] * complement = 0`.
-   A second spanning argument (over complement words) gives `X * M₁ = M₁ * X`
-   for all `M₁`, hence `X * A_j = A_j * X`.
+4. Block injectivity extends the identity from word products to the full
+   matrix algebra. Applying the same spanning argument to the complementary
+   words gives \(XM=MX\) for every matrix \(M\), hence \(XA_j=A_jX\).
 
 ## Main results
 
-* `MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_long_word_commutes`
-  — block injectivity turns long-word commutation into generator commutation
-* `MPSTensor.boundary_matrix_commutes` — if `groundSpaceMap A N X` lies in
-  every cyclic window's ground space, then `X` commutes with all `A_j`.
+The main statements show that the two identities
+\[
+  A^\mu A^j X = Y_\mu A^j,
+  \qquad
+  X A^j A^\mu = A^jY_\mu
+\]
+imply commutation with fixed-length word products; that fixed-length
+commutation propagates to long words; and that block injectivity then gives
+\(XA_j=A_jX\) for every one-site matrix. They also record the one-sided
+uniqueness consequences of block injectivity used in the periodic-boundary
+comparison.
 
 ## References
 
-* [CPGSV21] arXiv:2011.12127, lines 2013–2094
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2021] arXiv:2011.12127,
+  Section IV.C, lines 1976--2094
 * [FNW92] Sections 3–4
+
+## External input — Quantum Wielandt vector-to-matrix span
+
+This file imports `TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan`, which supplies
+the spanning step used in the periodic boundary-closure argument:
+
+> **Vector-to-matrix spanning step (arXiv:0909.5347, Lemma 2(a) / Wolf Chapter 6).**
+> If the vector-valued images of Kraus word products span the full vector space
+> \(ℂ^D\), then the matrix-valued word products span the full matrix
+> algebra \(M_D(ℂ)\).  Concretely: \(\operatorname{span}\{A_w v\} = \mathbb C^D\)
+> for all \(v \ne 0\) implies \(\operatorname{span}\{A_w\} = M_D(\mathbb C)\).
+
+In MPS notation after blocking: for an injective tensor \(A\), the Kraus word
+products of length \(L-1\) span \(M_D(\mathbb C)\).
+This spanning conclusion is what allows the proof to extend the word-compatibility
+identity from word products to arbitrary matrices \(M\), yielding \(XM=MX\)
+for all matrices \(M\), hence \(XA_j=A_jX\) for each one-site matrix.
 -/
 
 open scoped Matrix BigOperators
@@ -59,12 +82,21 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ### Cyclic config decomposition at the wrapping position
+private theorem fin_cons_mk_succ {L : ℕ} (i : Fin d) (σ : Fin L → Fin d)
+    (k : Fin L) (h : k.val + 1 < L + 1) :
+    (Fin.cons (n := L) (α := fun _ => Fin d) i σ) ⟨k.val + 1, h⟩ = σ k := by
+  have hidx : (⟨k.val + 1, h⟩ : Fin (L + 1)) = k.succ := by
+    ext
+    rfl
+  rw [hidx, Fin.cons_succ]
 
-These lemmas analyze the structure of `cyclicCfg` at position `N-1`,
+/-! ### Cyclic config decomposition at the last-site boundary-crossing position
+
+These lemmas analyze the structure of `cyclicCfg` at position \(N-1\),
 where the window wraps from the last site back to the first sites. -/
 
-/-- At the wrapping position `N-1`, the cyclic config's last site is `σ_w 0`. -/
+/-- At the last-site boundary-crossing position \(N-1\), the cyclic config's last site is
+\(\sigma_w(0)\). -/
 private theorem cyclicCfg_last_eq {N L : ℕ} (hN : 2 ≤ N) (hLN : L ≤ N) (hL : 1 < L)
     (σ_w : Fin L → Fin d) (τ : Fin N → Fin d) :
     cyclicCfg (by omega : 0 < N) L ⟨N - 1, by omega⟩ σ_w τ ⟨N - 1, by omega⟩ =
@@ -76,7 +108,8 @@ private theorem cyclicCfg_last_eq {N L : ℕ} (hN : 2 ≤ N) (hLN : L ≤ N) (hL
   rw [dif_pos (show ((N - 1) + N - (N - 1)) % N < L by rw [hoffset]; omega)]
   congr 1; ext; simp
 
-/-- At the wrapping position `N-1`, sites `0..L-2` get `σ_w(1)..σ_w(L-1)`. -/
+/-- At the wrapping position \(N-1\), sites \(0,\ldots,L-2\) get
+\(\sigma_w(1),\ldots,\sigma_w(L-1)\). -/
 private theorem cyclicCfg_window_site {N L : ℕ} (hN : 2 ≤ N) (_hLN : L ≤ N) (hL : 1 < L)
     (σ_w : Fin L → Fin d) (τ : Fin N → Fin d)
     {k : ℕ} (hk : k < L - 1) :
@@ -89,7 +122,7 @@ private theorem cyclicCfg_window_site {N L : ℕ} (hN : 2 ≤ N) (_hLN : L ≤ N
   rw [dif_pos (show (k + N - (N - 1)) % N < L by rw [hoffset]; omega)]
   congr 1; ext; simp [hoffset]
 
-/-- At the wrapping position `N-1`, complement sites get τ values. -/
+/-- At the wrapping position \(N-1\), complement sites get \(\tau\) values. -/
 private theorem cyclicCfg_complement_site {N L : ℕ} (hN : 2 ≤ N) (_hLN : L ≤ N) (hL : 1 < L)
     (σ_w : Fin L → Fin d) (τ : Fin N → Fin d)
     {k : ℕ} (hk1 : L - 1 ≤ k) (hk2 : k < N - 1) :
@@ -103,12 +136,13 @@ private theorem cyclicCfg_complement_site {N L : ℕ} (hN : 2 ≤ N) (_hLN : L �
 
 /-! ### Snoc factorization
 
-Factor the full cyclic config product as `evalWord(init) * A(σ_w(0))`,
-then split `init` into window-tail and complement parts. -/
+Factor the full cyclic configuration product as \(A^{\mathrm{init}} A_{\sigma_w(0)}\),
+then split \(\mathrm{init}\) into window-tail and complement parts. -/
 
-/-- The evalWord of the cyclic config at position `M` (= `N-1`) on `M+1` sites
-decomposes as `evalWord(init) * A(σ_w(0))` where `init` covers sites `0..M-1`. -/
-private theorem evalWord_cyclicCfg_snoc {A : MPSTensor d D}
+/-- The word product along the cyclic configuration at position \(M\) on \(M+1\) sites
+decomposes as \(A^{\mathrm{init}} A_{\sigma_w(0)}\), where \(\mathrm{init}\) covers
+sites \(0,\ldots,M-1\). -/
+theorem evalWord_cyclicCfg_snoc {A : MPSTensor d D}
     {M L : ℕ} (hM : 1 ≤ M) (hLN : L ≤ M + 1) (hL : 1 < L)
     (σ_w : Fin L → Fin d) (τ : Fin (M + 1) → Fin d) :
     evalWord A (List.ofFn (cyclicCfg (by omega : 0 < M + 1) L ⟨M, by omega⟩ σ_w τ)) =
@@ -135,7 +169,7 @@ private theorem evalWord_cyclicCfg_snoc {A : MPSTensor d D}
 
 /-- The init part of the cyclic config at position M decomposes into
 tail (window sites 1..L-1) and complement (sites L-1..M-1). -/
-private theorem init_evalWord_split {A : MPSTensor d D}
+theorem init_evalWord_split {A : MPSTensor d D}
     {M L : ℕ} (hM : 1 ≤ M) (hLN : L ≤ M + 1) (hL : 1 < L)
     (σ_w : Fin L → Fin d) (τ : Fin (M + 1) → Fin d) :
     evalWord A (List.ofFn (fun k : Fin M =>
@@ -161,7 +195,7 @@ private theorem init_evalWord_split {A : MPSTensor d D}
       simp only [List.length_ofFn]
       have hcomp := cyclicCfg_complement_site (by omega : 2 ≤ M + 1) hLN hL σ_w τ
         (show L - 1 ≤ k from by omega) (show k < M from by omega)
-      -- hcomp is about cyclicCfg ... ⟨k, _⟩, we need it about Fin.castSucc ⟨k, _⟩
+      -- hcomp is about cyclicCfg at the original index; use Fin.castSucc ⟨k, _⟩.
       have : (Fin.castSucc (⟨k, by omega⟩ : Fin M) : Fin (M + 1)) =
           ⟨k, by omega⟩ := by ext; simp [Fin.castSucc]
       rw [this] at *
@@ -175,15 +209,15 @@ private theorem init_evalWord_split {A : MPSTensor d D}
       rw [dif_neg (by rw [hoffset]; omega)]
       congr 1; ext; simp; omega
 
-/-! ### Mirror factorization at the opposite wrapped position
+/-! ### Factorization at the second boundary-crossing position
 
-At the wrapped position `N - L + 1`, the cyclic word starts with the last window
-site, then runs through the complement, then finishes with the remaining
-`L - 1` window sites.  This yields the factorization needed for the mirror
-block-injective extraction. -/
+At the second boundary-crossing position \(N - L + 1\), the cyclic word starts
+with the last window site, then runs through the complement, then finishes with
+the remaining \(L - 1\) window sites.  This yields the factorization needed for
+the second block-injective extraction. -/
 
-/-- At the opposite wrapped position `N - L + 1`, site `0` carries the final
-window entry `σ_w(L-1)`. -/
+/-- At the second boundary-crossing position \(N - L + 1\), site \(0\) carries
+the final window entry \(\sigma_w(L-1)\). -/
 private theorem cyclicCfg_mirror_zero_eq {N L : ℕ} (hN : 2 ≤ N) (hLN : L ≤ N) (hL : 1 < L)
     (σ_w : Fin L → Fin d) (τ : Fin N → Fin d) :
     cyclicCfg (by omega : 0 < N) L ⟨N - L + 1, by omega⟩ σ_w τ ⟨0, by omega⟩ =
@@ -200,8 +234,8 @@ private theorem cyclicCfg_mirror_zero_eq {N L : ℕ} (hN : 2 ≤ N) (hLN : L ≤
   ext
   exact hoffset
 
-/-- At the opposite wrapped position `N - L + 1`, the complement sites
-`1, ..., N - L` keep their `τ` values. -/
+/-- At the second boundary-crossing position \(N - L + 1\), the complement sites
+\(1,\ldots,N-L\) keep their \(\tau\) values. -/
 private theorem cyclicCfg_mirror_complement_site {N L : ℕ}
     (hN : 2 ≤ N) (_hLN : L ≤ N) (hL : 1 < L)
     (σ_w : Fin L → Fin d) (τ : Fin N → Fin d)
@@ -214,8 +248,8 @@ private theorem cyclicCfg_mirror_complement_site {N L : ℕ}
     rw [this, Nat.mod_eq_of_lt (by omega)]
   rw [dif_neg (show ¬((k + N - (N - L + 1)) % N < L) by rw [hoffset]; omega)]
 
-/-- At the opposite wrapped position `N - L + 1`, the final `L - 1` physical
-sites carry the first `L - 1` entries of the window. -/
+/-- At the second boundary-crossing position \(N - L + 1\), the final \(L - 1\)
+physical sites carry the first \(L - 1\) entries of the window. -/
 private theorem cyclicCfg_mirror_window_site {N L : ℕ}
     (hN : 2 ≤ N) (_hLN : L ≤ N) (hL : 1 < L)
     (σ_w : Fin L → Fin d) (τ : Fin N → Fin d)
@@ -231,9 +265,9 @@ private theorem cyclicCfg_mirror_window_site {N L : ℕ}
   rw [dif_pos (show (N - L + 1 + k + N - (N - L + 1)) % N < L by rw [hoffset]; omega)]
   congr 1; ext; simp [hoffset]
 
-/-- At the opposite wrapped position `N - L + 1`, the cyclic word factors as
+/-- At the second boundary-crossing position \(N - L + 1\), the cyclic word factors as
 the final window letter, then the complement word, then the remaining
-`L - 1`-site window head. -/
+\((L - 1)\)-site window head. -/
 private theorem evalWord_cyclicCfg_cons {A : MPSTensor d D}
     {M L : ℕ} (hM : 1 ≤ M) (hLN : L ≤ M + 1) (hL : 1 < L)
     (σ_w : Fin L → Fin d) (τ : Fin (M + 1) → Fin d) :
@@ -293,12 +327,10 @@ private theorem evalWord_cyclicCfg_cons {A : MPSTensor d D}
 
 /-! ### Trace rotation and matrix equation extraction
 
-Use `tr(P * Q) = tr(Q * P)` to rotate the wrapping boundary,
+Use \(\operatorname{tr}(P \cdot Q) = \operatorname{tr}(Q \cdot P)\) to rotate
+across the periodic boundary,
 then extract a matrix equation via `groundSpaceMap_injective`. -/
 
-set_option maxHeartbeats 800000 in
--- Expanding `cyclicCfg` and rotating the trace through the wrapping window produces
--- large normalization goals, so this proof needs a larger heartbeat budget.
 private theorem wrapping_window_matEq {A : MPSTensor d D} [NeZero D]
     (hA : IsInjective A) {L : ℕ} (hL : 1 < L) {M : ℕ} (hM : 1 ≤ M) (hLN : L ≤ M + 1)
     {X : Matrix (Fin D) (Fin D) ℂ}
@@ -372,10 +404,10 @@ private theorem wrapping_window_matEq {A : MPSTensor d D} [NeZero D]
       Matrix.mul_assoc (A (σ₁ 0))] at key
   exact key
 
-/-- Block injectivity strips the wrapped tail block and yields the one-sided
-compatibility `C_τ * A j * X = Y_τ * A j`.  This is the valid local
-replacement identified by the #730 audit; issue #761 asks for the missing mirror
-comparison on top of this step. -/
+/-- Block injectivity strips the cyclic-window tail block at the boundary and
+yields the one-sided compatibility \(C_τ A_j X = Y_τ A_j\). The
+complementary second cyclic-window comparison is the remaining local step
+needed for the two-sided relation. -/
 theorem wrapping_window_compatibility_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -397,6 +429,7 @@ theorem wrapping_window_compatibility_of_isNBlkInjective
   rw [evalWord_cyclicCfg_snoc hM1 (by omega) hL (Fin.cons j σ_tail) τ] at key
   rw [init_evalWord_split hM1 (by omega) hL (Fin.cons j σ_tail) τ] at key
   rw [evalWord_ofFn_cons] at key
+  simp only [fin_cons_mk_succ] at key
   have key' :
       Matrix.trace
           (evalWord A (List.ofFn σ_tail) *
@@ -420,10 +453,9 @@ theorem wrapping_window_compatibility_of_isNBlkInjective
         (evalWord A (List.ofFn σ_tail) * (Y τ * A j)) := by
           simp [Matrix.mul_assoc]
 
-/-- The opposite wrapped position `N - L₀` exposes the mirror compatibility
-`X * A j * C_τ = A j * Y_τ` after block-injective stripping of the trailing
-`L₀`-site block.  This is the missing second wrapped-window extraction needed
-for the block-injective periodic argument. -/
+/-- The second cyclic position used in the closure property exposes the
+compatibility \(X A_j C_τ = A_j Y_τ\) after block-injective cancellation of the
+trailing \(L₀\)-site block. -/
 theorem wrapping_window_mirror_compatibility_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
@@ -503,11 +535,217 @@ theorem wrapping_window_mirror_compatibility_of_isNBlkInjective
     _ = Matrix.trace (evalWord A (List.ofFn σ_head) * (A j * Y τ)) := by
           simpa [Matrix.mul_assoc] using key'
 
+/-! ### Complement-word algebraic closure
+
+The two one-sided cyclic-window identities close the boundary matrix once they
+take the form
+\[
+  A^\mu A^j X = Y_\mu A^j,
+  \qquad
+  X A^j A^\mu = A^jY_\mu
+\]
+with the same word \(\mu\) on complementary sites and the same matrix
+\(Y_\mu\). -/
+
+/-- A boundary condition whose cyclic-window complement is the prescribed
+word on the complementary sites.
+
+For the boundary-crossing window beginning at the last site, the complement
+occupies physical sites \(L₀, \ldots, N - 2\).  This construction fills exactly
+those sites with \(\mu\); the remaining sites receive the letter \(\eta\) and do
+not affect the complement word extracted by the last-site boundary-crossing
+identity. -/
+def wrappedMiddleBackground (L₀ N : ℕ) (η : Fin d)
+    (μ : Fin (N - (L₀ + 1)) → Fin d) : Fin N → Fin d :=
+  fun i =>
+    if h : L₀ ≤ i.val ∧ i.val < N - 1 then
+      μ ⟨i.val - L₀, by omega⟩
+    else
+      η
+
+/-- A boundary condition whose second boundary-crossing window complement is the
+prescribed word on the complementary sites.
+
+For the second boundary-crossing window, the complement occupies physical sites
+\(1, \ldots, N - L₀ - 1\).  This construction fills exactly those sites with
+\(\mu\); all other sites receive the letter \(\eta\). -/
+def mirrorMiddleBackground (L₀ N : ℕ) (η : Fin d)
+    (μ : Fin (N - (L₀ + 1)) → Fin d) : Fin N → Fin d :=
+  fun i =>
+    if h : 1 ≤ i.val ∧ i.val < N - L₀ then
+      μ ⟨i.val - 1, by omega⟩
+    else
+      η
+
+/-- Extracting the wrapped complement from `wrappedMiddleBackground` returns the
+prescribed word on the complementary sites. -/
+theorem wrappedMiddleBackground_complement (L₀ N : ℕ) (η : Fin d)
+    (μ : Fin (N - (L₀ + 1)) → Fin d) :
+    (fun k : Fin (N - (L₀ + 1)) =>
+      wrappedMiddleBackground L₀ N η μ ⟨k.val + L₀, by omega⟩) = μ := by
+  ext k
+  simp only [wrappedMiddleBackground]
+  rw [dif_pos]
+  · congr 1
+    ext
+    simp
+  · constructor <;> omega
+
+/-- Extracting the mirror complement from `mirrorMiddleBackground` returns the
+prescribed word on the complementary sites. -/
+theorem mirrorMiddleBackground_complement (L₀ N : ℕ) (η : Fin d)
+    (μ : Fin (N - (L₀ + 1)) → Fin d) :
+    (fun k : Fin (N - (L₀ + 1)) =>
+      mirrorMiddleBackground L₀ N η μ ⟨k.val + 1, by omega⟩) = μ := by
+  ext k
+  simp only [mirrorMiddleBackground]
+  rw [dif_pos]
+  · congr 1
+  · constructor <;> omega
+
+/-- Reindexed cyclic-window identities give the two equations with one matrix
+\(Y_\mu\).
+
+The one-sided inputs have the form
+\[
+  A^\mu A^j X = Y^+_{\tau^+_\eta(\mu)}A^j,
+  \qquad
+  X A^j A^\mu = A^jY^-_{\tau^-_\eta(\mu)}.
+\]
+The boundary-crossing comparison
+\[
+  Y^+_{\tau^+_\eta(\mu)} = Y^-_{\tau^-_\eta(\mu)}
+\]
+therefore gives the two identities with the same matrix \(Y_\mu\). -/
+theorem two_sided_middle_compatibility_of_wrapped_witness_comparison
+    {A : MPSTensor d D} {L₀ N : ℕ} (η : Fin d)
+    {X : Matrix (Fin D) (Fin D) ℂ}
+    (Ywrap Ymirror : (Fin N → Fin d) → Matrix (Fin D) (Fin D) ℂ)
+    (hWrap : ∀ (j : Fin d) (τ : Fin N → Fin d),
+      evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
+        τ ⟨k.val + L₀, by omega⟩)) * A j * X = Ywrap τ * A j)
+    (hMirror : ∀ (j : Fin d) (τ : Fin N → Fin d),
+      X * A j * evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
+        τ ⟨k.val + 1, by omega⟩)) = A j * Ymirror τ)
+    (hCompare : ∀ μ : Fin (N - (L₀ + 1)) → Fin d,
+      Ywrap (wrappedMiddleBackground L₀ N η μ) =
+        Ymirror (mirrorMiddleBackground L₀ N η μ)) :
+    ∃ Y : (Fin (N - (L₀ + 1)) → Fin d) → Matrix (Fin D) (Fin D) ℂ,
+      (∀ (j : Fin d) (μ : Fin (N - (L₀ + 1)) → Fin d),
+        evalWord A (List.ofFn μ) * A j * X = Y μ * A j) ∧
+      (∀ (j : Fin d) (μ : Fin (N - (L₀ + 1)) → Fin d),
+        X * A j * evalWord A (List.ofFn μ) = A j * Y μ) := by
+  refine ⟨fun μ => Ywrap (wrappedMiddleBackground L₀ N η μ), ?_, ?_⟩
+  · intro j μ
+    have h := hWrap j (wrappedMiddleBackground L₀ N η μ)
+    simpa [wrappedMiddleBackground_complement] using h
+  · intro j μ
+    have h := hMirror j (mirrorMiddleBackground L₀ N η μ)
+    have hCmp := hCompare μ
+    simpa [mirrorMiddleBackground_complement, hCmp.symm] using h
+
+/-- Two one-sided identities with the same matrix \(Y_\mu\) force \(X\) to commute
+with every word obtained by adjoining one physical letter on each side.
+
+This is the algebraic core of the remaining normal parent-Hamiltonian closure
+property: after the two cyclic windows have been compared so that their matrices
+agree on a shared complement \(\mu\), the identities \(A^μ A^b X = Y_μ A^b\) and
+\(X A^a A^μ = A^a Y_μ\) imply
+\(X A^a A^μ A^b = A^a A^μ A^b X\). -/
+theorem commutes_words_of_two_sided_middle_compatibility
+    {A : MPSTensor d D} {m : ℕ} {X : Matrix (Fin D) (Fin D) ℂ}
+    (Y : (Fin m → Fin d) → Matrix (Fin D) (Fin D) ℂ)
+    (hLeft : ∀ (j : Fin d) (μ : Fin m → Fin d),
+      evalWord A (List.ofFn μ) * A j * X = Y μ * A j)
+    (hRight : ∀ (j : Fin d) (μ : Fin m → Fin d),
+      X * A j * evalWord A (List.ofFn μ) = A j * Y μ) :
+    ∀ ω : Fin (m + 2) → Fin d,
+      X * evalWord A (List.ofFn ω) = evalWord A (List.ofFn ω) * X := by
+  intro ω
+  let a : Fin d := ω ⟨0, by omega⟩
+  let tail : Fin (m + 1) → Fin d := Fin.tail ω
+  let μ : Fin m → Fin d := Fin.init tail
+  let b : Fin d := tail (Fin.last m)
+  have htail : Fin.tail ω = Fin.snoc μ b := by
+    dsimp only [tail, μ, b]
+    exact (Fin.snoc_init_self (Fin.tail ω)).symm
+  have hω : ω = Fin.cons a (Fin.snoc μ b) := by
+    rw [← Fin.cons_self_tail ω, htail]
+    simp [a]
+  rw [hω, evalWord_ofFn_cons, evalWord_ofFn_snoc]
+  calc
+    X * (A a * (evalWord A (List.ofFn μ) * A b))
+        = (X * A a * evalWord A (List.ofFn μ)) * A b := by
+            simp [Matrix.mul_assoc]
+    _ = (A a * Y μ) * A b := by rw [hRight a μ]
+    _ = A a * (Y μ * A b) := by simp [Matrix.mul_assoc]
+    _ = A a * (evalWord A (List.ofFn μ) * A b * X) := by rw [← hLeft b μ]
+    _ = (A a * (evalWord A (List.ofFn μ) * A b)) * X := by
+            simp [Matrix.mul_assoc]
+
+/-- If \(X\) commutes with all words of a fixed length \(m\), then it commutes
+with all words whose length is any multiple of \(m\).
+
+The proof chunks a list of length \(q * m\) into a length-\(m\) prefix and a shorter
+multiple-length suffix. This formalizes the amplification step that promotes
+fixed-length commutation to the long-word commutation hypothesis required by
+the block-injective boundary-contraction theorem. -/
+theorem commutes_words_mul_of_commutes_words {A : MPSTensor d D}
+    {m q : ℕ} {X : Matrix (Fin D) (Fin D) ℂ}
+    (hComm : ∀ ω : Fin m → Fin d,
+      X * evalWord A (List.ofFn ω) = evalWord A (List.ofFn ω) * X) :
+    ∀ ω : Fin (q * m) → Fin d,
+      X * evalWord A (List.ofFn ω) = evalWord A (List.ofFn ω) * X := by
+  suffices hList : ∀ q : ℕ, ∀ w : List (Fin d), w.length = q * m →
+      X * evalWord A w = evalWord A w * X by
+    intro ω
+    exact hList q (List.ofFn ω) (by simp)
+  intro q
+  induction q with
+  | zero =>
+      intro w hw
+      have hw0 : w = [] := List.eq_nil_of_length_eq_zero (by simpa using hw)
+      simp [hw0]
+  | succ q ih =>
+      intro w hw
+      have htake_len : (w.take m).length = m := by
+        have hm_le : m ≤ w.length := by
+          rw [hw, Nat.succ_mul]
+          omega
+        rw [List.length_take, Nat.min_eq_left hm_le]
+      let μ : Fin m → Fin d := fun i => (w.take m).get ⟨i.val, by simp [htake_len]⟩
+      have hμ : List.ofFn μ = w.take m := by
+        simpa [μ, htake_len] using (List.ofFn_get (w.take m))
+      have hdrop_len : (w.drop m).length = q * m := by
+        rw [List.length_drop, hw, Nat.succ_mul]
+        omega
+      have hdrop_comm := ih (w.drop m) hdrop_len
+      calc
+        X * evalWord A w
+            = X * evalWord A (w.take m ++ w.drop m) := by
+                rw [List.take_append_drop m w]
+        _ = X * (evalWord A (w.take m) * evalWord A (w.drop m)) := by
+                rw [evalWord_append]
+        _ = (X * evalWord A (w.take m)) * evalWord A (w.drop m) := by
+                rw [Matrix.mul_assoc]
+        _ = (evalWord A (w.take m) * X) * evalWord A (w.drop m) := by
+                rw [← hμ, hComm μ]
+        _ = evalWord A (w.take m) * (X * evalWord A (w.drop m)) := by
+                simp [Matrix.mul_assoc]
+        _ = evalWord A (w.take m) * (evalWord A (w.drop m) * X) := by
+                rw [hdrop_comm]
+        _ = (evalWord A (w.take m) * evalWord A (w.drop m)) * X := by
+                simp [Matrix.mul_assoc]
+        _ = evalWord A (w.take m ++ w.drop m) * X := by
+                rw [evalWord_append]
+        _ = evalWord A w * X := by
+                rw [List.take_append_drop m w]
+
 /-! ### Main commutation result
 
-Extend from the wrapping window equation to full commutation via spanning. -/
+Extend from the boundary-crossing equation to full commutation via spanning. -/
 
-/-- If a boundary matrix commutes with all words of some length `m ≥ L₀`, then
+/-- If a boundary matrix commutes with all words of some length \(m ≥ L₀\), then
 block injectivity forces it to commute with every generator. -/
 theorem boundary_matrix_commutes_of_isNBlkInjective_of_long_word_commutes
     {A : MPSTensor d D} {L₀ m : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -519,15 +757,140 @@ theorem boundary_matrix_commutes_of_isNBlkInjective_of_long_word_commutes
   exact commutes_all_of_commutes_long_words_of_isNBlkInjective
     (A := A) hInj hL₀ hm hComm (A j)
 
-set_option maxHeartbeats 800000 in
--- The double spanning argument over window tails and complements creates large
--- `LinearMap.ext_on_range` goals, so we raise the heartbeat budget here as well.
-/-- If `groundSpaceMap A N X` lies in every cyclic window's ground space,
-then `X` commutes with all generators `A_j`.
+/-- If left multiplication by \(Z\) annihilates every word product of length \(k\),
+and words of some longer length \(n\) span the full matrix algebra, then \(Z = 0\).
 
-This is the key step in the periodic-chain uniqueness argument:
-the wrapping window constraint forces the boundary matrix into the center
-of the algebra generated by `{A_j}`. -/
+This is the padding form needed in the normal periodic-boundary argument: a
+zero-product relation obtained for a short complement word can be multiplied by
+all padding words up to any length whose exact word span is \(\top\). -/
+theorem eq_zero_of_mul_evalWord_eq_zero_of_wordSpan_eq_top
+    {A : MPSTensor d D} {k n : ℕ} {Z : Matrix (Fin D) (Fin D) ℂ}
+    (htop : wordSpan A n = ⊤) (hkn : k ≤ n)
+    (hzero : ∀ σ : Fin k → Fin d, Z * evalWord A (List.ofFn σ) = 0) :
+    Z = 0 := by
+  have hzero_span : ∀ M ∈ wordSpan A n, Z * M = 0 := by
+    apply Submodule.span_induction
+    · intro M hM
+      rcases hM with ⟨σ, rfl⟩
+      let w := List.ofFn σ
+      have htake_len : (w.take k).length = k := by
+        rw [List.length_take]
+        have hwlen : w.length = n := by simp [w]
+        omega
+      let σk : Fin k → Fin d := fun i =>
+        (w.take k).get ⟨i.val, by simp [htake_len]⟩
+      have hσk : List.ofFn σk = w.take k := by
+        simpa [σk, htake_len] using (List.ofFn_get (w.take k))
+      have hprefix : Z * evalWord A (w.take k) = 0 := by
+        simpa [hσk] using hzero σk
+      calc
+        Z * evalWord A w = Z * evalWord A (w.take k ++ w.drop k) := by
+          rw [List.take_append_drop k w]
+        _ = Z * (evalWord A (w.take k) * evalWord A (w.drop k)) := by
+          rw [evalWord_append]
+        _ = (Z * evalWord A (w.take k)) * evalWord A (w.drop k) := by
+          rw [Matrix.mul_assoc]
+        _ = 0 := by rw [hprefix, zero_mul]
+    · simp
+    · intro M₁ M₂ _ _ h₁ h₂
+      simp [Matrix.mul_add, h₁, h₂]
+    · intro c M _ hM
+      simp [hM]
+  have h1 : Z * (1 : Matrix (Fin D) (Fin D) ℂ) = 0 :=
+    hzero_span 1 (htop ▸ Submodule.mem_top)
+  simpa using h1
+
+/-- Block-injective padding variant of
+`eq_zero_of_mul_evalWord_eq_zero_of_wordSpan_eq_top`.
+
+If \(A\) is \(L₀\)-block-injective, then every positive multiple of \(L₀\) has full
+word span. Hence a zero-product relation at length \(k\) already forces \(Z = 0\)
+as soon as \(k\) is bounded by such a multiple. -/
+theorem eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul
+    {A : MPSTensor d D} {L₀ k q : ℕ} (hInj : IsNBlkInjective A L₀)
+    (hq : 1 ≤ q) (hkq : k ≤ q * L₀) {Z : Matrix (Fin D) (Fin D) ℂ}
+    (hzero : ∀ σ : Fin k → Fin d, Z * evalWord A (List.ofFn σ) = 0) :
+    Z = 0 := by
+  exact eq_zero_of_mul_evalWord_eq_zero_of_wordSpan_eq_top
+    (A := A) (k := k) (n := q * L₀)
+    (wordSpan_top_of_mul A ((wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj) q hq)
+    hkq hzero
+
+/-- A right boundary witness is unique once its products with all one-site
+tensors are fixed.
+
+This is the one-sided uniqueness consequence of block injectivity used in the
+periodic-boundary comparison: a positive block-injective word span turns
+equality after multiplying by each one-site tensor into equality of the
+boundary matrices. -/
+theorem right_witness_unique_of_isNBlkInjective
+    {A : MPSTensor d D} {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {Y₁ Y₂ : Matrix (Fin D) (Fin D) ℂ}
+    (hY : ∀ j : Fin d, Y₁ * A j = Y₂ * A j) :
+    Y₁ = Y₂ := by
+  have hzero : ∀ σ : Fin 1 → Fin d, (Y₁ - Y₂) * evalWord A (List.ofFn σ) = 0 := by
+    intro σ
+    have heval : evalWord A (List.ofFn σ) = A (σ 0) := by
+      simp [evalWord]
+    rw [heval, sub_mul, hY (σ 0), sub_self]
+  have hsub : Y₁ - Y₂ = 0 :=
+    eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul
+      (A := A) (L₀ := L₀) (k := 1) (q := 1) hInj (by omega) (by omega) hzero
+  exact sub_eq_zero.mp hsub
+
+/-- A left boundary witness is unique once all one-site tensors have the same
+products with it. -/
+theorem left_witness_unique_of_isNBlkInjective
+    {A : MPSTensor d D} {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {Y₁ Y₂ : Matrix (Fin D) (Fin D) ℂ}
+    (hY : ∀ j : Fin d, A j * Y₁ = A j * Y₂) :
+    Y₁ = Y₂ := by
+  have hlist : ∀ w : List (Fin d), w ≠ [] →
+      evalWord A w * Y₁ = evalWord A w * Y₂ := by
+    intro w hw
+    induction w with
+    | nil => cases hw rfl
+    | cons j rest ih =>
+        cases rest with
+        | nil =>
+            simpa [evalWord] using hY j
+        | cons k rest =>
+            have htail : evalWord A (k :: rest) * Y₁ = evalWord A (k :: rest) * Y₂ :=
+              ih (by simp)
+            calc
+              evalWord A (j :: k :: rest) * Y₁
+                  = A j * (evalWord A (k :: rest) * Y₁) := by
+                      simp [evalWord, Matrix.mul_assoc]
+              _ = A j * (evalWord A (k :: rest) * Y₂) := by rw [htail]
+              _ = evalWord A (j :: k :: rest) * Y₂ := by
+                      simp [evalWord, Matrix.mul_assoc]
+  have hword : ∀ σ : Fin L₀ → Fin d,
+      evalWord A (List.ofFn σ) * Y₁ = evalWord A (List.ofFn σ) * Y₂ := by
+    intro σ
+    apply hlist
+    intro hnil
+    have hlen : L₀ = 0 := by
+      simpa [List.length_ofFn] using congrArg List.length hnil
+    omega
+  have hmul : LinearMap.mulRight ℂ Y₁ = LinearMap.mulRight ℂ Y₂ := by
+    apply LinearMap.ext_on_range
+      (v := fun σ : Fin L₀ → Fin d => evalWord A (List.ofFn σ))
+    · simpa [wordSpan] using (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
+    · intro σ
+      simpa [LinearMap.mulRight_apply] using hword σ
+  have h1 : (1 : Matrix (Fin D) (Fin D) ℂ) * Y₁ =
+      (1 : Matrix (Fin D) (Fin D) ℂ) * Y₂ := by
+    simpa [LinearMap.mulRight_apply] using
+      congrArg (fun f : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ =>
+        f (1 : Matrix (Fin D) (Fin D) ℂ)) hmul
+  simpa using h1
+
+/-- If `groundSpaceMap A N X` lies in every cyclic window's ground space,
+then \(X\) commutes with all generators \(A_j\).
+
+The boundary-crossing local condition forces the boundary matrix into the center
+of the algebra generated by \(\{A_j\}\), giving the periodic-chain uniqueness
+step. -/
 theorem boundary_matrix_commutes {A : MPSTensor d D} [NeZero D]
     (hA : IsInjective A) {L N : ℕ} (hN : 2 ≤ N) (hL : 1 < L) (hLN : L ≤ N)
     {X : Matrix (Fin D) (Fin D) ℂ}
@@ -538,7 +901,7 @@ theorem boundary_matrix_commutes {A : MPSTensor d D} [NeZero D]
   obtain ⟨M, rfl⟩ : ∃ M, N = M + 1 := ⟨N - 1, by omega⟩
   have hM : 1 ≤ M := by omega
   have hN0 : 0 < M + 1 := by omega
-  -- Extract Y_τ from wrapping window ground space membership
+  -- Extract Y_τ from boundary-crossing ground-space membership.
   have hGS : ∀ τ : Fin (M + 1) → Fin d, ∃ Y : Matrix (Fin D) (Fin D) ℂ,
       ∀ σ_w : Fin L → Fin d,
         Matrix.trace (evalWord A (List.ofFn

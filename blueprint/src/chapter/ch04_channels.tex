@@ -18,6 +18,16 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     $Y - X \ge 0$.
 \end{remark}
 
+\begin{definition}[Associated positive linear map]
+    \label{def:positive_map_is_positive_linear_map}
+    \lean{IsPositiveMap.toPositiveLinearMap}
+    \leanok
+    \uses{def:positive_map}
+    A positive matrix map $E : \MN{D} \to \MN{D}$ determines the same
+    linear map regarded as a positive linear map: if $A \le B$, then
+    $E(A) \le E(B)$.
+\end{definition}
+
 \begin{definition}[Trace-preserving map]\label{def:trace_preserving}
     \lean{IsTracePreservingMap}
     \leanok
@@ -30,15 +40,53 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \leanok
     A linear map $E : \MN{D} \to \MN{D}$ is \emph{completely positive} (CP)
     if it admits a \emph{Kraus representation}: there exist operators
-    $\{K_i\}_{i=0}^{r-1}$ with $K_i \in \MN{D}$ such that
+    $\{K_i\}_{i=0}^{r-1}$ with $K_i \in \MN{D}$ such that, for every
+    $X \in \MN{D}$,
     \[
-        E(X) = \sum_{i=0}^{r-1} K_i X K_i^\dagger
-        \quad \text{for all } X \in \MN{D}.
+        E(X) = \sum_{i=0}^{r-1} K_i X K_i^\dagger.
     \]
-    We use the Kraus characterisation because it matches the later
-    Kadison--Schwarz arguments. By Choi's theorem, this is equivalent
+    By Choi's theorem, this is equivalent
     to $E \otimes \id_n$ being positive for all~$n$.
 \end{definition}
+
+\begin{theorem}[Entrywise complete positivity from a Kraus representation]
+    \label{thm:cp_map_entrywise_complete_positive}
+    \lean{IsCPMap.map_cstarMatrix_nonneg}
+    \leanok
+    \uses{def:cp_map}
+    Let $E : \MN{D} \to \MN{D}$ be completely positive in the Kraus sense.
+    For every $k$ and every positive block matrix
+    $M \in M_k(\MN{D})$, the entrywise image
+    \[
+        (E(M_{ab}))_{a,b}
+    \]
+    is again positive in $M_k(\MN{D})$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Write $E(X)=\sum_i K_i X K_i^\dagger$.  For each $i$, let $d_i$ be
+    the block-diagonal matrix with $K_i$ on every diagonal block.  Then
+    \[
+        (E(M_{ab}))_{a,b}=\sum_i d_i M d_i^\dagger .
+    \]
+    Each term on the right is positive because conjugation preserves
+    positivity, and a finite sum of positive matrices is positive.
+\end{proof}
+
+\begin{theorem}[Kraus maps as abstract completely positive maps]
+    \label{thm:cp_map_to_abstract_completely_positive}
+    \lean{IsCPMap.toCompletelyPositiveMap}
+    \leanok
+    \uses{def:cp_map, thm:cp_map_entrywise_complete_positive}
+    Every Kraus-represented completely positive map
+    $E : \MN{D} \to \MN{D}$ determines a completely positive map between
+    the matrix $C^*$-algebras in the entrywise positivity sense.
+\end{theorem}
+
+\begin{proof}\leanok
+    The defining entrywise positivity condition is exactly
+    Theorem~\ref{thm:cp_map_entrywise_complete_positive}.
+\end{proof}
 
 \begin{theorem}[CP maps are positive]\label{thm:cp_is_positive}
     \lean{IsCPMap.isPositiveMap}
@@ -69,14 +117,16 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \label{thm:positive_map_preserves_hermitian}
     \lean{IsPositiveMap.map_isHermitian}
     \leanok
-    \uses{def:positive_map}
+    \uses{def:positive_map_is_positive_linear_map}
     If $E$ is positive and $X = X^\dagger$, then $E(X) = E(X)^\dagger$.
 \end{theorem}
 
 \begin{proof}\leanok
-    Decompose $X = X_+ - X_-$ into its positive and negative parts.
-    Positivity makes $E(X_+)$ and $E(X_-)$ positive semidefinite, hence Hermitian,
-    so their difference $E(X)$ is Hermitian.
+    Regard $E$ as the associated positive linear map
+    (Definition~\ref{def:positive_map_is_positive_linear_map}). For positive
+    linear maps between matrix $C^*$-algebras, $E(Y^\ast)=E(Y)^\ast$.
+    Since $X=X^\dagger$ means $X=X^\ast$, one obtains
+    $E(X)^\dagger=E(X)^\ast=E(X^\ast)=E(X)$.
 \end{proof}
 
 \begin{definition}[Quantum channel]\label{def:channel}
@@ -107,10 +157,10 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 \begin{proof}
     \leanok
     The PSD cone is closed
-    (preimage of the closed nonnegative cone under continuous
+    (preimage of the closed non-negative cone under continuous
     quadratic forms), and if $\rho \ge 0$ with $\tr(\rho) = 1$
     then each entry satisfies $|\rho_{ij}|^2 \le \rho_{ii}\rho_{jj} \le 1$:
-    the diagonal entries are nonnegative and sum to~$1$, and the
+    the diagonal entries are non-negative and sum to~$1$, and the
     off-diagonal bound is the PSD Cauchy--Schwarz inequality.
     Hence the matrix entries are uniformly bounded, and Heine--Borel
     gives compactness.
@@ -162,6 +212,46 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     $P = P^\dagger$ and $P^2 = P$.
 \end{definition}
 
+\begin{theorem}[Orthogonal projections and involutive-algebra projections]
+    \label{thm:orthogonal_projection_star_projection_channel}
+    \lean{IsOrthogonalProjection.isStarProjection}
+    \lean{IsStarProjection.isOrthogonalProjection}
+    \leanok
+    \uses{def:orthogonal_projection_channel}
+    For a complex square matrix, the two descriptions
+    $P = P^\dagger$, $P^2=P$ and $P^* = P$, $P^2=P$ are equivalent.
+\end{theorem}
+
+\begin{proof}\leanok
+    Since the involution on $\MN{D}$ is conjugate transpose,
+    $P^* = P^\dagger$. Therefore
+    \[
+        P^\dagger = P,\; P^2 = P
+        \iff
+        P^* = P,\; P^2 = P.
+    \]
+\end{proof}
+
+\begin{theorem}[Complement of an orthogonal projection]
+    \label{thm:orthogonal_projection_complement_channel}
+    \lean{IsOrthogonalProjection.one_sub}
+    \leanok
+    \uses{def:orthogonal_projection_channel,
+        thm:orthogonal_projection_star_projection_channel}
+    If $P \in \MN{D}$ is an orthogonal projection, then $\Id-P$ is an
+    orthogonal projection.
+\end{theorem}
+
+\begin{proof}\leanok
+    In the involutive algebra $\MN{D}$, $P$ satisfies $P^\dagger=P$ and
+    $P^2=P$. Hence
+    \[
+        (\Id-P)^\dagger=\Id-P,\qquad
+        (\Id-P)^2=\Id-2P+P^2=\Id-P .
+    \]
+    Thus $\Id-P$ is an orthogonal projection.
+\end{proof}
+
 \begin{definition}[Irreducible map]\label{def:irreducible_cp}
     \lean{IsIrreducibleMap}
     \leanok
@@ -171,7 +261,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     if whenever $P$ is an orthogonal projection satisfying
     $E(P \MN{D} P) \subseteq P \MN{D} P$,
     then $P = 0$ or $P = \Id$.
-    This is \cite[Thm.~6.2, condition~(1)]{Wolf2012Quantum}.
+    This is \cite[Theorem~6.2(1)]{Wolf2012Quantum}.
     The definition applies to any linear map; complete positivity
     is not required.
 \end{definition}
@@ -193,14 +283,17 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     so $P = 0$ or $P = \Id$.
 \end{proof}
 
-\begin{remark}[Transfer map is CP]\label{thm:transfer_cp}
+\begin{theorem}[Transfer map is CP]\label{thm:transfer_cp}
     \lean{MPSTensor.transferMap_isCPMap}
     \leanok
     \uses{def:transfer_map, def:cp_map}
     The transfer map $\E_A(X) = \sum_i A^i X (A^i)^\dagger$
-    is completely positive: it is already written in Kraus form,
-    with Kraus operators $\{A^i\}$.
-\end{remark}
+    is completely positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    It is already written in Kraus form, with Kraus operators $\{A^i\}$.
+\end{proof}
 
 \begin{theorem}[Transfer map is a channel]\label{thm:transfer_channel}
     \lean{MPSTensor.transferMap_isChannel}
@@ -212,10 +305,10 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:transfer_cp}
-    Complete positivity is the observation of Remark~\ref{thm:transfer_cp}.
+    Complete positivity is the observation of Theorem~\ref{thm:transfer_cp}.
     Trace preservation:
     $\tr(\E_A(X)) = \sum_i \tr(A^i X (A^i)^\dagger)
-    = \tr((\sum_i (A^i)^\dagger A^i) X) = \tr(X)$
+        = \tr((\sum_i (A^i)^\dagger A^i) X) = \tr(X)$
     by cyclicity and the normalization hypothesis.
 \end{proof}
 
@@ -251,7 +344,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     fixed point with decomposition $X = P_+ - P_-$ into orthogonal
     positive and negative parts ($P_\pm \ge 0$, $\tr(P_+ P_-) = 0$).
     Then $E(P_+) = P_+$ and $E(P_-) = P_-$.
-    This is \cite[Prop.~6.8]{Wolf2012Quantum}.
+    This is \cite[Proposition~6.8]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
@@ -276,13 +369,14 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 
 \begin{proof}
     \leanok
-    \uses{thm:density_compact, thm:density_convex,
-          thm:density_nonempty, thm:channel_preserves_density,
-          thm:cesaro_telescope}
+    \uses{thm:density_compact, thm:density_nonempty,
+        thm:channel_preserves_density, thm:cesaro_telescope}
     Start with any $\rho_0 \in \mc{D}_D$
     (Theorem~\ref{thm:density_nonempty}).
     Each Ces\`aro mean $\sigma_N$ lies in $\mc{D}_D$
-    (by convexity and channel preservation).
+    by applying channel preservation to every iterate, adding positive
+    semidefinite matrices, rescaling by the positive average factor, and using
+    trace linearity.
     By compactness (Theorem~\ref{thm:density_compact}),
     extract a convergent subsequence
     $\sigma_{N_k} \to \rho$.
@@ -290,7 +384,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     gives
     $\|E(\sigma_N) - \sigma_N\| = \frac{1}{N}\|E^N(\rho_0) - \rho_0\| \to 0$,
     so $E(\rho) = \rho$ by continuity.
-    In~\cite[Thm.~6.11]{Wolf2012Quantum}, existence is proved
+    In~\cite[Theorem~6.11]{Wolf2012Quantum}, existence is proved
     via Brouwer's fixed-point theorem; we use the Ces\`aro
     argument instead.
 \end{proof}
@@ -352,14 +446,24 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     are the eigenvalues $\lambda$ on the unit circle:
     $|\lambda| = 1$.
     For a channel, the spectral radius is~$1$
-    \cite[Prop.~6.1]{Wolf2012Quantum}, so these coincide with
+    \cite[Proposition~6.1]{Wolf2012Quantum}, so these coincide with
     the eigenvalues of maximal modulus.
 
-    \textbf{Note:} The condition $|\lambda| = 1$ is appropriate
-    for channels, since the spectral radius of a channel is~$1$.
-    For a general linear map with spectral radius $r \neq 1$
-    the condition would generalise to $|\lambda| = r$.
+    The condition $|\lambda| = 1$ is appropriate for channels, since the
+    spectral radius of a channel is~$1$; for a general linear map with
+    spectral radius $r \neq 1$ the condition would generalise to
+    $|\lambda| = r$.
 \end{definition}
+
+\begin{remark}[Peripheral conventions for channels]%
+    \label{rem:peripheral_conventions_channels}
+    \leanok
+    \uses{def:peripheral_spectrum, def:peripheral_eigenvalues}
+    The spectral-radius convention of
+    Definition~\ref{def:peripheral_spectrum} is the usual bounded-operator
+    notion. For channels the spectral radius is $1$, so the channel arguments
+    below use the unit-circle set of Definition~\ref{def:peripheral_eigenvalues}.
+\end{remark}
 
 \begin{theorem}[$1$ is a peripheral eigenvalue]\label{thm:one_peripheral}
     \lean{one_mem_peripheralEigenvalues}
@@ -372,15 +476,6 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 \begin{proof}\leanok
     $\rho$ is an eigenvector with eigenvalue~$1$, and $|1| = 1$.
 \end{proof}
-
-\begin{remark}[Peripheral eigenvalues lie on the unit circle]\label{thm:peripheral_unit_circle}
-    \lean{peripheralEigenvalues_subset_unit_circle}
-    \leanok
-    \uses{def:peripheral_eigenvalues}
-    Every peripheral eigenvalue $\lambda$ satisfies $|\lambda| = 1$.
-    This is simply the defining condition in
-    Definition~\ref{def:peripheral_eigenvalues}.
-\end{remark}
 
 \begin{theorem}[Finiteness of peripheral eigenvalues]\label{thm:peripheral_finite}
     \lean{peripheralEigenvalues_finite}
@@ -408,7 +503,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 
 \begin{proof}
     \leanok
-    Since $\mu^n$ is an eigenvalue for every~$n$,
+    Since $\mu^n$ is an eigenvalue for every positive~$n$,
     the pigeonhole principle on the finite eigenvalue set gives
     $\mu^a = \mu^b$ for some $a \neq b$, hence $\mu^{|a-b|} = 1$.
 \end{proof}
@@ -430,7 +525,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \leanok
     \uses{thm:peripheral_roots_of_unity}
     The closure hypothesis provides
-    $\mu^n \in \mathrm{peripheral}(E)$ for all $n$,
+    $\mu^n \in \mathrm{peripheral}(E)$ for all positive~$n$,
     which in particular means $\mu^n$ is an eigenvalue.
     Theorem~\ref{thm:peripheral_roots_of_unity} then gives
     $\mu^p = 1$ for some $p > 0$.
@@ -490,19 +585,19 @@ both unital and trace-preserving.
     (the ``bi-canonical'' case), the Kadison--Schwarz equality at peripheral
     eigenvectors (Theorem~\ref{thm:ks_peripheral_channels}) shows directly that the
     peripheral eigenvalues are closed under powers, and hence are roots of unity
-    by Theorem~\ref{thm:peripheral_powers}. This is the simplest argument, but
-    it requires both normalizations simultaneously. The more general adjoint-fixed-point
+    by Theorem~\ref{thm:peripheral_powers}. It
+    requires both normalizations simultaneously. The more general adjoint-fixed-point
     formulation below covers the case where only unitality and a positive definite
     adjoint fixed point are available.
 \end{remark}
 
-\subsection{Kadison--Schwarz input for peripheral and fixed-point arguments}
+\subsection{The Kadison--Schwarz inequality and the multiplicative domain}
 \label{subsec:ks_input_channels}
 
 \begin{definition}[Kraus maps, adjoints, and normalizations]
     \label{def:kraus_map_channels}
     \lean{KadisonSchwarz.krausMap, KadisonSchwarz.krausAdjointMap,
-          KadisonSchwarz.IsUnitalKraus, KadisonSchwarz.IsTPKraus}
+        KadisonSchwarz.IsUnitalKraus, KadisonSchwarz.IsTPKraus}
     \leanok
     For operators $\{K_i\}_{i=0}^{d-1} \subseteq \MN{D}$, the associated
     \emph{Kraus map} and \emph{adjoint Kraus map} are
@@ -525,14 +620,14 @@ both unital and trace-preserving.
     \[
         E(X^\dagger X) \ge E(X)^\dagger E(X).
     \]
-    This is \cite[Eq.~(5.2)]{Wolf2012Quantum}.
+    This is \cite[Equation~(5.2)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
     Apply the unital completely positive map entrywise to the positive
     $2 \times 2$ block matrix
     $\bigl(\begin{smallmatrix} X^\dagger X & X^\dagger \\ X & \Id
-    \end{smallmatrix}\bigr)$ and take the Schur complement of the lower-right block.
+        \end{smallmatrix}\bigr)$ and take the Schur complement of the lower-right block.
 \end{proof}
 
 \begin{theorem}[Hilbert--Schmidt contraction]
@@ -578,10 +673,9 @@ both unital and trace-preserving.
     \leanok
     \uses{thm:ks_gap_decomp_channels}
     Let $E$ be a unital Kraus map.
-    If $E(X^\dagger X) = E(X)^\dagger E(X)$, then
+    If $E(X^\dagger X) = E(X)^\dagger E(X)$, then, for every~$i$,
     \[
-        X K_i^\dagger = K_i^\dagger E(X)
-        \qquad \text{for all } i.
+        X K_i^\dagger = K_i^\dagger E(X).
     \]
 \end{theorem}
 
@@ -654,7 +748,7 @@ both unital and trace-preserving.
 The following results replace the trace-preservation hypothesis by the existence
 of a positive definite fixed point for the \emph{adjoint} Kraus map,
 matching the weighted-trace argument in
-\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
+\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 
 \begin{lemma}[Peripheral closure via adjoint fixed point]%
     \label{lem:peripheral_closed_powers_irred_fp}
@@ -675,7 +769,7 @@ matching the weighted-trace argument in
 
 \begin{proof}\leanok
     \uses{thm:kadison_schwarz_channels, thm:psd_fp_pd_irred,
-          thm:kraus_commute_channels, thm:left_multiplicative_identity_channels}
+        thm:kraus_commute_channels, thm:left_multiplicative_identity_channels}
     Let $E(X) = \mu X$ with $|\mu| = 1$, and set
     $G := E(X^\dagger X) - E(X)^\dagger E(X)$.
     By Kadison--Schwarz, $G \ge 0$.
@@ -727,9 +821,16 @@ matching the weighted-trace argument in
     $E^*(\Id) = \Id$, which is a positive definite fixed
     point of the adjoint.
     The adjoint-fixed-point formulation matches the
-    argument in \cite[Appendix~A]{Cirac2017MPDO_AnnPhys},
+    argument in \cite[Appendix~A]{Cirac2016MPDO_arXiv},
     which uses a faithful invariant state rather than
     bi-canonicality.
+    Theorem~\ref{thm:peripheral_roots_irred_fp} establishes the
+    root-of-unity conclusion in this adjoint-fixed-point formulation.
+    In the same adjoint-fixed-point formulation, Chapter~\ref{ch:spectral}
+    proves the corresponding cyclic structure: the cyclic group of
+    peripheral eigenvalues is Theorem~\ref{thm:peripheral_cyclic_structure},
+    and the cyclic projection decomposition is
+    Theorem~\ref{thm:cyclic_decomposition_irreducible_schwarz}.
 \end{remark}
 
 \begin{definition}[Channel period]\label{def:channel_period}
@@ -748,7 +849,7 @@ matching the weighted-trace argument in
     A linear map is \emph{primitive} if its only peripheral eigenvalue
     is $\lambda = 1$, i.e.\
     $\mathrm{peripheral}(E) = \{1\}$.
-    For channels this corresponds to \cite[Thm.~6.7]{Wolf2012Quantum}.
+    For channels this corresponds to \cite[Theorem~6.7]{Wolf2012Quantum}.
     This definition applies to any linear endomorphism, not only
     to channels.
 \end{definition}
@@ -770,7 +871,20 @@ matching the weighted-trace argument in
     only element is $1$.
 \end{proof}
 
-\begin{theorem}[Primitive maps have a spectral gap on the complement]\label{thm:primitive_compl_lt_one}
+\begin{remark}[Period-one characterization]%
+    \label{rem:primitive_period_one_characterization}
+    \leanok
+    \uses{def:channel_period, thm:primitive_iff_period_one}
+    The period $p(E)$ counts peripheral eigenvalues without multiplicity.
+    Theorem~\ref{thm:primitive_iff_period_one} is therefore the period-one
+    characterization of primitivity. The spectral estimates below are stated
+    directly with Definition~\ref{def:primitive_channel}, since they use the
+    absence of peripheral eigenvalues other than $1$, not a separate counting
+    hypothesis.
+\end{remark}
+
+\begin{theorem}[Complementary transfer-map gap for primitive maps]%
+    \label{thm:primitive_compl_lt_one}
     \lean{compl_eigenvalue_norm_lt_one_of_primitive}
     \leanok
     \uses{def:primitive_channel, def:fixed_point_proj, def:trace_preserving}
@@ -778,7 +892,7 @@ matching the weighted-trace argument in
     $\rho \neq 0$ satisfy $E(\rho) = \rho$ and $\tr(\rho) \neq 0$.
     Let
     \[
-        P(X) = \frac{\tr(X)}{\tr(\rho)} \, \rho
+        P(X) = \frac{\tr(X)}{\tr(\rho)} \rho
     \]
     be the fixed-point projection associated to $\rho$.
     Assume that:
@@ -806,1103 +920,11 @@ matching the weighted-trace argument in
     If instead $\tr(X) \neq 0$, trace preservation and
     $\tr(P(X)) = \tr(X)$ give
     \[
-        \tr(X) = \tr(E(X)) = \nu \, \tr(X) + \tr(P(X))
-        = \nu \, \tr(X) + \tr(X),
+        \tr(X) = \tr(E(X)) = \nu \tr(X) + \tr(P(X))
+        = \nu \tr(X) + \tr(X),
     \]
-    so $\nu \, \tr(X) = 0$ and therefore $\nu = 0$.
+    so $\nu \tr(X) = 0$ and therefore $\nu = 0$.
     In either case, $|\nu| < 1$.
-\end{proof}
-
-%% =========================================================
-\section{Representations}
-\label{sec:representations_infrastructure}
-%% =========================================================
-
-The following definitions support the Choi--Jamiol\-kowski isomorphism
-(Theorem~\ref{thm:cp_iff_choi_posSemidef}) and the representation theorems
-of~\cite[Ch.~2]{Wolf2012Quantum}.
-
-\begin{definition}[Partial traces]\label{def:partial_trace}
-    \lean{Matrix.traceLeft, Matrix.traceRight}
-    \leanok
-    Let $X \in \MN{d \cdot d'}$ be a bipartite matrix indexed by
-    \[
-        (\{0,\ldots,d-1\} \times \{0,\ldots,d'-1\})^2.
-    \]
-    The \emph{left partial trace} $\operatorname{tr}_A(X)$ and
-    \emph{right partial trace} $\operatorname{tr}_B(X)$ are the
-    $d' \times d'$ and $d \times d$ matrices defined by
-    \[
-        (\operatorname{tr}_A(X))_{ij}
-          = \sum_{k} X_{(k,i),(k,j)},
-        \qquad
-        (\operatorname{tr}_B(X))_{ij}
-          = \sum_{k} X_{(i,k),(j,k)}.
-    \]
-\end{definition}
-
-\begin{definition}[Maximally entangled state]\label{def:maximally_entangled}
-    \lean{Matrix.omegaProj}
-    \leanok
-    The \emph{maximally entangled state} on $\C^d \otimes \C^d$ is the
-    rank-one projector
-    \[
-        \lvert\Omega\rangle\!\langle\Omega\rvert,
-        \quad
-        \lvert\Omega\rangle
-          = \frac{1}{\sqrt{d}} \sum_{j=0}^{d-1} \lvert j,j\rangle.
-    \]
-    Concretely, $(\lvert\Omega\rangle\!\langle\Omega\rvert)_{(i_1,i_2),(j_1,j_2)}
-    = \frac{1}{d}\,\delta_{i_1 j_1}\delta_{i_2 j_2}$
-    and $\operatorname{tr}(\lvert\Omega\rangle\!\langle\Omega\rvert) = 1$.
-\end{definition}
-
-\begin{definition}[Tensor product of a map with identity]\label{def:tensor_map_id}
-    \lean{Matrix.tensorMapId}
-    \leanok
-    Given a linear map $T : \MN{D} \to \MN{D}$,
-    the \emph{tensor extension} $T \otimes \id$ acts on bipartite matrices
-    $X \in M_{D \times D}(\C)$ by applying $T$ to each ``slice'':
-    \[
-        (T \otimes \id)(X)_{(i_1,i_2),(j_1,j_2)}
-          = (T(X^{(i_2,j_2)}))_{i_1 j_1},
-    \]
-    where $X^{(i_2,j_2)}_{ab} = X_{(a,i_2),(b,j_2)}$ is the
-    bipartite slice.
-\end{definition}
-
-%% =========================================================
-\section{Choi--Jamio\l{}kowski isomorphism}
-\label{sec:choi_jamiolkowski}
-%% =========================================================
-
-\begin{definition}[Choi matrix]\label{def:choi_matrix}
-    \lean{ChoiJamiolkowski.choiMatrix}
-    \leanok
-    \uses{def:maximally_entangled, def:tensor_map_id}
-    The \emph{Choi matrix} of a linear map
-    $T : \MN{D} \to \MN{D}$ is
-    \[
-        \tau
-          = (T \otimes \id)(\lvert\Omega\rangle\!\langle\Omega\rvert)
-          \;\in\; M_{D \times D}(\C).
-    \]
-    Concretely,
-    $\tau_{(i_1,i_2),(j_1,j_2)}
-       = \frac{1}{D}\,(T(E_{i_2 j_2}))_{i_1 j_1}$
-    where $E_{i_2 j_2}$ is the matrix unit.
-    This is the Choi--Jamiol\-kowski convention of
-    \cite[Prop.~2.1]{Wolf2012Quantum}.
-\end{definition}
-
-\begin{theorem}[Choi matrix of the identity map]\label{thm:choi_matrix_id}
-    \lean{ChoiJamiolkowski.choiMatrix_id}
-    \leanok
-    \uses{def:choi_matrix, def:maximally_entangled}
-    The identity channel has Choi matrix
-    $\lvert\Omega\rangle\!\langle\Omega\rvert$.
-\end{theorem}
-
-\begin{proof}\leanok
-    Apply the identity map in the definition of the Choi matrix.
-\end{proof}
-
-\begin{theorem}[Complete positivity iff the Choi matrix is positive semidefinite]\label{thm:cp_iff_choi_posSemidef}
-    \lean{ChoiJamiolkowski.cp_iff_choi_posSemidef}
-    \leanok
-    \uses{def:choi_matrix, def:cp_map}
-    A linear map $T : \MN{D} \to \MN{D}$ is completely positive
-    (in the Kraus sense) if and only if its Choi matrix $\tau \ge 0$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{def:choi_matrix, def:cp_map}
-    ($\Rightarrow$) If $T(X) = \sum_i K_i X K_i^\dagger$, then
-    $\tau = \sum_i \lvert v_i\rangle\!\langle v_i\rvert$ where
-    $(v_i)_{(a,b)} = c\,K_i(a,b)$ and $c = 1/\sqrt{D}$.
-    This is a sum of rank-one PSD matrices.
-
-    ($\Leftarrow$) If $\tau \ge 0$, write
-    $\tau = \sum_m \lvert v_m\rangle\!\langle v_m\rvert$
-    by spectral decomposition, define $K_m(a,b) = v_m(a,b)/c$,
-    and recover $T(X) = \sum_m K_m X K_m^\dagger$ by linearity on
-    matrix units.
-\end{proof}
-
-\begin{theorem}[Trace preservation implies the partial-trace condition]\label{thm:traceLeft_choiMatrix_of_tp}
-    \lean{ChoiJamiolkowski.traceLeft_choiMatrix_of_tp}
-    \leanok
-    \uses{def:choi_matrix, def:partial_trace, def:trace_preserving}
-    If $T$ is trace-preserving, then
-    $\operatorname{tr}_A(\tau) = \frac{1}{D} \Id_D$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{def:choi_matrix, def:partial_trace}
-    $(\operatorname{tr}_A(\tau))_{ij}
-       = \operatorname{tr}(T(\Omega^{(ij)}))
-       = \operatorname{tr}(\Omega^{(ij)})$
-    by trace preservation, where
-    $\Omega^{(ij)} = \frac{1}{D} E_{ij}$ is the $(i,j)$-slice of
-    $\lvert\Omega\rangle\!\langle\Omega\rvert$.
-    Taking the trace gives $\frac{1}{D}\delta_{ij}$.
-\end{proof}
-
-\begin{theorem}[Hermiticity preservation and the Choi matrix]\label{thm:choiMatrix_isHermitian_iff_hermiticityPreserving}
-    \lean{ChoiJamiolkowski.choiMatrix_isHermitian_iff_hermiticityPreserving}
-    \leanok
-    \uses{def:choi_matrix}
-    The Choi matrix $\tau$ is Hermitian if and only if
-    $T(B^\dagger) = T(B)^\dagger$ for all $B \in \MN{D}$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{def:choi_matrix}
-    The Choi matrix entries satisfy
-    $\tau_{(a,i),(b,j)} = \frac{1}{D}(T(E_{ij}))_{ab}$.
-    Hermiticity of $\tau$ says
-    $\overline{\tau_{(b,j),(a,i)}} = \tau_{(a,i),(b,j)}$, which
-    unravels to $T(E_{ji})_{ba} = \overline{T(E_{ij})_{ab}}$, i.e.,
-    $T(E_{ij}^\dagger) = T(E_{ij})^\dagger$.
-    By linearity this extends to all $B$.
-\end{proof}
-
-\begin{theorem}[Trace of the Choi matrix of a trace-preserving map]\label{thm:trace_choiMatrix_of_tp}
-    \lean{ChoiJamiolkowski.trace_choiMatrix_of_tp}
-    \leanok
-    \uses{def:choi_matrix, def:trace_preserving, thm:traceLeft_choiMatrix_of_tp}
-    If $T$ is trace-preserving, then $\operatorname{tr}(\tau) = 1$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:traceLeft_choiMatrix_of_tp}
-    $\operatorname{tr}(\tau)
-       = \operatorname{tr}(\operatorname{tr}_A(\tau))
-       = \operatorname{tr}(\frac{1}{D}\Id_D)
-       = 1$.
-\end{proof}
-
-%% =========================================================
-\section{Representation corollaries (Props 2.2--2.4)}
-\label{sec:representation_corollaries}
-%% =========================================================
-
-The next three corollaries follow from the Choi/Kraus/Stinespring
-representations already developed above. They correspond to
-\cite[Props.~2.2--2.4]{Wolf2012Quantum}.
-
-\begin{theorem}[Prop.~2.2, polarization of sesquilinear sandwiches]
-    \label{thm:polarization_sandwich}
-    \lean{WolfProps.polarization_sandwich}
-    \leanok
-    For any $A, B, X \in \MN{D}$,
-    \[
-        4\,A X B^\dagger
-          = (A+B) X (A+B)^\dagger - (A-B) X (A-B)^\dagger
-            + i\,(A + iB) X (A + iB)^\dagger
-            - i\,(A - iB) X (A - iB)^\dagger.
-    \]
-    Each of the four summands on the right is a single-Kraus CP map, so
-    every sesquilinear sandwich decomposes into a signed complex linear
-    combination of CP maps.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Working entrywise, reduces to the scalar polarization identity
-    $4\,\alpha\,\overline{\delta}
-      = \sum_{k=0}^{3} i^k (\alpha + i^k \beta)\overline{(\gamma + i^k \delta)}$
-    in $\mathbb{C}$, which holds after substituting $i^2 = -1$.
-\end{proof}
-
-\begin{theorem}[Prop.~2.2, CP decomposition of sandwich sums]
-    \label{thm:cp_decomposition_of_sandwich_sum}
-    \lean{WolfProps.cp_decomposition_of_sandwich_sum}
-    \leanok
-    \uses{thm:polarization_sandwich}
-    For any finite Kraus-like families $\{A_i\}, \{B_i\}$, the map
-    $T(X) = \sum_i A_i X B_i^\dagger$ satisfies
-    $4\,T = T_1 - T_2 + i\,T_3 - i\,T_4$ with each $T_k$ a CP map given
-    explicitly by a single-side Kraus sum of the combined families.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:polarization_sandwich}
-    Apply the polarization identity summand-by-summand.
-\end{proof}
-
-\begin{theorem}[Prop.~2.3, no information without disturbance]
-    \label{thm:linearMap_eq_id_of_fixes_rankOne}
-    \lean{WolfProps.linearMap_eq_id_of_fixes_rankOne}
-    \leanok
-    Let $T : \MN{D} \to \MN{D}$ be linear. If $T(|v\rangle\!\langle v|)
-    = |v\rangle\!\langle v|$ for every $v \in \mathbb{C}^D$, then
-    $T = \mathrm{id}$. In particular, a quantum channel preserving every
-    pure state equals the identity.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Rank-one outer products $|u\rangle\!\langle v|$ polarize into rank-one
-    self-outer-products:
-    $4\,|u\rangle\!\langle v|
-      = \sum_{k=0}^3 i^k |u + i^k v\rangle\!\langle u + i^k v|$,
-    so $T$ preserves every $|u\rangle\!\langle v|$. Since the matrix units
-    $E_{ij} = |e_i\rangle\!\langle e_j|$ span $\MN{D}$, $T$ equals the
-    identity on a spanning set, hence everywhere.
-\end{proof}
-
-\begin{definition}[Pure-state ensemble density]
-    \label{def:pureEnsembleDensity}
-    \lean{WolfProps.pureEnsembleDensity}
-    \leanok
-    Given a finite family $\{\psi_i\}_{i \in \iota}$ of (unnormalized)
-    vectors in $\mathbb{C}^D$, its \emph{pure-ensemble density} is
-    $\rho = \sum_i |\psi_i\rangle\!\langle \psi_i|$. Weights
-    $p_i \geq 0$ with $\sum p_i = 1$ can be absorbed by replacing
-    $\psi_i \mapsto \sqrt{p_i}\,\psi_i$.
-\end{definition}
-
-\begin{theorem}[Prop.~2.4, isometric mixing preserves the density]
-    \label{thm:pureEnsembleDensity_eq_of_isometric_mixing}
-    \lean{WolfProps.pureEnsembleDensity_eq_of_isometric_mixing}
-    \leanok
-    \uses{def:pureEnsembleDensity}
-    If two pure-state ensembles $\{\psi_i\}_{i \in \iota_1}$ and
-    $\{\phi_j\}_{j \in \iota_2}$ are related by an isometric mixing
-    matrix $V \in M_{\iota_1 \times \iota_2}(\mathbb{C})$ with
-    $V^\dagger V = \Id$ and $\psi_i = \sum_j V_{ij}\,\phi_j$, then
-    they induce the same pure-ensemble density operator. This is the
-    sufficient direction of the Hughston--Jozsa--Wootters theorem; the
-    converse (necessity) requires Schmidt-decomposition machinery not
-    yet in the repository.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{def:pureEnsembleDensity}
-    Expanding and applying the orthogonality relation
-    $\sum_i V_{ij}\overline{V_{ij'}} = \delta_{j j'}$ from
-    $V^\dagger V = \Id$:
-    \[
-      \sum_i |\psi_i\rangle\!\langle \psi_i|
-        = \sum_{j, j'} \Big(\sum_i V_{ij}\,\overline{V_{ij'}}\Big)
-           |\phi_j\rangle\!\langle \phi_{j'}|
-        = \sum_j |\phi_j\rangle\!\langle \phi_j|.
-    \]
-\end{proof}
-
-%% =========================================================
-\section{Kraus representation theorem}
-\label{sec:kraus_representation}
-%% =========================================================
-
-\begin{theorem}[Trace preservation implies Kraus normalization]\label{thm:kraus_sum_conjTranspose_mul_of_tp}
-    \lean{kraus_sum_conjTranspose_mul_of_tp}
-    \leanok
-    \uses{def:cp_map, def:trace_preserving}
-    If $T(X) = \sum_i K_i X K_i^\dagger$ is trace-preserving, then
-    $\sum_i K_i^\dagger K_i = \Id$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{def:trace_preserving}
-    For any $N$,
-    $\operatorname{tr}((\sum_i K_i^\dagger K_i)\,N)
-       = \sum_i \operatorname{tr}(K_i^\dagger K_i N)
-       = \sum_i \operatorname{tr}(K_i N K_i^\dagger)
-       = \operatorname{tr}(T(N))
-       = \operatorname{tr}(N)$.
-    Non-degeneracy of the trace pairing forces
-    $\sum_i K_i^\dagger K_i = \Id$.
-\end{proof}
-
-\begin{theorem}[Kraus normalization implies trace preservation]\label{thm:kraus_tp_of_sum_conjTranspose_mul}
-    \lean{kraus_tp_of_sum_conjTranspose_mul}
-    \leanok
-    \uses{def:cp_map, def:trace_preserving}
-    If $\sum_i K_i^\dagger K_i = \Id$, then
-    $T(X) = \sum_i K_i X K_i^\dagger$ is trace-preserving.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    $\operatorname{tr}(T(X))
-       = \sum_i \operatorname{tr}(K_i X K_i^\dagger)
-       = \sum_i \operatorname{tr}(K_i^\dagger K_i X)
-       = \operatorname{tr}((\textstyle\sum_i K_i^\dagger K_i)\,X)
-       = \operatorname{tr}(X)$.
-\end{proof}
-
-\begin{theorem}[Unitality implies Kraus unital normalization]
-    \label{thm:kraus_sum_mul_conjTranspose_of_unital}
-    \lean{kraus_sum_mul_conjTranspose_of_unital}
-    \leanok
-    \uses{def:cp_map}
-    If $T(X) = \sum_i K_i X K_i^\dagger$ satisfies $T(\Id) = \Id$, then
-    \[
-        \sum_i K_i K_i^\dagger = \Id.
-    \]
-\end{theorem}
-
-\begin{proof}\leanok
-    Evaluate the Kraus formula at the identity matrix.
-\end{proof}
-
-\begin{theorem}[Unitary freedom in Kraus operators]\label{thm:kraus_same_map_of_unitary_combination}
-    \lean{kraus_same_map_of_unitary_combination}
-    \leanok
-    \uses{def:cp_map}
-    Let $U$ be a unitary $r \times r$ matrix ($U^\dagger U = \Id$)
-    and suppose $K_j = \sum_\ell U_{j\ell}\,\tilde{K}_\ell$.
-    Then $\{K_j\}$ and $\{\tilde{K}_\ell\}$ define the same Kraus map:
-    \[
-        \sum_j K_j X K_j^\dagger
-          = \sum_\ell \tilde{K}_\ell X \tilde{K}_\ell^\dagger
-        \quad \forall\, X \in \MN{D}.
-    \]
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Substitute the combination formula, expand the triple sum over
-    $j,\ell,\ell'$, swap summation order, and use the entry-wise form
-    of $U^\dagger U = \Id$ to collapse to $\ell = \ell'$ diagonal terms.
-\end{proof}
-
-\begin{theorem}[Isometric mixing preserves the Kraus map]
-    \label{thm:kraus_same_map_of_isometry_combination}
-    \lean{kraus_same_map_of_isometry_combination}
-    \leanok
-    \uses{def:cp_map}
-    Let $W$ be an isometry between two Kraus index spaces, so $W^\dagger W = \Id$.
-    If
-    \[
-        K_j = \sum_\ell W_{j\ell}\,\widetilde K_\ell,
-    \]
-    then the Kraus families $\{K_j\}$ and $\{\widetilde K_\ell\}$ define the
-    same completely positive map.
-\end{theorem}
-
-\begin{proof}\leanok
-    Expand the Kraus sums, interchange the finite summations, and use
-    $W^\dagger W = \Id$ to collapse the coefficient matrix.
-\end{proof}
-
-\begin{theorem}[The transition matrix of orthonormal Kraus families is unitary]\label{thm:kraus_transition_unitary_of_hs_orthonormal}
-    \lean{kraus_transition_unitary_of_hs_orthonormal}
-    \leanok
-    \uses{def:cp_map}
-    Let $\{K_j\}_{j=0}^{r-1}$ and $\{K'_j\}_{j=0}^{r-1}$ be two
-    Hilbert--Schmidt orthonormal Kraus families, and suppose
-    \[
-        K_j = \sum_{\ell=0}^{r-1} U_{j\ell}\,K'_\ell.
-    \]
-    Then the transition matrix $U$ is unitary:
-    $U^\dagger U = \Id_r$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Expand $\operatorname{tr}(K_j^\dagger K_i)$ using the change of basis.
-    Hilbert--Schmidt orthonormality of both Kraus families identifies
-    the Gram matrix with the identity, yielding the matrix identity
-    $U U^\dagger = \Id_r$, hence also $U^\dagger U = \Id_r$.
-\end{proof}
-
-\begin{theorem}[Dual map equality from primal map equality]\label{thm:kraus_dual_eq_of_map_eq}
-    \lean{kraus_dual_eq_of_map_eq}
-    \leanok
-    \uses{def:cp_map}
-    If two Kraus families satisfy
-    $\sum_\alpha B_\alpha X B_\alpha^\dagger = \sum_j A_j X A_j^\dagger$
-    for all $X$, then
-    $\sum_\alpha B_\alpha^\dagger Y B_\alpha = \sum_j A_j^\dagger Y A_j$
-    for all $Y$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Use the trace pairing: for all $X$,
-    $\operatorname{tr}(X^\dagger (\sum B_\alpha^\dagger Y B_\alpha))
-     = \operatorname{tr}((\sum B_\alpha X^\dagger B_\alpha^\dagger) Y)
-     = \operatorname{tr}((\sum A_j X^\dagger A_j^\dagger) Y)
-     = \operatorname{tr}(X^\dagger (\sum A_j^\dagger Y A_j))$.
-    Nondegeneracy of the trace pairing gives the result.
-\end{proof}
-
-\begin{theorem}[Equal Stinespring Gramians]\label{thm:kraus_conjTranspose_mul_eq_of_map_eq}
-    \lean{kraus_conjTranspose_mul_eq_of_map_eq}
-    \leanok
-    \uses{thm:kraus_dual_eq_of_map_eq}
-    If two Kraus families define the same CPM, then
-    $\sum_\alpha B_\alpha^\dagger B_\alpha = \sum_j A_j^\dagger A_j$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Specialise Theorem~\ref{thm:kraus_dual_eq_of_map_eq} at $Y = \Id$.
-\end{proof}
-
-\begin{theorem}[Rectangular Kraus freedom]\label{thm:kraus_rectangular_freedom}
-    \lean{kraus_rectangular_freedom}
-    \leanok
-    \uses{thm:kraus_dual_eq_of_map_eq, thm:kraus_conjTranspose_mul_eq_of_map_eq}
-    If $\sum_\alpha B_\alpha X B_\alpha^\dagger = \sum_j A_j X A_j^\dagger$
-    for all $X$ and $r_2 \le r_1$ (where $\{B_\alpha\}_{\alpha=0}^{r_1-1}$
-    is the larger family and $\{A_j\}_{j=0}^{r_2-1}$ the smaller),
-    then there exists a rectangular isometry
-    $V$ ($r_1 \times r_2$, $V^\dagger V = \Id_{r_2}$) such that
-    $B_\alpha = \sum_j V_{\alpha j}\,A_j$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Pad the smaller family to size $r_1$, establish Gram matrix equality
-    $M_B^\dagger M_B = M_{A'}^\dagger M_{A'}$ from dual map equality,
-    construct a partial isometry via inner product preservation on the
-    range, and extend to a full isometry $V$ with $V^\dagger V = \Id_{r_2}$.
-\end{proof}
-
-\begin{theorem}[Rectangular Kraus freedom with general finite index types]\label{thm:kraus_rectangular_freedom'}
-    \lean{kraus_rectangular_freedom'}
-    \leanok
-    \uses{thm:kraus_rectangular_freedom}
-    Variant of Theorem~\ref{thm:kraus_rectangular_freedom} with general
-    finite index sets $\iota_1, \iota_2$ in place of standard index sets of
-    cardinalities $r_1$ and $r_2$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Reindex by choosing enumerations of those finite index sets and apply
-    Theorem~\ref{thm:kraus_rectangular_freedom}.
-\end{proof}
-
-\begin{theorem}[Isometric freedom of Kraus representations]
-    \label{thm:kraus_isometry_freedom_iff}
-    \lean{kraus_isometry_freedom_iff}
-    \leanok
-    \uses{thm:kraus_rectangular_freedom'}
-    Let $\{B_\alpha\}_{\alpha \in \iota_1}$ and $\{A_j\}_{j \in \iota_2}$
-    be finite Kraus families with $|\iota_2| \le |\iota_1|$.
-    Then the following are equivalent:
-    \begin{enumerate}
-        \item $\sum_\alpha B_\alpha X B_\alpha^\dagger
-              = \sum_j A_j X A_j^\dagger$ for all $X \in \MN{D}$.
-        \item There exists a matrix $V = (V_{\alpha j})$ with
-              $V^\dagger V = \Id$ such that
-              $B_\alpha = \sum_j V_{\alpha j} A_j$ for every $\alpha$.
-    \end{enumerate}
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    The implication $(1) \Rightarrow (2)$ is
-    Theorem~\ref{thm:kraus_rectangular_freedom'}.
-    Conversely, expand $\sum_\alpha B_\alpha X B_\alpha^\dagger$ using
-    $B_\alpha = \sum_j V_{\alpha j} A_j$, interchange the finite sums,
-    and use $V^\dagger V = \Id$ to collapse the coefficient matrix to the
-    diagonal.
-\end{proof}
-
-\begin{theorem}[Unitary freedom of Kraus representations]
-    \label{thm:kraus_unitary_freedom_iff}
-    \lean{kraus_unitary_freedom_iff}
-    \leanok
-    \uses{thm:kraus_isometry_freedom_iff}
-    Let $\{B_\alpha\}_{\alpha \in \iota}$ and $\{A_j\}_{j \in \iota}$
-    be two Kraus families with the same finite index set.
-    Then the following are equivalent:
-    \begin{enumerate}
-        \item $\sum_\alpha B_\alpha X B_\alpha^\dagger
-              = \sum_j A_j X A_j^\dagger$ for all $X \in \MN{D}$.
-        \item There exists a unitary matrix $U = (U_{\alpha j})$ such that
-              $B_\alpha = \sum_j U_{\alpha j} A_j$ for every $\alpha$.
-    \end{enumerate}
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Apply Theorem~\ref{thm:kraus_isometry_freedom_iff} with
-    $|\iota| = |\iota|$.
-    In the square case an isometry matrix is unitary, and the converse is
-    immediate.
-\end{proof}
-
-\begin{remark}[Choi rank is bounded by Kraus rank]
-    \label{rem:choi_rank_le_kraus_rank}
-    \lean{Channel.HasKrausCard, Channel.HasKrausRankLE, Channel.choiRank,
-           Channel.choiRank_le_of_hasKrausCard,
-           Channel.choiRank_le_of_hasKrausRankLE}
-    \leanok
-    \uses{def:choi_matrix, def:cp_map}
-    If a completely positive map admits a Kraus representation with exactly $r$
-    operators, then its Choi matrix is a sum of $r$ rank-one outer products.
-    Consequently,
-    \[
-        \operatorname{rank}(\tau_E) \le r.
-    \]
-    More generally, any witness with at most $r$ Kraus operators yields the same
-    upper bound.
-\end{remark}
-
-\begin{proof}
-    \leanok
-    Expand the Choi matrix using the Kraus formula and
-    $\tau_E = \sum_j v_j v_j^\dagger$ with one vector $v_j$ for each Kraus
-    operator. The column space of this sum lies in the span of the $r$ vectors
-    $\{v_j\}$, so the rank is at most $r$.
-\end{proof}
-
-%% =========================================================
-\section{Stinespring dilation}
-\label{sec:stinespring}
-%% =========================================================
-
-\begin{definition}[Stinespring isometry]\label{def:stinespring_v}
-    \lean{stinespringV}
-    \leanok
-    \uses{def:cp_map}
-    Given Kraus operators $\{K_j\}_{j=0}^{r-1}$ with
-    $K_j \in \MN{D}$, the \emph{Stinespring isometry}
-    $V : \C^D \to \C^D \otimes \C^r$ is the
-    $(D \cdot r) \times D$ matrix
-    \[
-        V_{(i,j),k} = (K_j)_{ik}.
-    \]
-    This implements $V = \sum_j K_j \otimes \lvert j\rangle$.
-\end{definition}
-
-\begin{lemma}[Entry formula for the Stinespring isometry]\label{lem:stinespring_v_apply}
-    \lean{stinespringV_apply}
-    \leanok
-    \uses{def:stinespring_v}
-    For indices $i,k \in \{0,\dots,D-1\}$ and $j \in \{0,\dots,r-1\}$,
-    \[
-        V_{(i,j),k} = (K_j)_{ik}.
-    \]
-\end{lemma}
-
-\begin{theorem}[Stinespring Gram identity]\label{thm:stinespring_v_conjTranspose_mul}
-    \lean{stinespringV_conjTranspose_mul}
-    \leanok
-    \uses{def:stinespring_v}
-    The Stinespring isometry satisfies
-    \[
-        V^\dagger V = \sum_{j=0}^{r-1} K_j^\dagger K_j.
-    \]
-\end{theorem}
-
-\begin{theorem}[Stinespring dual representation]\label{thm:stinespring_dual_representation}
-    \lean{stinespring_dual_representation}
-    \leanok
-    \uses{def:stinespring_v, def:cp_map, thm:stinespring_v_conjTranspose_mul}
-    For Kraus operators $\{K_j\}$ and $A \in \MN{D}$,
-    \[
-        V^\dagger\,(A \otimes \Id_r)\,V
-          = \sum_j K_j^\dagger A\,K_j
-          = T^*(A).
-    \]
-    This is the Stinespring representation of the \emph{dual} (Heisenberg
-    picture) map $T^*$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{def:stinespring_v}
-    Compute $(V^\dagger (A \otimes \Id_r) V)_{ab}$
-    by summing over the product index $(i,j)$;
-    the $\delta_{jl}$ from $\Id_r$ collapses the sum over $l$, giving
-    $\sum_j K_j^\dagger A K_j$.
-\end{proof}
-
-\begin{theorem}[The Stinespring isometry condition iff trace preservation]\label{thm:stinespringV_isometry_iff_kraus_normalized}
-    \lean{stinespringV_isometry_iff_kraus_normalized}
-    \leanok
-    \uses{def:stinespring_v, def:trace_preserving}
-    $V^\dagger V = \Id_D$ if and only if
-    $\sum_j K_j^\dagger K_j = \Id_D$.
-    In particular, $V$ is an isometry precisely when the Kraus map is
-    trace-preserving.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{def:stinespring_v}
-    $(V^\dagger V)_{ab}
-       = \sum_{(i,j)} \overline{V_{(i,j),a}}\,V_{(i,j),b}
-       = \sum_j \sum_i \overline{(K_j)_{ia}}\,(K_j)_{ib}
-       = (\sum_j K_j^\dagger K_j)_{ab}$.
-\end{proof}
-
-\begin{theorem}[Stinespring Schr\"odinger representation]\label{thm:stinespring_schrodinger_representation}
-    \lean{stinespring_schrodinger_representation}
-    \leanok
-    \uses{def:stinespring_v, def:cp_map, def:partial_trace}
-    The Kraus map $T(\rho) = \sum_j K_j \rho K_j^\dagger$ equals
-    the partial trace over the dilation space:
-    \[
-        T(\rho)_{ij}
-          = \sum_{k=0}^{r-1}
-              (V \rho V^\dagger)_{(i,k),(j,k)}
-          = \operatorname{tr}_r(V\rho V^\dagger).
-    \]
-    This is the Schr\"odinger-picture Stinespring representation.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{def:stinespring_v}
-    Expand $(V\rho V^\dagger)_{(i,k),(j,k)}$
-    and sum over $k$ to recover $\sum_k K_k \rho K_k^\dagger$.
-\end{proof}
-
-\begin{theorem}[Existence of a Stinespring dilation]
-    \label{thm:exists_stinespring_dilation}
-    \lean{exists_stinespring_dilation}
-    \leanok
-    \uses{def:cp_map, def:stinespring_v}
-    Every completely positive map admits an ancilla dimension $r$, Kraus operators
-    $\{K_j\}_{j=0}^{r-1}$, and the concrete representation
-    $\pi(A) = A \otimes \Id_r$ such that
-    \[
-        E(A) = V^\dagger \pi(A) V.
-    \]
-\end{theorem}
-
-\begin{proof}\leanok
-    Choose a Kraus representation of $E$ and apply the explicit Heisenberg-picture
-    Stinespring formula.
-\end{proof}
-
-\begin{theorem}[CPTP maps admit isometric Stinespring dilations]
-    \label{thm:exists_stinespring_isometry_of_cptp}
-    \lean{exists_stinespring_isometry_of_cptp}
-    \leanok
-    \uses{def:channel, def:stinespring_v}
-    Every quantum channel admits a Stinespring dilation whose matrix $V$ is an
-    isometry, equivalently $V^\dagger V = \Id$.
-\end{theorem}
-
-\begin{proof}\leanok
-    Choose Kraus operators for the channel and use trace preservation to obtain
-    the Stinespring isometry condition $V^\dagger V = \Id$.
-\end{proof}
-
-%% =========================================================
-\section{POVMs and Naimark dilation}
-\label{sec:povm_naimark}
-%% =========================================================
-
-\begin{definition}[Positive operator-valued measure]\label{def:povm}
-    \lean{POVM}
-    \leanok
-    A \emph{positive operator-valued measure} with $n$ outcomes on $\C^D$
-    is a family $\{E_i\}_{i=1}^n$ of positive semidefinite
-    operators on $\C^D$ satisfying the resolution of identity
-    \[
-        \sum_{i=1}^n E_i = \Id_D.
-    \]
-\end{definition}
-
-\begin{definition}[Naimark Kraus square roots]\label{def:naimark_kraus}
-    \lean{POVM.naimarkKraus, POVM.naimarkKraus_spec}
-    \leanok
-    \uses{def:povm}
-    For a POVM $\{E_i\}$, each effect $E_i \ge 0$ admits a square-root
-    factorisation $E_i = M_i^\dagger M_i$ with $M_i \in \MN{D}$. The
-    operators $M_i$ are the \emph{Naimark Kraus square roots}.
-\end{definition}
-
-\begin{theorem}[Naimark square roots satisfy the Kraus normalization]
-    \label{lem:naimark_square_root_normalization}
-    \lean{POVM.sum_naimarkKraus_conjTranspose_mul}
-    \leanok
-    \uses{def:naimark_kraus, def:povm}
-    For a POVM $\{E_i\}$ with square roots $E_i = M_i^\dagger M_i$,
-    one has
-    \[
-        \sum_i M_i^\dagger M_i = \Id.
-    \]
-\end{theorem}
-
-\begin{proof}\leanok
-    Sum the identities $E_i = M_i^\dagger M_i$ and use the defining
-    resolution of the identity for the POVM.
-\end{proof}
-
-\begin{definition}[Naimark isometry]\label{def:naimark_isometry}
-    \lean{POVM.naimarkIsometry}
-    \leanok
-    \uses{def:naimark_kraus, def:stinespring_v}
-    The \emph{Naimark isometry} $V : \C^D \to \C^D \otimes \C^n$ of a POVM
-    is the Stinespring-type construction
-    \[
-        V = \sum_{i=1}^n M_i \otimes |i\rangle,
-        \qquad V_{(a,i),\,k} = (M_i)_{a,k}.
-    \]
-\end{definition}
-
-\begin{definition}[Naimark projective measurement]\label{def:naimark_projection}
-    \lean{POVM.naimarkProjection, POVM.naimarkProjection_apply}
-    \leanok
-    The \emph{Naimark projectors} on $\C^D \otimes \C^n$ are
-    \[
-        P_i = \Id_D \otimes |i\rangle\langle i|,
-        \qquad (P_i)_{(a,b),(c,d)} = \delta_{a,c}\,\delta_{b,i}\,\delta_{d,i}.
-    \]
-\end{definition}
-
-\begin{theorem}[Naimark isometry condition]\label{thm:naimark_isometry_isometry}
-    \lean{POVM.naimarkIsometry_isometry}
-    \leanok
-    \uses{def:naimark_isometry, def:povm}
-    The Naimark isometry satisfies $V^\dagger V = \Id_D$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    The Stinespring Gram identity gives
-    $V^\dagger V = \sum_i M_i^\dagger M_i = \sum_i E_i = \Id_D$
-    by the resolution of identity.
-\end{proof}
-
-\begin{theorem}[Naimark projectors form a projective measurement]
-    \label{thm:naimark_projection_axioms}
-    \lean{POVM.naimarkProjection_mul_self,
-          POVM.naimarkProjection_hermitian,
-          POVM.naimarkProjection_orthogonal,
-          POVM.naimarkProjection_sum_eq_one}
-    \leanok
-    \uses{def:naimark_projection}
-    The Naimark projectors satisfy $P_i^2 = P_i$, $P_i^\dagger = P_i$,
-    $P_i P_j = 0$ for $i \ne j$, and $\sum_i P_i = \Id_{\C^D \otimes \C^n}$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Each identity follows from direct entrywise computation using the
-    delta-function form of $(P_i)_{(a,b),(c,d)}$.
-\end{proof}
-
-\begin{theorem}[Naimark dilation]\label{thm:naimark_recovers_povm}
-    \lean{POVM.naimark_recovers_povm}
-    \leanok
-    \uses{def:povm, def:naimark_isometry, def:naimark_projection,
-          thm:naimark_isometry_isometry, thm:naimark_projection_axioms}
-    Every POVM $\{E_i\}_{i=1}^n$ arises as a projective measurement on a
-    dilation: for the isometry $V$ and projectors $P_i$ above,
-    \[
-        E_i = V^\dagger P_i V.
-    \]
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Computing entrywise,
-    $(V^\dagger P_i V)_{k,\ell}
-      = \sum_{a} \overline{(M_i)_{a,k}}\,(M_i)_{a,\ell}
-      = (M_i^\dagger M_i)_{k,\ell}
-      = (E_i)_{k,\ell}$.
-\end{proof}
-
-\begin{theorem}[Existential Naimark dilation]\label{thm:exists_naimark_dilation}
-    \lean{POVM.exists_naimark_dilation}
-    \leanok
-    \uses{thm:naimark_recovers_povm}
-    For every POVM $\{E_i\}$ on $\C^D$ there exist a dilation dimension $r$,
-    an isometry $V : \C^D \to \C^D \otimes \C^r$, and a projective
-    measurement $\{P_i\}$ on the dilation satisfying $E_i = V^\dagger P_i V$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Take $r = n$ and the explicit witnesses $V = \sum_i M_i \otimes |i\rangle$
-    and $P_i = \Id_D \otimes |i\rangle\langle i|$.
-\end{proof}
-
-\begin{definition}[Naimark dilation as a structure]
-    \label{def:is_naimark_dilation}
-    \lean{POVM.IsNaimarkDilation}
-    \leanok
-    \uses{thm:naimark_isometry_isometry, thm:naimark_projection_axioms,
-          thm:naimark_recovers_povm}
-    A \emph{Naimark dilation} of a POVM $\{E_i\}$ consists of an isometry
-    $V$ into a larger Hilbert space together with a projective measurement
-    $\{P_i\}$ there such that $E_i = V^\dagger P_i V$ for all $i$.
-\end{definition}
-
-\begin{theorem}[Canonical dilation satisfies the Naimark dilation axioms]
-    \label{thm:is_naimark_dilation_naimark}
-    \lean{POVM.isNaimarkDilation_naimark}
-    \leanok
-    \uses{def:is_naimark_dilation, thm:naimark_recovers_povm}
-    The explicit isometry $V = \sum_i M_i \otimes |i\rangle$ and projectors
-    $P_i = \Id_D \otimes |i\rangle\langle i|$ satisfy the defining axioms
-    of a Naimark dilation.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Combine the previously proved identities $V^\dagger V = \Id_D$,
-    $P_i^2 = P_i$, $P_i^\dagger = P_i$, $P_i P_j = 0$ for $i \ne j$,
-    $\sum_i P_i = \Id$, and $V^\dagger P_i V = E_i$.
-\end{proof}
-
-\begin{theorem}[Concrete uniqueness for canonical projectors]
-    \label{thm:naimark_concrete_uniqueness}
-    \lean{POVM.exists_isometry_mul_naimarkIsometry_of_recovery}
-    \leanok
-    \uses{def:naimark_isometry, def:naimark_projection, thm:naimark_recovers_povm}
-    Let $V : \C^D \to \C^D \otimes \C^n$ satisfy
-    $V^\dagger P_i V = E_i$ for the canonical projectors
-    $P_i = \Id_D \otimes |i\rangle\langle i|$.
-    Then there exists an isometry $W$ on the dilated space such that
-    $V = W V_0$, where $V_0$ is the canonical Naimark isometry of $\{E_i\}$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    For each outcome $i$, the $i$-th block of $V$ has Gram matrix $E_i$.
-    Comparing with the canonical square root $M_i$ gives
-    $V_i^\dagger V_i = M_i^\dagger M_i$, hence $V_i = U_i M_i$ for a unitary
-    $U_i$ on $\C^D$. Assemble the $U_i$ block-diagonally to obtain an
-    isometry $W = \bigoplus_i U_i$ on $\C^D \otimes \C^n$, and then
-    $V = W \sum_i M_i \otimes |i\rangle = W V_0$.
-\end{proof}
-
-\begin{definition}[POVM from a PSD resolution of identity on a dilation]
-    \label{def:povm_of_psd_resolution_of_identity}
-    \lean{POVM.ofPSDResolutionOfIdentity}
-    \leanok
-    Given an isometry $V : \C^D \to \C^{d'}$ with $V^\dagger V = \Id_D$
-    and a family $\{P_i\}_{i=1}^n$ of positive semidefinite operators on
-    $\C^{d'}$ summing to the identity, the pulled-back operators
-    \[
-        E_i := V^\dagger P_i V
-    \]
-    form a POVM. In particular, any projective measurement on the
-    dilation (a special case of a PSD resolution of identity) pulls back
-    to a POVM.
-\end{definition}
-
-\begin{definition}[Quantum instrument]\label{def:instrument}
-    \lean{Instrument}
-    \leanok
-    \uses{def:cp_map, def:trace_preserving}
-    A \emph{quantum instrument} with $n$ outcomes is a family
-    $\{\Phi_i\}_{i=1}^n$ of completely positive maps on $\MN{D}$ whose
-    sum $\sum_i \Phi_i$ is trace-preserving.
-\end{definition}
-
-\begin{definition}[Instrument operations]\label{def:instrument_operations}
-    \lean{Instrument.total, Instrument.update, Instrument.probability,
-          Instrument.posteriorState}
-    \leanok
-    \uses{def:instrument}
-    Associated to an instrument are the total channel $\sum_i \Phi_i$, the
-    unnormalized update $\rho \mapsto \Phi_i(\rho)$ for each outcome $i$, the
-    outcome probability $p_i(\rho) = \tr(\Phi_i(\rho))$, and the normalized
-    posterior state $\Phi_i(\rho) / p_i(\rho)$ whenever $p_i(\rho) \neq 0$.
-\end{definition}
-
-\begin{theorem}[Instrument total map is a channel]
-    \label{thm:instrument_total_is_channel}
-    \lean{Instrument.total_isChannel}
-    \leanok
-    \uses{def:instrument, def:channel}
-    The total map $\sum_i \Phi_i$ of an instrument is a quantum channel.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Complete positivity of the sum follows from closure of CP maps under
-    finite addition; trace preservation is built into the definition.
-\end{proof}
-
-\begin{theorem}[Conservation of probability for instruments]
-    \label{thm:instrument_sum_probability}
-    \lean{Instrument.sum_probability}
-    \leanok
-    \uses{def:instrument}
-    For every state $\rho \in \MN{D}$, the outcome probabilities
-    $p_i(\rho) := \operatorname{tr}(\Phi_i(\rho))$ sum to $\operatorname{tr}(\rho)$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Linearity of trace and trace preservation of $\sum_i \Phi_i$ give
-    $\sum_i \operatorname{tr}(\Phi_i(\rho)) = \operatorname{tr}\bigl((\sum_i \Phi_i)(\rho)\bigr)
-      = \operatorname{tr}(\rho)$.
-\end{proof}
-
-\begin{theorem}[Non-negativity of instrument probabilities]
-    \label{thm:instrument_probability_nonneg}
-    \lean{Instrument.probability_nonneg}
-    \leanok
-    \uses{def:instrument}
-    If $\rho \in \MN{D}$ is positive semidefinite, then each outcome
-    probability $p_i(\rho) = \operatorname{tr}(\Phi_i(\rho))$ is a
-    non-negative real number.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Each $\Phi_i$ is completely positive, hence positive, so
-    $\Phi_i(\rho)$ is positive semidefinite and its trace is a
-    non-negative real.
-\end{proof}
-
-%% =========================================================
-\subsection{Trace-pairing expansion in transfer-matrix form}
-\label{subsec:trace_pairing_expansion}
-%% =========================================================
-
-\begin{definition}[Trace-self-dual basis]\label{def:trace_pairing_self_dual_basis}
-    \lean{TracePairingSelfDualBasis}
-    \leanok
-    A basis $\{\sigma_i\}_i$ of $\MN{D}$ is \emph{trace-self-dual} when
-    its coordinate functionals are given by trace pairing:
-    \[
-        X = \sum_i \operatorname{tr}(\sigma_i X)\,\sigma_i.
-    \]
-\end{definition}
-
-\begin{definition}[Trace-pairing coefficients]\label{def:trace_pairing_coeff}
-    \lean{tracePairingCoeff}
-    \leanok
-    \uses{def:trace_pairing_self_dual_basis}
-    For a linear map $T : \MN{D} \to \MN{D}$ and a trace-self-dual basis
-    $\{\sigma_i\}$, define coefficients
-    \[
-        t_{ij} := \operatorname{tr}(\sigma_i\,T(\sigma_j)).
-    \]
-\end{definition}
-
-\begin{theorem}[Trace-pairing expansion of a linear map]\label{thm:linearMap_expand_tracePairing}
-    \lean{linearMap_expand_tracePairing}
-    \leanok
-    \uses{def:trace_pairing_self_dual_basis, def:trace_pairing_coeff}
-    If $\{\sigma_i\}$ is trace-self-dual, then every linear map
-    $T : \MN{D} \to \MN{D}$ admits the expansion
-    \[
-        T(\rho)
-          = \sum_i \sum_j t_{ij}\,
-              \operatorname{tr}(\sigma_j \rho)\,\sigma_i,
-        \qquad
-        t_{ij} = \operatorname{tr}(\sigma_i T(\sigma_j)).
-    \]
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Expand $\rho$ and each $T(\sigma_j)$ in the chosen basis and substitute.
-    The trace-self-dual identity replaces coordinates by traces, giving the
-    stated double-sum formula.
-\end{proof}
-
-%% The following sections will not be needed for the fundamental theorem of the matrix product states.
-
-%% =========================================================
-\section{Determinant of a quantum channel}
-\label{sec:channel_determinant}
-%% =========================================================
-
-%% Wolf §6.1.1, Thm 6.1(2)
-
-\begin{definition}[Channel determinant]\label{def:channel_det}
-    \lean{channelDet}\leanok
-    For a linear map $T : \MN{D} \to \MN{D}$, the
-    \emph{channel determinant} $\det T$ is the determinant of the
-    matrix of $T$ with respect to the standard matrix-unit basis
-    of $\MN{D}$.
-    This is the quantity studied in \cite[§6.1.1]{Wolf2012Quantum}.
-\end{definition}
-
-\begin{remark}[Channel determinant as an operator determinant]
-    \label{rem:channel_det_linearMap_det}
-    \lean{channelDet_eq_linearMap_det}
-    \leanok
-    The channel determinant agrees with the ordinary determinant of the linear
-    endomorphism $T : \MN{D} \to \MN{D}$.
-\end{remark}
-
-\begin{definition}[Unitary channel]\label{def:unitary_channel}
-    \lean{unitaryChannel, unitaryChannel_isChannel}\leanok
-    For a unitary matrix $U \in \mathcal{U}(D)$, the
-    \emph{unitary channel} is $T(\rho) = U\rho U^\dagger$.
-    It is automatically a quantum channel.
-\end{definition}
-
-\begin{theorem}[Unitary channels have determinant one]
-    \label{thm:channel_det_unitary_eq_one}
-    \lean{channelDet_unitary_eq_one, channelDet_norm_eq_one_of_unitaryChannel}
-    \leanok
-    \uses{def:channel_det, def:unitary_channel}
-    If $T(\rho) = U\rho U^\dagger$ is a unitary channel, then
-    $\det T = 1$ and hence $|\det T| = 1$.
-\end{theorem}
-
-\begin{proof}\leanok
-    Vectorization identifies $T$ with a Kronecker product
-    $\overline U \otimes U$, whose determinant is
-    $\overline{\det U}^{\,D}(\det U)^D = 1$.
-\end{proof}
-
-\begin{theorem}[Determinant bound for positive trace-preserving maps]
-    \label{thm:channelDet_norm_le_one}
-    \lean{channelDet_norm_le_one_of_positive_tracePreserving,
-          channelDet_norm_le_one_of_channel}\leanok
-    \uses{def:channel_det, def:positive_map, def:trace_preserving}
-    For any positive trace-preserving map $T : \MN{D} \to \MN{D}$,
-    $|\det T| \le 1$.
-    This is \cite[Thm.~6.1(1)]{Wolf2012Quantum}.
-\end{theorem}
-
-\begin{proof}\leanok
-    Every eigenvalue $\mu$ of $T$ satisfies $|\mu| \le 1$
-    (positivity and trace preservation force spectral radius~$\le 1$).
-    Since $\det T$ is the product of the eigenvalues
-    (counted with algebraic multiplicity), the bound
-    $|\det T| = \prod_i |\mu_i| \le 1$ follows by induction.
-\end{proof}
-
-\begin{theorem}[Determinant one iff the channel is unitary]
-    \label{thm:channelDet_norm_eq_one_iff_unitary}
-    \lean{channelDet_norm_eq_one_iff_exists_unitaryChannel,
-          channelDet_norm_eq_one_iff_exists_unitaryChannel_of_channel}\leanok
-    \uses{def:channel, def:channel_det, def:unitary_channel}
-    For a CPTP map $T : \MN{D} \to \MN{D}$,
-    \[
-        |\det T| = 1
-        \;\iff\;
-        \exists\, U \in \mathcal{U}(D),\quad T(\rho) = U\rho U^\dagger.
-    \]
-    This is \cite[Thm.~6.1(2)]{Wolf2012Quantum}.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:channelDet_norm_le_one, thm:channel_det_unitary_eq_one}
-    Reverse direction is Theorem~\ref{thm:channel_det_unitary_eq_one}.
-    Forward direction: $|\det T| = 1$ together with $|\mu| \le 1$ for every
-    eigenvalue $\mu$ (from trace preservation and positivity) forces every
-    eigenvalue to satisfy $|\mu| = 1$. Hence $T$ is bijective. A bijective
-    CPTP map is a $*$-automorphism: the Heisenberg dual
-    $T^*(Y) = \sum_i K_i^\dagger Y K_i$ is unital (since $T$ is TP), so the
-    Kadison--Schwarz inequality
-    $T^*(Y^\dagger Y) \ge T^*(Y)^\dagger T^*(Y)$ becomes an equality for every
-    $Y$. Hence $T^*$, and therefore $T$, preserves products. By the
-    Skolem--Noether theorem, every $*$-automorphism of $\MN{D}$ has the form
-    $T(\rho) = U \rho U^\dagger$ for some unitary $U$. Kraus freedom then
-    gives $K_i = c_i U$ with $\sum_i |c_i|^2 = 1$.
 \end{proof}
 
 %% =========================================================
@@ -1923,8 +945,8 @@ representations already developed above. They correspond to
     \lean{Kraus.fixedPoints_in_multiplicativeDomain}
     \leanok
     \uses{def:kraus_fixed_points, def:multiplicative_domain_channels,
-          def:kraus_map_channels}
-    Let $E$ be a trace-preserving Kraus map whose Schrödinger-picture map has a
+        def:kraus_map_channels}
+    Let $E$ be a trace-preserving Kraus map whose Schr{\"o}dinger-picture map has a
     positive definite fixed point $\rho > 0$.
     Then every adjoint fixed point belongs to the multiplicative domain of the
     adjoint Kraus family.
@@ -1943,7 +965,7 @@ representations already developed above. They correspond to
     Let $E$ be a unital Kraus map whose adjoint map $E^*$ has a positive
     definite fixed point $\rho > 0$.
     Then $\mathrm{Fix}(E)$ is a $*$-subalgebra of $\MN{D}$.
-    This is \cite[Thm.~6.12]{Wolf2012Quantum}.
+    This is \cite[Theorem~6.12]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1961,7 +983,7 @@ representations already developed above. They correspond to
 \end{proof}
 
 \begin{remark}\leanok
-    Theorem~\ref{thm:fixedPoints_in_multiplicativeDomain} records the
+    Theorem~\ref{thm:fixedPoints_in_multiplicativeDomain} is the
     trace-preserving / Heisenberg-picture counterpart of the same
     multiplicative-domain argument.
 \end{remark}
@@ -1969,14 +991,14 @@ representations already developed above. They correspond to
 \begin{theorem}[Projected elements lie in the multiplicative domain]
     \label{thm:map_mem_multiplicativeDomain_of_idempotent}
     \lean{Kraus.map_mem_multiplicativeDomain_of_idempotent}\leanok
-    \uses{def:kraus_fixed_points, def:unital_kraus}
+    \uses{def:kraus_fixed_points, def:kraus_map_channels}
     Let $E$ be a unital Kraus map whose adjoint map has a positive definite
     fixed point, and suppose $E^2 = E$. Then $E(X)$ lies in the multiplicative
     domain of $E$ for every $X \in \MN{D}$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:fixedPointsStarSubalgebra, thm:md_characterization}
+    \uses{thm:fixedPointsStarSubalgebra}
     Idempotence gives $E(E(X)) = E(X)$, so $E(X)$ is a fixed point.
     By the argument in Theorem~\ref{thm:fixedPointsStarSubalgebra}, the
     Kadison--Schwarz gap for the fixed point $E(X)$ vanishes, hence
@@ -1988,14 +1010,15 @@ representations already developed above. They correspond to
     \[
         E(E(X) E(X)^\dagger) = E(X) E(X)^\dagger.
     \]
-    Therefore Theorem~\ref{thm:md_characterization} places $E(X)$ in the
+    The vanishing of both Kadison--Schwarz gaps, again by the argument of
+    Theorem~\ref{thm:fixedPointsStarSubalgebra}, places $E(X)$ in the
     multiplicative domain.
 \end{proof}
 
 \begin{theorem}[Choi--Effros left absorption]
     \label{thm:choi_effros_left}
     \lean{Kraus.choi_effros_left}\leanok
-    \uses{def:kraus_fixed_points, def:unital_kraus}
+    \uses{def:kraus_fixed_points, def:kraus_map_channels}
     Under the same hypotheses, for all $X, Y \in \MN{D}$,
     \[
         E(E(X) Y) = E(E(X) E(Y)).
@@ -2014,7 +1037,7 @@ representations already developed above. They correspond to
 \begin{theorem}[Choi--Effros right absorption]
     \label{thm:choi_effros_right}
     \lean{Kraus.choi_effros_right}\leanok
-    \uses{def:kraus_fixed_points, def:unital_kraus}
+    \uses{def:kraus_fixed_points, def:kraus_map_channels}
     Under the same hypotheses, for all $X, Y \in \MN{D}$,
     \[
         E(X E(Y)) = E(E(X) E(Y)).
@@ -2033,7 +1056,7 @@ representations already developed above. They correspond to
 \begin{theorem}[Choi--Effros symmetric absorption]
     \label{thm:choi_effros_left_eq_right}
     \lean{Kraus.choi_effros_left_eq_right}\leanok
-    \uses{def:kraus_fixed_points, def:unital_kraus}
+    \uses{def:kraus_fixed_points, def:kraus_map_channels}
     Under the same hypotheses, for all $X, Y \in \MN{D}$,
     \[
         E(E(X) Y) = E(X E(Y)).
@@ -2048,7 +1071,7 @@ representations already developed above. They correspond to
 \begin{theorem}[Choi--Effros projected product]
     \label{thm:choi_effros_sandwich}
     \lean{Kraus.choi_effros_sandwich}\leanok
-    \uses{def:kraus_fixed_points, def:unital_kraus}
+    \uses{def:kraus_fixed_points, def:kraus_map_channels}
     Under the same hypotheses, for all $X, Y \in \MN{D}$,
     \[
         E(E(X) E(Y)) = E(X) E(Y).
@@ -2097,7 +1120,7 @@ representations already developed above. They correspond to
     \uses{def:kraus_map_channels}
     The \emph{Kraus commutant} is
     $\{K_i, K_i^\dagger\}' = \{X \in \MN{D} :
-    [X, K_i] = [X, K_i^\dagger] = 0 \;\forall i\}$.
+        [X, K_i] = [X, K_i^\dagger] = 0 \forall i\}$.
     It is a $*$-subalgebra of $\MN{D}$.
 \end{definition}
 
@@ -2110,7 +1133,7 @@ representations already developed above. They correspond to
     \[
         \mathrm{Fix}(E^*) = \{K_i, K_i^\dagger\}'.
     \]
-    This is \cite[Thm.~6.13]{Wolf2012Quantum}.
+    This is \cite[Theorem~6.13]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -2125,7 +1148,7 @@ representations already developed above. They correspond to
     $X K_i^\dagger = K_i^\dagger X$.
 \end{proof}
 
-\begin{theorem}[The Kraus commutant is the largest $*$-subalgebra inside the adjoint fixed points]
+\begin{theorem}[Kraus commutant inside the adjoint fixed points]
     \label{thm:kraus_commutant_greatest}
     \lean{Kraus.krausCommutantStarSubalgebra_isGreatest_adjointFixedPointStarSubalgebras}
     \leanok
@@ -2140,14 +1163,3 @@ representations already developed above. They correspond to
     the Kraus commutant, while the Kraus commutant itself is such a
     $*$-subalgebra.
 \end{proof}
-
-%% =========================================================
-\section{Quantum dynamical semigroups}
-\label{sec:quantum_dynamical_semigroups}
-%% =========================================================
-
-The one-parameter semigroup theory of Wolf Chapter~7 is treated in
-Chapter~\ref{ch:semigroup}. That later chapter records the exponential
-representation of norm-continuous semigroups, perturbation bounds, and
-the GKSL/Lindblad description of generators. We do not duplicate that
-material here.

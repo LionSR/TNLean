@@ -5,18 +5,17 @@ Released under Apache 2.0 license as described in the file LICENSE.
 
 import TNLean.MPS.Structure.PrimitivityBridge
 import TNLean.Spectral.MixedTransfer
-import TNLean.Wielandt.WielandtBound
 
 /-!
-# Primitivity consequences and normality restatements
+# Primitivity consequences for MPS transfer maps
 
-This file records the low-level consequences of `HasPrimitiveFixedPoint` used in the
-Wielandt development and recalls the normality side of the chain from
-`WielandtBound.lean`.
+This file states the low-level consequences of `HasPrimitiveFixedPoint` used in the
+Wielandt development.
 
-It does **not** prove `HasPrimitiveFixedPoint → IsNormal`. The currently formalized bridge
-with extra `ρ.PosDef` and aperiodicity hypotheses is assembled in
-`QuantumWielandt.lean`; the unconditional implication remains future work.
+It does **not** prove `HasPrimitiveFixedPoint → IsNormal`. The currently formalized route
+from complementary transfer-map gap primitivity to normality with an additional positive-definite
+fixed point hypothesis is assembled in
+`TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank`.
 
 ## Main results
 
@@ -26,12 +25,8 @@ with extra `ρ.PosDef` and aperiodicity hypotheses is assembled in
 * `transferMap_pow_apply_eq_sum`: `E^n(X) = Σ_σ (evalWord A σ) X (evalWord A σ)†`
 * `exists_nonzero_evalWord_of_isPrimitiveMPS`: for every `n`, some length-`n`
   word product is nonzero
-* `exists_nonzero_evalWord_of_hasPrimitiveFixedPoint`: existential wrapper
+* `exists_nonzero_evalWord_of_hasPrimitiveFixedPoint`: existential statement
 * `transferMap_pow_ne_zero_of_hasPrimitiveFixedPoint`: every transfer-map iterate is nonzero
-
-### From normality
-
-* `wielandt_full_analysis`: collects the four standard Wielandt-chain outputs
 
 ## References
 
@@ -73,7 +68,7 @@ theorem transferMap_pow_apply_eq_sum (A : MPSTensor d D) (n : ℕ)
 
 /-- **Every word length has a nonzero word product under primitivity.**
 
-Given `IsPrimitiveMPS A ρ` (transfer map has a spectral gap with PSD
+Given `IsPrimitiveMPS A ρ` (transfer map has a complementary gap with PSD
 fixed point `ρ`), for every `n : ℕ` there exists a word `σ : Fin n → Fin d`
 such that `evalWord A (List.ofFn σ) ≠ 0`.
 
@@ -97,7 +92,7 @@ theorem exists_nonzero_evalWord_of_isPrimitiveMPS [NeZero D]
   rw [hsum] at hfix
   exact hP.fixedPoint_ne_zero hfix.symm
 
-/-- Existential wrapper: if `A` has a primitive fixed point, every word length has a
+/-- Existential statement: if `A` has a primitive fixed point, every word length has a
 nonzero word product. -/
 theorem exists_nonzero_evalWord_of_hasPrimitiveFixedPoint [NeZero D]
     {A : MPSTensor d D} (hP : HasPrimitiveFixedPoint A) (n : ℕ) :
@@ -119,47 +114,25 @@ theorem transferMap_pow_ne_zero_of_isPrimitiveMPS [NeZero D]
   rw [transferMap_pow_fixed hP.fixedPoint_is_fixed n] at this
   exact hP.fixedPoint_ne_zero this
 
-/-- Existential wrapper for `transferMap_pow_ne_zero`. -/
+/-- Existential statement for `transferMap_pow_ne_zero`. -/
 theorem transferMap_pow_ne_zero_of_hasPrimitiveFixedPoint [NeZero D]
     {A : MPSTensor d D} (hP : HasPrimitiveFixedPoint A) (n : ℕ) :
     (transferMap (d := d) (D := D) A) ^ n ≠ 0 := by
   rcases hP with ⟨ρ, hρ⟩
   exact transferMap_pow_ne_zero_of_isPrimitiveMPS hρ n
 
-/-! ## Part 3: Recall the Wielandt chain from normality -/
-
-/-- **The complete Wielandt analysis from normality.**
-
-Given `IsNormal A`, the full Wielandt chain provides:
-1. Cumulative span T_{D²} = ⊤ (all matrices reachable)
-2. A word w₀ with |w₀| ≤ D² and tr(evalWord A w₀) ≠ 0
-3. A nonzero eigenvalue μ and eigenvector φ for evalWord A w₀
-4. Vector spanning: for any nonzero φ, word products applied to φ span ℂ^D
-
-This records `wielandt_chain` from `WielandtBound.lean` under a cleaner name. -/
-theorem wielandt_full_analysis [NeZero D]
-    (A : MPSTensor d D) (hN : IsNormal A) :
-    cumulativeSpan A (D ^ 2) = ⊤ ∧
-    (∃ (w₀ : List (Fin d)),
-      w₀.length ≤ D ^ 2 ∧ Matrix.trace (evalWord A w₀) ≠ 0) ∧
-    (∃ (w₀ : List (Fin d)) (μ : ℂ) (φ : Fin D → ℂ),
-      w₀.length ≤ D ^ 2 ∧ μ ≠ 0 ∧ φ ≠ 0 ∧
-      evalWord A w₀ *ᵥ φ = μ • φ) ∧
-    (∀ (φ : Fin D → ℂ), φ ≠ 0 →
-      cumulativeVectorSpan A φ (D ^ 2) = ⊤) :=
-  wielandt_chain A hN
-
-/-! ## Part 4: Status of the primitive → normal bridge
+/-! ## Part 3: Status of the primitive → normal implication
 
 The unconditional implication `HasPrimitiveFixedPoint → IsNormal` is still open
-in this file. The currently formalized route in `QuantumWielandt.lean` proves
-`IsNormal` from `IsPrimitiveMPS A ρ` under the extra hypotheses that `ρ` is
-positive definite and `1 ∈ wordSpan A 1`.
+in this file. The currently formalized route in
+`Primitivity/StronglyIrreducibleToFullRank.lean` proves `IsNormal` from
+`IsPrimitiveMPS A ρ` under the additional hypothesis that `ρ` is positive
+definite.
 
-What remains here is the gap from bare spectral-gap primitivity to eventual
+What remains here is the gap from bare complementary transfer-map gap primitivity to eventual
 full matrix spanning. Conceptually this should follow from irreducibility plus a
-Burnside- or peripheral-spectrum argument, but that infrastructure is kept out
-of this lightweight wrapper file.
+Burnside- or peripheral-spectrum argument, but that formalization is kept out
+of this lightweight statement file.
 -/
 
 

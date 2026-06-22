@@ -25,7 +25,7 @@ that the Heisenberg dual is multiplicative.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.1.1][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.1.1][Wolf2012QChannels]
 
 ## Tags
 
@@ -33,21 +33,9 @@ quantum channel, Heisenberg dual, Kadison-Schwarz, multiplicative domain
 -/
 open scoped Matrix ComplexOrder MatrixOrder BigOperators Kronecker Matrix.Norms.Frobenius
 open Matrix
+open ChannelDeterminant.Internal
 
 variable {d : ℕ}
-
-/-- File-local alias for the shared internal matrix-algebra model. -/
-private abbrev MatrixAlg (d : ℕ) := ChannelDeterminant.Internal.MatrixAlg d
-
-/-- File-local alias for endomorphisms of `M_d(ℂ)`. -/
-private abbrev MatrixEnd (d : ℕ) := ChannelDeterminant.Internal.MatrixEnd d
-
-/-- File-local alias for the shared basis index type. -/
-private abbrev MatrixBasisIndex (d : ℕ) := ChannelDeterminant.Internal.MatrixBasisIndex d
-
-/-- File-local alias for the shared standard basis of `M_d(ℂ)`. -/
-private noncomputable abbrev matrixSpaceBasis (d : ℕ) :=
-  ChannelDeterminant.Internal.matrixSpaceBasis d
 
 section WolfStatements
 
@@ -145,7 +133,7 @@ private theorem heisenberg_dual_ks_eq_stdBasis [NeZero d]
   have hgap_trace_nonneg : ∀ ij : Fin d × Fin d,
       0 ≤ (Matrix.trace (Td (e ij * (e ij)ᴴ) - Td (e ij) * (Td (e ij))ᴴ)).re := by
     intro ij
-    exact (Complex.le_def.mp (hgap_psd ij).trace_nonneg).1
+    exact (RCLike.nonneg_iff.mp (hgap_psd ij).trace_nonneg).1
   have hgap_trace_sum_le : ∑ ij : Fin d × Fin d,
       (Matrix.trace (Td (e ij * (e ij)ᴴ) - Td (e ij) * (Td (e ij))ᴴ)).re ≤ 0 := by
     have hTd_one : Td 1 = 1 := by
@@ -187,13 +175,17 @@ private theorem heisenberg_dual_ks_eq_stdBasis [NeZero d]
       simp only [Matrix.trace_sub, Complex.sub_re, Finset.sum_sub_distrib]
     rw [hsum_eq]
     nlinarith [hfirst, hsecond_ge]
+  have hgap_trace_sum_zero : ∑ ij : Fin d × Fin d,
+      (Matrix.trace (Td (e ij * (e ij)ᴴ) - Td (e ij) * (Td (e ij))ᴴ)).re = 0 :=
+    le_antisymm hgap_trace_sum_le (Fintype.sum_nonneg hgap_trace_nonneg)
   have hgap_trace_zero : ∀ ij : Fin d × Fin d,
       (Matrix.trace (Td (e ij * (e ij)ᴴ) - Td (e ij) * (Td (e ij))ᴴ)).re = 0 :=
-    eq_zero_of_nonneg_of_sum_le_zero _ hgap_trace_nonneg hgap_trace_sum_le
+    fun ij => congrFun
+      ((Fintype.sum_eq_zero_iff_of_nonneg hgap_trace_nonneg).mp hgap_trace_sum_zero) ij
   intro ij
   have hpsd := hgap_psd ij
   have htr_re := hgap_trace_zero ij
-  have htr_im := (Complex.le_def.mp hpsd.trace_nonneg).2.symm
+  have htr_im := (RCLike.nonneg_iff.mp hpsd.trace_nonneg).2
   have htr : Matrix.trace (Td (e ij * (e ij)ᴴ) - Td (e ij) * (Td (e ij))ᴴ) = 0 :=
     Complex.ext htr_re htr_im
   exact sub_eq_zero.mp (hpsd.trace_eq_zero_iff.mp htr)
@@ -209,9 +201,8 @@ private theorem heisenberg_dual_basis_commute [NeZero d]
     ∀ (ij : Fin d × Fin d) (a : Fin r),
       Matrix.stdBasis ℂ (Fin d) (Fin d) ij * K a =
         K a * Td (Matrix.stdBasis ℂ (Fin d) (Fin d) ij) := by
-  -- TODO(refactor/513): thread the shared `L`/`hTd_kraus`/`hL_unital` setup
-  -- through these helpers instead of rebuilding it here and in
-  -- `heisenberg_dual_ks_eq_stdBasis`.
+  -- TODO(reorganize/513): factor out the shared `L`/`hTd_kraus`/`hL_unital` setup
+  -- instead of reconstructing it here and in `heisenberg_dual_ks_eq_stdBasis`.
   set L : Fin r → MatrixAlg d := fun i => (K i)ᴴ with hL_def
   have hTd_kraus : ∀ X, Td X = KadisonSchwarz.krausMap L X := by
     intro X
@@ -222,8 +213,8 @@ private theorem heisenberg_dual_basis_commute [NeZero d]
   intro ij
   let e : MatrixAlg d := Matrix.stdBasis ℂ (Fin d) (Fin d) ij
   let es : MatrixAlg d := Matrix.stdBasis ℂ (Fin d) (Fin d) (ij.2, ij.1)
-  have hes : es = eᴴ := by
-    exact (stdBasis_conjTranspose_eq_swap (d := d) ij.1 ij.2).symm
+  have hes : es = eᴴ :=
+    (stdBasis_conjTranspose_eq_swap (d := d) ij.1 ij.2).symm
   have hTd_es : Td es = (Td e)ᴴ := by
     calc
       Td es = KadisonSchwarz.krausMap L es := hTd_kraus es

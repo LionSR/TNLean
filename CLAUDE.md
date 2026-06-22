@@ -4,7 +4,7 @@ This file provides guidance to AI coding assistants working with code in this re
 
 ## Project Overview
 
-TNLean is a Lean 4 formalization of the **Fundamental Theorem of Matrix Product States**, **Quantum Wielandt theory**, and finite-dimensional **quantum-channel theory** (following Wolf's *Quantum Channels & Operations*). Built on Mathlib v4.29.0.
+TNLean is a Lean 4 formalization of the **Fundamental Theorem of Matrix Product States**, **Quantum Wielandt theory**, and finite-dimensional **quantum-channel theory** (following Wolf's *Quantum Channels & Operations*). Built on Mathlib v4.31.0.
 
 ## Build Commands
 
@@ -32,8 +32,8 @@ cd blueprint && leanblueprint pdf
 
 ## Lean Toolchain & Dependencies
 
-- **Lean**: v4.29.0 (pinned in `lean-toolchain`)
-- **Mathlib**: v4.29.0
+- **Lean**: v4.31.0 (pinned in `lean-toolchain`)
+- **Mathlib**: v4.31.0
 - **checkdecls**: Blueprint declaration checker (PatrickMassot/checkdecls)
 - **Gametheory**: Custom Brouwer fixed-point theorem library (LionSR/Brouwer)
 
@@ -67,7 +67,7 @@ The source lives in `TNLean/` and is organized into **layers 0-6 with sublayers*
 - `IsInjective A` — matrices of `A` span the full matrix algebra
 - `SameMPV A B` / `SameMPV₂` — same matrix product vector family
 - `GaugeEquiv A B` — conjugation by invertible matrix (`B i = X * A i * X⁻¹`)
-- `IsCanonicalFormBNT` — basis-normal-triangular canonical form predicate
+- `IsBNTCanonicalForm` — paper-faithful basis-of-normal-tensors canonical form predicate
 - `cumulativeSpan A n` — span of all products of length <= n
 - `IsNormal A` — the project's normality notion for Wielandt theory
 - `transferMap A` — the CP map `rho -> sum_i A_i * rho * (A_i)^H`
@@ -78,23 +78,29 @@ Detailed conventions live in `docs/`. Read the relevant file before working in t
 
 | File | Covers |
 |------|--------|
-| [`docs/style.md`](docs/style.md) | Code formatting, line length (100 chars), declarations, tactic style, whitespace, transparency |
-| [`docs/naming.md`](docs/naming.md) | Capitalization rules, symbol-to-name dictionary, variable conventions |
-| [`docs/doc.md`](docs/doc.md) | Module docstrings, definition docstrings, sectioning comments, BibTeX citations |
-| [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md) | PR title format (`type(scope): description`), issue conventions, label taxonomy, review checklist |
-| [`docs/pr-review.md`](docs/pr-review.md) | Review criteria: style, documentation, location, improvements, library integration |
+| [`docs/MATHLIB_style.md`](docs/MATHLIB_style.md) | Code formatting, line length (100 chars), declarations, tactic style, whitespace, transparency, deprecation |
+| [`docs/MATHLIB_naming.md`](docs/MATHLIB_naming.md) | Capitalization rules, symbol-to-name dictionary, variable conventions |
+| [`docs/MATHLIB_doc.md`](docs/MATHLIB_doc.md) | Module docstrings, definition docstrings, sectioning comments, BibTeX citations |
+| [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md) | PR title format (`type(scope): description`), issue conventions, label taxonomy, review checklist, mathematical-language renames |
+| [`docs/MATHLIB_pr-review.md`](docs/MATHLIB_pr-review.md) | Review criteria: style, documentation, location, improvements, library integration |
 | [`docs/pr_review_management.md`](docs/pr_review_management.md) | PR triage process, comment API mapping, merge decisions |
 | [`docs/PROOF_INTEGRITY.md`](docs/PROOF_INTEGRITY.md) | Blockers (`sorry`, `axiom`, kernel bypasses, circular reasoning) and warnings (`maxHeartbeats`, debug artifacts) |
-| [`docs/blueprint_style_guide.md`](docs/blueprint_style_guide.md) | LaTeX conventions, `\lean{}`/`\leanok` tags, notation table, banned AI/software language |
+| [`docs/blueprint_style_guide.md`](docs/blueprint_style_guide.md) | LaTeX conventions, `\lean{}`/`\leanok` tags, notation table, `\uses` rules, blueprint build commands |
+| [`docs/prose_style.md`](docs/prose_style.md) | Prose conventions: no Lean jargon in the leanblueprint, banned software-engineering terms, banned LLM writing patterns (applies to `.tex` AND Lean docstrings/comments) |
 | [`docs/ci-automation.md`](docs/ci-automation.md) | CI workflows, auto-fix loops, iteration caps, commit message conventions |
 
 ### Quick Reference (from the docs above)
 
-- **PR titles**: `type(scope): description` — types: `feat`, `fix`, `refactor`, `docs`, `ci`, `chore`; scope is shortened module path without `TNLean/` prefix
+- **PR titles**: `type(scope): description` -- types: `feat`, `fix`, `refactor`,
+  `doc`, `style`, `ci`, `chore`; scope is shortened module path without
+  `TNLean/` prefix
+- **Issue titles**: plain mathematical titles, not `type(scope): ...`; use
+  `Tracking: <area>` for trackers and keep titles bracket-free
 - **Naming**: Definitions `camelCase`, predicates `IsPrefix`, theorems `snake_case`, files `CamelCase.lean`
 - **Proof integrity blockers**: `sorry`, `admit`, `native_decide`, `unsafeCast`, `axiom`, circular reasoning
 - **Blueprint prose**: Pure mathematics only — no Lean identifiers in text, no software jargon (see banned terms list in blueprint style guide)
 - **Paper references**: Cite theorem numbers in docstrings (e.g., "Wolf Thm 6.3", "arXiv:1606.00608 Appendix A")
+- **Mathematical renames**: When renaming a declaration whose old name encodes misleading terminology (banned vocabulary in `docs/prose_style.md` §2), skip the `@[deprecated] alias` and state the reason in the PR body (see `docs/CONTRIBUTING.md` §Mathematical-language renames).
 
 ## Workflow
 
@@ -120,3 +126,148 @@ When adding or completing (removing sorry from) theorems/lemmas:
 - Do not leave unrelated new sorrys
 - Before changing theorem statements, first try to complete the proof using existing lemmas
 - If a mathematical result looks wrong or suspiciously general, check the LaTeX sources in `Papers/` and `Notes/` for the original theorems
+
+### Faithfulness rule
+
+**A theorem is "formalized" only when its Lean signature has no hypothesis
+absent from the cited source's statement.** Adding hypotheses — even
+mathematically natural ones — produces a *different* theorem and must
+not be marked `\leanok` against the source's blueprint label.
+
+This applies to every formalized result, not only those undergoing active
+paper-realignment. The check is on hypotheses, not just conclusions:
+
+- A Lean theorem whose conclusion matches the source but whose hypotheses
+  are stricter than the source's is **not** the formalization of the source
+  theorem. It is a different theorem (a corollary or specialization).
+- The blueprint label citing the source must point to a Lean statement
+  with the source's hypothesis set, not to a stronger-hypothesis variant.
+- If the only available Lean theorem has extra hypotheses, the blueprint
+  must either: (a) drop the `\leanok` and `\lean{...}` tags from the
+  source-labelled entry, or (b) state the source's theorem as a
+  separate blueprint entry with `\leanok` only after a faithful Lean
+  version exists.
+
+Scope-restricted theorems may be marked `\leanok` only against a blueprint
+statement that explicitly states the restriction. Such an entry must not be
+presented as the source theorem itself. The unrestricted source theorem remains
+unformalized until a Lean statement with the source's hypothesis set exists.
+
+A paper-gap note in `docs/paper-gaps/` is required whenever a
+stricter-hypothesis Lean version is the *only* available formalization of
+a source theorem. The note must identify the missing hypothesis and the
+elimination plan (formalize the source-faithful version, derive the
+stricter version inside a particular argument, etc.).
+
+This rule was retroactively codified after the equalMPS audit
+(`docs/paper-gaps/cpsv16_equalMPS_gauge_phase_gap.tex`) found that the
+proportionality-conditional Lean theorem was being treated as the
+formalization of the proportionality-free source lemma.
+
+### Paper-realignment mode
+
+When the formalization has drifted from the cited source and the work is
+**realigning the Lean development to the paper** (replacing wrong hypotheses,
+removing divergent structures, restating theorems to match the source), the
+default `sorry`/`axiom` blockers from `docs/PROOF_INTEGRITY.md` are temporarily
+relaxed. The priority is **getting the statements right**; proofs are
+restored after.
+
+#### Source-citation requirement
+
+In paper-realignment mode every restated definition, hypothesis field, or
+theorem **must carry a docstring referencing the source by paper label or line
+range**. The minimum acceptable forms:
+
+- `arXiv:1606.00608, eq:II_CF1` — equation/theorem label
+- `arXiv:1606.00608, lines 1170–1192` — line range in the local source PDF/tex
+- `CPSV16, Lemma Lem1` — paper short name plus internal label
+- `Wolf §6.2` — published section reference
+
+For Lean fields and theorems whose mathematical content is being aligned to a
+specific paper passage, the docstring must say *which* passage. Inline
+identifiers without a source reference are unreviewable in this mode: a
+reviewer cannot tell whether the field/theorem is faithful or invented.
+
+This rule applies whether or not the proof is `sorry` — the *statement* is
+the load-bearing artifact during realignment.
+
+#### Marking unfaithful theorems
+
+A theorem or lemma is **unfaithful** when its proof relies on a hypothesis or
+intermediate lemma that is known to deviate from the cited source — typically
+because the hypothesis was smuggled into the formalization, the proof
+shortcuts a load-bearing source step, or the result is restated more weakly
+than the paper would prove. Unfaithful theorems must carry a docstring
+marker so a future reader (or a follow-up PR) can locate them.
+
+The marker is a docstring section starting with `**Unfaithful:**` that names
+the load-bearing deviation, cites the paper-gap note documenting it, and
+sketches the elimination plan. Minimum form:
+
+```
+**Unfaithful:** This proof currently relies on `<hypothesis or lemma>`,
+which deviates from `<paper, label or line range>`. Documented in
+`docs/paper-gaps/<note>.tex`. Elimination: replace by `<faithful
+substitute>`; tracked in `<issue or PR>`.
+```
+
+The marker propagates to dependent theorems: any theorem whose proof
+transitively calls an unfaithful one is itself unfaithful and must carry its
+own marker. The marker is removed only when every transitively-cited
+dependency is faithful.
+
+Reviewers should not approve a paper-realignment PR that introduces an
+unfaithful theorem without the marker. The marker makes the deviation
+auditable and keeps the elimination plan visible.
+
+#### Locally-fixable deviations
+
+Not every paper deviation rises to **Unfaithful**. When the cited source
+contains a small typo, a locally-fixable gap (a missing or off-by-one
+constant, a clarification needed at one step), or a scope restriction that
+the paper proves more generally but the local result handles only a
+sub-case, the formalization may proceed without the full **Unfaithful**
+ceremony. These cases must still:
+
+- Cite a paper-gap document (under `docs/paper-gaps/`) that records the
+  deviation in mathematical terms; if no note exists, write a short one
+  before merging.
+- Use a lighter-weight in-source marker. The recommended forms are
+  `**Scope restriction (...):**` for sub-case proofs, or
+  `**Local fix (...):**` for typo/constant adjustments. Both forms must
+  reference the paper-gap document by file path.
+- Be inline-readable: the marker should let a reader recognize the
+  deviation without leaving the file.
+
+The **Unfaithful** marker is reserved for deviations that would be
+mathematically wrong without follow-up work (the proof is unprovable, or
+the statement smuggles an unwarranted hypothesis). The lighter markers
+are for deviations that are mathematically correct as stated, just
+narrower or differently phrased than the source.
+
+A paper-realignment PR may:
+
+- Delete fields, hypotheses, or whole theorems that are documented as
+  divergent from the cited source (with the divergence recorded in
+  `docs/paper-gaps/`).
+- Leave `sorry` in proof bodies whose old proof depended on the deleted
+  data, when the paper-faithful replacement is the next step.
+- Cascade signature changes through downstream consumers, also using
+  `sorry` if necessary, rather than reverting to keep the build proof-clean.
+
+A paper-realignment PR must:
+
+- Cite the relevant `docs/paper-gaps/*.tex` note documenting the divergence
+  in the PR description.
+- Identify, in the PR description, every `sorry` introduced and the
+  paper-faithful theorem that will discharge it.
+- Be scoped tightly — no unrelated refactors or feature additions.
+- Be followed by tracked implementation issues for the missing
+  paper-faithful proofs.
+
+In paper-realignment mode the standard "do not add sorry" rule is the
+*wrong* heuristic: keeping a divergent proof intact to avoid `sorry`
+preserves a result the source does not assert. Reviewers should evaluate
+paper-realignment PRs against the paper-gap note and the planned
+follow-up, not against the temporary `sorry` count.

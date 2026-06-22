@@ -1,0 +1,147 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{The Fixed-Block Cancellation Step in CPSV16 Theorem II.1}
+\author{}
+\date{2026-05-11}
+
+\begin{document}
+\maketitle
+
+\section{Source passage}
+
+This note concerns the proof of CPSV16 Theorem~\texttt{thm1},
+Appendix MPV proof line~1182 of \cite{Cirac2016MPDO_arXiv}. The paper fixes a block
+$k_0\in\{1,\ldots,r_B\}$ and writes
+\begin{align}
+    \forall j, 
+    \langle V^{(N)}(B_{k_0}),V^{(N)}(A_j)\rangle
+    \xrightarrow[N\to\infty]{} 0
+\end{align}
+as a contradiction to eventual proportionality of the two full MPV families.
+Under the BNT decomposition, the proportionality hypothesis is
+projective proportionality: the scalar $c_N$ is nonzero at the lengths used in
+the comparison, as recorded in
+\path{docs/paper-gaps/cpsv16_nonzero_proportionality_reading.tex}. Thus
+\begin{align}
+    \sum_j \mu_j^N\,V^{(N)}(A_j)=c_N\sum_k \nu_k^N\,V^{(N)}(B_k),
+    \qquad c_N\neq 0,
+\end{align}
+and isolating the selected block gives
+\begin{align}
+    \sum_j \mu_j^N\,V^{(N)}(A_j)-c_N\nu_{k_0}^N\,V^{(N)}(B_{k_0})
+    =c_N\sum_{k\neq k_0}\nu_k^N\,V^{(N)}(B_k).
+\end{align}
+Corollary~\texttt{Lem1} in \cite{Cirac2016MPDO_arXiv} says that, from the left-hand
+decay, the family
+\begin{align}
+    \dim\operatorname{span}
+    \left(
+      \left\{V^{(N)}(A_j)\right\}_{j=1}^{r_A}
+      \cup
+      \left\{V^{(N)}(B_{k_0})\right\}
+    \right)
+    =r_A+1
+\end{align}
+for all sufficiently large $N$. Equivalently, the displayed family is linearly
+independent, so the selected block cannot be absorbed by the others without
+contradiction. \cite[Appendix MPV proof, line~1182]{Cirac2016MPDO_arXiv}
+
+\section{Formal boundary}
+
+The formal boundary in \cite{Cirac2016MPDO_arXiv} is narrower:
+\begin{align}
+    \forall^\mathrm{cof} N, 
+    \dim\operatorname{span}
+    \left(
+      \left\{V^{(N)}(A_j)\right\}_{j=1}^{r_A}
+      \cup
+      \left\{V^{(N)}(B_{k_0})\right\}
+    \right)
+    =r_A+1.
+\end{align}
+The surviving \leanid{SectorBNT} API does not currently contain this
+single-block linear-independence formulation.  It supplies the stronger
+full-family mechanism
+\leanid{MPSTensor.IsBNTCanonicalForm.combined_family_eventually_li},
+under all-pairwise cross-overlap decay; this is sufficient for the
+coefficient-comparison contradiction, but it is not the literal
+single-block statement displayed above.
+The exact fixed-block contradiction step is still open:
+\begin{align}
+    (\forall j,  \langle V^{(N)}(B_{k_0}),V^{(N)}(A_j)\rangle\to 0)
+    \Longrightarrow
+    \neg\left(
+      \sum_j \mu_j^N\,V^{(N)}(A_j)
+      =
+      c_N\sum_k \nu_k^N\,V^{(N)}(B_k)
+    \right).
+\end{align}
+No current Lean declaration carries the retired fixed-right or fixed-left
+one-copy fixed-block names.  The mathematical target remains the
+CPSV fixed-block cancellation at
+\cite[Appendix MPV proof, line~1182]{Cirac2016MPDO_arXiv}, now to be stated on the
+\leanid{SectorBNT} sector surface.
+
+The earlier conditional helpers requiring combined-family linear independence
+(\path{_phase_sum_li}) and the residual-span variants have been retired in
+the 2026-05-13 audit; see
+\path{docs/audits/2026-05-13_cpsv16_ft_paper_vs_code_structural_map.md}.
+Those helpers should not be used as replacements for the fixed-block sentence at
+Appendix MPV proof line~1182, because the needed combined-family independence is not
+supplied by Corollary~\texttt{Lem1}.  The remaining open obligation is the
+fixed-block cancellation itself, to be discharged without combined-family LI or
+residual-span exclusion.
+
+Retirement note: this note intentionally no longer lists the retired no-tail,
+leading-only, partner-identification, leading-tail, residual-span, or
+\path{_phase_sum_li} declarations.  They were deleted as wrong-direction or
+orphan scaffolding in the same audit.
+
+\section{Current discharge plan}
+
+The current plan is recorded in
+\path{docs/audits/2026-05-13_cpsv16_ft_sorry_discharge_plan.md}.  Plan~A is to
+prove an exact eventual leading-coefficient identity
+\begin{align}
+    c_N\,\mu^B_{0}{}^N\,\zeta^N=(\mu^A_{0})^N
+\end{align}
+for all sufficiently large $N$ from the proportionality identity and the BNT
+linear independence on the CPSV fixed-block family.  Once this
+identity is available, the proportional case can clone the equal-MPV tail
+subtraction and induction architecture, without assuming linear independence of
+all residual blocks on both sides.
+
+\subsection{Factored analytic discharge and the lower-bound gap}
+
+\textit{Classification: Scope restriction.}
+
+The intended factored analytic discharge uses four explicit analytic
+hypotheses:
+\begin{enumerate}
+  \item unit-modulus sector weights on both the $A$-family and the $B$-family;
+  \item off-diagonal cross-overlap decay on the fixed-block family, i.e.,
+        $\langle V^{(N)}(B_{k_0}), V^{(N)}(B_k)\rangle \to 0$ for $k \neq k_0$;
+  \item a nonzero limit of the self-overlap at the fixed block,
+        $\langle V^{(N)}(B_{k_0}), V^{(N)}(B_{k_0})\rangle \to \ell \neq 0$; and
+  \item an eventual positive lower bound $\|c_N\| \geq \delta > 0$.
+\end{enumerate}
+Hypotheses~(1)--(3) are present in the source via the BNT structure
+\cite[Theorem~\texttt{thm1}]{Cirac2016MPDO_arXiv}.  Hypothesis~(4) is not
+directly supplied: the cited argument rules out cancellation by appeal to the
+dominant-adjusted scalar limit, but deriving the explicit lower bound
+$\|c_N\|\geq\delta$ from the structural data of the canonical form is not yet
+formalized and is recorded as an open obligation in
+\path{docs/audits/2026-05-13_cpsv16_ft_sorry_discharge_plan.md}.  The earlier
+non-cancellation helpers carrying this lower-bound hypothesis were part of
+the retired Tier~3 route and should not be cited as present declarations.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

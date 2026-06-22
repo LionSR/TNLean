@@ -47,21 +47,41 @@ jobs:
           build: true
 
       - name: Install TeX and graphviz
-        run: sudo apt-get update && sudo apt-get install -y texlive-latex-extra texlive-fonts-recommended texlive-science latexmk graphviz libgraphviz-dev
+        uses: texra-ai/lean-env-action/blueprint-system-deps@v1
+        with:
+          cache-suffix: docgen-v1
+          extra-packages: latexmk texlive-science texlive-xetex
 
       - name: Install leanblueprint
-        run: |
-          pipx install leanblueprint
-          pipx inject --include-apps --force leanblueprint plastex
+        uses: texra-ai/lean-env-action/leanblueprint@v1
+
+      - name: Build blueprint bibliography
+        run: python3 scripts/blueprint_bibtex.py
+
+      - name: Build paper-gap PDFs
+        run: bash scripts/build-paper-gaps.sh
 
       - name: Build blueprint
         working-directory: blueprint
         run: |
           leanblueprint pdf
           set -o pipefail
-          leanblueprint web 2>&1 | tee /tmp/blueprint-output.txt
-          if grep -q "^ERROR:" /tmp/blueprint-output.txt; then
+          tmp_output_file="$(mktemp)"
+
+          set +o pipefail
+          leanblueprint web 2>&1 | tee "$tmp_output_file"
+          cmd_status=${PIPESTATUS[0]}
+          set -o pipefail
+
+          if grep -q "^ERROR:" "$tmp_output_file"; then
             echo "::error::Blueprint has unresolved labels (see ERROR lines above)"
+            exit 1
+          fi
+          if [ "$cmd_status" -ne 0 ]; then
+            exit "$cmd_status"
+          fi
+          if grep -R "TikZ SVG unavailable" web --include='*.html'; then
+            echo "::error::Blueprint contains unrendered TikZ SVG placeholders"
             exit 1
           fi
 

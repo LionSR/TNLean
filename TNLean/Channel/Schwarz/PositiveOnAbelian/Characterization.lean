@@ -27,7 +27,7 @@ block quadratic form.
 positive map, commuting family, block positivity, Schwarz inequality
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder BigOperators TNMatrixCFC
+open scoped Matrix ComplexOrder MatrixOrder BigOperators
 open Matrix Finset Complex Module.End
 
 namespace PositiveOnAbelian
@@ -78,7 +78,7 @@ private lemma blockHermitian_of_blockPositive {n D : ℕ}
       rw [hinnerSum i r, Finset.mul_sum]
       rfl
     have hqreal : star q = q := by
-      have hqim : q.im = 0 := (Complex.nonneg_iff.mp hq).2.symm
+      have hqim : q.im = 0 := (RCLike.nonneg_iff.mp hq).2
       apply Complex.ext
       · simp only [RCLike.star_def, conj_re]
       · simp only [RCLike.star_def, conj_im, hqim, neg_zero]
@@ -96,7 +96,7 @@ private lemma blockHermitian_of_blockPositive {n D : ℕ}
       _ = q := by simp only [RCLike.star_def, RingHomCompTriple.comp_apply, RingHom.id_apply]
       _ = star q := hqreal.symm
       _ = inner ℂ (A.toEuclideanLin x) x := by rw [hinner]
-  have hAherm : A.IsHermitian := (Matrix.isHermitian_iff_isSymmetric (A := A)).2 hAsym
+  have hAherm : A.IsHermitian := (Matrix.isSymmetric_toEuclideanLin_iff (A := A)).mp hAsym
   intro i j
   ext r s
   simpa only [conjTranspose_apply, RCLike.star_def] using congrArg
@@ -152,9 +152,6 @@ private lemma weighted_block_sum_posSemidef {n D : ℕ}
 -- the block quadratic form is nonneg whenever every scalar matrix is PSD.
 -- Proved via the joint-eigenspace decomposition
 -- (LinearMap.IsSymmetric.directSum_isInternal_of_pairwise_commute).
-set_option maxHeartbeats 1600000 in
--- Elaborating the joint-eigenspace decomposition and the finite-index reduction
--- requires more heartbeats than the default.
 private lemma blockForm_nonneg_of_scalarPSD_of_commuting {n D : ℕ}
     (M : Fin n → Fin n → Matrix (Fin D) (Fin D) ℂ)
     (hMadj : ∀ i j, (M j i)ᴴ = M i j)
@@ -176,25 +173,26 @@ private lemma blockForm_nonneg_of_scalarPSD_of_commuting {n D : ℕ}
   have hH : ∀ i j, (H i j).IsHermitian := by
     intro i j
     ext r s
-    simp only [one_div, smul_add, conjTranspose_apply, add_apply, smul_apply, smul_eq_mul,
-      RCLike.star_def, star_add, star_mul', star_inv₀, star_ofNat,
+    simp only [one_div, smul_add, conjTranspose_apply, Matrix.add_apply,
+      Matrix.smul_apply, smul_eq_mul, RCLike.star_def, star_add, star_mul', star_inv₀, star_ofNat,
       RingHomCompTriple.comp_apply, RingHom.id_apply, add_comm, H]
   have hK : ∀ i j, (K i j).IsHermitian := by
     intro i j
     ext r s
-    simp only [sub_eq_add_neg, smul_add, smul_neg, conjTranspose_apply, add_apply, smul_apply,
-      RCLike.star_def, smul_eq_mul, neg_apply, star_add, star_mul', star_div₀, conj_I,
+    simp only [sub_eq_add_neg, smul_add, smul_neg, conjTranspose_apply, Matrix.add_apply,
+      Matrix.smul_apply, RCLike.star_def, smul_eq_mul, Matrix.neg_apply, star_add, star_mul',
+      star_div₀, conj_I,
       star_ofNat, RingHomCompTriple.comp_apply, RingHom.id_apply, star_neg, K]
-    ring
+    ring_nf
   have hTsymm : ∀ idx, (T idx).IsSymmetric := by
     intro idx
     cases idx with
     | inl ij =>
         rcases ij with ⟨i, j⟩
-        simpa only [T] using (Matrix.isHermitian_iff_isSymmetric (A := H i j)).mp (hH i j)
+        simpa only [T] using (Matrix.isSymmetric_toEuclideanLin_iff (A := H i j)).mpr (hH i j)
     | inr ij =>
         rcases ij with ⟨i, j⟩
-        simpa only [T] using (Matrix.isHermitian_iff_isSymmetric (A := K i j)).mp (hK i j)
+        simpa only [T] using (Matrix.isSymmetric_toEuclideanLin_iff (A := K i j)).mpr (hK i j)
   have hEuclMul := Internal.toEuclideanLin_mul (D := D)
   have htoEuclComm {A B : Matrix (Fin D) (Fin D) ℂ} (hAB : Commute A B) :
       Commute (Matrix.toEuclideanLin A : EuclideanSpace ℂ (Fin D) →ₗ[ℂ] EuclideanSpace ℂ (Fin D))
@@ -297,8 +295,8 @@ private lemma blockForm_nonneg_of_scalarPSD_of_commuting {n D : ℕ}
         intro hbot
         apply hγ
         apply le_antisymm
-        · have hle : V γ ≤ Module.End.eigenspace (T idx) (γ idx) := by
-            exact iInf_le (fun j => Module.End.eigenspace (T j) (γ j)) idx
+        · have hle : V γ ≤ Module.End.eigenspace (T idx) (γ idx) :=
+            iInf_le (fun j => Module.End.eigenspace (T j) (γ j)) idx
           simpa only [le_bot_iff, hbot] using hle
         · exact bot_le
       let α : σ := fun idx => ⟨γ idx, hEig idx⟩
@@ -330,8 +328,8 @@ private lemma blockForm_nonneg_of_scalarPSD_of_commuting {n D : ℕ}
     χ a (Sum.inl (i, j)) + Complex.I * χ a (Sum.inr (i, j))
   have hM_decomp (i j : Fin n) : M i j = H i j + Complex.I • K i j := by
     ext r s
-    simp only [one_div, smul_add, sub_eq_add_neg, smul_neg, add_apply, smul_apply, smul_eq_mul,
-      conjTranspose_apply, RCLike.star_def, neg_apply, H, K]
+    simp only [one_div, smul_add, sub_eq_add_neg, smul_neg, Matrix.add_apply,
+      Matrix.smul_apply, smul_eq_mul, conjTranspose_apply, RCLike.star_def, Matrix.neg_apply, H, K]
     ring_nf
     norm_num [Complex.I_sq]
     ring
@@ -439,9 +437,6 @@ private lemma blockForm_nonneg_of_scalarPSD_of_commuting {n D : ℕ}
       intro j _
       rw [← hformTerm i j]
 
-set_option maxHeartbeats 1600000 in
--- Elaborating the simultaneous-diagonalization argument expands enough definitions
--- that the default heartbeat limit may time out.
 theorem quadraticForm_nonneg_of_isPositiveMap_of_commuting_images
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hT : IsPositiveMap T)
@@ -501,15 +496,5 @@ theorem quadraticForm_nonneg_of_isPositiveMap_of_commuting_images
     apply Finset.sum_congr rfl; intro q _
     ring
 
-/-- A positive map is positive on commuting block families.
-
-This collects `quadraticForm_nonneg_of_isPositiveMap_of_commuting_images` into a
-single reusable predicate. -/
-private lemma isPositiveOnCommuting_of_isPositiveMap
-    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
-    (hT : IsPositiveMap T) :
-    IsPositiveOnCommuting T := by
-  intro n a ha hcomm ψ
-  exact quadraticForm_nonneg_of_isPositiveMap_of_commuting_images hT a ha hcomm ψ
 
 end PositiveOnAbelian

@@ -2,7 +2,7 @@
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.Spectral.SpectralGap
+import TNLean.Spectral.TransferOperatorGap
 
 /-!
 # Cross-correlation decay and block separation
@@ -20,8 +20,15 @@ cross-correlations between distinct blocks decay exponentially.
 
 ## References
 
-* [PerezGarcia2007String] Pérez-García, Verstraete, Wolf, Cirac,
-  *Matrix Product State Representations*, 2007.
+* [CPGSV21] Cirac, Pérez-García, Schuch, Verstraete,
+  *Matrix Product States and Projected Entangled Pair States*,
+  Rev. Mod. Phys. 93 (2021), arXiv:2011.12127.
+  Sec. 2.3 (correlations and transfer matrix), Sec. 4 (transfer-matrix gap).
+  Source: `Papers/2011.12127/`
+* [PGWSVC08] Pérez-García, Wolf, Sanz, Verstraete, Cirac,
+  *String order and symmetries in quantum spin lattices*,
+  Phys. Rev. Lett. 100, 167202 (2008), arXiv:0802.0447.
+  Source: `Papers/0802.0447/`
 -/
 
 open scoped Matrix ComplexOrder BigOperators NNReal ENNReal
@@ -50,15 +57,15 @@ theorem cross_correlation_tendsto_zero
     Filter.Tendsto
       (fun N => Matrix.trace (((mixedTransferMap A B) ^ N) X))
       Filter.atTop (nhds 0) := by
-  -- Compose: F^N(X) → 0 (by spectral gap) and trace is continuous.
+  -- Compose: F^N(X) → 0 (by the transfer-operator gap) and trace is continuous.
   have h := mixedTransfer_pow_tendsto_zero A B hA hB hA_norm hB_norm hAB X
-  have h_cont : Continuous (Matrix.traceLinearMap (Fin D) ℂ ℂ) :=
-    LinearMap.continuous_of_finiteDimensional _
+  let tr : Matrix (Fin D) (Fin D) ℂ →L[ℂ] ℂ :=
+    LinearMap.toContinuousLinearMap (Matrix.traceLinearMap (Fin D) ℂ ℂ)
   have h2 : Filter.Tendsto
       (fun N => (Matrix.traceLinearMap (Fin D) ℂ ℂ) (((mixedTransferMap A B) ^ N) X))
       Filter.atTop (nhds 0) := by
-    rw [← map_zero (Matrix.traceLinearMap (Fin D) ℂ ℂ)]
-    exact h_cont.continuousAt.tendsto.comp h
+    simpa [tr, Function.comp_def, Matrix.traceLinearMap_apply] using
+      (tr.continuous.tendsto 0).comp h
   simpa [Matrix.traceLinearMap_apply] using h2
 
 /-- **Self-correlation persists**: If `ρ` is a fixed point of `E_A`, then

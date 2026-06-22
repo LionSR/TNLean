@@ -3,14 +3,14 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Determinant.Bound
+import TNLean.Algebra.MatrixAux
 import Mathlib.Analysis.Complex.Polynomial.Basic
 import Mathlib.Analysis.InnerProductSpace.Positive
 import Mathlib.Analysis.InnerProductSpace.Trace
-import Mathlib.Analysis.MeanInequalities
 import Mathlib.LinearAlgebra.Matrix.Charpoly.Eigs
 
 /-!
-# Hilbert--Schmidt helper lemmas for determinant saturation
+# Hilbert--Schmidt auxiliary lemmas for determinant saturation
 
 This file collects the auxiliary results used in the forward direction of Wolf
 Theorem 6.1(2) before the Heisenberg-dual multiplicativity argument proper.
@@ -28,14 +28,12 @@ Hilbert--Schmidt norm computations; and an AM--GM argument upgrades
   transpose swaps the indices of a matrix-unit basis element.
 * `ChannelDeterminant.Internal.sum_stdBasis_mul_conjTranspose` — the standard
   basis satisfies `∑_{ij} E_{ij} E_{ij}^† = d • 1`.
-* `ChannelDeterminant.Internal.eq_zero_of_nonneg_of_sum_le_zero` — a finite
-  nonnegative family with total sum at most `0` vanishes termwise.
 * `ChannelDeterminant.Internal.channelDet_norm_one_hs_norm_ge` — determinant
   saturation gives the AM--GM lower bound on the Hilbert--Schmidt norm.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.1.1][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.1.1][Wolf2012QChannels]
 
 ## Tags
 
@@ -43,27 +41,15 @@ quantum channel, determinant, Hilbert-Schmidt norm, standard basis, AM-GM
 -/
 open scoped Matrix ComplexOrder MatrixOrder BigOperators Kronecker Matrix.Norms.Frobenius
 open Matrix
+open ChannelDeterminant.Internal
 
 variable {d : ℕ}
-
-/-- File-local alias for the shared internal matrix-algebra model. -/
-private abbrev MatrixAlg (d : ℕ) := ChannelDeterminant.Internal.MatrixAlg d
-
-/-- File-local alias for endomorphisms of `M_d(ℂ)`. -/
-private abbrev MatrixEnd (d : ℕ) := ChannelDeterminant.Internal.MatrixEnd d
-
-/-- File-local alias for the shared basis index type. -/
-private abbrev MatrixBasisIndex (d : ℕ) := ChannelDeterminant.Internal.MatrixBasisIndex d
-
-/-- File-local alias for the shared standard basis of `M_d(ℂ)`. -/
-private noncomputable abbrev matrixSpaceBasis (d : ℕ) :=
-  ChannelDeterminant.Internal.matrixSpaceBasis d
 
 section WolfStatements
 
 variable {T : MatrixEnd d}
 
-/-! ### Helper lemmas for the forward direction of Wolf Thm 6.1(2) -/
+/-! ### Auxiliary lemmas for the forward direction of Wolf Theorem 6.1(2) -/
 
 namespace ChannelDeterminant
 namespace Internal
@@ -111,40 +97,12 @@ theorem channel_all_eigenvalues_norm_one [NeZero d]
   exact hroot_eq μ ((Polynomial.mem_roots A.charpoly_monic.ne_zero).2
     ((Matrix.mem_spectrum_iff_isRoot_charpoly).1 hμ_specA))
 
-private theorem stdBasis_conjTranspose_mul_self (i j : Fin d) :
-    (Matrix.stdBasis ℂ (Fin d) (Fin d) (i, j))ᴴ *
-        Matrix.stdBasis ℂ (Fin d) (Fin d) (i, j) =
-      Matrix.single j j (1 : ℂ) := by
-  ext a b
-  rw [Matrix.stdBasis_eq_single, Matrix.conjTranspose_single]
-  by_cases hja : j = a
-  · by_cases hjb : j = b
-    · subst hja; subst hjb
-      simp only [single, star_one, mul_apply, of_apply, true_and, and_true, mul_ite,
-        mul_one, mul_zero, Finset.sum_ite_eq, Finset.mem_univ, ↓reduceIte, and_self]
-    · have hab : a ≠ b := by simpa only [ne_eq, hja] using hjb
-      simp only [single, hja, star_one, mul_apply, of_apply, true_and, hab,
-        and_false, ↓reduceIte, mul_zero, Finset.sum_const_zero]
-  · simp only [single, star_one, mul_apply, of_apply, hja, false_and, ↓reduceIte,
-      mul_ite, mul_one, mul_zero, ite_self, Finset.sum_const_zero]
-
 /-- Conjugate transpose swaps the indices of a matrix-unit basis element. -/
 theorem stdBasis_conjTranspose_eq_swap (i j : Fin d) :
     (Matrix.stdBasis ℂ (Fin d) (Fin d) (i, j))ᴴ =
       Matrix.stdBasis ℂ (Fin d) (Fin d) (j, i) := by
   rw [Matrix.stdBasis_eq_single, Matrix.stdBasis_eq_single, Matrix.conjTranspose_single]
   simp only [star_one]
-
-private theorem stdBasis_mul_conjTranspose_self (i j : Fin d) :
-    Matrix.stdBasis ℂ (Fin d) (Fin d) (i, j) *
-        (Matrix.stdBasis ℂ (Fin d) (Fin d) (i, j))ᴴ =
-      Matrix.single i i (1 : ℂ) := by
-  simpa only [stdBasis_conjTranspose_eq_swap] using
-    (stdBasis_conjTranspose_mul_self (d := d) (i := j) (j := i))
-
-private theorem sum_single_diag_one :
-    ∑ j : Fin d, Matrix.single j j (1 : ℂ) = (1 : MatrixAlg d) := by
-  simpa only using (Matrix.sum_single_one (m := Fin d) (α := ℂ))
 
 /-- Summing `E_{ij} E_{ij}^†` over the standard matrix basis yields `d • 1`. -/
 theorem sum_stdBasis_mul_conjTranspose :
@@ -158,7 +116,7 @@ theorem sum_stdBasis_mul_conjTranspose :
             refine Finset.sum_congr rfl ?_
             intro ij _
             rcases ij with ⟨i, j⟩
-            simpa only using stdBasis_mul_conjTranspose_self (d := d) i j
+            simp [Matrix.stdBasis_eq_single]
     _ = ∑ i : Fin d, ∑ j : Fin d, Matrix.single i i (1 : ℂ) := by
           simpa only [Finset.sum_const, Finset.card_univ, Fintype.card_fin,
             smul_single, nsmul_eq_mul, mul_one, Finset.univ_product_univ] using
@@ -171,91 +129,13 @@ theorem sum_stdBasis_mul_conjTranspose :
           simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin, smul_single,
             nsmul_eq_mul, mul_one, smul_eq_mul]
     _ = (d : ℂ) • ∑ i : Fin d, Matrix.single i i (1 : ℂ) := by rw [Finset.smul_sum]
-    _ = (d : ℂ) • (1 : MatrixAlg d) := by rw [sum_single_diag_one]
-
-private theorem stdBasis_orthonormal_of_inner_eq_trace
-    [NormedAddCommGroup (MatrixAlg d)] [InnerProductSpace ℂ (MatrixAlg d)]
-    (hinner : ∀ X Y : MatrixAlg d, inner ℂ X Y = Matrix.trace (Y * Xᴴ)) :
-    Orthonormal ℂ ⇑(Matrix.stdBasis ℂ (Fin d) (Fin d)) := by
-  rw [orthonormal_iff_ite]
-  intro a b
-  rcases a with ⟨i, j⟩
-  rcases b with ⟨k, l⟩
-  rw [hinner, Matrix.stdBasis_eq_single, Matrix.stdBasis_eq_single, Matrix.conjTranspose_single]
-  rw [Matrix.trace_mul_single]
-  simp only [star_one, MulOpposite.op_one, single, of_apply, eq_comm, smul_ite,
-    one_smul, smul_zero, Prod.mk.injEq]
-
-/-- If a finite family of nonnegative reals has total sum at most `0`, then every term is `0`. -/
-lemma eq_zero_of_nonneg_of_sum_le_zero {ι : Type*} [Fintype ι]
-    (f : ι → ℝ) (hf : ∀ i, 0 ≤ f i) (hsum : ∑ i, f i ≤ 0) :
-    ∀ i, f i = 0 := by
-  intro i
-  have h1 : ∑ i, f i ≥ 0 := Finset.sum_nonneg (fun i _ => hf i)
-  have h2 : ∑ i, f i = 0 := le_antisymm hsum h1
-  have h3 := Finset.sum_eq_zero_iff_of_nonneg (fun i _ => hf i) |>.mp h2
-  exact h3 i (Finset.mem_univ i)
-
-private lemma complex_star_mul_re (z : ℂ) : (star z * z).re = ‖z‖ ^ 2 := by
-  rw [show star z = starRingEnd ℂ z from rfl, Complex.conj_mul',
-    ← Complex.ofReal_pow]
-  exact Complex.ofReal_re _
-
-private lemma trace_conjTranspose_mul_self_re_eq_sum_sq {m n : Type*} [Fintype m] [Fintype n]
-    (A : Matrix m n ℂ) :
-    (Matrix.trace (Aᴴ * A)).re = ∑ j, ∑ i, ‖A i j‖ ^ 2 := by
-  simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply, Matrix.conjTranspose_apply,
-    Complex.re_sum]
-  refine Finset.sum_congr rfl ?_
-  intro j _
-  refine Finset.sum_congr rfl ?_
-  intro i _
-  simpa only [RCLike.star_def, Complex.mul_re, Complex.conj_re, Complex.conj_im,
-    neg_mul, sub_neg_eq_add] using complex_star_mul_re (A i j)
+    _ = (d : ℂ) • (1 : MatrixAlg d) := by rw [Matrix.sum_single_one]
 
 private lemma matrix_det_norm_one_trace_conjTranspose_mul_self_ge [NeZero d]
     (A : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) (hdet : ‖A.det‖ = 1) :
     (d : ℝ) ^ 2 ≤ (Matrix.trace (Aᴴ * A)).re := by
-  let B : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ := Aᴴ * A
-  have hBherm : B.IsHermitian := by
-    simpa only using Matrix.isHermitian_conjTranspose_mul_self A
-  have hBpsd : B.PosSemidef := by
-    simpa only using Matrix.posSemidef_conjTranspose_mul_self A
-  have hdetB : Matrix.det B = 1 := by
-    change Matrix.det (Aᴴ * A) = 1
-    rw [Matrix.det_mul, Matrix.det_conjTranspose]
-    have hconj : star A.det * A.det = ((‖A.det‖ ^ 2 : ℝ) : ℂ) := by
-      simpa only [show star A.det = starRingEnd ℂ A.det from rfl, ← Complex.ofReal_pow] using
-        (Complex.conj_mul' A.det)
-    rw [hconj, hdet]
-    norm_num
-  have hprod_eq : ∏ i, hBherm.eigenvalues i = 1 := by
-    have h : Matrix.det B = ∏ i, (hBherm.eigenvalues i : ℂ) := hBherm.det_eq_prod_eigenvalues
-    rw [hdetB] at h
-    have h' : ((∏ i, hBherm.eigenvalues i : ℝ) : ℂ) = 1 := by
-      simpa only [Complex.ofReal_prod] using h.symm
-    exact_mod_cast h'
-  have hd_pos : 0 < (d : ℝ) := by
-    exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne d)
-  have hamgm : 1 ≤ (∑ i, hBherm.eigenvalues i) / ((d : ℝ) * d) := by
-    have := Real.geom_mean_le_arith_mean (s := Finset.univ) (w := fun _ => (1 : ℝ))
-      (z := fun i => hBherm.eigenvalues i)
-      (by intro i hi; positivity)
-      (by
-        simp only [Finset.sum_const, Finset.card_univ, Fintype.card_prod,
-          Fintype.card_fin, nsmul_eq_mul, Nat.cast_mul, mul_one, mul_self_pos,
-          ne_eq, Nat.cast_eq_zero, NeZero.ne d, not_false_eq_true])
-      (by intro i hi; simpa only using hBpsd.eigenvalues_nonneg i)
-    simpa only [ge_iff_le, Real.rpow_one, hprod_eq, Finset.sum_const,
-      Finset.card_univ, Fintype.card_prod, Fintype.card_fin, nsmul_eq_mul,
-      Nat.cast_mul, mul_one, _root_.mul_inv_rev, Real.one_rpow, one_mul] using this
-  have hmul_pos : 0 < (d : ℝ) * d := mul_pos hd_pos hd_pos
-  have hsum_ge : (d : ℝ) * d ≤ ∑ i, hBherm.eigenvalues i :=
-    (one_le_div hmul_pos).mp hamgm
-  have htrace_eq : (Matrix.trace B).re = ∑ i, hBherm.eigenvalues i := by
-    simpa only [Complex.coe_algebraMap, Complex.re_sum, Complex.ofReal_re] using
-      congrArg Complex.re hBherm.trace_eq_sum_eigenvalues
-  simpa only [pow_two, ge_iff_le] using hsum_ge.trans_eq htrace_eq.symm
+  have h := Matrix.card_le_trace_conjTranspose_mul_self_re_of_det_norm_eq_one A hdet
+  simpa only [Fintype.card_prod, Fintype.card_fin, Nat.cast_mul, pow_two] using h
 
 /-- **AM-GM lower bound on Hilbert-Schmidt norm via determinant.**
 
@@ -264,7 +144,7 @@ the Hilbert-Schmidt norm satisfies `‖Φ‖²_HS ≥ d²`. This follows from AM
 on the singular values: their product is `|det Φ| = 1`, so their squared sum
 (= the HS norm) is at least `d²`.
 
-This is the analytic ingredient for Wolf Thm 6.1(2). -/
+This is the analytic ingredient for Wolf Theorem 6.1(2). -/
 lemma channelDet_norm_one_hs_norm_ge [NeZero d]
     (Φ : MatrixEnd d) (hdet_Φ : ‖channelDet Φ‖ = 1) :
     (d : ℝ) ^ 2 ≤ ∑ ij : Fin d × Fin d,
@@ -283,7 +163,7 @@ lemma channelDet_norm_one_hs_norm_ge [NeZero d]
       (Matrix.trace (Aᴴ * A)).re =
           ∑ ij : Fin d × Fin d, ∑ kl : Fin d × Fin d,
             ‖(Φ (b ij)) kl.1 kl.2‖ ^ 2 := by
-              simp only [stdBasis, trace_conjTranspose_mul_self_re_eq_sum_sq,
+              simp only [stdBasis, Matrix.trace_conjTranspose_mul_self_re_eq_sum_norm_sq,
                 LinearMap.toMatrix_apply, Module.Basis.map_repr, Module.Basis.map_apply,
                 Module.Basis.coe_reindex, Function.comp_apply,
                 Equiv.sigmaEquivProd_symm_apply, Pi.basis_apply, Pi.basisFun_apply,
@@ -315,7 +195,7 @@ lemma channelDet_norm_one_hs_norm_ge [NeZero d]
                       ‖Φ (Matrix.stdBasis ℂ (Fin d) (Fin d) ij) i j‖ ^ 2 := by
                         rw [Finset.sum_comm]
             exact hsum_sq.trans
-              (trace_conjTranspose_mul_self_re_eq_sum_sq
+              (Matrix.trace_conjTranspose_mul_self_re_eq_sum_norm_sq
                 (A := Φ (Matrix.stdBasis ℂ (Fin d) (Fin d) ij))).symm
   calc
     (d : ℝ) ^ 2 ≤ (Matrix.trace (Aᴴ * A)).re :=

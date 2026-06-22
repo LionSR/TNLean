@@ -1,0 +1,363 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Normal Parent-Hamiltonian Range Reduction in Cirac--Perez-Garcia--Schuch--Verstraete 2021}
+\author{}
+\date{2026-04-30}
+
+\begin{document}
+\maketitle
+
+\section{The assertion}
+
+The range-reduction step for normal matrix product states appears in
+Section~IV.C of Cirac--P\'erez-Garc\'ia--Schuch--Verstraete
+\cite{Cirac2021Matrix}.\footnote{For traceability, this note corresponds to
+\href{https://github.com/LionSR/TNLean/issues/1042}{issue \#1042}. The principal
+range-reduction comparison is recorded in
+\href{https://github.com/LionSR/TNLean/issues/588}{issue \#588}; the
+periodic-boundary comparison is recorded in
+\href{https://github.com/LionSR/TNLean/issues/2368}{issue \#2368}; its current
+coordinate form is recorded in
+\href{https://github.com/LionSR/TNLean/issues/2405}{issue \#2405}; the
+length-$L_0$ trace-probe step was isolated in
+\href{https://github.com/LionSR/TNLean/issues/2929}{issue \#2929};
+and the parent-Hamiltonian consequences are recorded in
+\href{https://github.com/LionSR/TNLean/issues/460}{issue \#460}.}
+
+Let $A$ be a normal MPS tensor, and let $L_0>0$ be its injectivity length: after
+blocking $L_0$ consecutive sites, the resulting tensor is injective. The source
+first proves an intersection step for two overlapping local Hamiltonian terms of
+range $L_0+1$. These terms act on sites $1,\ldots,L_0+1$ and
+$2,\ldots,L_0+2$. The source denotes the three regions by $A$, $B$, and $C$:
+the first site, the middle region consisting of sites $2,\ldots,L_0+1$, and the
+last site. The tensor associated to the middle region $B$ is injective. For a
+state in the intersection
+\[
+  \mathcal G_{1,\ldots,L_0+1}\cap \mathcal G_{2,\ldots,L_0+2},
+\]
+the argument inverts the tensor associated with the first-site region $A$,
+restores the middle region $B$, and then uses injectivity of the enlarged
+region to invert the joint region. It concludes that every vector in the
+intersection already lies in
+$\mathcal G_{1,\ldots,L_0+2}$; the reverse inclusion is immediate.
+\footnote{Source location:
+\path{Papers/2011.12127/TN-Review-main.tex}:2049--2077, especially the
+middle-region argument around the displayed figures following
+\path{eq:4:initiate-intersection-proof}.}
+
+The source then says that this argument can be iterated. Hence the ground space
+obtained from all length-$L_0+1$ terms agrees with the ground space obtained from
+all longer length-$L_0+k$ terms. When $k=L_0$, the proof either appeals to the
+previous $2L_0$-range uniqueness theorem or applies the same kind of argument
+at the periodic boundary. The resulting theorem states that a normal
+MPS which becomes injective after blocking $L_0$ sites has a unique ground state
+for the parent Hamiltonian whose interaction range is $L_0+1$.
+\footnote{Source location:
+\path{Papers/2011.12127/TN-Review-main.tex}:2078--2079 for the iteration and
+periodic-boundary closure-property sentence, and
+\path{Papers/2011.12127/TN-Review-main.tex}:2087--2090 for the theorem labeled
+\path{thm:4:unique-gs-L0_plus_1}.}
+
+\section{The formal statement}
+
+The corresponding formal statement keeps the intended hypotheses, with one
+additional range restriction, $L_0+1<N$, recorded as a scope
+restriction in Section~\ref{sec:scope-minimal-ring}. In
+mathematical terms, it assumes that $A$ is normal, that $A$ is injective
+after blocking a positive number $L_0$ of sites, and that the ring has length
+$N\ge 2$ with an interaction range $L$ satisfying $L_0<L\le N$, together with the
+strict bound $L_0+1<N$. The desired
+conclusion is that the periodic-boundary ground space is the line spanned by
+the periodic MPS vector
+$\Omega_N(A)$:
+\[
+  \mathcal G_{N,L}(A)=\mathbb C\,\Omega_N(A).
+\]
+In the formal statement this is the equality between the periodic-boundary ground
+space and the subspace \(\mathbb C\,\Omega_N(A)\). The hard inclusion into
+\(\mathbb C\,\Omega_N(A)\) is the range-reduction lemma for the non-minimal
+ring case \(L_0+1<N\).
+\footnote{Formal locations:
+\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:902 for
+\path{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction},
+and
+\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:936 for
+\path{MPSTensor.chainGroundSpace_eq_mpvSubmodule_normal}. The formal hypotheses
+are named \path{IsNormal A} and \path{IsNBlkInjective A L0}, together with
+\path{0 < L0}, \path{2 <= N}, \path{L0 + 1 < N}, and
+\path{L0 < L <= N}.}
+
+The blueprint records the corresponding closure-property step in
+\path{blueprint/src/chapter/ch13_parent_hamiltonian_normal_closing.tex}, labelled
+\path{thm:normal_range_reduction_containment}. Its proof sketch separates the
+open-chain intersection iteration from the comparison at the periodic boundary,
+matching the source distinction between the intersection property and the
+closure property.
+
+
+The first mismatch is that the available intersection theorem is not a literal
+expression of the proof through the region $B$. That theorem was written for a
+tensor that is already injective at one site. Its proof decomposes the identity as a linear combination of the one-site matrices
+$A_j$ and then iterates this single-letter intersection property through
+contiguous windows.
+\footnote{Formal locations:
+\path{TNLean/MPS/ParentHamiltonian/IntersectionProperty.lean}:281--284 for
+\path{MPSTensor.groundSpace_intersection},
+\path{TNLean/MPS/ParentHamiltonian/IntersectionProperty.lean}:341--364 for the
+use of \path{decompositionMap hA 1}, and
+\path{TNLean/MPS/ParentHamiltonian/CyclicWindow.lean}:153--163 for the contiguous
+iteration using that theorem.}
+For a normal tensor with injectivity length $L_0$, the available inverse is the
+inverse for words of length $L_0$, not a one-site inverse. This is not a
+contradiction in the source argument; it is a mismatch between the diagrammatic
+region-by-region proof and the available formal statements for intersection
+properties.
+
+The formal argument therefore separates the proof into two parts instead of
+reproducing the compressed source proof verbatim. The open-chain component has been
+proved by a block-injective range-reduction lemma: if every contiguous
+window of length $L_0+1$ lies in the corresponding local MPS ground space, then
+the full open chain lies in the full MPS ground space. Combining this with cyclic
+window monotonicity gives an open-chain consequence from the cyclic length-$L$
+constraints. This supplies the formal analog of the iterated open-boundary
+part of the source proof, without expressing the inverse for the region $B$
+through the older single-site intersection lemma.
+\footnote{Formal locations:
+\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:266 for
+\path{MPSTensor.contiguous_mem_groundSpace_of_isNBlkInjective}, and
+\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:328 for
+\path{MPSTensor.chainGroundSpace_le_groundSpace_of_isNBlkInjective}.}
+
+\section{The boundary block-window identity}
+
+After the open-boundary range reduction, a periodic-boundary ground state can
+be written in trace form with a matrix \(X\). The boundary comparison uses the
+block-window identity
+\[
+  XA^\alpha A^\nu=A^\alpha Y_\nu
+\]
+for every length-\(L_0\) word \(\alpha\) and every nonempty complementary word
+\(\nu\). The block-injective commutation lemma then gives
+\(XA^k=A^kX\) for every one-site matrix of \(A\). Block injectivity finally
+forces \(X\) to be scalar, and hence the state lies in
+\(\mathbb C\,\Omega_N(A)\).
+
+This is why the open-chain containment cannot simply be reversed. Let
+\(\Gamma_N(X)\) denote the length-\(N\) trace-form vector
+\(\Gamma_N(X)_\omega=\tr(A^\omega X)\). A vector
+\(\Gamma_N(X)\in G_N(A)\) need not lie in the periodic-boundary ground space.
+For a boundary-crossing window, the restriction has trace coefficients with \(X\)
+between the two parts of the window word,
+\begin{align}
+  \tr\!\left(A^{\omega_{\mathrm{tail}}}X
+    A^{\omega_{\mathrm{head}}}A^\rho\right),
+\end{align}
+whereas membership in \(G_L(A)\) would require the same coefficients to be
+written as
+\begin{align}
+  \tr\!\left(A^{\omega_{\mathrm{tail}}}
+    A^{\omega_{\mathrm{head}}}Y_\rho\right)
+\end{align}
+for a matrix \(Y_\rho\) depending only on the labels outside the window.
+The closure-property comparison supplies the movement of \(X\) through
+the boundary-crossing word.
+
+In the coordinate form used here, \(\mu\) denotes the nonempty word placed on
+the sites outside the two cyclic windows and \(\eta\) is the letter used on the
+remaining outside sites. This is a coordinate form of the periodic-boundary
+closure-property sentence in Section~IV.C, lines 2078--2079. The reduction
+isolates the movement of \(X\) as an identity between boundary-restriction
+matrices in the closure-property comparison, which implies the one-site
+commutation identity.
+After choosing boundary-restriction matrices for the two boundary-crossing
+restrictions, the verified one-sided boundary-product lemma gives, for every
+physical letter \(j\),
+\[
+  W_\eta A^j=A^\mu A^jX,
+  \qquad
+  XA^jA^\mu=A^jV_\eta .
+\]
+Here \(W_\eta\) is the boundary-restriction matrix for the boundary-crossing
+restriction beginning at the last site, and \(V_\eta\) is the
+boundary-restriction matrix for the second boundary-crossing restriction.
+\footnote{Formal locations:
+\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean} for
+\path{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap},
+and
+\path{TNLean/MPS/ParentHamiltonian/BoundaryClosing.lean} for
+\path{MPSTensor.closure_property_boundary_one_sided_products_of_groundSpaceMap}.}
+This local matrix comparison gives the following commutation identity through
+the block-injective commutation lemma: for every physical letter \(k\),
+\[
+  XA^k=A^kX.
+\]
+This is the one-site commutation step in the periodic-boundary closure-property
+argument.\footnote{
+In the formal proof of
+\leanid{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap},
+the commutation identity is obtained from
+\leanid{MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq}.}
+
+For an \(N\)-site vector \(\psi\),
+\(\operatorname{Res}^{\tau}_{i,L}(\psi)\) denotes the \(L\)-site vector whose
+\(\sigma\)-coordinate is the coordinate of \(\psi\) obtained by placing
+\(\sigma\) in the cyclic window of length \(L\) beginning at \(i\), and by
+using \(\tau\) on the remaining sites.
+
+Once this identity is available, the boundary-restriction equality lemma proves
+that the two boundary-restriction matrices have the same first-letter products:
+\[
+  W_\eta A^j=V_\eta A^j,
+\]
+for every \(\eta\) and \(j\). The first-letter restriction lemma then identifies
+the two cyclic restrictions
+\[
+  \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
+  =
+  \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
+\]
+Thus the equality of boundary restrictions is no longer the primitive open
+comparison: it is a checked consequence of the one-sided products and the
+commutation identity.\footnote{Formal locations:
+\path{TNLean/MPS/ParentHamiltonian/BoundaryMatrixBlock.lean} for
+\leanid{MPSTensor.boundary_restrictions_eq_of_commutes_and_one_sided}, and
+\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean} for its
+use in
+\leanid{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap}.}
+
+The block-injective commutation lemma reduces the commutation identity itself
+to this local matrix equation. It states that, if \(A\) is
+\(L_0\)-block-injective and there are matrices \(Y_\nu\) such that, for every
+length-\(L_0\) word \(\alpha\) and every complementary word \(\nu\),
+\[
+  XA^\alpha A^\nu=A^\alpha Y_\nu,
+\]
+then \(XA^k=A^kX\) for every physical letter \(k\).\footnote{Formal location:
+\path{TNLean/MPS/ParentHamiltonian/BoundaryMatrixBlock.lean} for
+\leanid{MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq}.}
+The trace rotation at the last cyclic window has now been isolated as the
+identity
+\[
+  \operatorname{tr}\left(A^j X A^\alpha A^\nu\right)
+  =
+  \operatorname{tr}\left(A^j A^\alpha Y_\nu\right),
+\]
+recorded as
+\leanid{MPSTensor.closure_property_boundary_block_window_trace_eq_of_groundSpaceMap}.
+These identities pair the matrix difference only with the single letters
+\(A^j\), and therefore do not separate matrices for a general
+\(L_0\)-block-injective tensor. The corresponding trace identities against all
+length-\(L_0\) word products \(A^\beta\) are now obtained from the same
+boundary-crossing cyclic-window comparison; those products span the full matrix
+algebra by block injectivity.\footnote{Formal statement:
+\leanid{MPSTensor.closure_property_boundary_block_window_trace_evalWord_mul_eq_of_groundSpaceMap}.}
+The trace-separation theorem records the algebraic consequence: these
+length-\(L_0\) trace identities give
+\(XA^\alpha A^\nu=A^\alpha Y_\nu\).\footnote{Formal location:
+\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean} for
+\leanid{MPSTensor.block_window_matrix_equation_of_trace_evalWord_mul_eq_of_isNBlkInjective}.}
+The equation is now obtained from the cyclic-window constraints. The
+block-injective commutation lemma then supplies the one-site commutation
+identity, the boundary-restriction equality lemma supplies the equality of the
+two boundary restrictions, and the periodic-boundary comparison follows.
+\footnote{The source-labelled statement for this step is
+\leanid{MPSTensor.closure_property_boundary_block_window_equation_of_groundSpaceMap}.}
+
+Equivalently, the same boundary phenomenon can be recognized in coordinate
+terms. For an \(N\)-site vector \(\psi\), the two restrictions are obtained from
+the two boundary-crossing words
+\[
+  \tau^{+}_{\eta}(\mu)_i =
+  \begin{cases}
+    \mu_{i-L_0}, & L_0\le i<N-1,\\
+    \eta,        & \text{otherwise},
+  \end{cases}
+  \qquad
+  \tau^{-}_{\eta}(\mu)_i =
+  \begin{cases}
+    \mu_{i-1}, & 1\le i<N-L_0,\\
+    \eta,      & \text{otherwise}.
+  \end{cases}
+\]
+The direct comparison of these two restrictions, and the left-multiplied
+coordinate comparison obtained after taking first-letter restrictions, are
+consequences of the one-site commutation identity \(XA^k=A^kX\).
+
+\section{Scope restriction: the minimal ring}
+\label{sec:scope-minimal-ring}
+
+The source theorem \path{thm:4:unique-gs-L0_plus_1}
+(\path{Papers/2011.12127/TN-Review-main.tex}:2087--2090) asserts a unique ground
+state for the range-$(L_0+1)$ parent Hamiltonian on a normal MPS, placing no
+lower bound on the ring length $N$ beyond the $N\ge L_0+1$ needed to define a
+range-$(L_0+1)$ term. The minimal case $N=L_0+1$, in which the single
+length-$(L_0+1)$ window already wraps the whole ring, is therefore covered by the
+source statement.
+
+The formal statements add the strict hypothesis $L_0+1<N$, so they cover only
+$N\ge L_0+2$ and exclude that minimal ring. The restriction is forced by the
+periodic-boundary closure-property argument: the comparison ranges over a
+complement word $\mu\colon \mathrm{Fin}\,(N-(L_0+1))\to\mathrm{Fin}\,d$, which is
+the empty function exactly when $N=L_0+1$, so the two boundary-crossing windows
+coincide and the comparison carries no information. This is a genuine narrowing
+of the source theorem rather than a typo: the conclusion at $N=L_0+1$ is true
+(it is the source's minimal case), but the present proof does not reach it.
+
+Elimination plan: prove the empty-complement case of the periodic-boundary
+argument. When $N=L_0+1$, the complement word has length zero and the two
+boundary-crossing words coincide; one must still use the cyclic local constraints
+to identify the periodic ground space with the MPS line. Thus the missing step is
+not a single-window kernel computation, but a separate cyclic-boundary argument
+in the degenerate complement case. Alternatively, extend the witness-comparison
+lemma to include the empty complement word. Either route removes $L_0+1<N$ from
+\path{MPSTensor.wrapped_mirror_witness_agree_of_chainGroundSpace},
+\path{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction},
+\path{MPSTensor.chainGroundSpace_eq_mpvSubmodule_normal},
+\path{MPSTensor.parentHamiltonian_unique_gs_normal}, and, through this
+range-reduction theorem, the range-$2L_0$ corollary
+\path{MPSTensor.parentHamiltonian_unique_gs_injective}. In the latter corollary,
+the bound $L_0+1<N$ is automatic from $2L_0\le N$ for $1<L_0$ and only excludes
+the two-site case $L_0=1$, $N=2$. The narrowing is recorded in these declarations
+with a \texttt{Scope restriction} docstring marker.
+
+\section{Conclusion}
+
+This note records two distinctions between the compressed source proof and the
+available formal lemmas; it is not a source-error claim. The cited
+Cirac--Perez-Garcia--Schuch--Verstraete 2021 argument is not refuted. The source
+compresses two mathematical steps which the present proof keeps separate: the
+$B$-region inverting and growing-back open-chain range reduction, and the
+movement of the trace-form matrix \(X\) through the boundary-crossing word in
+the periodic-boundary comparison.
+
+The open-chain part has been proved under the intended block-injective
+hypotheses, though not by reusing the older single-site intersection theorem.
+For the nonempty-complement periodic-boundary comparison, the cyclic
+length-\((L_0+1)\) constraints now give the length-\(L_0\) trace identities
+\[
+  \operatorname{tr}(A^\beta X A^\alpha A^\nu)
+  =
+  \operatorname{tr}(A^\beta A^\alpha Y_\nu)
+\]
+for all length-\(L_0\) words \(\alpha,\beta\) and every nonempty complementary
+word \(\nu\). The trace-separation lemma then gives the matrix identity
+\[
+  XA^\alpha A^\nu=A^\alpha Y_\nu
+\]
+for every \(\alpha,\nu\). The block-injective commutation lemma then gives
+\(XA^k=A^kX\) for every physical letter \(k\), and the verified boundary-restriction equality
+lemma supplies the periodic-boundary comparison. The remaining restriction
+recorded here is the minimal ring case \(N=L_0+1\), where the complement word is
+empty and the present boundary-crossing comparison does not apply.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

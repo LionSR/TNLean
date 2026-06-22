@@ -26,12 +26,10 @@ can be normalized to a unitary.
   the determinant bound.
 * `channelDet_norm_eq_one_iff_exists_unitaryChannel` — Wolf Theorem 6.1(2) for
   CPTP maps.
-* `channelDet_norm_eq_one_iff_exists_unitaryChannel_of_channel` — the channel
-  alias of the same characterization.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.1.1][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.1.1][Wolf2012QChannels]
 
 ## Tags
 
@@ -39,23 +37,9 @@ quantum channel, determinant, unitary channel, Skolem-Noether
 -/
 open scoped Matrix ComplexOrder MatrixOrder BigOperators Kronecker Matrix.Norms.Frobenius
 open Matrix
+open ChannelDeterminant.Internal
 
 variable {d : ℕ}
-
-/-- File-local alias for the shared internal matrix-algebra model. -/
-private abbrev MatrixAlg (d : ℕ) := ChannelDeterminant.Internal.MatrixAlg d
-
-/-- File-local alias for endomorphisms of `M_d(ℂ)`. -/
-private abbrev MatrixEnd (d : ℕ) := ChannelDeterminant.Internal.MatrixEnd d
-
-/-- Column-stacking vectorization as a linear equivalence. -/
-private noncomputable def matrixVecLinearEquiv (d : ℕ) :
-    MatrixAlg d ≃ₗ[ℂ] (Fin d × Fin d → ℂ) :=
-  LinearEquiv.ofBijective
-    { toFun := Matrix.vec
-      map_add' := Matrix.vec_add
-      map_smul' := Matrix.vec_smul }
-    Matrix.vec_bijective
 
 section WolfStatements
 
@@ -77,10 +61,10 @@ private theorem extract_unitary_from_inner_form [NeZero d]
           Y * ((↑P : MatrixAlg d)ᴴ * (↑P : MatrixAlg d))) :
     ∃ U : Matrix.unitaryGroup (Fin d) ℂ, T = unitaryChannel U := by
   -- GL identities
-  have hPinvP : (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) * (↑P : MatrixAlg d) = 1 := by
-    exact congrArg Units.val (inv_mul_cancel P)
-  have hPPinv : (↑P : MatrixAlg d) * (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) = 1 := by
-    exact congrArg Units.val (mul_inv_cancel P)
+  have hPinvP : (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) * (↑P : MatrixAlg d) = 1 :=
+    congrArg Units.val (inv_mul_cancel P)
+  have hPPinv : (↑P : MatrixAlg d) * (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) = 1 :=
+    congrArg Units.val (mul_inv_cancel P)
   -- Step 1: P†P is in the center → is a scalar matrix
   have hPHP_center :
       (↑P : MatrixAlg d)ᴴ * (↑P : MatrixAlg d) ∈
@@ -96,9 +80,11 @@ private theorem extract_unitary_from_inner_form [NeZero d]
   have hPHP_psd : ((↑P : MatrixAlg d)ᴴ * (↑P : MatrixAlg d)).PosSemidef :=
     Matrix.posSemidef_conjTranspose_mul_self _
   have hc_nonneg : 0 ≤ c := by
-    have := hPHP_psd.diag_nonneg (i := (0 : Fin d))
-    simpa only [ge_iff_le, hPHP_smul, smul_apply, one_apply_eq, smul_eq_mul,
-      mul_one] using this
+    have hdiag :
+        ((↑P : MatrixAlg d)ᴴ * (↑P : MatrixAlg d)) (0 : Fin d) (0 : Fin d) = c := by
+      rw [hPHP_smul]
+      simp only [Matrix.smul_apply, Matrix.one_apply_eq, smul_eq_mul, mul_one]
+    simpa only [hdiag] using hPHP_psd.diag_nonneg (i := (0 : Fin d))
   -- Step 3: c ≠ 0 (from invertibility of P)
   have hc_ne : c ≠ 0 := by
     intro hc0
@@ -114,8 +100,8 @@ private theorem extract_unitary_from_inner_form [NeZero d]
     exact one_ne_zero (show (1 : MatrixAlg d) = 0 by
       rw [← hPPinv, hP_zero, zero_mul])
   -- Step 4: c is a positive real number
-  have hc_re_nonneg : 0 ≤ c.re := (Complex.nonneg_iff.mp hc_nonneg).1
-  have hc_im_zero : c.im = 0 := (Complex.nonneg_iff.mp hc_nonneg).2.symm
+  have hc_re_nonneg : 0 ≤ c.re := (RCLike.nonneg_iff.mp hc_nonneg).1
+  have hc_im_zero : c.im = 0 := (RCLike.nonneg_iff.mp hc_nonneg).2
   have hc_re_pos : 0 < c.re := by
     rcases lt_or_eq_of_le hc_re_nonneg with h | h
     · exact h
@@ -173,7 +159,7 @@ private theorem extract_unitary_from_inner_form [NeZero d]
     smul_mul_assoc, smul_mul_assoc, mul_smul_comm, smul_smul,
     inv_mul_cancel₀ hr_ne, one_smul]
 
-/-- **Wolf Thm 6.1(2), forward direction.** -/
+/-- **Wolf Theorem 6.1(2), forward direction.** -/
 private theorem forward_det_one_implies_unitaryChannel [NeZero d]
     (hT : IsChannel T) (hdet : ‖channelDet T‖ = 1) :
     ∃ U : Matrix.unitaryGroup (Fin d) ℂ, T = unitaryChannel U := by
@@ -232,15 +218,13 @@ private theorem forward_det_one_implies_unitaryChannel [NeZero d]
   have hT_inner : ∀ A : MatrixAlg d,
       T A = (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) * A * (↑P : MatrixAlg d) := by
     intro A
-    suffices h : ∀ B, trace ((T A -
-        (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) * A * (↑P : MatrixAlg d)) * B) = 0 by
-      exact sub_eq_zero.mp ((Matrix.trace_mul_right_eq_zero_iff _).mp h)
+    apply (Matrix.ext_iff_trace_mul_right).2
     intro B
-    rw [sub_mul, trace_sub, hAdj A B]
-    change trace (A * Td B) -
+    rw [hAdj A B]
+    change trace (A * Td B) =
       trace ((↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) * A *
-        (↑P : MatrixAlg d) * B) = 0
-    rw [show Td B = Td_equiv B from rfl, hP B, sub_eq_zero]
+        (↑P : MatrixAlg d) * B)
+    rw [show Td B = Td_equiv B from rfl, hP B]
     simpa only [Matrix.mul_assoc] using
       (Matrix.trace_mul_cycle (A * (↑P : MatrixAlg d)) B
         ((↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d)))
@@ -285,16 +269,22 @@ private theorem forward_det_one_implies_unitaryChannel [NeZero d]
 /-- The determinant of a unitary channel equals `1`. -/
 theorem channelDet_unitary_eq_one (U : Matrix.unitaryGroup (Fin d) ℂ) :
     channelDet (unitaryChannel U) = 1 := by
-  let e : MatrixAlg d ≃ₗ[ℂ] (Fin d × Fin d → ℂ) := matrixVecLinearEquiv d
+  let e : MatrixAlg d ≃ₗ[ℂ] (Fin d × Fin d → ℂ) :=
+    LinearEquiv.ofBijective
+      { toFun := Matrix.vec
+        map_add' := Matrix.vec_add
+        map_smul' := Matrix.vec_smul }
+      Matrix.vec_bijective
   let M : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ :=
     ((U : MatrixAlg d).map star) ⊗ₖ (U : MatrixAlg d)
   have hvec : ∀ X : MatrixAlg d,
       e (unitaryChannel U X) = Matrix.toLin' M (e X) := by
     intro X
+    -- The equivalence `e` is the column-stacking vectorization used by `Matrix.vec`.
     change Matrix.vec (((U : MatrixAlg d) * X * (U : MatrixAlg d)ᴴ) : MatrixAlg d) =
       M.mulVec (Matrix.vec X)
     symm
-    simpa only [RCLike.star_def, conjTranspose] using
+    simpa only [M, RCLike.star_def, conjTranspose, ← Matrix.transpose_map] using
       (Matrix.kronecker_mulVec_vec (A := (U : MatrixAlg d)) (X := X)
         (B := (U : MatrixAlg d).map star))
   have hconj :
@@ -309,8 +299,8 @@ theorem channelDet_unitary_eq_one (U : Matrix.unitaryGroup (Fin d) ℂ) :
       toLin'_apply, LinearEquiv.apply_symm_apply] using congrFun (hvec (e.symm w)) ij
   have hdet_map_star :
       ((U : MatrixAlg d).map star).det = star (Matrix.det (U : MatrixAlg d)) := by
-    simpa only [RCLike.star_def, RingEquiv.mapMatrix_apply, starRingAut_apply] using
-      (RingEquiv.map_det (starRingAut : ℂ ≃+* ℂ) (U : MatrixAlg d)).symm
+    simpa only [RCLike.star_def, RingHom.mapMatrix_apply] using
+      (RingHom.map_det (starRingEnd ℂ) (U : MatrixAlg d)).symm
   have hdet_unitary :
       star (Matrix.det (U : MatrixAlg d)) * Matrix.det (U : MatrixAlg d) = 1 := by
     have hU : ((U : MatrixAlg d)ᴴ) * (U : MatrixAlg d) = 1 := by
@@ -340,9 +330,9 @@ theorem channelDet_norm_eq_one_of_unitaryChannel (U : Matrix.unitaryGroup (Fin d
     ‖channelDet (unitaryChannel U)‖ = 1 := by
   simp only [channelDet_unitary_eq_one, one_mem, CStarRing.norm_of_mem_unitary]
 
-/-- Wolf Thm 6.1(2) restricted to CPTP maps: `‖det T‖ = 1 ↔ ∃ U, T = unitaryChannel U`.
+/-- Wolf Theorem 6.1(2) restricted to CPTP maps: `‖det T‖ = 1 ↔ ∃ U, T = unitaryChannel U`.
 
-The transposition branch from Wolf's general Thm 6.1(2) for positive TP maps does not
+The transposition branch from Wolf's general Theorem 6.1(2) for positive TP maps does not
 appear for CPTP maps since the transpose map is not completely positive. -/
 theorem channelDet_norm_eq_one_iff_exists_unitaryChannel
     (hT : IsChannel T) :
@@ -355,12 +345,5 @@ theorem channelDet_norm_eq_one_iff_exists_unitaryChannel
       exact forward_det_one_implies_unitaryChannel hT h
   · rintro ⟨U, rfl⟩
     exact channelDet_norm_eq_one_of_unitaryChannel U
-
-/-- CPTP specialization of the unitary characterization (alias of
-`channelDet_norm_eq_one_iff_exists_unitaryChannel`). -/
-theorem channelDet_norm_eq_one_iff_exists_unitaryChannel_of_channel
-    (hT : IsChannel T) :
-    ‖channelDet T‖ = 1 ↔ ∃ U : Matrix.unitaryGroup (Fin d) ℂ, T = unitaryChannel U :=
-  channelDet_norm_eq_one_iff_exists_unitaryChannel hT
 
 end WolfStatements

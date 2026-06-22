@@ -11,20 +11,17 @@ import Mathlib.LinearAlgebra.Matrix.Trace
 /-!
 # Trace expansion over matrix units
 
-Shared infrastructure for expanding `LinearMap.trace` as a sum over matrix-unit basis elements,
+Trace-expansion lemmas for `LinearMap.trace` as a sum over matrix-unit basis elements,
 and for evaluating entries of products involving `Matrix.single`.
 
-The lemmas are stated over a general `CommRing 𝕜` so that no import of complex-number
-infrastructure is required here. Downstream files instantiate `𝕜 := ℂ`.
+The lemmas are stated over a general `CommRing 𝕜`, so this file does not need
+complex-number imports. Downstream files instantiate `𝕜 := ℂ`.
 
 ## Main results
 
-- `linearMap_trace_eq_sum_apply_single₂`: operator trace as a double sum over matrix units
-  (rectangular, general bond dimensions).
-- `entry_mul_single_mul₂`: `(p, q)` entry of `M * single p q 1 * N` equals `M p p * N q q`
-  (rectangular, general).
-- `linearMap_trace_eq_sum_apply_single`: square specialization of `…single₂`.
-- `entry_mul_single_mul`: square specialization of `…mul₂`.
+- `linearMap_trace_eq_sum_apply_single`: operator trace as a double sum over matrix units,
+  for rectangular matrix spaces.
+- `entry_mul_single_mul`: `(p, q)` entry of `M * single p q 1 * N` equals `M p p * N q q`.
 -/
 
 open scoped Matrix BigOperators
@@ -38,8 +35,8 @@ variable {𝕜 : Type*} [CommRing 𝕜]
 /-- Expand the operator trace of an endomorphism of `Matrix (Fin D₁) (Fin D₂) 𝕜` as a sum over
 matrix units `Matrix.single p q 1`.
 
-This is the rectangular (general bond dimension) version. -/
-lemma linearMap_trace_eq_sum_apply_single₂
+This statement allows different row and column bond dimensions. -/
+lemma linearMap_trace_eq_sum_apply_single
     {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
     (T : Matrix (Fin D₁) (Fin D₂) 𝕜 →ₗ[𝕜] Matrix (Fin D₁) (Fin D₂) 𝕜) :
     (LinearMap.trace 𝕜 (Matrix (Fin D₁) (Fin D₂) 𝕜)) T
@@ -74,8 +71,8 @@ lemma linearMap_trace_eq_sum_apply_single₂
 
 /-- The `(p, q)` entry of `M * Matrix.single p q 1 * N` equals `M p p * N q q`.
 
-Rectangular version: `M : D₁ × D₁` and `N : D₂ × D₂`. -/
-lemma entry_mul_single_mul₂
+Here `M : D₁ × D₁` and `N : D₂ × D₂`. -/
+lemma entry_mul_single_mul
     {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
     (M : Matrix (Fin D₁) (Fin D₁) 𝕜) (N : Matrix (Fin D₂) (Fin D₂) 𝕜)
     (p : Fin D₁) (q : Fin D₂) :
@@ -86,30 +83,5 @@ lemma entry_mul_single_mul₂
   · simp
 
 end TraceExpansion
-
-section SingleEntrySquare
-
-variable {𝕜 : Type*} [CommRing 𝕜]
-
-/-- Square specialization of `linearMap_trace_eq_sum_apply_single₂`.
-
-Provided for backwards compatibility with lemmas in `MPVOverlapTrace`. -/
-lemma linearMap_trace_eq_sum_apply_single
-    {D : ℕ} [NeZero D]
-    (T : Matrix (Fin D) (Fin D) 𝕜 →ₗ[𝕜] Matrix (Fin D) (Fin D) 𝕜) :
-    (LinearMap.trace 𝕜 (Matrix (Fin D) (Fin D) 𝕜)) T
-      = ∑ p : Fin D, ∑ q : Fin D, (T (Matrix.single p q (1 : 𝕜))) p q :=
-  linearMap_trace_eq_sum_apply_single₂ T
-
-/-- Square specialization of `entry_mul_single_mul₂`.
-
-Provided for backwards compatibility with lemmas in `MPVOverlapTrace`. -/
-lemma entry_mul_single_mul
-    {D : ℕ} [NeZero D]
-    (M N : Matrix (Fin D) (Fin D) 𝕜) (p q : Fin D) :
-    (M * Matrix.single p q (1 : 𝕜) * N) p q = M p p * N q q :=
-  entry_mul_single_mul₂ M N p q
-
-end SingleEntrySquare
 
 end MPSTensor

@@ -1,0 +1,1359 @@
+\subsection{Cyclic windows at the boundary cut}\label{subsec:block_diagonal_boundary_crossing}
+
+A cyclic length-$L$ window either stays inside the chosen linear interval
+($i+L\le N$) or crosses the boundary cut ($N<i+L$). The non-wrapping case is
+immediate from trace cyclicity, while the crossing case requires a boundary-matrix
+identity $\mu_j^NX_jA^j_\beta=A^j_\beta Y$. The lemmas below establish the
+single-block periodic membership $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$
+in both cases.
+
+\begin{lemma}[Cyclic restrictions of block-diagonal boundary vectors]
+    \label{lem:block_diagonal_boundary_cyclic_restriction_sum}
+    \lean{MPSTensor.cyclicRestrictₗ_groundSpaceMap_toTensorFromBlocks_blockDiagonal_eq_sum}
+    \leanok
+    \uses{lem:block_diagonal_boundary_condition_sum}
+    Let $B=\bigoplus_{j=1}^g\mu_jA_j$, and fix block-diagonal boundary
+    conditions $X_j$. For every cyclic restriction $R_{i,\tau}$ from
+    $N$ sites to $L$ sites,
+    \[
+        R_{i,\tau}\!\left(
+        \Gamma_N^B\!\left(\bigoplus_{j=1}^gX_j\right)
+        \right)
+        =
+        \sum_{j=1}^g
+        R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_boundary_condition_sum}
+    Apply Lemma~\ref{lem:block_diagonal_boundary_condition_sum} at length $N$,
+    then use linearity of the cyclic restriction $R_{i,\tau}$.
+\end{proof}
+
+\begin{lemma}[Local direct-sum constraint from block-diagonal boundary conditions]
+    \label{lem:block_diagonal_boundary_local_sum_mem}
+    \lean{MPSTensor.blockDiagonal_boundary_cyclicRestrict_sum_mem_iSup_groundSpace}
+    \leanok
+    \uses{lem:block_diagonal_boundary_cyclic_restriction_sum,
+        lem:block_sum_local_ground_space}
+    Let $B=\bigoplus_{j=1}^g\mu_jA_j$, with $\mu_j\ne0$, and suppose
+    \[
+        \psi=\Gamma_N^B\!\left(\bigoplus_{j=1}^gX_j\right),
+        \qquad
+        \psi\in\mathcal G_{N,L}(B).
+    \]
+    Then every local constraint of $\psi$ gives
+    \[
+        \sum_{j=1}^g
+        R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)
+        \in
+        \bigvee_{j=1}^gG_L(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_boundary_cyclic_restriction_sum,
+        lem:block_sum_local_ground_space}
+    The hypothesis $\psi\in\mathcal G_{N,L}(B)$ says that the left-hand side
+    before decomposition lies in $G_L(B)$.  Lemma
+    \ref{lem:block_diagonal_boundary_cyclic_restriction_sum} rewrites this local
+    vector as the displayed sum, and Lemma~\ref{lem:block_sum_local_ground_space}
+    identifies $G_L(B)$ with $\bigvee_jG_L(A_j)$.
+
+    % Next source step, not proven by this membership lemma: blockwise
+    % extraction
+    % $A^j_{i_{m+1}}C^j_{i_1}=D^j_{i_{m+1}}A^j_{i_1}$
+    % from \cite[Theorem~12]{PerezGarcia2007Matrix}.
+\end{proof}
+
+\begin{lemma}[Cyclic windows not crossing the cut]
+    \label{lem:block_diagonal_boundary_nonwrapping_component}
+    \lean{MPSTensor.blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_nonwrapping}
+    \leanok
+    \uses{def:ground_space_parent, rem:cyclic_window_operators}
+    Fix block-diagonal boundary conditions $X_j$. If the cyclic window beginning
+    at $i$ stays inside the chosen linear interval, $i+L\le N$, then
+    for every block $j$,
+    \[
+        R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)
+        \in G_L(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:ground_space_parent, rem:cyclic_window_operators}
+    When the window stays inside the chosen linear interval, the boundary matrix
+    remains outside the window. Write
+    $A_{\rm left}=A^j_{\tau_0}\cdots A^j_{\tau_{i-1}}$ and
+    $A_{\rm right}=A^j_{\tau_{i+L}}\cdots A^j_{\tau_{N-1}}$. Trace cyclicity
+    gives
+    \[
+        R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)
+        =
+        \Gamma_L^{A_j}\!\left(A_{\rm right}\,\mu_j^NX_j\,A_{\rm left}\right).
+    \]
+    Hence the restricted vector lies in $G_L(A_j)$.
+    % Crossing-window note, not part of this non-wrapping lemma: after trace
+    % rotation, $\mu_j^N X_j$ lies between the two pieces of the interval. The
+    % missing block-diagonal periodic-boundary comparison is
+    % $A^j_{i_{m+1}}C^j_{i_1}=D^j_{i_{m+1}}A^j_{i_1}$ from
+    % \cite[Theorem~12]{PerezGarcia2007Matrix}.
+\end{proof}
+
+\begin{lemma}[Boundary-crossing coefficient formula]
+    \label{lem:block_diagonal_boundary_crossing_coefficient_formula}
+    \lean{MPSTensor.blockDiagonal_boundary_cyclicRestrict_component_apply_crossing}
+    \leanok
+    \uses{def:ground_space_map, rem:cyclic_window_operators}
+    Assume $0<N$, $L\le N$, and let the cyclic interval beginning at $i$
+    cross the boundary cut, so $N<i+L$. Write $a=i+L-N$. For a local word
+    $\sigma$ of length $L$, set
+    \[
+        \beta=\sigma_{N-i}\cdots\sigma_{L-1},\qquad
+        \rho=\tau_a\cdots\tau_{i-1},\qquad
+        \alpha=\sigma_0\cdots\sigma_{N-i-1}.
+    \]
+    Then the corresponding coefficient of the $j$-th block component is
+    \[
+        R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)(\sigma)
+        =
+        \tr\!\left(A^j_\beta A^j_\rho A^j_\alpha\,\mu_j^NX_j\right).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:ground_space_map, rem:cyclic_window_operators}
+    Let $\omega$ be the $N$-site word obtained by inserting $\sigma$ in the
+    cyclic interval beginning at $i$ and by using $\tau$ outside that interval.
+    Since the interval crosses the cut,
+    \[
+        \omega=\beta\rho\alpha .
+    \]
+    Hence
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)(\omega)
+        =
+        \tr\!\left(A^j_\beta A^j_\rho A^j_\alpha\,\mu_j^NX_j\right).
+    \]
+    This is exactly
+    $R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)(\sigma)$.
+\end{proof}
+
+\begin{lemma}[Boundary-crossing trace decomposition from the local constraint]
+    \label{lem:block_diagonal_boundary_crossing_trace_decomposition}
+    \lean{MPSTensor.blockDiagonal_boundary_crossing_trace_decomposition_of_sum_mem_iSup}
+    \leanok
+    \uses{lem:block_diagonal_boundary_crossing_coefficient_formula}
+    Assume $0<N$, $L\le N$, and let the cyclic interval beginning at $i$
+    cross the boundary cut, so $N<i+L$. Put $a=i+L-N$. For a local word
+    $\sigma$ of length $L$, write
+    \[
+        \beta=\sigma_{N-i}\cdots\sigma_{L-1},\qquad
+        \rho=\tau_a\cdots\tau_{i-1},\qquad
+        \alpha=\sigma_0\cdots\sigma_{N-i-1}.
+    \]
+    These are the word coordinates obtained by opening the periodic boundary at
+    the chosen cut, in the comparison with the source expressions involving
+    $C^j_{i_1}$ and $D^j_{i_{m+1}}$.
+    If
+    \[
+        \sum_j
+        R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)
+        \in\bigvee_jG_L(A_j),
+    \]
+    then there are matrices $C^j_{i,\tau}$ such that, for every $\sigma$,
+    \[
+        \sum_j\tr\!\left(A^j_\beta C^j_{i,\tau}A^j_\alpha\right)
+        =
+        \sum_j
+        \tr\!\left(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_\alpha\right).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_boundary_crossing_coefficient_formula}
+    Decompose the local vector in $\bigvee_jG_L(A_j)$ as a sum of vectors
+    $\Gamma_L^{A_j}(C^j_{i,\tau})$.  Evaluating at $\sigma$ gives
+    \[
+        \sum_j\tr\!\left(A^j_{\alpha\beta}C^j_{i,\tau}\right).
+    \]
+    Trace cyclicity rewrites this as
+    $\sum_j\tr(A^j_\beta C^j_{i,\tau}A^j_\alpha)$.  On the other hand,
+    Lemma~\ref{lem:block_diagonal_boundary_crossing_coefficient_formula}
+    gives the second trace expression for the same local coefficient sum.
+\end{proof}
+
+\begin{lemma}[Boundary representation gives fixed-tail boundary traces]
+    \label{lem:block_diagonal_boundary_crossing_trace_decomposition_boundary}
+    \lean{MPSTensor.blockDiagonal_boundary_crossing_trace_decomposition_of_boundary}
+    \leanok
+    \uses{lem:block_diagonal_boundary_local_sum_mem,
+        lem:block_diagonal_boundary_crossing_trace_decomposition}
+    Assume that the physical dimension $d$ is positive, $0<N$, $L\le N$, and
+    $\mu_j\ne0$ for every block $j$. Let the cyclic interval beginning at $i$
+    cross the boundary cut, so $N<i+L$. Let
+    \[
+        \psi\in
+        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right),
+        \qquad
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right).
+    \]
+    For every outside word $\rho$ of length $N-L$, there are matrices
+    $C^j_{i,\rho}$ such that, for every word $\beta$ of length $i+L-N$ before
+    the cut and every wrapped tail word $\alpha$ of length $N-i$,
+    \[
+        \sum_j\tr\!\left(A^j_\beta C^j_{i,\rho}A^j_\alpha\right)
+        =
+        \sum_j
+        \tr\!\left(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_\alpha\right).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_boundary_local_sum_mem,
+        lem:block_diagonal_boundary_crossing_trace_decomposition}
+    Since $d>0$, extend the outside word $\rho$ to a full outside configuration
+    $\tau$ whose entries between the end of the interval and the cut are the
+    word $\rho$. By the nonzero-weight hypothesis,
+    Lemma~\ref{lem:block_diagonal_boundary_local_sum_mem} applies and puts the
+    sum of the corresponding block restrictions in $\bigvee_jG_L(A_j)$. Applying
+    Lemma~\ref{lem:block_diagonal_boundary_crossing_trace_decomposition} gives
+    the displayed trace equality after rewriting the opened cyclic word as
+    $\beta\rho\alpha$.
+\end{proof}
+
+\begin{lemma}[Boundary representation gives all fixed-tail boundary traces]
+    \label{lem:block_diagonal_boundary_crossing_trace_decompositions_boundary}
+    \lean{MPSTensor.blockDiagonal_boundary_crossing_trace_decompositions_of_boundary}
+    \leanok
+    \uses{lem:block_diagonal_boundary_crossing_trace_decomposition_boundary}
+    Assume that the physical dimension $d$ is positive, $0<N$, $L\le N$, and
+    $\mu_j\ne0$ for every block $j$. Let
+    \[
+        \psi\in
+        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right),
+        \qquad
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right).
+    \]
+    Then there are matrices $C^j_{i,\rho}$, indexed by the boundary-crossing
+    start $i$ and by an outside word $\rho$ of length $N-L$, such that whenever
+    $N<i+L$,
+    \[
+        \sum_j\tr\!\left(A^j_\beta C^j_{i,\rho}A^j_\alpha\right)
+        =
+        \sum_j
+        \tr\!\left(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_\alpha\right)
+    \]
+    for every word $\beta$ of length $i+L-N$ before the cut and every wrapped
+    tail word $\alpha$ of length $N-i$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_boundary_crossing_trace_decomposition_boundary}
+    Apply
+    Lemma~\ref{lem:block_diagonal_boundary_crossing_trace_decomposition_boundary}
+    to each boundary-crossing start $i$ and each outside word $\rho$, and choose
+    the resulting matrices $C^j_{i,\rho}$.
+\end{proof}
+
+\begin{theorem}[Fixed boundary-crossing $C^j,D^j$ comparison from the local block-sum constraint]
+    \label{thm:block_diagonal_boundary_crossing_pgvwc_comparison}
+    \lean{MPSTensor.blockDiagonal_boundary_crossing_pgvwc_comparison_of_sum_mem_iSup}
+    \leanok
+    \uses{lem:block_diagonal_boundary_crossing_trace_decomposition,
+        lem:fixed_complementary_word_boundary_compatibility_from_traces}
+    Assume $0<N$, $L\le N$, and let the cyclic interval beginning at $i$
+    cross the boundary cut, so $N<i+L$. Put $a=i+L-N$ and
+    $\rho=\tau_a\cdots\tau_{i-1}$. Suppose also that the block tensors have
+    the common word-span property at length $N-i$. If
+    \[
+        \sum_j
+        R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)
+        \in\bigvee_jG_L(A_j),
+    \]
+    then there are matrices $C^j_{i,\tau}$ such that, for every block $j$
+    and every word $\beta$ of length $a$,
+    \[
+        A^j_\beta C^j_{i,\tau}
+        =
+        \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho .
+    \]
+    % Coordinate form of the Perez-Garcia--Verstraete--Wolf--Cirac comparison
+    % $A^j_{i_{m+1}}C^j_{i_1}=D^j_{i_{m+1}}A^j_{i_1}$ from
+    % \cite[Theorem~12]{PerezGarcia2007Matrix}; this theorem does not assert
+    % the full periodic-boundary ground-space statement.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_boundary_crossing_trace_decomposition,
+        lem:fixed_complementary_word_boundary_compatibility_from_traces}
+    Lemma~\ref{lem:block_diagonal_boundary_crossing_trace_decomposition}
+    gives matrices $C^j_{i,\tau}$ with
+    \[
+        \sum_j\tr\!\left(A^j_\beta C^j_{i,\tau}A^j_\alpha\right)
+        =
+        \sum_j
+        \tr\!\left(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_\alpha\right)
+    \]
+    for every word $\alpha$ of length $N-i$ and every word $\beta$ of length
+    $a$. The fixed complementary-word trace comparison, applied with
+    $X_j$ replaced by $\mu_j^NX_j$, gives the displayed matrix identity.
+\end{proof}
+
+\begin{theorem}[Fixed boundary-crossing component in the local block space]
+    \label{thm:block_diagonal_boundary_crossing_component_mem_ground_space}
+    \lean{MPSTensor.blockDiagonal_boundary_crossing_component_mem_groundSpace_of_pgvwc_comparison_of_sum_mem_iSup}
+    \leanok
+    \uses{thm:block_diagonal_boundary_crossing_pgvwc_comparison,
+        lem:block_diagonal_boundary_crossing_matrix_identity}
+    Assume $0<N$, $L\le N$, and let the cyclic interval beginning at $i$
+    cross the boundary cut, so $N<i+L$. Suppose that the block tensors have
+    the common word-span property at length $N-i$ and that
+    \[
+        \sum_j
+        R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)
+        \in\bigvee_jG_L(A_j).
+    \]
+    Then each block component of the fixed boundary-crossing restriction lies
+    in its local block space:
+    \[
+        R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)
+        \in G_L(A_j).
+    \]
+    % Fixed-window local-membership consequence of the preceding comparison.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:block_diagonal_boundary_crossing_pgvwc_comparison,
+        lem:block_diagonal_boundary_crossing_matrix_identity}
+    Theorem~\ref{thm:block_diagonal_boundary_crossing_pgvwc_comparison}
+    gives matrices $C^j_{i,\tau}$ with
+    \[
+        A^j_\beta C^j_{i,\tau}
+        =
+        \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho .
+    \]
+    Thus $E=C^j_{i,\tau}$ satisfies the boundary matrix identity required in
+    Lemma~\ref{lem:block_diagonal_boundary_crossing_matrix_identity}, and the
+    displayed membership follows for every block $j$.
+\end{proof}
+
+\begin{lemma}[Boundary-crossing cyclic intervals from the boundary matrix identity]
+    \label{lem:block_diagonal_boundary_crossing_matrix_identity}
+    \lean{MPSTensor.blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_crossing_matrix}
+    \leanok
+    \uses{def:ground_space_parent, rem:cyclic_window_operators}
+    Assume $0<N$, $L\le N$, and let the cyclic interval beginning at $i$
+    cross the boundary cut, so $N<i+L$. Put $a=i+L-N$. Suppose that there is
+    a matrix $E$ such that for every word $\beta$ of length $a$,
+    \[
+        \mu_j^N X_j A^j_\beta
+        A^j_{\tau_a}\cdots A^j_{\tau_{i-1}}
+        =
+        A^j_\beta E.
+    \]
+    Then
+    \[
+        R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)
+        \in G_L(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_boundary_crossing_coefficient_formula,
+        def:ground_space_parent, rem:cyclic_window_operators}
+    Write a length-$L$ word in the boundary-crossing interval as
+    $\alpha\beta$, where $\alpha$ is the segment inside
+    $\{i,\ldots,N-1\}$ and $\beta$ is the segment after the interval wraps
+    past the cut, inside $\{0,\ldots,a-1\}$. The full
+    $N$-site word appearing in the restriction is then
+    \[
+        \beta\,\tau_a\cdots\tau_{i-1}\,\alpha .
+    \]
+    Trace cyclicity gives
+    \[
+        \tr\!\left(
+        A^j_\beta A^j_{\tau_a}\cdots A^j_{\tau_{i-1}}
+        A^j_\alpha \mu_j^NX_j\right)
+        =
+        \tr\!\left(
+        A^j_\alpha \mu_j^NX_j A^j_\beta
+        A^j_{\tau_a}\cdots A^j_{\tau_{i-1}}\right).
+    \]
+    The assumed boundary matrix identity changes the last expression to
+    \[
+        \tr\!\left(A^j_\alpha A^j_\beta E\right),
+    \]
+    which is the coefficient of $\Gamma_L^{A_j}(E)$ at the word
+    $\alpha\beta$. Hence the restricted vector lies in $G_L(A_j)$.
+\end{proof}
+
+\begin{lemma}[Last crossing-window component trace form]
+    \label{lem:block_diagonal_last_crossing_component_trace_form}
+    \lean{MPSTensor.blockDiagonal_boundary_last_cyclicRestrict_component_eq_leftBoundaryComponent}
+    \leanok
+    \uses{def:ground_space_map, rem:cyclic_window_operators}
+    Write $N=M+1$ and let the local length be $m+2\le M+1$. Consider the
+    cyclic interval beginning at the last site $M$. For an outside
+    configuration $\tau$, put
+    \[
+        \rho=\tau_{m+1}\cdots\tau_{M-1},
+        \qquad
+        C^j_a=A^j_\rho A^j_a(\mu_j^{M+1}X_j).
+    \]
+    Then the $j$-th component of the last crossing-window restriction has
+    the left-boundary trace form
+    \[
+        R_{M,\tau}\!\left(\Gamma_{M+1}^{A_j}(\mu_j^{M+1}X_j)\right)
+        =
+        \Phi^j,
+        \qquad
+        \Phi^j(a,w,b)=\tr\!\left(A^j_b C^j_a A^j_w\right).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:ground_space_map, rem:cyclic_window_operators}
+    The cyclic interval beginning at $M$ reads the last site first and then
+    wraps to the sites $0,\ldots,m$. Thus, for the local word $awb$, the
+    full word in the trace is
+    \[
+        w\,b\,\rho\,a .
+    \]
+    Hence the $j$-th coefficient is
+    \[
+        \tr\!\left(A^j_wA^j_bA^j_\rho A^j_a
+        (\mu_j^{M+1}X_j)\right).
+    \]
+    Trace cyclicity rotates this to
+    \[
+        \tr\!\left(
+        A^j_bA^j_\rho A^j_a(\mu_j^{M+1}X_j)A^j_w\right),
+    \]
+    which is the displayed left-boundary trace form.
+\end{proof}
+
+\begin{lemma}[Last crossing-window trace form]
+    \label{lem:block_diagonal_last_crossing_trace_form}
+    \lean{MPSTensor.blockDiagonal_boundary_last_cyclicRestrict_sum_eq_leftBoundaryComponents}
+    \leanok
+    \uses{lem:block_diagonal_last_crossing_component_trace_form}
+    Write $N=M+1$ and let the local length be $m+2\le M+1$. Consider the
+    cyclic interval beginning at the last site $M$. For an outside
+    configuration $\tau$, put
+    \[
+        \rho=\tau_{m+1}\cdots\tau_{M-1},
+        \qquad
+        C^j_a=A^j_\rho A^j_a(\mu_j^{M+1}X_j).
+    \]
+    Then the block sum of the last crossing-window restrictions has the
+    left-boundary trace form
+    \[
+        \sum_j
+        R_{M,\tau}\!\left(\Gamma_{M+1}^{A_j}(\mu_j^{M+1}X_j)\right)
+        =
+        \sum_j \Phi^j,
+        \qquad
+        \Phi^j(a,w,b)=\tr\!\left(A^j_b C^j_a A^j_w\right).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_last_crossing_component_trace_form}
+    Sum Lemma~\ref{lem:block_diagonal_last_crossing_component_trace_form} over
+    the block index.
+\end{proof}
+
+\begin{lemma}[Last crossing-window coefficient comparison]
+    \label{lem:block_diagonal_last_crossing_coefficients_from_sum_membership}
+    \lean{MPSTensor.blockDiagonal_boundary_last_coefficients_of_sum_mem_iSup}
+    \leanok
+    \uses{lem:block_diagonal_last_crossing_trace_form,
+        lem:blockwise_boundary_identities_from_left_trace_membership}
+    In the setting of Lemma~\ref{lem:block_diagonal_last_crossing_trace_form},
+    assume that the length-$m$ simultaneous word tuples span the product
+    algebra and that
+    \[
+        \sum_j
+        R_{M,\tau}\!\left(\Gamma_{M+1}^{A_j}(\mu_j^{M+1}X_j)\right)
+        \in \bigvee_j G_{m+2}(A^j).
+    \]
+    Then there are matrices $E_j$ such that, for every block $j$ and all
+    boundary letters $a,b$,
+    \[
+        A^j_b\bigl(A^j_\rho A^j_a(\mu_j^{M+1}X_j)\bigr)
+        =
+        A^j_bE_jA^j_a .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_last_crossing_trace_form,
+        lem:blockwise_boundary_identities_from_left_trace_membership}
+    Lemma~\ref{lem:block_diagonal_last_crossing_trace_form} writes the local
+    block sum in the form
+    \[
+        \Phi(a,w,b)=
+        \sum_j\tr\!\left(A^j_bC^j_aA^j_w\right),
+        \qquad
+        C^j_a=A^j_\rho A^j_a(\mu_j^{M+1}X_j).
+    \]
+    Applying
+    Lemma~\ref{lem:blockwise_boundary_identities_from_left_trace_membership}
+    gives the displayed blockwise equations.
+\end{proof}
+
+\begin{lemma}[Last crossing-window component membership]
+    \label{lem:block_diagonal_last_crossing_component_membership_from_sum_membership}
+    \lean{MPSTensor.blockDiagonal_boundary_last_cyclicRestrict_component_mem_groundSpace_of_sum_mem_iSup}
+    \leanok
+    \uses{lem:block_diagonal_last_crossing_component_trace_form,
+        lem:block_diagonal_last_crossing_coefficients_from_sum_membership,
+        lem:left_boundary_component_mem_ground_space}
+    In the setting of Lemma~\ref{lem:block_diagonal_last_crossing_trace_form},
+    assume that the length-$m$ simultaneous word tuples span the product
+    algebra and that
+    \[
+        \sum_j
+        R_{M,\tau}\!\left(\Gamma_{M+1}^{A_j}(\mu_j^{M+1}X_j)\right)
+        \in \bigvee_j G_{m+2}(A^j).
+    \]
+    Then, for every block $j$,
+    \[
+        R_{M,\tau}\!\left(\Gamma_{M+1}^{A_j}(\mu_j^{M+1}X_j)\right)
+        \in G_{m+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_last_crossing_component_trace_form,
+        lem:block_diagonal_last_crossing_coefficients_from_sum_membership,
+        lem:left_boundary_component_mem_ground_space}
+    Lemma~\ref{lem:block_diagonal_last_crossing_coefficients_from_sum_membership}
+    gives matrices $E_j$ with
+    \[
+        A^j_bC^j_a=A^j_bE_jA^j_a.
+    \]
+    By Lemma~\ref{lem:block_diagonal_last_crossing_component_trace_form}, the
+    $j$-th cyclic restriction is the left-boundary component determined by
+    $C^j_a$. The displayed identity makes that component equal to
+    $\Gamma_{m+2}^{A_j}(E_j)$, hence it lies in $G_{m+2}(A^j)$.
+\end{proof}
+
+\begin{lemma}[Last crossing-window coefficients from a block-diagonal chain vector]
+    \label{lem:block_diagonal_last_crossing_coefficients_from_chain_ground_space}
+    \lean{MPSTensor.blockDiagonal_boundary_last_coefficients_of_blockDiagonal_chainGroundSpace}
+    \leanok
+    \uses{lem:block_diagonal_boundary_local_sum_mem,
+        lem:block_diagonal_last_crossing_coefficients_from_sum_membership}
+    Let $B=\bigoplus_j\mu_jA^j$, and assume $\mu_j\ne0$ for every block
+    $j$. Suppose
+    \[
+        \psi=\Gamma_{M+1}^{B}\!\left(\bigoplus_jX_j\right),
+        \qquad
+        \psi\in\mathcal G_{M+1,m+2}(B).
+    \]
+    Assume also that the length-$m$ simultaneous word tuples span the product
+    algebra. Then, for every outside configuration $\tau$, with
+    $\rho=\tau_{m+1}\cdots\tau_{M-1}$, there are matrices $E_j$ such that
+    \[
+        A^j_b\bigl(A^j_\rho A^j_a(\mu_j^{M+1}X_j)\bigr)
+        =
+        A^j_bE_jA^j_a
+    \]
+    for every block $j$ and all boundary letters $a,b$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_boundary_local_sum_mem,
+        lem:block_diagonal_last_crossing_coefficients_from_sum_membership}
+    The local constraint of $\psi$ at the cyclic interval beginning at $M$
+    gives
+    \[
+        \sum_j
+        R_{M,\tau}\!\left(\Gamma_{M+1}^{A_j}(\mu_j^{M+1}X_j)\right)
+        \in \bigvee_j G_{m+2}(A^j)
+    \]
+    by Lemma~\ref{lem:block_diagonal_boundary_local_sum_mem}. Applying
+    Lemma~\ref{lem:block_diagonal_last_crossing_coefficients_from_sum_membership}
+    gives the displayed equations.
+\end{proof}
+
+\begin{lemma}[Last crossing-window component membership from a chain vector]
+    \label{lem:block_diagonal_last_crossing_component_membership_from_chain_ground_space}
+    \lean{MPSTensor.blockDiagonal_boundary_last_component_mem_groundSpace_of_blockDiagonal_chainGroundSpace}
+    \leanok
+    \uses{lem:block_diagonal_boundary_local_sum_mem,
+        lem:block_diagonal_last_crossing_component_membership_from_sum_membership}
+    Let $B=\bigoplus_j\mu_jA^j$, and assume $\mu_j\ne0$ for every block
+    $j$. Suppose
+    \[
+        \psi=\Gamma_{M+1}^{B}\!\left(\bigoplus_jX_j\right),
+        \qquad
+        \psi\in\mathcal G_{M+1,m+2}(B).
+    \]
+    If the length-$m$ simultaneous word tuples span the product algebra, then
+    for every outside configuration $\tau$ and every block $j$,
+    \[
+        R_{M,\tau}\!\left(\Gamma_{M+1}^{A_j}(\mu_j^{M+1}X_j)\right)
+        \in G_{m+2}(A^j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_boundary_local_sum_mem,
+        lem:block_diagonal_last_crossing_component_membership_from_sum_membership}
+    Lemma~\ref{lem:block_diagonal_boundary_local_sum_mem} applied to the
+    window beginning at the last site gives
+    \[
+        \sum_j
+        R_{M,\tau}\!\left(\Gamma_{M+1}^{A_j}(\mu_j^{M+1}X_j)\right)
+        \in \bigvee_j G_{m+2}(A^j).
+    \]
+    Lemma~\ref{lem:block_diagonal_last_crossing_component_membership_from_sum_membership}
+    then applies to each block component.
+\end{proof}
+
+\begin{lemma}[Boundary-crossing intervals from a right boundary-matrix identity]
+    \label{lem:block_diagonal_boundary_crossing_right_boundary_matrix}
+    \lean{MPSTensor.blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_boundary_identity}
+    \leanok
+    \uses{lem:block_diagonal_boundary_crossing_matrix_identity}
+    Assume $0<N$, $L\le N$, and let the cyclic interval beginning at $i$
+    cross the boundary cut, so $N<i+L$. Put $a=i+L-N$. Suppose that there is
+    a matrix $Y$ such that for every word $\beta$ of length $a$,
+    \[
+        \mu_j^N X_j A^j_\beta=A^j_\beta Y .
+    \]
+    Then
+    \[
+        R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)
+        \in G_L(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_boundary_crossing_matrix_identity}
+    Let
+    \[
+        E:=Y A^j_{\tau_a}\cdots A^j_{\tau_{i-1}} .
+    \]
+    Then, for every word $\beta$ on the segment $0,\ldots,a-1$,
+    \[
+        \mu_j^N X_j A^j_\beta
+        A^j_{\tau_a}\cdots A^j_{\tau_{i-1}}
+        =
+        A^j_\beta E.
+    \]
+    Lemma~\ref{lem:block_diagonal_boundary_crossing_matrix_identity} gives the
+    stated local constraint.
+\end{proof}
+
+\begin{lemma}[Boundary-crossing cyclic intervals suffice]
+    \label{lem:block_diagonal_boundary_component_crossing_windows_suffice}
+    \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_crossing_windows}
+    \leanok
+    \uses{def:chain_ground_space,
+        lem:block_diagonal_boundary_nonwrapping_component}
+    Assume $0<N$ and $L\le N$. Fix block-diagonal boundary conditions
+    $X_j$. Suppose that, for every block $j$, every cyclic interval
+    beginning at $i$ with $N<i+L$, and every configuration $\tau$,
+    \[
+        R_{i,\tau}\!\left(\Gamma_N^{A_j}(\mu_j^NX_j)\right)
+        \in G_L(A_j).
+    \]
+    Then, for every block $j$,
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in \mathcal G_{N,L}(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:chain_ground_space,
+        lem:block_diagonal_boundary_nonwrapping_component}
+    By definition, membership in $\mathcal G_{N,L}(A_j)$ is the collection of
+    all cyclic length-$L$ local constraints. For an interval beginning at $i$,
+    either $i+L\le N$ or $N<i+L$. In the first case use
+    Lemma~\ref{lem:block_diagonal_boundary_nonwrapping_component}. In the second
+    case use the displayed hypothesis.
+\end{proof}
+
+\begin{lemma}[Right boundary-matrix identities give single-block periodic-boundary constraints]
+    \label{lem:block_diagonal_boundary_component_right_boundary_matrices}
+    \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_boundary_identities}
+    \leanok
+    \uses{lem:block_diagonal_boundary_crossing_right_boundary_matrix,
+        lem:block_diagonal_boundary_component_crossing_windows_suffice}
+    Assume $0<N$ and $L\le N$. Fix block-diagonal boundary conditions
+    $X_j$. Suppose that, for every block $j$, every boundary-crossing
+    interval beginning at $i$, and every configuration $\tau$, there is a
+    matrix $Y_{j,i,\tau}$ such that, for every word $\beta$ of length
+    $a=i+L-N$,
+    \[
+        \mu_j^N X_j A^j_\beta
+        =
+        A^j_\beta Y_{j,i,\tau} .
+    \]
+    Then,
+    for every block $j$,
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in \mathcal G_{N,L}(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_boundary_crossing_right_boundary_matrix,
+        lem:block_diagonal_boundary_component_crossing_windows_suffice}
+    Lemma~\ref{lem:block_diagonal_boundary_crossing_right_boundary_matrix}
+    turns the displayed boundary identity into the local constraint for each
+    boundary-crossing interval.
+    Lemma~\ref{lem:block_diagonal_boundary_component_crossing_windows_suffice}
+    then yields
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in \mathcal G_{N,L}(A_j),
+    \]
+    handling both boundary-crossing intervals $N<i+L$ and non-crossing
+    intervals $i+L\le N$.
+\end{proof}
+
+\begin{lemma}[Spanning matrix identities give single-block constraints]
+    \label{lem:block_diagonal_boundary_component_complementary_word_identities}
+    \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities}
+    \leanok
+    \uses{thm:word_span_common_boundary_matrix,
+        lem:block_diagonal_boundary_component_right_boundary_matrices}
+    Assume $0<N$, $L\le N$, and that for every block $j$, the
+    length-$N-L$ word products of $A_j$ span the full matrix algebra. Suppose
+    that, for every block $j$, every boundary-crossing interval
+    beginning at $i$, and every outside word $\rho$ of length $N-L$, there is
+    a matrix $E_{j,i,\rho}$ such that for every word $\beta$ before the cut,
+    of length $i+L-N$,
+    \[
+        \mu_j^N X_j A^j_\beta A^j_\rho
+        =
+        A^j_\beta E_{j,i,\rho}.
+    \]
+    Then, for every block $j$,
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:word_span_common_boundary_matrix,
+        lem:block_diagonal_boundary_component_right_boundary_matrices}
+    For fixed $j,i$, apply
+    Theorem~\ref{thm:word_span_common_boundary_matrix} to the family
+    \[
+        Z_\beta=\mu_j^NX_jA^j_\beta,\qquad F_\beta=A^j_\beta.
+    \]
+    Since the length-$N-L$ outside-word products span the full matrix
+    algebra, there is a single matrix $Y_{j,i}$ such that, for every $\beta$,
+    \[
+        \mu_j^NX_jA^j_\beta=A^j_\beta Y_{j,i} .
+    \]
+    Lemma~\ref{lem:block_diagonal_boundary_component_right_boundary_matrices}
+    then gives the periodic-boundary constraints for each block.
+\end{proof}
+
+\begin{lemma}[Matrix identities under block injectivity give single-block constraints]
+    \label{lem:block_diagonal_boundary_component_complementary_word_identities_injective}
+    \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities_of_injective}
+    \leanok
+    \uses{lem:block_diagonal_boundary_component_complementary_word_identities,
+        thm:wordspan_propagation_unital}
+    Assume $0<N$, $L\le N$, and $L+L_0\le N$. Suppose each block $A_j$
+    is $L_0$-block-injective and satisfies the normalization equation
+    \[
+        \sum_a A^j_aA^{j\dagger}_a=I .
+    \]
+    Suppose also that the boundary-crossing matrix identities of
+    Lemma~\ref{lem:block_diagonal_boundary_component_complementary_word_identities}
+    hold for every outside word $\rho$ of length $N-L$. Then, for
+    every block $j$,
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_boundary_component_complementary_word_identities,
+        thm:wordspan_propagation_unital}
+    Since $L+L_0\le N$, the complementary length satisfies $L_0\le N-L$.
+    Theorem~\ref{thm:wordspan_propagation_unital} therefore gives, for every
+    block $j$,
+    \[
+        S_{N-L}(A_j)=\MN{D_j} .
+    \]
+    Apply
+    Lemma~\ref{lem:block_diagonal_boundary_component_complementary_word_identities}.
+\end{proof}
+
+\begin{lemma}[Normalization for words]
+    \label{lem:sum_evalWord_mul_conjTranspose_evalWord}
+    \lean{MPSTensor.sum_evalWord_mul_conjTranspose_evalWord}
+    \leanok
+    \uses{}
+    If
+    \[
+        \sum_a A_aA_a^\dagger=I ,
+    \]
+    then, for every length $M$,
+    \[
+        \sum_\rho A_\rho A_\rho^\dagger=I ,
+    \]
+    where $\rho$ ranges over all words of length $M$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{}
+    The case $M=0$ is the identity matrix.  For the induction step, write a
+    word of length $M+1$ as $a\rho$.  Since $A_{a\rho}=A_aA_\rho$,
+    \[
+        \sum_{a,\rho} A_aA_\rho A_\rho^\dagger A_a^\dagger
+        =
+        \sum_a A_a
+        \left(\sum_\rho A_\rho A_\rho^\dagger\right)
+        A_a^\dagger
+        =
+        \sum_a A_aA_a^\dagger
+        =
+        I .
+    \]
+\end{proof}
+
+\begin{lemma}[Compatibility hypotheses under block injectivity give single-block constraints]
+    \label{lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
+    \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_pgvwc_comparison_of_injective}
+    \leanok
+    \uses{lem:sum_evalWord_mul_conjTranspose_evalWord,
+        lem:complementary_word_boundary_identities_from_pgvwc,
+        lem:block_diagonal_boundary_component_complementary_word_identities_injective}
+    Assume $0<N$, $L\le N$, and $L+L_0\le N$. Suppose each block $A_j$
+    is $L_0$-block-injective and satisfies
+    \[
+        \sum_a A^j_aA^{j\dagger}_a=I .
+    \]
+    Fix block-diagonal boundary conditions $X_j$. For every boundary-crossing
+    interval beginning at $i$, suppose there are matrices $C^j_{i,\rho}$,
+    indexed by outside words $\rho$ of length $N-L$, such that for every word
+    $\beta$ before the cut, of length $i+L-N$,
+    \[
+        A^j_\beta C^j_{i,\rho}
+        =
+        \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho .
+    \]
+    After opening the periodic boundary at the chosen cut, this is the source
+    comparison
+    \[
+        A^j_{i_{m+1}}C^j_{i_1}=D^j_{i_{m+1}}A^j_{i_1},
+        \qquad
+        D^j_\beta=(\mu_j^NX_j)A^j_\beta .
+    \]
+    Then, for every block $j$,
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:sum_evalWord_mul_conjTranspose_evalWord,
+        lem:complementary_word_boundary_identities_from_pgvwc,
+        lem:block_diagonal_boundary_component_complementary_word_identities_injective}
+    The normalization equation gives, by induction on word length,
+    \[
+        \sum_\rho A^j_\rho A^{j\dagger}_\rho=I
+    \]
+    for words $\rho$ of length $N-L$. Applying
+    Lemma~\ref{lem:complementary_word_boundary_identities_from_pgvwc} with
+    $X=\mu_j^NX_j$ gives, for every outside word $\rho$, a matrix
+    $E_{j,i,\rho}$ such that for every word $\beta$ before the cut,
+    \[
+        \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho
+        =
+        A^j_\beta E_{j,i,\rho}.
+    \]
+    Lemma~\ref{lem:block_diagonal_boundary_component_complementary_word_identities_injective}
+    then gives the periodic-boundary constraint for each block.
+\end{proof}
+
+\begin{lemma}[Boundary representation and crossing constraints give periodic components]
+    \label{lem:block_diagonal_boundary_periodic_components_from_crossing_boundary}
+    \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_crossing_pgvwc_comparison_of_boundary}
+    \leanok
+    \uses{lem:block_diagonal_boundary_local_sum_mem,
+        thm:block_diagonal_boundary_crossing_pgvwc_comparison,
+        lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
+    Assume $0<N$, $L\le N$, and $L+L_0\le N$. Suppose each block $A_j$
+    is $L_0$-block-injective and satisfies
+    \[
+        \sum_a A^j_aA^{j\dagger}_a=I .
+    \]
+    Let
+    \[
+        \psi\in
+        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right),
+        \qquad
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right).
+    \]
+    If every boundary-crossing interval has the corresponding tail-word
+    spanning property, then there are block-diagonal boundary conditions $X_j$
+    with the displayed representation of $\psi$ and, for every $j$,
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_boundary_local_sum_mem,
+        thm:block_diagonal_boundary_crossing_pgvwc_comparison,
+        lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
+    For a boundary-crossing interval, the local constraint on $\psi$ and the
+    boundary representation give a vector in $\bigvee_jG_L(A_j)$ by
+    Lemma~\ref{lem:block_diagonal_boundary_local_sum_mem}. The crossing
+    comparison theorem supplies matrices $C^j_{i,\rho}$ satisfying
+    \[
+        A^j_\beta C^j_{i,\rho}
+        =
+        ((\mu_j^NX_j)A^j_\beta)A^j_\rho .
+    \]
+    Lemma~\ref{lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
+    then gives the single-block periodic constraints.
+\end{proof}
+
+\begin{lemma}[Boundary comparison implies trace comparison]
+    \label{lem:block_diagonal_boundary_trace_decomposition_from_pgvwc_comparison}
+    \lean{MPSTensor.blockDiagonal_boundary_trace_decomposition_of_pgvwc_comparison}
+    \leanok
+    Fix block-diagonal boundary matrices $X_j$. Suppose the opened-boundary
+    matrices $C^j_{i,\rho}$ satisfy, for every boundary-crossing interval $i$,
+    every outside word $\rho$, and every word $\beta$ before the cut,
+    \[
+        A^j_\beta C^j_{i,\rho}
+        =
+        ((\mu_j^NX_j)A^j_\beta)A^j_\rho .
+    \]
+    Then for every middle word $w$,
+    \[
+        \sum_j\tr\!\left(A^j_\beta C^j_{i,\rho}A^j_w\right)
+        =
+        \sum_j
+        \tr\!\left(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_w\right).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Substituting the displayed comparison identity in each summand gives
+    \[
+        \tr\!\left(A^j_\beta C^j_{i,\rho}A^j_w\right)
+        =
+        \tr\!\left(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_w\right).
+    \]
+    Summing over \(j\) gives the conclusion.
+\end{proof}
+
+\begin{lemma}[Boundary trace comparisons give single-block constraints]
+    \label{lem:block_diagonal_boundary_component_trace_decomposition_injective}
+    \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_trace_decomposition_of_injective}
+    \leanok
+    \uses{lem:block_boundary_cde_identities_from_trace_decompositions,
+        lem:block_diagonal_boundary_component_complementary_word_identities_injective}
+    Assume $0<N$, $L\le N$, and $L+L_0\le N$. Suppose each block $A_j$
+    is $L_0$-block-injective and satisfies
+    \[
+        \sum_a A^j_aA^{j\dagger}_a=I .
+    \]
+    Assume also that the simultaneous tuples $w\mapsto(A^1_w,\ldots,A^g_w)$
+    at the middle-word length $m$ span the full product algebra
+    $\prod_j\MN{D_j}$.
+    Fix complex numbers $\mu_j$ and block-diagonal boundary conditions
+    $X_j$. For every boundary-crossing interval beginning at $i$, suppose
+    there are matrices $C^j_{i,\rho}$, indexed by outside words
+    $\rho$ of length $N-L$, such that for every word $\beta$ before the cut,
+    outside word $\rho$, and middle word $w$,
+    \[
+        \sum_j\tr\!\left(A^j_\beta C^j_{i,\rho}A^j_w\right)
+        =
+        \sum_j
+        \tr\!\left(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_w\right).
+    \]
+    Then, for every block $j$,
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_boundary_cde_identities_from_trace_decompositions,
+        lem:block_diagonal_boundary_component_complementary_word_identities_injective}
+    Applying
+    Lemma~\ref{lem:block_boundary_cde_identities_from_trace_decompositions}
+    with the same scalars $\mu_j$ and boundary matrices $X_j$, for every
+    block $j$ and every boundary-crossing interval $i$, this gives a matrix
+    $E^j_i$ such that, for every word $\beta$ before the cut,
+    \[
+        (\mu_j^NX_j)A^j_\beta=A^j_\beta E^j_i .
+    \]
+    Hence for every outside word $\rho$, taking
+    $E_{j,i,\rho}=E^j_iA^j_\rho$ gives
+    \[
+        ((\mu_j^NX_j)A^j_\beta)A^j_\rho=A^j_\beta E_{j,i,\rho} .
+    \]
+    These are precisely the block-diagonal boundary-condition equations of
+    Lemma~\ref{lem:block_diagonal_boundary_component_complementary_word_identities_injective},
+    which gives the periodic-boundary constraint for each block.
+\end{proof}
+
+\begin{lemma}[Boundary trace comparisons with a block-diagonal representation]
+    \label{lem:block_diagonal_boundary_periodic_components_from_trace_decomposition_boundary}
+    \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_of_boundary}
+    \leanok
+    \uses{lem:block_diagonal_boundary_component_trace_decomposition_injective}
+    Assume $0<N$, $L\le N$, and $L+L_0\le N$. Suppose each block $A_j$
+    is $L_0$-block-injective and satisfies
+    \[
+        \sum_a A^j_aA^{j\dagger}_a=I .
+    \]
+    Assume also that the simultaneous tuples $w\mapsto(A^1_w,\ldots,A^g_w)$
+    at the middle-word length $m$ span the full product algebra
+    $\prod_j\MN{D_j}$. Let
+    \[
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right)
+    \]
+    for some block-diagonal boundary conditions $X_j$. Suppose that whenever
+    $\psi$ has such a representation, there are matrices $C^j_{i,\rho}$
+    such that, for every boundary-crossing interval $i$, every outside word
+    $\rho$ of length $N-L$, every word $\beta$ of length $i+L-N$ before the
+    cut, and every word $w$ of length $m$,
+    \[
+        \sum_j\tr\!\left(A^j_\beta C^j_{i,\rho}A^j_w\right)
+        =
+        \sum_j
+        \tr\!\left(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_w\right).
+    \]
+    Then there are block-diagonal boundary conditions $X_j$ with
+    \[
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right)
+    \]
+    and, for every $j$,
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_boundary_component_trace_decomposition_injective}
+    Choose a block-diagonal boundary representation of $\psi$. For that
+    representation, the boundary trace comparison supplies the matrices
+    $C^j_{i,\rho}$. Applying
+    Lemma~\ref{lem:block_diagonal_boundary_component_trace_decomposition_injective}
+    gives the desired containment
+    $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$ for every block $j$.
+\end{proof}
+
+\begin{lemma}[$C^j$ boundary comparison with a block-diagonal representation]
+    \label{lem:block_diagonal_boundary_periodic_components_from_pgvwc_comparison_boundary}
+    \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_of_boundary}
+    \leanok
+    \uses{lem:block_diagonal_boundary_trace_decomposition_from_pgvwc_comparison,
+        lem:block_diagonal_boundary_periodic_components_from_trace_decomposition_boundary}
+    Assume $0<N$, $L\le N$, and $L+L_0\le N$. Suppose each block $A_j$
+    is $L_0$-block-injective and satisfies
+    \[
+        \sum_a A^j_aA^{j\dagger}_a=I .
+    \]
+    Assume also that the simultaneous tuples $w\mapsto(A^1_w,\ldots,A^g_w)$
+    at the middle-word length $m$ span the full product algebra
+    $\prod_j\MN{D_j}$. Let
+    \[
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right)
+    \]
+    for some block-diagonal boundary conditions $X_j$. Suppose that whenever
+    $\psi$ has such a representation, there are matrices $C^j_{i,\rho}$
+    such that, for every boundary-crossing interval $i$, every outside word
+    $\rho$ of length $N-L$, and every word $\beta$ of length $i+L-N$ before
+    the cut,
+    \[
+        A^j_\beta C^j_{i,\rho}
+        =
+        \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho .
+    \]
+    Then there are block-diagonal boundary conditions $X_j$ with
+    \[
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right)
+    \]
+    and, for every $j$,
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_boundary_trace_decomposition_from_pgvwc_comparison,
+        lem:block_diagonal_boundary_periodic_components_from_trace_decomposition_boundary}
+    Choose a block-diagonal boundary representation of $\psi$. For that
+    representation,
+    Lemma~\ref{lem:block_diagonal_boundary_trace_decomposition_from_pgvwc_comparison}
+    gives, for every boundary-crossing interval $i$, outside word $\rho$,
+    word $\beta$ before the cut, and middle word $w$,
+    \[
+        \sum_j\tr\!\left(A^j_\beta C^j_{i,\rho}A^j_w\right)
+        =
+        \sum_j\tr\!\left(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_w\right).
+    \]
+    Applying
+    Lemma~\ref{lem:block_diagonal_boundary_periodic_components_from_trace_decomposition_boundary}
+    to these trace comparisons gives, for every $j$,
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
+    \]
+\end{proof}
+
+\begin{lemma}[Boundary trace comparisons give periodic-boundary single-block states]
+    \label{lem:block_diagonal_boundary_periodic_components_from_trace_decomposition}
+    \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1}
+    \leanok
+    \uses{lem:bnt_block_diagonal_open_boundary_matrices,
+        lem:block_diagonal_boundary_periodic_components_from_trace_decomposition_boundary}
+    With the hypotheses and notation of
+    Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices}, assume in
+    addition that $L+L_0\le N$. Assume also that, for some middle-word length
+    $m$, the simultaneous tuples $w\mapsto(A^1_w,\ldots,A^g_w)$, where $w$
+    ranges over words of length $m$ in $\{0,\ldots,d-1\}$, span the full product
+    algebra $\prod_j\MN{D_j}$. Let
+    \[
+        \psi\in
+        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right).
+    \]
+    Suppose that whenever
+    \[
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right),
+    \]
+    there are matrices $C^j_{i,\rho}$ such that, for every
+    boundary-crossing interval $i$, every outside word $\rho$ of length $N-L$,
+    every word $\beta$ before the cut, and every word $w$ of length $m$,
+    \[
+        \sum_j\tr\!\left(A^j_\beta C^j_{i,\rho}A^j_w\right)
+        =
+        \sum_j
+        \tr\!\left(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_w\right).
+    \]
+    Then there are block-diagonal boundary conditions $X_j$ with
+    \[
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right)
+    \]
+    and, for every $j$,
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:bnt_block_diagonal_open_boundary_matrices,
+        lem:block_diagonal_boundary_periodic_components_from_trace_decomposition_boundary}
+    By Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices} there are
+    matrices $X_j$ with
+    \[
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right).
+    \]
+    Lemma~\ref{lem:block_diagonal_boundary_periodic_components_from_trace_decomposition_boundary}
+    applies to this representation and the assumed equality of boundary trace
+    expressions. Thus, for every $j$,
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
+    \]
+\end{proof}
+
+\begin{lemma}[Basis-of-normal-tensors product span gives boundary-trace periodic components]
+    \label{lem:block_diagonal_boundary_periodic_components_from_trace_decomposition_bnt_span}
+    \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1_span}
+    \leanok
+    \uses{lem:unital_block_separating_product_span,
+        lem:block_diagonal_boundary_periodic_components_from_trace_decomposition}
+    With the hypotheses and notation of
+    Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices}, assume in
+    addition that $L+L_0\le N$ and
+    \[
+        L\ge
+        (L_0+1)+(g-1)\bigl((L_0+1)+((L_0+1)+(L_0+1))\bigr)+1.
+    \]
+    Put
+    \[
+        m=(L_0+1)+(g-1)\bigl((L_0+1)+((L_0+1)+(L_0+1))\bigr).
+    \]
+    Let
+    \[
+        \psi\in
+        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right).
+    \]
+    Suppose that whenever
+    \[
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right),
+    \]
+    there are matrices $C^j_{i,\rho}$ such that, for every
+    boundary-crossing interval $i$, every outside word $\rho$ of length $N-L$,
+    every word $\beta$ before the cut, and every word $w$ of length $m$,
+    \[
+        \sum_j\tr\!\left(A^j_\beta C^j_{i,\rho}A^j_w\right)
+        =
+        \sum_j
+        \tr\!\left(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_w\right).
+    \]
+    Then there are block-diagonal boundary conditions $X_j$ with
+    \[
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right)
+    \]
+    and, for every $j$,
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:unital_block_separating_product_span,
+        lem:block_diagonal_boundary_periodic_components_from_trace_decomposition}
+    Lemma~\ref{lem:unital_block_separating_product_span} gives
+    \[
+        \spn\{(A^1_w,\ldots,A^g_w):|w|=m\}
+        =
+        \prod_j\MN{D_j}.
+    \]
+    Applying
+    Lemma~\ref{lem:block_diagonal_boundary_periodic_components_from_trace_decomposition}
+    with this middle-word span gives the stated block-diagonal boundary
+    conditions and the periodic-boundary constraint in each block.
+\end{proof}
+
+\begin{lemma}[$C^j$ boundary comparison gives periodic single-block states]
+    \label{lem:block_diagonal_boundary_periodic_components_from_pgvwc_comparison}
+    \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_bnt_c1}
+    \leanok
+    \uses{lem:bnt_block_diagonal_open_boundary_matrices,
+        lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
+    With the hypotheses and notation of
+    Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices}, assume in
+    addition that $L+L_0\le N$. Let
+    \[
+        \psi\in
+        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right).
+    \]
+    Suppose that whenever
+    \[
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right),
+    \]
+    there are matrices $C^j_{i,\rho}$ such that, for every
+    boundary-crossing interval $i$, every outside word $\rho$ of length $N-L$,
+    and every word $\beta$ before the cut,
+    \[
+        A^j_\beta C^j_{i,\rho}
+        =
+        \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho .
+    \]
+    Then there are block-diagonal boundary conditions $X_j$ with
+    \[
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right)
+    \]
+    and, for every $j$,
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:bnt_block_diagonal_open_boundary_matrices,
+        lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
+    By Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices} there are
+    matrices $X_j$ with
+    \[
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right).
+    \]
+    For these boundary conditions, the assumed $C^j$ boundary comparison supplies the
+    matrices $C^j_{i,\rho}$.
+    Lemma~\ref{lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
+    gives, for every $j$,
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
+    \]
+\end{proof}
+
+\begin{lemma}[Matrix identities give periodic single-block states]
+    \label{lem:block_diagonal_boundary_periodic_components_from_complementary_identities}
+    \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_complementary_identities_bnt_c1}
+    \leanok
+    \uses{lem:bnt_block_diagonal_open_boundary_matrices,
+        lem:block_diagonal_boundary_component_complementary_word_identities_injective}
+    With the hypotheses and notation of
+    Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices}, assume in
+    addition that $L+L_0\le N$.  Let
+    \[
+        \psi\in
+        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right).
+    \]
+    Suppose that whenever
+    \[
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right),
+    \]
+    the corresponding boundary conditions satisfy the block-diagonal
+    boundary-condition equations: for every boundary-crossing interval $i$, every word
+    $\beta$ before the cut, and every outside word $\rho$ of length $N-L$,
+    \[
+        \mu_j^N X_jA^j_\beta A^j_\rho=A^j_\beta E_{j,i,\rho} .
+    \]
+    Then there are block-diagonal boundary conditions $X_j$ with
+    \[
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right)
+    \]
+    and, for every $j$,
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j) .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:bnt_block_diagonal_open_boundary_matrices,
+        lem:block_diagonal_boundary_component_complementary_word_identities_injective}
+    By Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices} there are
+    matrices $X_j$ with
+    \[
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right).
+    \]
+    These $X_j$ satisfy the assumed identities, so
+    Lemma~\ref{lem:block_diagonal_boundary_component_complementary_word_identities_injective}
+    gives, for every $j$,
+    \[
+        \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j) .
+    \]
+\end{proof}

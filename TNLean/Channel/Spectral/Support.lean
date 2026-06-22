@@ -9,7 +9,7 @@ import TNLean.MPS.Irreducible.FixedPointProjection
 
 For a positive semi-definite matrix `ρ` on `ℂ^D`, let `P := supportProj ρ` be its support
 projection. Although `ρ` is generally not positive definite on the whole space, it becomes
-positive definite when restricted to its support. This file records that fact.
+positive definite when restricted to its support. This file states that fact.
 
 ## Main results
 
@@ -22,7 +22,7 @@ positive definite when restricted to its support. This file records that fact.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Cor. 6.6]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Corollary 6.6]
 -/
 
 open scoped Matrix ComplexOrder BigOperators
@@ -87,7 +87,8 @@ theorem compression_on_support_posDef
   have h_quadform : star w ⬝ᵥ ((V * ρ * Vᴴ) *ᵥ w) = star u ⬝ᵥ (ρ *ᵥ u) := by
     have h1 : (V * ρ * Vᴴ) *ᵥ w = V *ᵥ (ρ *ᵥ u) := by
       simp [u, Matrix.mulVec_mulVec, Matrix.mul_assoc]
-    rw [h1, Matrix.dotProduct_mulVec, Matrix.star_mulVec, Matrix.conjTranspose_conjTranspose]
+    rw [h1, Matrix.dotProduct_mulVec, Matrix.star_mulVec,
+      Matrix.conjTranspose_conjTranspose]
   rw [h_quadform]
   -- Apply the pointwise strict positivity lemma.
   exact hρ.dotProduct_mulVec_pos_of_supportProj_fixed hu_ne hPu

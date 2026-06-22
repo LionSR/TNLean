@@ -5,19 +5,19 @@ Authors: TNLean contributors
 -/
 
 import TNLean.Wielandt.RectangularSpan.Basic
+import TNLean.Wielandt.RankOne.SpanGrowth
 
 /-!
 # Rectangular Span Growth and Stabilization
 
-This module develops the one-sided rectangular-span growth argument used in the
-Wielandt Lemma 2(b) backend. It proves that left-multiplication by `A i₀`
+This module develops the one-sided rectangular-span growth argument used in
+Wielandt Lemma 2(b). It proves that left-multiplication by `A i₀`
 induces an injective step map on `rectSpan ((A i₀)^D) A n`, deduces monotonicity
-of the associated finrank sequence, and records the stabilization criteria that
+of the associated finrank sequence, and proves the stabilization criteria that
 identify `rectSpan` and `cumulativeRectSpan` with `range (mulLeft P)`.
 
 `TNLean.Wielandt.RectangularSpan.Universality` builds on this file to turn stabilized
-rectangular spans into rank-one universality and the later sharp D²-D+1
-backends.
+rectangular spans into rank-one universality and the later sharp D²-D+1 theorems.
 -/
 
 open scoped Matrix
@@ -104,83 +104,12 @@ noncomputable def rectSpanLeftStep (n : ℕ) :
   map_add' x y := by ext; simp [Matrix.mul_add]
   map_smul' a x := by ext; simp
 
-/-- Every element of `rectSpan ((A i₀)^D) A n` lies in the range of `mulLeft ((A i₀)^D)`. -/
-private theorem mem_range_mulLeft_pow_of_mem_rectSpan
-    {n : ℕ} {X : Matrix (Fin D) (Fin D) ℂ}
-    (hX : X ∈ rectSpan ((A i₀) ^ D) A n) :
-    X ∈ LinearMap.range (LinearMap.mulLeft ℂ ((A i₀) ^ D)) := by
-  obtain ⟨M, _, rfl⟩ := Submodule.mem_map.mp hX
-  exact ⟨M, by simp [LinearMap.mulLeft_apply]⟩
-
 /-! ### Injectivity of the left-step
 
-The proof uses the Fitting-decomposition disjointness: `ker(A i₀)` is disjoint from
-`range((A i₀)^D)`. Since every element of `rectSpan ((A i₀)^D) A n` lies in that range,
-left-multiplication by `A i₀` is injective on it. -/
-
-/-- `ker f` is disjoint from `range (f^D)` (local proof using Fitting decomposition).
-This is a local copy of `WielandtRankOne.disjoint_ker_range_pow` from
-`RankOneSpanGrowth.lean`, proved from the same ingredients which are accessible
-through our imports of `RankOneExtraction` and `FittingDecomposition`. -/
-private theorem disjoint_ker_range_pow_local (f : End ℂ (Fin D → ℂ)) :
-    Disjoint (LinearMap.ker f) (LinearMap.range (f ^ D)) := by
-  -- ker f ≤ maxGenEigenspace 0
-  have hker_le : LinearMap.ker f ≤ f.maxGenEigenspace (0 : ℂ) := by
-    intro x hx
-    refine (Module.End.mem_maxGenEigenspace f (0 : ℂ) x).2 ⟨1, ?_⟩
-    simpa using (LinearMap.mem_ker.mp hx)
-  -- maxGenEigenspace 0 is disjoint from ⨆ (μ ≠ 0), maxGenEigenspace μ
-  have hindep : iSupIndep f.maxGenEigenspace :=
-    Wielandt.independent_maxGenEigenspace f
-  have hdisj0 : Disjoint (f.maxGenEigenspace (0 : ℂ))
-      (⨆ (μ : ℂ) (_ : μ ≠ (0 : ℂ)), f.maxGenEigenspace μ) := hindep 0
-  -- range(f^D) = ⨆ (μ ≠ 0), maxGenEigenspace μ
-  simpa [WielandtRankOne.range_pow_eq_iSup_maxGenEigenspace_ne_zero (D := D) f] using
-    Disjoint.mono_left hker_le hdisj0
-
-/-- Vector-level injectivity: if `v ∈ range((A i₀)^D)` and `(A i₀) *ᵥ v = 0`, then `v = 0`.
-
-This uses the Fitting-decomposition disjointness between `ker(f)` and `range(f^D)`. -/
-private theorem vec_eq_zero_of_mulVec_eq_zero_of_mem_range_pow'
-    {v : Fin D → ℂ}
-    (hv : v ∈ LinearMap.range (Matrix.toLin' ((A i₀) ^ D)))
-    (hMv : (A i₀) *ᵥ v = 0) : v = 0 := by
-  classical
-  let f : End ℂ (Fin D → ℂ) := Matrix.toLin' (A i₀)
-  have hdisj : Disjoint (LinearMap.ker f) (LinearMap.range (f ^ D)) :=
-    disjoint_ker_range_pow_local (D := D) f
-  have hv' : v ∈ LinearMap.range (f ^ D) := by
-    simpa [f, Matrix.toLin'_pow] using hv
-  have hker : v ∈ LinearMap.ker f := by
-    refine LinearMap.mem_ker.mpr ?_
-    simpa [f, Matrix.toLin'_apply] using hMv
-  have hinter : (LinearMap.ker f ⊓ LinearMap.range (f ^ D)) = ⊥ := hdisj.eq_bot
-  have : v ∈ (⊥ : Submodule ℂ (Fin D → ℂ)) := hinter ▸ ⟨hker, hv'⟩
-  simpa using this
-
-/-- Matrix-level injectivity on the range of left multiplication by `(A i₀)^D`.
-
-If `X ∈ range(mulLeft ((A i₀)^D))` and `(A i₀) * X = 0`, then `X = 0`. -/
-private theorem matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow'
-    {X : Matrix (Fin D) (Fin D) ℂ}
-    (hX : X ∈ LinearMap.range (LinearMap.mulLeft ℂ ((A i₀) ^ D)))
-    (hMX : (A i₀) * X = 0) : X = 0 := by
-  classical
-  have hcols : ∀ j : Fin D, X.col j ∈ LinearMap.range (Matrix.toLin' ((A i₀) ^ D)) := by
-    have := (mem_range_mulLeft_iff_cols (D := D) (P := (A i₀) ^ D) (M := X)).1 hX
-    simpa using this
-  have hcol0 : ∀ j : Fin D, X.col j = 0 := by
-    intro j
-    have hcolKilled : (A i₀) *ᵥ (X.col j) = 0 := by
-      have : ((A i₀) * X).col j = 0 := by
-        simpa using congrArg (fun Z : Matrix (Fin D) (Fin D) ℂ => Z.col j) hMX
-      simpa [col_mul (P := A i₀) (X := X) (j := j)] using this
-    exact vec_eq_zero_of_mulVec_eq_zero_of_mem_range_pow' A i₀ (hcols j) hcolKilled
-  apply Matrix.ext_col
-  intro j
-  have hzero : (0 : Matrix (Fin D) (Fin D) ℂ).col j = (0 : Fin D → ℂ) := by
-    ext i; simp [Matrix.col_apply]
-  simp [hcol0 j, hzero]
+The proof uses the shared Fitting-decomposition consequence
+`WielandtRankOne.matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow`: every element of
+`rectSpan ((A i₀)^D) A n` lies in `range (mulLeft ((A i₀)^D))`, where left-multiplication
+by `A i₀` is injective. -/
 
 /-- **The left-step map is injective**: multiplication by `A i₀` is injective on
 `rectSpan ((A i₀)^D) A n`, because every element lies in the range of `mulLeft ((A i₀)^D)`
@@ -191,12 +120,17 @@ theorem rectSpanLeftStep_injective (n : ℕ) :
   have hmat : (A i₀) * x.1 = (A i₀) * y.1 := congrArg Subtype.val hxy
   have hz : (A i₀) * (x.1 - y.1) = 0 := by
     simpa [Matrix.mul_sub, sub_eq_zero] using hmat
+  have hrect_le_range :
+      rectSpan ((A i₀) ^ D) A n ≤ LinearMap.range (LinearMap.mulLeft ℂ ((A i₀) ^ D)) := by
+    rw [rectSpan]
+    exact LinearMap.map_le_range
   have hzRange : (x.1 - y.1) ∈ LinearMap.range (LinearMap.mulLeft ℂ ((A i₀) ^ D)) :=
     Submodule.sub_mem _
-      (mem_range_mulLeft_pow_of_mem_rectSpan A i₀ x.2)
-      (mem_range_mulLeft_pow_of_mem_rectSpan A i₀ y.2)
+      (hrect_le_range x.2)
+      (hrect_le_range y.2)
   have hzero : x.1 - y.1 = 0 :=
-    matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow' A i₀ hzRange hz
+    WielandtRankOne.matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow
+      (D := D) (M := A i₀) (X := x.1 - y.1) hzRange hz
   exact Subtype.ext (by simpa [sub_eq_zero] using hzero)
 
 /-- Finrank is non-decreasing along the sequence

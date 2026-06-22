@@ -6,6 +6,16 @@ rather than duplicating the rules inline.
 
 > **Lean version**: 4.x (Lean 3 keywords like `constant` do not apply)
 
+> **Paper-realignment exception**: When the formalization is being realigned
+> to a cited source (replacing wrong hypotheses, restating divergent theorems
+> to match the paper), the `sorry` blocker below is temporarily relaxed for
+> the *specific* theorems whose old proof depended on the deviating
+> hypotheses. The protocol — including the required `**Unfaithful:**` marker
+> on every such theorem and a paper-gap note documenting the deviation — is
+> in `CLAUDE.md` §"Paper-realignment mode". Reviewers should evaluate
+> paper-realignment PRs against the gap note and the planned follow-up, not
+> against the `sorry` count alone.
+
 ---
 
 ## Blockers
@@ -44,9 +54,9 @@ treated as blockers.
 | Axiom | Module | Citation |
 |-------|--------|----------|
 | `strong_subadditivity` | `TNLean/Axioms/Entropy.lean` | Lieb–Ruskai, JMP 14, 1938 (1973). The namespaced `Entropy.strongSubadditivity` in `TNLean/Entropy/StrongSubadditivity.lean` is a *theorem* wrapper around this axiom; there is only one SSA axiom in the library. |
-| `hayashi_ssa_equality_characterization` | `TNLean/Axioms/Entropy.lean` | Equality case of strong subadditivity as quantum-Markov-chain structure on the middle subsystem. Sanctioned for issue #632 / gate #236. Citations: Hayashi, J. Phys. A 37 (2004) L205–L208; Ruskai, JMP 43, 4358 (2002); equivalent structural formulation also appears in Hayden–Jozsa–Petz–Winter, CMP 246, 359–374 (2004). Consumed by the theorem wrappers in `TNLean/Entropy/MarkovChain.lean`. |
-| `Axioms.rfp_to_nncph_commute` | `TNLean/Axioms/Beigi.lean` | arXiv:1606.00608 §3.3 Theorem 3.10 (product-of-entangled-pairs structural form from Appendix B — *not* gated on Beigi 2012); consumed by `MPSTensor.rfp_implies_nncph` in `TNLean/MPS/ParentHamiltonian/Commuting.lean`. |
-| `Axioms.beigi_nncph_to_rfp` | `TNLean/Axioms/Beigi.lean` | S. Beigi, *J. Phys. A: Math. Theor.* **45** (2012) 025306 — ground-space characterization of 1D commuting nearest-neighbor Hamiltonians with finite degeneracy; consumed by `MPSTensor.nncph_implies_rfp` in `TNLean/MPS/ParentHamiltonian/Commuting.lean` (arXiv:1606.00608 §3.3 Thm 3.10, reverse direction only). |
+| `hayashi_ssa_equality_characterization` | `TNLean/Axioms/Entropy.lean` | Equality case of strong subadditivity as quantum-Markov-chain structure on the middle subsystem. Sanctioned for issue #632 / gate #236. Citations: Hayashi, *Quantum Information: An Introduction*, Springer 2006, Theorem 5.24; Ruskai, JMP 43, 4358 (2002); equivalent structural formulation also appears in Hayden–Jozsa–Petz–Winter, CMP 246, 359–374 (2004). Consumed by the theorem wrappers in `TNLean/Entropy/MarkovChain.lean`. |
+| `Axioms.rfp_to_nncph_commute` | `TNLean/Axioms/Beigi.lean` | arXiv:1606.00608 Section 3.3 Theorem 3.10 (product-of-entangled-pairs structural form from Appendix B — *not* gated on Beigi 2012); consumed by `MPSTensor.rfp_implies_nncph` in `TNLean/MPS/ParentHamiltonian/Commuting.lean`. |
+| `Axioms.beigi_nncph_to_rfp` | `TNLean/Axioms/Beigi.lean` | S. Beigi, *J. Phys. A: Math. Theor.* **45** (2012) 025306 — ground-space characterization of 1D commuting nearest-neighbor Hamiltonians with finite degeneracy; consumed by `MPSTensor.nncph_implies_rfp` in `TNLean/MPS/ParentHamiltonian/Commuting.lean` from the explicit BNT relation `MPSTensor.IsBNT` and the all-chain NNCPH ground-space condition `MPSTensor.HasNNCPHGroundSpaces` (arXiv:1606.00608 Section 3.3 Theorem 3.10, reverse direction only). |
 | Operator-convexity axioms (`posMap_rpow_concave_jensen`, `posMap_rpow_convex_jensen`, `posMap_log_concave_jensen`, `lieb_concavity_axiom`) | `TNLean/Axioms/OperatorConvexity.lean` | Pending upstream Mathlib. The former `trace_rpow_concave_axiom` / `trace_rpow_convex_axiom` have been discharged; see `TNLean/Analysis/OperatorConvexity.lean`. |
 
 ### Circular reasoning

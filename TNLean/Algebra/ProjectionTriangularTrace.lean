@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Defs
 import TNLean.Channel.Irreducible.Basic
+import Mathlib.Algebra.Ring.Idempotent
 
 /-!
 # Projection-triangular trace lemma
@@ -37,28 +38,6 @@ abbrev Q (P : Matrix (Fin D) (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ :=
 noncomputable def diagPart (A : MPSTensor d D) (P : Matrix (Fin D) (Fin D) ℂ) : MPSTensor d D :=
   fun i => P * A i * P + (1 - P) * A i * (1 - P)
 
-section Helpers
-
-variable (P : Matrix (Fin D) (Fin D) ℂ)
-
-lemma proj_add_projCompl : P + (1 - P) = (1 : Matrix (Fin D) (Fin D) ℂ) := by
-  simp
-
-lemma proj_mul_projCompl (hP : IsOrthogonalProjection P) : P * (1 - P) = 0 := by
-  -- `P*(1-P) = P - P*P = 0`.
-  rw [mul_sub, mul_one, hP.2, sub_self]
-
-lemma projCompl_mul_proj (hP : IsOrthogonalProjection P) : (1 - P) * P = 0 := by
-  -- `(1-P)*P = P - P*P = 0`.
-  rw [sub_mul, one_mul, hP.2, sub_self]
-
-lemma projCompl_mul_projCompl (hP : IsOrthogonalProjection P) : (1 - P) * (1 - P) = (1 - P) := by
-  -- `(1-P)^2 = (1-P) - (1-P)P`.
-  rw [mul_sub, mul_one, projCompl_mul_proj (P := P) hP, sub_zero]
-
-end Helpers
-
-
 /-- If each letter satisfies `(1-P) * A i * P = 0`, then every word evaluation satisfies
 `(1-P) * evalWord A w * P = 0`.
 
@@ -72,10 +51,10 @@ lemma lowerZero_evalWord (A : MPSTensor d D) (P : Matrix (Fin D) (Fin D) ℂ)
   induction w with
   | nil =>
       -- `(1-P) * 1 * P = (1-P)P = 0`.
-      simpa [evalWord] using projCompl_mul_proj (P := P) hP
+      simpa [evalWord] using IsIdempotentElem.one_sub_mul_self hP.2
   | cons i w ih =>
       have hsum : P + (1 - P) = (1 : Matrix (Fin D) (Fin D) ℂ) :=
-        proj_add_projCompl (P := P)
+        by simp
       calc
         (1 - P) * evalWord A (i :: w) * P
             = (1 - P) * A i * evalWord A w * P := by
@@ -118,16 +97,16 @@ lemma evalWord_diagPart_eq (A : MPSTensor d D) (P : Matrix (Fin D) (Fin D) ℂ)
   induction w with
   | nil =>
       have hPP : P * P = P := hP.2
-      have hQQ : (1 - P) * (1 - P) = (1 - P) := projCompl_mul_projCompl (P := P) hP
-      have hsum : P + (1 - P) = (1 : Matrix (Fin D) (Fin D) ℂ) := proj_add_projCompl (P := P)
+      have hQQ : (1 - P) * (1 - P) = (1 - P) := IsIdempotentElem.one_sub hP.2
+      have hsum : P + (1 - P) = (1 : Matrix (Fin D) (Fin D) ℂ) := by simp
       -- `evalWord` is `1` on the empty word.
       simp [evalWord, hPP, hQQ, hsum]
   | cons i w ih =>
       have hPP : P * P = P := hP.2
-      have hP1P : P * (1 - P) = 0 := proj_mul_projCompl (P := P) hP
-      have h1PP : (1 - P) * P = 0 := projCompl_mul_proj (P := P) hP
-      have hQQ : (1 - P) * (1 - P) = (1 - P) := projCompl_mul_projCompl (P := P) hP
-      have hsum : P + (1 - P) = (1 : Matrix (Fin D) (Fin D) ℂ) := proj_add_projCompl (P := P)
+      have hP1P : P * (1 - P) = 0 := IsIdempotentElem.mul_one_sub_self hP.2
+      have h1PP : (1 - P) * P = 0 := IsIdempotentElem.one_sub_mul_self hP.2
+      have hQQ : (1 - P) * (1 - P) = (1 - P) := IsIdempotentElem.one_sub hP.2
+      have hsum : P + (1 - P) = (1 : Matrix (Fin D) (Fin D) ℂ) := by simp
       have hLowerWord : (1 - P) * evalWord A w * P = 0 :=
         lowerZero_evalWord (d := d) (D := D) A P hP hLower w
       -- First simplify the `diagPart` product: cross terms vanish because `P*(1-P)=0`
@@ -238,8 +217,8 @@ lemma trace_eq_trace_diag_of_proj (P : Matrix (Fin D) (Fin D) ℂ)
     (hP : IsOrthogonalProjection P) (M : Matrix (Fin D) (Fin D) ℂ) :
     Matrix.trace M = Matrix.trace (P * M * P) + Matrix.trace ((1 - P) * M * (1 - P)) := by
   classical
-  have hP1P : P * (1 - P) = 0 := proj_mul_projCompl (P := P) hP
-  have h1PP : (1 - P) * P = 0 := projCompl_mul_proj (P := P) hP
+  have hP1P : P * (1 - P) = 0 := IsIdempotentElem.mul_one_sub_self hP.2
+  have h1PP : (1 - P) * P = 0 := IsIdempotentElem.one_sub_mul_self hP.2
   have htrPQ : Matrix.trace (P * M * (1 - P)) = 0 := by
     calc
       Matrix.trace (P * M * (1 - P))
@@ -260,7 +239,7 @@ lemma trace_eq_trace_diag_of_proj (P : Matrix (Fin D) (Fin D) ℂ)
   calc
     Matrix.trace M
         = Matrix.trace ((P + (1 - P)) * M * (P + (1 - P))) := by
-            simp [proj_add_projCompl (P := P)]
+            simp
     _ = Matrix.trace (P * M * P + P * M * (1 - P) + (1 - P) * M * P + (1 - P) * M * (1 - P)) := by
             have hExpand : (P + (1 - P)) * M * (P + (1 - P)) =
                 P * M * P + P * M * (1 - P) + (1 - P) * M * P + (1 - P) * M * (1 - P) := by

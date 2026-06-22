@@ -1,0 +1,581 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{./command}
+
+\title{Block-Diagonal Boundary Conditions in the Degenerate Parent-Hamiltonian Ground Space}
+\author{}
+\date{2026-06-11}
+
+\begin{document}
+\maketitle
+
+\section{Notation}
+
+For a tensor $A=(A_i)_{i=1}^d$ with bond dimension $D$, write
+\begin{align}
+  \Gamma_N^A(X)(i_1,\ldots,i_N)
+    =\tr(A_{i_1}\cdots A_{i_N}X)
+    \qquad (X\in M_D(\mathbb C)).
+\end{align}
+Set
+\begin{align}
+  \mathcal G_N^A
+  =
+  \{\Gamma_N^A(X):X\in M_D(\mathbb C)\},
+  \qquad
+  V^{(N)}(A)=\Gamma_N^A(I).
+\end{align}
+For the ring with periodic boundary conditions, with $\operatorname{res}_{s,L}$
+denoting restriction to the length-$L$ interval beginning at
+$s\in \mathbb Z/N\mathbb Z$, the local ground-space condition is
+\begin{align}
+  \mathcal K_{N,L}(A)
+  =
+  \bigcap_{s\in \mathbb Z/N\mathbb Z}
+  \{\psi:\operatorname{res}_{s,L}(\psi)\in\mathcal G_L^A\}.
+\end{align}
+When weights are present, write
+\begin{align}
+  \widehat A_i=\bigoplus_{j=1}^b\mu_jA_i^j,
+  \qquad
+  \mu_j\ne0,
+\end{align}
+for the corresponding block-diagonal tensor.  The letters $g$ and $b$ both
+denote the number of blocks below: $g$ follows the review's block-injective
+canonical form notation, while $b$ follows
+\cite[Theorem~12]{PerezGarcia2007MPSReps}.
+
+\section{The source assertion}
+
+Cirac et al. describe the degenerate parent-Hamiltonian ground space for a
+matrix product state with more than one block in canonical form in Section~IV.C
+of \cite{Cirac2021Matrix}.\footnote{For
+	traceability, the periodic-boundary block-component comparison was tracked by
+	\href{https://github.com/LionSR/TNLean/issues/2651}{issue \#2651}, which is
+	now closed. The remaining derivation of the source comparison currently
+	assumed by the conditional theorems is tracked by
+	\href{https://github.com/LionSR/TNLean/issues/2971}{issue \#2971}. Pull
+	request~\#2724 records the conditional reduction on the main branch, reducing
+	the unconditional target to the boundary-crossing comparison identities.
+	Earlier reductions were tracked by
+	\href{https://github.com/LionSR/TNLean/issues/2641}{issue \#2641},
+	\href{https://github.com/LionSR/TNLean/issues/905}{issue \#905}, and
+	\href{https://github.com/LionSR/TNLean/issues/870}{issue \#870}. The relevant
+	source lines are \path{Papers/2011.12127/TN-Review-main.tex}:2112--2128.}
+The source's block-injective canonical form is a block-diagonal
+physical--virtual correspondence. If
+\begin{align}
+  \widetilde A^i=\bigoplus_{j=1}^g A_j^i,
+\end{align}
+then
+\begin{align}
+  \forall X=(X_j)_j\in\bigoplus_{j=1}^g M_{D_j}(\mathbb C),
+  \qquad
+  \exists (c_i(X))_i,\qquad
+  X=\sum_i c_i(X)\widetilde A^i.
+\end{align}
+After blocking, the corresponding word-span statement is
+\begin{align}
+  \exists m_0\quad \forall m\ge m_0,\qquad
+  \operatorname{span}\{(A_1^\omega,\ldots,A_g^\omega):|\omega|=m\}
+  =
+  \prod_{j=1}^g M_{D_j}(\mathbb C).
+\end{align}
+
+The current Lean development separates the product-span input from
+the finite blocking hypothesis.  First, it proves the one-step intersection
+identity from \cite[Theorem~12]{PerezGarcia2007MPSReps} under the displayed
+product-span equation.  Then the
+normalized basis-of-normal-tensors (BNT) theorems derive that product span in
+the finite Condition C1 range from the injectivity of
+\begin{align}
+  \Gamma_{L_0}^{A_j}:M_{D_j}(\mathbb C)
+    \to(\mathbb C^d)^{\otimes L_0},
+\end{align}
+together with the separated normalized block hypotheses.  Thus the current
+Lean statements no longer replace Condition C1 by a length-one span condition
+in the boundary-decomposition path.  The remaining mathematical boundary lies
+later in the argument: after the cyclic constraints have been propagated into
+the trace-form sum, the boundary conditions themselves must be compared.
+
+The resulting parent-Hamiltonian theorem in \cite[Section~IV.C]{Cirac2021Matrix}
+is
+\begin{align}
+  N\ge L_0+1
+  \quad\Longrightarrow\quad
+  \ker(H_N)=\operatorname{span}\{V^{(N)}(A_j):j=1,\ldots,g\}.
+\end{align}
+The sentence preceding the theorem restricts the proof to block-diagonal
+boundary conditions.  After opening the periodic boundary at the chosen cut, this
+means boundary matrices of the form
+\begin{align}
+  X=\bigoplus_{j=1}^g X_j,
+  \qquad
+  Y=\bigoplus_{j=1}^g Y_j
+  \qquad
+  (X_j,Y_j\in M_{D_j}(\mathbb C)).
+\end{align}
+
+\section{The block-diagonal intersection identity}
+
+The older representation paper \cite[Theorem \emph{Degeneracy of the ground
+space v2}]{PerezGarcia2007MPSReps} gives the finite-chain identity used by the
+source argument.\footnote{Source
+location: \path{Papers/quant-ph_0608197/MPSarchive.tex}:1424--1456.} It fixes
+the block count and local length by
+\begin{align}
+  b=g,
+  \qquad
+  L\ge 3(b-1)(L_0+1)+1.
+\end{align}
+Thus
+\begin{align}
+  m\ge L
+\end{align}
+is the range used in the intersection step:
+\begin{align}
+  \mathbb C^d\otimes\left(\bigoplus_j \mathcal G_m^{A_j}\right)
+  \cap
+  \left(\bigoplus_j \mathcal G_m^{A_j}\right)\otimes\mathbb C^d
+  =
+  \bigoplus_j \mathcal G_{m+1}^{A_j}.
+\end{align}
+For a vector $\psi$ in the left-hand side,
+\begin{align}
+  \psi
+  &=
+  \sum_j
+  \sum_{i_1,\ldots,i_{m+1}}
+  \tr\!\left(A^j_{i_{m+1}} C^j_{i_1} A^j_{i_2}\cdots A^j_{i_m}\right)
+  |i_1\cdots i_{m+1}\rangle \notag\\
+  &=
+  \sum_j
+  \sum_{i_1,\ldots,i_{m+1}}
+  \tr\!\left(D^j_{i_{m+1}} A^j_{i_1} A^j_{i_2}\cdots A^j_{i_m}\right)
+  |i_1\cdots i_{m+1}\rangle.
+\end{align}
+The direct-sum separation lemma and the one-block injectivity condition identify,
+for every $j,i_1,i_{m+1}$,
+\begin{align}
+  A^j_{i_{m+1}} C^j_{i_1}
+  =
+  D^j_{i_{m+1}} A^j_{i_1}.
+\end{align}
+The source line writes \(E^j=\sum_k C^j_kA^j_k\), without an adjoint on the
+second factor. The normalization used in the next line is
+\(\sum_kA^j_kA^{j\dagger}_k=I\), so the calculation requires the adjointed
+matrix
+\begin{align}
+  E^j=\sum_{k} C^j_{k}A^{j\dagger}_{k}.
+\end{align}
+Together with the normalization
+\begin{align}
+  \sum_{i_1} A^j_{i_1}A^{j\dagger}_{i_1}=I,
+\end{align}
+the displayed matrix identity gives
+\begin{align}
+  A^j_{i_{m+1}} E^j A^j_{i_1}
+  &=
+  \sum_k
+  A^j_{i_{m+1}} C^j_k A^{j\dagger}_k A^j_{i_1} \notag\\
+  &=
+  D^j_{i_{m+1}}
+  \left(\sum_k A^j_k A^{j\dagger}_k\right)
+  A^j_{i_1} \notag\\
+  &=
+  D^j_{i_{m+1}} A^j_{i_1}
+  =
+  A^j_{i_{m+1}} C^j_{i_1},
+\end{align}
+which puts the vector in $\bigoplus_j \mathcal G_{m+1}^{A_j}$.
+
+\section{The remaining boundary condition}
+
+The present Lean statements prove the one-step identity under the product-span
+hypothesis
+\begin{align}
+  \operatorname{span}
+  \{(A^1_w,\ldots,A^b_w): |w|=m\}
+  =
+  \prod_{j=1}^b M_{D_j}(\mathbb C),
+\end{align}
+and, in the normalized BNT case, give the internal direct sums
+\begin{align}
+  \bigvee_j \mathcal G_m^{A_j}
+  =
+  \bigoplus_j \mathcal G_m^{A_j},
+  \qquad
+  \bigvee_j \mathcal G_{m+1}^{A_j}
+  =
+  \bigoplus_j \mathcal G_{m+1}^{A_j}.
+\end{align}
+The proved one-step conclusion is therefore
+\begin{align}
+  \mathbb C^d\otimes\left(\bigoplus_j \mathcal G_m^{A_j}\right)
+  \cap
+  \left(\bigoplus_j \mathcal G_m^{A_j}\right)\otimes\mathbb C^d
+  =
+  \bigoplus_j \mathcal G_{m+1}^{A_j}
+\end{align}
+for all sufficiently large $m$ satisfying the product-span hypotheses.\footnote{
+Lean declarations:
+\leanid{MPSTensor.pgvwc07_directSum_restriction_intersection_of_wordTupleSpanTop},
+\leanid{MPSTensor.groundSpace_iSupIndep_of_wordTupleSpanTop}, and
+\leanid{MPSTensor.pgvwc07_directSum_restriction_intersection_of_ge_of_bnt_directSum_unital}.}
+The corresponding finite-Condition-C1 declarations then propagate the cyclic
+local constraints to
+\begin{align}
+  \mathcal K_{N,L}(\widehat A)\subseteq
+  S_N:=\bigvee_{j=1}^b\mathcal G_N^{A_j},
+\end{align}
+and make the sum defining $S_N$ internal.\footnote{Lean declarations:
+\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1},
+\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1},
+\leanid{MPSTensor.exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1},
+and
+\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital_c1}.}
+What remains is the source boundary-condition comparison: starting with a
+vector in the periodic-boundary space $\mathcal K_{N,L}(\widehat A)$, produce
+block-diagonal boundary matrices whose block components again belong to the
+blockwise periodic-boundary spaces.
+
+The present boundary isolates the remaining source comparison in the coordinates
+obtained by opening the periodic boundary for boundary-crossing windows.  Suppose
+\begin{align}
+  \psi
+  =
+  \Gamma_N^{\widehat A}\!\left(\bigoplus_{j=1}^b X_j\right)
+  \in \mathcal K_{N,L}(\widehat A).
+\end{align}
+For a cyclic interval beginning at \(i\) and crossing the boundary cut, put
+\(a=i+L-N\).  The word \(\beta\) records the part of the interval before the
+chosen cut, while \(\rho\) records the outside word of length \(N-L\).  These
+are the blocked words obtained by opening the source boundary-index comparison.
+The conditional theorem assumes that, for every block \(j\) and every such
+outside word \(\rho\), there is a matrix \(E_{j,i,\rho}\) such that for every
+word \(\beta\) of length \(a\),
+\begin{align}
+  \mu_j^N X_j A^j_\beta A^j_\rho
+  =
+  A^j_\beta E_{j,i,\rho}.
+\end{align}
+Under the usual block-injectivity and normalization hypotheses this assumption
+implies
+\begin{align}
+  \Gamma_N^{A_j}(\mu_j^N X_j)\in\mathcal K_{N,L}(A_j)
+  \qquad (1\le j\le b).
+\end{align}
+Thus the trace representation of \(\psi\) is not the obstruction. The
+periodic component theorem proves the displayed conclusion from these
+boundary-crossing coordinate identities. The remaining source-level work in this note is
+to present the \(C^j,D^j,E^j\) comparison from
+\cite[Theorem~12]{PerezGarcia2007MPSReps}
+as an unconditional hypothesis-free equality theorem in the source range.\footnote{Formal declarations:
+\leanid{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities},
+\leanid{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities_of_injective},
+\leanid{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_pgvwc_comparison_of_injective},
+\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_complementary_identities_bnt_c1}, and
+\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_complementary_identities}.}
+
+The live blueprint records the block-diagonal periodic-boundary ground space,
+the forward inclusion, the block-diagonal intersection identity from
+\cite[Theorem~12]{PerezGarcia2007MPSReps}, the parent-ground-space
+containment, and the final span statement with explicit citations. It also
+separates these opened-boundary coordinates from the paper's boundary indices,
+without claiming that the source statement is proved.
+% Blueprint labels: def:parent_hamiltonian_ground_space_bnt,
+% lem:isup_chain_ground_space_block_le_assembled,
+% thm:block_diagonal_ground_space_intersection,
+% thm:parent_ground_space_le_bnt_span, thm:gs_eq_bnt_span.
+With this notation,
+\begin{align}
+  \sum_{j=1}^b\mathcal K_{N,L}(A_j)
+  =
+  \left\{
+    \sum_{j=1}^b \psi_j:
+    \psi_j\in\mathcal K_{N,L}(A_j)
+  \right\}.
+\end{align}
+The source-level boundary-condition statement not yet stated without assuming
+the boundary-crossing coordinate identity is
+\begin{align}
+  \left[
+    b\ge2
+    \ \wedge\
+    L_0\ge1
+    \ \wedge\
+    (\forall j,\ \mu_j\ne 0)
+    \ \wedge\
+    L_0<L
+    \ \wedge\
+    L\ge 3(b-1)(L_0+1)+1
+    \ \wedge\
+    N\ge L+L_0
+  \right]
+  \Longrightarrow
+  \notag\\
+  \mathcal K_{N,L}(\widehat A)
+  =
+  \sum_{j=1}^b \mathcal K_{N,L}(A_j).
+\end{align}
+
+The following implication is not available.  The trace-form space
+$\mathcal G_N^A$ is not contained in the periodic-boundary ground space
+$\mathcal K_{N,L}(A)$ for an arbitrary boundary matrix $X$.  If the
+cyclic window crosses the chosen virtual boundary, then a vector
+$\Gamma_N^A(X)$ has coefficients of the form
+\begin{align}
+  \tr\!\left(A^{\omega_{\mathrm{tail}}}
+    X A^{\omega_{\mathrm{head}}} A^\rho\right),
+\end{align}
+where $\omega_{\mathrm{tail}}\omega_{\mathrm{head}}$ is the word seen in the
+cyclic window and $\rho$ is the outside word.  This is not, for general $X$,
+of the form
+\begin{align}
+  \tr\!\left(A^{\omega_{\mathrm{tail}}}
+    A^{\omega_{\mathrm{head}}}Y_\rho\right)
+\end{align}
+with one matrix $Y_\rho$ independent of the window word.  The missing step is
+therefore a boundary-condition comparison, not the inclusion
+$\mathcal G_N^A\subseteq\mathcal K_{N,L}(A)$.
+The source theorem uses the multi-block hypothesis, the positive common
+injectivity length, the nonzero-weight hypothesis, and the length range of
+\cite[Theorem~12]{PerezGarcia2007MPSReps}:
+\begin{align}
+  b\ge2,
+  \qquad
+  L_0\ge1,
+  \qquad
+  \forall j,\ \mu_j\ne0,
+  \qquad
+  L_0<L,
+  \qquad
+  L\ge 3(b-1)(L_0+1)+1,
+  \qquad
+  N\ge L+L_0.
+\end{align}
+For $b\ge2$ and $L_0\ge1$, the source length bound implies
+$L\ge 3L_0+4>L_0$; the inequality $L_0<L$ is displayed separately because the
+one-block uniqueness input is used in that range.
+The one-block case is the injective parent-Hamiltonian theorem rather than the
+degenerate block-injective boundary theorem.
+The finite-Condition-C1 propagation theorem currently proved in Lean is stated
+in the more conservative range
+\begin{align}
+  L\ge (L_0+1)+3(b-1)(L_0+1)+1.
+\end{align}
+The periodic-boundary comparison reductions now separate into three forms: a
+decomposition into blockwise vectors with periodic boundary conditions, a
+block-diagonal boundary representation whose components already belong to the
+corresponding blockwise periodic-boundary spaces, and the boundary-crossing
+coordinate formulation displayed above.\footnote{Lean declarations:
+\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_of_boundary_decomposition},
+\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_of_blockDiagonal_boundary_groundSpaceMap},
+\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_boundary_decomposition},
+\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_blockBoundary},
+and
+\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_complementary_identities}.}
+These reductions do not yet state the source theorem without assuming the
+boundary-crossing comparison.
+For
+\begin{align}
+  X=\bigoplus_j X_j,
+\end{align}
+the boundary-matrix formula is
+\begin{align}
+  \Gamma_N^{\widehat A}(X)(i_1,\ldots,i_N)
+  &=
+  \sum_j \mu_j^N
+  \tr(A^j_{i_1}\cdots A^j_{i_N}X_j) \notag\\
+  &=
+  \sum_j \mu_j^N\Gamma_N^{A_j}(X_j)(i_1,\ldots,i_N).
+\end{align}
+For the next display, abbreviate
+\begin{align}
+  \Gamma_j(X)=\Gamma_N^{A_j}(X),
+  \qquad
+  V_j=V^{(N)}(A_j).
+\end{align}
+Thus the desired proof with periodic boundary conditions is the composition of
+the two implications
+\begin{align}
+  \psi\in\mathcal K_{N,L}(\widehat A)
+  &\Longrightarrow
+  \exists (X_j)_{j=1}^b,\quad
+  \psi=\sum_{j=1}^b\Gamma_j(X_j),
+  \notag\\
+  &\hphantom{\Longrightarrow}
+  \forall\,1\le j\le b,\quad
+  \Gamma_j(X_j)\in\mathcal K_{N,L}(A_j)
+  ,
+\end{align}
+and, for every $X_1,\ldots,X_b$,
+\begin{align}
+  \forall\,1\le j\le b,\quad
+  \Gamma_j(X_j)\in\mathcal K_{N,L}(A_j)
+  &\Longrightarrow
+  \exists (c_j)_{j=1}^b,
+  \notag\\
+  &\hphantom{\Longrightarrow}
+  \forall\,1\le j\le b,\quad
+  \Gamma_j(X_j)=c_j V_j
+  .
+\end{align}
+The composition gives
+\begin{align}
+  \psi
+  &=
+  \sum_{j=1}^b\Gamma_j(X_j)
+  =
+  \sum_{j=1}^b c_j V_j,
+  \notag\\
+  \psi
+  &\in
+  \operatorname{span}\{V_j:j=1,\ldots,b\}.
+\end{align}
+
+\section{Conclusion}
+
+This is not a source-error claim. The formal development has proved the
+surrounding block-diagonal reductions and a conditional propagation step. In the
+finite-Condition-C1 Lean range
+\begin{align}
+  L\ge (L_0+1)+3(b-1)(L_0+1)+1,
+\end{align}
+assume the boundary-crossing coordinate identities displayed above. Then, for
+every block $j$,
+\begin{align}
+  \psi\in\mathcal K_{N,L}(\widehat A)
+  \quad\Longrightarrow\quad
+  \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal K_{N,L}(A_j).
+\end{align}
+This is the conditional reduction recorded by pull request~\#2724.  There are
+now two proved conditional routes to the boundary-condition comparison. The
+boundary-trace route records the following implication. Assume the common
+word-span property for the middle-word length \(m\). If, for every
+boundary-crossing interval, word
+$\beta$ before the cut, outside word $\rho$, and middle word $w$ of length \(m\),
+the two boundary trace expressions from \cite[Theorem~12]{PerezGarcia2007MPSReps}
+satisfy
+\begin{align}
+  \sum_j\tr\!\left(A^j_\beta C^j_\rho A^j_w\right)
+  =
+  \sum_j\tr\!\left((\mu_j^NX_jA^j_\beta)A^j_\rho A^j_w\right),
+\end{align}
+then
+\begin{align}
+  \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal K_{N,L}(A_j)
+\end{align}
+for every block $j$ in the block-injective range.\footnote{Lean declaration:
+\leanid{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_trace_decomposition_of_injective}.}
+There is also an explicit-boundary version: once
+\(\psi=\Gamma_N^{\widehat A}(\bigoplus_jX_j)\) is fixed, the same equality of
+boundary trace expressions gives
+\begin{align}
+  \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal K_{N,L}(A_j)
+\end{align}
+for every block \(j\), without using any span assumption at the short
+boundary-crossing tail length \(N-i\).\footnote{Lean declaration:
+\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_of_boundary}.}
+At the fixed wrapped-tail length supplied by a single boundary-crossing cyclic
+window, the boundary trace expressions are now derived from the local
+constraint once the block-diagonal boundary representation is fixed: for
+\(N<i+L\), outside word \(\rho\) of length \(N-L\), and wrapped tail word
+\(\alpha\) of length \(N-i\), there are matrices \(C^j_{i,\rho}\) such that
+\begin{align}
+  \sum_j\tr\!\left(A^j_\beta C^j_{i,\rho}A^j_\alpha\right)
+  =
+  \sum_j\tr\!\left((\mu_j^NX_jA^j_\beta)A^j_\rho A^j_\alpha\right).
+\end{align}
+This fixed-tail statement is recorded as
+\leanid{MPSTensor.blockDiagonal_boundary_crossing_trace_decomposition_of_boundary}.
+It should not be read as the middle-word trace hypothesis at a common
+product-spanning length: the fixed cyclic window gives the wrapped tail length
+\(N-i\), whereas the separating trace-decomposition implication is stated at a
+common product-span length \(m\).
+
+In the normalized BNT finite range, this common middle-word span is no longer an
+external assumption. If
+\begin{align}
+  m=(L_0+1)+(b-1)\bigl((L_0+1)+((L_0+1)+(L_0+1))\bigr),
+  \qquad
+  L\ge m+1,
+\end{align}
+then the normalized block-separation theorem gives
+\begin{align}
+  \operatorname{span}\{(A^1_w,\ldots,A^b_w):|w|=m\}
+  =
+  \prod_j M_{D_j}(\mathbb C).
+\end{align}
+Consequently the boundary-trace implication in the finite range only keeps
+the displayed trace equality and the block-diagonal boundary representation
+as external inputs.\footnote{Lean declarations:
+\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1_span}
+and
+\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition_bnt_c1_span}.}
+
+The \(C^j,D^j\) opened-boundary route is closer to the proof of
+\cite[Theorem~12]{PerezGarcia2007MPSReps}.
+The words \(\beta\) and \(\rho\) are local word coordinates introduced after
+opening and blocking the cyclic boundary comparison; they reindex the source
+end-site comparison \(i_1,i_{m+1}\) by blocked words, and are not additional
+hypotheses or terminology from the paper.
+For a fixed boundary-crossing interval starting at site \(i\), the local
+block-sum constraint and the word-tuple span of the wrapped tail word of
+length \(N-i\) now give matrices
+\(C^j_{i,\rho}\) satisfying
+\begin{align}
+  A^j_\beta C^j_{i,\rho}
+  =
+  \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho .
+\end{align}
+This is formalized as
+\leanid{MPSTensor.blockDiagonal_boundary_crossing_pgvwc_comparison_of_sum_mem_iSup}
+and, once a block-diagonal boundary representation of \(\psi\) is fixed, into
+\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_crossing_pgvwc_comparison_of_boundary}.
+The current BNT specialization then obtains that boundary representation through
+\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_crossing_pgvwc_comparison_bnt_c1}.
+Thus the crossing comparison is not an independent trace-comparison assumption:
+the present proof boundary is the crossing-tail word-span hypothesis and the
+still-used block-diagonal boundary representation of a vector
+\(\psi\in\mathcal K_{N,L}(\widehat A)\).
+This crossing-tail span hypothesis should not be confused with the
+large-length BNT product-span bound: if the boundary-crossing interval begins
+at \(i=N-1\), the required tail length is \(N-i=1\), so it is not supplied by
+the lower bound on \(L\) alone.
+
+After \href{https://github.com/LionSR/TNLean/issues/2651}{issue \#2651} was
+closed, the remaining source-comparison target is tracked by
+\href{https://github.com/LionSR/TNLean/issues/2971}{issue \#2971}: remove the
+remaining external boundary-representation input, and replace the
+span-dependent crossing-tail route by the \(C^j,D^j,E^j\) comparison from
+\cite[Theorem~12]{PerezGarcia2007MPSReps} in the source range
+\begin{align}
+  b\ge2,
+  \qquad
+  L_0\ge1,
+  \qquad
+  L\ge 3(b-1)(L_0+1)+1,
+  \qquad
+  N\ge L+L_0.
+\end{align}
+After this boundary-condition comparison is proved, the conditional equality
+formalized in the current finite Condition C1 range gives
+\begin{align}
+  \mathcal K_{N,L}(\widehat A)
+  =
+  \sum_{j=1}^b\mathcal K_{N,L}(A_j).
+\end{align}
+The final degenerate
+parent-Hamiltonian ground-space equality follows by applying the one-block
+uniqueness theorem to each block.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

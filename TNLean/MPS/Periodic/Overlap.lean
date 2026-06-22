@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Periodic.Overlap.SelfOverlap
+import TNLean.MPS.Periodic.Overlap.SelfOverlapNonrep
 import TNLean.MPS.Periodic.Overlap.Case1
 import TNLean.MPS.Periodic.Overlap.Case2
 import TNLean.MPS.Periodic.Overlap.Case3
@@ -18,17 +19,20 @@ The supporting modules are:
 
 * `TNLean.MPS.Periodic.Overlap.SelfOverlap` — cyclic-sector setup and
   self-overlap.
+* `TNLean.MPS.Periodic.Overlap.SelfOverlapNonrep` — the spectral
+  non-repetition crux (off-diagonal vanishing).
 * `TNLean.MPS.Periodic.Overlap.Case1` — different periods imply orthogonality.
 * `TNLean.MPS.Periodic.Overlap.Case2` — equal period with no sector match
   implies orthogonality.
 * `TNLean.MPS.Periodic.Overlap.Case3` — equal period with a sector match yields
   repeated blocks.
-* `TNLean.MPS.Periodic.Overlap.Dichotomy` — Proposition 3.3 and eventual
-  linear independence.
+* `TNLean.MPS.Periodic.Overlap.Dichotomy` — the source proposition
+  `equal-or-orthogonal-generalized` and eventual linear independence.
 
 ## References
 
 * De las Cuevas, Cirac, Schuch, Perez-Garcia,
   *Irreducible forms of Matrix Product States: Theory and Applications*,
-  arXiv:1708.00029, Proposition 3.3 and Appendix A.
+  arXiv:1708.00029, proposition `equal-or-orthogonal-generalized`
+  and Appendix A.
 -/

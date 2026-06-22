@@ -1,0 +1,231 @@
+\section{Commuting form and GSNNCH}
+
+\begin{definition}[Commuting-form data for an MPDO]
+    \label{def:mpdo_commuting_form_data}
+    \lean{MPOTensor.CommutingFormData}
+    \leanok
+    \uses{def:mpo_tensor}
+    For a fixed chain length $N \ge 2$, this consists of a positive
+    semidefinite two-site operator $B$ such that its translated copies on the
+    periodic chain commute pairwise.
+\end{definition}
+
+\begin{definition}[Commuting-form property]
+    \label{def:mpdo_has_commuting_form}
+    \lean{MPOTensor.HasCommutingForm}
+    \leanok
+    \uses{def:mpdo_commuting_form_data, def:mpo_tensor}
+    An MPO tensor has the commuting-form property if for every $N \ge 2$ its
+    $N$-site operator is a positive scalar multiple of the product of the
+    translated copies of some commuting two-site operator $B$.
+\end{definition}
+
+\begin{definition}[GSNNCH]
+    \label{def:mpdo_is_gsnnch}
+    \lean{MPOTensor.IsGSNNCH}
+    \leanok
+    \uses{def:mpdo_has_commuting_form}
+    An MPO tensor is a Gibbs state of a nearest-neighbor commuting Hamiltonian
+    if every finite-chain operator admits the equivalent positive-operator
+    presentation $\rho^{(N)} = c \prod_i B_{i,i+1}$ with $c > 0$ and
+    commuting nearest-neighbor factors. The projector-limit convention in
+    \cite{Cirac2016MPDO_arXiv}
+    identifies this with the exponential Gibbs form.
+\end{definition}
+
+\begin{theorem}[GSNNCH iff commuting form]
+    \label{thm:mpdo_is_gsnnch_iff_has_commuting_form}
+    \lean{MPOTensor.isGSNNCH_iff_hasCommutingForm}
+    \leanok
+    \uses{def:mpdo_is_gsnnch, def:mpdo_has_commuting_form}
+    For an MPO tensor, the GSNNCH condition is equivalent to the existence of
+    commuting-form data on every finite chain.
+\end{theorem}
+
+\begin{proof}\leanok
+    A positive normalization constant converts commuting-form data into a GSNNCH
+    witness, and every GSNNCH witness remembers its underlying commuting-form data.
+\end{proof}
+
+\begin{definition}[GSNNCH with doubled-index transfer idempotence]
+    \label{def:mpdo_is_gsnnch_zcl}
+    \lean{MPOTensor.IsGSNNCHWithZCL}
+    \leanok
+    \uses{def:mpdo_is_gsnnch, def:mpo_is_zcl}
+    This is the conjunction of the GSNNCH condition with the doubled-index
+    transfer condition
+    \[
+        \E_M\circ\E_M=\E_M.
+    \]
+    It is the currently formalized analogue of the ZCL clause in item~(iii) of
+    the simple-MPDO equivalence in \cite{Cirac2016MPDO_arXiv}; the
+    source physical-trace condition is Definition~\ref{def:mpo_source_zcl}.
+\end{definition}
+
+\begin{theorem}[GSNNCH with doubled-index idempotence iff commuting form with it]
+    \label{thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl}
+    \lean{MPOTensor.isGSNNCHWithZCL_iff_hasCommutingForm_and_isZCL}
+    \leanok
+    \uses{def:mpdo_is_gsnnch_zcl, thm:mpdo_is_gsnnch_iff_has_commuting_form}
+    The GSNNCH branch with doubled-index transfer idempotence is equivalent to
+    the conjunction of the commuting-form property with that same idempotence
+    condition.
+\end{theorem}
+
+\begin{proof}\leanok
+    Unfold the definition of the GSNNCH branch with doubled-index transfer
+    idempotence and apply
+    Theorem~\ref{thm:mpdo_is_gsnnch_iff_has_commuting_form}.
+\end{proof}
+
+\begin{definition}[Translation-invariant two-site bond]
+    \label{def:mpdo_translation_invariant_bond_data}
+    \lean{MPOTensor.TranslationInvariantBondData}
+    \leanok
+    \uses{def:mpdo_commuting_form_data}
+    This records a single positive two-site bond together with its translated
+    copies on every finite periodic chain, requiring those translated copies to
+    commute pairwise.
+\end{definition}
+
+\begin{definition}[$\eta$-local commuting-form data]
+    \label{def:mpdo_eta_local_structure_data}
+    \lean{MPOTensor.EtaLocalStructureData}
+    \leanok
+    \uses{def:mpdo_translation_invariant_bond_data, def:mpdo_has_commuting_form}
+    This defines the eta-local form of \cite[Appendix~C.2]{Cirac2016MPDO_arXiv}: the
+    translation-invariant positive two-site bond data together with the
+    requirement that the corresponding product realizes the MPO at every finite
+    length.
+\end{definition}
+
+\begin{definition}[Finite-chain data from a translation-invariant bond]
+    \label{def:mpdo_translation_invariant_bond_to_commuting_form_data}
+    \lean{MPOTensor.TranslationInvariantBondData.toCommutingFormData}
+    \leanok
+    \uses{def:mpdo_translation_invariant_bond_data, def:mpdo_commuting_form_data}
+    A translation-invariant positive two-site bond determines finite-chain
+    commuting-form data at every length $N \ge 2$.
+\end{definition}
+
+\begin{theorem}[Component identities for finite-chain bond data]
+    \label{thm:mpdo_translation_invariant_bond_to_commuting_form_data_components}
+    \lean{MPOTensor.TranslationInvariantBondData.toCommutingFormData_bond}
+    \lean{MPOTensor.TranslationInvariantBondData.toCommutingFormData_hN}
+    \lean{MPOTensor.TranslationInvariantBondData.toCommutingFormData_bondAt}
+    \leanok
+    \uses{def:mpdo_translation_invariant_bond_data, def:mpdo_commuting_form_data}
+    The finite-chain data associated to a translation-invariant bond retains
+    the original local bond and the supplied lower bound $2 \le N$, and the
+    factor at site $i$ is the translated copy of that local two-site bond.
+\end{theorem}
+
+\begin{proof}\leanok
+    These are the component identities for the finite-chain construction.
+\end{proof}
+
+\begin{theorem}[$\eta$-local structure carries commuting form]
+    \label{thm:mpdo_eta_local_structure_has_commuting_form}
+    \lean{MPOTensor.EtaLocalStructureData.hasCommutingForm}
+    \lean{MPOTensor.EtaLocalStructureData.formAt_realizes}
+    \lean{MPOTensor.EtaLocalStructureData.formAt_bondAt_comm}
+    \lean{MPOTensor.EtaLocalStructureData.exists_positive_scalar_mpo_eq_product}
+    \lean{MPOTensor.EtaLocalStructureData.positive_commuting_product_form}
+    \leanok
+    \uses{def:mpdo_eta_local_structure_data, def:mpdo_has_commuting_form}
+    The $\eta$-local structure itself determines a commuting-form witness for every
+    chain length $N \ge 2$. In particular, the translated nearest-neighbor
+    bonds commute and the MPDO at length $N$ is a positive scalar multiple of
+    their product. This is the commuting-form half of
+    \cite[Proposition~C.8]{Cirac2016MPDO_arXiv}, taking the $\eta$-local data as
+    given; deriving that data from the saturation of the area law is the
+    deferred step recorded in Remark~\ref{rem:simple_mpdo_rfp_chain_gap}.
+\end{theorem}
+
+\begin{proof}\leanok
+    At length $N$, apply the commuting two-site bond and realization identity
+    provided by the $\eta$-local structure.
+\end{proof}
+
+\begin{theorem}[$\eta$-local structure gives GSNNCH]
+    \label{thm:mpdo_eta_local_structure_is_gsnnch}
+    \lean{MPOTensor.EtaLocalStructureData.isGSNNCH}
+    \leanok
+    \uses{def:mpdo_eta_local_structure_data, def:mpdo_is_gsnnch}
+    The same $\eta$-local structure gives a GSNNCH witness on every finite
+    periodic chain.
+\end{theorem}
+
+\begin{proof}\leanok
+    Evaluate the local structure at each chain length $N \ge 2$.
+\end{proof}
+
+\begin{theorem}[$\eta$-local structure with doubled-index idempotence]
+    \label{thm:mpdo_eta_local_structure_is_gsnnch_zcl}
+    \lean{MPOTensor.EtaLocalStructureData.isGSNNCHWithZCL}
+    \lean{MPOTensor.isGSNNCHWithZCL_of_etaLocalStructure}
+    \leanok
+    \uses{thm:mpdo_eta_local_structure_has_commuting_form,
+        thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl}
+    Once the $\eta$-local structure gives the commuting nearest-neighbor
+    product form, adding the doubled-index transfer condition gives the
+    corresponding GSNNCH branch.
+\end{theorem}
+
+\begin{proof}\leanok
+    Use the commuting-form witness carried by the $\eta$-local structure and
+    combine it with the doubled-index transfer hypothesis.
+\end{proof}
+
+\begin{theorem}[$\eta$-local structure implies commuting form]
+    \label{thm:mpdo_has_commuting_form_of_eta_local_structure}
+    \lean{MPOTensor.hasCommutingForm_of_etaLocalStructure}
+    \leanok
+    \uses{thm:mpdo_eta_local_structure_has_commuting_form}
+    Once the explicit neighboring operators $\eta_{k,h}$ have been assembled
+    into an $\eta$-local structure, the global commuting-form property follows.
+\end{theorem}
+
+\begin{proof}\leanok
+    This is the commuting-form consequence already carried by the
+    $\eta$-local structure.
+\end{proof}
+
+\begin{theorem}[$\eta$-local structure implies GSNNCH]
+    \label{thm:mpdo_is_gsnnch_of_eta_local_structure}
+    \lean{MPOTensor.isGSNNCH_of_etaLocalStructure}
+    \leanok
+    \uses{thm:mpdo_eta_local_structure_is_gsnnch}
+    Once the explicit neighboring operators $\eta_{k,h}$ have been assembled
+    into the $\eta$-local structure, the GSNNCH condition follows.
+\end{theorem}
+
+\begin{proof}\leanok
+    This is the GSNNCH witness already carried by the $\eta$-local structure.
+\end{proof}
+
+\begin{remark}[Entropy-side construction]
+    The remaining entropy-side step is the construction of a single
+    $\eta$-local product form from $\mathrm{SAL}(K)$. The local $\eta_{k,h}$
+    are already supplied by
+    Definition~\ref{def:mpdo_eta_of_hayashi_markov}. What remains is the
+    tensor-coordinate assembly
+    \begin{equation}\label{eq:mpdo_eta_bond_assembly}
+        B=\sum_{k,h}
+        \operatorname{Id}_{H_L^{(k)}}\otimes
+        \eta_{k,h}\otimes
+        \operatorname{Id}_{H_R^{(h)}},
+        \qquad B\ge 0,
+    \end{equation}
+    and, for every $N\ge 2$,
+    \begin{equation}\label{eq:mpdo_eta_product_form}
+        \sigma^{(N)}(K)=c_N\prod_{n=1}^{N}B_{n,n+1},
+        \qquad c_N>0,\qquad
+        [B_{i,i+1},B_{j,j+1}]=0.
+    \end{equation}
+    (\ref{eq:mpdo_eta_bond_assembly}) and~(\ref{eq:mpdo_eta_product_form}) are
+    exactly the $\eta$-local product hypothesis; after that,
+    Theorem~\ref{thm:mpdo_has_commuting_form_of_eta_local_structure}
+    gives the commuting-form conclusion. The doubled-index transfer condition
+    enters only in the subsequent RFP and GSNNCH branch conclusions.
+\end{remark}

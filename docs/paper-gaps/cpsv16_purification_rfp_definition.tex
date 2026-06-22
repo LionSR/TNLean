@@ -1,0 +1,141 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Purification RFP in Cirac--Perez-Garcia--Schuch--Verstraete 2017}
+\author{}
+\date{2026-06-05}
+
+\begin{document}
+\maketitle
+
+\section{Source statement}
+
+Cirac--P\'erez-Garcia--Schuch--Verstraete define a purification
+renormalization fixed point for an MPDO tensor $M$ through a purifying MPS
+tensor $A$:
+\[
+  \rho^{(N)}_p(M)
+  =
+  \tr_a\bigl(
+    |\Psi^{(N)}(A)\rangle\langle\Psi^{(N)}(A)|
+  \bigr).
+\]
+The source definition says that $M$ is a PRFP when it admits such a
+representation with $A$ an RFP.\footnote{Source location:
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex}:750--763, Definition
+\path{def:Puri-RFP}.}
+
+The following theorem in the source states that, for tensors $M$ satisfying the
+purification equation above, the three conditions
+\[
+  M\text{ is a PRFP},\qquad
+  M\text{ has ZCL},\qquad
+  \rho^{(N)}(M)\text{ has the displayed PRFP decomposition}
+\]
+are equivalent.\footnote{Source location:
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex}:775--786.}
+The later warning that this definition is too weak concerns saturation of the
+area law, not the implication from PRFP to zero correlation length.
+
+\section{Deleted formalization}
+
+The deleted predicate \leanid{MPOTensor.IsPRFP} did not formalize the source
+definition. It did require a local LPDO witness and the condition
+\[
+  \leanid{MPSTensor.IsRFP}(\leanid{purifyingMPSTensor}(A)),
+\]
+so the pure-state RFP requirement itself was present. The missing source data
+was the stronger purification-RFP structure around
+\path{eq:MPDO-Puri-1}: after tracing the ancillary index, the source obtains a
+trace-preserving completely positive map on the spin degrees of freedom and the
+decomposition displayed in \path{PuriRFP}--\path{PuriRFP-BNT}. The purifying
+tensor is also described by the canonical RFP form \path{III_CFI_RFP}, but this
+is not the condition violated by the deleted scalar witness; in bond
+dimension~$1$ the witness already has that form. The deleted predicate kept
+only the local purifying family together with generic transfer-map idempotence
+of the doubled MPS tensor. It did not encode the global purification equation or
+the trace-preserving post-ancilla map.
+
+With this weaker hypothesis the development proved a counterexample to PRFP
+implying ZCL. That conclusion contradicted the source theorem above, so it was
+a counterexample to the local Lean predicate, not to Definition
+\path{def:Puri-RFP}.
+
+For this reason the file \path{TNLean/MPS/MPDO/PRFP.lean}, the corresponding
+blueprint section, and the counterexample registry entry were removed. The
+coverage audit now records the source PRFP definition as open, not as
+formalized.\footnote{This note records the divergence removed in
+\href{https://github.com/LionSR/TNLean/pull/2386}{PR \#2386}. The faithful
+replacement is tracked by
+\href{https://github.com/LionSR/TNLean/issues/2383}{issue \#2383} and the
+MPDO coverage tracker
+\href{https://github.com/LionSR/TNLean/issues/2380}{issue \#2380}.}
+
+\section{Faithful replacement}
+
+A faithful formalization should state the purification RFP definition with the
+positive-length global purification equation \path{eq:MPDO-Puri-1} and require
+the purifying spin--ancilla tensor to be a pure-state RFP. The trace over the
+ancillary index, discussed after Definition \path{def:Puri-RFP}, is a separate
+one-site tpCPM; it is not the two-map mixed-state RFP condition
+\path{RFPMixedTS}. The definitions are now present in
+\path{TNLean/MPS/MPDO/PRFP.lean}: the global equation is
+\leanid{MPOTensor.HasGlobalPurificationEquation}, the pure-state witness is
+\leanid{MPOTensor.HasPurificationRFPWitness}, and the source predicate is
+\leanid{MPOTensor.IsPRFP}. The ancillary-trace map is
+\leanid{MPOTensor.ancillaryTraceMap}; its Kraus-form trace-preserving
+complete positivity is
+\leanid{MPOTensor.ancillaryTraceMap_isKrausCPTP}, and the corresponding
+spin-reduction condition is
+\leanid{MPOTensor.HasTracePreservingSpinReduction}. Only after the remaining
+theorem is proved should the theorem
+\[
+  \operatorname{PRFP}(M) \Longleftrightarrow \operatorname{ZCL}(M)
+\]
+be attached to the source theorem.
+
+No theorem should assert that source PRFP fails to imply ZCL. Any future
+counterexample must instead be phrased for a separate local-purification
+predicate and must not be cited as Definition \path{def:Puri-RFP}.
+
+\section{Status}
+
+A separate local predicate
+\leanid{MPOTensor.IsLocalPurificationRFP} is now in
+\path{TNLean/MPS/MPDO/LocalPurificationRFP.lean}. It records the tensor-level
+local purification structure
+\[
+  M^{ij}
+  =
+  \left(\sum_k A^{(i,k)} \otimes \overline{A^{(j,k)}}\right)_{e}
+\]
+together with the requirement that the purifying tensor $A$, viewed as an MPS
+tensor on the combined spin--ancilla index, is a pure-state renormalization
+fixed point (\leanid{MPSTensor.IsRFP}). This predicate pins the local tensor of
+$M$ and proves the useful consequence
+\[
+  \leanid{MPOTensor.IsLocalPurificationRFP.isMPDO}:
+  \leanid{MPOTensor.IsLocalPurificationRFP}(M)
+  \Longrightarrow \leanid{MPOTensor.IsMPDO}(M),
+\]
+via \leanid{MPOTensor.IsLPDO.isMPDO}.
+
+This local predicate is not Definition \path{def:Puri-RFP}. The source-level
+positive-length global purification equation and the trace-preserving structure
+appearing after the ancillary trace are recorded separately in
+\path{TNLean/MPS/MPDO/PRFP.lean}. The equivalence
+\[
+  \operatorname{PRFP}(M) \Longleftrightarrow \operatorname{ZCL}(M)
+\]
+therefore remains open.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

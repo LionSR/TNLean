@@ -6,7 +6,7 @@ import TNLean.QPF.PosDef
 import TNLean.QPF.Uniqueness
 import TNLean.MPS.Core.CPPrimitive
 -- Needed for `IsChannel.exists_posSemidef_fixedPoint`.
--- We import it directly here instead of relying on a legacy transitive route.
+-- The fixed-point existence theorem is used explicitly below.
 import TNLean.Channel.FixedPoint.Cesaro
 
 /-!
@@ -22,9 +22,9 @@ theorem from its components:
 
 Together these formalize the core of **Wolf Theorem 6.3** (Spectral radius of
 irreducible maps), specialized to the trace-preserving (spectral radius = 1) setting:
-- Existence: there is a nonzero PSD fixed point (Wolf Thm 6.11 / Prop 6.3 route)
-- PosDef: under irreducibility the fixed point is strictly positive (Wolf Thm 6.3(2))
-- Uniqueness: the eigenvalue 1 is non-degenerate (Wolf Thm 6.3(2))
+- Existence: there is a nonzero PSD fixed point (Wolf Theorem 6.11 / Proposition 6.3 route)
+- PosDef: under irreducibility the fixed point is strictly positive (Wolf Theorem 6.3(2))
+- Uniqueness: the eigenvalue 1 is non-degenerate (Wolf Theorem 6.3(2))
 
 ## Main results
 
@@ -34,8 +34,8 @@ irreducible maps), specialized to the trace-preserving (spectral radius = 1) set
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2 Thm 6.3,
-  §6.4 Thm 6.11][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2 Theorem 6.3,
+  Section 6.4 Theorem 6.11][Wolf2012QChannels]
 * [Evans, Høegh-Krohn, *Spectral properties of positive maps*, 1978][Evans1978Spectral]
 -/
 
@@ -70,9 +70,9 @@ theorem exists_posSemidef_fixedPoint
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hD : 0 < D) :
     ∃ ρ : Matrix (Fin D) (Fin D) ℂ, ρ.PosSemidef ∧ ρ ≠ 0 ∧
-      transferMap (d := d) (D := D) A ρ = ρ := by
-  have hCh := MPSTensor.transferMap_isChannel A hNorm
-  exact hCh.exists_posSemidef_fixedPoint (E := transferMap A) hD
+      transferMap (d := d) (D := D) A ρ = ρ :=
+  (MPSTensor.transferMap_isChannel A hNorm).exists_posSemidef_fixedPoint
+    (E := transferMap A) hD
 
 end Existence
 
@@ -81,7 +81,7 @@ end Existence
 section PerronFrobenius
 
 /-- **The quantum Perron–Frobenius theorem for MPS transfer operators**
-(Wolf Thm 6.3, specialized to CP maps with spectral radius 1).
+(Wolf Theorem 6.3, specialized to CP maps with spectral radius 1).
 
 The transfer map of an injective MPS tensor has a unique PSD fixed point
 (up to scalar), and it is positive definite. -/
@@ -106,13 +106,8 @@ theorem quantum_perron_frobenius [DecidableEq (Fin D)]
 
 `quantum_perron_frobenius` requires `0 < D`. The theorem below lifts this restriction. -/
 
-/-- For D = 0, the zero matrix is vacuously positive definite. -/
-private lemma posDef_zero_fin0 : (0 : Matrix (Fin 0) (Fin 0) ℂ).PosDef :=
-  Matrix.PosDef.of_dotProduct_mulVec_pos Matrix.isHermitian_zero
-    (fun x hx => absurd (Subsingleton.elim x 0) hx)
-
 /-- **Injectivity implies unique fixed point** (without the `0 < D` hypothesis).
-Wraps `quantum_perron_frobenius` with a vacuous case for `D = 0`. -/
+Extends `quantum_perron_frobenius` to the case `D = 0`, which holds vacuously. -/
 theorem injective_transfer_unique_fixed_point' [DecidableEq (Fin D)]
     (A : MPSTensor d D) (hA : IsInjective A)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
@@ -124,7 +119,8 @@ theorem injective_transfer_unique_fixed_point' [DecidableEq (Fin D)]
     interval_cases D
     exact ⟨0, {
       fixed := by ext i; exact Fin.elim0 i
-      pos_def := posDef_zero_fin0
+      pos_def := Matrix.PosDef.of_dotProduct_mulVec_pos Matrix.isHermitian_zero
+        (fun x hx => absurd (Subsingleton.elim x 0) hx)
       unique := fun σ _ _ => ⟨0, by ext i; exact Fin.elim0 i⟩
     }⟩
 

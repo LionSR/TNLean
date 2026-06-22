@@ -13,15 +13,13 @@ variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-local instance : ContinuousSMul ℝ ℂ := TNOperatorSpace.complexContinuousSMulReal
-
 local instance : ContinuousSMul ℝ Mat :=
-  TNOperatorSpace.matrixContinuousSMulReal (n := Fin D)
+  inferInstance
 
 local instance : IsScalarTower ℝ ℂ Mat :=
-  TNOperatorSpace.matrixScalarTowerRealComplex (n := Fin D)
+  inferInstance
 
-/-! ## Helper lemmas for the primitivity proof -/
+/-! ## Auxiliary lemmas for the primitivity proof -/
 
 /-- Semigroup iteration: `T (n * t) = (T t) ^ n` for nonneg `t`. -/
 theorem semigroup_pow
@@ -39,20 +37,6 @@ theorem semigroup_pow
     have hcomp := hS.comp (↑n * t) t hnt ht
     rw [hcast, hcomp, ih]
     exact (pow_succ (T t) n).symm
-
-/-- Eigenvector equation for powers of a linear map: if `f v = μ • v` then
-`(f ^ n) v = μ ^ n • v`. -/
-theorem pow_apply_eigenvector
-    {V : Type*} [AddCommGroup V] [Module ℂ V]
-    (f : V →ₗ[ℂ] V) (v : V) (μ : ℂ) (n : ℕ) (hv : f v = μ • v) :
-    (f ^ n) v = μ ^ n • v := by
-  induction n with
-  | zero => simp [pow_zero]
-  | succ n ih =>
-    have hstep : (f ^ (n + 1)) v = (f ^ n) (f v) := by
-      change (f ^ n * f) v = (f ^ n) (f v)
-      rfl
-    rw [hstep, hv, map_smul, ih, smul_smul, pow_succ']
 
 /-- A density matrix is nonzero. -/
 lemma ne_zero_of_mem_densityMatrices' {ρ : Matrix (Fin D) (Fin D) ℂ}
@@ -87,25 +71,36 @@ theorem expSemigroup_apply_eigenvector
     (L : Mat →ₗ[ℂ] Mat) (X : Mat) (μ : ℂ)
     (hX : L X = μ • X) (t : ℝ) :
     expSemigroup L t X = Complex.exp ((t : ℂ) * μ) • X := by
+  letI : NormedSpace ℝ ℂ := NormedAlgebra.toNormedSpace ℂ
+  letI : ContinuousSMul ℝ ℂ :=
+    show ContinuousSMul ℝ (RestrictScalars ℝ ℂ ℂ) from inferInstance
+  letI : AddCommGroup Mat := Matrix.linftyOpNormedAddCommGroup.toAddCommGroup
+  letI : NormedAddCommGroup Mat := Matrix.linftyOpNormedAddCommGroup
+  letI : Module ℝ Mat :=
+    (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)).toModule
+  letI : TopologicalSpace Mat := PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+  letI : NormedSpace ℝ Mat :=
+    TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)
+  letI : ContinuousSMul ℝ Mat := inferInstance
   letI : IsScalarTower ℝ ℂ Mat := by infer_instance
   let c : ℝ → ℂ := fun u => Complex.exp (-((u : ℂ) * μ))
   let g : ℝ → Matrix (Fin D) (Fin D) ℂ := fun u => expSemigroup L u X
-  let f : ℝ → Matrix (Fin D) (Fin D) ℂ := fun u => c u • g u
+  let f : ℝ → Matrix (Fin D) (Fin D) ℂ := c • g
   have hsmul_deriv (u : ℝ) (hc : HasDerivAt c (-(c u * μ)) u)
       (hg : HasDerivAt g (μ • g u) u) :
       HasDerivAt f (c u • (μ • g u) + (-(c u * μ)) • g u) u := by
     have h :
         HasDerivAt (c • g) (c u • (μ • g u) + (-(c u * μ)) • g u) u :=
       @HasDerivAt.smul ℝ _ Mat _ _ g (μ • g u) u ℂ _ _ _ _
-        (TNOperatorSpace.matrixScalarTowerRealComplex (n := Fin D)) c (-(c u * μ)) hc hg
-    simpa [f, c, g] using h
+        (inferInstance : IsScalarTower ℝ ℂ Mat) c (-(c u * μ)) hc hg
+    exact h
   have hdiff : Differentiable ℝ f := by
     intro u
     have hmul : HasDerivAt (fun u : ℝ => (u : ℂ) * μ) ((1 : ℂ) * μ) u :=
       (Complex.ofRealCLM.hasDerivAt.mul_const μ)
     have hc : HasDerivAt c (-(c u * μ)) u := by
       dsimp [c]
-      simpa using (Complex.hasDerivAt_exp (-((u : ℂ) * μ))).comp u hmul.neg
+      simpa [mul_assoc] using hmul.neg.cexp
     have hg : HasDerivAt g (μ • g u) u := by
       dsimp [g]
       simpa [hX, smul_smul, mul_assoc] using hasDerivAt_expSemigroup_apply (D := D) L X u
@@ -117,7 +112,7 @@ theorem expSemigroup_apply_eigenvector
       (Complex.ofRealCLM.hasDerivAt.mul_const μ)
     have hc : HasDerivAt c (-(c u * μ)) u := by
       dsimp [c]
-      simpa using (Complex.hasDerivAt_exp (-((u : ℂ) * μ))).comp u hmul.neg
+      simpa [mul_assoc] using hmul.neg.cexp
     have hg : HasDerivAt g (μ • g u) u := by
       dsimp [g]
       simpa [hX, smul_smul, mul_assoc] using hasDerivAt_expSemigroup_apply (D := D) L X u
@@ -211,25 +206,30 @@ theorem bounded_root_of_peripheral_closed_powers [NeZero D]
   rcases Nat.lt_or_gt_of_ne hab_ne with hlt | hgt
   · refine ⟨(b : ℕ) - (a : ℕ), Nat.sub_pos_of_lt hlt, ?_, ?_⟩
     · exact Nat.sub_le _ _ |>.trans (Nat.le_of_lt_succ b.2)
-    · have hμ_ne : μ ≠ 0 := ne_zero_of_norm_eq_one hμ.2
+    · have hμ_ne : μ ≠ 0 := by
+        rw [← norm_ne_zero_iff, hμ.2]
+        norm_num
       exact mul_left_cancel₀ (pow_ne_zero _ hμ_ne) (by
         rw [← pow_add, Nat.add_sub_cancel' hlt.le, mul_one]
         exact hab'.symm)
   · refine ⟨(a : ℕ) - (b : ℕ), Nat.sub_pos_of_lt hgt, ?_, ?_⟩
     · exact Nat.sub_le _ _ |>.trans (Nat.le_of_lt_succ a.2)
-    · have hμ_ne : μ ≠ 0 := ne_zero_of_norm_eq_one hμ.2
+    · have hμ_ne : μ ≠ 0 := by
+        rw [← norm_ne_zero_iff, hμ.2]
+        norm_num
       exact mul_left_cancel₀ (pow_ne_zero _ hμ_ne) (by
         rw [← pow_add, Nat.add_sub_cancel' hgt.le, mul_one]
         exact hab')
 
-/-- Power-closure helper at an irreducible time slice.
+/-- Power-closure auxiliary lemma at an irreducible time slice.
 
-This is the only new semigroup-specific ingredient still missing from the refactor below: we need
-that after a similarity transform by a positive-definite fixed point, the irreducible channel
-becomes unital with an adjoint fixed point, so Wolf's peripheral-power closure theorem applies.
+After conjugating by the square root of a positive-definite fixed point, the
+irreducible channel becomes unital with an adjoint fixed point, so Wolf's
+peripheral-power closure theorem applies to the gauged Kraus family.
 
-The statement is substantially simpler than the original circular `sorry`: it is a pure channel
-lemma, independent of continuous-time propagation or generator kernels. -/
+This is a purely channel-level lemma: its hypotheses mention one channel with a
+positive-definite fixed point and do not use continuous-time propagation or
+generator kernels. -/
 theorem peripheral_powers_closed_of_irreducible_channel_with_fixed [NeZero D]
     (E : Mat →ₗ[ℂ] Mat) (hE : IsChannel E) (hIrr : IsIrreducibleMap E)
     (σ : Mat) (hσ_pd : σ.PosDef) (hσ_fix : E σ = σ)
@@ -311,7 +311,7 @@ theorem peripheral_powers_closed_of_irreducible_channel_with_fixed [NeZero D]
     rw [hL_transfer X]
     change S⁻¹ * E (S * X * S) * S⁻¹ = S⁻¹ * E (S * X * Sᴴ) * (Sᴴ)⁻¹
     rw [hS_herm]
-  -- Helper: sandwich cancellation lemmas
+  -- Auxiliary lemma: sandwich cancellation lemmas
   have hSandwich : ∀ A : Mat, S * (S⁻¹ * A * S⁻¹) * S = A := by
     intro A
     calc S * (S⁻¹ * A * S⁻¹) * S
@@ -368,16 +368,6 @@ theorem peripheral_powers_closed_of_irreducible_channel_with_fixed [NeZero D]
   obtain ⟨hpow_eig, hpow_norm⟩ := hpow n
   exact ⟨heig_bwd (μ ^ n) hpow_eig, hpow_norm⟩
 
-/-- Evaluation of powers after bundling an endomorphism as a continuous linear map. -/
-theorem toContinuousLinearMap_pow_apply [NeZero D]
-    (F : Mat →ₗ[ℂ] Mat) (X : Mat) (n : ℕ) :
-    (((Module.End.toContinuousLinearMap Mat) F) ^ n) X = (F ^ n) X := by
-  have hpowEq : ((Module.End.toContinuousLinearMap Mat) F) ^ n =
-      (Module.End.toContinuousLinearMap Mat) (F ^ n) := by
-    exact (map_pow (Module.End.toContinuousLinearMap Mat) F n).symm
-  rw [hpowEq]
-  rfl
-
 /-- In finite dimensions, a strict modulus bound on every eigenvalue gives a spectral-radius gap. -/
 theorem spectralRadius_lt_one_of_eigenvalues_lt_one [NeZero D]
     (F : Mat →ₗ[ℂ] Mat)
@@ -396,14 +386,15 @@ theorem spectralRadius_lt_one_of_eigenvalues_lt_one [NeZero D]
       inferInstance inferInstance inferInstance hComplete inferInstance (Φ F)
   obtain ⟨μ, hμ_spec, hμ_max⟩ :=
     hcompact.exists_isMaxOn hF_nonempty continuous_nnnorm.continuousOn
-  have hμ_norm : (‖μ‖₊ : ENNReal) = spectralRadius ℂ (Φ F) := by
-    exact le_antisymm (le_iSup₂ (α := ENNReal) μ hμ_spec) (iSup₂_le <| mod_cast hμ_max)
+  have hμ_norm : (‖μ‖₊ : ENNReal) = spectralRadius ℂ (Φ F) :=
+    le_antisymm (le_iSup₂ (α := ENNReal) μ hμ_spec) (iSup₂_le <| mod_cast hμ_max)
   have hμ_spec_end : μ ∈ spectrum ℂ F := by
     rw [AlgEquiv.spectrum_eq Φ] at hμ_spec
     exact hμ_spec
   have hμ_ev : Module.End.HasEigenvalue F μ :=
     Module.End.hasEigenvalue_iff_mem_spectrum.mpr hμ_spec_end
   have hμ_lt : ‖μ‖ < 1 := hF μ hμ_ev
+  change spectralRadius ℂ (Φ F) < 1
   rw [← hμ_norm]
   exact by
     exact_mod_cast hμ_lt

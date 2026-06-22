@@ -1,0 +1,207 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Zero correlation length uses the physical-trace transfer in
+Cirac--Perez-Garcia--Schuch--Verstraete 2017}
+\author{}
+\date{2026-06-08}
+
+\begin{document}
+\maketitle
+
+\section{Source statement}
+
+For mixed states, Definition~4.2 (local label \texttt{DefinitionZCL},
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:735--739}) defines a tensor $M$
+generating an MPDO to have \emph{zero correlation length} (ZCL) by a graphical
+equation displayed as the figure \texttt{MPDO\_ZCL.png}. The diagram closes the
+ket and bra physical legs of a single MPDO tensor and compares the resulting
+one-layer virtual transfer with its square. In formulas, if
+$M^{ij}$ denotes the bond matrix with ket index $i$ and bra index $j$, the
+object represented by the diagram is the physical-trace transfer
+\[
+  \mathcal T_M := \sum_i M^{ii},
+\]
+not the doubled-index completely positive map on bond matrices. The text states
+that this is ``the natural extension of the pure state case of
+Theorem~\ref{TheoremZCLPure}'' and that correlation functions computed from an
+MPDO with ZCL are length-independent.
+
+The pure-state case is made precise in the proof of Theorem~\ref{TheoremZCLPure}
+(\path{Papers/1606.00608/MPDO-22-12-17-2.tex:1248}): ZCL ``is equivalent to the
+property $\mathbb{E}^2=\mathbb{E}$ for a tensor $A$ in CF'' --- that is, the
+transfer operator is idempotent \emph{for a tensor in canonical form}. The
+renormalization step is $\mathcal{E}\mapsto\mathcal{E}^2$
+(\path{Papers/1606.00608/MPDO-22-12-17-2.tex:1209}), and a fixed point satisfies
+$\mathcal{E}=\mathcal{E}^2$. Canonical form normalizes the transfer operator so
+that its leading eigenvalue equals $1$; the idempotence $\mathbb{E}^2=\mathbb{E}$
+is the statement that, after this normalization, $\mathbb{E}$ projects onto the
+peripheral (eigenvalue-$1$) subspace.
+
+\section{The gap}
+
+The Lean definition \texttt{MPOTensor.IsZCL} instead reads
+\[
+  \mathcal E_M \circ \mathcal E_M = \mathcal E_M,
+  \qquad
+  \mathcal E_M(X)=\sum_{i,j} M^{ij}X(M^{ij})^\ast ,
+\]
+i.e. \emph{literal} idempotence of the doubled-index CP transfer map
+$\mathcal E_M$. This is not the transfer drawn in Definition~4.2: the source
+contracts the two physical legs first and squares $\mathcal T_M=\sum_iM^{ii}$.
+Thus the current predicate is not merely an un-normalized version of the source
+condition; it is a condition on a different transfer object. Even after allowing
+a scalar normalization, idempotence of $\mathcal E_M$ would classify tensors by
+the doubled-index MPS transfer rather than by the MPDO ZCL diagram.
+
+\paragraph{Classification.} This is a wrong-transfer-object gap: the current
+formal predicate records doubled-index CP-transfer idempotence, while the source
+definition uses the physical-trace transfer. Until the latter transfer is
+formalized, unrestricted source ZCL remains open.
+
+This deviation is witnessed in the development by
+\texttt{MPOTensor.exists\_isLocalPurificationRFP\_not\_isZCL}. Take $d=d_K=2$,
+$D'=D=1$, $A=[\tfrac{1}{\sqrt2},0,0,\tfrac{1}{\sqrt2}]$, which is an RFP MPS tensor
+($E_A=\mathrm{id}$). The induced MPDO tensor has scalar entries
+$M^{00}=M^{11}=\tfrac12$, off-diagonal $0$, so $\rho^{(N)}(M)=(\tfrac12)^N I$ is
+the (normalized) maximally mixed state --- manifestly length-independent
+correlations, hence ZCL in the source's sense. On the source transfer,
+\[
+  \mathcal T_M=M^{00}+M^{11}=1,
+\]
+so the graphical idempotence holds. On the Lean doubled-index CP transfer,
+$\mathcal E_M=\tfrac12\,\mathrm{id}$, so
+$\mathcal E_M\circ\mathcal E_M=\tfrac14\,\mathrm{id}\neq\mathcal E_M$ and literal
+\texttt{IsZCL} fails. The witness therefore exposes the wrong transfer object,
+not only a missing scalar normalization.
+
+\section{Consequence and elimination plan}
+
+The source's $\text{PRFP}\Rightarrow\text{ZCL}$ implication
+(\path{Papers/1606.00608/MPDO-22-12-17-2.tex:777}) is therefore not provable
+against \texttt{IsZCL} as literally stated: the source implication controls
+$\mathcal T_M$, whereas the Lean predicate controls $\mathcal E_M$. Two faithful
+options:
+
+\begin{enumerate}
+  \item \textbf{Source ZCL transfer.} Introduce the physical-trace transfer
+  $\mathcal T_M=\sum_iM^{ii}$ and state ZCL as idempotence of this transfer,
+  with scalar normalization allowed before canonical form:
+  $\mathcal T_M\ne0$ and $\mathcal T_M^2=\lambda\mathcal T_M$ for some
+  $\lambda>0$. The canonical representative is the case $\lambda=1$.
+  \item \textbf{Canonical physical-trace hypothesis.} Keep exact idempotence
+  $\mathcal T_M^2=\mathcal T_M$ only for source-labelled theorems whose
+  hypotheses include the required canonical normalization. The doubled-index map
+  $\mathcal E_M$ remains a separate CP transfer used in the current formal
+  fusion and algebra statements, not the source's ZCL transfer.
+\end{enumerate}
+
+Until one of these is in place, \texttt{IsZCL} should be documented as a
+doubled-index CP-transfer idempotence condition, not as the unrestricted source
+Definition~4.2. The
+$\text{PRFP}\Leftrightarrow\text{ZCL}$ equivalence remains open
+(issues \#2395, \#2421).
+
+\section{The faithful definition and its consequences}
+
+The faithful reading is Option~1 (source ZCL transfer). Writing $\mathcal T_M$
+for the physical-trace transfer, the normalized condition is
+\[
+  \texttt{IsZCL}\ M\ :=\ \mathcal T_M\ne 0\ \wedge\
+  \exists\, \lambda\in\mathbb R,\ 0<\lambda
+  \ \wedge\ \mathcal T_M^2 = \lambda\, \mathcal T_M .
+\]
+The clause $\mathcal T_M\ne0$ excludes the degenerate zero tensor, which otherwise
+satisfies $\mathcal T_M^2=\lambda\mathcal T_M$ vacuously for every $\lambda$.
+No spectral-radius apparatus is required: if
+$\mathcal T_M^2=\lambda\mathcal T_M$ with $\lambda>0$ and
+$\mathcal T_M\ne0$, the minimal polynomial of $\mathcal T_M$ divides
+$x(x-\lambda)$, so its eigenvalues lie in $\{0,\lambda\}$ and $\lambda$ is the
+leading eigenvalue. Literal idempotence $\mathcal T_M^2=\mathcal T_M$ is exactly
+the $\lambda=1$ case, the canonical-form representative. The maximally mixed
+witness has $\mathcal T_M=1$ and is therefore classified as ZCL by the source
+transfer, whereas the current doubled-index condition wrongly excludes it.
+
+\paragraph{The correction is to ZCL, not to the doubled-index RFP predicate.}
+The doubled-index transfer map $\mathcal E_M$ remains the object used by the
+current Lean predicate \texttt{IsRFP} and by the transfer-map formulation of the
+fusion/algebra statements. It should no longer be identified with the source ZCL
+diagram. Literal idempotence of the physical-trace transfer
+$\mathcal T_M^2=\mathcal T_M$ implies normalized ZCL only together with the
+nonzero hypothesis $\mathcal T_M\ne0$ (or an equivalent generated-MPDO
+nondegeneracy assumption); without that clause, the zero transfer is idempotent
+but not ZCL under the definition above. Every source-facing description that
+calls the doubled-index literal notion ``definitionally zero correlation
+length'' must be weakened to a separate bridge, with the nonzero hypothesis
+stated explicitly.
+
+\paragraph{Effect on the purification witness.} The diagonal purification of
+Section~3 has $\mathcal T_M=1$, hence satisfies the source ZCL equation already.
+The earlier reading, that this witness fails zero correlation length, was an
+artifact of using $\mathcal E_M=\tfrac12\,\mathrm{id}$ in place of the
+physical-trace transfer. Under the faithful reading it is a positive example
+showing that ZCL captures the maximally mixed product state, as the source
+intends.
+
+\paragraph{Finding (classification: unfaithful theorem).} The simple-MPDO
+direction of Theorem~4.9 (paper label \texttt{thm:main-simple},
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:851}; chain
+$\mathrm{(i)}\Rightarrow\mathrm{(ii)}\Leftrightarrow\mathrm{(iii)}
+\Rightarrow\mathrm{(iv)}\Rightarrow\mathrm{(v)}$ at line~892) is formalized by
+treating a zero-correlation-length hypothesis \emph{as if} it were literal
+idempotence of the doubled-index transfer, in order to build the blocked fusion
+isometry. This identification is valid only while the two notions coincide
+definitionally; under the faithful physical-trace ZCL it is no longer available,
+and the source does not supply the missing step. Two facts pin this down.
+
+First, the source's conclusion is not literal transfer-map idempotence.
+Hypothesis (ii) is ``$K$ has ZCL and SAL'' (line~862), and the terminal
+conclusion (v) is ``$M$ is a RFP'' (line~890) in the mixed-state sense of
+Definition~4.1 (paper label \texttt{RFPMixedTS},
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:657}): the existence of two
+trace-preserving completely positive maps $\mathcal S,\mathcal T$ on the
+physical indices intertwining the one- and two-site operators. This is a
+structural reversibility condition, not
+$\mathcal E_M\circ\mathcal E_M=\mathcal E_M$; the source notes (line~786) that
+for mixed states zero correlation length is strictly weaker than this
+fixed-point property.
+
+Second, the proposed bridge to doubled-index idempotence is false. The witness
+above generates the maximally mixed product state $\rho^{(N)}\propto I$, which
+has vanishing mutual information at every length ($I_1=I_2=\dots=0$), hence
+satisfies the strong area law (Definition~\texttt{def:area-law},
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:812}) as well as zero correlation
+length, yet $\mathcal E_M\circ\mathcal E_M=\tfrac14\,\mathrm{id}\neq\mathcal E_M$.
+So the strong area law and zero correlation length together do \emph{not} imply
+literal idempotence of the doubled-index transfer; the missing passage cannot be
+obtained by definitional coercion.
+
+The faithful obligation discharged by the simple-MPDO direction is therefore:
+from zero correlation length \emph{together with} the strong area law, derive
+condition~(iv), the BNT support, positivity, and fusion data of equations
+\texttt{KxKy=0}--\texttt{PsiPhi}; then use the source implication
+$\mathrm{(iv)}\Rightarrow\mathrm{(v)}$ to obtain the structural fixed point of
+Definition~4.1, formalized as \texttt{IsRFPViaTS}. Condition~(iv) is an
+intermediate used to derive that target, not an equivalent name for the target
+itself. The residual passage from the structural fixed point to literal
+doubled-index idempotence $\mathcal E_M^2=\mathcal E_M$ is a separate
+canonical-normalization bridge; as the witness above shows, it does not hold
+for an arbitrary ZCL and SAL tensor.
+
+Accordingly, any Lean theorem that currently obtains doubled-index idempotence
+(\texttt{IsRFP}) from a zero-correlation-length hypothesis by definitional
+coercion --- the pattern in the simple-MPDO chain that uses an
+\texttt{IsZCL} field directly as \texttt{IsRFP} --- relies on an intermediate the
+source does not provide, and is \emph{unfaithful} in the sense of the project's
+faithfulness policy. Under the realignment each such theorem must carry an
+in-source \texttt{**Unfaithful:**} marker pointing to this note and naming
+\texttt{IsRFPViaTS}, reached through condition~(iv), as the faithful target that
+the realignment must instead establish.
+
+\end{document}

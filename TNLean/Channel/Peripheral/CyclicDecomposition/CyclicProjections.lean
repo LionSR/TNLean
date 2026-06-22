@@ -8,7 +8,7 @@ import TNLean.Channel.Peripheral.CyclicDecomposition.Basic
 # Cyclic projections of a finite-order peripheral unitary
 
 This file constructs the Fourier spectral projections attached to a unitary of
-finite order and records their cyclic behavior under a linear map.
+finite order and states their cyclic behavior under a linear map.
 
 ## Main statements
 
@@ -17,7 +17,7 @@ finite order and records their cyclic behavior under a linear map.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Thm. 6.6]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 6.6]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
@@ -39,10 +39,10 @@ private abbrev cyclicOneIdx (m : ℕ) [NeZero m] : ℕ := ((1 : Fin m) : ℕ)
 /-- A primitive root has unit modulus, written as `star γ * γ = 1`. -/
 private lemma star_mul_self_of_primitiveRoot {γ : ℂ} (hγprim : IsPrimitiveRoot γ m) :
     star γ * γ = 1 := by
-  have hm0 : m ≠ 0 := NeZero.ne m
-  have hγ_norm : ‖γ‖ = 1 := Complex.norm_eq_one_of_pow_eq_one hγprim.pow_eq_one hm0
-  rw [Complex.star_def, ← Complex.normSq_eq_conj_mul_self]
-  simp only [normSq_eq_norm_sq, hγ_norm, one_pow, ofReal_one]
+  have hγ_norm : ‖γ‖ = 1 :=
+    Complex.norm_eq_one_of_pow_eq_one hγprim.pow_eq_one (NeZero.ne m)
+  simpa [Complex.normSq_eq_norm_sq, hγ_norm] using
+    (Complex.normSq_eq_conj_mul_self (z := γ)).symm
 
 /-- A primitive root has unit modulus, written as `γ * star γ = 1`. -/
 private lemma self_mul_star_of_primitiveRoot {γ : ℂ} (hγprim : IsPrimitiveRoot γ m) :
@@ -51,8 +51,8 @@ private lemma self_mul_star_of_primitiveRoot {γ : ℂ} (hγprim : IsPrimitiveRo
 
 /-- For a primitive root, complex conjugation agrees with inversion. -/
 private lemma star_eq_inv_of_primitiveRoot {γ : ℂ} (hγprim : IsPrimitiveRoot γ m) :
-    star γ = γ⁻¹ := by
-  exact eq_inv_of_mul_eq_one_right (self_mul_star_of_primitiveRoot (m := m) hγprim)
+    star γ = γ⁻¹ :=
+  eq_inv_of_mul_eq_one_right (self_mul_star_of_primitiveRoot (m := m) hγprim)
 
 /-- The phase `γ ^ n` cancels against its conjugate power. -/
 private lemma pow_mul_star_pow_of_primitiveRoot {γ : ℂ} (hγprim : IsPrimitiveRoot γ m)
@@ -187,8 +187,8 @@ private lemma coeff_sum_spec_of_primitiveRoot {γ : ℂ} (hγprim : IsPrimitiveR
       if j = cyclicOneIdx (m := m) then (m : ℂ) else 0 := by
   have honeIdx_lt : cyclicOneIdx (m := m) < m := by
     simpa [cyclicOneIdx] using ((1 : Fin m).is_lt)
-  have honeIdx_mem : cyclicOneIdx (m := m) ∈ Finset.range m := by
-    exact Finset.mem_range.mpr honeIdx_lt
+  have honeIdx_mem : cyclicOneIdx (m := m) ∈ Finset.range m :=
+    Finset.mem_range.mpr honeIdx_lt
   rw [cyclic_projection_step1_coeff_sum_spec_geometric (m := m) hγprim j]
   by_cases hjeq : j = cyclicOneIdx (m := m)
   · subst hjeq
@@ -226,8 +226,8 @@ private lemma base_cyclic_of_primitiveRoot {γ : ℂ} (hγprim : IsPrimitiveRoot
     rw [hval, pow_succ, mul_assoc, star_mul_self_of_primitiveRoot (m := m) hγprim]
     simp only [RCLike.star_def, mul_one]
   · have hk_eq : (k : ℕ) + 1 = m := by
-      have hle : m ≤ (k : ℕ) + 1 := by
-        exact Nat.le_of_not_gt (by simpa using hk)
+      have hle : m ≤ (k : ℕ) + 1 :=
+        Nat.le_of_not_gt (by simpa using hk)
       exact le_antisymm (Nat.succ_le_of_lt k.is_lt) hle
     have hval0 : (((k + 1 : Fin m) : ℕ)) = 0 := by
       simp only [Fin.val_add, Fin.coe_ofNat_eq_mod, Nat.add_mod_mod, hk_eq, Nat.mod_self]
@@ -478,10 +478,10 @@ private lemma left_mul_cyclicProjection_eq {γ : ℂ} (hγprim : IsPrimitiveRoot
               (fun j => (γ ^ (k : ℕ) *
                 ((((star γ) ^ (k : ℕ)) ^ (j + 1) : ℂ))) •
                   ((U : MatrixAlg D) ^ (j + 1))) +
-            γ ^ (k : ℕ) • (1 : MatrixAlg D)) := by
-          exact cyclic_projection_step2_left_mul_shifted_sum (m := m) hγprim U hUm k
-    _ = γ ^ (k : ℕ) • cyclicProjection (m := m) (γ := γ) U k := by
-          exact cyclic_projection_step3_shifted_sum_eq_smul (m := m) (γ := γ) U k
+            γ ^ (k : ℕ) • (1 : MatrixAlg D)) :=
+          cyclic_projection_step2_left_mul_shifted_sum (m := m) hγprim U hUm k
+    _ = γ ^ (k : ℕ) • cyclicProjection (m := m) (γ := γ) U k :=
+          cyclic_projection_step3_shifted_sum_eq_smul (m := m) (γ := γ) U k
 
 omit [NeZero m] in
 /-- Each cyclic projection commutes with the generating unitary. -/
@@ -559,8 +559,8 @@ private lemma unitary_eq_sum_cyclicProjection {γ : ℂ} (hγprim : IsPrimitiveR
     ∑ k : Fin m, γ ^ (k : ℕ) • cyclicProjection (m := m) (γ := γ) U k = (U : MatrixAlg D) := by
   have honeIdx_lt : cyclicOneIdx (m := m) < m := by
     simpa [cyclicOneIdx] using ((1 : Fin m).is_lt)
-  have honeIdx_mem : cyclicOneIdx (m := m) ∈ Finset.range m := by
-    exact Finset.mem_range.mpr honeIdx_lt
+  have honeIdx_mem : cyclicOneIdx (m := m) ∈ Finset.range m :=
+    Finset.mem_range.mpr honeIdx_lt
   dsimp [cyclicProjection]
   calc
     ∑ k : Fin m, γ ^ (k : ℕ) •
@@ -769,8 +769,7 @@ private lemma unitary_mul_star_cyclicProjection_eq {γ : ℂ} (hγprim : IsPrimi
     simpa [Matrix.conjTranspose_mul, Matrix.conjTranspose_smul] using
       congrArg Matrix.conjTranspose
         (right_mul_cyclicProjection_eq (m := m) hγprim U hUm k)
-  have hU_mul_star : (U : MatrixAlg D) * (U : MatrixAlg D)ᴴ = 1 := by
-    exact U.2.2
+  have hU_mul_star : (U : MatrixAlg D) * (U : MatrixAlg D)ᴴ = 1 := U.2.2
   have hpre :
       (cyclicProjection (m := m) (γ := γ) U k)ᴴ =
         star (γ ^ (k : ℕ)) • ((U : MatrixAlg D) * (cyclicProjection (m := m) (γ := γ) U k)ᴴ) := by

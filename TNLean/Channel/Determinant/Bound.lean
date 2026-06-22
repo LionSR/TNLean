@@ -27,7 +27,7 @@ this bounded-orbit argument to eigenvectors of the channel.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.1.1][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.1.1][Wolf2012QChannels]
 
 ## Tags
 
@@ -35,21 +35,9 @@ quantum channel, determinant bound, positive map, trace-preserving map
 -/
 open scoped Matrix ComplexOrder MatrixOrder BigOperators Kronecker Matrix.Norms.Frobenius
 open Matrix
+open ChannelDeterminant.Internal
 
 variable {d : ℕ}
-
-/-- File-local alias for the shared internal matrix-algebra model. -/
-private abbrev MatrixAlg (d : ℕ) := ChannelDeterminant.Internal.MatrixAlg d
-
-/-- File-local alias for endomorphisms of `M_d(ℂ)`. -/
-private abbrev MatrixEnd (d : ℕ) := ChannelDeterminant.Internal.MatrixEnd d
-
-/-- File-local alias for the shared basis index type. -/
-private abbrev MatrixBasisIndex (d : ℕ) := ChannelDeterminant.Internal.MatrixBasisIndex d
-
-/-- File-local alias for the shared standard basis of `M_d(ℂ)`. -/
-private noncomputable abbrev matrixSpaceBasis (d : ℕ) :=
-  ChannelDeterminant.Internal.matrixSpaceBasis d
 
 section WolfStatements
 
@@ -148,8 +136,8 @@ private theorem positiveTracePreserving_bounded_orbit_of_trace_zero_hermitian [N
     _ ≤ ‖c‖ * (‖(T ^ n) ρ‖ + ‖(T ^ n) σ‖) := by
       gcongr
       exact norm_sub_le _ _
-    _ ≤ ‖c‖ * (M + M) := by
-      exact mul_le_mul_of_nonneg_left (add_le_add hρ_orbit hσ_orbit) (norm_nonneg _)
+    _ ≤ ‖c‖ * (M + M) :=
+      mul_le_mul_of_nonneg_left (add_le_add hρ_orbit hσ_orbit) (norm_nonneg _)
 
 private theorem positiveTracePreserving_eigenvalue_norm_le_one [NeZero d]
     {T : MatrixEnd d} (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T)
@@ -163,15 +151,15 @@ private theorem positiveTracePreserving_eigenvalue_norm_le_one [NeZero d]
     let y : MatrixAlg d := (1 / 2 : ℝ) • (Complex.I • (zᴴ - z))
     have hx_herm : x.IsHermitian := by
       ext i j
-      simp only [smul_add, one_div, conjTranspose_apply, add_apply, smul_apply,
+      simp only [smul_add, one_div, conjTranspose_apply, Matrix.add_apply, Matrix.smul_apply,
         Complex.real_smul, Complex.ofReal_inv, Complex.ofReal_ofNat, RCLike.star_def,
         star_add, star_mul', star_inv₀, star_ofNat, RingHomCompTriple.comp_apply,
         RingHom.id_apply, add_comm, x]
     have hy_herm : y.IsHermitian := by
       ext i j
       simp only [one_div, sub_eq_add_neg, smul_add, smul_neg, conjTranspose_apply,
-        add_apply, smul_apply, RCLike.star_def, smul_eq_mul, Complex.real_smul,
-        Complex.ofReal_inv, Complex.ofReal_ofNat, neg_apply, add_comm, star_add,
+        Matrix.add_apply, Matrix.smul_apply, RCLike.star_def, smul_eq_mul, Complex.real_smul,
+        Complex.ofReal_inv, Complex.ofReal_ofNat, Matrix.neg_apply, add_comm, star_add,
         star_neg, star_mul', star_inv₀, star_ofNat, Complex.conj_I, neg_mul, mul_neg,
         neg_neg, RingHomCompTriple.comp_apply, RingHom.id_apply, y]
     have hx_tr : Matrix.trace x = 0 := by
@@ -189,17 +177,17 @@ private theorem positiveTracePreserving_eigenvalue_norm_le_one [NeZero d]
         _ = -((2 : ℂ)⁻¹ * w) := by norm_num [Complex.I_sq]
     have hIy : Complex.I • y = (1 / 2 : ℝ) • (z - zᴴ) := by
       ext i j
-      simp only [one_div, sub_eq_add_neg, smul_add, smul_neg, smul_apply, add_apply,
+      simp only [one_div, sub_eq_add_neg, smul_add, smul_neg, Matrix.smul_apply, Matrix.add_apply,
         conjTranspose_apply, RCLike.star_def, smul_eq_mul, Complex.real_smul,
-        Complex.ofReal_inv, Complex.ofReal_ofNat, neg_apply, add_comm, mul_add,
+        Complex.ofReal_inv, Complex.ofReal_ofNat, Matrix.neg_apply, add_comm, mul_add,
         mul_neg, hmulI, neg_neg, y]
     have hz_decomp : z = x + Complex.I • y := by
       rw [hIy]
       ext i j
-      simp only [smul_add, one_div, sub_eq_add_neg, smul_neg, add_apply, smul_apply,
-        Complex.real_smul, Complex.ofReal_inv, Complex.ofReal_ofNat, conjTranspose_apply,
-        RCLike.star_def, neg_apply, x]
-      ring
+      simp only [smul_add, one_div, sub_eq_add_neg, smul_neg, Matrix.add_apply,
+        Matrix.smul_apply, Complex.real_smul, Complex.ofReal_inv, Complex.ofReal_ofNat,
+        conjTranspose_apply, RCLike.star_def, Matrix.neg_apply, x]
+      ring_nf
     obtain ⟨Cx, hCx⟩ :=
       positiveTracePreserving_bounded_orbit_of_trace_zero_hermitian (d := d) hPos hTP
         hx_herm hx_tr
@@ -223,8 +211,8 @@ private theorem positiveTracePreserving_eigenvalue_norm_le_one [NeZero d]
     have hμ_gt : 1 < ‖μ‖ := lt_of_not_ge hμ_le
     have hz_norm_pos : 0 < ‖z‖ := norm_pos_iff.mpr hz_ne
     obtain ⟨n, hn⟩ := pow_unbounded_of_one_lt ((Cx + Cy) / ‖z‖) hμ_gt
-    have hpow_gt : Cx + Cy < ‖μ‖ ^ n * ‖z‖ := by
-      exact (div_lt_iff₀ hz_norm_pos).mp hn
+    have hpow_gt : Cx + Cy < ‖μ‖ ^ n * ‖z‖ :=
+      (div_lt_iff₀ hz_norm_pos).mp hn
     have hpow_le : ‖μ‖ ^ n * ‖z‖ ≤ Cx + Cy := by
       calc
         ‖μ‖ ^ n * ‖z‖ = ‖μ ^ n • z‖ := by rw [norm_smul, norm_pow]
@@ -279,7 +267,7 @@ private lemma channelDet_norm_le_one_of_eigenvalues_bounded
     _ = ‖(channelMatrix T).charpoly.roots.prod‖ := by rw [Matrix.det_eq_prod_roots_charpoly]
     _ ≤ 1 := ChannelDeterminant.Internal.norm_prod_le_one_of_forall_mem' _ hroot_le
 
-/-- Wolf Thm. 6.1(1): for a positive trace-preserving map on `M_d(ℂ)`, the channel
+/-- Wolf Theorem 6.1(1): for a positive trace-preserving map on `M_d(ℂ)`, the channel
 determinant satisfies `|det T| ≤ 1`. -/
 theorem channelDet_norm_le_one_of_positive_tracePreserving
     (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T) :

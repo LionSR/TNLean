@@ -26,8 +26,14 @@ variable {d D : ℕ}
 Let `B` be an MPS tensor in irreducible form II and let `p ≥ 1`. Under both the forward
 canonicalization hypothesis `PRefinementCanonicalization` and the inverse canonicalization
 hypothesis `PRefinementInverseCanonicalization`, `p`-refinability of `B` is equivalent to
-`p`-divisibility of its transfer map. This bundles
-`thm_4_1_p_refinement_forward` and `thm_4_1_p_refinement_reverse` into a single iff. -/
+`p`-divisibility of its transfer map.
+
+This is a conditional version of arXiv:1708.00029, Theorem 4.1; the source
+statement, lines 728--731, does not assume the two canonicalization hypotheses.
+The converse root/Kraus-rank gap is recorded in
+`docs/paper-gaps/periodic_thm41_root_kraus_rank.tex`. This theorem combines
+`thm_4_1_p_refinement_forward` and `thm_4_1_p_refinement_reverse` into a
+single biconditional. -/
 theorem thm_4_1_p_refinement
     (B : MPSTensor d D) (hB : IsIrreducibleForm B)
     (p : ℕ) (hp : 0 < p)

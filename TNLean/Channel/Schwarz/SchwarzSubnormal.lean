@@ -12,19 +12,17 @@ import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
 /-!
 # Schwarz inequalities for subnormal and commuting dominant operators
 
-This file records the Chapter 5 extensions of the normal-input Schwarz inequality
+This file states the Chapter 5 extensions of the normal-input Schwarz inequality
 that appear in Wolf's notes.
 
 ## Main declarations
 
 * `KadisonSchwarz.IsSubnormal`
 * `KadisonSchwarz.schwarz_inequality_subnormal_operator`
-* `KadisonSchwarz.wolf_theorem_5_5`
 * `KadisonSchwarz.commuting_dominant_right_bound`
 * `KadisonSchwarz.kadison_schwarz_commuting_dominant_cp_of_two_sided_bound`
 * `KadisonSchwarz.kadison_schwarz_commuting_dominant_cp`
 * `KadisonSchwarz.schwarz_inequality_commuting_dominant_operator`
-* `KadisonSchwarz.wolf_theorem_5_6`
 
 The key new result is `commuting_dominant_right_bound`: if `D ≥ 0` commutes with
 `A` and dominates `A† A`, then it also dominates `A A†`.  The proof uses the
@@ -40,7 +38,7 @@ general PSD case follows by approximating `D` with `D + ε · I`.
 open scoped Matrix ComplexOrder MatrixOrder TNOperatorSpace
 open Matrix
 
-/-! ### C*-algebra infrastructure for matrices -/
+/-! ### C*-algebra formalization for matrices -/
 
 namespace KadisonSchwarz
 
@@ -68,7 +66,7 @@ The proof uses the C*-identity `‖x* x‖ = ‖x‖²`. -/
 private lemma contraction_conjTranspose
     (B : Mat) (h : Bᴴ * B ≤ 1) : B * Bᴴ ≤ 1 := by
   change B * star B ≤ 1
-  have h' : star B * B ≤ 1 := by simpa only using h
+  have h' : star B * B ≤ 1 := by simpa [Matrix.star_eq_conjTranspose] using h
   have h_norm_sq : ‖B‖₊ * ‖B‖₊ ≤ 1 := by
     simpa only [mul_self_le_one_iff, CStarRing.nnnorm_star_mul_self] using
       (CStarAlgebra.nnnorm_le_one_iff_of_nonneg _ (star_mul_self_nonneg B)).2 h'
@@ -99,12 +97,13 @@ private lemma commuting_dominant_right_bound_posDef
   have hS_selfAdjoint : IsSelfAdjoint S := by
     simpa only using (CFC.sqrt_nonneg (a := Dom)).isSelfAdjoint
   have hSA : Commute S A := by
-    simpa only using hComm.cfcₙ_nnreal NNReal.sqrt
+    simpa only [S, CFC.sqrt] using hComm.cfcₙ_nnreal NNReal.sqrt
   obtain ⟨u, hu⟩ : ∃ u : Matˣ, (u : Mat) = S := by
     have hS_unit : IsUnit S := by
       dsimp [S]
       exact (CFC.isUnit_sqrt_iff Dom hDom_nonneg).2 hPD.isUnit
-    simpa only using hS_unit
+    rcases hS_unit with ⟨u, hu⟩
+    exact ⟨u, hu⟩
   have hU_selfAdjoint : IsSelfAdjoint u := by
     refine Units.ext ?_
     simpa only [Units.coe_star, hu] using hS_selfAdjoint.star_eq
@@ -134,7 +133,8 @@ private lemma commuting_dominant_right_bound_posDef
           rw [← mul_assoc, hSA.eq, mul_assoc]
       _ = A := by
         simpa only [coe_units_inv, mul_assoc, mul_one] using congrArg (fun M : Mat => A * M) hSSi
-  have hS_conjTranspose : Sᴴ = S := by simpa only using hS_selfAdjoint.star_eq
+  have hS_conjTranspose : Sᴴ = S := by
+    simpa [Matrix.star_eq_conjTranspose] using hS_selfAdjoint.star_eq
   have hXstarS : Xᴴ * S = Aᴴ := by
     have hXstarS' : Xᴴ * Sᴴ = Aᴴ := by
       simpa only [conjTranspose_mul] using congrArg Matrix.conjTranspose hSX
@@ -150,17 +150,6 @@ private lemma commuting_dominant_right_bound_posDef
 
 /-! ### General PSD case -/
 
-/-- `Dom.PosSemidef` implies `(Dom + ε • 1).PosDef` for `ε > 0`. -/
-private lemma posDef_add_pos_smul_one (Dom : Mat) (hPSD : Dom.PosSemidef)
-    (ε : ℝ) (hε : 0 < ε) :
-    (Dom + (ε : ℂ) • (1 : Mat)).PosDef := by
-  rw [add_comm]
-  apply Matrix.PosDef.add_posSemidef _ hPSD
-  have h1 : (ε : ℂ) • (1 : Mat) = (ε : ℝ) • (1 : Mat) := by
-    ext i j; simp [Matrix.smul_apply, smul_eq_mul, Complex.real_smul]
-  rw [h1]
-  exact Matrix.PosDef.one.smul hε
-
 /-- If `B ≤ D + ε • 1` for all `ε > 0`, then `B ≤ D`.
 This is the closedness of the PSD cone, applied to the differences
 `D - B + ε • 1`. -/
@@ -172,8 +161,8 @@ private lemma le_of_forall_le_add_pos_smul_one (B D : Mat)
   have hg_tendsto : Filter.Tendsto g Filter.atTop (nhds (D - B)) := by
     have hε :
         Filter.Tendsto (fun n : ℕ => ((((1 / ((n : ℝ) + 1)) : ℝ) : ℂ)))
-          Filter.atTop (nhds (0 : ℂ)) := by
-      exact (Complex.continuous_ofReal.tendsto 0).comp tendsto_one_div_add_atTop_nhds_zero_nat
+          Filter.atTop (nhds (0 : ℂ)) :=
+      (Complex.continuous_ofReal.tendsto 0).comp tendsto_one_div_add_atTop_nhds_zero_nat
     have hzero :
         Filter.Tendsto
           (fun n : ℕ => ((((1 / ((n : ℝ) + 1)) : ℝ) : ℂ)) • (1 : Mat))
@@ -188,8 +177,10 @@ private lemma le_of_forall_le_add_pos_smul_one (B D : Mat)
       change (D - B) + ((((1 / ((n : ℝ) + 1)) : ℝ) : ℂ)) • 1 = _
       abel
     rw [hg_eq, Matrix.le_iff]
+    have hn := h (1 / ((n : ℝ) + 1)) (by positivity)
+    rw [Matrix.le_iff] at hn
     simpa only [one_div, Complex.ofReal_inv, Complex.ofReal_add, Complex.ofReal_natCast,
-      Complex.ofReal_one, sub_zero] using h (1 / ((n : ℝ) + 1)) (by positivity)
+      Complex.ofReal_one, sub_zero] using hn
   simpa only [sub_nonneg, le_iff] using ge_of_tendsto' hg_tendsto hg_nonneg
 
 /-- An operator is subnormal if it is the north-west block of a normal operator
@@ -208,15 +199,21 @@ private noncomputable def nwExtendLinearMap (T : Mat →ₗ[ℂ] Mat) (E : ℕ) 
   map_add' := by
     intro M N
     have hAdd : T ((M + N).toBlocks₁₁) = T (M.toBlocks₁₁) + T (N.toBlocks₁₁) := by
-      simpa only [toBlocks₁₁, add_apply, of_add_of] using
-        T.map_add M.toBlocks₁₁ N.toBlocks₁₁
+      have hBlocks : (M + N).toBlocks₁₁ = M.toBlocks₁₁ + N.toBlocks₁₁ := by
+        ext i j
+        rfl
+      rw [hBlocks]
+      exact T.map_add M.toBlocks₁₁ N.toBlocks₁₁
     ext i j
     rcases i with i | i <;> rcases j with j | j <;> simp [hAdd]
   map_smul' := by
     intro c M
     have hSmul : T ((c • M).toBlocks₁₁) = c • T (M.toBlocks₁₁) := by
-      simpa only [toBlocks₁₁, smul_apply, smul_eq_mul, smul_of] using
-        T.map_smul c M.toBlocks₁₁
+      have hBlocks : (c • M).toBlocks₁₁ = c • M.toBlocks₁₁ := by
+        ext i j
+        rfl
+      rw [hBlocks]
+      exact T.map_smul c M.toBlocks₁₁
     ext i j
     rcases i with i | i <;> rcases j with j | j <;> simp [hSmul]
 
@@ -225,7 +222,7 @@ private lemma nwExtendLinearMap_isPositiveMap (T : Mat →ₗ[ℂ] Mat)
     IsPositiveMap (nwExtendLinearMap (D := D) T E) := by
   intro M hM
   refine Matrix.PosSemidef.fromBlocks_diag ?_ Matrix.PosSemidef.zero
-  exact hPos _ (by simpa only [toBlocks₁₁] using hM.submatrix Sum.inl)
+  exact hPos _ (by change M.toBlocks₁₁.PosSemidef; exact hM.submatrix Sum.inl)
 
 private lemma nwExtendLinearMap_subunital (T : Mat →ₗ[ℂ] Mat)
     (hSub : T 1 ≤ (1 : Mat)) (E : ℕ) :
@@ -247,10 +244,10 @@ private lemma nwExtendLinearMap_subunital (T : Mat →ₗ[ℂ] Mat)
       simp [nwExtendLinearMap, hOne11, Matrix.one_apply]
   simpa only [hEq] using hDiag
 
-/-- Wolf Thm. 5.5: Schwarz inequality for subnormal operators.
+/-- Wolf Theorem 5.5: Schwarz inequality for subnormal operators.
 
 The intended proof composes the given positive subunital map with the north-west
-block extraction map on a normal extension of `A`, then applies Wolf Prop. 5.1
+block extraction map on a normal extension of `A`, then applies Wolf Proposition 5.1
 (`schwarz_inequality_normal_operator`) to the resulting positive map. -/
 private theorem topLeft_schwarz_of_normal_extension
     (T : Mat →ₗ[ℂ] Mat)
@@ -270,7 +267,7 @@ private theorem topLeft_schwarz_of_normal_extension
     nwExtendLinearMap_subunital (D := D) T hSub E
   let e : (Fin D ⊕ Fin E) ≃ Fin (D + E) := finSumFinEquiv (m := D) (n := E)
   let ρ := Matrix.reindexLinearEquiv ℂ ℂ e e
-  let Nf : Matrix (Fin (D + E)) (Fin (D + E)) ℂ := Matrix.reindex e e N
+  let Nf : Matrix (Fin (D + E)) (Fin (D + E)) ℂ := ρ N
   let Sf : Matrix (Fin (D + E)) (Fin (D + E)) ℂ →ₗ[ℂ]
       Matrix (Fin (D + E)) (Fin (D + E)) ℂ :=
     ρ.toLinearMap.comp (S.comp ρ.symm.toLinearMap)
@@ -289,31 +286,29 @@ private theorem topLeft_schwarz_of_normal_extension
         (1 : Matrix (Fin (D + E)) (Fin (D + E)) ℂ) - Sf 1 =
           Matrix.reindex e e ((1 : Matrix (Fin D ⊕ Fin E) (Fin D ⊕ Fin E) ℂ) - S 1) := by
       ext i j
-      simp [Sf, ρ, Matrix.reindexLinearEquiv_apply, Matrix.one_apply]
+      simp [Sf, ρ, Matrix.coe_reindexLinearEquiv, Matrix.one_apply]
     simpa only [hEq, reindex_apply, posSemidef_submatrix_equiv] using hSubS.submatrix e.symm
   have hNormalf : Nfᴴ * Nf = Nf * Nfᴴ := by
-    change (Matrix.reindex e e N)ᴴ * Matrix.reindex e e N =
-      Matrix.reindex e e N * (Matrix.reindex e e N)ᴴ
+    change (ρ N)ᴴ * ρ N = ρ N * (ρ N)ᴴ
     calc
-      (Matrix.reindex e e N)ᴴ * Matrix.reindex e e N =
-          Matrix.reindex e e Nᴴ * Matrix.reindex e e N := by
-            rw [Matrix.conjTranspose_reindex]
-      _ = Matrix.reindex e e (Nᴴ * N) := by
-        convert (Matrix.reindexLinearEquiv_mul ℂ ℂ e e e Nᴴ N) using 1
-      _ = Matrix.reindex e e (N * Nᴴ) := by rw [hNormal]
-      _ = Matrix.reindex e e N * Matrix.reindex e e Nᴴ := by
-        convert (Matrix.reindexLinearEquiv_mul ℂ ℂ e e e N Nᴴ).symm using 1
-      _ = Matrix.reindex e e N * (Matrix.reindex e e N)ᴴ := by
-        rw [Matrix.conjTranspose_reindex]
+      (ρ N)ᴴ * ρ N = ρ Nᴴ * ρ N := by
+        rw [show (ρ N)ᴴ = ρ Nᴴ by
+          simpa [ρ, Matrix.coe_reindexLinearEquiv] using Matrix.conjTranspose_reindex e e N]
+      _ = ρ (Nᴴ * N) := by rw [Matrix.reindexLinearEquiv_mul]
+      _ = ρ (N * Nᴴ) := by rw [hNormal]
+      _ = ρ N * ρ Nᴴ := by rw [Matrix.reindexLinearEquiv_mul]
+      _ = ρ N * (ρ N)ᴴ := by
+        rw [show (ρ N)ᴴ = ρ Nᴴ by
+          simpa [ρ, Matrix.coe_reindexLinearEquiv] using Matrix.conjTranspose_reindex e e N]
   have hLeftf : (Sf (Nfᴴ * Nf) - Sf Nfᴴ * Sf Nf).PosSemidef :=
     schwarz_inequality_normal_operator (D := D + E) Sf hPosSf hSubSf Nf hNormalf
   have hLeftSum : (S (Nᴴ * N) - S Nᴴ * S N).PosSemidef := by
     have h :
         ((S (Nᴴ * N)).submatrix e.symm e.symm -
           (S Nᴴ * S N).submatrix e.symm e.symm).PosSemidef := by
-      simpa only [Sf, Nf, ρ, Matrix.conjTranspose_reindex, reindexLinearEquiv_symm,
+      simpa only [Sf, Nf, ρ, Matrix.conjTranspose_reindex, Matrix.symm_reindexLinearEquiv,
         reindex_apply, conjTranspose_submatrix, submatrix_mul_equiv, LinearMap.coe_comp,
-        LinearEquiv.coe_coe, Function.comp_apply, reindexLinearEquiv_apply,
+        LinearEquiv.coe_coe, Function.comp_apply, Matrix.coe_reindexLinearEquiv,
         Matrix.reindexLinearEquiv_mul, Matrix.submatrix_sub, Equiv.symm_symm,
         submatrix_submatrix, Equiv.symm_comp_self, submatrix_id_id] using hLeftf
     simpa only [submatrix_sub, Pi.sub_apply, submatrix_submatrix, Equiv.symm_comp_self,
@@ -327,10 +322,10 @@ private theorem topLeft_schwarz_of_normal_extension
     have h :
         ((S (N * Nᴴ)).submatrix e.symm e.symm -
           (S N * S Nᴴ).submatrix e.symm e.symm).PosSemidef := by
-      simpa only [Sf, Nf, ρ, Matrix.conjTranspose_reindex, reindexLinearEquiv_symm,
+      simpa only [Sf, Nf, ρ, Matrix.conjTranspose_reindex, Matrix.symm_reindexLinearEquiv,
         reindex_apply, conjTranspose_submatrix, conjTranspose_conjTranspose,
         submatrix_mul_equiv, LinearMap.coe_comp, LinearEquiv.coe_coe, Function.comp_apply,
-        reindexLinearEquiv_apply, Matrix.reindexLinearEquiv_mul, Matrix.submatrix_sub,
+        Matrix.coe_reindexLinearEquiv, Matrix.reindexLinearEquiv_mul, Matrix.submatrix_sub,
         Equiv.symm_symm, submatrix_submatrix, Equiv.symm_comp_self, submatrix_id_id] using
         hRightf
     simpa only [submatrix_sub, Pi.sub_apply, submatrix_submatrix, Equiv.symm_comp_self,
@@ -338,9 +333,13 @@ private theorem topLeft_schwarz_of_normal_extension
   refine ⟨?_, ?_⟩
   · rw [Matrix.le_iff]
     have hTop := hLeftSum.submatrix Sum.inl
-    simpa only [S, toBlocks₁₁, conjTranspose_apply, RCLike.star_def, nwExtendLinearMap,
-      LinearMap.coe_mk, AddHom.coe_mk, fromBlocks_multiply, Matrix.mul_zero, add_zero,
-      Matrix.zero_mul, mul_zero, submatrix_apply, submatrix_sub, Pi.sub_apply] using hTop
+    have hEqTop :
+        (S (Nᴴ * N) - S Nᴴ * S N).submatrix Sum.inl Sum.inl =
+          T ((Nᴴ * N).toBlocks₁₁) - T (Nᴴ.toBlocks₁₁) * T (N.toBlocks₁₁) := by
+      ext i j
+      simp [S, nwExtendLinearMap, Matrix.fromBlocks_multiply,
+        Matrix.toBlocks₁₁, Matrix.submatrix_apply]
+    rwa [hEqTop] at hTop
   · rw [Matrix.le_iff]
     have hBlockEq : (N * Nᴴ).toBlocks₁₁ = (Nᴴ * N).toBlocks₁₁ := by
       simpa only using congrArg Matrix.toBlocks₁₁ hNormal.symm
@@ -367,17 +366,14 @@ theorem schwarz_inequality_subnormal_operator
     topLeft_schwarz_of_normal_extension (D := D) T hPos hSub
       (Matrix.fromBlocks A B 0 C) hNormal
 
-/-- Alias for `schwarz_inequality_subnormal_operator` matching Wolf Theorem 5.5. -/
-alias wolf_theorem_5_5 := schwarz_inequality_subnormal_operator
-
-/-- Linear-map wrapper for the canonical adjoint Kraus map.
+/-- Linear-map formulation for the canonical adjoint Kraus map.
 
 This bundles `KadisonSchwarz.krausAdjointMap` from `KadisonSchwarz.lean` as a
 linear map. It is convenient for reusing the generic positivity/monotonicity
-API from `PositiveMapProperties`.
+interface from `PositiveMapProperties`.
 
 Note: `TNLean.Channel.Semigroup.Generator` contains an older duplicate
-formula with the same name; inside `namespace KadisonSchwarz`, this wrapper
+formula with the same name; inside `namespace KadisonSchwarz`, this formulation
 intentionally uses the canonical Schwarz-side definition. -/
 noncomputable def krausAdjointMapLinear (K : Fin d → Mat) : Mat →ₗ[ℂ] Mat where
   toFun := krausAdjointMap K
@@ -400,7 +396,7 @@ private lemma krausAdjointMapLinear_isPositiveMap (K : Fin d → Mat) :
         simpa only [Matrix.mul_assoc, conjTranspose_conjTranspose] using
           hX.mul_mul_conjTranspose_same (B := (K i)ᴴ))
 
-/-- The missing order-theoretic step in Wolf Thm. 5.6: if `D ≥ 0` commutes with
+/-- The missing order-theoretic step in Wolf Theorem 5.6: if `D ≥ 0` commutes with
 `A` and dominates `Aᴴ * A`, then it also dominates `A * Aᴴ`.
 
 Wolf proves this first for invertible `D` using `X = A D^{-1/2}`, and then passes
@@ -420,8 +416,12 @@ theorem commuting_dominant_right_bound
     A * Aᴴ ≤ Dom := by
   apply le_of_forall_le_add_pos_smul_one _ _
   intro ε hε
-  have hPD : (Dom + (ε : ℂ) • (1 : Mat)).PosDef :=
-    posDef_add_pos_smul_one Dom hDomPos ε hε
+  have hPD : (Dom + (ε : ℂ) • (1 : Mat)).PosDef := by
+    apply Matrix.PosDef.posSemidef_add hDomPos
+    have h1 : (ε : ℂ) • (1 : Mat) = (ε : ℝ) • (1 : Mat) := by
+      ext i j; simp [Matrix.smul_apply, smul_eq_mul, Complex.real_smul]
+    rw [h1]
+    exact Matrix.PosDef.one.smul hε
   have hComm' : Commute (Dom + (ε : ℂ) • (1 : Mat)) A :=
     hComm.add_left ((Commute.one_left A).smul_left (ε : ℂ))
   have hDom' : Aᴴ * A ≤ Dom + (ε : ℂ) • (1 : Mat) :=
@@ -431,7 +431,7 @@ theorem commuting_dominant_right_bound
         (Matrix.PosSemidef.one (n := Fin D) (R := ℂ)).smul hε.le
   simpa using commuting_dominant_right_bound_posDef A _ hPD hComm' hDom'
 
-/-- CP/Kraus version of Wolf Thm. 5.6 under both dominant bounds.
+/-- CP/Kraus version of Wolf Theorem 5.6 under both dominant bounds.
 
 Once both inequalities `Aᴴ * A ≤ D` and `A * Aᴴ ≤ D` are available, the proof is
 just Kadison--Schwarz for the adjoint Kraus map, followed by monotonicity of the
@@ -456,7 +456,8 @@ theorem kadison_schwarz_commuting_dominant_cp_of_two_sided_bound
       krausAdjointMap K (Aᴴ * A) := by
     simpa only [krausAdjointMap_conjTranspose] using hKSLeft'
   have hDomLeftMap : krausAdjointMap K (Aᴴ * A) ≤ krausAdjointMap K Dom := by
-    simpa only using hPosT.map_le_map hDomLeft
+    simpa only [T, krausAdjointMapLinear, LinearMap.coe_mk, AddHom.coe_mk] using
+      hPosT.map_le_map hDomLeft
   have hKSRight' : (krausAdjointMap K (Aᴴ))ᴴ * krausAdjointMap K (Aᴴ) ≤
       krausAdjointMap K (A * Aᴴ) := by
     simpa only [krausAdjointMap_conjTranspose, conjTranspose_conjTranspose] using
@@ -467,10 +468,11 @@ theorem kadison_schwarz_commuting_dominant_cp_of_two_sided_bound
       krausAdjointMap K (A * Aᴴ) := by
     simpa only [krausAdjointMap_conjTranspose, conjTranspose_conjTranspose] using hKSRight'
   have hDomRightMap : krausAdjointMap K (A * Aᴴ) ≤ krausAdjointMap K Dom := by
-    simpa only using hPosT.map_le_map hDomRight
+    simpa only [T, krausAdjointMapLinear, LinearMap.coe_mk, AddHom.coe_mk] using
+      hPosT.map_le_map hDomRight
   refine ⟨hKSLeft.trans hDomLeftMap, hKSRight.trans hDomRightMap⟩
 
-/-- Wolf Thm. 5.6 in the CP/Kraus setting.
+/-- Wolf Theorem 5.6 in the CP/Kraus setting.
 
 The only missing ingredient beyond `kadison_schwarz_commuting_dominant_cp_of_two_sided_bound`
 is the right-dominance lemma `commuting_dominant_right_bound`. -/
@@ -545,19 +547,21 @@ private lemma intertwine_sqrt_of_mul_eq
   have hS_psd : (CFC.sqrt M).PosSemidef := (Matrix.nonneg_iff_posSemidef).mp hS_nonneg
   have hS11_nonneg : (0 : Mat) ≤ (CFC.sqrt M).toBlocks₁₁ := by
     rw [Matrix.nonneg_iff_posSemidef]
-    simpa only [toBlocks₁₁] using hS_psd.submatrix Sum.inl
+    change ((CFC.sqrt M).submatrix Sum.inl Sum.inl).PosSemidef
+    exact hS_psd.submatrix Sum.inl
   have hS22_nonneg : (0 : Mat) ≤ (CFC.sqrt M).toBlocks₂₂ := by
     rw [Matrix.nonneg_iff_posSemidef]
-    simpa only using hS_psd.submatrix Sum.inr
+    change ((CFC.sqrt M).submatrix Sum.inr Sum.inr).PosSemidef
+    exact hS_psd.submatrix Sum.inr
   have hSq : CFC.sqrt M * CFC.sqrt M = M := CFC.sqrt_mul_sqrt_self M hM_nonneg
   have h11sq : (CFC.sqrt M).toBlocks₁₁ * (CFC.sqrt M).toBlocks₁₁ = P := by
     have h := congrArg Matrix.toBlocks₁₁ hSq
     rw [hSdecomp, Matrix.fromBlocks_multiply] at h
-    simpa only [mul_zero, add_zero, zero_mul, zero_add, toBlocks_fromBlocks₁₁] using h
+    simpa [M] using h
   have h22sq : (CFC.sqrt M).toBlocks₂₂ * (CFC.sqrt M).toBlocks₂₂ = Q := by
     have h := congrArg Matrix.toBlocks₂₂ hSq
     rw [hSdecomp, Matrix.fromBlocks_multiply] at h
-    simpa only [mul_zero, add_zero, zero_mul, zero_add, toBlocks_fromBlocks₂₂] using h
+    simpa [M] using h
   have h11eq : CFC.sqrt P = (CFC.sqrt M).toBlocks₁₁ :=
     (CFC.sqrt_eq_iff P _ hP hS11_nonneg).2 h11sq
   have h22eq : CFC.sqrt Q = (CFC.sqrt M).toBlocks₂₂ :=
@@ -569,7 +573,7 @@ private lemma intertwine_sqrt_of_mul_eq
   simp [K, Matrix.fromBlocks_multiply] at h
   simpa only [h22eq, h11eq] using h.symm
 
-/-- Helper: the PD Schwarz inequality for commuting dominant operators.
+/-- Auxiliary lemma: the PD Schwarz inequality for commuting dominant operators.
 
 This is proved by a normal dilation whose `NᴴN` top-left block is `Dom`. -/
 private lemma schwarz_commuting_dominant_posDef
@@ -648,7 +652,7 @@ private lemma schwarz_commuting_dominant_posDef
   have hNstarN11 : (Nᴴ * N).toBlocks₁₁ = Dom := by rw [hNstarN]; simp
   simpa only [hNstar11, hN11, hNstarN11] using hBlock
 
-/-- Wolf Thm. 5.6: Schwarz inequality for commuting dominant operators.
+/-- Wolf Theorem 5.6: Schwarz inequality for commuting dominant operators.
 
 If `T` is a positive subunital linear map, `D ≥ 0` commutes with `A`, and
 `Aᴴ * A ≤ D`, then `T(Aᴴ) T(A) ≤ T(D)` and `T(A) T(Aᴴ) ≤ T(D)`.
@@ -676,27 +680,25 @@ theorem schwarz_inequality_commuting_dominant_operator
       T Aᴴ * T A ≤ T Dom + (ε : ℂ) • 1 ∧
         T A * T Aᴴ ≤ T Dom + (ε : ℂ) • 1 := by
     intro ε hε
-    have hPD := posDef_add_pos_smul_one Dom hDomPos ε hε
+    have hPD : (Dom + (ε : ℂ) • (1 : Mat)).PosDef := by
+      apply Matrix.PosDef.posSemidef_add hDomPos
+      have h1 : (ε : ℂ) • (1 : Mat) = (ε : ℝ) • (1 : Mat) := by
+        ext i j; simp [Matrix.smul_apply, smul_eq_mul, Complex.real_smul]
+      rw [h1]
+      exact Matrix.PosDef.one.smul hε
     have hPD_result :=
       schwarz_commuting_dominant_posDef T hPos hSub A _ hPD (hComm_add (ε : ℂ))
         (hDom_add ε hε.le)
     refine ⟨?_, ?_⟩
     · calc T Aᴴ * T A ≤ T (Dom + (ε : ℂ) • 1) := hPD_result.1
         _ = T Dom + (ε : ℂ) • T 1 := by
-            simpa only [Complex.coe_smul, map_add, LinearMap.map_smul_of_tower,
-              add_right_inj] using
-              congrArg (fun X => T Dom + X) (T.map_smul (ε : ℂ) (1 : Mat))
+            simp only [Complex.coe_smul, map_add, LinearMap.map_smul_of_tower]
         _ ≤ T Dom + (ε : ℂ) • 1 := by gcongr
     · calc T A * T Aᴴ ≤ T (Dom + (ε : ℂ) • 1) := hPD_result.2
         _ = T Dom + (ε : ℂ) • T 1 := by
-            simpa only [Complex.coe_smul, map_add, LinearMap.map_smul_of_tower,
-              add_right_inj] using
-              congrArg (fun X => T Dom + X) (T.map_smul (ε : ℂ) (1 : Mat))
+            simp only [Complex.coe_smul, map_add, LinearMap.map_smul_of_tower]
         _ ≤ T Dom + (ε : ℂ) • 1 := by gcongr
   exact ⟨le_of_forall_le_add_pos_smul_one _ _ fun ε hε => (hApprox ε hε).1,
          le_of_forall_le_add_pos_smul_one _ _ fun ε hε => (hApprox ε hε).2⟩
-
-/-- Alias for `schwarz_inequality_commuting_dominant_operator` matching Wolf Theorem 5.6. -/
-alias wolf_theorem_5_6 := schwarz_inequality_commuting_dominant_operator
 
 end KadisonSchwarz

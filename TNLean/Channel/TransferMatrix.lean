@@ -9,12 +9,12 @@ import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Data.Matrix.Basis
 
 /-!
-# Transfer-matrix representation of channels (Wolf §2.2)
+# Transfer-matrix representation of channels (Wolf Section 2.2)
 
 This file defines the **transfer matrix** (matrix representation) of a linear
 map `T : M_D(ℂ) → M_D(ℂ)`. Given an ordered basis `{E_{kl}}` of standard
 matrix units for `M_D(ℂ)`, the transfer matrix `T̂` is the `D² × D²` matrix
-that represents `T` in the column-stacking vectorization `Matrix.vec`.
+that represents `T` in the column-stacking vectorization `Matrix.vec` (Wolf Eq. (2.20)).
 
 The main result is that `T̂` faithfully represents `T` in the vectorized
 picture: `vec(T(ρ)) = T̂ *ᵥ vec(ρ)`, and this representation is compatible
@@ -30,16 +30,16 @@ with composition. We also relate it to the Kraus representation.
 ## Main results
 
 * `transferMatrix_mulVec_eq`: `T̂ *ᵥ vec(ρ) = vec(T(ρ))`
-* `transferMatrix_comp`: `(S ∘ T)^ = Ŝ * T̂`
+* `transferMatrix_comp`: `(S ∘ T)^ = Ŝ * T̂`
 * `transferMatrix_id`: the transfer matrix of the identity is the identity
 * `transferMatrix_kraus`: for a Kraus map `T(X) = ∑ᵢ Kᵢ X Kᵢ†`, the transfer
-  matrix is `∑ᵢ K̄ᵢ ⊗ₖ Kᵢ`
+  matrix is `∑ᵢ K'ᵢ ⊗ₖ Kᵢ`
 * `MPSTensor.transferMatrix_eq`: the MPS transfer map `E_A` has transfer
   matrix `∑ᵢ Āᵢ ⊗ₖ Aᵢ`
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §2.2][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 2.2][Wolf2012QChannels]
 -/
 
 open scoped Matrix BigOperators Kronecker
@@ -121,10 +121,8 @@ theorem transferMatrix_apply
 
 private lemma sum_smul_single_eq (ρ : Matrix (Fin D) (Fin D) ℂ) :
     ρ = ∑ k : Fin D, ∑ l : Fin D, ρ k l • Matrix.single k l 1 := by
-  conv_lhs => rw [Matrix.matrix_eq_sum_single ρ]
-  refine Finset.sum_congr rfl fun k _ => Finset.sum_congr rfl fun l _ => ?_
-  ext a b
-  simp [Matrix.single_apply, smul_eq_mul]
+  simpa [Matrix.smul_single, smul_eq_mul, mul_one] using
+    (Matrix.matrix_eq_sum_single ρ)
 
 /-! ### Fundamental property: T̂ represents T in the vectorized picture -/
 
@@ -141,7 +139,8 @@ theorem transferMatrix_mulVec_eq
   simp only [Matrix.mulVec, dotProduct, transferMatrix_apply,
     Matrix.vec, Fintype.sum_prod_type]
   have key : T ρ = ∑ k, ∑ l, ρ k l • T (Matrix.single k l 1) := by
-    conv_lhs => rw [sum_smul_single_eq ρ]
+    conv_lhs =>
+      rw [sum_smul_single_eq ρ]
     simp_rw [map_sum, LinearMap.map_smul]
   rw [key]
   simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
@@ -159,7 +158,8 @@ theorem transferMatrix_comp
     Fintype.sum_prod_type]
   have key : S (T (Matrix.single k l 1)) =
       ∑ a, ∑ b, (T (Matrix.single k l 1)) a b • S (Matrix.single a b 1) := by
-    conv_lhs => rw [sum_smul_single_eq (T (Matrix.single k l 1))]
+    conv_lhs =>
+      rw [sum_smul_single_eq (T (Matrix.single k l 1))]
     simp_rw [map_sum, LinearMap.map_smul]
   rw [key]
   simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
@@ -205,7 +205,7 @@ noncomputable def transferMatrixLM :
 /-! ### Kraus representation of the transfer matrix -/
 
 /-- For a Kraus map `T(X) = ∑ᵢ Kᵢ X Kᵢ†`, the transfer matrix is
-`∑ᵢ K̄ᵢ ⊗ₖ Kᵢ` (Kronecker product of the entrywise conjugate of `Kᵢ`
+`∑ᵢ K'ᵢ ⊗ₖ Kᵢ` (Kronecker product of the entrywise conjugate of `Kᵢ`
 with `Kᵢ`).
 
 This connects the channel-theoretic Kraus representation with the
@@ -232,7 +232,7 @@ namespace MPSTensor
 /-- The MPS transfer map `E_A(X) = ∑ᵢ Aᵢ X Aᵢ†` has transfer matrix
 `∑ᵢ Āᵢ ⊗ₖ Aᵢ`.
 
-This bridges Wolf's channel-side §2.2 transfer matrix with the MPS-side
+This relates Wolf's Section 2.2 transfer matrix for quantum channels to the MPS
 transfer operator. -/
 theorem transferMatrix_eq (A : MPSTensor d D) :
     transferMatrix (MPSTensor.transferMap A) =
@@ -242,11 +242,11 @@ theorem transferMatrix_eq (A : MPSTensor d D) :
 
 end MPSTensor
 
-/-! ### Props 2.5-2.6: Transfer matrix characterizations of TP, unital, and HP maps -/
+/-! ### Propositions 2.5-2.6: Transfer matrix characterizations of TP, unital, and HP maps -/
 
 section TransferMatrixChar
 
-/-- **Prop 2.6 (TP via transfer matrix)**: `T` is trace-preserving iff
+/-- **Proposition 2.6 (TP via transfer matrix)**: `T` is trace-preserving iff
 the column-diagonal sums of the transfer matrix give `δ_{kl}`:
 `∑_i T̂_{(i,i),(l,k)} = δ_{kl}`.
 
@@ -277,15 +277,17 @@ theorem transferMatrix_tp_iff
         · rw [if_neg hkl, Matrix.trace_single_eq_of_ne k l (1 : ℂ) hkl]
     calc Matrix.trace (T X)
         = Matrix.trace (T (∑ k, ∑ l, X k l • Matrix.single k l 1)) := by
-            rw [← sum_smul_single_eq X]
+            conv_lhs =>
+              rw [sum_smul_single_eq X]
       _ = ∑ k, ∑ l, X k l • Matrix.trace (T (Matrix.single k l 1)) := by
             simp_rw [map_sum, LinearMap.map_smul, Matrix.trace_sum, Matrix.trace_smul]
       _ = ∑ k, ∑ l, X k l • Matrix.trace (Matrix.single k l (1 : ℂ)) := by
             simp_rw [key]
       _ = Matrix.trace X := by
-            simp_rw [← Matrix.trace_smul, ← Matrix.trace_sum]; rw [← sum_smul_single_eq X]
+            simp_rw [← Matrix.trace_smul, ← Matrix.trace_sum]
+            rw [← sum_smul_single_eq X]
 
-/-- **Prop 2.6 (Unital via transfer matrix)**: `T` is unital (`T 1 = 1`) iff
+/-- **Proposition 2.6 (Unital via transfer matrix)**: `T` is unital (`T 1 = 1`) iff
 the row-diagonal sums of the transfer matrix give `δ_{ij}`:
 `∑_k T̂_{(j,i),(k,k)} = δ_{ij}`. -/
 theorem transferMatrix_unital_iff
@@ -294,12 +296,7 @@ theorem transferMatrix_unital_iff
       ∀ i j : Fin D, ∑ k : Fin D, transferMatrix T (j, i) (k, k) =
         if i = j then 1 else 0 := by
   have one_eq : (1 : Matrix (Fin D) (Fin D) ℂ) = ∑ k, Matrix.single k k 1 := by
-    ext i j
-    simp only [Matrix.one_apply, Matrix.sum_apply, Matrix.single_apply]
-    by_cases hij : i = j
-    · subst hij; simp [Finset.sum_ite_eq']
-    · rw [if_neg hij]; symm; exact Finset.sum_eq_zero fun k _ => by
-        rw [if_neg]; exact fun ⟨h1, h2⟩ => hij (h1.symm.trans h2)
+    simpa using (Matrix.sum_single_one (m := Fin D) (α := ℂ)).symm
   constructor
   · intro hunit i j
     simp only [transferMatrix_apply]
@@ -311,7 +308,7 @@ theorem transferMatrix_unital_iff
     simp only [Matrix.sum_apply]
     have := h i j; simp only [transferMatrix_apply] at this; exact this
 
-/-- **Prop 2.5 (Hermiticity-preserving via transfer matrix)**:
+/-- **Proposition 2.5 (Hermiticity-preserving via transfer matrix)**:
 `T` preserves Hermiticity (`(T X)ᴴ = T Xᴴ` for all `X`) iff
 `T̂_{(j,i),(k,l)} = conj(T̂_{(i,j),(l,k)})` for all indices. -/
 theorem transferMatrix_hermiticityPreserving_iff
@@ -334,22 +331,24 @@ theorem transferMatrix_hermiticityPreserving_iff
       have := h j i l k; simp only [transferMatrix_apply] at this
       -- this : (T (single k l 1)) j i = starRingEnd ℂ ((T (single l k 1)) i j)
       rw [this, starRingEnd_apply, star_star]
-    conv_lhs => rw [sum_smul_single_eq X]
+    conv_lhs =>
+      rw [sum_smul_single_eq X]
     simp_rw [map_sum, LinearMap.map_smul, Matrix.conjTranspose_sum,
       Matrix.conjTranspose_smul, basis_eq]
     have hXconj : Xᴴ = ∑ k : Fin D, ∑ l : Fin D,
         star (X l k) • Matrix.single k l 1 := by
-      conv_lhs => rw [sum_smul_single_eq Xᴴ]
+      conv_lhs =>
+        rw [sum_smul_single_eq Xᴴ]
       simp_rw [Matrix.conjTranspose_apply]
     rw [hXconj]; simp_rw [map_sum, LinearMap.map_smul]
     rw [Finset.sum_comm]
 
 end TransferMatrixChar
 
-/-! ### Unitary conjugation maps (Wolf §2.3, preparation for Props 2.7-2.8)
+/-! ### Unitary conjugation maps (Wolf Section 2.3, preparation for Propositions 2.7-2.8)
 
 The unitary conjugation `Ad_U(X) = U X U†` is the basic building block for
-the Lorentz normal form (Prop 2.7). Its transfer matrix is `Ū ⊗ₖ U`,
+the Lorentz normal form (Proposition 2.7). Its transfer matrix is `Ū ⊗ₖ U`,
 and composing with unitary conjugations transforms the transfer matrix by
 left/right multiplication — the algebraic engine behind normal forms. -/
 
@@ -375,7 +374,7 @@ theorem unitaryConjLM_apply (U : Matrix (Fin D) (Fin D) ℂ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     unitaryConjLM U X = U * X * Uᴴ := rfl
 
-/-- **Transfer matrix of unitary conjugation** (Wolf Prop 2.7 ingredient):
+/-- **Transfer matrix of unitary conjugation** (Wolf Proposition 2.7 ingredient):
 `(Ad_U)^ = Ū ⊗ₖ U`, the Kronecker product of the entrywise conjugate
 of `U` with `U`. -/
 theorem transferMatrix_unitaryConj (U : Matrix (Fin D) (Fin D) ℂ) :
@@ -407,14 +406,14 @@ theorem unitaryConjLM_isChannel_of_unitary (U : Matrix (Fin D) (Fin D) ℂ)
 
 end UnitaryConjugation
 
-/-! ### Props 2.7-2.8: Normal form decomposition via transfer matrix
+/-! ### Propositions 2.7-2.8: Normal form decomposition via transfer matrix
 
-**Prop 2.7** (Lorentz normal form): For any channel `T`, composing with
+**Proposition 2.7** (Lorentz normal form): For any channel `T`, composing with
 unitary conjugations `Ad_{U₁}` and `Ad_{U₂}` yields a transfer matrix
 `(Ū₁ ⊗ U₁) * T̂ * (Ū₂ ⊗ U₂)`. By choosing `U₁, U₂` to diagonalize
 the 3×3 block (for qubits), one obtains the Lorentz normal form.
 
-**Prop 2.8** (SVD representation): The singular value decomposition of
+**Proposition 2.8** (SVD representation): The singular value decomposition of
 the coefficient matrix `[tᵢⱼ]` in the trace-pairing expansion
 `T(ρ) = ∑ᵢⱼ tᵢⱼ σᵢ tr(σⱼ ρ)` yields the SVD representation
 `T(ρ) = ∑ₖ sₖ uₖ tr(vₖ ρ)` with orthonormal `{uₖ}`, `{vₖ}`.
@@ -424,11 +423,11 @@ shows how unitary conjugation acts on transfer matrices. -/
 
 section NormalForms
 
-/-- **Props 2.7-2.8 key identity**: The transfer matrix of `Ad_{U₁} ∘ T ∘ Ad_{U₂}`
+/-- **Propositions 2.7-2.8 key identity**: The transfer matrix of `Ad_{U₁} ∘ T ∘ Ad_{U₂}`
 is `(Ū₁ ⊗ U₁) * T̂ * (Ū₂ ⊗ U₂)`.
 
-This is the algebraic engine behind the Lorentz normal form (Prop 2.7)
-and the SVD representation (Prop 2.8): by choosing unitaries `U₁, U₂`
+This is the algebraic engine behind the Lorentz normal form (Proposition 2.7)
+and the SVD representation (Proposition 2.8): by choosing unitaries `U₁, U₂`
 appropriately (e.g. via SVD of `T̂`), the transfer matrix can be brought
 to a diagonal or block-diagonal normal form. -/
 theorem transferMatrix_unitaryConj_sandwich

@@ -3,24 +3,25 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Peripheral.Cycles
+import Mathlib.Logic.Equiv.Fin.Rotate
 
 /-!
 # Multi-cycle block-permutation decompositions
 
 This file develops an explicit multi-cycle refinement of the
-block-permutation infrastructure developed in
+block-permutation formalization developed in
 `TNLean.Channel.Peripheral.Cycles`, in the form needed for the
 asymptotic-image side of
 Wolf, *Quantum Channels & Operations*, Theorem 6.16.
 
-Concretely, Wolf Thm. 6.16 describes the asymptotic dynamics of a general
+Concretely, Wolf Theorem 6.16 describes the asymptotic dynamics of a general
 trace-preserving positive Schwarz map `T` as a permutation of Wedderburn
 blocks, with each block transported by a unitary.  Such a permutation may
 already be represented abstractly by the `CycleStructure` bundled data of
 `TNLean.Channel.Peripheral.Cycles`, whose underlying permutation `σ` is
 allowed to have multiple disjoint cycles.  The present file refines that
 view by choosing an *explicit* cycle-index type `ι`, a per-cycle period
-`period : ι → ℕ`, and the corresponding projection families, recording the
+`period : ι → ℕ`, and the corresponding projection families, stating the
 disjoint-union-of-cycles structure as separate data.
 
 The corner-preservation proofs reuse the per-orbit proof pattern of
@@ -28,7 +29,7 @@ The corner-preservation proofs reuse the per-orbit proof pattern of
 `TNLean.Channel.Peripheral.CyclicDecomposition`, adapted to the setting
 where the per-cycle projections do not sum to the identity.  The
 *existence direction* — that every TP positive Schwarz map admits such a
-decomposition on its asymptotic image — depends on Wolf Thm. 6.14
+decomposition on its asymptotic image — depends on Wolf Theorem 6.14
 (Wedderburn decomposition of the fixed-point algebra, issues #27/#360)
 and is left to future work.
 
@@ -53,7 +54,7 @@ and is left to future work.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Thm. 6.16, §6.5]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 6.16, Section 6.5]
 -/
 
 open scoped Matrix BigOperators
@@ -64,7 +65,7 @@ variable {D : ℕ}
 /-- Bundled data for a **multi-cycle block-permutation decomposition** of a
 matrix endomorphism `T`.
 
-A `MultiCycleDecomposition T` records a finite family of cycles — one per
+A `MultiCycleDecomposition T` states a finite family of cycles — one per
 element of the cycle-index type `ι` — together with:
 
 * a per-cycle `period c : ℕ` with `NeZero (period c)`;
@@ -81,11 +82,11 @@ with per-cycle periods and projection families for the underlying
 permutation structure, while `toCycleStructure` forgets that extra
 organisation.
 
-In Wolf's Thm. 6.16, the cycle-index `ι` runs over the equivalence classes
+In Wolf's Theorem 6.16, the cycle-index `ι` runs over the equivalence classes
 of Wedderburn blocks that share both a common multiplicity and a common
 period under the block permutation.  The existence of this data on the
 asymptotic image of an arbitrary TP positive Schwarz map depends on the
-Wedderburn decomposition of the fixed-point algebra (Wolf Thm. 6.14) and is
+Wedderburn decomposition of the fixed-point algebra (Wolf Theorem 6.14) and is
 deferred. -/
 structure MultiCycleDecomposition.{u} (T : MatrixEnd D) where
   /-- Finite index type for the cycles. -/
@@ -125,7 +126,7 @@ instance instNeZeroPeriod (M : MultiCycleDecomposition T) (c : M.ι) :
 section CyclicShift
 
 /-- The cyclic-shift index: an explicit `Fin m` representative of `k + n`,
-constructed from `⟨((k : ℕ) + n) % m, _⟩`.  Mirrors the `cyclicIndex` helper
+constructed from `⟨((k : ℕ) + n) % m, _⟩`.  Mirrors the `cyclicIndex` auxiliary lemma
 used inside `preserves_corner_pow_of_cyclic_decomp`. -/
 private def shiftIndex {m : ℕ} [NeZero m] (k : Fin m) (n : ℕ) : Fin m :=
   ⟨((k : ℕ) + n) % m, Nat.mod_lt _ (Nat.pos_of_ne_zero (NeZero.ne m))⟩
@@ -149,7 +150,7 @@ private lemma shiftIndex_succ {m : ℕ} [NeZero m] (k : Fin m) (n : ℕ) :
 
 end CyclicShift
 
-section PreservesCornerHelper
+section CornerPreservation
 
 /-- Corner preservation is stable under taking powers. -/
 private lemma preserves_corner_pow {S : MatrixEnd D} {P : MatrixAlg D}
@@ -180,7 +181,7 @@ private lemma preserves_corner_pow {S : MatrixEnd D} {P : MatrixAlg D}
         _ = (S ^ n) (S (P * X * P)) := this
         _ = (S ^ (n + 1)) (P * X * P) := by simp [pow_succ]
 
-end PreservesCornerHelper
+end CornerPreservation
 
 section PerCycle
 
@@ -193,7 +194,7 @@ hypothesis on the sector projections (which is not available in the
 multi-cycle setting, where the per-cycle projections typically do not
 sum to the identity).
 
-Per Wolf Thm. 6.16 §6.5, this is the per-cycle restriction of the block
+Per Wolf Theorem 6.16 Section 6.5, this is the per-cycle restriction of the block
 permutation back to its own orbit: after `period c` applications of `T`,
 each cycle returns to itself. -/
 theorem preserves_corner_pow_period (M : MultiCycleDecomposition T)
@@ -225,8 +226,8 @@ theorem preserves_corner_pow_period (M : MultiCycleDecomposition T)
                   calc
                     T (M.P c (shiftIndex j n + 1) * X * M.P c (shiftIndex j n + 1))
                         = T (M.P c (shiftIndex j n + 1) * X) *
-                            T (M.P c (shiftIndex j n + 1)) := by
-                              exact M.mulRight c (shiftIndex j n + 1)
+                            T (M.P c (shiftIndex j n + 1)) :=
+                              M.mulRight c (shiftIndex j n + 1)
                                 (M.P c (shiftIndex j n + 1) * X)
                     _ = (T (M.P c (shiftIndex j n + 1)) * T X) *
                           T (M.P c (shiftIndex j n + 1)) := by
@@ -255,7 +256,7 @@ theorem preserves_corner_pow_period (M : MultiCycleDecomposition T)
 Whenever `N` is divisible by every per-cycle period, `T^N` preserves each
 corner of the decomposition.
 
-In Wolf's Thm. 6.16, `N` is the global period (= LCM of per-cycle periods),
+In Wolf's Theorem 6.16, `N` is the global period (= LCM of per-cycle periods),
 after which the whole block permutation returns to the identity and the
 channel acts diagonally on each block. -/
 theorem preserves_corner_pow_of_dvd (M : MultiCycleDecomposition T)
@@ -285,15 +286,12 @@ def totalProj (M : MultiCycleDecomposition T) : M.Idx → MatrixAlg D :=
 `Equiv.Perm.sigmaCongrRight`. -/
 noncomputable def totalPerm (M : MultiCycleDecomposition T) :
     Equiv.Perm M.Idx :=
-  Equiv.Perm.sigmaCongrRight (fun c : M.ι =>
-    { toFun := fun k => k + 1
-      invFun := fun k => k - 1
-      left_inv := by intro k; simp
-      right_inv := by intro k; simp })
+  Equiv.Perm.sigmaCongrRight (fun c : M.ι => finRotate (M.period c))
 
 @[simp]
 lemma totalPerm_apply (M : MultiCycleDecomposition T) (x : M.Idx) :
-    M.totalPerm x = ⟨x.1, x.2 + 1⟩ := rfl
+    M.totalPerm x = ⟨x.1, x.2 + 1⟩ := by
+  simp [totalPerm, finRotate_apply]
 
 /-- **Flattening construction.**  A multi-cycle decomposition gives a
 `CycleStructure` on the total block-index type
@@ -303,10 +301,10 @@ The permutation is the sigma-product of per-cycle cyclic shifts; the
 projections are the flattened family; the cyclic action on the sigma
 index matches the per-cycle action on each `Fin (period c)`.
 
-This provides an assembly point: given a Wolf Thm. 6.16 Wedderburn-based
-existence result (currently blocked on issues #27/#360), the resulting
-`MultiCycleDecomposition` can be flattened to a `CycleStructure` for use
-with the existing block-permutation infrastructure in
+This connects multi-cycle decompositions to the block-permutation theory:
+given a Wolf Theorem 6.16 Wedderburn-based existence result (currently blocked
+on issues #27/#360), the resulting `MultiCycleDecomposition` can be flattened
+to a `CycleStructure` for use with
 `TNLean.Channel.Peripheral.Cycles`. -/
 noncomputable def toCycleStructure (M : MultiCycleDecomposition T) :
     CycleStructure T :=
@@ -317,7 +315,7 @@ noncomputable def toCycleStructure (M : MultiCycleDecomposition T) :
       exact M.isProj c k)
     (by
       rintro ⟨c, k⟩
-      change T (M.P c (k + 1)) = M.P c k
+      rw [M.totalPerm_apply ⟨c, k⟩]
       exact M.cyclic c k)
     (by
       rintro ⟨c, k⟩ X

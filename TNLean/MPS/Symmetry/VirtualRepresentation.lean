@@ -10,21 +10,29 @@ import TNLean.Algebra.ProjectiveRepresentation
 # Virtual representation theorem for injective MPS
 
 If an injective MPS tensor `A` is on-site symmetric under a group representation `U`,
-then the virtual gauge matrices extracted from the single-block Fundamental Theorem
-can be reindexed by inversion to produce a genuine projective representation on the
+then the virtual gauge matrices obtained from the single-block Fundamental
+Theorem can be reindexed by inversion to produce a projective representation on the
 bond space.
+
+The pointwise gauges are supplied by `gaugeEquiv_twistedTensor_of_injective`
+(the single-block Fundamental Theorem applied to each twisted tensor).
+Gauge uniqueness and the twist composition law then assemble these gauges into the
+virtual representation.
 
 ## Main results
 
-* `MPSTensor.virtual_rep_of_symmetric_injective`: the main theorem — the virtual gauges
+* `MPSTensor.virtual_rep_of_symmetric_injective`: the virtual gauges
   define a unit-valued scalar cocycle `ω` and a `ProjectiveRepresentation` on the bond
   space.
 
-## Convention note
+## Convention
 
-The natural law from `twistedTensor_mul` (which says `twist(g*h) = twist_g ∘ twist_h`)
-gives `X(h) * X(g) = ω(h,g) • X(g * h)`. The theorem below packages this into the
-standard projective representation law by defining `V(g) = X(g⁻¹)`.
+The composition law `twistedTensor_mul` gives
+`twist(g*h) = twist_g ∘ twist_h`, which translates to
+`X(h) * X(g) = ω(h,g) • X(g * h)` for the chosen gauges.  The theorem
+below reindexes by inversion, setting `V(g) = X(g⁻¹)`, to obtain the
+standard projective representation law
+`V(g) * V(h) = ω(g,h) • V(g*h)`.
 
 ## References
 
@@ -88,7 +96,8 @@ private lemma gauge_product_intertwines
 /-- **Virtual representation theorem for injective MPS with on-site symmetry.**
 
 If an injective MPS tensor `A` is symmetric under on-site action of a group `G`,
-then there exist:
+then the single-block Fundamental Theorem supplies gauges for all twists, and
+there exist:
 - a unit-valued scalar cocycle `ω : ScalarCocycle G`,
 - a projective representation `ρ` of `G` on the bond space,
 

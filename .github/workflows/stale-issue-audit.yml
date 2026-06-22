@@ -1,0 +1,101 @@
+name: Stale issue audit
+
+on:
+  schedule:
+    # Report-only stale citation sweep, aligned with the Monday standup window.
+    - cron: "30 8 * * 1"
+  workflow_dispatch:
+
+concurrency:
+  group: stale-issue-audit
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  issues: read
+
+jobs:
+  audit:
+    name: Run stale-issue audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Export open issues
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh issue list \
+            --repo "$GH_REPO" \
+            --state open \
+            --limit 500 \
+            --json number,title,body,url,labels \
+            > "$RUNNER_TEMP/open-issues.json"
+
+      - name: Run report-only audit
+        run: |
+          # The audit contract is documented in docs/stale_issue_audit.md:
+          # it only reports stale citations and never edits GitHub issues.
+          python3 scripts/audit_stale_issues.py \
+            --issues "$RUNNER_TEMP/open-issues.json" \
+            --format json \
+            --output "$RUNNER_TEMP/stale-issue-audit.json"
+          python3 scripts/audit_stale_issues.py \
+            --issues "$RUNNER_TEMP/open-issues.json" \
+            --output "$RUNNER_TEMP/stale-issue-audit.txt"
+
+      - name: Summarize audit result
+        id: summarize
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          import os
+          from pathlib import Path
+
+          report_path = Path(os.environ["RUNNER_TEMP"]) / "stale-issue-audit.json"
+          report = json.loads(report_path.read_text())
+          flagged = [issue for issue in report if issue["flagged"]]
+          with_citations = [
+              issue for issue in report
+              if issue["file_citations"] or issue["decl_citations"]
+          ]
+          print(f"scanned={len(report)}")
+          print(f"with_citations={len(with_citations)}")
+          print(f"flagged={len(flagged)}")
+          PY
+
+      - name: Add flagged-citation summary
+        if: steps.summarize.outputs.flagged != '0'
+        run: |
+          {
+            echo "## Stale-issue audit"
+            echo
+            echo "- Issues scanned: ${{ steps.summarize.outputs.scanned }}"
+            echo "- Issues with citations: ${{ steps.summarize.outputs.with_citations }}"
+            echo "- Issues flagged stale: ${{ steps.summarize.outputs.flagged }}"
+            echo
+            echo "The workflow is report-only; maintainers must review the flags manually."
+            echo "When updating an issue, keep its mathematical source citation precise: paper or blueprint path, line, label, and a short quotation or precise paraphrase."
+            echo "See docs/stale_issue_audit.md for the triage policy."
+            echo
+            echo '```text'
+            cat "$RUNNER_TEMP/stale-issue-audit.txt"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload flagged-citation report
+        if: steps.summarize.outputs.flagged != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: stale-issue-audit-report
+          path: |
+            ${{ runner.temp }}/stale-issue-audit.json
+            ${{ runner.temp }}/stale-issue-audit.txt
+          if-no-files-found: error

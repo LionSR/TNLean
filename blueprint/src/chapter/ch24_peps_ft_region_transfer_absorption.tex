@@ -1,0 +1,364 @@
+%======================================================================
+% InsertSplit: the one-site quotient of the blocked-region weight
+%======================================================================
+
+\begin{theorem}[Region vertex product across an inserted site]%
+    \label{thm:peps_prod_region_insert_split}
+    \lean{TNLean.PEPS.prod_region_insert_split}
+    \leanok
+    Let $v\notin R$.  At a fixed global virtual configuration $\zeta$ and a
+    physical configuration $\sigma$ on $R\cup\{v\}$, the product of the local
+    tensors over the vertices of $R\cup\{v\}$ factors as the local tensor at the
+    inserted site $v$ times the product over the vertices of $R$:
+    \[
+        \prod_{w\in R\cup\{v\}}A_w\bigl(\zeta|_{\operatorname{inc}(w)},\sigma_w\bigr)
+        =
+        A_v\bigl(\zeta|_{\operatorname{inc}(v)},\sigma_v\bigr)
+        \prod_{w\in R}A_w\bigl(\zeta|_{\operatorname{inc}(w)},\sigma|_R{}_w\bigr).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    The inserted site $v$ is isolated from the product over $R\cup\{v\}$ by
+    splitting off a single factor, and the residual product over the remaining
+    vertices is reindexed through the bijection between the vertices of $R$ and
+    the non-$v$ vertices of $R\cup\{v\}$.
+\end{proof}
+
+\begin{theorem}[One-site split of the blocked-region weight]%
+    \label{thm:peps_regionBlockedWeight_insert_eq_sum_split}
+    \lean{TNLean.PEPS.regionBlockedWeight_insert_eq_sum_split}
+    \leanok
+    \uses{thm:peps_prod_region_insert_split}
+    Let $v\notin R$.  The blocked-region weight of $R\cup\{v\}$ is the constrained
+    sum, over global virtual configurations $\zeta$ whose crossing-edge label on
+    $R\cup\{v\}$ is $\mu$, of the inserted-site tensor times the vertex product
+    over $R$:
+    \[
+        T_{A,R\cup\{v\}}^{\mu}(\sigma)
+        =
+        \sum_{\zeta:\,\zeta|_{\partial(R\cup\{v\})}=\mu}
+        A_v\bigl(\zeta|_{\operatorname{inc}(v)},\sigma_v\bigr)
+        \prod_{w\in R}A_w\bigl(\zeta|_{\operatorname{inc}(w)},\sigma|_R{}_w\bigr).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Each summand of the blocked-region weight is the vertex product over
+    $R\cup\{v\}$, which factors by
+    Theorem~\ref{thm:peps_prod_region_insert_split}.
+\end{proof}
+
+\begin{theorem}[A non-incident crossing edge survives the insertion]%
+    \label{thm:peps_isRegionBoundaryEdge_insert_of_not_incident}
+    \lean{TNLean.PEPS.isRegionBoundaryEdge_insert_of_not_incident}
+    \leanok
+    Let $v\notin R$.  A crossing edge of $R$ whose two endpoints both differ from
+    $v$ is also a crossing edge of $R\cup\{v\}$.
+\end{theorem}
+\begin{proof}\leanok
+    A crossing edge of $R$ has exactly one endpoint inside $R$.  Adjoining $v$ to
+    $R$ leaves both endpoints on the same side as before, since neither endpoint
+    is $v$, so the edge still crosses the boundary of $R\cup\{v\}$.
+\end{proof}
+
+\begin{definition}[Boundary label of the smaller region across an insertion]%
+    \label{def:peps_boundaryLabelOfInsert}
+    \lean{TNLean.PEPS.boundaryLabelOfInsert}
+    \leanok
+    \uses{thm:peps_isRegionBoundaryEdge_insert_of_not_incident}
+    Let $v\notin R$.  Given a crossing-edge label $\mu$ for $R\cup\{v\}$ and a
+    local virtual configuration $\eta$ on the edges incident to $v$, the
+    crossing-edge label $\beta(\mu,\eta)$ of $R$ is read off these two
+    configurations: a crossing edge of $R$ incident to $v$ has become internal to
+    $R\cup\{v\}$, so its label is taken from $\eta$; a crossing edge of $R$ not
+    incident to $v$ is also a crossing edge of $R\cup\{v\}$, so its label is taken
+    from $\mu$.
+\end{definition}
+
+\begin{theorem}[Boundary-label fiber identity across an inserted site]%
+    \label{thm:peps_regionBoundaryLabel_eq_boundaryLabelOfInsert}
+    \lean{TNLean.PEPS.regionBoundaryLabel_eq_boundaryLabelOfInsert}
+    \leanok
+    \uses{def:peps_boundaryLabelOfInsert}
+    Let $v\notin R$.  If a global virtual configuration $\zeta$ restricts to $\mu$
+    on the crossing edges of $R\cup\{v\}$ and to $\eta$ on the edges incident to
+    $v$, then the crossing-edge label of $R$ read from $\zeta$ is exactly
+    $\beta(\mu,\eta)$ of
+    Definition~\ref{def:peps_boundaryLabelOfInsert}.
+\end{theorem}
+\begin{proof}\leanok
+    The two labels are compared edge by edge.  On a crossing edge of $R$
+    incident to $v$ both sides read $\zeta$ on an edge incident to $v$, which is
+    $\eta$.  On a crossing edge of $R$ not incident to $v$ both sides read
+    $\zeta$ on a crossing edge of $R\cup\{v\}$, which is $\mu$.
+\end{proof}
+
+%======================================================================
+% Gauge absorption at region granularity
+%======================================================================
+
+\begin{theorem}[Region gauge absorption]%
+    \label{thm:peps_regionInsertedCoeff_applyGauge}
+    \lean{TNLean.PEPS.regionInsertedCoeff_applyGauge}
+    \leanok
+    \uses{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff,
+        thm:peps_edge_gauge_absorption, def:applyGauge}
+    Let $X$ be an edge-gauge family, write $B^X$ for the gauged tensor, and let
+    $f$ be a crossing edge of $R$.  Inserting $M$ on $f$ between the region and
+    its complement in $B^X$ equals inserting, in $B$, the matrix obtained by
+    orienting $M$ to the boundary-edge convention, conjugating by the transpose
+    of the endpoint gauge $X_f$, and orienting back:
+    \[
+        C_{B^X}(R,f,M;\sigma,\tau)
+        =
+        C_B\bigl(R,f,
+            \mathcal O_{R,f}\bigl(X_f^{\mathsf T}\,
+                \mathcal O_{R,f}(M)\,(X_f^{-1})^{\mathsf T}\bigr);
+            \sigma,\tau\bigr),
+    \]
+    where $\mathcal O_{R,f}$ is the boundary-edge orientation.  This is the
+    region-granularity analogue of
+    Theorem~\ref{thm:peps_edge_gauge_absorption}.
+\end{theorem}
+\begin{proof}\leanok
+    By Theorem~\ref{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff} the
+    region/complement contraction is the single-bond cut at $f$ up to the
+    interior-bond multiplicity $p_B(R)=\prod_{g\notin\partial R}D_B(g)$, which is
+    unchanged by a gauge.  At the edge granularity every interior edge and every
+    crossing edge other than $f$ cancels its gauge pairwise, while on $f$ the
+    endpoint gauges conjugate the oriented matrix
+    $N=\mathcal O_{R,f}(M)$ by the transpose of $X_f$ and its inverse:
+    \[
+        E_{B^X}\bigl(f,\omega_{R,\sigma,\tau},N\bigr)
+        =
+        E_B\bigl(f,\omega_{R,\sigma,\tau},
+            X_f^{\mathsf T}\,N\,(X_f^{-1})^{\mathsf T}\bigr).
+    \]
+    Transporting this back through
+    Theorem~\ref{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff} on $B$,
+    and using that the boundary-edge orientation is an involution
+    ($\mathcal O_{R,f}\circ\mathcal O_{R,f}=\operatorname{id}$), gives the
+    displayed equality.
+\end{proof}
+
+\subsection{From the conjugation identity to the absorbed equality}%
+\label{subsec:peps_absorbed_equality}
+
+% Companion to docs/paper-gaps/peps_normal_ft_section3_route.tex.
+At a region $R$ with boundary edge $f$, the per-edge gauge identity takes
+the \emph{conjugation} form
+\[
+    C_A(R,f,M;\sigma,\tau)
+    =
+    C_B\bigl(R,f,Z\,\phi_{h_f}(M)\,Z^{-1};\sigma,\tau\bigr),
+\]
+where $Z$ is the invertible bond matrix on $f$ and $\phi_{h_f}$ is the
+matrix-algebra transport induced by $h_f:D_A(f)=D_B(f)$. The region comparison
+of \cite[Section~3]{Molnar2018NormalPEPS} instead consumes the \emph{absorbed}
+form: the gauge is absorbed into the second tensor, and the \emph{same} matrix
+$\phi_{h_f}(M)$ is inserted on both sides.
+
+\begin{definition}[Orientation-adapted absorbing gauge]%
+    \label{def:peps_absorbedBoundaryGauge}
+    \lean{TNLean.PEPS.absorbedBoundaryGauge}
+    \leanok
+    Let $f$ be a boundary edge of $R$ and let $Z$ be an invertible matrix on the
+    bond space of $f$. The orientation-adapted absorbing gauge is
+    \[
+        X_f
+        =
+        \begin{cases}
+            Z^{\mathsf T} & \text{if the left endpoint of $f$ lies in $R$,}\\
+            Z^{-1} & \text{otherwise.}
+        \end{cases}
+    \]
+    It is the absorbing matrix on $f$ for which the gauge action on the region
+    coefficient reproduces the conjugation $Z\,(\cdot)\,Z^{-1}$.
+\end{definition}
+
+\begin{theorem}[Matrix reconciliation for the absorbing gauge]%
+    \label{thm:peps_regionEdgeOrient_absorbedBoundaryGauge}
+    \lean{TNLean.PEPS.regionEdgeOrient_absorbedBoundaryGauge}
+    \leanok
+    \uses{def:peps_absorbedBoundaryGauge}
+    With $X_f$ the orientation-adapted absorbing gauge of $Z$ and
+    $\mathcal O_{R,f}$ the boundary-edge orientation, for every matrix $N$ on the
+    bond space of $f$,
+    \[
+        \mathcal O_{R,f}\bigl(
+            X_f^{\mathsf T}\,\mathcal O_{R,f}(N)\,(X_f^{-1})^{\mathsf T}
+        \bigr)
+        =
+        Z\,N\,Z^{-1}.
+    \]
+    The conjugation by $X_f^{\mathsf T}\cdot(\cdot)\cdot(X_f^{-1})^{\mathsf T}$
+    carried by the region gauge action thus equals $Z\,(\cdot)\,Z^{-1}$.
+\end{theorem}
+\begin{proof}\leanok
+    When the left endpoint of $f$ lies in $R$, the orientation is the identity
+    and $X_f=Z^{\mathsf T}$, so $X_f^{\mathsf T}=Z$ and
+    $(X_f^{-1})^{\mathsf T}=Z^{-1}$. Otherwise the orientation is transpose and
+    $X_f=Z^{-1}$, so $X_f^{\mathsf T}=(Z^{-1})^{\mathsf T}$ and
+    $(X_f^{-1})^{\mathsf T}=Z^{\mathsf T}$, giving
+    \[
+        X_f^{\mathsf T}\,\mathcal O_{R,f}(N)\,(X_f^{-1})^{\mathsf T}
+        =
+        (Z^{-1})^{\mathsf T}\,N^{\mathsf T}\,Z^{\mathsf T}
+        =
+        (Z\,N\,Z^{-1})^{\mathsf T}.
+    \]
+    Applying the outer transpose orientation gives
+    $\mathcal O_{R,f}((Z\,N\,Z^{-1})^{\mathsf T})=Z\,N\,Z^{-1}$.
+    Both cases give $Z\,N\,Z^{-1}$.
+\end{proof}
+
+\begin{theorem}[Region absorbed equality from the conjugation identity]%
+    \label{thm:peps_regionInsertedCoeff_eq_applyGauge_of_conjIdentity}
+    \lean{TNLean.PEPS.regionInsertedCoeff_eq_applyGauge_of_conjIdentity}
+    \leanok
+    \uses{def:peps_regionInsertedCoeff, def:applyGauge,
+        def:peps_absorbedBoundaryGauge,
+        thm:peps_regionEdgeOrient_absorbedBoundaryGauge,
+        thm:peps_regionInsertedCoeff_applyGauge}
+    Let $R$ be a region with boundary edge $f$ and assume the
+    bond-dimension equality $h:D_A=D_B$. Suppose the per-edge gauge $Z$ realizes
+    the conjugation-form region-insertion identity at $f$: for every matrix $M$
+    on the bond space of $f$ and all physical configurations $\sigma$ on $R$ and
+    $\tau$ on $V\setminus R$,
+    \[
+        C_A(R,f,M;\sigma,\tau)
+        =
+        C_B\bigl(R,f,Z\,\phi_{h_f}(M)\,Z^{-1};\sigma,\tau\bigr).
+    \]
+    Let $X$ be an edge-gauge family whose value on $f$ is the orientation-adapted
+    absorbing gauge $X_f$ of $Z$. Then $A$ inserting $M$ matches the absorbed
+    tensor $B^X$ inserting the same transported matrix:
+    \[
+        C_A(R,f,M;\sigma,\tau)
+        =
+        C_{B^X}\bigl(R,f,\phi_{h_f}(M);\sigma,\tau\bigr).
+    \]
+    This is the region analogue of
+    Theorem~\ref{thm:peps_postAbsorptionEdgeInsertionEquality}: the
+    conjugation-form coefficient identity becomes the absorbed plain equality.
+\end{theorem}
+\begin{proof}\leanok
+    By Theorem~\ref{thm:peps_regionInsertedCoeff_applyGauge} the region gauge
+    action conjugates the inserted matrix by
+    $X_f^{\mathsf T}\cdot\mathcal O_{R,f}(\cdot)\cdot(X_f^{-1})^{\mathsf T}$ and
+    cancels every interior gauge of the region and of its complement, so the
+    right-hand coefficient over $B^X$ equals the coefficient over $B$ with the
+    transported matrix conjugated by that gauge. Substituting the conjugation
+    hypothesis on the left and the matrix reconciliation
+    Theorem~\ref{thm:peps_regionEdgeOrient_absorbedBoundaryGauge} matches the two
+    conjugation forms.
+\end{proof}
+
+\begin{theorem}[Edge absorbed equality from the region absorbed equality]%
+    \label{thm:peps_edgeInsertedCoeff_eq_applyGauge_of_region}
+    \lean{TNLean.PEPS.edgeInsertedCoeff_eq_applyGauge_of_region}
+    \leanok
+    \uses{def:peps_regionInsertedCoeff, def:peps_edgeInsertedCoeff,
+        def:applyGauge,
+        thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff}
+    Let $R$ be a region with boundary edge $f$, assume the bond-dimension
+    equality $h:D_A=D_B$ and that every bond dimension of $A$ is positive, and
+    suppose the absorbed region equality holds: for every matrix $M$ on the bond
+    space of $f$ and all physical configurations $\sigma$ on $R$ and $\tau$ on
+    $V\setminus R$,
+    \[
+        C_A(R,f,M;\sigma,\tau)
+        =
+        C_{B^X}\bigl(R,f,\phi_{h_f}(M);\sigma,\tau\bigr).
+    \]
+    Then the edge-level absorbed equality holds at $f$: for every global physical
+    configuration $\sigma$ and every matrix $N$ on the bond space of $f$,
+    \[
+        E_A(f,\sigma,N)
+        =
+        E_{B^X}\bigl(f,\sigma,\phi_{h_f}(N)\bigr).
+    \]
+    The edge-level identity no longer mentions the region.
+\end{theorem}
+\begin{proof}\leanok
+    The interior bond multiplicity $p_A(R)=\prod_{g\notin\partial R}D_A(g)$ is a
+    positive integer, and it is shared by $A$ and $B^X$ because the gauge
+    preserves bond dimensions and $D_A=D_B$. Apply
+    Theorem~\ref{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff} with the
+    inserted matrix $\mathcal O_{R,f}(N)$ and with configurations
+    $(\sigma|_R,\sigma|_{V\setminus R})$. On the left-hand side,
+    \[
+        C_A\bigl(R,f,\mathcal O_{R,f}(N);
+            \sigma|_R,\sigma|_{V\setminus R}\bigr)
+        =
+        p_A(R)\,
+        E_A\bigl(f,\sigma,
+            \mathcal O_{R,f}(\mathcal O_{R,f}(N))\bigr)
+        =
+        p_A(R)\,E_A(f,\sigma,N).
+    \]
+    On the right-hand side of the assumed region equality,
+    \[
+    \begin{aligned}
+        C_{B^X}\bigl(R,f,\phi_{h_f}(\mathcal O_{R,f}(N));
+            \sigma|_R,\sigma|_{V\setminus R}\bigr)
+        &=
+        p_A(R)\,
+        E_{B^X}\bigl(f,\sigma,
+            \mathcal O_{R,f}(\phi_{h_f}(\mathcal O_{R,f}(N)))\bigr)\\
+        &=
+        p_A(R)\,
+        E_{B^X}\bigl(f,\sigma,\phi_{h_f}(N)\bigr).
+    \end{aligned}
+    \]
+    The displayed equalities also use
+    $\mathcal O_{R,f}\circ\mathcal O_{R,f}=\operatorname{id}$, the compatibility
+    of $\mathcal O_{R,f}$ with transport, and
+    $\omega_{R,\sigma|_R,\sigma|_{V\setminus R}}=\sigma$. Substituting these two
+    identities into the assumed region equality and cancelling the shared
+    positive multiplicity gives the edge-level identity.
+\end{proof}
+
+\begin{theorem}[Region absorbed equality from the edge absorbed equality]%
+    \label{thm:peps_regionInsertedCoeff_eq_applyGauge_of_edge}
+    \lean{TNLean.PEPS.regionInsertedCoeff_eq_applyGauge_of_edge}
+    \leanok
+    \uses{def:peps_regionInsertedCoeff, def:peps_edgeInsertedCoeff,
+        def:applyGauge,
+        thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff}
+    Assume the bond-dimension equality $h:D_A=D_B$ and suppose the edge-level
+    absorbed equality holds at an edge $e$: for every global physical
+    configuration $\sigma$ and every matrix $N$ on the bond space of $e$,
+    \[
+        E_A(e,\sigma,N)
+        =
+        E_{B^X}\bigl(e,\sigma,\phi_{h_e}(N)\bigr).
+    \]
+    Then the region absorbed equality holds at every region $R$ having $e$ as a
+    boundary edge: for every matrix $M$ on the bond space of $e$ and all physical
+    configurations $\sigma$ on $R$ and $\tau$ on $V\setminus R$,
+    \[
+        C_A(R,e,M;\sigma,\tau)
+        =
+        C_{B^X}\bigl(R,e,\phi_{h_e}(M);\sigma,\tau\bigr).
+    \]
+    Together with the preceding theorem this expresses region-independence: the
+    absorbed plain equality over any comparison region follows from the single
+    edge-level identity at the boundary edge.
+\end{theorem}
+\begin{proof}\leanok
+    Read both region coefficients through the region-to-edge identity
+    Theorem~\ref{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff}. The
+    interior multiplicities agree because the gauge preserves bond dimensions and
+    $D_A=D_B$, and the orientation $\mathcal O_{R,e}$ commutes with the transport.
+    Hence the two sides are $p_A(R)$ times the edge coefficients
+    \[
+        E_A(e,\omega_{R,\sigma,\tau},\mathcal O_{R,e}(M))
+        \quad\text{and}\quad
+        E_{B^X}\bigl(e,\omega_{R,\sigma,\tau},
+            \phi_{h_e}(\mathcal O_{R,e}(M))\bigr).
+    \]
+    The edge-level hypothesis at $\omega_{R,\sigma,\tau}$ equates these
+    coefficients; multiplying by the common factor $p_A(R)$ gives the region
+    equality.
+\end{proof}
+

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.Data.Matrix.Basis
+import Mathlib.Analysis.Matrix.Order
 import Mathlib.LinearAlgebra.Matrix.PosDef
 import Mathlib.Tactic.NoncommRing
 
@@ -19,18 +20,14 @@ on matrix algebras `M_D(ℂ)`.
 * `IsIrreducibleMap`: a CP map with no non-trivial invariant projection
 * `HasUniqueFixedPoint`: unique PSD fixed point (up to scalar), which is positive definite
 
-## Main lemmas
-
-* `diagonal_mul_conjTranspose_eq_normSq_sum`: diagonal of `M * Mᴴ` is a sum of squared norms
-* `eq_zero_of_sum_mul_conjTranspose_eq_zero`: if `∑ Bᵢ Bᵢᴴ = 0` then each `Bᵢ = 0`
-
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2, Thm 6.2][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2,
+  Theorem 6.2][Wolf2012QChannels]
 * [Evans, Høegh-Krohn, *Spectral properties of positive maps*, 1978][Evans1978Spectral]
 -/
 
-open scoped Matrix ComplexOrder BigOperators
+open scoped Matrix ComplexOrder BigOperators MatrixOrder
 
 variable {D : ℕ}
 
@@ -41,21 +38,30 @@ These correspond to projections onto subspaces of `ℂ^D`. -/
 def IsOrthogonalProjection (P : Matrix (Fin D) (Fin D) ℂ) : Prop :=
   P.IsHermitian ∧ P * P = P
 
-/-- The zero matrix is an orthogonal projection. -/
-lemma isOrthogonalProjection_zero : IsOrthogonalProjection (0 : Matrix (Fin D) (Fin D) ℂ) :=
-  ⟨Matrix.isHermitian_zero, by simp only [Matrix.zero_mul]⟩
+/-- An orthogonal projection is a star projection. -/
+theorem IsOrthogonalProjection.isStarProjection {P : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsOrthogonalProjection P) : IsStarProjection P := by
+  rw [isStarProjection_iff']
+  exact ⟨hP.2, by simpa [Matrix.star_eq_conjTranspose] using hP.1.eq⟩
 
-/-- The identity matrix is an orthogonal projection. -/
-lemma isOrthogonalProjection_one : IsOrthogonalProjection (1 : Matrix (Fin D) (Fin D) ℂ) :=
-  ⟨Matrix.isHermitian_one, by simp only [Matrix.one_mul]⟩
+/-- A star projection is an orthogonal projection. -/
+theorem IsStarProjection.isOrthogonalProjection {P : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsStarProjection P) : IsOrthogonalProjection P := by
+  rw [isStarProjection_iff'] at hP
+  refine ⟨?_, hP.1⟩
+  change Pᴴ = P
+  simpa [Matrix.star_eq_conjTranspose] using hP.2
+
+/-- The complement of an orthogonal projection is an orthogonal projection. -/
+theorem IsOrthogonalProjection.one_sub {P : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsOrthogonalProjection P) : IsOrthogonalProjection (1 - P) :=
+  hP.isStarProjection.one_sub.isOrthogonalProjection
 
 /-- An orthogonal projection is positive semidefinite. -/
 theorem isOrthogonalProjection_posSemidef {P : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsOrthogonalProjection P) :
-    P.PosSemidef := by
-  have hPP : P = Pᴴ * P := by rw [hP.1, hP.2]
-  rw [hPP]
-  exact P.posSemidef_conjTranspose_mul_self
+    P.PosSemidef :=
+  Matrix.nonneg_iff_posSemidef.mp hP.isStarProjection.nonneg
 
 /-! ### Irreducibility of CP maps -/
 
@@ -93,28 +99,6 @@ structure HasUniqueFixedPoint [DecidableEq (Fin D)]
   /-- Any PSD fixed point is a scalar multiple of `ρ`. -/
   unique : ∀ σ : Matrix (Fin D) (Fin D) ℂ, σ.PosSemidef → E σ = σ → ∃ c : ℂ, σ = c • ρ
 
-/-! ### Auxiliary matrix algebra lemmas -/
-
-/-- Entry computation for a sandwich product with a single-entry matrix. -/
-private lemma mul_single_mul_eq [DecidableEq (Fin D)]
-    (Q P : Matrix (Fin D) (Fin D) ℂ) (k l : Fin D) :
-    Q * Matrix.single k l (1 : ℂ) * P =
-      Matrix.of (fun i j => Q i k * P l j) := by
-  ext i j
-  simp only [Matrix.mul_apply, Matrix.of_apply, Matrix.single_apply]
-  have inner_eq : ∀ x, ∑ x₁, Q i x₁ * (if k = x₁ ∧ l = x then 1 else 0) =
-      if l = x then Q i k else 0 := by
-    intro x
-    by_cases hlx : l = x
-    · subst hlx; simp only [and_true]
-      rw [Finset.sum_eq_single k] <;> simp (config := { contextual := true }) [Ne.symm]
-    · simp only [hlx, and_false, ite_false, mul_zero, Finset.sum_const_zero]
-  simp_rw [inner_eq]
-  rw [Finset.sum_eq_single l]
-  · simp
-  · intro b _ hbl; simp [Ne.symm hbl]
-  · simp
-
 /-- If `(1 - P) * M * P = 0` for all matrices `M`, then `P = 0` or `P = 1`.
 This is the final step: an invariant subspace of every matrix must be trivial. -/
 lemma proj_zero_or_one_of_sandwich [DecidableEq (Fin D)]
@@ -128,42 +112,16 @@ lemma proj_zero_or_one_of_sandwich [DecidableEq (Fin D)]
       by_contra h_all; push Not at h_all
       exact hP (Matrix.ext fun i j => h_all i j)
     ext i k
-    have h_eq := mul_single_mul_eq (1 - P) P k l₀
-    rw [h (Matrix.single k l₀ 1)] at h_eq
-    have h_entry := congr_fun (congr_fun h_eq i) j₀
-    simp [Matrix.of_apply] at h_entry
+    have h_entry := congr_fun (congr_fun (h (Matrix.single k l₀ 1)) i) j₀
+    have hsum :
+        ∑ x, ((1 - P) * Matrix.single k l₀ (1 : ℂ)) i x * P x j₀ =
+          (1 - P) i k * P l₀ j₀ := by
+      rw [Finset.sum_eq_single l₀]
+      · simp
+      · intro b _ hb
+        simp [Matrix.mul_single_apply_of_ne, hb]
+      · simp
+    have h_prod : (1 - P) i k * P l₀ j₀ = 0 := by
+      exact hsum ▸ (by simpa [Matrix.mul_apply] using h_entry)
     simp only [Matrix.sub_apply, Matrix.one_apply, Matrix.zero_apply]
-    exact h_entry.resolve_right hlj
-
-/-- `(M * Mᴴ) c c = ∑ x, ‖M c x‖²` for any matrix `M`. -/
-lemma diagonal_mul_conjTranspose_eq_normSq_sum
-    (M : Matrix (Fin D) (Fin D) ℂ) (c : Fin D) :
-    (M * Mᴴ) c c = ↑(∑ x, Complex.normSq (M c x)) := by
-  rw [Matrix.mul_apply, Complex.ofReal_sum]
-  congr 1; ext x
-  simp [Matrix.conjTranspose_apply, Complex.normSq_eq_conj_mul_self]; ring
-
-/-- If `∑ᵢ Bᵢ * Bᵢᴴ = 0` then each `Bᵢ = 0`, since each term is PSD. -/
-lemma eq_zero_of_sum_mul_conjTranspose_eq_zero {ι : Type*} [Fintype ι]
-    (B : ι → Matrix (Fin D) (Fin D) ℂ)
-    (h : ∑ i : ι, B i * (B i)ᴴ = 0) :
-    ∀ i, B i = 0 := by
-  have h_each_diag : ∀ k c, (B k * (B k)ᴴ) c c = 0 := by
-    intro k c
-    have h_diag_eq : ∑ k' : ι, (B k' * (B k')ᴴ) c c = 0 := by
-      have := congr_fun (congr_fun h c) c
-      simpa only [Matrix.sum_apply, Matrix.zero_apply] using this
-    simp_rw [diagonal_mul_conjTranspose_eq_normSq_sum] at h_diag_eq ⊢
-    have h_nonneg : ∀ k', (0 : ℝ) ≤ ∑ x, Complex.normSq (B k' c x) :=
-      fun k' => Finset.sum_nonneg (fun x _ => Complex.normSq_nonneg _)
-    have h_sum_real : ∑ k' : ι, ∑ x, Complex.normSq (B k' c x) = 0 := by
-      exact_mod_cast h_diag_eq
-    simp [(Finset.sum_eq_zero_iff_of_nonneg (fun k' _ => h_nonneg k')).mp
-      h_sum_real k (Finset.mem_univ _)]
-  intro i; ext a b
-  have h_ii := h_each_diag i a
-  rw [diagonal_mul_conjTranspose_eq_normSq_sum] at h_ii
-  have h_sum_real : ∑ x, Complex.normSq (B i a x) = 0 := by exact_mod_cast h_ii
-  exact Complex.normSq_eq_zero.mp
-    ((Finset.sum_eq_zero_iff_of_nonneg (fun x _ => Complex.normSq_nonneg _)).mp
-      h_sum_real b (Finset.mem_univ _))
+    exact (mul_eq_zero.mp h_prod).resolve_right hlj

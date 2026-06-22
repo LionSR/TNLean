@@ -8,23 +8,25 @@ Released under Apache 2.0 license as described in the file LICENSE.
 
 # Periodic applications of the fundamental theorem
 
-This module houses the Gemma/arXiv:1708.00029 §4 content that depends on the
-periodic fundamental theorem. It contains:
+This module contains formal material around the applications in arXiv:1708.00029,
+Section 4, that depend on the periodic fundamental theorem. The refinement and
+divisibility material belongs to Section 4.1, while the symmetry-to-`Z`-gauge
+corollary belongs to Section 4.2. It contains:
 
-1. A lightweight **single-block** symmetry wrapper (`rotatePhysical` +
+1. A **single-block** symmetry theorem (`rotatePhysical` +
    `gaugeEquiv_of_sameMPV_rotatePhysical`).
-2. A **periodic-form assembly lemma** that isolates the only missing input for
-   the full Corollary 4.1 of arXiv:1708.00029 §4.
+2. A **periodic-form theorem** that isolates the periodic equal-case FT input
+   for the symmetry corollary of arXiv:1708.00029, Section 4.2.
 3. **Preservation lemmas** showing that unitary rotation of the physical index
    preserves the transfer map, left-canonical normalization, irreducibility,
    periodicity, and irreducible form II structure.
 
-## Status for §4 (as of merged periodic FT infrastructure)
+## Status for Section 4 (as of merged periodic FT theory)
 
 * Corollary 4.1 (symmetry corollary): reduced to one call to the periodic
   equal-case FT, now that `isIrreducibleForm_rotatePhysical` is fully proven.
 * Theorem 4.1 (`p`-refinement): still needs the periodic-block
-  phase-distribution construction from §4.
+  phase-distribution construction from Section 4.1.
 -/
 
 open scoped Matrix BigOperators
@@ -35,57 +37,57 @@ noncomputable section
 
 variable {d D : ℕ}
 
-/-- Physical-index rotation of a tensor by a matrix `u` on the physical leg:
+/-- Physical-index rotation of a tensor by a matrix `M` on the physical leg:
 
-`(rotatePhysical u A) i = ∑ j, u i j • A j`.
+`(rotatePhysical M A) i = ∑ j, M i j • A j`.
 -/
-def rotatePhysical (u : Matrix (Fin d) (Fin d) ℂ) (A : MPSTensor d D) : MPSTensor d D :=
-  fun i => ∑ j : Fin d, u i j • A j
+def rotatePhysical (M : Matrix (Fin d) (Fin d) ℂ) (A : MPSTensor d D) : MPSTensor d D :=
+  fun i => ∑ j : Fin d, M i j • A j
 
 @[simp] lemma rotatePhysical_apply
-    (u : Matrix (Fin d) (Fin d) ℂ) (A : MPSTensor d D) (i : Fin d) :
-    rotatePhysical u A i = ∑ j : Fin d, u i j • A j := rfl
+    (M : Matrix (Fin d) (Fin d) ℂ) (A : MPSTensor d D) (i : Fin d) :
+    rotatePhysical M A i = ∑ j : Fin d, M i j • A j := rfl
 
-/-- Symmetry-to-virtual-gauge wrapper.
+/-- Symmetry-to-virtual-gauge theorem.
 
 If `A` is injective and has the same MPV family as its physical-leg rotation
-`B = rotatePhysical u A`, then `B` is gauge equivalent to `A`.
+`B = rotatePhysical M A`, then `B` is gauge equivalent to `A`.
 
-This is the formal Lean bridge used in Corollary-4.1 style arguments: the
-nontrivial analytic/group-theoretic part is in the hypothesis
-`SameMPV A (rotatePhysical u A)`, and the conclusion is provided by the
+This is the formal statement used in Corollary-4.1 style arguments: the
+analytic and group-theoretic content is in the hypothesis
+`SameMPV A (rotatePhysical M A)`, and the conclusion is provided by the
 single-block Fundamental Theorem. -/
 theorem gaugeEquiv_of_sameMPV_rotatePhysical
-    (u : Matrix (Fin d) (Fin d) ℂ)
+    (M : Matrix (Fin d) (Fin d) ℂ)
     (A : MPSTensor d D)
     (hA : IsInjective A)
-    (hSym : SameMPV A (rotatePhysical u A)) :
-    GaugeEquiv A (rotatePhysical u A) :=
+    (hSym : SameMPV A (rotatePhysical M A)) :
+    GaugeEquiv A (rotatePhysical M A) :=
   fundamentalTheorem_singleBlock hA hSym
 
-/-- Corollary 4.1 assembly step (periodic form).
+/-- Corollary 4.1 (periodic form).
 
 Assume the periodic equal-case FT as a hypothesis (`hPeriodicEq`): whenever two
 tensors are in irreducible form II and generate the same MPV family, they are
 Z-gauge equivalent. Then the symmetry corollary follows immediately for
-`B := rotatePhysical u A` once `B` is known to be in irreducible form II.
+`B := rotatePhysical M A` once `B` is known to be in irreducible form II.
 
-This theorem explicitly records the current dependency boundary: no
+This theorem states the current dependency boundary: no
 additional overlap arguments are needed *here* beyond the periodic equal-case
 FT input. -/
 theorem zGaugeEquiv_of_isIrreducibleForm_sameMPV_rotatePhysical
-    (u : Matrix (Fin d) (Fin d) ℂ)
+    (M : Matrix (Fin d) (Fin d) ℂ)
     (A : MPSTensor d D)
     (hA : IsIrreducibleForm A)
-    (hRot : IsIrreducibleForm (rotatePhysical u A))
-    (hSym : SameMPV A (rotatePhysical u A))
+    (hRot : IsIrreducibleForm (rotatePhysical M A))
+    (hSym : SameMPV A (rotatePhysical M A))
     (hPeriodicEq :
       ∀ {X Y : MPSTensor d D},
         IsIrreducibleForm X →
         IsIrreducibleForm Y →
         SameMPV X Y →
         ∃ m : ℕ, 0 < m ∧ ZGaugeEquiv m X Y) :
-    ∃ m : ℕ, 0 < m ∧ ZGaugeEquiv m A (rotatePhysical u A) :=
+    ∃ m : ℕ, 0 < m ∧ ZGaugeEquiv m A (rotatePhysical M A) :=
   hPeriodicEq hA hRot hSym
 
 /-! ### Transfer map preservation under rotation -/
@@ -104,13 +106,6 @@ theorem transferMap_rotatePhysical (A : MPSTensor d D) (u : Matrix (Fin d) (Fin 
 
 /-! ### Left-canonical preservation under rotation -/
 
-/-- Extract the orthogonality relation from `uᴴ * u = 1`. -/
-private lemma unitary_orth_entry (u : Matrix (Fin d) (Fin d) ℂ) (hu : uᴴ * u = 1)
-    (j k : Fin d) :
-    ∑ i : Fin d, starRingEnd ℂ (u i j) * u i k = if j = k then 1 else 0 := by
-  have h := congrArg (fun M : Matrix (Fin d) (Fin d) ℂ => M j k) hu
-  simpa [Matrix.mul_apply, Matrix.one_apply, Matrix.conjTranspose_apply] using h
-
 /-- Left-canonical normalization is preserved by unitary rotation of the physical
 index. The proof mirrors `kraus_same_map_of_unitary_combination` for the adjoint
 channel: expand, swap sums, apply orthogonality, collapse. -/
@@ -120,7 +115,11 @@ theorem isLeftCanonical_rotatePhysical (A : MPSTensor d D) (u : Matrix (Fin d) (
   unfold IsLeftCanonical at *
   simp only [rotatePhysical_apply]
   have hu' : uᴴ * u = 1 := mul_eq_one_comm.mp hu
-  have hU := unitary_orth_entry u hu'
+  have hU : ∀ j k : Fin d,
+      ∑ i : Fin d, starRingEnd ℂ (u i j) * u i k = if j = k then 1 else 0 := by
+    intro j k
+    have h := congrArg (fun M : Matrix (Fin d) (Fin d) ℂ => M j k) hu'
+    simpa [Matrix.mul_apply, Matrix.one_apply, Matrix.conjTranspose_apply] using h
   have star_eq : ∀ (c : ℂ), star c = starRingEnd ℂ c := fun _ => rfl
   -- Suffices: show the expanded sum equals ∑_j A_j† A_j
   suffices h : ∑ i : Fin d, (∑ j : Fin d, u i j • A j)ᴴ * (∑ k : Fin d, u i k • A k) =
@@ -155,7 +154,11 @@ theorem isIrreducibleTensor_rotatePhysical (A : MPSTensor d D) (u : Matrix (Fin 
   refine ⟨P, hProj, hNe0, hNe1, ?_⟩
   intro k
   have hu' : uᴴ * u = 1 := mul_eq_one_comm.mp hu
-  have hU := unitary_orth_entry u hu'
+  have hU : ∀ j k : Fin d,
+      ∑ i : Fin d, starRingEnd ℂ (u i j) * u i k = if j = k then 1 else 0 := by
+    intro j k
+    have h := congrArg (fun M : Matrix (Fin d) (Fin d) ℂ => M j k) hu'
+    simpa [Matrix.mul_apply, Matrix.one_apply, Matrix.conjTranspose_apply] using h
   -- Distribute (1-P)*_*P through the sum in the invariance condition
   have hInv' : ∀ i : Fin d, ∑ j : Fin d, u i j • ((1 - P) * A j * P) = 0 := by
     intro i
@@ -194,29 +197,29 @@ theorem isPeriodic_rotatePhysical (m : ℕ) (A : MPSTensor d D) (u : Matrix (Fin
 /-! ### SameMPV₂ preservation under rotation -/
 
 /-- Strengthened induction: for any prefix word `p`, the trace of
-`evalWord A p * evalWord (rotatePhysical u A) w` equals the corresponding
+`evalWord A p * evalWord (rotatePhysical M A) w` equals the corresponding
 expression with `B`. This generalises the `coeff` equality needed for
 `sameMPV₂_rotatePhysical`. -/
 private lemma trace_evalWord_rotatePhysical_prefix {D₁ D₂ : ℕ}
-    (u : Matrix (Fin d) (Fin d) ℂ)
+    (M : Matrix (Fin d) (Fin d) ℂ)
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (h : ∀ w : List (Fin d), coeff A w = coeff B w)
     (p : List (Fin d)) :
     ∀ w : List (Fin d),
-      Matrix.trace (evalWord A p * evalWord (rotatePhysical u A) w) =
-      Matrix.trace (evalWord B p * evalWord (rotatePhysical u B) w) := by
+      Matrix.trace (evalWord A p * evalWord (rotatePhysical M A) w) =
+      Matrix.trace (evalWord B p * evalWord (rotatePhysical M B) w) := by
   intro w
   induction w generalizing p with
   | nil => simp only [evalWord_nil, mul_one, coeff_eq] at *; exact h p
   | cons i w ih =>
     simp only [evalWord_cons, rotatePhysical_apply]
-    -- Helper: expand trace(prefix * (∑ j, u i j • C j) * tail) as
-    -- ∑ j, u i j * trace(evalWord C (p ++ [j]) * tail)
+    -- Auxiliary: expand trace(prefix * (∑ j, M i j • C j) * tail) as
+    -- ∑ j, M i j * trace(evalWord C (p ++ [j]) * tail)
     have expand : ∀ {D' : ℕ} (C : MPSTensor d D'),
-        Matrix.trace (evalWord C p * ((∑ j : Fin d, u i j • C j) *
-          evalWord (rotatePhysical u C) w)) =
-        ∑ j : Fin d, u i j * Matrix.trace (evalWord C (p ++ [j]) *
-          evalWord (rotatePhysical u C) w) := by
+        Matrix.trace (evalWord C p * ((∑ j : Fin d, M i j • C j) *
+          evalWord (rotatePhysical M C) w)) =
+        ∑ j : Fin d, M i j * Matrix.trace (evalWord C (p ++ [j]) *
+          evalWord (rotatePhysical M C) w) := by
       intro D' C
       rw [← Matrix.mul_assoc, Matrix.mul_sum]
       simp_rw [mul_smul_comm, Matrix.sum_mul, smul_mul_assoc,
@@ -228,13 +231,13 @@ private lemma trace_evalWord_rotatePhysical_prefix {D₁ D₂ : ℕ}
     exact ih (p ++ [j])
 
 /-- If `A` and `B` generate the same MPV family, so do their physical-index
-rotations `rotatePhysical u A` and `rotatePhysical u B`.
+rotations `rotatePhysical M A` and `rotatePhysical M B`.
 
 The proof uses a strengthened induction with an arbitrary prefix word,
 reducing each step to the `SameMPV₂` hypothesis via word concatenation. -/
-theorem sameMPV₂_rotatePhysical {D₁ D₂ : ℕ} (u : Matrix (Fin d) (Fin d) ℂ)
+theorem sameMPV₂_rotatePhysical {D₁ D₂ : ℕ} (M : Matrix (Fin d) (Fin d) ℂ)
     (A : MPSTensor d D₁) (B : MPSTensor d D₂) (h : SameMPV₂ A B) :
-    SameMPV₂ (rotatePhysical u A) (rotatePhysical u B) := by
+    SameMPV₂ (rotatePhysical M A) (rotatePhysical M B) := by
   -- Convert SameMPV₂ to coeff-level equality for all words
   have hcoeff : ∀ w : List (Fin d), coeff A w = coeff B w := by
     intro w
@@ -244,22 +247,22 @@ theorem sameMPV₂_rotatePhysical {D₁ D₂ : ℕ} (u : Matrix (Fin d) (Fin d) 
   intro N σ
   simp only [mpv_eq, coeff_eq]
   -- Apply the prefix lemma with empty prefix
-  have := trace_evalWord_rotatePhysical_prefix u A B hcoeff [] (List.ofFn σ)
+  have := trace_evalWord_rotatePhysical_prefix M A B hcoeff [] (List.ofFn σ)
   simpa [evalWord_nil] using this
 
 /-! ### Irreducible form preservation under rotation -/
 
-/-- Physical-index rotation distributes over the block-diagonal assembly:
-`rotatePhysical u (toTensorFromBlocks μ A) =
-  toTensorFromBlocks μ (fun k => rotatePhysical u (A k))`.
+/-- Physical-index rotation distributes over the block-diagonal sum:
+`rotatePhysical M (toTensorFromBlocks μ A) =
+  toTensorFromBlocks μ (fun k => rotatePhysical M (A k))`.
 
 This follows from linearity of `blockDiagonal'` and `smul` through finite
 sums. -/
 theorem rotatePhysical_toTensorFromBlocks {r : ℕ} {dim : Fin r → ℕ}
-    (u : Matrix (Fin d) (Fin d) ℂ) (μ : Fin r → ℂ)
+    (M : Matrix (Fin d) (Fin d) ℂ) (μ : Fin r → ℂ)
     (A : (k : Fin r) → MPSTensor d (dim k)) :
-    rotatePhysical u (toTensorFromBlocks (d := d) μ A) =
-    toTensorFromBlocks (d := d) μ (fun k => rotatePhysical u (A k)) := by
+    rotatePhysical M (toTensorFromBlocks (d := d) μ A) =
+    toTensorFromBlocks (d := d) μ (fun k => rotatePhysical M (A k)) := by
   funext i; ext a b
   simp only [rotatePhysical_apply, toTensorFromBlocks, Matrix.sum_apply,
     Matrix.smul_apply, Matrix.reindex_apply, Matrix.submatrix_apply,

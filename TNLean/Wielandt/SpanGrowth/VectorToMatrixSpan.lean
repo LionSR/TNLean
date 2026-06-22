@@ -17,7 +17,7 @@ import Mathlib.LinearAlgebra.Matrix.StdBasis
 This module starts closing the main remaining gap in the Quantum Wielandt proof
 (arXiv:0909.5347, Lemma 2(b)).
 
-We currently formalize the **algebraic assembly** part of Lemma 2(b):
+We currently formalize the **algebraic fixed-length matrix spanning** part of Lemma 2(b):
 
 * If (fixed-length) word products applied to a vector `φ` span all of `ℂ^D`, and
 * If we can produce the rank-one operators `|φ⟩⟨e_j|` as word products of a
@@ -35,10 +35,17 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ## Basic linear map lemmas -/
+/-! ## Main results
 
+* `MPSTensor.wordSpan_mul_le` — fixed-length word spans multiply into the span at
+  the summed length
+* `MPSTensor.wordSpan_top_of_mul` — full word span persists at positive multiples
+* `MPSTensor.wordSpan_eq_top_of_blockTensor_wordSpan_eq_top` — full blocked word
+  span gives a full unblocked word span
+
+## Basic linear map lemmas -/
 /-- The linear map `M ↦ M *ᵥ φ` for a fixed vector `φ`. -/
-def mulVecLinearMap (φ : Fin D → ℂ) :
+noncomputable def mulVecLinearMap (φ : Fin D → ℂ) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] (Fin D → ℂ) :=
   { toFun := fun M => M *ᵥ φ
     map_add' := fun M N => Matrix.add_mulVec M N φ
@@ -60,10 +67,12 @@ theorem map_wordSpan_eq_vectorSpreadSpan
       (Set.range fun σ : Fin n → Fin d => A.evalWord (List.ofFn σ) *ᵥ φ) =
         (fun M : Matrix (Fin D) (Fin D) ℂ => M *ᵥ φ) ''
           (Set.range fun σ : Fin n → Fin d => A.evalWord (List.ofFn σ)) := by
-    -- This is exactly `Set.range_comp`.
-    simpa [Function.comp] using
-      (Set.range_comp (fun M : Matrix (Fin D) (Fin D) ℂ => M *ᵥ φ)
-        (fun σ : Fin n → Fin d => A.evalWord (List.ofFn σ)))
+    ext v
+    constructor
+    · rintro ⟨σ, rfl⟩
+      exact ⟨A.evalWord (List.ofFn σ), ⟨σ, rfl⟩, rfl⟩
+    · rintro ⟨M, ⟨σ, rfl⟩, rfl⟩
+      exact ⟨σ, rfl⟩
   -- Finish by rewriting.
   simp [hrange]
 
@@ -91,7 +100,40 @@ theorem wordSpan_mul_le (A : MPSTensor d D) (m n : ℕ) :
     simpa [List.length_append] using
       (evalWord_mem_wordSpan A (List.ofFn σ₁ ++ List.ofFn σ₂))
   -- Rewrite the product using `evalWord_append`.
-  simpa [evalWord_append] using hmem
+  simpa [wordSpan, evalWord_append] using hmem
+
+/-- If `wordSpan A N = ⊤`, then `wordSpan A (k * N) = ⊤` for any `k ≥ 1`. -/
+theorem wordSpan_top_of_mul (A : MPSTensor d D) {N : ℕ}
+    (htop : wordSpan A N = ⊤) :
+    ∀ k : ℕ, 1 ≤ k → wordSpan A (k * N) = ⊤ := by
+  intro k hk
+  induction k with
+  | zero => omega
+  | succ k ih =>
+      by_cases hk0 : k = 0
+      · simpa [hk0] using htop
+      · have hkge : 1 ≤ k := Nat.one_le_iff_ne_zero.mpr hk0
+        have hih : wordSpan A (k * N) = ⊤ := ih hkge
+        have hmul : wordSpan A (k * N) * wordSpan A N ≤ wordSpan A (k * N + N) :=
+          wordSpan_mul_le A (k * N) N
+        have htoptop : wordSpan A (k * N) * wordSpan A N = ⊤ := by
+          rw [hih, htop]
+          apply eq_top_iff.mpr
+          intro M _
+          simpa using
+            (Submodule.mul_mem_mul
+              (show M ∈ (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) from
+                Submodule.mem_top)
+              (show (1 : Matrix (Fin D) (Fin D) ℂ) ∈
+                  (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) from
+                Submodule.mem_top))
+        have hle : (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) ≤
+            wordSpan A (k * N + N) := by
+          rw [← htoptop]
+          exact hmul
+        have hlen : k * N + N = (k + 1) * N := by ring
+        rw [hlen] at hle
+        exact eq_top_iff.mpr hle
 
 /-! ## Blocking transfer: word spans for blocked tensors -/
 
@@ -240,9 +282,9 @@ theorem vectorSpreadSpan_eq_top_of_cumulativeVectorSpan_eq_top_of_eigenvector
   simpa [cumulativeVectorSpan_eq_vectorSpreadSpan_of_eigenvector (A := A) (φ := φ) (n := n)
     i₀ μ hμ heig] using htop
 
-/-! ## Vector spanning → fixed-length matrix spanning (assembly step) -/
+/-! ## Vector spanning → fixed-length matrix spanning -/
 
-/-- **Lemma 2(b) (assembly step, rank-one hypothesis)**.
+/-- **Lemma 2(b) (rank-one hypothesis)**.
 
 Assume:
 * `vectorSpreadSpan A φ n = ⊤`, i.e. length-`n` word products applied to `φ`
@@ -255,8 +297,8 @@ Then `wordSpan A (n+m) = ⊤`.
 This is the part of Lemma 2(b) that turns rank-one operators + vector spanning
 into full matrix spanning.
 
-The remaining hard part (TODO) is to construct these rank-one operators from the
-Jordan/Fitting analysis of an eigenvalue word.
+The rank-one operators are constructed later by the Fitting-based extraction
+theorems in `TNLean.Wielandt.RankOne.ExtractionFull`.
 -/
 theorem wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOneBasis
     (A : MPSTensor d D) (φ : Fin D → ℂ) {n m : ℕ}
@@ -302,17 +344,9 @@ theorem wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOneBasis
         _ = Matrix.single i j (1 : ℂ) := houter
     simpa [hcalc] using hprod
   -- Conclude `wordSpan = ⊤` by showing it contains the standard matrix basis.
-  apply eq_top_iff.mpr
-  have hbasis :
-      Submodule.span ℂ (Set.range (Matrix.stdBasis ℂ (Fin D) (Fin D))) ≤
-        wordSpan A (n + m) := by
-    refine Submodule.span_le.2 ?_
-    rintro M ⟨ij, rfl⟩
-    rcases ij with ⟨i, j⟩
-    simpa [Matrix.stdBasis_eq_single] using hsingle i j
-  have htop_le :
-      (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) ≤ wordSpan A (n + m) := by
-    simpa [(Matrix.stdBasis ℂ (Fin D) (Fin D)).span_eq] using hbasis
-  exact htop_le
+  refine (Submodule.eq_top_iff_forall_basis_mem
+    (Matrix.stdBasis ℂ (Fin D) (Fin D))).2 ?_
+  rintro ⟨i, j⟩
+  simpa [Matrix.stdBasis_eq_single] using hsingle i j
 
 end MPSTensor

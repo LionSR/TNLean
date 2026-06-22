@@ -11,7 +11,7 @@ local tensors agree under all virtual insertions on both bonds, then the two
 pairs are proportional by inverse nonzero scalars.
 
 The full proportionality theorem is stated as `tensor_proportional`.
-The first trace-to-product reduction steps are provided as helper lemmas.
+The first trace-to-product reduction steps are provided as auxiliary lemmas.
 -/
 
 open scoped Matrix
@@ -28,25 +28,20 @@ variable {d D : ℕ}
       Matrix.trace (A₁ i * X * A₂ j) = Matrix.trace (B₁ i * X * B₂ j)) :
     ∀ i j, A₂ j * A₁ i = B₂ j * B₁ i := by
   intro i j
-  have hzero :
-      A₂ j * A₁ i - B₂ j * B₁ i = 0 := by
-    apply (Matrix.trace_mul_right_eq_zero_iff (n := Fin D) (A₂ j * A₁ i - B₂ j * B₁ i)).1
-    intro X
-    have hX := hInt X i j
-    have hcycA : Matrix.trace (A₁ i * X * A₂ j) = Matrix.trace (A₂ j * A₁ i * X) := by
-      simpa [Matrix.mul_assoc] using
-        (Matrix.trace_mul_cycle (A₁ i) X (A₂ j))
-    have hcycB : Matrix.trace (B₁ i * X * B₂ j) = Matrix.trace (B₂ j * B₁ i * X) := by
-      simpa [Matrix.mul_assoc] using
-        (Matrix.trace_mul_cycle (B₁ i) X (B₂ j))
-    calc
-      Matrix.trace ((A₂ j * A₁ i - B₂ j * B₁ i) * X)
-          = Matrix.trace (A₂ j * A₁ i * X) - Matrix.trace (B₂ j * B₁ i * X) := by
-              simp [sub_mul]
-      _ = Matrix.trace (A₁ i * X * A₂ j) - Matrix.trace (B₁ i * X * B₂ j) := by
-            rw [hcycA, hcycB]
-      _ = 0 := by simp [hX]
-  exact sub_eq_zero.mp hzero
+  apply (Matrix.ext_iff_trace_mul_right).2
+  intro X
+  have hX := hInt X i j
+  have hcycA : Matrix.trace (A₁ i * X * A₂ j) = Matrix.trace (A₂ j * A₁ i * X) := by
+    simpa [Matrix.mul_assoc] using
+      (Matrix.trace_mul_cycle (A₁ i) X (A₂ j))
+  have hcycB : Matrix.trace (B₁ i * X * B₂ j) = Matrix.trace (B₂ j * B₁ i * X) := by
+    simpa [Matrix.mul_assoc] using
+      (Matrix.trace_mul_cycle (B₁ i) X (B₂ j))
+  calc
+    Matrix.trace (A₂ j * A₁ i * X)
+        = Matrix.trace (A₁ i * X * A₂ j) := hcycA.symm
+    _ = Matrix.trace (B₁ i * X * B₂ j) := hX
+    _ = Matrix.trace (B₂ j * B₁ i * X) := hcycB
 
 /-- External insertion trace agreement implies equality of the mixed products
 `A₁ i * A₂ j = B₁ i * B₂ j` for all physical indices. -/
@@ -56,25 +51,20 @@ variable {d D : ℕ}
       Matrix.trace (A₂ j * Y * A₁ i) = Matrix.trace (B₂ j * Y * B₁ i)) :
     ∀ i j, A₁ i * A₂ j = B₁ i * B₂ j := by
   intro i j
-  have hzero :
-      A₁ i * A₂ j - B₁ i * B₂ j = 0 := by
-    apply (Matrix.trace_mul_right_eq_zero_iff (n := Fin D) (A₁ i * A₂ j - B₁ i * B₂ j)).1
-    intro Y
-    have hY := hExt Y i j
-    have hcycA : Matrix.trace (A₂ j * Y * A₁ i) = Matrix.trace (A₁ i * A₂ j * Y) := by
-      simpa [Matrix.mul_assoc] using
-        (Matrix.trace_mul_cycle (A₂ j) Y (A₁ i))
-    have hcycB : Matrix.trace (B₂ j * Y * B₁ i) = Matrix.trace (B₁ i * B₂ j * Y) := by
-      simpa [Matrix.mul_assoc] using
-        (Matrix.trace_mul_cycle (B₂ j) Y (B₁ i))
-    calc
-      Matrix.trace ((A₁ i * A₂ j - B₁ i * B₂ j) * Y)
-          = Matrix.trace (A₁ i * A₂ j * Y) - Matrix.trace (B₁ i * B₂ j * Y) := by
-              simp [sub_mul]
-      _ = Matrix.trace (A₂ j * Y * A₁ i) - Matrix.trace (B₂ j * Y * B₁ i) := by
-            rw [hcycA, hcycB]
-      _ = 0 := by simp [hY]
-  exact sub_eq_zero.mp hzero
+  apply (Matrix.ext_iff_trace_mul_right).2
+  intro Y
+  have hY := hExt Y i j
+  have hcycA : Matrix.trace (A₂ j * Y * A₁ i) = Matrix.trace (A₁ i * A₂ j * Y) := by
+    simpa [Matrix.mul_assoc] using
+      (Matrix.trace_mul_cycle (A₂ j) Y (A₁ i))
+  have hcycB : Matrix.trace (B₂ j * Y * B₁ i) = Matrix.trace (B₁ i * B₂ j * Y) := by
+    simpa [Matrix.mul_assoc] using
+      (Matrix.trace_mul_cycle (B₂ j) Y (B₁ i))
+  calc
+    Matrix.trace (A₁ i * A₂ j * Y)
+        = Matrix.trace (A₂ j * Y * A₁ i) := hcycA.symm
+    _ = Matrix.trace (B₂ j * Y * B₁ i) := hY
+    _ = Matrix.trace (B₁ i * B₂ j * Y) := hcycB
 
 /-- Lemma 2 of arXiv:1804.04964 (2-site case): two injective tensor pairs that
 agree under all virtual insertions on both bonds are proportional. -/

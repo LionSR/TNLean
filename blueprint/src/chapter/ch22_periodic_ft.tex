@@ -1,0 +1,2187 @@
+%% =========================================================
+%% Chapter: Periodic MPS - irreducible form and the periodic
+%% Fundamental Theorem. Source: \cite[Sections~3--4]{DeLasCuevas2017Irreducible}.
+%% (De las Cuevas--Cirac--Schuch--P\'erez-Garc\'ia).
+%% =========================================================
+
+\chapter{Periodic MPS: irreducible form and the periodic Fundamental Theorem}%
+\label{ch:periodic_ft_apps}
+
+This chapter develops the periodic equal-case Fundamental Theorem of MPS
+(Theorem~\ref{thm:periodic_ft}) following
+\cite{DeLasCuevas2017Irreducible}, and gives its two applications:
+the symmetry corollary lifting a physical on-site symmetry of a tensor
+in irreducible form~II to a virtual $Z$-gauge, and the equivalence between
+$p$-refinability of the matrix-product-vector family and
+$p$-divisibility of the transfer map.
+
+\section{Periodic irreducible form and physical-index rotation}%
+\label{sec:periodic_irreducible_rotation}
+
+\begin{definition}[Left-canonical periodic tensor]
+    \label{def:periodic_tensor}
+    \lean{MPSTensor.IsPeriodic}
+    \leanok
+    A left-canonical irreducible MPS tensor $A$ of bond dimension $D$ is
+    \emph{$m$-periodic} (for some $m \ge 1$) if the peripheral spectrum of
+    its transfer map $\E_A$ is exactly the $m$-th roots of unity
+    $\{e^{2\pi i k/m} : 0 \le k < m\}$. This is the normalized form-II
+    convention used later in the source.
+    A $1$-periodic tensor is exactly an irreducible tensor with
+    primitive transfer map (Definition~\ref{def:primitive_channel}).
+\end{definition}
+
+\begin{definition}[Irreducible form]
+    \label{def:irreducible_form}
+    \lean{MPSTensor.IsIrreducibleForm}
+    \leanok
+    A tensor $A$ is in \emph{irreducible form} if it is block-diagonal
+    \[
+        A^i = \bigoplus_{j \in J} \mu_j\, A_j^i,
+    \]
+    where each block $A_j$ is an $m_j$-periodic tensor. Following
+    \cite[Section~II]{DeLasCuevas2017Irreducible}, the phases are fixed by the
+    convention $\mu_j>0$, so the weights are positive real scalars.
+    % Source check: arXiv:1708.00029, lines 252--261 define irreducible form
+    % with the positive-weight convention. The non-repeated basis of periodic
+    % tensors is introduced later, at lines 287--303, and is not part of this
+    % definition.
+    It extends the normal canonical form
+    (Definition~\ref{def:is_normal_canonical_form}),
+    which requires the stronger condition that every block is $1$-periodic.
+\end{definition}
+
+\begin{remark}[Normal canonical form gives irreducible form]
+    \label{rem:irr_form_vs_ncf}
+\lean{MPSTensor.toIsIrreducibleFormOfPhaseNormalized,
+    MPSTensor.toIsIrreducibleFormOfPhaseNormalized_period_eq_one}
+\leanok
+    Let $A^i=\bigoplus_j \mu_j A_j^i$ be a normal canonical block family with
+    nonzero complex weights. Replacing $\mu_j$ by $|\mu_j|$ and $A_j$ by
+    $(\mu_j/|\mu_j|)A_j$ gives the positive-weight irreducible form convention
+    and does not change the MPV family. The corresponding irreducible-form
+    witness has all periods equal to~$1$. This is the period-one part of the statement in
+    \cite[Section~II]{DeLasCuevas2017Irreducible} that normal tensors are
+    periodic tensors with period~$1$.
+\end{remark}
+
+\begin{remark}[Irreducible form allows higher periods]
+    \label{rem:irreducible_form_higher_periods}
+\notready
+    The converse containment is not part of the formalized implication above.
+    Irreducible form permits periodic blocks with period larger than~$1$; for
+    instance, the antiferromagnetic example has period~$2$.
+\end{remark}
+
+\noindent Physical-index rotation was introduced in
+Definition~\ref{def:rotate_physical} (Chapter~\ref{ch:symmetry}).
+The following compatibility theorems are proved in the present chapter.
+
+\begin{theorem}[Transfer map preserved by physical rotation]%
+    \label{thm:transfer_map_rotate_physical}
+    \lean{MPSTensor.transferMap_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical, def:transfer_map}
+    If $u u^\dagger = I$, then the transfer map is invariant under
+    physical-index rotation:
+    $\mathcal{E}_{A_u} = \mathcal{E}_A$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:unitary_kraus_mixing}
+    This is the unitary freedom of Kraus representations from
+    \cite[Theorem~2.1(4)]{Wolf2012Quantum}.
+\end{proof}
+
+\begin{theorem}[Left-canonical preserved by physical rotation]%
+    \label{thm:left_canonical_rotate_physical}
+    \lean{MPSTensor.isLeftCanonical_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical}
+    If $u u^\dagger = I$ and $A$ is left-canonical, then
+    $A_u$ is left-canonical.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:rotate_physical}
+    Expand $\sum_i B_i^\dagger B_i$ where $B_i = \sum_j u_{ij} A_j$,
+    swap sums, apply orthogonality $u^\dagger u = I$, and collapse to
+    $\sum_j A_j^\dagger A_j = I$.
+\end{proof}
+
+\begin{theorem}[Irreducibility preserved by physical rotation]%
+    \label{thm:irreducible_tensor_rotate_physical}
+    \lean{MPSTensor.isIrreducibleTensor_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical}
+    If $u u^\dagger = I$ and $A$ is irreducible, then
+    $A_u$ is irreducible.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:rotate_physical}
+    Contrapositive: any nontrivial invariant projection~$P$ for the
+    rotated tensor yields $(1-P)\, A_k\, P = 0$ for all~$k$ via the
+    orthogonality of~$u$, contradicting irreducibility of~$A$.
+\end{proof}
+
+\begin{theorem}[Periodicity preserved by physical rotation]%
+    \label{thm:periodic_rotate_physical}
+    \lean{MPSTensor.isPeriodic_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical, thm:transfer_map_rotate_physical,
+        thm:left_canonical_rotate_physical,
+        thm:irreducible_tensor_rotate_physical}
+    If $u u^\dagger = I$ and $A$ is periodic with period~$m$, then
+    $A_u$ is periodic with the same period.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:transfer_map_rotate_physical,
+        thm:left_canonical_rotate_physical,
+        thm:irreducible_tensor_rotate_physical}
+    Assembles transfer-map invariance, left-canonical preservation, and
+    irreducibility preservation.
+\end{proof}
+
+\begin{theorem}[Equality of MPV families preserved by physical rotation]%
+    \label{thm:same_mpv_rotate_physical}
+    \lean{MPSTensor.sameMPV₂_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical, def:same_mpv}
+    If $\mathcal{V}(A) = \mathcal{V}(B)$, then
+    $\mathcal{V}(A_u) = \mathcal{V}(B_u)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:rotate_physical, def:same_mpv}
+    Induction on the word length with a strengthened hypothesis
+    carrying an arbitrary prefix matrix, reducing each step to the
+    hypothesis via word concatenation.
+\end{proof}
+
+\begin{theorem}[Physical rotation distributes over block-diagonal composition]%
+    \label{thm:rotate_physical_blocks}
+    \lean{MPSTensor.rotatePhysical_toTensorFromBlocks}
+    \leanok
+    \uses{def:rotate_physical}
+    The rotated block-diagonal tensor satisfies
+    $(\bigoplus_k \mu_k A_k)_u
+        = \bigoplus_k \mu_k (A_k)_u$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:rotate_physical}
+    Pointwise matrix-entry computation using linearity of
+    the block-diagonal embedding and reindexing.
+\end{proof}
+
+\begin{theorem}[Irreducible form preserved by physical rotation]%
+    \label{thm:irreducible_form_rotate_physical}
+    \lean{MPSTensor.isIrreducibleForm_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical, def:irreducible_form,
+        thm:periodic_rotate_physical,
+        thm:same_mpv_rotate_physical,
+        thm:rotate_physical_blocks}
+    If $u u^\dagger = I$ and $A$ is in irreducible form, then
+    $A_u$ is in irreducible form with the same block structure and
+    rotated blocks.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_rotate_physical,
+        thm:same_mpv_rotate_physical,
+        thm:rotate_physical_blocks}
+    Each block remains periodic by
+    Theorem~\ref{thm:periodic_rotate_physical}, equality of MPV families
+    transfers via Theorem~\ref{thm:same_mpv_rotate_physical}, and
+    block-diagonal compatibility follows from
+    Theorem~\ref{thm:rotate_physical_blocks}.
+\end{proof}
+
+\subsection{The \texorpdfstring{$Z$}{Z}-gauge degree of freedom}
+
+\begin{definition}[Entrywise periodic $Z$-gauge ratio]\label{def:z_gauge_entry}
+    \lean{MPSTensor.zGaugeEntry}
+    \leanok
+    Given complex multiplicity entries $\mu,\nu$, define the entrywise
+    $Z$-gauge ratio by
+    \[
+        z(\mu,\nu) := \mu/\nu.
+    \]
+\end{definition}
+
+\begin{lemma}[Matched powers imply root-of-unity ratio]\label{lem:z_gauge_entry_pow}
+    \lean{MPSTensor.zGaugeEntry_pow_eq_one_of_pow_eq}
+    \leanok
+    \uses{def:z_gauge_entry}
+    If $\mu^m=\nu^m$ and $\nu\neq 0$, then
+    \[
+        z(\mu,\nu)^m = 1.
+    \]
+\end{lemma}
+
+\begin{lemma}[Ratio rescales denominator back to numerator]\label{lem:z_gauge_entry_mul}
+    \lean{MPSTensor.zGaugeEntry_mul_right}
+    \leanok
+    \uses{def:z_gauge_entry}
+    If $\nu\neq 0$, then
+    \[
+        z(\mu,\nu) \nu=\mu.
+    \]
+\end{lemma}
+
+\begin{definition}[Diagonal periodic $Z$-gauge matrix]\label{def:z_gauge_diagonal}
+    \lean{MPSTensor.zGaugeDiagonal}
+    \leanok
+    \uses{def:z_gauge_entry}
+    For matched multiplicity entries $(\mu_i)_i$ and $(\nu_i)_i$ on a finite
+    index type, define the diagonal matrix
+    \[
+        Z := \diag\!(z(\mu_i,\nu_i))_i.
+    \]
+\end{definition}
+
+\begin{lemma}[Diagonal $Z$-gauge has finite order under matched powers]%
+    \label{lem:z_gauge_diagonal_pow}
+    \lean{MPSTensor.zGaugeDiagonal_pow_eq_one}
+    \leanok
+    \uses{def:z_gauge_diagonal, lem:z_gauge_entry_pow}
+    If $\mu_i^m=\nu_i^m$ and $\nu_i\neq 0$ for all~$i$, then
+    \[
+        Z^m=\Id.
+    \]
+\end{lemma}
+
+\begin{lemma}[Diagonal $Z$-gauge transports diagonal multiplicities]\label{lem:z_gauge_diagonal_mul}
+    \lean{MPSTensor.zGaugeDiagonal_mul_diagonal}
+    \leanok
+    \uses{def:z_gauge_diagonal, lem:z_gauge_entry_mul}
+    Under $\nu_i\neq 0$ for all~$i$,
+    \[
+        Z\,\diag(\nu)=\diag(\mu).
+    \]
+\end{lemma}
+
+\begin{definition}[$Z$-gauge equivalence]
+    \label{def:z_gauge_equiv}
+    \lean{MPSTensor.ZGaugeEquiv}
+    \leanok
+    Let $A$ be an $m$-periodic irreducible tensor of bond dimension $D$.
+    A global finite-order intertwining relation is given by a matrix
+    $Z \in \MN{D}$ satisfying:
+    \begin{enumerate}
+        \item $Z$ commutes with every tensor matrix: $[A^i, Z] = 0$
+              for all physical indices $i$, and
+        \item $Z^m = \Id_D$.
+    \end{enumerate}
+    Two tensors $A, B$ are \emph{$Z$-gauge equivalent} if there exists
+    an invertible $Y$ and a $Z$-gauge transformation $Z$ for $A$ such that
+    $Z A^i = Y B^i Y^{-1}$ for all~$i$.
+    The source equal-case theorem uses the finer block-multiplicity diagonal
+    gauges $Z_j$ from Theorem~\ref{thm:periodic_ft}; those multiplicity-space
+    matrices are not part of this global relation.
+\end{definition}
+
+\begin{remark}[$Z$-gauge is trivial for period-$1$ blocks]
+    \label{rem:z_gauge_trivial_period1}
+    \lean{MPSTensor.ZGaugeEquiv.of_period_one}
+    \leanok
+    When $m = 1$ the condition $Z^1 = \Id$ forces $Z = \Id$,
+    so $Z$-gauge equivalence reduces to ordinary gauge equivalence
+    (Definition~\ref{def:gauge_equiv}).
+    The $Z$-gauge is therefore a genuine new degree of freedom
+    that appears only for $m > 1$.
+\end{remark}
+
+\begin{theorem}[Blocking a $\mathbb Z_m$-gauge gives an ordinary gauge]
+    \label{thm:z_gauge_blockTensor_gauge_equiv}
+    \lean{MPSTensor.ZGaugeEquiv.blockTensor_gaugeEquiv}
+    \leanok
+    \uses{def:z_gauge_equiv, def:blocked_tensor, def:gauge_equiv}
+    If $A$ and $B$ are $\mathbb Z_m$-gauge equivalent, then their $m$-blocked
+    tensors $A^{[m]}$ and $B^{[m]}$ are gauge equivalent in the ordinary sense.
+\end{theorem}
+
+\begin{proof}\leanok
+    Write the $\mathbb Z_m$-gauge relation as
+    $Z A^i = Y B^i Y^{-1}$ with $Z^m = \Id$ and $[A^i, Z] = 0$.
+    For a blocked letter, commute one factor of $Z$ past each physical letter in
+    the associated length-$m$ word. The total prefactor becomes $Z^m = \Id$,
+    so the entire blocked word is related by the same ordinary gauge $Y$.
+\end{proof}
+
+\begin{corollary}[Blocking a $\mathbb Z_m$-gauge preserves the MPV family]
+    \label{cor:z_gauge_blockTensor_same_mpv}
+    \lean{MPSTensor.ZGaugeEquiv.blockTensor_sameMPV}
+    \leanok
+    \uses{thm:z_gauge_blockTensor_gauge_equiv, thm:gauge_invariance}
+    If $A$ and $B$ are $\mathbb Z_m$-gauge equivalent, then the blocked tensors
+    $A^{[m]}$ and $B^{[m]}$ have the same MPV family.
+\end{corollary}
+
+\begin{proof}\leanok
+    Apply Theorem~\ref{thm:z_gauge_blockTensor_gauge_equiv} and then the gauge
+    invariance of MPV families.
+\end{proof}
+
+\section{Periodic Fundamental Theorem}%
+\label{sec:periodic_ft}
+
+The theorems in Chapter~\ref{ch:ft_proof} all require that each block has a
+\emph{primitive} transfer map, i.e.\ peripheral spectrum exactly $\{1\}$.
+This is achieved by blocking the original tensor by a common period.
+\cite{DeLasCuevas2017Irreducible} develops a framework that
+avoids this blocking step, giving a fundamental theorem that applies
+directly to periodic tensors.
+
+\subsection{Common-period blocking lemmas}
+
+\begin{definition}[LCM period for a finite block family]
+    \label{def:lcm_period}
+    \lean{MPSTensor.lcmPeriod}
+    \leanok
+    Given a finite family of blocking periods $(p_i)$ indexed by a finite set,
+    their least common multiple serves as the shared blocking period.
+\end{definition}
+
+\begin{definition}[Common-period blocked family]
+    \label{def:common_period_blocking}
+    \lean{MPSTensor.commonPeriodBlocking}
+    \leanok
+    \uses{def:lcm_period, def:blocked_tensor}
+    Given a finite family of tensors $(B_i)$ with designated periods $(p_i)$,
+    block each $B_i$ to the shared period $\operatorname{lcm}(p_i)$, so
+    every block lives in the same physical space.
+\end{definition}
+
+\begin{theorem}[Common-period blocking preserves transfer-map primitivity]
+    \label{thm:common_period_blocking_primitive}
+    \lean{MPSTensor.isPrimitive_transferMap_commonPeriodBlocking}
+    \leanok
+    \uses{def:common_period_blocking, thm:iterated_blocking_transfer,
+        thm:primitive_blocking_divisible}
+    If each tensor $B_i$ has a primitive transfer map after blocking by its own
+    positive period $p_i$, then blocking the entire family to the common
+    LCM period preserves primitivity of each member's transfer map.
+\end{theorem}
+
+\begin{proof}\leanok
+    Each $p_i$ divides $\operatorname{lcm}(p_i)$.
+    Apply the divisibility monotonicity theorem for primitive blocked transfer maps
+    to each family member separately.
+\end{proof}
+
+\subsection{Statement of the periodic Fundamental Theorem}
+
+The following is the equal-case theorem of
+\cite[lines~643--656]{DeLasCuevas2017Irreducible}.
+The statements recorded here are conditional components of that theorem: the
+final comparison still assumes periodic-overlap and power-equality hypotheses,
+so the literature theorem has not yet been obtained here as a single
+unconditional result.
+
+% The source-level equal-case theorem remains not ready as a single theorem:
+% the present Lean statements still assume the periodic-overlap and
+% coefficient-power hypotheses which the paper derives from equality of the
+% MPV family. The Z-gauge/root-of-unity construction is already formalized.
+\begin{theorem}[Periodic Fundamental Theorem]\notready
+    \label{thm:periodic_ft}
+    \uses{def:irreducible_form}
+    Let $A$ and $B$ be MPS tensors in irreducible form. Write
+    \[
+        A^i=\bigoplus_{j\in J}(R_j\otimes A_j^i),
+        \qquad
+        B^i=\bigoplus_{k\in K}(S_k\otimes B_k^i),
+    \]
+    where $\{A_j\}_{j \in J}$ and $\{B_k\}_{k \in K}$ are bases of periodic
+    tensors, $R_j$ and $S_k$ are diagonal multiplicity matrices of sizes
+    $r_j\times r_j$ and $s_k\times s_k$, and $A_j^i$ and $B_k^i$ act on
+    bond spaces of dimensions $D_j$ and $D_k$.
+    Suppose that $\mathcal{V}(A) = \mathcal{V}(B)$
+    (equal MPV families for all lengths $N$).
+
+    Then $|J| = |K|$ and there is a bijection $\pi : J \to K$
+    such that $A_j$ and $B_{\pi(j)}$ are $m_j$-periodic for the same
+    period $m_j$.
+    Moreover, for each $j \in J$ there exists:
+    \begin{enumerate}
+        \item an invertible matrix $Y_j$ of size $D_{\pi(j)} \times D_j$,
+              and
+        \item a diagonal unitary matrix $Z_j$ of size $r_j \times r_j$
+              satisfying $Z_j^{m_j} = \Id_{r_j}$,
+    \end{enumerate}
+    such that $B_{\pi(j)}^i = Y_j A_j^i Y_j^{-1}$ for every physical
+    index~$i$, and, after reordering the diagonal entries of the
+    multiplicity matrix $S_{\pi(j)}$, one has $Z_j R_j = S_{\pi(j)}$.
+    Equivalently, setting $Z = \bigoplus_j Z_j \otimes \Id_{D_j}$ gives an
+    invertible matrix $Y$ such that $Z A^i = Y B^i Y^{-1}$ for all $i$,
+    with $[A^i, Z] = 0$ and $\mathcal{V}(A) = \mathcal{V}(ZA)$.
+
+    \noindent\emph{Remark.}
+    The proof is conditional on the periodic-overlap dichotomy of
+    \cite[lines~589--609]{DeLasCuevas2017Irreducible},
+    which is left here as a separate hypothesis.
+\end{theorem}
+
+\begin{theorem}[Diagonal multiplicity gauge from equal powers]
+    \label{thm:zgauge_construction}
+    \lean{MPSTensor.zgauge_construction}
+    \leanok
+    \uses{lem:z_gauge_diagonal_pow, lem:z_gauge_diagonal_mul}
+    Let $(\mu_i)_{i\in I}$ and $(\nu_i)_{i\in I}$ be two finite lists of
+    nonzero multiplicity entries. If $\mu_i^m=\nu_i^m$ for every $i\in I$,
+    then there exists a diagonal matrix $Z$ such that
+    \[
+        Z^m=\Id,
+        \qquad
+        Z\,\diag(\nu)=\diag(\mu).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Take $Z=\diag(\mu_i/\nu_i)_{i\in I}$ and apply the two diagonal
+    identities from Lemmas~\ref{lem:z_gauge_diagonal_pow} and
+    \ref{lem:z_gauge_diagonal_mul}.
+\end{proof}
+
+\begin{theorem}[Scalar multiplicity gauge from power sums]
+    \label{thm:equalcase_zgauge_power_sums}
+    \lean{MPSTensor.equalCase_zgauge_of_power_sums}
+    \leanok
+    \uses{thm:zgauge_construction}
+    Let $(\mu_i)_{i\in I}$ and $(\nu_i)_{i\in I}$ be two finite lists of
+    multiplicity entries. Suppose that the $\nu_i$ are nonzero, that
+    $\mu_i^m=\nu_i^m$ for every $i\in I$, and that
+    \[
+        \sum_{i\in I}\mu_i^k=\sum_{i\in I}\nu_i^k
+    \]
+    for every positive integer $k$. Then the two lists determine the same
+    multiset, and there is a diagonal $Z$ satisfying
+    $Z^m=\Id$ and $Z\,\diag(\nu)=\diag(\mu)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply Theorem~\ref{thm:zgauge_construction} to obtain $Z$, and apply the
+    Newton--Girard power-sum identity to recover the multiplicity multiset.
+\end{proof}
+
+\begin{theorem}[Conditional matching of bases of periodic tensors]
+    \label{thm:periodic_equalcase_matching}
+    \lean{MPSTensor.fundamentalTheorem_periodic_equalCase_matching}
+    \leanok
+    \uses{def:irreducible_form}
+    Let $A$ and $B$ be in irreducible form, and suppose their bases of periodic
+    tensors contain no repeated pair of distinct basis elements. If the
+    periodic-overlap hypothesis holds for the two bases, then the two bases
+    have the same cardinality and are matched by a bijection whose matched
+    elements are repeated blocks.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the proportional-case periodic Fundamental Theorem to the two bases
+    extracted from the irreducible-form decompositions.
+\end{proof}
+
+\begin{theorem}[Conditional scalar equal-case component]
+    \label{thm:periodic_equalcase_scalar_component}
+    \lean{MPSTensor.fundamentalTheorem_periodic_equalCase}
+    \leanok
+    \uses{thm:periodic_equalcase_matching, thm:equalcase_zgauge_power_sums}
+    Let $A$ and $B$ be in irreducible form, and suppose their bases of periodic
+    tensors contain no repeated pair of distinct basis elements. Assume the
+    periodic-overlap hypothesis and the corresponding power equality for the
+    scalar multiplicity entries. Then the bases are matched by a bijection, and
+    each matched pair has a scalar diagonal $Z_j\in M_1(\mathbb C)$ with
+    \[
+        Z_j^{m_j}=\Id,
+        \qquad
+        Z_j\,\diag(\mu_{A,j})=\diag(\mu_{B,\pi(j)}).
+    \]
+    The two scalar multiplicity entries also determine the same singleton
+    multiset.
+\end{theorem}
+
+\begin{proof}\leanok
+    First use Theorem~\ref{thm:periodic_equalcase_matching} to match the
+    bases of periodic tensors. For each matched block, apply
+    Theorem~\ref{thm:equalcase_zgauge_power_sums} to the singleton list of
+    multiplicity entries.
+\end{proof}
+
+\subsection{Periodic overlap dichotomy}
+
+\begin{theorem}[Sector scalars from a product tensor identity]
+    \label{thm:periodic_product_tensor_phase_extraction}
+    \lean{TNLean.Algebra.PiTensorProductPhase.exists_kappa_of_piTensorProduct_eq_smul}
+    \leanok
+    Let $z\in\C$ be nonzero. For each sector $v=0,\ldots,m-1$, let
+    $\{A_v^i\}_i$ and $\{B_v^i\}_i$ be families of complex matrices with the
+    same rectangular size. Suppose that for every choice of letters
+    $\sigma=(\sigma_v)_v$,
+    \[
+        \bigotimes_{v=0}^{m-1} A_v^{\sigma_v}
+        =
+        z\,\bigotimes_{v=0}^{m-1} B_v^{\sigma_v}.
+    \]
+    Suppose also that for each $v$ there is a reference letter $i_v$ and a
+    matrix entry $(r_v,c_v)$ with
+    $(B_v^{i_v})_{r_v,c_v}\ne 0$. Then there are scalars
+    $\kappa_v\in\C$ such that
+    \[
+        \prod_{v=0}^{m-1}\kappa_v=z,
+        \qquad
+        A_v^i=\kappa_v B_v^i
+    \]
+    for every sector $v$ and every letter $i$.
+
+    This is the scalar extraction used in
+    \cite[Appendix~A, lines~1072--1080]{DeLasCuevas2017Irreducible}, after the
+    contraction with the maps $F_u$ and $\Omega_u$ has produced the displayed
+    product-tensor identity.
+\end{theorem}
+
+\begin{proof}\leanok
+    For each sector choose the coordinate functional at the nonzero reference
+    entry and normalize it so that it takes the value $1$ on
+    $B_v^{i_v}$. Applying the tensor product of these functionals to the
+    reference tensor identity gives $\prod_v\kappa_v=z$. To prove the
+    proportionality in sector $v$, replace only the $v$-th functional by the
+    coordinate functional at an arbitrary entry $(r,c)$ and apply the tensor
+    identity with $\sigma_v=i$ and all other letters fixed at their references.
+    The product over the other sectors is nonzero because its product with
+    $\kappa_v$ is $z$, so cancellation gives
+    $(A_v^i)_{r,c}=(\kappa_v B_v^i)_{r,c}$ for every entry.
+\end{proof}
+
+\begin{theorem}[Product-one sector scalars after choosing a root]
+    \label{thm:periodic_product_one_phase_extraction}
+    \lean{TNLean.Algebra.PiTensorProductPhase.exists_kappa_product_one_of_piTensorProduct_eq_root_smul}
+    \leanok
+    \uses{thm:periodic_product_tensor_phase_extraction}
+    Let $m>0$, let $z\in\C$ be nonzero, and choose $\xi\in\C$ with
+    $\xi^m=z$. For each sector $v=0,\ldots,m-1$, let $\{A_v^i\}_i$ and
+    $\{B_v^i\}_i$ be families of complex matrices with the same rectangular
+    size. Suppose that for every choice of letters $\sigma=(\sigma_v)_v$,
+    \[
+        \bigotimes_{v=0}^{m-1} A_v^{\sigma_v}
+        =
+        z\,\bigotimes_{v=0}^{m-1} B_v^{\sigma_v}.
+    \]
+    Suppose also that each sector has a reference letter $i_v$ and a matrix
+    entry $(r_v,c_v)$ with $(B_v^{i_v})_{r_v,c_v}\ne0$. Then there are scalars
+    $\kappa_v\in\C$ such that
+    \[
+        \prod_{v=0}^{m-1}\kappa_v=1,
+        \qquad
+        A_v^i=\kappa_v\xi\,B_v^i
+    \]
+    for every sector $v$ and every letter $i$.
+
+    This is the normalization in
+    \cite[Appendix~A, lines~1072--1080]{DeLasCuevas2017Irreducible}: after the
+    preceding translation step has made the scalar independent of the sector
+    label, choosing a common $m$-th root of that scalar leaves a product-one
+    family of sector scalars.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply Theorem~\ref{thm:periodic_product_tensor_phase_extraction} to obtain
+    scalars $\mu_v$ with $\prod_v\mu_v=z$ and $A_v^i=\mu_vB_v^i$. Since
+    $m>0$, the identities $\xi^m=z$ and $z\ne0$ imply $\xi\ne0$. Put
+    $\kappa_v=\mu_v/\xi$. Then
+    \[
+        \prod_v\kappa_v=\frac{\prod_v\mu_v}{\xi^m}=\frac{z}{z}=1,
+    \]
+    and $A_v^i=(\kappa_v\xi)B_v^i$.
+\end{proof}
+
+\begin{theorem}[Left-canonical scalar normalization]
+    \label{thm:left_canonical_scalar_normalization}
+    \lean{MPSTensor.norm_eq_one_of_leftCanonical_smul}
+    \leanok
+    Let $A$ have positive bond dimension, and let $c\in\C$. If both $A$ and
+    the scalar multiple $cA$ are left-canonical, then $|c|=1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The two left-canonical equations give
+    \[
+        \sum_i (A^i)^\dagger A^i=\Id,
+        \qquad
+        \sum_i (cA^i)^\dagger(cA^i)=\Id.
+    \]
+    Substituting the first equation into the second gives
+    $(\bar c c)\Id=\Id$. Since the bond dimension is positive, comparison of
+    any diagonal entry gives $\bar c c=1$, hence $|c|=1$.
+\end{proof}
+
+\begin{theorem}[Left-canonical sector scalar normalization]
+    \label{thm:left_canonical_sector_scalar_normalization}
+    \lean{MPSTensor.kappa_norm_eq_one_of_leftCanonical_smul}
+    \leanok
+    \uses{thm:left_canonical_scalar_normalization}
+    Let $A$ and $B$ be left-canonical tensors with the same positive bond
+    dimension. Suppose that $|\xi|=1$ and that, for every physical index~$i$,
+    \[
+        A^i=(\kappa\xi)B^i
+    \]
+    Then $|\kappa|=1$.
+
+    This is the scalar normalization in
+    \cite[Appendix~A, lines~1082--1084]{DeLasCuevas2017Irreducible}, after the
+    sectorwise proportionality relation has been obtained.
+\end{theorem}
+
+\begin{proof}\leanok
+    By Theorem~\ref{thm:left_canonical_scalar_normalization}, applied to $B$
+    and the scalar $\kappa\xi$, one has $|\kappa\xi|=1$. Since $|\xi|=1$, the
+    multiplicativity of the complex norm gives $|\kappa|=1$.
+\end{proof}
+
+\begin{definition}[Off-diagonal sector decomposition]%
+    \label{def:cyclic_sector_decomp}
+    \lean{MPSTensor.IsCyclicSectorDecomp, MPSTensor.IsCyclicSectorDecompWith}
+    \leanok
+    \uses{def:periodic_tensor}
+    A family of compressed sector tensors
+    $(C_k)_{k=0}^{m-1}$ on corner bond spaces forms an \emph{off-diagonal
+        decomposition} of the blocked tensor $A^{(m)}$ if there exist orthogonal
+    projections $P_0,\dotsc,P_{m-1}$ on the ambient bond space such that
+    $\sum_k P_k = \Id$, the projections satisfy the cyclic-shift relation
+    $\E_A^\dagger(P_{k+1}) = P_k$ with the index $k+1$ taken cyclically
+    modulo~$m$, each $P_k$ commutes with every blocked letter
+    $P_k A^{(m)}_i = A^{(m)}_i P_k$, and
+    $V^{(N)}(C_k)_\sigma = \tr(P_k (A^{(m)})^\sigma)$ for every word~$\sigma$,
+    and each block carries a $\ast$-algebra isomorphism
+    $\varphi_k : M_{\dim C_k}(\mathbb{C}) \xrightarrow{\sim}
+        P_k \cdot M_D(\mathbb{C}) \cdot P_k$
+    (multiplicative and adjoint-preserving) intertwining the compressed adjoint
+    transfer map with the sector adjoint transfer map on the corner of~$P_k$.
+    We shall sometimes keep these projections and corner isomorphisms as
+    specified witnesses; forgetting the witnesses gives the displayed
+    decomposition.
+    This is the inverse cyclic indexing of the off-diagonal convention in
+    \cite[Appendix~A]{DeLasCuevas2017Irreducible}. There the same adjoint
+    transfer map is written $E^*$, and the source projectors satisfy
+    $E^*(P_u)=P_{u+1}$ together with
+    $A^i=\sum_u P_u A^i P_{u+1}$. Here $P_k$ corresponds to the source
+    sector $u=-k \pmod m$, which turns the source shift into the displayed
+    adjoint-transfer relation.
+\end{definition}
+
+\begin{theorem}[Single-site cyclic grading]
+    \label{thm:offdiag_shift_adjoint_cyclic_shift}
+    \lean{MPSTensor.offDiag_shift_of_adjoint_cyclic_shift}
+    \leanok
+    \uses{def:transfer_map}
+    Let $A$ be left-canonical, and let $P_0,\ldots,P_{m-1}$ be orthogonal
+    projections on the bond space. If the adjoint transfer map satisfies
+    \[
+        \E_A^\dagger(P_{k+1})=P_k
+    \]
+    for all $k$, with indices taken modulo $m$, then for every physical
+    letter $i$,
+    \[
+        P_{k+1}A^i=A^iP_k.
+    \]
+    This is the single-site grading behind
+    \cite[eq.~Aoffdiag]{DeLasCuevas2017Irreducible}; the compressed blocks of
+    \cite[eq.~Auprop]{DeLasCuevas2017Irreducible} use the inverse cyclic
+    indexing convention of Definition~\ref{def:cyclic_sector_decomp}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Put $K_i=(A^i)^\dagger$ and let $\Phi_K$ be the Kraus map of the family
+    $K$. Since $A$ is left-canonical, $\Phi_K$ is unital. The projection
+    identities and the shift relation give
+    \[
+        \Phi_K(P_{k+1}^\dagger P_{k+1})
+        =
+        \Phi_K(P_{k+1})^\dagger\Phi_K(P_{k+1}),
+    \]
+    because both sides are equal to $P_k$. The equality case in the
+    Kadison--Schwarz inequality therefore gives
+    \[
+        P_{k+1}K_i^\dagger=K_i^\dagger\Phi_K(P_{k+1}).
+    \]
+    Substituting $K_i^\dagger=A^i$ and $\Phi_K(P_{k+1})=P_k$ gives
+    $P_{k+1}A^i=A^iP_k$.
+\end{proof}
+
+\begin{theorem}[Off-diagonal reconstruction]
+    \label{thm:eq_sum_offdiag_adjoint_cyclic_shift}
+    \lean{MPSTensor.eq_sum_offDiag_of_adjoint_cyclic_shift}
+    \leanok
+    \uses{thm:offdiag_shift_adjoint_cyclic_shift}
+    Under the hypotheses of Theorem~\ref{thm:offdiag_shift_adjoint_cyclic_shift},
+    assume in addition that
+    \[
+        \sum_{u=0}^{m-1} P_u=\Id .
+    \]
+    Then every physical letter decomposes as
+    \[
+        A^i=\sum_{u=0}^{m-1} P_{u+1}A^iP_u .
+    \]
+    This is \cite[eq.~Aoffdiag]{DeLasCuevas2017Irreducible}, written in the
+    same inverse cyclic indexing convention.
+\end{theorem}
+
+\begin{proof}\leanok
+    Insert $\sum_u P_u=\Id$ on the right of $A^i$, then use
+    Theorem~\ref{thm:offdiag_shift_adjoint_cyclic_shift} and
+    $P_u^2=P_u$ term by term.
+\end{proof}
+
+\begin{theorem}[Word cyclic grading]
+    \label{thm:offdiag_shift_eval_word_adjoint_cyclic_shift}
+    \lean{MPSTensor.offDiag_shift_evalWord_of_adjoint_cyclic_shift}
+    \leanok
+    \uses{thm:offdiag_shift_adjoint_cyclic_shift}
+    Under the hypotheses of Theorem~\ref{thm:offdiag_shift_adjoint_cyclic_shift},
+    a word $w=i_1\cdots i_\ell$ satisfies
+    \[
+        P_{k+\ell} A^w = A^w P_k .
+    \]
+    Thus the single-site grading accumulates one cyclic step for each letter of
+    the word.
+\end{theorem}
+
+\begin{proof}\leanok
+    Induct on the length of $w$, using
+    Theorem~\ref{thm:offdiag_shift_adjoint_cyclic_shift} for the first letter
+    and the induction hypothesis for the remaining word.
+\end{proof}
+
+\begin{theorem}[Cyclic-sector single-site grading]
+    \label{thm:cyclic_sector_offdiag_shift}
+    \lean{MPSTensor.IsCyclicSectorDecomp.offDiag_shift}
+    \leanok
+    \uses{def:periodic_tensor, def:cyclic_sector_decomp,
+        thm:offdiag_shift_adjoint_cyclic_shift}
+    If a periodic tensor admits a cyclic sector decomposition, then for every
+    $k$ and every physical letter $i$ there exists a family
+    $P_0,\ldots,P_{m-1}$ such that
+    \[
+        P_u^\dagger=P_u,\qquad P_u^2=P_u\quad(0\le u<m),
+        \qquad
+        \sum_{u=0}^{m-1}P_u=\Id
+    \]
+    and
+    \[
+        P_{k+1}A^i=A^iP_k .
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose the projection family contained in the cyclic sector decomposition.
+    It satisfies
+    \[
+        P_u^\dagger=P_u,\qquad P_u^2=P_u,\qquad
+        \sum_u P_u=\Id,\qquad \E_A^\dagger(P_{u+1})=P_u .
+    \]
+    Apply
+    Theorem~\ref{thm:offdiag_shift_adjoint_cyclic_shift}.
+\end{proof}
+
+\begin{theorem}[Cyclic-sector off-diagonal reconstruction]
+    \label{thm:cyclic_sector_eq_sum_offdiag}
+    \lean{MPSTensor.IsCyclicSectorDecomp.eq_sum_offDiag}
+    \leanok
+    \uses{def:periodic_tensor, def:cyclic_sector_decomp,
+        thm:eq_sum_offdiag_adjoint_cyclic_shift}
+    If a periodic tensor admits a cyclic sector decomposition, then for every
+    physical letter $i$ there exists a family $P_0,\ldots,P_{m-1}$ such that
+    \[
+        P_u^\dagger=P_u,\qquad P_u^2=P_u\quad(0\le u<m),
+        \qquad
+        \sum_{u=0}^{m-1}P_u=\Id
+    \]
+    and
+    \[
+        A^i=\sum_{u=0}^{m-1} P_{u+1}A^iP_u .
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose the projection family contained in the cyclic sector decomposition.
+    It satisfies
+    \[
+        P_u^\dagger=P_u,\qquad P_u^2=P_u,\qquad
+        \sum_u P_u=\Id,\qquad \E_A^\dagger(P_{u+1})=P_u .
+    \]
+    Apply
+    Theorem~\ref{thm:eq_sum_offdiag_adjoint_cyclic_shift}.
+\end{proof}
+
+\begin{theorem}[Cyclic sector decomposition of a periodic tensor]
+    \label{thm:cyclic_sector_decomp_after_blocking_periodic}
+    \lean{MPSTensor.exists_cyclic_sector_decomp_after_blocking_of_isPeriodic}
+    \leanok
+    \uses{def:cyclic_sector_decomp, def:periodic_tensor}
+    If $A$ is periodic with period $m$, then the blocked tensor $A^{(m)}$
+    admits a cyclic sector decomposition. Thus there are projectors $P_u$ and
+    corner tensors $C_u=P_u A^{(m)}$ which reproduce the blocked matrix-product
+    vectors, are left-canonical, have nonzero bond dimensions, and realize the
+    cyclic adjoint-transfer relation of Lemma~\emph{bdcf} in
+    \cite[lines~404--423]{DeLasCuevas2017Irreducible}. The normality and
+    non-repetition conclusions of Lemma~\emph{bdcf} are recorded separately in
+    the component lemmas below.
+\end{theorem}
+
+\begin{proof}\leanok
+    This is the cyclic-sector existence part of Lemma~\emph{bdcf}, translated
+    into the inverse indexing convention of
+    Definition~\ref{def:cyclic_sector_decomp}.
+\end{proof}
+
+\begin{theorem}[Cyclic-sector decomposition with compressed corner letters]
+    \label{thm:cyclic_sector_compression_letter}
+    \lean{MPSTensor.exists_cyclic_sector_decomp_with_letter_after_blocking_of_isPeriodic}
+    \leanok
+    \uses{thm:cyclic_sector_decomp_after_blocking_periodic, def:blocked_tensor}
+    Under the hypotheses of the cyclic-sector construction for the blocked
+    tensor $A^{(m)}$, there are sector tensors $C_k$, projections $P_k$, and
+    linear corner isomorphisms
+    \[
+        \varphi_k : M_{\dim C_k}(\mathbb C)
+            \longrightarrow P_k M_D(\mathbb C) P_k
+    \]
+    whose sector tensors are left-canonical, reproduce the blocked
+    matrix-product vectors, have nonzero bond dimensions, and carry the cyclic
+    adjoint-transfer decomposition of
+    Theorem~\ref{thm:cyclic_sector_decomp_after_blocking_periodic}. In addition,
+    for every blocked physical letter $i$,
+    \[
+        \varphi_k(C_k^i)=P_k (A^{(m)})^i P_k .
+    \]
+    This is the corner-letter identity used in
+    \cite[Lemma~\emph{bdcf}, eq.~\emph{Cu}]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Let $U$ diagonalize $P_k$, so that
+    \[
+        U^\dagger P_k U=
+        \begin{pmatrix} I & 0 \\ 0 & 0 \end{pmatrix}.
+    \]
+    Write $B^i=U^\dagger (A^{(m)})^i U$, and let $B_{kk}^i$ be the corner block
+    on the support of $P_k$. The sector tensor is
+    \[
+        C_k^i=V_k^\dagger B_{kk}^iV_k,
+    \]
+    where $V_k$ identifies the support with $\mathbb C^{\dim C_k}$. The linear
+    corner isomorphism is the inverse transport
+    \[
+        X\longmapsto
+        U
+        \begin{pmatrix} V_k X V_k^\dagger & 0 \\ 0 & 0 \end{pmatrix}
+        U^\dagger .
+    \]
+    Hence
+    \[
+        \varphi_k(C_k^i)
+        =
+        U
+        \begin{pmatrix} B_{kk}^i & 0 \\ 0 & 0 \end{pmatrix}
+        U^\dagger
+        =
+        P_k (A^{(m)})^i P_k .
+    \]
+\end{proof}
+
+\begin{theorem}[Periodic cyclic sectors with support isometries]
+    \label{thm:cyclic_sector_compression_letter_isometry_periodic}
+    \lean{MPSTensor.exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_isPeriodic}
+    \leanok
+    \uses{thm:cyclic_sector_decomp_after_blocking_isometry, def:periodic_tensor}
+    If $A$ is periodic with period $m$, then the cyclic-sector decomposition of
+    $A^{(m)}$ may be chosen with rectangular support isometries $V_k$ such that
+    \[
+        V_k^\dagger V_k=\Id,\qquad V_kV_k^\dagger=P_k,\qquad
+        \varphi_k(X)=V_kXV_k^\dagger .
+    \]
+    In particular, the same isometries realize the corner-letter identity
+    \[
+        \varphi_k(C_k^i)=P_k(A^{(m)})^iP_k .
+    \]
+    \begin{proof}
+        \leanok
+        Apply Theorem~\ref{thm:cyclic_sector_decomp_after_blocking_isometry}
+        to the original tensor $A$ with its period-$m$ peripheral-spectrum
+        hypotheses.  The resulting decomposition is the decomposition of
+        $A^{(m)}$, and the isometries $V_k$ in its conclusion are the required
+        support isometries.
+    \end{proof}
+\end{theorem}
+
+\begin{lemma}[One-site transport of sector overlaps]
+    \label{lem:sector_overlap_succ_eq_cyclic_sector_decomp}
+    \lean{MPSTensor.sectorOverlap_succ_eq_of_cyclicSectorDecomp}
+    \leanok
+    \uses{def:cyclic_sector_decomp, def:mpv_overlap, def:blocked_tensor,
+        thm:offdiag_shift_adjoint_cyclic_shift}
+    Let $A$ and $B$ be left-canonical tensors with cyclic sector
+    decompositions $\{A_u\}_{u\in\mathbb Z_m}$ and
+    $\{B_v\}_{v\in\mathbb Z_m}$. For every $u,v\in\mathbb Z_m$ and every
+    $N>0$,
+    \[
+        O_{A_{u+1},B_{v+1}}(N)=O_{A_u,B_v}(N).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Choose the projection families $P_u$ and $Q_v$ from the two cyclic sector
+    decompositions. The single-site relations
+    $P_{u+1}A^i=A^iP_u$ and $Q_{v+1}B^i=B^iQ_v$ give the following
+    trace-sum identity, where $T$ is the one-site rotation of physical words:
+    \[
+    \begin{aligned}
+        O_{A_{u+1},B_{v+1}}(N)
+        &=\sum_{\tau\in[d]^{Nm}}\operatorname{tr}(P_{u+1}A^\tau)\,
+            \overline{\operatorname{tr}(Q_{v+1}B^\tau)}\\
+        &=\sum_{\tau\in[d]^{Nm}}\operatorname{tr}(P_{u+1}A^{T\tau})\,
+            \overline{\operatorname{tr}(Q_{v+1}B^{T\tau})}\\
+        &=\sum_{\tau\in[d]^{Nm}}\operatorname{tr}(P_uA^\tau)\,
+            \overline{\operatorname{tr}(Q_vB^\tau)}
+        =O_{A_u,B_v}(N).
+    \end{aligned}
+    \]
+    The first and last equalities are the cyclic-sector trace formula after
+    reindexing blocked words as physical words of length $Nm$.
+\end{proof}
+
+\begin{lemma}[Off-diagonal eigenvectors of the period transfer vanish]
+    \label{lem:offdiag_eigenvector_eq_zero_periodic}
+    \lean{MPSTensor.offDiag_eigenvector_eq_zero_of_isPeriodic}
+    \leanok
+    \uses{def:periodic_tensor, def:cyclic_sector_decomp,
+        lem:peripheral_pow_singleton}
+    Let $A$ be periodic of period $m$. Let $P_0,\ldots,P_{m-1}$ be
+    orthogonal projections with
+    \[
+        \sum_{k=0}^{m-1} P_k = 1,
+        \qquad
+        \mathcal E_A^*(P_{k+1})=P_k.
+    \]
+    If
+    \[
+        U=P_u U P_v,\qquad P_uP_v=0,\qquad
+        \mathcal E_A^m(U)=\zeta U,\qquad |\zeta|=1,
+    \]
+    then $U=0$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Since the peripheral spectrum of $\mathcal E_A$ consists of $m$-th roots
+    of unity, Lemma~\ref{lem:peripheral_pow_singleton} gives
+    \[
+        \operatorname{Spec}_{\mathrm{per}}(\mathcal E_A^m)=\{1\},
+    \]
+    hence $\zeta=1$. The cyclic trace gives
+    \[
+        \tr U=\tr(P_uUP_v)=\tr(P_vP_uU)=0.
+    \]
+    Put
+    \[
+        W=\sum_{t=0}^{m-1}\mathcal E_A^t(U).
+    \]
+    The equation $\mathcal E_A^m(U)=U$ gives $\mathcal E_A(W)=W$, and
+    trace preservation gives $\tr W=0$. Irreducibility of $A$ therefore gives
+    $W=0$. The shift relation
+    \[
+        P_{k+1}A^i=A^iP_k
+    \]
+    moves $\mathcal E_A^t(U)$ into the $(u+t,v+t)$ corner, so only the
+    $t=0$ term contributes after multiplying by $P_u$ and $P_v$. Thus
+    \[
+        U=P_uWP_v=0.
+    \]
+\end{proof}
+
+% The overlap component lemmas below are part of the source dichotomy proof.
+% The self-overlap and no-sector-match theorems are already formal statements;
+% the full periodic overlap dichotomy still requires assembling these pieces
+% with the remaining sector-match argument.
+\begin{theorem}[Self-overlap along period multiples]\label{thm:periodic_self_overlap_tendsto}
+    \lean{MPSTensor.periodicSelfOverlap_tendsto}
+    \leanok
+    \uses{def:periodic_tensor}
+    If $A$ is $m$-periodic, then
+    $\lim_{N\to\infty} O_{AA}(mN)=m$.
+\end{theorem}
+
+\begin{theorem}[Different periods imply asymptotic orthogonality]%
+    \label{thm:periodic_overlap_zero_ne_period}
+    \lean{MPSTensor.periodicOverlap_tendsto_zero_of_ne_period}
+    \leanok
+    \uses{def:periodic_tensor}
+    If $A$ and $B$ have periods $m_A\ne m_B$, then
+    $\lim_{N\to\infty}O_{AB}(N)=0$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:periodic_overlap_zero_ne_dim}
+    If $D_A\ne D_B$, use Theorem~\ref{thm:periodic_overlap_zero_ne_dim}.
+    Assume $D_A=D_B$ and $A\sim_{\mathrm{gp}}B$, say
+    $B^i=\zeta X A^iX^{-1}$ with $X\in\GL_D(\C)$ and
+    $\zeta\ne0$. The transfer maps satisfy
+    \[
+        \E_B(Y)
+        =
+        \zeta\overline{\zeta}
+        X\,\E_A(X^{-1}YX^{-*})\,X^*.
+    \]
+    With $\E_A(\rho_A)=\rho_A$, put
+    $\sigma=X\rho_A X^*$. Then
+    $\E_B(\sigma)=|\zeta|^2\sigma$, while $\E_B(\rho_B)=\rho_B$ for a
+    nonzero positive fixed point $\rho_B$. Perron--Frobenius eigenvalue
+    uniqueness \cite[Theorem~6.3]{Wolf2012Quantum} gives $|\zeta|^2=1$.
+    Hence $\E_B$ is conjugate to $\E_A$, so
+    $\sigma_{\mathrm{per}}(\E_A)=\sigma_{\mathrm{per}}(\E_B)$. Since
+    \begin{equation}\label{eq:pft_periodic_set_equality}
+        \sigma_{\mathrm{per}}(\E_A)
+        =
+        \{e^{2\pi i r/m_A}:0\le r<m_A\},
+        \qquad
+        \sigma_{\mathrm{per}}(\E_B)
+        =
+        \{e^{2\pi i r/m_B}:0\le r<m_B\},
+    \end{equation}
+    equality of the two finite sets in~(\ref{eq:pft_periodic_set_equality})
+    gives $m_A=m_B$, a contradiction. Thus
+    $A\not\sim_{\mathrm{gp}}B$, and the irreducible trace-preserving overlap
+    dichotomy gives $\lim_{N\to\infty}O_{AB}(N)=0$.
+\end{proof}
+
+\begin{lemma}[Sector-block normality for periodic tensors]\label{lem:sector_blocked_normal_periodic}
+    \lean{MPSTensor.sectorBlocked_isNormal_of_isPeriodic}
+    \leanok
+    \uses{def:periodic_tensor, def:cyclic_sector_decomp}
+    For a periodic tensor equipped with a cyclic sector decomposition,
+    each nonzero blocked sector tensor is normal.
+\end{lemma}
+
+\begin{theorem}[No sector match implies asymptotic orthogonality]%
+    \label{thm:periodic_overlap_zero_no_sector_match}
+    \lean{MPSTensor.periodicOverlap_tendsto_zero_of_no_sector_match}
+    \leanok
+    \uses{def:periodic_tensor, lem:sector_blocked_normal_periodic}
+    Suppose $A$ and $B$ have the same total bond dimension and the same
+    period $m$. Let
+    $A_u$ and $B_v$ be period-blocked sector tensors of virtual dimensions
+    $d_u$ and $e_v$, indexed by $u,v\in\mathbb Z_m$, such that
+    \[
+        \bar A\sim\bigoplus_{u\in\mathbb Z_m}A_u,\qquad
+        \bar B\sim\bigoplus_{v\in\mathbb Z_m}B_v
+    \]
+    with unit weights, and the two decompositions are cyclic sector
+    decompositions. Assume each sector is left-canonical,
+    \[
+        \sum_{\alpha} (A_u^\alpha)^\dagger A_u^\alpha=I_{d_u},
+        \qquad
+        \sum_{\alpha} (B_v^\alpha)^\dagger B_v^\alpha=I_{e_v},
+    \]
+    Assume $\forall u,\ d_u\ne0$ and $\forall v,\ e_v\ne0$, and
+    whenever $d_u=e_v$, the corresponding sector tensors are not gauge-phase
+    equivalent after identifying their virtual spaces:
+    \[
+        d_u=e_v\quad\Longrightarrow\quad A_u\not\sim_{\mathrm{gp}}B_v.
+    \]
+    Then $\lim_{N\to\infty}O_{AB}(N)=0$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:sector_blocked_normal_periodic,
+        thm:periodic_self_overlap_tendsto,
+        thm:overlap_decay_irr_tp,
+        thm:overlap_decay_rect_irr_tp}
+    Write
+    $\bar A\sim\bigoplus_{u\in\mathbb Z_m}A_u$ and
+    $\bar B\sim\bigoplus_{v\in\mathbb Z_m}B_v$. For every $N$,
+    \begin{equation}\label{eq:pft_overlap_double_sum}
+        O_{\bar A\bar B}(N)
+        =
+        \sum_{u\in\mathbb Z_m}\sum_{v\in\mathbb Z_m}
+        O_{A_uB_v}(N).
+    \end{equation}
+    For each sector pair $(u,v)$,
+    \[
+        d_u=e_v,\quad A_u\not\sim_{\mathrm{gp}}B_v
+        \quad\Longrightarrow\quad
+        \lim_{N\to\infty}O_{A_uB_v}(N)=0,
+    \]
+    and
+    \[
+        d_u\ne e_v
+        \quad\Longrightarrow\quad
+        \lim_{N\to\infty}O_{A_uB_v}(N)=0.
+    \]
+    The finite double sum~(\ref{eq:pft_overlap_double_sum}) therefore gives
+    \[
+        \lim_{N\to\infty} O_{\bar A\bar B}(N)
+        =
+        \sum_{u\in\mathbb Z_m}\sum_{v\in\mathbb Z_m}
+        \lim_{N\to\infty} O_{A_uB_v}(N)
+        =0.
+    \]
+
+    If $A\sim_{\mathrm{gp}} B$, then $\bar A\sim_{\mathrm{gp}}\bar B$, so for
+    some $X\in\GL_D(\C)$ and $\zeta\ne0$,
+    $(\bar B)^\alpha=\zeta X(\bar A)^\alpha X^{-1}$. Thus
+    $V^{(N)}(\bar B)_\sigma=\zeta^N V^{(N)}(\bar A)_\sigma$, and
+    \[
+        O_{\bar A\bar B}(N)
+        =
+        \overline{\zeta}^{\,N} O_{\bar A\bar A}(N),
+        \qquad
+        O_{\bar B\bar B}(N)
+        =
+        |\zeta|^{2N} O_{\bar A\bar A}(N).
+    \]
+    Since
+    $\lim_{N\to\infty}O_{\bar A\bar A}(N)
+        =\lim_{N\to\infty}O_{\bar B\bar B}(N)=m>0$,
+    \[
+        1
+        =
+        \lim_{N\to\infty}
+        \frac{O_{\bar B\bar B}(N)}{O_{\bar A\bar A}(N)}
+        =
+        \lim_{N\to\infty}|\zeta|^{2N},
+    \]
+    hence $|\zeta|=1$. Therefore
+    \[
+        \lim_{N\to\infty}|O_{\bar A\bar B}(N)|
+        =
+        \lim_{N\to\infty}O_{\bar A\bar A}(N)
+        =
+        m\ne0,
+    \]
+    contradicting $\lim_{N\to\infty}O_{\bar A\bar B}(N)=0$. Thus
+    $A\not\sim_{\mathrm{gp}}B$, and the irreducible trace-preserving overlap
+    dichotomy gives $\lim_{N\to\infty}O_{AB}(N)=0$.
+\end{proof}
+
+\begin{lemma}[Sector-match propagation under translation]\label{lem:sector_match_propagation}
+    \lean{MPSTensor.sectorMatch_propagation}
+    \leanok
+    \uses{def:periodic_tensor, def:cyclic_sector_decomp,
+        lem:sector_overlap_succ_eq_cyclic_sector_decomp}
+    Let $A$ and $B$ be left-canonical tensors with period $m$, and let
+    $\bar A\sim\bigoplus_u A_u$ and $\bar B\sim\bigoplus_v B_v$ be unit-weight
+    cyclic sector decompositions whose sectors are left-canonical. Suppose
+    $d_{u_0}=e_{v_0}$, $d_{u_0}\ne0$, and, after identifying the virtual spaces,
+    $A_{u_0}\sim_{\mathrm{gp}}B_{v_0}$. Then for every $l\in\mathbb Z_m$ there
+    is an equality $d_{u_0+l}=e_{v_0+l}$ and, after this identification,
+    \[
+        A_{u_0+l}\sim_{\mathrm{gp}}B_{v_0+l}.
+    \]
+\end{lemma}
+
+\begin{lemma}[Finite-cycle coboundary]\label{lem:finite_cycle_coboundary}
+    \lean{TNLean.Algebra.exists_fin_succ_coboundary_of_prod_eq_one}
+    \lean{TNLean.Algebra.exists_fin_cyclic_coboundary_of_prod_eq_one}
+    \lean{TNLean.Algebra.exists_fin_complex_unit_cyclic_coboundary_of_prod_eq_one}
+    \leanok
+    \uses{}
+    Let $G$ be a commutative group, and let
+    $\kappa_0,\ldots,\kappa_n\in G$. If
+    \[
+        \prod_{k=0}^{n}\kappa_k=1,
+    \]
+    then there are $\varphi_0,\ldots,\varphi_n\in G$ such that, for every
+    $k<n$,
+    \[
+        \kappa_k=\varphi_k\varphi_{k+1}^{-1},
+    \]
+    and
+    \[
+        \kappa_n=\varphi_n\varphi_0^{-1}.
+    \]
+    Equivalently, on a nonempty finite cyclic index set, a product-one family
+    satisfies $\kappa_k=\varphi_k\varphi_{k+1}^{-1}$ for every cyclic edge.
+    In particular, a product-one family of complex unit phases admits such a
+    choice with all $\varphi_k$ again of unit modulus.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{}
+    Set $\varphi_k=(\kappa_0\cdots\kappa_{k-1})^{-1}$, with the empty product
+    equal to $1$. For $k<n$,
+    \[
+        \varphi_k\varphi_{k+1}^{-1}
+        =
+        (\kappa_0\cdots\kappa_{k-1})^{-1}
+        (\kappa_0\cdots\kappa_k)
+        =
+        \kappa_k.
+    \]
+    Separating the final factor in the product-one hypothesis gives
+    \[
+        (\kappa_0\cdots\kappa_{n-1})\kappa_n=1,
+    \]
+    which gives
+    \[
+        \varphi_n\varphi_0^{-1}
+        =
+        (\kappa_0\cdots\kappa_{n-1})^{-1}
+        =
+        \kappa_n.
+    \]
+\end{proof}
+
+\begin{lemma}[Cyclic $\Omega_u$-contraction for blocked sector gauges]%
+    \label{lem:sector_tensor_proportional_blocked_match}
+    \lean{MPSTensor.sectorTensor_proportional_of_blockedMatch}
+    % The source conclusion below is unitary. The tagged Lean declaration currently
+    % concludes `RepeatedBlocks`, which records an invertible gauge with inverse;
+    % upgrading that statement to a unitary gauge is part of the remaining Case-3
+    % gap in docs/paper-gaps/1708_periodic_overlap_route_alignment.tex.
+    \notready
+    \uses{lem:sector_match_propagation, def:cyclic_sector_decomp,
+        thm:periodic_product_one_phase_extraction,
+        thm:left_canonical_sector_scalar_normalization, lem:finite_cycle_coboundary}
+    Let $A$ and $B$ be left-canonical tensors with period $m$, and let
+    $\bar A\sim\bigoplus_u A_u$ and $\bar B\sim\bigoplus_v B_v$ be unit-weight
+    cyclic sector decompositions whose sectors are left-canonical. Let the
+    specified cyclic projectors be $P_u$ and $Q_v$, and let the specified
+    corner identifications realize the blocked sector tensors by
+    \[
+        A_u^\alpha = P_u\bar A^\alpha P_u,
+        \qquad
+        B_v^\alpha = Q_v\bar B^\alpha Q_v.
+    \]
+    Assume
+    $d_u\ne0$ and $A_u$ is normal for every $u$. Fix $q\in\mathbb Z_m$ and
+    assume that for every $u$ there are $d_u=e_{u+q}$, $\zeta_u\ne0$, and
+    $X_u\in\GL_{d_u}(\C)$ such that
+    $B_{u+q}^\alpha=\zeta_u X_u A_u^\alpha X_u^{-1}$ for every blocked
+    physical index $\alpha$. The source obtains a phase-only product identity
+    after absorbing these sector gauges into the $B$-sectors: with $Q_v$ the
+    cyclic sector projectors of $B$, it writes
+    \[
+        \widetilde B_v^i
+        =
+        U_v Q_v B^i Q_{v+1} U_{v+1}^{\dagger}.
+    \]
+    The contraction input is then, for every physical block $(i_1,\ldots,i_m)$,
+    \[
+        A_u^{i_1}A_{u+1}^{i_2}\cdots A_{u+m-1}^{i_m}
+        =
+        e^{i\lambda_{u+q}}
+        \widetilde B_{u+q}^{i_1}\widetilde B_{u+q+1}^{i_2}
+        \cdots\widetilde B_{u+q+m-1}^{i_m}.
+    \]
+    % arXiv:1708.00029 Appendix A: eq:Fu, eq:Omegauprop, eq:resultprop.
+    Choose $N_0$ so that the $N_0$-fold repetition of each cyclic
+    $m$-site sector product is injective. For
+    $\mathbf i=(i_1,\ldots,i_{mN_0})$, form the repeated product
+    \[
+        F_u^{\mathbf i}
+        =
+        \bigl(A_u^{i_1}\cdots A_{u+m-1}^{i_m}\bigr)
+        \cdots
+        \bigl(A_u^{i_{m(N_0-1)+1}}\cdots A_{u+m-1}^{i_{mN_0}}\bigr),
+    \]
+    and choose right inverses $\Omega_u$ satisfying
+    \[
+        \sum_{\mathbf i}(\Omega_u^{\mathbf i})_{\alpha,\beta}
+        (F_u^{\mathbf i})_{\alpha',\beta'}
+        =
+        \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+    \]
+    Let $\widetilde F_{u+q+r}^{\mathbf i}$ denote the same cyclic repeated
+    product formed from
+    $\widetilde B_{u+q+r},\ldots,\widetilde B_{u+q+r+m-1}$. For every
+    $r\in\mathbb Z_m$, the block identity gives
+    \[
+        F_{u+r}^{\mathbf i}
+        =
+        e^{iN_0\lambda_{u+q+r}}\widetilde F_{u+q+r}^{\mathbf i},
+        \qquad
+        \widetilde F_{u+q+r}^{\mathbf i}
+        =
+        e^{-iN_0\lambda_{u+q+r}}F_{u+r}^{\mathbf i}.
+    \]
+    % Local fix (docs/paper-gaps/1708_periodic_overlap_route_alignment.tex):
+    % arXiv:1708.00029, lines 1041--1060, displays $m-1$ inverses although the
+    % repetition count and phase formula require one inverse for each inserted product.
+    Let $\mathbf i_1,\ldots,\mathbf i_m$ be independent words of length $mN_0$,
+    one for each inserted repeated product. Sum each $\mathbf i_r$ in the
+    contraction by the right-inverse relation for $\Omega_{u+r}$:
+    \[
+        A_u^{i_1}F_{u+1}^{\mathbf i_1}
+        A_{u+1}^{i_2}F_{u+2}^{\mathbf i_2}
+        \cdots
+        A_{u+m-1}^{i_m}F_u^{\mathbf i_m}
+        \xrightarrow{\ \Omega_{u+1}\otimes\cdots\otimes\Omega_{u+m-1}
+            \otimes\Omega_u\ }
+        A_u^{i_1}\otimes A_{u+1}^{i_2}\otimes\cdots\otimes A_{u+m-1}^{i_m}.
+    \]
+    Expand the words $\mathbf i_1,\ldots,\mathbf i_m$, and write $j_{s,t}$ for
+    the physical index in the $t$th sector of the $s$th consecutive $m$-site
+    block of the expanded word, where $0\leq s\leq mN_0$ and $1\leq t\leq m$.
+    Since each inserted product $F_{u+r}^{\mathbf i_r}$ has length $mN_0$,
+    insertion shifts the cyclic sector position by $mN_0\equiv 0\pmod m$.
+    Hence every consecutive $m$-site block begins at the sector $u$, and the
+    interleaved word is
+    \[
+        \begin{aligned}
+        A_u^{i_1}F_{u+1}^{\mathbf i_1}
+        A_{u+1}^{i_2}F_{u+2}^{\mathbf i_2}
+        \cdots
+        A_{u+m-1}^{i_m}F_u^{\mathbf i_m}
+        &=
+        (A_u^{j_{0,1}}\cdots A_{u+m-1}^{j_{0,m}})
+        \cdots \\
+        &\quad\cdot
+        (A_u^{j_{mN_0,1}}\cdots A_{u+m-1}^{j_{mN_0,m}})
+        \end{aligned}
+    \]
+    Applying the block identity at the sector $u$ to each of these $m$-site
+    blocks gives
+    \[
+        A_u^{i_1}F_{u+1}^{\mathbf i_1}
+        A_{u+1}^{i_2}F_{u+2}^{\mathbf i_2}
+        \cdots
+        A_{u+m-1}^{i_m}F_u^{\mathbf i_m}
+        =
+        e^{i\lambda_{u+q}(mN_0+1)}
+        \widetilde B_{u+q}^{i_1}\widetilde F_{u+q+1}^{\mathbf i_1}
+        \widetilde B_{u+q+1}^{i_2}\widetilde F_{u+q+2}^{\mathbf i_2}
+        \cdots
+        \widetilde B_{u+q+m-1}^{i_m}\widetilde F_{u+q}^{\mathbf i_m}.
+    \]
+    For each $r\in\mathbb Z_m$, substituting $\mathbf i=\mathbf i_r$ in the
+    displayed identity gives
+    \[
+        \widetilde F_{u+q+r}^{\mathbf i_r}
+        =
+        e^{-iN_0\lambda_{u+q+r}}F_{u+r}^{\mathbf i_r}.
+    \]
+    Therefore the right-inverse relation gives the per-sector contraction
+    identity
+    \[
+        \sum_{\mathbf i_r}
+        (\Omega_{u+r}^{\mathbf i_r})_{\alpha,\beta}
+        (\widetilde F_{u+q+r}^{\mathbf i_r})_{\alpha',\beta'}
+        =
+        e^{-iN_0\lambda_{u+q+r}}
+        \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+    \]
+    Since $r\mapsto u+q+r$ is a permutation of $\mathbb Z_m$,
+    \[
+        \sum_{r\in\mathbb Z_m}\lambda_{u+q+r}
+        =
+        \sum_{r\in\mathbb Z_m}\lambda_r.
+    \]
+    Applying
+    $\Omega_{u+1}\otimes\cdots\otimes\Omega_{u+m-1}\otimes\Omega_u$ to both
+    sides of the intermediate block-identity equation above and collecting the
+    sector phases gives
+    \[
+        \begin{aligned}
+        A_u^{i_1}\otimes A_{u+1}^{i_2}\otimes\cdots\otimes A_{u+m-1}^{i_m}
+        &=
+        e^{i\lambda_{u+q}(mN_0+1)-iN_0\sum_{r\in\mathbb Z_m}\lambda_r}
+        \widetilde B_{u+q}^{i_1}\otimes\widetilde B_{u+q+1}^{i_2}
+        \otimes\cdots\otimes\widetilde B_{u+q+m-1}^{i_m} \\
+        &=
+        e^{i\eta_{u+q}}
+        \widetilde B_{u+q}^{i_1}\otimes\widetilde B_{u+q+1}^{i_2}
+        \otimes\cdots\otimes\widetilde B_{u+q+m-1}^{i_m}.
+        \end{aligned}
+    \]
+    Here
+    \[
+        \eta_{u+q}=\lambda_{u+q}(mN_0+1)
+            -N_0\sum_{r\in\mathbb Z_m}\lambda_r.
+    \]
+    Then there are a phase $\xi$ and a unitary matrix $U$ such that
+    $A^i=e^{i\xi}UB^iU^{\dagger}$ for every physical index $i$.
+\end{lemma}
+
+\begin{theorem}[Sector match yields repeated-block equivalence]%
+    \label{thm:periodic_overlap_gauge_equiv_sector_match}
+    \lean{MPSTensor.periodicOverlap_gaugeEquiv_of_sector_match}
+    \leanok
+    \uses{lem:sector_match_propagation, lem:sector_tensor_proportional_blocked_match,
+        def:cyclic_sector_decomp}
+    Let $A$ and $B$ be periodic tensors with the same period $m$. Let
+    $\bar A\sim\bigoplus_u A_u$ and $\bar B\sim\bigoplus_v B_v$ be unit-weight
+    cyclic sector decompositions whose sectors are left-canonical, with
+    specified cyclic projectors $P_u,Q_v$ and corner identifications satisfying
+    \[
+        A_u^\alpha = P_u\bar A^\alpha P_u,
+        \qquad
+        B_v^\alpha = Q_v\bar B^\alpha Q_v.
+    \]
+    Assume
+    every sector $A_u$ has nonzero virtual dimension. If there are sectors
+    $u_0,v_0$ with $d_{u_0}=e_{v_0}$ and
+    $A_{u_0}\sim_{\mathrm{gp}}B_{v_0}$ after identifying their virtual spaces,
+    then $A$ and $B$ are repeated blocks.
+\end{theorem}
+
+\begin{theorem}[Different bond dimensions imply asymptotic orthogonality]%
+    \label{thm:periodic_overlap_zero_ne_dim}
+    \lean{MPSTensor.periodicOverlap_tendsto_zero_of_ne_dim}
+    \leanok
+    \uses{def:periodic_tensor}
+    If two periodic tensors have different bond dimensions, then
+    $\braket{V^{(N)}(A)}{V^{(N)}(B)} \to 0$ as $N\to\infty$.
+\end{theorem}
+
+\begin{theorem}[Periodic overlap dichotomy]\label{thm:periodic_overlap_dichotomy}
+    \lean{MPSTensor.periodicOverlapDichotomy}
+    \leanok
+    \uses{thm:periodic_overlap_zero_ne_period,
+        thm:periodic_overlap_zero_no_sector_match,
+        thm:periodic_overlap_zero_ne_dim,
+        thm:periodic_overlap_gauge_equiv_sector_match}
+    Let $A$ and $B$ be periodic tensors. Then at least one of the following
+    alternatives holds:
+    \begin{enumerate}
+        \item $\braket{V^{(N)}(A)}{V^{(N)}(B)} \to 0$ as $N\to\infty$;
+        \item $A$ and $B$ are related by the repeated-block relation, i.e. they
+              differ by a unit-modulus phase and an invertible gauge.
+    \end{enumerate}
+\end{theorem}
+\begin{proof}\notready
+    \uses{thm:periodic_overlap_zero_ne_period,
+        thm:periodic_overlap_zero_no_sector_match,
+        thm:periodic_overlap_zero_ne_dim,
+        thm:periodic_overlap_gauge_equiv_sector_match}
+    If $m_A\ne m_B$, then
+    $\lim_{N\to\infty}O_{AB}(N)=0$ by
+    Theorem~\ref{thm:periodic_overlap_zero_ne_period}. Assume $m_A=m_B=m$.
+    If $D_A\ne D_B$, then
+    $\lim_{N\to\infty}O_{AB}(N)=0$ by
+    Theorem~\ref{thm:periodic_overlap_zero_ne_dim}. Assume $D_A=D_B$.
+
+    Choose period-blocked sector decompositions
+    \[
+        \bar A\sim\bigoplus_{u\in\mathbb Z_m}A_u,
+        \qquad
+        \bar B\sim\bigoplus_{v\in\mathbb Z_m}B_v.
+    \]
+    If no pair $(u,v)$ satisfies
+    \[
+        d_u=e_v,
+        \qquad
+        A_u\sim_{\mathrm{gp}}B_v,
+    \]
+    then Theorem~\ref{thm:periodic_overlap_zero_no_sector_match} gives
+    $\lim_{N\to\infty}O_{AB}(N)=0$.
+
+    Otherwise there are $u_0,v_0\in\mathbb Z_m$ such that
+    \[
+        d_{u_0}=e_{v_0},
+        \qquad
+        A_{u_0}\sim_{\mathrm{gp}}B_{v_0}.
+    \]
+    Theorem~\ref{thm:periodic_overlap_gauge_equiv_sector_match} then gives
+    repeated-block equivalence between $A$ and $B$.
+\end{proof}
+
+\begin{theorem}[Eventual linear independence of periodic vectors]%
+    \label{thm:periodic_basis_eventually_li}
+    \lean{MPSTensor.periodicBasis_eventuallyLinearlyIndependent}
+    \leanok
+    \uses{thm:periodic_overlap_dichotomy, thm:periodic_self_overlap_tendsto}
+    For a finite family $\{A_j\}_{j\in J}$ of pairwise non-repeated
+    periodic tensors, in the sense that no two are related by a gauge
+    transformation and a unit-modulus scalar, whose periods divide a common
+    positive integer $p$,
+    there is $N_0$ such that for every $N \ge N_0$, the map
+    \[
+        \Phi_N : \C^J \to (\C^d)^{\otimes pN},
+        \qquad
+        (c_j)_{j\in J}\mapsto
+        \sum_{j\in J}c_j\ket{V^{(pN)}(A_j)}
+    \]
+    satisfies
+    \[
+        \ker \Phi_N=\{0\}.
+    \]
+
+    \emph{Scope restriction.}  The source consequence following the
+    periodic-overlap dichotomy
+    \cite[lines~589--609]{DeLasCuevas2017Irreducible} also states that
+    the non-zero vectors $\ket{V_N(A_j)}$ span the vector $\ket{V_N(A)}$;
+    this spanning assertion is what the paper cites as justification for
+    the phrase ``basis of periodic vectors''.  The theorem recorded here
+    contains only the independence assertion.  The corresponding paper-gap
+    note, \path{docs/paper-gaps/1708_periodic_overlap_route_alignment.tex},
+    Section ``Scope restriction: independence without spanning'', records
+    this restriction and its elimination plan.
+\end{theorem}
+
+\begin{proof}
+    \notready
+    \uses{thm:periodic_overlap_dichotomy, thm:periodic_self_overlap_tendsto}
+    The missing point is not the Gram-matrix argument itself.  It is the
+    sector-match alternative in
+    Theorem~\ref{thm:periodic_overlap_dichotomy}.  In the notation of
+    Appendix~A of \cite{DeLasCuevas2017Irreducible}, after choosing inverses
+    $\Omega_u$ for the injective words $F_u$, the required contraction is
+    \[
+        A_u^{i_1}\otimes A_{u+1}^{i_2}\otimes\cdots
+        \otimes A_{u+m-1}^{i_m}
+        =
+        e^{i\eta_v}
+        B_v^{i_1}\otimes B_{v+1}^{i_2}\otimes\cdots
+        \otimes B_{v+m-1}^{i_m}.
+    \]
+    Applying the same identity after a cyclic translation gives
+    \[
+        e^{i\eta_{v+\ell}}=e^{i\eta_v}
+        \qquad
+        (\ell=0,\ldots,m-1),
+    \]
+    so we write the common phase as $e^{i\eta}$.  The product-tensor identity
+    then gives scalars $\kappa_v$ with
+    \[
+        A_u^i=\kappa_v e^{i\eta/m}B_v^i,
+        \qquad
+        \prod_{v=1}^{m}\kappa_v=1.
+    \]
+    The left-canonical normalization gives $|\kappa_v|=1$; writing
+    $\kappa_v=e^{i(\phi_v-\phi_{v+1})}$ gives, where $q$ is the cyclic
+    offset between the matched sector labels and $v=u+q$,
+    \[
+        P_u A^i P_{u+1}
+        =
+        e^{i\eta/m} e^{i\phi_v}
+        U_v Q_v B^i Q_{v+1} U_{v+1}^{\dagger} e^{-i\phi_{v+1}}.
+    \]
+    Hence, for
+    \[
+        U=\sum_{u=1}^{m}e^{i\phi_{u+q}}P_uU_{u+q}Q_{u+q},
+        \qquad
+        \xi=\eta/m,
+    \]
+    one obtains the global relation
+    \[
+        A^i=e^{i\xi}UB^iU^\dagger.
+    \]
+    % Remaining step: see
+    % docs/paper-gaps/1708_periodic_overlap_route_alignment.tex,
+    % Section ``Remaining Case-3 input''.
+
+    Let
+    \[
+        G_N(j,k)
+        =
+        \left\langle
+        V^{(pN)}(A_j),V^{(pN)}(A_k)
+        \right\rangle
+    \]
+    be the Gram matrix of the periodic vectors.  The diagonal entries have
+    positive limits,
+    \[
+        G_N(j,j)\longrightarrow m_j>0,
+    \]
+    by Theorem~\ref{thm:periodic_self_overlap_tendsto}.  If $j\ne k$, the
+    second alternative in Theorem~\ref{thm:periodic_overlap_dichotomy} would
+    make $A_j$ and $A_k$ repeated blocks, that is, gauge equivalent up to a
+    unit-modulus scalar.  This contradicts the non-repetition hypothesis, and
+    hence
+    \[
+        G_N(j,k)\longrightarrow 0.
+    \]
+    Hence
+    \[
+        G_N\longrightarrow \diag(m_j)_{j\in J}.
+    \]
+    Since $m_j>0$ for every $j$, the limit matrix $\diag(m_j)_{j\in J}$ is
+    positive definite.  Hence $G_N$ is positive definite for all sufficiently
+    large $N$.  Thus
+    \[
+        \Phi_N(c)=0
+        \quad\Longrightarrow\quad
+        0=\langle \Phi_N(c),\Phi_N(c)\rangle
+        =c^{*}G_Nc
+        \quad\Longrightarrow\quad
+        c=0,
+    \]
+    and $\ker\Phi_N=\{0\}$.
+\end{proof}
+
+\begin{remark}[Comparison with the blocking approach]\notready
+    \label{rem:periodic_vs_blocking_ft}
+    Theorem~\ref{thm:periodic_ft} and the equal-MPV corollary
+    of Section~\ref{sec:ft_equal_proportional_cases} both characterize the gauge freedom
+    between two tensors with equal MPV families, but they do so at
+    different levels:
+
+    \begin{enumerate}
+        \item \emph{Blocking approach} (Section~\ref{sec:ft_equal_proportional_cases},
+              following \cite{Cirac2016MPDO_arXiv}):
+              for a common multiple $p$ of the periods,
+              \[
+                  A^{[p]}\sim\bigoplus_a C_a,
+                  \qquad
+                  B^{[p]}\sim\bigoplus_b D_b,
+              \]
+              with all $C_a,D_b$ normal.  The Fundamental Theorem gives, after a
+              permutation of the normal summands,
+              \[
+                  D_{\pi(a)}^\alpha
+                  =
+                  X_a C_a^\alpha X_a^{-1}.
+              \]
+              This is a gauge statement for $A^{[p]}$ and $B^{[p]}$; the cyclic
+              phases have been absorbed into the period-$p$ words.
+
+        \item \emph{Periodic approach} (Theorem~\ref{thm:periodic_ft},
+              following \cite{DeLasCuevas2017Irreducible}):
+              keep the cyclic sectors
+              \[
+                  A^i=\sum_{u\in\mathbb Z_m}P_uA^iP_{u+1},
+                  \qquad
+                  B^i=\sum_{v\in\mathbb Z_m}Q_vB^iQ_{v+1}.
+              \]
+              Sector matching gives phases $\phi_v$, a shift $q$, and unitaries
+              $U_v$ such that
+              \[
+                  P_uA^iP_{u+1}
+                  =
+                  e^{i\xi}e^{i\phi_{u+q}}
+                  U_{u+q}Q_{u+q}B^iQ_{u+q+1}U_{u+q+1}^{\dagger}
+                  e^{-i\phi_{u+q+1}}.
+              \]
+              In the equal-MPV theorem the proportional phase is absorbed, so
+              one obtains $ZA^i=UB^iU^{-1}$ with $Z^m=\Id$; the trace only sees
+              powers of the corresponding $m$-th roots of unity.
+    \end{enumerate}
+
+    Chapters~\ref{ch:canonical} and~\ref{ch:ft_proof} follow only the
+    blocking argument: remove periodicity by blocking, then apply the
+    Fundamental Theorem.  The periodic extension treats periodic blocks directly.
+\end{remark}
+
+\begin{theorem}[Peripheral proportional case from exact MPV equality]
+    \label{thm:peripheral_periodic_ft_proportional_same}
+    \lean{MPSTensor.peripheralProportionalCase_periodicFT_of_sameMPV}
+    \notready
+    \uses{def:periodic_tensor, thm:periodic_overlap_dichotomy,
+        thm:periodic_self_overlap_tendsto}
+    Let $A$ and $B$ be periodic tensors with the same matrix product vectors.
+    Then their bond dimensions agree, and after identifying the bond spaces,
+    $A$ and $B$ are repeated blocks.
+\end{theorem}
+\begin{proof}\notready
+    By Theorem~\ref{thm:periodic_overlap_dichotomy}, either the overlap
+    $\braket{V^{(N)}(A)}{V^{(N)}(B)}$ tends to $0$ or the bond dimensions agree
+    and $A$ and $B$ are repeated blocks. In the decay case,
+    equality of the MPV families gives, for every $N$,
+    \begin{equation}\label{eq:pft_decay_mpv_equality}
+        \braket{V^{(N)}(A)}{V^{(N)}(B)}
+        =
+        \braket{V^{(N)}(A)}{V^{(N)}(A)}.
+    \end{equation}
+    Along multiples of the period $m_a$, (\ref{eq:pft_decay_mpv_equality})
+    would imply
+    \[
+        0
+        =
+        \lim_{N\to\infty}
+        \braket{V^{(m_aN)}(A)}{V^{(m_aN)}(B)}
+        =
+        \lim_{N\to\infty}
+        \braket{V^{(m_aN)}(A)}{V^{(m_aN)}(A)}
+        =
+        m_a,
+    \]
+    contradicting $m_a>0$.
+\end{proof}
+
+\begin{theorem}[Peripheral proportional case from phase rescaling]
+    \label{thm:peripheral_periodic_ft_proportional_rescaling}
+    \lean{MPSTensor.peripheralProportionalCase_periodicFT_of_rootFromRescaling}
+    \notready
+    \uses{def:periodic_tensor, thm:peripheral_periodic_ft_proportional_same}
+    Assume that whenever two periodic tensors have proportional MPV families,
+    one can rescale one tensor by a unit-modulus phase so that the MPV families
+    agree exactly. Then proportional periodic MPV families already force the
+    tensors to be repeated blocks.
+\end{theorem}
+\begin{proof}\notready
+    Apply the phase-rescaling hypothesis to replace $A$ by a periodic tensor
+    $A'$ with the same MPV family as $B$. Theorem~\ref{thm:peripheral_periodic_ft_proportional_same}
+    then yields repeated-block equivalence between $A'$ and $B$. Since $A'$
+    differs from $A$ only by a unit-modulus phase, $A$ and $A'$ are themselves
+    repeated blocks, and transitivity gives the claim.
+\end{proof}
+
+\begin{remark}[Proportional periodic FT]\notready
+    \label{rem:periodic_ft_proportional}
+    There is also a proportional periodic Fundamental Theorem
+    \cite[lines~613--623]{DeLasCuevas2017Irreducible}.
+    The former formulation of this theorem assumed externally supplied
+    coefficient arrays with nonzero limits as hypotheses. That is not the
+    hypothesis set of the source theorem.
+    A faithful statement must instead derive the nondecaying cross-overlap
+    witnesses from the proportional MPV hypothesis and the basis of periodic
+    tensors.
+\end{remark}
+
+\section{Physical symmetries on periodic MPS}\label{sec:periodic_symmetry}
+
+\begin{theorem}[Conditional group-action $Z$-gauge reformulation of the symmetry corollary]%
+    \label{cor:cor_4_1_physical_symmetry_zgauge}
+    \lean{MPSTensor.cor_4_1_physical_symmetry_zgauge}
+    \leanok
+    \uses{def:irreducible_form, def:z_gauge_equiv, def:on_site_symmetric,
+        def:twisted_tensor, thm:periodic_ft}
+    Let $A$ be an MPS tensor in irreducible form~II and let
+    $U : G \to \GL_d(\C)$ be a representation of a group $G$ on the
+    physical leg, acting unitarily ($U(g)\, U(g)^{\dagger} = \Id$).
+    Assume moreover the periodic equal-case Fundamental Theorem of MPS
+    (Theorem~\ref{thm:periodic_ft}) as an explicit hypothesis on the
+    pair $(d, D)$, expressed by the hypothesis
+    \lean{MPSTensor.PeriodicEqualCaseFT}\,$d\,D$.
+    If $A$ is on-site symmetric under~$U$ --- that is, the twisted tensor
+    $\widetilde{A}_g$ has the same MPV family as~$A$ for every $g \in G$
+    --- then for each $g \in G$ there exists a positive period $m_g$ and
+    a $\Z_{m_g}$-gauge equivalence between~$A$ and~$\widetilde{A}_g$.
+
+    Concretely there are matrices $Z_g$ and~$Y_g$, with $Z_g^{m_g} = \Id$
+    and $[A^i, Z_g] = 0$, satisfying, for every physical index~$i$,
+    \[
+        Z_g\, A^i = Y_g\, \widetilde{A}_g^{\,i}\, Y_g^{-1}
+    \]
+
+    % Source comparison: the source corollary in
+    % \cite[lines~834--845]{DeLasCuevas2017Irreducible} is stated for a single
+    % local unitary. It concludes that, for a local unitary $u$, there are a
+    % diagonal unitary $Z$ and a virtual unitary $Y$ satisfying, for every
+    % physical index $i'$,
+    % \[
+    %     \sum_i u^{i',i} A^i = Z\,Y\,A^{i'}Y^{\dagger}.
+    % \]
+    % The statement here is a pointwise group-action reformulation using the
+    % periodic equal-case Fundamental Theorem as an explicit hypothesis. It does
+    % not assert the diagonal normalization of $Z_g$ or the exact displayed
+    % source equation.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:rotate_physical, thm:periodic_ft,
+        thm:irreducible_form_rotate_physical, cor:symmetry_periodic_assembly}
+    The twisted tensor $\widetilde{A}_g$ coincides with the physical-index
+    rotation $A_{U(g)}$ of Definition~\ref{def:rotate_physical}.
+    By Theorem~\ref{thm:irreducible_form_rotate_physical} the rotated
+    tensor remains in irreducible form~II, and the on-site symmetry
+    hypothesis supplies the equality $\mathcal{V}(A) = \mathcal{V}(A_{U(g)})$.
+    Apply the periodic equal-case Fundamental Theorem
+    (Theorem~\ref{thm:periodic_ft}) to obtain the asserted
+    $\Z_{m_g}$-gauge equivalence.
+\end{proof}
+
+\begin{definition}[Conditional periodic projective-rigidity hypothesis]%
+    \label{def:periodic_projective_rigidity}
+    \lean{MPSTensor.PeriodicProjectiveRigidity}
+    \leanok
+    \uses{def:twisted_tensor, def:on_site_symmetric}
+    Let $A$ be an MPS tensor with physical dimension $d$ and bond dimension $D$,
+    and assume it is on-site symmetric under a group action
+    $U : G \to \GL_d(\C)$. The tensor $A$ satisfies the
+    \emph{periodic projective-rigidity hypothesis} if one may choose a
+    family of virtual gauges $Y : G \to \GL_D(\C)$ and a scalar
+    $2$-cochain $u : G \times G \to \C^{\times}$ such that
+
+    \begin{enumerate}
+        \item every $Y_g$ realizes the pointwise $Z$-gauge intertwining
+              modeled on the symmetry corollary with the twisted tensor
+              $\widetilde{A}_g$ for some accompanying
+              $Z_g$ (with $Z_g^{m_g} = \Id$ and $[A^i, Z_g] = 0$); and
+        \item the family obeys the projective multiplication law on the
+              bond space: $Y_h\, Y_g = u(g, h)\, Y_{gh}$.
+    \end{enumerate}
+
+    The source supplies the corresponding intertwining for a single local unitary.
+    The group-indexed coherent choice and the projective multiplication law are
+    additional assumptions: after proving the symmetry corollary, the source
+    paper says that its consequences will be explored elsewhere. The injective
+    case reduces this coherence to scalar uniqueness of gauges
+    (cf.~\S\ref{sec:injective_symmetry_cocycle}); in the genuinely periodic
+    setting there is a non-trivial $\Z_m$-gauge ambiguity, so coherence of the
+    factor system $u$ is an independent analytic assumption.
+\end{definition}
+
+\begin{theorem}[Conditional projective representation from symmetry gauges]%
+    \label{thm:cor_4_1_projective_rep}
+    \lean{MPSTensor.cor_4_1_projective_rep}
+    \leanok
+    \uses{def:periodic_projective_rigidity}
+    Assume the periodic projective-rigidity hypothesis
+    (Definition~\ref{def:periodic_projective_rigidity}) for the tensor $A$ and
+    the physical action $U$. Then the virtual gauge family supplied by that
+    hypothesis defines a projective representation of $G$ on the bond space:
+    there exist a scalar $2$-cochain
+    $\omega : G \times G \to \C^{\times}$ and virtual gauges
+    $X : G \to \GL_D(\C)$ satisfying
+    \[
+        X(g)\, X(h) =  \omega(g, h)\, X(g h),
+    \]
+    while for each $g$ the matrix $X(g^{-1})$ still realizes the pointwise
+    $\Z_{m_g}$-intertwining, encoded in the rigidity hypothesis, between $A$
+    and the twisted tensor $\widetilde{A}_g$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:periodic_projective_rigidity}
+    Unpack the rigidity hypothesis to extract the family $(Y, u)$ together
+    with the pointwise $Z$-gauge intertwiners. Set
+    $X(g) := Y(g^{-1})$ and $\omega(g, h) := u(h^{-1}, g^{-1})$. The
+    projective multiplication law $X(g)\, X(h) = \omega(g, h)\, X(gh)$
+    is then exactly the $(h^{-1}, g^{-1})$-instance of the factor-system
+    identity, using $(gh)^{-1} = h^{-1} g^{-1}$. The intertwining
+    relation between $A$ and $\widetilde{A}_g$ transports unchanged.
+\end{proof}
+
+\begin{theorem}[Cocycle identity for the upgraded factor system]%
+    \label{thm:cor_4_1_projective_rep_cocycle}
+    \lean{MPSTensor.cor_4_1_projective_rep_cocycle}
+    \leanok
+    \uses{thm:cor_4_1_projective_rep}
+    If the bond dimension $D$ is positive, the factor system $\omega$
+    produced by Theorem~\ref{thm:cor_4_1_projective_rep} satisfies the
+    multiplicative $2$-cocycle identity
+    $\omega(g, h)\, \omega(g h, k) = \omega(g, h k)\, \omega(h, k)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cor_4_1_projective_rep}
+    Associativity of matrix multiplication applied to
+    $X(g)\, X(h)\, X(k)$, combined with the projective multiplication
+    law, gives
+    \begin{equation}\label{eq:pft_assoc_scalar_multiple}
+        \omega(g, h)\, \omega(g h, k)\, X((g h) k)
+        =
+        \omega(g, h k)\, \omega(h, k)\, X(g (h k)).
+    \end{equation}
+    Since $(g h) k = g (h k)$, both sides of
+    (\ref{eq:pft_assoc_scalar_multiple}) are scalar multiples of the
+    same matrix $X((g h) k)$. The matrix lies in $\GL_D(\C)$ and is
+    therefore invertible, but the scalar cancellation leading from an
+    equality of scalar multiples of a matrix to equality of the scalar
+    coefficients additionally requires $D > 0$ so that the underlying
+    index set is inhabited. Cancelling then yields
+    $\omega(g, h)\, \omega(g h, k) = \omega(g, h k)\, \omega(h, k)$
+    in $\C^{\times}$, hence in $\mathrm{Units}(\C)$.
+\end{proof}
+
+\begin{remark}[External cohomological interpretation]%
+    \label{rem:cor_4_1_projective_rep_spt}
+    \uses{thm:cor_4_1_projective_rep_cocycle}
+    In the one-dimensional SPT literature, a $U(1)$-valued factor system
+    of a symmetric MPS gives a cohomology class in $H^{2}(G,U(1))$
+    (cf.~Chen--Gu--Wen and P\'erez-Garc\'ia et al.). This interpretation
+    is external to \cite{DeLasCuevas2017Irreducible}: Section~4.2 proves
+    the $Z$-gauge symmetry corollary and leaves its consequences to
+    later work. The result established here is only the 2-cocycle
+    identity of Theorem~\ref{thm:cor_4_1_projective_rep_cocycle}, under
+    the conditional rigidity hypothesis of
+    Definition~\ref{def:periodic_projective_rigidity}.
+\end{remark}
+
+\begin{theorem}[Conditional projective representation and cocycle from symmetry]%
+    \label{thm:projectiveRep_of_symmetry}
+    \lean{MPSTensor.projectiveRep_of_symmetry}
+    \leanok
+    \uses{thm:cor_4_1_projective_rep, thm:cor_4_1_projective_rep_cocycle}
+    Theorems~\ref{thm:cor_4_1_projective_rep}
+    and~\ref{thm:cor_4_1_projective_rep_cocycle} combine into a
+    single statement: from the periodic projective-rigidity
+    hypothesis (Definition~\ref{def:periodic_projective_rigidity}), one
+    obtains a projective representation of $G$ on the bond space whose
+    factor system is a genuine $2$-cocycle whenever $D > 0$.
+\end{theorem}
+
+\section{Refinement and divisibility}\label{sec:periodic_refinement}
+
+The next theorem relates refinement of a matrix-product-vector family to
+divisibility of its transfer map, following
+\cite[Theorem~4.1]{DeLasCuevas2017Irreducible}.
+
+\begin{definition}[$p$-divisible CP map]
+    \label{def:p_divisible_channel}
+    \lean{MPSTensor.IsPDivisibleChannel}
+    \leanok
+    A linear endomorphism $\mathcal{E}$ of $M_D(\C)$ is \emph{$p$-divisible}
+    if there exists a CPTP map $\mathcal{E}'$ of $M_D(\C)$ such that
+    $\mathcal{E} = (\mathcal{E}')^p$.
+\end{definition}
+
+\begin{definition}[$p$-refinable MPS tensor]
+    \label{def:p_refinable}
+    \lean{MPSTensor.IsPRefinable}
+    \leanok
+    \uses{def:mps_tensor, def:blocked_tensor}
+    Given a tensor $B$, the family $\mc V(B)$ can be \emph{$p$-refined} if
+    there exist another tensor $A$ and an isometry
+    $W : \C^d \to (\C^d)^{\otimes p}$ such that, for every $N$,
+    \[
+        \ket{V_{pN}(A)} = W^{\otimes N}\ket{V_N(B)}.
+    \]
+    Equivalently, after identifying a $p$-letter with an element of
+    $\{0,\ldots,d^p-1\}$, the $p$-blocked tensor $A^{[p]}$ satisfies
+    \[
+        V^{(N)}(A^{[p]})_\tau
+        =
+        \sum_{\sigma \in \{0,\ldots,d-1\}^N}
+        \left(\prod_{k} W_{\tau(k), \sigma(k)}\right)
+        V^{(N)}(B)_\sigma
+    \]
+    for every $N \in \N$ and every
+    $\tau \in \{0,\ldots,d^p-1\}^N$.
+\end{definition}
+
+\begin{theorem}[Pullback of a refinement witness]
+    \label{thm:p_refinement_pullback_irreducible_form}
+    \lean{MPSTensor.pRefinementCanonicalization_pullback_of_irreducibleForm}
+    \leanok
+    \uses{def:irreducible_form, def:p_refinable}
+    Let $B$ be an MPS tensor in irreducible form~II. If $\mc V(B)$ can be
+    $p$-refined, then there exist a tensor $A$, an isometry
+    $W : \C^d \to (\C^d)^{\otimes p}$, and the pullback tensor
+    \[
+        C^{\alpha} := \sum_{i=0}^{d-1} W_{\alpha,i} B^i
+    \]
+    for $\alpha \in \{0,\ldots,d^p-1\}$,
+    such that $C$ is again in irreducible form~II, $\mathcal E_C = \mathcal E_B$,
+    and $C$ has the same MPV family as $A^{[p]}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose $(A,W)$ from the refinement data. The pullback construction gives
+    $\mathcal E_C = \mathcal E_B$ and equality of MPV families between $C$
+    and $A^{[p]}$. To see that $C$ is still in irreducible form~II, transport
+    each periodic block $B_j$ of $B$ through the same physical isometry $W$.
+    The left-canonical normalization is preserved because $W^{\dagger}W = \Id$,
+    while irreducibility and the peripheral spectrum are preserved because the
+    transfer map of each transported block agrees with that of $B_j$.
+    Reassembling these transported blocks with the same weights gives an
+    irreducible-form decomposition of $C$.
+\end{proof}
+
+\begin{definition}[Blocked equal-case Z-gauge extraction hypothesis]
+    \label{def:peripheral_equalcase_zgauge_sameMPV}
+    \lean{MPSTensor.PeripheralEqualCaseZGaugeOfSameMPV}
+    \leanok
+    \uses{def:irreducible_form, def:blocked_tensor, def:same_mpv, def:z_gauge_equiv}
+    Fix $(d,D,p)$. This hypothesis says that whenever a blocked tensor $C$ in
+    irreducible form~II has the same MPV family as a blocked root $A^{[p]}$,
+    there exists an integer $m \ge 1$ and a $\mathbb Z_m$-gauge equivalence
+    between $C$ and $A^{[p]}$.
+\end{definition}
+
+\begin{definition}[Blocked-to-root reconstruction hypothesis from Z-gauge]
+    \label{def:peripheral_equalcase_root_from_zgauge}
+    \lean{MPSTensor.PeripheralEqualCaseRootFromZGauge}
+    \leanok
+    \uses{def:irreducible_form, def:blocked_tensor, def:z_gauge_equiv}
+    Fix $(d,D,p)$. This hypothesis says that if $m \ge 1$ and a blocked tensor
+    $C$ in irreducible form~II is $\mathbb Z_m$-gauge equivalent to $A^{[p]}$,
+    then there exists a tensor $A'$ with
+    $\sum_i (A'^i)^\dagger A'^i = \Id$ and
+    $\mathcal E_C = \mathcal E_{A'^{[p]}}$.
+\end{definition}
+
+\begin{definition}[Blocked equal-case root hypothesis]
+    \label{def:peripheral_equalcase_periodicFT_sameMPV}
+    \lean{MPSTensor.PeripheralEqualCasePeriodicFTOfSameMPV}
+    \leanok
+    \uses{def:irreducible_form, def:blocked_tensor, def:same_mpv}
+    Fix $(d,D,p)$. This states the combined root-existence statement: whenever a
+    blocked tensor $C$ in irreducible form~II has the same MPV family as a
+    blocked root $A^{[p]}$, one can replace $A$ by a left-canonical tensor $A'$
+    with $\mathcal E_C = \mathcal E_{A'^{[p]}}$.
+\end{definition}
+
+\begin{theorem}[Blocked equal-case root from Z-gauge extraction]
+    \label{thm:peripheral_equalcase_sameMPV_zgauge_reduction}
+    \lean{MPSTensor.peripheralEqualCase_periodicFT_of_sameMPV}
+    \leanok
+    \uses{def:peripheral_equalcase_zgauge_sameMPV,
+        def:peripheral_equalcase_root_from_zgauge,
+        def:peripheral_equalcase_periodicFT_sameMPV}
+    If the blocked equal-case Z-gauge extraction hypothesis and the
+    blocked-to-root reconstruction hypothesis both hold, then the combined
+    blocked equal-case root hypothesis holds.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the Z-gauge extraction hypothesis to obtain a blocked
+    $\mathbb Z_m$-gauge witness between $C$ and $A^{[p]}$, and then apply the
+    reconstruction hypothesis to that witness.
+\end{proof}
+
+\begin{theorem}[Reduction to the blocked equal-case root hypothesis]
+    \label{thm:p_refinement_forward_equalcase_reduction}
+    \lean{MPSTensor.pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV}
+    \leanok
+    \uses{def:peripheral_equalcase_periodicFT_sameMPV,
+        def:irreducible_form, def:p_refinable,
+        thm:p_refinement_pullback_irreducible_form}
+    Assume the blocked equal-case root hypothesis. Then every
+    $p$-refinable tensor $B$ in irreducible form~II admits a left-canonical root
+    $A'$ with $\mathcal E_B = \mathcal E_{A'^{[p]}}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply Theorem~\ref{thm:p_refinement_pullback_irreducible_form} to the
+    refinement witness of $B$. This produces a blocked tensor $C$ in
+    irreducible form~II with $\mathcal E_C = \mathcal E_B$ and the same MPV
+    family as $A^{[p]}$. The blocked equal-case root hypothesis then
+    gives a left-canonical tensor $A'$ with
+    $\mathcal E_C = \mathcal E_{A'^{[p]}}$. Combining the two transfer-map
+    identities yields $\mathcal E_B = \mathcal E_{A'^{[p]}}$.
+\end{proof}
+
+\begin{theorem}[Forward direction from the blocked equal-case root hypothesis]
+    \label{thm:thm_4_1_p_refinement_forward_blocked_equalcase}
+    \lean{MPSTensor.thm_4_1_p_refinement_forward_of_peripheralEqualCase_periodicFT_of_sameMPV}
+    \leanok
+    \uses{def:peripheral_equalcase_periodicFT_sameMPV,
+        def:irreducible_form, def:p_refinable, def:p_divisible_channel,
+        thm:p_refinement_forward_equalcase_reduction}
+    Assume the blocked equal-case root hypothesis. Then for every tensor
+    $B$ in irreducible form~II, $p$-refinability of $B$ implies
+    $p$-divisibility of $\mathcal E_B$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Combine Theorem~\ref{thm:p_refinement_forward_equalcase_reduction} with the
+    witness-level forward implication: once $\mathcal E_B$ is identified with
+    $\mathcal E_{A'^{[p]}}$ for a left-canonical $A'$, the blocking identity
+    gives $\mathcal E_B = (\mathcal E_{A'})^p$.
+\end{proof}
+
+The following conditional statements separate the refinability--divisibility
+equivalence of \cite[Theorem~4.1]{DeLasCuevas2017Irreducible} from the
+root-construction assumptions used below.
+
+% Source comparison: arXiv:1708.00029, Theorem 4.1, lines 728--731 asserts
+% the same refinability--divisibility equivalence without additional root
+% hypotheses. The forward left-canonical root construction corresponds to
+% lines 735--810, while the reverse transfer-map root construction corresponds
+% to lines 812--818. The Lean theorem below packages the two proved one-way
+% implications and is therefore conditional on those two root hypotheses.
+\begin{theorem}[$p$-refinability iff transfer-map $p$-divisibility, conditional]%
+    \label{thm:thm_4_1_p_refinement}
+    \lean{MPSTensor.thm_4_1_p_refinement}
+    \leanok
+    \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel,
+        thm:periodic_ft, thm:thm_4_1_p_refinement_forward,
+        thm:thm_4_1_p_refinement_reverse}
+    Let $B$ be an MPS tensor in irreducible form~II and let $p \ge 1$.
+    Assume the forward left-canonical root hypothesis for
+    refinability $\Rightarrow$ divisibility and the reverse transfer-map root
+    hypothesis for divisibility $\Rightarrow$ refinability. Then $B$ is
+    $p$-refinable iff its transfer map $\mathcal{E}_B$ is $p$-divisible.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:thm_4_1_p_refinement_forward, thm:thm_4_1_p_refinement_reverse}
+    Combine the forward implication
+    (Theorem~\ref{thm:thm_4_1_p_refinement_forward}) with the reverse
+    implication (Theorem~\ref{thm:thm_4_1_p_refinement_reverse}) into a
+    single biconditional. The forward direction assumes the left-canonical root
+    hypothesis; the reverse direction assumes only the transfer-map root
+    hypothesis. Together they give the full equivalence under those hypotheses.
+\end{proof}
+
+\begin{theorem}[$p$-refinability implies transfer-map $p$-divisibility]%
+    \label{thm:thm_4_1_p_refinement_forward}
+    \lean{MPSTensor.thm_4_1_p_refinement_forward}
+    \leanok
+    \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel}
+    Let $B$ be an MPS tensor in irreducible form~II. Assume a left-canonical
+    root hypothesis: every refinement witness gives a tensor $A$ with
+    $\sum_i (A^i)^\dagger A^i = \Id$ and
+    $\mathcal{E}_B = \mathcal{E}_{A^{[p]}}$. Then
+    $p$-refinability of $B$ implies $p$-divisibility of $\mathcal{E}_B$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The left-canonical root hypothesis supplies a witness $A$ with
+    $\sum_i (A^i)^\dagger A^i = \Id$ (left-canonical) and
+    $\mathcal{E}_B = \mathcal{E}_{A^{[p]}}$. The left-canonical property makes
+    $\mathcal{E}_A$ a CPTP channel, and the blocking identity
+    $\mathcal{E}_{A^{[p]}} = (\mathcal{E}_A)^p$ then identifies
+    $\mathcal{E}_B$ with the $p$-th power of the channel $\mathcal{E}_A$.
+\end{proof}
+
+\begin{definition}[Blocked-to-root channel-root hypothesis from Z-gauge]
+    \label{def:peripheral_equalcase_root_channel_from_zgauge}
+    \lean{MPSTensor.PeripheralEqualCaseRootChannelOfZGauge}
+    \leanok
+    \uses{def:peripheral_equalcase_root_from_zgauge, def:z_gauge_equiv,
+        def:p_divisible_channel}
+    Fix $(d,D,p)$. This sharpened reconstruction hypothesis asks for a CPTP map
+    $\mathcal E'$ such that
+    $\mathcal E_C = (\mathcal E')^p$ and the Choi/Kraus rank of
+    $\mathcal E'$ is at most $d$, whenever $C$ is related to $A^{[p]}$ by a
+    blocked $\mathbb Z_m$-gauge witness.
+\end{definition}
+
+\begin{theorem}[Channel-root criterion for blocked-to-root reconstruction]
+    \label{thm:peripheral_equalcase_root_from_root_channel}
+    \lean{MPSTensor.peripheralEqualCaseRootFromZGauge_of_rootChannel}
+    \leanok
+    \uses{def:peripheral_equalcase_root_channel_from_zgauge,
+        def:peripheral_equalcase_root_from_zgauge}
+    If the blocked-to-root channel-root hypothesis holds, then the tensor-level
+    blocked-to-root reconstruction hypothesis holds as well.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose a tensor $A'$ whose matrix family realizes the root channel with at
+    most $d$ nonzero terms. Since this channel is trace-preserving, the matrices
+    of $A'$ satisfy
+    $\sum_i (A'^i)^\dagger A'^i = \Id$. The identity
+    $\mathcal E_C = (\mathcal E_{A'})^p$ is then equivalent to
+    $\mathcal E_C = \mathcal E_{A'^{[p]}}$ by the blocking formula.
+\end{proof}
+
+\begin{theorem}[Transfer-map $p$-divisibility implies $p$-refinability]%
+    \label{thm:thm_4_1_p_refinement_reverse}
+    \lean{MPSTensor.thm_4_1_p_refinement_reverse}
+    \leanok
+    \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel}
+    Let $B$ be an MPS tensor in irreducible form~II and let $p \ge 1$.
+    Assume the reverse transfer-map root hypothesis: there is a tensor $A$ with
+    $\mathcal{E}_B = \mathcal{E}_{A^{[p]}}$ whenever $\mathcal{E}_B$ is
+    $p$-divisible. Then $p$-divisibility of $\mathcal{E}_B$ implies
+    $p$-refinability of $B$.
+\end{theorem}
+
+\begin{proof}\leanok
+    From the reverse transfer-map root hypothesis, extract $A$ with
+    $\mathcal{E}_B = \mathcal{E}_{A^{[p]}}$. This matches two finite Kraus
+    families of the same completely positive map: the blocked family $A^{[p]}$
+    with $d^{p}$ operators and the original family $B$ with $d$ operators.
+    The cardinality comparison $d \le d^{p}$ holds whenever $p \ge 1$, so
+    \cite[Theorem~2.1(4)]{Wolf2012Quantum} supplies an isometry
+    $V \in M_{d^p \times d}(\C)$ with $V^{\dagger} V = \Id$ and
+    $(A^{[p]})^{\alpha} = \sum_{j} V_{\alpha,j}\, B^{j}$. Expanding the
+    coefficient of $A^{[p]}$ at the word~$\tau$ by linearity of matrix
+    multiplication and of the trace, the contributions reorganise into the
+    $V$-weighted sum over length-$N$ words of $B$ required by
+    Definition~\ref{def:p_refinable}, exhibiting $V$ as the isometry $W$ in the
+    statement of $p$-refinability.
+\end{proof}
+
+\begin{remark}[Continuum-limit application]\notready
+    \label{rem:thm_4_1_continuum_limit}
+    The original motivation for Theorem~\ref{thm:thm_4_1_p_refinement}
+    is a continuum-limit construction in the spirit of
+    \cite{DeLasCuevas2017Irreducible}: refinability along arbitrarily
+    large $p$ is equivalent to infinite divisibility of the transfer
+    map, which selects out continuum limits of translationally invariant
+    MPS. The further consequences are explored elsewhere.
+\end{remark}

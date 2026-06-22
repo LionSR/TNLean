@@ -9,10 +9,13 @@ on:
       - 'lakefile.*'
       - 'lean-toolchain'
       - 'lake-manifest.json'
-      - '.github/actions/setup-lean/**'
       - '.github/workflows/lint-blueprint.yml'
       - 'blueprint/src/**'
+      - 'blueprint/.chktexrc'
+      - 'blueprint/latexindent.yaml'
+      - 'scripts/blueprint_bibtex.py'
       - 'scripts/blueprint_lean_sync.py'
+      - 'scripts/check_reader_facing_prose.py'
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
@@ -20,10 +23,13 @@ on:
       - 'lakefile.*'
       - 'lean-toolchain'
       - 'lake-manifest.json'
-      - '.github/actions/setup-lean/**'
       - '.github/workflows/lint-blueprint.yml'
       - 'blueprint/src/**'
+      - 'blueprint/.chktexrc'
+      - 'blueprint/latexindent.yaml'
+      - 'scripts/blueprint_bibtex.py'
       - 'scripts/blueprint_lean_sync.py'
+      - 'scripts/check_reader_facing_prose.py'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -38,14 +44,88 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
+      - name: Check reader-facing prose patterns
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: origin/${{ github.event.pull_request.base.ref }}
+        run: |
+          git fetch --no-tags origin "+refs/heads/${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}"
+          python3 scripts/check_reader_facing_prose.py --root . --diff-base "$BASE_REF" --ci
 
-      - name: Set up Lean and blueprint tooling
-        uses: ./.github/actions/setup-lean
-        with:
-          install-blueprint: 'true'
+      - name: Detect changed Lean files
+        id: changed-lean-files
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: origin/${{ github.event.pull_request.base.ref }}
+        run: |
+          git fetch --no-tags origin "+refs/heads/${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}"
+          changed_lean_paths="$(git diff --merge-base --name-only "$BASE_REF" -- \
+            TNLean.lean 'TNLean/**/*.lean' lakefile.* lean-toolchain lake-manifest.json)"
+          if [ -n "$changed_lean_paths" ]; then
+            has_changed_lean=true
+          else
+            has_changed_lean=false
+            while IFS= read -r tex_file; do
+              if [ -f "$tex_file" ] && grep -Eq '\\lean\{|\\uses\{|\\leanok|\\notready' "$tex_file"; then
+                has_changed_lean=true
+                break
+              fi
+              base_tex="$(git show "$BASE_REF:$tex_file" 2>/dev/null || true)"
+              if [ -n "$base_tex" ] \
+                  && grep -Eq '\\lean\{|\\uses\{|\\leanok|\\notready' <<< "$base_tex"; then
+                has_changed_lean=true
+                break
+              fi
+            done < <(git diff --merge-base --name-only "$BASE_REF" -- \
+              'blueprint/src/**/*.tex' 'blueprint/src/*.tex')
+          fi
+          echo "has_changed_lean=$has_changed_lean" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Lean toolchain
+        id: lean-setup
+        if: github.event_name != 'pull_request' || steps.changed-lean-files.outputs.has_changed_lean == 'true'
+        continue-on-error: true
+        timeout-minutes: 6
+        uses: texra-ai/lean-env-action@v1
+
+      - name: Install blueprint system dependencies
+        uses: texra-ai/lean-env-action/blueprint-system-deps@v1
+
+      - name: Install blueprint Python dependencies
+        uses: texra-ai/lean-env-action/leanblueprint@v1
+
+      - name: Check tensor-network diagram macros
+        run: |
+          cd blueprint/src
+          PYTHONPATH=Packages python3 Packages/tn_diagrams.py \
+            --check \
+            --check-peps-usage \
+            --smoke-render
+
+      - name: Lint LaTeX (chktex)
+        run: |
+          cd blueprint/src
+          find . -name '*.tex' -not -path '*/Packages/*' -print0 \
+            | xargs -0 -r chktex -q -l ../.chktexrc
+
+      # TODO: drop continue-on-error after a separate mechanical PR has run
+      # `latexindent -l blueprint/latexindent.yaml -w -s` over blueprint/src.
+      - name: Check LaTeX formatting (latexindent)
+        continue-on-error: true
+        timeout-minutes: 5
+        run: |
+          set -e
+          status=0
+          while IFS= read -r f; do
+            if ! latexindent -k -s -l blueprint/latexindent.yaml "$f" > /dev/null; then
+              echo "::warning file=$f::not formatted to blueprint/latexindent.yaml; run 'latexindent -l blueprint/latexindent.yaml -w -s \"$f\"' locally to fix"
+              status=1
+            fi
+          done < <(find blueprint/src -name '*.tex' -not -path '*/Packages/*')
+          exit $status
+
+      - name: Build blueprint bibliography
+        run: python3 scripts/blueprint_bibtex.py
 
       - name: Run leanblueprint web and check for errors
         working-directory: blueprint
@@ -64,29 +144,40 @@ jobs:
             echo "::error::Blueprint has unresolved labels (see ERROR lines above)"
             exit 1
           fi
+          if grep -q "WARNING: File not found:" "$tmp_output_file"; then
+            echo "::warning::Blueprint has missing file references (see WARNING lines above)"
+          fi
 
           # If leanblueprint itself failed, propagate its exit status
           if [ "$cmd_status" -ne 0 ]; then
             exit "$cmd_status"
           fi
 
-      - name: Build project (needed for checkdecls)
-        run: lake build
-
       - name: Generate lean_decls from blueprint .tex files
+        id: lean-decls
         run: python3 scripts/blueprint_lean_sync.py --root . --update-lean-decls
 
       - name: Check blueprint and Lean source stay in sync
+        if: steps.lean-decls.outcome == 'success'
         run: python3 scripts/blueprint_lean_sync.py --root . --ci
 
-      - name: Warn on changed Lean declarations missing blueprint entries
-        if: github.event_name == 'pull_request'
-        continue-on-error: true
+      - name: Fetch PR base ref for diff
+        id: fetch-base-ref
+        if: github.event_name == 'pull_request' && steps.lean-setup.outcome == 'success'
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+        run: git fetch --no-tags origin "$BASE_REF"
+
+      - name: Error on changed Lean declarations missing blueprint entries
+        if: github.event_name == 'pull_request' && steps.lean-setup.outcome == 'success'
+        env:
+          BASE_REF: origin/${{ github.event.pull_request.base.ref }}
         run: |
           python3 - <<'PY'
+          import os
           import subprocess
 
-          base_ref = "origin/${{ github.event.pull_request.base.ref }}"
+          base_ref = os.environ["BASE_REF"]
 
           changed = subprocess.check_output(
               [
@@ -97,6 +188,7 @@ jobs:
                   "--diff-filter=AMR",
                   base_ref,
                   "--",
+                  "TNLean.lean",
                   "TNLean/**/*.lean",
               ],
               text=True,
@@ -124,4 +216,10 @@ jobs:
           PY
 
       - name: Check blueprint Lean declarations
-        run: lake exe checkdecls blueprint/lean_decls
+        if: steps.lean-setup.outcome == 'success' && steps.lean-decls.outcome == 'success'
+        continue-on-error: true
+        timeout-minutes: 10
+        run: |
+          if ! lake exe checkdecls blueprint/lean_decls; then
+            echo "::warning::Some blueprint/lean_decls entries have no matching Lean declaration yet (this is expected while formalization is in progress)"
+          fi

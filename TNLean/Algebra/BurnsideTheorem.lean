@@ -68,7 +68,8 @@ If the Kraus operators of `A : MPSTensor d D` act irreducibly on `ℂ^D` (in the
 `IsIrreducibleAction`), then the unital subalgebra they generate is all of `M_D(ℂ)`.
 
 Implementation outline:
-* Transport `algSpan A` along `Matrix.toLinAlgEquiv'` to a subalgebra of `Module.End ℂ (Fin D → ℂ)`.
+* Transport `algSpan A` along `Matrix.toLinAlgEquiv'` to a subalgebra
+  of `Module.End ℂ (Fin D → ℂ)`.
 * `IsIrreducibleAction` gives a simple module.
 * Schur (over an algebraically closed field) identifies the commuting endomorphisms with scalars.
 * Jacobson density then forces surjectivity onto all endomorphisms.
@@ -121,7 +122,8 @@ theorem burnside_matrix [NeZero D]
       have hsmul : (⟨φ (A i), hφA_mem i⟩ : R) • v ∈ W :=
         W.smul_mem ⟨φ (A i), hφA_mem i⟩ hv'
       have : (A i).mulVec v ∈ W := by
-        simpa [φ, Subalgebra.smul_def, Module.End.smul_def, Matrix.toLinAlgEquiv'_apply] using hsmul
+        simpa [φ, Subalgebra.smul_def, Module.End.smul_def,
+          Matrix.toLinAlgEquiv'_apply] using hsmul
       simpa [Wℂ] using this
     rcases hIrr Wℂ hWInv with hbot | htop
     · left

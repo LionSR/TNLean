@@ -1,10 +1,27 @@
+<!--
+PR title format: type(scope): short mathematical description
+Types: feat, fix, refactor, doc, style, ci, chore.
+Examples:
+- feat(MPS/CanonicalForm): assemble cyclic sectors at a common blocking length
+- doc(Wolf Ch6): add Lean tags for spectral theorems
+- style(MPS/CanonicalForm): rewrite equal-case prose in MPS language
+-->
+
 ### Motivation
+<!-- PR title convention: `type(scope): short mathematical description`. -->
+<!-- Example: `feat(MPS/CanonicalForm): assemble cyclic sectors at a common blocking length`. -->
 <!-- Why this change is needed (1--3 bullets). -->
+<!-- Write in mathematical prose. Avoid AI or process slang in public mathematical discussion. -->
+<!-- For mathematical work, cite the source theorem, blueprint label, or issue. -->
+<!-- If the source is in blueprint/, Papers/, or Notes/, give the source file,
+     line range, theorem/lemma/equation label when available, and a short quote. -->
 
 -
 
 ### Description
 <!-- What was changed: files added/modified, definitions introduced, lemmas proved. -->
+<!-- State the mathematical content precisely enough for a reader who has not read
+     the issue thread. -->
 
 -
 

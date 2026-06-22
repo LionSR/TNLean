@@ -1,0 +1,306 @@
+\section{Simple local structure from SAL and ZCL}
+
+For the simple MPDO case in Appendix~C.2 of \cite{Cirac2016MPDO_arXiv},
+the strong-area-law hypothesis is used locally through the equality case of
+strong subadditivity for a normalized three-site reduced state.
+
+\begin{definition}[Local $\eta$-structure for a three-site reduced state]
+    \label{def:mpdo_eta_structure}
+    \lean{MPOTensor.EtaStructure}
+    \leanok
+    \uses{def:entropy_quantum_markov_decomposition}
+    For a three-site density operator $\rho_{ABC}$, the local $\eta$-structure
+    is the quantum Markov decomposition on the middle subsystem $B$ produced by
+    equality in strong subadditivity. Concretely, after a unitary change of
+    basis on $B$, one has a finite direct-sum decomposition
+    \[
+        B = \bigoplus_k (b_1^{(k)} \otimes b_2^{(k)})
+    \]
+    such that
+    \[
+        \rho_{ABC} = \bigoplus_k \rho_{A b_1}^{(k)} \otimes \rho_{b_2 C}^{(k)}.
+    \]
+\end{definition}
+
+\begin{theorem}[SAL implies local $\eta$-structure]
+    \label{thm:sal_implies_eta_structure}
+    \lean{MPOTensor.sal_implies_eta_structure}
+    \leanok
+    \uses{def:ssa_equality, def:mpdo_eta_structure}
+    If a normalized three-site reduced state satisfies the equality case of
+    strong subadditivity --- the local entropy form of the simple-MPDO strong
+    area law --- then it admits the local $\eta$-structure of
+    Definition~\ref{def:mpdo_eta_structure}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:entropy_ssa_equality_quantum_markov}
+    This is exactly the forward implication of the Hayashi equality
+    characterization: equality in strong subadditivity yields a quantum Markov
+    decomposition on the middle subsystem.
+\end{proof}
+
+\begin{definition}[Injective inverse map for a simple MPO tensor]
+    \label{def:mpdo_injective_inverse_layer}
+    \lean{MPOTensor.IsInjective}
+    \lean{MPOTensor.inverseTensor}
+    \lean{MPOTensor.physRealize}
+    \lean{MPOTensor.physRealizeLeft}
+    \leanok
+    \uses{def:mpo_tensor, def:mpo_to_mps, def:injective}
+    A simple MPO tensor $K$ is called injective if its doubled-index MPS tensor
+    is injective. For such a tensor, the chosen decomposition map of the
+    doubled-index MPS furnishes a concrete inverse tensor $K^{-1}$ together
+    with right- and left-physical realization maps that turn virtual bond
+    insertions back into local physical operators.
+\end{definition}
+
+\begin{theorem}[Inverse-map identities for an injective simple MPO tensor]
+    \label{thm:mpdo_injective_inverse_layer_spec}
+    \lean{MPOTensor.inverseTensor_spec}
+    \lean{MPOTensor.physRealize_spec}
+    \lean{MPOTensor.physRealize_mul}
+    \lean{MPOTensor.physRealizeLeft_spec}
+    \leanok
+    \uses{def:mpdo_injective_inverse_layer}
+    For an injective simple MPO tensor, contracting $K^{-1}$ with $K$ recovers
+    the matrix units on the virtual bond space. Likewise, every right virtual
+    insertion admits a physical realization, this realization is multiplicative,
+    and the analogous left-insertion statement also holds.
+\end{theorem}
+
+\begin{definition}[Explicit neighboring $\eta$-operator data]
+    \label{def:mpdo_explicit_eta_operators}
+    \lean{MPOTensor.etaOperators}
+    \lean{MPOTensor.ExplicitEtaOperators}
+    \leanok
+    \uses{def:mpdo_eta_structure}
+    Fix a Hayashi decomposition witness $h_\eta$. An explicit neighboring
+    $\eta$-family is a dependent family $(\eta_{k,h})$ indexed by sector pairs,
+    where $\eta_{k,h}$ acts on the neighboring bond space
+    $B_k^{R} \otimes B_h^{L}$. Requiring positivity for each pair gives the
+    corresponding positive $\eta$-data.
+\end{definition}
+
+\begin{definition}[Trace matrices of explicit $\eta$-data]
+    \label{def:mpdo_explicit_eta_trace_matrix}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrix}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrix_apply}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrixRe}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrixRe_apply}
+    \leanok
+    \uses{def:mpdo_explicit_eta_operators}
+    Every explicit neighboring $\eta$-family determines a sector-by-sector trace
+    matrix. We give both its complex-valued form and the real-part version,
+    which is the direct data for the real Perron--Frobenius matrix $T$ used
+    in the rank-one step.
+\end{definition}
+
+
+\begin{theorem}[Positivity of bipartite partial traces]
+    \label{thm:matrix_possemidef_partial_traces}
+    \lean{Matrix.PosSemidef.traceLeft}
+    \lean{Matrix.PosSemidef.traceRight}
+    \leanok
+    If $\rho$ is positive semidefinite on a bipartite space $A \otimes B$, then
+    both reduced operators $\tr_A \rho$ and $\tr_B \rho$ are positive
+    semidefinite.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Write each partial trace as the finite sum, over the traced index, of a
+    principal submatrix of $\rho$. Principal submatrices of a positive
+    semidefinite matrix are positive semidefinite, and finite sums of positive
+    semidefinite matrices remain positive semidefinite.
+\end{proof}
+
+\begin{definition}[Hayashi--Markov extraction of explicit $\eta$-operators]
+    \label{def:mpdo_eta_of_hayashi_markov}
+    \lean{MPOTensor.ExplicitEtaOperators.ofHayashiMarkov}
+    \leanok
+    \uses{def:mpdo_eta_structure, def:mpdo_explicit_eta_operators,
+        thm:matrix_possemidef_partial_traces}
+    Every Hayashi decomposition witness $h_\eta$ canonically produces an
+    explicit neighboring $\eta$-family by Kronecker-multiplying the
+    sector-reduced states on the neighboring bond spaces:
+    \[
+        \eta_{k,h}
+        := \tr_C(\rho_{b_2 C}^{(k)})
+        \otimes \tr_A(\rho_{A b_1}^{(h)}).
+    \]
+    Positive semidefiniteness of each $\eta_{k,h}$ follows from the fact
+    that partial traces preserve positivity and that positive
+    semidefiniteness is closed under Kronecker products. This is the
+    sector-reduced extraction; the remaining connection to
+    \cite[Appendix~C.2]{Cirac2016MPDO_arXiv} is the identification of this
+    family with the inverse-map
+    construction in the original simple-MPDO tensor coordinates.
+\end{definition}
+
+\begin{theorem}[Trace matrix of the Hayashi--Markov $\eta$-operators]
+    \label{thm:mpdo_eta_of_hayashi_markov_trace_matrix}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrix_ofHayashiMarkov}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrixRe_ofHayashiMarkov}
+    \leanok
+    \uses{def:mpdo_eta_of_hayashi_markov,
+        def:mpdo_explicit_eta_trace_matrix}
+    The trace matrix induced by the extracted family is entrywise
+    $T_{k,h} = 1$ in both its complex-valued form and its real-valued form,
+    matching the normalization $T_{k,h} = a_k b_h$ used in
+    $a_k = b_h = 1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_eta_of_hayashi_markov,
+        def:mpdo_explicit_eta_trace_matrix}
+    Each $\rho_{b_2 C}^{(k)}$ is a density matrix, hence has unit trace; the
+    partial trace $\tr_C$ preserves the trace. The analogous statement holds
+    for $\tr_A \rho_{A b_1}^{(h)}$. Multiplicativity of the trace under
+    Kronecker products gives $T_{k,h} = 1 \cdot 1 = 1$, and taking real parts
+    gives the real-valued statement.
+\end{proof}
+
+\begin{theorem}[Entrywise nonnegativity of the real trace matrix]
+    \label{thm:mpdo_explicit_eta_trace_matrix_nonneg}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrixRe_nonneg}
+    \leanok
+    \uses{def:mpdo_explicit_eta_trace_matrix}
+    Positivity of the neighboring operators gives entrywise nonnegativity of
+    the real trace matrix. Matrix-level positive semidefiniteness of $T$ is a
+    separate structural condition.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The trace of a positive semidefinite neighboring operator is non-negative in
+    the complex order. Taking real parts gives the stated entrywise
+    nonnegativity.
+\end{proof}
+
+\begin{definition}[Auxiliary matrix predicates for the rank-one step]
+    \label{def:matrix_trace_rankone_predicates}
+    \lean{Matrix.TracePowersConstant}
+    \lean{Matrix.HasRankOneFactorization}
+    \lean{Matrix.PrimitiveTracePowersConstantImpliesRankOne}
+    \leanok
+    The auxiliary predicates state three matrix-theoretic ingredients used in
+    the rank-one step of \cite[Appendix~C.2, Lemma~C.5]{Cirac2016MPDO_arXiv}:
+    constant traces of all
+    positive powers, existence of a rank-one factorization $T = a b^\top$, and
+    the conditional Perron--Frobenius implication from primitivity together with
+    constant trace powers to such a factorization.
+
+    This conditional implication is not a globally provable theorem. As a
+    universal statement over primitive non-negative matrices it is false; a
+    concrete $3 \times 3$ counterexample appears in the archive, and the
+    deviation from the source is documented in
+    \path{docs/paper-gaps/cpgsv17_pf_rank_one.tex}. The
+    corrected criterion proved here adds positive semidefiniteness and trace
+    normalization, which provide the diagonalizability needed to turn the
+    trace-power condition into a rank-one factorization.
+\end{definition}
+
+\begin{theorem}[Trace square of a Hermitian matrix]
+    \label{thm:matrix_hermitian_trace_square_eigenvalues}
+    \lean{Matrix.IsHermitian.trace_sq_eq_sum_eigenvalues_sq}
+    \leanok
+    Let $T$ be a finite Hermitian matrix over a real or complex scalar field,
+    with Hermitian eigenvalues $\lambda_i$. Then
+    \[
+        \tr(T^2) = \sum_i \lambda_i^2.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The spectral theorem writes $T$ as a unitary conjugate of the diagonal
+    matrix of its Hermitian eigenvalues. Squaring commutes with this conjugation,
+    and cyclicity of trace reduces the identity to the trace of the squared
+    diagonal matrix.
+\end{proof}
+
+\begin{theorem}[PSD trace-power rank-one criterion]
+    \label{thm:matrix_psd_trace_power_rank_one}
+    \lean{Matrix.PosSemidef.trace_powers_constant_implies_rank_one}
+    \lean{Matrix.primitive_trace_powers_constant_implies_rank_one_of_posSemidef}
+    \leanok
+    \uses{def:matrix_trace_rankone_predicates}
+    Let $T$ be a finite real square matrix. If $T$ is positive semidefinite,
+    normalized by $\tr(T)=1$, and has constant traces on all positive powers,
+    then $T$ has a rank-one factorization. Consequently, under the same
+    positive-semidefinite and trace-normalization hypotheses, the conditional
+    rank-one criterion used in \cite[Lemma~C.5]{Cirac2016MPDO_arXiv} follows.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:matrix_trace_rankone_predicates, thm:matrix_hermitian_trace_square_eigenvalues}
+    The spectral theorem diagonalizes the positive semidefinite matrix with
+    non-negative real eigenvalues. The trace gives that their sum is $1$, while
+    the second trace moment gives that the sum of their squares is also $1$.
+    Hence exactly one eigenvalue is equal to $1$ and all others vanish, so the
+    diagonal form is rank one. Unitary conjugation preserves the existence of an
+    outer-product factorization.
+\end{proof}
+
+% Unfaithful: thm:sal_zcl_implies_rank_one_t mirrors the Lean theorem
+% MPOTensor.sal_zcl_implies_rank_one_T, whose conditional Perron--Frobenius
+% hypothesis is false as a universal statement (counterexample in
+% TNLean/Archive/PerronFrobeniusRankOneCounterexample.lean); the source
+% Lemma~C.5 derives the factorization from Perron--Frobenius fixed-point
+% theory. Documented in docs/paper-gaps/cpgsv17_pf_rank_one.tex; eliminated by
+% the PSD-corrected thm:psd_trace_powers_rank_one_t.
+\begin{theorem}[SAL and ZCL imply rank-one $T$ (conditional form)]
+    \label{thm:sal_zcl_implies_rank_one_t}
+    \lean{MPOTensor.sal_zcl_implies_rank_one_T}
+    \leanok
+    \uses{def:matrix_trace_rankone_predicates}
+    Let $T$ be a finite real square matrix. Assume that $T$ is primitive,
+    that $\tr(T) = 1$, and that every positive power of $T$ has the same trace
+    as $T$. If one further supplies the Perron--Frobenius hypothesis that
+    this particular primitive non-negative matrix with constant trace powers is
+    rank one, then
+    \[
+        T = a b^\top
+    \]
+    for some vectors $a$ and $b$, with normalization
+    \[
+        a \cdot b = 1.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:matrix_trace_rankone_predicates}
+    The Perron--Frobenius hypothesis gives the factorization $T = a b^\top$.
+    Taking traces and using $\tr(a b^\top) = a \cdot b$ converts the
+    normalization $\tr(T) = 1$ into $a \cdot b = 1$.
+\end{proof}
+
+\begin{theorem}[PSD-corrected rank-one $T$ criterion]
+    \label{thm:psd_trace_powers_rank_one_t}
+    \lean{MPOTensor.sal_zcl_implies_rank_one_T_of_posSemidef}
+    \leanok
+    \uses{def:matrix_trace_rankone_predicates}
+    Let $T$ be a finite real square matrix. Assume that $T$ is primitive,
+    positive semidefinite, normalized by $\tr(T)=1$, and has constant traces on
+    all positive powers. Then
+    \[
+        T = a b^\top
+    \]
+    for some vectors $a$ and $b$, with $a \cdot b = 1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:matrix_trace_rankone_predicates, thm:sal_zcl_implies_rank_one_t,
+        thm:matrix_psd_trace_power_rank_one}
+    The positive-semidefinite matrix criterion diagonalizes $T$, uses the first
+    two trace moments to show that exactly one eigenvalue is nonzero, and hence
+    supplies the auxiliary rank-one criterion. The conditional statement of
+    \cite[Lemma~C.5]{Cirac2016MPDO_arXiv} then gives the factorization and
+    trace normalization.
+\end{proof}

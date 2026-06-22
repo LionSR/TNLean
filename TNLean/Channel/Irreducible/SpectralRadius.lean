@@ -8,7 +8,9 @@ import TNLean.Channel.Irreducible.PerronFrobenius
 import TNLean.Channel.Irreducible.Similarity
 import TNLean.Channel.Irreducible.TraceAdjoint
 import TNLean.MPS.Core.TPGauge
-import TNLean.Spectral.SpectralGap
+import TNLean.Spectral.TransferOperatorGap
+import Mathlib.Algebra.Module.Equiv.Basic
+import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 
 /-!
 # Irreducible spectral-radius identity (Wolf Theorem 6.3(4))
@@ -28,13 +30,13 @@ for irreducible completely positive maps on `M_D(ℂ)`.
 
 The proof uses a TP-gauge reduction. Starting from a positive-definite right
  eigenvector, we build a positive-definite adjoint eigenvector, rescale and gauge
- the Kraus family to a trace-preserving one, use the existing spectral-gap bound
+ the Kraus family to a trace-preserving one, use the existing transfer-operator gap bound
  to obtain spectral radius `1` in the gauged setting, and then undo the scalar
  rescaling and similarity.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2, Thm 6.3]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2, Theorem 6.3]
   [Wolf2012QChannels]
 -/
 
@@ -45,64 +47,39 @@ variable {D : ℕ}
 
 /-! ## Spectral radius identity (Wolf 6.3(4)) -/
 
-private noncomputable def sandwichLinearMap
-    (L R : Matrix (Fin D) (Fin D) ℂ) :
-    Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ where
-  toFun X := L * X * R
-  map_add' X Y := by
-    simp [Matrix.mul_add, Matrix.add_mul, Matrix.mul_assoc]
-  map_smul' a X := by
-    simp [Matrix.mul_assoc]
+section SimilarityCLM
 
-private noncomputable def sandwichEquiv
+private noncomputable def sandwichUnit
+    (C : Matrix (Fin D) (Fin D) ℂ) (hC : C.det ≠ 0) : GL (Fin D) ℂ :=
+  Matrix.GeneralLinearGroup.mkOfDetNeZero C hC
+
+private noncomputable def sandwichLinearEquiv
     (C : Matrix (Fin D) (Fin D) ℂ) (hC : C.det ≠ 0) :
-    Matrix (Fin D) (Fin D) ℂ ≃L[ℂ] Matrix (Fin D) (Fin D) ℂ where
-  toFun X := C * X * Cᴴ
-  invFun X := C⁻¹ * X * (Cᴴ)⁻¹
-  left_inv X := by
-    have hC_unit : IsUnit C.det := Ne.isUnit hC
-    have hCstar : Cᴴ.det ≠ 0 := by
-      rw [Matrix.det_conjTranspose]
-      exact star_ne_zero.mpr hC
-    have hCstar_unit : IsUnit (Cᴴ.det) := Ne.isUnit hCstar
-    calc
-      C⁻¹ * (C * X * Cᴴ) * (Cᴴ)⁻¹
-          = (C⁻¹ * C) * X * (Cᴴ * (Cᴴ)⁻¹) := by
-              simp [Matrix.mul_assoc]
-      _ = X := by
-            simp [Matrix.nonsing_inv_mul C hC_unit,
-              Matrix.mul_nonsing_inv Cᴴ hCstar_unit]
-  right_inv X := by
-    have hC_unit : IsUnit C.det := Ne.isUnit hC
-    have hCstar : Cᴴ.det ≠ 0 := by
-      rw [Matrix.det_conjTranspose]
-      exact star_ne_zero.mpr hC
-    have hCstar_unit : IsUnit (Cᴴ.det) := Ne.isUnit hCstar
-    calc
-      C * (C⁻¹ * X * (Cᴴ)⁻¹) * Cᴴ
-          = (C * C⁻¹) * X * ((Cᴴ)⁻¹ * Cᴴ) := by
-              simp [Matrix.mul_assoc]
-      _ = X := by
-            simp [Matrix.mul_nonsing_inv C hC_unit,
-              Matrix.nonsing_inv_mul Cᴴ hCstar_unit]
-  map_add' X Y := by
-    simp [Matrix.mul_add, Matrix.add_mul, Matrix.mul_assoc]
-  map_smul' a X := by
-    simp [Matrix.mul_assoc]
-  continuous_toFun :=
-    (LinearMap.toContinuousLinearMap (sandwichLinearMap (D := D) C Cᴴ)).continuous
-  continuous_invFun :=
-    (LinearMap.toContinuousLinearMap (sandwichLinearMap (D := D) C⁻¹ (Cᴴ)⁻¹)).continuous
+    Matrix (Fin D) (Fin D) ℂ ≃ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
+  ((sandwichUnit (D := D) C hC).mulLeftLinearEquiv ℂ (Matrix (Fin D) (Fin D) ℂ)).trans
+    ((star (sandwichUnit (D := D) C hC)).mulRightLinearEquiv ℂ)
 
-@[simp] private lemma sandwichEquiv_apply
+@[simp] private lemma sandwichLinearEquiv_apply
     (C : Matrix (Fin D) (Fin D) ℂ) (hC : C.det ≠ 0)
     (X : Matrix (Fin D) (Fin D) ℂ) :
-    sandwichEquiv (D := D) C hC X = C * X * Cᴴ := rfl
+    sandwichLinearEquiv (D := D) C hC X = C * X * Cᴴ := by
+  simp [sandwichLinearEquiv, sandwichUnit, Matrix.star_eq_conjTranspose, Matrix.mul_assoc]
 
-@[simp] private lemma sandwichEquiv_symm_apply
+@[simp] private lemma sandwichLinearEquiv_symm_apply
     (C : Matrix (Fin D) (Fin D) ℂ) (hC : C.det ≠ 0)
     (X : Matrix (Fin D) (Fin D) ℂ) :
-    (sandwichEquiv (D := D) C hC).symm X = C⁻¹ * X * (Cᴴ)⁻¹ := rfl
+    (sandwichLinearEquiv (D := D) C hC).symm X = C⁻¹ * X * (Cᴴ)⁻¹ := by
+  have hSymmMulLeft : ∀ Z : Matrix (Fin D) (Fin D) ℂ,
+      ((Units.mulLeftLinearEquiv ℂ (Matrix (Fin D) (Fin D) ℂ))
+        (sandwichUnit (D := D) C hC)).symm Z = C⁻¹ * Z := by
+    intro Z
+    simpa [sandwichUnit, Matrix.GeneralLinearGroup.coe_inv] using
+      Units.symm_mulLeftLinearEquiv_apply (R := ℂ) (sandwichUnit (D := D) C hC) Z
+  simp only [sandwichLinearEquiv, LinearEquiv.symm_trans_apply,
+    Units.symm_mulRightLinearEquiv_apply]
+  rw [hSymmMulLeft]
+  simp [sandwichUnit, Matrix.star_eq_conjTranspose, Matrix.conjTranspose_nonsing_inv,
+    Matrix.mul_assoc]
 
 private lemma spectralRadius_similarity_eq
     (C : Matrix (Fin D) (Fin D) ℂ) (hC : C.det ≠ 0)
@@ -112,28 +89,36 @@ private lemma spectralRadius_similarity_eq
         (similarityMap (D := D) C E)) =
       spectralRadius ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) E) := by
-  have hsim :
-      (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-        (similarityMap (D := D) C E) =
-        (sandwichEquiv (D := D) C hC).symm.conjContinuousAlgEquiv
-          ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) E) := by
-    apply ContinuousLinearMap.ext
+  let Φ : (Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) ≃ₐ[ℂ]
+      TNLean.MatrixCLM (Fin D) :=
+    Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)
+  have hsim_alg :
+      similarityMap (D := D) C E =
+        (sandwichLinearEquiv (D := D) C hC).symm.conjAlgEquiv ℂ E := by
+    apply LinearMap.ext
     intro X
-    change C⁻¹ * E (C * X * Cᴴ) * (Cᴴ)⁻¹ =
-      C⁻¹ * E (C * X * Cᴴ) * (Cᴴ)⁻¹
-    simp [Matrix.mul_assoc]
-  have hspectrum :
-      spectrum ℂ
-        ((sandwichEquiv (D := D) C hC).symm.conjContinuousAlgEquiv
-          ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) E)) =
-        spectrum ℂ
-          ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) E) :=
-    AlgEquiv.spectrum_eq ((sandwichEquiv (D := D) C hC).symm.conjContinuousAlgEquiv)
-      ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) E)
-  rw [hsim, spectralRadius, hspectrum, spectralRadius]
+    ext i j
+    simp [similarityMap, LinearEquiv.conjAlgEquiv_apply, Matrix.mul_assoc]
+  have hspec_left :
+      spectrum ℂ (Φ (similarityMap (D := D) C E)) =
+        spectrum ℂ (similarityMap (D := D) C E) :=
+    AlgEquiv.spectrum_eq Φ (similarityMap (D := D) C E)
+  have hspec_alg :
+      spectrum ℂ (similarityMap (D := D) C E) = spectrum ℂ E := by
+    rw [hsim_alg]
+    exact AlgEquiv.spectrum_eq
+      ((sandwichLinearEquiv (D := D) C hC).symm.conjAlgEquiv ℂ) E
+  have hspec_right :
+      spectrum ℂ (Φ E) = spectrum ℂ E :=
+    AlgEquiv.spectrum_eq Φ E
+  have hspec :
+      spectrum ℂ (Φ (similarityMap (D := D) C E)) = spectrum ℂ (Φ E) := by
+    rw [hspec_left, hspec_alg, hspec_right]
+  change spectralRadius ℂ (Φ (similarityMap (D := D) C E)) = spectralRadius ℂ (Φ E)
+  rw [spectralRadius, spectralRadius, hspec]
 
-set_option synthInstance.maxHeartbeats 200000 in
--- `CompleteSpace` on matrix endomorphism CLMs is finite-dimensional but expensive to synthesize.
+end SimilarityCLM
+
 private lemma spectralRadius_smul
     [NeZero D]
     (F : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -141,7 +126,8 @@ private lemma spectralRadius_smul
     spectralRadius ℂ (c • F) = (‖c‖₊ : ℝ≥0∞) * spectralRadius ℂ F := by
   letI : FiniteDimensional ℂ
       (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
-    (TNLean.matrixEndEquiv (Fin D)).toLinearEquiv.finiteDimensional
+    (Module.End.toContinuousLinearMap
+      (Matrix (Fin D) (Fin D) ℂ)).toLinearEquiv.finiteDimensional
   have hF_nonempty : (spectrum ℂ F).Nonempty :=
     spectrum.nonempty_of_isAlgClosed_of_finiteDimensional ℂ F
   have hspec : spectrum ℂ (c • F) = c • spectrum ℂ F := by
@@ -154,14 +140,14 @@ private lemma spectralRadius_smul
       rwa [Set.mem_smul_set_iff_inv_smul_mem₀ hc] at hz
     have hz' : c • (c⁻¹ • z) = z := by
       rw [smul_smul, mul_inv_cancel₀ hc, one_smul]
-    have hnorm : (‖c • (c⁻¹ • z)‖₊ : ℝ≥0∞) = (‖c‖₊ : ℝ≥0∞) * ‖c⁻¹ • z‖₊ := by
-      exact congrArg (fun t : ℝ≥0 => (t : ℝ≥0∞)) (nnnorm_smul c (c⁻¹ • z))
+    have hnorm : (‖c • (c⁻¹ • z)‖₊ : ℝ≥0∞) = (‖c‖₊ : ℝ≥0∞) * ‖c⁻¹ • z‖₊ :=
+      congrArg (fun t : ℝ≥0 => (t : ℝ≥0∞)) (nnnorm_smul c (c⁻¹ • z))
     calc
       (‖z‖₊ : ℝ≥0∞) = (‖c • (c⁻¹ • z)‖₊ : ℝ≥0∞) := by rw [hz']
       _ = (‖c‖₊ : ℝ≥0∞) * ‖c⁻¹ • z‖₊ := hnorm
       _ ≤ (‖c‖₊ : ℝ≥0∞) * spectralRadius ℂ F := by
           gcongr
-          show (‖c⁻¹ • z‖₊ : ℝ≥0∞) ≤ spectralRadius ℂ F
+          change (‖c⁻¹ • z‖₊ : ℝ≥0∞) ≤ spectralRadius ℂ F
           rw [spectralRadius]
           exact @le_iSup₂ ENNReal ℂ (· ∈ spectrum ℂ F) _
             (fun k _ => (‖k‖₊ : ENNReal)) (c⁻¹ • z) hμ
@@ -175,8 +161,8 @@ private lemma spectralRadius_smul
         inferInstance inferInstance inferInstance hComplete inferInstance F
     obtain ⟨μ, hμ_spec, hμ_max⟩ :=
       hcompact.exists_isMaxOn hF_nonempty continuous_nnnorm.continuousOn
-    have hμ_rad : (‖μ‖₊ : ℝ≥0∞) = spectralRadius ℂ F := by
-      exact le_antisymm (le_iSup₂ (α := ℝ≥0∞) μ hμ_spec) (iSup₂_le <| mod_cast hμ_max)
+    have hμ_rad : (‖μ‖₊ : ℝ≥0∞) = spectralRadius ℂ F :=
+      le_antisymm (le_iSup₂ (α := ℝ≥0∞) μ hμ_spec) (iSup₂_le <| mod_cast hμ_max)
     have hcμ_spec : c • μ ∈ spectrum ℂ (c • F) := by
       rw [hspec]
       exact Set.smul_mem_smul_set hμ_spec
@@ -191,14 +177,14 @@ private lemma spectralRadius_smul
           exact @le_iSup₂ ENNReal ℂ (· ∈ spectrum ℂ (c • F)) _
             (fun k _ => (‖k‖₊ : ENNReal)) (c • μ) hcμ_spec
 
-/-- **Perron eigenvalue = spectral radius** (Wolf Thm 6.3(4)).
+/-- **Perron eigenvalue = spectral radius** (Wolf Theorem 6.3(4)).
 
 Let `E` be an irreducible CP map and assume `ρ > 0` is a positive-definite
 right eigenvector with `E ρ = r • ρ`, `r > 0`. Then the spectral radius of `E`
 (as a continuous linear map on matrices) is exactly `r`.
 
 The proof follows Wolf's similarity argument, but uses the already-formalized
-TP-gauge infrastructure:
+TP-gauge formalization:
 1. obtain a positive-definite left eigenvector `σ > 0` for the adjoint map;
 2. use the weighted trace identity to show its eigenvalue also equals `r`;
 3. gauge by `σ^{1/2}` and rescale by `1 / r` to obtain a TP map;
@@ -221,7 +207,12 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
   let K := hSetup.K
   have hE_eq : E = MPSTensor.transferMap (d := n) (D := D) K := hSetup.map_eq
   have hρ_ne : ρ ≠ 0 := (Matrix.PosDef.isUnit hρ_pd).ne_zero
-  have hE_ne : E ≠ 0 := LinearMap.ne_zero_of_pos_eigenvector hρ_ne hr hEig
+  have hE_ne : E ≠ 0 := by
+    intro hE0
+    have hsmul : (r : ℂ) • ρ = 0 := by
+      simpa [hE0] using hEig.symm
+    exact hρ_ne
+      ((eq_zero_or_eq_zero_of_smul_eq_zero hsmul).resolve_left (by exact_mod_cast hr.ne'))
   obtain ⟨σ, t, hσ_pd, ht_pos, hσ_eig⟩ :=
     hSetup.exists_posDef_adjoint_eigenvector hE_ne
   have htrace : ∀ X : Matrix (Fin D) (Fin D) ℂ,
@@ -305,7 +296,6 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
                 subst A'
                 subst S
                 simp [MPSTensor.transferMap_apply, MPSTensor.tpGauge]
-                rfl
       _ = ∑ i : Fin n,
               (↑r : ℂ)⁻¹ • (S * (K i * (S⁻¹ * X * S⁻¹) * (K i)ᴴ) * S) := by
             refine Finset.sum_congr rfl ?_
@@ -315,7 +305,7 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
             rw [← Finset.smul_sum]
       _ = (↑r : ℂ)⁻¹ •
             (S * (∑ i : Fin n, K i * (S⁻¹ * X * S⁻¹) * (K i)ᴴ) * S) := by
-            rw [Matrix.sum_mul_mul]
+            simp only [← Matrix.sum_mul, ← Matrix.mul_sum]
       _ = (↑r : ℂ)⁻¹ • (S * E (S⁻¹ * X * S⁻¹) * S) := by
             rw [hE_eq]
             simp [MPSTensor.transferMap_apply]
@@ -393,11 +383,18 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
         spectralRadius ℂ
           ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
             (similarityMap (D := D) S⁻¹ E)) := by
-    simpa [hE'_def] using
-      spectralRadius_smul (D := D)
-        ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-          (similarityMap (D := D) S⁻¹ E))
-        (c := (↑r : ℂ)⁻¹) (inv_ne_zero (by exact_mod_cast hr.ne'))
+    have hE'_clm :
+        ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) E') =
+          (↑r : ℂ)⁻¹ •
+            ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+              (similarityMap (D := D) S⁻¹ E)) := by
+      rw [hE'_def]
+      rfl
+    rw [hE'_clm]
+    exact spectralRadius_smul (D := D)
+      ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+        (similarityMap (D := D) S⁻¹ E))
+      (c := (↑r : ℂ)⁻¹) (inv_ne_zero (by exact_mod_cast hr.ne'))
   have hnorm_inv : (‖((↑r : ℂ)⁻¹)‖₊ : ℝ≥0∞) = (ENNReal.ofReal r)⁻¹ := by
     let rInvNN : ℝ≥0 := ⟨r⁻¹, by positivity⟩
     have hnorm_cast : ‖(r : ℂ)‖ = r := by
@@ -408,8 +405,8 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
       rw [show (rInvNN : ℝ) = r⁻¹ by rfl, norm_inv]
       simpa using congrArg Inv.inv hnorm_cast
     calc
-      (‖((↑r : ℂ)⁻¹)‖₊ : ℝ≥0∞) = (rInvNN : ℝ≥0∞) := by
-        exact congrArg (fun x : ℝ≥0 => (x : ℝ≥0∞)) hnorm_nnn
+      (‖((↑r : ℂ)⁻¹)‖₊ : ℝ≥0∞) = (rInvNN : ℝ≥0∞) :=
+        congrArg (fun x : ℝ≥0 => (x : ℝ≥0∞)) hnorm_nnn
       _ = ENNReal.ofReal (r⁻¹) := by
         rw [← ENNReal.ofReal_coe_nnreal]
         rfl
@@ -448,7 +445,7 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
     _ = ENNReal.ofReal r * 1 := by rw [hscaled_one]
     _ = ENNReal.ofReal r := by rw [mul_one]
 
-/-- **Real-valued spectral-radius identity** (Wolf Thm 6.3(4), real form).
+/-- **Real-valued spectral-radius identity** (Wolf Theorem 6.3(4), real form).
 
 Convenience corollary of `spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp`:
 the Perron–Frobenius eigenvalue `r > 0` equals the `ℝ`-valued spectral radius

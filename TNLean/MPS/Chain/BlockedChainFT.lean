@@ -2,22 +2,24 @@ import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Chain.FundamentalTheorem
 
 /-!
-# Fundamental theorem endpoint for blocked chains
+# Fundamental theorem for blocked chains
 
-This module gives a blocked-chain endpoint. The theorem
-`fundamentalTheorem_blockedChain` is stated for blocked chains built from a
-common blocking length `L`.
+For an MPS tensor `A` and blocking length `L`, the constant blocked chain of
+`A^{[L]}` satisfies the chain fundamental theorem with respect to the blocked
+combined tensor.  The theorem hypothesis uses `SameMPV` on the combined
+blocked tensors.
 
-Design note: we keep the endpoint in explicit-assumption style (`L`, `hA_block`,
-`hMPV`) so downstream uses can choose blocking witnesses locally.
+## References
+
+* [arXiv:1804.04964](https://arxiv.org/abs/1804.04964)
 -/
 
 namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- Equivalence between project `N`-block injectivity and injectivity of the physically
-blocked tensor `blockTensor A N`. -/
+/-- Equivalence between `N`-block injectivity and injectivity of the blocked
+tensor `blockTensor A N`. -/
 lemma isNBlkInjective_iff_blockTensor_isInjective (A : MPSTensor d D) (N : ℕ) :
     IsNBlkInjective A N ↔ IsInjective (blockTensor A N) := by
   classical
@@ -30,8 +32,8 @@ lemma isNBlkInjective_iff_blockTensor_isInjective (A : MPSTensor d D) (N : ℕ) 
     · rintro ⟨i, rfl⟩
       exact ⟨decodeBlock d N i, rfl⟩
     · rintro ⟨σ, rfl⟩
-      exact ⟨(Fintype.equivFin (Fin N → Fin d)) σ, by
-        simp [decodeBlock]⟩
+      exact ⟨Fin.cast (blockPhysDim_eq_pow d N).symm (finFunctionFinEquiv σ), by
+        simp [decodeBlock, Fin.cast_cast]⟩
   unfold IsNBlkInjective IsInjective blockTensor
   have hSpan :
       Submodule.span ℂ
@@ -39,11 +41,7 @@ lemma isNBlkInjective_iff_blockTensor_isInjective (A : MPSTensor d D) (N : ℕ) 
             evalWord A (List.ofFn (decodeBlock d N i))) =
         Submodule.span ℂ (Set.range fun σ : Fin N → Fin d => evalWord A (List.ofFn σ)) := by
     simp [hRange]
-  constructor
-  · intro h
-    exact hSpan.trans h
-  · intro h
-    exact hSpan.symm.trans h
+  exact ⟨hSpan.trans, hSpan.symm.trans⟩
 
 end MPSTensor
 
@@ -65,10 +63,11 @@ lemma blockedChain_isInjective (A : MPSTensor d D) (L n : ℕ)
   simpa [blockedChain] using
     (MPSTensor.isNBlkInjective_iff_blockTensor_isInjective A L).1 hA
 
-/-- Fundamental theorem endpoint for blocked chains at a common blocking length.
+/-- **Fundamental Theorem for blocked chains**.
 
-The hypothesis `hA_block` chooses a witness `L` used in the blocked-chain
-reduction to the injective-chain theorem. -/
+If `A` is `L`-block injective and the constant blocked chains built from
+`A^{[L]}` and `B^{[L]}` satisfy `SameMPV` on their combined tensors, then
+the blocked chains are gauge equivalent. -/
 theorem fundamentalTheorem_blockedChain
     (A B : MPSTensor d D) (L n : ℕ)
     (hA_block : MPSTensor.IsNBlkInjective A L)

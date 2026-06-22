@@ -8,13 +8,13 @@ import TNLean.Channel.Irreducible.PerronFrobenius
 import TNLean.Channel.Schwarz.PositiveMapProperties
 import TNLean.Channel.KrausRepresentation
 import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
-import TNLean.Spectral.SpectralGap
+import TNLean.Spectral.TransferOperatorGap
 
 /-!
-# Channel-level wrappers for peripheral spectrum and primitivity
+# Channel-level formulations for peripheral spectrum and primitivity
 
 This file collects the general channel-level consequences of the MPS-specific
-peripheral-spectrum machinery from Wolf Chapter 6.
+peripheral-spectrum theory from Wolf Chapter 6.
 
 ## Main results
 
@@ -25,10 +25,10 @@ peripheral-spectrum machinery from Wolf Chapter 6.
 * `peripheral_isRootOfUnity_of_irreducible_channel`:
   peripheral eigenvalues of an irreducible channel are roots of unity
 * `compl_eigenvalue_norm_lt_one_of_primitive_of_irreducible_channel`:
-  primitive irreducible channels have a strict complementary spectral gap
+  primitive irreducible channels have a strict complementary transfer-map gap
 
 The proofs reduce general channels to Kraus transfer maps and then reuse the
-existing MPS blocking / periodicity-removal infrastructure.
+existing MPS blocking / periodicity-removal formalization.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators NNReal ENNReal
@@ -107,8 +107,8 @@ theorem fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel
     X = 0 := by
   have hXstar : E Xᴴ = Xᴴ := by
     calc
-      E Xᴴ = (E X)ᴴ := by
-        exact IsPositiveMap.map_conjTranspose (hT := hE.pos) X
+      E Xᴴ = (E X)ᴴ :=
+        IsPositiveMap.map_conjTranspose (hT := hE.pos) X
       _ = Xᴴ := by simp [hXfix]
   let Y₁ : Matrix (Fin D) (Fin D) ℂ := X + Xᴴ
   let Y₂ : Matrix (Fin D) (Fin D) ℂ := Complex.I • (X - Xᴴ)
@@ -126,11 +126,11 @@ theorem fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel
     simp [Y₁, htrX, Matrix.trace_add, Matrix.trace_conjTranspose]
   have htrY₂ : Matrix.trace Y₂ = 0 := by
     simp [Y₂, htrX, Matrix.trace_smul, Matrix.trace_sub, Matrix.trace_conjTranspose]
-  have hY₁_zero : Y₁ = 0 := by
-    exact hermitian_fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel
+  have hY₁_zero : Y₁ = 0 :=
+    hermitian_fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel
       hE hIrr Y₁ hY₁_herm hY₁_fix htrY₁
-  have hY₂_zero : Y₂ = 0 := by
-    exact hermitian_fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel
+  have hY₂_zero : Y₂ = 0 :=
+    hermitian_fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel
       hE hIrr Y₂ hY₂_herm hY₂_fix htrY₂
   have hXherm : X = Xᴴ := by
     have h' : X - Xᴴ = 0 := by
@@ -175,13 +175,14 @@ theorem peripheral_isRootOfUnity_of_irreducible_channel [NeZero D]
   have hμp_eig : Module.End.HasEigenvalue
       ((MPSTensor.transferMap (d := r) (D := D) K) ^ p) (μ ^ p) := by
     simpa [hE_eq] using hμ_eig.pow p
-  have hμp_norm : ‖μ ^ p‖ = 1 := norm_pow_eq_one_of_norm_eq_one hμ_norm p
+  have hμp_norm : ‖μ ^ p‖ = 1 := by
+    simp [norm_pow, hμ_norm]
   exact ⟨p, hp_pos, hPrimP.unique_peripheral (μ ^ p) hμp_eig hμp_norm⟩
 
-/-- Channel-level wrapper for `compl_eigenvalue_norm_lt_one_of_primitive`.
+/-- Channel-level formulation for `compl_eigenvalue_norm_lt_one_of_primitive`.
 
 For an irreducible channel, the auxiliary hypotheses needed by the general
-spectral-gap lemma are automatic: channel eigenvalues have norm at most `1`,
+complementary-gap lemma are automatic: channel eigenvalues have norm at most `1`,
 and trace-zero fixed points vanish by irreducibility. -/
 theorem compl_eigenvalue_norm_lt_one_of_primitive_of_irreducible_channel
     [NeZero D]
@@ -192,8 +193,8 @@ theorem compl_eigenvalue_norm_lt_one_of_primitive_of_irreducible_channel
     (htr : Matrix.trace ρ ≠ 0)
     (hPrim : IsPrimitive E)
     (ν : ℂ) (hν : Module.End.HasEigenvalue (E - fixedPointProj ρ htr) ν) :
-    ‖ν‖ < 1 := by
-  exact _root_.compl_eigenvalue_norm_lt_one_of_primitive
+    ‖ν‖ < 1 :=
+  _root_.compl_eigenvalue_norm_lt_one_of_primitive
     (E := E) (ρ := ρ) hρ_fix hρ_ne htr hE.tp hPrim
     (fun μ hμ => hE.eigenvalue_norm_le_one μ hμ)
     (fun X hXfix htrX =>

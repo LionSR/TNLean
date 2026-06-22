@@ -11,7 +11,7 @@ import Mathlib.LinearAlgebra.Matrix.ToLin
 /-!
 # Manufacturing a rank-one matrix in the range of two-sided multiplication
 
-This file provides a small helper lemma used in the rank-one step of the Wielandt proof:
+This file proves a lemma used in the rank-one step of the Wielandt proof:
 
 If a column vector `φ` lies in the range of left-multiplication by `P` (as a linear map on
 vectors), and a row vector `ψ` lies in the range of right-multiplication by `Q` (again as a
@@ -40,18 +40,8 @@ theorem vecMulVec_mem_range_mulLeft_mulRight
   have hz' : z ᵥ* Q = ψ := by
     simpa [Matrix.vecMulLinear_apply] using hz
   -- Witness `X := Matrix.vecMulVec y z`.
-  refine (LinearMap.mem_range).2 ?_
-  refine ⟨Matrix.vecMulVec y z, ?_⟩
-  -- Compute `P * (X * Q)` as a rank-one matrix.
-  calc
-    ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) (Matrix.vecMulVec y z)
-        = P * (Matrix.vecMulVec y z * Q) := by
-          simp [LinearMap.comp_apply]
-    _ = P * Matrix.vecMulVec y (z ᵥ* Q) := by
-          simp [Matrix.vecMulVec_mul]
-    _ = Matrix.vecMulVec (P *ᵥ y) (z ᵥ* Q) := by
-          simp [Matrix.mul_vecMulVec]
-    _ = Matrix.vecMulVec φ ψ := by
-          simp [hy', hz']
+  simpa [LinearMap.comp_apply, Matrix.vecMulVec_mul, Matrix.mul_vecMulVec, hy', hz'] using
+    LinearMap.mem_range_self
+      ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) (Matrix.vecMulVec y z)
 
 end MPSTensor

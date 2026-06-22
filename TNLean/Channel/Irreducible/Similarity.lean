@@ -53,9 +53,11 @@ private lemma supportProj_eq_mul_supportInv
   set invEig : Fin D → ℂ := fun i =>
     if 0 < hH.eigenvalues i then ↑(1 / hH.eigenvalues i) else 0
   have hUU : Uᴴ * U = 1 := by
-    simpa [U] using (eig_conj_mul (D := D) (hM := hH))
+    simpa [U, Matrix.star_eq_conjTranspose] using
+      Matrix.UnitaryGroup.star_mul_self hH.eigenvectorUnitary
   have hρ_spec : ρ = U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ := by
-    simpa [U] using (spectral_decomp_eq (D := D) (M := ρ) hH)
+    simpa [U, Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose,
+      Function.comp_def] using hH.spectral_theorem
   have hP_def : supportProj (D := D) ρ hρ = U * Matrix.diagonal sgn * Uᴴ := by
     simp [supportProj, U, sgn]
   have hS_def : supportInv (D := D) ρ hρ = U * Matrix.diagonal invEig * Uᴴ := by
@@ -140,8 +142,7 @@ private lemma not_posDef_of_conj_projection_ne_one
     apply hij
     have hw_i := congrFun hw i
     simpa [w, Matrix.mulVec, dotProduct, Pi.single_apply, Finset.sum_ite_eq'] using hw_i
-  have hQ1Q : Q * (1 - Q) = 0 := by
-    rw [mul_sub, mul_one, hQ.2, sub_self]
+  have hQ1Q : Q * (1 - Q) = 0 := IsIdempotentElem.mul_one_sub_self hQ.2
   have hQw : Q *ᵥ w = 0 := by
     ext a
     simpa [w, Matrix.mulVec, dotProduct, Matrix.mul_apply,
@@ -171,6 +172,11 @@ private lemma not_posDef_of_conj_projection_ne_one
 /-- **Wolf Proposition 6.6 (Similarity preserves irreducibility)**:
 if `E` is an irreducible CP map and `C` is an invertible matrix, then
 `X ↦ C⁻¹ * E (C * X * Cᴴ) * (Cᴴ)⁻¹` is also irreducible.
+
+In Wolf's notation (Eq. 6.34):
+`T'(·) := c C⁻¹ T(C · C†) C⁻†` is irreducible whenever `T` is irreducible,
+`c > 0`, and `C` is invertible. Our version covers the invertible-matrix case
+(the scalar factor `c` is handled by `isIrreducibleMap_full_similarity` below).
 
 The proof shows that any invariant projection `Q` for the similarity transform
 gives rise to a projection `P = supportProj(CQCᴴ)` that is invariant for `E`;
@@ -346,8 +352,8 @@ theorem isIrreducibleMap_similarity_smul
     {C : Matrix (Fin D) (Fin D) ℂ} (hC : C.det ≠ 0)
     {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hIrr : IsIrreducibleMap E) :
-    IsIrreducibleMap (c • similarityMap (D := D) C E) := by
-  exact isIrreducibleMap_smul hc (isIrreducibleMap_similarity (D := D) hC hIrr)
+    IsIrreducibleMap (c • similarityMap (D := D) C E) :=
+  isIrreducibleMap_smul hc (isIrreducibleMap_similarity (D := D) hC hIrr)
 
 /-- Wolf Proposition 6.6 in the paper's scalar-normalized form (`c > 0`). -/
 theorem isIrreducibleMap_full_similarity
@@ -355,5 +361,5 @@ theorem isIrreducibleMap_full_similarity
     {C : Matrix (Fin D) (Fin D) ℂ} (hC : C.det ≠ 0)
     {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hIrr : IsIrreducibleMap E) :
-    IsIrreducibleMap ((c : ℂ) • similarityMap (D := D) C E) := by
-  exact isIrreducibleMap_similarity_smul (D := D) (by exact_mod_cast hc.ne') hC hIrr
+    IsIrreducibleMap ((c : ℂ) • similarityMap (D := D) C E) :=
+  isIrreducibleMap_similarity_smul (D := D) (by exact_mod_cast hc.ne') hC hIrr

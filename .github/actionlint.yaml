@@ -1,0 +1,10 @@
+# actionlint configuration.
+#
+# Generated workflow lock files (the `gh aw compile` output of gh-aw) carry a
+# "DO NOT EDIT" header and embed gh-aw extensions (e.g. `concurrency.queue`)
+# plus generated shell that actionlint/shellcheck flag. They are validated by
+# the gh-aw compiler, not by us, so exclude them from actionlint.
+paths:
+  "**/*.lock.yml":
+    ignore:
+      - ".*"

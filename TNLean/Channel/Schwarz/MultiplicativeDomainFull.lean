@@ -30,7 +30,7 @@ namespace KadisonSchwarz
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-section Helpers
+section AuxiliaryLemmas
 
 @[simp] theorem krausMap_add (K : Fin d → Mat) (X Y : Mat) :
     krausMap K (X + Y) = krausMap K X + krausMap K Y := by
@@ -44,15 +44,7 @@ section Helpers
     krausMap K (μ • X) = μ • krausMap K X := by
   simp [krausMap, Finset.smul_sum, mul_assoc]
 
-theorem krausMap_conjTranspose (K : Fin d → Mat) (X : Mat) :
-    krausMap K Xᴴ = (krausMap K X)ᴴ := by
-  simp [krausMap, conjTranspose_sum, conjTranspose_mul, mul_assoc]
-
-theorem conjTranspose_krausMap (K : Fin d → Mat) (X : Mat) :
-    (krausMap K X)ᴴ = krausMap K Xᴴ := by
-  rw [krausMap_conjTranspose]
-
-end Helpers
+end AuxiliaryLemmas
 
 section Definitions
 
@@ -238,31 +230,31 @@ theorem conjTranspose_mem_leftMultiplicativeDomain (K : Fin d → Mat) {X : Mat}
   simpa [conjTranspose_krausMap, mul_assoc] using h
 
 theorem zero_mem_multiplicativeDomain (K : Fin d → Mat) :
-    (0 : Mat) ∈ multiplicativeDomain K := by
-  exact ⟨zero_mem_rightMultiplicativeDomain K, zero_mem_leftMultiplicativeDomain K⟩
+    (0 : Mat) ∈ multiplicativeDomain K :=
+  ⟨zero_mem_rightMultiplicativeDomain K, zero_mem_leftMultiplicativeDomain K⟩
 
 theorem add_mem_multiplicativeDomain (K : Fin d → Mat) {X Y : Mat}
     (hX : X ∈ multiplicativeDomain K) (hY : Y ∈ multiplicativeDomain K) :
-    X + Y ∈ multiplicativeDomain K := by
-  exact ⟨add_mem_rightMultiplicativeDomain (K := K) hX.1 hY.1,
+    X + Y ∈ multiplicativeDomain K :=
+  ⟨add_mem_rightMultiplicativeDomain (K := K) hX.1 hY.1,
     add_mem_leftMultiplicativeDomain (K := K) hX.2 hY.2⟩
 
 theorem mul_mem_multiplicativeDomain (K : Fin d → Mat) {X Y : Mat}
     (hX : X ∈ multiplicativeDomain K) (hY : Y ∈ multiplicativeDomain K) :
-    X * Y ∈ multiplicativeDomain K := by
-  exact ⟨mul_mem_rightMultiplicativeDomain (K := K) hX.1 hY.1,
+    X * Y ∈ multiplicativeDomain K :=
+  ⟨mul_mem_rightMultiplicativeDomain (K := K) hX.1 hY.1,
     mul_mem_leftMultiplicativeDomain (K := K) hX.2 hY.2⟩
 
 theorem one_mem_multiplicativeDomain (K : Fin d → Mat)
     (h_unital : IsUnitalKraus K) :
-    (1 : Mat) ∈ multiplicativeDomain K := by
-  exact ⟨one_mem_rightMultiplicativeDomain (K := K) h_unital,
+    (1 : Mat) ∈ multiplicativeDomain K :=
+  ⟨one_mem_rightMultiplicativeDomain (K := K) h_unital,
     one_mem_leftMultiplicativeDomain (K := K) h_unital⟩
 
 theorem conjTranspose_mem_multiplicativeDomain (K : Fin d → Mat) {X : Mat}
     (hX : X ∈ multiplicativeDomain K) :
-    Xᴴ ∈ multiplicativeDomain K := by
-  exact ⟨conjTranspose_mem_rightMultiplicativeDomain (K := K) hX.2,
+    Xᴴ ∈ multiplicativeDomain K :=
+  ⟨conjTranspose_mem_rightMultiplicativeDomain (K := K) hX.2,
     conjTranspose_mem_leftMultiplicativeDomain (K := K) hX.1⟩
 
 noncomputable def rightMultiplicativeDomainSubalgebra (K : Fin d → Mat)
@@ -343,7 +335,6 @@ noncomputable def krausMapStarAlgHom (K : Fin d → Mat)
     commutes' := fun μ => by
       change krausMap K (↑(algebraMap ℂ (↥S) μ)) = (algebraMap ℂ Mat) μ
       have : (↑(algebraMap ℂ (↥S) μ) : Mat) = μ • (1 : Mat) := by
-        change (algebraMap ℂ (↥S) μ : Mat) = μ • (1 : Mat)
         simp [Algebra.algebraMap_eq_smul_one]
       rw [this, krausMap_smul, krausMap_one_of_unital K h_unital, Algebra.algebraMap_eq_smul_one]
     map_star' := fun X => by

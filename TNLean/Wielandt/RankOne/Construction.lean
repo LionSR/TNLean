@@ -12,7 +12,8 @@ import Mathlib.Data.List.FinRange
 /-!
 # Rank-one construction (reductions)
 
-`TNLean/Wielandt/SpanGrowth/VectorToMatrixSpan.lean` already proves the **assembly step** of
+`TNLean/Wielandt/SpanGrowth/VectorToMatrixSpan.lean` already proves the
+**vector-to-matrix spanning step** of
 Wielandt Lemma 2(b): if
 
 * word products of length `n` applied to a vector `φ` span all of `ℂ^D`, and
@@ -131,7 +132,7 @@ theorem IsNBlkInjective_transposeTensor
         (fun M : Matrix (Fin D) (Fin D) ℂ => Mᵀ) ''
             Set.range (fun σ : Fin N → Fin d => evalWord A (List.ofFn σ)) =
           Set.range fun σ : Fin N → Fin d => (evalWord A (List.ofFn σ))ᵀ := by
-      simpa [Function.comp] using
+      simpa [Function.comp_def] using
         (Set.range_comp (fun M : Matrix (Fin D) (Fin D) ℂ => Mᵀ)
           (fun σ : Fin N → Fin d => evalWord A (List.ofFn σ))).symm
     simp [e, hrange']
@@ -206,7 +207,7 @@ theorem cumulativeSpan_transposeTensor_eq_top_of_cumulativeSpan_eq_top
 /-! ## Row spreading: right action on row vectors -/
 
 /-- The linear map `M ↦ ψ ᵥ* M` for a fixed row vector `ψ`. -/
-def vecMulLinearMap (ψ : Fin D → ℂ) :
+noncomputable def vecMulLinearMap (ψ : Fin D → ℂ) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] (Fin D → ℂ) :=
   { toFun := fun M => Matrix.vecMul ψ M
     map_add' := fun M N => by
@@ -221,7 +222,7 @@ This is the row-analogue of `vectorSpreadSpan A φ n`.
 
 We keep it as a separate definition because `vectorSpreadSpan` uses `mulVec`
 (left action), while here we need `vecMul` (right action). -/
-def rowSpreadSpan (A : MPSTensor d D) (ψ : Fin D → ℂ) (n : ℕ) :
+noncomputable def rowSpreadSpan (A : MPSTensor d D) (ψ : Fin D → ℂ) (n : ℕ) :
     Submodule ℂ (Fin D → ℂ) :=
   Submodule.span ℂ (Set.range fun σ : Fin n → Fin d =>
     Matrix.vecMul ψ (evalWord A (List.ofFn σ)))
@@ -292,7 +293,7 @@ theorem map_wordSpan_eq_rowSpreadSpan
       (Set.range fun σ : Fin n → Fin d => Matrix.vecMul ψ (evalWord A (List.ofFn σ))) =
         (fun M : Matrix (Fin D) (Fin D) ℂ => Matrix.vecMul ψ M) ''
           (Set.range fun σ : Fin n → Fin d => evalWord A (List.ofFn σ)) := by
-    simpa [Function.comp] using
+    simpa [Function.comp_def] using
       (Set.range_comp (fun M : Matrix (Fin D) (Fin D) ℂ => Matrix.vecMul ψ M)
         (fun σ : Fin n → Fin d => evalWord A (List.ofFn σ)))
   simp [hrange]
@@ -331,8 +332,9 @@ theorem rowSpreadSpan_eq_top_of_cumulativeSpan_eq_top_of_eigenvector_transpose
   classical
   have hrow :
       rowSpreadSpan A ψ (D - 1) = vectorSpreadSpan (transposeTensor A) ψ (D - 1) := by
-    simpa [transposeTensor] using
-      (rowSpreadSpan_eq_vectorSpreadSpan_transpose (A := A) (ψ := ψ) (n := D - 1))
+    change rowSpreadSpan A ψ (D - 1) =
+      vectorSpreadSpan (fun i => (A i)ᵀ) ψ (D - 1)
+    exact rowSpreadSpan_eq_vectorSpreadSpan_transpose (A := A) (ψ := ψ) (n := D - 1)
   have hCumT : cumulativeSpan (transposeTensor A) N = ⊤ :=
     cumulativeSpan_transposeTensor_eq_top_of_cumulativeSpan_eq_top (A := A) hCum
   have hcum : cumulativeVectorSpan (transposeTensor A) ψ (D - 1) = ⊤ := by
@@ -391,11 +393,12 @@ theorem vecMulVec_pi_single_mem_wordSpan_of_rankOne
   -- Substitute the chosen `M` so that `ψ ᵥ* M = e_j`.
   simpa [hcalc, hvec] using hprod
 
-/-- **(Optional assembly)** If `vectorSpreadSpan A φ n = ⊤`, and one can build a
+/-- **Rank-one reduction** If `vectorSpreadSpan A φ n = ⊤`, and one can build a
 single rank-one element `|φ⟩⟨ψ|` inside `wordSpan A m` together with a row
 spreading statement `rowSpreadSpan A ψ k = ⊤`, then `wordSpan A (n + (m+k)) = ⊤`.
 
-This composes the reduction above with the assembly lemma from `SpanGrowth/VectorToMatrixSpan.lean`.
+This composes the reduction above with the vector-to-matrix spanning lemma from
+`SpanGrowth/VectorToMatrixSpan.lean`.
 -/
 theorem wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOne
     (A : MPSTensor d D) (φ ψ : Fin D → ℂ) {n m k : ℕ}
@@ -408,7 +411,7 @@ theorem wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOne
       Matrix.vecMulVec φ (Pi.single j (1 : ℂ)) ∈ wordSpan A (m + k) :=
     vecMulVec_pi_single_mem_wordSpan_of_rankOne (A := A) (φ := φ) (ψ := ψ)
       (m := m) (k := k) hRankOne hRow
-  -- Then apply the existing assembly lemma.
+  -- Then apply the existing vector-to-matrix spanning lemma.
   simpa [Nat.add_assoc] using
     (wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOneBasis
       (A := A) (φ := φ) (n := n) (m := m + k) hVec hRankOneBasis)

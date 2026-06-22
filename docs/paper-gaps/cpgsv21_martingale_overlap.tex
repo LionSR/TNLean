@@ -1,0 +1,361 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The Martingale Principal-Angle Estimate for MPS Parent Hamiltonians}
+\author{}
+\date{2026-06-04}
+
+\begin{document}
+\maketitle
+
+\section{The source assertion}
+
+The martingale-method paragraph in Cirac--Perez-Garcia--Schuch--Verstraete 2021
+can be compared with the quantitative estimate isolated in the formal
+parent-Hamiltonian proof.\footnote{For
+    traceability, the finite-row reduction is recorded in
+    \href{https://github.com/LionSR/TNLean/issues/1044}{issue \#1044}. The remaining
+    quantitative estimate is recorded in
+    \href{https://github.com/LionSR/TNLean/issues/952}{issue \#952}, and the broader
+    parent-Hamiltonian theorem in
+    \href{https://github.com/LionSR/TNLean/issues/460}{issue \#460}.}
+The relevant source passage is the discussion of gaps for MPS parent Hamiltonians
+in \cite[Section~IV.C]{Cirac2021Matrix}, where the local paragraph
+\path{sec:4:hams-gaps} develops the inequalities labelled
+\path{eq:4:martingale-1} and \path{eq:4:martingale-2}.
+
+Let
+\[
+    H=\sum_i h_i
+\]
+be a frustration-free Hamiltonian whose local terms are projections. The
+source recalls that a gap lower bound $\gamma>0$ is equivalent, at the
+quadratic-form level, to
+\[
+    H^2\ge \gamma H.
+\]
+Since $h_i^2=h_i$, the expansion of $H^2$ separates diagonal terms,
+overlapping products, and non-overlapping products. The non-overlapping
+products are treated as non-negative. Thus it is enough to control each
+overlapping pair by an anticommutator estimate
+\begin{equation}
+    h_i h_j+h_j h_i
+    \ge -c_{ij}(1-\gamma)(h_i+h_j),
+    \tag{\path{eq:4:martingale-2}}
+\end{equation}
+where the coefficients $c_{ij}$ are chosen so that the contributions in each
+row add up to one. The formal row-sum algebra uses the slightly more flexible
+condition that, for each fixed $i$, the sum of the coefficients attached to
+terms overlapping $h_i$ is at most one.
+
+The same paragraph interprets this estimate as a lower bound on the minimum
+non-zero angle between the ground spaces of overlapping regions. It then cites
+the martingale method and the MPS parent-Hamiltonian results of
+Fannes--Nachtergaele--Werner and Nachtergaele, together with the later
+Kastoryano--Lucia formulation, for the conclusion that MPS parent Hamiltonians
+have a uniform positive spectral gap after a suitable blocking
+\cite{Fannes1992Finitely,Nachtergaele1996Spectral,Kastoryano2018Martingale}.
+In the convention of this note, the Kastoryano--Lucia formulation cited there
+is the estimate for
+\begin{align}
+    \delta(\ell):=\|q_i q_j-P\|,
+\end{align}
+where $q_i$ and $q_j$ are the projectors onto the ground spaces
+$\ker h_i$ and $\ker h_j$, $P$ is the projector onto
+$\ker h_i\cap\ker h_j=\ker(h_i+h_j)$, and $\ell$ is the size of the
+overlap region. The review writes the displayed product with the symbols
+$h_i,h_j$; in the convention fixed above, those symbols must be read as the
+ground-space projectors $q_i,q_j$, not as the excitation projections $h_i$ used
+in \path{eq:4:martingale-2}. If one inserted the excitation projections into
+$\|h_ih_j-P\|$, the norm would be at least one on the common ground space. With
+the ground-space projectors, the cited result states that $\delta(\ell)$ decays
+exponentially with universal constants whenever the frustration-free
+Hamiltonian is gapped, and that this implies the martingale condition because
+both quantities depend only on the principal angles between
+$\ker h_i$ and $\ker h_j$.
+The review text does not spell out the numerical constants or the precise
+finite cyclic blocking convention needed for the formal statement below.
+In particular, the intersection identity
+\[
+    \ker h_i\cap\ker h_j=\ker(h_i+h_j)
+\]
+identifies the common local ground space, but it is not a substitute for the
+quantitative principal-angle estimate.
+
+The source route that has to be matched is more precise than the review
+paragraph. Kastoryano--Lucia define, for finite regions $A$ and $B$,
+\[
+    \delta(A,B)
+      =\|(P_A-P_{A\cup B})(P_B-P_{A\cup B})\|
+      =\|P_A P_B-P_{A\cup B}\|
+\]
+under frustration-freeness, and identify this with the cosine of the first
+principal angle between the two reduced ground-space projectors
+\cite[Definition~2 and Remark~2]{Kastoryano2018Martingale}. Nachtergaele's
+martingale hypotheses C3 and C3$'$ instead use the projection estimates
+\[
+    \|G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}E_n\|\le\varepsilon_l,
+    \qquad
+    \|G_{\Lambda_{n+p}\setminus\Lambda_{n-l}}E_n^{(p)}\|\le\eta_l,
+\]
+with thresholds $\varepsilon_l<1/\sqrt{l+1}$ and
+$\eta_l<1/\sqrt{2}$, and Theorem~3 gives the corresponding gap lower bounds
+\cite[Equations~(2.4)--(2.5) and Theorem~3]{Nachtergaele1996Spectral}. In
+Section~6, Nachtergaele proves the GVBS/MPS gap by verifying C3$'$ using the
+projection estimates inherited from Fannes--Nachtergaele--Werner
+\cite[Section~6]{Nachtergaele1996Spectral}. The remaining formal task is to
+convert one of these source estimates to the cyclic-window inequality used
+below, with constants in the same blocking convention.
+
+\section{Finite-row martingale reduction}
+
+The current development separates the finite-row martingale algebra from the
+remaining MPS-specific principal-angle estimate. Fix an interaction range
+$L>1$ and an $N$-site periodic chain with $N\ge 2L$. Let $p_i$ denote the
+Hilbert-space representative of the length-$L$ local parent-Hamiltonian
+projection at the cyclic window starting at $i$. Write $i\sim_L j$ when the two
+length-$L$ cyclic windows intersect and $i\ne j$.
+For each fixed $i$, the number of indices $j$ with $i\sim_L j$ is at most
+\[
+    m=2(L-1).
+\]
+The row-sum reduction specializes the source coefficients to
+\[
+    c_{ij}=\frac{1}{2(L-1)}
+\]
+for overlapping cyclic windows and to $0$ otherwise. The row-cardinality bound
+then gives $\sum_j c_{ij}\le 1$.
+
+With this choice, the constant in the local statement is
+\[
+    \gamma_L=\frac{1}{4L}.
+\]
+The ordered overlapping estimate sufficient for the gap bound is
+\begin{equation}
+    \operatorname{Re}\langle p_i v,p_j v\rangle
+    \ge
+    -\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}
+    \operatorname{Re}\langle p_i v,v\rangle
+    \tag{F}
+\end{equation}
+for every $N\ge 2L$, every off-diagonal overlapping pair $i\sim_L j$, and every
+vector $v$ in the finite chain Hilbert space. Given this estimate, the already
+formalized row-sum argument proves $H_{N,L}^2\ge \gamma_L H_{N,L}$, and hence a
+norm lower bound with constant $\gamma_L$ on the orthogonal complement of the
+ground space.
+
+The proof also isolates a sufficient norm-compression form of the same
+input:
+\begin{equation}
+    \|p_i p_j v\|
+    \le
+    \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}
+    \|p_i v\|.
+    \tag{N}
+\end{equation}
+For a symmetric projection $p_i$ one has
+\[
+    \operatorname{Re}\langle p_i v,p_j v\rangle
+    =\operatorname{Re}\langle p_i v,p_i p_j v\rangle
+    \ge -\|p_i v\| \|p_i p_j v\|.
+\]
+Thus (N), together with $\operatorname{Re}\langle p_i v,v\rangle=\|p_i v\|^2$,
+implies (F). This is a sufficient projection-geometry comparison used in the
+proof: a norm-compression estimate for each overlapping pair is converted
+by Cauchy--Schwarz to the ordered cross-term estimate, and the finite row-sum
+argument converts those ordered estimates into the global gap bound. The Lean
+development also records the source anticommutator row-sum reduction directly,
+without passing through this stronger one-sided estimate.\footnote{The
+    current formal anchors include the anticommutator row-sum reductions
+    \leanid{crossTerm_sum_bound_of_anticommutator_rowCol},
+    \leanid{quadraticForm_sum_projections_of_anticommutator_rowCol}, and
+    \leanid{parentHamiltonianES_gap_bound_of_anticommutator_local_term_bounds}.
+    The finite-overlap anticommutator reductions are
+    \leanid{quadraticForm_sum_projections_of_finite_overlap_anticommutator},
+    \leanid{parentHamiltonianES_gap_bound_of_finite_overlap_anticommutator}, and
+    \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator}.
+    The corresponding final gap statements are
+    \leanid{parentHamiltonianES_gap_bound_of_anticommutator} and
+    \leanid{parentHamiltonian_gapped_of_anticommutator} in
+    \path{TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean}.
+    The cyclic-window compression reductions are
+    \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_ordered_cross_term},
+    \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound},
+    and
+    \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_le}
+    in \path{TNLean/MPS/ParentHamiltonian/Martingale/Reduction.lean}. The
+    corresponding constant-$\eta$ reductions are
+    \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_lt}
+    in the same file and
+    \leanid{parentHamiltonianES_gap_bound_of_overlap_norm_constant},
+    \leanid{parentHamiltonian_gapped_of_overlap_norm_constant} in
+    \path{TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean}. The
+    projection-geometry reductions used by these statements are in
+    \path{TNLean/Analysis/ProjectionGeometry.lean}. The declaration names
+    identify the intermediate ordered cross-term estimate and the sufficient
+    norm-compression estimates; this note uses ``anticommutator estimate'' for
+    the source condition and ``norm compression'' for the local sufficient
+    strengthening.}
+
+The anticommutator row-sum formulation, including its finite-overlap
+cyclic-window specialization, is now the formal condition matching the source.
+The flexible constant formulation records a sufficient norm-compression variant:
+instead of requiring the special coefficient in (N), it assumes that for some
+$\eta\ge 0$,
+\begin{equation}
+    \eta\,2(L-1)<1
+    \tag{E}
+\end{equation}
+and that every overlapping cyclic-window pair satisfies
+\begin{equation}
+    \|p_i p_j v\|\le \eta\|p_i v\|.
+    \tag{N$_\eta$}
+\end{equation}
+The finite-row argument then gives a positive gap with lower bound
+$1-\eta\,2(L-1)$. The special displayed estimate (N) is one sufficient choice
+of $\eta$, but the source comparison need only supply a compression constant
+strictly smaller than $1/(2(L-1))$ for the blocking convention used here.
+
+\section{What remains to compare}
+
+The source discussion and the formal theorem are aligned at the qualitative
+level: both use the martingale expansion, non-negativity of non-overlapping
+terms, row-sum coefficients for overlapping terms, and principal-angle estimates
+for local ground spaces. The point still requiring a mathematical check is
+quantitative and conventional.
+
+First, the source-matching formal theorem asks for the cyclic-window
+anticommutator estimate
+\[
+    p_i p_j+p_jp_i
+    \ge
+    -\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}(p_i+p_j)
+\]
+for overlapping off-diagonal pairs. The review text states the same martingale
+condition with general coefficients $c_{ij}$ whose rows add to one, and it
+refers to blocking and principal angles to obtain a positive gap. It does not by
+itself identify the Fannes--Nachtergaele--Werner, Nachtergaele, or
+Kastoryano--Lucia estimates with this coefficient and this fixed cyclic-window
+convention. A proof may instead derive a row-sum anticommutator estimate with
+different positive constants and then specialize the final gap constant
+accordingly.
+
+Second, the blocking parameter in the cited martingale argument must be matched
+with the formal convention. The formal statement is uniform for all $N\ge 2L$
+and for the length-$L$ cyclic windows used in the formal finite-chain
+Hilbert-space realization. A source proof that produces some positive gap after
+increasing or changing the blocking may still be mathematically sufficient for the
+existential MPS gap theorem, but it would not immediately be the displayed
+all-$L$ estimate with constant $1/(4L)$ unless the constants are converted to
+the same blocking convention.
+
+Consequently the remaining comparison is not whether the row-sum algebra is
+valid; that part has been isolated and formalized. The remaining comparison is
+whether the cited FNW--Nachtergaele--Kastoryano principal-angle estimates supply
+the required cyclic-window anticommutator estimate, with constants independent
+of the chain length, after the same blocking convention has been fixed.
+The qualitative fact that two finite-dimensional subspaces have a well-defined
+principal-angle decomposition is not enough: the martingale reduction needs a
+uniform numerical bound after the same blocking convention has been fixed.
+
+The norm-compression route remains available as a stronger sufficient target:
+any estimate (N$_\eta$) with $\eta\,2(L-1)<1$ gives a positive gap through the
+already formalized reduction. There is, however, a directional point. If
+(N$_\eta$) is imposed for all vectors
+$v$, then $p_i v=0$ implies $p_i p_j v=0$. Thus $p_j$ maps $\ker p_i$ into
+$\ker p_i$. This is stronger than merely knowing that the
+smallest non-zero principal angle between the two local ground spaces is
+positive. A proof using compression must therefore identify a principal-angle
+estimate that gives the directed compressed-product bound (N$_\eta$). A direct
+proof can instead target the anticommutator form
+\[
+    h_i h_j+h_jh_i\ge -c_{ij}(1-\gamma)(h_i+h_j)
+\]
+used in \cite[Section~IV.C]{Cirac2021Matrix}.
+
+\section{Relation to the blueprint}
+
+The blueprint item labelled \path{lem:martingale_mps} in
+\path{blueprint/src/chapter/ch13_parent_hamiltonian_spectral_gap.tex}
+separates the finite-row martingale reduction from the still-open quantitative
+estimate.
+It does not assert that the displayed all-$L>1$ cyclic-window bound has already
+been obtained from the cited principal-angle estimates. Instead, it records the
+source anticommutator estimate as the hypothesis of
+Theorem \path{thm:anticommutator_gap_bound}, and records norm-compression
+estimates as sufficient stronger hypotheses.
+
+The source-matching theorem entry
+\path{thm:anticommutator_gap_bound} points to
+\leanid{parentHamiltonianES_gap_bound_of_anticommutator} in
+\path{TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean}. Its hypothesis is the
+cyclic-window anticommutator lower bound with coefficient
+\[
+    \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}.
+\]
+The theorem entries
+\path{thm:overlap_norm_gap_bound} and
+\path{thm:overlap_norm_gap_bound_constant} point respectively to the special
+coefficient theorem and to the constant-$\eta$ theorem in
+\path{TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean}. The special coefficient
+theorem is the specialization of the constant-$\eta$ theorem with
+\[
+    \eta=\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)},
+    \qquad
+    1-\eta\,2(L-1)=\frac{1}{4L}.
+\]
+The two norm-compression theorem entries are therefore conditional on the same
+stronger input, specialized either to this displayed coefficient or to an
+arbitrary coefficient satisfying (E). Thus all finite-row, cyclic-window,
+non-overlap, anticommutator, norm-compression, and spectral-theorem reductions
+are proved, while the MPS-specific anticommutator estimate remains to be proved
+or matched precisely to the cited martingale estimates.
+
+Once the quantitative comparison with the cited martingale estimates is settled,
+the blueprint should say that the cyclic-window anticommutator estimate follows
+from those estimates under the convention used here. If the proof instead goes
+through norm compression, the blueprint should say explicitly that the
+compression bound (N$_\eta$) with $\eta\,2(L-1)<1$ is a stronger sufficient
+estimate implying the anticommutator route.
+
+\section{Conclusion}
+
+The conclusion is a difference between the review paragraph and the formal
+quantitative statement, with one mathematical comparison still to be made. The
+source states the martingale condition in terms of general row-sum coefficients
+and invokes principal-angle estimates to obtain a positive MPS parent-Hamiltonian
+gap. The formal proof contains the direct finite-overlap anticommutator
+reduction for cyclic windows, specializes the row coefficients to
+$c_{ij}=1/(2(L-1))$ on overlapping pairs, and leaves the remaining MPS-specific
+work as the source anticommutator estimate. It also records the stronger
+norm-compression route
+\[
+    \|p_i p_j v\|\le \eta\|p_i v\|,
+    \qquad
+    \eta\,2(L-1)<1.
+\]
+The earlier coefficient
+\[
+    \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}
+\]
+is a sufficient special case for this stronger route, not the only possible way
+to use the formal martingale reduction.
+
+The Cirac--Perez-Garcia--Schuch--Verstraete 2021 statement is not being
+challenged. The comparison records that the available formal argument is more
+explicit than the review paragraph: the exact constants and the cyclic-window
+blocking convention still have to be compared with the FNW, Nachtergaele, and
+Kastoryano--Lucia estimates.
+
+\textbf{Verdict:} open gap.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

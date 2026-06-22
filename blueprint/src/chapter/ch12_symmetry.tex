@@ -1,0 +1,1312 @@
+%% =========================================================
+%% Chapter: Symmetries and String Order
+%% Develops the symmetry-theoretic consequences of the MPS Fundamental
+%% Theorem: virtual gauges, projective bond representations, and
+%% string-order criteria for injective tensors.
+%% =========================================================
+
+\chapter{Symmetries and String Order}\label{ch:symmetry}
+
+This chapter collects the symmetry-theoretic consequences of the MPS
+Fundamental Theorem~\cite{PerezGarcia2007Matrix}, following the symmetry
+analysis of~\cite{PerezGarcia2008StringOrder}. For injective tensors,
+physical on-site symmetries determine virtual gauges, those gauges define
+projective representations on the bond space, and virtual intertwiners
+enter the string-order criteria.
+
+\section{Physical Symmetries Give Virtual Gauges}
+
+\begin{definition}[Physical-index rotation]%
+    \label{def:rotate_physical}
+    \lean{MPSTensor.rotatePhysical}
+    \leanok
+    \uses{def:mps_tensor}
+    Given a matrix $M \in \MN{d}$ and an MPS tensor~$A$,
+    the \emph{physical-index rotation} is the tensor
+    $(A_M)^i := \sum_j M_{ij}\, A^j$.
+    When the matrix is a unitary $u$, the rotation is written $A_u$.
+\end{definition}
+
+\begin{corollary}[Periodic symmetry yields gauge equivalence up to a root of unity]%
+    \label{cor:symmetry_periodic_assembly}
+    \lean{MPSTensor.zGaugeEquiv_of_isIrreducibleForm_sameMPV_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical, def:same_mpv}
+    Suppose that for any two tensors in irreducible form~II with the same MPV
+    family there is $m > 0$ making them gauge equivalent up to an $m$-th root of
+    unity. Let $A$ be in irreducible form~II and
+    let $M$ be a matrix such that $B := A_M$ is also in irreducible form~II and
+    $\mc{V}(A) = \mc{V}(B)$. Then there is $m > 0$ such that $A$ and~$B$ are
+    gauge equivalent up to an $m$-th root of unity.
+\end{corollary}
+
+\begin{proof}\leanok
+    Apply the assumed equivalence to $A$ and $B$, which are in irreducible
+    form~II with $\mc{V}(A) = \mc{V}(B)$.
+\end{proof}
+
+\section{Virtual Representation Theorem}\label{sec:injective_symmetry_cocycle}
+
+With a full group of on-site symmetries (rather than just a single
+unitary), the resulting gauges determine a projective representation
+on the bond space.
+
+\begin{definition}[Twisted tensor]\label{def:twisted_tensor}
+    \lean{MPSTensor.twistedTensor}
+    \leanok
+    \uses{def:mps_tensor}
+    Given a group representation $U : G \to \GL_{d}(\C)$ on the physical
+    index, the \emph{$g$-twisted tensor} is defined, for each
+    $i \in \{0,\ldots,d{-}1\}$, by
+    \[
+        \widetilde{A}_g^i :=  \sum_{j=0}^{d-1} U(g)_{ij}\, A^j.
+    \]
+\end{definition}
+
+\begin{definition}[On-site symmetry]\label{def:on_site_symmetric}
+    \lean{MPSTensor.IsOnSiteSymmetric}
+    \leanok
+    \uses{def:twisted_tensor, def:same_mpv}
+    A tensor $A$ is \emph{on-site symmetric} under a group
+    representation $U : G \to \GL_{d}(\C)$ if $\mc{V}(A) = \mc{V}(\widetilde{A}_g)$
+    for every $g \in G$.
+\end{definition}
+
+\begin{lemma}[Functoriality of twisting]\label{lem:twisted_tensor_mul}
+    \lean{MPSTensor.twistedTensor_mul}
+    \leanok
+    \uses{def:twisted_tensor}
+    The twisted tensor satisfies the composition law
+    \[
+        \widetilde{A}_{gh} =  \widetilde{(\widetilde{A}_h)}_g,
+    \]
+    i.e.\ twisting by $gh$ is the same as first twisting by~$h$
+    and then by~$g$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:twisted_tensor}
+    Expanding both sides using $U(gh) = U(g)\, U(h)$, then swapping
+    the order of summation.
+\end{proof}
+
+\begin{lemma}[Identity twist]\label{lem:twisted_tensor_one}
+    \lean{MPSTensor.twistedTensor_one}
+    \leanok
+    \uses{def:twisted_tensor}
+    Twisting by the identity group element is trivial:
+    $\widetilde{A}_1 = A$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:twisted_tensor}
+    Since $U(1) = \Id_d$, each component reduces to
+    $\sum_j \delta_{ij}\, A^j = A^i$.
+\end{proof}
+
+\begin{lemma}[Symmetric twists are gauge equivalent]%
+    \label{lem:gauge_equiv_twisted}
+    \lean{MPSTensor.gaugeEquiv_twistedTensor_of_injective}
+    \leanok
+    \uses{def:injective, def:on_site_symmetric}
+    If $A$ is injective and on-site symmetric under $U$, then
+    for every $g \in G$ the twisted tensor $\widetilde{A}_g$ is
+    gauge equivalent to~$A$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:on_site_symmetric, thm:ft_single}
+    On-site symmetry gives
+    $\mc{V}(A) = \mc{V}(\widetilde{A}_g)$, and the single-block
+    Fundamental Theorem turns this equality of MPV families into gauge
+    equivalence.
+\end{proof}
+
+\begin{remark}[Fundamental-Theorem route for injective symmetry]%
+    \label{rem:injective_symmetry_ft_route}
+    \uses{thm:ft_single, lem:gauge_equiv_twisted, lem:gauge_unique_up_to_scalar,
+        lem:twisted_tensor_mul, thm:virtual_rep_injective}
+    The injective virtual-representation theorem is not proved from string-order
+    rigidity. The on-site symmetry condition first identifies $A$ and
+    $\widetilde{A}_g$ as the same MPV family; the single-block Fundamental
+    Theorem gives the gauge in Lemma~\ref{lem:gauge_equiv_twisted}. Gauge
+    uniqueness and the twist composition law then give
+    Theorem~\ref{thm:virtual_rep_injective}. The string-order results later in
+    this chapter use this virtual representation as an input.
+\end{remark}
+
+\begin{theorem}[Virtual symmetry equation]\label{thm:virtual_symmetry_eq}
+    \lean{MPSTensor.virtual_symmetry_eq}
+    \leanok
+    \uses{def:injective, def:on_site_symmetric, lem:gauge_equiv_twisted}
+    If $A$ is injective and on-site symmetric under $U$, then
+    for every $g \in G$ there exist an invertible matrix $X(g) \in \GL_{D}(\C)$
+    and a nonzero scalar $\varphi(g) \in \C^{\times}$ (in fact $\varphi = 1$
+    in the single-block case) such that
+    $\widetilde{A}_g^{\,i} = \varphi(g)\, X(g)\, A^i\, X(g)^{-1}$ for all~$i$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{lem:gauge_equiv_twisted}
+    The physical action is transferred to the virtual level by the same
+    local move that replaces the twisted tensor by a gauge-conjugated one:
+    % Use a physical-leg operator insertion for the
+    % linear twist \widetilde{A}_g^{\,i} = \sum_j U(g)_{ij}\, A^j rather
+    % than the relabelling-only permutation-twist glyph.
+    \begin{center}
+        \TNLinearTwist{U(g)}{i}
+        \qquad $\leadsto$ \qquad
+        \TNGaugeConjugation{X(g)}{i}{X(g)^{-1}}
+    \end{center}
+    Apply Lemma~\ref{lem:gauge_equiv_twisted} to obtain $X(g)$, then
+    set $\varphi(g) = 1$.
+\end{proof}
+
+\begin{lemma}[Gauge uniqueness up to scalar]\label{lem:gauge_unique_up_to_scalar}
+    \lean{MPSTensor.gauge_unique_up_to_scalar}
+    \leanok
+    \uses{def:injective, def:gauge_equiv, lem:center_scalar}
+    Let $A$ be an injective tensor.
+    If $X, Y \in \GL_{D}(\C)$ both satisfy
+    $B^i = X\, A^i\, X^{-1} = Y\, A^i\, Y^{-1}$
+    for all~$i$, then there exists a nonzero scalar $u \in \C^{\times}$
+    such that $Y = u \cdot X$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:injective, lem:center_scalar}
+    The matrix $Z = Y^{-1} X$ commutes with every $A^i$.
+    Since $A$ is injective, $\{A^i\}$ spans $\MN{D}$, so $Z$
+    lies in the centre of $\MN{D}$.
+    By Lemma~\ref{lem:center_scalar}, $Z$ is a scalar matrix.
+    Since $Z$ is invertible, that scalar is nonzero, and
+    $Y = u \cdot X$.
+\end{proof}
+
+\begin{theorem}[Gauge uniqueness from equality of MPV families]
+    \label{thm:gauge_unique_up_to_scalar_sameMPV}
+    \lean{MPSTensor.gauge_unique_up_to_scalar_of_sameMPV}
+    \leanok
+    \uses{def:injective, def:same_mpv}
+    Let $A$ be an injective tensor and assume that $A$ and $B$ generate the
+    same MPV family.
+    If $X, Y \in \GL_{D}(\C)$ both satisfy
+    $B^i = X\, A^i\, X^{-1} = Y\, A^i\, Y^{-1}$ for all $i$, then there is a
+    nonzero scalar $u \in \C^{\times}$ such that $Y = u \cdot X$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:gauge_unique_up_to_scalar}
+    This is exactly Lemma~\ref{lem:gauge_unique_up_to_scalar}; the extra MPV
+    hypothesis specifies the setting in which the two gauges are usually
+    produced.
+\end{proof}
+
+\begin{definition}[Scalar 2-cochain]\label{def:scalar_cocycle}
+    \lean{TNLean.Algebra.ScalarCocycle}
+    \leanok
+    A \emph{scalar 2-cochain} on a group $G$ is a function
+    $\omega : G \times G \to \C^{\times}$.
+\end{definition}
+
+\begin{definition}[Projective representation]\label{def:projective_rep}
+    \lean{TNLean.Algebra.ProjectiveRepresentation}
+    \leanok
+    \uses{def:scalar_cocycle}
+    Given a scalar 2-cochain $\omega$, a \emph{projective representation}
+    of $G$ on $\C^D$ is a map $\rho : G \to \GL_{D}(\C)$ satisfying, for all
+    $g,h \in G$,
+    \[
+        \rho(g)\, \rho(h) = \omega(g,h)\, \rho(gh).
+    \]
+\end{definition}
+
+\begin{lemma}[Associativity forces the cocycle condition]%
+    \label{lem:cocycle_of_assoc}
+    \lean{TNLean.Algebra.ProjectiveRepresentation.cocycle_of_assoc}
+    \leanok
+    \uses{def:projective_rep, def:scalar_cocycle}
+    If $\rho$ is a projective representation with factor system $\omega$
+    and $D > 0$, then $\omega$ satisfies the 2-cocycle identity:
+    \[
+        \omega(g, h)\, \omega(gh, k)
+        = \omega(g, hk)\, \omega(h, k).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:projective_rep}
+    Expanding $\rho(g)\,(\rho(h) \rho(k))$ and
+    $(\rho(g) \rho(h)) \rho(k)$ using the projective
+    multiplication law and equating via matrix associativity.
+    The hypothesis $D > 0$ allows cancellation of the
+    invertible matrix factor.
+\end{proof}
+
+\begin{theorem}[Virtual representation theorem for injective MPS]%
+    \label{thm:virtual_rep_injective}
+    \lean{MPSTensor.virtual_rep_of_symmetric_injective}
+    \leanok
+    \uses{def:injective, def:on_site_symmetric, def:projective_rep,
+        def:scalar_cocycle, lem:gauge_unique_up_to_scalar,
+        lem:twisted_tensor_mul}
+    Let $A$ be an injective MPS tensor that is on-site symmetric
+    under a group representation $U : G \to \GL_{d}(\C)$.
+    Then there exist:
+    \begin{enumerate}
+        \item a scalar 2-cochain
+              $\omega : G \times G \to \C^{\times}$, and
+        \item a map $\rho : G \to \GL_{D}(\C)$ satisfying, for all $g,h \in G$,
+              \[
+                  \rho(g)\, \rho(h) = \omega(g,h)\, \rho(gh).
+              \]
+    \end{enumerate}
+    such that, defining the gauge matrices $X(g) := \rho(g^{-1})$,
+    one has, for every $g \in G$ and $i \in \{0,\ldots,d{-}1\}$,
+    \[
+        \widetilde{A}_g^i =  X(g)\, A^i\, X(g)^{-1}.
+    \]
+    In tensor-network notation, for each fixed~$g$ this is the local gauge
+    relation
+    \begin{center}
+        \TNGaugeConjugation{X(g)}{i}{X(g)^{-1}}
+    \end{center}
+    with the black node denoting the tensor named in the surrounding
+    formula and the two red side nodes acting on the virtual legs.
+    In particular, $\rho$ is a projective representation of $G$ on the
+    bond space $\C^D$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:on_site_symmetric, lem:gauge_equiv_twisted,
+        lem:gauge_unique_up_to_scalar, lem:twisted_tensor_mul}
+    Since $A$ is injective and on-site symmetric, each twisted tensor
+    $\widetilde{A}_g$ is gauge equivalent to~$A$
+    (Lemma~\ref{lem:gauge_equiv_twisted}).
+    Choose $X(g) \in \GL_{D}(\C)$ with
+    $\widetilde{A}_g^i = X(g)\, A^i\, X(g)^{-1}$ for all~$i$.
+
+    By functoriality (Lemma~\ref{lem:twisted_tensor_mul}), the product
+    $X(h)\, X(g)$ also intertwines $A$ with $\widetilde{A}_{gh}$.
+    Since $X(gh)$ does the same, gauge uniqueness
+    (Lemma~\ref{lem:gauge_unique_up_to_scalar}) gives a nonzero scalar
+    $\omega'(h,g)$ with $X(h)\, X(g) = \omega'(h,g)\, X(gh)$.
+
+    Defining $\rho(g) := X(g^{-1})$ converts this to the standard law:
+    $\rho(g)\, \rho(h) = \omega(g,h)\, \rho(gh)$
+    where $\omega(g,h) := \omega'(h^{-1}, g^{-1})$.
+\end{proof}
+
+\begin{corollary}[2-cocycle identity for the factor system]%
+    \label{cor:virtual_rep_cocycle}
+    \lean{MPSTensor.virtual_rep_of_symmetric_injective_cocycle}
+    \leanok
+    \uses{thm:virtual_rep_injective, lem:cocycle_of_assoc}
+    If $D > 0$, the factor system $\omega$ from
+    Theorem~\ref{thm:virtual_rep_injective} satisfies the
+    2-cocycle identity for all $g,h,k \in G$:
+    \[
+        \omega(g, h)\, \omega(gh, k)
+        = \omega(g, hk)\, \omega(h, k).
+    \]
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{thm:virtual_rep_injective, lem:cocycle_of_assoc}
+    Theorem~\ref{thm:virtual_rep_injective} gives $\rho$ and $\omega$.
+    By Lemma~\ref{lem:cocycle_of_assoc}, the cocycle identity follows
+    from associativity of matrix multiplication and invertibility of
+    the representation matrices.
+\end{proof}
+
+\section{Cohomology Classes of Virtual Symmetry Cocycles}
+
+Two cocycles may differ by a coboundary yet represent the same
+projective-representation class. The following definitions and results
+make this precise and establish the quotient $H^2(G,\C^{\times})$.
+
+\begin{definition}[Coboundary]\label{def:is_coboundary}
+    \lean{TNLean.Algebra.ScalarCocycle.IsCoboundary}
+    \leanok
+    \uses{def:scalar_cocycle}
+    A scalar 2-cocycle $\omega$ is a \emph{coboundary} if there exists
+    $\varphi \colon G \to \C^{\times}$ such that, for all $g,h \in G$,
+    \[
+        \omega(g,h)
+        = \varphi(g) \varphi(h) \varphi(gh)^{-1}.
+    \]
+\end{definition}
+
+\begin{definition}[Cohomologous cocycles]\label{def:cohomologous_to}
+    \lean{TNLean.Algebra.ScalarCocycle.CohomologousTo}
+    \leanok
+    \uses{def:scalar_cocycle}
+    Two cocycles $\omega_1,\omega_2$ are \emph{cohomologous}
+    (written $\omega_1 \sim \omega_2$) if there exists
+    $\varphi \colon G \to \C^{\times}$ such that, for all $g,h \in G$,
+    \[
+        \omega_1(g,h)
+        = \varphi(g) \varphi(h) \varphi(gh)^{-1} \omega_2(g,h).
+    \]
+\end{definition}
+
+\begin{theorem}[Cohomology relation is an equivalence relation]%
+    \label{thm:cohomologous_equivalence}
+    \lean{TNLean.Algebra.ScalarCocycle.CohomologousTo.equivalence}
+    \leanok
+    \uses{def:cohomologous_to}
+    The relation ``cohomologous to'' is reflexive, symmetric, and
+    transitive on the set of scalar 2-cocycles.
+\end{theorem}
+
+\begin{proof}\leanok\uses{def:cohomologous_to}
+    Reflexivity: take $\varphi = 1$.
+    Symmetry: replace $\varphi$ by $\varphi^{-1}$.
+    Transitivity: compose the witnesses $\varphi$ and $\psi$ pointwise.
+\end{proof}
+
+\begin{lemma}[Coboundary iff cohomologous to the trivial cocycle]%
+    \label{lem:coboundary_iff_cohomologous_one}
+    \lean{TNLean.Algebra.ScalarCocycle.isCoboundary_iff_cohomologousTo_one}
+    \leanok
+    \uses{def:is_coboundary, def:cohomologous_to}
+    A cocycle $\omega$ is a coboundary if and only if
+    $\omega \sim \Id$, where $\Id(g,h) = 1$ for all $g,h$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:is_coboundary, def:cohomologous_to}
+    Both directions follow by absorbing or introducing the factor
+    $\Id(g,h) = 1$ via $x\cdot 1 = x$.
+\end{proof}
+
+\begin{theorem}[Gauge independence of the cocycle class]%
+    \label{thm:cocycle_gauge_independence}
+    \lean{MPSTensor.cohomologousTo_of_isInjective}
+    \leanok
+    \uses{thm:virtual_rep_injective, lem:gauge_unique_up_to_scalar,
+        def:cohomologous_to}
+    If the bond dimension satisfies $D \ge 1$ and two projective
+    representations $\rho_1,\rho_2$ (with cocycles
+    $\omega_1,\omega_2$) both arise as virtual representations of the
+    same injective MPS tensor $A$ under an on-site symmetry~$U$, then
+    $\omega_1 \sim \omega_2$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:virtual_rep_injective, lem:gauge_unique_up_to_scalar,
+        def:cohomologous_to}
+    For each $g$, gauge uniqueness gives a nonzero scalar $f(g)$ with
+    $X_2(g^{-1}) = f(g)\,X_1(g^{-1})$.
+    Equivalently, for each fixed $g$ the two local gauges
+    \begin{center}
+        \TNGaugeConjugation{X_1(g^{-1})}{i}{X_1(g^{-1})^{-1}}
+        \qquad and\qquad
+        \TNGaugeConjugation{X_2(g^{-1})}{i}{X_2(g^{-1})^{-1}}
+    \end{center}
+    describe the same twisted tensor, so they differ by a scalar.
+    Substituting into the projective law and cancelling $X_1(g\cdot h)$
+    yields
+    $\omega_2(g,h) = f(g)\,f(h)\,f(gh)^{-1} \omega_1(g,h)$.
+\end{proof}
+
+\begin{definition}[Multiplicative 2-cocycle condition]\label{def:is_cocycle}
+    \lean{TNLean.Algebra.ScalarCocycle.IsCocycle}
+    \leanok
+    A scalar 2-cochain $\omega \colon G \times G \to \C^{\times}$ is a
+    \emph{2-cocycle} if it satisfies, for all $g,h,k \in G$,
+    \[
+        \omega(g,h) \omega(gh,k) = \omega(g,hk) \omega(h,k).
+    \]
+\end{definition}
+
+\begin{definition}[Second cohomology quotient]\label{def:h2_cx}
+    \lean{TNLean.Algebra.H2}
+    \leanok
+    \uses{def:cohomologous_to, def:is_cocycle}
+    The second cohomology set is the quotient
+    \[
+        H^2(G,\C^{\times})
+        := Z^2(G,\C^{\times})/{\sim},
+    \]
+    where $\sim$ is the coboundary-equivalence relation.
+\end{definition}
+
+\begin{definition}[Projective equivalence]\label{def:projectively_equivalent}
+    \lean{TNLean.Algebra.ProjectivelyEquivalent}
+    \leanok
+    \uses{def:projective_rep, def:cohomologous_to}
+    Two projective representations are \emph{projectively equivalent}
+    when their factor systems are cohomologous.
+\end{definition}
+
+\begin{theorem}[Projective equivalence and cohomologous cocycles]%
+    \label{thm:projrep_equiv_iff_cohomologous}
+    \lean{TNLean.Algebra.projRep_equiv_iff_cohomologous}
+    \leanok
+    \uses{def:projectively_equivalent, def:cohomologous_to}
+    Let $\rho_1,\rho_2$ be projective representations with factor systems
+    $\omega_1,\omega_2$. Then
+    \[
+        \rho_1 \sim_{\mathrm{proj}} \rho_2
+        \iff
+        \omega_1 \sim \omega_2.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok\uses{def:projectively_equivalent}
+    This is immediate from the definition of projective equivalence as
+    cohomology-class equality for factor systems.
+\end{proof}
+
+\subsection{Non-triviality via the commutator phase}
+
+For an abelian symmetry group the cohomology class of a factor system is
+detected by an antisymmetric pairing, which gives a computable test for
+non-triviality.
+
+\begin{definition}[Commutator phase]\label{def:comm_phase}
+    \lean{TNLean.Algebra.ScalarCocycle.commPhase}
+    \leanok
+    \uses{def:scalar_cocycle}
+    The \emph{commutator phase} of a $2$-cochain $\omega$ at a pair $g,h$ is
+    $\beta_\omega(g,h) := \omega(g,h)\,\omega(h,g)^{-1}$.  It is defined for any
+    $\mathbb{C}^{\times}$-valued $2$-cochain, the cocycle condition is not needed.
+\end{definition}
+
+\begin{theorem}[The commutator phase is a class invariant]\label{thm:comm_phase_invariant}
+    \lean{TNLean.Algebra.ScalarCocycle.commPhase_eq_of_cohomologousTo}
+    \leanok
+    \uses{def:comm_phase, def:cohomologous_to}
+    If $\omega_1\sim\omega_2$ and $gh=hg$, then
+    $\beta_{\omega_1}(g,h)=\beta_{\omega_2}(g,h)$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{def:comm_phase, def:cohomologous_to}
+    Write $\omega_1(g,h)=\varphi(g)\varphi(h)\varphi(gh)^{-1}\omega_2(g,h)$ for a
+    coboundary witness $\varphi$.  Substituting into the ratio and using
+    $gh=hg$ and the commutativity of $\mathbb{C}^{\times}$,
+    \[
+        \beta_{\omega_1}(g,h)
+        = \frac{\varphi(g)\varphi(h)\varphi(gh)^{-1}\,\omega_2(g,h)}
+        {\varphi(h)\varphi(g)\varphi(hg)^{-1}\,\omega_2(h,g)}
+        = \frac{\omega_2(g,h)}{\omega_2(h,g)}
+        = \beta_{\omega_2}(g,h),
+    \]
+    the $\varphi$-factors cancelling since $\varphi(gh)=\varphi(hg)$.
+\end{proof}
+
+\begin{definition}[Non-trivial cohomology class]\label{def:nontrivial_class}
+    \lean{TNLean.Algebra.ScalarCocycle.IsNontrivialClass}
+    \leanok
+    \uses{def:cohomologous_to}
+    A factor system $\omega$ has a \emph{non-trivial class} when it is not
+    cohomologous to the constant cocycle $1$.
+\end{definition}
+
+\begin{theorem}[Commutator-phase non-triviality test]\label{thm:nontrivial_of_comm_phase}
+    \lean{TNLean.Algebra.ScalarCocycle.isNontrivialClass_of_commPhase_ne_one}
+    \leanok
+    \uses{def:nontrivial_class, def:comm_phase, thm:comm_phase_invariant}
+    If a commuting pair $g,h$ has $\beta_\omega(g,h)\neq 1$, then $\omega$ has a
+    non-trivial class.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:comm_phase_invariant}
+    The trivial cocycle has commutator phase $1$ at every pair, so by
+    Theorem~\ref{thm:comm_phase_invariant} any cocycle cohomologous to it has
+    $\beta = 1$ at every commuting pair.  Contrapositively, $\beta_\omega(g,h)\neq
+        1$ for one commuting pair forces $\omega$ to be non-cohomologous to the
+    trivial cocycle.
+\end{proof}
+
+\section{Permutation-Based Physical Symmetry}
+
+The linear-combination twist $\widetilde{A}_g^i = \sum_j U(g)_{ij}\, A^j$
+is the standard form used in the virtual representation theorem.
+The following alternative formulation replaces the matrix action by a
+permutation of the physical index; it is useful for symmetries that act by
+reordering basis states rather than by a general linear map. % The statements of this section are auxiliary constructions not
+% directly sourced from~\cite{PerezGarcia2008StringOrder}.
+
+\begin{definition}[Permutation symmetry datum]\label{def:on_site_symmetry_perm}
+    \lean{MPSTensor.OnSiteSymmetry}
+    \leanok
+    An \emph{on-site symmetry datum} for a group $G$ on a physical
+    space of dimension $d$ consists of a matrix-valued map
+    $u : G \to \MN{d}$ and a physical-index action
+    $\sigma : G \to \mathrm{End}(\{0,\ldots,d{-}1\})$.
+\end{definition}
+
+\begin{definition}[Permutation-twisted tensor]\label{def:perm_twisted_tensor}
+    \lean{MPSTensor.TwistedTensor}
+    \leanok
+    \uses{def:on_site_symmetry_perm, def:mps_tensor}
+    Given an on-site symmetry datum $(u, \sigma)$, the
+    \emph{permutation-twisted tensor} at group element $g$ is
+    \[
+        (A^{\sigma_g})^i :=  A^{\sigma(g)(i)}.
+    \]
+    In tensor-network notation the local tensor is unchanged and only the
+    physical leg is relabelled:
+    \begin{center}
+        \TNPermutationTwist{i}{\sigma(g)(i)}
+    \end{center}
+\end{definition}
+
+\begin{lemma}[Identity permutation twist]\label{lem:perm_twisted_one}
+    \lean{MPSTensor.TwistedTensor_one}
+    \leanok
+    \uses{def:perm_twisted_tensor}
+    If $\sigma(1) = \id$, then $(A^{\sigma_1})^i = A^i$ for all~$i$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:perm_twisted_tensor}
+    Immediate from $\sigma(1)(i) = i$ for all~$i$.
+\end{proof}
+
+\noindent\emph{Composition order.}
+The linear-combination twist (Lemma~\ref{lem:twisted_tensor_mul}) composes as
+$\widetilde{(\widetilde{A}_h)}_g = \widetilde{A}_{gh}$, applying $h$ first
+then~$g$. The permutation twist below uses the same left-action convention
+$\sigma(gh) = \sigma(g) \circ \sigma(h)$, so
+$(A^{\sigma_g})^{\sigma_h} = A^{\sigma_{gh}}$; the inner permutation $\sigma(h)$
+acts first on the index.
+
+\begin{lemma}[Composition of permutation twists]\label{lem:perm_twisted_mul}
+    \lean{MPSTensor.TwistedTensor_mul}
+    \leanok
+    \uses{def:perm_twisted_tensor}
+    If $\sigma(gh) = \sigma(g) \circ \sigma(h)$ for all $g, h \in G$,
+    then
+    \[
+        A^{\sigma_{gh}} =  (A^{\sigma_g})^{\sigma_h}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:perm_twisted_tensor}
+    Expanding both sides:
+    $(A^{\sigma_{gh}})^i = A^{\sigma(g)(\sigma(h)(i))} = ((A^{\sigma_g})^{\sigma_h})^i$.
+    Diagrammatically this is just two consecutive relabellings of the same
+    local tensor:
+    % Label the two arrows by \sigma_h and \sigma_g so
+    % the relabelling order matches the composition \sigma(g) \circ \sigma(h).
+    \begin{center}
+        \TNPermutationTwistLabeled{i}{\sigma(h)(i)}{\sigma_h}
+        \qquad
+        \TNPermutationTwistLabeled{\sigma(h)(i)}{\sigma(g)(\sigma(h)(i))}{\sigma_g}
+    \end{center}
+\end{proof}
+
+\section{String Order and Local Symmetry Equivalence}
+
+The string order parameter~\cite{PerezGarcia2008StringOrder} detects
+whether an on-site unitary $u$ acts as a local symmetry on the state
+generated by an injective MPS tensor.
+
+\begin{definition}[Twisted transfer map]\label{def:twisted_transfer_map}
+    \lean{MPSTensor.twistedTransferMap}
+    \leanok
+    \uses{def:mps_tensor}
+    Given an MPS tensor $A$ and a physical-index matrix $u$, the
+    \emph{twisted transfer map} is
+    \[
+        \E_u(X) :=  \sum_{n,n'} \bra{n'} u \ket{n}
+        A_n\, X\, A_{n'}^\dagger.
+    \]
+    Diagrammatically one inserts the physical operator $u$ on the doubled
+    local transfer cell:
+    \begin{center}
+        \TNTwistedTransfer{u}
+    \end{center}
+    The upper and lower black nodes denote $A_n$ and $A_{n'}^\dagger$, and the
+    red node labelled $u$ couples the physical legs.
+\end{definition}
+
+\begin{definition}[String order parameter]\label{def:string_order_param}
+    \lean{MPSTensor.stringOrderParam}
+    \leanok
+    \uses{def:twisted_transfer_map}
+    The \emph{string order parameter} for twist $u$ and stationary
+    state $\Lambda$ at length $L$ is
+    \[
+        R_L(u) :=  \tr\!(\Lambda \cdot \E_u^L(\Id)).
+    \]
+    In tensor-network notation this is the length-$L$ doubled chain with a
+    copy of $u$ inserted on each physical rung:
+    \begin{center}
+        \TNStringOrderParameter{u}{L}
+    \end{center}
+    The boundary matrix $\Lambda$ is contracted into the virtual boundary, the
+    red nodes labelled $u$ sit on the physical rungs, and the right boundary
+    is traced.
+\end{definition}
+
+\begin{definition}[Physical string correlator]\label{def:physical_string_order_param}
+    \lean{MPSTensor.physicalStringOrderParam}
+    \leanok
+    \uses{def:twisted_transfer_map}
+    For physical operators $x,y \in \MN{d}$, a twist $u \in \MN{d}$, and
+    boundary state $\Lambda$, the transfer-form string correlator of
+    \cite[display~SOPMP, lines~176--181]{PerezGarcia2008StringOrder} is
+    \[
+        S_N(x,y,u)
+        := \tr\!\bigl(\Lambda\,\E_x\,\E_u^N(\E_y(\Id))\bigr).
+    \]
+    This is the physical-endpoint expression corresponding to
+    $\langle \Psi|\,x \otimes u^{\otimes N} \otimes y\,|\Psi\rangle$.
+\end{definition}
+
+\begin{definition}[Physical string order]\label{def:has_physical_string_order}
+    \lean{MPSTensor.HasPhysicalStringOrderWith}
+    \lean{MPSTensor.HasPhysicalStringOrder}
+    \leanok
+    \uses{def:physical_string_order_param}
+    A tensor has physical string order, in the sense of
+    \cite[display~SOP, lines~112--122]{PerezGarcia2008StringOrder}, if
+    there exist a unitary $u \ne \Id$ and physical endpoint operators $x,y$
+    for which the absolute value of the correlator has a positive limit:
+    for some $s>0$,
+    \[
+        |S_N(x,y,u)| \longrightarrow s .
+    \]
+    The comparison with virtual boundary matrices is a separate
+    endpoint-realizability statement.
+\end{definition}
+
+\begin{definition}[Boundary string order parameter]%
+    \label{def:string_order_boundary_param}
+    \lean{MPSTensor.stringOrderBoundaryParam}
+    \leanok
+    \uses{def:twisted_transfer_map, def:string_order_param}
+    For a boundary state $\Lambda$ and boundary matrices $X,Y \in \MN{D}$, the
+    \emph{boundary string order parameter} is
+    \[
+        R_L(u;X,Y) := \tr\!(\Lambda X \E_u^L(Y)).
+    \]
+    The ordinary string order parameter is the special case $X=Y=\Id$.
+    The matrices $X,Y$ act on the virtual level. In the string correlator
+    of~\cite{PerezGarcia2008StringOrder} the string of twists is instead
+    flanked by local operators $x,y$ acting on physical sites; expanding
+    such operators in the transfer picture produces particular virtual
+    matrices, and \cite{PerezGarcia2008StringOrder} argues that for
+    injective tensors, physical operators on sufficiently many sites
+    produce every virtual matrix. That comparison is not formalized here,
+    and the results below are stated for the virtual form.
+    % Deviation recorded in docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex.
+\end{definition}
+
+\begin{definition}[Local symmetry]\label{def:local_symmetry}
+    \lean{MPSTensor.IsLocalSymmetry}
+    \leanok
+    \uses{def:mps_tensor}
+    An MPS tensor $A$ has \emph{local symmetry} under a unitary $u$ with
+    respect to a boundary state $\Lambda$ if there exist a unitary
+    matrix $V$ and a phase $\mu$ with $|\mu| = 1$ such that
+    $V^\dagger \Lambda V = \Lambda$ and, for every physical index~$i$,
+    \[
+        \sum_j u_{ij}\, A^j = \mu\, V\, A^i\, V^\dagger.
+    \]
+    The unitary $V$ intertwines the physical action of~$u$ with a virtual
+    conjugation, and the boundary state $\Lambda$ is invariant under~$V$.
+\end{definition}
+
+\begin{definition}[String order]\label{def:has_string_order}
+    \lean{MPSTensor.HasStringOrder}
+    \leanok
+    \uses{def:string_order_boundary_param}
+    String order \emph{exists} for $u$ with respect to a boundary
+    state $\Lambda$ if there exist boundary matrices $X, Y$ and a
+    positive constant $c > 0$ such that
+    $c \le \|R_L(u;X,Y)\|$ for all $L$, where
+    $R_L(u;X,Y)$ is the boundary-refined string-order parameter.
+    Thus some boundary-refined string-order sequence does not decay to zero.
+
+    String order is here an existence statement over the virtual matrices
+    $X,Y$, for a fixed twist $u$; no claim is made for any particular
+    boundary choice. Definition~\ref{def:has_physical_string_order} records
+    the physical-endpoint source definition, which quantifies existentially
+    over $u,x,y$ and requires a positive limit rather than a lower bound
+    uniform in the length; that paper also notes that the correlator for a
+    particular endpoint choice can vanish even when the symmetry is present.
+    % Deviation recorded in docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex.
+\end{definition}
+
+\begin{lemma}[String order prevents decay to zero]
+    \label{lem:not_tendsto_zero_of_hasStringOrder}
+    \lean{MPSTensor.not_tendsto_zero_of_hasStringOrder}
+    \leanok
+    \uses{def:has_string_order}
+    If $A$ has string order for $u$ with respect to a boundary state
+    $\Lambda$, then for some boundary matrices $X,Y$ the sequence
+    $R_L(u;X,Y)$ does not tend to $0$ as $L \to \infty$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:has_string_order}
+    A uniform lower bound $c \le \|R_L(u;X,Y)\|$ is incompatible with
+    convergence to $0$.
+\end{proof}
+
+\begin{definition}[Local physical intertwining]\label{def:condC1}
+    \lean{MPSTensor.CondC1}
+    \leanok
+    \uses{def:mps_tensor}
+    The local physical intertwining relation is
+    $\sum_j u_{ij}\, A^j = V\, A^i\, V^\dagger$.
+    Locally, the physical action of $u$ can therefore be pushed to the virtual
+    legs:
+    \begin{center}
+        \TNCondCOne{u}{V}{i}
+    \end{center}
+\end{definition}
+
+\begin{definition}[Transfer-map covariance]\label{def:condC2}
+    \lean{MPSTensor.CondC2}
+    \leanok
+    \uses{def:transfer_map}
+    Transfer-map covariance is the identity that the transfer map commutes with virtual
+    conjugation: $\E(V X V^\dagger) = V\, \E(X)\, V^\dagger$.
+    In doubled-layer notation, the virtual operators slide through the local
+    transfer cell:
+    \begin{center}
+        \TNCondCTwo{V}
+    \end{center}
+\end{definition}
+
+\begin{definition}[Commutation in the doubled transfer picture]\label{def:condC3}
+    \lean{MPSTensor.CondC3}
+    \leanok
+    \uses{def:twisted_transfer_map}
+    In the transfer-map language, the commutation of the doubled transfer matrix
+    $E = \sum_i A_i \otimes \bar A_i$ with $V \otimes \bar V$ is
+    \[
+        V\, \E_1(X)\, V^\dagger = \E_1(V X V^\dagger).
+    \]
+\end{definition}
+
+\begin{theorem}[Transfer-map covariance and doubled commutation are equivalent]%
+    \label{thm:condC2_iff_condC3}
+    \lean{MPSTensor.condC2_iff_condC3}
+    \leanok
+    \uses{def:condC2, def:condC3}
+    Transfer-map covariance and commutation in the doubled transfer
+    picture are equivalent for any matrix $V$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Both sides express the same local picture with opposite orientation:
+    \begin{center}
+        \TNCondCTwo{V}
+    \end{center}
+    The two formulas are the same identity read from opposite sides.
+\end{proof}
+
+\begin{lemma}[Unitary Kraus mixing]\label{lem:unitary_kraus_mixing}
+    \lean{MPSTensor.unitary_kraus_mixing}
+    \leanok
+    If $u$ is unitary, then replacing Kraus operators $\{A_i\}$ by
+    their unitary mixtures $\{\sum_j u_{ij} A_j\}$ preserves the
+    channel:
+    \[
+        \sum_i \left(\sum_j u_{ij} A_j\right)\, Y
+        \left(\sum_j u_{ij} A_j\right)^\dagger
+        =
+        \sum_i A_i\, Y\, A_i^\dagger.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:kraus_same_map_of_unitary_combination}
+    This is exactly the usual invariance of a Kraus decomposition under a
+    unitary change of Kraus operators; see Theorem~\ref{thm:kraus_same_map_of_unitary_combination}.
+\end{proof}
+
+\begin{theorem}[Local physical intertwining implies transfer-map covariance]%
+    \label{thm:condC1_imp_condC2}
+    \lean{MPSTensor.condC1_imp_condC2}
+    \leanok
+    \uses{def:condC1, def:condC2, lem:unitary_kraus_mixing}
+    If $V$ and $u$ are unitary and the local physical intertwining
+    relation holds, then the transfer map is covariant.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:unitary_kraus_mixing}
+    Starting from
+    \begin{center}
+        \TNCondCOne{u}{V}{i}
+    \end{center}
+    one inserts $V^\dagger V = \Id$ so that each local transfer cell is
+    written in terms of conjugated Kraus operators, then replaces those
+    operators using the intertwining relation. After that, the physical
+    $u$-boxes disappear by the unitary Kraus-mixing identity.
+\end{proof}
+
+\begin{theorem}[Transfer-map covariance implies local physical intertwining]%
+    \label{thm:condC2_imp_condC1_of_injective}
+    \lean{MPSTensor.condC2_imp_condC1_of_injective}
+    \leanok
+    \uses{def:condC2, def:condC1, def:injective}
+    For an injective MPS, if $V$ is unitary and the transfer map is
+    covariant, then there exists a unitary $u$ satisfying the local
+    physical intertwining relation.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:condC2_iff_condC3, thm:condC1_imp_condC2}
+    Set $B^i := V\, A^i\, V^\dagger$. The transfer-map covariance relation
+    \begin{center}
+        \TNCondCTwo{V}
+    \end{center}
+    implies that the two Kraus families $B$ and $A$ define the same
+    transfer map. Kraus freedom for equal channels converts
+    $\E_B = \E_A$ into a unitary Kraus mixing matrix $u$ with
+    $B^i = \sum_j u_{ij} A^j$.
+\end{proof}
+
+\begin{definition}[Twisted companion tensor]\label{def:twisted_mixed_companion}
+    \lean{MPSTensor.twistedMixedCompanion}
+    \leanok
+    \uses{def:mps_tensor}
+    For an MPS tensor $A$ and a physical-index matrix $u$, define the
+    companion tensor $B_u$ by
+    \[
+        B_u^n := \sum_{n'=0}^{d-1} \overline{u_{n'n}}\, A^{n'}.
+    \]
+\end{definition}
+
+\begin{lemma}[Twisted transfer as a mixed transfer operator]%
+    \label{lem:twisted_transfer_eq_mixed_transfer}
+    \lean{MPSTensor.twistedTransferMap_eq_mixedTransfer}
+    \leanok
+    \uses{def:twisted_transfer_map, def:twisted_mixed_companion, def:mixed_transfer}
+    The twisted transfer map of $A$ is the mixed transfer operator of the pair
+    $(A,B_u)$:
+    \[
+        \E_u = F_{A,B_u}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Expand both definitions and rearrange the double sum.
+\end{proof}
+
+\begin{theorem}[Twisted-transfer eigenvalues have modulus at most one]%
+    \label{thm:twisted_transfer_spectral_radius_le_one}
+    \lean{MPSTensor.twistedTransfer_spectralRadius_le_one}
+    \leanok
+    \uses{def:twisted_transfer_map, def:injective}
+    Let $A$ be an injective MPS tensor with $\E_A(\Id)=\Id$, and let $u$
+    satisfy $u u^\dagger = \Id$.
+    If
+    \[
+        \E_u(X) = \lambda X
+    \]
+    for some nonzero $X \in \MN{D}$, then $|\lambda| \le 1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:unitary_kraus_mixing, lem:twisted_transfer_eq_mixed_transfer,
+        thm:left_canonical_gauge, thm:eigenvalue_bound}
+    By Lemma~\ref{lem:twisted_transfer_eq_mixed_transfer}, the twisted transfer
+    map is the mixed transfer operator $F_{A,B_u}$.
+    Because $B_u$ is obtained from $A$ by unitary mixing of the Kraus operators,
+    the transfer maps of $A$ and $B_u$ coincide, so the two adjoint channels
+    share a common positive definite fixed point.
+    Gauging both families by that fixed point puts them in a common
+    trace-preserving gauge.
+    Theorem~\ref{thm:eigenvalue_bound} then applies to the mixed transfer
+    operator in that gauge, and similarity preserves the eigenvalue $\lambda$.
+\end{proof}
+
+\begin{theorem}[Modulus-one twisted eigenvalue implies gauge-phase equivalence]%
+    \label{thm:twisted_transfer_modulus_one_gauge_phase}
+    \lean{MPSTensor.twistedTransfer_modulus_one_implies_gaugePhase}
+    \leanok
+    \uses{def:twisted_transfer_map, def:twisted_mixed_companion,
+        def:gauge_phase_equiv, def:injective}
+    Let $A$ be an injective MPS tensor with $\E_A(\Id)=\Id$, and let $u$
+    satisfy $u u^\dagger = \Id$.
+    If
+    \begin{equation}\label{eq:symmetry_twisted_eigen_mod_one}
+        \E_u(X) = \lambda X
+    \end{equation}
+    for some nonzero $X \in \MN{D}$ with $|\lambda|=1$, then $A$ is
+    gauge-phase equivalent to the companion tensor $B_u$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:unitary_kraus_mixing, lem:twisted_transfer_eq_mixed_transfer,
+        thm:left_canonical_gauge, thm:modulus_one_gauge_irr_tp}
+    By Lemma~\ref{lem:twisted_transfer_eq_mixed_transfer}, the twisted transfer
+    map is the mixed transfer operator $F_{A,B_u}$.
+    Because $B_u$ is obtained from $A$ by unitary mixing of the Kraus operators,
+    the transfer maps of $A$ and $B_u$ coincide, so the two adjoint channels
+    share a common positive definite fixed point.
+    Gauging both families by that fixed point puts them in a common
+    trace-preserving gauge.
+    In that gauge the eigenvalue equation~(\ref{eq:symmetry_twisted_eigen_mod_one})
+    becomes a modulus-one peripheral
+    eigenvalue for an irreducible mixed transfer operator, so
+    Theorem~\ref{thm:modulus_one_gauge_irr_tp} yields gauge-phase equivalence.
+    Undoing the common trace-preserving gauge gives the claim for $A$ and $B_u$.
+\end{proof}
+
+\begin{lemma}[Spectral radius $<1$ forces boundary-string decay]%
+    \label{lem:boundary_string_order_tendsto_zero}
+    \lean{MPSTensor.stringOrderBoundaryParam_tendsto_zero_of_spectralRadius_lt_one}
+    \leanok
+    \uses{def:string_order_boundary_param, def:twisted_transfer_map}
+    If $\rho(\E_u) < 1$, then, as $L \to \infty$, for all boundary matrices
+    $X,Y,\Lambda \in \MN{D}$ one has
+    \[
+        R_L(u;X,Y) \longrightarrow 0.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    In finite dimension, $\rho(\E_u) < 1$ implies $\E_u^L \to 0$ in operator
+    norm. Composing with the fixed trace pairing
+    $Z \mapsto \tr(\Lambda X Z)$ gives the stated scalar convergence.
+\end{proof}
+
+\begin{theorem}[String order gives gauge-phase equivalence with the companion tensor]%
+    \label{thm:string_order_implies_twisted_gauge_phase}
+    \lean{MPSTensor.gaugePhaseEquiv_twisted_of_hasStringOrder}
+    \leanok
+    \uses{def:has_string_order, def:twisted_mixed_companion,
+        def:gauge_phase_equiv, def:injective}
+    Let $A$ be injective, let $\Lambda \in \MN{D}$, and assume
+    $u u^\dagger = \Id$ and $\E_A(\Id)=\Id$.
+    If string order exists for $u$ with boundary parameter $\Lambda$, then $A$
+    is gauge-phase equivalent to the companion tensor $B_u$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:boundary_string_order_tendsto_zero,
+        thm:twisted_transfer_spectral_radius_le_one,
+        thm:twisted_transfer_modulus_one_gauge_phase}
+    If $\rho(\E_u) < 1$, Lemma~\ref{lem:boundary_string_order_tendsto_zero}
+    forces every boundary string-order sequence to decay to zero, contradicting
+    Definition~\ref{def:has_string_order}.
+    Hence $\rho(\E_u) \ge 1$.
+    Theorem~\ref{thm:twisted_transfer_spectral_radius_le_one} shows that every
+    eigenvalue has modulus at most $1$, so some peripheral eigenvalue has modulus
+    exactly $1$.
+    Applying Theorem~\ref{thm:twisted_transfer_modulus_one_gauge_phase} then
+    gives the gauge-phase equivalence.
+\end{proof}
+
+\begin{theorem}[Gauge-phase equivalence with the companion tensor yields a virtual unitary]%
+    \label{thm:virtual_unitary_of_twisted_gauge_phase}
+    \lean{MPSTensor.virtualUnitary_of_gaugePhaseEquiv_twisted}
+    \leanok
+    \uses{def:gauge_phase_equiv, def:twisted_mixed_companion, def:injective}
+    Let $A$ be injective, assume $u u^\dagger = \Id$ and $\E_A(\Id)=\Id$.
+    If $A$ is gauge-phase equivalent to the companion tensor $B_u$, then there
+    exist a unitary $V$ and a phase $\mu$ with $|\mu|=1$ such that, for every
+    physical index~$i$,
+    \begin{equation}\label{eq:symmetry_phased_covariance}
+        \sum_j u_{ij} A^j = \mu\, V A^i V^\dagger.
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:psd_fp_unique}
+    Start from an invertible intertwiner $X$ between $A$ and $B_u$.
+    The positive matrix $Q := X X^\dagger$ is a positive fixed point of
+    $\E_A$.
+    By uniqueness of positive fixed points for an injective normalized tensor,
+    $Q$ is a positive scalar multiple of the identity.
+    Rescaling $X$ by the square root of that scalar produces a unitary $V$,
+    and the original intertwining relation becomes the phased covariance
+    equation~(\ref{eq:symmetry_phased_covariance}), with $|\mu|=1$.
+\end{proof}
+
+\begin{theorem}[Virtual unitary gives a twisted-transfer eigenmatrix]%
+    \label{thm:twisted_transfer_eigen_of_virtual_unitary}
+    \lean{MPSTensor.twistedTransfer_eigen_of_virtualUnitary}
+    \leanok
+    \uses{def:twisted_transfer_map}
+    Assume $\E_A(\Id)=\Id$ and that, for every physical index~$i$,
+    \[
+        \sum_j u_{ij} A^j = \mu\, V A^i V^\dagger
+    \]
+    with $V$ unitary.
+    Then $V$ is an eigenmatrix of the twisted transfer map:
+    \[
+        \E_u(V) = \mu V.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Expand $\E_u(V)$, insert the intertwining relation into each local term,
+    and use $V^\dagger V = \Id$ together with $\E_A(\Id)=\Id$.
+\end{proof}
+
+\begin{theorem}[Boundary-state invariance of the virtual unitary]%
+    \label{thm:boundary_state_invariant_of_virtual_unitary}
+    \lean{MPSTensor.boundaryState_invariant_of_virtualUnitary}
+    \leanok
+    \uses{def:injective}
+    Let $A$ be injective, assume $u u^\dagger = \Id$, and let $\Lambda$ be a
+    positive definite boundary state with $\tr(\Lambda)=1$ and
+    $\E_A^\dagger(\Lambda)=\Lambda$.
+    If $V$ is a unitary and $\mu$ a phase satisfying, for every physical
+    index~$i$,
+    \begin{equation}\label{eq:symmetry_boundary_covariance}
+        \sum_j u_{ij} A^j = \mu\, V A^i V^\dagger,
+    \end{equation}
+    then
+    \[
+        V^\dagger \Lambda V = \Lambda.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:psd_fp_unique}
+    Relation~(\ref{eq:symmetry_boundary_covariance}) shows that
+    $V^\dagger \Lambda V$ is another positive
+    fixed point of the adjoint transfer map.
+    Since $\Lambda$ is the normalized positive fixed point, uniqueness forces
+    $V^\dagger \Lambda V = \Lambda$.
+\end{proof}
+
+\begin{lemma}[Local symmetry implies string order]%
+    \label{lem:has_string_order_of_local_symmetry}
+    \lean{MPSTensor.hasStringOrder_of_localSymmetry}
+    \leanok
+    \uses{def:local_symmetry, def:has_string_order}
+    Assume $\tr(\Lambda)=1$ and $\E_A(\Id)=\Id$.
+    If $u$ is a local symmetry of $A$ with respect to $\Lambda$, then string
+    order exists for $u$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:twisted_transfer_eigen_of_virtual_unitary,
+        def:string_order_boundary_param}
+    Choose the boundary matrices $X = V^\dagger$ and $Y = V$, where $V$ is the
+    unitary from the local-symmetry datum.
+    By Theorem~\ref{thm:twisted_transfer_eigen_of_virtual_unitary},
+    one has $\E_u^L(V)=\mu^L V$.
+    Therefore
+    \[
+        R_L(u;V^\dagger,V)=\mu^L \tr(\Lambda)=\mu^L,
+    \]
+    whose norm is constantly $1$.
+\end{proof}
+
+\begin{theorem}[Local symmetry iff a unitary peripheral eigenmatrix exists]%
+    \label{thm:local_symmetry_iff_spectral_radius}
+    \lean{MPSTensor.localSymmetry_iff_spectralRadius_one}
+    \leanok
+    \uses{def:local_symmetry, def:twisted_transfer_map, def:injective,
+        thm:twisted_transfer_spectral_radius_le_one}
+    Let $A$ be injective, and assume $u u^\dagger = \Id$, $\E_A(\Id)=\Id$,
+    $\Lambda$ is positive definite, $\tr(\Lambda)=1$, and
+    $\E_A^\dagger(\Lambda)=\Lambda$.
+    Then $u$ is a local symmetry if and only if there exist a unitary
+    $V \in \MN{D}$ and a phase $\mu$ with $|\mu|=1$ such that
+    \[
+        \E_u(V) = \mu V.
+    \]
+    By Theorem~\ref{thm:twisted_transfer_spectral_radius_le_one}, this witness
+    form is equivalent to the peripheral-spectrum condition $\rho(\E_u)=1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:twisted_transfer_eigen_of_virtual_unitary,
+        thm:twisted_transfer_modulus_one_gauge_phase,
+        thm:virtual_unitary_of_twisted_gauge_phase,
+        thm:boundary_state_invariant_of_virtual_unitary}
+    The forward direction is Theorem~\ref{thm:twisted_transfer_eigen_of_virtual_unitary}.
+    For the reverse direction, start from a unitary peripheral eigenmatrix.
+    Theorem~\ref{thm:twisted_transfer_modulus_one_gauge_phase} gives
+    gauge-phase equivalence with the companion tensor; then
+    Theorem~\ref{thm:virtual_unitary_of_twisted_gauge_phase} yields a virtual
+    unitary and phase satisfying the local covariance relation, and
+    Theorem~\ref{thm:boundary_state_invariant_of_virtual_unitary} gives the
+    boundary-state invariance needed for local symmetry.
+\end{proof}
+
+\begin{theorem}[String order $\Leftrightarrow$ local symmetry]%
+    \label{thm:string_order_iff_local_symmetry}
+    \lean{MPSTensor.stringOrder_iff_localSymmetry}
+    \leanok
+    \uses{def:has_string_order, def:local_symmetry, def:injective}
+    For an injective MPS, assume $u u^\dagger = \Id$,
+    $\E_A(\Id)=\Id$, $\Lambda$ is positive definite,
+    $\tr(\Lambda)=1$, and $\E_A^\dagger(\Lambda)=\Lambda$. Then string
+    order for $u$ exists iff $u$ is a local symmetry.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:string_order_implies_twisted_gauge_phase,
+        thm:virtual_unitary_of_twisted_gauge_phase,
+        thm:boundary_state_invariant_of_virtual_unitary,
+        lem:has_string_order_of_local_symmetry}
+    If string order exists, Theorem~\ref{thm:string_order_implies_twisted_gauge_phase}
+    gives a gauge-phase equivalence with the companion tensor.
+    Theorem~\ref{thm:virtual_unitary_of_twisted_gauge_phase} extracts a virtual
+    unitary and phase from that equivalence, and
+    Theorem~\ref{thm:boundary_state_invariant_of_virtual_unitary} shows that the
+    same unitary preserves the boundary state, so one obtains local symmetry.
+    Conversely, Lemma~\ref{lem:has_string_order_of_local_symmetry} turns local
+    symmetry into a non-decaying boundary string-order sequence.
+\end{proof}
+
+\begin{theorem}[Virtual unitary from string order]%
+    \label{thm:virtual_unitary_of_string_order}
+    \lean{MPSTensor.virtualUnitary_of_stringOrder}
+    \leanok
+    \uses{def:has_string_order, def:injective}
+    For an injective MPS, let $\Lambda \in \MN{D}$, and assume
+    $u u^\dagger = \Id$ and $\E_A(\Id)=\Id$.
+    If string order exists for $u$ with boundary parameter $\Lambda$, then
+    there exists a virtual unitary $V$ and a unit-modulus scalar $\mu$ such that
+    $\sum_j u_{ij} A^j = \mu\, V A^i V^\dagger$ for all~$i$.
+    Diagrammatically this is the same local intertwining relation,
+    but only up to an overall unit scalar on the virtual side:
+    \begin{center}
+        \TNCondCOne{u}{V}{i}
+    \end{center}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:string_order_implies_twisted_gauge_phase,
+        thm:virtual_unitary_of_twisted_gauge_phase}
+    String order first gives gauge-phase equivalence with the companion tensor by
+    Theorem~\ref{thm:string_order_implies_twisted_gauge_phase}.
+    Theorem~\ref{thm:virtual_unitary_of_twisted_gauge_phase} then normalizes the
+    resulting intertwiner to a unitary and produces the phase $\mu$.
+\end{proof}
+
+%% ---------------------------------------------------------
+\section{SPT Phase Labels and String-Order Universality}
+%% ---------------------------------------------------------
+
+Two injective symmetric tensors are defined to be in the same
+symmetry-protected topological (SPT) phase when their virtual
+representation cocycles are cohomologous. The identification of this
+cocycle class with phase equivalence under symmetric gapped paths is the
+classification theorem of Chen, Gu, and Wen~\cite{ChenGuWen2011} and
+Schuch, P\'erez-Garc\'ia, and Cirac~\cite[Section~II.F]{Schuch2011Phases},
+which is not formalized here
+(Remark~\ref{rem:spt_classification_not_formalized}). The theorems of
+this section show that string order holds for every injective symmetric
+tensor with canonical normalisations, so existence of string order is a
+symmetry diagnostic and does not separate SPT phases
+(Remark~\ref{rem:string_order_symmetry_diagnostic}).
+
+\begin{definition}[Same SPT phase]\label{def:is_same_spt_phase}
+    \lean{MPSTensor.IsSameSPTPhase}
+    \leanok
+    \uses{def:cohomologous_to, def:projective_rep}
+    Injective tensors $A$ and $B$, both symmetric under an on-site
+    representation $U \colon G \to \GL_{d}(\C)$, are in the \emph{same SPT
+        phase} if there exist virtual cocycles $\omega_A,\omega_B$ with
+    corresponding projective representations that intertwine the
+    respective twisted tensors and satisfy
+    $\omega_A\sim\omega_B$ (cohomologous).
+\end{definition}
+
+\begin{remark}[The classification theorem is not formalized here]%
+    \label{rem:spt_classification_not_formalized}
+    \uses{def:is_same_spt_phase}
+    For injective tensors with a fixed on-site symmetry and no symmetry
+    breaking, two tensors can be connected by a symmetric gapped path if
+    and only if their virtual cocycle classes in $H^2(G,\mathrm{U}(1))$
+    coincide (\cite{ChenGuWen2011};
+    \cite[Section~II.F]{Schuch2011Phases}). Neither direction of that
+    equivalence is established here: this chapter constructs the cocycle
+    label and proves its gauge independence
+    (Theorem~\ref{thm:cocycle_gauge_independence}), and
+    Definition~\ref{def:is_same_spt_phase} takes cohomologous cocycles as
+    the definition of phase equality.
+\end{remark}
+
+\begin{theorem}[String order holds for injective symmetric MPS]%
+    \label{thm:has_string_order_of_symmetric_injective}
+    \lean{MPSTensor.hasStringOrder_of_symmetric_injective}
+    \leanok
+    \uses{def:has_string_order, thm:virtual_rep_injective}
+    Let $A$ be an injective tensor, symmetric under a unitary
+    representation $U$. Assume $\E_A(\Id)=\Id$, $\Lambda$ is positive
+    definite, $\tr(\Lambda)=1$, and $\E_A^\dagger(\Lambda)=\Lambda$.
+    Then string order exists for every group element $g$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:virtual_rep_injective,
+        thm:twisted_transfer_modulus_one_gauge_phase,
+        thm:virtual_unitary_of_twisted_gauge_phase,
+        thm:boundary_state_invariant_of_virtual_unitary,
+        lem:has_string_order_of_local_symmetry}
+    The virtual representation theorem produces
+    $\rho(g^{-1}) \in \GL_{D}(\C)$ satisfying
+    $\sum_j U(g)_{ij}\,A^j = \rho(g^{-1})\,A^i\,\rho(g^{-1})^{-1}$.
+    A direct computation using $\E_A(\Id)=\Id$ shows that
+    $\E_{U(g)}(\rho(g^{-1})) = \rho(g^{-1})$, so
+    $\rho(g^{-1})$ is a nonzero eigenvector with eigenvalue~$1$.
+    Theorem~\ref{thm:twisted_transfer_modulus_one_gauge_phase} gives
+    gauge-phase equivalence with the companion tensor, and
+    Theorem~\ref{thm:virtual_unitary_of_twisted_gauge_phase} extracts a virtual
+    unitary and phase.
+    By Theorem~\ref{thm:boundary_state_invariant_of_virtual_unitary}, this
+    unitary preserves the boundary state, so
+    Lemma~\ref{lem:has_string_order_of_local_symmetry} gives string order.
+\end{proof}
+
+\begin{theorem}[String order existence agrees for any two injective symmetric tensors]%
+    \label{thm:has_string_order_iff_of_symmetric_injective}
+    \lean{MPSTensor.hasStringOrder_iff_of_symmetric_injective}
+    \leanok
+    \uses{def:has_string_order, def:on_site_symmetric, def:injective}
+    If $A$ and $B$ are injective, both on-site symmetric under a
+    unitary representation $U$, and if $\E_A(\Id)=\Id$,
+    $\E_B(\Id)=\Id$, $\Lambda_A$ and $\Lambda_B$ are positive
+    definite, $\tr(\Lambda_A)=1$, $\tr(\Lambda_B)=1$,
+    $\E_A^\dagger(\Lambda_A)=\Lambda_A$, and
+    $\E_B^\dagger(\Lambda_B)=\Lambda_B$, then for every $g \in G$,
+    string order exists for $A$ with twist $U(g)$ if and only if it
+    exists for~$B$. In particular, since
+    Definition~\ref{def:is_same_spt_phase} implies on-site symmetry
+    for both tensors, this theorem applies to tensors in the same SPT
+    phase; it applies equally to symmetric tensors in different SPT
+    phases.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:has_string_order_of_symmetric_injective}
+    Both directions follow from
+    Theorem~\ref{thm:has_string_order_of_symmetric_injective}, which
+    shows that string order holds universally for injective symmetric
+    tensors with canonical normalisations.
+\end{proof}
+
+\begin{remark}[String order detects symmetry, not the SPT phase]%
+    \label{rem:string_order_symmetry_diagnostic}
+    \uses{thm:has_string_order_iff_of_symmetric_injective}
+    Theorem~\ref{thm:has_string_order_of_symmetric_injective} applies to
+    every injective symmetric tensor with canonical normalisations,
+    irrespective of its cocycle class, so tensors in different SPT phases
+    all have string order for every group element. Existence of string
+    order is equivalent to the local symmetry itself
+    (Theorem~\ref{thm:string_order_iff_local_symmetry}); the invariant
+    that separates SPT phases is the cohomology class of the virtual
+    representation cocycle (Definition~\ref{def:is_same_spt_phase}).
+\end{remark}

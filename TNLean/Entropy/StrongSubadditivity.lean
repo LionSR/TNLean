@@ -7,23 +7,22 @@ import TNLean.Entropy.TripartiteTrace
 import TNLean.Entropy.VonNeumann
 
 /-!
-# Strong subadditivity (namespaced wrapper + basic corollaries)
+# Strong subadditivity (theorem formulation and basic corollaries)
 
-This module exposes **strong subadditivity** (SSA) of the von Neumann
-entropy inside the `Entropy` namespace, following the roadmap of
-issue #613 for the Simple MPDO RFP track (issue #236, umbrella
-#239).
+This module states **strong subadditivity** (SSA) of the von Neumann
+entropy as a theorem inside the `Entropy` namespace, following the
+roadmap of issue #613 for the Simple MPDO RFP track (issue #236,
+umbrella #239).
 
 SSA is the statement that for any tripartite density matrix
 `ρ_ABC` on `A ⊗ B ⊗ C`,
 `S(ρ_ABC) + S(ρ_B) ≤ S(ρ_AB) + S(ρ_BC)`.
-This is a deep theorem of Lieb–Ruskai (1973). Its full Lean proof is
+This is a deep theorem of Lieb–Ruskai (1973). The full Lean proof is
 deferred to the sanctioned axiom `_root_.strong_subadditivity` in
 `TNLean.Axioms.Entropy`; the theorem `Entropy.strongSubadditivity`
-provided here is a thin *theorem* wrapper around that single
-axiom, so that the sanctioned axiom inventory under
-`TNLean/Axioms/` remains authoritative and no duplicate
-axiomatization of SSA is introduced.
+stated here forwards that single axiom, so that the sanctioned
+axiom inventory under `TNLean/Axioms/` remains authoritative and
+no duplicate axiomatization of SSA is introduced.
 
 ## Main declarations
 
@@ -59,9 +58,12 @@ A review with conditions for equality", JMP 43, 4358 (2002).
 ## References
 
 * Lieb, Ruskai, "Proof of the strong subadditivity of quantum-mechanical
-  entropy", JMP 14, 1938 (1973)
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*][Wolf2012QChannels]
-* arXiv:1606.00608 §4.4
+  entropy", JMP 14, 1938 (1973) — source of SSA
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 8][Wolf2012QChannels]
+* arXiv:1606.00608 Section 4.4
+* Blueprint `thm:entropy_strong_subadditivity`,
+  `thm:entropy_subadditivity_trivial_B`,
+  `thm:entropy_fin_one_zero`
 -/
 
 open scoped Matrix ComplexOrder
@@ -69,13 +71,14 @@ open Matrix Finset Real
 
 namespace Entropy
 
-/-! ## The strong subadditivity wrapper -/
+/-! ## The strong subadditivity theorem -/
 
 section StrongSubadditivity
 
 variable {dA dB dC : ℕ}
 
-/-- **Strong subadditivity** (Lieb–Ruskai 1973), namespaced wrapper.
+/-- **Strong subadditivity** (Lieb–Ruskai 1973), stated in the
+`Entropy` namespace.
 
 For a tripartite density matrix `ρ_ABC` on `A ⊗ B ⊗ C`:
   `S(ρ_ABC) + S(ρ_B) ≤ S(ρ_AB) + S(ρ_BC)`
@@ -84,13 +87,13 @@ where the reduced states are obtained via the tripartite partial
 traces `traceAC_ABC`, `traceC_ABC`, `traceA_ABC` (see
 `TNLean.Analysis.Entropy`).
 
-This is a thin theorem wrapper around the sanctioned axiom
+This theorem forwards the sanctioned axiom
 `_root_.strong_subadditivity` (in `TNLean/Axioms/Entropy.lean`); no
 new axiom is introduced by this module. See the module-level TODO for
 the roadmap replacing the underlying axiom with a proof.
 
-References:
-* Lieb, Ruskai, JMP 14, 1938 (1973). -/
+Source: Lieb, Ruskai, JMP 14, 1938 (1973);
+blueprint `thm:entropy_strong_subadditivity`. -/
 theorem strongSubadditivity
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ)
@@ -108,7 +111,9 @@ theorem strongSubadditivity
 "conditional entropy" form: `S(ρ_ABC) − S(ρ_AB) ≤ S(ρ_BC) − S(ρ_B)`.
 
 This follows from the axiom by adding `−S(ρ_AB) − S(ρ_B)` to both
-sides of the basic SSA inequality. -/
+sides of the basic SSA inequality.
+
+Source: [Wolf, Chapter 8, Section 8.7][Wolf2012QChannels]. -/
 theorem strongSubadditivity_rearranged
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ)
@@ -138,7 +143,9 @@ section FinOneEntropy
 von Neumann entropy.
 
 The single eigenvalue equals the trace (which is `1`), and
-`negMulLog 1 = -(1 * log 1) = 0`. -/
+`negMulLog 1 = -(1 * log 1) = 0`.
+
+Source: blueprint `thm:entropy_fin_one_zero`. -/
 theorem vonNeumannEntropy_eq_zero_of_fin_one
     (M : Matrix (Fin 1) (Fin 1) ℂ)
     (hM : M.IsHermitian) (hM_trace : M.trace = 1) :
@@ -149,10 +156,8 @@ theorem vonNeumannEntropy_eq_zero_of_fin_one
     exact_mod_cast h_cast
   have h_eig : hM.eigenvalues 0 = 1 := by
     simpa [Fin.sum_univ_one] using h_sum
-  have h1 : Real.negMulLog (1 : ℝ) = 0 := by
-    simp [Real.negMulLog]
   change ∑ i : Fin 1, Real.negMulLog (hM.eigenvalues i) = 0
-  rw [Fin.sum_univ_one, h_eig, h1]
+  rw [Fin.sum_univ_one, h_eig, Real.negMulLog_one]
 
 end FinOneEntropy
 
@@ -176,7 +181,10 @@ For a density matrix `ρ_ABC` on `A ⊗ 1 ⊗ C`, SSA reduces to
 `S(ρ_ABC) ≤ S(ρ_AB) + S(ρ_BC)` because the `Fin 1`-indexed middle
 reduced state contributes zero entropy, and
 `Matrix.trace_eq_trace_traceAC_ABC` supplies the unit-trace condition
-needed by `vonNeumannEntropy_eq_zero_of_fin_one`. -/
+needed by `vonNeumannEntropy_eq_zero_of_fin_one`.
+
+Source: blueprint `thm:entropy_subadditivity_trivial_B`;
+[Wolf, Chapter 8 (SSA corollary)][Wolf2012QChannels]. -/
 theorem subadditivity_ssa_trivial_B
     (ρ_ABC : Matrix (Fin dA × Fin 1 × Fin dC)
       (Fin dA × Fin 1 × Fin dC) ℂ)

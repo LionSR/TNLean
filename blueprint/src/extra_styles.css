@@ -23,3 +23,23 @@ div.corollary_thmcontent {
 div.proof_content {
 	border-left: .08rem solid grey;
 }
+
+.tn-svg {
+	display: inline-block;
+	max-width: min(100%, 42rem);
+	height: auto;
+	margin: .35rem .2rem;
+	vertical-align: middle;
+}
+
+.tn-svg-missing {
+	display: inline-block;
+	margin: .35rem .2rem;
+	padding: .4rem .55rem;
+	border: 1px solid #d0d7de;
+	border-radius: 4px;
+	background: #f6f8fa;
+	color: #57606a;
+	font-size: .9rem;
+	vertical-align: middle;
+}

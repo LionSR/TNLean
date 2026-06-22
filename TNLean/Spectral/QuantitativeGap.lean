@@ -2,34 +2,35 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.Spectral.SpectralGap
+import TNLean.Spectral.TransferOperatorGap
 import TNLean.Channel.Peripheral.Spectrum
 import TNLean.Wielandt.Primitivity.EasyDirections
 import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducibleAux
-import TNLean.MPS.Overlap.PeripheralToSpectralGap
+import TNLean.MPS.Overlap.PeripheralToTransferMapGap
 
 /-!
-# Quantitative spectral gap bounds for MPS transfer operators
+# Quantitative transfer-map gap bounds for MPS transfer operators
 
-This file provides **explicit quantitative bounds** on the spectral gap of
+This file provides **explicit quantitative bounds** on transfer-map gaps for
 MPS transfer operators, strengthening the existing qualitative result
 `spectralRadius_mixedTransfer_lt_one` (which only proves `ρ < 1` without
 a lower bound on `1 - ρ`).
 
 ## Building blocks (already formalized elsewhere)
 
-* `pow_tendsto_zero_of_spectralRadius_lt_one` in `Spectral/SpectralGap.lean` —
+* `pow_tendsto_zero_of_spectralRadius_lt_one` in `Spectral/TransferOperatorGap.lean` —
   exponential convergence to zero when spectral radius < 1
 * `compl_eigenvalue_norm_lt_one_of_primitive` in `Peripheral/Spectrum.lean` —
-  primitive channels have spectral gap
-* `cumulativeSpan_eq_top` in `Wielandt/WielandtBound.lean` — the D² Wielandt bound
+  primitive channels have a complementary transfer-map gap
+* `cumulativeSpan_eq_top` in `Wielandt/SpanGrowth/NonzeroTraceProduct.lean` —
+  the D² Wielandt bound
 
 ## Main results
 
 * `exponential_convergence_of_primitive` — for an injective primitive TP channel,
   `‖E^n(X) - P(X)‖ ≤ C · (1-δ)^n · ‖X‖` (convergence to fixed-point projection)
 * `correlation_length_bound` — exponential decay of traceless iterates
-* `spectral_gap_of_injective` — explicit spectral gap `δ > 0` with
+* `transfer_map_gap_of_injective` — explicit transfer-map gap `δ > 0` with
   all non-unit eigenvalues satisfying `|μ| ≤ 1 - δ`
 
 ## Strengthening relative to the literature
@@ -39,11 +40,17 @@ but gives no explicit bound. This file provides constructive bounds.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations*, §6.3]
+* [M. Wolf, *Quantum Channels & Operations*, Section 6.3]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators NNReal ENNReal
 open Matrix Finset
+
+attribute [local instance 1001]
+  ContinuousLinearMap.toNormedAddCommGroup
+  ContinuousLinearMap.toNormedSpace
+  ContinuousLinearMap.toNormedRing
+  ContinuousLinearMap.toNormedAlgebra
 
 namespace MPSTensor
 
@@ -129,7 +136,8 @@ private theorem geometric_bound_of_spectralRadius_lt_one
   have hr_lt_one : (r : ℝ) < 1 := by
     exact_mod_cast hr_below
   have hr_pos : 0 < (r : ℝ) := by
-    exact_mod_cast (lt_of_le_of_lt (show (0 : ℝ≥0∞) ≤ spectralRadius ℂ T from bot_le) hr_above)
+    exact_mod_cast (lt_of_le_of_lt
+      (show (0 : ℝ≥0∞) ≤ spectralRadius ℂ T from bot_le) hr_above)
   have hev :
       ∀ᶠ n in Filter.atTop, ‖T ^ n‖₊ < r ^ n := by
     have gelfand := spectrum.pow_nnnorm_pow_one_div_tendsto_nhds_spectralRadius T
@@ -193,7 +201,7 @@ private theorem geometric_apply_bound_of_spectralRadius_lt_one
       exact mul_le_mul_of_nonneg_right (hpow n) (norm_nonneg x)
     _ = C * r ^ n * ‖x‖ := by ring
 
-/-! ## Helper lemmas -/
+/-! ## Auxiliary lemmas -/
 
 /-- The word span at length 1 equals the span of the Kraus operators. -/
 theorem wordSpan_one_eq_span_range (A : MPSTensor d D) :
@@ -208,7 +216,7 @@ theorem hasEventuallyFullKrausRank_of_injective (A : MPSTensor d D)
     (hA : IsInjective A) : HasEventuallyFullKrausRank A :=
   ⟨1, by rw [wordSpan_one_eq_span_range, hA]⟩
 
-/-! ## Convergence rate from spectral gap -/
+/-! ## Convergence rate from a complementary transfer-map gap -/
 
 /-- **Exponential convergence of injective primitive channels.**
 
@@ -218,7 +226,7 @@ For an injective primitive TP channel `E` with fixed point projection `P`, the i
   `‖E^n(X) - P(X)‖ ≤ C · (1-δ)^n · ‖X‖`
 
 where `P(X) = tr(X) · ρ_∞ / tr(ρ_∞)` is the projection onto the fixed state,
-`δ > 0` is the spectral gap, and `C` depends on the Jordan structure.
+`δ > 0` is the transfer-map gap, and `C` depends on the Jordan structure.
 
 The extra injectivity hypothesis is what supplies the needed uniqueness of
 trace-zero fixed points, so that the complementary map `E - P` has spectral
@@ -241,6 +249,8 @@ theorem exponential_convergence_of_primitive [NeZero D]
   let P : V →ₗ[ℂ] V := fixedPointProj (D := D) ρ (ne_of_gt hρ_pd.trace_pos)
   let N : V →ₗ[ℂ] V := E - P
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
+  letI : NormedAddCommGroup (V →L[ℂ] V) := ContinuousLinearMap.toNormedAddCommGroup
+  letI : NormedSpace ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedSpace
   have hPrim : IsPrimitive E :=
     isPeripherallyPrimitive_of_isPrimitivePaper A hNorm
       (isPrimitivePaper_of_hasEventuallyFullKrausRank A
@@ -309,10 +319,11 @@ theorem exponential_convergence_of_primitive [NeZero D]
 
 For an injective TP-normalized MPS tensor, traceless matrices decay
 exponentially under the transfer map iteration. The rate is determined by
-the spectral gap, which exists because injectivity implies primitivity.
+the complementary transfer-map gap, which exists because injectivity implies
+primitivity.
 
 This uses `pow_tendsto_zero_of_spectralRadius_lt_one` from
-`Spectral/SpectralGap.lean` directly — traceless matrices lie in
+`Spectral/TransferOperatorGap.lean` directly — traceless matrices lie in
 `ker(P) = range(E - P)`, where `E - P` has spectral radius < 1. -/
 theorem correlation_length_bound [NeZero D]
     (A : MPSTensor d D)
@@ -402,7 +413,7 @@ theorem correlation_length_bound [NeZero D]
 
 /-! ## Explicit gap from injectivity -/
 
-/-- **Spectral gap from injectivity** (existential version).
+/-- **Transfer-map gap from injectivity** (existential version).
 
 For an injective TP-normalized MPS tensor, all eigenvalues of the transfer
 map other than 1 have modulus strictly less than 1, with a uniform gap.
@@ -410,10 +421,10 @@ map other than 1 have modulus strictly less than 1, with a uniform gap.
 The existential bound `∃ δ > 0` follows from: injectivity implies
 `HasEventuallyFullKrausRank` (at index 1), which implies primitivity
 (via `IsPrimitivePaper → IsPeripherallyPrimitive`), primitivity implies
-spectral gap (by `compl_eigenvalue_norm_lt_one_of_primitive`), and in
-finite dimensions the maximum over finitely many eigenvalues gives a
+the complementary transfer-map gap (by `compl_eigenvalue_norm_lt_one_of_primitive`),
+and in finite dimensions the maximum over finitely many eigenvalues gives a
 uniform bound. -/
-theorem spectral_gap_of_injective [NeZero D]
+theorem transfer_map_gap_of_injective [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hA : IsInjective A) :
@@ -432,7 +443,7 @@ theorem spectral_gap_of_injective [NeZero D]
     intro μ hμ
     exact eigenvalue_norm_le_one A A hNorm hNorm μ (hE_eq ▸ hμ)
   -- Step 3: non-1 eigenvalues have ‖μ‖ < 1, then extract uniform gap
-  exact uniform_spectral_gap_of_finite_lt_one (Module.End.finite_hasEigenvalue E)
+  exact uniform_eigenvalue_gap_of_finite_lt_one (Module.End.finite_hasEigenvalue E)
     fun μ hμ hne => lt_of_le_of_ne (hbound μ hμ)
       fun h => hne (hPrim.unique_peripheral μ hμ h)
 

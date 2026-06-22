@@ -18,7 +18,7 @@ across five focused submodules.
 The supporting modules are:
 
 * `TNLean.Channel.Peripheral.CyclicDecomposition.Basic` — corner algebras,
-  compression linear equivalences, and the corner-rank API.
+  compression linear equivalences, and the corner-rank interface.
 * `TNLean.Channel.Peripheral.CyclicDecomposition.PeripheralUnitary` — scalar
   fixed points and peripheral-unitary normalization.
 * `TNLean.Channel.Peripheral.CyclicDecomposition.CyclicProjections` — Fourier
@@ -39,5 +39,5 @@ The supporting modules are:
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Thm. 6.6, Thm. 6.16]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 6.6, Theorem 6.16]
 -/

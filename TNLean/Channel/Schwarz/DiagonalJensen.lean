@@ -38,13 +38,13 @@ computation gives
 so the scalar Jensen inequality `ConvexOn.map_sum_le` applied to the
 weights `p` and points `λ` yields the conclusion.
 
-This helper is a prerequisite for the trace convexity axioms
+This auxiliary lemma is a prerequisite for the trace convexity axioms
 `trace_rpow_concave_axiom` and `trace_rpow_convex_axiom` in
 `TNLean.Axioms.OperatorConvexity`.
 
 ## References
 
-* Bhatia, *Matrix Analysis*, Ch. V (matrix Jensen inequality).
+* Bhatia, *Matrix Analysis*, Chapter V (matrix Jensen inequality).
 -/
 
 open scoped Matrix ComplexOrder
@@ -112,8 +112,15 @@ theorem diagonal_jensen_of_convexOn
   -- Spectral form of `A`.
   have hA_spec : A = U * Matrix.diagonal (fun i => ((μ i : ℂ))) * Uᴴ := by
     have h := hH.spectral_theorem
+    have hdiag : Matrix.diagonal (Complex.ofReal ∘ hH.eigenvalues) =
+        Matrix.diagonal (fun i => ((hH.eigenvalues i : ℝ) : ℂ)) := by
+      ext i j
+      by_cases hij : i = j
+      · subst hij
+        simp [Function.comp_apply]
+      · simp [Matrix.diagonal, hij]
     simpa [Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose,
-      hU_def, hμ_def] using h
+      Matrix.mul_assoc, hU_def, hμ_def, hdiag] using h
   -- Spectral form of `hH.cfc f`.
   have hfA_spec : hH.cfc f
       = U * Matrix.diagonal (fun i => ((f (μ i) : ℂ))) * Uᴴ := by

@@ -39,7 +39,7 @@ diagonalization has reduced them to a scalar problem.
 positive map, commuting family, Schwarz inequality, normal operator
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder BigOperators TNMatrixCFC
+open scoped Matrix ComplexOrder MatrixOrder BigOperators
 open Matrix Finset Complex Module.End
 
 namespace PositiveOnAbelian
@@ -53,6 +53,7 @@ the Euclidean linear map level. -/
 lemma toEuclideanLin_mul (A B : Matrix (Fin D) (Fin D) ℂ) :
     (Matrix.toEuclideanLin A : EuclideanSpace ℂ (Fin D) →ₗ[ℂ] EuclideanSpace ℂ (Fin D)) *
       Matrix.toEuclideanLin B = Matrix.toEuclideanLin (A * B) := by
+  rw [Module.End.mul_eq_comp]
   simpa only [Matrix.toEuclideanLin_eq_toLin_orthonormal] using
     (Matrix.toLin_mul (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
       (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
@@ -86,9 +87,10 @@ noncomputable def blockQuadraticForm {n D : ℕ}
 /-- A map is **positive on commuting block families** if it preserves
 block-quadratic-form positivity whenever the image family is pairwise commuting.
 
-This is the concrete stand-in for "the restriction to a commutative
-`*`-subalgebra is completely positive" that is sufficient for the normal-input
-Schwarz argument used later in the project. -/
+This formulation records the exact condition used by the normal-input Schwarz
+argument: after applying the map to each block, the resulting family commutes
+pairwise, and positivity of the original block quadratic form remains
+positivity of the transformed form. -/
 def IsPositiveOnCommuting
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) : Prop :=
   ∀ {n : ℕ} (a : Matrix (Fin n) (Fin n) (Matrix (Fin D) (Fin D) ℂ)),
@@ -196,10 +198,10 @@ private lemma familyMain_term_eq
       = z i • (familyMainKraus C (i, p) * (familyMainKraus C (i, p))ᴴ) := by
   ext r s
   simp only [rectKrausMap, univ_unique, PUnit.default_eq_unit, sum_const, card_singleton,
-    smul_apply, Matrix.mul_apply, familyMainKraus, diagonal_apply, mul_ite, ite_mul, zero_mul,
+    Matrix.smul_apply, Matrix.mul_apply, familyMainKraus, diagonal_apply, mul_ite, ite_mul, zero_mul,
     mul_zero, sum_ite_eq', mem_univ, ↓reduceIte, conjTranspose_apply, RCLike.star_def,
-    Option.elim_some, one_smul, smul_eq_mul]
-  ring
+    Option.elim_some, one_smul]
+  ring_nf
 
 private lemma familyMain_outer_sum
     {ι : Type*} [Fintype ι] [DecidableEq ι]
@@ -236,9 +238,9 @@ private lemma familyDefect_term_zero
       (Matrix.diagonal (fun o : Option ι => o.elim 0 z)) = 0 := by
   ext r s
   simp only [rectKrausMap, univ_unique, PUnit.default_eq_unit, sum_const, card_singleton,
-    smul_apply, Matrix.mul_apply, familyDefectKraus, Matrix.diagonal_apply, mul_ite, ite_mul,
+    Matrix.smul_apply, Matrix.mul_apply, familyDefectKraus, Matrix.diagonal_apply, mul_ite, ite_mul,
     zero_mul, mul_zero, sum_ite_eq', mem_univ, ↓reduceIte, conjTranspose_apply, RCLike.star_def,
-    Option.elim_none, nsmul_zero, zero_apply]
+    Option.elim_none, nsmul_zero, Matrix.zero_apply]
 
 /-- The diagonal / finite-spectrum Schwarz inequality for a positive family
 `{Bᵢ}` with `∑ᵢ Bᵢ ≤ 1`. This is the direct diagonal case needed for the

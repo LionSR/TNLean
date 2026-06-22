@@ -11,10 +11,10 @@ import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducible
 This file continues the (a)→(c) direction of Proposition 3 from arXiv:0909.5347:
 **IsPrimitivePaper A → IsStronglyIrreduciblePaper A**.
 
-It builds on the helper lemmas in `ImpliesStronglyIrreducible` (Parts 1–8) and develops:
+It builds on the auxiliary lemmas in `ImpliesStronglyIrreducible` (Parts 1–8) and develops:
 
 - **Part 9: Spectral perturbation** — from peripheral eigenvectors to PSD non-PosDef
-  fixed points (the machinery for case (iii) of Wolf §6.4 Theorem 6.7).
+  fixed points (the argument for case (iii) of Wolf Section 6.4 Theorem 6.7).
 - **Part 10: Uniqueness** of PSD fixed points under paper-primitivity.
 - **Part 11: Channel structure** — the iterated transfer map `E^p` is a quantum channel.
 - **Part 12: Hermitian vanishing** — Hermitian trace-zero `E^p`-fixed points vanish
@@ -24,14 +24,14 @@ It builds on the helper lemmas in `ImpliesStronglyIrreducible` (Parts 1–8) and
 - **Part 14: Conclusion** — `IsPrimitivePaper A → IsPeripherallyPrimitive A` and
   `IsPrimitivePaper A → IsStronglyIrreduciblePaper A`.
 
-For the packaged public Proposition 3 API, prefer
+For the public Proposition 3 formulation, prefer
 `TNLean.Wielandt.Primitivity.Equivalence`; this file is retained for specialized
 access to the intermediate lemmas used in the (a)→(c) proof.
 
 ## References
 
 - [Sanz, Pérez-García, Wolf, Cirac, arXiv:0909.5347], Proposition 3
-- Wolf, *Quantum Channels & Operations: Guided Tour*, §6.4
+- Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.4
 -/
 
 open scoped Matrix ComplexOrder BigOperators
@@ -41,7 +41,7 @@ namespace MPSTensor
 
 /-! ## Part 9: Spectral perturbation — from peripheral eigenvectors to PSD non-PosDef fixed points
 
-This section develops the spectral-perturbation machinery needed for the paper's case (iii)
+This section develops the spectral-perturbation argument needed for the paper's case (iii)
 in Proposition 3 (a)→(c) of arXiv:0909.5347.
 
 **Setup**: Given `ρ.PosDef` with `E(ρ) = ρ`, and a nontrivial peripheral eigenvector
@@ -50,7 +50,7 @@ all ingredients toward constructing a matrix `τ` satisfying:
 - `τ.PosSemidef`, `τ ≠ 0`, `(E ^ p) τ = τ`, `¬ τ.PosDef`
 
 Paper: This corresponds to the spectral-perturbation argument in Proposition 3,
-case (iii), and in Wolf §6.4 Theorem 6.7.
+case (iii), and in Wolf Section 6.4 Theorem 6.7.
 -/
 
 section SpectralPerturbation
@@ -108,14 +108,6 @@ theorem transferMap_pow_conjTranspose_eigenvector_of_root_of_unity
 
 /-! ### Step 3: Hermitian parts are fixed points -/
 
-/-- `X + X†` is always Hermitian. -/
-private lemma isHermitian_add_conjTranspose
-    (X : Matrix (Fin D) (Fin D) ℂ) :
-    (X + Xᴴ).IsHermitian := by
-  unfold Matrix.IsHermitian
-  rw [Matrix.conjTranspose_add, Matrix.conjTranspose_conjTranspose]
-  abel
-
 /-- `i • (X† - X)` is always Hermitian. -/
 private lemma isHermitian_smul_I_sub_conjTranspose
     (X : Matrix (Fin D) (Fin D) ℂ) :
@@ -169,21 +161,6 @@ theorem trace_eigenvector_eq_zero
   rcases mul_eq_zero.mp h2 with h | h
   · exact absurd (sub_eq_zero.mp h) hμ_ne
   · exact h
-
-/-- Trace of `X + X†` vanishes when trace of `X` vanishes. -/
-private lemma trace_hermitianPart_eq_zero
-    {X : Matrix (Fin D) (Fin D) ℂ}
-    (htr : Matrix.trace X = 0) :
-    Matrix.trace (X + Xᴴ) = 0 := by
-  rw [Matrix.trace_add, Matrix.trace_conjTranspose, htr, star_zero, add_zero]
-
-/-- Trace of `i(X† - X)` vanishes when trace of `X` vanishes. -/
-private lemma trace_antiHermitianPart_eq_zero
-    {X : Matrix (Fin D) (Fin D) ℂ}
-    (htr : Matrix.trace X = 0) :
-    Matrix.trace (Complex.I • (Xᴴ - X)) = 0 := by
-  rw [Matrix.trace_smul, Matrix.trace_sub, Matrix.trace_conjTranspose, htr, star_zero,
-    sub_zero, smul_zero]
 
 /-- At least one of `X + X†` and `i(X† - X)` is nonzero when `X ≠ 0`. -/
 private lemma hermitianParts_not_both_zero
@@ -252,20 +229,25 @@ theorem exists_hermitian_ne_zero_trace_zero_pow_fixedPoint
       ¬H.PosSemidef := by
   have htr := trace_eigenvector_eq_zero A hNorm hEig hμ_ne
   rcases hermitianParts_not_both_zero hX_ne with h | h
-  · exact ⟨X + Xᴴ,
-      isHermitian_add_conjTranspose X, h,
-      trace_hermitianPart_eq_zero htr,
+  · have htrH : Matrix.trace (X + Xᴴ) = 0 := by
+      rw [Matrix.trace_add, Matrix.trace_conjTranspose, htr, star_zero, add_zero]
+    exact ⟨X + Xᴴ,
+      Matrix.isHermitian_add_transpose_self X, h,
+      htrH,
       transferMap_pow_hermitianPart_fixedPoint A hEig hroot,
       not_posSemidef_of_hermitian_ne_zero_trace_eq_zero
-        (isHermitian_add_conjTranspose X) h (trace_hermitianPart_eq_zero htr)⟩
-  · exact ⟨Complex.I • (Xᴴ - X),
+        (Matrix.isHermitian_add_transpose_self X) h htrH⟩
+  · have htrH : Matrix.trace (Complex.I • (Xᴴ - X)) = 0 := by
+      rw [Matrix.trace_smul, Matrix.trace_sub, Matrix.trace_conjTranspose, htr, star_zero,
+        sub_zero, smul_zero]
+    exact ⟨Complex.I • (Xᴴ - X),
       isHermitian_smul_I_sub_conjTranspose X, h,
-      trace_antiHermitianPart_eq_zero htr,
+      htrH,
       transferMap_pow_antiHermitianPart_fixedPoint A hEig hroot,
       not_posSemidef_of_hermitian_ne_zero_trace_eq_zero
-        (isHermitian_smul_I_sub_conjTranspose X) h (trace_antiHermitianPart_eq_zero htr)⟩
+        (isHermitian_smul_I_sub_conjTranspose X) h htrH⟩
 
-/-! ### Step 7: Helper lemmas for the perturbation construction -/
+/-! ### Step 7: Auxiliary lemmas for the perturbation construction -/
 
 /-- **Negative eigenvalue of non-PSD Hermitian matrix.**
 
@@ -303,12 +285,7 @@ theorem perturbation_ne_zero_of_trace_zero [NeZero D]
   rw [Matrix.trace_add, Matrix.trace_smul, htr, smul_zero, add_zero] at this
   have htr_pos : (0 : ℝ) < (ρ.trace).re := by
     rw [hρ.isHermitian.trace_eq_sum_eigenvalues]
-    -- Goal: 0 < (∑ i, ↑(eigenvalues i)).re
-    -- Since eigenvalues are real, .re of the sum = sum of eigenvalues
-    suffices h : 0 < ∑ i : Fin D, hρ.isHermitian.eigenvalues i by
-      calc (0 : ℝ) < ∑ i : Fin D, hρ.isHermitian.eigenvalues i := h
-        _ = (∑ i, (hρ.isHermitian.eigenvalues i : ℂ)).re := by simp
-        _ = _ := rfl
+    simp only [Complex.re_sum]
     exact Finset.sum_pos (fun i _ => hρ.eigenvalues_pos i)
       ⟨⟨0, NeZero.pos D⟩, Finset.mem_univ _⟩
   exact absurd this (ne_of_apply_ne Complex.re (ne_of_gt htr_pos))
@@ -342,7 +319,7 @@ fixed points: any two nonzero PSD fixed points of `E^p` under paper-primitivity
 must be proportional.
 
 Paper: this corresponds to the non-degeneracy/uniqueness claim in Proposition 3
-(a)→(c) of arXiv:0909.5347 and Wolf Thm 6.7, case (iii). -/
+(a)→(c) of arXiv:0909.5347 and Wolf Theorem 6.7, case (iii). -/
 
 section Uniqueness
 
@@ -465,7 +442,7 @@ If `A` is paper-primitive with witness `q`, and normalized (`∑ A_i† * A_i = 
 then any Hermitian matrix `H` with `trace(H) = 0` and `E^p(H) = H` must be zero.
 
 **Proof outline:**
-1. Decompose `H = Q₁ - Q₂` via CFC (Wolf Prop 6.8), with `Q₁, Q₂` PSD and
+1. Decompose `H = Q₁ - Q₂` via CFC (Wolf Proposition 6.8), with `Q₁, Q₂` PSD and
    `E^p`-fixed.
 2. By PSD uniqueness (Part 10): if both `Q₁, Q₂ ≠ 0`, then `Q₁ = c₁ • ρ` and
    `Q₂ = c₂ • ρ` for some common PosDef `ρ`.
@@ -484,7 +461,7 @@ theorem hermitian_pow_fixedPoint_eq_zero_of_trace_eq_zero_of_isPrimitivePaper [N
   set Ep := ((transferMap (d := d) (D := D) A) ^ p :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) with hEp_def
   have hCh : IsChannel Ep := transferMap_pow_isChannel A hNorm p
-  -- Step 2: Decompose H = Q₁ - Q₂ with both PSD and E^p-fixed (Wolf Prop 6.8)
+  -- Step 2: Decompose H = Q₁ - Q₂ with both PSD and E^p-fixed (Wolf Proposition 6.8)
   obtain ⟨Q₁, Q₂, hQ₁_psd, hQ₂_psd, hH_decomp, hEQ₁, hEQ₂⟩ :=
     IsChannel.posSemidef_parts_of_hermitian_fixedPoint (E := Ep) hCh hH_herm hH_fix
   -- Step 3: Get a PosDef E-fixed point ρ₀ for reference
@@ -541,7 +518,7 @@ a nonzero Hermitian trace-zero E^p-fixed matrix — which must vanish by Part 12
 This gives the desired contradiction.
 
 Paper: this is case (iii) of the contradiction argument in Proposition 3 (a)→(c)
-of arXiv:0909.5347 and Wolf §6.4 Theorem 6.7. -/
+of arXiv:0909.5347 and Wolf Section 6.4 Theorem 6.7. -/
 
 section PeripheralContradiction
 
@@ -571,12 +548,14 @@ theorem not_isPrimitivePaper_of_root_of_unity_eigenvector [NeZero D]
 
 end PeripheralContradiction
 
-/-! ## Part 14: Proposition 3(a) → (c) conclusion — IsPrimitivePaper implies IsPeripherallyPrimitive
+/-! ## Part 14: Proposition 3(a) → (c) conclusion
+
+Paper-primitivity implies peripheral primitivity.
 
 The culminating theorem of the (a)→(c) direction: paper-primitivity of an MPS
 tensor `A` implies peripheral primitivity of its transfer map.
 
-**Proof strategy** (following Wolf §6.4 / arXiv:0909.5347 Proposition 3):
+**Proof strategy** (following Wolf Section 6.4 / arXiv:0909.5347 Proposition 3):
 
 1. Paper-primitivity implies tensor-irreducibility (Part 7).
 2. Tensor-irreducibility + normalization imply (via the blocking-periodicity
@@ -602,7 +581,7 @@ reduction (`exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor`),
 eigenvector power lifting, and the peripheral-eigenvalue contradiction engine
 (Part 13).
 
-Paper: Proposition 3 (a)⟹(c) of arXiv:0909.5347. Wolf §6.4 Theorem 6.7. -/
+Paper: Proposition 3 (a)⟹(c) of arXiv:0909.5347. Wolf Section 6.4 Theorem 6.7. -/
 theorem isPeripherallyPrimitive_of_isPrimitivePaper [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -636,7 +615,8 @@ theorem isPeripherallyPrimitive_of_isPrimitivePaper [NeZero D]
         ((Module.End.hasEigenvector_iff.mpr
           ⟨Module.End.mem_eigenspace_iff.mpr hEigP, hX_ne⟩))
     -- ‖μ^p‖ = 1
-    have hμp_norm : ‖μ ^ p‖ = 1 := norm_pow_eq_one_of_norm_eq_one hμ_norm p
+    have hμp_norm : ‖μ ^ p‖ = 1 := by
+      simp [norm_pow, hμ_norm]
     -- By IsPrimitive (E^p): μ^p = 1
     have hμp_eq : μ ^ p = 1 := hPrimP.unique_peripheral (μ ^ p) hμp_eig hμp_norm
     -- If μ ≠ 1, get contradiction via Part 13
@@ -666,12 +646,12 @@ a positive-definite fixed point, peripheral spectrum `{1}`, and is irreducible
    `IsIrreducibleMap` on the transfer map
    (`isIrreducibleCP_transferMap_of_isIrreducibleTensor`).
 
-This packaged strong-irreducibility statement is exactly the input later fed
+This formulated strong-irreducibility statement is exactly the input later fed
 into Proposition 3(c)→(b), which yields eventual full Kraus rank (hence
 normality) directly, without passing through an aperiodicity argument.
 
 Paper: Proposition 3 (a)⟹(c) of arXiv:0909.5347.
-This is the full paper-facing (a)→(c) direction. -/
+This is the full (a)→(c) direction. -/
 theorem isStronglyIrreduciblePaper_of_isPrimitivePaper [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -693,7 +673,7 @@ theorem isStronglyIrreduciblePaper_of_isPrimitivePaper [NeZero D]
   have hIrr : IsIrreducibleMap E :=
     isIrreducibleCP_transferMap_of_isIrreducibleTensor A
       (isIrreducibleTensor_of_isPrimitivePaper A ⟨q, hq⟩)
-  -- Step 6: Package into IsStronglyIrreduciblePaper
+  -- Step 6: assemble `IsStronglyIrreduciblePaper`.
   exact isStronglyIrreduciblePaper_of ρ hρ_pd hρ_fix hCPrim hIrr
 
 end Construction

@@ -1,0 +1,33 @@
+name: Oversized Lean file guard
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+# New oversized files (any Lean file over 1000 lines) cause this check to fail.
+# The previous grandfathered files have been split into submodules.
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  guard:
+    name: Check Lean file lengths
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Run oversized-file guard
+        run: >
+          python3 scripts/check_oversized_lean_files.py
+          --root .

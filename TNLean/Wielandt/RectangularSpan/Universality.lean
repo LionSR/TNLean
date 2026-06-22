@@ -7,10 +7,10 @@ Authors: TNLean contributors
 import TNLean.Wielandt.RectangularSpan.UniversalityAux
 
 /-!
-# Rectangular Span Universality — Sharp Backends (Sections 8g–8h)
+# Rectangular Span Universality — Sharp Bounds (Sections 8g–8h)
 
-This module is the second half of the rectangular-span universality proof.  It imports
-all the auxiliary infrastructure from `UniversalityAux` and proves the key unconditional
+This module is the second half of the rectangular-span universality proof. It imports
+the auxiliary lemmas from `UniversalityAux` and proves the key unconditional
 theorems.
 
 ## Main results
@@ -26,7 +26,7 @@ theorems.
   reduction of the sharp D²−D+1 bound to a single strict-growth hypothesis, and the
   structural invariance theorem `rectSpan_eq_mulLeft_image_of_finrank_eq`.
 - **Section 8h** (`ExactPropagation`): permanence chain via right-expansion of `rectSpan`,
-  strict growth under `IsNormal`, unconditional assembly, and eigenvector padding to exact
+  strict growth under `IsNormal`, unconditional rectangular span, and eigenvector padding to exact
   word-level.
 -/
 
@@ -51,27 +51,29 @@ We prove:
    a non-decreasing `ℕ → ℕ` sequence that is *strictly increasing below the ceiling*
    reaches the ceiling within `C - a₀` steps.
 2. **`rectSpan_nilpIndex_eq_range_of_strict_growth`** — strict growth
-   → the first `n₀ ≤ D · D̃` with `rectSpan = range`.
+   → the first `n₀ ≤ D · D'` with `rectSpan = range`.
    Monotonicity is now automatic via `rectSpan_nilpIndex_finrank_mono` (Section 8f½).
 3. **`wielandt_unconditional_sharp_of_strict_growth`** — the complete
    unconditional `D² − D + 1` Lemma 2(b) assuming only strict growth.
 4. **`rectSpan_eq_mulLeft_image_of_finrank_eq`** — structural consequence of
    finrank stabilization: `rectSpan P A (n+1) = (A i₀) · rectSpan P A n`.
-   This is the key algebraic invariance that must be contradicted by `IsNormal` to
-   discharge the strict growth hypothesis.
+   This is the key algebraic invariance contradicted by `IsNormal` in the strict
+   growth theorem proved below.
 
-### What remains for the fully unconditional sharp bound
+### Strict growth and the fully unconditional sharp bound
 
-The only remaining piece is proving:
+The decisive strict-growth statement is:
 
-    ∀ n, finrank(rectSpan P A n) < D · D̃ →
+    ∀ n, finrank(rectSpan P A n) < D · D' →
          finrank(rectSpan P A n) < finrank(rectSpan P A (n+1))
 
 under `IsNormal` (the "Appendix A" argument from arXiv:0909.5347 / Paz).
 The structural theorem `rectSpan_eq_mulLeft_image_of_finrank_eq` shows that
 finrank stabilization below the ceiling forces `rectSpan P A (n+1) = (A i₀) · rectSpan P A n`
 (all generators A i captured by the i₀-direction modulo `ker(mulLeft P)`), which
-combined with primitivity gives the contradiction.
+combined with primitivity gives the contradiction. This proves rank-one
+membership in the cumulative span at the sharp bound; an eigenvector-padding
+step later upgrades this to the exact fixed-length word-span form.
 -/
 
 section StrictGrowthReduction
@@ -137,7 +139,7 @@ theorem strict_growth_reaches_ceiling_exists
 /-- **rectSpan at nilpIndex power reaches range under strict growth.**
 
 Under the strict growth hypothesis, the rectSpan reaches the
-full `mulLeft` range within `D · D̃` steps, where `D̃ = rank((A i₀)^D)`.
+full `mulLeft` range within `D · D'` steps, where `D' = rank((A i₀)^D)`.
 
 Monotonicity is now provided automatically by `rectSpan_nilpIndex_finrank_mono`
 (proved in Section 8f½ via Fitting disjointness).
@@ -163,10 +165,10 @@ theorem rectSpan_nilpIndex_eq_range_of_strict_growth
   set C := D * dTilde
   set a := fun n => finrank ℂ (rectSpan P A n)
   have hrank_eq : P.rank = dTilde := rank_pow_nilpIndex_eq A i₀
-  -- Monotonicity from nilpIndex growth infrastructure
+  -- Monotonicity from the nilpIndex growth lemmas.
   have hMono : ∀ n, a n ≤ a (n + 1) :=
     fun n => rectSpan_nilpIndex_finrank_mono A i₀ n
-  -- Ceiling: finrank(R_n) ≤ D * D̃ for all n
+  -- Ceiling: finrank(R_n) ≤ D * D' for all n
   have hbound : ∀ n, a n ≤ C := by
     intro n
     change finrank ℂ (rectSpan P A n) ≤ C
@@ -192,10 +194,10 @@ every rank-one matrix `vecMulVec φ ψ` lies in `cumulativeSpan A (D² - D + 1)`
 
 Monotonicity is now automatic (via `rectSpan_nilpIndex_finrank_mono`).
 
-This is the assembly that combines:
-1. Strict growth → rectSpan = range within D·D̃ steps
+This is the rectangular span step that combines:
+1. Strict growth → rectSpan = range within D·D' steps
 2. Sharp direct route → vecMulVec φ ψ ∈ wordSpan A (r + n₀)
-3. Arithmetic: r + D·D̃ ≤ D²-D+1
+3. Arithmetic: r + D·D' ≤ D²-D+1
 -/
 theorem wielandt_unconditional_sharp_of_strict_growth
     [NeZero D]
@@ -210,7 +212,7 @@ theorem wielandt_unconditional_sharp_of_strict_growth
         finrank ℂ (rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A (n + 1))) :
     ∀ ψ : Fin D → ℂ,
       vecMulVec φ ψ ∈ cumulativeSpan A (D ^ 2 - D + 1) := by
-  -- Get n₀ ≤ D * D̃ with rectSpan = range
+  -- Get n₀ ≤ D * D' with rectSpan = range
   obtain ⟨n₀, hn₀, hstab⟩ :=
     rectSpan_nilpIndex_eq_range_of_strict_growth A i₀ hStrict
   -- Apply conditional sharp theorem
@@ -229,10 +231,11 @@ image of `rectSpan P A n` under left-multiplication by `A i₀`.
 This means: ALL generators `A i` (not just `i₀`) contribute to `rectSpan` at
 level `n+1` only through the `A i₀` direction (modulo `ker(mulLeft P)`).
 Under `IsNormal` (primitivity), this invariance leads to a contradiction
-unless the finrank equals the ceiling `D · D̃`.
+unless the finrank equals the ceiling `D · D'`.
 
-To discharge the strict growth hypothesis in `wielandt_unconditional_sharp_of_strict_growth`,
-one needs to show this structural invariance contradicts primitivity. -/
+Primitivity contradicts this structural invariance: normality eventually forces
+the rectangular span to fill the whole range of left multiplication, while
+stabilization below the ceiling would keep it in a proper invariant subspace. -/
 theorem rectSpan_leftStep_image_eq_of_finrank_eq
     (A : MPSTensor d D) (i₀ : Fin d) (n : ℕ)
     (hfin : finrank ℂ (rectSpan ((A i₀) ^ D) A n) =
@@ -303,7 +306,7 @@ theorem proj_gen_in_leftStep_of_finrank_eq
 /-! ### Part 5: NilpIndex structural consequences
 
 Analogues of Part 4 for `P = (A i₀)^r` where `r = nilpIndex(toLin'(A i₀))`.
-These use the nilpIndex growth infrastructure from Section 8f½. -/
+These use the nilpIndex growth lemmas from Section 8f½. -/
 
 /-- **NilpIndex version of structural invariance**: when finrank stabilizes
 at the nilpIndex power, `rectSpan P A (n+1) = (A i₀) · rectSpan P A n`. -/
@@ -320,7 +323,11 @@ theorem rectSpan_nilpIndex_eq_mulLeft_image_of_finrank_eq
     have hsurj := rectSpanNilpIndexLeftStep_surjective_of_finrank_eq
       A i₀ n hfin
     obtain ⟨⟨X, hX⟩, hXY⟩ := hsurj ⟨Y, hY⟩
-    exact ⟨X, hX, by simpa [LinearMap.mulLeft_apply] using congrArg Subtype.val hXY⟩
+    have hXYval : A i₀ * X = Y := by
+      have hval := congrArg Subtype.val hXY
+      change A i₀ * X = Y at hval
+      exact hval
+    exact ⟨X, hX, by simpa [LinearMap.mulLeft_apply] using hXYval⟩
   · -- ≥: (A i₀) * R_n ⊆ R_{n+1} by left-step
     intro Y hY
     obtain ⟨X, hX, rfl⟩ := Submodule.mem_map.mp hY
@@ -355,18 +362,19 @@ theorem proj_gen_in_leftStep_nilpIndex_of_finrank_eq
 /-! ### Part 6: Contrapositive — finrank stabilization ≠ range implies absorption
 
 The contrapositive of strict growth: if finrank stabilizes below the ceiling,
-then the rectSpan is a PROPER invariant subspace of range(mulLeft P) under
-the "quotient action" of generators via A_{i₀}. This is the KEY algebraic
-condition that must be contradicted under IsNormal. -/
+then the rectSpan is a proper invariant subspace of range(mulLeft P) under
+the quotient action of generators via A_{i₀}. This is the algebraic condition
+contradicted under `IsNormal`. -/
 
 /-- **Negation of strict growth implies absorption.**
 
-If `finrank(rectSpan P A n) < D * D̃` and `finrank(rectSpan P A n) =
-finrank(rectSpan P A (n+1))`, then `rectSpan P A n` is a PROPER subspace of
+If `finrank(rectSpan P A n) < D * D'` and `finrank(rectSpan P A n) =
+finrank(rectSpan P A (n+1))`, then `rectSpan P A n` is a proper subspace of
 `range(mulLeft P)` that absorbs all generator products via `A i₀`.
 
-This is the precise algebraic hypothesis that must be contradicted by
-primitivity to prove the strict growth claim. -/
+Primitivity rules out this situation because normality eventually makes the
+rectangular span equal to the full range, whereas absorption after stabilization
+would keep it proper. -/
 theorem rectSpan_nilpIndex_proper_absorption
     (A : MPSTensor d D) (i₀ : Fin d) (n : ℕ)
     (hlt : finrank ℂ (rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n) <
@@ -377,7 +385,7 @@ theorem rectSpan_nilpIndex_proper_absorption
       LinearMap.range (LinearMap.mulLeft ℂ
         ((A i₀) ^ nilpIndex (toLin' (A i₀)))) := by
   intro heq
-  -- If rectSpan = range, then finrank = D * D̃
+  -- If rectSpan = range, then finrank = D * D'
   have hceiling : finrank ℂ (rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n) =
       D * ((A i₀) ^ D).rank := by
     rw [heq, finrank_range_mulLeft, rank_pow_nilpIndex_eq A i₀]
@@ -399,11 +407,14 @@ Combined with the **commutativity** of `mulLeft` and `mulRight` on submodules
 1. **Right-expansion**: `rectSpan P A (n+1) = ⨆_j mulRight(A j)(rectSpan P A n)`
 2. **Structural permanence**: if `R_{n+1} = A i₀ · R_n` (from finrank stabilization),
    then `R_{n+2} = A i₀ · R_{n+1}` (by substituting and using commutativity)
-3. **Finrank permanence**: finrank(R_n) = finrank(R_{n+1}) ⟹ finrank(R_{n+1}) = finrank(R_{n+2})
-4. **Constant finrank**: stabilization at level n ⟹ finrank(R_m) = finrank(R_n) ∀ m ≥ n
+3. **Finrank permanence**:
+   finrank(R_n) = finrank(R_{n+1}) ⟹ finrank(R_{n+1}) = finrank(R_{n+2})
+4. **Constant finrank**:
+   stabilization at level n ⟹ finrank(R_m) = finrank(R_n) ∀ m ≥ n
 5. **Strict growth under IsNormal**: contrapositive of (4) using existence of N
    with rectSpan P A N = range(mulLeft P)
-6. **Unconditional sharp D²-D+1**: plugging (5) into `wielandt_unconditional_sharp_of_strict_growth`
+6. **Unconditional sharp D²-D+1**:
+   plug (5) into `wielandt_unconditional_sharp_of_strict_growth`
 -/
 
 section ExactPropagation
@@ -433,7 +444,7 @@ theorem wordSpan_succ_eq_mul_right (A : MPSTensor d D) (n : ℕ) :
       (Submodule.subset_span ⟨σ₂, rfl⟩)
   · exact wordSpan_mul_le A n 1
 
-/-! ### Helpers for length-1 word spans -/
+/-! ### Lemmas for length-1 word spans -/
 
 /-- `evalWord A (List.ofFn σ) = A (σ 0)` for `σ : Fin 1 → Fin d`. -/
 private lemma evalWord_ofFn_one (A : MPSTensor d D) (σ : Fin 1 → Fin d) :
@@ -487,19 +498,6 @@ theorem rectSpan_succ_eq_iSup_mulRight
 
 /-! ### Part 3: Permanence of finrank stabilization -/
 
-/-- Left-multiplication and right-multiplication commute on image submodules. -/
-private theorem map_mulRight_map_mulLeft_comm
-    (a b : Matrix (Fin D) (Fin D) ℂ)
-    (S : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) :
-    Submodule.map (LinearMap.mulRight ℂ b)
-      (Submodule.map (LinearMap.mulLeft ℂ a) S) =
-    Submodule.map (LinearMap.mulLeft ℂ a)
-      (Submodule.map (LinearMap.mulRight ℂ b) S) := by
-  simp only [← Submodule.map_comp]
-  congr 1
-  ext x
-  simp [LinearMap.mulLeft_apply, LinearMap.mulRight_apply, Matrix.mul_assoc]
-
 /-- **Structural permanence**: if `finrank(R_n) = finrank(R_{n+1})` then
 `R_{n+2} = (A i₀) · R_{n+1}`. -/
 theorem rectSpan_nilpIndex_succ2_eq_mulLeft_of_finrank_eq
@@ -519,7 +517,17 @@ theorem rectSpan_nilpIndex_succ2_eq_mulLeft_of_finrank_eq
   have hexp2 := rectSpan_succ_eq_iSup_mulRight P A (n + 1)
   have hexp1 := rectSpan_succ_eq_iSup_mulRight P A n
   rw [hstab] at hexp2
-  simp_rw [map_mulRight_map_mulLeft_comm (A i₀) _ (rectSpan P A n)] at hexp2
+  have hmap_comm (j : Fin d) :
+      Submodule.map (LinearMap.mulRight ℂ (A j))
+        (Submodule.map (LinearMap.mulLeft ℂ (A i₀)) (rectSpan P A n)) =
+      Submodule.map (LinearMap.mulLeft ℂ (A i₀))
+        (Submodule.map (LinearMap.mulRight ℂ (A j)) (rectSpan P A n)) := by
+    simp only [← Submodule.map_comp]
+    rw [show LinearMap.mulRight ℂ (A j) ∘ₗ LinearMap.mulLeft ℂ (A i₀) =
+        LinearMap.mulLeft ℂ (A i₀) ∘ₗ LinearMap.mulRight ℂ (A j) by
+      simpa [Module.End.mul_eq_comp] using
+        (LinearMap.commute_mulLeft_right (R := ℂ) (A i₀) (A j)).eq.symm]
+  simp_rw [hmap_comm] at hexp2
   rw [← Submodule.map_iSup, ← hexp1] at hexp2
   exact hexp2
 
@@ -592,10 +600,10 @@ private theorem rectSpan_nilpIndex_finrank_mono_le
     exact le_trans (ih (by omega)) (rectSpan_nilpIndex_finrank_mono A i₀ (m + k))
 
 /-- **Strict growth under `IsNormal`**: if `IsNormal A` and
-`finrank(R_n) < D * D̃`, then `finrank(R_n) < finrank(R_{n+1})`.
+`finrank(R_n) < D * D'`, then `finrank(R_n) < finrank(R_{n+1})`.
 
 By contradiction: stabilization below ceiling would freeze finrank at a value
-strictly less than D * D̃ for all future levels, contradicting the existence
+strictly less than D * D' for all future levels, contradicting the existence
 (under IsNormal) of a level N with rectSpan P A N = range(mulLeft P). -/
 theorem rectSpan_nilpIndex_strict_growth_of_isNormal
     (A : MPSTensor d D) (i₀ : Fin d)
@@ -746,7 +754,7 @@ theorem vecMulVec_eigenvector_exact_wordSpan
       finrank ℂ (rectSpan ((A i₀) ^ r) A n) <
         finrank ℂ (rectSpan ((A i₀) ^ r) A (n + 1)) :=
     fun n hlt => rectSpan_nilpIndex_strict_growth_of_isNormal A i₀ hN n hlt
-  -- Get n₀ ≤ D * D̃ with rectSpan = range
+  -- Get n₀ ≤ D * D' with rectSpan = range
   obtain ⟨n₀, hn₀, hstab⟩ :=
     rectSpan_nilpIndex_eq_range_of_strict_growth A i₀ hStrict
   -- vecMulVec φ ψ ∈ wordSpan A (r + n₀) from the direct route
@@ -763,74 +771,11 @@ theorem vecMulVec_eigenvector_exact_wordSpan
 
 end ExactPropagation
 
-/-! ## Section 9: Summary -/
-
-/-- The rank-one extraction and unconditional assembly are provided in
-`RankOne/ExtractionFull.lean`:
-- `exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors`: given external
-  word eigenvectors and `IsNormal A`, places `vecMulVec φ ψ` in a word span of
-  the blocked tensor.
-- `wielandt_blocked_assembly_complete`: combines the rank-one extraction with the
-  conditional assembly to produce `∃ N, wordSpan A N = ⊤` unconditionally.
-- `wielandt_lemma2b`: the fully unconditional Lemma 2(b).
-
-### Sharp direct route (Section 8f)
-The sharp direct route via `nilpIndex` provides:
-- `rank_pow_nilpIndex_eq`: `rank((A i₀)^r) = rank((A i₀)^D)`
-- `rank_pow_D_add_dimV0`: `rank((A i₀)^D) + dim(V₀) = D`
-- `range_mulLeft_pow_nilpIndex_eq`: range equality for mulLeft at nilpIndex
-- `vecMulVec_eigenvector_mem_wordSpan_nilpIndex`: direct route costing `r + n₀`
-- `sharp_bound_le`: `D · D̃ + r ≤ D² - D + 1` (pure arithmetic)
-- `vecMulVec_eigenvector_sharp_of_rectSpan`: conditional sharp Lemma 2(b)
-  — `∀ ψ, vecMulVec φ ψ ∈ cumulativeSpan A (D² - D + 1)`
-
-### NilpIndex growth infrastructure (Section 8f½)
-Mirrors Section 8 growth for P = (A i₀)^r where r = nilpIndex:
-- `mulLeft_mem_rectSpan_nilpIndex_succ`: left-step membership
-- `rectSpanNilpIndexLeftStep`: the linear map
-- `rectSpan_nilpIndex_finrank_mono`: finrank non-decreasing
-- `rectSpan_nilpIndex_finrank_le`: tight ceiling D * D̃
-- `exists_finrank_eq_succ_of_rectSpan_nilpIndex`: pigeonhole
-- `rectSpan_nilpIndex_finrank_ceiling_permanent`: ceiling finrank stays permanent
-- `rectSpan_nilpIndex_eq_range_of_finrank_eq_ceiling`: finrank = ceiling → rectSpan = range
-- `rectSpan_nilpIndex_range_permanent`: once rectSpan = range, stays there
-
-### Strict growth reduction (Section 8g)
-The strict growth section reduces the fully unconditional sharp D²-D+1 bound to:
-- `strict_growth_reaches_ceiling`: combinatorial: strict + mono + bounded → ceiling
-- `rectSpan_nilpIndex_eq_range_of_strict_growth`: **strict growth only** → rectSpan = range
-  within D·D̃ steps (monotonicity automatic via Section 8f½)
-- `wielandt_unconditional_sharp_of_strict_growth`: **strict growth only** + ¬IsUnit + eigenvector
-  → ∀ ψ, vecMulVec φ ψ ∈ cumulativeSpan A (D²-D+1)
-- `rectSpan_eq_mulLeft_image_of_finrank_eq`: structural invariance from finrank stabilization
-  — `rectSpan P A (n+1) = (A i₀) · rectSpan P A n`
-- `proj_gen_in_leftStep_of_finrank_eq`: all generators captured by i₀ direction
-
-### Exact-level propagation and strict growth (Section 8h)  ⭐ NEW
-The permanence chain that closes the Appendix-A bottleneck:
-- `wordSpan_succ_eq_mul_right`: `wordSpan A (n+1) = wordSpan A n * wordSpan A 1`
-- `rectSpan_succ_eq_iSup_mulRight`: right-expansion of rectSpan
-- `rectSpan_nilpIndex_succ2_eq_mulLeft_of_finrank_eq`: structural permanence
-- `rectSpan_nilpIndex_finrank_permanence'`: finrank permanence (one-step)
-- `rectSpan_nilpIndex_finrank_constant'`: constant finrank from stabilization
-- `rectSpan_nilpIndex_strict_growth_of_isNormal`: **strict growth under IsNormal** ⭐
-  — `finrank(R_n) < D·D̃ → finrank(R_n) < finrank(R_{n+1})`
-- `wielandt_sharp_unconditional`: **unconditional sharp D²-D+1 Lemma 2(b)** ⭐⭐
-  — `IsNormal → ¬IsUnit → eigenvector → ∀ψ, vecMulVec φ ψ ∈ cumulativeSpan A (D²-D+1)`
-
-### Eigenvector padding and exact wordSpan (Section 8h, Part 7)  ⭐⭐⭐ NEW
-Upgrades the cumulativeSpan result to exact wordSpan at the paper level D²-D+1:
-- `vecMulVec_eigenvector_pad_wordSpan`: one-step padding via eigenvector
-- `vecMulVec_eigenvector_pad_wordSpan_add`: iterated padding by `k` levels
-- `vecMulVec_eigenvector_mem_wordSpan_of_le`: monotone padding `n ≤ m → ∈ wordSpan m`
-- `vecMulVec_eigenvector_exact_wordSpan`: **exact paper-level D²-D+1** ⭐⭐⭐
-  — `IsNormal → ¬IsUnit → eigenvector → ∀ψ, vecMulVec φ ψ ∈ wordSpan A (D²-D+1)`
-
-This completes the exact-level backend at the paper level. The remaining work
-to get a fully unconditional `wordSpan A N = ⊤` for `N = D²-D+1` is purely
-in the top-level assembly: connecting eigenvector existence, blocking, and
-the sharp rank-one placement.
+/-!
+The subsequent rank-one step applies the exact word-span result above to word
+eigenvectors of suitable blocked tensors. Combined with the conditional
+rank-one reduction theorem, this gives a single word length whose evaluations span
+the full matrix algebra, and hence the fully unconditional form of Lemma 2(b).
 -/
-theorem wielandt_summary_documentation : True := trivial
 
 end MPSTensor

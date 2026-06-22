@@ -1,0 +1,488 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  11pt,
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{setspace}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+  \setmainfont[]{DejaVu Serif}
+  \setmathfont[]{DejaVu Math TeX Gyre}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{enumitem}
+\setlist[itemize]{topsep=3pt,itemsep=2pt,parsep=0pt}
+\setlist[enumerate]{topsep=3pt,itemsep=2pt,parsep=0pt}
+\usepackage{microtype}
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection}{0.7em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.7em}{}
+\usepackage[most]{tcolorbox}
+\tcbset{colback=gray!4,colframe=gray!40,arc=2pt,boxrule=0.4pt,left=6pt,right=6pt,top=5pt,bottom=5pt}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Recommendation on CPSV16 Step 1, One-Copy BNT, and Non-Dominant Projection},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={blue},
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Recommendation on CPSV16 Step 1, One-Copy BNT, and Non-Dominant
+Projection}
+\author{}
+\date{May 13, 2026}
+
+\begin{document}
+\maketitle
+
+\setstretch{1.08}
+\section{Recommendation on CPSV16 Step 1, one-copy BNT, and non-dominant
+projection}\label{recommendation-on-cpsv16-step-1-one-copy-bnt-and-non-dominant-projection}
+
+\subsection{Executive summary}\label{executive-summary}
+
+The current issue is not merely a missing estimate. It is a mismatch
+between three things:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  the paper-level BNT/canonical-form structure;
+\item
+  the current formalization surface, apparently called
+  \texttt{IsCanonicalFormBNT};
+\item
+  the proof strategy being attempted for CPSV16 Step 1.
+\end{enumerate}
+
+The current \texttt{IsCanonicalFormBNT} surface is described as carrying
+a single weight per sector with strict modulus ordering. This is a
+\textbf{one-copy specialization} of the paper's two-layer structure,
+where each BNT sector may contain several gauge-phase-equivalent copies
+and contributes a power-sum coefficient.
+
+The non-dominant per-block projection argument should not be pushed
+further. It works for the dominant block, but for a non-dominant block
+both sides of the projected identity can decay to zero. The paper's Step
+1 mechanism is instead linear independence of the relevant combined
+family and coefficient comparison.
+
+The examples below are meant to make the distinction concrete.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{1. Paper-level BNT structure is not
+one-copy}\label{paper-level-bnt-structure-is-not-one-copy}
+
+In the MPDO/CPGSV canonical-form framework, after grouping
+gauge-phase-equivalent normal blocks into a basis of normal tensors, one
+sector may contain several copies:
+
+\[
+A^i \simeq
+\bigoplus_{j=1}^g
+\bigoplus_{q=1}^{r_j}
+\mu_{j,q} X_{j,q} A_j^i X_{j,q}^{-1}.
+\]
+
+At the MPV level this gives
+
+\[
+V_N(A)
+=
+\sum_{j=1}^g
+\left(\sum_{q=1}^{r_j}\mu_{j,q}^N\right)V_N(A_j).
+\]
+
+So the coefficient attached to a BNT sector is generally a power sum
+
+\[
+c_j(N)=\sum_q \mu_{j,q}^N,
+\]
+
+not a single scalar power \(\mu_j^N\).
+
+The uploaded note explicitly describes the current
+\texttt{IsCanonicalFormBNT} surface as the specialization \(r_j=1\): one
+weight per sector, strictly ordered by modulus. That is a genuine
+restriction relative to the paper's BNT structure.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{2. Example: one BNT sector with two phase
+copies}\label{example-one-bnt-sector-with-two-phase-copies}
+
+Take one normal tensor \(C\), and consider the block tensor
+
+\[
+A = C \oplus (-C).
+\]
+
+Equivalently, this is one paper-level BNT tensor \(C\) with two scalar
+copies
+
+\[
+\mu_1=1,\qquad \mu_2=-1.
+\]
+
+Then
+
+\[
+V_N(A)=1^N V_N(C)+(-1)^N V_N(C)
+      =(1+(-1)^N)V_N(C).
+\]
+
+Thus
+
+\[
+V_N(A)=
+\begin{cases}
+2V_N(C), & N\text{ even},\\
+0, & N\text{ odd}.
+\end{cases}
+\]
+
+This is exactly the kind of phenomenon the paper's BNT-sector notation
+records: repeated gauge-phase-equivalent copies of the same normal block
+combine into one sector coefficient.
+
+But it cannot be represented by a \textbf{single} scalar power
+\(\mu^N V_N(C)\), because no scalar \(\mu\) satisfies
+
+\[
+\mu^N = 1+(-1)^N
+\]
+
+for all \(N\). The problem is not notation; the one-copy surface has
+removed genuine multiplicity data.
+
+This example should not be described as two distinct BNT elements. It is
+one BNT element with multiplicity two. That is precisely the distinction
+the current one-copy predicate appears to collapse.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{3. Example: equal-modulus
+copies}\label{example-equal-modulus-copies}
+
+Similarly, take
+
+\[
+A = C \oplus e^{i\theta}C.
+\]
+
+Then
+
+\[
+V_N(A)=(1+e^{iN\theta})V_N(C).
+\]
+
+Both scalar copies have modulus \(1\). A strict block-level ordering
+
+\[
+|\mu_1|>|\mu_2|>\cdots
+\]
+
+cannot keep both copies as separate ordered blocks. The paper handles
+this by grouping them into one BNT sector and recording the coefficient
+
+\[
+1+e^{iN\theta}.
+\]
+
+Therefore, a strict one-weight-per-sector formalization is weaker than
+the paper unless there is an additional theorem that reconstructs the
+full sector/multiplicity structure.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{4. Why the non-dominant projection argument
+fails}\label{why-the-non-dominant-projection-argument-fails}
+
+The uploaded note's analytic point is correct. Suppose, after dominant
+normalization, the assembled \(B\)-side has two blocks
+
+\[
+B_{\mathrm{tot}}=B_0\oplus \lambda B_1,
+\qquad 0<|\lambda|<1.
+\]
+
+Assume the proportionality scalar has the dominant behavior
+
+\[
+c_N\sim 1.
+\]
+
+Project onto the dominant block \(B_0\). The leading RHS contribution is
+
+\[
+c_N\cdot 1^N\cdot
+\langle V_N(B_0),V_N(B_0)\rangle
+\to \ell_0\neq 0.
+\]
+
+So if the LHS tends to zero, this gives a contradiction.
+
+But now project onto the non-dominant block \(B_1\). The leading RHS
+contribution is
+
+\[
+c_N\lambda^N
+\langle V_N(B_1),V_N(B_1)\rangle
+\sim \lambda^N\ell_1
+\to 0.
+\]
+
+Thus both sides of the projected identity may tend to zero. There is no
+contradiction.
+
+This is not a Lean technicality. It is a genuine analytic obstruction to
+extending the dominant-block projection proof to arbitrary blocks.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{5. What the paper's Step 1 proof uses
+instead}\label{what-the-papers-step-1-proof-uses-instead}
+
+The source proof should be formalized as a
+linear-independence/coefficient-comparison argument.
+
+Start from eventual proportionality:
+
+\[
+\sum_j (\mu_j^A)^N V_N(A_j)
+=
+c_N\sum_k(\mu_k^B)^N V_N(B_k).
+\]
+
+Fix \(k_0\). Move all terms except \(B_{k_0}\) to the left:
+
+\[
+\sum_j (\mu_j^A)^N V_N(A_j)
+-
+c_N\sum_{k\neq k_0}(\mu_k^B)^N V_N(B_k)
+=
+c_N(\mu_{k_0}^B)^N V_N(B_{k_0}).
+\]
+
+If the actual family appearing in this relation,
+
+\[
+\{V_N(A_j)\}_j\cup \{V_N(B_k)\}_k,
+\]
+
+is eventually linearly independent, then coefficient comparison forces
+
+\[
+c_N(\mu_{k_0}^B)^N=0.
+\]
+
+This contradicts \(c_N\neq0\) and \(\mu_{k_0}^B\neq0\).
+
+The crucial point is that this proof does \textbf{not} require
+
+\[
+c_N(\mu_{k_0}^B)^N
+\]
+
+to stay bounded away from zero. It only requires it to be nonzero. This
+is why coefficient comparison works where projection estimates fail.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{6. Why the smaller linear-independence lemma is
+insufficient}\label{why-the-smaller-linear-independence-lemma-is-insufficient}
+
+It is not enough to know linear independence of
+
+\[
+\{V_N(A_j)\}_j\cup\{V_N(B_{k_0})\}.
+\]
+
+The exact vector relation also contains the other \(B_k\)'s:
+
+\[
+\sum_j a_j(N)V_N(A_j)
+-
+\sum_{k\neq k_0} b_k(N)V_N(B_k)
+-
+b_{k_0}(N)V_N(B_{k_0})=0.
+\]
+
+Independence of the smaller family gives no coefficient information in a
+relation involving omitted vectors.
+
+A finite-dimensional toy example shows the issue. In \(\mathbb C^2\),
+let
+
+\[
+u=e_1,\qquad v=e_2,\qquad w=e_1+e_2.
+\]
+
+The pair \(\{u,v\}\) is linearly independent. But in the larger family,
+
+\[
+w-u-v=0.
+\]
+
+So knowing that \(\{u,v\}\) is independent does not let one isolate the
+coefficient of \(v\) in a relation involving \(w\). Analogously, knowing
+independence of \(\{A_j\}\cup\{B_{k_0}\}\) does not isolate \(B_{k_0}\)
+in the proportionality identity involving all \(B_k\).
+
+The needed statement is the full combined-family linear independence
+lemma, or at least a version strong enough to isolate the coefficient of
+\(B_{k_0}\) in the actual relation.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{7. Recommended message to the formalization
+agents}\label{recommended-message-to-the-formalization-agents}
+
+Please separate the following theorem surfaces explicitly:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{One-copy BNT canonical form.}\\
+  One scalar weight per BNT sector, strict ordering of moduli. This is
+  the current \texttt{IsCanonicalFormBNT} surface as described in the
+  uploaded note.
+\item
+  \textbf{Paper-level sector/BNT canonical form.}\\
+  A sector may contain several gauge-phase-equivalent copies, and the
+  coefficient of a BNT block is a power sum \(\sum_q\mu_{j,q}^N\).
+\item
+  \textbf{Fully unconditional canonical-form existence.}\\
+  Starting from arbitrary tensors, one must still construct the
+  appropriate canonical/BNT data before applying the uniqueness theorem.
+\end{enumerate}
+
+The present non-dominant Step 1 issue concerns the gap between (1) and
+(2), plus an invalid attempt to prove a universal statement using a
+dominant-block projection argument.
+
+Please do not try to extend the dominant-block projection proof to
+non-dominant blocks. For a non-dominant block, the scalar prefactor
+decays, so the projected proportionality identity can reduce
+asymptotically to \(0=0\). The two-block example
+\(B_0\oplus\lambda B_1\), \(|\lambda|<1\), already shows this.
+
+The correct CPSV/MPDO proof mechanism is eventual linear independence of
+the full combined family and exact coefficient comparison.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{8. Recommended formalization
+repairs}\label{recommended-formalization-repairs}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Rename or document the current predicate as \textbf{one-copy BNT
+  canonical form}.
+\item
+  Add or promote a paper-faithful sector structure:
+
+  \[
+  (\lambda_j,\{\omega_{j,q}\}_q,A_j),
+  \qquad |\omega_{j,q}|=1,
+  \]
+
+  with sector coefficient
+
+  \[
+  \lambda_j^N\sum_q\omega_{j,q}^N.
+  \]
+\item
+  Prove the full combined-family Lem1:
+
+  \[
+  \text{all relevant cross-overlaps decay}
+  \Longrightarrow
+  \{V_N(A_j)\}_j\cup\{V_N(B_k)\}_k
+  \text{ is eventually linearly independent}.
+  \]
+\item
+  Use exact coefficient comparison, not asymptotic projection, for
+  arbitrary \(k_0\).
+\item
+  Keep the dominant projection theorem as a useful special lemma, but do
+  not present it as the proof of the universal nondecay statement.
+\item
+  Do not claim the full MPDO/CPGSV BNT theorem from the one-copy
+  predicate unless a sector/grouping theorem has been added.
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Final classification}\label{final-classification}
+
+The current situation is best classified as:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{scope restriction:} the current predicate is one-copy and
+  therefore weaker than the paper-level BNT structure;
+\item
+  \textbf{proof-strategy gap:} the non-dominant projection argument is
+  analytically insufficient;
+\item
+  \textbf{repairable formalization gap:} the right repair is full
+  combined-family linear independence plus coefficient comparison, or a
+  move to the paper-faithful sector decomposition.
+\end{itemize}
+
+The examples above are deliberately simple. Their role is to prevent the
+issue from being mistaken for a cosmetic naming complaint. The
+formalization is not merely missing polish: it is using a restricted
+canonical-form surface and a proof method that fails exactly where the
+paper switches to BNT-sector linear independence.
+
+\end{document}

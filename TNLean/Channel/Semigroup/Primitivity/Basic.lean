@@ -13,19 +13,19 @@ import TNLean.Channel.Peripheral.ClosureFixedPoint
 import TNLean.Channel.FixedPoint.Cesaro
 import TNLean.Channel.Primitive
 import TNLean.MPS.Irreducible.Adjoint
-import TNLean.Spectral.SpectralGap
+import TNLean.Spectral.TransferOperatorGap
 import Mathlib.Analysis.Calculus.Deriv.Mul
 import Mathlib.NumberTheory.Real.Irrational
 
 /-!
-# Irreducibility implies primitivity for quantum dynamical semigroups — Prop 7.5
+# Irreducibility implies primitivity for quantum dynamical semigroups — Proposition 7.5
 
 ## Main results
 
-* `irreducible_semigroup_implies_primitive` — **Prop 7.5** (forward direction):
+* `irreducible_semigroup_implies_primitive` — **Proposition 7.5** (forward direction):
   If `T_{t₀} = exp(t₀ · L)` is irreducible for some `t₀ > 0`, then
   `T_t` is primitive for ALL `t > 0`.
-* `qds_irreducible_iff_primitive` — **Prop 7.5** (full equivalence):
+* `qds_irreducible_iff_primitive` — **Proposition 7.5** (full equivalence):
   `∃ t₀ > 0, T_{t₀} irreducible ↔ ∀ t > 0, T_t primitive`.
 
 ## Proof outline for `irreducible_semigroup_implies_primitive`
@@ -33,14 +33,13 @@ import Mathlib.NumberTheory.Real.Irrational
 The proof requires the following chain:
 
 **Step A** (continuous-time key): `T_{t₀}` irreducible → `T_t` irreducible for all `t > 0`.
-This is the core continuous-time fact: irreducibility is a generator property.
-In a norm-continuous QDS `T_t = exp(tL)`, the generator `L` is irreducible
-(no non-trivial invariant faces of the PSD cone). An irreducible generator
-generates an irreducible semigroup: `T_t` is irreducible for ALL `t > 0`.
-*Missing infrastructure*: formalization of "generator irreducibility ↔ T_t irr ∀ t".
+This is the core continuous-time fact: irreducibility propagates through the
+norm-continuous semigroup.  The Lean proof realizes this propagation in
+`irreducible_all_of_irreducible_time` by combining the unique faithful fixed
+density at the irreducible time with a primitive positive fractional slice.
 
 **Step B**: `T_t` irreducible + channel → peripheral eigenvalues of `T_t` are roots
-of unity (Wolf Thm 6.6). This channel-level bridge is now available as
+of unity (Wolf Theorem 6.6). This channel-level result is available as
 `peripheral_isRootOfUnity_of_irreducible_channel`, proved by choosing a Kraus
 representation, converting to an irreducible tensor, and applying the existing
 blocking-periodicity theorem.
@@ -51,16 +50,17 @@ peripheral `μ`), the eigenvector `V` with `T_t V = μ V` satisfies
 is one-dimensional.  Thus `V = c · σ'` (the unique faithful density fixed point),
 and `T_t σ' = μ σ'`.  Trace preservation forces `μ = 1`.
 
-The helper lemmas `eigenvalue_exp_of_eigenvalue_generator`,
+The auxiliary lemmas `eigenvalue_exp_of_eigenvalue_generator`,
 `eq_zero_of_exp_mul_I_isRootOfUnity`, and `re_eq_zero_of_peripheral_generator`
-are fully proved. Step A (generator irreducibility ↔ semigroup irreducibility)
-is formalized via `irreducible_all_of_irreducible_time` in
-`IrreducibleAnalysis.lean`, but that theorem transitively depends on 13
-`sorry` placeholders (formerly `axiom` declarations).
+are fully proved.  The propagation theorem `irreducible_all_of_irreducible_time`
+in `IrreducibleAnalysis.lean` establishes Step A from the faithful fixed-density
+construction, the primitive fractional slice, and the one-dimensional fixed-point
+space obtained from that slice.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §7.1, Prop 7.5][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 7.1,
+  Proposition 7.5][Wolf2012Quantum]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators NNReal TNOperatorSpace
@@ -88,8 +88,6 @@ structure IsQuantumDynSemigroup
 If `λ` is an eigenvalue of `exp(t₀ · L)`, then `λ^(t/t₀)` is an eigenvalue
 of `exp(t · L)`. This uses `spectrum.exp_mem_exp`. -/
 
-set_option maxHeartbeats 5000000 in
--- The spectral-mapping step uses `spectrum.exp_mem_exp` on a large CLM expression.
 /-- If `μ` is an eigenvalue of `L`, then `exp(t · μ)` is an eigenvalue of
 `exp(t · L)` (spectral mapping theorem for exp). -/
 theorem eigenvalue_exp_of_eigenvalue_generator
@@ -123,14 +121,16 @@ theorem eigenvalue_exp_of_eigenvalue_generator
     · have hu : IsUnit t := isUnit_iff_ne_zero.mpr ht
       simpa [smul_eq_mul] using
         (spectrum.smul_mem_smul_iff (a := L) (r := hu.unit)).mpr hμ
-  simpa [Complex.exp_eq_exp_ℂ] using
-    (@spectrum.exp_mem_exp ℂ
+  have hs :=
+    @spectrum.exp_mem_exp ℂ
       (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
-      inferInstance inferInstance inferInstance hComplete (t • L) (z := t * μ) htmul)
+      inferInstance inferInstance inferInstance hComplete (t • L) (z := t * μ) htmul
+  rw [Complex.exp_eq_exp_ℂ]
+  exact hs
 
 /-! ## Key lemma: exp(itθ) root of unity for all t > 0 implies θ = 0
 
-This is the number-theoretic heart of Prop 7.5. If `exp(i t θ)` is a root of unity
+This is the number-theoretic heart of Proposition 7.5. If `exp(i t θ)` is a root of unity
 for every `t > 0`, then `θ = 0`. The proof uses the density of irrationals:
 `exp(i t θ)^p = 1` means `t p θ ∈ 2π ℤ`, but this cannot hold for all `t > 0`
 unless `θ = 0` (since `t ↦ t θ / (2π)` takes irrational values). -/

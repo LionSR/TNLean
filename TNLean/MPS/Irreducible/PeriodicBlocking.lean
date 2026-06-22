@@ -7,9 +7,9 @@ import TNLean.Channel.Peripheral.CyclicDecomposition
 open scoped BigOperators
 
 /-!
-# Periodic-sector blocking helpers
+# Periodic-sector blocking constructions
 
-This module records lightweight definitions used by periodic-sector arguments:
+This module defines the elementary blocking data used by periodic-sector arguments:
 
 * the gcd-based block count/period for blocking by an arbitrary `p`;
 * a concrete orbit-sum projection builder (`∑ l, T^[l](Q)`);
@@ -18,7 +18,7 @@ This module records lightweight definitions used by periodic-sector arguments:
 
 namespace MPSTensor
 
-/-! ## GCD blocking numerics (Lemma 2.5 bookkeeping) -/
+/-! ## GCD blocking arithmetic (Lemma 2.5) -/
 
 /-- Number of periodic blocks after blocking period-`m` data by `p`: `gcd(m,p)`. -/
 def periodicBlockCount (m p : ℕ) : ℕ := Nat.gcd m p
@@ -61,7 +61,7 @@ def NonrepeatingSectors {D m : ℕ} (P : Fin m → MatrixAlg D) : Prop :=
 def blockedSectorIndex {m : ℕ} [NeZero m] (p : ℕ) (α : ℕ) (k : ℕ) : Fin m :=
   ⟨(α + p * k) % m, Nat.mod_lt _ (Nat.pos_of_ne_zero (NeZero.ne m))⟩
 
-/-- Blocked sector projection `P̃_α = ∑_k P_[α+pk mod m]` with `k < m / gcd(m,p)`. -/
+/-- Blocked sector projection `P'_α = ∑_k P_[α+pk mod m]` with `k < m / gcd(m,p)`. -/
 noncomputable def blockedSectorProjection {D m : ℕ} [NeZero m]
     (P : Fin m → MatrixAlg D) (p : ℕ) (α : ℕ) : MatrixAlg D :=
   ∑ k : Fin (periodicBlockPeriod m p), P (blockedSectorIndex (m := m) p α k)

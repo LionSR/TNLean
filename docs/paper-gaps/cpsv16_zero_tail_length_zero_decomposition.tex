@@ -1,0 +1,144 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\newcommand{\MPV}[2]{V^{(#1)}\!\left(#2\right)}
+
+\title{The Length-Zero (``Zero-Tail'') Bookkeeping in the\\
+  Blocked Canonical-Form Decomposition}
+\author{}
+\date{2026-05-30}
+
+\begin{document}
+\maketitle
+
+\noindent
+This note explains why carrying the blocked canonical-form decomposition as an
+\emph{all-length} matrix-product-vector identity is the wrong formal shape, and
+records the clean replacement together with the one place where the formal
+development still keeps the awkward form.\footnote{%
+  Context: PRs \ghpr{2153}, \ghpr{2156}, and \ghpr{2167} removed roughly a
+  thousand lines of ``zero-tail'' plumbing built on the all-length form
+  discussed here. This note records why that form is a non-source-faithful
+  overcomplication and what remains.}
+
+\section{The assertion}
+
+Let $A$ be a translation-invariant matrix-product tensor of bond
+dimension~$D$, with one-site matrices $A^i\in M_D(\mathbb C)$. For a length
+$N$ and a word $\sigma=(i_1,\dots,i_N)$ write the matrix-product-vector
+coefficient
+\begin{align}
+  \MPV{N}{A}_\sigma = \tr\!\left(A^{i_1}\cdots A^{i_N}\right).
+\end{align}
+The blocked canonical-form reduction of
+\cite[Section~2.3]{Cirac2016MPDO_arXiv}, following
+\cite[Theorem~3]{PerezGarcia2007MPSReps}, states that after blocking by some
+period $p\ge 1$ the tensor is, up to a gauge, the direct sum of an all-zero
+block and a weighted family of normal blocks,
+\begin{align}
+  A^{[p]} \cong  \mathbf 0_{z}\ \oplus\ \bigoplus_{k} \mu_k\,B_k,\label{eq:zero-block}
+\end{align}
+where $\mathbf 0_{z}$ is the zero tensor on a bond space of dimension~$z$,
+the $B_k$ are normal (primitive, trace-preserving, irreducible) blocks of
+bond dimension $D_k$, the weights satisfy $\mu_k\neq 0$, and
+$z+\sum_k D_k = D$ is the bond dimension of $A^{[p]}$.
+
+\section{The point at issue}
+
+The direct sum~\eqref{eq:zero-block} gives, at every length $N$ and word
+$\sigma$,
+\begin{align}
+  \MPV{N}{A^{[p]}}_\sigma
+  = \MPV{N}{\mathbf 0_{z}}_\sigma
+  + \MPV{N}{\textstyle\bigoplus_k \mu_k B_k}_\sigma.\label{eq:all-length}
+\end{align}
+The zero block contributes nothing except at the empty word: for $N\ge 1$ a
+product of $A^i$-blocks that passes through the zero summand vanishes, so
+\begin{align}
+  \MPV{N}{\mathbf 0_{z}}_\sigma = 0 \qquad (N\ge 1),
+\end{align}
+whereas at $N=0$ the only coefficient is the trace of the identity on the
+bond space,
+\begin{align}
+  \MPV{0}{C}_{\varnothing} = \tr(\mathbf 1_{D_C}) = D_C.
+\end{align}
+Hence the \emph{entire} content of the length-zero instance
+of~\eqref{eq:all-length} is the dimension count
+\begin{align}
+  z + \sum_k D_k = D,\label{eq:dim}
+\end{align}
+which is already part of~\eqref{eq:zero-block}. Every length $N\ge 1$ carries
+the genuine mathematical content: the weighted normal-block comparison
+$\MPV{N}{A^{[p]}}_\sigma = \MPV{N}{\bigoplus_k \mu_k B_k}_\sigma$.
+
+\noindent\emph{Why the all-length form is the wrong shape.}
+Stating the reduction as the all-length identity~\eqref{eq:all-length}
+attaches the trivial dimension fact~\eqref{eq:dim} to the substantive
+positive-length comparison and forces both to travel together through blocking,
+reindexing, and sector grouping. In the formal development this produced a
+family of transport lemmas whose only purpose was to move the empty-word
+instance of~\eqref{eq:all-length} across each such step.\footnote{%
+  These were the \leanid{zeroTail_*} lemmas in
+  \path{TNLean/MPS/CanonicalForm/SectorComparison/}; they are removed in
+  PRs \ghpr{2156} and \ghpr{2167} once the comparison is stated at positive
+  length.}
+This is also not source-faithful: the article introduces the zero block once,
+to account for the bond dimension, and then discards it, comparing only the
+nonzero normal blocks in the thermodynamic limit. The zero summand
+$\mathbf 0_z$ is an artifact of keeping a common bond space in the formal
+statement; it carries no state and no normal-block structure.
+
+\section{The clean statement}
+
+Separate the two facts. The positive-length comparison
+\begin{align}
+  \MPV{N}{A^{[p]}}_\sigma
+  = \MPV{N}{\textstyle\bigoplus_k \mu_k B_k}_\sigma
+  \qquad (N\ge 1)\label{eq:pos}
+\end{align}
+carries all of the mathematics, and the length-zero coefficient is recovered
+\emph{once}, where an all-length statement is genuinely needed, from the single
+dimension identity~\eqref{eq:dim}: if two tensors agree at all positive lengths
+and have equal bond dimension, they agree at length zero as well, because the
+empty-word coefficient is the bond dimension.\footnote{%
+  Formally, positive-length equality is \leanid{SameMPV₂Pos} and the one-step
+  upgrade is
+  \leanid{SameMPV₂Pos.toSameMPV₂_of_bondDim_eq} in
+  \doclink{TNLean/MPS/Defs}. The canonical-form predicate now stores
+  \leanid{SameMPV₂Pos} together with a single bond-dimension field rather than
+  the all-length decomposition; see \ghpr{2153}.}
+This is the source-faithful shape: the nonzero normal blocks are compared at
+positive length, and the zero block appears only as the scalar~$z$
+in~\eqref{eq:dim}.
+
+\section{Formal status}
+
+\leanid{exists_tp_primitive_blockDecomp_after_blocking}, blueprint
+\path{thm:tp_primitive_blockdecomp} in
+\path{blueprint/src/chapter/ch09_canonical.tex}, now uses the
+source-faithful shape: its MPV clause is the positive-length comparison
+in~\eqref{eq:pos}, and the empty-word contribution is the separate identity
+\(z+\sum_k D_k=D\).  The former support lemma
+\leanid{zeroTail_toTensorFromBlocks_blockPower} has therefore been removed.
+
+\section{Conclusion}
+
+The blocked canonical form~\eqref{eq:zero-block} is correct, and the dimension
+count~\eqref{eq:dim} is part of it. The former formal defect was one of shape:
+stating the reduction as the all-length matrix-product-vector
+identity~\eqref{eq:all-length} fused a trivial empty-word dimension count with
+the substantive positive-length comparison. The faithful statement is the
+positive-length comparison~\eqref{eq:pos} with the length-zero coefficient
+restored once from~\eqref{eq:dim}. The development now uses this shape in the
+after-blocking primitive decomposition and its downstream consumers.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

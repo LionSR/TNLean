@@ -1,7 +1,103 @@
 \chapter{Introduction}\label{ch:intro}
 
-We study the fundamental theorem for periodic, translation-invariant matrix product vectors. The basic object is a family of matrices $\{A^i\}$, viewed as a tensor that generates vectors $\ket{V^{(N)}(A)}$ on chains of length $N$.
+The central result is the Fundamental Theorem for translation-invariant
+matrix product vectors. The basic object is a family of matrices
+$A=\{A^i\}_{i=0}^{d-1}$, which assigns to each chain length~$N$ the vector
+$\ket{V^{(N)}(A)}$ with coefficients indexed by
+$\sigma=(i_1,\ldots,i_N)$,
+\[
+    V^{(N)}(A)_\sigma
+    = \tr(A^{i_1}\cdots A^{i_N}).
+\]
+The main argument, for translation-invariant tensors, follows the canonical-form and
+basis-of-normal-tensors argument of~\cite{Cirac2016MPDO_arXiv,Cirac2021Matrix},
+with the single-block injective case anchored in the earlier representation
+theorem of~\cite{PerezGarcia2007Matrix}.
 
-Chapters~\ref{ch:mps} and~\ref{ch:single} describe the algebraic core. Chapter~\ref{ch:mps} introduces word evaluation, MPV coefficients, gauge equivalence, injectivity, blocking, overlap, and the block-injective canonical-form data. Chapter~\ref{ch:single} proves the single-block fundamental theorem by a purely algebraic argument through trace pairings, linear extension, simplicity of matrix algebras, and Skolem--Noether.
+\section*{Notation}
 
-The later chapters develop the spectral and canonical-form machinery needed for the full multi-block theorem. Chapter~\ref{ch:channels} studies positive maps and quantum channels. Chapters~\ref{ch:qpf} and~\ref{ch:spectral} supply Perron--Frobenius theory and overlap decay. Chapters~\ref{ch:wielandt} and~\ref{ch:canonical} connect blocking, primitivity, irreducibility, and the normal/canonical-form reductions. Chapters~\ref{ch:block_perm} and~\ref{ch:bnt} carry out block permutation and BNT theory; Chapter~\ref{ch:assembly} proves the blocking-based Fundamental Theorem, while Chapter~\ref{ch:periodic_ft_apps} develops the direct periodic extension.
+\begin{center}
+    \begin{tabular}{ll}
+        $\C$, $\N$, $\Z$            & complex numbers, natural numbers, integers       \\
+        $\MN{D}$, $\GL_D(\C)$       & complex matrices and invertible complex matrices \\
+        $\tr(X)$, $\spn_{\C}(S)$    & trace and complex linear span                    \\
+        $A=\{A^i\}_{i=0}^{d-1}$     & a translation-invariant MPS tensor               \\
+        $w=(i_1,\ldots,i_L)$, $A^w$ & a word and the product
+        $A^{i_1}\cdots A^{i_L}$                                                        \\
+        $\ket{V^{(N)}(A)}$          & the length-$N$ matrix product vector             \\
+        $V^{(N)}(A)_\sigma$         & the coefficient of $\ket{V^{(N)}(A)}$ at
+        $\sigma$                                                                       \\
+        $O_{AB}(N)$                 & the bilinear overlap
+        $\sum_\sigma V^{(N)}(A)_\sigma\,\overline{V^{(N)}(B)_\sigma}$                  \\
+        $\E_A(X)$                   & the transfer map $\sum_i A^i X(A^i)^\dagger$     \\
+        $A^{[L]}$                   & the length-$L$ blocked tensor                    \\
+    \end{tabular}
+\end{center}
+
+In canonical form one writes
+\begin{equation}\label{eq:intro_canonical_form}
+    A^i = \bigoplus_{j=1}^{g} \mu_j A_j^i,
+    \qquad
+    B^i = \bigoplus_{k=1}^{h} \nu_k B_k^i,
+\end{equation}
+where the displayed blocks are normal tensors. If
+$\ket{V^{(N)}(A)}=\ket{V^{(N)}(B)}$ for every positive chain length~$N$, then
+the bases of normal tensors have the same size. After relabelling the blocks
+of $B$, each matched pair satisfies
+\begin{equation}\label{eq:intro_matched_pair_gauge}
+    B_j^i = \zeta_j X_j A_j^i X_j^{-1},
+\end{equation}
+for some invertible matrix $X_j$ and nonzero scalar $\zeta_j$, and the equal
+case compares the coefficient power sums attached to the relabelled bases. The
+block gauges~(\ref{eq:intro_matched_pair_gauge}) and the weight comparison then
+combine into a single gauge conjugacy of the two weighted block-diagonal
+tensors~(\ref{eq:intro_canonical_form}). For a single injective block this
+reduces to the familiar conclusion $B^i = X A^i X^{-1}$ for all physical
+indices $i$, the single-block specialization
+of~(\ref{eq:intro_matched_pair_gauge}).
+
+Chapters~\ref{ch:mps}--\ref{ch:ft_proof} carry out this argument.
+Chapter~\ref{ch:mps} fixes the matrix product vector notation, word
+evaluations, transfer maps, gauge equivalence, injectivity, blocking, and
+site-periodic tensor families. Chapter~\ref{ch:single} proves the
+single-block theorem by trace pairings, linear extension, simplicity of matrix
+algebras, and Skolem--Noether. Chapters~\ref{ch:channels}, \ref{ch:schwarz},
+\ref{ch:qpf}, and~\ref{ch:spectral} develop the positive-map,
+multiplicative-domain, Perron--Frobenius, and overlap-decay tools used to
+control normal blocks. Chapters~\ref{ch:wielandt} and~\ref{ch:canonical}
+supply the blocking, primitivity, irreducibility, and canonical-form reductions.
+Chapter~\ref{ch:canonical} includes the invariant-projection splitting.
+Chapter~\ref{ch:bnt} supplies bases of normal tensors and the
+power-sum comparison. The
+after-blocking reductions in Section~\ref{sec:reduction_to_normal_form} give
+the common primitive block decompositions used immediately in
+Chapter~\ref{ch:ft_proof}, which records the conditional theorem
+statements.
+% Maintainer note: the same-index direct-sum lemmas used after a block
+% correspondence has already been fixed are collected later in
+% the algebraic-FT draft chapter, because they are facts about block-diagonal
+% gauges, not part of the canonical-form reduction or of the BNT block-matching
+% proof. The remaining BNT matching and fixed-length span inputs are kept as
+% explicit hypotheses until the corresponding source steps are supplied.
+
+The chapters after Chapter~\ref{ch:ft_proof} collect applications,
+alternative formulations, and later tensor-network material.
+Chapter~\ref{ch:symmetry} uses the Fundamental Theorem to obtain virtual
+symmetry gauges, projective bond representations, and string-order criteria;
+its Kraus-mixing step appeals only to the later channel-representation chapter,
+not to any additional input for the Fundamental Theorem.
+Parent Hamiltonians, correlations, examples, channel representations, normal
+forms, quantum dynamical semigroups, operator convexity, and entropy are then
+collected.
+A later draft treats the direct Fundamental Theorem for periodically repeated
+tensors in irreducible form, together with the compatibility theorems for
+physical-index rotation (Definition~\ref{def:rotate_physical} in
+Chapter~\ref{ch:symmetry}).
+% Maintainer note: the rotation definition is internal bookkeeping for the
+% periodic MPS material, not an external-paper input or part of the Molnar
+% algebraic-FT chapter.
+The matrix-product-operator, periodic, algebraic, and PEPS draft chapters remain
+in the repository but are omitted from the generated blueprint while their
+statements are being stabilized.
+These later topics use the Fundamental Theorem, or develop later
+finite-dimensional channel theory, rather than enter its proof.

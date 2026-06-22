@@ -1,0 +1,297 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Wolf Chapter~5 Operator Jensen and Lieb Concavity Axioms}
+\author{}
+\date{2026-06-22}
+
+\begin{document}
+\maketitle
+
+\section{Scope}
+
+This note records the mathematical content of the four axioms that remain in the
+Chapter~5 operator-convexity development\footnote{%
+    The axioms are
+    \leanid{posMap_rpow_concave_jensen}, \leanid{posMap_rpow_convex_jensen},
+    \leanid{posMap_log_concave_jensen}, and \leanid{lieb_concavity_axiom} in
+    \doclink{TNLean/Axioms/OperatorConvexity}.}
+together with the cited sources they stand in for, the precise gap that blocks a
+proof, and the first concrete step toward eliminating each gap.  The three
+positive-map Jensen axioms underlie \cite[Corollary~5.2]{Wolf2012Quantum} (the
+second corollary of Wolf's \S5.4) and rest on the operator-convexity and
+operator-monotonicity-versus-positive-maps results
+\cite[Theorems~5.10--5.13]{Wolf2012Quantum}; the Lieb axiom is the Ando--Lieb
+trace functional \cite[Theorem~5.15]{Wolf2012Quantum}.  (Wolf's Theorem~5.1 is
+Douglas' theorem and is unrelated to this development.)
+
+The notation is fixed throughout.  Operators act on a finite-dimensional Hilbert
+space, identified with $D\times D$ complex matrices.  The order $A\le B$ is the
+Loewner order ($B-A$ positive semidefinite).  A linear map $T$ on matrices is
+\emph{positive} if it sends positive semidefinite operators to positive
+semidefinite operators, \emph{subunital} if $T(\mathbf 1)\le\mathbf 1$, and
+\emph{unital} if $T(\mathbf 1)=\mathbf 1$.  The power $A^p$ for $A\ge 0$ and the
+logarithm $\log A$ for $A>0$ are defined by the continuous functional calculus.
+
+\section{The three positive-map Jensen axioms}
+
+\subsection{The assertions}\label{ssec:assertions}
+
+For a positive subunital map $T$ the development asserts the operator Jensen
+inequalities
+\begin{align}
+  T(A^p) &\le (T A)^p, & p&\in[0,1], \ A\ge 0, \tag{\path{posMap_rpow_concave_jensen}}\\
+  (T A)^p &\le T(A^p), & p&\in[1,2], \ A\ge 0, \tag{\path{posMap_rpow_convex_jensen}}
+\end{align}
+and, for a positive \emph{unital} map $T$ and $A>0$,
+\begin{align}
+  T(\log A) &\le \log(T A). \tag{\path{posMap_log_concave_jensen}}
+\end{align}
+These are the operator-valued Jensen inequalities behind Wolf
+Corollary~5.2.\footnote{%
+    They are consumed by
+    \leanid{cor52_item1_rpow_of_subunital},
+    \leanid{cor52_item2_rpow_of_subunital}, and
+    \leanid{cor52_item3_log_of_subunital} in
+    \doclink{TNLean/Channel/Schwarz/OperatorMonotone}.}
+The first and third are concavity inequalities (for the operator-concave
+functions $x\mapsto x^p$ on $[0,1]$ and $x\mapsto\log x$); the second is a
+convexity inequality (for the operator-convex function $x\mapsto x^p$ on
+$[1,2]$).  The logarithmic case requires $T$ unital, not merely subunital: with
+$T$ only subunital the inequality fails because $\log$ is unbounded below near
+$0$.
+
+\subsection{The point at issue: the genuine gap is positive-map Jensen}
+
+Mathlib~4.31 supplies the integral
+representation\footnote{%
+    \leanid{CFC.exists_measure_nnrpow_eq_integral_cfcₙ_rpowIntegrand₀₁}
+    and its $[1,2]$ companion in
+    \path{Mathlib/Analysis/SpecialFunctions/ContinuousFunctionalCalculus/Rpow/IntegralRepresentation.lean},
+    together with the Bochner-integral convexity bridge for C\textsuperscript{*}-algebras.}
+and, through it, the operator concavity of $x\mapsto x^p$ on $[0,1]$
+(\leanid{CFC.concaveOn_rpow}) and of $\log$ (\leanid{CFC.concaveOn_log}).  The
+scalar inputs of the two concavity axioms are therefore already
+operator-concave in the formal library.  The scalar input of the convex axiom,
+operator convexity of $x\mapsto x^p$ on $[1,2]$, is \emph{not} yet in the
+library: only the operator-monotone and operator-concave $[0,1]$ lemmas exist,
+and operator convexity of \texttt{rpow} over $\mathrm{Icc}\,1\,2$ is an open
+upstream TODO.\footnote{%
+    \path{Mathlib/Analysis/SpecialFunctions/ContinuousFunctionalCalculus/Rpow/Order.lean},
+    line~29.}
+That missing convexity lemma is, however, a small derivable increment
+(\S\ref{ssec:first-step}), not the deep obstruction.
+
+The remaining gap is the step \emph{from} operator concavity (a statement about a
+single operator) \emph{to} the Jensen inequality $T(fA)\le f(TA)$ for a positive
+map.  This is the Choi--Davis--Jensen inequality (the positive-map form of the
+Hansen--Pedersen operator Jensen inequality): for an operator-concave $f$ and a
+positive unital map $T$ one has $T(fA)\le f(TA)$, with the subunital version
+obtained by dilating $T$ to a unital map.  Mathlib~4.31 contains no such
+theorem for positive maps.  Thus the three axioms are blocked on the
+positive-map Jensen step, not on the integral representation of the integrand.
+
+\subsection{The compression scaffold is faithful to bare
+positivity}\label{ssec:caveat}
+
+A faithfulness worry would arise if the only available proof route needed a
+\emph{completely positive} $T$, since the axioms assume only that $T$ is
+positive (the hypothesis recorded in the formal statements is
+\leanid{IsPositiveMap}) and a complete-positivity hypothesis would be the
+stronger-hypothesis variant forbidden by the faithfulness rule.  That worry does
+not apply here.
+
+Wolf's own proof of the positive-map operator Jensen results
+(\cite[Theorems~5.10--5.13]{Wolf2012Quantum}) proves them first for completely
+positive maps, then \emph{reduces} the bare positive-map case to the completely
+positive case: $A$ and $f(A)$ lie in the abelian $C^*$-algebra generated by $A$
+and $\mathbf 1$, on which every positive map is automatically completely
+positive (Wolf Prop.~1.6) and admits a completely positive extension to all of
+$\mathcal M_d$ (Wolf Prop.~1.7).  Thus no obstruction specific to maps that are
+positive but not completely positive survives, and the source corollary itself
+is stated for
+positive subunital maps, not for channels: \cite[Corollary~5.2]{Wolf2012Quantum}
+hypothesises a positive map with $T(\mathbf 1)\le\mathbf 1$, which is exactly the
+\leanid{IsPositiveMap} plus subunitality recorded in the two power companions
+\leanid{cor52_item1_rpow_of_subunital} and
+\leanid{cor52_item2_rpow_of_subunital}.
+
+\paragraph{Local fix (log unitality).}  The logarithmic companion
+\leanid{cor52_item3_log_of_subunital} departs from this subunital hypothesis: it
+assumes $T$ \emph{unital}, $T(\mathbf 1)=\mathbf 1$, rather than $T(\mathbf
+1)\le\mathbf 1$.  This is a deliberate strengthening, not an exact match to the
+subunital form of the source corollary: as recorded in \S\ref{ssec:assertions},
+the subunital logarithmic inequality $T(\log A)\le\log(TA)$ fails because $\log$
+is unbounded below near $0$, so the unital restriction is the mathematically
+correct domain for the logarithmic case.  This is a local fix (a hypothesis
+sharpened to the regime where the inequality holds), documented here so the
+deviation from the verbatim subunital reading of
+\cite[Corollary~5.2]{Wolf2012Quantum} is auditable; the two power companions
+above retain the bare subunital hypothesis.
+
+The partial scaffold already present in the repository for the concave power
+case\footnote{%
+    \doclink{TNLean/Channel/Schwarz/OperatorJensenAux} (finite-POVM compression,
+    Schur-complement inverse bound, and the resolvent inequality).}
+realises this reduction at the matrix level.  It is a finite-POVM compression
+argument in terms of a positive family $\{C_i\}$ and a defect block, not a global
+Kraus or Stinespring representation of $T$.  Its POVM elements are supplied by
+the positive matrices $T(P_i)$, where the $P_i$ are the spectral projections of
+$A$; these exist for any positive map (indeed $\sum_i T(P_i)=T(\mathbf 1)$, the
+identity used in Wolf's block-positivity step in the proof of
+  \cite[Theorem~5.12]{Wolf2012Quantum}).  The scaffold
+  therefore applies to a bare positive map in the finite-POVM resolvent reduction
+  under the \leanid{IsPositiveMap} hypothesis --- it does not require, and must not
+  be relabelled with, complete positivity.  It does not by itself prove the
+  Jensen inequalities; the axioms remain open until the integral step below is
+  supplied.
+
+What is missing is therefore not a faithful proof route but the analytic step
+that closes the existing one: the Löwner-integral argument carrying the pointwise
+finite-POVM resolvent inequality (\leanid{povm_resolvent_inv_le}) through the
+integral representation of \texttt{rpow} to the operator inequality
+\leanid{posMap_rpow_concave_jensen}.
+
+\subsection{The concrete first step}\label{ssec:first-step}
+
+Independently of the positive-map Jensen step, one input is still missing from
+the formal library on the convex side: operator convexity of $x\mapsto x^p$ for
+$p\in[1,2]$.  Adding \leanid{CFC.convexOn_rpow} for $p\in[1,2]$ discharges the
+corresponding upstream TODO\footnote{%
+    \path{Mathlib/Analysis/SpecialFunctions/ContinuousFunctionalCalculus/Rpow/Order.lean},
+    line~29.}
+and supplies the scalar operator-convexity input for
+\leanid{posMap_rpow_convex_jensen}.  It is obtained from the $[0,1]$ data
+already in the library through the Bendat--Sherman / Hansen--Pedersen
+characterization: for a continuous $f$ on $[0,\infty)$ with $f(0)\le 0$, $f$ is
+operator convex if and only if $x\mapsto f(x)/x$ is operator monotone.  Applied
+to $f(x)=x^p$ with $f(0)=0$, this gives the required statement on
+$[0,\infty)$: for each exponent $p\in[1,2]$, the function $x\mapsto x^p$ is
+operator convex once $x\mapsto x^{p-1}$ is operator monotone.  The latter is
+exactly \leanid{CFC.monotone_rpow} with exponent $p-1\in[0,1]$.  The bridge
+therefore runs through operator
+\emph{monotonicity}, not operator concavity: the naive identity
+$x^p = x\cdot x^{p-1}$ does \emph{not} establish operator convexity, since
+operator convexity is not preserved under multiplication by $x$.  This is the
+smallest reusable increment toward the convex power case.
+
+\subsection{Verdict}
+
+The three positive-map Jensen statements are mathematically standard
+\cite[Theorems~5.10--5.13 and Corollary~5.2]{Wolf2012Quantum}.  Their
+elimination is blocked on the positive-map operator Jensen step (the
+Choi--Davis--Jensen inequality), which is absent from Mathlib~4.31; the integral
+representation of the integrand, previously named as the obstruction, is
+present.  The existing finite-POVM compression scaffold realises Wolf's
+positive-map route (\S\ref{ssec:caveat}) and is faithful to the bare positivity
+hypothesis; what remains is the Löwner-integral step that carries the pointwise
+resolvent inequality through the integral representation.
+
+\section{The Lieb concavity axiom}
+
+\subsection{The assertion}
+
+For $s\in[0,1]$, an arbitrary matrix $K$, and positive-definite $A,B$, the map
+\begin{align}
+  (A,B)\ \longmapsto\ \tr\!\bigl(K^\dagger A^s K B^{1-s}\bigr)
+  \tag{\path{lieb_concavity_axiom}}
+\end{align}
+is jointly concave on pairs of positive-definite matrices.  This is the
+boundary-exponent specialization of the Lieb concavity theorem
+(\cite[Theorem~5.15, the Ando--Lieb functional]{Wolf2012Quantum}), the trace
+functional underlying the Wigner--Yanase--Dyson conjecture.
+
+\paragraph{Scope restriction (boundary exponent).}  Wolf's Theorem~5.15 is
+stated for two exponents $x,y\ge 0$ with $x+y\le 1$.  The formal axiom
+\leanid{lieb_concavity_axiom} records only the boundary line $x=s$, $y=1-s$,
+where $x+y=1$.  This is sufficient for the current downstream Lieb-concavity
+corollaries, but it is not the full source theorem; the sub-boundary range
+$x+y<1$ remains unformalized unless it is derived separately or the axiom is
+generalized.
+
+\paragraph{Scope restriction (positive-definite versus positive
+semidefinite).}  Wolf's Theorem~5.15 states the Ando--Lieb concavity for
+positive (semidefinite) operators, including singular ones.  The formal axiom
+\leanid{lieb_concavity_axiom} is stated only for positive-\emph{definite} $A,B$
+(its hypotheses are \leanid{Matrix.PosDef}), so it does not yet cover singular
+positive inputs on which the source theorem still applies.  This is a scope
+restriction, not an unfaithful statement: the powers $A^s$ and $B^{1-s}$ and the
+resolvent factors $(L_A+tR_B)^{-1}$ used in the elimination route
+(\S\ref{ssec:lieb-gap}) are most directly defined for invertible $A,B$, and the
+positive-definite case extends to the positive-semidefinite case by continuity.
+The unrestricted source theorem remains unformalized until the axiom is
+discharged for positive semidefinite $A,B$; this is recorded here so the
+restriction is auditable.
+
+\subsection{The point at issue}\label{ssec:lieb-gap}
+
+The matrix identity
+$A^s B^{1-s}=\tfrac{\sin(\pi s)}{\pi}\int_0^\infty t^{s-1}A\,(A+tB)^{-1}B\,\mathrm dt$
+holds only when $A$ and $B$ commute; for noncommuting $A,B$ the product
+$A^sB^{1-s}$ is not even self-adjoint, and this resolvent formula is \emph{not}
+the representation behind the Lieb functional.  The standard route works instead
+with the \emph{left and right multiplication superoperators} on $\mathcal M_d$,
+\begin{align}
+  L_A : X \longmapsto AX, \qquad R_B : X \longmapsto XB,
+\end{align}
+which always commute ($L_A R_B = R_B L_A$) and are positive on the
+Hilbert--Schmidt space $(\mathcal M_d,\langle X,Y\rangle = \tr(X^\dagger Y))$
+when $A,B\ge 0$.  The Lieb functional is the Hilbert--Schmidt pairing
+\begin{align}
+  \tr\!\bigl(K^\dagger A^s K B^{1-s}\bigr)
+    = \bigl\langle K,\ L_A^{\,s}\,R_B^{\,1-s}\,K\bigr\rangle,
+\end{align}
+and the Ando/Lieb integral representation is the commuting-superoperator identity
+\begin{align}
+  L_A^{\,s}\,R_B^{\,1-s}
+    = \frac{\sin(\pi s)}{\pi}\int_0^\infty t^{s-1}\,
+      L_A\,(L_A + t\,R_B)^{-1}\,R_B\ \mathrm dt .
+\end{align}
+Joint concavity of the superoperator integrand in $(A,B)$ for each fixed $t$ ---
+via operator monotonicity of the resolvent $(L_A+tR_B)^{-1}$ in $A,B$ --- followed
+by pairing against $K$ in the Hilbert--Schmidt inner product, integration, and
+linearity, yields the result.
+
+Mathlib~4.31 contains neither this superoperator integral representation nor a
+matrix-mean / resolvent-monotonicity API of the required form for the commuting
+pair $(L_A,R_B)$.  Supplying it is a library-level contribution, not a short
+local bridge.
+
+\subsection{Verdict}
+
+The Lieb concavity statement is correct
+\cite[Theorem~5.15]{Wolf2012Quantum}.  Its elimination requires the Ando
+integral representation of the commuting left/right multiplication superoperators
+$L_A^{\,s}R_B^{\,1-s}$ (not the matrix product $A^sB^{1-s}$, whose resolvent
+formula holds only when $A,B$ commute) together with resolvent monotonicity of
+$(L_A+tR_B)^{-1}$, both absent from Mathlib~4.31.  The axiom is therefore blocked at
+the library level.  Three downstream corollaries already build on it (the
+$K=\mathbf 1$ case and separate concavity in each argument); these inherit the
+same blocked status until the integral representation is formalized.
+
+\section*{References}
+
+Beyond \cite{Wolf2012Quantum}, the underlying matrix-analysis facts are:
+E.~H.\ Lieb, \emph{Convex trace functions and the Wigner--Yanase--Dyson
+conjecture}, Adv.\ Math.\ \textbf{11} (1973) 267--288;
+T.~Ando, \emph{Concavity of certain maps on positive definite matrices and
+applications to Hadamard products}, Linear Algebra Appl.\ \textbf{26} (1979)
+203--241;
+F.~Hansen and G.~K.\ Pedersen, \emph{Jensen's operator inequality}, Bull.\
+London Math.\ Soc.\ \textbf{35} (2003) 553--564;
+R.~Bhatia, \emph{Matrix Analysis}, Springer GTM~169 (1997), Chapter~V.
+The relevant formal-library lemmas are
+\leanid{CFC.exists_measure_nnrpow_eq_integral_cfcₙ_rpowIntegrand₀₁},
+\leanid{CFC.concaveOn_rpow}, and \leanid{CFC.concaveOn_log}; the missing
+upstream item is \leanid{CFC.convexOn_rpow} for $p\in[1,2]$.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

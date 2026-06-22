@@ -15,7 +15,7 @@ renormalization fixed-point tensors (arXiv:1606.00608, Lemma B.1). The main
 result is `rfp_nt_structural_full`, which shows that a normal tensor in
 canonical form II and at a renormalization fixed point admits a decomposition
 `A i = X * diagonal Λ * U i * X⁻¹`, where `Λ` has positive diagonal entries
-and the family `U` is isometric in the physical index.
+and the family `U` is left-canonical with a scaled pair-index orthonormality.
 
 The proof is self-contained and contains the full appendix argument in the main
 `MPS/RFP` development.
@@ -43,19 +43,6 @@ variable {d D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-private lemma ofReal_re_eq_self_of_pos {z : ℂ} (hz : 0 < z) :
-    ((z.re : ℝ) : ℂ) = z := by
-  have h := (Complex.lt_def).1 hz
-  have hz_im : z.im = 0 := by
-    simpa using h.2.symm
-  refine Complex.ext ?_ ?_
-  · rfl
-  · simp [hz_im]
-
-private lemma sum_single_diag_const (c : ℂ) :
-    ∑ i : Fin D, Matrix.single i i c = c • (1 : Mat) := by
-  rw [Matrix.sum_single_eq_diagonal, Matrix.smul_one_eq_diagonal]
-
 private lemma matrixUnits_map (X : Mat) :
     ∑ p : Fin D × Fin D,
       Matrix.single p.1 p.2 (1 : ℂ) * X * (Matrix.single p.1 p.2 (1 : ℂ))ᴴ =
@@ -79,18 +66,25 @@ private lemma matrixUnits_map (X : Mat) :
     _ = ∑ j : Fin D, Matrix.single j j (Matrix.trace X) := by
           simp [Matrix.trace, Matrix.diag]
     _ = Matrix.trace X • (1 : Mat) := by
-          simpa using sum_single_diag_const (D := D) (c := Matrix.trace X)
+          rw [Matrix.sum_single_eq_diagonal, Matrix.smul_one_eq_diagonal]
 
 /-- **Lemma B.1** (arXiv:1606.00608, Appendix B): a normal tensor in canonical
 form II that is an RFP admits the decomposition `A i = X * Λ * U i * X⁻¹`
-with diagonal positive `Λ` and a physical-index isometry `U`.
+with diagonal positive `Λ` and a residual tensor `U` satisfying the
+left-canonical equation and the scaled pair-index orthonormality
+\[
+  \sum_i \overline{(U^i)_{\alpha,\beta}}\,(U^i)_{\alpha',\beta'}
+  =
+  D^{-1}\delta_{(\alpha,\beta),(\alpha',\beta')}.
+\]
 
 The proof combines the diagonal fixed-point reduction
 `rfp_nt_cfii_diagonal_fixedPoint`, the rank-one classification
 `transferMap_eq_fixedPointProj_of_isRFP_injective`, and an explicit Kraus
 realization of `fixedPointProj ρ`. Applying `kraus_rectangular_freedom'`
-identifies the physical-index family with an isometry and yields the witnesses
-`X * diag(Λ) * U i * X⁻¹`. -/
+identifies the physical-index coefficients with an isometry. The matrix units
+are normalized by $D^{-1/2}$, so the resulting matrix entries carry the
+displayed factor $D^{-1}$. -/
 theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
     (hNT : IsNormal A) (hRFP : IsRFP A)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
@@ -99,6 +93,9 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
       X.det ≠ 0 ∧
       (∀ k, 0 < Λ k) ∧
       (∑ i : Fin d, (U i)ᴴ * U i = 1) ∧
+      (∀ p q : Fin D × Fin D,
+        ∑ i : Fin d, star (U i p.1 p.2) * U i q.1 q.2 =
+          if p = q then (D : ℂ)⁻¹ else 0) ∧
       (∀ i, A i = X * Matrix.diagonal (fun k => (Λ k : ℂ)) * U i * X⁻¹) := by
   classical
   have hInjA : IsInjective A :=
@@ -155,14 +152,17 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
     rw [Matrix.posDef_diagonal_iff] at hdiag_pd
     exact hdiag_pd
   have htr_re_eq : (((Matrix.trace ρ).re : ℝ) : ℂ) = Matrix.trace ρ :=
-    ofReal_re_eq_self_of_pos hρ_pd.trace_pos
+    (RCLike.ofReal_eq_re_of_isSelfAdjoint
+      (IsSelfAdjoint.of_nonneg (le_of_lt hρ_pd.trace_pos))).mp rfl
   have hρii_re_eq : ∀ k : Fin D, (((ρ k k).re : ℝ) : ℂ) = ρ k k :=
-    fun k => ofReal_re_eq_self_of_pos (hρdiag_pos k)
+    fun k =>
+      (RCLike.ofReal_eq_re_of_isSelfAdjoint
+        (IsSelfAdjoint.of_nonneg (le_of_lt (hρdiag_pos k)))).mp rfl
   have hDpos_nat : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
   have hDpos : 0 < (D : ℝ) := by
     exact_mod_cast hDpos_nat
   have hD_neC : (D : ℂ) ≠ 0 := by
-    exact_mod_cast (NeZero.ne D)
+    exact_mod_cast NeZero.ne D
   let Λ : Fin D → ℝ := fun k =>
     Real.sqrt (((D : ℝ) * (ρ k k).re) / (Matrix.trace ρ).re)
   let L : Mat := Matrix.diagonal (fun k => (Λ k : ℂ))
@@ -249,9 +249,9 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
     by_cases hij : i = j
     · subst hij
       have hρii_re_pos : 0 < (ρ i i).re := by
-        exact (Complex.lt_def).1 (hρdiag_pos i) |>.1
+        exact (RCLike.pos_iff.mp (hρdiag_pos i)).1
       have htr_re_pos : 0 < (Matrix.trace ρ).re := by
-        exact (Complex.lt_def).1 hρ_pd.trace_pos |>.1
+        exact (RCLike.pos_iff.mp hρ_pd.trace_pos).1
       have harg_nonneg : 0 ≤ ((D : ℝ) * (ρ i i).re) / (Matrix.trace ρ).re := by
         exact div_nonneg (by positivity) (le_of_lt htr_re_pos)
       have htr_re_ne : (Matrix.trace ρ).re ≠ 0 := by
@@ -341,6 +341,46 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
     intro p q
     have h := congrFun (congrFun hV_iso p) q
     simpa [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply] using h
+  have hU_entry : ∀ (i : Fin d) (p : Fin D × Fin D), U i p.1 p.2 = c * V i p := by
+    intro i p
+    simp only [U, E, Matrix.smul_single, smul_eq_mul, mul_one]
+    rw [Matrix.sum_apply]
+    rw [Finset.sum_eq_single p]
+    · simp [mul_comm]
+    · intro q _ hq
+      have hcoord : q.1 ≠ p.1 ∨ q.2 ≠ p.2 := by
+        by_cases h1 : q.1 = p.1
+        · right
+          intro h2
+          apply hq
+          exact Prod.ext h1 h2
+        · exact Or.inl h1
+      rcases hcoord with h1 | h2
+      · simp [h1]
+      · simp [h2]
+    · simp
+  have hc_norm' : star c * c = (D : ℂ)⁻¹ := by
+    rw [mul_comm, hc_norm]
+    simp [div_eq_mul_inv]
+  have hU_pair : ∀ p q : Fin D × Fin D,
+      ∑ i : Fin d, star (U i p.1 p.2) * U i q.1 q.2 =
+        if p = q then (D : ℂ)⁻¹ else 0 := by
+    intro p q
+    calc
+      ∑ i : Fin d, star (U i p.1 p.2) * U i q.1 q.2
+          = ∑ i : Fin d, (star c * c) * (star (V i p) * V i q) := by
+              refine Finset.sum_congr rfl ?_
+              intro i _
+              rw [hU_entry i p, hU_entry i q]
+              simp [mul_assoc, mul_left_comm, mul_comm]
+      _ = (star c * c) * ∑ i : Fin d, star (V i p) * V i q := by
+              rw [Finset.mul_sum]
+      _ = (star c * c) * (if p = q then 1 else 0) := by
+              rw [hV_entry p q]
+      _ = if p = q then (D : ℂ)⁻¹ else 0 := by
+              by_cases hpq : p = q
+              · simpa [hpq] using hc_norm'
+              · simp [hpq]
   have hU_left : ∑ i : Fin d, (U i)ᴴ * U i = 1 := by
     calc
       ∑ i : Fin d, (U i)ᴴ * U i
@@ -381,13 +421,13 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
             simp [Finset.mul_sum]
       _ = L * U i := by
             simp [U]
-  refine ⟨X, Λ, U, hX_det, ?_, hU_left, ?_⟩
+  refine ⟨X, Λ, U, hX_det, ?_, hU_left, hU_pair, ?_⟩
   · intro k
     apply Real.sqrt_pos.2
     have hk_pos : 0 < (ρ k k).re := by
-      exact (Complex.lt_def).1 (hρdiag_pos k) |>.1
+      exact (RCLike.pos_iff.mp (hρdiag_pos k)).1
     have htr_pos : 0 < (Matrix.trace ρ).re := by
-      exact (Complex.lt_def).1 hρ_pd.trace_pos |>.1
+      exact (RCLike.pos_iff.mp hρ_pd.trace_pos).1
     positivity
   · intro i
     calc
@@ -401,4 +441,42 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
         rw [hB_fact i]
       _ = X * Matrix.diagonal (fun k => (Λ k : ℂ)) * U i * X⁻¹ := by
         simp [L, Matrix.mul_assoc]
+
+/-- **Per-block isometry canonical form.** When each block of a multi-block tensor
+is a normal, left-canonical renormalization fixed point, that block admits an
+isometry decomposition A_k^i = X diag(Λ) U^i X⁻¹ with X invertible, Λ positive,
+and U a physical-index isometry.
+
+This is the isometry canonical form applied separately to each normal-tensor
+block; it is a per-block form related to arXiv:1606.00608, Corollary III.cor3,
+lines 583--589. The source additionally imposes the normalization tr(Λ_k) = 1;
+the statement here gives positive Λ_k without it. The normalization is genuine,
+not a conjugation gauge: rescaling Λ_k ↦ Λ_k / tr(Λ_k) factors out as an overall
+scalar on A_k, since conjugation by X preserves the scale.
+
+**Scope restriction (source isometry):** Corollary III.cor3 also invokes the
+joint isometry condition from eq:III_isometry, lines 550--554. This theorem now
+records the diagonal pair-index equation for each block in the normalization used
+by `rfp_nt_structural_full`, where the right-hand side is multiplied by
+$(\dim k)^{-1}$. It still omits the source trace-normalization of $\Lambda_k$ and the
+δ_{j,j'} orthogonality between distinct blocks. This restriction is recorded in
+`docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. Elimination: strengthen the
+normalization comparison, then prove a joint BNT-family isometry form from
+whole-tensor canonical-form RFP data.
+
+Deriving the per-block normal/RFP/left-canonical hypotheses from a whole-tensor
+canonical-form fixed-point condition is a separate step. -/
+theorem rfp_nt_structural_full_blocks {r : ℕ} {dim : Fin r → ℕ}
+    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
+    (hNT : ∀ k, IsNormal (A k)) (hRFP : ∀ k, IsRFP (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1) :
+    ∀ k, ∃ (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) (Λ : Fin (dim k) → ℝ)
+      (U : MPSTensor d (dim k)),
+      X.det ≠ 0 ∧ (∀ j, 0 < Λ j) ∧ (∑ i : Fin d, (U i)ᴴ * U i = 1) ∧
+      (∀ p q : Fin (dim k) × Fin (dim k),
+        ∑ i : Fin d, star (U i p.1 p.2) * U i q.1 q.2 =
+          if p = q then (dim k : ℂ)⁻¹ else 0) ∧
+      (∀ i, A k i = X * Matrix.diagonal (fun j => (Λ j : ℂ)) * U i * X⁻¹) :=
+  fun k => rfp_nt_structural_full (A k) (hNT k) (hRFP k) (hLeft k)
+
 end MPSTensor

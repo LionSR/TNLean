@@ -1,0 +1,684 @@
+import TNLean.PEPS.TorusWindowChain
+import TNLean.PEPS.RegionBlock.UnionInjectivityGeneral
+
+/-!
+# Extending a deformed-window state to a larger region
+
+The two-dimensional strengthening of the normal PEPS Fundamental Theorem
+(arXiv:1804.04964, the corollary at lines 2297--2318 of
+`Papers/1804.04964/paper_normal.tex`) chains the consecutive-window comparisons of
+`TNLean/PEPS/TorusDeformedWindow.lean` across the staircase patch around a lattice
+edge.  The chaining needs to read a single window's deformed state as the deformed
+state of a larger region carrying the genuine network block on the added vertices:
+the *corner-extended* insert.  This file builds that extension and the load-bearing
+identity, following the filled-in derivation
+(`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Steps 2--3).
+
+## The extension identity
+
+For nested regions `R ⊆ S`, the deformed state on `R` with insert `C` equals the
+deformed state on `S` with the *extended* insert `extendInsert R S C`, where the
+extended insert pairs `C` with the genuine network block of the added vertices
+`S \ R`.  The extension reuses the three-block factorization
+`ThreeBlockGeometry.regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical`
+of `TNLean/PEPS/RegionBlock/UnionInjectivityGeneral.lean`: with red block \(R\),
+blue block \(S\setminus R\), and complement \(V\setminus S\), the host
+\(V\setminus R\) is the complement block of the deformed state on \(R\), and the
+factorization splits its weight into the blue-coupling combination of the
+\(V\setminus S\) complement weights.  The
+blue-coupling coefficient `threeBlockBlueCoeff`, contracted against `C`, is exactly the
+extended insert.  The factorization carries an interior-bond multiplicity factor on the
+\(V\setminus S\) block, a nonzero scalar at positive bond dimensions, which cancels.
+
+The deformed state is read as a function of the *full* physical configuration through
+`assembleRegionσ`, so the identity is a region-independent equality of functions on
+`V → Fin d`; this lets the consecutive-window equalities chain across the patch by
+transitivity, the content of Step 2.
+
+## The chaining and stripping
+
+With the corner-extension identity, each single-window deformed state is the union
+deformed state of its corner-extended insert; `horizontalConsecutiveWindow_extend_eq`
+passes the agreement of two consecutive windows to the consecutive-window comparison
+engine, giving the open-boundary equality on the union (Step 1's display).  The patch
+chaining `horizontalStaircase_patch_extend_eq` extends the two end windows' states to the
+staircase patch and chains them at the closed-torus level (Step 2).  The faithful Step 3
+stripping is the open-boundary shared-corner cancellation `staircasePair_insert_eq_open` of
+`TNLean/PEPS/TorusWindowChain6.lean`, which cancels only the injective completed corner and
+never inverts the torus complement \(V\setminus S\); the collapse lemma
+`deformedRegionStateAssembled_extendInsert_eq` below records why no closed-torus inversion on
+a superset of the end pair can avoid \(V\setminus S\).  See
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 3.
+
+## References
+
+* [Molnár, Garre-Rubio, Pérez-García, Schuch, Cirac, *Normal projected entangled
+  pair states generating the same state*, arXiv:1804.04964, the corollary and proof
+  sketch at lines 2296--2445 of
+  `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964); the
+  filled-in derivation in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+  Steps 2--3.
+-/
+
+open scoped BigOperators Matrix
+
+namespace TNLean
+namespace PEPS
+
+variable {V : Type*} [Fintype V] [LinearOrder V]
+variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
+variable {A : Tensor G d}
+
+/-! ### The nested-region three-block geometry
+
+For `R ⊆ S` the three blocks \(R\), \(S\setminus R\), and \(V\setminus S\)
+partition the vertex set, with host \(V\setminus R\).  This is the geometry whose
+three-block factorization splits the deformed-state complement weight on
+\(V\setminus R\) into the \(V\setminus S\) complement weights, the blue coupling
+carrying the added vertices \(S\setminus R\). -/
+
+/-- The nested-region three-block geometry for `R ⊆ S`: red block \(R\), blue block
+\(S\setminus R\), and complement \(V\setminus S\).  The host is \(V\setminus R\),
+the complement block
+of the deformed state on `R`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `injective_union`, lines 1324--1400 of
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 2. -/
+def nestedThreeBlockGeometry {R S : Finset V} (hRS : R ⊆ S) : ThreeBlockGeometry V where
+  red := R
+  blue := S \ R
+  complement := Finset.univ \ S
+  red_disjoint_blue := by
+    rw [Finset.disjoint_left]; intro v hvR hvSR
+    exact (Finset.mem_sdiff.mp hvSR).2 hvR
+  red_disjoint_complement := by
+    rw [Finset.disjoint_left]; intro v hvR hvS
+    exact (Finset.mem_sdiff.mp hvS).2 (hRS hvR)
+  blue_disjoint_complement := by
+    rw [Finset.disjoint_left]; intro v hvSR hvS
+    exact (Finset.mem_sdiff.mp hvS).2 (Finset.mem_sdiff.mp hvSR).1
+  cover_univ := by
+    ext v
+    simp only [Finset.mem_union, Finset.mem_sdiff, Finset.mem_univ, true_and, iff_true]
+    by_cases hvR : v ∈ R
+    · exact Or.inl (Or.inl hvR)
+    · by_cases hvS : v ∈ S
+      · exact Or.inl (Or.inr ⟨hvS, hvR⟩)
+      · exact Or.inr hvS
+
+omit [DecidableRel G.Adj] in
+@[simp] theorem nestedThreeBlockGeometry_red {R S : Finset V} (hRS : R ⊆ S) :
+    (nestedThreeBlockGeometry (V := V) hRS).red = R := rfl
+
+omit [DecidableRel G.Adj] in
+@[simp] theorem nestedThreeBlockGeometry_blue {R S : Finset V} (hRS : R ⊆ S) :
+    (nestedThreeBlockGeometry (V := V) hRS).blue = S \ R := rfl
+
+omit [DecidableRel G.Adj] in
+@[simp] theorem nestedThreeBlockGeometry_complement {R S : Finset V} (hRS : R ⊆ S) :
+    (nestedThreeBlockGeometry (V := V) hRS).complement = Finset.univ \ S := rfl
+
+omit [DecidableRel G.Adj] in
+/-- The host `univ \ red` of the nested geometry is `univ \ R`. -/
+theorem nestedThreeBlockGeometry_sdiff_red {R S : Finset V} (hRS : R ⊆ S) :
+    Finset.univ \ (nestedThreeBlockGeometry (V := V) hRS).red = Finset.univ \ R := rfl
+
+/-! ### Restricting a global physical configuration to a region
+
+The deformed state is read as a function of the full physical configuration through
+the restriction `restrictRegionσ`, the inverse of `assembleRegionσ`.  Restricting to
+the host `univ \ R` factors through the nested geometry's fused leg: the host
+restriction is the `complPhysical` of the blue restriction (to `S \ R`) and the
+complement restriction (to `univ \ S`). -/
+
+/-- The restriction of a global physical configuration `cfg` to the region `R`. -/
+def restrictRegionσ (R : Finset V) (cfg : V → Fin d) :
+    RegionPhysicalConfig (V := V) (d := d) R :=
+  fun w => cfg w.1
+
+omit [Fintype V] [LinearOrder V] [DecidableRel G.Adj] in
+@[simp] theorem restrictRegionσ_apply (R : Finset V) (cfg : V → Fin d)
+    (w : {w : V // w ∈ R}) : restrictRegionσ (V := V) (d := d) R cfg w = cfg w.1 := rfl
+
+
+omit [DecidableRel G.Adj] in
+/-- The host `univ \ R` restriction is the nested geometry's fused leg of the blue
+restriction (to `S \ R`) and the complement restriction (to `univ \ S`). -/
+theorem nestedComplPhysical_restrict {R S : Finset V} (hRS : R ⊆ S) (cfg : V → Fin d) :
+    (nestedThreeBlockGeometry (V := V) hRS).complPhysical (d := d)
+        (restrictRegionσ (V := V) (d := d) (S \ R) cfg)
+        (restrictRegionσ (V := V) (d := d) (Finset.univ \ S) cfg) =
+      restrictRegionσ (V := V) (d := d) (Finset.univ \ R) cfg := by
+  funext w
+  rw [ThreeBlockGeometry.complPhysical]
+  by_cases hb : w.1 ∈ (nestedThreeBlockGeometry (V := V) hRS).blue
+  · rw [dif_pos hb, restrictRegionσ_apply, restrictRegionσ_apply]
+  · rw [dif_neg hb, restrictRegionσ_apply, restrictRegionσ_apply]
+
+/-- The restriction of a physical configuration on `S` to a sub-region `R ⊆ S`. -/
+def restrictSubRegionσ {R S : Finset V} (hRS : R ⊆ S)
+    (σ : RegionPhysicalConfig (V := V) (d := d) S) :
+    RegionPhysicalConfig (V := V) (d := d) R :=
+  fun w => σ ⟨w.1, hRS w.2⟩
+
+omit [Fintype V] [LinearOrder V] [DecidableRel G.Adj] in
+@[simp] theorem restrictSubRegionσ_restrict {R S : Finset V} (hRS : R ⊆ S) (cfg : V → Fin d) :
+    restrictSubRegionσ (V := V) (d := d) hRS (restrictRegionσ (V := V) (d := d) S cfg) =
+      restrictRegionσ (V := V) (d := d) R cfg := rfl
+
+/-! ### The corner-extended insert and the extension identity
+
+The corner-extended insert `extendInsert hRS C` pairs the insert `C` on `R` with the
+blue-coupling coefficient `threeBlockBlueCoeff` of the nested geometry, contracting `C`
+against the genuine network block of the added vertices `S \ R`.  Reading the deformed
+state as a function of the full physical configuration, the extension identity says the
+deformed state on `R` with `C` equals the deformed state on `S` with `extendInsert
+hRS C`. -/
+
+/-- The corner-extended insert on `S` built from an insert `C` on `R ⊆ S`: for a
+boundary configuration `ν` on `S` and a physical configuration `σ` on `S`, contract `C`
+(read on `R`) against the blue-coupling coefficient `threeBlockBlueCoeff` of the nested
+geometry (read on the added vertices `S \ R`) at the complement boundary configuration
+`regionComplementBoundaryConfig A S ν` on `univ \ S`, divided by the `univ \ S`
+interior-bond multiplicity.  This pairs `C` with the genuine network block of `S \ R`
+across the matching boundary configurations; the multiplicity divisor cancels the factor
+the three-block factorization introduces, so the deformed state is preserved.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex` (the blue coupling coefficient);
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 2. -/
+noncomputable def extendInsert {R S : Finset V} (hRS : R ⊆ S)
+    (C : RegionInsert (G := G) (d := d) A R) :
+    RegionInsert (G := G) (d := d) A S :=
+  fun ν σ =>
+    (regionInteriorBondProd (G := G) A (Finset.univ \ S) : ℂ)⁻¹ *
+      ∑ μ : RegionBoundaryConfig (G := G) A R,
+        C μ (restrictSubRegionσ (V := V) (d := d) hRS σ) *
+          (nestedThreeBlockGeometry (V := V) hRS).threeBlockBlueCoeff
+            (regionComplementBoundaryConfig (G := G) A R μ)
+            (restrictSubRegionσ (V := V) (d := d) Finset.sdiff_subset σ)
+            (regionComplementBoundaryConfig (G := G) A S ν)
+
+/-- The deformed-window state read as a function of the full physical configuration:
+restrict the global configuration to the region and its complement and evaluate the
+deformed state. -/
+noncomputable def deformedRegionStateAssembled (A : Tensor G d) (R : Finset V)
+    (C : RegionInsert (G := G) (d := d) A R) (cfg : V → Fin d) : ℂ :=
+  deformedRegionState (G := G) A R C
+    (restrictRegionσ (V := V) (d := d) R cfg)
+    (restrictRegionσ (V := V) (d := d) (Finset.univ \ R) cfg)
+
+/-! ### The interior-bond multiple of the extension identity
+
+The three-block factorization carries an interior-bond multiplicity factor on the
+`univ \ S` block.  The *bare* corner-extended coefficient — the corner-extended insert
+without the multiplicity divisor — has deformed state equal to that multiple of the
+deformed state on `R`.  Dividing out the multiplicity (a nonzero scalar at positive bond
+dimensions) gives the clean extension identity. -/
+
+/-- The bare corner-extended coefficient: the corner-extended insert without the
+multiplicity divisor.  Its deformed state on `S` is the `univ \ S` interior-bond multiple
+of the deformed state on `R`. -/
+noncomputable def bareExtendInsert {R S : Finset V} (hRS : R ⊆ S)
+    (C : RegionInsert (G := G) (d := d) A R) :
+    RegionInsert (G := G) (d := d) A S :=
+  fun ν σ =>
+    ∑ μ : RegionBoundaryConfig (G := G) A R,
+      C μ (restrictSubRegionσ (V := V) (d := d) hRS σ) *
+        (nestedThreeBlockGeometry (V := V) hRS).threeBlockBlueCoeff
+          (regionComplementBoundaryConfig (G := G) A R μ)
+          (restrictSubRegionσ (V := V) (d := d) Finset.sdiff_subset σ)
+          (regionComplementBoundaryConfig (G := G) A S ν)
+
+/-- The corner-extended insert is the bare coefficient scaled by the inverse
+multiplicity. -/
+theorem extendInsert_eq_smul_bare {R S : Finset V} (hRS : R ⊆ S)
+    (C : RegionInsert (G := G) (d := d) A R) :
+    extendInsert (G := G) hRS C =
+      fun ν σ => (regionInteriorBondProd (G := G) A (Finset.univ \ S) : ℂ)⁻¹ *
+        bareExtendInsert (G := G) hRS C ν σ := rfl
+
+-- The corner-extended insert is whnf-expensive over the discrete-torus regions (its blue
+-- coupling unfolds the cyclic-rectangle arithmetic); marking it irreducible keeps
+-- unification from unfolding it.  Its only consumer below is `extendInsert_eq_smul_bare`.
+attribute [irreducible] extendInsert
+
+open scoped Classical in
+/-- The bare corner-extended coefficient has deformed state the `univ \ S` interior-bond
+multiple of the deformed state on `R`, read as a function of the full physical
+configuration.  Each complement weight on `univ \ R` is split by the nested three-block
+factorization into the blue-coupling combination of the `univ \ S` complement weights,
+the blue coupling reassembling into the bare coefficient after reindexing the complement
+boundary configurations along `regionComplementBoundaryConfigEquiv`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 2. -/
+theorem deformedRegionStateAssembled_bareExtend
+    {R S : Finset V} (hRS : R ⊆ S) (C : RegionInsert (G := G) (d := d) A R) (cfg : V → Fin d) :
+    deformedRegionStateAssembled (G := G) A S (bareExtendInsert (G := G) hRS C) cfg =
+      (regionInteriorBondProd (G := G) A (Finset.univ \ S) : ℂ) •
+        deformedRegionStateAssembled (G := G) A R C cfg := by
+  classical
+  set g := nestedThreeBlockGeometry (V := V) hRS with hg
+  -- Abbreviate the three restrictions.
+  set σR := restrictRegionσ (V := V) (d := d) R cfg with hσR
+  set σblue := restrictRegionσ (V := V) (d := d) (S \ R) cfg with hσblue
+  set σcompl := restrictRegionσ (V := V) (d := d) (Finset.univ \ S) cfg with hσcompl
+  have hcompl : restrictRegionσ (V := V) (d := d) (Finset.univ \ R) cfg =
+      g.complPhysical (d := d) σblue σcompl := (nestedComplPhysical_restrict hRS cfg).symm
+  -- The right side: distribute the multiplicity into the boundary sum, then split each
+  -- `univ \ R` complement weight by the nested three-block factorization.
+  have hRHS : (regionInteriorBondProd (G := G) A (Finset.univ \ S) : ℂ) •
+        deformedRegionStateAssembled (G := G) A R C cfg =
+      ∑ bc' : RegionBoundaryConfig (G := G) A g.complement,
+        (∑ μ : RegionBoundaryConfig (G := G) A R,
+            C μ σR * g.threeBlockBlueCoeff (regionComplementBoundaryConfig (G := G) A R μ)
+              σblue bc') * regionBlockedWeight (G := G) A g.complement bc' σcompl := by
+    rw [deformedRegionStateAssembled, deformedRegionState, ← hσR, hcompl, Finset.smul_sum]
+    -- Split each `univ \ R` complement weight by the nested three-block factorization.
+    rw [show (∑ μ : RegionBoundaryConfig (G := G) A R,
+          (regionInteriorBondProd (G := G) A (Finset.univ \ S) : ℂ) •
+            (C μ σR * regionBlockedWeight (G := G) A (Finset.univ \ R)
+              (regionComplementBoundaryConfig (G := G) A R μ)
+              (g.complPhysical (d := d) σblue σcompl))) =
+        ∑ μ : RegionBoundaryConfig (G := G) A R,
+          ∑ bc' : RegionBoundaryConfig (G := G) A g.complement,
+            (C μ σR * g.threeBlockBlueCoeff (regionComplementBoundaryConfig (G := G) A R μ)
+              σblue bc') * regionBlockedWeight (G := G) A g.complement bc' σcompl from ?_,
+      Finset.sum_comm]
+    · refine Finset.sum_congr rfl (fun bc' _ => ?_)
+      rw [Finset.sum_mul]
+    · refine Finset.sum_congr rfl (fun μ _ => ?_)
+      have hfac := g.regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical
+        (regionComplementBoundaryConfig (G := G) A R μ) σblue σcompl
+      rw [smul_eq_mul, mul_comm (C μ σR), ← mul_assoc,
+        show ((regionInteriorBondProd (G := G) A (Finset.univ \ S) : ℂ) *
+              regionBlockedWeight (G := G) A (Finset.univ \ R)
+                (regionComplementBoundaryConfig (G := G) A R μ)
+                (g.complPhysical (d := d) σblue σcompl)) =
+            (regionInteriorBondProd (G := G) A g.complement : ℂ) •
+              regionBlockedWeight (G := G) A (Finset.univ \ g.red)
+                (regionComplementBoundaryConfig (G := G) A R μ)
+                (g.complPhysical (d := d) σblue σcompl) from by rw [smul_eq_mul]; rfl,
+        hfac, Finset.sum_mul]
+      refine Finset.sum_congr rfl (fun bc' _ => ?_)
+      rw [smul_eq_mul]; ring
+  rw [hRHS, deformedRegionStateAssembled, deformedRegionState]
+  -- Reindex the `bc'` sum to the `S`-boundary sum, then match the bare insert termwise.
+  refine Eq.trans ?_ (Equiv.sum_comp (regionComplementBoundaryConfigEquiv (G := G) A S)
+    (fun bc' : RegionBoundaryConfig (G := G) A g.complement =>
+      (∑ μ : RegionBoundaryConfig (G := G) A R,
+          C μ σR * g.threeBlockBlueCoeff (regionComplementBoundaryConfig (G := G) A R μ)
+            σblue bc') * regionBlockedWeight (G := G) A g.complement bc' σcompl))
+  refine Finset.sum_congr rfl (fun ν _ => ?_)
+  rw [regionComplementBoundaryConfigEquiv_apply, bareExtendInsert]
+  congr 1
+
+/-! ### The clean extension identity
+
+Dividing out the interior-bond multiplicity gives the corner-extension identity: the
+deformed state on `R` with `C` equals the deformed state on `S` with the corner-extended
+insert, as functions of the full physical configuration.  The multiplicity is a nonzero
+scalar at positive bond dimensions. -/
+
+/-- The deformed state is linear in scaling the insert by a constant: scaling the insert
+by `c` scales the deformed state by `c`. -/
+theorem deformedRegionStateAssembled_const_smul (A : Tensor G d) (R : Finset V) (c : ℂ)
+    (C : RegionInsert (G := G) (d := d) A R) (cfg : V → Fin d) :
+    deformedRegionStateAssembled (G := G) A R (fun μ σ => c * C μ σ) cfg =
+      c * deformedRegionStateAssembled (G := G) A R C cfg := by
+  rw [deformedRegionStateAssembled, deformedRegionStateAssembled, deformedRegionState,
+    deformedRegionState, Finset.mul_sum]
+  refine Finset.sum_congr rfl (fun μ _ => ?_)
+  rw [mul_assoc]
+
+open scoped Classical in
+/-- **The corner-extension identity.** For nested regions `R ⊆ S` and positive bond
+dimensions, the deformed state on `R` with insert `C` equals the deformed state on `S`
+with the corner-extended insert `extendInsert hRS C`, as functions of the full physical
+configuration.  The corner-extended insert pairs `C` with the genuine network block of
+the added vertices `S \ R`; the three-block factorization
+(`deformedRegionStateAssembled_bareExtend`) produces the bare coupling scaled by the
+`univ \ S` interior-bond multiplicity, which the corner-extended insert's divisor
+cancels.
+
+Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex` (the deformed states agree as closed-torus states);
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 2. -/
+theorem deformedRegionState_extend {R S : Finset V} (hRS : R ⊆ S)
+    (hpos : ∀ e : Edge G, 0 < A.bondDim e) (C : RegionInsert (G := G) (d := d) A R)
+    (cfg : V → Fin d) :
+    deformedRegionStateAssembled (G := G) A R C cfg =
+      deformedRegionStateAssembled (G := G) A S (extendInsert (G := G) hRS C) cfg := by
+  classical
+  have hne : (regionInteriorBondProd (G := G) A (Finset.univ \ S) : ℂ) ≠ 0 :=
+    Nat.cast_ne_zero.mpr (regionInteriorBondProd_pos (G := G) A (Finset.univ \ S) hpos).ne'
+  rw [extendInsert_eq_smul_bare, deformedRegionStateAssembled_const_smul,
+    deformedRegionStateAssembled_bareExtend, smul_eq_mul, ← mul_assoc,
+    inv_mul_cancel₀ hne, one_mul]
+
+/-! ### From the assembled state to the curried state
+
+The assembled deformed state, read as a function of the full physical configuration,
+determines the curried deformed state, a function of the region and complement physical
+configurations: assembling those two configurations and restricting back recovers them.
+Two inserts with equal assembled states therefore have equal curried states, the form
+the consecutive-window comparison engine consumes. -/
+
+omit [DecidableRel G.Adj] in
+/-- Restricting the assembled configuration to the region recovers the region
+configuration. -/
+theorem restrictRegionσ_assembleRegionσ (R : Finset V)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    restrictRegionσ (V := V) (d := d) R (assembleRegionσ (V := V) (d := d) R σ τ) = σ := by
+  funext w
+  rw [restrictRegionσ_apply, assembleRegionσ_mem]
+
+omit [DecidableRel G.Adj] in
+/-- Restricting the assembled configuration to the set complement recovers the complement
+configuration. -/
+theorem restrictRegionσ_compl_assembleRegionσ (R : Finset V)
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    restrictRegionσ (V := V) (d := d) (Finset.univ \ R)
+        (assembleRegionσ (V := V) (d := d) R σ τ) = τ := by
+  funext w
+  rw [restrictRegionσ_apply, assembleRegionσ_notMem]
+
+/-- Equal assembled deformed states give equal curried deformed states.  Evaluating the
+curried states at `(σ, τ)` is evaluating the assembled states at `assembleRegionσ R σ τ`,
+where the two restrictions recover `σ` and `τ`. -/
+theorem deformedRegionState_eq_of_assembled_eq (A : Tensor G d) (R : Finset V)
+    (C₁ C₂ : RegionInsert (G := G) (d := d) A R)
+    (h : deformedRegionStateAssembled (G := G) A R C₁ =
+      deformedRegionStateAssembled (G := G) A R C₂) :
+    deformedRegionState (G := G) A R C₁ = deformedRegionState (G := G) A R C₂ := by
+  funext σ τ
+  have hcfg := congrFun h (assembleRegionσ (V := V) (d := d) R σ τ)
+  simp only [deformedRegionStateAssembled, restrictRegionσ_assembleRegionσ,
+    restrictRegionσ_compl_assembleRegionσ] at hcfg
+  exact hcfg
+
+/-- Equal curried deformed states give equal assembled deformed states. -/
+theorem deformedRegionStateAssembled_eq_of_curried_eq (A : Tensor G d) (R : Finset V)
+    (C₁ C₂ : RegionInsert (G := G) (d := d) A R)
+    (h : deformedRegionState (G := G) A R C₁ = deformedRegionState (G := G) A R C₂) :
+    deformedRegionStateAssembled (G := G) A R C₁ =
+      deformedRegionStateAssembled (G := G) A R C₂ := by
+  funext cfg
+  rw [deformedRegionStateAssembled, deformedRegionStateAssembled, h]
+
+/-- The complement-inversion engine in assembled form: two inserts on `R` whose assembled
+deformed states agree are equal when the set complement `univ \ R` is blocked-tensor
+injective.  Combines the curried bridge with
+`deformedRegionState_insert_eq_of_complementInjective`. -/
+theorem deformedRegionStateAssembled_insert_eq_of_complementInjective (A : Tensor G d)
+    (R : Finset V) (hC : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (C₁ C₂ : RegionInsert (G := G) (d := d) A R)
+    (h : deformedRegionStateAssembled (G := G) A R C₁ =
+      deformedRegionStateAssembled (G := G) A R C₂) :
+    C₁ = C₂ :=
+  deformedRegionState_insert_eq_of_complementInjective (G := G) A R hC C₁ C₂
+    (deformedRegionState_eq_of_assembled_eq (G := G) A R C₁ C₂ h)
+
+/-! ### The superset closed-state route collapses to the sub-region complement
+
+The corner-extension identity `deformedRegionState_extend` reads in both directions: the
+assembled state on a superset `S ⊆ P'` with the corner-extended insert is the assembled
+state on `R = S`'s sub-region with the original insert.  This subsection records the
+consequence that governs the staircase-pair stripping of Step 3: extending an insert
+through a superset never changes the assembled state, so inverting the superset closed
+state recovers the sub-region insert *only* when the sub-region's torus complement is
+blocked-tensor injective.  Injectivity of the added block `P' \ R` plays no role in the
+closed-state route; it enters only an open-boundary cancellation, which the closed state
+does not provide.  This is the obstruction recorded in
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 3. -/
+
+/-- **The superset closed-state collapse.** For nested regions `R ⊆ P'` and positive bond
+dimensions, the assembled state on the superset `P'` with the corner-extended insert
+`extendInsert hRP' C` is the assembled state on `R` with the original insert `C`.  This is
+`deformedRegionState_extend` read with the larger region named, isolating the structural
+fact that extending an insert through a superset leaves the closed-torus state unchanged.
+
+The collapse is the reason the staircase-pair stripping cannot strip a closed-state patch
+equality to an open-boundary equality on the end pair by enlarging the compared region:
+enlarging from the end pair `S` to any superset `P'` (the patch, or the patch with the
+corner completed) leaves the assembled state equal to the one on `S`, so inverting it
+requires the same sub-region complement `univ \ S`, never the added block `P' \ S`.
+
+Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 3. -/
+theorem deformedRegionStateAssembled_extendInsert_eq {R P' : Finset V} (hRP' : R ⊆ P')
+    (hpos : ∀ e : Edge G, 0 < A.bondDim e) (C : RegionInsert (G := G) (d := d) A R)
+    (cfg : V → Fin d) :
+    deformedRegionStateAssembled (G := G) A P' (extendInsert (G := G) hRP' C) cfg =
+      deformedRegionStateAssembled (G := G) A R C cfg :=
+  (deformedRegionState_extend (G := G) hRP' hpos C cfg).symm
+
+/-- **The superset closed-state route still needs the sub-region complement.** If two
+inserts `C₁` and `C₂` on `R` have corner-extended inserts on a superset `R ⊆ P'` with
+equal assembled states, and the sub-region complement `univ \ R` is blocked-tensor
+injective, then `C₁ = C₂`.  The proof collapses the superset assembled states to the
+`R`-assembled states (`deformedRegionStateAssembled_extendInsert_eq`) and inverts the
+`R`-complement.
+
+The hypothesis is `univ \ R` injective, never injectivity of the added block `P' \ R`:
+the closed-state route through any superset reduces to inverting `univ \ R`.  At the
+corollary's minimal size the staircase end pair `R = S` has non-injective `univ \ S`, so
+this route is unavailable and the faithful Step 3 cancels the shared injective completed
+corner at the open-boundary level instead.  Documented in
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 3.
+
+Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 3. -/
+theorem deformedRegionStateAssembled_extendInsert_eq_of_subComplementInjective
+    {R P' : Finset V} (hRP' : R ⊆ P')
+    (hpos : ∀ e : Edge G, 0 < A.bondDim e)
+    (hC : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (C₁ C₂ : RegionInsert (G := G) (d := d) A R)
+    (h : deformedRegionStateAssembled (G := G) A P' (extendInsert (G := G) hRP' C₁) =
+      deformedRegionStateAssembled (G := G) A P' (extendInsert (G := G) hRP' C₂)) :
+    C₁ = C₂ := by
+  refine deformedRegionStateAssembled_insert_eq_of_complementInjective (G := G) A R hC C₁ C₂ ?_
+  funext cfg
+  rw [← deformedRegionStateAssembled_extendInsert_eq hRP' hpos C₁ cfg,
+    ← deformedRegionStateAssembled_extendInsert_eq hRP' hpos C₂ cfg, congrFun h cfg]
+
+/-! ### The consecutive-window union display on the torus
+
+On the discrete torus each single-window deformed state is, by the corner-extension
+identity, the union deformed state of the corner-extended insert.  Two consecutive
+windows whose deformed states agree therefore have equal union deformed states, and the
+consecutive-window comparison engine
+(`NormalTorusArcWindowInjectivityHypotheses.horizontalUnion_insert_eq_of_deformedState_eq`)
+strips that to the open-boundary equality of the corner-extended inserts on the union
+`U`: the note's Step 1 display restricted to the union. -/
+
+section Torus
+
+variable {width height : ℕ} [NeZero width] [NeZero height]
+variable [Fact (1 < width)] [Fact (1 < height)]
+variable {L K : ℕ} {B : Tensor (torusGraph width height) d}
+
+omit [Fact (1 < height)] in
+/-- The left window of a horizontally consecutive pair is a subset of their union, the
+`(L + 1) × K` cyclic rectangle. -/
+theorem torusArcRectangle_subset_horizontalUnion_left {L K : ℕ} (hL : 0 < L)
+    (s : TorusVertex width height) :
+    torusArcRectangle s L K ⊆ torusArcRectangle s (L + 1) K := by
+  rw [← horizontalAdjacentWindows_union hL (Fact.out (p := (1 < width))) s]
+  exact Finset.subset_union_left
+
+omit [Fact (1 < height)] in
+/-- The right window of a horizontally consecutive pair is a subset of their union, the
+`(L + 1) × K` cyclic rectangle. -/
+theorem torusArcRectangle_subset_horizontalUnion_right {L K : ℕ} (hL : 0 < L)
+    (s : TorusVertex width height) :
+    torusArcRectangle (s.1 + (1 : ZMod width), s.2) L K ⊆ torusArcRectangle s (L + 1) K := by
+  rw [← horizontalAdjacentWindows_union hL (Fact.out (p := (1 < width))) s]
+  exact Finset.subset_union_right
+
+/-- **The consecutive-window display (horizontal slide).** If two horizontally
+consecutive windows carry deformed inserts `C₁` and `C₂` whose deformed states agree as
+functions of the full physical configuration, then the corner-extended inserts on their
+union `U` are equal: the open-boundary equality on `U` of the note's Step 1.  Each window
+state is the union state of its corner-extended insert (`deformedRegionState_extend`); the
+agreement transfers to the union states, the curried bridge passes it to the comparison
+engine, and the engine strips the equal closed-torus states to the equal inserts.
+
+Source: arXiv:1804.04964, the one-dimensional inversions at lines 2133--2179 of
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
+Step 1. -/
+theorem horizontalConsecutiveWindow_extend_eq
+    (h : NormalTorusArcWindowInjectivityHypotheses L K
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hUB : RegionInjectivityUnionClosure
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hpos : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
+    (hL : 2 ≤ L) (hK : 2 ≤ K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
+    (s : TorusVertex width height)
+    (C₁ : RegionInsert (G := torusGraph width height) (d := d) B (torusArcRectangle s L K))
+    (C₂ : RegionInsert (G := torusGraph width height) (d := d) B
+      (torusArcRectangle (s.1 + (1 : ZMod width), s.2) L K))
+    (hstate : deformedRegionStateAssembled (G := torusGraph width height) B
+        (torusArcRectangle s L K) C₁ =
+      deformedRegionStateAssembled (G := torusGraph width height) B
+        (torusArcRectangle (s.1 + (1 : ZMod width), s.2) L K) C₂) :
+    extendInsert (G := torusGraph width height)
+        (torusArcRectangle_subset_horizontalUnion_left (by omega) s) C₁ =
+      extendInsert (G := torusGraph width height)
+        (torusArcRectangle_subset_horizontalUnion_right (by omega) s) C₂ := by
+  -- Both extended inserts have equal union deformed states.
+  have hunion : deformedRegionStateAssembled (G := torusGraph width height) B
+        (torusArcRectangle s (L + 1) K)
+        (extendInsert (G := torusGraph width height)
+          (torusArcRectangle_subset_horizontalUnion_left (by omega) s) C₁) =
+      deformedRegionStateAssembled (G := torusGraph width height) B
+        (torusArcRectangle s (L + 1) K)
+        (extendInsert (G := torusGraph width height)
+          (torusArcRectangle_subset_horizontalUnion_right (by omega) s) C₂) := by
+    funext cfg
+    rw [← deformedRegionState_extend
+        (torusArcRectangle_subset_horizontalUnion_left (by omega) s) hpos C₁,
+      ← deformedRegionState_extend
+        (torusArcRectangle_subset_horizontalUnion_right (by omega) s) hpos C₂,
+      hstate]
+  -- Pass to the curried comparison engine on the union.
+  exact h.horizontalUnion_insert_eq_of_deformedState_eq hUB hL hK hxw hyh s _ _
+    (deformedRegionState_eq_of_assembled_eq (G := torusGraph width height) B
+      (torusArcRectangle s (L + 1) K) _ _ hunion)
+
+/-! ### The patch chaining and the staircase-pair stripping
+
+The corner-extension identity, applied with the larger region the staircase patch `P`,
+extends each single-window assembled state to a patch assembled state.  All the windows'
+states agreeing therefore makes the two end windows' patch-extended assembled states
+agree.  Completing the corner block to the injective `L × K` rectangle and inverting it
+strips the patch comparison to the open-boundary equality on the staircase end pair: the
+note's Step 3 display. -/
+
+omit [Fact (1 < width)] [Fact (1 < height)] in
+/-- The left/last end window is a subset of the staircase patch. -/
+theorem horizontalStaircaseLeftWindow_subset_patch {L K : ℕ} (hL : 0 < L) (hK : 0 < K)
+    (hxw : 2 * L ≤ width) (hyh : 2 * K ≤ height) (s : TorusVertex width height) :
+    horizontalStaircaseLeftWindow s L K ⊆ horizontalStaircasePatch s L K := by
+  rw [horizontalStaircasePatch_eq_endPair_union_corner hL hK hxw hyh s,
+    horizontalStaircaseEndPair]
+  exact Finset.subset_union_left.trans Finset.subset_union_left
+
+omit [Fact (1 < width)] [Fact (1 < height)] in
+/-- The right/first end window is a subset of the staircase patch. -/
+theorem horizontalStaircaseRightWindow_subset_patch {L K : ℕ} (hL : 0 < L) (hK : 0 < K)
+    (hxw : 2 * L ≤ width) (hyh : 2 * K ≤ height) (s : TorusVertex width height) :
+    horizontalStaircaseRightWindow s L K ⊆ horizontalStaircasePatch s L K := by
+  rw [horizontalStaircasePatch_eq_endPair_union_corner hL hK hxw hyh s,
+    horizontalStaircaseEndPair]
+  exact Finset.subset_union_right.trans Finset.subset_union_left
+
+/-- **The patch chaining (Step 2).** If the two end windows carry deformed inserts whose
+assembled states agree, then the patch-extended inserts of the two end windows have equal
+assembled states on the patch.  Each end window's assembled state is the patch state of
+its corner-extended insert (`deformedRegionState_extend` with the larger region the
+patch); the agreement of the window states transfers to the patch states.  This is the
+note's Step 2 chaining, here delivered as the agreement of the two end-window
+contributions on the patch (the intermediate windows drop out of the comparison since all
+states are equal).
+
+Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex` (chaining the windows across the patch);
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 2. -/
+theorem horizontalStaircase_patch_extend_eq
+    (hpos : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
+    (hL : 0 < L) (hK : 0 < K) (hxw : 2 * L ≤ width) (hyh : 2 * K ≤ height)
+    (s : TorusVertex width height)
+    (C₀ : RegionInsert (G := torusGraph width height) (d := d) B
+      (horizontalStaircaseRightWindow s L K))
+    (Cend : RegionInsert (G := torusGraph width height) (d := d) B
+      (horizontalStaircaseLeftWindow s L K))
+    (hstate : deformedRegionStateAssembled (G := torusGraph width height) B
+        (horizontalStaircaseRightWindow s L K) C₀ =
+      deformedRegionStateAssembled (G := torusGraph width height) B
+        (horizontalStaircaseLeftWindow s L K) Cend) :
+    deformedRegionStateAssembled (G := torusGraph width height) B
+        (horizontalStaircasePatch s L K)
+        (extendInsert (G := torusGraph width height)
+          (horizontalStaircaseRightWindow_subset_patch hL hK hxw hyh s) C₀) =
+      deformedRegionStateAssembled (G := torusGraph width height) B
+        (horizontalStaircasePatch s L K)
+        (extendInsert (G := torusGraph width height)
+          (horizontalStaircaseLeftWindow_subset_patch hL hK hxw hyh s) Cend) := by
+  funext cfg
+  rw [← deformedRegionState_extend
+      (horizontalStaircaseRightWindow_subset_patch hL hK hxw hyh s) hpos C₀,
+    ← deformedRegionState_extend
+      (horizontalStaircaseLeftWindow_subset_patch hL hK hxw hyh s) hpos Cend,
+    hstate]
+
+omit [Fact (1 < width)] [Fact (1 < height)] in
+/-- The left/last end window is a subset of the staircase end pair. -/
+theorem horizontalStaircaseLeftWindow_subset_endPair (s : TorusVertex width height) :
+    horizontalStaircaseLeftWindow s L K ⊆ horizontalStaircaseEndPair s L K :=
+  Finset.subset_union_left
+
+omit [Fact (1 < width)] [Fact (1 < height)] in
+/-- The right/first end window is a subset of the staircase end pair. -/
+theorem horizontalStaircaseRightWindow_subset_endPair (s : TorusVertex width height) :
+    horizontalStaircaseRightWindow s L K ⊆ horizontalStaircaseEndPair s L K :=
+  Finset.subset_union_right
+
+/-! ### Step 3 is the open-boundary shared-corner cancellation
+
+The faithful Step 3 stripping is *not* run on the closed-torus patch equality
+`horizontalStaircase_patch_extend_eq` above.  Enlarging the compared region from the end
+pair `S` to any superset `P'` (the patch, or the patch with the corner completed) leaves the
+assembled state unchanged: by `deformedRegionStateAssembled_extendInsert_eq` the assembled
+state on \(P'\) with the extension of \(C\) from \(S\) to \(P'\) is the assembled
+state on \(S\) with \(C\), since
+\(V\setminus S = (P'\setminus S)\sqcup(V\setminus P')\) and the closed state has
+already contracted the \(V\setminus P'\) boundary.  Inverting the closed state on
+\(P'\) therefore reduces to inverting \(V\setminus S\)
+(`deformedRegionStateAssembled_extendInsert_eq_of_subComplementInjective`), which
+is *not* blocked-tensor injective at the corollary's minimal size
+\(2L+1\le W\), \(2K+1\le H\): at the row \(y+K-1\)
+the two end windows together occupy all columns \([x-L+1,x+L]\), leaving a
+complement band of width \(W-2L\), which is \(1\) at the minimal
+width, so no injective \(L\times K\) window translate fits through that row.
+Injectivity of the added completed corner \(P'\setminus S\) plays no role in this
+collapse.
+
+The faithful Step 3 is therefore the open-boundary shared-corner cancellation
+`staircasePair_insert_eq_open` of `TNLean/PEPS/TorusWindowChain6.lean`: it re-derives the
+patch chaining at the open-boundary (tensor-on-region) level and cancels only the *shared*
+injective completed corner `horizontalStaircaseCompletedCorner` (an `L × K` window, injective
+by hypothesis) common to both sides, never asserting injectivity of \(V\setminus S\).  See
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 3. -/
+
+end Torus
+
+end PEPS
+end TNLean

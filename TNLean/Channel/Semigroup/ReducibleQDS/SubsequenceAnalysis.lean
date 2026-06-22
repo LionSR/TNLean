@@ -10,7 +10,7 @@ import TNLean.Channel.Irreducible.Basic
 # Subsequence Analysis: (4) → (2) via Cesàro + subsequences
 
 This file proves that block-upper-triangular Lindblad form implies the existence
-of a rank-deficient kernel element (condition (2) of Wolf Prop 7.6).
+of a rank-deficient kernel element (condition (2) of Wolf Proposition 7.6).
 
 The proof combines:
 1. Cesàro fixed point within PMP
@@ -21,29 +21,23 @@ The proof combines:
 open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace
 open Matrix Finset TNLean
 
+attribute [local instance 1001]
+  Matrix.linftyOpNormedAddCommGroup
+  Matrix.linftyOpNormedSpace
+
 noncomputable section
 
 variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
+local instance instSubsequenceNormOneClassMatrixCLM [NeZero D] :
+    NormOneClass (Mat →L[ℂ] Mat) := by
+  constructor
+  change ‖(ContinuousLinearMap.id ℂ Mat)‖ = 1
+  exact ContinuousLinearMap.norm_id (𝕜 := ℂ) (E := Mat)
+
 /-! ## (4) → (2): Block-upper-triangular → rank-deficient kernel element -/
-
-/-- A nonzero orthogonal projection has nonzero trace. -/
-private lemma trace_ne_zero_of_proj_ne_zero'
-    {P : Mat} (hP : IsOrthogonalProjection P) (hP_ne : P ≠ 0) :
-    Matrix.trace P ≠ 0 := by
-  intro htr
-  exact hP_ne ((isOrthogonalProjection_posSemidef hP).trace_eq_zero_iff.1 htr)
-
-/-- `P / tr(P)` is a density matrix. -/
-private lemma normalizedProj_mem_densityMatrices'
-    {P : Mat} (hP : IsOrthogonalProjection P) (hP_ne : P ≠ 0) :
-    ((trace P)⁻¹ • P) ∈ densityMatrices D := by
-  have hP_psd := isOrthogonalProjection_posSemidef hP
-  have htrP_ne := trace_ne_zero_of_proj_ne_zero' hP hP_ne
-  exact ⟨hP_psd.smul (inv_nonneg_of_nonneg hP_psd.trace_nonneg),
-    by simp [Matrix.trace_smul, htrP_ne]⟩
 
 /-- `P * (P/tr(P)) * P = P/tr(P)` (the normalized projection is in `PMP`). -/
 private lemma normalizedProj_in_PMP'
@@ -72,7 +66,14 @@ private theorem channel_fixedPoint_in_PMP
       P * ρ * P = ρ ∧ E ρ = ρ := by
   -- Set up initial state
   set σ₀ := (trace P)⁻¹ • P with hσ₀_def
-  have hσ₀_mem : σ₀ ∈ densityMatrices D := normalizedProj_mem_densityMatrices' hP hP_ne
+  have hP_psd := isOrthogonalProjection_posSemidef hP
+  have htrP_ne : Matrix.trace P ≠ 0 := by
+    intro htr
+    exact hP_ne (hP_psd.trace_eq_zero_iff.1 htr)
+  have hσ₀_mem : σ₀ ∈ densityMatrices D := by
+    rw [hσ₀_def]
+    exact ⟨hP_psd.smul (inv_nonneg_of_nonneg hP_psd.trace_nonneg),
+      by simp [Matrix.trace_smul, htrP_ne]⟩
   have hσ₀_PMP : P * σ₀ * P = σ₀ := normalizedProj_in_PMP' hP
   -- Iterates stay in PMP ∩ DM
   have h_iter_mem : ∀ n : ℕ, (E ^ n) σ₀ ∈ densityMatrices D := by
@@ -111,6 +112,10 @@ private theorem channel_fixedPoint_in_PMP
     refine congrArg ((1 / ↑(N + 1 : ℕ) : ℂ) • ·) ?_
     exact Finset.sum_congr rfl (fun n _ => h_iter_PMP n)
   -- Extract convergent subsequence
+  haveI : TopologicalSpace.PseudoMetrizableSpace Mat :=
+    PseudoEMetricSpace.pseudoMetrizableSpace
+  haveI : FirstCountableTopology Mat :=
+    TopologicalSpace.PseudoMetrizableSpace.firstCountableTopology
   obtain ⟨ρ, hρ_mem, φ, hφ_mono, hφ_tendsto⟩ :=
     densityMatrices_isCompact.tendsto_subseq hσ_dm
   -- ρ is in PMP (limit of PMP elements, PMP is closed)
@@ -122,9 +127,9 @@ private theorem channel_fixedPoint_in_PMP
         (fun n => hσ_PMP (φ n)))
       hφ_tendsto
   -- Show E(ρ) = ρ by telescoping
-  have hE_cont : Continuous E := LinearMap.continuous_of_finiteDimensional E
-  have h_Eσ : Filter.Tendsto (E ∘ σ ∘ φ) Filter.atTop (nhds (E ρ)) :=
-    (hE_cont.tendsto ρ).comp hφ_tendsto
+  let E' : Mat →L[ℂ] Mat := LinearMap.toContinuousLinearMap E
+  have h_Eσ : Filter.Tendsto (E ∘ σ ∘ φ) Filter.atTop (nhds (E ρ)) := by
+    simpa [E'] using (E'.continuous.tendsto ρ).comp hφ_tendsto
   have h_diff : Filter.Tendsto (fun k => (E ∘ σ ∘ φ) k - (σ ∘ φ) k)
       Filter.atTop (nhds (E ρ - ρ)) :=
     h_Eσ.sub hφ_tendsto
@@ -160,7 +165,12 @@ private theorem norm_expSemigroupCLM_taylor_bound [NeZero D]
     (E : (Mat →L[ℂ] Mat)) {s : ℝ} (hs : 0 ≤ s) :
     ‖expSemigroupCLM E s - (1 + (s : ℂ) • E)‖ ≤
       s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) := by
-  have h := norm_exp_sub_one_sub_self_le ((s : ℂ) • E)
+  have h :
+      ‖NormedSpace.exp ((s : ℂ) • E) - 1 - (s : ℂ) • E‖ ≤
+        ‖((s : ℂ) • E)‖ ^ 2 * Real.exp ‖((s : ℂ) • E)‖ :=
+    @norm_exp_sub_one_sub_self_le (Mat →L[ℂ] Mat)
+      inferInstance inferInstance inferInstance (instSubsequenceNormOneClassMatrixCLM (D := D))
+      ((s : ℂ) • E)
   simp only [expSemigroupCLM] at h ⊢
   have hnorm_smul : ‖(s : ℂ) • E‖ = s * ‖E‖ := by
     rw [norm_smul, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hs]
@@ -242,8 +252,6 @@ private theorem compression_eq_limit_of_tendsto
       (fun n => hρ_PMP (φ n)))
     hφ_tendsto
 
-set_option maxHeartbeats 4000000 in
--- Needed for the Taylor remainder normalization step inside the subsequence limit argument.
 private theorem generator_vanishes_at_limit
     [NeZero D]
     {L : Mat →ₗ[ℂ] Mat}
@@ -253,14 +261,14 @@ private theorem generator_vanishes_at_limit
     (hφ_mono : StrictMono φ)
     (hφ_tendsto : Filter.Tendsto (fun n => ρ_shift (φ n)) Filter.atTop (nhds ρ)) :
     L ρ = 0 := by
-  have hL_cont : Continuous L := LinearMap.continuous_of_finiteDimensional L
-  have hL_tendsto : Filter.Tendsto (fun n => L (ρ_shift (φ n))) Filter.atTop (nhds (L ρ)) :=
-    (hL_cont.tendsto ρ).comp hφ_tendsto
+  set E : Mat →L[ℂ] Mat := endEquiv L
+  have hL_tendsto : Filter.Tendsto (fun n => L (ρ_shift (φ n))) Filter.atTop (nhds (L ρ)) := by
+    change Filter.Tendsto (E ∘ fun n => ρ_shift (φ n)) Filter.atTop (nhds (E ρ))
+    exact (E.continuous.tendsto ρ).comp hφ_tendsto
   suffices h_to_zero :
       Filter.Tendsto (fun n => L (ρ_shift (φ n))) Filter.atTop (nhds 0) by
     exact tendsto_nhds_unique hL_tendsto h_to_zero
   obtain ⟨R, hR⟩ := density_subseq_norm_bounded (D := D) ρ_shift hρ_mem (φ := φ)
-  set E : Mat →L[ℂ] Mat := endEquiv L
   have hE_apply : ∀ X : Mat, E X = L X := by
     intro X
     rfl
@@ -280,7 +288,8 @@ private theorem generator_vanishes_at_limit
       simpa [s, m] using hρ_fix (φ n)
     have hfp_clm : (expSemigroupCLM E s) (ρ_shift (φ n)) = ρ_shift (φ n) := by
       have hfp' : endEquiv (expSemigroup L s) (ρ_shift (φ n)) = ρ_shift (φ n) := by
-        simpa using hfp
+        change expSemigroup L s (ρ_shift (φ n)) = ρ_shift (φ n)
+        exact hfp
       simpa [E, expSemigroup_toCLM (L := L) s] using hfp'
     have h_eq_clm :
         (s : ℂ) • (endEquiv L) (ρ_shift (φ n)) =
@@ -320,7 +329,9 @@ private theorem generator_vanishes_at_limit
               (norm_nonneg _)
     have h_norm_smul : ‖(s : ℂ) • L (ρ_shift (φ n))‖ ≤
         s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ_shift (φ n)‖ := by
-      simpa [hE_apply] using h_norm_smul_clm
+      change ‖(s : ℂ) • (endEquiv L) (ρ_shift (φ n))‖ ≤
+        s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ_shift (φ n)‖
+      exact h_norm_smul_clm
     have hs_pos : 0 < s := by
       dsimp [s, m]
       positivity
@@ -334,8 +345,8 @@ private theorem generator_vanishes_at_limit
     calc ‖L (ρ_shift (φ n))‖
         ≤ s * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ_shift (φ n)‖ := hL_norm
       _ ≤ s * ‖E‖ ^ 2 * Real.exp (1 * ‖E‖) * R := by
-          have h_exp : Real.exp (s * ‖E‖) ≤ Real.exp (1 * ‖E‖) := by
-            exact Real.exp_le_exp_of_le (by nlinarith [norm_nonneg E, hs_le_one])
+          have h_exp : Real.exp (s * ‖E‖) ≤ Real.exp (1 * ‖E‖) :=
+            Real.exp_le_exp_of_le (by nlinarith [norm_nonneg E, hs_le_one])
           have h_mul :
               Real.exp (s * ‖E‖) * ‖ρ_shift (φ n)‖ ≤
                 Real.exp (1 * ‖E‖) * R :=
@@ -374,7 +385,10 @@ theorem hasRankDeficientKernelElement_of_hasBlockUpperTriangularLindblad
   have hT_pres := semigroup_preserves_compression_of_generator hP_nt.1 hgen
   obtain ⟨ρ_shift, hρ_mem, hρ_PMP, hρ_fix⟩ :=
     exists_fixed_point_sequence_in_PMP hP_nt.1 hP_ne hGKSL hT_pres
-  haveI : FirstCountableTopology Mat := by infer_instance
+  haveI : TopologicalSpace.PseudoMetrizableSpace Mat :=
+    PseudoEMetricSpace.pseudoMetrizableSpace
+  haveI : FirstCountableTopology Mat :=
+    TopologicalSpace.PseudoMetrizableSpace.firstCountableTopology
   haveI : (nhds (0 : Mat)).IsCountablyGenerated := by infer_instance
   haveI : (_root_.uniformity Mat).IsCountablyGenerated :=
     IsUniformAddGroup.uniformity_countably_generated

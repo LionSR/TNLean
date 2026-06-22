@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Irreducible.Growth.OneStep
 import TNLean.Channel.Irreducible.Growth.Preservation
+import TNLean.Algebra.MatrixAux
 
 /-!
 # Kernel-descent proof of the growth condition
@@ -30,7 +31,7 @@ produces a PosDef matrix or strictly shrinks the kernel of the PSD input.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2, Thm 6.2
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2, Theorem 6.2
   item 2][Wolf2012QChannels]
 
 ## Tags
@@ -89,33 +90,6 @@ end KernelDecrease
 
 section Growth
 
-/-- PSD with trivial kernel implies PosDef. -/
-private lemma posDef_of_psd_ker_bot
-    {B : Matrix (Fin D) (Fin D) ℂ} (hB : B.PosSemidef)
-    (hker : B.mulVecLin.ker = ⊥) : B.PosDef := by
-  rw [Matrix.posDef_iff_dotProduct_mulVec]
-  refine ⟨hB.isHermitian, fun v hv => ?_⟩
-  have h_nonneg := hB.dotProduct_mulVec_nonneg v
-  suffices star v ⬝ᵥ (B *ᵥ v) ≠ 0 from lt_of_le_of_ne h_nonneg (Ne.symm this)
-  intro h0
-  have hBv : B *ᵥ v = 0 := (hB.dotProduct_mulVec_zero_iff v).mp h0
-  have hmem : v ∈ B.mulVecLin.ker := by rw [LinearMap.mem_ker]; exact hBv
-  rw [hker] at hmem
-  exact hv ((Submodule.mem_bot ℂ).mp hmem)
-
-/-- PosDef implies kernel is trivial. -/
-private lemma ker_bot_of_posDef
-    {B : Matrix (Fin D) (Fin D) ℂ} (hB : B.PosDef) : B.mulVecLin.ker = ⊥ := by
-  rw [Submodule.eq_bot_iff]
-  intro v hv
-  rw [LinearMap.mem_ker] at hv
-  change B *ᵥ v = 0 at hv
-  by_contra hne
-  obtain ⟨_, hpd⟩ := Matrix.posDef_iff_dotProduct_mulVec.mp hB
-  have h_pos : (0 : ℂ) < star v ⬝ᵥ (B *ᵥ v) := hpd hne
-  have h_zero : star v ⬝ᵥ (B *ᵥ v) = 0 := by simp [hv]
-  linarith
-
 /-- **Wolf Theorem 6.2, item 2 (Growth condition for irreducible CP maps)**:
 If `E` is an irreducible completely positive map on `M_D(ℂ)` and `A ≥ 0` is
 nonzero, then `(id + E)^{D-1}(A)` is positive definite.
@@ -170,7 +144,16 @@ theorem growth_posDef_of_irreducible_cp
   | zero =>
     intro B hB _ hkd
     have hk0 : Module.finrank ℂ (LinearMap.ker B.mulVecLin) = 0 := Nat.le_zero.mp hkd
-    simpa [pow_zero] using posDef_of_psd_ker_bot hB (Submodule.finrank_eq_zero.mp hk0)
+    have hker : B.mulVecLin.ker = ⊥ := Submodule.finrank_eq_zero.mp hk0
+    have hdet : B.det ≠ 0 := by
+      intro hdet
+      obtain ⟨v, hvne, hv⟩ := Matrix.exists_mulVec_eq_zero_iff.mpr hdet
+      have hvker : v ∈ B.mulVecLin.ker := by
+        rw [LinearMap.mem_ker]
+        exact hv
+      rw [hker] at hvker
+      exact hvne ((Submodule.mem_bot ℂ).mp hvker)
+    simpa [pow_zero] using hB.posDef_iff_det_ne_zero.mpr hdet
   | succ n ih =>
     intro B hB hBne hkd
     rw [pow_succ, Module.End.mul_apply]
@@ -178,7 +161,10 @@ theorem growth_posDef_of_irreducible_cp
     · apply ih (T B) (hT_psd hB) (hT_ne hB hBne)
       have hTBpd : (T B).PosDef := by
         simpa [hT_eq B] using idPlusE_posDef hPos hBpd
-      rw [ker_bot_of_posDef hTBpd]
+      rw [(Matrix.ker_mulVecLin_eq_bot_iff).mpr fun v hv => by
+        by_contra hne
+        have h_pos := hTBpd.dotProduct_mulVec_pos hne
+        simp [hv] at h_pos]
       simp
     · apply ih (T B) (hT_psd hB) (hT_ne hB hBne)
       have h_lt : (B + E B).mulVecLin.ker < B.mulVecLin.ker :=

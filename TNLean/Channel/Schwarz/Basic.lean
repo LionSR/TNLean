@@ -1,12 +1,13 @@
 import TNLean.Channel.Basic
+import TNLean.Algebra.MatrixAux
 
 /-!
-# CP Schwarz / Multiplicative-domain infrastructure for Kraus maps
+# CP Schwarz / Multiplicative-domain formalization for Kraus maps
 
-This file provides a small self-contained API for Kraus maps on matrices
+This file provides a small self-contained interface for Kraus maps on matrices
 `Matrix n n ℂ`, parametrised by an arbitrary finite Kraus index type `ι`.
 
-The main purpose is to support the spectral-gap proof for the mixed transfer
+The main purpose is to support the transfer-operator gap proof for the mixed transfer
 operator, where we need a *weighted* Kadison–Schwarz equality:
 
 * `kadison_schwarz` : KS inequality for unital Kraus maps
@@ -207,7 +208,7 @@ theorem posSemidef_eq_zero_of_posDef_trace_mul_eq_zero
       Matrix.trace_mul_cycle S M Sᴴ
     have htr'' : Matrix.trace (Sᴴ * S * M) = 0 := by
       -- Rewrite `tr(ρ M)=0` using `ρ = S†S`.
-      simpa [hρ_eq, Matrix.mul_assoc] using htr
+      simpa [hρ_eq, Matrix.mul_assoc, ← Matrix.star_eq_conjTranspose] using htr
     exact hcycle.trans htr''
   -- PSD + trace 0 ⇒ zero.
   have hSMS_zero : S * M * Sᴴ = 0 := (hSMS_psd.trace_eq_zero_iff.mp htr')
@@ -254,15 +255,8 @@ theorem ks_equality_of_peripheral_eigenvector_of_fixedPoint
     -- Second term: use the eigenvector equation `E(X)=μX` and `‖μ‖=1`.
     have h2 : Matrix.trace (ρ * ((map K X)ᴴ * map K X)) = Matrix.trace (ρ * (Xᴴ * X)) := by
       -- Rewrite `‖μ‖ = 1` as `conj μ * μ = 1`.
-      have hnormSq : Complex.normSq μ = 1 := by
-        calc
-          Complex.normSq μ = ‖μ‖ ^ 2 := Complex.normSq_eq_norm_sq μ
-          _ = 1 := by simp [hμ]
       have hconjmul : (starRingEnd ℂ) μ * μ = (1 : ℂ) := by
-        calc
-          (starRingEnd ℂ) μ * μ = (↑(Complex.normSq μ) : ℂ) := by
-            simpa using (Complex.normSq_eq_conj_mul_self (z := μ)).symm
-          _ = 1 := by simp [hnormSq]
+        rw [Complex.conj_mul', hμ]; simp
       have hmulconj : μ * (starRingEnd ℂ) μ = (1 : ℂ) := by
         simpa [mul_comm] using hconjmul
       have hkey : (μ • X)ᴴ * (μ • X) = Xᴴ * X := by
@@ -271,34 +265,11 @@ theorem ks_equality_of_peripheral_eigenvector_of_fixedPoint
       simp only [hEig, hkey]
     simp [h1, h2]
   -- Faithfulness: PSD + weighted trace 0 ⇒ the KS gap is 0.
-  have h_gap_zero : map K (Xᴴ * X) - (map K X)ᴴ * map K X = 0 := by
-    exact posSemidef_eq_zero_of_posDef_trace_mul_eq_zero (hM := h_psd) (hρ := hρ) h_trace_gap
+  have h_gap_zero : map K (Xᴴ * X) - (map K X)ᴴ * map K X = 0 :=
+    posSemidef_eq_zero_of_posDef_trace_mul_eq_zero (hM := h_psd) (hρ := hρ) h_trace_gap
   exact sub_eq_zero.mp h_gap_zero
 
 /-! ## KS gap decomposition and Kraus-level commutation -/
-
-omit [DecidableEq n] in
-/-- If `∑ᵢ Rᵢ†Rᵢ = 0`, then each `Rᵢ = 0`. -/
-private lemma each_zero_of_sum_conjTranspose_mul_self_zero
-    (R : ι → Matrix n n ℂ)
-    (h : ∑ i : ι, (R i)ᴴ * R i = 0) :
-    ∀ i : ι, R i = 0 := by
-  intro i
-  have h_psd_i := Matrix.posSemidef_conjTranspose_mul_self (R i)
-  have h_each_nonneg : ∀ j : ι, 0 ≤ ((R j)ᴴ * R j).trace.re :=
-    fun j => (Complex.le_def.mp (Matrix.posSemidef_conjTranspose_mul_self (R j)).trace_nonneg).1
-  have h_tr_sum_re : (∑ j : ι, ((R j)ᴴ * R j).trace.re) = 0 := by
-    rw [← Complex.re_sum, ← Matrix.trace_sum, h]
-    simp
-  have h_tr_re : ((R i)ᴴ * R i).trace.re = 0 :=
-    le_antisymm
-      (by
-        linarith [Finset.sum_eq_zero_iff_of_nonneg (fun j _ => h_each_nonneg j)
-            |>.mp h_tr_sum_re i (Finset.mem_univ i)])
-      (h_each_nonneg i)
-  have h_tr_zero : ((R i)ᴴ * R i).trace = 0 :=
-    Complex.ext h_tr_re (Complex.le_def.mp h_psd_i.trace_nonneg).2.symm
-  exact Matrix.conjTranspose_mul_self_eq_zero.mp (h_psd_i.trace_eq_zero_iff.mp h_tr_zero)
 
 /-- **KS gap decomposition** at the level of Kraus operators.
 
@@ -365,8 +336,8 @@ theorem kraus_commute_of_ks_equality (K : ι → Matrix n n ℂ)
     simpa [h_gap] using this
   -- Each square term must vanish.
   have h_each :=
-    each_zero_of_sum_conjTranspose_mul_self_zero
-      (R := fun i => X * (K i)ᴴ - (K i)ᴴ * map K X) h_sum_zero
+    Matrix.eq_zero_of_sum_conjTranspose_mul_self_eq_zero
+      (B := fun i => X * (K i)ᴴ - (K i)ᴴ * map K X) h_sum_zero
   intro i
   exact sub_eq_zero.mp (h_each i)
 

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Basic
+import TNLean.Algebra.MatrixAux
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Schwarz.KadisonSchwarz
 
@@ -17,37 +18,33 @@ This module sets up the **normalization map**
 $$\rho \mapsto \frac{E(\rho)}{\operatorname{tr}(E(\rho))}$$
 
 on density matrices, together with the key denominator/nonvanishing lemmas
-needed for the Perron–Frobenius / TP-gauge existence step in
-arXiv:1606.00608, Appendix A.
+needed for the Perron–Frobenius / TP-gauge existence step.
 
-No fixed-point theorem is assumed here.
+The normalization map is the central construction in the Brouwer fixed-point
+proof of **Wolf Theorem 6.5** (spectral radius and positive eigenvectors): one
+considers the continuous self-map `ρ ↦ E(ρ) / tr(E(ρ))` on the compact convex set
+of density matrices; any fixed point yields an eigenvector identity
+`E(ρ) = tr(E(ρ)) · ρ`. The nonvanishing lemma
+`IsIrreducibleMap.map_posSemidef_ne_zero` provides the denominator-nonzero
+hypothesis for irreducible CP maps (used in **Wolf Theorem 6.3** item 2).
+
+No fixed-point theorem is assumed here — that is proved in
+`TNLean.Axioms.BrouwerFixedPoint` and consumed in
+`TNLean.Channel.PerronFrobenius.Existence`.
+
+## References
+
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2,
+  proof of Theorem 6.5 via Brouwer fixed point][Wolf2012QChannels]
+* [Cirac et al., arXiv:1606.00608, Appendix A][Cirac2017Annals]
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder BigOperators TNMatrixCFC
+open scoped Matrix ComplexOrder MatrixOrder BigOperators
 open Matrix Finset
 
 variable {D : ℕ}
 
 namespace PerronFrobeniusNormalization
-
-/-- A small helper: rewrite the spectral theorem in `U * diagonal * Uᴴ` form. -/
-private lemma spectral_decomp_eq [DecidableEq (Fin D)]
-    {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.IsHermitian) :
-    M = (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)
-      * Matrix.diagonal (fun j => (↑(hM.eigenvalues j) : ℂ))
-      * (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ := by
-  have h := hM.spectral_theorem
-  -- Unfold the unitary conjugation.
-  -- `simp` turns `RCLike.ofReal` into coercion to `ℂ`.
-  simpa [Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose] using h
-
-/-- `Uᴴ * U = 1` for the eigenvector unitary `U`. -/
-private lemma eig_conj_mul [DecidableEq (Fin D)]
-    {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.IsHermitian) :
-    (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ
-      * (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ) = 1 := by
-  rw [← Matrix.star_eq_conjTranspose]
-  exact Matrix.UnitaryGroup.star_mul_self hM.eigenvectorUnitary
 
 /--
 Given a PSD matrix `ρ`, choose the orthogonal projection onto its support using the spectral
@@ -71,9 +68,11 @@ private lemma exists_supportProjection
   let sgn : Fin D → ℂ := fun j => if 0 < hH.eigenvalues j then 1 else 0
   let P : Matrix (Fin D) (Fin D) ℂ := U * Matrix.diagonal sgn * Uᴴ
   have hUU : Uᴴ * U = 1 := by
-    simpa [U] using eig_conj_mul (D := D) hH
+    simpa [U, Matrix.star_eq_conjTranspose] using
+      Matrix.UnitaryGroup.star_mul_self hH.eigenvectorUnitary
   have hρ_spectral : ρ = U * Matrix.diagonal eig * Uᴴ := by
-    simpa [U, eig] using spectral_decomp_eq (D := D) hH
+    simpa [U, eig, Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose,
+      Matrix.mul_assoc, Function.comp_def] using hH.spectral_theorem
   have hsgn_star : star sgn = sgn := by
     ext j
     simp [sgn, Pi.star_apply]
@@ -170,7 +169,8 @@ theorem IsIrreducibleMap.map_posSemidef_ne_zero
       simpa [hK] using hEρ
     simpa [hB', Matrix.mul_assoc, Matrix.conjTranspose_mul] using this
   have hKiB : ∀ i : Fin r, K i * Bᴴ = 0 :=
-    eq_zero_of_sum_mul_conjTranspose_eq_zero (B := fun i : Fin r => K i * Bᴴ) hsum0
+    Matrix.eq_zero_of_sum_mul_conjTranspose_eq_zero
+      (B := fun i : Fin r => K i * Bᴴ) hsum0
   have hKiρ : ∀ i : Fin r, K i * ρ = 0 := by
     intro i
     rw [hB']
@@ -282,9 +282,10 @@ theorem continuousAt_normMap
     (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (htr : Matrix.trace (E ρ) ≠ 0) :
     ContinuousAt (normMap (D := D) E) ρ := by
-  -- Continuity of the linear map `E` in finite dimension.
-  have hE : Continuous (fun ρ : Matrix (Fin D) (Fin D) ℂ => E ρ) :=
-    E.continuous_of_finiteDimensional
+  let E' : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ :=
+    LinearMap.toContinuousLinearMap E
+  have hE : Continuous (fun ρ : Matrix (Fin D) (Fin D) ℂ => E ρ) := by
+    simpa [E'] using E'.continuous
   have htrace :
       ContinuousAt (fun ρ : Matrix (Fin D) (Fin D) ℂ => Matrix.trace (E ρ)) ρ :=
     hE.matrix_trace.continuousAt

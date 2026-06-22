@@ -1,0 +1,741 @@
+
+\section{Periodic-boundary comparison for injective tensors}\label{sec:injective_boundary_closing}
+
+On the periodic ring the two cyclic supports that cross the periodic-boundary cut
+expose the same complementary word, and matching their boundary matrices forces
+$X$ to commute with every $A^j$. This section derives the boundary-crossing
+compatibilities $C^+_\tau A^j X = Y_\tau A^j$ and $X A^j C^-_\tau = A^j Y_\tau$
+and combines them into the commutation $X A^j = A^j X$.
+
+\begin{lemma}[Boundary-crossing compatibility at the last site]%
+    \label{lem:wrapped_window_one_sided_compatibility}
+    \lean{MPSTensor.wrapping_window_compatibility_of_isNBlkInjective}
+    \leanok
+    \uses{def:l_blk_injective, rem:cyclic_window_operators}
+    Assume $A$ is $L_0$-block-injective with $L_0>0$ and $M \ge L_0$.
+    If the reduced cyclic interval crossing the last site
+    has boundary matrices $Y_\tau$, then for every physical letter $j$ one has
+    \begin{equation}\label{eq:ph_wrapped_window_compat}
+        C^+_\tau A^j X = Y_\tau A^j,
+    \end{equation}
+    where $C^+_\tau$ is the complementary word seen by that cyclic interval.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:ground_space_map_injective_blk}
+    The trace identity for this cyclic interval is tested against all words of
+    length $L_0$. Injectivity of $\Gamma_{L_0}$, which follows from
+    $L_0$-block injectivity, turns these test-word identities into the displayed
+    matrix identity~(\ref{eq:ph_wrapped_window_compat}).
+\end{proof}
+
+\begin{lemma}[Boundary-crossing compatibility at the second boundary position]%
+    \label{lem:mirror_wrapped_window_one_sided_compatibility}
+    \lean{MPSTensor.wrapping_window_mirror_compatibility_of_isNBlkInjective}
+    \leanok
+    \uses{def:l_blk_injective, rem:cyclic_window_operators}
+    Assume $A$ is $L_0$-block-injective with $L_0>0$ and $M \ge L_0$.
+    If the second boundary-crossing reduced cyclic interval has
+    boundary matrices $Y_\tau$, then
+    \[
+        X A^j C^-_\tau = A^j Y_\tau
+    \]
+    for every physical letter $j$, where $C^-_\tau$ is the complementary word
+    seen from the second cyclic position.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:ground_space_map_injective_blk}
+    Factor the cyclic word at the second cyclic position, rotate
+    the trace, and use injectivity of $\Gamma_{L_0}$ to remove the
+    length-$L_0$ test word.
+\end{proof}
+
+\begin{theorem}[The two boundary-crossing compatibilities]%
+    \label{thm:reduced_wrapped_boundary_compatibilities}
+    \lean{MPSTensor.chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective}
+    \leanok
+    \uses{def:chain_ground_space, def:l_blk_injective,
+        lem:cyclic_window_range_antitonicity,
+        lem:wrapped_window_one_sided_compatibility,
+        lem:mirror_wrapped_window_one_sided_compatibility}
+    Let $A$ be $L_0$-block-injective with $L_0>0$ and $D \ge 1$.
+    Suppose $\psi \in \mathcal G_{N,L}(A)$, $N \ge 2$, $L_0 < L \le N$, and
+    $\psi = \Gamma_N(X)$ for a boundary matrix $X$. Then there are two families
+    of boundary matrices $Y^+_\tau$ and $Y^-_\tau$, indexed by fixed complement
+    values $\tau$, such that for every physical letter $j$,
+    \begin{equation}\label{eq:ph_reduced_wrapped_compat}
+        C^+_\tau A^j X = Y^+_\tau A^j,
+        \qquad
+        X A^j C^-_\tau = A^j Y^-_\tau,
+    \end{equation}
+    where $C^+_\tau$ and $C^-_\tau$ are the complementary words exposed by the
+    two boundary-crossing cyclic intervals, both of reduced length $L_0+1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:cyclic_window_range_antitonicity,
+        lem:wrapped_window_one_sided_compatibility,
+        lem:mirror_wrapped_window_one_sided_compatibility}
+    First use Lemma~\ref{lem:cyclic_window_range_antitonicity} to reduce the
+    cyclic constraints from range $L$ to range $L_0+1$. Then apply the two
+    cyclic-interval compatibility lemmas at the two boundary positions to obtain
+    the displayed one-sided identities~(\ref{eq:ph_reduced_wrapped_compat}).
+\end{proof}
+
+\begin{lemma}[Boundary-crossing equations for $\Gamma_{M+1}(X)$]%
+    \label{lem:closure_property_boundary_crossing_equations_ground_space_map}
+    \lean{MPSTensor.closure_property_wrapped_mirror_compatibilities_of_groundSpaceMap}
+    \leanok
+    \uses{def:ground_space_map, rem:cyclic_window_operators,
+        lem:wrapped_window_one_sided_compatibility,
+        lem:mirror_wrapped_window_one_sided_compatibility}
+    Let $A$ be $L_0$-block-injective with $L_0>0$, $D\ge1$, and $L_0\le M$.
+    Suppose $\psi=\Gamma_{M+1}(X)$, and suppose matrices $Y_i(\tau)$ represent
+    the length-$(L_0+1)$ cyclic restrictions
+    \[
+        \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)
+        =
+        \Gamma_{L_0+1}(Y_i(\tau)).
+    \]
+    Then, for every physical letter $j$ and boundary condition $\tau$,
+    \begin{equation}\label{eq:ph_closure_boundary_crossing_gamma_equations}
+        A^{\tau_{L_0}}\cdots A^{\tau_{M-1}} A^j X
+        =
+        Y_M(\tau)A^j,
+        \qquad
+        X A^j A^{\tau_1}\cdots A^{\tau_{M-L_0}}
+        =
+        A^jY_{M+1-L_0}(\tau).
+    \end{equation}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Substitute $\psi=\Gamma_{M+1}(X)$ in the two cyclic restrictions at the
+    last site and at the second boundary-crossing support. Lemmas
+    \ref{lem:wrapped_window_one_sided_compatibility} and
+    \ref{lem:mirror_wrapped_window_one_sided_compatibility} then give the two
+    equations in~(\ref{eq:ph_closure_boundary_crossing_gamma_equations}).
+\end{proof}
+
+\begin{lemma}[One-sided products for a common complement word]
+    \label{lem:closure_property_boundary_one_sided_products_ground_space_map}
+    \lean{MPSTensor.closure_property_boundary_one_sided_products_of_groundSpaceMap}
+    \leanok
+    \uses{lem:closure_property_boundary_crossing_equations_ground_space_map,
+        lem:wrapped_middle_backgrounds}
+    Let $A$ be $L_0$-block-injective with $L_0>0$, $D\ge1$, and $L_0\le M$.
+    Suppose $\psi=\Gamma_{M+1}(X)$, and suppose matrices $Y_i(\tau)$ represent
+    the length-$(L_0+1)$ cyclic restrictions
+    \[
+        \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)
+        =
+        \Gamma_{L_0+1}(Y_i(\tau)).
+    \]
+    For every boundary letter $\eta$, every physical letter $j$, and every
+    complementary word $\mu$,
+    \[
+        Y_M(\tau^+_\eta(\mu))A^j
+        =
+        A^\mu A^j X,
+        \qquad
+        X A^j A^\mu
+        =
+        A^jY_{M+1-L_0}(\tau^-_\eta(\mu)).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Substitute $\tau^+_\eta(\mu)$ and $\tau^-_\eta(\mu)$ into
+    Lemma~\ref{lem:closure_property_boundary_crossing_equations_ground_space_map}.
+    The exposed-complement identities of
+    Lemma~\ref{lem:wrapped_middle_backgrounds} identify both complementary
+    products with $A^\mu$.
+\end{proof}
+
+\begin{lemma}[Common complement word for the two boundary supports]%
+    \label{lem:wrapped_middle_backgrounds}
+    \lean{MPSTensor.wrappedMiddleBackground,
+        MPSTensor.mirrorMiddleBackground,
+        MPSTensor.wrappedMiddleBackground_complement,
+        MPSTensor.mirrorMiddleBackground_complement}
+    \leanok
+    \uses{rem:cyclic_window_operators}
+    On a chain of length $N=M+1$, with $L_0\le M$, fix a physical letter $\eta$
+    used outside the complementary sites and a word $\mu$ of length
+    $M+1-(L_0+1)$. Write $\tau^+_\eta(\mu)$ for the boundary condition at the
+    support crossing the last site and $\tau^-_\eta(\mu)$ for the boundary
+    condition at the second boundary-crossing support. Their exposed complements
+    are both exactly $\mu$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Put the same letter $\eta$ on the remaining sites. Fill the physical sites
+    $L_0,\ldots,M-1$ with $\mu$ for the support crossing the last site, and fill
+    the sites $1,\ldots,M-L_0$ with $\mu$ for the second boundary-crossing
+    support.
+    The two complement-extraction identities are then immediate from the index
+    arithmetic. The same outside-site calculation gives, for any $\rho$ with
+    $\rho_{k+L_0}=\mu_k$,
+    \[
+        \operatorname{Res}^{\rho}_{M,L_0+1}\psi
+        =
+        \operatorname{Res}^{\tau^+_\eta(\mu)}_{M,L_0+1}\psi,
+    \]
+    and, for any $\rho$ with $\rho_{k+1}=\mu_k$,
+    \[
+        \operatorname{Res}^{\rho}_{M+1-L_0,L_0+1}\psi
+        =
+        \operatorname{Res}^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}\psi.
+    \]
+\end{proof}
+
+\begin{lemma}[Boundary equations from a common complement word]
+    \label{lem:boundary_assignment_first_letter_products}
+    \lean{MPSTensor.cyclicRestrictₗ_first_products_eq_of_restriction_eq,
+        MPSTensor.cyclicRestrictₗ_wrappedMiddleBackground_eq_of_complement_eq,
+        MPSTensor.cyclicRestrictₗ_mirrorMiddleBackground_eq_of_complement_eq,
+        MPSTensor.wrappedMiddleBackground_first_products_eq_of_complement_eq,
+        MPSTensor.mirrorMiddleBackground_first_products_eq_of_complement_eq,
+        MPSTensor.wrappedMiddleBackground_first_products_eq_of_complement_eq_right_word,
+        MPSTensor.mirrorMiddleBackground_first_products_eq_of_complement_eq_right_word}
+    \leanok
+    \uses{rem:cyclic_window_operators, lem:wrapped_middle_backgrounds}
+    Let $A$ be $L_0$-block-injective, with $L_0>0$, and let $L_0\le M$.
+    Suppose two length-$(L_0+1)$ restrictions of a state $\psi$ at the same
+    cyclic support are represented by
+    \[
+        \operatorname{Res}^{\rho}_{i,L_0+1}\psi=\Gamma_{L_0+1}(Y_\rho),
+        \qquad
+        \operatorname{Res}^{\tau}_{i,L_0+1}\psi=\Gamma_{L_0+1}(Y_\tau).
+    \]
+    If these two restrictions are equal, then for every physical letter $j$,
+    \[
+        Y_\rho A^j = Y_\tau A^j .
+    \]
+    In particular, the last-site boundary-crossing condition satisfies
+    \[
+        \rho_{k+L_0}=\mu_k
+        \Longrightarrow
+        Y_\rho A^j = Y_{\tau^+_\eta(\mu)}A^j,
+    \]
+    and the second boundary-crossing condition satisfies
+    \[
+        \rho_{k+1}=\mu_k
+        \Longrightarrow
+        Y_\rho A^j = Y_{\tau^-_\eta(\mu)}A^j .
+    \]
+    Consequently, for every word $\sigma$ of length $L_0$, the two displayed
+    implications remain true after right multiplication by $A^\sigma$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Apply the first-letter restriction to both equal length-$(L_0+1)$
+    restrictions. The two resulting length-$L_0$ vectors are represented by
+    $\Gamma_{L_0}(Y_\rho A^j)$ and $\Gamma_{L_0}(Y_\tau A^j)$, and block
+    injectivity makes $\Gamma_{L_0}$ injective. The two displayed special cases
+    follow from Lemma~\ref{lem:wrapped_middle_backgrounds}. The
+    length-$L_0$ word forms are obtained by multiplying these equations on the
+    right by $A^\sigma$.
+\end{proof}
+
+\begin{lemma}[Reduction to compatible boundary conditions]
+    \label{lem:boundary_closing_product_compatible_backgrounds}
+    \lean{MPSTensor.boundary_closing_product_eq_of_compatible_backgrounds}
+    \leanok
+    \uses{lem:boundary_assignment_first_letter_products}
+    Let $A$ be $L_0$-block-injective, with $L_0>0$, and let $L_0\le M$.
+    Let $\psi$ be a state on the chain of length $M+1$, and let the matrices
+    $Y_i(\tau)$ represent its length-$(L_0+1)$ cyclic restrictions:
+    \[
+        \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)
+        =
+        \Gamma_{L_0+1}(Y_i(\tau)).
+    \]
+    Fix a boundary letter $\eta$ and a complementary word $\mu$. Let $\rho^+$
+    and $\rho^-$ be two boundary conditions satisfying
+    \[
+        \rho^+_{k+L_0}=\mu_k,
+        \qquad
+        \rho^-_{k+1}=\mu_k .
+    \]
+    If the adjacent-window comparison gives, for every physical letter $j$ and
+    every word $\sigma$ of length $L_0$,
+    \[
+        Y_M(\rho^+)A^jA^\sigma
+        =
+        Y_{M+1-L_0}(\rho^-)A^jA^\sigma ,
+    \]
+    then the same product equation holds for $\tau^+_\eta(\mu)$ and
+    $\tau^-_\eta(\mu)$:
+    \[
+        Y_M(\tau^+_\eta(\mu))A^jA^\sigma
+        =
+        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    By Lemma~\ref{lem:boundary_assignment_first_letter_products},
+    \[
+        Y_M(\rho^+)A^j = Y_M(\tau^+_\eta(\mu))A^j,
+        \qquad
+        Y_{M+1-L_0}(\rho^-)A^j
+        =
+        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j.
+    \]
+    Multiplying on the right by $A^\sigma$ and applying the hypothesis gives the
+    displayed product equation.
+\end{proof}
+
+\begin{theorem}[Pointwise reduction to compatible boundary conditions]
+    \label{thm:boundary_closing_product_pointwise_compatible_boundary_assignments}
+    \lean{MPSTensor.boundary_closing_product_eq_of_pointwise_compatible_boundary_assignments}
+    \leanok
+    \uses{lem:boundary_assignment_first_letter_products}
+    Let $A$ be $L_0$-block-injective, with $L_0>0$, and let $L_0\le M$.
+    Let $\psi$ be a state on the chain of length $M+1$, and let the matrices
+    $Y_i(\tau)$ represent its length-$(L_0+1)$ cyclic restrictions:
+    \[
+        \operatorname{Res}^{\tau}_{i,L_0+1}(\psi)
+        =
+        \Gamma_{L_0+1}(Y_i(\tau)).
+    \]
+    Fix a boundary letter $\eta$ and a complementary word $\mu$. Suppose that,
+    for each physical letter $j$ and word $\sigma$ of length $L_0$, boundary
+    conditions $\rho^+_{j,\sigma}$ and $\rho^-_{j,\sigma}$ satisfy, for every
+    complementary position $k$,
+    \[
+        \rho^+_{j,\sigma}(k+L_0)=\mu_k,
+        \qquad
+        \rho^-_{j,\sigma}(k+1)=\mu_k .
+    \]
+    If, for every $j$ and $\sigma$,
+    \[
+        Y_M(\rho^+_{j,\sigma})A^jA^\sigma
+        =
+        Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma ,
+    \]
+    then, for every $j$ and $\sigma$,
+    \[
+        Y_M(\tau^+_\eta(\mu))A^jA^\sigma
+        =
+        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma .
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Fix $j$ and $\sigma$. Lemma~\ref{lem:boundary_assignment_first_letter_products}
+    gives
+    \[
+        Y_M(\rho^+_{j,\sigma})A^j
+        =
+        Y_M(\tau^+_\eta(\mu))A^j,
+        \qquad
+        Y_{M+1-L_0}(\rho^-_{j,\sigma})A^j
+        =
+        Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j.
+    \]
+    Multiply the two identities on the right by $A^\sigma$ and use the assumed
+    product equation for the chosen pair $j,\sigma$.
+\end{proof}
+
+\begin{lemma}[Endpoint words for the periodic-boundary windows]
+    \label{lem:boundary_closing_endpoint_word_products}
+    \lean{MPSTensor.boundary_closing_endpoint_word_products_common_background}
+    \leanok
+    \uses{lem:cyclic_window_boundary_matrix_transport}
+    Let $A$ be $L_0$-block-injective with $L_0>0$, and let $L_0\le M$.
+    Let $\psi$ be a state on the chain of length $M+1$. Suppose that
+    matrices $Y_r(\rho)$, for $0\le r\le L_0-1$, represent the
+    length-$(L_0+1)$ cyclic restrictions beginning at the sites
+    $M+1-L_0+r$:
+    \[
+        \operatorname{Res}^{\rho}_{M+1-L_0+r,L_0+1}\psi
+        =
+        \Gamma_{L_0+1}(Y_r(\rho)).
+    \]
+    Then
+    \[
+        Y_0(\rho)
+        A^{\rho_{M+1-L_0}}\cdots A^{\rho_{M-1}}
+        =
+        A^{\rho_1}\cdots A^{\rho_{L_0-1}}
+        Y_{L_0-1}(\rho).
+    \]
+    For $L_0=1$, both products are empty.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Use Lemma~\ref{lem:cyclic_window_boundary_matrix_transport} for the
+    $L_0-1$ adjacent restrictions starting at $i_0=M+1-L_0$. For
+    $0\le r<L_0-1$, the two endpoint words are determined by
+    \[
+        i_0+r=M+1-L_0+r,\qquad
+        i_0+r+L_0+1\equiv r+1 \pmod {M+1},
+    \]
+    Substituting these two words in the iterated transport identity gives the
+    displayed product equation.
+\end{proof}
+
+\begin{lemma}[Boundary-condition product for the periodic-boundary windows]
+    \label{lem:closure_property_boundary_condition_product_window_witnesses}
+    \lean{MPSTensor.closure_property_boundary_condition_product_of_window_witnesses,
+        MPSTensor.closure_property_boundary_condition_product_of_window_witnesses_mul_right}
+    \leanok
+    \uses{rem:cyclic_window_operators, lem:cyclic_window_boundary_matrix_transport}
+    Let $A$ be $L_0$-block-injective with $L_0>0$, and let $L_0\le M$. Let
+    $\psi$ be a state on the chain of length $M+1$, and suppose matrices
+    $Y_i(\rho)$ represent the length-$(L_0+1)$ cyclic restrictions
+    \[
+        \operatorname{Res}^{\rho}_{i,L_0+1}(\psi)
+        =
+        \Gamma_{L_0+1}(Y_i(\rho)).
+    \]
+    Then, for every boundary condition $\rho$,
+    \[
+        Y_{M+1-L_0}(\rho)
+        A^{\rho_{M+1-L_0}}\cdots A^{\rho_{M-1}}
+        =
+        A^{\rho_1}\cdots A^{\rho_{L_0-1}}Y_M(\rho).
+    \]
+    For $L_0=1$, both products are empty.
+    The same equation remains true after multiplying both sides on the right by
+    any matrix $R$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Apply Lemma~\ref{lem:cyclic_window_boundary_matrix_transport} to the
+    $L_0-1$ restrictions beginning at $M+1-L_0+r$, with
+    \[
+        Y_r(\rho)=Y_{M+1-L_0+r}(\rho).
+    \]
+    With $i_0=M+1-L_0$, the site labels satisfy
+    \[
+        i_0+r=M+1-L_0+r,
+        \qquad
+        i_0+r+L_0+1\equiv r+1 \pmod {M+1}
+    \]
+    hence, for $r=0,\ldots,L_0-2$,
+    \[
+        Y_{M+1-L_0+r}(\rho) A^{\rho_{M+1-L_0+r}}
+        =
+        A^{\rho_{r+1}}Y_{M+2-L_0+r}(\rho).
+    \]
+    Multiplying these $L_0-1$ equations from left to right gives the displayed
+    product equation. The right-multiplied form follows by multiplying this
+    equality by $R$.
+\end{proof}
+
+\begin{lemma}[Transport followed by the one-sided boundary equation]
+    \label{lem:boundary_transport_wrapped_product_ground_space_map}
+    \lean{MPSTensor.closure_property_boundary_condition_transport_wrapped_product_of_groundSpaceMap}
+    \leanok
+    \uses{lem:closure_property_boundary_condition_product_window_witnesses,
+        lem:closure_property_boundary_crossing_equations_ground_space_map}
+    Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, and let
+    $L_0\le M$.  Let $\psi=\Gamma_{M+1}(X)$, and suppose that matrices
+    $Y_i(\rho)$ represent all length-$(L_0+1)$ cyclic restrictions of $\psi$.
+    Then, for every boundary condition $\rho$ and every physical letter $j$,
+    \[
+        Y_{M+1-L_0}(\rho)
+        A^{\rho_{M+1-L_0}}\cdots A^{\rho_{M-1}}A^j
+        =
+        A^{\rho_1}\cdots A^{\rho_{L_0-1}}
+        A^{\rho_{L_0}}\cdots A^{\rho_{M-1}}A^jX .
+    \]
+    For $\rho=\tau^-_\eta(\mu)$ this is the transport identity supplied by the
+    adjacent-window argument, with the single factor $A^j$ following
+    $Y_{M+1-L_0}(\tau^-_\eta(\mu))$. The padded identity, whose corresponding
+    factor is $A^jA^\sigma$, is supplied separately.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:closure_property_boundary_condition_product_window_witnesses}
+    gives
+    \[
+        Y_{M+1-L_0}(\rho)
+        A^{\rho_{M+1-L_0}}\cdots A^{\rho_{M-1}}A^j
+        =
+        A^{\rho_1}\cdots A^{\rho_{L_0-1}}Y_M(\rho)A^j .
+    \]
+    The one-sided equation for the window beginning at $M$ gives
+    \[
+        Y_M(\rho)A^j
+        =
+        A^{\rho_{L_0}}\cdots A^{\rho_{M-1}}A^jX .
+    \]
+    Substitution gives the displayed formula.
+\end{proof}
+
+\begin{lemma}[Long boundary-condition product for the periodic-boundary windows]
+    \label{lem:closure_property_boundary_condition_long_product_window_witnesses}
+    \lean{MPSTensor.closure_property_boundary_condition_long_product_of_window_witnesses}
+    \leanok
+    \uses{rem:cyclic_window_operators, lem:cyclic_window_boundary_matrix_transport}
+    Let $A$ be $L_0$-block-injective with $L_0>0$, and let $L_0\le M$. Let
+    $\psi$ be a state on the chain of length $M+1$, and suppose matrices
+    $Y_i(\rho)$ represent the length-$(L_0+1)$ cyclic restrictions
+    \[
+        \operatorname{Res}^{\rho}_{i,L_0+1}(\psi)
+        =
+        \Gamma_{L_0+1}(Y_i(\rho)).
+    \]
+    Then, for every boundary condition $\rho$,
+    \[
+        Y_M(\rho)A^{\rho_M}A^{\rho_0}\cdots A^{\rho_{M-L_0}}
+        =
+        A^{\rho_{L_0}}\cdots A^{\rho_M}A^{\rho_0}
+        Y_{M+1-L_0}(\rho).
+    \]
+    Each side has $M+2-L_0$ one-site factors, with site labels read modulo
+    $M+1$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Apply Lemma~\ref{lem:cyclic_window_boundary_matrix_transport} to the
+    $M+2-L_0$ restrictions beginning at $M+r$ modulo $M+1$. With $i_0=M$, the
+    site labels satisfy
+    \[
+        i_0+r\equiv M+r,
+        \qquad
+        i_0+r+L_0+1\equiv L_0+r
+        \pmod {M+1}.
+    \]
+    The final window is
+    \[
+        i_0+M+2-L_0\equiv M+1-L_0 \pmod {M+1}.
+    \]
+    Substituting these site labels in the iterated product identity gives the
+    displayed equation.
+\end{proof}
+
+\begin{lemma}[One matrix $Y_\mu$ from compared boundary matrices]%
+    \label{lem:two_sided_middle_of_wrapped_witness_comparison}
+    \lean{MPSTensor.two_sided_middle_compatibility_of_wrapped_witness_comparison}
+    \leanok
+    \uses{lem:wrapped_middle_backgrounds}
+    Fix a physical letter $\eta$ used outside the complementary sites. Suppose
+    the two one-sided boundary matrix families $Y^+$ and $Y^-$ have been
+    extracted from the cyclic windows. If, for every word on the complementary sites
+    $\mu$, these boundary matrices agree on the boundary conditions built from
+    $\eta$,
+    \[
+        Y^+_{\tau^+_\eta(\mu)} = Y^-_{\tau^-_\eta(\mu)},
+    \]
+    then there is a single family $Y_\mu$ satisfying
+    \[
+        A^\mu A^b X = Y_\mu A^b,
+        \qquad
+        X A^a A^\mu = A^a Y_\mu
+    \]
+    for all letters $a,b$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Define $Y_\mu$ to be the first boundary matrix evaluated on the boundary
+    condition
+    $\tau^+_\eta(\mu)$. Lemma~\ref{lem:wrapped_middle_backgrounds} rewrites the
+    first cyclic-window complement as $\mu$, while the assumed comparison at
+    $\tau^-_\eta(\mu)$ rewrites the second boundary matrix to the same
+    $Y_\mu$.
+\end{proof}
+
+\begin{lemma}[Commutation from two one-sided equations]%
+    \label{lem:common_middle_same_witness_commutation}
+    \lean{MPSTensor.commutes_words_of_two_sided_middle_compatibility}
+    \leanok
+    Suppose a single family of boundary matrices $Y_\mu$, indexed by words
+    $\mu$ on the complementary sites, satisfies the two one-sided identities
+    \begin{equation}\label{eq:ph_common_middle_one_sided}
+        A^\mu A^b X = Y_\mu A^b,
+        \qquad
+        X A^a A^\mu = A^a Y_\mu
+    \end{equation}
+    for every pair of physical letters $a,b$. Then $X$ commutes with every word
+    product $A^a A^\mu A^b$ obtained by adjoining one letter on each side of the
+    word $A^\mu$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Multiply the second identity in~(\ref{eq:ph_common_middle_one_sided}) on the
+    right by $A^b$ and the first identity on the left by $A^a$:
+    \[
+        X A^a A^\mu A^b = A^a Y_\mu A^b
+        = A^a A^\mu A^b X.
+    \]
+\end{proof}
+
+\begin{theorem}[Boundary matrix commutation from periodic closure]%
+    \label{thm:boundary_matrix_commutes}
+    \lean{MPSTensor.boundary_matrix_commutes}
+    \leanok
+    \uses{def:ground_space_map, def:ground_space_parent, thm:ground_space_map_injective}
+    Let $A$ be injective with $D \ge 1$, and let $\psi = \Gamma_{N}(X)$ for some boundary matrix
+    $X \in \MN{D}$. If every cyclic restriction of length $L$ of $\psi$ lies in $G_{L}(A)$,
+    with $N \ge 2$ and $1 < L \le N$, then, for every $j = 0,\ldots,d-1$,
+    \[
+        X A^{j} = A^{j} X
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The periodic boundary condition produces matrix identities of the form
+    $XMW=MY$ for arbitrary test matrices $M$ and complementary words $W$.
+    Spanning first over the length-$(L-1)$ tails and then over the complementary words,
+    injectivity forces $(XM-MX)W = 0$ for every $W$, hence $XM = MX$ for every matrix
+    $M$. In particular, $X$ commutes with each letter $A^{j}$.
+\end{proof}
+
+\section{Periodic unique ground state}\label{sec:periodic_unique_ground_state}
+
+This section gives three periodic ground-space facts: the span of the
+periodic MPS vector $V^{(N)}(A) = \Gamma_N(\Id)$, its membership in every cyclic
+window constraint $\mathcal G_{N,L}(A)$, and its nonvanishing for
+block-injective tensors. Together with the boundary-matrix commutation
+$X A^j = A^j X$ of the previous section, these establish that the periodic
+ground space is spanned by $V^{(N)}(A)$; the one-dimensionality conclusion is
+completed downstream.
+
+\begin{definition}[Span of the periodic MPS vector]\label{def:mpv_submodule}
+    \lean{MPSTensor.mpvSubmodule}
+    \leanok
+    \uses{def:mpv}
+    The subspace spanned by the MPS vector
+    $V^{(N)}(A)(\sigma) = \tr(A^{\sigma_0}\cdots A^{\sigma_{N-1}})$.
+\end{definition}
+
+\begin{lemma}[The periodic MPS vector is the ground-space map at the identity]
+    \label{lem:mpv_eq_ground_space_map_one}
+    \lean{MPSTensor.mpv_eq_groundSpaceMap_one}
+    \leanok
+    \uses{def:ground_space_map, def:mpv}
+    For every chain length $N$,
+    \[
+        V^{(N)}(A) = \Gamma_{N}(\Id).
+    \]
+\end{lemma}
+
+\begin{lemma}[The periodic MPS vector lies in the local ground space]\label{lem:mpv_mem_ground_space}
+    \lean{MPSTensor.mpv_mem_groundSpace}
+    \leanok
+    \uses{def:ground_space_parent, def:mpv}
+    $V^{(N)}(A) \in G_N(A)$ for every $N$, with boundary matrix $X = I$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    $V^{(N)}(A)(\sigma) = \tr(A^\sigma) = \tr(A^\sigma \cdot I) = \Gamma_N(I)(\sigma)$.
+\end{proof}
+
+\begin{definition}[One-dimensional ground space]\label{def:has_unique_ground_state}
+    \lean{MPSTensor.HasUniqueGroundState}
+    \leanok
+    A finite-dimensional ground space $S$ is one-dimensional if $\dim S = 1$.
+\end{definition}
+
+\begin{theorem}[One-dimensionality criterion]\label{thm:has_unique_ground_state_iff_proportional}
+    \lean{MPSTensor.hasUniqueGroundState_iff_proportional}
+    \leanok
+    \uses{def:has_unique_ground_state}
+    For finite-dimensional $S$, $\dim S = 1$ iff there exists a nonzero
+    $\psi_0 \in S$ such that every $\psi \in S$ is of the form $c\,\psi_0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Apply the standard finite-dimensional criterion that a nonzero space has
+    dimension one exactly when all of its vectors are proportional to a single
+    nonzero vector.
+\end{proof}
+
+\begin{definition}[Periodic parent-Hamiltonian ground space]\label{def:chain_ground_space}
+    \lean{MPSTensor.chainGroundSpace}
+    \leanok
+    \uses{def:ground_space_parent}
+    For $N > 0$ and $L \le N$, define the \emph{periodic parent-Hamiltonian
+        ground space}
+    \[
+        \mathcal{G}_{N,L}(A) := \bigl\{\psi \in (\{0,\ldots,d{-}1\}^N \to \C)
+        : \forall i \in \{0,\ldots,N{-}1\},\
+        \psi|_{[i,i+L-1]} \in G_L(A)\bigr\},
+    \]
+    where the condition $\psi|_{[i,i+L-1]} \in G_L(A)$ means that for every
+    choice of physical indices outside the window, the restriction of $\psi$
+    to that window lies in $G_L(A)$.
+    The one-index notation $G_L(A)$ denotes the local ground space
+    $\mathcal G_L$ of \cite[Section~IV.C]{Cirac2021Matrix}. The two-index
+    notation $\mathcal G_{N,L}(A)$ used here denotes the periodic intersection
+    of those local constraints over all translated length-$L$ windows on the
+    $N$-site ring.
+    When $N = 0$ or $L > N$, set $\mathcal{G}_{N,L}(A) := \top$ by convention.
+\end{definition}
+
+\begin{lemma}[Cyclic-window representation matrices inside the periodic ground space]
+    \label{lem:chain_ground_space_window_witnesses}
+    \lean{MPSTensor.chainGroundSpace_window_witnesses}
+    \leanok
+    \uses{def:chain_ground_space, def:ground_space_parent}
+    If $0<N$, $L\le N$, and $\psi\in\mathcal G_{N,L}(A)$, then for every
+    cyclic window and every outside configuration there is a boundary matrix $Y$
+    such that the corresponding restricted $L$-site state is $\Gamma_L(Y)$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    This is the defining cyclic-window condition for membership in
+    $\mathcal G_{N,L}(A)$, together with the definition of the local ground
+    space as the range of $\Gamma_L$.
+\end{proof}
+
+\begin{lemma}[The periodic MPS vector satisfies every cyclic window constraint]
+    \label{lem:mpv_mem_chain_ground_space}
+    \lean{MPSTensor.mpv_mem_chainGroundSpace}
+    \leanok
+    \uses{def:chain_ground_space, lem:mpv_window_mem_ground_space}
+    If $0 < N$ and $L \le N$, then
+    \[
+        V^{(N)}(A) \in \mathcal G_{N,L}(A).
+    \]
+\end{lemma}
+
+\begin{theorem}[Periodic MPS vector nonvanishing for block-injective tensors]%
+    \label{thm:mpv_ne_zero_blk_injective}
+    \lean{MPSTensor.mpv_ne_zero_of_isNBlkInjective}
+    \leanok
+    \uses{def:mpv, def:l_blk_injective}
+    If $A$ is $L_0$-block-injective with $L_0 > 0$, $D \ge 1$, and
+    $N \ge L_0 + 1$, then $V^{(N)}(A) \ne 0$ in the $N$-site space.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Suppose for contradiction that $V^{(N)}(A) = 0$, i.e.\
+    $\tr(A^\sigma) = 0$ for every word $\sigma$ of length~$N$.
+    For any words $w$ and $u$ with $|w| = N - L_0$ and $|u| = L_0$,
+    we have $\tr(A^w A^u) = 0$.
+    Since $A$ is $L_0$-block-injective, $\{A^u : |u| = L_0\}$
+    spans $\MN{D}$. By nondegeneracy of the trace pairing,
+    $A^w = 0$ for every $|w| = N - L_0$.
+    Repeating the argument with words of length $N - 2L_0$ (since
+    $|w'| + L_0 = N - L_0$, the product $A^{w'} A^{u_1}$ has length
+    $N - L_0$, so $A^{w'} A^{u_1} = 0$ by the previous step) and iterating,
+    we eventually reach $\tr(A^u) = 0$ for $|u| = L_0$, which gives
+    $I = 0$, a contradiction.
+\end{proof}

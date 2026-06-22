@@ -13,9 +13,9 @@ This file proves the GKSL theorem characterizing generators of CPTP semigroups.
 
 ## Main results
 
-* `generator_shift_invariance` — **Prop 7.4** (Kraus shift freedom).
+* `generator_shift_invariance` — **Proposition 7.4** (Kraus shift freedom).
 * `IsGKSLGenerator` — definition.
-* `gksl_iff_lindbladForm` — **Thm 7.1**: GKSL ↔ Lindblad form.
+* `gksl_iff_lindbladForm` — **Theorem 7.1**: GKSL ↔ Lindblad form.
 -/
 
 open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace
@@ -27,10 +27,10 @@ variable {D : ℕ}
 
 section LindbladForms
 
-/-! ## Prop 7.4: Freedom in generator representation (Wolf Proposition 7.4) -/
+/-! ## Proposition 7.4: Freedom in generator representation (Wolf Proposition 7.4) -/
 
 /-- **Wolf Proposition 7.4 (item 1)**: If we shift the Kraus operators by
-`L'ᵢ = Lᵢ + cᵢ 𝟙` and adjust `κ` accordingly (Eq. 7.19), we get the same
+`L'ᵢ = Lᵢ + cᵢ 𝟙` and adjust `κ` accordingly (Equation 7.19), we get the same
 generator. -/
 theorem generator_shift_invariance
     {r : ℕ} (K : Fin r → Matrix (Fin D) (Fin D) ℂ)
@@ -54,9 +54,9 @@ theorem generator_shift_invariance
     simp only [star_mul', Complex.star_def, Complex.conj_I, Complex.conj_ofReal]
   simp only [hmu, RCLike.star_def, one_div, RingHomCompTriple.comp_apply,
     RingHom.id_apply, star_mul', neg_mul, neg_smul, star_inv₀, star_ofNat]
-  have hnorm : ∀ i : Fin r, c i * starRingEnd ℂ (c i) = starRingEnd ℂ (c i) * c i := by
-    intro i; ring
-  simp_rw [hnorm]
+  simp_rw [show ∀ i : Fin r,
+      c i * starRingEnd ℂ (c i) = starRingEnd ℂ (c i) * c i from
+    fun i => mul_comm _ _]
   simp only [smul_smul]
   set A : Matrix (Fin D) (Fin D) ℂ := ∑ x, c x • (ρ * (K x)ᴴ)
   set B : Matrix (Fin D) (Fin D) ℂ := ∑ x, (starRingEnd ℂ (c x)) • (K x * ρ)
@@ -79,7 +79,7 @@ theorem generator_shift_invariance
           ∑ x, K x * (ρ * (K x)ᴴ) + -(κ * ρ) + -(ρ * κᴴ) +
             (S + (-((2 : ℂ)⁻¹)) • S + (-((2 : ℂ)⁻¹)) • S) := by abel
     rw [hrearr, hScancel, add_zero]
-  have hX : - -X = X := by exact neg_neg X
+  have hX : - -X = X := neg_neg X
   rw [hX]
   simpa [neg_smul] using hgoal
 
@@ -133,7 +133,8 @@ theorem generatorDecomp_of_gksl
   -- Need: Σ Kᵢ†Kᵢ = G.κ + G.κ† (from TA via trace pairing non-degeneracy)
   have hTA_G : IsTraceAnnihilating G.toLinearMap := hG ▸ hTA
   have hdiff : ∑ i : Fin r, (K i)ᴴ * K i - G.κ - G.κᴴ = 0 := by
-    apply Matrix.eq_zero_of_forall_trace_mul_eq_zero
+    refine (Matrix.ext_iff_trace_mul_right
+      (A := ∑ i : Fin r, (K i)ᴴ * K i - G.κ - G.κᴴ) (B := 0)).2 ?_
     intro ρ
     have h := hTA_G ρ
     simp only [GeneratorDecomp.toLinearMap_apply] at h
@@ -150,8 +151,10 @@ theorem generatorDecomp_of_gksl
     rw [hcycl] at h
     -- trace(ρ * G.κ†) = trace(G.κ† * ρ) by cyclic property
     rw [Matrix.trace_mul_comm ρ G.κᴴ, ← trace_sub, ← trace_sub] at h
-    convert h using 1
-    simp only [sub_mul]
+    have hzero : trace ((∑ i : Fin r, (K i)ᴴ * K i - G.κ - G.κᴴ) * ρ) = 0 := by
+      convert h using 1
+      simp only [sub_mul]
+    simpa using hzero
   -- Σ Kᵢ†Kᵢ - G.κ - G.κ† = 0 ⟹ Σ Kᵢ†Kᵢ = G.κ + G.κ†
   rw [sub_sub] at hdiff
   exact sub_eq_zero.mp hdiff
@@ -184,7 +187,7 @@ private lemma iH_half_S_eq_κ (κ S : Matrix (Fin D) (Fin D) ℂ) (hS : S = κ +
   rw [this, smul_smul]; norm_num
 
 /-- **Wolf Theorem 7.1 (Lindblad form)**: `L` is a GKSL generator iff it can be
-written in the standard Lindblad form (Eq. 7.21):
+written in the standard Lindblad form (Equation 7.21):
 `L(ρ) = i[ρ, H] + Σⱼ (Lⱼ ρ Lⱼ† - ½ {Lⱼ†Lⱼ, ρ}₊)`
 with `H = H†`. -/
 theorem gksl_iff_lindbladForm

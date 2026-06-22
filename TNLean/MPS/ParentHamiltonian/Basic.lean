@@ -3,9 +3,10 @@ import TNLean.MPS.ParentHamiltonian.Defs
 /-!
 # Basic parent-Hamiltonian properties
 
-The parent interaction is the orthogonal projector onto `(groundSpace A L)ᗮ`.
-It therefore annihilates any vector in the ground space. The MPS state `mpv A`
-lies in the ground space at every window, which gives frustration-freeness.
+The parent interaction is the orthogonal projector onto \(G_L(A)^\perp\).
+It therefore annihilates any vector in the ground space. The periodic MPS vector
+`mpv A` lies in the ground space at every window, which gives
+frustration-freeness.
 -/
 
 open scoped BigOperators
@@ -18,7 +19,7 @@ variable {d D : ℕ}
 
 /-- The parent interaction annihilates any vector in the ground space.
 This is the core property: `parentInteraction A L` is the orthogonal projector
-onto `(groundSpace A L)ᗮ`, so it kills everything in `groundSpace A L`. -/
+onto \(G_L(A)^\perp\), so it kills everything in `groundSpace A L`. -/
 lemma parentInteraction_apply_mem_groundSpace (A : MPSTensor d D) (L : ℕ)
     (v : NSiteSpace d L) (hv : v ∈ groundSpace A L) :
     parentInteraction A L v = 0 := by
@@ -28,30 +29,24 @@ lemma parentInteraction_apply_mem_groundSpace (A : MPSTensor d D) (L : ℕ)
   have hkill : (groundSpaceES A L)ᗮ.starProjection
       ((WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm v) = 0 := by
     rw [Submodule.starProjection_orthogonal']
-    simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.one_apply]
+    simp only [sub_apply, one_apply_eq_self]
     rw [sub_eq_zero]
     exact (Submodule.starProjection_eq_self_iff.mpr hmem).symm
   -- Unfold `parentInteraction` to expose the equiv ∘ projection ∘ equiv⁻¹ structure.
-  -- This `change` is definitional; update it if `parentInteraction` is refactored.
+  -- This `change` is definitional; update it if `parentInteraction` is restated.
   change (WithLp.linearEquiv 2 ℂ (NSiteSpace d L))
     ((groundSpaceES A L)ᗮ.starProjection
       ((WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm v)) = 0
   rw [hkill, map_zero]
 
-/-! ### Cyclic trace invariance -/
+/-! ### Periodic MPS vector window membership -/
 
-/-- Trace of evalWord is invariant under cyclic swap of concatenated words. -/
-private lemma trace_evalWord_append_comm (A : MPSTensor d D) (w₁ w₂ : List (Fin d)) :
-    Matrix.trace (evalWord A (w₁ ++ w₂)) = Matrix.trace (evalWord A (w₂ ++ w₁)) := by
-  rw [evalWord_append, evalWord_append, Matrix.trace_mul_comm]
+/-- The periodic MPS vector restricted to any window of \(L\) sites lies in
+`groundSpace A L`.
 
-/-! ### MPS window membership -/
-
-/-- The MPS state restricted to any window of `L` sites lies in `groundSpace A L`.
-
-The witness is the "complement matrix": the product of `A`-matrices on sites
-outside the `L`-site window, cyclically ordered starting from `i + L`. The proof
-uses trace cyclicity to rotate the full `N`-site product so that the window
+The witness is the "complement matrix": the product of \(A\)-matrices on sites
+outside the \(L\)-site window, cyclically ordered starting from \(i + L\). The proof
+uses trace cyclicity to rotate the full \(N\)-site product so that the window
 indices come first, matching the `groundSpaceMap` definition. -/
 lemma mpv_window_mem_groundSpace (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N)
     (i : Fin N) (σ : Cfg d N) :
@@ -74,7 +69,7 @@ lemma mpv_window_mem_groundSpace (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N)
     have hle : i.val ≤ (List.ofFn (replaceWindow L hLN i σ τ)).length := by
       simp [List.length_ofFn]
     rw [← hlist, List.rotate_eq_drop_append_take hle,
-        trace_evalWord_append_comm, List.take_append_drop]
+        evalWord_append, Matrix.trace_mul_comm, ← evalWord_append, List.take_append_drop]
   -- Prove the rotated list equals τ ++ complement elementwise
   apply List.ext_getElem
   · have : compList.length = N - L := by simp [compList, List.length_ofFn]
@@ -89,11 +84,7 @@ lemma mpv_window_mem_groundSpace (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N)
       else σ ⟨(k + i.val) % N, Nat.mod_lt _ hN⟩) = _
     -- The offset always equals k (regardless of wrapping)
     have hoffset : ((k + i.val) % N + N - i.val) % N = k := by
-      rcases lt_or_ge (k + i.val) N with h | h
-      · rw [Nat.mod_eq_of_lt h, show k + i.val + N - i.val = k + N from by omega,
-            Nat.add_mod_right, Nat.mod_eq_of_lt hkN]
-      · rw [Nat.mod_eq_sub_mod h, Nat.mod_eq_of_lt (by omega : k + i.val - N < N),
-            show k + i.val - N + N - i.val = k from by omega, Nat.mod_eq_of_lt hkN]
+      simpa [Nat.add_comm] using offset_mod_eq i.isLt hkN
     rw [hoffset]
     by_cases hkL : k < L
     · -- Window part → τ
@@ -106,7 +97,7 @@ lemma mpv_window_mem_groundSpace (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N)
       change (k + i.val) % N = (i.val + L + (k - L)) % N
       rw [show i.val + L + (k - L) = k + i.val from by omega]
 
-/-- Each local term annihilates the MPV state. -/
+/-- Each local term annihilates the periodic MPS vector. -/
 lemma localTerm_annihilates_mpv (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N) (i : Fin N) :
     localTerm A L N i (mpv A) = 0 := by
   ext σ
@@ -119,13 +110,14 @@ lemma localTerm_annihilates_mpv (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N) 
   rw [hkill]
   rfl
 
-/-- The parent Hamiltonian annihilates the MPV state: `H_N |ψ(A)⟩ = 0`. -/
+/-- The parent Hamiltonian annihilates the periodic MPS vector:
+\(H_N V^{(N)}(A) = 0\). -/
 lemma parentHamiltonian_annihilates (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N) :
     parentHamiltonian A L N (mpv A) = 0 := by
   simp only [parentHamiltonian, LinearMap.sum_apply]
   exact Finset.sum_eq_zero fun i _ => localTerm_annihilates_mpv A L N hLN i
 
-/-- The parent Hamiltonian model is frustration-free on the MPV state:
+/-- The parent Hamiltonian model is frustration-free on the periodic MPS vector:
 each local term individually annihilates `mpv A`. -/
 lemma parentHamiltonian_frustrationFree (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N) :
     IsFrustrationFree A L N (mpv A) :=

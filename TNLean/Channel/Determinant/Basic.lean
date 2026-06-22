@@ -12,11 +12,11 @@ import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.LinearAlgebra.UnitaryGroup
 
 /-!
-# Determinant API and unitary channels
+# Determinant interface and unitary channels
 
 This file contains the foundational definitions for the determinant of a quantum
 channel acting on $M_d(\mathbb{C})$, together with the basic unitary-channel
-API used in Wolf's determinant-rigidity argument.
+interface used in Wolf's determinant-rigidity argument.
 
 ## Main definitions
 
@@ -25,7 +25,7 @@ API used in Wolf's determinant-rigidity argument.
   ambient matrix algebra and its endomorphisms.
 * `ChannelDeterminant.Internal.MatrixBasisIndex`,
   `ChannelDeterminant.Internal.matrixSpaceBasis` — shared internal linear-algebra
-  scaffolding for the standard matrix basis.
+  framework for the standard matrix basis.
 * `channelMatrix`, `channelDet` — the matrix representation of a channel and its
   determinant.
 * `unitaryChannel` — conjugation by a unitary matrix.
@@ -43,7 +43,7 @@ API used in Wolf's determinant-rigidity argument.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.1.1][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.1.1][Wolf2012QChannels]
 
 ## Tags
 
@@ -76,18 +76,7 @@ noncomputable def matrixSpaceBasis (d : ℕ) :
 end Internal
 end ChannelDeterminant
 
-/-- File-local alias for the shared internal matrix-algebra model. -/
-private abbrev MatrixAlg (d : ℕ) := ChannelDeterminant.Internal.MatrixAlg d
-
-/-- File-local alias for endomorphisms of `M_d(ℂ)`. -/
-private abbrev MatrixEnd (d : ℕ) := ChannelDeterminant.Internal.MatrixEnd d
-
-/-- File-local alias for the shared basis index type. -/
-private abbrev MatrixBasisIndex (d : ℕ) := ChannelDeterminant.Internal.MatrixBasisIndex d
-
-/-- File-local alias for the shared standard basis of `M_d(ℂ)`. -/
-private noncomputable abbrev matrixSpaceBasis (d : ℕ) :=
-  ChannelDeterminant.Internal.matrixSpaceBasis d
+open ChannelDeterminant.Internal
 
 section Determinant
 
@@ -126,7 +115,7 @@ theorem channelDet_ne_zero_iff_bijective (T : MatrixEnd d) :
     ⟨fun hT => ⟨hT, (LinearMap.injective_iff_surjective (f := T)).1 hT⟩, (·.1)⟩
   exact (channelDet_ne_zero_iff_injective (T := T)).trans hbij
 
-/-- Wolf Thm 6.1: `det T = 0` iff `T` is not invertible as a linear map on `M_d(ℂ)`. -/
+/-- Wolf Theorem 6.1: `det T = 0` iff `T` is not invertible as a linear map on `M_d(ℂ)`. -/
 theorem channelDet_eq_zero_iff_not_bijective (T : MatrixEnd d) :
     channelDet T = 0 ↔ ¬ Function.Bijective T := by
   simpa only [ne_eq, Decidable.not_not] using
