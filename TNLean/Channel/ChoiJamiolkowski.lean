@@ -626,6 +626,84 @@ theorem choiMatrix_id :
   ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
   simp [choiMatrix, Matrix.tensorMapId_apply, Matrix.bipartiteSlice]
 
+/-! ### Transposition and the flip operator -/
+
+/-- **Wolf Chapter 3, Equation (3.1).** The Choi matrix of transposition is the
+normalized flip operator:
+\[
+  (\theta \otimes \mathrm{id})(|\Omega\rangle\langle\Omega|) = D^{-1}F.
+\] -/
+theorem choiMatrix_transposeLinearMapComplex_eq_swap (hD : 0 < D) :
+    choiMatrix (Matrix.transposeLinearMapComplex (Fin D)) =
+      (1 / (D : ℂ)) • Matrix.swapMatrix D := by
+  ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
+  rw [choiMatrix_apply, omegaSlice_eq_single]
+  let c : ℂ := (((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) *
+      star ((1 : ℂ) / ((D : ℝ).sqrt : ℂ)))
+  have hc : c = 1 / (D : ℂ) := omegaCoeff_eq_inv hD
+  change (Matrix.transposeLinearMapComplex (Fin D) (Matrix.single i₂ j₂ c)) i₁ j₁ =
+    ((1 / (D : ℂ)) • Matrix.swapMatrix D) (i₁, i₂) (j₁, j₂)
+  rw [hc]
+  change Matrix.single i₂ j₂ (1 / (D : ℂ)) j₁ i₁ =
+    ((1 / (D : ℂ)) • Matrix.swapMatrix D) (i₁, i₂) (j₁, j₂)
+  by_cases h : i₁ = j₂ ∧ i₂ = j₁
+  · rcases h with ⟨h₁, h₂⟩
+    subst h₁
+    subst h₂
+    simp [Matrix.swapMatrix_apply]
+  · have hsingle : Matrix.single i₂ j₂ (1 / (D : ℂ)) j₁ i₁ = 0 := by
+      rw [Matrix.single_apply, if_neg]
+      intro hcond
+      exact h ⟨hcond.2.symm, hcond.1⟩
+    rw [hsingle]
+    simp [Matrix.swapMatrix_apply, h]
+
+private theorem scaled_swap_submatrix_finTwo {D : ℕ} (hD : 2 ≤ D) :
+    (((1 / (D : ℂ)) • Matrix.swapMatrix D).submatrix
+      (fun p : Fin 2 × Fin 2 => (Fin.castLE hD p.1, Fin.castLE hD p.2))
+      (fun p : Fin 2 × Fin 2 => (Fin.castLE hD p.1, Fin.castLE hD p.2))) =
+        (1 / (D : ℂ)) • Matrix.swapMatrix 2 := by
+  ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
+  fin_cases i₁ <;> fin_cases i₂ <;> fin_cases j₁ <;> fin_cases j₂ <;>
+    simp [Matrix.swapMatrix_apply]
+
+private theorem scaled_swap_negative {D : ℕ} :
+    star Matrix.finTwoAntisymmVec ⬝ᵥ
+        (((1 / (D : ℂ)) • Matrix.swapMatrix 2).mulVec Matrix.finTwoAntisymmVec) =
+      (-(2 / (D : ℂ)) : ℂ) := by
+  simp [dotProduct, Matrix.mulVec, Fintype.sum_prod_type, Matrix.finTwoAntisymmVec,
+    Matrix.swapMatrix_apply]
+  ring
+
+/-- As a consequence of Wolf Chapter 3, Equation (3.1), matrix transposition is
+not completely positive in dimension at least two. The obstruction is the
+negative expectation of the normalized flip operator on the antisymmetric
+vector \(|01\rangle-|10\rangle\). -/
+theorem transposeLinearMapComplex_not_isCPMap {D : ℕ} (hD : 2 ≤ D) :
+    ¬ IsCPMap (Matrix.transposeLinearMapComplex (Fin D)) := by
+  intro hcp
+  have hDpos : 0 < D := lt_of_lt_of_le (by norm_num) hD
+  letI : NeZero D := ⟨Nat.ne_of_gt hDpos⟩
+  have hpsd : (choiMatrix (Matrix.transposeLinearMapComplex (Fin D))).PosSemidef :=
+    (cp_iff_choi_posSemidef (D := D)
+      (T := Matrix.transposeLinearMapComplex (Fin D))).mp hcp
+  have hpsd₂ : (((1 / (D : ℂ)) • Matrix.swapMatrix 2)).PosSemidef := by
+    have hsub := hpsd.submatrix
+      (fun p : Fin 2 × Fin 2 => (Fin.castLE hD p.1, Fin.castLE hD p.2))
+    rw [choiMatrix_transposeLinearMapComplex_eq_swap hDpos,
+      scaled_swap_submatrix_finTwo hD] at hsub
+    exact hsub
+  have hnonneg := (Matrix.posSemidef_iff_dotProduct_mulVec.mp hpsd₂).2
+    Matrix.finTwoAntisymmVec
+  have hneg : ¬ (0 : ℂ) ≤
+      star Matrix.finTwoAntisymmVec ⬝ᵥ
+        (((1 / (D : ℂ)) • Matrix.swapMatrix 2).mulVec Matrix.finTwoAntisymmVec) := by
+    rw [scaled_swap_negative, RCLike.nonneg_iff]
+    norm_num
+    have hDreal : (0 : ℝ) < (D : ℝ) := Nat.cast_pos.mpr hDpos
+    positivity
+  exact hneg hnonneg
+
 /-! ### Normalization and trace -/
 
 /-- **Proposition 2.1, trace normalization** (Wolf):

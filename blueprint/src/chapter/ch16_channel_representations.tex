@@ -52,6 +52,36 @@ of~\cite[Chapter~2]{Wolf2012Quantum}.
     and $\tr(\ketbra{\Omega}{\Omega}) = 1$.
 \end{definition}
 
+\begin{definition}[Flip operator]\label{def:flip_operator}
+    \lean{Matrix.swapMatrix}
+    \leanok
+    The \emph{flip operator} $F$ on $\C^d \otimes \C^d$ is
+    \[
+        F = \sum_{i,j=0}^{d-1} \ket{ij}\!\bra{ji}.
+    \]
+    Its matrix entries are
+    \[
+        F_{(i_1,i_2),(j_1,j_2)}
+        =
+        \begin{cases}
+            1, & i_1=j_2 \text{ and } i_2=j_1,\\
+            0, & \text{otherwise}.
+        \end{cases}
+    \]
+\end{definition}
+
+\begin{definition}[Two-dimensional antisymmetric vector]
+    \label{def:fin_two_antisymm_vec}
+    \lean{Matrix.finTwoAntisymmVec}
+    \leanok
+    In $\C^2 \otimes \C^2$, let
+    \[
+        v = \ket{01} - \ket{10}.
+    \]
+    Equivalently, $v_{(0,1)}=1$, $v_{(1,0)}=-1$, and all other coefficients
+    are zero.
+\end{definition}
+
 \begin{definition}[Tensor product of a map with identity]\label{def:tensor_map_id}
     \lean{Matrix.tensorMapId}
     \leanok
@@ -107,6 +137,28 @@ matrix $\tau=(T\otimes\id)\ketbra{\Omega}{\Omega}$ on the doubled space:
 
 \begin{proof}\leanok
     Apply the identity map in the definition of the Choi matrix.
+\end{proof}
+
+\begin{theorem}[Choi matrix of transposition]\label{thm:choi_transpose_flip}
+    \lean{ChoiJamiolkowski.choiMatrix_transposeLinearMapComplex_eq_swap}
+    \leanok
+    \uses{def:choi_matrix, def:flip_operator, def:maximally_entangled}
+    Let $\theta(X)=X^T$ be matrix transposition on $\MN{D}$, with $D \ge 1$.
+    Then
+    \[
+        (\theta\otimes\id)(\ketbra{\Omega}{\Omega})
+        =
+        \frac{1}{D}F.
+    \]
+    This is \cite[Equation~3.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:choi_matrix, def:flip_operator}
+    The $(i_2,j_2)$ slice of $\ketbra{\Omega}{\Omega}$ is
+    $D^{-1}E_{i_2j_2}$. Transposition sends this matrix unit to
+    $D^{-1}E_{j_2i_2}$, whose $(i_1,j_1)$ entry is $D^{-1}$ exactly when
+    $i_1=j_2$ and $i_2=j_1$.
 \end{proof}
 
 \begin{theorem}[Complete positivity iff the Choi matrix is positive semidefinite]\label{thm:cp_iff_choi_posSemidef}
