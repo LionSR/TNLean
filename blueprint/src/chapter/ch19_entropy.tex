@@ -241,7 +241,8 @@ finite-dimensional quantum systems.
     \label{thm:quantum_relative_entropy_entropy_form}
     \lean{quantumRelativeEntropy_eq_neg_entropy_sub_trace_mul_log}
     \leanok
-    \uses{def:quantum_relative_entropy, thm:entropy_eq_neg_trace_mul_log}
+    \uses{def:quantum_relative_entropy, lem:quantum_relative_entropy_trace_split,
+        thm:entropy_eq_neg_trace_mul_log}
     If $\rho$ is Hermitian, then
     \[
         D(\rho\Vert\sigma)
@@ -250,9 +251,17 @@ finite-dimensional quantum systems.
 \end{theorem}
 
 \begin{proof}\leanok
-    Split the definition of $D(\rho\Vert\sigma)$ into its two trace terms and
-    replace the first term by $-S(\rho)$ using the trace-logarithm form of the
-    von Neumann entropy.
+    Apply Lemma~\ref{lem:quantum_relative_entropy_trace_split} to write
+    \[
+        D(\rho\Vert\sigma)
+            = \operatorname{Re}\operatorname{tr}(\rho\log\rho)
+              - \operatorname{Re}\operatorname{tr}(\rho\log\sigma).
+    \]
+    The trace-logarithm identity
+    \[
+        \operatorname{Re}\operatorname{tr}(\rho\log\rho)=-S(\rho)
+    \]
+    then gives the result.
 \end{proof}
 
 \begin{theorem}[Entropy is invariant under reindexing]
