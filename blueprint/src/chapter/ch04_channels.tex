@@ -46,8 +46,9 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
-    If $X \ge 0$, then $X^T \ge 0$ because transposition preserves positive
-    semidefiniteness. Trace preservation is the identity $\tr(X^T)=\tr(X)$.
+    If $X \ge 0$, write $X=C^\dagger C$. Then
+    $X^T=C^T\overline C=\overline C^\dagger\overline C$, so $X^T \ge 0$.
+    Trace preservation is the identity $\tr(X^T)=\tr(X)$.
 \end{proof}
 
 \begin{definition}[Completely positive map]\label{def:cp_map}
