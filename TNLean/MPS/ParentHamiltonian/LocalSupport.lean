@@ -180,10 +180,7 @@ theorem localTerm_two_three_zero_eq_leftPairLift_parentInteraction
           replaceAXCfg σ τ := by
       funext k
       fin_cases k <;> rfl
-    change (Pi.single ω (1 : ℂ) : NSiteSpace d 3)
-        (replaceWindow 2 (by decide : 2 ≤ 3) (0 : Fin 3) σ τ) =
-      (Pi.single ω (1 : ℂ) : NSiteSpace d 3) (replaceAXCfg σ τ)
-    rw [hWindow]
+    simp [hWindow]
   simp [localTerm, leftPairLift, hExtract, hPi]
 
 /-- On a three-site window, the translated length-two parent interaction at
@@ -208,10 +205,7 @@ theorem localTerm_two_three_one_eq_rightPairLift_parentInteraction
           replaceXBCfg σ τ := by
       funext k
       fin_cases k <;> rfl
-    change (Pi.single ω (1 : ℂ) : NSiteSpace d 3)
-        (replaceWindow 2 (by decide : 2 ≤ 3) (1 : Fin 3) σ τ) =
-      (Pi.single ω (1 : ℂ) : NSiteSpace d 3) (replaceXBCfg σ τ)
-    rw [hWindow]
+    simp [hWindow]
   simp [localTerm, rightPairLift, hExtract, hPi]
 
 /-- The algebraic part of the source nearest-neighbor parent-commuting condition
