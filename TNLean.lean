@@ -39,6 +39,8 @@ import TNLean.Algebra.CocycleCohomology
 
 -- Layer 0b: General analysis
 import TNLean.Analysis.ProjectionGeometry
+-- Layer 0b: Trace of the Hermitian functional calculus (Mathlib-only matrix lemma)
+import TNLean.Analysis.TraceCFC
 
 -- Layer 1: Generic convex/topological infrastructure
 import TNLean.Topology.ConvexProjection
@@ -103,7 +105,6 @@ import TNLean.Channel.Schwarz.TwoPositive
 import TNLean.Channel.Schwarz.MultiplicativeDomain
 import TNLean.Channel.Schwarz.MultiplicativeDomainPowers
 import TNLean.Channel.Schwarz.MultiplicativeDomainFull
-import TNLean.Channel.Schwarz.TraceCFC
 import TNLean.Channel.FixedPoint.Algebra
 import TNLean.Channel.FixedPoint.ChoiEffros
 import TNLean.Channel.FixedPoint.Cesaro

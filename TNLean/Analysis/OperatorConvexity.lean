@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Schwarz.DiagonalJensen
-import TNLean.Channel.Schwarz.TraceCFC
+import TNLean.Analysis.TraceCFC
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Order
@@ -22,7 +22,7 @@ This module proves the trace convexity and concavity of the map
 Both statements were previously axiomatized in `TNLean.Axioms.OperatorConvexity`
 (as `trace_rpow_concave_axiom` / `trace_rpow_convex_axiom`); this module
 discharges them using the matrix-analysis lemmas
-`Matrix.IsHermitian.trace_cfc_eq_sum_re` (from `TNLean/Channel/Schwarz/TraceCFC.lean`)
+`Matrix.IsHermitian.trace_cfc_eq_sum_re` (from `TNLean/Analysis/TraceCFC.lean`)
 and `Matrix.diagonal_jensen_of_convexOn`
 (from `TNLean/Channel/Schwarz/DiagonalJensen.lean`).
 

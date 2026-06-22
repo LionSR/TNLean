@@ -139,6 +139,44 @@ finite-dimensional quantum systems.
     defining $S(\rho)$ equals the displayed sum over roots.
 \end{proof}
 
+\begin{theorem}[Trace-logarithm form of the entropy]
+    \label{thm:entropy_eq_neg_trace_mul_log}
+    \lean{vonNeumannEntropy_eq_neg_trace_mul_log}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    Let $\rho$ be a Hermitian matrix and let $\log\rho$ be its logarithm defined
+    through the functional calculus. Then
+    \[
+        S(\rho) = -\operatorname{Re}\bigl(\operatorname{tr}(\rho\,\log\rho)\bigr).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:von_neumann_entropy}
+    A Hermitian matrix and its logarithm are simultaneously diagonalized by a
+    unitary $U$ with $\rho = U\operatorname{diag}(\lambda_i)U^*$, so
+    \[
+        \operatorname{tr}(\rho\,\log\rho)
+            = \operatorname{tr}\!\bigl(U\operatorname{diag}(\lambda_i\log\lambda_i)U^*\bigr)
+            = \sum_i \lambda_i\log\lambda_i.
+    \]
+    Its negative is $\sum_i\bigl({-}\lambda_i\log\lambda_i\bigr) = S(\rho)$. Zero
+    eigenvalues contribute nothing under the convention $0\log 0 = 0$, so no
+    full-support assumption is required.
+\end{proof}
+
+\begin{remark}
+    The logarithm is the totalized real logarithm, with
+    $\log x = \log\lvert x\rvert$ and $\log 0 = 0$; both sides of the identity
+    use it on every eigenvalue, so the equality holds for an arbitrary Hermitian
+    matrix. It coincides with the physical entropy $-\operatorname{tr}(\rho\log\rho)$
+    precisely when $\rho$ is positive semidefinite. In that case (a density
+    matrix $\rho$, positive semidefinite with unit trace) the eigenvalues
+    $\lambda_i$ are nonnegative, $\rho\,\log\rho$ is Hermitian with real trace,
+    and the real-part extraction is superfluous: the identity reduces to the
+    standard expression $S(\rho) = -\operatorname{tr}(\rho\log\rho)$.
+\end{remark}
+
 \begin{theorem}[Entropy is invariant under reindexing]
     \label{thm:entropy_submatrix_equiv}
     \lean{vonNeumannEntropy_submatrix_equiv}
