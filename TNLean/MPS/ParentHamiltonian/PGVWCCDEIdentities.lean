@@ -13,8 +13,7 @@ Theorem 12, proof lines 1446--1451.
 
 In the source proof the auxiliary matrices are indexed by the boundary indices
 \(i_1\) and \(i_{m+1}\). The variables \(\beta\) and \(\rho\) below are the
-cut-adapted word coordinates used to express the same comparison after a
-periodic interval has been opened at the chosen cut.
+word coordinates obtained by opening the periodic interval at the chosen cut.
 
 The formula for \(E^j\) uses the adjointed word product
 \[

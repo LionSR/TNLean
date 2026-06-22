@@ -14,7 +14,7 @@ The boundary-crossing comparison from arXiv:quant-ph/0608197
   =
   \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho
 \]
-is the cut-adapted boundary-crossing form of the \(C^j,D^j\) trace
+is the opened-boundary form of the \(C^j,D^j\) trace
 comparison from arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1451,
 after specializing \(D^j_\beta\) to \((\mu_j^N X_j)A^j_\beta\). The normalized
 \(E^j\)-calculation then implies the periodic-boundary single-block constraints
@@ -22,8 +22,8 @@ and the finite-range block-diagonal periodic-boundary equality used here.
 
 The source proof writes this comparison with boundary-indexed matrices
 \(C^j_{i_1}\), \(D^j_{i_{m+1}}\), and the derived matrix \(E^j\). The words
-\(\beta\) and \(\rho\) below are cut-adapted coordinates for the same
-periodic-boundary comparison, not additional source terminology.
+\(\beta\) and \(\rho\) below are the word coordinates obtained by opening the
+periodic boundary at the chosen cut, not additional source terminology.
 -/
 
 open scoped Matrix BigOperators
@@ -37,7 +37,7 @@ boundary representation to periodic single-block states.
 
 Under the normalized BNT hypotheses, every vector in the block-diagonal
 periodic-boundary ground space has block-diagonal boundary conditions \(X_j\). If those
-same boundary conditions satisfy the source comparison, in the cut-adapted
+same boundary conditions satisfy the source comparison, in the opened-boundary
 boundary-crossing form
 \[
   A^j_\beta C^j_{i,\rho}
@@ -120,7 +120,7 @@ single-block states.
 Assume the vector \(\psi\in\mathcal G_{N,L}(\oplus_j\mu_jA_j)\) has already
 been written with block-diagonal boundary matrices \(X_j\). If every
 boundary-crossing interval has the simultaneous block-word spanning property,
-then the local constraint produces the cut-adapted \(C^j,D^j\) comparison,
+then the local constraint produces the opened-boundary \(C^j,D^j\) comparison,
 and the normalized \(E^j\)-calculation gives
 \[
   \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j).
@@ -434,7 +434,7 @@ theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_crossing_pgvwc_comparison
 periodic-boundary equality in the finite BNT range.
 
 This theorem assumes the source \(C^j,D^j\) comparison only up to the
-cut-adapted matrix identity
+opened-boundary matrix identity
 \[
   A^j_\beta C^j_{i,\rho}
   =
@@ -442,8 +442,8 @@ cut-adapted matrix identity
 \]
 for every boundary-crossing interval, local word \(\beta\) before the cut,
 and outside word \(\rho\), with \(D^j_\beta\) already specialized to
-\((\mu_j^NX_j)A^j_\beta\). The words \(\beta\) and \(\rho\) are
-cut-adapted coordinates for the opened boundary comparison; they reindex the source
+\((\mu_j^NX_j)A^j_\beta\). The words \(\beta\) and \(\rho\) are obtained by
+opening the periodic boundary at the chosen cut; they reindex the source
 end-site comparison by blocked words rather than replacing the source indices.
 The normalized \(E^j\)-calculation
 and the block-injective crossing-window argument then give the
@@ -519,7 +519,7 @@ the equality conclusion
   =
   \bigvee_j\mathcal G_{N,L}(A_j),
 \]
-under the assumed cut-adapted \(C^j,D^j\) comparison.
+under the assumed opened-boundary \(C^j,D^j\) comparison.
 
 **Scope restriction (length-\(L_0\) injectivity range):** Theorem 12 of
 arXiv:quant-ph/0608197 assumes \(L\ge 3(b-1)(L_0+1)+1\). This theorem is stated in the current BNT
@@ -579,7 +579,7 @@ theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_pgvwc_comparison
 containment needed for the block-diagonal parent-Hamiltonian spanning clause,
 provided each block chain space is already contained in its MPS line.
 
-Let \(B=\bigoplus_j\mu_jA_j\).  The cut-adapted \(C^j,D^j\) comparison gives
+Let \(B=\bigoplus_j\mu_jA_j\).  The opened-boundary \(C^j,D^j\) comparison gives
 \[
   \mathcal G_{N,L}(B)=\bigvee_j\mathcal G_{N,L}(A_j).
 \]
