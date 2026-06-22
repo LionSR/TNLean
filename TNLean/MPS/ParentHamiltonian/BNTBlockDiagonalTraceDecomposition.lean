@@ -375,8 +375,8 @@ lines 2126--2128. It is still a fixed wrapped-tail statement; it does not
 replace the separate common product-spanning length hypothesis.
 
 **Scope restriction (boundary representation):** The block-diagonal boundary
-representation of \(\psi\) is a hypothesis here. Removing this remaining input
-is tracked in issue 2971 and documented in
+representation of \(\psi\) is a hypothesis here. Removing this remaining
+hypothesis is tracked in issue 2971 and documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem blockDiagonal_boundary_crossing_trace_decompositions_of_boundary
     {r : ℕ} {dim : Fin r → ℕ}
