@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import Mathlib.Analysis.Matrix.PosDef
+import TNLean.Algebra.MatrixAux
 
 /-!
 # Hermitian matrix extremal eigenvalues
@@ -99,6 +100,59 @@ theorem hermitian_sub_scalar_spectral
           congr 1
           ext i
           simp [Complex.ofReal_sub]
+
+/-- Subtracting the smallest Hermitian eigenvalue leaves a positive semidefinite matrix. -/
+theorem sub_minEigenvalue_smul_one_posSemidef [Nonempty (Fin D)]
+    {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.IsHermitian) :
+    (M - (↑(minEigenvalue hM) : ℂ) • 1).PosSemidef := by
+  classical
+  let U : Matrix (Fin D) (Fin D) ℂ := ↑hM.eigenvectorUnitary
+  let Λ : Fin D → ℂ := fun j => ↑(hM.eigenvalues j - minEigenvalue hM)
+  have hdiag : (Matrix.diagonal Λ).PosSemidef := by
+    refine Matrix.PosSemidef.diagonal ?_
+    intro j
+    change (0 : ℂ) ≤ ↑(hM.eigenvalues j - minEigenvalue hM)
+    exact_mod_cast sub_nonneg.mpr (minEigenvalue_le hM j)
+  have hconj : (U * Matrix.diagonal Λ * Uᴴ).PosSemidef := by
+    simpa only [mul_assoc, Matrix.conjTranspose_conjTranspose] using
+      hdiag.mul_mul_conjTranspose_same (B := U)
+  rw [hermitian_sub_scalar_spectral hM (minEigenvalue hM)]
+  simpa [U, Λ] using hconj
+
+/-- Positive-definite trace lower bound by the smallest eigenvalue.
+
+This is the matrix estimate used in Wolf's compactness argument for the Lorentz
+normal form: the filtered Choi trace is bounded below by the smallest
+eigenvalue times the Hilbert--Schmidt trace form. -/
+theorem posDef_minEigenvalue_mul_trace_conjTranspose_mul_self_le
+    [Nonempty (Fin D)] {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.PosDef)
+    (X : Matrix (Fin D) (Fin D) ℂ) :
+    (↑(minEigenvalue hM.isHermitian) : ℂ) * Matrix.trace (Xᴴ * X) ≤
+      Matrix.trace (X * M * Xᴴ) := by
+  classical
+  let lam : ℂ := ↑(minEigenvalue hM.isHermitian)
+  have hleft : (Xᴴ * X).PosSemidef :=
+    Matrix.posSemidef_conjTranspose_mul_self X
+  have hdiff : (M - lam • (1 : Matrix (Fin D) (Fin D) ℂ)).PosSemidef := by
+    simpa [lam] using sub_minEigenvalue_smul_one_posSemidef hM.isHermitian
+  have hnonneg : 0 ≤ Matrix.trace ((Xᴴ * X) * (M - lam • 1)) :=
+    Matrix.PosSemidef.trace_mul_nonneg hleft hdiff
+  have hcycle :
+      Matrix.trace ((Xᴴ * X) * M) = Matrix.trace (X * M * Xᴴ) := by
+    simpa [mul_assoc] using (Matrix.trace_mul_cycle X M Xᴴ).symm
+  have htrace :
+      Matrix.trace ((Xᴴ * X) * (M - lam • 1)) =
+        Matrix.trace (X * M * Xᴴ) - lam * Matrix.trace (Xᴴ * X) := by
+    calc
+      Matrix.trace ((Xᴴ * X) * (M - lam • 1))
+          = Matrix.trace ((Xᴴ * X) * M) -
+              Matrix.trace ((Xᴴ * X) * (lam • 1)) := by
+                rw [mul_sub, Matrix.trace_sub]
+      _ = Matrix.trace (X * M * Xᴴ) - lam * Matrix.trace (Xᴴ * X) := by
+                rw [hcycle]
+                simp [mul_assoc]
+  rw [htrace] at hnonneg
+  exact sub_nonneg.mp hnonneg
 
 /-- Spectral form of subtracting a Hermitian matrix from a scalar multiple of the identity. -/
 theorem smul_one_sub_hermitian_spectral

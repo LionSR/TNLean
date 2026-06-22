@@ -1528,8 +1528,34 @@ This section states the existence theorems from
     \cite[Proposition~2.8]{Wolf2012Quantum}.
 \end{definition}
 
+\begin{lemma}[Positive-definite trace lower bound]\label{lem:posdef_trace_lower_bound}
+    \lean{posDef_minEigenvalue_mul_trace_conjTranspose_mul_self_le,
+        sub_minEigenvalue_smul_one_posSemidef}
+    \leanok
+    Let $D\geq 1$, let $M\in \MN{D}$ be positive-definite, and let
+    $\lambda_{\min}(M)$ be its smallest Hermitian eigenvalue. For every
+    $X\in \MN{D}$,
+    \[
+        \lambda_{\min}(M)\,\tr(X^{\dagger}X)
+        \leq
+        \tr(XMX^{\dagger}).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The matrix $M-\lambda_{\min}(M)\Id$ is positive semidefinite by the
+    spectral theorem. Since $X^{\dagger}X$ is also positive semidefinite, the
+    trace product of these two matrices is non-negative. Expanding
+    \[
+        \tr\!\left(X^{\dagger}X(M-\lambda_{\min}(M)\Id)\right)
+    \]
+    and cycling the trace gives the displayed inequality.
+\end{proof}
+
 % Lean: Wolf.infimum_is_attained
 \begin{lemma}[Infimum attainment for SL-filterings]\label{lem:infimum_is_attained}
+    \uses{lem:posdef_trace_lower_bound}
     For a positive-definite Choi matrix $\tau$, the infimum of
     $\tr\![(S_{2} \otimes_{k} S_{1}) \tau (S_{2} \otimes_{k} S_{1})^{\dagger}]$
     over $S_{1}, S_{2} \in \MN{D}$ with $\det S_{1} = \det S_{2} = 1$
