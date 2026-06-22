@@ -2776,11 +2776,16 @@ input is an injective 2D PEPS whose generated state is invariant under the
 lattice translations; its conclusion is that all vertical bond dimensions
 agree, all horizontal bond dimensions agree, and the state has a
 translation-invariant 2D PEPS description with a single injective tensor \(B\)
-of the same horizontal and vertical bond dimensions. The source proves it by
-applying the one-dimensional argument separately along the horizontal and the
-vertical lattice translations: comparing the tensor with each translate through
-the injective PEPS Fundamental Theorem produces per-edge gauges, which telescope
-around each row and each column and close under the periodic boundary condition.
+of the same horizontal and vertical bond dimensions. The source states this
+corollary without proof (lines 1892--1894); it gives a proof only for the
+one-dimensional case (lines 1807--1890) and remarks at line 1801 that ``below we
+provide the proof for injective MPS, but the proof can easily be extended to the
+other cases as well.'' The intended extension applies the one-dimensional
+argument separately along the horizontal and the vertical lattice translations:
+comparing the tensor with each translate through the injective PEPS Fundamental
+Theorem would produce per-edge gauges, which telescope around each row and each
+column and close under the periodic boundary condition. This route is the
+expected one, not a proof the source carries out.
 
 The load-bearing dependency, the injective PEPS Fundamental Theorem
 (\path{TNLean.PEPS.fundamentalTheorem_PEPS}, blueprint
