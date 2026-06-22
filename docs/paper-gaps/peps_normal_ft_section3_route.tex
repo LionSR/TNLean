@@ -2806,7 +2806,34 @@ repeated-tensor construction discussed above is also formalized as
 The remaining work is the PEPS-specific two-directional closure: the horizontal
 and vertical gauge telescopings must be made compatible around plaquettes and
 periodic seams, and their residual virtual operations must be absorbed into one
-site-independent 2D tensor. The blueprint records the restricted target as
+site-independent 2D tensor. In the notation of the blueprint proof sketch,
+writing
+\[
+    H_{j,k}=R^{(j,k)}_h\bigl(L^{(j+1,k)}_h\bigr)^{-1},
+    \qquad
+    V_{j,k}=R^{(j,k)}_v\bigl(L^{(j,k+1)}_v\bigr)^{-1},
+\]
+the residual \(H_{j,k}\) acts on the horizontal virtual leg
+\(\mathbb C^{D_h}\), while \(V_{j,k}\) acts on the vertical virtual leg
+\(\mathbb C^{D_v}\).  Thus the plaquette condition is not an ordinary product
+of a \(D_h\times D_h\) matrix with a \(D_v\times D_v\) matrix.  It must be
+stated on the corner virtual space
+\(\mathbb C^{D_h}\otimes\mathbb C^{D_v}\): after the row and column
+telescopings make \(H_{j,k}=H_k\) and \(V_{j,k}=V_j\), the missing scalar
+plaquette flatness relation is
+\[
+    (H_k\otimes I_{D_v})(I_{D_h}\otimes V_{j+1})
+    =
+    \lambda_{j,k}\,(I_{D_h}\otimes V_j)(H_{k+1}\otimes I_{D_v})
+\]
+for nonzero scalars \(\lambda_{j,k}\).  These scalars must also satisfy the
+periodic seam closures
+\[
+    \prod_{k\in\mathbb Z/N_v\mathbb Z}\lambda_{j,k}=1,
+    \qquad
+    \prod_{j\in\mathbb Z/N_h\mathbb Z}\lambda_{j,k}=1.
+\]
+The blueprint records the restricted target as
 \path{cor:exists_constant_injectivePEPS_of_translationInvariantState}, marked
 not ready.
 
