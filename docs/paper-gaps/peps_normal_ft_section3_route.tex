@@ -2778,6 +2778,45 @@ content: the type \path{MPSChainTensor d D n} already fixes one bond dimension.
 The per-bond rectangular version, in which adjacent invertible gauges first
 imply equality of the bond dimensions, remains the follow-up.
 
+\subsection*{The 2D analogue}
+
+The Applications section states the same corollary in two dimensions
+immediately after the one-dimensional version (lines 1892--1894 of
+\path{Papers/1804.04964/paper_normal.tex}), tracked by \ghissue{2921}. Its
+input is an injective 2D PEPS whose generated state is invariant under the
+lattice translations; its conclusion is that all vertical bond dimensions
+agree, all horizontal bond dimensions agree, and the state has a
+translation-invariant 2D PEPS description with a single injective tensor \(B\)
+of the same horizontal and vertical bond dimensions. The source states this
+corollary without proof (lines 1892--1894); it gives a proof only for the
+one-dimensional case (lines 1807--1890) and remarks at line 1801 that ``below we
+provide the proof for injective MPS, but the proof can easily be extended to the
+other cases as well.'' The intended extension applies the one-dimensional
+argument separately along the horizontal and the vertical lattice translations:
+comparing the tensor with each translate through the injective PEPS Fundamental
+Theorem would produce per-edge gauges, which telescope around each row and each
+column and close under the periodic boundary condition. This route is the
+expected one, not a proof the source carries out.
+
+The load-bearing dependency, the injective PEPS Fundamental Theorem
+(\path{TNLean.PEPS.fundamentalTheorem_PEPS}, blueprint
+\path{thm:fundamentalTheorem_PEPS}), is formalized. The remaining work is the
+two-directional telescoping closure, which is the 2D form of the
+still-open one-dimensional repeated-tensor construction discussed above; it is
+not yet formalized. The blueprint records the restricted target as
+\path{cor:exists_constant_injectivePEPS_of_translationInvariantState}, marked
+not ready.
+
+\emph{Verdict: scope restriction.} As in the one-dimensional case, the
+orientation-uniform torus bond-dimension type fixes the horizontal dimension
+\(D_h\) and the vertical dimension \(D_v\) in advance, so the source's
+``all vertical (resp. horizontal) bond dimensions are equal'' clauses are
+vacuous in the uniform-dimension statement. A fully faithful version requires a
+per-edge, rectangular bond model in which the adjacent invertible gauges along
+each orientation first force equality of the bond dimensions; that variant
+inherits the same uniform-dimension restriction recorded for the
+one-dimensional corollary and remains a separate follow-up.
+
 \section*{The strengthening to $n \ge 2L+1$ via overlapping windows}
 
 The plan recorded in the previous section is carried out: the source's
