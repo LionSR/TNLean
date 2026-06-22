@@ -46,10 +46,11 @@ normal form* — with three canonical representatives.
 
 ## Dependencies on missing Mathlib infrastructure
 
-The compactness / minimisation argument used in the proof of Proposition 2.8 and 2.9
-(over SL(n, ℂ) filterings) is not yet formalised in Mathlib or TNLean.  The
-relevant theorems are therefore stated with `sorry` for the minimisation core.
-See the documentation of `infimum_is_attained` for the precise missing fact.
+The compactness / minimisation core (the infimum over SL(n, ℂ) filterings is
+attained) is now formalised as `infimum_is_attained`.  The remaining gap is the
+AM–GM optimality iteration (Step 5 below) that turns a minimiser into a
+doubly-stochastic normal form; it is still `sorry` inside
+`exists_normal_form_generic`.
 
 ## References
 
@@ -151,10 +152,9 @@ The proof idea (see Wolf Section 2.3):
 5. At the optimum, both partial traces of τ' are proportional to identity,
    giving doubly-stochastic T'.
 
-Step 4 is the compactness/minimisation argument that is **not yet formalised**
-in Mathlib or TNLean.  We state the lemma as `infimum_is_attained` with a
-`sorry` filler.  Step 5 follows from the optimality condition (AGM iteration),
-stated below. -/
+Step 4 is the compactness/minimisation argument, now formalised as
+`infimum_is_attained` below.  Step 5 follows from the optimality condition
+(AM–GM iteration) and is the remaining `sorry` in `exists_normal_form_generic`. -/
 
 section GenericNormalForm
 
@@ -170,23 +170,19 @@ achieves its minimum on `SL(D, ℂ) × SL(D, ℂ)`.
 (Hilbert–Schmidt) norm `‖M‖² = tr[M M†]`; the coercivity bound below is false
 for the operator norm (e.g. `‖I‖_op² = 1 < D`).  With `X = S₂ ⊗ₖ S₁`:
 
-* the smallest-eigenvalue bound
-  `posDef_minEigenvalue_mul_trace_conjTranspose_mul_self_le` gives
-  `λ_min(τ) · tr[X† X] ≤ tr[X τ X†]`;
-* `Matrix.trace_conjTranspose_mul_self_re_kronecker` gives
+* positive-semidefiniteness of `τ - λ_min(τ)·I` gives the smallest-eigenvalue
+  bound `λ_min(τ) · tr[X† X] ≤ tr[X τ X†]`;
+* the Kronecker factorisation of the Hilbert–Schmidt norm gives
   `tr[X† X] = ‖S₂‖² · ‖S₁‖²`;
-* `Matrix.card_le_trace_conjTranspose_mul_self_re_of_det_norm_eq_one` gives
-  `‖S_i‖² ≥ D` for `det S_i = 1` (singular-value AM–GM).
+* the singular-value AM–GM inequality gives `‖S_i‖² ≥ D` whenever `det S_i = 1`.
 
 Together these yield `tr[X τ X†] ≥ λ_min(τ) · D · ‖S_i‖²`, so any pair whose
 value is at most the value at the identity lies in a fixed Frobenius ball
 `{‖S‖² ≤ R}`.  Intersecting that ball with `{det S = 1}` gives a closed and
-bounded — hence compact, by finite-dimensional Heine–Borel
-`Metric.isCompact_of_isClosed_isBounded` — set on which the continuous trace
-functional attains its minimum (`IsCompact.exists_isMinOn`); any pair outside
-the ball has value exceeding the value at the identity, so this minimiser is
-global.  The degenerate case `D = 0` is handled separately (all traces
-vanish). -/
+bounded — hence compact, by finite-dimensional Heine–Borel — set on which the
+continuous trace functional attains its minimum; any pair outside the ball has
+value exceeding the value at the identity, so this minimiser is global.  The
+degenerate case `D = 0` is handled separately (all traces vanish). -/
 lemma infimum_is_attained
     {τ : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ}
     (hτ_posDef : τ.PosDef) :
