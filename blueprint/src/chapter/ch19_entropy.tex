@@ -149,19 +149,28 @@ finite-dimensional quantum systems.
     \[
         S(\rho) = -\operatorname{Re}\bigl(\operatorname{tr}(\rho\,\log\rho)\bigr).
     \]
-    For a density matrix this is the standard expression
-    $S(\rho) = -\operatorname{tr}(\rho\log\rho)$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:von_neumann_entropy}
-    A Hermitian matrix and its logarithm are simultaneously diagonalized, so the
-    product $\rho\,\log\rho$ has eigenvalues $\lambda_i\log\lambda_i$. Its trace
-    is therefore the spectral sum $\sum_i \lambda_i\log\lambda_i$, and its
-    negative is $\sum_i\bigl({-}\lambda_i\log\lambda_i\bigr) = S(\rho)$. Zero
+    A Hermitian matrix and its logarithm are simultaneously diagonalized by a
+    unitary $U$ with $\rho = U\operatorname{diag}(\lambda_i)U^*$, so
+    \[
+        \operatorname{tr}(\rho\,\log\rho)
+            = \operatorname{tr}\!\bigl(U\operatorname{diag}(\lambda_i\log\lambda_i)U^*\bigr)
+            = \sum_i \lambda_i\log\lambda_i.
+    \]
+    Its negative is $\sum_i\bigl({-}\lambda_i\log\lambda_i\bigr) = S(\rho)$. Zero
     eigenvalues contribute nothing under the convention $0\log 0 = 0$, so no
     full-support assumption is required.
 \end{proof}
+
+\begin{remark}
+    For a density matrix $\rho$ (positive semidefinite with unit trace) the
+    eigenvalues $\lambda_i$ are nonnegative, so $\rho\,\log\rho$ is Hermitian
+    with real trace and the real-part extraction is superfluous: the identity
+    reduces to the standard expression $S(\rho) = -\operatorname{tr}(\rho\log\rho)$.
+\end{remark}
 
 \begin{theorem}[Entropy is invariant under reindexing]
     \label{thm:entropy_submatrix_equiv}

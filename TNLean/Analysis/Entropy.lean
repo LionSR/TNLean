@@ -132,10 +132,10 @@ private theorem isHermitian_self_mul_cfc {A : Matrix n n ℂ} (hA : A.IsHermitia
   exact (isHermitian_cfc_mul hA id g).symm
 
 open scoped Matrix.Norms.L2Operator in
-/-- **Bridge between the eigenvalue-based and trace-`log` forms of the von
-Neumann entropy.** For a Hermitian matrix `ρ`,
+/-- **Equality of the eigenvalue-sum and trace-`log` forms of the von Neumann
+entropy.** For a Hermitian matrix `ρ`,
 `S(ρ) = -(tr(ρ · log ρ)).re`, where `log` is the matrix logarithm `CFC.log`
-from the continuous functional calculus. This connects the spectral definition
+from the continuous functional calculus. This identifies the spectral definition
 `vonNeumannEntropy ρ = ∑ᵢ negMulLog(λᵢ)` with the trace-`log` form used in the
 quantum relative-entropy / strong-subadditivity development.
 
