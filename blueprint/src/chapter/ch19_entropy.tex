@@ -21,6 +21,32 @@ finite-dimensional quantum systems.
     where $0 \log 0 := 0$.
 \end{definition}
 
+\begin{lemma}[Entropy respects equality]\label{lem:entropy_congr}
+    \lean{vonNeumannEntropy_congr}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    If two Hermitian matrices are equal, then their von Neumann entropies are
+    equal.
+\end{lemma}
+
+\begin{proof}\leanok
+    Substitute the equality of the matrices in the defining eigenvalue sum.
+\end{proof}
+
+\begin{lemma}[Entropy of the zero matrix]\label{lem:entropy_zero}
+    \lean{vonNeumannEntropy_zero}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    The zero matrix has zero von Neumann entropy:
+    \[
+        S(0)=0.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    All eigenvalues of the zero matrix are zero, and $0\log 0=0$.
+\end{proof}
+
 \begin{theorem}[Entropy is non-negative]\label{thm:entropy_nonneg}
     \lean{vonNeumannEntropy_nonneg}
     \leanok

@@ -24,6 +24,11 @@ with trivial unfolding `@[simp]` lemmas.
 
 * `Entropy.vonNeumannEntropy` — alias of `_root_.vonNeumannEntropy`,
   the entropy `S(ρ) = -tr(ρ log ρ)` of a Hermitian matrix.
+* `Entropy.vonNeumannEntropy_congr` — alias of
+  `_root_.vonNeumannEntropy_congr`: entropy is congruent in the matrix
+  argument.
+* `Entropy.vonNeumannEntropy_zero` — alias of
+  `_root_.vonNeumannEntropy_zero`: `S(0) = 0`.
 * `Entropy.vonNeumannEntropy_nonneg` — alias of
   `_root_.vonNeumannEntropy_nonneg`: `S(ρ) ≥ 0` for density matrices.
 * `Entropy.vonNeumannEntropy_le_log_dim` — alias of
@@ -52,6 +57,14 @@ equal to `_root_.vonNeumannEntropy`.
 
 Source: blueprint `def:entropy_von_neumann_entropy`. -/
 noncomputable alias vonNeumannEntropy := _root_.vonNeumannEntropy
+
+/-- **Von Neumann entropy is congruent in the matrix argument**, namespaced
+alias of `_root_.vonNeumannEntropy_congr`. -/
+alias vonNeumannEntropy_congr := _root_.vonNeumannEntropy_congr
+
+/-- **The zero matrix has zero von Neumann entropy**, namespaced alias of
+`_root_.vonNeumannEntropy_zero`. -/
+alias vonNeumannEntropy_zero := _root_.vonNeumannEntropy_zero
 
 /-- **Von Neumann entropy is nonneg for density matrices**, namespaced
 alias of `_root_.vonNeumannEntropy_nonneg`. -/
