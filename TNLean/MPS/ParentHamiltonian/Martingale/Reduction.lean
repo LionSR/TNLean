@@ -772,8 +772,10 @@ IV.C, equation eq:4:martingale-2, with per-pair coefficient \(\eta\), and hence
 the same finite-overlap martingale gap as the anticommutator route.  Both this
 operator-product bound and the directional bound are conditional reductions: for
 the overlapping excitation projections \(h_i, h_j\) one has \(\|h_i h_j\| = 1\)
-when the ranges intersect, so neither hypothesis is satisfiable for
-\(\eta < 1\).  See `docs/paper-gaps/cpgsv21_martingale_overlap.tex`. -/
+when their ranges have a common nonzero vector, so neither hypothesis is
+satisfiable for \(\eta < 1\) in that case.  Degenerate cases, such as a zero
+excitation projection, are not ruled out by the combinatorics alone.  See
+`docs/paper-gaps/cpgsv21_martingale_overlap.tex`. -/
 theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_le
     (A : MPSTensor d D) (L : ℕ) (hL : 1 < L) {γ η : ℝ}
     (hγpos : 0 < γ) (hγle : γ ≤ 1)

@@ -360,11 +360,14 @@
         (1-\eta m)\|v\|\le \|H_{N,L}^{\mathrm{ES}}(A)v\|.
     \]
     This is a conditional reduction. The local terms
-    $h_{i,\mathrm{ES}}=p_i$ are the \emph{excitation} projections, so
-    $\|h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}\|=1$ whenever the overlapping ranges
-    intersect; the hypothesis is then unsatisfiable for $\eta<1$, and it is not the
-    quantity controlled by the cited principal-angle estimates. The comparison is
-    documented in \path{docs/paper-gaps/cpgsv21_martingale_overlap.tex}.
+    $h_{i,\mathrm{ES}}=p_i$ are the \emph{excitation} projections. If their
+    overlapping ranges have a common nonzero vector, then
+    $\|h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}\|=1$, so the hypothesis is
+    unsatisfiable for $\eta<1$ in that case. In degenerate cases, such as a
+    zero excitation projection, the operator-product norm can be smaller. In any
+    case this is not the quantity controlled by the cited principal-angle
+    estimates. The comparison is documented in
+    \path{docs/paper-gaps/cpgsv21_martingale_overlap.tex}.
 \end{theorem}
 
 \begin{proof}
@@ -444,9 +447,10 @@
         \gamma\|v\|\le \|H_{N,L}^{\mathrm{ES}}(A)v\|.
     \]
     As in Theorem~\ref{thm:overlap_operator_norm_gap_bound_constant} this is a
-    conditional reduction: the operator-product hypothesis is unsatisfiable for the
-    overlapping excitation projections, where
-    $\|h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}\|=1$.
+    conditional reduction: the operator-product hypothesis is unsatisfiable for
+    any overlapping pair whose excitation ranges have a common nonzero vector,
+    since then $\|h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}\|=1$. The statement does not
+    assert this norm identity in degenerate cases.
 \end{theorem}
 
 \begin{proof}

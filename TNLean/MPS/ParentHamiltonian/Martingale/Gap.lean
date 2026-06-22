@@ -327,12 +327,14 @@ such bound with \(\eta\,2(L-1) < 1\) yields the positive gap constant
 \(1 - \eta\,2(L-1)\).
 
 Like `parentHamiltonianES_gap_bound_of_principal_angle_compression`, this is a
-conditional reduction, not an achievable MPS estimate: \(p_i, p_j\) are the
-excitation projections, so when the overlapping excitation ranges share a vector
-one has \(\|p_i p_j\| = 1\) and the hypothesis is unsatisfiable for
-\(\eta < 1\).  The cited FNW--Nachtergaele--Kastoryano estimates control the
-ground-space principal angle \(\|q_i q_j - P\|\), a different quantity; the
-comparison is recorded in `docs/paper-gaps/cpgsv21_martingale_overlap.tex`. -/
+conditional reduction, not an achievable MPS estimate in the generic overlapping
+case: \(p_i, p_j\) are the excitation projections, and when their ranges share a
+nonzero vector one has \(\|p_i p_j\| = 1\), making the hypothesis unsatisfiable
+for \(\eta < 1\).  In degenerate cases, for instance when an excitation
+projection is zero, the product norm can be smaller.  The cited
+FNW--Nachtergaele--Kastoryano estimates control the ground-space principal angle
+\(\|q_i q_j - P\|\), a different quantity; the comparison is recorded in
+`docs/paper-gaps/cpgsv21_martingale_overlap.tex`. -/
 theorem parentHamiltonianES_gap_bound_of_overlap_operator_norm_constant
     (A : MPSTensor d D) (L : ℕ) (hL : 1 < L) {η : ℝ}
     (hηnonneg : 0 ≤ η)
@@ -365,9 +367,10 @@ This is the operator-product (symmetric) analogue of
 anticommutator estimate of arXiv:2011.12127, Section IV.C, equation
 eq:4:martingale-2 with coefficient \(\eta\).  Like
 `parentHamiltonian_gapped_of_overlap_norm_constant`, it is a conditional
-reduction whose hypothesis is unsatisfiable for the overlapping excitation
-projections (\(\|p_i p_j\| = 1\) when the ranges intersect), not an achievable
-MPS target; see `docs/paper-gaps/cpgsv21_martingale_overlap.tex`. -/
+reduction whose hypothesis is unsatisfiable when the overlapping excitation
+ranges have a common nonzero vector, since then \(\|p_i p_j\| = 1\).  It is not
+an achievable MPS target in such cases; see
+`docs/paper-gaps/cpgsv21_martingale_overlap.tex`. -/
 theorem parentHamiltonian_gapped_of_overlap_operator_norm_constant
     (A : MPSTensor d D) (L : ℕ) (hL : 1 < L) {η : ℝ}
     (hηnonneg : 0 ≤ η)
