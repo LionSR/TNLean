@@ -265,15 +265,17 @@ range derived from length-\(L_0\) block injectivity,
 \((L_0+1)+3(r-1)(L_0+1)+1\le L\). The source-range comparison is recorded in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
 
-The block-diagonal boundary representation supplied by
-`exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1`
-is the boundary-comparison-free open-boundary inclusion of arXiv:quant-ph/0608197, Theorem 12 (its
-block components lie in \(G_N(A_j)\)) and does not assume the boundary-crossing
-comparison. The only residual source-scope gap is the crossing-tail span
-hypothesis noted above, which supplies the periodic-boundary upgrade
-(arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456; arXiv:2011.12127,
-Section IV.C, lines 2126--2128). Documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; tracked in issue 2971.
+The block-diagonal boundary representation used here is the
+boundary-comparison-free open-boundary inclusion of arXiv:quant-ph/0608197,
+Theorem 12 (its block components lie in \(G_N(A_j)\)) and does not assume the
+boundary-crossing comparison.
+
+**Scope restriction (crossing span):** The residual source-scope gap is the
+crossing-tail span hypothesis noted above, which supplies the periodic-boundary
+upgrade (arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456;
+arXiv:2011.12127, Section IV.C, lines 2126--2128). Documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; tracked in
+issue 2971.
 
 **Unfaithful:** This proof transitively relies on
 `pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`, whose
@@ -365,15 +367,17 @@ span hypothesis is part of the remaining source-faithful boundary comparison
 recorded in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
 
-The block-diagonal boundary representation supplied by
-`exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1`
-is the boundary-comparison-free open-boundary inclusion of arXiv:quant-ph/0608197, Theorem 12 (its
-block components lie in \(G_N(A_j)\)) and does not assume the boundary-crossing
-comparison. The only residual source-scope gap is the crossing-tail span
-hypothesis noted above, which supplies the periodic-boundary upgrade
-(arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456; arXiv:2011.12127,
-Section IV.C, lines 2126--2128). Documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; tracked in issue 2971.
+The block-diagonal boundary representation used here is the
+boundary-comparison-free open-boundary inclusion of arXiv:quant-ph/0608197,
+Theorem 12 (its block components lie in \(G_N(A_j)\)) and does not assume the
+boundary-crossing comparison.
+
+**Scope restriction (crossing span):** The residual source-scope gap is the
+crossing-tail span hypothesis noted above, which supplies the periodic-boundary
+upgrade (arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456;
+arXiv:2011.12127, Section IV.C, lines 2126--2128). Documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; tracked in
+issue 2971.
 
 **Unfaithful:** This proof transitively relies on
 `pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`, whose
@@ -445,15 +449,17 @@ span hypothesis is part of the remaining source-faithful boundary comparison
 recorded in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
 
-The block-diagonal boundary representation supplied by
-`exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1`
-is the boundary-comparison-free open-boundary inclusion of arXiv:quant-ph/0608197, Theorem 12 (its
-block components lie in \(G_N(A_j)\)) and does not assume the boundary-crossing
-comparison. The only residual source-scope gap is the crossing-tail span
-hypothesis noted above, which supplies the periodic-boundary upgrade
-(arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456; arXiv:2011.12127,
-Section IV.C, lines 2126--2128). Documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; tracked in issue 2971.
+The block-diagonal boundary representation used here is the
+boundary-comparison-free open-boundary inclusion of arXiv:quant-ph/0608197,
+Theorem 12 (its block components lie in \(G_N(A_j)\)) and does not assume the
+boundary-crossing comparison.
+
+**Scope restriction (crossing span):** The residual source-scope gap is the
+crossing-tail span hypothesis noted above, which supplies the periodic-boundary
+upgrade (arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456;
+arXiv:2011.12127, Section IV.C, lines 2126--2128). Documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; tracked in
+issue 2971.
 
 **Unfaithful:** This proof transitively relies on
 `pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`, whose

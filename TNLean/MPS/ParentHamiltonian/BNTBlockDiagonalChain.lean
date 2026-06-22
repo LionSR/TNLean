@@ -101,11 +101,11 @@ Theorem 12 of arXiv:quant-ph/0608197 (proof lines
 separate step of closing the boundaries with block-diagonal boundary
 conditions.
 
-The proof uses only the span-based one-step intersection identity
-`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`, which is
-independent of the boundary-condition comparison at boundary-crossing windows. The
-periodic-boundary upgrade — replacing the open-boundary span \(\bigvee_jG_N(A_j)\)
-by \(\sum_j\mathcal G_{N,L}(A_j)\) — is the separate comparison of
+The proof uses only the span-based one-step intersection identity for normalized
+BNT product spans, which is independent of the boundary-condition comparison at
+boundary-crossing windows. The periodic-boundary upgrade — replacing the
+open-boundary span \(\bigvee_jG_N(A_j)\) by
+\(\sum_j\mathcal G_{N,L}(A_j)\) — is the separate comparison of
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and
 arXiv:2011.12127, Section IV.C, lines 2126--2128, recorded in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex` (issue 2971).
