@@ -72,10 +72,18 @@ representation\footnote{%
     and its $[1,2]$ companion in
     \path{Mathlib/Analysis/SpecialFunctions/ContinuousFunctionalCalculus/Rpow/IntegralRepresentation.lean},
     together with the Bochner-integral convexity bridge for C\textsuperscript{*}-algebras.}
-and, through it, the operator concavity of $x\mapsto x^p$ on $[0,1]$ and of
-$\log$, and the operator convexity of $x\mapsto x^p$ on the relevant range.  The
-scalar input functions are therefore operator-concave (resp.\ operator-convex)
-in the formal library.
+and, through it, the operator concavity of $x\mapsto x^p$ on $[0,1]$
+(\leanid{CFC.concaveOn_rpow}) and of $\log$ (\leanid{CFC.concaveOn_log}).  The
+scalar inputs of the two concavity axioms are therefore already
+operator-concave in the formal library.  The scalar input of the convex axiom,
+operator convexity of $x\mapsto x^p$ on $[1,2]$, is \emph{not} yet in the
+library: only the operator-monotone and operator-concave $[0,1]$ lemmas exist,
+and operator convexity of \texttt{rpow} over $\mathrm{Icc}\,1\,2$ is an open
+upstream TODO.\footnote{%
+    \path{Mathlib/Analysis/SpecialFunctions/ContinuousFunctionalCalculus/Rpow/Order.lean},
+    line~29.}
+That missing convexity lemma is, however, a small derivable increment
+(\S\ref{ssec:first-step}), not the deep obstruction.
 
 The remaining gap is the step \emph{from} operator concavity (a statement about a
 single operator) \emph{to} the Jensen inequality $T(fA)\le f(TA)$ for a positive
@@ -110,14 +118,18 @@ asserted, in violation of the faithfulness rule.  Two faithful options remain:
     hypothesis, matching what the dilation argument proves and what Wolf's
     Corollary~5.2 in fact uses (the maps there are channels, hence completely
     positive); or
-  \item prove the Choi--Davis--Jensen inequality by a positivity-only argument
-    (for instance the block-matrix / unitary-dilation proof of
-    Hansen--Pedersen, which uses only $2$-positivity, available for any positive
-    map between matrix algebras via the $2\times 2$ amplification), keeping the
-    bare \leanid{IsPositiveMap} hypothesis.
+  \item prove the Choi--Davis--Jensen inequality by a positivity-only argument,
+    keeping the bare \leanid{IsPositiveMap} hypothesis.  In the matrix-algebra
+    setting the positive-map operator Jensen inequality $f(TA)\le T(fA)$ for an
+    operator-convex $f$ and a \emph{unital positive} map $T$ is the classical
+    Davis (1957) / Choi (1974) theorem, whose standard proof needs only
+    positivity and unitality of $T$ (not complete positivity, and not the
+    stronger $2$-positivity).  The subunital case is recovered by dilating $T$
+    to a unital positive map.  This route avoids the Kraus/Stinespring
+    construction entirely and so is faithful to the bare positivity hypothesis.
 \end{enumerate}
 
-\subsection{The concrete first step}
+\subsection{The concrete first step}\label{ssec:first-step}
 
 Independently of the dilation question, one input is still missing from the
 formal library on the convex side: operator convexity of $x\mapsto x^p$ for
@@ -126,10 +138,18 @@ corresponding upstream TODO\footnote{%
     \path{Mathlib/Analysis/SpecialFunctions/ContinuousFunctionalCalculus/Rpow/Order.lean},
     line~29.}
 and supplies the scalar operator-convexity input for
-\leanid{posMap_rpow_convex_jensen}.  It is obtained from the case
-$p\in[0,1]$ already in the library through the identity $x^p = x\cdot x^{p-1}$
-with $p-1\in[0,1]$.  This is the smallest reusable increment toward the convex
-power case.
+\leanid{posMap_rpow_convex_jensen}.  It is obtained from the $[0,1]$ data
+already in the library through the Bendat--Sherman / Hansen--Pedersen
+characterization: for a continuous $f$ on $[0,\infty)$ with $f(0)\le 0$, $f$ is
+operator convex if and only if $x\mapsto f(x)/x$ is operator monotone.  Applied
+to $f(x)=x^p$ with $f(0)=0$, this gives: $x\mapsto x^p$ is operator convex on
+$[1,2]$ if and only if $x\mapsto x^{p-1}$ is operator monotone on $[0,1]$, and
+the latter is exactly \leanid{CFC.monotone_rpow} (operator monotonicity of
+$x^{p-1}$ for $p-1\in[0,1]$).  The bridge therefore runs through operator
+\emph{monotonicity}, not operator concavity: the naive identity
+$x^p = x\cdot x^{p-1}$ does \emph{not} establish operator convexity, since
+operator convexity is not preserved under multiplication by $x$.  This is the
+smallest reusable increment toward the convex power case.
 
 \subsection{Verdict}
 
