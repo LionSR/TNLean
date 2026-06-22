@@ -104,33 +104,6 @@ theorem vonNeumannEntropy_congr {ρ₁ ρ₂ : Matrix n n ℂ} (h : ρ₁ = ρ�
   rw [hzero]
   simp [Real.negMulLog_zero]
 
-/-- The Hermitian functional calculus is multiplicative: `cfc (f · g) = cfc f · cfc g`.
-On a Hermitian matrix the calculus is realized by simultaneous diagonalization, so
-this holds for arbitrary `f, g` (no continuity hypothesis is needed because the
-spectrum is finite). -/
-private theorem isHermitian_cfc_mul {A : Matrix n n ℂ} (hA : A.IsHermitian)
-    (f g : ℝ → ℝ) : hA.cfc (fun x => f x * g x) = hA.cfc f * hA.cfc g := by
-  have hdiag : (RCLike.ofReal ∘ (fun x => f x * g x) ∘ hA.eigenvalues)
-      = (fun i => (RCLike.ofReal ∘ f ∘ hA.eigenvalues) i
-          * ((RCLike.ofReal : ℝ → ℂ) ∘ g ∘ hA.eigenvalues) i) := by
-    funext i; simp [Function.comp_apply]
-  simp only [Matrix.IsHermitian.cfc]
-  rw [← map_mul, diagonal_mul_diagonal, hdiag]
-
-/-- The Hermitian functional calculus of the identity recovers the matrix. -/
-private theorem isHermitian_cfc_id {A : Matrix n n ℂ} (hA : A.IsHermitian) :
-    hA.cfc id = A := by
-  rw [Matrix.IsHermitian.cfc]
-  conv_rhs => rw [hA.spectral_theorem]
-  rw [Function.id_comp]
-
-/-- Left multiplication by the matrix absorbs into the functional calculus:
-`A · cfc g = cfc (fun x ↦ x · g x)`. -/
-private theorem isHermitian_self_mul_cfc {A : Matrix n n ℂ} (hA : A.IsHermitian)
-    (g : ℝ → ℝ) : A * hA.cfc g = hA.cfc (fun x => x * g x) := by
-  nth_rewrite 1 [← isHermitian_cfc_id hA]
-  exact (isHermitian_cfc_mul hA id g).symm
-
 open scoped Matrix.Norms.L2Operator in
 /-- **Equality of the eigenvalue-sum and trace-`log` forms of the von Neumann
 entropy.** For a Hermitian matrix `ρ`,
@@ -163,7 +136,7 @@ theorem vonNeumannEntropy_eq_neg_trace_mul_log
   have key : ρ * CFC.log ρ = hρ.cfc (fun x => x * Real.log x) := by
     rw [show CFC.log ρ = hρ.cfc Real.log from by
           rw [CFC.log]; exact Matrix.IsHermitian.cfc_eq hρ Real.log]
-    exact isHermitian_self_mul_cfc hρ Real.log
+    exact hρ.self_mul_cfc Real.log
   rw [vonNeumannEntropy, key]
   have htr := hρ.trace_cfc_eq_sum_re (fun x => x * Real.log x)
   rw [RCLike.re_eq_complex_re] at htr
