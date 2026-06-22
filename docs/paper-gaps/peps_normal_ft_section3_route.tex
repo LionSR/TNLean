@@ -2758,14 +2758,25 @@ initial restricted statement is only
 \]
 under a prior uniform bond-dimension hypothesis on the family \(A_i\).
 The blueprint records this restricted target as
-\path{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState};
-the cyclic-shift comparison and the \(L_i,R_i\) expression are formalized, but
-the final repeated-tensor construction remains open.
+\path{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState}, now
+formalized as
+\leanid{TNLean.PEPS.exists_constant_injectiveMPS_of_cyclicShiftInvariantState}.
+The cyclic-shift comparison, the running-product (\(L_i,R_i\)) expression, the
+seam-closure argument pinning the loop product \(P_n=Z_{n-1}\cdots Z_0\) to a
+scalar \(\lambda\), and the final repeated-tensor construction
+\(B=c\,(A_0 Z_0)\) with \(c^n=\lambda^{-1}\) are all in place. The \(n\)-th
+root absorbs the residual scalar that the source elides when it asserts
+\(R_{n+1}=L_{n+1}=1\): the seam closure forces \(P_n\) to be central, hence a
+scalar, but not necessarily the identity, so an \(n\)-th root (available since
+\(\mathbb{C}\) is algebraically closed) is needed to fold the residual phase
+into the repeated tensor.
 
-\emph{Verdict: scope restriction.} The uniform-\(D\) theorem can record the
+\emph{Verdict: scope restriction.} The uniform-\(D\) theorem records the
 existence of the repeated injective tensor \(B\), but it cannot express the
 source's equal-bond-dimension conclusion as a theorem with mathematical
-content. The per-bond rectangular version remains open.
+content: the type \path{MPSChainTensor d D n} already fixes one bond dimension.
+The per-bond rectangular version, in which adjacent invertible gauges first
+imply equality of the bond dimensions, remains the follow-up.
 
 \section*{The strengthening to $n \ge 2L+1$ via overlapping windows}
 
