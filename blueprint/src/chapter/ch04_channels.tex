@@ -51,6 +51,26 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     Trace preservation is the identity $\tr(X^T)=\tr(X)$.
 \end{proof}
 
+\begin{theorem}[Forward Lorentz-cone trace inequality]
+    \label{thm:psd_trace_square_le_square_trace}
+    \lean{Matrix.PosSemidef.trace_sq_re_le_trace_re_sq}
+    \leanok
+    If $A \in \MN{D}$ is positive semidefinite, then
+    \[
+        \tr(A^2) \le \tr(A)^2 .
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Diagonalize $A$ with nonnegative eigenvalues $\lambda_i$. Then
+    $\tr(A^2)=\sum_i \lambda_i^2$ and $\tr(A)=\sum_i \lambda_i$, so the
+    desired inequality is
+    \[
+        \sum_i \lambda_i^2 \le \left(\sum_i \lambda_i\right)^2 ,
+    \]
+    which follows because all mixed products are nonnegative.
+\end{proof}
+
 \begin{definition}[Completely positive map]\label{def:cp_map}
     \lean{IsCPMap}
     \leanok
