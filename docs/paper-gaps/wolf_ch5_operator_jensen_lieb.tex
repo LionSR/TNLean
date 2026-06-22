@@ -145,10 +145,12 @@ Kraus or Stinespring representation of $T$.  Its POVM elements are supplied by
 the positive matrices $T(P_i)$, where the $P_i$ are the spectral projections of
 $A$; these exist for any positive map (indeed $\sum_i T(P_i)=T(\mathbf 1)$, the
 identity used in Wolf's block-positivity step in the proof of
-\cite[Theorem~5.12]{Wolf2012Quantum}).  The scaffold
-therefore applies to a bare positive map and proves the inequalities under the
-\leanid{IsPositiveMap} hypothesis as stated --- it does not require, and must not
-be relabelled with, complete positivity.
+  \cite[Theorem~5.12]{Wolf2012Quantum}).  The scaffold
+  therefore applies to a bare positive map in the finite-POVM resolvent reduction
+  under the \leanid{IsPositiveMap} hypothesis --- it does not require, and must not
+  be relabelled with, complete positivity.  It does not by itself prove the
+  Jensen inequalities; the axioms remain open until the integral step below is
+  supplied.
 
 What is missing is therefore not a faithful proof route but the analytic step
 that closes the existing one: the Löwner-integral argument carrying the pointwise
@@ -169,10 +171,11 @@ and supplies the scalar operator-convexity input for
 already in the library through the Bendat--Sherman / Hansen--Pedersen
 characterization: for a continuous $f$ on $[0,\infty)$ with $f(0)\le 0$, $f$ is
 operator convex if and only if $x\mapsto f(x)/x$ is operator monotone.  Applied
-to $f(x)=x^p$ with $f(0)=0$, this gives: $x\mapsto x^p$ is operator convex on
-$[1,2]$ if and only if $x\mapsto x^{p-1}$ is operator monotone on $[0,1]$, and
-the latter is exactly \leanid{CFC.monotone_rpow} (operator monotonicity of
-$x^{p-1}$ for $p-1\in[0,1]$).  The bridge therefore runs through operator
+to $f(x)=x^p$ with $f(0)=0$, this gives the required statement on
+$[0,\infty)$: for each exponent $p\in[1,2]$, the function $x\mapsto x^p$ is
+operator convex once $x\mapsto x^{p-1}$ is operator monotone.  The latter is
+exactly \leanid{CFC.monotone_rpow} with exponent $p-1\in[0,1]$.  The bridge
+therefore runs through operator
 \emph{monotonicity}, not operator concavity: the naive identity
 $x^p = x\cdot x^{p-1}$ does \emph{not} establish operator convexity, since
 operator convexity is not preserved under multiplication by $x$.  This is the
@@ -199,9 +202,18 @@ For $s\in[0,1]$, an arbitrary matrix $K$, and positive-definite $A,B$, the map
   (A,B)\ \longmapsto\ \tr\!\bigl(K^\dagger A^s K B^{1-s}\bigr)
   \tag{\path{lieb_concavity_axiom}}
 \end{align}
-is jointly concave on pairs of positive-definite matrices.  This is the Lieb
-concavity theorem (\cite[Theorem~5.15, the Ando--Lieb functional]{Wolf2012Quantum}),
-the trace functional underlying the Wigner--Yanase--Dyson conjecture.
+is jointly concave on pairs of positive-definite matrices.  This is the
+boundary-exponent specialization of the Lieb concavity theorem
+(\cite[Theorem~5.15, the Ando--Lieb functional]{Wolf2012Quantum}), the trace
+functional underlying the Wigner--Yanase--Dyson conjecture.
+
+\paragraph{Scope restriction (boundary exponent).}  Wolf's Theorem~5.15 is
+stated for two exponents $x,y\ge 0$ with $x+y\le 1$.  The formal axiom
+\leanid{lieb_concavity_axiom} records only the boundary line $x=s$, $y=1-s$,
+where $x+y=1$.  This is sufficient for the current downstream Lieb-concavity
+corollaries, but it is not the full source theorem; the sub-boundary range
+$x+y<1$ remains unformalized unless it is derived separately or the axiom is
+generalized.
 
 \paragraph{Scope restriction (positive-definite versus positive
 semidefinite).}  Wolf's Theorem~5.15 states the Ando--Lieb concavity for
