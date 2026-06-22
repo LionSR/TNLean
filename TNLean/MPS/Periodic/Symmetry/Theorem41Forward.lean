@@ -7,8 +7,9 @@ import TNLean.MPS.Periodic.Symmetry.Theorem41Defs
 /-!
 # Theorem 4.1, forward direction
 
-This module contains the forward half of arXiv:1708.00029, Theorem 4.1, together
-with the formal pullback tensor \(C\) introduced in lines 735--743 of the paper.
+This module contains the forward half of arXiv:1708.00029, Theorem 4.1,
+together with the tensor \(C\) defined from the refinement isometry \(W\) in
+lines 735--743 of the paper.
 -/
 
 open scoped Matrix BigOperators
@@ -24,7 +25,7 @@ variable {d D : ℕ}
 /-- **Rectangular Kraus isometry mixing.**
 
 For a (possibly rectangular) isometry `W : Fin m → Fin d` with `Wᴴ · W = 1`,
-the `W`-pullback family `C τ := ∑_σ W(τ, σ) · B σ` has the same transfer map
+the family `C τ := ∑_σ W(τ, σ) · B σ` has the same transfer map
 as `B`. This is an adapter from
 `kraus_same_map_of_isometry_combination` to the `MPSTensor.transferMap` interface. -/
 theorem transferMap_kraus_isometry
@@ -37,7 +38,7 @@ theorem transferMap_kraus_isometry
       (K := fun τ : Fin m => ∑ σ : Fin d, W τ σ • B σ)
       (K' := B) W hW (fun _ => rfl) X
 
-/-- Evaluation of a `W`-pulled-back tensor on a blocked word is a `W`-weighted sum
+/-- Evaluation of the tensor \(C\) defined from \(W\) on a blocked word is a \(W\)-weighted sum
 of evaluations of the original tensor.
 
 If `C τ = ∑_σ W(τ, σ) • B σ` is the isometric mixing of an MPS tensor
@@ -47,7 +48,7 @@ every `τ : Fin N → Fin m`,
 
 This is the coefficient-expansion identity used in both directions of Theorem 4.1:
 in the forward direction it rewrites a refinement witness as `SameMPV` for the
-`W`-pullback tensor, and in the reverse direction it expands the blocked witness
+tensor \(C\), and in the reverse direction it expands the blocked witness
 produced by Wolf Theorem 2.18. -/
 theorem evalWord_sum_smul_ofFn
     {m : ℕ} (B : MPSTensor d D) (W : Matrix (Fin m) (Fin d) ℂ) :
@@ -266,9 +267,9 @@ noncomputable def isIrreducibleForm_kraus_isometry
     intro N τ
     exact (hPullbackSame N τ).trans (hBlocksSame N τ)
 
-/-- **Pullback tensor in the forward proof of Theorem 4.1.**
+/-- **The tensor \(C\) in the forward proof of Theorem 4.1.**
 
-From a `p`-refinement witness `(A, W)` for `B`, the `W`-pullback tensor
+From a `p`-refinement witness `(A, W)` for `B`, the tensor
 `C τ := ∑_σ W(τ, σ) • B σ` has the same transfer map as `B` and the same MPV
 family as `blockTensor A p`.
 
@@ -299,9 +300,9 @@ theorem pRefinementCanonicalization_pullback
     _ = mpv (blockTensor A p) τ := by
           simpa [mpv_eq] using (hCoeff N τ).symm
 
-/-- **The pullback tensor is still in irreducible form II.**
+/-- **The tensor \(C\) is still in irreducible form II.**
 
-If the refined tensor `B` is already in irreducible form II, then the pullback
+If the refined tensor `B` is already in irreducible form II, then the tensor
 `C τ := ∑_σ W(τ, σ) • B σ` coming from a `p`-refinement witness is again in
 irreducible form II, has the same transfer map as `B`, and has the same MPV
 family as `blockTensor A p`. This formalizes the sentence in arXiv:1708.00029,
@@ -345,36 +346,38 @@ theorem thm_4_1_p_refinement_forward_witness
   ⟨transferMap A, transferMap_isChannel A hA_norm, by
     rw [hTransferEq, transferMap_blockTensor]⟩
 
-/-- **Blocked Z-gauge extraction for the periodic equal-case stage.**
+/-- **Blocked \(Z\)-gauge extraction for the periodic equal-case step.**
 
 This Prop isolates the existence half of the blocked equal-case argument needed
 for Theorem 4.1: whenever an irreducible-form blocked tensor `C` has the same
-MPV family as a blocked root `blockTensor A p`, one can extract a periodic
-`Z`-gauge witness between `C` and `blockTensor A p`.
+MPV family as the \(p\)-blocked tensor `blockTensor A p`, one can extract a
+periodic \(Z\)-gauge witness between `C` and `blockTensor A p`.
 
 Compared with `PeripheralEqualCasePeriodicFTOfSameMPV`, this does **not** yet
-recover a left-canonical root. It only asserts the blocked equal-case
-Fundamental Theorem / Z-phase existence step. -/
+construct the tensor \(\widetilde A\) from arXiv:1708.00029, lines 765--810.
+It only asserts the blocked equal-case Fundamental Theorem step producing the
+finite-order \(Z\)-factor. -/
 def PeripheralEqualCaseZGaugeOfSameMPV (d D p : ℕ) : Prop :=
   ∀ {A : MPSTensor d D} {C : MPSTensor (blockPhysDim d p) D},
     IsIrreducibleForm C →
     SameMPV C (blockTensor A p) →
       ∃ m : ℕ, 0 < m ∧ ZGaugeEquiv m C (blockTensor A p)
 
-/-- **Scope-restricted blocked `Z`-gauge extraction from the periodic equal-case FT.**
+/-- **Scope-restricted blocked \(Z\)-gauge extraction from the periodic equal-case FT.**
 
 Applying the periodic equal-case Fundamental Theorem at the blocked physical
-dimension `blockPhysDim d p` gives the blocked `Z`-gauge once both tensors are
+dimension `blockPhysDim d p` gives the blocked \(Z\)-gauge once both tensors are
 already known to be in irreducible form. The irreducible-form hypothesis for
-the \(p\)-blocked root is an explicit input here; it is not obtained from
+the \(p\)-blocked tensor is an explicit input here; it is not obtained from
 equality of MPV families.
 
 This theorem is therefore only the equal-case FT application step. It does not
 prove the full `PeripheralEqualCaseZGaugeOfSameMPV` hypothesis, since that
-hypothesis does not assume irreducible form for the blocked root. The remaining
+hypothesis does not assume irreducible form for `blockTensor A p`. The remaining
 canonicalization work is to prove the missing irreducible-form input for the
-blocked root, and then to distribute the resulting blocked `Z`-phase back to a
-left-canonical root. -/
+\(p\)-blocked tensor, and then to carry out the construction of
+\(\widetilde A\) from the matrix \(Z\) and the scalars \(c_{j,\alpha}\) in
+arXiv:1708.00029, lines 765--810. -/
 theorem zGaugeEquiv_of_periodicEqualCaseFT_of_irreducibleForm
     (p : ℕ) (hFT : PeriodicEqualCaseFT (blockPhysDim d p) D)
     {A : MPSTensor d D} {C : MPSTensor (blockPhysDim d p) D}
@@ -384,15 +387,21 @@ theorem zGaugeEquiv_of_periodicEqualCaseFT_of_irreducibleForm
     ∃ m : ℕ, 0 < m ∧ ZGaugeEquiv m C (blockTensor A p) :=
   hFT hC hBlock hSame
 
-/-- **Blocked-to-root reconstruction from a periodic `Z`-gauge witness.**
+/-- **Construction of \(\widetilde A\) from a periodic \(Z\)-gauge witness.**
 
 This Prop isolates the second half of the blocked equal-case argument: once a
-blocked tensor `C` is related to `blockTensor A p` by a periodic `Z`-gauge,
-one can distribute that blocked phase data across a root tensor `A'` so that
-`A'` is left-canonical and `E_C = E_{A'^{[p]}}`.
+blocked tensor `C` is related to `blockTensor A p` by a periodic \(Z\)-gauge,
+one can distribute the scalar factors \(c_{j,\alpha}\) across the cyclic
+sectors of `A`, producing a left-canonical tensor whose \(p\)-blocked transfer
+map equals that of `C`.
 
-In the paper this is the blocked-to-root phase-distribution step after the
-periodic equal-case Fundamental Theorem. -/
+In the irreducible-form subcase treated in arXiv:1708.00029, lines 765--810, define
+\(A'_j{}^i = \sum_u d_{j,u} P_{j,u} A_j^i\), obtain
+\(A'^{(p)} = Z A^{(p)}\), and then set
+\(\widetilde A = U^\dagger A' U\). The witness called `A'` below is this final
+tensor \(\widetilde A\). The formal statement keeps this construction as a
+conditional input for arbitrary `A`; it does not assert the irreducible block
+data of `A` as hypotheses. -/
 def PeripheralEqualCaseRootFromZGauge (d D p : ℕ) : Prop :=
   ∀ {A : MPSTensor d D} {C : MPSTensor (blockPhysDim d p) D} {m : ℕ},
     IsIrreducibleForm C →
@@ -402,13 +411,14 @@ def PeripheralEqualCaseRootFromZGauge (d D p : ℕ) : Prop :=
         (∑ i : Fin d, (A' i)ᴴ * A' i = 1) ∧
         transferMap C = transferMap (blockTensor A' p)
 
-/-- **Blocked equal-case root hypothesis for Theorem 4.1.**
+/-- **The \(\widetilde A\) construction after the blocked equal-case step.**
 
 This Prop isolates exactly the remaining forward input after
 `pRefinementCanonicalization_pullback_of_irreducibleForm`: whenever an
-irreducible-form blocked tensor `C` has the same MPV family as a blocked root
-`blockTensor A p`, one can replace `A` by a left-canonical root `A'` with the
-same blocked transfer map, `E_C = E_{A'^{[p]}}`.
+irreducible-form blocked tensor `C` has the same MPV family as the
+\(p\)-blocked tensor `blockTensor A p`, one can construct a left-canonical
+tensor \(\widetilde A\) with the same \(p\)-blocked transfer map,
+`E_C = E_{\widetilde A^{[p]}}`.
 
 In the paper this is the point where the blocked equal-case Fundamental Theorem
 (source theorem `thm:bdequal`, arXiv:1708.00029, lines 643--656) is combined
@@ -424,16 +434,17 @@ def PeripheralEqualCasePeriodicFTOfSameMPV (d D p : ℕ) : Prop :=
         (∑ i : Fin d, (A' i)ᴴ * A' i = 1) ∧
         transferMap C = transferMap (blockTensor A' p)
 
-/-- **Blocked equal-case continuation from Z-gauge extraction and reconstruction.**
+/-- **From \(Z\)-gauge extraction to the \(\widetilde A\) construction.**
 
-If we can first extract a blocked periodic `Z`-gauge from
-`SameMPV C (blockTensor A p)` and then distribute that blocked `Z`-phase back
-to a left-canonical root, then the continuation hypothesis
+If we can first extract a blocked periodic \(Z\)-gauge from
+`SameMPV C (blockTensor A p)` and then carry out the construction of
+\(\widetilde A\) from the corresponding scalars \(c_{j,\alpha}\), then the
+continuation hypothesis
 `PeripheralEqualCasePeriodicFTOfSameMPV` holds.
 
-This splits the blocked equal-case continuation into two explicit obligations:
-the blocked equal-case `Z`-gauge existence step and the subsequent
-blocked-to-root reconstruction. -/
+This splits the blocked equal-case part of the forward proof into two explicit
+obligations: the equal-case \(Z\)-gauge existence step and the construction of
+\(\widetilde A\) described in arXiv:1708.00029, lines 765--810. -/
 theorem peripheralEqualCase_periodicFT_of_sameMPV
     (hZGauge : PeripheralEqualCaseZGaugeOfSameMPV d D p)
     (hRoot : PeripheralEqualCaseRootFromZGauge d D p) :
@@ -442,15 +453,15 @@ theorem peripheralEqualCase_periodicFT_of_sameMPV
   obtain ⟨m, hm, hZ⟩ := hZGauge (A := A) (C := C) hC hSame
   exact hRoot (A := A) (C := C) (m := m) hC hm hZ
 
-/-- **Forward root hypothesis for Theorem 4.1.**
+/-- **Forward construction hypothesis for Theorem 4.1.**
 
 This Prop states the analytic content that remains between the
 coefficient-level `IsPRefinable B p` (a trace-level MPV identity) and the
 channel-level conclusion needed to exhibit `E_B` as a `p`-th power: any
-`p`-refinement of `B` can be *canonicalized* to a witness that is both
-left-canonical and produces a matching transfer map under `p`-blocking.
+`p`-refinement of `B` can be replaced by a left-canonical tensor
+\(\widetilde A\) whose \(p\)-blocked transfer map agrees with `E_B`.
 
-In the source proof, this begins with the \(W\)-pullback tensor
+In the source proof, this begins with the tensor \(C\) defined by
 \(C^{i_1,\ldots,i_p}=\sum_i W^{(i_1,\ldots,i_p),i}B^i\)
 from arXiv:1708.00029, lines 735--743. The theorems
 `pRefinementCanonicalization_pullback` and
@@ -459,11 +470,12 @@ first stage, giving `E_C = E_B`, `SameMPV C (blockTensor A p)`, and preserving
 irreducible form II when `B` already has it. The periodic equal-case
 Fundamental Theorem (source theorem `thm:bdequal`, arXiv:1708.00029,
 lines 643--656, available here as the hypothesis `PeriodicEqualCaseFT`) then
-supplies a `Z`-gauge relation between `C` and `blockTensor A p`. The remaining
-source step is the distribution of this blocked `Z`-phase across the cyclic
-blocks of `A` in lines 765--810. The theorem
+supplies a \(Z\)-gauge relation between `C` and `blockTensor A p`. The remaining
+source step is the construction of \(A'_j\) and
+\(\widetilde A=U^\dagger A' U\) from the scalars \(c_{j,\alpha}\) in
+lines 765--810. The theorem
 `pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV`
-shows that this hypothesis follows from the sharper blocked equal-case root
+shows that this hypothesis follows from the more precise blocked equal-case
 hypothesis `PeripheralEqualCasePeriodicFTOfSameMPV`. -/
 def PRefinementCanonicalization (d D p : ℕ) : Prop :=
   ∀ {B : MPSTensor d D}, IsIrreducibleForm B → IsPRefinable B p →
@@ -471,13 +483,13 @@ def PRefinementCanonicalization (d D p : ℕ) : Prop :=
       (∑ i : Fin d, (A i)ᴴ * A i = 1) ∧
       transferMap B = transferMap (blockTensor A p)
 
-/-- **Reduction of forward canonicalization to the blocked equal-case stage.**
+/-- **Reduction of the forward construction to the blocked equal-case step.**
 
-Assuming `PeripheralEqualCasePeriodicFTOfSameMPV`, the pullback theorem
+Assuming `PeripheralEqualCasePeriodicFTOfSameMPV`, the theorem
 `pRefinementCanonicalization_pullback_of_irreducibleForm` already yields the
 full forward-side canonicalization hypothesis `PRefinementCanonicalization`.
 Thus the remaining forward gap in Theorem 4.1 is exactly the blocked
-equal-case/root-reconstruction step captured by
+equal-case construction of \(\widetilde A\) captured by
 `PeripheralEqualCasePeriodicFTOfSameMPV`. -/
 theorem pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV
     (hPeripheralEq : PeripheralEqualCasePeriodicFTOfSameMPV d D p) :
@@ -499,10 +511,10 @@ theorem pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV
     transferMap B = transferMap C := hTransfer'.symm
     _ = transferMap (blockTensor A' p) := hTransferA'
 
-/-- **Forward direction of Theorem 4.1 from the blocked equal-case stage.**
+/-- **Forward direction of Theorem 4.1 from the blocked equal-case step.**
 
-This restates `thm_4_1_p_refinement_forward` after replacing the coarse
-hypothesis `PRefinementCanonicalization` by the sharper blocked-stage
+This restates `thm_4_1_p_refinement_forward` after replacing the broader
+hypothesis `PRefinementCanonicalization` by the more precise blocked-stage
 hypothesis `PeripheralEqualCasePeriodicFTOfSameMPV`. -/
 theorem thm_4_1_p_refinement_forward_of_peripheralEqualCase_periodicFT_of_sameMPV
     (B : MPSTensor d D) (hB : IsIrreducibleForm B)
@@ -523,8 +535,8 @@ Let `B` be an MPS tensor in irreducible form II. Assume
 `IsPRefinable B p` implies `IsPDivisibleChannel (transferMap B) p`.
 
 This follows the same conditional pattern as
-`MPSTensor.cor_4_1_physical_symmetry_zgauge`: analytic inputs beyond the
-repository's current reach are exposed as explicit hypotheses, while the
+`MPSTensor.cor_4_1_physical_symmetry_zgauge`: inputs not yet formalized are
+exposed as explicit hypotheses, while the
 algebraic structure — the blocking-commutes-with-power identity and the
 left-canonical-channel lemma — is formalized here. -/
 theorem thm_4_1_p_refinement_forward
