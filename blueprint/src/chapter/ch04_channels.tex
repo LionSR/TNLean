@@ -65,6 +65,29 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     to $E \otimes \id_n$ being positive for all~$n$.
 \end{definition}
 
+\begin{theorem}[Transposition is not completely positive]
+    \label{thm:transpose_not_completely_positive}
+    \lean{ChoiJamiolkowski.transposeLinearMapComplex_not_isCPMap}
+    \leanok
+    \uses{def:cp_map, def:flip_operator, thm:choi_transpose_flip,
+        thm:cp_iff_choi_posSemidef}
+    If $D \ge 2$, the matrix transposition map $\theta(X)=X^T$ on $\MN{D}$
+    is not completely positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:flip_operator, thm:choi_transpose_flip,
+        thm:cp_iff_choi_posSemidef}
+    If $\theta$ were completely positive, its Choi matrix would be positive
+    semidefinite. By Theorem~\ref{thm:choi_transpose_flip}, this Choi matrix is
+    $D^{-1}F$. For the antisymmetric vector
+    $v=\ket{01}-\ket{10}$,
+    \[
+        \bra{v}\,D^{-1}F\,\ket{v} = -\frac{2}{D} < 0,
+    \]
+    contradicting positive semidefiniteness.
+\end{proof}
+
 \begin{theorem}[Entrywise complete positivity from a Kraus representation]
     \label{thm:cp_map_entrywise_complete_positive}
     \lean{IsCPMap.map_cstarMatrix_nonneg}
