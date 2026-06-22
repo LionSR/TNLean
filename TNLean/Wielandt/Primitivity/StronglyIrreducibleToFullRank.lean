@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 
 import TNLean.Spectral.MixedTransfer
 import TNLean.Spectral.TraceExpansion
+import TNLean.Algebra.HermitianHelpers
 import TNLean.Wielandt.Primitivity.PrimitiveBridge
 import TNLean.Wielandt.Primitivity.TracePairing
 import Mathlib.Analysis.Complex.Basic
@@ -60,7 +61,7 @@ access to the (c)→(b) proof route and its quantitative intermediates.
 * `sum_normSq_trace_conjTranspose_mul_evalWord` — the trace-pairing identity
 * `isPrimitiveMPS_of_isStronglyIrreduciblePaper` — primitivity implication
 * `IsPrimitiveMPS.transferMap_pow_apply_tendsto` — convergence `E^n → P_ρ`
-* `eq_zero_of_trace_conjTranspose_mul_posDef_mul_eq_zero` — PosDef nondegeneracy
+* `trace_conjTranspose_posDef_mul_lower` — uniform PosDef trace lower bound
 
 ## References
 
@@ -133,10 +134,6 @@ private theorem tracePairBilin_fixedPointProj [NeZero D]
 
 `tr(B† ρ B) > 0` when `ρ` is positive definite and `B ≠ 0`. -/
 
--- We need the auxiliary fact that ρ^{1/2} B = 0 implies B = 0 when ρ.PosDef.
--- And tr(B† ρ B) = tr(ρ^{1/2} B (ρ^{1/2} B)†) ≥ 0 with equality iff ρ^{1/2} B = 0.
--- For now we prove the strict positivity directly.
-
 /-! ### Part 3: Main theorem — strong irreducibility → eventually full Kraus rank
 
 The proof follows the paper's contradiction argument:
@@ -146,56 +143,6 @@ The proof follows the paper's contradiction argument:
 3. The trace-pairing identity gives `tracePairBilin(E^n)(B_n).re = 0`.
 4. But `E^n → P_ρ`, so the RHS converges to `tr(B_n† ρ B_n) / tr(ρ) > 0`.
 5. The contradiction finishes the proof. -/
-
-/-- **Nondegeneracy of the PosDef inner product.**
-If `ρ` is positive definite and `tr(B† ρ B) = 0`, then `B = 0`.
-
-This is the key positivity fact: the form `B ↦ tr(B† ρ B)` is nondegenerate
-when `ρ` is PosDef. The proof uses the characterization of PosDef via
-`star x ⬝ᵥ ρ *ᵥ x > 0` for `x ≠ 0`. -/
-private theorem eq_zero_of_trace_conjTranspose_mul_posDef_mul_eq_zero
-    {D : ℕ} [NeZero D]
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
-    (B : Matrix (Fin D) (Fin D) ℂ)
-    (htr : Matrix.trace (Bᴴ * ρ * B) = 0) :
-    B = 0 := by
-  classical
-  -- B†ρB is PSD with trace 0, hence B†ρB = 0
-  have hpsd : (Bᴴ * ρ * B).PosSemidef := hρ.posSemidef.conjTranspose_mul_mul_same B
-  have hBρB : Bᴴ * ρ * B = 0 := hpsd.trace_eq_zero_iff.mp htr
-  -- For any vector v: star(Bv) ⬝ᵥ ρ *ᵥ (Bv) = v† (B†ρB) v = 0
-  -- Since ρ PosDef, Bv = 0 for all v, hence B = 0.
-  ext i j
-  -- Test with e_j (j-th standard basis vector)
-  suffices h : B *ᵥ (Pi.single j 1) = 0 by
-    have hi := congrFun h i
-    -- (B *ᵥ e_j) i = ∑_k B i k * δ_{jk} = B i j
-    simp only [Matrix.mulVec, dotProduct, Pi.single_apply, Pi.zero_apply, mul_ite,
-      mul_one, mul_zero, Finset.sum_ite_eq', Finset.mem_univ, ite_true] at hi
-    exact hi
-  -- Suppose B *ᵥ e_j ≠ 0
-  by_contra hw
-  -- Then star(Bv) ⬝ᵥ ρ(Bv) > 0 by PosDef
-  have hpos := hρ.dotProduct_mulVec_pos hw
-  -- But star(Bv) ⬝ᵥ ρ(Bv) = v†(B†ρB)v = 0
-  have : star (B *ᵥ Pi.single j 1) ⬝ᵥ ρ.mulVec (B *ᵥ Pi.single j 1) =
-      star (Pi.single j (1 : ℂ)) ⬝ᵥ (Bᴴ * ρ * B).mulVec (Pi.single j 1) := by
-    have hvec : (Bᴴ * ρ * B).mulVec (Pi.single j 1) =
-        Bᴴ *ᵥ (ρ *ᵥ (B *ᵥ Pi.single j 1)) := by
-      rw [Matrix.mulVec_mulVec, Matrix.mulVec_mulVec]
-    calc
-      star (B *ᵥ Pi.single j 1) ⬝ᵥ ρ.mulVec (B *ᵥ Pi.single j 1)
-          = star (Pi.single j (1 : ℂ)) ⬝ᵥ
-              Bᴴ *ᵥ (ρ *ᵥ (B *ᵥ Pi.single j 1)) := by
-                rw [Matrix.dotProduct_mulVec, Matrix.star_mulVec]
-                conv_rhs =>
-                  rw [Matrix.dotProduct_mulVec]
-                  rw [Matrix.dotProduct_mulVec]
-      _ = star (Pi.single j (1 : ℂ)) ⬝ᵥ
-            (Bᴴ * ρ * B).mulVec (Pi.single j 1) := by
-              rw [hvec]
-  rw [this, hBρB] at hpos
-  simp at hpos
 
 /-! ### Part 4: Uniform positivity lemmas
 
@@ -473,8 +420,8 @@ This is the key compactness step for the (c) → (b) proof:
 1. **Continuity**: `B ↦ tr(B† ρ B).re` is a continuous real-valued function.
 2. **Compactness**: The unit sphere in `M_D(ℂ)` is compact
    (finite-dimensional over `ℂ` ⇒ `ProperSpace`).
-3. **Positivity on the sphere**: From PosDef nondegeneracy
-   (`eq_zero_of_trace_conjTranspose_mul_posDef_mul_eq_zero`).
+3. **Positivity on the sphere**: From the positive-definite
+   smallest-eigenvalue trace lower bound.
 4. **Minimum exists**: Apply `IsCompact.exists_isMinOn` to get `c = min f(sphere) > 0`.
 5. **Extend by homogeneity**: For `B ≠ 0`, normalize `B' := ‖B‖⁻¹ • B ∈ sphere`,
    then `f(B) = ‖B‖² · f(B') ≥ c · ‖B‖²`.
@@ -500,20 +447,33 @@ private theorem trace_conjTranspose_posDef_mul_lower [NeZero D]
   -- Step 3: Sphere is nonempty (finite-dimensional nontrivial space)
   have hne : (Metric.sphere (0 : Matrix (Fin D) (Fin D) ℂ) 1).Nonempty := by
     rw [NormedSpace.sphere_nonempty]; linarith
-  -- Step 4: f is positive on the sphere (from PosDef nondegeneracy)
+  -- Step 4: f is positive on the sphere, by the smallest-eigenvalue lower bound.
   have hfpos : ∀ B ∈ Metric.sphere (0 : Matrix (Fin D) (Fin D) ℂ) 1, 0 < f B := by
     intro B hB
     have hBne : B ≠ 0 := by
       intro h; simp [h] at hB
-    have hpsd : (Bᴴ * ρ * B).PosSemidef := hρ.posSemidef.conjTranspose_mul_mul_same B
-    have hre_nonneg : 0 ≤ f B := (RCLike.nonneg_iff.mp hpsd.trace_nonneg).1
-    rcases eq_or_lt_of_le hre_nonneg with h | h
-    · exfalso
-      have him : (Matrix.trace (Bᴴ * ρ * B)).im = 0 :=
-        (RCLike.nonneg_iff.mp hpsd.trace_nonneg).2
-      exact hBne (eq_zero_of_trace_conjTranspose_mul_posDef_mul_eq_zero ρ hρ B
-        (Complex.ext h.symm him))
-    · exact h
+    let lam : ℝ := minEigenvalue hρ.isHermitian
+    have hlam_pos : 0 < lam := minEigenvalue_pos_of_posDef hρ.isHermitian hρ
+    have hlower :
+        (↑lam : ℂ) * Matrix.trace (B * Bᴴ) ≤ Matrix.trace (Bᴴ * ρ * B) := by
+      simpa [lam, Matrix.conjTranspose_conjTranspose] using
+        (posDef_minEigenvalue_mul_trace_conjTranspose_mul_self_le (M := ρ) hρ Bᴴ)
+    have hBB_psd : (B * Bᴴ).PosSemidef := Matrix.posSemidef_self_mul_conjTranspose B
+    have hBB_trace_nonneg := RCLike.nonneg_iff.mp hBB_psd.trace_nonneg
+    have hBB_trace_ne : Matrix.trace (B * Bᴴ) ≠ 0 := by
+      intro htrace
+      exact hBne (Matrix.trace_mul_conjTranspose_self_eq_zero_iff.mp htrace)
+    have hBB_re_pos : 0 < (Matrix.trace (B * Bᴴ)).re := by
+      rcases eq_or_lt_of_le hBB_trace_nonneg.1 with hzero | hpos
+      · exact False.elim (hBB_trace_ne (Complex.ext hzero.symm hBB_trace_nonneg.2))
+      · exact hpos
+    have hleft_pos : 0 < (((↑lam : ℂ) * Matrix.trace (B * Bᴴ)).re) := by
+      have htrace_eq :
+          Matrix.trace (B * Bᴴ) = ((Matrix.trace (B * Bᴴ)).re : ℂ) :=
+        Complex.ext rfl hBB_trace_nonneg.2
+      rw [htrace_eq, ← Complex.ofReal_mul, Complex.ofReal_re]
+      exact mul_pos hlam_pos hBB_re_pos
+    exact lt_of_lt_of_le hleft_pos ((Complex.le_def.mp hlower).1)
   -- Step 5: Get minimum on compact sphere
   obtain ⟨B₀, hB₀mem, hB₀min⟩ :=
     hcomp.exists_isMinOn hne hfcont.continuousOn
