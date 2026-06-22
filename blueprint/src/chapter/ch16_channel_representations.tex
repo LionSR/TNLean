@@ -1553,9 +1553,33 @@ This section states the existence theorems from
     and cycling the trace gives the displayed inequality.
 \end{proof}
 
+\begin{lemma}[Determinant AM--GM Hilbert--Schmidt bound]
+\label{lem:det_amgm_hilbert_schmidt_bound}
+    \lean{Matrix.card_le_trace_conjTranspose_mul_self_re_of_det_norm_eq_one}
+    \leanok
+    Let $A\in \MN{D}$ with $D\geq 1$. If $|\det A|=1$, then
+    \[
+        D \leq \tr(A^{\dagger}A).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The matrix $A^{\dagger}A$ is positive semidefinite and has determinant
+    $|\det A|^{2}=1$. Thus the product of its Hermitian eigenvalues is one.
+    Denoting the eigenvalues of $A^{\dagger}A$ by
+    $\lambda_{1},\ldots,\lambda_{D}\geq 0$, the arithmetic-geometric mean
+    inequality gives
+    \[
+        \frac{\lambda_{1}+\cdots+\lambda_{D}}{D}
+        \geq(\lambda_{1}\cdots\lambda_{D})^{1/D}=1,
+    \]
+    so $\tr(A^{\dagger}A)=\lambda_{1}+\cdots+\lambda_{D}\geq D$.
+\end{proof}
+
 % Lean: Wolf.infimum_is_attained
 \begin{lemma}[Infimum attainment for SL-filterings]\label{lem:infimum_is_attained}
-    \uses{lem:posdef_trace_lower_bound}
+    \uses{lem:posdef_trace_lower_bound, lem:det_amgm_hilbert_schmidt_bound}
     For a positive-definite Choi matrix $\tau$, the infimum of
     $\tr\![(S_{2} \otimes_{k} S_{1}) \tau (S_{2} \otimes_{k} S_{1})^{\dagger}]$
     over $S_{1}, S_{2} \in \MN{D}$ with $\det S_{1} = \det S_{2} = 1$

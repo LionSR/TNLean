@@ -7,7 +7,6 @@ import TNLean.Algebra.MatrixAux
 import Mathlib.Analysis.Complex.Polynomial.Basic
 import Mathlib.Analysis.InnerProductSpace.Positive
 import Mathlib.Analysis.InnerProductSpace.Trace
-import Mathlib.Analysis.MeanInequalities
 import Mathlib.LinearAlgebra.Matrix.Charpoly.Eigs
 
 /-!
@@ -135,46 +134,8 @@ theorem sum_stdBasis_mul_conjTranspose :
 private lemma matrix_det_norm_one_trace_conjTranspose_mul_self_ge [NeZero d]
     (A : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) (hdet : ‖A.det‖ = 1) :
     (d : ℝ) ^ 2 ≤ (Matrix.trace (Aᴴ * A)).re := by
-  let B : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ := Aᴴ * A
-  have hBherm : B.IsHermitian := by
-    simpa only using Matrix.isHermitian_conjTranspose_mul_self A
-  have hBpsd : B.PosSemidef := by
-    simpa only using Matrix.posSemidef_conjTranspose_mul_self A
-  have hdetB : Matrix.det B = 1 := by
-    change Matrix.det (Aᴴ * A) = 1
-    rw [Matrix.det_mul, Matrix.det_conjTranspose]
-    have hconj : star A.det * A.det = ((‖A.det‖ ^ 2 : ℝ) : ℂ) := by
-      simpa [Complex.star_def, Complex.normSq_eq_norm_sq] using
-        (Complex.normSq_eq_conj_mul_self (z := A.det)).symm
-    rw [hconj, hdet]
-    norm_num
-  have hprod_eq : ∏ i, hBherm.eigenvalues i = 1 := by
-    have h : Matrix.det B = ∏ i, (hBherm.eigenvalues i : ℂ) := hBherm.det_eq_prod_eigenvalues
-    rw [hdetB] at h
-    have h' : ((∏ i, hBherm.eigenvalues i : ℝ) : ℂ) = 1 := by
-      simpa only [Complex.ofReal_prod] using h.symm
-    exact_mod_cast h'
-  have hd_pos : 0 < (d : ℝ) := by
-    exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne d)
-  have hamgm : 1 ≤ (∑ i, hBherm.eigenvalues i) / ((d : ℝ) * d) := by
-    have := Real.geom_mean_le_arith_mean (s := Finset.univ) (w := fun _ => (1 : ℝ))
-      (z := fun i => hBherm.eigenvalues i)
-      (by intro i hi; positivity)
-      (by
-        simp only [Finset.sum_const, Finset.card_univ, Fintype.card_prod,
-          Fintype.card_fin, nsmul_eq_mul, Nat.cast_mul, mul_one, mul_self_pos,
-          ne_eq, Nat.cast_eq_zero, NeZero.ne d, not_false_eq_true])
-      (by intro i hi; simpa only using hBpsd.eigenvalues_nonneg i)
-    simpa only [ge_iff_le, Real.rpow_one, hprod_eq, Finset.sum_const,
-      Finset.card_univ, Fintype.card_prod, Fintype.card_fin, nsmul_eq_mul,
-      Nat.cast_mul, mul_one, _root_.mul_inv_rev, Real.one_rpow, one_mul] using this
-  have hmul_pos : 0 < (d : ℝ) * d := mul_pos hd_pos hd_pos
-  have hsum_ge : (d : ℝ) * d ≤ ∑ i, hBherm.eigenvalues i :=
-    (one_le_div hmul_pos).mp hamgm
-  have htrace_eq : (Matrix.trace B).re = ∑ i, hBherm.eigenvalues i := by
-    simpa only [Complex.coe_algebraMap, Complex.re_sum, Complex.ofReal_re] using
-      congrArg Complex.re hBherm.trace_eq_sum_eigenvalues
-  simpa only [pow_two, ge_iff_le] using hsum_ge.trans_eq htrace_eq.symm
+  have h := Matrix.card_le_trace_conjTranspose_mul_self_re_of_det_norm_eq_one A hdet
+  simpa only [Fintype.card_prod, Fintype.card_fin, Nat.cast_mul, pow_two] using h
 
 /-- **AM-GM lower bound on Hilbert-Schmidt norm via determinant.**
 
