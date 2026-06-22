@@ -117,9 +117,11 @@ lemma convexOn_cfc_rpowIntegrand₁₂ {p t : ℝ} (ht : 0 < t) :
     have hcont_inv : ContinuousOn (fun z : ℝ => t ^ p * (t + z)⁻¹ - t ^ (p - 1))
         (spectrum ℝ x) := (continuousOn_const.mul hg).sub continuousOn_const
     rw [cfc_add (a := x) (f := fun z : ℝ => t ^ (p - 2) * z)
-        (g := fun z : ℝ => t ^ p * (t + z)⁻¹ - t ^ (p - 1)) (hf := hcont_lin) (hg := hcont_inv)]
+        (g := fun z : ℝ => t ^ p * (t + z)⁻¹ - t ^ (p - 1))
+        (hf := hcont_lin) (hg := hcont_inv)]
     rw [cfc_const_mul (t ^ (p - 2)) (fun z : ℝ => z) x, cfc_id' (R := ℝ) (a := x)]
-    rw [cfc_sub (a := x) (f := fun z : ℝ => t ^ p * (t + z)⁻¹) (g := fun z : ℝ => t ^ (p - 1))]
+    rw [cfc_sub (a := x) (f := fun z : ℝ => t ^ p * (t + z)⁻¹)
+        (g := fun z : ℝ => t ^ (p - 1))]
     rw [cfc_const_mul (t ^ p) (fun z : ℝ => (t + z)⁻¹) x]
     rw [cfc_inv (f := fun z : ℝ => t + z) (a := x) hspectrum]
     rw [cfc_const_add t (fun z : ℝ => z) x, cfc_id' (R := ℝ) (a := x)]
