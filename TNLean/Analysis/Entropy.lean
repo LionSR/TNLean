@@ -5,8 +5,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.Matrix.Spectrum
 import Mathlib.Analysis.SpecialFunctions.Log.NegMulLog
+import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Basic
+import Mathlib.Analysis.CStarAlgebra.Matrix
 import TNLean.Channel.Basic
 import TNLean.Channel.PartialTrace
+import TNLean.Analysis.TraceCFC
 
 /-!
 # Von Neumann entropy, partial traces, and mutual information
@@ -100,6 +103,45 @@ theorem vonNeumannEntropy_congr {ρ₁ ρ₂ : Matrix n n ℂ} (h : ρ₁ = ρ�
     exact (Matrix.isHermitian_zero (n := n) (α := ℂ)).eigenvalues_eq_zero_iff.mpr rfl
   rw [hzero]
   simp [Real.negMulLog_zero]
+
+open scoped Matrix.Norms.L2Operator in
+/-- **Equality of the eigenvalue-sum and trace-`log` forms of the von Neumann
+entropy.** For a Hermitian matrix `ρ`,
+`S(ρ) = -(tr(ρ · log ρ)).re`, where `log` is the matrix logarithm `CFC.log`
+from the continuous functional calculus. This identifies the spectral definition
+`vonNeumannEntropy ρ = ∑ᵢ negMulLog(λᵢ)` with the trace-`log` form used in the
+quantum relative-entropy / strong-subadditivity development.
+
+On a matrix the spectrum is finite, so the functional calculus is multiplicative
+without any continuity hypothesis: `ρ · CFC.log ρ = cfc (fun x ↦ x · log x) ρ`.
+Taking the trace of the latter yields the spectral sum `∑ᵢ λᵢ log λᵢ`, the
+negative of `∑ᵢ negMulLog λᵢ`. The zero eigenvalues are handled by the
+convention `0 · log 0 = 0 = negMulLog 0`, so the identity holds for density
+matrices in particular (positive semidefinite, trace `1`).
+
+Both `CFC.log ρ` and `vonNeumannEntropy ρ` are built from Mathlib's `Real.log`,
+which is the *totalized* logarithm: `Real.log x = Real.log |x|` and
+`Real.log 0 = 0`. The two sides therefore use the same convention on every
+eigenvalue, so the equality is an honest identity for an arbitrary Hermitian
+matrix. It coincides with the physical von Neumann entropy `-tr(ρ log ρ)`
+precisely when `ρ` is positive semidefinite, where every eigenvalue is
+nonnegative; for a Hermitian matrix with a negative eigenvalue both sides
+evaluate the totalized log and the common value is not the physical entropy.
+
+Source: standard; blueprint `thm:entropy_eq_neg_trace_mul_log`. -/
+theorem vonNeumannEntropy_eq_neg_trace_mul_log
+    {ρ : Matrix n n ℂ} (hρ : ρ.IsHermitian) :
+    vonNeumannEntropy ρ hρ = -(Matrix.trace (ρ * CFC.log ρ)).re := by
+  -- Simultaneous diagonalization turns `ρ · log ρ` into `cfc (fun x ↦ x · log x)`.
+  have key : ρ * CFC.log ρ = hρ.cfc (fun x => x * Real.log x) := by
+    rw [show CFC.log ρ = hρ.cfc Real.log from by
+          rw [CFC.log]; exact Matrix.IsHermitian.cfc_eq hρ Real.log]
+    exact hρ.self_mul_cfc Real.log
+  rw [vonNeumannEntropy, key]
+  have htr := hρ.trace_cfc_eq_sum_re (fun x => x * Real.log x)
+  rw [RCLike.re_eq_complex_re] at htr
+  rw [htr, ← Finset.sum_neg_distrib]
+  exact Finset.sum_congr rfl fun i _ => by simp only [Real.negMulLog]; ring
 
 /-- The von Neumann entropy depends only on the characteristic polynomial: it is
 the `negMulLog`-sum of the (real parts of the) roots of `charpoly`. -/
