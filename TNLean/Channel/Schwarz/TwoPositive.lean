@@ -346,14 +346,14 @@ omit [DecidableEq n] [Fintype n] in
 Wolf Chapter 3, Equation (3.3), treats the `k`-positive maps as closed convex
 cones.  This proves the closedness part for the topology inherited from the
 finite-dimensional space of linear maps. -/
-theorem isClosed_setOf_isNPositiveMap (D k : ℕ) :
-    IsClosed {E : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ |
+theorem isClosed_setOf_isNPositiveMap [Finite n] (k : ℕ) :
+    IsClosed {E : Matrix n n ℂ →L[ℂ] Matrix n n ℂ |
       IsNPositiveMap k E.toLinearMap} := by
   classical
-  let ampEval (X : Matrix (Fin D × Fin k) (Fin D × Fin k) ℂ) :
-      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) →ₗ[ℂ]
-        Matrix (Fin D × Fin k) (Fin D × Fin k) ℂ :=
-    { toFun := fun E => Matrix.of fun (ip : Fin D × Fin k) (jq : Fin D × Fin k) =>
+  let ampEval (X : Matrix (n × Fin k) (n × Fin k) ℂ) :
+      (Matrix n n ℂ →L[ℂ] Matrix n n ℂ) →ₗ[ℂ]
+        Matrix (n × Fin k) (n × Fin k) ℂ :=
+    { toFun := fun E => Matrix.of fun (ip : n × Fin k) (jq : n × Fin k) =>
         (E (Matrix.of fun i j => X (i, ip.2) (j, jq.2))) ip.1 jq.1
       map_add' := by
         intro E F
@@ -364,9 +364,9 @@ theorem isClosed_setOf_isNPositiveMap (D k : ℕ) :
         ext ip jq
         simp }
   have hset :
-      {E : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ |
+      {E : Matrix n n ℂ →L[ℂ] Matrix n n ℂ |
         IsNPositiveMap k E.toLinearMap}
-        = ⋂ (X : Matrix (Fin D × Fin k) (Fin D × Fin k) ℂ),
+        = ⋂ (X : Matrix (n × Fin k) (n × Fin k) ℂ),
           ⋂ (_hX : X.PosSemidef), {E | (ampEval X E).PosSemidef} := by
     ext E
     simp [IsNPositiveMap, ampEval]
