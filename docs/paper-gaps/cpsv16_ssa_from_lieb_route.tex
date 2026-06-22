@@ -92,11 +92,45 @@ chain of them. In source order the chain is the following.
     $\sigma_{ABC} = (\mathbf 1_A / d_A) \otimes \rho_{BC}$, the tensor product of
     the maximally mixed state $\mathbf 1_A / d_A$ on $\mathcal H_A$
     ($d_A = \dim \mathcal H_A$) with the reduced state $\rho_{BC}$ on
-    $\mathcal H_B \otimes \mathcal H_C$; this $\sigma_{ABC}$ is a density operator,
-    so it lies in the domain of the relative entropy defined in layer (2). Since
+    $\mathcal H_B \otimes \mathcal H_C$. Being a density operator is \emph{not}
+    enough to place the pair $(\rho_{ABC},\sigma_{ABC})$ in the domain fixed in
+    layer (2): that domain is the kernel-containment condition
+    $\ker\sigma_{ABC} \subseteq \ker\rho_{ABC}$, and as soon as $\rho_{BC}$ fails
+    to be full rank the reference state $\sigma_{ABC}$ is singular, so the
+    condition is a genuine hypothesis to be discharged and is also what licenses
+    the displayed logarithm. The containment is supplied by the following
+    \emph{marginal support lemma}: for any density operator $\rho_{ABC}\ge 0$ with
+    marginal $\rho_{BC} = \tr_A \rho_{ABC}$,
+    \begin{align}
+      \mathcal H_A \otimes \ker\rho_{BC} \subseteq \ker\rho_{ABC},
+      \qquad\text{equivalently}\qquad
+      \operatorname{supp}\rho_{ABC} \subseteq
+        \mathcal H_A \otimes \operatorname{supp}\rho_{BC}.
+      \label{eq:marginal-support}
+    \end{align}
+    To see~\eqref{eq:marginal-support}, let $P_{BC}$ be the projection onto
+    $\operatorname{supp}\rho_{BC}$ and $Q = \mathbf 1_A \otimes (\mathbf 1_{BC} -
+    P_{BC})$ the projection onto $\mathcal H_A \otimes \ker\rho_{BC}$. Using
+    $\tr_A \rho_{ABC} = \rho_{BC}$ and $(\mathbf 1_{BC} - P_{BC})\,\rho_{BC} = 0$,
+    \begin{align}
+      \tr\bigl(Q\,\rho_{ABC}\bigr)
+        = \tr\bigl((\mathbf 1_{BC} - P_{BC})\,\tr_A\rho_{ABC}\bigr)
+        = \tr\bigl((\mathbf 1_{BC} - P_{BC})\,\rho_{BC}\bigr) = 0 .
+    \end{align}
+    Since $\rho_{ABC}\ge 0$ and $Q$ is a projection,
+    $\tr(Q\,\rho_{ABC}) = \lVert Q\,\rho_{ABC}^{1/2}\rVert_2^2 = 0$ forces
+    $Q\,\rho_{ABC}^{1/2} = 0$, hence $Q\,\rho_{ABC} = 0$, so the range of $Q$ ---
+    namely $\mathcal H_A \otimes \ker\rho_{BC}$ --- lies in $\ker\rho_{ABC}$.
+    Because $\mathbf 1_A / d_A$ is full rank we have $\ker\sigma_{ABC} =
+    \mathcal H_A \otimes \ker\rho_{BC}$, so~\eqref{eq:marginal-support} gives
+    exactly $\ker\sigma_{ABC} \subseteq \ker\rho_{ABC}$ and places the pair in the
+    domain of layer (2). On $\operatorname{supp}\sigma_{ABC}$, where the relative
+    entropy is evaluated, the logarithm splits as
     $\log\bigl((\mathbf 1_A / d_A) \otimes \rho_{BC}\bigr)
-      = -(\log d_A)\,\mathbf 1_{ABC} + \mathbf 1_A \otimes \log\rho_{BC}$,
-    the relative entropy evaluates to
+      = -(\log d_A)\,\mathbf 1_{ABC} + \mathbf 1_A \otimes \log\rho_{BC}$
+    (with $\log\rho_{BC}$ taken on $\operatorname{supp}\rho_{BC}$), and the
+    support condition guarantees $\rho_{ABC}$ carries no weight off this support,
+    so the relative entropy evaluates to
     \begin{align}
       D\bigl(\rho_{ABC} \,\|\, (\mathbf 1_A / d_A) \otimes \rho_{BC}\bigr)
         = \log d_A + S(\rho_{BC}) - S(\rho_{ABC}).
@@ -104,7 +138,10 @@ chain of them. In source order the chain is the following.
     Applying the partial trace $\Lambda = \tr_C$ sends
     $\rho_{ABC} \mapsto \rho_{AB}$ and
     $(\mathbf 1_A / d_A) \otimes \rho_{BC} \mapsto
-    (\mathbf 1_A / d_A) \otimes \rho_{B}$, so the image relative entropy is
+    (\mathbf 1_A / d_A) \otimes \rho_{B}$. The image pair inherits its own support
+    condition from~\eqref{eq:marginal-support} applied to $\rho_{AB}$ with
+    marginal $\rho_{B} = \tr_A\rho_{AB}$, so it again lies in the domain of layer
+    (2) and the image relative entropy is
     \begin{align}
       D\bigl(\rho_{AB} \,\|\, (\mathbf 1_A / d_A) \otimes \rho_{B}\bigr)
         = \log d_A + S(\rho_{B}) - S(\rho_{AB}).
@@ -146,7 +183,10 @@ in place. Concretely:
     = D(\rho\,\|\,\sigma)$ into the partial-trace monotonicity statement via the
     twirling representation of $\tr_C$.
   \item Layer (6) instantiates layer (5) at the tripartite splitting to
-    recover~\eqref{eq:ssa}.
+    recover~\eqref{eq:ssa}; it additionally needs the marginal support
+    lemma~\eqref{eq:marginal-support}, which puts the singular reference state
+    $(\mathbf 1_A/d_A)\otimes\rho_{BC}$ into the domain of layer (2) and so is a
+    prerequisite of the instantiation rather than a consequence of normalization.
 \end{itemize}
 
 After layer (6) the inequality is a theorem, the standalone axiom is removed, and
