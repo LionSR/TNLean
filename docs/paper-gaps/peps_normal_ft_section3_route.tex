@@ -2806,7 +2806,21 @@ repeated-tensor construction discussed above is also formalized as
 The remaining work is the PEPS-specific two-directional closure: the horizontal
 and vertical gauge telescopings must be made compatible around plaquettes and
 periodic seams, and their residual virtual operations must be absorbed into one
-site-independent 2D tensor. The blueprint records the restricted target as
+site-independent 2D tensor. In the notation of the blueprint proof sketch,
+writing
+\[
+    H_{j,k}=R^{(j,k)}_h\bigl(L^{(j+1,k)}_h\bigr)^{-1},
+    \qquad
+    V_{j,k}=R^{(j,k)}_v\bigl(L^{(j,k+1)}_v\bigr)^{-1},
+\]
+the missing plaquette flatness relation is the scalar commutation condition
+\[
+    H_{j,k}V_{j+1,k}
+    =\lambda_{j,k}\,V_{j,k}H_{j,k+1}
+\]
+for nonzero scalars \(\lambda_{j,k}\), together with the analogous scalar
+closure of the horizontal and vertical loop products at the periodic seams.
+The blueprint records the restricted target as
 \path{cor:exists_constant_injectivePEPS_of_translationInvariantState}, marked
 not ready.
 
