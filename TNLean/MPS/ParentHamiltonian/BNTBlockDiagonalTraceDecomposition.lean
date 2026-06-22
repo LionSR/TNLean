@@ -350,6 +350,91 @@ theorem blockDiagonal_boundary_crossing_trace_decomposition_of_boundary
       simp [σ, hlt]
   simpa [hHead, hMiddle, hTail, Matrix.mul_assoc] using hTrace σ
 
+/-- A fixed block-diagonal boundary representation gives fixed-tail boundary
+trace comparisons for all boundary-crossing intervals.
+
+The preceding fixed-interval construction may be chosen for every crossing
+start \(i\) and every outside word \(\rho\) at once. Thus, under the same
+explicit boundary representation
+\[
+  \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right),
+\]
+there are matrices \(C^j_{i,\rho}\) such that, whenever \(N<i+L\),
+\[
+  \sum_j\operatorname{tr}(A^j_\beta C^j_{i,\rho}A^j_w)
+  =
+  \sum_j\operatorname{tr}\bigl(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_w\bigr)
+\]
+for every word \(\beta\) before the cut and every wrapped tail word \(w\) of
+length \(N-i\).
+
+This is the family form of the explicit-boundary trace-decomposition step in
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1436--1451, specialized to
+the block-diagonal boundary conditions in arXiv:2011.12127, Section IV.C,
+lines 2126--2128. It is still a fixed wrapped-tail statement; it does not
+replace the separate common product-spanning length hypothesis.
+
+**Scope restriction (boundary representation):** The block-diagonal boundary
+representation of \(\psi\) is a hypothesis here. Removing this remaining input
+is tracked in issue 2971 and documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
+theorem blockDiagonal_boundary_crossing_trace_decompositions_of_boundary
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hμ : ∀ k : Fin r, μ k ≠ 0)
+    {L N : ℕ} [NeZero d] (hN : 0 < N) (hLN : L ≤ N)
+    {ψ : NSiteSpace d N}
+    (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N)
+    (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (hψX :
+      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
+        ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X))) :
+    ∃ C : ∀ (j : Fin r) (_ : Fin N),
+        (Fin (N - L) → Fin d) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+      ∀ i : Fin N,
+        N < i.val + L →
+          ∀ ρ : Fin (N - L) → Fin d,
+            ∀ β : Fin (i.val + L - N) → Fin d,
+              ∀ w : Fin (N - i.val) → Fin d,
+                (∑ j : Fin r,
+                  Matrix.trace
+                    ((evalWord (A j) (List.ofFn β) * C j i ρ) *
+                      evalWord (A j) (List.ofFn w))) =
+                (∑ j : Fin r,
+                  Matrix.trace
+                    ((((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β) *
+                        evalWord (A j) (List.ofFn ρ)) *
+                      evalWord (A j) (List.ofFn w))) := by
+  classical
+  have hExists :
+      ∀ i : Fin N, ∀ ρ : Fin (N - L) → Fin d,
+        ∃ C : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+          N < i.val + L →
+            ∀ β : Fin (i.val + L - N) → Fin d,
+              ∀ w : Fin (N - i.val) → Fin d,
+                (∑ j : Fin r,
+                  Matrix.trace
+                    ((evalWord (A j) (List.ofFn β) * C j) *
+                      evalWord (A j) (List.ofFn w))) =
+                (∑ j : Fin r,
+                  Matrix.trace
+                    ((((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β) *
+                        evalWord (A j) (List.ofFn ρ)) *
+                      evalWord (A j) (List.ofFn w))) := by
+    intro i ρ
+    by_cases hi : N < i.val + L
+    · obtain ⟨C, hC⟩ :=
+        blockDiagonal_boundary_crossing_trace_decomposition_of_boundary
+          μ A hμ hN hLN hψ X hψX i hi ρ
+      exact ⟨C, fun _ => hC⟩
+    · refine ⟨fun _ => 0, ?_⟩
+      intro hcross
+      exact False.elim (hi hcross)
+  choose C hC using hExists
+  refine ⟨fun j i ρ => C i ρ j, ?_⟩
+  intro i hi ρ β w
+  exact hC i ρ hi β w
+
 /-- The \(C^j,D^j\) boundary comparison gives periodic single-block states
 from an explicit block-diagonal boundary representation.
 
