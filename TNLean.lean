@@ -158,6 +158,7 @@ import TNLean.Spectral.QuantitativeGap
 import TNLean.MPS.Defs
 import TNLean.MPS.OpenBoundary
 import TNLean.MPS.Core.RepeatedWord
+import TNLean.MPS.Core.CyclicTrace
 import TNLean.MPS.Tactic.Basic
 import TNLean.MPS.Chain.Defs
 import TNLean.MPS.Chain.VirtualInsertion
