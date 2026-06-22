@@ -340,6 +340,40 @@ theorem IsNPositiveMap.smul_nonneg {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n �
   ext ip jq
   simp
 
+omit [DecidableEq n] [Fintype n] in
+/-- The set of `k`-positive maps is closed.
+
+Wolf Chapter 3, Equation (3.3), treats the `k`-positive maps as closed convex
+cones.  This proves the closedness part for the topology inherited from the
+finite-dimensional space of linear maps. -/
+theorem isClosed_setOf_isNPositiveMap (D k : ℕ) :
+    IsClosed {E : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ |
+      IsNPositiveMap k E.toLinearMap} := by
+  classical
+  let ampEval (X : Matrix (Fin D × Fin k) (Fin D × Fin k) ℂ) :
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) →ₗ[ℂ]
+        Matrix (Fin D × Fin k) (Fin D × Fin k) ℂ :=
+    { toFun := fun E => Matrix.of fun (ip : Fin D × Fin k) (jq : Fin D × Fin k) =>
+        (E (Matrix.of fun i j => X (i, ip.2) (j, jq.2))) ip.1 jq.1
+      map_add' := by
+        intro E F
+        ext ip jq
+        simp
+      map_smul' := by
+        intro c E
+        ext ip jq
+        simp }
+  have hset :
+      {E : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ |
+        IsNPositiveMap k E.toLinearMap}
+        = ⋂ (X : Matrix (Fin D × Fin k) (Fin D × Fin k) ℂ),
+          ⋂ (_hX : X.PosSemidef), {E | (ampEval X E).PosSemidef} := by
+    ext E
+    simp [IsNPositiveMap, ampEval]
+  rw [hset]
+  exact isClosed_iInter fun X => isClosed_iInter fun _hX =>
+    matrix_isClosed_posSemidef.preimage ((ampEval X).continuous_of_finiteDimensional)
+
 omit [DecidableEq n] in
 /-- CP maps are 2-positive. -/
 theorem IsCPMap.is2PositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
