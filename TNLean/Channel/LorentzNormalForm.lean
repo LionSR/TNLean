@@ -62,18 +62,6 @@ open scoped Matrix BigOperators ComplexOrder Kronecker Matrix.Norms.Frobenius
 open Matrix Finset
 open ChoiJamiolkowski
 
-/-- The Kronecker product is jointly continuous in both of its matrix factors.
-
-This is the entrywise statement: each entry of `A x ⊗ₖ B x` is a product of one
-entry of `A x` and one entry of `B x`, both continuous in `x`. -/
-theorem Continuous.matrix_kronecker {X l m p q : Type*} [TopologicalSpace X]
-    {α : Type*} [TopologicalSpace α] [Mul α] [ContinuousMul α]
-    {A : X → Matrix l m α} {B : X → Matrix p q α}
-    (hA : Continuous A) (hB : Continuous B) :
-    Continuous fun x => (A x) ⊗ₖ (B x) := by
-  refine continuous_matrix fun i j => ?_
-  exact (hA.matrix_elem i.1 j.1).mul (hB.matrix_elem i.2 j.2)
-
 namespace Wolf
 
 section FilteringOperations
@@ -181,17 +169,16 @@ its minimum on the domain of SL(n, ℂ) × SL(n, ℂ).
 **Proof** (Wolf Section 2.3).  Throughout, `‖·‖` denotes the Frobenius
 (Hilbert–Schmidt) norm `‖M‖² = tr[M M†]`; the coercivity bounds below are false
 for the operator norm (e.g. `‖I‖_op² = 1 < n`).  Writing `X = S₂ ⊗ₖ S₁`, the
-smallest-eigenvalue bound `posDef_minEigenvalue_mul_trace_conjTranspose_mul_self_le`
-gives `λ_min(τ) · tr[Xᴴ X] ≤ tr[X τ Xᴴ]`, Hilbert–Schmidt multiplicativity
-`trace_conjTranspose_mul_self_re_kronecker` gives
-`tr[Xᴴ X] = tr[S₂ᴴ S₂] · tr[S₁ᴴ S₁]`, and the determinant AM–GM estimate
-`card_le_trace_conjTranspose_mul_self_re_of_det_norm_eq_one` gives
-`tr[Sᵢᴴ Sᵢ] = ‖Sᵢ‖² ≥ n` whenever `det Sᵢ = 1`.  Combining these,
-`tr[X τ Xᴴ] ≥ λ_min(τ) · n · ‖Sᵢ‖²` for each factor, so any minimiser is confined
-to the bounded set `{S | ‖S‖ ≤ C}`.  Intersecting with the closed set `det S = 1`
-gives a compact set on which the continuous trace functional attains its minimum
-(`IsCompact.exists_isMinOn`); a value outside the sublevel set is automatically
-larger than the value at the identity, so this minimiser is global. -/
+smallest-eigenvalue bound for a positive-definite matrix gives
+`λ_min(τ) · tr[Xᴴ X] ≤ tr[X τ Xᴴ]`, Hilbert–Schmidt multiplicativity of the
+Kronecker product gives `tr[Xᴴ X] = tr[S₂ᴴ S₂] · tr[S₁ᴴ S₁]`, and the determinant
+AM–GM estimate gives `tr[Sᵢᴴ Sᵢ] = ‖Sᵢ‖² ≥ n` whenever `det Sᵢ = 1`.  Combining
+these, `tr[X τ Xᴴ] ≥ λ_min(τ) · n · ‖Sᵢ‖²` for each factor, so any minimiser is
+confined to the bounded set `{S | ‖S‖ ≤ C}`.  Intersecting with the closed set
+`det S = 1` gives a compact set on which the continuous trace functional attains
+its minimum by the extreme value theorem; a value outside the sublevel set is
+automatically larger than the value at the identity, so this minimiser is
+global. -/
 lemma infimum_is_attained
     {τ : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ}
     (hτ_posDef : τ.PosDef) :
