@@ -366,14 +366,14 @@ def PeripheralEqualCaseZGaugeOfSameMPV (d D p : ℕ) : Prop :=
 Applying the periodic equal-case Fundamental Theorem at the blocked physical
 dimension `blockPhysDim d p` gives the blocked `Z`-gauge once both tensors are
 already known to be in irreducible form. The irreducible-form hypothesis for
-`blockTensor A p` is an explicit input here; it is not transported from
-`SameMPV C (blockTensor A p)`.
+the \(p\)-blocked root is an explicit input here; it is not obtained from
+equality of MPV families.
 
 This theorem is therefore only the equal-case FT application step. The remaining
-canonicalization problem is to construct genuine irreducible-form data for the
-blocked root appearing in the refinement argument. -/
+canonicalization problem is to prove that the blocked root appearing in the
+refinement argument is in irreducible form. -/
 theorem peripheralEqualCaseZGaugeOfSameMPV_of_periodicEqualCaseFT
-    (hFT : PeriodicEqualCaseFT (blockPhysDim d p) D)
+    (p : ℕ) (hFT : PeriodicEqualCaseFT (blockPhysDim d p) D)
     {A : MPSTensor d D} {C : MPSTensor (blockPhysDim d p) D}
     (hC : IsIrreducibleForm C)
     (hBlock : IsIrreducibleForm (blockTensor A p))
