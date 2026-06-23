@@ -658,6 +658,25 @@ maps.
     Theorem~\ref{thm:choi_right_tensor_sandwich}.
 \end{proof}
 
+\begin{lemma}[Rank-$k$ projection fixing a rectangular right factor]
+    \label{lem:rank_k_projection_fixing_rectangular_factor}
+    \lean{Matrix.exists_isHermitian_idempotent_rank_mul_eq_self}
+    \leanok
+    Let $X\in\MN{D,k}(\C)$ and suppose $k\le D$.  Then there exists a
+    Hermitian projection $P\in\MN{D,D}(\C)$ of rank $k$ such that
+    \[
+      PX=X.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The column space of $X$ has dimension at most $k$.  Since $k\le D$, extend
+    this column space to a $k$-dimensional subspace $U\subseteq\C^D$.  Let $P$
+    be the orthogonal projection onto $U$.  Then $P$ is Hermitian and
+    idempotent, its rank is $\dim U=k$, and it fixes each column of $X$.
+\end{proof}
+
 \begin{lemma}[Right-tensor factorization for $VV^\dagger$]
     \label{lem:right_tensor_factorization_mul_adjoint}
     \lean{ChoiJamiolkowski.rightTensorMatrix_mul_conjTranspose_eq_conjTranspose_mul_self}
@@ -724,9 +743,6 @@ maps.
     The middle factor is positive by
     Theorem~\ref{thm:k_positive_right_tensor_choi_sandwiches}, and positive
     semidefiniteness is preserved under compression by $R_V$.
-    % The full rank-$k$ projection form of
-    % \cite[Chapter~3, Proposition~3.1]{Wolf2012Quantum} requires a separate
-    % factorization of arbitrary rank-$k$ orthogonal projections.
 \end{proof}
 
 \begin{lemma}[Rank-$k$ Hermitian projection factorization]
@@ -772,9 +788,57 @@ maps.
     By Lemma~\ref{lem:rank_k_hermitian_projection_factorization}, write
     $P=VV^\dagger$ with $V\in\MN{D,k}(\C)$.  The conclusion is then exactly
     Theorem~\ref{thm:factorized_right_projection_choi_sandwich}.
-    % The reverse implication in the full equivalence of
-    % \cite[Chapter~3, Proposition~3.1]{Wolf2012Quantum} is a separate
-    % rectangular-compression reconstruction step.
+\end{proof}
+
+\begin{theorem}[Projection-compression converse for the Choi criterion]
+    \label{thm:rank_k_right_projection_choi_sandwich_converse}
+    \lean{ChoiJamiolkowski.isNPositiveMap_of_forall_rankProjection_rightTensor_choiMatrix_sandwich_posSemidef}
+    \leanok
+    \uses{thm:k_positive_iff_right_choi_compressions,
+        lem:square_sandwich_fixed_rectangular_compression,
+        lem:rank_k_projection_fixing_rectangular_factor}
+    Assume $D>0$ and $k\le D$.  Let $T:\MN{D,D}(\C)\to\MN{D,D}(\C)$ have
+    Choi matrix $\tau$.  Suppose that
+    \[
+      R_P\tau R_P^\dagger\geq0
+    \]
+    for every Hermitian projection $P\in\MN{D,D}(\C)$ of rank $k$.  Then $T$
+    is $k$-positive.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By the rectangular compression criterion, it is enough to prove positivity
+    of the right-factor compression by an arbitrary $X\in\MN{D,k}(\C)$.  Choose
+    a rank-$k$ Hermitian projection $P$ with $PX=X$ using
+    Lemma~\ref{lem:rank_k_projection_fixing_rectangular_factor}.  The assumed
+    positivity of $R_P\tau R_P^\dagger$, together with
+    Lemma~\ref{lem:square_sandwich_fixed_rectangular_compression}, gives
+    positivity of the rectangular compression by $X$.
+\end{proof}
+
+\begin{theorem}[Rank-$k$ projection form of the Choi criterion]
+    \label{thm:rank_k_right_projection_choi_criterion}
+    \lean{ChoiJamiolkowski.isNPositiveMap_iff_forall_rankProjection_rightTensor_choiMatrix_sandwich_posSemidef}
+    \leanok
+    \uses{thm:rank_k_right_projection_choi_sandwich_forward,
+        thm:rank_k_right_projection_choi_sandwich_converse}
+    Assume $D>0$ and $k\le D$.  A linear map
+    $T:\MN{D,D}(\C)\to\MN{D,D}(\C)$ is $k$-positive if and only if, for every
+    Hermitian projection $P\in\MN{D,D}(\C)$ of rank $k$,
+    \[
+      R_P\tau R_P^\dagger\geq0,
+    \]
+    where $\tau$ is the Choi matrix of $T$.  This is the rank-$k$ projection
+    formulation of \cite[Chapter~3, Proposition~3.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The forward direction is
+    Theorem~\ref{thm:rank_k_right_projection_choi_sandwich_forward}.  The
+    reverse direction is
+    Theorem~\ref{thm:rank_k_right_projection_choi_sandwich_converse}.
 \end{proof}
 
 \begin{definition}[Trace-pairing adjoint]\label{def:trace_pairing_adjoint}
