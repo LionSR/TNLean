@@ -285,6 +285,31 @@ noncomputable def AppendixBStructuralData.coreTensor {A : MPSTensor d D}
     hStruct.coreTensor i = Matrix.diagonal (fun k => (hStruct.Λ k : ℂ)) * hStruct.U i :=
   rfl
 
+/-- The Appendix B pair-index orthogonality for the core tensor \(\Lambda U^i\).
+
+Source: arXiv:1606.00608, lines 543--555, especially the source unit
+pair-index isometry equation.  Multiplication by \(\Lambda\) on the left
+weights the two virtual left indices. -/
+theorem AppendixBStructuralData.coreTensor_pair_orthogonality
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
+    (p q : Fin D × Fin D) :
+    ∑ i : Fin d, star (hStruct.coreTensor i p.1 p.2) *
+        hStruct.coreTensor i q.1 q.2 =
+      (hStruct.Λ p.1 : ℂ) * (hStruct.Λ q.1 : ℂ) *
+        (if p = q then 1 else 0) := by
+  classical
+  calc
+    ∑ i : Fin d, star (hStruct.coreTensor i p.1 p.2) *
+        hStruct.coreTensor i q.1 q.2 =
+      (hStruct.Λ p.1 : ℂ) * (hStruct.Λ q.1 : ℂ) *
+        (∑ i : Fin d, star (hStruct.U i p.1 p.2) *
+          hStruct.U i q.1 q.2) := by
+        simp [AppendixBStructuralData.coreTensor, Matrix.diagonal_mul,
+          Finset.mul_sum, mul_assoc, mul_left_comm, mul_comm]
+    _ = (hStruct.Λ p.1 : ℂ) * (hStruct.Λ q.1 : ℂ) *
+        (if p = q then 1 else 0) := by
+        rw [hStruct.hU_pair p q]
+
 /-! ### Coefficients of the source basic-vector expression -/
 
 /-- The next virtual bond in the cyclic chain of length \(L\). -/
