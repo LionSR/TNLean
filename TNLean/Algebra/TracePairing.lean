@@ -18,6 +18,7 @@ on square matrices that are used throughout the proof of the Fundamental Theorem
 ## Main definitions and results
 
 * `Matrix.trace_mul_right_eq_zero_iff` — nondegeneracy of the trace pairing over `ℂ`
+* `Matrix.traceAdjointMap_traceAdjointMap` — the trace-pairing adjoint is involutive
 * `MPSTensor.traceMulRightPi` — the linear map `M ↦ (i ↦ trace (M * A i))`
 * `MPSTensor.SameMPV.trace_evalWord` — `SameMPV` implies trace agreement on all words
 * `MPSTensor.sameMPV_trace_word2` — auxiliary length-2 specialisation
@@ -114,6 +115,31 @@ theorem trace_traceAdjointMap_mul {n : Type*} [Fintype n]
       simp [Matrix.single, smul_eq_mul]
     rw [hsingle, map_smul, Matrix.mul_smul, Matrix.trace_smul]
     simp [traceAdjointMap, Matrix.trace_mul_single, MulOpposite.op_one, one_smul]
+
+/-- The trace-pairing adjoint is involutive. -/
+theorem traceAdjointMap_traceAdjointMap {n : Type*} [Fintype n]
+    (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) :
+    traceAdjointMap (traceAdjointMap E) = E := by
+  classical
+  apply LinearMap.ext
+  intro X
+  refine sub_eq_zero.mp ((trace_mul_right_eq_zero_iff
+    (M := traceAdjointMap (traceAdjointMap E) X - E X)).1 ?_)
+  intro N
+  have htrace :
+      Matrix.trace (traceAdjointMap (traceAdjointMap E) X * N) =
+        Matrix.trace (E X * N) := by
+    calc
+      Matrix.trace (traceAdjointMap (traceAdjointMap E) X * N)
+          = Matrix.trace (X * traceAdjointMap E N) :=
+            trace_traceAdjointMap_mul (traceAdjointMap E) X N
+      _ = Matrix.trace (traceAdjointMap E N * X) := by
+            rw [Matrix.trace_mul_comm]
+      _ = Matrix.trace (N * E X) :=
+            trace_traceAdjointMap_mul E N X
+      _ = Matrix.trace (E X * N) := by
+            rw [Matrix.trace_mul_comm]
+  simp [Matrix.sub_mul, Matrix.trace_sub, htrace]
 
 end Matrix
 
