@@ -216,6 +216,58 @@ maps.
     semidefinite cone under finite sums.
 \end{proof}
 
+\begin{definition}[Right compression of the Choi matrix]\label{def:choi_right_compression}
+    \lean{ChoiJamiolkowski.rightCompression,
+        ChoiJamiolkowski.rightCompression_apply,
+        ChoiJamiolkowski.compressedOmegaVector}
+    \leanok
+    \uses{def:blockwise_ampliation}
+    For $X\in\MN{D,k}(\C)$ and a Choi matrix $\tau$, the right-factor
+    compression in the blockwise ampliation index convention has entries
+    \[
+      C_{(i,p),(j,q)}
+      = \sum_{a,b} X_{a,p}\,\tau_{(i,a),(j,b)}\,\overline{X_{b,q}}.
+    \]
+    The associated vector is the normalized vector with coefficients
+    $D^{-1/2}X_{i,p}$.
+\end{definition}
+
+\begin{lemma}[Rank-one ampliation as Choi compression]
+    \label{lem:rank_one_ampliation_choi_compression}
+    \lean{ChoiJamiolkowski.nPositiveAmpliation_rankOne_eq_rightCompression}
+    \leanok
+    \uses{def:blockwise_ampliation, def:choi_right_compression}
+    Applying the $k$-fold ampliation of $T$ to the rank-one matrix
+    $|\psi\rangle\langle\psi|$, where $\psi_{(a,p)}=D^{-1/2}X_{a,p}$, is
+    exactly the right-factor compression of the Choi matrix of $T$ by $X$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    In entries, both sides are
+    \[
+      \sum_{a,b} X_{a,p}\,
+        T\!\left(D^{-1}E_{a,b}\right)_{i,j}\,\overline{X_{b,q}}.
+    \]
+    If $\psi_{(a,p)}=D^{-1/2}X_{a,p}$, then for fixed $p,q$ the corresponding
+    block of $|\psi\rangle\langle\psi|$ is
+    \[
+      \bigl(|\psi\rangle\langle\psi|\bigr)_{(\cdot,p),(\cdot,q)}
+      = D^{-1}\sum_{a,b} X_{a,p}\,\overline{X_{b,q}}\,E_{a,b}.
+    \]
+    Hence
+    \[
+      T\!\left(D^{-1}\sum_{a,b}
+          X_{a,p}\,\overline{X_{b,q}}\,E_{a,b}\right)_{i,j}
+      = D^{-1}\sum_{a,b}
+          X_{a,p}\,\overline{X_{b,q}}\,\bigl(T(E_{a,b})\bigr)_{i,j}
+      = \sum_{a,b}
+          X_{a,p}\,\tau_{(i,a),(j,b)}\,\overline{X_{b,q}},
+    \]
+    where the second equality uses
+    $\tau_{(i,a),(j,b)}=D^{-1}\bigl(T(E_{a,b})\bigr)_{i,j}$.
+\end{proof}
+
 \begin{definition}[Trace-pairing adjoint]\label{def:trace_pairing_adjoint}
     \lean{Matrix.traceAdjointMap}
     \leanok
