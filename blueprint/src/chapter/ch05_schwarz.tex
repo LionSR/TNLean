@@ -121,7 +121,7 @@ maps.
     A linear map is \emph{two-positive} if it is $2$-positive.
 \end{definition}
 
-\begin{definition}[Trace-pairing adjoint]
+\begin{definition}[Trace-pairing adjoint]\label{def:trace_pairing_adjoint}
     \lean{Matrix.traceAdjointMap}
     \leanok
     The trace-pairing adjoint $E^*$ of a linear map on matrices is the
@@ -131,11 +131,18 @@ maps.
 \begin{theorem}[Trace-pairing adjoint identity]
     \lean{Matrix.trace_traceAdjointMap_mul}
     \leanok
-    For all matrices $\rho$ and $X$, one has
+    \uses{def:trace_pairing_adjoint}
+    For every linear map $E : \MN{D} \to \MN{D}$ and all matrices $\rho$
+    and $X$, one has
     \[
         \operatorname{tr}(E^*(\rho)X)=\operatorname{tr}(\rho E(X)).
     \]
 \end{theorem}
+
+\begin{proof}
+    \leanok
+    This is the defining trace-pairing identity of $E^*$.
+\end{proof}
 
 \begin{theorem}[Completely positive maps are $k$-positive]
     \lean{IsCPMap.isNPositiveMap}
