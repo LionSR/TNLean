@@ -65,19 +65,28 @@ The nearest-neighbor parent-Hamiltonian development now also has a separate
 three-site support layer for the \(AX\) and \(XB\) faces:
 \leanid{MPSTensor.leftPairLift}, \leanid{MPSTensor.rightPairLift}, and
 \leanid{MPSTensor.HasOverlappingTwoSiteCommutation}.  This records the local
-action and commutation equation on the common three-site space, but it still
-does not include the kernel-intersection condition or the orthogonal-projector
-identification required by Definition~D.2.  The elementary passage from
-\(Q_{AX},Q_{XB}\) to their complements \(1-Q_{AX},1-Q_{XB}\) is now recorded by
+action and commutation equation on the common three-site space.  The source
+kernel-intersection equation
+\[
+  K_{AXB}=\ker((Q_{AX})_{AX})\cap\ker((Q_{XB})_{XB})
+\]
+is now recorded by
+\leanid{MPSTensor.HasAppendixD2ParentCommutingHamiltonian}, whose forgetful
+projection gives the algebraic overlapping-commutation predicate.  What remains
+outside this local package is the orthogonal-projector identification and the
+construction of \(Q_{AX}\) and \(Q_{XB}\) from the Appendix~B basic-vector form.
+The elementary passage from \(Q_{AX},Q_{XB}\) to their complements
+\(1-Q_{AX},1-Q_{XB}\) is recorded by
 \leanid{MPSTensor.HasOverlappingTwoSiteCommutation.complement}.
 
 \section{Elimination plan}
 
 A source-faithful version should build on the existing \(AX/XB\) support layer
-by adding the local subspaces \(K_{AX}\) and \(K_{XB}\), the corresponding
+by constructing the local subspaces \(K_{AX}\) and \(K_{XB}\), the corresponding
 orthogonal projectors \(Q_{AX}\) and \(Q_{XB}\), and the source
-kernel-intersection equation.  From those hypotheses it should derive the
-idempotent-product declaration above as a lemma, with \(P_K=P_{AXB}\).
+orthogonal-projector hypotheses from the Appendix~B data.  From those
+hypotheses it should derive the idempotent-product declaration above as a
+lemma, with \(P_K=P_{AXB}\).
 
 After that source-level version is available, the blueprint entry for the source
 parent commuting Hamiltonian condition should point to that statement.  The
