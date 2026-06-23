@@ -808,6 +808,7 @@ the specialization $L=2$.
     \lean{MPSTensor.AppendixBStructuralData.gaugeEquiv_coreTensor}
     \lean{MPSTensor.AppendixBStructuralData.groundSpace_eq_coreTensor}
     \lean{MPSTensor.AppendixBStructuralData.mpv_eq_coreTensor}
+    \lean{MPSTensor.AppendixBStructuralData.mpv_eq_cyclicVirtualPairState}
     \lean{MPSTensor.AppendixBStructuralData.twoSiteAmplitude_eq_mpv}
     \lean{MPSTensor.AppendixBStructuralData.twoSiteAmplitude_eq_coreTensor_mpv}
     \lean{MPSTensor.AppendixBStructuralData.mpv_coreTensor_eq_productPairState_one}
@@ -870,6 +871,11 @@ the specialization $L=2$.
     periodic MPS coefficients:
     \[
         G_L(A)=G_L(\Lambda U).
+    \]
+    Consequently, for every chain length \(L\geq1\), the original tensor has
+    the same cyclic coefficient formula:
+    \[
+        V^{(L)}(A)_\sigma=C_L(\sigma).
     \]
     In particular, the corresponding two-site amplitude is
     \[
