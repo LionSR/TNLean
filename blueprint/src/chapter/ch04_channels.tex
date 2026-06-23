@@ -55,7 +55,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \label{def:reduction_map}
     \lean{Matrix.reductionMap}
     \leanok
-    The reduction map on $\MN{D}$ is
+    The reduction map on $\MN{D}$, for $k\in\N$, is
     \[
         T_k(X)=\tr(X)\Id-k^{-1}X.
     \]
@@ -70,9 +70,12 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
-    If $X\ge 0$, diagonalize $X$.  Its eigenvalues are nonnegative, and each
-    eigenvalue is bounded by their sum $\tr(X)$.  Therefore all eigenvalues of
-    $\tr(X)\Id-X$ are nonnegative.
+    If $X\ge 0$, diagonalize $X$.  Its eigenvalues
+    $\lambda_1,\ldots,\lambda_D$ are nonnegative, and for each $j$,
+    \[
+        \lambda_j\le \sum_{i=1}^D \lambda_i=\tr(X).
+    \]
+    Therefore all eigenvalues of $\tr(X)\Id-X$ are nonnegative.
 \end{proof}
 
 \begin{theorem}[Conjugation filters preserve positivity]
