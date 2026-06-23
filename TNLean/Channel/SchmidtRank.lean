@@ -29,6 +29,7 @@ bounded Schmidt rank.
 * `Matrix.schmidtRank_le_left`, `Matrix.schmidtRank_le_right`: dimension bounds.
 * `Matrix.schmidtRank_zero`: the zero vector has Schmidt rank zero.
 * `Matrix.schmidtRank_product_le_one`: product vectors have Schmidt rank at most one.
+* `Matrix.rank_smul_of_ne_zero`: nonzero complex rescaling preserves matrix rank.
 
 ## References
 
@@ -52,6 +53,20 @@ theorem schmidtCoeffMatrix_apply (ψ : m × n → ℂ) (i : m) (j : n) :
   rfl
 
 variable [Fintype n]
+
+/-- Multiplication by a nonzero complex scalar does not change the rank of a
+matrix. -/
+theorem rank_smul_of_ne_zero {c : ℂ} (hc : c ≠ 0) (A : Matrix m n ℂ) :
+    (c • A).rank = A.rank := by
+  have hrange :
+      LinearMap.range (c • A).mulVecLin = LinearMap.range A.mulVecLin := by
+    ext v
+    constructor
+    · rintro ⟨x, rfl⟩
+      exact ⟨c • x, by simp⟩
+    · rintro ⟨x, rfl⟩
+      exact ⟨c⁻¹ • x, by simp [hc]⟩
+  rw [Matrix.rank, Matrix.rank, hrange]
 
 /-- The Schmidt rank of a finite bipartite vector. -/
 noncomputable def schmidtRank (ψ : m × n → ℂ) : ℕ :=

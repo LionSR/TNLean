@@ -34,6 +34,8 @@ the pair $(i,p)$.
   same compression is the sandwich by the right tensor factor.
 * `ChoiJamiolkowski.compressedOmegaVector_hasSchmidtRankLE`: the compressed
   maximally entangled vector has Schmidt rank at most the compression dimension.
+* `ChoiJamiolkowski.hasSchmidtRankLE_iff_exists_rank_le_compressedOmegaVector`:
+  Wolf's square-matrix parametrization of vectors of bounded Schmidt rank.
 * `ChoiJamiolkowski.isNPositiveMap_iff_forall_rightCompression_posSemidef`:
   `k`-positivity is equivalent to positivity of all rectangular right-factor
   Choi compressions.
@@ -120,6 +122,60 @@ theorem compressedOmegaVector_hasSchmidtRankLE
   simpa [Matrix.HasSchmidtRankLE, Matrix.schmidtRank, Matrix.schmidtCoeffMatrix,
     compressedOmegaVector] using
     Matrix.rank_le_card_width (Matrix.schmidtCoeffMatrix (compressedOmegaVector X))
+
+/-- If the square compression matrix has rank at most k, then the associated
+compressed maximally entangled vector has Schmidt rank at most k. -/
+theorem compressedOmegaVector_hasSchmidtRankLE_of_rank_le [NeZero D]
+    {X : Matrix (Fin D) (Fin D) ℂ} {k : ℕ} (hX : X.rank ≤ k) :
+    Matrix.HasSchmidtRankLE k (compressedOmegaVector X) := by
+  let c : ℂ := (1 : ℂ) / ((D : ℝ).sqrt : ℂ)
+  have hDpos : 0 < (D : ℝ) := by
+    exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne D)
+  have hsqrt_ne : ((D : ℝ).sqrt : ℂ) ≠ 0 := by
+    exact_mod_cast (Real.sqrt_ne_zero'.mpr hDpos)
+  have hc_ne : c ≠ 0 := by
+    simp [c, hsqrt_ne]
+  have hcoeff :
+      Matrix.schmidtCoeffMatrix (compressedOmegaVector X) = c • X := by
+    ext i j
+    simp [Matrix.schmidtCoeffMatrix, compressedOmegaVector, c]
+  have hrank :
+      (Matrix.schmidtCoeffMatrix (compressedOmegaVector X)).rank = X.rank := by
+    rw [hcoeff]
+    exact Matrix.rank_smul_of_ne_zero hc_ne X
+  simpa [Matrix.HasSchmidtRankLE, Matrix.schmidtRank, hrank] using hX
+
+/-- Wolf's square-matrix parametrization of bounded Schmidt-rank vectors.
+When D is positive, a vector in $\mathbb{C}^D \otimes \mathbb{C}^D$ has Schmidt
+rank at most k if and only if it is obtained from the normalized maximally
+entangled vector by applying a square matrix of rank at most k on the right
+tensor factor. -/
+theorem hasSchmidtRankLE_iff_exists_rank_le_compressedOmegaVector [NeZero D]
+    {k : ℕ} {ψ : Fin D × Fin D → ℂ} :
+    Matrix.HasSchmidtRankLE k ψ ↔
+      ∃ X : Matrix (Fin D) (Fin D) ℂ, X.rank ≤ k ∧ compressedOmegaVector X = ψ := by
+  constructor
+  · intro hψ
+    let c : ℂ := ((D : ℝ).sqrt : ℂ)
+    have hDpos : 0 < (D : ℝ) := by
+      exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne D)
+    have hc_ne : c ≠ 0 := by
+      dsimp [c]
+      exact_mod_cast (Real.sqrt_ne_zero'.mpr hDpos)
+    refine ⟨c • Matrix.schmidtCoeffMatrix ψ, ?_, ?_⟩
+    · have hrank :
+          (c • Matrix.schmidtCoeffMatrix ψ).rank =
+            (Matrix.schmidtCoeffMatrix ψ).rank :=
+        Matrix.rank_smul_of_ne_zero hc_ne (Matrix.schmidtCoeffMatrix ψ)
+      simpa [Matrix.HasSchmidtRankLE, Matrix.schmidtRank, hrank] using hψ
+    · ext ip
+      rcases ip with ⟨i, j⟩
+      simp only [compressedOmegaVector, Matrix.smul_apply, Matrix.schmidtCoeffMatrix_apply,
+        smul_eq_mul]
+      field_simp [c, hc_ne]
+      simp [c]
+  · rintro ⟨X, hX, rfl⟩
+    exact compressedOmegaVector_hasSchmidtRankLE_of_rank_le hX
 
 /-- For the vector `compressedOmegaVector X`, the `k`-fold ampliation of the
 rank-one matrix $|\psi\rangle\langle\psi|$ by `T` is the right-factor Choi

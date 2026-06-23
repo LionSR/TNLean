@@ -289,6 +289,30 @@ maps.
     its rank is bounded by the number of columns, which is $k$.
 \end{proof}
 
+\begin{lemma}[Square parametrization of bounded Schmidt rank]
+    \label{lem:schmidt_rank_square_compressed_omega}
+    \lean{ChoiJamiolkowski.hasSchmidtRankLE_iff_exists_rank_le_compressedOmegaVector}
+    \leanok
+    \uses{def:schmidt_rank, def:choi_right_compression}
+    Assume $D>0$.  A vector $\psi\in\C^D\otimes\C^D$ has Schmidt rank at most
+    $k$ if and only if there is a matrix $X\in\MD(\C)$ of rank at most $k$
+    such that
+    \[
+      \psi_{(i,j)}=D^{-1/2}X_{i,j}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The forward direction takes $X=D^{1/2}C_\psi$, where $C_\psi$ is the
+    coefficient matrix of $\psi$.  The reverse direction notes that
+    \[
+      C_\psi = D^{-1/2}X,
+    \]
+    so $\operatorname{rank}(C_\psi)=\operatorname{rank}(X)$, since
+    multiplication by a nonzero scalar preserves rank.
+\end{proof}
+
 \begin{lemma}[Rank-one ampliation as Choi compression]
     \label{lem:rank_one_ampliation_choi_compression}
     \lean{ChoiJamiolkowski.nPositiveAmpliation_rankOne_eq_rightCompression}
