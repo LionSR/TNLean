@@ -336,22 +336,22 @@ maps.
     $E\otimes\id_1$ is exactly positivity of $E$.
 \end{proof}
 
-\begin{theorem}[$D$-positive maps on $\MN{D}$ are completely positive]
+\begin{theorem}[$D$-positive maps on nonzero $\MN{D}$ are completely positive]
     \label{thm:d_positive_iff_completely_positive}
     \lean{isCPMap_iff_isNPositiveMap_card}
     \leanok
     \uses{def:k_positive_map, def:cp_map, thm:cp_iff_choi_posSemidef}
-    For maps $E:\MN{D}\to\MN{D}$, complete positivity is equivalent to
-    $D$-positivity.
+    For maps $E:\MN{D}\to\MN{D}$ with $D\ge 1$, complete positivity is
+    equivalent to $D$-positivity.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Complete positivity implies $k$-positivity for every $k$. Conversely, if
-    $E$ is $D$-positive, apply $E\otimes\id_D$ to the maximally entangled
-    projector $|\Omega\rangle\langle\Omega|$. The result is the Choi matrix of
-    $E$, hence it is positive semidefinite. Choi's theorem then gives complete
-    positivity.
+    Complete positivity implies $k$-positivity for every $k$. Conversely,
+    assume $D\ge 1$. If $E$ is $D$-positive, apply $E\otimes\id_D$ to the
+    maximally entangled projector $|\Omega\rangle\langle\Omega|$. The result is
+    the Choi matrix of $E$, hence it is positive semidefinite. Choi's theorem
+    then gives complete positivity.
 \end{proof}
 
 \begin{theorem}[$(k\!+\!1)$-positive implies $k$-positive]
