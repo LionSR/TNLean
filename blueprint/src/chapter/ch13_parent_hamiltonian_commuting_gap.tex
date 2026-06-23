@@ -659,8 +659,21 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
 
 \begin{proof}
     \leanok
-    Expand a matrix product entry as a sum over virtual paths with prescribed
-    endpoints, then identify the two endpoints in the trace.
+    The trace is the diagonal sum:
+    \[
+        \operatorname{tr}(A^{\sigma_0}\cdots A^{\sigma_{L-1}})
+        =
+        \sum_{\alpha_0}
+        (A^{\sigma_0}\cdots A^{\sigma_{L-1}})_{\alpha_0,\alpha_0}.
+    \]
+    For prescribed endpoints, the matrix product entry expands as
+    \[
+        (A^{\sigma_0}\cdots A^{\sigma_{L-1}})_{\alpha_0,\alpha_L}
+        =
+        \sum_{\alpha_1,\ldots,\alpha_{L-1}}
+        \prod_{t=0}^{L-1}(A^{\sigma_t})_{\alpha_t,\alpha_{t+1}}.
+    \]
+    Substituting $\alpha_L=\alpha_0$ in the trace gives the cyclic formula.
 \end{proof}
 
 \begin{remark}[Product-of-pairs equations for nearest-neighbor parent-term commutation]%
