@@ -129,6 +129,34 @@ and a chosen structural datum:
 This is the declaration
 \leanid{MPSTensor.AppendixBStructuralData.mpv_eq_cyclicVirtualPairState}.  It
 does not prove the disjoint adjacent physical-pair condition.
+The pair-index isometry above is an orthogonality equation after summing over
+the physical letter \(i\).  It is therefore not, by itself, a coefficient
+identity for a fixed physical word \(\sigma\).  Any proof of a fixed-word
+adjacent-pair factorization must use the source basic-vector expression
+\(U^{\otimes L}\varphi_j^{\otimes L}\), or an equivalent construction of the
+corresponding local projectors, rather than applying the summed isometry as if
+the physical labels were also summed in \(C_L(\sigma)\).
+This obstruction is genuine, not merely a missing formal proof.  For example,
+take two virtual indices and physical labels \(i=(a,b)\), with
+\[
+  (U^{(a,b)})_{x,y}=\delta_{x,a}\delta_{y,b},
+  \qquad
+  A^{(a,b)}=\lambda_a E_{a,b},
+\]
+where \(\lambda_0,\lambda_1>0\).  The unit pair-index isometry holds.  For the
+length-four word
+\[
+  \sigma=((0,1),(1,0),(1,0),(0,1)),
+\]
+the cyclic coefficient \(C_4(\sigma)\) vanishes, because the middle virtual
+matching condition fails.  The disjoint adjacent-pair product is instead
+\[
+  (\lambda_0\lambda_1)(\lambda_1\lambda_0)
+  =
+  \lambda_0^2\lambda_1^2\ne 0.
+\]
+Thus the adjacent physical-pair coefficient identity is not a consequence of
+the unit pair-index isometry alone.
 
 There is still no conclusion relating $U_k$ and $U_\ell$ for $k\ne \ell$.  Thus
 the formal theorems record only a separate isometry condition for each block;
