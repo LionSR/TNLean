@@ -272,6 +272,35 @@ are not developed elsewhere in this document.
     formula for $(A+t\Id)^{-1}$.
 \end{proof}
 
+\begin{lemma}[Positive-map real-power integrand inequality]
+    \label{lem:operator_jensen_positive_map_rpow_integrand}
+    \lean{TNLean.OperatorJensen.positiveMap_rpowIntegrand₀₁_jensen}
+    \leanok
+    \uses{lem:operator_jensen_positive_map_resolvent}
+    Let $T$ be a positive subunital map, let $A\ge0$, let
+    $p\in(0,1)$, and let $t>0$. Then
+    \[
+        T\!\left(f_{p,t}(A)\right)
+        \le
+        f_{p,t}(TA),
+        \qquad
+        f_{p,t}(x)=t^p\left(t^{-1}-(t+x)^{-1}\right).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:operator_jensen_positive_map_resolvent}
+    Rewrite the continuous functional calculus for $f_{p,t}$ in resolvent
+    form,
+    \[
+        f_{p,t}(X)=t^{p-1}\Id-t^p(t\Id+X)^{-1}.
+    \]
+    After applying the linear map $T$, the difference
+    $f_{p,t}(TA)-T(f_{p,t}(A))$ is exactly $t^p$ times the positive matrix
+    supplied by the positive-map resolvent inequality.
+\end{proof}
+
 \begin{lemma}[Positive matrix-valued integrals]\label{lem:operator_jensen_integral_order}
     \lean{TNLean.OperatorJensen.integral_nonneg_matrix_of_ae}
     \leanok
@@ -291,7 +320,7 @@ are not developed elsewhere in this document.
 \begin{theorem}[Jensen for concave real powers]\label{thm:posMap_rpow_concave_jensen}
     \lean{posMap_rpow_concave_jensen}
     \notready
-    \uses{def:positive_map, lem:operator_jensen_positive_map_resolvent,
+    \uses{def:positive_map, lem:operator_jensen_positive_map_rpow_integrand,
         lem:operator_jensen_integral_order}
     For a positive subunital map $T$, a positive semidefinite matrix~$A$,
     and $p\in[0,1]$:
