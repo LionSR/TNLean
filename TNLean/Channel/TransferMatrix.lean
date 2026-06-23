@@ -497,6 +497,10 @@ theorem Matrix.conjTranspose_inv_sqrt_mul_self_mul_inv_sqrt_eq_one_of_posDef
     _ = S⁻¹ * (S * S) * S⁻¹ := by rw [hSinv_herm, hS_sq]
     _ = 1 := by simp [Matrix.mul_assoc, hSinv_mul, hSmul_inv]
 
+@[deprecated (since := "2026-06-23")] alias
+  Matrix.conjTranspose_inv_cfc_sqrt_mul_self_of_posDef :=
+    Matrix.conjTranspose_inv_sqrt_mul_self_mul_inv_sqrt_eq_one_of_posDef
+
 /-- **Wolf Chapter 3 trace normalization by inverse square root.**
 
 If T is positive and T*(1) is positive definite, then choosing
