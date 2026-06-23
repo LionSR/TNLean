@@ -321,6 +321,39 @@ maps.
     Every completely positive map is $k$-positive for all $k \ge 1$.
 \end{theorem}
 
+\begin{theorem}[One-positive maps are positive]
+    \label{thm:one_positive_iff_positive}
+    \lean{isNPositiveMap_one_iff_isPositiveMap}
+    \leanok
+    \uses{def:k_positive_map, def:positive_map}
+    A linear map is $1$-positive if and only if it is positive.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The ampliation by $\MN{1}$ is identified with the original matrix algebra:
+    all block indices have the unique value, so positivity of
+    $E\otimes\id_1$ is exactly positivity of $E$.
+\end{proof}
+
+\begin{theorem}[$D$-positive maps on $\MN{D}$ are completely positive]
+    \label{thm:d_positive_iff_completely_positive}
+    \lean{isCPMap_iff_isNPositiveMap_card}
+    \leanok
+    \uses{def:k_positive_map, def:cp_map, thm:cp_iff_choi_posSemidef}
+    For maps $E:\MN{D}\to\MN{D}$, complete positivity is equivalent to
+    $D$-positivity.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Complete positivity implies $k$-positivity for every $k$. Conversely, if
+    $E$ is $D$-positive, apply $E\otimes\id_D$ to the maximally entangled
+    projector $|\Omega\rangle\langle\Omega|$. The result is the Choi matrix of
+    $E$, hence it is positive semidefinite. Choi's theorem then gives complete
+    positivity.
+\end{proof}
+
 \begin{theorem}[$(k\!+\!1)$-positive implies $k$-positive]
     \lean{IsNPositiveMap.mono}
     \leanok
