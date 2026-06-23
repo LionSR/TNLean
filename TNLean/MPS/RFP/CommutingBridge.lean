@@ -372,6 +372,12 @@ theorem AppendixBStructuralData.gaugeEquiv_coreTensor {A : MPSTensor d D}
   intro i
   simp [Xg, AppendixBStructuralData.coreTensor, hStruct.hA_eq i, Matrix.mul_assoc]
 
+/-- The Appendix B basis change leaves every local ground space unchanged. -/
+theorem AppendixBStructuralData.groundSpace_eq_coreTensor {A : MPSTensor d D}
+    (hStruct : AppendixBStructuralData A) (L : ℕ) :
+    groundSpace A L = groundSpace hStruct.coreTensor L :=
+  (hStruct.gaugeEquiv_coreTensor.groundSpace_eq L).symm
+
 /-- The Appendix B basis change does not change any MPV coefficient. -/
 theorem AppendixBStructuralData.mpv_eq_coreTensor {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) {N : ℕ} (σ : Cfg d N) :
@@ -391,6 +397,15 @@ theorem AppendixBStructuralData.twoSiteAmplitude_eq_coreTensor_mpv {A : MPSTenso
     (hStruct : AppendixBStructuralData A) (σ : Cfg d 2) :
     hStruct.twoSiteAmplitude σ = mpv hStruct.coreTensor σ := by
   rw [hStruct.twoSiteAmplitude_eq_mpv σ, hStruct.mpv_eq_coreTensor σ]
+
+/-- On two sites, the Appendix B cyclic basic-vector coefficient is the
+structural two-site amplitude. -/
+theorem AppendixBStructuralData.cyclicVirtualPairState_two_eq_twoSiteAmplitude
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) (σ : Cfg d 2) :
+    hStruct.cyclicVirtualPairState (by decide : 0 < 2) σ =
+      hStruct.twoSiteAmplitude σ := by
+  rw [← hStruct.mpv_coreTensor_eq_cyclicVirtualPairState (by decide : 0 < 2) σ,
+    hStruct.twoSiteAmplitude_eq_coreTensor_mpv]
 
 /-- The length-two case of the disjoint adjacent-pair coefficient condition. -/
 theorem AppendixBStructuralData.mpv_coreTensor_eq_productPairState_one {A : MPSTensor d D}

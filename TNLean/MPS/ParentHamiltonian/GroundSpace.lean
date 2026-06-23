@@ -41,6 +41,44 @@ noncomputable def groundSpace (A : MPSTensor d D) (L : ℕ) :
     Submodule ℂ (NSiteSpace d L) :=
   (groundSpaceMap A L).range
 
+lemma trace_gauge_boundary (X : GL (Fin D) ℂ) (E Y : Matrix (Fin D) (Fin D) ℂ) :
+    Matrix.trace (((X : Matrix (Fin D) (Fin D) ℂ) * E *
+        ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) * Y) =
+      Matrix.trace (E * (((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) *
+        Y * (X : Matrix (Fin D) (Fin D) ℂ))) := by
+  set Xmat : Matrix (Fin D) (Fin D) ℂ := (X : Matrix (Fin D) (Fin D) ℂ)
+  set Xinv : Matrix (Fin D) (Fin D) ℂ :=
+    ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
+  calc
+    Matrix.trace ((Xmat * E * Xinv) * Y)
+        = Matrix.trace (Xmat * E * (Xinv * Y)) := by simp [Matrix.mul_assoc]
+    _ = Matrix.trace ((Xinv * Y) * Xmat * E) := by
+        simpa using Matrix.trace_mul_cycle Xmat E (Xinv * Y)
+    _ = Matrix.trace (E * (Xinv * Y * Xmat)) := by
+        simpa [Matrix.mul_assoc] using Matrix.trace_mul_comm ((Xinv * Y) * Xmat) E
+
+/-- A virtual gauge change does not change the local ground space. -/
+theorem GaugeEquiv.groundSpace_le {A B : MPSTensor d D}
+    (h : GaugeEquiv A B) (L : ℕ) :
+    groundSpace B L ≤ groundSpace A L := by
+  rcases h with ⟨X, hX⟩
+  rintro ψ ⟨Y, rfl⟩
+  refine ⟨((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * Y *
+      (X : Matrix (Fin D) (Fin D) ℂ), ?_⟩
+  ext σ
+  rw [groundSpaceMap_apply, groundSpaceMap_apply]
+  rw [evalWord_gauge X hX]
+  exact (trace_gauge_boundary X (evalWord A (List.ofFn σ)) Y).symm
+
+/-- Gauge-equivalent tensors have identical local ground spaces at every
+length. -/
+theorem GaugeEquiv.groundSpace_eq {A B : MPSTensor d D}
+    (h : GaugeEquiv A B) (L : ℕ) :
+    groundSpace A L = groundSpace B L := by
+  apply le_antisymm
+  · exact h.symm.groundSpace_le L
+  · exact h.groundSpace_le L
+
 /-- The span of the periodic MPS vectors associated to a finite family of BNT
 components.
 

@@ -247,6 +247,37 @@ structure HasOverlappingTwoSiteCommutation
     leftPairLift QAX * rightPairLift QXB =
       rightPairLift QXB * leftPairLift QAX
 
+/-- The local projector condition of arXiv:1606.00608, Definition D.2, on one
+three-site window.
+
+The source writes two local projectors \(Q_{AX}\) and \(Q_{XB}\) on the
+overlapping pairs \(AX\) and \(XB\). Besides idempotence and commutation after
+lifting them to \(A X B\), Definition D.2 includes the local ground-space
+condition that the three-site subspace is the intersection of their two lifted
+kernels. Orthogonality and the construction of these projectors from the
+Appendix B basic-vector form are still separate obligations. -/
+structure HasAppendixD2ParentCommutingHamiltonian
+    (KAXB : Submodule ℂ (NSiteSpace d 3))
+    (QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) : Prop where
+  left_idempotent : QAX * QAX = QAX
+  right_idempotent : QXB * QXB = QXB
+  commute_lifts :
+    leftPairLift QAX * rightPairLift QXB =
+      rightPairLift QXB * leftPairLift QAX
+  kernel_intersection :
+    KAXB = LinearMap.ker (leftPairLift QAX) ⊓ LinearMap.ker (rightPairLift QXB)
+
+/-- Forgetting the kernel-intersection part of arXiv:1606.00608, Definition D.2,
+leaves the algebraic overlapping two-site commutation predicate. -/
+theorem HasAppendixD2ParentCommutingHamiltonian.to_overlapping
+    {KAXB : Submodule ℂ (NSiteSpace d 3)}
+    {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
+    (h : HasAppendixD2ParentCommutingHamiltonian (d := d) KAXB QAX QXB) :
+    HasOverlappingTwoSiteCommutation (d := d) QAX QXB where
+  left_idempotent := h.left_idempotent
+  right_idempotent := h.right_idempotent
+  commute_lifts := h.commute_lifts
+
 theorem HasOverlappingTwoSiteCommutation.commute_apply
     {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
     (h : HasOverlappingTwoSiteCommutation (d := d) QAX QXB)
@@ -323,6 +354,39 @@ theorem localTerm_two_three_zero_one_commute_of_overlapping_two_site_commutation
   rw [localTerm_two_three_zero_eq_leftPairLift_parentInteraction,
     localTerm_two_three_one_eq_rightPairLift_parentInteraction]
   exact h.commute_lifts
+
+/-- If the two-site parent interaction is identified with the complementary
+Appendix D.2 projectors \(P_{AX}=1-Q_{AX}\) and \(P_{XB}=1-Q_{XB}\), then the
+first two translated parent terms on the three-site chain commute. -/
+theorem localTerm_two_three_zero_one_commute_of_overlapping_two_site_complement
+    (A : MPSTensor d D) {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
+    (h : HasOverlappingTwoSiteCommutation (d := d) QAX QXB)
+    (hAX : parentInteraction A 2 = 1 - QAX)
+    (hXB : parentInteraction A 2 = 1 - QXB) :
+    localTerm A 2 3 (0 : Fin 3) * localTerm A 2 3 (1 : Fin 3) =
+      localTerm A 2 3 (1 : Fin 3) * localTerm A 2 3 (0 : Fin 3) := by
+  rw [localTerm_two_three_zero_eq_leftPairLift_parentInteraction,
+    localTerm_two_three_one_eq_rightPairLift_parentInteraction]
+  have hLeft : leftPairLift (parentInteraction A 2) = leftPairLift (1 - QAX) := by
+    rw [hAX]
+  have hRight : rightPairLift (parentInteraction A 2) = rightPairLift (1 - QXB) := by
+    rw [hXB]
+  rw [hLeft, hRight]
+  exact h.commute_complement_lifts
+
+/-- The Definition D.2 local projector condition gives commutation of the first
+two translated parent terms, once the canonical two-site parent interaction is
+identified with the complementary projectors \(1-Q_{AX}\) and \(1-Q_{XB}\). -/
+theorem localTerm_two_three_zero_one_commute_of_appendixD2_complement
+    (A : MPSTensor d D) {KAXB : Submodule ℂ (NSiteSpace d 3)}
+    {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
+    (h : HasAppendixD2ParentCommutingHamiltonian (d := d) KAXB QAX QXB)
+    (hAX : parentInteraction A 2 = 1 - QAX)
+    (hXB : parentInteraction A 2 = 1 - QXB) :
+    localTerm A 2 3 (0 : Fin 3) * localTerm A 2 3 (1 : Fin 3) =
+      localTerm A 2 3 (1 : Fin 3) * localTerm A 2 3 (0 : Fin 3) :=
+  localTerm_two_three_zero_one_commute_of_overlapping_two_site_complement A
+    h.to_overlapping hAX hXB
 
 /-! ### Adjacent cyclic two-site supports -/
 
