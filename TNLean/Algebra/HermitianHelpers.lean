@@ -193,3 +193,73 @@ theorem smul_one_sub_hermitian_spectral
           congr 1
           ext i
           simp [Complex.ofReal_sub]
+
+/-- A Hermitian matrix is bounded above by its largest eigenvalue times the
+identity. -/
+theorem maxEigenvalue_smul_one_sub_posSemidef [Nonempty n]
+    {M : Matrix n n ℂ} (hM : M.IsHermitian) :
+    ((↑(maxEigenvalue hM) : ℂ) • (1 : Matrix n n ℂ) - M).PosSemidef := by
+  classical
+  let U : Matrix n n ℂ := ↑hM.eigenvectorUnitary
+  let Λ : n → ℂ := fun j => ↑(maxEigenvalue hM - hM.eigenvalues j)
+  have hdiag : (Matrix.diagonal Λ).PosSemidef := by
+    refine Matrix.PosSemidef.diagonal ?_
+    intro j
+    change (0 : ℂ) ≤ ↑(maxEigenvalue hM - hM.eigenvalues j)
+    exact_mod_cast sub_nonneg.mpr (le_maxEigenvalue hM j)
+  have hconj : (U * Matrix.diagonal Λ * Uᴴ).PosSemidef := by
+    simpa only [mul_assoc, Matrix.conjTranspose_conjTranspose] using
+      hdiag.mul_mul_conjTranspose_same (B := U)
+  rw [smul_one_sub_hermitian_spectral hM (maxEigenvalue hM)]
+  simpa [U, Λ] using hconj
+
+namespace Matrix.PosSemidef
+
+/-- The largest eigenvalue of a positive semidefinite matrix is bounded by its
+trace. -/
+theorem maxEigenvalue_le_trace_re [Nonempty n]
+    {M : Matrix n n ℂ} (hM : M.PosSemidef) :
+    maxEigenvalue hM.isHermitian ≤ (Matrix.trace M).re := by
+  classical
+  obtain ⟨i, hi⟩ := maxEigenvalue_achieved hM.isHermitian
+  have htrace : (Matrix.trace M).re = ∑ j : n, hM.isHermitian.eigenvalues j := by
+    have h := hM.isHermitian.trace_eq_sum_eigenvalues
+    exact_mod_cast congrArg Complex.re h
+  calc
+    maxEigenvalue hM.isHermitian = hM.isHermitian.eigenvalues i := hi.symm
+    _ ≤ ∑ j : n, hM.isHermitian.eigenvalues j :=
+        Finset.single_le_sum (fun j _ => hM.eigenvalues_nonneg j) (Finset.mem_univ i)
+    _ = (Matrix.trace M).re := htrace.symm
+
+/-- For a positive semidefinite matrix, `tr(A) I - A` is positive semidefinite.
+
+This is the matrix inequality behind the reduction criterion in Wolf Chapter 3,
+Example 3.1. -/
+theorem trace_smul_one_sub_self_posSemidef [Nonempty n]
+    {M : Matrix n n ℂ} (hM : M.PosSemidef) :
+    (Matrix.trace M • (1 : Matrix n n ℂ) - M).PosSemidef := by
+  classical
+  let c : ℝ := (Matrix.trace M).re
+  have htrace_eq : Matrix.trace M = (c : ℂ) := by
+    have h := hM.isHermitian.trace_eq_sum_eigenvalues
+    rw [h]
+    apply Complex.ext
+    · simp [c, h]
+    · simp
+  have hshift : ((↑(maxEigenvalue hM.isHermitian) : ℂ) •
+      (1 : Matrix n n ℂ) - M).PosSemidef :=
+    maxEigenvalue_smul_one_sub_posSemidef hM.isHermitian
+  have hextra : (((c - maxEigenvalue hM.isHermitian : ℝ) : ℂ) •
+      (1 : Matrix n n ℂ)).PosSemidef := by
+    exact Matrix.PosSemidef.one.smul
+      (by exact_mod_cast sub_nonneg.mpr hM.maxEigenvalue_le_trace_re)
+  have hdecomp :
+      Matrix.trace M • (1 : Matrix n n ℂ) - M =
+        ((c - maxEigenvalue hM.isHermitian : ℝ) : ℂ) • (1 : Matrix n n ℂ) +
+          ((↑(maxEigenvalue hM.isHermitian) : ℂ) • (1 : Matrix n n ℂ) - M) := by
+    rw [htrace_eq]
+    module
+  rw [hdecomp]
+  exact hextra.add hshift
+
+end Matrix.PosSemidef
