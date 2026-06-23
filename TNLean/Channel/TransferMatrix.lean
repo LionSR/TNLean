@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Basic
 import TNLean.MPS.Core.Transfer
+import TNLean.Algebra.TracePairing
 import Mathlib.LinearAlgebra.Matrix.Vec
 import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Data.Matrix.Basis
@@ -34,6 +35,10 @@ with composition. We also relate it to the Kraus representation.
 * `transferMatrix_id`: the transfer matrix of the identity is the identity
 * `transferMatrix_kraus`: for a Kraus map `T(X) = ∑ᵢ Kᵢ X Kᵢ†`, the transfer
   matrix is `∑ᵢ K'ᵢ ⊗ₖ Kᵢ`
+* `IsPositiveMap.comp_unitaryConjLM`: positive maps remain positive after
+  precomposition with a conjugation map
+* `IsTracePreservingMap.comp_unitaryConjLM_of_conj_traceAdjointMap_one`: a
+  trace-normalization criterion for filtered maps `ρ ↦ T(XρX†)`
 * `MPSTensor.transferMatrix_eq`: the MPS transfer map `E_A` has transfer
   matrix `∑ᵢ Āᵢ ⊗ₖ Aᵢ`
 
@@ -390,6 +395,19 @@ theorem unitaryConjLM_isCPMap (U : Matrix (Fin D) (Fin D) ℂ) :
     change U * X * Uᴴ = _
     simp only [Fin.sum_univ_one]⟩
 
+/-- Conjugation by an arbitrary matrix preserves positive semidefiniteness. -/
+theorem unitaryConjLM_isPositiveMap (U : Matrix (Fin D) (Fin D) ℂ) :
+    IsPositiveMap (unitaryConjLM U) :=
+  (unitaryConjLM_isCPMap U).isPositiveMap
+
+/-- Precomposing a positive map with conjugation by an arbitrary matrix preserves
+positivity. -/
+theorem IsPositiveMap.comp_unitaryConjLM
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hT : IsPositiveMap T) (X : Matrix (Fin D) (Fin D) ℂ) :
+    IsPositiveMap (T.comp (unitaryConjLM X)) :=
+  fun ρ hρ => hT (unitaryConjLM X ρ) (unitaryConjLM_isPositiveMap X ρ hρ)
+
 /-- Unitary conjugation by a unitary matrix is trace-preserving. -/
 theorem unitaryConjLM_isTP_of_unitary (U : Matrix (Fin D) (Fin D) ℂ)
     (hU : Uᴴ * U = 1) :
@@ -403,6 +421,49 @@ theorem unitaryConjLM_isChannel_of_unitary (U : Matrix (Fin D) (Fin D) ℂ)
     (hU : Uᴴ * U = 1) :
     IsChannel (unitaryConjLM U) :=
   ⟨unitaryConjLM_isCPMap U, unitaryConjLM_isTP_of_unitary U hU⟩
+
+/-- Trace-normalization criterion for a filtered map.
+
+If `X† T*(1) X = 1`, where `T*` is the trace-pairing adjoint, then
+`ρ ↦ T(XρX†)` is trace preserving.  This is the trace calculation in Wolf
+Chapter 3's construction making a positive map trace preserving by choosing
+`X = T*(1)^{-1/2}`. -/
+theorem IsTracePreservingMap.comp_unitaryConjLM_of_conj_traceAdjointMap_one
+    (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (X : Matrix (Fin D) (Fin D) ℂ)
+    (hX : Xᴴ * Matrix.traceAdjointMap T 1 * X = 1) :
+    IsTracePreservingMap (T.comp (unitaryConjLM X)) := by
+  intro ρ
+  change Matrix.trace (T (X * ρ * Xᴴ)) = Matrix.trace ρ
+  have hcycle :
+      Matrix.trace (Matrix.traceAdjointMap T 1 * (X * ρ * Xᴴ)) =
+        Matrix.trace ((Xᴴ * Matrix.traceAdjointMap T 1 * X) * ρ) := by
+    calc
+      Matrix.trace (Matrix.traceAdjointMap T 1 * (X * ρ * Xᴴ))
+          = Matrix.trace ((Matrix.traceAdjointMap T 1 * X) * ρ * Xᴴ) := by
+              simp [Matrix.mul_assoc]
+      _ = Matrix.trace (Xᴴ * (Matrix.traceAdjointMap T 1 * X) * ρ) := by
+              rw [Matrix.trace_mul_cycle]
+      _ = Matrix.trace ((Xᴴ * Matrix.traceAdjointMap T 1 * X) * ρ) := by
+              simp [Matrix.mul_assoc]
+  calc
+    Matrix.trace (T (X * ρ * Xᴴ))
+        = Matrix.trace (1 * T (X * ρ * Xᴴ)) := by simp
+    _ = Matrix.trace (Matrix.traceAdjointMap T 1 * (X * ρ * Xᴴ)) := by
+          rw [Matrix.trace_traceAdjointMap_mul]
+    _ = Matrix.trace ((Xᴴ * Matrix.traceAdjointMap T 1 * X) * ρ) := hcycle
+    _ = Matrix.trace ρ := by rw [hX, Matrix.one_mul]
+
+/-- A filtered positive map is again positive, and is trace preserving under
+the corresponding trace-adjoint normalization. -/
+theorem IsPositiveMap.comp_unitaryConjLM_positive_tracePreserving
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hT : IsPositiveMap T) (X : Matrix (Fin D) (Fin D) ℂ)
+    (hX : Xᴴ * Matrix.traceAdjointMap T 1 * X = 1) :
+    IsPositiveMap (T.comp (unitaryConjLM X)) ∧
+      IsTracePreservingMap (T.comp (unitaryConjLM X)) :=
+  ⟨hT.comp_unitaryConjLM X,
+    IsTracePreservingMap.comp_unitaryConjLM_of_conj_traceAdjointMap_one T X hX⟩
 
 end UnitaryConjugation
 
