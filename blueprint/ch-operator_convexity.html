@@ -1275,7 +1275,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>  Let \(Y\) be positive definite and let \(W\) be an isometry. Then </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f95ab3b7650>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f60fe86b650>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:opconv_inverse_compression_le} (W^\ast Y W)^{-1} \le W^\ast Y^{-1} W. \end{equation}
@@ -1352,7 +1352,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>  If the defect block satisfies </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f95ab3b7b30>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f60fe86bb30>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:opconv_defect_block_relation} S S^\ast = \mathbb {1}- \sum _{i \in \iota } C_i C_i^\ast , \end{equation}
@@ -1461,7 +1461,7 @@
   \[  S S^\ast = \mathbb {1}- \sum _{i \in \iota } C_i C_i^\ast ,  \]
 </div>
 <p> then </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f95ab40cdd0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f60fe8c0dd0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:opconv_povm_resolvent_bound} \left(\sum _{i \in \iota } w_i\,  C_i C_i^\ast + t\, \mathbb {1}\right)^{-1} \le \sum _{i \in \iota } (w_i+t)^{-1}\,  C_i C_i^\ast + t^{-1}\,  S S^\ast . \end{equation}
@@ -1634,12 +1634,100 @@
 
   </div>
 </div>
-<div class="lemma_thmwrapper theorem-style-plain" id="lem:operator_jensen_integral_order">
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:operator_jensen_positive_map_rpow_integrand">
   <div class="lemma_thmheading">
     <span class="lemma_thmcaption">
     Lemma
     </span>
     <span class="lemma_thmlabel">18.11</span>
+    <span class="lemma_thmtitle">Positive-map real-power integrand inequality</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-operator_convexity.html#lem:operator_jensen_positive_map_rpow_integrand">#</a>
+    
+    <a class="icon proof" href="ch-operator_convexity.html#a0000028635"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-operator_convexity.html#lem:operator_jensen_positive_map_resolvent">Lemma 18.10</a></li>
+          
+          <li><a href="ch-operator_convexity.html#lem:operator_jensen_positive_map_resolvent">Lemma 18.10</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.OperatorJensen.positiveMap_rpowIntegrand₀₁_jensen" class="lean_decl">TNLean.OperatorJensen.positiveMap_rpowIntegrand₀₁_jensen</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>    Let \(T\) be a positive subunital map, let \(A\ge 0\), let \(p\in (0,1)\), and let \(t{\gt}0\). Then </p>
+<div class="displaymath" id="a0000028636">
+  \[  T\! \left(f_{p,t}(A)\right) \le f_{p,t}(TA), \qquad f_{p,t}(x)=t^p\left(t^{-1}-(t+x)^{-1}\right).  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000028635">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Rewrite the continuous functional calculus for \(f_{p,t}\) in resolvent form, </p>
+<div class="displaymath" id="a0000028637">
+  \[  f_{p,t}(X)=t^{p-1}\mathbb {1}-t^p(t\mathbb {1}+X)^{-1}.  \]
+</div>
+<p> After applying the linear map \(T\), the difference \(f_{p,t}(TA)-T(f_{p,t}(A))\) is exactly \(t^p\) times the positive matrix supplied by the positive-map resolvent inequality. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:operator_jensen_integral_order">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">18.12</span>
     <span class="lemma_thmtitle">Positive matrix-valued integrals</span>
     <div class="thm_header_extras">
 
@@ -1650,7 +1738,7 @@
 
     <a class="icon proof" href="ch-operator_convexity.html#lem:operator_jensen_integral_order">#</a>
     
-    <a class="icon proof" href="ch-operator_convexity.html#a0000028635"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-operator_convexity.html#a0000028638"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1681,7 +1769,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000028635">
+<div class="proof_wrapper" id="a0000028638">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1698,7 +1786,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.12</span>
+    <span class="theorem_thmlabel">18.13</span>
     <span class="theorem_thmtitle">Jensen for concave real powers</span>
     <div class="thm_header_extras">
 
@@ -1722,9 +1810,9 @@
           
           <li><a href="ch-channels.html#def:positive_map">Definition 4.1</a></li>
           
-          <li><a href="ch-operator_convexity.html#lem:operator_jensen_positive_map_resolvent">Lemma 18.10</a></li>
+          <li><a href="ch-operator_convexity.html#lem:operator_jensen_positive_map_rpow_integrand">Lemma 18.11</a></li>
           
-          <li><a href="ch-operator_convexity.html#lem:operator_jensen_integral_order">Lemma 18.11</a></li>
+          <li><a href="ch-operator_convexity.html#lem:operator_jensen_integral_order">Lemma 18.12</a></li>
           
         </ul>
     
@@ -1756,7 +1844,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For a positive subunital map \(T\), a positive semidefinite matrix&#160;\(A\), and \(p\in [0,1]\): </p>
-<div class="displaymath" id="a0000028636">
+<div class="displaymath" id="a0000028639">
   \[  T(A^p) \le (TA)^p.  \]
 </div>
 <p> This is <span class="cite">
@@ -1774,7 +1862,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.13</span>
+    <span class="theorem_thmlabel">18.14</span>
     <span class="theorem_thmtitle">Map form of Jensen for concave real powers</span>
     <div class="thm_header_extras">
 
@@ -1785,7 +1873,7 @@
 
     <a class="icon proof" href="ch-operator_convexity.html#thm:rpow_concave_jensen">#</a>
     
-    <a class="icon proof" href="ch-operator_convexity.html#a0000028637"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-operator_convexity.html#a0000028640"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1801,7 +1889,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-operator_convexity.html#thm:posMap_rpow_concave_jensen">Theorem 18.12</a></li>
+          <li><a href="ch-operator_convexity.html#thm:posMap_rpow_concave_jensen">Theorem 18.13</a></li>
           
         </ul>
     
@@ -1836,7 +1924,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000028637">
+<div class="proof_wrapper" id="a0000028640">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1853,7 +1941,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.14</span>
+    <span class="theorem_thmlabel">18.15</span>
     <span class="theorem_thmtitle">Jensen for convex real powers</span>
     <div class="thm_header_extras">
 
@@ -1907,7 +1995,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For a positive subunital map \(T\), a positive semidefinite matrix&#160;\(A\), and \(p\in [1,2]\): </p>
-<div class="displaymath" id="a0000028638">
+<div class="displaymath" id="a0000028641">
   \[  (TA)^p \le T(A^p).  \]
 </div>
 <p> This is <span class="cite">
@@ -1925,7 +2013,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.15</span>
+    <span class="theorem_thmlabel">18.16</span>
     <span class="theorem_thmtitle">Map form of Jensen for convex real powers</span>
     <div class="thm_header_extras">
 
@@ -1936,7 +2024,7 @@
 
     <a class="icon proof" href="ch-operator_convexity.html#thm:rpow_convex_jensen">#</a>
     
-    <a class="icon proof" href="ch-operator_convexity.html#a0000028639"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-operator_convexity.html#a0000028642"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1952,7 +2040,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-operator_convexity.html#thm:posMap_rpow_convex_jensen">Theorem 18.14</a></li>
+          <li><a href="ch-operator_convexity.html#thm:posMap_rpow_convex_jensen">Theorem 18.15</a></li>
           
         </ul>
     
@@ -1987,7 +2075,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000028639">
+<div class="proof_wrapper" id="a0000028642">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2004,7 +2092,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.16</span>
+    <span class="theorem_thmlabel">18.17</span>
     <span class="theorem_thmtitle">Jensen for concave log</span>
     <div class="thm_header_extras">
 
@@ -2058,7 +2146,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For a positive <em>unital</em> map \(T\) and positive-definite&#160;\(A\): </p>
-<div class="displaymath" id="a0000028640">
+<div class="displaymath" id="a0000028643">
   \[  T(\log A) \le \log (TA).  \]
 </div>
 <p> This is <span class="cite">
@@ -2076,7 +2164,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.17</span>
+    <span class="theorem_thmlabel">18.18</span>
     <span class="theorem_thmtitle">Map form of Jensen for the concave logarithm</span>
     <div class="thm_header_extras">
 
@@ -2087,7 +2175,7 @@
 
     <a class="icon proof" href="ch-operator_convexity.html#thm:log_concave_jensen">#</a>
     
-    <a class="icon proof" href="ch-operator_convexity.html#a0000028641"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-operator_convexity.html#a0000028644"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2103,7 +2191,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-operator_convexity.html#thm:posMap_log_concave_jensen">Theorem 18.16</a></li>
+          <li><a href="ch-operator_convexity.html#thm:posMap_log_concave_jensen">Theorem 18.17</a></li>
           
         </ul>
     
@@ -2138,7 +2226,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000028641">
+<div class="proof_wrapper" id="a0000028644">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2156,7 +2244,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.18</span>
+    <span class="theorem_thmlabel">18.19</span>
     <span class="theorem_thmtitle">Lieb concavity</span>
     <div class="thm_header_extras">
 
@@ -2190,7 +2278,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>  For \(s\in [0,1]\), any matrix&#160;\(K\), and positive-definite matrices \(A_1,A_2,B_1,B_2\), the map \((A,B)\mapsto \operatorname{tr}(K^\dagger A^s K B^{1-s})\) is jointly concave: </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f95ab40f770>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f60fe7245f0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:opconv_lieb_joint_concavity} t\, \Re \operatorname{tr}(K^\dagger A_1^s K B_1^{1-s}) +(1-t) \Re \operatorname{tr}(K^\dagger A_2^s K B_2^{1-s}) \le \Re \operatorname{tr}\! (K^\dagger (tA_1+(1-t)A_2)^s K (tB_1+(1-t)B_2)^{1-s}). \end{equation}
@@ -2215,7 +2303,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.19</span>
+    <span class="theorem_thmlabel">18.20</span>
     <span class="theorem_thmtitle">Map form of Lieb concavity</span>
     <div class="thm_header_extras">
 
@@ -2226,7 +2314,7 @@
 
     <a class="icon proof" href="ch-operator_convexity.html#thm:lieb_concavity">#</a>
     
-    <a class="icon proof" href="ch-operator_convexity.html#a0000028642"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-operator_convexity.html#a0000028645"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2242,7 +2330,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-operator_convexity.html#thm:lieb_concavity_axiom">Theorem 18.18</a></li>
+          <li><a href="ch-operator_convexity.html#thm:lieb_concavity_axiom">Theorem 18.19</a></li>
           
         </ul>
     
@@ -2273,11 +2361,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   For \(s\in [0,1]\), any matrix&#160;\(K\), and positive-definite matrices \(A_1,A_2,B_1,B_2\), the function \((A,B)\mapsto \Re \operatorname{tr}(K^\dagger A^s K B^{1-s})\) is jointly concave, satisfying the inequality&#160;(??) of Theorem&#160;<a href="ch-operator_convexity.html#thm:lieb_concavity_axiom">18.18</a>. </p>
+  <p>   For \(s\in [0,1]\), any matrix&#160;\(K\), and positive-definite matrices \(A_1,A_2,B_1,B_2\), the function \((A,B)\mapsto \Re \operatorname{tr}(K^\dagger A^s K B^{1-s})\) is jointly concave, satisfying the inequality&#160;(??) of Theorem&#160;<a href="ch-operator_convexity.html#thm:lieb_concavity_axiom">18.19</a>. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000028642">
+<div class="proof_wrapper" id="a0000028645">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2294,7 +2382,7 @@
     <span class="corollary_thmcaption">
     Corollary
     </span>
-    <span class="corollary_thmlabel">18.20</span>
+    <span class="corollary_thmlabel">18.21</span>
     <span class="corollary_thmtitle">Lieb concavity, \(K=\mathbb {1}\) case</span>
     <div class="thm_header_extras">
 
@@ -2305,7 +2393,7 @@
 
     <a class="icon proof" href="ch-operator_convexity.html#cor:lieb_concavity_id">#</a>
     
-    <a class="icon proof" href="ch-operator_convexity.html#a0000028643"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-operator_convexity.html#a0000028646"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2321,7 +2409,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-operator_convexity.html#thm:lieb_concavity">Theorem 18.19</a></li>
+          <li><a href="ch-operator_convexity.html#thm:lieb_concavity">Theorem 18.20</a></li>
           
         </ul>
     
@@ -2353,14 +2441,14 @@
   </div>
   <div class="corollary_thmcontent">
   <p>   For \(s\in [0,1]\), \(t\in [0,1]\), and positive-definite matrices \(A_1,A_2,B_1,B_2\), the map \((A,B)\mapsto \Re \operatorname{tr}(A^s B^{1-s})\) is jointly concave: </p>
-<div class="displaymath" id="a0000028644">
+<div class="displaymath" id="a0000028647">
   \[  t\, \Re \operatorname{tr}(A_1^s B_1^{1-s})+(1-t) \Re \operatorname{tr}(A_2^s B_2^{1-s}) \le \Re \operatorname{tr}\! ((tA_1+(1-t)A_2)^s (tB_1+(1-t)B_2)^{1-s}).  \]
 </div>
-<p> Obtained from Theorem&#160;<a href="ch-operator_convexity.html#thm:lieb_concavity">18.19</a> by taking \(K=\mathbb {1}\). </p>
+<p> Obtained from Theorem&#160;<a href="ch-operator_convexity.html#thm:lieb_concavity">18.20</a> by taking \(K=\mathbb {1}\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000028643">
+<div class="proof_wrapper" id="a0000028646">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2368,7 +2456,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Specialize Theorem&#160;<a href="ch-operator_convexity.html#thm:lieb_concavity">18.19</a> at \(K=\mathbb {1}\) and simplify \(\mathbb {1}^{\dagger }=\mathbb {1}\) together with \(\mathbb {1}\cdot X=X\cdot \mathbb {1}=X\). </p>
+  <p>Specialize Theorem&#160;<a href="ch-operator_convexity.html#thm:lieb_concavity">18.20</a> at \(K=\mathbb {1}\) and simplify \(\mathbb {1}^{\dagger }=\mathbb {1}\) together with \(\mathbb {1}\cdot X=X\cdot \mathbb {1}=X\). </p>
 
   </div>
 </div>
@@ -2377,7 +2465,7 @@
     <span class="corollary_thmcaption">
     Corollary
     </span>
-    <span class="corollary_thmlabel">18.21</span>
+    <span class="corollary_thmlabel">18.22</span>
     <span class="corollary_thmtitle">Concavity of Lieb’s map in the first argument</span>
     <div class="thm_header_extras">
 
@@ -2388,7 +2476,7 @@
 
     <a class="icon proof" href="ch-operator_convexity.html#cor:lieb_concavity_in_fst">#</a>
     
-    <a class="icon proof" href="ch-operator_convexity.html#a0000028645"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-operator_convexity.html#a0000028648"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2404,7 +2492,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-operator_convexity.html#thm:lieb_concavity">Theorem 18.19</a></li>
+          <li><a href="ch-operator_convexity.html#thm:lieb_concavity">Theorem 18.20</a></li>
           
         </ul>
     
@@ -2436,13 +2524,13 @@
   </div>
   <div class="corollary_thmcontent">
   <p>    For \(s\in [0,1]\), \(t\in [0,1]\), matrix \(K\), and positive-definite matrices \(A_1,A_2,B\), the map \(A\mapsto \Re \operatorname{tr}(K^\dagger A^s K B^{1-s})\) is concave: </p>
-<div class="displaymath" id="a0000028646">
+<div class="displaymath" id="a0000028649">
   \[  t\, \Re \operatorname{tr}(K^\dagger A_1^s K B^{1-s}) +(1-t) \Re \operatorname{tr}(K^\dagger A_2^s K B^{1-s}) \le \Re \operatorname{tr}\! (K^\dagger (tA_1+(1-t)A_2)^s K B^{1-s}).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000028645">
+<div class="proof_wrapper" id="a0000028648">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2450,7 +2538,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Specialize Theorem&#160;<a href="ch-operator_convexity.html#thm:lieb_concavity">18.19</a> at \(B_1=B_2=B\), so that the convex combination collapses: \(tB+(1-t)B=B\). </p>
+  <p>Specialize Theorem&#160;<a href="ch-operator_convexity.html#thm:lieb_concavity">18.20</a> at \(B_1=B_2=B\), so that the convex combination collapses: \(tB+(1-t)B=B\). </p>
 
   </div>
 </div>
@@ -2459,7 +2547,7 @@
     <span class="corollary_thmcaption">
     Corollary
     </span>
-    <span class="corollary_thmlabel">18.22</span>
+    <span class="corollary_thmlabel">18.23</span>
     <span class="corollary_thmtitle">Concavity of Lieb’s map in the second argument</span>
     <div class="thm_header_extras">
 
@@ -2470,7 +2558,7 @@
 
     <a class="icon proof" href="ch-operator_convexity.html#cor:lieb_concavity_in_snd">#</a>
     
-    <a class="icon proof" href="ch-operator_convexity.html#a0000028647"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-operator_convexity.html#a0000028650"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2486,7 +2574,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-operator_convexity.html#thm:lieb_concavity">Theorem 18.19</a></li>
+          <li><a href="ch-operator_convexity.html#thm:lieb_concavity">Theorem 18.20</a></li>
           
         </ul>
     
@@ -2518,13 +2606,13 @@
   </div>
   <div class="corollary_thmcontent">
   <p>    For \(s\in [0,1]\), \(t\in [0,1]\), matrix \(K\), and positive-definite matrices \(A,B_1,B_2\), the map \(B\mapsto \Re \operatorname{tr}(K^\dagger A^s K B^{1-s})\) is concave: </p>
-<div class="displaymath" id="a0000028648">
+<div class="displaymath" id="a0000028651">
   \[  t\, \Re \operatorname{tr}(K^\dagger A^s K B_1^{1-s}) +(1-t) \Re \operatorname{tr}(K^\dagger A^s K B_2^{1-s}) \le \Re \operatorname{tr}\! (K^\dagger A^s K (tB_1+(1-t)B_2)^{1-s}).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000028647">
+<div class="proof_wrapper" id="a0000028650">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2532,7 +2620,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Specialize Theorem&#160;<a href="ch-operator_convexity.html#thm:lieb_concavity">18.19</a> at \(A_1=A_2=A\), so that the convex combination collapses: \(tA+(1-t)A=A\). </p>
+  <p>Specialize Theorem&#160;<a href="ch-operator_convexity.html#thm:lieb_concavity">18.20</a> at \(A_1=A_2=A\), so that the convex combination collapses: \(tA+(1-t)A=A\). </p>
 
   </div>
 </div>
