@@ -108,7 +108,7 @@ maps.
 
 \subsection{Two-positive maps and the generalized Schwarz inequality}
 
-\begin{definition}[$k$-positive map]
+\begin{definition}[$k$-positive map]\label{def:k_positive_map}
     \lean{IsNPositiveMap}
     \leanok
     A linear map $E : \MN{D} \to \MN{D}$ is $k$-positive if
@@ -120,6 +120,30 @@ maps.
     \leanok
     A linear map is \emph{two-positive} if it is $2$-positive.
 \end{definition}
+
+\begin{definition}[Blockwise ampliation]\label{def:blockwise_ampliation}
+    \lean{nPositiveAmpliation}
+    \leanok
+    For a linear map $E : \MN{D}\to\MN{D}$, its $k$-fold ampliation acts on
+    block matrices by
+    \[
+        E^{(k)}(X)_{(i,p),(j,q)}
+        = E\bigl((X_{(a,p),(b,q)})_{a,b}\bigr)_{i,j}.
+    \]
+\end{definition}
+
+\begin{theorem}[$k$-positivity as positivity of the ampliation]
+    \lean{isNPositiveMap_iff_isPositiveMap_nPositiveAmpliation}
+    \leanok
+    \uses{def:k_positive_map, def:blockwise_ampliation}
+    A linear map is $k$-positive if and only if its blockwise ampliation is
+    positive on $\MN{D}\otimes\MN{k}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This is precisely the preceding definition of the ampliation.
+\end{proof}
 
 \begin{definition}[Trace-pairing adjoint]\label{def:trace_pairing_adjoint}
     \lean{Matrix.traceAdjointMap}
@@ -148,7 +172,7 @@ maps.
     $(E^*(\rho))_{ji}=\operatorname{tr}(\rho E(e_{ij}))$.
 \end{proof}
 
-\begin{theorem}[Trace-pairing adjoint is involutive]
+\begin{theorem}[Trace-pairing adjoint is involutive]\label{thm:trace_pairing_adjoint_involutive}
     \lean{Matrix.traceAdjointMap_traceAdjointMap}
     \leanok
     \uses{def:trace_pairing_adjoint, thm:trace_nondeg}
@@ -187,6 +211,48 @@ maps.
     $\operatorname{tr}(Axx^\dagger)=x^\dagger A x$ and the hypothesis give
     $x^\dagger A x\geq 0$ for every vector $x$, so the Hermitian matrix $A$ is
     positive semidefinite.
+\end{proof}
+
+\begin{theorem}[Trace-pairing adjoint of a positive map]\label{thm:trace_pairing_adjoint_positive}
+    \lean{IsPositiveMap.traceAdjointMap}
+    \leanok
+    \uses{def:trace_pairing_adjoint, thm:psd_trace_pairing_self_dual}
+    If $E : \MN{D}\to\MN{D}$ is positive, then its trace-pairing adjoint $E^*$
+    is positive.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Let $\rho\geq 0$.  First $E^*(\rho)$ is Hermitian.  Indeed,
+    positivity of $E$ gives $E(A^\dagger)=E(A)^\dagger$, and hence for matrix
+    units $e_{ij}$,
+    \[
+        \overline{\operatorname{tr}(\rho E(e_{ij}))}
+        =\operatorname{tr}(E(e_{ij})^\dagger\rho)
+        =\operatorname{tr}(E(e_{ji})\rho)
+        =\operatorname{tr}(\rho E(e_{ji})).
+    \]
+    For every $B\geq 0$, the adjoint identity gives
+    \[
+        \operatorname{tr}(E^*(\rho)B)=\operatorname{tr}(\rho E(B)).
+    \]
+    Since $E(B)\geq 0$, the right side is nonnegative by positivity of the
+    trace product of two positive semidefinite matrices.  Self-duality of the
+    positive semidefinite cone therefore gives $E^*(\rho)\geq 0$.
+\end{proof}
+
+\begin{theorem}[Trace-pairing adjoints preserve positivity exactly]
+    \lean{isPositiveMap_traceAdjointMap_iff}
+    \leanok
+    \uses{thm:trace_pairing_adjoint_positive, thm:trace_pairing_adjoint_involutive}
+    A linear map is positive if and only if its trace-pairing adjoint is
+    positive.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    One direction is the preceding theorem.  The other follows by applying the
+    same theorem to $E^*$ and using $(E^*)^*=E$.
 \end{proof}
 
 \begin{theorem}[Completely positive maps are $k$-positive]

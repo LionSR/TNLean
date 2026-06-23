@@ -3,6 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Basic
+import TNLean.Algebra.MatrixAux
+import TNLean.Algebra.TracePairing
 import TNLean.Channel.Schwarz.KadisonSchwarz
 import TNLean.Channel.Schwarz.PositiveMapProperties
 import Mathlib.Analysis.CStarAlgebra.Matrix
@@ -19,10 +21,12 @@ the existing result which is restricted to completely positive maps.
 
 * `IsNPositiveMap` — a linear map `E` is n-positive if `E ⊗ id_n` is positive
 * `Is2PositiveMap` — 2-positive maps (the case n = 2)
+* `nPositiveAmpliation` — the explicit blockwise ampliation `E ⊗ id_k`
 
 ## Main results
 
 * `IsCPMap.isNPositiveMap` — CP maps are n-positive for all n
+* `IsPositiveMap.traceAdjointMap` — the trace-pairing adjoint of a positive map is positive
 * `IsCPMap.is2PositiveMap` — CP maps are 2-positive
 * `kadison_schwarz_2positive` — Kadison–Schwarz for unital 2-positive maps
 
@@ -117,6 +121,78 @@ def IsNPositiveMap (k : ℕ) (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) : P
 /-- A linear map is **2-positive** if `E ⊗ id₂` is positive. -/
 def Is2PositiveMap (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) : Prop :=
   IsNPositiveMap 2 E
+
+/-- The explicit blockwise ampliation `E ⊗ id_k` used in the definition of
+`k`-positivity. -/
+def nPositiveAmpliation (k : ℕ) (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) :
+    Matrix (n × Fin k) (n × Fin k) ℂ →ₗ[ℂ]
+      Matrix (n × Fin k) (n × Fin k) ℂ where
+  toFun X := Matrix.of fun (ip : n × Fin k) (jq : n × Fin k) =>
+    (E (Matrix.of fun i j => X (i, ip.2) (j, jq.2))) ip.1 jq.1
+  map_add' X Y := by
+    ext ip jq
+    change E ((Matrix.of fun i j => X (i, ip.2) (j, jq.2)) +
+        (Matrix.of fun i j => Y (i, ip.2) (j, jq.2))) ip.1 jq.1 =
+      (E (Matrix.of fun i j => X (i, ip.2) (j, jq.2)) +
+        E (Matrix.of fun i j => Y (i, ip.2) (j, jq.2))) ip.1 jq.1
+    rw [map_add]
+  map_smul' c X := by
+    ext ip jq
+    change E (c • (Matrix.of fun i j => X (i, ip.2) (j, jq.2))) ip.1 jq.1 =
+      (c • E (Matrix.of fun i j => X (i, ip.2) (j, jq.2))) ip.1 jq.1
+    rw [map_smul]
+
+omit [Fintype n] [DecidableEq n] in
+/-- The definition of `k`-positivity is positivity of the blockwise ampliation. -/
+theorem isNPositiveMap_iff_isPositiveMap_nPositiveAmpliation
+    (k : ℕ) (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) :
+    IsNPositiveMap k E ↔ IsPositiveMap (nPositiveAmpliation k E) := by
+  rfl
+
+omit [DecidableEq n] in
+private theorem traceAdjointMap_map_isHermitian_of_isPositiveMap
+    {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
+    (hE : IsPositiveMap E) {X : Matrix n n ℂ} (hX : X.IsHermitian) :
+    (Matrix.traceAdjointMap E X).IsHermitian := by
+  classical
+  rw [Matrix.IsHermitian]
+  ext i j
+  simp only [Matrix.conjTranspose_apply, RCLike.star_def]
+  calc
+    (starRingEnd ℂ) (Matrix.trace (X * E (Matrix.single i j 1)))
+        = Matrix.trace ((X * E (Matrix.single i j 1))ᴴ) := by
+          simpa using (Matrix.trace_conjTranspose (X * E (Matrix.single i j 1))).symm
+    _ = Matrix.trace ((E (Matrix.single i j 1))ᴴ * Xᴴ) := by
+          rw [Matrix.conjTranspose_mul]
+    _ = Matrix.trace (E (Matrix.single j i 1) * X) := by
+          rw [hX.eq, ← hE.map_conjTranspose]
+          simp
+    _ = Matrix.trace (X * E (Matrix.single j i 1)) := by
+          rw [Matrix.trace_mul_comm]
+
+omit [DecidableEq n] in
+/-- The trace-pairing adjoint of a positive map is positive. -/
+theorem IsPositiveMap.traceAdjointMap
+    {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
+    (hE : IsPositiveMap E) : IsPositiveMap (Matrix.traceAdjointMap E) := by
+  intro X hX
+  refine Matrix.PosSemidef.of_forall_trace_mul_nonneg
+    (traceAdjointMap_map_isHermitian_of_isPositiveMap hE hX.1) ?_
+  intro B hB
+  rw [Matrix.trace_traceAdjointMap_mul]
+  exact Matrix.PosSemidef.trace_mul_nonneg hX (hE B hB)
+
+omit [DecidableEq n] in
+/-- Positivity is invariant under the trace-pairing adjoint. -/
+theorem isPositiveMap_traceAdjointMap_iff
+    {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ} :
+    IsPositiveMap (Matrix.traceAdjointMap E) ↔ IsPositiveMap E := by
+  constructor
+  · intro h
+    have h' := h.traceAdjointMap
+    simpa [Matrix.traceAdjointMap_traceAdjointMap] using h'
+  · intro h
+    exact h.traceAdjointMap
 
 private theorem posSemidef_fromBlocks_zero_zero
     {m o : Type*} {A : Matrix m m ℂ} (hA : A.PosSemidef) :
