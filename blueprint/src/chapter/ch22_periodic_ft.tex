@@ -754,6 +754,61 @@ unconditional result.
     and the induction hypothesis for the remaining word.
 \end{proof}
 
+\begin{definition}[Corner-transition letters]
+    \label{def:periodic_corner_letter}
+    \lean{MPSTensor.cornerLetter}
+    \leanok
+    \uses{def:periodic_tensor}
+    Let $P_0,\ldots,P_{m-1}$ be cyclic sector projections for a tensor $A$.
+    The one-site corner-transition letters of
+    \cite[Appendix~A]{DeLasCuevas2017Irreducible} are
+    \[
+        A_u^i=P_u A^i P_{u+1},
+    \]
+    with the index $u+1$ taken cyclically modulo~$m$.
+\end{definition}
+
+\begin{definition}[Repeated corner products]
+    \label{def:periodic_corner_product}
+    \lean{MPSTensor.cornerProd}
+    \leanok
+    \uses{def:periodic_corner_letter}
+    For a word $\mathbf i=(i_1,\ldots,i_\ell)$, define
+    \[
+        F_u^{\mathbf i}
+        =
+        A_u^{i_1}A_{u+1}^{i_2}\cdots A_{u+\ell-1}^{i_\ell}.
+    \]
+    The empty word gives $F_u^\varnothing=P_u$, and a one-letter word gives
+    $F_u^{(i)}=A_u^i$. This is the notation of
+    \cite[Appendix~A]{DeLasCuevas2017Irreducible}; in the Case~3 contraction
+    the length is $\ell=mN_0$.
+\end{definition}
+
+\begin{lemma}[Concatenation of corner products]
+    \label{lem:periodic_corner_product_append}
+    \lean{MPSTensor.cornerProd_append}
+    \leanok
+    \uses{def:periodic_corner_product}
+    If the sector maps $P_u$ are orthogonal projections, then for any two
+    words $\mathbf i$ and $\mathbf j$,
+    \[
+        F_u^{\mathbf i\mathbf j}
+        =
+        F_u^{\mathbf i}F_{u+|\mathbf i|}^{\mathbf j},
+    \]
+    where indices are taken cyclically modulo~$m$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:periodic_corner_product}
+    Induct on the word $\mathbf i$.  For the empty word the identity is
+    $P_uF_u^{\mathbf j}=F_u^{\mathbf j}$, which follows from the idempotent
+    part of the orthogonal-projection hypothesis.  For a nonempty word, remove
+    the first letter and apply the induction hypothesis at the next cyclic
+    sector.
+\end{proof}
+
 \begin{theorem}[Cyclic-sector single-site grading]
     \label{thm:cyclic_sector_offdiag_shift}
     \lean{MPSTensor.IsCyclicSectorDecomp.offDiag_shift}
@@ -1239,6 +1294,8 @@ unconditional result.
     % gap in docs/paper-gaps/1708_periodic_overlap_route_alignment.tex.
     \notready
     \uses{lem:sector_match_propagation, def:cyclic_sector_decomp,
+        def:periodic_corner_letter, def:periodic_corner_product,
+        lem:periodic_corner_product_append,
         thm:periodic_product_one_phase_extraction,
         thm:left_canonical_sector_scalar_normalization, lem:finite_cycle_coboundary}
     Let $A$ and $B$ be left-canonical tensors with period $m$, and let
