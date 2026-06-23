@@ -41,8 +41,10 @@ variable {D k : ℕ}
 
 /-- The right-factor Choi compression, written in the index convention of the
 blockwise ampliation.  Here `X : Matrix (Fin D) (Fin k) ℂ` carries the original
-Choi auxiliary index and the `k`-dimensional ampliation index; the entry formula
-is given by `rightCompression_apply`. -/
+Choi auxiliary index and the `k`-dimensional ampliation index.  The
+$(i,p),(j,q)$ entry is
+$\sum_{a,b} X_{a,p}\,\tau_{(i,a),(j,b)}\,\overline{X_{b,q}}$, where $\tau$ is
+the Choi matrix of `T`. -/
 noncomputable def rightCompression
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (X : Matrix (Fin D) (Fin k) ℂ) :
@@ -52,9 +54,9 @@ noncomputable def rightCompression
       X a ip.2 * choiMatrix T (ip.1, a) (jq.1, b) * star (X b jq.2)
 
 /-- The entry formula for the right-factor compression of the Choi matrix.  The
-`(i,p),(j,q)` entry is
-`∑ a, ∑ b, X a p * τ (i,a) (j,b) * star (X b q)`, where `τ` is the Choi
-matrix of `T`. -/
+$(i,p),(j,q)$ entry is
+$\sum_{a,b} X_{a,p}\,\tau_{(i,a),(j,b)}\,\overline{X_{b,q}}$, where $\tau$ is
+the Choi matrix of `T`. -/
 theorem rightCompression_apply
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (X : Matrix (Fin D) (Fin k) ℂ) (i j : Fin D) (p q : Fin k) :
