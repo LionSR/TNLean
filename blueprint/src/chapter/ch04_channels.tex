@@ -96,9 +96,8 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 
     This is the algebraic trace-normalization step in the proof of
     \cite[Chapter~3, Lemma ``Making positive maps trace preserving'']
-    {Wolf2012Quantum}.  The existence of such an $X$ from
-    $T^*(\Id)>0$ requires the inverse-square-root theorem and remains
-    separate.
+    {Wolf2012Quantum}.  The inverse-square-root choice is recorded in the
+    next theorem.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -111,6 +110,37 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
         =\tr(X^\dagger T^*(\Id)X\rho)
         =\tr(\rho).
     \]
+\end{proof}
+
+\begin{theorem}[Trace normalization by inverse square root]
+    \label{thm:trace_normalization_inverse_square_root}
+    \lean{IsPositiveMap.comp_unitaryConjLM_inv_cfc_sqrt_traceAdjointMap_one}
+    \leanok
+    \uses{def:positive_map, def:trace_preserving, def:trace_pairing_adjoint,
+        thm:filtered_trace_normalization_criterion}
+    Let $T:\MN{D}\to\MN{D}$ be a positive map such that $T^*(\Id)$ is positive
+    definite.  Put
+    \[
+        X=(T^*(\Id))^{-1/2}.
+    \]
+    Then
+    \[
+        \rho\longmapsto T(X\rho X^\dagger)
+    \]
+    is positive and trace-preserving.
+\end{theorem}
+
+\begin{proof}\leanok
+    Let $S=(T^*(\Id))^{1/2}$.  Since $T^*(\Id)$ is positive definite, $S$ is
+    invertible and self-adjoint, and $S^2=T^*(\Id)$.  For $X=S^{-1}$,
+    \[
+        X^\dagger T^*(\Id)X
+        =
+        S^{-1}S^2S^{-1}
+        =
+        \Id .
+    \]
+    The preceding trace-normalization criterion applies.
 \end{proof}
 
 \begin{theorem}[Forward Lorentz-cone trace inequality]
