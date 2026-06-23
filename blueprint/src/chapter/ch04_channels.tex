@@ -51,6 +51,42 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     Trace preservation is the identity $\tr(X^T)=\tr(X)$.
 \end{proof}
 
+\begin{theorem}[Filtered trace-normalization criterion]
+    \label{thm:filtered_trace_normalization_criterion}
+    \lean{unitaryConjLM_isPositiveMap,
+        IsTracePreservingMap.comp_unitaryConjLM_of_conj_traceAdjointMap_one,
+        IsPositiveMap.comp_unitaryConjLM_positive_tracePreserving}
+    \leanok
+    \uses{def:positive_map, def:trace_preserving, def:trace_pairing_adjoint}
+    Let $T:\MN{D}\to\MN{D}$ be a positive map, and let $X\in\MN{D}$ satisfy
+    \[
+        X^\dagger T^*(\one)X=\one,
+    \]
+    where $T^*$ is the trace-pairing adjoint.  Then
+    \[
+        \rho\longmapsto T(X\rho X^\dagger)
+    \]
+    is positive and trace-preserving.
+
+    This is the algebraic trace-normalization step in the proof of
+    \cite[Chapter~3, Lemma ``Making positive maps trace preserving'']
+    {Wolf2012Quantum}.  The existence of such an $X$ from
+    $T^*(\one)>0$ requires the inverse-square-root theorem and remains
+    separate.
+\end{theorem}
+
+\begin{proof}\leanok
+    Positivity follows because $X\rho X^\dagger$ is positive whenever
+    $\rho$ is positive, and $T$ is positive.  For trace preservation, use the
+    trace-pairing adjoint identity and cyclicity of trace:
+    \[
+        \tr(T(X\rho X^\dagger))
+        =\tr(T^*(\one)X\rho X^\dagger)
+        =\tr(X^\dagger T^*(\one)X\rho)
+        =\tr(\rho).
+    \]
+\end{proof}
+
 \begin{theorem}[Forward Lorentz-cone trace inequality]
     \label{thm:psd_trace_square_le_square_trace}
     \lean{Matrix.PosSemidef.trace_sq_re_le_trace_re_sq}
