@@ -23,7 +23,12 @@ the specialization $L=2$.
     \lean{MPSTensor.replaceXBCfg}
     \lean{MPSTensor.leftPairLift}
     \lean{MPSTensor.rightPairLift}
+    \lean{MPSTensor.leftPairLift_sub}
+    \lean{MPSTensor.rightPairLift_sub}
+    \lean{MPSTensor.leftPairLift_one_sub}
+    \lean{MPSTensor.rightPairLift_one_sub}
     \lean{MPSTensor.HasOverlappingTwoSiteCommutation}
+    \lean{MPSTensor.HasOverlappingTwoSiteCommutation.commute_complement_lifts}
     \lean{MPSTensor.adjacent_twoSite_cyclicWindowsOverlap}
     \leanok
     \uses{def:nsite_space_parent, def:cyclic_window_support,
@@ -55,6 +60,21 @@ the specialization $L=2$.
     in \cite[Definition~D.2]{Cirac2016MPDO_arXiv}.  The cyclic windows beginning
     at $i$ and $i+1$ realize the two supports $AX$ and $XB$, and hence overlap at
     the middle site.
+
+    The two lift maps also distribute over complementary projectors:
+    \[
+        (1-Q_{AX})_{AX}=1-(Q_{AX})_{AX},\qquad
+        (1-Q_{XB})_{XB}=1-(Q_{XB})_{XB}.
+    \]
+    Consequently, if the projectors $Q_{AX}$ and $Q_{XB}$ commute on the
+    three-site space, then their complementary projectors
+    \[
+        P_{AX}=1-Q_{AX},\qquad P_{XB}=1-Q_{XB}
+    \]
+    commute after the same lifts. This is the elementary algebraic passage used
+    when one moves between the $Q$-projectors of
+    \cite[Appendix~D.2]{Cirac2016MPDO_arXiv} and the complementary ground-space
+    projectors $P$.
 \end{definition}
 
 \begin{theorem}[Three-site translated parent terms]
@@ -112,8 +132,9 @@ the specialization $L=2$.
         h^{(3)}_1(A,2)h^{(3)}_0(A,2).
     \]
     This is only the local transport from the \(AX/XB\) condition to translated
-    parent terms; the construction of the projectors of
-    \cite[Appendix~B]{Cirac2016MPDO_arXiv} is a separate step.
+    parent terms; the construction of the
+    \cite[Appendix~D.2]{Cirac2016MPDO_arXiv} projectors associated with the
+    \cite[Appendix~B]{Cirac2016MPDO_arXiv} basic-vector form is a separate step.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -809,8 +830,10 @@ the specialization $L=2$.
     above when that relation is justified.
     On a three-site chain, the two adjacent length-two parent terms are the
     \(AX\) and \(XB\) actions of the canonical two-site parent interaction.
-    What remains from Appendix~B is to identify the source projectors with
-    these canonical parent interactions and to prove
+    Appendix~B supplies the basic-vector expression, while Appendix~D.2 supplies
+    the parent-commuting projector condition. What remains is to identify the
+    corresponding source projectors with these canonical parent interactions and
+    to prove
     \(Q_{AX}Q_{XB}=Q_{XB}Q_{AX}\). For the all-chain statement, the resulting
     two-site parent projectors must be identified with idempotents \(p_i\)
     satisfying
