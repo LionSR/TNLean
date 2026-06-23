@@ -107,6 +107,7 @@ import TNLean.Channel.Schwarz.SchwarzNormal
 import TNLean.Channel.Schwarz.SchwarzSubnormal
 import TNLean.Channel.Schwarz.SchwarzNotCP
 import TNLean.Channel.Schwarz.TwoPositive
+import TNLean.Channel.Schwarz.ChoiCompression
 import TNLean.Channel.Schwarz.MultiplicativeDomain
 import TNLean.Channel.Schwarz.MultiplicativeDomainPowers
 import TNLean.Channel.Schwarz.MultiplicativeDomainFull
