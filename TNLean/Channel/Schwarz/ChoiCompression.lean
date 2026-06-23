@@ -4,8 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.Channel.SchmidtRank
+import TNLean.Channel.Schwarz.PositiveOnAbelian.Basic
 import TNLean.Channel.Schwarz.TwoPositive
 import Mathlib.Analysis.InnerProductSpace.Positive
+import Mathlib.Analysis.InnerProductSpace.Projection.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Choi compression for the rank-one test
@@ -43,6 +46,11 @@ the pair $(i,p)$.
 * `ChoiJamiolkowski.isNPositiveMap_iff_forall_rightCompression_posSemidef`:
   `k`-positivity is equivalent to positivity of all rectangular right-factor
   Choi compressions.
+* `Matrix.exists_mul_conjTranspose_of_isHermitian_idempotent_rank`: a Hermitian
+  idempotent matrix of rank `k` factors as `P = V * Vᴴ`.
+* `IsNPositiveMap.rightTensor_choiMatrix_sandwich_posSemidef_of_isHermitian_idempotent_rank`:
+  `k`-positivity implies positivity of the Choi sandwich compressed by a
+  Hermitian idempotent of rank `k`.
 
 ## References
 
@@ -87,6 +95,78 @@ theorem posSemidef_of_dotProduct_mulVec_nonneg_complex
     · rw [hinner, hx_real]
       exact (RCLike.nonneg_iff.mp hx_nonneg).1
   exact hpos.isSymmetric
+
+end Matrix
+
+namespace Matrix
+
+/-- Every finite-dimensional Hermitian idempotent matrix of rank `k` has a
+factorization `P = V * Vᴴ` with `k` columns.  The proof identifies `P` with the
+orthogonal projection onto its range, chooses an orthonormal basis of that range,
+and takes the basis vectors as the columns of `V`.
+
+This is the finite-dimensional projection factorization used in Wolf,
+Proposition 3.1, item 2. -/
+theorem exists_mul_conjTranspose_of_isHermitian_idempotent_rank
+    {D k : ℕ} (P : Matrix (Fin D) (Fin D) ℂ)
+    (hP : P.IsHermitian) (hP_idem : P * P = P) (hrank : P.rank = k) :
+    ∃ V : Matrix (Fin D) (Fin k) ℂ, P = V * Vᴴ := by
+  let E := EuclideanSpace ℂ (Fin D)
+  let p : E →ₗ[ℂ] E := Matrix.toEuclideanLin P
+  have hp : p.IsSymmetricProjection := by
+    constructor
+    · change Matrix.toEuclideanLin P * Matrix.toEuclideanLin P = Matrix.toEuclideanLin P
+      rw [PositiveOnAbelian.Internal.toEuclideanLin_mul, hP_idem]
+    · exact (Matrix.isSymmetric_toEuclideanLin_iff (A := P)).mpr hP
+  obtain ⟨horth, hp_eq⟩ :=
+    LinearMap.isSymmetricProjection_iff_eq_coe_starProjection_range.mp hp
+  letI : (LinearMap.range p).HasOrthogonalProjection := horth
+  have hrange : Module.finrank ℂ (LinearMap.range p) = k := by
+    have hrank_range0 :
+        P.rank = Module.finrank ℂ (LinearMap.range
+          (Matrix.toEuclideanLin P : E →ₗ[ℂ] E)) := by
+      rw [Matrix.toEuclideanLin_eq_toLin_orthonormal]
+      exact Matrix.rank_eq_finrank_range_toLin P
+        (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
+        (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
+    have hrank_range : P.rank = Module.finrank ℂ (LinearMap.range p) := by
+      simpa [p, E] using hrank_range0
+    exact hrank_range.symm.trans hrank
+  let b0 : OrthonormalBasis (Fin (Module.finrank ℂ (LinearMap.range p))) ℂ
+      (LinearMap.range p) :=
+    stdOrthonormalBasis ℂ (LinearMap.range p)
+  let b : OrthonormalBasis (Fin k) ℂ (LinearMap.range p) :=
+    b0.reindex (finCongr hrange)
+  let V : Matrix (Fin D) (Fin k) ℂ := fun a j => (b j : E) a
+  refine ⟨V, ?_⟩
+  apply Matrix.toEuclideanLin.injective
+  have hVV : V * Vᴴ = ∑ j : Fin k, Matrix.vecMulVec (b j : E) (star (b j : E)) := by
+    dsimp [V]
+    ext a c
+    simp [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.sum_apply, Matrix.vecMulVec]
+  have hsum_rankOne :
+      Matrix.toEuclideanLin (V * Vᴴ) =
+        ∑ j : Fin k, (InnerProductSpace.rankOne ℂ (b j : E) (b j : E) : E →ₗ[ℂ] E) := by
+    rw [hVV]
+    simp only [map_sum]
+    apply Finset.sum_congr rfl
+    intro j _
+    have h := congrArg Matrix.toEuclideanLin
+      (InnerProductSpace.symm_toEuclideanLin_rankOne (𝕜 := ℂ)
+        (x := (b j : E)) (y := (b j : E)))
+    simpa using h.symm
+  have hstar_linear :
+      ((LinearMap.range p).starProjection : E →ₗ[ℂ] E) =
+        ∑ j : Fin k, (InnerProductSpace.rankOne ℂ (b j : E) (b j : E) : E →ₗ[ℂ] E) := by
+    have hstar := OrthonormalBasis.starProjection_eq_sum_rankOne (U := LinearMap.range p) b
+    simpa [ContinuousLinearMap.toLinearMap_sum] using
+      congrArg (fun L : E →L[ℂ] E => (L : E →ₗ[ℂ] E)) hstar
+  calc
+    Matrix.toEuclideanLin P = p := rfl
+    _ = ((LinearMap.range p).starProjection : E →ₗ[ℂ] E) := hp_eq
+    _ = ∑ j : Fin k, (InnerProductSpace.rankOne ℂ (b j : E) (b j : E) : E →ₗ[ℂ] E) :=
+      hstar_linear
+    _ = Matrix.toEuclideanLin (V * Vᴴ) := hsum_rankOne.symm
 
 end Matrix
 
@@ -484,6 +564,19 @@ theorem IsNPositiveMap.rightTensor_choiMatrix_sandwich_posSemidef_of_mul_conjTra
   exact
     (IsNPositiveMap.rightTensor_choiMatrix_sandwich_posSemidef hT V).conjTranspose_mul_mul_same
       (rightTensorMatrix V)
+
+/-- Forward projection-compression consequence in Wolf, Proposition 3.1,
+item 2.  If `P = Pᴴ`, `P * P = P`, and `rank(P) = k`, then the right-factor
+Choi sandwich by `P` is positive semidefinite under `k`-positivity. -/
+theorem IsNPositiveMap.rightTensor_choiMatrix_sandwich_posSemidef_of_isHermitian_idempotent_rank
+    [NeZero D]
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hT : IsNPositiveMap k T) {P : Matrix (Fin D) (Fin D) ℂ}
+    (hP : P.IsHermitian) (hP_idem : P * P = P) (hrank : P.rank = k) :
+    (rightTensorMatrix P * choiMatrix T * (rightTensorMatrix P)ᴴ).PosSemidef := by
+  obtain ⟨V, rfl⟩ :=
+    Matrix.exists_mul_conjTranspose_of_isHermitian_idempotent_rank P hP hP_idem hrank
+  exact IsNPositiveMap.rightTensor_choiMatrix_sandwich_posSemidef_of_mul_conjTranspose hT V
 
 /-- Forward direction of Wolf's Schmidt-rank expectation criterion.  If `T` is
 `k`-positive, then the Choi quadratic form is nonnegative on every vector of
