@@ -28,6 +28,8 @@ the specialization $L=2$.
     \lean{MPSTensor.leftPairLift_one_sub}
     \lean{MPSTensor.rightPairLift_one_sub}
     \lean{MPSTensor.HasOverlappingTwoSiteCommutation}
+    \lean{MPSTensor.HasAppendixD2ParentCommutingHamiltonian}
+    \lean{MPSTensor.HasAppendixD2ParentCommutingHamiltonian.to_overlapping}
     \lean{MPSTensor.HasOverlappingTwoSiteCommutation.left_complement_idempotent}
     \lean{MPSTensor.HasOverlappingTwoSiteCommutation.right_complement_idempotent}
     \lean{MPSTensor.HasOverlappingTwoSiteCommutation.commute_complement_lifts}
@@ -63,6 +65,17 @@ the specialization $L=2$.
     in \cite[Definition~D.2]{Cirac2016MPDO_arXiv}.  The cyclic windows beginning
     at $i$ and $i+1$ realize the two supports $AX$ and $XB$, and hence overlap at
     the middle site.
+
+    The source local condition also fixes a three-site subspace $K_{AXB}$ and
+    imposes the kernel-intersection equation
+    \[
+        K_{AXB}=
+        \ker\bigl((Q_{AX})_{AX}\bigr)
+        \cap
+        \ker\bigl((Q_{XB})_{XB}\bigr).
+    \]
+    Forgetting this intersection equation gives the algebraic overlapping
+    two-site commutation condition displayed above.
 
     The two lift maps also distribute over complementary projectors:
     \[
@@ -148,6 +161,38 @@ the specialization $L=2$.
     parent interactions are \(q(A)_{AX}\) and \(q(A)_{XB}\). The assumed
     overlapping support condition says exactly that these two lifted
     endomorphisms commute.
+\end{proof}
+
+\begin{theorem}[Three-site commutation from complementary Appendix projectors]
+    \label{thm:local_term_two_three_commute_from_complement_ax_xb}
+    \lean{MPSTensor.localTerm_two_three_zero_one_commute_of_overlapping_two_site_complement}
+    \lean{MPSTensor.localTerm_two_three_zero_one_commute_of_appendixD2_complement}
+    \leanok
+    \uses{def:overlapping_two_site_supports,
+        thm:local_term_two_three_ax_xb_lifts}
+    Suppose the Appendix~D.2 projectors \(Q_{AX}\) and \(Q_{XB}\) satisfy the
+    local parent-commuting condition on \(A X B\), and suppose that the canonical
+    two-site parent interaction is their complement on both faces:
+    \[
+        q(A)=1-Q_{AX}=1-Q_{XB}.
+    \]
+    Then the first two translated length-two parent terms on the three-site
+    chain commute,
+    \[
+        h^{(3)}_0(A,2)h^{(3)}_1(A,2)
+        =
+        h^{(3)}_1(A,2)h^{(3)}_0(A,2).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    The lift identities of Theorem~\ref{thm:local_term_two_three_ax_xb_lifts}
+    identify the translated terms with \((1-Q_{AX})_{AX}\) and
+    \((1-Q_{XB})_{XB}\). The Appendix~D.2 condition implies the overlapping
+    two-site commutation condition after forgetting the kernel-intersection
+    equation. Definition~\ref{def:overlapping_two_site_supports} then gives
+    commutation of the complementary lifted projectors, hence the displayed
+    commutation relation.
 \end{proof}
 
 \begin{definition}[Translated parent-term commutation]\label{def:is_commuting_parent_ham}
@@ -756,7 +801,12 @@ the specialization $L=2$.
     \lean{MPSTensor.cyclicVirtualSucc}
     \lean{MPSTensor.AppendixBStructuralData.cyclicVirtualPairState}
     \lean{MPSTensor.AppendixBStructuralData.mpv_coreTensor_eq_cyclicVirtualPairState}
+    \lean{MPSTensor.AppendixBStructuralData.cyclicVirtualPairState_two_eq_twoSiteAmplitude}
+    \lean{MPSTensor.trace_gauge_boundary}
+    \lean{MPSTensor.GaugeEquiv.groundSpace_le}
+    \lean{MPSTensor.GaugeEquiv.groundSpace_eq}
     \lean{MPSTensor.AppendixBStructuralData.gaugeEquiv_coreTensor}
+    \lean{MPSTensor.AppendixBStructuralData.groundSpace_eq_coreTensor}
     \lean{MPSTensor.AppendixBStructuralData.mpv_eq_coreTensor}
     \lean{MPSTensor.AppendixBStructuralData.twoSiteAmplitude_eq_mpv}
     \lean{MPSTensor.AppendixBStructuralData.twoSiteAmplitude_eq_coreTensor_mpv}
@@ -812,8 +862,16 @@ the specialization $L=2$.
     \]
     where $\varphi_j$ is shared by $b_t$ and $a_{t+1}$ and $U$ acts on
     $(a_t,b_t)$.
-    The change of basis does not alter periodic MPS coefficients, so the
-    corresponding two-site amplitude is
+    At length two, this cyclic coefficient is the structural two-site amplitude:
+    \[
+        C_2(\sigma)=\phi_2(\sigma).
+    \]
+    The change of basis does not alter either the local spaces \(G_L\) or the
+    periodic MPS coefficients:
+    \[
+        G_L(A)=G_L(\Lambda U).
+    \]
+    In particular, the corresponding two-site amplitude is
     \[
         \phi_2(a,b)
         =
