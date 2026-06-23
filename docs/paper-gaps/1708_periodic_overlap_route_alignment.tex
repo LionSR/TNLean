@@ -229,6 +229,19 @@ The formal declarations are
 \leanid{sectorGaugePhaseEquiv_succ_of_cyclicTransport} and
 \leanid{gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP}.}
 
+\textbf{Corner-letter building blocks.} The corner-transition tensors
+$A_u^i=P_uA^iP_{u+1}$ (eq:Auprop) and their repeated products
+$F_u^{\mathbf i}=A_u^{i_1}A_{u+1}^{i_2}\cdots$ (eq:Fu) are now defined as
+\leanid{MPSTensor.cornerLetter} and \leanid{MPSTensor.cornerProd}. The cyclic
+concatenation law $F_u^{\mathbf{i}_1\mathbf{i}_2}
+=F_u^{\mathbf i_1}\,F_{u+\ell_1}^{\mathbf i_2}$, by which the appendix repeats a
+single block around the cycle to an injective length, is
+\leanid{MPSTensor.cornerProd_append}; the junction projector is absorbed by
+idempotency, so the law needs no injectivity or normality input. These are the
+$A_u^i/F_u$ building blocks that enter the first bullet above; the right-inverse
+contraction of $F_u$ to \emph{eq:resultprop} and the global gauge assembly remain
+open.
+
 \section{Scope restriction: independence without spanning}
 
 \textbf{Source.}\footnote{\cite{DeLasCuevas2017Irreducible}, lines 604--608
