@@ -51,16 +51,43 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     Trace preservation is the identity $\tr(X^T)=\tr(X)$.
 \end{proof}
 
+\begin{theorem}[Conjugation filters preserve positivity]
+    \label{thm:conjugation_filters_preserve_positivity}
+    \lean{unitaryConjLM_isCPMap, unitaryConjLM_isPositiveMap,
+        IsPositiveMap.comp_unitaryConjLM, unitaryConjLM_isTP_of_unitary,
+        unitaryConjLM_isChannel_of_unitary}
+    \leanok
+    \uses{def:cp_map, def:positive_map, def:trace_preserving, def:channel}
+    For every $X\in\MN{D}$, the conjugation filter
+    \[
+        \rho\longmapsto X\rho X^\dagger
+    \]
+    is completely positive, hence positive.  Therefore, if
+    $T:\MN{D}\to\MN{D}$ is positive, then
+    $\rho\mapsto T(X\rho X^\dagger)$ is positive.  If in addition
+    $X^\dagger X=\Id$, then the conjugation filter is trace-preserving and
+    hence is a quantum channel.
+\end{theorem}
+
+\begin{proof}\leanok
+    Complete positivity follows from the single Kraus operator $X$.
+    Positivity follows immediately.  If $X^\dagger X=\Id$, cyclicity of trace
+    gives
+    \[
+        \tr(X\rho X^\dagger)=\tr(X^\dagger X\rho)=\tr(\rho).
+    \]
+\end{proof}
+
 \begin{theorem}[Filtered trace-normalization criterion]
     \label{thm:filtered_trace_normalization_criterion}
-    \lean{unitaryConjLM_isPositiveMap,
-        IsTracePreservingMap.comp_unitaryConjLM_of_conj_traceAdjointMap_one,
+    \lean{IsTracePreservingMap.comp_unitaryConjLM_of_conj_traceAdjointMap_one,
         IsPositiveMap.comp_unitaryConjLM_positive_tracePreserving}
     \leanok
-    \uses{def:positive_map, def:trace_preserving, def:trace_pairing_adjoint}
+    \uses{def:positive_map, def:trace_preserving, def:trace_pairing_adjoint,
+        thm:conjugation_filters_preserve_positivity}
     Let $T:\MN{D}\to\MN{D}$ be a positive map, and let $X\in\MN{D}$ satisfy
     \[
-        X^\dagger T^*(\one)X=\one,
+        X^\dagger T^*(\Id)X=\Id,
     \]
     where $T^*$ is the trace-pairing adjoint.  Then
     \[
@@ -71,7 +98,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     This is the algebraic trace-normalization step in the proof of
     \cite[Chapter~3, Lemma ``Making positive maps trace preserving'']
     {Wolf2012Quantum}.  The existence of such an $X$ from
-    $T^*(\one)>0$ requires the inverse-square-root theorem and remains
+    $T^*(\Id)>0$ requires the inverse-square-root theorem and remains
     separate.
 \end{theorem}
 
@@ -81,8 +108,8 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     trace-pairing adjoint identity and cyclicity of trace:
     \[
         \tr(T(X\rho X^\dagger))
-        =\tr(T^*(\one)X\rho X^\dagger)
-        =\tr(X^\dagger T^*(\one)X\rho)
+        =\tr(T^*(\Id)X\rho X^\dagger)
+        =\tr(X^\dagger T^*(\Id)X\rho)
         =\tr(\rho).
     \]
 \end{proof}
