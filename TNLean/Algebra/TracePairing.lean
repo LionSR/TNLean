@@ -81,7 +81,8 @@ theorem trace_mul_right_eq_zero_iff {n : Type*} [Fintype n]
 
 /-- The trace-pairing adjoint of a linear map on matrices.
 
-It is characterized by `trace (traceAdjointMap E ρ * X) = trace (ρ * E X)`. -/
+It is characterized by the identity
+tr(E^*(ρ) X) = tr(ρ E(X)) for the bilinear trace pairing. -/
 noncomputable def traceAdjointMap {n : Type*} [Fintype n] [DecidableEq n]
     (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) :
     Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ where
