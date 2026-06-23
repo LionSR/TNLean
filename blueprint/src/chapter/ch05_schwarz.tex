@@ -158,9 +158,18 @@ maps.
 
 \begin{proof}
     \leanok
-    Pair both sides with an arbitrary matrix under the trace pairing.  The
-    defining adjoint identity, applied twice, gives the same trace pairing with
-    every test matrix, and nondegeneracy of the trace pairing gives equality.
+    Fix an arbitrary matrix $N\in\MN{D}$.  The adjoint identity
+    $\operatorname{tr}(E^*(\rho)X)=\operatorname{tr}(\rho E(X))$, applied first
+    to $E^*$ and then to $E$, gives
+    \[
+        \operatorname{tr}((E^*)^*(X)N)
+        = \operatorname{tr}(X E^*(N))
+        = \operatorname{tr}(E^*(N)X)
+        = \operatorname{tr}(N E(X))
+        = \operatorname{tr}(E(X)N).
+    \]
+    Since this holds for every $N$ and the trace pairing is nondegenerate,
+    $(E^*)^*=E$.
 \end{proof}
 
 \begin{theorem}[Self-duality of the positive semidefinite cone]
@@ -174,7 +183,8 @@ maps.
 \begin{proof}
     \leanok
     Test the hypothesis on rank-one positive semidefinite matrices
-    $B=xx^\dagger$.  The trace identity gives
+    $B=xx^\dagger$.  The identity
+    $\operatorname{tr}(Axx^\dagger)=x^\dagger A x$ and the hypothesis give
     $x^\dagger A x\geq 0$ for every vector $x$, so the Hermitian matrix $A$ is
     positive semidefinite.
 \end{proof}
