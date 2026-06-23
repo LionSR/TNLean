@@ -35,6 +35,8 @@ with composition. We also relate it to the Kraus representation.
 * `transferMatrix_id`: the transfer matrix of the identity is the identity
 * `transferMatrix_kraus`: for a Kraus map `T(X) = ∑ᵢ Kᵢ X Kᵢ†`, the transfer
   matrix is `∑ᵢ K'ᵢ ⊗ₖ Kᵢ`
+* `IsPositiveMap.comp_unitaryConjLM`: positive maps remain positive after
+  precomposition with a conjugation map
 * `IsTracePreservingMap.comp_unitaryConjLM_of_conj_traceAdjointMap_one`: a
   trace-normalization criterion for filtered maps `ρ ↦ T(XρX†)`
 * `MPSTensor.transferMatrix_eq`: the MPS transfer map `E_A` has transfer
@@ -398,6 +400,14 @@ theorem unitaryConjLM_isPositiveMap (U : Matrix (Fin D) (Fin D) ℂ) :
     IsPositiveMap (unitaryConjLM U) :=
   (unitaryConjLM_isCPMap U).isPositiveMap
 
+/-- Precomposing a positive map with conjugation by an arbitrary matrix preserves
+positivity. -/
+theorem IsPositiveMap.comp_unitaryConjLM
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hT : IsPositiveMap T) (X : Matrix (Fin D) (Fin D) ℂ) :
+    IsPositiveMap (T.comp (unitaryConjLM X)) :=
+  fun ρ hρ => hT (unitaryConjLM X ρ) (unitaryConjLM_isPositiveMap X ρ hρ)
+
 /-- Unitary conjugation by a unitary matrix is trace-preserving. -/
 theorem unitaryConjLM_isTP_of_unitary (U : Matrix (Fin D) (Fin D) ℂ)
     (hU : Uᴴ * U = 1) :
@@ -451,11 +461,9 @@ theorem IsPositiveMap.comp_unitaryConjLM_positive_tracePreserving
     (hT : IsPositiveMap T) (X : Matrix (Fin D) (Fin D) ℂ)
     (hX : Xᴴ * Matrix.traceAdjointMap T 1 * X = 1) :
     IsPositiveMap (T.comp (unitaryConjLM X)) ∧
-      IsTracePreservingMap (T.comp (unitaryConjLM X)) := by
-  constructor
-  · intro ρ hρ
-    exact hT (unitaryConjLM X ρ) (unitaryConjLM_isPositiveMap X ρ hρ)
-  · exact IsTracePreservingMap.comp_unitaryConjLM_of_conj_traceAdjointMap_one T X hX
+      IsTracePreservingMap (T.comp (unitaryConjLM X)) :=
+  ⟨hT.comp_unitaryConjLM X,
+    IsTracePreservingMap.comp_unitaryConjLM_of_conj_traceAdjointMap_one T X hX⟩
 
 end UnitaryConjugation
 
