@@ -20,6 +20,8 @@ the pair $(i,p)$.
 
 * `ChoiJamiolkowski.rightCompression`: the right-factor Choi compression,
   written in the index convention of the blockwise ampliation.
+* `ChoiJamiolkowski.compressedOmegaVector`: the vector with component
+  $D^{-1/2}X_{i,p}$ at the pair $(i,p)$.
 
 ## Main results
 
@@ -71,8 +73,9 @@ noncomputable def compressedOmegaVector (X : Matrix (Fin D) (Fin k) ℂ) :
     Fin D × Fin k → ℂ :=
   fun ip => ((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) * X ip.1 ip.2
 
-/-- The rank-one matrix used by the ampliation test agrees with the right-factor
-compression of the Choi matrix. -/
+/-- For the vector `compressedOmegaVector X`, the `k`-fold ampliation of the
+rank-one matrix $|\psi\rangle\langle\psi|$ by `T` is the right-factor Choi
+compression by `X`. -/
 theorem nPositiveAmpliation_rankOne_eq_rightCompression
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (X : Matrix (Fin D) (Fin k) ℂ) :
@@ -101,7 +104,7 @@ theorem nPositiveAmpliation_rankOne_eq_rightCompression
             rw [Matrix.matrix_eq_sum_single
               (Matrix.of fun a b => (X a p * star (X b q)) * (c * star c))]
             simp [ChoiJamiolkowski.omegaSlice_eq_single, c, Matrix.smul_single,
-              smul_eq_mul, mul_assoc, mul_left_comm, mul_comm]
+              smul_eq_mul]
   calc
     nPositiveAmpliation k T
         (Matrix.vecMulVec (compressedOmegaVector X) (star (compressedOmegaVector X)))
