@@ -398,6 +398,69 @@ matching and then from the coefficient identities that produce one.
     then applies to this copy-weight matching.
 \end{proof}
 
+The coefficient-identity hypothesis of
+Theorem~\ref{thm:sector_bnt_proportional_global_gauge_of_coeff_identity} is the
+scalar-free identity~(\ref{eq:ft_coeff_identity}). From the proportional MPV
+hypothesis alone one obtains the same identity carrying the global length-scalar
+of the proportionality, recorded next.
+
+\begin{lemma}[Proportional matched-phase coefficient identity, scalar-threaded]%
+    \label{lem:sector_bnt_coeff_identity_via_matched_mpv_phase_proportional}
+    \lean{MPSTensor.coeff_identity_via_matched_mpv_phase_proportional}
+    \leanok
+    \uses{def:sector_bnt_cf, lem:eventual_coeff_eq_of_eventual_li}
+    Let $P$ be a BNT canonical form and $Q$ a sector decomposition whose total
+    tensors generate eventually nonzero proportional MPV families. Suppose a
+    bijection $\beta:J(Q)\simeq J(P)$ and scalars $\zeta_k$ satisfy the matched
+    MPV phase identities~(\ref{eq:ft_phase_relation_hyp}) for every sector $k$.
+    Then there is a single eventually-nonzero scalar sequence $c_N$ and a
+    threshold $N_0$ such that, for all $N>N_0$ and every $k\in J(Q)$,
+    \begin{equation}\label{eq:ft_coeff_identity_threaded}
+        c_N^{(\beta(k))}(P)=c_N\,\zeta_k^N\,c_N^{(k)}(Q).
+    \end{equation}
+    The scalar $c_N$ is the same for every sector $k$: it is the single global
+    proportionality scalar of \cite[Theorem~\texttt{thm1}, lines~1167--1170]%
+    {Cirac2016MPDO_arXiv} at length $N$.
+\end{lemma}
+
+\begin{proof}\leanok
+    For each $N$ on the proportionality tail, expand both total MPVs in their
+    sector bases and use the global proportionality scalar $c_N$:
+    \[
+        \sum_{j\in J(P)} c_N^{(j)}(P)\ket{V^{(N)}(P_j)}
+        =
+        c_N\sum_{k\in J(Q)} c_N^{(k)}(Q)\ket{V^{(N)}(Q_k)}.
+    \]
+    The matched phase identities~(\ref{eq:ft_phase_relation_hyp}) give
+    $\ket{V^{(N)}(Q_k)}=\zeta_k^N\ket{V^{(N)}(P_{\beta(k)})}$; because every
+    sector is matched, reindexing the $Q$-sum by $\beta$ rewrites the right-hand
+    side entirely in the $P$-basis. The BNT eventual linear independence of the
+    $P$-basis and Lemma~\ref{lem:eventual_coeff_eq_of_eventual_li} then extract
+    the coefficient identities~(\ref{eq:ft_coeff_identity_threaded}) for all
+    sufficiently large $N$.
+\end{proof}
+
+\begin{remark}[Residual length-scalar control]%
+    \label{rem:proportional_length_scalar_gap}
+    The identity~(\ref{eq:ft_coeff_identity_threaded}) discharges the hypothesis
+    of Theorem~\ref{thm:sector_bnt_proportional_global_gauge_of_coeff_identity}
+    --- equivalently~(\ref{eq:ft_coeff_identity}) --- precisely when $c_N\equiv1$,
+    which holds if and only if $c_N=\xi^N$ for a single fixed phase $\xi$ (the
+    power $\xi^N$ is then absorbed into the sector phases $\zeta_k$). The
+    gauge-phase conclusion of \cite[Theorem~\texttt{thm1}]{Cirac2016MPDO_arXiv}
+    itself forces $c_N=\xi^N$, so this is the necessary form. Proving that the
+    global proportionality scalar of two BNT canonical forms is a pure phase
+    power is a length-scalar control statement requiring peripheral-spectrum /
+    almost-periodicity analysis of the bounded power sums $c_N^{(j)}(\cdot)$; it
+    is not derivable from~(\ref{eq:ft_coeff_identity_threaded}) alone. The
+    obstruction is recorded in
+    \texttt{docs/paper-gaps/cpsv16\_proportional\_length\_scalar\_gap.tex}. Until
+    it is discharged, the unconditional full-tensor proportional gauge
+    equivalence is not stated; the unconditional per-normal-tensor proportional
+    fundamental theorem is
+    Theorem~\ref{thm:cpgsv_multiblock_ft_source}.
+\end{remark}
+
 In the equal-MPV case all ingredients are unconditional.
 
 \begin{lemma}[Equal-MPV matched copy-weight witnesses]%
