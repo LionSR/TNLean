@@ -228,10 +228,27 @@ are not developed elsewhere in this document.
     bound~(\ref{eq:opconv_povm_resolvent_bound}).
 \end{proof}
 
+\begin{lemma}[Positive matrix-valued integrals]\label{lem:operator_jensen_integral_order}
+    \lean{TNLean.OperatorJensen.integral_posSemidef_of_ae}
+    \leanok
+    Let $f$ be a function from a measure space to a finite matrix algebra. If
+    $f(x)\ge0$ for almost every $x$, then
+    $\int f(x)\,d\mu(x)\ge0$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The Loewner order has closed positive cone in finite dimension. Hence the
+    ordered Bochner integral preserves almost-everywhere nonnegativity. The
+    corresponding almost-everywhere monotonicity statement is the general
+    ordered Bochner integral theorem.
+\end{proof}
+
 \begin{theorem}[Jensen for concave real powers]\label{thm:posMap_rpow_concave_jensen}
     \lean{posMap_rpow_concave_jensen}
     \notready
-    \uses{def:positive_map, lem:operator_jensen_povm_resolvent}
+    \uses{def:positive_map, lem:operator_jensen_povm_resolvent,
+        lem:operator_jensen_integral_order}
     For a positive subunital map $T$, a positive semidefinite matrix~$A$,
     and $p\in[0,1]$:
     \[
