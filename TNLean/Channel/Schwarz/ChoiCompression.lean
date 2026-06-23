@@ -54,9 +54,14 @@ the pair $(i,p)$.
   `rightCompression_posSemidef_of_rightTensorMatrix_sandwich_posSemidef_of_mul_eq_self`.
 * `Matrix.exists_mul_conjTranspose_of_isHermitian_idempotent_rank`: a Hermitian
   idempotent matrix of rank `k` factors as `P = V * Vᴴ`.
+* `Matrix.exists_isHermitian_idempotent_rank_mul_eq_self`: every rectangular
+  right factor with `k ≤ D` is fixed by some Hermitian idempotent rank-`k`
+  projection.
 * `IsNPositiveMap.rightTensor_choiMatrix_sandwich_posSemidef_of_isHermitian_idempotent_rank`:
   `k`-positivity implies positivity of the Choi sandwich compressed by a
   Hermitian idempotent of rank `k`.
+* `isNPositiveMap_iff_forall_rankProjection_rightTensor_choiMatrix_sandwich_posSemidef`:
+  Wolf's rank-`k` projection form of the Choi criterion.
 
 ## References
 
@@ -103,6 +108,47 @@ theorem posSemidef_of_dotProduct_mulVec_nonneg_complex
   exact hpos.isSymmetric
 
 end Matrix
+
+namespace Submodule
+
+/-- In a finite-dimensional vector space, any subspace of dimension at most `r`
+is contained in a subspace of dimension exactly `r`, provided `r` is no larger
+than the ambient dimension. -/
+theorem exists_le_finrank_eq {K V : Type*} [Field K] [AddCommGroup V] [Module K V]
+    [Module.Finite K V] (W : Submodule K V) {r : ℕ}
+    (hW : Module.finrank K W ≤ r) (hr : r ≤ Module.finrank K V) :
+    ∃ U : Submodule K V, W ≤ U ∧ Module.finrank K U = r := by
+  classical
+  let P : ℕ → Prop := fun n => ∀ W : Submodule K V,
+    r - Module.finrank K W = n → Module.finrank K W ≤ r →
+      ∃ U : Submodule K V, W ≤ U ∧ Module.finrank K U = r
+  have hP : ∀ n, P n := by
+    intro n
+    induction n with
+    | zero =>
+        intro W hdiff hWle
+        refine ⟨W, le_rfl, ?_⟩
+        omega
+    | succ n ih =>
+        intro W hdiff hWle
+        have hlt : Module.finrank K W < r := by omega
+        have hWV : Module.finrank K W < Module.finrank K V := lt_of_lt_of_le hlt hr
+        obtain ⟨v, hv⟩ := Submodule.exists_of_finrank_lt W hWV
+        let W' : Submodule K V := W ⊔ Submodule.span K ({v} : Set V)
+        have hWleW' : W ≤ W' := le_sup_left
+        have hvnot : v ∉ W := by
+          intro hvW
+          exact hv 1 one_ne_zero (by simpa using hvW)
+        have hfinW' : Module.finrank K W' = Module.finrank K W + 1 := by
+          simpa [W'] using
+            (Submodule.finrank_sup_span_singleton (K := K) (V := V) (p := W) hvnot)
+        have hW'le : Module.finrank K W' ≤ r := by omega
+        have hdiff' : r - Module.finrank K W' = n := by omega
+        obtain ⟨U, hW'U, hUfin⟩ := ih W' hdiff' hW'le
+        exact ⟨U, hWleW'.trans hW'U, hUfin⟩
+  exact hP (r - Module.finrank K W) W rfl hW
+
+end Submodule
 
 namespace Matrix
 
@@ -173,6 +219,89 @@ theorem exists_mul_conjTranspose_of_isHermitian_idempotent_rank
     _ = ∑ j : Fin k, (InnerProductSpace.rankOne ℂ (b j : E) (b j : E) : E →ₗ[ℂ] E) :=
       hstar_linear
     _ = Matrix.toEuclideanLin (V * Vᴴ) := hsum_rankOne.symm
+
+/-- The linear map represented by a rectangular product is the composition of
+the two represented linear maps. -/
+lemma toEuclideanLin_mul_rect {D k : ℕ}
+    (P : Matrix (Fin D) (Fin D) ℂ) (X : Matrix (Fin D) (Fin k) ℂ) :
+    Matrix.toEuclideanLin (P * X) =
+      (Matrix.toEuclideanLin P).comp (Matrix.toEuclideanLin X) := by
+  change Matrix.toLin (EuclideanSpace.basisFun (Fin k) ℂ).toBasis
+      (EuclideanSpace.basisFun (Fin D) ℂ).toBasis (P * X) =
+    (Matrix.toLin (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
+      (EuclideanSpace.basisFun (Fin D) ℂ).toBasis P).comp
+      (Matrix.toLin (EuclideanSpace.basisFun (Fin k) ℂ).toBasis
+        (EuclideanSpace.basisFun (Fin D) ℂ).toBasis X)
+  exact Matrix.toLin_mul (EuclideanSpace.basisFun (Fin k) ℂ).toBasis
+    (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
+    (EuclideanSpace.basisFun (Fin D) ℂ).toBasis P X
+
+/-- If `k ≤ D`, then every rectangular matrix `X : M_{D,k}(ℂ)` is fixed by
+some rank-`k` Hermitian idempotent on the left.  The projection is the
+orthogonal projection onto a `k`-dimensional subspace containing the column
+space of `X`.
+
+This is the geometric converse step in Wolf, Proposition 3.1, item 2. -/
+theorem exists_isHermitian_idempotent_rank_mul_eq_self
+    {D k : ℕ} (hkD : k ≤ D) (X : Matrix (Fin D) (Fin k) ℂ) :
+    ∃ P : Matrix (Fin D) (Fin D) ℂ,
+      P.IsHermitian ∧ P * P = P ∧ P.rank = k ∧ P * X = X := by
+  classical
+  let W : Submodule ℂ (EuclideanSpace ℂ (Fin D)) :=
+    LinearMap.range (Matrix.toEuclideanLin X : EuclideanSpace ℂ (Fin k) →ₗ[ℂ]
+      EuclideanSpace ℂ (Fin D))
+  have hWfin : Module.finrank ℂ W ≤ k := by
+    have hrank_range0 : X.rank = Module.finrank ℂ W := by
+      change X.rank = Module.finrank ℂ (LinearMap.range
+        ((Matrix.toLin (EuclideanSpace.basisFun (Fin k) ℂ).toBasis
+          (EuclideanSpace.basisFun (Fin D) ℂ).toBasis) X))
+      exact Matrix.rank_eq_finrank_range_toLin X
+        (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
+        (EuclideanSpace.basisFun (Fin k) ℂ).toBasis
+    rw [← hrank_range0]
+    exact Matrix.rank_le_width X
+  have hkE : k ≤ Module.finrank ℂ (EuclideanSpace ℂ (Fin D)) := by
+    simpa using hkD
+  obtain ⟨U, hWU, hUfin⟩ := Submodule.exists_le_finrank_eq W hWfin hkE
+  letI : U.HasOrthogonalProjection := inferInstance
+  let p : EuclideanSpace ℂ (Fin D) →ₗ[ℂ] EuclideanSpace ℂ (Fin D) :=
+    (U.starProjection : EuclideanSpace ℂ (Fin D) →ₗ[ℂ] EuclideanSpace ℂ (Fin D))
+  let P : Matrix (Fin D) (Fin D) ℂ := Matrix.toEuclideanLin.symm p
+  refine ⟨P, ?_, ?_, ?_, ?_⟩
+  · exact (Matrix.isSymmetric_toEuclideanLin_iff (A := P)).mp
+      (by simpa [P, p] using U.starProjection_isSymmetric)
+  · apply Matrix.toEuclideanLin.injective
+    rw [toEuclideanLin_mul_rect]
+    have hp : p.IsSymmetricProjection := by
+      dsimp [p]
+      exact Submodule.isSymmetricProjection_starProjection U
+    simpa [P, p, Module.End.mul_eq_comp] using hp.isIdempotentElem.eq
+  · have hrank_range0 :
+        P.rank = Module.finrank ℂ
+          (LinearMap.range (Matrix.toEuclideanLin P : EuclideanSpace ℂ (Fin D) →ₗ[ℂ]
+            EuclideanSpace ℂ (Fin D))) := by
+      change P.rank = Module.finrank ℂ (LinearMap.range
+        ((Matrix.toLin (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
+          (EuclideanSpace.basisFun (Fin D) ℂ).toBasis) P))
+      exact Matrix.rank_eq_finrank_range_toLin P
+        (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
+        (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
+    have hrange :
+        LinearMap.range (Matrix.toEuclideanLin P : EuclideanSpace ℂ (Fin D) →ₗ[ℂ]
+          EuclideanSpace ℂ (Fin D)) = U := by
+      calc
+        LinearMap.range (Matrix.toEuclideanLin P : EuclideanSpace ℂ (Fin D) →ₗ[ℂ]
+            EuclideanSpace ℂ (Fin D))
+            = LinearMap.range p := by simp [P]
+        _ = U := by simp [p, Submodule.range_starProjection U]
+    rw [hrank_range0, hrange, hUfin]
+  · apply Matrix.toEuclideanLin.injective
+    rw [toEuclideanLin_mul_rect]
+    ext v
+    have hvW : Matrix.toEuclideanLin X v ∈ W := by
+      exact ⟨v, rfl⟩
+    have hvU : Matrix.toEuclideanLin X v ∈ U := hWU hvW
+    simp [P, p, Submodule.starProjection_eq_self_iff.mpr hvU]
 
 end Matrix
 
@@ -615,6 +744,43 @@ theorem rightCompression_posSemidef_of_rightTensorMatrix_sandwich_posSemidef_of_
     rw [rightTensorMatrix_mul_rightTensorMatrix, hPX]
   rw [← hR]
   simpa [Matrix.mul_assoc] using hP.conjTranspose_mul_mul_same (rightTensorMatrix X)ᴴ
+
+/-- Converse projection-compression implication in Wolf, Proposition 3.1,
+item 2.  If every rank-`k` Hermitian projection gives a positive Choi sandwich
+and `k ≤ D`, then `T` is `k`-positive. -/
+theorem isNPositiveMap_of_forall_rankProjection_rightTensor_choiMatrix_sandwich_posSemidef
+    [NeZero D]
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hkD : k ≤ D)
+    (hP : ∀ P : Matrix (Fin D) (Fin D) ℂ,
+      P.IsHermitian → P * P = P → P.rank = k →
+        (rightTensorMatrix P * choiMatrix T * (rightTensorMatrix P)ᴴ).PosSemidef) :
+    IsNPositiveMap k T := by
+  rw [isNPositiveMap_iff_forall_rightCompression_posSemidef]
+  intro X
+  obtain ⟨P, hHerm, hIdem, hrank, hPX⟩ :=
+    Matrix.exists_isHermitian_idempotent_rank_mul_eq_self hkD X
+  exact rightCompression_posSemidef_of_rightTensorMatrix_sandwich_posSemidef_of_mul_eq_self
+    hPX (hP P hHerm hIdem hrank)
+
+/-- Wolf's rank-`k` projection form of the Choi criterion: under `D > 0` and
+`k ≤ D`, `k`-positivity is equivalent to positivity of all Choi sandwiches by
+rank-`k` Hermitian idempotent right projections. -/
+theorem isNPositiveMap_iff_forall_rankProjection_rightTensor_choiMatrix_sandwich_posSemidef
+    [NeZero D]
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ} (hkD : k ≤ D) :
+    IsNPositiveMap k T ↔
+      ∀ P : Matrix (Fin D) (Fin D) ℂ,
+        P.IsHermitian → P * P = P → P.rank = k →
+          (rightTensorMatrix P * choiMatrix T * (rightTensorMatrix P)ᴴ).PosSemidef := by
+  constructor
+  · intro hT P hHerm hIdem hrank
+    exact
+      IsNPositiveMap.rightTensor_choiMatrix_sandwich_posSemidef_of_isHermitian_idempotent_rank
+        hT hHerm hIdem hrank
+  · exact
+      isNPositiveMap_of_forall_rankProjection_rightTensor_choiMatrix_sandwich_posSemidef
+        hkD
 
 /-- Forward direction of Wolf's Schmidt-rank expectation criterion.  If `T` is
 `k`-positive, then the Choi quadratic form is nonnegative on every vector of
