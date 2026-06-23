@@ -2,9 +2,10 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.Channel.Basic
 import TNLean.Algebra.MatrixAux
 import TNLean.Algebra.TracePairing
+import TNLean.Channel.Basic
+import TNLean.Channel.ChoiJamiolkowski
 import TNLean.Channel.Schwarz.KadisonSchwarz
 import TNLean.Channel.Schwarz.PositiveMapProperties
 import Mathlib.Analysis.CStarAlgebra.Matrix
@@ -26,6 +27,8 @@ the existing result which is restricted to completely positive maps.
 ## Main results
 
 * `IsCPMap.isNPositiveMap` — CP maps are n-positive for all n
+* `isNPositiveMap_one_iff_isPositiveMap` — 1-positive maps are exactly positive maps
+* `isCPMap_iff_isNPositiveMap_card` — on `M_D`, `D`-positive maps are exactly CP maps
 * `IsPositiveMap.traceAdjointMap` — the trace-pairing adjoint of a positive map is positive
 * `IsNPositiveMap.traceAdjointMap` — the trace-pairing adjoint of a `k`-positive
   map is `k`-positive
@@ -150,6 +153,45 @@ theorem isNPositiveMap_iff_isPositiveMap_nPositiveAmpliation
     (k : ℕ) (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) :
     IsNPositiveMap k E ↔ IsPositiveMap (nPositiveAmpliation k E) := by
   rfl
+
+omit [Fintype n] [DecidableEq n] in
+/-- One-positive maps are exactly positive maps. -/
+theorem isNPositiveMap_one_iff_isPositiveMap
+    {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ} :
+    IsNPositiveMap 1 E ↔ IsPositiveMap E := by
+  constructor
+  · intro hE X hX
+    let X' : Matrix (n × Fin 1) (n × Fin 1) ℂ :=
+      Matrix.of fun ip jq => X ip.1 jq.1
+    have hX' : X'.PosSemidef := by
+      convert hX.submatrix (fun ip : n × Fin 1 => ip.1) using 1
+      ext ip jq
+      rfl
+    have hY := hE X' hX'
+    let emb : n → n × Fin 1 := fun i => (i, 0)
+    convert hY.submatrix emb using 1
+    ext i j
+    simp only [emb, X', Matrix.submatrix_apply, Matrix.of_apply]
+    rw [show (Matrix.of fun i j => X i j) = X by ext i j; rfl]
+  · intro hE
+    rw [isNPositiveMap_iff_isPositiveMap_nPositiveAmpliation]
+    intro X hX
+    let e : n × Fin 1 ≃ n := Equiv.prodUnique n (Fin 1)
+    have hY : (Matrix.of fun (ip : n × Fin 1) (jq : n × Fin 1) =>
+        E (Matrix.of fun i j => X (i, 0) (j, 0)) ip.1 jq.1).PosSemidef := by
+      have hblock : (Matrix.of fun i j => X (i, 0) (j, 0)).PosSemidef := by
+        convert hX.submatrix e.symm using 1
+        ext i j
+        simp [e]
+      have hEblock := hE _ hblock
+      convert hEblock.submatrix e using 1
+      ext ip jq
+      simp [e]
+    convert hY using 1
+    ext ip jq
+    have hip : ip.2 = 0 := Subsingleton.elim ip.2 0
+    have hjq : jq.2 = 0 := Subsingleton.elim jq.2 0
+    simp [nPositiveAmpliation, hip, hjq]
 
 omit [DecidableEq n] in
 private theorem traceAdjointMap_map_isHermitian_of_isPositiveMap
@@ -411,6 +453,30 @@ theorem IsCPMap.isNPositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
   change E (Matrix.of fun i j => X (i, ip.2) (j, jq.2)) ip.1 jq.1 =
       E (Xblk ip.2 jq.2) ip.1 jq.1
   rw [hXblk_apply ip.2 jq.2]
+
+omit [DecidableEq n] [Fintype n] in
+/-- On `M_D(ℂ)`, a `D`-positive map is completely positive. -/
+theorem IsNPositiveMap.isCPMap_of_card {D : ℕ} [NeZero D]
+    {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hE : IsNPositiveMap D E) : IsCPMap E := by
+  rw [ChoiJamiolkowski.cp_iff_choi_posSemidef]
+  have hΩ : (Matrix.omegaProj D).PosSemidef := by
+    simpa [Matrix.omegaProj, Matrix.star_omegaVec] using
+      Matrix.posSemidef_vecMulVec_self_star (Matrix.omegaVec D)
+  convert hE (Matrix.omegaProj D) hΩ using 1
+  ext ip jq
+  rfl
+
+omit [DecidableEq n] [Fintype n] in
+/-- On `M_D(ℂ)`, complete positivity is equivalent to `D`-positivity. -/
+theorem isCPMap_iff_isNPositiveMap_card {D : ℕ} [NeZero D]
+    {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ} :
+    IsCPMap E ↔ IsNPositiveMap D E := by
+  constructor
+  · intro hE
+    exact hE.isNPositiveMap D
+  · intro hE
+    exact hE.isCPMap_of_card
 
 omit [DecidableEq n] [Fintype n] in
 /-- **Monotonicity sanity check**: `(k+1)`-positive implies `k`-positive.
