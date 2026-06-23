@@ -601,7 +601,7 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
 \begin{theorem}[Renormalization fixed points have commuting nearest-neighbor parent terms]\label{thm:rfp_implies_nncph}
     \lean{MPSTensor.rfp_implies_nncph}
     \lean{Axioms.rfp_to_nncph_commute}
-    \notready
+    \leanok
     \uses{def:is_rfp, def:is_nncph, def:normal}
     If $A$ has nonzero virtual dimension and is a normal renormalization fixed
     point, then for every chain length $N \ge 2$ the two-site parent terms
@@ -618,7 +618,7 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     \label{thm:rfp_implies_nncph_ground_state}
     \lean{MPSTensor.rfp_implies_nncph_ground_state}
     \lean{Axioms.rfp_to_nncph_commute}
-    \notready
+    \leanok
     \uses{thm:rfp_implies_nncph, def:is_nncph_ground_state}
     If $A$ has nonzero virtual dimension and is a normal renormalization fixed
     point, then for every chain length $N \ge 2$ the MPS vector $V^{(N)}(A)$
@@ -635,10 +635,32 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
 \end{theorem}
 
 \begin{proof}
-    \notready
+    \leanok
     \uses{thm:rfp_implies_nncph, lem:parent_hamiltonian_ff}
     Conditional on Theorem~\ref{thm:rfp_implies_nncph}, the first equation is
     immediate. The second is Lemma~\ref{lem:parent_hamiltonian_ff} with $L=2$.
+\end{proof}
+
+\begin{theorem}[Cyclic trace expansion for a closed MPS chain]\label{thm:trace_eval_word_eq_sum_cyclic}
+    \lean{MPSTensor.trace_evalWord_eq_sum_cyclic}
+    \leanok
+    For a nonempty closed chain, the trace of the word
+    $A^{\sigma_0}\cdots A^{\sigma_{L-1}}$ is the sum over cyclic virtual-index
+    configurations:
+    \[
+        \operatorname{tr}(A^{\sigma_0}\cdots A^{\sigma_{L-1}})
+        =
+        \sum_{\alpha_0,\ldots,\alpha_{L-1}}
+        \prod_{t=0}^{L-1}
+        (A^{\sigma_t})_{\alpha_t,\alpha_{t+1}},
+        \qquad \alpha_L=\alpha_0 .
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Expand a matrix product entry as a sum over virtual paths with prescribed
+    endpoints, then identify the two endpoints in the trace.
 \end{proof}
 
 \begin{remark}[Product-of-pairs equations for nearest-neighbor parent-term commutation]%
@@ -676,6 +698,7 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     \lean{MPSTensor.rfp_implies_nncph_of_appendixBExtraction}
     \lean{MPSTensor.rfp_implies_nncph_ground_state_of_appendixBExtraction}
     \leanok
+    \uses{thm:trace_eval_word_eq_sum_cyclic}
     The Appendix~B structural form supplies
     \[
         A^i=X\Lambda U^iX^{-1}.
@@ -792,7 +815,7 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
 \begin{theorem}[All-chain nearest-neighbor commuting parent-Hamiltonian ground spaces imply a renormalization fixed point]\label{thm:nncph_implies_rfp}
     \lean{MPSTensor.nncph_implies_rfp}
     \lean{Axioms.beigi_nncph_to_rfp}
-    \notready
+    \leanok
     \uses{def:is_rfp, def:bnt, def:has_nncph_ground_spaces, def:normal}
     Let $B$ be normal and in left-canonical form. Suppose that the family
     \(A_j\) is a BNT for \(B\), and that the nearest-neighbor parent
