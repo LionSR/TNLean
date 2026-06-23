@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Algebra.HermitianHelpers
 import TNLean.Channel.Basic
 import TNLean.Channel.Schwarz.OperatorJensenAux
 import Mathlib.Analysis.CStarAlgebra.Matrix
@@ -28,9 +29,12 @@ together with the operator concavity of each integrand
 (`CFC.concaveOn_cfc_rpowIntegrand₀₁`) and its explicit resolvent form
 `cfc (Real.rpowIntegrand₀₁ p t) a = t ^ (p - 1) • 1 - t ^ p • (t • 1 + a)⁻¹`.
 The concave real-power Jensen inequality is proved below by integrating the
-pointwise positive-map inequality for the Löwner integrand.  The convex,
-logarithmic, and Lieb statements remain axioms because the corresponding
-positive-map Jensen or joint-concavity arguments are not yet formalized.
+pointwise positive-map inequality for the Löwner integrand.  The logarithmic
+Jensen inequality is then obtained as the right limit of
+`p⁻¹ • (A ^ p - 1)` as `p → 0+`, using
+`CFC.tendsto_cfc_rpow_sub_one_log`.  The convex real-power Jensen and Lieb
+statements remain axioms because the corresponding positive-map Jensen or
+joint-concavity arguments are not yet formalized.
 Operator convexity of `x ↦ x ^ p` for `1 ≤ p ≤ 2`, the scalar input of the
 convex case, is available as `CFC.convexOn_rpow` in
 `TNLean.Analysis.RpowConvexity`.
@@ -42,7 +46,8 @@ The following results are standard in matrix analysis:
 * `posMap_rpow_concave_jensen` — Jensen inequality for concave `rpow`,
   now a theorem.
 * `posMap_rpow_convex_jensen` — Jensen inequality for convex `rpow`.
-* `posMap_log_concave_jensen` — Jensen inequality for concave `log`.
+* `posMap_log_concave_jensen` — Jensen inequality for concave `log`,
+  now a theorem.
 * `lieb_concavity_axiom` — Lieb concavity theorem.
 
 The trace concavity/convexity statements for `A ↦ Re Tr(A^p)` that used to
@@ -52,9 +57,9 @@ via the spectral theorem and the scalar Jensen inequality.
 
 ## Status
 
-The concave real-power declaration is now proved.  Three declarations remain
-axioms: the convex real-power Jensen inequality, the logarithmic Jensen
-inequality, and Lieb's joint concavity theorem.  Mathlib 4.31 supplies the
+The concave real-power and logarithmic declarations are now proved.  Two
+declarations remain axioms: the convex real-power Jensen inequality and Lieb's
+joint concavity theorem.  Mathlib 4.31 supplies the
 C-star functional-calculus concavity inputs and the Löwner integral
 representation for the power case.  Earlier status notes recorded the integral
 representation as missing; that is no longer accurate.
@@ -82,7 +87,9 @@ The remaining Mathlib or local formalization gaps are:
   single-integrand Jensen inequality is
   `TNLean.OperatorJensen.positiveMap_rpowIntegrand₀₁_jensen`.  The theorem
   `posMap_rpow_concave_jensen` below performs the corresponding
-  Löwner-integral assembly.
+  Löwner-integral assembly.  The theorem `posMap_log_concave_jensen` below
+  follows by taking the right limit `p → 0+` in the concave real-power
+  inequality.
 * Operator convexity of `rpow` over `[1, 2]`, the scalar input of
   `posMap_rpow_convex_jensen`, is now available as `CFC.convexOn_rpow` in
   `TNLean.Analysis.RpowConvexity`; the convex axiom therefore shares the single
@@ -115,15 +122,15 @@ The remaining Mathlib or local formalization gaps are:
    decomposition `x^p = x · x^{p-1}` for `p ∈ [1, 2]` (Mathlib's
    `rpowIntegrand₁₂`), reducing to concavity of `x^{p-1}` for
    `p - 1 ∈ [0, 1]` and the same operator Jensen step.
-3. **Concave Jensen for `log`**: combine `CFC.concaveOn_log` with the
-   unital operator Jensen theorem.
+3. **Concave Jensen for `log`**: derive it from the right-limit formula
+   `CFC.tendsto_cfc_rpow_sub_one_log` and the concave real-power theorem,
+   using unitality to rewrite `T(1)=1`.
 4. **Lieb concavity**: requires the integral representation
    `A^s B^{1-s} = (sin πs/π) ∫₀^∞ t^{s-1} A(A+tB)⁻¹ B dt` and
    resolvent monotonicity.
 
-The convex `rpow` and logarithmic cases still need the corresponding
-positive-map Jensen input.  Lieb concavity remains a separate integral
-representation problem.
+The convex `rpow` case still needs the corresponding positive-map Jensen
+input.  Lieb concavity remains a separate integral representation problem.
 
 ## References
 
@@ -134,9 +141,10 @@ representation problem.
   conjecture*, 1973]
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder NNReal
+open scoped Matrix ComplexOrder MatrixOrder NNReal Topology
 open Matrix
 open MeasureTheory
+open Filter
 
 noncomputable section
 
@@ -148,8 +156,63 @@ private local instance instAxiomOCNormedRing : NormedRing Mat :=
   Matrix.instL2OpNormedRing
 private local instance instAxiomOCNormedAlgebra : NormedAlgebra ℂ Mat :=
   Matrix.instL2OpNormedAlgebra
+private local instance instAxiomOCCStarRing : CStarRing Mat :=
+  Matrix.instCStarRing
+private local instance instAxiomOCCStarAlgebra : CStarAlgebra Mat where
 
 /-! ## Jensen inequality axioms for positive maps -/
+
+private lemma cfc_rpow_sub_one_eq
+    {p : ℝ} {A : Mat} (hA : A.PosDef) :
+    cfc (fun x : ℝ => p⁻¹ * (x ^ p - 1)) A =
+      p⁻¹ • (A ^ p - (1 : Mat)) := by
+  have hAsp : IsStrictlyPositive A := hA.isStrictlyPositive
+  simp only [← smul_eq_mul]
+  rw [cfc_smul _ (hf := by fun_prop (disch := grind)),
+    cfc_sub _ _ (hf := by fun_prop (disch := grind)),
+    cfc_const_one .., CFC.rpow_eq_cfc_real (a := A) (ha := hA.posSemidef.nonneg)]
+
+private lemma IsPositiveMap.map_posDef_of_unital
+    {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hUnit : T 1 = (1 : Mat))
+    {A : Mat} (hA : A.PosDef) :
+    (T A).PosDef := by
+  classical
+  by_cases hne : Nonempty (Fin D)
+  · letI : Nonempty (Fin D) := hne
+    let lam : ℝ := minEigenvalue hA.isHermitian
+    have hlam : 0 < lam := minEigenvalue_pos_of_posDef hA.isHermitian hA
+    have hdiff :
+        (A - (↑lam : ℂ) • (1 : Mat)).PosSemidef := by
+      simpa [lam] using sub_minEigenvalue_smul_one_posSemidef hA.isHermitian
+    have hTdiff :
+        (T (A - (↑lam : ℂ) • (1 : Mat))).PosSemidef :=
+      hT _ hdiff
+    have hlamone : ((↑lam : ℂ) • (1 : Mat)).PosDef := by
+      simpa using
+        (Matrix.PosDef.smul (Matrix.PosDef.one : (1 : Mat).PosDef) (a := lam) hlam)
+    have hsum :
+        (T (A - (↑lam : ℂ) • (1 : Mat)) + (↑lam : ℂ) • (1 : Mat)).PosDef :=
+      Matrix.PosDef.posSemidef_add hTdiff hlamone
+    have hdecomp : A = (A - (↑lam : ℂ) • (1 : Mat)) + (↑lam : ℂ) • (1 : Mat) := by
+      abel
+    have hTA :
+        T A = T (A - (↑lam : ℂ) • (1 : Mat)) + (↑lam : ℂ) • (1 : Mat) := by
+      calc
+        T A = T ((A - (↑lam : ℂ) • (1 : Mat)) + (↑lam : ℂ) • (1 : Mat)) := by
+          exact congrArg T hdecomp
+        _ = T (A - (↑lam : ℂ) • (1 : Mat)) + T ((↑lam : ℂ) • (1 : Mat)) := by
+          rw [map_add]
+        _ = T (A - (↑lam : ℂ) • (1 : Mat)) + (↑lam : ℂ) • T (1 : Mat) := by
+          rw [map_smul]
+        _ = T (A - (↑lam : ℂ) • (1 : Mat)) + (↑lam : ℂ) • (1 : Mat) := by
+          rw [hUnit]
+    rw [hTA]
+    exact hsum
+  · refine ⟨hT.map_isHermitian hA.isHermitian, fun x hx => ?_⟩
+    exfalso
+    apply hx
+    ext i
+    exact (hne ⟨i⟩).elim
 
 private lemma cfcₙ_rpowIntegrand₀₁_eq_cfc
     {B : Mat} (hB : 0 ≤ B) {p t : ℝ}
@@ -282,17 +345,62 @@ axiom posMap_rpow_convex_jensen
 For a positive **unital** map `T` and positive-definite `A`:
   `T(log A) ≤ log(T A)`.
 
-Follows from operator concavity of `log` (Bhatia, Chapter V) combined with
-the operator Jensen inequality. Requires unitality (`T 1 = 1`), not
-merely subunitality.
+Follows by applying the concave real-power theorem to `(A ^ p - 1) / p` for
+`0 < p < 1`, then taking the right limit `p → 0+` with
+`CFC.tendsto_cfc_rpow_sub_one_log`. Requires unitality (`T 1 = 1`), not merely
+subunitality.
 
 References:
 * Wolf, Theorem 5.1
 * Hansen--Pedersen, *Jensen's operator inequality*, 2003 -/
-axiom posMap_log_concave_jensen
+theorem posMap_log_concave_jensen
     {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hUnit : T 1 = (1 : Mat))
     {A : Mat} (hA : A.PosDef) :
-    T (CFC.log A) ≤ CFC.log (T A)
+    T (CFC.log A) ≤ CFC.log (T A) := by
+  classical
+  let F : ℝ → Mat :=
+    fun p => T (cfc (fun x : ℝ => p⁻¹ * (x ^ p - 1)) A)
+  let G : ℝ → Mat :=
+    fun p => cfc (fun x : ℝ => p⁻¹ * (x ^ p - 1)) (T A)
+  have hTA : (T A).PosDef := hT.map_posDef_of_unital hUnit hA
+  have hle : ∀ᶠ p : ℝ in 𝓝[>] 0, F p ≤ G p := by
+    have hnear : ∀ᶠ p : ℝ in 𝓝[>] 0, 0 < p ∧ p < 1 :=
+      nhdsGT_basis 0 |>.mem_of_mem zero_lt_one
+    filter_upwards [hnear] with p hp
+    have hpIcc : p ∈ Set.Icc (0 : ℝ) 1 := ⟨hp.1.le, hp.2.le⟩
+    have hpow :
+        T (A ^ p) ≤ (T A) ^ p :=
+      posMap_rpow_concave_jensen hT (by rw [hUnit]) hpIcc hA.posSemidef.nonneg
+    calc
+      F p = T (p⁻¹ • (A ^ p - (1 : Mat))) := by
+        simp [F, cfc_rpow_sub_one_eq hA]
+      _ = p⁻¹ • T (A ^ p - (1 : Mat)) := by
+        rw [LinearMap.map_smul_of_tower]
+      _ = p⁻¹ • (T (A ^ p) - (1 : Mat)) := by
+        rw [map_sub, hUnit]
+      _ ≤ p⁻¹ • ((T A) ^ p - (1 : Mat)) := by
+        gcongr
+        exact inv_nonneg.mpr hp.1.le
+      _ = G p := by
+        simp [G, cfc_rpow_sub_one_eq hTA]
+  have hlimF :
+      Tendsto F (𝓝[>] (0 : ℝ)) (𝓝 (T (CFC.log A))) := by
+    have hAsp : IsStrictlyPositive A := hA.isStrictlyPositive
+    have hlimA :
+        Tendsto (fun p : ℝ => cfc (fun x : ℝ => p⁻¹ * (x ^ p - 1)) A)
+          (𝓝[>] (0 : ℝ)) (𝓝 (CFC.log A)) :=
+      CFC.tendsto_cfc_rpow_sub_one_log (a := A) (ha := hAsp)
+    simpa [F, Function.comp_def, LinearMap.coe_toContinuousLinearMap'] using
+      ((LinearMap.toContinuousLinearMap T).continuous.tendsto (CFC.log A)).comp hlimA
+  have hlimG :
+      Tendsto G (𝓝[>] (0 : ℝ)) (𝓝 (CFC.log (T A))) := by
+    have hTsp : IsStrictlyPositive (T A) := hTA.isStrictlyPositive
+    have hlimTA :
+        Tendsto (fun p : ℝ => cfc (fun x : ℝ => p⁻¹ * (x ^ p - 1)) (T A))
+          (𝓝[>] (0 : ℝ)) (𝓝 (CFC.log (T A))) :=
+      CFC.tendsto_cfc_rpow_sub_one_log (a := T A) (ha := hTsp)
+    simpa [G] using hlimTA
+  exact le_of_tendsto_of_tendsto hlimF hlimG hle
 
 /-! ## Lieb concavity axiom -/
 

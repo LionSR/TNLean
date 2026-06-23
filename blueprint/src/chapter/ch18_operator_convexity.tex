@@ -382,8 +382,8 @@ are not developed elsewhere in this document.
 
 \begin{theorem}[Jensen for concave log]\label{thm:posMap_log_concave_jensen}
     \lean{posMap_log_concave_jensen}
-    \notready
-    \uses{def:positive_map}
+    \leanok
+    \uses{def:positive_map, thm:posMap_rpow_concave_jensen}
     For a positive \emph{unital} map $T$ and positive-definite~$A$:
     \[
         T(\log A) \le \log(TA).
@@ -391,6 +391,14 @@ are not developed elsewhere in this document.
     This is \cite[Theorem~5.13]{Wolf2012Quantum} for~$f=\log$.
     Requires unitality ($T(\Id)=\Id$), not merely subunitality.
 \end{theorem}
+
+\begin{proof}\leanok
+    Apply Theorem~\ref{thm:posMap_rpow_concave_jensen} to $0<p<1$ and rewrite
+    it as an inequality for $(A^p-\Id)/p$.  The continuous functional calculus
+    gives $(A^p-\Id)/p\to \log A$ as $p\to0^+$, and the same limit holds for
+    $T(A)$.  Since the Loewner order graph is closed in finite dimension, the
+    limiting inequality is $T(\log A)\le \log(TA)$.
+\end{proof}
 
 \begin{theorem}[Map form of Jensen for the concave logarithm]\label{thm:log_concave_jensen}
     \lean{IsPositiveMap.log_concave_jensen}
@@ -401,7 +409,7 @@ are not developed elsewhere in this document.
 \end{theorem}
 
 \begin{proof}\leanok
-    Direct application of the axiom.
+    Direct application of Theorem~\ref{thm:posMap_log_concave_jensen}.
 \end{proof}
 
 \section{Lieb concavity theorem}

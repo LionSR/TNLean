@@ -39,15 +39,12 @@ subunitality, because `log` is unbounded below.
 
 ### Status
 
-The three Jensen instances below are proved from the axioms in
-`TNLean.Axioms.OperatorConvexity`.  Mathlib 4.31 now supplies the operator
-concavity inputs for `rpow` on `[0, 1]` and for `log`, but the
-positive-map Jensen theorem that turns those inputs into the displayed
-inequalities is still not present.
-
-A first batch of finite-POVM / compression auxiliaries for the direct concave
-real-power route now lives in `OperatorJensenAux.lean`, but those lemmas are
-not yet assembled into the full Jensen theorem.
+The three Jensen wrappers below are proved from the boundary declarations in
+`TNLean.Axioms.OperatorConvexity`.  The concave real-power theorem is proved
+there by the finite-POVM / compression integrand route, and the logarithmic
+theorem is proved from it by taking the right limit `p → 0+` in
+`(A ^ p - 1) / p`.  The convex real-power wrapper still rests on the remaining
+positive-map Jensen axiom.
 
 These are consumed by the Corollary 5.2 proofs in `OperatorMonotone.lean`.
 
@@ -110,10 +107,10 @@ theorem IsPositiveMap.rpow_convex_jensen
 For a positive **unital** map `T` and positive-definite `A`:
   `T(log A) ≤ log(T A)`.
 
-This follows from operator concavity of `log` on `(0, ∞)`, combined
-with the concave version of the operator Jensen inequality for positive
-unital maps. Note: unlike the `rpow` variants, the `log` Jensen inequality
-requires unitality (`T 1 = 1`), not merely subunitality (`T 1 ≤ 1`).
+This is obtained as the right limit of the concave real-power Jensen theorem
+for positive subunital maps. Note: unlike the `rpow` variants, the `log`
+Jensen inequality requires unitality (`T 1 = 1`), not merely subunitality
+(`T 1 ≤ 1`).
 
 Proved from `posMap_log_concave_jensen` in `TNLean.Axioms.OperatorConvexity`. -/
 theorem IsPositiveMap.log_concave_jensen
