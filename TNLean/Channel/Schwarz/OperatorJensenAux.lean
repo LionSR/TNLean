@@ -8,6 +8,7 @@ import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.LinearAlgebra.Matrix.PosDef
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
+import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.IntegralRepresentation
 
 /-!
 # Finite-POVM compression lemmas for operator Jensen
@@ -41,6 +42,8 @@ representation; see the status note below.
 - `positiveMap_resolvent_inv_le`: the corresponding resolvent inequality for
   a positive subunital map, obtained from the spectral projections of the input
   matrix and `povm_resolvent_inv_le`.
+- `positiveMap_rpowIntegrand₀₁_jensen`: Jensen's inequality for a single
+  Löwner-integral real-power integrand under a positive subunital map.
 - `integral_nonneg_matrix_of_ae`: matrix-valued Bochner integrals preserve
   almost-everywhere positive semidefiniteness.
 
@@ -59,15 +62,16 @@ integrand together with the resolvent form
 `cfc (Real.rpowIntegrand₀₁ p t) a = t ^ (p - 1) • 1 - t ^ p • (t • 1 + a)⁻¹`.
 
 This file now also proves the positive-map resolvent estimate obtained from
-the spectral projections of the input matrix and `povm_resolvent_inv_le`.  The
-remaining unfinished step is therefore to rewrite the single-integrand Jensen
-difference
+the spectral projections of the input matrix and `povm_resolvent_inv_le`, and
+uses it to prove the single-integrand Jensen inequality
+`T(cfc (Real.rpowIntegrand₀₁ p t) A) ≤ cfc (Real.rpowIntegrand₀₁ p t) (T A)`.
+The remaining unfinished step is therefore to integrate the pointwise
+positive-semidefinite bound obtained from
 `cfc (Real.rpowIntegrand₀₁ p t) (T A) - T(cfc (Real.rpowIntegrand₀₁ p t) A)`
-using that resolvent estimate and then integrate the resulting pointwise
-positive-semidefinite bound.  The matrix-valued positive-integral step is
-packaged below from Mathlib's ordered Bochner integral API and the local closed
-Loewner-order topology on finite matrices; order monotonicity itself is
-Mathlib's `integral_mono_ae`.
+through Mathlib's Löwner integral representation.  The matrix-valued
+positive-integral step is packaged below from Mathlib's ordered Bochner
+integral API and the local closed Loewner-order topology on finite matrices;
+order monotonicity itself is Mathlib's `integral_mono_ae`.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
@@ -690,6 +694,72 @@ lemma positiveMap_resolvent_inv_le
     (C := C) (S := S) (wgt := hA.1.eigenvalues)
     (fun i => hA.eigenvalues_nonneg i) t ht hdef
   simpa [hTA_c, hTInv_c, hS_def_T] using hpovm
+
+/-- Resolvent form of the Löwner-integral integrand
+`Real.rpowIntegrand₀₁ p t` under the continuous functional calculus. -/
+private lemma cfc_rpowIntegrand₀₁_eq_resolvent
+    {A : MatD} (hA : A.PosSemidef) {p t : ℝ}
+    (hp : p ∈ Set.Ioo (0 : ℝ) 1) (ht : 0 < t) :
+    cfc (Real.rpowIntegrand₀₁ p t) A =
+      t ^ (p - 1) • (1 : MatD) - t ^ p • ((t • (1 : MatD)) + A)⁻¹ := by
+  have hEq : ({A | (0 : MatD) ≤ A}.EqOn (cfc (Real.rpowIntegrand₀₁ p t))
+      (fun X : MatD =>
+        algebraMap ℝ MatD (t ^ (p - 1)) -
+          t ^ p • Ring.inverse (algebraMap ℝ MatD t + X))) := by
+    intro X hX
+    rw [Real.rpowIntegrand₀₁_eq_sub (by grind) ht]
+    have hg : ContinuousOn (fun z : ℝ => (t + z)⁻¹) (spectrum ℝ X) := by
+      fun_prop (disch := grind -abstractProof)
+    have hf : ContinuousOn (fun z : ℝ => (1 + z)) (spectrum ℝ X) := by fun_prop
+    have hspectrum : ∀ r ∈ spectrum ℝ X, t + r ≠ 0 := by grind
+    have := cfc_sub (fun _ : ℝ => t ^ (p - 1))
+      (fun z : ℝ => t ^ p * (t + z)⁻¹) X
+    rw [this, cfc_const .., cfc_const_mul .., cfc_inv _ _ hspectrum ..,
+      cfc_const_add .., cfc_id' ..]
+  have hA_nonneg : (0 : MatD) ≤ A := Matrix.nonneg_iff_posSemidef.mpr hA
+  have hcalc := hEq hA_nonneg
+  simpa [Algebra.algebraMap_eq_smul_one, ← Matrix.nonsing_inv_eq_ringInverse] using hcalc
+
+/-- Jensen's inequality for a single Löwner-integral real-power integrand under
+a positive subunital map.
+
+For `p ∈ (0, 1)` and `t > 0`, this proves the pointwise inequality
+`T(cfc (Real.rpowIntegrand₀₁ p t) A) ≤ cfc (Real.rpowIntegrand₀₁ p t) (T A)`.
+It is the integrand-level input for the Löwner-integral proof of the concave
+real-power operator Jensen inequality. -/
+lemma positiveMap_rpowIntegrand₀₁_jensen
+    {T : MatD →ₗ[ℂ] MatD} (hT : IsPositiveMap T)
+    (hSub : T 1 ≤ (1 : MatD)) {A : MatD} (hA : A.PosSemidef)
+    {p t : ℝ} (hp : p ∈ Set.Ioo (0 : ℝ) 1) (ht : 0 < t) :
+    T (cfc (Real.rpowIntegrand₀₁ p t) A) ≤
+      cfc (Real.rpowIntegrand₀₁ p t) (T A) := by
+  classical
+  have hTA : (T A).PosSemidef := hT A hA
+  have hAeq := cfc_rpowIntegrand₀₁_eq_resolvent hA hp ht
+  have hTAeq := cfc_rpowIntegrand₀₁_eq_resolvent hTA hp ht
+  rw [hAeq, hTAeq]
+  rw [Matrix.le_iff]
+  have hres := positiveMap_resolvent_inv_le hT hSub hA ht
+  rw [Matrix.le_iff] at hres
+  have hscale_nonneg : 0 ≤ t ^ p := Real.rpow_nonneg (le_of_lt ht) p
+  have hscaled := hres.smul hscale_nonneg
+  have ht_pow : t ^ (p - 1) = t ^ p * t⁻¹ := by
+    rw [Real.rpow_sub_one ht.ne']
+    ring
+  have ht_pow' : t ^ (-1 + p) = t ^ p * t⁻¹ := by
+    rw [show -1 + p = p - 1 by ring, ht_pow]
+  have ht_powC :
+      ((t ^ (-1 + p) : ℝ) : ℂ) = ((t ^ p : ℝ) : ℂ) * (t : ℂ)⁻¹ := by
+    rw [ht_pow', Complex.ofReal_mul, Complex.ofReal_inv]
+  have ht_powC₂ :
+      ((t ^ (p + -1) : ℝ) : ℂ) = ((t ^ p : ℝ) : ℂ) * (t : ℂ)⁻¹ := by
+    rw [show p + -1 = -1 + p by ring, ht_powC]
+  convert hscaled using 1
+  ext i j
+  simp [LinearMap.map_smul_of_tower, sub_eq_add_neg, smul_add, add_comm,
+    add_left_comm, add_assoc]
+  simp [ht_powC₂]
+  ring_nf
 
 end PositiveMapResolvent
 

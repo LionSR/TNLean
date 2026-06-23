@@ -62,9 +62,10 @@ The remaining Mathlib or local formalization gaps are:
 * General operator Jensen inequality for positive maps (the
   Hansen--Pedersen / Davis--Choi inequality `T(f A) ≤ f(T A)` for operator
   concave `f` with `f 0 ≥ 0` and positive subunital `T`): absent from Mathlib.
-  For the concave `rpow` case the per-resolvent core is already available in
-  `TNLean.Channel.Schwarz.OperatorJensenAux` (`povm_resolvent_inv_le`); see the
-  proof plan below.
+  For the concave `rpow` case the pointwise Löwner-integrand inequality is now
+  available in `TNLean.Channel.Schwarz.OperatorJensenAux` as
+  `TNLean.OperatorJensen.positiveMap_rpowIntegrand₀₁_jensen`; see the proof
+  plan below.
 * Monotonicity of the matrix-valued Bochner integral in the Loewner order is
   now available: `TNLean.Channel.Basic` supplies the closed Loewner-order
   topology on finite matrices, Mathlib supplies the ordered Bochner theorem
@@ -75,10 +76,10 @@ The remaining Mathlib or local formalization gaps are:
   finite-dimensional map as a continuous linear map.  The pointwise
   positive-map resolvent estimate and its spectral reduction to
   `povm_resolvent_inv_le` are available as
-  `TNLean.OperatorJensen.positiveMap_resolvent_inv_le`, using `CFC.sqrt` to
-  package each `T(P i)` and the subunital defect as square-root factors.  The
-  remaining proof work is the CFC-integrand rewrite and the Löwner-integral
-  assembly.
+  `TNLean.OperatorJensen.positiveMap_resolvent_inv_le`, and the corresponding
+  single-integrand Jensen inequality is
+  `TNLean.OperatorJensen.positiveMap_rpowIntegrand₀₁_jensen`.  The remaining
+  proof work for the concave power case is the Löwner-integral assembly.
 * Operator convexity of `rpow` over `[1, 2]`, the scalar input of
   `posMap_rpow_convex_jensen`, is now available as `CFC.convexOn_rpow` in
   `TNLean.Analysis.RpowConvexity`; the convex axiom therefore shares the single
@@ -100,10 +101,11 @@ The remaining Mathlib or local formalization gaps are:
    positive subunital map `T`.  Diagonalizing `A = ∑ i, λ i • P i` over its
    spectral projections and setting `B i = T (P i)` (positive semidefinite,
    with `∑ i, B i = T 1 ≤ 1`), this resolvent inequality is now proved as
-   `TNLean.OperatorJensen.positiveMap_resolvent_inv_le`.  What remains is to
-   rewrite the CFC integrand through the displayed resolvent formula and then
-   integrate this pointwise bound using Mathlib's ordered Bochner monotonicity
-   theorem, the local positive-semidefinite integral specialization in
+   `TNLean.OperatorJensen.positiveMap_resolvent_inv_le`; the displayed
+   integrand inequality itself is now
+   `TNLean.OperatorJensen.positiveMap_rpowIntegrand₀₁_jensen`.  What remains is
+   to integrate this pointwise bound using Mathlib's ordered Bochner
+   monotonicity theorem, the local positive-semidefinite integral specialization in
    `TNLean.Channel.Schwarz.OperatorJensenAux`, and the commutation of `T` with
    the integral.
 2. **Operator convexity of `rpow` for `p ∈ [1, 2]`**: use the
@@ -116,9 +118,9 @@ The remaining Mathlib or local formalization gaps are:
    `A^s B^{1-s} = (sin πs/π) ∫₀^∞ t^{s-1} A(A+tB)⁻¹ B dt` and
    resolvent monotonicity.
 
-The single missing reusable theorem for items 1--3 is the operator Jensen
-inequality for positive subunital (resp. unital) maps; once it is available,
-the three `rpow`/`log` axioms collapse via the steps above.
+The concave `rpow` case has now been reduced to the Löwner-integral assembly
+from the pointwise integrand inequality.  The convex `rpow` and logarithmic
+cases still need the corresponding positive-map Jensen input.
 
 ## References
 
