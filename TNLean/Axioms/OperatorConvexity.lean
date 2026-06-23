@@ -26,8 +26,10 @@ together with the operator concavity of each integrand
 `cfc (Real.rpowIntegrand₀₁ p t) a = t ^ (p - 1) • 1 - t ^ p • (t • 1 + a)⁻¹`.
 The axioms below remain because those inputs are not yet accompanied by a
 Hansen--Pedersen / Davis--Choi operator Jensen theorem for arbitrary positive
-subunital or unital maps, by operator convexity of `x ↦ x ^ p` for
-`1 ≤ p ≤ 2`, or by Lieb's joint concavity theorem.
+subunital or unital maps, or by Lieb's joint concavity theorem.  Operator
+convexity of `x ↦ x ^ p` for `1 ≤ p ≤ 2`, the scalar input of the convex
+case, is now available as `CFC.convexOn_rpow` in
+`TNLean.Analysis.RpowConvexity`.
 
 ## Axioms
 
@@ -60,11 +62,23 @@ The remaining Mathlib or local formalization gaps are:
 * General operator Jensen inequality for positive maps (the
   Hansen--Pedersen / Davis--Choi inequality `T(f A) ≤ f(T A)` for operator
   concave `f` with `f 0 ≥ 0` and positive subunital `T`): absent from Mathlib.
+  For the concave `rpow` case the per-resolvent core is already available in
+  `TNLean.Channel.Schwarz.OperatorJensenAux` (`povm_resolvent_inv_le`); see the
+  proof plan below.
 * Monotonicity of the matrix-valued Bochner integral in the Loewner order, and
   pulling a positive linear map through that integral
   (`ContinuousLinearMap.integral_comp_comm`): the analytic ingredients of the
-  integral route.
-* `CFC.Rpow.Order`: operator convexity of `rpow` over `[1, 2]`.
+  integral route.  Concretely, the Loewner monotonicity step requires a closed
+  positive-semidefinite cone (`OrderClosedTopology` for the Loewner order on
+  matrices) together with a vector-valued `integral_mono`; neither is present in
+  Mathlib 4.31 (the matrix order supplies `IsOrderedAddMonoid` and
+  `StarOrderedRing`, but no `OrderClosedTopology` instance).  The
+  positive-semidefinite square root needed to package each `T(P i)` as a Kraus
+  term `C i * (C i)ᴴ` for `povm_resolvent_inv_le` is available as `CFC.sqrt`.
+* Operator convexity of `rpow` over `[1, 2]`, the scalar input of
+  `posMap_rpow_convex_jensen`, is now available as `CFC.convexOn_rpow` in
+  `TNLean.Analysis.RpowConvexity`; the convex axiom therefore shares the single
+  remaining positive-map Jensen obstruction with the concave one.
 * Lieb concavity integral representation: absent from Mathlib.
 
 ## Proof plan
@@ -74,12 +88,20 @@ The remaining Mathlib or local formalization gaps are:
    bound `T(cfc (rpowIntegrand₀₁ p t) A) ≤ cfc (rpowIntegrand₀₁ p t) (T A)`
    for each `t > 0`, followed by integration.  Using the resolvent form
    `cfc (rpowIntegrand₀₁ p t) a = t ^ (p - 1) • 1 - t ^ p • (t • 1 + a)⁻¹`,
-   this per-integrand bound is exactly the operator Jensen inequality for the
-   operator concave integrand (which vanishes at `0`) under a positive
-   subunital map; integrating against the representing measure and pulling `T`
-   through the integral then gives `T(A ^ p) ≤ (T A) ^ p`.  The finite-POVM
-   compression half of this route is recorded in
-   `TNLean.Channel.Schwarz.OperatorJensenAux` (`povm_resolvent_inv_le`).
+   the per-integrand difference is
+   `cfc (rpowIntegrand₀₁ p t) (T A) - T(cfc (rpowIntegrand₀₁ p t) A) =
+     t ^ (p - 1) • (1 - T 1) + t ^ p • (T ((t • 1 + A)⁻¹) - (t • 1 + T A)⁻¹)`,
+   which is positive semidefinite precisely because of the operator resolvent
+   inequality `(t • 1 + T A)⁻¹ ≤ T ((t • 1 + A)⁻¹) + t⁻¹ • (1 - T 1)` for a
+   positive subunital map `T`.  Diagonalizing `A = ∑ i, λ i • P i` over its
+   spectral projections and setting `B i = T (P i)` (positive semidefinite,
+   with `∑ i, B i = T 1 ≤ 1`), this resolvent inequality is exactly
+   `povm_resolvent_inv_le` in `TNLean.Channel.Schwarz.OperatorJensenAux`, with
+   the Kraus factorization `B i = (CFC.sqrt (B i)) * (CFC.sqrt (B i))ᴴ` and
+   defect `(1 - ∑ i, B i)`.  What remains is integrating this pointwise bound:
+   the matrix-valued Bochner monotonicity step (`integral_mono` in the Loewner
+   order, needing the `OrderClosedTopology` instance flagged above) and the
+   commutation of `T` with the integral.
 2. **Operator convexity of `rpow` for `p ∈ [1, 2]`**: use the
    decomposition `x^p = x · x^{p-1}` for `p ∈ [1, 2]` (Mathlib's
    `rpowIntegrand₁₂`), reducing to concavity of `x^{p-1}` for
