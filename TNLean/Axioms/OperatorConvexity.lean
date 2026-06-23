@@ -72,11 +72,13 @@ The remaining Mathlib or local formalization gaps are:
   the positive-semidefinite integral specialization as
   `integral_nonneg_matrix_of_ae`.  Pulling a positive linear map through the
   integral can use `ContinuousLinearMap.integral_comp_comm` after packaging the
-  finite-dimensional map as a continuous linear map.  The remaining proof work
-  is the pointwise positive-map Jensen/resolvent step and its spectral
-  reduction to `povm_resolvent_inv_le`.  The positive-semidefinite square root
-  needed to package each `T(P i)` as a Kraus term `C i * (C i)ᴴ` is available as
-  `CFC.sqrt`.
+  finite-dimensional map as a continuous linear map.  The pointwise
+  positive-map resolvent estimate and its spectral reduction to
+  `povm_resolvent_inv_le` are available as
+  `TNLean.OperatorJensen.positiveMap_resolvent_inv_le`, using `CFC.sqrt` to
+  package each `T(P i)` and the subunital defect as square-root factors.  The
+  remaining proof work is the CFC-integrand rewrite and the Löwner-integral
+  assembly.
 * Operator convexity of `rpow` over `[1, 2]`, the scalar input of
   `posMap_rpow_convex_jensen`, is now available as `CFC.convexOn_rpow` in
   `TNLean.Analysis.RpowConvexity`; the convex axiom therefore shares the single
@@ -97,12 +99,11 @@ The remaining Mathlib or local formalization gaps are:
    inequality `(t • 1 + T A)⁻¹ ≤ T ((t • 1 + A)⁻¹) + t⁻¹ • (1 - T 1)` for a
    positive subunital map `T`.  Diagonalizing `A = ∑ i, λ i • P i` over its
    spectral projections and setting `B i = T (P i)` (positive semidefinite,
-   with `∑ i, B i = T 1 ≤ 1`), this resolvent inequality is exactly
-   `povm_resolvent_inv_le` in `TNLean.Channel.Schwarz.OperatorJensenAux`, with
-   the Kraus factorization `B i = (CFC.sqrt (B i)) * (CFC.sqrt (B i))ᴴ` and
-   defect `(1 - ∑ i, B i)`.  What remains is integrating this pointwise bound:
-   Mathlib's ordered Bochner monotonicity theorem, the local
-   positive-semidefinite integral specialization in
+   with `∑ i, B i = T 1 ≤ 1`), this resolvent inequality is now proved as
+   `TNLean.OperatorJensen.positiveMap_resolvent_inv_le`.  What remains is to
+   rewrite the CFC integrand through the displayed resolvent formula and then
+   integrate this pointwise bound using Mathlib's ordered Bochner monotonicity
+   theorem, the local positive-semidefinite integral specialization in
    `TNLean.Channel.Schwarz.OperatorJensenAux`, and the commutation of `T` with
    the integral.
 2. **Operator convexity of `rpow` for `p ∈ [1, 2]`**: use the
