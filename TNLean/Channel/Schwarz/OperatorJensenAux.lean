@@ -3,9 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Channel.Basic
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.LinearAlgebra.Matrix.PosDef
+import Mathlib.MeasureTheory.Integral.Bochner.Basic
 
 /-!
 # Finite-POVM compression lemmas for operator Jensen
@@ -36,6 +38,8 @@ representation; see the status note below.
   block-diagonal matrix yields the weighted sum of reciprocals.
 - `povm_resolvent_inv_le`: the finite-POVM resolvent inequality, the key
   algebraic step toward the concave real-power Jensen inequality.
+- `integral_nonneg_matrix_of_ae`: matrix-valued Bochner integrals preserve
+  almost-everywhere positive semidefiniteness.
 
 ## Status
 
@@ -54,8 +58,10 @@ integrand together with the resolvent form
 The remaining unfinished step is therefore the operator Jensen inequality for a
 positive subunital map `T` applied to a single integrand,
 `T(cfc (Real.rpowIntegrand₀₁ p t) A) ≤ cfc (Real.rpowIntegrand₀₁ p t) (T A)`,
-together with monotonicity of the matrix-valued integral in the Loewner order;
-combining these and integrating discharges `posMap_rpow_concave_jensen`.
+together with the spectral reduction to `povm_resolvent_inv_le`.  The
+matrix-valued positive-integral step is now packaged below from Mathlib's
+ordered Bochner integral API and the local closed Loewner-order topology on
+finite matrices; order monotonicity itself is Mathlib's `integral_mono_ae`.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
@@ -112,6 +118,28 @@ end
 end Matrix.PosDef
 
 namespace TNLean.OperatorJensen
+
+section MatrixBochnerOrder
+
+open MeasureTheory
+
+variable {α : Type*} [MeasurableSpace α] {μ : Measure α} {D : ℕ}
+
+/-- A matrix-valued Bochner integral is positive semidefinite when the integrand
+is positive semidefinite almost everywhere.  This is the Loewner-order
+specialization of Mathlib's ordered Bochner integral theorem, using the local
+closed-order instance for finite matrices from `TNLean.Channel.Basic`. -/
+lemma integral_nonneg_matrix_of_ae {f : α → Matrix (Fin D) (Fin D) ℂ}
+    (hpos : ∀ᵐ x ∂μ, (f x).PosSemidef) :
+    (∫ x, f x ∂μ).PosSemidef := by
+  have hnonneg : ∀ᵐ x ∂μ, (0 : Matrix (Fin D) (Fin D) ℂ) ≤ f x := by
+    filter_upwards [hpos] with x hx
+    simpa [Matrix.le_iff] using hx
+  have hint : (0 : Matrix (Fin D) (Fin D) ℂ) ≤ ∫ x, f x ∂μ :=
+    integral_nonneg_of_ae (μ := μ) (f := f) hnonneg
+  simpa [Matrix.le_iff] using hint
+
+end MatrixBochnerOrder
 
 section POVM
 

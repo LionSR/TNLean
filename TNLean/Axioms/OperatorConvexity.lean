@@ -65,16 +65,18 @@ The remaining Mathlib or local formalization gaps are:
   For the concave `rpow` case the per-resolvent core is already available in
   `TNLean.Channel.Schwarz.OperatorJensenAux` (`povm_resolvent_inv_le`); see the
   proof plan below.
-* Monotonicity of the matrix-valued Bochner integral in the Loewner order, and
-  pulling a positive linear map through that integral
-  (`ContinuousLinearMap.integral_comp_comm`): the analytic ingredients of the
-  integral route.  Concretely, the Loewner monotonicity step requires a closed
-  positive-semidefinite cone (`OrderClosedTopology` for the Loewner order on
-  matrices) together with a vector-valued `integral_mono`; neither is present in
-  Mathlib 4.31 (the matrix order supplies `IsOrderedAddMonoid` and
-  `StarOrderedRing`, but no `OrderClosedTopology` instance).  The
-  positive-semidefinite square root needed to package each `T(P i)` as a Kraus
-  term `C i * (C i)ᴴ` for `povm_resolvent_inv_le` is available as `CFC.sqrt`.
+* Monotonicity of the matrix-valued Bochner integral in the Loewner order is
+  now available: `TNLean.Channel.Basic` supplies the closed Loewner-order
+  topology on finite matrices, Mathlib supplies the ordered Bochner theorem
+  `integral_mono_ae`, and `TNLean.Channel.Schwarz.OperatorJensenAux` records
+  the positive-semidefinite integral specialization as
+  `integral_nonneg_matrix_of_ae`.  Pulling a positive linear map through the
+  integral can use `ContinuousLinearMap.integral_comp_comm` after packaging the
+  finite-dimensional map as a continuous linear map.  The remaining proof work
+  is the pointwise positive-map Jensen/resolvent step and its spectral
+  reduction to `povm_resolvent_inv_le`.  The positive-semidefinite square root
+  needed to package each `T(P i)` as a Kraus term `C i * (C i)ᴴ` is available as
+  `CFC.sqrt`.
 * Operator convexity of `rpow` over `[1, 2]`, the scalar input of
   `posMap_rpow_convex_jensen`, is now available as `CFC.convexOn_rpow` in
   `TNLean.Analysis.RpowConvexity`; the convex axiom therefore shares the single
@@ -99,9 +101,10 @@ The remaining Mathlib or local formalization gaps are:
    `povm_resolvent_inv_le` in `TNLean.Channel.Schwarz.OperatorJensenAux`, with
    the Kraus factorization `B i = (CFC.sqrt (B i)) * (CFC.sqrt (B i))ᴴ` and
    defect `(1 - ∑ i, B i)`.  What remains is integrating this pointwise bound:
-   the matrix-valued Bochner monotonicity step (`integral_mono` in the Loewner
-   order, needing the `OrderClosedTopology` instance flagged above) and the
-   commutation of `T` with the integral.
+   Mathlib's ordered Bochner monotonicity theorem, the local
+   positive-semidefinite integral specialization in
+   `TNLean.Channel.Schwarz.OperatorJensenAux`, and the commutation of `T` with
+   the integral.
 2. **Operator convexity of `rpow` for `p ∈ [1, 2]`**: use the
    decomposition `x^p = x · x^{p-1}` for `p ∈ [1, 2]` (Mathlib's
    `rpowIntegrand₁₂`), reducing to concavity of `x^{p-1}` for

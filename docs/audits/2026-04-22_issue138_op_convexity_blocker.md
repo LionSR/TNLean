@@ -14,6 +14,12 @@ Ando–Lieb goal.
 
 No honest proof edit to those declarations landed in this pass.
 
+Status update after the Mathlib 4.31 upgrade: the scalar functional-calculus
+inputs named below are now present in the formal development as
+`CFC.concaveOn_rpow`, `CFC.convexOn_rpow`, and `CFC.concaveOn_log`.  The remaining
+gap is the positive-map Jensen theorem for positive unital or subunital maps.
+The list below records the state of the April audit.
+
 ## Current available infrastructure
 
 ### Mathlib
@@ -30,14 +36,15 @@ Available on the current toolchain:
   $x \mapsto 1 - (1 + x)^{-1}$:
   `CFC.monotoneOn_one_sub_one_add_inv_real`
 
-Still explicitly missing upstream:
+At the time of the audit, the following items were still explicitly missing
+upstream:
 
 - operator concavity of $x^p$ on $[0,1]$
 - operator convexity of $x^p$ on $[1,2]$
 - operator concavity of $\log$
 - a general operator Jensen theorem for positive unital/subunital maps
 
-The current Mathlib source still says this out loud:
+At that time the Mathlib source still said this out loud:
 
 - `Mathlib/Analysis/SpecialFunctions/ContinuousFunctionalCalculus/Rpow/Order.lean`
   lists TODOs for operator concavity/convexity of `rpow`
