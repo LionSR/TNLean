@@ -152,7 +152,7 @@ maps.
     adjoint for the bilinear pairing $(A,B)\mapsto \operatorname{tr}(AB)$.
 \end{definition}
 
-\begin{theorem}[Trace-pairing adjoint identity]
+\begin{theorem}[Trace-pairing adjoint identity]\label{thm:trace_pairing_adjoint_identity}
     \lean{Matrix.trace_traceAdjointMap_mul}
     \leanok
     \uses{def:trace_pairing_adjoint}
@@ -241,12 +241,71 @@ maps.
     positive semidefinite cone therefore gives $E^*(\rho)\geq 0$.
 \end{proof}
 
-\begin{theorem}[Trace-pairing adjoints preserve positivity exactly]
+\begin{theorem}[Trace-pairing adjoints preserve positivity exactly]\label{thm:trace_pairing_adjoint_positive_iff}
     \lean{isPositiveMap_traceAdjointMap_iff}
     \leanok
     \uses{thm:trace_pairing_adjoint_positive, thm:trace_pairing_adjoint_involutive}
     A linear map is positive if and only if its trace-pairing adjoint is
     positive.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    One direction is the preceding theorem.  The other follows by applying the
+    same theorem to $E^*$ and using $(E^*)^*=E$.
+\end{proof}
+
+\begin{theorem}[Trace-pairing adjoint of an ampliation]
+    \label{thm:trace_pairing_adjoint_ampliation}
+    \lean{nPositiveAmpliation_traceAdjointMap}
+    \leanok
+    \uses{def:blockwise_ampliation, def:trace_pairing_adjoint,
+        thm:trace_pairing_adjoint_identity}
+    For every linear map $E : \MN{D}\to\MN{D}$, the trace-pairing adjoint
+    commutes with ampliation:
+    \[
+        (E^{(k)})^*=(E^*)^{(k)}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For block matrices write $\rho_{pq}$ and $X_{pq}$ for their
+    $\MN{D}$-valued blocks.  Expanding the trace by blocks gives
+    \[
+        \operatorname{tr}((E^*)^{(k)}(\rho)X)
+        =\sum_{p,q}\operatorname{tr}(E^*(\rho_{pq})X_{qp}).
+    \]
+    The trace-adjoint identity changes each summand to
+    $\operatorname{tr}(\rho_{pq}E(X_{qp}))$, and summing the blocks back gives
+    $\operatorname{tr}(\rho E^{(k)}(X))$.  Nondegeneracy of the trace pairing
+    identifies the two adjoints.
+\end{proof}
+
+\begin{theorem}[Trace-pairing adjoint of a $k$-positive map]
+    \label{thm:k_positive_trace_pairing_adjoint}
+    \lean{IsNPositiveMap.traceAdjointMap}
+    \leanok
+    \uses{def:k_positive_map, thm:trace_pairing_adjoint_ampliation,
+        thm:trace_pairing_adjoint_positive}
+    If $E$ is $k$-positive, then $E^*$ is $k$-positive.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Since $E$ is $k$-positive, its ampliation $E^{(k)}$ is positive.  The
+    trace-pairing adjoint of this positive map is positive, and the preceding
+    theorem identifies that adjoint with $(E^*)^{(k)}$.
+\end{proof}
+
+\begin{theorem}[$k$-positivity is trace-adjoint invariant]
+    \label{thm:k_positive_trace_pairing_adjoint_iff}
+    \lean{isNPositiveMap_traceAdjointMap_iff}
+    \leanok
+    \uses{thm:k_positive_trace_pairing_adjoint,
+        thm:trace_pairing_adjoint_involutive}
+    A linear map is $k$-positive if and only if its trace-pairing adjoint is
+    $k$-positive.
 \end{theorem}
 
 \begin{proof}

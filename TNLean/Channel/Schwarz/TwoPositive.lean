@@ -27,6 +27,8 @@ the existing result which is restricted to completely positive maps.
 
 * `IsCPMap.isNPositiveMap` — CP maps are n-positive for all n
 * `IsPositiveMap.traceAdjointMap` — the trace-pairing adjoint of a positive map is positive
+* `IsNPositiveMap.traceAdjointMap` — the trace-pairing adjoint of a `k`-positive
+  map is `k`-positive
 * `IsCPMap.is2PositiveMap` — CP maps are 2-positive
 * `kadison_schwarz_2positive` — Kadison–Schwarz for unital 2-positive maps
 
@@ -187,6 +189,75 @@ omit [DecidableEq n] in
 theorem isPositiveMap_traceAdjointMap_iff
     {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ} :
     IsPositiveMap (Matrix.traceAdjointMap E) ↔ IsPositiveMap E := by
+  constructor
+  · intro h
+    have h' := h.traceAdjointMap
+    simpa [Matrix.traceAdjointMap_traceAdjointMap] using h'
+  · intro h
+    exact h.traceAdjointMap
+
+omit [DecidableEq n] in
+private theorem trace_mul_eq_sum_trace_blocks
+    (k : ℕ) (A B : Matrix (n × Fin k) (n × Fin k) ℂ) :
+    Matrix.trace (A * B) =
+      ∑ p : Fin k, ∑ q : Fin k,
+        Matrix.trace
+          ((Matrix.of fun i j => A (i, p) (j, q)) *
+            (Matrix.of fun i j => B (i, q) (j, p))) := by
+  classical
+  simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply, Matrix.of_apply,
+    Fintype.sum_prod_type]
+  rw [Finset.sum_comm]
+  congr 1
+  ext p
+  conv_lhs =>
+    enter [2, i]
+    rw [Finset.sum_comm]
+  rw [Finset.sum_comm]
+
+omit [DecidableEq n] in
+/-- The trace-pairing adjoint commutes with the blockwise ampliation:
+`(E^{(k)})^* = (E^*)^{(k)}`. -/
+theorem nPositiveAmpliation_traceAdjointMap
+    (k : ℕ) (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) :
+    nPositiveAmpliation k (Matrix.traceAdjointMap E) =
+      Matrix.traceAdjointMap (nPositiveAmpliation k E) := by
+  classical
+  apply LinearMap.ext
+  intro ρ
+  refine (Matrix.ext_iff_trace_mul_right
+    (A := nPositiveAmpliation k (Matrix.traceAdjointMap E) ρ)
+    (B := Matrix.traceAdjointMap (nPositiveAmpliation k E) ρ)).2 ?_
+  intro X
+  rw [Matrix.trace_traceAdjointMap_mul]
+  rw [trace_mul_eq_sum_trace_blocks, trace_mul_eq_sum_trace_blocks]
+  congr 1
+  ext p
+  congr 1
+  ext q
+  simp only [nPositiveAmpliation, Matrix.of_apply, LinearMap.coe_mk, AddHom.coe_mk]
+  change Matrix.trace
+      (Matrix.traceAdjointMap E (Matrix.of fun i j => ρ (i, p) (j, q)) *
+        (Matrix.of fun i j => X (i, q) (j, p))) =
+    Matrix.trace
+      ((Matrix.of fun i j => ρ (i, p) (j, q)) *
+        E (Matrix.of fun i j => X (i, q) (j, p)))
+  rw [Matrix.trace_traceAdjointMap_mul]
+
+omit [DecidableEq n] in
+/-- The trace-pairing adjoint of a `k`-positive map is `k`-positive. -/
+theorem IsNPositiveMap.traceAdjointMap
+    {k : ℕ} {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
+    (hE : IsNPositiveMap k E) : IsNPositiveMap k (Matrix.traceAdjointMap E) := by
+  rw [isNPositiveMap_iff_isPositiveMap_nPositiveAmpliation] at hE ⊢
+  rw [nPositiveAmpliation_traceAdjointMap]
+  exact hE.traceAdjointMap
+
+omit [DecidableEq n] in
+/-- `k`-positivity is invariant under the trace-pairing adjoint. -/
+theorem isNPositiveMap_traceAdjointMap_iff
+    {k : ℕ} {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ} :
+    IsNPositiveMap k (Matrix.traceAdjointMap E) ↔ IsNPositiveMap k E := by
   constructor
   · intro h
     have h' := h.traceAdjointMap
