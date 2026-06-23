@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import Mathlib.Data.Complex.Basic
+import Mathlib.LinearAlgebra.Basis.VectorSpace
 import Mathlib.LinearAlgebra.Matrix.Rank
 
 /-!
@@ -29,6 +30,8 @@ bounded Schmidt rank.
 * `Matrix.schmidtRank_le_left`, `Matrix.schmidtRank_le_right`: dimension bounds.
 * `Matrix.schmidtRank_zero`: the zero vector has Schmidt rank zero.
 * `Matrix.schmidtRank_product_le_one`: product vectors have Schmidt rank at most one.
+* `Matrix.exists_mul_eq_of_rank_le`: a matrix of rank at most `k` factors
+  through a `k`-dimensional coordinate space.
 * `Matrix.rank_smul_of_ne_zero`: nonzero complex rescaling preserves matrix rank.
 
 ## References
@@ -67,6 +70,30 @@ theorem rank_smul_of_ne_zero {c : ℂ} (hc : c ≠ 0) (A : Matrix m n ℂ) :
     · rintro ⟨x, rfl⟩
       exact ⟨c⁻¹ • x, by simp [hc]⟩
   rw [Matrix.rank, Matrix.rank, hrange]
+
+/-- A matrix whose rank is at most `k` factors through `ℂ^k`. -/
+theorem exists_mul_eq_of_rank_le
+    (A : Matrix m n ℂ) {k : ℕ}
+    (hA : A.rank ≤ k) :
+    ∃ B : Matrix m (Fin k) ℂ, ∃ C : Matrix (Fin k) n ℂ, B * C = A := by
+  classical
+  let f : (n → ℂ) →ₗ[ℂ] m → ℂ := Matrix.toLin' A
+  have hrange_dim : Module.finrank ℂ (LinearMap.range f) ≤ Module.finrank ℂ (Fin k → ℂ) := by
+    have hf : f = A.mulVecLin := rfl
+    rw [hf]
+    simpa [Matrix.rank, Module.finrank_pi] using hA
+  obtain ⟨e, he⟩ := (finrank_le_iff_exists_linearMap
+    (R := ℂ) (M := LinearMap.range f) (M' := Fin k → ℂ)).mp hrange_dim
+  have heker : LinearMap.ker e = ⊥ := LinearMap.ker_eq_bot.mpr he
+  let g : (n → ℂ) →ₗ[ℂ] Fin k → ℂ := e.comp f.rangeRestrict
+  let h : (Fin k → ℂ) →ₗ[ℂ] m → ℂ := (LinearMap.range f).subtype.comp e.leftInverse
+  refine ⟨LinearMap.toMatrix' h, LinearMap.toMatrix' g, ?_⟩
+  rw [← LinearMap.toMatrix'_comp]
+  suffices h.comp g = Matrix.toLin' A by
+    simpa using congrArg LinearMap.toMatrix' this
+  change h.comp g = f
+  ext x i
+  simp [f, g, h, LinearMap.leftInverse_apply_of_inj heker]
 
 /-- The Schmidt rank of a finite bipartite vector. -/
 noncomputable def schmidtRank (ψ : m × n → ℂ) : ℕ :=

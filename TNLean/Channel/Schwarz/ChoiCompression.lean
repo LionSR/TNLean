@@ -5,6 +5,7 @@ Authors: Sirui Lu
 -/
 import TNLean.Channel.SchmidtRank
 import TNLean.Channel.Schwarz.TwoPositive
+import Mathlib.Analysis.InnerProductSpace.Positive
 
 /-!
 # Choi compression for the rank-one test
@@ -51,6 +52,43 @@ the pair $(i,p)$.
 
 open scoped Matrix BigOperators ComplexOrder
 open Matrix Finset
+
+namespace Matrix
+
+/-- Over a finite complex coordinate space, nonnegativity of all matrix
+quadratic forms already implies positive semidefiniteness.  The Hermitian part
+is recovered by the complex polarization identity. -/
+theorem posSemidef_of_dotProduct_mulVec_nonneg_complex
+    {n : Type*} [Fintype n] {M : Matrix n n ℂ}
+    (hM : ∀ x : n → ℂ, (0 : ℂ) ≤ star x ⬝ᵥ (M *ᵥ x)) : M.PosSemidef := by
+  classical
+  refine Matrix.PosSemidef.of_dotProduct_mulVec_nonneg ?_ hM
+  rw [← Matrix.isSymmetric_toEuclideanLin_iff]
+  have hpos : (Matrix.toEuclideanLin M).IsPositive := by
+    rw [LinearMap.isPositive_iff_complex]
+    intro x
+    have hx_nonneg : (0 : ℂ) ≤ star x.ofLp ⬝ᵥ (M *ᵥ x.ofLp) := hM x.ofLp
+    have hx_real :
+        star (star x.ofLp ⬝ᵥ (M *ᵥ x.ofLp)) =
+          star x.ofLp ⬝ᵥ (M *ᵥ x.ofLp) := by
+      rw [RCLike.star_def]
+      exact RCLike.conj_eq_iff_im.mpr (RCLike.nonneg_iff.mp hx_nonneg).2
+    have hinner :
+        inner ℂ ((Matrix.toEuclideanLin M) x) x =
+          star (star x.ofLp ⬝ᵥ (M *ᵥ x.ofLp)) := by
+      change inner ℂ (((Matrix.toLpLin 2 2) M) x) x =
+        star (star x.ofLp ⬝ᵥ (M *ᵥ x.ofLp))
+      rw [Matrix.toLpLin_apply, EuclideanSpace.inner_eq_star_dotProduct]
+      rw [dotProduct_comm]
+      simp [dotProduct, mul_comm]
+    constructor
+    · rw [hinner, hx_real]
+      exact RCLike.conj_eq_iff_re.mp (by simpa [RCLike.star_def] using hx_real)
+    · rw [hinner, hx_real]
+      exact (RCLike.nonneg_iff.mp hx_nonneg).1
+  exact hpos.isSymmetric
+
+end Matrix
 
 namespace ChoiJamiolkowski
 
@@ -110,6 +148,98 @@ theorem rightTensorMatrix_mul_choiMatrix_mul_conjTranspose
   · intro x _ hx
     simp [Ne.symm hx]
   · simp
+
+/-- The quadratic form of the Choi sandwich by the right tensor factor is the
+Choi quadratic form evaluated on the pulled-back vector. -/
+theorem rightTensor_choiMatrix_quadraticForm_eq
+    (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (X : Matrix (Fin D) (Fin k) ℂ) (η : Fin D × Fin k → ℂ) :
+    star η ⬝ᵥ
+        ((rightTensorMatrix X * choiMatrix T * (rightTensorMatrix X)ᴴ) *ᵥ η) =
+      star ((rightTensorMatrix X)ᴴ *ᵥ η) ⬝ᵥ
+        (choiMatrix T *ᵥ ((rightTensorMatrix X)ᴴ *ᵥ η)) := by
+  have hmul :
+      ((rightTensorMatrix X * choiMatrix T * (rightTensorMatrix X)ᴴ) *ᵥ η) =
+        rightTensorMatrix X *ᵥ
+          (choiMatrix T *ᵥ ((rightTensorMatrix X)ᴴ *ᵥ η)) := by
+    simp [Matrix.mulVec_mulVec, Matrix.mul_assoc]
+  have hstar :
+      star ((rightTensorMatrix X)ᴴ *ᵥ η) = star η ᵥ* rightTensorMatrix X := by
+    rw [Matrix.star_mulVec, Matrix.conjTranspose_conjTranspose]
+  rw [hmul, Matrix.dotProduct_mulVec, ← hstar]
+
+/-- The quadratic form of the right-factor compression is the Choi quadratic
+form evaluated on the vector pulled back by the adjoint right tensor factor. -/
+theorem rightCompression_quadraticForm_eq_choiMatrix_quadraticForm
+    (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (X : Matrix (Fin D) (Fin k) ℂ) (η : Fin D × Fin k → ℂ) :
+    star η ⬝ᵥ (rightCompression T X *ᵥ η) =
+      star ((rightTensorMatrix X)ᴴ *ᵥ η) ⬝ᵥ
+        (choiMatrix T *ᵥ ((rightTensorMatrix X)ᴴ *ᵥ η)) := by
+  rw [← rightTensorMatrix_mul_choiMatrix_mul_conjTranspose (T := T) (X := X)]
+  exact rightTensor_choiMatrix_quadraticForm_eq T X η
+
+/-- The coefficient matrix of the vector pulled back by the adjoint right
+tensor factor is the product of the coefficient matrix of the compressed vector
+with the adjoint of the right-factor matrix. -/
+theorem schmidtCoeffMatrix_rightTensorMatrix_conjTranspose_mulVec
+    (X : Matrix (Fin D) (Fin k) ℂ) (η : Fin D × Fin k → ℂ) :
+    Matrix.schmidtCoeffMatrix ((rightTensorMatrix X)ᴴ *ᵥ η) =
+      Matrix.schmidtCoeffMatrix η * Xᴴ := by
+  classical
+  ext j a
+  simp only [Matrix.schmidtCoeffMatrix, Matrix.mulVec, dotProduct, Matrix.mul_apply,
+    rightTensorMatrix, Matrix.conjTranspose_apply, Fintype.sum_prod_type]
+  rw [Finset.sum_eq_single j]
+  · simp [mul_comm]
+  · intro i _ hij
+    simp [hij]
+  · simp
+
+/-- Pulling a vector back by the adjoint right tensor factor gives a vector of
+Schmidt rank at most the compression dimension. -/
+theorem rightTensorMatrix_conjTranspose_mulVec_hasSchmidtRankLE
+    (X : Matrix (Fin D) (Fin k) ℂ) (η : Fin D × Fin k → ℂ) :
+    Matrix.HasSchmidtRankLE k ((rightTensorMatrix X)ᴴ *ᵥ η) := by
+  have hrank : (Matrix.schmidtCoeffMatrix ((rightTensorMatrix X)ᴴ *ᵥ η)).rank ≤ k := by
+    rw [schmidtCoeffMatrix_rightTensorMatrix_conjTranspose_mulVec]
+    calc
+      (Matrix.schmidtCoeffMatrix η * Xᴴ).rank ≤ (Xᴴ).rank :=
+        Matrix.rank_mul_le_right (Matrix.schmidtCoeffMatrix η) Xᴴ
+      _ = X.rank := Matrix.rank_conjTranspose X
+      _ ≤ Fintype.card (Fin k) := Matrix.rank_le_card_width X
+      _ = k := by simp
+  simpa [Matrix.HasSchmidtRankLE, Matrix.schmidtRank] using hrank
+
+/-- Every vector of Schmidt rank at most `k` is obtained by pulling back a
+vector in the `D × k` compressed space through the adjoint of a right tensor
+factor. -/
+theorem exists_rightTensorMatrix_conjTranspose_mulVec_of_hasSchmidtRankLE
+    {ψ : Fin D × Fin D → ℂ} (hψ : Matrix.HasSchmidtRankLE k ψ) :
+    ∃ X : Matrix (Fin D) (Fin k) ℂ, ∃ η : Fin D × Fin k → ℂ,
+      (rightTensorMatrix X)ᴴ *ᵥ η = ψ := by
+  classical
+  let A : Matrix (Fin D) (Fin D) ℂ := Matrix.schmidtCoeffMatrix ψ
+  have hA : A.rank ≤ k := by
+    simpa [A, Matrix.HasSchmidtRankLE, Matrix.schmidtRank] using hψ
+  obtain ⟨B, C, hBC⟩ := Matrix.exists_mul_eq_of_rank_le A hA
+  let X : Matrix (Fin D) (Fin k) ℂ := Cᴴ
+  let η : Fin D × Fin k → ℂ := fun ip => B ip.1 ip.2
+  refine ⟨X, η, ?_⟩
+  ext ip
+  rcases ip with ⟨j, a⟩
+  calc
+    ((rightTensorMatrix X)ᴴ *ᵥ η) (j, a)
+        = Matrix.schmidtCoeffMatrix ((rightTensorMatrix X)ᴴ *ᵥ η) j a := rfl
+    _ = (B * C) j a := by
+        rw [schmidtCoeffMatrix_rightTensorMatrix_conjTranspose_mulVec]
+        have hηcoeff : Matrix.schmidtCoeffMatrix η = B := by
+          ext i p
+          rfl
+        rw [hηcoeff]
+        simp only [X, Matrix.conjTranspose_conjTranspose]
+    _ = A j a := by rw [hBC]
+    _ = ψ (j, a) := rfl
 
 /-- The coefficient vector obtained from the normalized maximally entangled
 vector by applying `X` on the right tensor factor. -/
@@ -284,6 +414,21 @@ theorem isNPositiveMap_iff_forall_rightCompression_posSemidef [NeZero D]
     rw [nPositiveAmpliation_rankOne_eq_rightCompression]
     exact hX X
 
+/-- Converse Schmidt-rank test for Wolf's Choi criterion.  If all
+Schmidt-rank-`≤ k` vectors have nonnegative Choi quadratic form, then the map
+is `k`-positive. -/
+theorem isNPositiveMap_of_forall_hasSchmidtRankLE_choiMatrix_quadraticForm_nonneg [NeZero D]
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hψ : ∀ ψ : Fin D × Fin D → ℂ, Matrix.HasSchmidtRankLE k ψ →
+      (0 : ℂ) ≤ star ψ ⬝ᵥ (choiMatrix T *ᵥ ψ)) :
+    IsNPositiveMap k T := by
+  rw [isNPositiveMap_iff_forall_rightCompression_posSemidef]
+  intro X
+  refine Matrix.posSemidef_of_dotProduct_mulVec_nonneg_complex ?_
+  intro η
+  rw [rightCompression_quadraticForm_eq_choiMatrix_quadraticForm (T := T) (X := X) (η := η)]
+  exact hψ _ (rightTensorMatrix_conjTranspose_mulVec_hasSchmidtRankLE X η)
+
 /-- A `k`-positive map has positive Choi sandwiches by every right tensor
 factor `X : M_{D,k}(\mathbb{C})`.  This is the forward implication of the
 projection-compression formulation before requiring that `X` comes from a
@@ -294,5 +439,36 @@ theorem IsNPositiveMap.rightTensor_choiMatrix_sandwich_posSemidef [NeZero D]
     (rightTensorMatrix X * choiMatrix T * (rightTensorMatrix X)ᴴ).PosSemidef := by
   rw [rightTensorMatrix_mul_choiMatrix_mul_conjTranspose]
   exact (isNPositiveMap_iff_forall_rightCompression_posSemidef k T).mp hT X
+
+/-- Forward direction of Wolf's Schmidt-rank expectation criterion.  If `T` is
+`k`-positive, then the Choi quadratic form is nonnegative on every vector of
+Schmidt rank at most `k`. -/
+theorem IsNPositiveMap.choiMatrix_quadraticForm_nonneg_of_hasSchmidtRankLE [NeZero D]
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hT : IsNPositiveMap k T) {ψ : Fin D × Fin D → ℂ}
+    (hψ : Matrix.HasSchmidtRankLE k ψ) :
+    0 ≤ star ψ ⬝ᵥ (choiMatrix T *ᵥ ψ) := by
+  obtain ⟨X, η, hη⟩ :=
+    exists_rightTensorMatrix_conjTranspose_mulVec_of_hasSchmidtRankLE (D := D) hψ
+  have hcomp : (rightCompression T X).PosSemidef :=
+    (isNPositiveMap_iff_forall_rightCompression_posSemidef k T).mp hT X
+  have hq := hcomp.dotProduct_mulVec_nonneg η
+  rw [rightCompression_quadraticForm_eq_choiMatrix_quadraticForm] at hq
+  simpa [hη] using hq
+
+/-- Schmidt-rank expectation criterion for Wolf's Choi matrix:
+`k`-positivity is equivalent to nonnegativity of the Choi quadratic form on all
+vectors of Schmidt rank at most `k`. -/
+theorem isNPositiveMap_iff_forall_hasSchmidtRankLE_choiMatrix_quadraticForm_nonneg
+    [NeZero D]
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ} :
+    IsNPositiveMap k T ↔
+      ∀ ψ : Fin D × Fin D → ℂ, Matrix.HasSchmidtRankLE k ψ →
+        (0 : ℂ) ≤ star ψ ⬝ᵥ (choiMatrix T *ᵥ ψ) := by
+  constructor
+  · intro hT ψ hψ
+    exact IsNPositiveMap.choiMatrix_quadraticForm_nonneg_of_hasSchmidtRankLE hT hψ
+  · intro hψ
+    exact isNPositiveMap_of_forall_hasSchmidtRankLE_choiMatrix_quadraticForm_nonneg hψ
 
 end ChoiJamiolkowski
