@@ -283,12 +283,15 @@ maps.
 \begin{proof}
     \leanok
     The forward direction applies the rank-one $k$-positivity test to the
-    normalized vector with coefficients $D^{-1/2}X_{i,p}$, then uses
-    Lemma~\ref{lem:rank_one_ampliation_choi_compression}.  Conversely, given a
-    vector $\psi$ on the ampliated space, take
+    normalized vector $\psi_X$ with coefficients
+    $(\psi_X)_{(i,p)}=D^{-1/2}X_{i,p}$, then uses
+    Lemma~\ref{lem:rank_one_ampliation_choi_compression} in the form
+    \[
+      (T\otimes \id_k)(|\psi_X\rangle\langle\psi_X|)=C_T(X).
+    \]
+    Conversely, given a vector $\psi$ on the ampliated space, take
     $X_{i,p}=D^{1/2}\psi_{(i,p)}$.  Since $D>0$, this choice satisfies
-    $D^{-1/2}X_{i,p}=\psi_{(i,p)}$.  Lemma~\ref{lem:rank_one_ampliation_choi_compression}
-    gives
+    $D^{-1/2}X_{i,p}=\psi_{(i,p)}$.  The same compression identity gives
     \[
       (T\otimes \id_k)(|\psi\rangle\langle\psi|)=C_T(X),
     \]
