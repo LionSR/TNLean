@@ -41,8 +41,10 @@ The declarations below separate four mathematical statements:
 
 **Scope restriction (overlapping two-site terms):** The three-site support maps
 for the source \(AX\) and \(XB\) windows are represented in
-`TNLean.MPS.ParentHamiltonian.LocalSupport`. The remaining Appendix-B step is to
-identify the source projectors \(Q_{AX}\) and \(Q_{XB}\) with the translated
+`TNLean.MPS.ParentHamiltonian.LocalSupport`. Appendix B supplies the
+basic-vector form, while Appendix D.2 of arXiv:1606.00608 supplies the
+parent-commuting condition for the \(Q_{AX}\) and \(Q_{XB}\) projectors. The
+remaining local step is to identify those projectors with the translated
 length-two parent terms and prove their overlapping commutation. For this reason
 commutativity of the translated idempotents is an explicit hypothesis in
 `HasProductPairLocalProjectors`. Eliminating this hypothesis is the source

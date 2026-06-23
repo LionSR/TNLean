@@ -156,6 +156,28 @@ def rightPairLift (Q : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) :
   ext ψ σ
   simp [Module.End.mul_apply]
 
+@[simp] theorem leftPairLift_sub
+    (Q R : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) :
+    leftPairLift (Q - R) = leftPairLift Q - leftPairLift R := by
+  ext ψ σ
+  simp
+
+@[simp] theorem rightPairLift_sub
+    (Q R : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) :
+    rightPairLift (Q - R) = rightPairLift Q - rightPairLift R := by
+  ext ψ σ
+  simp
+
+@[simp] theorem leftPairLift_one_sub
+    (Q : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) :
+    leftPairLift (1 - Q) = 1 - leftPairLift Q := by
+  rw [leftPairLift_sub, leftPairLift_one]
+
+@[simp] theorem rightPairLift_one_sub
+    (Q : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) :
+    rightPairLift (1 - Q) = 1 - rightPairLift Q := by
+  rw [rightPairLift_sub, rightPairLift_one]
+
 variable {D : ℕ}
 
 /-- On a three-site window, the translated length-two parent interaction at
@@ -245,13 +267,26 @@ theorem HasOverlappingTwoSiteCommutation.right_lift_idempotent
     rightPairLift QXB * rightPairLift QXB = rightPairLift QXB := by
   rw [← rightPairLift_mul, h.right_idempotent]
 
+/-- Commutation of the Appendix D.2 projectors of arXiv:1606.00608 passes to
+the complementary ground-space projectors.
+
+In the source notation, after \(Q_{AX}\) and \(Q_{XB}\) commute, the
+complements \(P_{AX}=1-Q_{AX}\) and \(P_{XB}=1-Q_{XB}\) commute as well. -/
+theorem HasOverlappingTwoSiteCommutation.commute_complement_lifts
+    {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
+    (h : HasOverlappingTwoSiteCommutation (d := d) QAX QXB) :
+    leftPairLift (1 - QAX) * rightPairLift (1 - QXB) =
+      rightPairLift (1 - QXB) * leftPairLift (1 - QAX) := by
+  rw [leftPairLift_one_sub, rightPairLift_one_sub]
+  noncomm_ring [h.commute_lifts]
+
 /-- If the canonical two-site parent interaction satisfies the overlapping
 two-site commutation predicate on the \(AX\) and \(XB\) faces, then the first two
 translated parent terms on the three-site chain commute.
 
-This is the local transport from the source projectors of arXiv:1606.00608,
-Definition D.2, to the translated parent terms. It does not construct those
-source projectors from the Appendix B product-of-pairs form. -/
+This is the local transport from the Appendix D.2 projectors of
+arXiv:1606.00608 to the translated parent terms. It does not construct those
+source projectors associated with the Appendix B basic-vector form. -/
 theorem localTerm_two_three_zero_one_commute_of_overlapping_two_site_commutation
     (A : MPSTensor d D)
     (h : HasOverlappingTwoSiteCommutation (d := d)
