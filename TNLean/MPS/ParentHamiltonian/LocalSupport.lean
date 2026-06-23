@@ -245,6 +245,23 @@ theorem HasOverlappingTwoSiteCommutation.right_lift_idempotent
     rightPairLift QXB * rightPairLift QXB = rightPairLift QXB := by
   rw [← rightPairLift_mul, h.right_idempotent]
 
+/-- If the canonical two-site parent interaction satisfies the overlapping
+two-site commutation predicate on the \(AX\) and \(XB\) faces, then the first two
+translated parent terms on the three-site chain commute.
+
+This is the local transport from the source projectors of arXiv:1606.00608,
+Definition D.2, to the translated parent terms. It does not construct those
+source projectors from the Appendix B product-of-pairs form. -/
+theorem localTerm_two_three_zero_one_commute_of_overlapping_two_site_commutation
+    (A : MPSTensor d D)
+    (h : HasOverlappingTwoSiteCommutation (d := d)
+      (parentInteraction A 2) (parentInteraction A 2)) :
+    localTerm A 2 3 (0 : Fin 3) * localTerm A 2 3 (1 : Fin 3) =
+      localTerm A 2 3 (1 : Fin 3) * localTerm A 2 3 (0 : Fin 3) := by
+  rw [localTerm_two_three_zero_eq_leftPairLift_parentInteraction,
+    localTerm_two_three_one_eq_rightPairLift_parentInteraction]
+  exact h.commute_lifts
+
 /-! ### Adjacent cyclic two-site supports -/
 
 /-- The left two-site support \(AX\) of the three-site window starting at `i`. -/
