@@ -189,6 +189,22 @@ maps.
     $\operatorname{SR}(\psi)\le l$.
 \end{lemma}
 
+\begin{lemma}[Rank factorization through a coordinate space]
+    \label{lem:matrix_rank_factorization_coordinate}
+    \lean{Matrix.exists_mul_eq_of_rank_le}
+    \leanok
+    If $A\in\MN{m,n}(\C)$ has rank at most $k$, then there are matrices
+    $B\in\MN{m,k}(\C)$ and $C\in\MN{k,n}(\C)$ such that $BC=A$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The range of the linear map represented by $A$ has dimension at most $k$.
+    Embed this range into $\C^k$, compose with the range map, and then map
+    back to the ambient codomain.  The corresponding matrices give the desired
+    factorization.
+\end{proof}
+
 \begin{theorem}[Rank-one test for $k$-positivity]\label{thm:k_positive_rank_one_test}
     \lean{isNPositiveMap_iff_forall_ampliation_rank_one_posSemidef}
     \leanok
@@ -362,6 +378,147 @@ maps.
     \]
     so $\operatorname{rank}(C_\psi)=\operatorname{rank}(X)$, since
     multiplication by a nonzero scalar preserves rank.
+\end{proof}
+
+\begin{lemma}[Schmidt rank under the adjoint right tensor factor]
+    \label{lem:right_tensor_adjoint_schmidt_rank}
+    \lean{ChoiJamiolkowski.schmidtCoeffMatrix_rightTensorMatrix_conjTranspose_mulVec,
+        ChoiJamiolkowski.rightTensorMatrix_conjTranspose_mulVec_hasSchmidtRankLE}
+    \leanok
+    \uses{def:schmidt_rank, def:choi_right_tensor_factor}
+    Let $X\in\MN{D,k}(\C)$ and let $\eta\in\C^D\otimes\C^k$.  Then
+    $R_X^\dagger\eta\in\C^D\otimes\C^D$ has Schmidt rank at most $k$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    If $\eta$ is read as a $D\times k$ coefficient matrix $E$, then the
+    coefficient matrix of $R_X^\dagger\eta$ is $EX^\dagger$.  Therefore
+    \[
+        \rank(EX^\dagger)\le \rank(X^\dagger)=\rank(X)\le k.
+    \]
+\end{proof}
+
+\begin{lemma}[Right-tensor representatives of bounded Schmidt rank]
+    \label{lem:right_tensor_adjoint_schmidt_rank_representatives}
+    \lean{ChoiJamiolkowski.exists_rightTensorMatrix_conjTranspose_mulVec_of_hasSchmidtRankLE}
+    \leanok
+    \uses{def:schmidt_rank, def:choi_right_tensor_factor,
+        lem:matrix_rank_factorization_coordinate}
+    If $\psi\in\C^D\otimes\C^D$ has Schmidt rank at most $k$, then there
+    exist $X\in\MN{D,k}(\C)$ and $\eta\in\C^D\otimes\C^k$ such that
+    \[
+      \psi=R_X^\dagger\eta .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Let $C_\psi$ be the coefficient matrix of $\psi$.  The rank assumption
+    gives a factorisation $C_\psi=BC$ through $\C^k$.  Taking
+    $X=C^\dagger$ and reading $B$ as the coefficient matrix of $\eta$ gives
+    the required identity, because the coefficient matrix of
+    $R_X^\dagger\eta$ is $BX^\dagger=BC$.
+\end{proof}
+
+\begin{theorem}[Quadratic form of a right Choi compression]
+    \label{thm:choi_right_compression_quadratic_form}
+    \lean{ChoiJamiolkowski.rightTensor_choiMatrix_quadraticForm_eq,
+        ChoiJamiolkowski.rightCompression_quadraticForm_eq_choiMatrix_quadraticForm}
+    \leanok
+    \uses{def:choi_right_compression, def:choi_right_tensor_factor,
+        thm:choi_right_tensor_sandwich}
+    For $X\in\MN{D,k}(\C)$ and $\eta\in\C^D\otimes\C^k$,
+    \[
+      \langle \eta, C_T(X)\eta\rangle
+      =
+      \langle R_X^\dagger\eta,\tau_T R_X^\dagger\eta\rangle .
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The sandwich identity gives $C_T(X)=R_X\tau_T R_X^\dagger$.  Hence
+    \[
+      \langle\eta,R_X\tau_T R_X^\dagger\eta\rangle
+      =
+      \langle R_X^\dagger\eta,\tau_T R_X^\dagger\eta\rangle .
+    \]
+\end{proof}
+
+\begin{theorem}[Schmidt-rank Choi expectation from \(k\)-positivity]
+    \label{thm:k_positive_schmidt_rank_choi_expectation}
+    \lean{ChoiJamiolkowski.IsNPositiveMap.choiMatrix_quadraticForm_nonneg_of_hasSchmidtRankLE}
+    \leanok
+    \uses{lem:right_tensor_adjoint_schmidt_rank_representatives,
+        thm:choi_right_compression_quadratic_form,
+        thm:k_positive_iff_right_choi_compressions}
+    Assume $D>0$.  If $T$ is $k$-positive, then
+    \[
+      \langle\psi,\tau_T\psi\rangle\ge 0
+    \]
+    for every $\psi\in\C^D\otimes\C^D$ with
+    $\operatorname{SR}(\psi)\le k$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Write $\psi=R_X^\dagger\eta$ using
+    Lemma~\ref{lem:right_tensor_adjoint_schmidt_rank_representatives}.  By
+    Theorem~\ref{thm:k_positive_iff_right_choi_compressions}, the
+    compression $C_T(X)$ is positive semidefinite.  Its quadratic form at
+    $\eta$ is therefore nonnegative, and
+    Theorem~\ref{thm:choi_right_compression_quadratic_form} identifies this
+    number with $\langle\psi,\tau_T\psi\rangle$.
+\end{proof}
+
+\begin{theorem}[Converse Schmidt-rank Choi test]
+    \label{thm:schmidt_rank_choi_test_converse}
+    \lean{ChoiJamiolkowski.isNPositiveMap_of_forall_hasSchmidtRankLE_choiMatrix_quadraticForm_nonneg}
+    \leanok
+    \uses{lem:right_tensor_adjoint_schmidt_rank,
+        thm:choi_right_compression_quadratic_form,
+        thm:k_positive_iff_right_choi_compressions}
+    Assume $D>0$.  If
+    \[
+      \langle\psi,\tau_T\psi\rangle\ge 0
+    \]
+    for every $\psi\in\C^D\otimes\C^D$ with
+    $\operatorname{SR}(\psi)\le k$, then $T$ is $k$-positive.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By Theorem~\ref{thm:k_positive_iff_right_choi_compressions}, it is enough
+    to prove that $C_T(X)$ is positive semidefinite for each
+    $X\in\MN{D,k}(\C)$.  For any $\eta$, the quadratic-form identity identifies
+    $\langle\eta,C_T(X)\eta\rangle$ with
+    $\langle R_X^\dagger\eta,\tau_T R_X^\dagger\eta\rangle$, and
+    Lemma~\ref{lem:right_tensor_adjoint_schmidt_rank} gives
+    $\operatorname{SR}(R_X^\dagger\eta)\le k$.  Thus every quadratic form of
+    $C_T(X)$ is nonnegative.  Over a complex finite-dimensional space,
+    polarization recovers Hermiticity from this real nonnegative quadratic
+    form condition, so $C_T(X)$ is positive semidefinite.
+\end{proof}
+
+\begin{theorem}[Schmidt-rank Choi criterion]
+    \label{thm:schmidt_rank_choi_test_iff}
+    \lean{ChoiJamiolkowski.isNPositiveMap_iff_forall_hasSchmidtRankLE_choiMatrix_quadraticForm_nonneg}
+    \leanok
+    \uses{thm:k_positive_schmidt_rank_choi_expectation,
+        thm:schmidt_rank_choi_test_converse}
+    Assume $D>0$.  Then $T$ is $k$-positive if and only if
+    \[
+      \langle\psi,\tau_T\psi\rangle\ge 0
+    \]
+    for every $\psi\in\C^D\otimes\C^D$ with
+    $\operatorname{SR}(\psi)\le k$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Combine Theorem~\ref{thm:k_positive_schmidt_rank_choi_expectation} with
+    Theorem~\ref{thm:schmidt_rank_choi_test_converse}.
 \end{proof}
 
 \begin{lemma}[Rank-one ampliation as Choi compression]
