@@ -38,7 +38,7 @@ with composition. We also relate it to the Kraus representation.
 * `IsPositiveMap.comp_unitaryConjLM`: positive maps remain positive after
   precomposition with a conjugation map
 * `IsTracePreservingMap.comp_unitaryConjLM_of_conj_traceAdjointMap_one`: a
-  trace-normalization criterion for filtered maps `ρ ↦ T(XρX†)`
+  trace-normalization criterion for conjugated-input maps ρ ↦ T(XρX†)
 * `MPSTensor.transferMatrix_eq`: the MPS transfer map `E_A` has transfer
   matrix `∑ᵢ Āᵢ ⊗ₖ Aᵢ`
 
@@ -422,12 +422,12 @@ theorem unitaryConjLM_isChannel_of_unitary (U : Matrix (Fin D) (Fin D) ℂ)
     IsChannel (unitaryConjLM U) :=
   ⟨unitaryConjLM_isCPMap U, unitaryConjLM_isTP_of_unitary U hU⟩
 
-/-- Trace-normalization criterion for a filtered map.
+/-- Trace-normalization criterion for a map with conjugated input.
 
-If `X† T*(1) X = 1`, where `T*` is the trace-pairing adjoint, then
-`ρ ↦ T(XρX†)` is trace preserving.  This is the trace calculation in Wolf
+If X† T*(1) X = 1, where T* is the trace-pairing adjoint, then
+ρ ↦ T(XρX†) is trace preserving. This is the trace calculation in Wolf
 Chapter 3's construction making a positive map trace preserving by choosing
-`X = T*(1)^{-1/2}`. -/
+X = T*(1)^{-1/2}. -/
 theorem IsTracePreservingMap.comp_unitaryConjLM_of_conj_traceAdjointMap_one
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (X : Matrix (Fin D) (Fin D) ℂ)
@@ -454,8 +454,9 @@ theorem IsTracePreservingMap.comp_unitaryConjLM_of_conj_traceAdjointMap_one
     _ = Matrix.trace ((Xᴴ * Matrix.traceAdjointMap T 1 * X) * ρ) := hcycle
     _ = Matrix.trace ρ := by rw [hX, Matrix.one_mul]
 
-/-- A filtered positive map is again positive, and is trace preserving under
-the corresponding trace-adjoint normalization. -/
+/-- If T is positive, then ρ ↦ T(XρX†) is positive. If moreover
+X† T*(1) X = 1, where T* is the trace-pairing adjoint, then the same map is
+trace preserving. -/
 theorem IsPositiveMap.comp_unitaryConjLM_positive_tracePreserving
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hT : IsPositiveMap T) (X : Matrix (Fin D) (Fin D) ℂ)
