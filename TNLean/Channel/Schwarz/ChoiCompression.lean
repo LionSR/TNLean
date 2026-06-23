@@ -13,8 +13,8 @@ for `k`-positivity with the Choi-matrix compression appearing in Wolf Chapter 3,
 Proposition 3.1, equation (3.4).
 
 The Choi matrix is normalized using `Matrix.omegaVec`, so the vector attached to
-an operator `X : Matrix (Fin D) (Fin k) ℂ` is
-`(i,p) ↦ D^{-1/2} X i p`.
+a matrix $X\in M_{D\times k}(\mathbb{C})$ has component $D^{-1/2}X_{i,p}$ at
+the pair $(i,p)$.
 
 ## Main definitions
 
