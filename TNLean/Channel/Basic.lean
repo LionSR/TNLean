@@ -9,6 +9,7 @@ import Mathlib.Analysis.Matrix.Normed
 import Mathlib.Analysis.CStarAlgebra.PositiveLinearMap
 import Mathlib.Analysis.RCLike.Lemmas
 import Mathlib.Topology.Algebra.Module.FiniteDimension
+import Mathlib.Topology.Order.OrderClosed
 import Mathlib.Topology.Sequences
 import Mathlib.Topology.MetricSpace.Bounded
 import Mathlib.Topology.Instances.Matrix
@@ -32,6 +33,7 @@ Chapters 3 and 6 of Wolf's lecture notes.
   trace-preserving
 * `IsPositiveMap.map_isHermitian`: positive maps preserve Hermiticity
 * `matrix_isClosed_posSemidef`: the positive semidefinite cone is closed
+* `matrixOrderClosedTopology`: the Loewner order on finite matrices is order-closed
 * `densityMatrices_isCompact`: the set of density matrices is compact
 * `densityMatrices_isConvex`: the set of density matrices is convex
 * `IsChannel.map_densityMatrices`: channels map density matrices to density matrices
@@ -288,6 +290,26 @@ theorem matrix_isClosed_posSemidef {m : Type*} [Finite m] :
 theorem isClosed_posSemidef :
     IsClosed {X : Matrix (Fin D) (Fin D) ℂ | X.PosSemidef} :=
   matrix_isClosed_posSemidef
+
+/-- The Loewner order graph is closed for matrices over any finite index type. -/
+theorem matrix_isClosed_le {m : Type*} [Finite m] :
+    IsClosed {p : Matrix m m ℂ × Matrix m m ℂ | p.1 ≤ p.2} := by
+  have hset :
+      {p : Matrix m m ℂ × Matrix m m ℂ | p.1 ≤ p.2}
+        = (fun p : Matrix m m ℂ × Matrix m m ℂ => p.2 - p.1) ⁻¹'
+          {X : Matrix m m ℂ | X.PosSemidef} := by
+    ext p
+    simp [Matrix.le_iff]
+  rw [hset]
+  exact matrix_isClosed_posSemidef.preimage (continuous_snd.sub continuous_fst)
+
+/-- The Loewner order on finite complex matrices has closed order topology. -/
+@[reducible]
+def matrixOrderClosedTopology {m : Type*} [Finite m] :
+    OrderClosedTopology (Matrix m m ℂ) where
+  isClosed_le' := matrix_isClosed_le
+
+scoped[MatrixOrder] attribute [instance] matrixOrderClosedTopology
 
 /-- The set of density matrices is compact (Heine-Borel).
 
