@@ -128,6 +128,24 @@ noncomputable def rightTensorMatrix (X : Matrix (Fin D) (Fin k) ℂ) :
     Matrix (Fin D × Fin k) (Fin D × Fin D) ℂ :=
   Matrix.of fun ip ja => if ip.1 = ja.1 then X ja.2 ip.2 else 0
 
+/-- The right-tensor matrix for `X * Xᴴ` factors as `R_Xᴴ * R_X` in the
+index convention used for Choi compression. -/
+theorem rightTensorMatrix_mul_conjTranspose_eq_conjTranspose_mul_self
+    (X : Matrix (Fin D) (Fin k) ℂ) :
+    rightTensorMatrix (X * Xᴴ) = (rightTensorMatrix X)ᴴ * rightTensorMatrix X := by
+  classical
+  ext ⟨i, a⟩ ⟨j, b⟩
+  by_cases hij : i = j
+  · subst j
+    simp only [rightTensorMatrix, Matrix.of_apply, Matrix.mul_apply, Matrix.conjTranspose_apply,
+      if_true]
+    rw [Fintype.sum_prod_type]
+    simp [mul_comm]
+  · simp only [rightTensorMatrix, Matrix.of_apply, Matrix.mul_apply, Matrix.conjTranspose_apply]
+    rw [Fintype.sum_prod_type]
+    have hji : ¬j = i := fun hji => hij hji.symm
+    simp [hij, hji]
+
 /-- Sandwiching the Choi matrix by the right tensor factor gives exactly the
 right-factor compression entries.  In Wolf's notation this is the identity
 between $(\mathbf{1}\otimes X)\tau(\mathbf{1}\otimes X)^\dagger$ and the
@@ -439,6 +457,33 @@ theorem IsNPositiveMap.rightTensor_choiMatrix_sandwich_posSemidef [NeZero D]
     (rightTensorMatrix X * choiMatrix T * (rightTensorMatrix X)ᴴ).PosSemidef := by
   rw [rightTensorMatrix_mul_choiMatrix_mul_conjTranspose]
   exact (isNPositiveMap_iff_forall_rightCompression_posSemidef k T).mp hT X
+
+/-- If a right-factor matrix `P` is presented as `V * Vᴴ`, then its Choi
+sandwich is a compression of the rectangular Choi sandwich for `V`. -/
+theorem rightTensorMatrix_mul_conjTranspose_choi_sandwich_eq
+    (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (V : Matrix (Fin D) (Fin k) ℂ) :
+    rightTensorMatrix (V * Vᴴ) * choiMatrix T * (rightTensorMatrix (V * Vᴴ))ᴴ =
+      (rightTensorMatrix V)ᴴ *
+        (rightTensorMatrix V * choiMatrix T * (rightTensorMatrix V)ᴴ) *
+          rightTensorMatrix V := by
+  rw [rightTensorMatrix_mul_conjTranspose_eq_conjTranspose_mul_self]
+  simp [Matrix.mul_assoc]
+
+/-- If a right-factor matrix has the form `V * Vᴴ`, then the corresponding
+Choi sandwich is positive semidefinite. To recover the full statement of Wolf,
+Proposition 3.1, item 2, for an arbitrary rank-`k` orthogonal projection `P`,
+one additionally needs a factorization `P = V * Vᴴ`. -/
+theorem IsNPositiveMap.rightTensor_choiMatrix_sandwich_posSemidef_of_mul_conjTranspose
+    [NeZero D]
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hT : IsNPositiveMap k T) (V : Matrix (Fin D) (Fin k) ℂ) :
+    (rightTensorMatrix (V * Vᴴ) * choiMatrix T *
+      (rightTensorMatrix (V * Vᴴ))ᴴ).PosSemidef := by
+  rw [rightTensorMatrix_mul_conjTranspose_choi_sandwich_eq]
+  exact
+    (IsNPositiveMap.rightTensor_choiMatrix_sandwich_posSemidef hT V).conjTranspose_mul_mul_same
+      (rightTensorMatrix V)
 
 /-- Forward direction of Wolf's Schmidt-rank expectation criterion.  If `T` is
 `k`-positive, then the Choi quadratic form is nonnegative on every vector of
