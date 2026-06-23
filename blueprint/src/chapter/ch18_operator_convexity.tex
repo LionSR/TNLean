@@ -319,7 +319,7 @@ are not developed elsewhere in this document.
 
 \begin{theorem}[Jensen for concave real powers]\label{thm:posMap_rpow_concave_jensen}
     \lean{posMap_rpow_concave_jensen}
-    \notready
+    \leanok
     \uses{def:positive_map, lem:operator_jensen_positive_map_rpow_integrand,
         lem:operator_jensen_integral_order}
     For a positive subunital map $T$, a positive semidefinite matrix~$A$,
@@ -329,6 +329,17 @@ are not developed elsewhere in this document.
     \]
     This is \cite[Theorem~5.13]{Wolf2012Quantum} for concave~$f(x)=x^p$.
 \end{theorem}
+
+\begin{proof}\leanok
+    For $p=0$ the assertion is the subunitality condition $T(\Id)\le \Id$.
+    For $p=1$ it is an equality.  For $0<p<1$, use Carlen's integral
+    representation of $A^p$ by the functions
+    $f_{p,t}(x)=t^p(t^{-1}-(t+x)^{-1})$.  The pointwise inequality
+    $T(f_{p,t}(A))\le f_{p,t}(TA)$ is Lemma~\ref{lem:operator_jensen_positive_map_rpow_integrand}.
+    Integrating this inequality with respect to the representing measure gives
+    the result by Lemma~\ref{lem:operator_jensen_integral_order} and linearity
+    of the Bochner integral under $T$.
+\end{proof}
 
 \begin{theorem}[Map form of Jensen for concave real powers]\label{thm:rpow_concave_jensen}
     \lean{IsPositiveMap.rpow_concave_jensen}
@@ -340,7 +351,7 @@ are not developed elsewhere in this document.
 \end{theorem}
 
 \begin{proof}\leanok
-    Direct application of the axiom.
+    Direct application of Theorem~\ref{thm:posMap_rpow_concave_jensen}.
 \end{proof}
 
 \begin{theorem}[Jensen for convex real powers]\label{thm:posMap_rpow_convex_jensen}
