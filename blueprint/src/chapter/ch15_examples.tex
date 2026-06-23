@@ -670,6 +670,34 @@ resonating valence-bond state.
     recorded in \path{docs/paper-gaps/rmp_majumdar_ghosh_tensor_gap.tex}.
 \end{remark}
 
+The remaining target for the Majumdar--Ghosh example is the ground-space
+description of its parent Hamiltonian.  Because the tensor is non-normal
+(Theorem~\ref{thm:majumdar_ghosh_not_normal}) with a two-periodic bond grading,
+its periodic ground space is governed by the block-diagonal boundary-condition
+machinery for non-normal tensors
+(Section~\ref{sec:block_diagonal_boundary_closing}) rather than by the injective
+single-state result.  Thus the relevant target is the following range-three
+periodic ground-space statement.
+
+\begin{theorem}[Two-fold dimer degeneracy of the Majumdar--Ghosh ground space]%
+\label{thm:majumdar_ghosh_ground_space}
+    \notready
+    \uses{def:majumdar_ghosh_tensor, thm:majumdar_ghosh_not_normal,
+        def:ground_space_parent}
+    On an even periodic chain of length $N = 2m\ge4$, let
+    $H_{N,\mathrm{MG}}^{(3)}$ be the range-three parent Hamiltonian of the
+    Majumdar--Ghosh tensor, the periodic sum of translates of the local
+    projector with kernel $\mathcal G_3(A_{\mathrm{MG}})$.  Then
+    $H_{N,\mathrm{MG}}^{(3)}$ has a two-dimensional ground space, spanned by
+    the two nearest-neighbour singlet coverings
+    $(1,2)(3,4)\cdots(N-1,N)$ and $(2,3)(4,5)\cdots(N,1)$.
+    This two-fold degeneracy reflects the spontaneous breaking of the one-site
+    translation symmetry of the spin-$\tfrac12$ chain
+    $H=\sum \boldsymbol{S}_i\cdot\boldsymbol{S}_{i+1}
+    +\tfrac12\sum\boldsymbol{S}_i\cdot\boldsymbol{S}_{i+2}$
+    of \cite{Cirac2021Matrix}.
+\end{theorem}
+
 %% ===================================================================
 \section{The W state}\label{sec:w_state}
 %% ===================================================================
