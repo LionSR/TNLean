@@ -232,6 +232,63 @@ maps.
     $D^{-1/2}X_{i,p}$.
 \end{definition}
 
+\begin{definition}[Right tensor factor for Choi compression]
+    \label{def:choi_right_tensor_factor}
+    \lean{ChoiJamiolkowski.rightTensorMatrix}
+    \leanok
+    For $X\in\MN{D,k}(\C)$, let $R_X$ be the matrix from
+    $\C^D\otimes\C^D$ to $\C^D\otimes\C^k$ with entries
+    \[
+      (R_X)_{(i,p),(j,a)}=\delta_{i,j}X_{a,p}.
+    \]
+\end{definition}
+
+\begin{theorem}[Right tensor sandwich formula]
+    \label{thm:choi_right_tensor_sandwich}
+    \lean{ChoiJamiolkowski.rightTensorMatrix_mul_choiMatrix_mul_conjTranspose}
+    \leanok
+    \uses{def:choi_right_compression, def:choi_right_tensor_factor}
+    If $\tau$ is the Choi matrix of $T$, then
+    \[
+      R_X\tau R_X^\dagger = C_T(X),
+    \]
+    where $C_T(X)$ is the right-factor Choi compression by $X$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The $(i,p),(j,q)$ entry of $R_X\tau R_X^\dagger$ is
+    \[
+      \sum_{r,s,a,b}
+        \delta_{i,r}X_{a,p}\,
+        \tau_{(r,a),(s,b)}\,
+        \delta_{j,s}\overline{X_{b,q}}
+      =
+      \sum_{a,b} X_{a,p}\,
+        \tau_{(i,a),(j,b)}\,\overline{X_{b,q}},
+    \]
+    which is the defining entry of $C_T(X)$.
+\end{proof}
+
+\begin{lemma}[Compressed maximally entangled vectors have bounded Schmidt rank]
+    \label{lem:compressed_omega_schmidt_rank}
+    \lean{ChoiJamiolkowski.compressedOmegaVector_hasSchmidtRankLE}
+    \leanok
+    \uses{def:schmidt_rank, def:choi_right_compression}
+    For $X\in\MN{D,k}(\C)$, the vector
+    \[
+      \psi_X=\left(D^{-1/2}X_{i,p}\right)_{(i,p)}
+      \in \C^D\otimes\C^k
+    \]
+    has Schmidt rank at most $k$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The coefficient matrix of $\psi_X$ is a scalar multiple of $X$.  Therefore
+    its rank is bounded by the number of columns, which is $k$.
+\end{proof}
+
 \begin{lemma}[Rank-one ampliation as Choi compression]
     \label{lem:rank_one_ampliation_choi_compression}
     \lean{ChoiJamiolkowski.nPositiveAmpliation_rankOne_eq_rightCompression}
@@ -298,6 +355,28 @@ maps.
     where $C_T(X)$ is the right-factor Choi compression.  Positivity of
     $C_T(X)$ is therefore positivity of the ampliation on the rank-one matrix
     $|\psi\rangle\langle\psi|$, and the rank-one test gives $k$-positivity.
+\end{proof}
+
+\begin{theorem}[Right tensor Choi sandwiches of a $k$-positive map]
+    \label{thm:k_positive_right_tensor_choi_sandwiches}
+    \lean{ChoiJamiolkowski.IsNPositiveMap.rightTensor_choiMatrix_sandwich_posSemidef}
+    \leanok
+    \uses{thm:k_positive_iff_right_choi_compressions,
+        thm:choi_right_tensor_sandwich}
+    Assume $D>0$.  If $T:\MN{D,D}(\C)\to\MN{D,D}(\C)$ is $k$-positive, then
+    for every $X\in\MN{D,k}(\C)$,
+    \[
+      R_X\tau R_X^\dagger\geq 0,
+    \]
+    where $\tau$ is the Choi matrix of $T$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By Theorem~\ref{thm:k_positive_iff_right_choi_compressions},
+    $C_T(X)\geq0$ for every $X\in\MN{D,k}(\C)$.  The sandwich formula
+    Theorem~\ref{thm:choi_right_tensor_sandwich} identifies
+    $R_X\tau R_X^\dagger$ with $C_T(X)$.
 \end{proof}
 
 \begin{definition}[Trace-pairing adjoint]\label{def:trace_pairing_adjoint}
