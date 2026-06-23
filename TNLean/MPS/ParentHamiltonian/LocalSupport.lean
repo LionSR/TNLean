@@ -267,6 +267,22 @@ theorem HasOverlappingTwoSiteCommutation.right_lift_idempotent
     rightPairLift QXB * rightPairLift QXB = rightPairLift QXB := by
   rw [← rightPairLift_mul, h.right_idempotent]
 
+/-- The left complementary projector in arXiv:1606.00608, Appendix D.2, is
+idempotent. -/
+theorem HasOverlappingTwoSiteCommutation.left_complement_idempotent
+    {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
+    (h : HasOverlappingTwoSiteCommutation (d := d) QAX QXB) :
+    (1 - QAX) * (1 - QAX) = 1 - QAX := by
+  noncomm_ring [h.left_idempotent]
+
+/-- The right complementary projector in arXiv:1606.00608, Appendix D.2, is
+idempotent. -/
+theorem HasOverlappingTwoSiteCommutation.right_complement_idempotent
+    {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
+    (h : HasOverlappingTwoSiteCommutation (d := d) QAX QXB) :
+    (1 - QXB) * (1 - QXB) = 1 - QXB := by
+  noncomm_ring [h.right_idempotent]
+
 /-- Commutation of the Appendix D.2 projectors of arXiv:1606.00608 passes to
 the complementary ground-space projectors.
 
@@ -279,6 +295,17 @@ theorem HasOverlappingTwoSiteCommutation.commute_complement_lifts
       rightPairLift (1 - QXB) * leftPairLift (1 - QAX) := by
   rw [leftPairLift_one_sub, rightPairLift_one_sub]
   noncomm_ring [h.commute_lifts]
+
+/-- The complementary projectors \(P_{AX}=1-Q_{AX}\) and \(P_{XB}=1-Q_{XB}\)
+of arXiv:1606.00608, Appendix D.2, satisfy the same
+idempotent-and-commutation condition. -/
+theorem HasOverlappingTwoSiteCommutation.complement
+    {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
+    (h : HasOverlappingTwoSiteCommutation (d := d) QAX QXB) :
+    HasOverlappingTwoSiteCommutation (d := d) (1 - QAX) (1 - QXB) where
+  left_idempotent := h.left_complement_idempotent
+  right_idempotent := h.right_complement_idempotent
+  commute_lifts := h.commute_complement_lifts
 
 /-- If the canonical two-site parent interaction satisfies the overlapping
 two-site commutation predicate on the \(AX\) and \(XB\) faces, then the first two

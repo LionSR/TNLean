@@ -28,7 +28,10 @@ the specialization $L=2$.
     \lean{MPSTensor.leftPairLift_one_sub}
     \lean{MPSTensor.rightPairLift_one_sub}
     \lean{MPSTensor.HasOverlappingTwoSiteCommutation}
+    \lean{MPSTensor.HasOverlappingTwoSiteCommutation.left_complement_idempotent}
+    \lean{MPSTensor.HasOverlappingTwoSiteCommutation.right_complement_idempotent}
     \lean{MPSTensor.HasOverlappingTwoSiteCommutation.commute_complement_lifts}
+    \lean{MPSTensor.HasOverlappingTwoSiteCommutation.complement}
     \lean{MPSTensor.adjacent_twoSite_cyclicWindowsOverlap}
     \leanok
     \uses{def:nsite_space_parent, def:cyclic_window_support,
@@ -74,7 +77,10 @@ the specialization $L=2$.
     commute after the same lifts. This is the elementary algebraic passage used
     when one moves between the $Q$-projectors of
     \cite[Appendix~D.2]{Cirac2016MPDO_arXiv} and the complementary ground-space
-    projectors $P$.
+    projectors $P$.  Since the original two projectors are idempotent, the
+    complementary projectors are idempotent as well; hence the pair
+    \(P_{AX},P_{XB}\) satisfies the same idempotent-and-commutation condition on
+    the three-site space.
 \end{definition}
 
 \begin{theorem}[Three-site translated parent terms]
