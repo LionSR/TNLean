@@ -77,7 +77,12 @@ outside this local package is the orthogonal-projector identification and the
 construction of \(Q_{AX}\) and \(Q_{XB}\) from the Appendix~B basic-vector form.
 The elementary passage from \(Q_{AX},Q_{XB}\) to their complements
 \(1-Q_{AX},1-Q_{XB}\) is recorded by
-\leanid{MPSTensor.HasOverlappingTwoSiteCommutation.complement}.
+\leanid{MPSTensor.HasOverlappingTwoSiteCommutation.complement}.  The
+three-site transport from these local projectors to translated parent terms is
+available in both conventions: directly for \(Q_{AX},Q_{XB}\) through
+\leanid{MPSTensor.localTerm_two_three_zero_one_commute_of_appendixD2}, and for
+their complements through
+\leanid{MPSTensor.localTerm_two_three_zero_one_commute_of_appendixD2_complement}.
 
 \section{Elimination plan}
 

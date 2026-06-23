@@ -355,6 +355,39 @@ theorem localTerm_two_three_zero_one_commute_of_overlapping_two_site_commutation
     localTerm_two_three_one_eq_rightPairLift_parentInteraction]
   exact h.commute_lifts
 
+/-- If the two-site parent interaction is identified with the Appendix D.2
+projectors \(Q_{AX}\) and \(Q_{XB}\) on the two faces, then the first two
+translated parent terms on the three-site chain commute. -/
+theorem localTerm_two_three_zero_one_commute_of_overlapping_two_site_projectors
+    (A : MPSTensor d D) {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
+    (h : HasOverlappingTwoSiteCommutation (d := d) QAX QXB)
+    (hAX : parentInteraction A 2 = QAX)
+    (hXB : parentInteraction A 2 = QXB) :
+    localTerm A 2 3 (0 : Fin 3) * localTerm A 2 3 (1 : Fin 3) =
+      localTerm A 2 3 (1 : Fin 3) * localTerm A 2 3 (0 : Fin 3) := by
+  rw [localTerm_two_three_zero_eq_leftPairLift_parentInteraction,
+    localTerm_two_three_one_eq_rightPairLift_parentInteraction]
+  have hLeft : leftPairLift (parentInteraction A 2) = leftPairLift QAX := by
+    rw [hAX]
+  have hRight : rightPairLift (parentInteraction A 2) = rightPairLift QXB := by
+    rw [hXB]
+  rw [hLeft, hRight]
+  exact h.commute_lifts
+
+/-- The Definition D.2 local projector condition gives commutation of the first
+two translated parent terms, once the canonical two-site parent interaction is
+identified with the projectors \(Q_{AX}\) and \(Q_{XB}\) themselves. -/
+theorem localTerm_two_three_zero_one_commute_of_appendixD2
+    (A : MPSTensor d D) {KAXB : Submodule ℂ (NSiteSpace d 3)}
+    {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
+    (h : HasAppendixD2ParentCommutingHamiltonian (d := d) KAXB QAX QXB)
+    (hAX : parentInteraction A 2 = QAX)
+    (hXB : parentInteraction A 2 = QXB) :
+    localTerm A 2 3 (0 : Fin 3) * localTerm A 2 3 (1 : Fin 3) =
+      localTerm A 2 3 (1 : Fin 3) * localTerm A 2 3 (0 : Fin 3) :=
+  localTerm_two_three_zero_one_commute_of_overlapping_two_site_projectors A
+    h.to_overlapping hAX hXB
+
 /-- If the two-site parent interaction is identified with the complementary
 Appendix D.2 projectors \(P_{AX}=1-Q_{AX}\) and \(P_{XB}=1-Q_{XB}\), then the
 first two translated parent terms on the three-site chain commute. -/
