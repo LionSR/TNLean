@@ -51,6 +51,30 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     Trace preservation is the identity $\tr(X^T)=\tr(X)$.
 \end{proof}
 
+\begin{definition}[Reduction map]
+    \label{def:reduction_map}
+    \lean{Matrix.reductionMap}
+    \leanok
+    The reduction map on $\MN{D}$ is
+    \[
+        T_k(X)=\tr(X)\Id-k^{-1}X.
+    \]
+\end{definition}
+
+\begin{theorem}[The first reduction map is positive]
+    \label{thm:reduction_map_one_positive}
+    \lean{Matrix.reductionMap_one_isPositiveMap}
+    \leanok
+    \uses{def:positive_map, def:reduction_map}
+    For $D\ge 1$, the map $T_1(X)=\tr(X)\Id-X$ on $\MN{D}$ is positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    If $X\ge 0$, diagonalize $X$.  Its eigenvalues are nonnegative, and each
+    eigenvalue is bounded by their sum $\tr(X)$.  Therefore all eigenvalues of
+    $\tr(X)\Id-X$ are nonnegative.
+\end{proof}
+
 \begin{theorem}[Conjugation filters preserve positivity]
     \label{thm:conjugation_filters_preserve_positivity}
     \lean{unitaryConjLM_isCPMap, unitaryConjLM_isPositiveMap,
