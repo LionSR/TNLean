@@ -82,7 +82,7 @@ Elimination: derive the normalized BNT product-span input
 coordinate comparison of arXiv:2011.12127, Section IV.C, lines 2078--2079
 (per `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`), discharging the
 `pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`
-dependency. -/
+dependency; tracked in issue 460. -/
 theorem exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -288,7 +288,7 @@ Elimination: derive the normalized BNT product-span input
 coordinate comparison of arXiv:2011.12127, Section IV.C, lines 2078--2079
 (per `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`), discharging the
 `pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`
-dependency. -/
+dependency; tracked in issue 460. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_crossing_pgvwc_comparison_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -390,7 +390,7 @@ Elimination: derive the normalized BNT product-span input
 coordinate comparison of arXiv:2011.12127, Section IV.C, lines 2078--2079
 (per `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`), discharging the
 `pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`
-dependency. -/
+dependency; tracked in issue 460. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_crossing_pgvwc_comparison
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -472,7 +472,7 @@ Elimination: derive the normalized BNT product-span input
 coordinate comparison of arXiv:2011.12127, Section IV.C, lines 2078--2079
 (per `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`), discharging the
 `pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`
-dependency. -/
+dependency; tracked in issue 460. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_crossing_pgvwc_comparison
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -545,7 +545,7 @@ Elimination: derive the normalized BNT product-span input
 coordinate comparison of arXiv:2011.12127, Section IV.C, lines 2078--2079
 (per `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`), discharging the
 `pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`
-dependency. -/
+dependency; tracked in issue 460. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_pgvwc_comparison
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -628,7 +628,7 @@ Elimination: derive the normalized BNT product-span input
 coordinate comparison of arXiv:2011.12127, Section IV.C, lines 2078--2079
 (per `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`), discharging the
 `pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`
-dependency. -/
+dependency; tracked in issue 460. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_pgvwc_comparison
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -703,7 +703,7 @@ Elimination: derive the normalized BNT product-span input
 coordinate comparison of arXiv:2011.12127, Section IV.C, lines 2078--2079
 (per `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`), discharging the
 `pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`
-dependency. -/
+dependency; tracked in issue 460. -/
 theorem ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_pgvwc_comparison
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
