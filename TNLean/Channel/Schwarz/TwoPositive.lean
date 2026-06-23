@@ -155,6 +155,31 @@ theorem isNPositiveMap_iff_isPositiveMap_nPositiveAmpliation
   rfl
 
 omit [Fintype n] [DecidableEq n] in
+/-- Proposition 3.1 in Wolf, *Quantum Channels & Operations*: `k`-positivity
+can be tested on pure states of the ampliated system. -/
+theorem isNPositiveMap_iff_forall_ampliation_rank_one_posSemidef
+    [Finite n]
+    (k : ℕ) (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) :
+    IsNPositiveMap k E ↔
+      ∀ φ : n × Fin k → ℂ,
+        (nPositiveAmpliation k E (Matrix.vecMulVec φ (star φ))).PosSemidef := by
+  letI := Fintype.ofFinite n
+  constructor
+  · intro hE φ
+    exact hE _ (Matrix.posSemidef_vecMulVec_self_star φ)
+  · intro hE
+    rw [isNPositiveMap_iff_isPositiveMap_nPositiveAmpliation]
+    intro X hX
+    classical
+    obtain ⟨r, v, hXeq⟩ := (Matrix.posSemidef_iff_eq_sum_vecMulVec).mp hX
+    have hmap :
+        nPositiveAmpliation k E X =
+          ∑ i : Fin r, nPositiveAmpliation k E (Matrix.vecMulVec (v i) (star (v i))) := by
+      rw [hXeq, map_sum]
+    rw [hmap]
+    exact Matrix.posSemidef_sum _ fun i _ => hE (v i)
+
+omit [Fintype n] [DecidableEq n] in
 /-- One-positive maps are exactly positive maps. -/
 theorem isNPositiveMap_one_iff_isPositiveMap
     {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ} :

@@ -145,6 +145,33 @@ maps.
     This is precisely the preceding definition of the ampliation.
 \end{proof}
 
+\begin{theorem}[Rank-one test for $k$-positivity]\label{thm:k_positive_rank_one_test}
+    \lean{isNPositiveMap_iff_forall_ampliation_rank_one_posSemidef}
+    \leanok
+    \uses{def:k_positive_map, def:blockwise_ampliation}
+    A linear map $E:\MN{D}\to\MN{D}$ is $k$-positive if and only if,
+    for every vector $\phi\in\C^D\otimes\C^k$,
+    \[
+        E^{(k)}(|\phi\rangle\langle\phi|)\geq 0.
+    \]
+    This is the pure-state reduction used in
+    \cite[Chapter~3, Proposition~3.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The forward implication is the definition of $k$-positivity, since
+    $|\phi\rangle\langle\phi|$ is positive semidefinite.  Conversely, every
+    positive semidefinite matrix on $\C^D\otimes\C^k$ is a finite sum
+    $\sum_i |\phi_i\rangle\langle\phi_i|$, and
+    \[
+        E^{(k)}\!\left(\sum_i |\phi_i\rangle\langle\phi_i|\right)
+        = \sum_i E^{(k)}(|\phi_i\rangle\langle\phi_i|) \geq 0
+    \]
+    by linearity of $E^{(k)}$, the hypothesis, and closure of the positive
+    semidefinite cone under finite sums.
+\end{proof}
+
 \begin{definition}[Trace-pairing adjoint]\label{def:trace_pairing_adjoint}
     \lean{Matrix.traceAdjointMap}
     \leanok
