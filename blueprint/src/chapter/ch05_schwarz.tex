@@ -121,7 +121,7 @@ maps.
     A linear map is \emph{two-positive} if it is $2$-positive.
 \end{definition}
 
-\begin{definition}[Blockwise ampliation]
+\begin{definition}[Blockwise ampliation]\label{def:blockwise_ampliation}
     \lean{nPositiveAmpliation}
     \leanok
     For a linear map $E : \MN{D}\to\MN{D}$, its $k$-fold ampliation acts on
@@ -135,10 +135,15 @@ maps.
 \begin{theorem}[$k$-positivity as positivity of the ampliation]
     \lean{isNPositiveMap_iff_isPositiveMap_nPositiveAmpliation}
     \leanok
-    \uses{def:k_positive_map}
+    \uses{def:k_positive_map, def:blockwise_ampliation}
     A linear map is $k$-positive if and only if its blockwise ampliation is
     positive on $\MN{D}\otimes\MN{k}$.
 \end{theorem}
+
+\begin{proof}
+    \leanok
+    This is precisely the preceding definition of the ampliation.
+\end{proof}
 
 \begin{definition}[Trace-pairing adjoint]\label{def:trace_pairing_adjoint}
     \lean{Matrix.traceAdjointMap}
