@@ -71,6 +71,41 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     which follows because all mixed products are nonnegative.
 \end{proof}
 
+\begin{theorem}[Trace-nonnegative Lorentz-cone converse]
+    \label{thm:trace_nonnegative_lorentz_cone_converse}
+    \lean{Matrix.IsHermitian.posSemidef_of_trace_re_nonneg_of_card_sub_one_mul_trace_sq_re_le}
+    \leanok
+    Let $A\in\MN{D}$ be Hermitian and suppose that
+    $\operatorname{Re}\tr(A)\ge0$. If
+    \[
+        (D-1)\operatorname{Re}\tr(A^2)
+        \le \left(\operatorname{Re}\tr(A)\right)^2 ,
+    \]
+    then $A$ is positive semidefinite.
+
+    This is the trace-nonnegative form of the converse in
+    \cite[Proposition~3.9]{Wolf2012Quantum}. The unrestricted squared
+    implication printed there is false without a trace sign condition; this is
+    recorded in
+    \path{docs/paper-gaps/wolf_ch3_lorentz_cone_trace_sign.tex}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Diagonalize $A$ with real eigenvalues $\lambda_i$. Suppose that some
+    eigenvalue $\lambda_0$ is negative. Let
+    \[
+        T=\sum_i\lambda_i,\qquad R=\sum_{i\ne 0}\lambda_i .
+    \]
+    Since $T\ge0$ and $T=\lambda_0+R$, one has $T<R$, and hence $T^2<R^2$.
+    Cauchy's inequality gives
+    \[
+        R^2\le (D-1)\sum_{i\ne 0}\lambda_i^2
+            \le (D-1)\sum_i\lambda_i^2,
+    \]
+    contradicting the assumed Lorentz inequality. Thus all eigenvalues are
+    nonnegative.
+\end{proof}
+
 \begin{definition}[Completely positive map]\label{def:cp_map}
     \lean{IsCPMap}
     \leanok
