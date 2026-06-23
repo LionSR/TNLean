@@ -8,7 +8,7 @@ import TNLean.MPS.RFP.StructuralFull
 import Mathlib.Data.Fin.Basic
 
 /-!
-# Product-of-entangled-pairs form and translated two-site parent terms
+# Basic-vector form and translated two-site parent terms
 
 This file isolates the source ingredients used for the forward direction
 \(\mathrm{RFP}\Rightarrow\mathrm{NNCPH}\) in arXiv:1606.00608, Theorem 3.10.
@@ -20,16 +20,21 @@ the structural characterization theorem. That theorem, stated at source lines
     \bigoplus_{j=1}^{g}\bigoplus_{q=1}^{r_j}
       \mu_{j,q}X_{j,q}\Lambda_jU^i_jX_{j,q}^{-1}.
 \]
-Appendix B proves the corresponding normal-tensor form and identifies the
-isometry \(U\). The remaining parent-Hamiltonian step is the passage from this
-product-of-entangled-pairs form to commutativity of the translated two-site
-terms \(h_i=\tau_i(P_2^\perp)\).
+The source then writes the corresponding basic vectors as
+\[
+  |V^{(N)}(A_j)\rangle=U^{\otimes N}|\varphi_j\rangle^{\otimes N},
+  \qquad
+  |\varphi_j\rangle=\sum_m\lambda_m|m,m\rangle,
+\]
+where \(\varphi_j\) is shared by \(b_n\) and \(a_{n+1}\), and \(U\) acts on
+\((a_n,b_n)\). The remaining parent-Hamiltonian step is to pass from this
+basic-vector form to commutativity of the translated two-site terms
+\(h_i=\tau_i(P_2^\perp)\).
 
 The declarations below separate four mathematical statements:
 
-* the cyclic virtual-pair expression for the coefficients of \(\Lambda U^i\);
-* the adjacent even-chain coefficient factorization as a repeated two-site
-  amplitude;
+* the coefficient expression for \(U^{\otimes L}\varphi_j^{\otimes L}\);
+* the disjoint adjacent-pair coefficient condition used later in this file;
 * the identification of the translated two-site parent terms with commuting
   idempotents on each finite chain;
 * the already formalized Appendix B structural form.
@@ -37,11 +42,11 @@ The declarations below separate four mathematical statements:
 **Scope restriction (overlapping two-site terms):** The three-site support maps
 for the source \(AX\) and \(XB\) windows are represented in
 `TNLean.MPS.ParentHamiltonian.LocalSupport`. The remaining Appendix-B step is to
-identify the product-of-entangled-pairs parent projectors with the translated
+identify the source projectors \(Q_{AX}\) and \(Q_{XB}\) with the translated
 length-two parent terms and prove their overlapping commutation. For this reason
 commutativity of the translated idempotents is an explicit hypothesis in
-`HasProductPairLocalProjectors`. Eliminating this hypothesis is the
-product-of-entangled-pairs locality step recorded in
+`HasProductPairLocalProjectors`. Eliminating this hypothesis is the source
+projector-identification step recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 -/
 
@@ -73,13 +78,14 @@ def productPairWindow (N : ℕ) (σ : Cfg d (2 * N)) (p : Fin N) : Cfg d 2 :=
   simp [productPairWindow]
 
 /-- The even-chain state obtained by repeating a fixed two-site amplitude on
-adjacent pairs.
+disjoint adjacent pairs.
 
-This is the adjacent-pair expression used by the present nearest-neighbor
-parent-term input. Appendix B first gives a cyclic virtual-pair expression in
-which the vector \(\varphi_j\) is shared between \(b_n\) and \(a_{n+1}\), while
-the isometry \(U\) acts on \((a_n,b_n)\). Identifying that cyclic expression
-with this adjacent physical-pair expression is a separate mathematical step. -/
+This is the disjoint adjacent-pair expression used by the conditional
+nearest-neighbor parent-term theorem below. It is not the basic-vector formula
+of arXiv:1606.00608, lines 570--578, by itself: the source formula first puts
+\(\varphi_j\) between \(b_n\) and \(a_{n+1}\) and then applies \(U\) to
+\((a_n,b_n)\) at every site. Any use of this disjoint adjacent-pair expression
+therefore has to be justified separately from the source formula. -/
 def productPairState (ψ₂ : NSiteSpace d 2) (N : ℕ) : NSiteSpace d (2 * N) :=
   fun σ => ∏ p : Fin N, ψ₂ (productPairWindow N σ p)
 
@@ -93,20 +99,21 @@ def productPairState (ψ₂ : NSiteSpace d 2) (N : ℕ) : NSiteSpace d (2 * N) :
     productPairState ψ₂ 1 σ = ψ₂ σ := by
   simp [productPairState]
 
-/-- An MPS tensor has adjacent product-pair MPVs when every positive
+/-- An MPS tensor has disjoint adjacent-pair MPVs when every positive
 even-length coefficient factors as a repeated copy of one fixed two-site
 amplitude on the pairs \((0,1),(2,3),\ldots\).
 
 This is a generic factorization predicate: it does not assert that the two-site
 amplitude is entangled. The zero-pair case is omitted because the empty-chain
-MPV coefficient is the bond dimension, whereas the empty product-pair amplitude
+MPV coefficient is the bond dimension, whereas the empty disjoint-pair amplitude
 is \(1\). Odd chain lengths are omitted because this predicate is used only to
 identify the translated two-site parent terms in the RFP-to-NNCPH direction of
 arXiv:1606.00608, Theorem 3.10.
 
-**Scope restriction:** Appendix B first produces a cyclic virtual-pair network.
-This predicate is the later adjacent-pair input used by the present formal
-statement; it is not, by itself, the full Appendix B factorization theorem. -/
+**Scope restriction:** Appendix B first produces the basic-vector expression
+\(U^{\otimes N}\varphi_j^{\otimes N}\). This predicate is the later disjoint
+adjacent-pair condition used by the present formal statement; it is not, by
+itself, the full Appendix B factorization theorem. -/
 def HasProductPairMPV (A : MPSTensor d D) : Prop :=
   ∃ ψ₂ : NSiteSpace d 2, ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
     mpv A σ = productPairState ψ₂ N σ
@@ -123,9 +130,9 @@ theorem HasProductPairMPV.exists_twoSiteAmplitude {A : MPSTensor d D}
 
 **Scope restriction (local projectors):** The three-site \(AX/XB\) support maps
 for adjacent windows give the local support maps. This structure does not
-construct, from the Appendix-B product-of-entangled-pairs form, the chain-level
-projectors that equal the translated length-two parent terms. The projectors are
-therefore stated directly as endomorphisms of the full \(N\)-site space. -/
+construct the source projectors \(Q_{AX}\) and \(Q_{XB}\), nor does it identify
+them with the translated length-two parent terms. The projectors are therefore
+stated directly as endomorphisms of the full \(N\)-site space. -/
 structure HasProductPairLocalProjectors (A : MPSTensor d D) (N : ℕ) where
   proj : Fin N → NSiteSpace d N →ₗ[ℂ] NSiteSpace d N
   hidem : ∀ i, proj i * proj i = proj i
@@ -138,7 +145,7 @@ theorem HasProductPairLocalProjectors.localTerm_idempotent
     localTerm A 2 N i * localTerm A 2 N i = localTerm A 2 N i := by
   rw [hPair.hlocal i, hPair.hidem i]
 
-/-- The product-of-entangled-pairs locality witness implies commutativity of the
+/-- The stated local projector hypotheses imply commutativity of the
 nearest-neighbor parent-Hamiltonian local terms.
 
 This is exactly the body of `IsCommutingParentHam A 2 N` after unfolding the
@@ -153,10 +160,9 @@ theorem HasProductPairLocalProjectors.commuting_twoSite_localTerms
   rw [hPair.hlocal i, hPair.hlocal j]
   exact hPair.hcomm i j
 
-/-- Product-of-entangled-pairs hypotheses for a tensor whose positive
-even-chain MPVs factor through one adjacent two-site amplitude and whose
-nearest-neighbor parent projectors are commuting idempotents on every finite
-chain. -/
+/-- Conditional hypotheses for a tensor whose positive even-chain coefficients
+factor through one disjoint adjacent two-site amplitude and whose
+nearest-neighbor parent terms are commuting idempotents on every finite chain. -/
 structure ProductPairBridge (A : MPSTensor d D) where
   pairAmplitude : NSiteSpace d 2
   hmpv : ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
@@ -174,8 +180,8 @@ theorem ProductPairBridge.hasProductPairMPV {A : MPSTensor d D}
     HasProductPairMPV A :=
   ⟨hBridge.pairAmplitude, hBridge.hmpv⟩
 
-/-- The `ProductPairBridge` witness yields the unfolded `IsNNCPH` conclusion:
-all two-site local terms commute on every finite chain.
+/-- The conditional adjacent-pair hypotheses yield the unfolded `IsNNCPH`
+conclusion: all two-site local terms commute on every finite chain.
 
 The statement is written as the commutation equation for the translated
 two-site parent terms, which is the nearest-neighbor commutation condition in
@@ -192,15 +198,15 @@ theorem ProductPairBridge.localTerm_idempotent
     localTerm A 2 N i * localTerm A 2 N i = localTerm A 2 N i :=
   (hBridge.localProjectors N).localTerm_idempotent i
 
-/-! ### Appendix B structural form as the preceding input -/
+/-! ### Appendix B structural form used below -/
 
 /-- Structure recording the Appendix B normal-tensor decomposition
 \(A^i=X\Lambda U^iX^{-1}\) in the source unit pair-index convention.
 
 The theorem `rfp_nt_structural_full_unit_pair` proves existence of this
 structural form from the RFP, normality, and left-canonical hypotheses. The
-remaining product-of-entangled-pairs factorization and parent-term identities
-must use the same \(X,\Lambda,U\). -/
+remaining coefficient condition and parent-term identities must use the same
+\(X,\Lambda,U\). -/
 structure AppendixBStructuralData (A : MPSTensor d D) where
   /-- The virtual-bond change of basis. -/
   X : Matrix (Fin D) (Fin D) ℂ
@@ -277,15 +283,14 @@ noncomputable def AppendixBStructuralData.coreTensor {A : MPSTensor d D}
     hStruct.coreTensor i = Matrix.diagonal (fun k => (hStruct.Λ k : ℂ)) * hStruct.U i :=
   rfl
 
-/-! ### The cyclic virtual-pair expression from Appendix B -/
+/-! ### Coefficients of the source basic-vector expression -/
 
 /-- The next virtual bond in the cyclic chain of length \(L\). -/
 def cyclicVirtualSucc {L : ℕ} (hL : 0 < L) (t : Fin L) : Fin L :=
   letI : NeZero L := ⟨Nat.ne_of_gt hL⟩
   t + 1
 
-/-- The coefficient expression obtained by putting the Appendix B virtual pairs
-on a cycle.
+/-- The coefficient expression obtained from the source basic-vector formula.
 
 For a chain of length \(L\), choose a virtual index \(\alpha_t\) at each site.
 The factor at site \(t\) is
@@ -309,8 +314,8 @@ noncomputable def AppendixBStructuralData.cyclicVirtualPairState
       (hStruct.Λ (α t) : ℂ) *
         hStruct.U (σ t) (α t) (α (cyclicVirtualSucc hL t))
 
-/-- The coefficient of the Appendix B core tensor is the cyclic virtual-pair
-expression.
+/-- The coefficient of the Appendix B core tensor is the coefficient form of
+the source basic-vector expression.
 
 This is the coefficient form of
 \[
@@ -319,7 +324,7 @@ This is the coefficient form of
   |\varphi_j\rangle=\sum_m\lambda_m|m,m\rangle,
 \]
 with \(\varphi_j\) shared between \(b_t\) and \(a_{t+1}\). It is not the
-adjacent physical-pair factorization used later for nearest-neighbor
+disjoint adjacent physical-pair condition used later for nearest-neighbor
 parent-term commutation. -/
 theorem AppendixBStructuralData.mpv_coreTensor_eq_cyclicVirtualPairState
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
@@ -360,8 +365,7 @@ theorem AppendixBStructuralData.twoSiteAmplitude_eq_coreTensor_mpv {A : MPSTenso
     hStruct.twoSiteAmplitude σ = mpv hStruct.coreTensor σ := by
   rw [hStruct.twoSiteAmplitude_eq_mpv σ, hStruct.mpv_eq_coreTensor σ]
 
-/-- The length-two case of the core-tensor factorization required by the
-Appendix B extraction input. -/
+/-- The length-two case of the disjoint adjacent-pair coefficient condition. -/
 theorem AppendixBStructuralData.mpv_coreTensor_eq_productPairState_one {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) (σ : Cfg d (2 * 1)) :
     mpv hStruct.coreTensor σ = productPairState hStruct.twoSiteAmplitude 1 σ := by
@@ -375,15 +379,15 @@ theorem AppendixBStructuralData.mpv_eq_productPairState_one {A : MPSTensor d D}
     mpv A σ = productPairState hStruct.twoSiteAmplitude 1 σ := by
   rw [productPairState_one, hStruct.twoSiteAmplitude_eq_mpv]
 
-/-- The remaining adjacent product-pair input needed after the cyclic
-Appendix B expression.
+/-- The remaining disjoint adjacent-pair condition needed after the source
+basic-vector expression.
 
 For a fixed structural form, this captures the two facts that are still not
-produced by the Appendix B structural datum: the cyclic virtual-pair coefficient
-formula must be identified with a repeated adjacent two-site amplitude
-determined by the same witness, and the nearest-neighbor parent projectors on
-each finite chain must be identified with a commuting family attached to these
-adjacent two-site factors. -/
+produced by the Appendix B structural datum: the coefficient formula for
+\(U^{\otimes N}\varphi_j^{\otimes N}\) must be related to the repeated
+disjoint adjacent two-site amplitude stated here, and the nearest-neighbor
+parent projectors on each finite chain must be identified with a commuting
+family attached to the source projectors \(Q_{AX}\) and \(Q_{XB}\). -/
 structure AppendixBProductPairExtraction {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) where
   /-- Positive even-chain adjacent-pair factorization through the structural
@@ -393,10 +397,11 @@ structure AppendixBProductPairExtraction {A : MPSTensor d D}
   /-- Local projectors realizing the nearest-neighbor parent terms. -/
   localProjectors : ∀ N, HasProductPairLocalProjectors A N
 
-/-- Construct the MPV part of the extraction from the Appendix B core tensor.
+/-- Construct the coefficient part of the conditional structure from the
+Appendix B core tensor.
 
-This reduces the coefficient computation to the core tensor `Λ U_i`; the local
-projector identities remain a separate input. -/
+This reduces the coefficient computation to the core tensor \(\Lambda U^i\);
+the local projector identities remain a separate hypothesis. -/
 noncomputable def AppendixBProductPairExtraction.ofCoreTensorFactorization
     {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}
     (hCore : ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
@@ -409,8 +414,8 @@ noncomputable def AppendixBProductPairExtraction.ofCoreTensorFactorization
     exact hCore N hN σ
   localProjectors := hProj
 
-/-- The product-of-entangled-pairs input yields the established
-`ProductPairBridge`. -/
+/-- The conditional Appendix B hypotheses yield the `ProductPairBridge`
+structure used by the parent-Hamiltonian statements. -/
 noncomputable def AppendixBProductPairExtraction.toProductPairBridge
     {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}
     (hExtract : AppendixBProductPairExtraction hStruct) :
@@ -419,8 +424,8 @@ noncomputable def AppendixBProductPairExtraction.toProductPairBridge
   hmpv := hExtract.hmpv
   localProjectors := hExtract.localProjectors
 
-/-- The product-of-entangled-pairs input gives the unfolded nearest-neighbor commutation
-statement on every finite chain. -/
+/-- The conditional Appendix B hypotheses give the unfolded nearest-neighbor
+commutation statement on every finite chain. -/
 theorem AppendixBProductPairExtraction.commuting_twoSite_localTerms
     {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}
     (hExtract : AppendixBProductPairExtraction hStruct) (N : ℕ) :
@@ -432,11 +437,12 @@ theorem AppendixBProductPairExtraction.commuting_twoSite_localTerms
 /-- Conditional form of the forward implication in arXiv:1606.00608,
 Theorem 3.10:
 RFP plus the proved Appendix B structural theorem implies the nearest-neighbor
-commutation equation as soon as the product-of-entangled-pairs factorization and
-two-site projector identities are supplied for the resulting structural form.
+commutation equation as soon as the disjoint adjacent-pair coefficient condition
+and the two-site projector identities are supplied for the resulting structural
+form.
 
 This theorem deliberately stops short of claiming the full Beigi-independent
-`rfp_implies_nncph`: the missing input is exactly
+`rfp_implies_nncph`: the missing hypothesis is exactly
 `AppendixBProductPairExtraction` for the structural form produced by
 `AppendixBStructuralData.ofRFP`. -/
 theorem commuting_twoSite_localTerms_of_rfp_of_appendixBExtraction

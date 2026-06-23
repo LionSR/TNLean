@@ -45,8 +45,8 @@ clause from Definition 3.9.
   \(hᵢhⱼ = hⱼhᵢ\).
 * `MPSTensor.rfp_implies_nncph_of_appendixBExtraction` — a conditional theorem
   deriving NNCPH from the Appendix B structural form
-  \(Aᵢ = XΛUᵢX⁻¹\), the even-chain product-of-pairs factorization, and the
-  two-site projector identities, without invoking
+  \(A^i = X\Lambda U^iX^{-1}\), the disjoint adjacent-pair coefficient
+  condition, and the two-site projector identities, without invoking
   `Axioms.rfp_to_nncph_commute`.
 * `MPSTensor.rfp_implies_nncph_ground_state_of_appendixBExtraction` — the same
   conditional theorem with the zero-energy equation for \(V^{(N)}(A)\) included.
@@ -346,17 +346,17 @@ theorem HasProductPairLocalProjectors.isNNCPH {A : MPSTensor d D} {N : ℕ}
     IsNNCPH A N :=
   hPair.commuting_twoSite_localTerms
 
-/-- The product-of-pairs equations and the two-site projector identities give
-NNCPH on each finite chain. -/
+/-- The disjoint adjacent-pair coefficient condition and the two-site projector
+identities give NNCPH on each finite chain. -/
 theorem ProductPairBridge.isNNCPH {A : MPSTensor d D} (hBridge : ProductPairBridge A)
     (N : ℕ) :
     IsNNCPH A N :=
   (hBridge.localProjectors N).isNNCPH
 
-/-- Product-of-pairs data and the ground-space spanning equation give the full
-all-chain nearest-neighbor parent-Hamiltonian condition.
+/-- The conditional adjacent-pair hypotheses and the ground-space spanning
+equation give the full all-chain nearest-neighbor parent-Hamiltonian condition.
 
-The product-of-pairs data supply the translated length-two commutation
+The adjacent-pair hypotheses supply the translated length-two commutation
 equations. The usual parent-Hamiltonian frustration-free equation gives
 zero energy of \(V^{(N)}(B)\). The separate hypothesis
 `HasParentHamiltonianGroundSpaceSpanning B 2 A` supplies the remaining
@@ -373,10 +373,11 @@ theorem ProductPairBridge.hasNNCPHGroundSpaces_of_groundSpaceSpanning
 /-- Conditional internal theorem for Theorem 3.10(i)⟹(iii).
 
 A normal left-canonical RFP tensor has the Appendix B structural form
-\(Aᵢ = XΛUᵢX⁻¹\) by `AppendixBStructuralData.ofRFP`. If the associated two-site
-amplitude gives the even-chain factorization and the two-site parent terms are
-identified with commuting idempotents, then the nearest-neighbor parent
-Hamiltonian is commuting on every finite chain.
+\(A^i = X\Lambda U^iX^{-1}\) by `AppendixBStructuralData.ofRFP`. If the
+associated two-site amplitude gives the disjoint adjacent-pair coefficient
+condition and the two-site parent terms are identified with commuting
+idempotents, then the nearest-neighbor parent Hamiltonian is commuting on every
+finite chain.
 
 This theorem does not use `Axioms.rfp_to_nncph_commute`; it states the precise
 conditional theorem left after the structural form has been internalized. -/
@@ -391,7 +392,7 @@ theorem rfp_implies_nncph_of_appendixBExtraction (A : MPSTensor d D) [NeZero D]
 
 /-- Conditional ground-vector form of Theorem 3.10(i)⟹(iii).
 
-Under the same Appendix B product-of-pairs extraction used for
+Under the same Appendix B conditional hypotheses used for
 `rfp_implies_nncph_of_appendixBExtraction`, the nearest-neighbor parent terms
 commute and the periodic MPS vector \(V^{(N)}(A)\) has zero energy. This adds
 only the standard parent-Hamiltonian frustration-free equation; it does not
@@ -414,14 +415,14 @@ theorem rfp_implies_nncph_ground_state_of_appendixBExtraction
 
 /-- Conditional full source form of Theorem 3.10(i)⟹(iii).
 
-Under the Appendix B product-of-pairs extraction used above, a normal
+Under the Appendix B conditional hypotheses used above, a normal
 left-canonical RFP tensor has the all-chain commutation and zero-energy
 equations for nearest-neighbor parent terms. If, in addition, the
 Definition 3.9 ground-space spanning equation is supplied for a chosen BNT
 family \(A_j\), then the full all-chain NNCPH ground-space condition holds.
 
-This theorem does not use `Axioms.rfp_to_nncph_commute`; the remaining input is
-exactly the source ground-space spanning clause.
+This theorem does not use `Axioms.rfp_to_nncph_commute`; beyond the conditional
+Appendix B hypotheses, it assumes the source ground-space spanning clause.
 
 **Scope restriction (spanning clause assumed):** The source implication proves
 the ground-space spanning equation; this theorem assumes it via
