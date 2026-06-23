@@ -3,6 +3,7 @@ Copyright (c) 2026 Sirui Lu and TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
+import TNLean.Channel.SchmidtRank
 import TNLean.Channel.Schwarz.TwoPositive
 
 /-!
@@ -20,6 +21,8 @@ the pair $(i,p)$.
 
 * `ChoiJamiolkowski.rightCompression`: the right-factor Choi compression,
   written in the index convention of the blockwise ampliation.
+* `ChoiJamiolkowski.rightTensorMatrix`: the matrix form of the right tensor
+  factor acting on the Choi auxiliary index.
 * `ChoiJamiolkowski.compressedOmegaVector`: the vector with component
   $D^{-1/2}X_{i,p}$ at the pair $(i,p)$.
 
@@ -27,6 +30,10 @@ the pair $(i,p)$.
 
 * `ChoiJamiolkowski.nPositiveAmpliation_rankOne_eq_rightCompression`: the
   ampliation of the associated rank-one matrix is exactly that compression.
+* `ChoiJamiolkowski.rightTensorMatrix_mul_choiMatrix_mul_conjTranspose`: the
+  same compression is the sandwich by the right tensor factor.
+* `ChoiJamiolkowski.compressedOmegaVector_hasSchmidtRankLE`: the compressed
+  maximally entangled vector has Schmidt rank at most the compression dimension.
 * `ChoiJamiolkowski.isNPositiveMap_iff_forall_rightCompression_posSemidef`:
   `k`-positivity is equivalent to positivity of all rectangular right-factor
   Choi compressions.
@@ -70,11 +77,49 @@ theorem rightCompression_apply
         X a p * choiMatrix T (i, a) (j, b) * star (X b q) :=
   rfl
 
+/-- The matrix representing the right tensor factor in the Choi-compression
+index convention.  Its entry from the Choi index `(j,a)` to the compressed
+index `(i,p)` is $\delta_{ij}X_{a,p}$.  This is the matrix form used in
+Wolf, Chapter 3, Proposition 3.1, item 2. -/
+noncomputable def rightTensorMatrix (X : Matrix (Fin D) (Fin k) ℂ) :
+    Matrix (Fin D × Fin k) (Fin D × Fin D) ℂ :=
+  Matrix.of fun ip ja => if ip.1 = ja.1 then X ja.2 ip.2 else 0
+
+/-- Sandwiching the Choi matrix by the right tensor factor gives exactly the
+right-factor compression entries.  In Wolf's notation this is the identity
+between $(\mathbf{1}\otimes X)\tau(\mathbf{1}\otimes X)^\dagger$ and the
+matrix with entries
+$\sum_{a,b} X_{a,p}\tau_{(i,a),(j,b)}\overline{X_{b,q}}$. -/
+theorem rightTensorMatrix_mul_choiMatrix_mul_conjTranspose
+    (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (X : Matrix (Fin D) (Fin k) ℂ) :
+    rightTensorMatrix X * choiMatrix T * (rightTensorMatrix X)ᴴ =
+      rightCompression T X := by
+  classical
+  ext ⟨i, p⟩ ⟨j, q⟩
+  simp only [rightTensorMatrix, rightCompression, Matrix.mul_apply, Matrix.of_apply,
+    Matrix.conjTranspose_apply, Fintype.sum_prod_type]
+  rw [Finset.sum_eq_single j]
+  · rw [Finset.sum_comm]
+    simp [Finset.mul_sum, mul_assoc, mul_comm]
+  · intro x _ hx
+    simp [Ne.symm hx]
+  · simp
+
 /-- The coefficient vector obtained from the normalized maximally entangled
 vector by applying `X` on the right tensor factor. -/
 noncomputable def compressedOmegaVector (X : Matrix (Fin D) (Fin k) ℂ) :
     Fin D × Fin k → ℂ :=
   fun ip => ((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) * X ip.1 ip.2
+
+/-- The vector obtained by applying a `D × k` matrix on the right tensor factor
+of the maximally entangled vector has Schmidt rank at most `k`. -/
+theorem compressedOmegaVector_hasSchmidtRankLE
+    (X : Matrix (Fin D) (Fin k) ℂ) :
+    Matrix.HasSchmidtRankLE k (compressedOmegaVector X) := by
+  simpa [Matrix.HasSchmidtRankLE, Matrix.schmidtRank, Matrix.schmidtCoeffMatrix,
+    compressedOmegaVector] using
+    Matrix.rank_le_card_width (Matrix.schmidtCoeffMatrix (compressedOmegaVector X))
 
 /-- For the vector `compressedOmegaVector X`, the `k`-fold ampliation of the
 rank-one matrix $|\psi\rangle\langle\psi|$ by `T` is the right-factor Choi
@@ -160,5 +205,16 @@ theorem isNPositiveMap_iff_forall_rightCompression_posSemidef [NeZero D]
     rw [← hvec]
     rw [nPositiveAmpliation_rankOne_eq_rightCompression]
     exact hX X
+
+/-- A `k`-positive map has positive Choi sandwiches by every right tensor
+factor `X : M_{D,k}(\mathbb{C})`.  This is the forward implication of the
+projection-compression formulation before requiring that `X` comes from a
+rank-`k` Hermitian projection. -/
+theorem IsNPositiveMap.rightTensor_choiMatrix_sandwich_posSemidef [NeZero D]
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hT : IsNPositiveMap k T) (X : Matrix (Fin D) (Fin k) ℂ) :
+    (rightTensorMatrix X * choiMatrix T * (rightTensorMatrix X)ᴴ).PosSemidef := by
+  rw [rightTensorMatrix_mul_choiMatrix_mul_conjTranspose]
+  exact (isNPositiveMap_iff_forall_rightCompression_posSemidef k T).mp hT X
 
 end ChoiJamiolkowski
