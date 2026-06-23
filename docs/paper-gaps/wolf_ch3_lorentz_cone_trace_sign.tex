@@ -1,0 +1,93 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The Trace Sign in Wolf's Lorentz-Cone Converse}
+\author{}
+\date{2026-06-23}
+
+\begin{document}
+\maketitle
+
+\section{The assertion}
+
+Wolf's Proposition~3.9 states two elementary trace inequalities for Hermitian
+matrices.\footnote{\cite[Proposition~3.9]{Wolf2012Quantum};
+local source \path{Notes/WolfNoteTexSource/ch03_positive_not_completely.tex},
+lines 693--722.}  The forward implication says that a positive semidefinite
+matrix satisfies
+\begin{align}
+  \tr(A^2) \le \tr(A)^2.
+\end{align}
+The converse is printed as
+\begin{align}
+  \tr(A)^2 \ge (d-1)\tr(A^2) \Longrightarrow A \ge 0.
+  \tag{\path{Wolf Prop. 3.9 converse}}
+\end{align}
+
+\section{The point at issue}
+
+The printed converse cannot be true without a sign condition on the trace.  For
+example, if \(A=-I_d\) and \(d\geq 1\), then \(A\) is Hermitian and not positive
+semidefinite, while
+\begin{align}
+  \tr(A)^2=d^2 \ge d(d-1)=(d-1)\tr(A^2).
+\end{align}
+Thus the squared inequality only controls the Lorentz cone up to time
+orientation; it does not distinguish the positive and negative trace sheets.
+
+This is also visible in the proof printed after the proposition.  The argument
+decomposes \(A=A_+-A_-\) and uses the estimate
+\begin{align}
+  \tr(A) \le \tr(A_+).
+\end{align}
+To contradict the squared inequality one needs the left hand side to have the
+same orientation as the nonnegative quantity being bounded.  A nonnegative
+trace hypothesis supplies exactly this orientation.
+
+\section{Corrected statement}
+
+The formal theorem proves the trace-nonnegative version:
+\begin{align}
+  A=A^\dagger,\qquad
+  \tr(A)\ge 0,\qquad
+  (d-1)\tr(A^2)\le \tr(A)^2
+  \Longrightarrow A\ge 0.
+\end{align}
+In the complex matrix formalization the traces are written with real parts,
+which agrees with the displayed real quantities for Hermitian \(A\).\footnote{
+Formal declaration
+\leanid{Matrix.IsHermitian.posSemidef_of_trace_re_nonneg_of_card_sub_one_mul_trace_sq_re_le}
+in \doclink{TNLean/Analysis/MatrixTraceInequalities}; tracked by
+\ghissue{3402}.}
+
+The proof is a finite eigenvalue argument.  If some eigenvalue \(\lambda_0\) is
+negative, write
+\begin{align}
+  T=\sum_i\lambda_i,\qquad
+  R=\sum_{i\ne 0}\lambda_i .
+\end{align}
+Since \(T\ge0\) and \(T=\lambda_0+R\), one has \(T<R\), and hence
+\(T^2<R^2\).  Cauchy's inequality for the remaining \(d-1\) eigenvalues gives
+\begin{align}
+  R^2\le (d-1)\sum_{i\ne 0}\lambda_i^2
+       \le (d-1)\sum_i\lambda_i^2,
+\end{align}
+contradicting the assumed Lorentz inequality.  Therefore all eigenvalues are
+nonnegative.
+
+\section{Conclusion}
+
+The unrestricted printed converse should not be marked as formalized.  The
+formal development records the future-cone, trace-nonnegative converse as the
+mathematically valid statement used in the positive-map discussion.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
