@@ -8,12 +8,13 @@ to a renormalization fixed point uses a left-canonical normalization.
 
 The nearest-neighbor commuting parent Hamiltonian condition in
 \cite[Definition~3.9 and Theorem~3.10]{Cirac2016MPDO_arXiv} is distinct from
-the parent commuting Hamiltonian condition of Appendix~D.2, which is stated for
-local projectors $Q_{AX}$ and $Q_{XB}$. The latter appears in the decorrelation
-section that follows.
-In Definition~3.9 the parent-Hamiltonian condition also says that, for
-$N>L$, the ground space is spanned by the periodic MPS vectors associated to
-the BNT components; nearest-neighbor means the specialization $L=2$.
+the parent commuting Hamiltonian condition of
+\cite[Appendix~D.2]{Cirac2016MPDO_arXiv}, which is stated for local projectors
+$Q_{AX}$ and $Q_{XB}$. The latter appears in the decorrelation section that
+follows. In \cite[Definition~3.9]{Cirac2016MPDO_arXiv} the parent-Hamiltonian
+condition also says that, for $N>L$, the ground space is spanned by the
+periodic MPS vectors associated to the BNT components; nearest-neighbor means
+the specialization $L=2$.
 
 \begin{definition}[Overlapping two-site supports]\label{def:overlapping_two_site_supports}
     \lean{MPSTensor.axPairCfg}
@@ -93,6 +94,33 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     \]
     Substituting these two pairs of identities into the definition of the
     translated parent term gives the two displayed equations.
+\end{proof}
+
+\begin{theorem}[Three-site commutation from overlapping supports]
+    \label{thm:local_term_two_three_commute_from_ax_xb}
+    \lean{MPSTensor.localTerm_two_three_zero_one_commute_of_overlapping_two_site_commutation}
+    \leanok
+    \uses{def:overlapping_two_site_supports,
+        thm:local_term_two_three_ax_xb_lifts}
+    Suppose the canonical two-site parent interaction \(q(A)=1-P_{G_2(A)}\)
+    satisfies the overlapping \(AX/XB\) commutation condition of
+    Definition~\ref{def:overlapping_two_site_supports}. Then, on the three-site
+    chain,
+    \[
+        h^{(3)}_0(A,2)h^{(3)}_1(A,2)
+        =
+        h^{(3)}_1(A,2)h^{(3)}_0(A,2).
+    \]
+    This is only the local transport from the \(AX/XB\) condition to translated
+    parent terms; the construction of the projectors of
+    \cite[Appendix~B]{Cirac2016MPDO_arXiv} is a separate step.
+\end{theorem}
+
+\begin{proof}\leanok
+    By Theorem~\ref{thm:local_term_two_three_ax_xb_lifts}, the two translated
+    parent interactions are \(q(A)_{AX}\) and \(q(A)_{XB}\). The assumed
+    overlapping support condition says exactly that these two lifted
+    endomorphisms commute.
 \end{proof}
 
 \begin{definition}[Translated parent-term commutation]\label{def:is_commuting_parent_ham}
@@ -201,8 +229,8 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
         =
         \spn\{V^{(N)}(A_j):j=1,\ldots,g\}.
     \]
-    This is the definition below. It does not prove the ground-space spanning
-    equation for a concrete canonical-form tensor.
+    This condition records the ground-space spanning equation, but does not
+    prove it for a concrete canonical-form tensor.
 \end{definition}
 
 \begin{remark}[Elementary consequences of the commuting definition]
@@ -424,7 +452,7 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     \]
 \end{proof}
 
-\begin{lemma}[Kernel containment from the PGVWC block comparison]
+\begin{lemma}[Kernel containment from the block-diagonal boundary comparison]
     \label{lem:block_diagonal_kernel_to_bnt_span_from_pgvwc_comparison}
     \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_pgvwc_comparison}
     \leanok
@@ -799,10 +827,11 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
         def:parent_hamiltonian_ground_space_spanning}
     Suppose the Appendix~B product-of-pairs data give commuting two-site parent
     terms for a tensor \(B\). If the nearest-neighbor parent Hamiltonian also
-    satisfies the Definition~\ref{def:parent_hamiltonian_ground_space_spanning}
-    spanning equation with BNT components \(A_1,\ldots,A_g\), then \(B\) satisfies
-    the all-chain nearest-neighbor commuting parent-Hamiltonian ground-space
-    condition of Definition~\ref{def:has_nncph_ground_spaces}.
+    satisfies the ground-space spanning equation of
+    Definition~\ref{def:parent_hamiltonian_ground_space_spanning}, with BNT
+    components \(A_1,\ldots,A_g\), then \(B\) satisfies the all-chain
+    nearest-neighbor commuting parent-Hamiltonian ground-space condition of
+    Definition~\ref{def:has_nncph_ground_spaces}.
 
     In particular, if a normal left-canonical RFP tensor has nonzero bond
     dimension, the Appendix~B product-of-pairs extraction, and the same
