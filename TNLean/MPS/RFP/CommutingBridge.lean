@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.Defs
+import TNLean.MPS.Core.CyclicTrace
 import TNLean.MPS.RFP.StructuralFull
 import Mathlib.Data.Fin.Basic
 
@@ -24,9 +25,11 @@ isometry \(U\). The remaining parent-Hamiltonian step is the passage from this
 product-of-entangled-pairs form to commutativity of the translated two-site
 terms \(h_i=\tau_i(P_2^\perp)\).
 
-The declarations below separate three mathematical statements:
+The declarations below separate four mathematical statements:
 
-* the even-chain coefficient factorization as a repeated two-site amplitude;
+* the cyclic virtual-pair expression for the coefficients of \(\Lambda U^i\);
+* the adjacent even-chain coefficient factorization as a repeated two-site
+  amplitude;
 * the identification of the translated two-site parent terms with commuting
   idempotents on each finite chain;
 * the already formalized Appendix B structural form.
@@ -72,11 +75,11 @@ def productPairWindow (N : ℕ) (σ : Cfg d (2 * N)) (p : Fin N) : Cfg d 2 :=
 /-- The even-chain state obtained by repeating a fixed two-site amplitude on
 adjacent pairs.
 
-When the two-site amplitude is the maximally entangled pair, this is the
-product-of-entangled-pairs state appearing in Appendix B. We keep the two-site
-amplitude abstract here; the eventual structural-form construction will
-instantiate it with the maximally entangled pair transported through the relevant
-physical basis change. -/
+This is the adjacent-pair expression used by the present nearest-neighbor
+parent-term input. Appendix B first gives a cyclic virtual-pair expression in
+which the vector \(\varphi_j\) is shared between \(b_n\) and \(a_{n+1}\), while
+the isometry \(U\) acts on \((a_n,b_n)\). Identifying that cyclic expression
+with this adjacent physical-pair expression is a separate mathematical step. -/
 def productPairState (ψ₂ : NSiteSpace d 2) (N : ℕ) : NSiteSpace d (2 * N) :=
   fun σ => ∏ p : Fin N, ψ₂ (productPairWindow N σ p)
 
@@ -274,6 +277,60 @@ noncomputable def AppendixBStructuralData.coreTensor {A : MPSTensor d D}
     hStruct.coreTensor i = Matrix.diagonal (fun k => (hStruct.Λ k : ℂ)) * hStruct.U i :=
   rfl
 
+/-! ### The cyclic virtual-pair expression from Appendix B -/
+
+/-- The next virtual bond in the cyclic chain of length \(L\). -/
+def cyclicVirtualSucc {L : ℕ} (hL : 0 < L) (t : Fin L) : Fin L :=
+  letI : NeZero L := ⟨Nat.ne_of_gt hL⟩
+  t + 1
+
+/-- The coefficient expression obtained by putting the Appendix B virtual pairs
+on a cycle.
+
+For a chain of length \(L\), choose a virtual index \(\alpha_t\) at each site.
+The factor at site \(t\) is
+\[
+  \Lambda_{\alpha_t}\,
+  (U^{\sigma_t})_{\alpha_t,\alpha_{t+1}},
+\]
+where the successor is cyclic. This is the coefficient form of the source
+description
+\[
+  |V^{(N)}(A_j)\rangle=U^{\otimes N}|\varphi_j\rangle^{\otimes N},
+  \qquad
+  |\varphi_j\rangle=\sum_m \lambda_m |m,m\rangle,
+\]
+with \(\varphi_j\) shared between \(b_n\) and \(a_{n+1}\). -/
+noncomputable def AppendixBStructuralData.cyclicVirtualPairState
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
+    {L : ℕ} (hL : 0 < L) : NSiteSpace d L :=
+  fun σ =>
+    ∑ α : Fin L → Fin D, ∏ t : Fin L,
+      (hStruct.Λ (α t) : ℂ) *
+        hStruct.U (σ t) (α t) (α (cyclicVirtualSucc hL t))
+
+/-- The coefficient of the Appendix B core tensor is the cyclic virtual-pair
+expression.
+
+This is the coefficient form of
+\[
+  |V^{(L)}(A_j)\rangle=U^{\otimes L}|\varphi_j\rangle^{\otimes L},
+  \qquad
+  |\varphi_j\rangle=\sum_m\lambda_m|m,m\rangle,
+\]
+with \(\varphi_j\) shared between \(b_t\) and \(a_{t+1}\). It is not the
+adjacent physical-pair factorization used later for nearest-neighbor
+parent-term commutation. -/
+theorem AppendixBStructuralData.mpv_coreTensor_eq_cyclicVirtualPairState
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
+    {L : ℕ} (hL : 0 < L) (σ : Cfg d L) :
+    mpv hStruct.coreTensor σ = hStruct.cyclicVirtualPairState hL σ := by
+  classical
+  haveI : NeZero L := ⟨Nat.ne_of_gt hL⟩
+  rw [mpv, coeff, trace_evalWord_eq_sum_cyclic]
+  simp [AppendixBStructuralData.cyclicVirtualPairState,
+    AppendixBStructuralData.coreTensor, cyclicVirtualSucc, Matrix.diagonal_mul]
+
 /-- The original tensor is gauge equivalent to its Appendix B core tensor. -/
 theorem AppendixBStructuralData.gaugeEquiv_coreTensor {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) :
@@ -310,16 +367,19 @@ theorem AppendixBStructuralData.mpv_eq_productPairState_one {A : MPSTensor d D}
     mpv A σ = productPairState hStruct.twoSiteAmplitude 1 σ := by
   rw [productPairState_one, hStruct.twoSiteAmplitude_eq_mpv]
 
-/-- The remaining adjacent product-pair input needed after Appendix B.
+/-- The remaining adjacent product-pair input needed after the cyclic
+Appendix B expression.
 
 For a fixed structural form, this captures the two facts that are still not
-produced by the Appendix-B structural datum: the positive even-chain MPV must be
-a repeated copy of the two-site amplitude determined by that same witness, and
-the nearest-neighbor parent projectors on each finite chain must be identified
-with a commuting family attached to these adjacent two-site factors. -/
+produced by the Appendix B structural datum: the cyclic virtual-pair coefficient
+formula must be identified with a repeated adjacent two-site amplitude
+determined by the same witness, and the nearest-neighbor parent projectors on
+each finite chain must be identified with a commuting family attached to these
+adjacent two-site factors. -/
 structure AppendixBProductPairExtraction {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) where
-  /-- Positive even-chain coefficient factorization through the structural two-site amplitude. -/
+  /-- Positive even-chain adjacent-pair factorization through the structural
+  two-site amplitude. -/
   hmpv : ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
     mpv A σ = productPairState hStruct.twoSiteAmplitude N σ
   /-- Local projectors realizing the nearest-neighbor parent terms. -/
