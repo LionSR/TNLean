@@ -447,6 +447,7 @@ import TNLean.PEPS.TorusRowColumnReductionObstruction
 import TNLean.PEPS.TorusDeformedWindow
 import TNLean.PEPS.TorusWindowChain
 import TNLean.PEPS.TorusWindowFamily
+import TNLean.PEPS.TorusWindowFamilyVertical
 import TNLean.PEPS.TorusWindowChain2
 import TNLean.PEPS.TorusWindowChain3
 import TNLean.PEPS.TorusWindowChain4
