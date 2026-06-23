@@ -682,6 +682,54 @@ maps.
     % factorization of arbitrary rank-$k$ orthogonal projections.
 \end{proof}
 
+\begin{lemma}[Rank-$k$ Hermitian projection factorization]
+    \label{lem:rank_k_hermitian_projection_factorization}
+    \lean{Matrix.exists_mul_conjTranspose_of_isHermitian_idempotent_rank}
+    \leanok
+    Let $P\in\MN{D,D}(\C)$ be Hermitian, idempotent, and of rank $k$.
+    Then there exists $V\in\MN{D,k}(\C)$ such that
+    \[
+      P=VV^\dagger.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Regard $P$ as a linear operator on $\C^D$.  Hermiticity and idempotence say
+    that this operator is the orthogonal projection onto its range.  Choose an
+    orthonormal basis of the range, indexed by $\{0,\ldots,k-1\}$ using the
+    rank hypothesis, and let $V$ be the matrix whose columns are these basis
+    vectors.
+    The standard rank-one expansion of an orthogonal projection gives
+    $P=VV^\dagger$.
+\end{proof}
+
+\begin{theorem}[Rank-$k$ right projections in the Choi criterion]
+    \label{thm:rank_k_right_projection_choi_sandwich_forward}
+    \lean{ChoiJamiolkowski.IsNPositiveMap.rightTensor_choiMatrix_sandwich_posSemidef_of_isHermitian_idempotent_rank}
+    \leanok
+    \uses{lem:rank_k_hermitian_projection_factorization,
+        thm:factorized_right_projection_choi_sandwich}
+    Assume $D>0$.  Let $T:\MN{D,D}(\C)\to\MN{D,D}(\C)$ be $k$-positive,
+    with Choi matrix $\tau$.  If $P\in\MN{D,D}(\C)$ is Hermitian, satisfies
+    $P^2=P$, and has rank $k$, then
+    \[
+      R_P\tau R_P^\dagger\geq0.
+    \]
+    This is the forward rank-$k$ projection-compression direction of
+    \cite[Chapter~3, Proposition~3.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By Lemma~\ref{lem:rank_k_hermitian_projection_factorization}, write
+    $P=VV^\dagger$ with $V\in\MN{D,k}(\C)$.  The conclusion is then exactly
+    Theorem~\ref{thm:factorized_right_projection_choi_sandwich}.
+    % The reverse implication in the full equivalence of
+    % \cite[Chapter~3, Proposition~3.1]{Wolf2012Quantum} is a separate
+    % rectangular-compression reconstruction step.
+\end{proof}
+
 \begin{definition}[Trace-pairing adjoint]\label{def:trace_pairing_adjoint}
     \lean{Matrix.traceAdjointMap}
     \leanok
