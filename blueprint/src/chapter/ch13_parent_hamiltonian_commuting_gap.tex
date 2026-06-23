@@ -730,6 +730,7 @@ the specialization $L=2$.
     \lean{MPSTensor.AppendixBStructuralData.mpv_eq_coreTensor}
     \lean{MPSTensor.AppendixBStructuralData.twoSiteAmplitude_eq_mpv}
     \lean{MPSTensor.AppendixBStructuralData.twoSiteAmplitude_eq_coreTensor_mpv}
+    \lean{MPSTensor.AppendixBStructuralData.mpv_coreTensor_eq_productPairState_one}
     \lean{MPSTensor.AppendixBStructuralData.mpv_eq_productPairState_one}
     \lean{MPSTensor.AppendixBProductPairExtraction}
     \lean{MPSTensor.AppendixBProductPairExtraction.ofCoreTensorFactorization}
@@ -779,6 +780,13 @@ the specialization $L=2$.
         V^{(2)}(A)(a,b)
         =
         V^{(2)}(\Lambda U)(a,b).
+    \]
+    Thus the adjacent-pair factorization is already verified for one physical
+    pair in the core tensor:
+    \[
+        V^{(2)}(\Lambda U)(\sigma)
+        =
+        \phi_2(\sigma_0,\sigma_1).
     \]
     The adjacent-pair input presently used in the formal statement is the
     even-chain factorization, for a positive number $n$ of adjacent pairs,
