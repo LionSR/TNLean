@@ -471,7 +471,7 @@ theorem IsPositiveMap.comp_unitaryConjLM_positive_tracePreserving
 
 /-- If A is positive definite, conjugation by its inverse square root
 normalizes A to the identity. -/
-theorem Matrix.conjTranspose_inv_cfc_sqrt_mul_self_of_posDef
+theorem Matrix.conjTranspose_inv_sqrt_mul_self_mul_inv_sqrt_eq_one_of_posDef
     (A : Matrix (Fin D) (Fin D) ℂ) (hA : A.PosDef) :
     ((CFC.sqrt A)⁻¹)ᴴ * A * (CFC.sqrt A)⁻¹ = 1 := by
   set S : Matrix (Fin D) (Fin D) ℂ := CFC.sqrt A
@@ -497,6 +497,10 @@ theorem Matrix.conjTranspose_inv_cfc_sqrt_mul_self_of_posDef
     _ = S⁻¹ * (S * S) * S⁻¹ := by rw [hSinv_herm, hS_sq]
     _ = 1 := by simp [Matrix.mul_assoc, hSinv_mul, hSmul_inv]
 
+@[deprecated (since := "2026-06-23")] alias
+  Matrix.conjTranspose_inv_cfc_sqrt_mul_self_of_posDef :=
+    Matrix.conjTranspose_inv_sqrt_mul_self_mul_inv_sqrt_eq_one_of_posDef
+
 /-- **Wolf Chapter 3 trace normalization by inverse square root.**
 
 If T is positive and T*(1) is positive definite, then choosing
@@ -509,7 +513,7 @@ theorem IsPositiveMap.comp_unitaryConjLM_inv_cfc_sqrt_traceAdjointMap_one
       IsTracePreservingMap
         (T.comp (unitaryConjLM ((CFC.sqrt (Matrix.traceAdjointMap T 1))⁻¹))) := by
   exact hT.comp_unitaryConjLM_positive_tracePreserving _
-    (Matrix.conjTranspose_inv_cfc_sqrt_mul_self_of_posDef
+    (Matrix.conjTranspose_inv_sqrt_mul_self_mul_inv_sqrt_eq_one_of_posDef
       (Matrix.traceAdjointMap T 1) hTstar)
 
 end UnitaryConjugation
