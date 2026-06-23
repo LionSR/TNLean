@@ -384,6 +384,19 @@ theorem AppendixBStructuralData.mpv_eq_coreTensor {A : MPSTensor d D}
     mpv A σ = mpv hStruct.coreTensor σ :=
   (GaugeEquiv.sameMPV hStruct.gaugeEquiv_coreTensor N σ).symm
 
+/-- The original tensor has the Appendix B cyclic basic-vector coefficient.
+
+Source: arXiv:1606.00608, lines 543--555.
+
+This combines the gauge-invariance of MPV coefficients with the coefficient
+formula for the core tensor \(\Lambda U^i\).  The conclusion is the source
+cyclic virtual-pair expression, not the disjoint adjacent physical-pair
+condition used later in the conditional parent-Hamiltonian theorem. -/
+theorem AppendixBStructuralData.mpv_eq_cyclicVirtualPairState {A : MPSTensor d D}
+    (hStruct : AppendixBStructuralData A) {L : ℕ} (hL : 0 < L) (σ : Cfg d L) :
+    mpv A σ = hStruct.cyclicVirtualPairState hL σ := by
+  rw [hStruct.mpv_eq_coreTensor σ, hStruct.mpv_coreTensor_eq_cyclicVirtualPairState hL σ]
+
 /-- The structural two-site amplitude is exactly the two-site MPV coefficient. -/
 theorem AppendixBStructuralData.twoSiteAmplitude_eq_mpv {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) (σ : Cfg d 2) :
