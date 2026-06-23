@@ -181,6 +181,40 @@ maps.
     dimension at most one.
 \end{proof}
 
+\begin{definition}[Schmidt singular values]\label{def:schmidt_singular_values}
+    \lean{Matrix.schmidtSingularValues}
+    \leanok
+    \uses{def:schmidt_rank}
+    The Schmidt singular values of a vector
+    $\psi\in\C^{D}\otimes\C^k$ are the singular values of the coefficient
+    matrix $C_\psi$, viewed as a linear map $\C^k\to\C^D$.
+\end{definition}
+
+\begin{theorem}[Schmidt singular values and Schmidt rank]
+    \label{thm:schmidt_singular_values_support}
+    \lean{Matrix.support_schmidtSingularValues,
+        Matrix.schmidtSingularValues_eq_zero_iff,
+        Matrix.schmidtSingularValues_pos_iff_lt_schmidtRank,
+        Matrix.hasSchmidtRankLE_iff_schmidtSingularValues_eq_zero}
+    \leanok
+    \uses{def:schmidt_rank, def:schmidt_singular_values}
+    The Schmidt singular values are indexed from zero.  The nonzero Schmidt
+    singular values of $\psi$ are exactly those with index below
+    $\operatorname{SR}(\psi)$.  Equivalently, for zero-based indexing,
+    \[
+        s_k(\psi)=0 \quad\Longleftrightarrow\quad
+        \operatorname{SR}(\psi)\le k .
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For a finite-dimensional linear map, the support of the singular-value
+    sequence is the initial interval whose length is the dimension of the
+    range.  The coefficient matrix $C_\psi$ represents the corresponding map
+    $\C^k\to\C^D$, and this range dimension is $\rank(C_\psi)$.
+\end{proof}
+
 \begin{lemma}[Monotonicity of bounded Schmidt rank]\label{lem:schmidt_rank_mono}
     \lean{Matrix.HasSchmidtRankLE.mono}
     \leanok
