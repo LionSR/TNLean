@@ -69,8 +69,8 @@ noncomputable def compressedOmegaVector (X : Matrix (Fin D) (Fin k) ℂ) :
     Fin D × Fin k → ℂ :=
   fun ip => ((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) * X ip.1 ip.2
 
-/-- The rank-one positive semidefinite matrix used by the ampliation test agrees
-with the right-factor compression of the Choi matrix. -/
+/-- The rank-one matrix used by the ampliation test agrees with the right-factor
+compression of the Choi matrix. -/
 theorem nPositiveAmpliation_rankOne_eq_rightCompression
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (X : Matrix (Fin D) (Fin k) ℂ) :

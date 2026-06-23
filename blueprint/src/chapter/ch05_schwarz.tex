@@ -237,10 +237,9 @@ maps.
     \lean{ChoiJamiolkowski.nPositiveAmpliation_rankOne_eq_rightCompression}
     \leanok
     \uses{def:blockwise_ampliation, def:choi_right_compression}
-    Applying the $k$-fold ampliation of $T$ to the rank-one positive
-    semidefinite matrix $|\psi\rangle\langle\psi|$, where
-    $\psi_{(a,p)}=D^{-1/2}X_{a,p}$, is exactly the right-factor compression of
-    the Choi matrix of $T$ by $X$.
+    Applying the $k$-fold ampliation of $T$ to the rank-one matrix
+    $|\psi\rangle\langle\psi|$, where $\psi_{(a,p)}=D^{-1/2}X_{a,p}$, is
+    exactly the right-factor compression of the Choi matrix of $T$ by $X$.
 \end{lemma}
 
 \begin{proof}
@@ -260,9 +259,8 @@ maps.
     \[
       T\!\left(D^{-1}\sum_{a,b}
           X_{a,p}\,\overline{X_{b,q}}\,E_{a,b}\right)_{i,j}
-      = \sum_{a,b}
-          X_{a,p}\,\overline{X_{b,q}}\,
-          D^{-1}\bigl(T(E_{a,b})\bigr)_{i,j}
+      = D^{-1}\sum_{a,b}
+          X_{a,p}\,\overline{X_{b,q}}\,\bigl(T(E_{a,b})\bigr)_{i,j}
       = \sum_{a,b}
           X_{a,p}\,\tau_{(i,a),(j,b)}\,\overline{X_{b,q}},
     \]
