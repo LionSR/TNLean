@@ -7,7 +7,7 @@
 
 \input{command}
 
-\title{Wolf Chapter~5 Operator Jensen and Lieb Concavity Axioms}
+\title{Wolf Chapter~5 Operator Jensen and Lieb Concavity Boundary}
 \author{}
 \date{2026-06-23}
 
@@ -16,16 +16,17 @@
 
 \section{Scope}
 
-This note records the mathematical content of the four axioms that remain in the
-Chapter~5 operator-convexity development\footnote{%
-    The axioms are
+This note records the mathematical content of the Chapter~5
+operator-convexity boundary\footnote{%
+    The declarations are
     \leanid{posMap_rpow_concave_jensen}, \leanid{posMap_rpow_convex_jensen},
     \leanid{posMap_log_concave_jensen}, and \leanid{lieb_concavity_axiom} in
-    \doclink{TNLean/Axioms/OperatorConvexity}.}
-together with the cited sources they stand in for, the precise gap that blocks a
-proof, and the first concrete step toward eliminating each gap.  The three
-positive-map Jensen axioms underlie \cite[Corollary~5.2]{Wolf2012Quantum} (the
-second corollary of Wolf's \S5.4) and rest on the operator-convexity and
+    \doclink{TNLean/Axioms/OperatorConvexity}; the first is now a theorem, and
+    the latter three remain axioms.}
+together with the cited sources, the precise gaps, and the first concrete step
+toward eliminating each remaining gap.  The positive-map Jensen declarations
+underlie \cite[Corollary~5.2]{Wolf2012Quantum} (the second corollary of Wolf's
+\S5.4) and rest on the operator-convexity and
 operator-monotonicity-versus-positive-maps results
 \cite[Theorems~5.10--5.13]{Wolf2012Quantum}; the Lieb axiom is the Ando--Lieb
 trace functional \cite[Theorem~5.15]{Wolf2012Quantum}.  (Wolf's Theorem~5.1 is
@@ -39,7 +40,7 @@ semidefinite operators, \emph{subunital} if $T(\mathbf 1)\le\mathbf 1$, and
 \emph{unital} if $T(\mathbf 1)=\mathbf 1$.  The power $A^p$ for $A\ge 0$ and the
 logarithm $\log A$ for $A>0$ are defined by the continuous functional calculus.
 
-\section{The three positive-map Jensen axioms}
+\section{The positive-map Jensen declarations}
 
 \subsection{The assertions}\label{ssec:assertions}
 
@@ -80,7 +81,8 @@ and, through it, the operator concavity of $x\mapsto x^p$ on $[0,1]$
 scalar input of the convex axiom, operator convexity of $x\mapsto x^p$ on
 $[1,2]$, is also now present as \leanid{CFC.convexOn_rpow} in
 \doclink{TNLean/Analysis/RpowConvexity}.  Thus the scalar functional-calculus
-inputs for the three Jensen axioms are available in the formal development.
+inputs for the three Jensen declarations are available in the formal
+development.
 
 The remaining gap is the step \emph{from} operator concavity (a statement about a
 single operator) \emph{to} the Jensen inequality $T(fA)\le f(TA)$ for a positive
@@ -88,8 +90,12 @@ map.  This is the Choi--Davis--Jensen inequality (the positive-map form of the
 Hansen--Pedersen operator Jensen inequality): for an operator-concave $f$ and a
 positive unital map $T$ one has $T(fA)\le f(TA)$, with the subunital version
 obtained by dilating $T$ to a unital map.  Mathlib~4.31 contains no such
-theorem for positive maps.  Thus the three axioms are blocked on the
-positive-map Jensen step, not on the integral representation of the integrand.
+general theorem for positive maps.  The concave real-power case has now been
+discharged by the special Löwner-integrand route recorded in
+\leanid{TNLean.OperatorJensen.positiveMap_rpowIntegrand₀₁_jensen}, together
+with ordered Bochner integral monotonicity.  The convex real-power and
+logarithmic cases remain blocked on the corresponding positive-map Jensen step,
+not on the integral representation of the power integrand.
 
 \subsection{The compression scaffold is faithful to bare
 positivity}\label{ssec:caveat}
@@ -142,20 +148,20 @@ identity used in Wolf's block-positivity step in the proof of
   \cite[Theorem~5.12]{Wolf2012Quantum}).  The scaffold
   therefore applies to a bare positive map in the finite-POVM resolvent reduction
   under the \leanid{IsPositiveMap} hypothesis --- it does not require, and must not
-  be relabelled with, complete positivity.  It does not by itself prove the
-  Jensen inequalities; the axioms remain open until the integral step below is
-  supplied.
+  be relabelled with, complete positivity.  It now proves the concave
+  real-power Jensen inequality after integration; the convex real-power and
+  logarithmic Jensen declarations remain open.
 
-What is missing is therefore not a faithful proof route but the analytic step
-that closes the existing one: the Löwner-integral argument carrying the pointwise
-finite-POVM resolvent inequality (\leanid{povm_resolvent_inv_le}) through the
-integral representation of \texttt{rpow} to the operator inequality
+For the concave real-power case, the analytic step has now been supplied: the
+Löwner-integral argument carries the pointwise finite-POVM resolvent inequality
+(\leanid{povm_resolvent_inv_le}) through the integral representation of
+\texttt{rpow} to the operator inequality
 \leanid{posMap_rpow_concave_jensen}.
 
 \subsection{Current formal inputs}\label{ssec:formal-inputs}
 
-The auxiliary ingredients needed before the final positive-map Jensen assembly
-are now present.  The theorem \leanid{CFC.convexOn_rpow} supplies operator
+The auxiliary ingredients needed before the remaining positive-map Jensen
+assemblies are now present.  The theorem \leanid{CFC.convexOn_rpow} supplies operator
 convexity of $x\mapsto x^p$ for $p\in[1,2]$, completing the scalar
 functional-calculus input for \leanid{posMap_rpow_convex_jensen}.
 
@@ -170,17 +176,13 @@ directly by the general ordered Bochner theorem \leanid{integral_mono_ae}.
 \subsection{Verdict}
 
 The three positive-map Jensen statements are mathematically standard
-\cite[Theorems~5.10--5.13 and Corollary~5.2]{Wolf2012Quantum}.  Their
-elimination is blocked on the positive-map operator Jensen step (the
-Choi--Davis--Jensen inequality), which is absent from Mathlib~4.31; the integral
-representation of the integrand, previously named as the obstruction, is
-present.  The existing finite-POVM compression scaffold realises Wolf's
-positive-map route (\S\ref{ssec:caveat}) and is faithful to the bare positivity
-hypothesis.  What remains is the spectral reduction of the pointwise
-positive-map resolvent inequality to
-\leanid{TNLean.OperatorJensen.povm_resolvent_inv_le}, followed by the final
-assembly through the ordered Bochner integral monotonicity theorem and the
-matrix-valued positive-integral specialization.
+\cite[Theorems~5.10--5.13 and Corollary~5.2]{Wolf2012Quantum}.  The concave
+real-power statement \leanid{posMap_rpow_concave_jensen} has been discharged by
+the finite-POVM resolvent scaffold, the pointwise integrand inequality, and
+ordered Bochner integral monotonicity.  The convex real-power and logarithmic
+statements remain open; their elimination still needs the corresponding
+positive-map operator Jensen step.  The integral representation of the power
+integrand, previously named as the obstruction, is present.
 
 \section{The Lieb concavity axiom}
 
