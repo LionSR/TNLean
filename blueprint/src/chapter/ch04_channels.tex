@@ -78,6 +78,26 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     Therefore all eigenvalues of $\tr(X)\Id-X$ are nonnegative.
 \end{proof}
 
+\begin{theorem}[Choi matrix of the reduction map]
+    \label{thm:choi_matrix_reduction_map}
+    \lean{ChoiJamiolkowski.choiMatrix_reductionMap}
+    \leanok
+    \uses{def:reduction_map}
+    For $D\ge 1$, the Choi matrix of
+    $T_k(X)=\tr(X)\Id-k^{-1}X$ is
+    \[
+        \tau(T_k)=D^{-1}\Id-k^{-1}\ket{\Omega}\bra{\Omega}.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    The trace term sends the $(a,b)$ slice of
+    $\ket{\Omega}\bra{\Omega}$ to its trace times the identity, giving
+    the contribution $D^{-1}\Id$.  The second term is the Choi matrix of
+    $k^{-1}$ times the identity map, namely
+    $k^{-1}\ket{\Omega}\bra{\Omega}$.
+\end{proof}
+
 \begin{theorem}[Conjugation filters preserve positivity]
     \label{thm:conjugation_filters_preserve_positivity}
     \lean{unitaryConjLM_isCPMap, unitaryConjLM_isPositiveMap,
