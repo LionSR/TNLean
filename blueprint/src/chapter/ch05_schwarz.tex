@@ -312,8 +312,8 @@ maps.
     rank.
 \end{proof}
 
-\begin{theorem}[Square Schmidt-rank parametrization]
-    \label{thm:square_schmidt_rank_parametrization}
+\begin{theorem}[Square representative with exact Schmidt rank]
+    \label{thm:square_schmidt_rank_exact_parametrization}
     \lean{ChoiJamiolkowski.exists_squareCompression_of_vector,
         ChoiJamiolkowski.exists_squareCompression_of_hasSchmidtRankLE}
     \leanok
@@ -336,6 +336,32 @@ maps.
     $D^{-1/2}X_{i,p}=\psi_{(i,p)}$.  The rank identity follows from
     Theorem~\ref{thm:compressed_omega_schmidt_rank_eq_rank}.  The bounded-rank
     statement follows by comparison with the assumed Schmidt-rank bound.
+\end{proof}
+
+\begin{lemma}[Square parametrization of bounded Schmidt rank]
+    \label{lem:schmidt_rank_square_compressed_omega}
+    \lean{ChoiJamiolkowski.hasSchmidtRankLE_iff_exists_rank_le_compressedOmegaVector}
+    \leanok
+    \uses{def:schmidt_rank, def:choi_right_compression,
+        thm:square_schmidt_rank_exact_parametrization}
+    Assume $D>0$.  A vector $\psi\in\C^D\otimes\C^D$ has Schmidt rank at most
+    $k$ if and only if there is a matrix $X\in\MD(\C)$ of rank at most $k$
+    such that
+    \[
+      \psi_{(i,j)}=D^{-1/2}X_{i,j}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The forward direction is the bounded-rank part of
+    Theorem~\ref{thm:square_schmidt_rank_exact_parametrization}.  Conversely,
+    if $\psi_{(i,j)}=D^{-1/2}X_{i,j}$, then the coefficient matrix of $\psi$ is
+    \[
+      C_\psi = D^{-1/2}X,
+    \]
+    so $\operatorname{rank}(C_\psi)=\operatorname{rank}(X)$, since
+    multiplication by a nonzero scalar preserves rank.
 \end{proof}
 
 \begin{lemma}[Rank-one ampliation as Choi compression]

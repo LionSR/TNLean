@@ -29,6 +29,7 @@ bounded Schmidt rank.
 * `Matrix.schmidtRank_le_left`, `Matrix.schmidtRank_le_right`: dimension bounds.
 * `Matrix.schmidtRank_zero`: the zero vector has Schmidt rank zero.
 * `Matrix.schmidtRank_product_le_one`: product vectors have Schmidt rank at most one.
+* `Matrix.rank_smul_of_ne_zero`: nonzero scalar rescaling preserves matrix rank.
 
 ## References
 
