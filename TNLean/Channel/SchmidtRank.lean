@@ -54,10 +54,11 @@ theorem schmidtCoeffMatrix_apply (ψ : m × n → ℂ) (i : m) (j : n) :
 variable [Fintype n]
 
 /-- Multiplying every entry of a matrix by a scalar cannot increase rank. -/
-theorem rank_smul_le (c : ℂ) (A : Matrix m n ℂ) : (c • A).rank ≤ A.rank := by
+theorem rank_smul_le {K : Type*} [Field K] (c : K) (A : Matrix m n K) :
+    (c • A).rank ≤ A.rank := by
   rw [Matrix.rank_eq_finrank_span_cols, Matrix.rank_eq_finrank_span_cols]
-  haveI : Module.Finite ℂ ↥(Submodule.span ℂ (Set.range A.col)) :=
-    Module.Finite.span_of_finite ℂ (Set.finite_range A.col)
+  haveI : Module.Finite K ↥(Submodule.span K (Set.range A.col)) :=
+    Module.Finite.span_of_finite K (Set.finite_range A.col)
   refine Submodule.finrank_mono ?_
   refine Submodule.span_le.mpr ?_
   rintro _ ⟨j, rfl⟩
@@ -68,7 +69,8 @@ theorem rank_smul_le (c : ℂ) (A : Matrix m n ℂ) : (c • A).rank ≤ A.rank 
   exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨j, rfl⟩)
 
 /-- Multiplying every entry of a matrix by a nonzero scalar preserves rank. -/
-theorem rank_smul_of_ne_zero {c : ℂ} (hc : c ≠ 0) (A : Matrix m n ℂ) :
+theorem rank_smul_of_ne_zero {K : Type*} [Field K] {c : K} (hc : c ≠ 0)
+    (A : Matrix m n K) :
     (c • A).rank = A.rank := by
   refine le_antisymm (rank_smul_le c A) ?_
   have hle := rank_smul_le c⁻¹ (c • A)

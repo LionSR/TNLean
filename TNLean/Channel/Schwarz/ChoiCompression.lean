@@ -156,17 +156,13 @@ theorem exists_squareCompression_of_vector [NeZero D]
     exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne D)
   have hsqrt_ne : ((D : ℝ).sqrt : ℂ) ≠ 0 := by
     exact_mod_cast (Real.sqrt_ne_zero'.mpr hDpos)
-  refine ⟨X, ?_, ?_⟩
-  · ext ip
-    rcases ip with ⟨i, p⟩
-    simp only [compressedOmegaVector, X]
-    field_simp [hsqrt_ne]
-  · rw [← compressedOmegaVector_schmidtRank_eq_rank (X := X)]
-    congr
+  have hvec : compressedOmegaVector X = ψ := by
     ext ip
     rcases ip with ⟨i, p⟩
     simp only [compressedOmegaVector, X]
     field_simp [hsqrt_ne]
+  refine ⟨X, hvec, ?_⟩
+  simpa [hvec] using (compressedOmegaVector_schmidtRank_eq_rank (X := X)).symm
 
 /-- For `D > 0`, a square bipartite vector with Schmidt rank at most `r` has a
 square right-factor matrix representative of rank at most `r`. -/
