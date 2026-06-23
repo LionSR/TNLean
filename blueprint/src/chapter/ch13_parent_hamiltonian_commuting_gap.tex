@@ -660,6 +660,9 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     \lean{MPSTensor.AppendixBStructuralData.twoSiteAmplitude}
     \lean{MPSTensor.AppendixBStructuralData.coreTensor}
     \lean{MPSTensor.AppendixBStructuralData.coreTensor_apply}
+    \lean{MPSTensor.cyclicVirtualSucc}
+    \lean{MPSTensor.AppendixBStructuralData.cyclicVirtualPairState}
+    \lean{MPSTensor.AppendixBStructuralData.mpv_coreTensor_eq_cyclicVirtualPairState}
     \lean{MPSTensor.AppendixBStructuralData.gaugeEquiv_coreTensor}
     \lean{MPSTensor.AppendixBStructuralData.mpv_eq_coreTensor}
     \lean{MPSTensor.AppendixBStructuralData.twoSiteAmplitude_eq_mpv}
@@ -685,6 +688,25 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
         =
         \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
     \]
+    The cyclic virtual-pair coefficient associated to this structural form is
+    \[
+        C_L(\sigma)
+        =
+        \sum_{\alpha_0,\ldots,\alpha_{L-1}}
+        \prod_{t=0}^{L-1}
+        \Lambda_{\alpha_t}
+        (U^{\sigma_t})_{\alpha_t,\alpha_{t+1}},
+        \qquad \alpha_L=\alpha_0.
+    \]
+    This is the coefficient expression for the source vector
+    \[
+        |V^{(L)}(A_j)\rangle
+        =
+        U^{\otimes L}|\varphi_j\rangle^{\otimes L},\qquad
+        |\varphi_j\rangle=\sum_m\lambda_m|m,m\rangle,
+    \]
+    where $\varphi_j$ is shared by $b_t$ and $a_{t+1}$ and $U$ acts on
+    $(a_t,b_t)$.
     The change of basis does not alter periodic MPS coefficients, so the
     corresponding two-site amplitude is
     \[
@@ -705,9 +727,10 @@ the BNT components; nearest-neighbor means the specialization $L=2$.
     The case $n=0$ is not part of this source input: the empty-chain MPV
     coefficient is the virtual bond dimension, whereas the empty product on the
     right-hand side is $1$.
-    Appendix~B first gives a cyclic virtual-pair expression; identifying that
-    expression with this adjacent-pair formal input is part of the remaining
-    factorization theorem.
+    The first equality, $V^{(L)}(\Lambda U)_\sigma=C_L(\sigma)$, is the trace
+    expansion of the closed matrix product. The remaining coefficient step is
+    to identify this cyclic virtual-pair expression with the adjacent-pair input
+    above when that identification is justified.
     On a three-site chain, the two adjacent length-two parent terms are the
     \(AX\) and \(XB\) actions of the canonical two-site parent interaction.
     What remains from Appendix~B is to identify the projectors determined by the
