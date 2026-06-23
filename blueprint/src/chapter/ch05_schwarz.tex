@@ -145,6 +145,50 @@ maps.
     This is precisely the preceding definition of the ampliation.
 \end{proof}
 
+\begin{definition}[Schmidt rank]\label{def:schmidt_rank}
+    \lean{Matrix.schmidtCoeffMatrix, Matrix.schmidtRank, Matrix.HasSchmidtRankLE}
+    \leanok
+    A vector $\psi\in\C^{D}\otimes\C^{k}$ is identified with its coefficient
+    matrix $C_\psi\in \MN{D,k}(\C)$.  Its Schmidt rank is
+    \[
+        \operatorname{SR}(\psi)=\rank(C_\psi).
+    \]
+    We write $\operatorname{SR}(\psi)\le r$ for the corresponding bounded-rank
+    condition.
+\end{definition}
+
+\begin{theorem}[Basic bounds for Schmidt rank]\label{thm:schmidt_rank_basic_bounds}
+    \lean{Matrix.schmidtRank_zero, Matrix.schmidtRank_le_left,
+        Matrix.schmidtRank_le_right, Matrix.schmidtRank_le_min,
+        Matrix.schmidtRank_product_le_one, Matrix.hasSchmidtRankLE_one_product}
+    \leanok
+    \uses{def:schmidt_rank}
+    The zero vector has Schmidt rank zero, every vector satisfies
+    \[
+        \operatorname{SR}(\psi)\le \min(D,k),
+    \]
+    and every product vector $u\otimes v$ has Schmidt rank at most one.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The zero-vector claim is $\rank(0)=0$.  For the dimension bounds,
+    $\operatorname{SR}(\psi)=\rank(C_\psi)\le D$ and
+    $\operatorname{SR}(\psi)=\rank(C_\psi)\le k$ follow from the row-rank and
+    column-rank bounds on a $D\times k$ matrix, hence
+    $\operatorname{SR}(\psi)\le \min(D,k)$.  For a product vector, each column
+    of $C_{u\otimes v}$ is a scalar multiple of $u$, so the column span has
+    dimension at most one.
+\end{proof}
+
+\begin{lemma}[Monotonicity of bounded Schmidt rank]\label{lem:schmidt_rank_mono}
+    \lean{Matrix.HasSchmidtRankLE.mono}
+    \leanok
+    \uses{def:schmidt_rank}
+    If $\operatorname{SR}(\psi)\le k$ and $k\le l$, then
+    $\operatorname{SR}(\psi)\le l$.
+\end{lemma}
+
 \begin{theorem}[Rank-one test for $k$-positivity]\label{thm:k_positive_rank_one_test}
     \lean{isNPositiveMap_iff_forall_ampliation_rank_one_posSemidef}
     \leanok
