@@ -155,8 +155,9 @@ theorem isNPositiveMap_iff_isPositiveMap_nPositiveAmpliation
   rfl
 
 omit [Fintype n] [DecidableEq n] in
-/-- Proposition 3.1 in Wolf, *Quantum Channels & Operations*: `k`-positivity
-can be tested on pure states of the ampliated system. -/
+/-- The pure-state reduction used in the proof of Wolf, *Quantum Channels &
+Operations*, Proposition 3.1: `k`-positivity can be tested on pure states of the
+ampliated system. -/
 theorem isNPositiveMap_iff_forall_ampliation_rank_one_posSemidef
     [Finite n]
     (k : ℕ) (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) :
