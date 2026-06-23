@@ -34,6 +34,9 @@ the pair $(i,p)$.
   same compression is the sandwich by the right tensor factor.
 * `ChoiJamiolkowski.compressedOmegaVector_hasSchmidtRankLE`: the compressed
   maximally entangled vector has Schmidt rank at most the compression dimension.
+* `ChoiJamiolkowski.compressedOmegaVector_schmidtRank_eq_rank`: the compressed
+  maximally entangled vector has Schmidt rank equal to the rank of the
+  right-factor matrix.
 * `ChoiJamiolkowski.hasSchmidtRankLE_iff_exists_rank_le_compressedOmegaVector`:
   Wolf's square-matrix parametrization of vectors of bounded Schmidt rank.
 * `ChoiJamiolkowski.isNPositiveMap_iff_forall_rightCompression_posSemidef`:
@@ -114,6 +117,25 @@ noncomputable def compressedOmegaVector (X : Matrix (Fin D) (Fin k) ℂ) :
     Fin D × Fin k → ℂ :=
   fun ip => ((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) * X ip.1 ip.2
 
+/-- For `D > 0`, the compressed maximally entangled vector has Schmidt rank
+equal to the rank of the right-factor matrix. -/
+theorem compressedOmegaVector_schmidtRank_eq_rank [NeZero D]
+    (X : Matrix (Fin D) (Fin k) ℂ) :
+    Matrix.schmidtRank (compressedOmegaVector X) = X.rank := by
+  let c : ℂ := (1 : ℂ) / ((D : ℝ).sqrt : ℂ)
+  have hDpos : 0 < (D : ℝ) := by
+    exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne D)
+  have hsqrt_ne : ((D : ℝ).sqrt : ℂ) ≠ 0 := by
+    exact_mod_cast (Real.sqrt_ne_zero'.mpr hDpos)
+  have hc_ne : c ≠ 0 := by
+    simp [c, hsqrt_ne]
+  have hcoeff :
+      Matrix.schmidtCoeffMatrix (compressedOmegaVector X) = c • X := by
+    ext i p
+    simp [Matrix.schmidtCoeffMatrix, compressedOmegaVector, c]
+  rw [Matrix.schmidtRank, hcoeff]
+  exact Matrix.rank_smul_of_ne_zero hc_ne X
+
 /-- The vector obtained by applying a `D × k` matrix on the right tensor factor
 of the maximally entangled vector has Schmidt rank at most `k`. -/
 theorem compressedOmegaVector_hasSchmidtRankLE
@@ -128,22 +150,37 @@ compressed maximally entangled vector has Schmidt rank at most k. -/
 theorem compressedOmegaVector_hasSchmidtRankLE_of_rank_le [NeZero D]
     {X : Matrix (Fin D) (Fin D) ℂ} {k : ℕ} (hX : X.rank ≤ k) :
     Matrix.HasSchmidtRankLE k (compressedOmegaVector X) := by
-  let c : ℂ := (1 : ℂ) / ((D : ℝ).sqrt : ℂ)
+  simpa [Matrix.HasSchmidtRankLE, compressedOmegaVector_schmidtRank_eq_rank] using hX
+
+/-- For `D > 0`, every vector in $\mathbb{C}^D\otimes\mathbb{C}^D$ is obtained
+from the maximally entangled vector by applying a square right-factor matrix,
+and the matrix rank agrees with the Schmidt rank of the vector. -/
+theorem exists_squareCompression_of_vector [NeZero D]
+    (ψ : Fin D × Fin D → ℂ) :
+    ∃ X : Matrix (Fin D) (Fin D) ℂ,
+      compressedOmegaVector X = ψ ∧ X.rank = Matrix.schmidtRank ψ := by
+  let X : Matrix (Fin D) (Fin D) ℂ :=
+    fun a p => (((D : ℝ).sqrt : ℂ)) * ψ (a, p)
   have hDpos : 0 < (D : ℝ) := by
     exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne D)
   have hsqrt_ne : ((D : ℝ).sqrt : ℂ) ≠ 0 := by
     exact_mod_cast (Real.sqrt_ne_zero'.mpr hDpos)
-  have hc_ne : c ≠ 0 := by
-    simp [c, hsqrt_ne]
-  have hcoeff :
-      Matrix.schmidtCoeffMatrix (compressedOmegaVector X) = c • X := by
-    ext i j
-    simp [Matrix.schmidtCoeffMatrix, compressedOmegaVector, c]
-  have hrank :
-      (Matrix.schmidtCoeffMatrix (compressedOmegaVector X)).rank = X.rank := by
-    rw [hcoeff]
-    exact Matrix.rank_smul_of_ne_zero hc_ne X
-  simpa [Matrix.HasSchmidtRankLE, Matrix.schmidtRank, hrank] using hX
+  have hvec : compressedOmegaVector X = ψ := by
+    ext ip
+    rcases ip with ⟨i, p⟩
+    simp only [compressedOmegaVector, X]
+    field_simp [hsqrt_ne]
+  refine ⟨X, hvec, ?_⟩
+  simpa [hvec] using (compressedOmegaVector_schmidtRank_eq_rank (X := X)).symm
+
+/-- For `D > 0`, a square bipartite vector with Schmidt rank at most `r` has a
+square right-factor matrix representative of rank at most `r`. -/
+theorem exists_squareCompression_of_hasSchmidtRankLE [NeZero D]
+    {r : ℕ} {ψ : Fin D × Fin D → ℂ} (hψ : Matrix.HasSchmidtRankLE r ψ) :
+    ∃ X : Matrix (Fin D) (Fin D) ℂ,
+      compressedOmegaVector X = ψ ∧ X.rank ≤ r := by
+  obtain ⟨X, hXvec, hXrank⟩ := exists_squareCompression_of_vector (D := D) ψ
+  exact ⟨X, hXvec, hXrank.trans_le hψ⟩
 
 /-- Wolf's square-matrix parametrization of bounded Schmidt-rank vectors.
 When D is positive, a vector in $\mathbb{C}^D \otimes \mathbb{C}^D$ has Schmidt
@@ -156,24 +193,9 @@ theorem hasSchmidtRankLE_iff_exists_rank_le_compressedOmegaVector [NeZero D]
       ∃ X : Matrix (Fin D) (Fin D) ℂ, X.rank ≤ k ∧ compressedOmegaVector X = ψ := by
   constructor
   · intro hψ
-    let c : ℂ := ((D : ℝ).sqrt : ℂ)
-    have hDpos : 0 < (D : ℝ) := by
-      exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne D)
-    have hc_ne : c ≠ 0 := by
-      dsimp [c]
-      exact_mod_cast (Real.sqrt_ne_zero'.mpr hDpos)
-    refine ⟨c • Matrix.schmidtCoeffMatrix ψ, ?_, ?_⟩
-    · have hrank :
-          (c • Matrix.schmidtCoeffMatrix ψ).rank =
-            (Matrix.schmidtCoeffMatrix ψ).rank :=
-        Matrix.rank_smul_of_ne_zero hc_ne (Matrix.schmidtCoeffMatrix ψ)
-      simpa [Matrix.HasSchmidtRankLE, Matrix.schmidtRank, hrank] using hψ
-    · ext ip
-      rcases ip with ⟨i, j⟩
-      simp only [compressedOmegaVector, Matrix.smul_apply, Matrix.schmidtCoeffMatrix_apply,
-        smul_eq_mul]
-      field_simp [c, hc_ne]
-      simp [c]
+    obtain ⟨X, hXvec, hXrank⟩ := exists_squareCompression_of_hasSchmidtRankLE
+      (D := D) hψ
+    exact ⟨X, hXrank, hXvec⟩
   · rintro ⟨X, hX, rfl⟩
     exact compressedOmegaVector_hasSchmidtRankLE_of_rank_le hX
 

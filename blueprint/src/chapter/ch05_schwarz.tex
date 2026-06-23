@@ -289,11 +289,61 @@ maps.
     its rank is bounded by the number of columns, which is $k$.
 \end{proof}
 
+\begin{theorem}[Rank of a compressed maximally entangled vector]
+    \label{thm:compressed_omega_schmidt_rank_eq_rank}
+    \lean{ChoiJamiolkowski.compressedOmegaVector_schmidtRank_eq_rank}
+    \leanok
+    \uses{def:schmidt_rank, def:choi_right_compression}
+    Assume $D>0$.  For $X\in\MN{D,k}(\C)$, the vector
+    \[
+      \psi_X=\left(D^{-1/2}X_{i,p}\right)_{(i,p)}
+      \in \C^D\otimes\C^k
+    \]
+    satisfies
+    \[
+      \operatorname{SR}(\psi_X)=\rank X.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The coefficient matrix of $\psi_X$ is $D^{-1/2}X$.  Since $D>0$, the
+    scalar $D^{-1/2}$ is nonzero, and multiplication by this scalar preserves
+    rank.
+\end{proof}
+
+\begin{theorem}[Square representative with exact Schmidt rank]
+    \label{thm:square_schmidt_rank_exact_parametrization}
+    \lean{ChoiJamiolkowski.exists_squareCompression_of_vector,
+        ChoiJamiolkowski.exists_squareCompression_of_hasSchmidtRankLE}
+    \leanok
+    \uses{def:schmidt_rank, def:choi_right_compression,
+        thm:compressed_omega_schmidt_rank_eq_rank}
+    Assume $D>0$.  For every $\psi\in\C^D\otimes\C^D$ there is
+    $X\in\MN{D}(\C)$ such that
+    \[
+      \psi_{(i,p)}=D^{-1/2}X_{i,p}
+      \quad\text{and}\quad
+      \rank X=\operatorname{SR}(\psi).
+    \]
+    In particular, if $\operatorname{SR}(\psi)\le r$, then $X$ may be chosen
+    with $\rank X\le r$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Take $X_{i,p}=D^{1/2}\psi_{(i,p)}$.  Since $D>0$, this gives
+    $D^{-1/2}X_{i,p}=\psi_{(i,p)}$.  The rank identity follows from
+    Theorem~\ref{thm:compressed_omega_schmidt_rank_eq_rank}.  The bounded-rank
+    statement follows by comparison with the assumed Schmidt-rank bound.
+\end{proof}
+
 \begin{lemma}[Square parametrization of bounded Schmidt rank]
     \label{lem:schmidt_rank_square_compressed_omega}
     \lean{ChoiJamiolkowski.hasSchmidtRankLE_iff_exists_rank_le_compressedOmegaVector}
     \leanok
-    \uses{def:schmidt_rank, def:choi_right_compression}
+    \uses{def:schmidt_rank, def:choi_right_compression,
+        thm:square_schmidt_rank_exact_parametrization}
     Assume $D>0$.  A vector $\psi\in\C^D\otimes\C^D$ has Schmidt rank at most
     $k$ if and only if there is a matrix $X\in\MD(\C)$ of rank at most $k$
     such that
@@ -304,8 +354,9 @@ maps.
 
 \begin{proof}
     \leanok
-    The forward direction takes $X=D^{1/2}C_\psi$, where $C_\psi$ is the
-    coefficient matrix of $\psi$.  The reverse direction notes that
+    The forward direction is the bounded-rank part of
+    Theorem~\ref{thm:square_schmidt_rank_exact_parametrization}.  Conversely,
+    if $\psi_{(i,j)}=D^{-1/2}X_{i,j}$, then the coefficient matrix of $\psi$ is
     \[
       C_\psi = D^{-1/2}X,
     \]
