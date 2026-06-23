@@ -121,6 +121,33 @@ maps.
     A linear map is \emph{two-positive} if it is $2$-positive.
 \end{definition}
 
+\begin{definition}[Trace-pairing adjoint]\label{def:trace_pairing_adjoint}
+    \lean{Matrix.traceAdjointMap}
+    \leanok
+    The trace-pairing adjoint $E^*$ of a linear map on matrices is the
+    adjoint for the bilinear pairing $(A,B)\mapsto \operatorname{tr}(AB)$.
+\end{definition}
+
+\begin{theorem}[Trace-pairing adjoint identity]
+    \lean{Matrix.trace_traceAdjointMap_mul}
+    \leanok
+    \uses{def:trace_pairing_adjoint}
+    For every linear map $E : \MN{D} \to \MN{D}$ and all matrices $\rho$
+    and $X$, one has
+    \[
+        \operatorname{tr}(E^*(\rho)X)=\operatorname{tr}(\rho E(X)).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Write $X=\sum_{i,j} X_{ij}e_{ij}$ in the standard matrix units and use
+    linearity in $X$.  For $X=e_{ij}$ one has
+    $\operatorname{tr}(E^*(\rho)e_{ij})=(E^*(\rho))_{ji}$, while the definition
+    of $E^*$ gives
+    $(E^*(\rho))_{ji}=\operatorname{tr}(\rho E(e_{ij}))$.
+\end{proof}
+
 \begin{theorem}[Completely positive maps are $k$-positive]
     \lean{IsCPMap.isNPositiveMap}
     \leanok
