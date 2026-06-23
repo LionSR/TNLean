@@ -9,7 +9,7 @@
 
 \title{Wolf Chapter~5 Operator Jensen and Lieb Concavity Axioms}
 \author{}
-\date{2026-06-22}
+\date{2026-06-23}
 
 \begin{document}
 \maketitle
@@ -77,16 +77,10 @@ representation\footnote{%
     together with the Bochner-integral convexity bridge for C\textsuperscript{*}-algebras.}
 and, through it, the operator concavity of $x\mapsto x^p$ on $[0,1]$
 (\leanid{CFC.concaveOn_rpow}) and of $\log$ (\leanid{CFC.concaveOn_log}).  The
-scalar inputs of the two concavity axioms are therefore already
-operator-concave in the formal library.  The scalar input of the convex axiom,
-operator convexity of $x\mapsto x^p$ on $[1,2]$, is \emph{not} yet in the
-library: only the operator-monotone and operator-concave $[0,1]$ lemmas exist,
-and operator convexity of \texttt{rpow} over $\mathrm{Icc}\,1\,2$ is an open
-upstream TODO.\footnote{%
-    \path{Mathlib/Analysis/SpecialFunctions/ContinuousFunctionalCalculus/Rpow/Order.lean},
-    line~29.}
-That missing convexity lemma is, however, a small derivable increment
-(\S\ref{ssec:first-step}), not the deep obstruction.
+scalar input of the convex axiom, operator convexity of $x\mapsto x^p$ on
+$[1,2]$, is also now present as \leanid{CFC.convexOn_rpow} in
+\doclink{TNLean/Analysis/RpowConvexity}.  Thus the scalar functional-calculus
+inputs for the three Jensen axioms are available in the formal development.
 
 The remaining gap is the step \emph{from} operator concavity (a statement about a
 single operator) \emph{to} the Jensen inequality $T(fA)\le f(TA)$ for a positive
@@ -158,28 +152,20 @@ finite-POVM resolvent inequality (\leanid{povm_resolvent_inv_le}) through the
 integral representation of \texttt{rpow} to the operator inequality
 \leanid{posMap_rpow_concave_jensen}.
 
-\subsection{The concrete first step}\label{ssec:first-step}
+\subsection{Current formal inputs}\label{ssec:formal-inputs}
 
-Independently of the positive-map Jensen step, one input is still missing from
-the formal library on the convex side: operator convexity of $x\mapsto x^p$ for
-$p\in[1,2]$.  Adding \leanid{CFC.convexOn_rpow} for $p\in[1,2]$ discharges the
-corresponding upstream TODO\footnote{%
-    \path{Mathlib/Analysis/SpecialFunctions/ContinuousFunctionalCalculus/Rpow/Order.lean},
-    line~29.}
-and supplies the scalar operator-convexity input for
-\leanid{posMap_rpow_convex_jensen}.  It is obtained from the $[0,1]$ data
-already in the library through the Bendat--Sherman / Hansen--Pedersen
-characterization: for a continuous $f$ on $[0,\infty)$ with $f(0)\le 0$, $f$ is
-operator convex if and only if $x\mapsto f(x)/x$ is operator monotone.  Applied
-to $f(x)=x^p$ with $f(0)=0$, this gives the required statement on
-$[0,\infty)$: for each exponent $p\in[1,2]$, the function $x\mapsto x^p$ is
-operator convex once $x\mapsto x^{p-1}$ is operator monotone.  The latter is
-exactly \leanid{CFC.monotone_rpow} with exponent $p-1\in[0,1]$.  The bridge
-therefore runs through operator
-\emph{monotonicity}, not operator concavity: the naive identity
-$x^p = x\cdot x^{p-1}$ does \emph{not} establish operator convexity, since
-operator convexity is not preserved under multiplication by $x$.  This is the
-smallest reusable increment toward the convex power case.
+The auxiliary ingredients needed before the final positive-map Jensen assembly
+are now present.  The theorem \leanid{CFC.convexOn_rpow} supplies operator
+convexity of $x\mapsto x^p$ for $p\in[1,2]$, completing the scalar
+functional-calculus input for \leanid{posMap_rpow_convex_jensen}.
+
+The closedness of the finite-dimensional Loewner cone also gives the ordered
+Bochner integral step needed for the integral route.  The positive-cone
+specialization is recorded as
+\leanid{TNLean.OperatorJensen.integral_nonneg_matrix_of_ae}: a matrix-valued
+Bochner integral of an almost-everywhere positive semidefinite function is
+positive semidefinite.  Almost-everywhere Loewner inequalities are integrated
+directly by the general ordered Bochner theorem \leanid{integral_mono_ae}.
 
 \subsection{Verdict}
 
@@ -190,8 +176,11 @@ Choi--Davis--Jensen inequality), which is absent from Mathlib~4.31; the integral
 representation of the integrand, previously named as the obstruction, is
 present.  The existing finite-POVM compression scaffold realises Wolf's
 positive-map route (\S\ref{ssec:caveat}) and is faithful to the bare positivity
-hypothesis; what remains is the Löwner-integral step that carries the pointwise
-resolvent inequality through the integral representation.
+hypothesis.  What remains is the spectral reduction of the pointwise
+positive-map resolvent inequality to
+\leanid{TNLean.OperatorJensen.povm_resolvent_inv_le}, followed by the final
+assembly through the ordered Bochner integral monotonicity theorem and the
+matrix-valued positive-integral specialization.
 
 \section{The Lieb concavity axiom}
 
@@ -286,10 +275,12 @@ applications to Hadamard products}, Linear Algebra Appl.\ \textbf{26} (1979)
 F.~Hansen and G.~K.\ Pedersen, \emph{Jensen's operator inequality}, Bull.\
 London Math.\ Soc.\ \textbf{35} (2003) 553--564;
 R.~Bhatia, \emph{Matrix Analysis}, Springer GTM~169 (1997), Chapter~V.
-The relevant formal-library lemmas are
+The relevant formal-library inputs now available are
 \leanid{CFC.exists_measure_nnrpow_eq_integral_cfcₙ_rpowIntegrand₀₁},
-\leanid{CFC.concaveOn_rpow}, and \leanid{CFC.concaveOn_log}; the missing
-upstream item is \leanid{CFC.convexOn_rpow} for $p\in[1,2]$.
+\leanid{CFC.concaveOn_rpow}, \leanid{CFC.convexOn_rpow}, and
+\leanid{CFC.concaveOn_log}.  Thus the scalar functional-calculus inputs are
+available; the remaining unproved theorem is the positive-map Jensen step
+described above.
 
 \bibliographystyle{alpha}
 \bibliography{references}
