@@ -148,6 +148,37 @@ maps.
     $(E^*(\rho))_{ji}=\operatorname{tr}(\rho E(e_{ij}))$.
 \end{proof}
 
+\begin{theorem}[Trace-pairing adjoint is involutive]
+    \lean{Matrix.traceAdjointMap_traceAdjointMap}
+    \leanok
+    \uses{def:trace_pairing_adjoint, thm:trace_nondeg}
+    For every linear map $E : \MN{D} \to \MN{D}$, the trace-pairing adjoint
+    of $E^*$ is $E$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Pair both sides with an arbitrary matrix under the trace pairing.  The
+    defining adjoint identity, applied twice, gives the same trace pairing with
+    every test matrix, and nondegeneracy of the trace pairing gives equality.
+\end{proof}
+
+\begin{theorem}[Self-duality of the positive semidefinite cone]
+    \label{thm:psd_trace_pairing_self_dual}
+    \lean{Matrix.PosSemidef.of_forall_trace_mul_nonneg}
+    \leanok
+    Let $A \in \MN{D}$ be Hermitian.  If $\operatorname{tr}(AB)\geq 0$ for every
+    positive semidefinite matrix $B$, then $A\geq 0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Test the hypothesis on rank-one positive semidefinite matrices
+    $B=xx^\dagger$.  The trace identity gives
+    $x^\dagger A x\geq 0$ for every vector $x$, so the Hermitian matrix $A$ is
+    positive semidefinite.
+\end{proof}
+
 \begin{theorem}[Completely positive maps are $k$-positive]
     \lean{IsCPMap.isNPositiveMap}
     \leanok
