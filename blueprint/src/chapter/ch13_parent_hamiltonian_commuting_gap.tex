@@ -752,6 +752,7 @@ the specialization $L=2$.
     \lean{MPSTensor.AppendixBStructuralData.twoSiteAmplitude}
     \lean{MPSTensor.AppendixBStructuralData.coreTensor}
     \lean{MPSTensor.AppendixBStructuralData.coreTensor_apply}
+    \lean{MPSTensor.AppendixBStructuralData.coreTensor_pair_orthogonality}
     \lean{MPSTensor.cyclicVirtualSucc}
     \lean{MPSTensor.AppendixBStructuralData.cyclicVirtualPairState}
     \lean{MPSTensor.AppendixBStructuralData.mpv_coreTensor_eq_cyclicVirtualPairState}
@@ -780,6 +781,16 @@ the specialization $L=2$.
         \overline{(U^i)_{\alpha,\beta}}\,
         (U^i)_{\alpha',\beta'}
         =
+        \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+    \]
+    Therefore the residual core tensor \(\Lambda U^i\) satisfies the weighted
+    pair-index relation
+    \[
+        \sum_i
+        \overline{(\Lambda U^i)_{\alpha,\beta}}\,
+        (\Lambda U^i)_{\alpha',\beta'}
+        =
+        \lambda_\alpha\lambda_{\alpha'}
         \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
     \]
     The coefficient associated to the source basic-vector formula is
