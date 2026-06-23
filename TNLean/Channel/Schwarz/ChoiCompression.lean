@@ -27,6 +27,9 @@ the pair $(i,p)$.
 
 * `ChoiJamiolkowski.nPositiveAmpliation_rankOne_eq_rightCompression`: the
   ampliation of the associated rank-one matrix is exactly that compression.
+* `ChoiJamiolkowski.isNPositiveMap_iff_forall_rightCompression_posSemidef`:
+  `k`-positivity is equivalent to positivity of all rectangular right-factor
+  Choi compressions.
 
 ## References
 
@@ -34,7 +37,7 @@ the pair $(i,p)$.
   Proposition 3.1, equation (3.4)][Wolf2012QChannels]
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators ComplexOrder
 open Matrix Finset
 
 namespace ChoiJamiolkowski
@@ -126,5 +129,36 @@ theorem nPositiveAmpliation_rankOne_eq_rightCompression
         apply Finset.sum_congr rfl
         intro b _
         ring_nf
+
+/-- Rectangular compression form of Wolf, Proposition 3.1, equation (3.4), for
+endomorphisms of matrix algebras: when `D > 0`, `k`-positivity is equivalent to
+positivity of every right-factor compression of the Choi matrix by a matrix in
+`M_{D,k}`. -/
+theorem isNPositiveMap_iff_forall_rightCompression_posSemidef [NeZero D]
+    (k : ℕ) (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
+    IsNPositiveMap k T ↔
+      ∀ X : Matrix (Fin D) (Fin k) ℂ, (rightCompression T X).PosSemidef := by
+  constructor
+  · intro hT X
+    rw [← nPositiveAmpliation_rankOne_eq_rightCompression (T := T) (X := X)]
+    exact (isNPositiveMap_iff_forall_ampliation_rank_one_posSemidef k T).mp hT
+      (compressedOmegaVector X)
+  · intro hX
+    rw [isNPositiveMap_iff_forall_ampliation_rank_one_posSemidef]
+    intro φ
+    let X : Matrix (Fin D) (Fin k) ℂ :=
+      fun a p => (((D : ℝ).sqrt : ℂ)) * φ (a, p)
+    have hvec : compressedOmegaVector X = φ := by
+      have hDpos : 0 < (D : ℝ) := by
+        exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne D)
+      have hsqrt_ne : ((D : ℝ).sqrt : ℂ) ≠ 0 := by
+        exact_mod_cast (Real.sqrt_ne_zero'.mpr hDpos)
+      ext ip
+      rcases ip with ⟨i, p⟩
+      simp only [compressedOmegaVector, X]
+      field_simp [hsqrt_ne]
+    rw [← hvec]
+    rw [nPositiveAmpliation_rankOne_eq_rightCompression]
+    exact hX X
 
 end ChoiJamiolkowski

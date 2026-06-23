@@ -268,6 +268,35 @@ maps.
     $\tau_{(i,a),(j,b)}=D^{-1}\bigl(T(E_{a,b})\bigr)_{i,j}$.
 \end{proof}
 
+\begin{theorem}[Rectangular Choi-compression test for $k$-positivity]
+    \label{thm:k_positive_iff_right_choi_compressions}
+    \lean{ChoiJamiolkowski.isNPositiveMap_iff_forall_rightCompression_posSemidef}
+    \leanok
+    \uses{thm:k_positive_rank_one_test, def:choi_right_compression,
+        lem:rank_one_ampliation_choi_compression}
+    Assume $D>0$.  A linear map $T:\MN{D,D}(\C)\to\MN{D,D}(\C)$ is
+    $k$-positive if and only if, for every $X\in\MN{D,k}(\C)$, the
+    right-factor compression of the Choi matrix of $T$ by $X$ is positive
+    semidefinite.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The forward direction applies the rank-one $k$-positivity test to the
+    normalized vector with coefficients $D^{-1/2}X_{i,p}$, then uses
+    Lemma~\ref{lem:rank_one_ampliation_choi_compression}.  Conversely, given a
+    vector $\psi$ on the ampliated space, take
+    $X_{i,p}=D^{1/2}\psi_{(i,p)}$.  Since $D>0$, this choice satisfies
+    $D^{-1/2}X_{i,p}=\psi_{(i,p)}$.  Lemma~\ref{lem:rank_one_ampliation_choi_compression}
+    gives
+    \[
+      (T\otimes \id_k)(|\psi\rangle\langle\psi|)=C_T(X),
+    \]
+    where $C_T(X)$ is the right-factor Choi compression.  Positivity of
+    $C_T(X)$ is therefore positivity of the ampliation on the rank-one matrix
+    $|\psi\rangle\langle\psi|$, and the rank-one test gives $k$-positivity.
+\end{proof}
+
 \begin{definition}[Trace-pairing adjoint]\label{def:trace_pairing_adjoint}
     \lean{Matrix.traceAdjointMap}
     \leanok
