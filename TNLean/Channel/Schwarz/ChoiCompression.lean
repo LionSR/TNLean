@@ -46,6 +46,12 @@ the pair $(i,p)$.
 * `ChoiJamiolkowski.isNPositiveMap_iff_forall_rightCompression_posSemidef`:
   `k`-positivity is equivalent to positivity of all rectangular right-factor
   Choi compressions.
+* `ChoiJamiolkowski.rightTensorMatrix_mul_rightTensorMatrix`: right tensor
+  factors multiply by multiplying the corresponding right-factor matrices.
+* Fixed-column compression lemma:
+  a square right-factor sandwich controls each rectangular compression whose
+  columns it fixes; see
+  `rightCompression_posSemidef_of_rightTensorMatrix_sandwich_posSemidef_of_mul_eq_self`.
 * `Matrix.exists_mul_conjTranspose_of_isHermitian_idempotent_rank`: a Hermitian
   idempotent matrix of rank `k` factors as `P = V * Vᴴ`.
 * `IsNPositiveMap.rightTensor_choiMatrix_sandwich_posSemidef_of_isHermitian_idempotent_rank`:
@@ -225,6 +231,19 @@ theorem rightTensorMatrix_mul_conjTranspose_eq_conjTranspose_mul_self
     rw [Fintype.sum_prod_type]
     have hji : ¬j = i := fun hji => hij hji.symm
     simp [hij, hji]
+
+/-- Multiplication by a square right tensor factor corresponds to multiplication
+of the underlying right-factor matrices. -/
+theorem rightTensorMatrix_mul_rightTensorMatrix
+    (X : Matrix (Fin D) (Fin k) ℂ) (P : Matrix (Fin D) (Fin D) ℂ) :
+    rightTensorMatrix X * rightTensorMatrix P = rightTensorMatrix (P * X) := by
+  classical
+  ext ⟨i, p⟩ ⟨j, a⟩
+  simp only [rightTensorMatrix, Matrix.of_apply, Matrix.mul_apply, Fintype.sum_prod_type]
+  by_cases hij : i = j
+  · subst j
+    simp [mul_comm]
+  · simp [hij]
 
 /-- Sandwiching the Choi matrix by the right tensor factor gives exactly the
 right-factor compression entries.  In Wolf's notation this is the identity
@@ -577,6 +596,25 @@ theorem IsNPositiveMap.rightTensor_choiMatrix_sandwich_posSemidef_of_isHermitian
   obtain ⟨V, rfl⟩ :=
     Matrix.exists_mul_conjTranspose_of_isHermitian_idempotent_rank P hP hP_idem hrank
   exact IsNPositiveMap.rightTensor_choiMatrix_sandwich_posSemidef_of_mul_conjTranspose hT V
+
+/-- If a square right factor `P` fixes the columns of `X`, then
+positivity of the Choi sandwich by `P` implies positivity of the rectangular
+right compression by `X`.  This is the algebraic half of the converse direction
+in Wolf, Proposition 3.1, item 2; the remaining geometric step is to choose a
+rank-`k` projection `P` with `P * X = X`.
+
+Source: Wolf, Chapter 3, Proposition 3.1 proof, lines 110--111. -/
+theorem rightCompression_posSemidef_of_rightTensorMatrix_sandwich_posSemidef_of_mul_eq_self
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    {P : Matrix (Fin D) (Fin D) ℂ} {X : Matrix (Fin D) (Fin k) ℂ}
+    (hPX : P * X = X)
+    (hP : (rightTensorMatrix P * choiMatrix T * (rightTensorMatrix P)ᴴ).PosSemidef) :
+    (rightCompression T X).PosSemidef := by
+  rw [← rightTensorMatrix_mul_choiMatrix_mul_conjTranspose]
+  have hR : rightTensorMatrix X * rightTensorMatrix P = rightTensorMatrix X := by
+    rw [rightTensorMatrix_mul_rightTensorMatrix, hPX]
+  rw [← hR]
+  simpa [Matrix.mul_assoc] using hP.conjTranspose_mul_mul_same (rightTensorMatrix X)ᴴ
 
 /-- Forward direction of Wolf's Schmidt-rank expectation criterion.  If `T` is
 `k`-positive, then the Choi quadratic form is nonnegative on every vector of

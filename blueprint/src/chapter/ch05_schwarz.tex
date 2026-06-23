@@ -611,6 +611,53 @@ maps.
     $R_X\tau R_X^\dagger$ with $C_T(X)$.
 \end{proof}
 
+\begin{lemma}[Right-tensor multiplication]
+    \label{lem:right_tensor_multiplication}
+    \lean{ChoiJamiolkowski.rightTensorMatrix_mul_rightTensorMatrix}
+    \leanok
+    \uses{def:choi_right_tensor_factor}
+    Let $X\in\MN{D,k}(\C)$ and $P\in\MN{D,D}(\C)$.  Then the right-tensor
+    factors satisfy
+    \[
+      R_XR_P=R_{PX}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    This is an entrywise calculation: the Kronecker delta in the physical
+    index forces the two right-tensor factors to have the same physical
+    coordinate, and the remaining sum is the matrix product $PX$.
+\end{proof}
+
+\begin{lemma}[Square sandwich implies fixed rectangular compression]
+    \label{lem:square_sandwich_fixed_rectangular_compression}
+    \lean{ChoiJamiolkowski.rightCompression_posSemidef_of_rightTensorMatrix_sandwich_posSemidef_of_mul_eq_self}
+    \leanok
+    \uses{thm:choi_right_tensor_sandwich, lem:right_tensor_multiplication}
+    Let $T:\MN{D,D}(\C)\to\MN{D,D}(\C)$ have Choi matrix $\tau$.  Suppose
+    $P\in\MN{D,D}(\C)$ and $X\in\MN{D,k}(\C)$ satisfy $PX=X$.  If
+    \[
+      R_P\tau R_P^\dagger\geq0,
+    \]
+    then the rectangular right compression of $\tau$ by $X$ is positive
+    semidefinite.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Since $PX=X$, Lemma~\ref{lem:right_tensor_multiplication} gives
+    $R_XR_P=R_X$.  Therefore
+    \[
+      R_X\tau R_X^\dagger
+      =
+      R_X(R_P\tau R_P^\dagger)R_X^\dagger,
+    \]
+    which is positive because positive semidefiniteness is preserved under
+    compression.  The right-hand side is the rectangular compression by
+    Theorem~\ref{thm:choi_right_tensor_sandwich}.
+\end{proof}
+
 \begin{lemma}[Right-tensor factorization for $VV^\dagger$]
     \label{lem:right_tensor_factorization_mul_adjoint}
     \lean{ChoiJamiolkowski.rightTensorMatrix_mul_conjTranspose_eq_conjTranspose_mul_self}
