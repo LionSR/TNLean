@@ -30,6 +30,8 @@ Extracted from various files for reusability.
   AM--GM lower bound for the Hilbert--Schmidt trace form
 - `Matrix.PosSemidef.trace_mul_nonneg`: the trace product of two positive
   semidefinite matrices is nonnegative
+- `Matrix.PosSemidef.of_forall_trace_mul_nonneg`: self-duality of the positive
+  semidefinite cone for the trace pairing
 - `Matrix.eq_zero_of_sum_mul_conjTranspose_eq_zero`: a positive sum of squares
   vanishes only if every summand vanishes
 - `Matrix.eq_zero_of_sum_conjTranspose_mul_self_eq_zero`: the conjugate-transpose
@@ -219,6 +221,19 @@ theorem trace_mul_nonneg {A B : Matrix n n ℂ}
     simp [diagonal_apply]
   rw [hentry]
   exact mul_nonneg hdiag_nonneg (hΛ_nonneg i)
+
+/-- The positive semidefinite cone is self-dual for the trace pairing. -/
+theorem of_forall_trace_mul_nonneg {A : Matrix n n ℂ}
+    (hA : A.IsHermitian)
+    (h : ∀ B : Matrix n n ℂ, B.PosSemidef → 0 ≤ trace (A * B)) :
+    A.PosSemidef := by
+  classical
+  refine Matrix.PosSemidef.of_dotProduct_mulVec_nonneg hA ?_
+  intro x
+  have hB : (Matrix.vecMulVec x (star x)).PosSemidef :=
+    Matrix.posSemidef_vecMulVec_self_star x
+  have htrace := h (Matrix.vecMulVec x (star x)) hB
+  simpa [Matrix.mul_vecMulVec, Matrix.trace_vecMulVec, dotProduct_comm] using htrace
 
 end PosSemidef
 
