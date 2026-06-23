@@ -112,12 +112,35 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \]
 \end{proof}
 
+\begin{lemma}[Normalizing conjugation by inverse square root]
+    \label{lem:conj_inv_sqrt_normalizes}
+    \lean{Matrix.conjTranspose_inv_cfc_sqrt_mul_self_of_posDef}
+    \leanok
+    \uses{}
+    Let $A\in\MN{D}$ be positive definite and set $S=A^{1/2}$.  Then
+    \[
+        (S^{-1})^\dagger A S^{-1}=\Id .
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Since $A$ is positive definite, $S$ is invertible and self-adjoint.
+    Moreover $S^2=A$.  Therefore
+    \[
+        (S^{-1})^\dagger A S^{-1}
+        =
+        S^{-1}S^2S^{-1}
+        =
+        \Id .
+    \]
+\end{proof}
+
 \begin{theorem}[Trace normalization by inverse square root]
     \label{thm:trace_normalization_inverse_square_root}
     \lean{IsPositiveMap.comp_unitaryConjLM_inv_cfc_sqrt_traceAdjointMap_one}
     \leanok
     \uses{def:positive_map, def:trace_preserving, def:trace_pairing_adjoint,
-        thm:filtered_trace_normalization_criterion}
+        thm:filtered_trace_normalization_criterion, lem:conj_inv_sqrt_normalizes}
     Let $T:\MN{D}\to\MN{D}$ be a positive map such that $T^*(\Id)$ is positive
     definite.  Put
     \[
