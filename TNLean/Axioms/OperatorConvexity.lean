@@ -70,7 +70,7 @@ The remaining Mathlib or local formalization gaps are:
   topology on finite matrices, Mathlib supplies the ordered Bochner theorem
   `integral_mono_ae`, and `TNLean.Channel.Schwarz.OperatorJensenAux` records
   the positive-semidefinite integral specialization as
-  `integral_posSemidef_of_ae`.  Pulling a positive linear map through the
+  `integral_nonneg_matrix_of_ae`.  Pulling a positive linear map through the
   integral can use `ContinuousLinearMap.integral_comp_comm` after packaging the
   finite-dimensional map as a continuous linear map.  The remaining proof work
   is the pointwise positive-map Jensen/resolvent step and its spectral

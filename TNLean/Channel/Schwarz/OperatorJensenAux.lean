@@ -38,7 +38,7 @@ representation; see the status note below.
   block-diagonal matrix yields the weighted sum of reciprocals.
 - `povm_resolvent_inv_le`: the finite-POVM resolvent inequality, the key
   algebraic step toward the concave real-power Jensen inequality.
-- `integral_posSemidef_of_ae`: matrix-valued Bochner integrals preserve
+- `integral_nonneg_matrix_of_ae`: matrix-valued Bochner integrals preserve
   almost-everywhere positive semidefiniteness.
 
 ## Status
@@ -129,7 +129,7 @@ variable {α : Type*} [MeasurableSpace α] {μ : Measure α} {D : ℕ}
 is positive semidefinite almost everywhere.  This is the Loewner-order
 specialization of Mathlib's ordered Bochner integral theorem, using the local
 closed-order instance for finite matrices from `TNLean.Channel.Basic`. -/
-lemma integral_posSemidef_of_ae {f : α → Matrix (Fin D) (Fin D) ℂ}
+lemma integral_nonneg_matrix_of_ae {f : α → Matrix (Fin D) (Fin D) ℂ}
     (hpos : ∀ᵐ x ∂μ, (f x).PosSemidef) :
     (∫ x, f x ∂μ).PosSemidef := by
   have hnonneg : ∀ᵐ x ∂μ, (0 : Matrix (Fin D) (Fin D) ℂ) ≤ f x := by
