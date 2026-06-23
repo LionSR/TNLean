@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.Channel.Basic
 import TNLean.MPS.Core.Transfer
 import TNLean.Algebra.TracePairing
+import Mathlib.Analysis.Matrix.Order
 import Mathlib.LinearAlgebra.Matrix.Vec
 import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Data.Matrix.Basis
@@ -39,6 +40,8 @@ with composition. We also relate it to the Kraus representation.
   precomposition with a conjugation map
 * `IsTracePreservingMap.comp_unitaryConjLM_of_conj_traceAdjointMap_one`: a
   trace-normalization criterion for conjugated-input maps ρ ↦ T(XρX†)
+* `IsPositiveMap.comp_unitaryConjLM_inv_cfc_sqrt_traceAdjointMap_one`: the same
+  normalization with X = T*(1)^{-1/2} when T*(1) is positive definite
 * `MPSTensor.transferMatrix_eq`: the MPS transfer map `E_A` has transfer
   matrix `∑ᵢ Āᵢ ⊗ₖ Aᵢ`
 
@@ -47,7 +50,7 @@ with composition. We also relate it to the Kraus representation.
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 2.2][Wolf2012QChannels]
 -/
 
-open scoped Matrix BigOperators Kronecker
+open scoped Matrix BigOperators Kronecker MatrixOrder ComplexOrder
 open Matrix Finset
 
 variable {D : ℕ}
@@ -465,6 +468,49 @@ theorem IsPositiveMap.comp_unitaryConjLM_positive_tracePreserving
       IsTracePreservingMap (T.comp (unitaryConjLM X)) :=
   ⟨hT.comp_unitaryConjLM X,
     IsTracePreservingMap.comp_unitaryConjLM_of_conj_traceAdjointMap_one T X hX⟩
+
+/-- If A is positive definite, conjugation by its inverse square root
+normalizes A to the identity. -/
+theorem Matrix.conjTranspose_inv_cfc_sqrt_mul_self_of_posDef
+    (A : Matrix (Fin D) (Fin D) ℂ) (hA : A.PosDef) :
+    ((CFC.sqrt A)⁻¹)ᴴ * A * (CFC.sqrt A)⁻¹ = 1 := by
+  set S : Matrix (Fin D) (Fin D) ℂ := CFC.sqrt A
+  have hA_nonneg : (0 : Matrix (Fin D) (Fin D) ℂ) ≤ A := hA.posSemidef.nonneg
+  have hS_sq : S * S = A := by
+    simpa [S] using CFC.sqrt_mul_sqrt_self A hA_nonneg
+  have hS_herm : Sᴴ = S := by
+    have hpsd : S.PosSemidef := by
+      simpa [S] using (Matrix.nonneg_iff_posSemidef).1 (CFC.sqrt_nonneg A)
+    simpa using hpsd.isHermitian.eq
+  have hS_det : IsUnit S.det := by
+    have hA_unit : IsUnit A := Matrix.PosDef.isUnit hA
+    have hS_unit : IsUnit S := by
+      simpa [S] using (CFC.isUnit_sqrt_iff A hA_nonneg).2 hA_unit
+    exact (Matrix.isUnit_iff_isUnit_det S).1 hS_unit
+  have hSinv_mul : S⁻¹ * S = 1 := Matrix.nonsing_inv_mul S hS_det
+  have hSmul_inv : S * S⁻¹ = 1 := Matrix.mul_nonsing_inv S hS_det
+  have hSinv_herm : (S⁻¹)ᴴ = S⁻¹ := by
+    rw [Matrix.conjTranspose_nonsing_inv, hS_herm]
+  calc
+    ((CFC.sqrt A)⁻¹)ᴴ * A * (CFC.sqrt A)⁻¹
+        = (S⁻¹)ᴴ * A * S⁻¹ := by simp [S]
+    _ = S⁻¹ * (S * S) * S⁻¹ := by rw [hSinv_herm, hS_sq]
+    _ = 1 := by simp [Matrix.mul_assoc, hSinv_mul, hSmul_inv]
+
+/-- **Wolf Chapter 3 trace normalization by inverse square root.**
+
+If T is positive and T*(1) is positive definite, then choosing
+X = T*(1)^{-1/2} makes ρ ↦ T(XρX†) positive and trace-preserving. -/
+theorem IsPositiveMap.comp_unitaryConjLM_inv_cfc_sqrt_traceAdjointMap_one
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hT : IsPositiveMap T) (hTstar : (Matrix.traceAdjointMap T 1).PosDef) :
+    IsPositiveMap
+        (T.comp (unitaryConjLM ((CFC.sqrt (Matrix.traceAdjointMap T 1))⁻¹))) ∧
+      IsTracePreservingMap
+        (T.comp (unitaryConjLM ((CFC.sqrt (Matrix.traceAdjointMap T 1))⁻¹))) := by
+  exact hT.comp_unitaryConjLM_positive_tracePreserving _
+    (Matrix.conjTranspose_inv_cfc_sqrt_mul_self_of_posDef
+      (Matrix.traceAdjointMap T 1) hTstar)
 
 end UnitaryConjugation
 
