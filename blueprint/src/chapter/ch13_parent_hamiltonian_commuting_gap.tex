@@ -163,6 +163,39 @@ the specialization $L=2$.
     endomorphisms commute.
 \end{proof}
 
+\begin{theorem}[Three-site commutation from source projectors]
+    \label{thm:local_term_two_three_commute_from_source_q}
+    \lean{MPSTensor.localTerm_two_three_zero_one_commute_of_overlapping_two_site_projectors}
+    \lean{MPSTensor.localTerm_two_three_zero_one_commute_of_appendixD2}
+    \leanok
+    \uses{def:overlapping_two_site_supports,
+        thm:local_term_two_three_ax_xb_lifts}
+    Suppose the projectors $Q_{AX}$ and $Q_{XB}$ satisfy the
+    \cite[Definition~D.2]{Cirac2016MPDO_arXiv} local parent-commuting
+    condition on $A X B$, and suppose that the canonical two-site parent
+    interaction is identified with these projectors after lifting to the two
+    faces:
+    \[
+        q(A)_{AX}=(Q_{AX})_{AX},\qquad
+        q(A)_{XB}=(Q_{XB})_{XB}.
+    \]
+    Then the first two translated length-two parent terms on the three-site
+    chain commute,
+    \[
+        h^{(3)}_0(A,2)h^{(3)}_1(A,2)
+        =
+        h^{(3)}_1(A,2)h^{(3)}_0(A,2).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    The lift identities of Theorem~\ref{thm:local_term_two_three_ax_xb_lifts}
+    identify the translated terms with $(Q_{AX})_{AX}$ and $(Q_{XB})_{XB}$.
+    After forgetting the kernel-intersection equation, the
+    \cite[Definition~D.2]{Cirac2016MPDO_arXiv} condition says exactly that
+    these two lifted projectors commute.
+\end{proof}
+
 \begin{theorem}[Three-site commutation from complementary Appendix projectors]
     \label{thm:local_term_two_three_commute_from_complement_ax_xb}
     \lean{MPSTensor.localTerm_two_three_zero_one_commute_of_overlapping_two_site_complement}
