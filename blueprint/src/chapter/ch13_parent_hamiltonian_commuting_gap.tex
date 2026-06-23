@@ -638,8 +638,10 @@ the specialization $L=2$.
     This implication is cited here from the structural characterization theorem
     for renormalization fixed points in~\cite{Cirac2016MPDO_arXiv}; the source
     proof says that RFP $\Rightarrow$ NNCPH is immediate from that theorem.
-    At present this implication remains an unproved hypothesis; the source
-    derivation from the Appendix~B product-of-pairs form remains to be proved.
+    At present this implication remains an unproved hypothesis. The source
+    derivation from the basic-vector formula
+    $V^{(N)}(A_j)=U^{\otimes N}\varphi_j^{\otimes N}$ and the corresponding
+    two-site projectors remains to be proved.
 \end{theorem}
 
 \begin{theorem}[Renormalization fixed points satisfy the NNCPH commutation and zero-energy equations]%
@@ -704,7 +706,7 @@ the specialization $L=2$.
     Substituting $\alpha_L=\alpha_0$ in the trace gives the cyclic formula.
 \end{proof}
 
-\begin{remark}[Product-of-pairs equations for nearest-neighbor parent-term commutation]%
+\begin{remark}[Basic-vector coefficients and nearest-neighbor parent-term commutation]%
     \label{rem:product_pair_projectors}
     \lean{MPSTensor.productPairWindow}
     \lean{MPSTensor.productPairWindow_one}
@@ -753,7 +755,7 @@ the specialization $L=2$.
         =
         \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
     \]
-    The cyclic virtual-pair coefficient associated to this structural form is
+    The coefficient associated to the source basic-vector formula is
     \[
         C_L(\sigma)
         =
@@ -788,25 +790,27 @@ the specialization $L=2$.
         =
         \phi_2(\sigma_0,\sigma_1).
     \]
-    The adjacent-pair input presently used in the formal statement is the
-    even-chain factorization, for a positive number $n$ of adjacent pairs,
+    The disjoint adjacent-pair condition presently used in the formal statement
+    is the even-chain factorization, for a positive number $n$ of adjacent
+    pairs,
     \[
         V^{(2n)}(A)(\sigma)
         =
         \prod_{p=0}^{n-1}
         \phi_2\bigl(\sigma_{2p},\sigma_{2p+1}\bigr).
     \]
-    The case $n=0$ is not part of this source input: the empty-chain MPV
+    The case $n=0$ is not part of this condition: the empty-chain MPV
     coefficient is the virtual bond dimension, whereas the empty product on the
     right-hand side is $1$.
     The first equality, $V^{(L)}(\Lambda U)_\sigma=C_L(\sigma)$, is the trace
-    expansion of the closed matrix product. The remaining coefficient step is
-    to identify this cyclic virtual-pair expression with the adjacent-pair input
-    above when that identification is justified.
+    expansion of the closed matrix product and is the coefficient form of
+    $U^{\otimes L}\varphi_j^{\otimes L}$. The remaining coefficient step is
+    to relate this source expression to the disjoint adjacent-pair condition
+    above when that relation is justified.
     On a three-site chain, the two adjacent length-two parent terms are the
     \(AX\) and \(XB\) actions of the canonical two-site parent interaction.
-    What remains from Appendix~B is to identify the projectors determined by the
-    product-of-pairs form with these canonical parent interactions and to prove
+    What remains from Appendix~B is to identify the source projectors with
+    these canonical parent interactions and to prove
     \(Q_{AX}Q_{XB}=Q_{XB}Q_{AX}\). For the all-chain statement, the resulting
     two-site parent projectors must be identified with idempotents \(p_i\)
     satisfying
@@ -818,23 +822,25 @@ the specialization $L=2$.
         h_i(A,2)h_j(A,2)=h_j(A,2)h_i(A,2),
     \]
     which is the nearest-neighbor commuting conclusion for every finite chain.
-    The even-chain factorization and the two-site projector identification are
-    the inputs supplied by Appendix~B of \cite{Cirac2016MPDO_arXiv}; given them,
+    The source projector identification and the justification of any passage
+    from the source coefficients to this adjacent-pair condition are the
+    remaining obligations before the conditional theorem can be applied; once
+    they are proved,
     the local terms commute. Together with
-    Lemma~\ref{lem:parent_hamiltonian_ff}, the product-pair input also gives the
+    Lemma~\ref{lem:parent_hamiltonian_ff}, the adjacent-pair condition also gives the
     zero-energy equation for $V^{(N)}(A)$, still without asserting the source
     ground-space spanning condition.
 \end{remark}
 
-\begin{theorem}[Product-pair data and ground-space spanning give all-chain NNCPH]%
+\begin{theorem}[Adjacent-pair condition and ground-space spanning give all-chain NNCPH]%
     \label{thm:appendixB_product_pair_has_nncph_ground_spaces}
     \lean{MPSTensor.ProductPairBridge.hasNNCPHGroundSpaces_of_groundSpaceSpanning}
     \lean{MPSTensor.rfp_implies_hasNNCPHGroundSpaces_of_appendixBExtraction_of_groundSpaceSpanning}
     \leanok
     \uses{rem:product_pair_projectors, def:has_nncph_ground_spaces,
         def:parent_hamiltonian_ground_space_spanning}
-    Suppose the Appendix~B product-of-pairs data give commuting two-site parent
-    terms for a tensor \(B\). If the nearest-neighbor parent Hamiltonian also
+    Suppose the conditional adjacent-pair hypotheses give commuting two-site
+    parent terms for a tensor \(B\). If the nearest-neighbor parent Hamiltonian also
     satisfies the ground-space spanning equation of
     Definition~\ref{def:parent_hamiltonian_ground_space_spanning}, with BNT
     components \(A_1,\ldots,A_g\), then \(B\) satisfies the all-chain
@@ -842,7 +848,7 @@ the specialization $L=2$.
     Definition~\ref{def:has_nncph_ground_spaces}.
 
     In particular, if a normal left-canonical RFP tensor has nonzero bond
-    dimension, the Appendix~B product-of-pairs extraction, and the same
+    dimension, the same conditional Appendix~B hypotheses, and the same
     ground-space spanning equation, then it satisfies the full all-chain condition in
     \cite[Theorem~3.10(iii)]{Cirac2016MPDO_arXiv}.
 \end{theorem}
@@ -850,7 +856,7 @@ the specialization $L=2$.
 \begin{proof}
     \uses{lem:parent_hamiltonian_ff, def:has_nncph_ground_space}
     \leanok
-    The product-of-pairs equations give \(h_i h_j=h_j h_i\) for all translated
+    The adjacent-pair hypotheses give \(h_i h_j=h_j h_i\) for all translated
     two-site parent terms. Lemma~\ref{lem:parent_hamiltonian_ff} gives
     \(h_iV^{(N)}(B)=0\). For every \(N>2\), the spanning hypothesis supplies
     \[
