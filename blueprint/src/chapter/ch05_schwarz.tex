@@ -611,6 +611,77 @@ maps.
     $R_X\tau R_X^\dagger$ with $C_T(X)$.
 \end{proof}
 
+\begin{lemma}[Right-tensor factorization for $VV^\dagger$]
+    \label{lem:right_tensor_factorization_mul_adjoint}
+    \lean{ChoiJamiolkowski.rightTensorMatrix_mul_conjTranspose_eq_conjTranspose_mul_self}
+    \leanok
+    \uses{def:choi_right_tensor_factor}
+    For every $V\in\MN{D,k}(\C)$, the right-tensor factor satisfies
+    \[
+      R_{VV^\dagger}=R_V^\dagger R_V.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    This is the entrywise calculation obtained by expanding the definition of
+    $R_V$ and summing over the middle physical index.
+\end{proof}
+
+\begin{lemma}[Factorized right-tensor Choi sandwich]
+    \label{lem:factorized_right_tensor_choi_sandwich}
+    \lean{ChoiJamiolkowski.rightTensorMatrix_mul_conjTranspose_choi_sandwich_eq}
+    \leanok
+    \uses{def:choi_right_tensor_factor,
+        lem:right_tensor_factorization_mul_adjoint}
+    Let $T:\MN{D,D}(\C)\to\MN{D,D}(\C)$ have Choi matrix $\tau$.  For every
+    $V\in\MN{D,k}(\C)$,
+    \[
+      R_{VV^\dagger}\tau R_{VV^\dagger}^\dagger
+      =
+      R_V^\dagger(R_V\tau R_V^\dagger)R_V.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Substitute Lemma~\ref{lem:right_tensor_factorization_mul_adjoint} on the
+    left and reassociate the three matrix products.
+\end{proof}
+
+\begin{theorem}[Factorized right projections in the Choi criterion]
+    \label{thm:factorized_right_projection_choi_sandwich}
+    \lean{ChoiJamiolkowski.IsNPositiveMap.rightTensor_choiMatrix_sandwich_posSemidef_of_mul_conjTranspose}
+    \leanok
+    \uses{lem:factorized_right_tensor_choi_sandwich,
+        thm:k_positive_right_tensor_choi_sandwiches}
+    Assume $D>0$.  Let $T:\MN{D,D}(\C)\to\MN{D,D}(\C)$ be $k$-positive,
+    with Choi matrix $\tau$.  If a right-factor matrix has the form
+    $P=VV^\dagger$ with $V\in\MN{D,k}(\C)$, then
+    \[
+      R_P\tau R_P^\dagger\geq0.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    In the right-tensor convention one has
+    \[
+      R_{VV^\dagger}=R_V^\dagger R_V.
+    \]
+    Therefore
+    \[
+      R_{VV^\dagger}\tau R_{VV^\dagger}^\dagger
+      =R_V^\dagger(R_V\tau R_V^\dagger)R_V.
+    \]
+    The middle factor is positive by
+    Theorem~\ref{thm:k_positive_right_tensor_choi_sandwiches}, and positive
+    semidefiniteness is preserved under compression by $R_V$.
+    % The full rank-$k$ projection form of
+    % \cite[Chapter~3, Proposition~3.1]{Wolf2012Quantum} requires a separate
+    % factorization of arbitrary rank-$k$ orthogonal projections.
+\end{proof}
+
 \begin{definition}[Trace-pairing adjoint]\label{def:trace_pairing_adjoint}
     \lean{Matrix.traceAdjointMap}
     \leanok
