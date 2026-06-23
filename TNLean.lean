@@ -50,6 +50,7 @@ import TNLean.Topology.CompactRetractFixedPoint
 
 -- Layer 2: Quantum channels (general theory)
 import TNLean.Channel.Basic
+import TNLean.Channel.PositiveExamples
 import TNLean.Channel.DensityRetract
 
 -- Layer 2 (Ch. 2 infrastructure): Choi–Jamiolkowski, Kraus, Stinespring
