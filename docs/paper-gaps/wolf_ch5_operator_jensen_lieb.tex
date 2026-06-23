@@ -21,8 +21,9 @@ operator-convexity boundary\footnote{%
     The declarations are
     \leanid{posMap_rpow_concave_jensen}, \leanid{posMap_rpow_convex_jensen},
     \leanid{posMap_log_concave_jensen}, and \leanid{lieb_concavity_axiom} in
-    \doclink{TNLean/Axioms/OperatorConvexity}; the first is now a theorem, and
-    the latter three remain axioms.}
+    \doclink{TNLean/Axioms/OperatorConvexity}; the first and third are now
+    theorems, and the convex real-power Jensen and Lieb declarations remain
+    axioms.}
 together with the cited sources, the precise gaps, and the first concrete step
 toward eliminating each remaining gap.  The positive-map Jensen declarations
 underlie \cite[Corollary~5.2]{Wolf2012Quantum} (the second corollary of Wolf's
@@ -93,9 +94,12 @@ obtained by dilating $T$ to a unital map.  Mathlib~4.31 contains no such
 general theorem for positive maps.  The concave real-power case has now been
 discharged by the special Löwner-integrand route recorded in
 \leanid{TNLean.OperatorJensen.positiveMap_rpowIntegrand₀₁_jensen}, together
-with ordered Bochner integral monotonicity.  The convex real-power and
-logarithmic cases remain blocked on the corresponding positive-map Jensen step,
-not on the integral representation of the power integrand.
+with ordered Bochner integral monotonicity.  The logarithmic case has also been
+discharged, not by a general Choi--Davis--Jensen theorem, but by taking the
+right limit $p\to 0^+$ in the concave real-power inequality and using
+\leanid{CFC.tendsto_cfc_rpow_sub_one_log}.  The convex real-power case remains
+blocked on the corresponding positive-map Jensen step, not on the integral
+representation of the power integrand.
 
 \subsection{The compression scaffold is faithful to bare
 positivity}\label{ssec:caveat}
@@ -149,14 +153,19 @@ identity used in Wolf's block-positivity step in the proof of
   therefore applies to a bare positive map in the finite-POVM resolvent reduction
   under the \leanid{IsPositiveMap} hypothesis --- it does not require, and must not
   be relabelled with, complete positivity.  It now proves the concave
-  real-power Jensen inequality after integration; the convex real-power and
-  logarithmic Jensen declarations remain open.
+  real-power Jensen inequality after integration.  The logarithmic Jensen theorem
+  follows from this real-power result by the right-limit formula for
+  $(A^p-\mathbf 1)/p$ as $p\to 0^+$.  The convex real-power Jensen declaration
+  remains open.
 
 For the concave real-power case, the analytic step has now been supplied: the
 Löwner-integral argument carries the pointwise finite-POVM resolvent inequality
 (\leanid{povm_resolvent_inv_le}) through the integral representation of
 \texttt{rpow} to the operator inequality
-\leanid{posMap_rpow_concave_jensen}.
+\leanid{posMap_rpow_concave_jensen}.  The logarithmic inequality
+\leanid{posMap_log_concave_jensen} is then obtained by applying
+\leanid{CFC.tendsto_cfc_rpow_sub_one_log} to both $A$ and $T(A)$ and closing the
+Loewner inequality by the closedness of the finite-dimensional order graph.
 
 \subsection{Current formal inputs}\label{ssec:formal-inputs}
 
@@ -179,10 +188,12 @@ The three positive-map Jensen statements are mathematically standard
 \cite[Theorems~5.10--5.13 and Corollary~5.2]{Wolf2012Quantum}.  The concave
 real-power statement \leanid{posMap_rpow_concave_jensen} has been discharged by
 the finite-POVM resolvent scaffold, the pointwise integrand inequality, and
-ordered Bochner integral monotonicity.  The convex real-power and logarithmic
-statements remain open; their elimination still needs the corresponding
-positive-map operator Jensen step.  The integral representation of the power
-integrand, previously named as the obstruction, is present.
+ordered Bochner integral monotonicity.  The logarithmic statement
+\leanid{posMap_log_concave_jensen} has been discharged as the right limit of the
+concave real-power result.  The convex real-power statement remains open; its
+elimination still needs the corresponding positive-map operator Jensen step.
+The integral representation of the power integrand, previously named as the
+obstruction, is present.
 
 \section{The Lieb concavity axiom}
 
