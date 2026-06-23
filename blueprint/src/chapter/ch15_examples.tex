@@ -681,6 +681,7 @@ formalized, and it is not asserted here independently of that machinery.
 
 \begin{theorem}[Two-fold dimer degeneracy of the Majumdar--Ghosh ground space]%
 \label{thm:majumdar_ghosh_ground_space}
+    \notready
     \uses{def:majumdar_ghosh_tensor, thm:majumdar_ghosh_not_normal,
         def:ground_space_parent}
     On an even periodic chain of length $N = 2m$ the parent Hamiltonian of the
@@ -694,9 +695,10 @@ formalized, and it is not asserted here independently of that machinery.
 \end{theorem}
 
 \begin{remark}\label{rem:majumdar_ghosh_ground_space_dependency}
-    Theorem~\ref{thm:majumdar_ghosh_ground_space} carries no \lean{} or \leanok
-    tag: it depends on the periodic block-diagonal ground-space description for
-    non-normal tensors, whose general form is developed in
+    Theorem~\ref{thm:majumdar_ghosh_ground_space} is marked
+    \verb|\notready| and carries no \lean{} or \leanok tag: it depends on the
+    periodic block-diagonal ground-space description for non-normal tensors,
+    whose general form is developed in
     Section~\ref{sec:block_diagonal_boundary_closing} and is not yet specialized
     to the two-periodic Majumdar--Ghosh grading.  The degeneracy count must be
     derived from that description; it is recorded here as a target only and is not
