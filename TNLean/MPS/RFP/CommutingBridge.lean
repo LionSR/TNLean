@@ -360,6 +360,14 @@ theorem AppendixBStructuralData.twoSiteAmplitude_eq_coreTensor_mpv {A : MPSTenso
     hStruct.twoSiteAmplitude σ = mpv hStruct.coreTensor σ := by
   rw [hStruct.twoSiteAmplitude_eq_mpv σ, hStruct.mpv_eq_coreTensor σ]
 
+/-- The length-two case of the core-tensor factorization required by the
+Appendix B extraction input. -/
+theorem AppendixBStructuralData.mpv_coreTensor_eq_productPairState_one {A : MPSTensor d D}
+    (hStruct : AppendixBStructuralData A) (σ : Cfg d (2 * 1)) :
+    mpv hStruct.coreTensor σ = productPairState hStruct.twoSiteAmplitude 1 σ := by
+  rw [productPairState_one]
+  exact (hStruct.twoSiteAmplitude_eq_coreTensor_mpv σ).symm
+
 /-- The length-two case of the requested even-chain factorization is automatic
 from the definition of the structural two-site amplitude. -/
 theorem AppendixBStructuralData.mpv_eq_productPairState_one {A : MPSTensor d D}
