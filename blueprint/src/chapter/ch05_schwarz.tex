@@ -1567,10 +1567,10 @@ of a bipartite state whose Schmidt number is at most $n$.
     \cite[Equation~(3.18)]{Wolf2012Quantum}.  The source states the inequalities
     under the premise that $\rho$ has Schmidt number at most $n$, and reaches
     $(T_n\otimes\id)(\rho)\ge 0$ from that premise by the $n$-positivity of
-    $T_n$; that first step is taken here as the hypothesis rather than derived,
-    because a Schmidt-number predicate is not yet available.  The deviation is
-    recorded in
-    \path{docs/paper-gaps/wolf_reduction_criterion_schmidt_premise.tex}.
+    $T_n$; that first step is taken here as the hypothesis rather than derived.
+    The first step and the composed full criterion with the Schmidt-number
+    premise are
+    Theorem~\ref{thm:reduction_criterion_of_schmidt_number}.
 \end{theorem}
 
 \begin{proof}
@@ -1959,6 +1959,154 @@ the product positive operators, which is the form used below.
     The ampliation acts by $(T_1\otimes\id)(A_i\otimes B_i)=T_1(A_i)\otimes B_i$, each
     summand is a Kronecker product of positive semidefinite matrices, and the sum is
     positive semidefinite.
+\end{proof}
+
+\subsection{The Schmidt number and the full reduction criterion}
+
+The Schmidt number of a bipartite state is the smallest $n$ for which the state has
+a convex decomposition into pure states each of Schmidt rank at most $n$.  Separable
+states are precisely those of Schmidt number one, and a state of Schmidt number at
+most $n$ satisfies the reduction criterion
+\[
+    n\,\rho_1\otimes\Id\ge\rho
+    \qquad\text{and}\qquad
+    n\,\Id\otimes\rho_2\ge\rho,
+\]
+which is \cite[Equation~(3.18)]{Wolf2012Quantum}.  The bound on the Schmidt number is
+recorded as a finite sum of pure-state projectors of Schmidt rank at most $n$, the
+unnormalized form of the convex decomposition; rescaling a vector by the square root
+of its weight scales its coefficient matrix and so leaves the Schmidt rank unchanged.
+
+\begin{definition}[Bounded Schmidt number]
+    \label{def:has_schmidt_number_le}
+    \lean{Matrix.HasSchmidtNumberLE}
+    \leanok
+    \uses{def:schmidt_rank}
+    A bipartite matrix $\rho$ on $\MN{d}\otimes\MN{d'}$ has Schmidt number at most $n$
+    when it is a finite sum of pure-state projectors of Schmidt rank at most $n$,
+    \[
+        \rho=\sum_i\ket{\psi_i}\bra{\psi_i},
+        \qquad \operatorname{SR}(\psi_i)\le n.
+    \]
+\end{definition}
+
+\begin{theorem}[Basic properties of bounded Schmidt number]
+    \label{thm:has_schmidt_number_le_basic}
+    \lean{Matrix.HasSchmidtNumberLE.posSemidef, Matrix.HasSchmidtNumberLE.add,
+        Matrix.HasSchmidtNumberLE.mono}
+    \leanok
+    \uses{def:has_schmidt_number_le}
+    A matrix of Schmidt number at most $n$ is positive semidefinite.  States of
+    Schmidt number at most $n$ are closed under addition, and a bound on the Schmidt
+    number relaxes to any larger bound.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Each summand $\ket{\psi_i}\bra{\psi_i}$ is a rank-one positive semidefinite
+    matrix, and a finite sum of positive semidefinite matrices is positive
+    semidefinite.  Concatenating two pure-state families realizes a sum as a single
+    finite sum of pure-state projectors of Schmidt rank at most $n$, and a pure
+    summand of Schmidt rank at most $n$ also has Schmidt rank at most any larger
+    bound.
+\end{proof}
+
+\begin{theorem}[Schmidt number one is separability]
+    \label{thm:has_schmidt_number_le_one_iff_separable}
+    \lean{Matrix.hasSchmidtNumberLE_one_iff_isSeparable}
+    \leanok
+    \uses{def:has_schmidt_number_le, def:is_separable, def:schmidt_rank,
+        lem:matrix_rank_factorization_coordinate, thm:schmidt_rank_basic_bounds,
+        thm:is_separable_kronecker, thm:is_separable_add}
+    A bipartite matrix has Schmidt number at most one if and only if it is separable.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    A pure state of Schmidt rank at most one has a coefficient matrix of rank at most
+    one, which factors as $\psi(i,j)=u_i v_j$; its projector is the Kronecker product
+    $\ket{u}\bra{u}\otimes\ket{v}\bra{v}$ of two rank-one positive semidefinite
+    matrices, hence separable, and separable matrices are closed under addition.
+    Conversely a Kronecker product $A\otimes B$ of positive semidefinite matrices,
+    after expanding each factor into rank-one projectors, is a double sum of
+    product-vector projectors, each of Schmidt rank at most one, so it has Schmidt
+    number at most one; a separable matrix is a finite sum of such products.
+\end{proof}
+
+\begin{theorem}[Pure-state step of the reduction criterion]
+    \label{thm:tensor_map_id_t_eta_posSemidef_pure}
+    \lean{Matrix.tensorMapId_tEta_posSemidef_of_hasSchmidtRankLE}
+    \leanok
+    \uses{def:schmidt_rank, def:t_eta, def:tensor_map_id, thm:t_eta_threshold,
+        thm:reduction_map_eq_t_eta, thm:square_schmidt_rank_exact_parametrization,
+        lem:rank_one_ampliation_choi_compression,
+        thm:choi_right_compression_quadratic_form, thm:schmidt_rank_choi_test_iff}
+    For a pure state $\ket{\psi}\bra{\psi}$ with $\operatorname{SR}(\psi)\le n$ and
+    $1\le n<D$, applying $T_n$ to the first factor keeps the result positive
+    semidefinite:
+    \[
+        (T_n\otimes\id)(\ket{\psi}\bra{\psi})\ge 0.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The map $T_n$ is $n$-positive for $1\le n<D$.  Write $\psi$ through the maximally
+    entangled vector as $\psi=\psi_X$ for a square matrix $X$ on the right factor with
+    $\operatorname{rank}(X)=\operatorname{SR}(\psi)\le n$.  Then
+    $(T_n\otimes\id)(\ket{\psi}\bra{\psi})$ is the right-factor Choi compression of
+    $T_n$ by $X$.  Its quadratic form on any vector $\eta$ is the Choi quadratic form
+    of $T_n$ on $R_X^\dagger\eta$, whose Schmidt rank is at most
+    $\operatorname{rank}(X)\le n$.  The Schmidt-rank Choi criterion makes that form
+    nonnegative, so the compression is positive semidefinite.
+\end{proof}
+
+\begin{theorem}[Reduction step from the Schmidt-number premise]
+    \label{thm:has_schmidt_number_le_tensor_map_id_t_eta}
+    \lean{Matrix.HasSchmidtNumberLE.tensorMapId_tEta_posSemidef}
+    \leanok
+    \uses{def:has_schmidt_number_le, def:t_eta, def:tensor_map_id,
+        thm:tensor_map_id_sum, thm:tensor_map_id_t_eta_posSemidef_pure}
+    For $1\le n<D$, a bipartite state of Schmidt number at most $n$ satisfies
+    \[
+        (T_n\otimes\id)(\rho)\ge 0.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The state is a finite sum of pure-state projectors of Schmidt rank at most $n$.
+    Applying $T_n$ to the first factor is linear, so it distributes over the sum; the
+    pure-state step makes each summand positive semidefinite, and a finite sum of
+    positive semidefinite matrices is positive semidefinite.
+\end{proof}
+
+\begin{theorem}[Reduction criterion with the Schmidt-number premise]
+    \label{thm:reduction_criterion_of_schmidt_number}
+    \lean{Matrix.reductionCriterion_left_of_hasSchmidtNumberLE,
+        Matrix.reductionCriterion_right_of_hasSchmidtNumberLE}
+    \leanok
+    \uses{def:has_schmidt_number_le, def:t_eta,
+        thm:has_schmidt_number_le_tensor_map_id_t_eta, thm:reduction_criterion}
+    For $1\le n<D$, a bipartite state of Schmidt number at most $n$ satisfies the
+    reduction criterion
+    \[
+        n\,\rho_1\otimes\Id\ge\rho
+        \qquad\text{and}\qquad
+        n\,\Id\otimes\rho_2\ge\rho,
+    \]
+    with $\rho_1$ and $\rho_2$ the reduced densities on the first and second factors.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The Schmidt-number premise gives $(T_n\otimes\id)(\rho)\ge 0$, which is the first
+    step.  The operator implication then yields $n\,\Id\otimes\rho_2\ge\rho$.  The
+    factor swap of a state of Schmidt number at most $n$ again has Schmidt number at
+    most $n$, since the swap reindexes each pure summand to a vector with the
+    transposed coefficient matrix, of the same rank; applying the first step to the
+    swapped state and the operator implication in its symmetric form gives
+    $n\,\rho_1\otimes\Id\ge\rho$.
 \end{proof}
 
 \begin{theorem}[Completely positive implies two-positive]

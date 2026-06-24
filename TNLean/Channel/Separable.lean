@@ -66,10 +66,9 @@ with positive partial transpose exist once the dimension exceeds ℂ² ⊗ ℂ²
 The reduction-map positivity recorded here is the n = 1 instance: a separable
 state is exactly a state of Schmidt number one.  The Schmidt-number filtration for
 general n — of which separability is the lowest level — and the resulting general
-reduction criterion of Wolf eq. (3.18) with its Schmidt-number premise are a
-further step built on the predicate introduced here; they are recorded in
-`docs/paper-gaps/wolf_reduction_criterion_schmidt_premise.tex` and are not
-formalized in this file.
+reduction criterion of Wolf eq. (3.18) with its Schmidt-number premise are
+formalized in `SchmidtNumber.lean`, which proves that Schmidt number one coincides
+with separability.
 
 ## References
 
