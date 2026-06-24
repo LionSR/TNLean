@@ -336,6 +336,24 @@ finite-dimensional quantum systems.
     convex.
 \end{proof}
 
+\begin{lemma}[Functional calculus under unitary conjugation]
+    \label{lem:cfc_conj_unitary}
+    \lean{Matrix.cfc_conj_unitary}
+    \leanok
+    For a Hermitian matrix $A$, a real function $f$, and a unitary $U$, the
+    continuous functional calculus satisfies
+    \[
+        f(U A U^\dagger) = U\,f(A)\,U^\dagger.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    The conjugation $\varphi : x \mapsto U x U^\dagger$ is a star-algebra
+    automorphism of the matrix algebra, and the continuous functional calculus
+    commutes with such automorphisms, $\varphi(f(A)) = f(\varphi(A))$; since
+    $\varphi(A) = U A U^\dagger$, this is the claim.
+\end{proof}
+
 \begin{lemma}[Matrix logarithm under unitary conjugation]
     \label{lem:log_conj_unitary}
     \lean{Matrix.log_conj_unitary}
@@ -347,9 +365,12 @@ finite-dimensional quantum systems.
 \end{lemma}
 
 \begin{proof}\leanok
-    The conjugation $x \mapsto U x U^\dagger$ is a star-algebra automorphism of
-    the matrix algebra, and the continuous functional calculus commutes with such
-    automorphisms; applying this with the real logarithm gives the identity.
+    \uses{lem:cfc_conj_unitary}
+    This is the $f = \log$ case of Lemma~\ref{lem:cfc_conj_unitary}: with
+    $f(U A U^\dagger) = U\,f(A)\,U^\dagger$ specialized to the real logarithm,
+    \[
+        \log(U A U^\dagger) = U\,(\log A)\,U^\dagger.
+    \]
 \end{proof}
 
 \begin{theorem}[Unitary invariance of the quantum relative entropy]

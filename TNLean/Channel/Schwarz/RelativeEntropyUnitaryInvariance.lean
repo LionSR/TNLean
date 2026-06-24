@@ -49,7 +49,7 @@ conjugating unitaries.
 -/
 
 open scoped Matrix ComplexOrder Matrix.Norms.L2Operator
-open Matrix Finset
+open Matrix
 
 namespace Matrix
 
