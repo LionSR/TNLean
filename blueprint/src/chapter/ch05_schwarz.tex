@@ -1464,7 +1464,7 @@ of a bipartite state whose Schmidt number is at most $n$.
     For every $k\in\N$ the reduction map $T_k$ equals the family map $T_\eta$ at
     $\eta=k$:
     \[
-        T_k=T_{\eta=k}.
+        T_k=T_\eta\big|_{\eta=k}.
     \]
 \end{theorem}
 
@@ -1538,7 +1538,7 @@ of a bipartite state whose Schmidt number is at most $n$.
     $\Id\otimes\rho_2$.
 \end{proof}
 
-\begin{theorem}[Reduction criterion]
+\begin{theorem}[Operator-implication step of the reduction criterion]
     \label{thm:reduction_criterion}
     \lean{Matrix.reductionCriterion_left, Matrix.reductionCriterion_right}
     \leanok
@@ -1561,8 +1561,16 @@ of a bipartite state whose Schmidt number is at most $n$.
         (T_n\otimes\id)(\rho^{F})\ge 0,
     \]
     so the second hypothesis is Wolf's symmetric condition
-    $(\id\otimes T_n)(\rho)\ge 0$ expressed through the swap.  Together the two
-    inequalities are \cite[Equation~(3.18)]{Wolf2012Quantum}.
+    $(\id\otimes T_n)(\rho)\ge 0$ expressed through the swap.
+
+    This is the second step of Wolf's two-step argument for
+    \cite[Equation~(3.18)]{Wolf2012Quantum}.  The source states the inequalities
+    under the premise that $\rho$ has Schmidt number at most $n$, and reaches
+    $(T_n\otimes\id)(\rho)\ge 0$ from that premise by the $n$-positivity of
+    $T_n$; that first step is taken here as the hypothesis rather than derived,
+    because a Schmidt-number predicate is not yet available.  The deviation is
+    recorded in
+    \path{docs/paper-gaps/wolf_reduction_criterion_schmidt_premise.tex}.
 \end{theorem}
 
 \begin{proof}

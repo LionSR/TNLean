@@ -1,0 +1,122 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Schmidt-number premise of Wolf's reduction criterion (Wolf eq.~(3.18))}
+\author{}
+\date{2026-06-24}
+
+\begin{document}
+\maketitle
+
+\section{Source statement}
+
+The reduction-criterion paragraph of Wolf's \emph{Quantum Channels \&
+Operations} (\path{Notes/WolfNoteTexSource/ch03_positive_not_completely.tex},
+lines 329--338) introduces the maps $T_n(X)=\tr(X)\,\mathbf 1-X/n$, notes that
+each is $n$-positive and self-dual, and concludes that
+\begin{align}
+  n\,\rho_1\otimes\mathbf 1\ge\rho
+  \qquad\text{and}\qquad
+  n\,\mathbf 1\otimes\rho_2\ge\rho
+  \tag{3.18}
+\end{align}
+is \emph{necessary for a bipartite state $\rho$ to have Schmidt number $n$},
+with $\rho_1$ and $\rho_2$ the two reduced density matrices. The source assertion
+is the implication
+\begin{align}
+  \operatorname{sn}(\rho)\le n
+  \;\Longrightarrow\;
+  \bigl(n\,\rho_1\otimes\mathbf 1\ge\rho\ \text{and}\
+  n\,\mathbf 1\otimes\rho_2\ge\rho\bigr),
+  \tag{\path{source}}
+\end{align}
+where $\operatorname{sn}(\rho)$ is the Schmidt number of $\rho$. Its proof has
+two steps. A state of Schmidt number at most $n$ is a convex combination of
+pure states of Schmidt rank at most $n$, so $n$-positivity of $T_n$ gives
+\begin{align}
+  \operatorname{sn}(\rho)\le n
+  \;\Longrightarrow\;
+  (T_n\otimes\operatorname{id})(\rho)\ge 0,
+  \tag{step 1}
+\end{align}
+and the algebraic identity $(T_n\otimes\operatorname{id})(\rho)=\mathbf 1\otimes\rho_2-n^{-1}\rho$
+then yields
+\begin{align}
+  (T_n\otimes\operatorname{id})(\rho)\ge 0
+  \;\Longrightarrow\;
+  n\,\mathbf 1\otimes\rho_2\ge\rho,
+  \tag{step 2}
+\end{align}
+with the companion inequality obtained from the swapped state.
+
+\section{Formalized statement}
+
+The formal theorems\footnote{Formal declarations:
+    \leanid{Matrix.reductionCriterion_left} and
+    \leanid{Matrix.reductionCriterion_right} in
+    \doclink{TNLean/Channel/ReductionCriterion}.} establish step~2 only. For a
+bipartite matrix $\rho$ and $n\ge 1$,
+\begin{align}
+  (T_n\otimes\operatorname{id})(\rho)\ge 0
+  &\;\Longrightarrow\;
+  n\,\mathbf 1\otimes\rho_2\ge\rho,\\
+  (T_n\otimes\operatorname{id})(\rho^{F})\ge 0
+  &\;\Longrightarrow\;
+  n\,\rho_1\otimes\mathbf 1\ge\rho,
+\end{align}
+where $\rho^{F}$ is the image of $\rho$ under the factor swap and the second
+hypothesis equals Wolf's symmetric condition $(\operatorname{id}\otimes T_n)(\rho)\ge 0$. The
+underlying identity $(T_n\otimes\operatorname{id})(\rho)=\mathbf 1\otimes\rho_2-n^{-1}\rho$ is
+also formalized.\footnote{Formal declaration:
+    \leanid{Matrix.tensorMapId_tEta_eq}.}
+
+\section{The gap}
+
+The formalized statement carries the hypothesis $(T_n\otimes\operatorname{id})(\rho)\ge 0$,
+which is the intermediate produced by step~1 rather than the source premise
+$\operatorname{sn}(\rho)\le n$. Step~1 is not yet formalized because the
+repository has no Schmidt-number predicate for mixed states, equivalently no
+separable-state predicate from which the Schmidt-number filtration is built. The
+same missing foundation is the obstruction to the separability extension of the
+reduction criterion as an entanglement criterion.
+
+The $n$-positivity content needed for step~1 is itself available: the map $T_n$
+is $n$-positive for all $1\le n<D$.\footnote{Formal declaration:
+    \leanid{Matrix.isNPositiveMap_tEta_iff} in
+    \doclink{TNLean/Channel/NPositivityChainStrict}, the reduction map being
+    $T_\eta$ at $\eta=n$ by \leanid{Matrix.reductionMap_eq_tEta}.} What is
+absent is the predicate $\operatorname{sn}(\rho)\le n$ and the lemma that it
+implies $\rho$ lies in the cone on which the $n$-positive ampliation acts
+positively.
+
+\section{Elimination plan}
+
+Introduce a Schmidt-number predicate for bipartite matrices, built from a
+separable-state predicate, and prove step~1: a state of Schmidt number at most
+$n$ has $(T_n\otimes\operatorname{id})(\rho)\ge 0$, by writing it as a convex combination of
+Schmidt-rank-$\le n$ pure states and applying the $n$-positivity already
+formalized. Composing step~1 with the formalized step~2 recovers Wolf's
+eq.~(3.18) with its Schmidt-number premise. The separability foundation is
+shared with the entanglement-criterion extension and is tracked alongside the
+PPT and Schmidt-number formalization tasks.
+
+\section{Classification}
+
+\emph{Scope restriction.} The formal theorems prove the second step of Wolf's
+two-step argument: the operator implication from $(T_n\otimes\operatorname{id})(\rho)\ge 0$ to
+the inequalities of eq.~(3.18). The conclusions match the source exactly; the
+hypothesis is the derived intermediate of step~1, so the formalized statement is
+strictly weaker than, and is a sub-step of, the source implication. No
+hypothesis foreign to the source is introduced, so the deviation is a scope
+restriction rather than an unfaithful theorem.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

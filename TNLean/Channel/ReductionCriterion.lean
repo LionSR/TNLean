@@ -35,15 +35,20 @@ threshold (`Matrix.isNPositiveMap_tEta_iff`), the Choi formula
 (`Matrix.traceAdjointMap_reductionMap`) all describe one object.  No third
 definition of the map is introduced.
 
-## The operator implication
+## The operator-implication step
 
-The core of Wolf eq. (3.18) is the elementary identity
+Wolf reaches eq. (3.18) in two steps:
+`Schmidt-number(ρ) ≤ n ⟹ (T_n ⊗ id)(ρ) ≥ 0 ⟹ n • (1 ⊗ ρ₂) ≥ ρ`,
+the first step by `n`-positivity of `T_n` and the second by the elementary
+identity
 `(T_n ⊗ id)(ρ) = (1 ⊗ ρ₂) − n⁻¹ • ρ`,
-where the partial trace over the first factor produces `ρ₂`.  Positivity of the
-left-hand side is therefore equivalent, after scaling by `n > 0`, to
-`n • (1 ⊗ ρ₂) ≥ ρ`; applying the map to the second factor instead gives the
-symmetric bound `n • (ρ₁ ⊗ 1) ≥ ρ`.  The implications are recorded as
-`Matrix.reductionCriterion_left` and `Matrix.reductionCriterion_right`.
+where the partial trace over the first factor produces `ρ₂`.  This file
+formalizes the **second step**: positivity of `(T_n ⊗ id)(ρ)` is equivalent,
+after scaling by `n > 0`, to `n • (1 ⊗ ρ₂) ≥ ρ`; applying the map to the second
+factor instead gives the symmetric bound `n • (ρ₁ ⊗ 1) ≥ ρ`.  The implications
+are recorded as `Matrix.reductionCriterion_left` and
+`Matrix.reductionCriterion_right`.  The first step (the Schmidt-number premise)
+is not yet formalized; see the scope section.
 
 ## Main definitions
 
@@ -55,19 +60,29 @@ symmetric bound `n • (ρ₁ ⊗ 1) ≥ ρ`.  The implications are recorded as
 * `ChoiJamiolkowski.choiMatrix_reductionMap_eq_reductionWitness` -- the Choi
   operator of `T_n` is the witness `W_n`.
 * `Matrix.tensorMapId_tEta_eq` -- `(T_n ⊗ id)(ρ) = (1 ⊗ ρ₂) − n⁻¹ • ρ`.
-* `Matrix.reductionCriterion_left` and `Matrix.reductionCriterion_right` --
-  **Wolf eq. (3.18):** positivity of `(T_n ⊗ id)(ρ)` yields `n • (1 ⊗ ρ₂) ≥ ρ`,
-  and positivity of `(T_n ⊗ id)(ρ^swap)` -- equivalently Wolf's symmetric
-  condition `(id ⊗ T_n)(ρ) ≥ 0` -- yields `n • (ρ₁ ⊗ 1) ≥ ρ`.
+* `Matrix.reductionCriterion_left` and `Matrix.reductionCriterion_right` -- the
+  **operator-implication step of Wolf eq. (3.18):** positivity of `(T_n ⊗ id)(ρ)`
+  yields `n • (1 ⊗ ρ₂) ≥ ρ`, and positivity of `(T_n ⊗ id)(ρ^swap)` --
+  equivalently Wolf's symmetric condition `(id ⊗ T_n)(ρ) ≥ 0` -- yields
+  `n • (ρ₁ ⊗ 1) ≥ ρ`.  Wolf's Schmidt-number premise is not yet wired in; see
+  the scope note below.
 
 ## Scope
 
-The *entanglement* form of the reduction criterion (a separable state satisfies
-eq. (3.18)) requires a separable-state predicate, which is not yet part of the
-development; the operator implication above is the separability-free content.
-The other entanglement criteria of Example 3.1 (PPT / partial transpose, the
-Breuer–Hall map, the Choi-type maps) need a bipartite partial-transpose object
-and indecomposability, which are likewise absent.
+**Scope restriction (operator-implication half of eq. (3.18)):** Wolf's
+eq. (3.18) has the premise `Schmidt-number(ρ) ≤ n`.  The theorems here drop that
+premise and assume its consequence `(T_n ⊗ id)(ρ) ≥ 0` instead, so they
+formalize only the second of Wolf's two steps.  Deriving the first step needs a
+Schmidt-number predicate for mixed states, equivalently a separable-state
+predicate, which is absent from the development.  Documented in
+`docs/paper-gaps/wolf_reduction_criterion_schmidt_premise.tex`.
+
+The same missing foundation blocks the *entanglement* form of the reduction
+criterion (a separable state satisfies eq. (3.18)): the operator implication
+above is the separability-free content.  The other entanglement criteria of
+Example 3.1 (PPT / partial transpose, the Breuer–Hall map, the Choi-type maps)
+need a bipartite partial-transpose object and indecomposability, which are
+likewise absent.
 
 ## References
 
@@ -100,12 +115,6 @@ noncomputable def reductionWitness (D n : ℕ) :
   ((D : ℂ)⁻¹) • (1 : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) -
     ((n : ℂ)⁻¹) • Matrix.omegaProj D
 
-@[simp]
-theorem reductionWitness_apply (D n : ℕ) (x y : Fin D × Fin D) :
-    reductionWitness D n x y =
-      ((D : ℂ)⁻¹) • (1 : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) x y -
-        ((n : ℂ)⁻¹) • Matrix.omegaProj D x y := rfl
-
 end Matrix
 
 namespace ChoiJamiolkowski
@@ -129,8 +138,10 @@ variable {D D' : ℕ}
 
 /-- The trace of the `(i₂, j₂)`-slice of a bipartite matrix is the `(i₂, j₂)`
 entry of the partial trace over the first factor: `tr(ρ_{·,i₂,·,j₂}) = (ρ₂)_{i₂ j₂}`.
--/
-theorem trace_bipartiteSlice (ρ : Matrix (Fin D × Fin D') (Fin D × Fin D') ℂ)
+
+This is an internal auxiliary fact relating `bipartiteSlice` and `traceLeft`,
+used only to prove `tensorMapId_tEta_eq` below. -/
+private theorem trace_bipartiteSlice (ρ : Matrix (Fin D × Fin D') (Fin D × Fin D') ℂ)
     (i₂ j₂ : Fin D') :
     Matrix.trace (bipartiteSlice ρ i₂ j₂) = traceLeft ρ i₂ j₂ := by
   simp only [Matrix.trace, Matrix.diag, bipartiteSlice_apply, traceLeft_apply]
@@ -148,14 +159,18 @@ theorem tensorMapId_tEta_eq (η : ℝ) (ρ : Matrix (Fin D × Fin D') (Fin D × 
     trace_bipartiteSlice, kroneckerMap_apply, smul_eq_mul]
   by_cases hij : i₁ = j₁ <;> simp [hij]
 
-/-- **Wolf's reduction criterion, equation (3.18), first form.** If applying
-`T_n` to the first tensor factor of a bipartite matrix `ρ` yields a positive
-semidefinite operator, then `n • (1 ⊗ ρ₂) ≥ ρ`, where `ρ₂ = traceLeft ρ` is the
-reduced density on the second factor.
+/-- **Operator-implication step of Wolf's reduction criterion (eq. (3.18)), first
+form.** If applying `T_n` to the first tensor factor of a bipartite matrix `ρ`
+yields a positive semidefinite operator, then `n • (1 ⊗ ρ₂) ≥ ρ`, where
+`ρ₂ = traceLeft ρ` is the reduced density on the second factor.
 
-This is the separability-free operator content of the reduction criterion: it
-takes positivity of `(T_n ⊗ id)(ρ)` as a hypothesis rather than deriving it from
-a separability assumption on `ρ`. -/
+**Scope restriction (operator-implication half of eq. (3.18)):** Wolf states
+eq. (3.18) with the premise that `ρ` has Schmidt number at most `n`; the path to
+the inequality is `Schmidt-number(ρ) ≤ n ⟹ (T_n ⊗ id)(ρ) ≥ 0 ⟹ n • (1 ⊗ ρ₂) ≥ ρ`.
+This theorem formalizes only the second step, taking `(T_n ⊗ id)(ρ) ≥ 0` as a
+hypothesis; the first step is unformalized because no Schmidt-number /
+separable-state predicate exists in the development.  Documented in
+`docs/paper-gaps/wolf_reduction_criterion_schmidt_premise.tex`. -/
 theorem reductionCriterion_left {n : ℕ} (hn : 0 < n)
     (ρ : Matrix (Fin D × Fin D') (Fin D × Fin D') ℂ)
     (hpos : (tensorMapId (tEta D (n : ℝ)) ρ).PosSemidef) :
@@ -173,17 +188,24 @@ theorem reductionCriterion_left {n : ℕ} (hn : 0 < n)
     rw [hcancel, one_smul]
   rwa [hrw] at hscaled
 
-/-- **Wolf's reduction criterion, equation (3.18), second form.** Let `ρ` be a
-bipartite matrix and `ρ^swap = ρ.submatrix Prod.swap Prod.swap` its image under
-the factor swap.  If `(T_n ⊗ id)(ρ^swap)` is positive semidefinite, then
-`n • (ρ₁ ⊗ 1) ≥ ρ`, where `ρ₁ = traceRight ρ` is the reduced density on the
-first factor.
+/-- **Operator-implication step of Wolf's reduction criterion (eq. (3.18)),
+second form.** Let `ρ` be a bipartite matrix and
+`ρ^swap = ρ.submatrix Prod.swap Prod.swap` its image under the factor swap.  If
+`(T_n ⊗ id)(ρ^swap)` is positive semidefinite, then `n • (ρ₁ ⊗ 1) ≥ ρ`, where
+`ρ₁ = traceRight ρ` is the reduced density on the first factor.
 
 Because the factor swap is a unitary reindexing, `(T_n ⊗ id)(ρ^swap) ≥ 0` is
 equivalent to Wolf's symmetric condition `(id ⊗ T_n)(ρ) ≥ 0`, which applies
 `T_n` to the second factor.  The proof reindexes to the first factor, applies
 the first form, and reindexes back; positive semidefiniteness and the order are
-invariant under the swap. -/
+invariant under the swap.
+
+**Scope restriction (operator-implication half of eq. (3.18)):** as with the
+first form, the source premise is `Schmidt-number(ρ) ≤ n`; this theorem
+formalizes only the step from `(T_n ⊗ id)(ρ^swap) ≥ 0` to the inequality, the
+Schmidt-number step being unformalized for want of a Schmidt-number /
+separable-state predicate.  Documented in
+`docs/paper-gaps/wolf_reduction_criterion_schmidt_premise.tex`. -/
 theorem reductionCriterion_right {n : ℕ} (hn : 0 < n)
     (ρ : Matrix (Fin D × Fin D') (Fin D × Fin D') ℂ)
     (hpos : (tensorMapId (tEta D' (n : ℝ))
