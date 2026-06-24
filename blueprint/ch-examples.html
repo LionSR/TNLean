@@ -2832,6 +2832,9 @@
 
     <a class="icon proof" href="ch-examples.html#thm:su2_so3_surjective">#</a>
     
+    <a class="icon proof" href="ch-examples.html#a0000028491"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
     
     
     <button class="modal lean">L∃∀N</button>
@@ -2845,7 +2848,7 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/MPSTensor.spinHalfCover_surjective_onto_SO3" class="lean_decl">MPSTensor.spinHalfCover_surjective_onto_SO3</a></li>
+          <li><a href="../docs/find/#doc/SpinCover.spinHalfCover_surjective_onto_SO3" class="lean_decl">SpinCover.spinHalfCover_surjective_onto_SO3</a></li>
           
         </ul>
     
@@ -2856,7 +2859,19 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>  Every rotation \(R \in \mathrm{SO}(3)\) is realized by conjugating the Pauli vector by some \(U \in \mathrm{SU}(2)\): there is \(U \in \mathrm{SU}(2)\) with \(\bigl(\tfrac 12 \operatorname{tr}(\sigma _i\,  U \sigma _j U^{-1})\bigr)_{ij} = R\). Equivalently, the adjoint double cover \(\mathrm{SU}(2)\to \mathrm{SO}(3)\) is surjective. The proof factors \(R = R_z(\alpha )\, R_x(\beta )\, R_z(\gamma )\) by its \(ZXZ\) Euler decomposition and maps each coordinate rotation to an explicit \(\mathrm{SU}(2)\) generator: \(\operatorname{diag}(e^{-i\theta /2}, e^{i\theta /2}) \mapsto R_z(\theta )\) and \(\bigl(\begin{smallmatrix} \cos \frac\beta 2 
+  <p>  Every rotation \(R \in \mathrm{SO}(3)\) is realized by conjugating the Pauli vector by some \(U \in \mathrm{SU}(2)\): there is \(U \in \mathrm{SU}(2)\) with \(\bigl(\tfrac 12 \operatorname{tr}(\sigma _i\,  U \sigma _j U^{-1})\bigr)_{ij} = R\). Equivalently, the adjoint double cover \(\mathrm{SU}(2)\to \mathrm{SO}(3)\) is surjective. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000028491">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Factor \(R = R_z(\alpha )\, R_x(\beta )\, R_z(\gamma )\) by its \(ZXZ\) Euler decomposition and map each coordinate rotation to an explicit \(\mathrm{SU}(2)\) generator: \(\operatorname{diag}(e^{-i\theta /2}, e^{i\theta /2}) \mapsto R_z(\theta )\) and \(\bigl(\begin{smallmatrix} \cos \frac\beta 2 
 
 &  -i\sin \frac\beta 2 
 
@@ -2977,7 +2992,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:aklt_pauli_eigenvectors">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000028491"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000028492"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3031,13 +3046,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Each of the three Pauli matrices \(\sigma _x\), \(\sigma _y\), \(\sigma _z\) is an eigenvector of the AKLT transfer map with eigenvalue \(-\tfrac 13\): </p>
-<div class="displaymath" id="a0000028492">
+<div class="displaymath" id="a0000028493">
   \[  \mathcal{E}_A(\sigma _k) = -\tfrac 13\,  \sigma _k, \qquad k \in \{ x, y, z\} .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000028491">
+<div class="proof_wrapper" id="a0000028492">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3135,7 +3150,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:aklt_correlation_length">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000028493"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000028494"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3189,14 +3204,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   The AKLT correlation length, computed from the subleading eigenvalue \(\lambda _2 = -\tfrac 13\), equals </p>
-<div class="displaymath" id="a0000028494">
+<div class="displaymath" id="a0000028495">
   \[  \xi = -\frac{1}{\log |\lambda _2|} = \frac{1}{\log 3}.  \]
 </div>
 <p> It is finite and positive. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000028493">
+<div class="proof_wrapper" id="a0000028494">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3272,7 +3287,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   Set \(d = 2\) (spin-\(\tfrac 12\)) and \(D = 3\). The Majumdar–Ghosh tensor is the family \(\{ A^0, A^1\}  \subset M_{3}(\mathbb {C})\) defined by </p>
-<div class="displaymath" id="a0000028495">
+<div class="displaymath" id="a0000028496">
   \[  A^0 = \begin{pmatrix}  0 
 
 &  1 
@@ -3331,7 +3346,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:majumdar_ghosh_left_canonical">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000028496"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000028497"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3382,7 +3397,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000028496">
+<div class="proof_wrapper" id="a0000028497">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3410,7 +3425,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:majumdar_ghosh_transfer">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000028497"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000028498"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3463,7 +3478,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000028497">
+<div class="proof_wrapper" id="a0000028498">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3491,7 +3506,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:majumdar_ghosh_not_injective">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000028498"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000028499"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3544,7 +3559,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000028498">
+<div class="proof_wrapper" id="a0000028499">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3572,7 +3587,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:majumdar_ghosh_not_normal">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000028499"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000028500"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3625,7 +3640,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000028499">
+<div class="proof_wrapper" id="a0000028500">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3634,7 +3649,7 @@
   </div>
   <div class="proof_content">
   <p>The bond carries a two-periodic grading with complementary support sets \(\{ (0,1),(0,2),(1,0),(2,0)\} \) and \(\{ (0,0),(1,1),(1,2),(2,1),(2,2)\} \) that are exchanged by left multiplication with a generator. Let \(E_{ij}\) denote the \((i,j)\) matrix unit. Then, for every blocking length \(N\), </p>
-<div class="displaymath" id="a0000028500">
+<div class="displaymath" id="a0000028501">
   \begin{align*}  N\text{ odd} & \Rightarrow \bigl(\forall w,\  |w|=N \Rightarrow (A^w)_{22}=0\bigr) \Rightarrow E_{22}\notin \operatorname{span}_{\mathbb {C}}\{ A^w: |w|=N\} ,\\ N\text{ even} & \Rightarrow \bigl(\forall w,\  |w|=N \Rightarrow (A^w)_{10}=0\bigr) \Rightarrow E_{10}\notin \operatorname{span}_{\mathbb {C}}\{ A^w: |w|=N\} . \end{align*}
 </div>
 <p> Hence no fixed-length word span is all of \(M_{3}(\mathbb {C})\). </p>
@@ -3728,7 +3743,7 @@
 <h1 id="sec:w_state">15.4 The W state</h1>
 
 <p>The W state on \(N\) sites is the single-excitation symmetric state </p>
-<div class="displaymath" id="a0000028501">
+<div class="displaymath" id="a0000028502">
   \[  |W_N\rangle  = |10\cdots 0\rangle  + |010\cdots 0\rangle  + \cdots + |0\cdots 01\rangle ,  \]
 </div>
 <p> the equal-weight superposition of all configurations with exactly one excitation. Unlike the preceding examples it has no translation-invariant representation with bond dimension bounded independently of \(N\); it is presented with open boundary conditions, where the matrix product is closed by a left and a right boundary vector rather than by a trace. </p>
@@ -3795,7 +3810,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   For a tensor \(A\) with bond dimension \(D\), a left boundary covector \(v_L\in \mathbb {C}^D\), a right boundary vector \(v_R\in \mathbb {C}^D\), and a word \(w=(i_1,\ldots ,i_k)\), the open-boundary contraction is the bilinear pairing </p>
-<div class="displaymath" id="a0000028502">
+<div class="displaymath" id="a0000028503">
   \[  (v_L|\,  A^{i_1} A^{i_2}\cdots A^{i_k}\,  |v_R) = v_L^{\mathsf T}\, \bigl(A^{i_1}\cdots A^{i_k}\bigr)\,  v_R.  \]
 </div>
 
@@ -3930,7 +3945,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>     Set \(d = D = 2\). The W tensor is the site-independent family </p>
-<div class="displaymath" id="a0000028503">
+<div class="displaymath" id="a0000028504">
   \[  A^0 = \begin{pmatrix} 1
 
 & 0
@@ -3994,7 +4009,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>  For \(N\ge 0\), the W-state amplitude is the indicator of the single-excitation configurations: </p>
-<div class="displaymath" id="a0000028504">
+<div class="displaymath" id="a0000028505">
   \[  |W_N\rangle (\sigma _1,\ldots ,\sigma _N) = \begin{cases}  1, &  \text{exactly one } \sigma _j = 1, \\ 0, &  \text{otherwise}. \end{cases}  \]
 </div>
 
@@ -4016,7 +4031,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:w_state_identification">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000028505"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000028506"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4072,13 +4087,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For every \(N\), the open-boundary state of the W tensor with boundary vectors \((0|\) and \(|1)\) equals the W state: </p>
-<div class="displaymath" id="a0000028506">
+<div class="displaymath" id="a0000028507">
   \[  |W_N\rangle  = \sum _{\sigma } (0|\,  A^{\sigma _1} \cdots A^{\sigma _N}\,  |1)\,  |\sigma \rangle .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000028505">
+<div class="proof_wrapper" id="a0000028506">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4106,7 +4121,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:w_state_three_excited">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000028507"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000028508"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4163,7 +4178,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000028507">
+<div class="proof_wrapper" id="a0000028508">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4288,7 +4303,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   Set \(d = D = 2\). The cluster-state tensor is the family \(\{ A^0, A^1\}  \subset M_{2}(\mathbb {C})\) defined by </p>
-<div class="displaymath" id="a0000028508">
+<div class="displaymath" id="a0000028509">
   \[  A^0 = |+\rangle \! \langle 0| = \frac{1}{\sqrt{2}} \begin{pmatrix}  1 
 
 &  0 
@@ -4333,7 +4348,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:cluster_not_injective">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000028509"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000028510"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4388,7 +4403,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000028509">
+<div class="proof_wrapper" id="a0000028510">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4485,7 +4500,7 @@
   </div>
   <div class="remark_thmcontent">
   <p> Although the cluster-state tensor is not injective at length&#160;\(1\), the length-\(2\) blocked tensor is injective. Using \(\langle 0 | \pm  \rangle  = \tfrac {1}{\sqrt{2}}\), \(\langle 1 | + \rangle  = \tfrac {1}{\sqrt{2}}\), and \(\langle 1 | - \rangle  = -\tfrac {1}{\sqrt{2}}\), the four products \(A^{ij} = A^i A^j\) are </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fd8e1a54470>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7faa82cec470>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:ex_cluster_blocked_products} A^{00} = \tfrac {1}{\sqrt{2}}|+\rangle \! \langle 0|,\quad A^{01} = \tfrac {1}{\sqrt{2}}|+\rangle \! \langle 1|,\quad A^{10} = \tfrac {1}{\sqrt{2}}|-\rangle \! \langle 0|,\quad A^{11} = -\tfrac {1}{\sqrt{2}}|-\rangle \! \langle 1|. \end{equation}
@@ -4887,7 +4902,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:cluster_string_order">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000028510"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000028511"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4946,7 +4961,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000028510">
+<div class="proof_wrapper" id="a0000028511">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4974,7 +4989,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:cluster_blocked_idempotent">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000028511"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000028512"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5029,7 +5044,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000028511">
+<div class="proof_wrapper" id="a0000028512">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5057,7 +5072,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:cluster_zcl">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000028512"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000028513"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5116,7 +5131,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000028512">
+<div class="proof_wrapper" id="a0000028513">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5137,15 +5152,15 @@
 	, lines&#160;1988–2000
 	]
 </span> is recorded here in the form </p>
-<div class="displaymath" id="a0000028513">
+<div class="displaymath" id="a0000028514">
   \[  \mathcal G_L(A)= \left\{  \sum _{i_1,\ldots ,i_L} \operatorname{tr}(A^{i_1}\cdots A^{i_L}X) |i_1\cdots i_L\rangle  : X\in M_{D}(\mathbb {C}) \right\} .  \]
 </div>
 <p> Thus </p>
-<div class="displaymath" id="a0000028514">
+<div class="displaymath" id="a0000028515">
   \[  \ker h_L=\mathcal G_L(A), \qquad H_N^{(L)}=\sum _i (h_L)_i .  \]
 </div>
 <p> We write </p>
-<div class="displaymath" id="a0000028515">
+<div class="displaymath" id="a0000028516">
   \[  \operatorname {GS}(H)=\ker (H-E_0(H)I)  \]
 </div>
 <p> for the ground eigenspace. </p>
@@ -5165,7 +5180,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:ghz_ground_space_two">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000028516"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000028517"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5225,13 +5240,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For the GHZ tensor \(A\) of Definition&#160;<a href="ch-examples.html#def:ghz_tensor">15.1</a>, </p>
-<div class="displaymath" id="a0000028517">
+<div class="displaymath" id="a0000028518">
   \[  \mathcal G_2(A) = \operatorname{span}_{\mathbb {C}}\{ |00\rangle ,|11\rangle \} .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000028516">
+<div class="proof_wrapper" id="a0000028517">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5240,15 +5255,15 @@
   </div>
   <div class="proof_content">
   <p> By definition, </p>
-<div class="displaymath" id="a0000028518">
+<div class="displaymath" id="a0000028519">
   \[  \Gamma _2(X)(\sigma _1,\sigma _2) = \operatorname{tr}(A^{\sigma _1}A^{\sigma _2}X).  \]
 </div>
 <p> For the GHZ matrices \(A^0=\operatorname{diag}(1,0)\) and \(A^1=\operatorname{diag}(0,1)\), whenever \(\sigma _1\ne \sigma _2\), </p>
-<div class="displaymath" id="a0000028519">
+<div class="displaymath" id="a0000028520">
   \[  A^{\sigma _1}A^{\sigma _2}=0.  \]
 </div>
 <p> Hence </p>
-<div class="displaymath" id="a0000028520">
+<div class="displaymath" id="a0000028521">
   \[  \Gamma _2(X) = X_{00}|00\rangle +X_{11}|11\rangle ,  \]
 </div>
 <p> and the image of&#160;\(\Gamma _2\) is \(\operatorname{span}_{\mathbb {C}}\{ |00\rangle ,|11\rangle \} \). </p>
@@ -5271,7 +5286,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:constant_ket_mem_ghz_chain_ground_space">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000028521"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000028522"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5327,13 +5342,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For \(N\ge 2\) and \(a\in \{ 0,1\} \), </p>
-<div class="displaymath" id="a0000028522">
+<div class="displaymath" id="a0000028523">
   \[  |a\rangle ^{\otimes N}\in \mathcal G_{N,2}(A_{\mathrm{GHZ}}).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000028521">
+<div class="proof_wrapper" id="a0000028522">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5342,15 +5357,15 @@
   </div>
   <div class="proof_content">
   <p> For a cyclic nearest-neighbour window and outside assignment \(\tau \), set </p>
-<div class="displaymath" id="a0000028523">
+<div class="displaymath" id="a0000028524">
   \[  R_{i,\tau } := \left.|a\rangle ^{\otimes N}\right|_{[i,i+1],\tau }.  \]
 </div>
 <p> For \(b,c\in \{ 0,1\} \) with \(b\ne c\), the completed configuration is not constant, hence </p>
-<div class="displaymath" id="a0000028524">
+<div class="displaymath" id="a0000028525">
   \[  R_{i,\tau }(b,c)=0.  \]
 </div>
 <p> Therefore </p>
-<div class="displaymath" id="a0000028525">
+<div class="displaymath" id="a0000028526">
   \[  R_{i,\tau } \in \{ v:v(0,1)=v(1,0)=0\}  = \operatorname{span}_{\mathbb {C}}\{ |00\rangle ,|11\rangle \}  = \mathcal G_2(A_{\mathrm{GHZ}}),  \]
 </div>
 <p> so \(|a\rangle ^{\otimes N}\in \mathcal G_{N,2}(A_{\mathrm{GHZ}})\). </p>
@@ -5373,7 +5388,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:ghz_chain_ground_space_two">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000028526"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000028527"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5431,7 +5446,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For \(N\ge 2\), the common nearest-neighbour cyclic ground space of the GHZ tensor satisfies </p>
-<div class="displaymath" id="a0000028527">
+<div class="displaymath" id="a0000028528">
   \[  \mathcal G_{N,2}(A_{\mathrm{GHZ}}) = \operatorname{span}_{\mathbb {C}}\{  |0\rangle ^{\otimes N}, |1\rangle ^{\otimes N} \} .  \]
 </div>
 <p> This is the cyclic-window form of the two-fold degeneracy in <span class="cite">
@@ -5444,7 +5459,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000028526">
+<div class="proof_wrapper" id="a0000028527">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5453,27 +5468,27 @@
   </div>
   <div class="proof_content">
   <p> Let \(\psi \in \mathcal G_{N,2}(A_{\mathrm{GHZ}})\). For every cyclic nearest-neighbour window and outside assignment \(\tau \), </p>
-<div class="displaymath" id="a0000028528">
+<div class="displaymath" id="a0000028529">
   \[  \left.\psi \right|_{[i,i+1],\tau } \in \mathcal G_2(A_{\mathrm{GHZ}}) = \operatorname{span}_{\mathbb {C}}\{ |00\rangle ,|11\rangle \} .  \]
 </div>
 <p> Taking the outside assignment from the word \(\sigma \) gives </p>
-<div class="displaymath" id="a0000028529">
+<div class="displaymath" id="a0000028530">
   \[  \left.\psi \right|_{[i,i+1],\sigma }(\sigma _i,\sigma _{i+1}) = \psi (\sigma ).  \]
 </div>
 <p> Hence a mixed nearest-neighbour word has zero coefficient: </p>
-<div class="displaymath" id="a0000028530">
+<div class="displaymath" id="a0000028531">
   \[  \sigma _i\ne \sigma _{i+1} \quad \Longrightarrow \quad \psi (\sigma )=0.  \]
 </div>
 <p> A nonconstant binary cyclic word has a mixed edge, </p>
-<div class="displaymath" id="a0000028531">
+<div class="displaymath" id="a0000028532">
   \[  \sigma \notin \{ (0,\ldots ,0),(1,\ldots ,1)\}  \quad \Longrightarrow \quad \exists i,\  \sigma _i\ne \sigma _{i+1}.  \]
 </div>
 <p> Therefore </p>
-<div class="displaymath" id="a0000028532">
+<div class="displaymath" id="a0000028533">
   \[  \psi = \psi (0,\ldots ,0)|0\rangle ^{\otimes N} + \psi (1,\ldots ,1)|1\rangle ^{\otimes N}.  \]
 </div>
 <p> Conversely, Theorem&#160;<a href="ch-examples.html#thm:constant_ket_mem_ghz_chain_ground_space">15.64</a> gives </p>
-<div class="displaymath" id="a0000028533">
+<div class="displaymath" id="a0000028534">
   \[  |0\rangle ^{\otimes N},\  |1\rangle ^{\otimes N} \in \mathcal G_{N,2}(A_{\mathrm{GHZ}}),  \]
 </div>
 <p> and hence their span lies in \(\mathcal G_{N,2}(A_{\mathrm{GHZ}})\). </p>
@@ -5500,15 +5515,15 @@
   </div>
   <div class="remark_thmcontent">
   <p> For the GHZ tensor of Definition&#160;<a href="ch-examples.html#def:ghz_tensor">15.1</a>, </p>
-<div class="displaymath" id="a0000028534">
+<div class="displaymath" id="a0000028535">
   \[  \mathcal G_2(A) = \operatorname{span}\{ |00\rangle ,|11\rangle \} , \qquad h_{\mathrm{GHZ}} = |01\rangle \! \langle 01|+|10\rangle \! \langle 10| = I-|00\rangle \! \langle 00|-|11\rangle \! \langle 11|.  \]
 </div>
 <p> The periodic nearest-neighbour parent Hamiltonian therefore satisfies </p>
-<div class="displaymath" id="a0000028535">
+<div class="displaymath" id="a0000028536">
   \[  H_{\mathrm{GHZ},N} = \sum _i (h_{\mathrm{GHZ}})_i, \qquad \ker H_{\mathrm{GHZ},N} = \operatorname{span}\{ |0\rangle ^{\otimes N},|1\rangle ^{\otimes N}\} ,  \]
 </div>
 <p> using the cyclic-window equality </p>
-<div class="displaymath" id="a0000028536">
+<div class="displaymath" id="a0000028537">
   \[  \mathcal G_{N,2}(A_{\mathrm{GHZ}}) = \operatorname{span}\{ |0\rangle ^{\otimes N},|1\rangle ^{\otimes N}\}   \]
 </div>
 <p> from Theorem&#160;<a href="ch-examples.html#thm:ghz_chain_ground_space_two">15.65</a>. This is the ferromagnetic Ising parent Hamiltonian <span class="cite">
@@ -5553,11 +5568,11 @@
 	, lines&#160;2364–2369
 	]
 </span>. The sourced stabilizer is </p>
-<div class="displaymath" id="a0000028537">
+<div class="displaymath" id="a0000028538">
   \[  K_i^{ZXZ} = \sigma ^z_i\sigma ^x_{i+1}\sigma ^z_{i+2}.  \]
 </div>
 <p> The corresponding positive parent interaction is </p>
-<div class="displaymath" id="a0000028538">
+<div class="displaymath" id="a0000028539">
   \[  h_i^{ZXZ} = \frac12(I-K_i^{ZXZ}), \qquad H_{\mathrm{cl},N}^{ZXZ} = \sum _i h_i^{ZXZ}, \qquad \dim \ker H_{\mathrm{cl},N}^{ZXZ}=1  \]
 </div>
 <p> <span class="cite">
@@ -5567,7 +5582,7 @@
 	, local TeX lines&#160;374–387
 	]
 </span>. Thus an \(XZX\) formula should be used for this tensor only after establishing an equivalence such as </p>
-<div class="displaymath" id="a0000028539">
+<div class="displaymath" id="a0000028540">
   \[  U H_{\mathrm{cl},N}^{ZXZ} U^\dagger = H_{\mathrm{cl},N}^{XZX} \quad \text{or}\quad T H_{\mathrm{cl},N}^{ZXZ} T^{-1} = H_{\mathrm{cl},N}^{XZX}.  \]
 </div>
 
@@ -5593,7 +5608,7 @@
   </div>
   <div class="remark_thmcontent">
   <p> For the AKLT tensor of Definition&#160;<a href="ch-examples.html#def:aklt_tensor">15.13</a>, with \(\mathcal G_{[a,b]}\) denoting the local ground space on sites \(a,\ldots ,b\), </p>
-<div class="displaymath" id="a0000028540">
+<div class="displaymath" id="a0000028541">
   \[  L_0=2, \qquad \mathcal G_{[1,2]}\cap \mathcal G_{[2,3]}=\mathcal G_{[1,3]}  \]
 </div>
 <p> <span class="cite">
@@ -5603,7 +5618,7 @@
 	, line&#160;2095
 	]
 </span>. The displayed local spin-chain Hamiltonian is </p>
-<div class="displaymath" id="a0000028541">
+<div class="displaymath" id="a0000028542">
   \[  H_{\mathrm{AKLT},N} = \sum _i \left( \vec S_i\cdot \vec S_{i+1} +\frac13(\vec S_i\cdot \vec S_{i+1})^2 \right),  \]
 </div>
 <p> up to an additive constant <span class="cite">
@@ -5619,11 +5634,11 @@
 	, lines&#160;2126–2130
 	]
 </span>. The spin-\(2\) projector form is related to the polynomial Hamiltonian by the spin-addition identity </p>
-<div class="displaymath" id="a0000028542">
+<div class="displaymath" id="a0000028543">
   \[  P^{(2)}_{i,i+1} = \frac12 \left( \vec S_i\cdot \vec S_{i+1} +\frac13(\vec S_i\cdot \vec S_{i+1})^2 +\frac23 I \right)  \]
 </div>
 <p> for two spin-\(1\) particles. For open boundary conditions, </p>
-<div class="displaymath" id="a0000028543">
+<div class="displaymath" id="a0000028544">
   \[  \dim \operatorname {GS}(H_{\mathrm{AKLT},N}^{\mathrm{open}})=4, \qquad \dim \bigl(\operatorname {GS}(H_{\mathrm{AKLT},N}^{\mathrm{open}}) \cap \mathcal H_{S=0}\bigr)=1  \]
 </div>
 <p> <span class="cite">
