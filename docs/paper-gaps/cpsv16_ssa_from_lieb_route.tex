@@ -237,10 +237,18 @@ in place. Concretely:
     $\log(\rho\otimes\tau) = \log\rho\otimes\mathbf 1 + \mathbf 1\otimes\log\tau$
     --- the one-sided splits $\log(A\otimes\mathbf 1) = \log A\otimes\mathbf 1$ and
     $\log(\mathbf 1\otimes B) = \mathbf 1\otimes\log B$ follow from the same
-    functional-calculus covariance applied to the unital tensor embeddings, but
+    functional-calculus covariance applied to the unital tensor embeddings, and
     recombining them needs the logarithm of a commuting product
-    $\log(XY) = \log X + \log Y$ for commuting positive definite $X,Y$, a lemma
-    not yet available; and the twirling identity itself, which writes
+    $\log(XY) = \log X + \log Y$ for commuting positive definite $X,Y$. That
+    commuting-product lemma is now formalized
+    (\leanid{Matrix.PosDef.cfc_log_mul} in \doclink{TNLean/Analysis/CfcLogAdditive},
+    \path{TNLean/Analysis/CfcLogAdditive.lean}), via the inverse pairing of the
+    exponential and the logarithm: each factor is the exponential of its logarithm, the two
+    logarithms commute, and the exponential carries their sum to the product, so the
+    product is the exponential of the sum and the logarithm returns it. It depends
+    only on the standard Lean axioms and needs no Lieb input. The remaining
+    ancilla-additivity work is the tensor-product splitting itself; and the twirling
+    identity, which writes
     $\tr_C\rho\otimes(\mathbf 1_C/d_C)$ as a uniform average of conjugations by a
     unitary $1$-design on $C$ and requires either a Haar measure on the unitary
     group (absent from the matrix unitary group in the current dependency) or a
