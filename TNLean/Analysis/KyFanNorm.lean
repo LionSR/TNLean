@@ -7,22 +7,36 @@ import Mathlib.Analysis.Matrix.Spectrum
 import Mathlib.Analysis.Matrix.PosDef
 
 /-!
-# Ky-Fan k-norm of a Hermitian matrix
+# Sum of the largest eigenvalues of a Hermitian matrix (Ky Fan's principle)
 
-For a Hermitian matrix `A` the *Ky-Fan k-norm* is the sum of the `k` largest
-eigenvalues of `A`, counted with multiplicity.  For `k < card n` it equals the
-maximum of the real trace `tr(P A)` taken over all orthogonal projections `P`
-of rank exactly `k`; the rank-`k` constraint is essential, since for a Hermitian
-matrix with negative tail eigenvalues a lower-rank projection can give a larger
-trace.  When `k` reaches `card n` the norm is the real trace `tr(A)` itself,
-attained by the identity projection.  This module sets up the definition, its
-basic properties, the achievability half of the maximum principle (a rank-`k`
-projection attaining the sum), and the full maximum principle for `k < card n`.
+For a Hermitian matrix `A` this module studies the sum of its `k` largest
+(signed) eigenvalues, counted with multiplicity.  This quantity is the subject
+of Ky Fan's maximum principle: for `k < card n` it equals the maximum of the
+real trace `tr(P A)` over all orthogonal projections `P` of rank exactly `k`.
+The rank-`k` constraint is essential, since for a Hermitian matrix with negative
+tail eigenvalues a lower-rank projection can give a larger trace.  When `k`
+reaches `card n` the value is the real trace `tr(A)` itself, attained by the
+identity projection.
 
-The Ky-Fan norm is used in Wolf's Chapter 3 study of overlaps with pure states
-of a fixed Schmidt rank: the maximal overlap of a fixed vector with a normalized
-vector of Schmidt rank `n` equals the Ky-Fan `n`-norm of the reduced density
-matrix.
+This sum of largest eigenvalues equals the genuine *Ky-Fan `k`-norm* -- the sum
+of the `k` largest *singular values* -- exactly on the positive-semidefinite
+cone, where eigenvalues and singular values coincide.  For an indefinite
+Hermitian matrix the two differ: e.g. for `diag(1, -2)` the largest eigenvalue
+is `1`, while the largest singular value is `2`.  The definitions and the
+maximum principle here are stated for arbitrary Hermitian `A`, so they describe
+the signed eigenvalue sum; the name `kyFanNorm` is justified only on the
+positive-semidefinite cone.
+
+This eigenvalue sum is used in Wolf's Chapter 3 study of overlaps with pure
+states of a fixed Schmidt rank: the maximal overlap of a fixed vector with a
+normalized vector of Schmidt rank `n` equals the Ky-Fan `n`-norm of the reduced
+density matrix, which is positive semidefinite, so there the eigenvalue sum and
+the singular-value norm agree
+(`Notes/WolfNoteTexSource/ch03_positive_not_completely.tex` line 126).
+
+This module sets up the definition, its basic properties, the achievability half
+of the maximum principle (a rank-`k` projection attaining the sum), and the full
+maximum principle for `k < card n`.
 
 ## Main definitions
 
@@ -53,7 +67,6 @@ matrix.
 -/
 
 open scoped BigOperators Matrix ComplexOrder
-open Matrix Finset
 
 /-- **Top-`k` weighted-sum bound.** If `μ` is nonincreasing on `[0, N)`, the
 weights `w` lie in `[0, 1]`, and they sum to `k` over `[0, N)` with `k < N`, then
@@ -135,14 +148,20 @@ variable {n : Type*} [Fintype n] [DecidableEq n] {A : Matrix n n ℂ}
 /-- The `i`-th largest eigenvalue of a Hermitian matrix, returning `0` when the
 index exceeds the dimension.  It is `Matrix.IsHermitian.eigenvalues₀`, which
 lists the eigenvalues in descending order, indexed by a natural number so that
-the sum defining the Ky-Fan norm ranges over a plain `Finset.range`. -/
+the eigenvalue sum below ranges over a plain `Finset.range`. -/
 noncomputable def descEigenvalue (hA : A.IsHermitian) (i : ℕ) : ℝ :=
   if h : i < Fintype.card n then hA.eigenvalues₀ ⟨i, h⟩ else 0
 
-/-- The Ky-Fan `k`-norm of a Hermitian matrix: the sum of the `k` largest
-eigenvalues of `A`, sorted in descending order (Wolf Ch. 3, Lemma 3.1;
-Bhatia, *Matrix Analysis*).  Indices beyond the dimension contribute `0`, so
-the norm stabilizes at the trace once `k` reaches the matrix dimension. -/
+/-- The sum of the `k` largest (signed) eigenvalues of a Hermitian matrix,
+sorted in descending order -- the quantity in Ky Fan's maximum principle
+(Wolf Ch. 3, Lemma 3.1).  Indices beyond the dimension contribute `0`, so the
+value stabilizes at the real trace once `k` reaches the matrix dimension.
+
+This equals the genuine Ky-Fan `k`-norm (the sum of the `k` largest *singular*
+values) exactly on the positive-semidefinite cone, where eigenvalues and
+singular values coincide.  For an indefinite Hermitian matrix the two differ
+(for `diag(1, -2)` this sum is `1` at `k = 1`, while the Ky-Fan `1`-norm is
+`2`), so the name `kyFanNorm` is faithful only on positive-semidefinite `A`. -/
 noncomputable def kyFanNorm (hA : A.IsHermitian) (k : ℕ) : ℝ :=
   ∑ i ∈ Finset.range k, hA.descEigenvalue i
 
