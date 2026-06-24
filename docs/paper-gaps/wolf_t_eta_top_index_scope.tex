@@ -1,0 +1,89 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Top Schmidt-rank index in the $n$-positivity threshold of $T_\eta$
+(Wolf Chapter 3)}
+\author{}
+\date{2026-06-24}
+
+\begin{document}
+\maketitle
+
+\section{Source statement}
+
+In Chapter~3 of Wolf's lecture notes \cite{Wolf2012Quantum}, the one-parameter
+family
+\begin{align}
+  T_\eta(\rho)=\operatorname{tr}(\rho)\,\mathbf 1-\frac{\rho}{\eta},
+  \qquad \eta\in\mathbb R_+,
+  \tag{3.11}
+\end{align}
+on $M_D(\mathbb C)$ is analyzed through its Choi--Jamiolkowski operator
+$\tau_\eta=D^{-1}\mathbf 1-\eta^{-1}\ket\Omega\bra\Omega$.  All positive
+eigenvalues of $\tau_\eta$ equal $1/D$, and the single non-positive eigenvalue
+is $\nu_-=1/D-1/\eta$ with reduced density $\rho_-=\mathbf 1/D$, so its
+Ky--Fan $n$-norm is $\|\rho_-\|_{(n)}=n/D$.  The source concludes:
+\begin{align}
+  T_\eta\ \text{is $n$-positive}\iff \eta\ge n,
+  \qquad n=1,\dots,D,
+\end{align}
+where the range of $n$ runs up to the dimension $D$, in which case
+$n$-positivity is complete positivity.  This proves that every inclusion in
+Wolf's chain
+\begin{align}
+  \mathcal T_{\mathrm{cp}}=\mathcal T_D\subseteq
+  \mathcal T_{D-1}\subseteq\cdots\subseteq\mathcal T_2\subseteq\mathcal T_1
+  \tag{3.3}
+\end{align}
+is strict.\footnote{Local source:
+\path{Notes/WolfNoteTexSource/ch03_positive_not_completely.tex:181--193},
+equation label \path{eq:ch3:3.11}.}
+
+\section{Point at issue}
+
+The formal statement establishes the equivalence
+\begin{align}
+  T_\eta\ \text{is $k$-positive}\iff \eta\ge k
+\end{align}
+for Schmidt-rank index $1\le k<D$, omitting the top index $k=D$.  The
+restriction is inherited, not introduced here: the equivalence is derived from
+the maximal-overlap principle (Wolf Lemma~3.1), whose formal version
+$\sup_\psi|\braket{\Omega}{\psi}|^2=\|\rho\|_{(k)}$ over Schmidt-rank-$k$
+normalized vectors is available only for $1\le k<D$.  That bound in turn rests
+on the Ky--Fan maximum principle, stated for orthogonal projections of rank
+exactly $k$ with $k<D$.  At the top index $k=D$ the Ky--Fan $D$-norm is the
+full trace and the maximizing projection is the identity; the present
+formalization of the maximum principle does not cover that boundary case.
+
+Consequently the strictness witness produced here, a $k$-positive map that fails
+to be $(k+1)$-positive, is available for $1\le k$ with $k+1<D$.  This covers
+every inclusion in the chain~(3.3) except the topmost one,
+$\mathcal T_D\subseteq\mathcal T_{D-1}$, which compares complete positivity with
+$(D-1)$-positivity and requires the $k=D$ index.
+
+\section{Status}
+
+The deviation is a scope restriction, not a mathematical error: the formal
+equivalence and the strictness witnesses are correct as stated for the indices
+they cover.  The omitted boundary case $k=D$ is mathematically true in the
+source and would follow once the maximal-overlap principle and the Ky--Fan
+maximum principle are extended to the top index $k=D$ (where the bound reads
+$\|\rho\|_{(D)}=\operatorname{tr}\rho=1$ and the optimizing projection is the
+identity).  Extending those two principles to $k=D$ removes this restriction and
+supplies the top inclusion $\mathcal T_D\subseteq\mathcal T_{D-1}$.
+
+The formal declarations are
+\leanid{Matrix.isNPositiveMap_tEta_iff} for the threshold equivalence and
+\leanid{Matrix.exists_isNPositiveMap_not_succ} for the strictness witness, in
+\doclink{TNLean/Channel/NPositivityChainStrict}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
