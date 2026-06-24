@@ -39,6 +39,11 @@ matrix.
 * `Matrix.PosSemidef.kyFanNorm_le_succ` -- monotonicity in `k`.
 * `Matrix.IsHermitian.exists_isProj_trace_eq_kyFanNorm` -- a rank-`min k (card n)`
   orthogonal projection attains the Ky-Fan `k`-norm as a trace.
+* `Matrix.IsHermitian.trace_mul_re_le_kyFanNorm` -- the upper bound: every rank-`k`
+  orthogonal projection `P` with `k < card n` satisfies `(tr(P A)).re ≤ kyFanNorm k`.
+* `Matrix.IsHermitian.kyFanNorm_eq_sup_trace` -- the Ky-Fan maximum principle: for
+  `k < card n` the Ky-Fan `k`-norm is the greatest value of `(tr(P A)).re` over
+  rank-`k` orthogonal projections `P`.
 
 ## References
 
@@ -128,10 +133,9 @@ namespace Matrix.IsHermitian
 variable {n : Type*} [Fintype n] [DecidableEq n] {A : Matrix n n ℂ}
 
 /-- The `i`-th largest eigenvalue of a Hermitian matrix, returning `0` when the
-index exceeds the dimension.  This is a convenience wrapper around
-`Matrix.IsHermitian.eigenvalues₀`, which lists the eigenvalues in descending
-order, so that the sum defining the Ky-Fan norm ranges over a plain
-`Finset.range`. -/
+index exceeds the dimension.  It is `Matrix.IsHermitian.eigenvalues₀`, which
+lists the eigenvalues in descending order, indexed by a natural number so that
+the sum defining the Ky-Fan norm ranges over a plain `Finset.range`. -/
 noncomputable def descEigenvalue (hA : A.IsHermitian) (i : ℕ) : ℝ :=
   if h : i < Fintype.card n then hA.eigenvalues₀ ⟨i, h⟩ else 0
 
