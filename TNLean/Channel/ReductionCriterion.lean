@@ -28,8 +28,8 @@ k` (parametrized by `k : ℕ`) in `PositiveExamples.lean`, and the later
 `Matrix.tEta D η` (parametrized by `η : ℝ`) in `NPositivityChainStrict.lean`.
 They agree at `η = k`: `reductionMap D k = tEta D (k : ℝ)`, since the only
 difference is the scalar `(k : ℂ)⁻¹` versus `((k : ℝ) : ℂ)⁻¹`, and the natural
-and real casts of `k` into `ℂ` coincide.  The bridge lemma
-`Matrix.reductionMap_eq_tEta` makes this identification, so the `n`-positivity
+and real casts of `k` into `ℂ` coincide.  The identification lemma
+`Matrix.reductionMap_eq_tEta` records this, so the `n`-positivity
 threshold (`Matrix.isNPositiveMap_tEta_iff`), the Choi formula
 (`ChoiJamiolkowski.choiMatrix_tEta`), and the self-duality
 (`Matrix.traceAdjointMap_reductionMap`) all describe one object.  No third
@@ -51,13 +51,14 @@ symmetric bound `n • (ρ₁ ⊗ 1) ≥ ρ`.  The implications are recorded as
 
 ## Main results
 
-* `Matrix.reductionMap_eq_tEta` -- the bridge `reductionMap D k = tEta D (k : ℝ)`.
+* `Matrix.reductionMap_eq_tEta` -- the identification `reductionMap D k = tEta D (k : ℝ)`.
 * `ChoiJamiolkowski.choiMatrix_reductionMap_eq_reductionWitness` -- the Choi
   operator of `T_n` is the witness `W_n`.
 * `Matrix.tensorMapId_tEta_eq` -- `(T_n ⊗ id)(ρ) = (1 ⊗ ρ₂) − n⁻¹ • ρ`.
 * `Matrix.reductionCriterion_left` and `Matrix.reductionCriterion_right` --
-  **Wolf eq. (3.18):** positivity of `(T_n ⊗ id)(ρ)` (resp. `(id ⊗ T_n)(ρ)`)
-  yields `n • (1 ⊗ ρ₂) ≥ ρ` (resp. `n • (ρ₁ ⊗ 1) ≥ ρ`).
+  **Wolf eq. (3.18):** positivity of `(T_n ⊗ id)(ρ)` yields `n • (1 ⊗ ρ₂) ≥ ρ`,
+  and positivity of `(T_n ⊗ id)(ρ^swap)` -- equivalently Wolf's symmetric
+  condition `(id ⊗ T_n)(ρ) ≥ 0` -- yields `n • (ρ₁ ⊗ 1) ≥ ρ`.
 
 ## Scope
 
@@ -90,12 +91,6 @@ theorem reductionMap_eq_tEta (D k : ℕ) : reductionMap D k = tEta D (k : ℝ) :
   apply LinearMap.ext
   intro X
   rw [reductionMap_apply, tEta_apply, Complex.ofReal_natCast]
-
-end Matrix
-
-namespace Matrix
-
-variable {D : ℕ}
 
 /-- **Wolf's reduction witness.** The entanglement witness attached to `T_n` is
 `W_n = D⁻¹ • 1 − n⁻¹ • |Ω⟩⟨Ω|` on `M_D(ℂ) ⊗ M_D(ℂ)`.  It is exactly the Choi
@@ -178,14 +173,17 @@ theorem reductionCriterion_left {n : ℕ} (hn : 0 < n)
     rw [hcancel, one_smul]
   rwa [hrw] at hscaled
 
-/-- **Wolf's reduction criterion, equation (3.18), second form.** If applying
-`T_n` to the second tensor factor of a bipartite matrix `ρ` yields a positive
-semidefinite operator, then `n • (ρ₁ ⊗ 1) ≥ ρ`, where `ρ₁ = traceRight ρ` is the
-reduced density on the first factor.
+/-- **Wolf's reduction criterion, equation (3.18), second form.** Let `ρ` be a
+bipartite matrix and `ρ^swap = ρ.submatrix Prod.swap Prod.swap` its image under
+the factor swap.  If `(T_n ⊗ id)(ρ^swap)` is positive semidefinite, then
+`n • (ρ₁ ⊗ 1) ≥ ρ`, where `ρ₁ = traceRight ρ` is the reduced density on the
+first factor.
 
-The second factor is handled by reindexing to the first, applying the first
-form, and reindexing back; positive semidefiniteness and the order are invariant
-under the simultaneous index swap. -/
+Because the factor swap is a unitary reindexing, `(T_n ⊗ id)(ρ^swap) ≥ 0` is
+equivalent to Wolf's symmetric condition `(id ⊗ T_n)(ρ) ≥ 0`, which applies
+`T_n` to the second factor.  The proof reindexes to the first factor, applies
+the first form, and reindexes back; positive semidefiniteness and the order are
+invariant under the swap. -/
 theorem reductionCriterion_right {n : ℕ} (hn : 0 < n)
     (ρ : Matrix (Fin D × Fin D') (Fin D × Fin D') ℂ)
     (hpos : (tensorMapId (tEta D' (n : ℝ))

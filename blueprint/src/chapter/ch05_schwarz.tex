@@ -1518,10 +1518,24 @@ of a bipartite state whose Schmidt number is at most $n$.
 
 \begin{proof}
     \leanok
-    The $(i_2,j_2)$ slice of $\rho$ on the first factor has trace equal to the
-    $(i_2,j_2)$ entry of $\rho_2$.  Applying $T_\eta$ to each slice replaces the
-    trace term by that entry times the identity on the first factor, which is
-    the $\Id\otimes\rho_2$ term, and the second term is $\eta^{-1}\rho$.
+    Fix block indices $i_2,j_2$ on the second factor and write $\rho^{(i_2,j_2)}$
+    for the $D\times D$ slice $\rho^{(i_2,j_2)}_{i_1 j_1}=\rho_{(i_1,i_2),(j_1,j_2)}$
+    on the first factor.  Its trace is the corresponding entry of $\rho_2$:
+    \[
+        \tr\bigl(\rho^{(i_2,j_2)}\bigr)
+        =\sum_{i_1}\rho_{(i_1,i_2),(i_1,j_2)}
+        =(\rho_2)_{i_2 j_2}.
+    \]
+    Applying $T_\eta$ entry by entry gives
+    \[
+        \bigl((T_\eta\otimes\id)(\rho)\bigr)_{(i_1,i_2),(j_1,j_2)}
+        =\tr\bigl(\rho^{(i_2,j_2)}\bigr)\,\delta_{i_1 j_1}
+            -\eta^{-1}\rho_{(i_1,i_2),(j_1,j_2)}
+        =(\rho_2)_{i_2 j_2}\,\delta_{i_1 j_1}
+            -\eta^{-1}\rho_{(i_1,i_2),(j_1,j_2)},
+    \]
+    and the first term is exactly the $(i_1,i_2),(j_1,j_2)$ entry of
+    $\Id\otimes\rho_2$.
 \end{proof}
 
 \begin{theorem}[Reduction criterion]
@@ -1529,18 +1543,26 @@ of a bipartite state whose Schmidt number is at most $n$.
     \lean{Matrix.reductionCriterion_left, Matrix.reductionCriterion_right}
     \leanok
     \uses{def:t_eta, thm:tensor_map_id_t_eta}
-    Let $n\ge 1$ and let $\rho$ be a bipartite matrix.  If
-    $(T_n\otimes\id)(\rho)\ge 0$ then
+    Let $n\ge 1$ and let $\rho$ be a bipartite matrix, with $\rho^{F}$ its image
+    under the factor swap $\rho^{F}_{(i_2,i_1),(j_2,j_1)}=\rho_{(i_1,i_2),(j_1,j_2)}$.
+    If $(T_n\otimes\id)(\rho)\ge 0$ then
     \[
         n\,\Id\otimes\rho_2\ge\rho,
     \]
-    and if $(\id\otimes T_n)(\rho)\ge 0$ then
+    and if $(T_n\otimes\id)(\rho^{F})\ge 0$ then
     \[
         n\,\rho_1\otimes\Id\ge\rho,
     \]
     where $\rho_1$ and $\rho_2$ are the reduced densities of $\rho$ on the first
-    and second factors.  This is the operator inequality
-    \cite[Equation~(3.18)]{Wolf2012Quantum}.
+    and second factors.  Because the factor swap is a unitary reindexing,
+    \[
+        (\id\otimes T_n)(\rho)\ge 0
+        \iff
+        (T_n\otimes\id)(\rho^{F})\ge 0,
+    \]
+    so the second hypothesis is Wolf's symmetric condition
+    $(\id\otimes T_n)(\rho)\ge 0$ expressed through the swap.  Together the two
+    inequalities are \cite[Equation~(3.18)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
@@ -1548,9 +1570,18 @@ of a bipartite state whose Schmidt number is at most $n$.
     By the reduction-criterion identity, $(T_n\otimes\id)(\rho)$ equals
     $\Id\otimes\rho_2-n^{-1}\rho$.  Scaling a positive semidefinite operator by
     $n>0$ preserves positivity, so $n\,\Id\otimes\rho_2-\rho\ge 0$, which is the
-    first inequality.  The second follows by swapping the two factors, applying
-    the first form, and swapping back, since positivity and the order are
-    invariant under the simultaneous factor swap.
+    first inequality.  For the second, the factor swap $F$ satisfies $F^2=\id$
+    and is a unitary reindexing, so it preserves positive semidefiniteness and
+    the order, and it exchanges the reduced densities and the two tensor slots:
+    \[
+        (\rho^{F})_2=\rho_1,
+        \qquad
+        \bigl(\Id\otimes(\rho^{F})_2-n^{-1}\rho^{F}\bigr)^{F}
+        =\rho_1\otimes\Id-n^{-1}\rho.
+    \]
+    Applying the first form to $\rho^{F}$ gives
+    $n\,\Id\otimes(\rho^{F})_2-\rho^{F}\ge 0$; conjugating by $F$ turns this into
+    $n\,\rho_1\otimes\Id-\rho\ge 0$.
 \end{proof}
 
 \begin{theorem}[Completely positive implies two-positive]
