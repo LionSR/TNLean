@@ -25,7 +25,7 @@ where the reduced states are the tripartite partial traces.
   reference on the retained factor evaluates to an entropy difference:
   $D(\rho \,\|\, (\mathbf 1_A / d_A) \otimes \rho_R)
     = \log d_A + S(\rho_R) - S(\rho)$, where $\rho_R$ is the partial trace over
-  $A$ and the retained factor $A$ carries the maximally mixed state.
+  $A$ and the traced-out factor $A$ carries the maximally mixed state.
 * `SSAPosDef.quantumRelativeEntropy_traceC_le` — the data-processing inequality
   specialized to the partial trace over the third factor of the tripartite index.
 * `strong_subadditivity_posDef` — strong subadditivity for a positive definite
