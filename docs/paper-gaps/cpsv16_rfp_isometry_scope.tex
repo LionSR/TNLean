@@ -171,6 +171,86 @@ they do not record the cross-block equations
 \end{align}
 which are part of the source condition \path{eq:III_isometry}.
 
+\section{Square-root diagonal (local correction)}
+
+The source's displayed normal-tensor form (\path{eq_III_NT_RFP}) is written
+\begin{align}
+  A^i = X\,\Lambda\,U^i\,X^{-1},
+  \tag{\path{eq_III_NT_RFP}}
+\end{align}
+with the diagonal $\Lambda$ itself, together with the unit isometry
+condition\footnote{Local source:
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:1278} for the displayed equation and
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:1281-1283} for the unit isometry.}
+\begin{align}
+  \sum_i (U^i)_{\alpha,\beta}\,\overline{(U^i)_{\alpha',\beta'}}
+    = \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+\end{align}
+This literal pairing is internally inconsistent.  The same proof constructs the
+reference tensor\footnote{Local source:
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:1300}.}
+\begin{align}
+  \widehat A^{(\alpha',\beta')}_{\alpha,\beta}
+    = \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}\sqrt{\Lambda_\alpha},
+\end{align}
+which is left-canonical and has fixed point $\diag(\Lambda)$ with
+$\tr(\Lambda)=1$.  Writing $\widehat A = \Lambda\,U$ would force
+$U^{(\alpha',\beta')}_{\alpha,\beta}
+  = \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}/\sqrt{\Lambda_\alpha}$, whose pair-index
+sum is
+\begin{align}
+  \sum_i (U^i)_{\alpha,\beta}\,\overline{(U^i)_{\alpha',\beta'}}
+    = \frac{\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}}{\Lambda_\alpha}
+    \ne \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}
+    \qquad(\Lambda_\alpha\ne 1),
+\end{align}
+so the residual after factoring $\Lambda$ is \emph{not} a unit isometry.  Writing
+instead $\widehat A = \sqrt\Lambda\,U$ gives
+$U^{(\alpha',\beta')}_{\alpha,\beta}=\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}$,
+whose pair-index sum is
+$\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}$, a genuine unit isometry.
+
+The formalization therefore states the decomposition with the square-root
+diagonal,
+\begin{align}
+  A^i = X\,\sqrt\Lambda\,U^i\,X^{-1},
+\end{align}
+keeping both the source trace-normalization $\tr(\Lambda)=1$ on $\Lambda$ and the
+source unit isometry condition on $U$ simultaneously.  This $\Lambda\to\sqrt\Lambda$
+change is a \emph{local correction} of the source display: it is mathematically
+correct as stated, and the source itself uses $\sqrt{\Lambda_\alpha}$ for the
+reference tensor at line~1300, so the displayed $\Lambda$ at line~1278 is a
+typographic simplification of the dressing.
+
+\section{Trace normalization (discharged)}
+
+The source trace-normalization $\tr(\Lambda)=1$ is now formalized for a single
+normal-tensor block.  A named predicate records the isometry canonical
+form,\footnote{Formal declaration: \leanid{MPSTensor.IsIsometryCanonicalForm}
+in \doclink{TNLean/MPS/RFP/StructuralFull}.} and a theorem proves it for a
+normal canonical-form-II RFP tensor.\footnote{Formal declarations:
+\leanid{MPSTensor.isIsometryCanonicalForm_of_rfp_nt} and the per-block
+\leanid{MPSTensor.isIsometryCanonicalForm_of_rfp_nt_blocks}.}  The predicate
+asserts the existence of an invertible $X$, a positive diagonal $\Lambda$ with
+$\sum_\alpha\Lambda_\alpha=1$, and a unit pair-index isometry $U$ with
+\begin{align}
+  A^i = X\,\sqrt\Lambda\,U^i\,X^{-1},\qquad
+  \sum_i \overline{(U^i)_{\alpha,\beta}}\,(U^i)_{\alpha',\beta'}
+    = \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+\end{align}
+The square root on the diagonal matches the source reference tensor (the
+square-root correction is documented separately in the previous section); the
+trace
+condition $\tr(\Lambda)=1$ is imposed on $\Lambda$ itself, equivalently on the
+normalized diagonal fixed point $\rho=\diag(\Lambda)$,
+$\Lambda_\alpha=\rho_{\alpha,\alpha}/\tr\rho$.  The identity
+$\sum_\alpha\Lambda_\alpha=1$ is the trace identity
+$\sum_\alpha\rho_{\alpha,\alpha}=\tr\rho$ for the diagonal fixed point.
+
+This discharges the trace-normalization scope item.  The remaining open part of
+the source isometry condition is the cross-block $\delta_{j,j'}$ orthogonality
+between distinct normal-tensor blocks, treated below.
+
 \section{Elimination plan}
 
 A source-faithful version of Corollary~III.cor3 should be stated for a
@@ -211,8 +291,14 @@ unit pair-index convention the residual tensor satisfies
 \]
 while the contracted identity is instead
 $\sum_i (U_k^i)^\dagger U_k^i=D_k I$.  Thus the scalar normalization comparison
-is explicit, but the formal statements still omit the source trace-normalization
-and the cross-block $\delta_{j,j'}$ orthogonality equations.
+is explicit.  The source trace-normalization $\tr(\Lambda)=1$ is now formalized
+for a single block by the named predicate
+\leanid{MPSTensor.IsIsometryCanonicalForm} and the theorem
+\leanid{MPSTensor.isIsometryCanonicalForm_of_rfp_nt}, with the diagonal weight
+$\Lambda_\alpha=\rho_{\alpha,\alpha}/\tr\rho$ and the square-root dressing
+$\sqrt\Lambda$ of the unit isometry.  The remaining open part of the source
+isometry condition is the cross-block $\delta_{j,j'}$ orthogonality equations
+between distinct normal-tensor blocks.
 
 \bibliographystyle{alpha}
 \bibliography{references}
