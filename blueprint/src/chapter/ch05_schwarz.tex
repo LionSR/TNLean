@@ -1445,6 +1445,153 @@ adjacent cones.
     since $\eta=k\ge k$, but not $(k+1)$-positive, since $\eta=k<k+1$.
 \end{proof}
 
+\subsection{The reduction criterion}
+
+The reduction map and the family $T_\eta$ are the same map under two
+parametrizations: the natural-number parameter $k$ and the real parameter
+$\eta$ agree at $\eta=k$.  Identifying them lets the positivity threshold and
+the Choi formula carry over to the reduction map without restating them.  Wolf
+attaches to this map the entanglement witness
+$W_n=D^{-1}\Id-n^{-1}\ket{\Omega}\bra{\Omega}$ and the operator inequality
+\cite[Equation~(3.18)]{Wolf2012Quantum} that constrains the reduced densities
+of a bipartite state whose Schmidt number is at most $n$.
+
+\begin{theorem}[The reduction map is the family $T_\eta$ at integer parameter]
+    \label{thm:reduction_map_eq_t_eta}
+    \lean{Matrix.reductionMap_eq_tEta}
+    \leanok
+    \uses{def:reduction_map, def:t_eta}
+    For every $k\in\N$ the reduction map $T_k$ equals the family map $T_\eta$ at
+    $\eta=k$:
+    \[
+        T_k=T_\eta\big|_{\eta=k}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The two maps differ only in the scalar coefficient of $X$, namely $k^{-1}$
+    against $\eta^{-1}$ at $\eta=k$.  The natural-number and real casts of $k$
+    into the complex scalars coincide, so the coefficients agree and the maps
+    are equal.
+\end{proof}
+
+\begin{definition}[Reduction witness]
+    \label{def:reduction_witness}
+    \lean{Matrix.reductionWitness}
+    \leanok
+    The reduction witness on $\MN{D}\otimes\MN{D}$, for $n\in\N$, is
+    \[
+        W_n=D^{-1}\Id-n^{-1}\ket{\Omega}\bra{\Omega}.
+    \]
+\end{definition}
+
+\begin{theorem}[The Choi matrix of the reduction map is the witness]
+    \label{thm:choi_matrix_reduction_witness}
+    \lean{ChoiJamiolkowski.choiMatrix_reductionMap_eq_reductionWitness}
+    \leanok
+    \uses{def:reduction_map, def:reduction_witness, thm:reduction_map_eq_t_eta,
+        thm:choi_matrix_t_eta}
+    For $D\ge 1$ the Choi matrix of $T_n$ is the reduction witness:
+    \[
+        \tau(T_n)=W_n=D^{-1}\Id-n^{-1}\ket{\Omega}\bra{\Omega}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The reduction map is $T_\eta$ at $\eta=n$, whose Choi matrix is
+    $D^{-1}\Id-n^{-1}\ket{\Omega}\bra{\Omega}$, which is exactly $W_n$.
+\end{proof}
+
+\begin{theorem}[Reduction-criterion identity]
+    \label{thm:tensor_map_id_t_eta}
+    \lean{Matrix.tensorMapId_tEta_eq}
+    \leanok
+    \uses{def:t_eta}
+    Applying $T_\eta$ to the first factor of a bipartite matrix $\rho$ gives
+    \[
+        (T_\eta\otimes\id)(\rho)=\Id\otimes\rho_2-\eta^{-1}\rho,
+    \]
+    where $\rho_2$ is the reduced density of $\rho$ on the second factor.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Fix block indices $i_2,j_2$ on the second factor and write $\rho^{(i_2,j_2)}$
+    for the $D\times D$ slice $\rho^{(i_2,j_2)}_{i_1 j_1}=\rho_{(i_1,i_2),(j_1,j_2)}$
+    on the first factor.  Its trace is the corresponding entry of $\rho_2$:
+    \[
+        \tr\bigl(\rho^{(i_2,j_2)}\bigr)
+        =\sum_{i_1}\rho_{(i_1,i_2),(i_1,j_2)}
+        =(\rho_2)_{i_2 j_2}.
+    \]
+    Applying $T_\eta$ entry by entry gives
+    \[
+        \bigl((T_\eta\otimes\id)(\rho)\bigr)_{(i_1,i_2),(j_1,j_2)}
+        =\tr\bigl(\rho^{(i_2,j_2)}\bigr)\,\delta_{i_1 j_1}
+            -\eta^{-1}\rho_{(i_1,i_2),(j_1,j_2)}
+        =(\rho_2)_{i_2 j_2}\,\delta_{i_1 j_1}
+            -\eta^{-1}\rho_{(i_1,i_2),(j_1,j_2)},
+    \]
+    and the first term is exactly the $(i_1,i_2),(j_1,j_2)$ entry of
+    $\Id\otimes\rho_2$.
+\end{proof}
+
+\begin{theorem}[Operator-implication step of the reduction criterion]
+    \label{thm:reduction_criterion}
+    \lean{Matrix.reductionCriterion_left, Matrix.reductionCriterion_right}
+    \leanok
+    \uses{def:t_eta, thm:tensor_map_id_t_eta}
+    Let $n\ge 1$ and let $\rho$ be a bipartite matrix, with $\rho^{F}$ its image
+    under the factor swap $\rho^{F}_{(i_2,i_1),(j_2,j_1)}=\rho_{(i_1,i_2),(j_1,j_2)}$.
+    If $(T_n\otimes\id)(\rho)\ge 0$ then
+    \[
+        n\,\Id\otimes\rho_2\ge\rho,
+    \]
+    and if $(T_n\otimes\id)(\rho^{F})\ge 0$ then
+    \[
+        n\,\rho_1\otimes\Id\ge\rho,
+    \]
+    where $\rho_1$ and $\rho_2$ are the reduced densities of $\rho$ on the first
+    and second factors.  Because the factor swap is a unitary reindexing,
+    \[
+        (\id\otimes T_n)(\rho)\ge 0
+        \iff
+        (T_n\otimes\id)(\rho^{F})\ge 0,
+    \]
+    so the second hypothesis is Wolf's symmetric condition
+    $(\id\otimes T_n)(\rho)\ge 0$ expressed through the swap.
+
+    This is the second step of Wolf's two-step argument for
+    \cite[Equation~(3.18)]{Wolf2012Quantum}.  The source states the inequalities
+    under the premise that $\rho$ has Schmidt number at most $n$, and reaches
+    $(T_n\otimes\id)(\rho)\ge 0$ from that premise by the $n$-positivity of
+    $T_n$; that first step is taken here as the hypothesis rather than derived,
+    because a Schmidt-number predicate is not yet available.  The deviation is
+    recorded in
+    \path{docs/paper-gaps/wolf_reduction_criterion_schmidt_premise.tex}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By the reduction-criterion identity, $(T_n\otimes\id)(\rho)$ equals
+    $\Id\otimes\rho_2-n^{-1}\rho$.  Scaling a positive semidefinite operator by
+    $n>0$ preserves positivity, so $n\,\Id\otimes\rho_2-\rho\ge 0$, which is the
+    first inequality.  For the second, the factor swap $F$ satisfies $F^2=\id$
+    and is a unitary reindexing, so it preserves positive semidefiniteness and
+    the order, and it exchanges the reduced densities and the two tensor slots:
+    \[
+        (\rho^{F})_2=\rho_1,
+        \qquad
+        \bigl(\Id\otimes(\rho^{F})_2-n^{-1}\rho^{F}\bigr)^{F}
+        =\rho_1\otimes\Id-n^{-1}\rho.
+    \]
+    Applying the first form to $\rho^{F}$ gives
+    $n\,\Id\otimes(\rho^{F})_2-\rho^{F}\ge 0$; conjugating by $F$ turns this into
+    $n\,\rho_1\otimes\Id-\rho\ge 0$.
+\end{proof}
+
 \begin{theorem}[Completely positive implies two-positive]
     \lean{IsCPMap.is2PositiveMap}
     \leanok
