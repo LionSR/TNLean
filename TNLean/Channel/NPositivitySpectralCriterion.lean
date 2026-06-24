@@ -32,7 +32,7 @@ overlap vector.
 
 ## Main definitions
 
-* `Matrix.IsHermitian.eigvec` -- the eigenvector columns of a Hermitian matrix as
+* `Matrix.IsHermitian.eigenvector` -- the eigenvector columns of a Hermitian matrix as
   plain vectors.
 * `Matrix.IsHermitian.reducedEigDensity` -- the reduced density operator of an
   eigenvector projector on the first tensor factor.
@@ -41,7 +41,7 @@ overlap vector.
 
 * `Matrix.IsHermitian.rayleigh` and `Matrix.IsHermitian.rayleigh_re` -- the
   Rayleigh expansion of the quadratic form in the eigenbasis.
-* `Matrix.IsHermitian.sum_normSq_eigvec_overlap` and its real form -- Parseval's
+* `Matrix.IsHermitian.sum_normSq_eigenvector_overlap` and its real form -- Parseval's
   identity for the eigenbasis overlaps.
 * `Matrix.IsHermitian.spectral_lower_bound` -- Wolf's Chapter 3, Proposition 3.2,
   equation (3.7): the lower bound on the expectation in a Schmidt-rank-n vector.
@@ -64,21 +64,21 @@ namespace Matrix.IsHermitian
 variable {N : Type*} [Fintype N] [DecidableEq N] {τ : Matrix N N ℂ}
 
 /-- The i-th eigenvector column of a Hermitian matrix as a plain vector. -/
-noncomputable def eigvec (hτ : τ.IsHermitian) (i : N) : N → ℂ :=
+noncomputable def eigenvector (hτ : τ.IsHermitian) (i : N) : N → ℂ :=
   fun p => (hτ.eigenvectorUnitary : Matrix N N ℂ) p i
 
 /-- The overlap ⟨φᵢ|ψ⟩ of the i-th eigenvector with ψ is the i-th
 component of Uᴴ ψ. -/
-theorem star_eigvec_dotProduct (hτ : τ.IsHermitian) (ψ : N → ℂ) (i : N) :
-    star (hτ.eigvec i) ⬝ᵥ ψ
+theorem star_eigenvector_dotProduct (hτ : τ.IsHermitian) (ψ : N → ℂ) (i : N) :
+    star (hτ.eigenvector i) ⬝ᵥ ψ
       = ((star (hτ.eigenvectorUnitary : Matrix N N ℂ)) *ᵥ ψ) i := by
-  simp only [eigvec, mulVec, dotProduct, Pi.star_apply, star_apply, RCLike.star_def]
+  simp only [eigenvector, mulVec, dotProduct, Pi.star_apply, star_apply, RCLike.star_def]
 
 /-- **Rayleigh expansion.** The quadratic form of a Hermitian matrix decomposes
 in its eigenbasis as ⟨ψ|τ|ψ⟩ = Σᵢ νᵢ |⟨φᵢ|ψ⟩|². -/
 theorem rayleigh (hτ : τ.IsHermitian) (ψ : N → ℂ) :
     star ψ ⬝ᵥ (τ *ᵥ ψ)
-      = ∑ i, (hτ.eigenvalues i : ℂ) * ‖star (hτ.eigvec i) ⬝ᵥ ψ‖ ^ 2 := by
+      = ∑ i, (hτ.eigenvalues i : ℂ) * ‖star (hτ.eigenvector i) ⬝ᵥ ψ‖ ^ 2 := by
   set U := (hτ.eigenvectorUnitary : Matrix N N ℂ) with hU
   set D := Matrix.diagonal ((RCLike.ofReal ∘ hτ.eigenvalues : N → ℂ)) with hD
   have hτeq : τ = U * D * star U := by
@@ -95,9 +95,9 @@ theorem rayleigh (hτ : τ.IsHermitian) (ψ : N → ℂ) :
   rw [hstep]
   simp only [dotProduct, mulVec_diagonal, hD, Pi.star_apply, Function.comp_apply]
   refine Finset.sum_congr rfl fun i _ => ?_
-  have hyi : y i = star (hτ.eigvec i) ⬝ᵥ ψ := by rw [hy, star_eigvec_dotProduct]
-  set z : ℂ := star (hτ.eigvec i) ⬝ᵥ ψ with hz
-  have hsum : (∑ x, star (hτ.eigvec i x) * ψ x) = z := by
+  have hyi : y i = star (hτ.eigenvector i) ⬝ᵥ ψ := by rw [hy, star_eigenvector_dotProduct]
+  set z : ℂ := star (hτ.eigenvector i) ⬝ᵥ ψ with hz
+  have hsum : (∑ x, star (hτ.eigenvector i x) * ψ x) = z := by
     rw [hz]; simp only [dotProduct, Pi.star_apply]
   rw [hyi, hsum]
   have hzz : star z * z = ((‖z‖ ^ 2 : ℝ) : ℂ) := by
@@ -109,8 +109,8 @@ theorem rayleigh (hτ : τ.IsHermitian) (ψ : N → ℂ) :
 
 /-- **Parseval's identity.** The eigenbasis overlaps recover the squared norm:
 Σᵢ |⟨φᵢ|ψ⟩|² = ‖ψ‖². -/
-theorem sum_normSq_eigvec_overlap (hτ : τ.IsHermitian) (ψ : N → ℂ) :
-    (∑ i, ((‖star (hτ.eigvec i) ⬝ᵥ ψ‖ ^ 2 : ℝ) : ℂ)) = star ψ ⬝ᵥ ψ := by
+theorem sum_normSq_eigenvector_overlap (hτ : τ.IsHermitian) (ψ : N → ℂ) :
+    (∑ i, ((‖star (hτ.eigenvector i) ⬝ᵥ ψ‖ ^ 2 : ℝ) : ℂ)) = star ψ ⬝ᵥ ψ := by
   set U := (hτ.eigenvectorUnitary : Matrix N N ℂ) with hU
   set y : N → ℂ := (star U) *ᵥ ψ with hy
   have hstary : star y = star ψ ᵥ* U := by
@@ -119,9 +119,9 @@ theorem sum_normSq_eigvec_overlap (hτ : τ.IsHermitian) (ψ : N → ℂ) :
   have hUstar : U * star U = 1 := by
     have := (hτ.eigenvectorUnitary).2
     rw [Matrix.mem_unitaryGroup_iff] at this; exact this
-  have hterm : ∀ i, ((‖star (hτ.eigvec i) ⬝ᵥ ψ‖ ^ 2 : ℝ) : ℂ) = star (y i) * y i := by
+  have hterm : ∀ i, ((‖star (hτ.eigenvector i) ⬝ᵥ ψ‖ ^ 2 : ℝ) : ℂ) = star (y i) * y i := by
     intro i
-    have hyi : y i = star (hτ.eigvec i) ⬝ᵥ ψ := by rw [hy, star_eigvec_dotProduct]
+    have hyi : y i = star (hτ.eigenvector i) ⬝ᵥ ψ := by rw [hy, star_eigenvector_dotProduct]
     rw [hyi, Complex.star_def, ← Complex.normSq_eq_conj_mul_self, Complex.normSq_eq_norm_sq]
   simp_rw [hterm]
   have hdot : (∑ i, star (y i) * y i) = star y ⬝ᵥ y := by
@@ -130,8 +130,8 @@ theorem sum_normSq_eigvec_overlap (hτ : τ.IsHermitian) (ψ : N → ℂ) :
     Matrix.one_mulVec]
 
 /-- Each eigenvector column of a Hermitian matrix is normalized. -/
-theorem star_eigvec_dotProduct_self (hτ : τ.IsHermitian) (i : N) :
-    star (hτ.eigvec i) ⬝ᵥ (hτ.eigvec i) = 1 := by
+theorem star_eigenvector_dotProduct_self (hτ : τ.IsHermitian) (i : N) :
+    star (hτ.eigenvector i) ⬝ᵥ (hτ.eigenvector i) = 1 := by
   set U := (hτ.eigenvectorUnitary : Matrix N N ℂ) with hU
   have hUstar : star U * U = 1 := by
     have := (hτ.eigenvectorUnitary).2
@@ -139,21 +139,21 @@ theorem star_eigvec_dotProduct_self (hτ : τ.IsHermitian) (i : N) :
   have h : (star U * U) i i = (1 : Matrix N N ℂ) i i := by rw [hUstar]
   rw [Matrix.one_apply_eq] at h
   rw [← h, hU]
-  simp only [Matrix.mul_apply, eigvec, dotProduct, Pi.star_apply,
+  simp only [Matrix.mul_apply, eigenvector, dotProduct, Pi.star_apply,
     RCLike.star_def, Matrix.star_eq_conjTranspose, Matrix.conjTranspose_apply]
 
 /-- The real form of the Rayleigh expansion. -/
 theorem rayleigh_re (hτ : τ.IsHermitian) (ψ : N → ℂ) :
     (star ψ ⬝ᵥ (τ *ᵥ ψ)).re
-      = ∑ i, hτ.eigenvalues i * ‖star (hτ.eigvec i) ⬝ᵥ ψ‖ ^ 2 := by
+      = ∑ i, hτ.eigenvalues i * ‖star (hτ.eigenvector i) ⬝ᵥ ψ‖ ^ 2 := by
   rw [hτ.rayleigh ψ, Complex.re_sum]
   refine Finset.sum_congr rfl fun i _ => ?_
   rw [← Complex.ofReal_pow, ← Complex.ofReal_mul, Complex.ofReal_re]
 
 /-- The real form of Parseval's identity. -/
-theorem sum_normSq_eigvec_overlap_re (hτ : τ.IsHermitian) (ψ : N → ℂ) :
-    (∑ i, ‖star (hτ.eigvec i) ⬝ᵥ ψ‖ ^ 2) = (star ψ ⬝ᵥ ψ).re := by
-  have h := congrArg Complex.re (hτ.sum_normSq_eigvec_overlap ψ)
+theorem sum_normSq_eigenvector_overlap_re (hτ : τ.IsHermitian) (ψ : N → ℂ) :
+    (∑ i, ‖star (hτ.eigenvector i) ⬝ᵥ ψ‖ ^ 2) = (star ψ ⬝ᵥ ψ).re := by
+  have h := congrArg Complex.re (hτ.sum_normSq_eigenvector_overlap ψ)
   rw [Complex.re_sum] at h
   simp only [Complex.ofReal_re] at h
   exact h
@@ -222,15 +222,15 @@ variable {m n : Type*} [Fintype m] [Fintype n] [DecidableEq m] [DecidableEq n]
 projector of a Hermitian operator τ. -/
 noncomputable def IsHermitian.reducedEigDensity {τ : Matrix (m × n) (m × n) ℂ}
     (hτ : τ.IsHermitian) (i : m × n) : Matrix m m ℂ :=
-  partialTraceRight (vecMulVec (hτ.eigvec i) (star (hτ.eigvec i)))
+  partialTraceRight (vecMulVec (hτ.eigenvector i) (star (hτ.eigenvector i)))
 
 /-- The reduced density operator equals C Cᴴ for C the coefficient matrix of
 the eigenvector. -/
 theorem IsHermitian.reducedEigDensity_eq {τ : Matrix (m × n) (m × n) ℂ}
     (hτ : τ.IsHermitian) (i : m × n) :
     hτ.reducedEigDensity i
-      = (schmidtCoeffMatrix (hτ.eigvec i)) * (schmidtCoeffMatrix (hτ.eigvec i))ᴴ :=
-  partialTraceRight_vecMulVec_eq (hτ.eigvec i)
+      = (schmidtCoeffMatrix (hτ.eigenvector i)) * (schmidtCoeffMatrix (hτ.eigenvector i))ᴴ :=
+  partialTraceRight_vecMulVec_eq (hτ.eigenvector i)
 
 /-- The reduced density operator is positive semidefinite. -/
 theorem IsHermitian.reducedEigDensity_posSemidef {τ : Matrix (m × n) (m × n) ℂ}
@@ -252,15 +252,15 @@ theorem IsHermitian.normSq_overlap_le_kyFanNorm {τ : Matrix (m × n) (m × n) �
     (hτ : τ.IsHermitian) (i : m × n) {ψ : m × n → ℂ} {k : ℕ}
     (hk1 : 1 ≤ k) (hk : k < Fintype.card m)
     (hψ : star ψ ⬝ᵥ ψ = 1) (hrank : HasSchmidtRankLE k ψ) :
-    ‖star (hτ.eigvec i) ⬝ᵥ ψ‖ ^ 2
+    ‖star (hτ.eigenvector i) ⬝ᵥ ψ‖ ^ 2
       ≤ (hτ.reducedEigDensity_posSemidef i).isHermitian.kyFanNorm k := by
-  set C := schmidtCoeffMatrix (hτ.eigvec i) with hC
-  have hφnorm : star (hτ.eigvec i) ⬝ᵥ (hτ.eigvec i) = 1 :=
-    hτ.star_eigvec_dotProduct_self i
-  have hgreat := maximalSchmidtOverlap_eq_kyFanNorm (hτ.eigvec i) hφnorm hk1 hk
-  have hmem : ‖star (hτ.eigvec i) ⬝ᵥ ψ‖ ^ 2 ∈
+  set C := schmidtCoeffMatrix (hτ.eigenvector i) with hC
+  have hφnorm : star (hτ.eigenvector i) ⬝ᵥ (hτ.eigenvector i) = 1 :=
+    hτ.star_eigenvector_dotProduct_self i
+  have hgreat := maximalSchmidtOverlap_eq_kyFanNorm (hτ.eigenvector i) hφnorm hk1 hk
+  have hmem : ‖star (hτ.eigenvector i) ⬝ᵥ ψ‖ ^ 2 ∈
       {r : ℝ | ∃ ψ' : m × n → ℂ, star ψ' ⬝ᵥ ψ' = 1 ∧
-        HasSchmidtRankLE k ψ' ∧ ‖star (hτ.eigvec i) ⬝ᵥ ψ'‖ ^ 2 = r} :=
+        HasSchmidtRankLE k ψ' ∧ ‖star (hτ.eigenvector i) ⬝ᵥ ψ'‖ ^ 2 = r} :=
     ⟨ψ, hψ, hrank, rfl⟩
   have hbound := hgreat.2 hmem
   -- The two Ky-Fan norms agree: same matrix, proof-irrelevant Hermitian witness.
@@ -282,13 +282,13 @@ theorem IsHermitian.exists_overlap_eq_kyFanNorm {τ : Matrix (m × n) (m × n) �
     (hτ : τ.IsHermitian) (j : m × n) {k : ℕ}
     (hk1 : 1 ≤ k) (hk : k < Fintype.card m) :
     ∃ ψ : m × n → ℂ, star ψ ⬝ᵥ ψ = 1 ∧ HasSchmidtRankLE k ψ ∧
-      ‖star (hτ.eigvec j) ⬝ᵥ ψ‖ ^ 2
+      ‖star (hτ.eigenvector j) ⬝ᵥ ψ‖ ^ 2
         = (hτ.reducedEigDensity_posSemidef j).isHermitian.kyFanNorm k := by
-  set C := schmidtCoeffMatrix (hτ.eigvec j) with hC
-  have hφnorm : star (hτ.eigvec j) ⬝ᵥ (hτ.eigvec j) = 1 :=
-    hτ.star_eigvec_dotProduct_self j
+  set C := schmidtCoeffMatrix (hτ.eigenvector j) with hC
+  have hφnorm : star (hτ.eigenvector j) ⬝ᵥ (hτ.eigenvector j) = 1 :=
+    hτ.star_eigenvector_dotProduct_self j
   obtain ⟨ψ, hψnorm, hψrank, hψeq⟩ := (maximalSchmidtOverlap_eq_kyFanNorm
-    (hτ.eigvec j) hφnorm hk1 hk).1
+    (hτ.eigenvector j) hφnorm hk1 hk).1
   refine ⟨ψ, hψnorm, hψrank, ?_⟩
   rw [hψeq]
   have hkfn : (hτ.reducedEigDensity_posSemidef j).isHermitian.kyFanNorm k
@@ -320,10 +320,10 @@ theorem IsHermitian.spectral_lower_bound {τ : Matrix (m × n) (m × n) ℂ}
   classical
   rw [hτ.rayleigh_re ψ]
   refine Matrix.IsHermitian.spectral_lower_bound_core (ν := hτ.eigenvalues)
-    (o := fun i => ‖star (hτ.eigvec i) ⬝ᵥ ψ‖ ^ 2)
+    (o := fun i => ‖star (hτ.eigenvector i) ⬝ᵥ ψ‖ ^ 2)
     (b := fun i => (hτ.reducedEigDensity_posSemidef i).isHermitian.kyFanNorm k)
     (fun i => sq_nonneg _) ?_ hν0 hmin (fun i _ => ?_)
-  · rw [hτ.sum_normSq_eigvec_overlap_re ψ, hψ, Complex.one_re]
+  · rw [hτ.sum_normSq_eigenvector_overlap_re ψ, hψ, Complex.one_re]
   · exact hτ.normSq_overlap_le_kyFanNorm i hk1 hk hψ hrank
 
 /-- **Wolf's Chapter 3, Proposition 3.2, equation (3.8): spectral upper bound.**
@@ -348,7 +348,7 @@ theorem IsHermitian.exists_le_spectral_upper_bound {τ : Matrix (m × n) (m × n
   refine ⟨ψ, hψnorm, hψrank, ?_⟩
   rw [hτ.rayleigh_re ψ, ← hψeq]
   refine Matrix.IsHermitian.spectral_upper_bound_core (ν := hτ.eigenvalues)
-    (o := fun i => ‖star (hτ.eigvec i) ⬝ᵥ ψ‖ ^ 2) j (fun i => sq_nonneg _) ?_ hmax
-  rw [hτ.sum_normSq_eigvec_overlap_re ψ, hψnorm, Complex.one_re]
+    (o := fun i => ‖star (hτ.eigenvector i) ⬝ᵥ ψ‖ ^ 2) j (fun i => sq_nonneg _) ?_ hmax
+  rw [hτ.sum_normSq_eigenvector_overlap_re ψ, hψnorm, Complex.one_re]
 
 end Matrix
