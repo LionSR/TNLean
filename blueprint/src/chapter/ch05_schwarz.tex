@@ -301,6 +301,83 @@ maps.
     normalization.)
 \end{proof}
 
+\begin{theorem}[Spectral lower bound for the Schmidt-rank expectation]
+    \label{thm:spectral_lower_bound_schmidt_rank}
+    \lean{Matrix.IsHermitian.spectral_lower_bound}
+    \leanok
+    \uses{def:schmidt_rank, def:ky_fan_norm, thm:maximal_overlap_schmidt_rank}
+    Let $\tau$ be a Hermitian operator on $\C^{D'}\otimes\C^{D}$ with eigenvalues
+    $\nu_i$ and normalized eigenvectors $\phi_i$, and write
+    $\rho_i=\tr_2|\phi_i\rangle\langle\phi_i|$ for the reduced density operator of
+    $\phi_i$ on the first factor. Let $1\le n<D'$ and let $\nu_0\ge 0$ be a lower
+    bound for the positive eigenvalues (the smallest positive eigenvalue). Then
+    every normalized vector $\psi$ of Schmidt rank at most $n$ satisfies
+    \[
+        \nu_0 + \sum_{i:\nu_i\le 0}(\nu_i-\nu_0)\,\|\rho_i\|_{(n)}
+            \le \bra{\psi}\tau\ket{\psi} ,
+    \]
+    and hence the same bound holds for the infimum over such vectors. This is the
+    lower bound of \cite[Chapter~3, Proposition~3.2]{Wolf2012Quantum}, stated for
+    $n<D'$; the top index $n=D'$ lies outside the range of
+    Theorem~\ref{thm:maximal_overlap_schmidt_rank}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:maximal_overlap_schmidt_rank}
+    In the eigenbasis the expectation expands as
+    $\bra{\psi}\tau\ket{\psi}=\sum_i\nu_i\,|\braket{\phi_i}{\psi}|^2$, while
+    Parseval's identity gives $\sum_i|\braket{\phi_i}{\psi}|^2=\|\psi\|^2=1$.
+    Subtracting $\nu_0$ times the latter from the former,
+    \[
+        \bra{\psi}\tau\ket{\psi}
+            = \nu_0 + \sum_i (\nu_i-\nu_0)\,|\braket{\phi_i}{\psi}|^2 .
+    \]
+    For an eigenvalue $\nu_i>0$ the factor $\nu_i-\nu_0$ is nonnegative, so those
+    terms only increase the sum and may be dropped. For an eigenvalue
+    $\nu_i\le 0$ the factor $\nu_i-\nu_0$ is nonpositive, and the maximal-overlap
+    lemma (Theorem~\ref{thm:maximal_overlap_schmidt_rank}) bounds
+    $|\braket{\phi_i}{\psi}|^2\le\|\rho_i\|_{(n)}$; multiplying by the nonpositive
+    factor reverses the inequality, which gives the claimed lower bound.
+\end{proof}
+
+\begin{theorem}[Spectral upper bound for the Schmidt-rank expectation]
+    \label{thm:spectral_upper_bound_schmidt_rank}
+    \lean{Matrix.IsHermitian.exists_le_spectral_upper_bound}
+    \leanok
+    \uses{def:schmidt_rank, def:ky_fan_norm, thm:maximal_overlap_schmidt_rank}
+    With $\tau$, $\phi_i$ and $\rho_i$ as above, let $1\le n<D'$ and suppose every
+    eigenvalue of $\tau$ is at most $\nu$. For any eigenvector index $j$ there is a
+    normalized vector $\psi$ of Schmidt rank at most $n$ with
+    \[
+        \bra{\psi}\tau\ket{\psi}
+            \le \nu + (\nu_j-\nu)\,\|\rho_j\|_{(n)} ,
+    \]
+    and hence the infimum over such vectors lies below that value. Taking $\nu$
+    the largest positive eigenvalue and $j$ the index of the unique non-positive
+    eigenvalue $\nu_-$ recovers the upper bound
+    $\nu + (\nu_- - \nu)\,\|\rho_-\|_{(n)}$ of
+    \cite[Chapter~3, Proposition~3.2]{Wolf2012Quantum}. The statement is for
+    $n<D'$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:maximal_overlap_schmidt_rank}
+    Replacing $\nu_0$ by $\nu$ in the eigenbasis expansion of the previous proof,
+    \[
+        \bra{\psi}\tau\ket{\psi}
+            = \nu + \sum_i (\nu_i-\nu)\,|\braket{\phi_i}{\psi}|^2 ,
+    \]
+    every factor $\nu_i-\nu$ is nonpositive, so all terms are nonpositive and
+    keeping only the $i=j$ term gives
+    $\bra{\psi}\tau\ket{\psi}\le \nu + (\nu_j-\nu)\,|\braket{\phi_j}{\psi}|^2$.
+    The maximal-overlap lemma (Theorem~\ref{thm:maximal_overlap_schmidt_rank})
+    supplies a normalized $\psi$ of Schmidt rank at most $n$ attaining
+    $|\braket{\phi_j}{\psi}|^2=\|\rho_j\|_{(n)}$; at that vector the right-hand
+    side equals $\nu + (\nu_j-\nu)\,\|\rho_j\|_{(n)}$.
+\end{proof}
+
 \begin{theorem}[Rank-one test for $k$-positivity]\label{thm:k_positive_rank_one_test}
     \lean{isNPositiveMap_iff_forall_ampliation_rank_one_posSemidef}
     \leanok
