@@ -1344,6 +1344,107 @@ maps.
     finite-dimensional space of linear maps.
 \end{theorem}
 
+\subsection{The map \texorpdfstring{$T_\eta$}{T eta} and strictness of the chain}
+
+The cones of $k$-positive maps form a decreasing chain from the completely
+positive maps, at the top amplification dimension, down to the merely positive
+maps.  This subsection shows that every inclusion between consecutive
+dimensions, below the top one, is strict.  The witnesses come from a
+one-parameter family of maps whose positivity threshold is the parameter
+itself, so that tuning the parameter between two integers separates the two
+adjacent cones.
+
+\begin{definition}[The family $T_\eta$]
+    \label{def:t_eta}
+    \lean{Matrix.tEta}
+    \leanok
+    For a real parameter $\eta$, the map $T_\eta$ on $\MN{D}$ is
+    \[
+        T_\eta(\rho)=\tr(\rho)\,\Id-\eta^{-1}\rho.
+    \]
+    The map is defined for every real $\eta$; at $\eta=0$ it reduces to
+    $\rho\mapsto\tr(\rho)\,\Id$, and the positivity threshold below
+    assumes $\eta>0$.
+\end{definition}
+
+\begin{theorem}[Choi matrix of $T_\eta$]
+    \label{thm:choi_matrix_t_eta}
+    \lean{ChoiJamiolkowski.choiMatrix_tEta}
+    \leanok
+    \uses{def:t_eta, thm:choi_matrix_reduction_map}
+    For $D\ge 1$, the Choi matrix of $T_\eta$ is
+    \[
+        \tau_\eta=D^{-1}\Id-\eta^{-1}\ket{\Omega}\bra{\Omega}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The Choi matrix is linear in the map, so it splits over the two terms of
+    $T_\eta$.  The trace term contributes
+    \[
+        \tau\bigl(\rho\mapsto\tr(\rho)\,\Id\bigr)=D^{-1}\Id,
+    \]
+    since each elementary slice of $\ket{\Omega}\bra{\Omega}$ contributes its
+    trace times the identity.  The identity map contributes
+    \[
+        \tau(\id)=\ket{\Omega}\bra{\Omega}.
+    \]
+    Subtracting $\eta^{-1}$ times the second from the first gives
+    \[
+        \tau_\eta=D^{-1}\Id-\eta^{-1}\ket{\Omega}\bra{\Omega}.
+    \]
+\end{proof}
+
+\begin{theorem}[Positivity threshold of $T_\eta$]
+    \label{thm:t_eta_threshold}
+    \lean{Matrix.isNPositiveMap_tEta_iff}
+    \leanok
+    \uses{def:t_eta, thm:choi_matrix_t_eta, thm:schmidt_rank_choi_test_iff,
+        thm:maximal_overlap_schmidt_rank}
+    Let $\eta>0$ and $1\le k<D$.  Then $T_\eta$ is $k$-positive if and only if
+    $\eta\ge k$.  This is \cite[Equation~(3.11)]{Wolf2012Quantum}, stated here for
+    $1\le k<D$; the top index $k=D$, where $k$-positivity is complete positivity,
+    lies outside the range of the maximal-overlap principle in
+    Theorem~\ref{thm:maximal_overlap_schmidt_rank}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By the Schmidt-rank Choi criterion, $k$-positivity is the nonnegativity of
+    the Choi quadratic form on all vectors of Schmidt rank at most $k$.  For a
+    normalized such vector $\psi$, the Choi matrix
+    $\tau_\eta=D^{-1}\Id-\eta^{-1}\ket{\Omega}\bra{\Omega}$ gives
+    \[
+        \bra{\psi}\tau_\eta\ket{\psi}
+        =D^{-1}-\eta^{-1}|\braket{\Omega}{\psi}|^2.
+    \]
+    The reduced density of $\ket\Omega$ on the first factor is $\Id/D$, so by the
+    maximal-overlap principle the supremum of $|\braket{\Omega}{\psi}|^2$ over
+    Schmidt-rank-$k$ normalized vectors is $\|\Id/D\|_{(k)}=k/D$.  The infimum of
+    the quadratic form is therefore $D^{-1}-\eta^{-1}(k/D)=D^{-1}(1-k/\eta)$,
+    which is nonnegative precisely when $\eta\ge k$.  Degree-two homogeneity
+    extends the bound from normalized vectors to all vectors of Schmidt rank at
+    most $k$.
+\end{proof}
+
+\begin{corollary}[Strictness of the positivity chain]
+    \label{cor:positivity_chain_strict}
+    \lean{Matrix.exists_isNPositiveMap_not_succ}
+    \leanok
+    \uses{thm:t_eta_threshold}
+    Let $1\le k$ with $k+1<D$.  Then there is a map on $\MN{D}$ that is
+    $k$-positive but not $(k+1)$-positive; the cone of $k$-positive maps strictly
+    contains the cone of $(k+1)$-positive maps.  Every inclusion between
+    consecutive amplification dimensions below the top one is therefore strict.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    Take $T_\eta$ at $\eta=k$.  By the threshold equivalence it is $k$-positive,
+    since $\eta=k\ge k$, but not $(k+1)$-positive, since $\eta=k<k+1$.
+\end{proof}
+
 \begin{theorem}[Completely positive implies two-positive]
     \lean{IsCPMap.is2PositiveMap}
     \leanok
