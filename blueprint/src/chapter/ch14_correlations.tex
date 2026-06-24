@@ -486,6 +486,30 @@ and rates for the single-tensor transfer map $\E_A$.
     normalization contributes the factor $D^{-1}$ in the pair-index equation.
 \end{proof}
 
+\begin{theorem}[Structural form with diagonal square-sum identity]%
+    \label{thm:rfp_nt_structural_full_sq_sum}
+    \lean{MPSTensor.rfp_nt_structural_full_sqSum}
+    \leanok
+    \uses{thm:rfp_nt_structural_of_left_canonical,
+        thm:rfp_nt_cfii_diagonal_fixed_point,
+        thm:transferMap_eq_fixedPointProj_of_isRFP_injective}
+    The same decomposition as the full structural form
+    (Theorem~\ref{thm:rfp_nt_structural_full}) additionally records that the
+    diagonal weights satisfy $\sum_\alpha \Lambda_\alpha^2 = D$.  This square-sum
+    identity is the trace-normalization seed: the explicit weights are
+    $\Lambda_\alpha = \sqrt{D\,\rho_{\alpha,\alpha}/\tr\rho}$, and
+    $\sum_\alpha \rho_{\alpha,\alpha} = \tr\rho$ for the diagonal fixed point
+    $\rho$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:rfp_nt_structural_full}
+    The same construction as Theorem~\ref{thm:rfp_nt_structural_full} produces
+    the diagonal weights $\Lambda_\alpha = \sqrt{D\,\rho_{\alpha,\alpha}/\tr\rho}$,
+    so $\Lambda_\alpha^2 = D\,\rho_{\alpha,\alpha}/\tr\rho$.  Summing over
+    $\alpha$ and using $\sum_\alpha \rho_{\alpha,\alpha} = \tr\rho$ gives
+    $\sum_\alpha \Lambda_\alpha^2 = D$.
+\end{proof}
+
 \begin{theorem}[Unit pair-index form for RFP tensors]%
     \label{thm:rfp_nt_structural_full_unit_pair}
     \lean{MPSTensor.rfp_nt_structural_full_unit_pair}
@@ -630,7 +654,7 @@ and rates for the single-tensor transfer map $\E_A$.
     \label{thm:isometry_canonical_form_of_rfp_nt}
     \lean{MPSTensor.isIsometryCanonicalForm_of_rfp_nt}
     \leanok
-    \uses{def:is_isometry_canonical_form, thm:rfp_nt_structural_full}
+    \uses{def:is_isometry_canonical_form, thm:rfp_nt_structural_full_sq_sum}
     A normal tensor in canonical form~II that is a renormalization fixed point
     is in isometry canonical form: it admits a decomposition
     $A^i = X\sqrt\Lambda\,U^i X^{-1}$ with $\Lambda$ diagonal, positive,
@@ -639,20 +663,23 @@ and rates for the single-tensor transfer map $\E_A$.
     is $\Lambda_\alpha = \rho_{\alpha,\alpha}/\tr\rho$, the normalized diagonal
     fixed point of the transfer map; trace-normalization is then the trace
     identity $\sum_\alpha \rho_{\alpha,\alpha} = \tr\rho$.  This is the
-    single-block (NT) case of \cite[Section~3]{Cirac2016MPDO_arXiv},
-    Lemma~\path{lem:charact-NT-pure-RFP}, and the diagonal part of the isometry
-    condition in Theorem~\path{thm:charact-MPS}.
+    single-block normal-tensor case of the structural characterization of
+    pure-state renormalization fixed points in
+    \cite[Section~3]{Cirac2016MPDO_arXiv}, recovering the diagonal part of the
+    isometry condition there.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:rfp_nt_structural_full}
-    Apply Theorem~\ref{thm:rfp_nt_structural_full}, rescale to the unit
-    pair-index convention by $U^i\mapsto\sqrt D\,U^i$, and set
-    $\Lambda_\alpha=(\widetilde\Lambda_\alpha)^2$ where $\widetilde\Lambda$ is
-    the rescaled diagonal.  The contracted left-canonical identity gives
+    \uses{thm:rfp_nt_structural_full_sq_sum}
+    The structural form with the square-sum identity
+    (Theorem~\ref{thm:rfp_nt_structural_full_sq_sum}) supplies a positive
+    diagonal weight $\widetilde\Lambda$ with
+    $\sum_\alpha \widetilde\Lambda_\alpha^2 = D$.  Rescaling to the unit
+    pair-index convention by $U^i\mapsto\sqrt D\,U^i$ and setting
+    $\Lambda_\alpha=(\widetilde\Lambda_\alpha/\sqrt D)^2$ gives
     $\sum_\alpha \Lambda_\alpha = D^{-1}\sum_\alpha \widetilde\Lambda_\alpha^2
-    \cdot D = 1$ from the matrix-unit normalization $\sum_\alpha (\sqrt D\,
-    \widetilde\Lambda_\alpha)^2 = D$, while
-    $\sqrt{\Lambda_\alpha}=\widetilde\Lambda_\alpha$ recovers the decomposition.
+    = D^{-1}\cdot D = 1$, while
+    $\sqrt{\Lambda_\alpha}=\widetilde\Lambda_\alpha/\sqrt D$ recovers the
+    decomposition $A^i = X\sqrt\Lambda\,U^i X^{-1}$.
 \end{proof}
 
 \begin{theorem}[Per-block trace-normalized isometry canonical form]%

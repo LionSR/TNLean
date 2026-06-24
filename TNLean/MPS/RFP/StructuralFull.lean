@@ -68,16 +68,20 @@ private lemma matrixUnits_map (X : Mat) :
     _ = Matrix.trace X • (1 : Mat) := by
           rw [Matrix.sum_single_eq_diagonal, Matrix.smul_one_eq_diagonal]
 
-/-- Auxiliary extraction underlying `rfp_nt_structural_full`.
+/-- Full Appendix B extraction with the diagonal-weight square-sum identity.
 
-This is the full Appendix B extraction with one extra recorded fact: the diagonal
-weights satisfy `∑ k, (Λ k) ^ 2 = D` in the matrix-unit normalization used here.
-That identity comes from `(Λ k) ^ 2 = D · ρ_{k,k} / tr ρ` together with the
-trace identity `∑ k ρ_{k,k} = tr ρ` for the diagonal fixed point `ρ`. It is the
-seed for the source trace-normalization `tr(Λ_src) = 1` after rescaling to the
-unit pair-index convention (arXiv:1606.00608, Lemma `lem:charact-NT-pure-RFP`,
-lines 1271--1301). -/
-private theorem rfp_nt_structural_full_aux (A : MPSTensor d D) [NeZero D]
+This is the structural decomposition `A i = X * Λ * U i * X⁻¹` of Lemma B.1 with
+one extra recorded fact: the diagonal weights satisfy `∑ k, (Λ k) ^ 2 = D` in
+the matrix-unit normalization used here. That identity comes from
+`(Λ k) ^ 2 = D · ρ_{k,k} / tr ρ` together with the trace identity
+`∑ k ρ_{k,k} = tr ρ` for the diagonal fixed point `ρ`. It is the seed for the
+source trace-normalization `tr(Λ) = 1` after rescaling to the unit pair-index
+convention (arXiv:1606.00608, Lemma charact-NT-pure-RFP, lines 1271--1301).
+
+The plain structural form `rfp_nt_structural_full` is the wrapper that drops the
+square-sum conjunct; the trace-normalized form
+`isIsometryCanonicalForm_of_rfp_nt` is the wrapper that consumes it. -/
+theorem rfp_nt_structural_full_sqSum (A : MPSTensor d D) [NeZero D]
     (hNT : IsNormal A) (hRFP : IsRFP A)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
     ∃ (X : Matrix (Fin D) (Fin D) ℂ) (Λ : Fin D → ℝ)
@@ -488,7 +492,7 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
           if p = q then (D : ℂ)⁻¹ else 0) ∧
       (∀ i, A i = X * Matrix.diagonal (fun k => (Λ k : ℂ)) * U i * X⁻¹) := by
   obtain ⟨X, Λ, U, hX_det, hΛ_pos, hU_left, hU_pair, _, hA_eq⟩ :=
-    rfp_nt_structural_full_aux A hNT hRFP hLeft
+    rfp_nt_structural_full_sqSum A hNT hRFP hLeft
   exact ⟨X, Λ, U, hX_det, hΛ_pos, hU_left, hU_pair, hA_eq⟩
 
 /-- `(√D : ℂ)` times its conjugate is `D`. Used to rescale the `D⁻¹` pair-index
@@ -629,13 +633,13 @@ theorem rfp_nt_structural_full_unit_pair (A : MPSTensor d D) [NeZero D]
           simp [L, U]
 
 /-- **Isometry canonical form for a single normal-tensor block**
-(arXiv:1606.00608, Lemma `lem:charact-NT-pure-RFP`, lines 1271--1301, and the
-single-block case `j = j'` of Theorem `thm:charact-MPS`, eq. `III_CFI_RFP` and
-`eq:III_isometry`).
+(arXiv:1606.00608, Lemma charact-NT-pure-RFP, lines 1271--1301, and the
+single-block case j = j' of the structural characterization Theorem
+charact-MPS, eqs. III_CFI_RFP and III_isometry).
 
 A normal tensor `A` is in *isometry canonical form* when there are an invertible
 `X`, a positive diagonal weight `Λ` with `∑ k Λ k = 1` (the source
-trace-normalization `tr(Λ) = 1`), and a residual tensor `U` satisfying the unit
+trace-normalization tr Λ = 1), and a residual tensor `U` satisfying the unit
 pair-index isometry
 \[
   \sum_i \overline{(U^i)_{\alpha,\beta}}\,(U^i)_{\alpha',\beta'}
@@ -646,24 +650,27 @@ such that
   A^i = X \, \sqrt{\Lambda} \, U^i \, X^{-1}.
 \]
 The square root appears because the source reference tensor is
-`Â^{(α',β')}_{α,β} = δ_{α,α'} δ_{β,β'} √(Λ_α)` (arXiv:1606.00608, line 1300):
-the diagonal that dresses the unit isometry is `√Λ`, while the trace
-normalization `tr(Λ) = 1` is imposed on `Λ` itself, equivalently on the diagonal
-fixed point `ρ = diag(Λ)` of the transfer map.
+\(\widehat A^{(\alpha',\beta')}_{\alpha,\beta}
+  = \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}\sqrt{\Lambda_\alpha}\)
+(arXiv:1606.00608, line 1300): the diagonal that dresses the unit isometry is
+`√Λ`, while the trace normalization tr Λ = 1 is imposed on `Λ` itself,
+equivalently on the diagonal fixed point `ρ = diag Λ` of the transfer map.
 
 **Local fix (square-root diagonal):** The source's displayed equation
-`eq_III_NT_RFP` (arXiv:1606.00608, line 1278) writes `A^i = X Λ U^i X⁻¹` with the
-diagonal `Λ` itself (no square root) alongside the unit isometry condition on `U`
-(lines 1281--1283). That literal pairing is inconsistent: against the reference
-tensor `Â = √Λ · (matrix unit)` (line 1300) the residual `Λ⁻¹ Â = √Λ⁻¹ ·
-(matrix unit)` has pair-index sum `δ / Λ_α`, not `δ`, so a unit `U` forces the
-square-root dressing `√Λ` in the decomposition.  This `Λ → √Λ` change is a local
-correction of the source display, mathematically correct as stated; it is
+III_NT_RFP (arXiv:1606.00608, line 1278) writes \(A^i = X\Lambda U^iX^{-1}\) with
+the diagonal \(\Lambda\) itself (no square root) alongside the unit isometry
+condition on \(U\) (lines 1281--1283). That literal pairing is inconsistent:
+against the reference tensor \(\widehat A = \sqrt\Lambda\cdot(\text{matrix
+unit})\) (line 1300) the residual \(\Lambda^{-1}\widehat A\) has pair-index sum
+\(\delta/\Lambda_\alpha\), not \(\delta\), so a unit `U` forces the square-root
+dressing `√Λ` in the decomposition. This \(\Lambda\to\sqrt\Lambda\) change is a
+local correction of the source display, mathematically correct as stated; it is
 documented in `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`.
 
-This records the diagonal `j = j'` case of the source isometry condition. The
-cross-block `δ_{j,j'}` orthogonality between distinct normal-tensor blocks is a
-separate condition, recorded in `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
+This records the diagonal j = j' case of the source isometry condition. The
+cross-block \(\delta_{j,j'}\) orthogonality between distinct normal-tensor blocks
+is a separate condition, recorded in
+`docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
 def IsIsometryCanonicalForm (A : MPSTensor d D) : Prop :=
   ∃ (X : Matrix (Fin D) (Fin D) ℂ) (Λ : Fin D → ℝ) (U : MPSTensor d D),
     X.det ≠ 0 ∧
@@ -675,7 +682,7 @@ def IsIsometryCanonicalForm (A : MPSTensor d D) : Prop :=
     (∀ i, A i = X * Matrix.diagonal (fun k => (Real.sqrt (Λ k) : ℂ)) * U i * X⁻¹)
 
 /-- **Trace-normalized isometry canonical form of Lemma B.1**
-(arXiv:1606.00608, Lemma `lem:charact-NT-pure-RFP`, lines 1271--1301).
+(arXiv:1606.00608, Lemma charact-NT-pure-RFP, lines 1271--1301).
 
 A normal tensor in canonical form II that is a renormalization fixed point is in
 isometry canonical form: it admits a decomposition
@@ -689,7 +696,7 @@ point of the transfer map; trace-normalization is then the trace identity
 tensor `Â = √Λ · (matrix unit)` (arXiv:1606.00608, line 1300) and keeps `U` a
 genuine unit isometry.
 
-**Local fix (square-root diagonal):** the source display `eq_III_NT_RFP`
+**Local fix (square-root diagonal):** the source display III_NT_RFP
 (line 1278) writes `A^i = X Λ U^i X⁻¹` without the square root; the `Λ → √Λ`
 correction is documented in the predicate `IsIsometryCanonicalForm` and in
 `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
@@ -699,7 +706,7 @@ theorem isIsometryCanonicalForm_of_rfp_nt (A : MPSTensor d D) [NeZero D]
     IsIsometryCanonicalForm A := by
   classical
   obtain ⟨X, Λ₀, U₀, hX_det, hΛ₀_pos, _, hU₀_pair, hΛ₀_sq, hA_eq⟩ :=
-    rfp_nt_structural_full_aux A hNT hRFP hLeft
+    rfp_nt_structural_full_sqSum A hNT hRFP hLeft
   let sR : ℝ := Real.sqrt (D : ℝ)
   let s : ℂ := (sR : ℂ)
   -- Rescale to the unit pair-index convention: `U = √D · U₀`, `Λtil = Λ₀ / √D`.
@@ -769,17 +776,18 @@ theorem isIsometryCanonicalForm_of_rfp_nt (A : MPSTensor d D) [NeZero D]
 
 /-- **Per-block trace-normalized isometry canonical form.** Each block of a
 multi-block tensor that is a normal, left-canonical renormalization fixed point
-is in isometry canonical form: it admits a decomposition `A_k^i = X √Λ_k U^i X⁻¹`
-with `Λ_k` diagonal positive, trace-normalized (`∑ j Λ_k j = 1`), and `U`
-a unit pair-index isometry.
+is in isometry canonical form: it admits a decomposition
+\(A_k^i = X\sqrt{\Lambda_k}\,U^iX^{-1}\) with \(\Lambda_k\) diagonal positive,
+trace-normalized (\(\sum_j (\Lambda_k)_j = 1\)), and \(U\) a unit pair-index
+isometry.
 
-This is the single-block trace-normalized form (Theorem
-`isIsometryCanonicalForm_of_rfp_nt`, the diagonal `j = j'` case of
-arXiv:1606.00608, Corollary III.cor3, lines 583--589) applied to each block.
+This is the single-block trace-normalized form (`isIsometryCanonicalForm_of_rfp_nt`,
+the diagonal j = j' case of arXiv:1606.00608, Corollary III.cor3, lines
+583--589) applied to each block.
 
 **Scope restriction (source isometry):** Corollary III.cor3 also invokes the
-cross-block `δ_{j,j'}` orthogonality between distinct normal-tensor blocks
-(eq:III_isometry, lines 550--554). This per-block statement omits those
+cross-block \(\delta_{j,j'}\) orthogonality between distinct normal-tensor blocks
+(eq. III_isometry, lines 550--554). This per-block statement omits those
 cross-block equations; the gap is recorded in
 `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. Deriving the per-block
 normal/RFP/left-canonical hypotheses from a whole-tensor canonical-form
