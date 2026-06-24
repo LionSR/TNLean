@@ -26,7 +26,7 @@ The spin double cover `SU(2) → SO(3)` and the supporting Pauli-conjugation
 machinery (`SpinCover.pauliConjAd`, `SpinCover.spinHalfCover`,
 `SpinCover.spinHalfCover_surjective_onto_SO3`, `SpinCover.so3_euler_decomp`)
 are AKLT-independent and live in `TNLean.Algebra.SpinCover`; this module only
-adds the AKLT-facing consequences.
+adds the AKLT-specific results.
 
 ## Main definitions
 
