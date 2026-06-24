@@ -43,6 +43,7 @@ import TNLean.Analysis.ProjectionGeometry
 -- Layer 0b: Trace of the Hermitian functional calculus (Mathlib-only matrix lemma)
 import TNLean.Analysis.TraceCFC
 import TNLean.Analysis.MatrixTraceInequalities
+import TNLean.Analysis.KyFanNorm
 
 -- Layer 1: Generic convex/topological infrastructure
 import TNLean.Topology.ConvexProjection

@@ -287,6 +287,101 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     nonnegative.
 \end{proof}
 
+\begin{definition}[Sum of the largest eigenvalues]
+    \label{def:ky_fan_norm}
+    \lean{Matrix.IsHermitian.kyFanNorm}
+    \leanok
+    Let $A\in\MN{D}$ be Hermitian with eigenvalues
+    $\lambda_1\ge\lambda_2\ge\cdots\ge\lambda_D$ listed in decreasing order. For
+    $0\le k\le D$ set
+    \[
+        S_k(A) = \sum_{i=1}^{k}\lambda_i ,
+    \]
+    the sum of the $k$ largest (signed) eigenvalues. Indices beyond $D$ contribute
+    zero, so the value stabilizes at $\operatorname{Re}\tr(A)$ once $k$ reaches
+    $D$.
+
+    The \emph{Ky-Fan $k$-norm} $\|A\|_{(k)}$ is by definition the sum of the $k$
+    largest \emph{singular values} of $A$. It agrees with $S_k(A)$ exactly when
+    $A$ is positive semidefinite, where eigenvalues and singular values coincide;
+    for an indefinite Hermitian $A$ the two differ (for $A=\diag(1,-2)$ one has
+    $S_1(A)=1$ but $\|A\|_{(1)}=2$). The results below concern $S_k(A)$ for
+    arbitrary Hermitian $A$, so on the positive-semidefinite cone they are
+    statements about the Ky-Fan norm.
+\end{definition}
+
+\begin{theorem}[Achievability of the largest-eigenvalue sum]
+    \label{thm:ky_fan_achievability}
+    \lean{Matrix.IsHermitian.exists_isProj_trace_eq_kyFanNorm}
+    \leanok
+    \uses{def:ky_fan_norm}
+    For every Hermitian $A\in\MN{D}$ and every $k\ge0$ there is an orthogonal
+    projection $P$ of rank $\min(k,D)$ with
+    \[
+        \operatorname{Re}\tr(PA) = S_k(A) .
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:ky_fan_norm}
+    Diagonalize $A=U\,\diag(\lambda_i)\,U^\dagger$ and take $P$ to be the
+    projection onto the span of the eigenvectors with the $\min(k,D)$ largest
+    eigenvalues. Then $\operatorname{Re}\tr(PA)=\sum_{i\le k}\lambda_i=S_k(A)$.
+\end{proof}
+
+\begin{theorem}[Upper bound for the largest-eigenvalue sum]
+    \label{thm:ky_fan_upper_bound}
+    \lean{Matrix.IsHermitian.trace_mul_re_le_kyFanNorm}
+    \leanok
+    \uses{def:ky_fan_norm}
+    For every Hermitian $A\in\MN{D}$ and every orthogonal projection $P$ of rank
+    $k<D$,
+    \[
+        \operatorname{Re}\tr(PA) \le S_k(A) .
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:ky_fan_norm}
+    Conjugating $P$ by $U$ gives an orthogonal projection $Q$ of the same rank,
+    and $\operatorname{Re}\tr(PA)=\sum_i w_i\lambda_i$ where $w_i$ are the
+    diagonal entries of $Q$. Each $w_i$ lies in $[0,1]$ and the weights sum to
+    $\tr P = k$. With the threshold $c=\lambda_{k+1}$,
+    \[
+        \sum_{i\le k}\lambda_i - \sum_i w_i\lambda_i
+            = \sum_{i\le k}(\lambda_i-c)(1-w_i)
+                + \sum_{i>k}(c-\lambda_i)w_i \ge 0 ,
+    \]
+    since for $i\le k$ the eigenvalues dominate $c$ while $1-w_i\ge0$, and for
+    $i>k$ they are dominated by $c$ while $w_i\ge0$.
+\end{proof}
+
+\begin{theorem}[Ky Fan's maximum principle]
+    \label{thm:ky_fan_maximum_principle}
+    \lean{Matrix.IsHermitian.kyFanNorm_eq_sup_trace}
+    \leanok
+    \uses{def:ky_fan_norm, thm:ky_fan_achievability, thm:ky_fan_upper_bound}
+    Let $A\in\MN{D}$ be Hermitian and $0\le k<D$. Then the sum of its $k$ largest
+    eigenvalues is the largest value of $\operatorname{Re}\tr(PA)$ attained by an
+    orthogonal projection $P$ of rank $k$:
+    \[
+        S_k(A) = \max_{P^2=P=P^\dagger,\ \tr P = k}
+            \operatorname{Re}\tr(PA) .
+    \]
+    This is Ky Fan's maximum principle \cite{Fan1949Theorem}; see also
+    \cite[Problem~I.6.15, Exercise~II.1.13]{Bhatia1997Matrix}. For a positive
+    semidefinite $A$, where $S_k(A)$ coincides with the Ky-Fan norm
+    $\|A\|_{(k)}$, it gives the extremal overlap of \cite[Lemma~3.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:ky_fan_achievability, thm:ky_fan_upper_bound}
+    The achievability half (Theorem~\ref{thm:ky_fan_achievability}) provides a
+    rank-$k$ projection whose trace against $A$ equals $S_k(A)$, so the value is
+    attained. The upper bound (Theorem~\ref{thm:ky_fan_upper_bound}) shows that no
+    rank-$k$ projection exceeds it. Hence $S_k(A)$ is the maximum.
+\end{proof}
+
 \begin{definition}[Maps preserving the positive semidefinite cone]
     \label{def:maps_psd_cone_onto}
     \lean{MapsPSDConeOnto}
