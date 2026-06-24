@@ -76,7 +76,7 @@ That identity comes from `(Λ k) ^ 2 = D · ρ_{k,k} / tr ρ` together with the
 trace identity `∑ k ρ_{k,k} = tr ρ` for the diagonal fixed point `ρ`. It is the
 seed for the source trace-normalization `tr(Λ_src) = 1` after rescaling to the
 unit pair-index convention (arXiv:1606.00608, Lemma `lem:charact-NT-pure-RFP`,
-lines 1271--1295). -/
+lines 1271--1301). -/
 private theorem rfp_nt_structural_full_aux (A : MPSTensor d D) [NeZero D]
     (hNT : IsNormal A) (hRFP : IsRFP A)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
@@ -420,7 +420,7 @@ private theorem rfp_nt_structural_full_aux (A : MPSTensor d D) [NeZero D]
   -- `∑ k (Λ k)^2 = D`: each square is `D · ρ_{k,k} / tr ρ`, and `∑ ρ_{k,k} = tr ρ`.
   have hΛsq : ∀ k : Fin D, (Λ k) ^ 2 = (D : ℝ) * (ρ k k).re / (Matrix.trace ρ).re := by
     intro k
-    have hk_pos : 0 < (ρ k k).re := (RCLike.pos_iff.mp (hρdiag_pos k)).1
+    have hk_nonneg : 0 ≤ (ρ k k).re := le_of_lt (RCLike.pos_iff.mp (hρdiag_pos k)).1
     have harg_nonneg : 0 ≤ ((D : ℝ) * (ρ k k).re) / (Matrix.trace ρ).re :=
       div_nonneg (by positivity) (le_of_lt htr_re_pos)
     simpa [Λ, sq] using Real.sq_sqrt harg_nonneg
@@ -436,7 +436,7 @@ private theorem rfp_nt_structural_full_aux (A : MPSTensor d D) [NeZero D]
       _ = (D : ℝ) * (Matrix.trace ρ).re / (Matrix.trace ρ).re := by
             rw [htrace_re_sum]
       _ = (D : ℝ) := by
-            field_simp
+            field_simp [htr_re_ne]
   refine ⟨X, Λ, U, hX_det, ?_, hU_left, hU_pair, hΛ_sq_sum, ?_⟩
   · intro k
     apply Real.sqrt_pos.2
@@ -491,6 +491,51 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
     rfp_nt_structural_full_aux A hNT hRFP hLeft
   exact ⟨X, Λ, U, hX_det, hΛ_pos, hU_left, hU_pair, hA_eq⟩
 
+/-- `(√D : ℂ)` times its conjugate is `D`. Used to rescale the `D⁻¹` pair-index
+orthonormality to the unit convention. -/
+private theorem sqrtCard_star_mul [NeZero D] :
+    star ((Real.sqrt (D : ℝ) : ℂ)) * (Real.sqrt (D : ℝ) : ℂ) = (D : ℂ) := by
+  have hDpos : 0 < (D : ℝ) := by exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne D)
+  have hs_sq : Real.sqrt (D : ℝ) * Real.sqrt (D : ℝ) = (D : ℝ) := by
+    rw [← pow_two]; exact Real.sq_sqrt (le_of_lt hDpos)
+  rw [Complex.star_def, Complex.conj_ofReal, ← Complex.ofReal_mul, hs_sq,
+    Complex.ofReal_natCast]
+
+/-- Rescaling a residual tensor `U₀` with `D⁻¹` pair-index orthonormality by the
+scalar `√D` upgrades it to the unit pair-index convention
+\[
+  \sum_i \overline{(U^i)_{\alpha,\beta}}\,(U^i)_{\alpha',\beta'}
+  = \delta_{\alpha,\alpha'}\delta_{\beta,\beta'},
+  \qquad U^i = \sqrt D\,U_0^i.
+\]
+Shared between `rfp_nt_structural_full_unit_pair` and
+`isIsometryCanonicalForm_of_rfp_nt`. -/
+private theorem unit_pair_of_scaled_sqrtCard [NeZero D] (U₀ : MPSTensor d D)
+    (hU₀_pair : ∀ p q : Fin D × Fin D,
+      ∑ i : Fin d, star (U₀ i p.1 p.2) * U₀ i q.1 q.2 =
+        if p = q then (D : ℂ)⁻¹ else 0)
+    (p q : Fin D × Fin D) :
+    ∑ i : Fin d,
+        star (((Real.sqrt (D : ℝ) : ℂ) • U₀ i) p.1 p.2) *
+          ((Real.sqrt (D : ℝ) : ℂ) • U₀ i) q.1 q.2 =
+      if p = q then 1 else 0 := by
+  have hD_ne : (D : ℂ) ≠ 0 := by exact_mod_cast (NeZero.ne D)
+  set s : ℂ := (Real.sqrt (D : ℝ) : ℂ) with hs
+  calc
+    ∑ i : Fin d, star ((s • U₀ i) p.1 p.2) * (s • U₀ i) q.1 q.2
+        = ∑ i : Fin d, (star s * s) * (star (U₀ i p.1 p.2) * U₀ i q.1 q.2) := by
+            refine Finset.sum_congr rfl ?_
+            intro i _
+            simp [mul_assoc, mul_left_comm, mul_comm]
+    _ = (star s * s) * ∑ i : Fin d, star (U₀ i p.1 p.2) * U₀ i q.1 q.2 := by
+          rw [Finset.mul_sum]
+    _ = (D : ℂ) * (if p = q then (D : ℂ)⁻¹ else 0) := by
+          rw [hs, sqrtCard_star_mul, hU₀_pair p q]
+    _ = if p = q then 1 else 0 := by
+          by_cases hpq : p = q
+          · simp [hpq, hD_ne]
+          · simp [hpq]
+
 /-- **Unit pair-index form of Lemma B.1.**  This is the same structural
 decomposition as the isometry theorem above
 (Theorem~\ref{thm:rfp_nt_structural_full}), rewritten in the source convention
@@ -539,16 +584,6 @@ theorem rfp_nt_structural_full_unit_pair (A : MPSTensor d D) [NeZero D]
     exact Real.sqrt_pos.2 hDpos
   have hs_ne : s ≠ 0 := by
     simpa [s] using Complex.ofReal_ne_zero.mpr hsR_ne
-  have hs_star : star s * s = (D : ℂ) := by
-    have hs_sq : sR * sR = (D : ℝ) := by
-      have hnn : 0 ≤ (D : ℝ) := by positivity
-      change Real.sqrt (D : ℝ) * Real.sqrt (D : ℝ) = (D : ℝ)
-      rw [← pow_two]
-      exact Real.sq_sqrt hnn
-    have hs_sq_c := congrArg (fun x : ℝ => (x : ℂ)) hs_sq
-    simpa [s, Complex.ofReal_mul] using hs_sq_c
-  have hD_ne : (D : ℂ) ≠ 0 := by
-    exact_mod_cast (NeZero.ne D)
   have hdiag :
       Matrix.diagonal (fun k => (Λ k : ℂ)) =
         s⁻¹ • Matrix.diagonal (fun k => (Λ₀ k : ℂ)) := by
@@ -568,22 +603,7 @@ theorem rfp_nt_structural_full_unit_pair (A : MPSTensor d D) [NeZero D]
   · intro k
     exact div_pos (hΛ₀_pos k) hsR_pos
   · intro p q
-    calc
-      ∑ i : Fin d, star (U i p.1 p.2) * U i q.1 q.2
-          = ∑ i : Fin d,
-              (star s * s) * (star (U₀ i p.1 p.2) * U₀ i q.1 q.2) := by
-              refine Finset.sum_congr rfl ?_
-              intro i _
-              simp [U, s, mul_assoc, mul_left_comm, mul_comm]
-      _ = (star s * s) *
-            ∑ i : Fin d, star (U₀ i p.1 p.2) * U₀ i q.1 q.2 := by
-              rw [Finset.mul_sum]
-      _ = (D : ℂ) * (if p = q then (D : ℂ)⁻¹ else 0) := by
-              rw [hs_star, hU₀_pair p q]
-      _ = if p = q then 1 else 0 := by
-              by_cases hpq : p = q
-              · simp [hpq, hD_ne]
-              · simp [hpq]
+    exact unit_pair_of_scaled_sqrtCard U₀ hU₀_pair p q
   · intro i
     rw [hA_eq i]
     let L : Matrix (Fin D) (Fin D) ℂ := Matrix.diagonal (fun k => (Λ k : ℂ))
@@ -609,7 +629,7 @@ theorem rfp_nt_structural_full_unit_pair (A : MPSTensor d D) [NeZero D]
           simp [L, U]
 
 /-- **Isometry canonical form for a single normal-tensor block**
-(arXiv:1606.00608, Lemma `lem:charact-NT-pure-RFP`, lines 1271--1295, and the
+(arXiv:1606.00608, Lemma `lem:charact-NT-pure-RFP`, lines 1271--1301, and the
 single-block case `j = j'` of Theorem `thm:charact-MPS`, eq. `III_CFI_RFP` and
 `eq:III_isometry`).
 
@@ -626,10 +646,20 @@ such that
   A^i = X \, \sqrt{\Lambda} \, U^i \, X^{-1}.
 \]
 The square root appears because the source reference tensor is
-`Â^{(α',β')}_{α,β} = δ_{α,α'} δ_{β,β'} √(Λ_α)` (arXiv:1606.00608, line 1288):
+`Â^{(α',β')}_{α,β} = δ_{α,α'} δ_{β,β'} √(Λ_α)` (arXiv:1606.00608, line 1300):
 the diagonal that dresses the unit isometry is `√Λ`, while the trace
 normalization `tr(Λ) = 1` is imposed on `Λ` itself, equivalently on the diagonal
 fixed point `ρ = diag(Λ)` of the transfer map.
+
+**Local fix (square-root diagonal):** The source's displayed equation
+`eq_III_NT_RFP` (arXiv:1606.00608, line 1278) writes `A^i = X Λ U^i X⁻¹` with the
+diagonal `Λ` itself (no square root) alongside the unit isometry condition on `U`
+(lines 1281--1283). That literal pairing is inconsistent: against the reference
+tensor `Â = √Λ · (matrix unit)` (line 1300) the residual `Λ⁻¹ Â = √Λ⁻¹ ·
+(matrix unit)` has pair-index sum `δ / Λ_α`, not `δ`, so a unit `U` forces the
+square-root dressing `√Λ` in the decomposition.  This `Λ → √Λ` change is a local
+correction of the source display, mathematically correct as stated; it is
+documented in `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`.
 
 This records the diagonal `j = j'` case of the source isometry condition. The
 cross-block `δ_{j,j'}` orthogonality between distinct normal-tensor blocks is a
@@ -645,7 +675,7 @@ def IsIsometryCanonicalForm (A : MPSTensor d D) : Prop :=
     (∀ i, A i = X * Matrix.diagonal (fun k => (Real.sqrt (Λ k) : ℂ)) * U i * X⁻¹)
 
 /-- **Trace-normalized isometry canonical form of Lemma B.1**
-(arXiv:1606.00608, Lemma `lem:charact-NT-pure-RFP`, lines 1271--1295).
+(arXiv:1606.00608, Lemma `lem:charact-NT-pure-RFP`, lines 1271--1301).
 
 A normal tensor in canonical form II that is a renormalization fixed point is in
 isometry canonical form: it admits a decomposition
@@ -656,7 +686,13 @@ isometry.
 The diagonal weight is `Λ k = ρ_{k,k} / tr ρ`, the normalized diagonal fixed
 point of the transfer map; trace-normalization is then the trace identity
 `∑ k ρ_{k,k} = tr ρ`. The square-root dressing `√Λ` matches the source reference
-tensor `Â = √Λ · (matrix unit)` and keeps `U` a genuine unit isometry. -/
+tensor `Â = √Λ · (matrix unit)` (arXiv:1606.00608, line 1300) and keeps `U` a
+genuine unit isometry.
+
+**Local fix (square-root diagonal):** the source display `eq_III_NT_RFP`
+(line 1278) writes `A^i = X Λ U^i X⁻¹` without the square root; the `Λ → √Λ`
+correction is documented in the predicate `IsIsometryCanonicalForm` and in
+`docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
 theorem isIsometryCanonicalForm_of_rfp_nt (A : MPSTensor d D) [NeZero D]
     (hNT : IsNormal A) (hRFP : IsRFP A)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
@@ -676,14 +712,6 @@ theorem isIsometryCanonicalForm_of_rfp_nt (A : MPSTensor d D) [NeZero D]
   have hsR_ne : sR ≠ 0 := Real.sqrt_ne_zero'.2 hDpos
   have hsR_pos : 0 < sR := Real.sqrt_pos.2 hDpos
   have hs_ne : s ≠ 0 := by simpa [s] using Complex.ofReal_ne_zero.mpr hsR_ne
-  have hD_ne : (D : ℂ) ≠ 0 := by exact_mod_cast (NeZero.ne D)
-  have hs_star : star s * s = (D : ℂ) := by
-    have hs_sq : sR * sR = (D : ℝ) := by
-      have hnn : 0 ≤ (D : ℝ) := by positivity
-      change Real.sqrt (D : ℝ) * Real.sqrt (D : ℝ) = (D : ℝ)
-      rw [← pow_two]; exact Real.sq_sqrt hnn
-    have hs_sq_c := congrArg (fun x : ℝ => (x : ℂ)) hs_sq
-    simpa [s, Complex.ofReal_mul] using hs_sq_c
   have hΛtil_pos : ∀ k, 0 < Λtil k := fun k => div_pos (hΛ₀_pos k) hsR_pos
   -- `√Λ k = Λtil k`, so the decomposition matches the source `√Λ` dressing.
   have hsqrtΛ : ∀ k, Real.sqrt (Λ k) = Λtil k := by
@@ -704,23 +732,10 @@ theorem isIsometryCanonicalForm_of_rfp_nt (A : MPSTensor d D) [NeZero D]
             Finset.sum_congr rfl (fun k _ => hstep k)
       _ = (∑ k : Fin D, (Λ₀ k) ^ 2) / (D : ℝ) := by rw [Finset.sum_div]
       _ = (D : ℝ) / (D : ℝ) := by rw [hΛ₀_sq]
-      _ = 1 := by field_simp
+      _ = 1 := by field_simp [hDpos.ne']
   · -- Unit pair-index isometry: `√D · U₀` upgrades the `D⁻¹` form to unit.
     intro p q
-    calc
-      ∑ i : Fin d, star (U i p.1 p.2) * U i q.1 q.2
-          = ∑ i : Fin d, (star s * s) * (star (U₀ i p.1 p.2) * U₀ i q.1 q.2) := by
-              refine Finset.sum_congr rfl ?_
-              intro i _
-              simp [U, s, mul_assoc, mul_left_comm, mul_comm]
-      _ = (star s * s) * ∑ i : Fin d, star (U₀ i p.1 p.2) * U₀ i q.1 q.2 := by
-              rw [Finset.mul_sum]
-      _ = (D : ℂ) * (if p = q then (D : ℂ)⁻¹ else 0) := by
-              rw [hs_star, hU₀_pair p q]
-      _ = if p = q then 1 else 0 := by
-              by_cases hpq : p = q
-              · simp [hpq, hD_ne]
-              · simp [hpq]
+    exact unit_pair_of_scaled_sqrtCard U₀ hU₀_pair p q
   · -- Decomposition: `A^i = X √Λ U^i X⁻¹` reduces to the `Λ₀, U₀` form.
     intro i
     rw [hA_eq i]
@@ -739,7 +754,7 @@ theorem isIsometryCanonicalForm_of_rfp_nt (A : MPSTensor d D) [NeZero D]
         rw [show (Λtil a : ℂ) = (Λ₀ a / sR : ℝ) from by simp [Λtil],
           Complex.ofReal_div]
         rw [show s = (sR : ℂ) from rfl]
-        field_simp
+        field_simp [hsRC_ne]
       · simp [Matrix.diagonal, hab]
     have hmove : (s • L) * U₀ i = L * (s • U₀ i) := by
       rw [Matrix.smul_mul, Matrix.mul_smul]
