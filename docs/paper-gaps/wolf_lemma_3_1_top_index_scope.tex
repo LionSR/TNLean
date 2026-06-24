@@ -1,0 +1,57 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\title{Top-index scope of the maximal-overlap lemma (Wolf Lemma 3.1)}
+\author{}
+\date{2026-06-24}
+
+\begin{document}
+\maketitle
+
+\section{Source statement}
+
+Lemma~3.1 of Wolf's \emph{Quantum Channels \& Operations}
+(\path{Notes/WolfNoteTexSource/ch03_positive_not_completely.tex}, lines
+119--128) states that, for a normalized vector
+$\phi\in\mathbb{C}^{D'}\otimes\mathbb{C}^{D}$ with reduced density matrix
+$\rho=\operatorname{tr}_2|\phi\rangle\langle\phi|$,
+\[
+  \sup_{\psi}|\langle\phi|\psi\rangle|^2 = \|\rho\|_{(n)},
+\]
+where the supremum runs over normalized vectors $\psi$ of Schmidt rank $n$ and
+$\|\cdot\|_{(n)}$ is the Ky-Fan $n$-norm. In the application (n-positivity, Wolf
+Prop.~3.1) the Schmidt rank $n$ ranges over $1\le n\le D$, so the value $n=D$ is
+within the source's scope.
+
+\section{Formalized statement}
+
+The Lean theorem
+\path{Matrix.maximalSchmidtOverlap_eq_kyFanNorm} establishes the same
+identity, strengthened to attainment (\texttt{IsGreatest}), under the hypotheses
+$1\le n$ and $n<D$, where $D$ is the dimension of the first tensor factor.
+
+\section{The gap}
+
+The formalization omits the top index $n=D$. At $n=D$ the Schmidt-rank constraint
+is vacuous and $\|\rho\|_{(D)}=\operatorname{tr}\rho=1$; the supremum equals $1$
+and is attained at $\psi=\phi$.
+
+The restriction is inherited from the underlying maximum principle
+\path{Matrix.IsHermitian.kyFanNorm_eq_sup_trace}, which characterizes the Ky-Fan
+$k$-norm as a maximum over rank-exactly-$k$ orthogonal projections only for
+$k<D$. At $k=D$ the only rank-$D$ projection is the identity, and the eigenvalue
+sum already equals the trace; the variational statement degenerates rather than
+fails.
+
+\section{Elimination plan}
+
+Add a top-index case to \path{Matrix.IsHermitian.kyFanNorm_eq_sup_trace} (or a
+companion lemma) covering $k=D$, where the maximizing projection is the identity
+and the value is $\operatorname{Re}\operatorname{tr}(A)$. The overlap lemma then
+extends to $1\le n\le D$ by feeding that case into the same transfer argument.
+
+\end{document}
