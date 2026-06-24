@@ -17,8 +17,9 @@ import Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap
 
 This module collects the remaining axioms for the **operator Jensen
 inequalities** for matrix powers and logarithms under positive maps, and the
-**Lieb concavity theorem**.  It also contains the now-proved concave real-power
-Jensen theorem, since downstream files already import this boundary module.
+**Lieb concavity theorem**.  It also contains the now-proved concave and convex
+real-power Jensen theorems, since downstream files already import this boundary
+module.
 
 Mathlib 4.31 proves the operator concavity inputs for `x ↦ x ^ p`,
 `0 ≤ p ≤ 1`, and for `log`, via `CFC.concaveOn_rpow` and
@@ -32,9 +33,12 @@ The concave real-power Jensen inequality is proved below by integrating the
 pointwise positive-map inequality for the Löwner integrand.  The logarithmic
 Jensen inequality is then obtained as the right limit of
 `p⁻¹ • (A ^ p - 1)` as `p → 0+`, using
-`CFC.tendsto_cfc_rpow_sub_one_log`.  The convex real-power Jensen and Lieb
-statements remain axioms because the corresponding positive-map Jensen or
-joint-concavity arguments are not yet formalized.
+`CFC.tendsto_cfc_rpow_sub_one_log`.  The convex real-power Jensen inequality is
+proved analogously, by integrating the reversed pointwise positive-map
+inequality for the convex Löwner integrand `g p t` over the interior interval
+`(1, 2)` and passing to the endpoint `p = 2` by continuity of the matrix power
+`q ↦ M ^ q` in the exponent.  Only the Lieb statement remains an axiom, because
+the joint-concavity integral representation is not yet formalized.
 Operator convexity of `x ↦ x ^ p` for `1 ≤ p ≤ 2`, the scalar input of the
 convex case, is available as `CFC.convexOn_rpow` in
 `TNLean.Analysis.RpowConvexity`.
@@ -45,7 +49,8 @@ The following results are standard in matrix analysis:
 
 * `posMap_rpow_concave_jensen` — Jensen inequality for concave `rpow`,
   now a theorem.
-* `posMap_rpow_convex_jensen` — Jensen inequality for convex `rpow`.
+* `posMap_rpow_convex_jensen` — Jensen inequality for convex `rpow`,
+  now a theorem.
 * `posMap_log_concave_jensen` — Jensen inequality for concave `log`,
   now a theorem.
 * `lieb_concavity_axiom` — Lieb concavity theorem.
@@ -57,11 +62,10 @@ via the spectral theorem and the scalar Jensen inequality.
 
 ## Status
 
-The concave real-power and logarithmic declarations are now proved.  Two
-declarations remain axioms: the convex real-power Jensen inequality and Lieb's
-joint concavity theorem.  Mathlib 4.31 supplies the
-C-star functional-calculus concavity inputs and the Löwner integral
-representation for the power case.  Earlier status notes recorded the integral
+The concave real-power, convex real-power, and logarithmic declarations are now
+proved.  Only Lieb's joint concavity theorem remains an axiom.  Mathlib 4.31
+supplies the C-star functional-calculus concavity inputs and the Löwner integral
+representation for both power cases.  Earlier status notes recorded the integral
 representation as missing; that is no longer accurate.
 
 The remaining Mathlib or local formalization gaps are:
@@ -91,9 +95,10 @@ The remaining Mathlib or local formalization gaps are:
   follows by taking the right limit `p → 0+` in the concave real-power
   inequality.
 * Operator convexity of `rpow` over `[1, 2]`, the scalar input of
-  `posMap_rpow_convex_jensen`, is now available as `CFC.convexOn_rpow` in
-  `TNLean.Analysis.RpowConvexity`; the convex axiom therefore shares the single
-  remaining positive-map Jensen obstruction with the concave one.
+  `posMap_rpow_convex_jensen`, is available as `CFC.convexOn_rpow` in
+  `TNLean.Analysis.RpowConvexity`; the convex case is now proved directly from
+  the reversed Löwner integrand inequality
+  `TNLean.OperatorJensen.positiveMap_rpowIntegrand₁₂_jensen`.
 * Lieb concavity integral representation: absent from Mathlib.
 
 ## Proof plan
@@ -118,10 +123,14 @@ The remaining Mathlib or local formalization gaps are:
    theorem, the local positive-semidefinite integral specialization in
    `TNLean.Channel.Schwarz.OperatorJensenAux`, and the commutation of `T` with
    the integral.
-2. **Operator convexity of `rpow` for `p ∈ [1, 2]`**: use the
-   decomposition `x^p = x · x^{p-1}` for `p ∈ [1, 2]` (Mathlib's
-   `rpowIntegrand₁₂`), reducing to concavity of `x^{p-1}` for
-   `p - 1 ∈ [0, 1]` and the same operator Jensen step.
+2. **Operator convexity of `rpow` for `p ∈ [1, 2]`**: use Mathlib's convex
+   Löwner integrand `g p t`, whose resolvent form
+   `g p t A = t ^ (p - 2) • A + t ^ p • (t • I + A)⁻¹ - t ^ (p - 1) • I`
+   yields the reversed pointwise inequality `g p t (T A) ≤ T (g p t A)` from the
+   positive-map resolvent inequality.  Integrating over the interior
+   `p ∈ (1, 2)` and taking the left limit `p → 2⁻`, using continuity of the
+   matrix power `q ↦ M ^ q` in the exponent, gives the result on the closed
+   interval `[1, 2]`.
 3. **Concave Jensen for `log`**: derive it from the right-limit formula
    `CFC.tendsto_cfc_rpow_sub_one_log` and the concave real-power theorem,
    using unitality to rewrite `T(1)=1`.
@@ -129,8 +138,7 @@ The remaining Mathlib or local formalization gaps are:
    `A^s B^{1-s} = (sin πs/π) ∫₀^∞ t^{s-1} A(A+tB)⁻¹ B dt` and
    resolvent monotonicity.
 
-The convex `rpow` case still needs the corresponding positive-map Jensen
-input.  Lieb concavity remains a separate integral representation problem.
+Lieb concavity remains a separate integral representation problem.
 
 ## References
 
@@ -237,6 +245,34 @@ private lemma positiveMap_rpowIntegrand₀₁_cfcₙ_jensen
   simpa [cfcₙ_rpowIntegrand₀₁_eq_cfc hA hp ht,
     cfcₙ_rpowIntegrand₀₁_eq_cfc hTA hp ht] using hpoint
 
+private lemma continuousOn_rpowIntegrand₁₂_Ici {p t : ℝ}
+    (hp : 1 < p) (ht : 0 < t) :
+    ContinuousOn (Real.rpowIntegrand₁₂ p t) (Set.Ici 0) :=
+  (Real.continuousOn_rpowIntegrand₁₂_uncurry hp (Set.Ici 0) fun _ a => a).uncurry_left t ht
+
+private lemma cfcₙ_rpowIntegrand₁₂_eq_cfc
+    {B : Mat} (hB : 0 ≤ B) {p t : ℝ}
+    (hp : p ∈ Set.Ioo (1 : ℝ) 2) (ht : 0 < t) :
+    cfcₙ (Real.rpowIntegrand₁₂ p t) B =
+      cfc (Real.rpowIntegrand₁₂ p t) B := by
+  rw [cfcₙ_eq_cfc (hf := ?_) (hf0 := Real.rpowIntegrand₁₂_zero ht)]
+  exact (continuousOn_rpowIntegrand₁₂_Ici hp.1 ht).mono (by grind)
+
+private lemma positiveMap_rpowIntegrand₁₂_cfcₙ_jensen
+    {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T)
+    (hSub : T 1 ≤ (1 : Mat)) {A : Mat} (hA : 0 ≤ A)
+    {p t : ℝ} (hp : p ∈ Set.Ioo (1 : ℝ) 2) (ht : 0 < t) :
+    cfcₙ (Real.rpowIntegrand₁₂ p t) (T A) ≤
+      T (cfcₙ (Real.rpowIntegrand₁₂ p t) A) := by
+  have hApsd : A.PosSemidef := Matrix.nonneg_iff_posSemidef.mp hA
+  have hTApsd : (T A).PosSemidef := hT A hApsd
+  have hTA : 0 ≤ T A := Matrix.nonneg_iff_posSemidef.mpr hTApsd
+  have hpoint :=
+    TNLean.OperatorJensen.positiveMap_rpowIntegrand₁₂_jensen
+      hT hSub hApsd hp ht
+  simpa [cfcₙ_rpowIntegrand₁₂_eq_cfc hA hp ht,
+    cfcₙ_rpowIntegrand₁₂_eq_cfc hTA hp ht] using hpoint
+
 /-- **Operator Jensen for concave `rpow`** (Wolf Theorem 5.1, `p ∈ [0, 1]`).
 
 For a positive subunital map `T` and `p ∈ [0, 1]`:
@@ -324,6 +360,75 @@ theorem posMap_rpow_concave_jensen
       rw [hTAint.2]
     _ = (T A) ^ p := hTA_rpow
 
+/-- On a compact set, `x ↦ x ^ q` converges uniformly to `x ↦ x ^ 2` as the
+exponent `q` tends to `2` from the left.  This is the scalar input for passing
+the convex real-power Jensen inequality to the endpoint `p = 2`.
+
+The family is replaced by `x ↦ x ^ max q (1 / 2)`, which has a strictly positive
+exponent for every `q` and is therefore jointly continuous; the two families
+agree near `q = 2`, where `q ≥ 1 / 2`. -/
+private lemma tendstoUniformlyOn_rpow_exponent_two
+    (s : Set ℝ) (hs : IsCompact s) :
+    TendstoUniformlyOn (fun q : ℝ => fun x : ℝ => x ^ q) (fun x : ℝ => x ^ (2 : ℝ))
+      (𝓝[<] (2 : ℝ)) s := by
+  haveI : CompactSpace s := isCompact_iff_compactSpace.mp hs
+  set G : ℝ → ℝ → ℝ := fun q x => x ^ (max q (1 / 2 : ℝ)) with hG
+  have hGcont : ∀ q : ℝ, ContinuousOn (G q) s := by
+    intro q
+    apply ContinuousOn.rpow continuousOn_id continuousOn_const
+    intro x hx
+    exact Or.inr (lt_of_lt_of_le (by norm_num) (le_max_right _ _))
+  have hf : ContinuousOn (fun x : ℝ => x ^ (2 : ℝ)) s := by
+    apply ContinuousOn.rpow continuousOn_id continuousOn_const
+    intro x hx
+    exact Or.inr (by norm_num)
+  have key : TendstoUniformlyOn G (fun x : ℝ => x ^ (2 : ℝ)) (𝓝[<] (2 : ℝ)) s := by
+    rw [← (hf.tendsto_restrict_iff_tendstoUniformlyOn hGcont)]
+    have hjoint : Continuous (Function.uncurry G) := by
+      rw [hG]
+      apply Continuous.rpow continuous_snd
+        (continuous_id.comp continuous_fst |>.max continuous_const)
+      intro x
+      exact Or.inr (lt_of_lt_of_le (by norm_num) (le_max_right _ _))
+    have hΦcont : Continuous (fun q : ℝ => (⟨_, (hGcont q).restrict⟩ : C(s, ℝ))) := by
+      apply ContinuousMap.continuous_of_continuous_uncurry
+      exact hjoint.comp (continuous_id.prodMap continuous_subtype_val)
+    have hΦ2 : (⟨_, (hGcont 2).restrict⟩ : C(s, ℝ)) = ⟨_, hf.restrict⟩ := by
+      ext x
+      simp only [ContinuousMap.coe_mk, Set.restrict_apply, hG]
+      congr 1
+      norm_num
+    rw [← hΦ2]
+    exact (hΦcont.tendsto 2).mono_left nhdsWithin_le_nhds
+  apply key.congr
+  have hhalf : ∀ᶠ q : ℝ in 𝓝[<] (2 : ℝ), (1 / 2 : ℝ) ≤ q := by
+    have : ∀ᶠ q : ℝ in 𝓝 (2 : ℝ), (1 / 2 : ℝ) ≤ q := eventually_ge_nhds (by norm_num)
+    exact this.filter_mono nhdsWithin_le_nhds
+  filter_upwards [hhalf] with q hq
+  intro x hx
+  simp only [hG]
+  congr 1
+  exact max_eq_left hq
+
+/-- Right-continuity of `M ^ ·` at the exponent `2`, used to pass the convex
+real-power Jensen inequality from the open interval `(1, 2)` to the endpoint
+`p = 2`.  For positive semidefinite `M`, `M ^ q → M ^ 2` as `q → 2⁻`. -/
+private lemma tendsto_rpow_exponent_two {M : Mat} (hM : 0 ≤ M) :
+    Tendsto (fun q : ℝ => M ^ q) (𝓝[<] (2 : ℝ)) (𝓝 (M ^ (2 : ℝ))) := by
+  have hcfc : ∀ q : ℝ, M ^ q = cfc (fun x : ℝ => x ^ q) M := fun q =>
+    CFC.rpow_eq_cfc_real (a := M) hM
+  simp only [hcfc]
+  have hspec_compact : IsCompact (spectrum ℝ M) := spectrum.isCompact M
+  refine tendsto_cfc_fun ?tendsto ?cont
+  case cont =>
+    have hnear : ∀ᶠ q : ℝ in 𝓝[<] (2 : ℝ), (0 : ℝ) ≤ q := by
+      filter_upwards [eventually_nhdsWithin_of_eventually_nhds
+        (eventually_ge_nhds (by norm_num : (0 : ℝ) < 2))] with q hq using hq
+    filter_upwards [hnear] with q hq
+    exact ContinuousOn.rpow_const (by fun_prop) fun x _ => Or.inr hq
+  case tendsto =>
+    exact tendstoUniformlyOn_rpow_exponent_two (spectrum ℝ M) hspec_compact
+
 /-- **Operator Jensen for convex `rpow`** (Wolf Theorem 5.1, `p ∈ [1, 2]`).
 
 For a positive subunital map `T` and `p ∈ [1, 2]`:
@@ -335,10 +440,93 @@ the Hansen--Pedersen operator Jensen inequality for positive subunital maps.
 References:
 * Wolf, Theorem 5.1
 * Hansen--Pedersen, *Jensen's operator inequality*, 2003 -/
-axiom posMap_rpow_convex_jensen
+theorem posMap_rpow_convex_jensen
     {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hSub : T 1 ≤ (1 : Mat))
     {p : ℝ} (hp : p ∈ Set.Icc (1 : ℝ) 2) {A : Mat} (hA : 0 ≤ A) :
-    (T A) ^ p ≤ T (A ^ p)
+    (T A) ^ p ≤ T (A ^ p) := by
+  classical
+  have hApsd : A.PosSemidef := Matrix.nonneg_iff_posSemidef.mp hA
+  have hTApsd : (T A).PosSemidef := hT A hApsd
+  have hTA : 0 ≤ T A := Matrix.nonneg_iff_posSemidef.mpr hTApsd
+  -- The interior case `p ∈ (1, 2)` via the Löwner integral representation.
+  have hcore : ∀ q : ℝ, q ∈ Set.Ioo (1 : ℝ) 2 → (T A) ^ q ≤ T (A ^ q) := by
+    intro p hpIoo
+    let q : ℝ≥0 := ⟨p, by linarith [hpIoo.1]⟩
+    have hqcoe : (q : ℝ) = p := rfl
+    have hqpos : 0 < q := by
+      have : (0 : ℝ) < q := by rw [hqcoe]; linarith [hpIoo.1]
+      exact_mod_cast this
+    have hqIoo : q ∈ Set.Ioo (1 : ℝ≥0) 2 := by
+      constructor
+      · exact_mod_cast hpIoo.1
+      · exact_mod_cast hpIoo.2
+    obtain ⟨μ, hμ⟩ :=
+      CFC.exists_measure_nnrpow_eq_integral_cfcₙ_rpowIntegrand₁₂ Mat hqIoo
+    let ν := μ.restrict (Set.Ioi (0 : ℝ))
+    have hAint := hμ A (by simpa using hA)
+    have hTAint := hμ (T A) (by simpa using hTA)
+    have hAintν :
+        Integrable (fun t => cfcₙ (Real.rpowIntegrand₁₂ q t) A) ν := by
+      simpa [ν, MeasureTheory.IntegrableOn] using hAint.1
+    have hTAintν :
+        Integrable (fun t => cfcₙ (Real.rpowIntegrand₁₂ q t) (T A)) ν := by
+      simpa [ν, MeasureTheory.IntegrableOn] using hTAint.1
+    have hT_Aintν :
+        Integrable (fun t => T (cfcₙ (Real.rpowIntegrand₁₂ q t) A)) ν := by
+      simpa [LinearMap.coe_toContinuousLinearMap'] using
+        (LinearMap.toContinuousLinearMap T).integrable_comp hAintν
+    have hmono :
+        (fun t => cfcₙ (Real.rpowIntegrand₁₂ q t) (T A)) ≤ᵐ[ν]
+          fun t => T (cfcₙ (Real.rpowIntegrand₁₂ q t) A) := by
+      filter_upwards [ae_restrict_mem measurableSet_Ioi] with t ht
+      have htpos : 0 < t := ht
+      have hpoint :=
+        positiveMap_rpowIntegrand₁₂_cfcₙ_jensen hT hSub hA hpIoo htpos
+      convert hpoint using 2 <;> simp [hqcoe]
+    have hintegral_mono :
+        (∫ t, cfcₙ (Real.rpowIntegrand₁₂ q t) (T A) ∂ν) ≤
+          ∫ t, T (cfcₙ (Real.rpowIntegrand₁₂ q t) A) ∂ν :=
+      integral_mono_ae hTAintν hT_Aintν hmono
+    have hT_integral :
+        T (∫ t, cfcₙ (Real.rpowIntegrand₁₂ q t) A ∂ν) =
+          ∫ t, T (cfcₙ (Real.rpowIntegrand₁₂ q t) A) ∂ν := by
+      simpa [LinearMap.coe_toContinuousLinearMap'] using
+        ((LinearMap.toContinuousLinearMap T).integral_comp_comm hAintν).symm
+    have hA_rpow : A ^ p = A ^ q := by
+      have h := CFC.nnrpow_eq_rpow (a := A) hqpos
+      rw [hqcoe] at h
+      exact h.symm
+    have hTA_rpow : (T A) ^ q = (T A) ^ p := by
+      have h := CFC.nnrpow_eq_rpow (a := T A) hqpos
+      rw [hqcoe] at h
+      exact h
+    calc
+      (T A) ^ p = (T A) ^ q := hTA_rpow.symm
+      _ = ∫ t, cfcₙ (Real.rpowIntegrand₁₂ q t) (T A) ∂ν := by rw [hTAint.2]
+      _ ≤ ∫ t, T (cfcₙ (Real.rpowIntegrand₁₂ q t) A) ∂ν := hintegral_mono
+      _ = T (∫ t, cfcₙ (Real.rpowIntegrand₁₂ q t) A ∂ν) := hT_integral.symm
+      _ = T (A ^ q) := by rw [hAint.2]
+      _ = T (A ^ p) := by rw [hA_rpow]
+  -- Endpoints `p = 1` and `p = 2`.
+  rcases eq_or_lt_of_le hp.1 with hp1 | hp1
+  · rw [← hp1]
+    simp [CFC.rpow_one A hA, CFC.rpow_one (T A) hTA]
+  rcases eq_or_lt_of_le hp.2 with hp2 | hp2
+  · -- `p = 2`: pass the inequality to the left limit `q → 2⁻`.
+    subst hp2
+    have hlimF : Tendsto (fun q : ℝ => (T A) ^ q) (𝓝[<] (2 : ℝ)) (𝓝 ((T A) ^ (2 : ℝ))) :=
+      tendsto_rpow_exponent_two hTA
+    have hlimG : Tendsto (fun q : ℝ => T (A ^ q)) (𝓝[<] (2 : ℝ)) (𝓝 (T (A ^ (2 : ℝ)))) :=
+      ((LinearMap.toContinuousLinearMap T).continuous.tendsto (A ^ (2 : ℝ))).comp
+        (tendsto_rpow_exponent_two hA)
+    have hle : ∀ᶠ q : ℝ in 𝓝[<] (2 : ℝ), (T A) ^ q ≤ T (A ^ q) := by
+      have hnear : ∀ᶠ q : ℝ in 𝓝[<] (2 : ℝ), (1 : ℝ) < q := by
+        filter_upwards [eventually_nhdsWithin_of_eventually_nhds
+          (eventually_gt_nhds (by norm_num : (1 : ℝ) < 2))] with q hq using hq
+      filter_upwards [hnear, self_mem_nhdsWithin] with q hq1 hq2
+      exact hcore q ⟨hq1, hq2⟩
+    exact le_of_tendsto_of_tendsto hlimF hlimG hle
+  · exact hcore p ⟨hp1, hp2⟩
 
 /-- **Operator Jensen for concave `log`** (Wolf Theorem 5.1, log case).
 
