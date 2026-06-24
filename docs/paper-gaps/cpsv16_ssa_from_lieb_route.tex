@@ -67,7 +67,15 @@ chain of them. In source order the chain is the following.
     for density operators $\rho,\sigma$ with $\ker\sigma \subseteq \ker\rho$.
   \item \emph{Klein's inequality.} Nonnegativity $D(\rho\,\|\,\sigma) \ge 0$,
     with equality exactly when $\rho = \sigma$. This is the order property that
-    makes $D$ a divergence.
+    makes $D$ a divergence. The nonnegativity half is now formalized:
+    \leanid{quantumRelativeEntropy_nonneg} in
+    \doclink{TNLean/Analysis/KleinInequality}
+    (\path{TNLean/Analysis/KleinInequality.lean}) proves
+    $D(\rho\,\|\,\sigma)\ge 0$ for density operators $\rho,\sigma$ with $\sigma$
+    of full rank, by the eigenbasis reduction to the doubly stochastic overlap
+    matrix and the scalar Gibbs inequality $\log x\le x-1$; it consumes neither
+    Lieb concavity nor operator Jensen. The equality case and the
+    singular-$\sigma$ extension under $\ker\sigma\subseteq\ker\rho$ remain open.
   \item \emph{Joint convexity.} Convexity of
     $(\rho,\sigma) \mapsto D(\rho\,\|\,\sigma)$ in the pair of arguments. This is
     the step that consumes Lieb's joint concavity theorem: the concavity of
@@ -184,7 +192,11 @@ in place. Concretely:
     trace of a matrix logarithm.
   \item Layers (2) and (3) define the divergence and establish its
     nonnegativity; they need only the matrix logarithm and its operator
-    monotonicity, not Lieb concavity.
+    monotonicity, not Lieb concavity. Layer (2) is in place
+    (\leanid{quantumRelativeEntropy}) and layer (3), Klein's inequality, is now
+    formalized for full-rank $\sigma$ (\leanid{quantumRelativeEntropy_nonneg}),
+    via the eigenbasis reduction and the scalar Gibbs inequality rather than
+    operator monotonicity of the logarithm.
   \item Layer (4) is the single consumer of \leanid{lieb_concavity_axiom}: joint
     convexity of $D$ is the entropy-theoretic content of Lieb's theorem.
   \item Layer (5) packages joint convexity, unitary invariance, and
