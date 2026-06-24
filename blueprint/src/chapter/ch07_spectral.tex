@@ -1072,6 +1072,43 @@ sector is positive definite.
     $P u = 0$, contradicting $P u = u \neq 0$.
 \end{proof}
 
+\begin{theorem}[Corner-restricted fixed points form a $*$-algebra]%
+    \label{thm:cornerFixedPointsStarSubalgebra}
+    \lean{Kraus.cornerFixedPointsStarSubalgebra}
+    \leanok
+    \uses{thm:compression_on_support_posDef, rem:corner_algebra_star_instances,
+        thm:adjointFixedPointsStarSubalgebra, thm:support_proj_fixed}
+    Let $T^*(Y) = \sum_i K_i^\dagger Y K_i$ be a trace-preserving Schwarz map,
+    let $\rho \succeq 0$ satisfy $T(\rho) = \rho$ for the Schr\"odinger map
+    $T(X) = \sum_i K_i X K_i^\dagger$, and let $Q = \mathrm{supp}(\rho)$ be the
+    support projection of~$\rho$. Then
+    \[
+        \{Y \in Q\,\MN{D}\,Q \mid Q\,T^*(Y)\,Q = Y\}
+    \]
+    is a $*$-subalgebra of the corner algebra $Q\,\MN{D}\,Q$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:compression_on_support_posDef, thm:adjointFixedPointsStarSubalgebra,
+        thm:support_proj_fixed}
+    The stated set is the fixed-point set of the compressed map $\widetilde{T}^*$
+    on the support sector. Since $\rho$ is a fixed point of $T$, the support
+    projection satisfies $(\Id - Q) K_i Q = 0$
+    (Theorem~\ref{thm:support_proj_fixed}), so the compressed family
+    $Q K_i Q$ is supported on the corner and is trace-preserving there,
+    $\sum_i (Q K_i Q)^\dagger (Q K_i Q) = Q$. Compress this family to the
+    support sector: the compressed map is unital, and the compression of $\rho$
+    onto the sector is positive definite
+    (Theorem~\ref{thm:compression_on_support_posDef}) and is a fixed point of
+    the compressed Schr\"odinger map. The structure theorem for fixed points of
+    unital Schwarz maps with a positive-definite fixed point
+    (Theorem~\ref{thm:adjointFixedPointsStarSubalgebra}) makes the compressed
+    fixed points a $*$-algebra. The compression isomorphism is multiplicative
+    and star-preserving, intertwines the compressed adjoint map with the
+    corner-restricted map, and transports this $*$-algebra structure back to the
+    corner.
+\end{proof}
+
 \section{Wedderburn decomposition of the fixed-point algebra}
 
 This section proves the structure theorem for the fixed-point
