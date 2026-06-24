@@ -505,6 +505,74 @@ finite-dimensional quantum systems.
     prefactor $d^{-2}$ leaves $(\operatorname{tr} M / d)\,\mathbf 1$.
 \end{proof}
 
+\begin{lemma}[Twirl as partial trace tensored with the maximally mixed ancilla]
+    \label{lem:twirl_partial_trace}
+    \lean{Matrix.sum_kronecker_one_weyl_conj}
+    \leanok
+    \uses{thm:weyl_twirl}
+    Fix a dimension $d_C \ge 1$ and a primitive $d_C$-th root of unity $\zeta$.
+    For every matrix $M$ on $\mathcal H_S \otimes \mathbb{C}^{d_C}$, the uniform
+    average of the conjugations by the $d_C^2$ unitaries
+    $\mathbf 1_S \otimes W(a,b)$ on the second factor is the partial trace over
+    that factor tensored with the maximally mixed state $\mathbf 1_C / d_C$:
+    \[
+        \frac{1}{d_C^2} \sum_{a,b}
+            (\mathbf 1_S \otimes W(a,b))\, M\, (\mathbf 1_S \otimes W(a,b))^{\dagger}
+            = (\tr_C M) \otimes (\mathbf 1_C / d_C).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:weyl_twirl}
+    On each pair of blocks indexed by the first factor, the conjugation by
+    $\mathbf 1_S \otimes W(a,b)$ acts as the Weyl conjugation $W(a,b)\,(\cdot)\,
+    W(a,b)^{\dagger}$ of the corresponding block of $M$. Averaging over the $d_C^2$
+    Weyl operators sends each block to the depolarizing channel by
+    Theorem~\ref{thm:weyl_twirl}, replacing it by its trace times
+    $\mathbf 1_C / d_C$. The block trace is exactly the corresponding entry of the
+    partial trace $\tr_C M$, so the average is $(\tr_C M) \otimes
+    (\mathbf 1_C / d_C)$.
+\end{proof}
+
+\begin{theorem}[Data-processing inequality under the partial trace]
+    \label{thm:relative_entropy_data_processing}
+    \lean{Matrix.quantumRelativeEntropy_partialTraceRight_le}
+    \leanok
+    \uses{def:quantum_relative_entropy, thm:relative_entropy_ancilla_additivity,
+        thm:relative_entropy_unitary_invariance, thm:relative_entropy_joint_convexity,
+        lem:twirl_partial_trace}
+    For positive definite matrices $\rho, \sigma$ on a tensor product of a system
+    factor and an ancilla factor,
+    \[
+        D(\tr_C \rho \,\Vert\, \tr_C \sigma) \le D(\rho \,\Vert\, \sigma),
+    \]
+    where $\tr_C$ is the partial trace over the ancilla factor. (Scope
+    restriction: the source inequality holds for density operators with
+    $\ker \sigma \subseteq \ker \rho$; here both arguments are positive definite.
+    Recorded in the relative-entropy elimination route note for strong
+    subadditivity.)
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:relative_entropy_ancilla_additivity,
+        thm:relative_entropy_unitary_invariance, thm:relative_entropy_joint_convexity,
+        lem:twirl_partial_trace}
+    By ancilla additivity (Theorem~\ref{thm:relative_entropy_ancilla_additivity})
+    the reduced-state relative entropy equals
+    $D\bigl((\tr_C \rho) \otimes (\mathbf 1_C / d_C) \,\Vert\,
+    (\tr_C \sigma) \otimes (\mathbf 1_C / d_C)\bigr)$. By
+    Lemma~\ref{lem:twirl_partial_trace} each tensored reduced state is the uniform
+    average of the conjugations by the $d_C^2$ unitaries
+    $U_{ab} = \mathbf 1_S \otimes W(a,b)$, so this is the relative entropy of a
+    convex combination of the conjugated pairs
+    $(U_{ab}\,\rho\,U_{ab}^{\dagger}, U_{ab}\,\sigma\,U_{ab}^{\dagger})$ with equal
+    weights $d_C^{-2}$. Joint convexity bounds it above by the same convex
+    combination of the per-term relative entropies, each of which equals
+    $D(\rho \,\Vert\, \sigma)$ by unitary invariance
+    (Theorem~\ref{thm:relative_entropy_unitary_invariance}). As the weights sum to
+    one, the bound is $D(\rho \,\Vert\, \sigma)$.
+\end{proof}
+
 \begin{theorem}[Entropy is invariant under reindexing]
     \label{thm:entropy_submatrix_equiv}
     \lean{vonNeumannEntropy_submatrix_equiv}
