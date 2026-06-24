@@ -12,7 +12,10 @@ import TNLean.Channel.Schwarz.ChoiCompression
 
 Wolf's Chapter 3 closes the discussion of the n-positivity hierarchy with the
 one-parameter family of maps
-`T_η(ρ) = tr(ρ) • 1 − ρ / η`, `η ∈ ℝ₊`, on `M_D(ℂ)` (Wolf eq. (3.11)).  Its
+`T_η(ρ) = tr(ρ) • 1 − η⁻¹ • ρ` on `M_D(ℂ)` (Wolf eq. (3.11)).  The map `tEta` is
+defined for every real `η` (at `η = 0` it reduces to `ρ ↦ tr(ρ) • 1`); the
+n-positivity threshold theorems below assume `0 < η`, matching Wolf's
+`η ∈ ℝ₊`.  Its
 Choi–Jamiolkowski operator is `τ_η = D⁻¹ • 1 − η⁻¹ • |Ω⟩⟨Ω|`, whose positive
 eigenvalues all equal `1/D` and whose single negative eigenvalue is
 `ν₋ = 1/D − 1/η` (present when `η < D`), with reduced density `1/D • 1` on the
@@ -36,7 +39,7 @@ Choi criterion converts the resulting sign condition into `k`-positivity.
 
 ## Main definitions
 
-* `Matrix.tEta` -- Wolf's map `T_η(ρ) = tr(ρ) • 1 − ρ / η`.
+* `Matrix.tEta` -- Wolf's map `T_η(ρ) = tr(ρ) • 1 − η⁻¹ • ρ`.
 
 ## Main results
 
@@ -46,10 +49,9 @@ Choi criterion converts the resulting sign condition into `k`-positivity.
   nonnegative scalar multiple `c • 1` of the identity is `k • c` for `k < card`.
 * `Matrix.isNPositiveMap_tEta_iff` -- **Wolf eq. (3.11):** for `0 < η` and
   `1 ≤ k < D`, the map `T_η` is `k`-positive if and only if `η ≥ k`.
-* `Matrix.tEta_not_isNPositiveMap_succ_of_isNPositiveMap` and
-  `Matrix.exists_isNPositiveMap_not_isNPositiveMap_succ` -- the strictness
-  witness: a `k`-positive map that is not `(k+1)`-positive, for `1 ≤ k` with
-  `k + 1 < D`.
+* `Matrix.tEta_isNPositiveMap_not_succ` and
+  `Matrix.exists_isNPositiveMap_not_succ` -- the strictness witness: a
+  `k`-positive map that is not `(k+1)`-positive, for `1 ≤ k` with `k + 1 < D`.
 
 ## References
 
@@ -336,8 +338,8 @@ theorem normSq_omega_overlap_le [NeZero D] {k : ℕ} (hk1 : 1 ≤ k) (hk : k < D
     linarith [hφbound]
 
 /-- **Wolf eq. (3.11), `n`-positivity threshold of `T_η`.** For `0 < η` and
-`1 ≤ k < D`, the map `T_η(ρ) = tr(ρ) • 1 − ρ / η` on `M_D(ℂ)` is `k`-positive if
-and only if `η ≥ k`.
+`1 ≤ k < D`, the map `T_η(ρ) = tr(ρ) • 1 − η⁻¹ • ρ` on `M_D(ℂ)` is `k`-positive
+if and only if `η ≥ k`.
 
 The Choi operator of `T_η` is `D⁻¹ • 1 − η⁻¹ • |Ω⟩⟨Ω|`, whose expectation in a
 normalized Schmidt-rank-`k` vector `ψ` is `D⁻¹ − η⁻¹ |⟨Ω|ψ⟩|²`.  The

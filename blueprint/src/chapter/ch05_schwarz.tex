@@ -1360,8 +1360,11 @@ adjacent cones.
     \leanok
     For a real parameter $\eta$, the map $T_\eta$ on $\MN{D}$ is
     \[
-        T_\eta(\rho)=\operatorname{tr}(\rho)\,\Id-\frac{\rho}{\eta}.
+        T_\eta(\rho)=\tr(\rho)\,\Id-\eta^{-1}\rho.
     \]
+    The map is defined for every real $\eta$; at $\eta=0$ it reduces to
+    $\rho\mapsto\tr(\rho)\,\Id$, and the positivity threshold below
+    assumes $\eta>0$.
 \end{definition}
 
 \begin{theorem}[Choi matrix of $T_\eta$]
@@ -1377,10 +1380,20 @@ adjacent cones.
 
 \begin{proof}
     \leanok
-    The trace term sends each elementary slice of $\ket{\Omega}\bra{\Omega}$ to
-    its trace times the identity, giving $D^{-1}\Id$; the second term is
-    $\eta^{-1}$ times the Choi matrix of the identity map, namely
-    $\eta^{-1}\ket{\Omega}\bra{\Omega}$.
+    The Choi matrix is linear in the map, so it splits over the two terms of
+    $T_\eta$.  The trace term contributes
+    \[
+        \tau\bigl(\rho\mapsto\tr(\rho)\,\Id\bigr)=D^{-1}\Id,
+    \]
+    since each elementary slice of $\ket{\Omega}\bra{\Omega}$ contributes its
+    trace times the identity.  The identity map contributes
+    \[
+        \tau(\id)=\ket{\Omega}\bra{\Omega}.
+    \]
+    Subtracting $\eta^{-1}$ times the second from the first gives
+    \[
+        \tau_\eta=D^{-1}\Id-\eta^{-1}\ket{\Omega}\bra{\Omega}.
+    \]
 \end{proof}
 
 \begin{theorem}[Positivity threshold of $T_\eta$]

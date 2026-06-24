@@ -20,11 +20,13 @@
 In Chapter~3 of Wolf's lecture notes \cite{Wolf2012Quantum}, the one-parameter
 family
 \begin{align}
-  T_\eta(\rho)=\operatorname{tr}(\rho)\,\mathbf 1-\frac{\rho}{\eta},
+  T_\eta(\rho)=\tr(\rho)\,\mathbf 1-\frac{\rho}{\eta},
   \qquad \eta\in\mathbb R_+,
   \tag{3.11}
 \end{align}
-on $M_D(\mathbb C)$ is analyzed through its Choi--Jamiolkowski operator
+on $M_D(\mathbb C)$ (the formal map is written $\tr(\rho)\,\mathbf 1-\eta^{-1}\rho$,
+which agrees on $\eta>0$ and is moreover defined at $\eta=0$) is analyzed
+through its Choi--Jamiolkowski operator
 $\tau_\eta=D^{-1}\mathbf 1-\eta^{-1}\ket\Omega\bra\Omega$.  All positive
 eigenvalues of $\tau_\eta$ equal $1/D$, and the single non-positive eigenvalue
 is $\nu_-=1/D-1/\eta$ with reduced density $\rho_-=\mathbf 1/D$, so its
@@ -74,7 +76,7 @@ equivalence and the strictness witnesses are correct as stated for the indices
 they cover.  The omitted boundary case $k=D$ is mathematically true in the
 source and would follow once the maximal-overlap principle and the Ky--Fan
 maximum principle are extended to the top index $k=D$ (where the bound reads
-$\|\rho\|_{(D)}=\operatorname{tr}\rho=1$ and the optimizing projection is the
+$\|\rho\|_{(D)}=\tr\rho=1$ and the optimizing projection is the
 identity).  Extending those two principles to $k=D$ removes this restriction and
 supplies the top inclusion $\mathcal T_D\subseteq\mathcal T_{D-1}$.
 
@@ -82,6 +84,19 @@ The formal declarations are
 \leanid{Matrix.isNPositiveMap_tEta_iff} for the threshold equivalence and
 \leanid{Matrix.exists_isNPositiveMap_not_succ} for the strictness witness, in
 \doclink{TNLean/Channel/NPositivityChainStrict}.
+
+\section{Classification}
+
+\emph{Scope restriction.} The formal threshold proves the source
+equivalence~(3.11) for Schmidt ranks $1\le k<D$, a special case of the source's
+full range $1\le k\le D$. For $T_\eta$ both tensor factors of the Choi operator
+have dimension $D$ (the maximally entangled vector lies in
+$\mathbb C^{D}\otimes\mathbb C^{D}$), so the first-factor dimension that bounds
+the Ky--Fan index coincides with $D$; no separate $D'$ enters. The conclusion
+matches the source on $1\le k<D$, and only the top index $k=D$ is omitted, where
+the bound degenerates to complete positivity. No hypothesis foreign to the
+source is used, so the deviation is a scope restriction rather than an
+unfaithful theorem.
 
 \bibliographystyle{alpha}
 \bibliography{references}
