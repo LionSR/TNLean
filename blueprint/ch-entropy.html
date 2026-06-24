@@ -2420,12 +2420,164 @@
 
   </div>
 </div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:log_kronecker">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">19.22</span>
+    <span class="lemma_thmtitle">Logarithm of a tensor product of positive definite matrices</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-entropy.html#lem:log_kronecker">#</a>
+    
+    <a class="icon proof" href="ch-entropy.html#a0000031282"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.log_kronecker" class="lean_decl">Matrix.log_kronecker</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   For positive definite matrices \(\rho \) and \(\tau \), </p>
+<div class="displaymath" id="a0000031283">
+  \[  \log (\rho \otimes \tau ) = \log \rho \otimes \mathbf1 + \mathbf1 \otimes \log \tau .  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000031282">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The tensor product factors as \(\rho \otimes \tau = (\rho \otimes \mathbf1)(\mathbf1 \otimes \tau )\) into a pair of commuting positive definite matrices, so the logarithm of the product is the sum of the logarithms of the factors. Each unital embedding \(A \mapsto A \otimes \mathbf1\) and \(B \mapsto \mathbf1 \otimes B\) is a continuous star-algebra homomorphism, hence commutes with the functional calculus, which carries each logarithm onto its factor: \(\log (\rho \otimes \mathbf1) = \log \rho \otimes \mathbf1\) and \(\log (\mathbf1 \otimes \tau ) = \mathbf1 \otimes \log \tau \). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:relative_entropy_ancilla_additivity">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">19.23</span>
+    <span class="theorem_thmtitle">Ancilla additivity of the quantum relative entropy</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-entropy.html#thm:relative_entropy_ancilla_additivity">#</a>
+    
+    <a class="icon proof" href="ch-entropy.html#a0000031284"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-entropy.html#def:quantum_relative_entropy">Definition 19.12</a></li>
+          
+          <li><a href="ch-entropy.html#lem:log_kronecker">Lemma 19.22</a></li>
+          
+          <li><a href="ch-entropy.html#lem:log_kronecker">Lemma 19.22</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/quantumRelativeEntropy_kronecker" class="lean_decl">quantumRelativeEntropy_kronecker</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    For positive definite matrices \(\rho , \sigma \) and a positive definite matrix \(\tau \) of unit trace, </p>
+<div class="displaymath" id="a0000031285">
+  \[  D(\rho \otimes \tau \, \Vert \,  \sigma \otimes \tau ) = D(\rho \Vert \sigma ).  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000031284">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Splitting each tensor logarithm by Lemma&#160;<a href="ch-entropy.html#lem:log_kronecker">19.22</a>, the common \(\mathbf1 \otimes \log \tau \) terms cancel in the difference, leaving \(\log (\rho \otimes \tau ) - \log (\sigma \otimes \tau ) = (\log \rho - \log \sigma ) \otimes \mathbf1\). Hence </p>
+<div class="displaymath" id="a0000031286">
+  \[  D(\rho \otimes \tau \, \Vert \,  \sigma \otimes \tau ) = \operatorname {Re}\operatorname {tr}\! \bigl( (\rho (\log \rho - \log \sigma )) \otimes \tau \bigr) = \operatorname {Re}\bigl( \operatorname {tr}(\rho (\log \rho - \log \sigma )) \cdot \operatorname {tr}\tau \bigr),  \]
+</div>
+<p> where the trace of a tensor product factors as a product of traces. As \(\operatorname {tr}\tau = 1\), the right-hand side is \(D(\rho \Vert \sigma )\). </p>
+
+  </div>
+</div>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:entropy_submatrix_equiv">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">19.22</span>
+    <span class="theorem_thmlabel">19.24</span>
     <span class="theorem_thmtitle">Entropy is invariant under reindexing</span>
     <div class="thm_header_extras">
 
@@ -2436,7 +2588,7 @@
 
     <a class="icon proof" href="ch-entropy.html#thm:entropy_submatrix_equiv">#</a>
     
-    <a class="icon proof" href="ch-entropy.html#a0000031282"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-entropy.html#a0000031287"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2491,7 +2643,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031282">
+<div class="proof_wrapper" id="a0000031287">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2500,7 +2652,7 @@
   </div>
   <div class="proof_content">
   <p> By Lemma&#160;<a href="ch-entropy.html#lem:entropy_charpoly_roots">19.9</a> the entropy depends only on the characteristic polynomial. Reindexing conjugates \(\rho \) by a permutation matrix, so </p>
-<div class="displaymath" id="a0000031283">
+<div class="displaymath" id="a0000031288">
   \[  \chi _{(\rho _{e(i)\, e(j)})} = \chi _\rho ,  \]
 </div>
 <p> and the entropies coincide. </p>
@@ -2512,7 +2664,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">19.23</span>
+    <span class="lemma_thmlabel">19.25</span>
     <span class="lemma_thmtitle">Cyclic invariance of the charpoly-root entropy sum</span>
     <div class="thm_header_extras">
 
@@ -2523,7 +2675,7 @@
 
     <a class="icon proof" href="ch-entropy.html#lem:charpoly_root_entropy_cyclic_swap">#</a>
     
-    <a class="icon proof" href="ch-entropy.html#a0000031284"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-entropy.html#a0000031289"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2551,14 +2703,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(A \in M_{m \times n}(\mathbb {C})\) and \(B \in M_{n \times m}(\mathbb {C})\). Then the charpoly-root entropy sum is invariant under the cyclic swap \(AB \mapsto BA\): </p>
-<div class="displaymath" id="a0000031285">
+<div class="displaymath" id="a0000031290">
   \[  \sum _{\lambda \in \mathrm{roots}(\chi _{AB})} \bigl({-}\operatorname {Re}(\lambda )\log \operatorname {Re}(\lambda )\bigr) = \sum _{\mu \in \mathrm{roots}(\chi _{BA})} \bigl({-}\operatorname {Re}(\mu )\log \operatorname {Re}(\mu )\bigr),  \]
 </div>
 <p> with roots counted with algebraic multiplicity. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031284">
+<div class="proof_wrapper" id="a0000031289">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2567,7 +2719,7 @@
   </div>
   <div class="proof_content">
   <p>The rectangular characteristic-polynomial identity gives </p>
-<div class="displaymath" id="a0000031286">
+<div class="displaymath" id="a0000031291">
   \[  X^n \chi _{AB} = X^m \chi _{BA}.  \]
 </div>
 <p> Thus the two characteristic polynomials have the same nonzero roots, with multiplicity; the additional zero roots contribute nothing because \(0\log 0=0\). </p>
@@ -2579,7 +2731,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">19.24</span>
+    <span class="theorem_thmlabel">19.26</span>
     <span class="theorem_thmtitle">Entropy of \(AB\) equals entropy of \(BA\)</span>
     <div class="thm_header_extras">
 
@@ -2590,7 +2742,7 @@
 
     <a class="icon proof" href="ch-entropy.html#thm:entropy_mul_comm">#</a>
     
-    <a class="icon proof" href="ch-entropy.html#a0000031287"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-entropy.html#a0000031292"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2608,11 +2760,11 @@
           
           <li><a href="ch-entropy.html#lem:entropy_charpoly_roots">Lemma 19.9</a></li>
           
-          <li><a href="ch-entropy.html#lem:charpoly_root_entropy_cyclic_swap">Lemma 19.23</a></li>
+          <li><a href="ch-entropy.html#lem:charpoly_root_entropy_cyclic_swap">Lemma 19.25</a></li>
           
           <li><a href="ch-entropy.html#lem:entropy_charpoly_roots">Lemma 19.9</a></li>
           
-          <li><a href="ch-entropy.html#lem:charpoly_root_entropy_cyclic_swap">Lemma 19.23</a></li>
+          <li><a href="ch-entropy.html#lem:charpoly_root_entropy_cyclic_swap">Lemma 19.25</a></li>
           
         </ul>
     
@@ -2644,13 +2796,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For matrices \(A \in M_{m \times n}(\mathbb {C})\) and \(B \in M_{n \times m}(\mathbb {C})\) such that \(AB\) and \(BA\) are Hermitian, </p>
-<div class="displaymath" id="a0000031288">
+<div class="displaymath" id="a0000031293">
   \[  S(AB) = S(BA).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031287">
+<div class="proof_wrapper" id="a0000031292">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2658,7 +2810,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By Lemma&#160;<a href="ch-entropy.html#lem:entropy_charpoly_roots">19.9</a>, the entropy of a Hermitian matrix is its charpoly-root entropy sum. Lemma&#160;<a href="ch-entropy.html#lem:charpoly_root_entropy_cyclic_swap">19.23</a> identifies these two sums for \(AB\) and \(BA\). </p>
+  <p> By Lemma&#160;<a href="ch-entropy.html#lem:entropy_charpoly_roots">19.9</a>, the entropy of a Hermitian matrix is its charpoly-root entropy sum. Lemma&#160;<a href="ch-entropy.html#lem:charpoly_root_entropy_cyclic_swap">19.25</a> identifies these two sums for \(AB\) and \(BA\). </p>
 
   </div>
 </div>
@@ -2668,7 +2820,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">19.25</span>
+    <span class="definition_thmlabel">19.27</span>
     <span class="definition_thmtitle">Partial trace over \(A\)</span>
     <div class="thm_header_extras">
 
@@ -2704,7 +2856,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>  For a tripartite matrix \(\rho _{ABC}\) on \(\mathbb {C}^{d_A} \otimes \mathbb {C}^{d_B} \otimes \mathbb {C}^{d_C}\), the partial trace over \(A\) is </p>
-<div class="displaymath" id="a0000031289">
+<div class="displaymath" id="a0000031294">
   \[  (\operatorname{tr}_A \rho _{ABC})_{(b_1, c_1)(b_2, c_2)} = \sum _{a=0}^{d_A - 1} (\rho _{ABC})_{(a, b_1, c_1)(a, b_2, c_2)}.  \]
 </div>
 
@@ -2715,7 +2867,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">19.26</span>
+    <span class="definition_thmlabel">19.28</span>
     <span class="definition_thmtitle">Partial trace over \(C\)</span>
     <div class="thm_header_extras">
 
@@ -2751,7 +2903,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>  The partial trace over \(C\): </p>
-<div class="displaymath" id="a0000031290">
+<div class="displaymath" id="a0000031295">
   \[  (\operatorname{tr}_C \rho _{ABC})_{(a_1, b_1)(a_2, b_2)} = \sum _{c=0}^{d_C - 1} (\rho _{ABC})_{(a_1, b_1, c)(a_2, b_2, c)}.  \]
 </div>
 
@@ -2762,7 +2914,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">19.27</span>
+    <span class="definition_thmlabel">19.29</span>
     <span class="definition_thmtitle">Partial trace over \(AC\)</span>
     <div class="thm_header_extras">
 
@@ -2798,7 +2950,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>  The partial trace over \(A\) and \(C\): </p>
-<div class="displaymath" id="a0000031291">
+<div class="displaymath" id="a0000031296">
   \[  (\operatorname{tr}_{AC} \rho _{ABC})_{b_1 b_2} = \sum _{a=0}^{d_A - 1} \sum _{c=0}^{d_C - 1} (\rho _{ABC})_{(a, b_1, c)(a, b_2, c)}.  \]
 </div>
 
@@ -2809,7 +2961,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">19.28</span>
+    <span class="lemma_thmlabel">19.30</span>
     <span class="lemma_thmtitle">Partial trace preserves Hermiticity</span>
     <div class="thm_header_extras">
 
@@ -2820,7 +2972,7 @@
 
     <a class="icon proof" href="ch-entropy.html#lem:trace_isHermitian">#</a>
     
-    <a class="icon proof" href="ch-entropy.html#a0000031292"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-entropy.html#a0000031297"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2836,11 +2988,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-entropy.html#def:traceA_ABC">Definition 19.25</a></li>
+          <li><a href="ch-entropy.html#def:traceA_ABC">Definition 19.27</a></li>
           
-          <li><a href="ch-entropy.html#def:traceC_ABC">Definition 19.26</a></li>
+          <li><a href="ch-entropy.html#def:traceC_ABC">Definition 19.28</a></li>
           
-          <li><a href="ch-entropy.html#def:traceAC_ABC">Definition 19.27</a></li>
+          <li><a href="ch-entropy.html#def:traceAC_ABC">Definition 19.29</a></li>
           
         </ul>
     
@@ -2875,7 +3027,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031292">
+<div class="proof_wrapper" id="a0000031297">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2893,7 +3045,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">19.29</span>
+    <span class="theorem_thmlabel">19.31</span>
     <span class="theorem_thmtitle">Strong subadditivity</span>
     <div class="thm_header_extras">
 
@@ -2917,11 +3069,11 @@
           
           <li><a href="ch-entropy.html#def:von_neumann_entropy">Definition 19.1</a></li>
           
-          <li><a href="ch-entropy.html#def:traceA_ABC">Definition 19.25</a></li>
+          <li><a href="ch-entropy.html#def:traceA_ABC">Definition 19.27</a></li>
           
-          <li><a href="ch-entropy.html#def:traceC_ABC">Definition 19.26</a></li>
+          <li><a href="ch-entropy.html#def:traceC_ABC">Definition 19.28</a></li>
           
-          <li><a href="ch-entropy.html#def:traceAC_ABC">Definition 19.27</a></li>
+          <li><a href="ch-entropy.html#def:traceAC_ABC">Definition 19.29</a></li>
           
         </ul>
     
@@ -2953,7 +3105,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For a tripartite density matrix \(\rho _{ABC}\), </p>
-<div class="displaymath" id="a0000031293">
+<div class="displaymath" id="a0000031298">
   \[  S(\rho _{ABC}) + S(\rho _B) \le S(\rho _{AB}) + S(\rho _{BC}).  \]
 </div>
 
@@ -2964,7 +3116,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">19.30</span>
+    <span class="definition_thmlabel">19.32</span>
     <span class="definition_thmtitle">SSA equality</span>
     <div class="thm_header_extras">
 
@@ -2990,11 +3142,11 @@
           
           <li><a href="ch-entropy.html#def:von_neumann_entropy">Definition 19.1</a></li>
           
-          <li><a href="ch-entropy.html#def:traceA_ABC">Definition 19.25</a></li>
+          <li><a href="ch-entropy.html#def:traceA_ABC">Definition 19.27</a></li>
           
-          <li><a href="ch-entropy.html#def:traceC_ABC">Definition 19.26</a></li>
+          <li><a href="ch-entropy.html#def:traceC_ABC">Definition 19.28</a></li>
           
-          <li><a href="ch-entropy.html#def:traceAC_ABC">Definition 19.27</a></li>
+          <li><a href="ch-entropy.html#def:traceAC_ABC">Definition 19.29</a></li>
           
         </ul>
     
@@ -3026,7 +3178,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   A tripartite density matrix \(\rho _{ABC}\) satisfies <em>SSA equality</em> if </p>
-<div class="displaymath" id="a0000031294">
+<div class="displaymath" id="a0000031299">
   \[  S(\rho _{ABC}) + S(\rho _B) = S(\rho _{AB}) + S(\rho _{BC}).  \]
 </div>
 
@@ -3037,7 +3189,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">19.31</span>
+    <span class="definition_thmlabel">19.33</span>
     <span class="definition_thmtitle">Quantum Markov decomposition</span>
     <div class="thm_header_extras">
 
@@ -3061,7 +3213,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-entropy.html#def:ssa_equality">Definition 19.30</a></li>
+          <li><a href="ch-entropy.html#def:ssa_equality">Definition 19.32</a></li>
           
         </ul>
     
@@ -3093,11 +3245,11 @@
   </div>
   <div class="definition_thmcontent">
   <p>   A <em>Hayashi Markov decomposition</em> of a tripartite state \(\rho _{ABC}\) consists of a finite direct-sum decomposition </p>
-<div class="displaymath" id="a0000031295">
+<div class="displaymath" id="a0000031300">
   \[  H_B \cong \bigoplus _j H_{B_j^L} \otimes H_{B_j^R},  \]
 </div>
 <p> together with a unitary change of basis on \(B\), a probability vector \((p_j)_j\), and density matrices \(\rho _{A B_j^L}\) and \(\rho _{B_j^R C}\) such that, in the adapted basis, the state becomes </p>
-<div class="displaymath" id="a0000031296">
+<div class="displaymath" id="a0000031301">
   \[  \bigoplus _j p_j\,  \rho _{A B_j^L} \otimes \rho _{B_j^R C}.  \]
 </div>
 <p> The terminology follows Hayashi’s presentation of quantum Markov structure&#160;<span class="cite">
@@ -3121,7 +3273,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">19.32</span>
+    <span class="theorem_thmlabel">19.34</span>
     <span class="theorem_thmtitle">Hayashi SSA-equality characterization</span>
     <div class="thm_header_extras">
 
@@ -3143,9 +3295,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-entropy.html#def:ssa_equality">Definition 19.30</a></li>
+          <li><a href="ch-entropy.html#def:ssa_equality">Definition 19.32</a></li>
           
-          <li><a href="ch-entropy.html#def:hayashi_markov_decomposition">Definition 19.31</a></li>
+          <li><a href="ch-entropy.html#def:hayashi_markov_decomposition">Definition 19.33</a></li>
           
         </ul>
     
@@ -3177,7 +3329,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For a tripartite density matrix \(\rho _{ABC}\), </p>
-<div class="displaymath" id="a0000031297">
+<div class="displaymath" id="a0000031302">
   \[  S(\rho _{ABC}) + S(\rho _B) = S(\rho _{AB}) + S(\rho _{BC})  \]
 </div>
 <p> holds if and only if \(\rho _{ABC}\) admits a quantum Markov decomposition on the middle subsystem \(B\). </p>
@@ -3205,7 +3357,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">19.33</span>
+    <span class="definition_thmlabel">19.35</span>
     <span class="definition_thmtitle">Mutual information</span>
     <div class="thm_header_extras">
 
@@ -3261,7 +3413,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   The <em>quantum mutual information</em> of a bipartite state \(\rho _{AB}\) is </p>
-<div class="displaymath" id="a0000031298">
+<div class="displaymath" id="a0000031303">
   \[  I(A{:}B) = S(\rho _A) + S(\rho _B) - S(\rho _{AB}).  \]
 </div>
 
@@ -3272,7 +3424,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">19.34</span>
+    <span class="theorem_thmlabel">19.36</span>
     <span class="theorem_thmtitle">Mutual information is non-negative</span>
     <div class="thm_header_extras">
 
@@ -3283,7 +3435,7 @@
 
     <a class="icon proof" href="ch-entropy.html#thm:mutual_information_nonneg">#</a>
     
-    <a class="icon proof" href="ch-entropy.html#a0000031299"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-entropy.html#a0000031304"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3299,11 +3451,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-entropy.html#def:mutual_information">Definition 19.33</a></li>
+          <li><a href="ch-entropy.html#def:mutual_information">Definition 19.35</a></li>
           
-          <li><a href="ch-entropy.html#thm:strong_subadditivity">Theorem 19.29</a></li>
+          <li><a href="ch-entropy.html#thm:strong_subadditivity">Theorem 19.31</a></li>
           
-          <li><a href="ch-entropy.html#thm:strong_subadditivity">Theorem 19.29</a></li>
+          <li><a href="ch-entropy.html#thm:strong_subadditivity">Theorem 19.31</a></li>
           
         </ul>
     
@@ -3338,7 +3490,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031299">
+<div class="proof_wrapper" id="a0000031304">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3346,7 +3498,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply strong subadditivity (Theorem&#160;<a href="ch-entropy.html#thm:strong_subadditivity">19.29</a>) with trivial \(B\) (one-dimensional middle system). The SSA inequality \(S(\rho _{ABC}) + S(\rho _B) \le S(\rho _{AB}) + S(\rho _{BC})\) reduces to subadditivity \(S(\rho _{AC}) \le S(\rho _A) + S(\rho _C)\), which gives \(I(A{:}C) \ge 0\). </p>
+  <p> Apply strong subadditivity (Theorem&#160;<a href="ch-entropy.html#thm:strong_subadditivity">19.31</a>) with trivial \(B\) (one-dimensional middle system). The SSA inequality \(S(\rho _{ABC}) + S(\rho _B) \le S(\rho _{AB}) + S(\rho _{BC})\) reduces to subadditivity \(S(\rho _{AC}) \le S(\rho _A) + S(\rho _C)\), which gives \(I(A{:}C) \ge 0\). </p>
 
   </div>
 </div>
@@ -3357,7 +3509,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">19.35</span>
+    <span class="definition_thmlabel">19.37</span>
     <span class="definition_thmtitle">Entropy formulation of von Neumann entropy</span>
     <div class="thm_header_extras">
 
@@ -3421,7 +3573,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">19.36</span>
+    <span class="theorem_thmlabel">19.38</span>
     <span class="theorem_thmtitle">Entropy formulation of strong subadditivity</span>
     <div class="thm_header_extras">
 
@@ -3445,13 +3597,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-entropy.html#def:entropy_von_neumann_entropy">Definition 19.35</a></li>
+          <li><a href="ch-entropy.html#def:entropy_von_neumann_entropy">Definition 19.37</a></li>
           
-          <li><a href="ch-entropy.html#def:traceA_ABC">Definition 19.25</a></li>
+          <li><a href="ch-entropy.html#def:traceA_ABC">Definition 19.27</a></li>
           
-          <li><a href="ch-entropy.html#def:traceC_ABC">Definition 19.26</a></li>
+          <li><a href="ch-entropy.html#def:traceC_ABC">Definition 19.28</a></li>
           
-          <li><a href="ch-entropy.html#def:traceAC_ABC">Definition 19.27</a></li>
+          <li><a href="ch-entropy.html#def:traceAC_ABC">Definition 19.29</a></li>
           
         </ul>
     
@@ -3483,10 +3635,10 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For any tripartite density matrix \(\rho _{ABC}\) on \(A \otimes B \otimes C\), </p>
-<div class="displaymath" id="a0000031300">
+<div class="displaymath" id="a0000031305">
   \[  S(\rho _{ABC}) + S(\rho _B) \le S(\rho _{AB}) + S(\rho _{BC}).  \]
 </div>
-<p> This formulation introduces no new axiom: it is the same strong-subadditivity statement as Theorem&#160;<a href="ch-entropy.html#thm:strong_subadditivity">19.29</a>. The underlying axiom’s proof in <span class="cite">
+<p> This formulation introduces no new axiom: it is the same strong-subadditivity statement as Theorem&#160;<a href="ch-entropy.html#thm:strong_subadditivity">19.31</a>. The underlying axiom’s proof in <span class="cite">
 	[
 	
 	<a href="sect0001.html#LiebRuskai1973Proof" >LR73</a>
@@ -3501,7 +3653,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">19.37</span>
+    <span class="definition_thmlabel">19.39</span>
     <span class="definition_thmtitle">Entropy formulation of quantum Markov decomposition</span>
     <div class="thm_header_extras">
 
@@ -3525,7 +3677,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-entropy.html#def:hayashi_markov_decomposition">Definition 19.31</a></li>
+          <li><a href="ch-entropy.html#def:hayashi_markov_decomposition">Definition 19.33</a></li>
           
         </ul>
     
@@ -3556,7 +3708,7 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>    This is the entropy formulation of the Hayashi Markov decomposition from Definition&#160;<a href="ch-entropy.html#def:hayashi_markov_decomposition">19.31</a>. </p>
+  <p>    This is the entropy formulation of the Hayashi Markov decomposition from Definition&#160;<a href="ch-entropy.html#def:hayashi_markov_decomposition">19.33</a>. </p>
 
   </div>
 </div>
@@ -3565,7 +3717,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">19.38</span>
+    <span class="theorem_thmlabel">19.40</span>
     <span class="theorem_thmtitle">SSA equality iff quantum Markov decomposition</span>
     <div class="thm_header_extras">
 
@@ -3589,11 +3741,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-entropy.html#def:ssa_equality">Definition 19.30</a></li>
+          <li><a href="ch-entropy.html#def:ssa_equality">Definition 19.32</a></li>
           
-          <li><a href="ch-entropy.html#def:entropy_quantum_markov_decomposition">Definition 19.37</a></li>
+          <li><a href="ch-entropy.html#def:entropy_quantum_markov_decomposition">Definition 19.39</a></li>
           
-          <li><a href="ch-entropy.html#thm:hayashi_ssa_equality_characterization">Theorem 19.32</a></li>
+          <li><a href="ch-entropy.html#thm:hayashi_ssa_equality_characterization">Theorem 19.34</a></li>
           
         </ul>
     
@@ -3625,7 +3777,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For any tripartite density matrix \(\rho _{ABC}\), equality in strong subadditivity holds if and only if \(\rho _{ABC}\) admits a quantum Markov decomposition on the middle subsystem \(B\). </p>
-<p>This formulation introduces no new axiom: it is the same equality criterion as Theorem&#160;<a href="ch-entropy.html#thm:hayashi_ssa_equality_characterization">19.32</a>. </p>
+<p>This formulation introduces no new axiom: it is the same equality criterion as Theorem&#160;<a href="ch-entropy.html#thm:hayashi_ssa_equality_characterization">19.34</a>. </p>
 
   </div>
 </div>
@@ -3634,7 +3786,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">19.39</span>
+    <span class="definition_thmlabel">19.41</span>
     <span class="definition_thmtitle">Entropy formulation of mutual information</span>
     <div class="thm_header_extras">
 
@@ -3658,7 +3810,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-entropy.html#def:entropy_von_neumann_entropy">Definition 19.35</a></li>
+          <li><a href="ch-entropy.html#def:entropy_von_neumann_entropy">Definition 19.37</a></li>
           
         </ul>
     
@@ -3689,7 +3841,7 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   This formulation has the same value \(I(A{:}B) = S(\rho _A) + S(\rho _B) - S(\rho _{AB})\) as in Definition&#160;<a href="ch-entropy.html#def:mutual_information">19.33</a>. </p>
+  <p>   This formulation has the same value \(I(A{:}B) = S(\rho _A) + S(\rho _B) - S(\rho _{AB})\) as in Definition&#160;<a href="ch-entropy.html#def:mutual_information">19.35</a>. </p>
 
   </div>
 </div>
@@ -3698,7 +3850,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">19.40</span>
+    <span class="theorem_thmlabel">19.42</span>
     <span class="theorem_thmtitle">Subadditivity from trivial-middle SSA</span>
     <div class="thm_header_extras">
 
@@ -3709,7 +3861,7 @@
 
     <a class="icon proof" href="ch-entropy.html#thm:entropy_subadditivity_trivial_B">#</a>
     
-    <a class="icon proof" href="ch-entropy.html#a0000031301"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-entropy.html#a0000031306"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3725,17 +3877,17 @@
         
         <ul class="uses">
           
-          <li><a href="ch-entropy.html#def:entropy_von_neumann_entropy">Definition 19.35</a></li>
+          <li><a href="ch-entropy.html#def:entropy_von_neumann_entropy">Definition 19.37</a></li>
           
-          <li><a href="ch-entropy.html#def:traceA_ABC">Definition 19.25</a></li>
+          <li><a href="ch-entropy.html#def:traceA_ABC">Definition 19.27</a></li>
           
-          <li><a href="ch-entropy.html#def:traceC_ABC">Definition 19.26</a></li>
+          <li><a href="ch-entropy.html#def:traceC_ABC">Definition 19.28</a></li>
           
-          <li><a href="ch-entropy.html#thm:entropy_strong_subadditivity">Theorem 19.36</a></li>
+          <li><a href="ch-entropy.html#thm:entropy_strong_subadditivity">Theorem 19.38</a></li>
           
-          <li><a href="ch-entropy.html#thm:trace_traceac_abc">Theorem 19.46</a></li>
+          <li><a href="ch-entropy.html#thm:trace_traceac_abc">Theorem 19.48</a></li>
           
-          <li><a href="ch-entropy.html#thm:entropy_fin_one_zero">Theorem 19.47</a></li>
+          <li><a href="ch-entropy.html#thm:entropy_fin_one_zero">Theorem 19.49</a></li>
           
         </ul>
     
@@ -3767,13 +3919,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For a tripartite density matrix \(\rho _{ABC}\) with \(\dim B = 1\), </p>
-<div class="displaymath" id="a0000031302">
+<div class="displaymath" id="a0000031307">
   \[  S(\rho _{ABC}) \le S(\rho _{AB}) + S(\rho _{BC}).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031301">
+<div class="proof_wrapper" id="a0000031306">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3781,7 +3933,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Apply Theorem&#160;<a href="ch-entropy.html#thm:entropy_strong_subadditivity">19.36</a> with one-dimensional middle subsystem. The reduced middle state has trace \(1\) by Theorem&#160;<a href="ch-entropy.html#thm:trace_traceac_abc">19.46</a>, hence its entropy vanishes by Theorem&#160;<a href="ch-entropy.html#thm:entropy_fin_one_zero">19.47</a>.  </p>
+  <p>Apply Theorem&#160;<a href="ch-entropy.html#thm:entropy_strong_subadditivity">19.38</a> with one-dimensional middle subsystem. The reduced middle state has trace \(1\) by Theorem&#160;<a href="ch-entropy.html#thm:trace_traceac_abc">19.48</a>, hence its entropy vanishes by Theorem&#160;<a href="ch-entropy.html#thm:entropy_fin_one_zero">19.49</a>.  </p>
 
   </div>
 </div>
@@ -3792,7 +3944,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">19.41</span>
+    <span class="theorem_thmlabel">19.43</span>
     <span class="theorem_thmtitle">Entropy nonnegativity for finite index sets</span>
     <div class="thm_header_extras">
 
@@ -3803,7 +3955,7 @@
 
     <a class="icon proof" href="ch-entropy.html#thm:entropy_nonneg_finite_index">#</a>
     
-    <a class="icon proof" href="ch-entropy.html#a0000031303"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-entropy.html#a0000031308"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3819,7 +3971,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-entropy.html#def:entropy_von_neumann_entropy">Definition 19.35</a></li>
+          <li><a href="ch-entropy.html#def:entropy_von_neumann_entropy">Definition 19.37</a></li>
           
         </ul>
     
@@ -3854,7 +4006,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031303">
+<div class="proof_wrapper" id="a0000031308">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3871,7 +4023,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">19.42</span>
+    <span class="theorem_thmlabel">19.44</span>
     <span class="theorem_thmtitle">Mutual information is monotone under enlargement</span>
     <div class="thm_header_extras">
 
@@ -3882,7 +4034,7 @@
 
     <a class="icon proof" href="ch-entropy.html#thm:mutual_information_monotone_tripartite">#</a>
     
-    <a class="icon proof" href="ch-entropy.html#a0000031304"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-entropy.html#a0000031309"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3898,19 +4050,19 @@
         
         <ul class="uses">
           
-          <li><a href="ch-entropy.html#def:entropy_mutual_information">Definition 19.39</a></li>
+          <li><a href="ch-entropy.html#def:entropy_mutual_information">Definition 19.41</a></li>
           
-          <li><a href="ch-entropy.html#def:entropy_von_neumann_entropy">Definition 19.35</a></li>
+          <li><a href="ch-entropy.html#def:entropy_von_neumann_entropy">Definition 19.37</a></li>
           
-          <li><a href="ch-entropy.html#def:traceA_ABC">Definition 19.25</a></li>
+          <li><a href="ch-entropy.html#def:traceA_ABC">Definition 19.27</a></li>
           
-          <li><a href="ch-entropy.html#def:traceC_ABC">Definition 19.26</a></li>
+          <li><a href="ch-entropy.html#def:traceC_ABC">Definition 19.28</a></li>
           
-          <li><a href="ch-entropy.html#def:traceAC_ABC">Definition 19.27</a></li>
+          <li><a href="ch-entropy.html#def:traceAC_ABC">Definition 19.29</a></li>
           
-          <li><a href="ch-entropy.html#thm:entropy_strong_subadditivity">Theorem 19.36</a></li>
+          <li><a href="ch-entropy.html#thm:entropy_strong_subadditivity">Theorem 19.38</a></li>
           
-          <li><a href="ch-entropy.html#thm:entropy_strong_subadditivity">Theorem 19.36</a></li>
+          <li><a href="ch-entropy.html#thm:entropy_strong_subadditivity">Theorem 19.38</a></li>
           
         </ul>
     
@@ -3942,14 +4094,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For any tripartite density matrix \(\rho _{ABC}\) on \(A \otimes B \otimes C\), </p>
-<div class="displaymath" id="a0000031305">
+<div class="displaymath" id="a0000031310">
   \[  I(A{:}B)_{\operatorname{tr}_C \rho _{ABC}} \le I(A{:}BC)_{\rho _{ABC}},  \]
 </div>
 <p> where the left-hand side is the bipartite mutual information of the reduced state \(\rho _{AB} = \operatorname{tr}_C(\rho _{ABC})\) and the right-hand side is evaluated by expanding \(I(A{:}BC) = S(\rho _A) + S(\rho _{BC}) - S(\rho _{ABC})\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031304">
+<div class="proof_wrapper" id="a0000031309">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3957,7 +4109,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Expanding both sides in entropy form and cancelling the common \(S(\rho _A)\) term, the inequality reduces to strong subadditivity \(S(\rho _{ABC}) + S(\rho _B) \le S(\rho _{AB}) + S(\rho _{BC})\). The bipartite \(B\)-reduced state of \(\rho _{AB}\) matches the tripartite \(B\)-reduced state \(\operatorname{tr}_{AC}(\rho _{ABC})\), ensuring the \(S(\rho _B)\) term is the one supplied by Theorem&#160;<a href="ch-entropy.html#thm:entropy_strong_subadditivity">19.36</a>. </p>
+  <p> Expanding both sides in entropy form and cancelling the common \(S(\rho _A)\) term, the inequality reduces to strong subadditivity \(S(\rho _{ABC}) + S(\rho _B) \le S(\rho _{AB}) + S(\rho _{BC})\). The bipartite \(B\)-reduced state of \(\rho _{AB}\) matches the tripartite \(B\)-reduced state \(\operatorname{tr}_{AC}(\rho _{ABC})\), ensuring the \(S(\rho _B)\) term is the one supplied by Theorem&#160;<a href="ch-entropy.html#thm:entropy_strong_subadditivity">19.38</a>. </p>
 
   </div>
 </div>
@@ -3966,7 +4118,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">19.43</span>
+    <span class="theorem_thmlabel">19.45</span>
     <span class="theorem_thmtitle">Elementary area-law bound on mutual information</span>
     <div class="thm_header_extras">
 
@@ -3977,7 +4129,7 @@
 
     <a class="icon proof" href="ch-entropy.html#thm:mutual_information_le_log_dim_add_log_dim">#</a>
     
-    <a class="icon proof" href="ch-entropy.html#a0000031306"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-entropy.html#a0000031311"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3993,15 +4145,15 @@
         
         <ul class="uses">
           
-          <li><a href="ch-entropy.html#def:entropy_mutual_information">Definition 19.39</a></li>
+          <li><a href="ch-entropy.html#def:entropy_mutual_information">Definition 19.41</a></li>
           
           <li><a href="ch-entropy.html#thm:entropy_le_log_dim">Theorem 19.7</a></li>
           
-          <li><a href="ch-entropy.html#thm:entropy_nonneg_finite_index">Theorem 19.41</a></li>
+          <li><a href="ch-entropy.html#thm:entropy_nonneg_finite_index">Theorem 19.43</a></li>
           
           <li><a href="ch-entropy.html#thm:entropy_le_log_dim">Theorem 19.7</a></li>
           
-          <li><a href="ch-entropy.html#thm:entropy_nonneg_finite_index">Theorem 19.41</a></li>
+          <li><a href="ch-entropy.html#thm:entropy_nonneg_finite_index">Theorem 19.43</a></li>
           
         </ul>
     
@@ -4033,13 +4185,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For a bipartite density matrix \(\rho _{AB}\) on \(\mathbb {C}^{d_A} \otimes \mathbb {C}^{d_B}\) with \(d_A, d_B \ge 1\) whose single-system reduced states are obtained by partial trace, </p>
-<div class="displaymath" id="a0000031307">
+<div class="displaymath" id="a0000031312">
   \[  I(A{:}B) \le \log d_A + \log d_B.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031306">
+<div class="proof_wrapper" id="a0000031311">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4047,7 +4199,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The reduced states are density matrices because partial trace preserves positivity and trace. Combine \(S(\rho _A) \le \log d_A\) and \(S(\rho _B) \le \log d_B\) (Theorem&#160;<a href="ch-entropy.html#thm:entropy_le_log_dim">19.7</a>) with \(S(\rho _{AB}) \ge 0\) (Theorem&#160;<a href="ch-entropy.html#thm:entropy_nonneg_finite_index">19.41</a>). </p>
+  <p> The reduced states are density matrices because partial trace preserves positivity and trace. Combine \(S(\rho _A) \le \log d_A\) and \(S(\rho _B) \le \log d_B\) (Theorem&#160;<a href="ch-entropy.html#thm:entropy_le_log_dim">19.7</a>) with \(S(\rho _{AB}) \ge 0\) (Theorem&#160;<a href="ch-entropy.html#thm:entropy_nonneg_finite_index">19.43</a>). </p>
 
   </div>
 </div>
@@ -4058,7 +4210,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">19.44</span>
+    <span class="theorem_thmlabel">19.46</span>
     <span class="theorem_thmtitle">Partial trace over \(A\) preserves the full trace</span>
     <div class="thm_header_extras">
 
@@ -4069,7 +4221,7 @@
 
     <a class="icon proof" href="ch-entropy.html#thm:trace_tracea_abc">#</a>
     
-    <a class="icon proof" href="ch-entropy.html#a0000031308"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-entropy.html#a0000031313"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4085,7 +4237,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-entropy.html#def:traceA_ABC">Definition 19.25</a></li>
+          <li><a href="ch-entropy.html#def:traceA_ABC">Definition 19.27</a></li>
           
         </ul>
     
@@ -4117,13 +4269,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For any tripartite matrix \(\rho _{ABC}\), </p>
-<div class="displaymath" id="a0000031309">
+<div class="displaymath" id="a0000031314">
   \[  \operatorname{tr}(\rho _{ABC}) = \operatorname{tr}(\operatorname{tr}_A(\rho _{ABC})).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031308">
+<div class="proof_wrapper" id="a0000031313">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4132,7 +4284,7 @@
   </div>
   <div class="proof_content">
   <p>Unfolding the definitions, </p>
-<div class="displaymath" id="a0000031310">
+<div class="displaymath" id="a0000031315">
   \[  \operatorname{tr}(\operatorname{tr}_A(\rho _{ABC})) = \sum _{b,c} \sum _{a} (\rho _{ABC})_{(a,b,c)(a,b,c)} = \operatorname{tr}(\rho _{ABC}).  \]
 </div>
 
@@ -4143,7 +4295,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">19.45</span>
+    <span class="theorem_thmlabel">19.47</span>
     <span class="theorem_thmtitle">Partial trace over \(C\) preserves the full trace</span>
     <div class="thm_header_extras">
 
@@ -4154,7 +4306,7 @@
 
     <a class="icon proof" href="ch-entropy.html#thm:trace_tracec_abc">#</a>
     
-    <a class="icon proof" href="ch-entropy.html#a0000031311"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-entropy.html#a0000031316"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4170,7 +4322,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-entropy.html#def:traceC_ABC">Definition 19.26</a></li>
+          <li><a href="ch-entropy.html#def:traceC_ABC">Definition 19.28</a></li>
           
         </ul>
     
@@ -4202,13 +4354,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For any tripartite matrix \(\rho _{ABC}\), </p>
-<div class="displaymath" id="a0000031312">
+<div class="displaymath" id="a0000031317">
   \[  \operatorname{tr}(\rho _{ABC}) = \operatorname{tr}(\operatorname{tr}_C(\rho _{ABC})).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031311">
+<div class="proof_wrapper" id="a0000031316">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4217,7 +4369,7 @@
   </div>
   <div class="proof_content">
   <p>Unfolding the definitions, </p>
-<div class="displaymath" id="a0000031313">
+<div class="displaymath" id="a0000031318">
   \[  \operatorname{tr}(\operatorname{tr}_C(\rho _{ABC})) = \sum _{a,b} \sum _{c} (\rho _{ABC})_{(a,b,c)(a,b,c)} = \operatorname{tr}(\rho _{ABC}).  \]
 </div>
 
@@ -4228,7 +4380,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">19.46</span>
+    <span class="theorem_thmlabel">19.48</span>
     <span class="theorem_thmtitle">Partial trace over \(AC\) preserves the full trace</span>
     <div class="thm_header_extras">
 
@@ -4239,7 +4391,7 @@
 
     <a class="icon proof" href="ch-entropy.html#thm:trace_traceac_abc">#</a>
     
-    <a class="icon proof" href="ch-entropy.html#a0000031314"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-entropy.html#a0000031319"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4255,7 +4407,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-entropy.html#def:traceAC_ABC">Definition 19.27</a></li>
+          <li><a href="ch-entropy.html#def:traceAC_ABC">Definition 19.29</a></li>
           
         </ul>
     
@@ -4287,13 +4439,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For any tripartite matrix \(\rho _{ABC}\), </p>
-<div class="displaymath" id="a0000031315">
+<div class="displaymath" id="a0000031320">
   \[  \operatorname{tr}(\rho _{ABC}) = \operatorname{tr}(\operatorname{tr}_{AC}(\rho _{ABC})).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031314">
+<div class="proof_wrapper" id="a0000031319">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4302,7 +4454,7 @@
   </div>
   <div class="proof_content">
   <p>Unfolding the definitions and interchanging the outer sums, </p>
-<div class="displaymath" id="a0000031316">
+<div class="displaymath" id="a0000031321">
   \[  \operatorname{tr}(\operatorname{tr}_{AC}(\rho _{ABC})) = \sum _{b} \sum _{a,c} (\rho _{ABC})_{(a,b,c)(a,b,c)} = \operatorname{tr}(\rho _{ABC}).  \]
 </div>
 
@@ -4313,7 +4465,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">19.47</span>
+    <span class="theorem_thmlabel">19.49</span>
     <span class="theorem_thmtitle">Entropy vanishes in dimension \(1\)</span>
     <div class="thm_header_extras">
 
@@ -4324,7 +4476,7 @@
 
     <a class="icon proof" href="ch-entropy.html#thm:entropy_fin_one_zero">#</a>
     
-    <a class="icon proof" href="ch-entropy.html#a0000031317"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-entropy.html#a0000031322"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4340,7 +4492,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-entropy.html#def:entropy_von_neumann_entropy">Definition 19.35</a></li>
+          <li><a href="ch-entropy.html#def:entropy_von_neumann_entropy">Definition 19.37</a></li>
           
         </ul>
     
@@ -4372,13 +4524,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    If \(\rho \in M_{1}(\mathbb {C})\) is Hermitian and \(\operatorname{tr}(\rho ) = 1\), then </p>
-<div class="displaymath" id="a0000031318">
+<div class="displaymath" id="a0000031323">
   \[  S(\rho ) = 0.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031317">
+<div class="proof_wrapper" id="a0000031322">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4387,7 +4539,7 @@
   </div>
   <div class="proof_content">
   <p>The unique eigenvalue equals the trace, hence equals \(1\), and \(-1 \cdot \log 1 = 0\): </p>
-<div class="displaymath" id="a0000031319">
+<div class="displaymath" id="a0000031324">
   \[  \lambda _0 = \operatorname{tr}(\rho ) = 1, \qquad S(\rho ) = -\lambda _0 \log \lambda _0 = -1 \cdot \log 1 = 0.  \]
 </div>
 
