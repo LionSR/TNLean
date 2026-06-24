@@ -8,7 +8,6 @@ import Mathlib.Analysis.SpecialFunctions.Log.NegMulLog
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Basic
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import TNLean.Analysis.Entropy
-import TNLean.Analysis.TraceCFC
 
 /-!
 # Klein's inequality for the quantum relative entropy
