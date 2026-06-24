@@ -173,7 +173,7 @@ theorem convexOn_re_trace_fst :
 /-- **Joint concavity of $(A, B) \mapsto \operatorname{Re}\operatorname{tr}(A^s
 B^{1-s})$** on the positive definite matrices, in `ConcaveOn` form. For
 $s \in [0, 1]$, this is the $K = 1$ specialization of Lieb's joint concavity
-theorem, packaged as a concavity statement on the product domain. -/
+theorem, stated as a concavity result on the product domain. -/
 theorem concaveOn_re_trace_rpow_mul
     {s : ℝ} (hs : s ∈ Set.Icc (0 : ℝ) 1) :
     ConcaveOn ℝ (posDefSet (D := D) ×ˢ posDefSet (D := D))
@@ -395,7 +395,7 @@ theorem tendsto_relativeEntropyApprox {ρ σ : Mat}
 matrices, the map $(\rho, \sigma) \mapsto D(\rho\|\sigma)$ is jointly convex.
 
 The proof is the Lindblad/Uhlmann route: the approximant $g_s$ is jointly convex
-for each $s \in [0, 1)$ (`convexOn_relativeEntropyApprox`, consuming Lieb's
+for each $s \in [0, 1)$ (`convexOn_relativeEntropyApprox`, applying Lieb's
 concavity), and converges pointwise to $D$ as $s \to 1^-$
 (`tendsto_relativeEntropyApprox`). The pointwise limit of convex functions is
 convex (`isClosed_setOf_convexOn`), after extending both the approximants and
