@@ -253,7 +253,7 @@ theorem quantumRelativeEntropy_nonneg {n : Type*} [Fintype n] [DecidableEq n]
     (hσ : σ.PosSemidef) (hσ_tr : σ.trace = 1) (hσ_inv : IsUnit σ.det) :
     0 ≤ quantumRelativeEntropy ρ σ := by
   rw [quantumRelativeEntropy_eq_trace_mul_log_sub, sub_nonneg]
-  -- `D ≥ 0` ⟺ `Re tr(ρ log σ) ≤ Re tr(ρ log ρ)`.
+  -- `D ≥ 0` ↔ `Re tr(ρ log σ) ≤ Re tr(ρ log ρ)`.
   have hlogρ : CFC.log ρ = hρ.isHermitian.cfc Real.log := by
     rw [CFC.log]; exact Matrix.IsHermitian.cfc_eq hρ.isHermitian Real.log
   have hlogσ : CFC.log σ = hσ.isHermitian.cfc Real.log := by
