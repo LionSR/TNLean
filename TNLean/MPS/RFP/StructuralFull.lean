@@ -68,24 +68,16 @@ private lemma matrixUnits_map (X : Mat) :
     _ = Matrix.trace X • (1 : Mat) := by
           rw [Matrix.sum_single_eq_diagonal, Matrix.smul_one_eq_diagonal]
 
-/-- **Lemma B.1** (arXiv:1606.00608, Appendix B): a normal tensor in canonical
-form II that is an RFP admits the decomposition `A i = X * Λ * U i * X⁻¹`
-with diagonal positive `Λ` and a residual tensor `U` satisfying the
-left-canonical equation and the scaled pair-index orthonormality
-\[
-  \sum_i \overline{(U^i)_{\alpha,\beta}}\,(U^i)_{\alpha',\beta'}
-  =
-  D^{-1}\delta_{(\alpha,\beta),(\alpha',\beta')}.
-\]
+/-- Auxiliary extraction underlying `rfp_nt_structural_full`.
 
-The proof combines the diagonal fixed-point reduction
-`rfp_nt_cfii_diagonal_fixedPoint`, the rank-one classification
-`transferMap_eq_fixedPointProj_of_isRFP_injective`, and an explicit Kraus
-realization of `fixedPointProj ρ`. Applying `kraus_rectangular_freedom'`
-identifies the physical-index coefficients with an isometry. The matrix units
-are normalized by $D^{-1/2}$, so the resulting matrix entries carry the
-displayed factor $D^{-1}$. -/
-theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
+This is the full Appendix B extraction with one extra recorded fact: the diagonal
+weights satisfy `∑ k, (Λ k) ^ 2 = D` in the matrix-unit normalization used here.
+That identity comes from `(Λ k) ^ 2 = D · ρ_{k,k} / tr ρ` together with the
+trace identity `∑ k ρ_{k,k} = tr ρ` for the diagonal fixed point `ρ`. It is the
+seed for the source trace-normalization `tr(Λ_src) = 1` after rescaling to the
+unit pair-index convention (arXiv:1606.00608, Lemma `lem:charact-NT-pure-RFP`,
+lines 1271--1295). -/
+private theorem rfp_nt_structural_full_aux (A : MPSTensor d D) [NeZero D]
     (hNT : IsNormal A) (hRFP : IsRFP A)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
     ∃ (X : Matrix (Fin D) (Fin D) ℂ) (Λ : Fin D → ℝ)
@@ -96,6 +88,7 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
       (∀ p q : Fin D × Fin D,
         ∑ i : Fin d, star (U i p.1 p.2) * U i q.1 q.2 =
           if p = q then (D : ℂ)⁻¹ else 0) ∧
+      (∑ k : Fin D, (Λ k) ^ 2 = (D : ℝ)) ∧
       (∀ i, A i = X * Matrix.diagonal (fun k => (Λ k : ℂ)) * U i * X⁻¹) := by
   classical
   have hInjA : IsInjective A :=
@@ -421,7 +414,30 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
             simp [Finset.mul_sum]
       _ = L * U i := by
             simp [U]
-  refine ⟨X, Λ, U, hX_det, ?_, hU_left, hU_pair, ?_⟩
+  have htr_re_pos : 0 < (Matrix.trace ρ).re := by
+    exact (RCLike.pos_iff.mp hρ_pd.trace_pos).1
+  have htr_re_ne : (Matrix.trace ρ).re ≠ 0 := ne_of_gt htr_re_pos
+  -- `∑ k (Λ k)^2 = D`: each square is `D · ρ_{k,k} / tr ρ`, and `∑ ρ_{k,k} = tr ρ`.
+  have hΛsq : ∀ k : Fin D, (Λ k) ^ 2 = (D : ℝ) * (ρ k k).re / (Matrix.trace ρ).re := by
+    intro k
+    have hk_pos : 0 < (ρ k k).re := (RCLike.pos_iff.mp (hρdiag_pos k)).1
+    have harg_nonneg : 0 ≤ ((D : ℝ) * (ρ k k).re) / (Matrix.trace ρ).re :=
+      div_nonneg (by positivity) (le_of_lt htr_re_pos)
+    simpa [Λ, sq] using Real.sq_sqrt harg_nonneg
+  have htrace_re_sum : (Matrix.trace ρ).re = ∑ k : Fin D, (ρ k k).re := by
+    simp only [Matrix.trace, Matrix.diag_apply, Complex.re_sum]
+  have hΛ_sq_sum : ∑ k : Fin D, (Λ k) ^ 2 = (D : ℝ) := by
+    calc
+      ∑ k : Fin D, (Λ k) ^ 2
+          = ∑ k : Fin D, (D : ℝ) * (ρ k k).re / (Matrix.trace ρ).re := by
+            exact Finset.sum_congr rfl (fun k _ => hΛsq k)
+      _ = (D : ℝ) * (∑ k : Fin D, (ρ k k).re) / (Matrix.trace ρ).re := by
+            rw [← Finset.sum_div, ← Finset.mul_sum]
+      _ = (D : ℝ) * (Matrix.trace ρ).re / (Matrix.trace ρ).re := by
+            rw [htrace_re_sum]
+      _ = (D : ℝ) := by
+            field_simp
+  refine ⟨X, Λ, U, hX_det, ?_, hU_left, hU_pair, hΛ_sq_sum, ?_⟩
   · intro k
     apply Real.sqrt_pos.2
     have hk_pos : 0 < (ρ k k).re := by
@@ -441,6 +457,39 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
         rw [hB_fact i]
       _ = X * Matrix.diagonal (fun k => (Λ k : ℂ)) * U i * X⁻¹ := by
         simp [L, Matrix.mul_assoc]
+
+/-- **Lemma B.1** (arXiv:1606.00608, Appendix B): a normal tensor in canonical
+form II that is an RFP admits the decomposition `A i = X * Λ * U i * X⁻¹`
+with diagonal positive `Λ` and a residual tensor `U` satisfying the
+left-canonical equation and the scaled pair-index orthonormality
+\[
+  \sum_i \overline{(U^i)_{\alpha,\beta}}\,(U^i)_{\alpha',\beta'}
+  =
+  D^{-1}\delta_{(\alpha,\beta),(\alpha',\beta')}.
+\]
+
+The proof combines the diagonal fixed-point reduction
+`rfp_nt_cfii_diagonal_fixedPoint`, the rank-one classification
+`transferMap_eq_fixedPointProj_of_isRFP_injective`, and an explicit Kraus
+realization of `fixedPointProj ρ`. Applying `kraus_rectangular_freedom'`
+identifies the physical-index coefficients with an isometry. The matrix units
+are normalized by $D^{-1/2}$, so the resulting matrix entries carry the
+displayed factor $D^{-1}$. -/
+theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
+    (hNT : IsNormal A) (hRFP : IsRFP A)
+    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
+    ∃ (X : Matrix (Fin D) (Fin D) ℂ) (Λ : Fin D → ℝ)
+      (U : MPSTensor d D),
+      X.det ≠ 0 ∧
+      (∀ k, 0 < Λ k) ∧
+      (∑ i : Fin d, (U i)ᴴ * U i = 1) ∧
+      (∀ p q : Fin D × Fin D,
+        ∑ i : Fin d, star (U i p.1 p.2) * U i q.1 q.2 =
+          if p = q then (D : ℂ)⁻¹ else 0) ∧
+      (∀ i, A i = X * Matrix.diagonal (fun k => (Λ k : ℂ)) * U i * X⁻¹) := by
+  obtain ⟨X, Λ, U, hX_det, hΛ_pos, hU_left, hU_pair, _, hA_eq⟩ :=
+    rfp_nt_structural_full_aux A hNT hRFP hLeft
+  exact ⟨X, Λ, U, hX_det, hΛ_pos, hU_left, hU_pair, hA_eq⟩
 
 /-- **Unit pair-index form of Lemma B.1.**  This is the same structural
 decomposition as the isometry theorem above
@@ -558,6 +607,174 @@ theorem rfp_nt_structural_full_unit_pair (A : MPSTensor d D) [NeZero D]
             ← Matrix.mul_assoc X L (s • U₀ i)]
       _ = X * Matrix.diagonal (fun k => (Λ k : ℂ)) * U i * X⁻¹ := by
           simp [L, U]
+
+/-- **Isometry canonical form for a single normal-tensor block**
+(arXiv:1606.00608, Lemma `lem:charact-NT-pure-RFP`, lines 1271--1295, and the
+single-block case `j = j'` of Theorem `thm:charact-MPS`, eq. `III_CFI_RFP` and
+`eq:III_isometry`).
+
+A normal tensor `A` is in *isometry canonical form* when there are an invertible
+`X`, a positive diagonal weight `Λ` with `∑ k Λ k = 1` (the source
+trace-normalization `tr(Λ) = 1`), and a residual tensor `U` satisfying the unit
+pair-index isometry
+\[
+  \sum_i \overline{(U^i)_{\alpha,\beta}}\,(U^i)_{\alpha',\beta'}
+  = \delta_{\alpha,\alpha'}\delta_{\beta,\beta'},
+\]
+such that
+\[
+  A^i = X \, \sqrt{\Lambda} \, U^i \, X^{-1}.
+\]
+The square root appears because the source reference tensor is
+`Â^{(α',β')}_{α,β} = δ_{α,α'} δ_{β,β'} √(Λ_α)` (arXiv:1606.00608, line 1288):
+the diagonal that dresses the unit isometry is `√Λ`, while the trace
+normalization `tr(Λ) = 1` is imposed on `Λ` itself, equivalently on the diagonal
+fixed point `ρ = diag(Λ)` of the transfer map.
+
+This records the diagonal `j = j'` case of the source isometry condition. The
+cross-block `δ_{j,j'}` orthogonality between distinct normal-tensor blocks is a
+separate condition, recorded in `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
+def IsIsometryCanonicalForm (A : MPSTensor d D) : Prop :=
+  ∃ (X : Matrix (Fin D) (Fin D) ℂ) (Λ : Fin D → ℝ) (U : MPSTensor d D),
+    X.det ≠ 0 ∧
+    (∀ k, 0 < Λ k) ∧
+    (∑ k : Fin D, Λ k = 1) ∧
+    (∀ p q : Fin D × Fin D,
+      ∑ i : Fin d, star (U i p.1 p.2) * U i q.1 q.2 =
+        if p = q then 1 else 0) ∧
+    (∀ i, A i = X * Matrix.diagonal (fun k => (Real.sqrt (Λ k) : ℂ)) * U i * X⁻¹)
+
+/-- **Trace-normalized isometry canonical form of Lemma B.1**
+(arXiv:1606.00608, Lemma `lem:charact-NT-pure-RFP`, lines 1271--1295).
+
+A normal tensor in canonical form II that is a renormalization fixed point is in
+isometry canonical form: it admits a decomposition
+`A^i = X √Λ U^i X⁻¹` with `Λ` diagonal, positive, trace-normalized
+(`∑ k Λ k = 1`, the source condition `tr(Λ) = 1`), and `U` a unit pair-index
+isometry.
+
+The diagonal weight is `Λ k = ρ_{k,k} / tr ρ`, the normalized diagonal fixed
+point of the transfer map; trace-normalization is then the trace identity
+`∑ k ρ_{k,k} = tr ρ`. The square-root dressing `√Λ` matches the source reference
+tensor `Â = √Λ · (matrix unit)` and keeps `U` a genuine unit isometry. -/
+theorem isIsometryCanonicalForm_of_rfp_nt (A : MPSTensor d D) [NeZero D]
+    (hNT : IsNormal A) (hRFP : IsRFP A)
+    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
+    IsIsometryCanonicalForm A := by
+  classical
+  obtain ⟨X, Λ₀, U₀, hX_det, hΛ₀_pos, _, hU₀_pair, hΛ₀_sq, hA_eq⟩ :=
+    rfp_nt_structural_full_aux A hNT hRFP hLeft
+  let sR : ℝ := Real.sqrt (D : ℝ)
+  let s : ℂ := (sR : ℂ)
+  -- Rescale to the unit pair-index convention: `U = √D · U₀`, `Λtil = Λ₀ / √D`.
+  let Λtil : Fin D → ℝ := fun k => Λ₀ k / sR
+  -- The trace-normalized diagonal is `Λ = Λtil² = Λ₀² / D`.
+  let Λ : Fin D → ℝ := fun k => (Λtil k) ^ 2
+  let U : MPSTensor d D := fun i => s • U₀ i
+  have hDpos_nat : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
+  have hDpos : 0 < (D : ℝ) := by exact_mod_cast hDpos_nat
+  have hsR_ne : sR ≠ 0 := Real.sqrt_ne_zero'.2 hDpos
+  have hsR_pos : 0 < sR := Real.sqrt_pos.2 hDpos
+  have hs_ne : s ≠ 0 := by simpa [s] using Complex.ofReal_ne_zero.mpr hsR_ne
+  have hD_ne : (D : ℂ) ≠ 0 := by exact_mod_cast (NeZero.ne D)
+  have hs_star : star s * s = (D : ℂ) := by
+    have hs_sq : sR * sR = (D : ℝ) := by
+      have hnn : 0 ≤ (D : ℝ) := by positivity
+      change Real.sqrt (D : ℝ) * Real.sqrt (D : ℝ) = (D : ℝ)
+      rw [← pow_two]; exact Real.sq_sqrt hnn
+    have hs_sq_c := congrArg (fun x : ℝ => (x : ℂ)) hs_sq
+    simpa [s, Complex.ofReal_mul] using hs_sq_c
+  have hΛtil_pos : ∀ k, 0 < Λtil k := fun k => div_pos (hΛ₀_pos k) hsR_pos
+  -- `√Λ k = Λtil k`, so the decomposition matches the source `√Λ` dressing.
+  have hsqrtΛ : ∀ k, Real.sqrt (Λ k) = Λtil k := by
+    intro k
+    exact Real.sqrt_sq (le_of_lt (hΛtil_pos k))
+  refine ⟨X, Λ, U, hX_det, ?_, ?_, ?_, ?_⟩
+  · -- `Λ k = Λtil k ^ 2 > 0`.
+    intro k
+    exact pow_pos (hΛtil_pos k) 2
+  · -- `∑ k Λ k = (∑ Λ₀²) / D = D / D = 1`.
+    have hsR_sq : sR ^ 2 = (D : ℝ) := Real.sq_sqrt (le_of_lt hDpos)
+    have hstep : ∀ k, Λ k = (Λ₀ k) ^ 2 / (D : ℝ) := by
+      intro k
+      simp only [Λ, Λtil, div_pow]
+      rw [hsR_sq]
+    calc
+      ∑ k : Fin D, Λ k = ∑ k : Fin D, (Λ₀ k) ^ 2 / (D : ℝ) :=
+            Finset.sum_congr rfl (fun k _ => hstep k)
+      _ = (∑ k : Fin D, (Λ₀ k) ^ 2) / (D : ℝ) := by rw [Finset.sum_div]
+      _ = (D : ℝ) / (D : ℝ) := by rw [hΛ₀_sq]
+      _ = 1 := by field_simp
+  · -- Unit pair-index isometry: `√D · U₀` upgrades the `D⁻¹` form to unit.
+    intro p q
+    calc
+      ∑ i : Fin d, star (U i p.1 p.2) * U i q.1 q.2
+          = ∑ i : Fin d, (star s * s) * (star (U₀ i p.1 p.2) * U₀ i q.1 q.2) := by
+              refine Finset.sum_congr rfl ?_
+              intro i _
+              simp [U, s, mul_assoc, mul_left_comm, mul_comm]
+      _ = (star s * s) * ∑ i : Fin d, star (U₀ i p.1 p.2) * U₀ i q.1 q.2 := by
+              rw [Finset.mul_sum]
+      _ = (D : ℂ) * (if p = q then (D : ℂ)⁻¹ else 0) := by
+              rw [hs_star, hU₀_pair p q]
+      _ = if p = q then 1 else 0 := by
+              by_cases hpq : p = q
+              · simp [hpq, hD_ne]
+              · simp [hpq]
+  · -- Decomposition: `A^i = X √Λ U^i X⁻¹` reduces to the `Λ₀, U₀` form.
+    intro i
+    rw [hA_eq i]
+    let L : Matrix (Fin D) (Fin D) ℂ :=
+      Matrix.diagonal (fun k => (Real.sqrt (Λ k) : ℂ))
+    have hL_eq : L = Matrix.diagonal (fun k => (Λtil k : ℂ)) := by
+      simp only [L, hsqrtΛ]
+    have hdiagΛ₀ :
+        Matrix.diagonal (fun k => (Λ₀ k : ℂ)) = s • L := by
+      rw [hL_eq]
+      have hsRC_ne : (sR : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr hsR_ne
+      ext a b
+      by_cases hab : a = b
+      · subst hab
+        simp only [Matrix.diagonal_apply_eq, Matrix.smul_apply, smul_eq_mul]
+        rw [show (Λtil a : ℂ) = (Λ₀ a / sR : ℝ) from by simp [Λtil],
+          Complex.ofReal_div]
+        rw [show s = (sR : ℂ) from rfl]
+        field_simp
+      · simp [Matrix.diagonal, hab]
+    have hmove : (s • L) * U₀ i = L * (s • U₀ i) := by
+      rw [Matrix.smul_mul, Matrix.mul_smul]
+    calc
+      X * Matrix.diagonal (fun k => (Λ₀ k : ℂ)) * U₀ i * X⁻¹
+          = X * (s • L) * U₀ i * X⁻¹ := by rw [hdiagΛ₀]
+      _ = X * L * (s • U₀ i) * X⁻¹ := by
+            rw [Matrix.mul_assoc X (s • L) (U₀ i), hmove,
+              ← Matrix.mul_assoc X L (s • U₀ i)]
+      _ = X * Matrix.diagonal (fun k => (Real.sqrt (Λ k) : ℂ)) * U i * X⁻¹ := by
+            simp [L, U]
+
+/-- **Per-block trace-normalized isometry canonical form.** Each block of a
+multi-block tensor that is a normal, left-canonical renormalization fixed point
+is in isometry canonical form: it admits a decomposition `A_k^i = X √Λ_k U^i X⁻¹`
+with `Λ_k` diagonal positive, trace-normalized (`∑ j Λ_k j = 1`), and `U`
+a unit pair-index isometry.
+
+This is the single-block trace-normalized form (Theorem
+`isIsometryCanonicalForm_of_rfp_nt`, the diagonal `j = j'` case of
+arXiv:1606.00608, Corollary III.cor3, lines 583--589) applied to each block.
+
+**Scope restriction (source isometry):** Corollary III.cor3 also invokes the
+cross-block `δ_{j,j'}` orthogonality between distinct normal-tensor blocks
+(eq:III_isometry, lines 550--554). This per-block statement omits those
+cross-block equations; the gap is recorded in
+`docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. Deriving the per-block
+normal/RFP/left-canonical hypotheses from a whole-tensor canonical-form
+fixed-point condition is a separate step. -/
+theorem isIsometryCanonicalForm_of_rfp_nt_blocks {r : ℕ} {dim : Fin r → ℕ}
+    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
+    (hNT : ∀ k, IsNormal (A k)) (hRFP : ∀ k, IsRFP (A k))
+    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1) :
+    ∀ k, IsIsometryCanonicalForm (A k) :=
+  fun k => isIsometryCanonicalForm_of_rfp_nt (A k) (hNT k) (hRFP k) (hLeft k)
 
 /-- **Per-block isometry canonical form.** When each block of a multi-block tensor
 is a normal, left-canonical renormalization fixed point, that block admits an
