@@ -1592,6 +1592,212 @@ of a bipartite state whose Schmidt number is at most $n$.
     $n\,\rho_1\otimes\Id-\rho\ge 0$.
 \end{proof}
 
+\subsection{The partial transpose and the PPT property}
+
+Transposition is a positive map that is not completely positive, so applying it
+to one factor of a bipartite operator can break positivity.  The resulting
+operation, the partial transpose
+\cite[Equation~(3.16)]{Wolf2012Quantum}, sends $\rho\in\MN{d}\otimes\MN{d'}$ to
+the operator $\rho^{T_1}$ obtained by transposing the first tensor factor while
+leaving the second untouched, and the property $\rho^{T_1}\ge 0$ — positive
+partial transpose, or PPT — is the criterion
+\cite[Equation~(3.17)]{Wolf2012Quantum} that separates many entangled states
+from the separable ones.
+
+\begin{definition}[Partial transpose over the first factor]
+    \label{def:partial_transpose_left}
+    \lean{Matrix.partialTransposeLeft}
+    \leanok
+    For a bipartite matrix $\rho$ on $\MN{d}\otimes\MN{d'}$, the partial transpose
+    over the first factor is the matrix $\rho^{T_1}$ with entries
+    \[
+        \bigl(\rho^{T_1}\bigr)_{(i,k),(j,l)}=\rho_{(j,k),(i,l)},
+    \]
+    transposing the first index pair $i,j$ and fixing the second pair $k,l$.
+\end{definition}
+
+\begin{definition}[Partial transpose over the second factor]
+    \label{def:partial_transpose_right}
+    \lean{Matrix.partialTransposeRight}
+    \leanok
+    For a bipartite matrix $\rho$ on $\MN{d}\otimes\MN{d'}$, the partial transpose
+    over the second factor is the matrix $\rho^{T_2}$ with entries
+    \[
+        \bigl(\rho^{T_2}\bigr)_{(i,k),(j,l)}=\rho_{(i,l),(j,k)},
+    \]
+    transposing the second index pair $k,l$ and fixing the first pair $i,j$.
+\end{definition}
+
+\begin{theorem}[The partial transpose is an involution]
+    \label{thm:partial_transpose_left_involution}
+    \lean{Matrix.partialTransposeLeft_partialTransposeLeft}
+    \leanok
+    \uses{def:partial_transpose_left}
+    Applying the first-factor partial transpose twice returns the original matrix:
+    $\bigl(\rho^{T_1}\bigr)^{T_1}=\rho$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Both entries equal $\rho_{(i,k),(j,l)}$: the first transposition exchanges the
+    first index pair, the second restores it.
+\end{proof}
+
+\begin{theorem}[The partial transpose preserves the trace]
+    \label{thm:trace_partial_transpose_left}
+    \lean{Matrix.trace_partialTransposeLeft}
+    \leanok
+    \uses{def:partial_transpose_left}
+    The first-factor partial transpose preserves the trace:
+    $\tr\bigl(\rho^{T_1}\bigr)=\tr(\rho)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    On the diagonal the row and column indices coincide, so the index exchange in
+    the definition is the identity and each diagonal entry is unchanged.
+\end{proof}
+
+\begin{theorem}[The partial transpose preserves Hermiticity]
+    \label{thm:partial_transpose_left_hermitian}
+    \lean{Matrix.IsHermitian.partialTransposeLeft}
+    \leanok
+    \uses{def:partial_transpose_left}
+    If $\rho$ is Hermitian then so is its first-factor partial transpose
+    $\rho^{T_1}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The entry $\bigl(\rho^{T_1}\bigr)_{(i,k),(j,l)}=\rho_{(j,k),(i,l)}$ has complex
+    conjugate $\overline{\rho_{(j,k),(i,l)}}=\rho_{(i,l),(j,k)}$ by Hermiticity of
+    $\rho$, which is the $((j,l),(i,k))$ entry of $\rho^{T_1}$.
+\end{proof}
+
+\begin{theorem}[The two partial transposes differ by a global transposition]
+    \label{thm:partial_transpose_right_eq_transpose_left}
+    \lean{Matrix.partialTransposeRight_eq_transpose_partialTransposeLeft}
+    \leanok
+    \uses{def:partial_transpose_left, def:partial_transpose_right}
+    The second-factor partial transpose is the full transpose of the first-factor
+    one:
+    \[
+        \rho^{T_2}=\bigl(\rho^{T_1}\bigr)^{\mathsf T}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Transposing both factors is the full transpose, so transposing the first
+    factor and then the whole operator transposes only the second factor.
+\end{proof}
+
+\begin{definition}[Positive partial transpose property]
+    \label{def:is_ppt}
+    \lean{Matrix.IsPPT}
+    \leanok
+    \uses{def:partial_transpose_left}
+    A bipartite matrix $\rho$ has the positive-partial-transpose (PPT) property when
+    its first-factor partial transpose is positive semidefinite, $\rho^{T_1}\ge 0$.
+\end{definition}
+
+\begin{theorem}[The PPT property is symmetric in the two factors]
+    \label{thm:is_ppt_iff_right}
+    \lean{Matrix.isPPT_iff_partialTransposeRight_posSemidef}
+    \leanok
+    \uses{def:is_ppt, def:partial_transpose_right,
+        thm:partial_transpose_right_eq_transpose_left}
+    A bipartite matrix has the PPT property if and only if its second-factor
+    partial transpose is positive semidefinite:
+    \[
+        \rho^{T_1}\ge 0\iff\rho^{T_2}\ge 0.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The two partial transposes differ by a global transposition, and transposition
+    preserves positive semidefiniteness, so one is positive exactly when the other
+    is.
+\end{proof}
+
+\begin{theorem}[Basis-change law for the partial transpose]
+    \label{thm:partial_transpose_left_basis_change}
+    \lean{Matrix.partialTransposeLeft_basis_change}
+    \leanok
+    \uses{def:partial_transpose_left}
+    For matrices $U,V$ on the first factor and a bipartite matrix $\rho$,
+    conjugating inside by $V$ and $U$, taking the first-factor partial transpose,
+    and conjugating outside by $U$ and $V$ produces the original partial transpose
+    conjugated by $U U^{\mathsf T}$ and $V^{\mathsf T}V$:
+    \[
+        \bigl(U\otimes\Id\bigr)
+        \Bigl[\bigl((V\otimes\Id)\,\rho\,(U\otimes\Id)\bigr)^{T_1}\Bigr]
+        \bigl(V\otimes\Id\bigr)
+        =\bigl((U U^{\mathsf T})\otimes\Id\bigr)\,\rho^{T_1}\,
+            \bigl((V^{\mathsf T}V)\otimes\Id\bigr).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Expanding the conjugated operator entry by entry as a double sum over the first
+    factor, the partial transpose exchanges the two summation indices and reverses
+    the roles of the left and right conjugating matrices, leaving them transposed;
+    collecting the Kronecker factors gives the stated form.
+\end{proof}
+
+\begin{theorem}[Basis independence of the PPT property]
+    \label{thm:is_ppt_basis_change}
+    \lean{Matrix.isPPT_basis_change}
+    \leanok
+    \uses{def:is_ppt, thm:partial_transpose_left_basis_change}
+    Let $U$ be a unitary on the first factor.  If $\rho$ has the PPT property then
+    the partial transpose taken in the basis changed by $U$,
+    \[
+        \bigl(U\otimes\Id\bigr)
+        \Bigl[\bigl((U^\dagger\otimes\Id)\,\rho\,(U\otimes\Id)\bigr)^{T_1}\Bigr]
+        \bigl(U^\dagger\otimes\Id\bigr),
+    \]
+    is again positive semidefinite.  The positivity of the partial transpose is
+    therefore independent of the local basis.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By the basis-change law with $V=U^\dagger$, the new-basis partial transpose
+    equals $\bigl((U U^{\mathsf T})\otimes\Id\bigr)\,\rho^{T_1}\,
+    \bigl((U U^{\mathsf T})\otimes\Id\bigr)^\dagger$, a conjugation of $\rho^{T_1}$
+    that preserves positive semidefiniteness.
+\end{proof}
+
+\begin{definition}[Transposition witness]
+    \label{def:transposition_witness}
+    \lean{Matrix.transpositionWitness}
+    \leanok
+    For matrices $A,B$ on $\MN{d}$ and the SWAP operator $F$ on
+    $\MN{d}\otimes\MN{d}$, the transposition witness is
+    \[
+        W=(A\otimes B)\,F\,(A\otimes B)^\dagger.
+    \]
+    These are the entanglement witnesses associated with the transposition map.
+\end{definition}
+
+\begin{theorem}[Transposition witnesses are Hermitian]
+    \label{thm:transposition_witness_hermitian}
+    \lean{Matrix.transpositionWitness_isHermitian}
+    \leanok
+    \uses{def:transposition_witness}
+    Every transposition witness $W=(A\otimes B)\,F\,(A\otimes B)^\dagger$ is
+    Hermitian.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The SWAP operator is self-adjoint, $F^\dagger=F$, so taking the adjoint of
+    $(A\otimes B)\,F\,(A\otimes B)^\dagger$ returns the same operator.
+\end{proof}
+
 \begin{theorem}[Completely positive implies two-positive]
     \lean{IsCPMap.is2PositiveMap}
     \leanok
