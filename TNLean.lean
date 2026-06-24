@@ -62,6 +62,7 @@ import TNLean.Channel.TensorMap
 import TNLean.Channel.ChoiJamiolkowski
 import TNLean.Channel.SchmidtRank
 import TNLean.Channel.MaximalOverlap
+import TNLean.Channel.NPositivitySpectralCriterion
 import TNLean.Channel.KrausRank
 import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.KrausUnitaryFreedom
