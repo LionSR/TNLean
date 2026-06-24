@@ -453,9 +453,8 @@ theorem posMap_rpow_convex_jensen
     intro p hpIoo
     let q : ℝ≥0 := ⟨p, by linarith [hpIoo.1]⟩
     have hqcoe : (q : ℝ) = p := rfl
-    have hq1 : (1 : ℝ) < q := by exact_mod_cast hpIoo.1
     have hqpos : 0 < q := by
-      have : (0 : ℝ) < q := by linarith
+      have : (0 : ℝ) < q := by rw [hqcoe]; linarith [hpIoo.1]
       exact_mod_cast this
     have hqIoo : q ∈ Set.Ioo (1 : ℝ≥0) 2 := by
       constructor
