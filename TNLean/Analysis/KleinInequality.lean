@@ -246,7 +246,13 @@ making `log σ` finite on the range of `ρ`.
 
 Source: Klein's inequality; layer 3 of the relative-entropy elimination route
 for strong subadditivity, `docs/paper-gaps/cpsv16_ssa_from_lieb_route.tex`;
-blueprint `thm:klein_inequality`. -/
+blueprint `thm:klein_inequality`.
+
+**Scope restriction (full-rank σ):** This formalizes the full-rank sub-case
+(`IsUnit σ.det`). The general Klein inequality requires only the kernel
+inclusion ker σ ⊆ ker ρ; that extension and the equality case remain
+unformalized, documented in
+`docs/paper-gaps/cpsv16_ssa_from_lieb_route.tex`. -/
 theorem quantumRelativeEntropy_nonneg {n : Type*} [Fintype n] [DecidableEq n]
     {ρ σ : Matrix n n ℂ} (hρ : ρ.PosSemidef) (hρ_tr : ρ.trace = 1)
     (hσ : σ.PosSemidef) (hσ_tr : σ.trace = 1) (hσ_inv : IsUnit σ.det) :
