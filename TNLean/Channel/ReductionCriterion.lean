@@ -93,18 +93,6 @@ theorem reductionMap_eq_tEta (D k : ℕ) : reductionMap D k = tEta D (k : ℝ) :
 
 end Matrix
 
-namespace ChoiJamiolkowski
-
-variable {D : ℕ}
-
-/-- The Choi operator of `reductionMap D k` is the same matrix as that of
-`tEta D k`, since the two maps coincide. -/
-theorem choiMatrix_reductionMap_eq_choiMatrix_tEta [NeZero D] (k : ℕ) :
-    choiMatrix (Matrix.reductionMap D k) = choiMatrix (Matrix.tEta D (k : ℝ)) := by
-  rw [Matrix.reductionMap_eq_tEta]
-
-end ChoiJamiolkowski
-
 namespace Matrix
 
 variable {D : ℕ}
