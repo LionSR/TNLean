@@ -239,6 +239,43 @@ maps.
     factorization.
 \end{proof}
 
+\begin{theorem}[Maximal overlap with a fixed Schmidt rank]
+    \label{thm:maximal_overlap_schmidt_rank}
+    \lean{Matrix.maximalSchmidtOverlap_eq_kyFanNorm}
+    \leanok
+    \uses{def:schmidt_rank, def:ky_fan_norm, thm:ky_fan_maximum_principle}
+    Let $\phi\in\C^{D}\otimes\C^k$ be a normalized vector with reduced density
+    matrix $\rho=\tr_2 |\phi\rangle\langle\phi|$ on the first factor, and let
+    $1\le n<D$. The largest squared overlap $|\braket{\phi}{\psi}|^2$ attained by
+    a normalized vector $\psi$ of Schmidt rank at most $n$ is the Ky-Fan
+    $n$-norm of $\rho$:
+    \[
+        \max_{\operatorname{SR}(\psi)\le n,\ \|\psi\|=1}
+            |\braket{\phi}{\psi}|^2 = \|\rho\|_{(n)} .
+    \]
+    Because $\rho$ is positive semidefinite, this norm is the sum of its $n$
+    largest eigenvalues, which coincide there with its singular values. This is
+    \cite[Lemma~3.1]{Wolf2012Quantum}, stated here for $n<D$; the top index
+    $n=D$, where the value is $\tr\rho=1$, lies outside the range of the
+    maximum principle in Theorem~\ref{thm:ky_fan_maximum_principle}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ky_fan_maximum_principle}
+    Write $C$ for the coefficient matrix of $\phi$, so that $\rho=CC^\dagger$ and
+    the overlap with a vector $\psi$ of coefficient matrix $B$ is the Frobenius
+    pairing $\braket{\phi}{\psi}=\tr(C^\dagger B)$; normalization reads
+    $\tr(B^\dagger B)=1$ and the Schmidt-rank constraint reads $\rank(B)\le n$.
+    For the upper bound, the orthogonal projection $P$ onto the column space of
+    $B$ has rank at most $n$ and fixes $B$, so the Cauchy--Schwarz inequality
+    gives $|\tr(C^\dagger B)|^2\le \tr(P\rho)$, which the positive-semidefinite
+    form of Ky Fan's maximum principle bounds by $\|\rho\|_{(n)}$.  For the
+    converse, scaling the projection onto the $n$ largest eigenvalues of $\rho$
+    by $C$ yields a normalized coefficient matrix of rank at most $n$ whose
+    squared overlap equals $\|\rho\|_{(n)}$.
+\end{proof}
+
 \begin{theorem}[Rank-one test for $k$-positivity]\label{thm:k_positive_rank_one_test}
     \lean{isNPositiveMap_iff_forall_ampliation_rank_one_posSemidef}
     \leanok
