@@ -399,6 +399,59 @@ finite-dimensional quantum systems.
     where the middle equality is trace cyclicity together with $U^\dagger U = 1$.
 \end{proof}
 
+\begin{lemma}[Logarithm of a tensor product of positive definite matrices]
+    \label{lem:log_kronecker}
+    \lean{Matrix.log_kronecker}
+    \leanok
+    For positive definite matrices $\rho$ and $\tau$,
+    \[
+        \log(\rho \otimes \tau)
+            = \log\rho \otimes \mathbf 1 + \mathbf 1 \otimes \log\tau.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    The tensor product factors as
+    $\rho \otimes \tau = (\rho \otimes \mathbf 1)(\mathbf 1 \otimes \tau)$ into a
+    pair of commuting positive definite matrices, so the logarithm of the product
+    is the sum of the logarithms of the factors. Each unital embedding
+    $A \mapsto A \otimes \mathbf 1$ and $B \mapsto \mathbf 1 \otimes B$ is a
+    continuous star-algebra homomorphism, hence commutes with the functional
+    calculus, which carries each logarithm onto its factor:
+    $\log(\rho \otimes \mathbf 1) = \log\rho \otimes \mathbf 1$ and
+    $\log(\mathbf 1 \otimes \tau) = \mathbf 1 \otimes \log\tau$.
+\end{proof}
+
+\begin{theorem}[Ancilla additivity of the quantum relative entropy]
+    \label{thm:relative_entropy_ancilla_additivity}
+    \lean{quantumRelativeEntropy_kronecker}
+    \leanok
+    \uses{def:quantum_relative_entropy, lem:log_kronecker}
+    For positive definite matrices $\rho, \sigma$ and a positive definite matrix
+    $\tau$ of unit trace,
+    \[
+        D(\rho \otimes \tau \,\Vert\, \sigma \otimes \tau) = D(\rho\Vert\sigma).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:log_kronecker}
+    Splitting each tensor logarithm by Lemma~\ref{lem:log_kronecker}, the common
+    $\mathbf 1 \otimes \log\tau$ terms cancel in the difference, leaving
+    $\log(\rho \otimes \tau) - \log(\sigma \otimes \tau)
+        = (\log\rho - \log\sigma) \otimes \mathbf 1$. Hence
+    \[
+        D(\rho \otimes \tau \,\Vert\, \sigma \otimes \tau)
+            = \operatorname{Re}\operatorname{tr}\!\bigl(
+                (\rho(\log\rho - \log\sigma)) \otimes \tau\bigr)
+            = \operatorname{Re}\bigl(
+                \operatorname{tr}(\rho(\log\rho - \log\sigma))
+                \cdot \operatorname{tr}\tau\bigr),
+    \]
+    where the trace of a tensor product factors as a product of traces. As
+    $\operatorname{tr}\tau = 1$, the right-hand side is $D(\rho\Vert\sigma)$.
+\end{proof}
+
 \begin{theorem}[Entropy is invariant under reindexing]
     \label{thm:entropy_submatrix_equiv}
     \lean{vonNeumannEntropy_submatrix_equiv}

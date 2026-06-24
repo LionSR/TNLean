@@ -111,6 +111,7 @@ import TNLean.Channel.Schwarz.OperatorMonotone
 import TNLean.Channel.Schwarz.AndoLieb
 import TNLean.Channel.Schwarz.RelativeEntropyConvexity
 import TNLean.Channel.Schwarz.RelativeEntropyUnitaryInvariance
+import TNLean.Channel.Schwarz.RelativeEntropyAncillaAdditivity
 import TNLean.Channel.Schwarz.PositiveOnAbelian
 import TNLean.Channel.Schwarz.SchwarzNormal
 import TNLean.Channel.Schwarz.SchwarzSubnormal
