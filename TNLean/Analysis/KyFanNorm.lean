@@ -10,11 +10,14 @@ import Mathlib.Analysis.Matrix.PosDef
 # Ky-Fan k-norm of a Hermitian matrix
 
 For a Hermitian matrix `A` the *Ky-Fan k-norm* is the sum of the `k` largest
-eigenvalues of `A`, counted with multiplicity.  Equivalently, it is the
+eigenvalues of `A`, counted with multiplicity.  For `k < card n` it equals the
 maximum of the real trace `tr(P A)` taken over all orthogonal projections `P`
-of rank at most `k`.  This module sets up the definition, its basic
-properties, and the achievability half of that maximum principle: there is a
-rank-`k` orthogonal projection attaining the sum.
+of rank exactly `k`; the rank-`k` constraint is essential, since for a Hermitian
+matrix with negative tail eigenvalues a lower-rank projection can give a larger
+trace.  When `k` reaches `card n` the norm is the real trace `tr(A)` itself,
+attained by the identity projection.  This module sets up the definition, its
+basic properties, the achievability half of the maximum principle (a rank-`k`
+projection attaining the sum), and the full maximum principle for `k < card n`.
 
 The Ky-Fan norm is used in Wolf's Chapter 3 study of overlaps with pure states
 of a fixed Schmidt rank: the maximal overlap of a fixed vector with a normalized
@@ -306,8 +309,9 @@ theorem eigenvectorUnitary_indicator_trace (hA : A.IsHermitian) (S : Finset n) :
 /-- **Achievability half of the Ky-Fan maximum principle** (Wolf Ch. 3, Lemma 3.1).
 There is an orthogonal projection `P` (Hermitian, idempotent) of rank
 `min k (card n)` whose real trace against `A` realizes the Ky-Fan `k`-norm.
-Together with the upper bound `(P A).re ≤ kyFanNorm k` over all rank-`≤ k`
-projections, this gives the variational characterization of the norm. -/
+Together with the upper bound `(P A).re ≤ kyFanNorm k` over rank-`k`
+projections (for `k < card n`), this gives the variational characterization of
+the norm. -/
 theorem exists_isProj_trace_eq_kyFanNorm (hA : A.IsHermitian) (k : ℕ) :
     ∃ P : Matrix n n ℂ, P.IsHermitian ∧ P * P = P ∧
       (P.trace).re = (min k (Fintype.card n) : ℝ) ∧
