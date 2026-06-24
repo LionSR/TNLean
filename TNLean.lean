@@ -78,6 +78,7 @@ import TNLean.Channel.POVM.Uniqueness
 -- Layer 2: Quantum entropy infrastructure (depends on Channel.Basic, Channel.PartialTrace)
 import TNLean.Analysis.Entropy
 import TNLean.Analysis.KleinInequality
+import TNLean.Analysis.MarginalSupport
 
 -- Layer 2a: Density-matrix Brouwer fixed-point theorem used in Perron--Frobenius existence
 import TNLean.Axioms.BrouwerFixedPoint
