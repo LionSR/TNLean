@@ -6,6 +6,7 @@ import TNLean.Channel.FixedPoint.Algebra
 import TNLean.Channel.FixedPoint.Cesaro
 import TNLean.Channel.FixedPoint.ConditionalExpectation
 import TNLean.Channel.FixedPoint.StationarySupport
+import TNLean.Channel.FixedPoint.CornerFixedPoints
 import TNLean.Channel.FixedPoint.WedderburnDecomp
 import TNLean.Channel.FixedPoint.Corollaries
 import TNLean.Channel.Irreducible.Ergodicity
@@ -241,14 +242,23 @@ In `TNLean.Channel.FixedPoint.Algebra`:
 * `IsChannel.posSemidef_parts_of_hermitian_fixedPoint` — `TNLean.Channel.FixedPoint.Cesaro`
 * Numbered theorem: `IsChannel.wolf_prop_6_8` — `TNLean.Channel.WolfChapter6Wrappers`
 
-### Wolf Corollary 6.6 (projected support corner) — NOT YET FORMALIZED
+### Wolf Corollary 6.6 (projected support corner) — FORMALIZED
 
-The intended statement is that the corner
-`{Y ∈ Q M_D(ℂ) Q | Q T*(Y) Q = Y}` forms a `*`-algebra.
+In `TNLean.Channel.FixedPoint.CornerFixedPoints`:
 
-Current blocker: the repository exposes the corner only as the `Submodule`
-`cornerSubmodule Q`, not yet as a unital `*`-algebra with unit `Q`, so the
-corner-fixed-point statement is not yet formulated at the right algebraic level.
+* `Kraus.cornerFixedPointsStarSubalgebra` — for a trace-preserving Schwarz map
+  `T* = adjointMap K` (unitality of `T*` is `IsTP K`) and a PSD fixed point `ρ`
+  of `T = map K` with support projection `Q := stationaryProj`, the
+  corner-restricted fixed-point set `{Y ∈ Q M_D(ℂ) Q | Q T*(Y) Q = Y}` is a
+  `StarSubalgebra` of the corner algebra `Q M_D(ℂ) Q`.
+* `Kraus.mem_cornerFixedPointsStarSubalgebra` — membership is exactly the
+  corner fixed-point condition `Q (adjointMap K Y) Q = Y`.
+
+The proof compresses the supported family `Q Kᵢ Q` to the support sector via
+`exists_compressedTensor_of_supported_projection_with_letter_and_isometry`,
+where the compressed map is unital with a positive-definite fixed point, applies
+Wolf Theorem 6.12 there (`Kraus.adjointFixedPointsStarSubalgebra`), and transports
+the `*`-algebra structure back along the compression isomorphism.
 
 ### Wolf Theorem 6.14 (Wedderburn decomposition of fixed-point algebra) — PARTIALLY FORMALIZED
 
