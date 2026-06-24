@@ -679,8 +679,8 @@ private lemma pauliConjAd_su2_det (U : Matrix (Fin 2) (Fin 2) ℂ)
   have e11 := congrFun (congrFun hkey 0) 0
   have e01 := congrFun (congrFun hkey 0) 1
   simp only [Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one,
-    Matrix.head_cons, Matrix.empty_val', Matrix.cons_val_fin_one, Matrix.star_apply,
-    Complex.star_def, Matrix.head_fin_const] at e11 e01
+    Matrix.empty_val', Matrix.cons_val_fin_one, Matrix.star_apply,
+    Complex.star_def] at e11 e01
   rw [Matrix.det_fin_two] at hdet
   have hU01 : U 0 1 = -starRingEnd ℂ (U 1 0) := by linear_combination -e01
   have hnorm : U 0 0 * starRingEnd ℂ (U 0 0) + U 1 0 * starRingEnd ℂ (U 1 0) = 1 := by
@@ -688,9 +688,8 @@ private lemma pauliConjAd_su2_det (U : Matrix (Fin 2) (Fin 2) ℂ)
   rw [Matrix.det_fin_three]
   simp only [pauliConjAd, su2ToGL_coe, su2ToGL_inv_coe, Matrix.adjugate_fin_two, pauli,
     Matrix.trace_fin_two, Matrix.mul_apply, Fin.sum_univ_two, Matrix.cons_val_zero,
-    Matrix.cons_val_one, Matrix.head_cons, Matrix.of_apply, Matrix.cons_val',
-    Matrix.empty_val', Matrix.cons_val_fin_one, Matrix.head_fin_const, Matrix.cons_val_two,
-    Matrix.tail_cons, Fin.zero_eta, Fin.mk_one, Fin.isValue, Fin.reduceFinMk]
+    Matrix.cons_val_one, Matrix.of_apply, Matrix.cons_val',
+    Matrix.empty_val', Matrix.cons_val_fin_one, Fin.isValue]
   rw [e11, hU01]
   ring_nf
   rw [Complex.I_sq]
