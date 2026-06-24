@@ -65,13 +65,7 @@ Assume each block is injective at a common length \(L_0\). At the source length
   \mathbb C^d\otimes S_m\cap S_m\otimes\mathbb C^d=S_{m+1}.
 \]
 This is the equation used in PGVWC07, Theorem 12, proof lines
-1430--1452.
-
-**Unfaithful:** This proof relies on
-`wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1`, which
-transitively uses the periodic-boundary coordinate comparison rather than
-deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
-in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
+1430--1452. -/
 theorem pgvwc07_iSup_restriction_intersection_of_bnt_directSum_selectors_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -183,13 +177,7 @@ The normalization propagates this finite-length injectivity from \(L_0\) to
 then gives the simultaneous product span for every
 \[
   n\ge (L_0+1)+(r-1)\,3(L_0+1).
-\]
-
-**Unfaithful:** This proof relies on
-`hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv_c1`, which
-transitively uses the periodic-boundary coordinate comparison rather than
-deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
-in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
+\] -/
 theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -246,13 +234,7 @@ theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital
       A hIrr hLeft hOverlap hBlocks hBlk hInj hL hUnital hn)
 
 /-- Length-\(L_0\) injectivity form of the internal-direct-sum conclusion for
-the block local spaces.
-
-**Unfaithful:** This proof relies on
-`wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1`, which transitively uses
-the periodic-boundary coordinate comparison rather than deriving it from
-arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented in
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
+the block local spaces. -/
 theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -311,13 +293,7 @@ theorem pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital
     hUnital
 
 /-- Length-\(L_0\) injectivity form of the one-step block-intersection identity
-at every length above the BNT block-separation bound.
-
-**Unfaithful:** This proof relies on
-`wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1`, which transitively uses
-the periodic-boundary coordinate comparison rather than deriving it from
-arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented in
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
+at every length above the BNT block-separation bound. -/
 theorem pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -390,15 +366,7 @@ theorem pgvwc07_directSum_restriction_intersection_of_ge_of_bnt_directSum_unital
       A hIrr hLeft hOverlap hBlocks hBlk hInj hL hUnital hn⟩
 
 /-- Length-\(L_0\) injectivity form of the large-length block intersection as
-an internal direct sum.
-
-**Unfaithful:** This proof relies on the finite-length-injectivity
-internal-direct-sum and
-block-intersection conclusions above, which transitively use the
-periodic-boundary coordinate comparison rather than deriving it from
-arXiv:2011.12127,
-Section IV.C, lines 2078--2079. Documented in
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
+an internal direct sum. -/
 theorem pgvwc07_directSum_restriction_intersection_of_ge_of_bnt_directSum_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -524,13 +492,7 @@ theorem pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_unital
     A hIrr hLeft hOverlap hBlocks hBlk hInj hL hUnital hn
 
 /-- Length-\(L_0\) injectivity form of the eventual block-intersection identity
-without a separate one-site injectivity assumption.
-
-**Unfaithful:** This proof relies on
-`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`, which
-transitively uses the periodic-boundary coordinate comparison rather than
-deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
-in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`; prove the comparison. -/
+without a separate one-site injectivity assumption. -/
 theorem pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
