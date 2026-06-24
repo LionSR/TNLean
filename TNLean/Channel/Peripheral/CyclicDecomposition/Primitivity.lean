@@ -14,6 +14,7 @@ peripheral-spectrum development.
 
 ## Main statements
 
+* `isPrimitive_cornerRestriction_of_isPrimitive`
 * `preserves_corner_pow_of_cyclic_decomp`
 * `isIrreducible_restriction_of_cyclic_decomp`
 * `isPrimitive_restriction_of_cyclic_decomp`
@@ -26,6 +27,62 @@ peripheral-spectrum development.
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
 open Matrix Finset Complex
+
+/-- **Primitivity of the corner restriction.**
+
+If a linear map `T : M_D(ℂ) →ₗ M_D(ℂ)` preserves the corner `P · M_D(ℂ) · P`
+(`hInv`), is primitive on the ambient algebra (`hPrim`), and fixes the corner
+projection `P` (`hPfix : T P = P`) where `P` is a nonzero idempotent (`hPidem`,
+`hPne`), then the restriction of `T` to the corner is again primitive.
+
+This is the reusable foundational step toward Wolf Theorem 6.6: every eigenvalue
+of the corner restriction lifts through the corner inclusion to an eigenvalue of
+`T`, so the peripheral spectrum of the restriction is contained in `{1}`, while
+`P` itself exhibits `1` as a peripheral eigenvalue of the restriction. -/
+theorem isPrimitive_cornerRestriction_of_isPrimitive
+    {D : ℕ} (P : MatrixAlg D) (T : MatrixEnd D)
+    (hInv : PreservesCorner P T) (hPidem : P * P = P) (hPfix : T P = P)
+    (hPne : P ≠ 0) (hPrim : IsPrimitive T) :
+    IsPrimitive (cornerRestriction P T hInv) := by
+  -- `P` lies in its own corner.
+  have hPmem : P ∈ cornerSubmodule P := by
+    change P * P * P = P
+    rw [hPidem, hPidem]
+  -- `P` is a nonzero fixed point of the corner restriction.
+  have hcorner_fix :
+      cornerRestriction P T hInv ⟨P, hPmem⟩ = ⟨P, hPmem⟩ := by
+    apply Subtype.ext
+    change T P = P
+    exact hPfix
+  have hcorner_ne : (⟨P, hPmem⟩ : cornerSubmodule P) ≠ 0 := by
+    intro hzero
+    apply hPne
+    have hval := congrArg Subtype.val hzero
+    simpa using hval
+  -- Any norm-1 eigenvalue of the restriction lifts to a peripheral eigenvalue of `T`.
+  have huniq : ∀ μ : ℂ,
+      Module.End.HasEigenvalue (cornerRestriction P T hInv) μ →
+      ‖μ‖ = 1 → μ = 1 := by
+    intro μ hμeig hμnorm
+    rcases hμeig.exists_hasEigenvector with ⟨X, hX⟩
+    have hX_mem : X ∈ Module.End.eigenspace (cornerRestriction P T hInv) μ :=
+      (Module.End.hasEigenvector_iff.mp hX).1
+    have hX_ne : X ≠ 0 := (Module.End.hasEigenvector_iff.mp hX).2
+    have hX_eq : cornerRestriction P T hInv X = μ • X :=
+      (Module.End.mem_eigenspace_iff).1 hX_mem
+    have hX_eq_val : T X.1 = μ • X.1 := congrArg Subtype.val hX_eq
+    have hX_ne_ambient : X.1 ≠ 0 := by
+      intro h0
+      apply hX_ne
+      apply Subtype.ext
+      simpa using h0
+    have hX_eig_ambient : Module.End.HasEigenvalue T μ :=
+      hasEigenvalue_of_eigenvector_eq T μ X.1 hX_eq_val hX_ne_ambient
+    have hμ_ambient : μ ∈ peripheralEigenvalues T := ⟨hX_eig_ambient, hμnorm⟩
+    rw [hPrim] at hμ_ambient
+    exact hμ_ambient
+  exact isPrimitive_of_unique_norm_one
+    (cornerRestriction P T hInv) ⟨P, hPmem⟩ hcorner_fix hcorner_ne huniq
 
 section PrimitivityOfSectors
 
@@ -196,52 +253,9 @@ theorem isPrimitive_restriction_of_cyclic_decomp
   have hPk_fix : ∀ k : Fin m, (T ^ m) (P k) = P k := by
     intro k
     simpa using hcyclic_pow m k
-  have hPk_corner : ∀ k : Fin m, P k ∈ cornerSubmodule (P k) := by
-    intro k
-    change P k * P k * P k = P k
-    rw [Matrix.mul_assoc, (hPproj k).2, (hPproj k).2]
-  have hcorner_fix : ∀ k : Fin m,
-      cornerRestriction (P k) (T ^ m) (hInv k) ⟨P k, hPk_corner k⟩ = ⟨P k, hPk_corner k⟩ := by
-    intro k
-    apply Subtype.ext
-    change (T ^ m) (P k) = P k
-    exact hPk_fix k
-  have hcorner_ne : ∀ k : Fin m, (⟨P k, hPk_corner k⟩ : cornerSubmodule (P k)) ≠ 0 := by
-    intro k hzero
-    apply hPne k
-    have hval := congrArg Subtype.val hzero
-    simpa using hval
-  have huniq : ∀ k : Fin m, ∀ μ : ℂ,
-      Module.End.HasEigenvalue (cornerRestriction (P k) (T ^ m) (hInv k)) μ →
-      ‖μ‖ = 1 → μ = 1 := by
-    intro k μ hμeig hμnorm
-    rcases hμeig.exists_hasEigenvector with ⟨X, hX⟩
-    have hX_mem : X ∈ Module.End.eigenspace (cornerRestriction (P k) (T ^ m) (hInv k)) μ :=
-      (Module.End.hasEigenvector_iff.mp hX).1
-    have hX_ne : X ≠ 0 := (Module.End.hasEigenvector_iff.mp hX).2
-    have hX_eq : cornerRestriction (P k) (T ^ m) (hInv k) X = μ • X :=
-      (Module.End.mem_eigenspace_iff).1 hX_mem
-    have hX_eq_val : (T ^ m) X.1 = μ • X.1 := congrArg Subtype.val hX_eq
-    have hX_mem_ambient : X.1 ∈ Module.End.eigenspace (T ^ m) μ :=
-      (Module.End.mem_eigenspace_iff).2 hX_eq_val
-    have hX_ne_ambient : X.1 ≠ 0 := by
-      intro h0
-      apply hX_ne
-      apply Subtype.ext
-      simpa using h0
-    have hX_eig_ambient : Module.End.HasEigenvector (T ^ m) μ X.1 :=
-      (Module.End.hasEigenvector_iff).2 ⟨hX_mem_ambient, hX_ne_ambient⟩
-    have hμ_ambient : μ ∈ peripheralEigenvalues (T ^ m) :=
-      ⟨Module.End.hasEigenvalue_of_hasEigenvector hX_eig_ambient, hμnorm⟩
-    rw [hperiph_pow] at hμ_ambient
-    exact hμ_ambient
   intro k
-  exact isPrimitive_of_unique_norm_one
-    (cornerRestriction (P k) (T ^ m) (hInv k))
-    ⟨P k, hPk_corner k⟩
-    (hcorner_fix k)
-    (hcorner_ne k)
-    (huniq k)
+  exact isPrimitive_cornerRestriction_of_isPrimitive
+    (P k) (T ^ m) (hInv k) (hPproj k).2 (hPk_fix k) (hPne k) hperiph_pow
 
 section PermutationBlockStructure
 
