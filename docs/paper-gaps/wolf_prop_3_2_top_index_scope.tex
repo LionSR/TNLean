@@ -1,0 +1,94 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Top-index scope of the spectral n-positivity criterion (Wolf Prop.~3.2)}
+\author{}
+\date{2026-06-24}
+
+\begin{document}
+\maketitle
+
+\section{Source statement}
+
+Proposition~3.2 of Wolf's \emph{Quantum Channels \& Operations}
+(\path{Notes/WolfNoteTexSource/ch03_positive_not_completely.tex}, lines
+153--179) bounds the expectation of a Hermitian operator
+$\tau\in\mathcal{M}_{D'}\otimes\mathcal{M}_{D}$ in vectors of fixed Schmidt
+rank. Writing $\tau=\sum_i\nu_i|\phi_i\rangle\langle\phi_i|$ with normalized
+eigenvectors, $\rho_i=\tr_2|\phi_i\rangle\langle\phi_i|$ the reduced density on
+the first factor $\mathbb{C}^{D'}$, $\nu_0$ the smallest positive eigenvalue and
+$\nu$ the largest one, the infimum over normalized vectors $\psi$ of Schmidt
+rank $n$ obeys
+\begin{align}
+  \inf_{\psi}\langle\psi|\tau|\psi\rangle
+  &\ge \nu_0 + \sum_{i:\nu_i\le 0}(\nu_i-\nu_0)\,\|\rho_i\|_{(n)},
+  \tag{3.7}
+\end{align}
+and, when a single eigenvalue $\nu_-$ is non-positive,
+\begin{align}
+  \inf_{\psi}\langle\psi|\tau|\psi\rangle
+  &\le \nu + (\nu_- - \nu)\,\|\rho_-\|_{(n)}.
+  \tag{3.8}
+\end{align}
+Each $\rho_i$ acts on the first factor $\mathbb{C}^{D'}$, so its Ky-Fan
+$n$-norm $\|\rho_i\|_{(n)}$ is meaningful for $1\le n\le D'$. The Schmidt rank
+$n$ ranges over $1\le n\le D'$, so the top value $n=D'$ is within the source's
+scope.
+
+\section{Formalized statement}
+
+The formal theorems\footnote{Formal declarations:
+    \leanid{Matrix.IsHermitian.spectral_lower_bound} and
+    \leanid{Matrix.IsHermitian.exists_le_spectral_upper_bound} in
+    \doclink{TNLean/Channel/NPositivitySpectralCriterion}.}
+establish these bounds in the per-vector form: every normalized vector $\psi$ of
+Schmidt rank at most $n$ satisfies the lower bound~(3.7), and some such $\psi$
+realizes the upper bound~(3.8). The hypotheses are $1\le n$ and $n<D'$.
+
+\section{The gap}
+
+The formalization omits the top index $n=D'$. At $n=D'$ the Schmidt-rank
+constraint is vacuous: every normalized vector qualifies, $\|\rho_i\|_{(D')}
+=\tr\rho_i=1$, and both bounds collapse to the elementary estimate
+$\nu_{\min}\le\langle\psi|\tau|\psi\rangle\le\nu_{\max}$.
+
+The restriction is inherited from the maximal-overlap lemma,\footnote{Formal
+    declaration: \leanid{Matrix.maximalSchmidtOverlap_eq_kyFanNorm}; its own
+    top-index gap is recorded in
+    \path{docs/paper-gaps/wolf_lemma_3_1_top_index_scope.tex}.} which supplies
+the per-eigenvector overlap bound
+$|\langle\phi_i|\psi\rangle|^2\le\|\rho_i\|_{(n)}$ only for $n<D'$, because the
+underlying Ky-Fan maximum principle\footnote{Formal declaration:
+    \leanid{Matrix.IsHermitian.kyFanNorm_eq_sup_trace}.} is stated for
+rank-exactly-$n$ orthogonal projections with $n<D'$.
+
+\section{Elimination plan}
+
+Extend the maximal-overlap lemma to the top index $n=D'$ (its own elimination
+plan adds the $n=D'$ case to the Ky-Fan maximum principle, where the maximizing
+projection is the identity). The spectral bounds then extend to $1\le n\le D'$
+by feeding that case into the same per-eigenvector overlap step; the algebraic
+cores\footnote{Formal declarations:
+    \leanid{Matrix.IsHermitian.spectral_lower_bound_core} and
+    \leanid{Matrix.IsHermitian.spectral_upper_bound_core}.} are already
+index-agnostic.
+
+\section{Classification}
+
+\emph{Scope restriction.} The formal theorems prove the source bounds~(3.7)
+and~(3.8) for Schmidt ranks $1\le n<D'$, a special case of the source's full
+range $1\le n\le D'$. The conclusions match the source on that range; only the
+top index $n=D'$ is omitted, and there the bounds degenerate to the trivial
+spectral estimate. No hypothesis foreign to the source is used, so the
+deviation is a scope restriction rather than an unfaithful theorem.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
