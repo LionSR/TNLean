@@ -301,11 +301,64 @@ maps.
     normalization.)
 \end{proof}
 
+\begin{definition}[Reduced density of an eigenvector]
+    \label{def:reduced_eig_density}
+    \lean{Matrix.IsHermitian.reducedEigDensity}
+    \leanok
+    Let $\tau$ be a Hermitian operator on $\C^{D'}\otimes\C^{D}$ with normalized
+    eigenvectors $\phi_i$. The reduced density operator of the $i$-th eigenvector
+    on the first factor is
+    \[
+        \rho_i = \tr_2 |\phi_i\rangle\langle\phi_i| .
+    \]
+    Writing $C_i$ for the coefficient matrix of $\phi_i$, one has
+    $\rho_i = C_i C_i^\dagger$, so $\rho_i$ is positive semidefinite.
+\end{definition}
+
+\begin{lemma}[Eigenbasis Rayleigh expansion]
+    \label{lem:eigenbasis_rayleigh}
+    \lean{Matrix.IsHermitian.rayleigh_re}
+    \leanok
+    For a Hermitian operator $\tau$ with eigenvalues $\nu_i$ and normalized
+    eigenvectors $\phi_i$, the expectation in a vector $\psi$ expands as
+    \[
+        \bra{\psi}\tau\ket{\psi}
+            = \sum_i \nu_i\,|\braket{\phi_i}{\psi}|^2 .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Diagonalizing $\tau=U\,\diag(\nu_i)\,U^\dagger$ with $U$ the unitary of
+    eigenvectors, the change of variable $y=U^\dagger\psi$ gives
+    $\bra{\psi}\tau\ket{\psi}=\sum_i\nu_i\,|y_i|^2$, and $y_i=\braket{\phi_i}{\psi}$
+    is the $i$-th eigenvector overlap.
+\end{proof}
+
+\begin{lemma}[Eigenbasis Parseval identity]
+    \label{lem:eigenbasis_parseval}
+    \lean{Matrix.IsHermitian.sum_normSq_eigvec_overlap_re}
+    \leanok
+    For a Hermitian operator $\tau$ with normalized eigenvectors $\phi_i$, the
+    eigenvector overlaps recover the squared norm of $\psi$:
+    \[
+        \sum_i |\braket{\phi_i}{\psi}|^2 = \|\psi\|^2 .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The eigenvectors form an orthonormal basis, so with $y=U^\dagger\psi$ one has
+    $\sum_i|\braket{\phi_i}{\psi}|^2=\sum_i|y_i|^2=\|y\|^2=\|\psi\|^2$, the last
+    equality because $U$ is unitary.
+\end{proof}
+
 \begin{theorem}[Spectral lower bound for the Schmidt-rank expectation]
     \label{thm:spectral_lower_bound_schmidt_rank}
     \lean{Matrix.IsHermitian.spectral_lower_bound}
     \leanok
-    \uses{def:schmidt_rank, def:ky_fan_norm, thm:maximal_overlap_schmidt_rank}
+    \uses{def:schmidt_rank, def:ky_fan_norm, def:reduced_eig_density,
+        thm:maximal_overlap_schmidt_rank}
     Let $\tau$ be a Hermitian operator on $\C^{D'}\otimes\C^{D}$ with eigenvalues
     $\nu_i$ and normalized eigenvectors $\phi_i$, and write
     $\rho_i=\tr_2|\phi_i\rangle\langle\phi_i|$ for the reduced density operator of
@@ -324,7 +377,8 @@ maps.
 
 \begin{proof}
     \leanok
-    \uses{thm:maximal_overlap_schmidt_rank}
+    \uses{lem:eigenbasis_rayleigh, lem:eigenbasis_parseval,
+        thm:maximal_overlap_schmidt_rank}
     In the eigenbasis the expectation expands as
     $\bra{\psi}\tau\ket{\psi}=\sum_i\nu_i\,|\braket{\phi_i}{\psi}|^2$, while
     Parseval's identity gives $\sum_i|\braket{\phi_i}{\psi}|^2=\|\psi\|^2=1$.
@@ -345,7 +399,8 @@ maps.
     \label{thm:spectral_upper_bound_schmidt_rank}
     \lean{Matrix.IsHermitian.exists_le_spectral_upper_bound}
     \leanok
-    \uses{def:schmidt_rank, def:ky_fan_norm, thm:maximal_overlap_schmidt_rank}
+    \uses{def:schmidt_rank, def:ky_fan_norm, def:reduced_eig_density,
+        thm:maximal_overlap_schmidt_rank}
     With $\tau$, $\phi_i$ and $\rho_i$ as above, let $1\le n<D'$ and suppose every
     eigenvalue of $\tau$ is at most $\nu$. For any eigenvector index $j$ there is a
     normalized vector $\psi$ of Schmidt rank at most $n$ with
@@ -363,7 +418,8 @@ maps.
 
 \begin{proof}
     \leanok
-    \uses{thm:maximal_overlap_schmidt_rank}
+    \uses{lem:eigenbasis_rayleigh, lem:eigenbasis_parseval,
+        thm:maximal_overlap_schmidt_rank}
     Replacing $\nu_0$ by $\nu$ in the eigenbasis expansion of the previous proof,
     \[
         \bra{\psi}\tau\ket{\psi}
