@@ -452,6 +452,59 @@ finite-dimensional quantum systems.
     $\operatorname{tr}\tau = 1$, the right-hand side is $D(\rho\Vert\sigma)$.
 \end{proof}
 
+\begin{lemma}[Root-of-unity character-sum orthogonality]
+    \label{lem:root_of_unity_orthogonality}
+    \lean{Matrix.sum_rootOfUnity_pow_eq}
+    \leanok
+    Let $\zeta$ be a primitive $d$-th root of unity and let $i, j$ range over the
+    residues modulo $d$. Then
+    \[
+        \sum_{b=0}^{d-1} \zeta^{b\,i}\,\overline{\zeta^{b\,j}}
+            = \begin{cases} d & i = j, \\ 0 & i \ne j. \end{cases}
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Each summand equals $\xi^{b}$ with
+    $\xi = \zeta^{i}\,\overline{\zeta}^{\,j}$, and $\xi^{d} = 1$. When $i = j$ the
+    base $\xi$ equals $1$ and the sum is $d$. When $i \ne j$ the base is a root of
+    unity different from $1$, so the geometric sum
+    $(\xi - 1)\sum_{b} \xi^{b} = \xi^{d} - 1 = 0$ forces the sum to vanish; the
+    equivalence $\xi = 1 \iff i = j$ uses that $\overline{\zeta} = \zeta^{-1}$ and
+    the injectivity of $b \mapsto \zeta^{b}$ on residues.
+\end{proof}
+
+\begin{theorem}[Weyl-operator unitary 1-design twirl]
+    \label{thm:weyl_twirl}
+    \lean{Matrix.sum_weyl_conj}
+    \leanok
+    \uses{lem:root_of_unity_orthogonality}
+    Fix a dimension $d \ge 1$ and a primitive $d$-th root of unity $\zeta$, and
+    let $X$ be the cyclic shift $\lvert i\rangle \mapsto \lvert i+1\rangle$ and
+    $Z = \operatorname{diag}(\zeta^0,\dots,\zeta^{d-1})$ the clock operator. For
+    every matrix $M$ on $\mathbb{C}^d$, the uniform average of the conjugations
+    by the $d^2$ Weyl operators $W(a,b) = X^a Z^b$ is the completely depolarizing
+    channel:
+    \[
+        \frac{1}{d^2} \sum_{a,b=0}^{d-1} W(a,b)\,M\,W(a,b)^{\dagger}
+            = \frac{\operatorname{tr} M}{d}\,\mathbf 1.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:root_of_unity_orthogonality}
+    The double average factors into a clock average followed by a shift average.
+    The clock average $\sum_{b} Z^{b} M (Z^{b})^{\dagger}$ multiplies the entry
+    $M_{ij}$ by $\sum_{b} \zeta^{b\,i}\,\overline{\zeta^{b\,j}}$, which by
+    Lemma~\ref{lem:root_of_unity_orthogonality} is $d$ when $i = j$ and $0$
+    otherwise; the result is $d$ times the diagonal part of $M$. The shift
+    average $\sum_{a} X^{a} (\operatorname{diagonal} v) (X^{a})^{\dagger}$
+    cyclically permutes the diagonal entries, so each diagonal position receives
+    the full sum $\sum_{k} v_k = \operatorname{tr} M$, giving
+    $(\operatorname{tr} M)\,\mathbf 1$. Combining the two factors of $d$ with the
+    prefactor $d^{-2}$ leaves $(\operatorname{tr} M / d)\,\mathbf 1$.
+\end{proof}
+
 \begin{theorem}[Entropy is invariant under reindexing]
     \label{thm:entropy_submatrix_equiv}
     \lean{vonNeumannEntropy_submatrix_equiv}
