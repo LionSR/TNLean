@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.HermitianHelpers
+import TNLean.Algebra.TracePairing
 import TNLean.Channel.Basic
 import TNLean.Channel.ChoiJamiolkowski
 
@@ -17,6 +18,8 @@ This file records elementary positive maps from Wolf Chapter 3.
 * `Matrix.reductionMap`: the reduction map
   \(X \mapsto \operatorname{tr}(X) I - k^{-1}X\).
 * `Matrix.reductionMap_one_isPositiveMap`: the case \(k=1\) is positive.
+* `Matrix.traceAdjointMap_reductionMap`: the reduction map is self-dual for
+  the trace pairing.
 * `ChoiJamiolkowski.choiMatrix_reductionMap`: Choi matrix of the reduction map.
 
 ## References
@@ -58,6 +61,29 @@ theorem reductionMap_one_isPositiveMap {D : ℕ} [NeZero D] :
   intro X hX
   simpa [reductionMap] using
     (Matrix.PosSemidef.trace_smul_one_sub_self_posSemidef hX)
+
+/-- **Wolf Chapter 3, Example 3.1, equation (3.18).** The reduction map is
+self-dual for the bilinear trace pairing:
+\[
+  \operatorname{tr}(T_k(\rho)X)=\operatorname{tr}(\rho T_k(X)).
+\]
+-/
+theorem traceAdjointMap_reductionMap (D k : ℕ) :
+    Matrix.traceAdjointMap (reductionMap D k) = reductionMap D k := by
+  classical
+  apply LinearMap.ext
+  intro ρ
+  refine sub_eq_zero.mp ((Matrix.trace_mul_right_eq_zero_iff
+    (M := Matrix.traceAdjointMap (reductionMap D k) ρ - reductionMap D k ρ)).1 ?_)
+  intro X
+  rw [Matrix.sub_mul, Matrix.trace_sub]
+  have hleft :
+      Matrix.trace (Matrix.traceAdjointMap (reductionMap D k) ρ * X) =
+        Matrix.trace (ρ * reductionMap D k X) :=
+    Matrix.trace_traceAdjointMap_mul (reductionMap D k) ρ X
+  rw [hleft, sub_eq_zero]
+  simp [reductionMap, Matrix.mul_sub, Matrix.sub_mul, Matrix.trace_sub,
+    Matrix.trace_smul, mul_comm]
 
 end Matrix
 
