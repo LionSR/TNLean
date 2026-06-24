@@ -267,10 +267,22 @@ in place. Concretely:
     operators $W(a,b) = X^a Z^b$ equals the completely depolarizing channel
     $M \mapsto (\tr M / d)\,\mathbf 1$, via the root-of-unity character-sum
     orthogonality (\leanid{Matrix.sum_rootOfUnity_pow_eq}). This result depends
-    only on the standard Lean axioms and needs no Lieb input. The remaining
-    layer-(5) work is to present $\tr_C$ through this average, applied on $C$ after
-    appending the maximally mixed ancilla, and so derive the partial-trace
-    monotonicity of $D$.
+    only on the standard Lean axioms and needs no Lieb input. Lifting that
+    design property to the ancilla factor presents $\tr_C$ through the average:
+    \leanid{Matrix.sum_kronecker_one_weyl_conj} in
+    \doclink{TNLean/Channel/Schwarz/RelativeEntropyDataProcessing}
+    (\path{TNLean/Channel/Schwarz/RelativeEntropyDataProcessing.lean}) proves that
+    the uniform average of the conjugations by the $d_C^2$ unitaries
+    $\mathbf 1_S \otimes W(a,b)$ equals $(\tr_C M)\otimes(\mathbf 1_C/d_C)$. With
+    all three ingredients in place, layer (5) is now formalized on the
+    positive-definite domain: \leanid{quantumRelativeEntropy_partialTraceRight_le}
+    in the same file proves
+    $D(\tr_C\rho\,\|\,\tr_C\sigma)\le D(\rho\,\|\,\sigma)$ for positive definite
+    $\rho,\sigma$, via the ancilla-additivity expansion of the reduced-state
+    relative entropy, the twirling identity, joint convexity over the $d_C^2$
+    equally weighted conjugated pairs, and unitary invariance of each term. The
+    transport of joint convexity to the product index uses the reindexing
+    invariance \leanid{quantumRelativeEntropy_submatrix_equiv}.
   \item Layer (6) instantiates layer (5) at the tripartite splitting to
     recover~\eqref{eq:ssa}; it additionally needs the marginal support
     lemma~\eqref{eq:marginal-support}, which puts the singular reference state
@@ -290,22 +302,23 @@ in place. Concretely:
     layer-(6) work is the instantiation, which is gated on layer (5).
 \end{itemize}
 
-\paragraph{Current formal status.} Layers (1)--(4) and the layer-(6) marginal
-support prerequisite are formalized; layer (4) on the positive-definite domain
-(\leanid{convexOn_quantumRelativeEntropy}). Layer (5), data-processing
-(monotonicity of $D$ under the partial trace), is partly formalized. It combines
-the layer-(4) joint convexity with unitary invariance and ancilla-additivity
-$D(\rho\otimes\tau\,\|\,\sigma\otimes\tau) = D(\rho\,\|\,\sigma)$ via the
-twirling representation of $\tr_C$. Joint convexity (layer 4, on the
-positive-definite domain), unitary invariance
+\paragraph{Current formal status.} Layers (1)--(5) and the layer-(6) marginal
+support prerequisite are formalized; layers (4) and (5) on the positive-definite
+domain. Layer (5), data-processing (monotonicity of $D$ under the partial trace),
+combines the layer-(4) joint convexity with unitary invariance and
+ancilla-additivity $D(\rho\otimes\tau\,\|\,\sigma\otimes\tau) =
+D(\rho\,\|\,\sigma)$ via the twirling representation of $\tr_C$. Joint convexity
+(layer 4, on the positive-definite domain), unitary invariance
 (\leanid{quantumRelativeEntropy_conj_unitary}, for arbitrary Hermitian
 arguments), ancilla-additivity
-(\leanid{quantumRelativeEntropy_kronecker}, on the positive-definite domain), and
-the finite Heisenberg--Weyl $1$-design twirl
-(\leanid{Matrix.sum_weyl_conj}) are formalized; presenting $\tr_C$ through that
-twirl, and so the partial-trace monotonicity of $D$, remains open. Until that
-representation and the layer-(6) instantiation are in place the standalone axiom
-\leanid{strong_subadditivity} stands.
+(\leanid{quantumRelativeEntropy_kronecker}, on the positive-definite domain), the
+finite Heisenberg--Weyl $1$-design twirl (\leanid{Matrix.sum_weyl_conj}), and its
+ancilla-factor lift presenting $\tr_C$ through the twirl
+(\leanid{Matrix.sum_kronecker_one_weyl_conj}) are formalized, and combine into the
+partial-trace monotonicity
+\leanid{quantumRelativeEntropy_partialTraceRight_le} on the positive-definite
+domain. Only the layer-(6) instantiation remains; until it is in place the
+standalone axiom \leanid{strong_subadditivity} stands.
 
 After layer (6) the inequality is a theorem, the standalone axiom is removed, and
 the only remaining entropy-side axiom on this route is the Lieb-concavity axiom.
@@ -327,16 +340,17 @@ assembly at the tripartite splitting. Layers (2) and (3) are formalized (the
 latter for full-rank $\sigma$), and layer (4) is formalized on the
 positive-definite domain (\leanid{convexOn_quantumRelativeEntropy}), so the
 Lieb-concavity axiom is now connected to the joint convexity of the relative
-entropy. The unitary-invariance ingredient of layer (5) is formalized for
-arbitrary Hermitian arguments (\leanid{quantumRelativeEntropy_conj_unitary}), the
-ancilla-additivity ingredient is formalized on the positive-definite domain
-(\leanid{quantumRelativeEntropy_kronecker}), and the finite Heisenberg--Weyl
-$1$-design twirl is formalized (\leanid{Matrix.sum_weyl_conj}). The remaining work
-is the singular-$\sigma$ extension of layers (3) and (4), presenting $\tr_C$
-through the $1$-design twirl to obtain the partial-trace monotonicity of layer
-(5), and the assembly layer (6); until those are formalized, the standalone axiom
-records a result the development assumes but does not yet derive from its
-operator-convexity input.
+entropy. Layer (5), data-processing, is formalized on the positive-definite
+domain (\leanid{quantumRelativeEntropy_partialTraceRight_le}): its unitary
+invariance (\leanid{quantumRelativeEntropy_conj_unitary}), ancilla additivity
+(\leanid{quantumRelativeEntropy_kronecker}), finite Heisenberg--Weyl $1$-design
+twirl (\leanid{Matrix.sum_weyl_conj}), and the ancilla-factor lift presenting
+$\tr_C$ through the twirl (\leanid{Matrix.sum_kronecker_one_weyl_conj}) combine
+through joint convexity into the partial-trace monotonicity
+$D(\tr_C\rho\,\|\,\tr_C\sigma)\le D(\rho\,\|\,\sigma)$. The remaining work is the
+singular-$\sigma$ extension of layers (3)--(5) and the instantiation layer (6);
+until those are formalized, the standalone axiom records a result the development
+assumes but does not yet derive from its operator-convexity input.
 
 \begin{thebibliography}{9}
 
