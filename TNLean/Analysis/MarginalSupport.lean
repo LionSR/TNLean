@@ -12,7 +12,7 @@ import TNLean.Analysis.KleinInequality
 
 This file proves the **marginal support lemma**, a positive-semidefinite fact
 used to place the singular reference state $(\mathbf 1_A / d_A) \otimes \rho_{BC}$
-into the domain of the quantum relative entropy when assembling strong
+into the domain of the quantum relative entropy when deriving strong
 subadditivity from data-processing.
 
 The mathematical content is: for a positive semidefinite tripartite matrix
@@ -40,11 +40,11 @@ $A$, annihilates the full state.
 ## Proof outline
 
 For the core lemma write $\rho = R R$ with $R = \sqrt\rho$ the positive
-semidefinite square root, obtained from the Hermitian functional calculus
-`Real.sqrt`. Then $Q R$ is the Hermitian conjugate of $R Q$, and trace
+semidefinite square root, obtained from the Hermitian functional calculus of
+the real square root. Then $Q R$ is the Hermitian conjugate of $R Q$, and trace
 cyclicity together with $Q Q = Q$ rewrites the hypothesis as
-$\operatorname{tr}((Q R)^\dagger (Q R)) = 0$, which forces $Q R = 0$ by
-`Matrix.trace_conjTranspose_mul_self_eq_zero_iff`; hence
+$\operatorname{tr}((Q R)^\dagger (Q R)) = 0$, which forces $Q R = 0$ because the
+trace of $M^\dagger M$ vanishes only when $M = 0$; hence
 $Q \rho = (Q R) R = 0$.
 
 For the marginal support lemma the lift identity reduces the trace
@@ -54,7 +54,7 @@ annihilates the marginal, so the core lemma applies to the lifted projection.
 
 ## References
 
-* Layer 6 (final assembly) of the relative-entropy elimination route for strong
+* Layer 6 (instantiation) of the relative-entropy elimination route for strong
   subadditivity, `docs/paper-gaps/cpsv16_ssa_from_lieb_route.tex`, the marginal
   support lemma there.
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 8
@@ -259,7 +259,7 @@ In particular, taking $Q$ the projection onto $\ker \rho_{BC}$ gives
 $\mathcal H_A \otimes \ker \rho_{BC} \subseteq \ker \rho_{ABC}$, the
 kernel-containment used to place the singular reference state
 $(\mathbf 1_A / d_A) \otimes \rho_{BC}$ in the domain of the relative entropy at
-the final assembly step of `docs/paper-gaps/cpsv16_ssa_from_lieb_route.tex`. -/
+layer (6) of `docs/paper-gaps/cpsv16_ssa_from_lieb_route.tex`. -/
 theorem marginal_support
     {ρ : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ}
     (hρ : ρ.PosSemidef)
