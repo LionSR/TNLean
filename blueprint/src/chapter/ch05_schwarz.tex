@@ -1445,6 +1445,114 @@ adjacent cones.
     since $\eta=k\ge k$, but not $(k+1)$-positive, since $\eta=k<k+1$.
 \end{proof}
 
+\subsection{The reduction criterion}
+
+The reduction map and the family $T_\eta$ are the same map under two
+parametrizations: the natural-number parameter $k$ and the real parameter
+$\eta$ agree at $\eta=k$.  Identifying them lets the positivity threshold and
+the Choi formula carry over to the reduction map without restating them.  Wolf
+attaches to this map the entanglement witness
+$W_n=D^{-1}\Id-n^{-1}\ket{\Omega}\bra{\Omega}$ and the operator inequality
+\cite[Equation~(3.18)]{Wolf2012Quantum} that constrains the reduced densities
+of a bipartite state whose Schmidt number is at most $n$.
+
+\begin{theorem}[The reduction map is the family $T_\eta$ at integer parameter]
+    \label{thm:reduction_map_eq_t_eta}
+    \lean{Matrix.reductionMap_eq_tEta}
+    \leanok
+    \uses{def:reduction_map, def:t_eta}
+    For every $k\in\N$ the reduction map $T_k$ equals the family map $T_\eta$ at
+    $\eta=k$:
+    \[
+        T_k=T_{\eta=k}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The two maps differ only in the scalar coefficient of $X$, namely $k^{-1}$
+    against $\eta^{-1}$ at $\eta=k$.  The natural-number and real casts of $k$
+    into the complex scalars coincide, so the coefficients agree and the maps
+    are equal.
+\end{proof}
+
+\begin{definition}[Reduction witness]
+    \label{def:reduction_witness}
+    \lean{Matrix.reductionWitness}
+    \leanok
+    The reduction witness on $\MN{D}\otimes\MN{D}$, for $n\in\N$, is
+    \[
+        W_n=D^{-1}\Id-n^{-1}\ket{\Omega}\bra{\Omega}.
+    \]
+\end{definition}
+
+\begin{theorem}[The Choi matrix of the reduction map is the witness]
+    \label{thm:choi_matrix_reduction_witness}
+    \lean{ChoiJamiolkowski.choiMatrix_reductionMap_eq_reductionWitness}
+    \leanok
+    \uses{def:reduction_map, def:reduction_witness, thm:reduction_map_eq_t_eta,
+        thm:choi_matrix_t_eta}
+    For $D\ge 1$ the Choi matrix of $T_n$ is the reduction witness:
+    \[
+        \tau(T_n)=W_n=D^{-1}\Id-n^{-1}\ket{\Omega}\bra{\Omega}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The reduction map is $T_\eta$ at $\eta=n$, whose Choi matrix is
+    $D^{-1}\Id-n^{-1}\ket{\Omega}\bra{\Omega}$, which is exactly $W_n$.
+\end{proof}
+
+\begin{theorem}[Reduction-criterion identity]
+    \label{thm:tensor_map_id_t_eta}
+    \lean{Matrix.tensorMapId_tEta_eq}
+    \leanok
+    \uses{def:t_eta}
+    Applying $T_\eta$ to the first factor of a bipartite matrix $\rho$ gives
+    \[
+        (T_\eta\otimes\id)(\rho)=\Id\otimes\rho_2-\eta^{-1}\rho,
+    \]
+    where $\rho_2$ is the reduced density of $\rho$ on the second factor.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The $(i_2,j_2)$ slice of $\rho$ on the first factor has trace equal to the
+    $(i_2,j_2)$ entry of $\rho_2$.  Applying $T_\eta$ to each slice replaces the
+    trace term by that entry times the identity on the first factor, which is
+    the $\Id\otimes\rho_2$ term, and the second term is $\eta^{-1}\rho$.
+\end{proof}
+
+\begin{theorem}[Reduction criterion]
+    \label{thm:reduction_criterion}
+    \lean{Matrix.reductionCriterion_left, Matrix.reductionCriterion_right}
+    \leanok
+    \uses{def:t_eta, thm:tensor_map_id_t_eta}
+    Let $n\ge 1$ and let $\rho$ be a bipartite matrix.  If
+    $(T_n\otimes\id)(\rho)\ge 0$ then
+    \[
+        n\,\Id\otimes\rho_2\ge\rho,
+    \]
+    and if $(\id\otimes T_n)(\rho)\ge 0$ then
+    \[
+        n\,\rho_1\otimes\Id\ge\rho,
+    \]
+    where $\rho_1$ and $\rho_2$ are the reduced densities of $\rho$ on the first
+    and second factors.  This is the operator inequality
+    \cite[Equation~(3.18)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By the reduction-criterion identity, $(T_n\otimes\id)(\rho)$ equals
+    $\Id\otimes\rho_2-n^{-1}\rho$.  Scaling a positive semidefinite operator by
+    $n>0$ preserves positivity, so $n\,\Id\otimes\rho_2-\rho\ge 0$, which is the
+    first inequality.  The second follows by swapping the two factors, applying
+    the first form, and swapping back, since positivity and the order are
+    invariant under the simultaneous factor swap.
+\end{proof}
+
 \begin{theorem}[Completely positive implies two-positive]
     \lean{IsCPMap.is2PositiveMap}
     \leanok
