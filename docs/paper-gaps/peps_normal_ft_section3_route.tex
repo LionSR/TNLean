@@ -2636,11 +2636,19 @@ Feeding the bridges into the closed-chain corollary and unpacking the
 per-edge gauges yields the matrix form
 (\path{fundamentalTheorem_normalMPS}, blueprint
 \path{cor:fundamentalTheorem_normalMPS}): two $L$-block-injective matrix
-tensors on $n \ge 3L$ sites whose matrix product vectors agree at size $n$
-are related by invertible per-bond matrices $Z_v$ with
-$B^i = Z_v^{-1} A^i Z_{v+1}$, and two such families differ by a single
-constant (\path{fundamentalTheorem_normalMPS_gauge_unique}, blueprint
-\path{cor:fundamentalTheorem_normalMPS_gauge_unique}).  The unpacking
+tensors whose matrix product vectors agree at size $n$ are related by
+invertible per-bond matrices $Z_v$ with $B^i = Z_v^{-1} A^i Z_{v+1}$, and
+two such families differ by a single constant
+(\path{fundamentalTheorem_normalMPS_gauge_unique}, blueprint
+\path{cor:fundamentalTheorem_normalMPS_gauge_unique}).  The existence
+clause now carries the optimal $n \ge 2L + 1$ of the source's alternative
+proof: \path{fundamentalTheorem_normalMPS} delegates to the
+overlapping-window corollary \path{fundamentalTheorem_normalMPS_of_overlap}
+(documented in the section ``The strengthening to $n \ge 2L+1$ via
+overlapping windows'' below).  The uniqueness clause keeps the $n \ge 3L$
+of the graph-level per-edge route it invokes; lowering it to $n \ge 2L + 1$
+is the remaining follow-up for the closed-chain corollary, the source's
+uniqueness needing no system size.  The unpacking
 meets the same seam convention as on the torus: the ordered-edge normal
 form stores the wraparound edge with its endpoints swapped, so the per-bond
 gauge is the transpose of the per-edge matrix away from the seam and its
@@ -2659,9 +2667,10 @@ counterexample-backed positivity corrections of the graph-level corollary
 are discharged rather than assumed.  The statements specialize the source's
 site-dependent families to one repeated tensor; the source's
 translation-invariant corollary (lines 1624--1661: a single gauge $Z$ and a
-constant $\lambda$ with $\lambda^n = 1$) remains the follow-up refinement,
-as does the strengthening to $n \ge 2L + 1$ (line 1623, proved in the
-source's Section \path{normal_alt}).
+constant $\lambda$ with $\lambda^n = 1$) is delivered in single-gauge form
+in the next section, and the strengthening of the existence clause to
+$n \ge 2L + 1$ (line 1623, proved in the source's Section
+\path{normal_alt}) is now in place via the overlapping-window route below.
 
 \section*{The translation-invariant corollary in single-gauge form}
 
@@ -2673,43 +2682,22 @@ constant) is now delivered
 \path{fundamentalTheorem_normalMPS_translationInvariant_gauge_unique},
 blueprint \path{cor:fundamentalTheorem_normalMPS_translationInvariant},
 \path{cor:fundamentalTheorem_normalMPS_translationInvariant_gauge_unique}).
-The route is a matrix-level collapse of the per-bond family of
-\path{fundamentalTheorem_normalMPS}, with no further graph-level input.
-Iterating the per-bond relation $B^i = Z_v^{-1} A^i Z_{v+1}$ along a word
-conjugates the word products of $B$ by the gauges at the two ends of the
-word (\path{evalWord_eq_conj_of_gaugeFamily}); comparing the iterations
-from starting sites $v$ and $v+1$ over the spanning length-$L$ word
-products of $A$ and pinning the bond transports with the empty word shows
-that conjugation by $Z_v$ and by $Z_{v+1}$ agree on the full matrix
-algebra, so consecutive gauges are proportional by the centralizer step
-(\path{gaugeFamily_succ_proportional}, through the per-edge scalar lemma
-\path{gl_conj_unique_scalar}).  The same-state relation pins consecutive
-scalars against the nonzero tensor $B$, and one circuit of the closed chain
-returns to the starting bond, forcing $\lambda^n = 1$.  The uniqueness
-clause needs no system size at all: two single-gauge realizations, iterated
-along the spanning words (\path{evalWord_eq_smul_conj_of_gauge}), give two
-equal conjugations of the full matrix algebra after the empty word pins
+The existence clause carries the optimal $n \ge 2L + 1$ of the source's
+alternative proof: it delegates to the overlapping-window single-gauge
+corollary \path{fundamentalTheorem_normalMPS_translationInvariant_of_overlap}
+(documented in the section ``The strengthening to $n \ge 2L+1$ via
+overlapping windows'' below).  The same collapse of the per-bond family is
+available size-independently — iterating the per-bond relation
+$B^i = Z_v^{-1} A^i Z_{v+1}$ along a word conjugates the word products of
+$B$ by the gauges at the two ends, consecutive gauges are proportional by
+the centralizer step (\path{gaugeFamily_succ_proportional}), the same-state
+relation pins consecutive scalars against the nonzero tensor $B$, and one
+circuit of the closed chain forces $\lambda^n = 1$.  The uniqueness clause
+needs no system size at all: two single-gauge realizations, iterated along
+the spanning words (\path{evalWord_eq_smul_conj_of_gauge}), give two equal
+conjugations of the full matrix algebra after the empty word pins
 $\lambda^L = \lambda'^L$, so the gauges are proportional; neither equality
 of states nor the root-of-unity conditions enter.
-
-The strengthening to $n \ge 2L + 1$ (line 2258, proved in the source's
-Section \path{normal_alt}) remains unformalized, and it is not a
-re-derivation of the blocking bundle alone.  The source's alternative proof
-routes through its Lemma~5 (lines 2045--2255): a virtual operation on a
-single bond is interpreted as a physical operation on each of the
-overlapping injective windows containing that bond, the operators pushed
-through the windows define algebra homomorphisms $O_1 \mapsto X$ and
-$O_3 \mapsto X^{\mathsf T}$, and comparing the states they generate
-identifies the two.  This apparatus — operator pushing through overlapping
-windows rather than three disjoint arcs — replaces the three-arc cover
-behind \path{fundamentalTheorem_normalMPS_cycle}, so the $2L+1$ bound
-cascades into the closed-chain corollary itself rather than only its
-blocking hypotheses.  The plan, if taken up: formalize the bond-operator
-pushing of Lemma~5 for matrix tensors (the two algebra homomorphisms and
-their identification against the state), derive the per-bond family on
-$n \ge 2L + 1$ sites from it, and reuse the matrix-level collapse above
-verbatim — the collapse itself nowhere uses $3L \le n$ beyond consuming the
-per-bond family.
 
 \section*{The Applications translation-invariant description corollary}
 
@@ -2925,9 +2913,22 @@ and the per-bond family $B^i = Z_v^{-1} A^i Z_{v+1}$ at $n \ge 2L+1$
 the single gauge with powers of the root of unity, $Z_v = \lambda^v Z$.
 The single-gauge form arrives directly, so the matrix-level collapse of the
 per-bond family recorded in the previous sections is not needed on this
-route; the landed $n \ge 3L$ statements remain in place unchanged.  The
-uniqueness clause of the source corollary needs no system size and was
-already delivered by
+route.  The named matrix-level existence corollaries now carry this optimal
+bound: \leanid{TNLean.PEPS.fundamentalTheorem_normalMPS} and
+\leanid{TNLean.PEPS.fundamentalTheorem_normalMPS_translationInvariant}
+delegate to \path{fundamentalTheorem_normalMPS_of_overlap} and
+\path{fundamentalTheorem_normalMPS_translationInvariant_of_overlap}, so
+their hypothesis is $n \ge 2L + 1$ rather than the $n \ge 3L$ of the
+blocking route.  The graph-level closed-chain corollary
+\leanid{TNLean.PEPS.fundamentalTheorem_normalMPS_cycle} keeps the $n \ge 3L$
+of its three-disjoint-arc cover, which the overlapping-window apparatus
+replaces rather than reuses; the matrix-level existence clauses no longer
+route through it.  The per-bond uniqueness clause
+\leanid{TNLean.PEPS.fundamentalTheorem_normalMPS_gauge_unique} still invokes
+the graph-level per-edge uniqueness and so keeps $n \ge 3L$; lowering it to
+$n \ge 2L + 1$ is the remaining follow-up, the source's uniqueness needing
+no system size.  The translation-invariant single-gauge uniqueness clause of
+the source corollary needs no system size and was already delivered by
 \leanid{TNLean.PEPS.fundamentalTheorem_normalMPS_translationInvariant_gauge_unique}.
 With this, every numbered claim of the source's Section \path{normal_alt}
 for matrix-product states is formalized for one site-independent tensor;

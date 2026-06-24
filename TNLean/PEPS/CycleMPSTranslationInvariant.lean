@@ -211,141 +211,32 @@ theorem gaugeFamily_succ_proportional {n L d D : ℕ} [NeZero n] {A B : MPSTenso
 /-! ### The translation-invariant corollary -/
 
 /-- **Fundamental Theorem for translation-invariant normal MPS, single-gauge
-form** (arXiv:1804.04964, Section 3, the corollary for TI MPS).
+form** (arXiv:1804.04964, Section 3, the corollary for TI MPS; strengthened
+to the optimal system size of the alternative proof of its Section
+`normal_alt`).
 
-Two matrix tensors `A` and `B` on `n ≥ 3L` sites, each `L`-block injective —
-the matrix form of "blocking `L` consecutive sites results in an injective
-tensor" — generating the same closed-chain state at the single size `n`, are
-related by one invertible matrix `Z` and a constant `λ` with `λ^n = 1`
-through `B^i = λ · Z⁻¹ A^i Z` for every `i`.
+Two matrix tensors `A` and `B` on `n ≥ 2L + 1` sites, each `L`-block
+injective — the matrix form of "blocking `L` consecutive sites results in an
+injective tensor" — generating the same closed-chain state at the single
+size `n`, are related by one invertible matrix `Z` and a constant `λ` with
+`λ^n = 1` through `B^i = λ · Z⁻¹ A^i Z` for every `i`.
 
-The per-bond family of the matrix-form corollary
-(`fundamentalTheorem_normalMPS`) collapses: consecutive gauges are
-proportional (`gaugeFamily_succ_proportional`), the same-state relation pins
-consecutive scalars against the nonzero tensor `B`, and following the bonds
-once around the closed chain forces the common scalar's `n`-th power to be
-one.
+The system size is the optimal `n ≥ 2L + 1` of the source's alternative
+proof (line 1623 and Section `normal_alt`, the corollary after Lemma 5),
+rather than the `n ≥ 3L` of the Section-`normal` blocking route: the proof
+delegates to the overlapping-window corollary
+`fundamentalTheorem_normalMPS_translationInvariant_of_overlap`.
 
 Source: arXiv:1804.04964, Section 3, the corollary for TI MPS, lines
-1624--1661 of `Papers/1804.04964/paper_normal.tex`. -/
+1624--1661 of `Papers/1804.04964/paper_normal.tex`, strengthened to
+`n ≥ 2L + 1` per line 1623 and Section `normal_alt`. -/
 theorem fundamentalTheorem_normalMPS_translationInvariant {n L d D : ℕ} [NeZero n]
-    (hL : 0 < L) (hn : 3 * L ≤ n) (A B : MPSTensor d D)
+    (hL : 0 < L) (hn : 2 * L + 1 ≤ n) (A B : MPSTensor d D)
     (hA : MPSTensor.IsNBlkInjective A L) (hB : MPSTensor.IsNBlkInjective B L)
     (hAB : ∀ σ : Fin n → Fin d, MPSTensor.mpv A σ = MPSTensor.mpv B σ) :
     ∃ (Z : GL (Fin D) ℂ) (lam : ℂ), lam ^ n = 1 ∧
-      ∀ i : Fin d, B i = lam • ((Z⁻¹ : GL (Fin D) ℂ) * A i * (Z : GL (Fin D) ℂ)) := by
-  -- A vanishing bond dimension makes all matrices equal and the claim trivial.
-  rcases Nat.eq_zero_or_pos D with hD0 | hD
-  · subst hD0
-    refine ⟨1, 1, one_pow n, fun i => ?_⟩
-    apply Matrix.ext
-    intro a b
-    exact a.elim0
-  obtain ⟨Z, hZ⟩ := fundamentalTheorem_normalMPS hL hn A B hA hB hAB
-  obtain ⟨i₀, hi₀⟩ := exists_ne_zero_of_isNBlkInjective hL hD hB
-  -- Consecutive bond gauges differ by a nonzero scalar.
-  choose c hc using fun v => gaugeFamily_succ_proportional hA hZ v
-  -- The relation rewritten without inverses, for pinning the scalars.
-  have hstar : ∀ (v : Fin n) (i : Fin d),
-      (Z v : Matrix (Fin D) (Fin D) ℂ) * B i =
-        A i * (Z (v + 1) : Matrix (Fin D) (Fin D) ℂ) := by
-    intro v i
-    rw [hZ v i]
-    simp only [Matrix.mul_assoc, Units.mul_inv_cancel_left]
-  have hN : ∀ v : Fin n, (Z v : Matrix (Fin D) (Fin D) ℂ) * B i₀ ≠ 0 := by
-    intro v h0
-    apply hi₀
-    have hrec : B i₀ =
-        (((Z v)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) *
-          ((Z v : Matrix (Fin D) (Fin D) ℂ) * B i₀) := (Units.inv_mul_cancel_left _ _).symm
-    rw [h0, Matrix.mul_zero] at hrec
-    exact hrec
-  -- The same-state relation pins consecutive scalars to agree.
-  have hstep : ∀ v : Fin n, c (v + 1) = c v := by
-    intro v
-    have hkey : ((c v : ℂ)) • ((Z v : Matrix (Fin D) (Fin D) ℂ) * B i₀) =
-        ((c (v + 1) : ℂ)) • ((Z v : Matrix (Fin D) (Fin D) ℂ) * B i₀) := by
-      calc ((c v : ℂ)) • ((Z v : Matrix (Fin D) (Fin D) ℂ) * B i₀)
-          = (((c v : ℂ)) • (Z v : Matrix (Fin D) (Fin D) ℂ)) * B i₀ :=
-            (Matrix.smul_mul _ _ _).symm
-        _ = (Z (v + 1) : Matrix (Fin D) (Fin D) ℂ) * B i₀ := by rw [← hc v]
-        _ = A i₀ * (Z (v + 1 + 1) : Matrix (Fin D) (Fin D) ℂ) := hstar (v + 1) i₀
-        _ = A i₀ * (((c (v + 1) : ℂ)) • (Z (v + 1) : Matrix (Fin D) (Fin D) ℂ)) := by
-            rw [← hc (v + 1)]
-        _ = ((c (v + 1) : ℂ)) • (A i₀ * (Z (v + 1) : Matrix (Fin D) (Fin D) ℂ)) :=
-            Matrix.mul_smul _ _ _
-        _ = ((c (v + 1) : ℂ)) • ((Z v : Matrix (Fin D) (Fin D) ℂ) * B i₀) := by
-            rw [← hstar v i₀]
-    have hzero : (((c v : ℂ)) - ((c (v + 1) : ℂ))) •
-        ((Z v : Matrix (Fin D) (Fin D) ℂ) * B i₀) = 0 := by
-      rw [sub_smul, hkey, sub_self]
-    rcases smul_eq_zero.mp hzero with h | h
-    · exact (Units.ext (sub_eq_zero.mp h)).symm
-    · exact absurd h (hN v)
-  -- All scalars agree around the chain.
-  have hconst : ∀ v : Fin n, c v = c 0 := by
-    intro v
-    obtain ⟨k, hk⟩ := v
-    induction k with
-    | zero => exact congrArg c (Fin.ext (by simp))
-    | succ k IH =>
-      have hk' : k < n := by omega
-      have hsucc : (⟨k, hk'⟩ : Fin n) + 1 = ⟨k + 1, hk⟩ := by
-        apply Fin.ext
-        have h1 : ((1 : Fin n) : ℕ) = 1 := val_one_of_two_le (by omega)
-        rw [Fin.val_add_eq_ite, h1]
-        change (if n ≤ k + 1 then k + 1 - n else k + 1) = k + 1
-        split_ifs <;> omega
-      rw [← hsucc, hstep ⟨k, hk'⟩, IH hk']
-  -- The gauge at site `k` is the starting gauge scaled by the `k`-th power.
-  have hpow : ∀ (k : ℕ) (hk : k < n),
-      (Z (⟨k, hk⟩ : Fin n) : Matrix (Fin D) (Fin D) ℂ) =
-        ((c 0 : ℂ)) ^ k • (Z 0 : Matrix (Fin D) (Fin D) ℂ) := by
-    intro k
-    induction k with
-    | zero =>
-      intro hk
-      rw [show (⟨0, hk⟩ : Fin n) = 0 from Fin.ext (by simp), pow_zero, one_smul]
-    | succ k IH =>
-      intro hk
-      have hk' : k < n := by omega
-      have hsucc : (⟨k, hk'⟩ : Fin n) + 1 = ⟨k + 1, hk⟩ := by
-        apply Fin.ext
-        have h1 : ((1 : Fin n) : ℕ) = 1 := val_one_of_two_le (by omega)
-        rw [Fin.val_add_eq_ite, h1]
-        change (if n ≤ k + 1 then k + 1 - n else k + 1) = k + 1
-        split_ifs <;> omega
-      rw [← hsucc, hc ⟨k, hk'⟩, hconst ⟨k, hk'⟩, IH hk', smul_smul, ← pow_succ']
-  -- Following the bonds once around the chain forces `λ^n = 1`.
-  have hn1 : n - 1 < n := by omega
-  have hwrap : (⟨n - 1, hn1⟩ : Fin n) + 1 = 0 := by
-    apply Fin.ext
-    have h1 : ((1 : Fin n) : ℕ) = 1 := val_one_of_two_le (by omega)
-    rw [Fin.val_add_eq_ite, h1]
-    simp only [Fin.val_zero]
-    split_ifs <;> omega
-  have hcycle : (Z 0 : Matrix (Fin D) (Fin D) ℂ) =
-      ((c 0 : ℂ)) ^ n • (Z 0 : Matrix (Fin D) (Fin D) ℂ) := by
-    calc (Z 0 : Matrix (Fin D) (Fin D) ℂ)
-        = (Z ((⟨n - 1, hn1⟩ : Fin n) + 1) : Matrix (Fin D) (Fin D) ℂ) := by rw [hwrap]
-      _ = ((c ⟨n - 1, hn1⟩ : ℂ)) •
-            (Z (⟨n - 1, hn1⟩ : Fin n) : Matrix (Fin D) (Fin D) ℂ) :=
-          hc ⟨n - 1, hn1⟩
-      _ = ((c 0 : ℂ)) • (((c 0 : ℂ)) ^ (n - 1) • (Z 0 : Matrix (Fin D) (Fin D) ℂ)) := by
-          rw [hconst ⟨n - 1, hn1⟩, hpow (n - 1) hn1]
-      _ = ((c 0 : ℂ)) ^ n • (Z 0 : Matrix (Fin D) (Fin D) ℂ) := by
-          rw [smul_smul, ← pow_succ', Nat.sub_add_cancel (by omega : 1 ≤ n)]
-  have hroot : ((c 0 : ℂ)) ^ n = 1 := by
-    have hzero : (1 - ((c 0 : ℂ)) ^ n) • (Z 0 : Matrix (Fin D) (Fin D) ℂ) = 0 := by
-      rw [sub_smul, one_smul, ← hcycle, sub_self]
-    rcases smul_eq_zero.mp hzero with h | h
-    · exact (sub_eq_zero.mp h).symm
-    · haveI : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
-      exact absurd h (Units.ne_zero (Z 0))
-  refine ⟨Z 0, (c 0 : ℂ), hroot, fun i => ?_⟩
-  have h0 := hZ 0 i
-  rw [hc 0] at h0
-  rw [h0, Matrix.mul_smul]
+      ∀ i : Fin d, B i = lam • ((Z⁻¹ : GL (Fin D) ℂ) * A i * (Z : GL (Fin D) ℂ)) :=
+  fundamentalTheorem_normalMPS_translationInvariant_of_overlap hL hn A B hA hB hAB
 
 /-- **Uniqueness clause of the Fundamental Theorem for translation-invariant
 normal MPS, single-gauge form** (arXiv:1804.04964, Section 3, the corollary

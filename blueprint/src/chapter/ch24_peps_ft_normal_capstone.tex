@@ -521,8 +521,8 @@ translation-invariant corollary of \cite[Section~4]{Molnar2018NormalPEPS}.
     \lean{TNLean.PEPS.fundamentalTheorem_normalMPS}
     \leanok
     \uses{def:l_blk_injective, def:mpv}
-    Let $n$ be positive, let $0 < L$ with $3L \le n$, and let $A$ and $B$ be
-    tensors of $D \times D$ matrices over physical dimension $d$, each
+    Let $n$ be positive, let $0 < L$ with $2L + 1 \le n$, and let $A$ and $B$
+    be tensors of $D \times D$ matrices over physical dimension $d$, each
     $L$-block injective, whose matrix product vectors agree at system size
     $n$: $V^{(n)}(A)_\sigma = V^{(n)}(B)_\sigma$ for every configuration
     $\sigma$.  Then there are invertible matrices $Z_v$, one per bond of the
@@ -535,32 +535,21 @@ translation-invariant corollary of \cite[Section~4]{Molnar2018NormalPEPS}.
     \cite[Section~4]{Molnar2018NormalPEPS} specialized to one
     site-independent tensor: the source states the corollary for
     site-dependent families, and its conclusion is the per-bond gauge family
-    delivered here.  The source's translation-invariant corollary (a single
-    gauge $Z$ and a constant $\lambda$ with $\lambda^n = 1$) refines this
-    conclusion and is not part of this statement.  Positivity of the
-    physical and bond dimensions is not assumed: a vanishing bond dimension
-    makes the conclusion trivial, and a vanishing physical dimension
-    contradicts block injectivity.
+    delivered here.  The system size is the optimal $n \ge 2L + 1$ of the
+    source's alternative proof (its Section ``Normal MPS: alternative
+    proof''), rather than the $n \ge 3L$ of the blocking route.  The source's
+    translation-invariant corollary (a single gauge $Z$ and a constant
+    $\lambda$ with $\lambda^n = 1$) refines this conclusion and is not part
+    of this statement.  Positivity of the physical and bond dimensions is not
+    assumed: a vanishing bond dimension makes the conclusion trivial, and a
+    vanishing physical dimension contradicts block injectivity.
 \end{corollary}
 \begin{proof}\leanok
-    \uses{cor:fundamentalTheorem_normalMPS_cycle,
-        lem:stateCoeff_cycleTensorOfMPS,
-        lem:regionBlockedTensorInjective_cycleTensorOfMPS,
-        def:cycleTensorOfMPS, def:gaugeVertex}
-    The cycle tensors of $A$ and $B$ generate the same state by
-    Lemma~\ref{lem:stateCoeff_cycleTensorOfMPS}, and every arc of
-    $L$ consecutive sites is injective for each by
-    Lemma~\ref{lem:regionBlockedTensorInjective_cycleTensorOfMPS}, so the
-    closed-chain corollary
-    (Corollary~\ref{cor:fundamentalTheorem_normalMPS_cycle}) produces one
-    invertible matrix per edge relating the two cycle tensors.  At each site
-    the gauge action contracts the two incident matrices against the site
-    matrix, with the matrix of the entering bond acting by its
-    transposed inverse when the site is the stored second endpoint; reading
-    the per-site identity through the two incident bonds turns the per-edge
-    family into per-bond gauges, the transpose of the edge matrix away from
-    the seam and the inverse on the seam edge, whose conjugation relation is
-    exactly $B^i = Z_v^{-1} A^i Z_{v+1}$.
+    \uses{cor:fundamentalTheorem_normalMPS_of_overlap}
+    The per-bond form of the strengthened closed-chain corollary
+    (Corollary~\ref{cor:fundamentalTheorem_normalMPS_of_overlap}), proved
+    through the overlapping windows at $n \ge 2L + 1$, gives the per-bond
+    gauge family directly.
 \end{proof}
 
 \begin{corollary}[Uniqueness of the per-bond gauges up to one constant,
@@ -628,8 +617,8 @@ translation-invariant corollary of \cite[Section~4]{Molnar2018NormalPEPS}.
     \lean{TNLean.PEPS.fundamentalTheorem_normalMPS_translationInvariant}
     \leanok
     \uses{def:l_blk_injective, def:mpv}
-    Let $n$ be positive, let $0 < L$ with $3L \le n$, and let $A$ and $B$ be
-    tensors of $D \times D$ matrices over physical dimension $d$, each
+    Let $n$ be positive, let $0 < L$ with $2L + 1 \le n$, and let $A$ and $B$
+    be tensors of $D \times D$ matrices over physical dimension $d$, each
     $L$-block injective, whose matrix product vectors agree at system size
     $n$: $V^{(n)}(A)_\sigma = V^{(n)}(B)_\sigma$ for every configuration
     $\sigma$.  Then there are an invertible matrix $Z$ and a constant
@@ -639,27 +628,16 @@ translation-invariant corollary of \cite[Section~4]{Molnar2018NormalPEPS}.
     \]
     This is the translation-invariant corollary of
     \cite[Section~4]{Molnar2018NormalPEPS}, the statement for TI MPS
-    following the first corollary after the general normal-PEPS theorem.
-    Positivity of the bond dimension is not assumed: a vanishing bond
+    following the first corollary after the general normal-PEPS theorem.  The
+    system size is the optimal $n \ge 2L + 1$ of the source's alternative
+    proof.  Positivity of the bond dimension is not assumed: a vanishing bond
     dimension makes the conclusion trivial.
 \end{corollary}
 \begin{proof}\leanok
-    \uses{cor:fundamentalTheorem_normalMPS, lem:gaugeFamily_succ_proportional}
-    The matrix-form corollary
-    (Corollary~\ref{cor:fundamentalTheorem_normalMPS}) gives per-bond gauges
-    $Z_v$ with $B^i = Z_v^{-1} A^i Z_{v+1}$, and consecutive gauges are
-    proportional (Lemma~\ref{lem:gaugeFamily_succ_proportional}):
-    $Z_{v+1} = c_v Z_v$ with $c_v$ nonzero.  Multiplying the relation by
-    $Z_v$ on the left gives $Z_v B^i = A^i Z_{v+1}$ at every site; comparing
-    this at sites $v$ and $v+1$ through the proportionalities yields
-    $c_v\,(Z_v B^i) = c_{v+1}\,(Z_v B^i)$, and $Z_v B^{i_0} \neq 0$ for some
-    $i_0$ because $B$ is $L$-block injective with positive bond dimension,
-    so all the scalars equal a single constant $\lambda := c_0$.  Iterating
-    $Z_{v+1} = \lambda Z_v$ from the starting bond gives
-    $Z_k = \lambda^k Z_0$, and after $n$ steps the closed chain returns to
-    the starting bond: $Z_0 = \lambda^n Z_0$, so $\lambda^n = 1$ since
-    $Z_0 \neq 0$.  The relation at the starting site then reads
-    $B^i = \lambda\, Z_0^{-1} A^i Z_0$.
+    \uses{cor:fundamentalTheorem_normalMPS_translationInvariant_of_overlap}
+    This is the single-gauge form of the strengthened closed-chain corollary
+    (Corollary~\ref{cor:fundamentalTheorem_normalMPS_translationInvariant_of_overlap}),
+    proved through the overlapping windows at $n \ge 2L + 1$.
 \end{proof}
 
 \begin{corollary}[Uniqueness of the translation-invariant gauge up to a
@@ -914,10 +892,11 @@ to $n \ge 2L + 1$.
     \]
     This is the strengthened closed-chain corollary of
     \cite{Molnar2018NormalPEPS} (the corollary after Lemma~5 in its closing
-    section ``Normal MPS: alternative proof''), improving the system-size
-    bound of
-    Corollary~\ref{cor:fundamentalTheorem_normalMPS_translationInvariant}
-    from $n \ge 3L$ to $n \ge 2L + 1$.  The uniqueness clause of the source
+    section ``Normal MPS: alternative proof''), proved through the
+    overlapping windows at the optimal $n \ge 2L + 1$ rather than the
+    $n \ge 3L$ of the blocking route; the single-gauge corollary
+    \ref{cor:fundamentalTheorem_normalMPS_translationInvariant} delegates to
+    it.  The uniqueness clause of the source
     corollary — the gauge $Z$ is unique up to a multiplicative constant —
     needs no system size and is
     Corollary~\ref{cor:fundamentalTheorem_normalMPS_translationInvariant_gauge_unique}.
@@ -950,11 +929,11 @@ to $n \ge 2L + 1$.
         B^i = Z_v^{-1}\, A^i\, Z_{v+1}
         \qquad\text{for every site } v \text{ and every } i .
     \]
-    This is the per-bond gauge family of
-    Corollary~\ref{cor:fundamentalTheorem_normalMPS}, delivered at the
-    source's strengthened bound $n \ge 2L + 1$ in place of $n \ge 3L$
+    This is the per-bond gauge family of the closed-chain corollary, proved
+    at the source's strengthened bound $n \ge 2L + 1$
     (\cite{Molnar2018NormalPEPS}, the corollary after Lemma~5 in its
-    closing section ``Normal MPS: alternative proof'').
+    closing section ``Normal MPS: alternative proof'').  The named matrix-level
+    Corollary~\ref{cor:fundamentalTheorem_normalMPS} delegates to it.
 \end{corollary}
 \begin{proof}\leanok
     \uses{cor:fundamentalTheorem_normalMPS_translationInvariant_of_overlap}
