@@ -264,6 +264,43 @@ finite-dimensional quantum systems.
     then gives the result.
 \end{proof}
 
+\begin{theorem}[Klein's inequality]\label{thm:klein_inequality}
+    \lean{quantumRelativeEntropy_nonneg}
+    \leanok
+    \uses{def:quantum_relative_entropy, lem:quantum_relative_entropy_trace_split}
+    Let $\rho,\sigma\in \MN{D}$ be density matrices with $\sigma$ of full rank.
+    Then the relative entropy is nonnegative,
+    \[
+        D(\rho\Vert\sigma)\ge 0.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Diagonalize $\rho=\sum_i p_i\,\ketbra{e_i}{e_i}$ and
+    $\sigma=\sum_j q_j\,\ketbra{f_j}{f_j}$ in their eigenbases, with all
+    $q_j>0$ since $\sigma$ has full rank. The overlap numbers
+    $P_{ij}=\lvert\braket{e_i}{f_j}\rvert^2$ are nonnegative with row sums and column
+    sums equal to $1$, because the two eigenbases are orthonormal. A trace
+    computation gives
+    \[
+        \operatorname{Re}\operatorname{tr}(\rho\log\rho)=\sum_i p_i\log p_i,
+        \qquad
+        \operatorname{Re}\operatorname{tr}(\rho\log\sigma)
+            =\sum_{i,j} p_i\,P_{ij}\log q_j,
+    \]
+    so that
+    \[
+        D(\rho\Vert\sigma)
+            =\sum_i p_i\log p_i-\sum_{i,j} p_i\,P_{ij}\log q_j.
+    \]
+    The row sums let the first term be written over the index pair, and the
+    scalar tangent bound $\log x\le x-1$ applied to $q_j/p_i$ gives, after
+    weighting by $p_i\,P_{ij}$ and summing, the lower bound
+    $\sum_{i,j} P_{ij}(q_j-p_i)$. By the column sums and the trace-one
+    normalizations of $p$ and $q$ this telescopes to
+    $\sum_j q_j-\sum_i p_i=0$, which is the claim.
+\end{proof}
+
 \begin{theorem}[Entropy is invariant under reindexing]
     \label{thm:entropy_submatrix_equiv}
     \lean{vonNeumannEntropy_submatrix_equiv}
