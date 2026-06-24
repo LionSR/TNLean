@@ -42,6 +42,11 @@ with composition. We also relate it to the Kraus representation.
   trace-normalization criterion for conjugated-input maps ρ ↦ T(XρX†)
 * `IsPositiveMap.comp_unitaryConjLM_inv_cfc_sqrt_traceAdjointMap_one`: the same
   normalization with X = T*(1)^{-1/2} when T*(1) is positive definite
+* `unitaryConjLM_mapsPSDConeOnto` and
+  `unitaryConjLM_comp_transpose_mapsPSDConeOnto`: direction (3) ⇒ (1) of Wolf
+  Chapter 3, Proposition 3.8 — conjugation `X ↦ Y X Y†` and its transpose
+  variant `X ↦ Y Xᵀ Y†` by an invertible `Y` map the positive semidefinite
+  cone onto itself
 * `MPSTensor.transferMatrix_eq`: the MPS transfer map `E_A` has transfer
   matrix `∑ᵢ Āᵢ ⊗ₖ Aᵢ`
 
@@ -517,6 +522,84 @@ theorem IsPositiveMap.comp_unitaryConjLM_inv_cfc_sqrt_traceAdjointMap_one
       (Matrix.traceAdjointMap T 1) hTstar)
 
 end UnitaryConjugation
+
+/-! ### Proposition 3.8: automorphisms of the positive semidefinite cone
+
+Wolf Chapter 3, §3.5, Proposition 3.8 (Automorphisms and rank preserving maps),
+`Notes/WolfNoteTexSource/ch03_positive_not_completely.tex`, lines 652--686.
+
+For a linear map `T : M_D(ℂ) → M_D(ℂ)` the following are equivalent:
+
+1. `T` maps the cone of positive semidefinite matrices onto itself;
+2. `T` is positive and preserves the rank of Hermitian matrices;
+3. there is an invertible `Y` with `T(X) = Y X Y†` or `T(X) = Y Xᵀ Y†`
+   (eq. 3.42).
+
+The direction (3) ⇒ (1) is recorded here: both standard forms — conjugation
+`Ad_Y(X) = Y X Y†` and its transpose variant `X ↦ Y Xᵀ Y†` — map the positive
+semidefinite cone onto itself when `Y` is invertible. The reverse implications
+(1) ⇒ (2) ⇒ (3) rest on the spectrum-preserving classification (Wolf Cor. 1.1)
+and are not formalized here. -/
+
+section ConePreservation
+
+/-- A linear map `T : M_D(ℂ) → M_D(ℂ)` **maps the positive semidefinite cone onto
+itself** (condition (1) of Wolf Chapter 3, Proposition 3.8) if it sends positive
+semidefinite matrices to positive semidefinite matrices and every positive
+semidefinite matrix arises as the image of one. -/
+def MapsPSDConeOnto
+    (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) : Prop :=
+  IsPositiveMap T ∧
+    ∀ A : Matrix (Fin D) (Fin D) ℂ, A.PosSemidef → ∃ X, X.PosSemidef ∧ T X = A
+
+/-- Conjugation `Ad_Y(X) = Y X Y†` by an invertible matrix maps the positive
+semidefinite cone onto itself. This is the conjugation half of direction
+(3) ⇒ (1) of Wolf Chapter 3, Proposition 3.8. -/
+theorem unitaryConjLM_mapsPSDConeOnto
+    (Y : Matrix (Fin D) (Fin D) ℂ) (hY : IsUnit Y.det) :
+    MapsPSDConeOnto (unitaryConjLM Y) := by
+  have hYY : Y * Y⁻¹ = 1 := Matrix.mul_nonsing_inv Y hY
+  have hYYh : (Y⁻¹)ᴴ * Yᴴ = 1 := by
+    rw [← Matrix.conjTranspose_mul, hYY, Matrix.conjTranspose_one]
+  refine ⟨unitaryConjLM_isPositiveMap Y, fun A hA => ?_⟩
+  refine ⟨Y⁻¹ * A * (Y⁻¹)ᴴ, hA.mul_mul_conjTranspose_same (B := Y⁻¹), ?_⟩
+  rw [unitaryConjLM_apply,
+    show Y * (Y⁻¹ * A * (Y⁻¹)ᴴ) * Yᴴ = (Y * Y⁻¹) * A * ((Y⁻¹)ᴴ * Yᴴ) by
+      simp only [Matrix.mul_assoc],
+    hYY, hYYh, Matrix.one_mul, Matrix.mul_one]
+
+/-- The transpose conjugation `X ↦ Y Xᵀ Y†` by an invertible matrix maps the
+positive semidefinite cone onto itself. This is the transpose half of direction
+(3) ⇒ (1) of Wolf Chapter 3, Proposition 3.8. -/
+theorem unitaryConjLM_comp_transpose_mapsPSDConeOnto
+    (Y : Matrix (Fin D) (Fin D) ℂ) (hY : IsUnit Y.det) :
+    MapsPSDConeOnto
+      ((unitaryConjLM Y).comp (Matrix.transposeLinearMapComplex (Fin D))) := by
+  have hYY : Y * Y⁻¹ = 1 := Matrix.mul_nonsing_inv Y hY
+  have hYYh : (Y⁻¹)ᴴ * Yᴴ = 1 := by
+    rw [← Matrix.conjTranspose_mul, hYY, Matrix.conjTranspose_one]
+  have happly : ∀ M : Matrix (Fin D) (Fin D) ℂ,
+      Matrix.transposeLinearMapComplex (Fin D) M = Mᵀ := fun M => by
+    simp [Matrix.transposeLinearMapComplex]
+  constructor
+  · intro X hX
+    have heq : ((unitaryConjLM Y).comp (Matrix.transposeLinearMapComplex (Fin D))) X
+        = unitaryConjLM Y Xᵀ := by simp only [LinearMap.comp_apply, happly]
+    rw [heq]
+    exact unitaryConjLM_isPositiveMap Y Xᵀ hX.transpose
+  · intro A hA
+    refine ⟨(Y⁻¹ * A * (Y⁻¹)ᴴ)ᵀ,
+      (hA.mul_mul_conjTranspose_same (B := Y⁻¹)).transpose, ?_⟩
+    have heq : ((unitaryConjLM Y).comp (Matrix.transposeLinearMapComplex (Fin D)))
+        ((Y⁻¹ * A * (Y⁻¹)ᴴ)ᵀ) = Y * (Y⁻¹ * A * (Y⁻¹)ᴴ) * Yᴴ := by
+      simp only [LinearMap.comp_apply, happly, Matrix.transpose_transpose,
+        unitaryConjLM_apply]
+    rw [heq,
+      show Y * (Y⁻¹ * A * (Y⁻¹)ᴴ) * Yᴴ = (Y * Y⁻¹) * A * ((Y⁻¹)ᴴ * Yᴴ) by
+        simp only [Matrix.mul_assoc],
+      hYY, hYYh, Matrix.one_mul, Matrix.mul_one]
+
+end ConePreservation
 
 /-! ### Propositions 2.7-2.8: Normal form decomposition via transfer matrix
 
