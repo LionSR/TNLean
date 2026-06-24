@@ -1,6 +1,7 @@
 import TNLean.PEPS.CycleMPSInjectivity
 import TNLean.PEPS.CycleFundamentalTheorem
 import TNLean.PEPS.TorusAbsorbedCovariance
+import TNLean.PEPS.CycleMPSOverlapCapstone
 
 /-!
 # The Fundamental Theorem for translation-invariant normal MPS on a closed chain
@@ -10,10 +11,9 @@ Fundamental Theorem for normal PEPS (arXiv:1804.04964, Section 3, first
 corollary after the theorem labelled `normal`, lines 1585--1631 of
 `Papers/1804.04964/paper_normal.tex`), specialized to one site-independent
 tensor: two matrix tensors `A, B`, each `L`-block injective, generating the
-same closed-chain state on `n ≥ 3L` sites, are related by invertible matrices
-`Z_v` (one per bond, `n + 1 ≡ 1`) with `B = Z_v⁻¹ A Z_{v+1}` at every site
-(`fundamentalTheorem_normalMPS`), and the `Z_v` are unique up to one
-multiplicative constant (`fundamentalTheorem_normalMPS_gauge_unique`).
+same closed-chain state on `n ≥ 2L + 1` sites, are related by invertible
+matrices `Z_v` (one per bond, `n + 1 ≡ 1`) with `B = Z_v⁻¹ A Z_{v+1}` at
+every site (`fundamentalTheorem_normalMPS`).
 
 The statement is the source corollary's conclusion — a family of per-bond
 gauges — with the source's site-dependent families `{A_i}`, `{B_i}`
@@ -21,30 +21,36 @@ specialized to a single repeated tensor; the source's translation-invariant
 corollary (lines 1624--1661: a single gauge `Z` and a constant `λ` with
 `λ^n = 1`) refines this output and is not delivered here.
 
-The derivation goes through the cycle-graph corollary
-(`fundamentalTheorem_normalMPS_cycle`): the cycle tensors of `A` and `B`
-generate the same state since their coefficients are the matrix-product
+The existence clause carries the optimal system size `n ≥ 2L + 1` of the
+source's alternative proof (line 1623 and Section `normal_alt`, the corollary
+after Lemma 5): `fundamentalTheorem_normalMPS` delegates to the
+overlapping-window corollary `fundamentalTheorem_normalMPS_of_overlap`.
+
+The uniqueness clause `fundamentalTheorem_normalMPS_gauge_unique` still uses
+the `n ≥ 3L` route through the cycle-graph corollary
+(`fundamentalTheorem_normalMPS_cycle`).  There the cycle tensors of `A` and
+`B` generate the same state since their coefficients are the matrix-product
 traces, every arc of `L` consecutive sites is blocked-injective by `L`-block
 injectivity of the matrix tensors, and the graph-level gauge equivalence
-hands back one invertible matrix per edge.  The per-edge
-matrices convert to per-bond gauges through the stored-edge orientation: away
-from the seam the gauge of the bond entering site `v` is the transpose of the
-edge matrix, while on the seam edge — stored with its endpoints in the
-opposite order — it is the inverse (`cycleGaugeOfEdgeGauge`).  The per-vertex
-component identity of the graph-level gauge equivalence is equivalent to the
-matrix identity `B = Z_v⁻¹ A Z_{v+1}` (`cycleGauge_component_iff_matrix`).
-The uniqueness clause converts a per-bond family back into a per-edge family
+hands back one invertible matrix per edge.  The per-edge matrices convert to
+per-bond gauges through the stored-edge orientation: away from the seam the
+gauge of the bond entering site `v` is the transpose of the edge matrix,
+while on the seam edge — stored with its endpoints in the opposite order — it
+is the inverse (`cycleGaugeOfEdgeGauge`).  The per-vertex component identity
+of the graph-level gauge equivalence is equivalent to the matrix identity
+`B = Z_v⁻¹ A Z_{v+1}` (`cycleGauge_component_iff_matrix`).  The uniqueness
+clause converts a per-bond family back into a per-edge family
 (`edgeGaugeOfCycleGauge`), invokes the graph-level uniqueness for a constant
 per edge, and merges the constants into one because the relation
 `B = Z_v⁻¹ A Z_{v+1}` pins the ratio of consecutive constants against the
 nonzero tensor `B`.
 
 The matrix-level hypotheses match the source corollary: `0 < L` (implicit in
-blocking `L` consecutive sites), `3L ≤ n`, `L`-block injectivity of both
-tensors, and equality of the closed-chain coefficients at the single size `n`.
-The positivity side conditions of the graph-level corollary are discharged
-here, not assumed: a vanishing bond dimension makes the conclusion trivial,
-and a vanishing physical dimension contradicts block injectivity.
+blocking `L` consecutive sites), `L`-block injectivity of both tensors, and
+equality of the closed-chain coefficients at the single size `n`.  The
+positivity side conditions of the graph-level corollary are discharged here,
+not assumed: a vanishing bond dimension makes the conclusion trivial, and a
+vanishing physical dimension contradicts block injectivity.
 
 ## References
 
@@ -408,11 +414,13 @@ theorem pos_d_of_isNBlkInjective {L : ℕ} (hL : 0 < L) (hD : 0 < D)
 
 /-- **Fundamental Theorem for translation-invariant normal MPS on a closed
 chain** (arXiv:1804.04964, Section 3, first corollary after the theorem
-labelled `normal`, specialized to one site-independent tensor).
+labelled `normal`, specialized to one site-independent tensor; strengthened
+to the optimal system size of the alternative proof of its Section
+`normal_alt`).
 
-Two matrix tensors `A` and `B` on `n ≥ 3L` sites, each `L`-block injective —
-the matrix form of "blocking any `L` consecutive sites results in an
-injective tensor" for a site-independent family — generating the same
+Two matrix tensors `A` and `B` on `n ≥ 2L + 1` sites, each `L`-block
+injective — the matrix form of "blocking any `L` consecutive sites results
+in an injective tensor" for a site-independent family — generating the same
 closed-chain state at the single size `n`, are related by invertible matrices
 `Z_v`, one per bond of the closed chain (`n + 1 ≡ 1`), with
 `B = Z_v⁻¹ A Z_{v+1}` at every site.
@@ -423,38 +431,23 @@ statement is its specialization to one repeated tensor, and the source's
 translation-invariant corollary (lines 1624--1661, a single gauge `Z` with a
 constant `λ`, `λ^n = 1`) is the follow-up refinement, not delivered here.
 
+The system size is the optimal `n ≥ 2L + 1` of the source's alternative
+proof (line 1623 and Section `normal_alt`, the corollary after Lemma 5),
+rather than the `n ≥ 3L` of the Section-`normal` blocking route: the proof
+delegates to the overlapping-window corollary
+`fundamentalTheorem_normalMPS_of_overlap`.
+
 Source: arXiv:1804.04964, Section 3, first corollary after the theorem
-labelled `normal`, lines 1585--1631 of
-`Papers/1804.04964/paper_normal.tex`. -/
+labelled `normal`, lines 1585--1631 of `Papers/1804.04964/paper_normal.tex`,
+strengthened to `n ≥ 2L + 1` per line 1623 and Section `normal_alt`. -/
 theorem fundamentalTheorem_normalMPS {n L d D : ℕ} [NeZero n] (hL : 0 < L)
-    (hn : 3 * L ≤ n)
+    (hn : 2 * L + 1 ≤ n)
     (A B : MPSTensor d D) (hA : MPSTensor.IsNBlkInjective A L)
     (hB : MPSTensor.IsNBlkInjective B L)
     (hAB : ∀ σ : Fin n → Fin d, MPSTensor.mpv A σ = MPSTensor.mpv B σ) :
     ∃ Z : Fin n → GL (Fin D) ℂ, ∀ (v : Fin n) (i : Fin d),
-      B i = ((Z v)⁻¹ : GL (Fin D) ℂ) * A i * (Z (v + 1) : GL (Fin D) ℂ) := by
-  -- A vanishing bond dimension makes all matrices equal and the claim trivial.
-  rcases Nat.eq_zero_or_pos D with hD0 | hD
-  · subst hD0
-    refine ⟨fun _ => 1, fun v i => ?_⟩
-    apply Matrix.ext
-    intro a b
-    exact a.elim0
-  have hn3 : 3 ≤ n := by omega
-  have hLn : L < n := by omega
-  have hd : 0 < d := pos_d_of_isNBlkInjective hL hD hA
-  -- The cycle tensors generate the same state and have injective arcs.
-  have hstate : SameState (cycleTensorOfMPS hn3 A) (cycleTensorOfMPS hn3 B) := fun σ => by
-    rw [stateCoeff_cycleTensorOfMPS, stateCoeff_cycleTensorOfMPS]
-    exact hAB σ
-  obtain ⟨hDim, X, hX⟩ := fundamentalTheorem_normalMPS_cycle hL hn
-    (cycleTensorOfMPS hn3 A) (cycleTensorOfMPS hn3 B)
-    (fun s => regionBlockedTensorInjective_cycleTensorOfMPS hn3 hL hLn hD hA s)
-    (fun s => regionBlockedTensorInjective_cycleTensorOfMPS hn3 hL hLn hD hB s)
-    hstate hd (fun _ => hD) (fun _ => hD)
-  -- Convert the per-edge gauges to per-bond gauges.
-  refine ⟨cycleGaugeOfEdgeGauge hn3 X, fun v => ?_⟩
-  exact (cycleGauge_component_iff_matrix hn3 A B X v).mp (fun η σ => hX v η σ)
+      B i = ((Z v)⁻¹ : GL (Fin D) ℂ) * A i * (Z (v + 1) : GL (Fin D) ℂ) :=
+  fundamentalTheorem_normalMPS_of_overlap hL hn A B hA hB hAB
 
 /-- **Uniqueness clause of the Fundamental Theorem for translation-invariant
 normal MPS on a closed chain** (arXiv:1804.04964, Section 3, first corollary
@@ -466,6 +459,14 @@ at every site of the closed chain of `n ≥ 3L` sites are proportional by a
 single constant.  The per-edge constants come from the graph-level uniqueness
 clause; the relation itself pins the ratio of consecutive constants against
 the nonzero tensor `B`, merging them into one.
+
+The source's uniqueness clause carries no system-size constraint, while this
+proof keeps the `n ≥ 3L` of the graph-level uniqueness route it invokes; the
+existence clause `fundamentalTheorem_normalMPS` already holds at the optimal
+`n ≥ 2L + 1`.  The size-free single-gauge uniqueness is
+`fundamentalTheorem_normalMPS_translationInvariant_gauge_unique`; lowering
+this per-bond clause to `n ≥ 2L + 1` is tracked as a follow-up to
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`.
 
 Source: arXiv:1804.04964, Section 3, first corollary after the theorem
 labelled `normal`, lines 1585--1631 of
