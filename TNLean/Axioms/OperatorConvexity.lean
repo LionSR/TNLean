@@ -35,10 +35,10 @@ Jensen inequality is then obtained as the right limit of
 `p⁻¹ • (A ^ p - 1)` as `p → 0+`, using
 `CFC.tendsto_cfc_rpow_sub_one_log`.  The convex real-power Jensen inequality is
 proved analogously, by integrating the reversed pointwise positive-map
-inequality for the convex Löwner integrand `Real.rpowIntegrand₁₂` over the
-interior interval `(1, 2)` and passing to the endpoint `p = 2` by continuity of
-`M ^ ·` in the exponent.  Only the Lieb statement remains an axiom, because the
-joint-concavity integral representation is not yet formalized.
+inequality for the convex Löwner integrand `g p t` over the interior interval
+`(1, 2)` and passing to the endpoint `p = 2` by continuity of the matrix power
+`q ↦ M ^ q` in the exponent.  Only the Lieb statement remains an axiom, because
+the joint-concavity integral representation is not yet formalized.
 Operator convexity of `x ↦ x ^ p` for `1 ≤ p ≤ 2`, the scalar input of the
 convex case, is available as `CFC.convexOn_rpow` in
 `TNLean.Analysis.RpowConvexity`.
@@ -124,14 +124,13 @@ The remaining Mathlib or local formalization gaps are:
    `TNLean.Channel.Schwarz.OperatorJensenAux`, and the commutation of `T` with
    the integral.
 2. **Operator convexity of `rpow` for `p ∈ [1, 2]`**: use Mathlib's convex
-   Löwner integrand `rpowIntegrand₁₂`, whose resolvent form
-   `cfc (rpowIntegrand₁₂ p t) a = t ^ (p - 2) • a + t ^ p • (t • 1 + a)⁻¹
-     - t ^ (p - 1) • 1`
-   yields the reversed pointwise inequality
-   `cfc (rpowIntegrand₁₂ p t) (T A) ≤ T (cfc (rpowIntegrand₁₂ p t) A)` from the
-   same resolvent estimate `positiveMap_resolvent_inv_le`.  Integrating over the
-   interior `p ∈ (1, 2)` and taking the left limit `p → 2⁻`, using continuity of
-   `M ^ ·` in the exponent, gives the result on the closed interval `[1, 2]`.
+   Löwner integrand `g p t`, whose resolvent form
+   `g p t A = t ^ (p - 2) • A + t ^ p • (t • I + A)⁻¹ - t ^ (p - 1) • I`
+   yields the reversed pointwise inequality `g p t (T A) ≤ T (g p t A)` from the
+   positive-map resolvent inequality.  Integrating over the interior
+   `p ∈ (1, 2)` and taking the left limit `p → 2⁻`, using continuity of the
+   matrix power `q ↦ M ^ q` in the exponent, gives the result on the closed
+   interval `[1, 2]`.
 3. **Concave Jensen for `log`**: derive it from the right-limit formula
    `CFC.tendsto_cfc_rpow_sub_one_log` and the concave real-power theorem,
    using unitality to rewrite `T(1)=1`.

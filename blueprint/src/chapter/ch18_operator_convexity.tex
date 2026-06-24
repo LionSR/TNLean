@@ -301,6 +301,38 @@ are not developed elsewhere in this document.
     supplied by the positive-map resolvent inequality.
 \end{proof}
 
+\begin{lemma}[Positive-map convex real-power integrand inequality]
+    \label{lem:operator_jensen_positive_map_rpow_integrand_convex}
+    \lean{TNLean.OperatorJensen.positiveMap_rpowIntegrand₁₂_jensen}
+    \leanok
+    \uses{lem:operator_jensen_positive_map_resolvent}
+    Let $T$ be a positive subunital map, let $A\ge0$, let
+    $p\in(1,2)$, and let $t>0$. Then
+    \[
+        g_{p,t}(TA)
+        \le
+        T\!\left(g_{p,t}(A)\right),
+        \qquad
+        g_{p,t}(x)=t^{p-2}x+t^p(t+x)^{-1}-t^{p-1}.
+    \]
+    The inequality is reversed relative to the concave integrand, since
+    $g_{p,t}$ is operator convex.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:operator_jensen_positive_map_resolvent}
+    Rewrite the continuous functional calculus for $g_{p,t}$ in resolvent form,
+    \[
+        g_{p,t}(X)=t^{p-2}X+t^p(t\Id+X)^{-1}-t^{p-1}\Id.
+    \]
+    Under the linear map $T$ the leading $t^{p-2}$ terms cancel and the constant
+    $t^{p-1}$ terms combine, so the difference
+    $T(g_{p,t}(A))-g_{p,t}(TA)$ is exactly $t^p$ times the positive matrix
+    supplied by the positive-map resolvent inequality (using
+    $t^p\,t^{-1}=t^{p-1}$).
+\end{proof}
+
 \begin{lemma}[Positive matrix-valued integrals]\label{lem:operator_jensen_integral_order}
     \lean{TNLean.OperatorJensen.integral_nonneg_matrix_of_ae}
     \leanok
@@ -357,7 +389,8 @@ are not developed elsewhere in this document.
 \begin{theorem}[Jensen for convex real powers]\label{thm:posMap_rpow_convex_jensen}
     \lean{posMap_rpow_convex_jensen}
     \leanok
-    \uses{def:positive_map, lem:operator_jensen_positive_map_rpow_integrand,
+    \uses{def:positive_map,
+        lem:operator_jensen_positive_map_rpow_integrand_convex,
         lem:operator_jensen_integral_order}
     For a positive subunital map $T$, a positive semidefinite matrix~$A$,
     and $p\in[1,2]$:
@@ -372,14 +405,15 @@ are not developed elsewhere in this document.
     For $p=1$ the assertion is an equality.  For $1<p<2$, use Carlen's
     integral representation of $A^p$ by the convex integrands
     $g_{p,t}(x)=t^{p-2}x+t^p(t+x)^{-1}-t^{p-1}$.  The pointwise inequality
-    $g_{p,t}(TA)\le T(g_{p,t}(A))$ is the reversed form of the resolvent
-    estimate underlying Lemma~\ref{lem:operator_jensen_positive_map_rpow_integrand},
-    scaled by $t^p\ge0$.  Integrating this inequality with respect to the
-    representing measure and using
-    Lemma~\ref{lem:operator_jensen_integral_order} together with linearity of
-    the Bochner integral under $T$ gives the inequality for $1<p<2$.  The
-    endpoint $p=2$ follows by continuity of $M\mapsto M^q$ in the exponent, as
-    the limit of the open-interval inequality as $q\to2^-$.
+    $g_{p,t}(TA)\le T(g_{p,t}(A))$ is
+    Lemma~\ref{lem:operator_jensen_positive_map_rpow_integrand_convex}.
+    Integrating this inequality with respect to the representing measure and
+    using Lemma~\ref{lem:operator_jensen_integral_order} together with linearity
+    of the Bochner integral under $T$ gives the inequality for $1<p<2$.  The
+    endpoint $p=2$ follows by taking the limit $q\to2^-$ in
+    $(TA)^q\le T(A^q)$: since $M^q\to M^2$ in the operator norm as $q\to2^-$ for
+    any positive semidefinite $M$, and the Loewner order is closed, this gives
+    $(TA)^2\le T(A^2)$.
 \end{proof}
 
 \begin{theorem}[Map form of Jensen for convex real powers]\label{thm:rpow_convex_jensen}
