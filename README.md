@@ -1,4 +1,12 @@
-# TNLean
+<p align="center">
+  <img src="docs/logo.svg" alt="TNLean" width="440">
+</p>
+
+<p align="center">
+  <b>The mathematics of tensor networks, machine-checked in Lean 4</b><br>
+  from quantum channels to the Fundamental Theorem of Matrix Product States —
+  every proof verified by the computer.
+</p>
 
 [![Lean Action CI](https://github.com/LionSR/TNLean/actions/workflows/lean_action_ci.yml/badge.svg)](https://github.com/LionSR/TNLean/actions/workflows/lean_action_ci.yml)
 [![Compile blueprint](https://github.com/LionSR/TNLean/actions/workflows/blueprint.yml/badge.svg)](https://github.com/LionSR/TNLean/actions/workflows/blueprint.yml)
@@ -7,71 +15,66 @@
 ![Lean](https://img.shields.io/endpoint?url=https://sirui-lu.com/TNLean/badges/lean.json)
 ![Mathlib](https://img.shields.io/endpoint?url=https://sirui-lu.com/TNLean/badges/mathlib.json)
 
-TNLean is a Lean 4 library for finite-dimensional tensor-network mathematics.  Its
-central thread is the Fundamental Theorem of Matrix Product States (MPS), with
-formal developments of finite-dimensional quantum channels, Perron--Frobenius
-and quantum Wielandt theory, parent Hamiltonians, matrix-product density
-operators (MPDOs), renormalization fixed points (RFPs), and the present PEPS
-frontier.  The project is built on
-[Mathlib](https://github.com/leanprover-community/mathlib4) and currently uses
-Lean 4 / Mathlib `v4.31.0`.
+Tensor networks are the language physicists use to describe quantum many-body
+systems — and the theorems behind them are subtle enough that even experts get them
+wrong.  **TNLean** rebuilds this theory inside the [Lean 4](https://lean-lang.org/)
+proof assistant, so that every statement is checked by the computer down to the
+axioms.  No hand-waving, no "it can be shown": a result that compiles here is a
+result that is true.
 
-This is a research formalization.  The maintained root import is
+Its centrepiece is the **Fundamental Theorem of Matrix Product States** — the
+statement that two matrix-product descriptions yield the same physical state only
+when a simple change of basis (a "gauge") relates them.  Around it grows a sizeable
+formal development of the surrounding theory: quantum channels, Perron--Frobenius
+and quantum Wielandt theory, parent Hamiltonians, matrix-product density operators,
+renormalization fixed points, and projected entangled pair states.
+
+Built on [Mathlib](https://github.com/leanprover-community/mathlib4) (Lean 4 /
+Mathlib `v4.31.0`), the whole library loads with a single line:
 
 ```lean
 import TNLean
 ```
 
-and it imports the public modules intended for downstream users.  Some frontier
-files still contain explicit `sorry`s or sanctioned axioms; the badges above and
-the LeanBlueprint give the current accounting.  The README below is therefore
-conservative: it separates proved infrastructure and theorem packages from the
-canonical-form, parent-Hamiltonian, MPDO/RFP, and PEPS arguments that remain
-active formalization fronts.
+This is an active research formalization, not a finished textbook.  Some of the more
+advanced files still contain unfinished proofs (`sorry`) or results assumed rather
+than proved (axioms); the badges above track the current counts, and the sections
+below are explicit about what is fully proved and what is still being built.
 
 ## Mathematical scope
 
 ### Matrix product states and the Fundamental Theorem
 
-The MPS core introduces tensors `MPSTensor d D`, word evaluation, matrix product
-vector (MPV) coefficients, injectivity, blocking, transfer maps, overlap matrices,
-block-diagonal tensors, and gauge equivalence.  The basic single-block theorem is
-proved by extending the map $A^i \mapsto B^i$ linearly, proving multiplicativity
-from MPV equality, and applying Skolem--Noether for full matrix algebras:
+An MPS describes a quantum state of a chain of sites by placing a matrix at each
+site and multiplying them together.  The library defines these tensors
+(`MPSTensor d D`) and the basic operations on them, and proves the **single-block
+Fundamental Theorem**: if a tensor is "injective" (its matrices are rich enough to
+span everything) and two tensors describe the same state, then one is a gauge
+transformation of the other.
 
 ```lean
 theorem MPSTensor.fundamentalTheorem_singleBlock {A B : MPSTensor d D}
     (hA : IsInjective A) (hAB : SameMPV A B) : GaugeEquiv A B
 ```
 
-The library also contains chain-level variants, translation-invariance
-corollaries, finite-length SameMPV interfaces, and bridges between equality of
-periodic states and equality of MPV families under explicit hypotheses.
-
-The multi-block and canonical-form development is substantially larger.  It
-formalizes BNT-style block data, block permutations, normal and canonical-form
-predicates, overlap decay hypotheses, coefficient-convergence statements, and
-same-structure assembly theorems.  Current top-level theorems include the
-canonical-form equal-MPV and proportional-MPV results under explicit structural
-and coefficient hypotheses, together with reduction theorems that decompose a
-general tensor, normalize nonzero irreducible blocks by a trace-preserving gauge,
-and remove periods by blocking or cyclic-sector decomposition.  What is not yet
-advertised as a completed theorem is the fully automatic passage from arbitrary
-raw tensors to the final paper-level canonical form with all common-length,
-length-zero dimension, and sector-comparison hypotheses derived internally.
+Building on this, the library treats the general (multi-block) case, where a state
+decomposes into several injective pieces, and the *canonical form* that makes such
+a decomposition unique.  The precise hypotheses of each theorem are stated in its
+Lean signature.
 
 ### Quantum channels and Perron--Frobenius theory
 
-The channel side works with finite-dimensional matrix algebras.  It includes
-positive and completely positive maps, density-matrix retracts, partial traces,
-Choi--Jamiolkowski matrices, Kraus representations, Stinespring dilations, CP
-order and Radon--Nikodym infrastructure, POVMs, Schwarz inequalities and
-multiplicative domains, fixed-point algebras, irreducibility, stationary supports,
-peripheral spectra, and finite-dimensional quantum Markov semigroups in the
-style of Wolf's *Quantum Channels & Operations*.
+Following Wolf's *Quantum Channels & Operations*, the library develops the theory
+of quantum channels on finite-dimensional matrix algebras: the standard
+representations (Choi, Kraus, Stinespring), Schwarz inequalities, fixed-point
+structure, irreducibility, peripheral spectra, and quantum Markov semigroups.  The
+coverage is selective — the chapters most relevant to MPS are the most developed —
+and a few deep inputs (such as strong subadditivity of entropy) are taken as given
+rather than reproved from scratch.
 
-One recurrent tool is the Perron--Frobenius existence theorem for positive maps,
-proved through a Brouwer fixed-point theorem on density matrices:
+A recurring tool is the quantum Perron--Frobenius theorem: every positive map has a
+positive-semidefinite eigenvector with positive eigenvalue, proved here via a
+Brouwer fixed-point argument on density matrices.
 
 ```lean
 theorem exists_posSemidef_eigenvector [NeZero D]
@@ -82,24 +85,11 @@ theorem exists_posSemidef_eigenvector [NeZero D]
       ρ.PosSemidef ∧ ρ ≠ 0 ∧ 0 < r ∧ E ρ = (r : ℂ) • ρ
 ```
 
-The formalized Wolf material is selective rather than a chapter-by-chapter
-completion.  Chapters on Schwarz inequalities, spectral theory, fixed points, and
-semigroups are the most developed.  Strong subadditivity and some
-operator-convexity facts are recorded as explicit axiomatized interfaces.
-Mutual-information monotonicity $I(A{:}B) \le I(A{:}BC)$
-(`Entropy.mutualInformation_monotone_tripartite`,
-arXiv:1606.00608 Prop C.1) and the area-law bound
-$I(A{:}B) \le \log d_A + \log d_B$
-(`Entropy.mutualInformation_le_log_dim_add_log_dim`,
-arXiv:1606.00608 line 1319) are proved as theorems from strong subadditivity,
-while further operator-convexity facts await upstream Mathlib coverage.
-
 ### Quantum Wielandt theory
 
-The Wielandt hierarchy supplies span-growth infrastructure, rank-one extraction,
-rectangular span arguments, primitive-map definitions, and paper-facing endpoint
-modules.  A central current theorem is the cumulative $D^2$ bound for the
-project's normality predicate:
+The quantum Wielandt inequality controls how quickly products of a tensor's
+matrices span the whole matrix algebra.  A central result here is that for a normal
+tensor the spanning length is at most $D^2$, where $D$ is the bond dimension:
 
 ```lean
 theorem cumulativeSpan_eq_top_of_isNormal_bound [NeZero D]
@@ -107,89 +97,62 @@ theorem cumulativeSpan_eq_top_of_isNormal_bound [NeZero D]
     cumulativeSpan A (D ^ 2) = ⊤
 ```
 
-The active frontier here is to align sharpened quantum Wielandt bounds with the
-subspace elements and constants used in the source literature.  The repository
-keeps mathematical notes under `docs/paper-gaps/` when a paper argument and the
-formal statement are not identical.
+Sharpening this bound to match the constants in the literature is ongoing.
 
-### Parent Hamiltonians, MPDO/RFP, PEPS, and examples
+### Parent Hamiltonians, density operators, PEPS, and examples
 
-The parent-Hamiltonian modules define local terms and finite-chain ground spaces,
-prove basic frustration-free and annihilation statements, develop intersection
-and wrapping-window infrastructure, and contain unique-ground-state theorems for
-injective or normal MPS under the hypotheses stated in the Lean declarations.
-The martingale and overlapping-window estimates needed for spectral-gap proofs
-remain an active frontier.
+Beyond the core, the library reaches into several neighbouring topics, each at an
+earlier stage:
 
-The MPDO and RFP modules contain foundations for matrix-product density
-operators, locally purified density operators, vertical and bi-canonical form,
-zero-correlation-length and RFP predicates, pure-recovery and structural-form
-interfaces, fusion-isometry and commuting-form constructions, and related
-bridges.  These files should be read as a growing formal infrastructure for the
-MPDO/RFP parts of the tensor-network story, not as a completed classification
-proof.
+- **Parent Hamiltonians.** Local Hamiltonians whose ground space is the MPS, with
+  frustration-freeness and uniqueness of the ground state proved for injective or
+  normal tensors.  The estimates that would yield a spectral gap are not yet done.
+- **Matrix-product density operators.** Mixed-state analogues of MPS, their
+  canonical and zero-correlation-length forms, and renormalization fixed points —
+  developed as a foundation, not yet a complete classification.
+- **Projected entangled pair states (PEPS).** The two-dimensional generalization of
+  MPS, with the relevant definitions in place and a proof of the corresponding
+  Fundamental Theorem still to come.
+- **Examples.** Concrete states such as AKLT, GHZ, even parity, and the
+  $\mathbb{Z}/2\mathbb{Z}$ models, alongside algebraic variants of the Fundamental
+  Theorem.
 
-The PEPS directory gives finite-graph tensor definitions including square-lattice
-graph structure, state coefficients, virtual insertion, identity-edge insertion,
-normal-edge blocking and complement-cover infrastructure, edge gauge extraction,
-local gauge operations, and the current scaffold for the injective PEPS
-Fundamental Theorem.  The PEPS theorem
-statements are intentionally present near the definitions they require, but the
-complete proof of the two-dimensional theorem is still future work.
+Where a formal statement does not exactly match its source, the discrepancy is
+recorded as a mathematical note under `docs/paper-gaps/`.
 
-The repository also contains small MPS examples such as AKLT, GHZ, even parity,
-and $\mathbb{Z}/2\mathbb{Z}$ examples, together with the `TNLean/PiAlgebra/`
-directory of algebraic Fundamental-Theorem variants.
+## Organization of the source
 
-## Module structure
+The file `TNLean.lean` collects everything that is imported as one library;
+legacy material in `TNLean/Archive/` is kept out of it.  The source is grouped
+roughly as follows.
 
-`TNLean.lean` is the public import surface.  It imports maintained modules and
-intentionally leaves archival material in `TNLean/Archive/` outside the root
-import.  The main source tree is organized as follows.
-
-| Path | Role |
+| Path | Contents |
 |---|---|
-| `TNLean/Algebra`, `TNLean/Analysis`, `TNLean/Topology` | Matrix algebra, trace pairings, Gram matrices, Frobenius norms, Skolem--Noether, convergence helpers, and finite-dimensional fixed-point infrastructure. |
-| `TNLean/Axioms`, `TNLean/Entropy` | Explicit interfaces for Brouwer, strong subadditivity, Beigi recovery, operator convexity, and entropy corollaries. |
-| `TNLean/Channel` | Quantum-channel representations, Schwarz theory, fixed points, irreducibility, peripheral spectra, semigroups, determinants, POVMs, and Wolf chapter index modules. |
-| `TNLean/QPF`, `TNLean/Spectral` | Perron--Frobenius, positivity, mixed transfers, overlap decay, spectral gaps, and quantitative correlation estimates. |
-| `TNLean/MPS/Core`, `TNLean/MPS/Chain`, `TNLean/MPS/Overlap` | MPS tensors, words, blocking, chains, transfer maps, and overlap matrices. |
-| `TNLean/MPS/Tactic` | Custom `simp` attribute sets (`mps_block_words`, `mps_transfer`) and tactic macros (`mpv_ext`, `block_words`, `transfer_simp`) for recurring MPS proof patterns. |
-| `TNLean/MPS/FundamentalTheorem`, `TNLean/MPS/BNT`, `TNLean/MPS/CanonicalForm`, `TNLean/MPS/Periodic`, `TNLean/MPS/Structure` | Single-block, same-structure, BNT, periodic, and canonical-form Fundamental-Theorem material. |
-| `TNLean/MPS/Symmetry` | Gauge uniqueness, on-site symmetries, virtual representations, cocycle coboundaries, symmetric MPS, and string-order infrastructure. |
-| `TNLean/MPS/Irreducible` | Fixed-point projections, Form II reductions, scalar fixed points, adjoint irreducibility, and periodic-blocking infrastructure for irreducible blocks. |
-| `TNLean/MPS/SharedInfra` | Cross-cutting helpers reused across the canonical-form, irreducible, and Wielandt developments: block assembly and gauge data, gauge-phase normalization, Kraus-adjoint setup, scaling, and sector decomposition. |
-| `TNLean/MPS/ParentHamiltonian` | Parent Hamiltonians, local projectors, ground spaces, intersection and wrapping-window arguments, commuting cases, and martingale estimates. |
-| `TNLean/MPS/MPDO`, `TNLean/MPS/RFP` | MPDO/LPDO foundations, canonical-form and zero-correlation-length predicates, pure RFP structures, and structural bridges. |
-| `TNLean/MPS/Examples` | Example tensors and state families, including AKLT, even-parity, GHZ, and $\mathbb{Z}/2$ examples. |
-| `TNLean/Wielandt` | Quantum Wielandt span growth, rank-one constructions, rectangular span, primitivity equivalences, and paper-facing endpoints. |
-| `TNLean/PEPS` | PEPS definitions, square-lattice graph structure, virtual insertions, identity-edge insertions, normal-edge blocking and complement-cover infrastructure, edge gauge extraction, local gauge transformations, and the injective PEPS theorem frontier. |
-| `TNLean/PiAlgebra` | Algebraic Fundamental-Theorem variants and product-algebra/canonical-form auxiliary predicates. |
-| `blueprint/`, `docs/` | The LeanBlueprint, style and contribution guides, CI documentation, and paper-gap notes. |
+| `TNLean/Algebra`, `TNLean/Analysis`, `TNLean/Topology` | Linear algebra of matrices: traces, Gram matrices, Frobenius norms, Skolem--Noether, and convergence and fixed-point results. |
+| `TNLean/Axioms`, `TNLean/Entropy` | Inputs taken as given (Brouwer's theorem, strong subadditivity of entropy) and consequences drawn from them. |
+| `TNLean/Channel` | Quantum channels: their representations, Schwarz theory, fixed points, irreducibility, peripheral spectra, and semigroups. |
+| `TNLean/QPF`, `TNLean/Spectral` | Perron--Frobenius theory, spectral gaps, and correlation-decay estimates. |
+| `TNLean/MPS/Core`, `TNLean/MPS/Chain`, `TNLean/MPS/Overlap` | Matrix product states: tensors, words, blocking, transfer maps, and overlap matrices. |
+| `TNLean/MPS/FundamentalTheorem`, `.../BNT`, `.../CanonicalForm`, `.../Periodic`, `.../Structure`, `.../Irreducible` | The Fundamental Theorem in its single-block, multi-block, canonical-form, and periodic versions. |
+| `TNLean/MPS/Symmetry` | Symmetries of MPS: on-site and virtual symmetry, cohomology of cocycles, and string order. |
+| `TNLean/MPS/ParentHamiltonian` | Parent Hamiltonians, their ground spaces, and uniqueness of the ground state. |
+| `TNLean/MPS/MPDO`, `TNLean/MPS/RFP` | Matrix-product density operators and renormalization fixed points. |
+| `TNLean/MPS/Examples` | Worked examples (AKLT, GHZ, even parity, $\mathbb{Z}/2\mathbb{Z}$). |
+| `TNLean/Wielandt` | The quantum Wielandt inequality and primitivity. |
+| `TNLean/PEPS` | Projected entangled pair states on finite graphs. |
+| `TNLean/PiAlgebra` | Algebraic variants of the Fundamental Theorem. |
+| `blueprint/`, `docs/` | The mathematical companion text, conventions, and notes on gaps from the sources. |
 
-For exact imports, read `TNLean.lean`; it is the most reliable snapshot of the
-maintained library surface.
+## Status
 
-## Current frontiers
+Because the formalization is still growing, the README does not try to track which
+individual results are complete.  The authoritative, always-current picture is:
 
-The issue tracker contains fine-grained formalization tasks.  The main fronts at
-the present release state are:
-
-- completing the arbitrary-tensor-to-final-canonical-form path, especially common
-  blocking lengths, cyclic-sector comparison, length-zero dimension bookkeeping,
-  and the finite-length span equalities used by the block permutation theorem;
-- strengthening the parent-Hamiltonian story from intersection and uniqueness
-  results toward martingale and overlapping-window spectral-gap estimates;
-- extending the quantum Wielandt endpoint to the sharpened bounds and subspace
-  elements used in the current paper notes;
-- turning the MPDO/RFP structural interfaces into complete classification
-  arguments; and
-- replacing the PEPS Fundamental-Theorem scaffold by a full proof of local gauge
-  existence, consistency, and uniqueness.
-
-Known mathematical deviations, missing hypotheses, or places where the formal
-route differs from a cited source are recorded in `docs/paper-gaps/` as
-stand-alone mathematical notes.
+- the `sorries` and `axioms` badges at the top of this page, for the count of
+  unfinished proofs and assumed results;
+- the blueprint, which marks each theorem as formalized or not; and
+- `docs/paper-gaps/`, which records where a formal statement diverges from its
+  cited source.
 
 ## Building
 
@@ -215,14 +178,10 @@ Repository-specific notes from past Lean/Mathlib upgrades are collected in
 
 ## Blueprint and documentation
 
-The LeanBlueprint in `blueprint/` is the mathematical companion to the Lean
-library.  Its chapters cover the MPS core, the single-block theorem, quantum
-channels, Perron--Frobenius theory, Schwarz inequalities, spectral theory,
-quantum Wielandt, canonical form, BNT and block-permutation arguments, periodic
-Fundamental-Theorem material, semigroups, PEPS, symmetry, parent Hamiltonians,
-correlations, and examples.
-
-Typical blueprint commands are:
+The blueprint in `blueprint/` is the mathematical companion to the formalization:
+it states the definitions and theorems in ordinary mathematical language and links
+each one to its Lean proof.  It is built with `leanblueprint` on top of a
+successful `lake build`:
 
 ```bash
 lake build TNLean
@@ -231,10 +190,8 @@ leanblueprint checkdecls
 leanblueprint web   # or: leanblueprint pdf / leanblueprint all
 ```
 
-The command `leanblueprint checkdecls` assumes that the Lean declarations named
-in the blueprint are available from a successful Lean build.  General repository
-guidance for contributors is in `AGENTS.md` and `CLAUDE.md`; style and review
-conventions are in `docs/`.
+Conventions for contributors are collected in `AGENTS.md`, `CLAUDE.md`, and
+`docs/`.
 
 ## References
 
