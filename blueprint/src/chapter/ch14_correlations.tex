@@ -486,6 +486,33 @@ and rates for the single-tensor transfer map $\E_A$.
     normalization contributes the factor $D^{-1}$ in the pair-index equation.
 \end{proof}
 
+\begin{theorem}[Structural form with diagonal square-sum identity]%
+    \label{thm:rfp_nt_structural_full_sq_sum}
+    \lean{MPSTensor.rfp_nt_structural_full_sqSum}
+    \leanok
+    \uses{thm:rfp_nt_structural_of_left_canonical,
+        thm:rfp_nt_cfii_diagonal_fixed_point,
+        thm:transferMap_eq_fixedPointProj_of_isRFP_injective}
+    The same decomposition as the full structural form
+    (Theorem~\ref{thm:rfp_nt_structural_full}) additionally records that the
+    diagonal weights satisfy $\sum_\alpha \Lambda_\alpha^2 = D$.  This square-sum
+    identity is the trace-normalization seed: the explicit weights are
+    $\Lambda_\alpha = \sqrt{D\,\rho_{\alpha,\alpha}/\tr\rho}$, and
+    $\sum_\alpha \rho_{\alpha,\alpha} = \tr\rho$ for the diagonal fixed point
+    $\rho$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:rfp_nt_structural_of_left_canonical,
+        thm:rfp_nt_cfii_diagonal_fixed_point,
+        thm:transferMap_eq_fixedPointProj_of_isRFP_injective}
+    The diagonal fixed-point reduction and the rank-one classification of
+    injective left-canonical renormalization fixed points produce the diagonal
+    weights $\Lambda_\alpha = \sqrt{D\,\rho_{\alpha,\alpha}/\tr\rho}$, so
+    $\Lambda_\alpha^2 = D\,\rho_{\alpha,\alpha}/\tr\rho$.  Summing over $\alpha$
+    and using $\sum_\alpha \rho_{\alpha,\alpha} = \tr\rho$ gives
+    $\sum_\alpha \Lambda_\alpha^2 = D$.
+\end{proof}
+
 \begin{theorem}[Unit pair-index form for RFP tensors]%
     \label{thm:rfp_nt_structural_full_unit_pair}
     \lean{MPSTensor.rfp_nt_structural_full_unit_pair}
@@ -593,6 +620,86 @@ and rates for the single-tensor transfer map $\E_A$.
 \begin{proof}\leanok
     \uses{thm:rfp_nt_structural_full_unit_pair}
     Apply Theorem~\ref{thm:rfp_nt_structural_full_unit_pair} to each block.
+\end{proof}
+
+\begin{definition}[Isometry canonical form]%
+    \label{def:is_isometry_canonical_form}
+    \lean{MPSTensor.IsIsometryCanonicalForm}
+    \leanok
+    A normal tensor $A$ is in \emph{isometry canonical form} when there are an
+    invertible $X$, a positive diagonal weight $\Lambda$ with the trace
+    normalization $\sum_\alpha \Lambda_\alpha = 1$, and a residual tensor $U$
+    satisfying the unit pair-index isometry
+    \[
+        \sum_i \overline{(U^i)_{\alpha,\beta}}\,(U^i)_{\alpha',\beta'}
+        = \delta_{\alpha,\alpha'}\delta_{\beta,\beta'},
+    \]
+    such that
+    \[
+        A^i = X\,\sqrt\Lambda\,U^i\,X^{-1}.
+    \]
+    The square root dresses the unit isometry because the reference tensor of
+    \cite[Section~3]{Cirac2016MPDO_arXiv} is
+    $\widehat A^{(\alpha',\beta')}_{\alpha,\beta}
+        = \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}\sqrt{\Lambda_\alpha}$;
+    the normalization $\tr(\Lambda)=1$ is imposed on $\Lambda$, equivalently on
+    the normalized diagonal fixed point $\rho=\diag(\Lambda)$ of the transfer
+    map. The displayed source form writes $A^i=X\Lambda U^iX^{-1}$ with the bare
+    diagonal; that pairing forces a non-unit residual, so the consistent
+    decomposition keeps the square root $\sqrt\Lambda$ while the trace
+    normalization stays on $\Lambda$. This records the diagonal $j=j'$ case of
+    the source isometry condition.
+    % Square-root correction documented in
+    % docs/paper-gaps/cpsv16_rfp_isometry_scope.tex
+\end{definition}
+
+\begin{theorem}[Trace-normalized isometry canonical form for RFP tensors]%
+    \label{thm:isometry_canonical_form_of_rfp_nt}
+    \lean{MPSTensor.isIsometryCanonicalForm_of_rfp_nt}
+    \leanok
+    \uses{def:is_isometry_canonical_form, thm:rfp_nt_structural_full_sq_sum}
+    A normal tensor in canonical form~II that is a renormalization fixed point
+    is in isometry canonical form: it admits a decomposition
+    $A^i = X\sqrt\Lambda\,U^i X^{-1}$ with $\Lambda$ diagonal, positive,
+    trace-normalized ($\sum_\alpha \Lambda_\alpha = 1$, the source condition
+    $\tr(\Lambda)=1$), and $U$ a unit pair-index isometry.  The diagonal weight
+    is $\Lambda_\alpha = \rho_{\alpha,\alpha}/\tr\rho$, the normalized diagonal
+    fixed point of the transfer map; trace-normalization is then the trace
+    identity $\sum_\alpha \rho_{\alpha,\alpha} = \tr\rho$.  This is the
+    single-block normal-tensor case of the structural characterization of
+    pure-state renormalization fixed points in
+    \cite[Section~3]{Cirac2016MPDO_arXiv}, recovering the diagonal part of the
+    isometry condition there.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:rfp_nt_structural_full_sq_sum}
+    The structural form with the square-sum identity
+    (Theorem~\ref{thm:rfp_nt_structural_full_sq_sum}) supplies a positive
+    diagonal weight $\widetilde\Lambda$ with
+    $\sum_\alpha \widetilde\Lambda_\alpha^2 = D$.  Rescaling to the unit
+    pair-index convention by $U^i\mapsto\sqrt D\,U^i$ and setting
+    $\Lambda_\alpha=(\widetilde\Lambda_\alpha/\sqrt D)^2$ gives
+    $\sum_\alpha \Lambda_\alpha = D^{-1}\sum_\alpha \widetilde\Lambda_\alpha^2
+    = D^{-1}\cdot D = 1$, while
+    $\sqrt{\Lambda_\alpha}=\widetilde\Lambda_\alpha/\sqrt D$ recovers the
+    decomposition $A^i = X\sqrt\Lambda\,U^i X^{-1}$.
+\end{proof}
+
+\begin{theorem}[Per-block trace-normalized isometry canonical form]%
+    \label{thm:isometry_canonical_form_of_rfp_nt_blocks}
+    \lean{MPSTensor.isIsometryCanonicalForm_of_rfp_nt_blocks}
+    \leanok
+    \uses{def:is_isometry_canonical_form, thm:isometry_canonical_form_of_rfp_nt}
+    Each block of a multi-block tensor whose blocks are normal, left-canonical
+    renormalization fixed points is in isometry canonical form, with a
+    trace-normalized diagonal weight and a unit pair-index isometry.  This is
+    the single-block trace-normalized form applied to each block; it omits the
+    cross-block orthogonality between distinct normal-tensor blocks, recorded in
+    \path{docs/paper-gaps/cpsv16_rfp_isometry_scope.tex}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:isometry_canonical_form_of_rfp_nt}
+    Apply Theorem~\ref{thm:isometry_canonical_form_of_rfp_nt} to each block.
 \end{proof}
 
 \begin{theorem}[Canonical-form blocks are injective]\label{thm:rfp_cf_structural}
