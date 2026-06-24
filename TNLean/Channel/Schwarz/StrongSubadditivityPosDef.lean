@@ -69,59 +69,6 @@ open Matrix
 
 namespace SSAPosDef
 
-/-! ## Partial trace over the retained factor and its adjoint -/
-
-section RetainedFactor
-
-variable {dA : ℕ} {R : Type*} [Fintype R] [DecidableEq R]
-
-/-- Partial trace over the first factor $A$ of $A \otimes R$, the retained factor
-of the tripartite splitting. -/
-noncomputable def traceLeftA (ρ : Matrix (Fin dA × R) (Fin dA × R) ℂ) : Matrix R R ℂ :=
-  fun i j => ∑ a : Fin dA, ρ (a, i) (a, j)
-
-/-- The identity-on-$A$ lift $\mathbf 1_A \otimes M$ of a matrix on the retained
-factor. -/
-noncomputable def liftLeftA (M : Matrix R R ℂ) : Matrix (Fin dA × R) (Fin dA × R) ℂ :=
-  (1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ M
-
-omit [Fintype R] [DecidableEq R] in
-/-- The partial trace over the first factor of a positive definite matrix is
-positive definite, being a nonempty sum of positive definite principal
-submatrices. -/
-theorem traceLeftA_posDef [NeZero dA] {ρ : Matrix (Fin dA × R) (Fin dA × R) ℂ} (hρ : ρ.PosDef) :
-    (traceLeftA ρ).PosDef := by
-  have hblock : ∀ a : Fin dA, (ρ.submatrix (fun r : R => (a, r)) (fun r => (a, r))).PosDef :=
-    fun a => hρ.submatrix (fun i j h => (Prod.ext_iff.mp h).2)
-  have heq : traceLeftA ρ = ∑ a : Fin dA, ρ.submatrix (fun r : R => (a, r)) (fun r => (a, r)) := by
-    ext i j; simp only [traceLeftA, Matrix.sum_apply, Matrix.submatrix_apply]
-  rw [heq]
-  exact Matrix.posDef_sum Finset.univ_nonempty fun a _ => hblock a
-
-omit [DecidableEq R] in
-/-- **Partial-trace adjoint identity.** The trace of an identity-on-$A$ lift
-against a matrix equals the trace of the matrix against the partial trace over the
-first factor: $\operatorname{tr}((\mathbf 1_A \otimes M) \rho)
-= \operatorname{tr}(M \operatorname{tr}_A \rho)$. -/
-theorem traceLeftA_lift_trace (M : Matrix R R ℂ) (ρ : Matrix (Fin dA × R) (Fin dA × R) ℂ) :
-    (liftLeftA (dA := dA) M * ρ).trace = (M * traceLeftA ρ).trace := by
-  simp only [Matrix.trace, Matrix.diag_apply, Matrix.mul_apply, Fintype.sum_prod_type,
-    liftLeftA, kroneckerMap_apply, Matrix.one_apply, traceLeftA, Finset.mul_sum]
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl fun i _ => ?_
-  have hL : ∀ a : Fin dA, (∑ a₂, ∑ j, (if a = a₂ then (1 : ℂ) else 0) * M i j * ρ (a₂, j) (a, i))
-      = ∑ j, M i j * ρ (a, j) (a, i) := by
-    intro a
-    rw [Finset.sum_comm]
-    refine Finset.sum_congr rfl fun j _ => ?_
-    rw [Finset.sum_eq_single a]
-    · simp
-    · intro a₂ _ hne; simp [Ne.symm hne]
-    · intro h; exact absurd (Finset.mem_univ a) h
-  rw [Finset.sum_congr rfl fun a _ => hL a, Finset.sum_comm]
-
-end RetainedFactor
-
 /-! ## The logarithm of a positive scalar multiple of the identity -/
 
 /-- **Logarithm of a positive scalar multiple of the identity.** For a real

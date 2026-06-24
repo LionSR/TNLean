@@ -28,10 +28,11 @@ $A$, annihilates the full state.
   vanishing $\operatorname{tr}(Q \rho) = 0$ forces $Q \rho = 0$. This is the
   operator form of "a projection with zero expectation against a positive
   semidefinite state annihilates it".
-* `Matrix.traceA_ABC_lift_trace` — the partial-trace adjoint identity
-  $\operatorname{tr}((\mathbf 1_A \otimes M) \rho_{ABC})
-  = \operatorname{tr}(M \operatorname{tr}_A \rho_{ABC})$ for a matrix $M$ on the
-  $B \otimes C$ factor lifted by the identity on $A$.
+* `Matrix.traceLeftA_lift_trace` — the partial-trace adjoint identity
+  $\operatorname{tr}((\mathbf 1_A \otimes M) \rho)
+  = \operatorname{tr}(M \operatorname{tr}_A \rho)$ for a matrix $M$ on a general
+  retained factor lifted by the identity on $A$, and `Matrix.traceA_ABC_lift_trace`,
+  its special case for the $B \otimes C$ factor.
 * `Matrix.marginal_support` — the marginal support lemma: if a Hermitian
   idempotent $Q$ on $B \otimes C$ annihilates the marginal
   $\operatorname{tr}_A \rho_{ABC}$, then its identity-on-$A$ lift annihilates
@@ -61,7 +62,7 @@ annihilates the marginal, so the core lemma applies to the lifted projection.
   (Distance Measures)][Wolf2012QChannels].
 -/
 
-open scoped Matrix ComplexOrder
+open scoped Matrix ComplexOrder Kronecker
 open Matrix Finset
 
 namespace Matrix
@@ -152,6 +153,61 @@ theorem PosSemidef.proj_mul_eq_zero_of_trace_eq_zero {ρ Q : Matrix n n ℂ}
 
 end Core
 
+/-! ## Partial trace over the retained factor and its adjoint -/
+
+section RetainedFactor
+
+variable {dA : ℕ} {R : Type*} [Fintype R] [DecidableEq R]
+
+/-- Partial trace over the first factor $A$ of $A \otimes R$, the retained factor
+of the tripartite splitting. The marginal `traceA_ABC` is the special case
+$R = B \otimes C$. -/
+noncomputable def traceLeftA (ρ : Matrix (Fin dA × R) (Fin dA × R) ℂ) : Matrix R R ℂ :=
+  fun i j => ∑ a : Fin dA, ρ (a, i) (a, j)
+
+/-- The identity-on-$A$ lift $\mathbf 1_A \otimes M$ of a matrix on the retained
+factor. The lift `liftA` is the special case $R = B \otimes C$. -/
+noncomputable def liftLeftA (M : Matrix R R ℂ) : Matrix (Fin dA × R) (Fin dA × R) ℂ :=
+  (1 : Matrix (Fin dA) (Fin dA) ℂ) ⊗ₖ M
+
+omit [Fintype R] [DecidableEq R] in
+/-- The partial trace over the first factor of a positive definite matrix is
+positive definite, being a nonempty sum of positive definite principal
+submatrices. -/
+theorem traceLeftA_posDef [NeZero dA] {ρ : Matrix (Fin dA × R) (Fin dA × R) ℂ} (hρ : ρ.PosDef) :
+    (traceLeftA ρ).PosDef := by
+  have hblock : ∀ a : Fin dA, (ρ.submatrix (fun r : R => (a, r)) (fun r => (a, r))).PosDef :=
+    fun a => hρ.submatrix (fun i j h => (Prod.ext_iff.mp h).2)
+  have heq : traceLeftA ρ = ∑ a : Fin dA, ρ.submatrix (fun r : R => (a, r)) (fun r => (a, r)) := by
+    ext i j; simp only [traceLeftA, Matrix.sum_apply, Matrix.submatrix_apply]
+  rw [heq]
+  exact Matrix.posDef_sum Finset.univ_nonempty fun a _ => hblock a
+
+omit [DecidableEq R] in
+/-- **Partial-trace adjoint identity.** The trace of an identity-on-$A$ lift
+against a matrix equals the trace of the matrix against the partial trace over the
+first factor: $\operatorname{tr}((\mathbf 1_A \otimes M) \rho)
+= \operatorname{tr}(M \operatorname{tr}_A \rho)$. The marginal version
+`traceA_ABC_lift_trace` is the special case $R = B \otimes C$. -/
+theorem traceLeftA_lift_trace (M : Matrix R R ℂ) (ρ : Matrix (Fin dA × R) (Fin dA × R) ℂ) :
+    (liftLeftA (dA := dA) M * ρ).trace = (M * traceLeftA ρ).trace := by
+  simp only [Matrix.trace, Matrix.diag_apply, Matrix.mul_apply, Fintype.sum_prod_type,
+    liftLeftA, kroneckerMap_apply, Matrix.one_apply, traceLeftA, Finset.mul_sum]
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl fun i _ => ?_
+  have hL : ∀ a : Fin dA, (∑ a₂, ∑ j, (if a = a₂ then (1 : ℂ) else 0) * M i j * ρ (a₂, j) (a, i))
+      = ∑ j, M i j * ρ (a, j) (a, i) := by
+    intro a
+    rw [Finset.sum_comm]
+    refine Finset.sum_congr rfl fun j _ => ?_
+    rw [Finset.sum_eq_single a]
+    · simp
+    · intro a₂ _ hne; simp [Ne.symm hne]
+    · intro h; exact absurd (Finset.mem_univ a) h
+  rw [Finset.sum_congr rfl fun a _ => hL a, Finset.sum_comm]
+
+end RetainedFactor
+
 /-! ## Marginal support lemma for the tripartite partial trace -/
 
 section Marginal
@@ -214,38 +270,14 @@ theorem liftA_mul_self {Q : Matrix (Fin dB × Fin dC) (Fin dB × Fin dC) ℂ}
 against a tripartite matrix equals the trace of the matrix against the
 $A$-partial trace:
 $\operatorname{tr}((\mathbf 1_A \otimes M) \rho_{ABC})
-= \operatorname{tr}(M \operatorname{tr}_A \rho_{ABC})$. -/
+= \operatorname{tr}(M \operatorname{tr}_A \rho_{ABC})$. The special case
+$R = B \otimes C$ of `traceLeftA_lift_trace`, with which `liftA` and
+`traceA_ABC` agree definitionally. -/
 theorem traceA_ABC_lift_trace
     (M : Matrix (Fin dB × Fin dC) (Fin dB × Fin dC) ℂ)
     (ρ : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ) :
-    (liftA (dA := dA) M * ρ).trace = (M * traceA_ABC ρ).trace := by
-  -- Expand both traces fully into scalar nested sums.
-  simp only [Matrix.trace, Matrix.diag_apply, Matrix.mul_apply, Fintype.sum_prod_type, liftA,
-    Matrix.one_apply, traceA_ABC, Finset.mul_sum]
-  -- Move the row-`A` index inward past the `b₁, c₁` row sums.
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl fun b₁ _ => ?_
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl fun c₁ _ => ?_
-  -- Collapse the inner double sum over the two A-indices, with their equality
-  -- indicator, to a single diagonal sum over one A-index.
-  have hL : ∀ a : Fin dA, (∑ a₂, ∑ b₂, ∑ c₂, (if a = a₂ then (1 : ℂ) else 0)
-        * M (b₁, c₁) (b₂, c₂) * ρ (a₂, b₂, c₂) (a, b₁, c₁))
-      = ∑ b₂, ∑ c₂, M (b₁, c₁) (b₂, c₂) * ρ (a, b₂, c₂) (a, b₁, c₁) := by
-    intro a
-    rw [Finset.sum_comm]
-    refine Finset.sum_congr rfl fun b₂ _ => ?_
-    rw [Finset.sum_comm]
-    refine Finset.sum_congr rfl fun c₂ _ => ?_
-    rw [Finset.sum_eq_single a]
-    · simp
-    · intro a₂ _ hne; simp [Ne.symm hne]
-    · intro h; exact absurd (Finset.mem_univ a) h
-  rw [Finset.sum_congr rfl fun a _ => hL a]
-  -- Reorder `∑ a ∑ b₂ ∑ c₂` into the RHS layout `∑ b₂ ∑ c₂ ∑ a`.
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl fun b₂ _ => ?_
-  rw [Finset.sum_comm]
+    (liftA (dA := dA) M * ρ).trace = (M * traceA_ABC ρ).trace :=
+  traceLeftA_lift_trace (R := Fin dB × Fin dC) M ρ
 
 /-- **Marginal support lemma.**
 
