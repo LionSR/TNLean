@@ -287,6 +287,39 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     nonnegative.
 \end{proof}
 
+\begin{definition}[Maps preserving the positive semidefinite cone]
+    \label{def:maps_psd_cone_onto}
+    \lean{MapsPSDConeOnto}
+    \leanok
+    \uses{def:positive_map}
+    A linear map $T:\MN{D}\to\MN{D}$ \emph{maps the positive semidefinite cone
+    onto itself} if $T$ is positive and every positive semidefinite matrix is
+    the image under $T$ of a positive semidefinite matrix. This is condition
+    (1) of \cite[Proposition~3.8]{Wolf2012Quantum}.
+\end{definition}
+
+\begin{theorem}[Conjugations preserve the positive semidefinite cone]
+    \label{thm:conjugation_maps_psd_cone_onto}
+    \lean{unitaryConjLM_mapsPSDConeOnto,
+        unitaryConjLM_comp_transpose_mapsPSDConeOnto}
+    \leanok
+    \uses{def:maps_psd_cone_onto}
+    Let $Y\in\MN{D}$ be invertible. Then the map $X\mapsto YXY^\dagger$ and the
+    map $X\mapsto YX^TY^\dagger$ each map the positive semidefinite cone onto
+    itself. This is the implication (3) $\Rightarrow$ (1) of
+    \cite[Proposition~3.8]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Conjugation by any matrix preserves positive semidefiniteness, and the
+    transpose of a positive semidefinite matrix is positive semidefinite, so
+    both maps send the cone into itself. For surjectivity onto the cone, given
+    a positive semidefinite $A$ set $W=Y^{-1}A(Y^{-1})^\dagger$, which is again
+    positive semidefinite. Then $YWY^\dagger=A$ proves the conjugation case,
+    and $Y(W^T)^TY^\dagger=A$ proves the transpose case, with $W$ and $W^T$
+    positive semidefinite.
+\end{proof}
+
 \begin{definition}[Completely positive map]\label{def:cp_map}
     \lean{IsCPMap}
     \leanok
