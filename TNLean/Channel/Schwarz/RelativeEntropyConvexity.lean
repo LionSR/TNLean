@@ -404,7 +404,12 @@ concavity), and converges pointwise to $D$ as $s \to 1^-$
 (`tendsto_relativeEntropyApprox`). The pointwise limit of convex functions is
 convex (`isClosed_setOf_convexOn`), after extending both the approximants and
 the limit by $0$ outside the positive definite domain so the convergence holds at
-every point. -/
+every point.
+
+**Scope restriction (positive-definite domain):** This formalizes the
+positive-definite sub-case (the faithful domain of Lieb's joint concavity). The
+general result holds under the kernel inclusion ker σ ⊆ ker ρ; that extension is
+documented in `docs/paper-gaps/cpsv16_ssa_from_lieb_route.tex`. -/
 theorem convexOn_quantumRelativeEntropy :
     ConvexOn ℝ (posDefSet (D := D) ×ˢ posDefSet (D := D))
       (fun p : Mat × Mat => quantumRelativeEntropy p.1 p.2) := by
