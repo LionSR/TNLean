@@ -1,8 +1,12 @@
-# TNLean
+<p align="center">
+  <img src="docs/logo.svg" alt="TNLean" width="440">
+</p>
 
-> **The mathematics of tensor networks, machine-checked in Lean 4** — from quantum
-> channels to the Fundamental Theorem of Matrix Product States, every proof verified
-> by the computer.
+<p align="center">
+  <b>The mathematics of tensor networks, machine-checked in Lean 4</b><br>
+  from quantum channels to the Fundamental Theorem of Matrix Product States —
+  every proof verified by the computer.
+</p>
 
 [![Lean Action CI](https://github.com/LionSR/TNLean/actions/workflows/lean_action_ci.yml/badge.svg)](https://github.com/LionSR/TNLean/actions/workflows/lean_action_ci.yml)
 [![Compile blueprint](https://github.com/LionSR/TNLean/actions/workflows/blueprint.yml/badge.svg)](https://github.com/LionSR/TNLean/actions/workflows/blueprint.yml)

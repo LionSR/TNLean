@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="650" height="180" viewBox="0 0 650 180" role="img" aria-label="TNLean logo">
+  <defs>
+    <linearGradient id="tnGrad" gradientUnits="userSpaceOnUse" x1="40" y1="40" x2="300" y2="120">
+      <stop offset="0" stop-color="#7c3aed"/>
+      <stop offset="1" stop-color="#2563eb"/>
+    </linearGradient>
+    <style>
+      .bond { stroke: url(#tnGrad); stroke-width: 6; stroke-linecap: round; }
+      .leg  { stroke: #94a3b8; stroke-width: 5; stroke-linecap: round; }
+      .node { fill: #ffffff; stroke: url(#tnGrad); stroke-width: 6; }
+      .word { font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <!-- Matrix product state diagram: a chain of tensors joined by bonds, each with a physical leg -->
+  <g transform="translate(56,70)">
+    <!-- open virtual legs at the ends, then bonds between tensors -->
+    <line class="bond" x1="-34" y1="0" x2="216" y2="0"/>
+    <line class="bond" x1="216" y1="0" x2="250" y2="0"/>
+    <!-- physical legs -->
+    <line class="leg" x1="0"   y1="0" x2="0"   y2="42"/>
+    <line class="leg" x1="72"  y1="0" x2="72"  y2="42"/>
+    <line class="leg" x1="144" y1="0" x2="144" y2="42"/>
+    <line class="leg" x1="216" y1="0" x2="216" y2="42"/>
+    <!-- tensors -->
+    <circle class="node" cx="0"   cy="0" r="14"/>
+    <circle class="node" cx="72"  cy="0" r="14"/>
+    <circle class="node" cx="144" cy="0" r="14"/>
+    <circle class="node" cx="216" cy="0" r="14"/>
+  </g>
+
+  <!-- wordmark -->
+  <text x="360" y="80"  class="word" font-size="48" font-weight="700" fill="#1e293b">TNLean</text>
+  <text x="362" y="108" class="word" font-size="14.5" letter-spacing="2.1" font-weight="500" fill="#64748b">TENSOR NETWORKS · LEAN 4</text>
+</svg>
