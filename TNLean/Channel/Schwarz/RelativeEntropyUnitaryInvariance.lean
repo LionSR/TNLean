@@ -48,8 +48,7 @@ conjugating unitaries.
   (Distance Measures)][Wolf2012QChannels].
 -/
 
-open scoped Matrix ComplexOrder Matrix.Norms.L2Operator
-open Matrix
+open scoped Matrix.Norms.L2Operator
 
 namespace Matrix
 
