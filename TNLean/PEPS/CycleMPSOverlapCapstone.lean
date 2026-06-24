@@ -1,5 +1,5 @@
 import TNLean.PEPS.CycleMPSOverlapInsertion
-import TNLean.PEPS.CycleMPSFundamentalTheorem
+import TNLean.PEPS.CycleArcRegion
 
 /-!
 # The closed-chain corollaries at `n ≥ 2L + 1` via overlapping windows
@@ -15,8 +15,9 @@ translation-invariant MPS on `n ≥ 2L + 1` sites — two matrix tensors, each
   `B^i = λ · Z⁻¹ A^i Z`
   (`fundamentalTheorem_normalMPS_translationInvariant_of_overlap`), and
 * equivalently a per-bond gauge family `Z_v` with `B^i = Z_v⁻¹ A^i Z_{v+1}`
-  (`fundamentalTheorem_normalMPS_of_overlap`), the form delivered at
-  `n ≥ 3L` by `fundamentalTheorem_normalMPS` through the three-arc cover.
+  (`fundamentalTheorem_normalMPS_of_overlap`), the per-bond form of the
+  closed-chain corollary; the named matrix-level corollary
+  `fundamentalTheorem_normalMPS` delegates to it for its `n ≥ 2L + 1` bound.
 
 The uniqueness clause of the source corollary — the gauge `Z` is unique up
 to a multiplicative constant — needs no system size and is already delivered
