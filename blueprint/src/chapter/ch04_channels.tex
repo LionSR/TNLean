@@ -78,6 +78,25 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     Therefore all eigenvalues of $\tr(X)\Id-X$ are nonnegative.
 \end{proof}
 
+\begin{theorem}[Self-duality of the reduction map]
+    \label{thm:reduction_map_self_dual}
+    \lean{Matrix.traceAdjointMap_reductionMap}
+    \leanok
+    \uses{def:reduction_map}
+    The reduction map is self-dual for the trace pairing:
+    \[
+        \tr(T_k(\rho)X)=\tr(\rho T_k(X)).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand both sides using
+    $T_k(Y)=\tr(Y)\Id-k^{-1}Y$ and bilinearity of the trace.  Both sides are
+    \[
+        \tr(\rho)\tr(X)-k^{-1}\tr(\rho X).
+    \]
+\end{proof}
+
 \begin{theorem}[Choi matrix of the reduction map]
     \label{thm:choi_matrix_reduction_map}
     \lean{ChoiJamiolkowski.choiMatrix_reductionMap}
