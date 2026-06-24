@@ -226,7 +226,29 @@ in place. Concretely:
     lemma~\eqref{eq:marginal-support}, which puts the singular reference state
     $(\mathbf 1_A/d_A)\otimes\rho_{BC}$ into the domain of layer (2) and so is a
     prerequisite of the instantiation rather than a consequence of normalization.
+    The marginal support lemma is now formalized
+    (\leanid{Matrix.marginal_support} in \doclink{TNLean/Analysis/MarginalSupport},
+    \path{TNLean/Analysis/MarginalSupport.lean}): for a positive semidefinite
+    $\rho_{ABC}$ a Hermitian idempotent on $B\otimes C$ annihilating the marginal
+    $\tr_A\rho_{ABC}$ has its identity-on-$A$ lift annihilate $\rho_{ABC}$. Its
+    operator core --- a projection of zero expectation against a positive
+    semidefinite state annihilates it
+    (\leanid{Matrix.PosSemidef.proj_mul_eq_zero_of_trace_eq_zero}) --- and the
+    partial-trace adjoint identity it uses
+    (\leanid{Matrix.traceA_ABC_lift_trace}) are independent of Lieb concavity.
+    These three results depend only on the standard Lean axioms; the remaining
+    layer-(6) work is the instantiation, which is gated on layer (5).
 \end{itemize}
+
+\paragraph{Current formal status.} Layers (1)--(4) and the layer-(6) marginal
+support prerequisite are formalized; layer (4) on the positive-definite domain
+(\leanid{convexOn_quantumRelativeEntropy}). Layer (5), data-processing
+(monotonicity of $D$ under the partial trace), remains open: it combines the
+layer-(4) joint convexity with unitary invariance and ancilla-additivity
+$D(\rho\otimes\tau\,\|\,\sigma\otimes\tau) = D(\rho\,\|\,\sigma)$ via the
+twirling representation of $\tr_C$, none of which is yet formalized. Until
+layer (5) and the layer-(6) instantiation are in place the standalone axiom
+\leanid{strong_subadditivity} stands.
 
 After layer (6) the inequality is a theorem, the standalone axiom is removed, and
 the only remaining entropy-side axiom on this route is the Lieb-concavity axiom.
