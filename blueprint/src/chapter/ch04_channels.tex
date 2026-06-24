@@ -302,11 +302,57 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     $\operatorname{Re}\tr(A)$ once $k$ reaches $D$.
 \end{definition}
 
+\begin{theorem}[Ky-Fan achievability]
+    \label{thm:ky_fan_achievability}
+    \lean{Matrix.IsHermitian.exists_isProj_trace_eq_kyFanNorm}
+    \leanok
+    \uses{def:ky_fan_norm}
+    For every Hermitian $A\in\MN{D}$ and every $k\ge0$ there is an orthogonal
+    projection $P$ of rank $\min(k,D)$ with
+    \[
+        \operatorname{Re}\tr(PA) = \|A\|_{(k)} .
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:ky_fan_norm}
+    Diagonalize $A=U\,\diag(\lambda_i)\,U^\dagger$ and take $P$ to be the
+    projection onto the span of the eigenvectors with the $\min(k,D)$ largest
+    eigenvalues. Then $\operatorname{Re}\tr(PA)=\sum_{i\le k}\lambda_i=\|A\|_{(k)}$.
+\end{proof}
+
+\begin{theorem}[Ky-Fan upper bound]
+    \label{thm:ky_fan_upper_bound}
+    \lean{Matrix.IsHermitian.trace_mul_re_le_kyFanNorm}
+    \leanok
+    \uses{def:ky_fan_norm}
+    For every Hermitian $A\in\MN{D}$ and every orthogonal projection $P$ of rank
+    $k<D$,
+    \[
+        \operatorname{Re}\tr(PA) \le \|A\|_{(k)} .
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:ky_fan_norm}
+    Conjugating $P$ by $U$ gives an orthogonal projection $Q$ of the same rank,
+    and $\operatorname{Re}\tr(PA)=\sum_i w_i\lambda_i$ where $w_i$ are the
+    diagonal entries of $Q$. Each $w_i$ lies in $[0,1]$ and the weights sum to
+    $\tr P = k$. With the threshold $c=\lambda_{k+1}$,
+    \[
+        \sum_{i\le k}\lambda_i - \sum_i w_i\lambda_i
+            = \sum_{i\le k}(\lambda_i-c)(1-w_i)
+                + \sum_{i>k}(c-\lambda_i)w_i \ge 0 ,
+    \]
+    since for $i\le k$ the eigenvalues dominate $c$ while $1-w_i\ge0$, and for
+    $i>k$ they are dominated by $c$ while $w_i\ge0$.
+\end{proof}
+
 \begin{theorem}[Ky-Fan maximum principle]
     \label{thm:ky_fan_maximum_principle}
     \lean{Matrix.IsHermitian.kyFanNorm_eq_sup_trace}
     \leanok
-    \uses{def:ky_fan_norm}
+    \uses{def:ky_fan_norm, thm:ky_fan_achievability, thm:ky_fan_upper_bound}
     Let $A\in\MN{D}$ be Hermitian and $0\le k<D$. Then the Ky-Fan $k$-norm is the
     largest value of $\operatorname{Re}\tr(PA)$ attained by an orthogonal
     projection $P$ of rank $k$:
@@ -319,22 +365,11 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:ky_fan_norm}
-    Diagonalize $A=U\,\diag(\lambda_i)\,U^\dagger$. The projection onto the span
-    of the $k$ eigenvectors with the largest eigenvalues realizes the value: its
-    trace against $A$ equals $\sum_{i\le k}\lambda_i$, giving the lower bound.
-
-    For the upper bound, conjugating $P$ by $U$ gives an orthogonal projection
-    $Q$ with the same rank, and $\operatorname{Re}\tr(PA)=\sum_i w_i\lambda_i$
-    where $w_i$ are the diagonal entries of $Q$. Each $w_i$ lies in $[0,1]$ and
-    the weights sum to $\tr P = k$. Writing $c=\lambda_{k+1}$ as a threshold,
-    \[
-        \sum_{i\le k}\lambda_i - \sum_i w_i\lambda_i
-            = \sum_{i\le k}(\lambda_i-c)(1-w_i)
-                + \sum_{i>k}(c-\lambda_i)w_i \ge 0 ,
-    \]
-    since for $i\le k$ the eigenvalues dominate $c$ while $1-w_i\ge0$, and for
-    $i>k$ they are dominated by $c$ while $w_i\ge0$.
+    \uses{thm:ky_fan_achievability, thm:ky_fan_upper_bound}
+    The achievability half (Theorem~\ref{thm:ky_fan_achievability}) provides a
+    rank-$k$ projection whose trace against $A$ equals $\|A\|_{(k)}$, so the value
+    is attained. The upper bound (Theorem~\ref{thm:ky_fan_upper_bound}) shows that
+    no rank-$k$ projection exceeds it. Hence $\|A\|_{(k)}$ is the maximum.
 \end{proof}
 
 \begin{definition}[Maps preserving the positive semidefinite cone]
