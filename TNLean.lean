@@ -42,6 +42,7 @@ import TNLean.Algebra.SpinCover
 import TNLean.Analysis.ProjectionGeometry
 -- Layer 0b: Trace of the Hermitian functional calculus (Mathlib-only matrix lemma)
 import TNLean.Analysis.TraceCFC
+import TNLean.Analysis.CfcLogAdditive
 import TNLean.Analysis.MatrixTraceInequalities
 import TNLean.Analysis.KyFanNorm
 
