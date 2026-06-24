@@ -287,6 +287,56 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     nonnegative.
 \end{proof}
 
+\begin{definition}[Ky-Fan $k$-norm]
+    \label{def:ky_fan_norm}
+    \lean{Matrix.IsHermitian.kyFanNorm}
+    \leanok
+    Let $A\in\MN{D}$ be Hermitian with eigenvalues
+    $\lambda_1\ge\lambda_2\ge\cdots\ge\lambda_D$ listed in decreasing order. For
+    $0\le k\le D$ the \emph{Ky-Fan $k$-norm} of $A$ is the sum of its $k$ largest
+    eigenvalues,
+    \[
+        \|A\|_{(k)} = \sum_{i=1}^{k}\lambda_i .
+    \]
+    Indices beyond $D$ contribute zero, so the value stabilizes at
+    $\operatorname{Re}\tr(A)$ once $k$ reaches $D$.
+\end{definition}
+
+\begin{theorem}[Ky-Fan maximum principle]
+    \label{thm:ky_fan_maximum_principle}
+    \lean{Matrix.IsHermitian.kyFanNorm_eq_sup_trace}
+    \leanok
+    \uses{def:ky_fan_norm}
+    Let $A\in\MN{D}$ be Hermitian and $0\le k<D$. Then the Ky-Fan $k$-norm is the
+    largest value of $\operatorname{Re}\tr(PA)$ attained by an orthogonal
+    projection $P$ of rank $k$:
+    \[
+        \|A\|_{(k)} = \max_{P^2=P=P^\dagger,\ \tr P = k}
+            \operatorname{Re}\tr(PA) .
+    \]
+    This is the eigenvalue form of \cite[Lemma~3.1]{Wolf2012Quantum} and the
+    classical maximum principle of \cite[Theorem~IV.2.5]{Bhatia1997Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:ky_fan_norm}
+    Diagonalize $A=U\,\diag(\lambda_i)\,U^\dagger$. The projection onto the span
+    of the $k$ eigenvectors with the largest eigenvalues realizes the value: its
+    trace against $A$ equals $\sum_{i\le k}\lambda_i$, giving the lower bound.
+
+    For the upper bound, conjugating $P$ by $U$ gives an orthogonal projection
+    $Q$ with the same rank, and $\operatorname{Re}\tr(PA)=\sum_i w_i\lambda_i$
+    where $w_i$ are the diagonal entries of $Q$. Each $w_i$ lies in $[0,1]$ and
+    the weights sum to $\tr P = k$. Writing $c=\lambda_{k+1}$ as a threshold,
+    \[
+        \sum_{i\le k}\lambda_i - \sum_i w_i\lambda_i
+            = \sum_{i\le k}(\lambda_i-c)(1-w_i)
+                + \sum_{i>k}(c-\lambda_i)w_i \ge 0 ,
+    \]
+    since for $i\le k$ the eigenvalues dominate $c$ while $1-w_i\ge0$, and for
+    $i>k$ they are dominated by $c$ while $w_i\ge0$.
+\end{proof}
+
 \begin{definition}[Maps preserving the positive semidefinite cone]
     \label{def:maps_psd_cone_onto}
     \lean{MapsPSDConeOnto}
