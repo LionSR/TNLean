@@ -820,20 +820,7 @@ boundary-crossing comparison. The periodic-boundary upgrade encoded by `hIdentit
 is the boundary-condition comparison of arXiv:quant-ph/0608197, Theorem 12, proof
 lines 1446--1456, and arXiv:2011.12127, Section IV.C, lines 2126--2128, not yet
 derived from the periodic ground-space constraint. Documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; tracked in issue 2971.
-
-**Unfaithful:** This proof transitively relies on
-`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`, whose
-normalized BNT product-span input is not yet source-faithful: its derivation uses
-the normal-range reduction of arXiv:2011.12127, Section IV.C, lines 2078--2079,
-documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. This deviation
-is independent of the periodic-boundary comparison tracked in issue 2971.
-Elimination: derive the normalized BNT product-span input
-`wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1` from the source periodic-boundary
-coordinate comparison of arXiv:2011.12127, Section IV.C, lines 2078--2079
-(per `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`), discharging the
-`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`
-dependency. -/
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; tracked in issue 2971. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_complementary_identities_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -898,20 +885,7 @@ comparison. The periodic-boundary upgrade encoded by `hIdentity` is the
 boundary-condition comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines
 1446--1456, and arXiv:2011.12127, Section IV.C, lines 2126--2128, not yet derived
 from the periodic ground-space constraint. Documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; tracked in issue 2971.
-
-**Unfaithful:** This proof transitively relies on
-`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`, whose
-normalized BNT product-span input is not yet source-faithful: its derivation uses
-the normal-range reduction of arXiv:2011.12127, Section IV.C, lines 2078--2079,
-documented in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. This deviation
-is independent of the periodic-boundary comparison tracked in issue 2971.
-Elimination: derive the normalized BNT product-span input
-`wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1` from the source periodic-boundary
-coordinate comparison of arXiv:2011.12127, Section IV.C, lines 2078--2079
-(per `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`), discharging the
-`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1`
-dependency. -/
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; tracked in issue 2971. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_complementary_identities
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
