@@ -90,7 +90,9 @@ chain of them. In source order the chain is the following.
     the limit using continuity on the common support and lower semicontinuity at
     the boundary. Without this regularization step, the later support lemma would
     place the singular pairs in the domain of $D$ but would not yet connect them
-    to the positive-definite Lieb input.
+    to the positive-definite Lieb input. The positive-definite case of this layer
+    is now formalized (\leanid{convexOn_quantumRelativeEntropy}); only the
+    singular-$\sigma$ extension remains.
   \item \emph{Data-processing inequality (DPI).} Monotonicity
     $D(\Lambda\rho \,\|\, \Lambda\sigma) \le D(\rho\,\|\,\sigma)$ under every
     trace-preserving completely positive map $\Lambda$, in particular under the
@@ -198,7 +200,23 @@ in place. Concretely:
     via the eigenbasis reduction and the scalar Gibbs inequality rather than
     operator monotonicity of the logarithm.
   \item Layer (4) is the single consumer of \leanid{lieb_concavity_axiom}: joint
-    convexity of $D$ is the entropy-theoretic content of Lieb's theorem.
+    convexity of $D$ is the entropy-theoretic content of Lieb's theorem. This
+    layer is now formalized on the positive-definite domain:
+    \leanid{convexOn_quantumRelativeEntropy} in
+    \doclink{TNLean/Channel/Schwarz/RelativeEntropyConvexity}
+    (\path{TNLean/Channel/Schwarz/RelativeEntropyConvexity.lean}) proves that
+    $(\rho,\sigma)\mapsto D(\rho\,\|\,\sigma)$ is jointly convex on pairs of
+    positive definite matrices, via the Lindblad/Uhlmann approximant
+    $g_s(\rho,\sigma) = (\tr\rho
+    - \operatorname{Re}\tr(\rho^s\sigma^{1-s}))/(1-s)$: each $g_s$ is jointly
+    convex for $s\in[0,1)$ (\leanid{convexOn_relativeEntropyApprox}, the
+    consumer of \leanid{lieb_concavity_axiom}) and converges pointwise to $D$ as
+    $s\to1^-$ (\leanid{tendsto_relativeEntropyApprox}), and the pointwise limit
+    of convex functions is convex. The two-calculus trace double-sum identity
+    \leanid{re_trace_cfc_mul_cfc_eq_double_sum} underlying the limit consumes no
+    Lieb input. The extension from the positive-definite case to singular
+    reference states under $\ker\sigma\subseteq\ker\rho$ (the regularization
+    step described above) remains open.
   \item Layer (5) packages joint convexity, unitary invariance, and
     ancilla-additivity $D(\rho\otimes\tau\,\|\,\sigma\otimes\tau)
     = D(\rho\,\|\,\sigma)$ into the partial-trace monotonicity statement via the
@@ -226,9 +244,14 @@ disconnected from the Lieb-concavity axiom available in the same repository. The
 elimination route is the classical relative-entropy chain: entropy bridge,
 definition of relative entropy, Klein's inequality, joint convexity (the step
 consuming Lieb concavity), data-processing under the partial trace, and final
-assembly at the tripartite splitting. Until layers (2)--(6) are formalized, the
-standalone axiom records a result the development assumes but does not yet derive
-from its operator-convexity input.
+assembly at the tripartite splitting. Layers (2) and (3) are formalized (the
+latter for full-rank $\sigma$), and layer (4) is formalized on the
+positive-definite domain (\leanid{convexOn_quantumRelativeEntropy}), so the
+Lieb-concavity axiom is now connected to the joint convexity of the relative
+entropy. The remaining work is the singular-$\sigma$ extension of layers (3) and
+(4) and the data-processing and assembly layers (5)--(6); until those are
+formalized, the standalone axiom records a result the development assumes but
+does not yet derive from its operator-convexity input.
 
 \begin{thebibliography}{9}
 

@@ -301,6 +301,41 @@ finite-dimensional quantum systems.
     $\sum_j q_j-\sum_i p_i=0$, which is the claim.
 \end{proof}
 
+\begin{theorem}[Joint convexity of the relative entropy]
+    \label{thm:relative_entropy_joint_convexity}
+    \lean{TNLean.RelativeEntropyConvexity.convexOn_quantumRelativeEntropy}
+    \leanok
+    \uses{def:quantum_relative_entropy, cor:lieb_concavity_id}
+    On pairs of positive definite matrices in $\MN{D}$, the map
+    $(\rho,\sigma)\mapsto D(\rho\Vert\sigma)$ is jointly convex.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{cor:lieb_concavity_id}
+    For $s\in[0,1)$ consider the approximant
+    \[
+        g_s(\rho,\sigma)
+            =\frac{\operatorname{tr}\rho
+                -\operatorname{Re}\operatorname{tr}(\rho^s\sigma^{1-s})}{1-s}.
+    \]
+    The trace $\operatorname{tr}\rho$ is real-affine in the pair, hence convex,
+    while $(\rho,\sigma)\mapsto\operatorname{Re}\operatorname{tr}(\rho^s
+    \sigma^{1-s})$ is jointly concave by the $K=\Id$ case of the Lieb concavity
+    theorem (Corollary~\ref{cor:lieb_concavity_id}). Their difference, scaled by
+    the nonnegative factor $(1-s)^{-1}$, is therefore jointly convex, so each
+    $g_s$ is convex.
+
+    Writing $\rho$ and $\sigma$ in their eigenbases with eigenvalues $p_i,q_j>0$
+    and overlap weights $P_{ij}=\lvert\braket{e_i}{f_j}\rvert^2$, the approximant
+    becomes the double sum
+    $g_s(\rho,\sigma)=\sum_{i,j}(1-s)^{-1}(p_i-p_i^s q_j^{1-s})\,P_{ij}$. As
+    $s\to1^-$ each per-pair term converges, via the scalar limit
+    $(c^u-1)/u\to\log c$, to $p_i(\log p_i-\log q_j)\,P_{ij}$, whose sum equals
+    $D(\rho\Vert\sigma)$. Thus $g_s\to D$ pointwise on positive definite pairs,
+    and since the pointwise limit of convex functions is convex, $D$ is jointly
+    convex.
+\end{proof}
+
 \begin{theorem}[Entropy is invariant under reindexing]
     \label{thm:entropy_submatrix_equiv}
     \lean{vonNeumannEntropy_submatrix_equiv}
