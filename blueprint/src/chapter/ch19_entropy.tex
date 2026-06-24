@@ -336,6 +336,48 @@ finite-dimensional quantum systems.
     convex.
 \end{proof}
 
+\begin{lemma}[Matrix logarithm under unitary conjugation]
+    \label{lem:log_conj_unitary}
+    \lean{Matrix.log_conj_unitary}
+    \leanok
+    For a Hermitian matrix $A$ and a unitary $U$,
+    \[
+        \log(U A U^\dagger) = U\,(\log A)\,U^\dagger.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    The conjugation $x \mapsto U x U^\dagger$ is a star-algebra automorphism of
+    the matrix algebra, and the continuous functional calculus commutes with such
+    automorphisms; applying this with the real logarithm gives the identity.
+\end{proof}
+
+\begin{theorem}[Unitary invariance of the quantum relative entropy]
+    \label{thm:relative_entropy_unitary_invariance}
+    \lean{quantumRelativeEntropy_conj_unitary}
+    \leanok
+    \uses{def:quantum_relative_entropy}
+    For Hermitian matrices $\rho, \sigma$ and a unitary $U$,
+    \[
+        D(U\rho U^\dagger \,\Vert\, U\sigma U^\dagger) = D(\rho\Vert\sigma).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:log_conj_unitary}
+    Carry the two logarithms through the conjugation by
+    Lemma~\ref{lem:log_conj_unitary}, so that
+    \[
+        D(U\rho U^\dagger \,\Vert\, U\sigma U^\dagger)
+            = \operatorname{Re}\operatorname{tr}\!\bigl(
+                U\rho(\log\rho-\log\sigma)U^\dagger\bigr)
+            = \operatorname{Re}\operatorname{tr}\!\bigl(
+                \rho(\log\rho-\log\sigma)\bigr)
+            = D(\rho\Vert\sigma),
+    \]
+    where the middle equality is trace cyclicity together with $U^\dagger U = 1$.
+\end{proof}
+
 \begin{theorem}[Entropy is invariant under reindexing]
     \label{thm:entropy_submatrix_equiv}
     \lean{vonNeumannEntropy_submatrix_equiv}

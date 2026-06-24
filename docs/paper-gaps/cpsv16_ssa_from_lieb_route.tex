@@ -49,9 +49,11 @@ layers that are missing.
 \section{The point at issue}
 
 The standard derivation of~\eqref{eq:ssa} factors through the quantum relative
-entropy and its behaviour under coarse-graining. None of the intermediate
-objects is currently available, so the gap is not a single missing lemma but a
-chain of them. In source order the chain is the following.
+entropy and its behaviour under coarse-graining. Several of the intermediate
+objects are now formalized and several are still missing, so the gap is not a
+single missing lemma but a chain of them; the per-layer status is recorded below
+and summarized under \emph{Current formal status}. In source order the chain is
+the following.
 
 \begin{enumerate}
   \item \emph{Entropy bridge.} The identity
@@ -265,12 +267,15 @@ in place. Concretely:
 \paragraph{Current formal status.} Layers (1)--(4) and the layer-(6) marginal
 support prerequisite are formalized; layer (4) on the positive-definite domain
 (\leanid{convexOn_quantumRelativeEntropy}). Layer (5), data-processing
-(monotonicity of $D$ under the partial trace), remains open: it combines the
-layer-(4) joint convexity with unitary invariance and ancilla-additivity
+(monotonicity of $D$ under the partial trace), is partly formalized. It combines
+the layer-(4) joint convexity with unitary invariance and ancilla-additivity
 $D(\rho\otimes\tau\,\|\,\sigma\otimes\tau) = D(\rho\,\|\,\sigma)$ via the
-twirling representation of $\tr_C$, none of which is yet formalized. Until
-layer (5) and the layer-(6) instantiation are in place the standalone axiom
-\leanid{strong_subadditivity} stands.
+twirling representation of $\tr_C$. Joint convexity (layer 4, on the
+positive-definite domain) and unitary invariance
+(\leanid{quantumRelativeEntropy_conj_unitary}, for arbitrary Hermitian
+arguments) are formalized; ancilla-additivity and the twirling representation of
+$\tr_C$ remain open. Until those two ingredients and the layer-(6) instantiation
+are in place the standalone axiom \leanid{strong_subadditivity} stands.
 
 After layer (6) the inequality is a theorem, the standalone axiom is removed, and
 the only remaining entropy-side axiom on this route is the Lieb-concavity axiom.

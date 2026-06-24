@@ -13,7 +13,8 @@ for every unitary $U$,
 $D(U\rho U^\dagger \,\|\, U\sigma U^\dagger) = D(\rho\|\sigma)$.
 
 Unitary invariance is one of the three ingredients of the data-processing
-inequality under the partial trace (layer 5 of the route note), alongside joint
+inequality under the partial trace (layer 5 of the SSA-from-Lieb elimination
+route, `docs/paper-gaps/cpsv16_ssa_from_lieb_route.tex`), alongside joint
 convexity (layer 4, `convexOn_quantumRelativeEntropy`) and ancilla additivity.
 
 ## Main results
@@ -34,7 +35,7 @@ star-algebra homomorphism commutes with the continuous functional calculus,
 specialized to the conjugation automorphism $x \mapsto U x U^\dagger$ on the
 finite-dimensional matrix algebra; the four side conditions (continuity of $f$
 on the finite spectrum, continuity of the automorphism on a finite-dimensional
-space, and self-adjointness of $A$ and of its conjugate) are all dispatched
+space, and self-adjointness of $A$ and of its conjugate) are all verified
 directly. The relative-entropy invariance then follows by applying the
 covariance to $\log\rho$ and $\log\sigma$ and using trace cyclicity to cancel the
 conjugating unitaries.
@@ -94,9 +95,14 @@ end Matrix
 matrices $\rho, \sigma$ and a unitary $U$,
 $D(U\rho U^\dagger \,\|\, U\sigma U^\dagger) = D(\rho\|\sigma)$.
 
-The logarithms are carried through the conjugation by `Matrix.log_conj_unitary`,
-and the conjugating unitaries cancel under trace cyclicity. This is one of the
-three ingredients of the data-processing inequality under the partial trace
+The logarithms conjugate as $\log(U\rho U^\dagger) = U(\log\rho)U^\dagger$
+(`Matrix.log_conj_unitary`, applied to $\rho$ and $\sigma$), giving
+$$D(U\rho U^\dagger \,\|\, U\sigma U^\dagger)
+  = \operatorname{Re}\operatorname{tr}\!\bigl(U\rho(\log\rho-\log\sigma)U^\dagger\bigr)
+  = \operatorname{Re}\operatorname{tr}\!\bigl(\rho(\log\rho-\log\sigma)\bigr)
+  = D(\rho\|\sigma),$$
+where the middle equality is trace cyclicity ($U^\dagger U = 1$). This is one of
+the three ingredients of the data-processing inequality under the partial trace
 (layer 5 of `docs/paper-gaps/cpsv16_ssa_from_lieb_route.tex`). -/
 theorem quantumRelativeEntropy_conj_unitary {n : Type*} [Fintype n] [DecidableEq n]
     {ρ σ : Matrix n n ℂ} (hρ : ρ.IsHermitian) (hσ : σ.IsHermitian)
