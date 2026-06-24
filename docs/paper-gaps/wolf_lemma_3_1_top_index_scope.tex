@@ -5,6 +5,8 @@
 \usepackage[hidelinks]{hyperref}
 \setlength{\emergencystretch}{2em}
 
+\input{command}
+
 \title{Top-index scope of the maximal-overlap lemma (Wolf Lemma 3.1)}
 \author{}
 \date{2026-06-24}
@@ -18,40 +20,55 @@ Lemma~3.1 of Wolf's \emph{Quantum Channels \& Operations}
 (\path{Notes/WolfNoteTexSource/ch03_positive_not_completely.tex}, lines
 119--128) states that, for a normalized vector
 $\phi\in\mathbb{C}^{D'}\otimes\mathbb{C}^{D}$ with reduced density matrix
-$\rho=\operatorname{tr}_2|\phi\rangle\langle\phi|$,
-\[
+$\rho=\tr_2|\phi\rangle\langle\phi|$ on the first factor $\mathbb{C}^{D'}$,
+\begin{align}
   \sup_{\psi}|\langle\phi|\psi\rangle|^2 = \|\rho\|_{(n)},
-\]
+\end{align}
 where the supremum runs over normalized vectors $\psi$ of Schmidt rank $n$ and
-$\|\cdot\|_{(n)}$ is the Ky-Fan $n$-norm. In the application (n-positivity, Wolf
-Prop.~3.1) the Schmidt rank $n$ ranges over $1\le n\le D$, so the value $n=D$ is
-within the source's scope.
+$\|\cdot\|_{(n)}$ is the Ky-Fan $n$-norm. Since $\rho$ acts on the first factor
+$\mathbb{C}^{D'}$, its Ky-Fan $n$-norm is meaningful for $1\le n\le D'$. In the
+application (n-positivity, Wolf Prop.~3.2) the Schmidt rank $n$ ranges over
+$1\le n\le D'$, so the top value $n=D'$ is within the source's scope.
 
 \section{Formalized statement}
 
-The Lean theorem
-\path{Matrix.maximalSchmidtOverlap_eq_kyFanNorm} establishes the same
-identity, strengthened to attainment (\texttt{IsGreatest}), under the hypotheses
-$1\le n$ and $n<D$, where $D$ is the dimension of the first tensor factor.
+The formal theorem\footnote{Formal declaration:
+    \leanid{Matrix.maximalSchmidtOverlap_eq_kyFanNorm} in
+    \doclink{TNLean/Channel/MaximalOverlap}.} establishes the same identity,
+strengthened to attainment (the \Lean{} \texttt{IsGreatest} predicate), under
+the hypotheses $1\le n$ and $n<D'$, where $D'$ is the dimension of the first
+tensor factor on which $\rho$ acts.
 
 \section{The gap}
 
-The formalization omits the top index $n=D$. At $n=D$ the Schmidt-rank constraint
-is vacuous and $\|\rho\|_{(D)}=\operatorname{tr}\rho=1$; the supremum equals $1$
+The formalization omits the top index $n=D'$. At $n=D'$ the Schmidt-rank
+constraint is vacuous and $\|\rho\|_{(D')}=\tr\rho=1$; the supremum equals $1$
 and is attained at $\psi=\phi$.
 
-The restriction is inherited from the underlying maximum principle
-\path{Matrix.IsHermitian.kyFanNorm_eq_sup_trace}, which characterizes the Ky-Fan
-$k$-norm as a maximum over rank-exactly-$k$ orthogonal projections only for
-$k<D$. At $k=D$ the only rank-$D$ projection is the identity, and the eigenvalue
-sum already equals the trace; the variational statement degenerates rather than
-fails.
+The restriction is inherited from the underlying maximum principle,\footnote{Formal
+    declaration: \leanid{Matrix.IsHermitian.kyFanNorm_eq_sup_trace}.} which
+characterizes the Ky-Fan $k$-norm as a maximum over rank-exactly-$k$ orthogonal
+projections only for $k<D'$. At $k=D'$ the only rank-$D'$ projection is the
+identity, and the eigenvalue sum already equals the trace; the variational
+statement degenerates rather than fails.
 
 \section{Elimination plan}
 
-Add a top-index case to \path{Matrix.IsHermitian.kyFanNorm_eq_sup_trace} (or a
-companion lemma) covering $k=D$, where the maximizing projection is the identity
-and the value is $\operatorname{Re}\operatorname{tr}(A)$. The overlap lemma then
-extends to $1\le n\le D$ by feeding that case into the same transfer argument.
+Add a top-index case to the Ky-Fan maximum principle (or a companion lemma)
+covering $k=D'$, where the maximizing projection is the identity and the value
+is $\operatorname{Re}\tr(A)$. The overlap lemma then extends to $1\le n\le D'$
+by feeding that case into the same transfer argument.
+
+\section{Classification}
+
+\emph{Scope restriction.} The formal theorem proves the source identity for
+Schmidt ranks $1\le n<D'$, a special case of the source's full range
+$1\le n\le D'$. The conclusion matches the source on that range; only the top
+index $n=D'$ is omitted, and there the supremum degenerates to the trivial value
+$\|\rho\|_{(D')}=\tr\rho=1$. No hypothesis foreign to the source is used, so the
+deviation is a scope restriction rather than an unfaithful theorem.
+
+\bibliographystyle{alpha}
+\bibliography{references}
 
 \end{document}
