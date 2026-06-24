@@ -254,12 +254,23 @@ in place. Concretely:
     logarithms then cancels the $\mathbf 1\otimes\log\tau$ terms, the trace of the
     Kronecker product factors as a product of traces, and the unit trace of $\tau$
     leaves $D(\rho\,\|\,\sigma)$. These results depend only on the standard Lean
-    axioms and need no Lieb input. The remaining ingredient of layer (5) is the
+    axioms and need no Lieb input. The third ingredient of layer (5) is the
     twirling identity, which writes
     $\tr_C\rho\otimes(\mathbf 1_C/d_C)$ as a uniform average of conjugations by a
-    unitary $1$-design on $C$ and requires either a Haar measure on the unitary
-    group (absent from the matrix unitary group in the current dependency) or a
-    finite $1$-design averaged by a finite sum.
+    unitary $1$-design on $C$. Because the current dependency carries no Haar
+    measure on the matrix unitary group, the average is taken over the finite
+    Heisenberg--Weyl $1$-design. Its design property is now formalized:
+    \leanid{Matrix.sum_weyl_conj} in
+    \doclink{TNLean/Channel/Schwarz/WeylTwirl}
+    (\path{TNLean/Channel/Schwarz/WeylTwirl.lean}) proves that for a primitive
+    $d$-th root of unity the uniform average of the conjugations by the $d^2$ Weyl
+    operators $W(a,b) = X^a Z^b$ equals the completely depolarizing channel
+    $M \mapsto (\tr M / d)\,\mathbf 1$, via the root-of-unity character-sum
+    orthogonality (\leanid{Matrix.sum_rootOfUnity_pow_eq}). This result depends
+    only on the standard Lean axioms and needs no Lieb input. The remaining
+    layer-(5) work is to present $\tr_C$ through this average, applied on $C$ after
+    appending the maximally mixed ancilla, and so derive the partial-trace
+    monotonicity of $D$.
   \item Layer (6) instantiates layer (5) at the tripartite splitting to
     recover~\eqref{eq:ssa}; it additionally needs the marginal support
     lemma~\eqref{eq:marginal-support}, which puts the singular reference state
@@ -288,10 +299,12 @@ $D(\rho\otimes\tau\,\|\,\sigma\otimes\tau) = D(\rho\,\|\,\sigma)$ via the
 twirling representation of $\tr_C$. Joint convexity (layer 4, on the
 positive-definite domain), unitary invariance
 (\leanid{quantumRelativeEntropy_conj_unitary}, for arbitrary Hermitian
-arguments), and ancilla-additivity
-(\leanid{quantumRelativeEntropy_kronecker}, on the positive-definite domain) are
-formalized; the twirling representation of $\tr_C$ remains open. Until that
-ingredient and the layer-(6) instantiation are in place the standalone axiom
+arguments), ancilla-additivity
+(\leanid{quantumRelativeEntropy_kronecker}, on the positive-definite domain), and
+the finite Heisenberg--Weyl $1$-design twirl
+(\leanid{Matrix.sum_weyl_conj}) are formalized; presenting $\tr_C$ through that
+twirl, and so the partial-trace monotonicity of $D$, remains open. Until that
+representation and the layer-(6) instantiation are in place the standalone axiom
 \leanid{strong_subadditivity} stands.
 
 After layer (6) the inequality is a theorem, the standalone axiom is removed, and
@@ -315,13 +328,15 @@ latter for full-rank $\sigma$), and layer (4) is formalized on the
 positive-definite domain (\leanid{convexOn_quantumRelativeEntropy}), so the
 Lieb-concavity axiom is now connected to the joint convexity of the relative
 entropy. The unitary-invariance ingredient of layer (5) is formalized for
-arbitrary Hermitian arguments (\leanid{quantumRelativeEntropy_conj_unitary}), and
-the ancilla-additivity ingredient is formalized on the positive-definite domain
-(\leanid{quantumRelativeEntropy_kronecker}). The remaining work is the
-singular-$\sigma$ extension of layers (3) and (4), the twirling ingredient of the
-data-processing layer (5), and the assembly layer (6); until those are
-formalized, the standalone axiom records a result the development assumes but does
-not yet derive from its operator-convexity input.
+arbitrary Hermitian arguments (\leanid{quantumRelativeEntropy_conj_unitary}), the
+ancilla-additivity ingredient is formalized on the positive-definite domain
+(\leanid{quantumRelativeEntropy_kronecker}), and the finite Heisenberg--Weyl
+$1$-design twirl is formalized (\leanid{Matrix.sum_weyl_conj}). The remaining work
+is the singular-$\sigma$ extension of layers (3) and (4), presenting $\tr_C$
+through the $1$-design twirl to obtain the partial-trace monotonicity of layer
+(5), and the assembly layer (6); until those are formalized, the standalone axiom
+records a result the development assumes but does not yet derive from its
+operator-convexity input.
 
 \begin{thebibliography}{9}
 
