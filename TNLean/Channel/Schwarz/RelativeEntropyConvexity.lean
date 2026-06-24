@@ -15,8 +15,8 @@ on positive definite matrices.
 
 ## Main results
 
-* `re_trace_cfc_mul_cfc_eq_double_sum` — the real part of the trace of
-  `hρ.cfc f * hσ.cfc g` as a double sum
+* `re_trace_cfc_mul_cfc_eq_double_sum` — the real part of the trace of the
+  product \(f(\rho)\,g(\sigma)\) of the two functional calculi as a double sum
   $\sum_{ij} f(p_i)\,g(q_j)\,|W_{ij}|^2$ over the eigenvalues $p_i, q_j$ and the
   overlap matrix $W = U_\rho^\dagger U_\sigma$ of the two eigenvector unitaries.
 * `convexOn_quantumRelativeEntropy` — joint convexity of
@@ -25,9 +25,10 @@ on positive definite matrices.
 ## Proof outline
 
 The double-sum identity extends `TNLean.Klein.trace_mul_cfc_eq_double_sum` from a
-single Hermitian functional calculus to a product of two: both `hρ.cfc f` and
-`hσ.cfc g` are realized by simultaneous diagonalization, so their product trace
-reduces to the same `diagonal · W · diagonal · star W` shape handled by
+single Hermitian functional calculus to a product of two: both \(f(\rho)\) and
+\(g(\sigma)\) are realized by simultaneous diagonalization, so their product
+trace reduces to the same form
+\(\mathrm{diag}\cdot W\cdot\mathrm{diag}\cdot W^\ast\) handled by
 `TNLean.Klein.trace_diag_conj`. The relative entropy is then the limit, as
 $s \to 1^-$, of the approximant
 $g_s(\rho, \sigma) = (\operatorname{tr}\rho
@@ -52,12 +53,12 @@ namespace TNLean.Klein
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
-/-- Trace of `hρ.cfc f * hσ.cfc g` as a double sum over the eigenvalues
-weighted by the overlap matrix $W = U_\rho^\dagger U_\sigma$ of the two
-eigenvector unitaries. This is the two-calculus analogue of
-`trace_mul_cfc_eq_double_sum`: both factors are realized by simultaneous
-diagonalization, so the product trace reduces to the
-`diagonal · W · diagonal · star W` shape of `trace_diag_conj`. -/
+/-- Trace of the product \(f(\rho)\,g(\sigma)\) of the two functional calculi as
+a double sum over the eigenvalues weighted by the overlap matrix
+$W = U_\rho^\dagger U_\sigma$ of the two eigenvector unitaries. This is the
+two-calculus analogue of `trace_mul_cfc_eq_double_sum`: both factors are realized
+by simultaneous diagonalization, so the product trace reduces to the form
+\(\mathrm{diag}\cdot W\cdot\mathrm{diag}\cdot W^\ast\) of `trace_diag_conj`. -/
 theorem trace_cfc_mul_cfc_eq_double_sum {ρ σ : Matrix n n ℂ}
     (hρ : ρ.IsHermitian) (hσ : σ.IsHermitian) (f g : ℝ → ℝ) :
     Matrix.trace (hρ.cfc f * hσ.cfc g)
@@ -74,7 +75,7 @@ theorem trace_cfc_mul_cfc_eq_double_sum {ρ σ : Matrix n n ℂ}
   have hcfcf : hρ.cfc f = Vρ * Matrix.diagonal df * star Vρ := hρ.cfc_form f
   have hcfcg : hσ.cfc g = Vσ * Matrix.diagonal dg * star Vσ := hσ.cfc_form g
   conv_lhs => rw [hcfcf, hcfcg]
-  -- Reduce the conjugated product to `diagonal df * W * diagonal dg * star W`
+  -- Reduce the conjugated product to the diagonal-overlap form
   -- via trace cyclicity, then apply `trace_diag_conj`.
   have hstarW : star W = star Vσ * Vρ := by rw [hW, star_mul, star_star]
   rw [← trace_diag_conj df dg W, hstarW,
@@ -84,9 +85,10 @@ theorem trace_cfc_mul_cfc_eq_double_sum {ρ σ : Matrix n n ℂ}
     Matrix.trace_mul_comm Vρ _, ← hW]
   simp only [Matrix.mul_assoc]
 
-/-- Real part of the trace of `hρ.cfc f * hσ.cfc g` as a real double sum weighted
-by the doubly stochastic overlap matrix with entries $|W_{ij}|^2$. This is the
-two-calculus analogue of `re_trace_mul_cfc_eq_double_sum`. -/
+/-- Real part of the trace of the product \(f(\rho)\,g(\sigma)\) of the two
+functional calculi as a real double sum weighted by the doubly stochastic overlap
+matrix with entries $|W_{ij}|^2$. This is the two-calculus analogue of
+`re_trace_mul_cfc_eq_double_sum`. -/
 theorem re_trace_cfc_mul_cfc_eq_double_sum {ρ σ : Matrix n n ℂ}
     (hρ : ρ.IsHermitian) (hσ : σ.IsHermitian) (f g : ℝ → ℝ) :
     (Matrix.trace (hρ.cfc f * hσ.cfc g)).re
@@ -137,7 +139,7 @@ def posDefSet : Set Mat := {A : Mat | A.PosDef}
 
 /-- The positive definite matrices form a convex set: a convex combination of
 two positive definite matrices is positive definite, with the boundary points
-`a = 0` and `b = 0` handled directly. -/
+\(a = 0\) and \(b = 0\) handled directly. -/
 theorem convex_posDefSet : Convex ℝ (posDefSet (D := D)) := by
   rw [convex_iff_forall_pos]
   intro A hA B hB a b ha hb hab
@@ -182,7 +184,7 @@ theorem concaveOn_re_trace_rpow_mul
   obtain ⟨hxA, hxB⟩ := Set.mem_prod.mp hx
   obtain ⟨hyA, hyB⟩ := Set.mem_prod.mp hy
   simp only [posDefSet, Set.mem_setOf_eq] at hxA hxB hyA hyB
-  -- Reduce the boundary points `a = 0` / `b = 0` to reflexivity.
+  -- Reduce the boundary points \(a = 0\) / \(b = 0\) to reflexivity.
   rcases eq_or_lt_of_le ha with ha0 | ha0
   · subst ha0
     rw [zero_add] at hab; subst hab
@@ -193,7 +195,7 @@ theorem concaveOn_re_trace_rpow_mul
     rw [add_zero] at hab; subst hab
     refine le_of_eq ?_
     simp only [zero_smul, add_zero, one_smul]
-  -- Interior: apply Lieb's joint concavity with `K = 1`.
+  -- Interior: apply Lieb's joint concavity with \(K = 1\).
   have hba : b = 1 - a := by linarith
   subst hba
   have hint : a ∈ Set.Icc (0 : ℝ) 1 := ⟨ha0.le, by linarith⟩
@@ -255,7 +257,7 @@ $s \to 1^-$. -/
 theorem pair_approx_tendsto {p q : ℝ} (hp : 0 < p) (hq : 0 < q) :
     Tendsto (fun s : ℝ => (1 - s)⁻¹ * (p - p ^ s * q ^ (1 - s))) (𝓝[<] 1)
       (𝓝 (p * (Real.log p - Real.log q))) := by
-  -- The substitution `u = 1 - s` reduces to the scalar slope limit.
+  -- The substitution \(u = 1 - s\) reduces to the scalar slope limit.
   have hlimu : Tendsto (fun u : ℝ => u⁻¹ * (p - p ^ (1 - u) * q ^ u)) (𝓝[>] 0)
       (𝓝 (p * (Real.log p - Real.log q))) := by
     set c : ℝ := q / p with hc_def
@@ -288,8 +290,8 @@ theorem pair_approx_tendsto {p q : ℝ} (hp : 0 < p) (hq : 0 < q) :
   refine (hlimu.comp hmap).congr (fun s => ?_)
   simp only [Function.comp_apply, sub_sub_cancel]
 
-/-- For a positive definite matrix `A`, the real power `A ^ s` is the Hermitian
-functional calculus of `x ↦ x ^ s`. -/
+/-- For a positive definite matrix \(A\), the real power \(A^s\) is the Hermitian
+functional calculus of the map \(x \mapsto x^s\). -/
 theorem posDef_rpow_eq_cfc {A : Mat} (hA : A.PosDef) (s : ℝ) :
     A ^ s = hA.1.cfc (fun x : ℝ => x ^ s) := by
   rw [CFC.rpow_eq_cfc_real (a := A) (y := s) hA.posSemidef.nonneg]
@@ -356,7 +358,8 @@ theorem tendsto_relativeEntropyApprox {ρ σ : Mat}
     rw [quantumRelativeEntropy_eq_trace_mul_log_sub]
     have hlogσ : CFC.log σ = hσ.1.cfc Real.log := by
       rw [CFC.log]; exact Matrix.IsHermitian.cfc_eq hσ.1 Real.log
-    -- Self term: `Re tr(ρ log ρ) = ∑ᵢ pᵢ log pᵢ = ∑ᵢⱼ pᵢ log pᵢ Pᵢⱼ`.
+    -- Self term: \(\operatorname{Re}\operatorname{tr}(\rho\log\rho)
+    -- = \sum_i p_i\log p_i = \sum_{ij} p_i\log p_i\,P_{ij}\).
     have hself : (Matrix.trace (ρ * CFC.log ρ)).re = ∑ i, ∑ j, p i * Real.log (p i) * P i j := by
       have h := vonNeumannEntropy_eq_neg_trace_mul_log hρ.1
       rw [vonNeumannEntropy] at h
@@ -369,7 +372,8 @@ theorem tendsto_relativeEntropyApprox {ρ σ : Mat}
       refine Finset.sum_congr rfl fun i _ => ?_
       conv_lhs => rw [← mul_one (p i * Real.log (p i)), ← hrow i]
       rw [Finset.mul_sum]
-    -- Cross term: `Re tr(ρ log σ) = ∑ᵢⱼ pᵢ Pᵢⱼ log qⱼ`.
+    -- Cross term: \(\operatorname{Re}\operatorname{tr}(\rho\log\sigma)
+    -- = \sum_{ij} p_i\,P_{ij}\log q_j\).
     have hcross : (Matrix.trace (ρ * CFC.log σ)).re
         = ∑ i, ∑ j, p i * Real.log (q j) * P i j := by
       rw [hlogσ, TNLean.Klein.re_trace_mul_cfc_eq_double_sum hρ.1 hσ.1 Real.log]
@@ -406,7 +410,7 @@ theorem convexOn_quantumRelativeEntropy :
       (fun p : Mat × Mat => quantumRelativeEntropy p.1 p.2) := by
   classical
   set S : Set (Mat × Mat) := posDefSet (D := D) ×ˢ posDefSet (D := D) with hS
-  -- Extend the approximants and the limit by `0` off the domain.
+  -- Extend the approximants and the limit by \(0\) off the domain.
   set F : ℝ → (Mat × Mat) → ℝ :=
     fun s p => if p ∈ S then relativeEntropyApprox s p else 0 with hF
   set g : (Mat × Mat) → ℝ :=
@@ -425,7 +429,7 @@ theorem convexOn_quantumRelativeEntropy :
       have := tendsto_relativeEntropyApprox hpd.1 hpd.2
       simpa using this
     · simp only [hF, hg, hp, if_false, tendsto_const_nhds]
-  -- Each extended approximant is convex, eventually as `s → 1⁻`.
+  -- Each extended approximant is convex, eventually as \(s \to 1^-\).
   have hconv : ∀ᶠ s in 𝓝[<] (1 : ℝ), F s ∈ {f : (Mat × Mat) → ℝ | ConvexOn ℝ S f} := by
     have hmem : ∀ᶠ s in 𝓝[<] (1 : ℝ), 0 ≤ s := by
       have h1 : ∀ᶠ s in 𝓝[<] (1 : ℝ), (0 : ℝ) < s :=
@@ -434,7 +438,8 @@ theorem convexOn_quantumRelativeEntropy :
     filter_upwards [hmem, self_mem_nhdsWithin] with s hs0 hs1
     simp only [Set.mem_Iio] at hs1
     have hsico : s ∈ Set.Ico (0 : ℝ) 1 := ⟨hs0, hs1⟩
-    -- On the domain `F s = relativeEntropyApprox s`; extend convexity by congruence.
+    -- On the domain the extended approximant agrees with the approximant
+    -- `relativeEntropyApprox`; extend convexity by congruence.
     refine (convexOn_relativeEntropyApprox hsico).congr (fun p hp => ?_)
     have hpS : p ∈ S := hp
     simp only [hF, if_pos hpS]
