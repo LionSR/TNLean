@@ -502,11 +502,14 @@ and rates for the single-tensor transfer map $\E_A$.
     $\rho$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:rfp_nt_structural_full}
-    The same construction as Theorem~\ref{thm:rfp_nt_structural_full} produces
-    the diagonal weights $\Lambda_\alpha = \sqrt{D\,\rho_{\alpha,\alpha}/\tr\rho}$,
-    so $\Lambda_\alpha^2 = D\,\rho_{\alpha,\alpha}/\tr\rho$.  Summing over
-    $\alpha$ and using $\sum_\alpha \rho_{\alpha,\alpha} = \tr\rho$ gives
+    \uses{thm:rfp_nt_structural_of_left_canonical,
+        thm:rfp_nt_cfii_diagonal_fixed_point,
+        thm:transferMap_eq_fixedPointProj_of_isRFP_injective}
+    The diagonal fixed-point reduction and the rank-one classification of
+    injective left-canonical renormalization fixed points produce the diagonal
+    weights $\Lambda_\alpha = \sqrt{D\,\rho_{\alpha,\alpha}/\tr\rho}$, so
+    $\Lambda_\alpha^2 = D\,\rho_{\alpha,\alpha}/\tr\rho$.  Summing over $\alpha$
+    and using $\sum_\alpha \rho_{\alpha,\alpha} = \tr\rho$ gives
     $\sum_\alpha \Lambda_\alpha^2 = D$.
 \end{proof}
 

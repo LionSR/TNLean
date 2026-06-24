@@ -70,17 +70,19 @@ private lemma matrixUnits_map (X : Mat) :
 
 /-- Full Appendix B extraction with the diagonal-weight square-sum identity.
 
-This is the structural decomposition `A i = X * Λ * U i * X⁻¹` of Lemma B.1 with
-one extra recorded fact: the diagonal weights satisfy `∑ k, (Λ k) ^ 2 = D` in
-the matrix-unit normalization used here. That identity comes from
-`(Λ k) ^ 2 = D · ρ_{k,k} / tr ρ` together with the trace identity
-`∑ k ρ_{k,k} = tr ρ` for the diagonal fixed point `ρ`. It is the seed for the
-source trace-normalization `tr(Λ) = 1` after rescaling to the unit pair-index
-convention (arXiv:1606.00608, Lemma charact-NT-pure-RFP, lines 1271--1301).
+This is the structural decomposition \(A^i = X\Lambda U^i X^{-1}\) of Lemma B.1
+with one extra recorded fact: the diagonal weights satisfy
+\(\sum_k \Lambda_k^2 = D\) in the matrix-unit normalization used here. That
+identity comes from \(\Lambda_k^2 = D\,\rho_{k,k}/\operatorname{tr}\rho\)
+together with the trace identity \(\sum_k \rho_{k,k} = \operatorname{tr}\rho\)
+for the diagonal fixed point \(\rho\). It is the seed for the source
+trace-normalization \(\operatorname{tr}\Lambda = 1\) after rescaling to the unit
+pair-index convention (arXiv:1606.00608, Lemma charact-NT-pure-RFP,
+lines 1271--1301).
 
-The plain structural form `rfp_nt_structural_full` is the wrapper that drops the
-square-sum conjunct; the trace-normalized form
-`isIsometryCanonicalForm_of_rfp_nt` is the wrapper that consumes it. -/
+The plain structural form `rfp_nt_structural_full` is the equivalent formulation
+that drops the square-sum conjunct; the trace-normalized form
+`isIsometryCanonicalForm_of_rfp_nt` is the one that consumes it. -/
 theorem rfp_nt_structural_full_sqSum (A : MPSTensor d D) [NeZero D]
     (hNT : IsNormal A) (hRFP : IsRFP A)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
@@ -421,7 +423,8 @@ theorem rfp_nt_structural_full_sqSum (A : MPSTensor d D) [NeZero D]
   have htr_re_pos : 0 < (Matrix.trace ρ).re := by
     exact (RCLike.pos_iff.mp hρ_pd.trace_pos).1
   have htr_re_ne : (Matrix.trace ρ).re ≠ 0 := ne_of_gt htr_re_pos
-  -- `∑ k (Λ k)^2 = D`: each square is `D · ρ_{k,k} / tr ρ`, and `∑ ρ_{k,k} = tr ρ`.
+  -- The squared weights sum to D: each square is D times the k-th diagonal
+  -- entry of ρ over its trace, and those diagonal entries sum to the trace.
   have hΛsq : ∀ k : Fin D, (Λ k) ^ 2 = (D : ℝ) * (ρ k k).re / (Matrix.trace ρ).re := by
     intro k
     have hk_nonneg : 0 ≤ (ρ k k).re := le_of_lt (RCLike.pos_iff.mp (hρdiag_pos k)).1
@@ -463,8 +466,8 @@ theorem rfp_nt_structural_full_sqSum (A : MPSTensor d D) [NeZero D]
         simp [L, Matrix.mul_assoc]
 
 /-- **Lemma B.1** (arXiv:1606.00608, Appendix B): a normal tensor in canonical
-form II that is an RFP admits the decomposition `A i = X * Λ * U i * X⁻¹`
-with diagonal positive `Λ` and a residual tensor `U` satisfying the
+form II that is an RFP admits the decomposition \(A^i = X\Lambda U^i X^{-1}\)
+with diagonal positive \(\Lambda\) and a residual tensor \(U\) satisfying the
 left-canonical equation and the scaled pair-index orthonormality
 \[
   \sum_i \overline{(U^i)_{\alpha,\beta}}\,(U^i)_{\alpha',\beta'}
@@ -475,10 +478,10 @@ left-canonical equation and the scaled pair-index orthonormality
 The proof combines the diagonal fixed-point reduction
 `rfp_nt_cfii_diagonal_fixedPoint`, the rank-one classification
 `transferMap_eq_fixedPointProj_of_isRFP_injective`, and an explicit Kraus
-realization of `fixedPointProj ρ`. Applying `kraus_rectangular_freedom'`
+realization of `fixedPointProj`. Applying `kraus_rectangular_freedom'`
 identifies the physical-index coefficients with an isometry. The matrix units
-are normalized by $D^{-1/2}$, so the resulting matrix entries carry the
-displayed factor $D^{-1}$. -/
+are normalized by \(D^{-1/2}\), so the resulting matrix entries carry the
+displayed factor \(D^{-1}\). -/
 theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
     (hNT : IsNormal A) (hRFP : IsRFP A)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
@@ -495,8 +498,8 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
     rfp_nt_structural_full_sqSum A hNT hRFP hLeft
   exact ⟨X, Λ, U, hX_det, hΛ_pos, hU_left, hU_pair, hA_eq⟩
 
-/-- `(√D : ℂ)` times its conjugate is `D`. Used to rescale the `D⁻¹` pair-index
-orthonormality to the unit convention. -/
+/-- The complex number \(\sqrt D\) times its conjugate is \(D\). Used to rescale
+the \(D^{-1}\) pair-index orthonormality to the unit convention. -/
 private theorem sqrtCard_star_mul [NeZero D] :
     star ((Real.sqrt (D : ℝ) : ℂ)) * (Real.sqrt (D : ℝ) : ℂ) = (D : ℂ) := by
   have hDpos : 0 < (D : ℝ) := by exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne D)
@@ -505,8 +508,8 @@ private theorem sqrtCard_star_mul [NeZero D] :
   rw [Complex.star_def, Complex.conj_ofReal, ← Complex.ofReal_mul, hs_sq,
     Complex.ofReal_natCast]
 
-/-- Rescaling a residual tensor `U₀` with `D⁻¹` pair-index orthonormality by the
-scalar `√D` upgrades it to the unit pair-index convention
+/-- Rescaling a residual tensor `U₀` with \(D^{-1}\) pair-index orthonormality by
+the scalar \(\sqrt D\) upgrades it to the unit pair-index convention
 \[
   \sum_i \overline{(U^i)_{\alpha,\beta}}\,(U^i)_{\alpha',\beta'}
   = \delta_{\alpha,\alpha'}\delta_{\beta,\beta'},
@@ -637,10 +640,11 @@ theorem rfp_nt_structural_full_unit_pair (A : MPSTensor d D) [NeZero D]
 single-block case j = j' of the structural characterization Theorem
 charact-MPS, eqs. III_CFI_RFP and III_isometry).
 
-A normal tensor `A` is in *isometry canonical form* when there are an invertible
-`X`, a positive diagonal weight `Λ` with `∑ k Λ k = 1` (the source
-trace-normalization tr Λ = 1), and a residual tensor `U` satisfying the unit
-pair-index isometry
+A normal tensor \(A\) is in *isometry canonical form* when there are an
+invertible \(X\), a positive diagonal weight \(\Lambda\) with
+\(\sum_k \Lambda_k = 1\) (the source trace-normalization
+\(\operatorname{tr}\Lambda = 1\)), and a residual tensor \(U\) satisfying the
+unit pair-index isometry
 \[
   \sum_i \overline{(U^i)_{\alpha,\beta}}\,(U^i)_{\alpha',\beta'}
   = \delta_{\alpha,\alpha'}\delta_{\beta,\beta'},
@@ -653,8 +657,9 @@ The square root appears because the source reference tensor is
 \(\widehat A^{(\alpha',\beta')}_{\alpha,\beta}
   = \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}\sqrt{\Lambda_\alpha}\)
 (arXiv:1606.00608, line 1300): the diagonal that dresses the unit isometry is
-`√Λ`, while the trace normalization tr Λ = 1 is imposed on `Λ` itself,
-equivalently on the diagonal fixed point `ρ = diag Λ` of the transfer map.
+\(\sqrt\Lambda\), while the trace normalization \(\operatorname{tr}\Lambda = 1\)
+is imposed on \(\Lambda\) itself, equivalently on the diagonal fixed point
+\(\rho = \operatorname{diag}\Lambda\) of the transfer map.
 
 **Local fix (square-root diagonal):** The source's displayed equation
 III_NT_RFP (arXiv:1606.00608, line 1278) writes \(A^i = X\Lambda U^iX^{-1}\) with
@@ -662,10 +667,10 @@ the diagonal \(\Lambda\) itself (no square root) alongside the unit isometry
 condition on \(U\) (lines 1281--1283). That literal pairing is inconsistent:
 against the reference tensor \(\widehat A = \sqrt\Lambda\cdot(\text{matrix
 unit})\) (line 1300) the residual \(\Lambda^{-1}\widehat A\) has pair-index sum
-\(\delta/\Lambda_\alpha\), not \(\delta\), so a unit `U` forces the square-root
-dressing `√Λ` in the decomposition. This \(\Lambda\to\sqrt\Lambda\) change is a
-local correction of the source display, mathematically correct as stated; it is
-documented in `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`.
+\(\delta/\Lambda_\alpha\), not \(\delta\), so a unit \(U\) forces the square-root
+dressing \(\sqrt\Lambda\) in the decomposition. This \(\Lambda\to\sqrt\Lambda\)
+change is a local correction of the source display, mathematically correct as
+stated; it is documented in `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`.
 
 This records the diagonal j = j' case of the source isometry condition. The
 cross-block \(\delta_{j,j'}\) orthogonality between distinct normal-tensor blocks
@@ -686,19 +691,21 @@ def IsIsometryCanonicalForm (A : MPSTensor d D) : Prop :=
 
 A normal tensor in canonical form II that is a renormalization fixed point is in
 isometry canonical form: it admits a decomposition
-`A^i = X √Λ U^i X⁻¹` with `Λ` diagonal, positive, trace-normalized
-(`∑ k Λ k = 1`, the source condition `tr(Λ) = 1`), and `U` a unit pair-index
-isometry.
+\(A^i = X\sqrt\Lambda\,U^i X^{-1}\) with \(\Lambda\) diagonal, positive,
+trace-normalized (\(\sum_k \Lambda_k = 1\), the source condition
+\(\operatorname{tr}\Lambda = 1\)), and \(U\) a unit pair-index isometry.
 
-The diagonal weight is `Λ k = ρ_{k,k} / tr ρ`, the normalized diagonal fixed
-point of the transfer map; trace-normalization is then the trace identity
-`∑ k ρ_{k,k} = tr ρ`. The square-root dressing `√Λ` matches the source reference
-tensor `Â = √Λ · (matrix unit)` (arXiv:1606.00608, line 1300) and keeps `U` a
-genuine unit isometry.
+The diagonal weight is \(\Lambda_k = \rho_{k,k}/\operatorname{tr}\rho\), the
+normalized diagonal fixed point of the transfer map; trace-normalization is then
+the trace identity \(\sum_k \rho_{k,k} = \operatorname{tr}\rho\). The square-root
+dressing \(\sqrt\Lambda\) matches the source reference tensor
+\(\widehat A = \sqrt\Lambda\cdot(\text{matrix unit})\) (arXiv:1606.00608,
+line 1300) and keeps \(U\) a genuine unit isometry.
 
 **Local fix (square-root diagonal):** the source display III_NT_RFP
-(line 1278) writes `A^i = X Λ U^i X⁻¹` without the square root; the `Λ → √Λ`
-correction is documented in the predicate `IsIsometryCanonicalForm` and in
+(line 1278) writes \(A^i = X\Lambda U^i X^{-1}\) without the square root; the
+\(\Lambda\to\sqrt\Lambda\) correction is documented in the predicate
+`IsIsometryCanonicalForm` and in
 `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
 theorem isIsometryCanonicalForm_of_rfp_nt (A : MPSTensor d D) [NeZero D]
     (hNT : IsNormal A) (hRFP : IsRFP A)
@@ -709,9 +716,9 @@ theorem isIsometryCanonicalForm_of_rfp_nt (A : MPSTensor d D) [NeZero D]
     rfp_nt_structural_full_sqSum A hNT hRFP hLeft
   let sR : ℝ := Real.sqrt (D : ℝ)
   let s : ℂ := (sR : ℂ)
-  -- Rescale to the unit pair-index convention: `U = √D · U₀`, `Λtil = Λ₀ / √D`.
+  -- Rescale to the unit pair-index convention by the scalar square root of D.
   let Λtil : Fin D → ℝ := fun k => Λ₀ k / sR
-  -- The trace-normalized diagonal is `Λ = Λtil² = Λ₀² / D`.
+  -- The trace-normalized diagonal is the entrywise square of the rescaled one.
   let Λ : Fin D → ℝ := fun k => (Λtil k) ^ 2
   let U : MPSTensor d D := fun i => s • U₀ i
   have hDpos_nat : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
@@ -720,15 +727,16 @@ theorem isIsometryCanonicalForm_of_rfp_nt (A : MPSTensor d D) [NeZero D]
   have hsR_pos : 0 < sR := Real.sqrt_pos.2 hDpos
   have hs_ne : s ≠ 0 := by simpa [s] using Complex.ofReal_ne_zero.mpr hsR_ne
   have hΛtil_pos : ∀ k, 0 < Λtil k := fun k => div_pos (hΛ₀_pos k) hsR_pos
-  -- `√Λ k = Λtil k`, so the decomposition matches the source `√Λ` dressing.
+  -- The square root of the trace-normalized diagonal is the rescaled diagonal,
+  -- so the decomposition matches the source square-root dressing.
   have hsqrtΛ : ∀ k, Real.sqrt (Λ k) = Λtil k := by
     intro k
     exact Real.sqrt_sq (le_of_lt (hΛtil_pos k))
   refine ⟨X, Λ, U, hX_det, ?_, ?_, ?_, ?_⟩
-  · -- `Λ k = Λtil k ^ 2 > 0`.
+  · -- Positivity: each weight is a square of a positive number.
     intro k
     exact pow_pos (hΛtil_pos k) 2
-  · -- `∑ k Λ k = (∑ Λ₀²) / D = D / D = 1`.
+  · -- Trace normalization: the weights sum to the squares of Λ₀ over D, hence 1.
     have hsR_sq : sR ^ 2 = (D : ℝ) := Real.sq_sqrt (le_of_lt hDpos)
     have hstep : ∀ k, Λ k = (Λ₀ k) ^ 2 / (D : ℝ) := by
       intro k
@@ -740,10 +748,11 @@ theorem isIsometryCanonicalForm_of_rfp_nt (A : MPSTensor d D) [NeZero D]
       _ = (∑ k : Fin D, (Λ₀ k) ^ 2) / (D : ℝ) := by rw [Finset.sum_div]
       _ = (D : ℝ) / (D : ℝ) := by rw [hΛ₀_sq]
       _ = 1 := by field_simp [hDpos.ne']
-  · -- Unit pair-index isometry: `√D · U₀` upgrades the `D⁻¹` form to unit.
+  · -- Unit pair-index isometry: scaling U₀ by the square root of D upgrades the
+    -- inverse-D form to the unit one.
     intro p q
     exact unit_pair_of_scaled_sqrtCard U₀ hU₀_pair p q
-  · -- Decomposition: `A^i = X √Λ U^i X⁻¹` reduces to the `Λ₀, U₀` form.
+  · -- Decomposition: the square-root form reduces to the original Λ₀, U₀ form.
     intro i
     rw [hA_eq i]
     let L : Matrix (Fin D) (Fin D) ℂ :=
