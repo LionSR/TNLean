@@ -124,6 +124,7 @@ import TNLean.Channel.Schwarz.ChoiCompression
 import TNLean.Channel.NPositivityChainStrict
 import TNLean.Channel.ReductionCriterion
 import TNLean.Channel.PartialTranspose
+import TNLean.Channel.SchmidtNumber
 import TNLean.Channel.Separable
 import TNLean.Channel.Schwarz.MultiplicativeDomain
 import TNLean.Channel.Schwarz.MultiplicativeDomainPowers

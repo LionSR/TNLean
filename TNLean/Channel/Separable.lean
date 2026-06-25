@@ -50,6 +50,8 @@ positive semidefinite operators.
 * `Matrix.IsSeparable.add`: separable matrices are closed under addition.
 * `Matrix.IsSeparable.smul`: separable matrices are closed under multiplication by
   a nonnegative real scalar.
+* `Matrix.isSeparable_sum`: separable matrices are closed under arbitrary finite
+  sums.
 * `Matrix.IsSeparable.isPPT`: **the PPT criterion, forward direction** — every
   separable matrix has the positive-partial-transpose property, ρ^{T₁} ≥ 0.
 * `Matrix.IsSeparable.tensorMapId_tEta_one_posSemidef`: the reduction map at n = 1
@@ -66,10 +68,9 @@ with positive partial transpose exist once the dimension exceeds ℂ² ⊗ ℂ²
 The reduction-map positivity recorded here is the n = 1 instance: a separable
 state is exactly a state of Schmidt number one.  The Schmidt-number filtration for
 general n — of which separability is the lowest level — and the resulting general
-reduction criterion of Wolf eq. (3.18) with its Schmidt-number premise are a
-further step built on the predicate introduced here; they are recorded in
-`docs/paper-gaps/wolf_reduction_criterion_schmidt_premise.tex` and are not
-formalized in this file.
+reduction criterion of Wolf eq. (3.18) with its Schmidt-number premise are
+formalized in `SchmidtNumber.lean`, which proves that Schmidt number one coincides
+with separability.
 
 ## References
 
@@ -136,6 +137,23 @@ theorem IsSeparable.smul {ρ : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ}
   · exact (hAB i).1.smul (by exact_mod_cast hc)
   · rw [Finset.smul_sum]
     exact Finset.sum_congr rfl fun i _ => (smul_kronecker (c : ℂ) (A i) (B i)).symm
+
+/-- A finite sum of separable matrices is separable: the empty sum is the zero
+Kronecker product and the inductive step is the additive closure of separability. -/
+theorem isSeparable_sum {ι : Type*} (s : Finset ι)
+    {f : ι → Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ}
+    (hf : ∀ i ∈ s, IsSeparable (f i)) : IsSeparable (∑ i ∈ s, f i) := by
+  classical
+  induction s using Finset.induction with
+  | empty =>
+      simp only [Finset.sum_empty]
+      simpa using isSeparable_kronecker (d := d) (d' := d')
+        (A := (0 : Matrix (Fin d) (Fin d) ℂ)) (B := (0 : Matrix (Fin d') (Fin d') ℂ))
+        PosSemidef.zero PosSemidef.zero
+  | insert a s ha ih =>
+      rw [Finset.sum_insert ha]
+      exact (hf a (Finset.mem_insert_self a s)).add
+        (ih fun i hi => hf i (Finset.mem_insert_of_mem hi))
 
 /-! ## Separable matrices are positive semidefinite -/
 
@@ -206,5 +224,26 @@ theorem IsSeparable.tensorMapId_tEta_one_posSemidef [NeZero d]
   refine posSemidef_sum Finset.univ fun i _ => ?_
   rw [tensorMapId_kronecker]
   exact PosSemidef.kronecker (hpos (A i) (hAB i).1) (hAB i).2
+
+/-! ## Kronecker-product identities -/
+
+/-- The Kronecker product of two pure-state projectors is the pure-state projector
+of the product vector, which has Schmidt rank at most one. -/
+theorem vecMulVec_kronecker_vecMulVec (a : Fin d → ℂ) (b : Fin d' → ℂ) :
+    vecMulVec a (star a) ⊗ₖ vecMulVec b (star b)
+      = vecMulVec (fun p : Fin d × Fin d' => a p.1 * b p.2)
+          (star (fun p : Fin d × Fin d' => a p.1 * b p.2)) := by
+  ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
+  simp only [kroneckerMap_apply, vecMulVec_apply, Pi.star_apply]
+  rw [star_mul']
+  ring
+
+/-- The Kronecker product distributes over a double finite sum entrywise. -/
+theorem sum_kronecker_sum {ιa ιb : Type*} [Fintype ιa] [Fintype ιb]
+    (A : ιa → Matrix (Fin d) (Fin d) ℂ) (B : ιb → Matrix (Fin d') (Fin d') ℂ) :
+    (∑ i, A i) ⊗ₖ (∑ j, B j) = ∑ i, ∑ j, A i ⊗ₖ B j := by
+  ext ⟨p₁, p₂⟩ ⟨q₁, q₂⟩
+  simp only [kroneckerMap_apply, Matrix.sum_apply, Finset.sum_mul, Finset.mul_sum]
+  rw [Finset.sum_comm]
 
 end Matrix

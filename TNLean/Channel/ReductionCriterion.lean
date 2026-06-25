@@ -48,7 +48,9 @@ after scaling by `n > 0`, to `n • (1 ⊗ ρ₂) ≥ ρ`; applying the map to t
 factor instead gives the symmetric bound `n • (ρ₁ ⊗ 1) ≥ ρ`.  The implications
 are recorded as `Matrix.reductionCriterion_left` and
 `Matrix.reductionCriterion_right`.  The first step (the Schmidt-number premise)
-is not yet formalized; see the scope section.
+is formalized in `SchmidtNumber.lean`, where the two steps are composed into the
+full criterion `Matrix.reductionCriterion_left_of_hasSchmidtNumberLE` and
+`Matrix.reductionCriterion_right_of_hasSchmidtNumberLE`.
 
 ## Main definitions
 
@@ -64,25 +66,21 @@ is not yet formalized; see the scope section.
   **operator-implication step of Wolf eq. (3.18):** positivity of `(T_n ⊗ id)(ρ)`
   yields `n • (1 ⊗ ρ₂) ≥ ρ`, and positivity of `(T_n ⊗ id)(ρ^swap)` --
   equivalently Wolf's symmetric condition `(id ⊗ T_n)(ρ) ≥ 0` -- yields
-  `n • (ρ₁ ⊗ 1) ≥ ρ`.  Wolf's Schmidt-number premise is not yet wired in; see
-  the scope note below.
+  `n • (ρ₁ ⊗ 1) ≥ ρ`.  Wolf's Schmidt-number premise is supplied in
+  `SchmidtNumber.lean`, which composes these with the first step into the full
+  criterion.
 
 ## Scope
 
-**Scope restriction (operator-implication half of eq. (3.18)):** Wolf's
-eq. (3.18) has the premise `Schmidt-number(ρ) ≤ n`.  The theorems here drop that
-premise and assume its consequence `(T_n ⊗ id)(ρ) ≥ 0` instead, so they
-formalize only the second of Wolf's two steps.  Deriving the first step needs a
-Schmidt-number predicate for mixed states, equivalently a separable-state
-predicate, which is absent from the development.  Documented in
-`docs/paper-gaps/wolf_reduction_criterion_schmidt_premise.tex`.
+These theorems isolate the second of Wolf's two steps: the operator implication
+from `(T_n ⊗ id)(ρ) ≥ 0` to the inequalities of eq. (3.18), with no premise on
+the Schmidt number.  The first step (a state of Schmidt number at most `n` has
+`(T_n ⊗ id)(ρ) ≥ 0`) and the resulting full criterion with its Schmidt-number
+premise are formalized in `SchmidtNumber.lean`.
 
-The same missing foundation blocks the *entanglement* form of the reduction
-criterion (a separable state satisfies eq. (3.18)): the operator implication
-above is the separability-free content.  The other entanglement criteria of
-Example 3.1 (PPT / partial transpose, the Breuer–Hall map, the Choi-type maps)
-need a bipartite partial-transpose object and indecomposability, which are
-likewise absent.
+The other entanglement criteria of Example 3.1 (the Breuer–Hall map, the
+Choi-type maps, indecomposability) are a further step and are not part of this
+file.
 
 ## References
 
@@ -164,13 +162,11 @@ form.** If applying `T_n` to the first tensor factor of a bipartite matrix `ρ`
 yields a positive semidefinite operator, then `n • (1 ⊗ ρ₂) ≥ ρ`, where
 `ρ₂ = traceLeft ρ` is the reduced density on the second factor.
 
-**Scope restriction (operator-implication half of eq. (3.18)):** Wolf states
-eq. (3.18) with the premise that `ρ` has Schmidt number at most `n`; the path to
-the inequality is `Schmidt-number(ρ) ≤ n ⟹ (T_n ⊗ id)(ρ) ≥ 0 ⟹ n • (1 ⊗ ρ₂) ≥ ρ`.
-This theorem formalizes only the second step, taking `(T_n ⊗ id)(ρ) ≥ 0` as a
-hypothesis; the first step is unformalized because no Schmidt-number /
-separable-state predicate exists in the development.  Documented in
-`docs/paper-gaps/wolf_reduction_criterion_schmidt_premise.tex`. -/
+This is the second of Wolf's two steps: the path to the inequality is
+`Schmidt-number(ρ) ≤ n ⟹ (T_n ⊗ id)(ρ) ≥ 0 ⟹ n • (1 ⊗ ρ₂) ≥ ρ`, and this
+theorem takes `(T_n ⊗ id)(ρ) ≥ 0` as a hypothesis.  The first step and the
+composed full criterion with its Schmidt-number premise are
+`Matrix.reductionCriterion_left_of_hasSchmidtNumberLE` in `SchmidtNumber.lean`. -/
 theorem reductionCriterion_left {n : ℕ} (hn : 0 < n)
     (ρ : Matrix (Fin D × Fin D') (Fin D × Fin D') ℂ)
     (hpos : (tensorMapId (tEta D (n : ℝ)) ρ).PosSemidef) :
@@ -200,12 +196,11 @@ equivalent to Wolf's symmetric condition `(id ⊗ T_n)(ρ) ≥ 0`, which applies
 the first form, and reindexes back; positive semidefiniteness and the order are
 invariant under the swap.
 
-**Scope restriction (operator-implication half of eq. (3.18)):** as with the
-first form, the source premise is `Schmidt-number(ρ) ≤ n`; this theorem
-formalizes only the step from `(T_n ⊗ id)(ρ^swap) ≥ 0` to the inequality, the
-Schmidt-number step being unformalized for want of a Schmidt-number /
-separable-state predicate.  Documented in
-`docs/paper-gaps/wolf_reduction_criterion_schmidt_premise.tex`. -/
+As with the first form, this is the second of Wolf's two steps, taking
+`(T_n ⊗ id)(ρ^swap) ≥ 0` as a hypothesis.  The first step and the composed full
+criterion with its Schmidt-number premise are
+`Matrix.reductionCriterion_right_of_hasSchmidtNumberLE` in
+`SchmidtNumber.lean`. -/
 theorem reductionCriterion_right {n : ℕ} (hn : 0 < n)
     (ρ : Matrix (Fin D × Fin D') (Fin D × Fin D') ℂ)
     (hpos : (tensorMapId (tEta D' (n : ℝ))
