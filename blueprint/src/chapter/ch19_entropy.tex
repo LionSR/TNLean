@@ -399,6 +399,56 @@ finite-dimensional quantum systems.
     where the middle equality is trace cyclicity together with $U^\dagger U = 1$.
 \end{proof}
 
+\begin{lemma}[Logarithm is covariant under reindexing]
+    \label{lem:log_submatrix_equiv}
+    \lean{Matrix.log_submatrix_equiv}
+    \leanok
+    Let $A$ be a Hermitian matrix indexed by a finite set $J$, and let
+    $e : I \to J$ be a bijection from a finite set $I$. Writing $A_e$ for the
+    reindexed matrix on $I$ with entries $A_{e(i)\,e(j)}$,
+    \[
+        \log(A_e) = (\log A)_e.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Reindexing both indices by a bijection is the conjugation $A_e = P^\dagger A P$
+    by the permutation matrix $P$ of $e$, which is a unitary star-algebra
+    isomorphism. The functional calculus commutes with such an isomorphism, so the
+    logarithm of the reindexed matrix is the reindexing of the logarithm.
+\end{proof}
+
+\begin{theorem}[Reindexing invariance of the quantum relative entropy]
+    \label{thm:relative_entropy_submatrix_equiv}
+    \lean{Matrix.quantumRelativeEntropy_submatrix_equiv}
+    \leanok
+    \uses{def:quantum_relative_entropy}
+    Let $\rho, \sigma$ be Hermitian matrices indexed by a finite set $J$, and let
+    $e : I \to J$ be a bijection from a finite set $I$. Writing $\rho_e, \sigma_e$
+    for the matrices on $I$ with entries $\rho_{e(i)\,e(j)}$ and
+    $\sigma_{e(i)\,e(j)}$,
+    \[
+        D(\rho_e \,\Vert\, \sigma_e) = D(\rho\Vert\sigma).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:log_submatrix_equiv}
+    Carry the two logarithms through the reindexing by
+    Lemma~\ref{lem:log_submatrix_equiv}, so that $\log\rho_e - \log\sigma_e$ is the
+    reindexing of $\log\rho - \log\sigma$. The relative entropy is the real trace of
+    $\rho$ against this difference, and reindexing both factors by the same
+    bijection leaves the trace of the product unchanged, hence
+    \[
+        D(\rho_e \,\Vert\, \sigma_e)
+            = \operatorname{Re}\operatorname{tr}\!\bigl(
+                \rho_e\,((\log\rho - \log\sigma)_e)\bigr)
+            = \operatorname{Re}\operatorname{tr}\!\bigl(
+                \rho\,(\log\rho - \log\sigma)\bigr)
+            = D(\rho\Vert\sigma).
+    \]
+\end{proof}
+
 \begin{lemma}[Logarithm of a tensor product of positive definite matrices]
     \label{lem:log_kronecker}
     \lean{Matrix.log_kronecker}
