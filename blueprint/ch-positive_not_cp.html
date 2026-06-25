@@ -12,9 +12,9 @@
 <meta name="generator" content="plasTeX" />
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Exponential Decay of Correlations</title>
-<link rel="next" href="ch-examples.html" title="Concrete Examples" />
-<link rel="prev" href="ch-parent_hamiltonian.html" title="Parent Hamiltonians" />
+<title>Positive but Not Completely Positive Maps</title>
+<link rel="next" href="sect0001.html" title="Bibliography" />
+<link rel="prev" href="ch-entropy.html" title="Quantum Entropy" />
 <link rel="up" href="index.html" title="Fundamental Theorem of Matrix Product States" />
 <link rel="stylesheet" href="styles/theme-white.css" />
 <link rel="stylesheet" href="styles/amsthm.css" />
@@ -608,10 +608,10 @@
 
   </ul>
  </li>
-<li class=" active current">
+<li class="">
   <a href="ch-correlations.html"><span class="toc_ref">14</span> <span class="toc_entry">Exponential Decay of Correlations</span></a>
-  <span class="expand-toc">▼</span>
-  <ul class="sub-toc-1 active">
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
      <li class="">
   <a href="ch-correlations.html#a0000028429"><span class="toc_ref">14.1</span> <span class="toc_entry">Connected correlators from the transfer map</span></a>
  </li>
@@ -822,10 +822,10 @@
 
   </ul>
  </li>
-<li class="">
+<li class=" active current">
   <a href="ch-positive_not_cp.html"><span class="toc_ref">20</span> <span class="toc_entry">Positive but Not Completely Positive Maps</span></a>
-  <span class="expand-toc">▶</span>
-  <ul class="sub-toc-1">
+  <span class="expand-toc">▼</span>
+  <ul class="sub-toc-1 active">
      <li class="">
   <a href="ch-positive_not_cp.html#a0000028456"><span class="toc_ref">20.1</span> <span class="toc_entry">The reduction criterion</span></a>
  </li>
@@ -853,324 +853,24 @@
 
 
 <div class="main-text">
-<h1 id="ch:correlations">14 Exponential Decay of Correlations</h1>
+<h1 id="ch:positive_not_cp">20 Positive but Not Completely Positive Maps</h1>
 
-<p>This chapter derives the transfer-matrix expression for thermodynamic-limit correlators of a normal MPS and the resulting exponential decay estimate. The key mechanism is spectral: after removing the leading eigenvalue contribution, the connected part is governed by subleading eigenvalues of the transfer map. </p>
-<p>When the MPS tensor generates a parent Hamiltonian (Chapter&#160;<a href="ch-parent_hamiltonian.html">13</a>), the correlator quantifies spatial correlations in the ground state. The exponential decay rate is set by the spectral properties of the transfer map, i.e. by the modulus of its subleading eigenvalues. </p>
-<p>The spectral analysis of the transfer map and the mixed transfer operator, including the eigenvalue bound \(\rho (F_{AB}) \le 1\), the strict transfer-operator gap \(\rho (F_{AB}) {\lt} 1\) for non-equivalent blocks, and the resulting overlap decay, is developed in Chapter&#160;<a href="ch-spectral.html">7</a>. This chapter focuses on the <em>correlator</em> side: one-point and two-point expectations, their spectral decomposition, and quantitative bounds on decay rates. </p>
-<h1 id="a0000028429">14.1 Connected correlators from the transfer map</h1>
-<div class="definition_thmwrapper theorem-style-definition" id="def:one_point_expectation">
-  <div class="definition_thmheading">
-    <span class="definition_thmcaption">
-    Definition
-    </span>
-    <span class="definition_thmlabel">14.1</span>
-    <span class="definition_thmtitle">One-point expectation</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-correlations.html#def:one_point_expectation">#</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-mps.html#def:transfer_map">Definition 2.5</a></li>
-          
-          <li><a href="ch-qpf.html#thm:qpf">Theorem 6.11</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.onePointExpectation" class="lean_decl">MPSTensor.onePointExpectation</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="definition_thmcontent">
-  <p>   Fix an MPS tensor and a right fixed point of its transfer map. Write the tensor as \(A\) and the fixed point as \(\rho ^R\). Under the hypotheses of Theorem&#160;<a href="ch-qpf.html#thm:qpf">6.11</a>, that fixed point exists and is unique up to scaling; we normalize it so that \(\operatorname{tr}(\rho ^R)=1\). For a local observable \(X \in M_{D}(\mathbb {C})\) define </p>
-<div class="displaymath" id="a0000029721">
-  \[  \langle X_0 \rangle := \operatorname{tr}(X\rho ^R).  \]
-</div>
-
-  </div>
-</div>
-<div class="definition_thmwrapper theorem-style-definition" id="def:two_point_expectation">
-  <div class="definition_thmheading">
-    <span class="definition_thmcaption">
-    Definition
-    </span>
-    <span class="definition_thmlabel">14.2</span>
-    <span class="definition_thmtitle">Two-point expectation at distance \(n\)</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-correlations.html#def:two_point_expectation">#</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-mps.html#def:transfer_map">Definition 2.5</a></li>
-          
-          <li><a href="ch-correlations.html#def:one_point_expectation">Definition 14.1</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.twoPointExpectation" class="lean_decl">MPSTensor.twoPointExpectation</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="definition_thmcontent">
-  <p>   For observables \(X,Y \in M_{D}(\mathbb {C})\) and \(n\ge 0\), </p>
-<div class="displaymath" id="a0000029722">
-  \[  \langle X_0 Y_n \rangle := \operatorname{tr}\! \left(Y\, \mathcal{E}_A^n(X\rho ^R)\right).  \]
-</div>
-<p> Equivalently: insert \(X\) at site \(0\), propagate by \(\mathcal{E}_A^n\), then insert \(Y\) and take the trace. </p>
-<div class="centered"> <img class="tn-svg" src="tn_svg/tn-cc10b61b4daf1cff.svg" alt="\TNTwoPointCorrelator"></div>
-
-  </div>
-</div>
-<div class="definition_thmwrapper theorem-style-definition" id="def:connected_correlator">
-  <div class="definition_thmheading">
-    <span class="definition_thmcaption">
-    Definition
-    </span>
-    <span class="definition_thmlabel">14.3</span>
-    <span class="definition_thmtitle">Connected correlator</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-correlations.html#def:connected_correlator">#</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-correlations.html#def:two_point_expectation">Definition 14.2</a></li>
-          
-          <li><a href="ch-correlations.html#def:one_point_expectation">Definition 14.1</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.connectedCorrelator" class="lean_decl">MPSTensor.connectedCorrelator</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="definition_thmcontent">
-  <p>   The connected two-point function is </p>
-<div class="displaymath" id="a0000029724">
-  \[  C(X,Y;n) := \langle X_0Y_n\rangle - \langle X_0\rangle \langle Y_0\rangle .  \]
-</div>
-
-  </div>
-</div>
-<h1 id="a0000028430">14.2 Spectral expansion and exponential decay</h1>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:correlator_sum_exponentials">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">14.4</span>
-    <span class="theorem_thmtitle">Sum of exponentials (spectral expansion interface)</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-correlations.html#thm:correlator_sum_exponentials">#</a>
-    
-    <a class="icon proof" href="ch-correlations.html#a0000029725"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-correlations.html#def:connected_correlator">Definition 14.3</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.connectedCorrelator_eq_sum" class="lean_decl">MPSTensor.connectedCorrelator_eq_sum</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   If coefficients \(c_j\in \mathbb {C}\) and eigenvalues \(\lambda _j\in \mathbb {C}\) (\(j=1,\dots ,D^2-1\)) satisfy, for all \(n\ge 0\), </p>
-<div class="displaymath" id="a0000029726">
-  \[  C(X,Y;n) = \sum _{j=1}^{D^2-1} c_j\, \lambda _j^n,  \]
-</div>
-<p> then the connected correlator equals the stated sum of exponentials. The source&#160;<span class="cite">
+<p>Wolf, <em>Quantum Channels &amp; Operations</em>, Chapter 3 studies positive maps that fail to be completely positive and their role in entanglement detection. This material sits outside the fundamental-theorem chain of the preceding chapters: the reduction criterion, the partial transpose and the positive-partial-transpose (PPT) property, separable states, and the Schmidt number with the full reduction criterion. The threshold \(n\)-positivity of the family \(T_\eta \) and the two-positivity content these results use live in the Kadison–Schwarz chapter (Chapter&#160;<a href="ch-schwarz.html">5</a>). </p>
+<h1 id="a0000028456">20.1 The reduction criterion</h1>
+<p>The reduction map and the family \(T_\eta \) are the same map under two parametrizations: the natural-number parameter \(k\) and the real parameter \(\eta \) agree at \(\eta =k\). Identifying them lets the positivity threshold and the Choi formula carry over to the reduction map without restating them. Wolf attaches to this map the entanglement witness \(W_n=D^{-1}\mathbb {1}-n^{-1}|\Omega \rangle \langle \Omega |\) and the operator inequality <span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
-	, Section&#160;II.B.3
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Equation&#160;(3.18)
 	]
-</span> states that the connected correlator is a sum of \(D^2-1\) pure exponentials \(C(X,Y;n) = \sum _{j\ge 2}^{D^2} c_{XY}(j)\lambda _j^n\), which always exists for a normal MPS via the transfer-map spectral decomposition. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000029725">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p>Given the expansion hypothesis, the equality is immediate. The source&#160;<span class="cite">
-	[
-	
-	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
-	, Section&#160;II.B.3
-	]
-</span> derives this expansion from the spectral decomposition of \(\mathcal{E}_A^n\) restricted to the complement of the fixed-point eigenspace: the leading eigenvalue \(\lambda _1=1\) contributes \(\langle X_0\rangle \langle Y_0\rangle \), which is subtracted in the connected correlator, leaving the sum over subleading eigenvalues. </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:correlator_exponential_bound">
+</span> that constrains the reduced densities of a bipartite state whose Schmidt number is at most \(n\). </p>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:reduction_map_eq_t_eta">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.5</span>
-    <span class="theorem_thmtitle">Exponential decay bound (interface)</span>
+    <span class="theorem_thmlabel">20.1</span>
+    <span class="theorem_thmtitle">The reduction map is the family \(T_\eta \) at integer parameter</span>
     <div class="thm_header_extras">
 
     
@@ -1178,9 +878,9 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-correlations.html#thm:correlator_exponential_bound">#</a>
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:reduction_map_eq_t_eta">#</a>
     
-    <a class="icon proof" href="ch-correlations.html#a0000029727"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030245"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1196,7 +896,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-correlations.html#def:connected_correlator">Definition 14.3</a></li>
+          <li><a href="ch-channels.html#def:reduction_map">Definition 4.6</a></li>
+          
+          <li><a href="ch-schwarz.html#def:t_eta">Definition 5.70</a></li>
           
         </ul>
     
@@ -1216,7 +918,7 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/MPSTensor.connectedCorrelator_bound" class="lean_decl">MPSTensor.connectedCorrelator_bound</a></li>
+          <li><a href="../docs/find/#doc/Matrix.reductionMap_eq_tEta" class="lean_decl">Matrix.reductionMap_eq_tEta</a></li>
           
         </ul>
     
@@ -1227,21 +929,14 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   If a constant \(C_{XY}\in \mathbb {R}\) and \(\lambda _2\in \mathbb {C}\) satisfy, for all \(n\ge 0\), </p>
-<div class="displaymath" id="a0000029728">
-  \[  |C(X,Y;n)| \le C_{XY}\, |\lambda _2|^n,  \]
+  <p>    For every \(k\in \mathbb {N}\) the reduction map \(T_k\) equals the family map \(T_\eta \) at \(\eta =k\): </p>
+<div class="displaymath" id="a0000030246">
+  \[  T_k=T_\eta \big|_{\eta =k}.  \]
 </div>
-<p> then the connected correlator satisfies that exponential decay bound. The source&#160;<span class="cite">
-	[
-	
-	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
-	, Section&#160;II.B.3
-	]
-</span> obtains this by combining the sum-of-exponentials expansion with the triangle inequality, and Sec.&#160;4 provides the transfer-map gap condition \(|\lambda _j|{\lt}1\) for the subleading eigenvalues. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000029727">
+<div class="proof_wrapper" id="a0000030245">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1249,72 +944,17 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Given the bound hypothesis, the estimate is immediate. The source&#160;<span class="cite">
-	[
-	
-	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
-	, Section&#160;II.B.3
-	]
-</span> obtains this bound by applying the triangle inequality to the sum-of-exponentials expansion and using the transfer-map gap condition \(|\lambda _j|\le |\lambda _2|{\lt}1\) for all subleading eigenvalues. </p>
+  <p>The two maps differ only in the scalar coefficient of \(X\), namely \(k^{-1}\) against \(\eta ^{-1}\) at \(\eta =k\). The natural-number and real casts of \(k\) into the complex scalars coincide, so the coefficients agree and the maps are equal. </p>
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="rem:spectral_hypothesis">
-  <div class="remark_thmheading">
-    <span class="remark_thmcaption">
-    Remark
-    </span>
-    <span class="remark_thmlabel">14.6</span>
-    <span class="remark_thmtitle">Transfer-map spectral hypothesis</span>
-    <div class="thm_header_extras">
-
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-correlations.html#rem:spectral_hypothesis">#</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-correlations.html#thm:correlator_exponential_bound">Theorem 14.5</a></li>
-          
-          <li><a href="ch-channels.html#thm:primitive_compl_lt_one">Theorem 4.75</a></li>
-          
-          <li><a href="ch-spectral.html#thm:transfer_operator_gap_irr_tp">Theorem 7.29</a></li>
-          
-          <li><a href="ch-correlations.html#thm:transfer_map_gap_wielandt">Theorem 14.11</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-        </div>
-  </div>
-  <div class="remark_thmcontent">
-  <p>  The hypothesis “\(|\lambda _2| {\lt} 1\)” in Theorem&#160;<a href="ch-correlations.html#thm:correlator_exponential_bound">14.5</a> is a transfer-map gap condition: all non-leading eigenvalues of \(\mathcal{E}_A\) lie strictly inside the unit disk. It is distinct from the Hamiltonian spectral gap of Chapter&#160;<a href="ch-parent_hamiltonian.html">13</a>. The complementary transfer-map gap \(\rho (\mathcal{E}_A - P) {\lt} 1\) is established for primitive channels (Theorem&#160;<a href="ch-channels.html#thm:primitive_compl_lt_one">4.75</a>, Chapter&#160;<a href="ch-channels.html">4</a>). The mixed-transfer gap needed for block separation is supplied for irreducible trace-preserving tensors (Theorem&#160;<a href="ch-spectral.html#thm:transfer_operator_gap_irr_tp">7.29</a>), and quantitative single-tensor transfer-map bounds for injective tensors are recorded in Theorem&#160;<a href="ch-correlations.html#thm:transfer_map_gap_wielandt">14.11</a>. Thus the analytical input needed to make Theorems&#160;<a href="ch-correlations.html#thm:correlator_sum_exponentials">14.4</a> and&#160;<a href="ch-correlations.html#thm:correlator_exponential_bound">14.5</a> unconditional is already present; what remains is extracting the spectral expansion coefficients \(c_j,\lambda _j\) from the eigendecomposition of \(\mathcal{E}_A\) (Issue&#160;#1447). </p>
-
-  </div>
-</div>
-<div class="definition_thmwrapper theorem-style-definition" id="def:correlation_length">
+<div class="definition_thmwrapper theorem-style-definition" id="def:reduction_witness">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">14.7</span>
-    <span class="definition_thmtitle">Correlation length</span>
+    <span class="definition_thmlabel">20.2</span>
+    <span class="definition_thmtitle">Reduction witness</span>
     <div class="thm_header_extras">
 
     
@@ -1322,28 +962,8 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-correlations.html#def:correlation_length">#</a>
+    <a class="icon proof" href="ch-positive_not_cp.html#def:reduction_witness">#</a>
     
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-mps.html#def:transfer_map">Definition 2.5</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
     
     
     <button class="modal lean">L∃∀N</button>
@@ -1357,7 +977,7 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/MPSTensor.correlationLength" class="lean_decl">MPSTensor.correlationLength</a></li>
+          <li><a href="../docs/find/#doc/Matrix.reductionWitness" class="lean_decl">Matrix.reductionWitness</a></li>
           
         </ul>
     
@@ -1368,101 +988,20 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   The correlation length associated with a subleading eigenvalue \(\lambda _2\) of the transfer map (\(|\lambda _2|{\lt}1\)) is </p>
-<div class="displaymath" id="a0000029729">
-  \[  \xi := -\frac{1}{\log |\lambda _2|}.  \]
+  <p>   The reduction witness on \(M_{D}(\mathbb {C})\otimes M_{D}(\mathbb {C})\), for \(n\in \mathbb {N}\), is </p>
+<div class="displaymath" id="a0000030247">
+  \[  W_n=D^{-1}\mathbb {1}-n^{-1}|\Omega \rangle \langle \Omega |.  \]
 </div>
 
   </div>
 </div>
-<div class="lemma_thmwrapper theorem-style-plain" id="lem:correlation_length_pos">
-  <div class="lemma_thmheading">
-    <span class="lemma_thmcaption">
-    Lemma
-    </span>
-    <span class="lemma_thmlabel">14.8</span>
-    <span class="lemma_thmtitle">Correlation length is positive</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-correlations.html#lem:correlation_length_pos">#</a>
-    
-    <a class="icon proof" href="ch-correlations.html#a0000029730"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-correlations.html#def:correlation_length">Definition 14.7</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.correlationLength_pos" class="lean_decl">MPSTensor.correlationLength_pos</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="lemma_thmcontent">
-  <p>   If \(|\lambda _2| {\lt} 1\) and \(\lambda _2 \ne 0\), then \(\xi {\gt} 0\). </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000029730">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p>Since \(0 {\lt} |\lambda _2| {\lt} 1\), we have \(\log |\lambda _2| {\lt} 0\), so \(\xi = -1/\log |\lambda _2| {\gt} 0\). </p>
-
-  </div>
-</div>
-<h1 id="a0000028431">14.3 Quantitative transfer-map gap bounds</h1>
-<p>The transfer-map gap theorems in Chapter&#160;<a href="ch-channels.html">4</a> establish \(\rho (\mathcal{E}_A - P) {\lt} 1\) for primitive channels qualitatively. This section gives the <em>quantitative</em> refinements with explicit constants and rates for the single-tensor transfer map \(\mathcal{E}_A\). </p>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:exponential_convergence_primitive">
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:choi_matrix_reduction_witness">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.9</span>
-    <span class="theorem_thmtitle">Exponential convergence of injective primitive channels</span>
+    <span class="theorem_thmlabel">20.3</span>
+    <span class="theorem_thmtitle">The Choi matrix of the reduction map is the witness</span>
     <div class="thm_header_extras">
 
     
@@ -1470,9 +1009,9 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-correlations.html#thm:exponential_convergence_primitive">#</a>
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:choi_matrix_reduction_witness">#</a>
     
-    <a class="icon proof" href="ch-correlations.html#a0000029731"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030248"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1488,11 +1027,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channels.html#thm:primitive_compl_lt_one">Theorem 4.75</a></li>
+          <li><a href="ch-channels.html#def:reduction_map">Definition 4.6</a></li>
           
-          <li><a href="ch-channels.html#def:fixed_point_proj">Definition 4.46</a></li>
+          <li><a href="ch-positive_not_cp.html#def:reduction_witness">Definition 20.2</a></li>
           
-          <li><a href="ch-spectral.html#thm:primitive_overlap">Theorem 7.99</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:reduction_map_eq_t_eta">Theorem 20.1</a></li>
+          
+          <li><a href="ch-schwarz.html#thm:choi_matrix_t_eta">Theorem 5.71</a></li>
           
         </ul>
     
@@ -1512,7 +1053,7 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/MPSTensor.exponential_convergence_of_primitive" class="lean_decl">MPSTensor.exponential_convergence_of_primitive</a></li>
+          <li><a href="../docs/find/#doc/ChoiJamiolkowski.choiMatrix_reductionMap_eq_reductionWitness" class="lean_decl">ChoiJamiolkowski.choiMatrix_reductionMap_eq_reductionWitness</a></li>
           
         </ul>
     
@@ -1523,19 +1064,14 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Fix an injective, trace-preserving MPS tensor \(A\) with positive definite fixed point \(\rho \). Let </p>
-<div class="displaymath" id="a0000029732">
-  \[  P(X) = \frac{\operatorname{tr}(X)}{\operatorname{tr}(\rho )}\rho  \]
+  <p>    For \(D\ge 1\) the Choi matrix of \(T_n\) is the reduction witness: </p>
+<div class="displaymath" id="a0000030249">
+  \[  \tau (T_n)=W_n=D^{-1}\mathbb {1}-n^{-1}|\Omega \rangle \langle \Omega |.  \]
 </div>
-<p> be the corresponding fixed-point projection. Then there exist \(C {\gt} 0\) and \(0 {\lt} \delta \le 1\) such that for all \(n \ge 0\) and \(X \in M_{D}(\mathbb {C})\), </p>
-<div class="displaymath" id="a0000029733">
-  \[  \| \mathcal{E}_A^n(X) - P(X)\|  \le C\, (1-\delta )^n\, \| X\| .  \]
-</div>
-<p> The transfer-map gap \(\delta \) exists by primitivity (Theorem&#160;<a href="ch-channels.html#thm:primitive_compl_lt_one">4.75</a>, the complementary transfer-map gap). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000029731">
+<div class="proof_wrapper" id="a0000030248">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1543,17 +1079,17 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Injectivity implies primitivity of the transfer map. The complementary spectral radius \(\rho (\mathcal{E}_A - P) {\lt} 1\) then follows from the primitive transfer-map gap theorem for the complementary map. The Gelfand formula yields a geometric bound \(\| \, (\mathcal{E}_A - P)^n\|  \le C\, (1-\delta )^n\) for suitable constants, giving the claimed estimate. </p>
+  <p>The reduction map is \(T_\eta \) at \(\eta =n\), whose Choi matrix is \(D^{-1}\mathbb {1}-n^{-1}|\Omega \rangle \langle \Omega |\), which is exactly \(W_n\). </p>
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:correlation_length_bound">
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:tensor_map_id_t_eta">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.10</span>
-    <span class="theorem_thmtitle">Correlation length bound</span>
+    <span class="theorem_thmlabel">20.4</span>
+    <span class="theorem_thmtitle">Reduction-criterion identity</span>
     <div class="thm_header_extras">
 
     
@@ -1561,9 +1097,9 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-correlations.html#thm:correlation_length_bound">#</a>
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:tensor_map_id_t_eta">#</a>
     
-    <a class="icon proof" href="ch-correlations.html#a0000029734"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030250"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1579,11 +1115,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-correlations.html#def:correlation_length">Definition 14.7</a></li>
-          
-          <li><a href="ch-correlations.html#thm:exponential_convergence_primitive">Theorem 14.9</a></li>
-          
-          <li><a href="ch-mps.html#def:injective">Definition 2.28</a></li>
+          <li><a href="ch-schwarz.html#def:t_eta">Definition 5.70</a></li>
           
         </ul>
     
@@ -1603,7 +1135,7 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/MPSTensor.correlation_length_bound" class="lean_decl">MPSTensor.correlation_length_bound</a></li>
+          <li><a href="../docs/find/#doc/Matrix.tensorMapId_tEta_eq" class="lean_decl">Matrix.tensorMapId_tEta_eq</a></li>
           
         </ul>
     
@@ -1614,15 +1146,15 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   For an injective trace-preserving MPS tensor, there exist \(C {\gt} 0\) and \(\xi {\gt} 0\) such that for all \(n \ge 0\) and all traceless \(X \in M_{D}(\mathbb {C})\) (i.e. \(\operatorname{tr}(X) = 0\)), </p>
-<div class="displaymath" id="a0000029735">
-  \[  \| \mathcal{E}_A^n(X)\|  \le C\, e^{-n/\xi } \| X\| .  \]
+  <p>    Applying \(T_\eta \) to the first factor of a bipartite matrix \(\rho \) gives </p>
+<div class="displaymath" id="a0000030251">
+  \[  (T_\eta \otimes \operatorname{id})(\rho )=\mathbb {1}\otimes \rho _2-\eta ^{-1}\rho ,  \]
 </div>
-<p> Traceless matrices lie in \(\ker P\), where \(P\) is the fixed-point projection. Since \(\mathcal{E}_A - P\) has spectral radius strictly less than&#160;\(1\), the Gelfand formula gives exponential decay at rate \(\xi = -1/\log \rho (\mathcal{E}_A - P)\). </p>
+<p> where \(\rho _2\) is the reduced density of \(\rho \) on the second factor. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000029734">
+<div class="proof_wrapper" id="a0000030250">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1630,17 +1162,25 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>For traceless \(X\) we have \(P(X) = 0\), so \(\mathcal{E}_A^n(X) = (\mathcal{E}_A - P)^n(X)\). The exponential convergence theorem gives a geometric bound \(C\, (1-\delta )^n\, \| X\| \). Rewriting \((1-\delta )^n = e^{-n/\xi }\) with \(\xi = -1/\log (1-\delta )\) yields the claimed estimate. </p>
+  <p>Fix block indices \(i_2,j_2\) on the second factor and write \(\rho ^{(i_2,j_2)}\) for the \(D\times D\) slice \(\rho ^{(i_2,j_2)}_{i_1 j_1}=\rho _{(i_1,i_2),(j_1,j_2)}\) on the first factor. Its trace is the corresponding entry of \(\rho _2\): </p>
+<div class="displaymath" id="a0000030252">
+  \[  \operatorname{tr}\bigl(\rho ^{(i_2,j_2)}\bigr) =\sum _{i_1}\rho _{(i_1,i_2),(i_1,j_2)} =(\rho _2)_{i_2 j_2}.  \]
+</div>
+<p> Applying \(T_\eta \) entry by entry gives </p>
+<div class="displaymath" id="a0000030253">
+  \[  \bigl((T_\eta \otimes \operatorname{id})(\rho )\bigr)_{(i_1,i_2),(j_1,j_2)} =\operatorname{tr}\bigl(\rho ^{(i_2,j_2)}\bigr)\, \delta _{i_1 j_1} -\eta ^{-1}\rho _{(i_1,i_2),(j_1,j_2)} =(\rho _2)_{i_2 j_2}\, \delta _{i_1 j_1} -\eta ^{-1}\rho _{(i_1,i_2),(j_1,j_2)},  \]
+</div>
+<p> and the first term is exactly the \((i_1,i_2),(j_1,j_2)\) entry of \(\mathbb {1}\otimes \rho _2\). </p>
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:transfer_map_gap_wielandt">
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:reduction_criterion">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.11</span>
-    <span class="theorem_thmtitle">Transfer-map gap from injectivity</span>
+    <span class="theorem_thmlabel">20.5</span>
+    <span class="theorem_thmtitle">Operator-implication step of the reduction criterion</span>
     <div class="thm_header_extras">
 
     
@@ -1648,9 +1188,9 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-correlations.html#thm:transfer_map_gap_wielandt">#</a>
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:reduction_criterion">#</a>
     
-    <a class="icon proof" href="ch-correlations.html#a0000029736"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030254"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1666,7 +1206,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-spectral.html#thm:transfer_operator_gap">Theorem 7.20</a></li>
+          <li><a href="ch-schwarz.html#def:t_eta">Definition 5.70</a></li>
+          
+          <li><a href="ch-positive_not_cp.html#thm:tensor_map_id_t_eta">Theorem 20.4</a></li>
           
         </ul>
     
@@ -1686,7 +1228,9 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/MPSTensor.transfer_map_gap_of_injective" class="lean_decl">MPSTensor.transfer_map_gap_of_injective</a></li>
+          <li><a href="../docs/find/#doc/Matrix.reductionCriterion_left" class="lean_decl">Matrix.reductionCriterion_left</a></li>
+          
+          <li><a href="../docs/find/#doc/Matrix.reductionCriterion_right" class="lean_decl">Matrix.reductionCriterion_right</a></li>
           
         </ul>
     
@@ -1697,11 +1241,30 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   For an injective trace-preserving MPS tensor, there exists \(\delta {\gt} 0\) such that every eigenvalue \(\mu \neq 1\) of the transfer map satisfies \(|\mu | \le 1 - \delta \). </p>
+  <p>    Let \(n\ge 1\) and let \(\rho \) be a bipartite matrix, with \(\rho ^{F}\) its image under the factor swap \(\rho ^{F}_{(i_2,i_1),(j_2,j_1)}=\rho _{(i_1,i_2),(j_1,j_2)}\). If \((T_n\otimes \operatorname{id})(\rho )\ge 0\) then </p>
+<div class="displaymath" id="a0000030255">
+  \[  n\, \mathbb {1}\otimes \rho _2\ge \rho ,  \]
+</div>
+<p> and if \((T_n\otimes \operatorname{id})(\rho ^{F})\ge 0\) then </p>
+<div class="displaymath" id="a0000030256">
+  \[  n\, \rho _1\otimes \mathbb {1}\ge \rho ,  \]
+</div>
+<p> where \(\rho _1\) and \(\rho _2\) are the reduced densities of \(\rho \) on the first and second factors. Because the factor swap is a unitary reindexing, </p>
+<div class="displaymath" id="a0000030257">
+  \[  (\operatorname{id}\otimes T_n)(\rho )\ge 0 \iff (T_n\otimes \operatorname{id})(\rho ^{F})\ge 0,  \]
+</div>
+<p> so the second hypothesis is Wolf’s symmetric condition \((\operatorname{id}\otimes T_n)(\rho )\ge 0\) expressed through the swap. </p>
+<p>This is the second step of Wolf’s two-step argument for <span class="cite">
+	[
+	
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Equation&#160;(3.18)
+	]
+</span>. The source states the inequalities under the premise that \(\rho \) has Schmidt number at most \(n\), and reaches \((T_n\otimes \operatorname{id})(\rho )\ge 0\) from that premise by the \(n\)-positivity of \(T_n\); that first step is taken here as the hypothesis rather than derived. The first step and the composed full criterion with the Schmidt-number premise are Theorem&#160;<a href="ch-positive_not_cp.html#thm:reduction_criterion_of_schmidt_number">20.34</a>. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000029736">
+<div class="proof_wrapper" id="a0000030254">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1709,67 +1272,35 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Injectivity implies eventual full Kraus rank. This yields primitivity, hence a complementary transfer-map gap. Since the transfer map has only finitely many eigenvalues, one may choose a uniform \(\delta {\gt} 0\) separating \(1\) from the remaining spectrum. </p>
+  <p>By the reduction-criterion identity, \((T_n\otimes \operatorname{id})(\rho )\) equals \(\mathbb {1}\otimes \rho _2-n^{-1}\rho \). Scaling a positive semidefinite operator by \(n{\gt}0\) preserves positivity, so \(n\, \mathbb {1}\otimes \rho _2-\rho \ge 0\), which is the first inequality. For the second, the factor swap \(F\) satisfies \(F^2=\operatorname{id}\) and is a unitary reindexing, so it preserves positive semidefiniteness and the order, and it exchanges the reduced densities and the two tensor slots: </p>
+<div class="displaymath" id="a0000030258">
+  \[  (\rho ^{F})_2=\rho _1, \qquad \bigl(\mathbb {1}\otimes (\rho ^{F})_2-n^{-1}\rho ^{F}\bigr)^{F} =\rho _1\otimes \mathbb {1}-n^{-1}\rho .  \]
+</div>
+<p> Applying the first form to \(\rho ^{F}\) gives \(n\, \mathbb {1}\otimes (\rho ^{F})_2-\rho ^{F}\ge 0\); conjugating by \(F\) turns this into \(n\, \rho _1\otimes \mathbb {1}-\rho \ge 0\). </p>
 
   </div>
 </div>
-<h1 id="a0000028432">14.4 Relation to parent Hamiltonians</h1>
-<div class="remark_thmwrapper theorem-style-remark" id="rem:correlations_parent_hamiltonian">
-  <div class="remark_thmheading">
-    <span class="remark_thmcaption">
-    Remark
-    </span>
-    <span class="remark_thmlabel">14.12</span>
-    <div class="thm_header_extras">
-
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-correlations.html#rem:correlations_parent_hamiltonian">#</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-parent_hamiltonian.html#def:parent_hamiltonian">Definition 13.17</a></li>
-          
-          <li><a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_annihilates">Lemma 13.21</a></li>
-          
-          <li><a href="ch-correlations.html#def:correlation_length">Definition 14.7</a></li>
-          
-          <li><a href="ch-correlations.html#thm:correlator_exponential_bound">Theorem 14.5</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-        </div>
-  </div>
-  <div class="remark_thmcontent">
-  <p>  When the MPS tensor \(A\) generates a parent Hamiltonian \(H_N(A,L)\) (Definition&#160;<a href="ch-parent_hamiltonian.html#def:parent_hamiltonian">13.17</a>) whose ground state is the matrix product vector (Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:parent_hamiltonian_annihilates">13.21</a>), the exponential decay bound (Theorem&#160;<a href="ch-correlations.html#thm:correlator_exponential_bound">14.5</a>) shows that ground-state correlations decay with a finite correlation length \(\xi \). </p>
-
-  </div>
-</div>
-<h1 id="a0000028433">14.5 Renormalization fixed points and zero correlation length</h1>
-<div class="definition_thmwrapper theorem-style-definition" id="def:is_rfp">
+<h1 id="a0000028457">20.2 The partial transpose and the PPT property</h1>
+<p>Transposition is a positive map that is not completely positive, so applying it to one factor of a bipartite operator can break positivity. The resulting operation, the partial transpose <span class="cite">
+	[
+	
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Equation&#160;(3.16)
+	]
+</span>, sends \(\rho \in M_{d}(\mathbb {C})\otimes M_{d'}(\mathbb {C})\) to the operator \(\rho ^{T_1}\) obtained by transposing the first tensor factor while leaving the second untouched, and the property \(\rho ^{T_1}\ge 0\) — positive partial transpose, or PPT — is the criterion <span class="cite">
+	[
+	
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Equation&#160;(3.17)
+	]
+</span> that separates many entangled states from the separable ones. </p>
+<div class="definition_thmwrapper theorem-style-definition" id="def:partial_transpose_left">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">14.13</span>
-    <span class="definition_thmtitle">Renormalization fixed point</span>
+    <span class="definition_thmlabel">20.6</span>
+    <span class="definition_thmtitle">Partial transpose over the first factor</span>
     <div class="thm_header_extras">
 
     
@@ -1777,28 +1308,8 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-correlations.html#def:is_rfp">#</a>
+    <a class="icon proof" href="ch-positive_not_cp.html#def:partial_transpose_left">#</a>
     
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-mps.html#def:transfer_map">Definition 2.5</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
     
     
     <button class="modal lean">L∃∀N</button>
@@ -1812,7 +1323,7 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/MPSTensor.IsRFP" class="lean_decl">MPSTensor.IsRFP</a></li>
+          <li><a href="../docs/find/#doc/Matrix.partialTransposeLeft" class="lean_decl">Matrix.partialTransposeLeft</a></li>
           
         </ul>
     
@@ -1823,99 +1334,695 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   An MPS tensor \(A\) is a <em>renormalization fixed point</em> (RFP) when its transfer map is idempotent, \(\mathcal{E}_A \circ \mathcal{E}_A = \mathcal{E}_A\). See <span class="cite">
+  <p>   For a bipartite matrix \(\rho \) on \(M_{d}(\mathbb {C})\otimes M_{d'}(\mathbb {C})\), the partial transpose over the first factor is the matrix \(\rho ^{T_1}\) with entries </p>
+<div class="displaymath" id="a0000030259">
+  \[  \bigl(\rho ^{T_1}\bigr)_{(i,k),(j,l)}=\rho _{(j,k),(i,l)},  \]
+</div>
+<p> transposing the first index pair \(i,j\) and fixing the second pair \(k,l\). </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:partial_transpose_right">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">20.7</span>
+    <span class="definition_thmtitle">Partial transpose over the second factor</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#def:partial_transpose_right">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.partialTransposeRight" class="lean_decl">Matrix.partialTransposeRight</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   For a bipartite matrix \(\rho \) on \(M_{d}(\mathbb {C})\otimes M_{d'}(\mathbb {C})\), the partial transpose over the second factor is the matrix \(\rho ^{T_2}\) with entries </p>
+<div class="displaymath" id="a0000030260">
+  \[  \bigl(\rho ^{T_2}\bigr)_{(i,k),(j,l)}=\rho _{(i,l),(j,k)},  \]
+</div>
+<p> transposing the second index pair \(k,l\) and fixing the first pair \(i,j\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:partial_transpose_left_involution">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">20.8</span>
+    <span class="theorem_thmtitle">The partial transpose is an involution</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:partial_transpose_left_involution">#</a>
+    
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030261"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-positive_not_cp.html#def:partial_transpose_left">Definition 20.6</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.partialTransposeLeft_partialTransposeLeft" class="lean_decl">Matrix.partialTransposeLeft_partialTransposeLeft</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    Applying the first-factor partial transpose twice returns the original matrix: \(\bigl(\rho ^{T_1}\bigr)^{T_1}=\rho \). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000030261">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Both entries equal \(\rho _{(i,k),(j,l)}\): the first transposition exchanges the first index pair, the second restores it. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:trace_partial_transpose_left">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">20.9</span>
+    <span class="theorem_thmtitle">The partial transpose preserves the trace</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:trace_partial_transpose_left">#</a>
+    
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030262"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-positive_not_cp.html#def:partial_transpose_left">Definition 20.6</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.trace_partialTransposeLeft" class="lean_decl">Matrix.trace_partialTransposeLeft</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    The first-factor partial transpose preserves the trace: \(\operatorname{tr}\bigl(\rho ^{T_1}\bigr)=\operatorname{tr}(\rho )\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000030262">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>On the diagonal the row and column indices coincide, so the index exchange in the definition is the identity and each diagonal entry is unchanged. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:partial_transpose_left_hermitian">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">20.10</span>
+    <span class="theorem_thmtitle">The partial transpose preserves Hermiticity</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:partial_transpose_left_hermitian">#</a>
+    
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030263"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-positive_not_cp.html#def:partial_transpose_left">Definition 20.6</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.IsHermitian.partialTransposeLeft" class="lean_decl">Matrix.IsHermitian.partialTransposeLeft</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    If \(\rho \) is Hermitian then so is its first-factor partial transpose \(\rho ^{T_1}\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000030263">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The entry \(\bigl(\rho ^{T_1}\bigr)_{(i,k),(j,l)}=\rho _{(j,k),(i,l)}\) has complex conjugate \(\overline{\rho _{(j,k),(i,l)}}=\rho _{(i,l),(j,k)}\) by Hermiticity of \(\rho \), which is the \(((j,l),(i,k))\) entry of \(\rho ^{T_1}\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:partial_transpose_right_eq_transpose_left">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">20.11</span>
+    <span class="theorem_thmtitle">The two partial transposes differ by a global transposition</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:partial_transpose_right_eq_transpose_left">#</a>
+    
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030264"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-positive_not_cp.html#def:partial_transpose_left">Definition 20.6</a></li>
+          
+          <li><a href="ch-positive_not_cp.html#def:partial_transpose_right">Definition 20.7</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.partialTransposeRight_eq_transpose_partialTransposeLeft" class="lean_decl">Matrix.partialTransposeRight_eq_transpose_partialTransposeLeft</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    The second-factor partial transpose is the full transpose of the first-factor one: </p>
+<div class="displaymath" id="a0000030265">
+  \[  \rho ^{T_2}=\bigl(\rho ^{T_1}\bigr)^{\mathsf T}.  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000030264">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Transposing both factors is the full transpose, so transposing the first factor and then the whole operator transposes only the second factor. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:is_ppt">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">20.12</span>
+    <span class="definition_thmtitle">Positive partial transpose property</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#def:is_ppt">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-positive_not_cp.html#def:partial_transpose_left">Definition 20.6</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.IsPPT" class="lean_decl">Matrix.IsPPT</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>    A bipartite matrix \(\rho \) has the positive-partial-transpose (PPT) property when its first-factor partial transpose is positive semidefinite, \(\rho ^{T_1}\ge 0\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:is_ppt_iff_right">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">20.13</span>
+    <span class="theorem_thmtitle">The PPT property is symmetric in the two factors</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:is_ppt_iff_right">#</a>
+    
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030266"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-positive_not_cp.html#def:is_ppt">Definition 20.12</a></li>
+          
+          <li><a href="ch-positive_not_cp.html#def:partial_transpose_right">Definition 20.7</a></li>
+          
+          <li><a href="ch-positive_not_cp.html#thm:partial_transpose_right_eq_transpose_left">Theorem 20.11</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.isPPT_iff_partialTransposeRight_posSemidef" class="lean_decl">Matrix.isPPT_iff_partialTransposeRight_posSemidef</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    A bipartite matrix has the PPT property if and only if its second-factor partial transpose is positive semidefinite: </p>
+<div class="displaymath" id="a0000030267">
+  \[  \rho ^{T_1}\ge 0\iff \rho ^{T_2}\ge 0.  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000030266">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The two partial transposes differ by a global transposition, and transposition preserves positive semidefiniteness, so one is positive exactly when the other is. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:partial_transpose_left_basis_change">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">20.14</span>
+    <span class="theorem_thmtitle">Basis-change law for the partial transpose</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:partial_transpose_left_basis_change">#</a>
+    
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030268"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-positive_not_cp.html#def:partial_transpose_left">Definition 20.6</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.partialTransposeLeft_basis_change" class="lean_decl">Matrix.partialTransposeLeft_basis_change</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    For matrices \(U,V\) on the first factor and a bipartite matrix \(\rho \), conjugating inside by \(V\) and \(U\), taking the first-factor partial transpose, and conjugating outside by \(U\) and \(V\) produces the original partial transpose conjugated by \(U U^{\mathsf T}\) and \(V^{\mathsf T}V\): </p>
+<div class="displaymath" id="a0000030269">
+  \[  \bigl(U\otimes \mathbb {1}\bigr) \Bigl[\bigl((V\otimes \mathbb {1})\, \rho \, (U\otimes \mathbb {1})\bigr)^{T_1}\Bigr] \bigl(V\otimes \mathbb {1}\bigr) =\bigl((U U^{\mathsf T})\otimes \mathbb {1}\bigr)\, \rho ^{T_1}\,  \bigl((V^{\mathsf T}V)\otimes \mathbb {1}\bigr).  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000030268">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Expanding the conjugated operator entry by entry as a double sum over the first factor, the partial transpose exchanges the two summation indices and reverses the roles of the left and right conjugating matrices, leaving them transposed; collecting the Kronecker factors gives the stated form. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:is_ppt_basis_change">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">20.15</span>
+    <span class="theorem_thmtitle">Conjugation invariance of the partial transpose</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:is_ppt_basis_change">#</a>
+    
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030270"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-positive_not_cp.html#def:is_ppt">Definition 20.12</a></li>
+          
+          <li><a href="ch-positive_not_cp.html#thm:partial_transpose_left_basis_change">Theorem 20.14</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.isPPT_basis_change" class="lean_decl">Matrix.isPPT_basis_change</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    Let \(U\) be any matrix on the first factor. If \(\rho \) has the PPT property then </p>
+<div class="displaymath" id="a0000030271">
+  \[  \bigl(U\otimes \mathbb {1}\bigr) \Bigl[\bigl((U^\dagger \otimes \mathbb {1})\, \rho \, (U\otimes \mathbb {1})\bigr)^{T_1}\Bigr] \bigl(U^\dagger \otimes \mathbb {1}\bigr)  \]
+</div>
+<p> is positive semidefinite; no invertibility or unitarity of \(U\) is required. Specializing to a unitary \(U\) this is the partial transpose taken in the basis changed by \(U\), so the positivity of the partial transpose is independent of the local basis, recovering Wolf’s basis-independence statement <span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
-	, Definition&#160;3.2
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Equation&#160;(3.17)
 	]
 </span>. </p>
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:kraus_isometry_implies_rfp">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">14.14</span>
-    <span class="theorem_thmtitle">Kraus-isometry criterion for RFP</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-correlations.html#thm:kraus_isometry_implies_rfp">#</a>
-    
-    <a class="icon proof" href="ch-correlations.html#a0000029737"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-correlations.html#def:is_rfp">Definition 14.13</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.isRFP_of_kraus_isometry" class="lean_decl">MPSTensor.isRFP_of_kraus_isometry</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   Suppose there exists an isometry \(V : \mathbb {C}^d \to \mathbb {C}^{d^2}\), written as coefficients \(V_{(i_1,i_2),j}\), such that </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f6e08c32810>">
-<p>
-  <div class="equation_content">
-    \begin{equation} \label{eq:corr_kraus_isometry_decomp} A^{i_1} A^{i_2} = \sum _{j=0}^{d-1} V_{(i_1,i_2),j} A^j \end{equation}
-  </div>
-  <span class="equation_label">1</span>
-</p>
-</div>
-<p> for all \(i_1,i_2 \in \{ 0,\ldots ,d-1\} \). Then \(A\) is a renormalization fixed point. This is the backward direction of <span class="cite">
-	[
-	
-	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
-	, Theorem&#160;3.1
-	]
-</span>. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000029737">
+<div class="proof_wrapper" id="a0000030270">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1923,121 +2030,17 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Expanding \(\mathcal{E}_A^2\) gives a double Kraus sum indexed by pairs \((i_1,i_2)\). Substituting the decomposition&#160;(??) and using the isometry relation \(V^\dagger V = 1\) collapses the double sum to the single Kraus family \(\{ A^j\} \), hence \(\mathcal{E}_A^2 = \mathcal{E}_A\). </p>
+  <p>By the basis-change law with \(V=U^\dagger \), the new-basis partial transpose equals \(\bigl((U U^{\mathsf T})\otimes \mathbb {1}\bigr)\, \rho ^{T_1}\,  \bigl((U U^{\mathsf T})\otimes \mathbb {1}\bigr)^\dagger \), a conjugation of \(\rho ^{T_1}\) that preserves positive semidefiniteness. </p>
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:renormalization_flow">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">14.15</span>
-    <span class="theorem_thmtitle">Renormalization-fixed-point characterization</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-correlations.html#thm:renormalization_flow">#</a>
-    
-    <a class="icon proof" href="ch-correlations.html#a0000029738"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-correlations.html#def:is_rfp">Definition 14.13</a></li>
-          
-          <li><a href="ch-correlations.html#thm:kraus_isometry_implies_rfp">Theorem 14.14</a></li>
-          
-          <li><a href="ch-correlations.html#thm:kraus_isometry_implies_rfp">Theorem 14.14</a></li>
-          
-          <li><a href="ch-channel_representations.html#thm:kraus_rectangular_freedom'">Theorem 16.29</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.isRFP_iff_kraus_isometry" class="lean_decl">MPSTensor.isRFP_iff_kraus_isometry</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   An MPS tensor \(A\) is a renormalization fixed point if and only if there exists an isometry \(V : \mathbb {C}^d \to \mathbb {C}^{d^2}\), written as coefficients \(V_{(i_1,i_2),j}\) with \(V^\dagger V = 1\), such that </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f6e08c33b30>">
-<p>
-  <div class="equation_content">
-    \begin{equation} \label{eq:corr_AA_isometry} A^{i_1} A^{i_2} = \sum _{j=0}^{d-1} V_{(i_1,i_2),j} A^j \end{equation}
-  </div>
-  <span class="equation_label">2</span>
-</p>
-</div>
-<p> for all \(i_1,i_2 \in \{ 0,\ldots ,d-1\} \). This is <span class="cite">
-	[
-	
-	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
-	, Theorem&#160;3.1
-	]
-</span>. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000029738">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> The backward implication is Theorem&#160;<a href="ch-correlations.html#thm:kraus_isometry_implies_rfp">14.14</a>. For the forward implication, expanding \(\mathcal{E}_A^2 = \mathcal{E}_A\) as a Kraus sum gives, for every \(X\), </p>
-<div class="displaymath" id="a0000029739">
-  \[  \sum _{i_1,i_2}(A^{i_1} A^{i_2})\, X\, (A^{i_1} A^{i_2})^\dagger = \sum _j A^j\, X\, (A^j)^\dagger .  \]
-</div>
-<p> Theorem&#160;<a href="ch-channel_representations.html#thm:kraus_rectangular_freedom'">16.29</a> then supplies the isometry \(V\) relating the two Kraus families. </p>
-
-  </div>
-</div>
-<div class="definition_thmwrapper theorem-style-definition" id="def:is_locally_orthogonal">
+<div class="definition_thmwrapper theorem-style-definition" id="def:transposition_witness">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">14.16</span>
-    <span class="definition_thmtitle">Single-block local orthogonality convention</span>
+    <span class="definition_thmlabel">20.16</span>
+    <span class="definition_thmtitle">Transposition witness</span>
     <div class="thm_header_extras">
 
     
@@ -2045,28 +2048,8 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-correlations.html#def:is_locally_orthogonal">#</a>
+    <a class="icon proof" href="ch-positive_not_cp.html#def:transposition_witness">#</a>
     
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-correlations.html#def:is_rfp">Definition 14.13</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
     
     
     <button class="modal lean">L∃∀N</button>
@@ -2080,7 +2063,7 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/MPSTensor.IsLocallyOrthogonal" class="lean_decl">MPSTensor.IsLocallyOrthogonal</a></li>
+          <li><a href="../docs/find/#doc/Matrix.transpositionWitness" class="lean_decl">Matrix.transpositionWitness</a></li>
           
         </ul>
     
@@ -2091,25 +2074,21 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   For the single-block convention used here, local orthogonality means </p>
-<div class="displaymath" id="a0000029740">
-  \[  \mathcal{E}_A^2=\mathcal{E}_A .  \]
+  <p>   For matrices \(A,B\) on \(M_{d}(\mathbb {C})\) and the SWAP operator \(F\) on \(M_{d}(\mathbb {C})\otimes M_{d}(\mathbb {C})\), the transposition witness is </p>
+<div class="displaymath" id="a0000030272">
+  \[  W=(A\otimes B)\, F\, (A\otimes B)^\dagger .  \]
 </div>
-<p> The source local-orthogonality condition for a BNT family is instead the collection of mixed-sector equations for distinct components, </p>
-<div class="displaymath" id="a0000029741">
-  \[  \mathcal{E}_{j,j'}=0.  \]
-</div>
-<p> Thus this definition records the one-block idempotence convention. </p>
+<p> These are the entanglement witnesses associated with the transposition map. </p>
 
   </div>
 </div>
-<div class="definition_thmwrapper theorem-style-definition" id="def:is_bnt_locally_orthogonal">
-  <div class="definition_thmheading">
-    <span class="definition_thmcaption">
-    Definition
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:transposition_witness_hermitian">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
     </span>
-    <span class="definition_thmlabel">14.17</span>
-    <span class="definition_thmtitle">BNT local orthogonality</span>
+    <span class="theorem_thmlabel">20.17</span>
+    <span class="theorem_thmtitle">Transposition witnesses are Hermitian</span>
     <div class="thm_header_extras">
 
     
@@ -2117,7 +2096,10 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-correlations.html#def:is_bnt_locally_orthogonal">#</a>
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:transposition_witness_hermitian">#</a>
+    
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030273"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
     
     
     <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
@@ -2132,7 +2114,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-spectral.html#def:mixed_transfer_rect">Definition 7.2</a></li>
+          <li><a href="ch-positive_not_cp.html#def:transposition_witness">Definition 20.16</a></li>
           
         </ul>
     
@@ -2152,7 +2134,65 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/MPSTensor.IsBNTLocallyOrthogonal" class="lean_decl">MPSTensor.IsBNTLocallyOrthogonal</a></li>
+          <li><a href="../docs/find/#doc/Matrix.transpositionWitness_isHermitian" class="lean_decl">Matrix.transpositionWitness_isHermitian</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    Every transposition witness \(W=(A\otimes B)\, F\, (A\otimes B)^\dagger \) is Hermitian. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000030273">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The SWAP operator is self-adjoint, \(F^\dagger =F\), so taking the adjoint of \((A\otimes B)\, F\, (A\otimes B)^\dagger \) returns the same operator. </p>
+
+  </div>
+</div>
+<h1 id="a0000028458">20.3 Separable states and the PPT criterion</h1>
+<p>A bipartite state is separable when it is a convex combination of pure product states \(\sum _i p_i\, |a_i\rangle \langle a_i|\otimes |b_i\rangle \langle b_i|\). Each pure product state is a Kronecker product of two rank-one positive semidefinite matrices, the nonnegative weight \(p_i\) is absorbed into one factor, and conversely a positive semidefinite matrix is a nonnegative combination of rank-one projectors. Up to normalization this gives the equivalent description of separable states as finite sums of Kronecker products of positive semidefinite matrices, the cone generated by the product positive operators, which is the form used below. </p>
+<div class="definition_thmwrapper theorem-style-definition" id="def:is_separable">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">20.18</span>
+    <span class="definition_thmtitle">Separable bipartite matrix</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#def:is_separable">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.IsSeparable" class="lean_decl">Matrix.IsSeparable</a></li>
           
         </ul>
     
@@ -2163,27 +2203,20 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   Let \((A_j)_j\) be the BNT components of a tensor in canonical form. The family is <em>locally orthogonal</em> when, for every pair of distinct components, </p>
-<div class="displaymath" id="a0000029742">
-  \[  \mathcal{E}_{j,j'}=\sum _i A_j^i\otimes \overline{A_{j'}^i}=0.  \]
+  <p>   A bipartite matrix \(\rho \) on \(M_{d}(\mathbb {C})\otimes M_{d'}(\mathbb {C})\) is separable when it is a finite sum of Kronecker products of positive semidefinite matrices, </p>
+<div class="displaymath" id="a0000030274">
+  \[  \rho =\sum _i A_i\otimes B_i, \qquad A_i\ge 0,\quad B_i\ge 0.  \]
 </div>
-<p> This is the mixed-sector condition of <span class="cite">
-	[
-	
-	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
-	, Definition&#160;3.5
-	]
-</span>. </p>
 
   </div>
 </div>
-<div class="definition_thmwrapper theorem-style-definition" id="def:is_bnt_zcl">
-  <div class="definition_thmheading">
-    <span class="definition_thmcaption">
-    Definition
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:is_separable_kronecker">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
     </span>
-    <span class="definition_thmlabel">14.18</span>
-    <span class="definition_thmtitle">BNT zero correlation length</span>
+    <span class="theorem_thmlabel">20.19</span>
+    <span class="theorem_thmtitle">A Kronecker product of positive operators is separable</span>
     <div class="thm_header_extras">
 
     
@@ -2191,7 +2224,10 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-correlations.html#def:is_bnt_zcl">#</a>
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:is_separable_kronecker">#</a>
+    
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030275"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
     
     
     <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
@@ -2206,11 +2242,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:bnt_cpsv">Definition 10.2</a></li>
-          
-          <li><a href="ch-correlations.html#def:is_cid">Definition 14.34</a></li>
-          
-          <li><a href="ch-correlations.html#def:is_bnt_locally_orthogonal">Definition 14.17</a></li>
+          <li><a href="ch-positive_not_cp.html#def:is_separable">Definition 20.18</a></li>
           
         </ul>
     
@@ -2230,7 +2262,668 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/MPSTensor.IsBNTZCL" class="lean_decl">MPSTensor.IsBNTZCL</a></li>
+          <li><a href="../docs/find/#doc/Matrix.isSeparable_kronecker" class="lean_decl">Matrix.isSeparable_kronecker</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    For positive semidefinite \(A\) on \(M_{d}(\mathbb {C})\) and \(B\) on \(M_{d'}(\mathbb {C})\), the Kronecker product \(A\otimes B\) is separable. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000030275">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>It is the one-term sum \(\sum _i A_i\otimes B_i\) with the single index taking the value \(A\otimes B\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:is_separable_add">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">20.20</span>
+    <span class="theorem_thmtitle">Separable matrices are closed under addition</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:is_separable_add">#</a>
+    
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030276"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-positive_not_cp.html#def:is_separable">Definition 20.18</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.IsSeparable.add" class="lean_decl">Matrix.IsSeparable.add</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    If \(\rho \) and \(\sigma \) are separable then so is \(\rho +\sigma \). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000030276">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Concatenating the two index families realizes \(\rho +\sigma \) as a single sum of Kronecker products of positive semidefinite matrices. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:is_separable_smul">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">20.21</span>
+    <span class="theorem_thmtitle">Separable matrices are closed under nonnegative scaling</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:is_separable_smul">#</a>
+    
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030277"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-positive_not_cp.html#def:is_separable">Definition 20.18</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.IsSeparable.smul" class="lean_decl">Matrix.IsSeparable.smul</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    If \(\rho \) is separable and \(c\ge 0\) is real then \(c\, \rho \) is separable. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000030277">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Absorbing \(c\) into the first factor of each Kronecker product keeps every factor positive semidefinite, since a nonnegative multiple of a positive semidefinite matrix is positive semidefinite. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:is_separable_pos_semidef">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">20.22</span>
+    <span class="theorem_thmtitle">A separable matrix is positive semidefinite</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:is_separable_pos_semidef">#</a>
+    
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030278"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-positive_not_cp.html#def:is_separable">Definition 20.18</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.IsSeparable.posSemidef" class="lean_decl">Matrix.IsSeparable.posSemidef</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    Every separable matrix is positive semidefinite. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000030278">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Each summand \(A_i\otimes B_i\) is a Kronecker product of positive semidefinite matrices, hence positive semidefinite, and a finite sum of positive semidefinite matrices is positive semidefinite. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:partial_transpose_left_sum">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">20.23</span>
+    <span class="theorem_thmtitle">The partial transpose distributes over a finite sum</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:partial_transpose_left_sum">#</a>
+    
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030279"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-positive_not_cp.html#def:partial_transpose_left">Definition 20.6</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.partialTransposeLeft_sum" class="lean_decl">Matrix.partialTransposeLeft_sum</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    For a finite family of bipartite matrices, </p>
+<div class="displaymath" id="a0000030280">
+  \[  \Bigl(\sum _i f_i\Bigr)^{T_1}=\sum _i f_i^{T_1}.  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000030279">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The first-factor partial transpose is an entrywise reindexing of the matrix, so it commutes with the entrywise finite sum. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:is_separable_is_ppt">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">20.24</span>
+    <span class="theorem_thmtitle">PPT criterion, forward direction</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:is_separable_is_ppt">#</a>
+    
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030281"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-positive_not_cp.html#def:is_separable">Definition 20.18</a></li>
+          
+          <li><a href="ch-positive_not_cp.html#def:is_ppt">Definition 20.12</a></li>
+          
+          <li><a href="ch-positive_not_cp.html#thm:partial_transpose_left_sum">Theorem 20.23</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.IsSeparable.isPPT" class="lean_decl">Matrix.IsSeparable.isPPT</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    Every separable matrix has the positive-partial-transpose property: if \(\rho \) is separable then \(\rho ^{T_1}\ge 0\). A negative partial transpose therefore certifies that a state is entangled. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000030281">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The first-factor partial transpose is linear and acts on a Kronecker product by transposing the first factor, \((A\otimes B)^{T_1}=A^{\mathsf T}\otimes B\). Writing \(\rho =\sum _i A_i\otimes B_i\) with each factor positive semidefinite, the partial transpose is \(\sum _i A_i^{\mathsf T}\otimes B_i\). The transpose of a positive semidefinite matrix is positive semidefinite, so each summand is a Kronecker product of positive semidefinite matrices, and the sum is positive semidefinite. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:tensor_map_id_sum">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">20.25</span>
+    <span class="theorem_thmtitle">Applying a map to one factor distributes over a finite sum</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:tensor_map_id_sum">#</a>
+    
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030282"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-channel_representations.html#def:tensor_map_id">Definition 16.5</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.tensorMapId_sum" class="lean_decl">Matrix.tensorMapId_sum</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    For a linear map \(T\) on the first factor and a finite family of bipartite matrices, </p>
+<div class="displaymath" id="a0000030283">
+  \[  (T\otimes \operatorname{id})\Bigl(\sum _i f_i\Bigr)=\sum _i (T\otimes \operatorname{id})(f_i).  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000030282">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Applying a map to the first factor is linear in the bipartite matrix, so it commutes with the finite sum. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:is_separable_reduction_one">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">20.26</span>
+    <span class="theorem_thmtitle">Reduction map at the first level on a separable state</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:is_separable_reduction_one">#</a>
+    
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030284"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-positive_not_cp.html#def:is_separable">Definition 20.18</a></li>
+          
+          <li><a href="ch-schwarz.html#def:t_eta">Definition 5.70</a></li>
+          
+          <li><a href="ch-channels.html#thm:reduction_map_one_positive">Theorem 4.7</a></li>
+          
+          <li><a href="ch-positive_not_cp.html#thm:tensor_map_id_sum">Theorem 20.25</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.IsSeparable.tensorMapId_tEta_one_posSemidef" class="lean_decl">Matrix.IsSeparable.tensorMapId_tEta_one_posSemidef</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    For \(d\ge 1\) and a separable matrix \(\rho \) on \(M_{d}(\mathbb {C})\otimes M_{d'}(\mathbb {C})\), applying the reduction map \(T_1(X)=\operatorname{tr}(X)\mathbb {1}-X\) to the first factor keeps the result positive semidefinite: </p>
+<div class="displaymath" id="a0000030285">
+  \[  (T_1\otimes \operatorname{id})(\rho )\ge 0.  \]
+</div>
+<p> This is the separability instance of the operator inequality underlying the reduction criterion at the first level. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000030284">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The reduction map \(T_1\) is positive, so it maps each positive semidefinite first factor \(A_i\) of \(\rho =\sum _i A_i\otimes B_i\) to a positive semidefinite matrix. The ampliation acts by \((T_1\otimes \operatorname{id})(A_i\otimes B_i)=T_1(A_i)\otimes B_i\), each summand is a Kronecker product of positive semidefinite matrices, and the sum is positive semidefinite. </p>
+
+  </div>
+</div>
+<h1 id="a0000028459">20.4 The Schmidt number and the full reduction criterion</h1>
+<p>The Schmidt number of a bipartite state is the smallest \(n\) for which the state has a convex decomposition into pure states each of Schmidt rank at most \(n\). Separable states are precisely those of Schmidt number one, and a state of Schmidt number at most \(n\) satisfies the reduction criterion </p>
+<div class="displaymath" id="a0000030286">
+  \[  n\, \rho _1\otimes \mathbb {1}\ge \rho \qquad \text{and}\qquad n\, \mathbb {1}\otimes \rho _2\ge \rho ,  \]
+</div>
+<p> which is <span class="cite">
+	[
+	
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Equation&#160;(3.18)
+	]
+</span>. The bound on the Schmidt number is recorded as a finite sum of pure-state projectors of Schmidt rank at most \(n\), the unnormalized form of the convex decomposition; rescaling a vector by the square root of its weight scales its coefficient matrix and so leaves the Schmidt rank unchanged. </p>
+<div class="definition_thmwrapper theorem-style-definition" id="def:has_schmidt_number_le">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">20.27</span>
+    <span class="definition_thmtitle">Bounded Schmidt number</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#def:has_schmidt_number_le">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-schwarz.html#def:schmidt_rank">Definition 5.11</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.HasSchmidtNumberLE" class="lean_decl">Matrix.HasSchmidtNumberLE</a></li>
           
         </ul>
     
@@ -2241,31 +2934,487 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   Let \((A_j)_j\) be a basis of normal tensors for \(A\). The BNT zero-correlation-length condition is that </p>
-<div class="displaymath" id="a0000029743">
-  \[  \operatorname {CID}(A)  \]
+  <p>    A bipartite matrix \(\rho \) on \(M_{d}(\mathbb {C})\otimes M_{d'}(\mathbb {C})\) has Schmidt number at most \(n\) when it is a finite sum of pure-state projectors of Schmidt rank at most \(n\), </p>
+<div class="displaymath" id="a0000030287">
+  \[  \rho =\sum _i|\psi _i\rangle \langle \psi _i|, \qquad \operatorname {SR}(\psi _i)\le n.  \]
 </div>
-<p> and, for every pair of distinct BNT components, </p>
-<div class="displaymath" id="a0000029744">
-  \[  \mathcal{E}_{j,j'}=0.  \]
+
+  </div>
 </div>
-<p> This is <span class="cite">
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:has_schmidt_number_le_basic">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">20.28</span>
+    <span class="theorem_thmtitle">Basic properties of bounded Schmidt number</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:has_schmidt_number_le_basic">#</a>
+    
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030288"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.27</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.HasSchmidtNumberLE.posSemidef" class="lean_decl">Matrix.HasSchmidtNumberLE.posSemidef</a></li>
+          
+          <li><a href="../docs/find/#doc/Matrix.HasSchmidtNumberLE.add" class="lean_decl">Matrix.HasSchmidtNumberLE.add</a></li>
+          
+          <li><a href="../docs/find/#doc/Matrix.HasSchmidtNumberLE.mono" class="lean_decl">Matrix.HasSchmidtNumberLE.mono</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    A matrix of Schmidt number at most \(n\) is positive semidefinite. States of Schmidt number at most \(n\) are closed under addition, and a bound on the Schmidt number relaxes to any larger bound. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000030288">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Each summand \(|\psi _i\rangle \langle \psi _i|\) is a rank-one positive semidefinite matrix, and a finite sum of positive semidefinite matrices is positive semidefinite. Concatenating two pure-state families realizes a sum as a single finite sum of pure-state projectors of Schmidt rank at most \(n\), and a pure summand of Schmidt rank at most \(n\) also has Schmidt rank at most any larger bound. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:has_schmidt_number_le_one_iff_separable">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">20.29</span>
+    <span class="theorem_thmtitle">Schmidt number one is separability</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:has_schmidt_number_le_one_iff_separable">#</a>
+    
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030289"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.27</a></li>
+          
+          <li><a href="ch-positive_not_cp.html#def:is_separable">Definition 20.18</a></li>
+          
+          <li><a href="ch-schwarz.html#def:schmidt_rank">Definition 5.11</a></li>
+          
+          <li><a href="ch-schwarz.html#lem:matrix_rank_factorization_coordinate">Lemma 5.16</a></li>
+          
+          <li><a href="ch-schwarz.html#thm:schmidt_rank_basic_bounds">Theorem 5.12</a></li>
+          
+          <li><a href="ch-positive_not_cp.html#thm:is_separable_kronecker">Theorem 20.19</a></li>
+          
+          <li><a href="ch-positive_not_cp.html#thm:is_separable_add">Theorem 20.20</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.hasSchmidtNumberLE_one_iff_isSeparable" class="lean_decl">Matrix.hasSchmidtNumberLE_one_iff_isSeparable</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    A bipartite matrix has Schmidt number at most one if and only if it is separable. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000030289">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>A pure state of Schmidt rank at most one has a coefficient matrix of rank at most one, which factors as \(\psi (i,j)=u_i v_j\); its projector is the Kronecker product \(|u\rangle \langle u|\otimes |v\rangle \langle v|\) of two rank-one positive semidefinite matrices, hence separable, and separable matrices are closed under addition. Conversely a Kronecker product \(A\otimes B\) of positive semidefinite matrices, after expanding each factor into rank-one projectors, is a double sum of product-vector projectors, each of Schmidt rank at most one, so it has Schmidt number at most one; a separable matrix is a finite sum of such products. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:tensor_map_id_t_eta_posSemidef_pure">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">20.30</span>
+    <span class="theorem_thmtitle">Pure-state step of the reduction criterion</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:tensor_map_id_t_eta_posSemidef_pure">#</a>
+    
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030290"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-schwarz.html#def:schmidt_rank">Definition 5.11</a></li>
+          
+          <li><a href="ch-schwarz.html#def:t_eta">Definition 5.70</a></li>
+          
+          <li><a href="ch-channel_representations.html#def:tensor_map_id">Definition 16.5</a></li>
+          
+          <li><a href="ch-schwarz.html#thm:t_eta_threshold">Theorem 5.72</a></li>
+          
+          <li><a href="ch-schwarz.html#thm:square_schmidt_rank_exact_parametrization">Theorem 5.31</a></li>
+          
+          <li><a href="ch-schwarz.html#lem:rank_one_ampliation_choi_compression">Lemma 5.39</a></li>
+          
+          <li><a href="ch-schwarz.html#thm:choi_right_compression_quadratic_form">Theorem 5.35</a></li>
+          
+          <li><a href="ch-schwarz.html#thm:schmidt_rank_choi_test_iff">Theorem 5.38</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.tensorMapId_tEta_posSemidef_of_hasSchmidtRankLE" class="lean_decl">Matrix.tensorMapId_tEta_posSemidef_of_hasSchmidtRankLE</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    For a pure state \(|\psi \rangle \langle \psi |\) on the square bipartite system \(M_{D}(\mathbb {C})\otimes M_{D}(\mathbb {C})\) with \(\operatorname {SR}(\psi )\le n\) and \(1\le n{\lt}D\), applying \(T_n\) to the first factor keeps the result positive semidefinite: </p>
+<div class="displaymath" id="a0000030291">
+  \[  (T_n\otimes \operatorname{id})(|\psi \rangle \langle \psi |)\ge 0.  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000030290">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The map \(T_n\) is \(n\)-positive for \(1\le n{\lt}D\). Write \(\psi \) through the maximally entangled vector as \(\psi =\psi _X\) for a square matrix \(X\) on the right factor with \(\operatorname {rank}(X)=\operatorname {SR}(\psi )\le n\). Then \((T_n\otimes \operatorname{id})(|\psi \rangle \langle \psi |)\) is the right-factor Choi compression of \(T_n\) by \(X\). Its quadratic form on any vector \(\eta \) is the Choi quadratic form of \(T_n\) on \(R_X^\dagger \eta \), whose Schmidt rank is at most \(\operatorname {rank}(X)\le n\). The Schmidt-rank Choi criterion makes that form nonnegative, so the compression is positive semidefinite. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:tensor_map_id_posSemidef_pure">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">20.31</span>
+    <span class="theorem_thmtitle">Pure-state step for a general positive map</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:tensor_map_id_posSemidef_pure">#</a>
+    
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030292"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-schwarz.html#def:schmidt_rank">Definition 5.11</a></li>
+          
+          <li><a href="ch-channel_representations.html#def:tensor_map_id">Definition 16.5</a></li>
+          
+          <li><a href="ch-schwarz.html#def:k_positive_map">Definition 5.7</a></li>
+          
+          <li><a href="ch-schwarz.html#def:choi_right_compression">Definition 5.26</a></li>
+          
+          <li><a href="ch-schwarz.html#thm:square_schmidt_rank_exact_parametrization">Theorem 5.31</a></li>
+          
+          <li><a href="ch-schwarz.html#lem:rank_one_ampliation_choi_compression">Lemma 5.39</a></li>
+          
+          <li><a href="ch-schwarz.html#thm:choi_right_compression_quadratic_form">Theorem 5.35</a></li>
+          
+          <li><a href="ch-schwarz.html#thm:schmidt_rank_choi_test_iff">Theorem 5.38</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.tensorMapId_posSemidef_of_hasSchmidtRankLE" class="lean_decl">Matrix.tensorMapId_posSemidef_of_hasSchmidtRankLE</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    For a pure state \(|\psi \rangle \langle \psi |\) on the square bipartite system \(M_{D}(\mathbb {C})\otimes M_{D}(\mathbb {C})\) with \(\operatorname {SR}(\psi )\le n\) and any \(n\)-positive map \(T\), applying \(T\) to the first factor keeps the result positive semidefinite: </p>
+<div class="displaymath" id="a0000030293">
+  \[  (T\otimes \operatorname{id})(|\psi \rangle \langle \psi |)\ge 0.  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000030292">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Write \(\psi \) through the maximally entangled vector as \(\psi =\psi _X\) for a square matrix \(X\) on the right factor with \(\operatorname {rank}(X)=\operatorname {SR}(\psi )\le n\). Then \((T\otimes \operatorname{id})(|\psi \rangle \langle \psi |)\) is the right-factor Choi compression of \(T\) by \(X\), and its quadratic form on a vector \(\eta \) equals the Choi quadratic form \(C_T\) of \(T\) evaluated on \(R_X^\dagger \eta \), a vector of Schmidt rank at most \(\operatorname {rank}(X)\le n\). Because \(T\) is \(n\)-positive, </p>
+<div class="displaymath" id="a0000030294">
+  \[  \langle R_X^\dagger \eta ,\,  C_T\,  R_X^\dagger \eta \rangle \ge 0,  \]
+</div>
+<p> so the compression is positive semidefinite. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:has_schmidt_number_le_tensor_map_id">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">20.32</span>
+    <span class="theorem_thmtitle">Positive maps and entanglement, only-if direction</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:has_schmidt_number_le_tensor_map_id">#</a>
+    
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030295"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.27</a></li>
+          
+          <li><a href="ch-channel_representations.html#def:tensor_map_id">Definition 16.5</a></li>
+          
+          <li><a href="ch-schwarz.html#def:k_positive_map">Definition 5.7</a></li>
+          
+          <li><a href="ch-positive_not_cp.html#thm:tensor_map_id_sum">Theorem 20.25</a></li>
+          
+          <li><a href="ch-positive_not_cp.html#thm:tensor_map_id_posSemidef_pure">Theorem 20.31</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.HasSchmidtNumberLE.tensorMapId_posSemidef" class="lean_decl">Matrix.HasSchmidtNumberLE.tensorMapId_posSemidef</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    A bipartite state on the square system \(M_{D}(\mathbb {C})\otimes M_{D}(\mathbb {C})\) of Schmidt number at most \(n\) satisfies </p>
+<div class="displaymath" id="a0000030296">
+  \[  (T\otimes \operatorname{id})(\rho )\ge 0  \]
+</div>
+<p> for every \(n\)-positive map \(T\). This is the square case \(d=d'=D\) of the only-if direction of Wolf’s Proposition&#160;3.4 for a general bipartite system \(M_{d}(\mathbb {C})\otimes M_{d'}(\mathbb {C})\) <span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
-	, Definition&#160;3.6
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Chapter&#160;3, Proposition&#160;3.4
 	]
 </span>. </p>
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:rfp_nt_injective">
+<div class="proof_wrapper" id="a0000030295">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The state is a finite sum of pure-state projectors of Schmidt rank at most \(n\). Applying \(T\) to the first factor is linear, so it distributes over the sum; the pure-state step makes each summand positive semidefinite, and a finite sum of positive semidefinite matrices is positive semidefinite. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:has_schmidt_number_le_tensor_map_id_t_eta">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.19</span>
-    <span class="theorem_thmtitle">RFP normal tensor is injective</span>
+    <span class="theorem_thmlabel">20.33</span>
+    <span class="theorem_thmtitle">Reduction step from the Schmidt-number premise</span>
     <div class="thm_header_extras">
 
     
@@ -2273,9 +3422,9 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-correlations.html#thm:rfp_nt_injective">#</a>
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:has_schmidt_number_le_tensor_map_id_t_eta">#</a>
     
-    <a class="icon proof" href="ch-correlations.html#a0000029745"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030297"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2291,11 +3440,15 @@
         
         <ul class="uses">
           
-          <li><a href="ch-correlations.html#def:is_rfp">Definition 14.13</a></li>
+          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.27</a></li>
           
-          <li><a href="ch-mps.html#def:normal">Definition 2.31</a></li>
+          <li><a href="ch-schwarz.html#def:t_eta">Definition 5.70</a></li>
           
-          <li><a href="ch-mps.html#def:injective">Definition 2.28</a></li>
+          <li><a href="ch-channel_representations.html#def:tensor_map_id">Definition 16.5</a></li>
+          
+          <li><a href="ch-positive_not_cp.html#thm:tensor_map_id_sum">Theorem 20.25</a></li>
+          
+          <li><a href="ch-positive_not_cp.html#thm:tensor_map_id_t_eta_posSemidef_pure">Theorem 20.30</a></li>
           
         </ul>
     
@@ -2315,7 +3468,7 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/MPSTensor.rfp_nt_structural" class="lean_decl">MPSTensor.rfp_nt_structural</a></li>
+          <li><a href="../docs/find/#doc/Matrix.HasSchmidtNumberLE.tensorMapId_tEta_posSemidef" class="lean_decl">Matrix.HasSchmidtNumberLE.tensorMapId_tEta_posSemidef</a></li>
           
         </ul>
     
@@ -2326,11 +3479,14 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   If \(A\) is a nonzero normal RFP tensor, then \(A\) is injective. </p>
+  <p>    For \(1\le n{\lt}D\), a bipartite state on the square system \(M_{D}(\mathbb {C})\otimes M_{D}(\mathbb {C})\) of Schmidt number at most \(n\) satisfies </p>
+<div class="displaymath" id="a0000030298">
+  \[  (T_n\otimes \operatorname{id})(\rho )\ge 0.  \]
+</div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000029745">
+<div class="proof_wrapper" id="a0000030297">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2338,17 +3494,17 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The RFP condition \(\mathcal{E}_A^2 = \mathcal{E}_A\) implies that the cumulative span \(\operatorname{span}\{ A^w : |w| \le n\} \) stabilises after one step. Since \(A\) is normal (hence has an injective blocked form), the one-step span already equals \(M_{D}(\mathbb {C})\), so \(A\) is injective. </p>
+  <p>The state is a finite sum of pure-state projectors of Schmidt rank at most \(n\). Applying \(T_n\) to the first factor is linear, so it distributes over the sum; the pure-state step makes each summand positive semidefinite, and a finite sum of positive semidefinite matrices is positive semidefinite. </p>
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:rfp_nt_structural_of_left_canonical">
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:reduction_criterion_of_schmidt_number">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.20</span>
-    <span class="theorem_thmtitle">Left-canonical normal RFP tensor is injective</span>
+    <span class="theorem_thmlabel">20.34</span>
+    <span class="theorem_thmtitle">Reduction criterion with the Schmidt-number premise</span>
     <div class="thm_header_extras">
 
     
@@ -2356,9 +3512,9 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-correlations.html#thm:rfp_nt_structural_of_left_canonical">#</a>
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:reduction_criterion_of_schmidt_number">#</a>
     
-    <a class="icon proof" href="ch-correlations.html#a0000029746"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030299"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2374,13 +3530,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-correlations.html#def:is_rfp">Definition 14.13</a></li>
+          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.27</a></li>
           
-          <li><a href="ch-mps.html#def:normal">Definition 2.31</a></li>
+          <li><a href="ch-schwarz.html#def:t_eta">Definition 5.70</a></li>
           
-          <li><a href="ch-mps.html#def:injective">Definition 2.28</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:has_schmidt_number_le_tensor_map_id_t_eta">Theorem 20.33</a></li>
           
-          <li><a href="ch-correlations.html#thm:rfp_nt_injective">Theorem 14.19</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:reduction_criterion">Theorem 20.5</a></li>
           
         </ul>
     
@@ -2400,7 +3556,9 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/MPSTensor.rfp_nt_structural_of_leftCanonical" class="lean_decl">MPSTensor.rfp_nt_structural_of_leftCanonical</a></li>
+          <li><a href="../docs/find/#doc/Matrix.reductionCriterion_left_of_hasSchmidtNumberLE" class="lean_decl">Matrix.reductionCriterion_left_of_hasSchmidtNumberLE</a></li>
+          
+          <li><a href="../docs/find/#doc/Matrix.reductionCriterion_right_of_hasSchmidtNumberLE" class="lean_decl">Matrix.reductionCriterion_right_of_hasSchmidtNumberLE</a></li>
           
         </ul>
     
@@ -2411,21 +3569,15 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Assume \(D {\gt} 0\). Let \(A\) be a normal renormalization fixed point such that </p>
-<div class="displaymath" id="a0000029747">
-  \[  \sum _i (A^i)^\dagger A^i = \mathbb {1}.  \]
+  <p>    For \(1\le n{\lt}D\), a bipartite state on the square system \(M_{D}(\mathbb {C})\otimes M_{D}(\mathbb {C})\) of Schmidt number at most \(n\) satisfies the reduction criterion </p>
+<div class="displaymath" id="a0000030300">
+  \[  n\, \rho _1\otimes \mathbb {1}\ge \rho \qquad \text{and}\qquad n\, \mathbb {1}\otimes \rho _2\ge \rho ,  \]
 </div>
-<p> Then \(A\) is injective. This is the left-canonical injectivity step in <span class="cite">
-	[
-	
-	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
-	, Appendix&#160;B
-	]
-</span>. </p>
+<p> with \(\rho _1\) and \(\rho _2\) the reduced densities on the first and second factors. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000029746">
+<div class="proof_wrapper" id="a0000030299">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2433,1520 +3585,11 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The normalization \(\sum _i (A^i)^\dagger A^i = \mathbb {1}\) forces at least one matrix \(A^i\) to be nonzero, since otherwise the left-hand side would vanish. Hence \(A\) is a nonzero normal renormalization fixed point, and Theorem&#160;<a href="ch-correlations.html#thm:rfp_nt_injective">14.19</a> applies. </p>
+  <p>The Schmidt-number premise gives \((T_n\otimes \operatorname{id})(\rho )\ge 0\), which is the first step. The operator implication then yields \(n\, \mathbb {1}\otimes \rho _2\ge \rho \). The factor swap of a state of Schmidt number at most \(n\) again has Schmidt number at most \(n\), since the swap reindexes each pure summand to a vector with the transposed coefficient matrix, of the same rank; applying the first step to the swapped state and the operator implication in its symmetric form gives \(n\, \rho _1\otimes \mathbb {1}\ge \rho \). </p>
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:rfp_nt_cfii_diagonal_fixed_point">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">14.21</span>
-    <span class="theorem_thmtitle">Unitary diagonal fixed point for a left-canonical normal RFP</span>
-    <div class="thm_header_extras">
 
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-correlations.html#thm:rfp_nt_cfii_diagonal_fixed_point">#</a>
-    
-    <a class="icon proof" href="ch-correlations.html#a0000029748"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-correlations.html#def:is_rfp">Definition 14.13</a></li>
-          
-          <li><a href="ch-mps.html#def:normal">Definition 2.31</a></li>
-          
-          <li><a href="ch-mps.html#def:transfer_map">Definition 2.5</a></li>
-          
-          <li><a href="ch-correlations.html#thm:rfp_nt_structural_of_left_canonical">Theorem 14.20</a></li>
-          
-          <li><a href="ch-channels.html#thm:injective_irreducible">Theorem 4.39</a></li>
-          
-          <li><a href="ch-canonical.html#thm:form_II">Theorem 9.20</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.rfp_nt_cfii_diagonal_fixedPoint" class="lean_decl">MPSTensor.rfp_nt_cfii_diagonal_fixedPoint</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   Assume \(D {\gt} 0\). Let \(A\) be a normal renormalization fixed point such that </p>
-<div class="displaymath" id="a0000029749">
-  \[  \sum _i (A^i)^\dagger A^i = \mathbb {1}.  \]
-</div>
-<p> Then there exist a unitary \(U\) and a diagonal positive definite matrix \(\Lambda \) such that, for \(B^i := U^\dagger A^i U\), </p>
-<div class="displaymath" id="a0000029750">
-  \[  \sum _i (B^i)^\dagger B^i = \mathbb {1}\qquad \text{and}\qquad \mathcal{E}_B(\Lambda ) = \Lambda .  \]
-</div>
-<p> This is the diagonal fixed-point reduction in <span class="cite">
-	[
-	
-	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
-	, Appendix&#160;B
-	]
-</span>. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000029748">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> By Theorem&#160;<a href="ch-correlations.html#thm:rfp_nt_structural_of_left_canonical">14.20</a>, the tensor \(A\) is injective. Therefore its transfer map is irreducible, and hence \(A\) is irreducible as a tensor. Applying Theorem&#160;<a href="ch-canonical.html#thm:form_II">9.20</a> gives a unitary conjugate \(B\) for which the trace-preserving normalization remains valid and a diagonal positive definite matrix \(\Lambda \) with \(\mathcal{E}_B(\Lambda ) = \Lambda \). </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:transferMap_eq_fixedPointProj_of_isRFP_injective">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">14.22</span>
-    <span class="theorem_thmtitle">Rank-one classification for RFP transfer maps</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-correlations.html#thm:transferMap_eq_fixedPointProj_of_isRFP_injective">#</a>
-    
-    <a class="icon proof" href="ch-correlations.html#a0000029751"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-correlations.html#def:is_rfp">Definition 14.13</a></li>
-          
-          <li><a href="ch-mps.html#def:injective">Definition 2.28</a></li>
-          
-          <li><a href="ch-channels.html#def:fixed_point_proj">Definition 4.46</a></li>
-          
-          <li><a href="ch-correlations.html#thm:exponential_convergence_primitive">Theorem 14.9</a></li>
-          
-          <li><a href="ch-correlations.html#thm:exponential_convergence_primitive">Theorem 14.9</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.transferMap_eq_fixedPointProj_of_isRFP_injective" class="lean_decl">MPSTensor.transferMap_eq_fixedPointProj_of_isRFP_injective</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   Let \(A\) be an injective left-canonical RFP tensor with positive-definite fixed point \(\rho \) of the transfer map \(\mathcal{E}_A\). Then \(\mathcal{E}_A = P_\rho \), where \(P_\rho (X) = \frac{\operatorname{tr}(X)}{\operatorname{tr}(\rho )} \rho \) is the rank-one fixed-point projection. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000029751">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> The exponential convergence bound gives \(\lVert \mathcal{E}_A^n(X) - P_\rho (X)\rVert \le C(1-\delta )^n\lVert X\rVert \). Idempotence of \(\mathcal{E}_A\) implies \(\mathcal{E}_A^{n+1} = \mathcal{E}_A\) for all \(n \ge 0\), so \(\lVert \mathcal{E}_A(X) - P_\rho (X)\rVert \le C(1-\delta )^{n+1}\lVert X\rVert \) for all \(n\). Taking \(n \to \infty \) gives \(\mathcal{E}_A = P_\rho \). </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:rfp_nt_structural_full">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">14.23</span>
-    <span class="theorem_thmtitle">Full structural form for RFP tensors</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-correlations.html#thm:rfp_nt_structural_full">#</a>
-    
-    <a class="icon proof" href="ch-correlations.html#a0000029752"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-correlations.html#thm:rfp_nt_structural_of_left_canonical">Theorem 14.20</a></li>
-          
-          <li><a href="ch-correlations.html#thm:rfp_nt_cfii_diagonal_fixed_point">Theorem 14.21</a></li>
-          
-          <li><a href="ch-correlations.html#thm:transferMap_eq_fixedPointProj_of_isRFP_injective">Theorem 14.22</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.rfp_nt_structural_full" class="lean_decl">MPSTensor.rfp_nt_structural_full</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   A normal tensor \(A\) in canonical form&#160;II that is a renormalization fixed point admits a decomposition \(A^i = X \Lambda U^i X^{-1}\), where \(\Lambda \) is diagonal positive, \(\sum _i (U^i)^\dagger U^i=I\), and </p>
-<div class="displaymath" id="a0000029753">
-  \[  \sum _i \overline{(U^i)_{\alpha ,\beta }}\,  (U^i)_{\alpha ',\beta '} = D^{-1}\delta _{\alpha ,\alpha '}\delta _{\beta ,\beta '} .  \]
-</div>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000029752">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p>Combine the diagonal fixed-point reduction with the rank-one classification of injective left-canonical RFP tensors. One then writes the resulting rank-one projector in a normalized matrix-unit Kraus form, applies Kraus freedom to identify the pair-index coefficients, and transports the decomposition back through the conjugation. The matrix-unit normalization contributes the factor \(D^{-1}\) in the pair-index equation. </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:rfp_nt_structural_full_sq_sum">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">14.24</span>
-    <span class="theorem_thmtitle">Structural form with diagonal square-sum identity</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-correlations.html#thm:rfp_nt_structural_full_sq_sum">#</a>
-    
-    <a class="icon proof" href="ch-correlations.html#a0000029754"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-correlations.html#thm:rfp_nt_structural_of_left_canonical">Theorem 14.20</a></li>
-          
-          <li><a href="ch-correlations.html#thm:rfp_nt_cfii_diagonal_fixed_point">Theorem 14.21</a></li>
-          
-          <li><a href="ch-correlations.html#thm:transferMap_eq_fixedPointProj_of_isRFP_injective">Theorem 14.22</a></li>
-          
-          <li><a href="ch-correlations.html#thm:rfp_nt_structural_of_left_canonical">Theorem 14.20</a></li>
-          
-          <li><a href="ch-correlations.html#thm:rfp_nt_cfii_diagonal_fixed_point">Theorem 14.21</a></li>
-          
-          <li><a href="ch-correlations.html#thm:transferMap_eq_fixedPointProj_of_isRFP_injective">Theorem 14.22</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.rfp_nt_structural_full_sqSum" class="lean_decl">MPSTensor.rfp_nt_structural_full_sqSum</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   The same decomposition as the full structural form (Theorem&#160;<a href="ch-correlations.html#thm:rfp_nt_structural_full">14.23</a>) additionally records that the diagonal weights satisfy \(\sum _\alpha \Lambda _\alpha ^2 = D\). This square-sum identity is the trace-normalization seed: the explicit weights are \(\Lambda _\alpha = \sqrt{D\, \rho _{\alpha ,\alpha }/\operatorname{tr}\rho }\), and \(\sum _\alpha \rho _{\alpha ,\alpha } = \operatorname{tr}\rho \) for the diagonal fixed point \(\rho \). </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000029754">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> The diagonal fixed-point reduction and the rank-one classification of injective left-canonical renormalization fixed points produce the diagonal weights \(\Lambda _\alpha = \sqrt{D\, \rho _{\alpha ,\alpha }/\operatorname{tr}\rho }\), so \(\Lambda _\alpha ^2 = D\, \rho _{\alpha ,\alpha }/\operatorname{tr}\rho \). Summing over \(\alpha \) and using \(\sum _\alpha \rho _{\alpha ,\alpha } = \operatorname{tr}\rho \) gives \(\sum _\alpha \Lambda _\alpha ^2 = D\). </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:rfp_nt_structural_full_unit_pair">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">14.25</span>
-    <span class="theorem_thmtitle">Unit pair-index form for RFP tensors</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-correlations.html#thm:rfp_nt_structural_full_unit_pair">#</a>
-    
-    <a class="icon proof" href="ch-correlations.html#a0000029755"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-correlations.html#thm:rfp_nt_structural_full">Theorem 14.23</a></li>
-          
-          <li><a href="ch-correlations.html#thm:rfp_nt_structural_full">Theorem 14.23</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.rfp_nt_structural_full_unit_pair" class="lean_decl">MPSTensor.rfp_nt_structural_full_unit_pair</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   A normal tensor \(A\) in canonical form&#160;II that is a renormalization fixed point admits a decomposition \(A^i = X \Lambda U^i X^{-1}\), where \(\Lambda \) is diagonal positive and </p>
-<div class="displaymath" id="a0000029756">
-  \[  \sum _i \overline{(U^i)_{\alpha ,\beta }}\,  (U^i)_{\alpha ',\beta '} = \delta _{\alpha ,\alpha '}\delta _{\beta ,\beta '} .  \]
-</div>
-<p> This is the unit pair-index convention of <span class="cite">
-	[
-	
-	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
-	, Section&#160;3
-	]
-</span>. The statement still does not impose the trace-normalization \(\operatorname{tr}(\Lambda )=1\). </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000029755">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-correlations.html#thm:rfp_nt_structural_full">14.23</a>, then set \(\widetilde U^i=\sqrt D\, U^i\) and \(\widetilde\Lambda =D^{-1/2}\Lambda \). Since \(\widetilde\Lambda \widetilde U^i=\Lambda U^i\), the decomposition \(A^i=X\widetilde\Lambda \widetilde U^iX^{-1}\) still holds. The pair-index contraction becomes </p>
-<div class="displaymath" id="a0000029757">
-  \[  \sum _i \overline{(\widetilde U^i)_{\alpha ,\beta }}\,  (\widetilde U^i)_{\alpha ',\beta '} = D\cdot D^{-1} \delta _{\alpha ,\alpha '}\delta _{\beta ,\beta '} = \delta _{\alpha ,\alpha '}\delta _{\beta ,\beta '} .  \]
-</div>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:rfp_nt_structural_full_blocks">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">14.26</span>
-    <span class="theorem_thmtitle">Per-block isometry canonical form</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-correlations.html#thm:rfp_nt_structural_full_blocks">#</a>
-    
-    <a class="icon proof" href="ch-correlations.html#a0000029758"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-correlations.html#thm:rfp_nt_structural_full">Theorem 14.23</a></li>
-          
-          <li><a href="ch-correlations.html#thm:rfp_nt_structural_full">Theorem 14.23</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.rfp_nt_structural_full_blocks" class="lean_decl">MPSTensor.rfp_nt_structural_full_blocks</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   When each block \(A_k\) of a multi-block tensor is a normal, left-canonical renormalization fixed point, that block admits the isometry decomposition \(A_k^i = X_k \Lambda _k U_k^i X_k^{-1}\), with \(X_k\) invertible, \(\Lambda _k\) diagonal positive, and \(U_k = (U_k^i)\) satisfies \(\sum _i (U_k^i)^\dagger U_k^i = I\) and the pair-index orthonormality condition </p>
-<div class="displaymath" id="a0000029759">
-  \[  \sum _i \overline{(U_k^i)_{\alpha ,\beta }}\,  (U_k^i)_{\alpha ',\beta '} = D_k^{-1}\delta _{\alpha ,\alpha '}\delta _{\beta ,\beta '} .  \]
-</div>
-<p> This is the blockwise form of the isometry canonical form (Theorem&#160;<a href="ch-correlations.html#thm:rfp_nt_structural_full">14.23</a>); see <span class="cite">
-	[
-	
-	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
-	, Section&#160;3
-	]
-</span>. The source additionally imposes the normalization \(\operatorname{tr}(\Lambda _k) = 1\); the statement here gives positive \(\Lambda _k\) without it. That normalization is genuine rather than a conjugation gauge, since rescaling \(\Lambda _k \mapsto \Lambda _k/\operatorname{tr}(\Lambda _k)\) factors out as an overall scalar on \(A_k^i\) (conjugation by \(X_k\) preserves the scale); the statement is thus the un-normalized isometry form. <em>Scope restriction (source isometry).</em> Corollary&#160;III.cor3 also invokes the joint isometry condition </p>
-<div class="displaymath" id="a0000029760">
-  \[  \sum _i (U_k^i)_{\alpha ,\beta }\,  \overline{(U_\ell ^i)_{\alpha ',\beta '}} = \delta _{k,\ell }\delta _{\alpha ,\alpha '}\delta _{\beta ,\beta '}.  \]
-</div>
-<p> The theorem above records the contracted per-block condition \(\sum _i (U_k^i)^\dagger U_k^i=I\) and the diagonal pair-index equation with right-hand side \(D_k^{-1}\delta _{\alpha ,\alpha '}\delta _{\beta ,\beta '}\). It does not impose the trace-normalization \(\operatorname{tr}(\Lambda _k)=1\), and it does not include the cross-block equations for \(k\ne \ell \). This restriction is recorded in <a href=""></a>docs/paper-gaps/cpsv16_rfp_isometry_scope.tex. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000029758">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-correlations.html#thm:rfp_nt_structural_full">14.23</a> to each block. </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:rfp_nt_structural_full_blocks_unit_pair">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">14.27</span>
-    <span class="theorem_thmtitle">Per-block unit pair-index form</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-correlations.html#thm:rfp_nt_structural_full_blocks_unit_pair">#</a>
-    
-    <a class="icon proof" href="ch-correlations.html#a0000029761"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-correlations.html#thm:rfp_nt_structural_full_unit_pair">Theorem 14.25</a></li>
-          
-          <li><a href="ch-correlations.html#thm:rfp_nt_structural_full_unit_pair">Theorem 14.25</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.rfp_nt_structural_full_blocks_unit_pair" class="lean_decl">MPSTensor.rfp_nt_structural_full_blocks_unit_pair</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   Under the hypotheses of Theorem&#160;<a href="ch-correlations.html#thm:rfp_nt_structural_full_blocks">14.26</a>, each block admits a decomposition \(A_k^i = X_k \Lambda _k U_k^i X_k^{-1}\) with \(\Lambda _k\) diagonal positive and </p>
-<div class="displaymath" id="a0000029762">
-  \[  \sum _i \overline{(U_k^i)_{\alpha ,\beta }}\,  (U_k^i)_{\alpha ',\beta '} = \delta _{\alpha ,\alpha '}\delta _{\beta ,\beta '} .  \]
-</div>
-<p> This is a blockwise unit pair-index comparison. It still does not impose the source trace-normalization of \(\Lambda _k\) or the cross-block orthogonality equations for distinct blocks. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000029761">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-correlations.html#thm:rfp_nt_structural_full_unit_pair">14.25</a> to each block. </p>
-
-  </div>
-</div>
-<div class="definition_thmwrapper theorem-style-definition" id="def:is_isometry_canonical_form">
-  <div class="definition_thmheading">
-    <span class="definition_thmcaption">
-    Definition
-    </span>
-    <span class="definition_thmlabel">14.28</span>
-    <span class="definition_thmtitle">Isometry canonical form</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-correlations.html#def:is_isometry_canonical_form">#</a>
-    
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.IsIsometryCanonicalForm" class="lean_decl">MPSTensor.IsIsometryCanonicalForm</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="definition_thmcontent">
-  <p>  A normal tensor \(A\) is in <em>isometry canonical form</em> when there are an invertible \(X\), a positive diagonal weight \(\Lambda \) with the trace normalization \(\sum _\alpha \Lambda _\alpha = 1\), and a residual tensor \(U\) satisfying the unit pair-index isometry </p>
-<div class="displaymath" id="a0000029763">
-  \[  \sum _i \overline{(U^i)_{\alpha ,\beta }}\, (U^i)_{\alpha ',\beta '} = \delta _{\alpha ,\alpha '}\delta _{\beta ,\beta '},  \]
-</div>
-<p> such that </p>
-<div class="displaymath" id="a0000029764">
-  \[  A^i = X\, \sqrt\Lambda \, U^i\, X^{-1}.  \]
-</div>
-<p> The square root dresses the unit isometry because the reference tensor of <span class="cite">
-	[
-	
-	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
-	, Section&#160;3
-	]
-</span> is \(\widehat A^{(\alpha ',\beta ')}_{\alpha ,\beta } = \delta _{\alpha ,\alpha '}\delta _{\beta ,\beta '}\sqrt{\Lambda _\alpha }\); the normalization \(\operatorname{tr}(\Lambda )=1\) is imposed on \(\Lambda \), equivalently on the normalized diagonal fixed point \(\rho =\operatorname{diag}(\Lambda )\) of the transfer map. The displayed source form writes \(A^i=X\Lambda U^iX^{-1}\) with the bare diagonal; that pairing forces a non-unit residual, so the consistent decomposition keeps the square root \(\sqrt\Lambda \) while the trace normalization stays on \(\Lambda \). This records the diagonal \(j=j'\) case of the source isometry condition. </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:isometry_canonical_form_of_rfp_nt">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">14.29</span>
-    <span class="theorem_thmtitle">Trace-normalized isometry canonical form for RFP tensors</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-correlations.html#thm:isometry_canonical_form_of_rfp_nt">#</a>
-    
-    <a class="icon proof" href="ch-correlations.html#a0000029765"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-correlations.html#def:is_isometry_canonical_form">Definition 14.28</a></li>
-          
-          <li><a href="ch-correlations.html#thm:rfp_nt_structural_full_sq_sum">Theorem 14.24</a></li>
-          
-          <li><a href="ch-correlations.html#thm:rfp_nt_structural_full_sq_sum">Theorem 14.24</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.isIsometryCanonicalForm_of_rfp_nt" class="lean_decl">MPSTensor.isIsometryCanonicalForm_of_rfp_nt</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   A normal tensor in canonical form&#160;II that is a renormalization fixed point is in isometry canonical form: it admits a decomposition \(A^i = X\sqrt\Lambda \, U^i X^{-1}\) with \(\Lambda \) diagonal, positive, trace-normalized (\(\sum _\alpha \Lambda _\alpha = 1\), the source condition \(\operatorname{tr}(\Lambda )=1\)), and \(U\) a unit pair-index isometry. The diagonal weight is \(\Lambda _\alpha = \rho _{\alpha ,\alpha }/\operatorname{tr}\rho \), the normalized diagonal fixed point of the transfer map; trace-normalization is then the trace identity \(\sum _\alpha \rho _{\alpha ,\alpha } = \operatorname{tr}\rho \). This is the single-block normal-tensor case of the structural characterization of pure-state renormalization fixed points in <span class="cite">
-	[
-	
-	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
-	, Section&#160;3
-	]
-</span>, recovering the diagonal part of the isometry condition there. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000029765">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> The structural form with the square-sum identity (Theorem&#160;<a href="ch-correlations.html#thm:rfp_nt_structural_full_sq_sum">14.24</a>) supplies a positive diagonal weight \(\widetilde\Lambda \) with \(\sum _\alpha \widetilde\Lambda _\alpha ^2 = D\). Rescaling to the unit pair-index convention by \(U^i\mapsto \sqrt D\, U^i\) and setting \(\Lambda _\alpha =(\widetilde\Lambda _\alpha /\sqrt D)^2\) gives \(\sum _\alpha \Lambda _\alpha = D^{-1}\sum _\alpha \widetilde\Lambda _\alpha ^2 = D^{-1}\cdot D = 1\), while \(\sqrt{\Lambda _\alpha }=\widetilde\Lambda _\alpha /\sqrt D\) recovers the decomposition \(A^i = X\sqrt\Lambda \, U^i X^{-1}\). </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:isometry_canonical_form_of_rfp_nt_blocks">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">14.30</span>
-    <span class="theorem_thmtitle">Per-block trace-normalized isometry canonical form</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-correlations.html#thm:isometry_canonical_form_of_rfp_nt_blocks">#</a>
-    
-    <a class="icon proof" href="ch-correlations.html#a0000029766"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-correlations.html#def:is_isometry_canonical_form">Definition 14.28</a></li>
-          
-          <li><a href="ch-correlations.html#thm:isometry_canonical_form_of_rfp_nt">Theorem 14.29</a></li>
-          
-          <li><a href="ch-correlations.html#thm:isometry_canonical_form_of_rfp_nt">Theorem 14.29</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.isIsometryCanonicalForm_of_rfp_nt_blocks" class="lean_decl">MPSTensor.isIsometryCanonicalForm_of_rfp_nt_blocks</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   Each block of a multi-block tensor whose blocks are normal, left-canonical renormalization fixed points is in isometry canonical form, with a trace-normalized diagonal weight and a unit pair-index isometry. This is the single-block trace-normalized form applied to each block; it omits the cross-block orthogonality between distinct normal-tensor blocks, recorded in <a href=""></a>docs/paper-gaps/cpsv16_rfp_isometry_scope.tex. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000029766">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-correlations.html#thm:isometry_canonical_form_of_rfp_nt">14.29</a> to each block. </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:rfp_cf_structural">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">14.31</span>
-    <span class="theorem_thmtitle">Canonical-form blocks are injective</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-correlations.html#thm:rfp_cf_structural">#</a>
-    
-    <a class="icon proof" href="ch-correlations.html#a0000029767"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-canonical.html#def:is_canonical_form">Definition 9.24</a></li>
-          
-          <li><a href="ch-mps.html#def:injective">Definition 2.28</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.rfp_cf_structural" class="lean_decl">MPSTensor.rfp_cf_structural</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   For a family of tensors in canonical form, every block is injective. This is a direct projection of the injectivity field of the canonical-form predicate; see <span class="cite">
-	[
-	
-	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
-	, Section&#160;2.3
-	]
-</span>. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000029767">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p>Immediate from the <span class="ttfamily">block_injective</span> field of <span class="ttfamily">IsCanonicalForm</span>. </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:rg_flow_converges_of_cf">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">14.32</span>
-    <span class="theorem_thmtitle">RG flow convergence for canonical-form tensors</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-correlations.html#thm:rg_flow_converges_of_cf">#</a>
-    
-    <a class="icon proof" href="ch-correlations.html#a0000029768"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-canonical.html#def:is_canonical_form">Definition 9.24</a></li>
-          
-          <li><a href="ch-mps.html#def:transfer_map">Definition 2.5</a></li>
-          
-          <li><a href="ch-channels.html#def:fixed_point_proj">Definition 4.46</a></li>
-          
-          <li><a href="ch-correlations.html#thm:exponential_convergence_primitive">Theorem 14.9</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.rg_flow_converges_of_cf" class="lean_decl">MPSTensor.rg_flow_converges_of_cf</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   For a tensor in canonical form with blocks \((A_k)\) and weights \((\mu _k)\), the iterated blocking \(\mathcal{E}_{A_k}^{2^n}\) converges pointwise to an idempotent linear map \(\mathcal{E}_\infty \) as \(n\to \infty \). That is, there exists \(\mathcal{E}_\infty \) with \(\mathcal{E}_\infty ^2 = \mathcal{E}_\infty \) such that \(\mathcal{E}_{A_k}^{2^n}(\rho ) \to \mathcal{E}_\infty (\rho )\) for all density matrices \(\rho \). This is <span class="cite">
-	[
-	
-	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
-	, Appendix&#160;B
-	]
-</span>. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000029768">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p>Each block is injective and left-canonical, so its transfer map is a primitive channel with a unique positive-definite fixed point \(\rho _0\). The exponential convergence bound \(\lVert \mathcal{E}^n(X) - P(X)\rVert \le C(1-\delta )^n \lVert X\rVert \) (Theorem&#160;<a href="ch-correlations.html#thm:exponential_convergence_primitive">14.9</a>) then gives pointwise convergence \(\mathcal{E}^n(X)\to P(X)\), and composing with the subsequence \(2^n\to \infty \) yields the result. The witness \(\mathcal{E}_\infty = P\) is the rank-one fixed-point projection, which is idempotent. </p>
-
-  </div>
-</div>
-<div class="remark_thmwrapper theorem-style-remark" id="rem:zero_correlation_length">
-  <div class="remark_thmheading">
-    <span class="remark_thmcaption">
-    Remark
-    </span>
-    <span class="remark_thmlabel">14.33</span>
-    <div class="thm_header_extras">
-
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-correlations.html#rem:zero_correlation_length">#</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-spectral.html#thm:spectral_radius_le_one">Lemma 7.15</a></li>
-          
-          <li><a href="ch-correlations.html#def:correlation_length">Definition 14.7</a></li>
-          
-          <li><a href="ch-correlations.html#def:is_rfp">Definition 14.13</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-        </div>
-  </div>
-  <div class="remark_thmcontent">
-  <p>  When the transfer map is idempotent (\(\mathcal{E}^2=\mathcal{E}\)), connected correlations become separation-independent for all separations \(n \ge 1\). Informally, this corresponds to zero correlation length (\(\xi =0\)). The full spectral equivalence (idempotence iff vanishing subleading spectrum) is deferred here. </p>
-
-  </div>
-</div>
-<div class="definition_thmwrapper theorem-style-definition" id="def:is_cid">
-  <div class="definition_thmheading">
-    <span class="definition_thmcaption">
-    Definition
-    </span>
-    <span class="definition_thmlabel">14.34</span>
-    <span class="definition_thmtitle">Correlations independent of distance</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-correlations.html#def:is_cid">#</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-correlations.html#def:connected_correlator">Definition 14.3</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.IsCID" class="lean_decl">MPSTensor.IsCID</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="definition_thmcontent">
-  <p>   For a positive definite right fixed point \(\rho ^R {\gt} 0\), an MPS tensor has <em>correlations independent of distance</em> (CID) when for all local observables \(X\) and \(Y\) and all separations \(n,m \ge 1\), </p>
-<div class="displaymath" id="a0000029769">
-  \[  C(X,Y;n) = C(X,Y;m).  \]
-</div>
-
-  </div>
-</div>
-<div class="definition_thmwrapper theorem-style-definition" id="def:is_zcl">
-  <div class="definition_thmheading">
-    <span class="definition_thmcaption">
-    Definition
-    </span>
-    <span class="definition_thmlabel">14.35</span>
-    <span class="definition_thmtitle">Zero correlation length</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-correlations.html#def:is_zcl">#</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-correlations.html#def:is_locally_orthogonal">Definition 14.16</a></li>
-          
-          <li><a href="ch-correlations.html#def:is_bnt_zcl">Definition 14.18</a></li>
-          
-          <li><a href="ch-correlations.html#def:is_cid">Definition 14.34</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.IsZCL" class="lean_decl">MPSTensor.IsZCL</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="definition_thmcontent">
-  <p>   In the single-block convention, an MPS tensor has <em>zero correlation length</em> when </p>
-<div class="displaymath" id="a0000029770">
-  \[  \mathcal{E}_A^2=\mathcal{E}_A \qquad \text{and}\qquad \operatorname {CID}(A)  \]
-</div>
-<p> both hold. The source definition is the BNT condition in Definition&#160;<a href="ch-correlations.html#def:is_bnt_zcl">14.18</a>. </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:isCID_implies_isRFP">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">14.36</span>
-    <span class="theorem_thmtitle">CID implies RFP</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-correlations.html#thm:isCID_implies_isRFP">#</a>
-    
-    <a class="icon proof" href="ch-correlations.html#a0000029771"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-correlations.html#def:is_cid">Definition 14.34</a></li>
-          
-          <li><a href="ch-correlations.html#def:is_rfp">Definition 14.13</a></li>
-          
-          <li><a href="ch-mps.html#def:transfer_map">Definition 2.5</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.isCID_implies_isRFP" class="lean_decl">MPSTensor.isCID_implies_isRFP</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   If an MPS tensor admits a positive definite right fixed point of its transfer map and has correlations independent of distance, then its transfer map is idempotent. This is the reverse direction of <span class="cite">
-	[
-	
-	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
-	, Theorem&#160;3.8
-	]
-</span>. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000029771">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p>Trace nondegeneracy and invertibility of the fixed point reduce idempotence to equality of the connected correlator at separations \(n=2\) and \(n=1\). </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:zcl_iff_idempotent_transfer">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">14.37</span>
-    <span class="theorem_thmtitle">Zero correlation length iff idempotent transfer</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-correlations.html#thm:zcl_iff_idempotent_transfer">#</a>
-    
-    <a class="icon proof" href="ch-correlations.html#a0000029772"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-correlations.html#def:is_rfp">Definition 14.13</a></li>
-          
-          <li><a href="ch-correlations.html#def:is_cid">Definition 14.34</a></li>
-          
-          <li><a href="ch-correlations.html#def:is_locally_orthogonal">Definition 14.16</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.zcl_iff_idempotent_transfer" class="lean_decl">MPSTensor.zcl_iff_idempotent_transfer</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   Under the single-block convention above, </p>
-<div class="displaymath" id="a0000029773">
-  \[  \bigl(\mathcal{E}_A^2=\mathcal{E}_A \  \text{and}\  \operatorname {CID}(A)\bigr) \quad \Longleftrightarrow \quad \mathcal{E}_A^2=\mathcal{E}_A .  \]
-</div>
-<p> This is the idempotence/CID part of <span class="cite">
-	[
-	
-	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
-	, Theorem&#160;3.8
-	]
-</span>. The full source theorem for canonical-form tensors also uses Definition&#160;<a href="ch-correlations.html#def:is_bnt_zcl">14.18</a>. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000029772">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p>The forward direction extracts the idempotence hypothesis. The reverse uses \(\mathcal{E}^n = \mathcal{E}\) for \(n \ge 1\) to show the connected correlator is separation-independent. </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:rfp_iff_zcl">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">14.38</span>
-    <span class="theorem_thmtitle">Single-block RFP iff ZCL inside a canonical form</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-correlations.html#thm:rfp_iff_zcl">#</a>
-    
-    <a class="icon proof" href="ch-correlations.html#a0000029774"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-canonical.html#def:is_canonical_form">Definition 9.24</a></li>
-          
-          <li><a href="ch-correlations.html#def:is_rfp">Definition 14.13</a></li>
-          
-          <li><a href="ch-correlations.html#def:is_zcl">Definition 14.35</a></li>
-          
-          <li><a href="ch-correlations.html#thm:zcl_iff_idempotent_transfer">Theorem 14.37</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.rfp_iff_zcl" class="lean_decl">MPSTensor.rfp_iff_zcl</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   Let \(A^i=\bigoplus _k \mu _k A_k^i\) be a tensor in canonical form. For each \(k\), the tensor \(A_k\) is a renormalization fixed point if and only if \(A_k\) has zero correlation length. </p>
-<p>This is the single-block consequence of <span class="cite">
-	[
-	
-	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
-	, Theorem&#160;3.10
-	]
-</span>. The ZCL condition in the source theorem is the BNT-family condition: CID together with the local orthogonality equations </p>
-<div class="displaymath" id="a0000029775">
-  \[  \mathbb E_{j,j'}=0 \qquad (j\ne j'),  \]
-</div>
-<p> as in Definition&#160;<a href="ch-correlations.html#def:is_bnt_zcl">14.18</a>. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000029774">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-correlations.html#thm:zcl_iff_idempotent_transfer">14.37</a> to the chosen canonical-form block. </p>
-
-  </div>
-</div>
 
 </div> <!--main-text -->
 </div> <!-- content-wrapper -->
@@ -3958,11 +3601,11 @@
 
   <svg  id="showmore-plus" class="icon icon-eye-plus showmore"><use xlink:href="symbol-defs.svg#icon-eye-plus"></use></svg>
 
-  <a href="ch-parent_hamiltonian.html" title="Parent Hamiltonians"><svg  class="icon icon-arrow-left "><use xlink:href="symbol-defs.svg#icon-arrow-left"></use></svg>
+  <a href="ch-entropy.html" title="Quantum Entropy"><svg  class="icon icon-arrow-left "><use xlink:href="symbol-defs.svg#icon-arrow-left"></use></svg>
 </a>
   <a href="index.html" title="Fundamental Theorem of Matrix Product States"><svg  class="icon icon-arrow-up "><use xlink:href="symbol-defs.svg#icon-arrow-up"></use></svg>
 </a>
-  <a href="ch-examples.html" title="Concrete Examples"><svg  class="icon icon-arrow-right "><use xlink:href="symbol-defs.svg#icon-arrow-right"></use></svg>
+  <a href="sect0001.html" title="Bibliography"><svg  class="icon icon-arrow-right "><use xlink:href="symbol-defs.svg#icon-arrow-right"></use></svg>
 </a>
 </nav>
 
