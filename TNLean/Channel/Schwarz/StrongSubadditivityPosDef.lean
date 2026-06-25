@@ -21,8 +21,8 @@ where the reduced states are the tripartite partial traces.
 
 ## Main results
 
-* `SSAPosDef.rel_entropy_eval` — the relative entropy against the maximally mixed
-  reference on the retained factor evaluates to an entropy difference:
+* `SSAPosDef.rel_entropy_eval` — the relative entropy against the reference state
+  maximally mixed on the traced-out factor evaluates to an entropy difference:
   $D(\rho \,\|\, (\mathbf 1_A / d_A) \otimes \rho_R)
     = \log d_A + S(\rho_R) - S(\rho)$, where $\rho_R$ is the partial trace over
   $A$ and the traced-out factor $A$ carries the maximally mixed state.
@@ -84,13 +84,13 @@ theorem cfc_log_smul_one {n : Type*} [Fintype n] [DecidableEq n] (c : ℝ) :
     rw [Algebra.algebraMap_eq_smul_one]
   rw [he, CFC.log_algebraMap, Algebra.algebraMap_eq_smul_one]
 
-/-! ## The relative entropy against the maximally mixed retained factor -/
+/-! ## The relative entropy against a reference maximally mixed on the traced-out factor -/
 
 section RelEntropyEval
 
 variable {dA : ℕ} {R : Type*} [Fintype R] [DecidableEq R]
 
-/-- **The relative entropy against the maximally mixed reference on the retained
+/-- **The relative entropy against a reference maximally mixed on the traced-out
 factor.** For a positive definite density matrix $\rho$ on $A \otimes R$ with
 partial trace $\rho_R = \operatorname{tr}_A \rho$,
 $$D\bigl(\rho \,\|\, (\mathbf 1_A / d_A) \otimes \rho_R\bigr)
