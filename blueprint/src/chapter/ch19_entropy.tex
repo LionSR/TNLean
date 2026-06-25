@@ -704,6 +704,47 @@ finite-dimensional quantum systems.
     \]
 \end{theorem}
 
+\begin{theorem}[Strong subadditivity, positive definite case]
+    \label{thm:strong_subadditivity_posdef}
+    \lean{strong_subadditivity_posDef}
+    \leanok
+    \uses{def:von_neumann_entropy, def:traceA_ABC, def:traceC_ABC, def:traceAC_ABC}
+    For a positive definite tripartite density matrix $\rho_{ABC}$,
+    \[
+        S(\rho_{ABC}) + S(\rho_B)
+        \le S(\rho_{AB}) + S(\rho_{BC}).
+    \]
+    This is the positive definite case of Theorem~\ref{thm:strong_subadditivity}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:quantum_relative_entropy, thm:relative_entropy_data_processing}
+    Read the inequality as one instance of data processing under the partial
+    trace over $C$, with reference state
+    $\sigma_{ABC} = (\mathbf 1_A / d_A) \otimes \rho_{BC}$, which is positive
+    definite because $\rho_{BC}$ is. Against this reference the relative entropy of
+    each pair evaluates to an entropy difference,
+    \[
+        D\bigl(\rho_{ABC} \,\big\|\, (\mathbf 1_A / d_A) \otimes \rho_{BC}\bigr)
+            = \log d_A + S(\rho_{BC}) - S(\rho_{ABC}),
+    \]
+    \[
+        D\bigl(\rho_{AB} \,\big\|\, (\mathbf 1_A / d_A) \otimes \rho_{B}\bigr)
+            = \log d_A + S(\rho_{B}) - S(\rho_{AB}),
+    \]
+    each by the tensor logarithm split and the adjoint of the partial trace. Data
+    processing under the partial trace over $C$, which sends
+    $\rho_{ABC} \mapsto \rho_{AB}$ and
+    $(\mathbf 1_A / d_A) \otimes \rho_{BC} \mapsto
+    (\mathbf 1_A / d_A) \otimes \rho_{B}$, reads
+    \[
+        D\bigl(\rho_{AB} \,\big\|\, (\mathbf 1_A / d_A) \otimes \rho_{B}\bigr)
+            \le D\bigl(\rho_{ABC} \,\big\|\, (\mathbf 1_A / d_A) \otimes \rho_{BC}\bigr).
+    \]
+    Substituting the two evaluations cancels the common $\log d_A$ and rearranges
+    to the claimed inequality.
+\end{proof}
+
 \begin{definition}[SSA equality]\label{def:ssa_equality}
     \lean{IsSSAEquality}
     \leanok
