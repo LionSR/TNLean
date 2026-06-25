@@ -44,7 +44,9 @@ private noncomputable def glConjEquiv (X : GL (Fin D) ℂ) :
 If two periodic tensors (same bond dimension) are gauge-phase equivalent,
 they must have the same period.
 
-arXiv:0909.5347, via eigenvalue uniqueness (Wolf Theorem 6.3). -/
+arXiv:0909.5347, via eigenvalue uniqueness (Wolf Theorem 6.3). This is the
+load-bearing step of the different-period decay route substitution documented in
+`docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`. -/
 private theorem period_eq_of_gaugePhaseEquiv_of_isPeriodic
     [NeZero D] {A B : MPSTensor d D}
     {m_a m_b : ℕ} (hA : IsPeriodic m_a A) (hB : IsPeriodic m_b B)
@@ -103,9 +105,10 @@ Lemma bdcf, the blocks P_u A^{(p)} and Q_v B^{(p)} are non-repeated normal
 tensors, so that applying the one-site translation operator to Q_v B^{(p)}
 versus Q_{v+1} B^{(p)} yields a contradiction unless the overlap vanishes.
 
-**Different-period decay via the peripheral spectrum:** the Lean
-proof realizes the *same* obstruction through the peripheral-spectrum form rather
-than the paper's lcm-blocking + translation argument. If D₁ = D₂ and
+**Local fix (route substitution, different-period decay via the peripheral
+spectrum):** the Lean proof realizes the *same* obstruction through the
+peripheral-spectrum form rather than the paper's lcm-blocking + translation
+argument. If D₁ = D₂ and
 B i = ζ X (A i) X⁻¹, then
 𝓔_B(Y) = ζ · (conj ζ) · X 𝓔_A(X⁻¹ Y X⁻ᴴ) Xᴴ. Eigenvalue uniqueness for an irreducible CP
 map (Wolf, *Quantum Channels & Operations*, Thm 6.3) forces |ζ| = 1, so the
