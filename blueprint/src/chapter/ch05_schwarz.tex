@@ -1747,20 +1747,22 @@ from the separable ones.
     collecting the Kronecker factors gives the stated form.
 \end{proof}
 
-\begin{theorem}[Basis independence of the PPT property]
+\begin{theorem}[Conjugation invariance of the partial transpose]
     \label{thm:is_ppt_basis_change}
     \lean{Matrix.isPPT_basis_change}
     \leanok
     \uses{def:is_ppt, thm:partial_transpose_left_basis_change}
-    Let $U$ be a unitary on the first factor.  If $\rho$ has the PPT property then
-    the partial transpose taken in the basis changed by $U$,
+    Let $U$ be any matrix on the first factor.  If $\rho$ has the PPT property then
     \[
         \bigl(U\otimes\Id\bigr)
         \Bigl[\bigl((U^\dagger\otimes\Id)\,\rho\,(U\otimes\Id)\bigr)^{T_1}\Bigr]
-        \bigl(U^\dagger\otimes\Id\bigr),
+        \bigl(U^\dagger\otimes\Id\bigr)
     \]
-    is again positive semidefinite.  The positivity of the partial transpose is
-    therefore independent of the local basis.
+    is positive semidefinite; no invertibility or unitarity of $U$ is required.
+    Specializing to a unitary $U$ this is the partial transpose taken in the basis
+    changed by $U$, so the positivity of the partial transpose is independent of the
+    local basis, recovering Wolf's basis-independence statement
+    \cite[Equation~(3.17)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
