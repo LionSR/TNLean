@@ -1507,6 +1507,7 @@ Theorem~\ref{thm:peripheral_cyclic_group}.
 \end{definition}
 
 \begin{definition}[Restricted corner map]
+    \label{def:corner_restriction}
     \lean{cornerRestriction}
     \leanok
     The restriction of $E$ to an invariant corner $P\MN{D}P$.
@@ -1622,6 +1623,29 @@ Theorem~\ref{thm:peripheral_cyclic_group}.
     \leanok
     Appropriate powers of the channel preserve each sector corner.
 \end{lemma}
+
+\begin{lemma}[Primitivity passes to a fixed corner]
+    \label{lem:primitivity_corner_restriction}
+    \lean{isPrimitive_cornerRestriction_of_isPrimitive}
+    \leanok
+    \uses{def:corner_restriction}
+    Let $P\in\MN{D}$ be a nonzero idempotent and let $E$ be a linear map on
+    $\MN{D}$ that preserves the corner $P\MN{D}P$, is primitive, and fixes the
+    corner projection, $E(P)=P$. Then the restriction of $E$ to the corner
+    $P\MN{D}P$ is again primitive.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:corner_restriction}
+    The corner projection $P$ lies in its own corner and is fixed by the
+    restriction, so $1$ is a peripheral eigenvalue of the restriction. Conversely,
+    every eigenvalue of the restriction of unit modulus arises from a nonzero
+    corner element $X$ with $E(X)=\mu X$; viewing $X$ as an element of $\MN{D}$
+    exhibits $\mu$ as a peripheral eigenvalue of $E$. Primitivity of $E$ forces
+    $\mu=1$, so the peripheral spectrum of the restriction is exactly $\{1\}$ and
+    the restriction is primitive.
+\end{proof}
 
 \begin{lemma}[Irreducibility of restricted sector dynamics]
     \lean{isIrreducible_restriction_of_cyclic_decomp}
