@@ -8,6 +8,7 @@ import Mathlib.Analysis.SpecialFunctions.Log.NegMulLog
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Basic
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import TNLean.Analysis.Entropy
+import TNLean.Analysis.TraceCFC
 
 /-!
 # Klein's inequality for the quantum relative entropy
@@ -47,31 +48,6 @@ analytic input is `Real.log_le_sub_one_of_pos`.
 
 open scoped Matrix ComplexOrder
 open Matrix Finset Real
-
-namespace Matrix.IsHermitian
-
-variable {n : Type*} [Fintype n] [DecidableEq n]
-
-/-- The spectral form of a Hermitian matrix as a literal product
-`U * diagonal (↑eigenvalues) * star U`, where `U` is the eigenvector unitary. -/
-theorem spectral_form {A : Matrix n n ℂ} (hA : A.IsHermitian) :
-    A = (hA.eigenvectorUnitary : Matrix n n ℂ)
-        * Matrix.diagonal (fun i => ((hA.eigenvalues i : ℝ) : ℂ))
-        * star (hA.eigenvectorUnitary : Matrix n n ℂ) := by
-  have h := hA.spectral_theorem
-  rw [Unitary.conjStarAlgAut_apply] at h
-  exact h
-
-/-- The Hermitian functional calculus `hA.cfc f` as a literal product
-`U * diagonal (↑(f ∘ eigenvalues)) * star U`. -/
-theorem cfc_form {A : Matrix n n ℂ} (hA : A.IsHermitian) (f : ℝ → ℝ) :
-    hA.cfc f = (hA.eigenvectorUnitary : Matrix n n ℂ)
-        * Matrix.diagonal (fun i => ((f (hA.eigenvalues i) : ℝ) : ℂ))
-        * star (hA.eigenvectorUnitary : Matrix n n ℂ) := by
-  rw [Matrix.IsHermitian.cfc, Unitary.conjStarAlgAut_apply]
-  rfl
-
-end Matrix.IsHermitian
 
 namespace TNLean.Klein
 
