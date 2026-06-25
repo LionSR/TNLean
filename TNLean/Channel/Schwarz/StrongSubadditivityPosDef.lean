@@ -21,7 +21,7 @@ where the reduced states are the tripartite partial traces.
 
 ## Main results
 
-* `SSAPosDef.relEntropy_eval` — the relative entropy against the maximally mixed
+* `SSAPosDef.rel_entropy_eval` — the relative entropy against the maximally mixed
   reference on the retained factor evaluates to an entropy difference:
   $D(\rho \,\|\, (\mathbf 1_A / d_A) \otimes \rho_R)
     = \log d_A + S(\rho_R) - S(\rho)$, where $\rho_R$ is the partial trace over
@@ -37,7 +37,7 @@ Read strong subadditivity as one instance of the data-processing inequality unde
 the partial trace over $C$, with reference state $(\mathbf 1_A / d_A) \otimes
 \rho_{BC}$. The relative entropy of the full pair evaluates to
 $\log d_A + S(\rho_{BC}) - S(\rho_{ABC})$ and that of the partial-trace image to
-$\log d_A + S(\rho_B) - S(\rho_{AB})$, both by `relEntropy_eval`; data processing
+$\log d_A + S(\rho_B) - S(\rho_{AB})$, both by `rel_entropy_eval`; data processing
 between the two leaves $S(\rho_{ABC}) + S(\rho_B) \le S(\rho_{AB}) + S(\rho_{BC})$
 after the common $\log d_A$ cancels. The two evaluations use the partial-trace
 adjoint identity `traceLeftA_lift_trace` and the tensor logarithm split
@@ -101,7 +101,7 @@ $\log(\mathbf 1_A / d_A) \otimes \mathbf 1 = -(\log d_A) \cdot \mathbf 1$ and a
 retained term $\mathbf 1_A \otimes \log \rho_R$; the first contributes
 $\log d_A$ after pairing with the unit-trace $\rho$, and the second contributes
 $S(\rho_R)$ through the partial-trace adjoint identity `traceLeftA_lift_trace`. -/
-theorem relEntropy_eval [NeZero dA]
+theorem rel_entropy_eval [NeZero dA]
     {ρ : Matrix (Fin dA × R) (Fin dA × R) ℂ}
     (hρ : ρ.PosDef) (hρtr : ρ.trace = 1)
     (hρR : (traceLeftA ρ).PosDef) :
@@ -263,7 +263,7 @@ inequality is read as one instance of the data-processing inequality under the
 partial trace over $C$, with reference state $(\mathbf 1_A / d_A) \otimes
 \rho_{BC}$: the relative entropy of the full pair is
 $\log d_A + S(\rho_{BC}) - S(\rho_{ABC})$ and that of the partial-trace image is
-$\log d_A + S(\rho_B) - S(\rho_{AB})$ (`relEntropy_eval`), and data processing
+$\log d_A + S(\rho_B) - S(\rho_{AB})$ (`rel_entropy_eval`), and data processing
 (`quantumRelativeEntropy_traceC_le`) between them is the claim.
 
 **Scope restriction (positive-definite domain):** the source inequality holds for
@@ -308,10 +308,10 @@ theorem strong_subadditivity_posDef
     simp only [hρB, hρAB, traceLeftA, traceC_ABC, traceAC_ABC]
   have hρB_pd : ρB.PosDef := hρB_eq ▸ traceLeftA_posDef hρAB_pd
   -- Relative entropy of the full pair.
-  have hfull := relEntropy_eval (ρ := ρ_ABC) hρ hρtr (hρBC_eq ▸ hρBC_pd)
+  have hfull := rel_entropy_eval (ρ := ρ_ABC) hρ hρtr (hρBC_eq ▸ hρBC_pd)
   -- Relative entropy of the partial-trace image.
   have hABtr : ρAB.trace = 1 := by rw [hρAB, ← Matrix.trace_eq_trace_traceC_ABC]; exact hρtr
-  have himg := relEntropy_eval (ρ := ρAB) hρAB_pd hABtr (hρB_eq ▸ hρB_pd)
+  have himg := rel_entropy_eval (ρ := ρAB) hρAB_pd hABtr (hρB_eq ▸ hρB_pd)
   -- Data processing between the two pairs, tracing out the third factor.
   -- The reference state of the image pair is the partial trace of the full one.
   have hσtrace : traceC_ABC (((dA : ℂ)⁻¹ • (1 : Matrix (Fin dA) (Fin dA) ℂ)) ⊗ₖ traceLeftA ρ_ABC)
