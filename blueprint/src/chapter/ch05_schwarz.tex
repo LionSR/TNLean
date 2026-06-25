@@ -2042,7 +2042,7 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
         lem:rank_one_ampliation_choi_compression,
         thm:choi_right_compression_quadratic_form, thm:schmidt_rank_choi_test_iff}
     For a pure state $\ket{\psi}\bra{\psi}$ on the square bipartite system
-    $\mathbb{C}^D\otimes\mathbb{C}^D$ with $\operatorname{SR}(\psi)\le n$ and
+    $\MN{D}\otimes\MN{D}$ with $\operatorname{SR}(\psi)\le n$ and
     $1\le n<D$, applying $T_n$ to the first factor keeps the result positive
     semidefinite:
     \[
@@ -2068,8 +2068,8 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
     \leanok
     \uses{def:has_schmidt_number_le, def:t_eta, def:tensor_map_id,
         thm:tensor_map_id_sum, thm:tensor_map_id_t_eta_posSemidef_pure}
-    For $1\le n<D$, a bipartite state on the square system
-    $\mathbb{C}^D\otimes\mathbb{C}^D$ of Schmidt number at most $n$ satisfies
+    For $1\le n<D$, a bipartite state on the square system $\MN{D}\otimes\MN{D}$ of
+    Schmidt number at most $n$ satisfies
     \[
         (T_n\otimes\id)(\rho)\ge 0.
     \]
@@ -2090,8 +2090,8 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
     \leanok
     \uses{def:has_schmidt_number_le, def:t_eta,
         thm:has_schmidt_number_le_tensor_map_id_t_eta, thm:reduction_criterion}
-    For $1\le n<D$, a bipartite state on the square system
-    $\mathbb{C}^D\otimes\mathbb{C}^D$ of Schmidt number at most $n$ satisfies the
+    For $1\le n<D$, a bipartite state on the square system $\MN{D}\otimes\MN{D}$ of
+    Schmidt number at most $n$ satisfies the
     reduction criterion
     \[
         n\,\rho_1\otimes\Id\ge\rho
@@ -2099,9 +2099,6 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
         n\,\Id\otimes\rho_2\ge\rho,
     \]
     with $\rho_1$ and $\rho_2$ the reduced densities on the first and second factors.
-    Wolf states the criterion for a general bipartite system
-    $\mathbb{C}^d\otimes\mathbb{C}^{d'}$; the formalization covers the square case
-    $d=d'=D$.
 \end{theorem}
 
 \begin{proof}
