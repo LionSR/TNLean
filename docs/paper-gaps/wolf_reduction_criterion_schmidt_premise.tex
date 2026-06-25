@@ -108,11 +108,28 @@ the map $T_n$ is $n$-positive for all $1\le n<D$.\footnote{Formal declaration:
     \doclink{TNLean/Channel/NPositivityChainStrict}, the reduction map being
     $T_\eta$ at $\eta=n$ by \leanid{Matrix.reductionMap_eq_tEta}.}
 
+The pure-state step writes $\psi$ through the maximally entangled vector as a
+\emph{square} right-factor matrix, so the formalized statements fix the two tensor
+factors to a common dimension $D$: they live on the square bipartite system
+$\mathbb{C}^D\otimes\mathbb{C}^D$ rather than on Wolf's general
+$\mathbb{C}^d\otimes\mathbb{C}^{d'}$. The restriction enters through the square
+parametrization of a bipartite vector by a maximally-entangled-vector compression,
+which is currently available only for equal-dimension factors. Eliminating it
+requires the rectangular form of that parametrization (a vector on
+$\mathbb{C}^d\otimes\mathbb{C}^{d'}$ written as a $d\times d'$ right-factor matrix);
+once that is formalized, the three headline statements generalize verbatim to
+$\mathbb{C}^d\otimes\mathbb{C}^{d'}$.
+
 \section{Classification}
 
-\emph{Resolved}, with a residual scope restriction $1\le n<D$ inherited from the
+\emph{Resolved on the square bipartite system $\mathbb{C}^D\otimes\mathbb{C}^D$},
+with two residual scope restrictions. The first, $1\le n<D$, is inherited from the
 $n$-positivity threshold of $T_\eta$, whose top index $n=D$ (complete positivity)
-is documented in \path{docs/paper-gaps/wolf_t_eta_top_index_scope.tex}. The full
+is documented in \path{docs/paper-gaps/wolf_t_eta_top_index_scope.tex}. The second,
+the equal-dimension condition $d=d'=D$, comes from the square maximally-entangled-vector
+parametrization in the pure-state step; Wolf's eq.~(3.18) is stated for a general
+$\mathbb{C}^d\otimes\mathbb{C}^{d'}$, and its rectangular case awaits the rectangular
+form of that parametrization (elimination plan above). The square-system full
 criterion with Wolf's Schmidt-number premise is now available at
 \leanid{Matrix.reductionCriterion_left_of_hasSchmidtNumberLE} and
 \leanid{Matrix.reductionCriterion_right_of_hasSchmidtNumberLE}. The operator-half

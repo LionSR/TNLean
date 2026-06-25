@@ -2041,7 +2041,8 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
         thm:reduction_map_eq_t_eta, thm:square_schmidt_rank_exact_parametrization,
         lem:rank_one_ampliation_choi_compression,
         thm:choi_right_compression_quadratic_form, thm:schmidt_rank_choi_test_iff}
-    For a pure state $\ket{\psi}\bra{\psi}$ with $\operatorname{SR}(\psi)\le n$ and
+    For a pure state $\ket{\psi}\bra{\psi}$ on the square bipartite system
+    $\MN{D}\otimes\MN{D}$ with $\operatorname{SR}(\psi)\le n$ and
     $1\le n<D$, applying $T_n$ to the first factor keeps the result positive
     semidefinite:
     \[
@@ -2067,7 +2068,8 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
     \leanok
     \uses{def:has_schmidt_number_le, def:t_eta, def:tensor_map_id,
         thm:tensor_map_id_sum, thm:tensor_map_id_t_eta_posSemidef_pure}
-    For $1\le n<D$, a bipartite state of Schmidt number at most $n$ satisfies
+    For $1\le n<D$, a bipartite state on the square system $\MN{D}\otimes\MN{D}$ of
+    Schmidt number at most $n$ satisfies
     \[
         (T_n\otimes\id)(\rho)\ge 0.
     \]
@@ -2088,7 +2090,8 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
     \leanok
     \uses{def:has_schmidt_number_le, def:t_eta,
         thm:has_schmidt_number_le_tensor_map_id_t_eta, thm:reduction_criterion}
-    For $1\le n<D$, a bipartite state of Schmidt number at most $n$ satisfies the
+    For $1\le n<D$, a bipartite state on the square system $\MN{D}\otimes\MN{D}$ of
+    Schmidt number at most $n$ satisfies the
     reduction criterion
     \[
         n\,\rho_1\otimes\Id\ge\rho
