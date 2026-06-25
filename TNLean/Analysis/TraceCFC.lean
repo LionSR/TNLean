@@ -27,8 +27,8 @@ namespace IsHermitian
 
 variable {n 𝕜 : Type*} [RCLike 𝕜] [Fintype n] [DecidableEq n]
 
-/-- The spectral form of a Hermitian matrix as a literal product
-`U * diagonal (↑eigenvalues) * star U`, where `U` is the eigenvector unitary. -/
+/-- The spectral form of a Hermitian matrix, $A = U\,\operatorname{diag}(\lambda_i)\,U^{*}$,
+where $U$ is the eigenvector unitary and the $\lambda_i$ are the eigenvalues of $A$. -/
 theorem spectral_form {A : Matrix n n ℂ} (hA : A.IsHermitian) :
     A = (hA.eigenvectorUnitary : Matrix n n ℂ)
         * Matrix.diagonal (fun i => ((hA.eigenvalues i : ℝ) : ℂ))
@@ -37,8 +37,8 @@ theorem spectral_form {A : Matrix n n ℂ} (hA : A.IsHermitian) :
   rw [Unitary.conjStarAlgAut_apply] at h
   exact h
 
-/-- The Hermitian functional calculus `hA.cfc f` as a literal product
-`U * diagonal (↑(f ∘ eigenvalues)) * star U`. -/
+/-- The Hermitian functional calculus in spectral form,
+$f(A) = U\,\operatorname{diag}(f(\lambda_i))\,U^{*}$, where $U$ is the eigenvector unitary. -/
 theorem cfc_form {A : Matrix n n ℂ} (hA : A.IsHermitian) (f : ℝ → ℝ) :
     hA.cfc f = (hA.eigenvectorUnitary : Matrix n n ℂ)
         * Matrix.diagonal (fun i => ((f (hA.eigenvalues i) : ℝ) : ℂ))
