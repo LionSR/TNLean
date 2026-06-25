@@ -534,13 +534,35 @@ finite-dimensional quantum systems.
     (\mathbf 1_C / d_C)$.
 \end{proof}
 
+\begin{lemma}[Reindexing invariance of the quantum relative entropy]
+    \label{lem:relative_entropy_submatrix_equiv}
+    \lean{Matrix.quantumRelativeEntropy_submatrix_equiv}
+    \leanok
+    \uses{def:quantum_relative_entropy}
+    For Hermitian matrices $\rho, \sigma$ on a finite index set and any bijection
+    $e$ from that set onto another finite set,
+    \[
+        D(\rho_{e^{-1},e^{-1}} \,\Vert\, \sigma_{e^{-1},e^{-1}}) = D(\rho \,\Vert\, \sigma).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:quantum_relative_entropy}
+    Write $D(\rho \,\Vert\, \sigma) = \tr\bigl(\rho(\log\rho - \log\sigma)\bigr)$.
+    The matrix logarithm is covariant under reindexing, $\log(\rho_{e^{-1},e^{-1}})
+    = (\log\rho)_{e^{-1},e^{-1}}$, because reindexing is a star-algebra
+    isomorphism and so commutes with the continuous functional calculus; the trace
+    is invariant under reindexing. Hence every factor of the trace expression is
+    relabelled by $e$ without changing its value.
+\end{proof}
+
 \begin{theorem}[Data-processing inequality under the partial trace]
     \label{thm:relative_entropy_data_processing}
     \lean{Matrix.quantumRelativeEntropy_partialTraceRight_le}
     \leanok
     \uses{def:quantum_relative_entropy, thm:relative_entropy_ancilla_additivity,
         thm:relative_entropy_unitary_invariance, thm:relative_entropy_joint_convexity,
-        lem:twirl_partial_trace}
+        lem:relative_entropy_submatrix_equiv, lem:twirl_partial_trace}
     For positive definite matrices $\rho, \sigma$ on a tensor product of a system
     factor and an ancilla factor,
     \[
