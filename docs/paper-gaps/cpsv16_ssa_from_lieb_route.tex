@@ -298,8 +298,20 @@ in place. Concretely:
     (\leanid{Matrix.PosSemidef.proj_mul_eq_zero_of_trace_eq_zero}) --- and the
     partial-trace adjoint identity it uses
     (\leanid{Matrix.traceA_ABC_lift_trace}) are independent of Lieb concavity.
-    These three results depend only on the standard Lean axioms; the remaining
-    layer-(6) work is the instantiation, which is gated on layer (5).
+    These three results depend only on the standard Lean axioms. On the
+    positive-definite domain the instantiation is now formalized:
+    \leanid{strong_subadditivity_posDef} in
+    \doclink{TNLean/Channel/Schwarz/StrongSubadditivityPosDef}
+    (\path{TNLean/Channel/Schwarz/StrongSubadditivityPosDef.lean}) proves the
+    inequality~\eqref{eq:ssa} for a positive definite $\rho_{ABC}$. There the
+    reference state $(\mathbf 1_A/d_A)\otimes\rho_{BC}$ is itself positive
+    definite, so the marginal support lemma is not invoked and the layer-(2)
+    domain condition holds outright; the relative entropy of each pair evaluates
+    to the displayed entropy difference through the tensor logarithm split and the
+    partial-trace adjoint, and layer (5) data processing between the two pairs
+    yields~\eqref{eq:ssa}. The marginal support lemma is the prerequisite of the
+    singular-reference extension of this instantiation to the general
+    density-matrix domain, which remains open.
 \end{itemize}
 
 \paragraph{Current formal status.} Layers (1)--(5) and the layer-(6) marginal
@@ -317,11 +329,18 @@ ancilla-factor lift presenting $\tr_C$ through the twirl
 (\leanid{Matrix.sum_kronecker_one_weyl_conj}) are formalized, and combine into the
 partial-trace monotonicity
 \leanid{quantumRelativeEntropy_partialTraceRight_le} on the positive-definite
-domain. Only the layer-(6) instantiation remains; until it is in place the
-standalone axiom \leanid{strong_subadditivity} stands.
+domain. The layer-(6) instantiation is now formalized on the positive-definite
+domain (\leanid{strong_subadditivity_posDef}): for a positive definite
+$\rho_{ABC}$ the inequality~\eqref{eq:ssa} is a theorem whose only entropy-side
+axiom is the Lieb-concavity axiom. The standalone axiom
+\leanid{strong_subadditivity} stands for the general density-matrix domain,
+because the positive-definite version is a strictly stronger hypothesis and does
+not discharge the unrestricted axiom; closing that gap needs the
+singular-reference extension of layers (3)--(5) and of the instantiation.
 
-After layer (6) the inequality is a theorem, the standalone axiom is removed, and
-the only remaining entropy-side axiom on this route is the Lieb-concavity axiom.
+After the singular-reference extension the inequality is a theorem on the full
+density-matrix domain, the standalone axiom is removed, and the only remaining
+entropy-side axiom on this route is the Lieb-concavity axiom.
 The downstream consumers in the stable entropy interface
 \footnote{The stable interface re-exports the inequality from
 \doclink{TNLean/Entropy/StrongSubadditivity}; consumers import it from there and
@@ -347,10 +366,16 @@ invariance (\leanid{quantumRelativeEntropy_conj_unitary}), ancilla additivity
 twirl (\leanid{Matrix.sum_weyl_conj}), and the ancilla-factor lift presenting
 $\tr_C$ through the twirl (\leanid{Matrix.sum_kronecker_one_weyl_conj}) combine
 through joint convexity into the partial-trace monotonicity
-$D(\tr_C\rho\,\|\,\tr_C\sigma)\le D(\rho\,\|\,\sigma)$. The remaining work is the
-singular-$\sigma$ extension of layers (3)--(5) and the instantiation layer (6);
-until those are formalized, the standalone axiom records a result the development
-assumes but does not yet derive from its operator-convexity input.
+$D(\tr_C\rho\,\|\,\tr_C\sigma)\le D(\rho\,\|\,\sigma)$. The layer-(6)
+instantiation is formalized on the positive-definite domain
+(\leanid{strong_subadditivity_posDef}): for a positive definite $\rho_{ABC}$ the
+inequality follows from data processing alone, with the positive-definite
+reference state $(\mathbf 1_A/d_A)\otimes\rho_{BC}$ sidestepping the marginal
+support lemma. The remaining work is the singular-$\sigma$ extension of layers
+(3)--(5) and of the instantiation, which lifts the result from positive definite
+$\rho_{ABC}$ to a general density matrix; until that is formalized, the standalone
+axiom records the unrestricted statement that the development assumes but does not
+yet derive from its operator-convexity input.
 
 \begin{thebibliography}{9}
 
