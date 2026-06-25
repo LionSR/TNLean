@@ -549,11 +549,17 @@ finite-dimensional quantum systems.
 \begin{proof}\leanok
     \uses{def:quantum_relative_entropy}
     Write $D(\rho \,\Vert\, \sigma) = \tr\bigl(\rho(\log\rho - \log\sigma)\bigr)$.
-    The matrix logarithm is covariant under reindexing, $\log(\rho_{e^{-1},e^{-1}})
-    = (\log\rho)_{e^{-1},e^{-1}}$, because reindexing is a star-algebra
-    isomorphism and so commutes with the continuous functional calculus; the trace
-    is invariant under reindexing. Hence every factor of the trace expression is
-    relabelled by $e$ without changing its value.
+    The matrix logarithm is covariant under reindexing,
+    $\log(\rho_{e^{-1},e^{-1}}) = (\log\rho)_{e^{-1},e^{-1}}$, because reindexing is a
+    star-algebra isomorphism and so commutes with the continuous functional calculus.
+    The same isomorphism preserves products and the trace,
+    \[
+        (\rho\,M)_{e^{-1},e^{-1}} = \rho_{e^{-1},e^{-1}}\,M_{e^{-1},e^{-1}},
+        \qquad
+        \tr\bigl(M_{e^{-1},e^{-1}}\bigr) = \tr(M).
+    \]
+    Taking $M = \log\rho - \log\sigma$ and applying these three identities gives
+    $D(\rho_{e^{-1},e^{-1}} \,\Vert\, \sigma_{e^{-1},e^{-1}}) = D(\rho \,\Vert\, \sigma)$.
 \end{proof}
 
 \begin{theorem}[Data-processing inequality under the partial trace]
