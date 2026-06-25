@@ -47,13 +47,20 @@ theorem eventually_linearIndependent_of_gram_tendsto_nondegenerate
     (Matrix.det_gram_ne_zero_iff_linearIndependent (𝕜 := ℂ) (v := fun i => v i N)).mp hN
 
 /--
-**Lem1 (arXiv:1606.00608 / arXiv:1708.00029)**: eventual linear independence from
-Gram-matrix convergence to the identity.
+**Convergence form of the eventual-independence criterion**, the limit form in
+which Lemma `Lem1` of arXiv:1606.00608 / arXiv:1708.00029 is applied: eventual
+linear independence from Gram-matrix convergence to the identity.
 
 Special case of `eventually_linearIndependent_of_gram_tendsto_nondegenerate`
 where the limit matrix is the identity. For a finite family of vectors
 `v i N` in a complex inner product space, if `⟪v i N, v j N⟫_ℂ → δ_{ij}`,
 then for `N` large enough the vectors are linearly independent.
+
+The source `Lem1` (arXiv:1708.00029, `Lem1`/`Lem1t`) is the uniform-`ε` statement:
+given `g`, a single `ε > 0` makes any `g` vectors with `|⟪wᵢ, wⱼ⟫| ≤ ε` (`i ≠ j`)
+and `|⟪wᵢ, wᵢ⟫| ≥ 1 − ε` linearly independent for every `m ≥ g`. This declaration
+is the convergence corollary in which that lemma is used, not the uniform-`ε`
+statement itself.
 -/
 theorem eventually_linearIndependent_of_gram_tendsto_id
     {ι : Type*} [Finite ι] [DecidableEq ι]
