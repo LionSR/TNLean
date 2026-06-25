@@ -27,6 +27,25 @@ namespace IsHermitian
 
 variable {n 𝕜 : Type*} [RCLike 𝕜] [Fintype n] [DecidableEq n]
 
+/-- The spectral form of a Hermitian matrix as a literal product
+`U * diagonal (↑eigenvalues) * star U`, where `U` is the eigenvector unitary. -/
+theorem spectral_form {A : Matrix n n ℂ} (hA : A.IsHermitian) :
+    A = (hA.eigenvectorUnitary : Matrix n n ℂ)
+        * Matrix.diagonal (fun i => ((hA.eigenvalues i : ℝ) : ℂ))
+        * star (hA.eigenvectorUnitary : Matrix n n ℂ) := by
+  have h := hA.spectral_theorem
+  rw [Unitary.conjStarAlgAut_apply] at h
+  exact h
+
+/-- The Hermitian functional calculus `hA.cfc f` as a literal product
+`U * diagonal (↑(f ∘ eigenvalues)) * star U`. -/
+theorem cfc_form {A : Matrix n n ℂ} (hA : A.IsHermitian) (f : ℝ → ℝ) :
+    hA.cfc f = (hA.eigenvectorUnitary : Matrix n n ℂ)
+        * Matrix.diagonal (fun i => ((f (hA.eigenvalues i) : ℝ) : ℂ))
+        * star (hA.eigenvectorUnitary : Matrix n n ℂ) := by
+  rw [Matrix.IsHermitian.cfc, Unitary.conjStarAlgAut_apply]
+  rfl
+
 /-- The Hermitian functional calculus is multiplicative: `cfc (f · g) = cfc f · cfc g`.
 On a Hermitian matrix the calculus is realized by simultaneous diagonalization, so
 this holds for arbitrary `f, g` (no continuity hypothesis is needed because the
