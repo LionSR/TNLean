@@ -153,7 +153,7 @@ theorem PosSemidef.proj_mul_eq_zero_of_trace_eq_zero {ρ Q : Matrix n n ℂ}
 
 end Core
 
-/-! ## Partial trace over the retained factor and its adjoint -/
+/-! ## Partial trace over the first factor and its adjoint -/
 
 section RetainedFactor
 
