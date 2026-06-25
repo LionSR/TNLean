@@ -79,13 +79,7 @@ Wolf eq. (3.18) with its Schmidt-number premise.
 `n`-positivity threshold of `T_η` (Wolf eq. (3.11)), which is formalized for
 `1 ≤ n < D` where `D` is the first-factor dimension; the omitted top index `n = D`
 (complete positivity) is inherited through the maximal-overlap principle and is
-documented in `docs/paper-gaps/wolf_t_eta_top_index_scope.tex`.
-
-**Scope restriction (square system d = d' = D):** the forward reduction step fixes
-both tensor factors to a common dimension `D`, because the pure state is parametrized
-through the square maximally entangled vector; Wolf states eq. (3.18) for a general
-bipartite system `ℂ^d ⊗ ℂ^{d'}`, and the non-square case is documented in
-`docs/paper-gaps/wolf_reduction_criterion_schmidt_premise.tex`.  The Schmidt-number
+documented in `docs/paper-gaps/wolf_t_eta_top_index_scope.tex`.  The Schmidt-number
 predicate itself and its equivalence with separability carry no such restriction.
 
 ## References
@@ -260,9 +254,6 @@ theorem tensorMapId_eq_nPositiveAmpliation
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (X : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) :
     tensorMapId T X = nPositiveAmpliation D T X := by
-  -- Both sides unfold to `T` applied entrywise to the second tensor block while the
-  -- first block index is carried through, so the two ampliations are definitionally
-  -- the same matrix and the equality holds by `rfl`.
   rfl
 
 /-- A sharper Schmidt-rank bound for the pull-back through the adjoint right tensor
@@ -295,14 +286,7 @@ the `n`-positivity of `T_n` (Wolf eq. (3.11)) makes that form nonnegative.
 **Scope restriction (1 ≤ n < D):** the `n`-positivity threshold of `T_η` is
 formalized for `1 ≤ n < D`.  The omitted top index `n = D` (complete positivity) is
 inherited through the maximal-overlap principle and documented in
-`docs/paper-gaps/wolf_t_eta_top_index_scope.tex`.
-
-**Scope restriction (square system d = d' = D):** both tensor factors are fixed to a
-common dimension `D`, because the pure state is parametrized through the square
-maximally entangled vector (`ChoiJamiolkowski.exists_squareCompression_of_vector`).
-Wolf states the criterion for a general bipartite system `ℂ^d ⊗ ℂ^{d'}`; the
-non-square case is documented in
-`docs/paper-gaps/wolf_reduction_criterion_schmidt_premise.tex`. -/
+`docs/paper-gaps/wolf_t_eta_top_index_scope.tex`. -/
 theorem tensorMapId_tEta_posSemidef_of_hasSchmidtRankLE [NeZero D] {n : ℕ}
     (hn1 : 1 ≤ n) (hnD : n < D) {ψ : Fin D × Fin D → ℂ} (hψ : HasSchmidtRankLE n ψ) :
     (tensorMapId (tEta D (n : ℝ)) (vecMulVec ψ (star ψ))).PosSemidef := by
@@ -339,9 +323,8 @@ The state is a finite sum of pure-state projectors of Schmidt rank at most `n`; 
 ampliation is linear, the pure-state step makes each summand positive semidefinite,
 and a finite sum of positive semidefinite matrices is positive semidefinite.
 
-**Scope restriction (1 ≤ n < D; square system d = d' = D):** inherited from the
-pure-state step; see `docs/paper-gaps/wolf_t_eta_top_index_scope.tex` and
-`docs/paper-gaps/wolf_reduction_criterion_schmidt_premise.tex`. -/
+**Scope restriction (1 ≤ n < D):** inherited from the pure-state step; see
+`docs/paper-gaps/wolf_t_eta_top_index_scope.tex`. -/
 theorem HasSchmidtNumberLE.tensorMapId_tEta_posSemidef [NeZero D] {n : ℕ}
     (hn1 : 1 ≤ n) (hnD : n < D)
     {ρ : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ} (hρ : HasSchmidtNumberLE n ρ) :
@@ -362,9 +345,8 @@ This is Wolf's full two-step argument: the Schmidt-number premise gives
 `(T_n ⊗ id)(ρ) ≥ 0` (step 1), and the operator inequality then yields the bound
 (step 2).
 
-**Scope restriction (1 ≤ n < D; square system d = d' = D):** inherited from step 1;
-see `docs/paper-gaps/wolf_t_eta_top_index_scope.tex` and
-`docs/paper-gaps/wolf_reduction_criterion_schmidt_premise.tex`. -/
+**Scope restriction (1 ≤ n < D):** inherited from step 1; see
+`docs/paper-gaps/wolf_t_eta_top_index_scope.tex`. -/
 theorem reductionCriterion_left_of_hasSchmidtNumberLE [NeZero D] {n : ℕ}
     (hn1 : 1 ≤ n) (hnD : n < D)
     {ρ : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ} (hρ : HasSchmidtNumberLE n ρ) :
@@ -381,9 +363,8 @@ most `n`, since the swap reindexes each pure summand to a vector with the transp
 coefficient matrix, of the same rank.  Applying step 1 to the swapped state supplies
 the symmetric hypothesis of the operator-implication lemma.
 
-**Scope restriction (1 ≤ n < D; square system d = d' = D):** inherited from step 1;
-see `docs/paper-gaps/wolf_t_eta_top_index_scope.tex` and
-`docs/paper-gaps/wolf_reduction_criterion_schmidt_premise.tex`. -/
+**Scope restriction (1 ≤ n < D):** inherited from step 1; see
+`docs/paper-gaps/wolf_t_eta_top_index_scope.tex`. -/
 theorem reductionCriterion_right_of_hasSchmidtNumberLE [NeZero D] {n : ℕ}
     (hn1 : 1 ≤ n) (hnD : n < D)
     {ρ : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ} (hρ : HasSchmidtNumberLE n ρ) :

@@ -50,8 +50,6 @@ positive semidefinite operators.
 * `Matrix.IsSeparable.add`: separable matrices are closed under addition.
 * `Matrix.IsSeparable.smul`: separable matrices are closed under multiplication by
   a nonnegative real scalar.
-* `Matrix.isSeparable_sum`: separable matrices are closed under arbitrary finite
-  sums.
 * `Matrix.IsSeparable.isPPT`: **the PPT criterion, forward direction** — every
   separable matrix has the positive-partial-transpose property, ρ^{T₁} ≥ 0.
 * `Matrix.IsSeparable.tensorMapId_tEta_one_posSemidef`: the reduction map at n = 1
@@ -193,6 +191,27 @@ theorem IsSeparable.isPPT {ρ : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ}
   rw [partialTransposeLeft_kronecker]
   exact PosSemidef.kronecker (posSemidef_transpose_iff.mpr (hAB i).1) (hAB i).2
 
+/-! ## Kronecker-product identities -/
+
+/-- The Kronecker product of two pure-state projectors is the pure-state projector
+of the product vector. -/
+theorem vecMulVec_kronecker_vecMulVec (a : Fin d → ℂ) (b : Fin d' → ℂ) :
+    vecMulVec a (star a) ⊗ₖ vecMulVec b (star b)
+      = vecMulVec (fun p : Fin d × Fin d' => a p.1 * b p.2)
+          (star (fun p : Fin d × Fin d' => a p.1 * b p.2)) := by
+  ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
+  simp only [kroneckerMap_apply, vecMulVec_apply, Pi.star_apply]
+  rw [star_mul']
+  ring
+
+/-- The Kronecker product distributes over a double finite sum entrywise. -/
+theorem sum_kronecker_sum {ιa ιb : Type*} [Fintype ιa] [Fintype ιb]
+    (A : ιa → Matrix (Fin d) (Fin d) ℂ) (B : ιb → Matrix (Fin d') (Fin d') ℂ) :
+    (∑ i, A i) ⊗ₖ (∑ j, B j) = ∑ i, ∑ j, A i ⊗ₖ B j := by
+  ext ⟨p₁, p₂⟩ ⟨q₁, q₂⟩
+  simp only [kroneckerMap_apply, Matrix.sum_apply, Finset.sum_mul, Finset.mul_sum]
+  rw [Finset.sum_comm]
+
 /-! ## The reduction map on a separable state (Wolf eq. (3.18) at n = 1) -/
 
 /-- Applying a map to the first factor distributes over a finite sum of bipartite
@@ -224,26 +243,5 @@ theorem IsSeparable.tensorMapId_tEta_one_posSemidef [NeZero d]
   refine posSemidef_sum Finset.univ fun i _ => ?_
   rw [tensorMapId_kronecker]
   exact PosSemidef.kronecker (hpos (A i) (hAB i).1) (hAB i).2
-
-/-! ## Kronecker-product identities -/
-
-/-- The Kronecker product of two pure-state projectors is the pure-state projector
-of the product vector, which has Schmidt rank at most one. -/
-theorem vecMulVec_kronecker_vecMulVec (a : Fin d → ℂ) (b : Fin d' → ℂ) :
-    vecMulVec a (star a) ⊗ₖ vecMulVec b (star b)
-      = vecMulVec (fun p : Fin d × Fin d' => a p.1 * b p.2)
-          (star (fun p : Fin d × Fin d' => a p.1 * b p.2)) := by
-  ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
-  simp only [kroneckerMap_apply, vecMulVec_apply, Pi.star_apply]
-  rw [star_mul']
-  ring
-
-/-- The Kronecker product distributes over a double finite sum entrywise. -/
-theorem sum_kronecker_sum {ιa ιb : Type*} [Fintype ιa] [Fintype ιb]
-    (A : ιa → Matrix (Fin d) (Fin d) ℂ) (B : ιb → Matrix (Fin d') (Fin d') ℂ) :
-    (∑ i, A i) ⊗ₖ (∑ j, B j) = ∑ i, ∑ j, A i ⊗ₖ B j := by
-  ext ⟨p₁, p₂⟩ ⟨q₁, q₂⟩
-  simp only [kroneckerMap_apply, Matrix.sum_apply, Finset.sum_mul, Finset.mul_sum]
-  rw [Finset.sum_comm]
 
 end Matrix
