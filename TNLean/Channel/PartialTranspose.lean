@@ -305,7 +305,7 @@ theorem partialTransposeLeft_unitary_basis_change
 
 /-- **Basis independence of the PPT property (Wolf eq. (3.17)).** If a bipartite
 matrix `ρ` is PPT, then the partial transpose taken in the local basis changed by
-a unitary `U` on the first factor is again positive semidefinite.  By
+any matrix `U` on the first factor is again positive semidefinite.  By
 `partialTransposeLeft_unitary_basis_change` the new-basis partial transpose is the
 similarity transform `((U Uᵀ) ⊗ 1) ρ^{T₁} ((U Uᵀ)ᴴ ⊗ 1)`, and conjugation by a
 matrix preserves positive semidefiniteness, so the positivity of the partial
