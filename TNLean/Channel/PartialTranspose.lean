@@ -303,13 +303,15 @@ theorem partialTransposeLeft_unitary_basis_change
   rw [partialTransposeLeft_basis_change U Uᴴ ρ, Matrix.conjTranspose_mul]
   rfl
 
-/-- **Basis independence of the PPT property (Wolf eq. (3.17)).** If a bipartite
-matrix `ρ` is PPT, then the partial transpose taken in the local basis changed by
-a unitary `U` on the first factor is again positive semidefinite.  By
-`partialTransposeLeft_unitary_basis_change` the new-basis partial transpose is the
-similarity transform `((U Uᵀ) ⊗ 1) ρ^{T₁} ((U Uᵀ)ᴴ ⊗ 1)`, and conjugation by a
-matrix preserves positive semidefiniteness, so the positivity of the partial
-transpose does not depend on the local basis. -/
+/-- **Conjugation invariance of the partial transpose (Wolf eq. (3.17)).** For
+*any* matrix `U` on the first factor (no invertibility or unitarity required), if a
+bipartite matrix `ρ` is PPT then
+`(U ⊗ 1) [((Uᴴ ⊗ 1) ρ (U ⊗ 1))^{T₁}] (Uᴴ ⊗ 1)` is positive semidefinite.  By
+`partialTransposeLeft_unitary_basis_change` this operator equals the conjugate
+`((U Uᵀ) ⊗ 1) ρ^{T₁} ((U Uᵀ)ᴴ ⊗ 1)`, and conjugation by a matrix preserves positive
+semidefiniteness.  Specializing to a unitary `U` gives the partial transpose taken
+in the basis changed by `U`, so the positivity of the partial transpose is
+independent of the local basis (Wolf's basis-independence statement). -/
 theorem isPPT_basis_change {U : Matrix (Fin d) (Fin d) ℂ}
     {ρ : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ} (hρ : IsPPT ρ) :
     ((U ⊗ₖ (1 : Matrix (Fin d') (Fin d') ℂ)) *
