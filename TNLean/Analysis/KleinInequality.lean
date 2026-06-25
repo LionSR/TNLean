@@ -224,13 +224,16 @@ theorem eigenvalues_pos_of_posSemidef_isUnit_det {σ : Matrix n n ℂ}
 /-! ### Singular reference states: regularization to the support condition
 
 The full-rank Klein inequality is extended to the support condition
-`ker σ ⊆ ker ρ` by regularizing `σ` to the trace-one positive definite
-perturbation `σ_ε' = (1 + ε·N)⁻¹ (σ + ε•1)` and passing to the limit `ε → 0⁺`.
-The regularization shares `σ`'s eigenbasis, so the matrix limit reduces to scalar
-logarithm limits; this avoids any eigenvalue-continuity input. -/
+\(\ker\sigma \subseteq \ker\rho\) by regularizing \(\sigma\) to the trace-one
+positive definite perturbation
+\(\sigma_\varepsilon' = (1 + \varepsilon N)^{-1}(\sigma + \varepsilon\mathbf 1)\)
+and passing to the limit \(\varepsilon \to 0^+\). The regularization shares
+\(\sigma\)'s eigenbasis, so the matrix limit reduces to scalar logarithm limits;
+this avoids any eigenvalue-continuity input. -/
 
-/-- Single-sum diagonal form of `tr(ρ · hσ.cfc f)` in the eigenbasis of `σ`: the
-weights are the diagonal entries of `Uσᴴ ρ Uσ`. -/
+/-- Single-sum diagonal form of \(\operatorname{tr}(\rho\, f(\sigma))\) in the
+eigenbasis of \(\sigma\): the weights are the diagonal entries of
+\(U_\sigma^\dagger \rho\, U_\sigma\). -/
 theorem trace_mul_cfc_eq_diag_sum {ρ σ : Matrix n n ℂ}
     (hσ : σ.IsHermitian) (f : ℝ → ℝ) :
     Matrix.trace (ρ * hσ.cfc f)
@@ -254,8 +257,10 @@ theorem trace_mul_cfc_eq_diag_sum {ρ σ : Matrix n n ℂ}
   simp only [hdm, Matrix.diagonal_apply, mul_ite, mul_zero, Finset.sum_ite_eq']
   simp
 
-/-- Real part of the diagonal-sum form: `Re tr(ρ · hσ.cfc f)` is the real sum of
-the diagonal weights `(Uσᴴ ρ Uσ)_jj.re` against `f` of the eigenvalues. -/
+/-- Real part of the diagonal-sum form:
+\(\operatorname{Re}\operatorname{tr}(\rho\, f(\sigma))\) is the real sum of the
+diagonal weights \(\operatorname{Re}(U_\sigma^\dagger \rho\, U_\sigma)_{jj}\)
+against \(f\) of the eigenvalues. -/
 theorem re_trace_mul_cfc_eq_diag_sum {ρ σ : Matrix n n ℂ}
     (hσ : σ.IsHermitian) (f : ℝ → ℝ) :
     (Matrix.trace (ρ * hσ.cfc f)).re
@@ -267,10 +272,11 @@ theorem re_trace_mul_cfc_eq_diag_sum {ρ σ : Matrix n n ℂ}
   rw [mul_comm ((star (hσ.eigenvectorUnitary : Matrix n n ℂ) * ρ
         * (hσ.eigenvectorUnitary : Matrix n n ℂ)) j j), Complex.re_ofReal_mul, mul_comm]
 
-/-- A diagonal weight `(Uσᴴ ρ Uσ)_jj` vanishes when `ρ` annihilates the `j`-th
-eigenvector of `σ`. This is the load-bearing consequence of the support condition:
-the diagonal weight at a zero eigenvalue of `σ` is the quadratic form of `ρ` on the
-corresponding eigenvector, which lies in `ker ρ`. -/
+/-- A diagonal weight \((U_\sigma^\dagger \rho\, U_\sigma)_{jj}\) vanishes when
+\(\rho\) annihilates the \(j\)-th eigenvector of \(\sigma\). This is the
+load-bearing consequence of the support condition: the diagonal weight at a zero
+eigenvalue of \(\sigma\) is the quadratic form of \(\rho\) on the corresponding
+eigenvector, which lies in \(\ker\rho\). -/
 theorem diag_weight_eq_zero_of_kernel {ρ σ : Matrix n n ℂ}
     (hσ : σ.IsHermitian) (j : n)
     (hker : ρ *ᵥ ⇑(hσ.eigenvectorBasis j) = 0) :
@@ -290,11 +296,12 @@ theorem diag_weight_eq_zero_of_kernel {ρ σ : Matrix n n ℂ}
   simp
 
 open scoped Matrix.Norms.L2Operator in
-/-- Shared-eigenbasis logarithm of a positive scaling of `σ + ε•1`:
-`log(c • (σ + ε•1))` is the functional calculus of `x ↦ log(c (x + ε))` applied to
-`σ`, using `σ`'s own eigenbasis. The scaling `c > 0` and shift `ε > 0` keep the
-argument of the logarithm strictly positive on the (nonnegative) spectrum of the
-positive semidefinite `σ`, so the composition is continuous on the spectrum. -/
+/-- Shared-eigenbasis logarithm of a positive scaling of \(\sigma + \varepsilon\mathbf 1\):
+\(\log(c(\sigma + \varepsilon\mathbf 1))\) is the functional calculus of
+\(x \mapsto \log(c(x + \varepsilon))\) applied to \(\sigma\), using \(\sigma\)'s own
+eigenbasis. The scaling \(c > 0\) and shift \(\varepsilon > 0\) keep the argument of
+the logarithm strictly positive on the (nonnegative) spectrum of the positive
+semidefinite \(\sigma\), so the composition is continuous on the spectrum. -/
 theorem cfc_log_smul_add_smul_one {σ : Matrix n n ℂ} (hσ : σ.PosSemidef)
     {ε c : ℝ} (hε : 0 < ε) (hc : 0 < c) :
     CFC.log (c • (σ + ε • (1 : Matrix n n ℂ)))
@@ -322,19 +329,24 @@ theorem cfc_log_smul_add_smul_one {σ : Matrix n n ℂ} (hσ : σ.PosSemidef)
 
 open scoped Matrix.Norms.L2Operator in
 /-- **Trace-log limit under support-respecting regularization.** For a positive
-semidefinite `σ` and a `ρ` with `ker σ ⊆ ker ρ`, the cross term
-`Re tr(ρ · log(σ_ε'))` of the trace-normalized regularization
-`σ_ε' = (1 + ε·N)⁻¹ (σ + ε•1)` converges to `Re tr(ρ · log σ)` as `ε → 0⁺`.
+semidefinite \(\sigma\) and a \(\rho\) with \(\ker\sigma \subseteq \ker\rho\), the
+cross term \(\operatorname{Re}\operatorname{tr}(\rho\log\sigma_\varepsilon')\) of the
+trace-normalized regularization
+\(\sigma_\varepsilon' = (1 + \varepsilon N)^{-1}(\sigma + \varepsilon\mathbf 1)\)
+converges to \(\operatorname{Re}\operatorname{tr}(\rho\log\sigma)\) as
+\(\varepsilon \to 0^+\).
 
-In `σ`'s eigenbasis each summand is the diagonal weight `(Uσᴴ ρ Uσ)_jj.re` times
-`log` of the (scaled, shifted) eigenvalue. Eigenvalues `qⱼ > 0` give the scalar
-limit `log((1+ε·N)⁻¹(qⱼ+ε)) → log qⱼ`; the support condition forces the weight to
-vanish on the zero eigenvalues (`σ`-eigenvectors there lie in `ker ρ`), so those
-summands are identically zero. No eigenvalue-continuity input is needed: the
-regularization shares `σ`'s eigenbasis, reducing the matrix limit to scalar limits.
+In \(\sigma\)'s eigenbasis each summand is the diagonal weight
+\(\operatorname{Re}(U_\sigma^\dagger \rho\, U_\sigma)_{jj}\) times \(\log\) of the
+(scaled, shifted) eigenvalue. Eigenvalues \(q_j > 0\) give the scalar limit
+\(\log((1+\varepsilon N)^{-1}(q_j+\varepsilon)) \to \log q_j\); the support condition
+forces the weight to vanish on the zero eigenvalues (the \(\sigma\)-eigenvectors there
+lie in \(\ker\rho\)), so those summands are identically zero. No eigenvalue-continuity
+input is needed: the regularization shares \(\sigma\)'s eigenbasis, reducing the matrix
+limit to scalar limits.
 
-This limit lemma is reused for the singular-`σ` extension of the joint convexity of
-the relative entropy. -/
+This limit lemma is reused for the singular-\(\sigma\) extension of the joint convexity
+of the relative entropy. -/
 theorem tendsto_re_trace_mul_log_perturb {ρ σ : Matrix n n ℂ}
     (hσ : σ.PosSemidef)
     (hsupp : ∀ v : n → ℂ, σ.mulVec v = 0 → ρ.mulVec v = 0) :
@@ -403,16 +415,17 @@ end TNLean.Klein
 open TNLean.Klein in
 open scoped Matrix.Norms.L2Operator in
 /-- **Klein's inequality.** The quantum relative entropy of two density matrices
-is nonnegative: `D(ρ‖σ) = Re tr(ρ(log ρ − log σ)) ≥ 0`.
+is nonnegative:
+\(D(\rho\|\sigma) = \operatorname{Re}\operatorname{tr}(\rho(\log\rho - \log\sigma)) \ge 0\).
 
-Here `ρ` and `σ` are density matrices — positive semidefinite, trace one — and
-`σ` is assumed of full rank (`IsUnit σ.det`), the standard support condition
-making `log σ` finite on the range of `ρ`.
+Here \(\rho\) and \(\sigma\) are density matrices, positive semidefinite and trace
+one, and \(\sigma\) is assumed of full rank (`IsUnit σ.det`), the standard support
+condition making \(\log\sigma\) finite on the range of \(\rho\).
 
 This is the full-rank base case; the general support form
-`quantumRelativeEntropy_nonneg_general` (only `ker σ ⊆ ker ρ`) is derived from it
-by regularizing the reference state and passing to the limit, so this lemma keeps
-its standalone eigenbasis/Gibbs proof.
+`quantumRelativeEntropy_nonneg_general` (only \(\ker\sigma \subseteq \ker\rho\)) is
+derived from it by regularizing the reference state and passing to the limit, so this
+lemma keeps its standalone eigenbasis/Gibbs proof.
 
 Source: Klein's inequality; layer 3 of the relative-entropy elimination route
 for strong subadditivity, `docs/paper-gaps/cpsv16_ssa_from_lieb_route.tex`;
