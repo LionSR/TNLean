@@ -45,8 +45,9 @@ If two periodic tensors (same bond dimension) are gauge-phase equivalent,
 they must have the same period.
 
 arXiv:0909.5347, via eigenvalue uniqueness (Wolf Theorem 6.3). This is the
-load-bearing step of the different-period decay route substitution documented in
-`docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`. -/
+load-bearing step of the substitute proof route for different-period decay — the
+peripheral spectrum in place of the paper's lcm-blocking and one-site translation
+argument — documented in docs/paper-gaps/1708_periodic_overlap_route_alignment.tex. -/
 private theorem period_eq_of_gaugePhaseEquiv_of_isPeriodic
     [NeZero D] {A B : MPSTensor d D}
     {m_a m_b : ℕ} (hA : IsPeriodic m_a A) (hB : IsPeriodic m_b B)
