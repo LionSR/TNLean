@@ -15,39 +15,40 @@ import TNLean.Analysis.TraceCFC
 
 This file proves **Klein's inequality**: the quantum relative entropy of two
 density matrices is nonnegative,
-`D(ρ‖σ) = Re tr(ρ(log ρ − log σ)) ≥ 0`.
+\(D(\rho\|\sigma) = \operatorname{Re}\operatorname{tr}(\rho(\log\rho - \log\sigma)) \ge 0\).
 
 ## Main results
 
-* `quantumRelativeEntropy_nonneg_general`: for density matrices `ρ`, `σ`
-  (positive semidefinite, trace one) with the support condition `ker σ ⊆ ker ρ`,
-  `0 ≤ D(ρ‖σ)`. This is the source-faithful Klein inequality.
+* `quantumRelativeEntropy_nonneg_general`: for density matrices \(\rho\),
+  \(\sigma\) (positive semidefinite, trace one) with the support condition
+  \(\ker\sigma \subseteq \ker\rho\), \(0 \le D(\rho\|\sigma)\). This is the
+  source-faithful Klein inequality.
 * `quantumRelativeEntropy_nonneg`: the full-rank corollary (`IsUnit σ.det`).
 
 ## Proof outline
 
-The full-support case is direct. Write `ρ = ∑ᵢ pᵢ |eᵢ⟩⟨eᵢ|` and
-`σ = ∑ⱼ qⱼ |fⱼ⟩⟨fⱼ|` in their eigenbases. The overlap numbers
-`Pᵢⱼ = |⟨eᵢ|fⱼ⟩|²` form a doubly stochastic matrix, since the two eigenbases are
-orthonormal. A trace computation gives `Re tr(ρ log ρ) = ∑ᵢ pᵢ log pᵢ` and
-`Re tr(ρ log σ) = ∑ᵢⱼ pᵢ Pᵢⱼ log qⱼ`, so
+The full-support case is direct. Write \(\rho = \sum_i p_i |e_i\rangle\langle e_i|\)
+and \(\sigma = \sum_j q_j |f_j\rangle\langle f_j|\) in their eigenbases. The overlap
+numbers \(P_{ij} = |\langle e_i|f_j\rangle|^2\) form a doubly stochastic matrix,
+since the two eigenbases are orthonormal. A trace computation gives
+\(\operatorname{Re}\operatorname{tr}(\rho\log\rho) = \sum_i p_i\log p_i\) and
+\(\operatorname{Re}\operatorname{tr}(\rho\log\sigma) = \sum_{ij} p_i P_{ij}\log q_j\), so
+\[D(\rho\|\sigma) = \sum_i p_i\log p_i - \sum_{ij} p_i P_{ij}\log q_j.\]
+The row sums \(\sum_j P_{ij} = 1\) let the first sum be written over the index pair,
+and the resulting expression \(\sum_{ij} p_i P_{ij}(\log p_i - \log q_j)\) is bounded
+below using the scalar tangent inequality \(\log x \le x - 1\) together with the
+doubly stochastic row and column sums and the trace-one normalizations of \(p\) and
+\(q\). This avoids the matrix Jensen / operator-convexity machinery entirely: the
+only analytic input is `Real.log_le_sub_one_of_pos`.
 
-  `D(ρ‖σ) = ∑ᵢ pᵢ log pᵢ − ∑ᵢⱼ pᵢ Pᵢⱼ log qⱼ`.
-
-The row sums `∑ⱼ Pᵢⱼ = 1` let the first sum be written over the index pair, and
-the resulting expression `∑ᵢⱼ pᵢ Pᵢⱼ (log pᵢ − log qⱼ)` is bounded below using
-the scalar tangent inequality `log x ≤ x − 1` together with the doubly
-stochastic row and column sums and the trace-one normalizations of `p` and `q`.
-This avoids the matrix Jensen / operator-convexity machinery entirely: the only
-analytic input is `Real.log_le_sub_one_of_pos`.
-
-The general support case is obtained by regularization. The trace-one
-perturbation `σ_ε' = (1 + ε·N)⁻¹ (σ + ε•1)` is positive definite for `ε > 0`,
-hence of full rank, so the full-rank case gives `0 ≤ D(ρ‖σ_ε')`. As `ε → 0⁺`,
-`D(ρ‖σ_ε') → D(ρ‖σ)`: the regularization shares `σ`'s eigenbasis, so the matrix
-limit reduces to scalar logarithm limits on the positive eigenvalues, while the
-support condition forces the diagonal weights on the zero eigenvalues to vanish.
-No eigenvalue-continuity input is needed.
+The general support case is obtained by regularization. The trace-one perturbation
+\(\sigma_\varepsilon' = (1 + \varepsilon N)^{-1}(\sigma + \varepsilon\mathbf 1)\) is
+positive definite for \(\varepsilon > 0\), hence of full rank, so the full-rank case
+gives \(0 \le D(\rho\|\sigma_\varepsilon')\). As \(\varepsilon \to 0^+\),
+\(D(\rho\|\sigma_\varepsilon') \to D(\rho\|\sigma)\): the regularization shares
+\(\sigma\)'s eigenbasis, so the matrix limit reduces to scalar logarithm limits on
+the positive eigenvalues, while the support condition forces the diagonal weights on
+the zero eigenvalues to vanish. No eigenvalue-continuity input is needed.
 
 ## References
 
@@ -502,20 +503,23 @@ open TNLean.Klein in
 open scoped Matrix.Norms.L2Operator in
 /-- **Klein's inequality, support form.** The quantum relative entropy of two
 density matrices is nonnegative under the kernel-inclusion condition
-`ker σ ⊆ ker ρ`: `D(ρ‖σ) = Re tr(ρ(log ρ − log σ)) ≥ 0`.
+\(\ker\sigma \subseteq \ker\rho\):
+\(D(\rho\|\sigma) = \operatorname{Re}\operatorname{tr}(\rho(\log\rho - \log\sigma)) \ge 0\).
 
 This is the source-faithful Klein inequality. The full-rank hypothesis
 `IsUnit σ.det` of `quantumRelativeEntropy_nonneg` is replaced by the support
-condition that every vector annihilated by `σ` is annihilated by `ρ`, the natural
-assumption making `log σ` finite on the range of `ρ`.
+condition that every vector annihilated by \(\sigma\) is annihilated by \(\rho\),
+the natural assumption making \(\log\sigma\) finite on the range of \(\rho\).
 
-The proof regularizes `σ` by the trace-one perturbation
-`σ_ε' = (1 + ε·N)⁻¹ (σ + ε•1)`, which is positive definite for `ε > 0`, hence of
-full rank; `quantumRelativeEntropy_nonneg` gives `0 ≤ D(ρ‖σ_ε')`. As `ε → 0⁺`,
-`D(ρ‖σ_ε') → D(ρ‖σ)`: the regularization shares `σ`'s eigenbasis, so the limit
-reduces to scalar logarithm limits on the positive eigenvalues, while the support
-condition kills the diagonal weights on the zero eigenvalues
-(`tendsto_re_trace_mul_log_perturb`). The inequality passes to the limit.
+The proof regularizes \(\sigma\) by the trace-one perturbation
+\(\sigma_\varepsilon' = (1 + \varepsilon N)^{-1}(\sigma + \varepsilon\mathbf 1)\),
+which is positive definite for \(\varepsilon > 0\), hence of full rank;
+`quantumRelativeEntropy_nonneg` gives \(0 \le D(\rho\|\sigma_\varepsilon')\). As
+\(\varepsilon \to 0^+\), \(D(\rho\|\sigma_\varepsilon') \to D(\rho\|\sigma)\): the
+regularization shares \(\sigma\)'s eigenbasis, so the limit reduces to scalar
+logarithm limits on the positive eigenvalues, while the support condition kills the
+diagonal weights on the zero eigenvalues (`tendsto_re_trace_mul_log_perturb`). The
+inequality passes to the limit.
 
 Source: Klein's inequality; see e.g. [M. Wolf, *Quantum Channels & Operations:
 Guided Tour*, Chapter 8 (Distance Measures)][Wolf2012QChannels]; layer 3 of the
