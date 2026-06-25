@@ -2064,6 +2064,61 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
     nonnegative, so the compression is positive semidefinite.
 \end{proof}
 
+\begin{theorem}[Pure-state step for a general positive map]
+    \label{thm:tensor_map_id_posSemidef_pure}
+    \lean{Matrix.tensorMapId_posSemidef_of_hasSchmidtRankLE}
+    \leanok
+    \uses{def:schmidt_rank, def:tensor_map_id, def:k_positive_map,
+        def:choi_right_compression, thm:square_schmidt_rank_exact_parametrization,
+        lem:rank_one_ampliation_choi_compression,
+        thm:choi_right_compression_quadratic_form, thm:schmidt_rank_choi_test_iff}
+    For a pure state $\ket{\psi}\bra{\psi}$ on the square bipartite system
+    $\MN{D}\otimes\MN{D}$ with $\operatorname{SR}(\psi)\le n$ and any $n$-positive map
+    $T$, applying $T$ to the first factor keeps the result positive semidefinite:
+    \[
+        (T\otimes\id)(\ket{\psi}\bra{\psi})\ge 0.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Write $\psi$ through the maximally entangled vector as $\psi=\psi_X$ for a square
+    matrix $X$ on the right factor with
+    $\operatorname{rank}(X)=\operatorname{SR}(\psi)\le n$.  Then
+    $(T\otimes\id)(\ket{\psi}\bra{\psi})$ is the right-factor Choi compression of $T$
+    by $X$, and its quadratic form on a vector $\eta$ equals the Choi quadratic form
+    $C_T$ of $T$ evaluated on $R_X^\dagger\eta$, a vector of Schmidt rank at most
+    $\operatorname{rank}(X)\le n$.  Because $T$ is $n$-positive,
+    \[
+        \langle R_X^\dagger\eta,\, C_T\, R_X^\dagger\eta\rangle\ge 0,
+    \]
+    so the compression is positive semidefinite.
+\end{proof}
+
+\begin{theorem}[Positive maps and entanglement, only-if direction]
+    \label{thm:has_schmidt_number_le_tensor_map_id}
+    \lean{Matrix.HasSchmidtNumberLE.tensorMapId_posSemidef}
+    \leanok
+    \uses{def:has_schmidt_number_le, def:tensor_map_id, def:k_positive_map,
+        thm:tensor_map_id_sum, thm:tensor_map_id_posSemidef_pure}
+    A bipartite state on the square system $\MN{D}\otimes\MN{D}$ of Schmidt number at
+    most $n$ satisfies
+    \[
+        (T\otimes\id)(\rho)\ge 0
+    \]
+    for every $n$-positive map $T$.  This is the square case $d=d'=D$ of the only-if
+    direction of Wolf's Proposition~3.4 for a general bipartite system
+    $\MN{d}\otimes\MN{d'}$ \cite[Chapter~3, Proposition~3.4]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The state is a finite sum of pure-state projectors of Schmidt rank at most $n$.
+    Applying $T$ to the first factor is linear, so it distributes over the sum; the
+    pure-state step makes each summand positive semidefinite, and a finite sum of
+    positive semidefinite matrices is positive semidefinite.
+\end{proof}
+
 \begin{theorem}[Reduction step from the Schmidt-number premise]
     \label{thm:has_schmidt_number_le_tensor_map_id_t_eta}
     \lean{Matrix.HasSchmidtNumberLE.tensorMapId_tEta_posSemidef}

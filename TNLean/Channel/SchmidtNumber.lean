@@ -64,8 +64,15 @@ Wolf eq. (3.18) with its Schmidt-number premise.
   addition and monotonicity in the bound.
 * `Matrix.hasSchmidtNumberLE_one_iff_isSeparable`: **Schmidt number one is exactly
   separability** (Wolf §3.2).
-* `Matrix.tensorMapId_tEta_posSemidef_of_hasSchmidtRankLE`: the **pure-state step** —
-  for ψ of Schmidt rank at most `n` (with `1 ≤ n < D`), `(T_n ⊗ id)(|ψ⟩⟨ψ|) ≥ 0`.
+* `Matrix.tensorMapId_posSemidef_of_hasSchmidtRankLE`: the **pure-state step of Wolf
+  Prop 3.4 (only if)** — for ψ of Schmidt rank at most `n` and any `n`-positive map
+  `T`, `(T ⊗ id)(|ψ⟩⟨ψ|) ≥ 0`.
+* `Matrix.HasSchmidtNumberLE.tensorMapId_posSemidef`: **Wolf Prop 3.4 (only if)** — a
+  state of Schmidt number at most `n` has `(T ⊗ id)(ρ) ≥ 0` for every `n`-positive
+  map `T`.
+* `Matrix.tensorMapId_tEta_posSemidef_of_hasSchmidtRankLE`: the **pure-state step** at
+  `T = T_n` — for ψ of Schmidt rank at most `n` (with `1 ≤ n < D`),
+  `(T_n ⊗ id)(|ψ⟩⟨ψ|) ≥ 0`.
 * `Matrix.HasSchmidtNumberLE.tensorMapId_tEta_posSemidef`: **step 1 of Wolf
   eq. (3.18)** — a state of Schmidt number at most `n` has `(T_n ⊗ id)(ρ) ≥ 0`.
 * `Matrix.reductionCriterion_left_of_hasSchmidtNumberLE` and
@@ -282,6 +289,69 @@ theorem rightTensorMatrix_conjTranspose_mulVec_hasSchmidtRankLE_rank {k : ℕ}
       _ = X.rank := Matrix.rank_conjTranspose X
   simpa [HasSchmidtRankLE, schmidtRank] using hrank
 
+/-- **Positive maps and entanglement, only-if direction, pure-state step**
+(Wolf §3.2, Prop 3.4).  For a pure state `|ψ⟩⟨ψ|` with ψ of Schmidt rank at most `n`
+and any `n`-positive map `T`, the ampliation `(T ⊗ id)(|ψ⟩⟨ψ|)` is positive
+semidefinite.
+
+Writing ψ through the maximally entangled vector as a square right-factor matrix `X`
+of rank equal to the Schmidt rank of ψ, the ampliation is the right-factor Choi
+compression of `T` by `X`.  Its quadratic form on any vector is the Choi quadratic
+form of `T` on a vector of Schmidt rank at most the rank of `X`, hence at most `n`;
+the `n`-positivity of `T` makes that form nonnegative.
+
+**Scope restriction (square system d = d' = D):** both tensor factors are fixed to a
+common dimension `D`, because the pure state is parametrized through the square
+maximally entangled vector (`ChoiJamiolkowski.exists_squareCompression_of_vector`).
+Wolf states the criterion for a general bipartite system `ℂ^d ⊗ ℂ^{d'}`; the
+non-square case is documented in
+`docs/paper-gaps/wolf_reduction_criterion_schmidt_premise.tex`. -/
+theorem tensorMapId_posSemidef_of_hasSchmidtRankLE [NeZero D] {n : ℕ}
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hTpos : IsNPositiveMap n T) {ψ : Fin D × Fin D → ℂ} (hψ : HasSchmidtRankLE n ψ) :
+    (tensorMapId T (vecMulVec ψ (star ψ))).PosSemidef := by
+  classical
+  -- Express ψ as a square compression of the maximally entangled vector.
+  obtain ⟨X, hXvec, hXrank⟩ :=
+    ChoiJamiolkowski.exists_squareCompression_of_vector (D := D) ψ
+  have hXrank_le : X.rank ≤ n := by rw [hXrank]; exact hψ
+  -- The ampliation of the pure state is the right-factor Choi compression.
+  have hcomp :
+      tensorMapId T (vecMulVec ψ (star ψ)) = ChoiJamiolkowski.rightCompression T X := by
+    rw [tensorMapId_eq_nPositiveAmpliation, ← hXvec,
+      ChoiJamiolkowski.nPositiveAmpliation_rankOne_eq_rightCompression]
+  rw [hcomp]
+  -- Positivity via the Choi quadratic form on Schmidt-rank-≤n vectors.
+  refine posSemidef_of_dotProduct_mulVec_nonneg_complex ?_
+  intro η
+  rw [ChoiJamiolkowski.rightCompression_quadraticForm_eq_choiMatrix_quadraticForm]
+  have hrank :
+      HasSchmidtRankLE n ((ChoiJamiolkowski.rightTensorMatrix X)ᴴ *ᵥ η) :=
+    (rightTensorMatrix_conjTranspose_mulVec_hasSchmidtRankLE_rank X η).mono hXrank_le
+  exact
+    ChoiJamiolkowski.isNPositiveMap_iff_forall_hasSchmidtRankLE_choiMatrix_quadraticForm_nonneg.mp
+      hTpos _ hrank
+
+/-- **Positive maps and entanglement, only-if direction** (Wolf §3.2, Prop 3.4).  A
+bipartite state of Schmidt number at most `n` satisfies `(T ⊗ id)(ρ) ≥ 0` for every
+`n`-positive map `T`.
+
+The state is a finite sum of pure-state projectors of Schmidt rank at most `n`; the
+ampliation is linear, the pure-state step makes each summand positive semidefinite,
+and a finite sum of positive semidefinite matrices is positive semidefinite.
+
+**Scope restriction (square system d = d' = D):** inherited from the pure-state step;
+see `docs/paper-gaps/wolf_reduction_criterion_schmidt_premise.tex`. -/
+theorem HasSchmidtNumberLE.tensorMapId_posSemidef [NeZero D] {n : ℕ}
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hTpos : IsNPositiveMap n T)
+    {ρ : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ} (hρ : HasSchmidtNumberLE n ρ) :
+    (tensorMapId T ρ).PosSemidef := by
+  obtain ⟨ι, _, ψ, hψ, rfl⟩ := hρ
+  rw [tensorMapId_sum]
+  exact posSemidef_sum Finset.univ fun i _ =>
+    tensorMapId_posSemidef_of_hasSchmidtRankLE hTpos (hψ i)
+
 /-- **The pure-state step of the reduction criterion (Wolf eq. (3.18), step 1).**
 For a pure state `|ψ⟩⟨ψ|` with ψ of Schmidt rank at most `n` (and `1 ≤ n < D`),
 the ampliation `(T_n ⊗ id)(|ψ⟩⟨ψ|)` is positive semidefinite.
@@ -305,32 +375,10 @@ non-square case is documented in
 `docs/paper-gaps/wolf_reduction_criterion_schmidt_premise.tex`. -/
 theorem tensorMapId_tEta_posSemidef_of_hasSchmidtRankLE [NeZero D] {n : ℕ}
     (hn1 : 1 ≤ n) (hnD : n < D) {ψ : Fin D × Fin D → ℂ} (hψ : HasSchmidtRankLE n ψ) :
-    (tensorMapId (tEta D (n : ℝ)) (vecMulVec ψ (star ψ))).PosSemidef := by
-  classical
-  set T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ := tEta D (n : ℝ) with hT
-  -- `T_n` is `n`-positive (Wolf eq. (3.11)).
-  have hTpos : IsNPositiveMap n T :=
-    (isNPositiveMap_tEta_iff (by positivity) hn1 hnD).mpr (le_refl _)
-  -- Express ψ as a square compression of the maximally entangled vector.
-  obtain ⟨X, hXvec, hXrank⟩ :=
-    ChoiJamiolkowski.exists_squareCompression_of_vector (D := D) ψ
-  have hXrank_le : X.rank ≤ n := by rw [hXrank]; exact hψ
-  -- The ampliation of the pure state is the right-factor Choi compression.
-  have hcomp :
-      tensorMapId T (vecMulVec ψ (star ψ)) = ChoiJamiolkowski.rightCompression T X := by
-    rw [tensorMapId_eq_nPositiveAmpliation, ← hXvec,
-      ChoiJamiolkowski.nPositiveAmpliation_rankOne_eq_rightCompression]
-  rw [hcomp]
-  -- Positivity via the Choi quadratic form on Schmidt-rank-≤n vectors.
-  refine posSemidef_of_dotProduct_mulVec_nonneg_complex ?_
-  intro η
-  rw [ChoiJamiolkowski.rightCompression_quadraticForm_eq_choiMatrix_quadraticForm]
-  have hrank :
-      HasSchmidtRankLE n ((ChoiJamiolkowski.rightTensorMatrix X)ᴴ *ᵥ η) :=
-    (rightTensorMatrix_conjTranspose_mulVec_hasSchmidtRankLE_rank X η).mono hXrank_le
-  exact
-    ChoiJamiolkowski.isNPositiveMap_iff_forall_hasSchmidtRankLE_choiMatrix_quadraticForm_nonneg.mp
-      hTpos _ hrank
+    (tensorMapId (tEta D (n : ℝ)) (vecMulVec ψ (star ψ))).PosSemidef :=
+  -- `T_n` is `n`-positive (Wolf eq. (3.11)); the general only-if step applies.
+  tensorMapId_posSemidef_of_hasSchmidtRankLE
+    ((isNPositiveMap_tEta_iff (by positivity) hn1 hnD).mpr (le_refl _)) hψ
 
 /-- **Step 1 of Wolf's reduction criterion (eq. (3.18)).**  A bipartite state of
 Schmidt number at most `n` (with `1 ≤ n < D`) has `(T_n ⊗ id)(ρ) ≥ 0`.
@@ -345,11 +393,10 @@ pure-state step; see `docs/paper-gaps/wolf_t_eta_top_index_scope.tex` and
 theorem HasSchmidtNumberLE.tensorMapId_tEta_posSemidef [NeZero D] {n : ℕ}
     (hn1 : 1 ≤ n) (hnD : n < D)
     {ρ : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ} (hρ : HasSchmidtNumberLE n ρ) :
-    (tensorMapId (tEta D (n : ℝ)) ρ).PosSemidef := by
-  obtain ⟨ι, _, ψ, hψ, rfl⟩ := hρ
-  rw [tensorMapId_sum]
-  exact posSemidef_sum Finset.univ fun i _ =>
-    tensorMapId_tEta_posSemidef_of_hasSchmidtRankLE hn1 hnD (hψ i)
+    (tensorMapId (tEta D (n : ℝ)) ρ).PosSemidef :=
+  -- `T_n` is `n`-positive (Wolf eq. (3.11)); the general only-if direction applies.
+  hρ.tensorMapId_posSemidef
+    ((isNPositiveMap_tEta_iff (by positivity) hn1 hnD).mpr (le_refl _))
 
 /-! ## The full reduction criterion (Wolf eq. (3.18)) -/
 
