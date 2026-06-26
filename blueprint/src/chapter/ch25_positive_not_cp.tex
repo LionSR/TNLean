@@ -559,12 +559,13 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
 \begin{theorem}[Basic properties of bounded Schmidt number]
     \label{thm:has_schmidt_number_le_basic}
     \lean{Matrix.HasSchmidtNumberLE.posSemidef, Matrix.HasSchmidtNumberLE.add,
-        Matrix.HasSchmidtNumberLE.mono}
+        Matrix.HasSchmidtNumberLE.mono, Matrix.HasSchmidtNumberLE.smul}
     \leanok
     \uses{def:has_schmidt_number_le}
     A matrix of Schmidt number at most $n$ is positive semidefinite.  States of
-    Schmidt number at most $n$ are closed under addition, and a bound on the Schmidt
-    number relaxes to any larger bound.
+    Schmidt number at most $n$ are closed under addition and under multiplication by a
+    nonnegative real scalar, and a bound on the Schmidt number relaxes to any larger
+    bound.
 \end{theorem}
 
 \begin{proof}
@@ -574,7 +575,9 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
     semidefinite.  Concatenating two pure-state families realizes a sum as a single
     finite sum of pure-state projectors of Schmidt rank at most $n$, and a pure
     summand of Schmidt rank at most $n$ also has Schmidt rank at most any larger
-    bound.
+    bound.  Multiplication by a nonnegative real $a$ rescales each pure summand
+    $\psi_i$ to $\sqrt a\,\psi_i$, which leaves its Schmidt rank unchanged and
+    reproduces $a$ times the original state.
 \end{proof}
 
 \begin{theorem}[Schmidt number one is separability]
