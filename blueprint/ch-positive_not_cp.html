@@ -2999,6 +2999,8 @@
           
           <li><a href="../docs/find/#doc/Matrix.HasSchmidtNumberLE.mono" class="lean_decl">Matrix.HasSchmidtNumberLE.mono</a></li>
           
+          <li><a href="../docs/find/#doc/Matrix.HasSchmidtNumberLE.smul" class="lean_decl">Matrix.HasSchmidtNumberLE.smul</a></li>
+          
         </ul>
     
       </div>
@@ -3008,7 +3010,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    A matrix of Schmidt number at most \(n\) is positive semidefinite. States of Schmidt number at most \(n\) are closed under addition, and a bound on the Schmidt number relaxes to any larger bound. </p>
+  <p>    A matrix of Schmidt number at most \(n\) is positive semidefinite. States of Schmidt number at most \(n\) are closed under addition and under multiplication by a nonnegative real scalar, and a bound on the Schmidt number relaxes to any larger bound. </p>
 
   </div>
 </div>
@@ -3020,7 +3022,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Each summand \(|\psi _i\rangle \langle \psi _i|\) is a rank-one positive semidefinite matrix, and a finite sum of positive semidefinite matrices is positive semidefinite. Concatenating two pure-state families realizes a sum as a single finite sum of pure-state projectors of Schmidt rank at most \(n\), and a pure summand of Schmidt rank at most \(n\) also has Schmidt rank at most any larger bound. </p>
+  <p>Each summand \(|\psi _i\rangle \langle \psi _i|\) is a rank-one positive semidefinite matrix, and a finite sum of positive semidefinite matrices is positive semidefinite. Concatenating two pure-state families realizes a sum as a single finite sum of pure-state projectors of Schmidt rank at most \(n\), and a pure summand of Schmidt rank at most \(n\) also has Schmidt rank at most any larger bound. Multiplication by a nonnegative real \(a\) rescales each pure summand \(\psi _i\) to \(\sqrt a\, \psi _i\), which leaves its Schmidt rank unchanged and reproduces \(a\) times the original state. </p>
 
   </div>
 </div>
