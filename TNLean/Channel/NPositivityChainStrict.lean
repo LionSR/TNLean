@@ -50,7 +50,7 @@ Choi criterion converts the resulting sign condition into `k`-positivity.
 * `Matrix.isNPositiveMap_tEta_iff` -- **Wolf eq. (3.11):** for `0 < η` and
   `1 ≤ k < D`, the map `T_η` is `k`-positive if and only if `η ≥ k`.
 * `Matrix.isNPositiveMap_tEta_card_iff` -- **Wolf eq. (3.11) at the top index
-  `k = D`:** for `0 < η`, the map `T_η` is `D`-positive (i.e. completely positive)
+  k = D:** for `0 < η`, the map `T_η` is `D`-positive (i.e. completely positive)
   if and only if `η ≥ D`.
 * `Matrix.tEta_isNPositiveMap_not_succ` and
   `Matrix.exists_isNPositiveMap_not_succ` -- the strictness witness: a
@@ -421,9 +421,8 @@ theorem isNPositiveMap_tEta_iff [NeZero D] {η : ℝ} (hη : 0 < η) {k : ℕ}
 /-- **Wolf eq. (3.11) at the top index n = D.**  Since D-positivity on M_D(ℂ) is
 complete positivity, T_η is D-positive iff its Choi operator is positive
 semidefinite, and — the maximally entangled vector being the worst case — this
-holds iff D ≤ η.  Together with the lower-range threshold equivalence
-`isNPositiveMap_tEta_iff` (the range 1 ≤ k < D) this completes Wolf's threshold
-criterion over k = 1, …, D. -/
+holds iff D ≤ η.  Together with the lower-range threshold equivalence (the range
+1 ≤ k < D) this completes Wolf's threshold criterion over k = 1, …, D. -/
 theorem isNPositiveMap_tEta_card_iff [NeZero D] {η : ℝ} (hη : 0 < η) :
     IsNPositiveMap D (tEta D η) ↔ (D : ℝ) ≤ η := by
   classical
