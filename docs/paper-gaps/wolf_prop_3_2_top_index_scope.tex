@@ -55,23 +55,28 @@ realizes the upper bound~(3.8).
 
 The top index $n=D'$ is resolved by a route that bypasses the $n<D'$ restriction
 of the maximal-overlap and Ky-Fan principles. At $n=D'$ the Schmidt-rank
-constraint is vacuous: every normalized vector qualifies, $\|\rho_i\|_{(D')}
-=\tr\rho_i=1$, and both bounds collapse to the elementary spectral estimate
-$\nu_{\min}\le\langle\psi|\tau|\psi\rangle\le\nu_{\max}$. This estimate is the
-Rayleigh characterization of the extreme eigenvalues, which follows directly from
-the Rayleigh expansion $\langle\psi|\tau|\psi\rangle=\sum_i\nu_i
-|\langle\phi_i|\psi\rangle|^2$ and Parseval's identity $\sum_i
-|\langle\phi_i|\psi\rangle|^2=1$ by comparing each $\nu_i$ against $\nu_{\min}$
-respectively $\nu_{\max}$; both extremes are attained at the corresponding
-eigenvector. The Ky-Fan machinery of the $n<D'$ proof is not invoked.
+constraint is vacuous: every normalized vector qualifies and
+$\|\rho_i\|_{(D')}=\tr\rho_i=1$. Both bounds therefore constrain the same quantity,
+the infimum of $\langle\psi|\tau|\psi\rangle$ over all normalized vectors:
+\begin{itemize}
+  \item The lower bound~(3.7) becomes $\nu_{\min}\le\langle\psi|\tau|\psi\rangle$
+  for every normalized $\psi$, so $\inf_\psi\langle\psi|\tau|\psi\rangle\ge
+  \nu_{\min}$.
+  \item The upper bound~(3.8) on the infimum becomes the existence of a normalized
+  vector with $\langle\psi|\tau|\psi\rangle=\nu_{\min}$, namely a least-eigenvalue
+  eigenvector, so $\inf_\psi\langle\psi|\tau|\psi\rangle\le\nu_{\min}$.
+\end{itemize}
+Together they give $\inf_\psi\langle\psi|\tau|\psi\rangle=\nu_{\min}$. Both facts
+follow directly from the Rayleigh expansion $\langle\psi|\tau|\psi\rangle=\sum_i
+\nu_i|\langle\phi_i|\psi\rangle|^2$ and Parseval's identity $\sum_i
+|\langle\phi_i|\psi\rangle|^2=1$, comparing each $\nu_i$ against $\nu_{\min}$ and
+evaluating at the least-eigenvalue eigenvector; the Ky-Fan machinery of the $n<D'$
+proof is not invoked.
 
-The top-index bounds are recorded as
-\leanid{Matrix.IsHermitian.spectral_lower_bound_top} (with attainment
-\leanid{Matrix.IsHermitian.exists_spectral_lower_bound_top}) and
-\leanid{Matrix.IsHermitian.spectral_upper_bound_top} (with attainment
-\leanid{Matrix.IsHermitian.exists_spectral_upper_bound_top}), giving
-$\min_\psi\langle\psi|\tau|\psi\rangle=\nu_{\min}$ and the dual identity for the
-maximum, with no Schmidt-rank restriction on $\psi$.
+The top-index endpoint is recorded as
+\leanid{Matrix.IsHermitian.spectral_lower_bound_top} for~(3.7) and
+\leanid{Matrix.IsHermitian.exists_spectral_lower_bound_top} for~(3.8), which
+together state $\min_\psi\langle\psi|\tau|\psi\rangle=\nu_{\min}$.
 
 \section{Classification}
 
@@ -79,8 +84,9 @@ maximum, with no Schmidt-rank restriction on $\psi$.
 is now formalized: the per-vector bounds
 \leanid{Matrix.IsHermitian.spectral_lower_bound} and
 \leanid{Matrix.IsHermitian.exists_le_spectral_upper_bound} for $1\le n<D'$, and
-the Rayleigh characterization \leanid{Matrix.IsHermitian.spectral_lower_bound_top}
-and \leanid{Matrix.IsHermitian.spectral_upper_bound_top} for the
+their top-index endpoints
+\leanid{Matrix.IsHermitian.spectral_lower_bound_top}~(3.7) and
+\leanid{Matrix.IsHermitian.exists_spectral_lower_bound_top}~(3.8) for the
 completely-positive endpoint $n=D'$, by the route detailed in the Status above.
 No hypothesis foreign to the source is used.
 
