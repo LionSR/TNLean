@@ -463,6 +463,44 @@ are not developed elsewhere in this document.
 
 \section{Lieb concavity theorem}
 
+The Lieb concavity theorem rests on a scalar integral identity that expresses the
+geometric interpolation $a^s b^{1-s}$ as a positive average of the elementary
+fractions $ab/(a+tb)$. This is the analytic core of the integral representation
+of $A^s B^{1-s}$.
+
+\begin{lemma}[Reflection integral]\label{lem:reflection_integral}
+    \lean{Real.integral_rpow_div_one_add}
+    \leanok
+    For $s\in(0,1)$,
+    \[
+        \int_0^\infty \frac{u^{s-1}}{1+u}\,du = \frac{\pi}{\sin(\pi s)}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    This is the value $B(s,1-s)$ of the Beta function, which equals
+    $\Gamma(s)\Gamma(1-s)=\pi/\sin(\pi s)$ by Euler's reflection formula. The
+    substitution $x=u/(1+u)$ carries the half-line onto the unit interval and
+    turns the integrand into the Beta integrand $x^{s-1}(1-x)^{-s}$.
+\end{proof}
+
+\begin{lemma}[Scalar Lieb integral identity]\label{lem:scalar_lieb_integral}
+    \lean{rpow_mul_rpow_one_sub_eq_integral}
+    \leanok
+    \uses{lem:reflection_integral}
+    For $a,b>0$ and $s\in(0,1)$,
+    \[
+        a^s b^{1-s} = \frac{\sin(\pi s)}{\pi}
+            \int_0^\infty t^{s-1}\,\frac{ab}{a+tb}\,dt.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Apply the scaling substitution $t=(a/b)\,u$ to the integral and reduce to the
+    reflection integral of Lemma~\ref{lem:reflection_integral}, collecting the
+    factors $a^s b^{1-s}$.
+\end{proof}
+
 \begin{theorem}[Lieb concavity]\label{thm:lieb_concavity_axiom}
     \lean{lieb_concavity_axiom}
     \notready
