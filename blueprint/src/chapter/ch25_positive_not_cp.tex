@@ -807,3 +807,65 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
     the operator implication in its symmetric form gives $n\,\rho_1\otimes\Id\ge\rho$.
 \end{proof}
 
+
+\begin{theorem}[Trace-form representation of a real-linear functional]
+    \label{thm:exists_isHermitian_trace_form_re}
+    \lean{Matrix.exists_isHermitian_trace_form_re}
+    \leanok
+    Every real-linear functional $g$ on the space of square complex matrices is the
+    trace form of a Hermitian matrix: there is a Hermitian $H_0$ with
+    \[
+        g(X)=\operatorname{Re}\tr(X H_0)
+        \qquad\text{for every Hermitian }X.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The real bilinear pairing $(X,H)\mapsto\operatorname{Re}\tr(X H)$ is nondegenerate,
+    because on the diagonal pair $(H,H^{\dagger})$ it equals the squared Frobenius norm
+    $\operatorname{Re}\tr(H H^{\dagger})=\sum_{i,j}\lvert H_{ij}\rvert^2$, which is positive
+    unless $H=0$.  Hence the map sending $H$ to the functional
+    $X\mapsto\operatorname{Re}\tr(X H)$ is an injective real-linear map from the matrix
+    space to its real dual.  These two spaces have the same finite real dimension, so the
+    map is also surjective, and every $g$ is represented by some $H$.  Replacing $H$ by
+    its Hermitian part $\tfrac12(H+H^{\dagger})$ keeps the value on Hermitian inputs,
+    since $\tr(X H^{\dagger})=\overline{\tr(X H)}$ when $X$ is Hermitian, and produces a
+    Hermitian representing matrix.
+\end{proof}
+
+\begin{theorem}[Entanglement witness from a separating hyperplane]
+    \label{thm:exists_entanglement_witness}
+    \lean{Matrix.exists_isHermitian_witness}
+    \leanok
+    \uses{def:has_schmidt_number_le, def:schmidt_rank,
+        thm:convex_setOf_has_schmidt_number_le,
+        thm:compact_setOf_has_schmidt_number_le_trace_one,
+        thm:exists_isHermitian_trace_form_re}
+    Let $\rho$ be a trace-one Hermitian bipartite state whose Schmidt number exceeds $n$.
+    Then there is a Hermitian operator $W$ with
+    \[
+        \operatorname{Re}\tr(W\rho)<0,
+        \qquad
+        \operatorname{Re}\bra{\psi}W\ket{\psi}\ge 0
+        \quad\text{for every $\psi$ of Schmidt rank at most }n.
+    \]
+    This is the only-if direction of Wolf's Proposition~3.3
+    \cite[Chapter~3, Proposition~3.3]{Wolf2012Quantum}: a state of Schmidt number larger
+    than $n$ is detected by an entanglement witness for $S_n$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The set $S_n$ of trace-one states of Schmidt number at most $n$ is convex and
+    compact, and $\rho\notin S_n$.  The geometric Hahn--Banach theorem separates the
+    closed convex set $\{\rho\}$ from the compact convex set $S_n$ by a continuous
+    real-linear functional $f$ and a constant $c$ with $f(\rho)<c<f(\sigma)$ for every
+    $\sigma\in S_n$.  Representing $f$ as the trace form of a Hermitian $H_0$ and setting
+    $W=H_0-c\,\Id$ gives $\operatorname{Re}\tr(W\rho)=f(\rho)-c<0$.  For a vector $\psi$
+    of Schmidt rank at most $n$ the projector $\ket{\psi}\bra{\psi}$, after
+    normalization by $\lVert\psi\rVert^2$, is a trace-one state of $S_n$, so its value
+    under $f$ is at least $c$; multiplying back by the squared norm gives
+    $\operatorname{Re}\bra{\psi}W\ket{\psi}\ge 0$, with the zero vector giving the value
+    $0$ directly.
+\end{proof}
