@@ -397,17 +397,26 @@ finite-dimensional quantum systems.
     so the four regularized endpoints and the regularized mixture all lie in the
     positive definite domain and the positive definite joint convexity
     (Theorem~\ref{thm:relative_entropy_joint_convexity}) gives the two-point
-    inequality for the regularized pairs. The regularized relative entropy
-    converges on each pair of the support domain,
+    inequality for the regularized pairs. As $\varepsilon\to0^+$ the regularized
+    relative entropy converges on each pair of the support domain,
     \[
-        D(\rho_\varepsilon\Vert\sigma_\varepsilon) \to D(\rho\Vert\sigma)
-        \qquad\text{as } \varepsilon\to0^+,
+        D(\rho_\varepsilon\Vert\sigma_\varepsilon) \to D(\rho\Vert\sigma).
     \]
-    because the perturbation shares the eigenbasis of its argument, so the
-    trace-logarithm terms reduce to scalar limits on the positive eigenvalues,
-    while the support condition forces the diagonal weight on each zero eigenvalue
-    of $\sigma$ to vanish, leaving a term $x\log x\to0$. The inequality therefore
-    passes to the limit, giving joint convexity on the support domain.
+    Indeed the perturbation shares the eigenbasis of its argument, so each
+    trace-logarithm term is the diagonal sum
+    $\sum_j w_j(\varepsilon)\,\log\bigl((1+\varepsilon N)^{-1}(q_j+\varepsilon)\bigr)$,
+    where $q_j$ runs over the eigenvalues of $\sigma$ and $w_j(\varepsilon)$ is the
+    corresponding diagonal weight. For a positive eigenvalue the scalar factor has
+    the limit
+    \[
+        \log\bigl((1+\varepsilon N)^{-1}(q_j+\varepsilon)\bigr) \to \log q_j
+        \qquad (q_j>0),
+    \]
+    while at a zero eigenvalue the support condition makes the weight vanish, with
+    $w_j(\varepsilon)=(1+\varepsilon N)^{-1}\varepsilon$, so the summand is
+    $(1+\varepsilon N)^{-1}\varepsilon\,\log\bigl((1+\varepsilon N)^{-1}\varepsilon\bigr)\to0$
+    by $x\log x\to0$ as $x\to0^+$. The two-point inequality therefore passes to the
+    limit, giving joint convexity on the support domain.
 \end{proof}
 
 \begin{lemma}[Functional calculus under unitary conjugation]
