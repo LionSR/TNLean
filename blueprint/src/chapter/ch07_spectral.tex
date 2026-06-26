@@ -1117,6 +1117,48 @@ Jacobson radical characterization of semisimplicity together with the
 Wedderburn--Artin structure theorem for finite-dimensional semisimple
 algebras over an algebraically closed field.
 
+The algebraic core is the semisimplicity of an arbitrary $*$-subalgebra of a
+complex matrix algebra, from which the abstract Wedderburn--Artin decomposition
+follows. The fixed-point algebra of a trace-preserving Kraus map is then the
+special case used in this section.
+
+\begin{lemma}[A $*$-subalgebra of a matrix algebra is semisimple]%
+    \label{lem:starSubalgebra_isSemisimpleRing}
+    \lean{StarSubalgebra.isSemisimpleRing}
+    \leanok
+    Every $*$-subalgebra of $\MN{D}$ is a semisimple ring.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The subalgebra is finite-dimensional, hence Artinian, so its Jacobson
+    radical $J$ is nilpotent. If $x \in J$ then $x^*x \in J$, since the radical
+    is a two-sided ideal. In the matrix algebra $x^*x$ is positive
+    semidefinite, and a positive semidefinite nilpotent matrix vanishes: its
+    trace is a nilpotent complex number, hence zero, and the trace of $x^*x$
+    vanishes only when $x = 0$. Thus $J = 0$ and the subalgebra is semisimple.
+\end{proof}
+
+\begin{theorem}[Abstract Wedderburn--Artin decomposition for $*$-subalgebras]%
+    \label{thm:starSubalgebra_wedderburnArtin}
+    \lean{StarSubalgebra.exists_algEquiv_pi_matrix}
+    \leanok
+    \uses{lem:starSubalgebra_isSemisimpleRing}
+    There exist $n \in \N$ and dimensions $d_1,\ldots,d_n \ge 1$ such that every
+    $*$-subalgebra of $\MN{D}$ is $\C$-algebra isomorphic to
+    \[
+        \prod_{k=1}^{n} \MN{d_k}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:starSubalgebra_isSemisimpleRing}
+    Combine semisimplicity (Lemma~\ref{lem:starSubalgebra_isSemisimpleRing})
+    with the Wedderburn--Artin structure theorem for finite-dimensional
+    semisimple algebras over the algebraically closed field $\C$.
+\end{proof}
+
 \begin{theorem}[Fixed-point algebra is semisimple]%
     \label{thm:fixedPointAlgebra_isSemisimpleRing}
     \lean{Kraus.fixedPointAlgebra_isSemisimpleRing}
