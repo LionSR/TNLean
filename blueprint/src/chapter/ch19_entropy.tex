@@ -894,11 +894,16 @@ finite-dimensional quantum systems.
 
 \begin{proof}\leanok
     The eigenvalues of $c\,\omega$ are $c\lambda_i$, so the entropy is
-    $\sum_i -(c\lambda_i)\log(c\lambda_i)$; splitting each term and using the
-    unit eigenvalue sum gives the stated form.
+    $\sum_i -(c\lambda_i)\log(c\lambda_i)$. The splitting identity
+    \[
+        -(c\lambda)\log(c\lambda) = \lambda\,(-c\log c) + c\,(-\lambda\log\lambda)
+    \]
+    together with the unit eigenvalue sum $\sum_i \lambda_i = 1$ gives
+    $\sum_i -(c\lambda_i)\log(c\lambda_i) = (-c\log c)\sum_i\lambda_i +
+    c\sum_i(-\lambda_i\log\lambda_i) = -c\log c + c\,S(\omega)$, the stated form.
 \end{proof}
 
-\begin{theorem}[Entropy is additive over a weighted direct sum]
+\begin{theorem}[Entropy is additive over an orthogonal direct sum of Hermitian blocks]
     \label{thm:entropy_block_diagonal}
     \lean{vonNeumannEntropy_blockDiagonal'}
     \leanok
@@ -912,9 +917,14 @@ finite-dimensional quantum systems.
 
 \begin{proof}\leanok
     Each block diagonalizes by a unitary congruence, and the block-diagonal
-    assembly of the block unitaries diagonalizes the direct sum. Its eigenvalues
-    are the union of the block eigenvalues, so the entropy is the sum of the
-    block entropies.
+    assembly of the block unitaries diagonalizes the direct sum, whose eigenvalue
+    multiset is the disjoint union of the block eigenvalue multisets. Hence
+    \[
+        S\!\left(\bigoplus_j M_j\right)
+            = \sum_{\lambda \in \biguplus_j \mathrm{spec}(M_j)} -\lambda\log\lambda
+            = \sum_j \sum_{\lambda \in \mathrm{spec}(M_j)} -\lambda\log\lambda
+            = \sum_j S(M_j).
+    \]
 \end{proof}
 
 \section{Tripartite partial traces}
