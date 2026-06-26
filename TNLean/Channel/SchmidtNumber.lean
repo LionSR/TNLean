@@ -229,8 +229,8 @@ This convexity of `S_n` is the geometric input to Wolf's separating-hyperplane p
 Prop 3.3 (the existence of an entanglement witness for any state outside `S_n`):
 `S_n` is the convex set the hyperplane separates a given state `ρ ∉ S_n` from.  The
 remaining layers of that argument — compactness of `S_n`, the real inner-product space
-of Hermitian matrices, and Riesz extraction of the witness operator — are tracked in the
-#3399 roadmap. -/
+of Hermitian matrices, and Riesz extraction of the witness operator — are developed in
+the surrounding section toward Wolf Prop 3.3. -/
 theorem convex_setOf_hasSchmidtNumberLE {n : ℕ} :
     Convex ℝ {ρ : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ | HasSchmidtNumberLE n ρ} := by
   refine convex_iff_forall_pos.mpr fun x hx y hy a b ha hb _ => ?_
