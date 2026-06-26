@@ -873,8 +873,7 @@ finite-dimensional quantum systems.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:quantum_relative_entropy, thm:relative_entropy_data_processing_support,
-        thm:strong_subadditivity_posdef}
+    \uses{def:quantum_relative_entropy, thm:relative_entropy_data_processing_support}
     Read the inequality as one instance of data processing under the partial trace
     over $C$, with the singular reference state
     $\sigma_{ABC} = (\mathbf 1_A / d_A) \otimes \rho_{BC}$. Being a density operator
@@ -893,8 +892,17 @@ finite-dimensional quantum systems.
     \]
     For a singular reference the tensor logarithm does not split, so each evaluation
     regularizes the reduced state through the affine perturbation
-    $(1 + d_R\varepsilon)^{-1}(\rho_R + \varepsilon\mathbf 1)$ and passes to the
-    limit. Data processing on the singular support domain under the partial trace
+    $\rho_{R,\varepsilon} = (1 + d_R\varepsilon)^{-1}(\rho_R + \varepsilon\mathbf 1)$,
+    which is positive definite, and passes to the limit
+    \[
+        \operatorname{Re}\operatorname{tr}\bigl(
+            \rho\,\log((\mathbf 1_A / d_A) \otimes \rho_{R,\varepsilon})\bigr)
+            \to -\log d_A - S(\rho_R)
+        \qquad (\varepsilon \to 0^+),
+    \]
+    where the zero eigenvalues of $\rho_R$ contribute nothing because the kernel
+    inclusion makes the corresponding diagonal weights vanish. Data processing on
+    the singular support domain under the partial trace
     over $C$, which sends $\rho_{ABC} \mapsto \rho_{AB}$ and
     $(\mathbf 1_A / d_A) \otimes \rho_{BC} \mapsto (\mathbf 1_A / d_A) \otimes
     \rho_{B}$, reads

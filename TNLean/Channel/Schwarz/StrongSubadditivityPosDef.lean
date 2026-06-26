@@ -122,7 +122,7 @@ b\varepsilon\mathbf 1)$, the cross term $\operatorname{Re}\operatorname{tr}(\rho
 $\ker\sigma \subseteq \ker\rho$.
 
 This is the first-argument-fixed specialization of the two-argument affine limit
-`TNLean.RelativeEntropyConvexity.tendsto_re_trace_perturbAffine_mul_log_perturbAffine`:
+`tendsto_re_trace_perturbAffine_mul_log_perturbAffine`:
 in $\sigma$'s eigenbasis each summand is the constant diagonal weight
 $\operatorname{Re}(U_\sigma^\dagger \rho\, U_\sigma)_{jj}$ times $\log$ of the
 shifted-scaled eigenvalue. Eigenvalues $q_j > 0$ give the scalar logarithm limit;
@@ -198,8 +198,8 @@ open TNLean.RelativeEntropyConvexity
 variable {dA : ℕ} {R : Type*} [Fintype R] [DecidableEq R]
 
 /-- **The relative entropy against a reference maximally mixed on the traced-out
-factor.** For a positive definite density matrix $\rho$ on $A \otimes R$ with
-partial trace $\rho_R = \operatorname{tr}_A \rho$,
+factor.** For a Hermitian, unit-trace $\rho$ on $A \otimes R$ whose partial trace
+$\rho_R = \operatorname{tr}_A \rho$ is positive definite,
 $$D\bigl(\rho \,\|\, (\mathbf 1_A / d_A) \otimes \rho_R\bigr)
   = \log d_A + S(\rho_R) - S(\rho).$$
 
