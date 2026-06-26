@@ -69,15 +69,23 @@ the following.
     for density operators $\rho,\sigma$ with $\ker\sigma \subseteq \ker\rho$.
   \item \emph{Klein's inequality.} Nonnegativity $D(\rho\,\|\,\sigma) \ge 0$,
     with equality exactly when $\rho = \sigma$. This is the order property that
-    makes $D$ a divergence. The nonnegativity half is now formalized:
-    \leanid{quantumRelativeEntropy_nonneg} in
+    makes $D$ a divergence. The nonnegativity half is now formalized on the full
+    support domain: \leanid{quantumRelativeEntropy_nonneg_general} in
     \doclink{TNLean/Analysis/KleinInequality}
     (\path{TNLean/Analysis/KleinInequality.lean}) proves
-    $D(\rho\,\|\,\sigma)\ge 0$ for density operators $\rho,\sigma$ with $\sigma$
-    of full rank, by the eigenbasis reduction to the doubly stochastic overlap
-    matrix and the scalar Gibbs inequality $\log x\le x-1$; it consumes neither
-    Lieb concavity nor operator Jensen. The equality case and the
-    singular-$\sigma$ extension under $\ker\sigma\subseteq\ker\rho$ remain open.
+    $D(\rho\,\|\,\sigma)\ge 0$ for density operators $\rho,\sigma$ with
+    $\ker\sigma\subseteq\ker\rho$, exactly the source hypothesis. The full-rank
+    base case \leanid{quantumRelativeEntropy_nonneg} is proved first by the
+    eigenbasis reduction to the doubly stochastic overlap matrix and the scalar
+    Gibbs inequality $\log x\le x-1$; the support case follows by regularizing the
+    reference state to $\sigma_\varepsilon' = (1+\varepsilon N)^{-1}(\sigma +
+    \varepsilon\,\mathbf 1)$, which is positive definite for $\varepsilon>0$, and
+    passing to the limit $\varepsilon\to0^+$. Because $\sigma_\varepsilon'$ shares
+    $\sigma$'s eigenbasis, the matrix limit reduces to scalar logarithm limits on
+    the positive eigenvalues, while the support condition kills the diagonal
+    weights on the zero eigenvalues (\leanid{tendsto_re_trace_mul_log_perturb}); no
+    eigenvalue-continuity input is needed. It consumes neither Lieb concavity nor
+    operator Jensen. The equality case remains open.
   \item \emph{Joint convexity.} Convexity of
     $(\rho,\sigma) \mapsto D(\rho\,\|\,\sigma)$ in the pair of arguments. This is
     the step that consumes Lieb's joint concavity theorem: the concavity of
@@ -198,9 +206,10 @@ in place. Concretely:
     nonnegativity; they need only the matrix logarithm and its operator
     monotonicity, not Lieb concavity. Layer (2) is in place
     (\leanid{quantumRelativeEntropy}) and layer (3), Klein's inequality, is now
-    formalized for full-rank $\sigma$ (\leanid{quantumRelativeEntropy_nonneg}),
-    via the eigenbasis reduction and the scalar Gibbs inequality rather than
-    operator monotonicity of the logarithm.
+    formalized on the full support domain $\ker\sigma\subseteq\ker\rho$
+    (\leanid{quantumRelativeEntropy_nonneg_general}), via the full-rank eigenbasis
+    reduction and scalar Gibbs inequality together with the support-respecting
+    regularization, rather than operator monotonicity of the logarithm.
   \item Layer (4) is the single consumer of \leanid{lieb_concavity_axiom}: joint
     convexity of $D$ is the entropy-theoretic content of Lieb's theorem. This
     layer is now formalized on the positive-definite domain:
@@ -356,7 +365,8 @@ elimination route is the classical relative-entropy chain: entropy bridge,
 definition of relative entropy, Klein's inequality, joint convexity (the step
 consuming Lieb concavity), data-processing under the partial trace, and final
 assembly at the tripartite splitting. Layers (2) and (3) are formalized (the
-latter for full-rank $\sigma$), and layer (4) is formalized on the
+latter on the full support domain $\ker\sigma\subseteq\ker\rho$,
+\leanid{quantumRelativeEntropy_nonneg_general}), and layer (4) is formalized on the
 positive-definite domain (\leanid{convexOn_quantumRelativeEntropy}), so the
 Lieb-concavity axiom is now connected to the joint convexity of the relative
 entropy. Layer (5), data-processing, is formalized on the positive-definite
