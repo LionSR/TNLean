@@ -48,6 +48,11 @@ overlap vector.
 * `Matrix.IsHermitian.exists_le_spectral_upper_bound` -- Wolf's Chapter 3,
   Proposition 3.2, equation (3.8): a Schmidt-rank-n vector realizing the matching
   upper bound on the infimum.
+* `Matrix.IsHermitian.spectral_lower_bound_top` and
+  `Matrix.IsHermitian.exists_spectral_lower_bound_top` -- the top-index n = D case
+  of equations (3.7) and (3.8), where the Schmidt-rank constraint is vacuous and
+  the bounds reduce to the Rayleigh characterization of the least eigenvalue
+  min_ψ ⟨ψ|τ|ψ⟩ = λ_min.
 
 ## References
 
@@ -212,6 +217,66 @@ theorem spectral_upper_bound_core {ν o : N → ℝ} {νsup : ℝ} (j : N)
     Finset.sum_nonpos fun i _ => mul_nonpos_of_nonpos_of_nonneg (by linarith [hmax i]) (ho i)
   linarith
 
+/-- The eigenvectors of a Hermitian matrix are orthonormal: ⟨φᵢ|φⱼ⟩ = δᵢⱼ. -/
+theorem star_eigenvector_dotProduct_eigenvector (hτ : τ.IsHermitian) (i j : N) :
+    star (hτ.eigenvector i) ⬝ᵥ (hτ.eigenvector j) = if i = j then 1 else 0 := by
+  set U := (hτ.eigenvectorUnitary : Matrix N N ℂ) with hU
+  have hUstar : star U * U = 1 := by
+    have := (hτ.eigenvectorUnitary).2
+    rw [Matrix.mem_unitaryGroup_iff'] at this; exact this
+  have h : (star U * U) i j = (1 : Matrix N N ℂ) i j := by rw [hUstar]
+  rw [Matrix.one_apply] at h
+  rw [← h, hU]
+  simp only [Matrix.mul_apply, eigenvector, dotProduct, Pi.star_apply,
+    RCLike.star_def, Matrix.star_eq_conjTranspose, Matrix.conjTranspose_apply]
+
+/-- The Rayleigh quotient evaluated at an eigenvector returns its eigenvalue:
+⟨φⱼ|τ|φⱼ⟩ = νⱼ. -/
+theorem rayleigh_eigenvector_re (hτ : τ.IsHermitian) (j : N) :
+    (star (hτ.eigenvector j) ⬝ᵥ (τ *ᵥ hτ.eigenvector j)).re = hτ.eigenvalues j := by
+  rw [hτ.rayleigh_re (hτ.eigenvector j), Finset.sum_eq_single j]
+  · rw [hτ.star_eigenvector_dotProduct_eigenvector j j, if_pos rfl]; simp
+  · intro i _ hij
+    rw [hτ.star_eigenvector_dotProduct_eigenvector i j, if_neg hij]; simp
+  · intro h; exact absurd (Finset.mem_univ j) h
+
+/-- **Wolf's Chapter 3, Proposition 3.2, equation (3.7) at the top Schmidt-rank
+index n = D.**  At the top index the Schmidt-rank constraint is vacuous (every
+vector on the bipartite space has Schmidt rank at most D) and the Ky-Fan D-norm
+of each reduced density collapses to its trace, which is one.  The lower
+bound (3.7) therefore degenerates to the Rayleigh characterization of the least
+eigenvalue: every normalized vector ψ satisfies λ_min ≤ ⟨ψ|τ|ψ⟩, with no
+Schmidt-rank restriction.  This is the completely-positive endpoint of the
+positivity chain.  Together with `exists_spectral_lower_bound_top` it gives
+min_ψ ⟨ψ|τ|ψ⟩ = λ_min. -/
+theorem spectral_lower_bound_top [Nonempty N] (hτ : τ.IsHermitian)
+    {ψ : N → ℂ} (hψ : star ψ ⬝ᵥ ψ = 1) :
+    Finset.univ.inf' Finset.univ_nonempty hτ.eigenvalues ≤ (star ψ ⬝ᵥ (τ *ᵥ ψ)).re := by
+  rw [hτ.rayleigh_re ψ]
+  calc Finset.univ.inf' Finset.univ_nonempty hτ.eigenvalues
+      = Finset.univ.inf' Finset.univ_nonempty hτ.eigenvalues
+          * ∑ i, ‖star (hτ.eigenvector i) ⬝ᵥ ψ‖ ^ 2 := by
+        rw [hτ.sum_normSq_eigenvector_overlap_re ψ, hψ, Complex.one_re, mul_one]
+    _ = ∑ i, Finset.univ.inf' Finset.univ_nonempty hτ.eigenvalues
+          * ‖star (hτ.eigenvector i) ⬝ᵥ ψ‖ ^ 2 := by rw [Finset.mul_sum]
+    _ ≤ ∑ i, hτ.eigenvalues i * ‖star (hτ.eigenvector i) ⬝ᵥ ψ‖ ^ 2 :=
+        Finset.sum_le_sum fun i _ =>
+          mul_le_mul_of_nonneg_right (Finset.inf'_le _ (Finset.mem_univ i)) (sq_nonneg _)
+
+/-- **Wolf's Chapter 3, Proposition 3.2, equation (3.8) at the top Schmidt-rank
+index n = D.**  Equation (3.8) bounds the infimum of ⟨ψ|τ|ψ⟩ from above by
+exhibiting a low-expectation vector.  At the top index the Schmidt-rank
+constraint is vacuous and the bound becomes λ_min: the eigenvector at an index
+realizing the least eigenvalue is normalized and makes ⟨ψ|τ|ψ⟩ equal to λ_min,
+so inf_ψ ⟨ψ|τ|ψ⟩ ≤ λ_min.  Together with `spectral_lower_bound_top` this gives
+min_ψ ⟨ψ|τ|ψ⟩ = λ_min, the source's top-index statement. -/
+theorem exists_spectral_lower_bound_top [Nonempty N] (hτ : τ.IsHermitian) :
+    ∃ ψ : N → ℂ, star ψ ⬝ᵥ ψ = 1 ∧
+      (star ψ ⬝ᵥ (τ *ᵥ ψ)).re = Finset.univ.inf' Finset.univ_nonempty hτ.eigenvalues := by
+  obtain ⟨j, _, hj⟩ := Finset.exists_mem_eq_inf' Finset.univ_nonempty hτ.eigenvalues
+  exact ⟨hτ.eigenvector j, hτ.star_eigenvector_dotProduct_self j,
+    by rw [hτ.rayleigh_eigenvector_re j]; exact hj.symm⟩
+
 end Matrix.IsHermitian
 
 namespace Matrix
@@ -306,10 +371,12 @@ normalized vector ψ of Schmidt rank at most k satisfies
 ν₀ + Σ_{i:νᵢ≤0} (νᵢ − ν₀) ‖ρᵢ‖₍ₖ₎ ≤ ⟨ψ|τ|ψ⟩, hence the same bound holds for the
 infimum over such vectors.
 
-**Scope restriction (k < D):** the source ranges over Schmidt rank up to
-the dimension D of the first tensor factor; this version covers 1 ≤ k < D.
-The omitted top index k = D is inherited from the maximal-overlap lemma and
-documented in `docs/paper-gaps/wolf_prop_3_2_top_index_scope.tex`. -/
+This version covers Schmidt rank 1 ≤ k < D, where D is the dimension of the
+first tensor factor.  The top index k = D, where the Schmidt-rank constraint is
+vacuous and the bound degenerates to the Rayleigh estimate λ_min ≤ ⟨ψ|τ|ψ⟩, is
+`Matrix.IsHermitian.spectral_lower_bound_top`; the two together cover the full
+source range 1 ≤ k ≤ D.  See
+`docs/paper-gaps/wolf_prop_3_2_top_index_scope.tex`. -/
 theorem IsHermitian.spectral_lower_bound {τ : Matrix (m × n) (m × n) ℂ}
     (hτ : τ.IsHermitian) {ν₀ : ℝ} {k : ℕ} (hk1 : 1 ≤ k) (hk : k < Fintype.card m)
     (hν0 : 0 ≤ ν₀) (hmin : ∀ i, 0 < hτ.eigenvalues i → ν₀ ≤ hτ.eigenvalues i)
@@ -334,8 +401,11 @@ value.  In the source ν is the largest positive eigenvalue and j indexes the
 unique non-positive eigenvalue ν₋, in which case the bound reads
 ν + (ν₋ − ν) ‖ρ₋‖₍ₖ₎.
 
-**Scope restriction (k < D):** stated for 1 ≤ k < D; the source allows
-the top index k = D.  Documented in
+This version covers 1 ≤ k < D.  At the top index k = D, where the Schmidt
+constraint is vacuous and j is taken at the minimizing index, the bound becomes
+the existence of a vector with ⟨ψ|τ|ψ⟩ = λ_min, i.e.
+inf_ψ ⟨ψ|τ|ψ⟩ ≤ λ_min; that endpoint is
+`Matrix.IsHermitian.exists_spectral_lower_bound_top`.  See
 `docs/paper-gaps/wolf_prop_3_2_top_index_scope.tex`. -/
 theorem IsHermitian.exists_le_spectral_upper_bound {τ : Matrix (m × n) (m × n) ℂ}
     (hτ : τ.IsHermitian) {νsup : ℝ} {k : ℕ} (j : m × n) (hk1 : 1 ≤ k)

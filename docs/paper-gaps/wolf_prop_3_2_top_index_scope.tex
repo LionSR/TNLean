@@ -43,50 +43,52 @@ scope.
 
 \section{Formalized statement}
 
-The formal theorems\footnote{Formal declarations:
+For Schmidt ranks $1\le n<D'$ the formal theorems\footnote{Formal declarations:
     \leanid{Matrix.IsHermitian.spectral_lower_bound} and
     \leanid{Matrix.IsHermitian.exists_le_spectral_upper_bound} in
     \doclink{TNLean/Channel/NPositivitySpectralCriterion}.}
 establish these bounds in the per-vector form: every normalized vector $\psi$ of
 Schmidt rank at most $n$ satisfies the lower bound~(3.7), and some such $\psi$
-realizes the upper bound~(3.8). The hypotheses are $1\le n$ and $n<D'$.
+realizes the upper bound~(3.8).
 
-\section{The gap}
+\section{Status}
 
-The formalization omits the top index $n=D'$. At $n=D'$ the Schmidt-rank
-constraint is vacuous: every normalized vector qualifies, $\|\rho_i\|_{(D')}
-=\tr\rho_i=1$, and both bounds collapse to the elementary estimate
-$\nu_{\min}\le\langle\psi|\tau|\psi\rangle\le\nu_{\max}$.
+The top index $n=D'$ is resolved by a route that bypasses the $n<D'$ restriction
+of the maximal-overlap and Ky-Fan principles. At $n=D'$ the Schmidt-rank
+constraint is vacuous: every normalized vector qualifies and
+$\|\rho_i\|_{(D')}=\tr\rho_i=1$. Both bounds therefore constrain the same quantity,
+the infimum of $\langle\psi|\tau|\psi\rangle$ over all normalized vectors:
+\begin{itemize}
+  \item The lower bound~(3.7) becomes $\nu_{\min}\le\langle\psi|\tau|\psi\rangle$
+  for every normalized $\psi$, so $\inf_\psi\langle\psi|\tau|\psi\rangle\ge
+  \nu_{\min}$.
+  \item The upper bound~(3.8) on the infimum becomes the existence of a normalized
+  vector with $\langle\psi|\tau|\psi\rangle=\nu_{\min}$, namely a least-eigenvalue
+  eigenvector, so $\inf_\psi\langle\psi|\tau|\psi\rangle\le\nu_{\min}$.
+\end{itemize}
+Together they give $\inf_\psi\langle\psi|\tau|\psi\rangle=\nu_{\min}$. Both facts
+follow directly from the Rayleigh expansion $\langle\psi|\tau|\psi\rangle=\sum_i
+\nu_i|\langle\phi_i|\psi\rangle|^2$ and Parseval's identity $\sum_i
+|\langle\phi_i|\psi\rangle|^2=1$, comparing each $\nu_i$ against $\nu_{\min}$ and
+evaluating at the least-eigenvalue eigenvector; the Ky-Fan machinery of the $n<D'$
+proof is not invoked.
 
-The restriction is inherited from the maximal-overlap lemma,\footnote{Formal
-    declaration: \leanid{Matrix.maximalSchmidtOverlap_eq_kyFanNorm}; its own
-    top-index gap is recorded in
-    \path{docs/paper-gaps/wolf_lemma_3_1_top_index_scope.tex}.} which supplies
-the per-eigenvector overlap bound
-$|\langle\phi_i|\psi\rangle|^2\le\|\rho_i\|_{(n)}$ only for $n<D'$, because the
-underlying Ky-Fan maximum principle\footnote{Formal declaration:
-    \leanid{Matrix.IsHermitian.kyFanNorm_eq_sup_trace}.} is stated for
-rank-exactly-$n$ orthogonal projections with $n<D'$.
-
-\section{Elimination plan}
-
-Extend the maximal-overlap lemma to the top index $n=D'$ (its own elimination
-plan adds the $n=D'$ case to the Ky-Fan maximum principle, where the maximizing
-projection is the identity). The spectral bounds then extend to $1\le n\le D'$
-by feeding that case into the same per-eigenvector overlap step; the algebraic
-cores\footnote{Formal declarations:
-    \leanid{Matrix.IsHermitian.spectral_lower_bound_core} and
-    \leanid{Matrix.IsHermitian.spectral_upper_bound_core}.} are already
-index-agnostic.
+The top-index endpoint is recorded as
+\leanid{Matrix.IsHermitian.spectral_lower_bound_top} for~(3.7) and
+\leanid{Matrix.IsHermitian.exists_spectral_lower_bound_top} for~(3.8), which
+together state $\min_\psi\langle\psi|\tau|\psi\rangle=\nu_{\min}$.
 
 \section{Classification}
 
-\emph{Scope restriction.} The formal theorems prove the source bounds~(3.7)
-and~(3.8) for Schmidt ranks $1\le n<D'$, a special case of the source's full
-range $1\le n\le D'$. The conclusions match the source on that range; only the
-top index $n=D'$ is omitted, and there the bounds degenerate to the trivial
-spectral estimate. No hypothesis foreign to the source is used, so the
-deviation is a scope restriction rather than an unfaithful theorem.
+\emph{Resolved.} The full source range $1\le n\le D'$ of bounds~(3.7) and~(3.8)
+is now formalized: the per-vector bounds
+\leanid{Matrix.IsHermitian.spectral_lower_bound} and
+\leanid{Matrix.IsHermitian.exists_le_spectral_upper_bound} for $1\le n<D'$, and
+their top-index endpoints
+\leanid{Matrix.IsHermitian.spectral_lower_bound_top}~(3.7) and
+\leanid{Matrix.IsHermitian.exists_spectral_lower_bound_top}~(3.8) for the
+completely-positive endpoint $n=D'$, by the route detailed in the Status above.
+No hypothesis foreign to the source is used.
 
 \bibliographystyle{alpha}
 \bibliography{references}
