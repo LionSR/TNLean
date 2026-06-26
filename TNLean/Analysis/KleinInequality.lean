@@ -607,8 +607,8 @@ the two trace terms expand in the joint eigenbasis and the overlap matrix
 * `Re tr(ρ log σ) = ∑ᵢⱼ pᵢ Pᵢⱼ log qⱼ` (overlap double sum);
 * `W * star W = 1` and `star W * W = 1` (overlap unitarity).
 
-Extracted so the eigenbasis data is defined once and cannot drift between
-`quantumRelativeEntropy_nonneg` and `quantumRelativeEntropy_eq_zero_iff`. -/
+These are the trace expansions and overlap unitarity underlying both the
+nonnegativity and the equality analysis of Klein's inequality. -/
 private theorem klein_gibbs_setup {ρ σ : Matrix n n ℂ}
     (hρ : ρ.IsHermitian) (hσ : σ.IsHermitian) :
     (Matrix.trace (ρ * hρ.cfc Real.log)).re
@@ -710,11 +710,11 @@ theorem quantumRelativeEntropy_nonneg {n : Type*} [Fintype n] [DecidableEq n]
   -- Shared eigenbasis setup: trace expansions and overlap unitarity.
   obtain ⟨hself, hcross, hWunit_row, hWunit_col⟩ :=
     klein_gibbs_setup hρ.isHermitian hσ.isHermitian
-  set p : n → ℝ := fun i => hρ.isHermitian.eigenvalues i with hp_def
-  set q : n → ℝ := fun j => hσ.isHermitian.eigenvalues j with hq_def
+  set p : n → ℝ := fun i => hρ.isHermitian.eigenvalues i
+  set q : n → ℝ := fun j => hσ.isHermitian.eigenvalues j
   set W : Matrix n n ℂ := (star (hρ.isHermitian.eigenvectorUnitary : Matrix n n ℂ))
-    * (hσ.isHermitian.eigenvectorUnitary : Matrix n n ℂ) with hW_def
-  set P : n → n → ℝ := fun i j => Complex.normSq (W i j) with hP_def
+    * (hσ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
+  set P : n → n → ℝ := fun i j => Complex.normSq (W i j)
   rw [hself, hcross]
   -- Conclude with the classical Gibbs inequality.
   exact gibbs_core p q P (fun i => hρ.eigenvalues_nonneg i)
@@ -830,10 +830,10 @@ theorem quantumRelativeEntropy_eq_zero_iff {n : Type*} [Fintype n] [DecidableEq 
   -- Shared eigenbasis setup: trace expansions and overlap unitarity.
   obtain ⟨hself, hcross, hWunit_row, hWunit_col⟩ :=
     klein_gibbs_setup hρ.isHermitian hσ.isHermitian
-  set p : n → ℝ := fun i => hρ.isHermitian.eigenvalues i with hp_def
-  set q : n → ℝ := fun j => hσ.isHermitian.eigenvalues j with hq_def
+  set p : n → ℝ := fun i => hρ.isHermitian.eigenvalues i
+  set q : n → ℝ := fun j => hσ.isHermitian.eigenvalues j
   set W : Matrix n n ℂ := (star (hρ.isHermitian.eigenvectorUnitary : Matrix n n ℂ))
-    * (hσ.isHermitian.eigenvectorUnitary : Matrix n n ℂ) with hW_def
+    * (hσ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
   set P : n → n → ℝ := fun i j => Complex.normSq (W i j) with hP_def
   rw [hself, hcross] at hD
   have hp_nonneg : ∀ i, 0 ≤ p i := fun i => hρ.eigenvalues_nonneg i
