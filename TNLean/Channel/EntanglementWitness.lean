@@ -49,6 +49,12 @@ expectation nonnegative.
 * `Matrix.exists_isHermitian_witness`: **an entanglement witness exists for every
   trace-one Hermitian state of Schmidt number larger than `n`** (Wolf §3.2,
   Proposition 3.3, the only-if direction).
+* `Matrix.not_hasSchmidtNumberLE_of_exists_witness`: the converse — a state detected by a
+  Schmidt-`n` witness has Schmidt number larger than `n` (no density-matrix hypotheses
+  needed).
+* `Matrix.not_hasSchmidtNumberLE_iff_exists_witness`: **Wolf §3.2, Proposition 3.3** as an
+  iff, for a trace-one Hermitian state: Schmidt number larger than `n` is equivalent to
+  detection by an entanglement witness for `S_n`.
 
 ## References
 
@@ -302,5 +308,52 @@ theorem exists_isHermitian_witness (n : ℕ)
       have : s * f (euclideanProj φ) - c * s = s * (f (euclideanProj φ) - c) := by ring
       rw [this]
       exact mul_nonneg hs_nonneg (by linarith)
+
+/-- **A state detected by a Schmidt-`n` witness is not of Schmidt number at most `n`**
+(Wolf §3.2, Proposition 3.3, if direction).
+
+If a Hermitian operator `W` has negative expectation on ρ but nonnegative expectation on
+every pure state of Schmidt rank at most `n`, then ρ is not of Schmidt number at most `n`.
+This direction needs no density-matrix hypotheses on ρ: if ρ were a sum
+`∑ i, |ψ_i⟩⟨ψ_i|` of pure projectors of Schmidt rank at most `n`, the linearity of the
+trace would make `Re tr(W ρ)` the sum of the nonnegative numbers `Re tr(W |ψ_i⟩⟨ψ_i|)`,
+contradicting its negativity. -/
+theorem not_hasSchmidtNumberLE_of_exists_witness (n : ℕ)
+    {ρ : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ}
+    (hW : ∃ W : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ, W.IsHermitian ∧
+      (W * ρ).trace.re < 0 ∧
+      ∀ ψ : Fin d × Fin d' → ℂ, HasSchmidtRankLE n ψ →
+        0 ≤ (W * Matrix.vecMulVec ψ (star ψ)).trace.re) :
+    ¬ HasSchmidtNumberLE n ρ := by
+  obtain ⟨W, _, hneg, hpos⟩ := hW
+  rintro ⟨ι, _, ψ, hψ, rfl⟩
+  -- Push the witness multiplication and the trace through the finite sum.
+  have hsum : (W * ∑ i, vecMulVec (ψ i) (star (ψ i))).trace.re
+      = ∑ i, (W * vecMulVec (ψ i) (star (ψ i))).trace.re := by
+    rw [Finset.mul_sum, trace_sum, Complex.re_sum]
+  -- Each summand is nonnegative, so the total is nonnegative, contradicting `hneg`.
+  rw [hsum] at hneg
+  have : 0 ≤ ∑ i, (W * vecMulVec (ψ i) (star (ψ i))).trace.re :=
+    Finset.sum_nonneg fun i _ => hpos (ψ i) (hψ i)
+  linarith
+
+/-- **Wolf's entanglement-witness criterion** (Wolf §3.2, Proposition 3.3).  A trace-one
+Hermitian bipartite state ρ has Schmidt number larger than `n` if and only if there is a
+Hermitian operator `W` whose expectation on ρ is negative while its expectation on every
+pure state of Schmidt rank at most `n` is nonnegative.
+
+The forward implication is the separating-hyperplane construction
+`exists_isHermitian_witness`; the converse `not_hasSchmidtNumberLE_of_exists_witness`
+needs no density-matrix hypotheses on ρ and holds by the linearity of the trace. -/
+theorem not_hasSchmidtNumberLE_iff_exists_witness (n : ℕ)
+    {ρ : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ}
+    (hρH : ρ.IsHermitian) (hρtr : ρ.trace = 1) :
+    ¬ HasSchmidtNumberLE n ρ ↔
+      ∃ W : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ, W.IsHermitian ∧
+        (W * ρ).trace.re < 0 ∧
+        ∀ ψ : Fin d × Fin d' → ℂ, HasSchmidtRankLE n ψ →
+          0 ≤ (W * Matrix.vecMulVec ψ (star ψ)).trace.re :=
+  ⟨fun hρ => exists_isHermitian_witness n hρH hρtr hρ,
+   not_hasSchmidtNumberLE_of_exists_witness n⟩
 
 end Matrix
