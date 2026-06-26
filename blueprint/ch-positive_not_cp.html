@@ -3408,13 +3408,13 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:has_schmidt_number_le_tensor_map_id_diff">
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:has_schmidt_number_le_tensor_map_id_general">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
     <span class="theorem_thmlabel">20.33</span>
-    <span class="theorem_thmtitle">Only-if direction for differing bipartite factors</span>
+    <span class="theorem_thmtitle">Only-if direction for a general bipartite system</span>
     <div class="thm_header_extras">
 
     
@@ -3422,7 +3422,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-positive_not_cp.html#thm:has_schmidt_number_le_tensor_map_id_diff">#</a>
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:has_schmidt_number_le_tensor_map_id_general">#</a>
     
     <a class="icon proof" href="ch-positive_not_cp.html#a0000030390"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -3466,7 +3466,7 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/Matrix.HasSchmidtNumberLE.tensorMapId_posSemidef'" class="lean_decl">Matrix.HasSchmidtNumberLE.tensorMapId_posSemidef'</a></li>
+          <li><a href="../docs/find/#doc/Matrix.HasSchmidtNumberLE.tensorMapId_posSemidef_general" class="lean_decl">Matrix.HasSchmidtNumberLE.tensorMapId_posSemidef_general</a></li>
           
         </ul>
     
@@ -3477,17 +3477,17 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    Let the second factor satisfy \(d'\le d\). A bipartite state on \(M_{d}(\mathbb {C})\otimes M_{d'}(\mathbb {C})\) of Schmidt number at most \(n\) satisfies </p>
+  <p>    On a general bipartite system \(M_{d}(\mathbb {C})\otimes M_{d'}(\mathbb {C})\), with no relation imposed between the two factors, a state of Schmidt number at most \(n\) satisfies </p>
 <div class="displaymath" id="a0000030391">
   \[  (T\otimes \operatorname{id})(\rho )\ge 0  \]
 </div>
-<p> for every \(n\)-positive map \(T\) on \(M_{d}(\mathbb {C})\). This lifts the square restriction of Theorem&#160;<a href="ch-positive_not_cp.html#thm:has_schmidt_number_le_tensor_map_id">20.32</a> to a smaller second factor, a partial step toward Wolf’s general bipartite system \(M_{d}(\mathbb {C})\otimes M_{d'}(\mathbb {C})\) <span class="cite">
+<p> for every \(n\)-positive map \(T\) on \(M_{d}(\mathbb {C})\). This is the only-if direction of Wolf’s Proposition&#160;3.4, the first step of eq.&#160;(3.18) <span class="cite">
 	[
 	
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
 	, Chapter&#160;3, Proposition&#160;3.4
 	]
-</span>. </p>
+</span>, with no restriction on the bipartite dimensions. </p>
 
   </div>
 </div>
@@ -3499,7 +3499,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Pad the second factor of each pure summand from \(d'\) to \(d\) with zero columns; this preserves the Schmidt-rank bound, so the padded state on the square system \(M_{d}(\mathbb {C})\otimes M_{d}(\mathbb {C})\) still has Schmidt number at most \(n\). The square result makes the padded ampliation positive semidefinite, and the original ampliation is its \(d\times d'\) principal submatrix, hence positive semidefinite. </p>
+  <p>Pad the bipartite state to the square system \(M_{D}(\mathbb {C})\otimes M_{D}(\mathbb {C})\) with \(D=\max (d,d')\) by zero rows and columns: when \(d'\le d\) the second factor is padded up to \(d\); when \(d\le d'\) the first factor is padded up to \(d'\) and \(T\) is extended to a map on \(M_{d'}(\mathbb {C})\) that preserves \(n\)-positivity. Padding preserves the Schmidt-number bound, the square result makes the padded ampliation positive semidefinite, and the original ampliation is its principal submatrix, hence positive semidefinite. </p>
 
   </div>
 </div>
