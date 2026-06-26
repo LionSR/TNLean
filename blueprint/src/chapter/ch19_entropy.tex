@@ -657,11 +657,10 @@ finite-dimensional quantum systems.
     \[
         D(\tr_C \rho \,\Vert\, \tr_C \sigma) \le D(\rho \,\Vert\, \sigma),
     \]
-    where $\tr_C$ is the partial trace over the ancilla factor. (Scope
-    restriction: the source inequality holds for density operators with
-    $\ker \sigma \subseteq \ker \rho$; here both arguments are positive definite.
-    Recorded in the relative-entropy elimination route note for strong
-    subadditivity.)
+    where $\tr_C$ is the partial trace over the ancilla factor. This is the
+    positive-definite base case; the source inequality on the support domain
+    $\ker \sigma \subseteq \ker \rho$ is
+    Theorem~\ref{thm:relative_entropy_data_processing_support}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -682,6 +681,64 @@ finite-dimensional quantum systems.
     $D(\rho \,\Vert\, \sigma)$ by unitary invariance
     (Theorem~\ref{thm:relative_entropy_unitary_invariance}). As the weights sum to
     one, the bound is $D(\rho \,\Vert\, \sigma)$.
+\end{proof}
+
+\begin{theorem}[Data-processing inequality on the support domain]
+    \label{thm:relative_entropy_data_processing_support}
+    \lean{Matrix.quantumRelativeEntropy_partialTraceRight_le_support}
+    \leanok
+    \uses{def:quantum_relative_entropy, thm:relative_entropy_data_processing,
+        thm:relative_entropy_joint_convexity_support}
+    For positive semidefinite $\rho, \sigma$ on a tensor product of a system factor
+    and an ancilla factor of dimension $d_C$, with the support condition
+    $\ker \sigma \subseteq \ker \rho$,
+    \[
+        D(\tr_C \rho \,\Vert\, \tr_C \sigma) \le D(\rho \,\Vert\, \sigma),
+    \]
+    where $\tr_C$ is the partial trace over the ancilla factor.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:relative_entropy_data_processing,
+        thm:relative_entropy_joint_convexity_support}
+    Let $N$ be the dimension of the joint space. Regularize both arguments through
+    the affine trace-shrinking perturbation
+    $M_\varepsilon = (1+N\varepsilon)^{-1}(M+\varepsilon\,\mathbf 1)$, which is
+    positive definite for every $\varepsilon>0$, so the positive-definite
+    data-processing inequality
+    (Theorem~\ref{thm:relative_entropy_data_processing}) gives
+    \[
+        D(\tr_C \rho_\varepsilon \,\Vert\, \tr_C \sigma_\varepsilon)
+            \le D(\rho_\varepsilon \,\Vert\, \sigma_\varepsilon),
+        \qquad \varepsilon > 0.
+    \]
+    The right-hand side converges to $D(\rho \,\Vert\, \sigma)$ as
+    $\varepsilon\to0^+$, by the same shared-eigenbasis scalar-limit argument as the
+    joint convexity on the support domain
+    (Theorem~\ref{thm:relative_entropy_joint_convexity_support}).
+
+    For the left-hand side, the partial trace of the regularization is a
+    differently-scaled regularization of the marginal: because the partial trace is
+    linear and $\tr_C \mathbf 1 = d_C\,\mathbf 1$,
+    \[
+        \tr_C\bigl((1+N\varepsilon)^{-1}(M+\varepsilon\,\mathbf 1)\bigr)
+            = (1+N\varepsilon)^{-1}\bigl(\tr_C M + d_C\varepsilon\,\mathbf 1\bigr),
+    \]
+    the affine regularization of $\tr_C M$ with the same scaling rate $N$ but shift
+    rate $d_C$ and the smaller identity on the system factor. The support condition
+    transfers to the marginals,
+    $\ker(\tr_C \sigma) \subseteq \ker(\tr_C \rho)$: a vector annihilated by
+    $\tr_C \sigma$ has vanishing marginal quadratic form, which splits into the
+    nonnegative joint quadratic forms of its single-ancilla lifts, so each lift lies
+    in $\ker \sigma$, hence in $\ker \rho$, and reassembling the ancilla sum shows
+    the vector lies in $\ker(\tr_C \rho)$. With this support condition the
+    arbitrary-rate affine regularization has the same both-arguments limit, so
+    \[
+        D(\tr_C \rho_\varepsilon \,\Vert\, \tr_C \sigma_\varepsilon)
+            \to D(\tr_C \rho \,\Vert\, \tr_C \sigma),
+        \qquad \varepsilon\to0^+.
+    \]
+    Passing the inequality through the two limits gives the support-domain bound.
 \end{proof}
 
 \begin{theorem}[Entropy is invariant under reindexing]
