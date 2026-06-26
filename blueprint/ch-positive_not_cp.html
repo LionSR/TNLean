@@ -4098,6 +4098,366 @@
 
   </div>
 </div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:exists_choiMatrix_eq">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">20.41</span>
+    <span class="theorem_thmtitle">Surjectivity of the Choi correspondence</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:exists_choiMatrix_eq">#</a>
+    
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030640"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-channel_representations.html#thm:cp_iff_choi_posSemidef">Theorem 16.9</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/ChoiJamiolkowski.exists_choiMatrix_eq" class="lean_decl">ChoiJamiolkowski.exists_choiMatrix_eq</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    Assume \(D{\gt}0\). Every bipartite matrix \(W\) on \(\mathbb {C}^D\otimes \mathbb {C}^D\) is the Choi matrix \(\tau _T=(T\otimes \mathbb {1})(|\Omega \rangle \langle \Omega |)\) of some linear map \(T\colon M_{D}(\mathbb {C})\to M_{D}(\mathbb {C})\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000030640">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The Choi correspondence \(T\mapsto \tau _T\) is complex-linear and injective. Its domain, the space of linear maps on \(M_{D}(\mathbb {C})\), and its codomain, the bipartite matrix space on \(\mathbb {C}^D\otimes \mathbb {C}^D\), both have complex dimension \(D^4\), so the injective map is also surjective. Hence every \(W\) is a Choi matrix. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:exists_isNPositiveMap_choiMatrix_eq">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">20.42</span>
+    <span class="theorem_thmtitle">A witness is the Choi matrix of an \(n\)-positive map</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:exists_isNPositiveMap_choiMatrix_eq">#</a>
+    
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030641"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-schwarz.html#def:k_positive_map">Definition 5.7</a></li>
+          
+          <li><a href="ch-schwarz.html#def:schmidt_rank">Definition 5.11</a></li>
+          
+          <li><a href="ch-positive_not_cp.html#thm:exists_choiMatrix_eq">Theorem 20.41</a></li>
+          
+          <li><a href="ch-schwarz.html#thm:schmidt_rank_choi_test_iff">Theorem 5.40</a></li>
+          
+          <li><a href="ch-positive_not_cp.html#thm:exists_entanglement_witness">Theorem 20.39</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/ChoiJamiolkowski.exists_isNPositiveMap_choiMatrix_eq_of_witness" class="lean_decl">ChoiJamiolkowski.exists_isNPositiveMap_choiMatrix_eq_of_witness</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    Assume \(D{\gt}0\). Let \(W\) be a Hermitian operator on \(\mathbb {C}^D\otimes \mathbb {C}^D\) with </p>
+<div class="displaymath" id="a0000030642">
+  \[  \operatorname {Re}\langle \psi |W|\psi \rangle \ge 0 \quad \text{for every $\psi $ of Schmidt rank at most }n.  \]
+</div>
+<p> Then \(W\) is the Choi matrix of an \(n\)-positive map \(T\). This is the Choi–Jamiołkowski translation of the entanglement witness of Wolf’s Proposition&#160;3.3 into the \(n\)-positive map of Wolf’s Proposition&#160;3.4 <span class="cite">
+	[
+	
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Chapter&#160;3, Proposition&#160;3.4
+	]
+</span>. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000030641">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>By the surjectivity of the Choi correspondence (<a href="ch-positive_not_cp.html#thm:exists_choiMatrix_eq">20.41</a>) there is a linear map \(T\) with \(\tau _T=W\). Because \(W\) is Hermitian, the Choi quadratic form \(\langle \psi |W|\psi \rangle \) is real, and it equals the witness expectation \(\operatorname{tr}(W|\psi \rangle \langle \psi |)\); the witness condition makes it nonnegative on every vector of Schmidt rank at most \(n\). This is exactly the Schmidt-rank Choi criterion (<a href="ch-schwarz.html#thm:schmidt_rank_choi_test_iff">5.40</a>) for \(n\)-positivity of \(T\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:trace_choiMatrix_omega_quadratic_adjoint">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">20.43</span>
+    <span class="theorem_thmtitle">Choi trace pairing through the trace-pairing adjoint</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:trace_choiMatrix_omega_quadratic_adjoint">#</a>
+    
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030643"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-schwarz.html#def:trace_pairing_adjoint">Definition 5.54</a></li>
+          
+          <li><a href="ch-schwarz.html#thm:trace_pairing_adjoint_ampliation">Theorem 5.60</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/ChoiJamiolkowski.trace_choiMatrix_mul_eq_omegaVec_quadraticForm_traceAdjointMap" class="lean_decl">ChoiJamiolkowski.trace_choiMatrix_mul_eq_omegaVec_quadraticForm_traceAdjointMap</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    For a linear map \(T\colon M_{D}(\mathbb {C})\to M_{D}(\mathbb {C})\) with Choi matrix \(\tau _T\) and any bipartite matrix \(\rho \) on \(\mathbb {C}^D\otimes \mathbb {C}^D\), </p>
+<div class="displaymath" id="a0000030644">
+  \[  \operatorname{tr}(\tau _T\, \rho ) = \langle \Omega |(T^{*}\otimes \mathbb {1})(\rho )|\Omega \rangle ,  \]
+</div>
+<p> where \(T^{*}\) is the trace-pairing adjoint of \(T\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000030643">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Since \(\tau _T=(T\otimes \mathbb {1})(|\Omega \rangle \langle \Omega |)\), cyclicity of the trace gives \(\operatorname{tr}(\tau _T\rho )=\operatorname{tr}\bigl(\rho \, (T\otimes \mathbb {1})(|\Omega \rangle \langle \Omega |)\bigr)\). The \(\mathbb {1}\)-ampliation of the trace-pairing adjoint is the trace-pairing adjoint of the ampliation, so moving \(T\) across the trace pairing replaces \((T\otimes \mathbb {1})\) by \((T^{*}\otimes \mathbb {1})\) acting on \(\rho \) and turns the pairing against \(|\Omega \rangle \langle \Omega |\) into the quadratic form \(\langle \Omega |\, \cdot \, |\Omega \rangle \). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:exists_isNPositiveMap_detects">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">20.44</span>
+    <span class="theorem_thmtitle">Positive maps detect high Schmidt number</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:exists_isNPositiveMap_detects">#</a>
+    
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030645"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-schwarz.html#def:k_positive_map">Definition 5.7</a></li>
+          
+          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.27</a></li>
+          
+          <li><a href="ch-positive_not_cp.html#thm:exists_entanglement_witness">Theorem 20.39</a></li>
+          
+          <li><a href="ch-positive_not_cp.html#thm:exists_isNPositiveMap_choiMatrix_eq">Theorem 20.42</a></li>
+          
+          <li><a href="ch-schwarz.html#thm:trace_pairing_adjoint_positive">Theorem 5.58</a></li>
+          
+          <li><a href="ch-positive_not_cp.html#thm:trace_choiMatrix_omega_quadratic_adjoint">Theorem 20.43</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.exists_isNPositiveMap_tensorMapId_not_posSemidef" class="lean_decl">Matrix.exists_isNPositiveMap_tensorMapId_not_posSemidef</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    Let \(\rho \) be a trace-one Hermitian bipartite state on \(\mathbb {C}^D\otimes \mathbb {C}^D\) whose Schmidt number exceeds \(n\). Then there is an \(n\)-positive map \(T\colon M_{D}(\mathbb {C})\to M_{D}(\mathbb {C})\) such that \((T\otimes \mathbb {1})(\rho )\) is not positive semidefinite. This is the if direction of Wolf’s Proposition&#160;3.4 <span class="cite">
+	[
+	
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Chapter&#160;3, Proposition&#160;3.4
+	]
+</span>. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000030645">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The entanglement witness \(W\) for \(\rho \) (<a href="ch-positive_not_cp.html#thm:exists_entanglement_witness">20.39</a>) is the Choi matrix of an \(n\)-positive map \(P\) (<a href="ch-positive_not_cp.html#thm:exists_isNPositiveMap_choiMatrix_eq">20.42</a>). Its trace-pairing adjoint \(T=P^{*}\) is again \(n\)-positive (<a href="ch-schwarz.html#thm:trace_pairing_adjoint_positive">5.58</a>). By the Choi trace pairing through the trace-pairing adjoint (<a href="ch-positive_not_cp.html#thm:trace_choiMatrix_omega_quadratic_adjoint">20.43</a>), </p>
+<div class="displaymath" id="a0000030646">
+  \[  \langle \Omega |(T\otimes \mathbb {1})(\rho )|\Omega \rangle =\operatorname{tr}(W\rho ),  \]
+</div>
+<p> whose real part is negative. A positive semidefinite matrix has nonnegative quadratic forms, so \((T\otimes \mathbb {1})(\rho )\) is not positive semidefinite. </p>
+
+  </div>
+</div>
 
 
 </div> <!--main-text -->
