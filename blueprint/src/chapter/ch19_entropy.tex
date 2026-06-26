@@ -897,6 +897,25 @@ finite-dimensional quantum systems.
     evaluation follows.
 \end{proof}
 
+\begin{lemma}[The maximally mixed reference lies in the support domain]
+    \label{lem:kron_marginal_support}
+    \lean{SSAPosDef.kron_marginal_support}
+    \leanok
+    Let $\rho$ be a positive semidefinite operator on $A \otimes R$ with reduced
+    state $\rho_R = \tr_A \rho$. Then the singular reference
+    $(\mathbf 1_A / d_A) \otimes \rho_R$ satisfies the support condition
+    $\ker\bigl((\mathbf 1_A / d_A) \otimes \rho_R\bigr) \subseteq \ker\rho$.
+\end{lemma}
+
+\begin{proof}\leanok
+    A vector $v$ annihilated by $(\mathbf 1_A / d_A) \otimes \rho_R$ is annihilated
+    by $\mathbf 1_A \otimes \rho_R$, since $\mathbf 1_A / d_A$ is invertible. Let $P$
+    be the orthogonal projection onto the range of $\rho_R$. The complementary lift
+    $\mathbf 1_A \otimes (\mathbf 1 - P)$ then fixes $v$, while it annihilates $\rho$
+    on the left because the reduced state of $\rho$ on $R$ is supported on the range
+    of $P$. Hence $\rho v = 0$.
+\end{proof}
+
 \begin{theorem}[Strong subadditivity]\label{thm:strong_subadditivity}
     \lean{strong_subadditivity_general}
     \leanok
@@ -910,7 +929,7 @@ finite-dimensional quantum systems.
 
 \begin{proof}\leanok
     \uses{def:quantum_relative_entropy, thm:relative_entropy_data_processing_support,
-        lem:rel_entropy_eval_support}
+        lem:rel_entropy_eval_support, lem:kron_marginal_support}
     Read the inequality as one instance of data processing under the partial trace
     over $C$, with the singular reference state
     $\sigma_{ABC} = (\mathbf 1_A / d_A) \otimes \rho_{BC}$. Being a density operator
