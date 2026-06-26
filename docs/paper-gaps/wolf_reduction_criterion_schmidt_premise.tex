@@ -109,33 +109,40 @@ the map $T_n$ is $n$-positive for all $1\le n<D$.\footnote{Formal declaration:
     $T_\eta$ at $\eta=n$ by \leanid{Matrix.reductionMap_eq_tEta}.}
 
 The pure-state step writes $\psi$ through the maximally entangled vector as a
-\emph{square} right-factor matrix, so the formalized statements fix the two tensor
-factors to a common dimension $D$: they live on the square bipartite system
-$\mathbb{C}^D\otimes\mathbb{C}^D$ rather than on Wolf's general
-$\mathbb{C}^d\otimes\mathbb{C}^{d'}$. The restriction enters through the square
-parametrization of a bipartite vector by a maximally-entangled-vector compression,
-which is currently available only for equal-dimension factors. Eliminating it
-requires the rectangular form of that parametrization (a vector on
-$\mathbb{C}^d\otimes\mathbb{C}^{d'}$ written as a $d\times d'$ right-factor matrix);
-once that is formalized, the three headline statements generalize verbatim to
-$\mathbb{C}^d\otimes\mathbb{C}^{d'}$.
+\emph{square} right-factor matrix, so the $T_n$-specialised \emph{criterion} theorems
+still fix the two tensor factors to a common dimension $D$. The general bipartite
+\emph{forward step} itself, however, no longer carries that restriction: padding the
+bipartite state to the square system $\mathbb{C}^D\otimes\mathbb{C}^D$ with
+$D=\max(d,d')$ — padding the smaller factor by zero rows or columns and, when the
+first factor grows, extending the map by a corner sandwich that preserves
+$n$-positivity — reduces the general case to the square one. Thus
+$(T\otimes\operatorname{id})(\rho)\ge 0$ holds on a general
+$\mathbb{C}^d\otimes\mathbb{C}^{d'}$ for every $n$-positive map $T$, with no relation
+between the factors.\footnote{Formal declaration:
+    \leanid{Matrix.HasSchmidtNumberLE.tensorMapId_posSemidef_general} in
+    \doclink{TNLean/Channel/SchmidtNumberFactors}, with the $n$-positivity-preserving
+    corner extension \leanid{Matrix.isNPositiveMap_cornerExtendMap}.}
 
 \section{Classification}
 
-\emph{Resolved on the square bipartite system $\mathbb{C}^D\otimes\mathbb{C}^D$},
-with two residual scope restrictions. The first, $1\le n<D$, is inherited from the
-$n$-positivity threshold of $T_\eta$, whose top index $n=D$ (complete positivity)
-is documented in \path{docs/paper-gaps/wolf_t_eta_top_index_scope.tex}. The second,
-the equal-dimension condition $d=d'=D$, comes from the square maximally-entangled-vector
-parametrization in the pure-state step; Wolf's eq.~(3.18) is stated for a general
-$\mathbb{C}^d\otimes\mathbb{C}^{d'}$, and its rectangular case awaits the rectangular
-form of that parametrization (elimination plan above). The square-system full
-criterion with Wolf's Schmidt-number premise is now available at
-\leanid{Matrix.reductionCriterion_left_of_hasSchmidtNumberLE} and
-\leanid{Matrix.reductionCriterion_right_of_hasSchmidtNumberLE}. The operator-half
-theorems \leanid{Matrix.reductionCriterion_left} and
-\leanid{Matrix.reductionCriterion_right} remain as the separability-free
-sub-step, no longer the limit of what is formalized.
+\emph{Resolved.} The general bipartite forward step
+$\operatorname{sn}(\rho)\le n\Rightarrow(T\otimes\operatorname{id})(\rho)\ge 0$ holds
+for every $n$-positive map $T$ on $\mathbb{C}^d\otimes\mathbb{C}^{d'}$ with no relation
+between the factors, at
+\leanid{Matrix.HasSchmidtNumberLE.tensorMapId_posSemidef_general}.
+
+Two residual restrictions remain on the $T_n$-specialised reduction \emph{criterion}
+(the operator inequalities $n\,\rho_1\otimes\mathbf 1\ge\rho$ and
+$n\,\mathbf 1\otimes\rho_2\ge\rho$), not on the forward step. First, the criterion
+theorems \leanid{Matrix.reductionCriterion_left_of_hasSchmidtNumberLE} and
+\leanid{Matrix.reductionCriterion_right_of_hasSchmidtNumberLE} compose the
+\emph{square} forward step with the operator-implication step and so are still stated
+on $\mathbb{C}^D\otimes\mathbb{C}^D$; generalising them is the routine composition of
+the general forward step with the already dimension-general operator-half theorems
+\leanid{Matrix.reductionCriterion_left} and \leanid{Matrix.reductionCriterion_right}.
+Second, $1\le n<D$ is inherited from the $n$-positivity threshold of $T_\eta$, whose
+top index $n=D$ (complete positivity) is documented in
+\path{docs/paper-gaps/wolf_t_eta_top_index_scope.tex}.
 
 \bibliographystyle{alpha}
 \bibliography{references}
