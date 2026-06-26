@@ -44,18 +44,24 @@ quantum-Markov-chain structure of the tripartite state
 \cite{Ruskai2002, HaydenJozsaPetzWinter2004, Hayashi2006}.
 
 In the present development the biconditional
-\eqref{eq:ssa-eq} $\Leftrightarrow$~\eqref{eq:qmc} is asserted as a standalone
-axiom.\footnote{The axiom is \leanid{hayashi_ssa_equality_characterization} in
-\doclink{TNLean/Axioms/Entropy} (\path{TNLean/Axioms/Entropy.lean}).
+\eqref{eq:ssa-eq} $\Leftrightarrow$~\eqref{eq:qmc} is recovered by combining a
+forward-only axiom with a proved reverse direction.\footnote{The forward-only
+axiom is \leanid{hayashi_ssa_equality_characterization_forward} in
+\doclink{TNLean/Axioms/Entropy} (\path{TNLean/Axioms/Entropy.lean}); the proved
+reverse direction is
+\leanid{hayashi_ssa_equality_characterization_reverse} in
+\path{TNLean/Analysis/EntropyMarkovReverse.lean}; the biconditional
+\leanid{hayashi_ssa_equality_characterization} combines the two.
 The equality predicate is \leanid{IsSSAEquality} in
 \doclink{TNLean/Analysis/Entropy} (\path{TNLean/Analysis/Entropy.lean}),
 and the right-hand structure is recorded by
-\leanid{HayashiMarkovDecomposition} in \doclink{TNLean/Axioms/Entropy}
-(\path{TNLean/Axioms/Entropy.lean}), whose fields store the
+\leanid{HayashiMarkovDecomposition}, whose fields store the
 finite decomposition, the unitary basis change, the weights $p_j$, the component
-density operators, and the block-diagonal equality.} It is an external stand-in:
-the characterization is a theorem of Ruskai, of Hayden--Jozsa--Petz--Winter, and
-of Hayashi, but its proof is not formalized here.
+density operators, and the block-diagonal equality.} The forward direction is an
+external stand-in: that implication is a theorem of Ruskai, of
+Hayden--Jozsa--Petz--Winter, and of Hayashi, but its proof rests on
+recovery-map and Petz theory not formalized here. The reverse direction is now
+proved from the entropy-additivity sub-lemmas listed below.
 
 \section{The point at issue: only the forward direction is consumed}
 
@@ -92,15 +98,15 @@ downstream result.
 
 \section{The one-directional hygiene split}
 
-Because only the forward direction is both deep and used, an optional cleanup
-keeps the axiom boundary minimal: state the axiom as the single forward
-implication \eqref{eq:ssa-eq} $\Rightarrow$~\eqref{eq:qmc}, and prove the reverse
-implication \eqref{eq:qmc} $\Rightarrow$~\eqref{eq:ssa-eq} as a theorem. The full
-biconditional is then recovered by combining the two, but the axiomatic content
+Because only the forward direction is both deep and used, the axiom boundary is
+kept minimal: the axiom states the single forward
+implication \eqref{eq:ssa-eq} $\Rightarrow$~\eqref{eq:qmc}, and the reverse
+implication \eqref{eq:qmc} $\Rightarrow$~\eqref{eq:ssa-eq} is a theorem. The full
+biconditional is recovered by combining the two, and the axiomatic content
 is reduced to exactly the part that genuinely needs the missing theory.
 
-The reverse half needs the following entropy-additivity sub-lemmas, all of which
-are within reach of the present entropy interface:
+The reverse half uses the following entropy-additivity sub-lemmas, all proved in
+\path{TNLean/Analysis/EntropyDecomposition.lean}:
 
 \begin{itemize}
   \item additivity over a finite weighted orthogonal direct sum:
@@ -137,22 +143,22 @@ are within reach of the present entropy interface:
     terms of~\eqref{eq:ssa-eq} into the two additivity lemmas above.
 \end{itemize}
 
-With these five facts the reverse implication is a finite computation; the
+With these five facts the reverse implication is a finite computation, now
+carried out in \path{TNLean/Analysis/EntropyMarkovReverse.lean}; the
 forward implication remains an axiom until recovery-map and Petz theory are
 available.
 
 \section{Verdict}
 
-The strong-subadditivity equality characterization is an external stand-in for a
-theorem of Ruskai, of Hayden--Jozsa--Petz--Winter, and of Hayashi. Only the
-forward direction, equality implies quantum-Markov-chain structure, is consumed
-downstream, and it is precisely the direction that needs recovery-map and Petz
-theory not present in the library. The reverse direction is an elementary
-consequence of entropy additivity over weighted direct sums and tensor factors
-together with unitary and reindexing invariance, and could be proved now; doing
-so would let the axiom be narrowed to the single load-bearing forward
-implication. Until the recovery-map theory is formalized, the forward direction
-remains the irreducible axiomatic content of this characterization.
+The strong-subadditivity equality characterization is now split into a proved
+reverse direction and an axiomatic forward direction. Only the forward
+direction, equality implies quantum-Markov-chain structure, needs recovery-map
+and Petz theory not present in the library, and it alone is axiomatized. The
+reverse direction, a block-diagonal product state attains equality, is proved
+from entropy additivity over weighted direct sums and tensor factors together
+with unitary and reindexing invariance. Until the recovery-map theory is
+formalized, the forward direction remains the irreducible axiomatic content of
+this characterization.
 
 \begin{thebibliography}{9}
 
