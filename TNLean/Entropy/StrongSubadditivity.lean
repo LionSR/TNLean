@@ -21,8 +21,9 @@ This is a deep theorem of Lieb–Ruskai (1973). The full Lean proof is
 supplied by `strong_subadditivity_general` in
 `TNLean.Channel.Schwarz.StrongSubadditivityPosDef`, derived from Lieb
 concavity; the theorem `Entropy.strongSubadditivity` stated here
-applies that result, so the inequality is available in the `Entropy`
-namespace under the name used by the downstream entropy results.
+applies that result, so the inequality is available in the
+`Entropy` namespace under the name used by the downstream entropy
+results.
 
 ## Main declarations
 
