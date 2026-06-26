@@ -683,6 +683,32 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
     positive semidefinite matrices is positive semidefinite.
 \end{proof}
 
+\begin{theorem}[Only-if direction for differing bipartite factors]
+    \label{thm:has_schmidt_number_le_tensor_map_id_diff}
+    \lean{Matrix.HasSchmidtNumberLE.tensorMapId_posSemidef'}
+    \leanok
+    \uses{def:has_schmidt_number_le, def:tensor_map_id, def:k_positive_map,
+        thm:has_schmidt_number_le_tensor_map_id}
+    Let the second factor satisfy $d'\le d$.  A bipartite state on
+    $\MN{d}\otimes\MN{d'}$ of Schmidt number at most $n$ satisfies
+    \[
+        (T\otimes\id)(\rho)\ge 0
+    \]
+    for every $n$-positive map $T$ on $\MN{d}$.  This lifts the square restriction of
+    Theorem~\ref{thm:has_schmidt_number_le_tensor_map_id} to a smaller second factor,
+    a partial step toward Wolf's general bipartite system
+    $\MN{d}\otimes\MN{d'}$ \cite[Chapter~3, Proposition~3.4]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Pad the second factor of each pure summand from $d'$ to $d$ with zero columns;
+    this preserves the Schmidt-rank bound, so the padded state on the square system
+    $\MN{d}\otimes\MN{d}$ still has Schmidt number at most $n$.  The square result
+    makes the padded ampliation positive semidefinite, and the original ampliation is
+    its $d\times d'$ principal submatrix, hence positive semidefinite.
+\end{proof}
+
 \begin{theorem}[Reduction step from the Schmidt-number premise]
     \label{thm:has_schmidt_number_le_tensor_map_id_t_eta}
     \lean{Matrix.HasSchmidtNumberLE.tensorMapId_tEta_posSemidef}
