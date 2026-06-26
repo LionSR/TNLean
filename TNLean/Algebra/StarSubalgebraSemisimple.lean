@@ -18,8 +18,8 @@ numbers it therefore decomposes as a finite product of matrix algebras
 (its Wedderburn–Artin form).
 
 This is the algebraic core of Wolf Ch. 6, towards Thm 6.14 (the structure of the
-fixed-point set of a Schwarz map), and resolves the missing decomposition step
-recorded in issue #27.
+fixed-point set of a Schwarz map), supplying the semisimple-decomposition step of
+that structure theory.
 
 ## Main results
 
@@ -47,7 +47,7 @@ The full theorem also asserts that the decomposition is implemented by a single
 *unitary* conjugation bringing the subalgebra to block-diagonal form (each block a
 full matrix algebra times the identity on a multiplicity space). That ⋆- and
 unitary-upgrade of the abstract algebra isomorphism is not formalized here; it is
-the remaining step for issue #27.
+the remaining step towards Wolf Thm 6.14.
 -/
 
 open scoped Matrix ComplexOrder
@@ -80,7 +80,7 @@ instance instIsArtinianRing : IsArtinianRing S :=
   IsArtinianRing.of_finite ℂ S
 
 /-- A finite-dimensional ⋆-subalgebra of the complex matrix algebra is a semisimple
-ring. Wolf Ch. 6, towards Thm 6.14; see issue #27. -/
+ring. Wolf Ch. 6, towards Thm 6.14. -/
 instance isSemisimpleRing : IsSemisimpleRing S := by
   rw [IsArtinianRing.isSemisimpleRing_iff_jacobson]
   -- The Jacobson radical is nilpotent because the ring is Artinian.
@@ -107,7 +107,7 @@ instance isSemisimpleRing : IsSemisimpleRing S := by
 
 /-- The Wedderburn–Artin decomposition of a finite-dimensional ⋆-subalgebra of
 the complex matrix algebra: it is isomorphic, as a `ℂ`-algebra, to a finite
-product of complex matrix algebras. Wolf Ch. 6, towards Thm 6.14; see issue #27. -/
+product of complex matrix algebras. Wolf Ch. 6, towards Thm 6.14. -/
 theorem exists_algEquiv_pi_matrix :
     ∃ (k : ℕ) (d : Fin k → ℕ),
       Nonempty (S ≃ₐ[ℂ] Π i, Matrix (Fin (d i)) (Fin (d i)) ℂ) := by
