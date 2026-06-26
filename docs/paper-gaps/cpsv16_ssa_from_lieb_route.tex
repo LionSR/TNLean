@@ -347,17 +347,26 @@ in place. Concretely:
     domain condition holds outright; the relative entropy of each pair evaluates
     to the displayed entropy difference through the tensor logarithm split and the
     partial-trace adjoint, and layer (5) data processing between the two pairs
-    yields~\eqref{eq:ssa}. With layer (5) now formalized on the singular support
-    domain, the marginal support lemma is the one remaining ingredient of the
-    singular-reference extension of this instantiation to the general
-    density-matrix domain, which remains open: it places the singular reference
-    state $(\mathbf 1_A/d_A)\otimes\rho_{BC}$ in the domain of layer (2), after
-    which the singular-domain data processing applies directly.
+    yields~\eqref{eq:ssa}. The singular-reference extension to the general
+    density-matrix domain is now formalized as well:
+    \leanid{strong_subadditivity_general} in the same file proves the
+    inequality~\eqref{eq:ssa} for every positive semidefinite unit-trace
+    $\rho_{ABC}$. The marginal support lemma places the singular reference state
+    $(\mathbf 1_A/d_A)\otimes\rho_{BC}$ in the domain of layer (2) through the
+    kernel projection of $\rho_{BC}$, after which the singular-domain data
+    processing of layer (5) applies. The two relative entropies evaluate to the
+    displayed entropy differences by the singular-reference evaluation
+    \leanid{rel_entropy_eval_support}, which regularizes the reduced state through
+    the affine perturbation $(1+d_R\varepsilon)^{-1}(\rho_R+\varepsilon\mathbf 1)$
+    and passes to the limit, the tensor logarithm split being unavailable for a
+    singular reference. Its only entropy-side axiom is the Lieb-concavity axiom, so
+    this theorem discharges the content of the standalone strong subadditivity
+    axiom on the full density-matrix domain.
 \end{itemize}
 
-\paragraph{Current formal status.} Layers (1)--(5) and the layer-(6) marginal
-support prerequisite are formalized; layers (3), (4), and (5) on the full support
-domain. Layer (4) joint convexity is formalized on the singular support domain
+\paragraph{Current formal status.} Layers (1)--(6) are formalized, with layers
+(3), (4), (5), and the layer-(6) instantiation on the full density-matrix domain.
+Layer (4) joint convexity is formalized on the singular support domain
 $\ker\sigma\subseteq\ker\rho$ (\leanid{convexOn_quantumRelativeEntropy_support}),
 extending the positive-definite base case by regularizing both arguments and
 passing to the limit. Layer (5), data-processing (monotonicity of $D$ under the
@@ -379,20 +388,24 @@ arguments, transferring the support condition to the marginals
 (\leanid{Matrix.partialTraceRight_support}), and passing to the limit through the
 arbitrary-rate affine regularization
 (\leanid{TNLean.RelativeEntropyConvexity.tendsto_relativeEntropyPerturbAffine}).
-The layer-(6) instantiation is formalized on the positive-definite domain
-(\leanid{strong_subadditivity_posDef}): for a positive definite $\rho_{ABC}$ the
-inequality~\eqref{eq:ssa} is a theorem whose only entropy-side axiom is the
-Lieb-concavity axiom. The standalone axiom \leanid{strong_subadditivity} stands
-for the general density-matrix domain, because the positive-definite version is a
-strictly stronger hypothesis and does not discharge the unrestricted axiom; with
-layers (3), (4), and (5) now on the full support domain, closing that gap needs
-only the singular-reference extension of the instantiation, whose missing
-ingredient is placing the singular reference state in the layer-(2) domain by the
-marginal support lemma.
+The layer-(6) instantiation is formalized on the full density-matrix domain. The
+positive-definite case (\leanid{strong_subadditivity_posDef}) is the base case,
+and the singular-reference extension to every positive semidefinite unit-trace
+$\rho_{ABC}$ is \leanid{strong_subadditivity_general}, whose only entropy-side
+axiom is the Lieb-concavity axiom. The marginal support lemma places the singular
+reference state $(\mathbf 1_A/d_A)\otimes\rho_{BC}$ in the layer-(2) domain through
+the kernel projection of $\rho_{BC}$; the two relative entropies evaluate to the
+displayed entropy differences by the singular-reference evaluation
+\leanid{rel_entropy_eval_support} (which regularizes the reduced state and passes
+to the limit, the tensor logarithm split being unavailable for a singular
+reference); and the singular-domain data processing of layer (5) between the two
+pairs yields the inequality. Because \leanid{strong_subadditivity_general} carries
+exactly the hypotheses of the standalone axiom \leanid{strong_subadditivity}, it
+discharges the content of that axiom on the full density-matrix domain.
 
-After the singular-reference extension the inequality is a theorem on the full
-density-matrix domain, the standalone axiom is removed, and the only remaining
-entropy-side axiom on this route is the Lieb-concavity axiom.
+The inequality is now a theorem on the full density-matrix domain whose only
+entropy-side axiom on this route is the Lieb-concavity axiom; the standalone axiom
+can be removed and its consumers redirected to the derived theorem.
 The downstream consumers in the stable entropy interface
 \footnote{The stable interface re-exports the inequality from
 \doclink{TNLean/Entropy/StrongSubadditivity}; consumers import it from there and
@@ -428,17 +441,18 @@ and the singular extension under $\ker\sigma\subseteq\ker\rho$
 regularizing both arguments, transferring the support condition to the marginals
 (\leanid{Matrix.partialTraceRight_support}), and passing to the limit through the
 arbitrary-rate affine regularization. The layer-(6) instantiation is formalized on
-the positive-definite domain (\leanid{strong_subadditivity_posDef}): for a positive
-definite $\rho_{ABC}$ the inequality follows from data processing alone, with the
-positive-definite reference state $(\mathbf 1_A/d_A)\otimes\rho_{BC}$ sidestepping
-the marginal support lemma. With layers (3), (4), and (5) now on the full support
-domain, the remaining work is the singular-reference extension of the
-instantiation, which lifts the result from positive definite $\rho_{ABC}$ to a
-general density matrix by placing the singular reference state in the layer-(2)
-domain through the marginal support lemma; until that is formalized, the standalone
-axiom records the unrestricted statement that the development assumes but does not
-yet derive from
-its operator-convexity input.
+the full density-matrix domain. The positive-definite case
+(\leanid{strong_subadditivity_posDef}), where the positive-definite reference
+state $(\mathbf 1_A/d_A)\otimes\rho_{BC}$ sidesteps the marginal support lemma, is
+the base case; the singular-reference extension to every positive semidefinite
+unit-trace $\rho_{ABC}$ is \leanid{strong_subadditivity_general}, which places the
+singular reference state in the layer-(2) domain through the marginal support lemma
+and evaluates the two relative entropies by the singular-reference evaluation
+\leanid{rel_entropy_eval_support}. The inequality is therefore a theorem on the
+full density-matrix domain whose only entropy-side axiom is the Lieb-concavity
+axiom, and it carries exactly the hypotheses of the standalone axiom
+\leanid{strong_subadditivity}, so that axiom can be removed and its consumers
+redirected to the derived theorem.
 
 \begin{thebibliography}{9}
 

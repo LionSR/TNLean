@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
+import TNLean.Analysis.MarginalSupport
 import TNLean.Channel.PartialTrace
 import TNLean.Channel.Schwarz.WeylTwirl
 import TNLean.Channel.Schwarz.RelativeEntropyConvexity
@@ -49,6 +50,9 @@ discharge the standalone strong-subadditivity axiom.
   $\ker(\operatorname{tr}_C \sigma) \subseteq \ker(\operatorname{tr}_C \rho)$.
 * `Matrix.quantumRelativeEntropy_partialTraceRight_le_support` — the data-processing
   inequality on the singular support domain $\ker \sigma \subseteq \ker \rho$.
+* `Matrix.quantumRelativeEntropy_partialTraceRight_le_general_support` — the
+  data-processing inequality on the singular support domain over an arbitrary
+  product index $S \times T$, reindexed to the canonical product index.
 
 ## Proof outline
 
@@ -728,6 +732,47 @@ theorem quantumRelativeEntropy_partialTraceRight_le_support
   refine le_of_tendsto_of_tendsto hLHS_lim hRHS_lim ?_
   filter_upwards [self_mem_nhdsWithin] with ε hε
   exact hbase ε hε
+
+/-- **Data-processing inequality on an arbitrary product index, support domain.**
+For positive semidefinite matrices $\rho, \sigma$ on $S \times T$ with $T$
+nonempty and $\ker\sigma \subseteq \ker\rho$,
+$D(\operatorname{tr}_T \rho \,\|\, \operatorname{tr}_T \sigma)
+  \le D(\rho \,\|\, \sigma)$. The pair is reindexed to a canonical product index,
+where `quantumRelativeEntropy_partialTraceRight_le_support` applies, and the
+support condition is transported by `mulVec_submatrix_support`. -/
+theorem quantumRelativeEntropy_partialTraceRight_le_general_support
+    {S T : Type*} [Fintype S] [DecidableEq S] [Fintype T] [DecidableEq T] [Nonempty T]
+    {ρ σ : Matrix (S × T) (S × T) ℂ} (hρ : ρ.PosSemidef) (hσ : σ.PosSemidef)
+    (hsupp : ∀ v : S × T → ℂ, σ.mulVec v = 0 → ρ.mulVec v = 0) :
+    quantumRelativeEntropy (partialTraceRight ρ) (partialTraceRight σ)
+      ≤ quantumRelativeEntropy ρ σ := by
+  classical
+  set dS := Fintype.card S with hdS
+  set dT := Fintype.card T with hdT
+  have hNZ : NeZero dT := ⟨by simp [hdT, Fintype.card_ne_zero (α := T)]⟩
+  set eS : S ≃ Fin dS := Fintype.equivFin S with heS
+  set eT : T ≃ ZMod dT := (Fintype.equivFin T).trans (ZMod.finEquiv dT).toEquiv with heT
+  set e : (S × T) ≃ (Fin dS × ZMod dT) := eS.prodCongr eT with hedef
+  have hρ' : (ρ.submatrix e.symm e.symm).PosSemidef := hρ.submatrix e.symm
+  have hσ' : (σ.submatrix e.symm e.symm).PosSemidef := hσ.submatrix e.symm
+  have hsupp' := mulVec_submatrix_support e hsupp
+  have hbase := quantumRelativeEntropy_partialTraceRight_le_support (dS := dS) (dC := dT)
+    (ρ := ρ.submatrix e.symm e.symm) (σ := σ.submatrix e.symm e.symm) hρ' hσ' hsupp'
+  rw [quantumRelativeEntropy_submatrix_equiv hρ.isHermitian hσ.isHermitian e] at hbase
+  have hptr : ∀ X : Matrix (S × T) (S × T) ℂ,
+      partialTraceRight (X.submatrix e.symm e.symm)
+        = (partialTraceRight X).submatrix eS.symm eS.symm := by
+    intro X
+    rw [partialTraceRight_submatrix_left eS.symm X,
+      partialTraceRight_submatrix_right eT.symm
+        (X.submatrix (Prod.map eS.symm id) (Prod.map eS.symm id)),
+      Matrix.submatrix_submatrix]
+    congr 1
+  rw [hptr ρ, hptr σ,
+    quantumRelativeEntropy_submatrix_equiv
+      (partialTraceRight_isHermitian hρ.isHermitian)
+      (partialTraceRight_isHermitian hσ.isHermitian) eS] at hbase
+  exact hbase
 
 end DataProcessing
 

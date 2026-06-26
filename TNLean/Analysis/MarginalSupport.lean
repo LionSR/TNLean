@@ -28,6 +28,9 @@ $A$, annihilates the full state.
   vanishing $\operatorname{tr}(Q \rho) = 0$ forces $Q \rho = 0$. This is the
   operator form of "a projection with zero expectation against a positive
   semidefinite state annihilates it".
+* `Matrix.mulVec_submatrix_support` — support transport under reindexing by a
+  bijection: the kernel inclusion $\ker \sigma \subseteq \ker \rho$ is preserved
+  after reindexing rows and columns of both matrices by the inverse bijection.
 * `Matrix.traceLeftA_lift_trace` — the partial-trace adjoint identity
   $\operatorname{tr}((\mathbf 1_A \otimes M) \rho)
   = \operatorname{tr}(M \operatorname{tr}_A \rho)$ for a matrix $M$ on a general
@@ -153,6 +156,39 @@ theorem PosSemidef.proj_mul_eq_zero_of_trace_eq_zero {ρ Q : Matrix n n ℂ}
 
 end Core
 
+/-! ## Support transport under reindexing -/
+
+section SupportTransport
+
+/-- Support transport under reindexing by a bijection: if $\ker\sigma \subseteq
+\ker\rho$ then the same inclusion holds after reindexing rows and columns by
+$e^{-1}$. The reindexed kernel vectors are the images of the original kernel
+vectors under the bijection. -/
+theorem mulVec_submatrix_support {S T : Type*} [Fintype S] [DecidableEq S]
+    [Fintype T] [DecidableEq T] {ρ σ : Matrix S S ℂ} (e : S ≃ T)
+    (hsupp : ∀ v : S → ℂ, σ.mulVec v = 0 → ρ.mulVec v = 0) :
+    ∀ v : T → ℂ, (σ.submatrix e.symm e.symm).mulVec v = 0
+      → (ρ.submatrix e.symm e.symm).mulVec v = 0 := by
+  intro v hv
+  have hkey : ∀ (M : Matrix S S ℂ) (w : T → ℂ) (t : T),
+      (M.submatrix e.symm e.symm).mulVec w t = (M.mulVec (w ∘ e)) (e.symm t) := by
+    intro M w t
+    simp only [Matrix.mulVec, Matrix.submatrix_apply, dotProduct, Function.comp_apply]
+    refine (Fintype.sum_equiv e (fun s => M (e.symm t) s * w (e s))
+      (fun t' => M (e.symm t) (e.symm t') * w t') ?_).symm
+    intro s
+    rw [Equiv.symm_apply_apply]
+  have hv0 : σ.mulVec (v ∘ e) = 0 := by
+    funext s
+    have := congrFun hv (e s)
+    rw [hkey σ v (e s), Equiv.symm_apply_apply, Pi.zero_apply] at this
+    simpa using this
+  have hρ0 : ρ.mulVec (v ∘ e) = 0 := hsupp _ hv0
+  funext t
+  rw [hkey ρ v t, hρ0, Pi.zero_apply, Pi.zero_apply]
+
+end SupportTransport
+
 /-! ## Partial trace over the first factor and its adjoint -/
 
 section RetainedFactor
@@ -182,6 +218,19 @@ theorem traceLeftA_posDef [NeZero dA] {ρ : Matrix (Fin dA × R) (Fin dA × R) �
     ext i j; simp only [traceLeftA, Matrix.sum_apply, Matrix.submatrix_apply]
   rw [heq]
   exact Matrix.posDef_sum Finset.univ_nonempty fun a _ => hblock a
+
+omit [DecidableEq R] in
+/-- The partial trace over the first factor of a positive semidefinite matrix is
+positive semidefinite, being a sum of positive semidefinite principal
+submatrices. -/
+theorem traceLeftA_posSemidef {ρ : Matrix (Fin dA × R) (Fin dA × R) ℂ} (hρ : ρ.PosSemidef) :
+    (traceLeftA ρ).PosSemidef := by
+  have hblock : ∀ a : Fin dA, (ρ.submatrix (fun r : R => (a, r)) (fun r => (a, r))).PosSemidef :=
+    fun a => hρ.submatrix _
+  have heq : traceLeftA ρ = ∑ a : Fin dA, ρ.submatrix (fun r : R => (a, r)) (fun r => (a, r)) := by
+    ext i j; simp only [traceLeftA, Matrix.sum_apply, Matrix.submatrix_apply]
+  rw [heq]
+  exact Matrix.posSemidef_sum _ fun a _ => hblock a
 
 omit [DecidableEq R] in
 /-- **Partial-trace adjoint identity.** The trace of an identity-on-$A$ lift
