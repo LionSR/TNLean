@@ -301,6 +301,40 @@ finite-dimensional quantum systems.
     $\sum_j q_j-\sum_i p_i=0$, which is the claim.
 \end{proof}
 
+\begin{theorem}[Klein's inequality, support form]\label{thm:klein_inequality_general}
+    \lean{quantumRelativeEntropy_nonneg_general}
+    \leanok
+    \uses{def:quantum_relative_entropy}
+    Let $\rho,\sigma\in \MN{D}$ be density matrices satisfying the support
+    condition $\ker\sigma\subseteq\ker\rho$, that is, every vector annihilated by
+    $\sigma$ is annihilated by $\rho$. Then the relative entropy is nonnegative,
+    \[
+        D(\rho\Vert\sigma)\ge 0.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:klein_inequality}
+    Regularize $\sigma$ by the trace-one perturbation
+    $\sigma_\varepsilon' = (1+\varepsilon D)^{-1}(\sigma+\varepsilon\,\mathbf 1)$,
+    which is positive definite for every $\varepsilon>0$, hence of full rank. The
+    full-rank Klein inequality (Theorem~\ref{thm:klein_inequality}) gives
+    $D(\rho\Vert\sigma_\varepsilon')\ge 0$. The perturbation shares the
+    eigenbasis $\{\ket{f_j}\}$ of $\sigma$, so the cross term reduces to a scalar
+    sum over the eigenvalues $q_j$ of $\sigma$,
+    \[
+        \operatorname{Re}\operatorname{tr}\bigl(\rho\log\sigma_\varepsilon'\bigr)
+          = \sum_j \bra{f_j}\rho\ket{f_j}\,
+            \log\!\bigl((1+\varepsilon D)^{-1}(q_j+\varepsilon)\bigr).
+    \]
+    For $q_j>0$ the scalar logarithm converges to $\log q_j$; for $q_j=0$ the
+    eigenvector $\ket{f_j}$ lies in $\ker\sigma\subseteq\ker\rho$, so its diagonal
+    weight $\bra{f_j}\rho\ket{f_j}$ vanishes and the summand is identically zero.
+    No eigenvalue-continuity input is needed, so $D(\rho\Vert\sigma_\varepsilon')
+    \to D(\rho\Vert\sigma)$ as $\varepsilon\to0^+$ and the inequality passes to
+    the limit.
+\end{proof}
+
 \begin{theorem}[Joint convexity of the relative entropy]
     \label{thm:relative_entropy_joint_convexity}
     \lean{TNLean.RelativeEntropyConvexity.convexOn_quantumRelativeEntropy}
