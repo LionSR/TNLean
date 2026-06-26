@@ -247,18 +247,18 @@ theorem posSemidef_of_submatrix_corner {α β : Type*} [Finite α] [Finite β]
   have := Fintype.ofFinite β
   obtain ⟨m, u, hu⟩ := posSemidef_iff_eq_sum_vecMulVec.mp hpsd
   -- Extend each corner coefficient vector by zero off the range of `g`.
-  set ũ : Fin m → (β → ℂ) :=
-    fun k b => if hb : ∃ a, g a = b then u k hb.choose else 0 with hũ
-  have hũg : ∀ (k : Fin m) (a : α), ũ k (g a) = u k a := by
+  set uExt : Fin m → (β → ℂ) :=
+    fun k b => if hb : ∃ a, g a = b then u k hb.choose else 0 with huExt
+  have huExtg : ∀ (k : Fin m) (a : α), uExt k (g a) = u k a := by
     intro k a
     have hex : ∃ a', g a' = g a := ⟨a, rfl⟩
-    simp only [hũ, hex, dif_pos]
+    simp only [huExt, hex, dif_pos]
     rw [hg hex.choose_spec]
-  have hũoff : ∀ (k : Fin m) (b : β), (∀ a, g a ≠ b) → ũ k b = 0 := by
+  have huExtoff : ∀ (k : Fin m) (b : β), (∀ a, g a ≠ b) → uExt k b = 0 := by
     intro k b hb
     have : ¬ ∃ a, g a = b := fun ⟨a, ha⟩ => hb a ha
-    simp [hũ, this]
-  refine posSemidef_iff_eq_sum_vecMulVec.mpr ⟨m, ũ, ?_⟩
+    simp [huExt, this]
+  refine posSemidef_iff_eq_sum_vecMulVec.mpr ⟨m, uExt, ?_⟩
   ext i j
   simp only [Matrix.sum_apply, vecMulVec_apply, Pi.star_apply]
   by_cases hi : ∃ a, g a = i
@@ -268,19 +268,19 @@ theorem posSemidef_of_submatrix_corner {α β : Type*} [Finite α] [Finite β]
       have hMij : M (g a) (g b) = (M.submatrix g g) a b := by
         simp [Matrix.submatrix_apply]
       rw [hMij, hu]
-      simp only [Matrix.sum_apply, vecMulVec_apply, Pi.star_apply, hũg]
+      simp only [Matrix.sum_apply, vecMulVec_apply, Pi.star_apply, huExtg]
     · simp only [not_exists] at hj
       rw [hsupp i j (Or.inr hj)]
       symm
       apply Finset.sum_eq_zero
       intro k _
-      rw [hũoff k j hj, star_zero, mul_zero]
+      rw [huExtoff k j hj, star_zero, mul_zero]
   · simp only [not_exists] at hi
     rw [hsupp i j (Or.inl hi)]
     symm
     apply Finset.sum_eq_zero
     intro k _
-    rw [hũoff k i hi, zero_mul]
+    rw [huExtoff k i hi, zero_mul]
 
 /-- **Pad the first tensor factor of a bipartite vector by zeros.**  A vector on
 `Fin d × Fin d'` is extended to `Fin d' × Fin d'` (used with `d ≤ d'`) by setting the
@@ -455,7 +455,7 @@ theorem isNPositiveMap_cornerExtendMap (h : d ≤ d') {n : ℕ}
 
 /-- The padded square ampliation restricts on the `d × d'` corner of the first factor
 to the original ampliation: `tensorMapId T ρ` (on `Fin d × Fin d'`) is the principal
-submatrix of `tensorMapId (cornerExtendMap h T) ρ̃` (on `Fin d' × Fin d'`), where `ρ̃`
+submatrix of `tensorMapId (cornerExtendMap h T) ρ'` (on `Fin d' × Fin d'`), where `ρ'`
 is the first-factor zero-padding of `ρ`.  The extended map outputs zero off the corner
 and reproduces `T` on it, and the padded state agrees with the original on the corner. -/
 theorem tensorMapId_padFirstFactor_submatrix (h : d ≤ d')
