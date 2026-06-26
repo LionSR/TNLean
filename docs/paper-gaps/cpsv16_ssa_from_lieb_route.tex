@@ -28,23 +28,24 @@ $\mathcal H_A \otimes \mathcal H_B \otimes \mathcal H_C$, where
 $S(\rho) = -\tr(\rho \log \rho)$ and the reduced operators are the corresponding
 partial traces \cite{LiebRuskai1973}.
 
-In the present development the inequality~\eqref{eq:ssa} is asserted as a
-standalone axiom.\footnote{The axiom is
-\leanid{strong_subadditivity} in \doclink{TNLean/Axioms/Entropy}
-(\path{TNLean/Axioms/Entropy.lean}). It is stated with the
-eigenvalue-based entropy $S(\rho) = \sum_i \eta(\lambda_i)$, $\eta(x) = -x\log x$,
-of \doclink{TNLean/Analysis/Entropy}.}
-It is \emph{not} derived from the operator-concavity input that the same
-development already isolates for the Ando--Lieb theory, namely Lieb's joint
-concavity theorem.\footnote{Lieb concavity is the axiom
+The inequality~\eqref{eq:ssa} was previously asserted as a standalone axiom and
+has now been discharged: it is the theorem \leanid{strong_subadditivity_general}
+in \doclink{TNLean/Channel/Schwarz/StrongSubadditivityPosDef}, derived from Lieb
+concavity along the route recorded below, and the former axiom has been removed
+from \doclink{TNLean/Axioms/Entropy} with its single re-export
+\leanid{Entropy.strongSubadditivity} redirected to the derived
+theorem.\footnote{The entropy is the eigenvalue-based
+$S(\rho) = \sum_i \eta(\lambda_i)$, $\eta(x) = -x\log x$, of
+\doclink{TNLean/Analysis/Entropy}.}
+The derivation rests on the operator-concavity input that the same development
+already isolates for the Ando--Lieb theory, namely Lieb's joint concavity
+theorem.\footnote{Lieb concavity is the axiom
 \leanid{lieb_concavity_axiom} in \doclink{TNLean/Axioms/OperatorConvexity}
 (\path{TNLean/Axioms/OperatorConvexity.lean}), consumed by
 \leanid{lieb_concavity} in \doclink{TNLean/Channel/Schwarz/AndoLieb}.}
-The two axioms are therefore logically independent in the current
-formalization: discharging~\eqref{eq:ssa} into a theorem built on Lieb
-concavity is open work, not a completed reduction. This note records the
-mathematical route from the one axiom to the other and names the intermediate
-layers that are missing.
+The only entropy-side axiom in the closure of
+\leanid{strong_subadditivity_general} is therefore \leanid{lieb_concavity_axiom}.
+This note records the mathematical route that connects the two, layer by layer.
 
 \section{The point at issue}
 
@@ -415,9 +416,10 @@ justification changes from axiom to theorem.
 
 \section{Verdict}
 
-The strong-subadditivity inequality is presently an axiom that is logically
-disconnected from the Lieb-concavity axiom available in the same repository. The
-elimination route is the classical relative-entropy chain: entropy bridge,
+The strong-subadditivity inequality is now a theorem connected to the
+Lieb-concavity axiom available in the same repository; the former standalone
+axiom has been removed. The elimination route is the classical relative-entropy
+chain: entropy bridge,
 definition of relative entropy, Klein's inequality, joint convexity (the step
 consuming Lieb concavity), data-processing under the partial trace, and final
 assembly at the tripartite splitting. Layers (2) and (3) are formalized (the
@@ -450,9 +452,9 @@ singular reference state in the layer-(2) domain through the marginal support le
 and evaluates the two relative entropies by the singular-reference evaluation
 \leanid{rel_entropy_eval_support}. The inequality is therefore a theorem on the
 full density-matrix domain whose only entropy-side axiom is the Lieb-concavity
-axiom, and it carries exactly the hypotheses of the standalone axiom
-\leanid{strong_subadditivity}, so that axiom can be removed and its consumers
-redirected to the derived theorem.
+axiom, and it carries exactly the hypotheses of the former standalone axiom, so
+that axiom has been removed and its single re-export
+\leanid{Entropy.strongSubadditivity} redirected to the derived theorem.
 
 \begin{thebibliography}{9}
 

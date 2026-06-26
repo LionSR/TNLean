@@ -2,7 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.Axioms.Entropy
+import TNLean.Channel.Schwarz.StrongSubadditivityPosDef
 import TNLean.Entropy.TripartiteTrace
 import TNLean.Entropy.VonNeumann
 
@@ -18,17 +18,18 @@ SSA is the statement that for any tripartite density matrix
 `ρ_ABC` on `A ⊗ B ⊗ C`,
 `S(ρ_ABC) + S(ρ_B) ≤ S(ρ_AB) + S(ρ_BC)`.
 This is a deep theorem of Lieb–Ruskai (1973). The full Lean proof is
-deferred to the sanctioned axiom `_root_.strong_subadditivity` in
-`TNLean.Axioms.Entropy`; the theorem `Entropy.strongSubadditivity`
-stated here forwards that single axiom, so that the sanctioned
-axiom inventory under `TNLean/Axioms/` remains authoritative and
-no duplicate axiomatization of SSA is introduced.
+supplied by `strong_subadditivity_general` in
+`TNLean.Channel.Schwarz.StrongSubadditivityPosDef`, derived from Lieb
+concavity; the theorem `Entropy.strongSubadditivity` stated here
+applies that result, so the inequality is available in the
+`Entropy` namespace under the name used by the downstream entropy
+results.
 
 ## Main declarations
 
-* `Entropy.strongSubadditivity` — **theorem** (not a new axiom).
-  Forwards to `_root_.strong_subadditivity` from
-  `TNLean/Axioms/Entropy.lean`.
+* `Entropy.strongSubadditivity` — **theorem** (not an axiom).
+  Forwards to `strong_subadditivity_general` from
+  `TNLean/Channel/Schwarz/StrongSubadditivityPosDef.lean`.
 * `Entropy.vonNeumannEntropy_eq_zero_of_fin_one` — a 1×1 Hermitian
   matrix with trace 1 has vanishing entropy; proved from Mathlib via
   `Real.negMulLog_one`.
@@ -41,20 +42,20 @@ no duplicate axiomatization of SSA is introduced.
   zero entropy, and `Matrix.trace_eq_trace_traceAC_ABC` supplies the
   trace-one hypothesis for the reduced middle state.
 
-## TODO
+## Provenance
 
-Replace the sanctioned axiom `_root_.strong_subadditivity` (in
-`TNLean/Axioms/Entropy.lean`) with a proof along the classical route:
-1. Use `Entropy.quantumRelativeEntropy`, the trace-log relative entropy
+Strong subadditivity is no longer axiomatized. The underlying inequality
+is `strong_subadditivity_general` (in
+`TNLean.Channel.Schwarz.StrongSubadditivityPosDef`), proved from Lieb
+concavity along the relative-entropy route:
+1. `Entropy.quantumRelativeEntropy`, the trace-log relative entropy
    `D(ρ‖σ) = Re tr(ρ(log ρ − log σ))`.
-2. Establish Klein's inequality: `D(ρ‖σ) ≥ 0` for density matrices with
-   positive definite reference state `σ` (and later the usual support condition
-   for singular `σ`).
+2. Klein's inequality: `D(ρ‖σ) ≥ 0` for density matrices.
 3. Lieb's joint concavity of `(A, B) ↦ tr(Kᴴ Aᵗ K B^{1-t})`.
 4. Monotonicity of the relative entropy under partial trace
    (the "data-processing inequality").
 
-See Lieb–Ruskai, JMP 14, 1938 (1973) and also the modern
+See Lieb–Ruskai, JMP 14, 1938 (1973) and the modern
 operator-concavity proof in Ruskai, "Inequalities for quantum entropy:
 A review with conditions for equality", JMP 43, 4358 (2002).
 
@@ -90,10 +91,12 @@ where the reduced states are obtained via the tripartite partial
 traces `traceAC_ABC`, `traceC_ABC`, `traceA_ABC` (see
 `TNLean.Analysis.Entropy`).
 
-This theorem forwards the sanctioned axiom
-`_root_.strong_subadditivity` (in `TNLean/Axioms/Entropy.lean`); no
-new axiom is introduced by this module. See the module-level TODO for
-the roadmap replacing the underlying axiom with a proof.
+This theorem forwards the proved result
+`strong_subadditivity_general` (in
+`TNLean/Channel/Schwarz/StrongSubadditivityPosDef.lean`), which derives
+strong subadditivity for every positive-semidefinite unit-trace
+tripartite density matrix from Lieb concavity. No axiom is introduced
+by this module.
 
 Source: Lieb, Ruskai, JMP 14, 1938 (1973);
 blueprint `thm:entropy_strong_subadditivity`. -/
@@ -108,13 +111,13 @@ theorem strongSubadditivity
           (traceC_ABC_isHermitian hρ_dm.1.isHermitian)
       + Entropy.vonNeumannEntropy (traceA_ABC ρ_ABC)
           (traceA_ABC_isHermitian hρ_dm.1.isHermitian) :=
-  _root_.strong_subadditivity ρ_ABC hρ_dm
+  strong_subadditivity_general ρ_ABC hρ_dm
 
 /-- Algebraic rearrangement of `strongSubadditivity` in the
 "conditional entropy" form: `S(ρ_ABC) − S(ρ_AB) ≤ S(ρ_BC) − S(ρ_B)`.
 
-This follows from the axiom by adding `−S(ρ_AB) − S(ρ_B)` to both
-sides of the basic SSA inequality.
+This follows from `strongSubadditivity` by adding `−S(ρ_AB) − S(ρ_B)`
+to both sides of the basic SSA inequality.
 
 Source: [Wolf, Chapter 8, Section 8.7][Wolf2012QChannels]. -/
 theorem strongSubadditivity_rearranged

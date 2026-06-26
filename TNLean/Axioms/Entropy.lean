@@ -15,21 +15,15 @@ clear to downstream files and to CI.
 
 ## Status
 
-* `strong_subadditivity` is an **axiom** (proof deferred; see TODO below).
+* Strong subadditivity is **no longer axiomatized**: it is proved as
+  `strong_subadditivity_general` in
+  `TNLean.Channel.Schwarz.StrongSubadditivityPosDef`, derived from Lieb
+  concavity, and applied under the name `Entropy.strongSubadditivity`.
 * `hayashi_ssa_equality_characterization` is an **axiom** stating the
   standard equality case of strong subadditivity as a quantum-Markov-chain
   decomposition on the middle subsystem.
-* A `subadditivity` result can be derived from `strong_subadditivity` by
-  specializing `dC = 1`; this is left for downstream modules.
 
 ## TODO
-
-Replace `strong_subadditivity` with a proof from Klein's inequality and
-Lieb concavity (Lieb–Ruskai 1973). This requires:
-1. Quantum relative entropy `D(ρ‖σ) = tr(ρ(log ρ - log σ))`
-2. Klein's inequality: `D(ρ‖σ) ≥ 0`
-3. Joint convexity of relative entropy
-4. Monotonicity of relative entropy under partial trace
 
 Replace `hayashi_ssa_equality_characterization` with a proof of the equality
 case of strong subadditivity. A faithful formalization is expected to require:
@@ -170,38 +164,6 @@ structure HayashiMarkovDecomposition {dA dB dC : ℕ}
           (HayashiMarkov.liftB (dA := dA) (dB := dB) (dC := dC)
             (U_B : Matrix (Fin dB) (Fin dB) ℂ))ᴴ)
       = HayashiMarkov.blockState (dA := dA) (dC := dC) dL dR p ρ_left ρ_right
-
-/-! ## Strong subadditivity (axiom) -/
-
-section StrongSubadditivity
-
-variable {dA dB dC : ℕ}
-
-/-- **Strong subadditivity** (Lieb–Ruskai 1973).
-
-For a tripartite density matrix `ρ_ABC` on `A ⊗ B ⊗ C`:
-  `S(ρ_ABC) + S(ρ_B) ≤ S(ρ_AB) + S(ρ_BC)`
-
-This is axiomatized; see the module docstring for the deferred proof plan.
-Hermiticity of reduced states is derived via `traceA_ABC_isHermitian` etc.
-from `hρ_dm.1.isHermitian`.
-
-Source: Lieb, Ruskai, JMP 14, 1938 (1973);
-[Wolf, Chapter 8, Section 8.7 (Contractivity and the increase of entropy)][Wolf2012QChannels];
-blueprint `thm:strong_subadditivity`. -/
-axiom strong_subadditivity
-    (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
-      (Fin dA × Fin dB × Fin dC) ℂ)
-    (hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1) :
-    vonNeumannEntropy ρ_ABC hρ_dm.1.isHermitian
-      + vonNeumannEntropy (traceAC_ABC ρ_ABC)
-          (traceAC_ABC_isHermitian hρ_dm.1.isHermitian)
-    ≤ vonNeumannEntropy (traceC_ABC ρ_ABC)
-          (traceC_ABC_isHermitian hρ_dm.1.isHermitian)
-      + vonNeumannEntropy (traceA_ABC ρ_ABC)
-          (traceA_ABC_isHermitian hρ_dm.1.isHermitian)
-
-end StrongSubadditivity
 
 /-! ## Equality characterization of strong subadditivity (axiom) -/
 
