@@ -687,8 +687,7 @@ finite-dimensional quantum systems.
     \label{thm:relative_entropy_data_processing_support}
     \lean{Matrix.quantumRelativeEntropy_partialTraceRight_le_support}
     \leanok
-    \uses{def:quantum_relative_entropy, thm:relative_entropy_data_processing,
-        thm:relative_entropy_joint_convexity_support}
+    \uses{def:quantum_relative_entropy, thm:relative_entropy_data_processing}
     For positive semidefinite $\rho, \sigma$ on a tensor product of a system factor
     and an ancilla factor of dimension $d_C$, with the support condition
     $\ker \sigma \subseteq \ker \rho$,
@@ -699,8 +698,7 @@ finite-dimensional quantum systems.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:relative_entropy_data_processing,
-        thm:relative_entropy_joint_convexity_support}
+    \uses{thm:relative_entropy_data_processing}
     Let $N$ be the dimension of the joint space. Regularize both arguments through
     the affine trace-shrinking perturbation
     $M_\varepsilon = (1+N\varepsilon)^{-1}(M+\varepsilon\,\mathbf 1)$, which is
