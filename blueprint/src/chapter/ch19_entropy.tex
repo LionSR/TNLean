@@ -876,8 +876,8 @@ finite-dimensional quantum systems.
 
 \begin{proof}\leanok
     The tensor product is unitarily conjugate to the diagonal of eigenvalue
-    products $\lambda_i \mu_j$. Using $\mathrm{negMulLog}(\lambda_i \mu_j) =
-    \mu_j\, \mathrm{negMulLog}(\lambda_i) + \lambda_i\, \mathrm{negMulLog}(\mu_j)$
+    products $\lambda_i \mu_j$. Using $-\lambda_i\mu_j\log(\lambda_i\mu_j) =
+    \mu_j\,(-\lambda_i\log\lambda_i) + \lambda_i\,(-\mu_j\log\mu_j)$
     and the unit eigenvalue sums collapses the double sum to $S(\omega)+S(\tau)$.
 \end{proof}
 
@@ -886,15 +886,15 @@ finite-dimensional quantum systems.
     \lean{vonNeumannEntropy_smul}
     \leanok
     \uses{def:von_neumann_entropy}
-    For a density matrix $\omega$ and a nonnegative scalar $c$,
+    For a density matrix $\omega$ and a scalar $c$,
     \[
-        S(c\,\omega) = c\, S(\omega) + \mathrm{negMulLog}(c).
+        S(c\,\omega) = c\, S(\omega) - c\log c.
     \]
 \end{theorem}
 
 \begin{proof}\leanok
     The eigenvalues of $c\,\omega$ are $c\lambda_i$, so the entropy is
-    $\sum_i \mathrm{negMulLog}(c\lambda_i)$; splitting each term and using the
+    $\sum_i -(c\lambda_i)\log(c\lambda_i)$; splitting each term and using the
     unit eigenvalue sum gives the stated form.
 \end{proof}
 
@@ -1154,7 +1154,7 @@ finite-dimensional quantum systems.
 \begin{theorem}[Hayashi SSA-equality characterization]
     \label{thm:hayashi_ssa_equality_characterization}
     \lean{hayashi_ssa_equality_characterization}
-    \notready
+    \leanok
     \uses{def:ssa_equality, def:hayashi_markov_decomposition,
         thm:hayashi_ssa_equality_reverse}
     For a tripartite density matrix $\rho_{ABC}$,
