@@ -422,9 +422,9 @@ maps.
             \le \bra{\psi}\tau\ket{\psi} ,
     \]
     and hence the same bound holds for the infimum over such vectors. This is the
-    lower bound of \cite[Chapter~3, Proposition~3.2]{Wolf2012Quantum}, stated for
-    $n<D'$; the top index $n=D'$ lies outside the range of
-    Theorem~\ref{thm:maximal_overlap_schmidt_rank}.
+    lower bound of \cite[Chapter~3, Proposition~3.2]{Wolf2012Quantum} for
+    $n<D'$; the top index $n=D'$ is
+    Theorem~\ref{thm:spectral_bound_schmidt_rank_top}.
 \end{theorem}
 
 \begin{proof}
@@ -465,7 +465,8 @@ maps.
     eigenvalue $\nu_-$ recovers the upper bound
     $\nu + (\nu_- - \nu)\,\|\rho_-\|_{(n)}$ of
     \cite[Chapter~3, Proposition~3.2]{Wolf2012Quantum}. The statement is for
-    $n<D'$.
+    $n<D'$; the top index $n=D'$ is
+    Theorem~\ref{thm:spectral_bound_schmidt_rank_top}.
 \end{theorem}
 
 \begin{proof}
@@ -484,6 +485,38 @@ maps.
     supplies a normalized $\psi$ of Schmidt rank at most $n$ attaining
     $|\braket{\phi_j}{\psi}|^2=\|\rho_j\|_{(n)}$; at that vector the right-hand
     side equals $\nu + (\nu_j-\nu)\,\|\rho_j\|_{(n)}$.
+\end{proof}
+
+\begin{theorem}[Spectral bounds at the top Schmidt rank]
+    \label{thm:spectral_bound_schmidt_rank_top}
+    \lean{Matrix.IsHermitian.spectral_lower_bound_top,
+        Matrix.IsHermitian.spectral_upper_bound_top}
+    \leanok
+    \uses{lem:eigenbasis_rayleigh, lem:eigenbasis_parseval}
+    At the top index $n=D'$ the Schmidt-rank constraint is vacuous and each
+    Ky-Fan $D'$-norm collapses to $\|\rho_i\|_{(D')}=\tr\rho_i=1$, so the spectral
+    bounds reduce to the Rayleigh characterization of the extreme eigenvalues:
+    every normalized vector $\psi$ satisfies
+    \[
+        \nu_{\min} \le \bra{\psi}\tau\ket{\psi} \le \nu_{\max} ,
+    \]
+    with no Schmidt-rank restriction, and both extremes are attained at the
+    corresponding eigenvector. Together with
+    Theorems~\ref{thm:spectral_lower_bound_schmidt_rank}
+    and~\ref{thm:spectral_upper_bound_schmidt_rank} this covers the full range
+    $1\le n\le D'$ of \cite[Chapter~3, Proposition~3.2]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:eigenbasis_rayleigh, lem:eigenbasis_parseval}
+    The eigenbasis expansion
+    $\bra{\psi}\tau\ket{\psi}=\sum_i\nu_i\,|\braket{\phi_i}{\psi}|^2$ together with
+    Parseval's identity $\sum_i|\braket{\phi_i}{\psi}|^2=1$ bounds each weight
+    $\nu_i$ between $\nu_{\min}$ and $\nu_{\max}$, giving
+    $\nu_{\min}\le\bra{\psi}\tau\ket{\psi}\le\nu_{\max}$. Evaluating at the
+    eigenvector $\phi_j$ returns $\bra{\phi_j}\tau\ket{\phi_j}=\nu_j$, so the
+    extremes are attained.
 \end{proof}
 
 \begin{theorem}[Rank-one test for $k$-positivity]\label{thm:k_positive_rank_one_test}
