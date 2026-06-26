@@ -100,9 +100,14 @@ the following.
     the limit using continuity on the common support and lower semicontinuity at
     the boundary. Without this regularization step, the later support lemma would
     place the singular pairs in the domain of $D$ but would not yet connect them
-    to the positive-definite Lieb input. The positive-definite case of this layer
-    is now formalized (\leanid{convexOn_quantumRelativeEntropy}); only the
-    singular-$\sigma$ extension remains.
+    to the positive-definite Lieb input. This layer is now formalized on the full
+    support domain: the positive-definite case
+    (\leanid{convexOn_quantumRelativeEntropy}) is the base case, and the singular
+    extension under $\ker\sigma\subseteq\ker\rho$ is
+    \leanid{convexOn_quantumRelativeEntropy_support}, obtained by regularizing
+    both arguments through the affine trace-one perturbation
+    $M_\varepsilon = (1+\varepsilon N)^{-1}(M+\varepsilon\,\mathbf 1)$ and passing
+    to the limit $\varepsilon\to0^+$.
   \item \emph{Data-processing inequality (DPI).} Monotonicity
     $D(\Lambda\rho \,\|\, \Lambda\sigma) \le D(\rho\,\|\,\sigma)$ under every
     trace-preserving completely positive map $\Lambda$, in particular under the
@@ -226,8 +231,16 @@ in place. Concretely:
     of convex functions is convex. The two-calculus trace double-sum identity
     \leanid{re_trace_cfc_mul_cfc_eq_double_sum} underlying the limit consumes no
     Lieb input. The extension from the positive-definite case to singular
-    reference states under $\ker\sigma\subseteq\ker\rho$ (the regularization
-    step described above) remains open.
+    reference states under $\ker\sigma\subseteq\ker\rho$ is now formalized as
+    \leanid{convexOn_quantumRelativeEntropy_support} in the same file: both
+    arguments are regularized through the affine trace-one perturbation, the
+    positive-definite convexity applies to the four regularized endpoints and the
+    regularized mixture, and the inequality passes to the limit using the
+    both-arguments limit lemma \leanid{tendsto_relativeEntropyPerturb}. The domain
+    is convex because the kernel of a positively weighted sum of positive
+    semidefinite matrices is the intersection of the kernels
+    (\leanid{mulVec_eq_zero_of_smul_add}). This extension consumes no further Lieb
+    input beyond the positive-definite base case.
   \item Layer (5) combines joint convexity, unitary invariance, and
     ancilla-additivity $D(\rho\otimes\tau\,\|\,\sigma\otimes\tau)
     = D(\rho\,\|\,\sigma)$ into the partial-trace monotonicity statement via the
@@ -324,12 +337,16 @@ in place. Concretely:
 \end{itemize}
 
 \paragraph{Current formal status.} Layers (1)--(5) and the layer-(6) marginal
-support prerequisite are formalized; layers (4) and (5) on the positive-definite
-domain. Layer (5), data-processing (monotonicity of $D$ under the partial trace),
+support prerequisite are formalized; layer (4) on the full support domain and
+layer (5) on the positive-definite domain. Layer (4) joint convexity is now
+formalized on the singular support domain $\ker\sigma\subseteq\ker\rho$
+(\leanid{convexOn_quantumRelativeEntropy_support}), extending the
+positive-definite base case by regularizing both arguments and passing to the
+limit. Layer (5), data-processing (monotonicity of $D$ under the partial trace),
 combines the layer-(4) joint convexity with unitary invariance and
 ancilla-additivity $D(\rho\otimes\tau\,\|\,\sigma\otimes\tau) =
 D(\rho\,\|\,\sigma)$ via the twirling representation of $\tr_C$. Joint convexity
-(layer 4, on the positive-definite domain), unitary invariance
+(layer 4, on the singular support domain), unitary invariance
 (\leanid{quantumRelativeEntropy_conj_unitary}, for arbitrary Hermitian
 arguments), ancilla-additivity
 (\leanid{quantumRelativeEntropy_kronecker}, on the positive-definite domain), the
@@ -344,8 +361,9 @@ $\rho_{ABC}$ the inequality~\eqref{eq:ssa} is a theorem whose only entropy-side
 axiom is the Lieb-concavity axiom. The standalone axiom
 \leanid{strong_subadditivity} stands for the general density-matrix domain,
 because the positive-definite version is a strictly stronger hypothesis and does
-not discharge the unrestricted axiom; closing that gap needs the
-singular-reference extension of layers (3)--(5) and of the instantiation.
+not discharge the unrestricted axiom; with layers (3) and (4) now on the full
+support domain, closing that gap needs the singular-reference extension of layer
+(5) and of the instantiation.
 
 After the singular-reference extension the inequality is a theorem on the full
 density-matrix domain, the standalone axiom is removed, and the only remaining
@@ -366,10 +384,13 @@ definition of relative entropy, Klein's inequality, joint convexity (the step
 consuming Lieb concavity), data-processing under the partial trace, and final
 assembly at the tripartite splitting. Layers (2) and (3) are formalized (the
 latter on the full support domain $\ker\sigma\subseteq\ker\rho$,
-\leanid{quantumRelativeEntropy_nonneg_general}), and layer (4) is formalized on the
-positive-definite domain (\leanid{convexOn_quantumRelativeEntropy}), so the
-Lieb-concavity axiom is now connected to the joint convexity of the relative
-entropy. Layer (5), data-processing, is formalized on the positive-definite
+\leanid{quantumRelativeEntropy_nonneg_general}), and layer (4) is formalized on
+the same full support domain: the positive-definite base case
+(\leanid{convexOn_quantumRelativeEntropy}) is extended to
+$\ker\sigma\subseteq\ker\rho$ by \leanid{convexOn_quantumRelativeEntropy_support}
+through the both-arguments regularization, so the Lieb-concavity axiom is now
+connected to the joint convexity of the relative entropy on the full support
+domain. Layer (5), data-processing, is formalized on the positive-definite
 domain (\leanid{quantumRelativeEntropy_partialTraceRight_le}): its unitary
 invariance (\leanid{quantumRelativeEntropy_conj_unitary}), ancilla additivity
 (\leanid{quantumRelativeEntropy_kronecker}), finite Heisenberg--Weyl $1$-design
@@ -381,11 +402,12 @@ instantiation is formalized on the positive-definite domain
 (\leanid{strong_subadditivity_posDef}): for a positive definite $\rho_{ABC}$ the
 inequality follows from data processing alone, with the positive-definite
 reference state $(\mathbf 1_A/d_A)\otimes\rho_{BC}$ sidestepping the marginal
-support lemma. The remaining work is the singular-$\sigma$ extension of layers
-(3)--(5) and of the instantiation, which lifts the result from positive definite
-$\rho_{ABC}$ to a general density matrix; until that is formalized, the standalone
-axiom records the unrestricted statement that the development assumes but does not
-yet derive from its operator-convexity input.
+support lemma. With layers (3) and (4) now on the full support domain, the
+remaining work is the singular-$\sigma$ extension of layer (5) and of the
+instantiation, which lifts the result from positive definite $\rho_{ABC}$ to a
+general density matrix; until that is formalized, the standalone axiom records the
+unrestricted statement that the development assumes but does not yet derive from
+its operator-convexity input.
 
 \begin{thebibliography}{9}
 

@@ -370,6 +370,42 @@ finite-dimensional quantum systems.
     convex.
 \end{proof}
 
+\begin{theorem}[Joint convexity on the support domain]
+    \label{thm:relative_entropy_joint_convexity_support}
+    \lean{TNLean.RelativeEntropyConvexity.convexOn_quantumRelativeEntropy_support}
+    \leanok
+    \uses{def:quantum_relative_entropy, thm:relative_entropy_joint_convexity}
+    On pairs of density matrices $(\rho,\sigma)$ in $\MN{D}$ satisfying the support
+    condition $\ker\sigma\subseteq\ker\rho$, the map
+    $(\rho,\sigma)\mapsto D(\rho\Vert\sigma)$ is jointly convex.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:relative_entropy_joint_convexity, thm:klein_inequality_general}
+    The domain is convex: for a strict convex combination of two such pairs the
+    kernel of $a\sigma_1+b\sigma_2$ is $\ker\sigma_1\cap\ker\sigma_2$, since the
+    quadratic forms of the positive semidefinite summands are nonnegative and
+    their positively weighted sum vanishes only when each does, and a positive
+    semidefinite matrix annihilates exactly the vectors of zero quadratic form;
+    the two pointwise support inclusions then give
+    $\ker\sigma_1\cap\ker\sigma_2\subseteq\ker\rho_1\cap\ker\rho_2$.
+
+    Regularize both arguments through the affine trace-one perturbation
+    $M_\varepsilon = (1+\varepsilon D)^{-1}(M+\varepsilon\,\mathbf 1)$, which is
+    positive definite for every $\varepsilon>0$. Because the perturbation is
+    affine, it commutes with the convex combination, so the four regularized
+    endpoints and the regularized mixture all lie in the positive definite domain
+    and the positive definite joint convexity
+    (Theorem~\ref{thm:relative_entropy_joint_convexity}) gives the two-point
+    inequality for the regularized pairs. As $\varepsilon\to0^+$ the regularized
+    relative entropy converges to $D$ on each pair of the support domain: the
+    perturbation shares the eigenbasis of its argument, so the trace-logarithm
+    terms reduce to scalar limits on the positive eigenvalues, while the support
+    condition forces the diagonal weight on each zero eigenvalue of $\sigma$ to
+    vanish, leaving a term $x\log x\to0$. The inequality therefore passes to the
+    limit, giving joint convexity on the support domain.
+\end{proof}
+
 \begin{lemma}[Functional calculus under unitary conjugation]
     \label{lem:cfc_conj_unitary}
     \lean{Matrix.cfc_conj_unitary}
