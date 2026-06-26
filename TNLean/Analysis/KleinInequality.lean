@@ -155,6 +155,27 @@ theorem col_sum_normSq_eq_one {W : Matrix n n ℂ} (hW : star W * W = 1) (j : n)
   exact_mod_cast h1
 
 omit [DecidableEq n] in
+/-- Doubly stochastic telescoping: for trace-one `p`, `q` and a doubly stochastic
+`P` (row and column sums one), `∑ᵢⱼ Pᵢⱼ (pᵢ − qⱼ) = ∑ᵢ pᵢ − ∑ⱼ qⱼ = 0`. The row
+sums collapse the `pᵢ` part and the column sums collapse the `qⱼ` part. -/
+private theorem doubly_stochastic_telescope (p q : n → ℝ) (P : n → n → ℝ)
+    (hp_sum : ∑ i, p i = 1) (hq_sum : ∑ j, q j = 1)
+    (hP_row : ∀ i, ∑ j, P i j = 1) (hP_col : ∀ j, ∑ i, P i j = 1) :
+    ∑ i, ∑ j, P i j * (p i - q j) = 0 := by
+  have hrow : ∀ i, ∑ j, P i j * (p i - q j)
+      = p i * (∑ j, P i j) - ∑ j, P i j * q j := fun i => by
+    rw [Finset.mul_sum, ← Finset.sum_sub_distrib]
+    exact Finset.sum_congr rfl fun j _ => by ring
+  simp only [hrow, hP_row]
+  rw [Finset.sum_sub_distrib]
+  simp only [mul_one]
+  have hswap : ∑ i, ∑ j, P i j * q j = ∑ j, q j := by
+    rw [Finset.sum_comm]
+    refine Finset.sum_congr rfl fun j _ => ?_
+    rw [← Finset.sum_mul, hP_col j, one_mul]
+  rw [hp_sum, hswap, hq_sum, sub_self]
+
+omit [DecidableEq n] in
 /-- **Classical Gibbs / Klein core.** For a probability vector `p` (`pᵢ ≥ 0`,
 `∑ pᵢ = 1`), strictly positive `q` summing to one, and a doubly stochastic
 matrix `P` (nonnegative entries, row sums one and column sums one),
@@ -199,20 +220,7 @@ theorem gibbs_core (p q : n → ℝ) (P : n → n → ℝ)
       nlinarith [hmul]
   refine le_trans ?_ (Finset.sum_le_sum fun i _ => hterm i)
   -- The lower bound sums to `∑ⱼ qⱼ − ∑ᵢ pᵢ = 0`.
-  have hzero : ∑ i, ∑ j, P i j * (p i - q j) = 0 := by
-    have hrow : ∀ i, ∑ j, P i j * (p i - q j)
-        = p i * (∑ j, P i j) - ∑ j, P i j * q j := fun i => by
-      rw [Finset.mul_sum, ← Finset.sum_sub_distrib]
-      exact Finset.sum_congr rfl fun j _ => by ring
-    simp only [hrow, hP_row]
-    rw [Finset.sum_sub_distrib]
-    simp only [mul_one]
-    have hswap : ∑ i, ∑ j, P i j * q j = ∑ j, q j := by
-      rw [Finset.sum_comm]
-      refine Finset.sum_congr rfl fun j _ => ?_
-      rw [← Finset.sum_mul, hP_col j, one_mul]
-    rw [hp_sum, hswap, hq_sum, sub_self]
-  rw [hzero]
+  rw [doubly_stochastic_telescope p q P hp_sum hq_sum hP_row hP_col]
 
 /-- A positive semidefinite matrix with invertible determinant has strictly
 positive eigenvalues. -/
@@ -248,8 +256,7 @@ theorem gibbs_core_eq (p q : n → ℝ) (P : n → n → ℝ)
     with hs_def
   have hs_nonneg : ∀ i j, 0 ≤ s i j := by
     intro i j
-    rw [hs_def]
-    simp only
+    simp only [hs_def]
     rcases eq_or_lt_of_le (hp_nonneg i) with hpi | hpi
     · -- `pᵢ = 0`: the slack reduces to `Pᵢⱼ qⱼ ≥ 0`.
       rw [← hpi]
@@ -279,19 +286,7 @@ theorem gibbs_core_eq (p q : n → ℝ) (P : n → n → ℝ)
     have hdiag : ∑ i, ∑ j, p i * P i j * Real.log (p i) = ∑ i, p i * Real.log (p i) := by
       refine Finset.sum_congr rfl fun i _ => ?_
       rw [← Finset.sum_mul, ← Finset.mul_sum, hP_row i, mul_one]
-    have hzero : ∑ i, ∑ j, P i j * (p i - q j) = 0 := by
-      have hrow : ∀ i, ∑ j, P i j * (p i - q j)
-          = p i * (∑ j, P i j) - ∑ j, P i j * q j := fun i => by
-        rw [Finset.mul_sum, ← Finset.sum_sub_distrib]
-        exact Finset.sum_congr rfl fun j _ => by ring
-      simp only [hrow, hP_row]
-      rw [Finset.sum_sub_distrib]
-      simp only [mul_one]
-      have hswap : ∑ i, ∑ j, P i j * q j = ∑ j, q j := by
-        rw [Finset.sum_comm]
-        refine Finset.sum_congr rfl fun j _ => ?_
-        rw [← Finset.sum_mul, hP_col j, one_mul]
-      rw [hp_sum, hswap, hq_sum, sub_self]
+    have hzero := doubly_stochastic_telescope p q P hp_sum hq_sum hP_row hP_col
     rw [hdiag, hzero, heq, sub_self, sub_zero]
   intro i j
   have hzij : s i j = 0 := by
@@ -300,8 +295,7 @@ theorem gibbs_core_eq (p q : n → ℝ) (P : n → n → ℝ)
       (Finset.sum_eq_zero_iff_of_nonneg fun i _ => h1 i).mp hsum_zero
     exact (Finset.sum_eq_zero_iff_of_nonneg fun j _ => hs_nonneg i j).mp
       (hrow_zero i (Finset.mem_univ i)) j (Finset.mem_univ j)
-  rw [hs_def] at hzij
-  simp only at hzij
+  simp only [hs_def] at hzij
   linarith [hzij]
 
 omit [Fintype n] [DecidableEq n] in
@@ -603,6 +597,85 @@ theorem tendsto_re_trace_mul_log_perturb {ρ σ : Matrix n n ℂ}
   filter_upwards [self_mem_nhdsWithin] with ε hε
   rw [hfun ε hε]
 
+open scoped Matrix.Norms.L2Operator in
+/-- **Shared eigenbasis setup for the Gibbs reduction.** For Hermitian `ρ`, `σ`,
+the two trace terms expand in the joint eigenbasis and the overlap matrix
+`W = U_ρ^† U_σ` is unitary. Writing `p i = ρ`-eigenvalue, `q j = σ`-eigenvalue,
+`P i j = ‖W i j‖²`, this packages the four facts driving both Klein theorems:
+
+* `Re tr(ρ log ρ) = ∑ᵢ pᵢ log pᵢ` (von Neumann entropy / eigenvalue form);
+* `Re tr(ρ log σ) = ∑ᵢⱼ pᵢ Pᵢⱼ log qⱼ` (overlap double sum);
+* `W * star W = 1` and `star W * W = 1` (overlap unitarity).
+
+Extracted so the eigenbasis data is defined once and cannot drift between
+`quantumRelativeEntropy_nonneg` and `quantumRelativeEntropy_eq_zero_iff`. -/
+private theorem klein_gibbs_setup {ρ σ : Matrix n n ℂ}
+    (hρ : ρ.IsHermitian) (hσ : σ.IsHermitian) :
+    (Matrix.trace (ρ * hρ.cfc Real.log)).re
+        = ∑ i, hρ.eigenvalues i * Real.log (hρ.eigenvalues i)
+      ∧ (Matrix.trace (ρ * hσ.cfc Real.log)).re
+        = ∑ i, ∑ j, hρ.eigenvalues i
+            * Complex.normSq ((star (hρ.eigenvectorUnitary : Matrix n n ℂ)
+                * (hσ.eigenvectorUnitary : Matrix n n ℂ)) i j)
+            * Real.log (hσ.eigenvalues j)
+      ∧ (star (hρ.eigenvectorUnitary : Matrix n n ℂ)
+            * (hσ.eigenvectorUnitary : Matrix n n ℂ))
+          * star (star (hρ.eigenvectorUnitary : Matrix n n ℂ)
+            * (hσ.eigenvectorUnitary : Matrix n n ℂ)) = 1
+      ∧ star (star (hρ.eigenvectorUnitary : Matrix n n ℂ)
+            * (hσ.eigenvectorUnitary : Matrix n n ℂ))
+          * (star (hρ.eigenvectorUnitary : Matrix n n ℂ)
+            * (hσ.eigenvectorUnitary : Matrix n n ℂ)) = 1 := by
+  have hlogρ : CFC.log ρ = hρ.cfc Real.log := by
+    rw [CFC.log]; exact Matrix.IsHermitian.cfc_eq hρ Real.log
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · -- `Re tr(ρ log ρ) = ∑ᵢ pᵢ log pᵢ`, from the eigenvalue form of the entropy.
+    have h := vonNeumannEntropy_eq_neg_trace_mul_log hρ
+    rw [hlogρ, vonNeumannEntropy] at h
+    have hre : (Matrix.trace (ρ * hρ.cfc Real.log)).re
+        = -∑ i, Real.negMulLog (hρ.eigenvalues i) := by linarith
+    rw [hre, ← Finset.sum_neg_distrib]
+    exact Finset.sum_congr rfl fun i _ => by rw [Real.negMulLog]; ring
+  · -- `Re tr(ρ log σ) = ∑ᵢⱼ pᵢ Pᵢⱼ log qⱼ`, from the overlap double sum.
+    rw [re_trace_mul_cfc_eq_double_sum hρ hσ Real.log]
+    exact Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => by ring
+  · -- The overlap matrix `W` of the two eigenbases is unitary (`W * star W = 1`).
+    have hρ_uu : star (hρ.eigenvectorUnitary : Matrix n n ℂ)
+        * (hρ.eigenvectorUnitary : Matrix n n ℂ) = 1 := by
+      rw [Matrix.star_eq_conjTranspose]; exact Unitary.coe_star_mul_self _
+    have hσ_uu' : (hσ.eigenvectorUnitary : Matrix n n ℂ)
+        * star (hσ.eigenvectorUnitary : Matrix n n ℂ) = 1 := by
+      rw [Matrix.star_eq_conjTranspose]
+      exact Unitary.mul_star_self_of_mem hσ.eigenvectorUnitary.prop
+    rw [star_mul, star_star]
+    calc star (hρ.eigenvectorUnitary : Matrix n n ℂ)
+            * (hσ.eigenvectorUnitary : Matrix n n ℂ)
+            * (star (hσ.eigenvectorUnitary : Matrix n n ℂ)
+              * (hρ.eigenvectorUnitary : Matrix n n ℂ))
+        = star (hρ.eigenvectorUnitary : Matrix n n ℂ)
+            * ((hσ.eigenvectorUnitary : Matrix n n ℂ)
+              * star (hσ.eigenvectorUnitary : Matrix n n ℂ))
+            * (hρ.eigenvectorUnitary : Matrix n n ℂ) := by simp only [Matrix.mul_assoc]
+      _ = 1 := by rw [hσ_uu', Matrix.mul_one, hρ_uu]
+  · -- The overlap matrix `W` is unitary (`star W * W = 1`).
+    have hρ_uu' : (hρ.eigenvectorUnitary : Matrix n n ℂ)
+        * star (hρ.eigenvectorUnitary : Matrix n n ℂ) = 1 := by
+      rw [Matrix.star_eq_conjTranspose]
+      exact Unitary.mul_star_self_of_mem hρ.eigenvectorUnitary.prop
+    have hσ_uu : star (hσ.eigenvectorUnitary : Matrix n n ℂ)
+        * (hσ.eigenvectorUnitary : Matrix n n ℂ) = 1 := by
+      rw [Matrix.star_eq_conjTranspose]; exact Unitary.coe_star_mul_self _
+    rw [star_mul, star_star]
+    calc star (hσ.eigenvectorUnitary : Matrix n n ℂ)
+            * (hρ.eigenvectorUnitary : Matrix n n ℂ)
+            * (star (hρ.eigenvectorUnitary : Matrix n n ℂ)
+              * (hσ.eigenvectorUnitary : Matrix n n ℂ))
+        = star (hσ.eigenvectorUnitary : Matrix n n ℂ)
+            * ((hρ.eigenvectorUnitary : Matrix n n ℂ)
+              * star (hρ.eigenvectorUnitary : Matrix n n ℂ))
+            * (hσ.eigenvectorUnitary : Matrix n n ℂ) := by simp only [Matrix.mul_assoc]
+      _ = 1 := by rw [hρ_uu', Matrix.mul_one, hσ_uu]
+
 end TNLean.Klein
 
 open TNLean.Klein in
@@ -634,68 +707,15 @@ theorem quantumRelativeEntropy_nonneg {n : Type*} [Fintype n] [DecidableEq n]
   have hlogσ : CFC.log σ = hσ.isHermitian.cfc Real.log := by
     rw [CFC.log]; exact Matrix.IsHermitian.cfc_eq hσ.isHermitian Real.log
   rw [hlogρ, hlogσ]
+  -- Shared eigenbasis setup: trace expansions and overlap unitarity.
+  obtain ⟨hself, hcross, hWunit_row, hWunit_col⟩ :=
+    klein_gibbs_setup hρ.isHermitian hσ.isHermitian
   set p : n → ℝ := fun i => hρ.isHermitian.eigenvalues i with hp_def
   set q : n → ℝ := fun j => hσ.isHermitian.eigenvalues j with hq_def
   set W : Matrix n n ℂ := (star (hρ.isHermitian.eigenvectorUnitary : Matrix n n ℂ))
     * (hσ.isHermitian.eigenvectorUnitary : Matrix n n ℂ) with hW_def
   set P : n → n → ℝ := fun i j => Complex.normSq (W i j) with hP_def
-  -- `Re tr(ρ log ρ) = ∑ᵢ pᵢ log pᵢ`, from the eigenvalue form of the entropy.
-  have hself : (Matrix.trace (ρ * hρ.isHermitian.cfc Real.log)).re
-      = ∑ i, p i * Real.log (p i) := by
-    have h := vonNeumannEntropy_eq_neg_trace_mul_log hρ.isHermitian
-    rw [hlogρ, vonNeumannEntropy] at h
-    have hre : (Matrix.trace (ρ * hρ.isHermitian.cfc Real.log)).re
-        = -∑ i, Real.negMulLog (hρ.isHermitian.eigenvalues i) := by linarith
-    rw [hre, ← Finset.sum_neg_distrib]
-    exact Finset.sum_congr rfl fun i _ => by rw [Real.negMulLog, hp_def]; ring
-  -- `Re tr(ρ log σ) = ∑ᵢⱼ pᵢ Pᵢⱼ log qⱼ`, from the overlap double sum.
-  have hcross : (Matrix.trace (ρ * hσ.isHermitian.cfc Real.log)).re
-      = ∑ i, ∑ j, p i * P i j * Real.log (q j) := by
-    rw [re_trace_mul_cfc_eq_double_sum hρ.isHermitian hσ.isHermitian Real.log]
-    exact Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => by
-      rw [hp_def, hq_def, hP_def, hW_def]; ring
   rw [hself, hcross]
-  -- The overlap matrix `W` of the two eigenbases is unitary.
-  have hρ_uu : star (hρ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
-      * (hρ.isHermitian.eigenvectorUnitary : Matrix n n ℂ) = 1 := by
-    rw [Matrix.star_eq_conjTranspose]
-    exact Unitary.coe_star_mul_self hρ.isHermitian.eigenvectorUnitary
-  have hρ_uu' : (hρ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
-      * star (hρ.isHermitian.eigenvectorUnitary : Matrix n n ℂ) = 1 := by
-    rw [Matrix.star_eq_conjTranspose]
-    exact Unitary.mul_star_self_of_mem hρ.isHermitian.eigenvectorUnitary.prop
-  have hσ_uu : star (hσ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
-      * (hσ.isHermitian.eigenvectorUnitary : Matrix n n ℂ) = 1 := by
-    rw [Matrix.star_eq_conjTranspose]
-    exact Unitary.coe_star_mul_self hσ.isHermitian.eigenvectorUnitary
-  have hσ_uu' : (hσ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
-      * star (hσ.isHermitian.eigenvectorUnitary : Matrix n n ℂ) = 1 := by
-    rw [Matrix.star_eq_conjTranspose]
-    exact Unitary.mul_star_self_of_mem hσ.isHermitian.eigenvectorUnitary.prop
-  have hWunit_row : W * star W = 1 := by
-    rw [hW_def, star_mul, star_star]
-    calc star (hρ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
-            * (hσ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
-            * (star (hσ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
-              * (hρ.isHermitian.eigenvectorUnitary : Matrix n n ℂ))
-        = star (hρ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
-            * ((hσ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
-              * star (hσ.isHermitian.eigenvectorUnitary : Matrix n n ℂ))
-            * (hρ.isHermitian.eigenvectorUnitary : Matrix n n ℂ) := by
-          simp only [Matrix.mul_assoc]
-      _ = 1 := by rw [hσ_uu', Matrix.mul_one, hρ_uu]
-  have hWunit_col : star W * W = 1 := by
-    rw [hW_def, star_mul, star_star]
-    calc star (hσ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
-            * (hρ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
-            * (star (hρ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
-              * (hσ.isHermitian.eigenvectorUnitary : Matrix n n ℂ))
-        = star (hσ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
-            * ((hρ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
-              * star (hρ.isHermitian.eigenvectorUnitary : Matrix n n ℂ))
-            * (hσ.isHermitian.eigenvectorUnitary : Matrix n n ℂ) := by
-          simp only [Matrix.mul_assoc]
-      _ = 1 := by rw [hρ_uu', Matrix.mul_one, hσ_uu]
   -- Conclude with the classical Gibbs inequality.
   exact gibbs_core p q P (fun i => hρ.eigenvalues_nonneg i)
     (posSemidef_trace_one_eigenvalues_sum_one hρ hρ_tr)
@@ -807,69 +827,20 @@ theorem quantumRelativeEntropy_eq_zero_iff {n : Type*} [Fintype n] [DecidableEq 
   have hlogσ : CFC.log σ = hσ.isHermitian.cfc Real.log := by
     rw [CFC.log]; exact Matrix.IsHermitian.cfc_eq hσ.isHermitian Real.log
   rw [hlogρ, hlogσ] at hD
+  -- Shared eigenbasis setup: trace expansions and overlap unitarity.
+  obtain ⟨hself, hcross, hWunit_row, hWunit_col⟩ :=
+    klein_gibbs_setup hρ.isHermitian hσ.isHermitian
   set p : n → ℝ := fun i => hρ.isHermitian.eigenvalues i with hp_def
   set q : n → ℝ := fun j => hσ.isHermitian.eigenvalues j with hq_def
   set W : Matrix n n ℂ := (star (hρ.isHermitian.eigenvectorUnitary : Matrix n n ℂ))
     * (hσ.isHermitian.eigenvectorUnitary : Matrix n n ℂ) with hW_def
   set P : n → n → ℝ := fun i j => Complex.normSq (W i j) with hP_def
-  have hself : (Matrix.trace (ρ * hρ.isHermitian.cfc Real.log)).re
-      = ∑ i, p i * Real.log (p i) := by
-    have h := vonNeumannEntropy_eq_neg_trace_mul_log hρ.isHermitian
-    rw [hlogρ, vonNeumannEntropy] at h
-    have hre : (Matrix.trace (ρ * hρ.isHermitian.cfc Real.log)).re
-        = -∑ i, Real.negMulLog (hρ.isHermitian.eigenvalues i) := by linarith
-    rw [hre, ← Finset.sum_neg_distrib]
-    exact Finset.sum_congr rfl fun i _ => by rw [Real.negMulLog, hp_def]; ring
-  have hcross : (Matrix.trace (ρ * hσ.isHermitian.cfc Real.log)).re
-      = ∑ i, ∑ j, p i * P i j * Real.log (q j) := by
-    rw [re_trace_mul_cfc_eq_double_sum hρ.isHermitian hσ.isHermitian Real.log]
-    exact Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => by
-      rw [hp_def, hq_def, hP_def, hW_def]; ring
   rw [hself, hcross] at hD
   have hp_nonneg : ∀ i, 0 ≤ p i := fun i => hρ.eigenvalues_nonneg i
   have hp_sum : ∑ i, p i = 1 := posSemidef_trace_one_eigenvalues_sum_one hρ hρ_tr
   have hq_pos : ∀ j, 0 < q j := fun j =>
     eigenvalues_pos_of_posSemidef_isUnit_det hσ hσ_inv j
   have hq_sum : ∑ j, q j = 1 := posSemidef_trace_one_eigenvalues_sum_one hσ hσ_tr
-  -- The overlap matrix `W` of the two eigenbases is unitary.
-  have hρ_uu : star (hρ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
-      * (hρ.isHermitian.eigenvectorUnitary : Matrix n n ℂ) = 1 := by
-    rw [Matrix.star_eq_conjTranspose]; exact Unitary.coe_star_mul_self _
-  have hρ_uu' : (hρ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
-      * star (hρ.isHermitian.eigenvectorUnitary : Matrix n n ℂ) = 1 := by
-    rw [Matrix.star_eq_conjTranspose]
-    exact Unitary.mul_star_self_of_mem hρ.isHermitian.eigenvectorUnitary.prop
-  have hσ_uu : star (hσ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
-      * (hσ.isHermitian.eigenvectorUnitary : Matrix n n ℂ) = 1 := by
-    rw [Matrix.star_eq_conjTranspose]; exact Unitary.coe_star_mul_self _
-  have hσ_uu' : (hσ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
-      * star (hσ.isHermitian.eigenvectorUnitary : Matrix n n ℂ) = 1 := by
-    rw [Matrix.star_eq_conjTranspose]
-    exact Unitary.mul_star_self_of_mem hσ.isHermitian.eigenvectorUnitary.prop
-  have hWunit_row : W * star W = 1 := by
-    rw [hW_def, star_mul, star_star]
-    calc star (hρ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
-            * (hσ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
-            * (star (hσ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
-              * (hρ.isHermitian.eigenvectorUnitary : Matrix n n ℂ))
-        = star (hρ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
-            * ((hσ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
-              * star (hσ.isHermitian.eigenvectorUnitary : Matrix n n ℂ))
-            * (hρ.isHermitian.eigenvectorUnitary : Matrix n n ℂ) := by
-          simp only [Matrix.mul_assoc]
-      _ = 1 := by rw [hσ_uu', Matrix.mul_one, hρ_uu]
-  have hWunit_col : star W * W = 1 := by
-    rw [hW_def, star_mul, star_star]
-    calc star (hσ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
-            * (hρ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
-            * (star (hρ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
-              * (hσ.isHermitian.eigenvectorUnitary : Matrix n n ℂ))
-        = star (hσ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
-            * ((hρ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
-              * star (hρ.isHermitian.eigenvectorUnitary : Matrix n n ℂ))
-            * (hσ.isHermitian.eigenvectorUnitary : Matrix n n ℂ) := by
-          simp only [Matrix.mul_assoc]
-      _ = 1 := by rw [hρ_uu', Matrix.mul_one, hσ_uu]
   -- Every Gibbs slack term is tight, giving the eigenvalue matching on the overlap.
   have hgibbs_eq := gibbs_core_eq p q P hp_nonneg hp_sum hq_pos hq_sum
     (fun i j => Complex.normSq_nonneg _)
