@@ -1211,9 +1211,15 @@ finite-dimensional quantum systems.
     S(\omega_j)$ by Theorems~\ref{thm:entropy_block_diagonal}
     and~\ref{thm:entropy_smul}, and the entropy of a tensor product is additive,
     $S(\omega \otimes \tau) = S(\omega) + S(\tau)$, by
-    Theorem~\ref{thm:entropy_kronecker}. The three reduced states factor as
-    block-diagonal direct sums of the corresponding partial traces of the
-    components, so, writing $H = -\sum_j p_j\log p_j$, the four entropies expand as
+    Theorem~\ref{thm:entropy_kronecker}. Tracing out one tensor factor within each
+    block, the three reduced states factor as block-diagonal direct sums,
+    \[
+        \rho_{AB} \cong \bigoplus_j p_j\,\rho_{AB_j^L}\otimes\rho_{B_j^R}, \qquad
+        \rho_{BC} \cong \bigoplus_j p_j\,\rho_{B_j^L}\otimes\rho_{B_j^R C}, \qquad
+        \rho_{B}  \cong \bigoplus_j p_j\,\rho_{B_j^L}\otimes\rho_{B_j^R},
+    \]
+    with $\rho_{ABC} \cong \bigoplus_j p_j\,\rho_{AB_j^L}\otimes\rho_{B_j^R C}$ itself.
+    Writing $H = -\sum_j p_j\log p_j$, the four entropies expand as
     \[
         \begin{aligned}
         S(\rho_{ABC}) &= H + \sum_j p_j\bigl[S(\rho_{AB_j^L}) + S(\rho_{B_j^R C})\bigr], &
