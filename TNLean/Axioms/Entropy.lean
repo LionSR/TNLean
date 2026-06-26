@@ -6,6 +6,8 @@ import Mathlib.Data.Matrix.Block
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 import Mathlib.LinearAlgebra.UnitaryGroup
 import TNLean.Analysis.Entropy
+import TNLean.Analysis.HayashiMarkovStructure
+import TNLean.Analysis.EntropyMarkovReverse
 
 /-!
 # Axiomatized entropy inequalities and equality characterizations
@@ -19,19 +21,25 @@ clear to downstream files and to CI.
   `strong_subadditivity_general` in
   `TNLean.Channel.Schwarz.StrongSubadditivityPosDef`, derived from Lieb
   concavity, and applied under the name `Entropy.strongSubadditivity`.
-* `hayashi_ssa_equality_characterization` is an **axiom** stating the
-  standard equality case of strong subadditivity as a quantum-Markov-chain
-  decomposition on the middle subsystem.
+* The Hayashi equality characterization is **split into a proved reverse
+  direction and a forward-only axiom**. The reverse implication, that a
+  quantum-Markov-chain state attains equality, is proved as
+  `hayashi_ssa_equality_characterization_reverse` in
+  `TNLean.Analysis.EntropyMarkovReverse`, from the entropy-additivity lemmas in
+  `TNLean.Analysis.EntropyDecomposition`. Only the forward implication, that
+  equality forces the block-diagonal structure, remains axiomatized as
+  `hayashi_ssa_equality_characterization_forward`; the biconditional
+  `hayashi_ssa_equality_characterization` combines the two.
 
 ## TODO
 
-Replace `hayashi_ssa_equality_characterization` with a proof of the equality
-case of strong subadditivity. A faithful formalization is expected to require:
-1. Conditional mutual information and recovery maps
-2. A finite-dimensional direct-sum / tensor-factorization theory compatible with
-   basis changes on the middle subsystem
-3. The equivalence between equality in SSA and the quantum Markov-chain
-   structure of the tripartite state
+Remove the remaining axiom `hayashi_ssa_equality_characterization_forward` by
+proving the forward implication of the equality case. A faithful formalization
+is expected to require:
+1. Conditional mutual information and recovery maps (the Petz transpose channel)
+2. The saturation analysis of the data-processing inequality for relative
+   entropy
+3. The reconstruction of the discarded subsystem from a recovery map
 
 ## References
 
@@ -52,124 +60,43 @@ case of strong subadditivity. A faithful formalization is expected to require:
 
 open scoped Matrix ComplexOrder
 open Matrix Finset Real
-
-namespace HayashiMarkov
-
-/-- Reindex the `B` subsystem by an explicit direct-sum decomposition
-`B ≃ ⨆ j, B_jᴸ × B_jᴿ`, keeping `A` and `C` fixed. -/
-def abcEquiv {dA dB dC : ℕ} {m : ℕ} {dL dR : Fin m → ℕ}
-    (decompB : Fin dB ≃ Σ j : Fin m, Fin (dL j) × Fin (dR j)) :
-    (Fin dA × Fin dB × Fin dC) ≃
-      (Fin dA × ((Σ j : Fin m, Fin (dL j) × Fin (dR j)) × Fin dC)) :=
-  Equiv.prodCongr (Equiv.refl _) (Equiv.prodCongr decompB (Equiv.refl _))
-
-/-- Reassociate the indices of the dependent block-diagonal state into the
-tripartite shape `A × (B × C)`. -/
-def sigmaAssoc {dA dC : ℕ} {m : ℕ} (dL dR : Fin m → ℕ) :
-    (Σ j : Fin m, (Fin dA × Fin (dL j)) × (Fin (dR j) × Fin dC)) ≃
-      (Fin dA × ((Σ j : Fin m, Fin (dL j) × Fin (dR j)) × Fin dC)) :=
-  calc
-    (Σ j : Fin m, (Fin dA × Fin (dL j)) × (Fin (dR j) × Fin dC)) ≃
-        (Σ j : Fin m, Fin dA × ((Fin (dL j) × Fin (dR j)) × Fin dC)) :=
-      Equiv.sigmaCongrRight fun j =>
-        (Equiv.prodAssoc (Fin dA) (Fin (dL j)) (Fin (dR j) × Fin dC)).trans
-          (Equiv.prodCongr (Equiv.refl (Fin dA))
-            (Equiv.prodAssoc (Fin (dL j)) (Fin (dR j)) (Fin dC)).symm)
-    _ ≃ (Σ j : Fin m, ((Fin (dL j) × Fin (dR j)) × Fin dC) × Fin dA) :=
-      Equiv.sigmaCongrRight fun j =>
-        Equiv.prodComm (Fin dA) ((Fin (dL j) × Fin (dR j)) × Fin dC)
-    _ ≃ (Σ j : Fin m, (Fin (dL j) × Fin (dR j)) × Fin dC) × Fin dA :=
-      (Equiv.sigmaProdDistrib
-        (fun j : Fin m => (Fin (dL j) × Fin (dR j)) × Fin dC)
-        (Fin dA)).symm
-    _ ≃ Fin dA × (Σ j : Fin m, (Fin (dL j) × Fin (dR j)) × Fin dC) :=
-      Equiv.prodComm _ _
-    _ ≃ Fin dA × ((Σ j : Fin m, Fin (dL j) × Fin (dR j)) × Fin dC) :=
-      Equiv.prodCongr (Equiv.refl (Fin dA))
-        (Equiv.sigmaProdDistrib
-          (fun j : Fin m => Fin (dL j) × Fin (dR j)) (Fin dC)).symm
-
-/-- Lift a unitary on the middle subsystem `B` to the tripartite space
-`A ⊗ B ⊗ C` as `1_A ⊗ U_B ⊗ 1_C`. -/
-def liftB {dA dB dC : ℕ} (U_B : Matrix (Fin dB) (Fin dB) ℂ) :
-    Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ :=
-  Matrix.kroneckerMap (fun x y : ℂ => x * y)
-    (1 : Matrix (Fin dA) (Fin dA) ℂ)
-    (Matrix.kroneckerMap (fun x y : ℂ => x * y)
-      U_B (1 : Matrix (Fin dC) (Fin dC) ℂ))
-
-/-- The block-diagonal quantum-Markov-chain state
-`⊕_j p_j (ρ_{A B_jᴸ} ⊗ ρ_{B_jᴿ C})`, written in the basis adapted to the
-`B = ⊕_j B_jᴸ ⊗ B_jᴿ` decomposition. -/
-def blockState {dA dC : ℕ} {m : ℕ} (dL dR : Fin m → ℕ)
-    (p : Fin m → ℝ)
-    (ρ_left : (j : Fin m) →
-      Matrix (Fin dA × Fin (dL j)) (Fin dA × Fin (dL j)) ℂ)
-    (ρ_right : (j : Fin m) →
-      Matrix (Fin (dR j) × Fin dC) (Fin (dR j) × Fin dC) ℂ) :
-    Matrix
-      (Fin dA × ((Σ j : Fin m, Fin (dL j) × Fin (dR j)) × Fin dC))
-      (Fin dA × ((Σ j : Fin m, Fin (dL j) × Fin (dR j)) × Fin dC)) ℂ :=
-  Matrix.reindex
-    (sigmaAssoc (dA := dA) (dC := dC) dL dR)
-    (sigmaAssoc (dA := dA) (dC := dC) dL dR)
-    (Matrix.blockDiagonal' fun j : Fin m =>
-      (p j : ℂ) • Matrix.kroneckerMap (fun x y : ℂ => x * y)
-        (ρ_left j) (ρ_right j))
-
-end HayashiMarkov
-
-/-- Data witnessing the Hayashi / Ruskai / Hayden--Jozsa--Petz--Winter
-quantum-Markov-chain structure for a tripartite density matrix.
-
-This structure specifies an explicit finite direct-sum decomposition of the middle
-system `B`, an explicit unitary basis change on `B`, probabilities `p_j`, and
-left/right density matrices `ρ_{A B_jᴸ}` and `ρ_{B_jᴿ C}` such that after
-conjugating `ρ_ABC` by `1_A ⊗ U_B ⊗ 1_C` and reindexing `B` along the chosen
-finite decomposition, the state becomes the block-diagonal direct sum
-`⊕_j p_j (ρ_{A B_jᴸ} ⊗ ρ_{B_jᴿ C})`.
-
-Source: Hayashi, *Quantum Information: An Introduction*, Springer 2006,
-Theorem 5.24;
-Hayden--Jozsa--Petz--Winter, Commun. Math. Phys. 246, 359--374 (2004);
-blueprint `def:hayashi_markov_decomposition`. -/
-structure HayashiMarkovDecomposition {dA dB dC : ℕ}
-    (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
-      (Fin dA × Fin dB × Fin dC) ℂ) where
-  m : ℕ
-  dL : Fin m → ℕ
-  dR : Fin m → ℕ
-  decompB : Fin dB ≃ Σ j : Fin m, Fin (dL j) × Fin (dR j)
-  U_B : Matrix.unitaryGroup (Fin dB) ℂ
-  p : Fin m → ℝ
-  hp_nonneg : ∀ j : Fin m, 0 ≤ p j
-  hp_sum : ∑ j : Fin m, p j = 1
-  ρ_left : (j : Fin m) →
-    Matrix (Fin dA × Fin (dL j)) (Fin dA × Fin (dL j)) ℂ
-  ρ_right : (j : Fin m) →
-    Matrix (Fin (dR j) × Fin dC) (Fin (dR j) × Fin dC) ℂ
-  hρ_left_dm :
-    ∀ j : Fin m, (ρ_left j).PosSemidef ∧ (ρ_left j).trace = 1
-  hρ_right_dm :
-    ∀ j : Fin m, (ρ_right j).PosSemidef ∧ (ρ_right j).trace = 1
-  h_state :
-    Matrix.reindex
-        (HayashiMarkov.abcEquiv (dA := dA) (dB := dB) (dC := dC)
-          (dL := dL) (dR := dR) decompB)
-        (HayashiMarkov.abcEquiv (dA := dA) (dB := dB) (dC := dC)
-          (dL := dL) (dR := dR) decompB)
-        (HayashiMarkov.liftB (dA := dA) (dB := dB) (dC := dC)
-          (U_B : Matrix (Fin dB) (Fin dB) ℂ)
-          * ρ_ABC *
-          (HayashiMarkov.liftB (dA := dA) (dB := dB) (dC := dC)
-            (U_B : Matrix (Fin dB) (Fin dB) ℂ))ᴴ)
-      = HayashiMarkov.blockState (dA := dA) (dC := dC) dL dR p ρ_left ρ_right
-
-/-! ## Equality characterization of strong subadditivity (axiom) -/
+/-! ## Equality characterization of strong subadditivity -/
 
 section SSAEqualityCharacterization
 
 variable {dA dB dC : ℕ}
+
+/-- **Forward direction of the Hayashi / Ruskai / Hayden--Jozsa--Petz--Winter
+characterization of strong-subadditivity equality** (sanctioned axiom).
+
+For a tripartite density matrix `ρ_ABC`, equality in strong subadditivity forces
+`ρ_ABC` to have quantum-Markov-chain structure on the middle subsystem `B`: after
+a unitary change of basis on `B`, the Hilbert space of `B` decomposes as a finite
+direct sum `⊕_j (B_jᴸ ⊗ B_jᴿ)` and the state takes block-diagonal form
+`⊕_j p_j (ρ_{A B_jᴸ} ⊗ ρ_{B_jᴿ C})`, recorded by the structure
+`HayashiMarkovDecomposition ρ_ABC`.
+
+This implication is the deep half of the characterization: its proof needs
+recovery-map and Petz-transpose theory, that is, the analysis of when the
+data-processing inequality for relative entropy is saturated and the
+reconstruction of the discarded subsystem from a recovery map. This machinery is
+not yet formalized in Mathlib or in this repository, so the forward direction is
+introduced here as a **sanctioned axiom**. The reverse direction is proved in
+`TNLean.Analysis.EntropyMarkovReverse` and the biconditional below combines the
+two; see `docs/paper-gaps/cpsv16_ssa_equality_hayashi_markov.tex`.
+
+Source: Hayashi, *Quantum Information: An Introduction*, Springer 2006,
+Theorem 5.24;
+Ruskai, JMP 43, 4358 (2002);
+Hayden--Jozsa--Petz--Winter, Commun. Math. Phys. 246, 359--374 (2004);
+arXiv:1606.00608 Appendix C;
+blueprint `thm:hayashi_ssa_equality_characterization`. -/
+axiom hayashi_ssa_equality_characterization_forward
+    (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
+      (Fin dA × Fin dB × Fin dC) ℂ)
+    (hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1) :
+    IsSSAEquality ρ_ABC hρ_dm.1.isHermitian
+      → Nonempty (HayashiMarkovDecomposition ρ_ABC)
 
 /-- **Hayashi / Ruskai / Hayden--Jozsa--Petz--Winter characterization of
 strong-subadditivity equality**.
@@ -178,18 +105,16 @@ For a tripartite density matrix `ρ_ABC`, equality in strong subadditivity
 holds if and only if `ρ_ABC` has quantum-Markov-chain structure on the middle
 subsystem `B`: after a unitary change of basis on `B`, the Hilbert space of
 `B` decomposes as a finite direct sum `⊕_j (B_jᴸ ⊗ B_jᴿ)` and the state takes
-block-diagonal form
-`⊕_j p_j (ρ_{A B_jᴸ} ⊗ ρ_{B_jᴿ C})`.
+block-diagonal form `⊕_j p_j (ρ_{A B_jᴸ} ⊗ ρ_{B_jᴿ C})`, recorded by the
+structure `HayashiMarkovDecomposition ρ_ABC`.
 
-The right-hand side is recorded by the structure
-`HayashiMarkovDecomposition ρ_ABC`, whose fields store the explicit dimensions, the
-unitary basis change on `B`, the probabilities `p_j`, the component density
-matrices, and the block-diagonal equality.
-
-This result is introduced here as a **sanctioned axiom**: the full proof needs
-operator-algebra and recovery-map theory that is not yet formalized in
-Mathlib or in this repository. Downstream consumers should import the theorem
-statement from `TNLean/Entropy/MarkovChain.lean`, not this axiom module.
+The forward implication is the sanctioned axiom
+`hayashi_ssa_equality_characterization_forward`; the reverse implication is the
+proved theorem `hayashi_ssa_equality_characterization_reverse` in
+`TNLean.Analysis.EntropyMarkovReverse`. This biconditional combines the two, so
+its only axiomatic content is the forward direction. Downstream consumers should
+import the theorem statement from `TNLean/Entropy/MarkovChain.lean`, not this
+axiom module.
 
 Source: Hayashi, *Quantum Information: An Introduction*, Springer 2006,
 Theorem 5.24;
@@ -197,11 +122,13 @@ Ruskai, JMP 43, 4358 (2002);
 Hayden--Jozsa--Petz--Winter, Commun. Math. Phys. 246, 359--374 (2004);
 arXiv:1606.00608 Appendix C;
 blueprint `thm:hayashi_ssa_equality_characterization`. -/
-axiom hayashi_ssa_equality_characterization
+theorem hayashi_ssa_equality_characterization
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ)
     (hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1) :
     IsSSAEquality ρ_ABC hρ_dm.1.isHermitian
-      ↔ Nonempty (HayashiMarkovDecomposition ρ_ABC)
+      ↔ Nonempty (HayashiMarkovDecomposition ρ_ABC) :=
+  ⟨hayashi_ssa_equality_characterization_forward ρ_ABC hρ_dm,
+    hayashi_ssa_equality_characterization_reverse ρ_ABC hρ_dm⟩
 
 end SSAEqualityCharacterization
