@@ -6,6 +6,7 @@ import Mathlib.Data.Matrix.Block
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 import Mathlib.LinearAlgebra.UnitaryGroup
 import TNLean.Analysis.Entropy
+import TNLean.Analysis.EntropyDecomposition
 
 /-!
 # Axiomatized entropy inequalities and equality characterizations
