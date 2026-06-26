@@ -61,12 +61,14 @@ by feeding that case into the same transfer argument.
 
 \section{Classification}
 
-\emph{Scope restriction.} The formal theorem proves the source identity for
-Schmidt ranks $1\le n<D'$, a special case of the source's full range
-$1\le n\le D'$. The conclusion matches the source on that range; only the top
-index $n=D'$ is omitted, and there the supremum degenerates to the trivial value
-$\|\rho\|_{(D')}=\tr\rho=1$. No hypothesis foreign to the source is used, so the
-deviation is a scope restriction rather than an unfaithful theorem.
+\emph{Resolved.} The top index $n=D'$ is now formalized as the companion theorem
+\leanid{Matrix.maximalSchmidtOverlap_eq_kyFanNorm_top}: there the Schmidt-rank
+constraint is vacuous, the Ky-Fan $D'$-norm collapses to the trace
+$\|\rho\|_{(D')}=\tr\rho=1$, and the value is attained at $\psi=\phi$ with the
+upper bound supplied by Cauchy--Schwarz. Together with
+\leanid{Matrix.maximalSchmidtOverlap_eq_kyFanNorm} (the range $1\le n<D'$) this
+covers the full source range $1\le n\le D'$ of Wolf's Lemma~3.1, exactly as the
+elimination plan above anticipated.
 
 \bibliographystyle{alpha}
 \bibliography{references}

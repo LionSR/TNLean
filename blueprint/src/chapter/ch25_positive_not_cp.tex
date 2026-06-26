@@ -683,6 +683,34 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
     positive semidefinite matrices is positive semidefinite.
 \end{proof}
 
+\begin{theorem}[Only-if direction for a general bipartite system]
+    \label{thm:has_schmidt_number_le_tensor_map_id_general}
+    \lean{Matrix.HasSchmidtNumberLE.tensorMapId_posSemidef_general}
+    \leanok
+    \uses{def:has_schmidt_number_le, def:tensor_map_id, def:k_positive_map,
+        thm:has_schmidt_number_le_tensor_map_id}
+    On a general bipartite system $\MN{d}\otimes\MN{d'}$, with no relation imposed
+    between the two factors, a state of Schmidt number at most $n$ satisfies
+    \[
+        (T\otimes\id)(\rho)\ge 0
+    \]
+    for every $n$-positive map $T$ on $\MN{d}$.  This is the only-if direction of
+    Wolf's Proposition~3.4, the first step of eq.~(3.18)
+    \cite[Chapter~3, Proposition~3.4]{Wolf2012Quantum}, with no restriction on the
+    bipartite dimensions.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Pad the bipartite state to the square system $\MN{D}\otimes\MN{D}$ with
+    $D=\max(d,d')$ by zero rows and columns: when $d'\le d$ the second factor is padded
+    up to $d$; when $d\le d'$ the first factor is padded up to $d'$ and $T$ is extended
+    to a map on $\MN{d'}$ that preserves $n$-positivity.  Padding preserves the
+    Schmidt-number bound, the square result makes the padded ampliation positive
+    semidefinite, and the original ampliation is its principal submatrix, hence positive
+    semidefinite.
+\end{proof}
+
 \begin{theorem}[Reduction step from the Schmidt-number premise]
     \label{thm:has_schmidt_number_le_tensor_map_id_t_eta}
     \lean{Matrix.HasSchmidtNumberLE.tensorMapId_tEta_posSemidef}

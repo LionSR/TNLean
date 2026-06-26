@@ -69,7 +69,11 @@ Wolf eq. (3.18) with its Schmidt-number premise.
   `T`, `(T ⊗ id)(|ψ⟩⟨ψ|) ≥ 0`.
 * `Matrix.HasSchmidtNumberLE.tensorMapId_posSemidef`: **Wolf Prop 3.4 (only if)** — a
   state of Schmidt number at most `n` has `(T ⊗ id)(ρ) ≥ 0` for every `n`-positive
-  map `T`.
+  map `T`, on the square system `ℂ^D ⊗ ℂ^D`.  The lift to a general bipartite system
+  `ℂ^d ⊗ ℂ^{d'}` with no relation between the factors lives in
+  `TNLean/Channel/SchmidtNumberFactors.lean`
+  (`Matrix.HasSchmidtNumberLE.tensorMapId_posSemidef_general` and the two padding
+  directions it combines).
 * `Matrix.tensorMapId_tEta_posSemidef_of_hasSchmidtRankLE`: the **pure-state step** at
   `T = T_n` — for ψ of Schmidt rank at most `n` (with `1 ≤ n < D`),
   `(T_n ⊗ id)(|ψ⟩⟨ψ|) ≥ 0`.
@@ -88,12 +92,18 @@ Wolf eq. (3.18) with its Schmidt-number premise.
 (complete positivity) is inherited through the maximal-overlap principle and is
 documented in `docs/paper-gaps/wolf_t_eta_top_index_scope.tex`.
 
-**Scope restriction (square system d = d' = D):** the forward reduction step fixes
-both tensor factors to a common dimension `D`, because the pure state is parametrized
-through the square maximally entangled vector; Wolf states eq. (3.18) for a general
-bipartite system `ℂ^d ⊗ ℂ^{d'}`, and the non-square case is documented in
+**Scope restriction (square system d = d' = D):** the `T_n`-specialized forward step
+and the full reduction criterion fix both tensor factors to a common dimension `D`,
+because the pure state is parametrized through the square maximally entangled vector;
+Wolf states eq. (3.18) for a general bipartite system `ℂ^d ⊗ ℂ^{d'}`, and the
+non-square case is documented in
 `docs/paper-gaps/wolf_reduction_criterion_schmidt_premise.tex`.  The Schmidt-number
 predicate itself and its equivalence with separability carry no such restriction.
+The bare positive-semidefiniteness of the ampliation `(T ⊗ id)(ρ) ≥ 0` carries no
+restriction relating the two factors: the general forms live in
+`TNLean/Channel/SchmidtNumberFactors.lean`, holding for any second factor `d'` by
+padding the second factor when `d' ≤ d` and padding the first factor while extending
+`T` when `d ≤ d'`.
 
 ## References
 
