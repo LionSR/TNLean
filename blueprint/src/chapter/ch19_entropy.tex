@@ -861,6 +861,42 @@ finite-dimensional quantum systems.
 
 \section{Strong subadditivity}
 
+\begin{lemma}[Relative entropy against a maximally mixed reference]
+    \label{lem:rel_entropy_eval_support}
+    \lean{SSAPosDef.rel_entropy_eval_support}
+    \leanok
+    \uses{def:quantum_relative_entropy, def:von_neumann_entropy}
+    Let $\rho$ be a density matrix on $A \otimes R$ with reduced state
+    $\rho_R = \tr_A \rho$, and suppose the support condition
+    $\ker\bigl((\mathbf 1_A / d_A) \otimes \rho_R\bigr) \subseteq \ker\rho$ holds.
+    Then
+    \[
+        D\bigl(\rho \,\big\|\, (\mathbf 1_A / d_A) \otimes \rho_R\bigr)
+            = \log d_A + S(\rho_R) - S(\rho).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:quantum_relative_entropy}
+    When $\rho_R$ is singular the tensor logarithm of the reference does not split.
+    Regularize the reduced state by the affine perturbation
+    $\rho_{R,\varepsilon} = (1 + d_R\varepsilon)^{-1}(\rho_R + \varepsilon\mathbf 1)$,
+    positive definite for $\varepsilon > 0$. The reference
+    $(\mathbf 1_A / d_A) \otimes \rho_{R,\varepsilon}$ is then a positive definite
+    tensor product, whose logarithm splits, so the cross trace term evaluates to
+    $-\log d_A + \operatorname{Re}\operatorname{tr}(\rho_R\log\rho_{R,\varepsilon})$.
+    As $\varepsilon \to 0^+$ the support condition makes the zero eigenvalues of
+    $\rho_R$ contribute nothing, so
+    \[
+        \operatorname{Re}\operatorname{tr}\bigl(
+            \rho\,\log((\mathbf 1_A / d_A) \otimes \rho_{R,\varepsilon})\bigr)
+            \to -\log d_A - S(\rho_R).
+    \]
+    Since $D(\rho \,\|\, \sigma)
+        = -S(\rho) - \operatorname{Re}\operatorname{tr}(\rho\log\sigma)$, the
+    evaluation follows.
+\end{proof}
+
 \begin{theorem}[Strong subadditivity]\label{thm:strong_subadditivity}
     \lean{strong_subadditivity_general}
     \leanok
@@ -873,7 +909,8 @@ finite-dimensional quantum systems.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:quantum_relative_entropy, thm:relative_entropy_data_processing_support}
+    \uses{def:quantum_relative_entropy, thm:relative_entropy_data_processing_support,
+        lem:rel_entropy_eval_support}
     Read the inequality as one instance of data processing under the partial trace
     over $C$, with the singular reference state
     $\sigma_{ABC} = (\mathbf 1_A / d_A) \otimes \rho_{BC}$. Being a density operator
