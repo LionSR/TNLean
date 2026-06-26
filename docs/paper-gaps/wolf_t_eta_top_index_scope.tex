@@ -87,16 +87,15 @@ The formal declarations are
 
 \section{Classification}
 
-\emph{Scope restriction.} The formal threshold proves the source
-equivalence~(3.11) for Schmidt ranks $1\le k<D$, a special case of the source's
-full range $1\le k\le D$. For $T_\eta$ both tensor factors of the Choi operator
-have dimension $D$ (the maximally entangled vector lies in
-$\mathbb C^{D}\otimes\mathbb C^{D}$), so the first-factor dimension that bounds
-the Ky--Fan index coincides with $D$; no separate $D'$ enters. The conclusion
-matches the source on $1\le k<D$, and only the top index $k=D$ is omitted, where
-the bound degenerates to complete positivity. No hypothesis foreign to the
-source is used, so the deviation is a scope restriction rather than an
-unfaithful theorem.
+\emph{Resolved.} The top index $k=D$ is now formalized as
+\leanid{Matrix.isNPositiveMap_tEta_card_iff}: since $D$-positivity on
+$M_D(\mathbb C)$ is complete positivity (\leanid{isCPMap_iff_isNPositiveMap_card}),
+$T_\eta$ is $D$-positive iff its Choi operator is positive semidefinite, and the
+maximally entangled vector $\ket\Omega$ is the worst case (Cauchy--Schwarz), so
+this holds iff $D\le\eta$. Together with \leanid{Matrix.isNPositiveMap_tEta_iff}
+(the range $1\le k<D$) this covers the full source range $1\le k\le D$ of
+equivalence~(3.11), supplying the top inclusion
+$\mathcal T_D\subseteq\mathcal T_{D-1}$ of Wolf's chain~(3.3).
 
 \bibliographystyle{alpha}
 \bibliography{references}

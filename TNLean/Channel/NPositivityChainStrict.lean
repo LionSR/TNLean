@@ -415,6 +415,65 @@ theorem isNPositiveMap_tEta_iff [NeZero D] {η : ℝ} (hη : 0 < η) {k : ℕ}
         _ = (D : ℝ)⁻¹ * w := one_mul _
     linarith [h1, h2]
 
+/-- **Wolf eq. (3.11) at the top index `n = D`.**  Since `D`-positivity on
+`M_D(ℂ)` is complete positivity, `T_η` is `D`-positive iff its Choi operator is
+positive semidefinite, and — the maximally entangled vector being the worst
+case — this holds iff `D ≤ η`.  Together with `isNPositiveMap_tEta_iff` (the range
+`1 ≤ k < D`) this completes Wolf's threshold criterion over `k = 1, …, D`. -/
+theorem isNPositiveMap_tEta_card_iff [NeZero D] {η : ℝ} (hη : 0 < η) :
+    IsNPositiveMap D (tEta D η) ↔ (D : ℝ) ≤ η := by
+  classical
+  have hDpos : (0 : ℝ) < D := by exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne D)
+  have hΩself : star (omegaVec D) ⬝ᵥ (omegaVec D) = 1 := by
+    rw [star_omegaVec]; exact omegaVec_dotProduct_self (Nat.pos_of_ne_zero (NeZero.ne D))
+  rw [ChoiJamiolkowski.isNPositiveMap_iff_forall_hasSchmidtRankLE_choiMatrix_quadraticForm_nonneg]
+  constructor
+  · intro hpos
+    have hΩrank : Matrix.HasSchmidtRankLE D (omegaVec D) :=
+      Matrix.hasSchmidtRankLE_iff.mpr (by simpa using Matrix.schmidtRank_le_left (omegaVec D))
+    have hquad := choiMatrix_tEta_quadraticForm (D := D) η (omegaVec D)
+    rw [hΩself] at hquad
+    simp only [Complex.one_re, norm_one, one_pow] at hquad
+    have hval := hpos (omegaVec D) hΩrank
+    rw [hquad, ← Complex.ofReal_zero, Complex.real_le_real] at hval
+    have hcancelη : η⁻¹ * η = 1 := inv_mul_cancel₀ (ne_of_gt hη)
+    have hcancelD : (D : ℝ)⁻¹ * D = 1 := inv_mul_cancel₀ (ne_of_gt hDpos)
+    nlinarith [hval, hcancelη, hcancelD, hη, hDpos, mul_pos hDpos hη]
+  · intro hDη ψ _
+    have hquad := choiMatrix_tEta_quadraticForm (D := D) η ψ
+    rw [hquad, ← Complex.ofReal_zero, Complex.real_le_real]
+    set w : ℝ := (star ψ ⬝ᵥ ψ).re with hwdef
+    have hwnn : 0 ≤ w := by rw [hwdef, dotProduct_star_self_re]; positivity
+    have hcs : ‖star (omegaVec D) ⬝ᵥ ψ‖ ^ 2 ≤ w := by
+      have key : (inner (𝕜 := ℂ) (WithLp.toLp 2 (omegaVec D))
+          (WithLp.toLp 2 ψ : EuclideanSpace ℂ (Fin D × Fin D)) : ℂ)
+          = star (omegaVec D) ⬝ᵥ ψ := by
+        rw [EuclideanSpace.inner_eq_star_dotProduct]; exact dotProduct_comm _ _
+      have hΩn : ‖(WithLp.toLp 2 (omegaVec D) : EuclideanSpace ℂ (Fin D × Fin D))‖ = 1 := by
+        have h2 : ‖(WithLp.toLp 2 (omegaVec D) : EuclideanSpace ℂ (Fin D × Fin D))‖ ^ 2 = 1 := by
+          rw [← @inner_self_eq_norm_sq ℂ]
+          have hii : (inner (𝕜 := ℂ) (WithLp.toLp 2 (omegaVec D))
+              (WithLp.toLp 2 (omegaVec D) : EuclideanSpace ℂ (Fin D × Fin D)) : ℂ)
+              = star (omegaVec D) ⬝ᵥ (omegaVec D) := by
+            rw [EuclideanSpace.inner_eq_star_dotProduct]; exact dotProduct_comm _ _
+          rw [hii, hΩself]; simp
+        nlinarith [norm_nonneg (WithLp.toLp 2 (omegaVec D) : EuclideanSpace ℂ (Fin D × Fin D)), h2]
+      have hψn : ‖(WithLp.toLp 2 ψ : EuclideanSpace ℂ (Fin D × Fin D))‖ ^ 2 = w := by
+        rw [← @inner_self_eq_norm_sq ℂ, hwdef]
+        have hii : (inner (𝕜 := ℂ) (WithLp.toLp 2 ψ)
+            (WithLp.toLp 2 ψ : EuclideanSpace ℂ (Fin D × Fin D)) : ℂ) = star ψ ⬝ᵥ ψ := by
+          rw [EuclideanSpace.inner_eq_star_dotProduct]; exact dotProduct_comm _ _
+        rw [hii]; rfl
+      calc ‖star (omegaVec D) ⬝ᵥ ψ‖ ^ 2
+          = ‖(inner (𝕜 := ℂ) (WithLp.toLp 2 (omegaVec D))
+              (WithLp.toLp 2 ψ : EuclideanSpace ℂ (Fin D × Fin D)) : ℂ)‖ ^ 2 := by rw [key]
+        _ ≤ (‖(WithLp.toLp 2 (omegaVec D) : EuclideanSpace ℂ (Fin D × Fin D))‖
+              * ‖(WithLp.toLp 2 ψ : EuclideanSpace ℂ (Fin D × Fin D))‖) ^ 2 := by
+            gcongr; exact norm_inner_le_norm _ _
+        _ = w := by rw [hΩn, one_mul, hψn]
+    have hinvle : η⁻¹ ≤ (D : ℝ)⁻¹ := by rw [inv_le_inv₀ hη hDpos]; exact hDη
+    nlinarith [hcs, hwnn, hinvle, inv_pos.mpr hη, inv_pos.mpr hDpos]
+
 /-- **Strictness witness for Wolf's chain (3.3).** For `1 ≤ k` with `k + 1 < D`,
 the map `T_η` with `k ≤ η < k + 1` is `k`-positive but not `(k+1)`-positive. -/
 theorem tEta_isNPositiveMap_not_succ [NeZero D] {η : ℝ} {k : ℕ}
