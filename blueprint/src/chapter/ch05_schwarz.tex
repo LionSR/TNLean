@@ -255,9 +255,8 @@ maps.
     \]
     Because $\rho$ is positive semidefinite, this norm is the sum of its $n$
     largest eigenvalues, which coincide there with its singular values. This is
-    \cite[Lemma~3.1]{Wolf2012Quantum}, stated here for $n<D$; the top index
-    $n=D$, where the value is $\tr\rho=1$, lies outside the range of the
-    maximum principle in Theorem~\ref{thm:ky_fan_maximum_principle}.
+    \cite[Lemma~3.1]{Wolf2012Quantum} for $1\le n<D$; the top index $n=D$, where
+    the value is $\tr\rho=1$, is Theorem~\ref{thm:maximal_overlap_schmidt_rank_top}.
 \end{theorem}
 
 \begin{proof}
@@ -299,6 +298,32 @@ maps.
     so the bound is attained. (For a normalized $\phi$ with $1\le n$ one has
     $\|\rho\|_{(n)}\ge\|\rho\|_{(1)}>0$, since $\tr\rho=1$, which justifies the
     normalization.)
+\end{proof}
+
+\begin{theorem}[Maximal overlap at the top Schmidt rank]
+    \label{thm:maximal_overlap_schmidt_rank_top}
+    \lean{Matrix.maximalSchmidtOverlap_eq_kyFanNorm_top}
+    \leanok
+    \uses{def:schmidt_rank, def:ky_fan_norm, thm:maximal_overlap_schmidt_rank}
+    At the top index $n=D$ the Schmidt-rank constraint $\operatorname{SR}(\psi)\le D$
+    is vacuous, and the Ky-Fan $D$-norm of $\rho$ collapses to its trace. For a
+    normalized $\phi$ the identity of
+    Theorem~\ref{thm:maximal_overlap_schmidt_rank} then reads
+    \[
+        \max_{\|\psi\|=1} |\braket{\phi}{\psi}|^2 = \|\rho\|_{(D)} = \tr\rho = 1 ,
+    \]
+    attained at $\psi=\phi$. Together with
+    Theorem~\ref{thm:maximal_overlap_schmidt_rank} this covers the full range
+    $1\le n\le D$ of \cite[Lemma~3.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The Ky-Fan $D$-norm sums all eigenvalues of $\rho$, so
+    $\|\rho\|_{(D)}=\tr\rho=\|\phi\|^2=1$. The bound $1$ is attained at $\psi=\phi$,
+    whose Schmidt rank is at most $D$; and for any normalized $\psi$ the
+    Cauchy--Schwarz inequality gives
+    $|\braket{\phi}{\psi}|^2\le\|\phi\|^2\|\psi\|^2=1$.
 \end{proof}
 
 \begin{definition}[Reduced density of an eigenvector]

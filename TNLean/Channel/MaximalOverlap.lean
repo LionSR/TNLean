@@ -482,12 +482,12 @@ Schmidt rank at most n equals the Ky-Fan n-norm ‖ρ‖₍ₙ₎ -- the sum of 
 largest eigenvalues, which coincide with its singular values since ρ is positive
 semidefinite.
 
-**Scope restriction (n < D):** the source allows n up to the dimension D
-of the first factor, where the bound reads ‖ρ‖₍D₎ = tr ρ = 1; this version
-covers 1 ≤ n < D.  The omitted top index n = D is documented in
-`docs/paper-gaps/wolf_lemma_3_1_top_index_scope.tex`; it is inherited from the
-underlying maximum principle `Matrix.IsHermitian.kyFanNorm_eq_sup_trace`, stated
-for rank-exactly-k orthogonal projections with k < D. -/
+**Scope (1 ≤ n < D):** this version covers `1 ≤ n < D`, where the bound is the
+Ky-Fan `n`-norm and the underlying maximum principle
+`Matrix.IsHermitian.kyFanNorm_eq_sup_trace` applies (rank-exactly-`k` projections
+with `k < D`).  The top index `n = D` — where the constraint is vacuous and the
+value is `‖ρ‖₍D₎ = tr ρ = 1` — is `maximalSchmidtOverlap_eq_kyFanNorm_top`; the two
+theorems together cover the full range `1 ≤ n ≤ D` of the source lemma. -/
 theorem maximalSchmidtOverlap_eq_kyFanNorm (φ : m × n → ℂ)
     (hφ : star φ ⬝ᵥ φ = 1) {k : ℕ} (hk1 : 1 ≤ k) (hk : k < Fintype.card m) :
     IsGreatest {r : ℝ | ∃ ψ : m × n → ℂ, star ψ ⬝ᵥ ψ = 1 ∧
@@ -519,5 +519,52 @@ theorem maximalSchmidtOverlap_eq_kyFanNorm (φ : m × n → ℂ)
     · rw [← star_dotProduct_self_eq_trace_conjTranspose_mul, hψnorm]
     · exact hψrank
     · rw [hC, ← star_dotProduct_eq_trace_conjTranspose_mul]
+
+omit [DecidableEq n] in
+/-- **Wolf's Lemma 3.1 at the top index `n = D = card m`.**  At the largest
+Schmidt-rank index `k = D` the constraint `SR(ψ) ≤ D` is vacuous, the Ky-Fan
+`D`-norm of `ρ = C Cᴴ` collapses to its trace `tr ρ = ‖φ‖² = 1`, and the value
+`1` is attained at `ψ = φ` (with the upper bound supplied by Cauchy–Schwarz).
+Together with `maximalSchmidtOverlap_eq_kyFanNorm` (the case `1 ≤ n < D`) this
+covers the full range `1 ≤ n ≤ D` of Wolf eq. (3.5)
+(`Notes/WolfNoteTexSource/ch03_positive_not_completely.tex`, lines ~119–128). -/
+theorem maximalSchmidtOverlap_eq_kyFanNorm_top (φ : m × n → ℂ)
+    (hφ : star φ ⬝ᵥ φ = 1) :
+    IsGreatest {r : ℝ | ∃ ψ : m × n → ℂ, star ψ ⬝ᵥ ψ = 1 ∧
+        HasSchmidtRankLE (Fintype.card m) ψ ∧ ‖star φ ⬝ᵥ ψ‖ ^ 2 = r}
+      ((Matrix.posSemidef_self_mul_conjTranspose (schmidtCoeffMatrix φ)).isHermitian.kyFanNorm
+        (Fintype.card m)) := by
+  set C := schmidtCoeffMatrix φ with hC
+  have htrace : (C * Cᴴ).trace = star φ ⬝ᵥ φ := by
+    rw [Matrix.trace_mul_comm, ← star_dotProduct_self_eq_trace_conjTranspose_mul]
+  have htarget :
+      (Matrix.posSemidef_self_mul_conjTranspose C).isHermitian.kyFanNorm (Fintype.card m) = 1 := by
+    rw [Matrix.IsHermitian.kyFanNorm_card_eq_trace_re, htrace, hφ, Complex.one_re]
+  rw [htarget]
+  -- Each unit vector maps to a unit Euclidean vector, so Cauchy–Schwarz bounds
+  -- the overlap by `1`.
+  have hinner : ∀ ψ : m × n → ℂ,
+      (inner (𝕜 := ℂ) (WithLp.toLp 2 φ) (WithLp.toLp 2 ψ : EuclideanSpace ℂ (m × n)) : ℂ)
+        = star φ ⬝ᵥ ψ := by
+    intro ψ; rw [EuclideanSpace.inner_eq_star_dotProduct]; exact dotProduct_comm _ _
+  have hunit : ∀ ψ : m × n → ℂ, star ψ ⬝ᵥ ψ = 1 →
+      ‖(WithLp.toLp 2 ψ : EuclideanSpace ℂ (m × n))‖ = 1 := by
+    intro ψ hψ
+    have h2 : ‖(WithLp.toLp 2 ψ : EuclideanSpace ℂ (m × n))‖ ^ 2 = 1 := by
+      rw [← @inner_self_eq_norm_sq ℂ]
+      have hii : (inner (𝕜 := ℂ) (WithLp.toLp 2 ψ) (WithLp.toLp 2 ψ : EuclideanSpace ℂ (m × n)) : ℂ)
+          = star ψ ⬝ᵥ ψ := by
+        rw [EuclideanSpace.inner_eq_star_dotProduct]; exact dotProduct_comm _ _
+      rw [hii, hψ]; simp
+    nlinarith [norm_nonneg (WithLp.toLp 2 ψ : EuclideanSpace ℂ (m × n)), h2]
+  refine ⟨⟨φ, hφ, schmidtRank_le_left φ, by rw [hφ, norm_one, one_pow]⟩, ?_⟩
+  rintro r ⟨ψ, hψnorm, _, rfl⟩
+  have hcs : ‖star φ ⬝ᵥ ψ‖ ≤ 1 := by
+    rw [← hinner ψ]
+    calc ‖(inner (𝕜 := ℂ) (WithLp.toLp 2 φ) (WithLp.toLp 2 ψ : EuclideanSpace ℂ (m × n)) : ℂ)‖
+        ≤ ‖(WithLp.toLp 2 φ : EuclideanSpace ℂ (m × n))‖ *
+            ‖(WithLp.toLp 2 ψ : EuclideanSpace ℂ (m × n))‖ := norm_inner_le_norm _ _
+      _ = 1 := by rw [hunit φ hφ, hunit ψ hψnorm, mul_one]
+  nlinarith [hcs, norm_nonneg (star φ ⬝ᵥ ψ)]
 
 end Matrix
