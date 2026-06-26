@@ -1260,7 +1260,7 @@
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
 	, Equation&#160;(3.18)
 	]
-</span>. The source states the inequalities under the premise that \(\rho \) has Schmidt number at most \(n\), and reaches \((T_n\otimes \operatorname{id})(\rho )\ge 0\) from that premise by the \(n\)-positivity of \(T_n\); that first step is taken here as the hypothesis rather than derived. The first step and the composed full criterion with the Schmidt-number premise are Theorem&#160;<a href="ch-positive_not_cp.html#thm:reduction_criterion_of_schmidt_number">20.35</a>. </p>
+</span>. The source states the inequalities under the premise that \(\rho \) has Schmidt number at most \(n\), and reaches \((T_n\otimes \operatorname{id})(\rho )\ge 0\) from that premise by the \(n\)-positivity of \(T_n\); that first step is taken here as the hypothesis rather than derived. The first step and the composed full criterion with the Schmidt-number premise are Theorem&#160;<a href="ch-positive_not_cp.html#thm:reduction_criterion_of_schmidt_number">20.37</a>. </p>
 
   </div>
 </div>
@@ -3115,12 +3115,174 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:tensor_map_id_t_eta_posSemidef_pure">
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:convex_setOf_has_schmidt_number_le">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
     <span class="theorem_thmlabel">20.30</span>
+    <span class="theorem_thmtitle">Convexity of the Schmidt-number set</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:convex_setOf_has_schmidt_number_le">#</a>
+    
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030473"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.27</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.convex_setOf_hasSchmidtNumberLE" class="lean_decl">Matrix.convex_setOf_hasSchmidtNumberLE</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    For each \(n\) the set \(S_n\) of bipartite states of Schmidt number at most \(n\) is convex. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000030473">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>A convex combination \(a x + b y\) with \(a,b\ge 0\) is a sum of two nonnegatively scaled states of Schmidt number at most \(n\), and that bound is preserved under nonnegative scaling and under addition; rescaling a vector by a nonnegative scalar scales its coefficient matrix and so does not increase the Schmidt rank. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:compact_setOf_has_schmidt_number_le_trace_one">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">20.31</span>
+    <span class="theorem_thmtitle">Compactness of the Schmidt-number state set</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:compact_setOf_has_schmidt_number_le_trace_one">#</a>
+    
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030474"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.27</a></li>
+          
+          <li><a href="ch-schwarz.html#def:schmidt_rank">Definition 5.11</a></li>
+          
+          <li><a href="ch-positive_not_cp.html#thm:convex_setOf_has_schmidt_number_le">Theorem 20.30</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.isCompact_setOf_hasSchmidtNumberLE_trace_one" class="lean_decl">Matrix.isCompact_setOf_hasSchmidtNumberLE_trace_one</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    For each \(n\) the set \(S_n\) of trace-one bipartite states of Schmidt number at most \(n\) is compact. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000030474">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>A trace-one state of Schmidt number at most \(n\) is a convex combination of pure states \(|\psi \rangle \langle \psi |\) whose vector \(\psi \) has unit norm and Schmidt rank at most \(n\), so \(S_n\) is the convex hull of the set \(P_n\) of those pure states. The set \(P_n\) is the image, under the continuous projector map \(\psi \mapsto |\psi \rangle \langle \psi |\), of the unit vectors of Schmidt rank at most \(n\). In the Euclidean norm those unit vectors form the unit sphere, which is compact in finite dimension, intersected with the closed set on which the Schmidt rank is at most \(n\) (the coefficient matrix depends continuously on the vector and the matrices of rank at most \(n\) form a closed set); hence \(P_n\) is compact. The trace of \(|\psi \rangle \langle \psi |\) is the squared Euclidean norm of \(\psi \), so the trace-one constraint is exactly the unit-norm constraint and the weights of the convex decomposition are the squared norms, summing to the trace. The convex hull of a compact set is compact in a finite-dimensional real normed space. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:tensor_map_id_t_eta_posSemidef_pure">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">20.32</span>
     <span class="theorem_thmtitle">Pure-state step of the reduction criterion</span>
     <div class="thm_header_extras">
 
@@ -3131,7 +3293,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:tensor_map_id_t_eta_posSemidef_pure">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000030473"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030475"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3193,13 +3355,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For a pure state \(|\psi \rangle \langle \psi |\) on the square bipartite system \(M_{D}(\mathbb {C})\otimes M_{D}(\mathbb {C})\) with \(\operatorname {SR}(\psi )\le n\) and \(1\le n{\lt}D\), applying \(T_n\) to the first factor keeps the result positive semidefinite: </p>
-<div class="displaymath" id="a0000030474">
+<div class="displaymath" id="a0000030476">
   \[  (T_n\otimes \operatorname{id})(|\psi \rangle \langle \psi |)\ge 0.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000030473">
+<div class="proof_wrapper" id="a0000030475">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3216,7 +3378,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.31</span>
+    <span class="theorem_thmlabel">20.33</span>
     <span class="theorem_thmtitle">Pure-state step for a general positive map</span>
     <div class="thm_header_extras">
 
@@ -3227,7 +3389,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:tensor_map_id_posSemidef_pure">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000030475"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030477"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3289,13 +3451,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For a pure state \(|\psi \rangle \langle \psi |\) on the square bipartite system \(M_{D}(\mathbb {C})\otimes M_{D}(\mathbb {C})\) with \(\operatorname {SR}(\psi )\le n\) and any \(n\)-positive map \(T\), applying \(T\) to the first factor keeps the result positive semidefinite: </p>
-<div class="displaymath" id="a0000030476">
+<div class="displaymath" id="a0000030478">
   \[  (T\otimes \operatorname{id})(|\psi \rangle \langle \psi |)\ge 0.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000030475">
+<div class="proof_wrapper" id="a0000030477">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3304,7 +3466,7 @@
   </div>
   <div class="proof_content">
   <p>Write \(\psi \) through the maximally entangled vector as \(\psi =\psi _X\) for a square matrix \(X\) on the right factor with \(\operatorname {rank}(X)=\operatorname {SR}(\psi )\le n\). Then \((T\otimes \operatorname{id})(|\psi \rangle \langle \psi |)\) is the right-factor Choi compression of \(T\) by \(X\), and its quadratic form on a vector \(\eta \) equals the Choi quadratic form \(C_T\) of \(T\) evaluated on \(R_X^\dagger \eta \), a vector of Schmidt rank at most \(\operatorname {rank}(X)\le n\). Because \(T\) is \(n\)-positive, </p>
-<div class="displaymath" id="a0000030477">
+<div class="displaymath" id="a0000030479">
   \[  \langle R_X^\dagger \eta ,\,  C_T\,  R_X^\dagger \eta \rangle \ge 0,  \]
 </div>
 <p> so the compression is positive semidefinite. </p>
@@ -3316,7 +3478,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.32</span>
+    <span class="theorem_thmlabel">20.34</span>
     <span class="theorem_thmtitle">Positive maps and entanglement, only-if direction</span>
     <div class="thm_header_extras">
 
@@ -3327,7 +3489,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:has_schmidt_number_le_tensor_map_id">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000030478"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030480"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3351,7 +3513,7 @@
           
           <li><a href="ch-positive_not_cp.html#thm:tensor_map_id_sum">Theorem 20.25</a></li>
           
-          <li><a href="ch-positive_not_cp.html#thm:tensor_map_id_posSemidef_pure">Theorem 20.31</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:tensor_map_id_posSemidef_pure">Theorem 20.33</a></li>
           
         </ul>
     
@@ -3383,7 +3545,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    A bipartite state on the square system \(M_{D}(\mathbb {C})\otimes M_{D}(\mathbb {C})\) of Schmidt number at most \(n\) satisfies </p>
-<div class="displaymath" id="a0000030479">
+<div class="displaymath" id="a0000030481">
   \[  (T\otimes \operatorname{id})(\rho )\ge 0  \]
 </div>
 <p> for every \(n\)-positive map \(T\). This is the square case \(d=d'=D\) of the only-if direction of Wolf’s Proposition&#160;3.4 for a general bipartite system \(M_{d}(\mathbb {C})\otimes M_{d'}(\mathbb {C})\) <span class="cite">
@@ -3396,7 +3558,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000030478">
+<div class="proof_wrapper" id="a0000030480">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3413,7 +3575,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.33</span>
+    <span class="theorem_thmlabel">20.35</span>
     <span class="theorem_thmtitle">Only-if direction for a general bipartite system</span>
     <div class="thm_header_extras">
 
@@ -3424,7 +3586,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:has_schmidt_number_le_tensor_map_id_general">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000030480"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030482"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3446,7 +3608,7 @@
           
           <li><a href="ch-schwarz.html#def:k_positive_map">Definition 5.7</a></li>
           
-          <li><a href="ch-positive_not_cp.html#thm:has_schmidt_number_le_tensor_map_id">Theorem 20.32</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:has_schmidt_number_le_tensor_map_id">Theorem 20.34</a></li>
           
         </ul>
     
@@ -3478,7 +3640,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    On a general bipartite system \(M_{d}(\mathbb {C})\otimes M_{d'}(\mathbb {C})\), with no relation imposed between the two factors, a state of Schmidt number at most \(n\) satisfies </p>
-<div class="displaymath" id="a0000030481">
+<div class="displaymath" id="a0000030483">
   \[  (T\otimes \operatorname{id})(\rho )\ge 0  \]
 </div>
 <p> for every \(n\)-positive map \(T\) on \(M_{d}(\mathbb {C})\). This is the only-if direction of Wolf’s Proposition&#160;3.4, the first step of eq.&#160;(3.18) <span class="cite">
@@ -3491,7 +3653,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000030480">
+<div class="proof_wrapper" id="a0000030482">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3508,7 +3670,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.34</span>
+    <span class="theorem_thmlabel">20.36</span>
     <span class="theorem_thmtitle">Reduction step from the Schmidt-number premise</span>
     <div class="thm_header_extras">
 
@@ -3519,7 +3681,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:has_schmidt_number_le_tensor_map_id_t_eta">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000030482"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030484"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3543,7 +3705,7 @@
           
           <li><a href="ch-positive_not_cp.html#thm:tensor_map_id_sum">Theorem 20.25</a></li>
           
-          <li><a href="ch-positive_not_cp.html#thm:tensor_map_id_t_eta_posSemidef_pure">Theorem 20.30</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:tensor_map_id_t_eta_posSemidef_pure">Theorem 20.32</a></li>
           
         </ul>
     
@@ -3575,13 +3737,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For \(1\le n{\lt}D\), a bipartite state on the square system \(M_{D}(\mathbb {C})\otimes M_{D}(\mathbb {C})\) of Schmidt number at most \(n\) satisfies </p>
-<div class="displaymath" id="a0000030483">
+<div class="displaymath" id="a0000030485">
   \[  (T_n\otimes \operatorname{id})(\rho )\ge 0.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000030482">
+<div class="proof_wrapper" id="a0000030484">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3598,7 +3760,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.35</span>
+    <span class="theorem_thmlabel">20.37</span>
     <span class="theorem_thmtitle">Reduction criterion with the Schmidt-number premise</span>
     <div class="thm_header_extras">
 
@@ -3609,7 +3771,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:reduction_criterion_of_schmidt_number">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000030484"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030486"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3629,7 +3791,7 @@
           
           <li><a href="ch-schwarz.html#def:t_eta">Definition 5.71</a></li>
           
-          <li><a href="ch-positive_not_cp.html#thm:has_schmidt_number_le_tensor_map_id_general">Theorem 20.33</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:has_schmidt_number_le_tensor_map_id_general">Theorem 20.35</a></li>
           
           <li><a href="ch-positive_not_cp.html#thm:reduction_criterion">Theorem 20.5</a></li>
           
@@ -3665,14 +3827,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    On a general bipartite system \(M_{d}(\mathbb {C})\otimes M_{d'}(\mathbb {C})\), a state of Schmidt number at most \(n\) satisfies the reduction criterion </p>
-<div class="displaymath" id="a0000030485">
+<div class="displaymath" id="a0000030487">
   \[  n\, \mathbb {1}\otimes \rho _2\ge \rho \quad (1\le n{\lt}d) \qquad \text{and}\qquad n\, \rho _1\otimes \mathbb {1}\ge \rho \quad (1\le n{\lt}d'),  \]
 </div>
 <p> with \(\rho _1\) and \(\rho _2\) the reduced densities on the first and second factors. No relation is imposed between \(d\) and \(d'\); each inequality carries only the \(n\)-positivity threshold of \(T_n\) on its acting factor. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000030484">
+<div class="proof_wrapper" id="a0000030486">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
