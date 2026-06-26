@@ -42,6 +42,13 @@ raise its rank.
   `Matrix.HasSchmidtNumberLE.tensorMapId_posSemidef_general`: the **general bipartite
   forward step** of Wolf Prop 3.4 (only if), with no relation imposed between the two
   tensor factors, combining the two padding directions.
+* `Matrix.reductionCriterion_left_of_hasSchmidtNumberLE_general` and
+  `Matrix.reductionCriterion_right_of_hasSchmidtNumberLE_general`: the **general
+  bipartite reduction criterion** of Wolf eq. (3.18), composing the general forward
+  step with the (already dimension-general) operator-implication step.  A bipartite
+  state on `ℂ^d ⊗ ℂ^{d'}` of Schmidt number at most `n` satisfies `n • (1 ⊗ ρ₂) ≥ ρ`
+  (left form, `1 ≤ n < d`) and `n • (ρ₁ ⊗ 1) ≥ ρ` (right form, `1 ≤ n < d'`), with no
+  square restriction relating the two tensor factors.
 
 ## References
 
@@ -603,5 +610,73 @@ theorem HasSchmidtNumberLE.tensorMapId_posSemidef_general [NeZero d] [NeZero d']
   rcases le_or_gt d' d with h | h
   · exact hρ.tensorMapId_posSemidef' h hTpos
   · exact hρ.tensorMapId_posSemidef'' h.le hTpos
+
+/-! ## The general bipartite reduction criterion (Wolf eq. (3.18))
+
+Composing the general bipartite forward step with the already dimension-general
+operator-implication step (`Matrix.reductionCriterion_left`/`reductionCriterion_right`,
+stated for `ℂ^d ⊗ ℂ^{d'}`) lifts the `T_n`-specialized reduction criterion off the
+square system.  The forward step `(T_n ⊗ id)(ρ) ≥ 0` holds whenever `ρ` has Schmidt
+number at most `n` and `T_n` is `n`-positive; the operator step then yields the
+reduced-density bounds.  The `n`-positivity threshold of `T_n` (Wolf eq. (3.11)) is the
+only restriction: `1 ≤ n < d` for the left form (the map lives on the first factor),
+and `1 ≤ n < d'` for the right form (the factor swap moves the map to the second
+factor). -/
+
+/-- **Wolf's reduction criterion (eq. (3.18)), left form, general bipartite system.**
+A bipartite state `ρ` on `ℂ^d ⊗ ℂ^{d'}` of Schmidt number at most `n` (with
+`1 ≤ n < d`) satisfies `n • (1 ⊗ ρ₂) ≥ ρ`, where `ρ₂ = traceLeft ρ` is the reduced
+density on the second factor.  No relation is imposed between the two tensor factors.
+
+This is Wolf's full two-step argument over a general bipartite system: the
+Schmidt-number premise gives `(T_n ⊗ id)(ρ) ≥ 0` (step 1, the general forward step
+`HasSchmidtNumberLE.tensorMapId_posSemidef_general`), and the dimension-general
+operator inequality `reductionCriterion_left` then yields the bound (step 2).  The only
+scope is the `n`-positivity threshold `1 ≤ n < d` of `T_n` (Wolf eq. (3.11)); the square
+restriction `d = d'` of `reductionCriterion_left_of_hasSchmidtNumberLE` is removed. -/
+theorem reductionCriterion_left_of_hasSchmidtNumberLE_general [NeZero d] [NeZero d']
+    {n : ℕ} (hn1 : 1 ≤ n) (hnd : n < d)
+    {ρ : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ} (hρ : HasSchmidtNumberLE n ρ) :
+    ρ ≤ (n : ℂ) • ((1 : Matrix (Fin d) (Fin d) ℂ) ⊗ₖ traceLeft ρ) := by
+  -- `T_n` on the first factor is `n`-positive (Wolf eq. (3.11)).
+  have hTpos : IsNPositiveMap n (tEta d (n : ℝ)) :=
+    (isNPositiveMap_tEta_iff (by positivity) hn1 hnd).mpr (le_refl _)
+  exact reductionCriterion_left (by omega) ρ (hρ.tensorMapId_posSemidef_general hTpos)
+
+/-- **Wolf's reduction criterion (eq. (3.18)), right form, general bipartite system.**
+A bipartite state `ρ` on `ℂ^d ⊗ ℂ^{d'}` of Schmidt number at most `n` (with
+`1 ≤ n < d'`) satisfies `n • (ρ₁ ⊗ 1) ≥ ρ`, where `ρ₁ = traceRight ρ` is the reduced
+density on the first factor.  No relation is imposed between the two tensor factors.
+
+The factor swap `ρ.submatrix Prod.swap Prod.swap` on `ℂ^{d'} ⊗ ℂ^d` again has Schmidt
+number at most `n`, since the swap reindexes each pure summand to a vector with the
+transposed coefficient matrix, of the same rank.  Its first factor is `d'`, so the
+general forward step applied with the map `T_n` on `M_{d'}` (`n`-positive for
+`1 ≤ n < d'`) makes `(T_n ⊗ id)(ρ^swap) ≥ 0`, supplying the symmetric hypothesis of the
+dimension-general operator-implication step `reductionCriterion_right`.  The only scope
+is the `n`-positivity threshold `1 ≤ n < d'` of `T_n`; the square restriction `d = d'`
+of `reductionCriterion_right_of_hasSchmidtNumberLE` is removed. -/
+theorem reductionCriterion_right_of_hasSchmidtNumberLE_general [NeZero d] [NeZero d']
+    {n : ℕ} (hn1 : 1 ≤ n) (hnd' : n < d')
+    {ρ : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ} (hρ : HasSchmidtNumberLE n ρ) :
+    ρ ≤ (n : ℂ) • (traceRight ρ ⊗ₖ (1 : Matrix (Fin d') (Fin d') ℂ)) := by
+  classical
+  -- The factor swap of `ρ` again has Schmidt number at most `n`.
+  have hswap : HasSchmidtNumberLE n (ρ.submatrix Prod.swap Prod.swap) := by
+    obtain ⟨ι, _, ψ, hψ, rfl⟩ := hρ
+    refine ⟨ι, inferInstance, fun i => (ψ i) ∘ Prod.swap, fun i => ?_, ?_⟩
+    · -- The swapped vector has the transposed coefficient matrix, of equal rank.
+      have hcoeff :
+          schmidtCoeffMatrix ((ψ i) ∘ Prod.swap) = (schmidtCoeffMatrix (ψ i))ᵀ := by
+        ext a b; simp [schmidtCoeffMatrix, Function.comp]
+      rw [HasSchmidtRankLE, schmidtRank, hcoeff, Matrix.rank_transpose]
+      exact hψ i
+    · ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
+      simp only [Matrix.submatrix_apply, Matrix.sum_apply, vecMulVec_apply, Pi.star_apply,
+        Prod.swap_prod_mk, Function.comp_apply]
+  -- `T_n` on the swapped first factor `d'` is `n`-positive (Wolf eq. (3.11)).
+  have hTpos : IsNPositiveMap n (tEta d' (n : ℝ)) :=
+    (isNPositiveMap_tEta_iff (by positivity) hn1 hnd').mpr (le_refl _)
+  exact reductionCriterion_right (by omega) ρ (hswap.tensorMapId_posSemidef_general hTpos)
 
 end Matrix
