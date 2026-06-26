@@ -45,6 +45,7 @@ import TNLean.Analysis.TraceCFC
 import TNLean.Analysis.CfcLogAdditive
 import TNLean.Analysis.MatrixTraceInequalities
 import TNLean.Analysis.KyFanNorm
+import TNLean.Analysis.ConvexHullCompact
 
 -- Layer 1: Generic convex/topological infrastructure
 import TNLean.Topology.ConvexProjection
