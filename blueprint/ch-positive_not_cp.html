@@ -3629,7 +3629,7 @@
           
           <li><a href="ch-schwarz.html#def:t_eta">Definition 5.71</a></li>
           
-          <li><a href="ch-positive_not_cp.html#thm:has_schmidt_number_le_tensor_map_id_t_eta">Theorem 20.34</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:has_schmidt_number_le_tensor_map_id_general">Theorem 20.33</a></li>
           
           <li><a href="ch-positive_not_cp.html#thm:reduction_criterion">Theorem 20.5</a></li>
           
@@ -3651,9 +3651,9 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/Matrix.reductionCriterion_left_of_hasSchmidtNumberLE" class="lean_decl">Matrix.reductionCriterion_left_of_hasSchmidtNumberLE</a></li>
+          <li><a href="../docs/find/#doc/Matrix.reductionCriterion_left_of_hasSchmidtNumberLE_general" class="lean_decl">Matrix.reductionCriterion_left_of_hasSchmidtNumberLE_general</a></li>
           
-          <li><a href="../docs/find/#doc/Matrix.reductionCriterion_right_of_hasSchmidtNumberLE" class="lean_decl">Matrix.reductionCriterion_right_of_hasSchmidtNumberLE</a></li>
+          <li><a href="../docs/find/#doc/Matrix.reductionCriterion_right_of_hasSchmidtNumberLE_general" class="lean_decl">Matrix.reductionCriterion_right_of_hasSchmidtNumberLE_general</a></li>
           
         </ul>
     
@@ -3664,11 +3664,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    For \(1\le n{\lt}D\), a bipartite state on the square system \(M_{D}(\mathbb {C})\otimes M_{D}(\mathbb {C})\) of Schmidt number at most \(n\) satisfies the reduction criterion </p>
+  <p>    On a general bipartite system \(M_{d}(\mathbb {C})\otimes M_{d'}(\mathbb {C})\), a state of Schmidt number at most \(n\) satisfies the reduction criterion </p>
 <div class="displaymath" id="a0000030398">
-  \[  n\, \rho _1\otimes \mathbb {1}\ge \rho \qquad \text{and}\qquad n\, \mathbb {1}\otimes \rho _2\ge \rho ,  \]
+  \[  n\, \mathbb {1}\otimes \rho _2\ge \rho \quad (1\le n{\lt}d) \qquad \text{and}\qquad n\, \rho _1\otimes \mathbb {1}\ge \rho \quad (1\le n{\lt}d'),  \]
 </div>
-<p> with \(\rho _1\) and \(\rho _2\) the reduced densities on the first and second factors. </p>
+<p> with \(\rho _1\) and \(\rho _2\) the reduced densities on the first and second factors. No relation is imposed between \(d\) and \(d'\); each inequality carries only the \(n\)-positivity threshold of \(T_n\) on its acting factor. </p>
 
   </div>
 </div>
@@ -3680,7 +3680,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The Schmidt-number premise gives \((T_n\otimes \operatorname{id})(\rho )\ge 0\), which is the first step. The operator implication then yields \(n\, \mathbb {1}\otimes \rho _2\ge \rho \). The factor swap of a state of Schmidt number at most \(n\) again has Schmidt number at most \(n\), since the swap reindexes each pure summand to a vector with the transposed coefficient matrix, of the same rank; applying the first step to the swapped state and the operator implication in its symmetric form gives \(n\, \rho _1\otimes \mathbb {1}\ge \rho \). </p>
+  <p>The Schmidt-number premise gives \((T_n\otimes \operatorname{id})(\rho )\ge 0\) on the general system (first step), and the dimension-general operator implication then yields \(n\, \mathbb {1}\otimes \rho _2\ge \rho \). The factor swap of a state of Schmidt number at most \(n\) again has Schmidt number at most \(n\), since it sends each pure summand \(\psi \) to \(\psi \circ \mathrm{swap}\), whose Schmidt coefficient matrix is the transpose \(M_{\psi \circ \mathrm{swap}}=M_\psi ^{\mathsf T}\) of that of \(\psi \) and so has the same rank; applying the first step to the swapped state (whose first factor is \(d'\)) and the operator implication in its symmetric form gives \(n\, \rho _1\otimes \mathbb {1}\ge \rho \). </p>
 
   </div>
 </div>
