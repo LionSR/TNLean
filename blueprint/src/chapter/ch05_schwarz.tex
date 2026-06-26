@@ -1427,10 +1427,9 @@ adjacent cones.
     \uses{def:t_eta, thm:choi_matrix_t_eta, thm:schmidt_rank_choi_test_iff,
         thm:maximal_overlap_schmidt_rank}
     Let $\eta>0$ and $1\le k<D$.  Then $T_\eta$ is $k$-positive if and only if
-    $\eta\ge k$.  This is \cite[Equation~(3.11)]{Wolf2012Quantum}, stated here for
-    $1\le k<D$; the top index $k=D$, where $k$-positivity is complete positivity,
-    lies outside the range of the maximal-overlap principle in
-    Theorem~\ref{thm:maximal_overlap_schmidt_rank}.
+    $\eta\ge k$.  This is \cite[Equation~(3.11)]{Wolf2012Quantum} for $1\le k<D$;
+    the top index $k=D$, where $k$-positivity is complete positivity, is
+    Theorem~\ref{thm:t_eta_threshold_top}.
 \end{theorem}
 
 \begin{proof}
@@ -1450,6 +1449,29 @@ adjacent cones.
     which is nonnegative precisely when $\eta\ge k$.  Degree-two homogeneity
     extends the bound from normalized vectors to all vectors of Schmidt rank at
     most $k$.
+\end{proof}
+
+\begin{theorem}[Positivity threshold of $T_\eta$ at the top index]
+    \label{thm:t_eta_threshold_top}
+    \lean{Matrix.isNPositiveMap_tEta_card_iff}
+    \leanok
+    \uses{def:t_eta, thm:choi_matrix_t_eta, thm:schmidt_rank_choi_test_iff}
+    Let $\eta>0$ and $D\ge 1$.  Then $T_\eta$ is $D$-positive if and only if
+    $\eta\ge D$.
+    Together with Theorem~\ref{thm:t_eta_threshold} this is
+    \cite[Equation~(3.11)]{Wolf2012Quantum} over the full range $1\le k\le D$,
+    where the top index $k=D$ is complete positivity.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    On $M_D(\mathbb C)$, $D$-positivity is complete positivity, which is
+    positive semidefiniteness of the Choi operator
+    $\tau_\eta=D^{-1}\Id-\eta^{-1}\ket{\Omega}\bra{\Omega}$.  Its quadratic form on
+    a vector $\psi$ is $D^{-1}\|\psi\|^2-\eta^{-1}|\braket{\Omega}{\psi}|^2$; since
+    $\ket\Omega$ is normalized, Cauchy--Schwarz gives
+    $|\braket{\Omega}{\psi}|^2\le\|\psi\|^2$ with equality at $\psi=\Omega$, so the
+    form is nonnegative for all $\psi$ precisely when $\eta\ge D$.
 \end{proof}
 
 \begin{corollary}[Strictness of the positivity chain]
