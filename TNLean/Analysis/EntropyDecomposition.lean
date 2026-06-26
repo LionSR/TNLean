@@ -26,9 +26,9 @@ in strong subadditivity.
   conjugacy invariant.
 * `vonNeumannEntropy_kronecker` — tensor additivity:
   \(S(\omega \otimes \tau) = S(\omega) + S(\tau)\) for density matrices.
-* `vonNeumannEntropy_smul` — scaling a density matrix by \(c \ge 0\) of trace
-  one block adds the Shannon term: \(S(c \cdot \omega) = c\,S(\omega) +
-  \mathrm{negMulLog}(c)\) when \(\mathrm{tr}\,\omega = 1\).
+* `vonNeumannEntropy_smul` — scaling a trace-one density matrix by a scalar \(c\)
+  adds the Shannon term: \(S(c \cdot \omega) = c\,S(\omega) - c\log c\) when
+  \(\mathrm{tr}\,\omega = 1\).
 * `vonNeumannEntropy_blockDiagonal'` — additivity over a finite weighted
   orthogonal direct sum:
   \(S\!\left(\bigoplus_j p_j\,\omega_j\right) = H(\{p_j\}) + \sum_j p_j\,
@@ -137,7 +137,7 @@ and `B` that are density matrices (positive semidefinite, trace one),
 The Kronecker product is unitarily conjugate to the diagonal of eigenvalue
 products \(\lambda_i \mu_j\) (using the Kronecker product of the factor
 eigenvector unitaries), so the entropy is
-\(\sum_{i,j} \mathrm{negMulLog}(\lambda_i \mu_j)\). The unconditional
+\(\sum_{i,j} -\lambda_i\mu_j\log(\lambda_i \mu_j)\). The unconditional
 multiplicativity `Real.negMulLog_mul` splits each term, and the unit traces (the
 eigenvalue sums) collapse the cross terms to \(S(A) + S(B)\). -/
 theorem vonNeumannEntropy_kronecker {A : Matrix m m ℂ} {B : Matrix n n ℂ}
@@ -226,11 +226,11 @@ variable {n : Type*} [Fintype n] [DecidableEq n]
 open Matrix
 
 /-- **Entropy of a scaled density matrix.** For a density matrix `ω` (positive
-semidefinite, trace one) and a nonnegative real scalar `c`,
-\(S(c \cdot \omega) = c\,S(\omega) + \mathrm{negMulLog}(c)\).
+semidefinite, trace one) and a real scalar `c`,
+\(S(c \cdot \omega) = c\,S(\omega) - c\log c\).
 
 The eigenvalues of \(c\,\omega\) are \(c\lambda_i\), so the entropy is
-\(\sum_i \mathrm{negMulLog}(c\lambda_i)\); the unconditional split
+\(\sum_i -(c\lambda_i)\log(c\lambda_i)\); the unconditional split
 `Real.negMulLog_mul` and the unit eigenvalue sum collapse this to the stated
 form. -/
 theorem vonNeumannEntropy_smul {ω : Matrix n n ℂ} (hω : ω.PosSemidef)

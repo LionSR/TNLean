@@ -1201,11 +1201,22 @@ finite-dimensional quantum systems.
     S(\omega_j)$ by Theorems~\ref{thm:entropy_block_diagonal}
     and~\ref{thm:entropy_smul}, and the entropy of a tensor product is additive,
     $S(\omega \otimes \tau) = S(\omega) + S(\tau)$, by
-    Theorem~\ref{thm:entropy_kronecker}. The three reduced states
-    factor as block-diagonal direct sums of the corresponding partial traces of
-    the components, so substituting the four entropy terms and cancelling the
-    Shannon weights leaves the equality. The basis change on $B$ and the
-    direct-sum reindexing leave every entropy term unchanged.
+    Theorem~\ref{thm:entropy_kronecker}. The three reduced states factor as
+    block-diagonal direct sums of the corresponding partial traces of the
+    components, so, writing $H = -\sum_j p_j\log p_j$, the four entropies expand as
+    \[
+        \begin{aligned}
+        S(\rho_{ABC}) &= H + \sum_j p_j\bigl[S(\rho_{AB_j^L}) + S(\rho_{B_j^R C})\bigr], &
+        S(\rho_{AB})  &= H + \sum_j p_j\bigl[S(\rho_{AB_j^L}) + S(\rho_{B_j^R})\bigr], \\
+        S(\rho_{B})   &= H + \sum_j p_j\bigl[S(\rho_{B_j^L}) + S(\rho_{B_j^R})\bigr], &
+        S(\rho_{BC})  &= H + \sum_j p_j\bigl[S(\rho_{B_j^L}) + S(\rho_{B_j^R C})\bigr].
+        \end{aligned}
+    \]
+    Both sides of the claimed identity equal
+    $2H + \sum_j p_j\bigl[S(\rho_{AB_j^L}) + S(\rho_{B_j^R C}) + S(\rho_{B_j^L}) +
+    S(\rho_{B_j^R})\bigr]$, so $S(\rho_{ABC}) + S(\rho_B) = S(\rho_{AB}) +
+    S(\rho_{BC})$. The basis change on $B$ and the direct-sum reindexing leave
+    every entropy term unchanged.
 \end{proof}
 
 \section{Mutual information}
