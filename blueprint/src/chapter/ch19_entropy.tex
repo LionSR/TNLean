@@ -381,7 +381,7 @@ finite-dimensional quantum systems.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:relative_entropy_joint_convexity, thm:klein_inequality_general}
+    \uses{thm:relative_entropy_joint_convexity}
     The domain is convex: for a strict convex combination of two such pairs the
     kernel of $a\sigma_1+b\sigma_2$ is $\ker\sigma_1\cap\ker\sigma_2$, since the
     quadratic forms of the positive semidefinite summands are nonnegative and
@@ -391,19 +391,23 @@ finite-dimensional quantum systems.
     $\ker\sigma_1\cap\ker\sigma_2\subseteq\ker\rho_1\cap\ker\rho_2$.
 
     Regularize both arguments through the affine trace-one perturbation
-    $M_\varepsilon = (1+\varepsilon D)^{-1}(M+\varepsilon\,\mathbf 1)$, which is
-    positive definite for every $\varepsilon>0$. Because the perturbation is
-    affine, it commutes with the convex combination, so the four regularized
-    endpoints and the regularized mixture all lie in the positive definite domain
-    and the positive definite joint convexity
+    $M_\varepsilon = (1+\varepsilon N)^{-1}(M+\varepsilon\,\mathbf 1)$, where $N$
+    is the matrix dimension, which is positive definite for every $\varepsilon>0$.
+    Because the perturbation is affine, it commutes with the convex combination,
+    so the four regularized endpoints and the regularized mixture all lie in the
+    positive definite domain and the positive definite joint convexity
     (Theorem~\ref{thm:relative_entropy_joint_convexity}) gives the two-point
-    inequality for the regularized pairs. As $\varepsilon\to0^+$ the regularized
-    relative entropy converges to $D$ on each pair of the support domain: the
-    perturbation shares the eigenbasis of its argument, so the trace-logarithm
-    terms reduce to scalar limits on the positive eigenvalues, while the support
-    condition forces the diagonal weight on each zero eigenvalue of $\sigma$ to
-    vanish, leaving a term $x\log x\to0$. The inequality therefore passes to the
-    limit, giving joint convexity on the support domain.
+    inequality for the regularized pairs. The regularized relative entropy
+    converges on each pair of the support domain,
+    \[
+        D(\rho_\varepsilon\Vert\sigma_\varepsilon) \to D(\rho\Vert\sigma)
+        \qquad\text{as } \varepsilon\to0^+,
+    \]
+    because the perturbation shares the eigenbasis of its argument, so the
+    trace-logarithm terms reduce to scalar limits on the positive eigenvalues,
+    while the support condition forces the diagonal weight on each zero eigenvalue
+    of $\sigma$ to vanish, leaving a term $x\log x\to0$. The inequality therefore
+    passes to the limit, giving joint convexity on the support domain.
 \end{proof}
 
 \begin{lemma}[Functional calculus under unitary conjugation]

@@ -715,8 +715,8 @@ both-arguments limit `tendsto_relativeEntropyPerturb` yields the inequality for 
 original pairs.
 
 Source: Lieb concavity route, layer 4 of
-`docs/paper-gaps/cpsv16_ssa_from_lieb_route.tex`; blueprint
-`thm:relative_entropy_joint_convexity_support`. -/
+`docs/paper-gaps/cpsv16_ssa_from_lieb_route.tex`; blueprint theorem
+thm:relative_entropy_joint_convexity_support. -/
 theorem convexOn_quantumRelativeEntropy_support :
     ConvexOn ℝ (supportSet (D := D))
       (fun p : Mat × Mat => quantumRelativeEntropy p.1 p.2) := by
