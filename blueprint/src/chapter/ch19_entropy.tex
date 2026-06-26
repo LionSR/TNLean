@@ -379,9 +379,16 @@ finite-dimensional quantum systems.
     \[
         W\,\mathrm{diag}(q) = \mathrm{diag}(p)\,W,
     \]
-    so conjugating $\sigma$ into the eigenbasis of $\rho$ gives
-    $U_\rho^\dagger\sigma U_\rho = \mathrm{diag}(p)$, the spectral diagonal of
-    $\rho$. Therefore $\rho=\sigma$.
+    so conjugating $\sigma$ into the eigenbasis of $\rho$ and using the unitarity
+    $WW^\dagger=1$,
+    \[
+        U_\rho^\dagger\sigma U_\rho
+            = W\,\mathrm{diag}(q)\,W^\dagger
+            = \mathrm{diag}(p)\,WW^\dagger
+            = \mathrm{diag}(p),
+    \]
+    the spectral diagonal of $\rho$. Therefore $\sigma = U_\rho\,\mathrm{diag}(p)\,
+    U_\rho^\dagger = \rho$.
 \end{proof}
 
 \begin{theorem}[Joint convexity of the relative entropy]

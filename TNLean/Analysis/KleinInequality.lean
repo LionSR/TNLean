@@ -601,7 +601,7 @@ open scoped Matrix.Norms.L2Operator in
 /-- **Shared eigenbasis setup for the Gibbs reduction.** For Hermitian `ρ`, `σ`,
 the two trace terms expand in the joint eigenbasis and the overlap matrix
 `W = U_ρ^† U_σ` is unitary. Writing `p i = ρ`-eigenvalue, `q j = σ`-eigenvalue,
-`P i j = ‖W i j‖²`, this packages the four facts driving both Klein theorems:
+`P i j = ‖W i j‖²`, the four facts driving both Klein theorems are:
 
 * `Re tr(ρ log ρ) = ∑ᵢ pᵢ log pᵢ` (von Neumann entropy / eigenvalue form);
 * `Re tr(ρ log σ) = ∑ᵢⱼ pᵢ Pᵢⱼ log qⱼ` (overlap double sum);
