@@ -37,6 +37,7 @@ import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.ScalarCommutant
 import TNLean.Algebra.CocycleCohomology
 import TNLean.Algebra.SpinCover
+import TNLean.Algebra.MatrixRankClosed
 
 -- Layer 0b: General analysis
 import TNLean.Analysis.ProjectionGeometry
