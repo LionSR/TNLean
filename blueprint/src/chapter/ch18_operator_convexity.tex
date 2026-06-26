@@ -484,10 +484,38 @@ of $A^s B^{1-s}$.
     turns the integrand into the Beta integrand $x^{s-1}(1-x)^{-s}$.
 \end{proof}
 
+\begin{lemma}[Integrability of the Lieb integrand]\label{lem:lieb_integrand_integrable}
+    \lean{Real.integrableOn_lieb_integrand}
+    \leanok
+    For $a,b>0$ and $s\in(0,1)$, the function $t\mapsto t^{s-1}\,\dfrac{ab}{a+tb}$ is
+    integrable on $(0,\infty)$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The integrand is $O(t^{s-1})$ as $t\to0^+$ and $O(t^{s-2})$ as $t\to\infty$, so
+    it has integrable comparison functions on each tail.
+\end{proof}
+
+\begin{lemma}[Value of the Lieb integral]\label{lem:lieb_integral_value}
+    \lean{Real.integral_lieb_integrand}
+    \leanok
+    \uses{lem:reflection_integral, lem:lieb_integrand_integrable}
+    For $a,b>0$ and $s\in(0,1)$,
+    \[
+        \int_0^\infty t^{s-1}\,\frac{ab}{a+tb}\,dt = a^s b^{1-s}\,\frac{\pi}{\sin(\pi s)}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    The scaling substitution $t=(a/b)\,u$ turns the integrand into
+    $a^s b^{1-s}\,u^{s-1}/(1+u)$, whose half-line integral is the reflection integral
+    $\pi/\sin(\pi s)$ of Lemma~\ref{lem:reflection_integral}.
+\end{proof}
+
 \begin{lemma}[Scalar Lieb integral identity]\label{lem:scalar_lieb_integral}
     \lean{rpow_mul_rpow_one_sub_eq_integral}
     \leanok
-    \uses{lem:reflection_integral}
+    \uses{lem:lieb_integral_value}
     For $a,b>0$ and $s\in(0,1)$,
     \[
         a^s b^{1-s} = \frac{\sin(\pi s)}{\pi}
