@@ -22,8 +22,9 @@ matrices.
 The proof reduces positivity to the rank-one case: a positive semidefinite
 matrix is a sum of rank-one outer products `v vᴴ`
 (`Matrix.PosSemidef.eq_sum_vecMulVec_nonzero_eigs`), and on such a matrix
-`T_BH(v vᴴ) = ‖v‖² I - v vᴴ - (U v̄)(U v̄)ᴴ`.  The two vectors `v` and `U v̄` are
-orthogonal (by antisymmetry of `U`) and `‖U v̄‖ ≤ ‖v‖` (by the contraction
+`T_BH(v vᴴ) = ‖v‖² I - v vᴴ - (U (conj v))(U (conj v))ᴴ`.  The two vectors `v`
+and `U (conj v)` are orthogonal (by antisymmetry of `U`) and
+`‖U (conj v)‖ ≤ ‖v‖` (by the contraction
 property), so the quadratic form is nonnegative by a two-vector form of Bessel's
 inequality.
 
@@ -136,7 +137,7 @@ theorem breuerHallMap_apply (U : Matrix (Fin d) (Fin d) ℂ) (X : Matrix (Fin d)
 /-! ## Quadratic-form helper -/
 
 /-- The quadratic form of a rank-one outer product `vecMulVec a b` reads off as
-`(b ⬝ᵥ w)(w̄ ⬝ᵥ a)`. -/
+`(b ⬝ᵥ w)((conj w) ⬝ᵥ a)`. -/
 theorem star_dotProduct_vecMulVec_mulVec (a b w : Fin d → ℂ) :
     star w ⬝ᵥ (Matrix.vecMulVec a b *ᵥ w) = (b ⬝ᵥ w) * (star w ⬝ᵥ a) := by
   have lhs : star w ⬝ᵥ (Matrix.vecMulVec a b *ᵥ w)
@@ -153,9 +154,9 @@ theorem star_dotProduct_vecMulVec_mulVec (a b w : Fin d → ℂ) :
 
 /-- On a rank-one outer product `v vᴴ`, the Breuer-Hall map is positive
 semidefinite.  This is the heart of the positivity proof: the image is
-`‖v‖² I - v vᴴ - (U v̄)(U v̄)ᴴ`, whose quadratic form is nonnegative by the
-two-vector Bessel inequality applied to the orthogonal pair `v ⟂ U v̄` with
-`‖U v̄‖ ≤ ‖v‖`. -/
+`‖v‖² I - v vᴴ - (U (conj v))(U (conj v))ᴴ`, whose quadratic form is nonnegative
+by the two-vector Bessel inequality applied to the orthogonal pair
+`v ⟂ U (conj v)` with `‖U (conj v)‖ ≤ ‖v‖`. -/
 theorem breuerHallMap_vecMulVec_posSemidef (U : Matrix (Fin d) (Fin d) ℂ)
     (hUanti : Uᵀ = -U) (hUcontr : Uᴴ * U ≤ 1) (v : Fin d → ℂ) :
     (breuerHallMap U (Matrix.vecMulVec v (star v))).PosSemidef := by
@@ -178,7 +179,7 @@ theorem breuerHallMap_vecMulVec_posSemidef (U : Matrix (Fin d) (Fin d) ℂ)
     intro a b
     rw [EuclideanSpace.inner_toLp_toLp]
     exact dotProduct_comm (star a) b
-  -- orthogonality `v ⟂ U v̄`
+  -- orthogonality `v ⟂ U (conj v)`
   have hzero : star v ⬝ᵥ (U *ᵥ star v) = 0 := by
     have key : star v ⬝ᵥ (U *ᵥ star v) = -(star v ⬝ᵥ (U *ᵥ star v)) := by
       calc star v ⬝ᵥ (U *ᵥ star v)
@@ -190,7 +191,7 @@ theorem breuerHallMap_vecMulVec_posSemidef (U : Matrix (Fin d) (Fin d) ℂ)
     rwa [eq_neg_iff_add_eq_zero, add_self_eq_zero] at key
   have horth : ⟪V, P⟫_ℂ = 0 := by
     rw [hV, hP, ← bridge v p, hp]; exact hzero
-  -- contraction bound `‖U v̄‖ ≤ ‖v‖`
+  -- contraction bound `‖U (conj v)‖ ≤ ‖v‖`
   have hPV : ‖P‖ ≤ ‖V‖ := by
     have hpsd : (1 - Uᴴ * U).PosSemidef := by rw [← Matrix.le_iff]; exact hUcontr
     have hquad : (0 : ℂ) ≤ star (star v) ⬝ᵥ ((1 - Uᴴ * U) *ᵥ star v) :=
