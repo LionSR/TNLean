@@ -862,8 +862,8 @@ finite-dimensional quantum systems.
 \section{Strong subadditivity}
 
 \begin{theorem}[Strong subadditivity]\label{thm:strong_subadditivity}
-    \lean{strong_subadditivity}
-    \notready
+    \lean{strong_subadditivity_general}
+    \leanok
     \uses{def:von_neumann_entropy, def:traceA_ABC, def:traceC_ABC, def:traceAC_ABC}
     For a tripartite density matrix $\rho_{ABC}$,
     \[
@@ -871,6 +871,40 @@ finite-dimensional quantum systems.
         \le S(\rho_{AB}) + S(\rho_{BC}).
     \]
 \end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:quantum_relative_entropy, thm:relative_entropy_data_processing_support,
+        thm:strong_subadditivity_posdef}
+    Read the inequality as one instance of data processing under the partial trace
+    over $C$, with the singular reference state
+    $\sigma_{ABC} = (\mathbf 1_A / d_A) \otimes \rho_{BC}$. Being a density operator
+    is not enough to place the pair $(\rho_{ABC}, \sigma_{ABC})$ in the
+    relative-entropy domain, which is the kernel inclusion
+    $\ker\sigma_{ABC} \subseteq \ker\rho_{ABC}$; the marginal support lemma supplies
+    it. Against this reference the relative entropy of each pair evaluates to an
+    entropy difference,
+    \[
+        D\bigl(\rho_{ABC} \,\big\|\, (\mathbf 1_A / d_A) \otimes \rho_{BC}\bigr)
+            = \log d_A + S(\rho_{BC}) - S(\rho_{ABC}),
+    \]
+    \[
+        D\bigl(\rho_{AB} \,\big\|\, (\mathbf 1_A / d_A) \otimes \rho_{B}\bigr)
+            = \log d_A + S(\rho_{B}) - S(\rho_{AB}).
+    \]
+    For a singular reference the tensor logarithm does not split, so each evaluation
+    regularizes the reduced state through the affine perturbation
+    $(1 + d_R\varepsilon)^{-1}(\rho_R + \varepsilon\mathbf 1)$ and passes to the
+    limit. Data processing on the singular support domain under the partial trace
+    over $C$, which sends $\rho_{ABC} \mapsto \rho_{AB}$ and
+    $(\mathbf 1_A / d_A) \otimes \rho_{BC} \mapsto (\mathbf 1_A / d_A) \otimes
+    \rho_{B}$, reads
+    \[
+        D\bigl(\rho_{AB} \,\big\|\, (\mathbf 1_A / d_A) \otimes \rho_{B}\bigr)
+            \le D\bigl(\rho_{ABC} \,\big\|\, (\mathbf 1_A / d_A) \otimes \rho_{BC}\bigr).
+    \]
+    Substituting the two evaluations cancels the common $\log d_A$ and rearranges to
+    the claimed inequality.
+\end{proof}
 
 \begin{theorem}[Strong subadditivity, positive definite case]
     \label{thm:strong_subadditivity_posdef}

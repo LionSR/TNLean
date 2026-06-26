@@ -184,6 +184,19 @@ theorem traceLeftA_posDef [NeZero dA] {ρ : Matrix (Fin dA × R) (Fin dA × R) �
   exact Matrix.posDef_sum Finset.univ_nonempty fun a _ => hblock a
 
 omit [DecidableEq R] in
+/-- The partial trace over the first factor of a positive semidefinite matrix is
+positive semidefinite, being a sum of positive semidefinite principal
+submatrices. -/
+theorem traceLeftA_posSemidef {ρ : Matrix (Fin dA × R) (Fin dA × R) ℂ} (hρ : ρ.PosSemidef) :
+    (traceLeftA ρ).PosSemidef := by
+  have hblock : ∀ a : Fin dA, (ρ.submatrix (fun r : R => (a, r)) (fun r => (a, r))).PosSemidef :=
+    fun a => hρ.submatrix _
+  have heq : traceLeftA ρ = ∑ a : Fin dA, ρ.submatrix (fun r : R => (a, r)) (fun r => (a, r)) := by
+    ext i j; simp only [traceLeftA, Matrix.sum_apply, Matrix.submatrix_apply]
+  rw [heq]
+  exact Matrix.posSemidef_sum _ fun a _ => hblock a
+
+omit [DecidableEq R] in
 /-- **Partial-trace adjoint identity.** The trace of an identity-on-$A$ lift
 against a matrix equals the trace of the matrix against the partial trace over the
 first factor: $\operatorname{tr}((\mathbf 1_A \otimes M) \rho)
