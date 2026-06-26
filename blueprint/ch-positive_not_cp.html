@@ -3846,6 +3846,165 @@
 
   </div>
 </div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:exists_isHermitian_trace_form_re">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">20.38</span>
+    <span class="theorem_thmtitle">Trace-form representation of a real-linear functional</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:exists_isHermitian_trace_form_re">#</a>
+    
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030497"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.exists_isHermitian_trace_form_re" class="lean_decl">Matrix.exists_isHermitian_trace_form_re</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Every real-linear functional \(g\) on the space of square complex matrices is the trace form of a Hermitian matrix: there is a Hermitian \(H_0\) with </p>
+<div class="displaymath" id="a0000030498">
+  \[  g(X)=\operatorname {Re}\operatorname{tr}(X H_0) \qquad \text{for every Hermitian }X.  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000030497">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The real bilinear pairing \((X,H)\mapsto \operatorname {Re}\operatorname{tr}(X H)\) is nondegenerate, because on the diagonal pair \((H,H^{\dagger })\) it equals the squared Frobenius norm \(\operatorname {Re}\operatorname{tr}(H H^{\dagger })=\sum _{i,j}\lvert H_{ij}\rvert ^2\), which is positive unless \(H=0\). Hence the map sending \(H\) to the functional \(X\mapsto \operatorname {Re}\operatorname{tr}(X H)\) is an injective real-linear map from the matrix space to its real dual. These two spaces have the same finite real dimension, so the map is also surjective, and every \(g\) is represented by some \(H\). Replacing \(H\) by its Hermitian part \(\tfrac 12(H+H^{\dagger })\) keeps the value on Hermitian inputs, since \(\operatorname{tr}(X H^{\dagger })=\overline{\operatorname{tr}(X H)}\) when \(X\) is Hermitian, and produces a Hermitian representing matrix. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:exists_entanglement_witness">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">20.39</span>
+    <span class="theorem_thmtitle">Entanglement witness from a separating hyperplane</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:exists_entanglement_witness">#</a>
+    
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030499"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.27</a></li>
+          
+          <li><a href="ch-schwarz.html#def:schmidt_rank">Definition 5.11</a></li>
+          
+          <li><a href="ch-positive_not_cp.html#thm:convex_setOf_has_schmidt_number_le">Theorem 20.30</a></li>
+          
+          <li><a href="ch-positive_not_cp.html#thm:compact_setOf_has_schmidt_number_le_trace_one">Theorem 20.31</a></li>
+          
+          <li><a href="ch-positive_not_cp.html#thm:exists_isHermitian_trace_form_re">Theorem 20.38</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.exists_isHermitian_witness" class="lean_decl">Matrix.exists_isHermitian_witness</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    Let \(\rho \) be a trace-one Hermitian bipartite state whose Schmidt number exceeds \(n\). Then there is a Hermitian operator \(W\) with </p>
+<div class="displaymath" id="a0000030500">
+  \[  \operatorname {Re}\operatorname{tr}(W\rho ){\lt}0, \qquad \operatorname {Re}\langle \psi |W|\psi \rangle \ge 0 \quad \text{for every $\psi $ of Schmidt rank at most }n.  \]
+</div>
+<p> This is the only-if direction of Wolf’s Proposition&#160;3.3 <span class="cite">
+	[
+	
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Chapter&#160;3, Proposition&#160;3.3
+	]
+</span>: a state of Schmidt number larger than \(n\) is detected by an entanglement witness for \(S_n\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000030499">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The set \(S_n\) of trace-one states of Schmidt number at most \(n\) is convex and compact, and \(\rho \notin S_n\). The geometric Hahn–Banach theorem separates the closed convex set \(\{ \rho \} \) from the compact convex set \(S_n\) by a continuous real-linear functional \(f\) and a constant \(c\) with \(f(\rho ){\lt}c{\lt}f(\sigma )\) for every \(\sigma \in S_n\). Representing \(f\) as the trace form of a Hermitian \(H_0\) and setting \(W=H_0-c\, \mathbb {1}\) gives \(\operatorname {Re}\operatorname{tr}(W\rho )=f(\rho )-c{\lt}0\). For a vector \(\psi \) of Schmidt rank at most \(n\) the projector \(|\psi \rangle \langle \psi |\), after normalization by \(\lVert \psi \rVert ^2\), is a trace-one state of \(S_n\), so its value under \(f\) is at least \(c\); multiplying back by the squared norm gives \(\operatorname {Re}\langle \psi |W|\psi \rangle \ge 0\), with the zero vector giving the value \(0\) directly. </p>
+
+  </div>
+</div>
 
 
 </div> <!--main-text -->
