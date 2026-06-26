@@ -863,6 +863,60 @@ finite-dimensional quantum systems.
     identifies these two sums for $AB$ and $BA$.
 \end{proof}
 
+\begin{theorem}[Entropy is additive over tensor products]
+    \label{thm:entropy_kronecker}
+    \lean{vonNeumannEntropy_kronecker}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    For density matrices $\omega$ and $\tau$,
+    \[
+        S(\omega \otimes \tau) = S(\omega) + S(\tau).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    The tensor product is unitarily conjugate to the diagonal of eigenvalue
+    products $\lambda_i \mu_j$. Using $\mathrm{negMulLog}(\lambda_i \mu_j) =
+    \mu_j\, \mathrm{negMulLog}(\lambda_i) + \lambda_i\, \mathrm{negMulLog}(\mu_j)$
+    and the unit eigenvalue sums collapses the double sum to $S(\omega)+S(\tau)$.
+\end{proof}
+
+\begin{theorem}[Entropy of a scaled density matrix]
+    \label{thm:entropy_smul}
+    \lean{vonNeumannEntropy_smul}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    For a density matrix $\omega$ and a nonnegative scalar $c$,
+    \[
+        S(c\,\omega) = c\, S(\omega) + \mathrm{negMulLog}(c).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    The eigenvalues of $c\,\omega$ are $c\lambda_i$, so the entropy is
+    $\sum_i \mathrm{negMulLog}(c\lambda_i)$; splitting each term and using the
+    unit eigenvalue sum gives the stated form.
+\end{proof}
+
+\begin{theorem}[Entropy is additive over a weighted direct sum]
+    \label{thm:entropy_block_diagonal}
+    \lean{vonNeumannEntropy_blockDiagonal'}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    For a family of Hermitian matrices $M_j$, the block-diagonal direct sum
+    satisfies
+    \[
+        S\!\left(\bigoplus_j M_j\right) = \sum_j S(M_j).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Each block diagonalizes by a unitary congruence, and the block-diagonal
+    assembly of the block unitaries diagonalizes the direct sum. Its eigenvalues
+    are the union of the block eigenvalues, so the entropy is the sum of the
+    block entropies.
+\end{proof}
+
 \section{Tripartite partial traces}
 
 \begin{definition}[Partial trace over $A$]\label{def:traceA_ABC}
@@ -1101,13 +1155,21 @@ finite-dimensional quantum systems.
     \label{thm:hayashi_ssa_equality_characterization}
     \lean{hayashi_ssa_equality_characterization}
     \notready
-    \uses{def:ssa_equality, def:hayashi_markov_decomposition}
+    \uses{def:ssa_equality, def:hayashi_markov_decomposition,
+        thm:hayashi_ssa_equality_reverse}
     For a tripartite density matrix $\rho_{ABC}$,
     \[
         S(\rho_{ABC}) + S(\rho_B) = S(\rho_{AB}) + S(\rho_{BC})
     \]
     holds if and only if $\rho_{ABC}$ admits a quantum Markov decomposition on
     the middle subsystem $B$.
+
+    The reverse implication, that a quantum Markov decomposition forces the
+    equality, is proved as
+    Theorem~\ref{thm:hayashi_ssa_equality_reverse}. The forward implication, that
+    the equality forces the block-diagonal structure, is the deep part: it rests
+    on recovery-map and Petz theory not yet available, so it is the only part
+    that remains axiomatic. The biconditional combines the two.
 
     This equality criterion is cited here as an input for the later MPDO arguments.
     It is the equality criterion needed by Appendix~C of arXiv:1606.00608.
@@ -1116,6 +1178,35 @@ finite-dimensional quantum systems.
     the structural block-decomposition formulation used for MPDOs appears in
     \cite{Hayden2004Structure}.
 \end{theorem}
+
+\begin{theorem}[Quantum Markov structure attains SSA equality]
+    \label{thm:hayashi_ssa_equality_reverse}
+    \lean{hayashi_ssa_equality_characterization_reverse}
+    \leanok
+    \uses{def:ssa_equality, def:hayashi_markov_decomposition}
+    A tripartite density matrix $\rho_{ABC}$ that admits a quantum Markov
+    decomposition on the middle subsystem $B$ satisfies
+    \[
+        S(\rho_{ABC}) + S(\rho_B) = S(\rho_{AB}) + S(\rho_{BC}).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:ssa_equality, def:hayashi_markov_decomposition,
+        thm:entropy_kronecker, thm:entropy_smul, thm:entropy_block_diagonal}
+    Write the state in the adapted basis as the block-diagonal direct sum
+    $\bigoplus_j p_j\, \rho_{A B_j^L} \otimes \rho_{B_j^R C}$. The von Neumann
+    entropy of a weighted orthogonal direct sum is
+    $S(\bigoplus_j p_j\, \omega_j) = -\sum_j p_j \log p_j + \sum_j p_j\,
+    S(\omega_j)$ by Theorems~\ref{thm:entropy_block_diagonal}
+    and~\ref{thm:entropy_smul}, and the entropy of a tensor product is additive,
+    $S(\omega \otimes \tau) = S(\omega) + S(\tau)$, by
+    Theorem~\ref{thm:entropy_kronecker}. The three reduced states
+    factor as block-diagonal direct sums of the corresponding partial traces of
+    the components, so substituting the four entropy terms and cancelling the
+    Shannon weights leaves the equality. The basis change on $B$ and the
+    direct-sum reindexing leave every entropy term unchanged.
+\end{proof}
 
 \section{Mutual information}
 

@@ -81,6 +81,8 @@ import TNLean.Channel.POVM.Uniqueness
 -- Layer 2: Quantum entropy infrastructure (depends on Channel.Basic, Channel.PartialTrace)
 import TNLean.Analysis.Entropy
 import TNLean.Analysis.EntropyDecomposition
+import TNLean.Analysis.HayashiMarkovStructure
+import TNLean.Analysis.EntropyMarkovReverse
 import TNLean.Analysis.KleinInequality
 import TNLean.Analysis.MarginalSupport
 
