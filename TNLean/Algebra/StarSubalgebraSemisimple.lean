@@ -28,7 +28,8 @@ that structure theory.
 * `StarSubalgebra.isSemisimpleRing` — a ⋆-subalgebra of `Matrix n n ℂ` is a
   semisimple ring.
 * `StarSubalgebra.exists_algEquiv_pi_matrix` — such a ⋆-subalgebra is isomorphic,
-  as a `ℂ`-algebra, to a finite product of complex matrix algebras.
+  as a `ℂ`-algebra, to a finite product of complex matrix algebras with positive
+  block sizes.
 
 ## Proof outline
 
@@ -107,11 +108,12 @@ instance isSemisimpleRing : IsSemisimpleRing S := by
 
 /-- The Wedderburn–Artin decomposition of a finite-dimensional ⋆-subalgebra of
 the complex matrix algebra: it is isomorphic, as a `ℂ`-algebra, to a finite
-product of complex matrix algebras. Wolf Ch. 6, towards Thm 6.14. -/
+product of complex matrix algebras with positive block sizes. Wolf Ch. 6,
+towards Thm 6.14. -/
 theorem exists_algEquiv_pi_matrix :
-    ∃ (k : ℕ) (d : Fin k → ℕ),
+    ∃ (k : ℕ) (d : Fin k → ℕ), (∀ i, NeZero (d i)) ∧
       Nonempty (S ≃ₐ[ℂ] Π i, Matrix (Fin (d i)) (Fin (d i)) ℂ) := by
-  obtain ⟨k, d, _, he⟩ := IsSemisimpleRing.exists_algEquiv_pi_matrix_of_isAlgClosed ℂ S
-  exact ⟨k, d, he⟩
+  obtain ⟨k, d, hd, he⟩ := IsSemisimpleRing.exists_algEquiv_pi_matrix_of_isAlgClosed ℂ S
+  exact ⟨k, d, hd, he⟩
 
 end StarSubalgebra
