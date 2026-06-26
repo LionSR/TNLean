@@ -131,18 +131,22 @@ for every $n$-positive map $T$ on $\mathbb{C}^d\otimes\mathbb{C}^{d'}$ with no r
 between the factors, at
 \leanid{Matrix.HasSchmidtNumberLE.tensorMapId_posSemidef_general}.
 
-Two residual restrictions remain on the $T_n$-specialised reduction \emph{criterion}
-(the operator inequalities $n\,\rho_1\otimes\mathbf 1\ge\rho$ and
-$n\,\mathbf 1\otimes\rho_2\ge\rho$), not on the forward step. First, the criterion
-theorems \leanid{Matrix.reductionCriterion_left_of_hasSchmidtNumberLE} and
-\leanid{Matrix.reductionCriterion_right_of_hasSchmidtNumberLE} compose the
-\emph{square} forward step with the operator-implication step and so are still stated
-on $\mathbb{C}^D\otimes\mathbb{C}^D$; generalising them is the routine composition of
-the general forward step with the already dimension-general operator-half theorems
+The $T_n$-specialised reduction \emph{criterion} is likewise now general: the
+inequalities $n\,\mathbf 1\otimes\rho_2\ge\rho$ and $n\,\rho_1\otimes\mathbf 1\ge\rho$
+hold on a general $\mathbb{C}^d\otimes\mathbb{C}^{d'}$ at
+\leanid{Matrix.reductionCriterion_left_of_hasSchmidtNumberLE_general} and
+\leanid{Matrix.reductionCriterion_right_of_hasSchmidtNumberLE_general}, obtained by
+composing the general forward step with the dimension-general operator-half theorems
 \leanid{Matrix.reductionCriterion_left} and \leanid{Matrix.reductionCriterion_right}.
-Second, $1\le n<D$ is inherited from the $n$-positivity threshold of $T_\eta$, whose
-top index $n=D$ (complete positivity) is documented in
-\path{docs/paper-gaps/wolf_t_eta_top_index_scope.tex}.
+The square-restricted \leanid{Matrix.reductionCriterion_left_of_hasSchmidtNumberLE} and
+\leanid{Matrix.reductionCriterion_right_of_hasSchmidtNumberLE} remain as the $d=d'$
+specialisations.
+
+The only residual scope is the $n$-positivity threshold of $T_n$ itself: the left
+inequality needs $1\le n<d$ and the right needs $1\le n<d'$ (Wolf eq.~(3.11)), whose
+top index ($n=d$ for the left form, $n=d'$ for the right; complete positivity) is
+documented in \path{docs/paper-gaps/wolf_t_eta_top_index_scope.tex}. The bipartite-dimension
+restriction recorded in this note is thereby fully eliminated.
 
 \bibliographystyle{alpha}
 \bibliography{references}
