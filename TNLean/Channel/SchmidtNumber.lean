@@ -60,8 +60,12 @@ Wolf eq. (3.18) with its Schmidt-number premise.
 
 * `Matrix.HasSchmidtNumberLE.posSemidef`: a state of bounded Schmidt number is
   positive semidefinite.
-* `Matrix.HasSchmidtNumberLE.add`, `Matrix.HasSchmidtNumberLE.mono`: closure under
-  addition and monotonicity in the bound.
+* `Matrix.HasSchmidtNumberLE.add`, `Matrix.HasSchmidtNumberLE.mono`,
+  `Matrix.HasSchmidtNumberLE.smul`: closure under addition, monotonicity in the bound,
+  and closure under nonnegative scaling.
+* `Matrix.convex_setOf_hasSchmidtNumberLE`: **the Schmidt-number set `S_n` is convex**,
+  the geometric input to Wolf's separating-hyperplane construction of an entanglement
+  witness for any state outside `S_n` (Wolf §3.2, Prop 3.3).
 * `Matrix.hasSchmidtNumberLE_one_iff_isSeparable`: **Schmidt number one is exactly
   separability** (Wolf §3.2).
 * `Matrix.tensorMapId_posSemidef_of_hasSchmidtRankLE`: the **pure-state step of Wolf
@@ -176,6 +180,61 @@ theorem HasSchmidtNumberLE.mono {n m : ℕ}
     (hnm : n ≤ m) : HasSchmidtNumberLE m ρ := by
   obtain ⟨ι, _, ψ, hψ, rfl⟩ := hρ
   exact ⟨ι, inferInstance, ψ, fun i => (hψ i).mono hnm, rfl⟩
+
+/-- **States of bounded Schmidt number are closed under nonnegative scaling.** With
+closure under addition this exhibits the set `S_n = {ρ | HasSchmidtNumberLE n ρ}` as a
+convex cone, the structure underlying Wolf's separating-hyperplane construction of an
+entanglement witness for any state outside `S_n` (Wolf §3.2, Prop 3.3).
+
+The scalar `a ≥ 0` is absorbed into each pure summand by rescaling `ψ_i ↦ √a · ψ_i`,
+mirroring the absorption of a convex coefficient into a pure state.  Rescaling a vector
+scales its Schmidt coefficient matrix by a scalar, which does not increase the matrix
+rank, so each summand keeps Schmidt rank at most `n`; the two factors of `√a` combine
+to `a` because `√a · √a = a` for `a ≥ 0`. -/
+theorem HasSchmidtNumberLE.smul {n : ℕ}
+    {ρ : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ} (hρ : HasSchmidtNumberLE n ρ)
+    {a : ℝ} (ha : 0 ≤ a) : HasSchmidtNumberLE n (a • ρ) := by
+  obtain ⟨ι, _, ψ, hψ, rfl⟩ := hρ
+  refine ⟨ι, inferInstance, fun i => (Real.sqrt a : ℂ) • ψ i, fun i => ?_, ?_⟩
+  · -- Scaling a vector scales its coefficient matrix, never increasing the rank.
+    rw [hasSchmidtRankLE_iff]
+    refine le_trans ?_ ((hasSchmidtRankLE_iff).mp (hψ i))
+    rw [schmidtRank, schmidtRank]
+    have hcoeff : schmidtCoeffMatrix ((Real.sqrt a : ℂ) • ψ i)
+        = (Real.sqrt a : ℂ) • schmidtCoeffMatrix (ψ i) := by
+      ext p q; simp [schmidtCoeffMatrix]
+    rw [hcoeff]
+    -- For `a > 0` the scalar is nonzero and the rank is preserved; for `a = 0` the
+    -- rescaled coefficient matrix vanishes, so its rank is zero, hence bounded.
+    rcases eq_or_ne (Real.sqrt a : ℂ) 0 with hc | hc
+    · rw [hc, zero_smul, Matrix.rank_zero]
+      exact Nat.zero_le _
+    · exact (rank_smul_of_ne_zero hc (schmidtCoeffMatrix (ψ i))).le
+  · -- The `√a` factors combine to `a` and pull out of the sum.
+    rw [Finset.smul_sum]
+    refine Finset.sum_congr rfl fun i _ => ?_
+    have hstar : star ((Real.sqrt a : ℂ) • ψ i) = (Real.sqrt a : ℂ) • star (ψ i) := by
+      rw [star_smul, Complex.star_def, Complex.conj_ofReal]
+    rw [hstar, Matrix.smul_vecMulVec, Matrix.vecMulVec_smul, smul_smul,
+      ← Complex.ofReal_mul, Real.mul_self_sqrt ha]
+    exact (RCLike.real_smul_eq_coe_smul (K := ℂ) a (vecMulVec (ψ i) (star (ψ i)))).symm
+
+/-- **The Schmidt-number set is convex.**  For each `n`, the set
+`S_n = {ρ | HasSchmidtNumberLE n ρ}` of bipartite states of Schmidt number at most `n`
+is convex.  A convex combination `a • x + b • y` with `a, b ≥ 0` is a sum of two
+nonnegatively scaled states of Schmidt number at most `n`, and that bound is closed
+under both scaling and addition.
+
+This convexity of `S_n` is the geometric input to Wolf's separating-hyperplane proof of
+Prop 3.3 (the existence of an entanglement witness for any state outside `S_n`):
+`S_n` is the convex set the hyperplane separates a given state `ρ ∉ S_n` from.  The
+remaining layers of that argument — compactness of `S_n`, the real inner-product space
+of Hermitian matrices, and Riesz extraction of the witness operator — are developed in
+the surrounding section toward Wolf Prop 3.3. -/
+theorem convex_setOf_hasSchmidtNumberLE {n : ℕ} :
+    Convex ℝ {ρ : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ | HasSchmidtNumberLE n ρ} := by
+  refine convex_iff_forall_pos.mpr fun x hx y hy a b ha hb _ => ?_
+  exact (hx.smul ha.le).add (hy.smul hb.le)
 
 /-! ## Schmidt number one is separability -/
 
