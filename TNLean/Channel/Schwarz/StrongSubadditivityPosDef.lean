@@ -10,15 +10,17 @@ import TNLean.Channel.MaximalOverlap
 import TNLean.Entropy.TripartiteTrace
 
 /-!
-# Strong subadditivity on the positive definite domain
+# Strong subadditivity of the von Neumann entropy
 
 This file proves **strong subadditivity** of the von Neumann entropy for a
-positive definite tripartite density matrix, as the layer-6 instantiation of the
-relative-entropy elimination route,
-`docs/paper-gaps/cpsv16_ssa_from_lieb_route.tex`. For a positive definite density
+tripartite density matrix, as the layer-6 instantiation of the relative-entropy
+elimination route, `docs/paper-gaps/cpsv16_ssa_from_lieb_route.tex`. For a density
 matrix $\rho_{ABC}$ on $A \otimes B \otimes C$,
 $$S(\rho_{ABC}) + S(\rho_B) \le S(\rho_{AB}) + S(\rho_{BC}),$$
-where the reduced states are the tripartite partial traces.
+where the reduced states are the tripartite partial traces. The positive definite
+case is established first by the data-processing argument; the general
+density-matrix case extends it to the singular support domain, where the
+maximally mixed reference state can fail to be invertible.
 
 ## Main results
 
@@ -27,10 +29,24 @@ where the reduced states are the tripartite partial traces.
   $D(\rho \,\|\, (\mathbf 1_A / d_A) \otimes \rho_R)
     = \log d_A + S(\rho_R) - S(\rho)$, where $\rho_R$ is the partial trace over
   $A$ and the traced-out factor $A$ carries the maximally mixed state.
-* `SSAPosDef.quantumRelativeEntropy_traceC_le` — the data-processing inequality
-  specialized to the partial trace over the third factor of the tripartite index.
+* `SSAPosDef.rel_entropy_eval_support` — the same entropy-difference evaluation on
+  the singular support domain, where the maximally mixed reference state need not
+  be invertible.
+* `SSAPosDef.cross_term_eval` and
+  `SSAPosDef.tendsto_re_trace_mul_log_perturbAffine_right` — the cross trace term
+  of the relative entropy and the one-sided affine regularization limit that
+  evaluates it on the singular domain.
+* `SSAPosDef.quantumRelativeEntropy_traceC_le` and
+  `SSAPosDef.quantumRelativeEntropy_traceC_le_support` — the data-processing
+  inequality specialized to the partial trace over the third factor of the
+  tripartite index, on the positive definite and singular support domains.
+* `SSAPosDef.kron_marginal_support` — the marginal support condition placing the
+  singular reference state $(\mathbf 1_A / d_A) \otimes \rho_{BC}$ in the domain
+  of the relative entropy.
 * `strong_subadditivity_posDef` — strong subadditivity for a positive definite
   tripartite density matrix.
+* `strong_subadditivity_general` — strong subadditivity for an arbitrary
+  tripartite density matrix, on the full positive semidefinite unit-trace domain.
 
 ## Proof outline
 
@@ -46,13 +62,17 @@ adjoint identity `traceLeftA_lift_trace` and the tensor logarithm split
 data-processing inequality `quantumRelativeEntropy_partialTraceRight_le` to the
 tripartite index by reassociation and reindexing.
 
-**Scope restriction (positive-definite domain):** the source inequality holds for
-every tripartite density matrix, whereas this development restricts $\rho_{ABC}$
-to positive definite matrices, the domain on which the relative-entropy
-ingredients (joint convexity, ancilla additivity, data processing, and the
-logarithm split) are available. The standalone axiom `strong_subadditivity`
-remains in force for the general density-matrix domain. The restriction and its
-elimination plan are recorded in
+For a positive definite $\rho_{ABC}$ the maximally mixed reference state is
+invertible and the relative-entropy ingredients apply directly, giving
+`strong_subadditivity_posDef`. The general density-matrix case repeats the same
+data-processing argument on the singular support domain: the entropy evaluations
+use `rel_entropy_eval_support`, the reference state is placed in the relative-entropy
+domain by the marginal support condition `kron_marginal_support`, and the bound
+comes from the singular-domain data-processing inequality
+`quantumRelativeEntropy_traceC_le_support`. The result `strong_subadditivity_general`
+derives the same inequality for every positive semidefinite unit-trace
+$\rho_{ABC}$, discharging the content of the standalone strong-subadditivity axiom
+on the full density-matrix domain. The development is recorded in
 `docs/paper-gaps/cpsv16_ssa_from_lieb_route.tex`, layer 6.
 
 ## References
@@ -484,74 +504,6 @@ theorem traceC_ABC_posSemidef
   rw [heq]
   exact Matrix.posSemidef_sum _ fun c _ => hblock c
 
-/-- Support transport under reindexing by a bijection: if $\ker\sigma \subseteq
-\ker\rho$ then the same inclusion holds after reindexing rows and columns by
-$e^{-1}$. The reindexed kernel vectors are the images of the original kernel
-vectors under the bijection. -/
-theorem mulVec_submatrix_support {S T : Type*} [Fintype S] [DecidableEq S]
-    [Fintype T] [DecidableEq T] {ρ σ : Matrix S S ℂ} (e : S ≃ T)
-    (hsupp : ∀ v : S → ℂ, σ.mulVec v = 0 → ρ.mulVec v = 0) :
-    ∀ v : T → ℂ, (σ.submatrix e.symm e.symm).mulVec v = 0
-      → (ρ.submatrix e.symm e.symm).mulVec v = 0 := by
-  intro v hv
-  have hkey : ∀ (M : Matrix S S ℂ) (w : T → ℂ) (t : T),
-      (M.submatrix e.symm e.symm).mulVec w t = (M.mulVec (w ∘ e)) (e.symm t) := by
-    intro M w t
-    simp only [Matrix.mulVec, Matrix.submatrix_apply, dotProduct, Function.comp_apply]
-    refine (Fintype.sum_equiv e (fun s => M (e.symm t) s * w (e s))
-      (fun t' => M (e.symm t) (e.symm t') * w t') ?_).symm
-    intro s
-    rw [Equiv.symm_apply_apply]
-  have hv0 : σ.mulVec (v ∘ e) = 0 := by
-    funext s
-    have := congrFun hv (e s)
-    rw [hkey σ v (e s), Equiv.symm_apply_apply, Pi.zero_apply] at this
-    simpa using this
-  have hρ0 : ρ.mulVec (v ∘ e) = 0 := hsupp _ hv0
-  funext t
-  rw [hkey ρ v t, hρ0, Pi.zero_apply, Pi.zero_apply]
-
-/-- **Data-processing inequality on an arbitrary product index, support domain.**
-For positive semidefinite matrices $\rho, \sigma$ on $S \times T$ with $T$
-nonempty and $\ker\sigma \subseteq \ker\rho$,
-$D(\operatorname{tr}_T \rho \,\|\, \operatorname{tr}_T \sigma)
-  \le D(\rho \,\|\, \sigma)$. The pair is reindexed to a canonical product index,
-where `quantumRelativeEntropy_partialTraceRight_le_support` applies, and the
-support condition is transported by `mulVec_submatrix_support`. -/
-theorem quantumRelativeEntropy_partialTraceRight_le_general_support
-    {S T : Type*} [Fintype S] [DecidableEq S] [Fintype T] [DecidableEq T] [Nonempty T]
-    {ρ σ : Matrix (S × T) (S × T) ℂ} (hρ : ρ.PosSemidef) (hσ : σ.PosSemidef)
-    (hsupp : ∀ v : S × T → ℂ, σ.mulVec v = 0 → ρ.mulVec v = 0) :
-    quantumRelativeEntropy (partialTraceRight ρ) (partialTraceRight σ)
-      ≤ quantumRelativeEntropy ρ σ := by
-  classical
-  set dS := Fintype.card S with hdS
-  set dT := Fintype.card T with hdT
-  have hNZ : NeZero dT := ⟨by simp [hdT, Fintype.card_ne_zero (α := T)]⟩
-  set eS : S ≃ Fin dS := Fintype.equivFin S with heS
-  set eT : T ≃ ZMod dT := (Fintype.equivFin T).trans (ZMod.finEquiv dT).toEquiv with heT
-  set e : (S × T) ≃ (Fin dS × ZMod dT) := eS.prodCongr eT with hedef
-  have hρ' : (ρ.submatrix e.symm e.symm).PosSemidef := hρ.submatrix e.symm
-  have hσ' : (σ.submatrix e.symm e.symm).PosSemidef := hσ.submatrix e.symm
-  have hsupp' := mulVec_submatrix_support e hsupp
-  have hbase := quantumRelativeEntropy_partialTraceRight_le_support (dS := dS) (dC := dT)
-    (ρ := ρ.submatrix e.symm e.symm) (σ := σ.submatrix e.symm e.symm) hρ' hσ' hsupp'
-  rw [quantumRelativeEntropy_submatrix_equiv hρ.isHermitian hσ.isHermitian e] at hbase
-  have hptr : ∀ X : Matrix (S × T) (S × T) ℂ,
-      partialTraceRight (X.submatrix e.symm e.symm)
-        = (partialTraceRight X).submatrix eS.symm eS.symm := by
-    intro X
-    rw [partialTraceRight_submatrix_left eS.symm X,
-      partialTraceRight_submatrix_right eT.symm
-        (X.submatrix (Prod.map eS.symm id) (Prod.map eS.symm id)),
-      Matrix.submatrix_submatrix]
-    congr 1
-  rw [hptr ρ, hptr σ,
-    quantumRelativeEntropy_submatrix_equiv
-      (partialTraceRight_isHermitian hρ.isHermitian)
-      (partialTraceRight_isHermitian hσ.isHermitian) eS] at hbase
-  exact hbase
-
 /-- **Data processing for the partial trace over the third factor, support
 domain.** For positive semidefinite matrices on the tripartite index with
 $\ker\sigma \subseteq \ker\rho$, the relative entropy of the partial traces over
@@ -742,9 +694,10 @@ $\log d_A + S(\rho_B) - S(\rho_{AB})$ (`rel_entropy_eval`), and data processing
 **Scope restriction (positive-definite domain):** the source inequality holds for
 every tripartite density matrix; this version restricts $\rho_{ABC}$ to positive
 definite matrices, the domain on which the relative-entropy ingredients are
-available. The standalone axiom `strong_subadditivity` remains in force for the
-general density-matrix domain. Recorded in
-`docs/paper-gaps/cpsv16_ssa_from_lieb_route.tex`, layer 6.
+directly available. The full density-matrix statement is
+`strong_subadditivity_general`, which derives the same inequality for every
+positive semidefinite unit-trace $\rho_{ABC}$ on the singular support domain.
+Recorded in `docs/paper-gaps/cpsv16_ssa_from_lieb_route.tex`, layer 6.
 
 Source: Lieb, Ruskai, JMP 14, 1938 (1973);
 blueprint `thm:strong_subadditivity_posdef`. -/
