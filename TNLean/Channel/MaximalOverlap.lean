@@ -482,12 +482,12 @@ Schmidt rank at most n equals the Ky-Fan n-norm ‖ρ‖₍ₙ₎ -- the sum of 
 largest eigenvalues, which coincide with its singular values since ρ is positive
 semidefinite.
 
-**Scope (1 ≤ n < D):** this version covers `1 ≤ n < D`, where the bound is the
-Ky-Fan `n`-norm and the underlying maximum principle
-`Matrix.IsHermitian.kyFanNorm_eq_sup_trace` applies (rank-exactly-`k` projections
-with `k < D`).  The top index `n = D` — where the constraint is vacuous and the
-value is `‖ρ‖₍D₎ = tr ρ = 1` — is `maximalSchmidtOverlap_eq_kyFanNorm_top`; the two
-theorems together cover the full range `1 ≤ n ≤ D` of the source lemma. -/
+**Scope (1 ≤ n < D):** this version covers 1 ≤ n < D, where the bound is the
+Ky-Fan n-norm and the underlying maximum principle
+`Matrix.IsHermitian.kyFanNorm_eq_sup_trace` applies (rank-exactly-k projections
+with k < D).  The top index n = D — where the constraint is vacuous and the
+value is ‖ρ‖₍D₎ = tr ρ = 1 — is `maximalSchmidtOverlap_eq_kyFanNorm_top`; the two
+theorems together cover the full range 1 ≤ n ≤ D of the source lemma. -/
 theorem maximalSchmidtOverlap_eq_kyFanNorm (φ : m × n → ℂ)
     (hφ : star φ ⬝ᵥ φ = 1) {k : ℕ} (hk1 : 1 ≤ k) (hk : k < Fintype.card m) :
     IsGreatest {r : ℝ | ∃ ψ : m × n → ℂ, star ψ ⬝ᵥ ψ = 1 ∧
@@ -521,13 +521,13 @@ theorem maximalSchmidtOverlap_eq_kyFanNorm (φ : m × n → ℂ)
     · rw [hC, ← star_dotProduct_eq_trace_conjTranspose_mul]
 
 omit [DecidableEq n] in
-/-- **Wolf's Lemma 3.1 at the top index `n = D = card m`.**  At the largest
-Schmidt-rank index `k = D` the constraint `SR(ψ) ≤ D` is vacuous, the Ky-Fan
-`D`-norm of `ρ = C Cᴴ` collapses to its trace `tr ρ = ‖φ‖² = 1`, and the value
-`1` is attained at `ψ = φ` (with the upper bound supplied by Cauchy–Schwarz).
-Together with `maximalSchmidtOverlap_eq_kyFanNorm` (the case `1 ≤ n < D`) this
-covers the full range `1 ≤ n ≤ D` of Wolf eq. (3.5)
-(`Notes/WolfNoteTexSource/ch03_positive_not_completely.tex`, lines ~119–128). -/
+/-- **Wolf's Lemma 3.1 at the top index n = D = card m.**  At the largest
+Schmidt-rank index the constraint SR(ψ) ≤ D is vacuous, the Ky-Fan D-norm of the
+reduced density ρ collapses to its trace tr ρ = ‖φ‖² = 1, and the value 1 is
+attained at ψ = φ (with the upper bound supplied by Cauchy–Schwarz).  Together
+with `maximalSchmidtOverlap_eq_kyFanNorm` (the case 1 ≤ n < D) this covers the
+full range 1 ≤ n ≤ D of Wolf eq. (3.5)
+(Notes/WolfNoteTexSource/ch03_positive_not_completely.tex, lines ~119–128). -/
 theorem maximalSchmidtOverlap_eq_kyFanNorm_top (φ : m × n → ℂ)
     (hφ : star φ ⬝ᵥ φ = 1) :
     IsGreatest {r : ℝ | ∃ ψ : m × n → ℂ, star ψ ⬝ᵥ ψ = 1 ∧

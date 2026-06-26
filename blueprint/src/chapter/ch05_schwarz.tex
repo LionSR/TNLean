@@ -304,15 +304,14 @@ maps.
     \label{thm:maximal_overlap_schmidt_rank_top}
     \lean{Matrix.maximalSchmidtOverlap_eq_kyFanNorm_top}
     \leanok
-    \uses{def:schmidt_rank, def:ky_fan_norm, thm:maximal_overlap_schmidt_rank}
+    \uses{def:schmidt_rank, def:ky_fan_norm}
     At the top index $n=D$ the Schmidt-rank constraint $\operatorname{SR}(\psi)\le D$
-    is vacuous, and the Ky-Fan $D$-norm of $\rho$ collapses to its trace. For a
-    normalized $\phi$ the identity of
-    Theorem~\ref{thm:maximal_overlap_schmidt_rank} then reads
+    is vacuous, so the largest squared overlap is the Ky-Fan $D$-norm of $\rho$,
     \[
-        \max_{\|\psi\|=1} |\braket{\phi}{\psi}|^2 = \|\rho\|_{(D)} = \tr\rho = 1 ,
+        \max_{\|\psi\|=1} |\braket{\phi}{\psi}|^2 = \|\rho\|_{(D)} ,
     \]
-    attained at $\psi=\phi$. Together with
+    attained at $\psi=\phi$. The Ky-Fan $D$-norm sums all eigenvalues, so for a
+    normalized $\phi$ it collapses to $\|\rho\|_{(D)}=\tr\rho=1$. Together with
     Theorem~\ref{thm:maximal_overlap_schmidt_rank} this covers the full range
     $1\le n\le D$ of \cite[Lemma~3.1]{Wolf2012Quantum}.
 \end{theorem}
