@@ -696,6 +696,204 @@ theorem tendsto_relativeEntropyPerturb {ρ σ : Mat}
   refine Tendsto.sub ?_ (tendsto_re_trace_perturb_mul_log_perturb hρ hσ hsupp)
   exact tendsto_re_trace_perturb_mul_log_perturb hρ hρ (fun v hv => hv)
 
+/-! ## The affine trace-one regularization and its both-arguments limit
+
+The regularization `regPerturb` shrinks and shifts a matrix by the same scalars on
+the whole index. Under a marginal it picks up index-dependent constants: the
+partial trace of \(M_\varepsilon = (1 + N\varepsilon)^{-1}(M + \varepsilon\mathbf 1)\)
+over an ancilla of dimension \(d_C\) is the differently-scaled affine regularization
+\((1 + N\varepsilon)^{-1}((\operatorname{tr}_C M) + (d_C\varepsilon)\mathbf 1_S)\),
+with the same scalar weight \((1 + N\varepsilon)^{-1}\) but additive shift
+\(d_C\varepsilon\) and the smaller identity \(\mathbf 1_S\). The both-arguments limit
+`tendsto_relativeEntropyPerturb` therefore does not apply verbatim to a marginal.
+
+This section generalizes the regularization and its limit to an arbitrary
+positive-affine perturbation
+\(M \mapsto (1 + a\varepsilon)^{-1}(M + b\varepsilon\mathbf 1)\) with constants
+\(a, b > 0\) on an arbitrary finite index, of which `regPerturb` is the
+\(a = N, b = 1\) instance. The proof is the same shared-eigenbasis scalar-limit
+argument as `tendsto_re_trace_perturb_mul_log_perturb`; only the scalar weight and
+shift change. The generalized lemma is reused for the singular-support data-processing
+inequality and serves the tripartite instantiation. -/
+
+section AffinePerturb
+
+variable {n : Type*} [Fintype n] [DecidableEq n]
+
+/-- The affine trace-shrinking regularization
+\(M_\varepsilon = (1 + a\varepsilon)^{-1}(M + b\varepsilon\mathbf 1)\) of a matrix,
+with positive scaling rate \(a\) and shift rate \(b\). It is affine in \(M\) and,
+for a positive semidefinite \(M\) and \(a, b, \varepsilon > 0\), positive definite.
+The trace-one regularization `regPerturb` is the \(a = N, b = 1\) instance. -/
+def regPerturbAffine (a b ε : ℝ) (M : Matrix n n ℂ) : Matrix n n ℂ :=
+  (1 + a * ε)⁻¹ • (M + (b * ε) • (1 : Matrix n n ℂ))
+
+omit [Fintype n] in
+/-- For \(a, b, \varepsilon > 0\) the affine regularization of a positive semidefinite
+matrix is positive definite. -/
+theorem regPerturbAffine_posDef {a b ε : ℝ} (ha : 0 < a) (hb : 0 < b) (hε : 0 < ε)
+    {M : Matrix n n ℂ} (hM : M.PosSemidef) : (regPerturbAffine a b ε M).PosDef := by
+  refine Matrix.PosDef.smul
+    (Matrix.PosDef.posSemidef_add hM ((Matrix.PosDef.one).smul (by positivity))) ?_
+  have : (0 : ℝ) < 1 + a * ε := by positivity
+  positivity
+
+open Filter Topology TNLean.Klein in
+/-- **Both-arguments trace-log limit for the affine regularization.** For positive
+semidefinite \(\rho, \sigma\) with \(\ker\sigma \subseteq \ker\rho\) and constants
+\(a, b > 0\), the cross term
+\(\operatorname{Re}\operatorname{tr}(\rho_\varepsilon\log\sigma_\varepsilon)\) of the
+affine regularizations
+\(\rho_\varepsilon = (1 + a\varepsilon)^{-1}(\rho + b\varepsilon\mathbf 1)\),
+\(\sigma_\varepsilon = (1 + a\varepsilon)^{-1}(\sigma + b\varepsilon\mathbf 1)\)
+converges to \(\operatorname{Re}\operatorname{tr}(\rho\log\sigma)\) as
+\(\varepsilon \to 0^+\).
+
+In \(\sigma\)'s eigenbasis each summand is the regularized diagonal weight
+\((1 + a\varepsilon)^{-1}(w_j + b\varepsilon)\), with
+\(w_j = \operatorname{Re}(U_\sigma^\dagger \rho\, U_\sigma)_{jj}\), times \(\log\)
+of the regularized eigenvalue \((1 + a\varepsilon)^{-1}(q_j + b\varepsilon)\). For
+\(q_j > 0\) the weight tends to \(w_j\) and the logarithm to \(\log q_j\); for
+\(q_j = 0\) the support condition forces \(w_j = 0\), so the term is
+\(y_\varepsilon\log y_\varepsilon\) with
+\(y_\varepsilon = (1 + a\varepsilon)^{-1}b\varepsilon \to 0\), which tends to
+\(0 = w_j\log q_j\) by continuity of \(x \mapsto x\log x\). This is the
+\(a = N, b = 1\) generalization of `tendsto_re_trace_perturb_mul_log_perturb`. -/
+theorem tendsto_re_trace_perturbAffine_mul_log_perturbAffine {a b : ℝ}
+    (ha : 0 < a) (hb : 0 < b) {ρ σ : Matrix n n ℂ}
+    (hρ : ρ.PosSemidef) (hσ : σ.PosSemidef)
+    (hsupp : ∀ v : n → ℂ, σ.mulVec v = 0 → ρ.mulVec v = 0) :
+    Tendsto (fun ε : ℝ =>
+        (Matrix.trace (regPerturbAffine a b ε ρ * CFC.log (regPerturbAffine a b ε σ))).re)
+      (𝓝[>] 0) (𝓝 (Matrix.trace (ρ * CFC.log σ)).re) := by
+  set q : n → ℝ := fun j => hσ.isHermitian.eigenvalues j with hq
+  set Uσ : Matrix n n ℂ := (hσ.isHermitian.eigenvectorUnitary : Matrix n n ℂ) with hUσ
+  set w : n → ℝ := fun j => ((star Uσ * ρ * Uσ) j j).re with hw
+  have hlogσ : CFC.log σ = hσ.isHermitian.cfc Real.log := by
+    rw [CFC.log]; exact Matrix.IsHermitian.cfc_eq hσ.isHermitian Real.log
+  have hRHS : (Matrix.trace (ρ * CFC.log σ)).re = ∑ j, w j * Real.log (q j) := by
+    rw [hlogσ, re_trace_mul_cfc_eq_diag_sum hσ.isHermitian Real.log]
+  have hcε_pos : ∀ ε : ℝ, 0 < ε → 0 < (1 + a * ε)⁻¹ := by
+    intro ε hε
+    have : (0 : ℝ) < 1 + a * ε := by positivity
+    positivity
+  have hUσ_unit : star Uσ * Uσ = 1 := by
+    rw [hUσ, Matrix.star_eq_conjTranspose]
+    exact Unitary.coe_star_mul_self hσ.isHermitian.eigenvectorUnitary
+  -- the regularized weight in σ's eigenbasis: `(1 + aε)⁻¹ (w j + bε)`
+  have hdiag : ∀ ε : ℝ, ∀ j : n,
+      ((star Uσ * regPerturbAffine a b ε ρ * Uσ) j j).re
+        = (1 + a * ε)⁻¹ * (w j + b * ε) := by
+    intro ε j
+    have hsplit : star Uσ * regPerturbAffine a b ε ρ * Uσ
+        = (1 + a * ε)⁻¹ • (star Uσ * ρ * Uσ + (b * ε) • (1 : Matrix n n ℂ)) := by
+      rw [regPerturbAffine, Matrix.mul_smul, Matrix.smul_mul, mul_add, add_mul,
+        Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_one, Matrix.mul_assoc, hUσ_unit]
+    rw [hsplit]
+    simp only [Matrix.smul_apply, Matrix.add_apply, Matrix.one_apply_eq, smul_eq_mul,
+      mul_one, Complex.real_smul, Complex.mul_re, Complex.add_re, Complex.ofReal_re,
+      Complex.ofReal_im, Complex.add_im, hw]
+    ring
+  -- the function at ε is the diagonal sum against the shifted-scaled `log`,
+  -- with the regularized weight
+  have hfun : ∀ ε : ℝ, 0 < ε →
+      (Matrix.trace (regPerturbAffine a b ε ρ * CFC.log (regPerturbAffine a b ε σ))).re
+        = ∑ j, (1 + a * ε)⁻¹ * (w j + b * ε)
+            * Real.log ((1 + a * ε)⁻¹ * (q j + b * ε)) := by
+    intro ε hε
+    have hbε : 0 < b * ε := by positivity
+    have hlog : CFC.log (regPerturbAffine a b ε σ)
+        = hσ.isHermitian.cfc (fun x : ℝ => Real.log ((1 + a * ε)⁻¹ * (x + b * ε))) := by
+      rw [regPerturbAffine]; exact cfc_log_smul_add_smul_one hσ hbε (hcε_pos ε hε)
+    rw [hlog, re_trace_mul_cfc_eq_diag_sum hσ.isHermitian
+        (fun x : ℝ => Real.log ((1 + a * ε)⁻¹ * (x + b * ε)))]
+    refine Finset.sum_congr rfl fun j _ => ?_
+    simp only [hq]
+    rw [← hUσ, hdiag ε j]
+  rw [hRHS]
+  -- termwise limit of the diagonal sum
+  have hterm : ∀ j : n,
+      Tendsto (fun ε : ℝ => (1 + a * ε)⁻¹ * (w j + b * ε)
+          * Real.log ((1 + a * ε)⁻¹ * (q j + b * ε))) (𝓝[>] 0)
+        (𝓝 (w j * Real.log (q j))) := by
+    intro j
+    -- the regularized eigenvalue `y_ε = (1 + aε)⁻¹(c + bε)` for a constant `c ≥ 0`
+    have hreg : ∀ c : ℝ, Tendsto (fun ε : ℝ => (1 + a * ε)⁻¹ * (c + b * ε))
+        (𝓝[>] 0) (𝓝 c) := by
+      intro c
+      have h1 : Tendsto (fun ε : ℝ => (1 + a * ε)⁻¹) (𝓝[>] 0) (𝓝 ((1 : ℝ))) := by
+        have hc : Continuous (fun ε : ℝ => 1 + a * ε) := by continuity
+        have ht : Tendsto (fun ε : ℝ => 1 + a * ε) (𝓝[>] 0) (𝓝 (1 + a * 0)) :=
+          (hc.tendsto 0).mono_left nhdsWithin_le_nhds
+        simp only [mul_zero, add_zero] at ht
+        simpa using ht.inv₀ (by norm_num)
+      have h2 : Tendsto (fun ε : ℝ => c + b * ε) (𝓝[>] 0) (𝓝 (c + b * 0)) := by
+        have hc : Continuous (fun ε : ℝ => c + b * ε) := by continuity
+        exact (hc.tendsto 0).mono_left nhdsWithin_le_nhds
+      simp only [mul_zero, add_zero] at h2
+      simpa using h1.mul h2
+    rcases eq_or_lt_of_le (hσ.eigenvalues_nonneg j) with hqj | hqj
+    · -- qⱼ = 0: the weight vanishes by the support condition, term is `y log y → 0`
+      have hzero_w : w j = 0 := by
+        rw [hw]
+        refine congrArg Complex.re (diag_weight_eq_zero_of_kernel hσ.isHermitian j ?_)
+        apply hsupp
+        rw [hσ.isHermitian.mulVec_eigenvectorBasis, ← hqj, zero_smul]
+      have hqj' : q j = 0 := hqj.symm
+      have htarget : w j * Real.log (q j) = 0 := by rw [hzero_w, zero_mul]
+      rw [htarget]
+      -- the term equals `y_ε * log y_ε` with `y_ε = (1 + aε)⁻¹(0 + bε)`
+      have hcongr : (fun ε : ℝ => (1 + a * ε)⁻¹ * (w j + b * ε)
+          * Real.log ((1 + a * ε)⁻¹ * (q j + b * ε)))
+          =ᶠ[𝓝[>] 0]
+          (fun ε : ℝ => ((1 + a * ε)⁻¹ * (0 + b * ε))
+            * Real.log ((1 + a * ε)⁻¹ * (0 + b * ε))) := by
+        filter_upwards [self_mem_nhdsWithin] with ε _
+        rw [hzero_w, hqj']
+      refine Tendsto.congr' hcongr.symm ?_
+      have hy : Tendsto (fun ε : ℝ => (1 + a * ε)⁻¹ * (0 + b * ε)) (𝓝[>] 0) (𝓝 0) := hreg 0
+      have hmllog : Tendsto (fun y : ℝ => y * Real.log y) (𝓝 (0 : ℝ)) (𝓝 (0 * Real.log 0)) :=
+        (Real.continuous_mul_log.tendsto 0)
+      rw [Real.log_zero, mul_zero] at hmllog
+      exact hmllog.comp hy
+    · -- qⱼ > 0: weight tends to `w j`, log to `log q j`
+      have hwlim : Tendsto (fun ε : ℝ => (1 + a * ε)⁻¹ * (w j + b * ε)) (𝓝[>] 0) (𝓝 (w j)) :=
+        hreg (w j)
+      have hloglim : Tendsto (fun ε : ℝ => Real.log ((1 + a * ε)⁻¹ * (q j + b * ε)))
+          (𝓝[>] 0) (𝓝 (Real.log (q j))) :=
+        (Real.continuousAt_log hqj.ne').tendsto.comp (hreg (q j))
+      exact hwlim.mul hloglim
+  refine Tendsto.congr' ?_ (tendsto_finsetSum Finset.univ fun j _ => hterm j)
+  filter_upwards [self_mem_nhdsWithin] with ε hε
+  rw [hfun ε hε]
+
+open Filter Topology in
+/-- **Both-arguments relative-entropy limit for the affine regularization.** For
+positive semidefinite \(\rho, \sigma\) with \(\ker\sigma \subseteq \ker\rho\) and
+constants \(a, b > 0\), the relative entropy of the affine regularizations
+\(\rho_\varepsilon = (1 + a\varepsilon)^{-1}(\rho + b\varepsilon\mathbf 1)\),
+\(\sigma_\varepsilon = (1 + a\varepsilon)^{-1}(\sigma + b\varepsilon\mathbf 1)\)
+converges to \(D(\rho\|\sigma)\) as \(\varepsilon \to 0^+\).
+
+Splitting \(D(\rho_\varepsilon\|\sigma_\varepsilon)\) into the self and cross trace
+terms, both converge by `tendsto_re_trace_perturbAffine_mul_log_perturbAffine`: the
+self term is its \(\sigma = \rho\) instance and the cross term the support-respecting
+instance. This generalizes `tendsto_relativeEntropyPerturb`, of which it is the
+\(a = N, b = 1\) instance, and is the reusable singular-domain limit for marginals
+under the partial trace. -/
+theorem tendsto_relativeEntropyPerturbAffine {a b : ℝ} (ha : 0 < a) (hb : 0 < b)
+    {ρ σ : Matrix n n ℂ} (hρ : ρ.PosSemidef) (hσ : σ.PosSemidef)
+    (hsupp : ∀ v : n → ℂ, σ.mulVec v = 0 → ρ.mulVec v = 0) :
+    Tendsto (fun ε : ℝ =>
+        quantumRelativeEntropy (regPerturbAffine a b ε ρ) (regPerturbAffine a b ε σ))
+      (𝓝[>] 0) (𝓝 (quantumRelativeEntropy ρ σ)) := by
+  simp only [quantumRelativeEntropy_eq_trace_mul_log_sub]
+  refine Tendsto.sub ?_
+    (tendsto_re_trace_perturbAffine_mul_log_perturbAffine ha hb hρ hσ hsupp)
+  exact tendsto_re_trace_perturbAffine_mul_log_perturbAffine ha hb hρ hρ (fun v hv => hv)
+
+end AffinePerturb
+
 /-- **Joint convexity of the quantum relative entropy on the singular support
 domain.** For density matrices \((\rho, \sigma)\) with the kernel inclusion
 \(\ker\sigma \subseteq \ker\rho\), the map \((\rho, \sigma) \mapsto D(\rho\|\sigma)\)
