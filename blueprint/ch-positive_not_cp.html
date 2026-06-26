@@ -1260,7 +1260,7 @@
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
 	, Equation&#160;(3.18)
 	]
-</span>. The source states the inequalities under the premise that \(\rho \) has Schmidt number at most \(n\), and reaches \((T_n\otimes \operatorname{id})(\rho )\ge 0\) from that premise by the \(n\)-positivity of \(T_n\); that first step is taken here as the hypothesis rather than derived. The first step and the composed full criterion with the Schmidt-number premise are Theorem&#160;<a href="ch-positive_not_cp.html#thm:reduction_criterion_of_schmidt_number">20.34</a>. </p>
+</span>. The source states the inequalities under the premise that \(\rho \) has Schmidt number at most \(n\), and reaches \((T_n\otimes \operatorname{id})(\rho )\ge 0\) from that premise by the \(n\)-positivity of \(T_n\); that first step is taken here as the hypothesis rather than derived. The first step and the composed full criterion with the Schmidt-number premise are Theorem&#160;<a href="ch-positive_not_cp.html#thm:reduction_criterion_of_schmidt_number">20.35</a>. </p>
 
   </div>
 </div>
@@ -3408,12 +3408,107 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:has_schmidt_number_le_tensor_map_id_t_eta">
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:has_schmidt_number_le_tensor_map_id_diff">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
     <span class="theorem_thmlabel">20.33</span>
+    <span class="theorem_thmtitle">Only-if direction for differing bipartite factors</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:has_schmidt_number_le_tensor_map_id_diff">#</a>
+    
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030300"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.27</a></li>
+          
+          <li><a href="ch-channel_representations.html#def:tensor_map_id">Definition 16.5</a></li>
+          
+          <li><a href="ch-schwarz.html#def:k_positive_map">Definition 5.7</a></li>
+          
+          <li><a href="ch-positive_not_cp.html#thm:has_schmidt_number_le_tensor_map_id">Theorem 20.32</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.HasSchmidtNumberLE.tensorMapId_posSemidef'" class="lean_decl">Matrix.HasSchmidtNumberLE.tensorMapId_posSemidef'</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    Let the second factor satisfy \(d'\le d\). A bipartite state on \(M_{d}(\mathbb {C})\otimes M_{d'}(\mathbb {C})\) of Schmidt number at most \(n\) satisfies </p>
+<div class="displaymath" id="a0000030301">
+  \[  (T\otimes \operatorname{id})(\rho )\ge 0  \]
+</div>
+<p> for every \(n\)-positive map \(T\) on \(M_{d}(\mathbb {C})\). This lifts the square restriction of Theorem&#160;<a href="ch-positive_not_cp.html#thm:has_schmidt_number_le_tensor_map_id">20.32</a> to a smaller second factor, a partial step toward Wolf’s general bipartite system \(M_{d}(\mathbb {C})\otimes M_{d'}(\mathbb {C})\) <span class="cite">
+	[
+	
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Chapter&#160;3, Proposition&#160;3.4
+	]
+</span>. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000030300">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Pad the second factor of each pure summand from \(d'\) to \(d\) with zero columns; this preserves the Schmidt-rank bound, so the padded state on the square system \(M_{d}(\mathbb {C})\otimes M_{d}(\mathbb {C})\) still has Schmidt number at most \(n\). The square result makes the padded ampliation positive semidefinite, and the original ampliation is its \(d\times d'\) principal submatrix, hence positive semidefinite. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:has_schmidt_number_le_tensor_map_id_t_eta">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">20.34</span>
     <span class="theorem_thmtitle">Reduction step from the Schmidt-number premise</span>
     <div class="thm_header_extras">
 
@@ -3424,7 +3519,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:has_schmidt_number_le_tensor_map_id_t_eta">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000030300"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030302"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3480,13 +3575,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For \(1\le n{\lt}D\), a bipartite state on the square system \(M_{D}(\mathbb {C})\otimes M_{D}(\mathbb {C})\) of Schmidt number at most \(n\) satisfies </p>
-<div class="displaymath" id="a0000030301">
+<div class="displaymath" id="a0000030303">
   \[  (T_n\otimes \operatorname{id})(\rho )\ge 0.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000030300">
+<div class="proof_wrapper" id="a0000030302">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3503,7 +3598,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.34</span>
+    <span class="theorem_thmlabel">20.35</span>
     <span class="theorem_thmtitle">Reduction criterion with the Schmidt-number premise</span>
     <div class="thm_header_extras">
 
@@ -3514,7 +3609,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:reduction_criterion_of_schmidt_number">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000030302"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000030304"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3534,7 +3629,7 @@
           
           <li><a href="ch-schwarz.html#def:t_eta">Definition 5.70</a></li>
           
-          <li><a href="ch-positive_not_cp.html#thm:has_schmidt_number_le_tensor_map_id_t_eta">Theorem 20.33</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:has_schmidt_number_le_tensor_map_id_t_eta">Theorem 20.34</a></li>
           
           <li><a href="ch-positive_not_cp.html#thm:reduction_criterion">Theorem 20.5</a></li>
           
@@ -3570,14 +3665,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For \(1\le n{\lt}D\), a bipartite state on the square system \(M_{D}(\mathbb {C})\otimes M_{D}(\mathbb {C})\) of Schmidt number at most \(n\) satisfies the reduction criterion </p>
-<div class="displaymath" id="a0000030303">
+<div class="displaymath" id="a0000030305">
   \[  n\, \rho _1\otimes \mathbb {1}\ge \rho \qquad \text{and}\qquad n\, \mathbb {1}\otimes \rho _2\ge \rho ,  \]
 </div>
 <p> with \(\rho _1\) and \(\rho _2\) the reduced densities on the first and second factors. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000030302">
+<div class="proof_wrapper" id="a0000030304">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
