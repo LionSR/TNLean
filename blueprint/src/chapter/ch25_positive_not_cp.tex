@@ -198,9 +198,15 @@ fails to be completely positive, are not treated here.
         =\lVert v\rVert^{2}\,\Id-\ket{v}\bra{v}-\ket{U\overline{v}}\bra{U\overline{v}},
     \]
     with $\overline{v}$ the entrywise conjugate of $v$.  The two vectors $v$ and
-    $U\overline{v}$ are orthogonal: antisymmetry of $U$ forces the scalar
-    $\braket{v}{U\overline{v}}$ to equal its own negative, hence to vanish.  The
-    contraction bound gives $\lVert U\overline{v}\rVert\le\lVert v\rVert$.  For any
+    $U\overline{v}$ are orthogonal: antisymmetry of $U$ gives
+    \[
+        \braket{v}{U\overline{v}}
+        =\overline{v}^{\,\mathsf T}U\,\overline{v}
+        =\overline{v}^{\,\mathsf T}(-U^{\mathsf T})\overline{v}
+        =-\braket{v}{U\overline{v}},
+    \]
+    hence $\braket{v}{U\overline{v}}=0$.  The contraction bound gives
+    $\lVert U\overline{v}\rVert\le\lVert v\rVert$.  For any
     $w$ the quadratic form is
     \[
         \lVert v\rVert^{2}\lVert w\rVert^{2}

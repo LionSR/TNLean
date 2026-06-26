@@ -45,10 +45,6 @@ not treated here; only positivity is established.
 open scoped Matrix ComplexOrder MatrixOrder InnerProductSpace
 open Matrix
 
-namespace Matrix
-
-variable {d : ℕ}
-
 /-! ## A two-vector orthogonal Bessel inequality -/
 
 section InnerProductAux
@@ -114,6 +110,10 @@ theorem orthogonal_two_inner_normSq_le {x y : E} (hxy : ⟪x, y⟫_ℂ = 0)
 
 end InnerProductAux
 
+namespace Matrix
+
+variable {d : ℕ}
+
 /-! ## The Breuer-Hall map -/
 
 /-- **Wolf Chapter 3, Example 3.1, equation (3.19).** The Breuer-Hall map
@@ -153,7 +153,7 @@ theorem star_dotProduct_vecMulVec_mulVec (a b w : Fin d → ℂ) :
 /-! ## Positivity on rank-one outer products -/
 
 /-- On a rank-one outer product `v vᴴ`, the Breuer-Hall map is positive
-semidefinite.  This is the heart of the positivity proof: the image is
+semidefinite.  This is the key step in the positivity proof: the image is
 `‖v‖² I - v vᴴ - (U (conj v))(U (conj v))ᴴ`, whose quadratic form is nonnegative
 by the two-vector Bessel inequality applied to the orthogonal pair
 `v ⟂ U (conj v)` with `‖U (conj v)‖ ≤ ‖v‖`. -/
