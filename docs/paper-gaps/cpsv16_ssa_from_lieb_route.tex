@@ -86,7 +86,15 @@ the following.
     the positive eigenvalues, while the support condition kills the diagonal
     weights on the zero eigenvalues (\leanid{tendsto_re_trace_mul_log_perturb}); no
     eigenvalue-continuity input is needed. It consumes neither Lieb concavity nor
-    operator Jensen. The equality case remains open.
+    operator Jensen. The equality case is now formalized for full-rank $\sigma$:
+    \leanid{quantumRelativeEntropy_eq_zero_iff} proves
+    $D(\rho\,\|\,\sigma) = 0 \iff \rho = \sigma$ by sharpening the Gibbs
+    reduction. When $D=0$ every term of the Gibbs slack is tight, so the strict
+    tangent inequality $\log x < x-1$ for $x\neq1$ forces the eigenvalues to match
+    on the overlap support; the matching makes the overlap matrix intertwine the
+    eigenvalue diagonals, and conjugating $\sigma$ into $\rho$'s eigenbasis
+    recovers $\rho$, giving $\rho=\sigma$. This argument too consumes neither Lieb
+    concavity nor operator Jensen.
   \item \emph{Joint convexity.} Convexity of
     $(\rho,\sigma) \mapsto D(\rho\,\|\,\sigma)$ in the pair of arguments. This is
     the step that consumes Lieb's joint concavity theorem: the concavity of

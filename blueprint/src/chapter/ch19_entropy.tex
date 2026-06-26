@@ -335,6 +335,62 @@ finite-dimensional quantum systems.
     the limit.
 \end{proof}
 
+\begin{theorem}[Equality case of Klein's inequality]
+    \label{thm:klein_inequality_equality}
+    \lean{quantumRelativeEntropy_eq_zero_iff}
+    \leanok
+    \uses{thm:klein_inequality}
+    Let $\rho,\sigma\in \MN{D}$ be density matrices with $\sigma$ of full rank.
+    Then the relative entropy vanishes exactly when the states coincide,
+    \[
+        D(\rho\Vert\sigma) = 0 \iff \rho = \sigma.
+    \]
+    Together with nonnegativity, this is the order property that makes $D$ a
+    divergence.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:quantum_relative_entropy_self}
+    If $\rho=\sigma$ then $\log\rho-\log\sigma=0$ and $D(\rho\Vert\sigma)=0$.
+    For the converse, diagonalize $\rho=\sum_i p_i\,\ketbra{e_i}{e_i}$ and
+    $\sigma=\sum_j q_j\,\ketbra{f_j}{f_j}$, with all $q_j>0$ by full rank, and set
+    $P_{ij}=\lvert\braket{e_i}{f_j}\rvert^2$. As in
+    Theorem~\ref{thm:klein_inequality},
+    \[
+        D(\rho\Vert\sigma)
+            =\sum_{i,j} P_{ij}\bigl[p_i\log p_i-p_i\log q_j-(p_i-q_j)\bigr],
+    \]
+    a sum of nonnegative terms: each is bounded below by the tangent inequality
+    $\log x\le x-1$ at $x=q_j/p_i$, while the linear remainder telescopes through
+    the doubly stochastic row and column sums,
+    \[
+        \sum_{i,j} P_{ij}(p_i-q_j) = \sum_i p_i - \sum_j q_j = 0.
+    \]
+    If the total vanishes then every term vanishes. On a row with $p_i=0$ the term
+    reads $P_{ij}q_j$, so $P_{ij}=0$; on a row with $p_i>0$ the term forces the
+    tangent inequality to be tight,
+    \[
+        \log\!\frac{q_j}{p_i} = \frac{q_j}{p_i}-1,
+    \]
+    and strict concavity of the logarithm ($\log x<x-1$ for $x\neq1$) gives
+    $q_j=p_i$. Hence $q_j=p_i$ whenever $\braket{e_i}{f_j}\neq0$. Writing
+    $W=U_\rho^\dagger U_\sigma$ for the overlap of the eigenvector unitaries, this
+    matching says $W$ intertwines the eigenvalue diagonals,
+    \[
+        W\,\mathrm{diag}(q) = \mathrm{diag}(p)\,W,
+    \]
+    so conjugating $\sigma$ into the eigenbasis of $\rho$ and using the unitarity
+    $WW^\dagger=1$,
+    \[
+        U_\rho^\dagger\sigma U_\rho
+            = W\,\mathrm{diag}(q)\,W^\dagger
+            = \mathrm{diag}(p)\,WW^\dagger
+            = \mathrm{diag}(p),
+    \]
+    the spectral diagonal of $\rho$. Therefore $\sigma = U_\rho\,\mathrm{diag}(p)\,
+    U_\rho^\dagger = \rho$.
+\end{proof}
+
 \begin{theorem}[Joint convexity of the relative entropy]
     \label{thm:relative_entropy_joint_convexity}
     \lean{TNLean.RelativeEntropyConvexity.convexOn_quantumRelativeEntropy}
