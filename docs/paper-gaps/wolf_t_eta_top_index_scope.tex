@@ -71,32 +71,32 @@ $(D-1)$-positivity and requires the $k=D$ index.
 
 \section{Status}
 
-The deviation is a scope restriction, not a mathematical error: the formal
-equivalence and the strictness witnesses are correct as stated for the indices
-they cover.  The omitted boundary case $k=D$ is mathematically true in the
-source and would follow once the maximal-overlap principle and the Ky--Fan
-maximum principle are extended to the top index $k=D$ (where the bound reads
-$\|\rho\|_{(D)}=\tr\rho=1$ and the optimizing projection is the
-identity).  Extending those two principles to $k=D$ removes this restriction and
-supplies the top inclusion $\mathcal T_D\subseteq\mathcal T_{D-1}$.
+The boundary case $k=D$ is resolved by a route that bypasses the $k<D$
+restriction of the maximal-overlap and Ky--Fan principles entirely.  On
+$M_D(\mathbb C)$, $D$-positivity is complete positivity
+(\leanid{isCPMap_iff_isNPositiveMap_card}), which is positive semidefiniteness of
+the Choi operator $\tau_\eta$.  Its quadratic form on a vector $\psi$ is
+$D^{-1}\|\psi\|^2-\eta^{-1}|\braket{\Omega}{\psi}|^2$, and since $\ket\Omega$ is
+normalized the Cauchy--Schwarz bound $|\braket{\Omega}{\psi}|^2\le\|\psi\|^2$
+(saturated at $\psi=\Omega$) makes that form nonnegative for every $\psi$ exactly
+when $\eta\ge D$.  Hence $T_\eta$ is $D$-positive iff $\eta\ge D$, the equivalence
+at the top index.
 
-The formal declarations are
-\leanid{Matrix.isNPositiveMap_tEta_iff} for the threshold equivalence and
-\leanid{Matrix.exists_isNPositiveMap_not_succ} for the strictness witness, in
-\doclink{TNLean/Channel/NPositivityChainStrict}.
+The formal declarations are \leanid{Matrix.isNPositiveMap_tEta_iff} for the
+range $1\le k<D$ and \leanid{Matrix.isNPositiveMap_tEta_card_iff} for the top
+index $k=D$, together covering the full equivalence~(3.11) over $1\le k\le D$, in
+\doclink{TNLean/Channel/NPositivityChainStrict}.  The strictness witness
+\leanid{Matrix.exists_isNPositiveMap_not_succ} remains stated for $k+1<D$; the
+strictness of the top inclusion $\mathcal T_D\subsetneq\mathcal T_{D-1}$ follows
+from the $k=D-1$ and $k=D$ thresholds but is not recorded as a separate witness.
 
 \section{Classification}
 
-\emph{Scope restriction.} The formal threshold proves the source
-equivalence~(3.11) for Schmidt ranks $1\le k<D$, a special case of the source's
-full range $1\le k\le D$. For $T_\eta$ both tensor factors of the Choi operator
-have dimension $D$ (the maximally entangled vector lies in
-$\mathbb C^{D}\otimes\mathbb C^{D}$), so the first-factor dimension that bounds
-the Ky--Fan index coincides with $D$; no separate $D'$ enters. The conclusion
-matches the source on $1\le k<D$, and only the top index $k=D$ is omitted, where
-the bound degenerates to complete positivity. No hypothesis foreign to the
-source is used, so the deviation is a scope restriction rather than an
-unfaithful theorem.
+\emph{Resolved.} The full source range $1\le k\le D$ of equivalence~(3.11) is now
+formalized: \leanid{Matrix.isNPositiveMap_tEta_iff} for $1\le k<D$ and
+\leanid{Matrix.isNPositiveMap_tEta_card_iff} for the completely-positive endpoint
+$k=D$, the latter by the Choi-operator route detailed in the Status above.  No
+hypothesis foreign to the source is used.
 
 \bibliographystyle{alpha}
 \bibliography{references}
