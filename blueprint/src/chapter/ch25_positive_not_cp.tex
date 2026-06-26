@@ -899,3 +899,99 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
     a sum of nonnegative terms, contradicting $\operatorname{Re}\tr(W\rho)<0$.  This
     converse uses no density-matrix hypotheses on $\rho$.
 \end{proof}
+
+\begin{theorem}[Surjectivity of the Choi correspondence]
+    \label{thm:exists_choiMatrix_eq}
+    \lean{ChoiJamiolkowski.exists_choiMatrix_eq}
+    \leanok
+    \uses{thm:cp_iff_choi_posSemidef}
+    Assume $D>0$.  Every bipartite matrix $W$ on $\C^D\otimes\C^D$ is the Choi matrix
+    $\tau_T=(T\otimes\Id)(\ket{\Omega}\bra{\Omega})$ of some linear map
+    $T\colon\MN{D}\to\MN{D}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The Choi correspondence $T\mapsto\tau_T$ is complex-linear and injective.  Its domain,
+    the space of linear maps on $\MN{D}$, and its codomain, the bipartite matrix space on
+    $\C^D\otimes\C^D$, both have complex dimension $D^4$, so the injective map is also
+    surjective.  Hence every $W$ is a Choi matrix.
+\end{proof}
+
+\begin{theorem}[A witness is the Choi matrix of an $n$-positive map]
+    \label{thm:exists_isNPositiveMap_choiMatrix_eq}
+    \lean{ChoiJamiolkowski.exists_isNPositiveMap_choiMatrix_eq_of_witness}
+    \leanok
+    \uses{def:k_positive_map, def:schmidt_rank, thm:exists_choiMatrix_eq,
+        thm:schmidt_rank_choi_test_iff, thm:exists_entanglement_witness}
+    Assume $D>0$.  Let $W$ be a Hermitian operator on $\C^D\otimes\C^D$ with
+    \[
+        \operatorname{Re}\bra{\psi}W\ket{\psi}\ge 0
+        \quad\text{for every $\psi$ of Schmidt rank at most }n.
+    \]
+    Then $W$ is the Choi matrix of an $n$-positive map $T$.  This is the
+    Choi--Jamio\l kowski translation of the entanglement witness of Wolf's Proposition~3.3
+    into the $n$-positive map of Wolf's Proposition~3.4
+    \cite[Chapter~3, Proposition~3.4]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By the surjectivity of the Choi correspondence (\ref{thm:exists_choiMatrix_eq}) there
+    is a linear map $T$ with $\tau_T=W$.  Because $W$ is Hermitian, the Choi quadratic form
+    $\bra{\psi}W\ket{\psi}$ is real, and it equals the witness expectation
+    $\tr(W\ket{\psi}\bra{\psi})$; the witness condition makes it nonnegative on every
+    vector of Schmidt rank at most $n$.  This is exactly the Schmidt-rank Choi criterion
+    (\ref{thm:schmidt_rank_choi_test_iff}) for $n$-positivity of $T$.
+\end{proof}
+
+\begin{theorem}[Choi trace pairing through the trace-pairing adjoint]
+    \label{thm:trace_choiMatrix_omega_quadratic_adjoint}
+    \lean{ChoiJamiolkowski.trace_choiMatrix_mul_eq_omegaVec_quadraticForm_traceAdjointMap}
+    \leanok
+    \uses{def:trace_pairing_adjoint, thm:trace_pairing_adjoint_ampliation}
+    For a linear map $T\colon\MN{D}\to\MN{D}$ with Choi matrix $\tau_T$ and any bipartite
+    matrix $\rho$ on $\C^D\otimes\C^D$,
+    \[
+        \tr(\tau_T\,\rho)
+          = \bra{\Omega}(T^{*}\otimes\Id)(\rho)\ket{\Omega},
+    \]
+    where $T^{*}$ is the trace-pairing adjoint of $T$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Since $\tau_T=(T\otimes\Id)(\ket{\Omega}\bra{\Omega})$, cyclicity of the trace gives
+    $\tr(\tau_T\rho)=\tr\bigl(\rho\,(T\otimes\Id)(\ket{\Omega}\bra{\Omega})\bigr)$.  The
+    $\Id$-ampliation of the trace-pairing adjoint is the trace-pairing adjoint of the
+    ampliation, so moving $T$ across the trace pairing replaces
+    $(T\otimes\Id)$ by $(T^{*}\otimes\Id)$ acting on $\rho$ and turns the pairing against
+    $\ket{\Omega}\bra{\Omega}$ into the quadratic form $\bra{\Omega}\,\cdot\,\ket{\Omega}$.
+\end{proof}
+
+\begin{theorem}[Positive maps detect high Schmidt number]
+    \label{thm:exists_isNPositiveMap_detects}
+    \lean{Matrix.exists_isNPositiveMap_tensorMapId_not_posSemidef}
+    \leanok
+    \uses{def:k_positive_map, def:has_schmidt_number_le,
+        thm:exists_entanglement_witness, thm:exists_isNPositiveMap_choiMatrix_eq,
+        thm:trace_pairing_adjoint_positive, thm:trace_choiMatrix_omega_quadratic_adjoint}
+    Let $\rho$ be a trace-one Hermitian bipartite state on $\C^D\otimes\C^D$ whose Schmidt
+    number exceeds $n$.  Then there is an $n$-positive map $T\colon\MN{D}\to\MN{D}$ such that
+    $(T\otimes\Id)(\rho)$ is not positive semidefinite.  This is the if direction of Wolf's
+    Proposition~3.4 \cite[Chapter~3, Proposition~3.4]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The entanglement witness $W$ for $\rho$ (\ref{thm:exists_entanglement_witness}) is the
+    Choi matrix of an $n$-positive map $P$ (\ref{thm:exists_isNPositiveMap_choiMatrix_eq}).
+    Its trace-pairing adjoint $T=P^{*}$ is again $n$-positive
+    (\ref{thm:trace_pairing_adjoint_positive}).  By the Choi trace pairing through the
+    trace-pairing adjoint (\ref{thm:trace_choiMatrix_omega_quadratic_adjoint}),
+    \[
+        \bra{\Omega}(T\otimes\Id)(\rho)\ket{\Omega}=\tr(W\rho),
+    \]
+    whose real part is negative.  A positive semidefinite matrix has nonnegative quadratic
+    forms, so $(T\otimes\Id)(\rho)$ is not positive semidefinite.
+\end{proof}
