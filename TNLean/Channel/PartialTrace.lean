@@ -96,6 +96,30 @@ theorem trace_partialTraceRight [Fintype α] (X : Matrix (α × β) (α × β) �
   simp only [Matrix.trace, Matrix.diag, partialTraceRight_apply]
   rw [Fintype.sum_prod_type]
 
+/-- The partial trace over the second factor is additive. -/
+theorem partialTraceRight_add (X Y : Matrix (α × β) (α × β) ℂ) :
+    partialTraceRight (X + Y) = partialTraceRight X + partialTraceRight Y := by
+  ext i j; simp [partialTraceRight_apply, Finset.sum_add_distrib]
+
+/-- The partial trace over the second factor commutes with real scalar
+multiplication. -/
+theorem partialTraceRight_real_smul (c : ℝ) (X : Matrix (α × β) (α × β) ℂ) :
+    partialTraceRight (c • X) = c • partialTraceRight X := by
+  ext i j; simp [partialTraceRight_apply, Finset.smul_sum]
+
+/-- The partial trace of the identity is the cardinality of the traced factor
+times the identity on the retained factor:
+\(\operatorname{tr}_\beta\mathbf 1 = |\beta|\,\mathbf 1\). -/
+theorem partialTraceRight_one [DecidableEq α] [DecidableEq β] :
+    partialTraceRight (1 : Matrix (α × β) (α × β) ℂ)
+      = (Fintype.card β : ℂ) • (1 : Matrix α α ℂ) := by
+  ext i j
+  simp only [partialTraceRight_apply, Matrix.one_apply, Prod.mk.injEq, Matrix.smul_apply,
+    smul_eq_mul]
+  by_cases hij : i = j
+  · subst hij; simp
+  · simp [hij]
+
 end GeneralRight
 
 /-- The trace is invariant under reindexing a matrix by an equivalence of its

@@ -238,38 +238,6 @@ of the partial trace of the identity, and prove the bipartite marginal support
 fact \(\ker(\operatorname{tr}_C\sigma) \subseteq \ker(\operatorname{tr}_C\rho)\)
 that transfers the support condition to the marginals. -/
 
-section PartialTraceAlgebra
-
-variable {α β : Type*} [Fintype β]
-
-/-- The partial trace over the second factor is additive. -/
-theorem partialTraceRight_add (X Y : Matrix (α × β) (α × β) ℂ) :
-    partialTraceRight (X + Y) = partialTraceRight X + partialTraceRight Y := by
-  ext i j; simp [partialTraceRight_apply, Finset.sum_add_distrib]
-
-/-- The partial trace over the second factor commutes with real scalar
-multiplication. -/
-theorem partialTraceRight_real_smul (c : ℝ) (X : Matrix (α × β) (α × β) ℂ) :
-    partialTraceRight (c • X) = c • partialTraceRight X := by
-  ext i j; simp [partialTraceRight_apply, Finset.smul_sum]
-
-variable [DecidableEq α] [DecidableEq β]
-
-/-- The partial trace of the identity is the cardinality of the traced factor
-times the identity on the retained factor:
-\(\operatorname{tr}_\beta\mathbf 1 = |\beta|\,\mathbf 1\). -/
-theorem partialTraceRight_one :
-    partialTraceRight (1 : Matrix (α × β) (α × β) ℂ)
-      = (Fintype.card β : ℂ) • (1 : Matrix α α ℂ) := by
-  ext i j
-  simp only [partialTraceRight_apply, Matrix.one_apply, Prod.mk.injEq, Matrix.smul_apply,
-    smul_eq_mul]
-  by_cases hij : i = j
-  · subst hij; simp
-  · simp [hij]
-
-end PartialTraceAlgebra
-
 section MarginalSupport
 
 variable {α β : Type*} [Fintype α] [Fintype β] [DecidableEq β]
@@ -669,10 +637,9 @@ theorem partialTraceRight_regPerturbAffine {α β : Type*} [Fintype β]
 open scoped Topology
 open Filter
 
-/-- **Data-processing inequality on the singular support domain.** For density
-matrices \(\rho, \sigma\) (positive semidefinite, unit trace) on a tensor product
-of a system factor and an ancilla factor with the kernel inclusion
-\(\ker\sigma \subseteq \ker\rho\),
+/-- **Data-processing inequality on the singular support domain.** For positive
+semidefinite \(\rho, \sigma\) on a tensor product of a system factor and an
+ancilla factor with the kernel inclusion \(\ker\sigma \subseteq \ker\rho\),
 \[
   D(\operatorname{tr}_C\rho \,\|\, \operatorname{tr}_C\sigma)
     \le D(\rho \,\|\, \sigma),
@@ -680,8 +647,10 @@ of a system factor and an ancilla factor with the kernel inclusion
 where \(\operatorname{tr}_C\) is the partial trace over the ancilla factor.
 
 This extends `quantumRelativeEntropy_partialTraceRight_le` from the positive
-definite domain to all density-matrix pairs of finite relative entropy. Both
-arguments are regularized through the affine trace-shrinking perturbation
+definite domain to all positive semidefinite pairs satisfying the support
+condition. No trace normalization is required; the intended application is to
+density matrices (trace one). Both arguments are regularized through the affine
+trace-shrinking perturbation
 \(M_\varepsilon = (1 + N_{SC}\varepsilon)^{-1}(M + \varepsilon\mathbf 1_{SC})\),
 which is positive definite for \(\varepsilon > 0\), so the positive-definite
 inequality applies at each \(\varepsilon\). The right-hand side converges to
