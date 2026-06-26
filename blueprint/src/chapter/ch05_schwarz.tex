@@ -1455,8 +1455,9 @@ adjacent cones.
     \label{thm:t_eta_threshold_top}
     \lean{Matrix.isNPositiveMap_tEta_card_iff}
     \leanok
-    \uses{def:t_eta, thm:choi_matrix_t_eta}
-    Let $\eta>0$.  Then $T_\eta$ is $D$-positive if and only if $\eta\ge D$.
+    \uses{def:t_eta, thm:choi_matrix_t_eta, thm:schmidt_rank_choi_test_iff}
+    Let $\eta>0$ and $D\ge 1$.  Then $T_\eta$ is $D$-positive if and only if
+    $\eta\ge D$.
     Together with Theorem~\ref{thm:t_eta_threshold} this is
     \cite[Equation~(3.11)]{Wolf2012Quantum} over the full range $1\le k\le D$,
     where the top index $k=D$ is complete positivity.

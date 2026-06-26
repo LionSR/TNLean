@@ -49,6 +49,9 @@ Choi criterion converts the resulting sign condition into `k`-positivity.
   nonnegative scalar multiple `c • 1` of the identity is `k • c` for `k < card`.
 * `Matrix.isNPositiveMap_tEta_iff` -- **Wolf eq. (3.11):** for `0 < η` and
   `1 ≤ k < D`, the map `T_η` is `k`-positive if and only if `η ≥ k`.
+* `Matrix.isNPositiveMap_tEta_card_iff` -- **Wolf eq. (3.11) at the top index
+  `k = D`:** for `0 < η`, the map `T_η` is `D`-positive (i.e. completely positive)
+  if and only if `η ≥ D`.
 * `Matrix.tEta_isNPositiveMap_not_succ` and
   `Matrix.exists_isNPositiveMap_not_succ` -- the strictness witness: a
   `k`-positive map that is not `(k+1)`-positive, for `1 ≤ k` with `k + 1 < D`.
@@ -415,11 +418,12 @@ theorem isNPositiveMap_tEta_iff [NeZero D] {η : ℝ} (hη : 0 < η) {k : ℕ}
         _ = (D : ℝ)⁻¹ * w := one_mul _
     linarith [h1, h2]
 
-/-- **Wolf eq. (3.11) at the top index `n = D`.**  Since `D`-positivity on
-`M_D(ℂ)` is complete positivity, `T_η` is `D`-positive iff its Choi operator is
-positive semidefinite, and — the maximally entangled vector being the worst
-case — this holds iff `D ≤ η`.  Together with `isNPositiveMap_tEta_iff` (the range
-`1 ≤ k < D`) this completes Wolf's threshold criterion over `k = 1, …, D`. -/
+/-- **Wolf eq. (3.11) at the top index n = D.**  Since D-positivity on M_D(ℂ) is
+complete positivity, T_η is D-positive iff its Choi operator is positive
+semidefinite, and — the maximally entangled vector being the worst case — this
+holds iff D ≤ η.  Together with the lower-range threshold equivalence
+`isNPositiveMap_tEta_iff` (the range 1 ≤ k < D) this completes Wolf's threshold
+criterion over k = 1, …, D. -/
 theorem isNPositiveMap_tEta_card_iff [NeZero D] {η : ℝ} (hη : 0 < η) :
     IsNPositiveMap D (tEta D η) ↔ (D : ℝ) ≤ η := by
   classical
@@ -436,9 +440,8 @@ theorem isNPositiveMap_tEta_card_iff [NeZero D] {η : ℝ} (hη : 0 < η) :
     simp only [Complex.one_re, norm_one, one_pow] at hquad
     have hval := hpos (omegaVec D) hΩrank
     rw [hquad, ← Complex.ofReal_zero, Complex.real_le_real] at hval
-    have hcancelη : η⁻¹ * η = 1 := inv_mul_cancel₀ (ne_of_gt hη)
-    have hcancelD : (D : ℝ)⁻¹ * D = 1 := inv_mul_cancel₀ (ne_of_gt hDpos)
-    nlinarith [hval, hcancelη, hcancelD, hη, hDpos, mul_pos hDpos hη]
+    simp only [mul_one] at hval
+    exact (inv_le_inv₀ hη hDpos).mp (by linarith)
   · intro hDη ψ _
     have hquad := choiMatrix_tEta_quadraticForm (D := D) η ψ
     rw [hquad, ← Complex.ofReal_zero, Complex.real_le_real]
