@@ -70,6 +70,11 @@ Wolf eq. (3.18) with its Schmidt-number premise.
 * `Matrix.HasSchmidtNumberLE.tensorMapId_posSemidef`: **Wolf Prop 3.4 (only if)** — a
   state of Schmidt number at most `n` has `(T ⊗ id)(ρ) ≥ 0` for every `n`-positive
   map `T`.
+* `Matrix.tensorMapId_posSemidef_of_hasSchmidtRankLE'` and
+  `Matrix.HasSchmidtNumberLE.tensorMapId_posSemidef'`: the **differing-factors**
+  forms of the only-if direction, on a general bipartite system `ℂ^d ⊗ ℂ^{d'}` with
+  second factor `d' ≤ d`, obtained from the square forms by padding the second
+  factor up to `d` with zeros and restricting back to the `d × d'` corner.
 * `Matrix.tensorMapId_tEta_posSemidef_of_hasSchmidtRankLE`: the **pure-state step** at
   `T = T_n` — for ψ of Schmidt rank at most `n` (with `1 ≤ n < D`),
   `(T_n ⊗ id)(|ψ⟩⟨ψ|) ≥ 0`.
@@ -88,12 +93,17 @@ Wolf eq. (3.18) with its Schmidt-number premise.
 (complete positivity) is inherited through the maximal-overlap principle and is
 documented in `docs/paper-gaps/wolf_t_eta_top_index_scope.tex`.
 
-**Scope restriction (square system d = d' = D):** the forward reduction step fixes
-both tensor factors to a common dimension `D`, because the pure state is parametrized
-through the square maximally entangled vector; Wolf states eq. (3.18) for a general
-bipartite system `ℂ^d ⊗ ℂ^{d'}`, and the non-square case is documented in
+**Scope restriction (square system d = d' = D):** the `T_n`-specialized forward step
+and the full reduction criterion fix both tensor factors to a common dimension `D`,
+because the pure state is parametrized through the square maximally entangled vector;
+Wolf states eq. (3.18) for a general bipartite system `ℂ^d ⊗ ℂ^{d'}`, and the
+non-square case is documented in
 `docs/paper-gaps/wolf_reduction_criterion_schmidt_premise.tex`.  The Schmidt-number
 predicate itself and its equivalence with separability carry no such restriction.
+The bare positive-semidefiniteness of the ampliation `(T ⊗ id)(ρ) ≥ 0` is available
+on a general bipartite system with second factor `d' ≤ d` (the primed forms), by
+padding the second factor up to `d` with zeros and restricting to the `d × d'`
+corner; the complementary case `d' > d` remains documented in the same note.
 
 ## References
 
@@ -351,6 +361,172 @@ theorem HasSchmidtNumberLE.tensorMapId_posSemidef [NeZero D] {n : ℕ}
   rw [tensorMapId_sum]
   exact posSemidef_sum Finset.univ fun i _ =>
     tensorMapId_posSemidef_of_hasSchmidtRankLE hTpos (hψ i)
+
+/-! ### Padding to a square system
+
+The square forward step above fixes both tensor factors to the map's dimension
+`d`.  To reach Wolf's general bipartite system `ℂ^d ⊗ ℂ^{d'}` we pad the second
+factor up to `d` by zeros (valid when `d' ≤ d`), apply the square result, and
+restrict back to the `d × d'` corner with `Matrix.PosSemidef.submatrix`.  The
+padding is the standard zero-border dilation; it preserves Schmidt rank because
+appending zero columns to the coefficient matrix cannot raise its rank. -/
+
+/-- **Pad the second tensor factor of a bipartite vector by zeros.**  A vector on
+`Fin d × Fin d'` is extended to `Fin d × Fin d` (used with `d' ≤ d`) by setting the
+new coordinates `d' ≤ j < d` to zero, keeping the `d × d'` block.  Its coefficient
+matrix is the original coefficient matrix bordered by zero columns. -/
+def padSecondFactor (ψ : Fin d × Fin d' → ℂ) : Fin d × Fin d → ℂ :=
+  fun p => if hp : (p.2 : ℕ) < d' then ψ (p.1, ⟨(p.2 : ℕ), hp⟩) else 0
+
+/-- The corner-index embedding `Fin d × Fin d' ↪ Fin d × Fin d` that fixes the
+first factor and includes the second factor as the initial `d'` coordinates. -/
+def cornerEmbed (h : d' ≤ d) : Fin d × Fin d' → Fin d × Fin d :=
+  fun p => (p.1, Fin.castLE h p.2)
+
+@[simp]
+theorem padSecondFactor_cornerEmbed (h : d' ≤ d) (ψ : Fin d × Fin d' → ℂ)
+    (p : Fin d × Fin d') : padSecondFactor (ψ) (cornerEmbed h p) = ψ p := by
+  cases p with
+  | mk i j =>
+    have hj : ((Fin.castLE h j : Fin d) : ℕ) < d' := by simp [Fin.castLE]
+    have hidx : (⟨((Fin.castLE h j : Fin d) : ℕ), hj⟩ : Fin d') = j := Fin.ext rfl
+    simp only [cornerEmbed, padSecondFactor, hj, dif_pos, hidx]
+
+/-- Padding the second factor by zeros preserves the Schmidt-rank bound: the
+padded coefficient matrix is the original coefficient matrix right-multiplied by a
+zero-bordered inclusion, so its rank cannot exceed that of the original. -/
+theorem hasSchmidtRankLE_padSecondFactor {n : ℕ}
+    {ψ : Fin d × Fin d' → ℂ} (hψ : HasSchmidtRankLE n ψ) :
+    HasSchmidtRankLE n (padSecondFactor ψ) := by
+  classical
+  -- The padded coefficient matrix factors as `schmidtCoeffMatrix ψ * E`, with `E`
+  -- the zero-bordered inclusion `Fin d' → Fin d`.
+  set M : Matrix (Fin d) (Fin d') ℂ := schmidtCoeffMatrix ψ with hM
+  set E : Matrix (Fin d') (Fin d) ℂ :=
+    fun k j => if hj : (j : ℕ) < d' then (if k = ⟨(j : ℕ), hj⟩ then 1 else 0) else 0
+    with hE
+  have hfactor : schmidtCoeffMatrix (padSecondFactor ψ) = M * E := by
+    ext i j
+    simp only [schmidtCoeffMatrix_apply, padSecondFactor, Matrix.mul_apply, hM, hE]
+    by_cases hj : (j : ℕ) < d'
+    · simp only [hj, dif_pos]
+      rw [Finset.sum_eq_single (⟨(j : ℕ), hj⟩ : Fin d')]
+      · simp
+      · intro b _ hb
+        simp [if_neg hb]
+      · intro hb; exact absurd (Finset.mem_univ _) hb
+    · simp only [hj, dif_neg, not_false_iff]
+      symm
+      apply Finset.sum_eq_zero
+      intro k _
+      simp
+  have hrank : (schmidtCoeffMatrix (padSecondFactor ψ)).rank ≤ n := by
+    rw [hfactor]
+    exact (Matrix.rank_mul_le_left M E).trans hψ
+  simpa [HasSchmidtRankLE, schmidtRank] using hrank
+
+/-- The ampliation on the padded square system restricts on the `d × d'` corner to
+the ampliation of the original state: `tensorMapId T ρ` is the corner submatrix of
+the ampliation of the zero-padded state, because `tensorMapId` carries the second
+factor through untouched and the padded second-factor coordinates lie inside the
+corner. -/
+theorem tensorMapId_padSecondFactor_submatrix (h : d' ≤ d)
+    (T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] Matrix (Fin d) (Fin d) ℂ)
+    {ι : Type} [Fintype ι] (ψ : ι → (Fin d × Fin d' → ℂ)) :
+    tensorMapId T (∑ i, vecMulVec (ψ i) (star (ψ i)))
+      = (tensorMapId T
+          (∑ i, vecMulVec (padSecondFactor (ψ i)) (star (padSecondFactor (ψ i))))).submatrix
+        (cornerEmbed h) (cornerEmbed h) := by
+  classical
+  -- The padded summand restricted to the corner is the original summand.
+  have hsum :
+      (∑ i, vecMulVec (ψ i) (star (ψ i)))
+        = (∑ i, vecMulVec (padSecondFactor (ψ i))
+            (star (padSecondFactor (ψ i)))).submatrix (cornerEmbed h) (cornerEmbed h) := by
+    ext p q
+    simp only [Matrix.submatrix_apply, Matrix.sum_apply, vecMulVec_apply, Pi.star_apply,
+      padSecondFactor_cornerEmbed]
+  -- The ampliation commutes with the corner restriction of the second factor.
+  ext p q
+  obtain ⟨i₁, i₂⟩ := p
+  obtain ⟨j₁, j₂⟩ := q
+  simp only [Matrix.submatrix_apply, cornerEmbed, tensorMapId_apply]
+  -- The relevant second-factor slice agrees on the corner.
+  have hslice :
+      bipartiteSlice (∑ i, vecMulVec (ψ i) (star (ψ i))) i₂ j₂
+        = bipartiteSlice (∑ i, vecMulVec (padSecondFactor (ψ i))
+            (star (padSecondFactor (ψ i)))) (Fin.castLE h i₂) (Fin.castLE h j₂) := by
+    ext a b
+    simp only [bipartiteSlice]
+    have := congrFun (congrFun hsum (a, i₂)) (b, j₂)
+    simpa [cornerEmbed, Matrix.submatrix_apply] using this
+  rw [hslice]
+
+/-- **Positive maps and entanglement, only-if direction, pure-state step, differing
+factors** (Wolf §3.2, Prop 3.4).  For a pure state `|ψ⟩⟨ψ|` on `ℂ^d ⊗ ℂ^{d'}` with
+ψ of Schmidt rank at most `n`, the first factor `d` equal to the dimension of the
+`n`-positive map `T`, and the second factor `d' ≤ d`, the ampliation
+`(T ⊗ id)(|ψ⟩⟨ψ|)` is positive semidefinite.
+
+The vector is padded to the square system `ℂ^d ⊗ ℂ^d` by zero columns, which keeps
+the Schmidt rank at most `n`; the square pure-state step makes the padded ampliation
+positive semidefinite; and the original ampliation is the `d × d'` corner submatrix
+of the padded one, hence positive semidefinite.
+
+**Scope restriction (d' ≤ d):** the second factor is padded up to the first factor
+`d`, which requires `d' ≤ d`; the complementary case `d' > d` (extending `T` to the
+larger square) is documented in
+`docs/paper-gaps/wolf_reduction_criterion_schmidt_premise.tex`. -/
+theorem tensorMapId_posSemidef_of_hasSchmidtRankLE' [NeZero d] {n : ℕ} (h : d' ≤ d)
+    {T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] Matrix (Fin d) (Fin d) ℂ}
+    (hTpos : IsNPositiveMap n T) {ψ : Fin d × Fin d' → ℂ} (hψ : HasSchmidtRankLE n ψ) :
+    (tensorMapId T (vecMulVec ψ (star ψ))).PosSemidef := by
+  classical
+  -- Pad to the square system and restrict back to the corner.
+  have hsq :
+      (tensorMapId T (vecMulVec (padSecondFactor ψ)
+        (star (padSecondFactor ψ)))).PosSemidef :=
+    tensorMapId_posSemidef_of_hasSchmidtRankLE hTpos (hasSchmidtRankLE_padSecondFactor hψ)
+  have hcorner :
+      tensorMapId T (vecMulVec ψ (star ψ))
+        = (tensorMapId T (vecMulVec (padSecondFactor ψ)
+            (star (padSecondFactor ψ)))).submatrix (cornerEmbed h) (cornerEmbed h) := by
+    have := tensorMapId_padSecondFactor_submatrix (ι := PUnit) h T (fun _ => ψ)
+    simpa using this
+  rw [hcorner]
+  exact hsq.submatrix (cornerEmbed h)
+
+/-- **Positive maps and entanglement, only-if direction, differing factors**
+(Wolf §3.2, Prop 3.4).  A bipartite state on `ℂ^d ⊗ ℂ^{d'}` of Schmidt number at
+most `n`, with first factor `d` equal to the dimension of the `n`-positive map `T`
+and second factor `d' ≤ d`, satisfies `(T ⊗ id)(ρ) ≥ 0`.
+
+The state is padded to the square system `ℂ^d ⊗ ℂ^d` by zero columns on each pure
+summand, which preserves the Schmidt-number bound; the square forward step makes the
+padded ampliation positive semidefinite; and the original ampliation is its `d × d'`
+corner submatrix.
+
+**Scope restriction (d' ≤ d):** inherited from the pure-state step; the
+complementary case `d' > d` is documented in
+`docs/paper-gaps/wolf_reduction_criterion_schmidt_premise.tex`. -/
+theorem HasSchmidtNumberLE.tensorMapId_posSemidef' [NeZero d] {n : ℕ} (h : d' ≤ d)
+    {T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] Matrix (Fin d) (Fin d) ℂ}
+    (hTpos : IsNPositiveMap n T)
+    {ρ : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ} (hρ : HasSchmidtNumberLE n ρ) :
+    (tensorMapId T ρ).PosSemidef := by
+  classical
+  obtain ⟨ι, _, ψ, hψ, rfl⟩ := hρ
+  -- Pad each pure summand and restrict the padded square ampliation to the corner.
+  have hsq :
+      (tensorMapId T
+        (∑ i, vecMulVec (padSecondFactor (ψ i))
+          (star (padSecondFactor (ψ i))))).PosSemidef := by
+    rw [tensorMapId_sum]
+    exact posSemidef_sum Finset.univ fun i _ =>
+      tensorMapId_posSemidef_of_hasSchmidtRankLE hTpos
+        (hasSchmidtRankLE_padSecondFactor (hψ i))
+  rw [tensorMapId_padSecondFactor_submatrix h T ψ]
+  exact hsq.submatrix (cornerEmbed h)
 
 /-- **The pure-state step of the reduction criterion (Wolf eq. (3.18), step 1).**
 For a pure state `|ψ⟩⟨ψ|` with ψ of Schmidt rank at most `n` (and `1 ≤ n < D`),
