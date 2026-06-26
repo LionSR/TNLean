@@ -127,6 +127,7 @@ import TNLean.Channel.NPositivityChainStrict
 import TNLean.Channel.ReductionCriterion
 import TNLean.Channel.PartialTranspose
 import TNLean.Channel.SchmidtNumber
+import TNLean.Channel.SchmidtNumberCompact
 import TNLean.Channel.SchmidtNumberFactors
 import TNLean.Channel.Separable
 import TNLean.Channel.Schwarz.MultiplicativeDomain

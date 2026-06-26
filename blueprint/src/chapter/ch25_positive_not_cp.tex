@@ -599,6 +599,50 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
     number at most one; a separable matrix is a finite sum of such products.
 \end{proof}
 
+\begin{theorem}[Convexity of the Schmidt-number set]
+    \label{thm:convex_setOf_has_schmidt_number_le}
+    \lean{Matrix.convex_setOf_hasSchmidtNumberLE}
+    \leanok
+    \uses{def:has_schmidt_number_le}
+    For each $n$ the set $S_n$ of bipartite states of Schmidt number at most $n$ is
+    convex.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    A convex combination $a x + b y$ with $a,b\ge 0$ is a sum of two nonnegatively
+    scaled states of Schmidt number at most $n$, and that bound is preserved under
+    nonnegative scaling and under addition; rescaling a vector by a nonnegative
+    scalar scales its coefficient matrix and so does not increase the Schmidt rank.
+\end{proof}
+
+\begin{theorem}[Compactness of the Schmidt-number state set]
+    \label{thm:compact_setOf_has_schmidt_number_le_trace_one}
+    \lean{Matrix.isCompact_setOf_hasSchmidtNumberLE_trace_one}
+    \leanok
+    \uses{def:has_schmidt_number_le, def:schmidt_rank,
+        thm:convex_setOf_has_schmidt_number_le}
+    For each $n$ the set $S_n$ of trace-one bipartite states of Schmidt number at most
+    $n$ is compact.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    A trace-one state of Schmidt number at most $n$ is a convex combination of pure
+    states $\ket{\psi}\bra{\psi}$ whose vector $\psi$ has unit norm and Schmidt rank
+    at most $n$, so $S_n$ is the convex hull of the set $P_n$ of those pure states.
+    The set $P_n$ is the image, under the continuous projector map
+    $\psi\mapsto\ket{\psi}\bra{\psi}$, of the unit vectors of Schmidt rank at most
+    $n$.  In the Euclidean norm those unit vectors form the unit sphere, which is
+    compact in finite dimension, intersected with the closed set on which the Schmidt
+    rank is at most $n$ (the coefficient matrix depends continuously on the vector and
+    the matrices of rank at most $n$ form a closed set); hence $P_n$ is compact.  The
+    trace of $\ket{\psi}\bra{\psi}$ is the squared Euclidean norm of $\psi$, so the
+    trace-one constraint is exactly the unit-norm constraint and the weights of the
+    convex decomposition are the squared norms, summing to the trace.  The convex hull
+    of a compact set is compact in a finite-dimensional real normed space.
+\end{proof}
+
 \begin{theorem}[Pure-state step of the reduction criterion]
     \label{thm:tensor_map_id_t_eta_posSemidef_pure}
     \lean{Matrix.tensorMapId_tEta_posSemidef_of_hasSchmidtRankLE}
