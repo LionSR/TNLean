@@ -18,7 +18,7 @@ clear to downstream files and to CI.
 * Strong subadditivity is **no longer axiomatized**: it is proved as
   `strong_subadditivity_general` in
   `TNLean.Channel.Schwarz.StrongSubadditivityPosDef`, derived from Lieb
-  concavity, and re-exported as `Entropy.strongSubadditivity`.
+  concavity, and applied under the name `Entropy.strongSubadditivity`.
 * `hayashi_ssa_equality_characterization` is an **axiom** stating the
   standard equality case of strong subadditivity as a quantum-Markov-chain
   decomposition on the middle subsystem.
