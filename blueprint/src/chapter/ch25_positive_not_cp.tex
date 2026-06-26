@@ -734,30 +734,31 @@ of its weight scales its coefficient matrix and so leaves the Schmidt rank uncha
 
 \begin{theorem}[Reduction criterion with the Schmidt-number premise]
     \label{thm:reduction_criterion_of_schmidt_number}
-    \lean{Matrix.reductionCriterion_left_of_hasSchmidtNumberLE,
-        Matrix.reductionCriterion_right_of_hasSchmidtNumberLE}
+    \lean{Matrix.reductionCriterion_left_of_hasSchmidtNumberLE_general,
+        Matrix.reductionCriterion_right_of_hasSchmidtNumberLE_general}
     \leanok
     \uses{def:has_schmidt_number_le, def:t_eta,
-        thm:has_schmidt_number_le_tensor_map_id_t_eta, thm:reduction_criterion}
-    For $1\le n<D$, a bipartite state on the square system $\MN{D}\otimes\MN{D}$ of
-    Schmidt number at most $n$ satisfies the
-    reduction criterion
+        thm:has_schmidt_number_le_tensor_map_id_general, thm:reduction_criterion}
+    On a general bipartite system $\MN{d}\otimes\MN{d'}$, a state of Schmidt number at
+    most $n$ satisfies the reduction criterion
     \[
-        n\,\rho_1\otimes\Id\ge\rho
+        n\,\Id\otimes\rho_2\ge\rho \quad(1\le n<d)
         \qquad\text{and}\qquad
-        n\,\Id\otimes\rho_2\ge\rho,
+        n\,\rho_1\otimes\Id\ge\rho \quad(1\le n<d'),
     \]
     with $\rho_1$ and $\rho_2$ the reduced densities on the first and second factors.
+    No relation is imposed between $d$ and $d'$; each inequality carries only the
+    $n$-positivity threshold of $T_n$ on its acting factor.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    The Schmidt-number premise gives $(T_n\otimes\id)(\rho)\ge 0$, which is the first
-    step.  The operator implication then yields $n\,\Id\otimes\rho_2\ge\rho$.  The
-    factor swap of a state of Schmidt number at most $n$ again has Schmidt number at
-    most $n$, since the swap reindexes each pure summand to a vector with the
-    transposed coefficient matrix, of the same rank; applying the first step to the
-    swapped state and the operator implication in its symmetric form gives
-    $n\,\rho_1\otimes\Id\ge\rho$.
+    The Schmidt-number premise gives $(T_n\otimes\id)(\rho)\ge 0$ on the general system
+    (first step), and the dimension-general operator implication then yields
+    $n\,\Id\otimes\rho_2\ge\rho$.  The factor swap of a state of Schmidt number at most
+    $n$ again has Schmidt number at most $n$, since the swap reindexes each pure summand
+    to a vector with the transposed coefficient matrix, of the same rank; applying the
+    first step to the swapped state (whose first factor is $d'$) and the operator
+    implication in its symmetric form gives $n\,\rho_1\otimes\Id\ge\rho$.
 \end{proof}
 
