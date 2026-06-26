@@ -29,10 +29,11 @@ in strong subadditivity.
 * `vonNeumannEntropy_smul` — scaling a trace-one density matrix by a scalar \(c\)
   adds the Shannon term: \(S(c \cdot \omega) = c\,S(\omega) - c\log c\) when
   \(\mathrm{tr}\,\omega = 1\).
-* `vonNeumannEntropy_blockDiagonal'` — additivity over a finite weighted
-  orthogonal direct sum:
-  \(S\!\left(\bigoplus_j p_j\,\omega_j\right) = H(\{p_j\}) + \sum_j p_j\,
-  S(\omega_j)\).
+* `vonNeumannEntropy_blockDiagonal'` — additivity over a finite orthogonal
+  direct sum of Hermitian blocks: \(S\!\left(\bigoplus_j M_j\right) =
+  \sum_j S(M_j)\). The weighted Shannon form
+  \(S\!\left(\bigoplus_j p_j\,\omega_j\right) = H(\{p_j\}) + \sum_j p_j\,S(\omega_j)\)
+  is assembled downstream from this together with the scaling lemma.
 
 ## Implementation notes
 
