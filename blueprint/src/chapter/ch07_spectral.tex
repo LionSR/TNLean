@@ -1499,9 +1499,9 @@ irreducible pieces such an intertwiner is automatically an isomorphism.
     that is, $W$ lies in the orthogonal complement of $W'$.
 \end{proof}
 
-The grouping is now assembled. Collecting the pieces of one type into the supremum of a
-same-type class, the suprema of two different classes are orthogonal, and the classes cover
-the whole family, so the components span $\C^{D}$.
+Each isotypic component is the supremum of one same-type class; the suprema of two different
+classes are orthogonal, and the classes cover the whole family, so the components span
+$\C^{D}$.
 
 \begin{lemma}[Suprema of cross-type classes are orthogonal]%
     \label{lem:starSubalgebra_isOrtho_sSup_not_sameIsotype}
@@ -1560,9 +1560,16 @@ the whole family, so the components span $\C^{D}$.
     (Lemmas~\ref{lem:starSubalgebra_sameIsotype_symm}
     and~\ref{lem:starSubalgebra_sameIsotype_trans}). If two representatives are of the same type,
     transitivity makes their classes equal, hence their components equal; so two distinct
-    components come from representatives of different type, and then no piece of one class is of
-    the same type as any piece of the other, whence the components are orthogonal
-    (Lemma~\ref{lem:starSubalgebra_isOrtho_sSup_not_sameIsotype}).
+    components come from representatives $W, W'$ that are not of the same type. Write $\sim$ for
+    the same-type relation. For $a \in \mathcal{D}_W$ and $b \in \mathcal{D}_{W'}$ one has
+    $W \sim a$ and $W' \sim b$ by definition of the classes; were $a \sim b$, symmetry and
+    transitivity would give
+    \[
+        W \sim a \sim b \sim W',
+    \]
+    hence $W \sim W'$, contradicting that $W$ and $W'$ are not of the same type. So no piece of
+    $\mathcal{D}_W$ is of the same type as any piece of $\mathcal{D}_{W'}$, and the components are
+    orthogonal (Lemma~\ref{lem:starSubalgebra_isOrtho_sSup_not_sameIsotype}).
 \end{proof}
 
 \begin{theorem}[Fixed-point algebra is semisimple]%
