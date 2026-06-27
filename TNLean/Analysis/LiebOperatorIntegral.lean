@@ -3,9 +3,11 @@ Copyright (c) 2026 Sirui Lu and TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
+import TNLean.Analysis.CfcConjugation
 import TNLean.Analysis.LiebScalarIntegral
+import TNLean.Analysis.MatrixOrderTopology
 import TNLean.Analysis.TraceCFC
-import TNLean.Channel.Schwarz.RelativeEntropyUnitaryInvariance
+import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
 import Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap
 import Mathlib.MeasureTheory.SpecificCodomains.Pi
