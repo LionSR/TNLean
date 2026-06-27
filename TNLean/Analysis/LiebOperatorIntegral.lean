@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.Analysis.LiebScalarIntegral
-import TNLean.Analysis.SuperoperatorResolvent
 import TNLean.Analysis.TraceCFC
 import TNLean.Channel.Schwarz.RelativeEntropyUnitaryInvariance
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
@@ -28,8 +27,10 @@ functional calculus for real-valued diagonal matrices (`Matrix.cfc_diagonal`,
 (`Matrix.rpow_conj_unitary`, from `Matrix.cfc_conj_unitary`), and the commutation of
 the Bochner integral with the continuous conjugation map `X ↦ V X V^†`.
 
-This is the make-or-break analytic step (the operator integral representation) toward
-eliminating the sanctioned `lieb_concavity_axiom` in `TNLean/Axioms/OperatorConvexity.lean`.
+This operator integral representation (Carlen, Lemma 2.8) is the analytic input that,
+combined with the resolvent-integrand concavity, yields the joint concavity of
+`Â^s B̂^{1-s}`, used to eliminate the sanctioned `lieb_concavity_axiom` in
+`TNLean/Axioms/OperatorConvexity.lean`.
 
 ## Main results
 
@@ -58,8 +59,10 @@ namespace Matrix
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
-instance : CStarRing (Matrix n n ℂ) := Matrix.instCStarRing
-instance : CStarAlgebra (Matrix n n ℂ) where
+/-- The `C⋆`-algebra structure on `Matrix n n ℂ` from the `L²`-operator norm. Kept as a
+`local instance` so the `L²`-operator norm does not leak onto `Matrix n n ℂ` for transitive
+importers (see `Mathlib/Analysis/CStarAlgebra/Matrix.lean`). -/
+noncomputable local instance matrixCStarAlgebra : CStarAlgebra (Matrix n n ℂ) where
 
 /-- The real spectrum of a real-valued diagonal matrix is the range of its diagonal. -/
 private lemma spectrum_real_ofReal_diagonal (g : n → ℝ) :

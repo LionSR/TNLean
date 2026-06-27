@@ -501,6 +501,28 @@ of $A^s B^{1-s}$.
     factors $a^s b^{1-s}$.
 \end{proof}
 
+\begin{lemma}[Operator integral representation]\label{lem:op_lieb_integral_rep}
+    \lean{superop_lieb_integral_rep}
+    \leanok
+    \uses{lem:scalar_lieb_integral}
+    For positive-definite matrices $A$, $B$ and $s\in(0,1)$,
+    \[
+        (A\otimes I)^s\,(I\otimes B^\top)^{1-s}
+        = \frac{\sin(\pi s)}{\pi}
+          \int_0^\infty t^{s-1}\,(A\otimes I)
+            \bigl((A\otimes I)+t(I\otimes B^\top)\bigr)^{-1}
+            (I\otimes B^\top)\,dt,
+    \]
+    where $A\otimes I$ and $I\otimes B^\top$ are regarded as operators on the Kronecker
+    model space $\mathbb{C}^{D\times D}$.
+\end{lemma}
+\begin{proof}\leanok
+    The pair $(A\otimes I,\,I\otimes B^\top)$ is simultaneously diagonalized by
+    $V = U_A\otimes U_{B^\top}$ (eigenbases of $A$ and $B^\top$).
+    In that basis both sides are diagonal, and the identity holds entrywise by
+    Lemma~\ref{lem:scalar_lieb_integral}.
+\end{proof}
+
 \begin{theorem}[Lieb concavity]\label{thm:lieb_concavity_axiom}
     \lean{lieb_concavity_axiom}
     \notready
