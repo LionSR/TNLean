@@ -46,7 +46,7 @@ a single unitary. That tensor identification and the unitary assembly are not
 formalized here; they remain the open steps towards Wolf Thm 6.14.
 -/
 
-open scoped Matrix ComplexOrder
+open scoped Matrix
 open scoped InnerProductSpace
 
 namespace StarSubalgebraSpatial
