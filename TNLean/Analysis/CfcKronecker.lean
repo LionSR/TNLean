@@ -20,7 +20,7 @@ $$f(A \otimes \mathbf 1) = f(A) \otimes \mathbf 1, \qquad
 
 These are pure matrix facts about the functional calculus on Kronecker products.
 They are gathered here, at the foundational analysis layer, so that the relative
-entropy stack and the operator convexity boundary can both use them without
+entropy modules and the operator convexity boundary can both use them without
 either depending on the other.
 
 ## Main results
