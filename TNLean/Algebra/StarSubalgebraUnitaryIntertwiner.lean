@@ -33,12 +33,12 @@ namespace StarSubalgebra
 variable {n : Type*} [Fintype n] [DecidableEq n]
 variable (S : StarSubalgebra ℂ (Matrix n n ℂ))
 
-/-- For two irreducible pieces `p` and `q` of a star-subalgebra `S` of complex matrices that
-are of the same type, there is an operator `u` that is an intertwiner from `p` into `q`, maps
-`p` onto `q`, and preserves the inner product on `p`: for all `x` and `y` in `p`,
+/-- For two irreducible pieces $p$ and $q$ of a star-subalgebra $S$ of complex matrices that
+are of the same type, there is an operator $u$ that is an intertwiner from $p$ into $q$, maps
+$p$ onto $q$, and preserves the inner product on $p$: for all $x, y \in p$,
 $$\langle u(x), u(y)\rangle = \langle x, y\rangle .$$
-Same type gives an intertwiner injective on `p` with image `q`; since `q` is nonzero it does
-not vanish on `p`, so the scaled inner-product identity gives a positive real factor $c$ with
+Same type gives an intertwiner injective on $p$ with image $q$; since $q$ is nonzero it does
+not vanish on $p$, so the scaled inner-product identity gives a positive real factor $c$ with
 $\langle f(x), f(y)\rangle = c\,\langle x, y\rangle$. Dividing the intertwiner by $\sqrt{c}$
 keeps the commuting identity and the image and turns the factor into one,
 $$\langle u(x), u(y)\rangle = \tfrac{1}{c}\,\langle f(x), f(y)\rangle = \langle x, y\rangle .$$
@@ -51,14 +51,7 @@ theorem exists_isometry_intertwiner_of_sameIsotype
   -- Same type gives an intertwiner `f` injective on `p` with image exactly `q`.
   obtain ⟨f, hf, _, hfeq⟩ := (S.sameIsotype_iff_exists_isomorphism hp hq).mp h
   -- Since `q` is nonzero, `f` does not vanish on `p`, giving a positive inner-product factor.
-  have hne : ¬ ∀ x ∈ p, f x = 0 := by
-    intro hzero
-    refine hq.2.1 (eq_bot_iff.mpr ?_)
-    rw [← hfeq]
-    rintro y hy
-    obtain ⟨x, hx, rfl⟩ := Submodule.mem_map.mp hy
-    rw [hzero x hx]
-    exact Submodule.zero_mem _
+  have hne : ¬ ∀ x ∈ p, f x = 0 := not_forall_apply_eq_zero_of_map_ne_bot (hfeq ▸ hq.2.1)
   obtain ⟨c, hcpos, hceq⟩ := S.exists_pos_smul_inner_of_intertwiner_ne_zero hp hf hne
   -- The normalizing real scalar `s = 1 / √c`, nonzero since `c > 0`.
   set s : ℝ := (Real.sqrt c)⁻¹ with hs
@@ -75,7 +68,7 @@ theorem exists_isometry_intertwiner_of_sameIsotype
     rw [LinearMap.smul_apply, LinearMap.smul_apply, hf.2 A hA x hx, map_smul]
   · -- `u` maps `p` onto `q`, again by the scaling-invariance of the image.
     rw [Submodule.map_smul f p (s : ℂ) hs_ne, hfeq]
-  · -- `u` preserves the inner product: the factor `s² c` equals one.
+  · -- `u` preserves the inner product: the factor s² c equals one.
     intro x hx y hy
     rw [LinearMap.smul_apply, LinearMap.smul_apply, inner_smul_left, inner_smul_right,
       Complex.conj_ofReal, hceq x hx y hy]
@@ -90,3 +83,4 @@ theorem exists_isometry_intertwiner_of_sameIsotype
     simp
 
 end StarSubalgebra
+

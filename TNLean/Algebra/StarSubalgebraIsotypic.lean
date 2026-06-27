@@ -77,7 +77,7 @@ def SameIsotype (p q : Submodule ℂ (EuclideanSpace ℂ n)) : Prop :=
 
 omit [Fintype n] [DecidableEq n] in
 /-- If the image of `p` under `f` is a nonzero subspace, then `f` is not zero on `p`. -/
-private theorem not_forall_apply_eq_zero_of_map_ne_bot
+theorem not_forall_apply_eq_zero_of_map_ne_bot
     {p : Submodule ℂ (EuclideanSpace ℂ n)} {f : Module.End ℂ (EuclideanSpace ℂ n)}
     (hne : Submodule.map f p ≠ ⊥) : ¬ ∀ x ∈ p, f x = 0 := by
   intro hzero
