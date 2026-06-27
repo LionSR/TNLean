@@ -1201,6 +1201,33 @@ special case used in this section.
     semisimple algebras over an algebraically closed field.
 \end{proof}
 
+\begin{theorem}[Wedderburn--Artin decomposition of the unital fixed-point algebra]%
+    \label{thm:fixedPointsStarSubalgebra_exists_algEquiv_pi_matrix}
+    \lean{Kraus.fixedPointsStarSubalgebra_exists_algEquiv_pi_matrix}
+    \leanok
+    \uses{thm:starSubalgebra_wedderburnArtin, thm:fixedPointsStarSubalgebra}
+    Let $E$ be a unital Kraus map on $\MN{D}$ whose adjoint map $E^*$ has a
+    positive definite fixed point $\rho > 0$. There exist $n \in \N$ and
+    dimensions $d_1,\ldots,d_n \ge 1$ such that the fixed-point $*$-subalgebra
+    $\mathrm{Fix}(E)$ is $\C$-algebra isomorphic to
+    \[
+        \mathrm{Fix}(E) \;\cong\; \prod_{k=1}^{n} \MN{d_k}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:starSubalgebra_wedderburnArtin, thm:fixedPointsStarSubalgebra}
+    By Theorem~\ref{thm:fixedPointsStarSubalgebra} the fixed-point set
+    $\mathrm{Fix}(E)$ is a $*$-subalgebra of $\MN{D}$. Applying the abstract
+    Wedderburn--Artin decomposition for $*$-subalgebras
+    (Theorem~\ref{thm:starSubalgebra_wedderburnArtin}) gives
+    \[
+        \mathrm{Fix}(E) \;\cong\; \prod_{k=1}^{n} \MN{d_k}
+    \]
+    with each block size $d_k \ge 1$.
+\end{proof}
+
 \begin{theorem}[Fixed-point algebra decomposition with multiplicities]%
     \label{thm:adjointFixedPoints_wedderburnDecomp}
     \lean{Kraus.adjointFixedPoints_wedderburnDecomp}

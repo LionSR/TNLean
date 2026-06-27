@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.FixedPoint.Algebra
+import TNLean.Algebra.StarSubalgebraSemisimple
 import Mathlib.RingTheory.SimpleModule.IsAlgClosed
 import Mathlib.RingTheory.Artinian.Module
 import Mathlib.Analysis.CStarAlgebra.Matrix
@@ -29,6 +30,9 @@ decomposition `ℂ^D = ℂ^{d₀} ⊕ ⊕_k ℂ^{d_k} ⊗ ℂ^{m_k}`.
 * `Kraus.fixedPointAlgebra_wedderburnArtin`: there exist `n : ℕ` and
   `dims : Fin n → ℕ` such that the fixed-point algebra is algebra-isomorphic
   to `Π i, Matrix (Fin (dims i)) (Fin (dims i)) ℂ`.
+* `Kraus.fixedPointsStarSubalgebra_exists_algEquiv_pi_matrix`: the
+  Schrödinger-picture form, decomposing the fixed-point `*`-subalgebra of a
+  unital Schwarz map whose adjoint has a positive definite fixed point.
 
 ## Strategy
 
@@ -155,6 +159,37 @@ theorem fixedPointAlgebra_wedderburnArtin
     (↥(adjointFixedPointsStarSubalgebra (d := d) (D := D) K h_tp hρ hρ_fix))
 
 end AbstractDecomp
+
+/-! ## Schrödinger-picture fixed-point algebra decomposition -/
+
+section SchrodingerDecomp
+
+/-- **Wolf Theorem 6.14**, Schrödinger-picture form (abstract structure).
+
+The fixed-point `*`-subalgebra of a unital Schwarz map whose adjoint map has a
+positive definite fixed point decomposes, as a ℂ-algebra, into a finite product
+of full complex matrix algebras with positive block sizes.
+
+This is the structure-of-the-algebra content of Wolf Ch. 6, Thm 6.14, applied
+to the fixed-point `*`-subalgebra `fixedPointsStarSubalgebra` of the
+Schrödinger-picture map `map K`. It is the companion of
+`fixedPointAlgebra_wedderburnArtin`, which decomposes the Heisenberg-picture
+adjoint-fixed-point algebra.
+
+The remaining step toward the full Wolf Thm 6.14 is the unitary block-diagonal
+refinement that exhibits each summand as a full matrix algebra tensored with an
+identity on a multiplicity space, weighted by a density operator; that
+refinement is not formalized here. -/
+theorem fixedPointsStarSubalgebra_exists_algEquiv_pi_matrix
+    (K : Fin d → Mat) (h_unital : IsUnital K)
+    {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : adjointMap K ρ = ρ) :
+    ∃ (n : ℕ) (dims : Fin n → ℕ), (∀ i, NeZero (dims i)) ∧
+      Nonempty
+        (fixedPointsStarSubalgebra K h_unital hρ hρ_fix ≃ₐ[ℂ]
+          Π i : Fin n, Matrix (Fin (dims i)) (Fin (dims i)) ℂ) :=
+  StarSubalgebra.exists_algEquiv_pi_matrix _
+
+end SchrodingerDecomp
 
 /-! ## Concrete block-diagonal embedding (Wolf Equations 1.39–1.40) -/
 
