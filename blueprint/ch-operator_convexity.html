@@ -1306,7 +1306,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>  Let \(Y\) be positive definite and let \(W\) be an isometry. Then </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f83a074e390>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f2009362390>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:opconv_inverse_compression_le} (W^\ast Y W)^{-1} \le W^\ast Y^{-1} W. \end{equation}
@@ -1383,7 +1383,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>  If the defect block satisfies </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f83a074e870>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f2009362870>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:opconv_defect_block_relation} S S^\ast = \mathbb {1}- \sum _{i \in \iota } C_i C_i^\ast , \end{equation}
@@ -1492,7 +1492,7 @@
   \[  S S^\ast = \mathbb {1}- \sum _{i \in \iota } C_i C_i^\ast ,  \]
 </div>
 <p> then </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f83a074fad0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f2009363ad0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:opconv_povm_resolvent_bound} \left(\sum _{i \in \iota } w_i\,  C_i C_i^\ast + t\, \mathbb {1}\right)^{-1} \le \sum _{i \in \iota } (w_i+t)^{-1}\,  C_i C_i^\ast + t^{-1}\,  S S^\ast . \end{equation}
@@ -2705,13 +2705,13 @@
 
   </div>
 </div>
-<div class="lemma_thmwrapper theorem-style-plain" id="lem:op_lieb_integral_rep">
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:diagonal_lieb_integral">
   <div class="lemma_thmheading">
     <span class="lemma_thmcaption">
     Lemma
     </span>
     <span class="lemma_thmlabel">18.24</span>
-    <span class="lemma_thmtitle">Operator integral representation</span>
+    <span class="lemma_thmtitle">Diagonal Lieb integral identity</span>
     <div class="thm_header_extras">
 
     
@@ -2719,7 +2719,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-operator_convexity.html#lem:op_lieb_integral_rep">#</a>
+    <a class="icon proof" href="ch-operator_convexity.html#lem:diagonal_lieb_integral">#</a>
     
     <a class="icon proof" href="ch-operator_convexity.html#a0000031535"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -2738,6 +2738,90 @@
         <ul class="uses">
           
           <li><a href="ch-operator_convexity.html#lem:scalar_lieb_integral">Lemma 18.23</a></li>
+          
+          <li><a href="ch-operator_convexity.html#lem:scalar_lieb_integral">Lemma 18.23</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.diagonal_lieb_integral" class="lean_decl">Matrix.diagonal_lieb_integral</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   For positive diagonal matrices \(M\) and \(N\) and \(s\in (0,1)\), </p>
+<div class="displaymath" id="a0000031536">
+  \[  M^s N^{1-s} = \frac{\sin (\pi s)}{\pi }\int _0^\infty t^{s-1}\, M\, (M+tN)^{-1}\, N\, dt.  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000031535">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Both sides are diagonal, so the identity holds entry by entry; on each diagonal entry it is the scalar Lieb integral identity (Lemma&#160;<a href="ch-operator_convexity.html#lem:scalar_lieb_integral">18.23</a>). </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:op_lieb_integral_rep">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">18.25</span>
+    <span class="lemma_thmtitle">Operator integral representation</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-operator_convexity.html#lem:op_lieb_integral_rep">#</a>
+    
+    <a class="icon proof" href="ch-operator_convexity.html#a0000031537"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-operator_convexity.html#lem:diagonal_lieb_integral">Lemma 18.24</a></li>
           
         </ul>
     
@@ -2769,14 +2853,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   For positive-definite matrices \(A\), \(B\) and \(s\in (0,1)\), </p>
-<div class="displaymath" id="a0000031536">
+<div class="displaymath" id="a0000031538">
   \[  (A\otimes I)^s\, (I\otimes B^\top )^{1-s} = \frac{\sin (\pi s)}{\pi } \int _0^\infty t^{s-1}\, (A\otimes I) \bigl((A\otimes I)+t(I\otimes B^\top )\bigr)^{-1} (I\otimes B^\top )\, dt,  \]
 </div>
 <p> where \(A\otimes I\) and \(I\otimes B^\top \) are regarded as operators on the Kronecker model space \(\mathbb {C}^{D\times D}\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031535">
+<div class="proof_wrapper" id="a0000031537">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2784,7 +2868,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The pair \((A\otimes I,\, I\otimes B^\top )\) is simultaneously diagonalized by \(V = U_A\otimes U_{B^\top }\) (eigenbases of \(A\) and \(B^\top \)). In that basis both sides are diagonal, and the identity holds entrywise by Lemma&#160;<a href="ch-operator_convexity.html#lem:scalar_lieb_integral">18.23</a>. </p>
+  <p>The pair \((A\otimes I,\, I\otimes B^\top )\) is simultaneously diagonalized by \(V = U_A\otimes U_{B^\top }\) (eigenbases of \(A\) and \(B^\top \)). In that basis the pair becomes a commuting pair of positive diagonal matrices, and the identity follows from the diagonal case (Lemma&#160;<a href="ch-operator_convexity.html#lem:diagonal_lieb_integral">18.24</a>). </p>
 
   </div>
 </div>
@@ -2793,7 +2877,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">18.25</span>
+    <span class="lemma_thmlabel">18.26</span>
     <span class="lemma_thmtitle">Concavity of the parallel sum</span>
     <div class="thm_header_extras">
 
@@ -2804,7 +2888,7 @@
 
     <a class="icon proof" href="ch-operator_convexity.html#lem:parallel_sum_concave">#</a>
     
-    <a class="icon proof" href="ch-operator_convexity.html#a0000031537"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-operator_convexity.html#a0000031539"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2832,14 +2916,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>  For positive-definite matrices \(X_1, X_2, Y_1, Y_2\) and \(\theta \in [0,1]\), the parallel sum \((X,Y)\mapsto X(X+Y)^{-1}Y\) is jointly concave in the Loewner order: </p>
-<div class="displaymath" id="a0000031538">
+<div class="displaymath" id="a0000031540">
   \[  \theta \, X_1(X_1+Y_1)^{-1}Y_1 + (1-\theta )\, X_2(X_2+Y_2)^{-1}Y_2 \le X_\theta (X_\theta +Y_\theta )^{-1}Y_\theta ,  \]
 </div>
 <p> where \(X_\theta =\theta X_1+(1-\theta )X_2\) and \(Y_\theta =\theta Y_1+(1-\theta )Y_2\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031537">
+<div class="proof_wrapper" id="a0000031539">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2848,11 +2932,11 @@
   </div>
   <div class="proof_content">
   <p>Write \(Z = X(X+Y)^{-1}Y\). The identity \(X(X+Y)^{-1}(X+Y) = X\) gives </p>
-<div class="displaymath" id="a0000031539">
+<div class="displaymath" id="a0000031541">
   \[  (X - Z) - X(X+Y)^{-1}X = 0,  \]
 </div>
 <p> so the block matrix \(\begin{psmallmatrix} \end{psmallmatrix}X-Z &  X\\ X &  X+Y\end{psmallmatrix}\) is positive semidefinite (its Schur complement against \(X+Y\) vanishes). Setting \(Z_i = X_i(X_i+Y_i)^{-1}Y_i\) and \(Z_\theta = \theta Z_1+(1-\theta )Z_2\), the convex combination of the two block matrices is \(\begin{psmallmatrix} \end{psmallmatrix}X_\theta -Z_\theta &  X_\theta \\ X_\theta &  X_\theta +Y_\theta \end{psmallmatrix}\), which is positive semidefinite, and its Schur complement against \(X_\theta +Y_\theta \) yields </p>
-<div class="displaymath" id="a0000031540">
+<div class="displaymath" id="a0000031542">
   \[  X_\theta (X_\theta +Y_\theta )^{-1}Y_\theta - Z_\theta \ge 0,  \]
 </div>
 <p> which is the claimed inequality (Ando, 1979). </p>
@@ -2864,7 +2948,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">18.26</span>
+    <span class="lemma_thmlabel">18.27</span>
     <span class="lemma_thmtitle">Concavity of the resolvent integrand</span>
     <div class="thm_header_extras">
 
@@ -2875,7 +2959,7 @@
 
     <a class="icon proof" href="ch-operator_convexity.html#lem:superop_resolvent_integrand_concave">#</a>
     
-    <a class="icon proof" href="ch-operator_convexity.html#a0000031541"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-operator_convexity.html#a0000031543"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2891,7 +2975,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-operator_convexity.html#lem:parallel_sum_concave">Lemma 18.25</a></li>
+          <li><a href="ch-operator_convexity.html#lem:parallel_sum_concave">Lemma 18.26</a></li>
           
         </ul>
     
@@ -2923,13 +3007,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   For \(t{\gt}0\), positive-definite \(A_1,A_2,B_1,B_2\), and \(\theta \in [0,1]\), with \(\hat{A}=A\otimes I\) and \(\hat{B}=I\otimes B^\top \), setting \(A_\theta =\theta A_1+(1-\theta )A_2\) and \(B_\theta =\theta B_1+(1-\theta )B_2\): </p>
-<div class="displaymath" id="a0000031542">
+<div class="displaymath" id="a0000031544">
   \[  \theta \, \hat A_1(\hat A_1+t\hat B_1)^{-1}\hat B_1 +(1-\theta )\, \hat A_2(\hat A_2+t\hat B_2)^{-1}\hat B_2 \le \hat A_\theta (\hat A_\theta +t\hat B_\theta )^{-1}\hat B_\theta .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031541">
+<div class="proof_wrapper" id="a0000031543">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2937,7 +3021,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The integrand equals \(t^{-1}\, \hat A(\hat A+t\hat B)^{-1}(t\hat B)\), a rescaled parallel sum of \(\hat A\) and \(t\hat B\), so concavity follows from Lemma&#160;<a href="ch-operator_convexity.html#lem:parallel_sum_concave">18.25</a> and the linearity of \(A\mapsto \hat A\), \(B\mapsto \hat B\). </p>
+  <p>The integrand equals \(t^{-1}\, \hat A(\hat A+t\hat B)^{-1}(t\hat B)\), a rescaled parallel sum of \(\hat A\) and \(t\hat B\), so concavity follows from Lemma&#160;<a href="ch-operator_convexity.html#lem:parallel_sum_concave">18.26</a> and the linearity of \(A\mapsto \hat A\), \(B\mapsto \hat B\). </p>
 
   </div>
 </div>
@@ -2946,7 +3030,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">18.27</span>
+    <span class="lemma_thmlabel">18.28</span>
     <span class="lemma_thmtitle">Concavity of the fractional product</span>
     <div class="thm_header_extras">
 
@@ -2957,7 +3041,7 @@
 
     <a class="icon proof" href="ch-operator_convexity.html#lem:op_lieb_concave">#</a>
     
-    <a class="icon proof" href="ch-operator_convexity.html#a0000031543"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-operator_convexity.html#a0000031545"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2973,9 +3057,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-operator_convexity.html#lem:op_lieb_integral_rep">Lemma 18.24</a></li>
+          <li><a href="ch-operator_convexity.html#lem:op_lieb_integral_rep">Lemma 18.25</a></li>
           
-          <li><a href="ch-operator_convexity.html#lem:superop_resolvent_integrand_concave">Lemma 18.26</a></li>
+          <li><a href="ch-operator_convexity.html#lem:superop_resolvent_integrand_concave">Lemma 18.27</a></li>
           
         </ul>
     
@@ -3007,13 +3091,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   For positive-definite matrices \(A_1,A_2,B_1,B_2\), \(s\in (0,1)\), and \(\theta \in [0,1]\), with \(\hat{A}=A\otimes I\) and \(\hat{B}=I\otimes B^\top \), setting \(A_\theta =\theta A_1+(1-\theta )A_2\) and \(B_\theta =\theta B_1+(1-\theta )B_2\), the fractional product \(\hat A^s\hat B^{1-s}\) is jointly concave in the Loewner order: </p>
-<div class="displaymath" id="a0000031544">
+<div class="displaymath" id="a0000031546">
   \[  \theta \, \hat A_1^{\, s}\hat B_1^{\, 1-s} +(1-\theta )\, \hat A_2^{\, s}\hat B_2^{\, 1-s} \le \hat A_\theta ^{\, s}\hat B_\theta ^{\, 1-s}.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031543">
+<div class="proof_wrapper" id="a0000031545">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3021,7 +3105,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>By the integral representation&#160;<a href="ch-operator_convexity.html#lem:op_lieb_integral_rep">18.24</a> each fractional product equals the positive multiple \(\frac{\sin (\pi s)}{\pi }\) of the integral of the resolvent integrand against the nonnegative weight \(t^{s-1}\) on \((0,\infty )\). For each \(t{\gt}0\) the integrand is jointly concave by Lemma&#160;<a href="ch-operator_convexity.html#lem:superop_resolvent_integrand_concave">18.26</a>, so the difference of the averaged point and the convex combination is, almost everywhere, the nonnegative scalar \(t^{s-1}\) times a positive-semidefinite matrix. Integrating a positive-semidefinite integrand yields a positive-semidefinite matrix, and scaling by the positive constant \(\frac{\sin (\pi s)}{\pi }\) preserves the Loewner order, which gives the inequality. </p>
+  <p>By the integral representation&#160;<a href="ch-operator_convexity.html#lem:op_lieb_integral_rep">18.25</a> each fractional product equals the positive multiple \(\frac{\sin (\pi s)}{\pi }\) of the integral of the resolvent integrand against the nonnegative weight \(t^{s-1}\) on \((0,\infty )\). For each \(t{\gt}0\) the integrand is jointly concave by Lemma&#160;<a href="ch-operator_convexity.html#lem:superop_resolvent_integrand_concave">18.27</a>, so the difference of the averaged point and the convex combination is, almost everywhere, the nonnegative scalar \(t^{s-1}\) times a positive-semidefinite matrix. Integrating a positive-semidefinite integrand yields a positive-semidefinite matrix, and scaling by the positive constant \(\frac{\sin (\pi s)}{\pi }\) preserves the Loewner order, which gives the inequality. </p>
 
   </div>
 </div>
@@ -3030,7 +3114,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.28</span>
+    <span class="theorem_thmlabel">18.29</span>
     <span class="theorem_thmtitle">Lieb concavity</span>
     <div class="thm_header_extras">
 
@@ -3064,7 +3148,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>  For \(s\in [0,1]\), any matrix&#160;\(K\), and positive-definite matrices \(A_1,A_2,B_1,B_2\), the map \((A,B)\mapsto \operatorname{tr}(K^\dagger A^s K B^{1-s})\) is jointly concave: </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f83a0673350>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f200928ef90>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:opconv_lieb_joint_concavity} t\, \Re \operatorname{tr}(K^\dagger A_1^s K B_1^{1-s}) +(1-t) \Re \operatorname{tr}(K^\dagger A_2^s K B_2^{1-s}) \le \Re \operatorname{tr}\! (K^\dagger (tA_1+(1-t)A_2)^s K (tB_1+(1-t)B_2)^{1-s}). \end{equation}
@@ -3089,7 +3173,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">18.29</span>
+    <span class="theorem_thmlabel">18.30</span>
     <span class="theorem_thmtitle">Map form of Lieb concavity</span>
     <div class="thm_header_extras">
 
@@ -3100,7 +3184,7 @@
 
     <a class="icon proof" href="ch-operator_convexity.html#thm:lieb_concavity">#</a>
     
-    <a class="icon proof" href="ch-operator_convexity.html#a0000031545"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-operator_convexity.html#a0000031547"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3116,7 +3200,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-operator_convexity.html#thm:lieb_concavity_axiom">Theorem 18.28</a></li>
+          <li><a href="ch-operator_convexity.html#thm:lieb_concavity_axiom">Theorem 18.29</a></li>
           
         </ul>
     
@@ -3147,11 +3231,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   For \(s\in [0,1]\), any matrix&#160;\(K\), and positive-definite matrices \(A_1,A_2,B_1,B_2\), the function \((A,B)\mapsto \Re \operatorname{tr}(K^\dagger A^s K B^{1-s})\) is jointly concave, satisfying the inequality&#160;(??) of Theorem&#160;<a href="ch-operator_convexity.html#thm:lieb_concavity_axiom">18.28</a>. </p>
+  <p>   For \(s\in [0,1]\), any matrix&#160;\(K\), and positive-definite matrices \(A_1,A_2,B_1,B_2\), the function \((A,B)\mapsto \Re \operatorname{tr}(K^\dagger A^s K B^{1-s})\) is jointly concave, satisfying the inequality&#160;(??) of Theorem&#160;<a href="ch-operator_convexity.html#thm:lieb_concavity_axiom">18.29</a>. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031545">
+<div class="proof_wrapper" id="a0000031547">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3168,7 +3252,7 @@
     <span class="corollary_thmcaption">
     Corollary
     </span>
-    <span class="corollary_thmlabel">18.30</span>
+    <span class="corollary_thmlabel">18.31</span>
     <span class="corollary_thmtitle">Lieb concavity, \(K=\mathbb {1}\) case</span>
     <div class="thm_header_extras">
 
@@ -3179,7 +3263,7 @@
 
     <a class="icon proof" href="ch-operator_convexity.html#cor:lieb_concavity_id">#</a>
     
-    <a class="icon proof" href="ch-operator_convexity.html#a0000031546"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-operator_convexity.html#a0000031548"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3195,7 +3279,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-operator_convexity.html#thm:lieb_concavity">Theorem 18.29</a></li>
+          <li><a href="ch-operator_convexity.html#thm:lieb_concavity">Theorem 18.30</a></li>
           
         </ul>
     
@@ -3227,14 +3311,14 @@
   </div>
   <div class="corollary_thmcontent">
   <p>   For \(s\in [0,1]\), \(t\in [0,1]\), and positive-definite matrices \(A_1,A_2,B_1,B_2\), the map \((A,B)\mapsto \Re \operatorname{tr}(A^s B^{1-s})\) is jointly concave: </p>
-<div class="displaymath" id="a0000031547">
+<div class="displaymath" id="a0000031549">
   \[  t\, \Re \operatorname{tr}(A_1^s B_1^{1-s})+(1-t) \Re \operatorname{tr}(A_2^s B_2^{1-s}) \le \Re \operatorname{tr}\! ((tA_1+(1-t)A_2)^s (tB_1+(1-t)B_2)^{1-s}).  \]
 </div>
-<p> Obtained from Theorem&#160;<a href="ch-operator_convexity.html#thm:lieb_concavity">18.29</a> by taking \(K=\mathbb {1}\). </p>
+<p> Obtained from Theorem&#160;<a href="ch-operator_convexity.html#thm:lieb_concavity">18.30</a> by taking \(K=\mathbb {1}\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031546">
+<div class="proof_wrapper" id="a0000031548">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3242,7 +3326,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Specialize Theorem&#160;<a href="ch-operator_convexity.html#thm:lieb_concavity">18.29</a> at \(K=\mathbb {1}\) and simplify \(\mathbb {1}^{\dagger }=\mathbb {1}\) together with \(\mathbb {1}\cdot X=X\cdot \mathbb {1}=X\). </p>
+  <p>Specialize Theorem&#160;<a href="ch-operator_convexity.html#thm:lieb_concavity">18.30</a> at \(K=\mathbb {1}\) and simplify \(\mathbb {1}^{\dagger }=\mathbb {1}\) together with \(\mathbb {1}\cdot X=X\cdot \mathbb {1}=X\). </p>
 
   </div>
 </div>
@@ -3251,7 +3335,7 @@
     <span class="corollary_thmcaption">
     Corollary
     </span>
-    <span class="corollary_thmlabel">18.31</span>
+    <span class="corollary_thmlabel">18.32</span>
     <span class="corollary_thmtitle">Concavity of Lieb’s map in the first argument</span>
     <div class="thm_header_extras">
 
@@ -3262,7 +3346,7 @@
 
     <a class="icon proof" href="ch-operator_convexity.html#cor:lieb_concavity_in_fst">#</a>
     
-    <a class="icon proof" href="ch-operator_convexity.html#a0000031548"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-operator_convexity.html#a0000031550"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3278,7 +3362,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-operator_convexity.html#thm:lieb_concavity">Theorem 18.29</a></li>
+          <li><a href="ch-operator_convexity.html#thm:lieb_concavity">Theorem 18.30</a></li>
           
         </ul>
     
@@ -3310,13 +3394,13 @@
   </div>
   <div class="corollary_thmcontent">
   <p>    For \(s\in [0,1]\), \(t\in [0,1]\), matrix \(K\), and positive-definite matrices \(A_1,A_2,B\), the map \(A\mapsto \Re \operatorname{tr}(K^\dagger A^s K B^{1-s})\) is concave: </p>
-<div class="displaymath" id="a0000031549">
+<div class="displaymath" id="a0000031551">
   \[  t\, \Re \operatorname{tr}(K^\dagger A_1^s K B^{1-s}) +(1-t) \Re \operatorname{tr}(K^\dagger A_2^s K B^{1-s}) \le \Re \operatorname{tr}\! (K^\dagger (tA_1+(1-t)A_2)^s K B^{1-s}).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031548">
+<div class="proof_wrapper" id="a0000031550">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3324,7 +3408,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Specialize Theorem&#160;<a href="ch-operator_convexity.html#thm:lieb_concavity">18.29</a> at \(B_1=B_2=B\), so that the convex combination collapses: \(tB+(1-t)B=B\). </p>
+  <p>Specialize Theorem&#160;<a href="ch-operator_convexity.html#thm:lieb_concavity">18.30</a> at \(B_1=B_2=B\), so that the convex combination collapses: \(tB+(1-t)B=B\). </p>
 
   </div>
 </div>
@@ -3333,7 +3417,7 @@
     <span class="corollary_thmcaption">
     Corollary
     </span>
-    <span class="corollary_thmlabel">18.32</span>
+    <span class="corollary_thmlabel">18.33</span>
     <span class="corollary_thmtitle">Concavity of Lieb’s map in the second argument</span>
     <div class="thm_header_extras">
 
@@ -3344,7 +3428,7 @@
 
     <a class="icon proof" href="ch-operator_convexity.html#cor:lieb_concavity_in_snd">#</a>
     
-    <a class="icon proof" href="ch-operator_convexity.html#a0000031550"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-operator_convexity.html#a0000031552"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3360,7 +3444,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-operator_convexity.html#thm:lieb_concavity">Theorem 18.29</a></li>
+          <li><a href="ch-operator_convexity.html#thm:lieb_concavity">Theorem 18.30</a></li>
           
         </ul>
     
@@ -3392,13 +3476,13 @@
   </div>
   <div class="corollary_thmcontent">
   <p>    For \(s\in [0,1]\), \(t\in [0,1]\), matrix \(K\), and positive-definite matrices \(A,B_1,B_2\), the map \(B\mapsto \Re \operatorname{tr}(K^\dagger A^s K B^{1-s})\) is concave: </p>
-<div class="displaymath" id="a0000031551">
+<div class="displaymath" id="a0000031553">
   \[  t\, \Re \operatorname{tr}(K^\dagger A^s K B_1^{1-s}) +(1-t) \Re \operatorname{tr}(K^\dagger A^s K B_2^{1-s}) \le \Re \operatorname{tr}\! (K^\dagger A^s K (tB_1+(1-t)B_2)^{1-s}).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031550">
+<div class="proof_wrapper" id="a0000031552">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3406,7 +3490,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Specialize Theorem&#160;<a href="ch-operator_convexity.html#thm:lieb_concavity">18.29</a> at \(A_1=A_2=A\), so that the convex combination collapses: \(tA+(1-t)A=A\). </p>
+  <p>Specialize Theorem&#160;<a href="ch-operator_convexity.html#thm:lieb_concavity">18.30</a> at \(A_1=A_2=A\), so that the convex combination collapses: \(tA+(1-t)A=A\). </p>
 
   </div>
 </div>
@@ -3417,7 +3501,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">18.33</span>
+    <span class="lemma_thmlabel">18.34</span>
     <span class="lemma_thmtitle">Loewner inverse-antitonicity</span>
     <div class="thm_header_extras">
 
@@ -3428,7 +3512,7 @@
 
     <a class="icon proof" href="ch-operator_convexity.html#lem:loewner_inv_antitone">#</a>
     
-    <a class="icon proof" href="ch-operator_convexity.html#a0000031552"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-operator_convexity.html#a0000031554"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3459,7 +3543,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031552">
+<div class="proof_wrapper" id="a0000031554">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3476,7 +3560,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">18.34</span>
+    <span class="lemma_thmlabel">18.35</span>
     <span class="lemma_thmtitle">Joint Loewner-antitonicity of the commuting-multiplication resolvent</span>
     <div class="thm_header_extras">
 
@@ -3487,7 +3571,7 @@
 
     <a class="icon proof" href="ch-operator_convexity.html#lem:superop_resolvent_antitone">#</a>
     
-    <a class="icon proof" href="ch-operator_convexity.html#a0000031553"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-operator_convexity.html#a0000031555"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3503,9 +3587,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-operator_convexity.html#lem:loewner_inv_antitone">Lemma 18.33</a></li>
+          <li><a href="ch-operator_convexity.html#lem:loewner_inv_antitone">Lemma 18.34</a></li>
           
-          <li><a href="ch-operator_convexity.html#lem:loewner_inv_antitone">Lemma 18.33</a></li>
+          <li><a href="ch-operator_convexity.html#lem:loewner_inv_antitone">Lemma 18.34</a></li>
           
         </ul>
     
@@ -3537,13 +3621,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    Fix \(t{\gt}0\) and positive-definite matrices with \(A_1\le A_2\) and \(B_1\le B_2\). The resolvent of the Kronecker model \(A\otimes \mathbb {1}+t\, (\mathbb {1}\otimes B^{\top })\) of the commuting left- and right-multiplication superoperators is antitone: </p>
-<div class="displaymath" id="a0000031554">
+<div class="displaymath" id="a0000031556">
   \[  \bigl(A_2\otimes \mathbb {1}+t\, (\mathbb {1}\otimes B_2^{\top })\bigr)^{-1} \le \bigl(A_1\otimes \mathbb {1}+t\, (\mathbb {1}\otimes B_1^{\top })\bigr)^{-1}.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031553">
+<div class="proof_wrapper" id="a0000031555">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3552,10 +3636,10 @@
   </div>
   <div class="proof_content">
   <p> Each operator \(A\otimes \mathbb {1}+t\, (\mathbb {1}\otimes B^{\top })\) is positive definite, being the sum of the positive-definite \(A\otimes \mathbb {1}\) and the positive-semidefinite \(t\, (\mathbb {1}\otimes B^{\top })\). From \(A_1\le A_2\) and \(B_1\le B_2\) one gets \(A_1\otimes \mathbb {1}\le A_2\otimes \mathbb {1}\) and \(\mathbb {1}\otimes B_1^{\top }\le \mathbb {1}\otimes B_2^{\top }\); since \(t{\gt}0\), adding these yields </p>
-<div class="displaymath" id="a0000031555">
+<div class="displaymath" id="a0000031557">
   \[  A_1\otimes \mathbb {1}+t\, (\mathbb {1}\otimes B_1^{\top }) \le A_2\otimes \mathbb {1}+t\, (\mathbb {1}\otimes B_2^{\top }).  \]
 </div>
-<p> Inverse-antitonicity (Lemma&#160;<a href="ch-operator_convexity.html#lem:loewner_inv_antitone">18.33</a>) reverses this inequality on passing to the resolvents. </p>
+<p> Inverse-antitonicity (Lemma&#160;<a href="ch-operator_convexity.html#lem:loewner_inv_antitone">18.34</a>) reverses this inequality on passing to the resolvents. </p>
 
   </div>
 </div>
