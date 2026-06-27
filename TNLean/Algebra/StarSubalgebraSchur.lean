@@ -52,7 +52,7 @@ namespace StarSubalgebra
 variable {n : Type*} [Fintype n] [DecidableEq n]
 variable (S : StarSubalgebra ℂ (Matrix n n ℂ))
 
-/-- Schur's lemma for distinct irreducible pieces of a star-subalgebra of complex matrices: a
+/-- Schur's lemma for irreducible pieces of a star-subalgebra of complex matrices: a
 complex-linear operator `f` that carries an irreducible invariant subspace `p` into another
 irreducible invariant subspace `q` and commutes on `p` with every member of the subalgebra is
 either zero on `p` or an isomorphism of `p` onto `q` (injective on `p` with image exactly `q`).
@@ -121,7 +121,7 @@ theorem exists_eq_smul_of_commute_of_irreducible
   -- `f` restricts to an operator on the irreducible piece `p`.
   have hmaps : ∀ x ∈ p, f x ∈ p :=
     (Module.End.mem_invtSubmodule_iff_forall_mem_of_mem (f := f)).mp hf
-  have hpnt : Nontrivial p := Submodule.nontrivial_iff_ne_bot.mpr hpne
+  haveI hpnt : Nontrivial p := Submodule.nontrivial_iff_ne_bot.mpr hpne
   -- Over `ℂ` the restricted operator has an eigenvalue, hence an eigenvector inside `p`.
   obtain ⟨c, hc⟩ := Module.End.exists_eigenvalue (f.restrict hmaps)
   obtain ⟨w, hw_mem, hw_ne⟩ := hc.exists_hasEigenvector
