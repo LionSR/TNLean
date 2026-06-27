@@ -38,6 +38,7 @@ import TNLean.Algebra.ScalarCommutant
 import TNLean.Algebra.CocycleCohomology
 import TNLean.Algebra.SpinCover
 import TNLean.Algebra.MatrixRankClosed
+import TNLean.Algebra.StarSubalgebraIntertwinerIsometry
 import TNLean.Algebra.StarSubalgebraIrreducibleDecomp
 import TNLean.Algebra.StarSubalgebraIsotypic
 import TNLean.Algebra.StarSubalgebraIsotypicDecomp
