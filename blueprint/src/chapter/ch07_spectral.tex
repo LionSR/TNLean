@@ -1340,17 +1340,74 @@ it carries $W$ into $W'$ and commutes on $W$ with every member of $S$. Two piece
 the same type when some intertwiner between them does not vanish on the source; on
 irreducible pieces such an intertwiner is automatically an isomorphism.
 
-\begin{definition}[Intertwiner between invariant subspaces]%
+\begin{definition}[Intertwiner between subspaces]%
     \label{def:starSubalgebra_intertwiner}
     \lean{StarSubalgebra.IsIntertwiner}
     \leanok
-    Let $S$ be a $*$-subalgebra of $\MN{D}$ and let $W, W' \subseteq \C^{D}$ be invariant
-    under $S$. A linear operator $f \colon \C^{D} \to \C^{D}$ is an intertwiner from $W$ into
+    Let $S$ be a $*$-subalgebra of $\MN{D}$ and let $W, W' \subseteq \C^{D}$ be subspaces. A
+    linear operator $f \colon \C^{D} \to \C^{D}$ is an intertwiner from $W$ into
     $W'$ when it carries $W$ into $W'$ and, for every $A \in S$ and every $x \in W$,
     \[
         f(A x) = A\,(f x).
     \]
 \end{definition}
+
+An intertwiner whose source is irreducible scales the inner product by one nonnegative real
+factor; when the intertwiner does not vanish on the source, that factor is positive, so after
+rescaling it is an isometry. This is the metric ingredient that turns each same-type
+isomorphism into a partial isometry.
+
+\begin{lemma}[Intertwiner scales the inner product]%
+    \label{lem:starSubalgebra_intertwiner_inner_scale}
+    \lean{StarSubalgebra.exists_real_smul_inner_of_intertwiner}
+    \leanok
+    \uses{def:starSubalgebra_intertwiner, def:starSubalgebra_irreducibleSubspace,
+        lem:starSubalgebra_scalar_commutant_irreducible}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$, let $W \subseteq \C^{D}$ be irreducible under $S$,
+    and let $f$ be an intertwiner from $W$ into a subspace $W'$. Then there is a
+    real number $c \ge 0$ such that for all $x, y \in W$,
+    \[
+        \langle f(x), f(y) \rangle = c\,\langle x, y \rangle .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:starSubalgebra_intertwiner, def:starSubalgebra_irreducibleSubspace,
+        lem:starSubalgebra_scalar_commutant_irreducible}
+    Following $f$ with its adjoint and the orthogonal projection $P_{W}$ onto $W$ gives an
+    operator $g = P_{W} f^{*} f$ that maps $W$ into itself, since the projection lands in $W$.
+    On $W$ it commutes with every member of $S$: for $A \in S$ the adjoint $A^{*}$ is again a
+    member, and combining the intertwining identity of $f$ with the pairing of the projected
+    adjoint against $W$ gives $g(A x) = A\,(g x)$ for $x \in W$. By Schur's lemma
+    (Lemma~\ref{lem:starSubalgebra_scalar_commutant_irreducible}) the operator $g$ acts on $W$
+    as a scalar, $g x = \lambda\,x$. Pairing with a vector $y \in W$ and using that $P_{W}$ is
+    invisible against $W$ gives $\langle f(x), f(y) \rangle = \langle g(x), y \rangle =
+    \overline{\lambda}\,\langle x, y \rangle$. Pairing a nonzero $x \in W$ with itself shows
+    that $c = \overline{\lambda} = \|f(x)\|^{2} / \|x\|^{2}$, a nonnegative real.
+\end{proof}
+
+\begin{lemma}[Nonzero intertwiner scales by a positive factor]%
+    \label{lem:starSubalgebra_intertwiner_inner_scale_pos}
+    \lean{StarSubalgebra.exists_pos_smul_inner_of_intertwiner_ne_zero}
+    \leanok
+    \uses{lem:starSubalgebra_intertwiner_inner_scale}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$, let $W \subseteq \C^{D}$ be irreducible under $S$,
+    and let $f$ be an intertwiner from $W$ into a subspace $W'$ that does not vanish
+    on $W$. Then there is a real number $c > 0$ such that for all $x, y \in W$,
+    \[
+        \langle f(x), f(y) \rangle = c\,\langle x, y \rangle .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:starSubalgebra_intertwiner_inner_scale}
+    The nonnegative factor from
+    Lemma~\ref{lem:starSubalgebra_intertwiner_inner_scale} satisfies $\|f(x)\|^{2} =
+    c\,\|x\|^{2}$. Choosing $x \in W$ with $f(x) \neq 0$ forces both squared norms to be
+    positive, so $c > 0$.
+\end{proof}
 
 \begin{definition}[Same type for invariant subspaces]%
     \label{def:starSubalgebra_sameIsotype}
