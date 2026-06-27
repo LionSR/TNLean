@@ -34,6 +34,8 @@ the same type, or zero, placing the first piece in the orthogonal complement of 
   same type is the same as the existence of an operator that is an isomorphism of the first
   piece onto the second and commutes with the subalgebra.
 * `StarSubalgebra.sameIsotype_refl` -- an irreducible piece has the same type as itself.
+* `StarSubalgebra.sameIsotype_symm` -- the same-type relation on irreducible pieces is
+  symmetric.
 * `StarSubalgebra.sameIsotype_trans` -- the same-type relation on irreducible pieces is
   transitive.
 * `StarSubalgebra.starProjection_toEuclideanLin_comm` -- the orthogonal projection onto an
