@@ -148,7 +148,7 @@ theorem exists_real_smul_inner_of_intertwiner
 /-- On an irreducible piece `p` of a star-subalgebra `S` of complex matrices, an intertwiner
 `f` carrying `p` into a piece `q` that does not vanish on `p` preserves the inner product up
 to a strictly positive real factor `c`: for all `x` and `y` in `p`,
-$$\langle f(x), f(y)\rangle = c\,\langle x, y\rangle , \qquad c > 0 .$$
+$$\langle f(x), f(y)\rangle = c\,\langle x, y\rangle .$$
 The nonnegative factor from the inner-product identity is strictly positive here, since
 evaluating it at a vector of `p` on which `f` is nonzero gives a positive squared norm. See
 *Quantum Channels & Operations* (Wolf 2012), Chapter 6, towards Theorem 6.14. -/

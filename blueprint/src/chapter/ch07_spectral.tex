@@ -1365,11 +1365,10 @@ isomorphism into a partial isometry.
         lem:starSubalgebra_scalar_commutant_irreducible}
     Let $S$ be a $*$-subalgebra of $\MN{D}$, let $W \subseteq \C^{D}$ be irreducible under $S$,
     and let $f$ be an intertwiner from $W$ into an invariant subspace $W'$. Then there is a
-    real number $c \ge 0$ with
+    real number $c \ge 0$ such that for all $x, y \in W$,
     \[
-        \langle f(x), f(y) \rangle = c\,\langle x, y \rangle
+        \langle f(x), f(y) \rangle = c\,\langle x, y \rangle .
     \]
-    for all $x, y \in W$.
 \end{lemma}
 
 \begin{proof}
@@ -1377,9 +1376,10 @@ isomorphism into a partial isometry.
     \uses{def:starSubalgebra_intertwiner, def:starSubalgebra_irreducibleSubspace,
         lem:starSubalgebra_scalar_commutant_irreducible}
     Following $f$ with its adjoint and the orthogonal projection $P_{W}$ onto $W$ gives an
-    operator $g = P_{W} f^{*} f$ that maps $W$ into itself and commutes on $W$ with every
-    member of $S$, because $P_{W}$ commutes with $S$ and the adjoint of every member of $S$ is
-    again a member. By Schur's lemma
+    operator $g = P_{W} f^{*} f$ that maps $W$ into itself, since the projection lands in $W$.
+    On $W$ it commutes with every member of $S$: for $A \in S$ the adjoint $A^{*}$ is again a
+    member, and combining the intertwining identity of $f$ with the pairing of the projected
+    adjoint against $W$ gives $g(A x) = A\,(g x)$ for $x \in W$. By Schur's lemma
     (Lemma~\ref{lem:starSubalgebra_scalar_commutant_irreducible}) the operator $g$ acts on $W$
     as a scalar, $g x = \lambda\,x$. Pairing with a vector $y \in W$ and using that $P_{W}$ is
     invisible against $W$ gives $\langle f(x), f(y) \rangle = \langle g(x), y \rangle =
@@ -1394,11 +1394,10 @@ isomorphism into a partial isometry.
     \uses{lem:starSubalgebra_intertwiner_inner_scale}
     Let $S$ be a $*$-subalgebra of $\MN{D}$, let $W \subseteq \C^{D}$ be irreducible under $S$,
     and let $f$ be an intertwiner from $W$ into an invariant subspace $W'$ that does not vanish
-    on $W$. Then there is a real number $c > 0$ with
+    on $W$. Then there is a real number $c > 0$ such that for all $x, y \in W$,
     \[
-        \langle f(x), f(y) \rangle = c\,\langle x, y \rangle
+        \langle f(x), f(y) \rangle = c\,\langle x, y \rangle .
     \]
-    for all $x, y \in W$.
 \end{lemma}
 
 \begin{proof}
