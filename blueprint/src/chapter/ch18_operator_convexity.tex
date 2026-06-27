@@ -524,9 +524,13 @@ of $A^s B^{1-s}$.
 \end{lemma}
 
 \begin{proof}\leanok
-    Apply the scaling substitution $t=(a/b)\,u$ to the integral and reduce to the
-    reflection integral of Lemma~\ref{lem:reflection_integral}, collecting the
-    factors $a^s b^{1-s}$.
+    By Lemma~\ref{lem:lieb_integral_value} the integral equals
+    $a^s b^{1-s}\,\pi/\sin(\pi s)$, so
+    \[
+        \frac{\sin(\pi s)}{\pi}\int_0^\infty t^{s-1}\,\frac{ab}{a+tb}\,dt
+            = \frac{\sin(\pi s)}{\pi}\cdot a^s b^{1-s}\,\frac{\pi}{\sin(\pi s)}
+            = a^s b^{1-s}.
+    \]
 \end{proof}
 
 \begin{theorem}[Lieb concavity]\label{thm:lieb_concavity_axiom}
