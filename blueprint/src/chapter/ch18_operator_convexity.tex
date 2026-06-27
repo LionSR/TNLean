@@ -688,8 +688,13 @@ Loewner order.
     being the sum of the positive-definite $A\otimes\Id$ and the
     positive-semidefinite $t\,(\Id\otimes B^{\top})$. From $A_1\le A_2$ and
     $B_1\le B_2$ one gets $A_1\otimes\Id\le A_2\otimes\Id$ and
-    $\Id\otimes B_1^{\top}\le\Id\otimes B_2^{\top}$, so the two operators are
-    Loewner-ordered. Inverse-antitonicity
-    (Lemma~\ref{lem:loewner_inv_antitone}) reverses the order on passing to the
-    resolvents.
+    $\Id\otimes B_1^{\top}\le\Id\otimes B_2^{\top}$; since $t>0$, adding these
+    yields
+    \[
+        A_1\otimes\Id+t\,(\Id\otimes B_1^{\top})
+        \le
+        A_2\otimes\Id+t\,(\Id\otimes B_2^{\top}).
+    \]
+    Inverse-antitonicity (Lemma~\ref{lem:loewner_inv_antitone}) reverses this
+    inequality on passing to the resolvents.
 \end{proof}
