@@ -1334,6 +1334,171 @@ numbers the commutant of $S$ on a single piece is the scalars.
     subspace is all of $W$, so $f$ acts as multiplication by $c$ throughout $W$.
 \end{proof}
 
+Schur's lemma turns the qualitative notion of two pieces ``looking the same'' into a
+usable relation. Call a linear operator on $\C^{D}$ an intertwiner from $W$ into $W'$ when
+it carries $W$ into $W'$ and commutes on $W$ with every member of $S$. Two pieces are of
+the same type when some intertwiner between them does not vanish on the source; on
+irreducible pieces such an intertwiner is automatically an isomorphism.
+
+\begin{definition}[Intertwiner between invariant subspaces]%
+    \label{def:starSubalgebra_intertwiner}
+    \lean{StarSubalgebra.IsIntertwiner}
+    \leanok
+    Let $S$ be a $*$-subalgebra of $\MN{D}$ and let $W, W' \subseteq \C^{D}$ be invariant
+    under $S$. A linear operator $f \colon \C^{D} \to \C^{D}$ is an intertwiner from $W$ into
+    $W'$ when it carries $W$ into $W'$ and, for every $A \in S$ and every $x \in W$,
+    \[
+        f(A x) = A\,(f x).
+    \]
+\end{definition}
+
+\begin{definition}[Same type for invariant subspaces]%
+    \label{def:starSubalgebra_sameIsotype}
+    \lean{StarSubalgebra.SameIsotype}
+    \leanok
+    \uses{def:starSubalgebra_intertwiner}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$ and let $W, W' \subseteq \C^{D}$ be invariant
+    under $S$. The pieces $W$ and $W'$ are of the same type when there is an intertwiner from
+    $W$ into $W'$ that is not zero on $W$.
+\end{definition}
+
+\begin{lemma}[Same type is the existence of an isomorphism]%
+    \label{lem:starSubalgebra_sameIsotype_iso}
+    \lean{StarSubalgebra.sameIsotype_iff_exists_isomorphism}
+    \leanok
+    \uses{def:starSubalgebra_sameIsotype, lem:starSubalgebra_intertwiner_irreducible}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$ and let $W, W' \subseteq \C^{D}$ be irreducible
+    under $S$. Then $W$ and $W'$ are of the same type if and only if there is an intertwiner
+    from $W$ into $W'$ that is injective on $W$ and maps $W$ onto $W'$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:starSubalgebra_sameIsotype, lem:starSubalgebra_intertwiner_irreducible}
+    If $W$ and $W'$ are of the same type, then an intertwiner that is nonzero on $W$ is, by
+    Schur's lemma (Lemma~\ref{lem:starSubalgebra_intertwiner_irreducible}), injective on $W$
+    with image $W'$. Conversely, an intertwiner injective on $W$ with image $W'$ cannot
+    vanish on $W$, since $W'$ is nonzero, so the two pieces are of the same type.
+\end{proof}
+
+\begin{lemma}[Reflexivity of the same-type relation]%
+    \label{lem:starSubalgebra_sameIsotype_refl}
+    \lean{StarSubalgebra.sameIsotype_refl}
+    \leanok
+    \uses{def:starSubalgebra_sameIsotype, def:starSubalgebra_irreducibleSubspace}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$ and let $W \subseteq \C^{D}$ be irreducible under
+    $S$. Then $W$ is of the same type as itself.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:starSubalgebra_sameIsotype}
+    The identity operator carries $W$ into itself, commutes with every member of $S$, and is
+    nonzero on $W$ because $W$ is nonzero.
+\end{proof}
+
+\begin{lemma}[Symmetry of the same-type relation]%
+    \label{lem:starSubalgebra_sameIsotype_symm}
+    \lean{StarSubalgebra.sameIsotype_symm}
+    \leanok
+    \uses{lem:starSubalgebra_sameIsotype_iso}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$ and let $W, W' \subseteq \C^{D}$ be irreducible
+    under $S$. If $W$ is of the same type as $W'$, then $W'$ is of the same type as $W$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:starSubalgebra_sameIsotype_iso}
+    An isomorphism $f$ of $W$ onto $W'$ has an inverse $g$, obtained by projecting onto $W'$,
+    inverting on the subspace, and including back into $W$. For every $A \in S$ and
+    $w \in W'$, since $f$ is an intertwiner,
+    \[
+        g(A w) = f^{-1}(A w) = f^{-1}\bigl(A\,f(f^{-1} w)\bigr)
+        = f^{-1}\bigl(f(A\,f^{-1} w)\bigr) = A\,g(w),
+    \]
+    so $g$ is an intertwiner from $W'$ into $W$ that is injective on $W'$ with image $W$, and
+    the two pieces are of the same type in the reverse order.
+\end{proof}
+
+\begin{lemma}[Transitivity of the same-type relation]%
+    \label{lem:starSubalgebra_sameIsotype_trans}
+    \lean{StarSubalgebra.sameIsotype_trans}
+    \leanok
+    \uses{lem:starSubalgebra_sameIsotype_iso}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$ and let $W, W', W'' \subseteq \C^{D}$ be
+    irreducible under $S$. If $W$ is of the same type as $W'$ and $W'$ is of the same type as
+    $W''$, then $W$ is of the same type as $W''$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:starSubalgebra_sameIsotype_iso}
+    Composing an isomorphism $f$ of $W$ onto $W'$ with an isomorphism $g$ of $W'$ onto $W''$
+    gives a map $g \circ f$ for which, for every $A \in S$ and $x \in W$,
+    \[
+        (g \circ f)(A x) = g(f(A x)) = g(A\,f(x)) = A\,g(f(x)) = A\,(g \circ f)(x),
+    \]
+    so it is an intertwiner from $W$ into $W''$ that is injective on $W$ with image $W''$,
+    which is nonzero on $W$ because $W''$ is nonzero.
+\end{proof}
+
+\begin{lemma}[The orthogonal projection onto an invariant subspace commutes with the subalgebra]%
+    \label{lem:starSubalgebra_projection_commutant}
+    \lean{StarSubalgebra.starProjection_toEuclideanLin_comm}
+    \leanok
+    \uses{lem:starSubalgebra_orthogonal_reducibility}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$ and let $W \subseteq \C^{D}$ be invariant under
+    $S$, with orthogonal projection $P$ onto $W$. Then for every $A \in S$,
+    \[
+        P(A x) = A\,(P x)
+    \]
+    holds for every $x \in \C^{D}$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:starSubalgebra_orthogonal_reducibility}
+    Decompose $x = P x + P^{\perp} x$ into its projection onto $W$ and its orthogonal part,
+    where $P^{\perp}$ is the projection onto $W^{\perp}$. Each member of $S$ sends $P x$ into
+    $W$ (invariance) and $P^{\perp} x$ into $W^{\perp}$ (orthogonal reducibility,
+    Lemma~\ref{lem:starSubalgebra_orthogonal_reducibility}), so
+    \[
+        P(A x) = P\bigl(A\,P x + A\,P^{\perp} x\bigr) = A\,P x + P\bigl(A\,P^{\perp} x\bigr)
+        = A\,P x,
+    \]
+    because $A\,P x \in W$ is fixed by $P$ and $A\,P^{\perp} x \in W^{\perp}$ is annihilated by
+    $P$.
+\end{proof}
+
+\begin{lemma}[Pieces of different type are orthogonal]%
+    \label{lem:starSubalgebra_isOrtho_not_sameIsotype}
+    \lean{StarSubalgebra.isOrtho_of_not_sameIsotype}
+    \leanok
+    \uses{lem:starSubalgebra_intertwiner_irreducible, lem:starSubalgebra_projection_commutant,
+        lem:starSubalgebra_sameIsotype_iso}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$ and let $W, W' \subseteq \C^{D}$ be irreducible
+    under $S$. If $W$ and $W'$ are not of the same type, then $W$ and $W'$ are orthogonal.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:starSubalgebra_intertwiner_irreducible, lem:starSubalgebra_projection_commutant,
+        lem:starSubalgebra_sameIsotype_iso}
+    The orthogonal projection onto $W'$ commutes with every member of $S$
+    (Lemma~\ref{lem:starSubalgebra_projection_commutant}) and carries $W$ into $W'$, so it is
+    an intertwiner from $W$ into $W'$. By Schur's lemma
+    (Lemma~\ref{lem:starSubalgebra_intertwiner_irreducible}) it is either an isomorphism,
+    which would make the two pieces of the same type, or zero on $W$. Since the pieces are
+    not of the same type, the projection $P_{W'}$ onto $W'$ vanishes on $W$. For every
+    $x \in W$ and $y \in W'$ we have $P_{W'} y = y$ and $P_{W'} x = 0$, so self-adjointness
+    of $P_{W'}$ gives
+    \[
+        \langle x, y \rangle = \langle x, P_{W'} y \rangle = \langle P_{W'} x, y \rangle
+        = \langle 0, y \rangle = 0,
+    \]
+    that is, $W$ lies in the orthogonal complement of $W'$.
+\end{proof}
+
 \begin{theorem}[Fixed-point algebra is semisimple]%
     \label{thm:fixedPointAlgebra_isSemisimpleRing}
     \lean{Kraus.fixedPointAlgebra_isSemisimpleRing}
