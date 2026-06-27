@@ -55,6 +55,7 @@ import TNLean.Analysis.ConvexHullCompact
 import TNLean.Analysis.SuperoperatorResolvent
 import TNLean.Analysis.LiebScalarIntegral
 import TNLean.Analysis.LiebOperatorIntegral
+import TNLean.Analysis.LiebIntegrandConcave
 
 -- Layer 1: Generic convex/topological infrastructure
 import TNLean.Topology.ConvexProjection
