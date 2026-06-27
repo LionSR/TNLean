@@ -1409,10 +1409,15 @@ irreducible pieces such an intertwiner is automatically an isomorphism.
 \begin{proof}
     \leanok
     \uses{lem:starSubalgebra_sameIsotype_iso}
-    An isomorphism of $W$ onto $W'$ has an inverse, obtained by projecting onto $W'$,
-    inverting on the subspace, and including back into $W$. This inverse is an intertwiner
-    from $W'$ into $W$ that is injective on $W'$ with image $W$, so the two pieces are of the
-    same type in the reverse order.
+    An isomorphism $f$ of $W$ onto $W'$ has an inverse $g$, obtained by projecting onto $W'$,
+    inverting on the subspace, and including back into $W$. For every $A \in S$ and
+    $w \in W'$, since $f$ is an intertwiner,
+    \[
+        g(A w) = f^{-1}(A w) = f^{-1}\bigl(A\,f(f^{-1} w)\bigr)
+        = f^{-1}\bigl(f(A\,f^{-1} w)\bigr) = A\,g(w),
+    \]
+    so $g$ is an intertwiner from $W'$ into $W$ that is injective on $W'$ with image $W$, and
+    the two pieces are of the same type in the reverse order.
 \end{proof}
 
 \begin{lemma}[Transitivity of the same-type relation]%
@@ -1428,9 +1433,13 @@ irreducible pieces such an intertwiner is automatically an isomorphism.
 \begin{proof}
     \leanok
     \uses{lem:starSubalgebra_sameIsotype_iso}
-    Composing an isomorphism of $W$ onto $W'$ with an isomorphism of $W'$ onto $W''$ gives an
-    intertwiner from $W$ into $W''$ that is injective on $W$ with image $W''$, which is
-    nonzero on $W$ because $W''$ is nonzero.
+    Composing an isomorphism $f$ of $W$ onto $W'$ with an isomorphism $g$ of $W'$ onto $W''$
+    gives a map $g \circ f$ for which, for every $A \in S$ and $x \in W$,
+    \[
+        (g \circ f)(A x) = g(f(A x)) = g(A\,f(x)) = A\,g(f(x)) = A\,(g \circ f)(x),
+    \]
+    so it is an intertwiner from $W$ into $W''$ that is injective on $W$ with image $W''$,
+    which is nonzero on $W$ because $W''$ is nonzero.
 \end{proof}
 
 \begin{lemma}[The orthogonal projection onto an invariant subspace commutes with the subalgebra]%
@@ -1449,11 +1458,16 @@ irreducible pieces such an intertwiner is automatically an isomorphism.
 \begin{proof}
     \leanok
     \uses{lem:starSubalgebra_orthogonal_reducibility}
-    Decompose $x$ as the sum of its projection onto $W$ and its orthogonal part. Each member
-    of $S$ sends the projection into $W$, since $W$ is invariant, and sends the orthogonal
-    part into the orthogonal complement, which is invariant by orthogonal reducibility
-    (Lemma~\ref{lem:starSubalgebra_orthogonal_reducibility}). Projecting the image onto $W$
-    therefore recovers the member applied to the projection of $x$.
+    Decompose $x = P x + P^{\perp} x$ into its projection onto $W$ and its orthogonal part,
+    where $P^{\perp}$ is the projection onto $W^{\perp}$. Each member of $S$ sends $P x$ into
+    $W$ (invariance) and $P^{\perp} x$ into $W^{\perp}$ (orthogonal reducibility,
+    Lemma~\ref{lem:starSubalgebra_orthogonal_reducibility}), so
+    \[
+        P(A x) = P\bigl(A\,P x + A\,P^{\perp} x\bigr) = A\,P x + P\bigl(A\,P^{\perp} x\bigr)
+        = A\,P x,
+    \]
+    because $A\,P x \in W$ is fixed by $P$ and $A\,P^{\perp} x \in W^{\perp}$ is annihilated by
+    $P$.
 \end{proof}
 
 \begin{lemma}[Pieces of different type are orthogonal]%
@@ -1475,8 +1489,14 @@ irreducible pieces such an intertwiner is automatically an isomorphism.
     an intertwiner from $W$ into $W'$. By Schur's lemma
     (Lemma~\ref{lem:starSubalgebra_intertwiner_irreducible}) it is either an isomorphism,
     which would make the two pieces of the same type, or zero on $W$. Since the pieces are
-    not of the same type, the projection vanishes on $W$, that is, $W$ lies in the orthogonal
-    complement of $W'$.
+    not of the same type, the projection $P_{W'}$ onto $W'$ vanishes on $W$. For every
+    $x \in W$ and $y \in W'$ we have $P_{W'} y = y$ and $P_{W'} x = 0$, so self-adjointness
+    of $P_{W'}$ gives
+    \[
+        \langle x, y \rangle = \langle x, P_{W'} y \rangle = \langle P_{W'} x, y \rangle
+        = \langle 0, y \rangle = 0,
+    \]
+    that is, $W$ lies in the orthogonal complement of $W'$.
 \end{proof}
 
 \begin{theorem}[Fixed-point algebra is semisimple]%

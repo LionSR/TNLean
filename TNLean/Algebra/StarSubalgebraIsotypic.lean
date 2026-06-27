@@ -7,15 +7,16 @@ import TNLean.Algebra.StarSubalgebraSchur
 /-!
 # Grouping the irreducible pieces of a star-subalgebra by isomorphism type
 
-Continuing the structure theory of Wolf Ch. 6 (towards Thm 6.14), this file groups the
+Continuing the structure theory of *Quantum Channels & Operations* (Wolf 2012), Chapter 6,
+towards Theorem 6.14, this file groups the
 mutually orthogonal irreducible pieces produced by the orthogonal decomposition according
 to their isomorphism type. Two irreducible invariant subspaces have the same type when
 there is a nonzero operator that carries one into the other and commutes there with the
 subalgebra; Schur's lemma upgrades any such nonzero operator to an isomorphism of one piece
 onto the other.
 
-The same-type relation is reflexive and transitive, and is characterized by the existence
-of an isomorphism between the two pieces. Pieces of different types are forced to be
+The same-type relation is reflexive, symmetric, and transitive, and is characterized by the
+existence of an isomorphism between the two pieces. Pieces of different types are forced to be
 orthogonal: the orthogonal projection onto one piece is itself an operator commuting with
 the subalgebra, so Schur's lemma makes it either an isomorphism onto the other piece, giving
 the same type, or zero, placing the first piece in the orthogonal complement of the second.
@@ -43,7 +44,7 @@ the same type, or zero, placing the first piece in the orthogonal complement of 
 * `StarSubalgebra.isOrtho_of_not_sameIsotype` -- two irreducible pieces that do not have the
   same type are orthogonal.
 
-## Remaining gap towards Wolf Thm 6.14
+## Remaining gap: isotypic decomposition and unitary change of basis
 
 The same-type relation and the orthogonality of pieces of different types are established
 here. The full theorem additionally collects the pieces of a single type into an isotypic
@@ -59,7 +60,8 @@ variable (S : StarSubalgebra ℂ (Matrix n n ℂ))
 
 /-- An operator from one invariant subspace into another for a star-subalgebra `S` of complex
 matrices: a complex-linear operator on Euclidean space that carries `p` into `q` and, on `p`,
-commutes with every member of the subalgebra. Wolf Ch. 6, towards Thm 6.14. -/
+commutes with every member of the subalgebra. See *Quantum Channels & Operations*
+(Wolf 2012), Chapter 6, towards Theorem 6.14. -/
 def IsIntertwiner (p q : Submodule ℂ (EuclideanSpace ℂ n))
     (f : Module.End ℂ (EuclideanSpace ℂ n)) : Prop :=
   Submodule.map f p ≤ q ∧
@@ -68,7 +70,8 @@ def IsIntertwiner (p q : Submodule ℂ (EuclideanSpace ℂ n))
 /-- Two invariant subspaces `p` and `q` of a star-subalgebra `S` of complex matrices are of
 the same type when there is an operator carrying `p` into `q`, commuting on `p` with every
 member of the subalgebra, that is not zero on `p`. On irreducible pieces Schur's lemma makes
-any such operator an isomorphism of `p` onto `q`. Wolf Ch. 6, towards Thm 6.14. -/
+any such operator an isomorphism of `p` onto `q`. See *Quantum Channels & Operations*
+(Wolf 2012), Chapter 6, towards Theorem 6.14. -/
 def SameIsotype (p q : Submodule ℂ (EuclideanSpace ℂ n)) : Prop :=
   ∃ f : Module.End ℂ (EuclideanSpace ℂ n), S.IsIntertwiner p q f ∧ ¬ ∀ x ∈ p, f x = 0
 
@@ -88,8 +91,8 @@ private theorem not_forall_apply_eq_zero_of_map_ne_bot
 type exactly when some operator commuting with the subalgebra is an isomorphism of the first
 piece onto the second: injective on the source with image exactly the target. The forward
 direction upgrades a nonzero intertwiner via Schur's lemma; the reverse direction notes that
-an isomorphism onto a nonzero target cannot vanish on the source. Wolf Ch. 6, towards
-Thm 6.14. -/
+an isomorphism onto a nonzero target cannot vanish on the source. See
+*Quantum Channels & Operations* (Wolf 2012), Chapter 6, towards Theorem 6.14. -/
 theorem sameIsotype_iff_exists_isomorphism {p q : Submodule ℂ (EuclideanSpace ℂ n)}
     (hp : S.IsIrreducibleSubspace p) (hq : S.IsIrreducibleSubspace q) :
     S.SameIsotype p q ↔
@@ -105,7 +108,8 @@ theorem sameIsotype_iff_exists_isomorphism {p q : Submodule ℂ (EuclideanSpace 
 
 /-- An irreducible piece of a star-subalgebra of complex matrices has the same type as
 itself: the identity operator carries the piece into itself, commutes with the subalgebra,
-and is nonzero there since the piece is nonzero. Wolf Ch. 6, towards Thm 6.14. -/
+and is nonzero there since the piece is nonzero. See *Quantum Channels & Operations*
+(Wolf 2012), Chapter 6, towards Theorem 6.14. -/
 theorem sameIsotype_refl {p : Submodule ℂ (EuclideanSpace ℂ n)}
     (hp : S.IsIrreducibleSubspace p) : S.SameIsotype p p := by
   refine ⟨LinearMap.id, ⟨(Submodule.map_id p).le, fun _ _ _ _ => rfl⟩, ?_⟩
@@ -114,8 +118,8 @@ theorem sameIsotype_refl {p : Submodule ℂ (EuclideanSpace ℂ n)}
 
 /-- The same-type relation on irreducible pieces of a star-subalgebra of complex matrices is
 transitive: composing an isomorphism of `p` onto `q` with an isomorphism of `q` onto `r`
-gives an isomorphism of `p` onto `r` that commutes with the subalgebra. Wolf Ch. 6, towards
-Thm 6.14. -/
+gives an isomorphism of `p` onto `r` that commutes with the subalgebra. See
+*Quantum Channels & Operations* (Wolf 2012), Chapter 6, towards Theorem 6.14. -/
 theorem sameIsotype_trans {p q r : Submodule ℂ (EuclideanSpace ℂ n)}
     (hp : S.IsIrreducibleSubspace p) (hq : S.IsIrreducibleSubspace q)
     (hr : S.IsIrreducibleSubspace r) (hpq : S.SameIsotype p q) (hqr : S.SameIsotype q r) :
@@ -132,8 +136,8 @@ theorem sameIsotype_trans {p q r : Submodule ℂ (EuclideanSpace ℂ n)}
 matrices commutes with every member of the subalgebra. Writing a vector as the sum of its
 projection and its orthogonal part, each member sends the projection into the subspace and
 the orthogonal part into the orthogonal complement, which is invariant as well; so applying
-the member and then projecting recovers the projected-then-applied vector. Wolf Ch. 6,
-towards Thm 6.14. -/
+the member and then projecting recovers the projected-then-applied vector. See
+*Quantum Channels & Operations* (Wolf 2012), Chapter 6, towards Theorem 6.14. -/
 theorem starProjection_toEuclideanLin_comm {q : Submodule ℂ (EuclideanSpace ℂ n)}
     (hq : S.IsInvariantSubspace q) {A : Matrix n n ℂ} (hA : A ∈ S)
     (x : EuclideanSpace ℂ n) :
@@ -158,8 +162,8 @@ theorem starProjection_toEuclideanLin_comm {q : Submodule ℂ (EuclideanSpace �
 type are orthogonal. The orthogonal projection onto the second piece, viewed as an operator,
 commutes with the subalgebra and carries the first piece into the second, so Schur's lemma
 makes it either an isomorphism, giving the same type, or zero on the first piece, which means
-the first piece lies in the orthogonal complement of the second. Wolf Ch. 6, towards
-Thm 6.14. -/
+the first piece lies in the orthogonal complement of the second. See
+*Quantum Channels & Operations* (Wolf 2012), Chapter 6, towards Theorem 6.14. -/
 theorem isOrtho_of_not_sameIsotype {p q : Submodule ℂ (EuclideanSpace ℂ n)}
     (hp : S.IsIrreducibleSubspace p) (hq : S.IsIrreducibleSubspace q)
     (h : ¬ S.SameIsotype p q) : p ⟂ q := by
@@ -180,7 +184,8 @@ theorem isOrtho_of_not_sameIsotype {p q : Submodule ℂ (EuclideanSpace ℂ n)}
 /-- The same-type relation on irreducible pieces of a star-subalgebra of complex matrices is
 symmetric: an isomorphism of `p` onto `q` has an inverse, built by projecting onto `q`,
 inverting on the subspace, and including back into `p`, which is an isomorphism of `q` onto
-`p` commuting with the subalgebra. Wolf Ch. 6, towards Thm 6.14. -/
+`p` commuting with the subalgebra. See *Quantum Channels & Operations* (Wolf 2012),
+Chapter 6, towards Theorem 6.14. -/
 theorem sameIsotype_symm {p q : Submodule ℂ (EuclideanSpace ℂ n)}
     (hp : S.IsIrreducibleSubspace p) (hq : S.IsIrreducibleSubspace q)
     (h : S.SameIsotype p q) : S.SameIsotype q p := by
