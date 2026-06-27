@@ -248,7 +248,7 @@ open Real in
 
 This is the scalar real-analysis prerequisite for eliminating the sanctioned
 `lieb_concavity_axiom`: the operator integral representation follows entrywise
-from this identity once the commuting operators `A \otimes 1` and `1 \otimes B^{T}`
+from this identity once the commuting operators \(A \otimes 1\) and \(1 \otimes B^{T}\)
 are simultaneously diagonalized. -/
 theorem rpow_mul_rpow_one_sub_eq_integral {a b s : ℝ}
     (ha : 0 < a) (hb : 0 < b) (hs : s ∈ Ioo (0 : ℝ) 1) :
