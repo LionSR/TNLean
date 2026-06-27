@@ -56,7 +56,16 @@ treated as blockers.
 | `hayashi_ssa_equality_characterization_forward` | `TNLean/Axioms/Entropy.lean` | **Forward** direction of the SSA-equality characterization: SSA equality forces the quantum-Markov-chain structure on the middle subsystem (rests on recovery-map / Petz theory). The biconditional `hayashi_ssa_equality_characterization` is now a **derived theorem** (`⟨forward, reverse⟩`); the reverse direction is proved in `TNLean/Analysis/EntropyMarkovReverse.lean`, so this forward axiom is the only remaining axiomatic content. Sanctioned for issue #632 / gate #236. Citations: Hayashi, *Quantum Information: An Introduction*, Springer 2006, Theorem 5.24; Ruskai, JMP 43, 4358 (2002); equivalent structural formulation also appears in Hayden–Jozsa–Petz–Winter, CMP 246, 359–374 (2004). Consumed (via the biconditional theorem) by the theorem wrappers in `TNLean/Entropy/MarkovChain.lean`. |
 | `Axioms.rfp_to_nncph_commute` | `TNLean/Axioms/Beigi.lean` | arXiv:1606.00608 Section 3.3 Theorem 3.10 (product-of-entangled-pairs structural form from Appendix B — *not* gated on Beigi 2012); consumed by `MPSTensor.rfp_implies_nncph` in `TNLean/MPS/ParentHamiltonian/Commuting.lean`. |
 | `Axioms.beigi_nncph_to_rfp` | `TNLean/Axioms/Beigi.lean` | S. Beigi, *J. Phys. A: Math. Theor.* **45** (2012) 025306 — ground-space characterization of 1D commuting nearest-neighbor Hamiltonians with finite degeneracy; consumed by `MPSTensor.nncph_implies_rfp` in `TNLean/MPS/ParentHamiltonian/Commuting.lean` from the explicit BNT relation `MPSTensor.IsBNT` and the all-chain NNCPH ground-space condition `MPSTensor.HasNNCPHGroundSpaces` (arXiv:1606.00608 Section 3.3 Theorem 3.10, reverse direction only). |
-| Operator-convexity axioms (`posMap_rpow_convex_jensen`, `lieb_concavity_axiom`) | `TNLean/Axioms/OperatorConvexity.lean` | The concave real-power Jensen statement `posMap_rpow_concave_jensen` and the logarithmic Jensen statement `posMap_log_concave_jensen` have been discharged. The former `trace_rpow_concave_axiom` / `trace_rpow_convex_axiom` have also been discharged; see `TNLean/Analysis/OperatorConvexity.lean`. |
+
+`TNLean/Axioms/OperatorConvexity.lean` no longer declares any axioms: the operator
+Jensen inequalities for the concave real power, convex real power, and logarithm
+(`posMap_rpow_concave_jensen`, `posMap_rpow_convex_jensen`,
+`posMap_log_concave_jensen`) and Lieb's concavity theorem (`lieb_concavity_axiom`)
+are all proved there, the former three from the Loewner integral representation of
+the power function and the last from the operator integral representation of the
+fractional product together with the vectorization isometry. The former
+`trace_rpow_concave_axiom` / `trace_rpow_convex_axiom` were discharged earlier; see
+`TNLean/Analysis/OperatorConvexity.lean`.
 
 ### Circular reasoning
 
