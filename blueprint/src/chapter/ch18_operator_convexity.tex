@@ -555,6 +555,58 @@ of $A^s B^{1-s}$.
     Lemma~\ref{lem:scalar_lieb_integral}.
 \end{proof}
 
+\begin{lemma}[Concavity of the parallel sum]\label{lem:parallel_sum_concave}
+    \lean{Matrix.PosDef.parallel_sum_concave}
+    \leanok
+    For positive-definite matrices $X_1, X_2, Y_1, Y_2$ and $\theta\in[0,1]$,
+    the parallel sum $(X,Y)\mapsto X(X+Y)^{-1}Y$ is jointly concave in the
+    Loewner order:
+    \[
+        \theta\,X_1(X_1+Y_1)^{-1}Y_1 + (1-\theta)\,X_2(X_2+Y_2)^{-1}Y_2
+        \le
+        X_\theta(X_\theta+Y_\theta)^{-1}Y_\theta,
+    \]
+    where $X_\theta=\theta X_1+(1-\theta)X_2$ and $Y_\theta=\theta Y_1+(1-\theta)Y_2$.
+\end{lemma}
+\begin{proof}\leanok
+    Write $Z = X(X+Y)^{-1}Y$.  The identity $X(X+Y)^{-1}(X+Y) = X$ gives
+    \[
+        (X - Z) - X(X+Y)^{-1}X = 0,
+    \]
+    so the block matrix $\begin{psmallmatrix}X-Z & X\\X & X+Y\end{psmallmatrix}$
+    is positive semidefinite (its Schur complement against $X+Y$ vanishes).
+    Setting $Z_i = X_i(X_i+Y_i)^{-1}Y_i$ and $Z_\theta = \theta Z_1+(1-\theta)Z_2$,
+    the convex combination of the two block matrices is
+    $\begin{psmallmatrix}X_\theta-Z_\theta & X_\theta\\X_\theta & X_\theta+Y_\theta\end{psmallmatrix}$,
+    which is positive semidefinite, and its Schur complement against
+    $X_\theta+Y_\theta$ yields
+    \[
+        X_\theta(X_\theta+Y_\theta)^{-1}Y_\theta - Z_\theta \ge 0,
+    \]
+    which is the claimed inequality (Ando, 1979).
+\end{proof}
+
+\begin{lemma}[Concavity of the resolvent integrand]\label{lem:superop_resolvent_integrand_concave}
+    \lean{superop_resolvent_integrand_concave}
+    \leanok
+    \uses{lem:parallel_sum_concave}
+    For $t>0$, positive-definite $A_1,A_2,B_1,B_2$, and $\theta\in[0,1]$, with
+    $\hat{A}=A\otimes I$ and $\hat{B}=I\otimes B^\top$, setting
+    $A_\theta=\theta A_1+(1-\theta)A_2$ and $B_\theta=\theta B_1+(1-\theta)B_2$:
+    \[
+        \theta\,\hat A_1(\hat A_1+t\hat B_1)^{-1}\hat B_1
+        +(1-\theta)\,\hat A_2(\hat A_2+t\hat B_2)^{-1}\hat B_2
+        \le
+        \hat A_\theta(\hat A_\theta+t\hat B_\theta)^{-1}\hat B_\theta.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    The integrand equals $t^{-1}\,\hat A(\hat A+t\hat B)^{-1}(t\hat B)$, a rescaled
+    parallel sum of $\hat A$ and $t\hat B$, so concavity follows from
+    Lemma~\ref{lem:parallel_sum_concave} and the linearity of $A\mapsto\hat A$,
+    $B\mapsto\hat B$.
+\end{proof}
+
 \begin{theorem}[Lieb concavity]\label{thm:lieb_concavity_axiom}
     \lean{lieb_concavity_axiom}
     \notready
