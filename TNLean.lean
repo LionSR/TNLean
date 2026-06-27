@@ -40,6 +40,7 @@ import TNLean.Algebra.SpinCover
 import TNLean.Algebra.MatrixRankClosed
 import TNLean.Algebra.StarSubalgebraIrreducibleDecomp
 import TNLean.Algebra.StarSubalgebraIsotypic
+import TNLean.Algebra.StarSubalgebraIsotypicDecomp
 import TNLean.Algebra.StarSubalgebraSchur
 import TNLean.Algebra.StarSubalgebraSemisimple
 import TNLean.Algebra.StarSubalgebraSpatial
