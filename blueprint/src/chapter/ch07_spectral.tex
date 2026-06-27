@@ -1271,6 +1271,69 @@ step the two pieces are.
     whole space $W = \C^{D}$, which is invariant under every member of $S$.
 \end{proof}
 
+The next step towards the structure theorem groups the irreducible pieces by
+isomorphism type. The grouping is governed by Schur's lemma: a map commuting with
+$S$ between two pieces is either zero or an isomorphism, and over the complex
+numbers the commutant of $S$ on a single piece is the scalars.
+
+\begin{lemma}[Schur's lemma: an intertwiner of irreducible pieces is zero or an isomorphism]%
+    \label{lem:starSubalgebra_intertwiner_irreducible}
+    \lean{StarSubalgebra.intertwiner_zero_or_isomorphism}
+    \leanok
+    \uses{def:starSubalgebra_irreducibleSubspace}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$ and let $W, W' \subseteq \C^{D}$ be irreducible
+    under $S$. Let $f \colon \C^{D} \to \C^{D}$ be a linear operator that carries $W$ into
+    $W'$ and commutes on $W$ with every member of $S$, that is,
+    \[
+        f(A x) = A\,(f x)
+    \]
+    for every $A \in S$ and every $x \in W$. Then either $f$ is zero on $W$, or $f$ is
+    injective on $W$ and maps $W$ onto $W'$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:starSubalgebra_irreducibleSubspace}
+    The vectors of $W$ annihilated by $f$ form a subspace of $W$ that is invariant under
+    $S$, because $f$ commutes with $S$ on $W$. By irreducibility of $W$ this kernel is
+    either all of $W$, in which case $f$ is zero on $W$, or trivial, in which case $f$ is
+    injective on $W$. Likewise the image of $W$ under $f$ is a subspace of $W'$ invariant
+    under $S$, so by irreducibility of $W'$ it is either trivial, again forcing $f$ to be
+    zero on $W$, or all of $W'$. Hence $f$ is zero on $W$, or it is injective on $W$ with
+    image $W'$.
+\end{proof}
+
+\begin{lemma}[Scalar commutant on an irreducible piece]%
+    \label{lem:starSubalgebra_scalar_commutant_irreducible}
+    \lean{StarSubalgebra.exists_eq_smul_of_commute_of_irreducible}
+    \leanok
+    \uses{def:starSubalgebra_irreducibleSubspace}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$ and let $W \subseteq \C^{D}$ be irreducible
+    under $S$. Let $f \colon \C^{D} \to \C^{D}$ be a linear operator that maps $W$ into
+    itself and commutes on $W$ with every member of $S$, that is,
+    \[
+        f(A x) = A\,(f x)
+    \]
+    for every $A \in S$ and every $x \in W$. Then $f$ acts on $W$ as a scalar: there is a
+    complex number $c$ with
+    \[
+        f x = c\,x
+    \]
+    for every $x \in W$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:starSubalgebra_irreducibleSubspace}
+    Restricting $f$ to $W$ gives an operator on a nonzero finite-dimensional complex
+    vector space, which over the complex numbers has an eigenvalue $c$ together with an
+    eigenvector inside $W$. The set of vectors of $W$ on which $f$ acts as multiplication
+    by $c$ is a subspace contained in $W$; it is nonzero because it contains that
+    eigenvector, and it is invariant under $S$ because $f$ commutes with every member of
+    $S$ on $W$ while the scalar $c$ commutes with everything. By irreducibility this
+    subspace is all of $W$, so $f$ acts as multiplication by $c$ throughout $W$.
+\end{proof}
+
 \begin{theorem}[Fixed-point algebra is semisimple]%
     \label{thm:fixedPointAlgebra_isSemisimpleRing}
     \lean{Kraus.fixedPointAlgebra_isSemisimpleRing}
