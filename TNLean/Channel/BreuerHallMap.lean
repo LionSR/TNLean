@@ -151,10 +151,11 @@ theorem star_dotProduct_vecMulVec_mulVec (a b w : Fin d → ℂ) :
 /-! ## Positivity on rank-one outer products -/
 
 /-- On a rank-one outer product `v vᴴ`, the Breuer-Hall map is positive
-semidefinite.  This is the key step in the positivity proof: the image is
-`‖v‖² I - v vᴴ - (U (conj v))(U (conj v))ᴴ`, whose quadratic form is nonnegative
-by the two-vector Bessel inequality applied to the orthogonal pair
-`v ⟂ U (conj v)` with `‖U (conj v)‖ ≤ ‖v‖`. -/
+semidefinite.  This is the key step in the positivity proof: with
+`w = U *ᵥ star v` the image under `U` of the entrywise conjugate of `v`, the
+image is `‖v‖² I - v vᴴ - w wᴴ`, whose quadratic form is nonnegative by the
+two-vector Bessel inequality applied to the orthogonal pair `v ⟂ w` with
+`‖w‖ ≤ ‖v‖`. -/
 theorem breuerHallMap_vecMulVec_posSemidef (U : Matrix (Fin d) (Fin d) ℂ)
     (hUanti : Uᵀ = -U) (hUcontr : Uᴴ * U ≤ 1) (v : Fin d → ℂ) :
     (breuerHallMap U (Matrix.vecMulVec v (star v))).PosSemidef := by
@@ -177,7 +178,7 @@ theorem breuerHallMap_vecMulVec_posSemidef (U : Matrix (Fin d) (Fin d) ℂ)
     intro a b
     rw [EuclideanSpace.inner_toLp_toLp]
     exact dotProduct_comm (star a) b
-  -- orthogonality `v ⟂ U (conj v)`
+  -- orthogonality `v ⟂ U *ᵥ star v`
   have hzero : star v ⬝ᵥ (U *ᵥ star v) = 0 := by
     have key : star v ⬝ᵥ (U *ᵥ star v) = -(star v ⬝ᵥ (U *ᵥ star v)) := by
       calc star v ⬝ᵥ (U *ᵥ star v)
@@ -189,7 +190,7 @@ theorem breuerHallMap_vecMulVec_posSemidef (U : Matrix (Fin d) (Fin d) ℂ)
     rwa [eq_neg_iff_add_eq_zero, add_self_eq_zero] at key
   have horth : ⟪V, P⟫_ℂ = 0 := by
     rw [hV, hP, ← bridge v p, hp]; exact hzero
-  -- contraction bound `‖U (conj v)‖ ≤ ‖v‖`
+  -- contraction bound `‖U *ᵥ star v‖ ≤ ‖v‖`
   have hPV : ‖P‖ ≤ ‖V‖ := by
     have hpsd : (1 - Uᴴ * U).PosSemidef := by rw [← Matrix.le_iff]; exact hUcontr
     have hquad : (0 : ℂ) ≤ star (star v) ⬝ᵥ ((1 - Uᴴ * U) *ᵥ star v) :=

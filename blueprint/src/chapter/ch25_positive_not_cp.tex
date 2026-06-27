@@ -178,21 +178,21 @@ fails to be completely positive, are not treated here.
     \]
 \end{definition}
 
-\begin{theorem}[The Breuer--Hall map is positive]
-    \label{thm:breuer_hall_positive}
-    \lean{Matrix.breuerHallMap_isPositiveMap}
+\begin{lemma}[The Breuer--Hall map on rank-one operators]
+    \label{lem:breuer_hall_rankone}
+    \lean{Matrix.breuerHallMap_vecMulVec_posSemidef}
     \leanok
     \uses{def:breuer_hall_map}
     If $U$ is antisymmetric, $U^{\mathsf T}=-U$, and a contraction,
-    $U^{\dagger}U\le\Id$, then the Breuer--Hall map $T_{\mathrm{BH}}$ sends every
-    positive semidefinite matrix to a positive semidefinite matrix.
-\end{theorem}
+    $U^{\dagger}U\le\Id$, then for every vector $v$ the image
+    $T_{\mathrm{BH}}(\ket{v}\bra{v})$ of the rank-one operator $\ket{v}\bra{v}$ is
+    positive semidefinite.
+\end{lemma}
 
 \begin{proof}
     \leanok
-    A linear map is positive once it sends every rank-one positive operator
-    $\ket{v}\bra{v}$ to a positive one, because a positive semidefinite matrix is
-    a sum of such rank-one operators.  On $\ket{v}\bra{v}$ the image is
+    \uses{def:breuer_hall_map}
+    On $\ket{v}\bra{v}$ the image is
     \[
         T_{\mathrm{BH}}(\ket{v}\bra{v})
         =\lVert v\rVert^{2}\,\Id-\ket{v}\bra{v}-\ket{U\overline{v}}\bra{U\overline{v}},
@@ -221,6 +221,26 @@ fails to be completely positive, are not treated here.
         +\lvert\braket{U\overline{v}}{w}\rvert^{2}
         \le\lVert v\rVert^{2}\lVert w\rVert^{2}.
     \]
+\end{proof}
+
+\begin{theorem}[The Breuer--Hall map is positive]
+    \label{thm:breuer_hall_positive}
+    \lean{Matrix.breuerHallMap_isPositiveMap}
+    \leanok
+    \uses{def:breuer_hall_map}
+    If $U$ is antisymmetric, $U^{\mathsf T}=-U$, and a contraction,
+    $U^{\dagger}U\le\Id$, then the Breuer--Hall map $T_{\mathrm{BH}}$ sends every
+    positive semidefinite matrix to a positive semidefinite matrix.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:breuer_hall_rankone}
+    A positive semidefinite matrix is a sum of rank-one operators
+    $\ket{v}\bra{v}$.  By Lemma~\ref{lem:breuer_hall_rankone} the Breuer--Hall map
+    sends each such operator to a positive semidefinite matrix, and a sum of
+    positive semidefinite matrices is positive semidefinite, so $T_{\mathrm{BH}}$
+    is positive.
 \end{proof}
 
 \section{The partial transpose and the PPT property}
