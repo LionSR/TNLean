@@ -251,17 +251,15 @@ This is the scalar real-analysis prerequisite for eliminating the sanctioned
 from this identity once the commuting operators `A \otimes 1` and `1 \otimes B^{T}`
 are simultaneously diagonalized. -/
 theorem rpow_mul_rpow_one_sub_eq_integral {a b s : ℝ}
-    (ha : 0 < a) (hb : 0 < b) (hs : s ∈ Set.Ioo (0 : ℝ) 1) :
+    (ha : 0 < a) (hb : 0 < b) (hs : s ∈ Ioo (0 : ℝ) 1) :
     a ^ s * b ^ (1 - s)
-      = (Real.sin (Real.pi * s) / Real.pi) *
-          ∫ t in Set.Ioi (0 : ℝ), t ^ (s - 1) * (a * b / (a + t * b)) := by
-  have hsin : 0 < Real.sin (Real.pi * s) := by
+      = (Real.sin (π * s) / π) *
+          ∫ t in Ioi (0 : ℝ), t ^ (s - 1) * (a * b / (a + t * b)) := by
+  have hsin : 0 < Real.sin (π * s) := by
     obtain ⟨h0, h1⟩ := hs
     exact Real.sin_pos_of_pos_of_lt_pi (by positivity) (by nlinarith [Real.pi_pos])
   rw [integral_lieb_integrand ha hb hs]
   -- a^s b^{1-s} = (sin/π) · (a^s b^{1-s} · π/sin)
-  rw [mul_comm (Real.sin (Real.pi * s) / Real.pi) _, mul_assoc,
-    show Real.pi / Real.sin (Real.pi * s) * (Real.sin (Real.pi * s) / Real.pi) = 1 by
+  rw [mul_comm (Real.sin (π * s) / π) _, mul_assoc,
+    show π / Real.sin (π * s) * (Real.sin (π * s) / π) = 1 by
       field_simp, mul_one]
-
-
