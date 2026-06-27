@@ -66,7 +66,8 @@ theorem exists_isometry_intertwiner_of_sameIsotype
   -- The normalized operator `u = s • f`.
   refine ⟨(s : ℂ) • f, ⟨?_, ?_⟩, ?_, ?_⟩
   · -- `u` carries `p` into `q`, since scaling by a nonzero scalar preserves the image.
-    rw [Submodule.map_smul f p (s : ℂ) hs_ne, hfeq]
+    rw [Submodule.map_smul f p (s : ℂ) hs_ne]
+    exact hfeq.le
   · -- `u` commutes on `p` with every member: scaling commutes with the linear matrix action.
     intro A hA x hx
     rw [LinearMap.smul_apply, LinearMap.smul_apply, hf.2 A hA x hx, map_smul]
