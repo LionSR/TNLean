@@ -576,8 +576,10 @@ of $A^s B^{1-s}$.
     so the block matrix $\begin{psmallmatrix}X-Z & X\\X & X+Y\end{psmallmatrix}$
     is positive semidefinite (its Schur complement against $X+Y$ vanishes).
     Setting $Z_i = X_i(X_i+Y_i)^{-1}Y_i$ and $Z_\theta = \theta Z_1+(1-\theta)Z_2$,
-    the convex combination of the two block matrices is positive semidefinite,
-    and its Schur complement against $X_\theta+Y_\theta$ yields
+    the convex combination of the two block matrices is
+    $\begin{psmallmatrix}X_\theta-Z_\theta & X_\theta\\X_\theta & X_\theta+Y_\theta\end{psmallmatrix}$,
+    which is positive semidefinite, and its Schur complement against
+    $X_\theta+Y_\theta$ yields
     \[
         X_\theta(X_\theta+Y_\theta)^{-1}Y_\theta - Z_\theta \ge 0,
     \]
