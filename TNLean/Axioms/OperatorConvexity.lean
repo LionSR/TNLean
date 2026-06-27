@@ -5,21 +5,24 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.Algebra.HermitianHelpers
 import TNLean.Channel.Basic
 import TNLean.Channel.Schwarz.OperatorJensenAux
+import TNLean.Analysis.LiebOperatorConcave
+import TNLean.Channel.Schwarz.RelativeEntropyAncillaAdditivity
+import TNLean.Analysis.TraceCFC
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Order
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Order
 import Mathlib.LinearAlgebra.Matrix.Trace
+import Mathlib.LinearAlgebra.Matrix.Vec
 import Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap
 
 /-!
 # Operator convexity and concavity boundary
 
-This module collects the remaining axioms for the **operator Jensen
-inequalities** for matrix powers and logarithms under positive maps, and the
-**Lieb concavity theorem**.  It also contains the now-proved concave and convex
-real-power Jensen theorems, since downstream files already import this boundary
-module.
+This module collects the **operator Jensen inequalities** for matrix powers and
+logarithms under positive maps, together with the **Lieb concavity theorem**,
+which is now proved here.  It also contains the concave and convex real-power
+Jensen theorems, since downstream files already import this boundary module.
 
 Mathlib 4.31 proves the operator concavity inputs for `x ↦ x ^ p`,
 `0 ≤ p ≤ 1`, and for `log`, via `CFC.concaveOn_rpow` and
@@ -37,23 +40,24 @@ Jensen inequality is then obtained as the right limit of
 proved analogously, by integrating the reversed pointwise positive-map
 inequality for the convex Löwner integrand `g p t` over the interior interval
 `(1, 2)` and passing to the endpoint `p = 2` by continuity of the matrix power
-`q ↦ M ^ q` in the exponent.  Only the Lieb statement remains an axiom, because
-the joint-concavity integral representation is not yet formalized.
-Operator convexity of `x ↦ x ^ p` for `1 ≤ p ≤ 2`, the scalar input of the
-convex case, is available as `CFC.convexOn_rpow` in
+`q ↦ M ^ q` in the exponent.  Lieb's joint concavity theorem is proved below by
+pairing the Loewner concavity of the commuting-Kronecker fractional product
+`(A ⊗ₖ 1)^s (1 ⊗ₖ Bᵀ)^{1-s}` (the operator integral representation in
+`TNLean.Analysis.LiebOperatorConcave`) with the vectorization isometry, which
+turns the trace functional `Tr(K† A^s K B^{1-s})` into a quadratic form of the
+Kronecker product.  Operator convexity of `x ↦ x ^ p` for `1 ≤ p ≤ 2`, the
+scalar input of the convex case, is available as `CFC.convexOn_rpow` in
 `TNLean.Analysis.RpowConvexity`.
 
-## Axioms
+## Main results
 
-The following results are standard in matrix analysis:
+The following results are standard in matrix analysis and are all proved here:
 
-* `posMap_rpow_concave_jensen` — Jensen inequality for concave `rpow`,
-  now a theorem.
-* `posMap_rpow_convex_jensen` — Jensen inequality for convex `rpow`,
-  now a theorem.
-* `posMap_log_concave_jensen` — Jensen inequality for concave `log`,
-  now a theorem.
-* `lieb_concavity_axiom` — Lieb concavity theorem.
+* `posMap_rpow_concave_jensen` — Jensen inequality for concave `rpow`.
+* `posMap_rpow_convex_jensen` — Jensen inequality for convex `rpow`.
+* `posMap_log_concave_jensen` — Jensen inequality for concave `log`.
+* `lieb_concavity_axiom` — Lieb concavity theorem (joint concavity of
+  `(A, B) ↦ Re Tr(K† A^s K B^{1-s})`).
 
 The trace concavity/convexity statements for `A ↦ Re Tr(A^p)` that used to
 live here (`trace_rpow_concave_axiom`, `trace_rpow_convex_axiom`) have been
@@ -62,11 +66,12 @@ via the spectral theorem and the scalar Jensen inequality.
 
 ## Status
 
-The concave real-power, convex real-power, and logarithmic declarations are now
-proved.  Only Lieb's joint concavity theorem remains an axiom.  Mathlib 4.31
-supplies the C-star functional-calculus concavity inputs and the Löwner integral
-representation for both power cases.  Earlier status notes recorded the integral
-representation as missing; that is no longer accurate.
+All four declarations are now proved.  Mathlib 4.31 supplies the C-star
+functional-calculus concavity inputs and the Löwner integral representation for
+both power cases, and `TNLean.Analysis.LiebOperatorConcave` supplies the
+operator integral representation underlying Lieb concavity.  Earlier status
+notes recorded these integral representations as missing; that is no longer
+accurate.
 
 The remaining Mathlib or local formalization gaps are:
 
@@ -99,7 +104,10 @@ The remaining Mathlib or local formalization gaps are:
   `TNLean.Analysis.RpowConvexity`; the convex case is now proved directly from
   the reversed Löwner integrand inequality
   `TNLean.OperatorJensen.positiveMap_rpowIntegrand₁₂_jensen`.
-* Lieb concavity integral representation: absent from Mathlib.
+* Lieb concavity integral representation: absent from Mathlib, but formalized
+  locally as `Matrix.superop_lieb_concave` in
+  `TNLean.Analysis.LiebOperatorConcave`, from which `lieb_concavity_axiom` below
+  is derived by the vectorization argument.
 
 ## Proof plan
 
@@ -134,11 +142,16 @@ The remaining Mathlib or local formalization gaps are:
 3. **Concave Jensen for `log`**: derive it from the right-limit formula
    `CFC.tendsto_cfc_rpow_sub_one_log` and the concave real-power theorem,
    using unitality to rewrite `T(1)=1`.
-4. **Lieb concavity**: requires the integral representation
-   `A^s B^{1-s} = (sin πs/π) ∫₀^∞ t^{s-1} A(A+tB)⁻¹ B dt` and
-   resolvent monotonicity.
-
-Lieb concavity remains a separate integral representation problem.
+4. **Lieb concavity**: pair the Loewner concavity of the commuting-Kronecker
+   fractional product `M(A, B) = (A ⊗ₖ 1)^s (1 ⊗ₖ Bᵀ)^{1-s}`
+   (`Matrix.superop_lieb_concave`, itself proved from the operator integral
+   representation `A^s B^{1-s} = (sin πs/π) ∫₀^∞ t^{s-1} A(A+tB)⁻¹ B dt` and
+   resolvent monotonicity) with the vectorization isometry `vec`.  Writing
+   `M(A, B) = A^s ⊗ₖ (Bᵀ)^{1-s}`, the trace functional
+   `Tr(K† A^s K B^{1-s})` equals the quadratic form `⟨vec Kᵀ, M(A, B) vec Kᵀ⟩`,
+   so applying that positive quadratic form to the Loewner inequality transfers
+   the concavity to the trace.  The endpoints `s = 0` and `s = 1` are linear in
+   the varying argument, hence equalities.
 
 ## References
 
@@ -590,21 +603,107 @@ theorem posMap_log_concave_jensen
     simpa [G] using hlimTA
   exact le_of_tendsto_of_tendsto hlimF hlimG hle
 
-/-! ## Lieb concavity axiom -/
+/-! ## Lieb concavity theorem -/
+
+section Lieb
+
+open scoped Kronecker
+
+/-- Entrywise complex conjugation of square matrices as an `ℝ`-`⋆`-algebra hom. -/
+private def conjMatStarAlgHom : Mat →⋆ₐ[ℝ] Mat :=
+  { (RCLike.conjAe (K := ℂ)).mapMatrix.toAlgHom with
+    map_star' := fun M => by
+      change ((star M).map (RCLike.conjAe (K := ℂ))) = star (M.map (RCLike.conjAe (K := ℂ)))
+      ext i j
+      simp [Matrix.star_eq_conjTranspose, Matrix.conjTranspose_apply, Matrix.map_apply,
+        RCLike.conjAe_coe] }
+
+private lemma conjMatStarAlgHom_apply (M : Mat) :
+    conjMatStarAlgHom M = M.map (starRingEnd ℂ) := rfl
+
+private lemma conjMatStarAlgHom_continuous : Continuous (conjMatStarAlgHom (D := D)) :=
+  conjMatStarAlgHom.toLinearMap.continuous_of_finiteDimensional
+
+/-- For Hermitian `A`, the transpose equals entrywise complex conjugation. -/
+private lemma transpose_eq_map_conj {A : Mat} (hA : A.IsHermitian) :
+    Aᵀ = A.map (starRingEnd ℂ) := by
+  have h1 : Aᵀ = (Aᴴ).map star := by
+    rw [Matrix.conjTranspose, Matrix.map_map]; simp [Function.comp_def]
+  rw [h1, hA.eq]; rfl
+
+/-- The continuous functional calculus commutes with transpose on a Hermitian matrix:
+`(cfc f A)ᵀ = cfc f Aᵀ`, since the transpose of a Hermitian matrix is its entrywise
+conjugate, and entrywise conjugation is an `ℝ`-`⋆`-algebra hom commuting with the calculus. -/
+private lemma cfc_transpose {A : Mat} (hA : A.IsHermitian) (f : ℝ → ℝ)
+    (hf : ContinuousOn f (spectrum ℝ A)) :
+    (cfc f A)ᵀ = cfc f (Aᵀ) := by
+  have hsa : IsSelfAdjoint A := hA
+  have hcfc : (cfc f A).IsHermitian :=
+    Matrix.isHermitian_iff_isSelfAdjoint.mpr (cfc_predicate f A)
+  rw [transpose_eq_map_conj hcfc, transpose_eq_map_conj hA,
+    ← conjMatStarAlgHom_apply, ← conjMatStarAlgHom_apply]
+  exact StarAlgHomClass.map_cfc conjMatStarAlgHom f A hf conjMatStarAlgHom_continuous hsa
+    (hsa.map conjMatStarAlgHom)
+
+/-- The real power of a positive-definite matrix commutes with transpose:
+`(Bᵀ) ^ r = (B ^ r)ᵀ`. -/
+private lemma rpow_transpose (B : Mat) (hB : B.PosDef) (r : ℝ) : (Bᵀ) ^ r = (B ^ r)ᵀ := by
+  have h0B : (0 : Mat) ≤ B := hB.posSemidef.nonneg
+  have h0BT : (0 : Mat) ≤ Bᵀ := hB.transpose.posSemidef.nonneg
+  rw [CFC.rpow_eq_cfc_real h0BT, CFC.rpow_eq_cfc_real h0B]
+  refine (cfc_transpose hB.isHermitian (fun x : ℝ => x ^ r) ?_).symm
+  apply ContinuousOn.rpow_const continuousOn_id
+  intro x hx
+  left
+  rw [hB.isHermitian.spectrum_real_eq_range_eigenvalues] at hx
+  obtain ⟨i, rfl⟩ := hx
+  exact (hB.eigenvalues_pos i).ne'
+
+/-- The reduction `(A ⊗ₖ 1)^s (1 ⊗ₖ Bᵀ)^{1-s} = A^s ⊗ₖ (Bᵀ)^{1-s}`, obtained by pushing the
+continuous functional calculus through each unital tensor embedding. -/
+private lemma lieb_kronecker_reduction (A B : Mat) (hA : A.PosDef) (hB : B.PosDef) (s : ℝ) :
+    (A ⊗ₖ (1 : Mat)) ^ s * ((1 : Mat) ⊗ₖ Bᵀ) ^ (1 - s)
+      = (A ^ s) ⊗ₖ ((Bᵀ) ^ (1 - s)) := by
+  have hAk : (A ⊗ₖ (1 : Mat)) ^ s = (A ^ s) ⊗ₖ (1 : Mat) := by
+    rw [CFC.rpow_eq_cfc_real (a := A ⊗ₖ (1 : Mat))
+        (hA.kronecker Matrix.PosDef.one).posSemidef.nonneg,
+      CFC.rpow_eq_cfc_real (a := A) hA.posSemidef.nonneg,
+      Matrix.cfc_kronecker_one hA.isHermitian]
+  have hBk : ((1 : Mat) ⊗ₖ Bᵀ) ^ (1 - s) = (1 : Mat) ⊗ₖ ((Bᵀ) ^ (1 - s)) := by
+    rw [CFC.rpow_eq_cfc_real (a := (1 : Mat) ⊗ₖ Bᵀ)
+        (Matrix.PosDef.one.kronecker hB.transpose).posSemidef.nonneg,
+      CFC.rpow_eq_cfc_real (a := Bᵀ) hB.transpose.posSemidef.nonneg,
+      Matrix.cfc_one_kronecker hB.transpose.isHermitian]
+  rw [hAk, hBk, ← Matrix.mul_kronecker_mul, Matrix.mul_one, Matrix.one_mul]
+
+/-- The vectorization bridge: the quadratic form of `A^s ⊗ₖ (Bᵀ)^{1-s}` at the vector
+`vec Kᵀ` recovers the Lieb trace functional `Tr(K† A^s K B^{1-s})`. -/
+private lemma lieb_quad_eq_trace (A B K : Mat) (hB : B.PosDef) (s : ℝ) :
+    star (Matrix.vec Kᵀ) ⬝ᵥ (((A ^ s) ⊗ₖ ((Bᵀ) ^ (1 - s))) *ᵥ Matrix.vec Kᵀ)
+      = (Kᴴ * A ^ s * K * B ^ (1 - s)).trace := by
+  rw [Matrix.kronecker_mulVec_vec ((Bᵀ) ^ (1 - s)) Kᵀ (A ^ s),
+    Matrix.star_vec_dotProduct_vec, ← Matrix.mul_assoc, ← Matrix.mul_assoc,
+    rpow_transpose B hB (1 - s), Matrix.transpose_conjTranspose K,
+    ← Matrix.trace_transpose (Kᴴ * A ^ s * K * B ^ (1 - s))]
+  simp only [Matrix.transpose_mul, Matrix.conjTranspose_transpose, Matrix.mul_assoc]
+  rw [Matrix.trace_mul_comm (K.map star)]
+  simp only [Matrix.mul_assoc]
 
 /-- **Lieb concavity theorem** (Lieb 1973, Ando 1979).
 
-For `s ∈ [0, 1]`, any matrix `K`, and PD matrices `A₁, A₂, B₁, B₂`:
-  the map `(A, B) ↦ Tr(K† A^s K B^{1−s})` is jointly concave.
+For `s ∈ [0, 1]`, any matrix `K`, and positive-definite matrices `A₁, A₂, B₁, B₂`, the map
+`(A, B) ↦ Re Tr(K† A^s K B^{1−s})` is jointly concave.
 
-Requires the integral representation
-`A^s B^{1-s} = (sin πs / π) ∫₀^∞ t^{s-1} A(A + tB)⁻¹ B dt`
-and resolvent monotonicity, which are not yet in Mathlib.
+The interior case `s ∈ (0, 1)` follows from the Loewner concavity of the commuting-Kronecker
+fractional product `Matrix.superop_lieb_concave`: writing the product as `A^s ⊗ₖ (Bᵀ)^{1-s}`,
+the trace functional is the quadratic form of that Kronecker product at the vector `vec Kᵀ`, so
+the positive quadratic form transfers the operator inequality to the trace.  The endpoints
+`s = 0` and `s = 1` are linear in the varying argument and hold with equality.
 
 References:
 * Lieb, *Convex trace functions*, Adv. Math. 11, 1973
 * Ando, *Concavity of certain maps on positive definite matrices*, 1979 -/
-axiom lieb_concavity_axiom
+theorem lieb_concavity_axiom
     {s : ℝ} (hs : s ∈ Set.Icc (0 : ℝ) 1)
     {A₁ A₂ B₁ B₂ K : Mat}
     (hA₁ : A₁.PosDef) (hA₂ : A₂.PosDef)
@@ -613,6 +712,74 @@ axiom lieb_concavity_axiom
     t * (trace (Kᴴ * A₁ ^ s * K * B₁ ^ (1 - s))).re +
       (1 - t) * (trace (Kᴴ * A₂ ^ s * K * B₂ ^ (1 - s))).re ≤
     (trace (Kᴴ * (t • A₁ + (1 - t) • A₂) ^ s * K *
-      (t • B₁ + (1 - t) • B₂) ^ (1 - s))).re
+      (t • B₁ + (1 - t) • B₂) ^ (1 - s))).re := by
+  classical
+  obtain ⟨ht0, ht1⟩ := ht
+  have ht1' : (0 : ℝ) ≤ 1 - t := by linarith
+  have hsum : t + (1 - t) = 1 := by ring
+  set Aθ := t • A₁ + (1 - t) • A₂ with hAθ
+  set Bθ := t • B₁ + (1 - t) • B₂ with hBθ
+  have hAθpd : Aθ.PosDef := Matrix.PosDef.convex_comb ht0 ht1' hsum hA₁ hA₂
+  have hBθpd : Bθ.PosDef := Matrix.PosDef.convex_comb ht0 ht1' hsum hB₁ hB₂
+  rcases lt_or_eq_of_le hs.1 with hs0 | hs0
+  · rcases lt_or_eq_of_le hs.2 with hs1 | hs1
+    · -- Interior case `s ∈ (0, 1)`.
+      have hsIoo : s ∈ Set.Ioo (0 : ℝ) 1 := ⟨hs0, hs1⟩
+      have hconc := superop_lieb_concave (D := D) hsIoo hA₁ hA₂ hB₁ hB₂ (θ := t) ⟨ht0, ht1⟩
+      rw [Matrix.le_iff] at hconc
+      have hquad := hconc.dotProduct_mulVec_nonneg (Matrix.vec Kᵀ)
+      set w := Matrix.vec Kᵀ with hw
+      set N₁ := (A₁ ⊗ₖ (1 : Mat)) ^ s * ((1 : Mat) ⊗ₖ B₁ᵀ) ^ (1 - s) with hN₁
+      set N₂ := (A₂ ⊗ₖ (1 : Mat)) ^ s * ((1 : Mat) ⊗ₖ B₂ᵀ) ^ (1 - s) with hN₂
+      set Nθ := (Aθ ⊗ₖ (1 : Mat)) ^ s * ((1 : Mat) ⊗ₖ Bθᵀ) ^ (1 - s) with hNθ
+      have hexp : star w ⬝ᵥ ((Nθ - (t • N₁ + (1 - t) • N₂)) *ᵥ w)
+          = (star w ⬝ᵥ (Nθ *ᵥ w))
+            - ((t : ℂ) * (star w ⬝ᵥ (N₁ *ᵥ w))
+              + ((1 : ℂ) - t) * (star w ⬝ᵥ (N₂ *ᵥ w))) := by
+        rw [Matrix.sub_mulVec, Matrix.add_mulVec, Matrix.smul_mulVec, Matrix.smul_mulVec,
+          dotProduct_sub, dotProduct_add, dotProduct_smul, dotProduct_smul,
+          Complex.real_smul, Complex.real_smul]
+        push_cast
+        ring
+      rw [hexp] at hquad
+      have hq₁ : star w ⬝ᵥ (N₁ *ᵥ w) = (Kᴴ * A₁ ^ s * K * B₁ ^ (1 - s)).trace := by
+        rw [hw, hN₁, lieb_kronecker_reduction A₁ B₁ hA₁ hB₁ s, lieb_quad_eq_trace A₁ B₁ K hB₁ s]
+      have hq₂ : star w ⬝ᵥ (N₂ *ᵥ w) = (Kᴴ * A₂ ^ s * K * B₂ ^ (1 - s)).trace := by
+        rw [hw, hN₂, lieb_kronecker_reduction A₂ B₂ hA₂ hB₂ s, lieb_quad_eq_trace A₂ B₂ K hB₂ s]
+      have hqθ : star w ⬝ᵥ (Nθ *ᵥ w) = (Kᴴ * Aθ ^ s * K * Bθ ^ (1 - s)).trace := by
+        rw [hw, hNθ, lieb_kronecker_reduction Aθ Bθ hAθpd hBθpd s,
+          lieb_quad_eq_trace Aθ Bθ K hBθpd s]
+      rw [hq₁, hq₂, hqθ] at hquad
+      have hre := (Complex.le_def.mp hquad).1
+      simp only [Complex.zero_re, Complex.sub_re, Complex.add_re, Complex.mul_re,
+        Complex.ofReal_re, Complex.ofReal_im, Complex.sub_im, Complex.one_re, Complex.one_im,
+        zero_mul, sub_zero] at hre
+      linarith [hre]
+    · -- Endpoint `s = 1`.
+      subst hs1
+      simp only [CFC.rpow_one _ hA₁.posSemidef.nonneg, CFC.rpow_one _ hA₂.posSemidef.nonneg,
+        CFC.rpow_one _ hAθpd.posSemidef.nonneg, sub_self, CFC.rpow_zero _ hB₁.posSemidef.nonneg,
+        CFC.rpow_zero _ hB₂.posSemidef.nonneg, CFC.rpow_zero _ hBθpd.posSemidef.nonneg,
+        Matrix.mul_one]
+      have hlin : Kᴴ * Aθ * K = t • (Kᴴ * A₁ * K) + (1 - t) • (Kᴴ * A₂ * K) := by
+        rw [hAθ]; simp only [Matrix.mul_add, Matrix.add_mul, Matrix.mul_smul, Matrix.smul_mul]
+      rw [hlin, Matrix.trace_add, Matrix.trace_smul, Matrix.trace_smul,
+        Complex.add_re, Complex.real_smul, Complex.real_smul, Complex.mul_re, Complex.mul_re,
+        Complex.ofReal_re, Complex.ofReal_im, zero_mul, sub_zero, Complex.ofReal_re,
+        Complex.ofReal_im, zero_mul, sub_zero]
+  · -- Endpoint `s = 0`.
+    subst hs0
+    simp only [CFC.rpow_zero _ hA₁.posSemidef.nonneg, CFC.rpow_zero _ hA₂.posSemidef.nonneg,
+      CFC.rpow_zero _ hAθpd.posSemidef.nonneg, sub_zero, CFC.rpow_one _ hB₁.posSemidef.nonneg,
+      CFC.rpow_one _ hB₂.posSemidef.nonneg, CFC.rpow_one _ hBθpd.posSemidef.nonneg,
+      Matrix.mul_one]
+    have hlin : Kᴴ * K * Bθ = t • (Kᴴ * K * B₁) + (1 - t) • (Kᴴ * K * B₂) := by
+      rw [hBθ]; simp only [Matrix.mul_add, Matrix.mul_smul]
+    rw [hlin, Matrix.trace_add, Matrix.trace_smul, Matrix.trace_smul,
+      Complex.add_re, Complex.real_smul, Complex.real_smul, Complex.mul_re, Complex.mul_re,
+      Complex.ofReal_re, Complex.ofReal_im, zero_mul, sub_zero, Complex.ofReal_re,
+      Complex.ofReal_im, zero_mul, sub_zero]
+
+end Lieb
 
 end
