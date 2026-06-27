@@ -21,9 +21,10 @@ pieces of one type are unitarily identified.
 ## Proof outline
 
 Compose the operator with the Euclidean adjoint and project back onto the source. The result
-maps the source into itself and commutes there with the subalgebra, because the orthogonal
-projection onto an invariant subspace commutes with the subalgebra and the adjoint of every
-member of the subalgebra is again a member. Schur's lemma on the irreducible source makes
+maps the source into itself, since the projection lands there, and commutes there with the
+subalgebra: the adjoint of every member is again a member, so the intertwining identity
+transfers through the adjoint to the projected composite. Schur's lemma on the irreducible
+source makes
 this composite a scalar, and pairing against the source identifies that scalar with the inner
 product of the images. Pairing a nonzero source vector with itself shows the scalar is a
 nonnegative real, since it equals the squared norm of the image divided by the squared norm
