@@ -20,13 +20,11 @@ positive map: it sends positive semidefinite matrices to positive semidefinite
 matrices.
 
 The proof reduces positivity to the rank-one case: a positive semidefinite
-matrix is a sum of rank-one outer products `v vᴴ`
-(`Matrix.PosSemidef.eq_sum_vecMulVec_nonzero_eigs`), and on such a matrix
-`T_BH(v vᴴ) = ‖v‖² I - v vᴴ - (U (conj v))(U (conj v))ᴴ`.  The two vectors `v`
-and `U (conj v)` are orthogonal (by antisymmetry of `U`) and
-`‖U (conj v)‖ ≤ ‖v‖` (by the contraction
-property), so the quadratic form is nonnegative by a two-vector form of Bessel's
-inequality.
+matrix is a sum of rank-one outer products `v vᴴ`, and on such a matrix
+`T_BH(v vᴴ) = ‖v‖² I - v vᴴ - w wᴴ`, where `w = U *ᵥ star v` applies `U` to the
+entrywise conjugate of `v`.  The two vectors `v` and `w` are orthogonal (by
+antisymmetry of `U`) and `‖w‖ ≤ ‖v‖` (by the contraction property), so the
+quadratic form is nonnegative by a two-vector form of Bessel's inequality.
 
 Indecomposability of the Breuer-Hall map and the `n`-positivity threshold are
 not treated here; only positivity is established.

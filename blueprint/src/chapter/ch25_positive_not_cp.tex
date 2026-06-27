@@ -213,8 +213,14 @@ fails to be completely positive, are not treated here.
         -\lvert\braket{v}{w}\rvert^{2}
         -\lvert\braket{U\overline{v}}{w}\rvert^{2},
     \]
-    which is nonnegative by Bessel's inequality for the orthogonal pair $v$,
-    $U\overline{v}$ together with $\lVert U\overline{v}\rVert\le\lVert v\rVert$.
+    which is nonnegative because the two-vector Bessel inequality for the
+    orthogonal pair $v$, $U\overline{v}$ with
+    $\lVert U\overline{v}\rVert\le\lVert v\rVert$ gives
+    \[
+        \lvert\braket{v}{w}\rvert^{2}
+        +\lvert\braket{U\overline{v}}{w}\rvert^{2}
+        \le\lVert v\rVert^{2}\lVert w\rVert^{2}.
+    \]
 \end{proof}
 
 \section{The partial transpose and the PPT property}
