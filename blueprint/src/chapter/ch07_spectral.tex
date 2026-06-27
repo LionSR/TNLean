@@ -1499,6 +1499,79 @@ irreducible pieces such an intertwiner is automatically an isomorphism.
     that is, $W$ lies in the orthogonal complement of $W'$.
 \end{proof}
 
+Each isotypic component is the supremum of one same-type class; the suprema of two different
+classes are orthogonal, and the classes cover the whole family, so the components span
+$\C^{D}$.
+
+\begin{lemma}[Suprema of cross-type classes are orthogonal]%
+    \label{lem:starSubalgebra_isOrtho_sSup_not_sameIsotype}
+    \lean{StarSubalgebra.isOrtho_sSup_of_not_sameIsotype}
+    \leanok
+    \uses{lem:starSubalgebra_isOrtho_not_sameIsotype}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$, and let $\mathcal{D}_1, \mathcal{D}_2$ be two sets
+    of subspaces irreducible under $S$. If no piece of $\mathcal{D}_1$ is of the same type as any
+    piece of $\mathcal{D}_2$, then
+    \[
+        \bigvee_{W \in \mathcal{D}_1} W \;\perp\; \bigvee_{W' \in \mathcal{D}_2} W'.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:starSubalgebra_isOrtho_not_sameIsotype}
+    Each pair $W \in \mathcal{D}_1$, $W' \in \mathcal{D}_2$ is of different type, hence orthogonal
+    by Lemma~\ref{lem:starSubalgebra_isOrtho_not_sameIsotype}. Orthogonality to a fixed subspace
+    is preserved by suprema on each side, so the supremum of $\mathcal{D}_1$ is orthogonal to the
+    supremum of $\mathcal{D}_2$.
+\end{proof}
+
+\begin{theorem}[Isotypic-component decomposition]%
+    \label{thm:starSubalgebra_orthogonal_isotypic_decomposition}
+    \lean{StarSubalgebra.exists_orthogonal_isotypic_decomposition}
+    \leanok
+    \uses{thm:starSubalgebra_orthogonal_irreducible_decomposition,
+        lem:starSubalgebra_isOrtho_sSup_not_sameIsotype,
+        lem:starSubalgebra_sameIsotype_refl, lem:starSubalgebra_sameIsotype_symm,
+        lem:starSubalgebra_sameIsotype_trans}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$. Then $\C^{D}$ is the supremum of a finite family
+    $\mathcal{C}$ of pairwise orthogonal subspaces, the isotypic components, and each component
+    $C \in \mathcal{C}$ is the supremum of a finite, nonempty class $\mathcal{D}_C$ of subspaces
+    irreducible under $S$ that are pairwise of the same type:
+    \[
+        C = \bigvee_{W \in \mathcal{D}_C} W.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:starSubalgebra_orthogonal_irreducible_decomposition,
+        lem:starSubalgebra_isOrtho_sSup_not_sameIsotype,
+        lem:starSubalgebra_sameIsotype_refl, lem:starSubalgebra_sameIsotype_symm,
+        lem:starSubalgebra_sameIsotype_trans}
+    The orthogonal irreducible decomposition
+    (Theorem~\ref{thm:starSubalgebra_orthogonal_irreducible_decomposition}) supplies a finite,
+    pairwise orthogonal family $\mathcal{D}$ of irreducible pieces with
+    $\bigvee_{W \in \mathcal{D}} W = \C^{D}$. For each piece $W$ let $\mathcal{D}_W$ be the class
+    of pieces of $\mathcal{D}$ of the same type as $W$, and let $C_W$ be its supremum. Each piece
+    lies in its own class by reflexivity
+    (Lemma~\ref{lem:starSubalgebra_sameIsotype_refl}), so each class is nonempty, the classes
+    cover $\mathcal{D}$, and the components span $\C^{D}$. Two pieces of one class are of the same type with each other through
+    the representative, by symmetry and transitivity
+    (Lemmas~\ref{lem:starSubalgebra_sameIsotype_symm}
+    and~\ref{lem:starSubalgebra_sameIsotype_trans}). If two representatives are of the same type,
+    transitivity makes their classes equal, hence their components equal; so two distinct
+    components come from representatives $W, W'$ that are not of the same type. Write $\sim$ for
+    the same-type relation. For $a \in \mathcal{D}_W$ and $b \in \mathcal{D}_{W'}$ one has
+    $W \sim a$ and $W' \sim b$ by definition of the classes; were $a \sim b$, symmetry and
+    transitivity would give
+    \[
+        W \sim a \sim b \sim W',
+    \]
+    hence $W \sim W'$, contradicting that $W$ and $W'$ are not of the same type. So no piece of
+    $\mathcal{D}_W$ is of the same type as any piece of $\mathcal{D}_{W'}$, and the components are
+    orthogonal (Lemma~\ref{lem:starSubalgebra_isOrtho_sSup_not_sameIsotype}).
+\end{proof}
+
 \begin{theorem}[Fixed-point algebra is semisimple]%
     \label{thm:fixedPointAlgebra_isSemisimpleRing}
     \lean{Kraus.fixedPointAlgebra_isSemisimpleRing}
