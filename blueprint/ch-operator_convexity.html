@@ -885,7 +885,7 @@
 	<a href="sect0001.html#Lieb1973Convex" >Lie73</a>
 	
 	]
-</span>). They are provided here as cited inputs, since the corresponding matrix-analysis proofs for real powers \(x\mapsto x^p\) on the Loewner order and for the matrix logarithm are not developed elsewhere in this document. </p>
+</span>). The operator Jensen inequalities for real powers \(x\mapsto x^p\) on the Loewner order are obtained from the Loewner integral representation of the power function. Lieb’s concavity theorem is derived from the operator integral representation of the fractional product together with the vectorization isometry, which turns the trace functional into a quadratic form of a positive-semidefinite matrix. </p>
 <h1 id="a0000029975">18.1 Diagonal Jensen inequality</h1>
 <div class="lemma_thmwrapper theorem-style-plain" id="lem:diagonal_jensen_of_convexOn">
   <div class="lemma_thmheading">
@@ -1306,7 +1306,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>  Let \(Y\) be positive definite and let \(W\) be an isometry. Then </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f33d625f4d0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7faeb644f4d0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:opconv_inverse_compression_le} (W^\ast Y W)^{-1} \le W^\ast Y^{-1} W. \end{equation}
@@ -1383,7 +1383,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>  If the defect block satisfies </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f33d625f9b0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7faeb644f9b0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:opconv_defect_block_relation} S S^\ast = \mathbb {1}- \sum _{i \in \iota } C_i C_i^\ast , \end{equation}
@@ -1492,7 +1492,7 @@
   \[  S S^\ast = \mathbb {1}- \sum _{i \in \iota } C_i C_i^\ast ,  \]
 </div>
 <p> then </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f33d62c0c50>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7faeb64b0c50>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:opconv_povm_resolvent_bound} \left(\sum _{i \in \iota } w_i\,  C_i C_i^\ast + t\, \mathbb {1}\right)^{-1} \le \sum _{i \in \iota } (w_i+t)^{-1}\,  C_i C_i^\ast + t^{-1}\,  S S^\ast . \end{equation}
@@ -3118,10 +3118,15 @@
     <span class="theorem_thmtitle">Lieb concavity</span>
     <div class="thm_header_extras">
 
+    
+    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
     <a class="icon proof" href="ch-operator_convexity.html#thm:lieb_concavity_axiom">#</a>
+    
+    <a class="icon proof" href="ch-operator_convexity.html#a0000031690"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
     
     
     
@@ -3147,8 +3152,8 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>  For \(s\in [0,1]\), any matrix&#160;\(K\), and positive-definite matrices \(A_1,A_2,B_1,B_2\), the map \((A,B)\mapsto \operatorname{tr}(K^\dagger A^s K B^{1-s})\) is jointly concave: </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f33d61d4290>">
+  <p>  For \(s\in [0,1]\), any matrix&#160;\(K\), and positive-definite matrices \(A_1,A_2,B_1,B_2\), the map \((A,B)\mapsto \Re \operatorname{tr}(K^\dagger A^s K B^{1-s})\) is jointly concave: </p>
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7faeb63c4290>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:opconv_lieb_joint_concavity} t\, \Re \operatorname{tr}(K^\dagger A_1^s K B_1^{1-s}) +(1-t) \Re \operatorname{tr}(K^\dagger A_2^s K B_2^{1-s}) \le \Re \operatorname{tr}\! (K^\dagger (tA_1+(1-t)A_2)^s K (tB_1+(1-t)B_2)^{1-s}). \end{equation}
@@ -3164,7 +3169,29 @@
 	<a href="sect0001.html#Ando1979Concavity" >And79</a>
 	
 	]
-</span>. </p>
+</span>. This statement is the positive-definite, boundary-exponent (\(x+y=1\)) case of the Ando–Lieb theorem <span class="cite">
+	[
+	
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Theorem&#160;5.15
+	]
+</span>, which holds for positive semidefinite \(A,B\) and all exponents \(x,y\ge 0\) with \(x+y\le 1\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000031690">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> For \(s\in (0,1)\), the concavity of the fractional product of the commuting left and right multiplication operators (Lemma&#160;<a href="ch-operator_convexity.html#lem:op_lieb_concave">18.28</a>) gives a Loewner-order inequality between positive-semidefinite matrices on the model space \(\mathbb {C}^D\otimes \mathbb {C}^D\). Writing that product as \(A^s\otimes (B^\top )^{1-s}\) and pairing it with the vectorization of \(K^\top \), </p>
+<div class="displaymath" id="a0000031691">
+  \[  \langle \operatorname {vec}K^\top ,\,  (A^s\otimes (B^\top )^{1-s})\operatorname {vec}K^\top \rangle = \Re \operatorname{tr}(K^\dagger A^s K B^{1-s}),  \]
+</div>
+<p> expresses the trace functional as the quadratic form of the Kronecker product at that vector. Applying this positive quadratic form to the Loewner inequality transfers the concavity to the real part of the trace. The endpoints \(s=0\) and \(s=1\) reduce the varying side to a linear function of the convex-combination argument, hence hold with equality. </p>
 
   </div>
 </div>
@@ -3184,7 +3211,7 @@
 
     <a class="icon proof" href="ch-operator_convexity.html#thm:lieb_concavity">#</a>
     
-    <a class="icon proof" href="ch-operator_convexity.html#a0000031690"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-operator_convexity.html#a0000031692"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3235,7 +3262,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031690">
+<div class="proof_wrapper" id="a0000031692">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3243,7 +3270,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Direct application of the axiom. </p>
+  <p>Follows directly from Theorem&#160;<a href="ch-operator_convexity.html#thm:lieb_concavity_axiom">18.29</a>. </p>
 
   </div>
 </div>
@@ -3263,7 +3290,7 @@
 
     <a class="icon proof" href="ch-operator_convexity.html#cor:lieb_concavity_id">#</a>
     
-    <a class="icon proof" href="ch-operator_convexity.html#a0000031691"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-operator_convexity.html#a0000031693"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3311,14 +3338,14 @@
   </div>
   <div class="corollary_thmcontent">
   <p>   For \(s\in [0,1]\), \(t\in [0,1]\), and positive-definite matrices \(A_1,A_2,B_1,B_2\), the map \((A,B)\mapsto \Re \operatorname{tr}(A^s B^{1-s})\) is jointly concave: </p>
-<div class="displaymath" id="a0000031692">
+<div class="displaymath" id="a0000031694">
   \[  t\, \Re \operatorname{tr}(A_1^s B_1^{1-s})+(1-t) \Re \operatorname{tr}(A_2^s B_2^{1-s}) \le \Re \operatorname{tr}\! ((tA_1+(1-t)A_2)^s (tB_1+(1-t)B_2)^{1-s}).  \]
 </div>
 <p> Obtained from Theorem&#160;<a href="ch-operator_convexity.html#thm:lieb_concavity">18.30</a> by taking \(K=\mathbb {1}\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031691">
+<div class="proof_wrapper" id="a0000031693">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3346,7 +3373,7 @@
 
     <a class="icon proof" href="ch-operator_convexity.html#cor:lieb_concavity_in_fst">#</a>
     
-    <a class="icon proof" href="ch-operator_convexity.html#a0000031693"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-operator_convexity.html#a0000031695"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3394,13 +3421,13 @@
   </div>
   <div class="corollary_thmcontent">
   <p>    For \(s\in [0,1]\), \(t\in [0,1]\), matrix \(K\), and positive-definite matrices \(A_1,A_2,B\), the map \(A\mapsto \Re \operatorname{tr}(K^\dagger A^s K B^{1-s})\) is concave: </p>
-<div class="displaymath" id="a0000031694">
+<div class="displaymath" id="a0000031696">
   \[  t\, \Re \operatorname{tr}(K^\dagger A_1^s K B^{1-s}) +(1-t) \Re \operatorname{tr}(K^\dagger A_2^s K B^{1-s}) \le \Re \operatorname{tr}\! (K^\dagger (tA_1+(1-t)A_2)^s K B^{1-s}).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031693">
+<div class="proof_wrapper" id="a0000031695">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3428,7 +3455,7 @@
 
     <a class="icon proof" href="ch-operator_convexity.html#cor:lieb_concavity_in_snd">#</a>
     
-    <a class="icon proof" href="ch-operator_convexity.html#a0000031695"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-operator_convexity.html#a0000031697"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3476,13 +3503,13 @@
   </div>
   <div class="corollary_thmcontent">
   <p>    For \(s\in [0,1]\), \(t\in [0,1]\), matrix \(K\), and positive-definite matrices \(A,B_1,B_2\), the map \(B\mapsto \Re \operatorname{tr}(K^\dagger A^s K B^{1-s})\) is concave: </p>
-<div class="displaymath" id="a0000031696">
+<div class="displaymath" id="a0000031698">
   \[  t\, \Re \operatorname{tr}(K^\dagger A^s K B_1^{1-s}) +(1-t) \Re \operatorname{tr}(K^\dagger A^s K B_2^{1-s}) \le \Re \operatorname{tr}\! (K^\dagger A^s K (tB_1+(1-t)B_2)^{1-s}).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031695">
+<div class="proof_wrapper" id="a0000031697">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3512,7 +3539,7 @@
 
     <a class="icon proof" href="ch-operator_convexity.html#lem:loewner_inv_antitone">#</a>
     
-    <a class="icon proof" href="ch-operator_convexity.html#a0000031697"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-operator_convexity.html#a0000031699"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3543,7 +3570,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031697">
+<div class="proof_wrapper" id="a0000031699">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3571,7 +3598,7 @@
 
     <a class="icon proof" href="ch-operator_convexity.html#lem:superop_resolvent_antitone">#</a>
     
-    <a class="icon proof" href="ch-operator_convexity.html#a0000031698"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-operator_convexity.html#a0000031700"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3621,13 +3648,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>    Fix \(t{\gt}0\) and positive-definite matrices with \(A_1\le A_2\) and \(B_1\le B_2\). The resolvent of the Kronecker model \(A\otimes \mathbb {1}+t\, (\mathbb {1}\otimes B^{\top })\) of the commuting left- and right-multiplication superoperators is antitone: </p>
-<div class="displaymath" id="a0000031699">
+<div class="displaymath" id="a0000031701">
   \[  \bigl(A_2\otimes \mathbb {1}+t\, (\mathbb {1}\otimes B_2^{\top })\bigr)^{-1} \le \bigl(A_1\otimes \mathbb {1}+t\, (\mathbb {1}\otimes B_1^{\top })\bigr)^{-1}.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031698">
+<div class="proof_wrapper" id="a0000031700">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3636,7 +3663,7 @@
   </div>
   <div class="proof_content">
   <p> Each operator \(A\otimes \mathbb {1}+t\, (\mathbb {1}\otimes B^{\top })\) is positive definite, being the sum of the positive-definite \(A\otimes \mathbb {1}\) and the positive-semidefinite \(t\, (\mathbb {1}\otimes B^{\top })\). From \(A_1\le A_2\) and \(B_1\le B_2\) one gets \(A_1\otimes \mathbb {1}\le A_2\otimes \mathbb {1}\) and \(\mathbb {1}\otimes B_1^{\top }\le \mathbb {1}\otimes B_2^{\top }\); since \(t{\gt}0\), adding these yields </p>
-<div class="displaymath" id="a0000031700">
+<div class="displaymath" id="a0000031702">
   \[  A_1\otimes \mathbb {1}+t\, (\mathbb {1}\otimes B_1^{\top }) \le A_2\otimes \mathbb {1}+t\, (\mathbb {1}\otimes B_2^{\top }).  \]
 </div>
 <p> Inverse-antitonicity (Lemma&#160;<a href="ch-operator_convexity.html#lem:loewner_inv_antitone">18.34</a>) reverses this inequality on passing to the resolvents. </p>
