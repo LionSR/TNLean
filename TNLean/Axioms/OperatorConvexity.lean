@@ -699,6 +699,12 @@ the trace functional is the quadratic form of that Kronecker product at the vect
 the positive quadratic form transfers the operator inequality to the trace.  The endpoints
 `s = 0` and `s = 1` are linear in the varying argument and hold with equality.
 
+**Scope restriction (positive-definite inputs; boundary exponent `s, 1−s`):** the
+source Ando–Lieb theorem (Wolf Thm 5.15) covers positive *semidefinite* `A, B` and
+all exponents `x, y ≥ 0` with `x + y ≤ 1`; the statement here is the
+positive-definite, boundary-line (`x + y = 1`) case. Documented in
+`docs/paper-gaps/wolf_ch5_operator_jensen_lieb.tex`.
+
 References:
 * Lieb, *Convex trace functions*, Adv. Math. 11, 1973
 * Ando, *Concavity of certain maps on positive definite matrices*, 1979 -/
