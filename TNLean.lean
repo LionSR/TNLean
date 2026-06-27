@@ -54,6 +54,7 @@ import TNLean.Analysis.KyFanNorm
 import TNLean.Analysis.ConvexHullCompact
 import TNLean.Analysis.SuperoperatorResolvent
 import TNLean.Analysis.LiebScalarIntegral
+import TNLean.Analysis.LiebOperatorIntegral
 
 -- Layer 1: Generic convex/topological infrastructure
 import TNLean.Topology.ConvexProjection
