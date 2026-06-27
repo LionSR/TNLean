@@ -6,7 +6,7 @@ import TNLean.Algebra.HermitianHelpers
 import TNLean.Channel.Basic
 import TNLean.Channel.Schwarz.OperatorJensenAux
 import TNLean.Analysis.LiebOperatorConcave
-import TNLean.Channel.Schwarz.RelativeEntropyAncillaAdditivity
+import TNLean.Analysis.CfcKronecker
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Order
@@ -143,9 +143,16 @@ The remaining Mathlib or local formalization gaps are:
    using unitality to rewrite `T(1)=1`.
 4. **Lieb concavity**: pair the Loewner concavity of the commuting-Kronecker
    fractional product `M(A, B) = (A ⊗ₖ 1)^s (1 ⊗ₖ Bᵀ)^{1-s}`
-   (`Matrix.superop_lieb_concave`, itself proved from the operator integral
-   representation `A^s B^{1-s} = (sin πs/π) ∫₀^∞ t^{s-1} A(A+tB)⁻¹ B dt` and
-   resolvent monotonicity) with the vectorization isometry `vec`.  Writing
+   (`Matrix.superop_lieb_concave`, itself proved from the integral
+   representation of the commuting left/right multiplication superoperators
+   `L_A^s R_B^{1-s} = (sin πs/π) ∫₀^∞ t^{s-1} L_A (L_A + t R_B)⁻¹ R_B dt`,
+   where `L_A : X ↦ A X` and `R_B : X ↦ X B` are realized on the Kronecker
+   model as `A ⊗ₖ 1` and `1 ⊗ₖ Bᵀ`, and resolvent monotonicity of
+   `(L_A + t R_B)⁻¹`).  The matrix-product identity
+   `A^s B^{1-s} = (sin πs/π) ∫₀^∞ t^{s-1} A (A + t B)⁻¹ B dt` holds only when
+   `A` and `B` commute, so it is the commuting superoperators `L_A`, `R_B` —
+   not the matrices `A`, `B` — that carry the representation.  Pair this with
+   the vectorization isometry `vec`.  Writing
    `M(A, B) = A^s ⊗ₖ (Bᵀ)^{1-s}`, the trace functional
    `Tr(K† A^s K B^{1-s})` equals the quadratic form `⟨vec Kᵀ, M(A, B) vec Kᵀ⟩`,
    so applying that positive quadratic form to the Loewner inequality transfers
