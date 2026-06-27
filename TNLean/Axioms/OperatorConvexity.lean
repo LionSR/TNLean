@@ -187,7 +187,7 @@ private local instance instAxiomOCCStarRing : CStarRing Mat :=
   Matrix.instCStarRing
 private local instance instAxiomOCCStarAlgebra : CStarAlgebra Mat where
 
-/-! ## Jensen inequality axioms for positive maps -/
+/-! ## Operator Jensen inequalities for positive maps -/
 
 private lemma cfc_rpow_sub_one_eq
     {p : ℝ} {A : Mat} (hA : A.PosDef) :
