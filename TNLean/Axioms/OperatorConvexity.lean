@@ -792,6 +792,159 @@ theorem lieb_concavity_axiom
       Complex.ofReal_re, Complex.ofReal_im, zero_mul, sub_zero, Complex.ofReal_re,
       Complex.ofReal_im, zero_mul, sub_zero]
 
+/-- The real matrix power `a ↦ a ^ s` for `s > 0` is continuous on the
+positive-semidefinite cone.  The strict positivity of the exponent makes the scalar
+map `x ↦ x ^ s` continuous at `0`, so the functional-calculus power is continuous on
+the whole cone (not only at strictly positive matrices). -/
+private lemma continuousOn_rpow_psd {s : ℝ} (hs : 0 < s) :
+    ContinuousOn (fun a : Mat => a ^ s) {a : Mat | 0 ≤ a} := by
+  have hns : (0 : ℝ≥0) < s.toNNReal := by rw [Real.toNNReal_pos]; exact hs
+  have hcont := CFC.continuousOn_nnrpow (A := Mat) s.toNNReal
+  have hfun : (fun a : Mat => a ^ (s.toNNReal : ℝ≥0)) = fun a : Mat => a ^ s := by
+    funext a; rw [CFC.nnrpow_eq_rpow hns, Real.coe_toNNReal s hs.le]
+  rwa [hfun] at hcont
+
+/-- For positive-semidefinite `A` and `s > 0`, the regularized power
+`(A + ε • 1) ^ s` converges to `A ^ s` as `ε → 0⁺`.  The regularized matrices stay in
+the positive-semidefinite cone, where `· ^ s` is continuous. -/
+private lemma tendsto_reg_rpow {s : ℝ} (hs : 0 < s) {A : Mat} (hA : A.PosSemidef) :
+    Tendsto (fun ε : ℝ => (A + ε • (1 : Mat)) ^ s) (𝓝[>] 0) (𝓝 (A ^ s)) := by
+  have hcontbase : Continuous (fun ε : ℝ => A + ε • (1 : Mat)) := by fun_prop
+  have hbase : Tendsto (fun ε : ℝ => A + ε • (1 : Mat)) (𝓝[>] 0) (𝓝 A) := by
+    have h0 : Tendsto (fun ε : ℝ => A + ε • (1 : Mat)) (𝓝 0) (𝓝 A) := by
+      have := hcontbase.tendsto (0 : ℝ); simpa using this
+    exact h0.mono_left nhdsWithin_le_nhds
+  have hmem : ∀ᶠ ε : ℝ in 𝓝[>] 0, (A + ε • (1 : Mat)) ∈ {a : Mat | 0 ≤ a} := by
+    filter_upwards [self_mem_nhdsWithin] with ε hε
+    exact Matrix.nonneg_iff_posSemidef.mpr (hA.add (Matrix.PosSemidef.one.smul hε.le))
+  have hA0 : A ∈ {a : Mat | 0 ≤ a} := Matrix.nonneg_iff_posSemidef.mpr hA
+  have hcwa : ContinuousWithinAt (fun a : Mat => a ^ s) {a : Mat | 0 ≤ a} A :=
+    (continuousOn_rpow_psd hs).continuousWithinAt hA0
+  have hbase' : Tendsto (fun ε : ℝ => A + ε • (1 : Mat)) (𝓝[>] 0)
+      (𝓝[{a : Mat | 0 ≤ a}] A) := tendsto_nhdsWithin_iff.mpr ⟨hbase, hmem⟩
+  have hcomp : Tendsto (fun ε : ℝ => (A + ε • (1 : Mat)) ^ s) (𝓝[>] 0)
+      (𝓝 (A ^ s)) := hcwa.tendsto.comp hbase'
+  exact hcomp
+
+/-- The regularized trace functional `ε ↦ Re Tr(K† (A + ε)^s K (B + ε)^{1−s})`
+converges to its un-regularized value as `ε → 0⁺`, for `s, 1 − s > 0` and
+positive-semidefinite `A, B`.  The trace functional is continuous in its two matrix
+arguments and each regularized power converges by `tendsto_reg_rpow`. -/
+private lemma tendsto_reg_trace {s : ℝ} (hs0 : 0 < s) (hs1 : 0 < 1 - s) {K A B : Mat}
+    (hA : A.PosSemidef) (hB : B.PosSemidef) :
+    Tendsto
+      (fun ε : ℝ => (trace (Kᴴ * (A + ε • (1:Mat)) ^ s * K * (B + ε • (1:Mat)) ^ (1 - s))).re)
+      (𝓝[>] 0)
+      (𝓝 (trace (Kᴴ * A ^ s * K * B ^ (1 - s))).re) := by
+  have hg : Continuous (fun p : Mat × Mat => (trace (Kᴴ * p.1 * K * p.2)).re) := by
+    have hmul : Continuous (fun p : Mat × Mat => Kᴴ * p.1 * K * p.2) := by fun_prop
+    exact Complex.continuous_re.comp hmul.matrix_trace
+  have hprod : Tendsto
+      (fun ε : ℝ => ((A + ε • (1:Mat)) ^ s, (B + ε • (1:Mat)) ^ (1 - s)))
+      (𝓝[>] 0) (𝓝 (A ^ s, B ^ (1 - s))) :=
+    (tendsto_reg_rpow hs0 hA).prodMk_nhds (tendsto_reg_rpow hs1 hB)
+  change Tendsto ((fun p : Mat × Mat => (trace (Kᴴ * p.1 * K * p.2)).re) ∘
+      (fun ε : ℝ => ((A + ε • (1:Mat)) ^ s, (B + ε • (1:Mat)) ^ (1 - s)))) _ _
+  exact (hg.tendsto (A ^ s, B ^ (1 - s))).comp hprod
+
+/-- **Lieb concavity theorem for positive-semidefinite inputs** (Lieb 1973, Ando 1979;
+Wolf Theorem 5.15 on the boundary line `x + y = 1`).
+
+For `s ∈ [0, 1]`, any matrix `K`, and positive-*semidefinite* matrices `A₁, A₂, B₁, B₂`,
+the map `(A, B) ↦ Re Tr(K† A^s K B^{1−s})` is jointly concave.  This lifts the
+positive-definiteness restriction of `lieb_concavity_axiom`: it is the full Ando–Lieb
+theorem (Wolf Thm 5.15) on the boundary line `x + y = 1`, with `x = s`, `y = 1 − s`.
+
+The interior case `s ∈ (0, 1)` follows from `lieb_concavity_axiom` by regularization.
+For `ε > 0` each input is replaced by the positive-definite matrix `Aᵢ + ε • 1`; the
+positive-definite inequality holds for every `ε`, and the limit `ε → 0⁺` recovers the
+semidefinite statement because `x ↦ x^s` is continuous at `0` for `s ∈ (0, 1)`, so each
+regularized power converges in norm.  The endpoints `s = 0` and `s = 1` are linear in
+the varying argument and hold with equality.
+
+The sole remaining restriction relative to Wolf Thm 5.15 is the boundary line
+`x + y = 1`; the general region `x + y ≤ 1` is documented in
+`docs/paper-gaps/wolf_ch5_operator_jensen_lieb.tex`.
+
+References:
+* Lieb, *Convex trace functions*, Adv. Math. 11, 1973
+* Ando, *Concavity of certain maps on positive definite matrices*, 1979 -/
+theorem lieb_concavity_psd
+    {s : ℝ} (hs : s ∈ Set.Icc (0 : ℝ) 1)
+    {A₁ A₂ B₁ B₂ K : Mat}
+    (hA₁ : A₁.PosSemidef) (hA₂ : A₂.PosSemidef)
+    (hB₁ : B₁.PosSemidef) (hB₂ : B₂.PosSemidef)
+    {t : ℝ} (ht : t ∈ Set.Icc (0 : ℝ) 1) :
+    t * (trace (Kᴴ * A₁ ^ s * K * B₁ ^ (1 - s))).re +
+      (1 - t) * (trace (Kᴴ * A₂ ^ s * K * B₂ ^ (1 - s))).re ≤
+    (trace (Kᴴ * (t • A₁ + (1 - t) • A₂) ^ s * K *
+      (t • B₁ + (1 - t) • B₂) ^ (1 - s))).re := by
+  classical
+  obtain ⟨ht0, ht1⟩ := ht
+  have ht1' : (0 : ℝ) ≤ 1 - t := by linarith
+  set Aθ := t • A₁ + (1 - t) • A₂ with hAθ
+  set Bθ := t • B₁ + (1 - t) • B₂ with hBθ
+  have hAθ' : Aθ.PosSemidef := (hA₁.smul ht0).add (hA₂.smul ht1')
+  have hBθ' : Bθ.PosSemidef := (hB₁.smul ht0).add (hB₂.smul ht1')
+  rcases lt_or_eq_of_le hs.1 with hs0 | hs0
+  · rcases lt_or_eq_of_le hs.2 with hs1 | hs1
+    · -- Interior case `s ∈ (0, 1)`: regularize to positive definite and take `ε → 0⁺`.
+      have hs1' : (0 : ℝ) < 1 - s := by linarith
+      have havgA : ∀ ε : ℝ,
+          t • (A₁ + ε • (1 : Mat)) + (1 - t) • (A₂ + ε • (1 : Mat)) = Aθ + ε • (1 : Mat) := by
+        intro ε; rw [hAθ]; module
+      have havgB : ∀ ε : ℝ,
+          t • (B₁ + ε • (1 : Mat)) + (1 - t) • (B₂ + ε • (1 : Mat)) = Bθ + ε • (1 : Mat) := by
+        intro ε; rw [hBθ]; module
+      have hineq : ∀ᶠ ε : ℝ in 𝓝[>] 0,
+          t * (trace (Kᴴ * (A₁ + ε • (1:Mat)) ^ s * K * (B₁ + ε • (1:Mat)) ^ (1-s))).re +
+            (1 - t) *
+              (trace (Kᴴ * (A₂ + ε • (1:Mat)) ^ s * K * (B₂ + ε • (1:Mat)) ^ (1-s))).re ≤
+          (trace (Kᴴ * (Aθ + ε • (1:Mat)) ^ s * K * (Bθ + ε • (1:Mat)) ^ (1-s))).re := by
+        filter_upwards [self_mem_nhdsWithin] with ε hε
+        have hone : ((ε : ℝ) • (1 : Mat)).PosDef := Matrix.PosDef.one.smul hε
+        have hpd :=
+          lieb_concavity_axiom (s := s) hs (A₁ := A₁ + ε • (1:Mat))
+            (A₂ := A₂ + ε • (1:Mat)) (B₁ := B₁ + ε • (1:Mat)) (B₂ := B₂ + ε • (1:Mat)) (K := K)
+            (Matrix.PosDef.posSemidef_add hA₁ hone) (Matrix.PosDef.posSemidef_add hA₂ hone)
+            (Matrix.PosDef.posSemidef_add hB₁ hone) (Matrix.PosDef.posSemidef_add hB₂ hone)
+            (t := t) ⟨ht0, ht1⟩
+        rwa [havgA ε, havgB ε] at hpd
+      have hcvgL : Tendsto
+          (fun ε : ℝ =>
+            t * (trace (Kᴴ * (A₁ + ε • (1:Mat)) ^ s * K * (B₁ + ε • (1:Mat)) ^ (1-s))).re +
+              (1 - t) *
+                (trace (Kᴴ * (A₂ + ε • (1:Mat)) ^ s * K * (B₂ + ε • (1:Mat)) ^ (1-s))).re)
+          (𝓝[>] 0)
+          (𝓝 (t * (trace (Kᴴ * A₁ ^ s * K * B₁ ^ (1 - s))).re +
+            (1 - t) * (trace (Kᴴ * A₂ ^ s * K * B₂ ^ (1 - s))).re)) :=
+        ((tendsto_reg_trace hs0 hs1' hA₁ hB₁).const_mul t).add
+          ((tendsto_reg_trace hs0 hs1' hA₂ hB₂).const_mul (1 - t))
+      have hcvgR := tendsto_reg_trace (K := K) hs0 hs1' hAθ' hBθ'
+      exact le_of_tendsto_of_tendsto hcvgL hcvgR hineq
+    · -- Endpoint `s = 1`.
+      subst hs1
+      simp only [CFC.rpow_one _ hA₁.nonneg, CFC.rpow_one _ hA₂.nonneg,
+        CFC.rpow_one _ hAθ'.nonneg, sub_self, CFC.rpow_zero _ hB₁.nonneg,
+        CFC.rpow_zero _ hB₂.nonneg, CFC.rpow_zero _ hBθ'.nonneg, Matrix.mul_one]
+      have hlin : Kᴴ * Aθ * K = t • (Kᴴ * A₁ * K) + (1 - t) • (Kᴴ * A₂ * K) := by
+        rw [hAθ]; simp only [Matrix.mul_add, Matrix.add_mul, Matrix.mul_smul, Matrix.smul_mul]
+      rw [hlin, Matrix.trace_add, Matrix.trace_smul, Matrix.trace_smul,
+        Complex.add_re, Complex.real_smul, Complex.real_smul, Complex.mul_re, Complex.mul_re,
+        Complex.ofReal_re, Complex.ofReal_im, zero_mul, sub_zero, Complex.ofReal_re,
+        Complex.ofReal_im, zero_mul, sub_zero]
+  · -- Endpoint `s = 0`.
+    subst hs0
+    simp only [CFC.rpow_zero _ hA₁.nonneg, CFC.rpow_zero _ hA₂.nonneg,
+      CFC.rpow_zero _ hAθ'.nonneg, sub_zero, CFC.rpow_one _ hB₁.nonneg,
+      CFC.rpow_one _ hB₂.nonneg, CFC.rpow_one _ hBθ'.nonneg, Matrix.mul_one]
+    have hlin : Kᴴ * K * Bθ = t • (Kᴴ * K * B₁) + (1 - t) • (Kᴴ * K * B₂) := by
+      rw [hBθ]; simp only [Matrix.mul_add, Matrix.mul_smul]
+    rw [hlin, Matrix.trace_add, Matrix.trace_smul, Matrix.trace_smul,
+      Complex.add_re, Complex.real_smul, Complex.real_smul, Complex.mul_re, Complex.mul_re,
+      Complex.ofReal_re, Complex.ofReal_im, zero_mul, sub_zero, Complex.ofReal_re,
+      Complex.ofReal_im, zero_mul, sub_zero]
+
 end Lieb
 
 end
