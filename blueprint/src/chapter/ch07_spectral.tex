@@ -1159,6 +1159,62 @@ special case used in this section.
     semisimple algebras over the algebraically closed field $\C$.
 \end{proof}
 
+The abstract decomposition records only the ring structure. To realize it by a
+single unitary change of basis, as in~\cite[Theorem~6.14]{Wolf2012Quantum}, one
+uses the spatial feature of a $*$-subalgebra: it reduces orthogonally. Whenever a
+subspace is invariant, so is its orthogonal complement, so the representation
+space splits into mutually orthogonal invariant pieces rather than merely into a
+direct sum of them.
+
+\begin{lemma}[Orthogonal reducibility of a $*$-subalgebra]%
+    \label{lem:starSubalgebra_orthogonal_reducibility}
+    \lean{StarSubalgebra.orthogonal_mem_invtSubmodule}
+    \leanok
+    Let $S$ be a $*$-subalgebra of $\MN{D}$, and let $W \subseteq \C^{D}$ be a
+    subspace invariant under every member of $S$, meaning $A\,W \subseteq W$ for
+    all $A \in S$. Then the orthogonal complement $W^{\perp}$ is also invariant
+    under every member of $S$: for each $A \in S$,
+    \[
+        A\, W^{\perp} \subseteq W^{\perp}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Fix $A \in S$. Since $S$ is closed under the adjoint, $A^{\dagger} \in S$,
+    and therefore $A^{\dagger} W \subseteq W$. For $v \in W^{\perp}$ and
+    $w \in W$,
+    \[
+        \langle w, A v \rangle = \langle A^{\dagger} w, v \rangle = 0,
+    \]
+    because $A^{\dagger} w \in W$ while $v$ is orthogonal to $W$. Hence
+    $A v \in W^{\perp}$.
+\end{proof}
+
+\begin{lemma}[Invariant subspaces split off orthogonally]%
+    \label{lem:starSubalgebra_isCompl_orthogonal}
+    \lean{StarSubalgebra.isCompl_orthogonal_of_invariant}
+    \leanok
+    \uses{lem:starSubalgebra_orthogonal_reducibility}
+    With $S$ and $W$ as in
+    Lemma~\ref{lem:starSubalgebra_orthogonal_reducibility}, the representation
+    space decomposes as the orthogonal direct sum
+    \[
+        \C^{D} = W \oplus W^{\perp},
+    \]
+    in which the orthogonal complement $W^{\perp}$ is invariant under every
+    member of $S$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:starSubalgebra_orthogonal_reducibility}
+    In a finite-dimensional inner product space the orthogonal complement of a
+    subspace is a vector-space complement, which gives the orthogonal direct
+    sum. Invariance of $W^{\perp}$ is
+    Lemma~\ref{lem:starSubalgebra_orthogonal_reducibility}.
+\end{proof}
+
 \begin{theorem}[Fixed-point algebra is semisimple]%
     \label{thm:fixedPointAlgebra_isSemisimpleRing}
     \lean{Kraus.fixedPointAlgebra_isSemisimpleRing}
