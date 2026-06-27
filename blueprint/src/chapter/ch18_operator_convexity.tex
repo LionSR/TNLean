@@ -533,10 +533,27 @@ of $A^s B^{1-s}$.
     \]
 \end{proof}
 
+\begin{lemma}[Diagonal Lieb integral identity]\label{lem:diagonal_lieb_integral}
+    \lean{Matrix.diagonal_lieb_integral}
+    \leanok
+    \uses{lem:scalar_lieb_integral}
+    For positive diagonal matrices $M$ and $N$ and $s\in(0,1)$,
+    \[
+        M^s N^{1-s}
+        = \frac{\sin(\pi s)}{\pi}\int_0^\infty t^{s-1}\,M\,(M+tN)^{-1}\,N\,dt.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:scalar_lieb_integral}
+    Both sides are diagonal, so the identity holds entry by entry; on each
+    diagonal entry it is the scalar Lieb integral identity
+    (Lemma~\ref{lem:scalar_lieb_integral}).
+\end{proof}
+
 \begin{lemma}[Operator integral representation]\label{lem:op_lieb_integral_rep}
     \lean{superop_lieb_integral_rep}
     \leanok
-    \uses{lem:scalar_lieb_integral}
+    \uses{lem:diagonal_lieb_integral}
     For positive-definite matrices $A$, $B$ and $s\in(0,1)$,
     \[
         (A\otimes I)^s\,(I\otimes B^\top)^{1-s}
@@ -551,8 +568,9 @@ of $A^s B^{1-s}$.
 \begin{proof}\leanok
     The pair $(A\otimes I,\,I\otimes B^\top)$ is simultaneously diagonalized by
     $V = U_A\otimes U_{B^\top}$ (eigenbases of $A$ and $B^\top$).
-    In that basis both sides are diagonal, and the identity holds entrywise by
-    Lemma~\ref{lem:scalar_lieb_integral}.
+    In that basis the pair becomes a commuting pair of positive diagonal
+    matrices, and the identity follows from the diagonal case
+    (Lemma~\ref{lem:diagonal_lieb_integral}).
 \end{proof}
 
 \begin{lemma}[Concavity of the parallel sum]\label{lem:parallel_sum_concave}
