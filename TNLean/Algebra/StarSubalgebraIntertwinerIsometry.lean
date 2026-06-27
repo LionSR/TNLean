@@ -149,8 +149,7 @@ theorem exists_real_smul_inner_of_intertwiner
 to a strictly positive real factor `c`: for all `x` and `y` in `p`,
 $$\langle f(x), f(y)\rangle = c\,\langle x, y\rangle , \qquad c > 0 .$$
 The nonnegative factor from the inner-product identity is strictly positive here, since
-evaluating it at a vector of `p` on which `f` is nonzero gives a positive squared norm. After
-dividing `f` by the square root of `c`, the restriction to `p` is an isometry onto `q`. See
+evaluating it at a vector of `p` on which `f` is nonzero gives a positive squared norm. See
 *Quantum Channels & Operations* (Wolf 2012), Chapter 6, towards Theorem 6.14. -/
 theorem exists_pos_smul_inner_of_intertwiner_ne_zero
     {p q : Submodule ℂ (EuclideanSpace ℂ n)} (hp : S.IsIrreducibleSubspace p)
