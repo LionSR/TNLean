@@ -7,7 +7,6 @@ import TNLean.Channel.Basic
 import TNLean.Channel.Schwarz.OperatorJensenAux
 import TNLean.Analysis.LiebOperatorConcave
 import TNLean.Channel.Schwarz.RelativeEntropyAncillaAdditivity
-import TNLean.Analysis.TraceCFC
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Order
@@ -676,7 +675,7 @@ private lemma lieb_kronecker_reduction (A B : Mat) (hA : A.PosDef) (hB : B.PosDe
       Matrix.cfc_one_kronecker hB.transpose.isHermitian]
   rw [hAk, hBk, ← Matrix.mul_kronecker_mul, Matrix.mul_one, Matrix.one_mul]
 
-/-- The vectorization bridge: the quadratic form of `A^s ⊗ₖ (Bᵀ)^{1-s}` at the vector
+/-- The vectorization identity: the quadratic form of `A^s ⊗ₖ (Bᵀ)^{1-s}` at the vector
 `vec Kᵀ` recovers the Lieb trace functional `Tr(K† A^s K B^{1-s})`. -/
 private lemma lieb_quad_eq_trace (A B K : Mat) (hB : B.PosDef) (s : ℝ) :
     star (Matrix.vec Kᵀ) ⬝ᵥ (((A ^ s) ⊗ₖ ((Bᵀ) ^ (1 - s))) *ᵥ Matrix.vec Kᵀ)
