@@ -1215,6 +1215,62 @@ direct sum of them.
     Lemma~\ref{lem:starSubalgebra_orthogonal_reducibility}.
 \end{proof}
 
+Orthogonal reducibility is the inductive step behind a full orthogonal
+decomposition. A subspace with no proper nonzero invariant subspace is
+irreducible; a subspace that has one splits off its orthogonal complement, and
+both pieces are again invariant and strictly smaller. Iterating on dimension
+exhausts the space into irreducible pieces, mutually orthogonal because at each
+step the two pieces are.
+
+\begin{definition}[Irreducible invariant subspace]%
+    \label{def:starSubalgebra_irreducibleSubspace}
+    \lean{StarSubalgebra.IsIrreducibleSubspace}
+    \leanok
+    Let $S$ be a $*$-subalgebra of $\MN{D}$. A subspace $W \subseteq \C^{D}$ is
+    irreducible under $S$ when it is nonzero, invariant under every member of $S$,
+    and its only invariant subspaces are $\{0\}$ and $W$ itself.
+\end{definition}
+
+\begin{lemma}[Orthogonal decomposition of an invariant subspace]%
+    \label{lem:starSubalgebra_orthogonal_irreducible_invariant}
+    \lean{StarSubalgebra.exists_orthogonal_irreducible_of_invariant}
+    \leanok
+    \uses{lem:starSubalgebra_isCompl_orthogonal, def:starSubalgebra_irreducibleSubspace}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$ and let $W \subseteq \C^{D}$ be invariant
+    under every member of $S$. Then $W$ is the sum of a finite family of pairwise
+    orthogonal subspaces contained in $W$, each irreducible under $S$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:starSubalgebra_isCompl_orthogonal}
+    Induct on the dimension of $W$. If $W$ is zero the empty family works, and if
+    $W$ is irreducible the family $\{W\}$ works. Otherwise $W$ has a proper nonzero
+    invariant subspace $U$. By
+    Lemma~\ref{lem:starSubalgebra_isCompl_orthogonal} the orthogonal complement of
+    $U$ inside $W$ is invariant, and both $U$ and that complement are strictly
+    smaller than $W$ and span it. Their inductive decompositions consist of
+    subspaces lying inside $U$ and inside its complement respectively, hence are
+    orthogonal to one another; the two families together form the required family.
+\end{proof}
+
+\begin{theorem}[Orthogonal irreducible decomposition]%
+    \label{thm:starSubalgebra_orthogonal_irreducible_decomposition}
+    \lean{StarSubalgebra.exists_orthogonal_irreducible_decomposition}
+    \leanok
+    \uses{lem:starSubalgebra_orthogonal_irreducible_invariant}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$. Then $\C^{D}$ is the sum of a finite
+    family of pairwise orthogonal subspaces, each irreducible under $S$; that is,
+    $\C^{D}$ is an orthogonal direct sum of irreducible invariant subspaces.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:starSubalgebra_orthogonal_irreducible_invariant}
+    Apply Lemma~\ref{lem:starSubalgebra_orthogonal_irreducible_invariant} to the
+    whole space $W = \C^{D}$, which is invariant under every member of $S$.
+\end{proof}
+
 \begin{theorem}[Fixed-point algebra is semisimple]%
     \label{thm:fixedPointAlgebra_isSemisimpleRing}
     \lean{Kraus.fixedPointAlgebra_isSemisimpleRing}
