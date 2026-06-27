@@ -1340,12 +1340,12 @@ it carries $W$ into $W'$ and commutes on $W$ with every member of $S$. Two piece
 the same type when some intertwiner between them does not vanish on the source; on
 irreducible pieces such an intertwiner is automatically an isomorphism.
 
-\begin{definition}[Intertwiner between invariant subspaces]%
+\begin{definition}[Intertwiner between subspaces]%
     \label{def:starSubalgebra_intertwiner}
     \lean{StarSubalgebra.IsIntertwiner}
     \leanok
-    Let $S$ be a $*$-subalgebra of $\MN{D}$ and let $W, W' \subseteq \C^{D}$ be invariant
-    under $S$. A linear operator $f \colon \C^{D} \to \C^{D}$ is an intertwiner from $W$ into
+    Let $S$ be a $*$-subalgebra of $\MN{D}$ and let $W, W' \subseteq \C^{D}$ be subspaces. A
+    linear operator $f \colon \C^{D} \to \C^{D}$ is an intertwiner from $W$ into
     $W'$ when it carries $W$ into $W'$ and, for every $A \in S$ and every $x \in W$,
     \[
         f(A x) = A\,(f x).
@@ -1364,7 +1364,7 @@ isomorphism into a partial isometry.
     \uses{def:starSubalgebra_intertwiner, def:starSubalgebra_irreducibleSubspace,
         lem:starSubalgebra_scalar_commutant_irreducible}
     Let $S$ be a $*$-subalgebra of $\MN{D}$, let $W \subseteq \C^{D}$ be irreducible under $S$,
-    and let $f$ be an intertwiner from $W$ into an invariant subspace $W'$. Then there is a
+    and let $f$ be an intertwiner from $W$ into a subspace $W'$. Then there is a
     real number $c \ge 0$ such that for all $x, y \in W$,
     \[
         \langle f(x), f(y) \rangle = c\,\langle x, y \rangle .
@@ -1393,7 +1393,7 @@ isomorphism into a partial isometry.
     \leanok
     \uses{lem:starSubalgebra_intertwiner_inner_scale}
     Let $S$ be a $*$-subalgebra of $\MN{D}$, let $W \subseteq \C^{D}$ be irreducible under $S$,
-    and let $f$ be an intertwiner from $W$ into an invariant subspace $W'$ that does not vanish
+    and let $f$ be an intertwiner from $W$ into a subspace $W'$ that does not vanish
     on $W$. Then there is a real number $c > 0$ such that for all $x, y \in W$,
     \[
         \langle f(x), f(y) \rangle = c\,\langle x, y \rangle .
