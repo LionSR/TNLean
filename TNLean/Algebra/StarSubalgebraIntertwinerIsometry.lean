@@ -10,10 +10,11 @@ import TNLean.Algebra.StarSubalgebraIsotypic
 Continuing the structure theory of *Quantum Channels & Operations* (Wolf 2012), Chapter 6,
 towards Theorem 6.14, this file shows that an operator carrying an irreducible piece of a
 star-subalgebra into another piece, and commuting there with the subalgebra, preserves the
-inner product up to a single nonnegative real factor. On the irreducible source it is, after
-dividing by the square root of that factor, an isometry onto its image.
+inner product up to a single nonnegative real factor. When it does not vanish on the
+irreducible source, that factor is positive, and dividing by its square root makes it an
+isometry onto its image.
 
-This is the metric input to the assembly of a single unitary change of basis: each
+This is the metric input to the construction of a single unitary change of basis: each
 isomorphism between pieces of the same type can be normalized to a partial isometry, so the
 pieces of one type are unitarily identified.
 
