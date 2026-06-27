@@ -18,11 +18,12 @@ it is a unitary identification of the two pieces.
 
 Same type gives an intertwiner that is injective on the source and maps it onto the target.
 Since the target is nonzero, the intertwiner does not vanish on the source, so the scaled
-inner-product identity for nonvanishing intertwiners gives a positive real factor `c` with
-`⟪f x, f y⟫ = c ⟪x, y⟫` on the source. Normalizing the intertwiner by `1 / √c` keeps the
-commuting identity, keeps the image (scaling by a nonzero scalar preserves the image
-subspace), and turns the inner-product factor into one, making the normalized operator an
-isometry of the source onto the target.
+inner-product identity for nonvanishing intertwiners gives a positive real factor $c$ with
+$\langle f(x), f(y)\rangle = c\,\langle x, y\rangle$ on the source. Normalizing the
+intertwiner to $u = f / \sqrt{c}$ keeps the commuting identity and the image (scaling by a
+nonzero scalar preserves the image subspace), and turns the factor into one,
+$$\langle u(x), u(y)\rangle = \tfrac{1}{c}\,\langle f(x), f(y)\rangle = \langle x, y\rangle,$$
+making the normalized operator an isometry of the source onto the target.
 -/
 
 open scoped Matrix InnerProductSpace ComplexConjugate
@@ -37,10 +38,11 @@ are of the same type, there is an operator `u` that is an intertwiner from `p` i
 `p` onto `q`, and preserves the inner product on `p`: for all `x` and `y` in `p`,
 $$\langle u(x), u(y)\rangle = \langle x, y\rangle .$$
 Same type gives an intertwiner injective on `p` with image `q`; since `q` is nonzero it does
-not vanish on `p`, so the scaled inner-product identity gives a positive real factor `c` with
-$\langle f(x), f(y)\rangle = c\,\langle x, y\rangle$, and dividing the intertwiner by
-$\sqrt{c}$ keeps the commuting identity and the image while turning the factor into one. See
-*Quantum Channels & Operations* (Wolf 2012), Chapter 6, towards Theorem 6.14. -/
+not vanish on `p`, so the scaled inner-product identity gives a positive real factor $c$ with
+$\langle f(x), f(y)\rangle = c\,\langle x, y\rangle$. Dividing the intertwiner by $\sqrt{c}$
+keeps the commuting identity and the image and turns the factor into one,
+$$\langle u(x), u(y)\rangle = \tfrac{1}{c}\,\langle f(x), f(y)\rangle = \langle x, y\rangle .$$
+See *Quantum Channels & Operations* (Wolf 2012), Chapter 6, towards Theorem 6.14. -/
 theorem exists_isometry_intertwiner_of_sameIsotype
     {p q : Submodule ℂ (EuclideanSpace ℂ n)} (hp : S.IsIrreducibleSubspace p)
     (hq : S.IsIrreducibleSubspace q) (h : S.SameIsotype p q) :
