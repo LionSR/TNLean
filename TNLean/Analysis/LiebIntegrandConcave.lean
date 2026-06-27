@@ -150,7 +150,8 @@ theorem parallel_sum_concave {X₁ X₂ Y₁ Y₂ : Matrix n n ℂ}
   have hSchur := (Matrix.PosDef.fromBlocks₂₂ (A := Xb - Zb) (B := Xb) hXYb).mp
   rw [hXbH] at hSchur
   have hfinal := hSchur hPS
-  -- `(Xb - Zb) - Xb (Xb + Yb)⁻¹ Xb = (Xb (Xb + Yb)⁻¹ Yb) - Zb`, so the Schur complement is the goal.
+  -- `(Xb - Zb) - Xb (Xb + Yb)⁻¹ Xb = (Xb (Xb + Yb)⁻¹ Yb) - Zb`, so the Schur
+  -- complement is the goal.
   have hrw : (Xb - Zb) - Xb * (Xb + Yb)⁻¹ * Xb = Xb * (Xb + Yb)⁻¹ * Yb - Zb := by
     rw [parallel_sum_eq_sub hXYb]; abel
   rw [hrw] at hfinal
@@ -217,14 +218,15 @@ theorem superop_resolvent_integrand_concave {t : ℝ} (ht : 0 < t)
   have hAhatlin : Ahat (θ • A₁ + (1 - θ) • A₂) = θ • Ahat A₁ + (1 - θ) • Ahat A₂ := by
     show (θ • A₁ + (1 - θ) • A₂) ⊗ₖ I = _
     rw [Matrix.add_kronecker, Matrix.smul_kronecker, Matrix.smul_kronecker]
-  have hBhatlin : t • Bhat (θ • B₁ + (1 - θ) • B₂) = θ • (t • Bhat B₁) + (1 - θ) • (t • Bhat B₂) := by
+  have hBhatlin :
+      t • Bhat (θ • B₁ + (1 - θ) • B₂) = θ • (t • Bhat B₁) + (1 - θ) • (t • Bhat B₂) := by
     show t • (I ⊗ₖ (θ • B₁ + (1 - θ) • B₂)ᵀ) = _
     rw [Matrix.transpose_add, Matrix.transpose_smul, Matrix.transpose_smul,
       Matrix.kronecker_add, Matrix.kronecker_smul, Matrix.kronecker_smul, smul_add,
       smul_comm t θ, smul_comm t (1 - θ)]
   -- Apply parallel-sum concavity to `Xᵢ = Ahat Aᵢ`, `Yᵢ = t • Bhat Bᵢ`.
-  have hpar := Matrix.PosDef.parallel_sum_concave (hAhatpd hA₁) (hAhatpd hA₂) (hBhatpd hB₁) (hBhatpd hB₂)
-    (θ := θ) ⟨hθ0, hθ1⟩
+  have hpar := Matrix.PosDef.parallel_sum_concave
+    (hAhatpd hA₁) (hAhatpd hA₂) (hBhatpd hB₁) (hBhatpd hB₂) (θ := θ) ⟨hθ0, hθ1⟩
   rw [← hAhatlin, ← hBhatlin] at hpar
   -- Scale the parallel-sum inequality by `t⁻¹ ≥ 0`.
   rw [hinteg, hinteg, hinteg, smul_comm θ (t⁻¹ : ℝ), smul_comm (1 - θ) (t⁻¹ : ℝ),
