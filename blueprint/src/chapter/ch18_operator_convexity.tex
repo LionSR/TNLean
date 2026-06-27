@@ -622,3 +622,52 @@ of $A^s B^{1-s}$.
     Specialize Theorem~\ref{thm:lieb_concavity} at $A_1=A_2=A$, so that
     the convex combination collapses: $tA+(1-t)A=A$.
 \end{proof}
+
+\section{Resolvent monotonicity toward the Lieb concavity theorem}
+
+The integral-representation route toward the Lieb concavity theorem rests on the
+antitonicity of the resolvent of the commuting left- and right-multiplication
+superoperators. Its matrix-order foundation is the inverse-antitonicity of the
+Loewner order.
+
+\begin{lemma}[Loewner inverse-antitonicity]\label{lem:loewner_inv_antitone}
+    \lean{Matrix.PosDef.inv_le_inv_of_le}
+    \leanok
+    For positive-definite matrices $A$ and $B$ with $A\le B$ in the Loewner
+    order, the inverses satisfy $B^{-1}\le A^{-1}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Compare the two Schur complements of the block matrix
+    $\begin{psmallmatrix}A^{-1}&\Id\\\Id&B\end{psmallmatrix}$. Complementing its
+    $(1,1)$ block gives $B-(A^{-1})^{-1}=B-A\ge 0$, so the block matrix is
+    positive semidefinite; complementing the $(2,2)$ block of the same matrix
+    gives $A^{-1}-B^{-1}$, which is therefore positive semidefinite as well.
+\end{proof}
+
+\begin{lemma}[Joint Loewner-antitonicity of the commuting-multiplication resolvent]
+    \label{lem:superop_resolvent_antitone}
+    \lean{superop_resolvent_antitone}
+    \leanok
+    \uses{lem:loewner_inv_antitone}
+    Fix $t>0$ and positive-definite matrices with $A_1\le A_2$ and $B_1\le B_2$.
+    The resolvent of the Kronecker model $A\otimes\Id+t\,(\Id\otimes B^{\top})$ of
+    the commuting left- and right-multiplication superoperators is antitone:
+    \[
+        \bigl(A_2\otimes\Id+t\,(\Id\otimes B_2^{\top})\bigr)^{-1}
+        \le
+        \bigl(A_1\otimes\Id+t\,(\Id\otimes B_1^{\top})\bigr)^{-1}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:loewner_inv_antitone}
+    Each operator $A\otimes\Id+t\,(\Id\otimes B^{\top})$ is positive definite,
+    being the sum of the positive-definite $A\otimes\Id$ and the
+    positive-semidefinite $t\,(\Id\otimes B^{\top})$. From $A_1\le A_2$ and
+    $B_1\le B_2$ one gets $A_1\otimes\Id\le A_2\otimes\Id$ and
+    $\Id\otimes B_1^{\top}\le\Id\otimes B_2^{\top}$, so the two operators are
+    Loewner-ordered. Inverse-antitonicity
+    (Lemma~\ref{lem:loewner_inv_antitone}) reverses the order on passing to the
+    resolvents.
+\end{proof}
