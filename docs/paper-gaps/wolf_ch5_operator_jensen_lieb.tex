@@ -21,16 +21,16 @@ operator-convexity boundary\footnote{%
     The declarations are
     \leanid{posMap_rpow_concave_jensen}, \leanid{posMap_rpow_convex_jensen},
     \leanid{posMap_log_concave_jensen}, and \leanid{lieb_concavity_axiom} in
-    \doclink{TNLean/Axioms/OperatorConvexity}; the first and third are now
-    theorems, and the convex real-power Jensen and Lieb declarations remain
-    axioms.}
+    \doclink{TNLean/Axioms/OperatorConvexity}; the first, third, and fourth are
+    now theorems (the Lieb declaration in its positive-definite, boundary-exponent
+    scope, see Section~\ref{sec:lieb}); none remains an axiom.}
 together with the cited sources, the precise gaps, and the first concrete step
 toward eliminating each remaining gap.  The positive-map Jensen declarations
 underlie \cite[Corollary~5.2]{Wolf2012Quantum} (the second corollary of Wolf's
 \S5.4) and rest on the operator-convexity and
 operator-monotonicity-versus-positive-maps results
-\cite[Theorems~5.10--5.13]{Wolf2012Quantum}; the Lieb axiom is the Ando--Lieb
-trace functional \cite[Theorem~5.15]{Wolf2012Quantum}.  (Wolf's Theorem~5.1 is
+\cite[Theorems~5.10--5.13]{Wolf2012Quantum}; the Lieb declaration is the
+Ando--Lieb trace functional \cite[Theorem~5.15]{Wolf2012Quantum}.  (Wolf's Theorem~5.1 is
 Douglas' theorem and is unrelated to this development.)
 
 The notation is fixed throughout.  Operators act on a finite-dimensional Hilbert
@@ -76,10 +76,10 @@ representation\footnote{%
     \leanid{CFC.exists_measure_nnrpow_eq_integral_cfcₙ_rpowIntegrand₀₁}
     and its $[1,2]$ companion in
     \path{Mathlib/Analysis/SpecialFunctions/ContinuousFunctionalCalculus/Rpow/IntegralRepresentation.lean},
-    together with the Bochner-integral convexity bridge for C\textsuperscript{*}-algebras.}
+    together with the Bochner-integral convexity transfer for C\textsuperscript{*}-algebras.}
 and, through it, the operator concavity of $x\mapsto x^p$ on $[0,1]$
 (\leanid{CFC.concaveOn_rpow}) and of $\log$ (\leanid{CFC.concaveOn_log}).  The
-scalar input of the convex axiom, operator convexity of $x\mapsto x^p$ on
+scalar input of the convex case, operator convexity of $x\mapsto x^p$ on
 $[1,2]$, is also now present as \leanid{CFC.convexOn_rpow} in
 \doclink{TNLean/Analysis/RpowConvexity}.  Thus the scalar functional-calculus
 inputs for the three Jensen declarations are available in the formal
@@ -97,15 +97,15 @@ discharged by the special Löwner-integrand route recorded in
 with ordered Bochner integral monotonicity.  The logarithmic case has also been
 discharged, not by a general Choi--Davis--Jensen theorem, but by taking the
 right limit $p\to 0^+$ in the concave real-power inequality and using
-\leanid{CFC.tendsto_cfc_rpow_sub_one_log}.  The convex real-power case remains
-blocked on the corresponding positive-map Jensen step, not on the integral
-representation of the power integrand.
+\leanid{CFC.tendsto_cfc_rpow_sub_one_log}.  The convex real-power case is now
+likewise proved, by the same positive-map Jensen step applied to the convex
+integrand of $x\mapsto x^p$ on $[1,2]$.
 
 \subsection{The compression scaffold is faithful to bare
 positivity}\label{ssec:caveat}
 
 A faithfulness worry would arise if the only available proof route needed a
-\emph{completely positive} $T$, since the axioms assume only that $T$ is
+\emph{completely positive} $T$, since the statements assume only that $T$ is
 positive (the hypothesis recorded in the formal statements is
 \leanid{IsPositiveMap}) and a complete-positivity hypothesis would be the
 stronger-hypothesis variant forbidden by the faithfulness rule.  That worry does
@@ -156,7 +156,7 @@ identity used in Wolf's block-positivity step in the proof of
   real-power Jensen inequality after integration.  The logarithmic Jensen theorem
   follows from this real-power result by the right-limit formula for
   $(A^p-\mathbf 1)/p$ as $p\to 0^+$.  The convex real-power Jensen declaration
-  remains open.
+  is now proved the same way, with the convex integrand on $[1,2]$.
 
 For the concave real-power case, the analytic step has now been supplied: the
 Löwner-integral argument carries the pointwise finite-POVM resolvent inequality
@@ -190,12 +190,13 @@ real-power statement \leanid{posMap_rpow_concave_jensen} has been discharged by
 the finite-POVM resolvent scaffold, the pointwise integrand inequality, and
 ordered Bochner integral monotonicity.  The logarithmic statement
 \leanid{posMap_log_concave_jensen} has been discharged as the right limit of the
-concave real-power result.  The convex real-power statement remains open; its
-elimination still needs the corresponding positive-map operator Jensen step.
+concave real-power result.  The convex real-power statement
+\leanid{posMap_rpow_convex_jensen} has likewise been discharged, by the same
+positive-map operator Jensen step applied to the convex integrand.
 The integral representation of the power integrand, previously named as the
 obstruction, is present.
 
-\section{The Lieb concavity axiom}
+\section{The Lieb concavity theorem (scope-restricted)}\label{sec:lieb}
 
 \subsection{The assertion}
 
@@ -207,19 +208,23 @@ For $s\in[0,1]$, an arbitrary matrix $K$, and positive-definite $A,B$, the map
 is jointly concave on pairs of positive-definite matrices.  This is the
 boundary-exponent specialization of the Lieb concavity theorem
 (\cite[Theorem~5.15, the Ando--Lieb functional]{Wolf2012Quantum}), the trace
-functional underlying the Wigner--Yanase--Dyson conjecture.
+functional underlying the Wigner--Yanase--Dyson conjecture.  It is now
+\emph{proved} in this scope --- \leanid{lieb_concavity_axiom} is a theorem,
+derived from the commuting-superoperator integral representation
+(\S\ref{ssec:lieb-gap}) --- and the two scope restrictions below record how it
+differs from the unrestricted source theorem.
 
 \paragraph{Scope restriction (boundary exponent).}  Wolf's Theorem~5.15 is
-stated for two exponents $x,y\ge 0$ with $x+y\le 1$.  The formal axiom
+stated for two exponents $x,y\ge 0$ with $x+y\le 1$.  The formal theorem
 \leanid{lieb_concavity_axiom} records only the boundary line $x=s$, $y=1-s$,
 where $x+y=1$.  This is sufficient for the current downstream Lieb-concavity
 corollaries, but it is not the full source theorem; the sub-boundary range
-$x+y<1$ remains unformalized unless it is derived separately or the axiom is
+$x+y<1$ remains unformalized unless it is derived separately or the theorem is
 generalized.
 
 \paragraph{Scope restriction (positive-definite versus positive
 semidefinite).}  Wolf's Theorem~5.15 states the Ando--Lieb concavity for
-positive (semidefinite) operators, including singular ones.  The formal axiom
+positive (semidefinite) operators, including singular ones.  The formal theorem
 \leanid{lieb_concavity_axiom} is stated only for positive-\emph{definite} $A,B$
 (its hypotheses are \leanid{Matrix.PosDef}), so it does not yet cover singular
 positive inputs on which the source theorem still applies.  This is a scope
@@ -227,8 +232,8 @@ restriction, not an unfaithful statement: the powers $A^s$ and $B^{1-s}$ and the
 resolvent factors $(L_A+tR_B)^{-1}$ used in the elimination route
 (\S\ref{ssec:lieb-gap}) are most directly defined for invertible $A,B$, and the
 positive-definite case extends to the positive-semidefinite case by continuity.
-The unrestricted source theorem remains unformalized until the axiom is
-discharged for positive semidefinite $A,B$; this is recorded here so the
+The unrestricted source theorem remains unformalized until the theorem is
+extended to positive semidefinite $A,B$; this is recorded here so the
 restriction is auditable.
 
 \subsection{The point at issue}\label{ssec:lieb-gap}
@@ -262,20 +267,25 @@ linearity, yields the result.
 
 Mathlib~4.31 contains neither this superoperator integral representation nor a
 matrix-mean / resolvent-monotonicity API of the required form for the commuting
-pair $(L_A,R_B)$.  Supplying it is a library-level contribution, not a short
-local bridge.
+pair $(L_A,R_B)$.  Both were therefore developed within the formalization
+itself rather than drawn from the library.
 
 \subsection{Verdict}
 
 The Lieb concavity statement is correct
-\cite[Theorem~5.15]{Wolf2012Quantum}.  Its elimination requires the Ando
+\cite[Theorem~5.15]{Wolf2012Quantum}.  Its elimination required the Ando
 integral representation of the commuting left/right multiplication superoperators
 $L_A^{\,s}R_B^{\,1-s}$ (not the matrix product $A^sB^{1-s}$, whose resolvent
 formula holds only when $A,B$ commute) together with resolvent monotonicity of
-$(L_A+tR_B)^{-1}$, both absent from Mathlib~4.31.  The axiom is therefore blocked at
-the library level.  Three downstream corollaries already build on it (the
-$K=\mathbf 1$ case and separate concavity in each argument); these inherit the
-same blocked status until the integral representation is formalized.
+$(L_A+tR_B)^{-1}$.  Both were formalized over a sequence of steps --- the scalar
+boundary integral, the operator integral representation on the Kronecker model,
+the concavity of the resolvent integrand, and the resulting operator concavity ---
+and \leanid{lieb_concavity_axiom} is now a theorem in its positive-definite,
+boundary-exponent scope.  Three downstream corollaries build on it (the
+$K=\mathbf 1$ case and separate concavity in each argument); these are now
+axiom-free.  The remaining open generalizations are the two scope extensions
+recorded above: the sub-boundary range $x+y<1$ and singular (positive
+semidefinite) inputs.
 
 \section*{References}
 
@@ -292,8 +302,8 @@ The relevant formal-library inputs now available are
 \leanid{CFC.exists_measure_nnrpow_eq_integral_cfcₙ_rpowIntegrand₀₁},
 \leanid{CFC.concaveOn_rpow}, \leanid{CFC.convexOn_rpow}, and
 \leanid{CFC.concaveOn_log}.  Thus the scalar functional-calculus inputs are
-available; the remaining unproved theorem is the positive-map Jensen step
-described above.
+available, and all four positive-map Jensen and Lieb declarations of this
+boundary are now proved theorems.
 
 \bibliographystyle{alpha}
 \bibliography{references}
