@@ -166,10 +166,9 @@ section SchrodingerDecomp
 
 /-- **Wolf Theorem 6.14**, Schrödinger-picture form (abstract structure).
 
-The fixed-point `*`-subalgebra `{X | map K X = X}` of a unital Schwarz map
-whose adjoint map has a positive definite fixed point decomposes, as a
-ℂ-algebra, into a finite product of full complex matrix algebras
-`Π i, Matrix (Fin (dims i)) (Fin (dims i)) ℂ` with positive block sizes.
+The fixed-point `*`-subalgebra of a unital Schwarz map whose adjoint map has a
+positive definite fixed point decomposes, as a ℂ-algebra, into a finite product
+of full complex matrix algebras with positive block sizes.
 
 This is the structure-of-the-algebra content of Wolf Ch. 6, Thm 6.14, applied
 to the fixed-point `*`-subalgebra `fixedPointsStarSubalgebra` of the
@@ -178,8 +177,9 @@ Schrödinger-picture map `map K`. It is the companion of
 adjoint-fixed-point algebra.
 
 The remaining step toward the full Wolf Thm 6.14 is the unitary block-diagonal
-refinement that exhibits each summand as `M_{d_k} ⊗ 1_{m_k}` weighted by a state
-`ρ_k`; that refinement is not formalized here. -/
+refinement that exhibits each summand as a full matrix algebra tensored with an
+identity on a multiplicity space, weighted by a density operator; that
+refinement is not formalized here. -/
 theorem fixedPointsStarSubalgebra_exists_algEquiv_pi_matrix
     (K : Fin d → Mat) (h_unital : IsUnital K)
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : adjointMap K ρ = ρ) :
