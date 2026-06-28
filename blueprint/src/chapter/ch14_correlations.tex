@@ -702,6 +702,57 @@ and rates for the single-tensor transfer map $\E_A$.
     Apply Theorem~\ref{thm:isometry_canonical_form_of_rfp_nt} to each block.
 \end{proof}
 
+\begin{lemma}[Block decomposition of the direct-sum transfer map]%
+    \label{lem:block_diagonal_transfer_sum_to_block}
+    \lean{MPSTensor.blockDiagonal'_transferSum_toBlock}
+    \leanok
+    \uses{def:mixed_transfer_rect}
+    Let $(B_k)_k$ be a family of tensors and let $\bigoplus_k B_k$ be their
+    direct sum on the total bond space. For every bond matrix $X$ and every pair
+    of blocks, the $(j,j')$ bond block of the transfer sum
+    \[
+        \sum_i \Bigl(\bigoplus_k B_k^i\Bigr)\,X\,
+            \Bigl(\bigoplus_k B_k^i\Bigr)^\dagger
+    \]
+    equals $\E_{j,j'}$ applied to the $(j,j')$ bond block of $X$.
+\end{lemma}
+\begin{proof}\leanok
+    A block-diagonal factor connects only matching blocks, so the $(j,j')$ block
+    of the product is $\sum_i B_j^i\,X_{j,j'}\,(B_{j'}^i)^\dagger$, which is the
+    mixed transfer operator of the two blocks applied to $X_{j,j'}$.
+\end{proof}
+
+\begin{theorem}[Cross-block transfer vanishing for a direct-sum fixed point]%
+    \label{thm:bnt_locally_orthogonal_of_rfp_direct_sum}
+    \lean{MPSTensor.isBNTLocallyOrthogonal_of_isRFP_directSum}
+    \leanok
+    \uses{def:is_bnt_locally_orthogonal, def:is_rfp, def:mixed_transfer_rect,
+        lem:block_diagonal_transfer_sum_to_block}
+    Let $(A_j)_j$ be a family of distinct irreducible left-canonical blocks, no
+    two of which are gauge-phase equivalent, and suppose the direct sum
+    $\bigoplus_j A_j$ is a renormalization fixed point. Then for every pair of
+    distinct components the mixed transfer operator vanishes,
+    \[
+        \E_{j,j'} = \sum_i A_j^i\otimes\overline{A_{j'}^i} = 0 .
+    \]
+    This is the cross-block ($\delta_{j,j'}$) content of the isometry condition
+    of \cite[Theorem~III \& Corollary~III.3]{Cirac2016MPDO_arXiv} at the level of
+    the normal-tensor blocks; converting it to the residual isometries $U_j$ is a
+    further step recorded in
+    \path{docs/paper-gaps/cpsv16_rfp_isometry_scope.tex}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:block_diagonal_transfer_sum_to_block}
+    By Lemma~\ref{lem:block_diagonal_transfer_sum_to_block} the $(j,j')$ bond
+    block of the direct-sum transfer map acts as $\E_{j,j'}$. Whole-tensor
+    idempotence therefore makes each $\E_{j,j'}$ idempotent. For distinct
+    irreducible left-canonical blocks that are not gauge-phase equivalent the
+    mixed transfer operator has spectral radius below one --- by the
+    same-dimension gauge rigidity when the bond dimensions agree, and by the
+    dimension-mismatch gap otherwise --- so an idempotent operator with spectral
+    radius below one must be zero.
+\end{proof}
+
 \begin{theorem}[Canonical-form blocks are injective]\label{thm:rfp_cf_structural}
     \lean{MPSTensor.rfp_cf_structural}
     \leanok

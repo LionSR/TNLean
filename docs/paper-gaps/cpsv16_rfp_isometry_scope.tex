@@ -300,6 +300,28 @@ $\sqrt\Lambda$ of the unit isometry.  The remaining open part of the source
 isometry condition is the cross-block $\delta_{j,j'}$ orthogonality equations
 between distinct normal-tensor blocks.
 
+\section{Progress on the cross-block equations}
+
+The cross-block $\delta_{j,j'}$ orthogonality is now established at the level of
+the normal-tensor blocks, before the passage to the residual isometries.  For a
+family of distinct irreducible left-canonical blocks $(A_j)_j$, no two
+gauge-phase equivalent, whose direct sum $\bigoplus_j A_j$ is a renormalization
+fixed point, the mixed transfer operators between distinct blocks vanish,
+\[
+  \E_{j,j'}=\sum_i A_j^i\otimes\overline{A_{j'}^i}=0
+  \qquad (j\ne j'),
+\]
+formalized by \leanid{MPSTensor.isBNTLocallyOrthogonal_of_isRFP_directSum}.  The
+argument decomposes the direct-sum transfer map block by block
+(\leanid{MPSTensor.blockDiagonal'_transferSum_toBlock}): whole-tensor idempotence
+makes each $\E_{j,j'}$ idempotent, and the same-dimension and dimension-mismatch
+transfer-operator gaps force an idempotent of spectral radius below one to be
+zero.  Writing $A_j^i = X_j\sqrt{\Lambda_j}\,U_j^i X_j^{-1}$ and cancelling the
+invertible factors converts $\E_{j,j'}=0$ to the residual-isometry equation
+$\sum_i (U_j^i)_{\alpha,\beta}\overline{(U_{j'}^i)_{\alpha',\beta'}}=0$; this
+last conversion, together with a faithful multi-block isometry predicate, is the
+remaining step.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 
