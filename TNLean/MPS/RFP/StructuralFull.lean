@@ -936,7 +936,7 @@ theorem unitPairIsometry_transfer (U : MPSTensor d D)
 renormalization fixed points** (arXiv:1606.00608, Theorem charact-MPS,
 line 543; single-block Lemma charact-NT-pure-RFP, lines 1271--1301).
 
-A normal tensor in isometry canonical form is a renormalization fixed point: if
+A tensor in isometry canonical form is a renormalization fixed point: if
 $A^i = X\sqrt\Lambda\,U^i X^{-1}$ with $\Lambda$ diagonal, positive,
 trace-normalized, and $U$ a unit pair-index isometry, then `transferMap A` is
 idempotent, so `IsRFP A` holds. The source calls this implication trivial
