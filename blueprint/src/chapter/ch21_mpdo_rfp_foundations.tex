@@ -396,3 +396,66 @@
     $\mathcal T_{M_{\mathrm w}}=1$. The identity is nonzero and idempotent, so
     source zero correlation length holds with $\lambda = 1$.
 \end{proof}
+
+\begin{theorem}[Physical-trace transfer is idempotent under the local purification RFP condition]
+    \label{thm:phys_trace_transfer_sq_of_local_purification_rfp}
+    \lean{MPOTensor.physTraceTransfer_sq_of_isLocalPurificationRFP}
+    \leanok
+    \uses{def:is_local_purification_rfp, def:mpo_physical_trace_transfer, def:is_rfp}
+    If an MPO tensor $M$ is the ancilla contraction of a pure-state
+    renormalization fixed point, then its physical-trace transfer
+    $\mathcal T_M=\sum_i M^{ii}$ is idempotent,
+    \[
+        \mathcal T_M\,\mathcal T_M=\mathcal T_M .
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:is_rfp}
+    Let $K' = \sum_p \overline{A_p}\otimes A_p$ be the transfer matrix of the
+    purifying tensor $A$; the pure-state renormalization fixed point condition
+    makes it idempotent, $K'K' = K'$. Write $X_\sigma$ for the reindexing of a
+    matrix $X$ by a bijection $\sigma$ of its index set, let $s$ be the Kronecker
+    factor swap, and let $e$ be the bond identification. Closing the ket and bra
+    physical legs of $M$ expresses the physical-trace transfer as
+    \[
+        \mathcal T_M = K_e, \qquad K = (K')_s .
+    \]
+    Reindexing by a bijection commutes with matrix multiplication,
+    $(XY)_\sigma = X_\sigma\,Y_\sigma$, so the idempotence of $K'$ passes first
+    to $K$ and then to $\mathcal T_M$:
+    \[
+        \mathcal T_M\,\mathcal T_M = (K_e)(K_e) = (KK)_e = K_e = \mathcal T_M .
+    \]
+\end{proof}
+
+\begin{theorem}[Local purification RFP with nonzero physical-trace transfer has source ZCL]
+    \label{thm:source_zcl_of_local_purification_rfp}
+    \lean{MPOTensor.isSourceZCL_of_isLocalPurificationRFP}
+    \leanok
+    \uses{def:is_local_purification_rfp, def:mpo_source_zcl}
+    Let $M$ be the ancilla contraction of a pure-state renormalization fixed
+    point, satisfying the local purification renormalization fixed point
+    condition. If the physical-trace transfer $\mathcal T_M=\sum_i M^{ii}$ is
+    nonzero, then $M$ has source zero correlation length.
+% Scope restriction: this is a local analogue (predicate
+% \ref{def:is_local_purification_rfp}) of the forward implication of the source
+% theorem (arXiv:1606.00608, lines 775--786), not that implication itself; it
+% does not cover a purification renormalization fixed point known only through
+% the global purification equation and the definition at arXiv:1606.00608,
+% line 758.
+% Normalization restriction: the unconditional implication fails -- the zero
+% tensor in bond dimension one is a counterexample -- and the hypothesis
+% $\mathcal T_M \neq 0$ reflects the source purification renormalization fixed
+% point being a normalized fixed point with leading eigenvalue 1.
+% See docs/paper-gaps/cpsv16_purification_rfp_definition.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:phys_trace_transfer_sq_of_local_purification_rfp,
+        thm:mpo_source_zcl_of_physical_trace_idempotent}
+    Theorem~\ref{thm:phys_trace_transfer_sq_of_local_purification_rfp} gives
+    idempotence of the physical-trace transfer, and the nonzero hypothesis lets
+    Theorem~\ref{thm:mpo_source_zcl_of_physical_trace_idempotent} conclude source
+    zero correlation length with $\lambda = 1$.
+\end{proof}
