@@ -108,7 +108,7 @@ open-boundary span \(\bigvee_jG_N(A_j)\) by
 \(\sum_j\mathcal G_{N,L}(A_j)\) — is the separate comparison of
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and
 arXiv:2011.12127, Section IV.C, lines 2126--2128, recorded in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex` (issue 2971). -/
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -192,7 +192,7 @@ windows. The periodic-boundary upgrade replacing \(S_N\) by
 \(\sum_j\mathcal G_{N,L}(A_j)\) is the separate comparison of
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and
 arXiv:2011.12127, Section IV.C, lines 2126--2128, recorded in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex` (issue 2971). -/
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -242,7 +242,7 @@ block-separation independence, both independent of the boundary-condition
 comparison at boundary-crossing windows. That periodic-boundary comparison
 (arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456;
 arXiv:2011.12127, Section IV.C, lines 2126--2128) is recorded in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex` (issue 2971). -/
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -325,7 +325,7 @@ the boundary-condition comparison at boundary-crossing windows. The
 periodic-boundary upgrade to \(\mathcal G_{N,L}(A_j)\) (arXiv:quant-ph/0608197,
 Theorem 12, proof lines 1446--1456; arXiv:2011.12127, Section IV.C, lines
 2126--2128) is the separate step recorded in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex` (issue 2971). -/
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem
     exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -442,7 +442,7 @@ comparison at boundary-crossing windows. The periodic-boundary upgrade
 replacing \(\bigvee_jG_N(A_j)\) by \(\sum_j\mathcal G_{N,L}(A_j)\)
 (arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456;
 arXiv:2011.12127, Section IV.C, lines 2126--2128) is recorded in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex` (issue 2971). -/
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -857,7 +857,7 @@ proved (its components lie in \(G_N(A_j)\)); the periodic-boundary upgrade is th
 boundary-condition comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines
 1446--1456, and arXiv:2011.12127, Section IV.C, lines 2126--2128, not yet derived
 from the periodic ground-space constraint. Documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; tracked in issue 2971. -/
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_blockBoundary
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))

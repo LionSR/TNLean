@@ -69,7 +69,7 @@ comparison. The periodic-boundary upgrade encoded by `hComparison` is the
 boundary-condition comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines
 1446--1456, and arXiv:2011.12127, Section IV.C, lines 2126--2128, not yet derived
 from the periodic ground-space constraint. Documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; tracked in issue 2971. -/
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -261,8 +261,7 @@ boundary-crossing comparison.
 crossing-tail span hypothesis noted above, which supplies the periodic-boundary
 upgrade (arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456;
 arXiv:2011.12127, Section IV.C, lines 2126--2128). Documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; tracked in
-issue 2971. -/
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_crossing_pgvwc_comparison_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -350,8 +349,7 @@ boundary-crossing comparison.
 crossing-tail span hypothesis noted above, which supplies the periodic-boundary
 upgrade (arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456;
 arXiv:2011.12127, Section IV.C, lines 2126--2128). Documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; tracked in
-issue 2971. -/
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_crossing_pgvwc_comparison
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -419,8 +417,7 @@ boundary-crossing comparison.
 crossing-tail span hypothesis noted above, which supplies the periodic-boundary
 upgrade (arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456;
 arXiv:2011.12127, Section IV.C, lines 2126--2128). Documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; tracked in
-issue 2971. -/
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_crossing_pgvwc_comparison
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -480,7 +477,7 @@ boundary-crossing comparison. The periodic-boundary upgrade encoded by
 `hComparison` is the boundary-condition comparison of arXiv:quant-ph/0608197,
 Theorem 12, proof lines 1446--1456, and arXiv:2011.12127, Section IV.C, lines
 2126--2128, not yet derived from the periodic ground-space constraint. Documented
-in `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; tracked in issue 2971. -/
+in `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_pgvwc_comparison
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -550,7 +547,7 @@ boundary-crossing comparison. The periodic-boundary upgrade encoded by
 `hComparison` is the boundary-condition comparison of arXiv:quant-ph/0608197,
 Theorem 12, proof lines 1446--1456, and arXiv:2011.12127, Section IV.C, lines
 2126--2128, not yet derived from the periodic ground-space constraint. Documented
-in `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; tracked in issue 2971. -/
+in `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_pgvwc_comparison
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -612,7 +609,7 @@ boundary-crossing comparison. The periodic-boundary upgrade encoded by
 `hComparison` is the boundary-condition comparison of arXiv:quant-ph/0608197,
 Theorem 12, proof lines 1446--1456, and arXiv:2011.12127, Section IV.C, lines
 2126--2128, not yet derived from the periodic ground-space constraint. Documented
-in `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; tracked in issue 2971. -/
+in `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_pgvwc_comparison
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))

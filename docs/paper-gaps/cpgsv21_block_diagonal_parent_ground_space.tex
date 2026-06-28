@@ -55,9 +55,13 @@ canonical form notation, while $b$ follows
 Cirac et al. describe the degenerate parent-Hamiltonian ground space for a
 matrix product state with more than one block in canonical form in Section~IV.C
 of \cite{Cirac2021Matrix}.\footnote{For
-	traceability, the remaining derivation of the source comparison currently
-	assumed by the conditional theorems is tracked by
-	\href{https://github.com/LionSR/TNLean/issues/2971}{issue \#2971}. Pull
+	traceability, the source comparison is now proved on the main branch
+	(\path{TNLean/MPS/ParentHamiltonian/BNTBlockDiagonalCrossingTrace.lean}); the
+	remaining step, discharging the explicit comparison hypothesis still assumed
+	by the conditional theorems, is tracked by
+	\href{https://github.com/LionSR/TNLean/issues/3597}{issue \#3597} (the earlier
+	tracker \href{https://github.com/LionSR/TNLean/issues/2971}{issue \#2971} for
+	proving the comparison is now closed). Pull
 	request~\#2724 records the conditional reduction on the main branch, reducing
 	the unconditional target to the boundary-crossing comparison identities.
 	Earlier reductions were tracked by
