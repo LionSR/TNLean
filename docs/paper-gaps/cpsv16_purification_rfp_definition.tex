@@ -138,9 +138,16 @@ therefore remains open.
 \section{Forward implication on the physical-trace transfer}
 
 The forward implication of the source theorem (lines 775--786), from a
-purification renormalization fixed point to zero correlation length, is
-formalized on the source physical-trace transfer object
-$\mathcal T_M=\sum_i M^{ii}$ (Definition~4.2, lines 735--739). The theorem
+purification renormalization fixed point to zero correlation length,
+\emph{restricted} to the local purification predicate
+\leanid{MPOTensor.IsLocalPurificationRFP} (the one-site tensor identity
+$M^{ij}=(\sum_k A^{(i,k)}\otimes\overline{A^{(j,k)}})_e$, not the global
+Definition \path{def:Puri-RFP} at line 758) and to the physical-trace-transfer
+notion of zero correlation length, is formalized as below; the unrestricted
+source implication remains open (see the Status section). That the object
+$\mathcal T_M=\sum_i M^{ii}$ (Definition~4.2, lines 735--739) is the source
+zero-correlation-length object is the verdict of the companion note
+\path{cpsv16_zcl_canonical_form_normalization.tex}. The theorem
 \leanid{MPOTensor.physTraceTransfer_sq_of_isLocalPurificationRFP} proves that
 the local purification renormalization fixed point condition makes
 $\mathcal T_M$ idempotent, $\mathcal T_M\,\mathcal T_M=\mathcal T_M$, with no
