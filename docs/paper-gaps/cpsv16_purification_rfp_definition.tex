@@ -135,6 +135,32 @@ appearing after the ancillary trace are recorded separately in
 \]
 therefore remains open.
 
+\section{Forward implication on the physical-trace transfer}
+
+The forward implication of the source theorem (lines 775--786), from a
+purification renormalization fixed point to zero correlation length, is
+formalized on the source physical-trace transfer object
+$\mathcal T_M=\sum_i M^{ii}$ (Definition~4.2, lines 735--739). The theorem
+\leanid{MPOTensor.physTraceTransfer_sq_of_isLocalPurificationRFP} proves that
+the local purification renormalization fixed point condition makes
+$\mathcal T_M$ idempotent, $\mathcal T_M\,\mathcal T_M=\mathcal T_M$, with no
+extra hypothesis: the transfer matrix of the pure-state purifying tensor is
+idempotent, and closing the physical legs of $M$ transports this idempotence
+through the bond identification and the Kronecker factor swap.
+
+The source-faithful conclusion that $M$ has source zero correlation length,
+\leanid{MPOTensor.isSourceZCL_of_isLocalPurificationRFP}, carries the extra
+hypothesis $\mathcal T_M\neq 0$. This records a normalization restriction: the
+unconditional implication is false. The zero tensor at $D=D'=d_K=1$ with
+$A^{(i,0)}=0$ satisfies the local purification condition, since its purifying
+tensor is identically zero and $0\circ 0=0$ makes that tensor a pure-state
+renormalization fixed point, yet $\mathcal T_M=0$, so the conclusion fails. The
+hypothesis $\mathcal T_M\neq 0$ reflects the source purification renormalization
+fixed point being a normalized pure-state fixed point with leading eigenvalue
+$1$, a normalization that \leanid{MPOTensor.IsLocalPurificationRFP} drops.
+Eliminating the hypothesis requires the normalized purification condition, which
+remains open together with the full equivalence.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 
