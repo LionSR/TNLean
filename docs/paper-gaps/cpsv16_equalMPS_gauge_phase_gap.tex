@@ -97,13 +97,16 @@ between the two bond spaces and then uses normality of the larger tensor to rule
 out a proper missing subspace, forcing equality of dimensions
 \cite[lines~1115--1117]{Cirac2016MPDO_arXiv}.
 
-The formalization records this conclusion as
-\leanid{MPSTensor.dim_eq_of_overlap_norm_tendsto_one_of_irreducible_TP}
-in \path{TNLean/MPS/FundamentalTheorem/Proportional.lean}. Its proof uses the
-contrapositive of the rectangular overlap-decay theorem
-\leanid{MPSTensor.mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP}:
-if the bond dimensions differ, the overlap tends to zero, contradicting the
-unit-modulus overlap hypothesis.
+This bond-dimension matching is obtained from the rectangular overlap-decay
+theorem
+\leanid{MPSTensor.mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP}
+in \path{TNLean/Spectral/TransferOperatorGapNT.lean}: if the bond dimensions
+differ, the overlap tends to zero, contradicting the unit-modulus overlap
+hypothesis, so a non-decaying overlap forces $D_a=D_b$. (A standalone
+contrapositive packaging of this step in
+\path{TNLean/MPS/FundamentalTheorem/Proportional.lean} was removed as part of a
+superseded route; the decay theorem is now applied directly where blocks of
+differing dimension arise.)
 
 This rectangular dimension recovery is genuinely needed in the proof of
 Theorem~\texttt{thm1}
@@ -118,7 +121,8 @@ after the rectangular dimension conclusion has been supplied separately.
 
 The same-bond-dimension gauge component is formalized without the
 source-absent MPV proportionality hypothesis. The rectangular
-bond-dimension conclusion $D_a=D_b$ is now formalized as a separate theorem.
+bond-dimension conclusion $D_a=D_b$ follows from the rectangular overlap-decay
+theorem, which is applied directly where blocks of differing dimension arise.
 Together these two components recover the structural conclusion of the
 unit-overlap branch of Lemma~\texttt{equalMPS}, though the upstream normal-tensor
 periodicity and dichotomy statements remain separate from this note.

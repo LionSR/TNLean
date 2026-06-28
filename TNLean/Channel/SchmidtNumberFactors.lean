@@ -511,9 +511,9 @@ corner sandwich, which stays `n`-positive; the square pure-state step makes the 
 ampliation positive semidefinite; and the original ampliation is its `d × d'`
 principal-corner submatrix.
 
-**Scope restriction (d ≤ d'):** the first factor is padded up to the second factor
-`d'`; the complementary case `d' ≤ d` is `tensorMapId_posSemidef_of_hasSchmidtRankLE'`.
-Both are combined without restriction in
+This lemma handles the case `d ≤ d'`, padding the first factor up to `d'`; the
+complementary case `d' ≤ d` is `tensorMapId_posSemidef_of_hasSchmidtRankLE'`, and
+the two are combined without restriction in
 `tensorMapId_posSemidef_of_hasSchmidtRankLE_general`. -/
 theorem tensorMapId_posSemidef_of_hasSchmidtRankLE'' [NeZero d'] {n : ℕ} (h : d ≤ d')
     {T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] Matrix (Fin d) (Fin d) ℂ}
@@ -545,9 +545,10 @@ which preserves the Schmidt-number bound; the corner extension of `T` stays
 `n`-positive; the square forward step makes the padded ampliation positive
 semidefinite; and the original ampliation is its `d × d'` principal-corner submatrix.
 
-**Scope restriction (d ≤ d'):** inherited from the pure-state step; the complementary
-case `d' ≤ d` is `HasSchmidtNumberLE.tensorMapId_posSemidef'`.  Both are combined
-without restriction in `HasSchmidtNumberLE.tensorMapId_posSemidef_general`. -/
+This lemma handles the case `d ≤ d'` (inherited from the pure-state step); the
+complementary case `d' ≤ d` is `HasSchmidtNumberLE.tensorMapId_posSemidef'`, and the
+two are combined without restriction in
+`HasSchmidtNumberLE.tensorMapId_posSemidef_general`. -/
 theorem HasSchmidtNumberLE.tensorMapId_posSemidef'' [NeZero d'] {n : ℕ} (h : d ≤ d')
     {T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] Matrix (Fin d) (Fin d) ℂ}
     (hTpos : IsNPositiveMap n T)
