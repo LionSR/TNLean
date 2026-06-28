@@ -252,11 +252,14 @@ M admitting a matrix product state purification, the three conditions
   length-independent completely positive map on a fixed product input
   (arXiv:1606.00608, line 770),
 
-are equivalent. The forward implication from a purification renormalization
-fixed point to zero correlation length is realized here on the source-faithful
-physical-trace transfer object `𝒯_M = ∑_i M^{ii}` (`physTraceTransfer`, the
-transfer object of Definition 4.2, arXiv:1606.00608, lines 735–739): when the
-purifying tensor A is a pure-state renormalization fixed point, the transfer
+are equivalent. Established here is a local, scope-restricted analogue of this
+forward implication, on the physical-trace transfer object `𝒯_M = ∑_i M^{ii}`
+(`physTraceTransfer`, the transfer object of Definition 4.2, arXiv:1606.00608,
+lines 735–739): it assumes the one-site local purification predicate
+(`IsLocalPurificationRFP`), not the global purification equation, so it does not
+cover a source purification renormalization fixed point known only through that
+global equation. When the purifying tensor A is a pure-state renormalization
+fixed point, the transfer
 matrix of its transfer map is idempotent, and closing the physical legs of M
 transports that idempotence to `𝒯_M`. -/
 
@@ -329,8 +332,8 @@ theorem physTraceTransfer_sq_of_isLocalPurificationRFP (M : MPOTensor d D)
   rw [hPT, Matrix.submatrix_mul_equiv K K (⇑e) e (⇑e), hidemK]
 
 /-- **The local purification-RFP condition with nonzero physical-trace transfer
-has source zero correlation length** (the forward implication PRFP `⟹` ZCL of
-arXiv:1606.00608, lines 775–786, on the source transfer object). If the ancilla
+has source zero correlation length** (the forward implication, from PRFP to ZCL,
+of arXiv:1606.00608, lines 775–786, on the source transfer object). If the ancilla
 contraction of a pure-state renormalization fixed point has nonzero
 physical-trace transfer `𝒯_M = ∑_i M^{ii} ≠ 0`, then `M` has source zero
 correlation length.

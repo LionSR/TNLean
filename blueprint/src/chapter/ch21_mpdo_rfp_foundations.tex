@@ -439,24 +439,18 @@
     Let $M$ be the ancilla contraction of a pure-state renormalization fixed
     point, satisfying the local purification renormalization fixed point
     condition. If the physical-trace transfer $\mathcal T_M=\sum_i M^{ii}$ is
-    nonzero, then $M$ has source zero correlation length. This is a
-    scope-restricted, local analogue of the forward implication of the source
-    theorem (arXiv:1606.00608, lines 775--786), not that implication itself: it
-    assumes the one-site local purification predicate
-    (Definition~\ref{def:is_local_purification_rfp}) in place of the global
-    purification equation and the renormalization fixed point definition
-    (arXiv:1606.00608, line 758), and it concludes for the physical-trace
-    transfer object. In particular it does not cover a source purification
-    renormalization fixed point known only through the global purification
-    equation.
-
-    The nonzero hypothesis records a normalization restriction. The source
-    purification renormalization fixed point is a normalized pure-state fixed
-    point, whose leading eigenvalue equals $1$. The local purification condition
-    drops that normalization, and without it the implication fails: the zero
-    tensor in bond dimension one satisfies the local purification condition with
-    vanishing physical-trace transfer, hence is not source zero correlation
-    length.
+    nonzero, then $M$ has source zero correlation length.
+% Scope restriction: this is a local analogue (predicate
+% \ref{def:is_local_purification_rfp}) of the forward implication of the source
+% theorem (arXiv:1606.00608, lines 775--786), not that implication itself; it
+% does not cover a purification renormalization fixed point known only through
+% the global purification equation and the definition at arXiv:1606.00608,
+% line 758.
+% Normalization restriction: the unconditional implication fails -- the zero
+% tensor in bond dimension one is a counterexample -- and the hypothesis
+% $\mathcal T_M \neq 0$ reflects the source purification renormalization fixed
+% point being a normalized fixed point with leading eigenvalue 1.
+% See docs/paper-gaps/cpsv16_purification_rfp_definition.tex.
 \end{theorem}
 
 \begin{proof}\leanok
