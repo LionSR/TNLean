@@ -45,7 +45,7 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-! ## Stage 1: block decomposition of a block-diagonal transfer sum -/
+/-! ## Block decomposition of a block-diagonal transfer sum -/
 
 section BlockDecomposition
 
@@ -96,7 +96,7 @@ private lemma blockDiagonal'_mul_mul_toBlock
   refine Finset.sum_congr rfl fun b _ => ?_
   rw [Matrix.blockDiagonal'_apply_eq, Matrix.submatrix_apply, blockIncl, blockIncl]
 
-/-- **Stage 1 (Σ-level).** The `(j, j')` bond block of the block-diagonal
+/-- The `(j, j')` bond block of the block-diagonal
 transfer sum `∑_i (⊕_k B_k^i) X (⊕_k B_k^i)^†` is the mixed transfer operator
 `mixedTransferMap₂ (B j) (B j')` applied to the `(j, j')` bond block of `X`.
 
@@ -156,7 +156,7 @@ theorem transferMap_directSumTensor_reindex
   rw [Matrix.conjTranspose_submatrix, Matrix.submatrix_mul_equiv _ _ _ e.symm _,
     Matrix.submatrix_mul_equiv _ _ _ e.symm _]
 
-/-- **Stage 2 (idempotence transfer).** Whole-tensor RFP of the direct sum makes
+/-- Whole-tensor RFP of the direct sum makes
 the block-diagonal transfer sum idempotent. -/
 theorem blockTransferSum_blockTransferSum
     (B : (k : Fin r) → MPSTensor d (dim k))
@@ -198,7 +198,7 @@ private lemma exists_toBlock_eq (j j' : Fin r) [NeZero (dim j)] [NeZero (dim j')
     funext (Function.leftInverse_invFun hinj_j')
   rw [Matrix.submatrix_submatrix, hj, hj', Matrix.submatrix_id_id]
 
-/-- **Stage 2 (off-diagonal idempotence).** Whole-tensor RFP of the direct sum
+/-- Whole-tensor RFP of the direct sum
 makes every (in particular off-diagonal) mixed transfer operator idempotent. -/
 theorem mixedTransferMap₂_isIdempotentElem_of_isRFP_directSum
     (B : (k : Fin r) → MPSTensor d (dim k))
@@ -230,7 +230,7 @@ theorem mixedTransferMap₂_isIdempotentElem_of_isRFP_directSum
 
 end BlockDecomposition
 
-/-! ## Stage 2: spectral gap forces the off-diagonal operator to vanish -/
+/-! ## Spectral gap forces the off-diagonal operator to vanish -/
 
 section Spectral
 
@@ -306,7 +306,7 @@ private lemma mixedTransferSpectralRadius₂_lt_one_of_dim_eq
 
 end Spectral
 
-/-! ## Stage 2 main theorem -/
+/-! ## Cross-block orthogonality of the blocks -/
 
 section Main
 
