@@ -959,9 +959,16 @@ and rates for the single-tensor transfer map $\E_A$.
     block $\E_{j,j}$ is the transfer map of $B_j$, which is idempotent because
     $B_j$ is a renormalization fixed point
     (Theorem~\ref{thm:is_rfp_of_isometry_canonical_form}); each off-diagonal block
-    $\E_{j,j'}$ with $j\ne j'$ vanishes by hypothesis. The squared transfer map
-    therefore agrees with the transfer map on every bond block, hence is equal to
-    it, so the direct sum is a renormalization fixed point.
+    $\E_{j,j'}$ with $j\ne j'$ vanishes by hypothesis. Therefore, for every bond
+    block,
+    \[
+        \bigl[\mathcal{E}_{\bigoplus B}^2(Y)\bigr]_{j,j'}
+        = \E_{j,j'}\!\bigl(\E_{j,j'}(Y_{j,j'})\bigr)
+        = \E_{j,j'}(Y_{j,j'})
+        = \bigl[\mathcal{E}_{\bigoplus B}(Y)\bigr]_{j,j'},
+    \]
+    so $\mathcal{E}_{\bigoplus B}^2 = \mathcal{E}_{\bigoplus B}$ and the direct
+    sum is a renormalization fixed point.
 \end{proof}
 
 \begin{theorem}[Canonical-form blocks are injective]\label{thm:rfp_cf_structural}
