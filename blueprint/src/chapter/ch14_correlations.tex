@@ -685,6 +685,54 @@ and rates for the single-tensor transfer map $\E_A$.
     decomposition $A^i = X\sqrt\Lambda\,U^i X^{-1}$.
 \end{proof}
 
+\begin{lemma}[Reference-tensor transfer identity for a unit pair-index isometry]%
+    \label{lem:unit_pair_isometry_transfer}
+    \lean{MPSTensor.unitPairIsometry_transfer}
+    \leanok
+    Let $U$ be a family of bond matrices satisfying the unit pair-index isometry
+    condition
+    \[
+        \sum_i \overline{(U^i)_{\alpha,\beta}}\,(U^i)_{\alpha',\beta'}
+        = \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+    \]
+    Then for every bond matrix $Z$,
+    \[
+        \sum_i U^i\,Z\,(U^i)^\dagger = \tr(Z)\,I.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    Reading off the $(x,y)$ entry, the pair-index condition gives
+    $\sum_i (U^i)_{x,\alpha}\,\overline{(U^i)_{y,\beta}}
+        = \delta_{x,y}\,\delta_{\alpha,\beta}$, so the entry collapses to
+    $\delta_{x,y}\sum_\alpha Z_{\alpha,\alpha} = \delta_{x,y}\,\tr(Z)$, which is
+    the $(x,y)$ entry of $\tr(Z)\,I$.
+\end{proof}
+
+\begin{theorem}[Isometry canonical form implies the renormalization fixed-point property]%
+    \label{thm:is_rfp_of_isometry_canonical_form}
+    \lean{MPSTensor.isRFP_of_isIsometryCanonicalForm}
+    \leanok
+    \uses{def:is_isometry_canonical_form, def:is_rfp}
+    A tensor in isometry canonical form is a renormalization fixed point. This is
+    the backward direction of the structural characterization of pure-state
+    renormalization fixed points in \cite[Section~3]{Cirac2016MPDO_arXiv}, which
+    the source states as immediate.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:unit_pair_isometry_transfer}
+    Write $A^i = X\sqrt\Lambda\,U^i X^{-1}$. Substituting into the transfer map
+    and pulling the index-independent factors $X\sqrt\Lambda$ and
+    $\sqrt\Lambda\,X^\dagger$ outside the sum, the unit pair-index isometry
+    identity (Lemma~\ref{lem:unit_pair_isometry_transfer}) gives the rank-one form
+    \[
+        \E_A(Y) = \tr\!\bigl(X^{-1} Y (X^{-1})^\dagger\bigr)\,R,
+        \qquad R = X\,\Lambda\,X^\dagger.
+    \]
+    Idempotence then reduces to
+    $\tr\!\bigl(X^{-1} R (X^{-1})^\dagger\bigr) = \tr(\Lambda) = 1$, the trace
+    normalization, so $\E_A \circ \E_A = \E_A$.
+\end{proof}
+
 \begin{theorem}[Per-block trace-normalized isometry canonical form]%
     \label{thm:isometry_canonical_form_of_rfp_nt_blocks}
     \lean{MPSTensor.isIsometryCanonicalForm_of_rfp_nt_blocks}

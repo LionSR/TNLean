@@ -872,4 +872,128 @@ theorem rfp_nt_structural_full_blocks_unit_pair {r : ℕ} {dim : Fin r → ℕ}
       (∀ i, A k i = X * Matrix.diagonal (fun j => (Λ j : ℂ)) * U i * X⁻¹) :=
   fun k => rfp_nt_structural_full_unit_pair (A k) (hNT k) (hRFP k) (hLeft k)
 
+/-- **Reference-tensor transfer identity for a unit pair-index isometry family.**
+
+If a family `U` satisfies the unit pair-index isometry condition
+\[
+  \sum_i \overline{(U^i)_{\alpha,\beta}}\,(U^i)_{\alpha',\beta'}
+    = \delta_{\alpha,\alpha'}\delta_{\beta,\beta'},
+\]
+then the contracted sum $Z \mapsto \sum_i U^i\,Z\,(U^i)^\dagger$ sends every $Z$
+to $(\operatorname{tr} Z)\,I$.
+
+This is the transfer identity behind the reference tensor in the proof of
+arXiv:1606.00608, Lemma charact-NT-pure-RFP (lines 1271--1301): the reference
+tensor $\widehat A^{(\alpha',\beta')}_{\alpha,\beta}
+  = \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}\sqrt{\Lambda_\alpha}$ gives the
+rank-one transfer map $|R)(L|$ with $(L| = \sum_\alpha (\alpha,\alpha|$, and the
+unit isometry dressing $U$ preserves this contracted identity. -/
+theorem unitPairIsometry_transfer (U : MPSTensor d D)
+    (hU : ∀ p q : Fin D × Fin D,
+      ∑ i : Fin d, star (U i p.1 p.2) * U i q.1 q.2 = if p = q then 1 else 0)
+    (Z : Mat) :
+    ∑ i : Fin d, U i * Z * (U i)ᴴ = Matrix.trace Z • (1 : Mat) := by
+  classical
+  have inner : ∀ x y a b : Fin D,
+      (∑ i : Fin d, U i x a * star (U i y b)) = if x = y ∧ a = b then 1 else 0 := by
+    intro x y a b
+    have h : (∑ i : Fin d, star (U i y b) * U i x a) = if (y, b) = (x, a) then (1 : ℂ) else 0 :=
+      hU (y, b) (x, a)
+    rw [show (∑ i : Fin d, U i x a * star (U i y b))
+          = ∑ i : Fin d, star (U i y b) * U i x a from
+        Finset.sum_congr rfl fun i _ => mul_comm _ _, h]
+    by_cases hxy : x = y <;> by_cases hab : a = b <;> simp [Prod.ext_iff, hxy, hab, eq_comm]
+  ext x y
+  rw [Matrix.smul_apply, Matrix.one_apply, smul_eq_mul, Matrix.sum_apply]
+  calc ∑ i : Fin d, (U i * Z * (U i)ᴴ) x y
+      = ∑ i : Fin d, ∑ j : Fin D, ∑ k : Fin D, U i x k * Z k j * star (U i y j) := by
+        simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Finset.sum_mul]
+    _ = ∑ j : Fin D, ∑ k : Fin D, Z k j * ∑ i : Fin d, U i x k * star (U i y j) := by
+        rw [Finset.sum_comm]
+        refine Finset.sum_congr rfl fun j _ => ?_
+        rw [Finset.sum_comm]
+        refine Finset.sum_congr rfl fun k _ => ?_
+        rw [Finset.mul_sum]
+        exact Finset.sum_congr rfl fun i _ => by ring
+    _ = ∑ j : Fin D, ∑ k : Fin D, Z k j * (if x = y ∧ k = j then 1 else 0) := by
+        simp_rw [inner]
+    _ = Matrix.trace Z * (if x = y then 1 else 0) := by
+        by_cases hxy : x = y
+        · rw [if_pos hxy, mul_one]
+          have hcond : ∀ k j : Fin D,
+              (if x = y ∧ k = j then (1 : ℂ) else 0) = if k = j then 1 else 0 :=
+            fun k j => by by_cases hkj : k = j <;> simp [hxy, hkj]
+          simp_rw [hcond, mul_ite, mul_one, mul_zero]
+          rw [Matrix.trace]
+          refine Finset.sum_congr rfl fun j _ => ?_
+          rw [Matrix.diag_apply]
+          exact Fintype.sum_ite_eq' j (fun k => Z k j)
+        · rw [if_neg hxy, mul_zero]
+          refine Finset.sum_eq_zero fun j _ => Finset.sum_eq_zero fun k _ => ?_
+          rw [if_neg (fun h => hxy h.1), mul_zero]
+
+/-- **Backward direction of the structural characterization of pure-state
+renormalization fixed points** (arXiv:1606.00608, Theorem charact-MPS,
+line 543; single-block Lemma charact-NT-pure-RFP, lines 1271--1301).
+
+A normal tensor in isometry canonical form is a renormalization fixed point: if
+$A^i = X\sqrt\Lambda\,U^i X^{-1}$ with $\Lambda$ diagonal, positive,
+trace-normalized, and $U$ a unit pair-index isometry, then `transferMap A` is
+idempotent, so `IsRFP A` holds. The source calls this implication trivial
+(line 1297).
+
+The transfer map has the rank-one closed form $E_A(Y) = \varphi(Y)\,R$ with
+$R = X\,\Lambda\,X^\dagger$ and
+$\varphi(Y) = \operatorname{tr}(X^{-1} Y (X^{-1})^\dagger)$, so idempotence
+reduces to $\varphi(R) = \operatorname{tr}\Lambda = 1$, the trace normalization.
+This is a faithful formalization of the source implication: it carries no
+hypothesis beyond `IsIsometryCanonicalForm`. -/
+theorem isRFP_of_isIsometryCanonicalForm (A : MPSTensor d D)
+    (h : IsIsometryCanonicalForm A) : IsRFP A := by
+  classical
+  obtain ⟨X, Λ, U, hX_det, hΛ_pos, hΛ_sum, hU_pair, hA_eq⟩ := h
+  set Dr : Mat := Matrix.diagonal (fun k => (Real.sqrt (Λ k) : ℂ)) with hDr
+  have hDr_herm : Drᴴ = Dr := by
+    rw [hDr, Matrix.diagonal_conjTranspose]
+    congr 1
+    funext k
+    simp
+  have hDr_sq : Dr * Dr = Matrix.diagonal (fun k => (Λ k : ℂ)) := by
+    rw [hDr, Matrix.diagonal_mul_diagonal]
+    congr 1
+    funext k
+    rw [← Complex.ofReal_mul, Real.mul_self_sqrt (le_of_lt (hΛ_pos k))]
+  have hXunit : IsUnit X.det := Ne.isUnit hX_det
+  have hXinvX : X⁻¹ * X = 1 := Matrix.nonsing_inv_mul X hXunit
+  set R : Mat := X * Matrix.diagonal (fun k => (Λ k : ℂ)) * Xᴴ with hR
+  have hXDrDrX : (X * Dr) * (Dr * Xᴴ) = R := by
+    rw [hR, Matrix.mul_assoc X Dr (Dr * Xᴴ), ← Matrix.mul_assoc Dr Dr Xᴴ,
+      ← Matrix.mul_assoc X (Dr * Dr) Xᴴ, hDr_sq]
+  have hclosed : ∀ Y : Mat, transferMap A Y = Matrix.trace (X⁻¹ * Y * (X⁻¹)ᴴ) • R := by
+    intro Y
+    have hsumm : ∀ i, A i * Y * (A i)ᴴ
+        = (X * Dr) * (U i * (X⁻¹ * Y * (X⁻¹)ᴴ) * (U i)ᴴ) * (Dr * Xᴴ) := by
+      intro i
+      rw [hA_eq i]
+      simp only [Matrix.conjTranspose_mul, hDr_herm, Matrix.mul_assoc]
+    rw [transferMap_apply]
+    simp_rw [hsumm]
+    rw [← Finset.sum_mul, ← Finset.mul_sum,
+      unitPairIsometry_transfer U hU_pair (X⁻¹ * Y * (X⁻¹)ᴴ),
+      Matrix.mul_smul, mul_one, Matrix.smul_mul, hXDrDrX]
+  have hφR : Matrix.trace (X⁻¹ * R * (X⁻¹)ᴴ) = 1 := by
+    rw [hR,
+      show X⁻¹ * (X * Matrix.diagonal (fun k => (Λ k : ℂ)) * Xᴴ) * (X⁻¹)ᴴ
+          = (X⁻¹ * X) * Matrix.diagonal (fun k => (Λ k : ℂ)) * (Xᴴ * (X⁻¹)ᴴ) from by
+        simp only [Matrix.mul_assoc],
+      hXinvX, Matrix.one_mul,
+      show Xᴴ * (X⁻¹)ᴴ = (X⁻¹ * X)ᴴ from (Matrix.conjTranspose_mul X⁻¹ X).symm,
+      hXinvX, Matrix.conjTranspose_one, Matrix.mul_one, Matrix.trace_diagonal,
+      ← Complex.ofReal_sum, hΛ_sum, Complex.ofReal_one]
+  show transferMap A ∘ₗ transferMap A = transferMap A
+  apply LinearMap.ext
+  intro Y
+  simp only [LinearMap.comp_apply]
+  rw [hclosed Y, map_smul, hclosed R, hφR, one_smul]
+
 end MPSTensor
