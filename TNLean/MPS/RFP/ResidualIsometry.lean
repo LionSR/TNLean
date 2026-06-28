@@ -179,15 +179,16 @@ lemma isRFP_block_of_isRFP_directSum [∀ k, NeZero (dim k)]
     simp only [mixedTransferMap₂_apply, transferMap_apply]
   rwa [hself] at hidem
 
-/-- **Residual isometry family** (arXiv:1606.00608, `eq:III_isometry`, line 551).
-A family of residual tensors `U_j` satisfies the source isometry condition when
+/-- **Residual isometry family** (arXiv:1606.00608, eq:III_isometry, line 551).
+A family of residual tensors $U_j$ satisfies the source isometry condition when
 the within-block pair-index orthonormality holds for each block and the
 cross-block sums vanish between distinct blocks:
 \[
   \sum_i (U_j^i)_{\alpha,\beta}\,\overline{(U_{j'}^i)_{\alpha',\beta'}}
     = \delta_{j,j'}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'} .
 \]
-The two fields are the `j = j'` and `j \ne j'` cases of that displayed equation. -/
+The $j = j'$ case is the within-block orthonormality and the $j \ne j'$ case is
+the cross-block vanishing between distinct blocks. -/
 def IsResidualIsometryFamily (U : (j : Fin r) → MPSTensor d (dim j)) : Prop :=
   (∀ (j : Fin r) (α β α' β' : Fin (dim j)),
       ∑ i : Fin d, U j i α β * star (U j i α' β') =
@@ -201,20 +202,21 @@ def IsResidualIsometryFamily (U : (j : Fin r) → MPSTensor d (dim j)) : Prop :=
 For a family of normal, irreducible, left-canonical blocks `B`, no two
 gauge-phase equivalent, whose direct sum is a renormalization fixed point, the
 residual tensors of the per-block isometry canonical forms satisfy the full
-source isometry condition `eq:III_isometry` (arXiv:1606.00608, line 551): there
-are invertible `X_j`, positive trace-normalized diagonal weights `Λ_j`, and
-residual tensors `U_j` with `B_j^i = X_j \sqrt{Λ_j} U_j^i X_j^{-1}` and
+source isometry condition eq:III_isometry (arXiv:1606.00608, line 551): there
+are invertible $X_j$, positive trace-normalized diagonal weights $\Lambda_j$, and
+residual tensors $U_j$ with $B_j^i = X_j \sqrt{\Lambda_j} U_j^i X_j^{-1}$ and
 `IsResidualIsometryFamily U`.  This is the residual-isometry content of
 Corollary III.cor3 (arXiv:1606.00608, line 584) at the level of the
 normal-tensor blocks.
 
 **Scope restriction (whole-tensor canonical form):** the load-bearing hypothesis
 is whole-tensor RFP of the direct sum together with the explicit per-block
-normal/irreducible/left-canonical/distinctness data of a basis of normal
-tensors.  Corollary III.cor3 starts instead from a single predicate "`A` in
-canonical form is RFP"; extracting the per-block data from that predicate is a
-separate step.  This restriction is recorded in
-`docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
+normality, irreducibility, left-canonical condition, and gauge-phase
+distinctness of a basis of normal tensors.  Corollary III.cor3 starts instead
+from a single predicate "$A$ in canonical form is RFP"; extracting the per-block
+normality, irreducibility, left-canonical condition, and gauge-phase
+distinctness from that predicate is a separate step.  This restriction is
+recorded in `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
 theorem exists_residualIsometryFamily_of_isRFP_directSum [∀ k, NeZero (dim k)]
     (B : (k : Fin r) → MPSTensor d (dim k))
     (hnormal : ∀ k, IsNormal (B k))

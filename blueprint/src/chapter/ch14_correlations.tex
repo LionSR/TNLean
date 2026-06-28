@@ -794,6 +794,52 @@ and rates for the single-tensor transfer map $\E_A$.
     which are independent of the summation index, outside the sum.
 \end{proof}
 
+\begin{lemma}[Vanishing of the residual transfer operator]%
+    \label{lem:mixed_transfer_eq_zero_of_conj}
+    \lean{MPSTensor.mixedTransferMap₂_eq_zero_of_conj}
+    \leanok
+    \uses{def:mixed_transfer_rect}
+    With decompositions $A^i = X_A D_A U^i X_A^{-1}$ and
+    $B^i = X_B D_B V^i X_B^{-1}$ whose factors $X_A, D_A, X_B, D_B$ are
+    invertible, if $\E_{A,B}=0$ then $\E_{U,V}=0$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:mixed_transfer_conj_apply}
+    The covariance identity Lemma~\ref{lem:mixed_transfer_conj_apply} expresses
+    $\E_{A,B}$ as $\E_{U,V}$ conjugated by the invertible outer factors
+    $X_A D_A$ and $(X_B D_B)^\dagger$, so $\E_{A,B}=0$ forces $\E_{U,V}=0$.
+\end{proof}
+
+\begin{lemma}[Entrywise residual isometry sum]%
+    \label{lem:residual_isometry_entry}
+    \lean{MPSTensor.residual_isometry_entry_of_mixedTransferMap₂_eq_zero}
+    \leanok
+    \uses{def:mixed_transfer_rect}
+    If $\E_{U,V}=0$, then for all virtual indices
+    \[
+        \sum_i (U^i)_{\alpha,\beta}\,\overline{(V^i)_{\alpha',\beta'}} = 0 .
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    Apply $\E_{U,V}=0$ to the matrix unit supported at $(\beta,\beta')$ and read
+    the $(\alpha,\alpha')$ entry.
+\end{proof}
+
+\begin{lemma}[Each block of a direct-sum fixed point is a fixed point]%
+    \label{lem:isrfp_block_of_rfp_direct_sum}
+    \lean{MPSTensor.isRFP_block_of_isRFP_directSum}
+    \leanok
+    \uses{def:is_rfp, def:mixed_transfer_rect}
+    If the direct sum $\bigoplus_k B_k$ is a renormalization fixed point, then
+    each block $B_j$ is a renormalization fixed point.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:block_diagonal_transfer_sum_to_block}
+    The diagonal mixed transfer operator $\E_{j,j}$ is the transfer map of
+    $B_j$, and whole-tensor idempotence makes it idempotent, which is exactly the
+    renormalization fixed-point condition for $B_j$.
+\end{proof}
+
 \begin{theorem}[Residual-isometry form of the cross-block structure]%
     \label{thm:residual_isometry_of_rfp_direct_sum}
     \lean{MPSTensor.exists_residualIsometryFamily_of_isRFP_directSum}
@@ -801,8 +847,9 @@ and rates for the single-tensor transfer map $\E_A$.
     \uses{def:is_residual_isometry_family, def:is_rfp,
         def:is_isometry_canonical_form}
     Let $(A_j)_j$ be a family of normal, irreducible, left-canonical blocks, no
-    two of which are gauge-phase equivalent, and suppose the direct sum
-    $\bigoplus_j A_j$ is a renormalization fixed point. Then there are invertible
+    two of which are gauge-phase equivalent, with $\dim_j \ge 1$ for all $j$, and
+    suppose the direct sum $\bigoplus_j A_j$ is a renormalization fixed point.
+    Then there are invertible
     $X_j$, positive trace-normalized diagonal weights $\Lambda_j$, and residual
     tensors $U_j$ with
     \[
@@ -811,15 +858,18 @@ and rates for the single-tensor transfer map $\E_A$.
     such that $(U_j)_j$ is a residual isometry family. This is the
     residual-isometry content of Corollary~III.cor3
     \cite[Corollary~III.3]{Cirac2016MPDO_arXiv} at the level of the normal-tensor
-    blocks. The load-bearing hypothesis is whole-tensor renormalization fixed
-    point of the direct sum, together with the explicit per-block data of a basis
-    of normal tensors; extracting that data from a single canonical-form
-    renormalization-fixed-point predicate is a separate step, recorded in
-    \path{docs/paper-gaps/cpsv16_rfp_isometry_scope.tex}.
+    blocks.
+% Scope restriction: the Lean theorem takes the per-block normality,
+% irreducibility, left-canonical condition, and gauge-phase distinctness as
+% explicit hypotheses; extracting these from a single canonical-form RFP
+% predicate is the remaining step
+% (docs/paper-gaps/cpsv16_rfp_isometry_scope.tex).
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:bnt_locally_orthogonal_of_rfp_direct_sum,
-        thm:isometry_canonical_form_of_rfp_nt, lem:mixed_transfer_conj_apply}
+        thm:isometry_canonical_form_of_rfp_nt, lem:mixed_transfer_conj_apply,
+        lem:isrfp_block_of_rfp_direct_sum, lem:mixed_transfer_eq_zero_of_conj,
+        lem:residual_isometry_entry}
     Whole-tensor idempotence makes the diagonal mixed transfer operator of each
     block its own transfer map, hence each block is a renormalization fixed
     point; the isometry canonical form
