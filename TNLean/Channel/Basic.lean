@@ -2,6 +2,7 @@
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Analysis.MatrixOrderTopology
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.Matrix.Spectrum
@@ -32,8 +33,7 @@ Chapters 3 and 6 of Wolf's lecture notes.
 * `Matrix.transposeLinearMapComplex_isTracePreservingMap`: matrix transposition is
   trace-preserving
 * `IsPositiveMap.map_isHermitian`: positive maps preserve Hermiticity
-* `matrix_isClosed_posSemidef`: the positive semidefinite cone is closed
-* `matrixOrderClosedTopology`: the Loewner order on finite matrices is order-closed
+* `isClosed_posSemidef`: the positive semidefinite cone is closed
 * `densityMatrices_isCompact`: the set of density matrices is compact
 * `densityMatrices_isConvex`: the set of density matrices is convex
 * `IsChannel.map_densityMatrices`: channels map density matrices to density matrices
@@ -171,11 +171,6 @@ def densityMatrices (D : ℕ) : Set (Matrix (Fin D) (Fin D) ℂ) :=
 @[simp] lemma mem_densityMatrices {ρ : Matrix (Fin D) (Fin D) ℂ} :
     ρ ∈ densityMatrices D ↔ ρ.PosSemidef ∧ trace ρ = 1 := Iff.rfl
 
-/-- The quadratic form `X ↦ star v ⬝ᵥ X.mulVec v` is continuous. -/
-private lemma continuous_quadraticForm {m : Type*} [Fintype m] (v : m → ℂ) :
-    Continuous (fun X : Matrix m m ℂ => star v ⬝ᵥ X.mulVec v) :=
-  Continuous.dotProduct continuous_const (Continuous.matrix_mulVec continuous_id continuous_const)
-
 /-! ### Auxiliary lemmas for boundedness -/
 
 /-- For PSD `X`, each diagonal entry norm is bounded by the trace norm. -/
@@ -265,51 +260,10 @@ theorem posSemidef_trace_bounded_isBounded (c : ℝ) :
           pow_le_pow_left₀ (norm_nonneg _) (hentry i j) 2
     _ = (↑D * c) ^ 2 := by simp [sum_const]; ring
 
-/-- The PSD cone is closed for matrices over any finite index type.
-
-Proof: `PosSemidef X ↔ X.IsHermitian ∧ ∀ v, 0 ≤ star v ⬝ᵥ X.mulVec v`.
-- `{X | X.IsHermitian}` is closed (continuous `conjTranspose`).
-- Each `{X | 0 ≤ star v ⬝ᵥ X.mulVec v}` is closed (preimage of closed
-  nonneg cone under continuous quadratic form). -/
-theorem matrix_isClosed_posSemidef {m : Type*} [Finite m] :
-    IsClosed {X : Matrix m m ℂ | X.PosSemidef} := by
-  classical
-  letI := Fintype.ofFinite m
-  have : {X : Matrix m m ℂ | X.PosSemidef}
-      = {X | X.IsHermitian} ∩
-        ⋂ (v : m → ℂ), {X | 0 ≤ star v ⬝ᵥ X.mulVec v} := by
-    ext X
-    simp only [Set.mem_setOf_eq, Set.mem_inter_iff, Set.mem_iInter,
-      Matrix.posSemidef_iff_dotProduct_mulVec]
-  rw [this]
-  exact (isClosed_eq continuous_star continuous_id).inter
-    (isClosed_iInter fun v =>
-      (isClosed_le continuous_const continuous_id).preimage (continuous_quadraticForm v))
-
 /-- The PSD cone is closed on `Fin D`-indexed matrices. -/
 theorem isClosed_posSemidef :
     IsClosed {X : Matrix (Fin D) (Fin D) ℂ | X.PosSemidef} :=
   matrix_isClosed_posSemidef
-
-/-- The Loewner order graph is closed for matrices over any finite index type. -/
-theorem matrix_isClosed_le {m : Type*} [Finite m] :
-    IsClosed {p : Matrix m m ℂ × Matrix m m ℂ | p.1 ≤ p.2} := by
-  have hset :
-      {p : Matrix m m ℂ × Matrix m m ℂ | p.1 ≤ p.2}
-        = (fun p : Matrix m m ℂ × Matrix m m ℂ => p.2 - p.1) ⁻¹'
-          {X : Matrix m m ℂ | X.PosSemidef} := by
-    ext p
-    simp [Matrix.le_iff]
-  rw [hset]
-  exact matrix_isClosed_posSemidef.preimage (continuous_snd.sub continuous_fst)
-
-/-- The Loewner order on finite complex matrices has closed order topology. -/
-@[reducible]
-def matrixOrderClosedTopology {m : Type*} [Finite m] :
-    OrderClosedTopology (Matrix m m ℂ) where
-  isClosed_le' := matrix_isClosed_le
-
-scoped[MatrixOrder] attribute [instance] matrixOrderClosedTopology
 
 /-- The set of density matrices is compact (Heine-Borel).
 
