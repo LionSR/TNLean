@@ -267,6 +267,103 @@ theorem exists_residualIsometryFamily_of_isRFP_directSum [∀ k, NeZero (dim k)]
         (hXdet j) (hDdet j) (hXdet j') (hDdet j') (hBNT j j' hjj')
     exact residual_isometry_entry_of_mixedTransferMap₂_eq_zero (U j) (U j') hUjj' α β α' β'
 
+/-! ## Backward direction: a direct sum of isometry-canonical-form blocks is a
+renormalization fixed point -/
+
+/-- Idempotence of the block-diagonal transfer sum when each block is in isometry
+canonical form and the cross-block mixed transfer operators vanish.
+
+The $(j,j')$ bond block of the transfer sum acts as `mixedTransferMap₂ (B j)
+(B j')` on the $(j,j')$ block of the argument
+(`blockDiagonal'_transferSum_toBlock`).  Each diagonal block contributes
+`transferMap (B j)`, which is idempotent because `B j` is a renormalization fixed
+point (`isRFP_of_isIsometryCanonicalForm`); each off-diagonal block vanishes by
+`hortho`.  This is the block-space form of the backward direction of the
+structural characterization of pure-state renormalization fixed points
+(arXiv:1606.00608, Theorem charact-MPS, line 543). -/
+theorem blockTransferSum_idempotent_of_isIsometryCanonicalForm
+    (B : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : ∀ k, IsIsometryCanonicalForm (B k))
+    (hortho : ∀ j j' : Fin r, j ≠ j' → mixedTransferMap₂ (B j) (B j') = 0)
+    (Y : Matrix ((k : Fin r) × Fin (dim k)) ((k : Fin r) × Fin (dim k)) ℂ) :
+    blockTransferSum B (blockTransferSum B Y) = blockTransferSum B Y := by
+  classical
+  have hStage1 : ∀ (W : Matrix ((k : Fin r) × Fin (dim k))
+        ((k : Fin r) × Fin (dim k)) ℂ) (j j' : Fin r),
+      (blockTransferSum B W).submatrix (blockIncl j dim) (blockIncl j' dim) =
+        mixedTransferMap₂ (B j) (B j')
+          (W.submatrix (blockIncl j dim) (blockIncl j' dim)) := by
+    intro W j j'
+    simpa only [blockTransferSum] using blockDiagonal'_transferSum_toBlock B W j j'
+  have blockEq : ∀ j j' : Fin r,
+      (blockTransferSum B (blockTransferSum B Y)).submatrix
+          (blockIncl j dim) (blockIncl j' dim) =
+        (blockTransferSum B Y).submatrix (blockIncl j dim) (blockIncl j' dim) := by
+    intro j j'
+    rw [hStage1 (blockTransferSum B Y) j j', hStage1 Y j j']
+    by_cases hjj' : j = j'
+    · subst hjj'
+      have hself : mixedTransferMap₂ (B j) (B j) = transferMap (B j) := by
+        ext X; simp only [mixedTransferMap₂_apply, transferMap_apply]
+      rw [hself]
+      have hRFPj : IsRFP (B j) := isRFP_of_isIsometryCanonicalForm (B j) (hCF j)
+      simpa only [LinearMap.comp_apply] using
+        LinearMap.congr_fun hRFPj (Y.submatrix (blockIncl j dim) (blockIncl j dim))
+    · rw [hortho j j' hjj']
+      simp
+  ext jx jy
+  obtain ⟨j, a⟩ := jx
+  obtain ⟨j', a'⟩ := jy
+  simpa only [Matrix.submatrix_apply, blockIncl] using
+    congrFun (congrFun (blockEq j j') a) a'
+
+/-- **Backward direction of the structural characterization of pure-state
+renormalization fixed points** (arXiv:1606.00608, Theorem charact-MPS, line 543),
+multiplicity-one case.
+
+A direct sum of blocks each in isometry canonical form whose cross-block mixed
+transfer operators vanish is a renormalization fixed point.  The cross-block
+hypothesis `hortho` is the off-diagonal ($j \ne j'$) content of the isometry
+condition eq:III_isometry (arXiv:1606.00608, line 551), so it belongs to the
+source's isometry form rather than being an added assumption; the within-block
+diagonal content is `IsIsometryCanonicalForm`.
+
+The direct-sum transfer map is block diagonal as a superoperator: its $(j,j')$
+bond block acts as `mixedTransferMap₂ (B j) (B j')` on the $(j,j')$ block of the
+argument.  The diagonal blocks are idempotent (per-block renormalization fixed
+point) and the off-diagonal blocks vanish, so the whole map is idempotent.
+
+**Scope restriction (multiplicity-one canonical form):** the source's canonical
+form III_CFI_RFP allows each normal tensor to repeat with a multiplicity and a
+phase; this is the distinct-blocks (multiplicity-one, phase-one) case, where the
+direct sum carries one copy of each block.  Recorded in the paper-gap note
+docs/paper-gaps/cpsv16_rfp_isometry_scope.tex. -/
+theorem isRFP_directSumTensor_of_isIsometryCanonicalForm
+    (B : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : ∀ k, IsIsometryCanonicalForm (B k))
+    (hortho : ∀ j j' : Fin r, j ≠ j' → mixedTransferMap₂ (B j) (B j') = 0) :
+    IsRFP (directSumTensor B) := by
+  classical
+  set e := finSigmaFinEquiv (m := r) (n := dim) with he
+  change transferMap (directSumTensor B) ∘ₗ transferMap (directSumTensor B)
+      = transferMap (directSumTensor B)
+  refine LinearMap.ext fun Z => ?_
+  rw [LinearMap.comp_apply]
+  obtain ⟨Y, rfl⟩ : ∃ Y, Matrix.reindex e e Y = Z :=
+    ⟨(Matrix.reindex e e).symm Z, (Matrix.reindex e e).apply_symm_apply Z⟩
+  calc
+    transferMap (directSumTensor B)
+          (transferMap (directSumTensor B) (Matrix.reindex e e Y))
+        = transferMap (directSumTensor B)
+            (Matrix.reindex e e (blockTransferSum B Y)) := by
+          rw [transferMap_directSumTensor_reindex B Y]
+    _ = Matrix.reindex e e (blockTransferSum B (blockTransferSum B Y)) :=
+          transferMap_directSumTensor_reindex B (blockTransferSum B Y)
+    _ = Matrix.reindex e e (blockTransferSum B Y) := by
+          rw [blockTransferSum_idempotent_of_isIsometryCanonicalForm B hCF hortho Y]
+    _ = transferMap (directSumTensor B) (Matrix.reindex e e Y) :=
+          (transferMap_directSumTensor_reindex B Y).symm
+
 end Blocks
 
 end MPSTensor
