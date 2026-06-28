@@ -253,27 +253,26 @@ M admitting a matrix product state purification, the three conditions
   (arXiv:1606.00608, line 770),
 
 are equivalent. Established here is a local, scope-restricted analogue of this
-forward implication, on the physical-trace transfer object `𝒯_M = ∑_i M^{ii}`
+forward implication, on the physical-trace transfer object 𝒯_M = ∑_i M^{ii}
 (`physTraceTransfer`, the transfer object of Definition 4.2, arXiv:1606.00608,
 lines 735–739): it assumes the one-site local purification predicate
 (`IsLocalPurificationRFP`), not the global purification equation, so it does not
 cover a source purification renormalization fixed point known only through that
 global equation. When the purifying tensor A is a pure-state renormalization
-fixed point, the transfer
-matrix of its transfer map is idempotent, and closing the physical legs of M
-transports that idempotence to `𝒯_M`. -/
+fixed point, the transfer matrix of its transfer map is idempotent, and closing
+the physical legs of M transports that idempotence to 𝒯_M. -/
 
 /-- **Idempotence of the physical-trace transfer under the local
-purification-RFP condition.** If `M` is the ancilla contraction of a pure-state
+purification-RFP condition.** If M is the ancilla contraction of a pure-state
 renormalization fixed point (`IsLocalPurificationRFP`, motivated by the
 purification equation at arXiv:1606.00608, line 747, and the definition at
-line 758), then the physical-trace transfer `𝒯_M = ∑_i M^{ii}`
-is idempotent: `𝒯_M * 𝒯_M = 𝒯_M`.
+line 758), then the physical-trace transfer 𝒯_M = ∑_i M^{ii}
+is idempotent: 𝒯_M 𝒯_M = 𝒯_M.
 
-The purifying tensor `A` has transfer matrix `K' = ∑_p conj(A_p) ⊗ A_p`
-(`MPSTensor.transferMatrix_eq`); the pure-state RFP condition makes `K'`
-idempotent (`transferMatrix_comp`). Closing the ket and bra physical legs of `M`
-rewrites `𝒯_M` as a reindexing of `K'` by the bond identification `e` together
+The purifying tensor A has transfer matrix K' = ∑_p conj(A_p) ⊗ A_p
+(`MPSTensor.transferMatrix_eq`); the pure-state RFP condition makes K'
+idempotent (`transferMatrix_comp`). Closing the ket and bra physical legs of M
+rewrites 𝒯_M as a reindexing of K' by the bond identification e together
 with the Kronecker factor swap, and matrix idempotence is preserved under
 reindexing by an equivalence (`Matrix.submatrix_mul_equiv`). -/
 theorem physTraceTransfer_sq_of_isLocalPurificationRFP (M : MPOTensor d D)
@@ -335,7 +334,7 @@ theorem physTraceTransfer_sq_of_isLocalPurificationRFP (M : MPOTensor d D)
 has source zero correlation length** (the forward implication, from PRFP to ZCL,
 of arXiv:1606.00608, lines 775–786, on the source transfer object). If the ancilla
 contraction of a pure-state renormalization fixed point has nonzero
-physical-trace transfer `𝒯_M = ∑_i M^{ii} ≠ 0`, then `M` has source zero
+physical-trace transfer 𝒯_M = ∑_i M^{ii} ≠ 0, then M has source zero
 correlation length.
 
 **Scope restriction (normalization):** the literal unconditional implication
