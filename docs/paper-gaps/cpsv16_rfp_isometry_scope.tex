@@ -316,11 +316,37 @@ argument decomposes the direct-sum transfer map block by block
 (\leanid{MPSTensor.blockDiagonal'_transferSum_toBlock}): whole-tensor idempotence
 makes each $\mathcal{E}_{j,j'}$ idempotent, and the same-dimension and dimension-mismatch
 transfer-operator gaps force an idempotent of spectral radius below one to be
-zero.  Writing $A_j^i = X_j\sqrt{\Lambda_j}\,U_j^i X_j^{-1}$ and cancelling the
-invertible factors converts $\mathcal{E}_{j,j'}=0$ to the residual-isometry equation
-$\sum_i (U_j^i)_{\alpha,\beta}\overline{(U_{j'}^i)_{\alpha',\beta'}}=0$; this
-last conversion, together with a faithful multi-block isometry predicate, is the
-remaining step.
+zero.
+
+The passage to the residual isometries is now formalized.  Writing
+$A_j^i = X_j\sqrt{\Lambda_j}\,U_j^i X_j^{-1}$ with $X_j$ and $\sqrt{\Lambda_j}$
+invertible, the mixed transfer operator is covariant under the two-sided change
+of variables,
+\[
+  \mathcal{E}_{A_j,A_{j'}}(Y)
+    = X_j\sqrt{\Lambda_j}\,
+      \mathcal{E}_{U_j,U_{j'}}\!\bigl(X_j^{-1}Y(X_{j'}^{-1})^\dagger\bigr)\,
+      (X_{j'}\sqrt{\Lambda_{j'}})^\dagger,
+\]
+formalized by \leanid{MPSTensor.mixedTransferMap₂_conj_apply}.  Cancelling the
+invertible outer factors converts $\mathcal{E}_{A_j,A_{j'}}=0$ into
+$\mathcal{E}_{U_j,U_{j'}}=0$, and reading the matrix entry at a matrix unit
+yields the residual-isometry equation
+$\sum_i (U_j^i)_{\alpha,\beta}\overline{(U_{j'}^i)_{\alpha',\beta'}}=0$.  Together
+with the within-block orthonormality of the isometry canonical form, this is the
+faithful multi-block isometry predicate
+\leanid{MPSTensor.IsResidualIsometryFamily}, established under whole-tensor
+renormalization fixed point of the direct sum by
+\leanid{MPSTensor.exists_residualIsometryFamily_of_isRFP_directSum}.  This is the
+residual-isometry content of Corollary~III.cor3 at the level of the
+normal-tensor blocks.
+
+The remaining scope restriction is the source's starting point.
+Corollary~III.cor3 assumes a single predicate ``$A$ in canonical form is a
+renormalization fixed point'', whereas the formal theorem takes the per-block
+normal, irreducible, left-canonical and distinctness data of a basis of normal
+tensors as explicit hypotheses.  Extracting that per-block data from the single
+canonical-form predicate is the remaining step.
 
 \bibliographystyle{alpha}
 \bibliography{references}

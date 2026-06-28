@@ -757,6 +757,83 @@ and rates for the single-tensor transfer map $\E_A$.
     $\E_{j,j'} = \E_{j,j'}^n \to 0$ as $n\to\infty$, so $\E_{j,j'}=0$.
 \end{proof}
 
+\begin{definition}[Residual isometry family]%
+    \label{def:is_residual_isometry_family}
+    \lean{MPSTensor.IsResidualIsometryFamily}
+    \leanok
+    A family of residual tensors $(U_j)_j$ is a \emph{residual isometry family}
+    when it satisfies the source isometry condition
+    \[
+        \sum_i (U_j^i)_{\alpha,\beta}\,\overline{(U_{j'}^i)_{\alpha',\beta'}}
+        = \delta_{j,j'}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'} :
+    \]
+    each block satisfies the within-block pair-index orthonormality, and the
+    cross-block sums between distinct blocks vanish. This is the isometry
+    condition of \cite[Theorem~III]{Cirac2016MPDO_arXiv}, split into its $j=j'$
+    and $j\ne j'$ cases.
+\end{definition}
+
+\begin{lemma}[Covariance of the mixed transfer operator]%
+    \label{lem:mixed_transfer_conj_apply}
+    \lean{MPSTensor.mixedTransferMap₂_conj_apply}
+    \leanok
+    \uses{def:mixed_transfer_rect}
+    For decompositions $A^i = X_A D_A U^i X_A^{-1}$ and
+    $B^i = X_B D_B V^i X_B^{-1}$, the mixed transfer operator of $A,B$ is the
+    mixed transfer operator of the residual tensors $U,V$ conjugated by the outer
+    factors:
+    \[
+        \E_{A,B}(Y)
+        = X_A D_A\,\E_{U,V}\!\bigl(X_A^{-1}\,Y\,(X_B^{-1})^\dagger\bigr)\,
+            (X_B D_B)^\dagger .
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    Substitute the two decompositions into
+    $\E_{A,B}(Y)=\sum_i A^i\,Y\,(B^i)^\dagger$ and collect the outer factors,
+    which are independent of the summation index, outside the sum.
+\end{proof}
+
+\begin{theorem}[Residual-isometry form of the cross-block structure]%
+    \label{thm:residual_isometry_of_rfp_direct_sum}
+    \lean{MPSTensor.exists_residualIsometryFamily_of_isRFP_directSum}
+    \leanok
+    \uses{def:is_residual_isometry_family, def:is_rfp,
+        def:is_isometry_canonical_form}
+    Let $(A_j)_j$ be a family of normal, irreducible, left-canonical blocks, no
+    two of which are gauge-phase equivalent, and suppose the direct sum
+    $\bigoplus_j A_j$ is a renormalization fixed point. Then there are invertible
+    $X_j$, positive trace-normalized diagonal weights $\Lambda_j$, and residual
+    tensors $U_j$ with
+    \[
+        A_j^i = X_j\,\sqrt{\Lambda_j}\,U_j^i\,X_j^{-1},
+    \]
+    such that $(U_j)_j$ is a residual isometry family. This is the
+    residual-isometry content of Corollary~III.cor3
+    \cite[Corollary~III.3]{Cirac2016MPDO_arXiv} at the level of the normal-tensor
+    blocks. The load-bearing hypothesis is whole-tensor renormalization fixed
+    point of the direct sum, together with the explicit per-block data of a basis
+    of normal tensors; extracting that data from a single canonical-form
+    renormalization-fixed-point predicate is a separate step, recorded in
+    \path{docs/paper-gaps/cpsv16_rfp_isometry_scope.tex}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:bnt_locally_orthogonal_of_rfp_direct_sum,
+        thm:isometry_canonical_form_of_rfp_nt, lem:mixed_transfer_conj_apply}
+    Whole-tensor idempotence makes the diagonal mixed transfer operator of each
+    block its own transfer map, hence each block is a renormalization fixed
+    point; the isometry canonical form
+    (Theorem~\ref{thm:isometry_canonical_form_of_rfp_nt}) supplies the
+    decomposition $A_j^i = X_j\sqrt{\Lambda_j}U_j^iX_j^{-1}$ with the within-block
+    orthonormality, which is the $j=j'$ case. For $j\ne j'$,
+    Theorem~\ref{thm:bnt_locally_orthogonal_of_rfp_direct_sum} gives
+    $\E_{A_j,A_{j'}}=0$; by the covariance
+    Lemma~\ref{lem:mixed_transfer_conj_apply} and invertibility of the outer
+    factors $\E_{U_j,U_{j'}}=0$, and reading the entry of this operator at a
+    matrix unit yields the cross-block sum
+    $\sum_i (U_j^i)_{\alpha,\beta}\overline{(U_{j'}^i)_{\alpha',\beta'}}=0$.
+\end{proof}
+
 \begin{theorem}[Canonical-form blocks are injective]\label{thm:rfp_cf_structural}
     \lean{MPSTensor.rfp_cf_structural}
     \leanok
