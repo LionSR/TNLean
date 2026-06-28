@@ -337,8 +337,9 @@ which restates the conclusion and is false in general (counterexample in
 C.5 (`SALZCL`, lines 1484--1502) instead derives the factorization from
 Perron--Frobenius fixed-point theory. Documented in
 `docs/paper-gaps/cpgsv17_pf_rank_one.tex`. Elimination: discharge via the
-PSD-corrected variant `sal_zcl_implies_rank_one_T_of_posSemidef` once the MPDO
-call site supplies positivity of `T`. -/
+PSD-corrected variant `sal_zcl_implies_rank_one_T_of_posSemidef` once
+positive-semidefiniteness of `T` is available as a hypothesis; the open
+follow-up is tracked in that note. -/
 theorem sal_zcl_implies_rank_one_T
     (T : Matrix (Fin n) (Fin n) ℝ)
     (hPrimitive : Matrix.IsPrimitive T)

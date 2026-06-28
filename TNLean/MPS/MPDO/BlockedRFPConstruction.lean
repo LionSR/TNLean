@@ -115,8 +115,9 @@ hypotheses already available in `SimpleLocalStructure.lean`.
 `sal_zcl_implies_rank_one_T`, whose `hPF` hypothesis is not supplied by
 arXiv:1606.00608, Lemma C.5, lines 1484--1502. Documented in
 `docs/paper-gaps/cpgsv17_pf_rank_one.tex`. Elimination: use
-`ofSALZCLOfPosSemidef` and `sal_zcl_implies_rank_one_T_of_posSemidef`; tracked
-in issue #1041. -/
+`ofSALZCLOfPosSemidef` and `sal_zcl_implies_rank_one_T_of_posSemidef` once
+positive-semidefiniteness of the sector trace matrix is available as a
+hypothesis; the open follow-up is tracked in that note. -/
 def ofSALZCL
     {dA dB dC n : ℕ}
     (rhoABC : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ)
@@ -205,7 +206,9 @@ variable {K : MPOTensor d D}
 and hence relies on the conditional `hPF` shortcut absent from arXiv:1606.00608,
 Lemma C.5, lines 1484--1502. Documented in
 `docs/paper-gaps/cpgsv17_pf_rank_one.tex`. Elimination: use
-`ofSALZCLAndCommutingFormOfPosSemidef`; tracked in issue #1041. -/
+`ofSALZCLAndCommutingFormOfPosSemidef` once positive-semidefiniteness of the
+sector trace matrix is available as a hypothesis; the open follow-up is tracked
+in that note. -/
 def ofSALZCLAndCommutingForm
     {dA dB dC n : ℕ}
     (rhoABC : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ)
@@ -286,7 +289,9 @@ tracked by issue #823.
 `SimpleMPDOLocalStructureData.ofSALZCL`, whose `hPF` shortcut is absent from
 arXiv:1606.00608, Lemma C.5, lines 1484--1502. Documented in
 `docs/paper-gaps/cpgsv17_pf_rank_one.tex`. Elimination: use
-`ofSALZCLAndEtaLocalStructureOfPosSemidef`; tracked in issue #1041. -/
+`ofSALZCLAndEtaLocalStructureOfPosSemidef` once positive-semidefiniteness of the
+sector trace matrix is available as a hypothesis; the open follow-up is tracked
+in that note. -/
 def ofSALZCLAndEtaLocalStructure
     {dA dB dC n : ℕ}
     (rhoABC : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ)
