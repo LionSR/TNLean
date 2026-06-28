@@ -412,12 +412,21 @@
 
 \begin{proof}\leanok
     \uses{def:is_rfp}
-    The purifying tensor $A$ has transfer matrix $\sum_p \overline{A_p}\otimes A_p$.
-    The pure-state renormalization fixed point condition makes this transfer
-    matrix idempotent. Closing the ket and bra physical legs of $M$ rewrites
-    $\mathcal T_M$ as a reindexing of that transfer matrix by the bond
-    identification together with the Kronecker factor swap, and idempotence of a
-    matrix is preserved under reindexing by a bijection of the bond space.
+    Let $K' = \sum_p \overline{A_p}\otimes A_p$ be the transfer matrix of the
+    purifying tensor $A$; the pure-state renormalization fixed point condition
+    makes it idempotent, $K'K' = K'$. Write $X_\sigma$ for the reindexing of a
+    matrix $X$ by a bijection $\sigma$ of its index set, let $s$ be the Kronecker
+    factor swap, and let $e$ be the bond identification. Closing the ket and bra
+    physical legs of $M$ expresses the physical-trace transfer as
+    \[
+        \mathcal T_M = K_e, \qquad K = (K')_s .
+    \]
+    Reindexing by a bijection commutes with matrix multiplication,
+    $(XY)_\sigma = X_\sigma\,Y_\sigma$, so the idempotence of $K'$ passes first
+    to $K$ and then to $\mathcal T_M$:
+    \[
+        \mathcal T_M\,\mathcal T_M = (K_e)(K_e) = (KK)_e = K_e = \mathcal T_M .
+    \]
 \end{proof}
 
 \begin{theorem}[Local purification RFP with nonzero physical-trace transfer has source ZCL]
