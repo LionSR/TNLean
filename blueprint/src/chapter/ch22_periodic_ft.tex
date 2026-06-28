@@ -809,6 +809,128 @@ unconditional result.
     sector.
 \end{proof}
 
+\begin{lemma}[Repeated-block matrix identity]
+    \label{lem:periodic_corner_product_blockmatch_pow}
+    \lean{MPSTensor.cornerProd_blockMatch_pow}
+    \leanok
+    \uses{def:periodic_corner_product, lem:periodic_corner_product_append}
+    Suppose the $m$-block product identity
+    \[
+        A_u^{i_1}\cdots A_{u+m-1}^{i_m}
+        =
+        c_u\, B_{u+q}^{i_1}\cdots B_{u+q+m-1}^{i_m}
+    \]
+    holds for every base sector $u$ and every length-$m$ word.  Then for every
+    word $W$ of length $km$ with $k\ge1$,
+    \[
+        F_u^{W}=c_u^{\,k}\,\widehat F_{u+q}^{W},
+    \]
+    where $\widehat F$ is the repeated corner product built from $B$.  Each of
+    the $k$ successive length-$m$ blocks is anchored at the same base sector
+    $u$, because a full cycle of unit shifts is trivial, $m\cdot 1=0$ in
+    $\mathbb Z_m$; hence every block contributes the same scalar $c_u$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:periodic_corner_product_append}
+    Induct on $k$.  The base case $k=1$ is the hypothesis.  For the inductive
+    step split $W$ into its first length-$m$ block and the remaining length-$km$
+    word, apply the concatenation law, and use that the junction shift
+    $m\cdot 1=0$ returns to the base sector before applying the block identity
+    and the induction hypothesis.
+\end{proof}
+
+\begin{lemma}[Right-inverse contraction]
+    \label{lem:periodic_corner_contraction}
+    \lean{MPSTensor.cornerProd_contraction}
+    \leanok
+    \uses{def:periodic_corner_letter, def:periodic_corner_product}
+    Let $\Omega_u$ be a finite-sum right inverse of the repeated corner product
+    $F_u$ over length-$L$ words, so that
+    $\sum_{\mathbf j}(\Omega_u(Y))_{\mathbf j}\,F_u^{\mathbf j}=Y$ for every $Y$
+    (\cite[eq.~Omegauprop]{DeLasCuevas2017Irreducible}).  Then for any sector
+    indices $\sigma$ and inserted matrices $X_0,\ldots,X_{m-1}$,
+    \[
+        \sum_{\boldsymbol\rho}
+        \Bigl(\prod_k (\Omega_{k+1}(X_k))_{\rho_k}\Bigr)
+        \prod_k A_k^{\sigma_k}\,F_{k+1}^{\rho_k}
+        =
+        \prod_k A_k^{\sigma_k}\,X_k .
+    \]
+    Summing the concatenated chain against the inverse coefficients collapses
+    each repeated product $F_{k+1}$ to its inserted matrix $X_k$.  This is the
+    algebraic content of applying the tensor of right inverses
+    $\Omega_{u+1}\otimes\cdots\otimes\Omega_u$ and invoking the recovery
+    identity.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:periodic_corner_product}
+    Expand each $A_k^{\sigma_k}X_k=\sum_{\mathbf j}(\Omega_{k+1}(X_k))_{\mathbf
+    j}\,A_k^{\sigma_k}F_{k+1}^{\mathbf j}$ using the right inverse, distribute
+    the ordered product of sums over all choices $\boldsymbol\rho$, and pull the
+    scalar coefficients out of each ordered product.
+\end{proof}
+
+\begin{lemma}[Inverse cyclic reindexing to the off-diagonal convention]
+    \label{lem:periodic_negreindex_shift}
+    \lean{MPSTensor.negReindex_paper_shift}
+    \leanok
+    \uses{thm:cyclic_sector_offdiag_shift}
+    The cyclic sector data stores the adjoint shift
+    $\mathcal E^*(P_{k+1})=P_k$, which gives the inverse-indexed grading
+    $P_{k+1}A^i=A^iP_k$.  After the inverse reindexing $P_k\mapsto P_{-k}$ the
+    projectors satisfy the off-diagonal convention
+    $P_{-k}A^i=A^iP_{-(k+1)}$ of
+    \cite[eq.~Auprop]{DeLasCuevas2017Irreducible}, under which the
+    corner-transition products are nonzero.
+\end{lemma}
+
+\begin{proof}\leanok
+    Apply the stored grading at sector $-(k+1)$ and simplify the cyclic index.
+\end{proof}
+
+\begin{lemma}[Telescoping of a corner product]
+    \label{lem:periodic_cornerprod_telescope}
+    \lean{MPSTensor.cornerProd_eq_conj_evalWord}
+    \leanok
+    \uses{def:periodic_corner_product}
+    Under the off-diagonal convention $P_kA^i=A^iP_{k+1}$, the repeated
+    corner-transition product collapses through its intermediate projectors:
+    \[
+        F_u^{\mathbf i}=P_u\,A^{\mathbf i}\,P_{u+|\mathbf i|},
+    \]
+    where $A^{\mathbf i}$ is the ordinary word product and the right projector
+    records the accumulated sector offset.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:periodic_corner_product}
+    Induct on the word.  The head junction $P_uA^iP_{u+1}=P_uA^i$ collapses by
+    the shift and idempotency; the induction hypothesis handles the tail, and the
+    accumulated offset realigns.
+\end{proof}
+
+\begin{lemma}[Blocked letter as a diagonal corner]
+    \label{lem:periodic_cornerprod_blockdiag}
+    \lean{MPSTensor.cornerProd_eq_blockDiagCorner}
+    \leanok
+    \uses{lem:periodic_cornerprod_telescope}
+    For a single blocked letter, the corner-transition product is the diagonal
+    blocked corner of \cite[eq.~Cu]{DeLasCuevas2017Irreducible}:
+    \[
+        F_u^{(I)}=P_u\,(A^{[m]})^I\,P_u .
+    \]
+    Combined with the corner-isomorphism letter identity, this exhibits the
+    compressed sector letter as a corner-transition product.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:periodic_cornerprod_telescope}
+    A blocked letter is a word of length exactly $m$; the accumulated offset
+    $m\cdot1=0$ vanishes, so the telescoping gives the diagonal corner.
+\end{proof}
+
 \begin{theorem}[Cyclic-sector single-site grading]
     \label{thm:cyclic_sector_offdiag_shift}
     \lean{MPSTensor.IsCyclicSectorDecomp.offDiag_shift}
@@ -1296,6 +1418,7 @@ unconditional result.
     \uses{lem:sector_match_propagation, def:cyclic_sector_decomp,
         def:periodic_corner_letter, def:periodic_corner_product,
         lem:periodic_corner_product_append,
+        lem:periodic_corner_product_blockmatch_pow, lem:periodic_corner_contraction,
         thm:periodic_product_one_phase_extraction,
         thm:left_canonical_sector_scalar_normalization, lem:finite_cycle_coboundary}
     Let $A$ and $B$ be left-canonical tensors with period $m$, and let
