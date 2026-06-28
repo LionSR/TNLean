@@ -387,6 +387,7 @@ import TNLean.MPS.RFP.CommutingBridge
 import TNLean.MPS.RFP.Convergence
 import TNLean.MPS.RFP.Assembly
 import TNLean.MPS.RFP.Decorrelation
+import TNLean.MPS.RFP.BNTOrthogonality
 
 -- Layer 6a: Quantum Wielandt span-growth infrastructure
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
