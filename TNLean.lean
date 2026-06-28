@@ -45,6 +45,7 @@ import TNLean.Algebra.StarSubalgebraIsotypicDecomp
 import TNLean.Algebra.StarSubalgebraSchur
 import TNLean.Algebra.StarSubalgebraSemisimple
 import TNLean.Algebra.StarSubalgebraSpatial
+import TNLean.Algebra.StarSubalgebraUnitaryIntertwiner
 
 -- Layer 0b: General analysis
 import TNLean.Analysis.ProjectionGeometry

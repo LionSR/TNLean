@@ -1438,6 +1438,35 @@ isomorphism into a partial isometry.
     vanish on $W$, since $W'$ is nonzero, so the two pieces are of the same type.
 \end{proof}
 
+\begin{lemma}[Same-type pieces are unitarily identified]%
+    \label{lem:starSubalgebra_sameIsotype_isometry}
+    \lean{StarSubalgebra.exists_isometry_intertwiner_of_sameIsotype}
+    \leanok
+    \uses{lem:starSubalgebra_sameIsotype_iso, lem:starSubalgebra_intertwiner_inner_scale_pos}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$ and let $W, W' \subseteq \C^{D}$ be irreducible
+    under $S$. If $W$ is of the same type as $W'$, then there is an intertwiner $u$ from $W$
+    into $W'$ that maps $W$ onto $W'$ and preserves the inner product on $W$: for all
+    $x, y \in W$,
+    \[
+        \langle u(x), u(y) \rangle = \langle x, y \rangle .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:starSubalgebra_sameIsotype_iso, lem:starSubalgebra_intertwiner_inner_scale_pos}
+    Same type gives, by Lemma~\ref{lem:starSubalgebra_sameIsotype_iso}, an intertwiner $f$ that
+    is injective on $W$ with image $W'$. Since $W'$ is nonzero, $f$ does not vanish on $W$, so
+    by Lemma~\ref{lem:starSubalgebra_intertwiner_inner_scale_pos} there is a real number
+    $c > 0$ with $\langle f(x), f(y) \rangle = c\,\langle x, y \rangle$ for all $x, y \in W$.
+    Set $u = f / \sqrt{c}$. Scaling by the nonzero factor $1 / \sqrt{c}$ keeps the commuting
+    identity and the image $W'$, and turns the inner-product factor into one,
+    \[
+        \langle u(x), u(y) \rangle = \tfrac{1}{c}\langle f(x), f(y) \rangle = \langle x, y \rangle,
+    \]
+    so $u$ maps $W$ onto $W'$ and is an isometry on $W$.
+\end{proof}
+
 \begin{lemma}[Reflexivity of the same-type relation]%
     \label{lem:starSubalgebra_sameIsotype_refl}
     \lean{StarSubalgebra.sameIsotype_refl}
