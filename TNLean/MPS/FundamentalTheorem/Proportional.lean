@@ -222,12 +222,14 @@ cross-transfer-matrix spectral radius (computed via
 together with the rigidity theorem
 `modulus_one_eigenvalue_implies_gauge_of_irreducible_TP`.
 
-**Scope restriction (same bond dimension):** The source Lemma equalMPS also
-concludes equality of the two bond dimensions in the unit-overlap case. This
-theorem proves the gauge recovery after the common bond dimension has already
-been identified. The rectangular component is proved separately as
-`dim_eq_of_overlap_norm_tendsto_one_of_irreducible_TP` in this file; together
-the two theorems recover the full structural conclusion of the source lemma. -/
+**Scope restriction (same bond dimension):** this theorem proves the gauge
+recovery for two tensors of a common bond dimension `D`. The source Lemma
+equalMPS additionally concludes `D_a = D_b` in the unit-overlap case; that
+bond-dimension matching follows from the rectangular overlap-decay theorem
+`mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP` (distinct bond dimensions
+force the overlap to decay, so a non-decaying overlap forces equal dimensions),
+which is applied directly where blocks of differing dimension arise. Documented
+in `docs/paper-gaps/cpsv16_equalMPS_gauge_phase_gap.tex`. -/
 theorem gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP
     (A B : MPSTensor d D)
     (hA_irr : IsIrreducibleTensor (d := d) (D := D) A)
