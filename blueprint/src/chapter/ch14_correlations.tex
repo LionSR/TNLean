@@ -830,8 +830,9 @@ and rates for the single-tensor transfer map $\E_A$.
     \lean{MPSTensor.isRFP_block_of_isRFP_directSum}
     \leanok
     \uses{def:is_rfp, def:mixed_transfer_rect}
-    If the direct sum $\bigoplus_k B_k$ is a renormalization fixed point, then
-    each block $B_j$ is a renormalization fixed point.
+    If the direct sum $\bigoplus_k B_k$ is a renormalization fixed point, with
+    $\dim_k \ge 1$ for all $k$, then each block $B_j$ is a renormalization fixed
+    point.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:block_diagonal_transfer_sum_to_block}

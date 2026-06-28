@@ -8,11 +8,11 @@ import TNLean.MPS.RFP.StructuralFull
 /-!
 # Residual-isometry form of the renormalization fixed-point structure
 
-For a family of normal-tensor blocks `B` whose direct sum is a renormalization
-fixed point, this file converts the block-level cross-block vanishing
-`mixedTransferMap₂ (B j) (B j') = 0` (arXiv:1606.00608, Theorem charact-MPS,
-the cross-block part of `eq:III_isometry`, line 551) into the literal
-residual-isometry equation between the residual tensors `U_j`,
+For a family of normal-tensor blocks $B$ whose direct sum is a renormalization
+fixed point, this file converts the block-level cross-block vanishing of
+`mixedTransferMap₂ (B j) (B j')` (arXiv:1606.00608, Theorem charact-MPS, the
+cross-block part of eq:III_isometry, line 551) into the literal residual-isometry
+equation between the residual tensors $U_j$,
 \[
   \sum_i (U_j^i)_{\alpha,\beta}\,\overline{(U_{j'}^i)_{\alpha',\beta'}}
     = \delta_{j,j'}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'} ,
@@ -22,28 +22,29 @@ the full isometry condition of Corollary III.cor3 (arXiv:1606.00608, line 584).
 ## Main results
 
 * `mixedTransferMap₂_conj_apply` — covariance of the mixed transfer operator
-  under a two-sided change of variables `A^i = X_A D_A U^i X_A^{-1}`.
+  under a two-sided change of variables $A^i = X_A D_A U^i X_A^{-1}$.
 * `mixedTransferMap₂_eq_zero_of_conj` — cancelling the invertible outer factors
-  turns `mixedTransferMap₂ A B = 0` into `mixedTransferMap₂ U V = 0`.
+  turns the vanishing of `mixedTransferMap₂ A B` into that of
+  `mixedTransferMap₂ U V`.
 * `residual_isometry_entry_of_mixedTransferMap₂_eq_zero` — reading off a matrix
   entry turns the vanishing operator into the entrywise residual-isometry sum.
-* `IsResidualIsometryFamily` — the full `eq:III_isometry` predicate on a family
-  of residual tensors (the within-block orthonormality together with the
-  cross-block vanishing).
+* `IsResidualIsometryFamily` — the full isometry condition eq:III_isometry as a
+  predicate on a family of residual tensors (the within-block orthonormality
+  together with the cross-block vanishing).
 * `exists_residualIsometryFamily_of_isRFP_directSum` — under whole-tensor RFP of
   the direct sum, the residual tensors of the isometry canonical forms of the
   blocks satisfy `IsResidualIsometryFamily`.
 
 ## Route
 
-Each block in isometry canonical form is `A_j^i = X_j \sqrt{\Lambda_j} U_j^i
-X_j^{-1}` with `X_j` and `\sqrt{\Lambda_j}` invertible.  Substituting the
+Each block in isometry canonical form is $A_j^i = X_j \sqrt{\Lambda_j} U_j^i
+X_j^{-1}$ with $X_j$ and $\sqrt{\Lambda_j}$ invertible.  Substituting the
 decomposition into the mixed transfer operator exposes the residual operator
-`mixedTransferMap₂ U_j U_{j'}` conjugated by the invertible outer factors, so the
-block-level vanishing transfers to the residual operator; reading the
-`(\alpha,\alpha')` entry of the operator applied to a matrix unit `Matrix.single
-\beta \beta' 1` recovers the entrywise sum.  The within-block diagonal `j = j'`
-case is already `IsIsometryCanonicalForm`.
+`mixedTransferMap₂ (U j) (U j')` conjugated by the invertible outer factors, so
+the block-level vanishing transfers to the residual operator; reading the
+$(\alpha,\alpha')$ entry of the operator applied to the matrix unit
+`Matrix.single β β' 1` recovers the entrywise sum.  The within-block diagonal
+$j = j'$ case is already `IsIsometryCanonicalForm`.
 -/
 
 open scoped Matrix BigOperators
@@ -58,7 +59,7 @@ section Cancellation
 
 variable {D₁ D₂ : ℕ}
 
-/-- If `M P N = 0` with `M` and `N` invertible, then `P = 0`. -/
+/-- If $M P N = 0$ with $M$ and $N$ invertible, then $P = 0$. -/
 private lemma eq_zero_of_invertible_mul_mul
     (M : Matrix (Fin D₁) (Fin D₁) ℂ) (N : Matrix (Fin D₂) (Fin D₂) ℂ)
     (P : Matrix (Fin D₁) (Fin D₂) ℂ)
@@ -74,16 +75,16 @@ private lemma eq_zero_of_invertible_mul_mul
   rwa [e] at h2
 
 /-- **Covariance of the mixed transfer operator under a two-sided change of
-variables.** If `A^i = X_A D_A U^i X_A^{-1}` and `B^i = X_B D_B V^i X_B^{-1}`,
-then the mixed transfer operator of `A, B` is the mixed transfer operator of the
-residual tensors `U, V`, conjugated by the invertible outer factors:
+variables.** If $A^i = X_A D_A U^i X_A^{-1}$ and $B^i = X_B D_B V^i X_B^{-1}$,
+then the mixed transfer operator of $A$ and $B$ is the mixed transfer operator of
+the residual tensors $U$ and $V$, conjugated by the invertible outer factors:
 \[
   \mathcal{E}_{A,B}(Y)
     = X_A D_A\,\mathcal{E}_{U,V}\!\bigl(X_A^{-1} Y (X_B^{-1})^\dagger\bigr)\,
       (X_B D_B)^\dagger .
 \]
 This is the algebraic identity underlying the passage from the block-level
-vanishing to `eq:III_isometry` (arXiv:1606.00608, line 551). -/
+vanishing to eq:III_isometry (arXiv:1606.00608, line 551). -/
 lemma mixedTransferMap₂_conj_apply
     (A U : MPSTensor d D₁) (B V : MPSTensor d D₂)
     (Xa Da : Matrix (Fin D₁) (Fin D₁) ℂ) (Xb Db : Matrix (Fin D₂) (Fin D₂) ℂ)
@@ -97,10 +98,10 @@ lemma mixedTransferMap₂_conj_apply
   rw [hA i, hB i]
   simp only [Matrix.conjTranspose_mul, Matrix.mul_assoc]
 
-/-- **The residual operator vanishes.** If `A, B` decompose with invertible outer
-factors as `A^i = X_A D_A U^i X_A^{-1}`, `B^i = X_B D_B V^i X_B^{-1}`, and the
-mixed transfer operator of `A, B` vanishes, then the mixed transfer operator of
-the residual tensors `U, V` vanishes.
+/-- **The residual operator vanishes.** If $A$ and $B$ decompose with invertible
+outer factors as $A^i = X_A D_A U^i X_A^{-1}$, $B^i = X_B D_B V^i X_B^{-1}$, and
+the mixed transfer operator of $A$ and $B$ vanishes, then the mixed transfer
+operator of the residual tensors $U$ and $V$ vanishes.
 
 This cancels the invertible conjugation in `mixedTransferMap₂_conj_apply`
 (arXiv:1606.00608, line 551). -/
@@ -134,13 +135,13 @@ lemma mixedTransferMap₂_eq_zero_of_conj
     exact star_ne_zero.mpr (mul_ne_zero hXb hDb)
 
 /-- **Entrywise form of the vanishing residual operator.** If
-`mixedTransferMap₂ U V = 0`, then for all virtual indices
+`mixedTransferMap₂ U V` vanishes, then for all virtual indices
 \[
   \sum_i (U^i)_{\alpha,\beta}\,\overline{(V^i)_{\alpha',\beta'}} = 0 .
 \]
 This is the entrywise reading of the operator equation (arXiv:1606.00608,
 line 551), obtained by evaluating at the matrix unit `Matrix.single β β' 1` and
-reading the `(α, α')` entry. -/
+reading the $(\alpha, \alpha')$ entry. -/
 lemma residual_isometry_entry_of_mixedTransferMap₂_eq_zero
     (U : MPSTensor d D₁) (V : MPSTensor d D₂)
     (h : mixedTransferMap₂ U V = 0)
@@ -167,7 +168,7 @@ section Blocks
 variable {r : ℕ} {dim : Fin r → ℕ}
 
 /-- Whole-tensor RFP of the direct sum makes each block a renormalization fixed
-point: the diagonal `j = j'` mixed transfer operator is `transferMap (B j)`,
+point: the diagonal $j = j'$ mixed transfer operator is `transferMap (B j)`,
 whose idempotence is `IsRFP (B j)` (arXiv:1606.00608, Definition 3.2). -/
 lemma isRFP_block_of_isRFP_directSum [∀ k, NeZero (dim k)]
     (B : (k : Fin r) → MPSTensor d (dim k))
@@ -199,7 +200,7 @@ def IsResidualIsometryFamily (U : (j : Fin r) → MPSTensor d (dim j)) : Prop :=
 
 /-- **Residual-isometry form of the cross-block RFP structure.**
 
-For a family of normal, irreducible, left-canonical blocks `B`, no two
+For a family of normal, irreducible, left-canonical blocks $B$, no two
 gauge-phase equivalent, whose direct sum is a renormalization fixed point, the
 residual tensors of the per-block isometry canonical forms satisfy the full
 source isometry condition eq:III_isometry (arXiv:1606.00608, line 551): there
@@ -216,7 +217,7 @@ distinctness of a basis of normal tensors.  Corollary III.cor3 starts instead
 from a single predicate "$A$ in canonical form is RFP"; extracting the per-block
 normality, irreducibility, left-canonical condition, and gauge-phase
 distinctness from that predicate is a separate step.  This restriction is
-recorded in `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
+recorded in the paper-gap note docs/paper-gaps/cpsv16_rfp_isometry_scope.tex. -/
 theorem exists_residualIsometryFamily_of_isRFP_directSum [∀ k, NeZero (dim k)]
     (B : (k : Fin r) → MPSTensor d (dim k))
     (hnormal : ∀ k, IsNormal (B k))
