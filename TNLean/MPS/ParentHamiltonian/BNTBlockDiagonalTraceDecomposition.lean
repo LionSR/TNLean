@@ -180,8 +180,7 @@ trace decompositions.
 
 **Scope restriction (boundary representation and trace decomposition):** The
 block-diagonal boundary representation of \(\psi\) and the displayed trace
-decompositions are hypotheses here. Removing these remaining inputs is tracked
-in issue 2971 and documented in
+decompositions are hypotheses here. Removing these remaining inputs is documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_of_boundary
     {r : ℕ} {dim : Fin r → ℕ}
@@ -260,7 +259,7 @@ hypothesis.
 
 **Scope restriction (boundary representation):** The block-diagonal boundary
 representation of \(\psi\) is a hypothesis here. Removing this remaining input
-is tracked in issue 2971 and documented in
+is documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem blockDiagonal_boundary_crossing_trace_decomposition_of_boundary
     {r : ℕ} {dim : Fin r → ℕ}
@@ -376,7 +375,7 @@ replace the separate common product-spanning length hypothesis.
 
 **Scope restriction (boundary representation):** The block-diagonal boundary
 representation of \(\psi\) is a hypothesis here. Removing this remaining
-hypothesis is tracked in issue 2971 and documented in
+hypothesis is documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem blockDiagonal_boundary_crossing_trace_decompositions_of_boundary
     {r : ℕ} {dim : Fin r → ℕ}
@@ -468,7 +467,7 @@ arXiv:quant-ph/0608197, Theorem 12, lines 1446--1451.
 
 **Scope restriction (boundary representation):** The block-diagonal boundary
 representation of \(\psi\) is a hypothesis here. Removing this remaining input
-is tracked in issue 2971 and documented in
+is documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_of_boundary
     {r : ℕ} {dim : Fin r → ℕ}
@@ -546,7 +545,7 @@ comparison with \(D^j_\beta=(\mu_j^NX_j)A^j_\beta\) — is the boundary-conditio
 comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and
 arXiv:2011.12127, Section IV.C, lines 2126--2128, not yet derived from the periodic
 ground-space constraint. Documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; tracked in issue 2971. -/
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -622,7 +621,7 @@ comparison with \(D^j_\beta=(\mu_j^NX_j)A^j_\beta\) — is the boundary-conditio
 comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and
 arXiv:2011.12127, Section IV.C, lines 2126--2128, not yet derived from the periodic
 ground-space constraint. Documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; tracked in issue 2971. -/
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1_span
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -701,7 +700,7 @@ comparison with \(D^j_\beta=(\mu_j^NX_j)A^j_\beta\) — is the boundary-conditio
 comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and
 arXiv:2011.12127, Section IV.C, lines 2126--2128, not yet derived from the periodic
 ground-space constraint. Documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; tracked in issue 2971. -/
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -772,7 +771,7 @@ comparison with \(D^j_\beta=(\mu_j^NX_j)A^j_\beta\) — is the boundary-conditio
 comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and
 arXiv:2011.12127, Section IV.C, lines 2126--2128, not yet derived from the periodic
 ground-space constraint. Documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; tracked in issue 2971. -/
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition_bnt_c1_span
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
