@@ -158,9 +158,8 @@ matching condition fails.  The disjoint adjacent-pair product is instead
 Thus the adjacent physical-pair coefficient identity is not a consequence of
 the unit pair-index isometry alone.
 
-There is still no conclusion relating $U_k$ and $U_\ell$ for $k\ne \ell$.  Thus
-the formal theorems record only a separate isometry condition for each block;
-they do not record the cross-block equations
+The per-block isometry form does not by itself relate $U_k$ and $U_\ell$ for
+$k\ne \ell$.  The cross-block equations
 \begin{align}
   \sum_i
   (U_k^i)_{\alpha,\beta}\,
@@ -169,7 +168,9 @@ they do not record the cross-block equations
   0
   \qquad (k\ne \ell),
 \end{align}
-which are part of the source condition \path{eq:III_isometry}.
+the $j\ne j'$ part of the source condition \path{eq:III_isometry}, are
+established separately at the normal-tensor-block level, in the section on the
+cross-block residual isometry below.
 
 \section{Square-root diagonal (local correction)}
 
@@ -247,34 +248,65 @@ $\Lambda_\alpha=\rho_{\alpha,\alpha}/\tr\rho$.  The identity
 $\sum_\alpha\Lambda_\alpha=1$ is the trace identity
 $\sum_\alpha\rho_{\alpha,\alpha}=\tr\rho$ for the diagonal fixed point.
 
-This discharges the trace-normalization scope item.  The remaining open part of
-the source isometry condition is the cross-block $\delta_{j,j'}$ orthogonality
-between distinct normal-tensor blocks, treated below.
+This discharges the trace-normalization scope item.  The cross-block
+$\delta_{j,j'}$ orthogonality between distinct normal-tensor blocks is treated in
+the next section.
+
+\section{Cross-block residual isometry}
+
+The cross-block $\delta_{j,j'}$ orthogonality is formalized at the level of the
+normal-tensor blocks.  For a family of normal, irreducible, left-canonical
+blocks $(A_j)_j$, no two gauge-phase equivalent, with $\dim_j\ge 1$ and whose
+direct sum $\bigoplus_j A_j$ is a renormalization fixed point, the mixed transfer
+operators between distinct blocks vanish,
+\[
+  \mathcal{E}_{j,j'}=\sum_i A_j^i\otimes\overline{A_{j'}^i}=0
+  \qquad (j\ne j'),
+\]
+formalized by \leanid{MPSTensor.isBNTLocallyOrthogonal_of_isRFP_directSum}.  The
+argument decomposes the direct-sum transfer map block by block
+(\leanid{MPSTensor.blockDiagonal'_transferSum_toBlock}): whole-tensor idempotence
+makes each $\mathcal{E}_{j,j'}$ idempotent, and the same-dimension and
+dimension-mismatch transfer-operator gaps force an idempotent of spectral radius
+below one to be zero.
+
+Passing to the residual isometries uses the isometry canonical form of each
+block.  Writing $A_j^i = X_j\sqrt{\Lambda_j}\,U_j^i X_j^{-1}$ with $X_j$ and
+$\sqrt{\Lambda_j}$ invertible, the mixed transfer operator is covariant under the
+two-sided change of variables,
+\[
+  \mathcal{E}_{A_j,A_{j'}}(Y)
+    = X_j\sqrt{\Lambda_j}\,
+      \mathcal{E}_{U_j,U_{j'}}\!\bigl(X_j^{-1}Y(X_{j'}^{-1})^\dagger\bigr)\,
+      (X_{j'}\sqrt{\Lambda_{j'}})^\dagger,
+\]
+formalized by \leanid{MPSTensor.mixedTransferMap₂_conj_apply}.  Cancelling the
+invertible outer factors converts $\mathcal{E}_{A_j,A_{j'}}=0$ into
+$\mathcal{E}_{U_j,U_{j'}}=0$, and reading the matrix entry at a matrix unit yields
+the residual-isometry equation
+$\sum_i (U_j^i)_{\alpha,\beta}\overline{(U_{j'}^i)_{\alpha',\beta'}}=0$.  Together
+with the within-block orthonormality of the isometry canonical form, this is the
+full source isometry condition \path{eq:III_isometry}, packaged as the predicate
+\leanid{MPSTensor.IsResidualIsometryFamily} and established under whole-tensor
+renormalization fixed point of the direct sum by
+\leanid{MPSTensor.exists_residualIsometryFamily_of_isRFP_directSum}.  This is the
+residual-isometry content of Corollary~III.cor3 at the normal-tensor-block level.
 
 \section{Elimination plan}
 
-A source-faithful version of Corollary~III.cor3 should be stated for a
-BNT-family or whole-tensor canonical-form datum, not merely for independent
-blocks.  Its conclusion should first expose the full pair-index isometry for a
-single block, with the normalization compared to the source convention, and
-then include a joint family $U$ satisfying
-\begin{align}
-  \sum_i
-  (U_k^i)_{\alpha,\beta}\,
-  \overline{(U_\ell^i)_{\alpha',\beta'}}
-  =
-  \delta_{k,\ell}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
-\end{align}
-Such a statement must account for the common physical space into which all
-blocks embed; in particular, the joint isometry condition has the dimensional
-content that the block-pair spaces fit orthogonally inside the physical space.
+The one remaining gap is the source's starting point.  Corollary~III.cor3 assumes
+a single predicate ``$A$ in canonical form is a renormalization fixed point'',
+whereas the formal theorem takes the per-block normality, irreducibility,
+left-canonical condition, and gauge-phase distinctness of a basis of normal
+tensors as explicit hypotheses.  A source-faithful version should derive those
+per-block conditions from the single canonical-form renormalization-fixed-point
+predicate, so that the residual isometry family follows from the whole-tensor
+predicate alone, by the block-level argument of the previous section.
 
 \section{Conclusion}
 
-The current theorem is a scope restriction.  It is a useful per-block
-consequence of the single-block RFP isometry form, but it is not the full
-isometry assertion of Corollary~III.cor3.  The formal development now exposes
-two normalization conventions.  In the $D_k^{-1/2}$ convention the residual
+The per-block isometry form exposes two normalization conventions, which the
+formal development makes explicit.  In the $D_k^{-1/2}$ convention the residual
 tensor satisfies the contracted per-block identity
 \[
   \sum_i (U_k^i)^\dagger U_k^i=I
@@ -296,57 +328,14 @@ for a single block by the named predicate
 \leanid{MPSTensor.IsIsometryCanonicalForm} and the theorem
 \leanid{MPSTensor.isIsometryCanonicalForm_of_rfp_nt}, with the diagonal weight
 $\Lambda_\alpha=\rho_{\alpha,\alpha}/\tr\rho$ and the square-root dressing
-$\sqrt\Lambda$ of the unit isometry.  The remaining open part of the source
-isometry condition is the cross-block $\delta_{j,j'}$ orthogonality equations
-between distinct normal-tensor blocks.
-
-\section{Progress on the cross-block equations}
-
-The cross-block $\delta_{j,j'}$ orthogonality is now established at the level of
-the normal-tensor blocks, before the passage to the residual isometries.  For a
-family of distinct irreducible left-canonical blocks $(A_j)_j$, no two
-gauge-phase equivalent, whose direct sum $\bigoplus_j A_j$ is a renormalization
-fixed point, the mixed transfer operators between distinct blocks vanish,
-\[
-  \mathcal{E}_{j,j'}=\sum_i A_j^i\otimes\overline{A_{j'}^i}=0
-  \qquad (j\ne j'),
-\]
-formalized by \leanid{MPSTensor.isBNTLocallyOrthogonal_of_isRFP_directSum}.  The
-argument decomposes the direct-sum transfer map block by block
-(\leanid{MPSTensor.blockDiagonal'_transferSum_toBlock}): whole-tensor idempotence
-makes each $\mathcal{E}_{j,j'}$ idempotent, and the same-dimension and dimension-mismatch
-transfer-operator gaps force an idempotent of spectral radius below one to be
-zero.
-
-The passage to the residual isometries is now formalized.  Writing
-$A_j^i = X_j\sqrt{\Lambda_j}\,U_j^i X_j^{-1}$ with $X_j$ and $\sqrt{\Lambda_j}$
-invertible, the mixed transfer operator is covariant under the two-sided change
-of variables,
-\[
-  \mathcal{E}_{A_j,A_{j'}}(Y)
-    = X_j\sqrt{\Lambda_j}\,
-      \mathcal{E}_{U_j,U_{j'}}\!\bigl(X_j^{-1}Y(X_{j'}^{-1})^\dagger\bigr)\,
-      (X_{j'}\sqrt{\Lambda_{j'}})^\dagger,
-\]
-formalized by \leanid{MPSTensor.mixedTransferMap₂_conj_apply}.  Cancelling the
-invertible outer factors converts $\mathcal{E}_{A_j,A_{j'}}=0$ into
-$\mathcal{E}_{U_j,U_{j'}}=0$, and reading the matrix entry at a matrix unit
-yields the residual-isometry equation
-$\sum_i (U_j^i)_{\alpha,\beta}\overline{(U_{j'}^i)_{\alpha',\beta'}}=0$.  Together
-with the within-block orthonormality of the isometry canonical form, this is the
-faithful multi-block isometry predicate
-\leanid{MPSTensor.IsResidualIsometryFamily}, established under whole-tensor
-renormalization fixed point of the direct sum by
-\leanid{MPSTensor.exists_residualIsometryFamily_of_isRFP_directSum}.  This is the
-residual-isometry content of Corollary~III.cor3 at the level of the
-normal-tensor blocks.
-
-The remaining scope restriction is the source's starting point.
-Corollary~III.cor3 assumes a single predicate ``$A$ in canonical form is a
-renormalization fixed point'', whereas the formal theorem takes the per-block
-normal, irreducible, left-canonical and distinctness data of a basis of normal
-tensors as explicit hypotheses.  Extracting that per-block data from the single
-canonical-form predicate is the remaining step.
+$\sqrt\Lambda$ of the unit isometry.  The cross-block $\delta_{j,j'}$
+orthogonality equations of \path{eq:III_isometry} are formalized at the
+normal-tensor-block level by
+\leanid{MPSTensor.exists_residualIsometryFamily_of_isRFP_directSum}.  The only
+part not yet formalized is the extraction of the per-block normality,
+irreducibility, left-canonical condition, and gauge-phase distinctness from a
+single canonical-form renormalization-fixed-point predicate, the hypothesis form
+of Corollary~III.cor3.
 
 \bibliographystyle{alpha}
 \bibliography{references}
