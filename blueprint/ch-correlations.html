@@ -1903,7 +1903,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Suppose there exists an isometry \(V : \mathbb {C}^d \to \mathbb {C}^{d^2}\), written as coefficients \(V_{(i_1,i_2),j}\), such that </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fc0cd1c1310>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fcb70ae1310>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:corr_kraus_isometry_decomp} A^{i_1} A^{i_2} = \sum _{j=0}^{d-1} V_{(i_1,i_2),j} A^j \end{equation}
@@ -2003,7 +2003,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   An MPS tensor \(A\) is a renormalization fixed point if and only if there exists an isometry \(V : \mathbb {C}^d \to \mathbb {C}^{d^2}\), written as coefficients \(V_{(i_1,i_2),j}\) with \(V^\dagger V = 1\), such that </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7fc0cd1c2db0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7fcb70ae2db0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:corr_AA_isometry} A^{i_1} A^{i_2} = \sum _{j=0}^{d-1} V_{(i_1,i_2),j} A^j \end{equation}
@@ -2214,7 +2214,7 @@
           
           <li><a href="ch-bnt.html#def:bnt_cpsv">Definition 10.2</a></li>
           
-          <li><a href="ch-correlations.html#def:is_cid">Definition 14.42</a></li>
+          <li><a href="ch-correlations.html#def:is_cid">Definition 14.44</a></li>
           
           <li><a href="ch-correlations.html#def:is_bnt_locally_orthogonal">Definition 14.17</a></li>
           
@@ -3229,12 +3229,171 @@
 
   </div>
 </div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:unit_pair_isometry_transfer">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">14.30</span>
+    <span class="lemma_thmtitle">Reference-tensor transfer identity for a unit pair-index isometry</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-correlations.html#lem:unit_pair_isometry_transfer">#</a>
+    
+    <a class="icon proof" href="ch-correlations.html#a0000031378"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.unitPairIsometry_transfer" class="lean_decl">MPSTensor.unitPairIsometry_transfer</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>  Let \(U\) be a family of bond matrices satisfying the unit pair-index isometry condition </p>
+<div class="displaymath" id="a0000031379">
+  \[  \sum _i \overline{(U^i)_{\alpha ,\beta }}\, (U^i)_{\alpha ',\beta '} = \delta _{\alpha ,\alpha '}\delta _{\beta ,\beta '}.  \]
+</div>
+<p> Then for every bond matrix \(Z\), </p>
+<div class="displaymath" id="a0000031380">
+  \[  \sum _i U^i\, Z\, (U^i)^\dagger = \operatorname{tr}(Z)\, I.  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000031378">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Reading off the \((x,y)\) entry, the pair-index condition gives \(\sum _i (U^i)_{x,\alpha }\, \overline{(U^i)_{y,\beta }} = \delta _{x,y}\, \delta _{\alpha ,\beta }\), so the entry collapses to \(\delta _{x,y}\sum _\alpha Z_{\alpha ,\alpha } = \delta _{x,y}\, \operatorname{tr}(Z)\), which is the \((x,y)\) entry of \(\operatorname{tr}(Z)\, I\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:is_rfp_of_isometry_canonical_form">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">14.31</span>
+    <span class="theorem_thmtitle">Isometry canonical form implies the renormalization fixed-point property</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-correlations.html#thm:is_rfp_of_isometry_canonical_form">#</a>
+    
+    <a class="icon proof" href="ch-correlations.html#a0000031381"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-correlations.html#def:is_isometry_canonical_form">Definition 14.28</a></li>
+          
+          <li><a href="ch-correlations.html#def:is_rfp">Definition 14.13</a></li>
+          
+          <li><a href="ch-correlations.html#lem:unit_pair_isometry_transfer">Lemma 14.30</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.isRFP_of_isIsometryCanonicalForm" class="lean_decl">MPSTensor.isRFP_of_isIsometryCanonicalForm</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   A tensor in isometry canonical form is a renormalization fixed point. This is the backward direction of the structural characterization of pure-state renormalization fixed points in <span class="cite">
+	[
+	
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
+	, Section&#160;3
+	]
+</span>, which the source states as immediate. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000031381">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Write \(A^i = X\sqrt\Lambda \, U^i X^{-1}\). Substituting into the transfer map and pulling the index-independent factors \(X\sqrt\Lambda \) and \(\sqrt\Lambda \, X^\dagger \) outside the sum, the unit pair-index isometry identity (Lemma&#160;<a href="ch-correlations.html#lem:unit_pair_isometry_transfer">14.30</a>) gives the rank-one form </p>
+<div class="displaymath" id="a0000031382">
+  \[  \mathcal{E}_A(Y) = \operatorname{tr}\! \bigl(X^{-1} Y (X^{-1})^\dagger \bigr)\, R, \qquad R = X\, \Lambda \, X^\dagger .  \]
+</div>
+<p> Idempotence then reduces to \(\operatorname{tr}\! \bigl(X^{-1} R (X^{-1})^\dagger \bigr) = \operatorname{tr}(\Lambda ) = 1\), the trace normalization, so \(\mathcal{E}_A \circ \mathcal{E}_A = \mathcal{E}_A\). </p>
+
+  </div>
+</div>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:isometry_canonical_form_of_rfp_nt_blocks">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.30</span>
+    <span class="theorem_thmlabel">14.32</span>
     <span class="theorem_thmtitle">Per-block trace-normalized isometry canonical form</span>
     <div class="thm_header_extras">
 
@@ -3245,7 +3404,7 @@
 
     <a class="icon proof" href="ch-correlations.html#thm:isometry_canonical_form_of_rfp_nt_blocks">#</a>
     
-    <a class="icon proof" href="ch-correlations.html#a0000031378"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-correlations.html#a0000031383"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3300,7 +3459,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031378">
+<div class="proof_wrapper" id="a0000031383">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3317,7 +3476,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">14.31</span>
+    <span class="lemma_thmlabel">14.33</span>
     <span class="lemma_thmtitle">Block decomposition of the direct-sum transfer map</span>
     <div class="thm_header_extras">
 
@@ -3328,7 +3487,7 @@
 
     <a class="icon proof" href="ch-correlations.html#lem:block_diagonal_transfer_sum_to_block">#</a>
     
-    <a class="icon proof" href="ch-correlations.html#a0000031379"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-correlations.html#a0000031384"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3376,14 +3535,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \((B_k)_k\) be a family of tensors and let \(\bigoplus _k B_k\) be their direct sum on the total bond space. For every bond matrix \(X\) and every pair of blocks, the \((j,j')\) bond block of the transfer sum </p>
-<div class="displaymath" id="a0000031380">
+<div class="displaymath" id="a0000031385">
   \[  \sum _i \Bigl(\bigoplus _k B_k^i\Bigr)\, X\,  \Bigl(\bigoplus _k B_k^i\Bigr)^\dagger  \]
 </div>
 <p> equals \(\mathcal{E}_{j,j'}\) applied to the \((j,j')\) bond block of \(X\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031379">
+<div class="proof_wrapper" id="a0000031384">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3392,7 +3551,7 @@
   </div>
   <div class="proof_content">
   <p>A block-diagonal factor connects only matching blocks, so the \((j,j')\) block of the product is </p>
-<div class="displaymath" id="a0000031381">
+<div class="displaymath" id="a0000031386">
   \[  \Bigl(\sum _i \bigl(\bigoplus _k B_k^i\bigr)\, X\,  \bigl(\bigoplus _k B_k^i\bigr)^\dagger \Bigr)_{j,j'} = \sum _i B_j^i\, X_{j,j'}\, (B_{j'}^i)^\dagger = \mathcal{E}_{j,j'}(X_{j,j'}) .  \]
 </div>
 
@@ -3403,7 +3562,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.32</span>
+    <span class="theorem_thmlabel">14.34</span>
     <span class="theorem_thmtitle">Cross-block transfer vanishing for a direct-sum fixed point</span>
     <div class="thm_header_extras">
 
@@ -3414,7 +3573,7 @@
 
     <a class="icon proof" href="ch-correlations.html#thm:bnt_locally_orthogonal_of_rfp_direct_sum">#</a>
     
-    <a class="icon proof" href="ch-correlations.html#a0000031382"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-correlations.html#a0000031387"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3436,7 +3595,7 @@
           
           <li><a href="ch-spectral.html#def:mixed_transfer_rect">Definition 7.2</a></li>
           
-          <li><a href="ch-correlations.html#lem:block_diagonal_transfer_sum_to_block">Lemma 14.31</a></li>
+          <li><a href="ch-correlations.html#lem:block_diagonal_transfer_sum_to_block">Lemma 14.33</a></li>
           
         </ul>
     
@@ -3468,7 +3627,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \((A_j)_j\) be a family of distinct irreducible left-canonical blocks, no two of which are gauge-phase equivalent, and suppose the direct sum \(\bigoplus _j A_j\) is a renormalization fixed point. Then for every pair of distinct components the mixed transfer operator vanishes, </p>
-<div class="displaymath" id="a0000031383">
+<div class="displaymath" id="a0000031388">
   \[  \mathcal{E}_{j,j'} = \sum _i A_j^i\otimes \overline{A_{j'}^i} = 0 .  \]
 </div>
 <p> This is the cross-block (\(\delta _{j,j'}\)) content of the isometry condition of <span class="cite">
@@ -3481,7 +3640,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031382">
+<div class="proof_wrapper" id="a0000031387">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3489,7 +3648,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By Lemma&#160;<a href="ch-correlations.html#lem:block_diagonal_transfer_sum_to_block">14.31</a> the \((j,j')\) bond block of the direct-sum transfer map acts as \(\mathcal{E}_{j,j'}\). Whole-tensor idempotence \(\mathcal{E}^2=\mathcal{E}\) therefore restricts to each block as \(\mathcal{E}_{j,j'}^2=\mathcal{E}_{j,j'}\). For distinct irreducible left-canonical blocks that are not gauge-phase equivalent the mixed transfer operator has spectral radius below one, \(\rho (\mathcal{E}_{j,j'}){\lt}1\) — by the same-dimension gauge rigidity when the bond dimensions agree, and by the dimension-mismatch gap otherwise. Then \(\mathcal{E}_{j,j'} = \mathcal{E}_{j,j'}^n \to 0\) as \(n\to \infty \), so \(\mathcal{E}_{j,j'}=0\). </p>
+  <p> By Lemma&#160;<a href="ch-correlations.html#lem:block_diagonal_transfer_sum_to_block">14.33</a> the \((j,j')\) bond block of the direct-sum transfer map acts as \(\mathcal{E}_{j,j'}\). Whole-tensor idempotence \(\mathcal{E}^2=\mathcal{E}\) therefore restricts to each block as \(\mathcal{E}_{j,j'}^2=\mathcal{E}_{j,j'}\). For distinct irreducible left-canonical blocks that are not gauge-phase equivalent the mixed transfer operator has spectral radius below one, \(\rho (\mathcal{E}_{j,j'}){\lt}1\) — by the same-dimension gauge rigidity when the bond dimensions agree, and by the dimension-mismatch gap otherwise. Then \(\mathcal{E}_{j,j'} = \mathcal{E}_{j,j'}^n \to 0\) as \(n\to \infty \), so \(\mathcal{E}_{j,j'}=0\). </p>
 
   </div>
 </div>
@@ -3498,7 +3657,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">14.33</span>
+    <span class="definition_thmlabel">14.35</span>
     <span class="definition_thmtitle">Residual isometry family</span>
     <div class="thm_header_extras">
 
@@ -3534,7 +3693,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>  A family of residual tensors \((U_j)_j\) is a <em>residual isometry family</em> when it satisfies the source isometry condition </p>
-<div class="displaymath" id="a0000031384">
+<div class="displaymath" id="a0000031389">
   \[  \sum _i (U_j^i)_{\alpha ,\beta }\, \overline{(U_{j'}^i)_{\alpha ',\beta '}} = \delta _{j,j'}\delta _{\alpha ,\alpha '}\delta _{\beta ,\beta '} :  \]
 </div>
 <p> each block satisfies the within-block pair-index orthonormality, and the cross-block sums between distinct blocks vanish. This is the isometry condition of <span class="cite">
@@ -3552,7 +3711,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">14.34</span>
+    <span class="lemma_thmlabel">14.36</span>
     <span class="lemma_thmtitle">Covariance of the mixed transfer operator</span>
     <div class="thm_header_extras">
 
@@ -3563,7 +3722,7 @@
 
     <a class="icon proof" href="ch-correlations.html#lem:mixed_transfer_conj_apply">#</a>
     
-    <a class="icon proof" href="ch-correlations.html#a0000031385"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-correlations.html#a0000031390"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3611,13 +3770,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   For decompositions \(A^i = X_A D_A U^i X_A^{-1}\) and \(B^i = X_B D_B V^i X_B^{-1}\), the mixed transfer operator of \(A,B\) is the mixed transfer operator of the residual tensors \(U,V\) conjugated by the outer factors: </p>
-<div class="displaymath" id="a0000031386">
+<div class="displaymath" id="a0000031391">
   \[  \mathcal{E}_{A,B}(Y) = X_A D_A\, \mathcal{E}_{U,V}\! \bigl(X_A^{-1}\, Y\, (X_B^{-1})^\dagger \bigr)\,  (X_B D_B)^\dagger .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031385">
+<div class="proof_wrapper" id="a0000031390">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3634,7 +3793,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">14.35</span>
+    <span class="lemma_thmlabel">14.37</span>
     <span class="lemma_thmtitle">Vanishing of the residual transfer operator</span>
     <div class="thm_header_extras">
 
@@ -3645,7 +3804,7 @@
 
     <a class="icon proof" href="ch-correlations.html#lem:mixed_transfer_eq_zero_of_conj">#</a>
     
-    <a class="icon proof" href="ch-correlations.html#a0000031387"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-correlations.html#a0000031392"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3663,7 +3822,7 @@
           
           <li><a href="ch-spectral.html#def:mixed_transfer_rect">Definition 7.2</a></li>
           
-          <li><a href="ch-correlations.html#lem:mixed_transfer_conj_apply">Lemma 14.34</a></li>
+          <li><a href="ch-correlations.html#lem:mixed_transfer_conj_apply">Lemma 14.36</a></li>
           
         </ul>
     
@@ -3698,7 +3857,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031387">
+<div class="proof_wrapper" id="a0000031392">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3706,7 +3865,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The covariance identity Lemma&#160;<a href="ch-correlations.html#lem:mixed_transfer_conj_apply">14.34</a> expresses \(\mathcal{E}_{A,B}\) as \(\mathcal{E}_{U,V}\) conjugated by the invertible outer factors \(X_A D_A\) and \((X_B D_B)^\dagger \), so \(\mathcal{E}_{A,B}=0\) forces \(\mathcal{E}_{U,V}=0\). </p>
+  <p> The covariance identity Lemma&#160;<a href="ch-correlations.html#lem:mixed_transfer_conj_apply">14.36</a> expresses \(\mathcal{E}_{A,B}\) as \(\mathcal{E}_{U,V}\) conjugated by the invertible outer factors \(X_A D_A\) and \((X_B D_B)^\dagger \), so \(\mathcal{E}_{A,B}=0\) forces \(\mathcal{E}_{U,V}=0\). </p>
 
   </div>
 </div>
@@ -3715,7 +3874,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">14.36</span>
+    <span class="lemma_thmlabel">14.38</span>
     <span class="lemma_thmtitle">Entrywise residual isometry sum</span>
     <div class="thm_header_extras">
 
@@ -3726,7 +3885,7 @@
 
     <a class="icon proof" href="ch-correlations.html#lem:residual_isometry_entry">#</a>
     
-    <a class="icon proof" href="ch-correlations.html#a0000031388"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-correlations.html#a0000031393"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3774,13 +3933,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   If \(\mathcal{E}_{U,V}=0\), then for all virtual indices </p>
-<div class="displaymath" id="a0000031389">
+<div class="displaymath" id="a0000031394">
   \[  \sum _i (U^i)_{\alpha ,\beta }\, \overline{(V^i)_{\alpha ',\beta '}} = 0 .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031388">
+<div class="proof_wrapper" id="a0000031393">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3797,7 +3956,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">14.37</span>
+    <span class="lemma_thmlabel">14.39</span>
     <span class="lemma_thmtitle">Each block of a direct-sum fixed point is a fixed point</span>
     <div class="thm_header_extras">
 
@@ -3808,7 +3967,7 @@
 
     <a class="icon proof" href="ch-correlations.html#lem:isrfp_block_of_rfp_direct_sum">#</a>
     
-    <a class="icon proof" href="ch-correlations.html#a0000031390"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-correlations.html#a0000031395"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3828,7 +3987,7 @@
           
           <li><a href="ch-spectral.html#def:mixed_transfer_rect">Definition 7.2</a></li>
           
-          <li><a href="ch-correlations.html#lem:block_diagonal_transfer_sum_to_block">Lemma 14.31</a></li>
+          <li><a href="ch-correlations.html#lem:block_diagonal_transfer_sum_to_block">Lemma 14.33</a></li>
           
         </ul>
     
@@ -3863,7 +4022,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031390">
+<div class="proof_wrapper" id="a0000031395">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3880,7 +4039,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.38</span>
+    <span class="theorem_thmlabel">14.40</span>
     <span class="theorem_thmtitle">Residual-isometry form of the cross-block structure</span>
     <div class="thm_header_extras">
 
@@ -3891,7 +4050,7 @@
 
     <a class="icon proof" href="ch-correlations.html#thm:residual_isometry_of_rfp_direct_sum">#</a>
     
-    <a class="icon proof" href="ch-correlations.html#a0000031391"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-correlations.html#a0000031396"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3907,23 +4066,23 @@
         
         <ul class="uses">
           
-          <li><a href="ch-correlations.html#def:is_residual_isometry_family">Definition 14.33</a></li>
+          <li><a href="ch-correlations.html#def:is_residual_isometry_family">Definition 14.35</a></li>
           
           <li><a href="ch-correlations.html#def:is_rfp">Definition 14.13</a></li>
           
           <li><a href="ch-correlations.html#def:is_isometry_canonical_form">Definition 14.28</a></li>
           
-          <li><a href="ch-correlations.html#thm:bnt_locally_orthogonal_of_rfp_direct_sum">Theorem 14.32</a></li>
+          <li><a href="ch-correlations.html#thm:bnt_locally_orthogonal_of_rfp_direct_sum">Theorem 14.34</a></li>
           
           <li><a href="ch-correlations.html#thm:isometry_canonical_form_of_rfp_nt">Theorem 14.29</a></li>
           
-          <li><a href="ch-correlations.html#lem:mixed_transfer_conj_apply">Lemma 14.34</a></li>
+          <li><a href="ch-correlations.html#lem:mixed_transfer_conj_apply">Lemma 14.36</a></li>
           
-          <li><a href="ch-correlations.html#lem:isrfp_block_of_rfp_direct_sum">Lemma 14.37</a></li>
+          <li><a href="ch-correlations.html#lem:isrfp_block_of_rfp_direct_sum">Lemma 14.39</a></li>
           
-          <li><a href="ch-correlations.html#lem:mixed_transfer_eq_zero_of_conj">Lemma 14.35</a></li>
+          <li><a href="ch-correlations.html#lem:mixed_transfer_eq_zero_of_conj">Lemma 14.37</a></li>
           
-          <li><a href="ch-correlations.html#lem:residual_isometry_entry">Lemma 14.36</a></li>
+          <li><a href="ch-correlations.html#lem:residual_isometry_entry">Lemma 14.38</a></li>
           
         </ul>
     
@@ -3955,7 +4114,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \((A_j)_j\) be a family of normal, irreducible, left-canonical blocks, no two of which are gauge-phase equivalent, with \(\dim _j \ge 1\) for all \(j\), and suppose the direct sum \(\bigoplus _j A_j\) is a renormalization fixed point. Then there are invertible \(X_j\), positive trace-normalized diagonal weights \(\Lambda _j\), and residual tensors \(U_j\) with </p>
-<div class="displaymath" id="a0000031392">
+<div class="displaymath" id="a0000031397">
   \[  A_j^i = X_j\, \sqrt{\Lambda _j}\, U_j^i\, X_j^{-1},  \]
 </div>
 <p> such that \((U_j)_j\) is a residual isometry family. This is the residual-isometry content of Corollary&#160;III.cor3 <span class="cite">
@@ -3968,7 +4127,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031391">
+<div class="proof_wrapper" id="a0000031396">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3976,7 +4135,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Whole-tensor idempotence makes the diagonal mixed transfer operator of each block its own transfer map, hence each block is a renormalization fixed point; the isometry canonical form (Theorem&#160;<a href="ch-correlations.html#thm:isometry_canonical_form_of_rfp_nt">14.29</a>) supplies the decomposition \(A_j^i = X_j\sqrt{\Lambda _j}U_j^iX_j^{-1}\) with the within-block orthonormality, which is the \(j=j'\) case. For \(j\ne j'\), Theorem&#160;<a href="ch-correlations.html#thm:bnt_locally_orthogonal_of_rfp_direct_sum">14.32</a> gives \(\mathcal{E}_{A_j,A_{j'}}=0\); by the covariance Lemma&#160;<a href="ch-correlations.html#lem:mixed_transfer_conj_apply">14.34</a> and invertibility of the outer factors \(\mathcal{E}_{U_j,U_{j'}}=0\), and reading the entry of this operator at a matrix unit yields the cross-block sum \(\sum _i (U_j^i)_{\alpha ,\beta }\overline{(U_{j'}^i)_{\alpha ',\beta '}}=0\). </p>
+  <p> Whole-tensor idempotence makes the diagonal mixed transfer operator of each block its own transfer map, hence each block is a renormalization fixed point; the isometry canonical form (Theorem&#160;<a href="ch-correlations.html#thm:isometry_canonical_form_of_rfp_nt">14.29</a>) supplies the decomposition \(A_j^i = X_j\sqrt{\Lambda _j}U_j^iX_j^{-1}\) with the within-block orthonormality, which is the \(j=j'\) case. For \(j\ne j'\), Theorem&#160;<a href="ch-correlations.html#thm:bnt_locally_orthogonal_of_rfp_direct_sum">14.34</a> gives \(\mathcal{E}_{A_j,A_{j'}}=0\); by the covariance Lemma&#160;<a href="ch-correlations.html#lem:mixed_transfer_conj_apply">14.36</a> and invertibility of the outer factors \(\mathcal{E}_{U_j,U_{j'}}=0\), and reading the entry of this operator at a matrix unit yields the cross-block sum \(\sum _i (U_j^i)_{\alpha ,\beta }\overline{(U_{j'}^i)_{\alpha ',\beta '}}=0\). </p>
 
   </div>
 </div>
@@ -3985,7 +4144,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.39</span>
+    <span class="theorem_thmlabel">14.41</span>
     <span class="theorem_thmtitle">Canonical-form blocks are injective</span>
     <div class="thm_header_extras">
 
@@ -3996,7 +4155,7 @@
 
     <a class="icon proof" href="ch-correlations.html#thm:rfp_cf_structural">#</a>
     
-    <a class="icon proof" href="ch-correlations.html#a0000031393"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-correlations.html#a0000031398"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4055,7 +4214,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031393">
+<div class="proof_wrapper" id="a0000031398">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4072,7 +4231,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.40</span>
+    <span class="theorem_thmlabel">14.42</span>
     <span class="theorem_thmtitle">RG flow convergence for canonical-form tensors</span>
     <div class="thm_header_extras">
 
@@ -4083,7 +4242,7 @@
 
     <a class="icon proof" href="ch-correlations.html#thm:rg_flow_converges_of_cf">#</a>
     
-    <a class="icon proof" href="ch-correlations.html#a0000031394"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-correlations.html#a0000031399"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4146,7 +4305,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031394">
+<div class="proof_wrapper" id="a0000031399">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4163,7 +4322,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">14.41</span>
+    <span class="remark_thmlabel">14.43</span>
     <div class="thm_header_extras">
 
         </div>
@@ -4209,7 +4368,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">14.42</span>
+    <span class="definition_thmlabel">14.44</span>
     <span class="definition_thmtitle">Correlations independent of distance</span>
     <div class="thm_header_extras">
 
@@ -4265,7 +4424,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   For a positive definite right fixed point \(\rho ^R {\gt} 0\), an MPS tensor has <em>correlations independent of distance</em> (CID) when for all local observables \(X\) and \(Y\) and all separations \(n,m \ge 1\), </p>
-<div class="displaymath" id="a0000031395">
+<div class="displaymath" id="a0000031400">
   \[  C(X,Y;n) = C(X,Y;m).  \]
 </div>
 
@@ -4276,7 +4435,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">14.43</span>
+    <span class="definition_thmlabel">14.45</span>
     <span class="definition_thmtitle">Zero correlation length</span>
     <div class="thm_header_extras">
 
@@ -4304,7 +4463,7 @@
           
           <li><a href="ch-correlations.html#def:is_bnt_zcl">Definition 14.18</a></li>
           
-          <li><a href="ch-correlations.html#def:is_cid">Definition 14.42</a></li>
+          <li><a href="ch-correlations.html#def:is_cid">Definition 14.44</a></li>
           
         </ul>
     
@@ -4336,7 +4495,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   In the single-block convention, an MPS tensor has <em>zero correlation length</em> when </p>
-<div class="displaymath" id="a0000031396">
+<div class="displaymath" id="a0000031401">
   \[  \mathcal{E}_A^2=\mathcal{E}_A \qquad \text{and}\qquad \operatorname {CID}(A)  \]
 </div>
 <p> both hold. The source definition is the BNT condition in Definition&#160;<a href="ch-correlations.html#def:is_bnt_zcl">14.18</a>. </p>
@@ -4348,7 +4507,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.44</span>
+    <span class="theorem_thmlabel">14.46</span>
     <span class="theorem_thmtitle">CID implies RFP</span>
     <div class="thm_header_extras">
 
@@ -4359,7 +4518,7 @@
 
     <a class="icon proof" href="ch-correlations.html#thm:isCID_implies_isRFP">#</a>
     
-    <a class="icon proof" href="ch-correlations.html#a0000031397"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-correlations.html#a0000031402"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4375,7 +4534,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-correlations.html#def:is_cid">Definition 14.42</a></li>
+          <li><a href="ch-correlations.html#def:is_cid">Definition 14.44</a></li>
           
           <li><a href="ch-correlations.html#def:is_rfp">Definition 14.13</a></li>
           
@@ -4420,7 +4579,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031397">
+<div class="proof_wrapper" id="a0000031402">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4437,7 +4596,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.45</span>
+    <span class="theorem_thmlabel">14.47</span>
     <span class="theorem_thmtitle">Zero correlation length iff idempotent transfer</span>
     <div class="thm_header_extras">
 
@@ -4448,7 +4607,7 @@
 
     <a class="icon proof" href="ch-correlations.html#thm:zcl_iff_idempotent_transfer">#</a>
     
-    <a class="icon proof" href="ch-correlations.html#a0000031398"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-correlations.html#a0000031403"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4466,7 +4625,7 @@
           
           <li><a href="ch-correlations.html#def:is_rfp">Definition 14.13</a></li>
           
-          <li><a href="ch-correlations.html#def:is_cid">Definition 14.42</a></li>
+          <li><a href="ch-correlations.html#def:is_cid">Definition 14.44</a></li>
           
           <li><a href="ch-correlations.html#def:is_locally_orthogonal">Definition 14.16</a></li>
           
@@ -4500,7 +4659,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Under the single-block convention above, </p>
-<div class="displaymath" id="a0000031399">
+<div class="displaymath" id="a0000031404">
   \[  \bigl(\mathcal{E}_A^2=\mathcal{E}_A \  \text{and}\  \operatorname {CID}(A)\bigr) \quad \Longleftrightarrow \quad \mathcal{E}_A^2=\mathcal{E}_A .  \]
 </div>
 <p> This is the idempotence/CID part of <span class="cite">
@@ -4513,7 +4672,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031398">
+<div class="proof_wrapper" id="a0000031403">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4530,7 +4689,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.46</span>
+    <span class="theorem_thmlabel">14.48</span>
     <span class="theorem_thmtitle">Single-block RFP iff ZCL inside a canonical form</span>
     <div class="thm_header_extras">
 
@@ -4541,7 +4700,7 @@
 
     <a class="icon proof" href="ch-correlations.html#thm:rfp_iff_zcl">#</a>
     
-    <a class="icon proof" href="ch-correlations.html#a0000031400"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-correlations.html#a0000031405"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4561,9 +4720,9 @@
           
           <li><a href="ch-correlations.html#def:is_rfp">Definition 14.13</a></li>
           
-          <li><a href="ch-correlations.html#def:is_zcl">Definition 14.43</a></li>
+          <li><a href="ch-correlations.html#def:is_zcl">Definition 14.45</a></li>
           
-          <li><a href="ch-correlations.html#thm:zcl_iff_idempotent_transfer">Theorem 14.45</a></li>
+          <li><a href="ch-correlations.html#thm:zcl_iff_idempotent_transfer">Theorem 14.47</a></li>
           
         </ul>
     
@@ -4602,14 +4761,14 @@
 	, Theorem&#160;3.10
 	]
 </span>. The ZCL condition in the source theorem is the BNT-family condition: CID together with the local orthogonality equations </p>
-<div class="displaymath" id="a0000031401">
+<div class="displaymath" id="a0000031406">
   \[  \mathbb E_{j,j'}=0 \qquad (j\ne j'),  \]
 </div>
 <p> as in Definition&#160;<a href="ch-correlations.html#def:is_bnt_zcl">14.18</a>. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031400">
+<div class="proof_wrapper" id="a0000031405">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4617,7 +4776,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-correlations.html#thm:zcl_iff_idempotent_transfer">14.45</a> to the chosen canonical-form block. </p>
+  <p> Apply Theorem&#160;<a href="ch-correlations.html#thm:zcl_iff_idempotent_transfer">14.47</a> to the chosen canonical-form block. </p>
 
   </div>
 </div>
