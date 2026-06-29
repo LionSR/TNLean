@@ -1903,7 +1903,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Suppose there exists an isometry \(V : \mathbb {C}^d \to \mathbb {C}^{d^2}\), written as coefficients \(V_{(i_1,i_2),j}\), such that </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f741d4b1310>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f088b9c5310>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:corr_kraus_isometry_decomp} A^{i_1} A^{i_2} = \sum _{j=0}^{d-1} V_{(i_1,i_2),j} A^j \end{equation}
@@ -2003,7 +2003,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   An MPS tensor \(A\) is a renormalization fixed point if and only if there exists an isometry \(V : \mathbb {C}^d \to \mathbb {C}^{d^2}\), written as coefficients \(V_{(i_1,i_2),j}\) with \(V^\dagger V = 1\), such that </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x7f741d4b2db0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x7f088b9c6db0>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:corr_AA_isometry} A^{i_1} A^{i_2} = \sum _{j=0}^{d-1} V_{(i_1,i_2),j} A^j \end{equation}
@@ -2214,7 +2214,7 @@
           
           <li><a href="ch-bnt.html#def:bnt_cpsv">Definition 10.2</a></li>
           
-          <li><a href="ch-correlations.html#def:is_cid">Definition 14.45</a></li>
+          <li><a href="ch-correlations.html#def:is_cid">Definition 14.46</a></li>
           
           <li><a href="ch-correlations.html#def:is_bnt_locally_orthogonal">Definition 14.17</a></li>
           
@@ -4236,12 +4236,123 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:rfp_cf_structural">
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:rfp_directSumTensor_iff">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
     <span class="theorem_thmlabel">14.42</span>
+    <span class="theorem_thmtitle">Distinct-blocks renormalization fixed-point characterization</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-correlations.html#thm:rfp_directSumTensor_iff">#</a>
+    
+    <a class="icon proof" href="ch-correlations.html#a0000031400"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-correlations.html#def:is_rfp">Definition 14.13</a></li>
+          
+          <li><a href="ch-correlations.html#def:is_isometry_canonical_form">Definition 14.28</a></li>
+          
+          <li><a href="ch-spectral.html#def:mixed_transfer_rect">Definition 7.2</a></li>
+          
+          <li><a href="ch-mps.html#def:normal">Definition 2.31</a></li>
+          
+          <li><a href="ch-canonical.html#def:irreducible_tensor">Definition 9.16</a></li>
+          
+          <li><a href="ch-mps.html#def:gauge_phase_equiv">Definition 2.23</a></li>
+          
+          <li><a href="ch-correlations.html#thm:isometry_canonical_form_of_rfp_nt">Theorem 14.29</a></li>
+          
+          <li><a href="ch-correlations.html#lem:isrfp_block_of_rfp_direct_sum">Lemma 14.39</a></li>
+          
+          <li><a href="ch-correlations.html#thm:bnt_locally_orthogonal_of_rfp_direct_sum">Theorem 14.34</a></li>
+          
+          <li><a href="ch-correlations.html#thm:is_rfp_of_isometry_canonical_form_direct_sum">Theorem 14.41</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.isRFP_directSumTensor_iff" class="lean_decl">MPSTensor.isRFP_directSumTensor_iff</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Let \((B_k)_k\) be a family of normal, irreducible, left-canonical blocks with \(\dim _k \ge 1\) for all \(k\), no two of which are gauge-phase equivalent. Then the direct sum \(\bigoplus _k B_k\) is a renormalization fixed point if and only if each block is in isometry canonical form and the mixed transfer operators between distinct blocks vanish: </p>
+<div class="displaymath" id="a0000031401">
+  \[  \Bigl(\bigoplus _k B_k \text{ is a RFP}\Bigr) \iff \Bigl(\forall k,\  B_k \text{ in isometry CF}\Bigr) \; \wedge \;  \Bigl(\forall j\ne j',\  \mathcal{E}_{j,j'} = 0\Bigr).  \]
+</div>
+<p> This is the distinct-blocks (multiplicity-one, phase-one) case of the structural characterization of pure-state renormalization fixed points <span class="cite">
+	[
+	
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
+	, Theorem&#160;III
+	]
+</span>, combining its forward and backward directions. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000031400">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> For the forward direction, whole-tensor idempotence makes each diagonal mixed transfer operator the transfer map of its block (Lemma&#160;<a href="ch-correlations.html#lem:isrfp_block_of_rfp_direct_sum">14.39</a>), so each block is a renormalization fixed point and hence in isometry canonical form (Theorem&#160;<a href="ch-correlations.html#thm:isometry_canonical_form_of_rfp_nt">14.29</a>), while the off-diagonal operators vanish, </p>
+<div class="displaymath" id="a0000031402">
+  \[  \mathcal{E}_{j,j'} = 0 \qquad (j\ne j'),  \]
+</div>
+<p> by Theorem&#160;<a href="ch-correlations.html#thm:bnt_locally_orthogonal_of_rfp_direct_sum">14.34</a>. Conversely, a direct sum of isometry-canonical-form blocks whose cross-block operators vanish is a renormalization fixed point (Theorem&#160;<a href="ch-correlations.html#thm:is_rfp_of_isometry_canonical_form_direct_sum">14.41</a>). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:rfp_cf_structural">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">14.43</span>
     <span class="theorem_thmtitle">Canonical-form blocks are injective</span>
     <div class="thm_header_extras">
 
@@ -4252,7 +4363,7 @@
 
     <a class="icon proof" href="ch-correlations.html#thm:rfp_cf_structural">#</a>
     
-    <a class="icon proof" href="ch-correlations.html#a0000031400"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-correlations.html#a0000031403"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4311,7 +4422,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031400">
+<div class="proof_wrapper" id="a0000031403">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4328,7 +4439,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.43</span>
+    <span class="theorem_thmlabel">14.44</span>
     <span class="theorem_thmtitle">RG flow convergence for canonical-form tensors</span>
     <div class="thm_header_extras">
 
@@ -4339,7 +4450,7 @@
 
     <a class="icon proof" href="ch-correlations.html#thm:rg_flow_converges_of_cf">#</a>
     
-    <a class="icon proof" href="ch-correlations.html#a0000031401"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-correlations.html#a0000031404"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4402,7 +4513,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031401">
+<div class="proof_wrapper" id="a0000031404">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4419,7 +4530,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">14.44</span>
+    <span class="remark_thmlabel">14.45</span>
     <div class="thm_header_extras">
 
         </div>
@@ -4465,7 +4576,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">14.45</span>
+    <span class="definition_thmlabel">14.46</span>
     <span class="definition_thmtitle">Correlations independent of distance</span>
     <div class="thm_header_extras">
 
@@ -4521,7 +4632,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   For a positive definite right fixed point \(\rho ^R {\gt} 0\), an MPS tensor has <em>correlations independent of distance</em> (CID) when for all local observables \(X\) and \(Y\) and all separations \(n,m \ge 1\), </p>
-<div class="displaymath" id="a0000031402">
+<div class="displaymath" id="a0000031405">
   \[  C(X,Y;n) = C(X,Y;m).  \]
 </div>
 
@@ -4532,7 +4643,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">14.46</span>
+    <span class="definition_thmlabel">14.47</span>
     <span class="definition_thmtitle">Zero correlation length</span>
     <div class="thm_header_extras">
 
@@ -4560,7 +4671,7 @@
           
           <li><a href="ch-correlations.html#def:is_bnt_zcl">Definition 14.18</a></li>
           
-          <li><a href="ch-correlations.html#def:is_cid">Definition 14.45</a></li>
+          <li><a href="ch-correlations.html#def:is_cid">Definition 14.46</a></li>
           
         </ul>
     
@@ -4592,7 +4703,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   In the single-block convention, an MPS tensor has <em>zero correlation length</em> when </p>
-<div class="displaymath" id="a0000031403">
+<div class="displaymath" id="a0000031406">
   \[  \mathcal{E}_A^2=\mathcal{E}_A \qquad \text{and}\qquad \operatorname {CID}(A)  \]
 </div>
 <p> both hold. The source definition is the BNT condition in Definition&#160;<a href="ch-correlations.html#def:is_bnt_zcl">14.18</a>. </p>
@@ -4604,7 +4715,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.47</span>
+    <span class="theorem_thmlabel">14.48</span>
     <span class="theorem_thmtitle">CID implies RFP</span>
     <div class="thm_header_extras">
 
@@ -4615,7 +4726,7 @@
 
     <a class="icon proof" href="ch-correlations.html#thm:isCID_implies_isRFP">#</a>
     
-    <a class="icon proof" href="ch-correlations.html#a0000031404"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-correlations.html#a0000031407"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4631,7 +4742,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-correlations.html#def:is_cid">Definition 14.45</a></li>
+          <li><a href="ch-correlations.html#def:is_cid">Definition 14.46</a></li>
           
           <li><a href="ch-correlations.html#def:is_rfp">Definition 14.13</a></li>
           
@@ -4676,7 +4787,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031404">
+<div class="proof_wrapper" id="a0000031407">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4693,7 +4804,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.48</span>
+    <span class="theorem_thmlabel">14.49</span>
     <span class="theorem_thmtitle">Zero correlation length iff idempotent transfer</span>
     <div class="thm_header_extras">
 
@@ -4704,7 +4815,7 @@
 
     <a class="icon proof" href="ch-correlations.html#thm:zcl_iff_idempotent_transfer">#</a>
     
-    <a class="icon proof" href="ch-correlations.html#a0000031405"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-correlations.html#a0000031408"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4722,7 +4833,7 @@
           
           <li><a href="ch-correlations.html#def:is_rfp">Definition 14.13</a></li>
           
-          <li><a href="ch-correlations.html#def:is_cid">Definition 14.45</a></li>
+          <li><a href="ch-correlations.html#def:is_cid">Definition 14.46</a></li>
           
           <li><a href="ch-correlations.html#def:is_locally_orthogonal">Definition 14.16</a></li>
           
@@ -4756,7 +4867,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Under the single-block convention above, </p>
-<div class="displaymath" id="a0000031406">
+<div class="displaymath" id="a0000031409">
   \[  \bigl(\mathcal{E}_A^2=\mathcal{E}_A \  \text{and}\  \operatorname {CID}(A)\bigr) \quad \Longleftrightarrow \quad \mathcal{E}_A^2=\mathcal{E}_A .  \]
 </div>
 <p> This is the idempotence/CID part of <span class="cite">
@@ -4769,7 +4880,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031405">
+<div class="proof_wrapper" id="a0000031408">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4786,7 +4897,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">14.49</span>
+    <span class="theorem_thmlabel">14.50</span>
     <span class="theorem_thmtitle">Single-block RFP iff ZCL inside a canonical form</span>
     <div class="thm_header_extras">
 
@@ -4797,7 +4908,7 @@
 
     <a class="icon proof" href="ch-correlations.html#thm:rfp_iff_zcl">#</a>
     
-    <a class="icon proof" href="ch-correlations.html#a0000031407"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-correlations.html#a0000031410"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4817,9 +4928,9 @@
           
           <li><a href="ch-correlations.html#def:is_rfp">Definition 14.13</a></li>
           
-          <li><a href="ch-correlations.html#def:is_zcl">Definition 14.46</a></li>
+          <li><a href="ch-correlations.html#def:is_zcl">Definition 14.47</a></li>
           
-          <li><a href="ch-correlations.html#thm:zcl_iff_idempotent_transfer">Theorem 14.48</a></li>
+          <li><a href="ch-correlations.html#thm:zcl_iff_idempotent_transfer">Theorem 14.49</a></li>
           
         </ul>
     
@@ -4858,14 +4969,14 @@
 	, Theorem&#160;3.10
 	]
 </span>. The ZCL condition in the source theorem is the BNT-family condition: CID together with the local orthogonality equations </p>
-<div class="displaymath" id="a0000031408">
+<div class="displaymath" id="a0000031411">
   \[  \mathbb E_{j,j'}=0 \qquad (j\ne j'),  \]
 </div>
 <p> as in Definition&#160;<a href="ch-correlations.html#def:is_bnt_zcl">14.18</a>. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031407">
+<div class="proof_wrapper" id="a0000031410">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4873,7 +4984,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-correlations.html#thm:zcl_iff_idempotent_transfer">14.48</a> to the chosen canonical-form block. </p>
+  <p> Apply Theorem&#160;<a href="ch-correlations.html#thm:zcl_iff_idempotent_transfer">14.49</a> to the chosen canonical-form block. </p>
 
   </div>
 </div>
