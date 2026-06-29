@@ -34,6 +34,10 @@ the full isometry condition of Corollary III.cor3 (arXiv:1606.00608, line 584).
 * `exists_residualIsometryFamily_of_isRFP_directSum` — under whole-tensor RFP of
   the direct sum, the residual tensors of the isometry canonical forms of the
   blocks satisfy `IsResidualIsometryFamily`.
+* `isRFP_directSumTensor_iff` — the distinct-blocks renormalization-fixed-point
+  characterization: the direct sum is a renormalization fixed point if and only
+  if each block is in isometry canonical form and the cross-block mixed transfer
+  operators vanish.
 
 ## Route
 
@@ -362,6 +366,49 @@ theorem isRFP_directSumTensor_of_isIsometryCanonicalForm
           rw [blockTransferSum_idempotent_of_isIsometryCanonicalForm B hCF hortho Y]
     _ = transferMap (directSumTensor B) (Matrix.reindex e e Y) :=
           (transferMap_directSumTensor_reindex B Y).symm
+
+/-- **Distinct-blocks structural characterization of pure-state renormalization
+fixed points** (arXiv:1606.00608, Theorem charact-MPS, line 543),
+multiplicity-one case.
+
+For a family of normal, irreducible, left-canonical blocks $B$, no two
+gauge-phase equivalent and each of positive bond dimension ($\dim_k \ge 1$), the
+direct sum is a renormalization fixed point if and only if each block is in
+isometry canonical form and the mixed transfer operators between distinct blocks
+vanish.  In symbols, `IsRFP (directSumTensor B)` holds exactly when both
+`IsIsometryCanonicalForm (B k)` for every $k$ and
+`mixedTransferMap₂ (B j) (B j') = 0` for all $j \ne j'$.
+
+The forward direction combines the per-block isometry canonical form — each
+block is a renormalization fixed point by `isRFP_block_of_isRFP_directSum`, hence
+in isometry canonical form by `isIsometryCanonicalForm_of_rfp_nt` — with the
+cross-block vanishing `isBNTLocallyOrthogonal_of_isRFP_directSum`.  The backward
+direction is `isRFP_directSumTensor_of_isIsometryCanonicalForm`.
+
+**Scope restriction (multiplicity-one canonical form):** the source canonical
+form $A^i = \bigoplus_{j} \bigoplus_{q} \mu_{j,q} X_{j,q} \Lambda_j U^i_j
+X_{j,q}^{-1}$ allows each normal tensor to repeat with a multiplicity $r_j$ and a
+unit-modulus phase $\mu_{j,q}$; this is the distinct-blocks (multiplicity-one,
+phase-one) case, where the direct sum carries one copy of each block.  Recorded
+in the paper-gap note docs/paper-gaps/cpsv16_rfp_isometry_scope.tex. -/
+theorem isRFP_directSumTensor_iff [∀ k, NeZero (dim k)]
+    (B : (k : Fin r) → MPSTensor d (dim k))
+    (hnormal : ∀ k, IsNormal (B k))
+    (hirr : ∀ k, IsIrreducibleTensor (B k))
+    (hleft : ∀ k, ∑ i : Fin d, (B k i)ᴴ * B k i = 1)
+    (hdist : ∀ j k : Fin r, j ≠ k → ∀ h : dim j = dim k,
+      ¬ GaugePhaseEquiv (cast (congrArg (MPSTensor d) h) (B j)) (B k)) :
+    IsRFP (directSumTensor B) ↔
+      ((∀ k, IsIsometryCanonicalForm (B k)) ∧
+        (∀ j j' : Fin r, j ≠ j' → mixedTransferMap₂ (B j) (B j') = 0)) := by
+  constructor
+  · intro hRFP
+    refine ⟨fun k => ?_, ?_⟩
+    · exact isIsometryCanonicalForm_of_rfp_nt (B k) (hnormal k)
+        (isRFP_block_of_isRFP_directSum B hRFP k) (hleft k)
+    · exact isBNTLocallyOrthogonal_of_isRFP_directSum B hirr hleft hdist hRFP
+  · rintro ⟨hCF, hortho⟩
+    exact isRFP_directSumTensor_of_isIsometryCanonicalForm B hCF hortho
 
 end Blocks
 
