@@ -276,7 +276,7 @@ canonical form and the cross-block mixed transfer operators vanish.
 The $(j,j')$ bond block of the transfer sum acts as `mixedTransferMap₂ (B j)
 (B j')` on the $(j,j')$ block of the argument
 (`blockDiagonal'_transferSum_toBlock`).  Each diagonal block contributes
-`transferMap (B j)`, which is idempotent because `B j` is a renormalization fixed
+`transferMap (B j)`, which is idempotent because $B_j$ is a renormalization fixed
 point (`isRFP_of_isIsometryCanonicalForm`); each off-diagonal block vanishes by
 the cross-block orthogonality hypothesis.  This is the block-space form of the
 backward direction of the
@@ -301,6 +301,9 @@ theorem blockTransferSum_idempotent_of_isIsometryCanonicalForm
           (blockIncl j dim) (blockIncl j' dim) =
         (blockTransferSum B Y).submatrix (blockIncl j dim) (blockIncl j' dim) := by
     intro j j'
+    -- Rewrite both the doubly-applied outer block and the once-applied inner
+    -- block to `mixedTransferMap₂ (B j) (B j')` of the corresponding submatrix
+    -- of `Y`, so the goal becomes idempotence of that per-pair operator.
     rw [hStage1 (blockTransferSum B Y) j j', hStage1 Y j j']
     by_cases hjj' : j = j'
     · subst hjj'
