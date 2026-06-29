@@ -333,6 +333,7 @@ import TNLean.MPS.Periodic.Defs
 import TNLean.MPS.Periodic.CornerTransition
 import TNLean.MPS.Periodic.CornerContraction
 import TNLean.MPS.Periodic.SectorLift
+import TNLean.MPS.Periodic.SectorContractionBridge
 import TNLean.MPS.Irreducible.Adjoint
 import TNLean.MPS.Periodic.SectorUnitary
 import TNLean.MPS.Periodic.GlobalGauge
