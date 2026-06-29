@@ -44,15 +44,18 @@ of a bipartite state whose Schmidt number is at most $n$.
     \label{thm:reduction_map_is_n_positive}
     \lean{Matrix.reductionMap_isNPositiveMap}
     \leanok
-    \uses{def:reduction_map, thm:reduction_map_eq_t_eta, thm:t_eta_threshold}
-    For $1\le k<D$ the reduction map $T_k$ on $\MN{D}$ is $k$-positive.
+    \uses{def:reduction_map, thm:reduction_map_eq_t_eta, thm:t_eta_threshold,
+        thm:t_eta_threshold_top}
+    For $1\le k\le D$ the reduction map $T_k$ on $\MN{D}$ is $k$-positive.
 \end{theorem}
 
 \begin{proof}
     \leanok
     The reduction map equals the family map $T_\eta$ at $\eta=k$, and $T_\eta$ is
     $k$-positive exactly when $\eta\ge k$; the threshold is met with equality at
-    $\eta=k$.
+    $\eta=k$.  For $k<D$ this is the Schmidt-rank threshold, and the top index
+    $k=D$ is the completely positive endpoint supplied by the dimension-indexed
+    threshold.
 \end{proof}
 
 \begin{definition}[Reduction witness]
