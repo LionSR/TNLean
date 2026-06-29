@@ -105,6 +105,24 @@ theorem reductionMap_eq_tEta (D k : ℕ) : reductionMap D k = tEta D (k : ℝ) :
   intro X
   rw [reductionMap_apply, tEta_apply, Complex.ofReal_natCast]
 
+/-- **Wolf Chapter 3, Example 3.1 (Proposition 3.2).** The reduction map
+$T_k(X) = \operatorname{tr}(X)\cdot\mathbf 1 - k^{-1}X$ on $M_D(\mathbb C)$ is
+$k$-positive for $1 \le k \le D$. It equals the parametric map $T_\eta$ at
+$\eta = k$, which is $k$-positive exactly when $\eta \ge k$; the threshold is met
+with equality at $\eta = k$. The top index $k = D$ is the completely positive
+endpoint, handled through the dimension-indexed threshold. -/
+theorem reductionMap_isNPositiveMap {k : ℕ} (hk1 : 1 ≤ k) (hk : k ≤ D) :
+    IsNPositiveMap k (reductionMap D k) := by
+  haveI : NeZero D := ⟨by omega⟩
+  rw [reductionMap_eq_tEta]
+  have hη : (0 : ℝ) < (k : ℝ) := by
+    have : (1 : ℝ) ≤ (k : ℝ) := by exact_mod_cast hk1
+    linarith
+  rcases lt_or_eq_of_le hk with hlt | heq
+  · exact (isNPositiveMap_tEta_iff hη hk1 hlt).mpr le_rfl
+  · subst heq
+    exact (isNPositiveMap_tEta_card_iff hη).mpr le_rfl
+
 /-- **Wolf's reduction witness.** The entanglement witness attached to `T_n` is
 `W_n = D⁻¹ • 1 − n⁻¹ • |Ω⟩⟨Ω|` on `M_D(ℂ) ⊗ M_D(ℂ)`.  It is exactly the Choi
 operator of `T_n`. -/
