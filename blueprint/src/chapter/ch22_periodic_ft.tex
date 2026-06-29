@@ -867,16 +867,21 @@ unconditional result.
 \begin{proof}\leanok
     \uses{def:periodic_corner_product}
     Expand each $A_k^{\sigma_k}X_k=\sum_{\mathbf j}(\Omega_{k+1}(X_k))_{\mathbf
-    j}\,A_k^{\sigma_k}F_{k+1}^{\mathbf j}$ using the right inverse, distribute
-    the ordered product of sums over all choices $\boldsymbol\rho$, and pull the
-    scalar coefficients out of each ordered product.
+    j}\,A_k^{\sigma_k}F_{k+1}^{\mathbf j}$ using the right inverse, apply the
+    noncommutative distributivity identity
+    \[
+        \prod_k\Bigl(\sum_{\mathbf j} f_{k,\mathbf j}\Bigr)
+        =\sum_{\boldsymbol\rho}\prod_k f_{k,\rho_k},
+    \]
+    and pull the scalar coefficients $\prod_k(\Omega_{k+1}(X_k))_{\rho_k}$ out of
+    each ordered product.
 \end{proof}
 
 \begin{lemma}[Inverse cyclic reindexing to the off-diagonal convention]
     \label{lem:periodic_negreindex_shift}
     \lean{MPSTensor.negReindex_paper_shift}
     \leanok
-    \uses{thm:cyclic_sector_offdiag_shift}
+    \uses{thm:offdiag_shift_adjoint_cyclic_shift}
     Let $A$ be left-canonical, $\sum_i A_i^\dagger A_i=1$, with orthogonal sector
     projectors $P_k$ satisfying the adjoint shift $\mathcal E^*(P_{k+1})=P_k$,
     which gives the inverse-indexed grading $P_{k+1}A^i=A^iP_k$.  After the
