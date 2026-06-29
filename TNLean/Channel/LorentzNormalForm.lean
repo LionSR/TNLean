@@ -150,7 +150,16 @@ arithmetic–geometric-mean inequality applied to the eigenvalues of a
 positive-semidefinite Choi matrix.  In product/sum form the eigenvalue estimate
 reads `Dᴰ · det M ≤ (tr M)ᴰ`, which is the polynomial form of AM–GM with uniform
 weights `1 / D`.  We record the underlying real-number inequality and its matrix
-specialisation here. -/
+specialisation here.
+
+Placement note: `pow_card_mul_prod_le_sum_pow` is a generic real-number AM–GM
+inequality and `posSemidef_pow_det_le_trace_pow` /
+`posSemidef_pow_det_eq_trace_pow_iff` are general positive-semidefinite matrix
+inequalities. Their natural Layer-0 home is `TNLean/Analysis/MatrixTraceInequalities.lean`
+(the `Matrix` namespace, alongside `PosSemidef.trace_sq_re_le_trace_re_sq`); they
+are kept local here pending the `exists_normal_form_generic` proof that consumes
+them, and are intended for relocation (and renaming out of the `Wolf` namespace)
+once that consumer lands. -/
 
 section TraceDetAMGM
 
