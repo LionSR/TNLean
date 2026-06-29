@@ -6663,7 +6663,7 @@
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
 	, Section&#160;2.3
 	]
-</span> discusses two families of normal forms for the transfer-matrix representation of a quantum channel: the <em>singular value decomposition</em> (SVD) and, for qubit channels, the <em>Lorentz normal form</em> obtained by \(\operatorname{SL}(2, \mathbb {C})\) filtering operations. The SVD normal form is proved below. The Lorentz normal form theorem (Theorem&#160;<a href="ch-channel_representations.html#thm:lorentz_normal_form_qubit">16.92</a>) requires the compactness and minimisation argument for \(\operatorname{SL}(2, \mathbb {C})\) filterings in <span class="cite">
+</span> discusses two families of normal forms for the transfer-matrix representation of a quantum channel: the <em>singular value decomposition</em> (SVD) and, for qubit channels, the <em>Lorentz normal form</em> obtained by \(\operatorname{SL}(2, \mathbb {C})\) filtering operations. The SVD normal form is proved below. The Lorentz normal form theorem (Theorem&#160;<a href="ch-channel_representations.html#thm:lorentz_normal_form_qubit">16.94</a>) requires the compactness and minimisation argument for \(\operatorname{SL}(2, \mathbb {C})\) filterings in <span class="cite">
 	[
 	
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
@@ -7250,12 +7250,163 @@
 
   </div>
 </div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:amgm_prod_sum">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">16.88</span>
+    <span class="lemma_thmtitle">Arithmetic–geometric-mean inequality, product/sum form</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-channel_representations.html#lem:amgm_prod_sum">#</a>
+    
+    <a class="icon proof" href="ch-channel_representations.html#a0000031602"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Wolf.pow_card_mul_prod_le_sum_pow" class="lean_decl">Wolf.pow_card_mul_prod_le_sum_pow</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   For a nonnegative family \(f_{1},\dots ,f_{D}\) of real numbers, </p>
+<div class="displaymath" id="a0000031603">
+  \[  D^{D}\prod _{i} f_{i} \le \Bigl(\sum _{i} f_{i}\Bigr)^{D}.  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000031602">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Apply the weighted arithmetic–geometric-mean inequality with uniform weights \(1/D\): </p>
+<div class="displaymath" id="a0000031604">
+  \[  \Bigl(\prod _{i} f_{i}\Bigr)^{1/D} \le \frac{1}{D}\sum _{i} f_{i}.  \]
+</div>
+<p> Raising both sides to the \(D\)-th power gives the stated bound. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:trace_det_amgm">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">16.89</span>
+    <span class="lemma_thmtitle">Trace–determinant AM–GM for positive-semidefinite matrices</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-channel_representations.html#lem:trace_det_amgm">#</a>
+    
+    <a class="icon proof" href="ch-channel_representations.html#a0000031605"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-channel_representations.html#lem:amgm_prod_sum">Lemma 16.88</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Wolf.posSemidef_pow_det_le_trace_pow" class="lean_decl">Wolf.posSemidef_pow_det_le_trace_pow</a></li>
+          
+          <li><a href="../docs/find/#doc/Wolf.posSemidef_pow_det_eq_trace_pow_iff" class="lean_decl">Wolf.posSemidef_pow_det_eq_trace_pow_iff</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>    For a positive-semidefinite \(D \times D\) matrix \(M\), </p>
+<div class="displaymath" id="a0000031606">
+  \[  D^{D}\det M \le (\operatorname{tr}M)^{D},  \]
+</div>
+<p> and equality holds if and only if \(M = (\operatorname{tr}M / D)\, \mathbb {1}\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000031605">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Both \(\det M = \prod _{i}\lambda _{i}\) and \(\operatorname{tr}M = \sum _{i}\lambda _{i}\) are expressed through the nonnegative eigenvalues \(\lambda _{i}\) of \(M\). The bound is the arithmetic–geometric-mean inequality with uniform weights \(1/D\), raised to the \(D\)-th power; equality holds exactly when all eigenvalues coincide, that is, when \(M\) is a scalar matrix. </p>
+
+  </div>
+</div>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:exists_normal_form_generic">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.88</span>
+    <span class="theorem_thmlabel">16.90</span>
     <span class="theorem_thmtitle">Generic normal form for CP maps</span>
     <div class="thm_header_extras">
 
@@ -7283,6 +7434,8 @@
           
           <li><a href="ch-channel_representations.html#lem:infimum_is_attained">Lemma 16.87</a></li>
           
+          <li><a href="ch-channel_representations.html#lem:trace_det_amgm">Lemma 16.89</a></li>
+          
         </ul>
     
       </div>
@@ -7293,7 +7446,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>  Let \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) be a completely positive map whose Choi matrix is positive-definite (equivalently, \(T\) has full Kraus rank). Then there exist SL-filterings \(\Phi _{1}, \Phi _{2}\) such that \(\Phi _{2} \circ T \circ \Phi _{1}\) is doubly-stochastic. <b class="bfseries">Not yet proved</b>—the compactness/minimisation lemma is proved; the remaining step is the AGM or first-order optimality argument showing that the minimiser is doubly-stochastic. </p>
+  <p>  Let \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) be a completely positive map whose Choi matrix is positive-definite (equivalently, \(T\) has full Kraus rank). Then there exist SL-filterings \(\Phi _{1}, \Phi _{2}\) such that \(\Phi _{2} \circ T \circ \Phi _{1}\) is doubly-stochastic. <b class="bfseries">Not yet proved</b>—the compactness/minimisation lemma is proved, and the trace–determinant AM–GM equality characterisation (Lemma&#160;<a href="ch-channel_representations.html#lem:trace_det_amgm">16.89</a>) supplies the optimality criterion; the remaining step combines these into the doubly-stochastic conclusion via the AGM iteration over both filtering factors. </p>
 
   </div>
 </div>
@@ -7302,7 +7455,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">16.89</span>
+    <span class="definition_thmlabel">16.91</span>
     <span class="definition_thmtitle">Diagonal Lorentz normal form</span>
     <div class="thm_header_extras">
 
@@ -7325,7 +7478,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">16.90</span>
+    <span class="definition_thmlabel">16.92</span>
     <span class="definition_thmtitle">Non-diagonal Lorentz normal form</span>
     <div class="thm_header_extras">
 
@@ -7340,7 +7493,7 @@
   </div>
   <div class="definition_thmcontent">
   <p> For a completely positive, trace-preserving qubit channel \(T' : M_{2}(\mathbb {C}) \to M_{2}(\mathbb {C})\), write \(\widehat{T'}\) in the normalized Pauli basis. The channel is in <em>non-diagonal Lorentz normal form</em> when, for some \(x \in [0,1]\), </p>
-<div class="displaymath" id="a0000031602">
+<div class="displaymath" id="a0000031607">
   \[  \widehat{T'} = \begin{pmatrix}  1 
 
 &  0 
@@ -7384,7 +7537,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">16.91</span>
+    <span class="definition_thmlabel">16.93</span>
     <span class="definition_thmtitle">Singular Lorentz normal form</span>
     <div class="thm_header_extras">
 
@@ -7399,7 +7552,7 @@
   </div>
   <div class="definition_thmcontent">
   <p> For a completely positive, trace-preserving qubit channel \(T' : M_{2}(\mathbb {C}) \to M_{2}(\mathbb {C})\), write \(\widehat{T'}\) in the normalized Pauli basis. The channel is in <em>singular Lorentz normal form</em> when </p>
-<div class="displaymath" id="a0000031603">
+<div class="displaymath" id="a0000031608">
   \[  \widehat{T'} = \begin{pmatrix}  1 
 
 &  0 
@@ -7443,7 +7596,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.92</span>
+    <span class="theorem_thmlabel">16.94</span>
     <span class="theorem_thmtitle">Lorentz normal form for qubit channels</span>
     <div class="thm_header_extras">
 
@@ -7467,13 +7620,13 @@
           
           <li><a href="ch-channel_representations.html#def:sl_filtering">Definition 16.82</a></li>
           
-          <li><a href="ch-channel_representations.html#thm:exists_normal_form_generic">Theorem 16.88</a></li>
+          <li><a href="ch-channel_representations.html#thm:exists_normal_form_generic">Theorem 16.90</a></li>
           
-          <li><a href="ch-channel_representations.html#def:lorentz_diagonal">Definition 16.89</a></li>
+          <li><a href="ch-channel_representations.html#def:lorentz_diagonal">Definition 16.91</a></li>
           
-          <li><a href="ch-channel_representations.html#def:lorentz_non_diagonal">Definition 16.90</a></li>
+          <li><a href="ch-channel_representations.html#def:lorentz_non_diagonal">Definition 16.92</a></li>
           
-          <li><a href="ch-channel_representations.html#def:lorentz_singular">Definition 16.91</a></li>
+          <li><a href="ch-channel_representations.html#def:lorentz_singular">Definition 16.93</a></li>
           
         </ul>
     
@@ -7496,7 +7649,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">16.93</span>
+    <span class="definition_thmlabel">16.95</span>
     <span class="definition_thmtitle">Channel determinant</span>
     <div class="thm_header_extras">
 
@@ -7546,7 +7699,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">16.94</span>
+    <span class="remark_thmlabel">16.96</span>
     <span class="remark_thmtitle">Channel determinant as an operator determinant</span>
     <div class="thm_header_extras">
 
@@ -7588,7 +7741,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">16.95</span>
+    <span class="definition_thmlabel">16.97</span>
     <span class="definition_thmtitle">Unitary channel</span>
     <div class="thm_header_extras">
 
@@ -7634,7 +7787,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.96</span>
+    <span class="theorem_thmlabel">16.98</span>
     <span class="theorem_thmtitle">Unitary channels have determinant one</span>
     <div class="thm_header_extras">
 
@@ -7645,7 +7798,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:channel_det_unitary_eq_one">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000031604"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000031609"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7661,9 +7814,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channel_representations.html#def:channel_det">Definition 16.93</a></li>
+          <li><a href="ch-channel_representations.html#def:channel_det">Definition 16.95</a></li>
           
-          <li><a href="ch-channel_representations.html#def:unitary_channel">Definition 16.95</a></li>
+          <li><a href="ch-channel_representations.html#def:unitary_channel">Definition 16.97</a></li>
           
         </ul>
     
@@ -7700,7 +7853,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031604">
+<div class="proof_wrapper" id="a0000031609">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7717,7 +7870,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.97</span>
+    <span class="theorem_thmlabel">16.99</span>
     <span class="theorem_thmtitle">Determinant bound for positive trace-preserving maps</span>
     <div class="thm_header_extras">
 
@@ -7728,7 +7881,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:channelDet_norm_le_one">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000031605"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000031610"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7744,7 +7897,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-channel_representations.html#def:channel_det">Definition 16.93</a></li>
+          <li><a href="ch-channel_representations.html#def:channel_det">Definition 16.95</a></li>
           
           <li><a href="ch-channels.html#def:positive_map">Definition 4.1</a></li>
           
@@ -7791,7 +7944,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031605">
+<div class="proof_wrapper" id="a0000031610">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7808,7 +7961,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.98</span>
+    <span class="theorem_thmlabel">16.100</span>
     <span class="theorem_thmtitle">Determinant one iff the channel is unitary</span>
     <div class="thm_header_extras">
 
@@ -7819,7 +7972,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:channelDet_norm_eq_one_iff_unitary">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000031606"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000031611"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7837,13 +7990,13 @@
           
           <li><a href="ch-channels.html#def:channel">Definition 4.29</a></li>
           
-          <li><a href="ch-channel_representations.html#def:channel_det">Definition 16.93</a></li>
+          <li><a href="ch-channel_representations.html#def:channel_det">Definition 16.95</a></li>
           
-          <li><a href="ch-channel_representations.html#def:unitary_channel">Definition 16.95</a></li>
+          <li><a href="ch-channel_representations.html#def:unitary_channel">Definition 16.97</a></li>
           
-          <li><a href="ch-channel_representations.html#thm:channelDet_norm_le_one">Theorem 16.97</a></li>
+          <li><a href="ch-channel_representations.html#thm:channelDet_norm_le_one">Theorem 16.99</a></li>
           
-          <li><a href="ch-channel_representations.html#thm:channel_det_unitary_eq_one">Theorem 16.96</a></li>
+          <li><a href="ch-channel_representations.html#thm:channel_det_unitary_eq_one">Theorem 16.98</a></li>
           
         </ul>
     
@@ -7875,7 +8028,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For a CPTP map \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\), </p>
-<div class="displaymath" id="a0000031607">
+<div class="displaymath" id="a0000031612">
   \[  |\det T| = 1 \iff \exists \,  U \in \mathcal{U}(D),\quad T(\rho ) = U\rho U^\dagger .  \]
 </div>
 <p> This is <span class="cite">
@@ -7888,7 +8041,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031606">
+<div class="proof_wrapper" id="a0000031611">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7896,7 +8049,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Reverse direction is Theorem&#160;<a href="ch-channel_representations.html#thm:channel_det_unitary_eq_one">16.96</a>. Forward direction: \(|\det T| = 1\) together with \(|\mu | \le 1\) for every eigenvalue \(\mu \) (from trace preservation and positivity) forces every eigenvalue to satisfy \(|\mu | = 1\). Hence \(T\) is bijective. A bijective CPTP map is a \(*\)-automorphism: the Heisenberg dual \(T^*(Y) = \sum _i K_i^\dagger Y K_i\) is unital (since \(T\) is TP), so the Kadison–Schwarz inequality \(T^*(Y^\dagger Y) \ge T^*(Y)^\dagger T^*(Y)\) becomes an equality for every \(Y\). Hence \(T^*\), and therefore \(T\), preserves products. By the Skolem–Noether theorem, every \(*\)-automorphism of \(M_{D}(\mathbb {C})\) has the form \(T(\rho ) = U \rho U^\dagger \) for some unitary \(U\). Kraus freedom then gives \(K_i = c_i U\) with \(\sum _i |c_i|^2 = 1\). </p>
+  <p> Reverse direction is Theorem&#160;<a href="ch-channel_representations.html#thm:channel_det_unitary_eq_one">16.98</a>. Forward direction: \(|\det T| = 1\) together with \(|\mu | \le 1\) for every eigenvalue \(\mu \) (from trace preservation and positivity) forces every eigenvalue to satisfy \(|\mu | = 1\). Hence \(T\) is bijective. A bijective CPTP map is a \(*\)-automorphism: the Heisenberg dual \(T^*(Y) = \sum _i K_i^\dagger Y K_i\) is unital (since \(T\) is TP), so the Kadison–Schwarz inequality \(T^*(Y^\dagger Y) \ge T^*(Y)^\dagger T^*(Y)\) becomes an equality for every \(Y\). Hence \(T^*\), and therefore \(T\), preserves products. By the Skolem–Noether theorem, every \(*\)-automorphism of \(M_{D}(\mathbb {C})\) has the form \(T(\rho ) = U \rho U^\dagger \) for some unitary \(U\). Kraus freedom then gives \(K_i = c_i U\) with \(\sum _i |c_i|^2 = 1\). </p>
 
   </div>
 </div>
