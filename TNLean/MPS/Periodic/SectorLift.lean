@@ -23,16 +23,15 @@ $A_u^i = P_u A^i P_{u+1}$ (eq:Auprop) is the nonzero corner and a product of
 such letters telescopes through the intermediate projectors.  This is the
 convention under which `MPSTensor.cornerProd` is nonzero.
 
-The repository's cyclic sector data (`IsCyclicSectorDecompWith`) stores instead
-the *adjoint* shift $\mathcal E^*(P_{k+1}) = P_k$, which gives the
-inverse-indexed grading $A^i = \sum_u P_{u+1} A^i P_u$ — equivalently
+The cyclic sector data (`IsCyclicSectorDecompWith`) instead satisfies the
+*adjoint* shift $\mathcal E^*(P_{k+1}) = P_k$, which gives the inverse-indexed
+grading $A^i = \sum_u P_{u+1} A^i P_u$ — equivalently
 $P_{k+1} A^i = A^i P_k$ (`offDiag_shift_of_adjoint_cyclic_shift`).  Under this
 convention $P_u A^i P_{u+1} = 0$ for $m \ge 3$, so `cornerProd` is identically
-zero when fed the stored projectors directly.  The two conventions agree after
-the inverse cyclic reindexing $P_k \mapsto P_{-k}$ (documented at
-`IsCyclicSectorDecompWith`): `negReindex_paper_shift` derives the paper-convention
-shift for `fun k => P (-k)` from the stored adjoint shift, repairing the index
-mismatch so the telescoping applies.
+zero on these projectors directly.  The two conventions agree after the inverse
+cyclic reindexing $P_k \mapsto P_{-k}$ (documented at `IsCyclicSectorDecompWith`):
+`negReindex_paper_shift` derives the paper-convention shift for `fun k => P (-k)`
+from the adjoint shift, repairing the index mismatch so the telescoping applies.
 
 ## Main declarations
 
@@ -45,7 +44,7 @@ mismatch so the telescoping applies.
 * `MPSTensor.cornerProd_eq_blockDiagCorner` — for a single blocked letter
   `wordOfBlock d m I`, the product is `P u * (blockTensor A m) I * P u`
   (eq:Cu).
-* `MPSTensor.negReindex_paper_shift` — converts the stored adjoint cyclic shift
+* `MPSTensor.negReindex_paper_shift` — converts the adjoint cyclic shift
   into the paper-convention shift for the inverse-reindexed projectors.
 
 ## References
@@ -125,7 +124,7 @@ theorem cornerProd_eq_diagCorner_of_length_smul_eq_zero
 For one blocked letter `wordOfBlock d m I` (a word of length exactly the period
 `m`), the corner-transition product is the diagonal blocked corner
 `P u * (blockTensor A m) I * P u = C_u^{I}` of Lemma bdcf.  Combined with the
-corner-isomorphism letter identity stored in `IsCyclicSectorDecompWith`
+corner-isomorphism letter identity of `IsCyclicSectorDecompWith`
 (`(φ k (blocks k I)).1 = P k * blockTensor A m I * P k`), this exhibits the
 compressed sector letter as the corner-transition product. -/
 theorem cornerProd_eq_blockDiagCorner
@@ -147,16 +146,16 @@ section NegReindex
 
 variable {m : ℕ} [NeZero m]
 
-/-- **Inverse cyclic reindexing of the stored adjoint shift into the paper
+/-- **Inverse cyclic reindexing of the adjoint shift into the paper
 convention.**
 
-`IsCyclicSectorDecompWith` stores the adjoint cyclic shift
+The cyclic sector decomposition satisfies the adjoint cyclic shift
 `𝓔^*(P_{k+1}) = P_k`, which yields the inverse-indexed grading
 `P_{k+1} A^i = A^i P_k` (`offDiag_shift_of_adjoint_cyclic_shift`).  After the
 inverse cyclic reindexing `P_k ↦ P_{-k}` documented at
 `IsCyclicSectorDecompWith`, the projectors satisfy the *paper* off-diagonal
 convention `P_{-k} A^i = A^i P_{-(k+1)}` (arXiv:1708.00029, eq:Auprop grading),
-which is exactly the hypothesis consumed by `cornerProd_eq_conj_evalWord`. -/
+which is the shift hypothesis of `cornerProd_eq_conj_evalWord`. -/
 theorem negReindex_paper_shift
     (A : MPSTensor d D)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)

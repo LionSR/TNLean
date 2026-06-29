@@ -814,7 +814,8 @@ unconditional result.
     \lean{MPSTensor.cornerProd_blockMatch_pow}
     \leanok
     \uses{def:periodic_corner_product, lem:periodic_corner_product_append}
-    Suppose the $m$-block product identity
+    Let $P_0,\ldots,P_{m-1}$ and $Q_0,\ldots,Q_{m-1}$ be orthogonal projections,
+    and suppose the $m$-block product identity
     \[
         A_u^{i_1}\cdots A_{u+m-1}^{i_m}
         =
@@ -845,11 +846,11 @@ unconditional result.
     \lean{MPSTensor.cornerProd_contraction}
     \leanok
     \uses{def:periodic_corner_letter, def:periodic_corner_product}
-    Let $\Omega_u$ be a finite-sum right inverse of the repeated corner product
-    $F_u$ over length-$L$ words, so that
-    $\sum_{\mathbf j}(\Omega_u(Y))_{\mathbf j}\,F_u^{\mathbf j}=Y$ for every $Y$
-    (\cite[eq.~Omegauprop]{DeLasCuevas2017Irreducible}).  Then for any sector
-    indices $\sigma$ and inserted matrices $X_0,\ldots,X_{m-1}$,
+    Suppose the coefficients $\Omega_{k+1}$ recover each inserted matrix $X_k$
+    from the repeated corner product $F_{k+1}$ over length-$L$ words:
+    $\sum_{\mathbf j}(\Omega_{k+1}(X_k))_{\mathbf j}\,F_{k+1}^{\mathbf j}=X_k$
+    (\cite[eq.~Omegauprop]{DeLasCuevas2017Irreducible} at $X_k$).  Then for any
+    sector indices $\sigma$,
     \[
         \sum_{\boldsymbol\rho}
         \Bigl(\prod_k (\Omega_{k+1}(X_k))_{\rho_k}\Bigr)
@@ -857,11 +858,10 @@ unconditional result.
         =
         \prod_k A_k^{\sigma_k}\,X_k .
     \]
-    Summing the concatenated chain against the inverse coefficients collapses
-    each repeated product $F_{k+1}$ to its inserted matrix $X_k$.  This is the
-    algebraic content of applying the tensor of right inverses
-    $\Omega_{u+1}\otimes\cdots\otimes\Omega_u$ and invoking the recovery
-    identity.
+    Summing the concatenated chain against these coefficients collapses each
+    repeated product $F_{k+1}$ to its inserted matrix $X_k$.  The recovery is
+    needed only at the inserted matrices $X_k$, which in the Case-3 contraction
+    are the corner-supported tensors that $\Omega_{k+1}$ inverts.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -877,17 +877,17 @@ unconditional result.
     \lean{MPSTensor.negReindex_paper_shift}
     \leanok
     \uses{thm:cyclic_sector_offdiag_shift}
-    The cyclic sector data stores the adjoint shift
-    $\mathcal E^*(P_{k+1})=P_k$, which gives the inverse-indexed grading
-    $P_{k+1}A^i=A^iP_k$.  After the inverse reindexing $P_k\mapsto P_{-k}$ the
-    projectors satisfy the off-diagonal convention
-    $P_{-k}A^i=A^iP_{-(k+1)}$ of
+    Let $A$ be left-canonical, $\sum_i A_i^\dagger A_i=1$, with orthogonal sector
+    projectors $P_k$ satisfying the adjoint shift $\mathcal E^*(P_{k+1})=P_k$,
+    which gives the inverse-indexed grading $P_{k+1}A^i=A^iP_k$.  After the
+    inverse reindexing $P_k\mapsto P_{-k}$ the projectors satisfy the
+    off-diagonal convention $P_{-k}A^i=A^iP_{-(k+1)}$ of
     \cite[eq.~Auprop]{DeLasCuevas2017Irreducible}, under which the
     corner-transition products are nonzero.
 \end{lemma}
 
 \begin{proof}\leanok
-    Apply the stored grading at sector $-(k+1)$ and simplify the cyclic index.
+    Apply the grading at sector $-(k+1)$ and simplify the cyclic index.
 \end{proof}
 
 \begin{lemma}[Telescoping of a corner product]
@@ -895,8 +895,9 @@ unconditional result.
     \lean{MPSTensor.cornerProd_eq_conj_evalWord}
     \leanok
     \uses{def:periodic_corner_product}
-    Under the off-diagonal convention $P_kA^i=A^iP_{k+1}$, the repeated
-    corner-transition product collapses through its intermediate projectors:
+    Under the off-diagonal convention $P_kA^i=A^iP_{k+1}$, with the $P_k$
+    orthogonal projections, the repeated corner-transition product collapses
+    through its intermediate projectors:
     \[
         F_u^{\mathbf i}=P_u\,A^{\mathbf i}\,P_{u+|\mathbf i|},
     \]
@@ -916,8 +917,10 @@ unconditional result.
     \lean{MPSTensor.cornerProd_eq_blockDiagCorner}
     \leanok
     \uses{lem:periodic_cornerprod_telescope}
-    For a single blocked letter, the corner-transition product is the diagonal
-    blocked corner of \cite[eq.~Cu]{DeLasCuevas2017Irreducible}:
+    Under the off-diagonal convention $P_kA^i=A^iP_{k+1}$, with the $P_k$
+    orthogonal projections, the corner-transition product of a single blocked
+    letter is the diagonal blocked corner of
+    \cite[eq.~Cu]{DeLasCuevas2017Irreducible}:
     \[
         F_u^{(I)}=P_u\,(A^{[m]})^I\,P_u .
     \]

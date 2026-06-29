@@ -168,20 +168,26 @@ theorem ofFn_prod_smul {m : ℕ} (s : Fin m → ℂ) (M : Fin m → R) :
 
 /-- **The `Ω`-contraction** (arXiv:1708.00029, Appendix A, lines 1057--1062).
 
-Each gap of the concatenation carries a repeated product `G_k`, a family with a
-finite-sum right inverse `∑_j (c_k Y)_j • G_k^j = Y` (`eq:Omegauprop`).  Summing
-the concatenated chain `∏_k (A_k · G_k^{ρ_k})` against the inverse coefficients
-`∏_k (c_k X_k)_{ρ_k}` collapses each `G_k` to the inserted matrix `X_k`, leaving
-the chain `∏_k (A_k · X_k)`.  This is the algebraic content of applying
-`Ω_{u+1} ⊗ ⋯ ⊗ Ω_u` and invoking `eq:Omegauprop`. -/
+Each gap of the concatenation carries a repeated product `G_k`, recovered at the
+inserted matrix `X_k` by the finite-sum coefficients `∑_j (c_k X_k)_j • G_k^j =
+X_k` (`eq:Omegauprop` evaluated at `X_k`).  Summing the concatenated chain
+`∏_k (A_k · G_k^{ρ_k})` against the coefficients `∏_k (c_k X_k)_{ρ_k}` collapses
+each `G_k` to the inserted matrix `X_k`, leaving the chain `∏_k (A_k · X_k)`.
+This is the algebraic content of applying `Ω_{u+1} ⊗ ⋯ ⊗ Ω_u` and invoking
+`eq:Omegauprop`.
+
+The recovery is required only at each inserted matrix `X_k`, not for every `Y`.
+This matters for the cyclic-sector instance, where the right inverse `Ω_u`
+recovers only the corner-supported matrices `P_u Y P_{u + L • 1}`, so a recovery
+identity for every `Y` would force `P_u = 1`. -/
 theorem ofFn_contraction {m : ℕ} (A X : Fin m → R) (G : Fin m → J → R)
     (c : Fin m → R → J → ℂ)
-    (hinv : ∀ (k : Fin m) (Y : R), ∑ j, c k Y j • G k j = Y) :
+    (hinv : ∀ k : Fin m, ∑ j, c k (X k) j • G k j = X k) :
     ∑ ρ : Fin m → J, (∏ k, c k (X k) (ρ k)) • (List.ofFn (fun k => A k * G k (ρ k))).prod
       = (List.ofFn (fun k => A k * X k)).prod := by
   have hf : ∀ k, A k * X k = ∑ j, c k (X k) j • (A k * G k j) := by
     intro k
-    conv_lhs => rw [← hinv k (X k)]
+    conv_lhs => rw [← hinv k]
     rw [Finset.mul_sum]
     exact Finset.sum_congr rfl (fun j _ => mul_smul_comm _ _ _)
   symm
@@ -206,17 +212,22 @@ variable {m : ℕ} [NeZero m]
 (arXiv:1708.00029, Appendix A, lines 1057--1062).
 
 Here `A_k^i = cornerLetter P A k i`, the gap repeated products are
-`F_{k+1}^{𝐣} = cornerProd P A (k+1) 𝐣` over length-`L` words, and `Ω` is their
-finite-sum right inverse `∑_{𝐣} (Ω_u Y)_{𝐣} F_u^{𝐣} = Y` (`eq:Omegauprop`).
-Contracting the concatenation `∏_k (A_k^{σ_k} · F_{k+1}^{ρ_k})` with the inverse
-coefficients replaces each `F_{k+1}` by the inserted matrix `X_k`, giving the
-chain `∏_k (A_k^{σ_k} · X_k)`. -/
+`F_{k+1}^{𝐣} = cornerProd P A (k+1) 𝐣` over length-`L` words, and `Ω_{k+1}`
+recovers each inserted matrix `X_k`: `∑_{𝐣} (Ω_{k+1} X_k)_{𝐣} F_{k+1}^{𝐣} = X_k`
+(`eq:Omegauprop` evaluated at `X_k`).  Contracting the concatenation
+`∏_k (A_k^{σ_k} · F_{k+1}^{ρ_k})` with these coefficients replaces each `F_{k+1}`
+by `X_k`, giving the chain `∏_k (A_k^{σ_k} · X_k)`.
+
+The recovery is required only at the inserted matrices `X_k`, which in the
+Case-3 contraction are the corner-supported tensors `P_{k+1} X_k P_{k+1+L•1}`
+that `Ω_{k+1}` actually inverts. -/
 theorem cornerProd_contraction
     (P : Fin m → MatrixAlg D) (A : MPSTensor d D) (L : ℕ)
     (Ω : Fin m → MatrixAlg D → (Fin L → Fin d) → ℂ)
-    (hΩ : ∀ (u : Fin m) (Y : MatrixAlg D),
-      ∑ j : Fin L → Fin d, Ω u Y j • cornerProd P A u (List.ofFn j) = Y)
-    (σ : Fin m → Fin d) (X : Fin m → MatrixAlg D) :
+    (σ : Fin m → Fin d) (X : Fin m → MatrixAlg D)
+    (hΩ : ∀ k : Fin m,
+      ∑ j : Fin L → Fin d, Ω (k + 1) (X k) j •
+        cornerProd P A (k + 1) (List.ofFn j) = X k) :
     ∑ ρ : Fin m → (Fin L → Fin d),
         (∏ k, Ω (k + 1) (X k) (ρ k)) •
           (List.ofFn (fun k => cornerLetter P A k (σ k) *
@@ -226,7 +237,7 @@ theorem cornerProd_contraction
     (fun k => cornerLetter P A k (σ k)) X
     (fun k j => cornerProd P A (k + 1) (List.ofFn j))
     (fun k => Ω (k + 1))
-    (fun k Y => hΩ (k + 1) Y)
+    hΩ
 
 end PeriodicContraction
 
