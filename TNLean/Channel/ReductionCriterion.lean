@@ -125,7 +125,7 @@ theorem reductionMap_isNPositiveMap {k : ℕ} (hk1 : 1 ≤ k) (hk : k ≤ D) :
 
 /-- **Wolf Chapter 3, Example 3.1 (chain strictness, eq. (3.3)).** The reduction
 map $T_k$ on $M_D(\mathbb C)$ is *not* $(k+1)$-positive for $1 \le k < D$.
-Together with `reductionMap_isNPositiveMap` this shows $T_k$ is *exactly*
+Together with $k$-positivity of $T_k$, this shows $T_k$ is *exactly*
 $k$-positive: it equals the parametric map $T_\eta$ at $\eta = k$, and $T_\eta$
 is $(k+1)$-positive only when $\eta \ge k+1$, which fails at $\eta = k$. -/
 theorem reductionMap_not_isNPositiveMap_succ {k : ℕ} (hk1 : 1 ≤ k) (hk : k < D) :
