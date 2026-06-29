@@ -1447,12 +1447,36 @@ unconditional result.
     of $\zeta$ is the irreducible normalization.
 \end{proof}
 
-\begin{lemma}[Global-gauge assembly]
+\begin{definition}[Global gauge]
+    \label{def:periodic_global_gauge}
+    \lean{MPSTensor.globalGauge}
+    \leanok
+    Given a positive period $m$, cyclic projectors $P_u$ and $Q_v$, a cyclic
+    offset $q$, and corner operators $U_v$, the global gauge is
+    \[
+        U=\sum_{u}P_uU_{u+q}Q_{u+q}.
+    \]
+\end{definition}
+
+\begin{lemma}[Global gauge as a sector sum]
+    \label{lem:periodic_global_gauge_eq_sum}
+    \lean{MPSTensor.globalGauge_eq_sum}
+    \leanok
+    \uses{def:periodic_global_gauge}
+    If each corner operator satisfies $U_v=P_{v-q}U_vQ_v$, then
+    $P_uU_{u+q}Q_{u+q}=U_{u+q}$, so the global gauge is the plain sector sum
+    \[
+        U=\sum_{v}U_v.
+    \]
+\end{lemma}
+
+\begin{lemma}[Global-gauge construction]
     \label{lem:periodic_global_gauge_assembly}
     \lean{MPSTensor.repeatedBlocks_of_globalGauge}
     \leanok
-    \uses{def:cyclic_sector_decomp, lem:periodic_sector_unitary}
-    Let $A$ and $B$ carry the cyclic off-diagonal structure
+    \uses{def:cyclic_sector_decomp, def:periodic_global_gauge,
+        lem:periodic_global_gauge_eq_sum, lem:periodic_sector_unitary}
+    Let $m\ge1$, and let $A$ and $B$ carry the cyclic off-diagonal structure
     \[
         A^i=\sum_{u}P_uA^iP_{u+1},
         \qquad
@@ -1489,9 +1513,16 @@ unconditional result.
     $UU^{\dagger}=\sum_uP_u=\mathbb 1$ and $U^{\dagger}U=\sum_vQ_v=\mathbb 1$.
     The off-diagonal structure of $B$ makes $Q_vB^iQ_w$ vanish unless $w=v+1$,
     so $UB^iU^{\dagger}=\sum_vU_vQ_vB^iQ_{v+1}U_{v+1}^{\dagger}$.  Summing the
-    per-site proportionality over $u$ and reindexing by $v=u+q$ identifies this
-    with $\zeta^{-1}A^i$.  The unit-modulus scalar and the unitary $U$ exhibit
-    $A$ and $B$ as repeated blocks.
+    per-site proportionality over $u$ and reindexing by $v=u+q$,
+    \[
+        \zeta\,UB^iU^{\dagger}
+        =\sum_v\zeta\,U_vQ_vB^iQ_{v+1}U_{v+1}^{\dagger}
+        =\sum_uP_uA^iP_{u+1}
+        =A^i,
+    \]
+    where the last equality is the off-diagonal structure of $A$.  The
+    unit-modulus scalar and the unitary $U$ exhibit $A$ and $B$ as repeated
+    blocks.
 \end{proof}
 
 \begin{lemma}[Cyclic $\Omega_u$-contraction for blocked sector gauges]%

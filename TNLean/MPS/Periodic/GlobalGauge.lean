@@ -6,9 +6,9 @@ import TNLean.MPS.Periodic.Defs
 import TNLean.MPS.Periodic.SectorIrreducibility.ProjectionOrtho
 
 /-!
-# Global-gauge assembly for the periodic Fundamental Theorem
+# Global-gauge construction for the periodic Fundamental Theorem
 
-This module assembles the per-sector corner partial isometries of the periodic
+This module builds the per-sector corner partial isometries of the periodic
 overlap argument into a single global gauge, completing the final algebraic step
 of Appendix A of arXiv:1708.00029.
 
@@ -72,7 +72,7 @@ theorem globalGauge_eq_sum [NeZero m]
         Finset.sum_congr rfl (fun u _ => hterm u)
     _ = ∑ v : Fin m, U v := Equiv.sum_comp (Equiv.addRight q) U
 
-/-- **Global-gauge assembly** (arXiv:1708.00029, Appendix A, eq:result).
+/-- **Global-gauge construction** (arXiv:1708.00029, Appendix A, eq:result).
 
 Suppose:
 
