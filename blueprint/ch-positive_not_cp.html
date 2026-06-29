@@ -1039,12 +1039,119 @@
 
   </div>
 </div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:reduction_map_not_n_positive_succ">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">20.3</span>
+    <span class="theorem_thmtitle">The reduction map \(T_k\) is not \((k+1)\)-positive</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#thm:reduction_map_not_n_positive_succ">#</a>
+    
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000031950"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-channels.html#def:reduction_map">Definition 4.6</a></li>
+          
+          <li><a href="ch-positive_not_cp.html#thm:reduction_map_eq_t_eta">Theorem 20.1</a></li>
+          
+          <li><a href="ch-schwarz.html#thm:t_eta_threshold">Theorem 5.74</a></li>
+          
+          <li><a href="ch-schwarz.html#thm:t_eta_threshold_top">Theorem 5.75</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.reductionMap_not_isNPositiveMap_succ" class="lean_decl">Matrix.reductionMap_not_isNPositiveMap_succ</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    For \(1\le k{\lt}D\) the reduction map \(T_k\) on \(M_{D}(\mathbb {C})\) is not \((k+1)\)-positive. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000031950">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The reduction map equals \(T_\eta \) at \(\eta =k\). For \(k+1{\lt}D\) the threshold gives that \(T_\eta \) is \((k+1)\)-positive iff \(\eta \ge k+1\), so \(T_k\) would require \(k\ge k+1\), which is false. For \(k+1=D\) the dimension-indexed threshold gives that \(T_\eta \) is \(D\)-positive iff \(\eta \ge D\), so \(T_k\) would require \(k\ge D\), contradicting \(k{\lt}D\). </p>
+
+  </div>
+</div>
+<div class="remark_thmwrapper theorem-style-remark" id="a0000031951">
+  <div class="remark_thmheading">
+    <span class="remark_thmcaption">
+    Remark
+    </span>
+    <span class="remark_thmlabel">20.4</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000031951">#</a>
+    
+    
+    
+        </div>
+  </div>
+  <div class="remark_thmcontent">
+  <p>Together with the \(k\)-positivity of \(T_k\) (<a href="ch-positive_not_cp.html#thm:reduction_map_is_n_positive">20.2</a>), this shows that \(T_k\) is <em>exactly</em> \(k\)-positive for \(1\le k{\lt}D\): every inclusion in Wolf’s chain \(T_{\mathrm{cp}}=T_D\subsetneq \cdots \subsetneq T_1\) is strict. </p>
+
+  </div>
+</div>
 <div class="definition_thmwrapper theorem-style-definition" id="def:reduction_witness">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">20.3</span>
+    <span class="definition_thmlabel">20.5</span>
     <span class="definition_thmtitle">Reduction witness</span>
     <div class="thm_header_extras">
 
@@ -1080,7 +1187,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   The reduction witness on \(M_{D}(\mathbb {C})\otimes M_{D}(\mathbb {C})\), for \(n\in \mathbb {N}\), is </p>
-<div class="displaymath" id="a0000031950">
+<div class="displaymath" id="a0000031952">
   \[  W_n=D^{-1}\mathbb {1}-n^{-1}|\Omega \rangle \langle \Omega |.  \]
 </div>
 
@@ -1091,7 +1198,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.4</span>
+    <span class="theorem_thmlabel">20.6</span>
     <span class="theorem_thmtitle">The Choi matrix of the reduction map is the witness</span>
     <div class="thm_header_extras">
 
@@ -1102,7 +1209,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:choi_matrix_reduction_witness">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000031951"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000031953"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1120,7 +1227,7 @@
           
           <li><a href="ch-channels.html#def:reduction_map">Definition 4.6</a></li>
           
-          <li><a href="ch-positive_not_cp.html#def:reduction_witness">Definition 20.3</a></li>
+          <li><a href="ch-positive_not_cp.html#def:reduction_witness">Definition 20.5</a></li>
           
           <li><a href="ch-positive_not_cp.html#thm:reduction_map_eq_t_eta">Theorem 20.1</a></li>
           
@@ -1156,13 +1263,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For \(D\ge 1\) the Choi matrix of \(T_n\) is the reduction witness: </p>
-<div class="displaymath" id="a0000031952">
+<div class="displaymath" id="a0000031954">
   \[  \tau (T_n)=W_n=D^{-1}\mathbb {1}-n^{-1}|\Omega \rangle \langle \Omega |.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031951">
+<div class="proof_wrapper" id="a0000031953">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1179,7 +1286,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.5</span>
+    <span class="theorem_thmlabel">20.7</span>
     <span class="theorem_thmtitle">Reduction-criterion identity</span>
     <div class="thm_header_extras">
 
@@ -1190,7 +1297,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:tensor_map_id_t_eta">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000031953"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000031955"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1238,14 +1345,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Applying \(T_\eta \) to the first factor of a bipartite matrix \(\rho \) gives </p>
-<div class="displaymath" id="a0000031954">
+<div class="displaymath" id="a0000031956">
   \[  (T_\eta \otimes \operatorname{id})(\rho )=\mathbb {1}\otimes \rho _2-\eta ^{-1}\rho ,  \]
 </div>
 <p> where \(\rho _2\) is the reduced density of \(\rho \) on the second factor. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031953">
+<div class="proof_wrapper" id="a0000031955">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1254,11 +1361,11 @@
   </div>
   <div class="proof_content">
   <p>Fix block indices \(i_2,j_2\) on the second factor and write \(\rho ^{(i_2,j_2)}\) for the \(D\times D\) slice \(\rho ^{(i_2,j_2)}_{i_1 j_1}=\rho _{(i_1,i_2),(j_1,j_2)}\) on the first factor. Its trace is the corresponding entry of \(\rho _2\): </p>
-<div class="displaymath" id="a0000031955">
+<div class="displaymath" id="a0000031957">
   \[  \operatorname{tr}\bigl(\rho ^{(i_2,j_2)}\bigr) =\sum _{i_1}\rho _{(i_1,i_2),(i_1,j_2)} =(\rho _2)_{i_2 j_2}.  \]
 </div>
 <p> Applying \(T_\eta \) entry by entry gives </p>
-<div class="displaymath" id="a0000031956">
+<div class="displaymath" id="a0000031958">
   \[  \bigl((T_\eta \otimes \operatorname{id})(\rho )\bigr)_{(i_1,i_2),(j_1,j_2)} =\operatorname{tr}\bigl(\rho ^{(i_2,j_2)}\bigr)\, \delta _{i_1 j_1} -\eta ^{-1}\rho _{(i_1,i_2),(j_1,j_2)} =(\rho _2)_{i_2 j_2}\, \delta _{i_1 j_1} -\eta ^{-1}\rho _{(i_1,i_2),(j_1,j_2)},  \]
 </div>
 <p> and the first term is exactly the \((i_1,i_2),(j_1,j_2)\) entry of \(\mathbb {1}\otimes \rho _2\). </p>
@@ -1270,7 +1377,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.6</span>
+    <span class="theorem_thmlabel">20.8</span>
     <span class="theorem_thmtitle">Operator-implication step of the reduction criterion</span>
     <div class="thm_header_extras">
 
@@ -1281,7 +1388,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:reduction_criterion">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000031957"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000031959"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1299,7 +1406,7 @@
           
           <li><a href="ch-schwarz.html#def:t_eta">Definition 5.72</a></li>
           
-          <li><a href="ch-positive_not_cp.html#thm:tensor_map_id_t_eta">Theorem 20.5</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:tensor_map_id_t_eta">Theorem 20.7</a></li>
           
         </ul>
     
@@ -1333,15 +1440,15 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Let \(n\ge 1\) and let \(\rho \) be a bipartite matrix, with \(\rho ^{F}\) its image under the factor swap \(\rho ^{F}_{(i_2,i_1),(j_2,j_1)}=\rho _{(i_1,i_2),(j_1,j_2)}\). If \((T_n\otimes \operatorname{id})(\rho )\ge 0\) then </p>
-<div class="displaymath" id="a0000031958">
+<div class="displaymath" id="a0000031960">
   \[  n\, \mathbb {1}\otimes \rho _2\ge \rho ,  \]
 </div>
 <p> and if \((T_n\otimes \operatorname{id})(\rho ^{F})\ge 0\) then </p>
-<div class="displaymath" id="a0000031959">
+<div class="displaymath" id="a0000031961">
   \[  n\, \rho _1\otimes \mathbb {1}\ge \rho ,  \]
 </div>
 <p> where \(\rho _1\) and \(\rho _2\) are the reduced densities of \(\rho \) on the first and second factors. Because the factor swap is a unitary reindexing, </p>
-<div class="displaymath" id="a0000031960">
+<div class="displaymath" id="a0000031962">
   \[  (\operatorname{id}\otimes T_n)(\rho )\ge 0 \iff (T_n\otimes \operatorname{id})(\rho ^{F})\ge 0,  \]
 </div>
 <p> so the second hypothesis is Wolf’s symmetric condition \((\operatorname{id}\otimes T_n)(\rho )\ge 0\) expressed through the swap. </p>
@@ -1351,11 +1458,11 @@
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
 	, Equation&#160;(3.18)
 	]
-</span>. The source states the inequalities under the premise that \(\rho \) has Schmidt number at most \(n\), and reaches \((T_n\otimes \operatorname{id})(\rho )\ge 0\) from that premise by the \(n\)-positivity of \(T_n\); that first step is taken here as the hypothesis rather than derived. The first step and the composed full criterion with the Schmidt-number premise are Theorem&#160;<a href="ch-positive_not_cp.html#thm:reduction_criterion_of_schmidt_number">20.41</a>. </p>
+</span>. The source states the inequalities under the premise that \(\rho \) has Schmidt number at most \(n\), and reaches \((T_n\otimes \operatorname{id})(\rho )\ge 0\) from that premise by the \(n\)-positivity of \(T_n\); that first step is taken here as the hypothesis rather than derived. The first step and the composed full criterion with the Schmidt-number premise are Theorem&#160;<a href="ch-positive_not_cp.html#thm:reduction_criterion_of_schmidt_number">20.43</a>. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031957">
+<div class="proof_wrapper" id="a0000031959">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1364,7 +1471,7 @@
   </div>
   <div class="proof_content">
   <p>By the reduction-criterion identity, \((T_n\otimes \operatorname{id})(\rho )\) equals \(\mathbb {1}\otimes \rho _2-n^{-1}\rho \). Scaling a positive semidefinite operator by \(n{\gt}0\) preserves positivity, so \(n\, \mathbb {1}\otimes \rho _2-\rho \ge 0\), which is the first inequality. For the second, the factor swap \(F\) satisfies \(F^2=\operatorname{id}\) and is a unitary reindexing, so it preserves positive semidefiniteness and the order, and it exchanges the reduced densities and the two tensor slots: </p>
-<div class="displaymath" id="a0000031961">
+<div class="displaymath" id="a0000031963">
   \[  (\rho ^{F})_2=\rho _1, \qquad \bigl(\mathbb {1}\otimes (\rho ^{F})_2-n^{-1}\rho ^{F}\bigr)^{F} =\rho _1\otimes \mathbb {1}-n^{-1}\rho .  \]
 </div>
 <p> Applying the first form to \(\rho ^{F}\) gives \(n\, \mathbb {1}\otimes (\rho ^{F})_2-\rho ^{F}\ge 0\); conjugating by \(F\) turns this into \(n\, \rho _1\otimes \mathbb {1}-\rho \ge 0\). </p>
@@ -1385,7 +1492,7 @@
 	, Equation&#160;(3.19)
 	]
 </span> is </p>
-<div class="displaymath" id="a0000031962">
+<div class="displaymath" id="a0000031964">
   \[  T_{\mathrm{BH}}(X)=\operatorname{tr}(X)\, \mathbb {1}-X-U\, X^{\mathsf T}U^{\dagger }.  \]
 </div>
 <p> It is positive; whether it is decomposable, and the threshold beyond which it fails to be completely positive, are not treated here. </p>
@@ -1394,7 +1501,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">20.7</span>
+    <span class="definition_thmlabel">20.9</span>
     <span class="definition_thmtitle">Breuer–Hall map</span>
     <div class="thm_header_extras">
 
@@ -1430,7 +1537,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   For a matrix \(U\) on \(M_{D}(\mathbb {C})\), the Breuer–Hall map on \(M_{D}(\mathbb {C})\) is </p>
-<div class="displaymath" id="a0000031963">
+<div class="displaymath" id="a0000031965">
   \[  T_{\mathrm{BH}}(X)=\operatorname{tr}(X)\, \mathbb {1}-X-U\, X^{\mathsf T}U^{\dagger }.  \]
 </div>
 
@@ -1441,7 +1548,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">20.8</span>
+    <span class="lemma_thmlabel">20.10</span>
     <span class="lemma_thmtitle">The Breuer–Hall map on rank-one operators</span>
     <div class="thm_header_extras">
 
@@ -1452,7 +1559,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#lem:breuer_hall_rankone">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000031964"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000031966"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1468,9 +1575,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-positive_not_cp.html#def:breuer_hall_map">Definition 20.7</a></li>
+          <li><a href="ch-positive_not_cp.html#def:breuer_hall_map">Definition 20.9</a></li>
           
-          <li><a href="ch-positive_not_cp.html#def:breuer_hall_map">Definition 20.7</a></li>
+          <li><a href="ch-positive_not_cp.html#def:breuer_hall_map">Definition 20.9</a></li>
           
         </ul>
     
@@ -1505,7 +1612,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031964">
+<div class="proof_wrapper" id="a0000031966">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1514,19 +1621,19 @@
   </div>
   <div class="proof_content">
   <p> On \(|v\rangle \langle v|\) the image is </p>
-<div class="displaymath" id="a0000031965">
+<div class="displaymath" id="a0000031967">
   \[  T_{\mathrm{BH}}(|v\rangle \langle v|) =\lVert v\rVert ^{2}\, \mathbb {1}-|v\rangle \langle v|-|U\overline{v}\rangle \langle U\overline{v}|,  \]
 </div>
 <p> with \(\overline{v}\) the entrywise conjugate of \(v\). The two vectors \(v\) and \(U\overline{v}\) are orthogonal: antisymmetry of \(U\) gives </p>
-<div class="displaymath" id="a0000031966">
+<div class="displaymath" id="a0000031968">
   \[  \langle v | U\overline{v} \rangle  =\overline{v}^{\, \mathsf T}U\, \overline{v} =\overline{v}^{\, \mathsf T}(-U^{\mathsf T})\overline{v} =-\langle v | U\overline{v} \rangle ,  \]
 </div>
 <p> hence \(\langle v | U\overline{v} \rangle =0\). The contraction bound gives \(\lVert U\overline{v}\rVert \le \lVert v\rVert \). For any \(w\) the quadratic form is </p>
-<div class="displaymath" id="a0000031967">
+<div class="displaymath" id="a0000031969">
   \[  \lVert v\rVert ^{2}\lVert w\rVert ^{2} -\lvert \langle v | w \rangle \rvert ^{2} -\lvert \langle U\overline{v} | w \rangle \rvert ^{2},  \]
 </div>
 <p> which is nonnegative because the two-vector Bessel inequality for the orthogonal pair \(v\), \(U\overline{v}\) with \(\lVert U\overline{v}\rVert \le \lVert v\rVert \) gives </p>
-<div class="displaymath" id="a0000031968">
+<div class="displaymath" id="a0000031970">
   \[  \lvert \langle v | w \rangle \rvert ^{2} +\lvert \langle U\overline{v} | w \rangle \rvert ^{2} \le \lVert v\rVert ^{2}\lVert w\rVert ^{2}.  \]
 </div>
 
@@ -1537,7 +1644,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.9</span>
+    <span class="theorem_thmlabel">20.11</span>
     <span class="theorem_thmtitle">The Breuer–Hall map is positive</span>
     <div class="thm_header_extras">
 
@@ -1548,7 +1655,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:breuer_hall_positive">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000031969"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000031971"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1564,9 +1671,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-positive_not_cp.html#def:breuer_hall_map">Definition 20.7</a></li>
+          <li><a href="ch-positive_not_cp.html#def:breuer_hall_map">Definition 20.9</a></li>
           
-          <li><a href="ch-positive_not_cp.html#lem:breuer_hall_rankone">Lemma 20.8</a></li>
+          <li><a href="ch-positive_not_cp.html#lem:breuer_hall_rankone">Lemma 20.10</a></li>
           
         </ul>
     
@@ -1601,7 +1708,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031969">
+<div class="proof_wrapper" id="a0000031971">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1609,7 +1716,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> A positive semidefinite matrix is a sum of rank-one operators \(|v\rangle \langle v|\). By Lemma&#160;<a href="ch-positive_not_cp.html#lem:breuer_hall_rankone">20.8</a> the Breuer–Hall map sends each such operator to a positive semidefinite matrix, and a sum of positive semidefinite matrices is positive semidefinite, so \(T_{\mathrm{BH}}\) is positive. </p>
+  <p> A positive semidefinite matrix is a sum of rank-one operators \(|v\rangle \langle v|\). By Lemma&#160;<a href="ch-positive_not_cp.html#lem:breuer_hall_rankone">20.10</a> the Breuer–Hall map sends each such operator to a positive semidefinite matrix, and a sum of positive semidefinite matrices is positive semidefinite, so \(T_{\mathrm{BH}}\) is positive. </p>
 
   </div>
 </div>
@@ -1632,7 +1739,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">20.10</span>
+    <span class="definition_thmlabel">20.12</span>
     <span class="definition_thmtitle">Partial transpose over the first factor</span>
     <div class="thm_header_extras">
 
@@ -1668,7 +1775,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   For a bipartite matrix \(\rho \) on \(M_{d}(\mathbb {C})\otimes M_{d'}(\mathbb {C})\), the partial transpose over the first factor is the matrix \(\rho ^{T_1}\) with entries </p>
-<div class="displaymath" id="a0000031970">
+<div class="displaymath" id="a0000031972">
   \[  \bigl(\rho ^{T_1}\bigr)_{(i,k),(j,l)}=\rho _{(j,k),(i,l)},  \]
 </div>
 <p> transposing the first index pair \(i,j\) and fixing the second pair \(k,l\). </p>
@@ -1680,7 +1787,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">20.11</span>
+    <span class="definition_thmlabel">20.13</span>
     <span class="definition_thmtitle">Partial transpose over the second factor</span>
     <div class="thm_header_extras">
 
@@ -1716,7 +1823,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   For a bipartite matrix \(\rho \) on \(M_{d}(\mathbb {C})\otimes M_{d'}(\mathbb {C})\), the partial transpose over the second factor is the matrix \(\rho ^{T_2}\) with entries </p>
-<div class="displaymath" id="a0000031971">
+<div class="displaymath" id="a0000031973">
   \[  \bigl(\rho ^{T_2}\bigr)_{(i,k),(j,l)}=\rho _{(i,l),(j,k)},  \]
 </div>
 <p> transposing the second index pair \(k,l\) and fixing the first pair \(i,j\). </p>
@@ -1728,7 +1835,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.12</span>
+    <span class="theorem_thmlabel">20.14</span>
     <span class="theorem_thmtitle">The partial transpose is an involution</span>
     <div class="thm_header_extras">
 
@@ -1739,7 +1846,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:partial_transpose_left_involution">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000031972"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000031974"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1755,7 +1862,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-positive_not_cp.html#def:partial_transpose_left">Definition 20.10</a></li>
+          <li><a href="ch-positive_not_cp.html#def:partial_transpose_left">Definition 20.12</a></li>
           
         </ul>
     
@@ -1790,7 +1897,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031972">
+<div class="proof_wrapper" id="a0000031974">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1807,7 +1914,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.13</span>
+    <span class="theorem_thmlabel">20.15</span>
     <span class="theorem_thmtitle">The partial transpose preserves the trace</span>
     <div class="thm_header_extras">
 
@@ -1818,7 +1925,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:trace_partial_transpose_left">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000031973"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000031975"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1834,7 +1941,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-positive_not_cp.html#def:partial_transpose_left">Definition 20.10</a></li>
+          <li><a href="ch-positive_not_cp.html#def:partial_transpose_left">Definition 20.12</a></li>
           
         </ul>
     
@@ -1869,7 +1976,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031973">
+<div class="proof_wrapper" id="a0000031975">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1886,7 +1993,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.14</span>
+    <span class="theorem_thmlabel">20.16</span>
     <span class="theorem_thmtitle">The partial transpose preserves Hermiticity</span>
     <div class="thm_header_extras">
 
@@ -1897,7 +2004,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:partial_transpose_left_hermitian">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000031974"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000031976"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1913,7 +2020,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-positive_not_cp.html#def:partial_transpose_left">Definition 20.10</a></li>
+          <li><a href="ch-positive_not_cp.html#def:partial_transpose_left">Definition 20.12</a></li>
           
         </ul>
     
@@ -1948,7 +2055,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031974">
+<div class="proof_wrapper" id="a0000031976">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1965,7 +2072,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.15</span>
+    <span class="theorem_thmlabel">20.17</span>
     <span class="theorem_thmtitle">The two partial transposes differ by a global transposition</span>
     <div class="thm_header_extras">
 
@@ -1976,7 +2083,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:partial_transpose_right_eq_transpose_left">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000031975"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000031977"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1992,9 +2099,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-positive_not_cp.html#def:partial_transpose_left">Definition 20.10</a></li>
+          <li><a href="ch-positive_not_cp.html#def:partial_transpose_left">Definition 20.12</a></li>
           
-          <li><a href="ch-positive_not_cp.html#def:partial_transpose_right">Definition 20.11</a></li>
+          <li><a href="ch-positive_not_cp.html#def:partial_transpose_right">Definition 20.13</a></li>
           
         </ul>
     
@@ -2026,13 +2133,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    The second-factor partial transpose is the full transpose of the first-factor one: </p>
-<div class="displaymath" id="a0000031976">
+<div class="displaymath" id="a0000031978">
   \[  \rho ^{T_2}=\bigl(\rho ^{T_1}\bigr)^{\mathsf T}.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031975">
+<div class="proof_wrapper" id="a0000031977">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2049,7 +2156,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">20.16</span>
+    <span class="definition_thmlabel">20.18</span>
     <span class="definition_thmtitle">Positive partial transpose property</span>
     <div class="thm_header_extras">
 
@@ -2073,7 +2180,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-positive_not_cp.html#def:partial_transpose_left">Definition 20.10</a></li>
+          <li><a href="ch-positive_not_cp.html#def:partial_transpose_left">Definition 20.12</a></li>
           
         </ul>
     
@@ -2113,7 +2220,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.17</span>
+    <span class="theorem_thmlabel">20.19</span>
     <span class="theorem_thmtitle">The PPT property is symmetric in the two factors</span>
     <div class="thm_header_extras">
 
@@ -2124,7 +2231,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:is_ppt_iff_right">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000031977"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000031979"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2140,11 +2247,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-positive_not_cp.html#def:is_ppt">Definition 20.16</a></li>
+          <li><a href="ch-positive_not_cp.html#def:is_ppt">Definition 20.18</a></li>
           
-          <li><a href="ch-positive_not_cp.html#def:partial_transpose_right">Definition 20.11</a></li>
+          <li><a href="ch-positive_not_cp.html#def:partial_transpose_right">Definition 20.13</a></li>
           
-          <li><a href="ch-positive_not_cp.html#thm:partial_transpose_right_eq_transpose_left">Theorem 20.15</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:partial_transpose_right_eq_transpose_left">Theorem 20.17</a></li>
           
         </ul>
     
@@ -2176,13 +2283,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    A bipartite matrix has the PPT property if and only if its second-factor partial transpose is positive semidefinite: </p>
-<div class="displaymath" id="a0000031978">
+<div class="displaymath" id="a0000031980">
   \[  \rho ^{T_1}\ge 0\iff \rho ^{T_2}\ge 0.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031977">
+<div class="proof_wrapper" id="a0000031979">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2199,7 +2306,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.18</span>
+    <span class="theorem_thmlabel">20.20</span>
     <span class="theorem_thmtitle">Basis-change law for the partial transpose</span>
     <div class="thm_header_extras">
 
@@ -2210,7 +2317,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:partial_transpose_left_basis_change">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000031979"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000031981"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2226,7 +2333,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-positive_not_cp.html#def:partial_transpose_left">Definition 20.10</a></li>
+          <li><a href="ch-positive_not_cp.html#def:partial_transpose_left">Definition 20.12</a></li>
           
         </ul>
     
@@ -2258,13 +2365,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For matrices \(U,V\) on the first factor and a bipartite matrix \(\rho \), conjugating inside by \(V\) and \(U\), taking the first-factor partial transpose, and conjugating outside by \(U\) and \(V\) produces the original partial transpose conjugated by \(U U^{\mathsf T}\) and \(V^{\mathsf T}V\): </p>
-<div class="displaymath" id="a0000031980">
+<div class="displaymath" id="a0000031982">
   \[  \bigl(U\otimes \mathbb {1}\bigr) \Bigl[\bigl((V\otimes \mathbb {1})\, \rho \, (U\otimes \mathbb {1})\bigr)^{T_1}\Bigr] \bigl(V\otimes \mathbb {1}\bigr) =\bigl((U U^{\mathsf T})\otimes \mathbb {1}\bigr)\, \rho ^{T_1}\,  \bigl((V^{\mathsf T}V)\otimes \mathbb {1}\bigr).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031979">
+<div class="proof_wrapper" id="a0000031981">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2281,7 +2388,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.19</span>
+    <span class="theorem_thmlabel">20.21</span>
     <span class="theorem_thmtitle">Conjugation invariance of the partial transpose</span>
     <div class="thm_header_extras">
 
@@ -2292,7 +2399,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:is_ppt_basis_change">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000031981"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000031983"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2308,9 +2415,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-positive_not_cp.html#def:is_ppt">Definition 20.16</a></li>
+          <li><a href="ch-positive_not_cp.html#def:is_ppt">Definition 20.18</a></li>
           
-          <li><a href="ch-positive_not_cp.html#thm:partial_transpose_left_basis_change">Theorem 20.18</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:partial_transpose_left_basis_change">Theorem 20.20</a></li>
           
         </ul>
     
@@ -2342,7 +2449,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Let \(U\) be any matrix on the first factor. If \(\rho \) has the PPT property then </p>
-<div class="displaymath" id="a0000031982">
+<div class="displaymath" id="a0000031984">
   \[  \bigl(U\otimes \mathbb {1}\bigr) \Bigl[\bigl((U^\dagger \otimes \mathbb {1})\, \rho \, (U\otimes \mathbb {1})\bigr)^{T_1}\Bigr] \bigl(U^\dagger \otimes \mathbb {1}\bigr)  \]
 </div>
 <p> is positive semidefinite; no invertibility or unitarity of \(U\) is required. Specializing to a unitary \(U\) this is the partial transpose taken in the basis changed by \(U\), so the positivity of the partial transpose is independent of the local basis, recovering Wolf’s basis-independence statement <span class="cite">
@@ -2355,7 +2462,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031981">
+<div class="proof_wrapper" id="a0000031983">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2372,7 +2479,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">20.20</span>
+    <span class="definition_thmlabel">20.22</span>
     <span class="definition_thmtitle">Transposition witness</span>
     <div class="thm_header_extras">
 
@@ -2408,7 +2515,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   For matrices \(A,B\) on \(M_{d}(\mathbb {C})\) and the SWAP operator \(F\) on \(M_{d}(\mathbb {C})\otimes M_{d}(\mathbb {C})\), the transposition witness is </p>
-<div class="displaymath" id="a0000031983">
+<div class="displaymath" id="a0000031985">
   \[  W=(A\otimes B)\, F\, (A\otimes B)^\dagger .  \]
 </div>
 <p> These are the entanglement witnesses associated with the transposition map. </p>
@@ -2420,7 +2527,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.21</span>
+    <span class="theorem_thmlabel">20.23</span>
     <span class="theorem_thmtitle">Transposition witnesses are Hermitian</span>
     <div class="thm_header_extras">
 
@@ -2431,7 +2538,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:transposition_witness_hermitian">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000031984"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000031986"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2447,7 +2554,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-positive_not_cp.html#def:transposition_witness">Definition 20.20</a></li>
+          <li><a href="ch-positive_not_cp.html#def:transposition_witness">Definition 20.22</a></li>
           
         </ul>
     
@@ -2482,7 +2589,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031984">
+<div class="proof_wrapper" id="a0000031986">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2501,7 +2608,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">20.22</span>
+    <span class="definition_thmlabel">20.24</span>
     <span class="definition_thmtitle">Separable bipartite matrix</span>
     <div class="thm_header_extras">
 
@@ -2537,7 +2644,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   A bipartite matrix \(\rho \) on \(M_{d}(\mathbb {C})\otimes M_{d'}(\mathbb {C})\) is separable when it is a finite sum of Kronecker products of positive semidefinite matrices, </p>
-<div class="displaymath" id="a0000031985">
+<div class="displaymath" id="a0000031987">
   \[  \rho =\sum _i A_i\otimes B_i, \qquad A_i\ge 0,\quad B_i\ge 0.  \]
 </div>
 
@@ -2548,7 +2655,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.23</span>
+    <span class="theorem_thmlabel">20.25</span>
     <span class="theorem_thmtitle">A Kronecker product of positive operators is separable</span>
     <div class="thm_header_extras">
 
@@ -2559,7 +2666,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:is_separable_kronecker">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000031986"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000031988"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2575,7 +2682,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-positive_not_cp.html#def:is_separable">Definition 20.22</a></li>
+          <li><a href="ch-positive_not_cp.html#def:is_separable">Definition 20.24</a></li>
           
         </ul>
     
@@ -2610,7 +2717,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031986">
+<div class="proof_wrapper" id="a0000031988">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2627,7 +2734,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.24</span>
+    <span class="theorem_thmlabel">20.26</span>
     <span class="theorem_thmtitle">Separable matrices are closed under addition</span>
     <div class="thm_header_extras">
 
@@ -2638,7 +2745,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:is_separable_add">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000031987"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000031989"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2654,7 +2761,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-positive_not_cp.html#def:is_separable">Definition 20.22</a></li>
+          <li><a href="ch-positive_not_cp.html#def:is_separable">Definition 20.24</a></li>
           
         </ul>
     
@@ -2689,7 +2796,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031987">
+<div class="proof_wrapper" id="a0000031989">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2706,7 +2813,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.25</span>
+    <span class="theorem_thmlabel">20.27</span>
     <span class="theorem_thmtitle">Separable matrices are closed under nonnegative scaling</span>
     <div class="thm_header_extras">
 
@@ -2717,7 +2824,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:is_separable_smul">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000031988"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000031990"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2733,7 +2840,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-positive_not_cp.html#def:is_separable">Definition 20.22</a></li>
+          <li><a href="ch-positive_not_cp.html#def:is_separable">Definition 20.24</a></li>
           
         </ul>
     
@@ -2768,7 +2875,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031988">
+<div class="proof_wrapper" id="a0000031990">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2785,7 +2892,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.26</span>
+    <span class="theorem_thmlabel">20.28</span>
     <span class="theorem_thmtitle">A separable matrix is positive semidefinite</span>
     <div class="thm_header_extras">
 
@@ -2796,7 +2903,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:is_separable_pos_semidef">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000031989"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000031991"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2812,7 +2919,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-positive_not_cp.html#def:is_separable">Definition 20.22</a></li>
+          <li><a href="ch-positive_not_cp.html#def:is_separable">Definition 20.24</a></li>
           
         </ul>
     
@@ -2847,7 +2954,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031989">
+<div class="proof_wrapper" id="a0000031991">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2864,7 +2971,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.27</span>
+    <span class="theorem_thmlabel">20.29</span>
     <span class="theorem_thmtitle">The partial transpose distributes over a finite sum</span>
     <div class="thm_header_extras">
 
@@ -2875,7 +2982,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:partial_transpose_left_sum">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000031990"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000031992"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2891,7 +2998,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-positive_not_cp.html#def:partial_transpose_left">Definition 20.10</a></li>
+          <li><a href="ch-positive_not_cp.html#def:partial_transpose_left">Definition 20.12</a></li>
           
         </ul>
     
@@ -2923,13 +3030,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For a finite family of bipartite matrices, </p>
-<div class="displaymath" id="a0000031991">
+<div class="displaymath" id="a0000031993">
   \[  \Bigl(\sum _i f_i\Bigr)^{T_1}=\sum _i f_i^{T_1}.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031990">
+<div class="proof_wrapper" id="a0000031992">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2946,7 +3053,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.28</span>
+    <span class="theorem_thmlabel">20.30</span>
     <span class="theorem_thmtitle">PPT criterion, forward direction</span>
     <div class="thm_header_extras">
 
@@ -2957,7 +3064,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:is_separable_is_ppt">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000031992"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000031994"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2973,11 +3080,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-positive_not_cp.html#def:is_separable">Definition 20.22</a></li>
+          <li><a href="ch-positive_not_cp.html#def:is_separable">Definition 20.24</a></li>
           
-          <li><a href="ch-positive_not_cp.html#def:is_ppt">Definition 20.16</a></li>
+          <li><a href="ch-positive_not_cp.html#def:is_ppt">Definition 20.18</a></li>
           
-          <li><a href="ch-positive_not_cp.html#thm:partial_transpose_left_sum">Theorem 20.27</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:partial_transpose_left_sum">Theorem 20.29</a></li>
           
         </ul>
     
@@ -3012,7 +3119,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031992">
+<div class="proof_wrapper" id="a0000031994">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3029,7 +3136,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.29</span>
+    <span class="theorem_thmlabel">20.31</span>
     <span class="theorem_thmtitle">Applying a map to one factor distributes over a finite sum</span>
     <div class="thm_header_extras">
 
@@ -3040,7 +3147,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:tensor_map_id_sum">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000031993"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000031995"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3088,13 +3195,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For a linear map \(T\) on the first factor and a finite family of bipartite matrices, </p>
-<div class="displaymath" id="a0000031994">
+<div class="displaymath" id="a0000031996">
   \[  (T\otimes \operatorname{id})\Bigl(\sum _i f_i\Bigr)=\sum _i (T\otimes \operatorname{id})(f_i).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031993">
+<div class="proof_wrapper" id="a0000031995">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3111,7 +3218,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.30</span>
+    <span class="theorem_thmlabel">20.32</span>
     <span class="theorem_thmtitle">Reduction map at the first level on a separable state</span>
     <div class="thm_header_extras">
 
@@ -3122,7 +3229,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:is_separable_reduction_one">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000031995"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000031997"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3138,13 +3245,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-positive_not_cp.html#def:is_separable">Definition 20.22</a></li>
+          <li><a href="ch-positive_not_cp.html#def:is_separable">Definition 20.24</a></li>
           
           <li><a href="ch-schwarz.html#def:t_eta">Definition 5.72</a></li>
           
           <li><a href="ch-channels.html#thm:reduction_map_one_positive">Theorem 4.7</a></li>
           
-          <li><a href="ch-positive_not_cp.html#thm:tensor_map_id_sum">Theorem 20.29</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:tensor_map_id_sum">Theorem 20.31</a></li>
           
         </ul>
     
@@ -3176,14 +3283,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For \(d\ge 1\) and a separable matrix \(\rho \) on \(M_{d}(\mathbb {C})\otimes M_{d'}(\mathbb {C})\), applying the reduction map \(T_1(X)=\operatorname{tr}(X)\mathbb {1}-X\) to the first factor keeps the result positive semidefinite: </p>
-<div class="displaymath" id="a0000031996">
+<div class="displaymath" id="a0000031998">
   \[  (T_1\otimes \operatorname{id})(\rho )\ge 0.  \]
 </div>
 <p> This is the separability instance of the operator inequality underlying the reduction criterion at the first level. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031995">
+<div class="proof_wrapper" id="a0000031997">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3197,7 +3304,7 @@
 </div>
 <h1 id="a0000030071">20.5 The Schmidt number and the full reduction criterion</h1>
 <p>The Schmidt number of a bipartite state is the smallest \(n\) for which the state has a convex decomposition into pure states each of Schmidt rank at most \(n\). Separable states are precisely those of Schmidt number one, and a state of Schmidt number at most \(n\) satisfies the reduction criterion </p>
-<div class="displaymath" id="a0000031997">
+<div class="displaymath" id="a0000031999">
   \[  n\, \rho _1\otimes \mathbb {1}\ge \rho \qquad \text{and}\qquad n\, \mathbb {1}\otimes \rho _2\ge \rho ,  \]
 </div>
 <p> which is <span class="cite">
@@ -3212,7 +3319,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">20.31</span>
+    <span class="definition_thmlabel">20.33</span>
     <span class="definition_thmtitle">Bounded Schmidt number</span>
     <div class="thm_header_extras">
 
@@ -3268,7 +3375,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>    A bipartite matrix \(\rho \) on \(M_{d}(\mathbb {C})\otimes M_{d'}(\mathbb {C})\) has Schmidt number at most \(n\) when it is a finite sum of pure-state projectors of Schmidt rank at most \(n\), </p>
-<div class="displaymath" id="a0000031998">
+<div class="displaymath" id="a0000032000">
   \[  \rho =\sum _i|\psi _i\rangle \langle \psi _i|, \qquad \operatorname {SR}(\psi _i)\le n.  \]
 </div>
 
@@ -3279,7 +3386,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.32</span>
+    <span class="theorem_thmlabel">20.34</span>
     <span class="theorem_thmtitle">Basic properties of bounded Schmidt number</span>
     <div class="thm_header_extras">
 
@@ -3290,7 +3397,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:has_schmidt_number_le_basic">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000031999"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000032001"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3306,7 +3413,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.31</a></li>
+          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.33</a></li>
           
         </ul>
     
@@ -3347,7 +3454,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031999">
+<div class="proof_wrapper" id="a0000032001">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3364,7 +3471,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.33</span>
+    <span class="theorem_thmlabel">20.35</span>
     <span class="theorem_thmtitle">Schmidt number one is separability</span>
     <div class="thm_header_extras">
 
@@ -3375,7 +3482,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:has_schmidt_number_le_one_iff_separable">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000032000"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000032002"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3391,9 +3498,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.31</a></li>
+          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.33</a></li>
           
-          <li><a href="ch-positive_not_cp.html#def:is_separable">Definition 20.22</a></li>
+          <li><a href="ch-positive_not_cp.html#def:is_separable">Definition 20.24</a></li>
           
           <li><a href="ch-schwarz.html#def:schmidt_rank">Definition 5.11</a></li>
           
@@ -3401,9 +3508,9 @@
           
           <li><a href="ch-schwarz.html#thm:schmidt_rank_basic_bounds">Theorem 5.12</a></li>
           
-          <li><a href="ch-positive_not_cp.html#thm:is_separable_kronecker">Theorem 20.23</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:is_separable_kronecker">Theorem 20.25</a></li>
           
-          <li><a href="ch-positive_not_cp.html#thm:is_separable_add">Theorem 20.24</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:is_separable_add">Theorem 20.26</a></li>
           
         </ul>
     
@@ -3438,7 +3545,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000032000">
+<div class="proof_wrapper" id="a0000032002">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3455,7 +3562,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.34</span>
+    <span class="theorem_thmlabel">20.36</span>
     <span class="theorem_thmtitle">Convexity of the Schmidt-number set</span>
     <div class="thm_header_extras">
 
@@ -3466,7 +3573,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:convex_setOf_has_schmidt_number_le">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000032001"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000032003"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3482,7 +3589,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.31</a></li>
+          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.33</a></li>
           
         </ul>
     
@@ -3517,7 +3624,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000032001">
+<div class="proof_wrapper" id="a0000032003">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3534,7 +3641,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.35</span>
+    <span class="theorem_thmlabel">20.37</span>
     <span class="theorem_thmtitle">Compactness of the Schmidt-number state set</span>
     <div class="thm_header_extras">
 
@@ -3545,7 +3652,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:compact_setOf_has_schmidt_number_le_trace_one">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000032002"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000032004"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3561,11 +3668,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.31</a></li>
+          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.33</a></li>
           
           <li><a href="ch-schwarz.html#def:schmidt_rank">Definition 5.11</a></li>
           
-          <li><a href="ch-positive_not_cp.html#thm:convex_setOf_has_schmidt_number_le">Theorem 20.34</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:convex_setOf_has_schmidt_number_le">Theorem 20.36</a></li>
           
         </ul>
     
@@ -3600,7 +3707,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000032002">
+<div class="proof_wrapper" id="a0000032004">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3617,7 +3724,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.36</span>
+    <span class="theorem_thmlabel">20.38</span>
     <span class="theorem_thmtitle">Pure-state step of the reduction criterion</span>
     <div class="thm_header_extras">
 
@@ -3628,7 +3735,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:tensor_map_id_t_eta_posSemidef_pure">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000032003"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000032005"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3690,13 +3797,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For a pure state \(|\psi \rangle \langle \psi |\) on the square bipartite system \(M_{D}(\mathbb {C})\otimes M_{D}(\mathbb {C})\) with \(\operatorname {SR}(\psi )\le n\) and \(1\le n{\lt}D\), applying \(T_n\) to the first factor keeps the result positive semidefinite: </p>
-<div class="displaymath" id="a0000032004">
+<div class="displaymath" id="a0000032006">
   \[  (T_n\otimes \operatorname{id})(|\psi \rangle \langle \psi |)\ge 0.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000032003">
+<div class="proof_wrapper" id="a0000032005">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3713,7 +3820,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.37</span>
+    <span class="theorem_thmlabel">20.39</span>
     <span class="theorem_thmtitle">Pure-state step for a general positive map</span>
     <div class="thm_header_extras">
 
@@ -3724,7 +3831,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:tensor_map_id_posSemidef_pure">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000032005"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000032007"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3786,13 +3893,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For a pure state \(|\psi \rangle \langle \psi |\) on the square bipartite system \(M_{D}(\mathbb {C})\otimes M_{D}(\mathbb {C})\) with \(\operatorname {SR}(\psi )\le n\) and any \(n\)-positive map \(T\), applying \(T\) to the first factor keeps the result positive semidefinite: </p>
-<div class="displaymath" id="a0000032006">
+<div class="displaymath" id="a0000032008">
   \[  (T\otimes \operatorname{id})(|\psi \rangle \langle \psi |)\ge 0.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000032005">
+<div class="proof_wrapper" id="a0000032007">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3801,7 +3908,7 @@
   </div>
   <div class="proof_content">
   <p>Write \(\psi \) through the maximally entangled vector as \(\psi =\psi _X\) for a square matrix \(X\) on the right factor with \(\operatorname {rank}(X)=\operatorname {SR}(\psi )\le n\). Then \((T\otimes \operatorname{id})(|\psi \rangle \langle \psi |)\) is the right-factor Choi compression of \(T\) by \(X\), and its quadratic form on a vector \(\eta \) equals the Choi quadratic form \(C_T\) of \(T\) evaluated on \(R_X^\dagger \eta \), a vector of Schmidt rank at most \(\operatorname {rank}(X)\le n\). Because \(T\) is \(n\)-positive, </p>
-<div class="displaymath" id="a0000032007">
+<div class="displaymath" id="a0000032009">
   \[  \langle R_X^\dagger \eta ,\,  C_T\,  R_X^\dagger \eta \rangle \ge 0,  \]
 </div>
 <p> so the compression is positive semidefinite. </p>
@@ -3813,7 +3920,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.38</span>
+    <span class="theorem_thmlabel">20.40</span>
     <span class="theorem_thmtitle">Positive maps and entanglement, only-if direction</span>
     <div class="thm_header_extras">
 
@@ -3824,7 +3931,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:has_schmidt_number_le_tensor_map_id">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000032008"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000032010"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3840,15 +3947,15 @@
         
         <ul class="uses">
           
-          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.31</a></li>
+          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.33</a></li>
           
           <li><a href="ch-channel_representations.html#def:tensor_map_id">Definition 16.5</a></li>
           
           <li><a href="ch-schwarz.html#def:k_positive_map">Definition 5.7</a></li>
           
-          <li><a href="ch-positive_not_cp.html#thm:tensor_map_id_sum">Theorem 20.29</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:tensor_map_id_sum">Theorem 20.31</a></li>
           
-          <li><a href="ch-positive_not_cp.html#thm:tensor_map_id_posSemidef_pure">Theorem 20.37</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:tensor_map_id_posSemidef_pure">Theorem 20.39</a></li>
           
         </ul>
     
@@ -3880,7 +3987,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    A bipartite state on the square system \(M_{D}(\mathbb {C})\otimes M_{D}(\mathbb {C})\) of Schmidt number at most \(n\) satisfies </p>
-<div class="displaymath" id="a0000032009">
+<div class="displaymath" id="a0000032011">
   \[  (T\otimes \operatorname{id})(\rho )\ge 0  \]
 </div>
 <p> for every \(n\)-positive map \(T\). This is the square case \(d=d'=D\) of the only-if direction of Wolf’s Proposition&#160;3.4 for a general bipartite system \(M_{d}(\mathbb {C})\otimes M_{d'}(\mathbb {C})\) <span class="cite">
@@ -3893,7 +4000,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000032008">
+<div class="proof_wrapper" id="a0000032010">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3910,7 +4017,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.39</span>
+    <span class="theorem_thmlabel">20.41</span>
     <span class="theorem_thmtitle">Only-if direction for a general bipartite system</span>
     <div class="thm_header_extras">
 
@@ -3921,7 +4028,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:has_schmidt_number_le_tensor_map_id_general">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000032010"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000032012"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3937,13 +4044,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.31</a></li>
+          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.33</a></li>
           
           <li><a href="ch-channel_representations.html#def:tensor_map_id">Definition 16.5</a></li>
           
           <li><a href="ch-schwarz.html#def:k_positive_map">Definition 5.7</a></li>
           
-          <li><a href="ch-positive_not_cp.html#thm:has_schmidt_number_le_tensor_map_id">Theorem 20.38</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:has_schmidt_number_le_tensor_map_id">Theorem 20.40</a></li>
           
         </ul>
     
@@ -3975,7 +4082,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    On a general bipartite system \(M_{d}(\mathbb {C})\otimes M_{d'}(\mathbb {C})\), with no relation imposed between the two factors, a state of Schmidt number at most \(n\) satisfies </p>
-<div class="displaymath" id="a0000032011">
+<div class="displaymath" id="a0000032013">
   \[  (T\otimes \operatorname{id})(\rho )\ge 0  \]
 </div>
 <p> for every \(n\)-positive map \(T\) on \(M_{d}(\mathbb {C})\). This is the only-if direction of Wolf’s Proposition&#160;3.4, the first step of eq.&#160;(3.18) <span class="cite">
@@ -3988,7 +4095,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000032010">
+<div class="proof_wrapper" id="a0000032012">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4005,7 +4112,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.40</span>
+    <span class="theorem_thmlabel">20.42</span>
     <span class="theorem_thmtitle">Reduction step from the Schmidt-number premise</span>
     <div class="thm_header_extras">
 
@@ -4016,7 +4123,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:has_schmidt_number_le_tensor_map_id_t_eta">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000032012"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000032014"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4032,15 +4139,15 @@
         
         <ul class="uses">
           
-          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.31</a></li>
+          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.33</a></li>
           
           <li><a href="ch-schwarz.html#def:t_eta">Definition 5.72</a></li>
           
           <li><a href="ch-channel_representations.html#def:tensor_map_id">Definition 16.5</a></li>
           
-          <li><a href="ch-positive_not_cp.html#thm:tensor_map_id_sum">Theorem 20.29</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:tensor_map_id_sum">Theorem 20.31</a></li>
           
-          <li><a href="ch-positive_not_cp.html#thm:tensor_map_id_t_eta_posSemidef_pure">Theorem 20.36</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:tensor_map_id_t_eta_posSemidef_pure">Theorem 20.38</a></li>
           
         </ul>
     
@@ -4072,13 +4179,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For \(1\le n{\lt}D\), a bipartite state on the square system \(M_{D}(\mathbb {C})\otimes M_{D}(\mathbb {C})\) of Schmidt number at most \(n\) satisfies </p>
-<div class="displaymath" id="a0000032013">
+<div class="displaymath" id="a0000032015">
   \[  (T_n\otimes \operatorname{id})(\rho )\ge 0.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000032012">
+<div class="proof_wrapper" id="a0000032014">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4095,7 +4202,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.41</span>
+    <span class="theorem_thmlabel">20.43</span>
     <span class="theorem_thmtitle">Reduction criterion with the Schmidt-number premise</span>
     <div class="thm_header_extras">
 
@@ -4106,7 +4213,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:reduction_criterion_of_schmidt_number">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000032014"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000032016"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4122,13 +4229,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.31</a></li>
+          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.33</a></li>
           
           <li><a href="ch-schwarz.html#def:t_eta">Definition 5.72</a></li>
           
-          <li><a href="ch-positive_not_cp.html#thm:has_schmidt_number_le_tensor_map_id_general">Theorem 20.39</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:has_schmidt_number_le_tensor_map_id_general">Theorem 20.41</a></li>
           
-          <li><a href="ch-positive_not_cp.html#thm:reduction_criterion">Theorem 20.6</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:reduction_criterion">Theorem 20.8</a></li>
           
         </ul>
     
@@ -4162,14 +4269,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    On a general bipartite system \(M_{d}(\mathbb {C})\otimes M_{d'}(\mathbb {C})\), a state of Schmidt number at most \(n\) satisfies the reduction criterion </p>
-<div class="displaymath" id="a0000032015">
+<div class="displaymath" id="a0000032017">
   \[  n\, \mathbb {1}\otimes \rho _2\ge \rho \quad (1\le n{\lt}d) \qquad \text{and}\qquad n\, \rho _1\otimes \mathbb {1}\ge \rho \quad (1\le n{\lt}d'),  \]
 </div>
 <p> with \(\rho _1\) and \(\rho _2\) the reduced densities on the first and second factors. No relation is imposed between \(d\) and \(d'\); each inequality carries only the \(n\)-positivity threshold of \(T_n\) on its acting factor. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000032014">
+<div class="proof_wrapper" id="a0000032016">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4186,7 +4293,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.42</span>
+    <span class="theorem_thmlabel">20.44</span>
     <span class="theorem_thmtitle">Trace-form representation of a real-linear functional</span>
     <div class="thm_header_extras">
 
@@ -4197,7 +4304,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:exists_isHermitian_trace_form_re">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000032016"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000032018"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4225,13 +4332,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Every real-linear functional \(g\) on the space of square complex matrices is the trace form of a Hermitian matrix: there is a Hermitian \(H_0\) with </p>
-<div class="displaymath" id="a0000032017">
+<div class="displaymath" id="a0000032019">
   \[  g(X)=\operatorname {Re}\operatorname{tr}(X H_0) \qquad \text{for every Hermitian }X.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000032016">
+<div class="proof_wrapper" id="a0000032018">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4248,7 +4355,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.43</span>
+    <span class="theorem_thmlabel">20.45</span>
     <span class="theorem_thmtitle">Entanglement witness from a separating hyperplane</span>
     <div class="thm_header_extras">
 
@@ -4259,7 +4366,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:exists_entanglement_witness">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000032018"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000032020"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4275,15 +4382,15 @@
         
         <ul class="uses">
           
-          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.31</a></li>
+          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.33</a></li>
           
           <li><a href="ch-schwarz.html#def:schmidt_rank">Definition 5.11</a></li>
           
-          <li><a href="ch-positive_not_cp.html#thm:convex_setOf_has_schmidt_number_le">Theorem 20.34</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:convex_setOf_has_schmidt_number_le">Theorem 20.36</a></li>
           
-          <li><a href="ch-positive_not_cp.html#thm:compact_setOf_has_schmidt_number_le_trace_one">Theorem 20.35</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:compact_setOf_has_schmidt_number_le_trace_one">Theorem 20.37</a></li>
           
-          <li><a href="ch-positive_not_cp.html#thm:exists_isHermitian_trace_form_re">Theorem 20.42</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:exists_isHermitian_trace_form_re">Theorem 20.44</a></li>
           
         </ul>
     
@@ -4315,7 +4422,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Let \(\rho \) be a trace-one Hermitian bipartite state whose Schmidt number exceeds \(n\). Then there is a Hermitian operator \(W\) with </p>
-<div class="displaymath" id="a0000032019">
+<div class="displaymath" id="a0000032021">
   \[  \operatorname {Re}\operatorname{tr}(W\rho ){\lt}0, \qquad \operatorname {Re}\langle \psi |W|\psi \rangle \ge 0 \quad \text{for every $\psi $ of Schmidt rank at most }n.  \]
 </div>
 <p> This is the only-if direction of Wolf’s Proposition&#160;3.3 <span class="cite">
@@ -4328,7 +4435,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000032018">
+<div class="proof_wrapper" id="a0000032020">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4345,7 +4452,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.44</span>
+    <span class="theorem_thmlabel">20.46</span>
     <span class="theorem_thmtitle">Witness criterion for Schmidt number</span>
     <div class="thm_header_extras">
 
@@ -4356,7 +4463,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:not_has_schmidt_number_le_iff_exists_witness">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000032020"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000032022"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4372,11 +4479,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.31</a></li>
+          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.33</a></li>
           
           <li><a href="ch-schwarz.html#def:schmidt_rank">Definition 5.11</a></li>
           
-          <li><a href="ch-positive_not_cp.html#thm:exists_entanglement_witness">Theorem 20.43</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:exists_entanglement_witness">Theorem 20.45</a></li>
           
         </ul>
     
@@ -4408,7 +4515,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Let \(\rho \) be a trace-one Hermitian bipartite state. Then the Schmidt number of \(\rho \) exceeds \(n\) if and only if there is a Hermitian operator \(W\) with </p>
-<div class="displaymath" id="a0000032021">
+<div class="displaymath" id="a0000032023">
   \[  \operatorname {Re}\operatorname{tr}(W\rho ){\lt}0, \qquad \operatorname {Re}\langle \psi |W|\psi \rangle \ge 0 \quad \text{for every $\psi $ of Schmidt rank at most }n.  \]
 </div>
 <p> This is Wolf’s Proposition&#160;3.3 <span class="cite">
@@ -4421,7 +4528,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000032020">
+<div class="proof_wrapper" id="a0000032022">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4429,7 +4536,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The forward implication is the separating-hyperplane construction (<a href="ch-positive_not_cp.html#thm:exists_entanglement_witness">20.43</a>). For the converse, suppose \(\rho \) had Schmidt number at most \(n\), so \(\rho =\sum _i|\psi _i\rangle \langle \psi _i|\) with each \(\psi _i\) of Schmidt rank at most \(n\). By linearity of the trace, \(\operatorname {Re}\operatorname{tr}(W\rho )=\sum _i\operatorname {Re}\operatorname{tr}\! \bigl(W|\psi _i\rangle \langle \psi _i|\bigr)\), a sum of nonnegative terms, contradicting \(\operatorname {Re}\operatorname{tr}(W\rho ){\lt}0\). This converse uses no density-matrix hypotheses on \(\rho \). </p>
+  <p>The forward implication is the separating-hyperplane construction (<a href="ch-positive_not_cp.html#thm:exists_entanglement_witness">20.45</a>). For the converse, suppose \(\rho \) had Schmidt number at most \(n\), so \(\rho =\sum _i|\psi _i\rangle \langle \psi _i|\) with each \(\psi _i\) of Schmidt rank at most \(n\). By linearity of the trace, \(\operatorname {Re}\operatorname{tr}(W\rho )=\sum _i\operatorname {Re}\operatorname{tr}\! \bigl(W|\psi _i\rangle \langle \psi _i|\bigr)\), a sum of nonnegative terms, contradicting \(\operatorname {Re}\operatorname{tr}(W\rho ){\lt}0\). This converse uses no density-matrix hypotheses on \(\rho \). </p>
 
   </div>
 </div>
@@ -4438,7 +4545,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.45</span>
+    <span class="theorem_thmlabel">20.47</span>
     <span class="theorem_thmtitle">Surjectivity of the Choi correspondence</span>
     <div class="thm_header_extras">
 
@@ -4449,7 +4556,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:exists_choiMatrix_eq">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000032022"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000032024"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4500,7 +4607,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000032022">
+<div class="proof_wrapper" id="a0000032024">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4517,7 +4624,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.46</span>
+    <span class="theorem_thmlabel">20.48</span>
     <span class="theorem_thmtitle">A witness is the Choi matrix of an \(n\)-positive map</span>
     <div class="thm_header_extras">
 
@@ -4528,7 +4635,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:exists_isNPositiveMap_choiMatrix_eq">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000032023"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000032025"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4548,11 +4655,11 @@
           
           <li><a href="ch-schwarz.html#def:schmidt_rank">Definition 5.11</a></li>
           
-          <li><a href="ch-positive_not_cp.html#thm:exists_choiMatrix_eq">Theorem 20.45</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:exists_choiMatrix_eq">Theorem 20.47</a></li>
           
           <li><a href="ch-schwarz.html#thm:schmidt_rank_choi_test_iff">Theorem 5.40</a></li>
           
-          <li><a href="ch-positive_not_cp.html#thm:exists_entanglement_witness">Theorem 20.43</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:exists_entanglement_witness">Theorem 20.45</a></li>
           
         </ul>
     
@@ -4584,7 +4691,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Assume \(D{\gt}0\). Let \(W\) be a Hermitian operator on \(\mathbb {C}^D\otimes \mathbb {C}^D\) with </p>
-<div class="displaymath" id="a0000032024">
+<div class="displaymath" id="a0000032026">
   \[  \operatorname {Re}\langle \psi |W|\psi \rangle \ge 0 \quad \text{for every $\psi $ of Schmidt rank at most }n.  \]
 </div>
 <p> Then \(W\) is the Choi matrix of an \(n\)-positive map \(T\). This is the Choi–Jamiołkowski translation of the entanglement witness of Wolf’s Proposition&#160;3.3 into the \(n\)-positive map of Wolf’s Proposition&#160;3.4 <span class="cite">
@@ -4597,7 +4704,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000032023">
+<div class="proof_wrapper" id="a0000032025">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4605,7 +4712,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>By the surjectivity of the Choi correspondence (<a href="ch-positive_not_cp.html#thm:exists_choiMatrix_eq">20.45</a>) there is a linear map \(T\) with \(\tau _T=W\). Because \(W\) is Hermitian, the Choi quadratic form \(\langle \psi |W|\psi \rangle \) is real, and it equals the witness expectation \(\operatorname{tr}(W|\psi \rangle \langle \psi |)\); the witness condition makes it nonnegative on every vector of Schmidt rank at most \(n\). This is exactly the Schmidt-rank Choi criterion (<a href="ch-schwarz.html#thm:schmidt_rank_choi_test_iff">5.40</a>) for \(n\)-positivity of \(T\). </p>
+  <p>By the surjectivity of the Choi correspondence (<a href="ch-positive_not_cp.html#thm:exists_choiMatrix_eq">20.47</a>) there is a linear map \(T\) with \(\tau _T=W\). Because \(W\) is Hermitian, the Choi quadratic form \(\langle \psi |W|\psi \rangle \) is real, and it equals the witness expectation \(\operatorname{tr}(W|\psi \rangle \langle \psi |)\); the witness condition makes it nonnegative on every vector of Schmidt rank at most \(n\). This is exactly the Schmidt-rank Choi criterion (<a href="ch-schwarz.html#thm:schmidt_rank_choi_test_iff">5.40</a>) for \(n\)-positivity of \(T\). </p>
 
   </div>
 </div>
@@ -4614,7 +4721,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.47</span>
+    <span class="theorem_thmlabel">20.49</span>
     <span class="theorem_thmtitle">Choi trace pairing through the trace-pairing adjoint</span>
     <div class="thm_header_extras">
 
@@ -4625,7 +4732,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:trace_choiMatrix_omega_quadratic_adjoint">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000032025"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000032027"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4675,14 +4782,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    For a linear map \(T\colon M_{D}(\mathbb {C})\to M_{D}(\mathbb {C})\) with Choi matrix \(\tau _T\) and any bipartite matrix \(\rho \) on \(\mathbb {C}^D\otimes \mathbb {C}^D\), </p>
-<div class="displaymath" id="a0000032026">
+<div class="displaymath" id="a0000032028">
   \[  \operatorname{tr}(\tau _T\, \rho ) = \langle \Omega |(T^{*}\otimes \mathbb {1})(\rho )|\Omega \rangle ,  \]
 </div>
 <p> where \(T^{*}\) is the trace-pairing adjoint of \(T\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000032025">
+<div class="proof_wrapper" id="a0000032027">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4699,7 +4806,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">20.48</span>
+    <span class="theorem_thmlabel">20.50</span>
     <span class="theorem_thmtitle">Positive maps detect high Schmidt number</span>
     <div class="thm_header_extras">
 
@@ -4710,7 +4817,7 @@
 
     <a class="icon proof" href="ch-positive_not_cp.html#thm:exists_isNPositiveMap_detects">#</a>
     
-    <a class="icon proof" href="ch-positive_not_cp.html#a0000032027"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-positive_not_cp.html#a0000032029"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4728,15 +4835,15 @@
           
           <li><a href="ch-schwarz.html#def:k_positive_map">Definition 5.7</a></li>
           
-          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.31</a></li>
+          <li><a href="ch-positive_not_cp.html#def:has_schmidt_number_le">Definition 20.33</a></li>
           
-          <li><a href="ch-positive_not_cp.html#thm:exists_entanglement_witness">Theorem 20.43</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:exists_entanglement_witness">Theorem 20.45</a></li>
           
-          <li><a href="ch-positive_not_cp.html#thm:exists_isNPositiveMap_choiMatrix_eq">Theorem 20.46</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:exists_isNPositiveMap_choiMatrix_eq">Theorem 20.48</a></li>
           
           <li><a href="ch-schwarz.html#thm:trace_pairing_adjoint_positive">Theorem 5.58</a></li>
           
-          <li><a href="ch-positive_not_cp.html#thm:trace_choiMatrix_omega_quadratic_adjoint">Theorem 20.47</a></li>
+          <li><a href="ch-positive_not_cp.html#thm:trace_choiMatrix_omega_quadratic_adjoint">Theorem 20.49</a></li>
           
         </ul>
     
@@ -4777,7 +4884,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000032027">
+<div class="proof_wrapper" id="a0000032029">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4785,8 +4892,8 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The entanglement witness \(W\) for \(\rho \) (<a href="ch-positive_not_cp.html#thm:exists_entanglement_witness">20.43</a>) is the Choi matrix of an \(n\)-positive map \(P\) (<a href="ch-positive_not_cp.html#thm:exists_isNPositiveMap_choiMatrix_eq">20.46</a>). Its trace-pairing adjoint \(T=P^{*}\) is again \(n\)-positive (<a href="ch-schwarz.html#thm:trace_pairing_adjoint_positive">5.58</a>). By the Choi trace pairing through the trace-pairing adjoint (<a href="ch-positive_not_cp.html#thm:trace_choiMatrix_omega_quadratic_adjoint">20.47</a>), </p>
-<div class="displaymath" id="a0000032028">
+  <p>The entanglement witness \(W\) for \(\rho \) (<a href="ch-positive_not_cp.html#thm:exists_entanglement_witness">20.45</a>) is the Choi matrix of an \(n\)-positive map \(P\) (<a href="ch-positive_not_cp.html#thm:exists_isNPositiveMap_choiMatrix_eq">20.48</a>). Its trace-pairing adjoint \(T=P^{*}\) is again \(n\)-positive (<a href="ch-schwarz.html#thm:trace_pairing_adjoint_positive">5.58</a>). By the Choi trace pairing through the trace-pairing adjoint (<a href="ch-positive_not_cp.html#thm:trace_choiMatrix_omega_quadratic_adjoint">20.49</a>), </p>
+<div class="displaymath" id="a0000032030">
   \[  \langle \Omega |(T\otimes \mathbb {1})(\rho )|\Omega \rangle =\operatorname{tr}(W\rho ),  \]
 </div>
 <p> whose real part is negative. A positive semidefinite matrix has nonnegative quadratic forms, so \((T\otimes \mathbb {1})(\rho )\) is not positive semidefinite. </p>
