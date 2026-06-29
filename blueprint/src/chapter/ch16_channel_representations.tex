@@ -1682,16 +1682,59 @@ This section states the existence theorems from
     so the minimiser on the compact set is a global minimiser.
 \end{proof}
 
+% Lean: Wolf.pow_card_mul_prod_le_sum_pow
+\begin{lemma}[Arithmetic--geometric-mean inequality, product/sum form]
+\label{lem:amgm_prod_sum}
+    \lean{Wolf.pow_card_mul_prod_le_sum_pow}
+    \leanok
+    For a nonnegative family $f_{1},\dots,f_{D}$ of real numbers,
+    \[
+        D^{D}\prod_{i} f_{i} \le \Bigl(\sum_{i} f_{i}\Bigr)^{D}.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    Apply the weighted arithmetic--geometric-mean inequality with uniform
+    weights $1/D$:
+    \[
+        \Bigl(\prod_{i} f_{i}\Bigr)^{1/D} \le \frac{1}{D}\sum_{i} f_{i}.
+    \]
+    Raising both sides to the $D$-th power gives the stated bound.
+\end{proof}
+
+% Lean: Wolf.posSemidef_pow_det_le_trace_pow, Wolf.posSemidef_pow_det_eq_trace_pow_iff
+\begin{lemma}[Trace--determinant AM--GM for positive-semidefinite matrices]
+\label{lem:trace_det_amgm}
+    \lean{Wolf.posSemidef_pow_det_le_trace_pow,
+    Wolf.posSemidef_pow_det_eq_trace_pow_iff}
+    \leanok
+    \uses{lem:amgm_prod_sum}
+    For a positive-semidefinite $D \times D$ matrix $M$,
+    \[
+        D^{D}\det M \le (\tr M)^{D},
+    \]
+    and equality holds if and only if $M = (\tr M / D)\,\mathbb{1}$.
+\end{lemma}
+\begin{proof}\leanok
+    Both $\det M = \prod_{i}\lambda_{i}$ and $\tr M = \sum_{i}\lambda_{i}$ are
+    expressed through the nonnegative eigenvalues $\lambda_{i}$ of $M$. The
+    bound is the arithmetic--geometric-mean inequality with uniform weights
+    $1/D$, raised to the $D$-th power; equality holds exactly when all
+    eigenvalues coincide, that is, when $M$ is a scalar matrix.
+\end{proof}
+
 % Lean: Wolf.exists_normal_form_generic
 \begin{theorem}[Generic normal form for CP maps]\label{thm:exists_normal_form_generic}
-    \uses{def:sl_filtering, def:doubly_stochastic, lem:infimum_is_attained}
+    \uses{def:sl_filtering, def:doubly_stochastic, lem:infimum_is_attained,
+    lem:trace_det_amgm}
     Let $T : \MN{D} \to \MN{D}$ be a completely positive map whose Choi matrix
     is positive-definite (equivalently, $T$ has full Kraus rank). Then there
     exist SL-filterings $\Phi_{1}, \Phi_{2}$ such that
     $\Phi_{2} \circ T \circ \Phi_{1}$ is doubly-stochastic.
-    \textbf{Not yet proved}---the compactness/minimisation lemma is proved;
-    the remaining step is the AGM or first-order optimality argument showing
-    that the minimiser is doubly-stochastic.
+    \textbf{Not yet proved}---the compactness/minimisation lemma is proved, and
+    the trace--determinant AM--GM equality characterisation
+    (Lemma~\ref{lem:trace_det_amgm}) supplies the optimality criterion; the
+    remaining step combines these into the doubly-stochastic conclusion via the
+    AGM iteration over both filtering factors.
 \end{theorem}
 
 % Lean: Wolf.IsLorentzDiagonal
