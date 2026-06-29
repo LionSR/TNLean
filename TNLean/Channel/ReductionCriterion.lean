@@ -109,8 +109,9 @@ theorem reductionMap_eq_tEta (D k : ℕ) : reductionMap D k = tEta D (k : ℝ) :
 `T_k(X) = tr(X) • 1 − k⁻¹ • X` is `k`-positive for `1 ≤ k < D`. It is the family
 map `tEta D k` at parameter `η = k`, and `tEta D η` is `k`-positive exactly when
 `η ≥ k`, so the threshold is attained at `η = k`. -/
-theorem reductionMap_isNPositiveMap [NeZero D] {k : ℕ} (hk1 : 1 ≤ k) (hk : k < D) :
+theorem reductionMap_isNPositiveMap {k : ℕ} (hk1 : 1 ≤ k) (hk : k < D) :
     IsNPositiveMap k (reductionMap D k) := by
+  haveI : NeZero D := ⟨by omega⟩
   rw [reductionMap_eq_tEta]
   have hη : (0 : ℝ) < (k : ℝ) := by
     have : (1 : ℝ) ≤ (k : ℝ) := by exact_mod_cast hk1
