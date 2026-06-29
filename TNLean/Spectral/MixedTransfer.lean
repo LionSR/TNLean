@@ -164,7 +164,7 @@ lemma mixedTransferMap₂_apply {d D₁ D₂ : ℕ}
     mixedTransferMap₂ A B X = ∑ i : Fin d, A i * X * (B i)ᴴ := by
   simp [mixedTransferMap₂, Matrix.mul_assoc]
 
-/-- The rectangular mixed transfer operator with `A = B` is the standard transfer
+/-- When $A = B$, the rectangular mixed transfer operator is the standard transfer
 map.  This is the rectangular analogue of `mixedTransferMap_self`. -/
 @[simp]
 lemma mixedTransferMap₂_self {d D : ℕ} (A : MPSTensor d D) :
