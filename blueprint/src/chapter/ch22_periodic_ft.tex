@@ -1289,12 +1289,13 @@ unconditional result.
     \label{lem:periodic_sector_unitary}
     \lean{MPSTensor.exists_unitaryConj_gaugePhase_of_leftCanonical_irreducible}
     \leanok
-    \uses{def:periodic_tensor}
-    Let $A$ and $B$ be left-canonical irreducible tensors that are gauge-phase
-    equivalent.  Then the gauge can be taken unitary: there is a unitary $U$ and
-    a unit-modulus scalar $\zeta$ with
+    \uses{def:gauge_phase_equiv, def:irreducible_tensor}
+    Let $A$ and $B$ be left-canonical irreducible tensors of common positive bond
+    dimension that are gauge-phase equivalent.  Then the gauge can be taken
+    unitary: there is a unitary $U$ and a unit-modulus scalar $\zeta$ such that,
+    for every $i$,
     \[
-        B^i=\zeta\,U A^i U^{\dagger}\qquad\text{for every }i .
+        B^i=\zeta\,U A^i U^{\dagger}.
     \]
     This is the per-sector unitary $U_v$ of
     \cite[eq.~Cvprop]{DeLasCuevas2017Irreducible}, obtained by the canonical-form
@@ -1308,7 +1309,7 @@ unconditional result.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:periodic_tensor}
+    \uses{thm:psd_fp_unique_irred, def:irreducible_tensor}
     From $\sum_i B^{i\dagger}B^i=\mathbb 1$ the matrix $X^{\dagger}X$ is a
     positive-semidefinite fixed point of the adjoint transfer map; by uniqueness
     it equals a positive scalar multiple $c\,\mathbb 1$ of the identity, so

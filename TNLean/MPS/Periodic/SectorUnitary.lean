@@ -11,10 +11,9 @@ import TNLean.QPF.Uniqueness
 
 This module upgrades the per-sector gauge-phase equivalence used in the periodic
 overlap argument from a general invertible gauge to a *unitary* gauge.  It is the
-per-sector core of `eq:Cvprop` / the corner unitaries `U_v` of arXiv:1708.00029,
-Appendix A.
+per-sector core of the corner unitaries `U_v` of arXiv:1708.00029, Appendix A.
 
-The paper builds `U_v` via `thm:cf` (the single-block canonical-form / Fundamental
+The paper builds `U_v` via the single-block canonical form (the Fundamental
 Theorem rigidity, cited as Theorem 2.10 of Cirac--Pérez-García).  In the
 canonical-form orientation, two left-canonical tensors that are gauge-phase
 equivalent are related by a *unitary* gauge: the modulus of the scalar is one and
@@ -40,7 +39,7 @@ fixed point up to scalar: `W = c • 1` with `c > 0` real.  Then `U := c^{-1/2} 
 is unitary and `X⁻¹ = c⁻¹ • Xᴴ`, so `X * A i * X⁻¹ = U * A i * Uᴴ`.
 
 This is the spatial-realization input behind the global corner unitary in
-arXiv:1708.00029, Appendix A, lines 1110--1117 (`eq:result`).
+arXiv:1708.00029, Appendix A, lines 1110--1117.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -50,7 +49,7 @@ namespace MPSTensor
 variable {d D : ℕ}
 
 /-- **Per-sector unitarity of the canonical-form gauge** (arXiv:1708.00029,
-Appendix A, `thm:cf` / `eq:Cvprop`).
+Appendix A).
 
 If `A` and `B` are both left-canonical and irreducible MPS tensors related by a
 gauge-phase equivalence, then the gauge can be taken *unitary* and the scalar has
