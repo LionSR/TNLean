@@ -1285,6 +1285,37 @@ unconditional result.
     \]
 \end{proof}
 
+\begin{lemma}[Per-sector unitary gauge]
+    \label{lem:periodic_sector_unitary}
+    \lean{MPSTensor.exists_unitaryConj_gaugePhase_of_leftCanonical_irreducible}
+    \leanok
+    \uses{def:periodic_tensor}
+    Let $A$ and $B$ be left-canonical irreducible tensors that are gauge-phase
+    equivalent.  Then the gauge can be taken unitary: there is a unitary $U$ and
+    a unit-modulus scalar $\zeta$ with
+    \[
+        B^i=\zeta\,U A^i U^{\dagger}\qquad\text{for every }i .
+    \]
+    This is the per-sector unitary $U_v$ of
+    \cite[eq.~Cvprop]{DeLasCuevas2017Irreducible}, obtained by the canonical-form
+    argument: writing $B^i=\zeta\,X A^i X^{-1}$ with $X$ invertible, the modulus
+    $\lVert\zeta\rVert=1$ follows from the irreducible normalization, while
+    $X^{\dagger}X$ is a positive-semidefinite fixed point of the adjoint transfer
+    map $Y\mapsto\sum_i A^{i\dagger}YA^i$.  Left-canonicity of $A$ makes the
+    identity another such fixed point, so uniqueness of the
+    positive-semidefinite fixed point gives $X^{\dagger}X=c\,\mathbb 1$ with
+    $c>0$, and $U:=c^{-1/2}X$ is unitary.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:periodic_tensor}
+    From $\sum_i B^{i\dagger}B^i=\mathbb 1$ the matrix $X^{\dagger}X$ is a
+    positive-semidefinite fixed point of the adjoint transfer map; by uniqueness
+    it equals a positive scalar multiple $c\,\mathbb 1$ of the identity, so
+    $c^{-1/2}X$ is unitary and $X A^i X^{-1}=U A^i U^{\dagger}$.  The unit modulus
+    of $\zeta$ is the irreducible normalization.
+\end{proof}
+
 \begin{lemma}[Cyclic $\Omega_u$-contraction for blocked sector gauges]%
     \label{lem:sector_tensor_proportional_blocked_match}
     \lean{MPSTensor.sectorTensor_proportional_of_blockedMatch}
