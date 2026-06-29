@@ -123,6 +123,25 @@ theorem reductionMap_isNPositiveMap {k : ℕ} (hk1 : 1 ≤ k) (hk : k ≤ D) :
   · subst heq
     exact (isNPositiveMap_tEta_card_iff hη).mpr le_rfl
 
+/-- **Wolf Chapter 3, Example 3.1 (chain strictness, eq. (3.3)).** The reduction
+map $T_k$ on $M_D(\mathbb C)$ is *not* $(k+1)$-positive for $1 \le k < D$.
+Together with $k$-positivity of $T_k$, this shows $T_k$ is *exactly*
+$k$-positive: it equals the parametric map $T_\eta$ at $\eta = k$, and $T_\eta$
+is $(k+1)$-positive only when $\eta \ge k+1$, which fails at $\eta = k$. -/
+theorem reductionMap_not_isNPositiveMap_succ {k : ℕ} (hk1 : 1 ≤ k) (hk : k < D) :
+    ¬ IsNPositiveMap (k + 1) (reductionMap D k) := by
+  haveI : NeZero D := ⟨by omega⟩
+  rw [reductionMap_eq_tEta]
+  have hη : (0 : ℝ) < (k : ℝ) := by
+    have : (1 : ℝ) ≤ (k : ℝ) := by exact_mod_cast hk1
+    linarith
+  rcases lt_or_eq_of_le (show k + 1 ≤ D by omega) with hlt | heq
+  · rw [isNPositiveMap_tEta_iff hη (by omega) hlt]
+    push_cast
+    exact not_le.mpr (by linarith)
+  · rw [heq, isNPositiveMap_tEta_card_iff hη]
+    exact not_le.mpr (by exact_mod_cast hk)
+
 /-- **Wolf's reduction witness.** The entanglement witness attached to `T_n` is
 `W_n = D⁻¹ • 1 − n⁻¹ • |Ω⟩⟨Ω|` on `M_D(ℂ) ⊗ M_D(ℂ)`.  It is exactly the Choi
 operator of `T_n`. -/
