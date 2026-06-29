@@ -933,6 +933,44 @@ and rates for the single-tensor transfer map $\E_A$.
     $\sum_i (U_j^i)_{\alpha,\beta}\overline{(U_{j'}^i)_{\alpha',\beta'}}=0$.
 \end{proof}
 
+\begin{theorem}[A direct sum of isometry-canonical-form blocks is a renormalization fixed point]%
+    \label{thm:is_rfp_of_isometry_canonical_form_direct_sum}
+    \lean{MPSTensor.isRFP_directSumTensor_of_isIsometryCanonicalForm}
+    \leanok
+    \uses{def:is_isometry_canonical_form, def:is_rfp, def:mixed_transfer_rect}
+    Let $(B_k)_k$ be a family of tensors, each in isometry canonical form, whose
+    cross-block mixed transfer operators vanish, $\E_{j,j'}=0$ for $j\ne j'$. Then
+    the direct sum $\bigoplus_k B_k$ is a renormalization fixed point. This is the
+    backward direction of the structural characterization of pure-state
+    renormalization fixed points \cite[Section~3]{Cirac2016MPDO_arXiv}, in the
+    distinct-blocks case where each normal tensor appears once; the cross-block
+    vanishing is the $j\ne j'$ part of the isometry condition of that
+    characterization, so it belongs to the source isometry form.
+% Scope restriction (multiplicity-one): the source canonical form allows each
+% normal tensor to repeat with a multiplicity and a phase; this is the
+% single-copy case (docs/paper-gaps/cpsv16_rfp_isometry_scope.tex).
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:is_rfp_of_isometry_canonical_form,
+        lem:block_diagonal_transfer_sum_to_block}
+    The direct-sum transfer map decouples block by block: by
+    Lemma~\ref{lem:block_diagonal_transfer_sum_to_block} its $(j,j')$ bond block
+    acts as $\E_{j,j'}$ on the $(j,j')$ bond block of the argument. Each diagonal
+    block $\E_{j,j}$ is the transfer map of $B_j$, which is idempotent because
+    $B_j$ is a renormalization fixed point
+    (Theorem~\ref{thm:is_rfp_of_isometry_canonical_form}); each off-diagonal block
+    $\E_{j,j'}$ with $j\ne j'$ vanishes by hypothesis. Therefore, for every bond
+    block,
+    \[
+        \bigl[\mathcal{E}_{\bigoplus B}^2(Y)\bigr]_{j,j'}
+        = \E_{j,j'}\!\bigl(\E_{j,j'}(Y_{j,j'})\bigr)
+        = \E_{j,j'}(Y_{j,j'})
+        = \bigl[\mathcal{E}_{\bigoplus B}(Y)\bigr]_{j,j'},
+    \]
+    so $\mathcal{E}_{\bigoplus B}^2 = \mathcal{E}_{\bigoplus B}$ and the direct
+    sum is a renormalization fixed point.
+\end{proof}
+
 \begin{theorem}[Canonical-form blocks are injective]\label{thm:rfp_cf_structural}
     \lean{MPSTensor.rfp_cf_structural}
     \leanok

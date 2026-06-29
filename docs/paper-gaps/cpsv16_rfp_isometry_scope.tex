@@ -292,6 +292,31 @@ renormalization fixed point of the direct sum by
 \leanid{MPSTensor.exists_residualIsometryFamily_of_isRFP_directSum}.  This is the
 residual-isometry content of Corollary~III.cor3 at the normal-tensor-block level.
 
+\section{Backward direction (multiplicity-one)}
+
+The backward direction of the characterization is also formalized at the
+normal-tensor-block level.  If each block $B_k$ is in isometry canonical form and
+the cross-block mixed transfer operators vanish, $\mathcal{E}_{j,j'}=0$ for
+$j\ne j'$, then the direct sum $\bigoplus_k B_k$ is a renormalization fixed
+point,\footnote{Formal declaration:
+\leanid{MPSTensor.isRFP_directSumTensor_of_isIsometryCanonicalForm} in
+\doclink{TNLean/MPS/RFP/ResidualIsometry}.} by
+\leanid{MPSTensor.blockTransferSum_idempotent_of_isIsometryCanonicalForm}.  The
+direct-sum transfer map decomposes block by block
+(\leanid{MPSTensor.blockDiagonal'_transferSum_toBlock}): the diagonal blocks are
+the per-block transfer maps, idempotent by
+\leanid{MPSTensor.isRFP_of_isIsometryCanonicalForm}, and the off-diagonal blocks
+vanish by the cross-block hypothesis, which is the $j\ne j'$ part of
+\path{eq:III_isometry} and so belongs to the source isometry form rather than
+being an added assumption.
+
+This handles the distinct-blocks (multiplicity-one, phase-one) case of the
+source canonical form \path{III_CFI_RFP}, where the inner direct sum over
+copies $q=1,\ldots,r_j$ has a single summand and the phases $\mu_{j,q}$ are all
+$1$, so the direct sum carries one copy of each normal-tensor block.  The
+full-multiplicity backward direction, summing repeated copies of each block with
+their phases and scalar weights, is a further step.
+
 \section{Elimination plan}
 
 The one remaining gap is the source's starting point.  Corollary~III.cor3 assumes
