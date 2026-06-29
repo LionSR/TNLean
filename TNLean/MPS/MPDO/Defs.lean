@@ -216,10 +216,11 @@ def IsLPDO (M : MPOTensor d D) : Prop :=
       (A i k) ⊗ₖ ((A j k).map (starRingEnd ℂ))).submatrix ↑e ↑e
 
 /-- The list product of LPDO tensor entries decomposes via Kronecker products
-of the purifying tensor. This is the key technical lemma for `IsLPDO.isMPDO`:
-the product of Kronecker sums expands as a Kronecker sum of products, using
-the mixed-product property `(A ⊗ B)(C ⊗ D) = (AC) ⊗ (BD)`. -/
-private lemma lpdo_prod_decomp {dK D' : ℕ}
+of the purifying tensor. This is the key technical lemma for `IsLPDO.isMPDO` and
+for the purification identity `mpo_eq_purificationDensity`: the product of
+Kronecker sums expands as a Kronecker sum of products, using the mixed-product
+property `(A ⊗ B)(C ⊗ D) = (AC) ⊗ (BD)`. -/
+lemma lpdo_prod_decomp {dK D' : ℕ}
     (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
     (e : Fin D ≃ Fin D' × Fin D')
     {M : MPOTensor d D}
