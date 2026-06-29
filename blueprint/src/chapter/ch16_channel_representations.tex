@@ -1724,18 +1724,33 @@ This section states the existence theorems from
 
 % Lean: Wolf.exists_normal_form_generic
 \begin{theorem}[Generic normal form for CP maps]\label{thm:exists_normal_form_generic}
+    \lean{Wolf.exists_normal_form_generic}
+    \leanok
     \uses{def:sl_filtering, def:doubly_stochastic, lem:infimum_is_attained,
     lem:trace_det_amgm}
     Let $T : \MN{D} \to \MN{D}$ be a completely positive map whose Choi matrix
     is positive-definite (equivalently, $T$ has full Kraus rank). Then there
     exist SL-filterings $\Phi_{1}, \Phi_{2}$ such that
     $\Phi_{2} \circ T \circ \Phi_{1}$ is doubly-stochastic.
-    \textbf{Not yet proved}---the compactness/minimisation lemma is proved, and
-    the trace--determinant AM--GM equality characterisation
-    (Lemma~\ref{lem:trace_det_amgm}) supplies the optimality criterion; the
-    remaining step combines these into the doubly-stochastic conclusion via the
-    AGM iteration over both filtering factors.
 \end{theorem}
+\begin{proof}\leanok
+    \uses{lem:infimum_is_attained, lem:trace_det_amgm}
+    Let $\tau$ be the Choi matrix of $T$ and take the minimiser
+    $(S_{1}, S_{2})$ of
+    $\tr[(S_{2} \otimes_{k} S_{1})\tau(S_{2} \otimes_{k} S_{1})^{\dagger}]$ over
+    $\det S_{1} = \det S_{2} = 1$ from Lemma~\ref{lem:infimum_is_attained}. Set
+    $\Phi_{1}, \Phi_{2}$ to be the filterings with matrices
+    $S_{1}^{\mathsf T}$ and $S_{2}$, so that the Choi matrix of
+    $\Phi_{2} \circ T \circ \Phi_{1}$ equals
+    $(S_{2} \otimes_{k} S_{1})\tau(S_{2} \otimes_{k} S_{1})^{\dagger}$. Holding
+    one filtering factor fixed, the minimiser is optimal in the other
+    coordinate, so each partial trace of this matrix minimises a functional
+    $\tr[S M S^{\dagger}]$ over $\det S = 1$ for a positive-semidefinite $M$. By
+    the equality case of the trace--determinant AM--GM bound
+    (Lemma~\ref{lem:trace_det_amgm}), each such minimiser is a scalar matrix;
+    hence both partial traces are proportional to the identity, which is exactly
+    the doubly-stochastic condition.
+\end{proof}
 
 % Lean: Wolf.IsLorentzDiagonal
 \begin{definition}[Diagonal Lorentz normal form]\label{def:lorentz_diagonal}

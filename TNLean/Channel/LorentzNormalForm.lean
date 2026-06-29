@@ -13,6 +13,7 @@ import Mathlib.Topology.Instances.Matrix
 import Mathlib.Topology.Algebra.Module.FiniteDimension
 import Mathlib.Topology.Order.Compact
 import Mathlib.Topology.MetricSpace.Bounded
+import TNLean.Analysis.MarginalSupport
 
 /-!
 # Lorentz normal form for quantum channels (Wolf Section 2.3, Propositions 2.8–2.11)
@@ -155,11 +156,10 @@ specialisation here.
 Placement note: `pow_card_mul_prod_le_sum_pow` is a generic real-number AM–GM
 inequality and `posSemidef_pow_det_le_trace_pow` /
 `posSemidef_pow_det_eq_trace_pow_iff` are general positive-semidefinite matrix
-inequalities. Their natural Layer-0 home is `TNLean/Analysis/MatrixTraceInequalities.lean`
-(the `Matrix` namespace, alongside `PosSemidef.trace_sq_re_le_trace_re_sq`); they
-are kept local here pending the `exists_normal_form_generic` proof that consumes
-them, and are intended for relocation (and renaming out of the `Wolf` namespace)
-once that consumer lands. -/
+inequalities, now consumed by `exists_normal_form_generic` below. Their natural
+Layer-0 home is `TNLean/Analysis/MatrixTraceInequalities.lean` (the `Matrix`
+namespace, alongside `PosSemidef.trace_sq_re_le_trace_re_sq`); relocating and
+renaming them out of the `Wolf` namespace is left as a follow-up refactor. -/
 
 section TraceDetAMGM
 
@@ -300,8 +300,12 @@ The proof idea (see Wolf Section 2.3):
    giving doubly-stochastic T'.
 
 Step 4 is the compactness/minimisation argument, formalised in
-`infimum_is_attained` below.  Step 5 follows from the optimality condition (AGM
-iteration), and is not yet formalised. -/
+`infimum_is_attained` below.  Step 5 is the optimality condition (AGM iteration):
+fixing one filtering, the other minimises a single-coordinate trace functional
+`tr[S Mᵢ S†]` over `det S = 1`, whose minimiser saturates the trace–determinant
+AM–GM bound and is therefore a scalar matrix (`posDef_orbit_min_isScalar`).  The
+two coordinate optima give the two `DoublyStochastic` conditions, completing
+`exists_normal_form_generic`. -/
 
 section GenericNormalForm
 
@@ -452,6 +456,293 @@ lemma infimum_is_attained
   · have hpB : g pmin ≤ B := isMinOn_iff.mp hpmin_min (1, 1) h11mem
     exact le_trans hpB (le_of_lt (not_le.mp hcase))
 
+/-- Entry formula for conjugation by `A ⊗ₖ 1` (identity on the second factor). -/
+private lemma kron_one_conj_entry (A : Matrix (Fin D) (Fin D) ℂ)
+    (M : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) (i₁ i₂ j₁ j₂ : Fin D) :
+    ((A ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) * M *
+        (A ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ))ᴴ) (i₁, i₂) (j₁, j₂)
+      = ∑ c, ∑ d, A i₁ c * M (c, i₂) (d, j₂) * star (A j₁ d) := by
+  have L : ∀ s : Fin D × Fin D,
+      ((A ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) * M) (i₁, i₂) s
+        = ∑ c, A i₁ c * M (c, i₂) s := by
+    intro s
+    rw [Matrix.mul_apply, Fintype.sum_prod_type]
+    refine Finset.sum_congr rfl fun c _ => ?_
+    simp only [Matrix.kroneckerMap_apply, Matrix.one_apply, mul_ite, mul_one,
+      mul_zero, ite_mul, zero_mul]
+    rw [Finset.sum_ite_eq Finset.univ i₂ (fun w₂ => A i₁ c * M (c, w₂) s)]
+    simp
+  have key : ((A ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) * M *
+        (A ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ))ᴴ) (i₁, i₂) (j₁, j₂)
+      = ∑ d, ∑ c, A i₁ c * M (c, i₂) (d, j₂) * star (A j₁ d) := by
+    rw [Matrix.mul_apply, Fintype.sum_prod_type]
+    refine Finset.sum_congr rfl fun d _ => ?_
+    rw [Finset.sum_eq_single j₂]
+    · rw [L (d, j₂), Finset.sum_mul]
+      refine Finset.sum_congr rfl fun c _ => ?_
+      congr 1
+      simp [Matrix.conjTranspose_apply, Matrix.kroneckerMap_apply]
+    · intro b _ hb
+      simp [Matrix.conjTranspose_apply, Matrix.kroneckerMap_apply, Ne.symm hb]
+    · intro h; exact absurd (Finset.mem_univ j₂) h
+  rw [key, Finset.sum_comm]
+
+/-- Entry formula for conjugation by `1 ⊗ₖ B` (identity on the first factor). -/
+private lemma one_kron_conj_entry (B : Matrix (Fin D) (Fin D) ℂ)
+    (M : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) (i₁ i₂ j₁ j₂ : Fin D) :
+    (((1 : Matrix (Fin D) (Fin D) ℂ) ⊗ₖ B) * M *
+        ((1 : Matrix (Fin D) (Fin D) ℂ) ⊗ₖ B)ᴴ) (i₁, i₂) (j₁, j₂)
+      = ∑ a, ∑ b, B i₂ a * M (i₁, a) (j₁, b) * star (B j₂ b) := by
+  have L : ∀ s : Fin D × Fin D,
+      (((1 : Matrix (Fin D) (Fin D) ℂ) ⊗ₖ B) * M) (i₁, i₂) s
+        = ∑ a, B i₂ a * M (i₁, a) s := by
+    intro s
+    rw [Matrix.mul_apply, Fintype.sum_prod_type, Finset.sum_comm]
+    refine Finset.sum_congr rfl fun a _ => ?_
+    simp only [Matrix.kroneckerMap_apply, Matrix.one_apply, ite_mul, one_mul, zero_mul]
+    rw [Finset.sum_ite_eq Finset.univ i₁ (fun w₁ => B i₂ a * M (w₁, a) s)]
+    simp
+  have key : (((1 : Matrix (Fin D) (Fin D) ℂ) ⊗ₖ B) * M *
+        ((1 : Matrix (Fin D) (Fin D) ℂ) ⊗ₖ B)ᴴ) (i₁, i₂) (j₁, j₂)
+      = ∑ b, ∑ a, B i₂ a * M (i₁, a) (j₁, b) * star (B j₂ b) := by
+    rw [Matrix.mul_apply, Fintype.sum_prod_type, Finset.sum_eq_single j₁]
+    · refine Finset.sum_congr rfl fun b _ => ?_
+      rw [L (j₁, b), Finset.sum_mul]
+      refine Finset.sum_congr rfl fun a _ => ?_
+      congr 1
+      simp [Matrix.conjTranspose_apply, Matrix.kroneckerMap_apply]
+    · intro c _ hc
+      apply Finset.sum_eq_zero
+      intro b _
+      simp [Matrix.conjTranspose_apply, Matrix.kroneckerMap_apply, Ne.symm hc]
+    · intro h; exact absurd (Finset.mem_univ j₁) h
+  rw [key, Finset.sum_comm]
+
+/-- `tr_A` commutes with conjugation by `1 ⊗ₖ X` (acting on the second factor):
+`tr_A((1 ⊗ X) ρ (1 ⊗ X)†) = X (tr_A ρ) X†`. -/
+private lemma traceLeft_one_kron_conj (X : Matrix (Fin D) (Fin D) ℂ)
+    (ρ : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) :
+    Matrix.traceLeft (((1 : Matrix (Fin D) (Fin D) ℂ) ⊗ₖ X) * ρ *
+        ((1 : Matrix (Fin D) (Fin D) ℂ) ⊗ₖ X)ᴴ)
+      = X * Matrix.traceLeft ρ * Xᴴ := by
+  ext i j
+  rw [Matrix.traceLeft_apply]
+  have hRHS : (X * Matrix.traceLeft ρ * Xᴴ) i j
+      = ∑ a, ∑ b, X i a * (∑ k, ρ (k, a) (k, b)) * star (X j b) := by
+    rw [Matrix.mul_apply]
+    simp_rw [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.traceLeft_apply, Finset.sum_mul]
+    rw [Finset.sum_comm]
+  rw [hRHS]
+  simp_rw [one_kron_conj_entry X ρ]
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl fun a _ => ?_
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl fun b _ => ?_
+  rw [Finset.mul_sum, Finset.sum_mul]
+
+/-- `tr_B` commutes with conjugation by `X ⊗ₖ 1` (acting on the first factor):
+`tr_B((X ⊗ 1) ρ (X ⊗ 1)†) = X (tr_B ρ) X†`. -/
+private lemma traceRight_kron_one_conj (X : Matrix (Fin D) (Fin D) ℂ)
+    (ρ : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) :
+    Matrix.traceRight ((X ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) * ρ *
+        (X ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ))ᴴ)
+      = X * Matrix.traceRight ρ * Xᴴ := by
+  ext i j
+  rw [Matrix.traceRight_apply]
+  have hRHS : (X * Matrix.traceRight ρ * Xᴴ) i j
+      = ∑ c, ∑ d, X i c * (∑ k, ρ (c, k) (d, k)) * star (X j d) := by
+    rw [Matrix.mul_apply]
+    simp_rw [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.traceRight_apply, Finset.sum_mul]
+    rw [Finset.sum_comm]
+  rw [hRHS]
+  simp_rw [kron_one_conj_entry X ρ]
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl fun c _ => ?_
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl fun d _ => ?_
+  rw [Finset.mul_sum, Finset.sum_mul]
+
+/-- Conjugating a matrix unit by `B` spreads it over all matrix units:
+`B (single i₂ j₂ c) B† = ∑ a b, (B a i₂ · conj(B b j₂)) (single a b c)`. -/
+private lemma single_conj_spread (B : Matrix (Fin D) (Fin D) ℂ) (i₂ j₂ : Fin D) (c : ℂ) :
+    B * Matrix.single i₂ j₂ c * Bᴴ
+      = ∑ a, ∑ b, (B a i₂ * star (B b j₂)) • Matrix.single a b c := by
+  ext p q
+  have hL : (B * Matrix.single i₂ j₂ c * Bᴴ) p q = B p i₂ * c * star (B q j₂) := by
+    rw [Matrix.mul_apply, Finset.sum_eq_single j₂]
+    · rw [Matrix.mul_single_apply_same, Matrix.conjTranspose_apply]
+    · intro x _ hx; rw [Matrix.mul_single_apply_of_ne (hbj := hx) (M := B), zero_mul]
+    · intro h; exact absurd (Finset.mem_univ j₂) h
+  have hR : (∑ a, ∑ b, (B a i₂ * star (B b j₂)) • Matrix.single a b c) p q
+      = B p i₂ * star (B q j₂) * c := by
+    rw [Matrix.sum_apply, Finset.sum_eq_single p]
+    · rw [Matrix.sum_apply, Finset.sum_eq_single q]
+      · rw [Matrix.smul_apply, Matrix.single_apply_same, smul_eq_mul]
+      · intro b _ hb
+        rw [Matrix.smul_apply, Matrix.single_apply_of_col_ne p p hb c, smul_zero]
+      · intro h; exact absurd (Finset.mem_univ q) h
+    · intro a _ ha
+      rw [Matrix.sum_apply]
+      refine Finset.sum_eq_zero fun b _ => ?_
+      rw [Matrix.smul_apply, Matrix.single_apply_of_row_ne ha b q c, smul_zero]
+    · intro h; exact absurd (Finset.mem_univ p) h
+  rw [hL, hR]; ring
+
+/-- Choi matrix of post-composition with conjugation by `A`:
+`choi(Ad_A ∘ T) = (A ⊗ 1) choi(T) (A ⊗ 1)†`. -/
+private lemma choiMatrix_unitaryConj_comp (A : Matrix (Fin D) (Fin D) ℂ)
+    (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
+    choiMatrix (unitaryConjLM A ∘ₗ T)
+      = (A ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) * choiMatrix T *
+          (A ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ))ᴴ := by
+  ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
+  rw [kron_one_conj_entry A (choiMatrix T) i₁ i₂ j₁ j₂, choiMatrix_apply,
+    LinearMap.comp_apply, unitaryConjLM_apply, Matrix.mul_apply]
+  simp_rw [Matrix.mul_apply, Matrix.conjTranspose_apply, Finset.sum_mul]
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl fun c _ => ?_
+  refine Finset.sum_congr rfl fun d _ => ?_
+  rw [choiMatrix_apply]
+
+/-- Choi matrix of pre-composition with conjugation by `B`:
+`choi(T ∘ Ad_B) = (1 ⊗ Bᵀ) choi(T) (1 ⊗ Bᵀ)†`. -/
+private lemma choiMatrix_comp_unitaryConj (B : Matrix (Fin D) (Fin D) ℂ)
+    (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
+    choiMatrix (T ∘ₗ unitaryConjLM B)
+      = ((1 : Matrix (Fin D) (Fin D) ℂ) ⊗ₖ Bᵀ) * choiMatrix T *
+          ((1 : Matrix (Fin D) (Fin D) ℂ) ⊗ₖ Bᵀ)ᴴ := by
+  ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
+  rw [one_kron_conj_entry Bᵀ (choiMatrix T) i₁ i₂ j₁ j₂, choiMatrix_apply,
+    LinearMap.comp_apply, unitaryConjLM_apply, omegaSlice_eq_single, single_conj_spread,
+    map_sum]
+  simp_rw [map_sum, map_smul, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
+  refine Finset.sum_congr rfl fun a _ => ?_
+  refine Finset.sum_congr rfl fun b _ => ?_
+  rw [choiMatrix_apply, omegaSlice_eq_single, Matrix.transpose_apply, Matrix.transpose_apply]
+  ring
+
+/-- Partial trace over the second factor of a positive-definite matrix is
+positive definite. -/
+private lemma traceRight_posDef [NeZero D] {ρ : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ}
+    (hρ : ρ.PosDef) : (Matrix.traceRight ρ).PosDef := by
+  have hblock : ∀ b : Fin D, (ρ.submatrix (fun i => (i, b)) (fun i => (i, b))).PosDef :=
+    fun b => hρ.submatrix (fun i j h => (Prod.ext_iff.mp h).1)
+  have heq : Matrix.traceRight ρ
+      = ∑ b : Fin D, ρ.submatrix (fun i => (i, b)) (fun i => (i, b)) := by
+    ext i j; simp only [Matrix.traceRight_apply, Matrix.sum_apply, Matrix.submatrix_apply]
+  rw [heq]
+  exact Matrix.posDef_sum Finset.univ_nonempty fun b _ => hblock b
+
+/-- Partial trace over the second factor of a positive-semidefinite matrix is
+positive semidefinite. -/
+private lemma traceRight_posSemidef {ρ : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ}
+    (hρ : ρ.PosSemidef) : (Matrix.traceRight ρ).PosSemidef := by
+  have hblock : ∀ b : Fin D, (ρ.submatrix (fun i => (i, b)) (fun i => (i, b))).PosSemidef :=
+    fun b => hρ.submatrix _
+  have heq : Matrix.traceRight ρ
+      = ∑ b : Fin D, ρ.submatrix (fun i => (i, b)) (fun i => (i, b)) := by
+    ext i j; simp only [Matrix.traceRight_apply, Matrix.sum_apply, Matrix.submatrix_apply]
+  rw [heq]
+  exact Matrix.posSemidef_sum _ fun b _ => hblock b
+
+/-- `Matrix.traceLeft` agrees with `Matrix.traceLeftA`. -/
+private lemma traceLeft_eq_traceLeftA (ρ : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) :
+    Matrix.traceLeft ρ = Matrix.traceLeftA ρ := rfl
+
+/-- The full trace equals the trace of the right partial trace: `tr(X) = tr(tr_B(X))`. -/
+private lemma trace_eq_trace_traceRight (X : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) :
+    X.trace = (Matrix.traceRight X).trace := by
+  simp only [Matrix.trace, Matrix.diag_apply, Matrix.traceRight_apply]
+  exact Fintype.sum_prod_type _
+
+/-- A positive-definite matrix can be normalized to a scalar matrix by an
+`SL(D, ℂ)` congruence: there exists `S` with `det S = 1` and
+`S M S† = r • 1` for some `r ≥ 0`.  Take `S = c · √M⁻¹` with `cᴰ = det √M`. -/
+private lemma exists_sl_normalize [NeZero D] {M : Matrix (Fin D) (Fin D) ℂ}
+    (hM : M.PosDef) :
+    ∃ S : Matrix (Fin D) (Fin D) ℂ, S.det = 1 ∧
+      ∃ r : ℝ, 0 ≤ r ∧ S * M * Sᴴ = (r : ℂ) • 1 := by
+  classical
+  set R : Matrix (Fin D) (Fin D) ℂ := hM.posSemidef.isHermitian.cfc Real.sqrt with hR_def
+  have hR_herm : R.IsHermitian := hM.posSemidef.cfc_sqrt_isHermitian
+  have hRR : R * R = M := hM.posSemidef.cfc_sqrt_mul_self
+  have hMdet : M.det ≠ 0 := ((Matrix.isUnit_iff_isUnit_det M).mp hM.isUnit).ne_zero
+  have hRdet : R.det ≠ 0 := by
+    intro h; apply hMdet; rw [← hRR, Matrix.det_mul, h, zero_mul]
+  have hRunit : IsUnit R.det := isUnit_iff_ne_zero.mpr hRdet
+  have hDpos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
+  obtain ⟨c, hc⟩ := IsAlgClosed.exists_pow_nat_eq R.det hDpos
+  refine ⟨c • R⁻¹, ?_, Complex.normSq c, Complex.normSq_nonneg c, ?_⟩
+  · rw [Matrix.det_smul, Fintype.card_fin, Matrix.det_nonsing_inv, hc,
+      Ring.mul_inverse_cancel _ hRunit]
+  · have hRinvH : (R⁻¹)ᴴ = R⁻¹ := by rw [Matrix.conjTranspose_nonsing_inv, hR_herm.eq]
+    have hRinvMul : R⁻¹ * M * R⁻¹ = 1 := by
+      rw [← hRR]
+      simp only [Matrix.mul_assoc]
+      rw [Matrix.mul_nonsing_inv _ hRunit, Matrix.mul_one, Matrix.nonsing_inv_mul _ hRunit]
+    rw [Matrix.conjTranspose_smul, hRinvH, Matrix.smul_mul, Matrix.smul_mul,
+      Matrix.mul_smul, smul_smul, hRinvMul, Complex.star_def, Complex.mul_conj]
+
+/-- **Optimality forces a scalar.**  If `N` is a positive-semidefinite matrix
+with the same determinant as a positive-definite `M`, and `tr N` is the minimum
+of `tr (S M S†)` over `det S = 1`, then `N` is a scalar matrix.  This is the
+AM–GM equality argument: the minimum saturates `Dᴰ det = (tr)ᴰ`. -/
+private lemma posDef_orbit_min_isScalar [NeZero D] {M N : Matrix (Fin D) (Fin D) ℂ}
+    (hM : M.PosDef) (hN : N.PosSemidef) (hdet : N.det = M.det)
+    (hmin : ∀ S : Matrix (Fin D) (Fin D) ℂ, S.det = 1 →
+      (Matrix.trace N).re ≤ (Matrix.trace (S * M * Sᴴ)).re) :
+    ∃ c : ℂ, N = c • 1 := by
+  obtain ⟨S₀, hS₀, r, hr0, hP⟩ := exists_sl_normalize hM
+  have hDpos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
+  have hdetP : (S₀ * M * S₀ᴴ).det = M.det := by
+    rw [Matrix.det_mul, Matrix.det_mul, hS₀, Matrix.det_conjTranspose, hS₀]; simp
+  have hNdet : N.det = ((r ^ D : ℝ) : ℂ) := by
+    rw [hdet, ← hdetP, hP, Matrix.det_smul, Fintype.card_fin, Matrix.det_one, mul_one,
+      ← Complex.ofReal_pow]
+  have hNdet_re : N.det.re = r ^ D := by rw [hNdet]; exact Complex.ofReal_re _
+  have hPtr : Matrix.trace (S₀ * M * S₀ᴴ) = ((r * D : ℝ) : ℂ) := by
+    rw [hP, Matrix.trace_smul, Matrix.trace_one, Fintype.card_fin, smul_eq_mul]
+    push_cast; ring
+  have hub : (Matrix.trace N).re ≤ r * D := by
+    refine (hmin S₀ hS₀).trans_eq ?_; rw [hPtr]; exact Complex.ofReal_re _
+  have htrN0 : 0 ≤ (Matrix.trace N).re := by
+    simpa using (Complex.le_def.mp hN.trace_nonneg).1
+  have hAGM := posSemidef_pow_det_le_trace_pow hN
+  rw [hNdet_re] at hAGM
+  have hlb : (D : ℝ) * r ≤ (Matrix.trace N).re := by
+    rw [← mul_pow] at hAGM
+    exact (pow_le_pow_iff_left₀ (mul_nonneg (Nat.cast_nonneg D) hr0) htrN0 (NeZero.ne D)).mp hAGM
+  have htrace_eq : (Matrix.trace N).re = (D : ℝ) * r :=
+    le_antisymm (hub.trans_eq (mul_comm r (D : ℝ))) hlb
+  exact ⟨_, (posSemidef_pow_det_eq_trace_pow_iff hN).mp (by rw [hNdet_re, htrace_eq, mul_pow])⟩
+
+/-- The reduced state `tr_B(choi T)` equals (up to the `|Ω⟩` normalization) `T 1`. -/
+private lemma traceRight_choiMatrix
+    (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
+    Matrix.traceRight (choiMatrix T)
+      = (((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) * star ((1 : ℂ) / ((D : ℝ).sqrt : ℂ))) • T 1 := by
+  set cc : ℂ := ((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) * star ((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) with hcc
+  ext i j
+  rw [Matrix.traceRight_apply, Matrix.smul_apply, smul_eq_mul]
+  have h1 : ∀ k : Fin D, choiMatrix T (i, k) (j, k) = cc * T (Matrix.single k k 1) i j := by
+    intro k
+    rw [choiMatrix_apply, omegaSlice_eq_single,
+      show Matrix.single k k cc = cc • Matrix.single k k (1 : ℂ) by
+        rw [Matrix.smul_single, smul_eq_mul, mul_one],
+      map_smul, Matrix.smul_apply, smul_eq_mul]
+  simp_rw [h1, ← Finset.mul_sum]
+  congr 1
+  rw [← Matrix.sum_apply, ← map_sum, Matrix.sum_single_one]
+
+/-- The `|Ω⟩` normalization constant is nonzero. -/
+private lemma omega_coeff_ne_zero (hD : 0 < D) :
+    (((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) * star ((1 : ℂ) / ((D : ℝ).sqrt : ℂ))) ≠ 0 := by
+  have hsqrt : ((D : ℝ).sqrt : ℂ) ≠ 0 := by
+    rw [ne_eq, Complex.ofReal_eq_zero]
+    exact Real.sqrt_ne_zero'.mpr (by exact_mod_cast hD)
+  have h1 : (1 : ℂ) / ((D : ℝ).sqrt : ℂ) ≠ 0 := one_div_ne_zero hsqrt
+  exact mul_ne_zero h1 (star_ne_zero.mpr h1)
+
 /-- **Wolf Proposition 2.9: generic normal form for CP maps with full Kraus rank.**
 
 Let `T : M_D(ℂ) → M_D(ℂ)` be a completely positive map with full Kraus rank
@@ -468,9 +759,120 @@ theorem exists_normal_form_generic
     (_hFullRank : (choiMatrix T).PosDef) :
     ∃ (Φ₁ Φ₂ : SLFiltering D),
       DoublyStochastic (Φ₂.map ∘ₗ T ∘ₗ Φ₁.map) := by
-  let τ := choiMatrix T
-  obtain ⟨_S₁, _S₂, _, _, _⟩ := infimum_is_attained (τ := τ) _hFullRank
-  sorry
+  classical
+  rcases Nat.eq_zero_or_pos D with hD0 | hDpos
+  · subst hD0
+    exact ⟨SLFiltering.id 0, SLFiltering.id 0,
+      ⟨0, Subsingleton.elim _ _⟩, ⟨0, Subsingleton.elim _ _⟩⟩
+  haveI : NeZero D := ⟨hDpos.ne'⟩
+  obtain ⟨S₁, S₂, hS₁det, hS₂det, hmin⟩ := infimum_is_attained (τ := choiMatrix T) _hFullRank
+  let Φ₁ : SLFiltering D :=
+    { S := S₁ᵀ
+      det_eq_one := by rw [Matrix.det_transpose, hS₁det]
+      map := unitaryConjLM S₁ᵀ
+      map_eq := rfl
+      cp := unitaryConjLM_isCPMap S₁ᵀ }
+  let Φ₂ : SLFiltering D :=
+    { S := S₂
+      det_eq_one := hS₂det
+      map := unitaryConjLM S₂
+      map_eq := rfl
+      cp := unitaryConjLM_isCPMap S₂ }
+  -- The Choi matrix of the filtered channel is the minimised matrix.
+  have hC : choiMatrix (Φ₂.map ∘ₗ T ∘ₗ Φ₁.map)
+      = (S₂ ⊗ₖ S₁) * choiMatrix T * (S₂ ⊗ₖ S₁)ᴴ := by
+    show choiMatrix (unitaryConjLM S₂ ∘ₗ (T ∘ₗ unitaryConjLM S₁ᵀ)) = _
+    rw [choiMatrix_unitaryConj_comp, choiMatrix_comp_unitaryConj, Matrix.transpose_transpose,
+      show (S₂ ⊗ₖ S₁) = (S₂ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) *
+          ((1 : Matrix (Fin D) (Fin D) ℂ) ⊗ₖ S₁) by
+        rw [← Matrix.mul_kronecker_mul, Matrix.mul_one, Matrix.one_mul],
+      Matrix.conjTranspose_mul]
+    simp only [Matrix.mul_assoc]
+  -- Invertibility of the kronecker factors.
+  have hU2 : IsUnit (S₂ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) := by
+    rw [Matrix.isUnit_iff_isUnit_det, Matrix.det_kronecker, hS₂det, Matrix.det_one]; simp
+  have hU1 : IsUnit ((1 : Matrix (Fin D) (Fin D) ℂ) ⊗ₖ S₁) := by
+    rw [Matrix.isUnit_iff_isUnit_det, Matrix.det_kronecker, hS₁det, Matrix.det_one]; simp
+  -- The two reduced matrices and their key properties.
+  set ρ₂ := (S₂ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) * choiMatrix T *
+    (S₂ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ))ᴴ with hρ₂
+  set ρ₁ := ((1 : Matrix (Fin D) (Fin D) ℂ) ⊗ₖ S₁) * choiMatrix T *
+    ((1 : Matrix (Fin D) (Fin D) ℂ) ⊗ₖ S₁)ᴴ with hρ₁
+  have hρ₂pd : ρ₂.PosDef :=
+    _hFullRank.mul_mul_conjTranspose_same (Matrix.vecMul_injective_iff_isUnit.mpr hU2)
+  have hρ₁pd : ρ₁.PosDef :=
+    _hFullRank.mul_mul_conjTranspose_same (Matrix.vecMul_injective_iff_isUnit.mpr hU1)
+  -- Conjugation/partial-trace reductions.
+  have hX : ∀ X : Matrix (Fin D) (Fin D) ℂ,
+      Matrix.traceLeft ((S₂ ⊗ₖ X) * choiMatrix T * (S₂ ⊗ₖ X)ᴴ)
+        = X * Matrix.traceLeft ρ₂ * Xᴴ := by
+    intro X
+    have hsplit : (S₂ ⊗ₖ X) * choiMatrix T * (S₂ ⊗ₖ X)ᴴ
+        = ((1 : Matrix (Fin D) (Fin D) ℂ) ⊗ₖ X) * ρ₂ *
+            ((1 : Matrix (Fin D) (Fin D) ℂ) ⊗ₖ X)ᴴ := by
+      rw [hρ₂, show (S₂ ⊗ₖ X) = ((1 : Matrix (Fin D) (Fin D) ℂ) ⊗ₖ X) *
+          (S₂ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) by
+            rw [← Matrix.mul_kronecker_mul, Matrix.one_mul, Matrix.mul_one],
+        Matrix.conjTranspose_mul]
+      simp only [Matrix.mul_assoc]
+    rw [hsplit, traceLeft_one_kron_conj]
+  have hY : ∀ X : Matrix (Fin D) (Fin D) ℂ,
+      Matrix.traceRight ((X ⊗ₖ S₁) * choiMatrix T * (X ⊗ₖ S₁)ᴴ)
+        = X * Matrix.traceRight ρ₁ * Xᴴ := by
+    intro X
+    have hsplit : (X ⊗ₖ S₁) * choiMatrix T * (X ⊗ₖ S₁)ᴴ
+        = (X ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) * ρ₁ *
+            (X ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ))ᴴ := by
+      rw [hρ₁, show (X ⊗ₖ S₁) = (X ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) *
+          ((1 : Matrix (Fin D) (Fin D) ℂ) ⊗ₖ S₁) by
+            rw [← Matrix.mul_kronecker_mul, Matrix.mul_one, Matrix.one_mul],
+        Matrix.conjTranspose_mul]
+      simp only [Matrix.mul_assoc]
+    rw [hsplit, traceRight_kron_one_conj]
+  have hM₁pd : (Matrix.traceLeft ρ₂).PosDef := by
+    rw [traceLeft_eq_traceLeftA]; exact traceLeftA_posDef hρ₂pd
+  have hM₂pd : (Matrix.traceRight ρ₁).PosDef := traceRight_posDef hρ₁pd
+  refine ⟨Φ₁, Φ₂, ?_, ?_⟩
+  · -- Clause 1: (Φ₂ ∘ T ∘ Φ₁)(1) ∝ 1.
+    have hN₂ : ∃ κ : ℂ,
+        Matrix.traceRight (choiMatrix (Φ₂.map ∘ₗ T ∘ₗ Φ₁.map)) = κ • 1 := by
+      apply posDef_orbit_min_isScalar hM₂pd
+      · rw [hC]; exact traceRight_posSemidef
+          (_hFullRank.posSemidef.mul_mul_conjTranspose_same _)
+      · rw [hC, hY S₂, Matrix.det_mul, Matrix.det_mul, hS₂det, Matrix.det_conjTranspose,
+          hS₂det]; simp
+      · intro S hS
+        have e1 : (Matrix.trace (Matrix.traceRight (choiMatrix (Φ₂.map ∘ₗ T ∘ₗ Φ₁.map)))).re
+            = (Matrix.trace ((S₂ ⊗ₖ S₁) * choiMatrix T * (S₂ ⊗ₖ S₁)ᴴ)).re := by
+          rw [hC, ← trace_eq_trace_traceRight]
+        have e2 : (Matrix.trace (S * Matrix.traceRight ρ₁ * Sᴴ)).re
+            = (Matrix.trace ((S ⊗ₖ S₁) * choiMatrix T * (S ⊗ₖ S₁)ᴴ)).re := by
+          rw [← hY S, ← trace_eq_trace_traceRight]
+        rw [e1, e2]
+        exact hmin S₁ S hS₁det hS
+    obtain ⟨κ, hκ⟩ := hN₂
+    rw [traceRight_choiMatrix] at hκ
+    set cc : ℂ := ((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) * star ((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) with hcc
+    have hcc_ne : cc ≠ 0 := by rw [hcc]; exact omega_coeff_ne_zero hDpos
+    refine ⟨cc⁻¹ * κ, ?_⟩
+    have h := congrArg (fun M => cc⁻¹ • M) hκ
+    simp only [smul_smul, inv_mul_cancel₀ hcc_ne, one_smul] at h
+    exact h
+  · -- Clause 2: tr_A(choi(Φ₂ ∘ T ∘ Φ₁)) ∝ 1.
+    apply posDef_orbit_min_isScalar hM₁pd
+    · rw [hC, hX S₁]
+      exact (hM₁pd.posSemidef.mul_mul_conjTranspose_same S₁)
+    · rw [hC, hX S₁, Matrix.det_mul, Matrix.det_mul, hS₁det, Matrix.det_conjTranspose,
+        hS₁det]; simp
+    · intro S hS
+      have e1 : (Matrix.trace (Matrix.traceLeft (choiMatrix (Φ₂.map ∘ₗ T ∘ₗ Φ₁.map)))).re
+          = (Matrix.trace ((S₂ ⊗ₖ S₁) * choiMatrix T * (S₂ ⊗ₖ S₁)ᴴ)).re := by
+        rw [hC, ← Matrix.trace_eq_trace_traceLeft]
+      have e2 : (Matrix.trace (S * Matrix.traceLeft ρ₂ * Sᴴ)).re
+          = (Matrix.trace ((S₂ ⊗ₖ S) * choiMatrix T * (S₂ ⊗ₖ S)ᴴ)).re := by
+        rw [← hX S, ← Matrix.trace_eq_trace_traceLeft]
+      rw [e1, e2]
+      exact hmin S S₂ hS hS₂det
 
 end GenericNormalForm
 
