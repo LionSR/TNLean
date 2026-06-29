@@ -278,7 +278,8 @@ The $(j,j')$ bond block of the transfer sum acts as `mixedTransferMap₂ (B j)
 (`blockDiagonal'_transferSum_toBlock`).  Each diagonal block contributes
 `transferMap (B j)`, which is idempotent because `B j` is a renormalization fixed
 point (`isRFP_of_isIsometryCanonicalForm`); each off-diagonal block vanishes by
-`hortho`.  This is the block-space form of the backward direction of the
+the cross-block orthogonality hypothesis.  This is the block-space form of the
+backward direction of the
 structural characterization of pure-state renormalization fixed points
 (arXiv:1606.00608, Theorem charact-MPS, line 543). -/
 theorem blockTransferSum_idempotent_of_isIsometryCanonicalForm
@@ -323,8 +324,8 @@ multiplicity-one case.
 
 A direct sum of blocks each in isometry canonical form whose cross-block mixed
 transfer operators vanish is a renormalization fixed point.  The cross-block
-hypothesis `hortho` is the off-diagonal ($j \ne j'$) content of the isometry
-condition eq:III_isometry (arXiv:1606.00608, line 551), so it belongs to the
+hypothesis is the off-diagonal ($j \ne j'$) content of the isometry
+condition (arXiv:1606.00608, line 551), so it belongs to the
 source's isometry form rather than being an added assumption; the within-block
 diagonal content is `IsIsometryCanonicalForm`.
 
@@ -334,7 +335,7 @@ argument.  The diagonal blocks are idempotent (per-block renormalization fixed
 point) and the off-diagonal blocks vanish, so the whole map is idempotent.
 
 **Scope restriction (multiplicity-one canonical form):** the source's canonical
-form III_CFI_RFP allows each normal tensor to repeat with a multiplicity and a
+form allows each normal tensor to repeat with a multiplicity and a
 phase; this is the distinct-blocks (multiplicity-one, phase-one) case, where the
 direct sum carries one copy of each block.  Recorded in the paper-gap note
 docs/paper-gaps/cpsv16_rfp_isometry_scope.tex. -/
