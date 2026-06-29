@@ -175,10 +175,7 @@ lemma isRFP_block_of_isRFP_directSum [∀ k, NeZero (dim k)]
     (hRFP : IsRFP (directSumTensor B)) (j : Fin r) :
     IsRFP (B j) := by
   have hidem := mixedTransferMap₂_isIdempotentElem_of_isRFP_directSum B hRFP j j
-  have hself : mixedTransferMap₂ (B j) (B j) = transferMap (B j) := by
-    ext X
-    simp only [mixedTransferMap₂_apply, transferMap_apply]
-  rwa [hself] at hidem
+  rwa [mixedTransferMap₂_self] at hidem
 
 /-- **Residual isometry family** (arXiv:1606.00608, eq:III_isometry, line 551).
 A family of residual tensors $U_j$ satisfies the source isometry condition when
@@ -307,9 +304,7 @@ theorem blockTransferSum_idempotent_of_isIsometryCanonicalForm
     rw [hStage1 (blockTransferSum B Y) j j', hStage1 Y j j']
     by_cases hjj' : j = j'
     · subst hjj'
-      have hself : mixedTransferMap₂ (B j) (B j) = transferMap (B j) := by
-        ext X; simp only [mixedTransferMap₂_apply, transferMap_apply]
-      rw [hself]
+      rw [mixedTransferMap₂_self]
       have hRFPj : IsRFP (B j) := isRFP_of_isIsometryCanonicalForm (B j) (hCF j)
       simpa only [LinearMap.comp_apply] using
         LinearMap.congr_fun hRFPj (Y.submatrix (blockIncl j dim) (blockIncl j dim))
@@ -348,7 +343,7 @@ theorem isRFP_directSumTensor_of_isIsometryCanonicalForm
     (hortho : ∀ j j' : Fin r, j ≠ j' → mixedTransferMap₂ (B j) (B j') = 0) :
     IsRFP (directSumTensor B) := by
   classical
-  set e := finSigmaFinEquiv (m := r) (n := dim) with he
+  set e := finSigmaFinEquiv (m := r) (n := dim)
   change transferMap (directSumTensor B) ∘ₗ transferMap (directSumTensor B)
       = transferMap (directSumTensor B)
   refine LinearMap.ext fun Z => ?_
