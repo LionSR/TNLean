@@ -971,6 +971,54 @@ and rates for the single-tensor transfer map $\E_A$.
     sum is a renormalization fixed point.
 \end{proof}
 
+\begin{theorem}[Distinct-blocks renormalization fixed-point characterization]%
+    \label{thm:rfp_directSumTensor_iff}
+    \lean{MPSTensor.isRFP_directSumTensor_iff}
+    \leanok
+    \uses{def:is_rfp, def:is_isometry_canonical_form, def:mixed_transfer_rect,
+        def:normal, def:irreducible_tensor, def:gauge_phase_equiv}
+    Let $(B_k)_k$ be a family of normal, irreducible, left-canonical blocks with
+    $\dim_k \ge 1$ for all $k$, no two of which are gauge-phase equivalent. Then
+    the direct sum $\bigoplus_k B_k$ is a renormalization fixed point if and only
+    if each block is in isometry canonical form and the mixed transfer operators
+    between distinct blocks vanish:
+    \[
+        \Bigl(\bigoplus_k B_k \text{ is a RFP}\Bigr)
+        \iff
+        \Bigl(\forall k,\ B_k \text{ in isometry CF}\Bigr)
+        \;\wedge\;
+        \Bigl(\forall j\ne j',\ \E_{j,j'} = 0\Bigr).
+    \]
+    This is the distinct-blocks (multiplicity-one, phase-one) case of the
+    structural characterization of pure-state renormalization fixed points
+    \cite[Theorem~III]{Cirac2016MPDO_arXiv}, combining its forward and backward
+    directions.
+% Scope restriction (multiplicity-one): the source canonical form
+% A^i = \oplus_j \oplus_q mu_{j,q} X_{j,q} Lambda_j U^i_j X_{j,q}^{-1} allows
+% each normal tensor to repeat with multiplicity r_j and a unit-modulus phase
+% mu_{j,q}; this is the single-copy case
+% (docs/paper-gaps/cpsv16_rfp_isometry_scope.tex).
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:isometry_canonical_form_of_rfp_nt,
+        lem:isrfp_block_of_rfp_direct_sum,
+        thm:bnt_locally_orthogonal_of_rfp_direct_sum,
+        thm:is_rfp_of_isometry_canonical_form_direct_sum}
+    For the forward direction, whole-tensor idempotence makes each diagonal mixed
+    transfer operator the transfer map of its block
+    (Lemma~\ref{lem:isrfp_block_of_rfp_direct_sum}), so each block is a
+    renormalization fixed point and hence in isometry canonical form
+    (Theorem~\ref{thm:isometry_canonical_form_of_rfp_nt}), while the off-diagonal
+    operators vanish,
+    \[
+        \E_{j,j'} = 0 \qquad (j\ne j'),
+    \]
+    by Theorem~\ref{thm:bnt_locally_orthogonal_of_rfp_direct_sum}. Conversely, a
+    direct sum of isometry-canonical-form blocks whose cross-block operators
+    vanish is a renormalization fixed point
+    (Theorem~\ref{thm:is_rfp_of_isometry_canonical_form_direct_sum}).
+\end{proof}
+
 \begin{theorem}[Canonical-form blocks are injective]\label{thm:rfp_cf_structural}
     \lean{MPSTensor.rfp_cf_structural}
     \leanok
