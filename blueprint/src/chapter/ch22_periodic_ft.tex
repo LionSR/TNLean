@@ -961,10 +961,10 @@ unconditional result.
     Let $P_k$ be orthogonal projections satisfying the off-diagonal convention
     $P_kA^i=A^iP_{k+1}$, and let $\varphi_k$ be the multiplicative corner
     isomorphisms with $\varphi_k(\bar A_k^I)=P_k(A^{[m]})^IP_k$.  Then for a
-    nonempty blocked word $W$ the corner-transition product over its flattening
-    is the corner image of the sector word product,
+    nonempty blocked word $W$, with flattening $\widehat W$, the
+    corner-transition product is the corner image of the word evaluation,
     \[
-        F_k^{\,\mathrm{flatten}(W)}=\bigl(\varphi_k(\mathrm{evalWord}(\bar A_k,W))\bigr),
+        F_k^{\widehat W}=\varphi_k\bigl(\bar A_k^{\,W}\bigr),
     \]
     the content of \cite[eq.~Fu]{DeLasCuevas2017Irreducible} read through
     $\varphi$.
@@ -972,11 +972,14 @@ unconditional result.
 
 \begin{proof}\leanok
     \uses{lem:periodic_cornerprod_blockdiag}
-    Induct on $W$.  Each length-$m$ block of the flattening collapses, by the
-    blocked-letter diagonal corner and the corner letter identity, to the corner
-    letter $\varphi_k(\bar A_k^I)$; multiplicativity of $\varphi$ reassembles the
-    letters into the sector word product.  The empty word is excluded so the
-    induction stays inside the corner.
+    Induct on $W$.  The head blocked letter collapses by the blocked-letter
+    diagonal corner to $\varphi_k(\bar A_k^I)$, and multiplicativity of $\varphi$
+    reassembles the letters:
+    \[
+        F_k^{\widehat W}=\prod_{I\in W}\varphi_k(\bar A_k^I)
+            =\varphi_k\Bigl(\prod_{I\in W}\bar A_k^I\Bigr)=\varphi_k(\bar A_k^{\,W}).
+    \]
+    The empty word is excluded so the induction stays inside the corner.
 \end{proof}
 
 \begin{lemma}[Ambient corner right inverse from the sector right inverse]
@@ -984,7 +987,8 @@ unconditional result.
     \lean{MPSTensor.exists_ambientCornerRightInverse_of_sectorRightInverse}
     \leanok
     \uses{lem:periodic_cornerprod_flatten}
-    From a sector right inverse $\Omega$ recovering $\mathrm{evalWord}(\bar{A}_k,\cdot)$ on the sector bond space
+    From a sector right inverse $\Omega$ recovering the sector word evaluations
+    $\bar A_k^{\,W}$ on the sector bond space
     (\cite[eq.~Omegauprop]{DeLasCuevas2017Irreducible}) one obtains an ambient
     corner right inverse $\hat\Omega$ recovering the corner-transition product on
     the ambient bond space: for every corner-supported $Y$ (that is $P_kYP_k=Y$),
@@ -995,11 +999,15 @@ unconditional result.
 
 \begin{proof}\leanok
     \uses{lem:periodic_cornerprod_flatten}
-    Transport the sector recovery identity through the corner embedding
-    $\varphi_k$ along the flattening bijection: the corner image of the sector
-    recovery sum is, by the corner-product-of-a-flattened-word identity, the sum
-    of corner-transition products with the same coefficients, and the corner
-    image of a corner-supported $Y$ is $Y$.
+    Set $\hat\Omega_k(Y)=\Omega_k(\varphi_k^{-1}(Y))$ for corner-supported $Y$.
+    Applying $\varphi_k$ to the sector recovery and using the corner product of a
+    flattened word,
+    \[
+        \sum_{W}(\hat\Omega_k(Y))_{\widehat W}\,F_k^{\widehat W}
+        =\varphi_k\Bigl(\sum_{W}\bigl(\Omega_k(\varphi_k^{-1}(Y))\bigr)_{W}\,
+            \bar A_k^{\,W}\Bigr)
+        =\varphi_k\bigl(\varphi_k^{-1}(Y)\bigr)=Y .
+    \]
 \end{proof}
 
 \begin{lemma}[Sector contraction]
@@ -1009,8 +1017,12 @@ unconditional result.
     \uses{lem:periodic_ambient_corner_inverse, lem:periodic_corner_contraction}
     Feeding the ambient corner right inverse into the right-inverse contraction
     yields the contracted product-tensor identity
-    \cite[eq.~resultprop]{DeLasCuevas2017Irreducible} for corner-supported
-    inserted matrices.
+    \cite[eq.~resultprop]{DeLasCuevas2017Irreducible}: for corner-supported
+    inserted matrices $X_k$,
+    \[
+        \sum_{\boldsymbol\rho}\Bigl(\prod_k(\hat\Omega_{k+1}(X_k))_{\rho_k}\Bigr)
+        \prod_k A_k^{\sigma_k}F_{k+1}^{\rho_k}=\prod_k A_k^{\sigma_k}X_k .
+    \]
 \end{lemma}
 
 \begin{proof}\leanok
