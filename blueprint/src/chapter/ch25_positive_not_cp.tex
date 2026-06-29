@@ -58,6 +58,23 @@ of a bipartite state whose Schmidt number is at most $n$.
     threshold.
 \end{proof}
 
+\begin{theorem}[The reduction map $T_k$ is not $(k+1)$-positive]
+    \label{thm:reduction_map_not_n_positive_succ}
+    \lean{Matrix.reductionMap_not_isNPositiveMap_succ}
+    \leanok
+    \uses{def:reduction_map, thm:reduction_map_eq_t_eta, thm:t_eta_threshold,
+        thm:t_eta_threshold_top}
+    For $1\le k<D$ the reduction map $T_k$ on $\MN{D}$ is not $(k+1)$-positive;
+    together with the previous theorem, $T_k$ is exactly $k$-positive.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The reduction map equals $T_\eta$ at $\eta=k$, which is $(k+1)$-positive only
+    when $\eta\ge k+1$; this fails at $\eta=k$.  For $k+1<D$ this is the
+    Schmidt-rank threshold, and for $k+1=D$ the dimension-indexed threshold.
+\end{proof}
+
 \begin{definition}[Reduction witness]
     \label{def:reduction_witness}
     \lean{Matrix.reductionWitness}
