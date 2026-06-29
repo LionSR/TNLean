@@ -459,3 +459,60 @@
     Theorem~\ref{thm:mpo_source_zcl_of_physical_trace_idempotent} conclude source
     zero correlation length with $\lambda = 1$.
 \end{proof}
+
+\begin{theorem}[The tensor purification identity yields the global purification equation]
+    \label{thm:mpo_eq_purification_density}
+    \lean{MPOTensor.mpo_eq_purificationDensity}
+    \leanok
+    \uses{def:lpdo, def:mpo_family, def:mpdo_purification_density}
+    Let $M$ be the ancilla contraction of a purifying spin--ancilla tensor $A$
+    through a bond identification $e$, so that
+    \[
+        M^{ij}
+        =
+        \left(\sum_{k} A^{(i,k)}\otimes\overline{A^{(j,k)}}\right)_{e,e}.
+    \]
+    Then at every length $N$ the matrix product operator equals the ancillary
+    trace of the pure spin--ancilla matrix product state,
+    \[
+        \rho^{(N)}(M)=\rho^{(N)}_p(A).
+    \]
+    This is the coefficient form of the purification equation of
+    \cite[line~751]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Applying the mixed-product property $(A\otimes B)(C\otimes D)=(AC)\otimes(BD)$
+    repeatedly, the length-$N$ product of the contracted tensor entries
+    distributes over the ancillary index sum:
+    \[
+        \prod_{l=0}^{N-1}\Bigl(\sum_{k} A^{(\sigma_l,k)}\otimes\overline{A^{(\tau_l,k)}}\Bigr)
+        = \sum_{\kappa\colon[N]\to[d_K]}
+            \Bigl(\prod_{l} A^{(\sigma_l,\kappa_l)}\Bigr)
+            \otimes \overline{\Bigl(\prod_l A^{(\tau_l,\kappa_l)}\Bigr)}.
+    \]
+    Tracing this sum and using
+    $\operatorname{tr}(X\otimes\overline Y)
+    =\operatorname{tr}(X)\,\overline{\operatorname{tr}(Y)}$ gives the coefficient
+    of the ancillary trace at every $\sigma,\tau$. The equation holds at every
+    length, so no positive-length restriction is needed.
+\end{proof}
+
+\begin{theorem}[The local purification RFP condition implies the purification RFP]
+    \label{thm:is_prfp_of_local_purification_rfp}
+    \lean{MPOTensor.isPRFP_of_isLocalPurificationRFP}
+    \leanok
+    \uses{def:is_local_purification_rfp, def:mpdo_is_prfp}
+    Every MPO tensor satisfying the local purification renormalization fixed
+    point condition is a purification renormalization fixed point in the sense of
+    Definition~4.4 of \cite[lines~756--764]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpo_eq_purification_density, def:mpdo_global_purification_equation}
+    The local condition supplies a purifying tensor $A$ that is a pure-state
+    renormalization fixed point and whose ancilla contraction is $M$. By
+    Theorem~\ref{thm:mpo_eq_purification_density} this contraction satisfies the
+    global purification equation at every positive length, so the same $A$ is a
+    purification RFP witness.
+\end{proof}
