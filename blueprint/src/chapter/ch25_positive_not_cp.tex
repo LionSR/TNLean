@@ -58,6 +58,31 @@ of a bipartite state whose Schmidt number is at most $n$.
     threshold.
 \end{proof}
 
+\begin{theorem}[The reduction map $T_k$ is not $(k+1)$-positive]
+    \label{thm:reduction_map_not_n_positive_succ}
+    \lean{Matrix.reductionMap_not_isNPositiveMap_succ}
+    \leanok
+    \uses{def:reduction_map, thm:reduction_map_eq_t_eta, thm:t_eta_threshold,
+        thm:t_eta_threshold_top}
+    For $1\le k<D$ the reduction map $T_k$ on $\MN{D}$ is not $(k+1)$-positive.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The reduction map equals $T_\eta$ at $\eta=k$.  For $k+1<D$ the threshold
+    gives that $T_\eta$ is $(k+1)$-positive iff $\eta\ge k+1$, so $T_k$ would
+    require $k\ge k+1$, which is false.  For $k+1=D$ the dimension-indexed
+    threshold gives that $T_\eta$ is $D$-positive iff $\eta\ge D$, so $T_k$ would
+    require $k\ge D$, contradicting $k<D$.
+\end{proof}
+
+\begin{remark}
+    Together with the $k$-positivity of $T_k$
+    (\ref{thm:reduction_map_is_n_positive}), this shows that $T_k$ is
+    \emph{exactly} $k$-positive for $1\le k<D$: every inclusion in Wolf's chain
+    $T_{\mathrm{cp}}=T_D\subsetneq\cdots\subsetneq T_1$ is strict.
+\end{remark}
+
 \begin{definition}[Reduction witness]
     \label{def:reduction_witness}
     \lean{Matrix.reductionWitness}
