@@ -40,6 +40,21 @@ of a bipartite state whose Schmidt number is at most $n$.
     are equal.
 \end{proof}
 
+\begin{theorem}[The reduction map $T_k$ is $k$-positive]
+    \label{thm:reduction_map_is_n_positive}
+    \lean{Matrix.reductionMap_isNPositiveMap}
+    \leanok
+    \uses{def:reduction_map, thm:reduction_map_eq_t_eta, thm:t_eta_threshold}
+    For $1\le k<D$ the reduction map $T_k$ on $\MN{D}$ is $k$-positive.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The reduction map equals the family map $T_\eta$ at $\eta=k$, and $T_\eta$ is
+    $k$-positive exactly when $\eta\ge k$; the threshold is met with equality at
+    $\eta=k$.
+\end{proof}
+
 \begin{definition}[Reduction witness]
     \label{def:reduction_witness}
     \lean{Matrix.reductionWitness}
