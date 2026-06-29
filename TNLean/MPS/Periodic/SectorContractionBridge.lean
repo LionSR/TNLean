@@ -19,7 +19,7 @@ inverse `Ω` — the one supplied by the normality input
 `MPSTensor.cornerProd_contraction` needs, recovering `cornerProd P A k …` on the
 ambient bond space `Fin D` for corner-supported matrices.
 
-## The bridge
+## From sector words to single-site words
 
 The sector right inverse works with *blocked* words `σ : Fin L → Fin (d^m)` over
 the blocked alphabet, while the contraction works with *single-site* words
@@ -33,15 +33,15 @@ corner-transition product telescopes:
 `cornerProd P A k (flattenBlockedWord d m W) = (φ k (evalWord (blocks k) W)).1`
 (`cornerProd_flatten_eq_phi_evalWord`), the algebraic content of eq:Fu read
 through the corner isomorphism `φ`.  Transporting the sector recovery identity
-`eq:Omegauprop` through `φ` along this bridge produces the ambient corner right
-inverse.
+`eq:Omegauprop` through `φ` along this telescoping produces the ambient corner
+right inverse.
 
 ## Main results
 
 * `MPSTensor.blockFlattenEquiv` — the bijection
   `(Fin L → Fin (blockPhysDim d m)) ≃ (Fin (m·L) → Fin d)` realizing
   `flattenBlockedWord` at the level of word-indexing functions.
-* `MPSTensor.cornerProd_flatten_eq_phi_evalWord` — the telescoping bridge
+* `MPSTensor.cornerProd_flatten_eq_phi_evalWord` — the telescoping identity
   identifying `cornerProd P A k` over a flattened blocked word with the corner
   image of the sector word product.
 * `MPSTensor.exists_ambientCornerRightInverse_of_sectorRightInverse` — **the
@@ -95,14 +95,14 @@ theorem ofFn_blockFlattenEquiv (d m L : ℕ) (σ : Fin L → Fin (blockPhysDim d
         wordOfBlock_iteratedBlockIndex d m L _
     _ = flattenBlockedWord d m (List.ofFn σ) := by rw [hword]
 
-/-! ## The telescoping bridge -/
+/-! ## Telescoping identity for flattened words -/
 
-section Bridge
+section Telescoping
 
 variable {m : ℕ} [NeZero m]
 
-/-- **Telescoping bridge** (arXiv:1708.00029, Appendix A, eq:Fu read through the
-corner isomorphism).
+/-- **Corner product of flattened words** (arXiv:1708.00029, Appendix A, eq:Fu
+read through the corner isomorphism).
 
 Under the paper off-diagonal convention `P k · A i = A i · P (k+1)`, the repeated
 corner-transition product over a *flattened* nonempty blocked word `W` telescopes
@@ -152,7 +152,7 @@ theorem cornerProd_flatten_eq_phi_evalWord
         cornerProd_append P A hproj k (wordOfBlock d m I) (flattenBlockedWord d m (J :: W'')),
         hjunc I, hsingle I, ih (by simp), ← hMul, ← evalWord_cons]
 
-end Bridge
+end Telescoping
 
 /-! ## The lift connector -/
 
@@ -226,7 +226,7 @@ theorem exists_ambientCornerRightInverse_of_sectorRightInverse
     (cornerSubmodule (P k)).subtype ∘ₗ
       (φ k : Matrix (Fin (dim k)) (Fin (dim k)) ℂ →ₗ[ℂ] cornerSubmodule (P k))
   have hψ : ∀ Z, ψ Z = (φ k Z).1 := fun _ => rfl
-  -- Telescoping bridge per blocked word, after reindexing.
+  -- Telescoping identity per blocked word, after reindexing.
   have hbridge : ∀ σ : Fin L → Fin (blockPhysDim d m),
       cornerProd P A k (List.ofFn (blockFlattenEquiv d m L σ))
         = (φ k (evalWord (blocks k) (List.ofFn σ))).1 := by

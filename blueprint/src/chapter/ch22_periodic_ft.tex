@@ -939,6 +939,87 @@ unconditional result.
     $m\cdot1=0$ vanishes, so the telescoping gives the diagonal corner.
 \end{proof}
 
+\begin{definition}[Flattening bijection on word indices]
+    \label{def:periodic_block_flatten_equiv}
+    \lean{MPSTensor.blockFlattenEquiv}
+    \leanok
+    The bijection between blocked words of length $L$ over the alphabet of
+    $d^m$ blocked letters and single-site words of length $mL$ over the alphabet
+    of $d$ letters,
+    \[
+        (\mathrm{Fin}\,L\to\mathrm{Fin}\,d^m)\;\simeq\;
+        (\mathrm{Fin}\,(mL)\to\mathrm{Fin}\,d),
+    \]
+    obtained from the iterated blocking bijection.
+\end{definition}
+
+\begin{lemma}[Corner product of a flattened word]
+    \label{lem:periodic_cornerprod_flatten}
+    \lean{MPSTensor.cornerProd_flatten_eq_phi_evalWord}
+    \leanok
+    \uses{def:periodic_corner_product, def:periodic_block_flatten_equiv}
+    Let $P_k$ be orthogonal projections satisfying the off-diagonal convention
+    $P_kA^i=A^iP_{k+1}$, and let $\varphi_k$ be the multiplicative corner
+    isomorphisms with $\varphi_k(\bar A_k^I)=P_k(A^{[m]})^IP_k$.  Then for a
+    nonempty blocked word $W$ the corner-transition product over its flattening
+    is the corner image of the sector word product,
+    \[
+        F_k^{\,\mathrm{flatten}(W)}=\bigl(\varphi_k(\mathrm{evalWord}(\bar A_k,W))\bigr),
+    \]
+    the content of \cite[eq.~Fu]{DeLasCuevas2017Irreducible} read through
+    $\varphi$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:periodic_cornerprod_blockdiag}
+    Induct on $W$.  Each length-$m$ block of the flattening collapses, by the
+    blocked-letter diagonal corner and the corner letter identity, to the corner
+    letter $\varphi_k(\bar A_k^I)$; multiplicativity of $\varphi$ reassembles the
+    letters into the sector word product.  The empty word is excluded so the
+    induction stays inside the corner.
+\end{proof}
+
+\begin{lemma}[Ambient corner right inverse from the sector right inverse]
+    \label{lem:periodic_ambient_corner_inverse}
+    \lean{MPSTensor.exists_ambientCornerRightInverse_of_sectorRightInverse}
+    \leanok
+    \uses{lem:periodic_cornerprod_flatten}
+    From a sector right inverse $\Omega$ recovering $\mathrm{evalWord}(\bar
+    A_k,\cdot)$ on the sector bond space
+    (\cite[eq.~Omegauprop]{DeLasCuevas2017Irreducible}) one obtains an ambient
+    corner right inverse $\hat\Omega$ recovering the corner-transition product on
+    the ambient bond space: for every corner-supported $Y$ (that is $P_kYP_k=Y$),
+    \[
+        \sum_{\mathbf j}(\hat\Omega_k(Y))_{\mathbf j}\,F_k^{\mathbf j}=Y .
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:periodic_cornerprod_flatten}
+    Transport the sector recovery identity through the corner embedding
+    $\varphi_k$ along the flattening bijection: the corner image of the sector
+    recovery sum is, by the corner-product-of-a-flattened-word identity, the sum
+    of corner-transition products with the same coefficients, and the corner
+    image of a corner-supported $Y$ is $Y$.
+\end{proof}
+
+\begin{lemma}[Sector contraction]
+    \label{lem:periodic_sector_contraction}
+    \lean{MPSTensor.exists_cornerProd_contraction_of_sectorRightInverse}
+    \leanok
+    \uses{lem:periodic_ambient_corner_inverse, lem:periodic_corner_contraction}
+    Feeding the ambient corner right inverse into the right-inverse contraction
+    yields the contracted product-tensor identity
+    \cite[eq.~resultprop]{DeLasCuevas2017Irreducible} for corner-supported
+    inserted matrices.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:periodic_ambient_corner_inverse, lem:periodic_corner_contraction}
+    Apply the right-inverse contraction with the ambient corner right inverse in
+    place of the abstract right inverse.
+\end{proof}
+
 \begin{theorem}[Cyclic-sector single-site grading]
     \label{thm:cyclic_sector_offdiag_shift}
     \lean{MPSTensor.IsCyclicSectorDecomp.offDiag_shift}
