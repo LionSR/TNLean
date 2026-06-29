@@ -1447,6 +1447,53 @@ unconditional result.
     of $\zeta$ is the irreducible normalization.
 \end{proof}
 
+\begin{lemma}[Global-gauge assembly]
+    \label{lem:periodic_global_gauge_assembly}
+    \lean{MPSTensor.repeatedBlocks_of_globalGauge}
+    \leanok
+    \uses{def:cyclic_sector_decomp, lem:periodic_sector_unitary}
+    Let $A$ and $B$ carry the cyclic off-diagonal structure
+    \[
+        A^i=\sum_{u}P_uA^iP_{u+1},
+        \qquad
+        B^i=\sum_{v}Q_vB^iQ_{v+1},
+    \]
+    with $P_u$ and $Q_v$ families of orthogonal projections summing to the
+    identity.  Let $q$ be the cyclic offset between the matched sector labels,
+    and let each $U_v$ be a corner partial isometry from the $Q_v$ corner onto
+    the $P_{v-q}$ corner, that is $U_v=P_{v-q}U_vQ_v$ with $U_v^{\dagger}U_v=Q_v$
+    and $U_vU_v^{\dagger}=P_{v-q}$.  Assume the per-site proportionality of
+    \cite[eq.~result]{DeLasCuevas2017Irreducible},
+    \[
+        P_uA^iP_{u+1}
+        =
+        \zeta\,U_{u+q}Q_{u+q}B^iQ_{u+q+1}U_{u+q+1}^{\dagger},
+        \qquad
+        |\zeta|=1.
+    \]
+    Then the global gauge
+    \[
+        U=\sum_{u}P_uU_{u+q}Q_{u+q}
+    \]
+    is unitary and satisfies $A^i=\zeta\,UB^iU^{\dagger}$ for every $i$, so $A$
+    and $B$ are repeated blocks.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:cyclic_sector_decomp}
+    The corner relation $U_v=P_{v-q}U_vQ_v$ gives
+    $P_uU_{u+q}Q_{u+q}=U_{u+q}$, so $U=\sum_v U_v$ after reindexing.  Distinct
+    projections are orthogonal, $Q_vQ_w=0$ and $P_{v-q}P_{w-q}=0$ for $v\ne w$,
+    which kills the cross terms in $UU^{\dagger}$ and $U^{\dagger}U$; the diagonal
+    terms are $U_vU_v^{\dagger}=P_{v-q}$ and $U_v^{\dagger}U_v=Q_v$, so
+    $UU^{\dagger}=\sum_uP_u=\mathbb 1$ and $U^{\dagger}U=\sum_vQ_v=\mathbb 1$.
+    The off-diagonal structure of $B$ makes $Q_vB^iQ_w$ vanish unless $w=v+1$,
+    so $UB^iU^{\dagger}=\sum_vU_vQ_vB^iQ_{v+1}U_{v+1}^{\dagger}$.  Summing the
+    per-site proportionality over $u$ and reindexing by $v=u+q$ identifies this
+    with $\zeta^{-1}A^i$.  The unit-modulus scalar and the unitary $U$ exhibit
+    $A$ and $B$ as repeated blocks.
+\end{proof}
+
 \begin{lemma}[Cyclic $\Omega_u$-contraction for blocked sector gauges]%
     \label{lem:sector_tensor_proportional_blocked_match}
     \lean{MPSTensor.sectorTensor_proportional_of_blockedMatch}
