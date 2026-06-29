@@ -1687,14 +1687,18 @@ This section states the existence theorems from
 \label{lem:amgm_prod_sum}
     \lean{Wolf.pow_card_mul_prod_le_sum_pow}
     \leanok
-    For a nonnegative family $f_{1},\dots,f_{D}$ of real numbers with $D \ge 1$,
+    For a nonnegative family $f_{1},\dots,f_{D}$ of real numbers,
     \[
         D^{D}\prod_{i} f_{i} \le \Bigl(\sum_{i} f_{i}\Bigr)^{D}.
     \]
 \end{lemma}
 \begin{proof}\leanok
-    This is the weighted arithmetic--geometric-mean inequality with uniform
-    weights $1/D$, raised to the $D$-th power.
+    Apply the weighted arithmetic--geometric-mean inequality with uniform
+    weights $1/D$:
+    \[
+        \Bigl(\prod_{i} f_{i}\Bigr)^{1/D} \le \frac{1}{D}\sum_{i} f_{i}.
+    \]
+    Raising both sides to the $D$-th power gives the stated bound.
 \end{proof}
 
 % Lean: Wolf.posSemidef_pow_det_le_trace_pow, Wolf.posSemidef_pow_det_eq_trace_pow_iff
@@ -1704,7 +1708,7 @@ This section states the existence theorems from
     Wolf.posSemidef_pow_det_eq_trace_pow_iff}
     \leanok
     \uses{lem:amgm_prod_sum}
-    For a positive-semidefinite $D \times D$ matrix $M$ with $D \ge 1$,
+    For a positive-semidefinite $D \times D$ matrix $M$,
     \[
         D^{D}\det M \le (\tr M)^{D},
     \]
