@@ -4,8 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Periodic.CornerTransition
-import TNLean.Algebra.PiTensorProductPhase
-import TNLean.MPS.Chain.OneSidedInverse
 
 /-!
 # The `m`-factor `Ω`-contraction for the periodic-overlap Case 3
@@ -61,7 +59,7 @@ product-tensor identity `eq:resultprop`, and feeding it to
   arXiv:1708.00029, Appendix A (eq:BCmprop, eq:Fu, eq:Omegauprop, eq:resultprop).
 -/
 
-open scoped Matrix BigOperators TensorProduct
+open scoped Matrix BigOperators
 open Matrix
 
 namespace MPSTensor
