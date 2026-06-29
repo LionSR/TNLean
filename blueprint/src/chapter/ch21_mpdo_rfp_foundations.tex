@@ -482,8 +482,15 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    The length-$N$ product of the contracted tensor entries expands as a
-    Kronecker sum over the ancillary words, with the bra factors conjugated.
+    Applying the mixed-product property $(A\otimes B)(C\otimes D)=(AC)\otimes(BD)$
+    repeatedly, the length-$N$ product of the contracted tensor entries
+    distributes over the ancillary index sum:
+    \[
+        \prod_{l=0}^{N-1}\Bigl(\sum_{k} A^{(\sigma_l,k)}\otimes\overline{A^{(\tau_l,k)}}\Bigr)
+        = \sum_{\kappa\colon[N]\to[d_K]}
+            \Bigl(\prod_{l} A^{(\sigma_l,\kappa_l)}\Bigr)
+            \otimes \overline{\Bigl(\prod_l A^{(\tau_l,\kappa_l)}\Bigr)}.
+    \]
     Tracing this sum and using
     $\operatorname{tr}(X\otimes\overline Y)
     =\operatorname{tr}(X)\,\overline{\operatorname{tr}(Y)}$ gives the coefficient
