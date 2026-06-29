@@ -1463,12 +1463,19 @@ unconditional result.
     \lean{MPSTensor.globalGauge_eq_sum}
     \leanok
     \uses{def:periodic_global_gauge}
-    If each corner operator satisfies $U_v=P_{v-q}U_vQ_v$, then
+    Let $m\ge1$.  If each corner operator satisfies $U_v=P_{v-q}U_vQ_v$, then
     $P_uU_{u+q}Q_{u+q}=U_{u+q}$, so the global gauge is the plain sector sum
     \[
         U=\sum_{v}U_v.
     \]
 \end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:periodic_global_gauge}
+    The corner relation $U_v=P_{v-q}U_vQ_v$ gives $P_uU_{u+q}Q_{u+q}=U_{u+q}$;
+    reindexing the sum by $v=u+q$ turns $\sum_uP_uU_{u+q}Q_{u+q}$ into
+    $\sum_vU_v$.
+\end{proof}
 
 \begin{lemma}[Global-gauge construction]
     \label{lem:periodic_global_gauge_assembly}
@@ -1504,7 +1511,7 @@ unconditional result.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:cyclic_sector_decomp}
+    \uses{def:cyclic_sector_decomp, lem:periodic_global_gauge_eq_sum}
     The corner relation $U_v=P_{v-q}U_vQ_v$ gives
     $P_uU_{u+q}Q_{u+q}=U_{u+q}$, so $U=\sum_v U_v$ after reindexing.  Distinct
     projections are orthogonal, $Q_vQ_w=0$ and $P_{v-q}P_{w-q}=0$ for $v\ne w$,
