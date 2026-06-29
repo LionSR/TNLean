@@ -334,6 +334,7 @@ import TNLean.MPS.Periodic.CornerContraction
 import TNLean.MPS.Periodic.SectorLift
 import TNLean.MPS.Irreducible.Adjoint
 import TNLean.MPS.Periodic.SectorUnitary
+import TNLean.MPS.Periodic.GlobalGauge
 import TNLean.MPS.Core.TPGauge
 import TNLean.MPS.Structure.BlockPermutation
 import TNLean.PiAlgebra.Construction
