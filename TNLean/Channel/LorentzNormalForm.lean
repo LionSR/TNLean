@@ -6,7 +6,7 @@ import TNLean.Channel.Basic
 import TNLean.Channel.TransferMatrix
 import TNLean.Channel.ChoiJamiolkowski
 import TNLean.Channel.NormalForm
-import TNLean.Channel.TraceDetAMGM
+import TNLean.Analysis.MatrixTraceInequalities
 import TNLean.Algebra.HermitianHelpers
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.Matrix.Order
@@ -539,14 +539,15 @@ private lemma posDef_orbit_min_isScalar [NeZero D] {M N : Matrix (Fin D) (Fin D)
     refine (hmin S₀ hS₀).trans_eq ?_; rw [hPtr]; exact Complex.ofReal_re _
   have htrN0 : 0 ≤ (Matrix.trace N).re := by
     simpa using (Complex.le_def.mp hN.trace_nonneg).1
-  have hAGM := posSemidef_pow_det_le_trace_pow hN
+  have hAGM := Matrix.PosSemidef.pow_card_mul_det_re_le_trace_re_pow hN
   rw [hNdet_re] at hAGM
   have hlb : (D : ℝ) * r ≤ (Matrix.trace N).re := by
     rw [← mul_pow] at hAGM
     exact (pow_le_pow_iff_left₀ (mul_nonneg (Nat.cast_nonneg D) hr0) htrN0 (NeZero.ne D)).mp hAGM
   have htrace_eq : (Matrix.trace N).re = (D : ℝ) * r :=
     le_antisymm (hub.trans_eq (mul_comm r (D : ℝ))) hlb
-  exact ⟨_, (posSemidef_pow_det_eq_trace_pow_iff hN).mp (by rw [hNdet_re, htrace_eq, mul_pow])⟩
+  exact ⟨_, (Matrix.PosSemidef.pow_card_mul_det_re_eq_trace_re_pow_iff hN).mp
+    (by rw [hNdet_re, htrace_eq, mul_pow])⟩
 
 /-- The reduced state `tr_B(choi T)` equals (up to the `|Ω⟩` normalization) `T 1`. -/
 private lemma traceRight_choiMatrix
