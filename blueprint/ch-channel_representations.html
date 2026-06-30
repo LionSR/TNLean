@@ -7410,10 +7410,15 @@
     <span class="theorem_thmtitle">Generic normal form for CP maps</span>
     <div class="thm_header_extras">
 
+    
+    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
     <a class="icon proof" href="ch-channel_representations.html#thm:exists_normal_form_generic">#</a>
+    
+    <a class="icon proof" href="ch-channel_representations.html#a0000031607"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
     
     
     <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
@@ -7436,6 +7441,10 @@
           
           <li><a href="ch-channel_representations.html#lem:trace_det_amgm">Lemma 16.89</a></li>
           
+          <li><a href="ch-channel_representations.html#lem:infimum_is_attained">Lemma 16.87</a></li>
+          
+          <li><a href="ch-channel_representations.html#lem:trace_det_amgm">Lemma 16.89</a></li>
+          
         </ul>
     
       </div>
@@ -7443,10 +7452,52 @@
 
     
     
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Wolf.exists_normal_form_generic" class="lean_decl">Wolf.exists_normal_form_generic</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>  Let \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) be a completely positive map whose Choi matrix is positive-definite (equivalently, \(T\) has full Kraus rank). Then there exist SL-filterings \(\Phi _{1}, \Phi _{2}\) such that \(\Phi _{2} \circ T \circ \Phi _{1}\) is doubly-stochastic. <b class="bfseries">Not yet proved</b>—the compactness/minimisation lemma is proved, and the trace–determinant AM–GM equality characterisation (Lemma&#160;<a href="ch-channel_representations.html#lem:trace_det_amgm">16.89</a>) supplies the optimality criterion; the remaining step combines these into the doubly-stochastic conclusion via the AGM iteration over both filtering factors. </p>
+  <p>   Let \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) be a completely positive map whose Choi matrix is positive-definite (equivalently, \(T\) has full Kraus rank). Then there exist SL-filterings \(\Phi _{1}, \Phi _{2}\) such that \(\Phi _{2} \circ T \circ \Phi _{1}\) is doubly-stochastic. </p>
+<p>This is the equal-dimension (square) case \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\); the source <span class="cite">
+	[
+	
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Proposition&#160;2.8
+	]
+</span> states the proposition for a general \(T : \mathcal{M}_{d_1} \to \mathcal{M}_{d_2}\) with separate filterings on each factor. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000031607">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Let \(\tau \) be the Choi matrix of \(T\) and take the minimiser \((S_{1}, S_{2})\) of \(\operatorname{tr}[(S_{2} \otimes _{k} S_{1})\tau (S_{2} \otimes _{k} S_{1})^{\dagger }]\) over \(\det S_{1} = \det S_{2} = 1\) from Lemma&#160;<a href="ch-channel_representations.html#lem:infimum_is_attained">16.87</a>. Set \(\Phi _{1}, \Phi _{2}\) to be the filterings with matrices \(S_{1}^{\mathsf T}\) and \(S_{2}\), so that the Choi matrix of \(\Phi _{2} \circ T \circ \Phi _{1}\) equals \((S_{2} \otimes _{k} S_{1})\tau (S_{2} \otimes _{k} S_{1})^{\dagger }\). Holding one filtering factor fixed, the minimiser is optimal in the other coordinate, so each partial trace minimises a functional \(\operatorname{tr}[S M S^{\dagger }]\) over \(\det S = 1\) for a positive-semidefinite \(M\), where </p>
+<div class="displaymath" id="a0000031608">
+  \[  \operatorname{tr}[S M S^{\dagger }] \ge D\, (\det M)^{1/D},  \]
+</div>
+<p> with equality at the minimiser; by the equality case of Lemma&#160;<a href="ch-channel_representations.html#lem:trace_det_amgm">16.89</a> this forces \(S M S^{\dagger } \propto \mathbb {1}\), hence both partial traces are proportional to the identity, which is exactly the doubly-stochastic condition. </p>
 
   </div>
 </div>
@@ -7493,7 +7544,7 @@
   </div>
   <div class="definition_thmcontent">
   <p> For a completely positive, trace-preserving qubit channel \(T' : M_{2}(\mathbb {C}) \to M_{2}(\mathbb {C})\), write \(\widehat{T'}\) in the normalized Pauli basis. The channel is in <em>non-diagonal Lorentz normal form</em> when, for some \(x \in [0,1]\), </p>
-<div class="displaymath" id="a0000031607">
+<div class="displaymath" id="a0000031609">
   \[  \widehat{T'} = \begin{pmatrix}  1 
 
 &  0 
@@ -7552,7 +7603,7 @@
   </div>
   <div class="definition_thmcontent">
   <p> For a completely positive, trace-preserving qubit channel \(T' : M_{2}(\mathbb {C}) \to M_{2}(\mathbb {C})\), write \(\widehat{T'}\) in the normalized Pauli basis. The channel is in <em>singular Lorentz normal form</em> when </p>
-<div class="displaymath" id="a0000031608">
+<div class="displaymath" id="a0000031610">
   \[  \widehat{T'} = \begin{pmatrix}  1 
 
 &  0 
@@ -7798,7 +7849,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:channel_det_unitary_eq_one">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000031609"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000031611"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7853,7 +7904,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031609">
+<div class="proof_wrapper" id="a0000031611">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7881,7 +7932,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:channelDet_norm_le_one">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000031610"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000031612"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7944,7 +7995,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031610">
+<div class="proof_wrapper" id="a0000031612">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7972,7 +8023,7 @@
 
     <a class="icon proof" href="ch-channel_representations.html#thm:channelDet_norm_eq_one_iff_unitary">#</a>
     
-    <a class="icon proof" href="ch-channel_representations.html#a0000031611"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-channel_representations.html#a0000031613"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8028,7 +8079,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For a CPTP map \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\), </p>
-<div class="displaymath" id="a0000031612">
+<div class="displaymath" id="a0000031614">
   \[  |\det T| = 1 \iff \exists \,  U \in \mathcal{U}(D),\quad T(\rho ) = U\rho U^\dagger .  \]
 </div>
 <p> This is <span class="cite">
@@ -8041,7 +8092,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000031611">
+<div class="proof_wrapper" id="a0000031613">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
