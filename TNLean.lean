@@ -91,7 +91,6 @@ import TNLean.Channel.OrderedCP
 import TNLean.Channel.CompletelyPositiveBridge
 import TNLean.Channel.RadonNikodym
 import TNLean.Channel.OpenSystem
-import TNLean.Channel.TraceDetAMGM
 import TNLean.Channel.TransferMatrix
 import TNLean.Channel.POVM
 import TNLean.Channel.POVM.Uniqueness

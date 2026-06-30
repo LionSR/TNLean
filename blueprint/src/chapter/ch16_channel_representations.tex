@@ -1682,12 +1682,12 @@ This section states the existence theorems from
     so the minimiser on the compact set is a global minimiser.
 \end{proof}
 
-% Lean: Wolf.pow_card_mul_prod_le_sum_pow
+% Lean: pow_card_mul_prod_le_sum_pow
 \begin{lemma}[Arithmetic--geometric-mean inequality, product/sum form]
 \label{lem:amgm_prod_sum}
-    \lean{Wolf.pow_card_mul_prod_le_sum_pow}
+    \lean{pow_card_mul_prod_le_sum_pow}
     \leanok
-    For a nonnegative family $f_{1},\dots,f_{D}$ of real numbers,
+    For a nonnegative family $f_{0},\dots,f_{D-1}$ of real numbers,
     \[
         D^{D}\prod_{i} f_{i} \le \Bigl(\sum_{i} f_{i}\Bigr)^{D}.
     \]
@@ -1701,11 +1701,12 @@ This section states the existence theorems from
     Raising both sides to the $D$-th power gives the stated bound.
 \end{proof}
 
-% Lean: Wolf.posSemidef_pow_det_le_trace_pow, Wolf.posSemidef_pow_det_eq_trace_pow_iff
+% Lean: Matrix.PosSemidef.pow_card_mul_det_re_le_trace_re_pow,
+% Matrix.PosSemidef.pow_card_mul_det_re_eq_trace_re_pow_iff
 \begin{lemma}[Trace--determinant AM--GM for positive-semidefinite matrices]
 \label{lem:trace_det_amgm}
-    \lean{Wolf.posSemidef_pow_det_le_trace_pow,
-    Wolf.posSemidef_pow_det_eq_trace_pow_iff}
+    \lean{Matrix.PosSemidef.pow_card_mul_det_re_le_trace_re_pow,
+    Matrix.PosSemidef.pow_card_mul_det_re_eq_trace_re_pow_iff}
     \leanok
     \uses{lem:amgm_prod_sum}
     For a positive-semidefinite $D \times D$ matrix $M$,
