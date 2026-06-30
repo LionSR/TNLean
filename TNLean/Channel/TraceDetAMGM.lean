@@ -24,7 +24,7 @@ inequalities, consumed by `Wolf.exists_normal_form_generic` in
 `LorentzNormalForm.lean`.  Their natural Layer-0 home is
 `TNLean/Analysis/MatrixTraceInequalities.lean` (the `Matrix` namespace, alongside
 `PosSemidef.trace_sq_re_le_trace_re_sq`); relocating and renaming them out of the
-`Wolf` namespace is left as a follow-up refactor.
+`Wolf` namespace is left as a follow-up reorganization.
 
 ## References
 

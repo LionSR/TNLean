@@ -158,7 +158,7 @@ The proof idea (see Wolf Section 2.3):
 Step 4 is the compactness/minimisation argument, formalised in
 `infimum_is_attained` below.  Step 5 is the optimality condition (AGM iteration):
 fixing one filtering, the other minimises a single-coordinate trace functional
-`tr[S Mᵢ S†]` over `det S = 1`, whose minimiser saturates the trace–determinant
+tr[S Mᵢ S†] over det S = 1, whose minimiser saturates the trace–determinant
 AM–GM bound and is therefore a scalar matrix (`posDef_orbit_min_isScalar`).  The
 two coordinate optima give the two `DoublyStochastic` conditions, completing
 `exists_normal_form_generic`. -/
@@ -477,30 +477,6 @@ private lemma choiMatrix_comp_unitaryConj (B : Matrix (Fin D) (Fin D) ℂ)
   rw [choiMatrix_apply, omegaSlice_eq_single, Matrix.transpose_apply, Matrix.transpose_apply]
   ring
 
-/-- Partial trace over the second factor of a positive-definite matrix is
-positive definite. -/
-private lemma traceRight_posDef [NeZero D] {ρ : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ}
-    (hρ : ρ.PosDef) : (Matrix.traceRight ρ).PosDef := by
-  have hblock : ∀ b : Fin D, (ρ.submatrix (fun i => (i, b)) (fun i => (i, b))).PosDef :=
-    fun b => hρ.submatrix (fun i j h => (Prod.ext_iff.mp h).1)
-  have heq : Matrix.traceRight ρ
-      = ∑ b : Fin D, ρ.submatrix (fun i => (i, b)) (fun i => (i, b)) := by
-    ext i j; simp only [Matrix.traceRight_apply, Matrix.sum_apply, Matrix.submatrix_apply]
-  rw [heq]
-  exact Matrix.posDef_sum Finset.univ_nonempty fun b _ => hblock b
-
-/-- Partial trace over the second factor of a positive-semidefinite matrix is
-positive semidefinite. -/
-private lemma traceRight_posSemidef {ρ : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ}
-    (hρ : ρ.PosSemidef) : (Matrix.traceRight ρ).PosSemidef := by
-  have hblock : ∀ b : Fin D, (ρ.submatrix (fun i => (i, b)) (fun i => (i, b))).PosSemidef :=
-    fun b => hρ.submatrix _
-  have heq : Matrix.traceRight ρ
-      = ∑ b : Fin D, ρ.submatrix (fun i => (i, b)) (fun i => (i, b)) := by
-    ext i j; simp only [Matrix.traceRight_apply, Matrix.sum_apply, Matrix.submatrix_apply]
-  rw [heq]
-  exact Matrix.posSemidef_sum _ fun b _ => hblock b
-
 /-- `Matrix.traceLeft` agrees with `Matrix.traceLeftA`. -/
 private lemma traceLeft_eq_traceLeftA (ρ : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) :
     Matrix.traceLeft ρ = Matrix.traceLeftA ρ := rfl
@@ -599,7 +575,7 @@ private lemma omega_coeff_ne_zero (hD : 0 < D) :
   have h1 : (1 : ℂ) / ((D : ℝ).sqrt : ℂ) ≠ 0 := one_div_ne_zero hsqrt
   exact mul_ne_zero h1 (star_ne_zero.mpr h1)
 
-/-- **Wolf Proposition 2.9: generic normal form for CP maps with full Kraus rank.**
+/-- **Wolf Proposition 2.8: generic normal form for CP maps with full Kraus rank.**
 
 Let `T : M_D(ℂ) → M_D(ℂ)` be a completely positive map with full Kraus rank
 (equivalently, its Choi matrix is positive-definite).  Then there exist
@@ -693,13 +669,13 @@ theorem exists_normal_form_generic
     rw [hsplit, traceRight_kron_one_conj]
   have hM₁pd : (Matrix.traceLeft ρ₂).PosDef := by
     rw [traceLeft_eq_traceLeftA]; exact traceLeftA_posDef hρ₂pd
-  have hM₂pd : (Matrix.traceRight ρ₁).PosDef := traceRight_posDef hρ₁pd
+  have hM₂pd : (Matrix.traceRight ρ₁).PosDef := Matrix.traceRight_posDef hρ₁pd
   refine ⟨Φ₁, Φ₂, ?_, ?_⟩
   · -- Clause 1: (Φ₂ ∘ T ∘ Φ₁)(1) ∝ 1.
     have hN₂ : ∃ κ : ℂ,
         Matrix.traceRight (choiMatrix (Φ₂.map ∘ₗ T ∘ₗ Φ₁.map)) = κ • 1 := by
       apply posDef_orbit_min_isScalar hM₂pd
-      · rw [hC]; exact traceRight_posSemidef
+      · rw [hC]; exact Matrix.traceRight_posSemidef
           (_hFullRank.posSemidef.mul_mul_conjTranspose_same _)
       · rw [hC, hY S₂, Matrix.det_mul, Matrix.det_mul, hS₂det, Matrix.det_conjTranspose,
           hS₂det]; simp
