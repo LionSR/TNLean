@@ -232,6 +232,34 @@ theorem traceLeftA_posSemidef {ρ : Matrix (Fin dA × R) (Fin dA × R) ℂ} (hρ
   rw [heq]
   exact Matrix.posSemidef_sum _ fun a _ => hblock a
 
+/-- The partial trace over the second factor of a positive definite matrix is
+positive definite, being a nonempty sum of positive definite principal
+submatrices. -/
+theorem traceRight_posDef {D : ℕ} [NeZero D]
+    {ρ : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ} (hρ : ρ.PosDef) :
+    (Matrix.traceRight ρ).PosDef := by
+  have hblock : ∀ b : Fin D, (ρ.submatrix (fun i => (i, b)) (fun i => (i, b))).PosDef :=
+    fun b => hρ.submatrix (fun i j h => (Prod.ext_iff.mp h).1)
+  have heq : Matrix.traceRight ρ
+      = ∑ b : Fin D, ρ.submatrix (fun i => (i, b)) (fun i => (i, b)) := by
+    ext i j; simp only [Matrix.traceRight_apply, Matrix.sum_apply, Matrix.submatrix_apply]
+  rw [heq]
+  exact Matrix.posDef_sum Finset.univ_nonempty fun b _ => hblock b
+
+/-- The partial trace over the second factor of a positive semidefinite matrix is
+positive semidefinite, being a sum of positive semidefinite principal
+submatrices. -/
+theorem traceRight_posSemidef {D : ℕ}
+    {ρ : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ} (hρ : ρ.PosSemidef) :
+    (Matrix.traceRight ρ).PosSemidef := by
+  have hblock : ∀ b : Fin D, (ρ.submatrix (fun i => (i, b)) (fun i => (i, b))).PosSemidef :=
+    fun b => hρ.submatrix _
+  have heq : Matrix.traceRight ρ
+      = ∑ b : Fin D, ρ.submatrix (fun i => (i, b)) (fun i => (i, b)) := by
+    ext i j; simp only [Matrix.traceRight_apply, Matrix.sum_apply, Matrix.submatrix_apply]
+  rw [heq]
+  exact Matrix.posSemidef_sum _ fun b _ => hblock b
+
 omit [DecidableEq R] in
 /-- **Partial-trace adjoint identity.** The trace of an identity-on-$A$ lift
 against a matrix equals the trace of the matrix against the partial trace over the
