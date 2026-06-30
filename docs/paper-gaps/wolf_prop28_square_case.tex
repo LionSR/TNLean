@@ -1,0 +1,92 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The Square-Dimension Restriction in Wolf's Generic Normal Form}
+\author{}
+\date{2026-06-30}
+
+\begin{document}
+\maketitle
+
+\section{The assertion}
+
+Wolf's Proposition~2.8 is a normal-form statement for completely positive maps
+with full Kraus rank.\footnote{\cite[Proposition~2.8]{Wolf2012Quantum};
+local source \path{Notes/WolfNoteTexSource/ch02_representations.tex},
+lines 923--929.}  In the source it reads: let
+\begin{align}
+  T : \mathcal{M}_{d_1} \to \mathcal{M}_{d_2}
+\end{align}
+be a completely positive map with full Kraus rank.  Then there exist invertible
+completely positive maps \(\Phi_i \in \mathcal B(\mathcal{M}_{d_i})\) of Kraus
+rank one such that \(T' := \Phi_2 T \Phi_1\) is doubly-stochastic, i.e.\ both
+\(T'(\one)\) and \(T'^{*}(\one)\) are proportional to the identity matrix.
+
+The two filterings act on \emph{different} matrix algebras: \(\Phi_1\) on the
+input algebra \(\mathcal{M}_{d_1}\) and \(\Phi_2\) on the output algebra
+\(\mathcal{M}_{d_2}\), with no constraint relating \(d_1\) and \(d_2\).
+
+\section{The point at issue}
+
+The formal development states the proposition only in the equal-dimension case
+\(d_1 = d_2 = D\):
+\begin{align}
+  T : \MN{D} \to \MN{D},
+\end{align}
+with both filterings acting on the same algebra \(\MN{D}\).\footnote{Formal
+declaration \leanid{Wolf.exists\_normal\_form\_generic} in
+\doclink{TNLean/Channel/LorentzNormalForm}.}  The Choi matrix
+\(\tau = (T \otimes \mathrm{id})(\ketbra{\Omega}{\Omega})\) is then a square
+matrix on \(\C^{D} \otimes \C^{D}\), and the minimisation runs over
+\(\mathrm{SL}(D,\C) \times \mathrm{SL}(D,\C)\) filterings of a single dimension.
+The compactness lemma \leanid{Wolf.infimum\_is\_attained} and the
+trace--determinant AM--GM equality
+\leanid{Wolf.posSemidef\_pow\_det\_eq\_trace\_pow\_iff} that drive the proof are
+likewise written for a square Choi matrix on \(\C^{D} \otimes \C^{D}\).
+
+The square case is the one needed downstream: the qubit Lorentz normal form
+(\leanid{Wolf.exists\_lorentz\_normal\_form\_qubit}) is the \(D = 2\)
+specialisation, and there \(d_1 = d_2 = 2\).  The general rectangular statement
+of the source is therefore not yet formalised; the equal-dimension instance is.
+
+\section{The restricted statement}
+
+The formal theorem proves the square instance:
+\begin{align}
+  T : \MN{D} \to \MN{D}, \qquad
+  \tau = \mathrm{choi}(T) \succ 0
+  \ \Longrightarrow\
+  \exists\, \Phi_1, \Phi_2,\
+  \Phi_2 \circ T \circ \Phi_1\ \text{doubly-stochastic},
+\end{align}
+with both \(\Phi_1, \Phi_2\) SL-filterings on \(\MN{D}\).  This is a sub-case of
+the source proposition, obtained by setting \(d_1 = d_2\); it is mathematically
+correct as stated, just narrower than Wolf's rectangular formulation.
+
+\section{Elimination plan}
+
+A faithful formalization of the source proposition requires generalising the
+two supporting lemmas to independent input and output dimensions:
+\begin{itemize}
+  \item \leanid{Wolf.infimum\_is\_attained} should range over a Choi matrix on
+    \(\C^{d_2} \otimes \C^{d_1}\) with filterings in
+    \(\mathrm{SL}(d_2,\C) \times \mathrm{SL}(d_1,\C)\);
+  \item \leanid{Wolf.exists\_normal\_form\_generic} should then be restated for
+    \(T : \mathcal{M}_{d_1} \to \mathcal{M}_{d_2}\) with separate filterings on
+    each factor.
+\end{itemize}
+Until that work is done, the square version is kept as an explicitly-labelled
+specialisation, and the source-faithful rectangular proposition remains
+unformalised.  The blueprint entry \texttt{thm:exists\_normal\_form\_generic}
+and the Lean docstring carry the matching scope marker.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
