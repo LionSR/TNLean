@@ -36,13 +36,13 @@ normal form* — with three canonical representatives.
 2. **Doubly-stochastic maps.**  A linear map T is *doubly-stochastic* if both
    `T(1)` and the partial trace of its Choi matrix over the first subsystem
    are proportional to the identity matrix.  This is the normal form target
-   for the generic construction (Wolf Proposition 2.8).
+   for the generic construction (Wolf Proposition 2.9).
 
-3. **Generic normal form (Wolf Proposition 2.8).**  For a CP map with full Kraus rank
+3. **Generic normal form (Wolf Proposition 2.9).**  For a CP map with full Kraus rank
    (equivalently, a positive-definite Choi matrix), there exist SL-filterings
    Φ₁, Φ₂ such that Φ₂ ∘ T ∘ Φ₁ is doubly-stochastic.
 
-4. **Lorentz normal form for qubit channels (Wolf Proposition 2.9 / Proposition 2.11).**
+4. **Lorentz normal form for qubit channels (Wolf Proposition 2.11).**
    For every qubit channel (D = 2), after suitable SL(2, ℂ)-filterings, the
    Pauli-basis transfer matrix takes one of three canonical forms: diagonal,
    non-diagonal, or singular.
@@ -125,7 +125,7 @@ variable {D : ℕ} (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (F
 matrix `tr₁[τ]` of its Choi matrix `τ = (T ⊗ id)(|Ω⟩⟨Ω|)` is proportional to
 the identity.  By Choi–Jamiołkowski, this is equivalent to both `T(1)` and
 `T*(1)` being proportional to identity, which is the target normal form in
-Wolf Proposition 2.8.
+Wolf Proposition 2.9.
 
 We use the partial-trace formulation to avoid depending on the adjoint of `T`
 as a Hilbert–Schmidt operator. -/
@@ -145,7 +145,7 @@ lemma DoublyStochastic.tracePreserving (hT : DoublyStochastic T) :
 
 end DoublyStochastic
 
-/-! ### Generic normal form (Wolf Proposition 2.8)
+/-! ### Generic normal form (Wolf Proposition 2.9)
 
 The proof idea (see Wolf Section 2.3):
 1. Work at the level of the Choi matrix τ = (T ⊗ id)(|Ω⟩⟨Ω|).
@@ -575,22 +575,23 @@ private lemma omega_coeff_ne_zero (hD : 0 < D) :
   have h1 : (1 : ℂ) / ((D : ℝ).sqrt : ℂ) ≠ 0 := one_div_ne_zero hsqrt
   exact mul_ne_zero h1 (star_ne_zero.mpr h1)
 
-/-- **Wolf Proposition 2.8: generic normal form for CP maps with full Kraus rank.**
+-- Source: Notes/WolfNoteTexSource/ch02_representations.tex lines 923–929 (Wolf Proposition 2.9).
+/-- **Wolf Proposition 2.9: generic normal form for CP maps with full Kraus rank.**
 
 Let `T : M_D(ℂ) → M_D(ℂ)` be a completely positive map with full Kraus rank
 (equivalently, its Choi matrix is positive-definite).  Then there exist
 SL(D, ℂ)-filterings Φ₁, Φ₂ such that `Φ₂ ∘ T ∘ Φ₁` is doubly-stochastic.
 
-This is the CP-map version of Wolf Proposition 2.8 (which is stated at the τ-level).
-The Lorentz normal form for qubit channels (Proposition 2.9) is the D = 2
-specialisation with the complete classification of the possible
-doubly-stochastic normal forms.
+This is the CP-map version (Wolf Proposition 2.9), the corollary of the τ-level
+statement Wolf Proposition 2.8.  The Lorentz normal form for qubit channels
+(Wolf Proposition 2.11) is the D = 2 specialisation with the complete
+classification of the possible doubly-stochastic normal forms.
 
 **Scope restriction (square case):** this is the equal-dimension case
-`T : Mₚ(ℂ) → Mₚ(ℂ)` (here `D × D → D × D`) of Wolf Proposition 2.8; the source
-(Wolf §2.3, `Notes/WolfNoteTexSource/ch02_representations.tex` lines 923–929)
-states it for a general `T : M_{d₁}(ℂ) → M_{d₂}(ℂ)` with separate filterings on
-each factor. Documented in `docs/paper-gaps/wolf_prop28_square_case.tex`. -/
+`T : Mₚ(ℂ) → Mₚ(ℂ)` (here `D × D → D × D`) of Wolf Proposition 2.9; the source
+(Wolf, *Quantum Channels & Operations*, Section 2.3) states it for a general
+`T : M_{d₁}(ℂ) → M_{d₂}(ℂ)` with separate filterings on each factor.  Documented
+in `docs/paper-gaps/wolf_prop28_square_case.tex`. -/
 theorem exists_normal_form_generic
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (_hCP : IsCPMap T)
@@ -714,10 +715,10 @@ theorem exists_normal_form_generic
 
 end GenericNormalForm
 
-/-! ### Lorentz normal form for qubit channels (Wolf Proposition 2.9 / Proposition 2.11)
+/-! ### Lorentz normal form for qubit channels (Wolf Proposition 2.11)
 
 For `D = 2` (qubit channels), the doubly-stochastic normal form from
-Proposition 2.8 is further simplified using the Lorentz group action on the
+Proposition 2.9 is further simplified using the Lorentz group action on the
 transfer matrix.  The result is a complete classification into three
 canonical forms.
 
@@ -733,7 +734,7 @@ where `v ∈ ℝ³` and `Δ` is a 3×3 real matrix (the Bloch-ball affine map:
 
 After SL(2, ℂ) filtering (which acts on `T̂` as a Lorentz transformation
 `L₂ T̂ L₁` with `L_i ∈ SO⁺(1,3)`), the transfer matrix can be brought to
-one of three canonical forms (Wolf Proposition 2.9):
+one of three canonical forms (Wolf Proposition 2.11):
 
 1. **Diagonal** (generic, full Kraus rank): `T̂` is diagonal —
    `v = 0` and `Δ = diag(λ₁, λ₂, λ₃)` with the CP condition
@@ -770,7 +771,7 @@ noncomputable def pauliTransferEntry
   ((1 : ℂ) / 2) * Matrix.trace (pauliMatrices i * T (pauliMatrices j))
 
 /-- A Hermiticity-preserving TP qubit channel `T'` is in **diagonal Lorentz normal
-form** (Wolf Proposition 2.9, case 1) if its Pauli-basis transfer matrix is diagonal:
+form** (Wolf Proposition 2.11, case 1) if its Pauli-basis transfer matrix is diagonal:
 `T'(1) = 1` (unital) and all off-diagonal entries of `T̂` vanish
 (i.e., `v = 0` and `Δ = diag(λ₁, λ₂, λ₃)`).
 
@@ -782,7 +783,7 @@ def IsLorentzDiagonal
     ∀ (i j : Fin 4), i ≠ j → pauliTransferEntry T' i j = 0
 
 /-- A Hermiticity-preserving TP qubit channel `T'` is in **non-diagonal Lorentz
-normal form** (Wolf Proposition 2.9, case 2) if its Pauli-basis transfer matrix has
+normal form** (Wolf Proposition 2.11, case 2) if its Pauli-basis transfer matrix has
 `Δ = diag(x/√3, x/√3, 1/3)` and `v = (0, 0, 2/3)` for some `x ∈ [0, 1]`.
 
 The channel condition supplies the trace-preserving first row. The predicate
@@ -800,7 +801,7 @@ def IsLorentzNonDiagonal
         pauliTransferEntry T' i j = 0
 
 /-- A Hermiticity-preserving TP qubit channel `T'` is in **singular Lorentz normal
-form** (Wolf Proposition 2.9, case 3) if its Pauli-basis transfer matrix has
+form** (Wolf Proposition 2.11, case 3) if its Pauli-basis transfer matrix has
 `Δ = 0` and `v = (0, 0, 1)`.  That is, only `T̂_{00} = 1` and
 `T̂_{30} = 1` are nonzero; the channel maps every input to the pure state
 `(1 + σ_z)/2`. -/
@@ -810,7 +811,7 @@ def IsLorentzSingular
     pauliTransferEntry T' 3 0 = 1 ∧
     ∀ (i j : Fin 4), (i, j) ≠ (0, 0) ∧ (i, j) ≠ (3, 0) → pauliTransferEntry T' i j = 0
 
-/-- **Lorentz normal form for qubit channels (Wolf Proposition 2.9 / Proposition 2.11).**
+/-- **Lorentz normal form for qubit channels (Wolf Proposition 2.11).**
 
 For every qubit channel `T : M₂(ℂ) → M₂(ℂ)`, there exist SL(2, ℂ)-filterings
 Φ₁, Φ₂ such that the filtered channel `T' = Φ₂ ∘ T ∘ Φ₁` is in one of the

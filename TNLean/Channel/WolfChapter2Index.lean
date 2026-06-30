@@ -196,16 +196,16 @@ project import.
   tr₁[τ] ∝ 1 ✓ (definitional)
 * `pauliMatrices` — the four Pauli matrices (qubit basis) ✓ (definitional)
 * `pauliTransferEntry` — Pauli-basis transfer matrix entry ✓ (definitional)
-* `IsLorentzDiagonal` — diagonal Lorentz normal form (Wolf Proposition 2.9 case 1) ✓
+* `IsLorentzDiagonal` — diagonal Lorentz normal form (Wolf Proposition 2.11 case 1) ✓
 * `IsLorentzNonDiagonal` — non-diagonal Lorentz normal form (case 2) ✓
 * `IsLorentzSingular` — singular Lorentz normal form (case 3) ✓
 * `Wolf.infimum_is_attained` — **key compactness lemma**: trace minimisation
   over SL(d, ℂ) filterings attains its infimum ✓
 * `Wolf.exists_normal_form_generic` — **Wolf Proposition 2.9 (generic normal form)**:
   every CP map with full Kraus rank admits SL-filterings making it
-  doubly-stochastic ⚠ (compactness is proved; the remaining step is the
-  AGM/first-order optimality argument at the minimiser)
-* `Wolf.exists_lorentz_normal_form_qubit` — **Wolf Proposition 2.9/2.11 (Lorentz
+  doubly-stochastic ✓ (proved via the AGM/first-order optimality argument at the
+  minimiser, using the trace-determinant AM-GM equality characterisation)
+* `Wolf.exists_lorentz_normal_form_qubit` — **Wolf Proposition 2.11 (Lorentz
   normal form for qubit channels)**: conclusion is a three-way disjunction
   `IsLorentzDiagonal ∨ IsLorentzNonDiagonal ∨ IsLorentzSingular` ⚠
   (depends on the generic normal form and Lorentz group classification)
