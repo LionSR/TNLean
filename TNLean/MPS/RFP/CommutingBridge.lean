@@ -2,7 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.ParentHamiltonian.Defs
+import TNLean.MPS.ParentHamiltonian.LocalSupport
 import TNLean.MPS.Core.CyclicTrace
 import TNLean.MPS.RFP.StructuralFull
 import Mathlib.Data.Fin.Basic
@@ -377,6 +377,86 @@ theorem AppendixBStructuralData.groundSpace_eq_coreTensor {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) (L : ℕ) :
     groundSpace A L = groundSpace hStruct.coreTensor L :=
   (hStruct.gaugeEquiv_coreTensor.groundSpace_eq L).symm
+
+/-- The Appendix B basis change leaves the canonical parent interaction unchanged.
+
+Source: arXiv:1606.00608, lines 543--555. -/
+theorem AppendixBStructuralData.parentInteraction_eq_coreTensor {A : MPSTensor d D}
+    (hStruct : AppendixBStructuralData A) (L : ℕ) :
+    parentInteraction A L = parentInteraction hStruct.coreTensor L := by
+  simp [parentInteraction, groundSpaceES, hStruct.groundSpace_eq_coreTensor L]
+
+/-- The two-site Appendix B basic-vector support for the core tensor.
+
+Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
+2205--2218. -/
+noncomputable def AppendixBStructuralData.twoSiteBasicSpace {A : MPSTensor d D}
+    (hStruct : AppendixBStructuralData A) : Submodule ℂ (NSiteSpace d 2) :=
+  groundSpace hStruct.coreTensor 2
+
+/-- The \(AX\) two-site operator named for Definition D.2, represented in the
+two-site coefficient space by the canonical parent interaction of the Appendix
+B core tensor.
+
+Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
+2205--2218. -/
+noncomputable def AppendixBStructuralData.appendixBQAX {A : MPSTensor d D}
+    (hStruct : AppendixBStructuralData A) : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2 :=
+  parentInteraction hStruct.coreTensor 2
+
+/-- The \(XB\) source projector named in Definition D.2, represented in the
+two-site coefficient space by the same Appendix B two-site projector before it
+is lifted to the \(XB\) face.
+
+Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
+2205--2218. -/
+noncomputable def AppendixBStructuralData.appendixBQXB {A : MPSTensor d D}
+    (hStruct : AppendixBStructuralData A) : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2 :=
+  hStruct.appendixBQAX
+
+/-- The Appendix B \(AX\) projector is the canonical two-site parent interaction
+of the original tensor.
+
+Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
+2205--2218. -/
+theorem AppendixBStructuralData.appendixBQAX_eq_parentInteraction {A : MPSTensor d D}
+    (hStruct : AppendixBStructuralData A) :
+    hStruct.appendixBQAX = parentInteraction A 2 := by
+  rw [AppendixBStructuralData.appendixBQAX]
+  exact (hStruct.parentInteraction_eq_coreTensor 2).symm
+
+/-- The Appendix B \(XB\) projector is the canonical two-site parent interaction
+of the original tensor.
+
+Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
+2205--2218. -/
+theorem AppendixBStructuralData.appendixBQXB_eq_parentInteraction {A : MPSTensor d D}
+    (hStruct : AppendixBStructuralData A) :
+    hStruct.appendixBQXB = parentInteraction A 2 := by
+  rw [AppendixBStructuralData.appendixBQXB]
+  exact hStruct.appendixBQAX_eq_parentInteraction
+
+/-- On a three-site window, the first translated length-two parent term is the
+\(AX\) lift of the Appendix B \(Q_{AX}\) projector.
+
+Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
+2205--2218. -/
+theorem AppendixBStructuralData.localTerm_two_three_zero_eq_leftPairLift_appendixBQAX
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
+    localTerm A 2 3 (0 : Fin 3) = leftPairLift hStruct.appendixBQAX := by
+  rw [localTerm_two_three_zero_eq_leftPairLift_parentInteraction,
+    hStruct.appendixBQAX_eq_parentInteraction]
+
+/-- On a three-site window, the second translated length-two parent term is the
+\(XB\) lift of the Appendix B \(Q_{XB}\) projector.
+
+Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
+2205--2218. -/
+theorem AppendixBStructuralData.localTerm_two_three_one_eq_rightPairLift_appendixBQXB
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
+    localTerm A 2 3 (1 : Fin 3) = rightPairLift hStruct.appendixBQXB := by
+  rw [localTerm_two_three_one_eq_rightPairLift_parentInteraction,
+    hStruct.appendixBQXB_eq_parentInteraction]
 
 /-- The Appendix B basis change does not change any MPV coefficient. -/
 theorem AppendixBStructuralData.mpv_eq_coreTensor {A : MPSTensor d D}
