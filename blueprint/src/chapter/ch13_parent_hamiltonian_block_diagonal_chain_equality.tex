@@ -365,8 +365,7 @@ $D^j_\beta=(\mu_j^NX_j)A^j_\beta$.
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_crossing_pgvwc_comparison}
     \leanok
     \uses{lem:bnt_block_diagonal_boundary_representation_equality,
-        lem:block_diagonal_boundary_local_sum_mem,
-        thm:block_diagonal_boundary_crossing_pgvwc_comparison,
+        thm:block_diagonal_boundary_crossing_pgvwc_comparison_chain_ground_space,
         lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
     With the hypotheses and notation of
     Lemma~\ref{lem:bnt_block_diagonal_boundary_representation_equality}, assume
@@ -400,17 +399,13 @@ $D^j_\beta=(\mu_j^NX_j)A^j_\beta$.
 \begin{proof}
     \leanok
     \uses{lem:bnt_block_diagonal_boundary_representation_equality,
-        lem:block_diagonal_boundary_local_sum_mem,
-        thm:block_diagonal_boundary_crossing_pgvwc_comparison,
+        thm:block_diagonal_boundary_crossing_pgvwc_comparison_chain_ground_space,
         lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
     For each $\psi$,
     Lemma~\ref{lem:bnt_block_diagonal_boundary_representation_equality} gives
-    block-diagonal boundary conditions $X_j$.  For a boundary-crossing interval,
-    Lemma~\ref{lem:block_diagonal_boundary_local_sum_mem} puts the sum of the
-    restricted block components in $\bigvee_jG_L(A_j)$.  The stated product-span
-    hypothesis and
-    Theorem~\ref{thm:block_diagonal_boundary_crossing_pgvwc_comparison} give the
-    matrices $C^j_{i,\rho}$ satisfying
+    block-diagonal boundary conditions $X_j$. The stated tail-word spans and
+    Theorem~\ref{thm:block_diagonal_boundary_crossing_pgvwc_comparison_chain_ground_space}
+    give the matrices $C^j_{i,\rho}$ satisfying
     \[
         A^j_\beta C^j_{i,\rho}
         =
