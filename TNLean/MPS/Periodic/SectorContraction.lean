@@ -11,7 +11,7 @@ import TNLean.MPS.Core.BlockingInfrastructure
 # Lifting the sector right inverse to an ambient corner right inverse
 
 This file builds the **sector → ambient-corner `Ω` lift** of arXiv:1708.00029,
-Appendix A (lines 1026--1062): the connector that turns the *sector* right
+Appendix A (lines 1026--1062): the construction that turns the *sector* right
 inverse `Ω` — the one supplied by the normality input
 `exists_common_sectorDecompositionMaps_of_isNormal_leftCanonical`, which recovers
 `evalWord (blocks k) …` on the sector bond space `Fin (dim k)` — into the
@@ -45,7 +45,7 @@ right inverse.
   identifying `cornerProd P A k` over a flattened blocked word with the corner
   image of the sector word product.
 * `MPSTensor.exists_ambientCornerRightInverse_of_sectorRightInverse` — **the
-  lift connector**: from the sector right inverse `Ω` (recovering
+  sector right inverse lift**: from the sector right inverse `Ω` (recovering
   `evalWord (blocks k) …` on `Fin (dim k)`) it produces the ambient corner right
   inverse `Ω̂` recovering `cornerProd P A k …` on `Fin D` for every
   corner-supported matrix.  This is exactly the `hΩ` hypothesis of
@@ -154,14 +154,14 @@ theorem cornerProd_flatten_eq_phi_evalWord
 
 end Telescoping
 
-/-! ## The lift connector -/
+/-! ## Ambient corner right inverse from the sector right inverse -/
 
 section Lift
 
 variable {m : ℕ} [NeZero m]
 
 /-- **Sector → ambient-corner `Ω` lift** (arXiv:1708.00029, Appendix A, lines
-1026--1062, the connector around eq:Omegauprop).
+1026--1062, the construction around eq:Omegauprop).
 
 Given:
 

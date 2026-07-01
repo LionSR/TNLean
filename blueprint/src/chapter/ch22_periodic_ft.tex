@@ -947,11 +947,27 @@ unconditional result.
     $d^m$ blocked letters and single-site words of length $mL$ over the alphabet
     of $d$ letters,
     \[
-        (\mathrm{Fin}\,L\to\mathrm{Fin}\,d^m)\;\simeq\;
-        (\mathrm{Fin}\,(mL)\to\mathrm{Fin}\,d),
+        [d^m]^L \;\simeq\; [d]^{mL},
     \]
-    obtained from the iterated blocking bijection.
+    obtained from the iterated blocking bijection.  Here $[q]^r$ denotes the
+    set of words of length $r$ over a $q$-letter alphabet.
 \end{definition}
+
+\begin{lemma}[Flattening bijection agrees with word flattening]
+    \label{lem:periodic_block_flatten_word_compat}
+    \lean{MPSTensor.ofFn_blockFlattenEquiv}
+    \leanok
+    \uses{def:periodic_block_flatten_equiv}
+    If \(W\in[d^m]^L\) is a blocked word and \(\widehat W\in[d]^{mL}\) is its
+    image under the flattening bijection, then \(\widehat W\) is exactly the
+    concatenation of the \(L\) decoded length-\(m\) blocks of \(W\).
+\end{lemma}
+
+\begin{proof}\leanok
+    The decoding bijection identifies a word-indexing function with its ordered
+    list of letters, and the iterated blocking bijection concatenates the
+    decoded length-\(m\) blocks in order.
+\end{proof}
 
 \begin{lemma}[Corner product of a flattened word]
     \label{lem:periodic_cornerprod_flatten}
@@ -986,19 +1002,22 @@ unconditional result.
     \label{lem:periodic_ambient_corner_inverse}
     \lean{MPSTensor.exists_ambientCornerRightInverse_of_sectorRightInverse}
     \leanok
-    \uses{lem:periodic_cornerprod_flatten}
-    From a sector right inverse $\Omega$ recovering the sector word evaluations
-    $\bar A_k^{\,W}$ on the sector bond space
+    \uses{lem:periodic_cornerprod_flatten,
+        lem:periodic_block_flatten_word_compat}
+    From a sector right inverse $\Omega$ recovering every sector word product
+    $\bar A_k^{\,W}$ over blocked words $W\in[d^m]^L$ with \(L>0\)
     (\cite[eq.~Omegauprop]{DeLasCuevas2017Irreducible}) one obtains an ambient
-    corner right inverse $\hat\Omega$ recovering the corner-transition product on
-    the ambient bond space: for every corner-supported $Y$ (that is $P_kYP_k=Y$),
+    corner right inverse $\hat\Omega$ over single-site words of length \(mL\):
+    for every corner-supported $Y$ (that is $P_kYP_k=Y$),
     \[
-        \sum_{\mathbf j}(\hat\Omega_k(Y))_{\mathbf j}\,F_k^{\mathbf j}=Y .
+        \sum_{\mathbf j\in[d]^{mL}}
+            (\hat\Omega_k(Y))_{\mathbf j}\,F_k^{\mathbf j}=Y .
     \]
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:periodic_cornerprod_flatten}
+    \uses{lem:periodic_cornerprod_flatten,
+        lem:periodic_block_flatten_word_compat}
     Set $\hat\Omega_k(Y)=\Omega_k(\varphi_k^{-1}(Y))$ for corner-supported $Y$.
     Applying $\varphi_k$ to the sector recovery and using the corner product of a
     flattened word,
