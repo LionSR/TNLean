@@ -309,6 +309,50 @@ in both cases.
     $X_j$ replaced by $\mu_j^NX_j$, gives the displayed matrix identity.
 \end{proof}
 
+\begin{theorem}[$C^j,D^j$ comparison for a block-diagonal boundary representation]
+    \label{thm:block_diagonal_boundary_crossing_pgvwc_comparison_chain_ground_space}
+    \lean{MPSTensor.blockDiagonal_boundary_crossing_pgvwc_comparison_of_chainGroundSpace}
+    \leanok
+    \uses{lem:block_diagonal_boundary_local_sum_mem,
+        thm:block_diagonal_boundary_crossing_pgvwc_comparison}
+    Let
+    \[
+        \psi\in
+        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right),
+        \qquad
+        \psi=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right).
+    \]
+    Assume that the physical alphabet is nonempty, that every $\mu_j$ is
+    nonzero, that $0<N$, and that $L\le N$. For every boundary-crossing
+    interval beginning at $i$, assume that the simultaneous products
+    \[
+        w\longmapsto(A^1_w,\ldots,A^r_w),
+        \qquad |w|=N-i,
+    \]
+    span the product algebra $\prod_j\MN{D_j}$. Then there are matrices
+    $C^j_{i,\rho}$ such that, for every boundary-crossing interval $i$, every
+    outside word $\rho$ of length $N-L$, every block $j$, and every word
+    $\beta$ before the cut,
+    \[
+        A^j_\beta C^j_{i,\rho}
+        =
+        \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho .
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:block_diagonal_boundary_local_sum_mem,
+        thm:block_diagonal_boundary_crossing_pgvwc_comparison}
+    For a boundary-crossing interval beginning at $i$ and an outside word
+    $\rho$, choose a configuration whose outside segment is $\rho$. The local
+    constraint on $\psi$ gives a vector in $\bigvee_jG_L(A_j)$ by
+    Lemma~\ref{lem:block_diagonal_boundary_local_sum_mem}.
+    Theorem~\ref{thm:block_diagonal_boundary_crossing_pgvwc_comparison}
+    applied with the stated span at length $N-i$ gives the displayed
+    $C^j,D^j$ comparison for that interval and outside word.
+\end{proof}
+
 \begin{theorem}[Fixed boundary-crossing component in the local block space]
     \label{thm:block_diagonal_boundary_crossing_component_mem_ground_space}
     \lean{MPSTensor.blockDiagonal_boundary_crossing_component_mem_groundSpace_of_pgvwc_comparison_of_sum_mem_iSup}
@@ -905,8 +949,7 @@ in both cases.
     \label{lem:block_diagonal_boundary_periodic_components_from_crossing_boundary}
     \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_crossing_pgvwc_comparison_of_boundary}
     \leanok
-    \uses{lem:block_diagonal_boundary_local_sum_mem,
-        thm:block_diagonal_boundary_crossing_pgvwc_comparison,
+    \uses{thm:block_diagonal_boundary_crossing_pgvwc_comparison_chain_ground_space,
         lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
     Assume $0<N$, $L\le N$, and $L+L_0\le N$. Suppose each block $A_j$
     is $L_0$-block-injective and satisfies
@@ -930,13 +973,10 @@ in both cases.
 
 \begin{proof}
     \leanok
-    \uses{lem:block_diagonal_boundary_local_sum_mem,
-        thm:block_diagonal_boundary_crossing_pgvwc_comparison,
+    \uses{thm:block_diagonal_boundary_crossing_pgvwc_comparison_chain_ground_space,
         lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
-    For a boundary-crossing interval, the local constraint on $\psi$ and the
-    boundary representation give a vector in $\bigvee_jG_L(A_j)$ by
-    Lemma~\ref{lem:block_diagonal_boundary_local_sum_mem}. The crossing
-    comparison theorem supplies matrices $C^j_{i,\rho}$ satisfying
+    Theorem~\ref{thm:block_diagonal_boundary_crossing_pgvwc_comparison_chain_ground_space}
+    supplies matrices $C^j_{i,\rho}$ satisfying
     \[
         A^j_\beta C^j_{i,\rho}
         =

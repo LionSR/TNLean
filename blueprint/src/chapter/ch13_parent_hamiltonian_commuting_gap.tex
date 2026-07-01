@@ -613,6 +613,61 @@ the specialization $L=2$.
     then applies to this equality and to the blockwise containments.
 \end{proof}
 
+\begin{lemma}[Kernel containment from boundary-crossing comparisons]
+    \label{lem:block_diagonal_kernel_to_bnt_span_from_crossing_pgvwc_comparison}
+    \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_crossing_pgvwc_comparison}
+    \leanok
+    \uses{lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting,
+        lem:bnt_block_diagonal_crossing_pgvwc_comparison_ground_space}
+    Let $B=\bigoplus_{j=0}^{r-1}\mu_jA_j$, with every $\mu_j\ne0$.
+    Suppose the physical alphabet and all block dimensions are nonempty. Assume
+    that the block family is irreducible, left-canonical, has normalized
+    self-overlap, and has no two blocks gauge-phase equivalent. Suppose also
+    that each $A_j$ is $L_0$-block-injective, that $L_0>0$, and that
+    \[
+        \sum_a A^j_a(A^j_a)^\dagger=I
+        \qquad (0\le j<r).
+    \]
+    Let $N>0$, $L>0$, $L\le N$, $L+L_0\le N$, and
+    \[
+        (L_0+1)
+        +(r-1)\bigl((L_0+1)+((L_0+1)+(L_0+1))\bigr)+1
+        \le L.
+    \]
+    Assume that, for every boundary-crossing interval beginning at $i$, the
+    simultaneous products
+    \[
+        w\longmapsto(A^1_w,\ldots,A^r_w),
+        \qquad |w|=N-i,
+    \]
+    span the product algebra $\prod_j\MN{D_j}$. If every block chain space is
+    contained in its periodic MPS line,
+    \[
+        \mathcal G_{N,L}(A_j)\subseteq \mathbb C V^{(N)}(A_j)
+        \qquad (0\le j<r),
+    \]
+    then
+    \[
+        \ker H_L^{(N)}(B)
+        \subseteq
+        \spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:bnt_block_diagonal_crossing_pgvwc_comparison_ground_space}
+    gives
+    \[
+        \mathcal G_{N,L}(B)=
+        \bigvee_{j=0}^{r-1}\mathcal G_{N,L}(A_j)
+    \]
+    from the block hypotheses, the local boundary-crossing constraints, and the
+    stated tail-word span.
+    Lemma~\ref{lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting}
+    then applies to this equality and to the blockwise containments.
+\end{proof}
+
 \begin{lemma}[Block-diagonal spanning is equivalent to the reverse inclusion]
     \label{lem:block_diagonal_parent_spanning_reverse_inclusion}
     \lean{MPSTensor.hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_iff_ker_le_bntMPSVectorSpan}

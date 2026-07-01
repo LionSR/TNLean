@@ -86,9 +86,8 @@ non-periodic FT cleanup loop unless explicitly brought back into scope.
   parent-Hamiltonian block-diagonal boundary-condition theorem behind the
   periodic block decomposition and the BNT ground-space span. The fixed-window
   PGVWC07 \(C^j,D^j\) comparison is now formalized under a crossing-tail
-  word-span hypothesis; the remaining boundary is the source-range
-  block-diagonal boundary representation and replacement of that span-dependent
-  route by the source \(C^j,D^j,E^j\) comparison.
+  word-span hypothesis; the remaining boundary is the replacement of that
+  span-dependent short-tail statement by the source \(C^j,D^j,E^j\) comparison.
 - `cpgsv21_martingale_overlap.tex` records the spectral-gap martingale
   comparison: the finite-row cyclic-window reduction is formalized, while the
   remaining source comparison is the overlapping-window anticommutator estimate;
