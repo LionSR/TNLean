@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Channel.Basic
+import Mathlib.Data.Complex.Basic
 import Mathlib.LinearAlgebra.Matrix.Permutation
 
 /-!
@@ -28,7 +28,7 @@ proved here.
   Example 3.1, equation (3.20)][Wolf2012QChannels]
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder
+open scoped Matrix
 open Finset
 
 namespace Matrix
@@ -37,13 +37,14 @@ variable {d : ℕ} [NeZero d]
 
 /-! ## Basic cyclic and diagonal operations -/
 
-/-- The cyclic shift matrix on `ZMod d`, indexed by addition by `k`. -/
+/-- The cyclic shift matrix \(U_{k0}\) from Wolf, equation (2.24), sending
+\(\ket r\) to \(\ket{k+r}\). -/
 def choiTypeShift (k : ZMod d) : Matrix (ZMod d) (ZMod d) ℂ :=
-  (Equiv.addRight k).permMatrix ℂ
+  (Equiv.addRight (-k)).permMatrix ℂ
 
 /-- The diagonal projection \(D(X)\), which keeps the diagonal entries and
 sets all off-diagonal entries to zero. -/
-noncomputable def diagonalProjection (d : ℕ) [NeZero d] :
+def diagonalProjection (d : ℕ) :
     Matrix (ZMod d) (ZMod d) ℂ →ₗ[ℂ] Matrix (ZMod d) (ZMod d) ℂ where
   toFun X := diagonal fun i => X i i
   map_add' X Y := by
@@ -53,13 +54,18 @@ noncomputable def diagonalProjection (d : ℕ) [NeZero d] :
     ext i j
     by_cases h : i = j <;> simp [h]
 
+omit [NeZero d] in
 @[simp]
 theorem diagonalProjection_apply (X : Matrix (ZMod d) (ZMod d) ℂ) :
     diagonalProjection d X = diagonal fun i => X i i :=
   rfl
 
-/-- Conjugation by a matrix, as a linear map. -/
-noncomputable def conjugationLinearMap {n : Type*} [Fintype n]
+/-- Conjugation by a matrix, as the linear map \(X\mapsto AXA^\dagger\).
+
+Wolf's Choi-type maps use this operation in the terms
+\(U_{k0}XU_{k0}^{\dagger}\).  As a map on matrices it is completely positive;
+that fact is not used in this file. -/
+def conjugationLinearMap {n : Type*} [Fintype n]
     (A : Matrix n n ℂ) : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ where
   toFun X := A * X * Aᴴ
   map_add' X Y := by
@@ -77,12 +83,12 @@ theorem conjugationLinearMap_apply {n : Type*} [Fintype n]
 theorem diagonalProjection_conj_choiTypeShift
     (k : ZMod d) (X : Matrix (ZMod d) (ZMod d) ℂ) :
     diagonalProjection d (choiTypeShift k * X * (choiTypeShift k)ᴴ) =
-      diagonal fun i => X (i + k) (i + k) := by
+      diagonal fun i => X (i - k) (i - k) := by
   ext i j
   by_cases h : i = j
   · subst h
     simp [diagonalProjection, choiTypeShift, Equiv.Perm.permMatrix,
-      PEquiv.toMatrix, Matrix.mul_apply]
+      PEquiv.toMatrix, Matrix.mul_apply, sub_eq_add_neg]
   · simp [diagonalProjection, h]
 
 /-! ## The Choi-type map -/
@@ -94,7 +100,7 @@ theorem diagonalProjection_conj_choiTypeShift
 on matrices indexed by the cyclic group `ZMod d`.  The coefficient `d - n` is
 the scalar difference appearing in the source; the positivity theorem uses the
 range `1 ≤ n ≤ d - 2`. -/
-noncomputable def choiTypeMap (d n : ℕ) [NeZero d] :
+def choiTypeMap (d n : ℕ) [NeZero d] :
     Matrix (ZMod d) (ZMod d) ℂ →ₗ[ℂ] Matrix (ZMod d) (ZMod d) ℂ :=
   ((d : ℂ) - (n : ℂ)) • diagonalProjection d - LinearMap.id +
     ∑ k : Fin n,
@@ -120,8 +126,8 @@ theorem choiTypeMap_vecMulVec
       diagonal (fun i =>
         ((d : ℂ) - (n : ℂ)) * (v i * star (v i)) +
           ∑ k : Fin n,
-            v (i + ((k.1 + 1 : ℕ) : ZMod d)) *
-              star (v (i + ((k.1 + 1 : ℕ) : ZMod d)))) -
+            v (i - ((k.1 + 1 : ℕ) : ZMod d)) *
+              star (v (i - ((k.1 + 1 : ℕ) : ZMod d)))) -
         vecMulVec v (star v) := by
   rw [choiTypeMap_apply]
   simp_rw [diagonalProjection_conj_choiTypeShift]

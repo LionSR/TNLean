@@ -319,7 +319,7 @@ assertions for the range $1\le n\le d-2$ remain open.
         T_C(\ket{v}\bra{v})
         =
         \operatorname{diag}\!\left(
-            (d-n)|v_i|^2+\sum_{k=1}^n |v_{i+k}|^2
+            (d-n)|v_i|^2+\sum_{k=1}^n |v_{i-k}|^2
         \right)
         -\ket{v}\bra{v}.
     \]
@@ -330,7 +330,7 @@ assertions for the range $1\le n\le d-2$ remain open.
     The diagonal projection of a shifted rank-one projector records the shifted
     squared moduli:
     \[
-        D(U_{k0}\ket{v}\bra{v}U_{k0}^{\dagger})_{ii}=|v_{i+k}|^2.
+        D(U_{k0}\ket{v}\bra{v}U_{k0}^{\dagger})_{ii}=|v_{i-k}|^2.
     \]
     Substituting this into the definition of $T_C$ gives the displayed diagonal
     matrix minus the original rank-one projector.
