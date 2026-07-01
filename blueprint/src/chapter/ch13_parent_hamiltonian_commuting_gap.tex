@@ -866,6 +866,103 @@ the specialization $L=2$.
     Substituting $\alpha_L=\alpha_0$ in the trace gives the cyclic formula.
 \end{proof}
 
+\begin{theorem}[Appendix B basis change and the parent interaction]
+    \label{lem:appendixB_basis_change_parent_interaction}
+    \lean{MPSTensor.AppendixBStructuralData.parentInteraction_eq_coreTensor}
+    \leanok
+    \uses{def:parent_interaction, def:ground_space_parent}
+    Let \(A^i=X\Lambda U^iX^{-1}\) be the Appendix~B structural form, and write
+    \(A_{\mathrm{core}}^i=\Lambda U^i\).  The canonical local parent
+    interaction is unchanged by this basis change:
+    \[
+        q_L(A)=q_L(A_{\mathrm{core}}).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The basis change gives a gauge equivalence between \(A_{\mathrm{core}}\) and
+    \(A\), hence equality of their length-\(L\) local ground spaces.  The
+    parent interaction is the orthogonal complement projector of this local
+    ground space.
+\end{proof}
+
+\begin{definition}[Appendix B two-site basic support]
+    \label{def:appendixB_two_site_basic_space}
+    \lean{MPSTensor.AppendixBStructuralData.twoSiteBasicSpace}
+    \leanok
+    \uses{def:ground_space_parent}
+    For Appendix~B structural data, the two-site basic support is
+    \[
+        G_2(A_{\mathrm{core}})=G_2(\Lambda U).
+    \]
+\end{definition}
+
+\begin{definition}[Appendix B \(AX\) two-site operator]
+    \label{def:appendixB_qax}
+    \lean{MPSTensor.AppendixBStructuralData.appendixBQAX}
+    \leanok
+    \uses{def:appendixB_two_site_basic_space, def:parent_interaction}
+    The \(AX\) two-site operator is represented, before the \(AX\)-lift, by
+    the canonical two-site parent interaction of the core tensor:
+    \[
+        Q_{AX}=q_2(A_{\mathrm{core}}).
+    \]
+\end{definition}
+
+\begin{definition}[Appendix B \(XB\) two-site operator]
+    \label{def:appendixB_qxb}
+    \lean{MPSTensor.AppendixBStructuralData.appendixBQXB}
+    \leanok
+    \uses{def:appendixB_qax}
+    The \(XB\) two-site operator is represented, before the \(XB\)-lift, by the
+    same two-site operator:
+    \[
+        Q_{XB}=Q_{AX}.
+    \]
+\end{definition}
+
+\begin{lemma}[Appendix B two-site operators and the parent interaction]
+    \label{lem:appendixB_qax_qxb_parent_interaction}
+    \lean{MPSTensor.AppendixBStructuralData.appendixBQAX_eq_parentInteraction}
+    \lean{MPSTensor.AppendixBStructuralData.appendixBQXB_eq_parentInteraction}
+    \leanok
+    \uses{lem:appendixB_basis_change_parent_interaction, def:appendixB_qax,
+        def:appendixB_qxb}
+    As two-site operators in the coefficient-space representation,
+    \[
+        Q_{AX}=q_2(A),\qquad Q_{XB}=q_2(A).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Both operators are \(q_2(A_{\mathrm{core}})\), and the Appendix~B basis
+    change leaves \(q_2\) unchanged.
+\end{proof}
+
+\begin{lemma}[Three-site lifts of the Appendix B two-site operators]
+    \label{lem:appendixB_three_site_parent_lifts}
+    \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_eq_leftPairLift_appendixBQAX}
+    \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_one_eq_rightPairLift_appendixBQXB}
+    \leanok
+    \uses{thm:local_term_two_three_ax_xb_lifts,
+        lem:appendixB_qax_qxb_parent_interaction}
+    On the three-site \(A,X,B\) window, the two adjacent length-two parent terms
+    are the two local lifts
+    \[
+        h_0^{(3)}(A,2)=(Q_{AX})_{AX},\qquad
+        h_1^{(3)}(A,2)=(Q_{XB})_{XB}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Apply the three-site translated parent-term identities to \(q_2(A)\), and
+    replace \(q_2(A)\) by \(Q_{AX}\) or \(Q_{XB}\) using the preceding
+    two-site identifications.
+\end{proof}
+
 \begin{remark}[Basic-vector coefficients and nearest-neighbor parent-term commutation]%
     \label{rem:product_pair_projectors}
     \lean{MPSTensor.productPairWindow}
@@ -909,7 +1006,11 @@ the specialization $L=2$.
     \lean{MPSTensor.rfp_implies_nncph_of_appendixBExtraction}
     \lean{MPSTensor.rfp_implies_nncph_ground_state_of_appendixBExtraction}
     \leanok
-    \uses{thm:trace_eval_word_eq_sum_cyclic}
+    \uses{thm:trace_eval_word_eq_sum_cyclic,
+        lem:appendixB_basis_change_parent_interaction,
+        def:appendixB_two_site_basic_space, def:appendixB_qax,
+        def:appendixB_qxb, lem:appendixB_qax_qxb_parent_interaction,
+        lem:appendixB_three_site_parent_lifts}
     The Appendix~B structural form supplies
     \[
         A^i=X\Lambda U^iX^{-1}.
@@ -963,6 +1064,23 @@ the specialization $L=2$.
     \[
         G_L(A)=G_L(\Lambda U).
     \]
+    It therefore also leaves the canonical parent interaction unchanged:
+    \[
+        q_L(A)=q_L(\Lambda U).
+    \]
+    At length two, the Appendix~B two-site basic support is
+    \(G_2(\Lambda U)\), and the corresponding \(Q_{AX}\) and \(Q_{XB}\)
+    projectors are the two copies of \(q_2(\Lambda U)\) before they are lifted
+    to the \(AX\) and \(XB\) faces. Hence
+    \[
+        Q_{AX}=q_2(A),\qquad Q_{XB}=q_2(A),
+    \]
+    as two-site operators in this coefficient-space representation. On the
+    three-site window this gives the local identifications
+    \[
+        h_0^{(3)}(A,2)=(Q_{AX})_{AX},\qquad
+        h_1^{(3)}(A,2)=(Q_{XB})_{XB}.
+    \]
     Consequently, for every chain length \(L\geq1\), the original tensor has
     the same cyclic coefficient formula:
     \[
@@ -1003,11 +1121,10 @@ the specialization $L=2$.
     On a three-site chain, the two adjacent length-two parent terms are the
     \(AX\) and \(XB\) actions of the canonical two-site parent interaction.
     Appendix~B supplies the basic-vector expression, while Appendix~D.2 supplies
-    the parent-commuting projector condition. What remains is to identify the
-    corresponding source projectors with these canonical parent interactions and
-    to prove
+    the parent-commuting projector condition. The local two-site projector
+    identification above does not prove the overlapping commutation relation
     \(Q_{AX}Q_{XB}=Q_{XB}Q_{AX}\). For the all-chain statement, the resulting
-    two-site parent projectors must be identified with idempotents \(p_i\)
+    two-site parent projectors must also be identified with idempotents \(p_i\)
     satisfying
     \[
         h_i(A,2)=p_i,\qquad p_i^2=p_i,\qquad p_ip_j=p_jp_i.
@@ -1017,11 +1134,10 @@ the specialization $L=2$.
         h_i(A,2)h_j(A,2)=h_j(A,2)h_i(A,2),
     \]
     which is the nearest-neighbor commuting conclusion for every finite chain.
-    The source projector identification and the justification of any passage
+    The overlapping commutation theorem and the justification of any passage
     from the source coefficients to this adjacent-pair condition are the
     remaining obligations before the conditional theorem can be applied; once
-    they are proved,
-    the local terms commute. Together with
+    they are proved, the local terms commute. Together with
     Lemma~\ref{lem:parent_hamiltonian_ff}, the adjacent-pair condition also gives the
     zero-energy equation for $V^{(N)}(A)$, still without asserting the source
     ground-space spanning condition.
