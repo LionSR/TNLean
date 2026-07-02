@@ -119,6 +119,8 @@ import TNLean.Entropy.MarkovChain
 import TNLean.Entropy.MutualInformation
 -- Layer 2b: Axiomatized operator convexity/concavity results (pending upstream Mathlib)
 import TNLean.Axioms.OperatorConvexity
+-- Layer 2b: Lieb concavity on the full sub-boundary region (Wolf Thm 5.15)
+import TNLean.Axioms.LiebSubBoundary
 -- Layer 2b: Trace convexity/concavity of matrix real powers (proved)
 import TNLean.Analysis.OperatorConvexity
 -- Layer 2b: Operator (Loewner) convexity of `a ↦ a^p` for `p ∈ [1,2]` (proved)

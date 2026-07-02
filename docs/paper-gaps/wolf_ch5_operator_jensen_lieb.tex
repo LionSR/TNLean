@@ -212,18 +212,22 @@ functional underlying the Wigner--Yanase--Dyson conjecture.  It is now
 \emph{proved} --- \leanid{lieb_concavity_axiom} is a theorem,
 derived from the commuting-superoperator integral representation
 (\S\ref{ssec:lieb-gap}) --- and \leanid{lieb_concavity_psd} extends it to
-positive-semidefinite inputs by regularization.  The two paragraphs below record
-how the formalization now relates to the unrestricted source theorem: the
-positive-semidefinite restriction is resolved, and only the boundary-exponent
-restriction $x+y=1$ remains.
+positive-semidefinite inputs by regularization.  The theorem
+\leanid{lieb_concavity_subboundary} now derives the two-exponent region
+$x,y\ge 0$, $x+y\le 1$, by reducing to the boundary theorem after the change of
+variables $r=x+y$, $s=x/r$ when $r>0$.  Thus the finite-dimensional matrix
+formalization now covers the exponent range of Wolf's Theorem~5.15.
 
-\paragraph{Scope restriction (boundary exponent).}  Wolf's Theorem~5.15 is
-stated for two exponents $x,y\ge 0$ with $x+y\le 1$.  The formal theorem
+\paragraph{Sub-boundary exponents (resolved).}  Wolf's Theorem~5.15 is stated
+for two exponents $x,y\ge 0$ with $x+y\le 1$.  The first formal theorem
 \leanid{lieb_concavity_axiom} records only the boundary line $x=s$, $y=1-s$,
-where $x+y=1$.  This is sufficient for the current downstream Lieb-concavity
-corollaries, but it is not the full source theorem; the sub-boundary range
-$x+y<1$ remains unformalized unless it is derived separately or the theorem is
-generalized.
+where $x+y=1$, and \leanid{lieb_concavity_psd} extends that boundary theorem to
+positive-semidefinite inputs.  The sub-boundary theorem
+\leanid{lieb_concavity_subboundary} removes the exponent restriction: for
+$r=x+y=0$ the functional is constant, and for $0<r\le 1$ it rewrites
+$A^x,B^y$ as $(A^r)^s,(B^r)^{1-s}$ and combines operator concavity of
+$C\mapsto C^r$, monotonicity of the boundary trace functional, and
+\leanid{lieb_concavity_psd}.
 
 \paragraph{Positive-definite versus positive semidefinite (resolved).}  Wolf's
 Theorem~5.15 states the Ando--Lieb concavity for positive (semidefinite)
@@ -239,7 +243,8 @@ semidefinite inequality.  The regularized powers converge because $x\mapsto x^s$
 is continuous on the nonnegative reals for $0<s<1$, including at the origin ---
 the logarithmic singularity that obstructs the entropy-continuity route does not
 arise here --- and the trace functional is continuous.  This scope restriction
-is therefore eliminated; only the boundary-exponent restriction below remains.
+is therefore eliminated; the exponent restriction is eliminated by
+\leanid{lieb_concavity_subboundary}.
 
 \subsection{The point at issue}\label{ssec:lieb-gap}
 
@@ -288,12 +293,12 @@ the concavity of the resolvent integrand, and the resulting operator concavity -
 and \leanid{lieb_concavity_axiom} is now a theorem in its positive-definite,
 boundary-exponent scope.  The positive-semidefinite case is also proved, as
 \leanid{lieb_concavity_psd}, by regularizing each input to positive definite and
-passing to the limit; this is the full Ando--Lieb theorem on the boundary line
-$x+y=1$.  Three downstream corollaries build on the positive-definite version
-(the $K=\mathbf 1$ case and separate concavity in each argument); these are now
-axiom-free.  The sole remaining open generalization is the sub-boundary range
-$x+y<1$; the singular (positive-semidefinite) input restriction has been
-eliminated.
+passing to the limit, and \leanid{lieb_concavity_subboundary} derives the full
+two-exponent range $x,y\ge 0$, $x+y\le 1$.  Three downstream corollaries build on
+the positive-definite version (the $K=\mathbf 1$ case and separate concavity in
+each argument); these are now axiom-free.  The former positive-semidefinite and
+sub-boundary exponent restrictions for the finite-dimensional matrix
+Ando--Lieb theorem have both been eliminated.
 
 \section*{References}
 

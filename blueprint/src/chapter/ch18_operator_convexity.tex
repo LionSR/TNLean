@@ -706,10 +706,9 @@ of $A^s B^{1-s}$.
     This is the full Ando--Lieb theorem
     \cite[Theorem~5.15]{Wolf2012Quantum} on the boundary line $x+y=1$
     (with $x=s$, $y=1-s$): the positive-definiteness restriction of
-    Theorem~\ref{thm:lieb_concavity_axiom} is lifted. The only remaining
-    restriction relative to Theorem~5.15 is the boundary line $x+y=1$; the
-    general region $x+y\le 1$ remains open.
-    % General-region gap in docs/paper-gaps/wolf_ch5_operator_jensen_lieb.tex
+    Theorem~\ref{thm:lieb_concavity_axiom} is lifted. The general
+    two-exponent region is obtained in
+    Theorem~\ref{thm:lieb_concavity_subboundary}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:lieb_concavity_axiom}
@@ -723,6 +722,42 @@ of $A^s B^{1-s}$.
     at the origin; the trace functional is continuous, so the regularized
     inequality passes to the limit. The endpoints $s=0$ and $s=1$ are linear in
     the convex-combination argument and hold with equality.
+\end{proof}
+
+\begin{theorem}[Lieb concavity, sub-boundary exponents]
+    \label{thm:lieb_concavity_subboundary}
+    \lean{lieb_concavity_subboundary}
+    \leanok
+    \uses{thm:lieb_concavity_psd}
+    Let $x,y\ge 0$ with $x+y\le 1$. For any matrix~$K$ and
+    positive-semidefinite matrices $A_1,A_2,B_1,B_2$, the map
+    $(A,B)\mapsto\Re\tr(K^\dagger A^x K B^y)$ is jointly concave:
+    \[
+        t\,\Re\tr(K^\dagger A_1^x K B_1^y)
+        +(1-t)\Re\tr(K^\dagger A_2^x K B_2^y)
+        \le
+        \Re\tr\!\bigl(K^\dagger(tA_1+(1-t)A_2)^x
+          K(tB_1+(1-t)B_2)^y\bigr)
+    \]
+    for every $t\in[0,1]$.
+    This is Wolf's Theorem~5.15 in the finite-dimensional matrix setting.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:lieb_concavity_psd}
+    Put $r=x+y$. If $r=0$, both exponents vanish and the functional is constant.
+    If $0<r\le 1$, set $s=x/r$. Then $x=rs$ and $y=r(1-s)$, with
+    $s\in[0,1]$. The functional becomes the boundary Lieb functional applied to
+    the powered inputs $A^r$ and $B^r$. Operator concavity of
+    $C\mapsto C^r$ gives
+    \[
+      tA_1^r+(1-t)A_2^r\le (tA_1+(1-t)A_2)^r
+    \]
+    and the analogous inequality for $B$. The boundary
+    positive-semidefinite theorem gives concavity at the left-hand powered
+    inputs, and monotonicity of
+    $(P,Q)\mapsto\Re\tr(K^\dagger P^s K Q^{1-s})$ on positive-semidefinite
+    arguments transports the result to the powered convex combinations.
 \end{proof}
 
 \begin{theorem}[Map form of Lieb concavity]\label{thm:lieb_concavity}
