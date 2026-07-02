@@ -103,7 +103,6 @@ theorem one_sub_vecMulVec_posSemidef_of_sum_normSq_le_one (v : ι → ℂ)
       have hCS := norm_inner_le_norm (𝕜 := ℂ) V W
       have hsq : ‖⟪V, W⟫_ℂ‖ ^ 2 ≤ (‖V‖ * ‖W‖) ^ 2 :=
         pow_le_pow_left₀ (norm_nonneg _) hCS 2
-      have hWnonneg : 0 ≤ ‖W‖ ^ 2 := by positivity
       nlinarith [hVVnorm, hsq, norm_nonneg V, norm_nonneg W]
     have hWWreal : ⟪W, W⟫_ℂ = ((‖W‖ ^ 2 : ℝ) : ℂ) := by
       rw [inner_self_eq_norm_sq_to_K (𝕜 := ℂ) W]
@@ -130,7 +129,6 @@ theorem diagonal_sub_vecMulVec_posSemidef_of_sum_normSq_div_le_one
   let s : ι → ℝ := fun i => Real.sqrt (a i)
   let p : ι → ℂ := fun i => if a i = 0 then 0 else v i / (s i : ℂ)
   let D : Matrix ι ι ℂ := diagonal fun i => (s i : ℂ)
-  have hs_nonneg : ∀ i, 0 ≤ s i := fun i => Real.sqrt_nonneg _
   have hp_norm : ∑ i, ‖p i‖ ^ 2 ≤ 1 := by
     have hterm : ∀ i, ‖p i‖ ^ 2 = ‖v i‖ ^ 2 / a i := by
       intro i
