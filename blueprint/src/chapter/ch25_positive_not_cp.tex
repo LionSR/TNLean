@@ -336,6 +336,108 @@ assertions for the range $1\le n\le d-2$ remain open.
     matrix minus the original rank-one projector.
 \end{proof}
 
+\begin{definition}[The Choi rank-one diagonal weight]
+    \label{def:choi_type_rankone_weight}
+    \lean{Matrix.choiTypeRankOneWeight}
+    \leanok
+    For a vector $v$ on $\mathbb Z/d\mathbb Z$, set
+    \[
+        a_i=(d-n)|v_i|^2+\sum_{k=1}^n |v_{i-k}|^2 .
+    \]
+\end{definition}
+
+\begin{lemma}[Rank-one complement from a unit bound]
+    \label{lem:rankone_complement_from_unit_bound}
+    \lean{Matrix.one_sub_vecMulVec_posSemidef_of_sum_normSq_le_one}
+    \leanok
+    If $p$ is a vector with
+    \[
+        \sum_i |p_i|^2\le 1,
+    \]
+    then
+    \[
+        I-\ket{p}\bra{p}\ge 0 .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    For every vector $w$,
+    \[
+        \bra{w}\bigl(I-\ket{p}\bra{p}\bigr)\ket{w}
+        =
+        \|w\|^2-|\braket{p}{w}|^2 .
+    \]
+    Since $\|p\|^2=\sum_i |p_i|^2\le 1$, Cauchy's inequality gives
+    \[
+        |\braket{p}{w}|^2\le \|p\|^2\|w\|^2\le \|w\|^2,
+    \]
+    so the quadratic form is nonnegative.
+\end{proof}
+
+\begin{lemma}[Diagonal rank-one Schur-complement criterion]
+    \label{lem:diagonal_rankone_schur_complement}
+    \lean{Matrix.diagonal_sub_vecMulVec_posSemidef_of_sum_normSq_div_le_one}
+    \leanok
+    \uses{lem:rankone_complement_from_unit_bound}
+    Let $a_i\ge0$ and suppose $v_i=0$ whenever $a_i=0$.  If, with the convention
+    that $|v_i|^2/a_i$ is read as $0$ when $a_i=0$,
+    \[
+        \sum_i \frac{|v_i|^2}{a_i}\le 1,
+    \]
+    then
+    \[
+        \operatorname{diag}(a_i)-\ket{v}\bra{v}\ge 0 .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Put $p_i=0$ when $a_i=0$ and $p_i=v_i/\sqrt{a_i}$ otherwise.  Then
+    \[
+        \|p\|^2=\sum_i |p_i|^2
+        =\sum_i \frac{|v_i|^2}{a_i}\le 1
+    \]
+    under the same zero-term convention.  Lemma~\ref{lem:rankone_complement_from_unit_bound}
+    gives $I-\ket{p}\bra{p}\ge0$.  If $S=\operatorname{diag}(\sqrt{a_i})$, then
+    the support condition gives
+    \[
+        S\bigl(I-\ket{p}\bra{p}\bigr)S^\dagger
+        =
+        \operatorname{diag}(a_i)-\ket{v}\bra{v}.
+    \]
+    Conjugation by $S$ preserves positive semidefiniteness, which proves the
+    claim.
+\end{proof}
+
+\begin{lemma}[Rank-one positivity from the cyclic reciprocal bound]
+    \label{lem:choi_type_rankone_positive_from_weight_bound}
+    \lean{Matrix.choiTypeMap_vecMulVec_posSemidef_of_weight_sum_le_one}
+    \leanok
+    \uses{def:choi_type_map, lem:choi_type_map_rankone,
+        def:choi_type_rankone_weight, lem:diagonal_rankone_schur_complement}
+    Assume $n\le d-2$. If, with the convention that the summand is $0$ at
+    indices where $a_i=0$,
+    \[
+        \sum_i \frac{|v_i|^2}{a_i}\le 1,
+    \]
+    where $a_i$ is the weight of
+    Definition~\ref{def:choi_type_rankone_weight}, then
+    \[
+        T_C(\ket{v}\bra{v})\ge 0 .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The matrix in Lemma~\ref{lem:choi_type_map_rankone} has the form
+    $\operatorname{diag}(a_i)-\ket{v}\bra{v}$.  Each $a_i$ is nonnegative.  Since
+    $n\le d-2$, the coefficient $d-n$ is positive; hence $a_i=0$ forces
+    $v_i=0$.  The hypotheses of
+    Lemma~\ref{lem:diagonal_rankone_schur_complement} therefore apply and give
+    the stated positivity.
+\end{proof}
+
 \section{The partial transpose and the PPT property}
 
 Transposition is a positive map that is not completely positive, so applying it
