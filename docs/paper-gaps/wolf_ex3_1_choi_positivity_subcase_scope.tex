@@ -31,21 +31,21 @@ The source states that \(T_C\) is positive and indecomposable for every
 
 \section{Restricted statement now proved}
 
-The present development proves only the first strict-coordinate rank-one
-subcase.  For \(d=3\), \(n=1\), and a vector
-\(v=(v_0,v_1,v_2)\) with all coordinates nonzero, it proves
+The present development proves only the first rank-one subcase.  For \(d=3\),
+\(n=1\), and an arbitrary vector \(v=(v_0,v_1,v_2)\), it proves
 \begin{align}
   T_C(|v\rangle\langle v|)\ge 0.
 \end{align}
-The scalar input is the strict-positive cyclic reciprocal inequality
+The scalar input is the boundary-inclusive cyclic reciprocal inequality
 \begin{align}
   \frac{x}{2x+z}+\frac{y}{2y+x}+\frac{z}{2z+y}\le 1,
-  \qquad x,y,z>0,
+  \qquad x,y,z\ge 0,
 \end{align}
-proved by clearing denominators and applying AM--GM to
-\(x^2y,y^2z,z^2x\).\footnote{Formal declarations:
-\leanid{Matrix.choiType\_cyclic\_reciprocal\_three\_one\_of\_pos} and
-\leanid{Matrix.choiTypeMap\_vecMulVec\_posSemidef\_three\_one\_of\_forall\_ne\_zero}
+with zero-denominator summands read as \(0\).  Away from the boundary this is
+proved by clearing denominators and applying AM--GM to \(x^2y,y^2z,z^2x\); the
+boundary cases reduce to a single half-bound.\footnote{Formal declarations:
+\leanid{Matrix.choiType\_cyclic\_reciprocal\_three\_one\_of\_nonneg} and
+\leanid{Matrix.choiTypeMap\_vecMulVec\_posSemidef\_three\_one}
 in \doclink{TNLean/Channel/ChoiTypeMap}.}
 
 \section{Missing hypotheses and elimination plan}
@@ -58,18 +58,17 @@ statement still requires the nonnegative cyclic reciprocal estimate
   \qquad (x_i\ge0,\;1\le n\le d-2),
 \end{align}
 with the usual zero-term convention.  Once this estimate is available, it
-should be applied to \(x_i=|v_i|^2\) to remove the nonzero-coordinate
-restriction from the rank-one statement.  A positive-semidefinite decomposition
-will then extend the rank-one result to positivity of \(T_C\) on all positive
-semidefinite matrices.  This is tracked by \ghissue{3622}.  The
-indecomposability assertion of the same source paragraph is separate and is
-tracked by \ghissue{3623}.
+should be applied to \(x_i=|v_i|^2\) to obtain the rank-one statement for the
+full parameter range.  A positive-semidefinite decomposition will then extend
+the rank-one result to positivity of \(T_C\) on all positive semidefinite
+matrices.  This is tracked by \ghissue{3622}.  The indecomposability assertion
+of the same source paragraph is separate and is tracked by \ghissue{3623}.
 
 \section{Classification}
 
 \emph{Scope restriction.}  The current theorem is mathematically correct as a
-strict \(3\times3\) rank-one subcase, but it should not be cited as the
-formalization of Wolf's full Choi-type positivity theorem.
+\(3\times3\) rank-one subcase, but it should not be cited as the formalization
+of Wolf's full Choi-type positivity theorem.
 
 \bibliographystyle{alpha}
 \bibliography{references}
