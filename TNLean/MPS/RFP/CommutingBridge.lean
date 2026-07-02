@@ -46,7 +46,8 @@ for the source \(AX\) and \(XB\) windows are represented in
 basic-vector form, while Definition D.2 of arXiv:1606.00608 supplies the
 parent-commuting condition for the \(Q_{AX}\) and \(Q_{XB}\) projectors. The
 objects `appendixBQAX` and `appendixBQXB` below are only the common two-site
-coefficient-space representative \(q_2(A)\) before it is placed on the \(AX\)
+coefficient-space representative \(q_2(\Lambda U)\), identified with \(q_2(A)\)
+after the Appendix B core-tensor comparison, before it is placed on the \(AX\)
 and \(XB\) faces. They do not by themselves construct the source projectors on
 \(\mathcal H_A\otimes\mathcal H_X\) and
 \(\mathcal H_X\otimes\mathcal H_B\), nor do they prove the lifted commutator.
@@ -427,8 +428,8 @@ noncomputable def AppendixBStructuralData.appendixBQAX {A : MPSTensor d D}
 /-- The \(XB\) two-site coefficient-space representative associated with the
 Appendix B core tensor.
 
-This is the same common two-site operator as `appendixBQAX`, now reserved for
-the later \(XB\)-lift. It is not, by itself, a construction of the source
+This is the same common two-site operator \(\widehat Q_{AX}\), now reserved
+for the later \(XB\)-lift. It is not, by itself, a construction of the source
 projector \(Q_{XB}\) as an operator on
 \(\mathcal H_X\otimes\mathcal H_B\).
 
