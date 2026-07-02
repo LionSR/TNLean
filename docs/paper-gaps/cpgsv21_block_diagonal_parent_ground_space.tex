@@ -55,15 +55,17 @@ canonical form notation, while $b$ follows
 Cirac et al. describe the degenerate parent-Hamiltonian ground space for a
 matrix product state with more than one block in canonical form in Section~IV.C
 of \cite{Cirac2021Matrix}.\footnote{For
-	traceability, the source comparison is now proved on the main branch
-	(\path{TNLean/MPS/ParentHamiltonian/BNTBlockDiagonalCrossingTrace.lean}); the
-	remaining step, discharging the explicit comparison hypothesis still assumed
-	by the conditional theorems, is tracked by
-	\href{https://github.com/LionSR/TNLean/issues/3597}{issue \#3597} (the earlier
-	tracker \href{https://github.com/LionSR/TNLean/issues/2971}{issue \#2971} for
-	proving the comparison is now closed). Pull
-	request~\#2724 records the conditional reduction on the main branch, reducing
-	the unconditional target to the boundary-crossing comparison identities.
+	traceability, the boundary-crossing comparison has a formal span-dependent
+	form on the main branch
+	(\path{TNLean/MPS/ParentHamiltonian/BNTBlockDiagonalCrossingTrace.lean} and
+	\path{TNLean/MPS/ParentHamiltonian/BNTBlockDiagonalPGVWCComparison.lean}).
+		The remaining step is to replace the short crossing-tail span hypothesis by
+		the source \(C^j,D^j,E^j\) boundary-condition comparison; this is tracked by
+		\href{https://github.com/LionSR/TNLean/issues/3597}{issue \#3597} (the earlier
+		tracker \href{https://github.com/LionSR/TNLean/issues/2971}{issue \#2971}, which
+		tracked proving the boundary-crossing comparison itself, is now closed). Pull
+	request~\#2724 records the earlier conditional reduction on the main branch,
+	reducing the unconditional target to boundary-crossing comparison identities.
 	Earlier reductions were tracked by
 	\href{https://github.com/LionSR/TNLean/issues/2641}{issue \#2641},
 	\href{https://github.com/LionSR/TNLean/issues/905}{issue \#905}, and
