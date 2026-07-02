@@ -62,7 +62,7 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- Extract the `p`-th two-site physical pair from a configuration on `2N`
+/-- Extract the `p`-th two-site physical pair from a configuration on `2 * N`
 sites, using the pairs `(0,1), (2,3), ...`. -/
 def productPairWindow (N : ℕ) (σ : Cfg d (2 * N)) (p : Fin N) : Cfg d 2 :=
   fun j => σ ⟨2 * p.val + j.val, by
@@ -130,9 +130,9 @@ theorem HasProductPairMPV.exists_twoSiteAmplitude {A : MPSTensor d D}
       mpv A σ = productPairState ψ₂ N σ :=
   hA
 
-/-- Local-projector data saying that the nearest-neighbor local terms of \(A\) are idempotents
-\(p_i\) associated to the adjacent two-site factors on an \(N\)-site chain, with
-\(p_i p_j=p_j p_i\).
+/-- Local-projector data saying that the nearest-neighbor local terms of \(A\)
+are idempotents \(p_i\) associated to the two-site factors on an \(N\)-site
+chain, with \(p_i p_j = p_j p_i\).
 
 **Scope restriction (local projectors):** The three-site \(AX/XB\) support maps
 for adjacent windows give the local support maps. This structure does not
