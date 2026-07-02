@@ -22,8 +22,8 @@ The main theorem in this file is the exact action on rank-one projectors.  This
 is the algebraic reduction needed for the later positivity proof of Wolf
 Example 3.1.  Positivity and indecomposability of the Choi-type maps are not
 proved here.  The remaining positivity step is a genuine cyclic reciprocal
-inequality for the diagonal weights; it does not follow merely from equality
-between the total numerator weight and the total denominator weight.
+inequality for the diagonal weights; it does not follow merely from equality of
+the total numerator and denominator weights.
 
 ## References
 

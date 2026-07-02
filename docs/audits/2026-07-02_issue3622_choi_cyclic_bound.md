@@ -1,7 +1,8 @@
 # Issue #3622: Choi-Type Cyclic Bound
 
 Issue #3622 asks for the positivity of the Choi-type map in Wolf Chapter 3,
-Example 3.1, equation (3.20), for \(1 \le n \le d-2\).
+Example 3.1, equation (3.20), for \(1 \le n \le d-2\).  The indices below are
+taken in \(\mathbb Z/d\mathbb Z\), so \(i-k\) is interpreted cyclically.
 
 The current reduction is:
 
