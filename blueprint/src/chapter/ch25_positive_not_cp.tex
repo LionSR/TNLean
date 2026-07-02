@@ -491,12 +491,21 @@ follow merely from equality of the total numerator and denominator weights.
 
 \begin{proof}
     \leanok
-    A positive semidefinite matrix is a finite sum of rank-one positive
-    semidefinite matrices coming from its spectral decomposition.  The preceding
-    lemma shows that the $d=3$, $n=1$ Choi map sends each summand to a positive
-    semidefinite matrix.  Since the map is linear and finite sums of positive
-    semidefinite matrices are positive semidefinite, this proves positivity of
-    the map.
+    Let $X\ge0$.  By the spectral decomposition, there are vectors $w_\alpha$
+    such that
+    \[
+        X=\sum_\alpha \ket{w_\alpha}\bra{w_\alpha},
+    \]
+    where each summand is rank-one and positive semidefinite.  Linearity gives
+    \[
+        T_C(X)=\sum_\alpha T_C(\ket{w_\alpha}\bra{w_\alpha}).
+    \]
+    The preceding lemma gives
+    \[
+        T_C(\ket{w_\alpha}\bra{w_\alpha})\ge0
+    \]
+    for every $\alpha$.  Hence the displayed sum is positive semidefinite, so
+    $T_C(X)\ge0$.
 \end{proof}
 
 \section{The partial transpose and the PPT property}
