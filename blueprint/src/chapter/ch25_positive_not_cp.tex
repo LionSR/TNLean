@@ -441,13 +441,13 @@ weights.
     the stated positivity.
 \end{proof}
 
-\begin{lemma}[The first Choi cyclic reciprocal subcase]
+\begin{lemma}[The first Choi rank-one positivity subcase]
     \label{lem:choi_type_first_cyclic_reciprocal_subcase}
-    \lean{Matrix.choiTypeMap_vecMulVec_posSemidef_three_one_of_forall_ne_zero}
+    \lean{Matrix.choiTypeMap_vecMulVec_posSemidef_three_one}
     \leanok
     \uses{def:choi_type_map, def:choi_type_rankone_weight,
         lem:choi_type_rankone_positive_from_weight_bound}
-    For $d=3$ and $n=1$, let $v=(v_0,v_1,v_2)$ have no zero coordinate.  Then
+    For $d=3$ and $n=1$, every vector $v=(v_0,v_1,v_2)$ satisfies
     \[
         T_C(\ket{v}\bra{v})\ge0 .
     \]
@@ -456,19 +456,27 @@ weights.
     \[
         \frac{x}{2x+z}+\frac{y}{2y+x}+\frac{z}{2z+y}\le1 .
     \]
-    This is only the strict-coordinate $3\times3$ rank-one subcase; the
-    nonnegative estimate for all $1\le n\le d-2$ remains open.
+    The zero-denominator terms are read as $0$, as in the preceding
+    Schur-complement criterion.  This is only the $3\times3$ rank-one subcase;
+    the cyclic estimate for all $1\le n\le d-2$ remains open.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    Since $x,y,z>0$, the denominators in the displayed inequality are positive.
-    After multiplying by their product, the inequality is equivalent to
+    First assume that the denominators are nonzero.  After multiplying by their
+    product, the inequality is equivalent to
     \[
         x^2y+y^2z+z^2x\ge3xyz .
     \]
-    This follows from AM--GM applied to the three positive numbers
-    $x^2y$, $y^2z$, and $z^2x$.  The rank-one positivity then follows from
+    This follows from AM--GM applied to the three nonnegative numbers
+    $x^2y$, $y^2z$, and $z^2x$.  If one of the denominators vanishes, the
+    corresponding two variables vanish.  For example, if $2x+z=0$, then
+    $x=z=0$, and the remaining term is
+    \[
+        \frac{y}{2y}\le\frac12\le1
+    \]
+    when $y>0$, while all terms vanish when $y=0$.  The rank-one positivity then
+    follows from
     Lemma~\ref{lem:choi_type_rankone_positive_from_weight_bound}.
 \end{proof}
 
