@@ -1006,6 +1006,41 @@ the specialization $L=2$.
     two-site identifications.
 \end{proof}
 
+\begin{lemma}[Appendix B lifted commutator gives three-site parent-term commutation]
+    \label{lem:appendixB_lift_commutator_parent_terms}
+    \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_overlapping}
+    \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_commute_lifts}
+    \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_appendixD2}
+    \leanok
+    \uses{lem:appendixB_overlapping_condition_from_lift_commutator,
+        lem:appendixB_three_site_parent_lifts}
+    If the Appendix~B \(AX\) and \(XB\) projectors satisfy the lifted
+    Definition~D.2 commutator
+    \[
+        (Q_{AX})_{AX}(Q_{XB})_{XB}
+        =
+        (Q_{XB})_{XB}(Q_{AX})_{AX},
+    \]
+    then the corresponding first two translated length-two parent terms on the
+    three-site window commute:
+    \[
+        h_0^{(3)}(A,2)h_1^{(3)}(A,2)
+        =
+        h_1^{(3)}(A,2)h_0^{(3)}(A,2).
+    \]
+    The same conclusion holds if the full Definition~D.2 local data are given
+    for these two Appendix~B projectors.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    By Lemma~\ref{lem:appendixB_three_site_parent_lifts}, the two translated
+    parent terms are exactly the \(AX\) and \(XB\) lifts of \(Q_{AX}\) and
+    \(Q_{XB}\).  The displayed equality is therefore the lifted commutator
+    itself.  Full Definition~D.2 data imply this commutator by forgetting the
+    kernel-intersection clause.
+\end{proof}
+
 \begin{remark}[Basic-vector coefficients and nearest-neighbor parent-term commutation]%
     \label{rem:product_pair_projectors}
     \lean{MPSTensor.productPairWindow}
@@ -1053,7 +1088,8 @@ the specialization $L=2$.
         lem:appendixB_basis_change_parent_interaction,
         def:appendixB_two_site_basic_space, def:appendixB_qax,
         def:appendixB_qxb, lem:appendixB_qax_qxb_parent_interaction,
-        lem:appendixB_three_site_parent_lifts}
+        lem:appendixB_three_site_parent_lifts,
+        lem:appendixB_lift_commutator_parent_terms}
     The Appendix~B structural form supplies
     \[
         A^i=X\Lambda U^iX^{-1}.
