@@ -898,31 +898,38 @@ the specialization $L=2$.
     \]
 \end{definition}
 
-\begin{definition}[Appendix B \(AX\) two-site operator]
+\begin{definition}[Appendix B \(AX\) coefficient representative]
     \label{def:appendixB_qax}
     \lean{MPSTensor.AppendixBStructuralData.appendixBQAX}
     \leanok
     \uses{def:appendixB_two_site_basic_space, def:parent_interaction}
-    The \(AX\) two-site operator is represented, before the \(AX\)-lift, by
+    The \(AX\) coefficient-space representative is, before the \(AX\)-lift,
     the canonical two-site parent interaction of the core tensor:
     \[
-        Q_{AX}=q_2(A_{\mathrm{core}}).
+        \widehat Q_{AX}=q_2(A_{\mathrm{core}}).
     \]
+    The source projector \(Q_{AX}\) of Definition~D.2 acts on
+    \(H_A\otimes H_X\).  The displayed operator is the two-site coefficient
+    representative that will be placed on the \(AX\) face; it is not by itself
+    the construction of that source projector.
 \end{definition}
 
-\begin{definition}[Appendix B \(XB\) two-site operator]
+\begin{definition}[Appendix B \(XB\) coefficient representative]
     \label{def:appendixB_qxb}
     \lean{MPSTensor.AppendixBStructuralData.appendixBQXB}
     \leanok
     \uses{def:appendixB_qax}
-    The \(XB\) two-site operator is represented, before the \(XB\)-lift, by the
+    The \(XB\) coefficient-space representative is, before the \(XB\)-lift, the
     same two-site operator:
     \[
-        Q_{XB}=Q_{AX}.
+        \widehat Q_{XB}=\widehat Q_{AX}.
     \]
+    The source projector \(Q_{XB}\) of Definition~D.2 acts on
+    \(H_X\otimes H_B\).  The displayed operator is the coefficient
+    representative later placed on the \(XB\) face.
 \end{definition}
 
-\begin{lemma}[Appendix B two-site operators and the parent interaction]
+\begin{lemma}[Appendix B coefficient representatives and the parent interaction]
     \label{lem:appendixB_qax_qxb_parent_interaction}
     \lean{MPSTensor.AppendixBStructuralData.appendixBQAX_eq_parentInteraction}
     \lean{MPSTensor.AppendixBStructuralData.appendixBQXB_eq_parentInteraction}
@@ -931,7 +938,7 @@ the specialization $L=2$.
         def:appendixB_qxb}
     As two-site operators in the coefficient-space representation,
     \[
-        Q_{AX}=q_2(A),\qquad Q_{XB}=q_2(A).
+        \widehat Q_{AX}=q_2(A),\qquad \widehat Q_{XB}=q_2(A).
     \]
 \end{lemma}
 
@@ -941,24 +948,25 @@ the specialization $L=2$.
     change leaves \(q_2\) unchanged.
 \end{proof}
 
-\begin{lemma}[Appendix B two-site idempotents]
+\begin{lemma}[Appendix B two-site representative idempotents]
     \label{lem:appendixB_qax_qxb_idempotent}
     \lean{MPSTensor.AppendixBStructuralData.appendixBQAX_idempotent}
     \lean{MPSTensor.AppendixBStructuralData.appendixBQXB_idempotent}
     \leanok
     \uses{lem:parent_interaction_idempotent,
         lem:appendixB_qax_qxb_parent_interaction}
-    The two Appendix~B two-site operators are idempotent:
+    The two Appendix~B two-site coefficient representatives are idempotent:
     \[
-        Q_{AX}^{2}=Q_{AX},\qquad Q_{XB}^{2}=Q_{XB}.
+        \widehat Q_{AX}^{2}=\widehat Q_{AX},\qquad
+        \widehat Q_{XB}^{2}=\widehat Q_{XB}.
     \]
 \end{lemma}
 
 \begin{proof}
     \leanok
-    By the preceding identification, both \(Q_{AX}\) and \(Q_{XB}\) are the
-    canonical two-site parent interaction \(q_2(A)\).  The latter is an
-    orthogonal projector, hence is idempotent.
+    By the preceding identification, both representatives are the canonical
+    two-site parent interaction \(q_2(A)\).  The latter is an orthogonal
+    projector, hence is idempotent.
 \end{proof}
 
 \begin{lemma}[Appendix B overlapping condition from the lifted commutator]
@@ -966,14 +974,15 @@ the specialization $L=2$.
     \lean{MPSTensor.AppendixBStructuralData.hasOverlappingTwoSiteCommutation_of_commute_lifts}
     \leanok
     \uses{def:overlapping_two_site_supports, lem:appendixB_qax_qxb_idempotent}
-    Suppose the lifted \(AX\) and \(XB\) operators commute:
+    Suppose the lifted \(AX\) and \(XB\) representatives commute:
     \[
-        (Q_{AX})_{AX}(Q_{XB})_{XB}
+        (\widehat Q_{AX})_{AX}(\widehat Q_{XB})_{XB}
         =
-        (Q_{XB})_{XB}(Q_{AX})_{AX}.
+        (\widehat Q_{XB})_{XB}(\widehat Q_{AX})_{AX}.
     \]
-    Then \(Q_{AX}\) and \(Q_{XB}\) satisfy the algebraic overlapping two-site
-    condition of Definition~\ref{def:overlapping_two_site_supports}.
+    Then \(\widehat Q_{AX}\) and \(\widehat Q_{XB}\) satisfy the algebraic
+    overlapping two-site condition of
+    Definition~\ref{def:overlapping_two_site_supports}.
 \end{lemma}
 
 \begin{proof}
@@ -994,16 +1003,16 @@ the specialization $L=2$.
     On the three-site \(A,X,B\) window, the two adjacent length-two parent terms
     are the two local lifts
     \[
-        h_0^{(3)}(A,2)=(Q_{AX})_{AX},\qquad
-        h_1^{(3)}(A,2)=(Q_{XB})_{XB}.
+        h_0^{(3)}(A,2)=(\widehat Q_{AX})_{AX},\qquad
+        h_1^{(3)}(A,2)=(\widehat Q_{XB})_{XB}.
     \]
 \end{lemma}
 
 \begin{proof}
     \leanok
     Apply the three-site translated parent-term identities to \(q_2(A)\), and
-    replace \(q_2(A)\) by \(Q_{AX}\) or \(Q_{XB}\) using the preceding
-    two-site identifications.
+    replace \(q_2(A)\) by \(\widehat Q_{AX}\) or \(\widehat Q_{XB}\) using the
+    preceding two-site identifications.
 \end{proof}
 
 \begin{lemma}[Appendix B overlapping condition gives three-site parent-term commutation]
@@ -1011,14 +1020,14 @@ the specialization $L=2$.
     \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_overlapping}
     \leanok
     \uses{lem:appendixB_three_site_parent_lifts}
-    If the Appendix~B $AX$ and $XB$ projectors satisfy the overlapping
-    two-site commutation datum
+    If the Appendix~B \(AX\) and \(XB\) coefficient representatives satisfy the
+    overlapping two-site commutation datum
     \[
-        Q_{AX}^2=Q_{AX},\qquad
-        Q_{XB}^2=Q_{XB},\qquad
-        (Q_{AX})_{AX}(Q_{XB})_{XB}
+        \widehat Q_{AX}^2=\widehat Q_{AX},\qquad
+        \widehat Q_{XB}^2=\widehat Q_{XB},\qquad
+        (\widehat Q_{AX})_{AX}(\widehat Q_{XB})_{XB}
         =
-        (Q_{XB})_{XB}(Q_{AX})_{AX},
+        (\widehat Q_{XB})_{XB}(\widehat Q_{AX})_{AX},
     \]
     then the corresponding first two translated length-two parent terms on the
     three-site window commute:
@@ -1032,9 +1041,9 @@ the specialization $L=2$.
 \begin{proof}
     \leanok
     By Lemma~\ref{lem:appendixB_three_site_parent_lifts}, the two translated
-    parent terms are exactly the $AX$ and $XB$ lifts of $Q_{AX}$ and
-    $Q_{XB}$.  The displayed equality is therefore the commutation clause of
-    the overlapping two-site datum.
+    parent terms are exactly the \(AX\) and \(XB\) lifts of
+    \(\widehat Q_{AX}\) and \(\widehat Q_{XB}\).  The displayed equality is
+    therefore the commutation clause of the overlapping two-site datum.
 \end{proof}
 
 \begin{lemma}[Appendix B lifted commutator gives three-site parent-term commutation]
@@ -1044,12 +1053,12 @@ the specialization $L=2$.
     \leanok
     \uses{lem:appendixB_overlapping_condition_from_lift_commutator,
         lem:appendixB_overlapping_condition_parent_terms}
-    If the Appendix~B $AX$ and $XB$ projectors satisfy the lifted
+    If the Appendix~B \(AX\) and \(XB\) coefficient representatives satisfy the lifted
     Definition~D.2 commutator
     \[
-        (Q_{AX})_{AX}(Q_{XB})_{XB}
+        (\widehat Q_{AX})_{AX}(\widehat Q_{XB})_{XB}
         =
-        (Q_{XB})_{XB}(Q_{AX})_{AX},
+        (\widehat Q_{XB})_{XB}(\widehat Q_{AX})_{AX},
     \]
     then the corresponding first two translated length-two parent terms on the
     three-site window commute:
@@ -1186,17 +1195,20 @@ the specialization $L=2$.
         q_L(A)=q_L(\Lambda U).
     \]
     At length two, the Appendix~B two-site basic support is
-    \(G_2(\Lambda U)\), and the corresponding \(Q_{AX}\) and \(Q_{XB}\)
-    projectors are the two copies of \(q_2(\Lambda U)\) before they are lifted
-    to the \(AX\) and \(XB\) faces. Hence
+    \(G_2(\Lambda U)\), and the coefficient-space representatives
+    \(\widehat Q_{AX}\) and \(\widehat Q_{XB}\) are the two copies of
+    \(q_2(\Lambda U)\) before they are lifted to the \(AX\) and \(XB\) faces.
+    Hence
     \[
-        Q_{AX}=q_2(A),\qquad Q_{XB}=q_2(A),
+        \widehat Q_{AX}=q_2(A),\qquad \widehat Q_{XB}=q_2(A),
     \]
-    as two-site operators in this coefficient-space representation. On the
-    three-site window this gives the local identifications
+    as two-site operators in this coefficient-space representation. This is not
+    yet the construction of the source projectors \(Q_{AX}\) and \(Q_{XB}\) on
+    \(H_A\otimes H_X\) and \(H_X\otimes H_B\). On the three-site window the
+    coefficient representatives give the local identifications
     \[
-        h_0^{(3)}(A,2)=(Q_{AX})_{AX},\qquad
-        h_1^{(3)}(A,2)=(Q_{XB})_{XB}.
+        h_0^{(3)}(A,2)=(\widehat Q_{AX})_{AX},\qquad
+        h_1^{(3)}(A,2)=(\widehat Q_{XB})_{XB}.
     \]
     Consequently, for every chain length \(L\geq1\), the original tensor has
     the same cyclic coefficient formula:
@@ -1240,9 +1252,15 @@ the specialization $L=2$.
     Appendix~B supplies the basic-vector expression, while Appendix~D.2 supplies
     the parent-commuting projector condition. The local two-site projector
     identification above does not prove the overlapping commutation relation
-    $Q_{AX}Q_{XB}=Q_{XB}Q_{AX}$. For the all-chain statement, the remaining
-    local projector equation is the following commutation condition: for every
-    finite chain and every pair of sites $i,j$,
+    \[
+        (\widehat Q_{AX})_{AX}(\widehat Q_{XB})_{XB}
+        =
+        (\widehat Q_{XB})_{XB}(\widehat Q_{AX})_{AX}.
+    \]
+    Nor does it construct the source \(Q_{AX},Q_{XB}\) projectors on the
+    tripartite Hilbert space. For the all-chain statement, the remaining local
+    projector equation is the following commutation condition: for every finite
+    chain and every pair of sites $i,j$,
     \[
         h_i(A,2)h_j(A,2)=h_j(A,2)h_i(A,2).
     \]
