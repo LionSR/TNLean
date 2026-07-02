@@ -733,6 +733,22 @@ theorem localTermES_commute_of_cyclic_windows_disjoint {N : ℕ} (A : MPSTensor 
   simpa [P] using separateLinearMap_apply_commute P P F (extractWindow L i σ)
     (extractWindow L j σ)
 
+/-- Local parent-Hamiltonian terms with disjoint cyclic supports commute.
+
+This is the coefficient-space form of
+`localTermES_commute_of_cyclic_windows_disjoint`, transported back from
+`EuclideanSpace` by the canonical `WithLp` equivalence. -/
+theorem localTerm_commute_of_cyclic_windows_disjoint {N : ℕ} (A : MPSTensor d D)
+    {L : ℕ} (hLN : L ≤ N) {i j : Fin N} (hij : CyclicWindowsDisjoint L i j) :
+    localTerm A L N i * localTerm A L N j =
+      localTerm A L N j * localTerm A L N i := by
+  apply LinearMap.ext
+  intro ψ
+  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d N)
+  have h :=
+    localTermES_commute_of_cyclic_windows_disjoint A hLN hij (e.symm ψ)
+  simpa [localTermES, Module.End.mul_apply, e] using congrArg e h
+
 /-- Non-overlap positivity for Euclidean-space local terms on disjoint cyclic windows.
 
 For \(L ≤ N\), if the cyclic windows based at \(i\) and \(j\) have no common site, then
