@@ -163,6 +163,19 @@ theorem HasProductPairLocalProjectors.commuting_twoSite_localTerms
   rw [hPair.hlocal i, hPair.hlocal j]
   exact hPair.hcomm i j
 
+/-- A commuting family of translated length-two parent terms gives the local
+projector witness, since each translated parent term is already idempotent. -/
+noncomputable def HasProductPairLocalProjectors.of_commuting_localTerms
+    {A : MPSTensor d D} {N : ℕ}
+    (hcomm : ∀ i j : Fin N,
+      localTerm A 2 N i * localTerm A 2 N j =
+        localTerm A 2 N j * localTerm A 2 N i) :
+    HasProductPairLocalProjectors A N where
+  proj := fun i => localTerm A 2 N i
+  hidem := fun i => _root_.MPSTensor.localTerm_idempotent A 2 N i
+  hlocal := fun _ => rfl
+  hcomm := hcomm
+
 /-- Conditional hypotheses for a tensor whose positive even-chain coefficients
 factor through one disjoint adjacent two-site amplitude and whose
 nearest-neighbor parent terms are commuting idempotents on every finite chain. -/
@@ -646,6 +659,23 @@ noncomputable def AppendixBProductPairExtraction.ofCoreTensorFactorization
     rw [hStruct.mpv_eq_coreTensor σ]
     exact hCore N hN σ
   localProjectors := hProj
+
+/-- Construct the conditional Appendix B extraction from the coefficient
+factorization and the all-chain commutation equations for the translated
+length-two parent terms.
+
+The idempotency of the local terms is supplied by `localTerm_idempotent`; the
+source-dependent obligation in this constructor is only the commutation family. -/
+noncomputable def AppendixBProductPairExtraction.ofCoreTensorFactorizationAndCommutation
+    {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}
+    (hCore : ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
+      mpv hStruct.coreTensor σ = productPairState hStruct.twoSiteAmplitude N σ)
+    (hComm : ∀ N, ∀ i j : Fin N,
+      localTerm A 2 N i * localTerm A 2 N j =
+        localTerm A 2 N j * localTerm A 2 N i) :
+    AppendixBProductPairExtraction hStruct :=
+  AppendixBProductPairExtraction.ofCoreTensorFactorization hCore
+    (fun N => HasProductPairLocalProjectors.of_commuting_localTerms (hComm N))
 
 /-- The conditional Appendix B hypotheses yield the `ProductPairBridge`
 structure used by the parent-Hamiltonian statements. -/

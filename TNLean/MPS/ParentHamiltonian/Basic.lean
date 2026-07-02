@@ -35,6 +35,43 @@ theorem parentInteraction_idempotent (A : MPSTensor d D) (L : ℕ) :
   rw [LinearEquiv.symm_apply_apply]
   exact congr_arg e (LinearMap.congr_fun hP (e.symm v))
 
+/-- Pointwise formula for a translated local term when the window length is at
+most the chain length. -/
+@[simp] theorem localTerm_apply_of_le (A : MPSTensor d D) (L N : ℕ)
+    (hLN : L ≤ N) (i : Fin N) (ψ : NSiteSpace d N) (σ : Cfg d N) :
+    localTerm A L N i ψ σ =
+      parentInteraction A L
+        (fun τ => ψ (replaceWindow L hLN i σ τ)) (extractWindow L i σ) := by
+  rw [localTerm, dif_pos hLN]
+  rfl
+
+/-- Every translated local parent interaction is idempotent.
+
+This is the finite-chain form of the fact that the local parent interaction is an
+orthogonal projector. -/
+theorem localTerm_idempotent (A : MPSTensor d D) (L N : ℕ) (i : Fin N) :
+    localTerm A L N i * localTerm A L N i = localTerm A L N i := by
+  by_cases hLN : L ≤ N
+  · apply LinearMap.ext
+    intro ψ
+    ext σ
+    rw [Module.End.mul_apply]
+    rw [localTerm_apply_of_le A L N hLN i (localTerm A L N i ψ) σ]
+    rw [localTerm_apply_of_le A L N hLN i ψ σ]
+    let f : NSiteSpace d L := fun τ => ψ (replaceWindow L hLN i σ τ)
+    have hwindow :
+        (fun τ => localTerm A L N i ψ (replaceWindow L hLN i σ τ)) =
+          parentInteraction A L f := by
+      funext τ
+      rw [localTerm_apply_of_le A L N hLN i ψ (replaceWindow L hLN i σ τ)]
+      simp [f]
+    rw [hwindow]
+    change parentInteraction A L (parentInteraction A L f) (extractWindow L i σ) =
+      parentInteraction A L f (extractWindow L i σ)
+    exact congr_fun (LinearMap.congr_fun (parentInteraction_idempotent A L) f)
+      (extractWindow L i σ)
+  · simp [localTerm, hLN]
+
 /-! ### Parent interaction kills ground space elements -/
 
 /-- The parent interaction annihilates any vector in the ground space.

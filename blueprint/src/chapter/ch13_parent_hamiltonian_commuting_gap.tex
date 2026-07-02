@@ -1085,6 +1085,7 @@ the specialization $L=2$.
     \lean{MPSTensor.productPairState_one}
     \lean{MPSTensor.HasProductPairMPV}
     \lean{MPSTensor.HasProductPairLocalProjectors}
+    \lean{MPSTensor.HasProductPairLocalProjectors.of_commuting_localTerms}
     \lean{MPSTensor.HasProductPairLocalProjectors.isNNCPH}
     \lean{MPSTensor.ProductPairBridge}
     \lean{MPSTensor.ProductPairBridge.localTerm_idempotent}
@@ -1114,6 +1115,7 @@ the specialization $L=2$.
     \lean{MPSTensor.AppendixBStructuralData.mpv_eq_productPairState_one}
     \lean{MPSTensor.AppendixBProductPairExtraction}
     \lean{MPSTensor.AppendixBProductPairExtraction.ofCoreTensorFactorization}
+    \lean{MPSTensor.AppendixBProductPairExtraction.ofCoreTensorFactorizationAndCommutation}
     \lean{MPSTensor.AppendixBProductPairExtraction.toProductPairBridge}
     \lean{MPSTensor.AppendixBProductPairExtraction.commuting_twoSite_localTerms}
     \lean{MPSTensor.commuting_twoSite_localTerms_of_rfp_of_appendixBExtraction}
@@ -1125,7 +1127,7 @@ the specialization $L=2$.
         def:appendixB_two_site_basic_space, def:appendixB_qax,
         def:appendixB_qxb, lem:appendixB_qax_qxb_parent_interaction,
         lem:appendixB_three_site_parent_lifts,
-        lem:appendixB_lift_commutator_parent_terms}
+        lem:appendixB_lift_commutator_parent_terms, lem:local_term_idempotent}
     The Appendix~B structural form supplies
     \[
         A^i=X\Lambda U^iX^{-1}.
@@ -1238,17 +1240,14 @@ the specialization $L=2$.
     Appendix~B supplies the basic-vector expression, while Appendix~D.2 supplies
     the parent-commuting projector condition. The local two-site projector
     identification above does not prove the overlapping commutation relation
-    \(Q_{AX}Q_{XB}=Q_{XB}Q_{AX}\). For the all-chain statement, the resulting
-    two-site parent projectors must also be identified with idempotents \(p_i\)
-    satisfying
+    $Q_{AX}Q_{XB}=Q_{XB}Q_{AX}$. For the all-chain statement, the remaining
+    local projector equation is the following commutation condition: for every
+    finite chain and every pair of sites $i,j$,
     \[
-        h_i(A,2)=p_i,\qquad p_i^2=p_i,\qquad p_ip_j=p_jp_i.
+        h_i(A,2)h_j(A,2)=h_j(A,2)h_i(A,2).
     \]
-    These equations give
-    \[
-        h_i(A,2)h_j(A,2)=h_j(A,2)h_i(A,2),
-    \]
-    which is the nearest-neighbor commuting conclusion for every finite chain.
+    The projector equation $h_i(A,2)^2=h_i(A,2)$ is already
+    Lemma~\ref{lem:local_term_idempotent}.
     The overlapping commutation theorem and the justification of any passage
     from the source coefficients to this adjacent-pair condition are the
     remaining obligations before the conditional theorem can be applied; once
