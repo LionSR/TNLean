@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.MPS.ParentHamiltonian.Basic
 import TNLean.MPS.ParentHamiltonian.LocalSupport
 import TNLean.MPS.Core.CyclicTrace
 import TNLean.MPS.RFP.StructuralFull
@@ -42,7 +43,7 @@ The declarations below separate four mathematical statements:
 **Scope restriction (overlapping two-site terms):** The three-site support maps
 for the source \(AX\) and \(XB\) windows are represented in
 `TNLean.MPS.ParentHamiltonian.LocalSupport`. Appendix B supplies the
-basic-vector form, while Appendix D.2 of arXiv:1606.00608 supplies the
+basic-vector form, while Definition D.2 of arXiv:1606.00608 supplies the
 parent-commuting condition for the \(Q_{AX}\) and \(Q_{XB}\) projectors. The
 remaining local step is to identify those projectors with the translated
 length-two parent terms and prove their overlapping commutation. For this reason
@@ -435,6 +436,46 @@ theorem AppendixBStructuralData.appendixBQXB_eq_parentInteraction {A : MPSTensor
     hStruct.appendixBQXB = parentInteraction A 2 := by
   rw [AppendixBStructuralData.appendixBQXB]
   exact hStruct.appendixBQAX_eq_parentInteraction
+
+/-- The Appendix B \(AX\) two-site operator is idempotent.
+
+Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
+2205--2218. -/
+theorem AppendixBStructuralData.appendixBQAX_idempotent {A : MPSTensor d D}
+    (hStruct : AppendixBStructuralData A) :
+    hStruct.appendixBQAX * hStruct.appendixBQAX = hStruct.appendixBQAX := by
+  rw [hStruct.appendixBQAX_eq_parentInteraction]
+  exact parentInteraction_idempotent A 2
+
+/-- The Appendix B \(XB\) two-site operator is idempotent.
+
+Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
+2205--2218. -/
+theorem AppendixBStructuralData.appendixBQXB_idempotent {A : MPSTensor d D}
+    (hStruct : AppendixBStructuralData A) :
+    hStruct.appendixBQXB * hStruct.appendixBQXB = hStruct.appendixBQXB := by
+  rw [hStruct.appendixBQXB_eq_parentInteraction]
+  exact parentInteraction_idempotent A 2
+
+/-- The Appendix B two-site operators satisfy the algebraic part of Definition
+D.2 once their \(AX\) and \(XB\) lifts commute.
+
+The idempotency of \(Q_{AX}\) and \(Q_{XB}\) follows from their identification
+with the canonical two-site parent interaction; the sole hypothesis is the
+commutation of the lifted operators.
+
+Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
+2205--2218. -/
+theorem AppendixBStructuralData.hasOverlappingTwoSiteCommutation_of_commute_lifts
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
+    (hcomm :
+      leftPairLift hStruct.appendixBQAX * rightPairLift hStruct.appendixBQXB =
+        rightPairLift hStruct.appendixBQXB * leftPairLift hStruct.appendixBQAX) :
+    HasOverlappingTwoSiteCommutation (d := d) hStruct.appendixBQAX
+      hStruct.appendixBQXB where
+  left_idempotent := hStruct.appendixBQAX_idempotent
+  right_idempotent := hStruct.appendixBQXB_idempotent
+  commute_lifts := hcomm
 
 /-- On a three-site window, the first translated length-two parent term is the
 \(AX\) lift of the Appendix B \(Q_{AX}\) projector.

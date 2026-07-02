@@ -15,7 +15,27 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ### Key lemma: parent interaction kills ground space elements -/
+/-! ### Parent interaction as a projector -/
+
+/-- The parent interaction is idempotent.
+
+This is the algebraic form of the fact that it is the orthogonal projector onto
+\(G_L(A)^\perp\). -/
+theorem parentInteraction_idempotent (A : MPSTensor d D) (L : ℕ) :
+    parentInteraction A L * parentInteraction A L = parentInteraction A L := by
+  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d L)
+  let P : EuclideanSpace ℂ (Cfg d L) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d L) :=
+    (groundSpaceES A L)ᗮ.starProjection.toLinearMap
+  have hP : P * P = P := by
+    simpa [P] using
+      (Submodule.isSymmetricProjection_starProjection ((groundSpaceES A L)ᗮ)).isIdempotentElem.eq
+  apply LinearMap.ext
+  intro v
+  change e (P (e.symm (e (P (e.symm v))))) = e (P (e.symm v))
+  rw [LinearEquiv.symm_apply_apply]
+  exact congr_arg e (LinearMap.congr_fun hP (e.symm v))
+
+/-! ### Parent interaction kills ground space elements -/
 
 /-- The parent interaction annihilates any vector in the ground space.
 This is the core property: `parentInteraction A L` is the orthogonal projector
