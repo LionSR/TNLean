@@ -35,7 +35,7 @@ basic-vector form to commutativity of the translated two-site terms
 The declarations below separate four mathematical statements:
 
 * the coefficient expression for \(U^{\otimes L}\varphi_j^{\otimes L}\);
-* the disjoint adjacent-pair coefficient condition used later in this file;
+* the even-chain physical-pair factorization condition used later in this file;
 * the two local coefficient-space representatives used before the \(AX\) and
   \(XB\) lifts;
 * the already formalized Appendix B structural form.
@@ -62,8 +62,8 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- Extract the `p`-th adjacent two-site block from a configuration on `2N`
-sites. -/
+/-- Extract the `p`-th two-site physical pair from a configuration on `2 * N`
+sites, using the pairs \((0,1),(2,3),\ldots\). -/
 def productPairWindow (N : ℕ) (σ : Cfg d (2 * N)) (p : Fin N) : Cfg d 2 :=
   fun j => σ ⟨2 * p.val + j.val, by
     have hp : p.val < N := p.isLt
@@ -77,20 +77,20 @@ def productPairWindow (N : ℕ) (σ : Cfg d (2 * N)) (p : Fin N) : Cfg d 2 :=
       have hj : j.val < 2 := j.isLt
       omega⟩ := rfl
 
-/-- On one adjacent pair, the extracted window is the whole two-site configuration. -/
+/-- For one physical pair, the extracted window is the whole two-site configuration. -/
 @[simp] theorem productPairWindow_one (σ : Cfg d (2 * 1)) :
     productPairWindow 1 σ 0 = σ := by
   funext j
   simp [productPairWindow]
 
-/-- The even-chain state obtained by repeating a fixed two-site amplitude on
-disjoint adjacent pairs.
+/-- The even-chain state obtained by repeating a fixed two-site amplitude on the
+physical pairs \((0,1),(2,3),\ldots\).
 
-This is the disjoint adjacent-pair expression used by the conditional
+This is the physical-pair factorization used by the conditional
 nearest-neighbor parent-term theorem below. It is not the basic-vector formula
 of arXiv:1606.00608, lines 570--578, by itself: the source formula first puts
 \(\varphi_j\) between \(b_n\) and \(a_{n+1}\) and then applies \(U\) to
-\((a_n,b_n)\) at every site. Any use of this disjoint adjacent-pair expression
+\((a_n,b_n)\) at every site. Any use of this physical-pair factorization
 therefore has to be justified separately from the source formula. -/
 def productPairState (ψ₂ : NSiteSpace d 2) (N : ℕ) : NSiteSpace d (2 * N) :=
   fun σ => ∏ p : Fin N, ψ₂ (productPairWindow N σ p)
@@ -100,26 +100,26 @@ def productPairState (ψ₂ : NSiteSpace d 2) (N : ℕ) : NSiteSpace d (2 * N) :
   funext σ
   simp [productPairState]
 
-/-- On a single adjacent pair, the product state is the original two-site amplitude. -/
+/-- For one physical pair, the product state is the original two-site amplitude. -/
 @[simp] theorem productPairState_one (ψ₂ : NSiteSpace d 2) (σ : Cfg d (2 * 1)) :
     productPairState ψ₂ 1 σ = ψ₂ σ := by
   simp [productPairState]
 
-/-- An MPS tensor has disjoint adjacent-pair MPVs when every positive
+/-- An MPS tensor has even-chain physical-pair factorization when every positive
 even-length coefficient factors as a repeated copy of one fixed two-site
 amplitude on the pairs \((0,1),(2,3),\ldots\).
 
 This is a generic factorization predicate: it does not assert that the two-site
 amplitude is entangled. The zero-pair case is omitted because the empty-chain
-MPV coefficient is the bond dimension, whereas the empty disjoint-pair amplitude
-is \(1\). Odd chain lengths are omitted because this predicate is used only to
+MPV coefficient is the bond dimension, whereas the empty physical-pair product is
+\(1\). Odd chain lengths are omitted because this predicate is used only to
 identify the translated two-site parent terms in the RFP-to-NNCPH direction of
 arXiv:1606.00608, Theorem 3.10.
 
 **Scope restriction:** Appendix B first produces the basic-vector expression
-\(U^{\otimes N}\varphi_j^{\otimes N}\). This predicate is the later disjoint
-adjacent-pair condition used by the present formal statement; it is not, by
-itself, the full Appendix B factorization theorem. -/
+\(U^{\otimes N}\varphi_j^{\otimes N}\). The condition above instead asks for an
+even-chain physical-pair factorization; by itself, it is not the full Appendix B
+factorization theorem. -/
 def HasProductPairMPV (A : MPSTensor d D) : Prop :=
   ∃ ψ₂ : NSiteSpace d 2, ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
     mpv A σ = productPairState ψ₂ N σ
@@ -130,9 +130,9 @@ theorem HasProductPairMPV.exists_twoSiteAmplitude {A : MPSTensor d D}
       mpv A σ = productPairState ψ₂ N σ :=
   hA
 
-/-- Witness that the nearest-neighbor local terms of \(A\) are idempotents
-\(p_i\) associated to the adjacent two-site factors on an \(N\)-site chain, with
-\(p_i p_j=p_j p_i\).
+/-- Hypotheses asserting that the nearest-neighbor local terms of \(A\) are
+commuting idempotents \(p_i\) on an \(N\)-site chain, with
+\(p_i p_j = p_j p_i\).
 
 **Scope restriction (local projectors):** The three-site \(AX/XB\) support maps
 for adjacent windows give the local support maps. This structure does not
@@ -166,8 +166,9 @@ theorem HasProductPairLocalProjectors.commuting_twoSite_localTerms
   rw [hPair.hlocal i, hPair.hlocal j]
   exact hPair.hcomm i j
 
-/-- A commuting family of translated length-two parent terms gives the local
-projector witness, since each translated parent term is already idempotent. -/
+/-- A commuting family of translated length-two parent terms satisfies the
+local-projector hypotheses, since each translated parent term is already
+idempotent. -/
 noncomputable def HasProductPairLocalProjectors.of_commuting_localTerms
     {A : MPSTensor d D} {N : ℕ}
     (hcomm : ∀ i j : Fin N,
@@ -180,7 +181,7 @@ noncomputable def HasProductPairLocalProjectors.of_commuting_localTerms
   hcomm := hcomm
 
 /-- Conditional hypotheses for a tensor whose positive even-chain coefficients
-factor through one disjoint adjacent two-site amplitude and whose
+factor through one repeated two-site amplitude and whose
 nearest-neighbor parent terms are commuting idempotents on every finite chain. -/
 structure ProductPairBridge (A : MPSTensor d D) where
   pairAmplitude : NSiteSpace d 2
@@ -199,7 +200,7 @@ theorem ProductPairBridge.hasProductPairMPV {A : MPSTensor d D}
     HasProductPairMPV A :=
   ⟨hBridge.pairAmplitude, hBridge.hmpv⟩
 
-/-- The conditional adjacent-pair hypotheses yield the unfolded `IsNNCPH`
+/-- The conditional physical-pair hypotheses yield the unfolded `IsNNCPH`
 conclusion: all two-site local terms commute on every finite chain.
 
 The statement is written as the commutation equation for the translated
@@ -264,7 +265,7 @@ theorem AppendixBStructuralData.exists_ofRFP (A : MPSTensor d D) [NeZero D]
 
 /-- Extract the Appendix B structural form from the proved structural theorem.
 
-This is a noncomputable definition only because it chooses a witness from the
+This is a noncomputable definition only because it chooses an element of the
 nonempty type produced by `AppendixBStructuralData.exists_ofRFP`; it introduces
 no new assumptions or trusted constants. -/
 noncomputable def AppendixBStructuralData.ofRFP (A : MPSTensor d D) [NeZero D]
@@ -368,7 +369,7 @@ This is the coefficient form of
   |\varphi_j\rangle=\sum_m\lambda_m|m,m\rangle,
 \]
 with \(\varphi_j\) shared between \(b_t\) and \(a_{t+1}\). It is not the
-disjoint adjacent physical-pair condition used later for nearest-neighbor
+even-chain physical-pair factorization used later for nearest-neighbor
 parent-term commutation. -/
 theorem AppendixBStructuralData.mpv_coreTensor_eq_cyclicVirtualPairState
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
@@ -601,8 +602,8 @@ Source: arXiv:1606.00608, lines 543--555.
 
 This combines the gauge-invariance of MPV coefficients with the coefficient
 formula for the core tensor \(\Lambda U^i\).  The conclusion is the source
-cyclic virtual-pair expression, not the disjoint adjacent physical-pair
-condition used later in the conditional parent-Hamiltonian theorem. -/
+cyclic virtual-pair expression, not the even-chain physical-pair factorization
+used later in the conditional parent-Hamiltonian theorem. -/
 theorem AppendixBStructuralData.mpv_eq_cyclicVirtualPairState {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) {L : ℕ} (hL : 0 < L) (σ : Cfg d L) :
     mpv A σ = hStruct.cyclicVirtualPairState hL σ := by
@@ -631,7 +632,7 @@ theorem AppendixBStructuralData.cyclicVirtualPairState_two_eq_twoSiteAmplitude
   rw [← hStruct.mpv_coreTensor_eq_cyclicVirtualPairState (by decide : 0 < 2) σ,
     hStruct.twoSiteAmplitude_eq_coreTensor_mpv]
 
-/-- The length-two case of the disjoint adjacent-pair coefficient condition. -/
+/-- The length-two case of the even-chain physical-pair factorization. -/
 theorem AppendixBStructuralData.mpv_coreTensor_eq_productPairState_one {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) (σ : Cfg d (2 * 1)) :
     mpv hStruct.coreTensor σ = productPairState hStruct.twoSiteAmplitude 1 σ := by
@@ -645,19 +646,18 @@ theorem AppendixBStructuralData.mpv_eq_productPairState_one {A : MPSTensor d D}
     mpv A σ = productPairState hStruct.twoSiteAmplitude 1 σ := by
   rw [productPairState_one, hStruct.twoSiteAmplitude_eq_mpv]
 
-/-- The remaining disjoint adjacent-pair condition needed after the source
+/-- The remaining even-chain physical-pair factorization needed after the source
 basic-vector expression.
 
 For a fixed structural form, this captures the two facts that are still not
 produced by the Appendix B structural datum: the coefficient formula for
 \(U^{\otimes N}\varphi_j^{\otimes N}\) must be related to the repeated
-disjoint adjacent two-site amplitude stated here, and the nearest-neighbor
+physical-pair two-site amplitude stated here, and the nearest-neighbor
 parent projectors on each finite chain must be identified with a commuting
 family attached to the source projectors \(Q_{AX}\) and \(Q_{XB}\). -/
 structure AppendixBProductPairExtraction {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) where
-  /-- Positive even-chain adjacent-pair factorization through the structural
-  two-site amplitude. -/
+  /-- Positive even-chain factorization through the structural two-site amplitude. -/
   hmpv : ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
     mpv A σ = productPairState hStruct.twoSiteAmplitude N σ
   /-- Local projectors realizing the nearest-neighbor parent terms. -/
@@ -720,7 +720,7 @@ theorem AppendixBProductPairExtraction.commuting_twoSite_localTerms
 /-- Conditional form of the forward implication in arXiv:1606.00608,
 Theorem 3.10:
 RFP plus the proved Appendix B structural theorem implies the nearest-neighbor
-commutation equation as soon as the disjoint adjacent-pair coefficient condition
+commutation equation as soon as the even-chain physical-pair coefficient condition
 and the two-site projector identities are supplied for the resulting structural
 form.
 
