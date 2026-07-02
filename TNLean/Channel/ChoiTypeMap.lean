@@ -7,7 +7,6 @@ import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Data.Complex.Basic
 import Mathlib.LinearAlgebra.Matrix.Permutation
 import TNLean.Algebra.MatrixAux
-import TNLean.Channel.Basic
 
 /-!
 # Choi-type positive maps
@@ -31,7 +30,7 @@ proved here.
   Example 3.1, equation (3.20)][Wolf2012QChannels]
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder InnerProductSpace
+open scoped Matrix ComplexOrder InnerProductSpace
 open Finset
 
 namespace Matrix
@@ -289,8 +288,8 @@ noncomputable def choiTypeRankOneWeight (d n : ℕ) [NeZero d] (v : ZMod d → �
 /-- Rank-one positivity of the Choi-type map reduced to the cyclic reciprocal
 bound for the diagonal weights.
 
-For Wolf's range \(1 \le n \le d-2\), the remaining scalar task is to prove the
-displayed bound for all vectors `v`. -/
+In the range \(n \le d-2\), the remaining scalar task is to prove the displayed
+bound for all vectors `v`. -/
 theorem choiTypeMap_vecMulVec_posSemidef_of_weight_sum_le_one
     (n : ℕ) (v : ZMod d → ℂ) (hn₂ : n ≤ d - 2)
     (hbound : ∑ i, ‖v i‖ ^ 2 / choiTypeRankOneWeight d n v i ≤ 1) :
