@@ -205,7 +205,7 @@ theorem HasNNCPHGroundSpace.isNNCPHGroundState {B : MPSTensor d D}
   h.1
 
 /-- The full fixed-chain NNCPH ground-space condition includes length-two
-translated parent-term commutation. -/
+local-term commutation. -/
 theorem HasNNCPHGroundSpace.isNNCPH {B : MPSTensor d D}
     {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
     {N : ℕ} (h : HasNNCPHGroundSpace B A N) :

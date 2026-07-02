@@ -368,6 +368,7 @@ sufficient stronger hypotheses.
     \lean{MPSTensor.CyclicWindowsDisjoint}
     \lean{MPSTensor.CyclicWindowsDisjoint.symm}
     \lean{MPSTensor.CyclicWindowsDisjoint.of_not_cyclicWindowsOverlap}
+    \lean{MPSTensor.localTerm_commute_of_cyclic_windows_disjoint}
     \lean{MPSTensor.localTermES_commute_of_cyclic_windows_disjoint}
     \lean{MPSTensor.localTermES_re_inner_nonneg_of_cyclic_windows_disjoint}
     \leanok
@@ -380,7 +381,8 @@ sufficient stronger hypotheses.
         h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)
         = h_{j,\mathrm{ES}}(h_{i,\mathrm{ES}}v),
     \]
-    and their ordered cross term is non-negative:
+    The same commutation identity holds for the corresponding local terms before
+    passing to the Hilbert-space model. Their ordered cross term is non-negative:
     \[
         0\le \operatorname{Re}\langle h_{i,\mathrm{ES}}v,
         h_{j,\mathrm{ES}}v\rangle.
