@@ -272,6 +272,23 @@ orthogonal projector is the canonical representative used here.
     $\sigma$; outside the interval both sides already agree with $\sigma$.
 \end{proof}
 
+\begin{lemma}[Replacing the same window twice]\label{lem:replace_window_replace_window_same}
+    \lean{MPSTensor.replaceWindow_replaceWindow_same}
+    \leanok
+    \uses{def:replace_window}
+    If $L \le N$, then two prescriptions on the same cyclic interval reduce to
+    the second prescription:
+    \[
+        \left(\sigma^{[i,i+L-1]\leftarrow\tau}\right)^{[i,i+L-1]\leftarrow\upsilon}
+        =
+        \sigma^{[i,i+L-1]\leftarrow\upsilon}.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    On the cyclic interval both sides take the value prescribed by $\upsilon$.
+    Away from that interval neither second prescription changes the value.
+\end{proof}
+
 For a periodic chain of length $N$, the parent Hamiltonian is the sum of
 translated copies of the local interaction.
 
@@ -294,6 +311,58 @@ translated copies of the local interaction.
         \end{cases}
     \]
 \end{definition}
+
+\begin{lemma}[Pointwise form of a translated local term]\label{lem:local_term_apply_of_le}
+    \lean{MPSTensor.localTerm_apply_of_le}
+    \leanok
+    \uses{def:local_term_parent}
+    If $L \le N$, then the translated term is obtained by applying the local
+    parent interaction on the chosen cyclic window:
+    \[
+        \bigl(h_i(A,L)\psi\bigr)(\sigma)
+        =
+        \left[
+            h_L(A)
+            \bigl(\tau\mapsto
+            \psi(\sigma^{[i,i+L-1]\leftarrow\tau})\bigr)
+        \right]\!\bigl(\sigma|_{[i,i+L-1]}\bigr).
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    This is the first case in the definition of the translated local term.
+\end{proof}
+
+\begin{lemma}[Translated local terms are idempotent]\label{lem:local_term_idempotent}
+    \lean{MPSTensor.localTerm_idempotent}
+    \leanok
+    \uses{def:local_term_parent, lem:parent_interaction_idempotent,
+        lem:local_term_apply_of_le, lem:extract_window_replace_window,
+        lem:replace_window_replace_window_same}
+    For every site $i$,
+    \[
+        h_i(A,L)^2=h_i(A,L).
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    If $L>N$, the translated term is zero. Suppose $L\le N$ and put
+    \[
+        f_{\sigma,i}(\tau)
+        =
+        \psi(\sigma^{[i,i+L-1]\leftarrow\tau}).
+    \]
+    The pointwise formula for translated terms, together with
+    Lemmas~\ref{lem:extract_window_replace_window} and
+    \ref{lem:replace_window_replace_window_same}, gives
+    \[
+        \bigl(h_i(A,L)^2\psi\bigr)(\sigma)
+        =
+        \bigl(h_L(A)^2 f_{\sigma,i}\bigr)
+        \bigl(\sigma|_{[i,i+L-1]}\bigr).
+    \]
+    Lemma~\ref{lem:parent_interaction_idempotent} turns the right-hand side into
+    $\bigl(h_L(A)f_{\sigma,i}\bigr)(\sigma|_{[i,i+L-1]})$, which is
+    $\bigl(h_i(A,L)\psi\bigr)(\sigma)$.
+\end{proof}
 
 \begin{definition}[Parent Hamiltonian]\label{def:parent_hamiltonian}
     \lean{MPSTensor.parentHamiltonian}

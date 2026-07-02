@@ -158,6 +158,18 @@ that configuration unchanged. -/
     exact congr_arg σ (Fin.ext key)
   · rw [dif_neg hoffset]
 
+/-- Replacing the same cyclic window twice is the same as keeping only the
+second replacement. -/
+@[simp] lemma replaceWindow_replaceWindow_same (L : ℕ) (hLN : L ≤ N) {α : Type*}
+    (i : Fin N) (σ : Fin N → α) (τ υ : Fin L → α) :
+    replaceWindow L hLN i (replaceWindow L hLN i σ τ) υ =
+      replaceWindow L hLN i σ υ := by
+  funext ⟨k, hk⟩
+  unfold replaceWindow
+  by_cases hoffset : (k + N - i.val) % N < L
+  · simp [hoffset]
+  · simp [hoffset]
+
 /-! ### Local term (site embedding) -/
 
 /-- Translated local term on an \(N\)-site periodic chain: embeds
