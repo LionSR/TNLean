@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import Mathlib.Data.Complex.Basic
 import Mathlib.LinearAlgebra.Matrix.Permutation
 import TNLean.Algebra.HermitianHelpers
+import TNLean.Analysis.MatrixTraceInequalities
 
 /-!
 # Choi-type positive maps
@@ -147,6 +148,63 @@ noncomputable def choiTypeRankOneWeight (d n : ℕ) [NeZero d] (v : ZMod d → �
   ((d : ℝ) - (n : ℝ)) * ‖v i‖ ^ 2 +
     ∑ k : Fin n, ‖v (i - ((k.1 + 1 : ℕ) : ZMod d))‖ ^ 2
 
+/-- The first nontrivial Choi cyclic reciprocal estimate.
+
+For the case \(d=3\), \(n=1\), the cyclic reciprocal bound reduces to
+\[
+  \frac{x}{2x+z}+\frac{y}{2y+x}+\frac{z}{2z+y}\le 1.
+\]
+Clearing denominators gives
+\[
+  x^2y+y^2z+z^2x\ge 3xyz,
+\]
+which is AM--GM applied to \(x^2y,y^2z,z^2x\).
+
+**Scope restriction:** See
+`docs/paper-gaps/wolf_ex3_1_choi_positivity_subcase_scope.tex`.  This proves
+only the strict-positive three-variable subcase of the scalar estimate needed
+for Wolf Chapter 3, Example 3.1, equation (3.20).  The full nonnegative cyclic
+estimate for \(1\le n\le d-2\) remains separate. -/
+theorem choiType_cyclic_reciprocal_three_one_of_pos
+    {x y z : ℝ} (hx : 0 < x) (hy : 0 < y) (hz : 0 < z) :
+    x / (2 * x + z) + y / (2 * y + x) + z / (2 * z + y) ≤ 1 := by
+  have hA : 0 < 2 * x + z := by positivity
+  have hB : 0 < 2 * y + x := by positivity
+  have hC : 0 < 2 * z + y := by positivity
+  rw [← sub_nonneg]
+  field_simp [hA.ne', hB.ne', hC.ne']
+  have hamgm : x ^ 2 * y + y ^ 2 * z + z ^ 2 * x - 3 * x * y * z ≥ 0 := by
+    let f : Fin 3 → ℝ := ![x ^ 2 * y, y ^ 2 * z, z ^ 2 * x]
+    have hf : ∀ i, 0 ≤ f i := by
+      intro i
+      fin_cases i <;> simp [f] <;> positivity
+    have h := pow_card_mul_prod_le_sum_pow (D := 3) f hf
+    have hcube : (3 * x * y * z) ^ 3 ≤
+        (x ^ 2 * y + y ^ 2 * z + z ^ 2 * x) ^ 3 := by
+      simpa [f, Fin.prod_univ_three, Fin.sum_univ_three, pow_succ, pow_two,
+        mul_assoc, mul_left_comm, mul_comm] using h
+    have hleft_nonneg : 0 ≤ 3 * x * y * z := by positivity
+    have hright_nonneg : 0 ≤ x ^ 2 * y + y ^ 2 * z + z ^ 2 * x := by positivity
+    have hle : 3 * x * y * z ≤ x ^ 2 * y + y ^ 2 * z + z ^ 2 * x := by
+      exact (pow_le_pow_iff_left₀ hleft_nonneg hright_nonneg
+        (by decide : (3 : ℕ) ≠ 0)).mp hcube
+    linarith
+  nlinarith
+
+/-- The cyclic reciprocal sum for the Choi rank-one weights when \(d=3\) and
+\(n=1\), written in the three explicit cyclic coordinates. -/
+theorem choiTypeRankOneWeight_reciprocal_sum_three_one (v : ZMod 3 → ℂ) :
+    ∑ i : ZMod 3, ‖v i‖ ^ 2 / choiTypeRankOneWeight 3 1 v i =
+      ‖v 0‖ ^ 2 / (2 * ‖v 0‖ ^ 2 + ‖v 2‖ ^ 2) +
+        ‖v 1‖ ^ 2 / (2 * ‖v 1‖ ^ 2 + ‖v 0‖ ^ 2) +
+          ‖v 2‖ ^ 2 / (2 * ‖v 2‖ ^ 2 + ‖v 1‖ ^ 2) := by
+  have hfin2 : (ZMod.finEquiv 3) 2 = (2 : ZMod 3) := by decide
+  have hminus : (-(1 : ZMod 3)) = 2 := by decide
+  rw [← (ZMod.finEquiv 3).toEquiv.sum_comp]
+  rw [Fin.sum_univ_three]
+  simp [choiTypeRankOneWeight, hfin2, hminus]
+  ring_nf
+
 /-- Rank-one positivity of the Choi-type map reduced to the cyclic reciprocal
 bound for the diagonal weights.
 
@@ -200,5 +258,27 @@ theorem choiTypeMap_vecMulVec_posSemidef_of_weight_sum_le_one
   · subst hij
     simp [a, choiTypeRankOneWeight, Complex.mul_conj, Complex.normSq_eq_norm_sq]
   · simp [hij]
+
+/-- Strict-nonzero-coordinate rank-one positivity for the first Choi map.
+
+For \(d=3\), \(n=1\), if all three coordinates of \(v\) are nonzero, then the
+rank-one image \(T_C(|v\rangle\langle v|)\) is positive semidefinite.
+
+**Scope restriction:** See
+`docs/paper-gaps/wolf_ex3_1_choi_positivity_subcase_scope.tex`.  This is only a
+strict-coordinate subcase of the positivity assertion in Wolf Chapter 3,
+Example 3.1, equation (3.20).  It does not prove positivity of \(T_C\) on every
+positive semidefinite matrix, and it does not treat the general range
+\(1\le n\le d-2\). -/
+theorem choiTypeMap_vecMulVec_posSemidef_three_one_of_forall_ne_zero
+    (v : ZMod 3 → ℂ) (h0 : v 0 ≠ 0) (h1 : v 1 ≠ 0) (h2 : v 2 ≠ 0) :
+    (choiTypeMap 3 1 (vecMulVec v (star v))).PosSemidef := by
+  refine choiTypeMap_vecMulVec_posSemidef_of_weight_sum_le_one
+    (d := 3) (n := 1) v (by decide) ?_
+  have hpos0 : 0 < ‖v 0‖ ^ 2 := sq_pos_of_ne_zero (by simpa [norm_eq_zero] using h0)
+  have hpos1 : 0 < ‖v 1‖ ^ 2 := sq_pos_of_ne_zero (by simpa [norm_eq_zero] using h1)
+  have hpos2 : 0 < ‖v 2‖ ^ 2 := sq_pos_of_ne_zero (by simpa [norm_eq_zero] using h2)
+  rw [choiTypeRankOneWeight_reciprocal_sum_three_one]
+  exact choiType_cyclic_reciprocal_three_one_of_pos hpos0 hpos1 hpos2
 
 end Matrix
