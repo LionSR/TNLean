@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Analysis.InnerProductSpace.PiL2
+import TNLean.Algebra.MatrixAux
 import TNLean.Channel.Basic
 import TNLean.Algebra.MatrixSpectralDecomp
 
@@ -131,22 +132,6 @@ theorem breuerHallMap_apply (U : Matrix (Fin d) (Fin d) ℂ) (X : Matrix (Fin d)
     breuerHallMap U X =
       Matrix.trace X • (1 : Matrix (Fin d) (Fin d) ℂ) - X - U * Xᵀ * Uᴴ :=
   rfl
-
-/-! ## Quadratic-form helper -/
-
-/-- The quadratic form of a rank-one outer product `vecMulVec a b` reads off as
-`(b ⬝ᵥ w)((conj w) ⬝ᵥ a)`. -/
-theorem star_dotProduct_vecMulVec_mulVec (a b w : Fin d → ℂ) :
-    star w ⬝ᵥ (Matrix.vecMulVec a b *ᵥ w) = (b ⬝ᵥ w) * (star w ⬝ᵥ a) := by
-  have lhs : star w ⬝ᵥ (Matrix.vecMulVec a b *ᵥ w)
-      = ∑ i, ∑ j, star (w i) * a i * b j * w j := by
-    simp only [dotProduct, Matrix.mulVec, Matrix.vecMulVec_apply, Pi.star_apply, Finset.mul_sum]
-    exact Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => by ring
-  have rhs : (b ⬝ᵥ w) * (star w ⬝ᵥ a) = ∑ i, ∑ j, star (w i) * a i * b j * w j := by
-    simp only [dotProduct, Pi.star_apply]
-    rw [Finset.sum_mul_sum, Finset.sum_comm]
-    exact Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => by ring
-  rw [lhs, rhs]
 
 /-! ## Positivity on rank-one outer products -/
 

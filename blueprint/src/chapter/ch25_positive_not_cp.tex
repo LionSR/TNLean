@@ -336,6 +336,43 @@ assertions for the range $1\le n\le d-2$ remain open.
     matrix minus the original rank-one projector.
 \end{proof}
 
+\begin{definition}[The Choi rank-one diagonal weight]
+    \label{def:choi_type_rankone_weight}
+    \lean{Matrix.choiTypeRankOneWeight}
+    \leanok
+    For a vector \(v\) on \(\mathbb Z/d\mathbb Z\), set
+    \[
+        a_i=(d-n)|v_i|^2+\sum_{k=1}^n |v_{i-k}|^2 .
+    \]
+\end{definition}
+
+\begin{lemma}[Rank-one positivity from the cyclic reciprocal bound]
+    \label{lem:choi_type_rankone_positive_from_weight_bound}
+    \lean{Matrix.choiTypeMap_vecMulVec_posSemidef_of_weight_sum_le_one}
+    \leanok
+    \uses{def:choi_type_map, lem:choi_type_map_rankone,
+        def:choi_type_rankone_weight}
+    Assume \(n\le d-2\). If
+    \[
+        \sum_i \frac{|v_i|^2}{a_i}\le 1,
+    \]
+    where \(a_i\) is the weight of
+    Definition~\ref{def:choi_type_rankone_weight}, then
+    \[
+        T_C(\ket{v}\bra{v})\ge 0 .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The matrix in Lemma~\ref{lem:choi_type_map_rankone} has the form
+    \(\operatorname{diag}(a_i)-\ket{v}\bra{v}\).  Conjugating by the diagonal
+    matrix with entries \(\sqrt{a_i}\) reduces the claim to
+    \(I-\ket{p}\bra{p}\ge0\), where \(p_i=v_i/\sqrt{a_i}\) on the support of
+    \(a_i\).  The displayed bound says \(\|p\|^2\le1\), and the conclusion is
+    Cauchy's inequality.
+\end{proof}
+
 \section{The partial transpose and the PPT property}
 
 Transposition is a positive map that is not completely positive, so applying it
