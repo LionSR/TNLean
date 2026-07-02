@@ -115,9 +115,15 @@ For the forward RFP-to-NNCPH direction, the three-site \(AX/XB\) support maps
 are now represented in \leanid{MPSTensor.HasOverlappingTwoSiteCommutation};
 Appendix~B supplies the basic-vector form, while the projectors
 \(Q_{AX}\) and \(Q_{XB}\) belong to the Appendix~D.2 parent-commuting
-condition.  The remaining local step is to identify those projectors with the
-translated two-site parent terms and prove the overlapping commutation relation
-for them.  On the coefficient side, the source statement is the basic-vector formula
+condition.  The coefficient-space representatives
+\leanid{MPSTensor.AppendixBStructuralData.appendixBQAX} and
+\leanid{MPSTensor.AppendixBStructuralData.appendixBQXB} are now identified with
+the canonical two-site parent interaction, and their lifted commutator has been
+transported to the first two translated three-site parent terms.  The remaining
+local step is to construct the source Appendix~D.2 data from the Appendix~B
+basic-vector form, prove the lifted \(AX/XB\) commutator, and extend the local
+transport to the all-chain family of two-site parent projectors.  On the
+coefficient side, the source statement is the basic-vector formula
 \(|V^{(L)}(A_j)\rangle=U^{\otimes L}|\varphi_j\rangle^{\otimes L}\), where
 \(\varphi_j\) is shared between neighboring virtual spins.  The current
 disjoint adjacent-pair condition is a separate conditional statement and should
@@ -151,9 +157,10 @@ The present formal boundary is therefore: the reverse implication has the
 source ground-space hypothesis, but its proof is still the Beigi axiom; the
 forward implication has the source-unit Appendix~B structural datum, the
 three-site \(AX/XB\) support maps, and the coefficient form of
-\(U^{\otimes L}\varphi_j^{\otimes L}\).  It still lacks the source projector
-identification and a justified relation between the source formula and any
-disjoint adjacent-pair condition used by the conditional theorem.
+\(U^{\otimes L}\varphi_j^{\otimes L}\).  It still lacks the construction of the
+source Appendix~D.2 projectors and their lifted commutator from that datum, the
+all-chain local-projector witness, and a justified relation between the source
+formula and any disjoint adjacent-pair condition used by the conditional theorem.
 The axiom-backed theorem still supplies the commutation direction used by the
 unconditional statements.
 
