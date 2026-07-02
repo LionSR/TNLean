@@ -1011,7 +1011,7 @@ the specialization $L=2$.
     \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_overlapping}
     \leanok
     \uses{lem:appendixB_three_site_parent_lifts}
-    If the Appendix~B \(AX\) and \(XB\) projectors satisfy the overlapping
+    If the Appendix~B $AX$ and $XB$ projectors satisfy the overlapping
     two-site commutation datum
     \[
         Q_{AX}^2=Q_{AX},\qquad
@@ -1032,8 +1032,8 @@ the specialization $L=2$.
 \begin{proof}
     \leanok
     By Lemma~\ref{lem:appendixB_three_site_parent_lifts}, the two translated
-    parent terms are exactly the \(AX\) and \(XB\) lifts of \(Q_{AX}\) and
-    \(Q_{XB}\).  The displayed equality is therefore the commutation clause of
+    parent terms are exactly the $AX$ and $XB$ lifts of $Q_{AX}$ and
+    $Q_{XB}$.  The displayed equality is therefore the commutation clause of
     the overlapping two-site datum.
 \end{proof}
 
@@ -1044,7 +1044,7 @@ the specialization $L=2$.
     \leanok
     \uses{lem:appendixB_overlapping_condition_from_lift_commutator,
         lem:appendixB_overlapping_condition_parent_terms}
-    If the Appendix~B \(AX\) and \(XB\) projectors satisfy the lifted
+    If the Appendix~B $AX$ and $XB$ projectors satisfy the lifted
     Definition~D.2 commutator
     \[
         (Q_{AX})_{AX}(Q_{XB})_{XB}
@@ -1066,8 +1066,15 @@ the specialization $L=2$.
     \leanok
     The lifted commutator, together with the Appendix~B idempotency already
     recorded above, gives the overlapping two-site commutation datum.  Full
-    Definition~D.2 data imply the same conclusion by retaining its commutation
-    clause and not using its kernel-intersection clause.
+    Definition~D.2 data imply the same conclusion by retaining their commutation
+    clause and not using the kernel-intersection condition
+    \[
+        K_{AXB}
+        =
+        \ker\bigl((Q_{AX})_{AX}\bigr)
+        \cap
+        \ker\bigl((Q_{XB})_{XB}\bigr).
+    \]
 \end{proof}
 
 \begin{remark}[Basic-vector coefficients and nearest-neighbor parent-term commutation]%
