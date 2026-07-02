@@ -1226,16 +1226,15 @@ the specialization $L=2$.
         =
         V^{(2)}(\Lambda U)(a,b).
     \]
-    Thus the adjacent-pair factorization is already verified for one physical
-    pair in the core tensor:
+    Thus the one-pair case of the factorization is already verified for the core
+    tensor:
     \[
         V^{(2)}(\Lambda U)(\sigma)
         =
         \phi_2(\sigma_0,\sigma_1).
     \]
-    The disjoint adjacent-pair condition presently used in the formal statement
-    is the even-chain factorization, for a positive number $n$ of adjacent
-    pairs,
+    The even-chain physical-pair factorization presently used in the formal
+    statement is the following condition, for a positive number $n$ of pairs,
     \[
         V^{(2n)}(A)(\sigma)
         =
@@ -1249,7 +1248,7 @@ the specialization $L=2$.
     expansion of the closed matrix product and is the coefficient form of
     $U^{\otimes L}\varphi_j^{\otimes L}$. The remaining coefficient step is
     to relate this source expression, with the physical word $\sigma$ fixed, to
-    the disjoint adjacent-pair condition above.
+    the even-chain physical-pair factorization above.
     On a three-site chain, the two adjacent length-two parent terms are the
     \(AX\) and \(XB\) actions of the canonical two-site parent interaction.
     Appendix~B supplies the basic-vector expression, while Appendix~D.2 supplies
@@ -1270,23 +1269,23 @@ the specialization $L=2$.
     The projector equation $h_i(A,2)^2=h_i(A,2)$ is already
     Lemma~\ref{lem:local_term_idempotent}.
     The overlapping commutation theorem and the justification of any passage
-    from the source coefficients to this adjacent-pair condition are the
+    from the source coefficients to this even-chain factorization are the
     remaining obligations before the conditional theorem can be applied; once
     they are proved, the local terms commute. Together with
-    Lemma~\ref{lem:parent_hamiltonian_ff}, the adjacent-pair condition also gives the
-    zero-energy equation for $V^{(N)}(A)$, still without asserting the source
-    ground-space spanning condition.
+    Lemma~\ref{lem:parent_hamiltonian_ff}, the same factorization also gives
+    the zero-energy equation for $V^{(N)}(A)$, still without asserting the
+    source ground-space spanning condition.
 \end{remark}
 
-\begin{theorem}[Adjacent-pair condition and ground-space spanning give all-chain NNCPH]%
+\begin{theorem}[Even-chain factorization and ground-space spanning give all-chain NNCPH]%
     \label{thm:appendixB_product_pair_has_nncph_ground_spaces}
     \lean{MPSTensor.ProductPairBridge.hasNNCPHGroundSpaces_of_groundSpaceSpanning}
     \lean{MPSTensor.rfp_implies_hasNNCPHGroundSpaces_of_appendixBExtraction_of_groundSpaceSpanning}
     \leanok
     \uses{rem:product_pair_projectors, def:has_nncph_ground_spaces,
         def:parent_hamiltonian_ground_space_spanning}
-    Suppose the conditional adjacent-pair hypotheses give commuting two-site
-    parent terms for a tensor \(B\). If the nearest-neighbor parent Hamiltonian also
+    Suppose the conditional even-chain hypotheses give commuting two-site parent
+    terms for a tensor \(B\). If the nearest-neighbor parent Hamiltonian also
     satisfies the ground-space spanning equation of
     Definition~\ref{def:parent_hamiltonian_ground_space_spanning}, with BNT
     components \(A_1,\ldots,A_g\), then \(B\) satisfies the all-chain
@@ -1302,7 +1301,7 @@ the specialization $L=2$.
 \begin{proof}
     \uses{lem:parent_hamiltonian_ff, def:has_nncph_ground_space}
     \leanok
-    The adjacent-pair hypotheses give \(h_i h_j=h_j h_i\) for all translated
+    The conditional hypotheses give \(h_i h_j=h_j h_i\) for all translated
     two-site parent terms. Lemma~\ref{lem:parent_hamiltonian_ff} gives
     \(h_iV^{(N)}(B)=0\). For every \(N>2\), the spanning hypothesis supplies
     \[
