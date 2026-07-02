@@ -105,9 +105,9 @@ non-periodic FT cleanup loop unless explicitly brought back into scope.
 For Wolf Chapter 3 positive maps:
 
 - `wolf_ex3_1_choi_positivity_subcase_scope.tex` records that the current
-  Choi-type positivity theorem is only the strict-coordinate \(d=3,n=1\)
-  rank-one subcase of Wolf Example 3.1.  The full nonnegative cyclic reciprocal
-  estimate and the extension to positivity of \(T_C\) remain open.
+  Choi-type positivity theorem is only the \(d=3,n=1\) rank-one subcase of
+  Wolf Example 3.1.  The general cyclic reciprocal estimate and the extension
+  to positivity of \(T_C\) remain open.
 
 For the periodic (irreducible-form) MPS Fundamental Theorem of
 arXiv:1708.00029, the overlap-dichotomy development has one route-alignment
