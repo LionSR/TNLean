@@ -941,6 +941,49 @@ the specialization $L=2$.
     change leaves \(q_2\) unchanged.
 \end{proof}
 
+\begin{lemma}[Appendix B two-site idempotents]
+    \label{lem:appendixB_qax_qxb_idempotent}
+    \lean{MPSTensor.AppendixBStructuralData.appendixBQAX_idempotent}
+    \lean{MPSTensor.AppendixBStructuralData.appendixBQXB_idempotent}
+    \leanok
+    \uses{lem:parent_interaction_idempotent,
+        lem:appendixB_qax_qxb_parent_interaction}
+    The two Appendix~B two-site operators are idempotent:
+    \[
+        Q_{AX}^{2}=Q_{AX},\qquad Q_{XB}^{2}=Q_{XB}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    By the preceding identification, both \(Q_{AX}\) and \(Q_{XB}\) are the
+    canonical two-site parent interaction \(q_2(A)\).  The latter is an
+    orthogonal projector, hence is idempotent.
+\end{proof}
+
+\begin{lemma}[Appendix B overlapping condition from the lifted commutator]
+    \label{lem:appendixB_overlapping_condition_from_lift_commutator}
+    \lean{MPSTensor.AppendixBStructuralData.hasOverlappingTwoSiteCommutation_of_commute_lifts}
+    \leanok
+    \uses{def:overlapping_two_site_supports, lem:appendixB_qax_qxb_idempotent}
+    Suppose the lifted \(AX\) and \(XB\) operators commute:
+    \[
+        (Q_{AX})_{AX}(Q_{XB})_{XB}
+        =
+        (Q_{XB})_{XB}(Q_{AX})_{AX}.
+    \]
+    Then \(Q_{AX}\) and \(Q_{XB}\) satisfy the algebraic overlapping two-site
+    condition of Definition~\ref{def:overlapping_two_site_supports}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The idempotency clauses are supplied by
+    Lemma~\ref{lem:appendixB_qax_qxb_idempotent}.  The only remaining clause
+    in Definition~\ref{def:overlapping_two_site_supports} is exactly the
+    displayed lifted commutator.
+\end{proof}
+
 \begin{lemma}[Three-site lifts of the Appendix B two-site operators]
     \label{lem:appendixB_three_site_parent_lifts}
     \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_eq_leftPairLift_appendixBQAX}

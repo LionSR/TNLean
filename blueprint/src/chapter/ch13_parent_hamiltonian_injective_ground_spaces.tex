@@ -175,6 +175,24 @@ orthogonal projector is the canonical representative used here.
     on the local $L$-site space.
 \end{definition}
 
+\begin{lemma}[Parent interaction is idempotent]
+    \label{lem:parent_interaction_idempotent}
+    \lean{MPSTensor.parentInteraction_idempotent}
+    \leanok
+    \uses{def:parent_interaction}
+    The local parent interaction is a projector:
+    \[
+        h_L(A)^2=h_L(A).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    This is the idempotency of the orthogonal projector onto
+    \(G_L(A)^\perp\), transported from the Hilbert-space realization of the
+    local coefficient space.
+\end{proof}
+
 \begin{lemma}[Parent interaction annihilates ground-space elements]%
     \label{lem:parent_interaction_apply_mem_ground_space}
     \lean{MPSTensor.parentInteraction_apply_mem_groundSpace}
