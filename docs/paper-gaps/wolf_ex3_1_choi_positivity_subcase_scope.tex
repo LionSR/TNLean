@@ -31,8 +31,8 @@ The source states that \(T_C\) is positive and indecomposable for every
 
 \section{Restricted statement now proved}
 
-The present development proves only the first rank-one subcase.  For \(d=3\),
-\(n=1\), and an arbitrary vector \(v=(v_0,v_1,v_2)\), it proves
+The present development proves only the first subcase.  For \(d=3\), \(n=1\),
+and an arbitrary vector \(v=(v_0,v_1,v_2)\), it proves
 \begin{align}
   T_C(|v\rangle\langle v|)\ge 0.
 \end{align}
@@ -47,6 +47,10 @@ boundary cases reduce to a single half-bound.\footnote{Formal declarations:
 \leanid{Matrix.choiType\_cyclic\_reciprocal\_three\_one\_of\_nonneg} and
 \leanid{Matrix.choiTypeMap\_vecMulVec\_posSemidef\_three\_one}
 in \doclink{TNLean/Channel/ChoiTypeMap}.}
+Using the spectral decomposition of a positive semidefinite matrix into
+rank-one positive semidefinite summands, the development then proves that this
+first Choi map is positive on all positive semidefinite inputs.\footnote{Formal
+declaration: \leanid{Matrix.choiTypeMap\_isPositiveMap\_three\_one}.}
 
 \section{Missing hypotheses and elimination plan}
 
@@ -59,15 +63,16 @@ statement still requires the nonnegative cyclic reciprocal estimate
 \end{align}
 with the usual zero-term convention.  Once this estimate is available, it
 should be applied to \(x_i=|v_i|^2\) to obtain the rank-one statement for the
-full parameter range.  A positive-semidefinite decomposition will then extend
-the rank-one result to positivity of \(T_C\) on all positive semidefinite
-matrices.  This is tracked by \ghissue{3622}.  The indecomposability assertion
-of the same source paragraph is separate and is tracked by \ghissue{3623}.
+full parameter range.  The same positive-semidefinite decomposition used in
+the \(d=3,n=1\) case will then extend the rank-one result to positivity of
+\(T_C\) on all positive semidefinite matrices.  This is tracked by
+\ghissue{3622}.  The indecomposability assertion of the same source paragraph
+is separate and is tracked by \ghissue{3623}.
 
 \section{Classification}
 
 \emph{Scope restriction.}  The current theorem is mathematically correct as a
-\(3\times3\) rank-one subcase, but it should not be cited as the formalization
+\(3\times3\) positive-map subcase, but it should not be cited as the formalization
 of Wolf's full Choi-type positivity theorem.
 
 \bibliographystyle{alpha}
