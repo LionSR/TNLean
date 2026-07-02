@@ -21,7 +21,9 @@ where `D` projects a matrix to its diagonal part.
 The main theorem in this file is the exact action on rank-one projectors.  This
 is the algebraic reduction needed for the later positivity proof of Wolf
 Example 3.1.  Positivity and indecomposability of the Choi-type maps are not
-proved here.
+proved here.  The remaining positivity step is a genuine cyclic reciprocal
+inequality for the diagonal weights; it does not follow merely from equality of
+the total numerator and denominator weights.
 
 ## References
 
@@ -149,7 +151,8 @@ noncomputable def choiTypeRankOneWeight (d n : ℕ) [NeZero d] (v : ZMod d → �
 bound for the diagonal weights.
 
 In the range \(n \le d-2\), the remaining scalar task is to prove the displayed
-bound for all vectors `v`. -/
+bound for all vectors `v`.  The cyclic placement of the shifted weights is
+essential; equality of the two total sums alone does not imply such a bound. -/
 theorem choiTypeMap_vecMulVec_posSemidef_of_weight_sum_le_one
     (n : ℕ) (v : ZMod d → ℂ) (hn₂ : n ≤ d - 2)
     (hbound : ∑ i, ‖v i‖ ^ 2 / choiTypeRankOneWeight d n v i ≤ 1) :
