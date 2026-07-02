@@ -569,13 +569,14 @@ theorem AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_commute_
   hStruct.localTerm_two_three_zero_one_commute_of_overlapping
     (hStruct.hasOverlappingTwoSiteCommutation_of_commute_lifts hcomm)
 
-/-- Definition D.2 data for the Appendix B \(AX\) and \(XB\) coefficient
-representatives gives commutation of the first two translated length-two parent
-terms on the three-site window.
+/-- A supplied Definition D.2-shaped condition on the Appendix B \(AX\) and
+\(XB\) coefficient representatives gives commutation of the first two translated
+length-two parent terms on the three-site window.
 
-This theorem only transports already-supplied Definition D.2 data to the
-canonical parent interactions identified above.  The construction of that data
-remains to be derived from the Appendix B basic-vector form.
+This theorem only transports the supplied idempotency and lifted-commutator
+clauses to the canonical parent interactions identified above; the
+kernel-intersection clause is not used here.  It does not construct the source
+projectors \(Q_{AX}\) and \(Q_{XB}\) from the Appendix B basic-vector form.
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
