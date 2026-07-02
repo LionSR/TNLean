@@ -900,7 +900,7 @@ the specialization $L=2$.
 
 \begin{definition}[Appendix B \(AX\) coefficient representative]
     \label{def:appendixB_qax}
-    \lean{MPSTensor.AppendixBStructuralData.appendixBQAX}
+    \lean{MPSTensor.AppendixBStructuralData.appendixBQAXOnCoeffSpace}
     \leanok
     \uses{def:appendixB_two_site_basic_space, def:parent_interaction}
     The \(AX\) coefficient-space representative is, before the \(AX\)-lift,
@@ -916,7 +916,7 @@ the specialization $L=2$.
 
 \begin{definition}[Appendix B \(XB\) coefficient representative]
     \label{def:appendixB_qxb}
-    \lean{MPSTensor.AppendixBStructuralData.appendixBQXB}
+    \lean{MPSTensor.AppendixBStructuralData.appendixBQXBOnCoeffSpace}
     \leanok
     \uses{def:appendixB_qax}
     The \(XB\) coefficient-space representative is, before the \(XB\)-lift, the
@@ -931,8 +931,8 @@ the specialization $L=2$.
 
 \begin{lemma}[Appendix B coefficient representatives and the parent interaction]
     \label{lem:appendixB_qax_qxb_parent_interaction}
-    \lean{MPSTensor.AppendixBStructuralData.appendixBQAX_eq_parentInteraction}
-    \lean{MPSTensor.AppendixBStructuralData.appendixBQXB_eq_parentInteraction}
+    \lean{MPSTensor.AppendixBStructuralData.appendixBQAXOnCoeffSpace_eq_parentInteraction}
+    \lean{MPSTensor.AppendixBStructuralData.appendixBQXBOnCoeffSpace_eq_parentInteraction}
     \leanok
     \uses{lem:appendixB_basis_change_parent_interaction, def:appendixB_qax,
         def:appendixB_qxb}
@@ -950,8 +950,8 @@ the specialization $L=2$.
 
 \begin{lemma}[Appendix B two-site representative idempotents]
     \label{lem:appendixB_qax_qxb_idempotent}
-    \lean{MPSTensor.AppendixBStructuralData.appendixBQAX_idempotent}
-    \lean{MPSTensor.AppendixBStructuralData.appendixBQXB_idempotent}
+    \lean{MPSTensor.AppendixBStructuralData.appendixBQAXOnCoeffSpace_idempotent}
+    \lean{MPSTensor.AppendixBStructuralData.appendixBQXBOnCoeffSpace_idempotent}
     \leanok
     \uses{lem:parent_interaction_idempotent,
         lem:appendixB_qax_qxb_parent_interaction}
@@ -995,8 +995,8 @@ the specialization $L=2$.
 
 \begin{lemma}[Three-site lifts of the Appendix B coefficient representatives]
     \label{lem:appendixB_three_site_parent_lifts}
-    \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_eq_leftPairLift_appendixBQAX}
-    \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_one_eq_rightPairLift_appendixBQXB}
+    \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_eq_appendixBQAXOnCoeffSpace_lift}
+    \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_one_eq_appendixBQXBOnCoeffSpace_lift}
     \leanok
     \uses{thm:local_term_two_three_ax_xb_lifts,
         lem:appendixB_qax_qxb_parent_interaction}
@@ -1068,7 +1068,7 @@ the specialization $L=2$.
         h_1^{(3)}(A,2)h_0^{(3)}(A,2).
     \]
     The same conclusion holds if the full Definition~D.2 local data are given
-    for these two Appendix~B projectors.
+    for these two coefficient-space representatives.
 \end{lemma}
 
 \begin{proof}
