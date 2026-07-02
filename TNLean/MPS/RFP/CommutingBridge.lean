@@ -63,7 +63,7 @@ namespace MPSTensor
 variable {d D : ℕ}
 
 /-- Extract the `p`-th two-site physical pair from a configuration on `2 * N`
-sites, using the pairs `(0,1), (2,3), ...`. -/
+sites, using the pairs \((0,1),(2,3),\ldots\). -/
 def productPairWindow (N : ℕ) (σ : Cfg d (2 * N)) (p : Fin N) : Cfg d 2 :=
   fun j => σ ⟨2 * p.val + j.val, by
     have hp : p.val < N := p.isLt
@@ -84,7 +84,7 @@ def productPairWindow (N : ℕ) (σ : Cfg d (2 * N)) (p : Fin N) : Cfg d 2 :=
   simp [productPairWindow]
 
 /-- The even-chain state obtained by repeating a fixed two-site amplitude on the
-physical pairs `(0,1), (2,3), ...`.
+physical pairs \((0,1),(2,3),\ldots\).
 
 This is the physical-pair factorization used by the conditional
 nearest-neighbor parent-term theorem below. It is not the basic-vector formula
@@ -130,9 +130,9 @@ theorem HasProductPairMPV.exists_twoSiteAmplitude {A : MPSTensor d D}
       mpv A σ = productPairState ψ₂ N σ :=
   hA
 
-/-- Local-projector data saying that the nearest-neighbor local terms of \(A\)
-are idempotents \(p_i\) associated to the two-site factors on an \(N\)-site
-chain, with \(p_i p_j = p_j p_i\).
+/-- Hypotheses asserting that the nearest-neighbor local terms of \(A\) are
+commuting idempotents \(p_i\) on an \(N\)-site chain, with
+\(p_i p_j = p_j p_i\).
 
 **Scope restriction (local projectors):** The three-site \(AX/XB\) support maps
 for adjacent windows give the local support maps. This structure does not
@@ -166,8 +166,9 @@ theorem HasProductPairLocalProjectors.commuting_twoSite_localTerms
   rw [hPair.hlocal i, hPair.hlocal j]
   exact hPair.hcomm i j
 
-/-- A commuting family of translated length-two parent terms gives the required
-local-projector data, since each translated parent term is already idempotent. -/
+/-- A commuting family of translated length-two parent terms satisfies the
+local-projector hypotheses, since each translated parent term is already
+idempotent. -/
 noncomputable def HasProductPairLocalProjectors.of_commuting_localTerms
     {A : MPSTensor d D} {N : ℕ}
     (hcomm : ∀ i j : Fin N,
@@ -368,7 +369,7 @@ This is the coefficient form of
   |\varphi_j\rangle=\sum_m\lambda_m|m,m\rangle,
 \]
 with \(\varphi_j\) shared between \(b_t\) and \(a_{t+1}\). It is not the
-disjoint adjacent physical-pair condition used later for nearest-neighbor
+even-chain physical-pair factorization used later for nearest-neighbor
 parent-term commutation. -/
 theorem AppendixBStructuralData.mpv_coreTensor_eq_cyclicVirtualPairState
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
@@ -601,8 +602,8 @@ Source: arXiv:1606.00608, lines 543--555.
 
 This combines the gauge-invariance of MPV coefficients with the coefficient
 formula for the core tensor \(\Lambda U^i\).  The conclusion is the source
-cyclic virtual-pair expression, not the disjoint adjacent physical-pair
-condition used later in the conditional parent-Hamiltonian theorem. -/
+cyclic virtual-pair expression, not the even-chain physical-pair factorization
+used later in the conditional parent-Hamiltonian theorem. -/
 theorem AppendixBStructuralData.mpv_eq_cyclicVirtualPairState {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) {L : ℕ} (hL : 0 < L) (σ : Cfg d L) :
     mpv A σ = hStruct.cyclicVirtualPairState hL σ := by
