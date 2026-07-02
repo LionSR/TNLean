@@ -36,8 +36,8 @@ The declarations below separate four mathematical statements:
 
 * the coefficient expression for \(U^{\otimes L}\varphi_j^{\otimes L}\);
 * the disjoint adjacent-pair coefficient condition used later in this file;
-* the coefficient-space representatives of the two local two-site operators
-  used before the \(AX\) and \(XB\) lifts;
+* the two local coefficient-space representatives used before the \(AX\) and
+  \(XB\) lifts;
 * the already formalized Appendix B structural form.
 
 **Scope restriction (overlapping two-site terms):** The source \(AX\) and
@@ -414,9 +414,10 @@ noncomputable def AppendixBStructuralData.twoSiteBasicSpace {A : MPSTensor d D}
 /-- The \(AX\) two-site coefficient-space representative associated with the
 Appendix B core tensor.
 
-This is the common two-site operator \(q_2(\Lambda U)\) before it is placed on
-the \(AX\) face. It is not, by itself, a construction of the source projector
-\(Q_{AX}\) as an operator on \(\mathcal H_A\otimes\mathcal H_X\).
+This is the common two-site coefficient representative \(q_2(\Lambda U)\)
+before it is placed on the \(AX\) face. It is not, by itself, a construction of
+the source projector \(Q_{AX}\) as an operator on
+\(\mathcal H_A\otimes\mathcal H_X\).
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
@@ -427,9 +428,9 @@ noncomputable def AppendixBStructuralData.appendixBQAX {A : MPSTensor d D}
 /-- The \(XB\) two-site coefficient-space representative associated with the
 Appendix B core tensor.
 
-This is the same common two-site operator \(\widehat Q_{AX}\), now reserved
-for the later \(XB\)-lift. It is not, by itself, a construction of the source
-projector \(Q_{XB}\) as an operator on
+This is the same common two-site coefficient representative
+\(\widehat Q_{AX}\), now reserved for the later \(XB\)-lift. It is not, by
+itself, a construction of the source projector \(Q_{XB}\) as an operator on
 \(\mathcal H_X\otimes\mathcal H_B\).
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
@@ -460,7 +461,7 @@ theorem AppendixBStructuralData.appendixBQXB_eq_parentInteraction {A : MPSTensor
   rw [AppendixBStructuralData.appendixBQXB]
   exact hStruct.appendixBQAX_eq_parentInteraction
 
-/-- The Appendix B \(AX\) two-site operator is idempotent.
+/-- The Appendix B \(AX\) two-site coefficient representative is idempotent.
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
@@ -470,7 +471,7 @@ theorem AppendixBStructuralData.appendixBQAX_idempotent {A : MPSTensor d D}
   rw [hStruct.appendixBQAX_eq_parentInteraction]
   exact parentInteraction_idempotent A 2
 
-/-- The Appendix B \(XB\) two-site operator is idempotent.
+/-- The Appendix B \(XB\) two-site coefficient representative is idempotent.
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
