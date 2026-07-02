@@ -543,8 +543,7 @@ three-site window.
 
 This theorem only transports already-supplied Definition D.2 data to the
 canonical parent interactions identified above.  The construction of that data
-from the Appendix B basic-vector form remains a separate source-level
-obligation.
+remains to be derived from the Appendix B basic-vector form.
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/

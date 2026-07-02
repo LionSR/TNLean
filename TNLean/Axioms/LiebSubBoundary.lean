@@ -30,9 +30,8 @@ The result reduces to the boundary case `lieb_concavity_psd`.  Set `r = x + y`. 
 `r = 0` both exponents vanish and the functional is the constant `Re Tr(K† K)`.  When
 `0 < r ≤ 1`, put `s = x / r ∈ [0, 1]`, so `x = r·s` and `y = r·(1 − s)`.  The rpow
 composition law `(Cʳ)ˢ = C^{r·s}` (`CFC.rpow_rpow_of_exponent_nonneg`) rewrites the
-functional as `G(Aʳ, Bʳ)`, where
-`G(A_tilde, B_tilde) = Re Tr(K† A_tildeˢ K B_tilde^{1-s})` is the boundary
-functional.  Joint concavity of `(A, B) ↦ G(Aʳ, Bʳ)` then follows by composing:
+functional as the boundary functional evaluated at the auxiliary matrices
+`Aʳ` and `Bʳ`.  Joint concavity of the resulting expression then follows by composing:
 
 * operator concavity of `C ↦ Cʳ` for `r ∈ [0, 1]` (`CFC.concaveOn_rpow`), giving the
   Loewner inequality `t·A₁ʳ + (1-t)·A₂ʳ <= (t·A₁ + (1-t)·A₂)ʳ`;

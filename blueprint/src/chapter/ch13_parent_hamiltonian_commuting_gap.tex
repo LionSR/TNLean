@@ -1006,14 +1006,42 @@ the specialization $L=2$.
     two-site identifications.
 \end{proof}
 
+\begin{lemma}[Appendix B overlapping condition gives three-site parent-term commutation]
+    \label{lem:appendixB_overlapping_condition_parent_terms}
+    \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_overlapping}
+    \leanok
+    \uses{lem:appendixB_three_site_parent_lifts}
+    If the Appendix~B \(AX\) and \(XB\) projectors satisfy the overlapping
+    two-site commutation datum, namely idempotency together with
+    \[
+        (Q_{AX})_{AX}(Q_{XB})_{XB}
+        =
+        (Q_{XB})_{XB}(Q_{AX})_{AX},
+    \]
+    then the corresponding first two translated length-two parent terms on the
+    three-site window commute:
+    \[
+        h_0^{(3)}(A,2)h_1^{(3)}(A,2)
+        =
+        h_1^{(3)}(A,2)h_0^{(3)}(A,2).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    By Lemma~\ref{lem:appendixB_three_site_parent_lifts}, the two translated
+    parent terms are exactly the \(AX\) and \(XB\) lifts of \(Q_{AX}\) and
+    \(Q_{XB}\).  The displayed equality is therefore the commutation clause of
+    the overlapping two-site datum.
+\end{proof}
+
 \begin{lemma}[Appendix B lifted commutator gives three-site parent-term commutation]
     \label{lem:appendixB_lift_commutator_parent_terms}
-    \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_overlapping}
     \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_commute_lifts}
     \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_appendixD2}
     \leanok
     \uses{lem:appendixB_overlapping_condition_from_lift_commutator,
-        lem:appendixB_three_site_parent_lifts}
+        lem:appendixB_overlapping_condition_parent_terms}
     If the Appendix~B \(AX\) and \(XB\) projectors satisfy the lifted
     Definition~D.2 commutator
     \[
@@ -1034,11 +1062,10 @@ the specialization $L=2$.
 
 \begin{proof}
     \leanok
-    By Lemma~\ref{lem:appendixB_three_site_parent_lifts}, the two translated
-    parent terms are exactly the \(AX\) and \(XB\) lifts of \(Q_{AX}\) and
-    \(Q_{XB}\).  The displayed equality is therefore the lifted commutator
-    itself.  Full Definition~D.2 data imply this commutator by forgetting the
-    kernel-intersection clause.
+    The lifted commutator, together with the Appendix~B idempotency already
+    recorded above, gives the overlapping two-site commutation datum.  Full
+    Definition~D.2 data imply the same conclusion by retaining its commutation
+    clause and not using its kernel-intersection clause.
 \end{proof}
 
 \begin{remark}[Basic-vector coefficients and nearest-neighbor parent-term commutation]%
