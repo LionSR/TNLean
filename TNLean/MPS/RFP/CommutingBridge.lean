@@ -40,20 +40,19 @@ The declarations below separate four mathematical statements:
   used before the \(AX\) and \(XB\) lifts;
 * the already formalized Appendix B structural form.
 
-**Scope restriction (overlapping two-site terms):** The three-site support maps
-for the source \(AX\) and \(XB\) windows are represented in
-`TNLean.MPS.ParentHamiltonian.LocalSupport`. Appendix B supplies the
-basic-vector form, while Definition D.2 of arXiv:1606.00608 supplies the
-parent-commuting condition for the \(Q_{AX}\) and \(Q_{XB}\) projectors. The
-objects `appendixBQAX` and `appendixBQXB` below are only the common two-site
-coefficient-space representative \(q_2(\Lambda U)\), identified with \(q_2(A)\)
-after the Appendix B core-tensor comparison, before it is placed on the \(AX\)
-and \(XB\) faces. They do not by themselves construct the source projectors on
+**Scope restriction (overlapping two-site terms):** The source \(AX\) and
+\(XB\) support maps are treated in their basic-vector form. Definition D.2 of
+arXiv:1606.00608 supplies the parent-commuting condition for the \(Q_{AX}\) and
+\(Q_{XB}\) projectors. The coefficient representatives \(\widehat Q_{AX}\) and
+\(\widehat Q_{XB}\) below are only the common two-site coefficient-space
+representative \(q_2(\Lambda U)\), identified with \(q_2(A)\) after the
+Appendix B core-tensor comparison, before it is placed on the \(AX\) and \(XB\)
+faces. They do not by themselves construct the source projectors on
 \(\mathcal H_A\otimes\mathcal H_X\) and
 \(\mathcal H_X\otimes\mathcal H_B\), nor do they prove the lifted commutator.
-For this reason commutativity of the translated idempotents is an explicit
-hypothesis in `HasProductPairLocalProjectors`. Eliminating this hypothesis is
-the source projector-construction and commutator step recorded in
+For this reason commutativity of the translated idempotents is kept as an
+explicit hypothesis. Eliminating this hypothesis is the source
+projector-construction and commutator step recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 -/
 
