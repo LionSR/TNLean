@@ -83,12 +83,16 @@ available in both conventions: directly for \(Q_{AX},Q_{XB}\) through
 \leanid{MPSTensor.localTerm_two_three_zero_one_commute_of_appendixD2}, and for
 their complements through
 \leanid{MPSTensor.localTerm_two_three_zero_one_commute_of_appendixD2_complement}.
-For the Appendix~B structural datum itself, the coefficient-space
+For the Appendix~B structural datum itself, the current coefficient-space
 representatives are
 \leanid{MPSTensor.AppendixBStructuralData.appendixBQAX} and
-\leanid{MPSTensor.AppendixBStructuralData.appendixBQXB}; they are identified
-with the canonical two-site parent interaction, and the supplied lifted
-commutator or supplied Definition~D.2 datum is transported to the corresponding
+\leanid{MPSTensor.AppendixBStructuralData.appendixBQXB}; both are identified
+with the canonical two-site parent interaction \(q_2(A)\) before placement on
+the \(AX\) and \(XB\) faces.  These representatives are not yet the source
+orthogonal projectors \(Q_{AX}\) and \(Q_{XB}\) on
+\(\mathcal H_A\otimes\mathcal H_X\) and
+\(\mathcal H_X\otimes\mathcal H_B\).  A supplied lifted commutator or supplied
+Definition~D.2 datum for the representatives is transported to the corresponding
 three-site translated parent terms by
 \leanid{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_commute_lifts}
 and
@@ -99,9 +103,10 @@ and
 A source-faithful version should build on the existing \(AX/XB\) support layer
 by constructing the local subspaces \(K_{AX}\) and \(K_{XB}\), the corresponding
 orthogonal projectors \(Q_{AX}\) and \(Q_{XB}\), and the source
-orthogonal-projector hypotheses from the Appendix~B data.  From those
-hypotheses it should derive the idempotent-product declaration above as a
-lemma, with \(P_K=P_{AXB}\).
+orthogonal-projector hypotheses from the Appendix~B data.  It should then
+explain why their coefficient representatives are the two lifted copies of
+\(q_2(A)\), prove the lifted commutator, and derive the idempotent-product
+declaration above as a lemma, with \(P_K=P_{AXB}\).
 
 After that source-level version is available, the blueprint entry for the source
 parent commuting Hamiltonian condition should point to that statement.  The

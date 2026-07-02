@@ -36,20 +36,23 @@ The declarations below separate four mathematical statements:
 
 * the coefficient expression for \(U^{\otimes L}\varphi_j^{\otimes L}\);
 * the disjoint adjacent-pair coefficient condition used later in this file;
-* the identification of the translated two-site parent terms with commuting
-  idempotents on each finite chain;
+* the two local coefficient-space representatives used before the \(AX\) and
+  \(XB\) lifts;
 * the already formalized Appendix B structural form.
 
-**Scope restriction (overlapping two-site terms):** The three-site support maps
-for the source \(AX\) and \(XB\) windows are represented in
-`TNLean.MPS.ParentHamiltonian.LocalSupport`. Appendix B supplies the
-basic-vector form, while Definition D.2 of arXiv:1606.00608 supplies the
-parent-commuting condition for the \(Q_{AX}\) and \(Q_{XB}\) projectors. The
-remaining local step is to identify those projectors with the translated
-length-two parent terms and prove their overlapping commutation. For this reason
-commutativity of the translated idempotents is an explicit hypothesis in
-`HasProductPairLocalProjectors`. Eliminating this hypothesis is the source
-projector-identification step recorded in
+**Scope restriction (overlapping two-site terms):** The source \(AX\) and
+\(XB\) support maps are treated in their basic-vector form. Definition D.2 of
+arXiv:1606.00608 supplies the parent-commuting condition for the \(Q_{AX}\) and
+\(Q_{XB}\) projectors. The coefficient representatives \(\widehat Q_{AX}\) and
+\(\widehat Q_{XB}\) below are only the common two-site coefficient-space
+representative \(q_2(\Lambda U)\), identified with \(q_2(A)\) after the
+Appendix B core-tensor comparison, before it is placed on the \(AX\) and \(XB\)
+faces. They do not by themselves construct the source projectors on
+\(\mathcal H_A\otimes\mathcal H_X\) and
+\(\mathcal H_X\otimes\mathcal H_B\), nor do they prove the lifted commutator.
+For this reason commutativity of the translated idempotents is kept as an
+explicit hypothesis. Eliminating this hypothesis is the source
+projector-construction and commutator step recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 -/
 
@@ -408,9 +411,13 @@ noncomputable def AppendixBStructuralData.twoSiteBasicSpace {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) : Submodule ℂ (NSiteSpace d 2) :=
   groundSpace hStruct.coreTensor 2
 
-/-- The \(AX\) two-site operator named for Definition D.2, represented in the
-two-site coefficient space by the canonical parent interaction of the Appendix
-B core tensor.
+/-- The \(AX\) two-site coefficient-space representative associated with the
+Appendix B core tensor.
+
+This is the common two-site coefficient representative \(q_2(\Lambda U)\)
+before it is placed on the \(AX\) face. It is not, by itself, a construction of
+the source projector \(Q_{AX}\) as an operator on
+\(\mathcal H_A\otimes\mathcal H_X\).
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
@@ -418,9 +425,13 @@ noncomputable def AppendixBStructuralData.appendixBQAX {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2 :=
   parentInteraction hStruct.coreTensor 2
 
-/-- The \(XB\) source projector named in Definition D.2, represented in the
-two-site coefficient space by the same Appendix B two-site projector before it
-is lifted to the \(XB\) face.
+/-- The \(XB\) two-site coefficient-space representative associated with the
+Appendix B core tensor.
+
+This is the same common two-site coefficient representative
+\(\widehat Q_{AX}\), now reserved for the later \(XB\)-lift. It is not, by
+itself, a construction of the source projector \(Q_{XB}\) as an operator on
+\(\mathcal H_X\otimes\mathcal H_B\).
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
@@ -428,8 +439,8 @@ noncomputable def AppendixBStructuralData.appendixBQXB {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2 :=
   hStruct.appendixBQAX
 
-/-- The Appendix B \(AX\) projector is the canonical two-site parent interaction
-of the original tensor.
+/-- The Appendix B \(AX\) coefficient representative is the canonical two-site
+parent interaction of the original tensor.
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
@@ -439,8 +450,8 @@ theorem AppendixBStructuralData.appendixBQAX_eq_parentInteraction {A : MPSTensor
   rw [AppendixBStructuralData.appendixBQAX]
   exact (hStruct.parentInteraction_eq_coreTensor 2).symm
 
-/-- The Appendix B \(XB\) projector is the canonical two-site parent interaction
-of the original tensor.
+/-- The Appendix B \(XB\) coefficient representative is the canonical two-site
+parent interaction of the original tensor.
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
@@ -450,7 +461,7 @@ theorem AppendixBStructuralData.appendixBQXB_eq_parentInteraction {A : MPSTensor
   rw [AppendixBStructuralData.appendixBQXB]
   exact hStruct.appendixBQAX_eq_parentInteraction
 
-/-- The Appendix B \(AX\) two-site operator is idempotent.
+/-- The Appendix B \(AX\) two-site coefficient representative is idempotent.
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
@@ -460,7 +471,7 @@ theorem AppendixBStructuralData.appendixBQAX_idempotent {A : MPSTensor d D}
   rw [hStruct.appendixBQAX_eq_parentInteraction]
   exact parentInteraction_idempotent A 2
 
-/-- The Appendix B \(XB\) two-site operator is idempotent.
+/-- The Appendix B \(XB\) two-site coefficient representative is idempotent.
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
@@ -470,12 +481,12 @@ theorem AppendixBStructuralData.appendixBQXB_idempotent {A : MPSTensor d D}
   rw [hStruct.appendixBQXB_eq_parentInteraction]
   exact parentInteraction_idempotent A 2
 
-/-- The Appendix B two-site operators satisfy the algebraic part of Definition
-D.2 once their \(AX\) and \(XB\) lifts commute.
+/-- The Appendix B two-site coefficient representatives satisfy the algebraic
+part of Definition D.2 once their \(AX\) and \(XB\) lifts commute.
 
-The idempotency of \(Q_{AX}\) and \(Q_{XB}\) follows from their identification
+The idempotency of the two representatives follows from their identification
 with the canonical two-site parent interaction; the sole hypothesis is the
-commutation of the lifted operators.
+commutation of their lifted operators.
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
@@ -491,7 +502,7 @@ theorem AppendixBStructuralData.hasOverlappingTwoSiteCommutation_of_commute_lift
   commute_lifts := hcomm
 
 /-- On a three-site window, the first translated length-two parent term is the
-\(AX\) lift of the Appendix B \(Q_{AX}\) projector.
+\(AX\) lift of the Appendix B \(AX\) coefficient representative.
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
@@ -502,7 +513,7 @@ theorem AppendixBStructuralData.localTerm_two_three_zero_eq_leftPairLift_appendi
     hStruct.appendixBQAX_eq_parentInteraction]
 
 /-- On a three-site window, the second translated length-two parent term is the
-\(XB\) lift of the Appendix B \(Q_{XB}\) projector.
+\(XB\) lift of the Appendix B \(XB\) coefficient representative.
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
@@ -512,8 +523,9 @@ theorem AppendixBStructuralData.localTerm_two_three_one_eq_rightPairLift_appendi
   rw [localTerm_two_three_one_eq_rightPairLift_parentInteraction,
     hStruct.appendixBQXB_eq_parentInteraction]
 
-/-- The algebraic overlapping condition for the Appendix B two-site projectors
-transports to commutation of the first two three-site parent terms.
+/-- The algebraic overlapping condition for the Appendix B two-site coefficient
+representatives transports to commutation of the first two three-site parent
+terms.
 
 This is only the local transport from the Definition D.2 \(AX/XB\) equation to
 the translated parent interactions.  It does not construct the source
@@ -532,8 +544,9 @@ theorem AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_overlapp
     hStruct.localTerm_two_three_one_eq_rightPairLift_appendixBQXB]
   exact h.commute_lifts
 
-/-- If the lifted Appendix B \(AX\) and \(XB\) projectors commute, then the
-first two translated length-two parent terms commute on the three-site window.
+/-- If the lifted Appendix B \(AX\) and \(XB\) coefficient representatives
+commute, then the first two translated length-two parent terms commute on the
+three-site window.
 
 This is the composed local consequence of the already isolated idempotency
 statements and the supplied Definition D.2 lifted commutator.
@@ -550,9 +563,9 @@ theorem AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_commute_
   hStruct.localTerm_two_three_zero_one_commute_of_overlapping
     (hStruct.hasOverlappingTwoSiteCommutation_of_commute_lifts hcomm)
 
-/-- Definition D.2 data for the Appendix B \(AX\) and \(XB\) projectors gives
-commutation of the first two translated length-two parent terms on the
-three-site window.
+/-- Definition D.2 data for the Appendix B \(AX\) and \(XB\) coefficient
+representatives gives commutation of the first two translated length-two parent
+terms on the three-site window.
 
 This theorem only transports already-supplied Definition D.2 data to the
 canonical parent interactions identified above.  The construction of that data
