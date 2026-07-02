@@ -679,7 +679,8 @@ theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
 /-- Boundary matrices agree once their right-products with every \(A^j\) agree:
 \(Y^+_{\tau^+_\eta(\mu)}A^j=Y^-_{\tau^-_\eta(\mu)}A^j\Rightarrow
 Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\).
-**Scope restriction:** \(L₀+1<N\); see the same paper-gap note. -/
+**Scope restriction:** \(L₀+1<N\) excludes the minimal ring \(N=L₀+1\);
+see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -723,7 +724,8 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
 /-- Closure-property containment
 \(\mathcal G_{N,L}(A) \subseteq \mathbb C\,V^{(N)}(A)\) for \(L>L₀\) and
 \(L₀+1<N\), following arXiv:2011.12127, Section IV.C, lines 2078--2090.
-**Scope restriction:** \(L₀+1<N\); see the same paper-gap note. -/
+**Scope restriction:** \(L₀+1<N\) excludes the minimal ring \(N=L₀+1\);
+see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
     {A : MPSTensor d D} [NeZero D]
     (_hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -754,7 +756,8 @@ theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
 
 /-- On a periodic chain, \(\mathcal G_{N,L}(A)=\mathbb C\,V^{(N)}(A)\) for
 \(L>L₀\) and \(L₀+1<N\), by arXiv:2011.12127, Section IV.C, lines 2078--2090.
-**Scope restriction:** \(L₀+1<N\); see the same paper-gap note. -/
+**Scope restriction:** \(L₀+1<N\) excludes the minimal ring \(N=L₀+1\);
+see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem chainGroundSpace_eq_mpvSubmodule_normal {A : MPSTensor d D} [NeZero D]
     (hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {L N : ℕ} (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N)
@@ -788,7 +791,9 @@ theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : IsInjec
 
 /-- Unique ground state for tensors injective after blocking at range \(2L₀\),
 with \(L₀+1<N\).
-**Scope restriction (two-site case):** Same note tracks excluded \(L₀=1,N=2\). -/
+**Scope restriction (two-site case):** The strict inequality \(L₀+1<N\)
+excludes \(L₀=1,N=2\); see
+`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : 2 * L₀ ≤ N) (hNlarge : L₀ + 1 < N) :
@@ -804,7 +809,8 @@ theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
 
 /-- Unique ground state for normal tensors at range \(L₀+1\), with \(L₀+1<N\):
 \(\dim \mathcal G_{N,L₀+1}(A)=1\).
-**Scope restriction:** \(L₀+1<N\); see the same paper-gap note. -/
+**Scope restriction:** \(L₀+1<N\) excludes the minimal ring \(N=L₀+1\);
+see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem parentHamiltonian_unique_gs_normal {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNormal A) (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : L₀ + 1 < N) :
