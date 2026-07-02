@@ -111,8 +111,8 @@ amplitude on the pairs \((0,1),(2,3),\ldots\).
 
 This is a generic factorization predicate: it does not assert that the two-site
 amplitude is entangled. The zero-pair case is omitted because the empty-chain
-MPV coefficient is the bond dimension, whereas the empty disjoint-pair amplitude
-is \(1\). Odd chain lengths are omitted because this predicate is used only to
+MPV coefficient is the bond dimension, whereas the empty physical-pair product is
+\(1\). Odd chain lengths are omitted because this predicate is used only to
 identify the translated two-site parent terms in the RFP-to-NNCPH direction of
 arXiv:1606.00608, Theorem 3.10.
 
