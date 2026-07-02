@@ -421,7 +421,7 @@ the source projector \(Q_{AX}\) as an operator on
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
-noncomputable def AppendixBStructuralData.appendixBQAX {A : MPSTensor d D}
+noncomputable def AppendixBStructuralData.appendixBQAXOnCoeffSpace {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2 :=
   parentInteraction hStruct.coreTensor 2
 
@@ -435,19 +435,19 @@ itself, a construction of the source projector \(Q_{XB}\) as an operator on
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
-noncomputable def AppendixBStructuralData.appendixBQXB {A : MPSTensor d D}
+noncomputable def AppendixBStructuralData.appendixBQXBOnCoeffSpace {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2 :=
-  hStruct.appendixBQAX
+  hStruct.appendixBQAXOnCoeffSpace
 
 /-- The Appendix B \(AX\) coefficient representative is the canonical two-site
 parent interaction of the original tensor.
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
-theorem AppendixBStructuralData.appendixBQAX_eq_parentInteraction {A : MPSTensor d D}
+theorem AppendixBStructuralData.appendixBQAXOnCoeffSpace_eq_parentInteraction {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) :
-    hStruct.appendixBQAX = parentInteraction A 2 := by
-  rw [AppendixBStructuralData.appendixBQAX]
+    hStruct.appendixBQAXOnCoeffSpace = parentInteraction A 2 := by
+  rw [AppendixBStructuralData.appendixBQAXOnCoeffSpace]
   exact (hStruct.parentInteraction_eq_coreTensor 2).symm
 
 /-- The Appendix B \(XB\) coefficient representative is the canonical two-site
@@ -455,30 +455,32 @@ parent interaction of the original tensor.
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
-theorem AppendixBStructuralData.appendixBQXB_eq_parentInteraction {A : MPSTensor d D}
+theorem AppendixBStructuralData.appendixBQXBOnCoeffSpace_eq_parentInteraction {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) :
-    hStruct.appendixBQXB = parentInteraction A 2 := by
-  rw [AppendixBStructuralData.appendixBQXB]
-  exact hStruct.appendixBQAX_eq_parentInteraction
+    hStruct.appendixBQXBOnCoeffSpace = parentInteraction A 2 := by
+  rw [AppendixBStructuralData.appendixBQXBOnCoeffSpace]
+  exact hStruct.appendixBQAXOnCoeffSpace_eq_parentInteraction
 
 /-- The Appendix B \(AX\) two-site coefficient representative is idempotent.
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
-theorem AppendixBStructuralData.appendixBQAX_idempotent {A : MPSTensor d D}
+theorem AppendixBStructuralData.appendixBQAXOnCoeffSpace_idempotent {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) :
-    hStruct.appendixBQAX * hStruct.appendixBQAX = hStruct.appendixBQAX := by
-  rw [hStruct.appendixBQAX_eq_parentInteraction]
+    hStruct.appendixBQAXOnCoeffSpace * hStruct.appendixBQAXOnCoeffSpace =
+      hStruct.appendixBQAXOnCoeffSpace := by
+  rw [hStruct.appendixBQAXOnCoeffSpace_eq_parentInteraction]
   exact parentInteraction_idempotent A 2
 
 /-- The Appendix B \(XB\) two-site coefficient representative is idempotent.
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
-theorem AppendixBStructuralData.appendixBQXB_idempotent {A : MPSTensor d D}
+theorem AppendixBStructuralData.appendixBQXBOnCoeffSpace_idempotent {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) :
-    hStruct.appendixBQXB * hStruct.appendixBQXB = hStruct.appendixBQXB := by
-  rw [hStruct.appendixBQXB_eq_parentInteraction]
+    hStruct.appendixBQXBOnCoeffSpace * hStruct.appendixBQXBOnCoeffSpace =
+      hStruct.appendixBQXBOnCoeffSpace := by
+  rw [hStruct.appendixBQXBOnCoeffSpace_eq_parentInteraction]
   exact parentInteraction_idempotent A 2
 
 /-- The Appendix B two-site coefficient representatives satisfy the algebraic
@@ -493,12 +495,14 @@ Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 theorem AppendixBStructuralData.hasOverlappingTwoSiteCommutation_of_commute_lifts
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
     (hcomm :
-      leftPairLift hStruct.appendixBQAX * rightPairLift hStruct.appendixBQXB =
-        rightPairLift hStruct.appendixBQXB * leftPairLift hStruct.appendixBQAX) :
-    HasOverlappingTwoSiteCommutation (d := d) hStruct.appendixBQAX
-      hStruct.appendixBQXB where
-  left_idempotent := hStruct.appendixBQAX_idempotent
-  right_idempotent := hStruct.appendixBQXB_idempotent
+      leftPairLift hStruct.appendixBQAXOnCoeffSpace *
+          rightPairLift hStruct.appendixBQXBOnCoeffSpace =
+        rightPairLift hStruct.appendixBQXBOnCoeffSpace *
+          leftPairLift hStruct.appendixBQAXOnCoeffSpace) :
+    HasOverlappingTwoSiteCommutation (d := d) hStruct.appendixBQAXOnCoeffSpace
+      hStruct.appendixBQXBOnCoeffSpace where
+  left_idempotent := hStruct.appendixBQAXOnCoeffSpace_idempotent
+  right_idempotent := hStruct.appendixBQXBOnCoeffSpace_idempotent
   commute_lifts := hcomm
 
 /-- On a three-site window, the first translated length-two parent term is the
@@ -506,22 +510,22 @@ theorem AppendixBStructuralData.hasOverlappingTwoSiteCommutation_of_commute_lift
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
-theorem AppendixBStructuralData.localTerm_two_three_zero_eq_leftPairLift_appendixBQAX
+theorem AppendixBStructuralData.localTerm_two_three_zero_eq_appendixBQAXOnCoeffSpace_lift
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
-    localTerm A 2 3 (0 : Fin 3) = leftPairLift hStruct.appendixBQAX := by
+    localTerm A 2 3 (0 : Fin 3) = leftPairLift hStruct.appendixBQAXOnCoeffSpace := by
   rw [localTerm_two_three_zero_eq_leftPairLift_parentInteraction,
-    hStruct.appendixBQAX_eq_parentInteraction]
+    hStruct.appendixBQAXOnCoeffSpace_eq_parentInteraction]
 
 /-- On a three-site window, the second translated length-two parent term is the
 \(XB\) lift of the Appendix B \(XB\) coefficient representative.
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
-theorem AppendixBStructuralData.localTerm_two_three_one_eq_rightPairLift_appendixBQXB
+theorem AppendixBStructuralData.localTerm_two_three_one_eq_appendixBQXBOnCoeffSpace_lift
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
-    localTerm A 2 3 (1 : Fin 3) = rightPairLift hStruct.appendixBQXB := by
+    localTerm A 2 3 (1 : Fin 3) = rightPairLift hStruct.appendixBQXBOnCoeffSpace := by
   rw [localTerm_two_three_one_eq_rightPairLift_parentInteraction,
-    hStruct.appendixBQXB_eq_parentInteraction]
+    hStruct.appendixBQXBOnCoeffSpace_eq_parentInteraction]
 
 /-- The algebraic overlapping condition for the Appendix B two-site coefficient
 representatives transports to commutation of the first two three-site parent
@@ -536,12 +540,12 @@ Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
 theorem AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_overlapping
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
-    (h : HasOverlappingTwoSiteCommutation (d := d) hStruct.appendixBQAX
-      hStruct.appendixBQXB) :
+    (h : HasOverlappingTwoSiteCommutation (d := d) hStruct.appendixBQAXOnCoeffSpace
+      hStruct.appendixBQXBOnCoeffSpace) :
     localTerm A 2 3 (0 : Fin 3) * localTerm A 2 3 (1 : Fin 3) =
       localTerm A 2 3 (1 : Fin 3) * localTerm A 2 3 (0 : Fin 3) := by
-  rw [hStruct.localTerm_two_three_zero_eq_leftPairLift_appendixBQAX,
-    hStruct.localTerm_two_three_one_eq_rightPairLift_appendixBQXB]
+  rw [hStruct.localTerm_two_three_zero_eq_appendixBQAXOnCoeffSpace_lift,
+    hStruct.localTerm_two_three_one_eq_appendixBQXBOnCoeffSpace_lift]
   exact h.commute_lifts
 
 /-- If the lifted Appendix B \(AX\) and \(XB\) coefficient representatives
@@ -556,8 +560,10 @@ Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 theorem AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_commute_lifts
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
     (hcomm :
-      leftPairLift hStruct.appendixBQAX * rightPairLift hStruct.appendixBQXB =
-        rightPairLift hStruct.appendixBQXB * leftPairLift hStruct.appendixBQAX) :
+      leftPairLift hStruct.appendixBQAXOnCoeffSpace *
+          rightPairLift hStruct.appendixBQXBOnCoeffSpace =
+        rightPairLift hStruct.appendixBQXBOnCoeffSpace *
+          leftPairLift hStruct.appendixBQAXOnCoeffSpace) :
     localTerm A 2 3 (0 : Fin 3) * localTerm A 2 3 (1 : Fin 3) =
       localTerm A 2 3 (1 : Fin 3) * localTerm A 2 3 (0 : Fin 3) :=
   hStruct.localTerm_two_three_zero_one_commute_of_overlapping
@@ -577,7 +583,7 @@ theorem AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_appendix
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
     {KAXB : Submodule ℂ (NSiteSpace d 3)}
     (hD2 : HasAppendixD2ParentCommutingHamiltonian
-      (d := d) KAXB hStruct.appendixBQAX hStruct.appendixBQXB) :
+      (d := d) KAXB hStruct.appendixBQAXOnCoeffSpace hStruct.appendixBQXBOnCoeffSpace) :
     localTerm A 2 3 (0 : Fin 3) * localTerm A 2 3 (1 : Fin 3) =
       localTerm A 2 3 (1 : Fin 3) * localTerm A 2 3 (0 : Fin 3) :=
   hStruct.localTerm_two_three_zero_one_commute_of_overlapping hD2.to_overlapping
