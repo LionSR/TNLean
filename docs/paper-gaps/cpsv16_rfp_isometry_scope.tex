@@ -117,8 +117,8 @@ Appendix~B first gives the coefficient form of the basic-vector expression
 \end{align}
 which is the coefficient form of
 \(|V^{(L)}(A_j)\rangle=U^{\otimes L}|\varphi_j\rangle^{\otimes L}\), with
-\(\varphi_j\) shared between \(b_t\) and \(a_{t+1}\).  The disjoint adjacent
-physical-pair condition used by the current conditional parent-Hamiltonian
+\(\varphi_j\) shared between \(b_t\) and \(a_{t+1}\).  The even-chain
+physical-pair factorization considered in the conditional parent-Hamiltonian
 theorem is therefore a separate statement, not the source expression itself.
 The formal development proves this cyclic coefficient formula for the original
 tensor after the Appendix~B change of basis, for every nonempty chain length
@@ -128,11 +128,11 @@ and a chosen structural datum:
 \]
 This is the declaration
 \leanid{MPSTensor.AppendixBStructuralData.mpv_eq_cyclicVirtualPairState}.  It
-does not prove the disjoint adjacent physical-pair condition.
+does not prove the even-chain physical-pair factorization.
 The pair-index isometry above is an orthogonality equation after summing over
 the physical letter \(i\).  It is therefore not, by itself, a coefficient
 identity for a fixed physical word \(\sigma\).  Any proof of a fixed-word
-adjacent-pair factorization must use the source basic-vector expression
+physical-pair factorization must use the source basic-vector expression
 \(U^{\otimes L}\varphi_j^{\otimes L}\), or an equivalent construction of the
 corresponding local projectors, rather than applying the summed isometry as if
 the physical labels were also summed in \(C_L(\sigma)\).
@@ -149,13 +149,13 @@ length-four word
   \sigma=((0,1),(1,0),(1,0),(0,1)),
 \]
 the cyclic coefficient \(C_4(\sigma)\) vanishes, because the middle virtual
-matching condition fails.  The disjoint adjacent-pair product is instead
+matching condition fails.  The physical-pair product is instead
 \[
   (\lambda_0\lambda_1)(\lambda_1\lambda_0)
   =
   \lambda_0^2\lambda_1^2\ne 0.
 \]
-Thus the adjacent physical-pair coefficient identity is not a consequence of
+Thus the even-chain physical-pair coefficient identity is not a consequence of
 the unit pair-index isometry alone.
 
 The per-block isometry form does not by itself relate $U_k$ and $U_\ell$ for

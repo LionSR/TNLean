@@ -45,8 +45,8 @@ clause from Definition 3.9.
   \(hᵢhⱼ = hⱼhᵢ\).
 * `MPSTensor.rfp_implies_nncph_of_appendixBExtraction` — a conditional theorem
   deriving NNCPH from the Appendix B structural form
-  \(A^i = X\Lambda U^iX^{-1}\), the disjoint adjacent-pair coefficient
-  condition, and the two-site projector identities, without invoking
+  \(A^i = X\Lambda U^iX^{-1}\), the even-chain physical-pair factorization,
+  and the two-site projector identities, without invoking
   `Axioms.rfp_to_nncph_commute`.
 * `MPSTensor.rfp_implies_nncph_ground_state_of_appendixBExtraction` — the same
   conditional theorem with the zero-energy equation for \(V^{(N)}(A)\) included.
@@ -346,17 +346,17 @@ theorem HasProductPairLocalProjectors.isNNCPH {A : MPSTensor d D} {N : ℕ}
     IsNNCPH A N :=
   hPair.commuting_twoSite_localTerms
 
-/-- The disjoint adjacent-pair coefficient condition and the two-site projector
+/-- The even-chain physical-pair factorization and the two-site projector
 identities give NNCPH on each finite chain. -/
 theorem ProductPairBridge.isNNCPH {A : MPSTensor d D} (hBridge : ProductPairBridge A)
     (N : ℕ) :
     IsNNCPH A N :=
   (hBridge.localProjectors N).isNNCPH
 
-/-- The conditional adjacent-pair hypotheses and the ground-space spanning
+/-- The conditional even-chain hypotheses and the ground-space spanning
 equation give the full all-chain nearest-neighbor parent-Hamiltonian condition.
 
-The adjacent-pair hypotheses supply the translated length-two commutation
+The even-chain hypotheses supply the translated length-two commutation
 equations. The usual parent-Hamiltonian frustration-free equation gives
 zero energy of \(V^{(N)}(B)\). The separate hypothesis
 `HasParentHamiltonianGroundSpaceSpanning B 2 A` supplies the remaining
@@ -374,8 +374,8 @@ theorem ProductPairBridge.hasNNCPHGroundSpaces_of_groundSpaceSpanning
 
 A normal left-canonical RFP tensor has the Appendix B structural form
 \(A^i = X\Lambda U^iX^{-1}\) by `AppendixBStructuralData.ofRFP`. If the
-associated two-site amplitude gives the disjoint adjacent-pair coefficient
-condition and the two-site parent terms are identified with commuting
+associated two-site amplitude gives the even-chain physical-pair factorization
+and the two-site parent terms are identified with commuting
 idempotents, then the nearest-neighbor parent Hamiltonian is commuting on every
 finite chain.
 
