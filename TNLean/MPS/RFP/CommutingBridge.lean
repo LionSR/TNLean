@@ -499,6 +499,63 @@ theorem AppendixBStructuralData.localTerm_two_three_one_eq_rightPairLift_appendi
   rw [localTerm_two_three_one_eq_rightPairLift_parentInteraction,
     hStruct.appendixBQXB_eq_parentInteraction]
 
+/-- The algebraic overlapping condition for the Appendix B two-site projectors
+transports to commutation of the first two three-site parent terms.
+
+This is only the local transport from the Definition D.2 \(AX/XB\) equation to
+the translated parent interactions.  It does not construct the source
+projectors or prove their lifted commutator from the Appendix B basic-vector
+form.
+
+Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
+2205--2218. -/
+theorem AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_overlapping
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
+    (h : HasOverlappingTwoSiteCommutation (d := d) hStruct.appendixBQAX
+      hStruct.appendixBQXB) :
+    localTerm A 2 3 (0 : Fin 3) * localTerm A 2 3 (1 : Fin 3) =
+      localTerm A 2 3 (1 : Fin 3) * localTerm A 2 3 (0 : Fin 3) := by
+  rw [hStruct.localTerm_two_three_zero_eq_leftPairLift_appendixBQAX,
+    hStruct.localTerm_two_three_one_eq_rightPairLift_appendixBQXB]
+  exact h.commute_lifts
+
+/-- If the lifted Appendix B \(AX\) and \(XB\) projectors commute, then the
+first two translated length-two parent terms commute on the three-site window.
+
+This is the composed local consequence of the already isolated idempotency
+statements and the supplied Definition D.2 lifted commutator.
+
+Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
+2205--2218. -/
+theorem AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_commute_lifts
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
+    (hcomm :
+      leftPairLift hStruct.appendixBQAX * rightPairLift hStruct.appendixBQXB =
+        rightPairLift hStruct.appendixBQXB * leftPairLift hStruct.appendixBQAX) :
+    localTerm A 2 3 (0 : Fin 3) * localTerm A 2 3 (1 : Fin 3) =
+      localTerm A 2 3 (1 : Fin 3) * localTerm A 2 3 (0 : Fin 3) :=
+  hStruct.localTerm_two_three_zero_one_commute_of_overlapping
+    (hStruct.hasOverlappingTwoSiteCommutation_of_commute_lifts hcomm)
+
+/-- Definition D.2 data for the Appendix B \(AX\) and \(XB\) projectors gives
+commutation of the first two translated length-two parent terms on the
+three-site window.
+
+This theorem only transports already-supplied Definition D.2 data to the
+canonical parent interactions identified above.  The construction of that data
+remains to be derived from the Appendix B basic-vector form.
+
+Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
+2205--2218. -/
+theorem AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_appendixD2
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
+    {KAXB : Submodule ℂ (NSiteSpace d 3)}
+    (hD2 : HasAppendixD2ParentCommutingHamiltonian
+      (d := d) KAXB hStruct.appendixBQAX hStruct.appendixBQXB) :
+    localTerm A 2 3 (0 : Fin 3) * localTerm A 2 3 (1 : Fin 3) =
+      localTerm A 2 3 (1 : Fin 3) * localTerm A 2 3 (0 : Fin 3) :=
+  hStruct.localTerm_two_three_zero_one_commute_of_overlapping hD2.to_overlapping
+
 /-- The Appendix B basis change does not change any MPV coefficient. -/
 theorem AppendixBStructuralData.mpv_eq_coreTensor {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) {N : ℕ} (σ : Cfg d N) :
