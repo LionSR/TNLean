@@ -294,11 +294,11 @@ $D(X)$ and cyclic shifts $U_{k0}$:
     T_C(X)=(d-n)D(X)-X+\sum_{k=1}^nD(U_{k0}XU_{k0}^{\dagger}).
 \]
 The formal statements below record the map and the rank-one reduction used in
-the standard positivity argument.  The positivity and indecomposability
-assertions for the range $1\le n\le d-2$ remain open.  The missing positivity
-step is a cyclic reciprocal estimate for the weights in the rank-one reduction;
-it does not follow merely from equality of the total numerator and denominator
-weights.
+the standard positivity argument.  The first case $d=3$, $n=1$ is positive.
+The positivity and indecomposability assertions for the full range
+$1\le n\le d-2$ remain open.  The missing general positivity step is a cyclic
+reciprocal estimate for the weights in the rank-one reduction; it does not
+follow merely from equality of the total numerator and denominator weights.
 
 \begin{definition}[Choi-type map]
     \label{def:choi_type_map}
@@ -478,6 +478,34 @@ weights.
     when $y>0$, while all terms vanish when $y=0$.  The rank-one positivity then
     follows from
     Lemma~\ref{lem:choi_type_rankone_positive_from_weight_bound}.
+\end{proof}
+
+\begin{theorem}[The first Choi map is positive]
+    \label{thm:choi_type_first_positive_subcase}
+    \lean{Matrix.choiTypeMap_isPositiveMap_three_one}
+    \leanok
+    \uses{def:choi_type_map, lem:choi_type_first_cyclic_reciprocal_subcase}
+    For $d=3$ and $n=1$, the Choi-type map $T_C$ sends every positive
+    semidefinite matrix to a positive semidefinite matrix.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Let $X\ge0$.  By the spectral decomposition, there are vectors $w_\alpha$
+    such that
+    \[
+        X=\sum_\alpha \ket{w_\alpha}\bra{w_\alpha},
+    \]
+    where each summand is rank-one and positive semidefinite.  Linearity gives
+    \[
+        T_C(X)=\sum_\alpha T_C(\ket{w_\alpha}\bra{w_\alpha}).
+    \]
+    The preceding lemma gives
+    \[
+        T_C(\ket{w_\alpha}\bra{w_\alpha})\ge0
+    \]
+    for every $\alpha$.  Hence the displayed sum is positive semidefinite, so
+    $T_C(X)\ge0$.
 \end{proof}
 
 \section{The partial transpose and the PPT property}

@@ -6,7 +6,9 @@ Authors: TNLean contributors
 import Mathlib.Data.Complex.Basic
 import Mathlib.LinearAlgebra.Matrix.Permutation
 import TNLean.Algebra.HermitianHelpers
+import TNLean.Algebra.MatrixSpectralDecomp
 import TNLean.Analysis.MatrixTraceInequalities
+import TNLean.Channel.Basic
 
 /-!
 # Choi-type positive maps
@@ -20,11 +22,11 @@ the natural home for the shift matrices \(U_{k0}\):
 where `D` projects a matrix to its diagonal part.
 
 The main theorem in this file is the exact action on rank-one projectors.  This
-is the algebraic reduction needed for the later positivity proof of Wolf
-Example 3.1.  Positivity and indecomposability of the Choi-type maps are not
-proved here.  The remaining positivity step is a genuine cyclic reciprocal
-inequality for the diagonal weights; it does not follow merely from equality of
-the total numerator and denominator weights.
+is the algebraic reduction needed for the positivity proof of Wolf Example 3.1.
+For the first case \(d=3,n=1\), this file proves positivity.  The general
+positivity theorem still requires a genuine cyclic reciprocal inequality for
+the diagonal weights; it does not follow merely from equality of the total
+numerator and denominator weights.  Indecomposability is not proved here.
 
 ## References
 
@@ -327,5 +329,24 @@ theorem choiTypeMap_vecMulVec_posSemidef_three_one_of_forall_ne_zero
     (v : ZMod 3 → ℂ) (_h0 : v 0 ≠ 0) (_h1 : v 1 ≠ 0) (_h2 : v 2 ≠ 0) :
     (choiTypeMap 3 1 (vecMulVec v (star v))).PosSemidef :=
   choiTypeMap_vecMulVec_posSemidef_three_one v
+
+/-- Positivity of the first Choi map.
+
+**Scope restriction:** See
+`docs/paper-gaps/wolf_ex3_1_choi_positivity_subcase_scope.tex`.  This proves
+only the \(d=3,n=1\) case of Wolf Chapter 3, Example 3.1, equation (3.20).
+The general range \(1\le n\le d-2\) remains separate. -/
+theorem choiTypeMap_isPositiveMap_three_one :
+    IsPositiveMap (choiTypeMap 3 1) := by
+  intro X hX
+  rw [hX.eq_sum_vecMulVec_nonzero_eigs]
+  rw [map_sum]
+  exact Matrix.posSemidef_sum Finset.univ fun i _ => by
+    let v : ZMod 3 → ℂ := fun p =>
+      ((Real.sqrt (hX.1.eigenvalues i.1) : ℂ)) *
+        hX.1.eigenvectorUnitary p i.1
+    convert choiTypeMap_vecMulVec_posSemidef_three_one v using 2
+    ext p q
+    simp [v, Matrix.vecMulVec_apply]
 
 end Matrix
