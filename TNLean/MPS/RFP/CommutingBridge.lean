@@ -117,9 +117,9 @@ identify the translated two-site parent terms in the RFP-to-NNCPH direction of
 arXiv:1606.00608, Theorem 3.10.
 
 **Scope restriction:** Appendix B first produces the basic-vector expression
-\(U^{\otimes N}\varphi_j^{\otimes N}\). This predicate is the later even-chain
-physical-pair condition used by the present formal statement; it is not, by
-itself, the full Appendix B factorization theorem. -/
+\(U^{\otimes N}\varphi_j^{\otimes N}\). The condition above instead asks for an
+even-chain physical-pair factorization; by itself, it is not the full Appendix B
+factorization theorem. -/
 def HasProductPairMPV (A : MPSTensor d D) : Prop :=
   ∃ ψ₂ : NSiteSpace d 2, ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
     mpv A σ = productPairState ψ₂ N σ
