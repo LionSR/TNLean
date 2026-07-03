@@ -7,10 +7,11 @@ references whose state on current ``main`` looks outdated:
 
   * ``TNLean/**/*.lean`` paths that no longer exist;
   * cited ``file.lean:LINE`` or ``line NNN`` markers where the line is no
-    longer a ``sorry`` / ``admit``;
+    longer a ``sorry`` / ``admit`` / ``axiom``;
   * backtick-quoted declaration names that no longer resolve to any
-    ``def`` / ``theorem`` / ``lemma`` / ``structure`` / ``instance`` /
-    ``class`` / ``abbrev`` / ``inductive`` declaration under ``TNLean/``.
+    ``def`` / ``theorem`` / ``lemma`` / ``axiom`` / ``structure`` /
+    ``instance`` / ``class`` / ``abbrev`` / ``inductive`` declaration or
+    structure-field projection under ``TNLean/``.
 
 The tool is **report-only**: it never edits or closes issues.  It is intended
 as a triage aid for humans who will decide whether a flagged issue is truly
@@ -70,16 +71,24 @@ _BACKTICK_DECL_RE = re.compile(r"`([A-Za-z][A-Za-z0-9_.']{1,})`")
 _DECL_DEFN_RE = re.compile(
     r"^\s*(?:@\[[^\]]*\]\s*)?"
     r"(?:(?:noncomputable|protected|private|local)\s+)*"
-    r"(?:def|theorem|lemma|abbrev|instance|class|structure|inductive|opaque)\s+"
+    r"(?:def|theorem|lemma|axiom|abbrev|instance|class|structure|inductive|opaque)\s+"
     r"([A-Za-z_][\w.']*)",
     re.MULTILINE,
 )
 
+_STRUCTURE_DEFN_RE = re.compile(
+    r"^\s*(?:@\[[^\]]*\]\s*)?"
+    r"(?:(?:noncomputable|protected|private|local)\s+)*"
+    r"(?:structure|class)\s+([A-Za-z_][\w.']*)",
+)
+
+_STRUCTURE_FIELD_RE = re.compile(r"^\s+([A-Za-z_][\w']*)\s*:")
+
 _NAMESPACE_RE = re.compile(r"^\s*namespace\s+([A-Za-z_][\w.']*)\b")
 _END_NAMESPACE_RE = re.compile(r"^\s*end(?:\s+([A-Za-z_][\w.']*))?\s*(?:--.*)?$")
 
-# Sorry markers we count as "still unproven".
-_SORRY_LINE_RE = re.compile(r"\b(sorry|admit)\b")
+# Markers we count as "still unproved or axiomatized" for line citations.
+_UNPROVED_LINE_RE = re.compile(r"\b(sorry|admit|axiom)\b")
 
 # Tokens that are common English words, Lean keywords, or otherwise too
 # ambiguous to treat as declaration citations.  Any backtick token in this
@@ -218,11 +227,14 @@ def build_decl_index(lean_root: Path) -> set[str]:
         except OSError:
             continue
         namespace_stack: list[str] = []
+        active_structure_names: list[str] = []
         for line in text.splitlines():
             if m := _NAMESPACE_RE.match(line):
                 namespace_stack.extend(m.group(1).split("."))
+                active_structure_names = []
                 continue
             if m := _END_NAMESPACE_RE.match(line):
+                active_structure_names = []
                 end_name = m.group(1)
                 if end_name:
                     parts = end_name.split(".")
@@ -242,11 +254,26 @@ def build_decl_index(lean_root: Path) -> set[str]:
                 names.add(declared)
                 if namespace_stack:
                     names.add(".".join([*namespace_stack, declared]))
+                if sm := _STRUCTURE_DEFN_RE.match(line):
+                    struct_declared = sm.group(1)
+                    struct_names = [struct_declared]
+                    if namespace_stack:
+                        struct_names.append(".".join([*namespace_stack, struct_declared]))
+                    active_structure_names = struct_names
+                else:
+                    active_structure_names = []
+                continue
+            if active_structure_names:
+                if fm := _STRUCTURE_FIELD_RE.match(line):
+                    field = fm.group(1)
+                    names.add(field)
+                    for struct_name in active_structure_names:
+                        names.add(f"{struct_name}.{field}")
     return names
 
 
 def line_is_sorry(path: Path, line_no: int) -> bool | None:
-    """Return True/False if ``path:line_no`` still contains a ``sorry``/``admit``.
+    """Return True/False if ``path:line_no`` still contains ``sorry``/``admit``/``axiom``.
 
     Returns ``None`` if the file can't be read or the line number is out of
     range.  Single-line ``--`` comments are stripped before matching so that
@@ -261,7 +288,7 @@ def line_is_sorry(path: Path, line_no: int) -> bool | None:
     if line_no < 1 or line_no > len(lines):
         return None
     line = lines[line_no - 1].split("--", 1)[0]
-    return _SORRY_LINE_RE.search(line) is not None
+    return _UNPROVED_LINE_RE.search(line) is not None
 
 
 # ---------------------------------------------------------------------------
@@ -313,9 +340,9 @@ def audit_issue(
             continue
         if fc.line is not None:
             sorry = line_is_sorry(full, fc.line)
-            # Treat both an explicit "no sorry on this line" (False) and an
-            # out-of-range line number (None) as stale: trackers drift as
-            # files are edited, and a citation past EOF is exactly the kind
+            # Treat both an explicit "no unproved marker on this line" (False)
+            # and an out-of-range line number (None) as stale: trackers drift
+            # as files are edited, and a citation past EOF is exactly the kind
             # of stale reference this audit is meant to surface.
             if sorry is not True:
                 report.non_sorry_lines.append((fc.path, fc.line))
@@ -391,7 +418,7 @@ def render_text_report(reports: list[IssueReport], only_flagged: bool) -> str:
             for p in r.missing_files:
                 lines.append(f"    - {p}")
         if r.non_sorry_lines:
-            lines.append("  lines no longer containing `sorry`/`admit`:")
+            lines.append("  lines no longer containing `sorry`/`admit`/`axiom`:")
             for path, ln in r.non_sorry_lines:
                 lines.append(f"    - {path}:{ln}")
         if r.missing_decls:
@@ -486,18 +513,34 @@ def _build_parser() -> argparse.ArgumentParser:
 def _self_test(repo_root: Path) -> int:
     """Minimal credentials-free smoke test.
 
-    Builds one synthetic issue whose body references this very script and a
-    deliberately bogus declaration, then confirms the audit emits the
-    expected flags.  Used by CI and by human reviewers to verify the tool
-    works on a fresh checkout without talking to GitHub.
+    Builds one synthetic issue whose body references this very script, a known
+    sanctioned axiom, a known structure-field projection, and a deliberately
+    bogus declaration, then confirms the audit emits the expected flags without
+    misclassifying the axiom or field.  Used by CI and by human reviewers to
+    verify the tool works on a fresh checkout without talking to GitHub.
     """
+    beigi_path = repo_root / "TNLean" / "Axioms" / "Beigi.lean"
+    beigi_line = 0
+    for idx, line in enumerate(beigi_path.read_text(errors="replace").splitlines(), start=1):
+        if re.match(r"\s*axiom\s+rfp_to_nncph_commute\b", line):
+            beigi_line = idx
+            break
+    if beigi_line == 0:
+        print("self-test FAILED:", file=sys.stderr)
+        print("  - could not locate rfp_to_nncph_commute axiom line", file=sys.stderr)
+        return 1
+
     synthetic = {
         "number": 0,
         "title": "[self-test] synthetic audit fixture",
         "url": "https://example.invalid/issue/0",
         "body": (
-            "Refers to `TNLean/Does/Not/Exist.lean:10` and to "
+            f"Refers to `TNLean/Axioms/Beigi.lean:{beigi_line}`, "
+            "`TNLean/Does/Not/Exist.lean:10`, and to "
             "`definitely_not_a_real_declaration`.\n"
+            "Also cites the sanctioned axiom `Axioms.rfp_to_nncph_commute`.\n"
+            "Also cites the structure field "
+            "`AppendixBProductPairExtraction.localProjectors`.\n"
             "Also mentions `scripts/audit_stale_issues.py` (should be ignored)."
         ),
     }
@@ -511,6 +554,18 @@ def _self_test(repo_root: Path) -> int:
     if "definitely_not_a_real_declaration" not in r.missing_decls:
         problems.append(
             f"expected missing-decl flag, got: {r.missing_decls!r}"
+        )
+    if ("TNLean/Axioms/Beigi.lean", beigi_line) in r.non_sorry_lines:
+        problems.append(
+            "axiom line was incorrectly flagged as no longer unproved"
+        )
+    if "Axioms.rfp_to_nncph_commute" in r.missing_decls:
+        problems.append(
+            "sanctioned axiom was incorrectly flagged as a missing declaration"
+        )
+    if "AppendixBProductPairExtraction.localProjectors" in r.missing_decls:
+        problems.append(
+            "structure field projection was incorrectly flagged as missing"
         )
     if problems:
         print("self-test FAILED:", file=sys.stderr)
