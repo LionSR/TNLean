@@ -531,6 +531,51 @@ positive map and a completely copositive map.
     positive and not decomposable.
 \end{definition}
 
+\begin{lemma}[Completely copositive maps are positive]
+    \label{lem:completely_copositive_map_positive}
+    \lean{IsCompletelyCopositiveMap.isPositiveMap}
+    \leanok
+    \uses{def:decomposable_positive_map, thm:transpose_positive_trace_preserving,
+        thm:cp_is_positive}
+    If $\Phi$ is completely copositive, then $\Phi$ is positive.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Let $X\ge0$.  Transposition preserves positivity, so $\theta(X)\ge0$.
+    Since $\Phi\circ\theta$ is completely positive,
+    \[
+        (\Phi\circ\theta)(\theta(X))\ge0.
+    \]
+    Because $\theta^2=\mathrm{id}$, this is exactly $\Phi(X)\ge0$.
+\end{proof}
+
+\begin{lemma}[Decomposable maps are positive]
+    \label{lem:decomposable_map_positive}
+    \lean{IsDecomposablePositiveMap.isPositiveMap}
+    \leanok
+    \uses{def:decomposable_positive_map, thm:cp_is_positive,
+        lem:completely_copositive_map_positive}
+    If $\Phi$ is decomposable, then $\Phi$ is positive.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Write
+    \[
+        \Phi=\Phi_{\mathrm{cp}}+\Phi_{\mathrm{ccp}},
+    \]
+    with $\Phi_{\mathrm{cp}}$ completely positive and
+    $\Phi_{\mathrm{ccp}}$ completely copositive.  For $X\ge0$, the two preceding
+    positivity results give
+    \[
+        \Phi_{\mathrm{cp}}(X)\ge0,
+        \qquad
+        \Phi_{\mathrm{ccp}}(X)\ge0.
+    \]
+    Their sum is positive, hence $\Phi(X)\ge0$.
+\end{proof}
+
 \section{The partial transpose and the PPT property}
 
 Transposition is a positive map that is not completely positive, so applying it
