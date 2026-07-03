@@ -150,8 +150,8 @@ the specialization $L=2$.
         =
         h^{(3)}_1(A,2)h^{(3)}_0(A,2).
     \]
-    This is only the local transport from the \(AX/XB\) condition to translated
-    local terms; the construction of the
+    This only identifies the first two translated local terms with the lifted
+    \(AX\) and \(XB\) actions; the construction of the
     \cite[Appendix~D.2]{Cirac2016MPDO_arXiv} projectors associated with the
     \cite[Appendix~B]{Cirac2016MPDO_arXiv} basic-vector form is a separate step.
 \end{theorem}
@@ -163,9 +163,29 @@ the specialization $L=2$.
     endomorphisms commute.
 \end{proof}
 
+\begin{theorem}[Three-site commutation from two-site representatives]
+    \label{thm:local_term_two_three_commute_from_two_site_q}
+    \lean{MPSTensor.localTerm_two_three_zero_one_commute_of_overlapping_two_site_projectors}
+    \leanok
+    \uses{def:overlapping_two_site_supports,
+        thm:local_term_two_three_ax_xb_lifts}
+    Let $Q_{AX}$ and $Q_{XB}$ be two-site projectors whose lifted \(AX\) and
+    \(XB\) actions commute. Suppose that
+    \[
+        q(A)=Q_{AX},\qquad q(A)=Q_{XB}.
+    \]
+    Then the first two translated length-two local terms on the three-site
+    chain commute.
+\end{theorem}
+
+\begin{proof}\leanok
+    The lift identities identify the translated terms with the lifted actions
+    of \(Q_{AX}\) and \(Q_{XB}\). The assumed overlapping commutation condition
+    is precisely the commutation of those two lifted actions.
+\end{proof}
+
 \begin{theorem}[Three-site commutation from source projectors]
     \label{thm:local_term_two_three_commute_from_source_q}
-    \lean{MPSTensor.localTerm_two_three_zero_one_commute_of_overlapping_two_site_projectors}
     \lean{MPSTensor.localTerm_two_three_zero_one_commute_of_appendixD2}
     \leanok
     \uses{def:overlapping_two_site_supports,
@@ -173,14 +193,14 @@ the specialization $L=2$.
     Suppose the projectors $Q_{AX}$ and $Q_{XB}$ satisfy the
     \cite[Definition~D.2]{Cirac2016MPDO_arXiv} local parent-commuting
     condition on $A X B$, and suppose that the canonical two-site parent
-    interaction is identified with these projectors after lifting to the two
-    faces:
+    interaction is identified, as a two-site operator, with the two source
+    projectors:
     \[
-        q(A)_{AX}=(Q_{AX})_{AX},\qquad
-        q(A)_{XB}=(Q_{XB})_{XB}.
+        q(A)=Q_{AX},\qquad q(A)=Q_{XB}.
     \]
-    Then the first two translated length-two local terms on the three-site
-    chain commute,
+    After lifting these two equalities to the \(AX\) and \(XB\) faces, the first
+    two translated length-two local terms on the three-site chain commute.
+    Thus
     \[
         h^{(3)}_0(A,2)h^{(3)}_1(A,2)
         =
@@ -1275,21 +1295,23 @@ the specialization $L=2$.
     On a three-site chain, the two adjacent length-two local terms are the
     \(AX\) and \(XB\) actions of the canonical two-site parent interaction.
     Appendix~B supplies the basic-vector expression, while Appendix~D.2 supplies
-    the parent-commuting projector condition. The local two-site projector
-    identification above does not prove the overlapping commutation relation
+    the parent-commuting condition for the source projectors. The
+    coefficient-representative identification above does not prove the
+    overlapping commutation relation
     \[
         (\widehat Q_{AX})_{AX}(\widehat Q_{XB})_{XB}
         =
         (\widehat Q_{XB})_{XB}(\widehat Q_{AX})_{AX}.
     \]
-    Nor does it construct the source \(Q_{AX},Q_{XB}\) projectors on the
-    tripartite Hilbert space. For the all-chain statement, the remaining local
-    projector equation is the following commutation condition: for every chain
-    length $N\geq2$ and every pair of sites $i,j\in\mathbb Z/N\mathbb Z$,
+    Nor does it construct the source projectors \(Q_{AX},Q_{XB}\) on the
+    two overlapping tensor factors, or their lifted actions on the tripartite
+    space. For the all-chain statement, the remaining local condition is the
+    following commutation equation: for every chain length $N\geq2$ and every
+    pair of sites $i,j\in\mathbb Z/N\mathbb Z$,
     \[
         h_i(A,2)h_j(A,2)=h_j(A,2)h_i(A,2).
     \]
-    The projector equation $h_i(A,2)^2=h_i(A,2)$ is already
+    The idempotency equation $h_i(A,2)^2=h_i(A,2)$ is already
     Lemma~\ref{lem:local_term_idempotent}.
     The overlapping commutation theorem and the justification of any passage
     from the source coefficients to this even-chain factorization are the
