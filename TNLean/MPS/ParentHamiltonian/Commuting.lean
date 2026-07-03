@@ -347,11 +347,11 @@ theorem HasProductPairLocalProjectors.isNNCPH {A : MPSTensor d D} {N : ℕ}
   hPair.commuting_twoSite_localTerms
 
 /-- The even-chain physical-pair factorization and the two-site projector
-identities give NNCPH on each finite chain. -/
+identities give NNCPH on each finite chain of length at least two. -/
 theorem ProductPairBridge.isNNCPH {A : MPSTensor d D} (hBridge : ProductPairBridge A)
-    (N : ℕ) :
+    (N : ℕ) (hN : 2 ≤ N) :
     IsNNCPH A N :=
-  (hBridge.localProjectors N).isNNCPH
+  (hBridge.localProjectors N hN).isNNCPH
 
 /-- The conditional even-chain hypotheses and the ground-space spanning
 equation give the full all-chain nearest-neighbor parent-Hamiltonian condition.
@@ -368,7 +368,8 @@ theorem ProductPairBridge.hasNNCPHGroundSpaces_of_groundSpaceSpanning
     (hSpan : HasParentHamiltonianGroundSpaceSpanning B 2 A) :
     HasNNCPHGroundSpaces B A := by
   intro N hN
-  exact ⟨(hBridge.isNNCPH N).isNNCPHGroundState (le_of_lt hN), hSpan N hN⟩
+  exact ⟨(hBridge.isNNCPH N (le_of_lt hN)).isNNCPHGroundState (le_of_lt hN),
+    hSpan N hN⟩
 
 /-- Conditional internal theorem for Theorem 3.10(i)⟹(iii).
 
@@ -377,7 +378,7 @@ A normal left-canonical RFP tensor has the Appendix B structural form
 associated two-site amplitude gives the even-chain physical-pair factorization
 and the two-site parent terms are identified with commuting
 idempotents, then the nearest-neighbor parent Hamiltonian is commuting on every
-finite chain.
+finite chain of length at least two.
 
 This theorem does not use `Axioms.rfp_to_nncph_commute`; it states the precise
 conditional theorem left after the structural form has been internalized. -/
@@ -385,10 +386,10 @@ theorem rfp_implies_nncph_of_appendixBExtraction (A : MPSTensor d D) [NeZero D]
     (hRFP : IsRFP A) (hNT : IsNormal A) (hLeft : IsLeftCanonical A)
     (hExtract : AppendixBProductPairExtraction
       (AppendixBStructuralData.ofRFP A hNT hRFP hLeft))
-    (N : ℕ) :
+    (N : ℕ) (hN : 2 ≤ N) :
     IsNNCPH A N :=
   commuting_twoSite_localTerms_of_rfp_of_appendixBExtraction
-    A hNT hRFP hLeft hExtract N
+    A hNT hRFP hLeft hExtract N hN
 
 /-- Conditional ground-vector form of Theorem 3.10(i)⟹(iii).
 
@@ -410,8 +411,8 @@ theorem rfp_implies_nncph_ground_state_of_appendixBExtraction
       (AppendixBStructuralData.ofRFP A hNT hRFP hLeft))
     (N : ℕ) (hN : 2 ≤ N) :
     IsNNCPHGroundState A N :=
-  (rfp_implies_nncph_of_appendixBExtraction A hRFP hNT hLeft hExtract N).isNNCPHGroundState
-    hN
+  have hNN := rfp_implies_nncph_of_appendixBExtraction A hRFP hNT hLeft hExtract N hN
+  hNN.isNNCPHGroundState hN
 
 /-- Conditional full source form of Theorem 3.10(i)⟹(iii).
 
