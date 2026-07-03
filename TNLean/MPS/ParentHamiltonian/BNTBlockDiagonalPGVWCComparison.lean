@@ -24,6 +24,16 @@ The source proof writes this comparison with boundary-indexed matrices
 \(C^j_{i_1}\), \(D^j_{i_{m+1}}\), and the derived matrix \(E^j\). The words
 \(\beta\) and \(\rho\) below are the word coordinates obtained by opening the
 periodic boundary at the chosen cut, not additional source terminology.
+
+**Proof-state note:** The \(E^j\)-normalization calculation is formalized by
+`pgvwc07_complementary_word_cde_identities_of_block_boundary_trace_decomposition`
+and `pgvwc07_complementary_word_boundary_identities_formula_of_compatibility`.
+The remaining comparison problem is to derive the displayed \(C^j,D^j\)
+compatibility from periodic-boundary membership in the source range
+\(b\ge2\), \(L\ge3(b-1)(L_0+1)+1\), and \(N\ge L+L_0\), where \(b\) is the
+number of blocks in arXiv:quant-ph/0608197, Theorem 12. This derivation should
+not use the short tail-word span hypothesis assumed by the conditional
+statements below.
 -/
 
 open scoped Matrix BigOperators
@@ -55,7 +65,7 @@ for every block \(j\), outside word \(\rho\), and word \(\beta\) before the cut,
   \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho .
 \]
 
-This is the fixed-boundary form of the \(C^j,D^j\) comparison in
+This is a span-dependent fixed-boundary form of the \(C^j,D^j\) comparison in
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1436--1456, specialized to the
 block-diagonal boundary conditions used in arXiv:2011.12127, Section IV.C,
 lines 2126--2128.
