@@ -534,10 +534,10 @@ theorem AppendixBStructuralData.localTerm_two_three_one_eq_appendixBQXBOnCoeffSp
 representatives transports to commutation of the first two three-site parent
 terms.
 
-This is only the local transport from the Definition D.2 \(AX/XB\) equation to
-the translated parent interactions.  It does not construct the source
-projectors or prove their lifted commutator from the Appendix B basic-vector
-form.
+This identifies the first two translated parent interactions with the lifted
+\(AX\) and \(XB\) actions of the coefficient representatives.  It does not
+construct the source projectors or prove their lifted commutator from the
+Appendix B basic-vector form.
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
@@ -654,9 +654,10 @@ basic-vector expression.
 For a fixed structural form, this captures the two facts that are still not
 produced by the Appendix B structural datum: the coefficient formula for
 \(U^{\otimes N}\varphi_j^{\otimes N}\) must be related to the repeated
-physical-pair two-site amplitude stated here, and the nearest-neighbor
-parent projectors on each finite chain must be identified with a commuting
-family attached to the source projectors \(Q_{AX}\) and \(Q_{XB}\). -/
+physical-pair two-site amplitude stated here, and the translated length-two
+parent terms on each finite chain must be shown to commute.  The latter step is
+the source \(Q_{AX},Q_{XB}\) projector construction and lifted-commutator
+argument, not a consequence of the coefficient representatives alone. -/
 structure AppendixBProductPairExtraction {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) where
   /-- Positive even-chain factorization through the structural two-site amplitude. -/
@@ -670,7 +671,7 @@ structure AppendixBProductPairExtraction {A : MPSTensor d D}
 Appendix B core tensor.
 
 This reduces the coefficient computation to the core tensor \(\Lambda U^i\);
-the local projector identities remain a separate hypothesis. -/
+the translated length-two commutation identities remain a separate hypothesis. -/
 noncomputable def AppendixBProductPairExtraction.ofCoreTensorFactorization
     {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}
     (hCore : ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
@@ -724,8 +725,8 @@ theorem AppendixBProductPairExtraction.commuting_twoSite_localTerms
 Theorem 3.10:
 RFP plus the proved Appendix B structural theorem implies the nearest-neighbor
 commutation equation as soon as the even-chain physical-pair coefficient condition
-and the two-site projector identities are supplied for the resulting structural
-form.
+and the translated two-site commutation identities are supplied for the
+resulting structural form.
 
 This theorem deliberately stops short of claiming the full Beigi-independent
 `rfp_implies_nncph`: the missing hypothesis is exactly
