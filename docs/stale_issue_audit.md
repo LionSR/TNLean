@@ -18,17 +18,18 @@ and checks each against the current `main` branch:
 2. **Line-number citations.** When an issue body cites a file together with a
    line number — either with the `file.lean:LINE` suffix or the separate
    `` line NNN `` idiom — the audit checks whether that line still contains a
-   `sorry` or `admit`. A line is flagged when:
-   - the line exists but no longer has `sorry`/`admit` (someone filled the
-     proof), or
+   `sorry`, `admit`, or `axiom`. A line is flagged when:
+   - the line exists but no longer has `sorry`/`admit`/`axiom` (someone filled
+     the proof or removed the axiom), or
    - the line number is past the end of the file (the file was shortened).
    Single-line `--` comments are stripped before matching, so a commented-out
    `-- sorry` does not count as an active sorry site.
 
 3. **Backtick-quoted declaration names.** A token like `` `someLemma` `` that
-   looks like a Lean identifer is checked against the set of `def`, `theorem`,
-   `lemma`, `structure`, `instance`, `class`, `abbrev`, `inductive`, and
-   `opaque` declarations currently present in `TNLean/`. A declaration is
+   looks like a Lean identifier is checked against the set of `def`, `theorem`,
+   `lemma`, `axiom`, `structure`, `instance`, `class`, `abbrev`, `inductive`,
+   and `opaque` declarations, together with structure-field projections,
+   currently present in `TNLean/`. A declaration is
    flagged when it cannot be resolved at all — neither by short name nor by
    namespace-qualified name. Common English words and Lean keywords (e.g.,
    `sorry`, `main`, `simp`, `Nat`) are excluded by a built-in stoplist.
