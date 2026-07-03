@@ -539,6 +539,23 @@ length \(N-i\) now give matrices
   =
   \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho .
 \end{align}
+Once this compatibility identity is available, the normalized \(E^j\)
+calculation is no longer a gap: the adjoint-corrected formula
+\begin{align}
+  E^j_i=\sum_\rho C^j_{i,\rho}(A^j_\rho)^\dagger
+\end{align}
+and the identities
+\begin{align}
+  (\mu_j^NX_j)A^j_\beta=A^j_\beta E^j_i,
+  \qquad
+  A^j_\beta C^j_{i,\rho}=A^j_\beta E^j_iA^j_\rho
+\end{align}
+are formalized by
+\leanid{MPSTensor.pgvwc07_complementary_word_cde_identities_of_block_boundary_trace_decomposition}.
+The local boundary formula with \(E_{j,i,\rho}=E^j_iA^j_\rho\) is formalized by
+\leanid{MPSTensor.pgvwc07_complementary_word_boundary_identities_formula_of_compatibility};
+its existential consequence is
+\leanid{MPSTensor.pgvwc07_complementary_word_boundary_identities_of_compatibility}.
 This is formalized as
 \leanid{MPSTensor.blockDiagonal_boundary_crossing_pgvwc_comparison_of_sum_mem_iSup}
 and, once a block-diagonal boundary representation of \(\psi\) is fixed, into
@@ -565,10 +582,10 @@ derives it from the span-based one-step intersection identity
 \leanid{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1};
 its block components lie in the open-boundary ground spaces $\mathcal G_N^{A_j}$,
 and its proof does not use the periodic-boundary comparison at boundary-crossing
-windows. The conditional block-diagonal parent-space wrappers therefore hold the
+windows. The conditional block-diagonal parent-space statements therefore hold the
 periodic-boundary comparison only as an explicit hypothesis---a scope
 restriction---rather than as a smuggled dependency. The residual transitive
-source-faithfulness gap carried by those wrappers is the normalized BNT
+source-faithfulness gap carried by those statements is the normalized BNT
 product-span input, whose derivation is the normal-range reduction recorded in
 \path{docs/paper-gaps/cpgsv21_normal_range_reduction.tex} (lines 2078--2079 of
 \path{Papers/2011.12127/TN-Review-main.tex}); that gap is independent of the
@@ -576,7 +593,7 @@ periodic-boundary comparison tracked here.
 
 The remaining source-comparison target is tracked by
 \href{https://github.com/LionSR/TNLean/issues/3597}{issue \#3597}: replace the
-span-dependent short-tail statement by the \(C^j,D^j,E^j\) comparison from
+span-dependent short-tail statement by the \(C^j,D^j\) comparison input from
 \cite[Theorem~12]{PerezGarcia2007MPSReps} in the source range
 \begin{align}
   b\ge2,

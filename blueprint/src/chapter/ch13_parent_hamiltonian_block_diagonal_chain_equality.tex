@@ -13,15 +13,22 @@ comparison in the periodic ring. The source proof
 \cite{PerezGarcia2007Matrix} writes this comparison with $C^j_{i_1}$,
 $D^j_{i_{m+1}}$, and the normalized matrix $E^j$; the symbols $\beta$ and
 $\rho$ below are the words obtained after opening the periodic boundary at the
-chosen cut. In these coordinates the source comparison becomes
+chosen cut. The source theorem writes the number of blocks as $b$ and assumes
+$b\ge2$; here the same number is denoted by $g$. In these coordinates the
+source comparison input becomes
 \[
     A^j_\beta C^j_{i,\rho}
     =
     \bigl(\mu_j^N X_j A^j_\beta\bigr)A^j_\rho,
 \]
-which is the opened-boundary form of
+which is the form obtained after opening the boundary from
 $A^j_{i_{m+1}}C^j_{i_1}=D^j_{i_{m+1}}A^j_{i_1}$ with
 $D^j_\beta=(\mu_j^NX_j)A^j_\beta$.
+Once this compatibility is known, the normalized $E^j$ calculation is the
+matrix identity of
+Lemma~\ref{lem:block_boundary_cde_identities_from_trace_decompositions};
+the local boundary form used after opening the periodic boundary is
+Lemma~\ref{lem:complementary_word_boundary_identities_from_pgvwc}.
 
 \begin{lemma}[The block-diagonal periodic-boundary space lies between two block sums]
     \label{lem:bnt_block_diagonal_periodic_chain_inclusions}
@@ -298,6 +305,9 @@ $D^j_\beta=(\mu_j^NX_j)A^j_\beta$.
         =
         \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho .
     \]
+    This is the $C^j,D^j$ compatibility input; the subsequent normalized
+    $E^j$ identities follow from
+    Lemma~\ref{lem:complementary_word_boundary_identities_from_pgvwc}.
     Then
     \[
         \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right)
@@ -344,10 +354,12 @@ $D^j_\beta=(\mu_j^NX_j)A^j_\beta$.
         =
         \bigvee_j\mathcal G_{N,L}(A_j).
     \]
-    This records only the ground-space equality conclusion obtained from the
-    \(C^j,D^j\) boundary-condition comparison in
+    This records only the ground-space equality conclusion obtained after the
+    $C^j,D^j$ boundary-condition comparison input in
     \cite[Theorem~12, proof lines~1446--1456]{PerezGarcia2007Matrix}; the
-    independence of the \(N\)-site spaces is a separate conclusion of
+    local normalized $E^j$ calculation is
+    Lemma~\ref{lem:complementary_word_boundary_identities_from_pgvwc}.
+    The independence of the $N$-site spaces is a separate conclusion of
     Lemma~\ref{lem:bnt_block_diagonal_pgvwc_comparison_equality}.
     The statement is still in the length-$L_0$ injectivity range displayed in
     that lemma, not the shorter range in
@@ -383,8 +395,8 @@ $D^j_\beta=(\mu_j^NX_j)A^j_\beta$.
     \]
     and the $N$-site ground spaces $G_N(A_j)=\mathcal G_{N,N}(A_j)$
     have internal sum.
-    The present statement is the span-dependent opened-boundary consequence of
-    the boundary-condition comparison in
+    The present statement is the span-dependent consequence, after opening the
+    boundary, of the $C^j,D^j$ compatibility input in
     \cite[Theorem~12, proof lines~1436--1451]{PerezGarcia2007Matrix} in the
     length-$L_0$ injectivity range
     \[
@@ -442,8 +454,8 @@ $D^j_\beta=(\mu_j^NX_j)A^j_\beta$.
     tail-word span hypothesis and in the longer current range. The independence
     of the $N$-site spaces is a separate conclusion of
     Lemma~\ref{lem:bnt_block_diagonal_crossing_pgvwc_comparison_equality}.
-    Thus the statement remains a conditional opened-boundary comparison, not
-    the unconditional boundary-condition comparison in the source theorem.
+    Thus the statement remains conditional on the short tail-word spans; it is
+    not the unconditional boundary-condition comparison in the source theorem.
     % Source-faithful replacement of the tail-word span hypothesis is tracked in issue~\#3597.
 \end{lemma}
 
