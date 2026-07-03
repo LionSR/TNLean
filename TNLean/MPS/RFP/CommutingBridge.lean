@@ -508,6 +508,28 @@ theorem AppendixBStructuralData.hasOverlappingTwoSiteCommutation_of_commute_lift
   right_idempotent := hStruct.appendixBQXBOnCoeffSpace_idempotent
   commute_lifts := hcomm
 
+/-- A Definition D.2 projector pair gives the Appendix B overlapping condition
+once the source projectors are transported to coefficient space and identified
+with the coefficient-space representatives.
+
+This statement does not construct the source projectors \(Q_{AX}\) and
+\(Q_{XB}\).  It records the exact transport step that will be used after those
+projectors are constructed from the Appendix B basic-vector form.
+
+Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
+2205--2218. -/
+theorem
+    AppendixBStructuralData.hasOverlappingTwoSiteCommutation_of_appendixD2_identified_projectors
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
+    {KAXB : Submodule ℂ (NSiteSpace d 3)}
+    {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
+    (hD2 : HasAppendixD2ParentCommutingHamiltonian (d := d) KAXB QAX QXB)
+    (hAX : QAX = hStruct.appendixBQAXOnCoeffSpace)
+    (hXB : QXB = hStruct.appendixBQXBOnCoeffSpace) :
+    HasOverlappingTwoSiteCommutation (d := d) hStruct.appendixBQAXOnCoeffSpace
+      hStruct.appendixBQXBOnCoeffSpace := by
+  simpa [hAX, hXB] using hD2.to_overlapping
+
 /-- On a three-site window, the first translated length-two parent term is the
 \(AX\) lift of the Appendix B \(AX\) coefficient representative.
 
@@ -591,6 +613,29 @@ theorem AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_appendix
     localTerm A 2 3 (0 : Fin 3) * localTerm A 2 3 (1 : Fin 3) =
       localTerm A 2 3 (1 : Fin 3) * localTerm A 2 3 (0 : Fin 3) :=
   hStruct.localTerm_two_three_zero_one_commute_of_overlapping hD2.to_overlapping
+
+/-- A Definition D.2 projector pair gives commutation of the first two
+translated length-two parent terms, once the source projectors are transported
+to coefficient space and identified with the Appendix B representatives.
+
+This is still conditional on the source-projector identification.  It does not
+construct \(Q_{AX}\) and \(Q_{XB}\) from the Appendix B basic-vector form.
+
+Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
+2205--2218. -/
+theorem
+    AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_appendixD2_identified_projectors
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
+    {KAXB : Submodule ℂ (NSiteSpace d 3)}
+    {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
+    (hD2 : HasAppendixD2ParentCommutingHamiltonian (d := d) KAXB QAX QXB)
+    (hAX : QAX = hStruct.appendixBQAXOnCoeffSpace)
+    (hXB : QXB = hStruct.appendixBQXBOnCoeffSpace) :
+    localTerm A 2 3 (0 : Fin 3) * localTerm A 2 3 (1 : Fin 3) =
+      localTerm A 2 3 (1 : Fin 3) * localTerm A 2 3 (0 : Fin 3) :=
+  hStruct.localTerm_two_three_zero_one_commute_of_overlapping
+    (hStruct.hasOverlappingTwoSiteCommutation_of_appendixD2_identified_projectors
+      hD2 hAX hXB)
 
 /-- The Appendix B basis change does not change any MPV coefficient. -/
 theorem AppendixBStructuralData.mpv_eq_coreTensor {A : MPSTensor d D}

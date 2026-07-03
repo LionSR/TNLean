@@ -1068,6 +1068,42 @@ the specialization $L=2$.
     displayed lifted commutator.
 \end{proof}
 
+\begin{lemma}[Definition D.2 projectors identified with Appendix B representatives]
+    \label{lem:appendixB_d2_projectors_identified_with_representatives}
+    \lean{MPSTensor.AppendixBStructuralData.hasOverlappingTwoSiteCommutation_of_appendixD2_identified_projectors}
+    \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_appendixD2_identified_projectors}
+    \leanok
+    \uses{def:overlapping_two_site_supports, def:appendixB_qax,
+        def:appendixB_qxb, lem:appendixB_overlapping_condition_parent_terms}
+    Let $Q_{AX}$ and $Q_{XB}$ be the two-site coefficient-space transports of
+    source projectors satisfying the Definition~D.2 local condition on
+    $A X B$.  If these transported projectors agree with the Appendix~B
+    coefficient representatives,
+    \[
+        Q_{AX}=\widehat Q_{AX},
+        \qquad
+        Q_{XB}=\widehat Q_{XB},
+    \]
+    then $\widehat Q_{AX}$ and $\widehat Q_{XB}$ satisfy the algebraic
+    overlapping two-site condition of
+    Definition~\ref{def:overlapping_two_site_supports}.  Consequently,
+    \[
+        h_0^{(3)}(A,2)h_1^{(3)}(A,2)
+        =
+        h_1^{(3)}(A,2)h_0^{(3)}(A,2).
+    \]
+    % Maintainer note: this conditional identification statement does not
+    % construct $Q_{AX}$ and $Q_{XB}$ from the Appendix~B basic-vector form.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Rewriting the two projectors in the Definition~D.2 condition as
+    $\widehat Q_{AX}$ and $\widehat Q_{XB}$ gives the algebraic overlapping
+    condition.  The three-site commutation is then
+    Lemma~\ref{lem:appendixB_overlapping_condition_parent_terms}.
+\end{proof}
+
 \begin{lemma}[Three-site lifts of the Appendix B coefficient representatives]
     \label{lem:appendixB_three_site_parent_lifts}
     \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_eq_appendixBQAXOnCoeffSpace_lift}
