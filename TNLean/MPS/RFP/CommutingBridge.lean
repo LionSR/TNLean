@@ -181,13 +181,13 @@ noncomputable def HasProductPairLocalProjectors.of_commuting_localTerms
   hcomm := hcomm
 
 /-- Conditional hypotheses for a tensor whose positive even-chain coefficients
-factor through one repeated two-site amplitude and whose
-nearest-neighbor parent terms are commuting idempotents on every finite chain. -/
+factor through one repeated two-site amplitude and whose nearest-neighbor parent
+terms are commuting idempotents on every finite chain of length at least two. -/
 structure ProductPairBridge (A : MPSTensor d D) where
   pairAmplitude : NSiteSpace d 2
   hmpv : ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
     mpv A σ = productPairState pairAmplitude N σ
-  localProjectors : ∀ N, HasProductPairLocalProjectors A N
+  localProjectors : ∀ N, 2 ≤ N → HasProductPairLocalProjectors A N
 
 theorem ProductPairBridge.mpv_eq_productPairState {A : MPSTensor d D}
     (hBridge : ProductPairBridge A) :
@@ -201,22 +201,24 @@ theorem ProductPairBridge.hasProductPairMPV {A : MPSTensor d D}
   ⟨hBridge.pairAmplitude, hBridge.hmpv⟩
 
 /-- The conditional physical-pair hypotheses yield the unfolded `IsNNCPH`
-conclusion: all two-site local terms commute on every finite chain.
+conclusion: all two-site local terms commute on every finite chain of length at
+least two.
 
 The statement is written as the commutation equation for the translated
 two-site parent terms, which is the nearest-neighbor commutation condition in
 arXiv:1606.00608, Definition 3.9. -/
 theorem ProductPairBridge.commuting_twoSite_localTerms
-    {A : MPSTensor d D} (hBridge : ProductPairBridge A) (N : ℕ) :
+    {A : MPSTensor d D} (hBridge : ProductPairBridge A) (N : ℕ) (hN : 2 ≤ N) :
     ∀ i j : Fin N,
       localTerm A 2 N i * localTerm A 2 N j =
         localTerm A 2 N j * localTerm A 2 N i :=
-  (hBridge.localProjectors N).commuting_twoSite_localTerms
+  (hBridge.localProjectors N hN).commuting_twoSite_localTerms
 
 theorem ProductPairBridge.localTerm_idempotent
-    {A : MPSTensor d D} (hBridge : ProductPairBridge A) (N : ℕ) (i : Fin N) :
+    {A : MPSTensor d D} (hBridge : ProductPairBridge A) (N : ℕ) (hN : 2 ≤ N)
+    (i : Fin N) :
     localTerm A 2 N i * localTerm A 2 N i = localTerm A 2 N i :=
-  (hBridge.localProjectors N).localTerm_idempotent i
+  (hBridge.localProjectors N hN).localTerm_idempotent i
 
 /-! ### Appendix B structural form used below -/
 
@@ -660,8 +662,9 @@ structure AppendixBProductPairExtraction {A : MPSTensor d D}
   /-- Positive even-chain factorization through the structural two-site amplitude. -/
   hmpv : ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
     mpv A σ = productPairState hStruct.twoSiteAmplitude N σ
-  /-- Local projectors realizing the nearest-neighbor parent terms. -/
-  localProjectors : ∀ N, HasProductPairLocalProjectors A N
+  /-- Local projectors realizing the nearest-neighbor parent terms for chains
+  of length at least two. -/
+  localProjectors : ∀ N, 2 ≤ N → HasProductPairLocalProjectors A N
 
 /-- Construct the coefficient part of the conditional structure from the
 Appendix B core tensor.
@@ -672,7 +675,7 @@ noncomputable def AppendixBProductPairExtraction.ofCoreTensorFactorization
     {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}
     (hCore : ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
       mpv hStruct.coreTensor σ = productPairState hStruct.twoSiteAmplitude N σ)
-    (hProj : ∀ N, HasProductPairLocalProjectors A N) :
+    (hProj : ∀ N, 2 ≤ N → HasProductPairLocalProjectors A N) :
     AppendixBProductPairExtraction hStruct where
   hmpv := by
     intro N hN σ
@@ -681,7 +684,7 @@ noncomputable def AppendixBProductPairExtraction.ofCoreTensorFactorization
   localProjectors := hProj
 
 /-- Construct the conditional Appendix B extraction from the coefficient
-factorization and the all-chain commutation equations for the translated
+factorization and the \(N \ge 2\) commutation equations for the translated
 length-two parent terms.
 
 The idempotency of the local terms is supplied by `localTerm_idempotent`; the
@@ -690,12 +693,12 @@ noncomputable def AppendixBProductPairExtraction.ofCoreTensorFactorizationAndCom
     {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}
     (hCore : ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
       mpv hStruct.coreTensor σ = productPairState hStruct.twoSiteAmplitude N σ)
-    (hComm : ∀ N, ∀ i j : Fin N,
+    (hComm : ∀ N, 2 ≤ N → ∀ i j : Fin N,
       localTerm A 2 N i * localTerm A 2 N j =
         localTerm A 2 N j * localTerm A 2 N i) :
     AppendixBProductPairExtraction hStruct :=
   AppendixBProductPairExtraction.ofCoreTensorFactorization hCore
-    (fun N => HasProductPairLocalProjectors.of_commuting_localTerms (hComm N))
+    (fun N hN => HasProductPairLocalProjectors.of_commuting_localTerms (hComm N hN))
 
 /-- The conditional Appendix B hypotheses yield the `ProductPairBridge`
 structure used by the parent-Hamiltonian statements. -/
@@ -708,14 +711,14 @@ noncomputable def AppendixBProductPairExtraction.toProductPairBridge
   localProjectors := hExtract.localProjectors
 
 /-- The conditional Appendix B hypotheses give the unfolded nearest-neighbor
-commutation statement on every finite chain. -/
+commutation statement on every finite chain of length at least two. -/
 theorem AppendixBProductPairExtraction.commuting_twoSite_localTerms
     {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}
-    (hExtract : AppendixBProductPairExtraction hStruct) (N : ℕ) :
+    (hExtract : AppendixBProductPairExtraction hStruct) (N : ℕ) (hN : 2 ≤ N) :
     ∀ i j : Fin N,
       localTerm A 2 N i * localTerm A 2 N j =
         localTerm A 2 N j * localTerm A 2 N i :=
-  hExtract.toProductPairBridge.commuting_twoSite_localTerms N
+  hExtract.toProductPairBridge.commuting_twoSite_localTerms N hN
 
 /-- Conditional form of the forward implication in arXiv:1606.00608,
 Theorem 3.10:
@@ -734,10 +737,10 @@ theorem commuting_twoSite_localTerms_of_rfp_of_appendixBExtraction
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hExtract : AppendixBProductPairExtraction
       (AppendixBStructuralData.ofRFP A hNT hRFP hLeft))
-    (N : ℕ) :
+    (N : ℕ) (hN : 2 ≤ N) :
     ∀ i j : Fin N,
       localTerm A 2 N i * localTerm A 2 N j =
         localTerm A 2 N j * localTerm A 2 N i :=
-  hExtract.commuting_twoSite_localTerms N
+  hExtract.commuting_twoSite_localTerms N hN
 
 end MPSTensor
