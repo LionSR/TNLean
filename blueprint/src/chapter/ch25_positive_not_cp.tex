@@ -508,6 +508,29 @@ follow merely from equality of the total numerator and denominator weights.
     $T_C(X)\ge0$.
 \end{proof}
 
+\section{Decomposable positive maps}
+
+The Choi-type maps are stated in Wolf's Example~3.1 as positive and
+indecomposable.  The formal language for the second adjective is the following
+standard one: a positive map is decomposable when it is the sum of a completely
+positive map and a completely copositive map.
+
+\begin{definition}[Decomposable and indecomposable positive maps]
+    \label{def:decomposable_positive_map}
+    \lean{IsCompletelyCopositiveMap, IsDecomposablePositiveMap,
+        IsIndecomposablePositiveMap}
+    \leanok
+    A map $\Phi\colon\MN{D}\to\MN{D}$ is completely copositive if
+    $\Phi\circ\theta$ is completely positive, where $\theta$ is transposition.
+    It is decomposable if
+    \[
+        \Phi=\Phi_{\mathrm{cp}}+\Phi_{\mathrm{ccp}}
+    \]
+    with $\Phi_{\mathrm{cp}}$ completely positive and
+    $\Phi_{\mathrm{ccp}}$ completely copositive.  It is indecomposable if it is
+    positive and not decomposable.
+\end{definition}
+
 \section{The partial transpose and the PPT property}
 
 Transposition is a positive map that is not completely positive, so applying it
