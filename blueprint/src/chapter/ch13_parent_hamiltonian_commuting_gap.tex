@@ -312,6 +312,63 @@ the specialization $L=2$.
     locality.
 \end{proof}
 
+\begin{lemma}[Length-two cyclic-overlap alternatives]
+    \label{lem:two_site_cyclic_window_overlap_cases}
+    \lean{MPSTensor.cyclicWindowsOverlap_twoSite_cases}
+    \leanok
+    \uses{def:cyclic_windows_overlap}
+    For $i,j\in\mathbb Z/N\mathbb Z$, if the two length-two cyclic supports
+    starting at $i$ and $j$ overlap, then
+    \[
+        j=i
+        \quad\text{or}\quad
+        j\equiv i+1\pmod N
+        \quad\text{or}\quad
+        i\equiv j+1\pmod N .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Expanding each length-two cyclic support gives shifts
+    $r_i,r_j\in\{0,1\}$ and an equality of sites
+    $i+r_i\equiv j+r_j\pmod N$.  The four possible pairs
+    $(r_i,r_j)$ give exactly the three alternatives displayed above.
+\end{proof}
+
+\begin{lemma}[Adjacent two-site translates suffice for nearest-neighbor commutation]
+    \label{lem:nncph_from_adjacent_two_site_commutation}
+    \lean{MPSTensor.isNNCPH_of_adjacent_twoSite_commute}
+    \lean{MPSTensor.HasProductPairLocalProjectors.of_adjacent_twoSite_commute}
+    \leanok
+    \uses{lem:two_site_cyclic_window_overlap_cases,
+        lem:commuting_parent_ham_overlap_reduction, lem:local_term_idempotent}
+    Let $N\ge2$. Suppose that, for every $i\in\mathbb Z/N\mathbb Z$, the
+    translated length-two local term commutes with its cyclic right neighbor:
+    \[
+        h_i(A,2)\,h_{i+1}(A,2)=h_{i+1}(A,2)\,h_i(A,2).
+    \]
+    Then all translated length-two local terms commute, and the family
+    $p_i=h_i(A,2)$ satisfies the finite-chain local-projector hypotheses used
+    in the conditional Appendix~B extraction.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    By Lemma~\ref{lem:two_site_cyclic_window_overlap_cases}, overlapping
+    length-two cyclic supports force
+    \[
+        j=i
+        \quad\text{or}\quad
+        j\equiv i+1\pmod N
+        \quad\text{or}\quad
+        i\equiv j+1\pmod N .
+    \]
+    The equal-start case gives $h_i(A,2)=h_j(A,2)$.  The two nearest-neighbor
+    cases are the displayed hypothesis and its transpose.  The overlap-reduction
+    lemma supplies the remaining disjoint pairs by locality.
+\end{proof}
+
 \begin{lemma}[Local-projector hypotheses from overlapping two-site commutation]
     \label{lem:product_pair_local_projectors_from_overlap}
     \lean{MPSTensor.HasProductPairLocalProjectors.of_twoSite_cyclicWindowsOverlap_commute}
@@ -1239,6 +1296,7 @@ the specialization $L=2$.
     \lean{MPSTensor.AppendixBProductPairExtraction.ofCoreTensorFactorization}
     \lean{MPSTensor.AppendixBProductPairExtraction.ofCoreTensorFactorizationAndCommutation}
     \lean{MPSTensor.AppendixBProductPairExtraction.ofCoreTensorFactorizationAndOverlapCommutation}
+    \lean{MPSTensor.AppendixBProductPairExtraction.ofCoreTensorFactorizationAndAdjacentCommutation}
     \lean{MPSTensor.AppendixBProductPairExtraction.toProductPairBridge}
     \lean{MPSTensor.AppendixBProductPairExtraction.commuting_twoSite_localTerms}
     \lean{MPSTensor.commuting_twoSite_localTerms_of_rfp_of_appendixBExtraction}
