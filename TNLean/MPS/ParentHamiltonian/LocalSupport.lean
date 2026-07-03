@@ -342,9 +342,10 @@ theorem HasOverlappingTwoSiteCommutation.complement
 two-site commutation predicate on the \(AX\) and \(XB\) faces, then the first two
 translated parent terms on the three-site chain commute.
 
-This is the local transport from the Appendix D.2 projectors of
-arXiv:1606.00608 to the translated parent terms. It does not construct those
-source projectors associated with the Appendix B basic-vector form. -/
+This identifies the first two translated terms with the lifted \(AX\) and
+\(XB\) actions of the canonical two-site parent interaction. It does not
+construct the source projectors associated with the Appendix B basic-vector
+form. -/
 theorem localTerm_two_three_zero_one_commute_of_overlapping_two_site_commutation
     (A : MPSTensor d D)
     (h : HasOverlappingTwoSiteCommutation (d := d)
@@ -356,7 +357,7 @@ theorem localTerm_two_three_zero_one_commute_of_overlapping_two_site_commutation
   exact h.commute_lifts
 
 /-- If the two-site parent interaction is identified with the Appendix D.2
-projectors \(Q_{AX}\) and \(Q_{XB}\) on the two faces, then the first two
+projectors \(Q_{AX}\) and \(Q_{XB}\) before lifting, then the first two
 translated parent terms on the three-site chain commute. -/
 theorem localTerm_two_three_zero_one_commute_of_overlapping_two_site_projectors
     (A : MPSTensor d D) {QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2}
