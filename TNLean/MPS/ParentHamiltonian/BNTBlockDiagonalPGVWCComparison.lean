@@ -385,18 +385,9 @@ specialized to the block-diagonal boundary conditions of
 arXiv:2011.12127, Section IV.C, lines 2126--2128.
 
 **Scope restriction (length-\(L_0\) injectivity range):** Theorem 12 of
-arXiv:quant-ph/0608197 assumes \(L\ge 3(b-1)(L_0+1)+1\). This theorem is stated in the current BNT
-range derived from length-\(L_0\) block injectivity,
+arXiv:quant-ph/0608197 assumes \(L\ge 3(b-1)(L_0+1)+1\). This theorem is stated
+in the current BNT range derived from length-\(L_0\) block injectivity,
 \((L_0+1)+3(r-1)(L_0+1)+1\le L\). The source-range comparison is recorded in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
-
-**Scope restriction (crossing span):** The theorem assumes that the simultaneous
-block-word tuples of length \(N-i\) span the product algebra for each
-boundary-crossing interval beginning at \(i\). The finite BNT range gives
-large-length simultaneous product spans; it does not by itself supply the
-shortest crossing tails, where \(N-i\) can be \(1\). Replacing this visible
-span hypothesis is part of the remaining source-faithful boundary comparison
-recorded in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
 
 The block-diagonal boundary representation used here is the
@@ -404,9 +395,13 @@ boundary-comparison-free open-boundary inclusion of arXiv:quant-ph/0608197,
 Theorem 12 (its block components lie in \(G_N(A_j)\)) and does not assume the
 boundary-crossing comparison.
 
-**Scope restriction (crossing span):** The residual source-scope gap is the
-crossing-tail span hypothesis noted above, which supplies the periodic-boundary
-upgrade (arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456;
+**Scope restriction (crossing span):** The theorem assumes that the simultaneous
+block-word tuples of length \(N-i\) span the product algebra for each
+boundary-crossing interval beginning at \(i\). The finite BNT range gives
+large-length simultaneous product spans; it does not by itself supply the
+shortest crossing tails, where \(N-i\) can be \(1\). This visible hypothesis is
+the residual source-scope gap in the periodic-boundary upgrade
+(arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456;
 arXiv:2011.12127, Section IV.C, lines 2126--2128). Documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem
@@ -453,18 +448,9 @@ the equality conclusion
 which is the ground-space assertion in the source theorem.
 
 **Scope restriction (length-\(L_0\) injectivity range):** Theorem 12 of
-arXiv:quant-ph/0608197 assumes \(L\ge 3(b-1)(L_0+1)+1\). This theorem is stated in the current BNT
-range derived from length-\(L_0\) block injectivity,
+arXiv:quant-ph/0608197 assumes \(L\ge 3(b-1)(L_0+1)+1\). This theorem is stated
+in the current BNT range derived from length-\(L_0\) block injectivity,
 \((L_0+1)+3(r-1)(L_0+1)+1\le L\). The source-range comparison is recorded in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
-
-**Scope restriction (crossing span):** The theorem assumes that the simultaneous
-block-word tuples of length \(N-i\) span the product algebra for each
-boundary-crossing interval beginning at \(i\). The finite BNT range gives
-large-length simultaneous product spans; it does not by itself supply the
-shortest crossing tails, where \(N-i\) can be \(1\). Replacing this visible
-span hypothesis is part of the remaining source-faithful boundary comparison
-recorded in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
 
 The block-diagonal boundary representation used here is the
@@ -472,9 +458,13 @@ boundary-comparison-free open-boundary inclusion of arXiv:quant-ph/0608197,
 Theorem 12 (its block components lie in \(G_N(A_j)\)) and does not assume the
 boundary-crossing comparison.
 
-**Scope restriction (crossing span):** The residual source-scope gap is the
-crossing-tail span hypothesis noted above, which supplies the periodic-boundary
-upgrade (arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456;
+**Scope restriction (crossing span):** The theorem assumes that the simultaneous
+block-word tuples of length \(N-i\) span the product algebra for each
+boundary-crossing interval beginning at \(i\). The finite BNT range gives
+large-length simultaneous product spans; it does not by itself supply the
+shortest crossing tails, where \(N-i\) can be \(1\). This visible hypothesis is
+the residual source-scope gap in the periodic-boundary upgrade
+(arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456;
 arXiv:2011.12127, Section IV.C, lines 2126--2128). Documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_crossing_pgvwc_comparison
