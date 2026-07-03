@@ -48,4 +48,38 @@ theorem isNNCPH_of_twoSite_cyclicWindowsOverlap_commute
     IsNNCPH A N :=
   isCommutingParentHam_of_cyclicWindowsOverlap_commute (A := A) (L := 2) hN hOverlap
 
+/-- Overlapping length-two cyclic-window commutation supplies the
+local-projector hypotheses used by the conditional Appendix B extraction.
+
+The idempotency part is the general translated-parent-term idempotency; the
+overlap reduction supplies the missing all-pairs commutation equations. -/
+noncomputable def HasProductPairLocalProjectors.of_twoSite_cyclicWindowsOverlap_commute
+    {A : MPSTensor d D} {N : ℕ} (hN : 2 ≤ N)
+    (hOverlap : ∀ i j : Fin N, cyclicWindowsOverlap N 2 i j →
+      localTerm A 2 N i * localTerm A 2 N j =
+        localTerm A 2 N j * localTerm A 2 N i) :
+    HasProductPairLocalProjectors A N :=
+  HasProductPairLocalProjectors.of_commuting_localTerms
+    (isNNCPH_of_twoSite_cyclicWindowsOverlap_commute (A := A) hN hOverlap)
+
+/-- Construct the conditional Appendix B extraction from the coefficient
+factorization and the overlapping length-two cyclic-window commutation
+equations on every chain.
+
+This is only the locality reduction from overlapping pairs to all pairs; the
+source \(Q_{AX},Q_{XB}\) projectors and their lifted commutator remain separate
+inputs to the proof of the overlap hypotheses. -/
+noncomputable def AppendixBProductPairExtraction.ofCoreTensorFactorizationAndOverlapCommutation
+    {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}
+    (hCore : ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
+      mpv hStruct.coreTensor σ = productPairState hStruct.twoSiteAmplitude N σ)
+    (hOverlap : ∀ N, 2 ≤ N → ∀ i j : Fin N, cyclicWindowsOverlap N 2 i j →
+      localTerm A 2 N i * localTerm A 2 N j =
+        localTerm A 2 N j * localTerm A 2 N i) :
+    AppendixBProductPairExtraction hStruct :=
+  AppendixBProductPairExtraction.ofCoreTensorFactorization hCore
+    (fun N hN =>
+      HasProductPairLocalProjectors.of_twoSite_cyclicWindowsOverlap_commute
+        (A := A) hN (hOverlap N hN))
+
 end MPSTensor
