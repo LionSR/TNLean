@@ -226,6 +226,15 @@ rest of the site.
 Conventions for contributors are collected in `AGENTS.md`, `CLAUDE.md`, and
 `docs/`.
 
+## License
+
+The Lean source, the blueprint, and the other original content of this
+repository are released under the Apache License 2.0 (see
+[`LICENSE`](LICENSE)). The `Papers/` directory contains the arXiv sources of
+the papers being formalized; these are third-party works that remain under
+their authors' copyright and are **not** covered by the repository license.
+See [`Papers/NOTICE.md`](Papers/NOTICE.md).
+
 ## References
 
 The formalization draws principally on the following sources.
