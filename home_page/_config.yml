@@ -1,5 +1,5 @@
-title: Fundamental Theorem of Matrix Product States
-description: A formal verification in Lean 4 using Mathlib
+title: TNLean
+description: Tensor-network theory, formalized in Lean 4
 baseurl: "/TNLean"
 url: "https://lionsr.github.io"
 github_username: LionSR
