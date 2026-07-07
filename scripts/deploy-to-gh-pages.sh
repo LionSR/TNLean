@@ -78,6 +78,14 @@ if [ ! -f "$REPO_ROOT/blueprint/print/print.pdf" ]; then
 fi
 cp "$REPO_ROOT/blueprint/print/print.pdf" "$WORK_DIR/site/blueprint.pdf"
 
+# Update the first-12-chapters release PDF (optional artifact; built by
+# scripts/build_blueprint_ch01_12.sh). If absent, keep the existing site copy.
+if [ -f "$REPO_ROOT/blueprint/print/print12.pdf" ]; then
+  cp "$REPO_ROOT/blueprint/print/print12.pdf" "$WORK_DIR/site/blueprint-ch01-12.pdf"
+else
+  echo "No first-12-chapters PDF at blueprint/print/print12.pdf; keeping existing site copy"
+fi
+
 # Update homepage (remove all homepage files first, then copy fresh)
 echo "==> Updating homepage..."
 rm -rf "$WORK_DIR/site/_layouts" "$WORK_DIR/site/assets" \

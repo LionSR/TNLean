@@ -79,6 +79,9 @@ jobs:
             exit 1
           fi
 
+      - name: Build first-12-chapters release PDF
+        run: ./scripts/build_blueprint_ch01_12.sh
+
       - name: Deploy to gh-pages
         env:
           GITHUB_TOKEN: ${{ github.token }}
