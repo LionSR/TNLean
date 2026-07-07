@@ -2,7 +2,7 @@
 CROSS-CHECK REPORT: Slide Deck vs Reference [3]
 ================================================================================
 
-Slide deck:  slides/presentation20260218_tao_technical.tex
+Slide deck:  docs/slides/presentation20260218_tao_technical.tex
 Reference:   [3] = Cirac/Pérez-García/Schuch/Verstraete, arXiv:1606.00608
              (1606.00608/MPDO-22-12-17-2.tex)
 Scope:       Section 2 (\section{Matrix Product Vectors}\label{Sec:MPV})

@@ -407,7 +407,7 @@ Recommended (literature-aligned) closure plan.
 5. Concrete slide-deck overhaul instructions (to match literature narrative)
 ================================================================================
 
-Reference slide source (current): slides/presentation20260218_tao_technical.tex
+Reference slide source (current): docs/slides/presentation20260218_tao_technical.tex
 Current section order:
   1) project goal + headline theorems
   2) Lean defs

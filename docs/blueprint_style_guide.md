@@ -5,7 +5,7 @@ The blueprint links the mathematics to its Lean formalization. A reader should b
 
 ## General Principles
 1. **Blueprint ↔ Lean must match.** Every `\lean{X}` tag must correspond to an actual Lean declaration. Every proof sketch must match what the Lean proof actually does — not a hand-wavy version of it.
-2. **Standalone.** `blueprint/` and `slides/` are independent — no cross-references, no shared files. Each has its own macros, its own `references.bib`.
+2. **Standalone.** `blueprint/` and `docs/slides/` are independent — no cross-references, no shared files. Each has its own macros, its own `references.bib`.
 3. **Mathematical language only — zero Lean jargon.** See [`prose_style.md`](prose_style.md) Section 1 for the full rule and examples; in short, the `\lean{...}` tag is the link, the body text is standard mathematics.
 4. **No filler prose.** Only precise definitions, theorem statements, and proof sketches. No "this is important because..." or "the transfer map governs the spectral theory...".
 5. **Cite non-trivial things.** Basic definitions (MPS tensor, MPV) don't need citations. Important results and non-obvious definitions should cite the source paper.
