@@ -57,6 +57,18 @@ boundary conditions (PBC).
     Immediate from the definition of $A^w$.
 \end{proof}
 
+\begin{lemma}[Centre of $\MN{D}$]\label{lem:center_scalar}
+    \lean{Matrix.isScalar_of_commute_span_eq_top}
+    \leanok
+    If a matrix $Z \in \MN{D}$ commutes with every element of $\MN{D}$, then
+    there exists $\lambda \in \C$ such that $Z = \lambda \Id_D$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Since $Z$ commutes with every matrix unit, all off-diagonal entries of $Z$
+    vanish and all diagonal entries are equal.
+\end{proof}
+
 \begin{definition}[Matrix product vector]\label{def:mpv}
     \lean{MPSTensor.mpv}
     \leanok
