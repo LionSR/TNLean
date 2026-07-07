@@ -6,7 +6,7 @@ modifiedAt: 2026-02-19T10:52:01.408Z
 # Slides Update Plan — 2026-02-19
 
 ## Task
-Update `slides/presentation20260218_tao_technical.tex` with:
+Update `docs/slides/presentation20260218_tao_technical.tex` with:
 1. ~10 more pages of detailed proof explanations (self-contained, for scientists)
 2. Updated next steps connecting to big picture
 3. Analysis of how far from most general FT-MPS
