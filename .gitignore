@@ -48,9 +48,8 @@ tikz_analysis.md
 improved_mps_tikz.tex
 
 # Slides build artifacts
-slides/.texpadtmp/
-slides/History/
-slides/build/
+docs/slides/.texpadtmp/
+docs/slides/History/
 *.bcf
 *.run.xml
 

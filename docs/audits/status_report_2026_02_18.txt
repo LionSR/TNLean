@@ -5,7 +5,7 @@ Repository snapshot
 - Branch: fix/schwarz-kraus-api
 - HEAD: cd95649e552e255b401ae7285f52219cb3d5ff26 (cd95649 Add presentation slides for block separation and project completion)
 - Working tree (uncommitted):
-  * D  slides/refactoring_summary.pdf
+  * D  docs/slides/refactoring_summary.pdf
   * ?? TNLean/MPS/BlockPermutationMPS 2.lean
   * ?? TNLean/QPF/Uniqueness 2.lean
   * ?? TNLean/Scratch/PerIndexAlgebra.lean.bak

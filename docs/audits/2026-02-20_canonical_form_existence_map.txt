@@ -2,7 +2,7 @@
 MEMO: Canonical Form Existence — Proof Spine Mapping to Lean
 Date: 2026-02-20
 Author: TNLean audit (automated)
-Relates to: slides/presentation20260218_tao_technical.tex (Step (i) gap),
+Relates to: docs/slides/presentation20260218_tao_technical.tex (Step (i) gap),
             TNLean codebase (core library, 0 sorry, 0 axioms)
 References:
   [PG07] Pérez-García, Verstraete, Wolf, Cirac — quant-ph/0608197 (MPSarchive.tex)
