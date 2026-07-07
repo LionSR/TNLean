@@ -246,6 +246,43 @@ the individual copy weights.
 The matched block gauges and copy weights now combine into a single
 block-diagonal gauge.
 
+\begin{definition}[Flattened block-diagonal gauge]%
+    \label{def:global_gauge_of_blocks}
+    \lean{MPSTensor.blockDiagonalGL, MPSTensor.globalGaugeOfBlocks}
+    \leanok
+    \uses{def:block_diagonal_tensor}
+    Given per-block gauges $X_k \in \GL_{D_k}(\C)$, form the block-diagonal
+    element $\bigoplus_k X_k$ and then reindex the dependent block-coordinate
+    space with the standard bond index
+    $\{0,\dots,\sum_k D_k-1\}$ of the assembled tensor. The result is an
+    element of $\GL_{\sum_k D_k}(\C)$.
+\end{definition}
+
+\begin{lemma}[Direct-sum conjugation by the flattened gauge]%
+    \label{lem:tensor_from_blocks_globalGauge_conj}
+    \lean{MPSTensor.toTensorFromBlocks_eq_globalGaugeOfBlocks_conj,
+        MPSTensor.gaugeEquiv_toTensorFromBlocks_of_blockConj}
+    \leanok
+    \uses{def:global_gauge_of_blocks, def:block_diagonal_tensor, def:gauge_equiv}
+    If, for every block $k$ and physical index $i$,
+    $B_k^i=X_kA_k^iX_k^{-1}$, then the weighted direct sums satisfy
+    \[
+        \bigoplus_k \mu_k B_k^i
+        =
+        X\left(\bigoplus_k \mu_k A_k^i\right)X^{-1},
+    \]
+    where $X$ is the flattened block-diagonal gauge from
+    Definition~\ref{def:global_gauge_of_blocks}. Hence the two assembled
+    tensors are gauge equivalent.
+\end{lemma}
+
+\begin{proof}\leanok
+    Multiplication of block-diagonal matrices is computed blockwise. The scalar
+    weight $\mu_k$ commutes with the conjugation on the $k$th block, and the
+    reindexing from dependent block coordinates to the flattened bond index
+    preserves products and inverses.
+\end{proof}
+
 \begin{theorem}[Global gauge from matched sectors and copy weights]%
     \label{thm:sector_bnt_global_gauge_of_matched_weights}
     \lean{MPSTensor.sector_bnt_global_gauge_of_matched_weights}

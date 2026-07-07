@@ -290,20 +290,6 @@ $\MN{D}$ consists of scalars.
     all of $\MN{D}$.
 \end{proof}
 
-\begin{lemma}[Centre of $\MN{D}$]\label{lem:center_scalar}
-    \lean{Matrix.isScalar_of_commute_span_eq_top}
-    \leanok
-    If $Z \in \MN{D}$ commutes with every element of $\MN{D}$, then
-    $Z = \lambda \Id_D$ for some $\lambda \in \C$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    Standard: $Z$ commutes with every matrix unit $E_{ij}$, which
-    forces all off-diagonal entries to vanish and all diagonal entries
-    to agree.
-\end{proof}
-
 \subsection{Same state forces a virtual bond gauge}
 
 The 3-site virtual-bond statement is used later in the proof of the PEPS
@@ -1164,45 +1150,6 @@ is obtained from BNT overlap, independence, and coefficient comparison; the
 corresponding global gauge assembly is
 Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
 
-\begin{definition}[Flattened block-diagonal gauge]%
-    \label{def:global_gauge_of_blocks}
-    \lean{MPSTensor.blockDiagonalGL, MPSTensor.globalGaugeOfBlocks}
-    \leanok
-    \uses{def:block_diagonal_tensor}
-    Given per-block gauges $X_k \in \GL_{D_k}(\C)$, first form the
-    dependent block-diagonal element $\bigoplus_k X_k$ and then reindex the
-    dependent block-coordinate index to the standard index
-    $\{0,\dots,\sum_k D_k-1\}$ of the assembled tensor.
-    The resulting element of $\GL_{\sum_k D_k}(\C)$ is the global gauge used
-    in the conjugation formula for $\bigoplus_k \mu_k A_k$.
-\end{definition}
-
-\begin{lemma}[Explicit direct-sum conjugation by the flattened gauge]%
-    \label{lem:tensor_from_blocks_globalGauge_conj}
-    \lean{MPSTensor.toTensorFromBlocks_eq_globalGaugeOfBlocks_conj,
-        MPSTensor.gaugeEquiv_toTensorFromBlocks_of_blockConj}
-    \leanok
-    \uses{def:global_gauge_of_blocks, def:block_diagonal_tensor, def:gauge_equiv}
-    If each block satisfies $B_k^i=X_k A_k^i X_k^{-1}$, then the weighted
-    direct sums satisfy, for every physical index~$i$,
-    \begin{equation}\label{eq:aft_blockGauge_conj}
-        \bigoplus_k \mu_k B_k^i
-        = X\left(\bigoplus_k \mu_k A_k^i\right)X^{-1},
-    \end{equation}
-    where $X$ is the flattened block-diagonal gauge of
-    Definition~\ref{def:global_gauge_of_blocks}. Consequently the two
-    assembled tensors are gauge equivalent with this explicit witness.
-\end{lemma}
-
-\begin{proof}\leanok
-    The block-diagonal matrix product is computed blockwise. The scalar weight
-    $\mu_k$ commutes with the per-block conjugation, so each diagonal block of
-    the right-hand side is $\mu_k B_k^i$. Reindexing from the dependent block
-    coordinates to the standard bond index preserves multiplication and
-    inverses. The gauge equivalence follows directly from the conjugation
-    identity~(\ref{eq:aft_blockGauge_conj}).
-\end{proof}
-
 \begin{lemma}[Gauge equivalence of direct sums from per-block gauge equivalence]%
     \label{lem:gauge_equiv_from_block_gauge}
     \lean{MPSTensor.gaugeEquiv_toTensorFromBlocks_of_blockGauge}\leanok
@@ -1246,13 +1193,12 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
 \label{subsec:ft_block_sum_corollaries}
 
 \begin{remark}
-    See Definition~\ref{def:block_diagonal_tensor} for the formalized
+    See Definition~\ref{def:block_diagonal_tensor} for the
     block-diagonal tensor construction. The results in this subsection assume
     that the block correspondence has already been fixed; they do not prove
-    \cite[Theorem~2.10]{Cirac2016MPDO_arXiv}. They are therefore retained
-    here as same-index assembly corollaries, not among the BNT preparation
-    steps used in the source proof or in the after-blocking canonical-form
-    reduction.
+    \cite[Theorem~2.10]{Cirac2016MPDO_arXiv}. They are same-index
+    direct-sum corollaries, not BNT preparation steps in the source proof
+    or in the after-blocking canonical-form reduction.
 \end{remark}
 
 \begin{lemma}[Per-block application of the single-block theorem]\label{lem:multi_block_ft}
