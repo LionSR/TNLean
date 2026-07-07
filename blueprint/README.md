@@ -20,9 +20,10 @@ Run these commands from the repository root:
 
 ```bash
 lake build
-cd blueprint && leanblueprint checkdecls
-cd blueprint && leanblueprint pdf
-cd blueprint && leanblueprint web
+cd blueprint
+leanblueprint checkdecls
+leanblueprint pdf
+leanblueprint web
 ```
 
 `leanblueprint checkdecls` should be run after adding or changing `\lean{...}`
