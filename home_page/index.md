@@ -23,3 +23,9 @@ at varying levels of completeness.
 The header buttons link to the blueprint (web and full PDF), the
 fundamental-theorem volume (chapters 1&ndash;12), the API documentation, and
 the source code.
+
+## Companion Paper
+
+A companion paper on the multi-agent, blueprint-guided formalization of
+TNLean is in preparation. A bibliographic citation and public link will be
+added here once the paper is available.
