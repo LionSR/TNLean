@@ -26,6 +26,7 @@ the source code.
 
 ## Companion Paper
 
-A companion paper on the multi-agent, blueprint-guided formalization of
-TNLean is in preparation. A bibliographic citation and public link will be
-added here once the paper is available.
+The companion paper "Autoformalizing the fundamental theorem of matrix product
+states: A multi-agent, blueprint-guided formalization in Lean 4" is in
+preparation. A bibliographic citation and public link will be added here once
+the paper is available.
