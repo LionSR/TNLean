@@ -66,6 +66,7 @@ blueprint/src/Packages/__pycache__/
 
 # Local notes / mail exports
 MeetingNotes/*.eml
+/References/
 
 blueprint/src/print.xdv
 

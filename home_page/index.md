@@ -20,6 +20,9 @@ quantum Markov semigroups, entropy inequalities, and projected entangled pair
 states are developed in the later blueprint chapters and in the source tree,
 at varying levels of completeness.
 
-The header buttons link to the blueprint (web and full PDF), the
-fundamental-theorem volume (chapters 1&ndash;12), the API documentation, and
-the source code.
+## Companion Paper
+
+The companion paper "Autoformalizing the fundamental theorem of matrix product
+states: A multi-agent, blueprint-guided formalization in Lean 4" is in
+preparation. A bibliographic citation and public link will be added here once
+the paper is available.
