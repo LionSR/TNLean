@@ -703,13 +703,17 @@ Chapter~\ref{ch:canonical}.
 
 \begin{proof}\leanok
     \uses{thm:psd_fp_unique_irred, def:irreducible_tensor}
-    Write $B^i=\zeta X A^iX^{-1}$.  Left canonicity implies that
-    $X^{\dagger}X$ is a positive-semidefinite fixed point of the adjoint
-    transfer map of $A$.  By irreducibility and uniqueness of such fixed
-    points, $X^{\dagger}X=c\mathbb 1$ for some $c>0$.  Hence
-    $U=c^{-1/2}X$ is unitary and
-    $X A^iX^{-1}=U A^iU^{\dagger}$.  The irreducible normalization gives
-    $|\zeta|=1$.
+    Write $B^i=\zeta X A^iX^{-1}$.  Transporting a nonzero positive
+    fixed point through $X$ gives a nonzero positive matrix $\sigma$ satisfying
+    \[
+        \mathcal E_B(\sigma)=|\zeta|^2\sigma.
+    \]
+    Since $\mathcal E_B$ also has a nonzero positive fixed point,
+    irreducibility forces $|\zeta|^2=1$.  Substitution into the left-canonical
+    identities then makes $X^{\dagger}X$ a positive-semidefinite fixed point of
+    the adjoint transfer map of $A$.  Uniqueness gives
+    $X^{\dagger}X=c\mathbb 1$ for some $c>0$.  Hence $U=c^{-1/2}X$ is unitary
+    and $X A^iX^{-1}=U A^iU^{\dagger}$.
 \end{proof}
 
 \begin{corollary}[Canonical Form II unitary refinement of proportional matching]%

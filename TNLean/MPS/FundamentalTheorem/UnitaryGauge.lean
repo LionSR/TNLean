@@ -146,12 +146,16 @@ theorem gaugePhase_scalar_norm_eq_one_of_leftCanonical_irreducible
 /-- **Per-sector unitarity of the canonical-form gauge** (arXiv:1708.00029,
 Appendix A).
 
-If `A` and `B` are both left-canonical and irreducible MPS tensors related by a
-gauge-phase equivalence, then the gauge can be taken *unitary* and the scalar has
-unit modulus: there exist a unitary `U` and `ζ` with `‖ζ‖ = 1` and
-`B i = ζ • (U * A i * Uᴴ)` for every `i`.
+If \(A=(A^i)_i\) and \(B=(B^i)_i\) are left-canonical irreducible MPS tensors
+related by a gauge-phase equivalence, then the gauge can be taken unitary: there
+exist a unitary matrix \(U\) and a scalar \(\zeta\), with \(|\zeta|=1\), such
+that
+\[
+    B^i=\zeta U A^i U^\dagger
+\]
+for every physical index \(i\).
 
-This is the per-sector core of the corner unitaries `U_v`. -/
+This is the per-sector core of the corner unitaries \(U_v\). -/
 theorem exists_unitaryConj_gaugePhase_of_leftCanonical_irreducible
     [NeZero D] {A B : MPSTensor d D}
     (h : GaugePhaseEquiv A B)
