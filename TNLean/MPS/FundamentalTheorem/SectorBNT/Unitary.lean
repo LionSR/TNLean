@@ -184,7 +184,7 @@ theorem ft_sector_bnt_equal_unitary_global_gauge_witnessesPos
         Matrix.unitaryGroup (Fin (Q.flatDim s)) ℂ :=
       fun s => U (Q.flatIndexEquiv.symm s).1
     exact globalGaugeOfBlocks_unitaryGL_mem Ucopy
-  let hCopies : ∀ k : Fin Q.basisCount, P.copies (β k) = Q.copies k := by
+  have hCopies : ∀ k : Fin Q.basisCount, P.copies (β k) = Q.copies k := by
     intro k
     have hcard := Fintype.card_congr (W.copy_equiv k)
     simpa using hcard.symm

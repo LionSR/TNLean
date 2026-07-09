@@ -317,8 +317,9 @@ theorem exists_unitaryConj_of_gaugePhase_data_of_leftCanonical_irreducible
   congr 1
   exact (hconj_i i).symm
 
-/-- **Per-sector unitarity of the canonical-form gauge** (arXiv:1708.00029,
-Appendix A).
+/-- **Per-sector unitarity of the canonical-form gauge.**
+
+Source: arXiv:1606.00608, Corollary C.5; arXiv:1708.00029, Appendix A.
 
 If \(A=(A^i)_i\) and \(B=(B^i)_i\) are left-canonical irreducible MPS tensors
 related by a gauge-phase equivalence, then the gauge can be taken unitary: there
@@ -329,7 +330,8 @@ that
 \]
 for every physical index \(i\).
 
-This is the per-sector core of the corner unitaries \(U_v\). -/
+This is the common per-sector input for the Canonical Form II unitary
+refinement and the periodic corner unitaries \(U_v\). -/
 theorem exists_unitaryConj_gaugePhase_of_leftCanonical_irreducible
     [NeZero D] {A B : MPSTensor d D}
     (h : GaugePhaseEquiv A B)
