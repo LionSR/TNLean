@@ -457,12 +457,28 @@
     \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_cf_mpdo,
         lem:blockwise_insert_eq_of_mpv_agree, lem:mpv_diagonal_tensor,
         lem:diagonal_tensor_vertical_assembly_grouping}
-    Starting from the horizontal canonical-form decomposition, one uses the MPDO
-    positivity condition to compare the first-site action of the doubled-index
-    tensor on the diagonal sector. Lemma~\ref{lem:blockwise_insert_eq_of_mpv_agree}
-    then shows that the diagonal tensor splits
-    along the same normal blocks, with the coefficients rearranged into
-    positive scalar weights.
-    Flattening those positive diagonal coefficients produces the required
-    vertical canonical-form decomposition.
+    MPDO positivity and
+    Lemma~\ref{lem:blockwise_insert_eq_of_mpv_agree} exclude a one-sided
+    invariant projection for the tensor viewed in the vertical direction.
+    Positivity also excludes nontrivial periodic sectors.  The canonical-form
+    theorem then gives a new vertical family $(B_k)_{k\in I}$ and weights
+    $\nu_k$ satisfying
+    \[
+        V^{(N)}\bigl(i\mapsto M^{ii}\bigr)
+        =V^{(N)}\Bigl(\textstyle\bigoplus_{k\in I}\nu_k B_k\Bigr).
+    \]
+    Group gauge-equivalent vertical sectors by a bijection
+    $e(k)=(\alpha,j)$.  Once the corresponding dimensions, weights, and
+    positive-length matrix product vectors are identified,
+    Lemma~\ref{lem:diagonal_tensor_vertical_assembly_grouping} gives
+    \[
+        V^{(N)}\bigl(i\mapsto M^{ii}\bigr)
+        =V^{(N)}\Bigl(
+          \textstyle\bigoplus_\alpha\bigoplus_{j=1}^{m_\alpha}
+          \omega_{\alpha j}A_\alpha
+        \Bigr)
+    \]
+    for every $N$, including $N=0$.  A final use of positivity gives
+    $\omega_{\alpha j}>0$ and makes the similarities between grouped sectors
+    unitary.
 \end{proof}
