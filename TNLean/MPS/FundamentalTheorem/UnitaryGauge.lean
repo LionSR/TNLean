@@ -16,7 +16,7 @@ import TNLean.QPF.Uniqueness
 This module upgrades a gauge-phase equivalence between left-canonical
 irreducible tensors from a general invertible gauge to a unitary gauge.
 
-The paper builds `U_v` via the single-block canonical form (the Fundamental
+The paper builds \(U_v\) via the single-block canonical form (the Fundamental
 Theorem rigidity, cited as Theorem 2.10 of Cirac--Pérez-García).  In the
 canonical-form orientation, two left-canonical tensors that are gauge-phase
 equivalent are related by a *unitary* gauge: the modulus of the scalar is one and
@@ -65,7 +65,7 @@ variable {d D : ℕ}
 
 /-- Cancellation for conjugation by an invertible matrix:
 $X^{-1}(X Y X^\dagger)(X^{-1})^\dagger = Y$. -/
-theorem gaugePhase_conj_cancel (X : GL (Fin D) ℂ)
+private theorem gaugePhase_conj_cancel (X : GL (Fin D) ℂ)
     (Y : Matrix (Fin D) (Fin D) ℂ) :
     X⁻¹.val * (X.val * Y * X.valᴴ) * X⁻¹.valᴴ = Y := by
   have h1 : X⁻¹.val * X.val = 1 := Units.inv_mul X
@@ -143,29 +143,33 @@ theorem gaugePhase_scalar_norm_eq_one_of_leftCanonical_irreducible
       (by simp [hτ_fix]) (by rw [hEB_σ, hζζ_real])).symm
   nlinarith [norm_nonneg ζ]
 
-/-- **Per-sector unitarity of the canonical-form gauge** (arXiv:1708.00029,
-Appendix A).
+/-- **Unitarity of a specified canonical-form gauge and phase.**
 
-If \(A=(A^i)_i\) and \(B=(B^i)_i\) are left-canonical irreducible MPS tensors
-related by a gauge-phase equivalence, then the gauge can be taken unitary: there
-exist a unitary matrix \(U\) and a scalar \(\zeta\), with \(|\zeta|=1\), such
-that
+Let \(A=(A^i)_i\) and \(B=(B^i)_i\) be left-canonical irreducible MPS tensors
+related by
 \[
-    B^i=\zeta U A^i U^\dagger
+    B^i=\zeta X A^iX^{-1},
 \]
-for every physical index \(i\).
+where \(X\) is invertible and \(\zeta\ne0\). Then \(X\) can be replaced by a
+unitary matrix \(U\) without changing \(\zeta\), and \(|\zeta|=1\):
+\[
+    B^i=\zeta U A^iU^\dagger.
+\]
 
-This is the per-sector core of the corner unitaries \(U_v\). -/
-theorem exists_unitaryConj_gaugePhase_of_leftCanonical_irreducible
+Retaining the phase is needed in the equal-MPV case because the same phase
+occurs in the matched copy-weight identity. Source: arXiv:1606.00608,
+Corollary C.5, lines 1197--1199. -/
+theorem exists_unitaryConj_of_gaugePhase_data_of_leftCanonical_irreducible
     [NeZero D] {A B : MPSTensor d D}
-    (h : GaugePhaseEquiv A B)
+    (X : GL (Fin D) ℂ) (ζ : ℂ) (hζ_ne : ζ ≠ 0)
+    (hB : ∀ i, B i = ζ • ((X : Matrix (Fin D) (Fin D) ℂ) * A i *
+      ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)))
     (hA_left : IsLeftCanonical A) (hB_left : IsLeftCanonical B)
     (hA_irr : IsIrreducibleTensor A) (hB_irr : IsIrreducibleTensor B) :
-    ∃ (U : Matrix.unitaryGroup (Fin D) ℂ) (ζ : ℂ), ‖ζ‖ = 1 ∧
+    ∃ U : Matrix.unitaryGroup (Fin D) ℂ, ‖ζ‖ = 1 ∧
       ∀ i, B i = ζ • ((U : Matrix (Fin D) (Fin D) ℂ) * A i *
         (U : Matrix (Fin D) (Fin D) ℂ)ᴴ) := by
   classical
-  obtain ⟨X, ζ, hζ_ne, hB⟩ := h
   -- Step 0: the scalar has unit modulus (Perron--Frobenius normalization).
   have hζ1 : ‖ζ‖ = 1 :=
     gaugePhase_scalar_norm_eq_one_of_leftCanonical_irreducible
@@ -308,9 +312,36 @@ theorem exists_unitaryConj_gaugePhase_of_leftCanonical_irreducible
     simp only [mul_smul_comm, smul_smul]
     rw [hscalar, one_smul]
   -- Assemble the result.
-  refine ⟨⟨U, hU_mem⟩, ζ, hζ1, fun i => ?_⟩
+  refine ⟨⟨U, hU_mem⟩, hζ1, fun i => ?_⟩
   rw [hB i]
   congr 1
   exact (hconj_i i).symm
+
+/-- **Per-sector unitarity of the canonical-form gauge** (arXiv:1708.00029,
+Appendix A).
+
+If \(A=(A^i)_i\) and \(B=(B^i)_i\) are left-canonical irreducible MPS tensors
+related by a gauge-phase equivalence, then the gauge can be taken unitary: there
+exist a unitary matrix \(U\) and a scalar \(\zeta\), with \(|\zeta|=1\), such
+that
+\[
+    B^i=\zeta U A^i U^\dagger
+\]
+for every physical index \(i\).
+
+This is the per-sector core of the corner unitaries \(U_v\). -/
+theorem exists_unitaryConj_gaugePhase_of_leftCanonical_irreducible
+    [NeZero D] {A B : MPSTensor d D}
+    (h : GaugePhaseEquiv A B)
+    (hA_left : IsLeftCanonical A) (hB_left : IsLeftCanonical B)
+    (hA_irr : IsIrreducibleTensor A) (hB_irr : IsIrreducibleTensor B) :
+    ∃ (U : Matrix.unitaryGroup (Fin D) ℂ) (ζ : ℂ), ‖ζ‖ = 1 ∧
+      ∀ i, B i = ζ • ((U : Matrix (Fin D) (Fin D) ℂ) * A i *
+        (U : Matrix (Fin D) (Fin D) ℂ)ᴴ) := by
+  obtain ⟨X, ζ, hζ_ne, hB⟩ := h
+  obtain ⟨U, hζ, hConj⟩ :=
+    exists_unitaryConj_of_gaugePhase_data_of_leftCanonical_irreducible
+      X ζ hζ_ne hB hA_left hB_left hA_irr hB_irr
+  exact ⟨U, ζ, hζ, hConj⟩
 
 end MPSTensor

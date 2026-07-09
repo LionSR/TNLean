@@ -150,6 +150,24 @@ proportional case.  Consequently the BNT sector-matching declarations are no
 longer scope-restricted: they carry exactly the source hypothesis set and may be
 cited as the CPSV16 theorem and corollary on the BNT canonical-form surface.
 
+\section{Unitary equal-case refinement}
+
+The equal-case conclusion of CPSV16 Corollary C.5 is also complete on this
+surface. The unitary normalization of a matched sector is applied while
+retaining the particular phase that appears in the copy-weight identity.
+Consequently that phase cancels copy by copy, and the repeated sector
+unitaries assemble into a unitary block-diagonal gauge. The finite permutation
+restoring the original sector and copy coordinates is itself unitary, so their
+product is one unitary gauge on the total bond space.
+
+The matched-coordinate statement is
+\leanid{MPSTensor.ft_sector_bnt_equal_unitary_global_gauge_witnessesPos}; the
+literal total-tensor statement is
+\leanid{MPSTensor.fundamentalTheorem_equal_canonicalForm_unitaryPos}. Both use
+only the BNT canonical-form hypotheses and equality of the MPV families. In
+particular, neither a per-sector unit-weight assumption nor any additional
+normalization is introduced.
+
 \section{Affected declarations}
 
 The following declarations \emph{formerly} carried the additional per-sector
