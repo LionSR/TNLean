@@ -707,8 +707,7 @@ In the equal-MPV case all ingredients are unconditional.
     \label{cor:sector_bnt_equal_unitary_global_gauge}
     \lean{MPSTensor.fundamentalTheorem_equal_canonicalForm_unitaryPos}
     \leanok
-    \uses{thm:sector_bnt_equal_global_gauge,
-        lem:sector_bnt_equal_unitary_matched_gauge}
+    \uses{lem:sector_bnt_equal_unitary_matched_gauge}
     Let $P$ and $Q$ be BNT canonical forms whose total tensors generate the
     same MPV family at every positive length. Their total bond dimensions
     agree; writing the common value as $D$, there is a unitary matrix
@@ -721,8 +720,7 @@ In the equal-MPV case all ingredients are unconditional.
 \end{corollary}
 
 \begin{proof}\leanok
-    \uses{thm:sector_bnt_equal_global_gauge,
-        lem:sector_bnt_equal_unitary_matched_gauge}
+    \uses{lem:sector_bnt_equal_unitary_matched_gauge}
     For each matched sector, retain the phase in both identities
     \[
         Q_k^i=\zeta_k U_kP_{\beta(k)}^iU_k^\dagger,
@@ -828,6 +826,7 @@ Chapter~\ref{ch:canonical}.
     for every $i$, then $|\zeta|=1$.
 \end{lemma}
 \begin{proof}\leanok
+    \uses{thm:eigenvalue_unique_irred}
     Let $\rho$ be a nonzero positive fixed point of $\mathcal E_A$ and set
     $\sigma=X\rho X^\dagger$. Then $\sigma$ is nonzero and positive, and
     \[
@@ -901,7 +900,7 @@ Chapter~\ref{ch:canonical}.
     \label{cor:sector_bnt_proportional_unitary_sector_match}
     \lean{MPSTensor.ft_sector_bnt_proportional_unitary_sector_match_witnesses}
     \leanok
-    \uses{def:sector_bnt_cf}
+    \uses{def:sector_bnt_cf, thm:cpgsv_multiblock_ft_source}
     Under the hypotheses of
     Theorem~\ref{thm:cpgsv_multiblock_ft_source}, there are a bijection
     $\beta:J(Q)\simeq J(P)$, unitary matrices
