@@ -44,6 +44,11 @@ arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete).
   Kronecker product of the sector-indexed neighboring reduced states.
 - `MPOTensor.ExplicitEtaOperators.traceMatrixRe_nonneg`: positivity of each
   neighboring operator gives entrywise nonnegativity of the real trace matrix.
+- `MPOTensor.ExplicitEtaOperators.traceMatrixRe_ofHayashiMarkov_posSemidef`:
+  the special sector-reduced extraction has the positive-semidefinite all-ones
+  trace matrix.
+- `MPOTensor.ExplicitEtaOperators.trace_traceMatrixRe_ofHayashiMarkov`: the
+  trace of that all-ones matrix is the number of sectors.
 - `MPOTensor.sal_zcl_implies_rank_one_T`: the conditional Lemma C.5 consequence,
   proved relative to the Perron–Frobenius rank-one input.
 - `MPOTensor.sal_zcl_implies_rank_one_T_of_posSemidef`: the same consequence
@@ -84,10 +89,12 @@ normalization and constant trace powers, supplies the missing diagonalizability
 and forces a rank-one factorization. The theorem
 `MPOTensor.sal_zcl_implies_rank_one_T_of_posSemidef` connects this corrected
 criterion to the Lemma C.5 structure. What remains on
-the MPDO side is to prove that the sector trace matrix `T` extracted from the
-η-operators is itself positive semidefinite or Hermitian; positivity of the
-individual η-operators alone only gives entrywise nonnegativity of the trace
-matrix.
+the MPDO side is to prove that the sector trace matrix `T` from the paper's
+inverse-map construction has additional structure excluding the nilpotent
+zero-eigenspace. Positivity of the individual η-operators alone gives only
+entrywise nonnegativity of the trace matrix. The special sector-reduced family
+`ofHayashiMarkov` does have a positive-semidefinite all-ones trace matrix, but
+its identification with the paper's inverse-map family is not available.
 
 ## References
 
@@ -303,6 +310,34 @@ rank-one trace matrix (the all-ones matrix). -/
   have h := traceMatrix_ofHayashiMarkov hη k h
   simp only [traceMatrix_apply] at h
   simp [traceMatrixRe_apply, h]
+
+/-- The trace of the real all-ones matrix from the Hayashi--Markov extraction
+is the number of sectors.
+
+This concerns the sector-reduced family in `ofHayashiMarkov`, not yet the
+inverse-map family of arXiv:1606.00608, Appendix C.2, lines 1413--1455. -/
+@[simp] theorem trace_traceMatrixRe_ofHayashiMarkov
+    (hη : EtaStructure ρ_ABC) :
+    Matrix.trace (ofHayashiMarkov hη).traceMatrixRe = hη.m := by
+  rw [Matrix.trace]
+  change ∑ i, (ofHayashiMarkov hη).traceMatrixRe i i = _
+  simp_rw [traceMatrixRe_ofHayashiMarkov]
+  simp
+
+/-- The real trace matrix of the Hayashi--Markov extraction is positive
+semidefinite.
+
+This is the positive-semidefinite all-ones matrix. It concerns the
+sector-reduced family in `ofHayashiMarkov`; identifying that family with the
+inverse-map construction of arXiv:1606.00608, Appendix C.2, lines 1413--1455,
+is a separate question. -/
+theorem traceMatrixRe_ofHayashiMarkov_posSemidef
+    (hη : EtaStructure ρ_ABC) :
+    (ofHayashiMarkov hη).traceMatrixRe.PosSemidef := by
+  convert Matrix.posSemidef_vecMulVec_self_star (fun _ : Fin hη.m => (1 : ℝ)) using 1
+  ext k h
+  rw [traceMatrixRe_ofHayashiMarkov]
+  simp [Matrix.vecMulVec]
 
 /-- Positivity of each neighboring operator makes the corresponding real trace
 entry nonnegative.
