@@ -50,8 +50,10 @@ private theorem phaseFlipTensor_transferMap_apply
     (X : Matrix (Fin 2) (Fin 2) ℂ) (i j : Fin 2) :
     MPSTensor.transferMap phaseFlipTensor X i j =
       if i = j then X i j else (-7 / 25 : ℂ) * X i j := by
-  have hstarFour : (starRingEnd ℂ) (4 : ℂ) = 4 := map_natCast (starRingEnd ℂ) 4
-  have hstarFive : (starRingEnd ℂ) (5 : ℂ) = 5 := map_natCast (starRingEnd ℂ) 5
+  have hstarFour : (starRingEnd ℂ) (4 : ℂ) = 4 :=
+    map_natCast (starRingEnd ℂ) 4
+  have hstarFive : (starRingEnd ℂ) (5 : ℂ) = 5 :=
+    map_natCast (starRingEnd ℂ) 5
   fin_cases i <;> fin_cases j <;>
     simp only [phaseFlipTensor, Fin.zero_eta, Fin.isValue, Fin.mk_one,
       MPSTensor.transferMap_apply, Fin.sum_univ_two, Matrix.add_apply,
