@@ -12,7 +12,7 @@ import TNLean.MPS.SharedInfra.BlockAssembly
 This file introduces a block-decomposed version of the vertical canonical-form
 structure used in the MPDO analysis of arXiv:1606.00608, Section 4.4.
 
-The paper's Proposition IV.12 writes the tensor, after a local isometry on the
+Proposition 4.13 (source label `Prop:IV.12`) writes the tensor, after a local isometry on the
 physical indices, as a direct sum
 `⊕_α μ_α ⊗ M_α`, where the `μ_α` are positive diagonal matrices and the
 `M_α` form a basis of normal tensors (BNT). The current repository formalization
@@ -37,7 +37,7 @@ surrogate for the paper's vertical canonical form.
 * `MPSTensor.diagBlock`:
   the diagonal restriction `B ↦ (i ↦ B (i, i))` of a doubled-index block.
 
-## Main results (toward Proposition IV.12)
+## Main results (toward Proposition 4.13)
 
 * `blockwise_insert_eq_of_mpv_agree`:
   Lemma L from the paper's appendix, proved using the block-injective
@@ -64,13 +64,18 @@ surrogate for the paper's vertical canonical form.
   a separate positive-length comparison under scalar power-sum identities.
 
 The full passage from horizontal to vertical canonical form
-(Proposition IV.12 / Proposition 4.13 of arXiv:1606.00608) is still outside
+(Proposition 4.13, source label `Prop:IV.12`, of arXiv:1606.00608) is still outside
 this file: its blueprint entry `thm:vertical_cf_of_horizontal_cf` is marked
-`\notready`. The results above supply the matrix-product-vector and positivity
-groundwork; the remaining step is the basis-of-normal-tensors regrouping of the
-diagonally-restricted blocks (diagonal restriction does not preserve normality),
-together with the resulting weight positivity. The Lean statement will be
-introduced together with its proof rather than as an empty placeholder.
+`\notready`. The results above supply matrix-product-vector identities and elementary
+positivity consequences; the remaining step is an independent canonical-form
+decomposition of the tensor viewed in the vertical direction. Its basis cannot be obtained
+by diagonally restricting the horizontal blocks: the finite-dimensional obstruction
+is proved in `TNLean.MPS.MPDO.BiCFDerivation.DiagonalRestrictionCounterexample` and
+documented in `docs/paper-gaps/cpgsv17_vertical_diagonal_restriction.tex`. A
+source-faithful proof must instead follow arXiv:1606.00608, lines 1873--1921, using
+MPDO positivity and Lemma L to establish an independent vertical canonical form
+and then proving positivity of its weights. The Lean statement will be introduced
+together with its proof rather than as an empty placeholder.
 
 ## Module location
 
@@ -82,7 +87,7 @@ location matches the existing layering.
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
-  Proposition IV.12 and the auxiliary Lemma L in the appendix
+  Proposition 4.13 (source label `Prop:IV.12`) and the auxiliary Lemma L in the appendix
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -168,7 +173,7 @@ theorem diagonalTensor_apply_eq (M : MPOTensor d D) (i : Fin d) :
 a configuration `σ` equals the MPV of the doubled-index tensor at the diagonal-paired
 configuration `k ↦ (σ k, σ k)`. This lets the horizontal canonical form of
 `M.toMPSTensor` (which constrains all `Fin (d*d)` configurations) be specialized to the
-diagonal configurations seen by `diagonalTensor M`, the first step of Proposition IV.12. -/
+diagonal configurations seen by `diagonalTensor M`, the first step of Proposition 4.13. -/
 theorem mpv_diagonalTensor (M : MPOTensor d D) {N : ℕ} (σ : Fin N → Fin d) :
     MPSTensor.mpv (diagonalTensor M) σ
       = MPSTensor.mpv M.toMPSTensor (fun k => finProdFinEquiv (σ k, σ k)) := by
@@ -593,8 +598,8 @@ theorem blockwise_insert_eq_of_mpv_agree
     (smul_eq_zero.mp hk).resolve_left hμne
   exact sub_eq_zero.mp hdiff
 
--- The implication `verticalCF_of_horizontalCF` (Proposition IV.12 / Proposition 4.13
--- of arXiv:1606.00608) — every MPDO in horizontal canonical form is in vertical
+-- The implication `verticalCF_of_horizontalCF` (Proposition 4.13, source label
+-- `Prop:IV.12`, of arXiv:1606.00608) — every MPDO in horizontal canonical form is in vertical
 -- canonical form — is tracked by the blueprint entry
 -- `thm:vertical_cf_of_horizontal_cf` (currently `\notready`) and will be added
 -- as a theorem together with its proof once the horizontal-to-vertical
