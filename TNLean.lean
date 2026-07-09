@@ -363,6 +363,7 @@ import TNLean.MPS.MPDO.LocalPurificationRFP
 import TNLean.MPS.MPDO.SimpleLocalStructure
 import TNLean.MPS.MPDO.FusionIsometries
 import TNLean.MPS.MPDO.AlgebraStructure
+import TNLean.MPS.MPDO.AlgebraFusionCounterexample
 import TNLean.MPS.MPDO.BNTCoefficients
 import TNLean.MPS.MPDO.BNTTheoremData
 import TNLean.MPS.MPDO.BNTTheoremWitness
