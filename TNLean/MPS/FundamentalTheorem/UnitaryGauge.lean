@@ -13,8 +13,8 @@ import TNLean.QPF.Uniqueness
 /-!
 # Unitary gauges for left-canonical irreducible tensors
 
-This module upgrades a gauge-phase equivalence between left-canonical
-irreducible tensors from a general invertible gauge to a unitary gauge.
+Gauge-phase equivalences between left-canonical irreducible tensors can be
+upgraded from general invertible gauges to unitary gauges.
 
 The paper builds \(U_v\) via the single-block canonical form (the Fundamental
 Theorem rigidity, cited as Theorem 2.10 of Cirac--Pérez-García).  In the
