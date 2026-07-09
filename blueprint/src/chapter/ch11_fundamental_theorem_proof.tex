@@ -280,8 +280,6 @@ block-diagonal gauge.
         =\bigoplus_k\mathbb 1
         =\mathbb 1.
     \]
-    Reindexing the dependent block coordinates by the flattened bond index
-    preserves multiplication and adjoints.
 \end{proof}
 
 \begin{lemma}[Direct-sum conjugation by the flattened gauge]%
@@ -687,7 +685,8 @@ In the equal-MPV case all ingredients are unconditional.
     \]
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:left_canonical_irreducible_same_phase_unitary_gauge,
+    \uses{lem:sector_bnt_equal_matched_copy_weight_witnesses,
+        lem:left_canonical_irreducible_same_phase_unitary_gauge,
         lem:unitary_global_gauge_of_blocks}
     Apply Lemma~\ref{lem:left_canonical_irreducible_same_phase_unitary_gauge}
     to each matched sector, retaining the phase in the copy-weight identity.
@@ -878,7 +877,8 @@ Chapter~\ref{ch:canonical}.
     \label{lem:left_canonical_irreducible_unitary_gauge}
     \lean{MPSTensor.exists_unitaryConj_gaugePhase_of_leftCanonical_irreducible}
     \leanok
-    \uses{def:gauge_phase_equiv, def:irreducible_tensor,
+    \uses{def:left_canonical_tensor, def:gauge_phase_equiv,
+        def:irreducible_tensor,
         lem:left_canonical_irreducible_same_phase_unitary_gauge}
     Let $A$ and $B$ be left-canonical irreducible tensors of common positive bond
     dimension that are gauge-phase equivalent.  Then the gauge can be taken
