@@ -258,6 +258,7 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     \lean{MPOTensor.exists_isRFP_MPDO_via_algebra_not_isRFP_MPDO_via_fusion}
     \leanok
     \uses{def:mpdo_rfp_via_algebra, def:mpdo_rfp_via_fusion,
+        thm:mpdo_rfp_of_fusion,
         thm:mpdo_algebra_from_stabilized_adjoint_fixedpoints}
     There exists an MPO tensor of physical and bond dimension two such that the
     doubled tensor is trace-preserving, the transfer map has a
@@ -266,11 +267,28 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
 \end{theorem}
 \begin{proof}\leanok
     Take the phase-flip channel with Kraus operators
-    $K_0=\frac35 I$ and $K_1=\frac45 Z$.  Its transfer map fixes diagonal
-    entries and multiplies off-diagonal entries by $-\frac7{25}$.  Therefore
-    every positive power has the same adjoint fixed-point algebra.  On the
-    other hand, the off-diagonal eigenvalue is neither zero nor one, so the
-    transfer map is not idempotent and cannot admit a fusion retract.
+    $K_0=\frac35 I$ and $K_1=\frac45 Z$. Its transfer map satisfies
+    \[
+        E(X)_{ij}
+        = \begin{cases}
+            X_{ij}, & i=j, \\
+            -\frac7{25}X_{ij}, & i\neq j.
+        \end{cases}
+    \]
+    Hence, for every $n>0$ and $i\neq j$,
+    \[
+        E^n(X)_{ij}=\left(-\frac7{25}\right)^n X_{ij}.
+    \]
+    Since $(-7/25)^n\neq 1$ for every $n>0$ and $E$ is self-adjoint,
+    \[
+        \operatorname{Fix}((E^n)^\dagger)=\operatorname{Fix}(E^\dagger).
+    \]
+    Thus the support-algebra condition holds. On the other hand,
+    \[
+        E^2(X)_{01}=\frac{49}{625}X_{01}
+        \neq -\frac7{25}X_{01}=E(X)_{01}.
+    \]
+    Therefore $E^2\neq E$, so the fusion condition fails.
 \end{proof}
 
 \begin{remark}[Why algebra data do not imply fusion data]%
