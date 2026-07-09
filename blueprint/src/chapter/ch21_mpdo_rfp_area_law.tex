@@ -51,8 +51,8 @@
     and $L'$ up to the larger composes these into the stated equality.
 \end{proof}
 
-\begin{lemma}[Tripartite marginals as block entropies]
-    \label{lem:mpdo_tripartite_block_entropy_identifications}
+\begin{theorem}[Tripartite marginals as block entropies]
+    \label{thm:mpdo_tripartite_block_entropy_identifications}
     \lean{vonNeumannEntropy_tripartiteSplit_eq_blockEntropy}
     \lean{vonNeumannEntropy_traceC_eq_blockEntropy}
     \lean{vonNeumannEntropy_traceAC_eq_blockEntropy}
@@ -68,14 +68,20 @@
         S(ABC)=S_{a+b+c},\qquad S(AB)=S_{a+b},\qquad
         S(B)=S_b,\qquad S(BC)=S_{b+c}.
     \]
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     Reindexing a matrix does not change its von Neumann entropy.  The first
     equality follows immediately.  Tracing out $C$ leaves the first $a+b$
     sites.  Tracing out $A$ and $C$ leaves the middle $b$ sites, while tracing
-    out $A$ leaves the final $b+c$ sites; translation invariance identifies
-    each of the latter two contiguous regions with the initial block of the
-    same length.
+    out $A$ leaves the final $b+c$ sites.  Translation invariance gives
+    \[
+        \operatorname{tr}_{A,C}(\rho_{ABC})\cong\rho^{(b)},
+        \qquad
+        \operatorname{tr}_{A}(\rho_{ABC})\cong\rho^{(b+c)},
+    \]
+    where $\rho^{(k)}$ is the first-$k$-site reduced state and $\cong$ denotes
+    equality up to a permutation of basis indices.  Hence $S(B)=S_b$ and
+    $S(BC)=S_{b+c}$.
 \end{proof}
 
 \begin{proposition}[Monotonicity of the mutual information]
@@ -98,7 +104,7 @@
 \end{proposition}
 \begin{proof}\leanok
     \uses{thm:entropy_strong_subadditivity, def:block_entropy,
-        lem:mpdo_tripartite_block_entropy_identifications}
+        thm:mpdo_tripartite_block_entropy_identifications}
     Apply strong subadditivity to the reduced state of the first $N-L$ spins,
     split into three contiguous segments of lengths $1$, $L$, and $N-2L-1$.
     Tracing the appropriate segments yields the four block entropies
