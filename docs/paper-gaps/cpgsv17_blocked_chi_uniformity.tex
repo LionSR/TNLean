@@ -9,15 +9,15 @@
 
 \title{CPGSV17 Blocked-Basis Chi Families and Uniform BNT Labels}
 \author{}
-\date{2026-05-24}
+\date{2026-07-09}
 
 \begin{document}
 \maketitle
 
 \section{Source statement}
 
-Cirac--P\'erez-Garc\'ia--Schuch--Verstraete 2017 state in
-\cite[Theorem~IV.13(ii)]{Cirac2017MPDO_AnnPhys} that there is a set of
+Cirac--P\'erez-Garc\'ia--Schuch--Verstraete state in
+\cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv} that there is a set of
 diagonal matrices
 \[
     \chi_{\alpha,\beta,\gamma}
@@ -74,7 +74,7 @@ positive-chain statement.
 Verdict: scope restriction.
 
 This blocked-basis analogue is not the uniform BNT-label statement of
-Theorem~IV.13(ii). It allows the diagonal matrix to depend on $n$, because
+Theorem~4.14(ii). It allows the diagonal matrix to depend on $n$, because
 the available indices themselves depend on the blocked bases
 $\mathcal A_n$ and $\mathcal A_{2n}$. The source theorem instead provides
 one matrix for each triple of BNT labels and uses that same matrix for every
@@ -99,10 +99,10 @@ in a basis at length $2n$. The exponent $n$ in
 \]
 is therefore the source length of the two factors, not the codomain length.
 This convention is only a blocked-basis analogue; it is not a replacement for
-the same-length multiplication statement in Theorem~IV.13(ii).
+the same-length multiplication statement in Theorem~4.14(ii).
 
 This note isolates the chi-uniformity and same-length coefficient comparison
-part of Theorem~IV.13(ii).  The idempotent condition
+part of Theorem~4.14(ii).  The idempotent condition
 \[
     m_\gamma =
       \sum_{\alpha,\beta} c^{(1)}_{\alpha,\beta,\gamma} m_\alpha m_\beta
@@ -112,11 +112,19 @@ not represented by the blocked-basis trace-power predicate.
 
 Consequently,
 \leanid{MPOTensor.AlgebraStructureData.HasBlockedStructureChiTracePowerForm}
-should not be cited as a formalization of Theorem~IV.13(ii). It is a local
+should not be cited as a formalization of Theorem~4.14(ii). It is a local
 blocked-basis coefficient statement, useful only after the
 uniform BNT-label statement has been separated from the chosen blocked bases.
 
 \section{Relation to the algebra-to-fusion converse}
+
+The line ranges must be kept distinct.  Lines~1830--1922 prove
+Proposition~4.13, the vertical canonical-form statement; they do not extract
+$\chi_{\alpha,\beta,\gamma}$.  The construction of $\chi$ in the forward
+direction $(\mathrm{i})\Rightarrow(\mathrm{ii})$ occurs at lines~2020--2042.
+The converse $(\mathrm{ii})\Rightarrow(\mathrm{i})$ begins at line~2046 and
+takes the positive $\chi$-coefficient formula and the idempotent identity as
+hypotheses.
 
 Let $E=E_1$ be the one-site transfer map.  The present algebra predicate gives
 the fixed-point-space identity
@@ -128,8 +136,18 @@ the fixed-point-space identity
 This rules out root-of-unity peripheral eigenvalues of $E^\dagger$, but it does
 not imply the fusion-side idempotence equation $E^2=E$.
 
+This failure is formalized by
+\leanid{MPOTensor.exists_isRFP_MPDO_via_algebra_not_isRFP_MPDO_via_fusion}.
+The counterexample is the phase-flip channel with Kraus operators
+$K_0=\frac35 I$ and $K_1=\frac45 Z$.  It is trace-preserving, fixes the
+positive-definite matrix $I$, and has off-diagonal eigenvalue $-\frac7{25}$.
+Thus every positive power has the same adjoint fixed-point algebra, while the
+transfer map is not idempotent.  Consequently, the requested implication from
+the present support-algebra predicate is false even under the additional
+trace-preserving and faithful-fixed-point hypotheses.
+
 The converse direction $(\mathrm{ii})\Rightarrow(\mathrm{i})$ in the proof of
-Theorem~IV.13 uses a stronger coefficient argument.  In Appendix~C.4,
+Theorem~4.14 uses a stronger coefficient argument.  In Appendix~C.4,
 lines~2046--2085, the authors compare the two BNT expansions coming from the
 one-site and two-site decompositions.  The source identity
 \texttt{eq:algebra-appendix} is stated at lines~1933--1936 and used in this
@@ -147,7 +165,7 @@ up to relabelling (line~2053),
     A_\gamma
       = e^{i\theta_\gamma} Z_\gamma M_\gamma Z_\gamma^{-1}.
 \]
-Proposition~IV.12 then removes the phase and identifies $Z_\gamma$ with a
+Proposition~4.13 then removes the phase and identifies $Z_\gamma$ with a
 unitary $U_\gamma$, as in line~2057, so
 \[
     A_\gamma = U_\gamma M_\gamma U_\gamma^{-1}
@@ -170,7 +188,7 @@ Summing this identity gives
       = m_\gamma .
 \]
 Only after this trace equality is obtained do the normalizing maps in
-\cite[lines~2065--2085]{Cirac2017MPDO_AnnPhys} have the form
+\cite[lines~2065--2085]{Cirac2016MPDO_arXiv} have the form
 \[
     \widetilde R_2\Bigl(\bigoplus_\gamma X_\gamma\Bigr)
       = \bigoplus_\gamma \frac{\nu_\gamma}{m_\gamma}\otimes X_\gamma,
@@ -249,7 +267,7 @@ basis of $\mathcal A_{2n}$, while the source theorem's BNT product law is
 same-length. It therefore records the formal blocked-basis comparison
 predicate; constructing the source label maps from an MPDO tensor is still part
 of the Appendix C.3--C.4 witness construction. The predicate is not itself the
-same-length product statement of Theorem~IV.13(ii).
+same-length product statement of Theorem~4.14(ii).
 These declarations specify the BNT-label coefficient objects and the comparison
 statement, but they do not yet construct the operators, trace scalars,
 coefficients, comparison maps, or $\chi$-matrices from an MPDO tensor.
@@ -442,32 +460,35 @@ exists_blocked_coeff_eq_trace_pow},
 \leanid{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi_posEntries},
 \leanid{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi_entry_pos},
 \leanid{MPOTensor.BNTLabelTheoremWitness.%
-blocked_coeff_eq_positiveBlockedChi_trace_pow}.}  The remaining step is still the
-construction of this existential witness from the MPDO tensor.
+blocked_coeff_eq_positiveBlockedChi_trace_pow}.}
 
-To eliminate the remaining gap, the formalization should introduce:
+The witness must not be constructed from an arbitrary MPDO tensor or from the
+present support-algebra predicate.  Such a construction would imply the false
+converse exhibited above.  In Theorem~4.14(ii), the BNT-label coefficients,
+their positive trace-power representation, and the length-one idempotent
+identity are the hypothesis of the converse, not consequences of the mere
+existence of stabilized adjoint fixed-point algebras.
+
+To eliminate the source-theorem gap, the formalization should instead:
 \begin{enumerate}
-    \item construction of the comparison maps relating the BNT-label
-        coefficients to the chosen blocked bases of $\mathcal A_n$;
-    \item construction of the same-length BNT operator family and product law
-        from the MPDO tensor, together with the comparison to the blocked
-        support-algebra product
-        $\mathcal A_n \times \mathcal A_n \to \mathcal A_{2n}$;
-    \item construction of the positive BNT-label
-        $\chi_{\alpha,\beta,\gamma}$-witness from the paper's Appendix C.3
-        and C.4 hypotheses;
-    \item construction of the idempotent condition
-        $m_\gamma =
-          \sum_{\alpha,\beta} c^{(1)}_{\alpha,\beta,\gamma}
-          m_\alpha m_\beta$ from the MPDO tensor;
-    \item construction of the single
-        \leanid{MPOTensor.BNTLabelTheoremWitness} from these source
-        objects, and hence of the underlying
-        \leanid{MPOTensor.BNTLabelTheoremData} record.  The blocked-basis
-        trace-power statement, with its
-        source-length exponent convention, is then a derived corollary of the
-        uniform BNT-label theorem, rather than a separate replacement for the
-        theorem itself.
+    \item define a separate, source-faithful predicate for
+        Theorem~4.14(ii), bundling the vertical canonical-form decomposition
+        from Proposition~4.13, the BNT operators $O_L(M_\alpha)$, the weights
+        $m_\alpha=\tr(\mu_\alpha)$, the positive matrices
+        $\chi_{\alpha,\beta,\gamma}$, the same-length product law, and the
+        length-one idempotent identity;
+    \item relate that predicate to the one-site and two-site vertical
+        decompositions used in Appendix~C.4, lines~2048--2058, and prove the
+        unitary relabelling and the positive multiset identity for the
+        $\nu_{\gamma,k}$;
+    \item deduce $\tr(\nu_\gamma)=m_\gamma$ and construct the maps
+        $T=\widetilde R_2\widetilde T R_1$ and
+        $S=\widetilde R_1\widetilde S R_2$ exactly as in lines~2065--2085;
+    \item conclude the paper's renormalization fixed-point predicate, namely
+        the existence of the two trace-preserving completely positive maps in
+        Definition~4.1.  Any comparison with the transfer-map fusion predicate
+        must then be stated separately, because the latter is presently
+        equivalent to transfer-map idempotence rather than Definition~4.1.
 \end{enumerate}
 
 \bibliographystyle{alpha}
