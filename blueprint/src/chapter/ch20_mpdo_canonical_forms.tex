@@ -232,7 +232,12 @@
     The four nonzero scalar multiples of the matrix units span the full matrix
     algebra.  The identity
     $(3/5)^2+(4/5)^2=1$ gives left-canonicality.  After diagonal restriction,
-    every word has vanishing $(0,1)$ entry, whereas $E_{01}$ does not.
+    \[
+        E_{ii}E_{jj}=\delta_{ij}E_{ii}.
+    \]
+    Hence every word is either zero or a scalar multiple of some $E_{ii}$, and
+    therefore has vanishing $(0,1)$ entry.  Since $E_{01}$ does not, it lies
+    outside the span at every blocking length.
 \end{proof}
 
 \begin{lemma}[Diagonal tensor word evaluation]

@@ -1,6 +1,7 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.BiCFDerivation.Basic
 
@@ -19,7 +20,7 @@ finite-length block-separation property in `HorizontalCFData`.
 This obstruction does not contradict arXiv:1606.00608, Proposition 4.13. In the
 proof at lines 1873--1921, positivity is first used to obtain a new canonical form in the
 vertical direction; the vertical basis of normal tensors is obtained from that canonical
-form, not by restricting each horizontal basis tensor to physical pairs `(i, i)`.
+form, not by restricting each horizontal basis tensor to physical pairs (i, i).
 
 ## References
 
@@ -34,14 +35,14 @@ namespace MPSTensor
 section DiagonalRestrictionCounterexample
 
 /-- A doubled-index tensor consisting of the four matrix units. The first row has
-coefficient `3/5` and the second row has coefficient `4/5`. -/
+coefficient 3/5 and the second row has coefficient 4/5. -/
 private noncomputable def diagonalRestrictionUnits : MPSTensor (2 * 2) 2
   | 0 => (3 / 5 : ℂ) • Matrix.single 0 0 1
   | 1 => (3 / 5 : ℂ) • Matrix.single 0 1 1
   | 2 => (4 / 5 : ℂ) • Matrix.single 1 0 1
   | 3 => (4 / 5 : ℂ) • Matrix.single 1 1 1
 
-/-- Evaluation at the physical pair `(a,b)` gives the corresponding matrix unit with
+/-- Evaluation at the physical pair (a,b) gives the corresponding matrix unit with
 the row-dependent coefficient. -/
 private theorem diagonalRestrictionUnits_finProd (a b : Fin 2) :
     diagonalRestrictionUnits (finProdFinEquiv (a, b)) =
@@ -98,7 +99,7 @@ private theorem diagBlock_diagonalRestrictionUnits_apply (i : Fin 2) :
         else (4 / 5 : ℂ) • Matrix.single 1 1 1) := by
   fin_cases i <;> norm_num [diagBlock, finProdFinEquiv, diagonalRestrictionUnits]
 
-/-- Every word in the diagonal restriction has vanishing `(0,1)` entry. -/
+/-- Every word in the diagonal restriction has vanishing (0,1) entry. -/
 private theorem evalWord_diagBlock_diagonalRestrictionUnits_zero_one (w : List (Fin 2)) :
     evalWord (diagBlock diagonalRestrictionUnits) w 0 1 = 0 := by
   induction w with

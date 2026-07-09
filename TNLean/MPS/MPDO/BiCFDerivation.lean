@@ -30,7 +30,7 @@ The supporting modules are:
   nonzero weights do not imply the biCF property.
 * `TNLean.MPS.MPDO.BiCFDerivation.DiagonalRestrictionCounterexample` — an
   injective, left-canonical single block whose restriction from physical pairs
-  `(i,j)` to `(i,i)` is not normal at any blocking length.
+  (i,j) to (i,i) is not normal at any blocking length.
 * `TNLean.MPS.MPDO.BiCFDerivation.DirectSumInput` — the trace-dual algebraic
   input from the direct-sum decomposition lemma of
   David--Perez-Garcia--Schuch--Wolf that follows from the two-sided nonzero
