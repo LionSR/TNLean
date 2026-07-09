@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.MPDO.BiCFDerivation.Counterexample
+import TNLean.MPS.MPDO.BiCFDerivation.DiagonalRestrictionCounterexample
 
 /-!
 # Finite-length sufficient conditions and obstructions for MPDO biCF
@@ -27,6 +28,9 @@ The supporting modules are:
 * `TNLean.MPS.MPDO.BiCFDerivation.Counterexample` — the duplicate scalar-block
   obstruction showing that blockwise injectivity, left-canonicality, and
   nonzero weights do not imply the biCF property.
+* `TNLean.MPS.MPDO.BiCFDerivation.DiagonalRestrictionCounterexample` — an
+  injective, left-canonical single block whose restriction from physical pairs
+  (i,j) to (i,i) is not normal at any blocking length.
 * `TNLean.MPS.MPDO.BiCFDerivation.DirectSumInput` — the trace-dual algebraic
   input from the direct-sum decomposition lemma of
   David--Perez-Garcia--Schuch--Wolf that follows from the two-sided nonzero
