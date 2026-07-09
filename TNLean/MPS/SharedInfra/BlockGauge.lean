@@ -6,6 +6,7 @@ import TNLean.MPS.SharedInfra.BlockAssembly
 
 import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Algebra.Group.Pi.Units
+import Mathlib.LinearAlgebra.UnitaryGroup
 
 /-!
 # Shared block-diagonal gauge infrastructure
@@ -45,6 +46,25 @@ section BlockDiagonalGL
 
 variable {r : ℕ} {dim : Fin r → ℕ}
 
+/-- Regard a unitary matrix as an element of the matrix general linear group. -/
+noncomputable def unitaryGL {n : Type*} [Fintype n] [DecidableEq n]
+    (U : Matrix.unitaryGroup n ℂ) : GL n ℂ :=
+  ⟨U, (U : Matrix n n ℂ)ᴴ,
+    by
+      rw [← Matrix.star_eq_conjTranspose]
+      exact Matrix.mem_unitaryGroup_iff.mp U.prop,
+    by
+      rw [← Matrix.star_eq_conjTranspose]
+      exact Matrix.UnitaryGroup.star_mul_self U⟩
+
+@[simp] private theorem unitaryGL_val {n : Type*} [Fintype n] [DecidableEq n]
+    (U : Matrix.unitaryGroup n ℂ) :
+    (unitaryGL U : Matrix n n ℂ) = U := rfl
+
+@[simp] private theorem unitaryGL_inv_val {n : Type*} [Fintype n] [DecidableEq n]
+    (U : Matrix.unitaryGroup n ℂ) :
+    (((unitaryGL U)⁻¹ : GL n ℂ) : Matrix n n ℂ) = (U : Matrix n n ℂ)ᴴ := rfl
+
 /-- Form a block-diagonal element of `GL` from a family of invertible matrices. -/
 noncomputable def blockDiagonalGL (X : (k : Fin r) → GL (Fin (dim k)) ℂ) :
     GL ((k : Fin r) × Fin (dim k)) ℂ :=
@@ -63,6 +83,28 @@ noncomputable def globalGaugeOfBlocks (X : (k : Fin r) → GL (Fin (dim k)) ℂ)
   Units.map
     (Matrix.reindexAlgEquiv ℂ ℂ (finSigmaFinEquiv (n := dim))).toRingEquiv.toMonoidHom
     (blockDiagonalGL X)
+
+/-- A block-diagonal gauge assembled from unitary blocks is unitary. -/
+theorem globalGaugeOfBlocks_unitaryGL_mem
+    (U : (k : Fin r) → Matrix.unitaryGroup (Fin (dim k)) ℂ) :
+    (globalGaugeOfBlocks (fun k => unitaryGL (U k)) :
+      Matrix (Fin (∑ k : Fin r, dim k)) (Fin (∑ k : Fin r, dim k)) ℂ) ∈
+      Matrix.unitaryGroup (Fin (∑ k : Fin r, dim k)) ℂ := by
+  rw [Matrix.mem_unitaryGroup_iff, Matrix.star_eq_conjTranspose]
+  simp only [globalGaugeOfBlocks, Matrix.toRingEquiv_reindexAlgEquiv,
+    RingHom.toMonoidHom_eq_coe, RingEquiv.toRingHom_eq_coe, blockDiagonalGL,
+    Units.coe_map, MonoidHom.coe_coe, Matrix.blockDiagonal'RingHom_apply,
+    RingHom.coe_coe, Matrix.coe_reindexRingEquiv, Matrix.reindex_apply,
+    Matrix.conjTranspose_submatrix, Matrix.blockDiagonal'_conjTranspose,
+    MulEquiv.val_piUnits_symm_apply, unitaryGL_val, Matrix.submatrix_mul_equiv,
+    ← Matrix.blockDiagonal'_mul]
+  have hU : (fun k => (U k : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) *
+      (U k : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)ᴴ) = 1 := by
+    funext k
+    rw [← Matrix.star_eq_conjTranspose]
+    exact Matrix.mem_unitaryGroup_iff.mp (U k).prop
+  rw [hU, Matrix.blockDiagonal'_one]
+  simp
 
 end BlockDiagonalGL
 

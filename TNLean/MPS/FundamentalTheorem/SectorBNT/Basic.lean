@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.FundamentalTheorem.SectorWeightComparison
 import TNLean.MPS.CanonicalForm.Reduction
-import TNLean.MPS.Periodic.Defs
+import TNLean.MPS.Core.CanonicalNormalization
 import TNLean.MPS.Overlap.Basic
 
 /-!
