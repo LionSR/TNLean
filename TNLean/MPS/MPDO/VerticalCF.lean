@@ -63,20 +63,18 @@ surrogate for the paper's vertical canonical form.
 * `sameMPV₂Pos_diagonalTensor_verticalAssembledTensor_of_power_sums`:
   a separate positive-length comparison under scalar power-sum identities.
 
-The full passage from horizontal to vertical canonical form
-(arXiv:1606.00608, Proposition 4.13) is still outside this file: its blueprint
-entry `thm:vertical_cf_of_horizontal_cf` is marked `\notready`. The results
-above supply matrix-product-vector identities
-and elementary positivity consequences; the remaining step is an independent
-canonical-form decomposition of the tensor viewed in the vertical direction.
+The results above supply matrix-product-vector identities and elementary
+positivity consequences, but do not give the passage from horizontal to
+vertical canonical form in arXiv:1606.00608, Proposition 4.13. That theorem
+requires an independent canonical-form decomposition of the tensor viewed in
+the vertical direction.
 Its basis cannot be obtained by diagonally restricting the horizontal blocks:
 the finite-dimensional obstruction is proved in
 `TNLean.MPS.MPDO.BiCFDerivation.DiagonalRestrictionCounterexample` and documented
 in `docs/paper-gaps/cpgsv17_vertical_diagonal_restriction.tex`. A source-faithful
-proof must instead follow arXiv:1606.00608, lines 1873--1921, using MPDO
+argument must instead follow arXiv:1606.00608, lines 1873--1921, using MPDO
 positivity and Lemma L to establish an independent vertical canonical form and
-then proving positivity of its weights. The Lean statement will be introduced
-together with its proof rather than as an empty placeholder.
+then proving positivity of its weights.
 
 ## Module location
 
