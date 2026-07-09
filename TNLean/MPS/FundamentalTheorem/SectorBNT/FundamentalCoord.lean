@@ -2,7 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.FundamentalTheorem.SectorBNT.Fundamental
+import TNLean.MPS.FundamentalTheorem.SectorBNT.Unitary
 
 /-!
 # BNT equal-MPV global-gauge witness
@@ -358,6 +358,21 @@ theorem permGL_val {n : Type*} [DecidableEq n] [Fintype n] (σ : Equiv.Perm n) :
 theorem permGL_inv_val {n : Type*} [DecidableEq n] [Fintype n] (σ : Equiv.Perm n) :
     (((permGL σ)⁻¹ : GL n ℂ) : Matrix n n ℂ) = Equiv.Perm.permMatrix ℂ σ.symm := rfl
 
+/-- The general linear group element associated with a permutation is unitary. -/
+private theorem permGL_mem_unitaryGroup {n : Type*} [DecidableEq n] [Fintype n]
+    (σ : Equiv.Perm n) :
+    (permGL σ : Matrix n n ℂ) ∈ Matrix.unitaryGroup n ℂ := by
+  rw [Matrix.mem_unitaryGroup_iff, Matrix.star_eq_conjTranspose,
+    permGL_val, Matrix.conjTranspose_permMatrix]
+  change Equiv.Perm.permMatrix ℂ σ * Equiv.Perm.permMatrix ℂ σ.symm = 1
+  have hmul : Equiv.Perm.permMatrix ℂ σ * Equiv.Perm.permMatrix ℂ σ.symm =
+      Equiv.Perm.permMatrix ℂ (σ.symm * σ) :=
+    (Matrix.permMatrix_mul (σ := σ.symm) (τ := σ)).symm
+  rw [hmul]
+  change Equiv.Perm.permMatrix ℂ (σ⁻¹ * σ) = 1
+  rw [inv_mul_cancel]
+  exact Matrix.permMatrix_one
+
 /-- Entrywise expansion of `Equiv.Perm.permMatrix`. -/
 private lemma permMatrix_apply' {n : Type*} [DecidableEq n] (σ : Equiv.Perm n)
     (i j : n) :
@@ -535,6 +550,113 @@ theorem ft_sector_bnt_equal_mps_gaugeEquiv_literalPos
           Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ))
   simp only [Matrix.mul_assoc]
 
+/-- **Canonical Form II equal-case unitary global gauge.**
+
+If two BNT canonical forms generate the same MPV family, their literal total
+tensors are related by a unitary gauge.  The gauge is the product of the
+block-diagonal direct sum of the matched sector unitaries and the unitary
+permutation that restores the original sector coordinates.
+
+Source: Cirac et al., arXiv:1606.00608, Corollary C.5, lines 1197--1199. -/
+private theorem ft_sector_bnt_equal_mps_unitaryGauge_literalPos
+    {P Q : SectorDecomposition d}
+    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
+    ∃ (hTotal : P.totalDim = Q.totalDim) (Y : GL (Fin Q.totalDim) ℂ),
+      (Y : Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) ∈
+        Matrix.unitaryGroup (Fin Q.totalDim) ℂ ∧
+      ∀ i : Fin d,
+        Q.toTensor i =
+          (Y : Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) *
+            cast (by rw [hTotal] :
+                Matrix (Fin P.totalDim) (Fin P.totalDim) ℂ =
+                Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ)
+              (P.toTensor i) *
+            (((Y)⁻¹ : GL (Fin Q.totalDim) ℂ) :
+              Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) := by
+  classical
+  obtain ⟨β, hDim, _hCopies, τ, _ζ, _U, X, _hζ, _hConj,
+      _hWeight, hXunitary, hGauge⟩ :=
+    ft_sector_bnt_equal_unitary_global_gauge_witnessesPos hP hQ hEqual
+  have hTotal : P.totalDim = Q.totalDim :=
+    SectorDecomposition.totalDim_eq_of_match (P := P) (Q := Q) β hDim τ
+  refine ⟨hTotal, ?_⟩
+  set ρ : Equiv.Perm (Fin Q.totalDim) :=
+    (SectorDecomposition.sectorFlatDimEquiv (P := P) (Q := Q) β hDim τ).trans
+      (finCongr hTotal) with hρ_def
+  let X' : GL (Fin Q.totalDim) ℂ := X
+  have hX'unitary :
+      (X' : Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) ∈
+        Matrix.unitaryGroup (Fin Q.totalDim) ℂ := hXunitary
+  have hYunitary :
+      (X' * permGL ρ : Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) ∈
+        Matrix.unitaryGroup (Fin Q.totalDim) ℂ :=
+    (Matrix.unitaryGroup (Fin Q.totalDim) ℂ).mul_mem
+      hX'unitary (permGL_mem_unitaryGroup ρ)
+  refine ⟨X' * permGL ρ, hYunitary, ?_⟩
+  intro i
+  have hsubm := matched_toTensor_eq_submatrix (P := P) (Q := Q) β hDim τ i
+  have hCast :
+      cast (by rw [hTotal] :
+          Matrix (Fin P.totalDim) (Fin P.totalDim) ℂ =
+          Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ)
+        (P.toTensor i) =
+        (P.toTensor i).submatrix (finCongr hTotal.symm) (finCongr hTotal.symm) := by
+    have hgen : ∀ (n m : ℕ) (h : n = m) (M : Matrix (Fin n) (Fin n) ℂ),
+        cast (by rw [h] :
+            Matrix (Fin n) (Fin n) ℂ = Matrix (Fin m) (Fin m) ℂ) M =
+          M.submatrix (finCongr h.symm) (finCongr h.symm) := by
+      intro n m h M
+      subst h
+      simp [finCongr]
+    exact hgen P.totalDim Q.totalDim hTotal (P.toTensor i)
+  have hPerm :
+      (permGL ρ : Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) *
+          cast (by rw [hTotal] :
+              Matrix (Fin P.totalDim) (Fin P.totalDim) ℂ =
+              Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ)
+            (P.toTensor i) *
+          (((permGL ρ)⁻¹ : GL (Fin Q.totalDim) ℂ) :
+            Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) =
+        toTensorFromBlocks (d := d)
+            (μ := matched_p_weight (P := P) (Q := Q) β τ)
+            (matched_p_basis (P := P) (Q := Q) β hDim) i := by
+    rw [permGL_val, permGL_inv_val, hCast,
+      permMatrix_conj_eq_submatrix ρ
+        ((P.toTensor i).submatrix (finCongr hTotal.symm) (finCongr hTotal.symm)),
+      Matrix.submatrix_submatrix, hsubm]
+    rfl
+  change toTensorFromBlocks (d := d) (μ := Q.flatWeight) Q.flatBasis i = _
+  rw [hGauge i, ← hPerm]
+  have hY_inv :
+      (((X' * permGL ρ)⁻¹ : GL (Fin Q.totalDim) ℂ) :
+        Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) =
+        (((permGL ρ)⁻¹ : GL (Fin Q.totalDim) ℂ) :
+          Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) *
+        ((X'⁻¹ : GL (Fin Q.totalDim) ℂ) :
+          Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) := by
+    rw [mul_inv_rev]
+    rfl
+  rw [hY_inv]
+  change (X' : Matrix _ _ ℂ) *
+      ((permGL ρ : Matrix _ _ ℂ) *
+        cast (by rw [hTotal] :
+            Matrix (Fin P.totalDim) (Fin P.totalDim) ℂ =
+            Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) (P.toTensor i) *
+        (((permGL ρ)⁻¹ : GL (Fin Q.totalDim) ℂ) :
+          Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ)) *
+      ((X'⁻¹ : GL (Fin Q.totalDim) ℂ) :
+        Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) =
+    ((X' : Matrix _ _ ℂ) * (permGL ρ : Matrix _ _ ℂ)) *
+      cast (by rw [hTotal] :
+          Matrix (Fin P.totalDim) (Fin P.totalDim) ℂ =
+          Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) (P.toTensor i) *
+      ((((permGL ρ)⁻¹ : GL (Fin Q.totalDim) ℂ) :
+          Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) *
+        ((X'⁻¹ : GL (Fin Q.totalDim) ℂ) :
+          Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ))
+  simp only [Matrix.mul_assoc]
+
 /-- Reformulation for the all-length `SameMPV₂` form. -/
 theorem ft_sector_bnt_equal_mps_gaugeEquiv_literal
     {P Q : SectorDecomposition d}
@@ -577,6 +699,31 @@ theorem fundamentalTheorem_equal_canonicalForm
             (((Y)⁻¹ : GL (Fin Q.totalDim) ℂ) :
               Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) :=
   ft_sector_bnt_equal_mps_gaugeEquiv_literal hP hQ hEqual
+
+/-- **Fundamental Theorem of MPS in Canonical Form II, equal case.**
+
+Two BNT canonical forms generating the same MPV family at every positive
+length are related by one unitary global gauge after identifying their equal
+total bond dimensions.
+
+Source: Cirac et al., arXiv:1606.00608, Corollary C.5, lines 1197--1199. -/
+theorem fundamentalTheorem_equal_canonicalForm_unitaryPos
+    {P Q : SectorDecomposition d}
+    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
+    ∃ (hTotal : P.totalDim = Q.totalDim) (Y : GL (Fin Q.totalDim) ℂ),
+      (Y : Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) ∈
+        Matrix.unitaryGroup (Fin Q.totalDim) ℂ ∧
+      ∀ i : Fin d,
+        Q.toTensor i =
+          (Y : Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) *
+            cast (by rw [hTotal] :
+                Matrix (Fin P.totalDim) (Fin P.totalDim) ℂ =
+                Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ)
+              (P.toTensor i) *
+            (((Y)⁻¹ : GL (Fin Q.totalDim) ℂ) :
+              Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) :=
+  ft_sector_bnt_equal_mps_unitaryGauge_literalPos hP hQ hEqual
 
 /-- **Fundamental Theorem of MPS, proportional multi-block case (CPSV16
 Theorem II.1) on the BNT canonical-form surface.**

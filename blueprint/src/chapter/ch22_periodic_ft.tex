@@ -1526,38 +1526,6 @@ unconditional result.
     \]
 \end{proof}
 
-\begin{lemma}[Per-sector unitary gauge]
-    \label{lem:periodic_sector_unitary}
-    \lean{MPSTensor.exists_unitaryConj_gaugePhase_of_leftCanonical_irreducible}
-    \leanok
-    \uses{def:gauge_phase_equiv, def:irreducible_tensor}
-    Let $A$ and $B$ be left-canonical irreducible tensors of common positive bond
-    dimension that are gauge-phase equivalent.  Then the gauge can be taken
-    unitary: there is a unitary $U$ and a unit-modulus scalar $\zeta$ such that,
-    for every $i$,
-    \[
-        B^i=\zeta\,U A^i U^{\dagger}.
-    \]
-    This is the per-sector unitary $U_v$ of
-    \cite[eq.~Cvprop]{DeLasCuevas2017Irreducible}, obtained by the canonical-form
-    argument: writing $B^i=\zeta\,X A^i X^{-1}$ with $X$ invertible, the modulus
-    $\lVert\zeta\rVert=1$ follows from the irreducible normalization, while
-    $X^{\dagger}X$ is a positive-semidefinite fixed point of the adjoint transfer
-    map $Y\mapsto\sum_i A^{i\dagger}YA^i$.  Left-canonicity of $A$ makes the
-    identity another such fixed point, so uniqueness of the
-    positive-semidefinite fixed point gives $X^{\dagger}X=c\,\mathbb 1$ with
-    $c>0$, and $U:=c^{-1/2}X$ is unitary.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{thm:psd_fp_unique_irred, def:irreducible_tensor}
-    From $\sum_i B^{i\dagger}B^i=\mathbb 1$ the matrix $X^{\dagger}X$ is a
-    positive-semidefinite fixed point of the adjoint transfer map; by uniqueness
-    it equals a positive scalar multiple $c\,\mathbb 1$ of the identity, so
-    $c^{-1/2}X$ is unitary and $X A^i X^{-1}=U A^i U^{\dagger}$.  The unit modulus
-    of $\zeta$ is the irreducible normalization.
-\end{proof}
-
 \begin{definition}[Global gauge]
     \label{def:periodic_global_gauge}
     \lean{MPSTensor.globalGauge}
@@ -1588,12 +1556,36 @@ unconditional result.
     $\sum_vU_v$.
 \end{proof}
 
+\begin{lemma}[Unit-phase gauge relation gives repeated blocks]
+    \label{lem:gauge_phase_data_repeated_blocks}
+    \lean{MPSTensor.repeatedBlocks_of_gaugePhaseData_norm_one}
+    \leanok
+    Suppose
+    \[
+        B^i=\zeta X A^iX^{-1},
+        \qquad |\zeta|=1,
+    \]
+    with $X$ invertible. Then $A$ and $B$ satisfy the repeated-block relation
+    \[
+        A^i=\zeta^{-1}X^{-1}B^iX.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    Since $|\zeta|=1$, the scalar is nonzero.  Multiplication by $X^{-1}$ on
+    the left and by $X$ on the right gives
+    \[
+        X^{-1}B^iX=\zeta A^i;
+    \]
+    multiplication by $\zeta^{-1}$ proves the claim.
+\end{proof}
+
 \begin{lemma}[Global-gauge construction]
     \label{lem:periodic_global_gauge_assembly}
     \lean{MPSTensor.repeatedBlocks_of_globalGauge}
     \leanok
     \uses{def:cyclic_sector_decomp, def:periodic_global_gauge,
-        lem:periodic_global_gauge_eq_sum, lem:periodic_sector_unitary}
+        lem:periodic_global_gauge_eq_sum,
+        lem:left_canonical_irreducible_unitary_gauge}
     Let $m\ge1$, and let $A$ and $B$ carry the cyclic off-diagonal structure
     \[
         A^i=\sum_{u}P_uA^iP_{u+1},

@@ -310,6 +310,7 @@ import TNLean.MPS.FundamentalTheorem.SectorBNT.Api
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Examples
 import TNLean.MPS.FundamentalTheorem.SectorBNT.ProportionalMatch
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Supplier
+import TNLean.MPS.FundamentalTheorem.SectorBNT.Unitary
 import TNLean.MPS.Periodic.Overlap
 import TNLean.MPS.Periodic.FundamentalTheorem
 import TNLean.MPS.Periodic.ZGauge
