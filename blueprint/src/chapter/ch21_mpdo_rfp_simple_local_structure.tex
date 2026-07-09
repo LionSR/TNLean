@@ -22,6 +22,33 @@ strong subadditivity for a normalized three-site reduced state.
     \]
 \end{definition}
 
+\begin{theorem}[Saturation gives equality in strong subadditivity]
+    \label{thm:mpdo_sal_ssa_equality}
+    \lean{MPOTensor.isSSAEquality_tripartite_of_isSAL}
+    \lean{MPOTensor.isSSAEquality_threeSite_of_isSAL}
+    \leanok
+    \uses{def:is_sal, def:ssa_equality}
+    Let $N\geq 4$, and divide the first $N-1$ sites of the normalized periodic
+    state into consecutive regions $A,B,C$ of lengths $1,1,N-3$. If the tensor
+    saturates the area law, then
+    \[
+        S(ABC)+S(B)=S(AB)+S(BC).
+    \]
+    In particular, the three-site reduced state of the four-site chain satisfies
+    equality in strong subadditivity.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_tripartite_block_entropy_identifications}
+    By saturation, $I_1=I_2$. Expanding the two mutual informations and cancelling
+    the entropy of the full chain gives
+    \[
+        S_{N-1}+S_1=S_2+S_{N-2},
+    \]
+    which is the stated equality for the regions $A,B,C$.
+\end{proof}
+
 \begin{theorem}[SAL implies local $\eta$-structure]
     \label{thm:sal_implies_eta_structure}
     \lean{MPOTensor.sal_implies_eta_structure}
