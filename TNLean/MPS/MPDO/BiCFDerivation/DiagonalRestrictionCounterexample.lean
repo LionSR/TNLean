@@ -5,16 +5,16 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.MPDO.BiCFDerivation.Basic
 
 /-!
-# Diagonal restriction need not preserve injectivity
+# Diagonal restriction need not preserve normality
 
 This file gives a two-dimensional counterexample to the assertion that the diagonal
-restriction of a doubled-index horizontal canonical-form block must be injective.
+restriction of a doubled-index horizontal canonical-form block must be normal.
 
 The tensor consists of the four matrix units, with nonzero row-dependent coefficients.
-Thus its four physical matrices span the full matrix algebra, while its diagonal
-restriction contains only the two diagonal matrix units. The coefficients are chosen so
-that the tensor is left-canonical. Since there is only one block, its injectivity also
-supplies the finite-length block-separation property in `HorizontalCFData`.
+Thus its four physical matrices span the full matrix algebra, while every word in its
+diagonal restriction remains diagonal. The coefficients are chosen so that the tensor is
+left-canonical. Since there is only one block, its injectivity also supplies the
+finite-length block-separation property in `HorizontalCFData`.
 
 This obstruction does not contradict Proposition 4.13 (source label `Prop:IV.12`) of
 arXiv:1606.00608. In the proof at lines 1873--1921, positivity is first used to obtain
@@ -98,25 +98,6 @@ private theorem diagBlock_diagonalRestrictionUnits_apply (i : Fin 2) :
       (if i = 0 then (3 / 5 : ℂ) • Matrix.single 0 0 1
         else (4 / 5 : ℂ) • Matrix.single 1 1 1) := by
   fin_cases i <;> norm_num [diagBlock, finProdFinEquiv, diagonalRestrictionUnits]
-
-/-- The diagonal restriction of the doubled-index tensor is not injective. -/
-private theorem diagBlock_diagonalRestrictionUnits_not_isInjective :
-    ¬ IsInjective (diagBlock diagonalRestrictionUnits) := by
-  intro h
-  suffices hzero : ∀ M ∈ Submodule.span ℂ (Set.range (diagBlock diagonalRestrictionUnits)),
-      M 0 1 = 0 by
-    have hmem : Matrix.single 0 1 (1 : ℂ) ∈
-        Submodule.span ℂ (Set.range (diagBlock diagonalRestrictionUnits)) :=
-      h ▸ Submodule.mem_top
-    exact absurd (hzero _ hmem) one_ne_zero
-  intro M hM
-  induction hM using Submodule.span_induction with
-  | mem M hM =>
-      obtain ⟨i, rfl⟩ := hM
-      fin_cases i <;> simp [diagBlock_diagonalRestrictionUnits_apply, Matrix.single]
-  | zero => simp
-  | add M N _ _ hM hN => simp [hM, hN]
-  | smul c M _ hM => simp [hM]
 
 /-- Every word in the diagonal restriction has vanishing `(0,1)` entry. -/
 private theorem evalWord_diagBlock_diagonalRestrictionUnits_zero_one (w : List (Fin 2)) :
@@ -202,28 +183,20 @@ private theorem diagonalRestrictionBlock_horizontalCFData :
       | smul c M _ hM => simp [Matrix.trace_smul, hM])
     simpa using hzero
 
-/-- Horizontal canonical-form hypotheses do not imply injectivity after restriction
-from physical pairs `(i,j)` to diagonal pairs `(i,i)`.
+/-- Horizontal canonical-form hypotheses also do not imply normality of the
+diagonally restricted blocks, even after arbitrary blocking.
 
 **Local obstruction (Proposition 4.13):** The proposition in arXiv:1606.00608,
 source label `Prop:IV.12`, lines 1873--1921, obtains a new vertical canonical form from
 positivity; it does not assert that the diagonal restrictions of the horizontal blocks
 are normal. The source comparison is documented in
 `docs/paper-gaps/cpgsv17_vertical_diagonal_restriction.tex`. -/
-private theorem horizontalCFData_diagBlock_not_isInjective :
-    MPOTensor.HorizontalCFData diagonalRestrictionWeight diagonalRestrictionBlock ∧
-      ¬ (∀ k, IsInjective (diagBlock (diagonalRestrictionBlock k))) := by
-  refine ⟨diagonalRestrictionBlock_horizontalCFData, ?_⟩
-  intro h
-  exact diagBlock_diagonalRestrictionUnits_not_isInjective (by
-    simpa [diagonalRestrictionBlock] using h 0)
-
-/-- Horizontal canonical-form hypotheses also do not imply normality of the
-diagonally restricted blocks, even after arbitrary blocking. -/
 theorem horizontalCFData_diagBlock_not_isNormal :
-    MPOTensor.HorizontalCFData diagonalRestrictionWeight diagonalRestrictionBlock ∧
-      ¬ (∀ k, IsNormal (diagBlock (diagonalRestrictionBlock k))) := by
-  refine ⟨diagonalRestrictionBlock_horizontalCFData, ?_⟩
+    ∃ (weight : Fin 1 → ℂ) (block : Fin 1 → MPSTensor (2 * 2) 2),
+      MPOTensor.HorizontalCFData weight block ∧
+        ¬ (∀ k, IsNormal (diagBlock (block k))) := by
+  refine ⟨diagonalRestrictionWeight, diagonalRestrictionBlock,
+    diagonalRestrictionBlock_horizontalCFData, ?_⟩
   intro h
   exact diagBlock_diagonalRestrictionUnits_not_isNormal (by
     simpa [diagonalRestrictionBlock] using h 0)
