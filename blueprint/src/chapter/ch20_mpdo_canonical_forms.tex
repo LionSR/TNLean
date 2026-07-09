@@ -202,6 +202,38 @@
     product vector of the single-spin block-diagonal assembly.
 \end{proof}
 
+\begin{theorem}[Diagonal restriction need not preserve normality]
+    \label{thm:diagonal_restriction_not_normal}
+    \lean{MPSTensor.horizontalCFData_diagBlock_not_isNormal}
+    \leanok
+    \uses{def:horizontal_cf_mpdo}
+    There is a left-canonical, injective doubled-index tensor satisfying the
+    finite-length block-separation hypothesis whose restriction to the diagonal
+    physical pairs is not normal.  On bond space $\mathbb C^2$, take
+    \[
+        A^{(a,b)}=c_a E_{ab},
+        \qquad c_0=\frac35,\qquad c_1=\frac45.
+    \]
+    Then the four matrices $A^{(a,b)}$ span $M_2(\mathbb C)$ and
+    \[
+        \sum_{a,b}\bigl(A^{(a,b)}\bigr)^*A^{(a,b)}=I.
+    \]
+    For a single block, injectivity also gives finite-length block separation.
+    The diagonal restriction, however, consists only of
+    \[
+        A^{\mathrm{diag}}(0)=\frac35 E_{00},
+        \qquad A^{\mathrm{diag}}(1)=\frac45 E_{11}.
+    \]
+    Every product of these two matrices is diagonal, so no blocking length spans
+    $M_2(\mathbb C)$.
+\end{theorem}
+\begin{proof}\leanok
+    The four nonzero scalar multiples of the matrix units span the full matrix
+    algebra.  The identity
+    $(3/5)^2+(4/5)^2=1$ gives left-canonicality.  After diagonal restriction,
+    every word has vanishing $(0,1)$ entry, whereas $E_{01}$ does not.
+\end{proof}
+
 \begin{lemma}[Diagonal tensor word evaluation]
     \label{lem:eval_word_diagonal_tensor}
     \lean{MPOTensor.evalWord_diagonalTensor}
@@ -471,7 +503,9 @@
     invariant projection for the tensor viewed in the vertical direction.
     Positivity also excludes nontrivial periodic sectors.  The canonical-form
     theorem then gives a new vertical family $(B_k)_{k\in I}$ and weights
-    $\nu_k$ satisfying
+    $\nu_k$.  This family is not obtained by restricting the horizontal blocks
+    to diagonal physical pairs, as
+    Theorem~\ref{thm:diagonal_restriction_not_normal} shows.  Instead it satisfies
     \[
         V^{(N)}\bigl(i\mapsto M^{ii}\bigr)
         =V^{(N)}\Bigl(\textstyle\bigoplus_{k\in I}\nu_k B_k\Bigr).
