@@ -253,9 +253,30 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     predicate to the stationary tower constructed from the faithful fixed point.
 \end{proof}
 
+\begin{theorem}[The support-algebra condition does not imply fusion]%
+    \label{thm:mpdo_algebra_not_imply_fusion}
+    \lean{MPOTensor.exists_isRFP_MPDO_via_algebra_not_isRFP_MPDO_via_fusion}
+    \leanok
+    \uses{def:mpdo_rfp_via_algebra, def:mpdo_rfp_via_fusion,
+        thm:mpdo_algebra_from_stabilized_adjoint_fixedpoints}
+    There exists an MPO tensor of physical and bond dimension two such that the
+    doubled tensor is trace-preserving, the transfer map has a
+    positive-definite fixed point, and the support-algebra condition holds, but
+    the fusion condition does not hold.
+\end{theorem}
+\begin{proof}\leanok
+    Take the phase-flip channel with Kraus operators
+    $K_0=\frac35 I$ and $K_1=\frac45 Z$.  Its transfer map fixes diagonal
+    entries and multiplies off-diagonal entries by $-\frac7{25}$.  Therefore
+    every positive power has the same adjoint fixed-point algebra.  On the
+    other hand, the off-diagonal eigenvalue is neither zero nor one, so the
+    transfer map is not idempotent and cannot admit a fusion retract.
+\end{proof}
+
 \begin{remark}[Why algebra data do not imply fusion data]%
     \label{rem:mpdo_algebra_to_fusion_gap}
-    \uses{def:mpdo_rfp_via_algebra, def:mpdo_rfp_via_fusion, thm:newton_girard}
+    \uses{def:mpdo_rfp_via_algebra, def:mpdo_rfp_via_fusion,
+        thm:mpdo_algebra_not_imply_fusion, thm:newton_girard}
     Write $E=E_1$ for the one-site transfer map. The present algebra predicate
     gives, for every $n>0$,
     \[
@@ -265,8 +286,9 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     Hence a vector $X$ with $E^\dagger X=\lambda X$ and $\lambda^n=1$ lies in
     $\operatorname{Fix}(E^\dagger)$, so $(\lambda-1)X=0$ and $\lambda=1$ by
     Theorem~\ref{thm:mpdo_algebra_root_of_unity_eigenvalue}. It does not imply
-    $E^2=E$. For instance, if $\Pi_{\mathrm{diag}}$ is the projection onto
-    diagonal matrices and $0<\varepsilon<1$, set
+    $E^2=E$, as Theorem~\ref{thm:mpdo_algebra_not_imply_fusion} shows.  More
+    generally, if $\Pi_{\mathrm{diag}}$ is the projection onto diagonal
+    matrices and $0<\varepsilon<1$, set
     \[
         E(X)
         = \varepsilon\, X
@@ -330,9 +352,14 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     $S=\widetilde R_1\widetilde S R_2$. The scalar
     Newton--Girard power-sum identity needed to obtain the trace-power form is
     already available as
-    Theorem~\ref{thm:newton_girard}; what remains is the MPDO construction of
-    the BNT-label witness carrying (\ref{eq:mpdo_nu_chi_witness}) and
-    (\ref{eq:mpdo_reconstruction_maps}).
+    Theorem~\ref{thm:newton_girard}.  A source-faithful completion must state
+    the BNT-label hypotheses of
+    \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv} as a separate condition,
+    relate them to the one-site and two-site vertical canonical forms, and
+    then construct the maps in
+    (\ref{eq:mpdo_reconstruction_maps}).  These hypotheses cannot be derived
+    from the support-algebra condition, by
+    Theorem~\ref{thm:mpdo_algebra_not_imply_fusion}.
 \end{remark}
 
 \subsection{Diagonal \texorpdfstring{$\chi$}{chi}-matrices and the trace-power formula}
@@ -393,4 +420,3 @@ the elementary trace-power identity for diagonal matrices.
     version---``there exists $\chi$ for which $(c,\chi)$ has trace-power
     form''---is obtained by quantifying over $\chi$.
 \end{definition}
-
