@@ -718,10 +718,11 @@ Chapter~\ref{ch:canonical}.
     \leanok
     \uses{def:sector_bnt_cf}
     Under the hypotheses of
-    Theorem~\ref{thm:cpgsv_multiblock_ft_source}, the matrices $Y_k$ may be
-    chosen unitary.  Thus there are unitary matrices
-    $U_k\in\mathrm{U}(\dim Q_k)$ and phases $\zeta_k\in\C$, with
-    $|\zeta_k|=1$, such that, for every $k$ and every physical index~$i$,
+    Theorem~\ref{thm:cpgsv_multiblock_ft_source}, there are a bijection
+    $\beta:J(Q)\simeq J(P)$, unitary matrices
+    $U_k\in\mathrm{U}(\dim Q_k)$, and phases $\zeta_k\in\C$ with
+    $|\zeta_k|=1$, such that $\dim P_{\beta(k)}=\dim Q_k$ and, for every $k$
+    and every physical index~$i$,
     \[
         Q_k^i
         =
@@ -734,11 +735,22 @@ Chapter~\ref{ch:canonical}.
 \begin{proof}\leanok
     \uses{thm:sector_bnt_proportional_sector_match_witnesses,
         lem:left_canonical_irreducible_unitary_gauge}
-    The proportional sector-matching theorem gives an invertible gauge and a
-    unit phase for each matched pair.  Both tensors in such a pair are
-    left-canonical and irreducible.
-    Lemma~\ref{lem:left_canonical_irreducible_unitary_gauge} therefore replaces
-    the invertible gauge by a unitary matrix.
+    The proportional sector-matching theorem gives a bijection $\beta$,
+    invertible matrices $X_k$, and unit-modulus phases $\zeta_k$ with
+    \[
+        Q_k^i=\zeta_k X_k P_{\beta(k)}^iX_k^{-1}.
+    \]
+    The matched tensors are left-canonical and irreducible. Hence
+    Lemma~\ref{lem:left_canonical_irreducible_unitary_gauge} gives unitary
+    matrices $U_k$ satisfying
+    \[
+        X_k P_{\beta(k)}^iX_k^{-1}
+        =U_kP_{\beta(k)}^iU_k^\dagger,
+    \]
+    and therefore
+    \[
+        Q_k^i=\zeta_k U_kP_{\beta(k)}^iU_k^\dagger.
+    \]
 \end{proof}
 
 % Collapsing the per-block phases into a single block-diagonal gauge on the
