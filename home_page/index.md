@@ -22,7 +22,6 @@ at varying levels of completeness.
 
 ## Companion Paper
 
-The companion paper "Autoformalizing the fundamental theorem of matrix product
-states: A multi-agent, blueprint-guided formalization in Lean 4" is in
-preparation. A bibliographic citation and public link will be added here once
+The companion paper "Multi-agent Autoformalization of Tensor Network Theory" is
+in preparation. A bibliographic citation and public link will be added here once
 the paper is available.
