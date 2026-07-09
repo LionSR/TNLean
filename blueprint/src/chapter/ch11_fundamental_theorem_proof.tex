@@ -662,7 +662,7 @@ In the equal-MPV case all ingredients are unconditional.
     the sector-permuted gauge gives the single matrix $Y$ of~(\ref{eq:ft_literal_gauge_Y}).
 \end{proof}
 
-\begin{lemma}[Same-phase unitary assembly in matched sector coordinates]
+\begin{lemma}[Unitary gauge in matched sector coordinates]
     \label{lem:sector_bnt_equal_unitary_matched_gauge}
     \lean{MPSTensor.ft_sector_bnt_equal_unitary_global_gauge_witnessesPos}
     \leanok
@@ -691,9 +691,16 @@ In the equal-MPV case all ingredients are unconditional.
     to each matched sector, retaining the phase in the copy-weight identity.
     Repeating $U_k$ on every copy gives
     $X=\bigoplus_{k,q}U_k$, which is unitary by
-    Lemma~\ref{lem:unitary_global_gauge_of_blocks}.  The phase cancellation in
-    the two displayed sector identities gives the matched-coordinate
-    conjugation formula.
+    Lemma~\ref{lem:unitary_global_gauge_of_blocks}.  For every matched copy
+    $(k,q)$,
+    \[
+        \nu_{k,q}Q_k^i
+        =\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}\,
+          \zeta_k U_kP_{\beta(k)}^iU_k^\dagger
+        =\mu_{\beta(k),\tau_k(q)}U_kP_{\beta(k)}^iU_k^\dagger.
+    \]
+    These are precisely the blocks of
+    $Q_{\mathrm{flat}}^i=XP_{\mathrm{match}}^iX^{-1}$.
 \end{proof}
 
 \begin{corollary}[Canonical Form II unitary refinement in the equal case]%
@@ -722,8 +729,14 @@ In the equal-MPV case all ingredients are unconditional.
         \qquad
         \nu_{k,q}=\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}.
     \]
-    Thus the phase cancels copy by copy.  Repeating $U_k$ on its matched copies
-    gives
+    For every matched copy $(k,q)$,
+    \[
+        \nu_{k,q}\zeta_k
+        =\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}\zeta_k
+        =\mu_{\beta(k),\tau_k(q)}.
+    \]
+    Hence $Q_{\mathrm{flat}}^i=XP_{\mathrm{match}}^iX^{-1}$. Repeating $U_k$
+    on its matched copies gives
     \[
         X=\bigoplus_{k,q}U_k,
         \qquad X^\dagger X=\mathbb 1.
@@ -734,8 +747,10 @@ In the equal-MPV case all ingredients are unconditional.
         U=X\Pi,
         \qquad U^\dagger U=\mathbb 1,
     \]
-    and conjugation by $U$ carries $P_{\mathrm{tot}}^i$ to
-    $Q_{\mathrm{tot}}^i$.
+    and the permutation of matched coordinates gives
+    \[
+        Q_{\mathrm{tot}}^i=UP_{\mathrm{tot}}^iU^\dagger.
+    \]
 \end{proof}
 
 \section{The equal and proportional cases}\label{sec:ft_equal_proportional_cases}
@@ -849,8 +864,13 @@ Chapter~\ref{ch:canonical}.
     \]
     Thus $X^\dagger X$ is a positive-semidefinite fixed point of the adjoint
     transfer map of $A$.  Irreducibility gives
-    $X^\dagger X=c\mathbb 1$ for some $c>0$;
-    hence $U=c^{-1/2}X$ is unitary and implements the same conjugation.
+    $X^\dagger X=c\mathbb 1$ for some $c>0$, so
+    $X^{-1}=c^{-1}X^\dagger$ and $U=c^{-1/2}X$ is unitary. Moreover,
+    \[
+        UA^iU^\dagger
+        =c^{-1}XA^iX^\dagger
+        =XA^iX^{-1}.
+    \]
 \end{proof}
 
 \begin{lemma}[Unitary gauge for left-canonical irreducible tensors]
