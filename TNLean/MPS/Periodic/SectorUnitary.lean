@@ -5,9 +5,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.FundamentalTheorem.UnitaryGauge
 
 /-!
-# Unitary gauge compatibility import
+# Unitary gauges in the periodic theory
 
-The general unitary-gauge theorem used by the periodic Fundamental Theorem now
-lives in `TNLean.MPS.FundamentalTheorem.UnitaryGauge`. This module preserves the
-former periodic import path.
+The unitary-gauge theorem for left-canonical irreducible tensors is used both in
+the single-block Fundamental Theorem and in its periodic extension.  This module
+records its role in the periodic theory.
 -/

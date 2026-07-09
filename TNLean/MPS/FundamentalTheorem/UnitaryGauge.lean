@@ -22,24 +22,35 @@ canonical-form orientation, two left-canonical tensors that are gauge-phase
 equivalent are related by a *unitary* gauge: the modulus of the scalar is one and
 the invertible intertwiner can be normalized to a unitary.
 
-The main result here, `exists_unitaryConj_gaugePhase_of_leftCanonical_irreducible`,
-makes this precise:
-
-> if `A B : MPSTensor d D` are both left-canonical and irreducible and are
-> gauge-phase equivalent, then there is a unitary `U` and a unit-modulus scalar
-> `ζ` with `B i = ζ • (U * A i * Uᴴ)`.
+More precisely, let \(A=(A^i)_i\) and \(B=(B^i)_i\) be left-canonical
+irreducible tensors of the same bond dimension.  If they are related by a gauge
+and a nonzero scalar, then there are a unitary matrix \(U\) and a scalar
+\(\zeta\), with \(|\zeta|=1\), such that
+\[
+    B^i=\zeta U A^i U^\dagger
+\]
+for every physical index \(i\).
 
 ## Mathematical content
 
-Write `B i = ζ • (X * A i * X⁻¹)` with `X` invertible.  The Perron--Frobenius
-normalization step (`gaugePhase_scalar_norm_eq_one_of_leftCanonical_irreducible`)
-forces `‖ζ‖ = 1`.  Substituting the gauge relation into `∑ᵢ Bᵢᴴ Bᵢ = 1`
-(left-canonicity of `B`) shows that `W := Xᴴ X` is a positive-semidefinite fixed
-point of the *adjoint* transfer map `Y ↦ ∑ᵢ Aᵢᴴ Y Aᵢ`.  Left-canonicity of `A`
-makes `1` another such fixed point, and irreducibility of `A` (transported to the
-conjugate-transposed Kraus family) gives uniqueness of the positive-semidefinite
-fixed point up to scalar: `W = c • 1` with `c > 0` real.  Then `U := c^{-1/2} • X`
-is unitary and `X⁻¹ = c⁻¹ • Xᴴ`, so `X * A i * X⁻¹ = U * A i * Uᴴ`.
+Write
+\[
+    B^i=\zeta X A^i X^{-1}
+\]
+with \(X\) invertible.  Perron--Frobenius normalization forces
+\(|\zeta|=1\).  Substituting the gauge relation into
+\(\sum_i (B^i)^\dagger B^i=I\) shows that \(W=X^\dagger X\) is a positive
+semidefinite fixed point of the adjoint transfer map
+\[
+    Y\longmapsto\sum_i (A^i)^\dagger Y A^i.
+\]
+Left-canonicity makes \(I\) another such fixed point, and irreducibility gives
+uniqueness of the positive semidefinite fixed point up to scale.  Hence
+\(W=cI\) for some real \(c>0\).  It follows that
+\(U=c^{-1/2}X\) is unitary and
+\[
+    X A^i X^{-1}=U A^i U^\dagger.
+\]
 
 This is the unitary-gauge input used both in the Fundamental Theorem refinement
 of arXiv:1606.00608, Corollary C.5, and in the periodic corner-unitary argument
