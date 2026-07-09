@@ -16,16 +16,15 @@ diagonal restriction remains diagonal. The coefficients are chosen so that the t
 left-canonical. Since there is only one block, its injectivity also supplies the
 finite-length block-separation property in `HorizontalCFData`.
 
-This obstruction does not contradict Proposition 4.13 (source label `Prop:IV.12`) of
-arXiv:1606.00608. In the proof at lines 1873--1921, positivity is first used to obtain
-a new canonical form in the
+This obstruction does not contradict arXiv:1606.00608, Proposition 4.13. In the
+proof at lines 1873--1921, positivity is first used to obtain a new canonical form in the
 vertical direction; the vertical basis of normal tensors is obtained from that canonical
 form, not by restricting each horizontal basis tensor to physical pairs `(i, i)`.
 
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
-  Proposition 4.13 (source label `Prop:IV.12`), lines 1863--1921
+  Proposition 4.13, lines 1863--1921
 -/
 
 open scoped Matrix BigOperators
@@ -187,9 +186,9 @@ private theorem diagonalRestrictionBlock_horizontalCFData :
 diagonally restricted blocks, even after arbitrary blocking.
 
 **Local obstruction (Proposition 4.13):** The proposition in arXiv:1606.00608,
-source label `Prop:IV.12`, lines 1873--1921, obtains a new vertical canonical form from
-positivity; it does not assert that the diagonal restrictions of the horizontal blocks
-are normal. The source comparison is documented in
+lines 1873--1921, obtains a new vertical canonical form from positivity; it does not
+assert that the diagonal restrictions of the horizontal blocks are normal. The source
+comparison is documented in
 `docs/paper-gaps/cpgsv17_vertical_diagonal_restriction.tex`. -/
 theorem horizontalCFData_diagBlock_not_isNormal :
     ∃ (weight : Fin 1 → ℂ) (block : Fin 1 → MPSTensor (2 * 2) 2),
