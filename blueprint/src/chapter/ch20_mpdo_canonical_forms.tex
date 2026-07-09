@@ -246,8 +246,9 @@
     $\sigma$.
 \end{lemma}
 \begin{proof}\leanok
-    By Lemma~\ref{lem:mpv_diagonal_tensor_eq_density} the value is a diagonal entry of $\rho^{(N)}(M)$, and the
-    diagonal entries of a positive semidefinite matrix are nonnegative.
+    By Lemma~\ref{lem:mpv_diagonal_tensor_eq_density}, the value is a diagonal
+    entry of $\rho^{(N)}(M)$, and the diagonal entries of a positive semidefinite
+    matrix are nonnegative.
 \end{proof}
 
 \begin{lemma}[Matrix product vector of the vertical-assembled tensor]
@@ -284,6 +285,81 @@
         \{1,\dots,\sum_\alpha\mult_\alpha\}$, under which $\widetilde\omega_q=
         \omega_{\alpha j}$ and $\widetilde A_q = A_\alpha$. Reindexing the sum along
     this bijection yields the double sum over $(\alpha, j)$.
+\end{proof}
+
+\begin{lemma}[Regrouping a block family by repeated representatives]
+    \label{lem:vertical_grouping_equiv}
+    \lean{MPOTensor.sameMPV₂_toTensorFromBlocks_verticalAssembledTensor_of_equiv}
+    \leanok
+    \uses{lem:mpv_vertical_assembled, thm:mpv_decomposition}
+    Let $(B_k)_{k\in I}$ be a finite family of blocks with weights $\nu_k$,
+    and let $(A_\alpha)_{\alpha\in J}$ be a finite family of representative
+    blocks.  Suppose there is a bijection
+    \[
+        e:I\simeq\{(\alpha,j):\alpha\in J, 1\le j\le m_\alpha\}
+    \]
+    such that, writing $e(k)=(\alpha,j)$, the paired blocks have equal bond
+    dimensions, $\nu_k=\omega_{\alpha j}$, and for every positive length $N$,
+    \[
+        V^{(N)}(B_k)=V^{(N)}(A_\alpha)
+    \]
+    Then
+    \[
+        V^{(N)}\Bigl(\textstyle\bigoplus_{k\in I}\nu_k B_k\Bigr)
+        =
+        V^{(N)}\Bigl(
+          \textstyle\bigoplus_{\alpha\in J}\bigoplus_{j=1}^{m_\alpha}
+          \omega_{\alpha j}A_\alpha
+        \Bigr)
+    \]
+    for every length $N$, including $N=0$.  This is the finite-sum
+    reindexing after the vertical sectors have been grouped in
+    \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:mpv_vertical_assembled, thm:mpv_decomposition}
+    Expand both matrix product vectors as finite sums.  The summand indexed by
+    $k$ on the left equals the summand indexed by $e(k)$ on the right by the
+    weight and block hypotheses.  Reindexing the sum by $e$ proves the result.
+    At length zero the pointwise dimension equality gives equality of the
+    paired bond dimensions, so the same reindexing also gives equality of the
+    total bond dimensions.
+\end{proof}
+
+\begin{lemma}[Diagonal tensor under vertical-sector grouping]
+    \label{lem:diagonal_tensor_vertical_assembly_grouping}
+    \lean{MPOTensor.sameMPV₂_diagonalTensor_verticalAssembledTensor_of_equiv}
+    \leanok
+    \uses{lem:mpv_diagonal_tensor_eq_blocks, lem:vertical_grouping_equiv}
+    Suppose the doubled-index tensor $\widehat M$ has the same matrix product
+    vector family as $\bigoplus_{k\in I}\nu_k B_k$.  Suppose further that a
+    bijection $e(k)=(\alpha,j)$ groups the diagonal restrictions
+    $B_k^{\mathrm{diag}}$ so that the paired blocks have equal bond dimensions,
+    $\nu_k=\omega_{\alpha j}$, and for every positive length $N$,
+    \[
+        V^{(N)}(B_k^{\mathrm{diag}})=V^{(N)}(A_\alpha)
+    \]
+    Then the diagonal tensor has the full matrix product
+    vector equality
+    \[
+        V^{(N)}\bigl(i\mapsto M^{ii}\bigr)
+        =
+        V^{(N)}\Bigl(
+          \textstyle\bigoplus_\alpha\bigoplus_{j=1}^{m_\alpha}
+          \omega_{\alpha j}A_\alpha
+        \Bigr)
+    \]
+    for every length $N$, including $N=0$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:mpv_diagonal_tensor_eq_blocks, lem:vertical_grouping_equiv}
+    The horizontal block decomposition identifies the diagonal tensor with
+    the block sum
+    \[
+        \bigoplus_k\nu_k B_k^{\mathrm{diag}}.
+    \]
+    Lemma~\ref{lem:vertical_grouping_equiv} applies to the stated grouping of
+    these diagonal restrictions.
 \end{proof}
 
 \begin{lemma}[Power-sum flattening of repeated vertical blocks]
@@ -373,13 +449,14 @@
         lem:blockwise_insert_eq_of_mpv_agree, lem:mpv_diagonal_tensor,
         lem:mpv_diagonal_tensor_eq_blocks, lem:mpv_diagonal_tensor_nonneg,
         lem:mpv_vertical_assembled,
-        lem:diagonal_tensor_vertical_assembly_power_sums}
+        lem:diagonal_tensor_vertical_assembly_grouping}
     Every MPDO in horizontal canonical form is also in vertical canonical form.
 \end{theorem}
 
 \begin{proof}
     \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_cf_mpdo,
-        lem:blockwise_insert_eq_of_mpv_agree, lem:mpv_diagonal_tensor}
+        lem:blockwise_insert_eq_of_mpv_agree, lem:mpv_diagonal_tensor,
+        lem:diagonal_tensor_vertical_assembly_grouping}
     Starting from the horizontal canonical-form decomposition, one uses the MPDO
     positivity condition to compare the first-site action of the doubled-index
     tensor on the diagonal sector. Lemma~\ref{lem:blockwise_insert_eq_of_mpv_agree}
