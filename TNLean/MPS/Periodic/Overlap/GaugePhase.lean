@@ -8,9 +8,9 @@ import TNLean.MPS.Periodic.Defs
 /-!
 # Gauge-phase identities for periodic tensors
 
-This module converts the general gauge-phase normalization theorem into the
-repeated-block relations used in the periodic-overlap argument of Appendix A of
-arXiv:1708.00029.
+The general gauge-phase normalization theorem gives the repeated-block
+relations used in the periodic-overlap argument of arXiv:1708.00029,
+Appendix A.
 -/
 
 open scoped Matrix BigOperators ComplexOrder

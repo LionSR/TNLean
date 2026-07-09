@@ -8,6 +8,5 @@ import TNLean.MPS.FundamentalTheorem.UnitaryGauge
 # Unitary gauges in the periodic theory
 
 The unitary-gauge theorem for left-canonical irreducible tensors is used both in
-the single-block Fundamental Theorem and in its periodic extension.  This module
-records its role in the periodic theory.
+the single-block Fundamental Theorem and in its periodic extension.
 -/
