@@ -143,13 +143,14 @@ strong subadditivity for a normalized three-site reduced state.
     \label{thm:mpdo_eta_of_hayashi_markov_trace_matrix}
     \lean{MPOTensor.ExplicitEtaOperators.traceMatrix_ofHayashiMarkov}
     \lean{MPOTensor.ExplicitEtaOperators.traceMatrixRe_ofHayashiMarkov}
+    \lean{MPOTensor.ExplicitEtaOperators.trace_traceMatrixRe_ofHayashiMarkov}
     \leanok
     \uses{def:mpdo_eta_of_hayashi_markov,
         def:mpdo_explicit_eta_trace_matrix}
     The trace matrix induced by the extracted family is entrywise
-    $T_{k,h} = 1$ in both its complex-valued form and its real-valued form,
-    matching the normalization $T_{k,h} = a_k b_h$ used in
-    $a_k = b_h = 1$.
+    $T_{k,h} = 1$ in both its complex-valued form and its real-valued form.
+    If there are $m$ sectors, then $T=\mathbf{1}\mathbf{1}^{\mathsf T}$ and
+    $\tr(T)=m$.
 \end{theorem}
 
 \begin{proof}
@@ -160,7 +161,24 @@ strong subadditivity for a normalized three-site reduced state.
     partial trace $\tr_C$ preserves the trace. The analogous statement holds
     for $\tr_A \rho_{A b_1}^{(h)}$. Multiplicativity of the trace under
     Kronecker products gives $T_{k,h} = 1 \cdot 1 = 1$, and taking real parts
-    gives the real-valued statement.
+    gives the real-valued statement. Summing the $m$ diagonal entries gives
+    $\tr(T)=m$.
+\end{proof}
+
+\begin{theorem}[Positive semidefiniteness of the Hayashi--Markov trace matrix]
+    \label{thm:mpdo_eta_of_hayashi_markov_trace_matrix_psd}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrixRe_ofHayashiMarkov_posSemidef}
+    \leanok
+    \uses{thm:mpdo_eta_of_hayashi_markov_trace_matrix}
+    The real trace matrix of the sector-reduced family is positive
+    semidefinite.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_eta_of_hayashi_markov_trace_matrix}
+    This trace matrix is the all-ones matrix
+    $\mathbf{1}\mathbf{1}^{\mathsf T}$, hence is positive semidefinite.
 \end{proof}
 
 \begin{theorem}[Entrywise nonnegativity of the real trace matrix]
