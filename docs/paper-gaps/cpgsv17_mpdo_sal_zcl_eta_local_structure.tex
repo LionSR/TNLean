@@ -10,7 +10,7 @@
 \title{The SAL to Eta-Local Structure Step in
 Cirac--Perez-Garcia--Schuch--Verstraete 2017 Appendix C.2}
 \author{}
-\date{2026-05-27}
+\date{2026-07-09}
 
 \begin{document}
 \maketitle
@@ -51,8 +51,20 @@ $B$-operators follows from their sector-local action.
 
 \section{Current formalization}
 
-The formal development currently records this as an eta-local structure for
-$K$.\footnote{The formal structure is
+The entropy implication at the beginning of Lemma~C.2 is formalized.  For
+$N\geq 4$, saturation gives $I_1=I_2$, and hence
+\[
+  S_{N-1}+S_1=S_2+S_{N-2}.
+\]
+This is equality in strong subadditivity for the normalized $(N-1)$-site
+marginal divided into three consecutive regions of lengths $1$, $1$, and
+$N-3$.  The literal three-site statement is obtained by taking $N=4$.
+\footnote{The formal statements are
+\leanid{MPOTensor.isSSAEquality_tripartite_of_isSAL} and
+\leanid{MPOTensor.isSSAEquality_threeSite_of_isSAL}.}
+
+The desired commuting product form is currently recorded as an eta-local
+structure for $K$.\footnote{The formal structure is
 \leanid{MPOTensor.EtaLocalStructureData}.} It contains the assembled positive
 translation-invariant two-site bond and its realization of the finite-chain
 MPO. From this structure, the development proves the commuting-form property
@@ -72,18 +84,17 @@ bonds from SAL.
 
 \section{Missing step}
 
-The missing source-faithful theorem must construct the formal eta-local
-structure \leanid{MPOTensor.EtaLocalStructureData} from the Appendix C.2 local
-data attached to a simple MPDO satisfying SAL. It must not add ZCL as a
-hypothesis for this construction. Concretely, it must identify the local
-$\eta_{k,h}$ family with the original tensor coordinates, define the
-translation-invariant bond
-$B_{n,n+1}$ above, prove $B_{n,n+1}\geq 0$, prove the commutation relations,
-and prove the finite-chain realization
+After the entropy equality above, two mathematical steps remain.  First, the
+sector operators $\eta_{k,h}$ must be identified with the original tensor
+coordinates.  The translation-invariant bond $B_{n,n+1}$ above must then be
+defined and proved positive, with commuting translates.  Second, one must
+prove the finite-chain realization
 \[
   \sigma^{(N)}(K)=c_N\prod_{n=1}^N B_{n,n+1}
 \]
-for positive scalars $c_N$.
+for positive scalars $c_N$.  These two steps construct
+\leanid{MPOTensor.EtaLocalStructureData} from the Appendix C.2 local structure
+of a simple MPDO satisfying SAL.  ZCL is not a hypothesis of this construction.
 
 ZCL enters only after this commuting product form has been obtained, in the
 later step that derives the GSNNCH--ZCL and RFP conclusions.
