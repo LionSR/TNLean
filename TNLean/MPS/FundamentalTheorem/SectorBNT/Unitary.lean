@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Fundamental
 import TNLean.MPS.FundamentalTheorem.UnitaryGauge
+import TNLean.MPS.SharedInfra.BlockGauge
 
 /-!
 # Unitary refinement of proportional BNT sector matching
@@ -52,7 +53,7 @@ theorem ft_sector_bnt_proportional_unitary_sector_match_witnesses
   classical
   obtain ⟨β, hDim, ζ₀, X, hζ₀, hConj, _hMpv⟩ :=
     ft_sector_bnt_proportional_sector_match_witnesses hP hQ hProp
-  let hGPE : ∀ k : Fin Q.basisCount,
+  have hGPE : ∀ k : Fin Q.basisCount,
       GaugePhaseEquiv
         (cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k))) (Q.basis k) :=
     fun k => ⟨X k, ζ₀ k, by

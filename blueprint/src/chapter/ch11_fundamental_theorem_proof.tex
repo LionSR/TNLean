@@ -803,7 +803,8 @@ Chapter~\ref{ch:canonical}.
     \label{lem:left_canonical_irreducible_phase_norm}
     \lean{MPSTensor.gaugePhase_scalar_norm_eq_one_of_leftCanonical_irreducible}
     \leanok
-    \uses{def:left_canonical_tensor, def:irreducible_tensor}
+    \uses{def:left_canonical_tensor, def:irreducible_tensor,
+        thm:eigenvalue_unique_irred}
     Let $A$ and $B$ be left-canonical tensors of common positive bond
     dimension, with $B$ irreducible.  If $X$ is invertible, $\zeta\ne0$, and
     \[
@@ -826,7 +827,7 @@ Chapter~\ref{ch:canonical}.
     \lean{MPSTensor.exists_unitaryConj_of_gaugePhase_data_of_leftCanonical_irreducible}
     \leanok
     \uses{def:left_canonical_tensor, def:irreducible_tensor,
-        lem:left_canonical_irreducible_phase_norm}
+        lem:left_canonical_irreducible_phase_norm, thm:psd_fp_unique_irred}
     Let $A$ and $B$ be left-canonical irreducible tensors of common positive
     bond dimension satisfying
     \[
@@ -840,11 +841,15 @@ Chapter~\ref{ch:canonical}.
     for every $i$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:left_canonical_irreducible_phase_norm}
+    \uses{lem:left_canonical_irreducible_phase_norm, thm:psd_fp_unique_irred}
     Lemma~\ref{lem:left_canonical_irreducible_phase_norm} gives
-    $|\zeta|=1$.  Substitution into the left-canonical identities shows that
-    $X^\dagger X$ is a positive-semidefinite fixed point of the adjoint transfer
-    map of $A$.  Irreducibility gives $X^\dagger X=c\mathbb 1$ for some $c>0$;
+    $|\zeta|=1$.  Substitution into the left-canonical identities gives
+    \[
+        \sum_i A^{i\dagger}(X^\dagger X)A^i=X^\dagger X.
+    \]
+    Thus $X^\dagger X$ is a positive-semidefinite fixed point of the adjoint
+    transfer map of $A$.  Irreducibility gives
+    $X^\dagger X=c\mathbb 1$ for some $c>0$;
     hence $U=c^{-1/2}X$ is unitary and implements the same conjugation.
 \end{proof}
 
