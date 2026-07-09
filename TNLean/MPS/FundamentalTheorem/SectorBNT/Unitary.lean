@@ -3,18 +3,18 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.FundamentalTheorem.SectorBNT.ProportionalMatch
-import TNLean.MPS.Periodic.SectorUnitary
+import TNLean.MPS.FundamentalTheorem.UnitaryGauge
 
 /-!
 # Unitary refinement of proportional BNT sector matching
 
 The proportional Fundamental Theorem matches the basis normal tensors of two
-canonical forms by gauge-phase equivalences.  When the basis tensors are in the
-left-canonical normalization included in `IsBNTCanonicalForm`, the matched
-gauges may be chosen unitary.
+canonical forms by gauge-phase equivalences. When the basis tensors satisfy the
+BNT canonical form hypotheses of left-canonicity and irreducibility, the
+matched gauges may be chosen unitary.
 
-This is the proportional part of the Canonical Form II refinement in
-arXiv:1606.00608, Corollary `thm:Fundamental-CFII`, lines 1197–1199.
+This is the proportional part of Canonical Form II in Cirac et al.,
+arXiv:1606.00608, Corollary C.5, lines 1197–1199.
 -/
 
 open scoped Matrix BigOperators
@@ -34,7 +34,7 @@ The BNT hypotheses already include left canonicity and irreducibility for each
 basis tensor.  Thus no hypothesis beyond those of the proportional BNT theorem
 is needed for this refinement.
 
-Source: arXiv:1606.00608, Corollary `thm:Fundamental-CFII`, lines 1197–1199. -/
+Source: Cirac et al., arXiv:1606.00608, Corollary C.5, lines 1197–1199. -/
 theorem ft_sector_bnt_proportional_unitary_sector_match_witnesses
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)

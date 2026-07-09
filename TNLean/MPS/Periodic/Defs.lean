@@ -1,6 +1,7 @@
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Irreducible.PeriodicBlocking
 import TNLean.MPS.Core.Blocking
+import TNLean.MPS.Core.CanonicalNormalization
 import TNLean.MPS.Chain.Defs
 import TNLean.Channel.Peripheral.Spectrum
 import TNLean.Channel.Peripheral.CyclicDecomposition
@@ -59,10 +60,6 @@ def instEquivalenceGaugeEquiv :
   trans := MPSChainTensor.GaugeEquiv.trans
 
 end PeriodicMPSTensor
-
-/-- Left-canonical (trace-preserving) condition for an MPS tensor. -/
-def IsLeftCanonical (A : MPSTensor d D) : Prop :=
-  ∑ i : Fin d, (A i)ᴴ * A i = 1
 
 /-- `IsPeriodic m A` bundles irreducibility, left-canonical normalization,
 peripheral spectrum equal to the `m`-th roots of unity, positivity of `m`,
