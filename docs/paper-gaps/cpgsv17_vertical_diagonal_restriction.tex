@@ -16,11 +16,10 @@
 
 \section{The source argument}
 
-Proposition~4.13 (source label \path{Prop:IV.12}) of Cirac,
-P\'erez-Garc\'ia, Schuch, and Verstraete concerns a tensor in horizontal
-canonical form that generates positive semidefinite density operators at every
-system size.  Its conclusion is that the same tensor, now viewed in the vertical
-direction, admits a vertical canonical form
+Proposition~4.13 of Cirac, P\'erez-Garc\'ia, Schuch, and Verstraete concerns a
+tensor in horizontal canonical form that generates positive semidefinite
+density operators at every system size. Its conclusion is that the same
+tensor, now viewed in the vertical direction, admits a vertical canonical form
 \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}.  The local source is
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex}, lines~1863--1921.
 
@@ -42,9 +41,10 @@ matrices.
 
 \section{A finite-dimensional obstruction}
 
-The stronger assertion suggested in issue
-\href{https://github.com/LionSR/TNLean/issues/2537}{\#2537} is false under the
-stated horizontal canonical-form hypotheses.  On bond space $\mathbb C^2$, let
+The stronger assertion is false under the stated horizontal canonical-form
+hypotheses.\footnote{The correction is tracked in
+\href{https://github.com/LionSR/TNLean/issues/2537}{issue 2537}.}
+On bond space $\mathbb C^2$, let
 \[
     A^{(a,b)}=c_aE_{ab},
     \qquad c_0=\frac35,
@@ -98,6 +98,11 @@ restriction remains useful as an auxiliary identity.  It cannot supply the
 normal blocks of the vertical canonical form.  In particular, Newton--Girard
 identities for scalar weights address only the multiplicity coefficients; they
 cannot restore matrix directions discarded by the restriction $(i,j)\mapsto(i,i)$.
+
+\paragraph{Verdict.}
+This is an open gap: the source-faithful horizontal-to-vertical implication of
+Proposition~4.13 remains unformalized. The diagonal-restriction route is a
+false strengthening and cannot close that gap.
 
 \bibliographystyle{alpha}
 \bibliography{references}

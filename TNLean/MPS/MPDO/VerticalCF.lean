@@ -12,8 +12,8 @@ import TNLean.MPS.SharedInfra.BlockAssembly
 This file introduces a block-decomposed version of the vertical canonical-form
 structure used in the MPDO analysis of arXiv:1606.00608, Section 4.4.
 
-Proposition 4.13 (source label `Prop:IV.12`) writes the tensor, after a local
-isometry on the physical indices, as a direct sum
+Proposition 4.13 of arXiv:1606.00608 writes the tensor, after a local isometry
+on the physical indices, as a direct sum
 `⊕_α μ_α ⊗ M_α`, where the `μ_α` are positive diagonal matrices and the
 `M_α` form a basis of normal tensors (BNT). The current repository formalization
 uses canonical-form and BNT data with scalar block weights. We therefore
@@ -64,9 +64,9 @@ surrogate for the paper's vertical canonical form.
   a separate positive-length comparison under scalar power-sum identities.
 
 The full passage from horizontal to vertical canonical form
-(Proposition 4.13, source label `Prop:IV.12`, of arXiv:1606.00608) is still
-outside this file: its blueprint entry `thm:vertical_cf_of_horizontal_cf` is
-marked `\notready`. The results above supply matrix-product-vector identities
+(arXiv:1606.00608, Proposition 4.13) is still outside this file: its blueprint
+entry `thm:vertical_cf_of_horizontal_cf` is marked `\notready`. The results
+above supply matrix-product-vector identities
 and elementary positivity consequences; the remaining step is an independent
 canonical-form decomposition of the tensor viewed in the vertical direction.
 Its basis cannot be obtained by diagonally restricting the horizontal blocks:
@@ -88,7 +88,7 @@ location matches the existing layering.
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
-  Proposition 4.13 (source label `Prop:IV.12`) and the auxiliary Lemma L in the appendix
+  Proposition 4.13 and the auxiliary Lemma L in the appendix
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -185,9 +185,9 @@ theorem mpv_diagonalTensor (M : MPOTensor d D) {N : ℕ} (σ : Fin N → Fin d) 
 /-- Under a horizontal canonical-form decomposition of `M.toMPSTensor`, the diagonal
 tensor of `M` generates the same MPV family as the block-diagonal assembly, on the
 physical index `Fin d`, of the diagonally-restricted blocks.  This is a preliminary
-coefficient identity for arXiv:1606.00608, Proposition 4.13 (source label
-Prop:IV.12), not the vertical canonical decomposition: diagonal restriction need
-not preserve normality, and the horizontal weights need not be positive. -/
+coefficient identity for arXiv:1606.00608, Proposition 4.13, not the vertical
+canonical decomposition: diagonal restriction need not preserve normality, and
+the horizontal weights need not be positive. -/
 theorem mpv_diagonalTensor_eq_blocks (M : MPOTensor d D)
     {r : ℕ} {dim : Fin r → ℕ} (μ : Fin r → ℂ)
     (A : (k : Fin r) → MPSTensor (d * d) (dim k))
@@ -348,10 +348,9 @@ weights and give equality of the positive-length matrix product vector
 families.
 
 This is the finite-sum reindexing used after the vertical canonical
-decomposition in arXiv:1606.00608, Proposition 4.13 (source label
-Prop:IV.12), lines 1895--1921.  Those lines first produce the vertical
-sectors and only then group gauge-equivalent sectors into the repeated copies
-of each basis tensor. -/
+decomposition in arXiv:1606.00608, Proposition 4.13, lines 1895--1921. Those
+lines first produce the vertical sectors and only then group gauge-equivalent
+sectors into the repeated copies of each basis tensor. -/
 theorem sameMPV₂_toTensorFromBlocks_verticalAssembledTensor_of_equiv
     {r g : ℕ} {dim₀ : Fin r → ℕ} {dim : Fin g → ℕ}
     (μ : Fin r → ℂ) (B : (k : Fin r) → MPSTensor d (dim₀ k))
@@ -388,9 +387,8 @@ the remaining hypotheses identify its bond dimension and weight and its
 positive-length matrix product vector family.
 
 The grouping hypotheses correspond to the vertical decomposition constructed
-in arXiv:1606.00608, Proposition 4.13 (source label Prop:IV.12), lines
-1895--1921.  They are not a consequence of reindexing the horizontal blocks
-alone. -/
+in arXiv:1606.00608, Proposition 4.13, lines 1895--1921. They are not a
+consequence of reindexing the horizontal blocks alone. -/
 theorem sameMPV₂_diagonalTensor_verticalAssembledTensor_of_equiv
     (M : MPOTensor d D) {r g : ℕ} {dim₀ : Fin r → ℕ} (μ : Fin r → ℂ)
     (B : (k : Fin r) → MPSTensor (d * d) (dim₀ k))
@@ -417,10 +415,9 @@ theorem sameMPV₂_diagonalTensor_verticalAssembledTensor_of_equiv
 with one scalar weight per block has the same positive-length MPV family as an
 assembly that repeats each block with several scalar weights.
 
-This is a conditional comparison lemma.  In arXiv:1606.00608, Proposition
-4.13 (source label Prop:IV.12), lines 1895--1921, the repeated weights instead
-arise by grouping the already constructed vertical canonical sectors; that
-source step is expressed by
+This is a conditional comparison lemma. In arXiv:1606.00608, Proposition 4.13,
+lines 1895--1921, the repeated weights instead arise by grouping the already
+constructed vertical canonical sectors; that source step is expressed by
 `sameMPV₂_toTensorFromBlocks_verticalAssembledTensor_of_equiv`. -/
 theorem sameMPV₂Pos_toTensorFromBlocks_verticalAssembledTensor_of_power_sums
     {g : ℕ} {dim : Fin g → ℕ} (μ : Fin g → ℂ) (mult : Fin g → ℕ)
@@ -452,9 +449,8 @@ positive-length MPV family as a repeated-block assembly when their scalar
 weights satisfy the stated positive-length power-sum identities.
 
 This conditional result does not construct the vertical grouping in
-arXiv:1606.00608, Proposition 4.13 (source label Prop:IV.12), lines
-1873--1921.  That construction must first identify the vertical BNT sectors
-and their positive weights. -/
+arXiv:1606.00608, Proposition 4.13, lines 1873--1921. That construction must
+first identify the vertical BNT sectors and their positive weights. -/
 theorem sameMPV₂Pos_diagonalTensor_verticalAssembledTensor_of_power_sums
     (M : MPOTensor d D) {g : ℕ} {dim : Fin g → ℕ} (μ : Fin g → ℂ)
     (A : (α : Fin g) → MPSTensor (d * d) (dim α))
@@ -599,8 +595,8 @@ theorem blockwise_insert_eq_of_mpv_agree
     (smul_eq_zero.mp hk).resolve_left hμne
   exact sub_eq_zero.mp hdiff
 
--- The implication `verticalCF_of_horizontalCF` (Proposition 4.13, source label
--- `Prop:IV.12`, of arXiv:1606.00608) — every MPDO in horizontal canonical form is in vertical
+-- The implication `verticalCF_of_horizontalCF` (arXiv:1606.00608,
+-- Proposition 4.13) — every MPDO in horizontal canonical form is in vertical
 -- canonical form — is tracked by the blueprint entry
 -- `thm:vertical_cf_of_horizontal_cf` (currently `\notready`) and will be added
 -- as a theorem together with its proof once the horizontal-to-vertical
