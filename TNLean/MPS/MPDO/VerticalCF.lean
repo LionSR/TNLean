@@ -54,10 +54,14 @@ surrogate for the paper's vertical canonical form.
 * `mpv_verticalAssembledTensor_eq_sum`:
   the MPV of the vertical-assembled tensor as a sum over the flattened
   `(block, multiplicity)` index.
+* `sameMPV₂_toTensorFromBlocks_verticalAssembledTensor_of_equiv`:
+  regrouping an indexed block family along a copy-label equivalence preserves
+  its full MPV family.
+* `sameMPV₂_diagonalTensor_verticalAssembledTensor_of_equiv`:
+  the exact diagonal-tensor consequence once the vertical BNT grouping and
+  pointwise block identifications are supplied.
 * `sameMPV₂Pos_diagonalTensor_verticalAssembledTensor_of_power_sums`:
-  the diagonal tensor has the same positive-length MPV family as the vertical
-  repeated-block assembly once the flattened scalar weights have the required
-  positive-length power sums.
+  a separate positive-length comparison under scalar power-sum identities.
 
 The full passage from horizontal to vertical canonical form
 (Proposition IV.12 / Proposition 4.13 of arXiv:1606.00608) is still outside
@@ -174,8 +178,10 @@ theorem mpv_diagonalTensor (M : MPOTensor d D) {N : ℕ} (σ : Fin N → Fin d) 
 
 /-- Under a horizontal canonical-form decomposition of `M.toMPSTensor`, the diagonal
 tensor of `M` generates the same MPV family as the block-diagonal assembly, on the
-physical index `Fin d`, of the diagonally-restricted blocks. This expresses the diagonal
-tensor as a positive-weight block decomposition, the core content of Proposition IV.12. -/
+physical index `Fin d`, of the diagonally-restricted blocks.  This is a preliminary
+coefficient identity for arXiv:1606.00608, Proposition 4.13 (source label
+Prop:IV.12), not the vertical canonical decomposition: diagonal restriction need
+not preserve normality, and the horizontal weights need not be positive. -/
 theorem mpv_diagonalTensor_eq_blocks (M : MPOTensor d D)
     {r : ℕ} {dim : Fin r → ℕ} (μ : Fin r → ℂ)
     (A : (k : Fin r) → MPSTensor (d * d) (dim k))
@@ -328,11 +334,88 @@ theorem mpv_verticalAssembledTensor_eq_sum {g : ℕ} (dim : Fin g → ℕ) (mult
   exact Equiv.sum_comp finSigmaFinEquiv.symm
     (fun s : (α : Fin g) × Fin (mult α) => (ω s.1 s.2) ^ N • MPSTensor.mpv (A s.1) σ)
 
-/-- Positive-length scalar power-sum identities are exactly the condition under
-which a block assembly with one scalar weight per block has the same
-positive-length MPV family as the vertical assembly that repeats each block with
-several scalar weights. This is the positive-length flattening step in
-Proposition IV.12 of arXiv:1606.00608. -/
+/-- Regrouping an indexed block assembly into repeated copies of a family of
+representative blocks preserves its full matrix product vector family.  The
+equivalence records which representative and which copy correspond to each
+original block; the pointwise hypotheses identify the bond dimensions and
+weights and give equality of the positive-length matrix product vector
+families.
+
+This is the finite-sum reindexing used after the vertical canonical
+decomposition in arXiv:1606.00608, Proposition 4.13 (source label
+Prop:IV.12), lines 1895--1921.  Those lines first produce the vertical
+sectors and only then group gauge-equivalent sectors into the repeated copies
+of each basis tensor. -/
+theorem sameMPV₂_toTensorFromBlocks_verticalAssembledTensor_of_equiv
+    {r g : ℕ} {dim₀ : Fin r → ℕ} {dim : Fin g → ℕ}
+    (μ : Fin r → ℂ) (B : (k : Fin r) → MPSTensor d (dim₀ k))
+    (mult : Fin g → ℕ) (ω : (α : Fin g) → Fin (mult α) → ℂ)
+    (A : (α : Fin g) → MPSTensor d (dim α))
+    (e : Fin r ≃ (α : Fin g) × Fin (mult α))
+    (hDim : ∀ k, dim₀ k = dim (e k).1)
+    (hWeight : ∀ k, μ k = ω (e k).1 (e k).2)
+    (hBlock : ∀ k, MPSTensor.SameMPV₂Pos (B k) (A (e k).1)) :
+    MPSTensor.SameMPV₂
+      (MPSTensor.toTensorFromBlocks (d := d) (μ := μ) B)
+      (verticalAssembledTensor dim mult ω A) := by
+  refine MPSTensor.SameMPV₂Pos.toSameMPV₂_of_bondDim_eq ?_ ?_
+  · intro N hN σ
+    rw [MPSTensor.mpv_toTensorFromBlocks_eq_sum, mpv_verticalAssembledTensor_eq_sum]
+    trans ∑ k : Fin r, (ω (e k).1 (e k).2) ^ N • MPSTensor.mpv (A (e k).1) σ
+    · refine Finset.sum_congr rfl fun k _ ↦ ?_
+      rw [hWeight k, hBlock k N hN σ]
+    · exact Equiv.sum_comp e
+        (fun p : (α : Fin g) × Fin (mult α) ↦ (ω p.1 p.2) ^ N • MPSTensor.mpv (A p.1) σ)
+  · trans ∑ k : Fin r, dim (e k).1
+    · exact Finset.sum_congr rfl fun k _ ↦ hDim k
+    · trans ∑ p : (α : Fin g) × Fin (mult α), dim p.1
+      · exact Equiv.sum_comp e fun p ↦ dim p.1
+      · change (∑ p : (α : Fin g) × Fin (mult α), dim p.1) =
+          ∑ q : Fin (∑ α : Fin g, mult α), dim ((finSigmaFinEquiv.symm q).1)
+        exact (Equiv.sum_comp finSigmaFinEquiv.symm (fun p ↦ dim p.1)).symm
+
+/-- A horizontal block decomposition yields the full matrix product vector
+equality required by the flattened vertical assembly once the vertical
+canonical-form grouping has been supplied.  The equivalence lists every
+original diagonal restriction as one copy of a representative vertical block;
+the remaining hypotheses identify its bond dimension and weight and its
+positive-length matrix product vector family.
+
+The grouping hypotheses correspond to the vertical decomposition constructed
+in arXiv:1606.00608, Proposition 4.13 (source label Prop:IV.12), lines
+1895--1921.  They are not a consequence of reindexing the horizontal blocks
+alone. -/
+theorem sameMPV₂_diagonalTensor_verticalAssembledTensor_of_equiv
+    (M : MPOTensor d D) {r g : ℕ} {dim₀ : Fin r → ℕ} (μ : Fin r → ℂ)
+    (B : (k : Fin r) → MPSTensor (d * d) (dim₀ k))
+    {dim : Fin g → ℕ} (mult : Fin g → ℕ)
+    (ω : (α : Fin g) → Fin (mult α) → ℂ)
+    (A : (α : Fin g) → MPSTensor d (dim α))
+    (hM : MPSTensor.SameMPV₂ M.toMPSTensor
+      (MPSTensor.toTensorFromBlocks (d := d * d) (μ := μ) B))
+    (e : Fin r ≃ (α : Fin g) × Fin (mult α))
+    (hDim : ∀ k, dim₀ k = dim (e k).1)
+    (hWeight : ∀ k, μ k = ω (e k).1 (e k).2)
+    (hBlock : ∀ k,
+      MPSTensor.SameMPV₂Pos (MPSTensor.diagBlock (B k)) (A (e k).1)) :
+    MPSTensor.SameMPV₂ (diagonalTensor M) (verticalAssembledTensor dim mult ω A) := by
+  intro N σ
+  trans MPSTensor.mpv
+    (MPSTensor.toTensorFromBlocks (d := d) (μ := μ)
+      (fun k ↦ MPSTensor.diagBlock (B k))) σ
+  · exact mpv_diagonalTensor_eq_blocks M μ B hM σ
+  · exact sameMPV₂_toTensorFromBlocks_verticalAssembledTensor_of_equiv
+      μ (fun k ↦ MPSTensor.diagBlock (B k)) mult ω A e hDim hWeight hBlock N σ
+
+/-- Positive-length scalar power-sum identities imply that a block assembly
+with one scalar weight per block has the same positive-length MPV family as an
+assembly that repeats each block with several scalar weights.
+
+This is a conditional comparison lemma.  In arXiv:1606.00608, Proposition
+4.13 (source label Prop:IV.12), lines 1895--1921, the repeated weights instead
+arise by grouping the already constructed vertical canonical sectors; that
+source step is expressed by
+`sameMPV₂_toTensorFromBlocks_verticalAssembledTensor_of_equiv`. -/
 theorem sameMPV₂Pos_toTensorFromBlocks_verticalAssembledTensor_of_power_sums
     {g : ℕ} {dim : Fin g → ℕ} (μ : Fin g → ℂ) (mult : Fin g → ℕ)
     (ω : (α : Fin g) → Fin (mult α) → ℂ)
@@ -359,10 +442,13 @@ theorem sameMPV₂Pos_toTensorFromBlocks_verticalAssembledTensor_of_power_sums
             (fun α q => (ω α q) ^ N • MPSTensor.mpv (A α) σ)).symm
 
 /-- Under a horizontal block decomposition, the diagonal tensor has the same
-positive-length MPV family as the vertical repeated-block assembly once the
-flattened scalar weights have the same positive-length power sums as the
-original block weights. This isolates the multiplicity-flattening step in
-Proposition IV.12 of arXiv:1606.00608 from the later BNT-normality argument. -/
+positive-length MPV family as a repeated-block assembly when their scalar
+weights satisfy the stated positive-length power-sum identities.
+
+This conditional result does not construct the vertical grouping in
+arXiv:1606.00608, Proposition 4.13 (source label Prop:IV.12), lines
+1873--1921.  That construction must first identify the vertical BNT sectors
+and their positive weights. -/
 theorem sameMPV₂Pos_diagonalTensor_verticalAssembledTensor_of_power_sums
     (M : MPOTensor d D) {g : ℕ} {dim : Fin g → ℕ} (μ : Fin g → ℂ)
     (A : (α : Fin g) → MPSTensor (d * d) (dim α))

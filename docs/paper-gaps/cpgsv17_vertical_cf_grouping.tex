@@ -1,0 +1,137 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Vertical Canonical-Form Grouping in Proposition 4.13}
+\author{}
+\date{2026-07-09}
+
+\begin{document}
+\maketitle
+
+\section{Source statement and proof order}
+
+Proposition~4.13 (source label \path{Prop:IV.12}) of
+\cite{Cirac2016MPDO_arXiv} states that a canonical-form
+tensor generating matrix product density operators is also in canonical form
+in the vertical direction.  After a physical isometry, the tensor has the form
+\begin{equation}
+  U\widetilde M U^\dagger
+  =
+  \bigoplus_\alpha \mu_\alpha\otimes M_\alpha,
+  \label{eq:source-vertical-form}
+\end{equation}
+where each $\mu_\alpha$ is positive and diagonal and the tensors
+$M_\alpha$ form a basis of normal tensors.
+
+The proof has a definite order.  It first uses positivity of the generated
+operators and Lemma~L to exclude one-sided transitions and nontrivial periodic
+sectors.  Only after vertical canonical form has been obtained does it write
+the vertical decomposition as
+\begin{equation}
+  \bigoplus_{\alpha,k}
+  \mu_{\alpha,k}X_{\alpha,k}M_\alpha X_{\alpha,k}^{-1}.
+  \label{eq:source-sector-form}
+\end{equation}
+The remainder of the proof shows that $\mu_{\alpha,k}>0$ and that each gauge
+$X_{\alpha,k}$ is proportional to a unitary.  The copy index $k$ in
+\eqref{eq:source-sector-form} is then the diagonal index of $\mu_\alpha$ in
+\eqref{eq:source-vertical-form}.
+
+Thus the positive diagonal coefficients in the conclusion are obtained from
+the \emph{vertical} canonical decomposition.  They are not obtained by
+flattening the scalar weights of a previously chosen horizontal decomposition
+while retaining the diagonal restrictions of its blocks.
+
+The relevant local source passage is
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:1861--1922}.
+
+\section{Exact finite-sum statement}
+
+Suppose an indexed family of blocks $(B_k)_{k\in I}$ has already been grouped
+into copies of representative blocks $(A_\alpha)_{\alpha\in J}$.  Write
+$m_\alpha$ for the number of copies and let
+\begin{equation}
+  e:I\simeq\{(\alpha,j):\alpha\in J, 0\leq j<m_\alpha\}
+  \label{eq:grouping-equivalence}
+\end{equation}
+be the grouping bijection.  If
+\begin{align}
+  \dim B_k&=\dim A_{e(k)_1},
+  \\
+  \nu_k&=\omega_{e(k)},
+  \\
+  V^{(N)}(B_k)&=V^{(N)}(A_{e(k)_1})
+  \qquad (N\geq 1),
+  \label{eq:pointwise-identifications}
+\end{align}
+then finite-sum reindexing gives
+\begin{equation}
+  V^{(N)}\!\left(\bigoplus_{k\in I}\nu_k B_k\right)
+  =
+  V^{(N)}\!\left(
+    \bigoplus_{\alpha\in J}\bigoplus_{j=0}^{m_\alpha-1}
+    \omega_{\alpha,j}A_\alpha
+  \right)
+  \label{eq:regrouped-mpv}
+\end{equation}
+for every $N$, including $N=0$.  The equality at $N=0$ follows from the
+pointwise dimension equalities in \eqref{eq:pointwise-identifications}.
+Summing these equalities along the bijection
+\eqref{eq:grouping-equivalence} gives the total bond-dimension equality.
+
+This statement is formalized by
+\path{MPOTensor.sameMPV2_toTensorFromBlocks_verticalAssembledTensor_of_equiv}
+and its diagonal-tensor consequence
+\path{MPOTensor.sameMPV2_diagonalTensor_verticalAssembledTensor_of_equiv}.
+In these two displayed names, the plain digit~$2$ denotes the subscripted
+character used in the source declaration.
+
+\section{Boundary of the present result}
+
+The conditional power-sum lemmas already present in the development compare
+one scalar weight $\mu_\alpha$ with several weights $\omega_{\alpha,j}$ under
+the additional identities
+\begin{equation}
+  \mu_\alpha^N=\sum_j\omega_{\alpha,j}^N,
+  \qquad N\geq 1.
+  \label{eq:power-sum-assumption}
+\end{equation}
+They are correct positive-length comparison lemmas, but
+\eqref{eq:power-sum-assumption} is not the flattening argument in
+Proposition~4.13.  In the source, the several weights are already the weights
+of the several vertical sectors in \eqref{eq:source-sector-form}; no single
+horizontal coefficient is replaced by their power sum.
+
+Diagonal restriction also does not preserve injectivity of a horizontal
+block.  For $d=D\geq2$, let the doubled-index matrices be
+\[
+  B^{(i,j)}=d^{-1/2}E_{ij}.
+\]
+They span $M_D(\mathbb C)$ and satisfy
+$\sum_{i,j}(B^{(i,j)})^\dagger B^{(i,j)}=I$.  Their diagonal restriction is
+$B^{(i,i)}=d^{-1/2}E_{ii}$, whose span is only the diagonal subalgebra.  Thus
+the BNT grouping in the conclusion must be obtained from the new vertical
+canonical decomposition, not by declaring the diagonal restrictions of the
+horizontal blocks to be normal blocks.
+
+The exact reindexing step \eqref{eq:regrouped-mpv} is therefore complete once
+the bijection and the pointwise block identifications are known.  The remaining
+source-level gap is to construct the vertical canonical decomposition, its BNT
+grouping, the positive weights, and the unitary gauges from horizontal
+canonical form and MPDO positivity, as done in source lines 1873--1921.  This
+is the mathematical content shared with the normality and grouping problem
+tracked by \ghissue{2537}; it cannot be supplied by a finite-sum identity
+alone.  The original formulation of \ghissue{2536}, interpreted as a direct
+conversion of the horizontal scalar weights and diagonal restrictions, is
+therefore not a consequence of Proposition~4.13.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
