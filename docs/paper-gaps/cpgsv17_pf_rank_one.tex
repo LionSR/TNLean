@@ -131,6 +131,50 @@ this forces exactly one $\lambda_i$ to be $1$ and all the others to be
 $0$. Therefore the diagonal form has rank one, and unitary conjugation gives
 an outer-product factorization of $T$.
 
+\section{Audit of the positive-semidefinite route}
+
+The neighboring-operator construction displayed in the source does not by
+itself exhibit $T$ as a Gram matrix. Immediately before Lemma~C.5, the paper
+writes
+\[
+  T_{k,h}=(r_k\mid l_h),
+\]
+with two different families $(r_k)_k$ and $(l_h)_h$
+\cite[Appendix~C.2, lines 1473--1482]{Cirac2016MPDO_arXiv}. No equality or
+adjoint relation between these two families is stated. Consequently this is a
+cross-pairing, rather than a Gram representation, and it gives neither symmetry
+nor positive semidefiniteness of $T$.
+
+The present type of explicit neighboring operators records only
+$\eta_{k,h}\geq 0$ for each ordered pair $(k,h)$. This hypothesis implies
+$T_{k,h}\geq 0$ entrywise, but contains no relation between $\eta_{k,h}$ and
+$\eta_{h,k}$. Thus matrix-level positive semidefiniteness cannot be deduced
+from that type alone.
+
+There is one special positive-semidefinite case in the formal development. The
+sector-reduced Hayashi--Markov family is defined by
+\[
+  \eta_{k,h}
+    =\tr_C(\rho_{b_2C}^{(k)})\otimes
+      \tr_A(\rho_{Ab_1}^{(h)}).
+\]
+Since each reduced density matrix has trace one, its trace matrix is the
+all-ones matrix. The theorem
+\path{MPOTensor.ExplicitEtaOperators.traceMatrixRe_ofHayashiMarkov_posSemidef}
+proves its positive
+semidefiniteness. This does not discharge Lemma~C.5: the sector-reduced family
+has not been identified with the inverse-map family constructed in lines
+1413--1455, and the trace of its all-ones matrix is the number of sectors, not
+one unless there is a single sector.
+
+The remaining argument must therefore use more of the MPDO construction than
+the separate inequalities $\eta_{k,h}\geq 0$. One possible completion is to
+derive an additional adjoint or Gram relation from the inverse-map tensors. If
+no such relation holds, the alternative is to combine the ZCL identity in
+lines 1489--1497 with injectivity and the tensor realization to rule out the
+nilpotent generalized zero-eigenspace directly. Positive semidefiniteness of
+the source trace matrix is not presently established by the cited passage.
+
 This corrected theorem does not refute the intended MPDO result. It identifies
 a matrix-level hypothesis sufficient for the rank-one step. The remaining
 question is whether the trace matrix
@@ -141,12 +185,12 @@ nonnegativity is not matrix-level positive semidefiniteness or Hermitian
 symmetry of $T$.
 \footnote{The entrywise nonnegativity result is
 \texttt{MPOTensor.ExplicitEtaOperators.traceMatrixRe\_nonneg} in
-\path{TNLean/MPS/MPDO/SimpleLocalStructure.lean:306--318}. The
+\path{TNLean/MPS/MPDO/SimpleLocalStructure.lean:350--352}. The
 positive-semidefinite reformulation for the rank-one conclusion is
 \texttt{MPOTensor.sal\_zcl\_implies\_rank\_one\_T\_of\_posSemidef} in
-\path{TNLean/MPS/MPDO/SimpleLocalStructure.lean:350--366}. The corresponding
+\path{TNLean/MPS/MPDO/SimpleLocalStructure.lean:398--406}. The corresponding
 blueprint discussion is
-\path{blueprint/src/chapter/ch21_mpdo_rfp_simple_local_structure.tex:44--303}.}
+\path{blueprint/src/chapter/ch21_mpdo_rfp_simple_local_structure.tex:184--324}.}
 
 \section{Conclusion}
 
