@@ -1556,6 +1556,30 @@ unconditional result.
     $\sum_vU_v$.
 \end{proof}
 
+\begin{lemma}[Unit-phase gauge relation gives repeated blocks]
+    \label{lem:gauge_phase_data_repeated_blocks}
+    \lean{MPSTensor.repeatedBlocks_of_gaugePhaseData_norm_one}
+    \leanok
+    \uses{def:gauge_phase_equiv}
+    Suppose
+    \[
+        B^i=\zeta X A^iX^{-1},
+        \qquad |\zeta|=1,
+    \]
+    with $X$ invertible. Then $A$ and $B$ satisfy the repeated-block relation
+    \[
+        A^i=\zeta^{-1}X^{-1}B^iX.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    Since $|\zeta|=1$, the scalar is nonzero.  Multiplication by $X^{-1}$ on
+    the left and by $X$ on the right gives
+    \[
+        X^{-1}B^iX=\zeta A^i;
+    \]
+    multiplication by $\zeta^{-1}$ proves the claim.
+\end{proof}
+
 \begin{lemma}[Global-gauge construction]
     \label{lem:periodic_global_gauge_assembly}
     \lean{MPSTensor.repeatedBlocks_of_globalGauge}

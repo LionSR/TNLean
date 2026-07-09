@@ -13,8 +13,8 @@ equal-modulus comparison has these current reference points.
   power-sum recovery.
 - `cpsv16_global_vs_persector_unit_witness.tex` records the earlier
   global-versus-per-sector unit-witness gap and its elimination by the exact
-  linear-independence matcher. It is now a closure record, not a live
-  restriction.
+  linear-independence matcher, together with the unitary equal-case assembly
+  of CPSV16 Corollary C.5. It is now a closure record, not a live restriction.
 - `blueprint/src/chapter/ch11_fundamental_theorem_proof.tex` records only how
   the Chapter 10 comparison is used in the equal-MPV and proportional-MPV
   Fundamental Theorem arguments.
