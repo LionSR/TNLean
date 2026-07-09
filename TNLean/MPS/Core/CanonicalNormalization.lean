@@ -7,8 +7,8 @@ import TNLean.MPS.Defs
 /-!
 # Canonical normalization of an MPS tensor
 
-This file contains normalization predicates shared by the canonical-form and
-periodic theories.
+Left-canonical normalization conditions for MPS tensors are used in the
+canonical-form and periodic theories.
 -/
 
 open scoped Matrix BigOperators

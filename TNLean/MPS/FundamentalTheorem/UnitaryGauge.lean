@@ -65,7 +65,7 @@ variable {d D : ℕ}
 
 /-- Cancellation for conjugation by an invertible matrix:
 $X^{-1}(X Y X^\dagger)(X^{-1})^\dagger = Y$. -/
-private theorem gaugePhase_conj_cancel (X : GL (Fin D) ℂ)
+theorem gaugePhase_conj_cancel (X : GL (Fin D) ℂ)
     (Y : Matrix (Fin D) (Fin D) ℂ) :
     X⁻¹.val * (X.val * Y * X.valᴴ) * X⁻¹.valᴴ = Y := by
   have h1 : X⁻¹.val * X.val = 1 := Units.inv_mul X
