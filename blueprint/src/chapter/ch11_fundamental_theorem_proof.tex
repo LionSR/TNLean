@@ -686,6 +686,61 @@ the reduction of an \emph{arbitrary} proportional-MPV pair to a common primitive
 block decomposition is
 Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_theorem} of
 Chapter~\ref{ch:canonical}.
+
+\begin{lemma}[Unitary gauge for left-canonical irreducible tensors]
+    \label{lem:left_canonical_irreducible_unitary_gauge}
+    \lean{MPSTensor.exists_unitaryConj_gaugePhase_of_leftCanonical_irreducible}
+    \leanok
+    \uses{def:gauge_phase_equiv, def:irreducible_tensor}
+    Let $A$ and $B$ be left-canonical irreducible tensors of common positive bond
+    dimension that are gauge-phase equivalent.  Then the gauge can be taken
+    unitary: there are a unitary matrix $U$ and a scalar $\zeta$ with
+    $|\zeta|=1$ such that, for every physical index~$i$,
+    \[
+        B^i=\zeta\,U A^i U^{\dagger}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:psd_fp_unique_irred, def:irreducible_tensor}
+    Write $B^i=\zeta X A^iX^{-1}$.  Left canonicity implies that
+    $X^{\dagger}X$ is a positive-semidefinite fixed point of the adjoint
+    transfer map of $A$.  By irreducibility and uniqueness of such fixed
+    points, $X^{\dagger}X=c\mathbb 1$ for some $c>0$.  Hence
+    $U=c^{-1/2}X$ is unitary and
+    $X A^iX^{-1}=U A^iU^{\dagger}$.  The irreducible normalization gives
+    $|\zeta|=1$.
+\end{proof}
+
+\begin{corollary}[Canonical Form II unitary refinement of proportional matching]%
+    \label{cor:sector_bnt_proportional_unitary_sector_match}
+    \lean{MPSTensor.ft_sector_bnt_proportional_unitary_sector_match_witnesses}
+    \leanok
+    \uses{def:sector_bnt_cf}
+    Under the hypotheses of
+    Theorem~\ref{thm:cpgsv_multiblock_ft_source}, the matrices $Y_k$ may be
+    chosen unitary.  Thus there are unitary matrices
+    $U_k\in\mathrm{U}(\dim Q_k)$ and phases $\zeta_k\in\C$, with
+    $|\zeta_k|=1$, such that, for every $k$ and every physical index~$i$,
+    \[
+        Q_k^i
+        =
+        \zeta_k\,U_k\,P_{\beta(k)}^i\,U_k^\dagger.
+    \]
+    This is the proportional part of
+    \cite[Corollary~C.5]{Cirac2016MPDO_arXiv}.
+\end{corollary}
+
+\begin{proof}\leanok
+    \uses{thm:sector_bnt_proportional_sector_match_witnesses,
+        lem:left_canonical_irreducible_unitary_gauge}
+    The proportional sector-matching theorem gives an invertible gauge and a
+    unit phase for each matched pair.  Both tensors in such a pair are
+    left-canonical and irreducible.
+    Lemma~\ref{lem:left_canonical_irreducible_unitary_gauge} therefore replaces
+    the invertible gauge by a unitary matrix.
+\end{proof}
+
 % Collapsing the per-block phases into a single block-diagonal gauge on the
 % total tensors additionally uses the copy-weight identities and the gauge
 % construction combined in thm:sector_bnt_equal_global_gauge (equal case) and,
