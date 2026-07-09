@@ -256,9 +256,10 @@
     \lean{MPOTensor.mpv_verticalAssembledTensor_eq_sum}
     \leanok
     \uses{thm:mpv_decomposition, def:block_diagonal_tensor}
-    Let $g$ be a block count, $\dim,\mult:\{1,\dots,g\}\to\mathbb N$, weights
-    $\omega_{\alpha j}\in\mathbb C$ for $j\le\mult_\alpha$, and blocks $A_\alpha$ of
-    bond dimension $\dim_\alpha$. The vertical-assembled tensor is the
+    Let $g$ be a block count,
+    $\dim,\mult:\{0,\dots,g-1\}\to\mathbb N$, weights
+    $\omega_{\alpha j}\in\mathbb C$ for $0\le j<\mult_\alpha$, and blocks
+    $A_\alpha$ of bond dimension $\dim_\alpha$. The vertical-assembled tensor is the
     block-diagonal assembly over the flattened index $(\alpha, j)$ that repeats
     $A_\alpha$ with weight $\omega_{\alpha j}$, written
     $\bigoplus_\alpha\bigoplus_j \omega_{\alpha j}\, A_\alpha$. Its matrix product
@@ -281,10 +282,13 @@
         = \sum_{q} (\widetilde\omega_q)^N\, V^{(N)}(\widetilde A_q)(\sigma).
     \]
     The flattening identifies $q$ with the pair $(\alpha, j)$ via the bijection
-    $\bigl(\{1,\dots,g\}\times\{1,\dots,\mult_\alpha\}\bigr)\simeq
-        \{1,\dots,\sum_\alpha\mult_\alpha\}$, under which $\widetilde\omega_q=
-        \omega_{\alpha j}$ and $\widetilde A_q = A_\alpha$. Reindexing the sum along
-    this bijection yields the double sum over $(\alpha, j)$.
+    \[
+        \{(\alpha,j):0\le\alpha<g,\ 0\le j<\mult_\alpha\}
+        \simeq \{0,\dots,\textstyle\sum_\alpha\mult_\alpha-1\},
+    \]
+    under which $\widetilde\omega_q=\omega_{\alpha j}$ and
+    $\widetilde A_q=A_\alpha$. Reindexing the sum along this bijection yields the
+    double sum over $(\alpha,j)$.
 \end{proof}
 
 \begin{lemma}[Regrouping a block family by repeated representatives]
@@ -296,7 +300,7 @@
     and let $(A_\alpha)_{\alpha\in J}$ be a finite family of representative
     blocks.  Suppose there is a bijection
     \[
-        e:I\simeq\{(\alpha,j):\alpha\in J, 1\le j\le m_\alpha\}
+        e:I\simeq\{(\alpha,j):\alpha\in J, 0\le j<m_\alpha\}
     \]
     such that, writing $e(k)=(\alpha,j)$, the paired blocks have equal bond
     dimensions, $\nu_k=\omega_{\alpha j}$, and for every positive length $N$,
@@ -308,7 +312,7 @@
         V^{(N)}\Bigl(\textstyle\bigoplus_{k\in I}\nu_k B_k\Bigr)
         =
         V^{(N)}\Bigl(
-          \textstyle\bigoplus_{\alpha\in J}\bigoplus_{j=1}^{m_\alpha}
+          \textstyle\bigoplus_{\alpha\in J}\bigoplus_{j=0}^{m_\alpha-1}
           \omega_{\alpha j}A_\alpha
         \Bigr)
     \]
@@ -318,12 +322,17 @@
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:mpv_vertical_assembled, thm:mpv_decomposition}
-    Expand both matrix product vectors as finite sums.  The summand indexed by
-    $k$ on the left equals the summand indexed by $e(k)$ on the right by the
-    weight and block hypotheses.  Reindexing the sum by $e$ proves the result.
-    At length zero the pointwise dimension equality gives equality of the
-    paired bond dimensions, so the same reindexing also gives equality of the
-    total bond dimensions.
+    For $N>0$ and every configuration $\sigma$, the two sides expand as
+    \[
+      \sum_{k\in I}\nu_k^N V^{(N)}(B_k)(\sigma),
+      \qquad
+      \sum_{\alpha\in J}\sum_{j=0}^{m_\alpha-1}
+        \omega_{\alpha j}^N V^{(N)}(A_\alpha)(\sigma).
+    \]
+    The summand indexed by $k$ in the first sum equals the summand indexed by
+    $e(k)$ in the second, so reindexing by $e$ proves the equality.  At length
+    zero the pointwise dimension equality gives equality of the paired bond
+    dimensions; the same reindexing gives equality of the total dimensions.
 \end{proof}
 
 \begin{lemma}[Diagonal tensor under vertical-sector grouping]
@@ -345,7 +354,7 @@
         V^{(N)}\bigl(i\mapsto M^{ii}\bigr)
         =
         V^{(N)}\Bigl(
-          \textstyle\bigoplus_\alpha\bigoplus_{j=1}^{m_\alpha}
+          \textstyle\bigoplus_\alpha\bigoplus_{j=0}^{m_\alpha-1}
           \omega_{\alpha j}A_\alpha
         \Bigr)
     \]
@@ -474,7 +483,7 @@
     \[
         V^{(N)}\bigl(i\mapsto M^{ii}\bigr)
         =V^{(N)}\Bigl(
-          \textstyle\bigoplus_\alpha\bigoplus_{j=1}^{m_\alpha}
+          \textstyle\bigoplus_\alpha\bigoplus_{j=0}^{m_\alpha-1}
           \omega_{\alpha j}A_\alpha
         \Bigr)
     \]

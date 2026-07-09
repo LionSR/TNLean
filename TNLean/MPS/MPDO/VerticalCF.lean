@@ -180,7 +180,7 @@ theorem mpv_diagonalTensor (M : MPOTensor d D) {N : ℕ} (σ : Fin N → Fin d) 
 tensor of `M` generates the same MPV family as the block-diagonal assembly, on the
 physical index `Fin d`, of the diagonally-restricted blocks.  This is a preliminary
 coefficient identity for arXiv:1606.00608, Proposition 4.13 (source label
-`Prop:IV.12`), not the vertical canonical decomposition: diagonal restriction need
+Prop:IV.12), not the vertical canonical decomposition: diagonal restriction need
 not preserve normality, and the horizontal weights need not be positive. -/
 theorem mpv_diagonalTensor_eq_blocks (M : MPOTensor d D)
     {r : ℕ} {dim : Fin r → ℕ} (μ : Fin r → ℂ)
@@ -343,7 +343,7 @@ families.
 
 This is the finite-sum reindexing used after the vertical canonical
 decomposition in arXiv:1606.00608, Proposition 4.13 (source label
-`Prop:IV.12`), lines 1895--1921.  Those lines first produce the vertical
+Prop:IV.12), lines 1895--1921.  Those lines first produce the vertical
 sectors and only then group gauge-equivalent sectors into the repeated copies
 of each basis tensor. -/
 theorem sameMPV₂_toTensorFromBlocks_verticalAssembledTensor_of_equiv
@@ -382,7 +382,7 @@ the remaining hypotheses identify its bond dimension and weight and its
 positive-length matrix product vector family.
 
 The grouping hypotheses correspond to the vertical decomposition constructed
-in arXiv:1606.00608, Proposition 4.13 (source label `Prop:IV.12`), lines
+in arXiv:1606.00608, Proposition 4.13 (source label Prop:IV.12), lines
 1895--1921.  They are not a consequence of reindexing the horizontal blocks
 alone. -/
 theorem sameMPV₂_diagonalTensor_verticalAssembledTensor_of_equiv
@@ -412,7 +412,7 @@ with one scalar weight per block has the same positive-length MPV family as an
 assembly that repeats each block with several scalar weights.
 
 This is a conditional comparison lemma.  In arXiv:1606.00608, Proposition
-4.13 (source label `Prop:IV.12`), lines 1895--1921, the repeated weights instead
+4.13 (source label Prop:IV.12), lines 1895--1921, the repeated weights instead
 arise by grouping the already constructed vertical canonical sectors; that
 source step is expressed by
 `sameMPV₂_toTensorFromBlocks_verticalAssembledTensor_of_equiv`. -/
@@ -446,7 +446,7 @@ positive-length MPV family as a repeated-block assembly when their scalar
 weights satisfy the stated positive-length power-sum identities.
 
 This conditional result does not construct the vertical grouping in
-arXiv:1606.00608, Proposition 4.13 (source label `Prop:IV.12`), lines
+arXiv:1606.00608, Proposition 4.13 (source label Prop:IV.12), lines
 1873--1921.  That construction must first identify the vertical BNT sectors
 and their positive weights. -/
 theorem sameMPV₂Pos_diagonalTensor_verticalAssembledTensor_of_power_sums
