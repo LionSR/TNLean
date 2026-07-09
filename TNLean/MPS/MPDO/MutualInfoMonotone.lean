@@ -230,6 +230,38 @@ theorem traceC_mat {d D : ℕ} (M : MPOTensor d D) {N a b c : ℕ} (h3 : a + b +
           (biSplitEquiv d a b).symm (biSplitEquiv d a b).symm := by
   rw [traceC_corr, reducedBlockState_prefix]
 
+/-- The entropy of the tripartite reindexing of an \((a+b+c)\)-site reduced
+state is its block entropy. -/
+theorem vonNeumannEntropy_tripartiteSplit_eq_blockEntropy
+    {d D : ℕ} (M : MPOTensor d D) {N a b c : ℕ} (h3 : a + b + c ≤ N)
+    (hM : (mpo M N).PosSemidef) :
+    vonNeumannEntropy
+        ((M.reducedBlockState N (a + b + c) h3).submatrix
+          (tripartiteSplitEquiv d a b c).symm
+          (tripartiteSplitEquiv d a b c).symm)
+        ((reducedBlockState_posSemidef M N (a + b + c) h3 hM).submatrix _).1
+      = M.blockEntropy N (a + b + c) h3 hM := by
+  rw [vonNeumannEntropy_submatrix_equiv]
+  rfl
+
+/-- Tracing the third factor of a tripartite reduced state gives the block
+entropy of the first \(a+b\) sites. -/
+theorem vonNeumannEntropy_traceC_eq_blockEntropy
+    {d D : ℕ} (M : MPOTensor d D) {N a b c : ℕ} (h3 : a + b + c ≤ N)
+    (hM : (mpo M N).PosSemidef) :
+    vonNeumannEntropy
+        (Matrix.traceC_ABC
+          ((M.reducedBlockState N (a + b + c) h3).submatrix
+            (tripartiteSplitEquiv d a b c).symm
+            (tripartiteSplitEquiv d a b c).symm))
+        (Matrix.traceC_ABC_isHermitian
+          ((reducedBlockState_posSemidef M N (a + b + c) h3 hM).submatrix _).1)
+      = M.blockEntropy N (a + b) ((Nat.le_add_right _ c).trans h3) hM := by
+  rw [vonNeumannEntropy_congr (traceC_mat M h3) _
+    (((reducedBlockState_isHermitian M N (a + b) _ hM)).submatrix _),
+    vonNeumannEntropy_submatrix_equiv]
+  rfl
+
 /-- **traceAC correspondence.** Tracing the first and third tripartite factors of
 the cast reduced state recovers the middle `b`-block reduced state (translation
 invariance moves the middle block to the front). -/
@@ -247,6 +279,25 @@ theorem traceAC_mat {d D : ℕ} (M : MPOTensor d D) {N a b c : ℕ} (h3 : a + b 
     (Fin.append (finFunctionFinEquiv.symm a') (finFunctionFinEquiv.symm b1))
     (Fin.append (finFunctionFinEquiv.symm a') (finFunctionFinEquiv.symm b2)))]
   rw [collapse_first M (by omega)]
+
+/-- Tracing the first and third factors of a tripartite reduced state gives the
+block entropy of the middle \(b\) sites. -/
+theorem vonNeumannEntropy_traceAC_eq_blockEntropy
+    {d D : ℕ} (M : MPOTensor d D) {N a b c : ℕ} (h3 : a + b + c ≤ N)
+    (hM : (mpo M N).PosSemidef) :
+    vonNeumannEntropy
+        (Matrix.traceAC_ABC
+          ((M.reducedBlockState N (a + b + c) h3).submatrix
+            (tripartiteSplitEquiv d a b c).symm
+            (tripartiteSplitEquiv d a b c).symm))
+        (Matrix.traceAC_ABC_isHermitian
+          ((reducedBlockState_posSemidef M N (a + b + c) h3 hM).submatrix _).1)
+      = M.blockEntropy N b (le_trans (by omega) h3) hM := by
+  obtain ⟨e, hEq⟩ := traceAC_mat M h3
+  rw [vonNeumannEntropy_congr hEq _
+    (((reducedBlockState_isHermitian M N b _ hM)).submatrix _),
+    vonNeumannEntropy_submatrix_equiv]
+  rfl
 
 /-- Reduced block state is invariant under a length-cast of the kept config. -/
 theorem reducedBlockState_cast {d D : ℕ} (M : MPOTensor d D) {N k k' : ℕ} (h : k' = k)
@@ -285,6 +336,25 @@ theorem traceA_mat {d D : ℕ} (M : MPOTensor d D) {N a b c : ℕ} (h3 : a + b +
       append_assoc_cast, append_assoc_cast])]
   rw [collapse_first M (a := a) (b := b + c) (by omega)]
 
+/-- Tracing the first factor of a tripartite reduced state gives the block
+entropy of the final \(b+c\) sites. -/
+theorem vonNeumannEntropy_traceA_eq_blockEntropy
+    {d D : ℕ} (M : MPOTensor d D) {N a b c : ℕ} (h3 : a + b + c ≤ N)
+    (hM : (mpo M N).PosSemidef) :
+    vonNeumannEntropy
+        (Matrix.traceA_ABC
+          ((M.reducedBlockState N (a + b + c) h3).submatrix
+            (tripartiteSplitEquiv d a b c).symm
+            (tripartiteSplitEquiv d a b c).symm))
+        (Matrix.traceA_ABC_isHermitian
+          ((reducedBlockState_posSemidef M N (a + b + c) h3 hM).submatrix _).1)
+      = M.blockEntropy N (b + c) (le_trans (by omega) h3) hM := by
+  obtain ⟨e, hEq⟩ := traceA_mat M h3
+  rw [vonNeumannEntropy_congr hEq _
+    (((reducedBlockState_isHermitian M N (b + c) _ hM)).submatrix _),
+    vonNeumannEntropy_submatrix_equiv]
+  rfl
+
 /-- Block entropy is congruent in the block length. -/
 theorem blockEntropy_congr {d D : ℕ} (M : MPOTensor d D) (N : ℕ) {j k : ℕ} (h : j = k)
     (hj : j ≤ N) (hk : k ≤ N) (hM : (mpo M N).PosSemidef) :
@@ -311,34 +381,11 @@ theorem ssa_block_entropy {d D : ℕ} (M : MPOTensor d D) {N a b c : ℕ} (h3 : 
   have hσ : σ.PosSemidef := reducedBlockState_posSemidef M N (a + b + c) h3 hM
   have htr1 : σ.trace = 1 := reducedBlockState_trace M N (a + b + c) h3 htr
   have ssa := ssa_cast_ineq σ hσ htr1
-  obtain ⟨eAC, hAC⟩ := traceAC_mat M h3
-  obtain ⟨eA, hA⟩ := traceA_mat M h3
   have hEσ : vonNeumannEntropy σ hσ.1 = M.blockEntropy N (a + b + c) h3 hM :=
     vonNeumannEntropy_congr rfl _ _
-  have hEC : vonNeumannEntropy (Matrix.traceC_ABC (σ.submatrix
-        (tripartiteSplitEquiv d a b c).symm (tripartiteSplitEquiv d a b c).symm))
-        (Matrix.traceC_ABC_isHermitian (hσ.submatrix _).1)
-      = M.blockEntropy N (a + b) ((Nat.le_add_right _ c).trans h3) hM := by
-    rw [vonNeumannEntropy_congr (traceC_mat M h3) _
-      (((reducedBlockState_isHermitian M N (a + b) _ hM)).submatrix _),
-      vonNeumannEntropy_submatrix_equiv]
-    rfl
-  have hEAC : vonNeumannEntropy (Matrix.traceAC_ABC (σ.submatrix
-        (tripartiteSplitEquiv d a b c).symm (tripartiteSplitEquiv d a b c).symm))
-        (Matrix.traceAC_ABC_isHermitian (hσ.submatrix _).1)
-      = M.blockEntropy N b (le_trans (by omega) h3) hM := by
-    rw [vonNeumannEntropy_congr hAC _
-      (((reducedBlockState_isHermitian M N b _ hM)).submatrix _),
-      vonNeumannEntropy_submatrix_equiv]
-    rfl
-  have hEA : vonNeumannEntropy (Matrix.traceA_ABC (σ.submatrix
-        (tripartiteSplitEquiv d a b c).symm (tripartiteSplitEquiv d a b c).symm))
-        (Matrix.traceA_ABC_isHermitian (hσ.submatrix _).1)
-      = M.blockEntropy N (b + c) (le_trans (by omega) h3) hM := by
-    rw [vonNeumannEntropy_congr hA _
-      (((reducedBlockState_isHermitian M N (b + c) _ hM)).submatrix _),
-      vonNeumannEntropy_submatrix_equiv]
-    rfl
+  have hEC := vonNeumannEntropy_traceC_eq_blockEntropy M h3 hM
+  have hEAC := vonNeumannEntropy_traceAC_eq_blockEntropy M h3 hM
+  have hEA := vonNeumannEntropy_traceA_eq_blockEntropy M h3 hM
   rw [hEσ, hEC, hEAC, hEA] at ssa
   linarith [ssa]
 
