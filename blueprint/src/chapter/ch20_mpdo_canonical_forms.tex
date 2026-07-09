@@ -458,14 +458,14 @@
         lem:blockwise_insert_eq_of_mpv_agree, lem:mpv_diagonal_tensor,
         lem:mpv_diagonal_tensor_eq_blocks, lem:mpv_diagonal_tensor_nonneg,
         lem:mpv_vertical_assembled,
-        lem:diagonal_tensor_vertical_assembly_grouping}
+        lem:vertical_grouping_equiv}
     Every MPDO in horizontal canonical form is also in vertical canonical form.
 \end{theorem}
 
 \begin{proof}
     \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_cf_mpdo,
         lem:blockwise_insert_eq_of_mpv_agree, lem:mpv_diagonal_tensor,
-        lem:diagonal_tensor_vertical_assembly_grouping}
+        lem:vertical_grouping_equiv}
     MPDO positivity and
     Lemma~\ref{lem:blockwise_insert_eq_of_mpv_agree} exclude a one-sided
     invariant projection for the tensor viewed in the vertical direction.
@@ -479,7 +479,7 @@
     Group gauge-equivalent vertical sectors by a bijection
     $e(k)=(\alpha,j)$.  Once the corresponding dimensions, weights, and
     positive-length matrix product vectors are identified,
-    Lemma~\ref{lem:diagonal_tensor_vertical_assembly_grouping} gives
+    Lemma~\ref{lem:vertical_grouping_equiv} gives
     \[
         V^{(N)}\bigl(i\mapsto M^{ii}\bigr)
         =V^{(N)}\Bigl(
