@@ -131,7 +131,7 @@
     $I_L = S_L + S_{N-L} - S_N$, using $N-(N-L) = L$.
 \end{proof}
 
-\begin{lemma}[Empty-block entropy vanishes]
+\begin{lemma}[Entropy of the empty block]
     \label{lem:block_entropy_zero}
     \lean{blockEntropy_zero}
     \leanok
@@ -219,9 +219,11 @@
 \end{lemma}
 \begin{proof}\leanok
     The word product of doubled-tensor entries is the Kronecker product of the
-    bra word product and the conjugated ket word product (mixed-product property
-    of the Kronecker product), so its trace factors as
-    $\overline{V^{(N)}(A)(\tau)}\,V^{(N)}(A)(\sigma)$, the matrix element of
+    bra word product and the conjugated ket word product. Thus its trace is
+    \[
+        \overline{V^{(N)}(A)(\tau)}\,V^{(N)}(A)(\sigma),
+    \]
+    the corresponding matrix element of
     $\ketbra{V^{(N)}(A)}{V^{(N)}(A)}$.
 \end{proof}
 
