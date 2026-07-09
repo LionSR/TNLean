@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.MPDO.Defs
 import TNLean.Entropy.MarkovChain
+import TNLean.MPS.MPDO.MutualInfoMonotone
 import TNLean.MPS.Chain.VirtualInsertion
 import TNLean.Algebra.PerronFrobenius.RankOne
 import Mathlib.Analysis.Matrix.Order
@@ -28,9 +29,12 @@ arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete).
   analogue of the physical realization map.
 - `MPOTensor.EtaStructure`: the quantum-Markov decomposition on the middle
   subsystem supplied by equality in strong subadditivity.
-- `MPOTensor.sal_implies_eta_structure`: the Lean form of the entropy step in
-  Lemma C.2. We formalize the strong-area-law input locally as equality in
-  strong subadditivity for a normalized three-site reduced state.
+- `MPOTensor.isSSAEquality_tripartite_of_isSAL` and
+  `MPOTensor.isSSAEquality_threeSite_of_isSAL`: saturation of the area law gives
+  equality in strong subadditivity for the marginal used in Lemma C.2 and for
+  its three-site specialization.
+- `MPOTensor.sal_implies_eta_structure`: equality in strong subadditivity gives
+  the local structure by the Hayashi equality characterization.
 - `MPOTensor.etaOperators`: the dependent type of explicit neighboring operator
   families over a fixed Hayashi decomposition.
 - `MPOTensor.ExplicitEtaOperators`: the explicit neighboring operators
@@ -182,6 +186,109 @@ theorem physRealizeLeft_spec (K : MPOTensor d D) (hK : K.IsInjective)
   MPSTensor.physRealizeLeft_spec K.toMPSTensor hK X p
 
 end InjectiveInverseMaps
+
+section GlobalToLocalSAL
+
+variable {d D : ℕ}
+
+/-- Saturation of the area law gives equality in strong subadditivity for the
+three-region marginal used in the proof of Lemma C.2.
+
+The regions have lengths `1`, `1`, and `N - 3`. Thus the entropy identity is
+\(S_{N-1} + S_1 = S_2 + S_{N-2}\), which is exactly \(I_1 = I_2\).
+
+Source: arXiv:1606.00608, Appendix C.2, Lemma `Lsigma3`, lines 1344--1368. -/
+theorem isSSAEquality_tripartite_of_isSAL (M : MPOTensor d D) (hSAL : IsSAL M)
+    {N : ℕ} (hN : 4 ≤ N) :
+    let hM : (mpo M N).PosSemidef := (Classical.choose hSAL) N
+    let h3 : 1 + 1 + (N - 3) ≤ N := by omega
+    let ρ_ABC := (M.reducedBlockState N (1 + 1 + (N - 3)) h3).submatrix
+      (tripartiteSplitEquiv d 1 1 (N - 3)).symm
+      (tripartiteSplitEquiv d 1 1 (N - 3)).symm
+    IsSSAEquality ρ_ABC
+      ((reducedBlockState_posSemidef M N (1 + 1 + (N - 3)) h3 hM).submatrix _).1 := by
+  classical
+  dsimp only
+  rw [IsSSAEquality]
+  let hMpdo : IsMPDO M := Classical.choose hSAL
+  rcases Classical.choose_spec hSAL with ⟨_, hstep⟩
+  have hEq := hstep N 1 (by omega) (by omega)
+  simp only [mutualInfoChain] at hEq
+  have hABC : (M.reducedBlockState N (1 + 1 + (N - 3)) (by omega)).PosSemidef :=
+    reducedBlockState_posSemidef M N _ _ (hMpdo N)
+  obtain ⟨eAC, hAC⟩ :=
+    traceAC_mat M (N := N) (a := 1) (b := 1) (c := N - 3) (by omega)
+  obtain ⟨eA, hA⟩ :=
+    traceA_mat M (N := N) (a := 1) (b := 1) (c := N - 3) (by omega)
+  have hEABC :
+      vonNeumannEntropy
+          ((M.reducedBlockState N (1 + 1 + (N - 3)) (by omega)).submatrix
+            (tripartiteSplitEquiv d 1 1 (N - 3)).symm
+            (tripartiteSplitEquiv d 1 1 (N - 3)).symm)
+          ((reducedBlockState_posSemidef M N (1 + 1 + (N - 3)) (by omega)
+            (hMpdo N)).submatrix _).1
+        = M.blockEntropy N (1 + 1 + (N - 3)) (by omega) (hMpdo N) := by
+    rw [vonNeumannEntropy_submatrix_equiv]
+    · rfl
+  have hEC :
+      vonNeumannEntropy
+          (Matrix.traceC_ABC
+            ((M.reducedBlockState N (1 + 1 + (N - 3)) (by omega)).submatrix
+              (tripartiteSplitEquiv d 1 1 (N - 3)).symm
+              (tripartiteSplitEquiv d 1 1 (N - 3)).symm))
+          (Matrix.traceC_ABC_isHermitian (hABC.submatrix _).1)
+        = M.blockEntropy N (1 + 1) (by omega) (hMpdo N) := by
+    rw [vonNeumannEntropy_congr
+      (traceC_mat M (N := N) (a := 1) (b := 1) (c := N - 3) (by omega)) _
+      (((reducedBlockState_isHermitian M N (1 + 1) _ (hMpdo N))).submatrix _),
+      vonNeumannEntropy_submatrix_equiv]
+    · rfl
+  have hEAC :
+      vonNeumannEntropy
+          (Matrix.traceAC_ABC
+            ((M.reducedBlockState N (1 + 1 + (N - 3)) (by omega)).submatrix
+              (tripartiteSplitEquiv d 1 1 (N - 3)).symm
+              (tripartiteSplitEquiv d 1 1 (N - 3)).symm))
+          (Matrix.traceAC_ABC_isHermitian (hABC.submatrix _).1)
+        = M.blockEntropy N 1 (by omega) (hMpdo N) := by
+    rw [vonNeumannEntropy_congr hAC _
+      (((reducedBlockState_isHermitian M N 1 _ (hMpdo N))).submatrix _),
+      vonNeumannEntropy_submatrix_equiv]
+    · rfl
+  have hEA :
+      vonNeumannEntropy
+          (Matrix.traceA_ABC
+            ((M.reducedBlockState N (1 + 1 + (N - 3)) (by omega)).submatrix
+              (tripartiteSplitEquiv d 1 1 (N - 3)).symm
+              (tripartiteSplitEquiv d 1 1 (N - 3)).symm))
+          (Matrix.traceA_ABC_isHermitian (hABC.submatrix _).1)
+        = M.blockEntropy N (1 + (N - 3)) (by omega) (hMpdo N) := by
+    rw [vonNeumannEntropy_congr hA _
+      (((reducedBlockState_isHermitian M N (1 + (N - 3)) _ (hMpdo N))).submatrix _),
+      vonNeumannEntropy_submatrix_equiv]
+    · rfl
+  rw [hEABC, hEAC, hEC, hEA]
+  rw [blockEntropy_congr M N (show 1 + 1 + (N - 3) = N - 1 by omega)
+      (by omega) (Nat.sub_le N 1) (hMpdo N),
+    blockEntropy_congr M N (show 1 + (N - 3) = N - (1 + 1) by omega)
+      (by omega) (Nat.sub_le N (1 + 1)) (hMpdo N)]
+  linarith [hEq]
+
+/-- Saturation of the area law gives equality in strong subadditivity for the
+three-site reduced state of the four-site periodic chain.
+
+Source: arXiv:1606.00608, Appendix C.2, Lemma `Lsigma3`, lines 1344--1368. -/
+theorem isSSAEquality_threeSite_of_isSAL (M : MPOTensor d D) (hSAL : IsSAL M) :
+    let hM : (mpo M 4).PosSemidef := (Classical.choose hSAL) 4
+    let h3 : 1 + 1 + (4 - 3) ≤ 4 := by omega
+    let ρ_ABC := (M.reducedBlockState 4 (1 + 1 + (4 - 3)) h3).submatrix
+      (tripartiteSplitEquiv d 1 1 (4 - 3)).symm
+      (tripartiteSplitEquiv d 1 1 (4 - 3)).symm
+    IsSSAEquality ρ_ABC
+      ((reducedBlockState_posSemidef M 4 (1 + 1 + (4 - 3)) h3 hM).submatrix _).1 := by
+  simpa using isSSAEquality_tripartite_of_isSAL M hSAL (N := 4) (by omega)
+
+end GlobalToLocalSAL
 
 section LocalSAL
 
