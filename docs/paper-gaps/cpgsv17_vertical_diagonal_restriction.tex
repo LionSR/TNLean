@@ -1,0 +1,110 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Diagonal Restriction and the Vertical Canonical Form in Proposition 4.13}
+\author{}
+\date{2026-07-09}
+
+\begin{document}
+\maketitle
+
+\section{The source argument}
+
+Proposition~4.13 of Cirac, P\'erez-Garc\'ia, Schuch, and Verstraete concerns a
+tensor in horizontal canonical form that generates positive semidefinite
+density operators at every system size. Its conclusion is that the same
+tensor, now viewed in the vertical direction, admits a vertical canonical form
+\cite[Proposition~4.13]{Cirac2016MPDO_arXiv}.  The local source is
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex}, lines~1863--1921.
+
+The proof does not restrict each horizontal normal tensor from physical pairs
+$(i,j)$ to diagonal pairs $(i,i)$ and then assert that the restricted tensor is
+normal.  Instead, it constructs a new canonical form in the vertical direction.
+Positivity and the first-site insertion lemma rule out a one-sided invariant
+projection at lines~1873--1887.  Positivity then excludes nontrivial periodic
+sectors at lines~1889--1893.  Only after these two steps does the proof invoke a
+canonical-form decomposition in the vertical direction.  The remainder of the
+argument, lines~1895--1921, proves positivity of its multiplicity weights and
+reduces the corresponding similarities to unitary changes of basis.
+
+The block-injectivity proposition at lines~340--345 has a different role.  It
+separates the normal blocks belonging to one fixed canonical-form decomposition.
+It does not compare horizontal blocks with their diagonal restrictions, and it
+does not imply that injectivity survives deletion of all off-diagonal physical
+matrices.
+
+\section{A finite-dimensional obstruction}
+
+The stronger assertion is false under the stated horizontal canonical-form
+hypotheses.\footnote{The correction is tracked in
+\href{https://github.com/LionSR/TNLean/issues/2537}{issue 2537}.}
+On bond space $\mathbb C^2$, let
+\[
+    A^{(a,b)}=c_aE_{ab},
+    \qquad c_0=\frac35,
+    \qquad c_1=\frac45,
+    \qquad a,b\in\{0,1\}.
+\]
+The four matrices are nonzero scalar multiples of the matrix units, hence span
+$M_2(\mathbb C)$.  They also satisfy
+\[
+    \sum_{a,b}\bigl(A^{(a,b)}\bigr)^*A^{(a,b)}
+      =\bigl(c_0^2+c_1^2\bigr)I=I.
+\]
+Taking a single horizontal block makes the simultaneous block-separation
+condition identical to ordinary injectivity.  Thus this example satisfies the
+injectivity, left-canonicality, nonzero-weight, and finite-length block-separation
+assumptions in the current horizontal canonical-form structure.
+
+Its diagonal restriction is
+\[
+    A^{\mathrm{diag}}(0)=\frac35E_{00},
+    \qquad
+    A^{\mathrm{diag}}(1)=\frac45E_{11}.
+\]
+Every word in these two matrices is diagonal.  Consequently, no blocking length
+can span $M_2(\mathbb C)$, so the restricted tensor is not normal.  This example
+is formalized in
+\path{TNLean/MPS/MPDO/BiCFDerivation/DiagonalRestrictionCounterexample.lean}.
+
+The example is not presented as a counterexample to Proposition~4.13.  The
+formal horizontal structure records properties of a block decomposition but does
+not assume that the associated tensor generates positive semidefinite operators
+at every length.  That positivity hypothesis is essential in the source proof.
+More importantly, even with positivity available, the proposition constructs a
+new vertical basis of normal tensors rather than reusing the diagonal
+restrictions of the horizontal basis.
+
+\section{The corrected formal target}
+
+A source-faithful proof of Proposition~4.13 should begin with both horizontal
+canonical form and the MPDO positivity hypothesis.  It should then formalize the
+three stages visible in the source:
+\begin{enumerate}
+    \item use positivity and the first-site insertion lemma to rule out one-sided
+      invariant projections in the vertical direction;
+    \item use positivity to rule out nontrivial vertical periods;
+    \item obtain the vertical canonical-form blocks independently, and prove the
+      positivity and unitary normalization of their multiplicity coefficients.
+\end{enumerate}
+The already formalized equality of matrix product vectors after diagonal
+restriction remains useful as an auxiliary identity.  It cannot supply the
+normal blocks of the vertical canonical form.  In particular, Newton--Girard
+identities for scalar weights address only the multiplicity coefficients; they
+cannot restore matrix directions discarded by the restriction $(i,j)\mapsto(i,i)$.
+
+\paragraph{Verdict.}
+This is an open gap: the source-faithful horizontal-to-vertical implication of
+Proposition~4.13 remains unformalized. The diagonal-restriction route is a
+false strengthening and cannot close that gap.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
