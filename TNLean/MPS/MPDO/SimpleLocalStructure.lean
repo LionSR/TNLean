@@ -504,41 +504,36 @@ theorem sal_zcl_implies_rank_one_T_of_posSemidef
 /-! ### Sector tensors and the pairing route to rank one
 
 Appendix C.2 of arXiv:1606.00608 obtains the sector trace matrix by pairing
-sector tensors: after the isometry `U`, the injective simple tensor splits
-as a direct sum over sectors `k` of pairs `l_k`, `r_k` (eq. formK,
-lines 1436--1448), the closed tensors `|l_k)` and `(r_k|` pair to
-T_{k,h} = (r_k|l_h) (eq. lkrk and eq. Tkn, lines 1473--1482), and the
-zero-correlation-length identity displayed in the proof of Lemma SALZCL
-(lines 1490--1493) states that the operator sum_k |l_k)(r_k| equals its own
-square.  The declarations below record this pairing and derive the rank-one
-factorization of `T` through
+sector tensors. After the isometry $U$, the injective simple tensor splits as
+a direct sum over sectors $k$ of pairs $l_k,r_k$ at lines 1436--1448. The
+closed tensors $|l_k)$ and $(r_k|$ pair to $T_{k,h}=(r_k|l_h)$ at lines
+1473--1482. The zero-correlation-length identity at lines 1490--1493 states
+that the operator $\sum_k |l_k)(r_k|$ equals its own square. The declarations
+below record this pairing and derive the rank-one factorization of $T$ through
 `Matrix.mul_self_eq_self_of_pairing_idempotent`. -/
 
 /-- The sector tensors of arXiv:1606.00608, Appendix C.2, paired into the
-sector trace matrix `T`.
+sector trace matrix $T$.
 
-The vector space `V` carries the closed sector tensors `|l_k)` and the
-functionals `(r_k|` of eq. lkrk (lines 1473--1477).  The two recorded
-identities are the paper's displayed equations: the pairing
-T_{k,h} = (r_k|l_h) of eq. Tkn (lines 1478--1482) and the
-zero-correlation-length identity in the proof of Lemma SALZCL
-(lines 1490--1493).  The construction of these families from an injective
-simple tensor is the content of Lemma propSN (eq. formK, lines 1436--1448)
-and is not yet formalized; see the module docstring. -/
+The vector space $V$ carries the closed sector tensors $|l_k)$ and the
+functionals $(r_k|$ at lines 1473--1477. The recorded identities are the
+pairing $T_{k,h}=(r_k|l_h)$ at lines 1478--1482 and the
+zero-correlation-length identity at lines 1490--1493. Constructing these
+families from the injective simple tensor factorization at lines 1436--1448
+remains open; see the module docstring. -/
 structure SectorPairingData (T : Matrix (Fin n) (Fin n) ℝ)
     (V : Type*) [AddCommGroup V] [Module ℝ V] where
-  /-- The closed sector tensors `|l_k)`; arXiv:1606.00608, eq. lkrk,
-  lines 1473--1477. -/
+  /-- The closed sector tensors $|l_k)$; arXiv:1606.00608, lines 1473--1477. -/
   l : Fin n → V
-  /-- The closed sector functionals `(r_k|`; arXiv:1606.00608, eq. lkrk,
+  /-- The closed sector functionals $(r_k|$; arXiv:1606.00608,
   lines 1473--1477. -/
   r : Fin n → Module.Dual ℝ V
-  /-- The pairing identity T_{k,h} = (r_k|l_h); arXiv:1606.00608, eq. Tkn,
+  /-- The pairing identity $T_{k,h}=(r_k|l_h)$; arXiv:1606.00608,
   lines 1478--1482. -/
   pairing : ∀ k h, T k h = r k (l h)
   /-- The zero-correlation-length identity
-  sum_k |l_k)(r_k| = sum_{k,h} T_{k,h} |l_k)(r_h|, evaluated on a vector;
-  arXiv:1606.00608, proof of Lemma SALZCL, lines 1490--1493. -/
+  $\sum_k |l_k)(r_k|=\sum_{k,h}T_{k,h}|l_k)(r_h|$, evaluated on a vector;
+  arXiv:1606.00608, lines 1490--1493. -/
   zcl : ∀ v : V, ∑ k, r k v • l k = ∑ k, ∑ h, (T k h * r h v) • l k
 
 namespace SectorPairingData
@@ -546,10 +541,10 @@ namespace SectorPairingData
 variable {T : Matrix (Fin n) (Fin n) ℝ} {V : Type*} [AddCommGroup V] [Module ℝ V]
 
 /-- The zero-correlation-length identity makes the pairing operator
-sum_k |l_k)(r_k| equal to its own square: the right-hand side of the displayed
-identity of arXiv:1606.00608, lines 1490--1493, expands to the square of its
-left-hand side once the coefficients T_{k,h} are replaced by the pairing
-(r_k|l_h) of eq. Tkn. -/
+$\sum_k |l_k)(r_k|$ equal to its own square. The right-hand side of the
+identity at lines 1490--1493 expands to this square after replacing
+$T_{k,h}$ by the pairing $(r_k|l_h)$ from lines 1478--1482 of
+arXiv:1606.00608. -/
 theorem pairing_operator_idempotent (data : SectorPairingData T V) (v : V) :
     ∑ k, data.r k (∑ j, data.r j v • data.l j) • data.l k
       = ∑ k, data.r k v • data.l k := by
@@ -567,10 +562,10 @@ theorem pairing_operator_idempotent (data : SectorPairingData T V) (v : V) :
     _ = ∑ k, data.r k v • data.l k := (data.zcl v).symm
 
 /-- **Idempotence of the sector trace matrix** for sector tensors satisfying
-the zero-correlation-length identity: `T * T = T`.
+the zero-correlation-length identity: $T^2=T$.
 
-**Scope restriction (linear independence):** the source lemma
-(arXiv:1606.00608, Lemma SALZCL, lines 1484--1499) neither assumes nor derives
+**Scope restriction (linear independence):** the source argument at
+arXiv:1606.00608, lines 1484--1499 neither assumes nor derives
 linear independence of the sector tensors; see the marker on
 `Matrix.mul_self_eq_self_of_pairing_idempotent` and
 `docs/paper-gaps/cpgsv17_pf_rank_one.tex`.  The hypothesis `hl` is discharged
@@ -582,8 +577,8 @@ theorem mul_self_eq_self (data : SectorPairingData T V)
     data.pairing_operator_idempotent
 
 /-- The traces of all positive powers of the sector trace matrix agree with
-its trace: the display tr(T^N) = tr(T) of arXiv:1606.00608, lines 1494--1497,
-recovered from idempotence.
+its trace: $\operatorname{tr}(T^N)=\operatorname{tr}(T)$ for $N\geq 1$, as at
+arXiv:1606.00608, lines 1494--1497, recovered from idempotence.
 
 **Scope restriction (linear independence):** inherited from
 `SectorPairingData.mul_self_eq_self`; documented in
@@ -593,9 +588,9 @@ theorem tracePowersConstant (data : SectorPairingData T V)
   Matrix.tracePowersConstant_of_mul_self_eq_self (data.mul_self_eq_self hl)
 
 /-- Primitivity of the sector trace matrix makes every closed sector tensor
-`|l_k)` nonzero: some entry of the `k`-th column of `T` is positive, and that
-entry is the pairing of `|l_k)` against a functional (arXiv:1606.00608,
-eq. Tkn, lines 1478--1482). -/
+$|l_k)$ nonzero: some entry of column $k$ of $T$ is positive, and that entry
+is the pairing of $|l_k)$ against a functional (arXiv:1606.00608,
+lines 1478--1482). -/
 theorem l_ne_zero (data : SectorPairingData T V)
     (hPrimitive : Matrix.IsPrimitive T) (k : Fin n) : data.l k ≠ 0 := by
   intro hzero
@@ -604,16 +599,16 @@ theorem l_ne_zero (data : SectorPairingData T V)
   exact lt_irrefl 0 hj
 
 /-- Linear independence of the closed sector tensors from a block-support
-decomposition: if each `|l_k)` lies in its own member of an independent family
-of subspaces of `V` and the sector trace matrix is primitive, then the family
-`|l_k)` is linearly independent.
+decomposition: if each $|l_k)$ lies in its own member of an independent family
+of subspaces of $V$ and the sector trace matrix is primitive, then the family
+$|l_k)$ is linearly independent.
 
 **Scope restriction (block supports):** the subspace family is not displayed
-in arXiv:1606.00608; eq. formK (lines 1436--1448) gives the sector splitting
-of the physical indices, but the closed tensors `|l_k)` of eq. lkrk live in a
-common bond space after the physical sector legs are contracted.  Whether the
-inverse-map construction of Lemma propSN supplies such supports, or the
-independence by other means, remains open; documented in
+in arXiv:1606.00608. Lines 1436--1448 give a sector splitting of the physical
+indices, but the closed tensors $|l_k)$ at lines 1473--1477 live in a common
+bond space after the physical sector legs are contracted. Whether the
+inverse-map construction supplies such supports, or proves independence by
+another argument, remains open; documented in
 `docs/paper-gaps/cpgsv17_pf_rank_one.tex`. -/
 theorem linearIndependent_l (data : SectorPairingData T V)
     (support : Fin n → Submodule ℝ V)
@@ -625,16 +620,16 @@ theorem linearIndependent_l (data : SectorPairingData T V)
 
 end SectorPairingData
 
-/-- **Lemma C.5, pairing-idempotence form**: for a sector trace matrix `T`
-paired from sector tensors that satisfy the zero-correlation-length identity
-of arXiv:1606.00608, lines 1490--1493, linear independence of the closed
-sector tensors and the trace normalization give the rank-one factorization
-T_{k,h} = a_k b_h with sum_k a_k b_k = 1 (Lemma SALZCL, lines 1484--1499).
+/-- **Rank one from sector-pairing idempotence.**
+
+For a sector trace matrix $T$ paired from sector tensors satisfying the
+zero-correlation-length identity at arXiv:1606.00608, lines 1490--1493,
+linear independence and trace normalization give
+$T_{k,h}=a_kb_h$ with $\sum_k a_kb_k=1$, the conclusion at lines 1484--1499.
 Unlike the positive-semidefinite variant
 `MPOTensor.sal_zcl_implies_rank_one_T_of_posSemidef`, the constant trace
-powers are derived, not assumed.  The primitivity of `T`, supplied in the
-source by Lemma propSN, is not needed once the independence is assumed; it
-enters the block-support form
+powers are derived, not assumed. Primitivity of $T$ is not needed once linear
+independence is assumed. It enters the block-support form
 `MPOTensor.sal_zcl_implies_rank_one_T_of_sector_supports`, where it makes
 the closed sector tensors nonzero.
 
@@ -657,10 +652,11 @@ theorem sal_zcl_implies_rank_one_T_of_pairing_idempotent
   rw [← Matrix.trace_vecMulVec, ← hT]
   exact hTrace
 
-/-- **Lemma C.5, block-support form**: the rank-one factorization of the
-sector trace matrix with the linear independence of the closed sector tensors
-derived, rather than assumed, from primitivity and a block-support
-decomposition.
+/-- **Rank one from independent sector supports.**
+
+This is the rank-one conclusion at arXiv:1606.00608, lines 1484--1499, with
+linear independence of the closed sector tensors derived from primitivity and
+a block-support decomposition.
 
 **Scope restriction (block supports):** the subspace family carrying the
 closed sector tensors is not displayed in arXiv:1606.00608; documented in

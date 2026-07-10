@@ -27,9 +27,9 @@ counterexample was added in
 \href{https://github.com/LionSR/TNLean/pull/849}{pull request \#849}; and the
 positive-semidefinite replacement theorem was added in
 \href{https://github.com/LionSR/TNLean/pull/917}{pull request \#917}. The open
-follow-up --- supplying matrix-level positive-semidefiniteness of the sector
-trace matrix at the MPDO call site so the replacement theorem discharges the
-\texttt{hPF} shortcut --- is tracked in
+follow-up --- either supplying matrix-level positive semidefiniteness of the
+sector trace matrix, or completing the sector-pairing and linear-independence
+route described below --- is tracked in
 \href{https://github.com/LionSR/TNLean/issues/3593}{issue \#3593}. The
 source passage is
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:1394--1499}.}
@@ -176,53 +176,47 @@ established at the matrix product density operator call site.
 
 \subsection{The sector pairing at the matrix product density operator side}
 
-The formal development now states the paper's pairing on the matrix product
-density operator side.  The structure
-\leanid{MPOTensor.SectorPairingData} records vectors $|l_k)$ and functionals
-$(r_k|$ in an abstract real vector space together with the two displayed
-identities of the source: the pairing $T_{k,h}=(r_k|l_h)$
-\cite[Appendix~C.2, lines~1478--1482]{Cirac2016MPDO_arXiv} and the
-zero-correlation-length identity
+The formal development now records the paper's pairing on the matrix product
+density operator side.  In an abstract real vector space, let $|l_k)$ be the
+closed sector tensors and $(r_k|$ the corresponding functionals.  It assumes
+the two displayed identities of the source,
 \[
-  \sum_k |l_k)(r_k| = \sum_{k,h} T_{k,h} |l_k)(r_h|
+  T_{k,h}=(r_k|l_h),
+  \qquad
+  \sum_k |l_k)(r_k| = \sum_{k,h} T_{k,h}|l_k)(r_h|,
 \]
-\cite[Appendix~C.2, lines~1490--1493]{Cirac2016MPDO_arXiv}.  From this the
-development proves, in order: the pairing operator equals its own square
-(\leanid{MPOTensor.SectorPairingData.pairing_operator_idempotent}); with
-linearly independent $(l_k)_k$ the matrix identity $T^2=T$ and the constant
-trace powers of the source follow
-(\leanid{MPOTensor.SectorPairingData.mul_self_eq_self},
-\leanid{MPOTensor.SectorPairingData.tracePowersConstant}); primitivity of $T$
-makes every $|l_k)$ nonzero, because a primitive matrix has a positive entry
-in every row and column
-(\leanid{Matrix.IsPrimitive.exists_row_pos},
-\leanid{Matrix.IsPrimitive.exists_col_pos},
-\leanid{MPOTensor.SectorPairingData.l_ne_zero}); and nonzero vectors lying
-in distinct members of an independent family of subspaces are linearly
-independent
-(\leanid{MPOTensor.SectorPairingData.linearIndependent_l}).  The rank-one
-conclusion of Lemma~C.5, with the trace-power condition derived rather than
-assumed, is
-\leanid{MPOTensor.sal_zcl_implies_rank_one_T_of_pairing_idempotent}
-and, with the independence derived from block supports,
-\leanid{MPOTensor.sal_zcl_implies_rank_one_T_of_sector_supports}.
+from lines 1478--1493 of Appendix C.2.  These equations make the pairing
+operator $M=\sum_k|l_k)(r_k|$ idempotent.  If the vectors $(l_k)_k$ are
+linearly independent, then the coefficient map $L$ is injective and
+\[
+  L T^2=M^2L=ML=LT,
+\]
+so $T^2=T$.  Hence all positive powers of $T$ have the same trace; trace one
+then gives the rank-one factorization.  Primitivity separately makes each
+$|l_k)$ nonzero, so an independent family of subspaces carrying the vectors
+is sufficient to derive their linear independence.
+\footnote{The formal declarations are
+\path{MPOTensor.SectorPairingData.pairing_operator_idempotent},
+\path{MPOTensor.SectorPairingData.mul_self_eq_self},
+\path{MPOTensor.SectorPairingData.tracePowersConstant},
+\path{MPOTensor.SectorPairingData.l_ne_zero},
+\path{MPOTensor.SectorPairingData.linearIndependent_l},
+\path{MPOTensor.sal_zcl_implies_rank_one_T_of_pairing_idempotent}, and
+\path{MPOTensor.sal_zcl_implies_rank_one_T_of_sector_supports}.}
 
-Two obligations remain before the conditional hypotheses disappear.
-First, the families $(l_k)_k$ and $(r_k)_k$ must be constructed from an
-injective simple tensor: this is the conclusion of Lemma~propSN
-\cite[Appendix~C.2, lines~1407--1471]{Cirac2016MPDO_arXiv}, whose
-inverse-map computation is not yet formalized, and it must produce the
-pairing and zero-correlation-length identities recorded in the structure.
-Second, the linear independence of the closed tensors $|l_k)$ must be
-derived.  The direct sum in the source's sector splitting
-\cite[Appendix~C.2, lines~1436--1448]{Cirac2016MPDO_arXiv} concerns the
-physical indices; the closed tensors $|l_k)$ obtained by contracting the
-physical sector legs live in a common bond space, so their block supports
---- or their independence by another argument --- do not follow from the
-displayed equations alone.  Until then the independence, or the subspace
-family carrying the $|l_k)$, remains an explicit hypothesis.
+Three obligations remain before the conditional hypotheses disappear.
+First, the inverse-map factorization at lines 1407--1482 must construct the
+families $(l_k)_k$ and $(r_k)_k$ from an injective simple tensor and prove the
+pairing $T_{k,h}=(r_k|l_h)$.  Second, zero correlation length must be used to
+derive the operator identity at lines 1490--1493 for those concrete families;
+the present structure records this identity as data.  Third, linear
+independence of the closed tensors must be proved.  The direct sum in the
+source's sector splitting at lines 1436--1448 concerns the physical indices;
+after those indices are contracted, the closed tensors live in a common bond
+space.  Their block supports --- or their independence by another argument ---
+therefore do not follow from the displayed equations alone.
 
-\section{The corrected statement}
+\section{A positive-semidefinite route}
 
 The formal development proves a corrected sufficient matrix theorem. Let $T$
 be a finite real square matrix. If $T$ is positive semidefinite,
@@ -312,14 +306,18 @@ primitive entrywise non-negative matrix with constant traces of positive powers
 need not have rank one. The obstruction is a nilpotent Jordan component at the
 zero eigenvalue, which is not detected by the trace identities.
 
-The formal development proves a corrected sufficient theorem: positive
-semidefiniteness, trace normalization, and the same trace-power hypothesis imply
-the required rank-one factorization. What remains for the unconditional MPDO
-argument is not another Perron--Frobenius statement for arbitrary non-negative
-matrices, but an MPDO-specific proof that the trace matrix obtained from the
-$\eta$-operators has the Hermitian or positive-semidefinite structure needed by
-the corrected theorem. Thus the source proof has a genuine unsupported
-intermediate assertion, while the intended MPDO theorem itself has not been
+The formal development now proves two corrected sufficient theorems.  The
+first derives the rank-one factorization from positive semidefiniteness, trace
+normalization, and the trace-power identities.  The second derives
+$T^2=T$ from the sector-pairing identity and linear independence of the closed
+sector tensors; trace one then gives the same rank-one factorization directly.
+
+For the unconditional matrix product density operator argument, it therefore
+suffices either to prove the required positive-semidefinite structure of the
+trace matrix, or to construct the source sector pairing and derive the needed
+linear independence at the matrix product density operator call site.  The
+source proof has a genuine unsupported intermediate assertion, while the
+intended matrix product density operator theorem itself has not been
 disproved.
 
 \bibliographystyle{alpha}
