@@ -53,7 +53,8 @@ there are matrices $B_k \in M_{d_k}(\mathbb{C})$ with, for all $k$, $i < m_k$, a
 $$A\,f_{k,i,j} \;=\; \sum_{j'} (B_k)_{j'j}\, f_{k,i,j'} :$$
 the member $A$ acts on the $k$-th component as $\mathbf{1}_{m_k} \otimes B_k$. The basis is
 the concatenation of the adapted orthonormal bases of the pairwise orthogonal isotypic
-components produced by `StarSubalgebra.exists_isotypic_tensor_factorization`. This is the
+components, combining `StarSubalgebra.exists_orthogonal_isotypic_decomposition` with
+`StarSubalgebra.exists_adapted_orthonormal_family_of_sameIsotype` on each component. This is the
 adapted-basis form of the block decomposition behind *Quantum Channels & Operations*
 (Wolf 2012), Theorem 6.14, in the unital case (no zero block). Only the containment direction
 is stated: every member of $S$ takes this form. -/
