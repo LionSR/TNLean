@@ -25,7 +25,6 @@ at varying levels of completeness.
 S. Lu, E. Tjoa, J. I. Cirac, *Multi-agent Autoformalization of Tensor Network
 Theory*, [arXiv:2607.07857](https://arxiv.org/abs/2607.07857).
 
-Part of the formalization effort and its CI ran through
-[TeXRA](https://texra.ai) ([github.com/texra-ai](https://github.com/texra-ai)),
-whose [`lean-env-action`](https://github.com/texra-ai/lean-env-action) sets up
-the Lean and blueprint toolchain used throughout this repository's workflows.
+Most of the formalization was carried out by agents running on
+[TeXRA](https://texra.ai), whose `lean-env-action` also sets up the Lean and
+blueprint toolchain used throughout this repository's CI workflows.
