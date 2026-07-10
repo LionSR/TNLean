@@ -204,12 +204,12 @@ normalized four-site MPO:
 \]
 
 The scalar is the normalization of the full four-site state. This matrix is
-the one-site specialization of the virtual tail shown in the three-site
-marginal formula `sigma3bka` and later denoted by $m$ at lines 1430--1433.
+the one-site specialization of the virtual tail in the three-site marginal
+formula at lines 1343--1348, later denoted by $m$ at lines 1430--1433.
 
-Source: arXiv:1606.00608, lines 792--793 and Appendix C.2, equation
-`sigma3bka`, lines 1343--1348. The later inverse-map contraction at lines
-1415--1438 uses this tail but is not part of the definition. -/
+Source: arXiv:1606.00608, lines 792--793 and Appendix C.2, lines 1343--1348.
+The later inverse-map contraction at lines 1415--1438 uses this tail but is not
+part of the definition. -/
 noncomputable def normalizedFourSiteTail (K : MPOTensor d D) :
     Matrix (Fin D) (Fin D) ℂ :=
   (Matrix.trace (mpo K 4))⁻¹ • physTraceTransfer K
@@ -222,12 +222,13 @@ the first three local tensors closed against `normalizedFourSiteTail`:
     = \operatorname{tr}\!\left(K^{u_1,v_1}K^{u_2,v_2}K^{u_3,v_3}R_4\right).
 \]
 
-This is the four-site instance of equation `sigma3bka`. It supplies the
-normalized tail occurring in the inverse-map calculation at lines 1415--1438;
-it does not make the subsequent comparison with the Hayashi decomposition.
+This is the four-site instance of the three-site marginal formula at lines
+1343--1348. It supplies the normalized tail occurring in the inverse-map
+calculation at lines 1415--1438; it does not make the subsequent comparison
+with the Hayashi decomposition.
 
-Source: arXiv:1606.00608, lines 792--793 and Appendix C.2, equation
-`sigma3bka`, lines 1343--1348; compare lines 1415--1438. -/
+Source: arXiv:1606.00608, lines 792--793 and Appendix C.2, lines 1343--1348;
+compare lines 1415--1438. -/
 theorem reducedBlockState_four_three_apply
     (K : MPOTensor d D) (u v : Fin 3 → Fin d) :
     K.reducedBlockState 4 3 (by omega) u v =
@@ -251,8 +252,7 @@ theorem reducedBlockState_four_three_apply
   let z : Fin 1 := 0
   have hone (x : Fin 1 → Fin d) :
       K.evalWord (List.ofFn x) (List.ofFn x) = K (x z) (x z) := by
-    simp
-    congr 3
+    simp [z]
   simp_rw [hone]
   rw [← Equiv.sum_comp (Equiv.funUnique (Fin 1) (Fin d)).symm
     (fun x : Fin 1 → Fin d ↦
@@ -296,15 +296,14 @@ one-site tail does not vanish:
   \exists\,\beta,\alpha,\qquad (R_4)_{\beta,\alpha}\ne 0.
 \]
 
-These are precisely the indices selected before equation `formK`; no SAL or
-injectivity hypothesis is needed for this selection once the four-site state
-has nonzero trace.
+These are precisely the indices selected at line 1434 before the sector
+factorization at lines 1435--1437; no SAL or injectivity hypothesis is needed
+for this selection once the four-site state has nonzero trace.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1431--1437. -/
 theorem exists_normalizedFourSiteTail_entry_ne_zero
     (K : MPOTensor d D) (htrace : (mpo K 4).trace ≠ 0) :
     ∃ β α : Fin D, normalizedFourSiteTail K β α ≠ 0 := by
-  classical
   by_contra h
   push Not at h
   apply normalizedFourSiteTail_ne_zero K htrace
