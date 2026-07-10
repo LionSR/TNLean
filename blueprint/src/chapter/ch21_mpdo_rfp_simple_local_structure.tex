@@ -97,6 +97,18 @@ strong subadditivity for a normalized three-site reduced state.
     and the analogous left-insertion statement also holds.
 \end{theorem}
 
+\begin{figure}[ht]
+    \centering
+    \TNMPDOInverseContraction
+    \caption{The inverse-map identity for an injective simple tensor:
+    contracting $K^{-1}$ with $K$ through the physical index
+    identifies the virtual legs of $K^{-1}$ with the corresponding
+    virtual legs of $K$, which is the matrix-unit identity
+    $\sum_p(K^{-1})^{\alpha,\beta}_p\,K^p=E_{\alpha,\beta}$.
+    This is \cite[Appendix~C.2, lines~1376--1380]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_inverse_contraction}
+\end{figure}
+
 \begin{definition}[Three-site inverse-map contraction]
     \label{def:mpdo_inverse_map_three_site_contraction}
     \lean{MPOTensor.inverseMapThreeSiteContraction}
@@ -196,6 +208,17 @@ strong subadditivity for a normalized three-site reduced state.
     which is the direct data for the real Perron--Frobenius matrix $T$ used
     in the rank-one step.
 \end{definition}
+
+\begin{figure}[ht]
+    \centering
+    \TNMPDOSectorPairing
+    \caption{Tracing the ket and bra legs of a sector tensor leaves only its
+    bond leg: $l_k$ becomes the bond vector $|l_k)$ and $r_k$ the bond
+    functional $(r_k|$. Contracting the shared bond of a neighboring pair
+    gives the trace-matrix entry $T_{k,h}=(r_k|l_h)=\tr(\eta_{k,h})$. This is
+    \cite[Appendix~C.2, lines~1474--1481]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_sector_pairing}
+\end{figure}
 
 
 \begin{theorem}[Positivity of bipartite partial traces]
@@ -475,6 +498,18 @@ strong subadditivity for a normalized three-site reduced state.
         T^2=T.
     \]
 \end{proof}
+
+\begin{figure}[ht]
+    \centering
+    \TNMPDOSectorZCLIdentity
+    \caption{The zero-correlation-length identity for the sector pairing: the
+    one-site operator $\sum_k|l_k)(r_k|$ on the bond space equals the
+    two-site contraction, whose inner pairing contributes the scalar
+    $T_{k,h}=(r_k|l_h)$, so that
+    $\sum_k|l_k)(r_k|=\sum_{k,h}T_{k,h}\,|l_k)(r_h|$. This is the displayed
+    identity of \cite[Appendix~C.2, lines~1490--1493]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_sector_zcl_identity}
+\end{figure}
 
 % Scope restriction (linear independence): the source Lemma C.5 neither
 % assumes nor derives linear independence of the sector tensors. Its proof
