@@ -526,6 +526,21 @@ theorem pow_tendsto_zero_of_spectralRadius_lt_one
     rw [← coe_nnnorm, ← NNReal.coe_pow]; exact_mod_cast hn.le
   · exact tendsto_pow_atTop_nhds_zero_of_lt_one r.coe_nonneg (by exact_mod_cast hr_lt_one)
 
+/-- **An idempotent with spectral radius below one is zero.** In a complex Banach
+algebra, the powers of such an element converge to `0` while every positive power
+equals the element itself. -/
+theorem IsIdempotentElem.eq_zero_of_spectralRadius_lt_one
+    {A : Type*} [NormedRing A] [CompleteSpace A] [NormedAlgebra ℂ A]
+    {a : A} (ha : IsIdempotentElem a) (h : spectralRadius ℂ a < 1) :
+    a = 0 := by
+  have hpow := pow_tendsto_zero_of_spectralRadius_lt_one a h
+  have hshift : Filter.Tendsto (fun n => a ^ (n + 1)) Filter.atTop (nhds 0) :=
+    hpow.comp (Filter.tendsto_add_atTop_nat 1)
+  have hconst : Filter.Tendsto (fun n => a ^ (n + 1)) Filter.atTop (nhds a) := by
+    simp only [ha.pow_succ_eq]
+    exact tendsto_const_nhds
+  exact tendsto_nhds_unique hconst hshift
+
 /-! ### Application to mixed transfer convergence -/
 
 /-- **Mixed transfer iterates decay for distinct blocks**: `F_{AB}^n(X) → 0`. -/
