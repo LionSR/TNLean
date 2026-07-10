@@ -124,8 +124,10 @@ theorem hasRankOneFactorization_of_mul_self_eq_self
 
 /-- An idempotent matrix has constant traces of positive powers.  This recovers
 the display tr(T^N) = tr(T) in the proof of Lemma C.5 (arXiv:1606.00608,
-Appendix C.2, lines 1494--1497) from the idempotence of the sector trace matrix
-supplied by the zero-correlation-length identity. -/
+Appendix C.2, lines 1494--1497) from the idempotence of the sector trace matrix.
+In the pairing route below, this idempotence follows from the
+zero-correlation-length identity together with linear independence of the
+sector tensors. -/
 theorem tracePowersConstant_of_mul_self_eq_self
     {T : Matrix (Fin n) (Fin n) ℝ} (hTT : T * T = T) :
     TracePowersConstant T := by
@@ -145,8 +147,8 @@ In the proof of Lemma C.5 (arXiv:1606.00608, Appendix C.2, lines
 Lemma C.4 (lines 1407--1471).  A primitive matrix has a positive entry in
 every row and in every column, so no sector tensor l_k and no functional r_k
 pairs to zero against the whole opposite family.  These lemmas supply the
-nonvanishing of the sector tensors used to derive their linear independence
-from a block-support decomposition. -/
+nonvanishing used to derive linear independence once each sector tensor lies in
+the corresponding member of an independent family of subspaces. -/
 
 /-- A primitive matrix has a positive entry in every row: a vanishing row of
 `T` would make the same row of every power of `T` vanish. -/
