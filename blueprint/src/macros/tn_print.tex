@@ -202,6 +202,66 @@
     \end{tikzpicture}%
 }
 
+% Applying the inverse tensor to the first and third sites of a three-site
+% MPO word leaves one matrix entry of the middle tensor and one entry of the
+% complementary virtual tail.
+\newcommand{\TNMPDOInverseMapThreeSiteContraction}{%
+    \begin{tikzpicture}[tn picture]
+        % Three-site word with the first and third physical indices contracted
+        % against the inverse tensor.
+        \TN@tensordot{tnKone}{(-3.00,0)}
+        \TN@tensordot{tnKtwo}{(-1.60,0)}
+        \TN@tensordot{tnKthree}{(-0.20,0)}
+        \draw[tn leg] (tnKone.east) -- (tnKtwo.west);
+        \draw[tn leg] (tnKtwo.east) -- (tnKthree.west);
+        \node at (-3.00,-0.30) {${\cal K}$};
+        \node at (-1.60,-0.30) {${\cal K}$};
+        \node at (-0.20,-0.30) {${\cal K}$};
+
+        \TN@tensordot{tnInvOne}{(-3.00,1.18)}
+        \TN@tensordot{tnInvThree}{(-0.20,1.18)}
+        \draw[tn phys leg] (tnKone.north) -- (tnInvOne.south);
+        \draw[tn phys leg] (tnKthree.north) -- (tnInvThree.south);
+        \TN@leftleg{tnInvOne}{0.52}
+        \TN@rightleg{tnInvOne}{0.52}
+        \TN@leftleg{tnInvThree}{0.52}
+        \TN@rightleg{tnInvThree}{0.52}
+        \node at (-3.00,1.52) {${\cal K}^{-1}$};
+        \node at (-0.20,1.52) {${\cal K}^{-1}$};
+        \node[anchor=east] at (-3.58,1.18) {$\alpha_1$};
+        \node[anchor=west] at (-2.42,1.18) {$\beta_1$};
+        \node[anchor=east] at (-0.78,1.18) {$\alpha_3$};
+        \node[anchor=west] at (0.38,1.18) {$\beta_3$};
+        \TN@upleg{tnKtwo}{0.52}
+        \node at (-1.60,0.82) {$p_2$};
+
+        % The trace closes the three-site word through the remaining sites R.
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+            (tnTail) at (-1.60,-1.02) {$R$};
+        \draw[tn leg] (tnKone.west) -- ++(-0.42,0) |- (tnTail.west);
+        \draw[tn leg] (tnTail.east) -| ($(tnKthree.east)+(0.42,0)$) -- (tnKthree.east);
+
+        \node at (0.88,0.20) {$=$};
+
+        % The two surviving factors.
+        \TN@tensordot{tnMiddle}{(2.25,0.20)}
+        \TN@leftleg{tnMiddle}{0.58}
+        \TN@rightleg{tnMiddle}{0.58}
+        \TN@upleg{tnMiddle}{0.52}
+        \node at (2.25,-0.10) {${\cal K}$};
+        \node at (2.25,1.02) {$p_2$};
+        \node[anchor=east] at (1.61,0.20) {$\beta_1$};
+        \node[anchor=west] at (2.89,0.20) {$\alpha_3$};
+        \node at (3.50,0.20) {$\times$};
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+            (tnTailEntry) at (4.65,0.20) {$R$};
+        \draw[tn leg] (tnTailEntry.west) -- ++(-0.58,0);
+        \draw[tn leg] (tnTailEntry.east) -- ++(0.58,0);
+        \node[anchor=east] at (4.01,0.20) {$\beta_3$};
+        \node[anchor=west] at (5.29,0.20) {$\alpha_1$};
+    \end{tikzpicture}%
+}
+
 \newcommand{\TNGaugeConjugation}[3]{%
     \begin{tikzpicture}[tn picture]
         \TN@opdotabove{tnXl}{(-1.10,0)}{#1}
