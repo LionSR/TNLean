@@ -235,14 +235,21 @@ read as the full source definition for a multi-block BNT family. See
 def IsZCL (A : MPSTensor d D) : Prop :=
   IsLocallyOrthogonal A ∧ IsCID A
 
-/-- **CID implies RFP** (arXiv:1606.00608, Theorem 3.8 reverse direction):
-for a tensor with a PosDef fixed point, correlations independent of distance
-implies the transfer map is idempotent.
+/-- **Virtual-insertion distance independence implies RFP.**
+
+For a tensor with a positive-definite fixed point, independence of the
+virtual-insertion correlator implies that the transfer map is idempotent.
 
 The proof uses trace nondegeneracy: IsCID forces
 $\operatorname{tr}(Y\, E^n(X \rho_R))$ to be constant in `n` for all `X`, `Y`,
 so $E^n(X \rho_R)$ is constant. Since `ρR` is PosDef (hence invertible),
-$X \rho_R$ ranges over all matrices, giving $E^2 = E$. -/
+$X \rho_R$ ranges over all matrices, giving $E^2 = E$.
+
+**Scope restriction (virtual insertions):** `IsCID` quantifies over arbitrary
+virtual bond matrices, rather than the physical block observables in
+arXiv:1606.00608, Definition 3.3 and Theorem TheoremZCLPure.  The missing
+physical-realization step from lines 1250--1258 is recorded in
+`docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
 theorem isCID_implies_isRFP
     (A : MPSTensor d D)
     (ρR : Matrix (Fin D) (Fin D) ℂ)
