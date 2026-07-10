@@ -501,6 +501,66 @@
     Gram matrix the identity.
 \end{proof}
 
+\begin{theorem}[Gram conjugation from the adjoint dressing]
+    \label{thm:gram_conj_of_dressed_adjoint}
+    \lean{Matrix.gram_conj_eq_conjTranspose_of_dressed_adjoint}
+    \lean{Matrix.gram_conj_eq_gram_conj_of_dressed_adjoint}
+    \lean{Matrix.commute_gram_of_dressed_adjoint_of_conjTranspose_eq}
+    \leanok
+    Let $X$ be invertible and let $B$ satisfy the dressed-adjoint identity
+    \[
+        XBX^{-1} = (X^{-1})^\dagger B^\dagger X^\dagger.
+    \]
+    Then conjugation by the Gram matrix carries $B$ to its adjoint,
+    \[
+        (X^\dagger X)\,B\,(X^\dagger X)^{-1} = B^\dagger,
+    \]
+    so any two gauges satisfying the identity have equal Gram conjugations,
+    and if moreover $B^\dagger = B$ then $X^\dagger X$ commutes with $B$.
+    Applied to the letters of a vertical sector, the first display is the
+    blockwise form of the first diagram in the proof of
+    \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}, the second is the second
+    diagram, and the commutation is its form in the normalization
+    $X_{\alpha,1}=\Id$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Multiply the dressed-adjoint identity by $X^\dagger$ on the left and by
+    $(X^{-1})^\dagger$ on the right.  The left side becomes
+    $(X^\dagger X)B(X^\dagger X)^{-1}$ and the right side collapses to
+    $B^\dagger$.  If $B^\dagger = B$, multiplying the resulting identity by
+    $X^\dagger X$ on the right gives the commutation.
+\end{proof}
+
+\begin{theorem}[Equation eq3 from the dressed-adjoint identities]
+    \label{thm:eq3_of_dressed_adjoint}
+    \lean{MPSTensor.IsNormal.conjTranspose_mul_self_eq_smul_one_of_dressed_adjoint}
+    \lean{MPSTensor.IsNormal.smul_mem_unitaryGroup_of_dressed_adjoint}
+    \leanok
+    \uses{def:normal, thm:gram_conj_of_dressed_adjoint,
+        thm:normal_tensor_gram_rigidity}
+    Let $M_\alpha$ be a normal tensor with self-adjoint letters and let
+    $X \ne 0$ be invertible with
+    $XM_\alpha^iX^{-1} = (X^{-1})^\dagger (M_\alpha^i)^\dagger X^\dagger$
+    for every letter.  Then $X^\dagger X = \omega\,\Id$ for a necessarily
+    positive constant $\omega$, and $\omega^{-1/2}X$ is unitary.  The
+    hypotheses are the blockwise identities produced by Lemma L from the
+    first diagram in the proof of
+    \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}, for the sectors $k$ and
+    $1$ in the normalization $X_{\alpha,1}=\Id$; the conclusion is
+    equation eq3 with its isometric normalization.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:gram_conj_of_dressed_adjoint, thm:normal_tensor_gram_rigidity}
+    By Theorem~\ref{thm:gram_conj_of_dressed_adjoint} the Gram matrix
+    $X^\dagger X$ commutes with every letter of $M_\alpha$.
+    Theorem~\ref{thm:normal_tensor_gram_rigidity} then makes it a positive
+    multiple of the identity and normalizes $X$ to a unitary.
+\end{proof}
+
 \begin{lemma}[Matrix product vector of the diagonal tensor]
     \label{lem:mpv_diagonal_tensor}
     \lean{MPOTensor.mpv_diagonalTensor}
@@ -851,6 +911,9 @@
         thm:psd_commute_of_commute_pow,
         thm:mpdo_sector_compression_trace_pos,
         thm:normal_tensor_gram_rigidity,
+        thm:mpo_adjoint_reflection,
+        thm:gram_conj_of_dressed_adjoint,
+        thm:eq3_of_dressed_adjoint,
         lem:mpv_diagonal_tensor,
         lem:mpv_diagonal_tensor_eq_blocks, lem:mpv_diagonal_tensor_nonneg,
         lem:mpv_vertical_assembled,
@@ -867,6 +930,9 @@
         thm:psd_commute_of_commute_pow,
         thm:mpdo_sector_compression_trace_pos,
         thm:normal_tensor_gram_rigidity,
+        thm:mpo_adjoint_reflection,
+        thm:gram_conj_of_dressed_adjoint,
+        thm:eq3_of_dressed_adjoint,
         lem:mpv_diagonal_tensor,
         lem:vertical_grouping_equiv}
     Theorem~\ref{thm:blockwise_one_sub_mp_zero} shows
@@ -900,10 +966,10 @@
     $\omega_{\alpha j}>0$ and makes the similarities between grouped sectors
     unitary: Theorem~\ref{thm:mpdo_sector_compression_trace_pos} gives the
     positive traces of the nonzero sector compressions, and
-    Theorem~\ref{thm:normal_tensor_gram_rigidity} turns the Gram matrices of
-    the sector gauges into positive multiples of the identity, whose
-    normalizations are the required unitaries.  Deriving the commutation
-    hypothesis of the rigidity theorem from self-adjointness of the sector
-    compressions remains open, as does the construction of the vertical
-    canonical decomposition itself.
+    Theorem~\ref{thm:eq3_of_dressed_adjoint} derives equation eq3 and the
+    isometric normalization of the sector gauges from the blockwise
+    dressed-adjoint identities of the two displayed diagrams.  Deriving those
+    identities from self-adjointness of the sector compressions via Lemma L
+    within the vertical decomposition remains open, as does the construction
+    of the vertical canonical decomposition itself.
 \end{proof}

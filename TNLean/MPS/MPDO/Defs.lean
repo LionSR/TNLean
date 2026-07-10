@@ -33,6 +33,8 @@ Verstraete):
 * `MPOTensor.transferMap`: the MPO transfer map
   `E_M(X) = ∑_{i,j} M^{ij} X (M^{ij})†`.
 * `MPOTensor.IsHermitian`: local hermiticity predicate on the tensor.
+* `MPOTensor.adjointTensor`: the adjoint tensor `(M†)^{ij} = (M^{ji})†`, which
+  generates the adjoint operator family up to spatial reflection.
 * `MPOTensor.IsMPDO`: global positivity predicate.
 * `MPOTensor.IsLPDO`: local purification predicate.
 * `MPOTensor.IsRFP`: renormalization fixed-point predicate.
@@ -173,6 +175,83 @@ noncomputable def mpo (M : MPOTensor d D) (N : ℕ) :
 def IsHermitian (M : MPOTensor d D) : Prop :=
   ∀ i j : Fin d, M i j = (M j i)ᴴ
 
+/-! ### The adjoint tensor -/
+
+/-- The **adjoint tensor** $M^\dagger$: exchange the ket and bra physical
+indices and take the conjugate transpose of each virtual matrix,
+$(M^\dagger)^{ij} = (M^{ji})^\dagger$.  Site by site this is the dagger of
+the generated operator family; the $\dagger$-marked tensors in the first
+displayed diagram of the proof of Proposition 4.13 of arXiv:1606.00608,
+lines 1909--1913, are of this form. -/
+def adjointTensor (M : MPOTensor d D) : MPOTensor d D :=
+  fun i j => (M j i)ᴴ
+
+@[simp] lemma adjointTensor_apply (M : MPOTensor d D) (i j : Fin d) :
+    adjointTensor M i j = (M j i)ᴴ := rfl
+
+/-- A tensor equals its adjoint tensor precisely when it is Hermitian. -/
+lemma adjointTensor_eq_iff_isHermitian (M : MPOTensor d D) :
+    adjointTensor M = M ↔ IsHermitian M := by
+  constructor
+  · intro h i j
+    exact (congrFun (congrFun h i) j).symm
+  · intro h
+    funext i j
+    exact (h i j).symm
+
+/-- Word evaluation of the adjoint tensor: for equal-length words it is the
+conjugate transpose of the original word evaluation on the reversed words
+with ket and bra exchanged. -/
+theorem evalWord_adjointTensor (M : MPOTensor d D) :
+    ∀ σs τs : List (Fin d), σs.length = τs.length →
+      evalWord (adjointTensor M) σs τs = (evalWord M τs.reverse σs.reverse)ᴴ := by
+  intro σs
+  induction σs with
+  | nil =>
+      intro τs h
+      rw [List.length_nil, eq_comm, List.length_eq_zero_iff] at h
+      subst h
+      simp only [List.reverse_nil, evalWord_nil, Matrix.conjTranspose_one]
+  | cons i is ih =>
+      intro τs h
+      cases τs with
+      | nil => simp at h
+      | cons j js =>
+          have hlen : is.length = js.length := by simpa using h
+          simp only [evalWord_cons, adjointTensor_apply, List.reverse_cons]
+          rw [ih js hlen,
+            evalWord_append M js.reverse is.reverse [j] [i]
+              (by simp only [List.length_reverse]; exact hlen.symm),
+            evalWord_cons, evalWord_nil, Matrix.mul_one, Matrix.conjTranspose_mul]
+
+/-- Reading a configuration through the index reversal `Fin.rev` reverses the
+associated word. -/
+private theorem ofFn_comp_rev {α : Type*} {N : ℕ} (σ : Fin N → α) :
+    List.ofFn (fun k => σ (Fin.rev k)) = (List.ofFn σ).reverse := by
+  apply List.ext_getElem
+  · simp
+  · intro k h1 h2
+    simp only [List.length_ofFn] at h1
+    rw [List.getElem_ofFn, List.getElem_reverse, List.getElem_ofFn]
+    congr 1
+    ext
+    simp only [Fin.val_rev, List.length_ofFn]
+    omega
+
+/-- The adjoint tensor generates the adjoint operator family up to spatial
+reflection: entrywise,
+$H^{(N)}(M^\dagger)_{\sigma\tau}
+= \overline{H^{(N)}(M)_{\tau\circ\mathrm{rev},\,\sigma\circ\mathrm{rev}}}$,
+where $\mathrm{rev}$ reverses the site order.  This identifies the
+$\dagger$-marked chain in the first displayed diagram of the proof of
+Proposition 4.13 of arXiv:1606.00608, lines 1909--1913. -/
+theorem mpo_adjointTensor (M : MPOTensor d D) {N : ℕ} (σ τ : Fin N → Fin d) :
+    mpo (adjointTensor M) N σ τ =
+      star (mpo M N (fun k => τ (Fin.rev k)) (fun k => σ (Fin.rev k))) := by
+  simp only [mpo_apply, mpoMatrixEntry]
+  rw [evalWord_adjointTensor M _ _ (by simp), ← Matrix.trace_conjTranspose,
+    ofFn_comp_rev, ofFn_comp_rev]
+
 /-! ### Transfer map -/
 
 /-- The **MPO transfer map** associated to an MPO tensor `M`:
@@ -211,6 +290,28 @@ it generates positive semidefinite operators for all system sizes:
 See arXiv:1606.00608, Section 4. -/
 def IsMPDO (M : MPOTensor d D) : Prop :=
   ∀ N : ℕ, (mpo M N).PosSemidef
+
+/-- For an MPDO, Hermiticity of the density operators removes the conjugation:
+the adjoint tensor generates the spatially reflected density operators. -/
+theorem IsMPDO.mpo_adjointTensor_eq {M : MPOTensor d D} (hM : IsMPDO M)
+    {N : ℕ} (σ τ : Fin N → Fin d) :
+    mpo (adjointTensor M) N σ τ =
+      mpo M N (fun k => σ (Fin.rev k)) (fun k => τ (Fin.rev k)) := by
+  rw [mpo_adjointTensor]
+  exact (hM N).isHermitian.apply _ _
+
+/-- The adjoint tensor of an MPDO is again an MPDO: its density operators are
+spatial reflections of positive semidefinite operators. -/
+theorem IsMPDO.adjointTensor {M : MPOTensor d D} (hM : IsMPDO M) :
+    IsMPDO (MPOTensor.adjointTensor M) := by
+  intro N
+  have href : mpo (MPOTensor.adjointTensor M) N =
+      (mpo M N).submatrix (fun σ k => σ (Fin.rev k)) (fun τ k => τ (Fin.rev k)) := by
+    ext σ τ
+    rw [hM.mpo_adjointTensor_eq]
+    rfl
+  rw [href]
+  exact (hM N).submatrix _
 
 /-! ### LPDO: local purification -/
 
