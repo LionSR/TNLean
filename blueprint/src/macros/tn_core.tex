@@ -140,6 +140,25 @@
     \node at (\TN@chainellipsisx,-1.02) {$#6$};%
 }
 
+% Trace-closed MPO word: a row of MPO sites (first, ellipsis, last) whose
+% virtual bond is contracted along the row and closed below by the trace,
+% while every ket and bra leg stays external.
+\newcommand{\TN@closedMPOword}[1]{%
+    \TN@tensordot{#1L}{(0,0)}
+    \TN@tensordot{#1M}{(1.15,0)}
+    \TN@tensordot{#1R}{(3.05,0)}
+    \foreach \n in {#1L,#1M,#1R} {
+            \TN@upleg{\n}{0.46}
+            \TN@downleg{\n}{0.46}
+        }
+    \draw[tn leg] (#1L.east) -- (#1M.west);
+    \draw[tn leg] (#1M.east) -- ++(0.50,0);
+    \draw[tn leg] ($(#1R.west)+(-0.50,0)$) -- (#1R.west);
+    \node at (2.10,0) {$\cdots$};
+    \draw[tn leg] (#1L.west) -- ++(-0.42,0) -- ++(0,-0.92)
+    -- ($(#1R.east)+(0.42,-0.92)$) -- ($(#1R.east)+(0.42,0)$) -- (#1R.east);%
+}
+
 \newcommand{\TN@boxedThreeSiteChain}[4]{%
     \draw[tn leg] (0.40,0) rectangle (3.50,-0.46);
     \TN@tensordot{#1one}{(1.00,0)}

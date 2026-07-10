@@ -278,6 +278,185 @@
     \end{tikzpicture}%
 }
 
+% Horizontal MPDO operator: one row of MPO sites with the virtual bond
+% contracted along the row and closed by the trace; the ket and bra legs
+% stay external.
+\newcommand{\TNMPDOHorizontalOperator}{%
+    \begin{tikzpicture}[tn picture]
+        \node[anchor=east] at (-0.72,0) {$H^{(N)}(\tilde M)\;=$};
+        \TN@closedMPOword{hop}
+    \end{tikzpicture}%
+}
+
+% The three first-site contractions of the horizontal MPDO operator: the
+% matrix P inserted on the ket leg, on the bra leg, and on both legs of the
+% first site.
+\newcommand{\TNMPDOFirstSiteContractions}{%
+    \begin{tikzpicture}[tn picture]
+        \begin{scope}
+            \TN@closedMPOword{fsl}
+            \TN@opdotleft{fslP}{(0,0.26)}{P}
+            \node[anchor=west] at (3.80,0) {$PH^{(N+1)}$};
+        \end{scope}
+        \begin{scope}[yshift=-2.35cm]
+            \TN@closedMPOword{fsr}
+            \TN@opdotleft{fsrP}{(0,-0.26)}{P}
+            \node[anchor=west] at (3.80,0) {$H^{(N+1)}P$};
+        \end{scope}
+        \begin{scope}[yshift=-4.70cm]
+            \TN@closedMPOword{fsc}
+            \TN@opdotleft{fscPu}{(0,0.26)}{P}
+            \TN@opdotleft{fscPd}{(0,-0.26)}{P}
+            \node[anchor=west] at (3.80,0) {$PH^{(N+1)}P$};
+        \end{scope}
+    \end{tikzpicture}%
+}
+
+% Vertical direct-sum form of the doubled tensor: after the physical isometry
+% each block factorizes into a diagonal weight on the multiplicity factor and
+% a basis tensor carrying the virtual legs.
+\newcommand{\TNMPDOVerticalDirectSum}{%
+    \begin{tikzpicture}[tn picture]
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt] (vdUu) at (-2.55,0.76) {$U^\dagger$};
+        \TN@tensordot{vdM}{(-2.55,0)}
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt] (vdUd) at (-2.55,-0.76) {$U$};
+        \draw[tn phys leg] ($(vdUu.north)+(-0.11,0)$) -- ++(0,0.36);
+        \draw[tn phys leg] ($(vdUu.north)+(0.11,0)$) -- ++(0,0.36);
+        \draw[tn phys leg] (vdUu.south) -- (vdM.north);
+        \draw[tn phys leg] (vdM.south) -- (vdUd.north);
+        \draw[tn phys leg] ($(vdUd.south)+(-0.11,0)$) -- ++(0,-0.36);
+        \draw[tn phys leg] ($(vdUd.south)+(0.11,0)$) -- ++(0,-0.36);
+        \TN@leftleg{vdM}{0.58}
+        \TN@rightleg{vdM}{0.58}
+        \node at (-2.92,-0.26) {$\tilde M$};
+        \node at (-1.43,0) {$=$};
+        \node at (-0.62,0) {$\displaystyle\bigoplus_\alpha$};
+        \TN@opdot{vdMu}{(0.45,0)}
+        \draw[tn phys leg] (vdMu.north) -- ++(0,0.40);
+        \draw[tn phys leg] (vdMu.south) -- ++(0,-0.40);
+        \node at (0.45,0.74) {$\mu_\alpha$};
+        \TN@tensordot{vdMa}{(1.55,0)}
+        \TN@upleg{vdMa}{0.44}
+        \TN@downleg{vdMa}{0.44}
+        \TN@leftleg{vdMa}{0.55}
+        \TN@rightleg{vdMa}{0.55}
+        \node at (1.55,0.74) {$M_\alpha$};
+    \end{tikzpicture}%
+}
+
+% Inverse-map contraction for an injective simple tensor: contracting the
+% inverse tensor with the tensor through the physical index identifies the
+% two pairs of virtual legs (the matrix units on the bond space).
+\newcommand{\TNMPDOInverseContraction}{%
+    \begin{tikzpicture}[tn picture]
+        \TN@tensordot{invT}{(0,0.55)}
+        \TN@tensordot{invB}{(0,-0.55)}
+        \TN@leftleg{invT}{0.60}
+        \TN@rightleg{invT}{0.60}
+        \TN@leftleg{invB}{0.60}
+        \TN@rightleg{invB}{0.60}
+        \draw[tn phys leg] (invT.south) -- (invB.north);
+        \node at (-0.50,0.88) {$K^{-1}$};
+        \node at (-0.42,-0.88) {$K$};
+        \node at (1.35,0) {$=$};
+        \draw[tn leg] (1.90,0.55) -- (2.15,0.55)
+        .. controls (2.70,0.55) and (2.70,-0.55) .. (2.15,-0.55)
+        -- (1.90,-0.55);
+        \draw[tn leg] (3.90,0.55) -- (3.65,0.55)
+        .. controls (3.10,0.55) and (3.10,-0.55) .. (3.65,-0.55)
+        -- (3.90,-0.55);
+    \end{tikzpicture}%
+}
+
+% Sector pairing data: tracing the ket and bra legs of a sector tensor leaves
+% only its bond leg; contracting the shared bond of a neighboring pair gives
+% the trace-matrix entry.
+\newcommand{\TNMPDOSectorPairing}{%
+    \begin{tikzpicture}[tn picture]
+        \TN@tensordot{spL}{(0,0)}
+        \TN@leftleg{spL}{0.60}
+        \draw[tn phys leg] (spL.north) -- (0,0.41);
+        \draw[tn phys leg] (spL.south) -- (0,-0.41);
+        \draw[tn phys leg] (0,0.41)
+        .. controls (0.46,0.41) and (0.46,-0.41) .. (0,-0.41);
+        \node at (0,0.68) {$l_k$};
+        \node[anchor=west] at (0.62,0) {$=\;|l_k)$};
+        \TN@tensordot{spR}{(3.05,0)}
+        \TN@rightleg{spR}{0.60}
+        \draw[tn phys leg] (spR.north) -- (3.05,0.41);
+        \draw[tn phys leg] (spR.south) -- (3.05,-0.41);
+        \draw[tn phys leg] (3.05,0.41)
+        .. controls (2.59,0.41) and (2.59,-0.41) .. (3.05,-0.41);
+        \node at (3.05,0.68) {$r_k$};
+        \node[anchor=west] at (3.80,0) {$=\;(r_k|$};
+        \TN@tensordot{spTk}{(6.35,0)}
+        \TN@tensordot{spTh}{(7.35,0)}
+        \draw[tn leg] (spTk.east) -- (spTh.west);
+        \draw[tn phys leg] (spTk.north) -- (6.35,0.41);
+        \draw[tn phys leg] (spTk.south) -- (6.35,-0.41);
+        \draw[tn phys leg] (6.35,0.41)
+        .. controls (5.89,0.41) and (5.89,-0.41) .. (6.35,-0.41);
+        \draw[tn phys leg] (spTh.north) -- (7.35,0.41);
+        \draw[tn phys leg] (spTh.south) -- (7.35,-0.41);
+        \draw[tn phys leg] (7.35,0.41)
+        .. controls (7.81,0.41) and (7.81,-0.41) .. (7.35,-0.41);
+        \node at (6.35,0.68) {$r_k$};
+        \node at (7.35,0.68) {$l_h$};
+        \node[anchor=west] at (8.05,0) {$=\;T_{k,h}$};
+    \end{tikzpicture}%
+}
+
+% Zero-correlation-length identity for the sector pairing: the one-site
+% physical-trace operator on the bond space equals its two-site square.
+\newcommand{\TNMPDOSectorZCLIdentity}{%
+    \begin{tikzpicture}[tn picture]
+        \node at (-1.60,0) {$\displaystyle\sum_k$};
+        \TN@tensordot{zcAl}{(-0.50,0)}
+        \draw[tn leg] (zcAl.west) -- ++(-0.55,0);
+        \draw[tn phys leg] (zcAl.north) -- (-0.50,0.41);
+        \draw[tn phys leg] (zcAl.south) -- (-0.50,-0.41);
+        \draw[tn phys leg] (-0.50,0.41)
+        .. controls (-0.04,0.41) and (-0.04,-0.41) .. (-0.50,-0.41);
+        \node at (-0.50,0.68) {$l_k$};
+        \TN@tensordot{zcAr}{(0.75,0)}
+        \draw[tn leg] (zcAr.east) -- ++(0.55,0);
+        \draw[tn phys leg] (zcAr.north) -- (0.75,0.41);
+        \draw[tn phys leg] (zcAr.south) -- (0.75,-0.41);
+        \draw[tn phys leg] (0.75,0.41)
+        .. controls (0.29,0.41) and (0.29,-0.41) .. (0.75,-0.41);
+        \node at (0.75,0.68) {$r_k$};
+        \node at (1.90,0) {$=$};
+        \node at (2.70,0) {$\displaystyle\sum_{k,h}$};
+        \TN@tensordot{zcBlk}{(3.85,0)}
+        \draw[tn leg] (zcBlk.west) -- ++(-0.55,0);
+        \draw[tn phys leg] (zcBlk.north) -- (3.85,0.41);
+        \draw[tn phys leg] (zcBlk.south) -- (3.85,-0.41);
+        \draw[tn phys leg] (3.85,0.41)
+        .. controls (4.31,0.41) and (4.31,-0.41) .. (3.85,-0.41);
+        \node at (3.85,0.68) {$l_k$};
+        \TN@tensordot{zcBrk}{(5.10,0)}
+        \draw[tn phys leg] (zcBrk.north) -- (5.10,0.41);
+        \draw[tn phys leg] (zcBrk.south) -- (5.10,-0.41);
+        \draw[tn phys leg] (5.10,0.41)
+        .. controls (4.64,0.41) and (4.64,-0.41) .. (5.10,-0.41);
+        \node at (5.10,0.68) {$r_k$};
+        \TN@tensordot{zcBlh}{(5.90,0)}
+        \draw[tn leg] (zcBrk.east) -- (zcBlh.west);
+        \draw[tn phys leg] (zcBlh.north) -- (5.90,0.41);
+        \draw[tn phys leg] (zcBlh.south) -- (5.90,-0.41);
+        \draw[tn phys leg] (5.90,0.41)
+        .. controls (6.36,0.41) and (6.36,-0.41) .. (5.90,-0.41);
+        \node at (5.90,0.68) {$l_h$};
+        \TN@tensordot{zcBrh}{(7.15,0)}
+        \draw[tn leg] (zcBrh.east) -- ++(0.55,0);
+        \draw[tn phys leg] (zcBrh.north) -- (7.15,0.41);
+        \draw[tn phys leg] (zcBrh.south) -- (7.15,-0.41);
+        \draw[tn phys leg] (7.15,0.41)
+        .. controls (6.69,0.41) and (6.69,-0.41) .. (7.15,-0.41);
+        \node at (7.15,0.68) {$r_h$};
+    \end{tikzpicture}%
+}
+
 \newcommand{\TNGaugeConjugation}[3]{%
     \begin{tikzpicture}[tn picture]
         \TN@opdotabove{tnXl}{(-1.10,0)}{#1}

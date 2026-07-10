@@ -10,6 +10,12 @@ name: TNMPOLocalPurification TNMPORenormalizationTS TNEtaSectorDecomposition
 name: TNMPDOInverseMapThreeSiteContraction
 {{ obj.tn_svg_html }}
 
+name: TNMPDOHorizontalOperator TNMPDOFirstSiteContractions TNMPDOVerticalDirectSum
+{{ obj.tn_svg_html }}
+
+name: TNMPDOInverseContraction TNMPDOSectorPairing TNMPDOSectorZCLIdentity
+{{ obj.tn_svg_html }}
+
 name: TNGaugeConjugation TNPhysicalRealization TNLinearTwist
 {{ obj.tn_svg_html }}
 
