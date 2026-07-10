@@ -153,11 +153,11 @@ $(r_k)_k$ are linearly independent, the same argument in the dual space gives
 the idempotence of $T^{\top}$, hence of $T$.  Together with the trace
 normalization $\operatorname{tr}(T)=1$ and the idempotent trace-one criterion
 above, this recovers the outer-product factorization asserted by
-Lemma~C.5.\footnote{The formal statements are
-\path{Matrix.mul_self_eq_self_of_pairing_idempotent},
-\path{Matrix.mul_self_eq_self_of_pairing_idempotent_dual}, and
-\path{Matrix.hasRankOneFactorization_of_pairing_idempotent} in
-\path{TNLean/Algebra/PerronFrobenius/RankOne.lean}, added in \ghpr{3685}.}
+Lemma~C.5.\footnote{\sloppy The formal statements are
+{\scriptsize\leanid{Matrix.mul_self_eq_self_of_pairing_idempotent}},
+{\scriptsize\leanid{Matrix.mul_self_eq_self_of_pairing_idempotent_dual}}, and
+{\scriptsize\leanid{Matrix.hasRankOneFactorization_of_pairing_idempotent}} in
+\doclink{TNLean/Algebra/PerronFrobenius/RankOne}, added in \ghpr{3685}.}
 
 The linear-independence hypothesis is a scope restriction relative to the
 source.  Lemma~C.5 neither assumes nor derives it: the construction
@@ -195,14 +195,15 @@ so $T^2=T$.  Hence all positive powers of $T$ have the same trace; trace one
 then gives the rank-one factorization.  Primitivity separately makes each
 $|l_k)$ nonzero, so an independent family of subspaces carrying the vectors
 is sufficient to derive their linear independence.
-\footnote{The formal declarations are
-\path{MPOTensor.SectorPairingData.pairing_operator_idempotent},
-\path{MPOTensor.SectorPairingData.mul_self_eq_self},
-\path{MPOTensor.SectorPairingData.tracePowersConstant},
-\path{MPOTensor.SectorPairingData.l_ne_zero},
-\path{MPOTensor.SectorPairingData.linearIndependent_l},
-\path{MPOTensor.sal_zcl_implies_rank_one_T_of_pairing_idempotent}, and
-\path{MPOTensor.sal_zcl_implies_rank_one_T_of_sector_supports}.}
+\footnote{\sloppy The formal declarations are
+{\scriptsize\leanid{MPOTensor.SectorPairingData.pairing_operator_idempotent}},
+{\scriptsize\leanid{MPOTensor.SectorPairingData.mul_self_eq_self}},
+{\scriptsize\leanid{MPOTensor.SectorPairingData.tracePowersConstant}},
+{\scriptsize\leanid{MPOTensor.SectorPairingData.l_ne_zero}},
+{\scriptsize\leanid{MPOTensor.SectorPairingData.linearIndependent_l}},
+{\scriptsize\leanid{MPOTensor.sal_zcl_implies_rank_one_T_of_pairing_idempotent}}, and
+{\scriptsize\leanid{MPOTensor.sal_zcl_implies_rank_one_T_of_sector_supports}} in
+\doclink{TNLean/MPS/MPDO/SimpleLocalStructure}.}
 
 Three obligations remain before the conditional hypotheses disappear.
 First, the inverse-map factorization at lines 1407--1482 must construct the
