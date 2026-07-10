@@ -1163,11 +1163,45 @@ and rates for the single-tensor transfer map $\E_A$.
     \cite[Definition~3.3]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
+\begin{definition}[Physical observable transfer]
+    \label{def:physical_observable_transfer}
+    \lean{MPSTensor.physicalObservableTransfer}
+    \leanok
+    \uses{def:eval_word}
+    For an observable $O$ on a block of $L$ physical spins, define the linear
+    map on the virtual matrix space by
+    \[
+        \E_O(X)=\sum_{\boldsymbol i,\boldsymbol j}
+        \langle\boldsymbol j|O|\boldsymbol i\rangle
+        A^{\boldsymbol i}X(A^{\boldsymbol j})^\dagger .
+    \]
+    This is the observable transfer map in equation~\path{Corr} of
+    \cite[lines~490--496]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Two-observable periodic expectation]
+    \label{def:physical_two_point_expectation}
+    \lean{MPSTensor.physicalTwoPointExpectation}
+    \leanok
+    \uses{def:physical_observable_transfer, def:transfer_map}
+    Let $O_1,O_2$ act on blocks of $L_1,L_2$ physical spins, separated around
+    the periodic chain by complementary gaps of lengths $n_1,n_2$.  Their
+    two-observable expectation is
+    \[
+        \operatorname{Tr}_{\MN{D}}\!\left(
+        \E_{O_2}\circ\E_A^{n_2}\circ\E_{O_1}\circ\E_A^{n_1}
+        \right).
+    \]
+    The trace is the operator trace on the virtual matrix space, as in
+    equation~\path{Corr} of \cite[lines~490--496]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
 \begin{definition}[Positive-gap physical distance independence]%
     \label{def:is_positive_gap_physical_cid}
     \lean{MPSTensor.IsPositiveGapPhysicalCID}
     \leanok
-    \uses{def:transfer_map}
+    \uses{def:physical_observable_transfer,
+        def:physical_two_point_expectation}
     For an observable $O$ on a block of $L$ physical spins, write
     \[
         \E_O(X)=\sum_{\boldsymbol i,\boldsymbol j}
