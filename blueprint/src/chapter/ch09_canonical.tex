@@ -349,6 +349,105 @@ the resulting splitting decomposes any tensor into irreducible blocks.
     projection supplied by Definition~\ref{def:has_inv_proj}.
 \end{proof}
 
+\begin{lemma}[Support isometry of an orthogonal projection]
+    \label{lem:projection_support_isometry}
+    \lean{IsOrthogonalProjection.exists_support_isometry}
+    \leanok
+    \uses{def:orthogonal_projection_channel}
+    Every orthogonal projection $P$ on $\C^D$ factors through an isometry:
+    there are $n \in \N$ and $V \in \C^{D \times n}$ with
+    $V^\dagger V = \Id$, $V V^\dagger = P$, and $n = \tr(P)$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Diagonalize $P$ unitarily; its eigenvalues are $0$ and $1$ because $P$ is
+    Hermitian and idempotent. The columns of the diagonalizing unitary
+    corresponding to eigenvalue $1$ form the required isometry, and their
+    number is $\tr(P)$.
+\end{proof}
+
+\begin{lemma}[Corner tensors inherit projector closure]
+    \label{lem:projector_closure_corner}
+    \lean{MPSTensor.hasInvariantProjectorClosure_compress_of_commutes}
+    \leanok
+    \uses{def:invariant_projector_closure, def:orthogonal_projection_channel}
+    Let $A$ have invariant-projector closure, and let $V$ be an isometry,
+    $V^\dagger V = \Id$, whose range projection $V V^\dagger$ commutes with
+    every $A^i$. Then the corner tensor $B^i = V^\dagger A^i V$ again has
+    invariant-projector closure.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:invariant_projector_closure}
+    Let $Q$ be an orthogonal projection with $Q B^i = Q B^i Q$ for all~$i$.
+    Then $V Q V^\dagger$ is an orthogonal projection, and commutation of
+    $V V^\dagger$ with each $A^i$ gives
+    $(V Q V^\dagger) A^i = (V Q V^\dagger) A^i (V Q V^\dagger)$.
+    Projector closure for $A$ yields
+    $A^i (V Q V^\dagger) = (V Q V^\dagger) A^i (V Q V^\dagger)$, and
+    compressing both sides between $V^\dagger$ and $V$ returns
+    $B^i Q = Q B^i Q$.
+\end{proof}
+
+\begin{lemma}[Matrix product vectors split along an isometric partition]
+    \label{lem:mpv_partition_isometries}
+    \lean{MPSTensor.sameMPV₂_toTensorFromBlocks_of_isometry_family}
+    \leanok
+    \uses{def:same_mpv2, def:block_diagonal_tensor}
+    Let $V_1, \ldots, V_r$ be isometries, $V_k^\dagger V_k = \Id$, with
+    $\sum_k V_k V_k^\dagger = \Id$, and suppose $A^i V_k = V_k A_k^i$ for the
+    corner tensors $A_k^i = V_k^\dagger A^i V_k$. Then
+    $\mc{V}(A) = \mc{V}(\bigoplus_{k=1}^r A_k)$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The intertwining relation propagates from letters to words, so
+    $A^w V_k = V_k A_k^w$ for every word $w$. Inserting the partition of
+    unity $\sum_k V_k V_k^\dagger = \Id$ into the trace and cycling gives
+    \[
+        \tr(A^w)
+        = \sum_{k=1}^r \tr\bigl(V_k^\dagger A^w V_k\bigr)
+        = \sum_{k=1}^r \tr\bigl(A_k^w\bigr),
+    \]
+    which is the matrix product vector of the direct sum.
+\end{proof}
+
+\begin{theorem}[Decomposition into irreducible corners under projector closure]
+    \label{thm:projector_closure_irreducible_corners}
+    \lean{MPSTensor.exists_irreducible_blockDecomp_with_isometry_of_hasInvariantProjectorClosure}
+    \leanok
+    \uses{def:invariant_projector_closure, def:irreducible_tensor,
+        def:same_mpv2, def:block_diagonal_tensor}
+    Suppose $A$ has invariant-projector closure. Then there are isometries
+    $V_1, \ldots, V_r$ with $V_k^\dagger V_k = \Id$, pairwise orthogonal
+    ranges, and $\sum_k V_k V_k^\dagger = \Id$, such that
+    $A^i V_k = V_k A_k^i$ for the corner tensors
+    $A_k^i = V_k^\dagger A^i V_k$, every corner tensor $A_k$ is irreducible,
+    and $\mc{V}(A) = \mc{V}(\bigoplus_{k=1}^r A_k)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:has_inv_proj, thm:invariant_projector_closure_commutes,
+        lem:projection_support_isometry, lem:projector_closure_corner,
+        lem:mpv_partition_isometries}
+    Strong induction on the bond dimension. If $A$ is irreducible, the single
+    corner $V = \Id$ suffices. Otherwise $A$ has a nontrivial invariant
+    projection $P$, which commutes with every $A^i$ by
+    Theorem~\ref{thm:invariant_projector_closure_commutes}. Factoring $P$ and
+    $\Id - P$ through support isometries
+    (Lemma~\ref{lem:projection_support_isometry}) splits $A$ into two corner
+    tensors of strictly smaller bond dimension, each of which inherits
+    invariant-projector closure by Lemma~\ref{lem:projector_closure_corner}.
+    The two recursively obtained families are combined; ranges from different
+    corners are orthogonal because the corresponding projections are. The
+    equality of matrix product vectors is
+    Lemma~\ref{lem:mpv_partition_isometries}.
+\end{proof}
+
 \begin{theorem}[PSD fixed point gives invariant projection]\label{thm:fp_inv_proj}
     \lean{MPSTensor.lowerZero_of_posSemidef_fixedPoint}
     \leanok
