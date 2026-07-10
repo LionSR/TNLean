@@ -10,16 +10,15 @@ import TNLean.Algebra.StarSubalgebraSemisimple
 
 A star-subalgebra `S` of complex matrices acts on Euclidean space, each member acting as the
 operator its matrix represents. Mathlib already provides this action as a module structure:
-matrices act on `n → ℂ` (`Matrix.instModuleForall`), the action restricts to the subalgebra
-(`Subsemiring.instModuleSubtypeMem`), and it transports to `EuclideanSpace ℂ n`
-(`WithLp.instModule`). This file identifies the invariant-subspace notions used in the
+matrices act on `n → ℂ`, the action restricts to the subalgebra, and it transports to
+`EuclideanSpace ℂ n`. This file identifies the invariant-subspace notions used in the
 structure theory of Wolf Ch. 6 (towards Thm 6.14) with their module-theoretic counterparts:
 the submodules over the subalgebra are exactly the invariant subspaces, and the irreducible
 invariant subspaces are exactly the simple submodules.
 
 Through this identification the isotypic grouping behind Wolf Thm 6.14 can draw on the
-general theory of simple and semisimple modules (`IsSimpleModule`, `IsSemisimpleModule`,
-`Mathlib.RingTheory.SimpleModule.Isotypic`) instead of re-deriving it for the spatial
+general theory of simple and semisimple modules (`IsSimpleModule`, `IsSemisimpleModule` and
+the isotypic decomposition built on them) instead of re-deriving it for the spatial
 predicates.
 
 ## Main definitions
@@ -46,8 +45,8 @@ variable {n : Type*} [Fintype n] [DecidableEq n]
 variable (S : StarSubalgebra ℂ (Matrix n n ℂ))
 
 /-- Scaling a member of a star-subalgebra of complex matrices scales its action on `n → ℂ`:
-the restriction to the subalgebra of the corresponding property of the full matrix action
-(`Matrix.instIsScalarTowerForall`). Together with the general `WithLp` instance this yields
+the restriction to the subalgebra of the corresponding property of the full matrix action.
+Together with the general `WithLp` instance this yields
 `IsScalarTower ℂ ↥S (EuclideanSpace ℂ n)`. Wolf Ch. 6, towards Thm 6.14. -/
 instance isScalarTower_pi : IsScalarTower ℂ ↥S ((i : n) → ℂ) where
   smul_assoc c s v := by

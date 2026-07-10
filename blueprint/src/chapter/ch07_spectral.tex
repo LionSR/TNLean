@@ -1273,8 +1273,7 @@ step the two pieces are.
 
 The irreducibility notion just used is simplicity in the language of modules. The
 members of $S$ act on $\C^{D}$ as the operators their matrices represent, making
-$\C^{D}$ a module over the algebra $S$; a subspace of $\C^{D}$ is closed under this
-action precisely when it is invariant under every member of $S$.
+$\C^{D}$ a module over the algebra $S$.
 
 \begin{lemma}[Irreducible invariant subspaces are the simple submodules]%
     \label{lem:starSubalgebra_irreducible_iff_simple}
@@ -1282,22 +1281,32 @@ action precisely when it is invariant under every member of $S$.
       StarSubalgebra.isIrreducibleSubspace_restrictScalars_iff}
     \leanok
     \uses{def:starSubalgebra_irreducibleSubspace}
-    Let $S$ be a $*$-subalgebra of $\MN{D}$, acting on $\C^{D}$. The subspaces of
-    $\C^{D}$ closed under the action of $S$ are exactly the invariant subspaces,
-    and an invariant subspace is irreducible under $S$ precisely when, as a module
-    over $S$, it is simple: nonzero, with no submodule other than $\{0\}$ and
-    itself.
+    Let $S$ be a $*$-subalgebra of $\MN{D}$, acting on $\C^{D}$. A complex
+    subspace $W \subseteq \C^{D}$ is invariant under every member of $S$ if and
+    only if $W$ is the underlying complex subspace of a submodule of $\C^{D}$
+    over $S$. Under this identification an invariant subspace is irreducible
+    under $S$ precisely when, as a module over $S$, it is simple: nonzero, with
+    no submodule other than $\{0\}$ and itself.
 \end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:starSubalgebra_irreducibleSubspace}
-    A subspace closed under the action of $S$ is invariant, since each member of
-    $S$ maps it into itself; conversely an invariant subspace is closed under the
-    action of every member of $S$ and under the complex scalars, which lie in $S$.
-    Under this correspondence the submodules contained in an invariant subspace
-    $W$ are exactly the invariant subspaces contained in $W$, so irreducibility of
-    $W$ and simplicity of $W$ as a module ask the same of them.
+    The underlying set of a submodule of $\C^{D}$ over $S$ is closed under
+    addition and under the action of every member of $S$; since the complex
+    scalars lie in $S$, it is a complex subspace, and it is invariant.
+    Conversely an invariant complex subspace $W$ is closed under addition and
+    under the action of every member of $S$, so $W$ underlies a submodule $q$
+    of $\C^{D}$ over $S$ with the same members. Under this correspondence the
+    submodules below $q$ are exactly the invariant subspaces below $W$:
+    \[
+        \{\, q' \subseteq q : q' \text{ a submodule over } S \,\}
+        =
+        \{\, W' \subseteq W : W' \text{ invariant under } S \,\}.
+    \]
+    Hence $q$ has a submodule other than $\{0\}$ and $q$ exactly when $W$ has
+    an invariant subspace other than $\{0\}$ and $W$: simplicity of $q$ as a
+    module over $S$ is irreducibility of $W$ under $S$.
 \end{proof}
 
 \begin{lemma}[Euclidean space is a semisimple module over the subalgebra]%
