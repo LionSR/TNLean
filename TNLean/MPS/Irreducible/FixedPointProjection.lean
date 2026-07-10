@@ -457,23 +457,6 @@ section NonScalarFixedPoint
 
 variable {d D : ℕ}
 
-private lemma max_shift_posSemidef [Nonempty (Fin D)]
-    {X : Matrix (Fin D) (Fin D) ℂ} (hX : X.IsHermitian) :
-    ((↑(maxEigenvalue hX) : ℂ) • (1 : Matrix (Fin D) (Fin D) ℂ) - X).PosSemidef := by
-  classical
-  set U : Matrix (Fin D) (Fin D) ℂ := ↑hX.eigenvectorUnitary
-  have hU_unit : IsUnit U := by
-    rw [Matrix.isUnit_iff_isUnit_det]
-    simpa [U] using Matrix.UnitaryGroup.det_isUnit hX.eigenvectorUnitary
-  rw [smul_one_sub_hermitian_spectral hX (maxEigenvalue hX)]
-  rw [show Uᴴ = star U by simp [Matrix.star_eq_conjTranspose]]
-  exact (Matrix.IsUnit.posSemidef_star_right_conjugate_iff hU_unit).mpr
-    (Matrix.posSemidef_diagonal_iff.mpr (fun i => by
-      rw [RCLike.nonneg_iff]
-      constructor
-      · exact_mod_cast sub_nonneg.mpr (le_maxEigenvalue hX i)
-      · simp [Complex.ofReal_im]))
-
 private lemma max_shift_not_posDef [Nonempty (Fin D)]
     {X : Matrix (Fin D) (Fin D) ℂ} (hX : X.IsHermitian) :
     ¬ ((↑(maxEigenvalue hX) : ℂ) • (1 : Matrix (Fin D) (Fin D) ℂ) - X).PosDef := by
@@ -519,7 +502,7 @@ theorem exists_singular_posSemidef_fixedPoint_of_unital_nonScalar_fixedPoint
   let c : ℝ := maxEigenvalue hX_herm
   let ρ : Matrix (Fin D) (Fin D) ℂ := (↑c : ℂ) • 1 - X
   have hρ_psd : ρ.PosSemidef := by
-    simpa [ρ, c] using max_shift_posSemidef (D := D) hX_herm
+    simpa [ρ, c] using maxEigenvalue_smul_one_sub_posSemidef hX_herm
   have hρ_not_pd : ¬ ρ.PosDef := by
     simpa [ρ, c] using max_shift_not_posDef (D := D) hX_herm
   have hρ_fix : transferMap (d := d) (D := D) A ρ = ρ := by

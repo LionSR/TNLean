@@ -208,14 +208,8 @@ lemma exists_critical_scalar [Nonempty (Fin D)]
   have h_shift := hermitian_sub_scalar_spectral hH_herm c₀
   have hct : ∀ f, V * Matrix.diagonal f * Vᴴ = V * Matrix.diagonal f * star V :=
     fun _ => by simp [Matrix.star_eq_conjTranspose]
-  have hHc_psd : (H - (↑c₀ : ℂ) • 1).PosSemidef := by
-    rw [h_shift, hct]
-    exact (Matrix.IsUnit.posSemidef_star_right_conjugate_iff hV_unit).mpr
-      (Matrix.posSemidef_diagonal_iff.mpr (fun i => by
-        rw [RCLike.nonneg_iff]
-        constructor
-        · exact_mod_cast sub_nonneg.mpr (minEigenvalue_le hH_herm i)
-        · simp [Complex.ofReal_im]))
+  have hHc_psd : (H - (↑c₀ : ℂ) • 1).PosSemidef :=
+    sub_minEigenvalue_smul_one_posSemidef hH_herm
   have hHc_not_pd : ¬(H - (↑c₀ : ℂ) • 1).PosDef := by
     rw [h_shift, hct]; intro h_pd
     have h_pd' := (Matrix.IsUnit.posDef_star_right_conjugate_iff hV_unit).mp h_pd

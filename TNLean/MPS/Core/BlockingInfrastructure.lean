@@ -461,25 +461,6 @@ theorem wordOfBlock_cast_length (d : ℕ) {L₁ L₂ : ℕ} (h : L₁ = L₂)
   subst h
   rfl
 
-/-- Reindex the physical alphabet of a tensor by a map of physical indices. -/
-noncomputable def reindexPhysical {d₁ d₂ D : ℕ} (f : Fin d₁ → Fin d₂)
-    (A : MPSTensor d₂ D) : MPSTensor d₁ D :=
-  fun i => A (f i)
-
-/-- Word evaluation after physical reindexing is word evaluation on the mapped word. -/
-theorem evalWord_reindexPhysical {d₁ d₂ D : ℕ} (f : Fin d₁ → Fin d₂)
-    (A : MPSTensor d₂ D) (w : List (Fin d₁)) :
-    evalWord (reindexPhysical f A) w = evalWord A (w.map f) := by
-  induction w with
-  | nil => simp
-  | cons i w ih => simp [evalWord, reindexPhysical, ih]
-
-/-- MPVs after physical reindexing are MPVs on the reindexed configuration. -/
-theorem mpv_reindexPhysical {d₁ d₂ D : ℕ} (f : Fin d₁ → Fin d₂)
-    (A : MPSTensor d₂ D) {N : ℕ} (σ : Fin N → Fin d₁) :
-    mpv (reindexPhysical f A) σ = mpv A (fun n => f (σ n)) := by
-  simp [mpv, coeff, evalWord_reindexPhysical, List.map_ofFn, Function.comp_def]
-
 /-- Iterated physical blocking agrees with direct blocking after the canonical
 index relabeling from iterated blocks to flattened blocks. -/
 @[mps_block_words]

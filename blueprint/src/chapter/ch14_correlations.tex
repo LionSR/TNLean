@@ -609,23 +609,12 @@ and rates for the single-tensor transfer map $\E_A$.
     the trace-normalization $\tr(\Lambda)=1$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:rfp_nt_structural_full}
-    Apply Theorem~\ref{thm:rfp_nt_structural_full}, then set
-    $\widetilde U^i=\sqrt D\,U^i$ and
-    $\widetilde\Lambda=D^{-1/2}\Lambda$.  Since
-    $\widetilde\Lambda\widetilde U^i=\Lambda U^i$, the decomposition
-    $A^i=X\widetilde\Lambda\widetilde U^iX^{-1}$ still holds.  The
-    pair-index contraction becomes
-    \[
-        \sum_i
-        \overline{(\widetilde U^i)_{\alpha,\beta}}\,
-        (\widetilde U^i)_{\alpha',\beta'}
-        =
-        D\cdot D^{-1}
-        \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}
-        =
-        \delta_{\alpha,\alpha'}\delta_{\beta,\beta'} .
-    \]
+    \uses{thm:isometry_canonical_form_of_rfp_nt}
+    Apply Theorem~\ref{thm:isometry_canonical_form_of_rfp_nt}, which gives
+    $A^i = X\sqrt{\Lambda}\,U^i X^{-1}$ with $U$ already a unit pair-index
+    isometry.  Set $\widetilde\Lambda_\alpha = \sqrt{\Lambda_\alpha}$, so that
+    $A^i = X\widetilde\Lambda\,U^i X^{-1}$ with $\widetilde\Lambda$ diagonal
+    positive; the decomposition and the pair-index condition are immediate.
 \end{proof}
 
 \begin{theorem}[Per-block isometry canonical form]%
