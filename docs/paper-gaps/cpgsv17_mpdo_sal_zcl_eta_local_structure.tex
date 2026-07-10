@@ -153,22 +153,33 @@ $m_{\beta,\alpha}$ and the subsequent choice of a nonzero pair $(\alpha,\beta)$
 are consistent with this correction.  Thus the repeated $\alpha_3$ is a local
 index typo, not a different mathematical hypothesis.
 
-The next result must compare this contraction of the concrete three-site
-reduced state with the two factors obtained by contracting
-$\rho_{A b_1}^{(k)}$ and $\rho_{b_2 c}^{(k)}$ in the Hayashi
-decomposition.  The equality in that decomposition is written after
-conjugation by the middle-site unitary and reindexing by
-$H_B=\bigoplus_k H_{b_1}^{(k)}\otimes H_{b_2}^{(k)}$; the new
-inverse-map identity is written in the original physical coordinates.  The
-missing comparison must commute the two end contractions through this unitary
-and reindexing, obtain the sectorwise product
-$A^{(k)}_{\alpha_1,\beta_1}\otimes
-B^{(k)}_{\alpha_3,\beta_3}$, and then choose a nonzero entry
-$R_{\beta_3,\alpha_1}$ before dividing to obtain the sector factorization
-displayed at lines 1434--1438.  None of the present physical-realization
-identities states this comparison: they rewrite left or right virtual
-multiplication on one copy of ${\cal K}$, whereas the required equality
-contracts two physical sites of a reduced density operator.
+The comparison with the Hayashi factors is now formalized.  For a three-site
+closure against $R$, let $A^{(k)}_{\alpha_1,\beta_1}$ and
+$B^{(k)}_{\alpha_3,\beta_3}$ be obtained by contracting the inverse tensor
+against $\rho_{A b_1}^{(k)}$ and $\rho_{b_2 c}^{(k)}$, respectively.  In the
+basis selected by the middle-site unitary, every diagonal sector satisfies
+\[
+  R_{\beta_3,\alpha_1}\,
+  \widetilde{\cal K}^{(k)}_{\beta_1,\alpha_3}
+    ((l,r),(l',r'))
+  =p_k A^{(k)}_{\alpha_1,\beta_1}(l,l')
+    B^{(k)}_{\alpha_3,\beta_3}(r,r').
+\]
+The factor $p_k$ is explicit because the formal Hayashi decomposition stores
+normalized left and right density operators.  The proof commutes the two outer
+contractions through the unitary change of basis and applies the double
+inverse-map contraction above.
+\footnote{The formal declarations are
+\leanid{MPOTensor.IsThreeSiteClosure},
+\leanid{MPOTensor.physicalSlice},
+\leanid{MPOTensor.hayashiInverseLeft},
+\leanid{MPOTensor.hayashiInverseRight}, and
+\leanid{MPOTensor.inverseMap_hayashi_sector_comparison}.}
+
+The next missing result chooses a nonzero entry
+$R_{\beta_3,\alpha_1}$ and divides the comparison to obtain the tensor
+factorization displayed at lines 1434--1438.  It must then assemble the
+neighboring operators and prove their all-length cyclic contraction identity.
 
 The canonical family
 \leanid{MPOTensor.ExplicitEtaOperators.ofHayashiMarkov} does not supply this
@@ -200,8 +211,8 @@ derives the GSNNCH--ZCL and RFP conclusions.  Accordingly, adding ZCL to a
 conditional theorem would not repair the missing inverse-map sector
 factorization.
 
-The inverse-map comparison, sector factorization, all-length identity, and
-primitivity statement of Lemma \texttt{propSN} are tracked by
+The sector factorization, all-length identity, and primitivity statement of
+Lemma \texttt{propSN} are tracked by
 \href{https://github.com/LionSR/TNLean/issues/3696}{issue \#3696}.  Once those
 operators have been constructed, the positive commuting bond and product form
 of Proposition \texttt{3to4} are tracked separately by

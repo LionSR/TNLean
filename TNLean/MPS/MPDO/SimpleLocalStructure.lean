@@ -102,9 +102,9 @@ is the trace of ηₖₕ. Consequently these two families cannot simply be
 identified.
 
 The raw double inverse-map contraction (arXiv:1606.00608, Appendix C.2,
-lines 1415--1438) is `MPOTensor.inverseMapThreeSiteContraction_eq`. The earliest
-missing connection is the comparison of that contraction with the conjugated,
-reindexed Hayashi decomposition. This comparison must produce a sector
+lines 1415--1438) is `MPOTensor.inverseMapThreeSiteContraction_eq`. The
+remaining passage from this contraction to the neighboring-sector operators
+must produce a
 factorization of the concrete tensor `K` satisfying, for every `N`,
 \[
   \widetilde\sigma^{(N)}(K)
