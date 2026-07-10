@@ -173,14 +173,6 @@ noncomputable def ketLeftBraRightAction (P : Matrix (Fin d) (Fin d) ℂ) :
     Matrix (Fin (d * d)) (Fin (d * d)) ℂ :=
   fun p q => P p.divNat q.divNat * P q.modNat p.modNat
 
-@[simp] private theorem finProdFinEquiv_divNat (i j : Fin d) :
-    (finProdFinEquiv (i, j) : Fin (d * d)).divNat = i := by
-  exact congrArg Prod.fst (finProdFinEquiv.symm_apply_apply (i, j))
-
-@[simp] private theorem finProdFinEquiv_modNat (i j : Fin d) :
-    (finProdFinEquiv (i, j) : Fin (d * d)).modNat = j := by
-  exact congrArg Prod.snd (finProdFinEquiv.symm_apply_apply (i, j))
-
 /-- Reading the doubled physical index as a ket--bra pair recovers the
 corresponding matrix entry of the horizontal MPO contraction. -/
 theorem mpv_toMPSTensor_pairConfig (M : MPOTensor d D) {N : ℕ}
@@ -317,20 +309,6 @@ theorem firstSiteActionAgree_ketLeft_braRight
   rw [ketLeftAction_mpv, braRightAction_mpv]
   exact hComm N ρ
 
-/-- Evaluating a reindexed word: `evalWord B (l.map g) = evalWord (B ∘ g) l`. -/
-lemma evalWord_map {d' : ℕ} (B : MPSTensor d' D) (g : Fin d → Fin d') (l : List (Fin d)) :
-    evalWord B (l.map g) = evalWord (fun i => B (g i)) l := by
-  induction l with
-  | nil => rfl
-  | cons a t ih => simp only [List.map_cons, evalWord_cons, ih]
-
-/-- Reindexing the physical legs of an MPV: composing the tensor with `g : Fin d → Fin d'`
-on the inside equals composing the configuration with `g` on the outside. -/
-lemma mpv_comp_reindex {d' : ℕ} (B : MPSTensor d' D) (g : Fin d → Fin d')
-    {N : ℕ} (σ : Fin N → Fin d) :
-    mpv (fun i => B (g i)) σ = mpv B (fun k => g (σ k)) := by
-  simp only [mpv, coeff, List.ofFn_comp' σ g, evalWord_map]
-
 /-- The diagonal restriction of a doubled-index block: `diagBlock B i = B (i, i)`. -/
 def diagBlock {dim : ℕ} (B : MPSTensor (d * d) dim) : MPSTensor d dim :=
   fun i => B (finProdFinEquiv (i, i))
@@ -346,7 +324,7 @@ theorem mpv_toTensorFromBlocks_diag {r : ℕ} {dim : Fin r → ℕ}
   rw [mpv_toTensorFromBlocks_eq_sum, mpv_toTensorFromBlocks_eq_sum]
   refine Finset.sum_congr rfl fun k _ => ?_
   congr 1
-  exact (mpv_comp_reindex (A k) (fun i => finProdFinEquiv (i, i)) σ).symm
+  exact (mpv_reindexPhysical (fun i => finProdFinEquiv (i, i)) (A k) σ).symm
 
 end MPSTensor
 
@@ -368,13 +346,8 @@ def diagonalTensor (M : MPOTensor d D) : MPSTensor d D :=
 `(i, i)`: `diagonalTensor M i = M.toMPSTensor (finProdFinEquiv (i, i))`. -/
 theorem diagonalTensor_apply_eq (M : MPOTensor d D) (i : Fin d) :
     diagonalTensor M i = M.toMPSTensor (finProdFinEquiv (i, i)) := by
-  have h : ((finProdFinEquiv (i, i) : Fin (d * d)).divNat,
-      (finProdFinEquiv (i, i) : Fin (d * d)).modNat) = (i, i) :=
-    finProdFinEquiv.symm_apply_apply (i, i)
-  have hd : (finProdFinEquiv (i, i) : Fin (d * d)).divNat = i := congrArg Prod.fst h
-  have hm : (finProdFinEquiv (i, i) : Fin (d * d)).modNat = i := congrArg Prod.snd h
-  simp only [diagonalTensor_apply, toMPSTensor]
-  rw [hd, hm]
+  simp only [diagonalTensor_apply, toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
+    MPSTensor.finProdFinEquiv_modNat]
 
 /-- **Matrix product vector of the diagonal tensor.** The MPV of the diagonal tensor at
 a configuration `σ` equals the MPV of the doubled-index tensor at the diagonal-paired
@@ -384,9 +357,10 @@ diagonal configurations seen by `diagonalTensor M`, the first step of Propositio
 theorem mpv_diagonalTensor (M : MPOTensor d D) {N : ℕ} (σ : Fin N → Fin d) :
     MPSTensor.mpv (diagonalTensor M) σ
       = MPSTensor.mpv M.toMPSTensor (fun k => finProdFinEquiv (σ k, σ k)) := by
-  have htensor : diagonalTensor M = fun i => M.toMPSTensor (finProdFinEquiv (i, i)) :=
+  have htensor : diagonalTensor M =
+      MPSTensor.reindexPhysical (fun i => finProdFinEquiv (i, i)) M.toMPSTensor :=
     funext (diagonalTensor_apply_eq M)
-  rw [htensor, MPSTensor.mpv_comp_reindex M.toMPSTensor (fun i => finProdFinEquiv (i, i))]
+  rw [htensor, MPSTensor.mpv_reindexPhysical (fun i => finProdFinEquiv (i, i)) M.toMPSTensor]
 
 /-- Under a horizontal canonical-form decomposition of `M.toMPSTensor`, the diagonal
 tensor of `M` generates the same MPV family as the block-diagonal assembly, on the
