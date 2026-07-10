@@ -3,6 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import Mathlib.Analysis.Matrix.PosDef
+import Mathlib.LinearAlgebra.Dual.Defs
+import Mathlib.LinearAlgebra.LinearIndependent.Defs
 import Mathlib.LinearAlgebra.Matrix.Irreducible.Defs
 import Mathlib.LinearAlgebra.Projection
 import Mathlib.LinearAlgebra.Trace
@@ -31,6 +33,16 @@ The theorem `Matrix.hasRankOneFactorization_of_mul_self_eq_self` records the
 alternative exact condition suggested by the operator-valued ZCL identity: an
 idempotent trace-one matrix is the projection onto a one-dimensional range and
 therefore factors as an outer product.
+
+The theorems `Matrix.mul_self_eq_self_of_pairing_idempotent` and
+`Matrix.mul_self_eq_self_of_pairing_idempotent_dual` supply this idempotence:
+for the sector trace matrix T_{k,h} = (r_k|l_h) of arXiv:1606.00608,
+Appendix C.2, the zero-correlation-length identity
+sum_k |l_k)(r_k| = sum_{k,h} T_{k,h} |l_k)(r_h| (lines 1489--1497) states that
+the pairing operator equals its own square, and linear independence of the
+tensors on one side of the pairing turns this into `T * T = T`.  The theorem
+`Matrix.hasRankOneFactorization_of_pairing_idempotent` combines the two steps
+into the rank-one conclusion of Lemma SALZCL (lines 1484--1502).
 -/
 
 open scoped BigOperators Matrix ComplexOrder
@@ -102,6 +114,103 @@ theorem hasRankOneFactorization_of_mul_self_eq_self
   change Classical.choose _ * u.1 i = f (Pi.single j 1) i at hb'
   rw [heval] at hb'
   simpa [b, Matrix.vecMulVec_apply, mul_comm] using hb'.symm
+
+/-! ### Idempotence of the sector trace matrix
+
+Appendix C.2 of arXiv:1606.00608 pairs the tensors l_k and r_k into the
+sector trace matrix T_{k,h} = (r_k|l_h).  Zero correlation length gives the
+operator identity sum_k |l_k)(r_k| = sum_{k,h} T_{k,h} |l_k)(r_h|
+(lines 1489--1497), whose right-hand side is the square of its left-hand side.
+The lemmas below turn this identity into the matrix identity `T * T = T` when
+the tensors on one side of the pairing are linearly independent.  Together with
+the trace normalization and
+`Matrix.hasRankOneFactorization_of_mul_self_eq_self`, this recovers the
+rank-one factorization of Lemma SALZCL (lines 1484--1502).
+-/
+
+section PairingIdempotence
+
+variable {R : Type*} [CommRing R] {V : Type*} [AddCommGroup V] [Module R V]
+
+/-- **Idempotence of the sector trace matrix.**
+
+Let `T k h = r k (l h)` be the matrix pairing a family of vectors `l` against a
+family of linear functionals `r`; for the tensors of arXiv:1606.00608,
+Appendix C.2 this is the sector trace matrix T_{k,h} = (r_k|l_h).  Suppose the
+map `v ↦ ∑ k, r k v • l k`, which is the operator sum_k |l_k)(r_k|, equals its
+own square; this is the zero-correlation-length identity
+sum_k |l_k)(r_k| = sum_{k,h} T_{k,h} |l_k)(r_h| of arXiv:1606.00608,
+Appendix C.2, lines 1489--1497.  If the vectors `l k` are linearly independent,
+then `T * T = T`.  This is the operator-to-matrix step of Lemma SALZCL,
+lines 1484--1502. -/
+theorem mul_self_eq_self_of_pairing_idempotent
+    {l : Fin n → V} {r : Fin n → Module.Dual R V} {T : Matrix (Fin n) (Fin n) R}
+    (hT : ∀ k h, T k h = r k (l h)) (hl : LinearIndependent R l)
+    (hM : ∀ v : V, ∑ k, r k (∑ j, r j v • l j) • l k = ∑ k, r k v • l k) :
+    T * T = T := by
+  classical
+  -- The functionals do not distinguish a vector from its image under the pairing map.
+  have hinv : ∀ (v : V) (k : Fin n), r k (∑ j, r j v • l j) = r k v := by
+    intro v k
+    have hzero : ∑ i, (r i (∑ j, r j v • l j) - r i v) • l i = 0 := by
+      simp only [sub_smul, Finset.sum_sub_distrib, hM v, sub_self]
+    exact sub_eq_zero.mp (Fintype.linearIndependent_iff.mp hl _ hzero k)
+  ext k h
+  rw [Matrix.mul_apply]
+  have hexpand : r k (∑ j, r j (l h) • l j) = ∑ j, T k j * T j h := by
+    rw [map_sum]
+    exact Finset.sum_congr rfl fun j _ => by rw [map_smul, smul_eq_mul, hT k j, hT j h]; ring
+  rw [← hexpand, hinv (l h) k, hT k h]
+
+/-- Variant of `Matrix.mul_self_eq_self_of_pairing_idempotent` with the linear
+independence placed on the functionals `r k` instead of the vectors `l k`.  The
+proof passes to the dual space, where the functionals become the vectors of the
+pairing, evaluation at `l k` provides the functionals, and the pairing matrix
+becomes the transpose of `T`. -/
+theorem mul_self_eq_self_of_pairing_idempotent_dual
+    {l : Fin n → V} {r : Fin n → Module.Dual R V} {T : Matrix (Fin n) (Fin n) R}
+    (hT : ∀ k h, T k h = r k (l h)) (hr : LinearIndependent R r)
+    (hM : ∀ v : V, ∑ k, r k (∑ j, r j v • l j) • l k = ∑ k, r k v • l k) :
+    T * T = T := by
+  classical
+  have hTt : Tᵀ * Tᵀ = Tᵀ := by
+    refine mul_self_eq_self_of_pairing_idempotent (l := r)
+      (r := fun k => Module.Dual.eval R V (l k)) (fun k h => ?_) hr fun f => ?_
+    · simp only [Matrix.transpose_apply, Module.Dual.eval_apply]
+      exact hT h k
+    · simp only [Module.Dual.eval_apply]
+      ext v
+      simp only [LinearMap.sum_apply, LinearMap.smul_apply, smul_eq_mul]
+      have h1 := congrArg f (hM v)
+      simp only [map_sum, map_smul, smul_eq_mul] at h1
+      calc ∑ k, (∑ j, f (l j) * r j (l k)) * r k v
+          = ∑ k, ∑ j, f (l j) * r j (l k) * r k v := by simp only [Finset.sum_mul]
+        _ = ∑ j, ∑ k, f (l j) * r j (l k) * r k v := Finset.sum_comm
+        _ = ∑ k, (∑ j, r j v * r k (l j)) * f (l k) := by
+            simp only [Finset.sum_mul]
+            exact Finset.sum_congr rfl fun k _ => Finset.sum_congr rfl fun j _ => by ring
+        _ = ∑ k, r k v * f (l k) := h1
+        _ = ∑ k, f (l k) * r k v := Finset.sum_congr rfl fun k _ => mul_comm _ _
+  have h := congrArg Matrix.transpose hTt
+  simpa only [Matrix.transpose_mul, Matrix.transpose_transpose] using h
+
+end PairingIdempotence
+
+/-- **Rank-one factorization of the sector trace matrix.**
+
+Combining the idempotence `T * T = T` obtained from the zero-correlation-length
+identity of arXiv:1606.00608, Appendix C.2, lines 1489--1497 with the trace
+normalization gives the rank-one factorization of the sector trace matrix
+asserted by Lemma SALZCL, lines 1484--1502. -/
+theorem hasRankOneFactorization_of_pairing_idempotent
+    {V : Type*} [AddCommGroup V] [Module ℝ V]
+    {l : Fin n → V} {r : Fin n → Module.Dual ℝ V} {T : Matrix (Fin n) (Fin n) ℝ}
+    (hT : ∀ k h, T k h = r k (l h)) (hl : LinearIndependent ℝ l)
+    (hM : ∀ v : V, ∑ k, r k (∑ j, r j v • l j) • l k = ∑ k, r k v • l k)
+    (hTrace : Matrix.trace T = 1) :
+    HasRankOneFactorization T :=
+  hasRankOneFactorization_of_mul_self_eq_self
+    (mul_self_eq_self_of_pairing_idempotent hT hl hM) hTrace
 
 /-- A finite family of nonnegative real numbers with sum and sum of squares both
 one has exactly one nonzero entry, and that entry is one. -/
