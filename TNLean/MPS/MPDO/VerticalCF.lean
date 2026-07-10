@@ -67,9 +67,10 @@ surrogate for the paper's vertical canonical form.
 * `sameMPV₂Pos_diagonalTensor_verticalAssembledTensor_of_power_sums`:
   a separate positive-length comparison under scalar power-sum identities.
 * `blockwise_opposite_insert_eq_of_mpv_agree`:
-  once the two first-site equalities in the positivity argument are supplied,
-  Lemma L transfers them to the opposite corner of every horizontal
-  canonical-form block.
+  if two pairs of first-site matrices satisfy `FirstSiteActionAgree` with a
+  common left matrix, then the corresponding inserted tensors agree on every
+  horizontal canonical-form block, by two applications of
+  `blockwise_insert_eq_of_mpv_agree`.
 
 The results above supply matrix-product-vector identities and elementary
 positivity consequences, but do not give the passage from horizontal to
@@ -238,9 +239,9 @@ operator has zero opposite corner.
 
 This is equation `eq1:proof.IV.12` in the proof of Proposition 4.13 of
 arXiv:1606.00608, lines 1873--1887.  The subsequent use of Lemma L transfers
-this operator equality back to the tensor blocks; the present lemma isolates
-the positivity argument without adding assumptions beyond one-sided invariance
-and Hermiticity of `P`. -/
+this operator equality back to the tensor blocks. Positivity supplies the
+Hermiticity of the density operator; the algebraic corner argument then uses
+only that Hermiticity, one-sided invariance, and Hermiticity of `P`. -/
 theorem mpo_opposite_corner_eq_zero (M : MPOTensor d D) (hM : IsMPDO M) (N : ℕ)
     (P : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) (hP : P.IsHermitian)
     (hInv : P * mpo M N = P * mpo M N * P) :
