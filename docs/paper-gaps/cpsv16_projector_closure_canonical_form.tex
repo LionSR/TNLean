@@ -1,38 +1,94 @@
-% Source-faithfulness note for arXiv:1606.00608, lines 253--254.
-\section*{The projector-closure sufficient condition for canonical form}
+\documentclass{article}
 
-Cirac, Pérez-García, Schuch, and Verstraete state that a tensor without
-nontrivial periodic vectors is in canonical form if every orthogonal projection
-$P$ satisfying
-\[
-  P A^i = P A^i P
-\]
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The Projector-Closure Sufficient Condition for Canonical Form}
+\author{}
+\date{2026-07-10}
+
+\begin{document}
+\maketitle
+
+\section{The source assertion}
+
+Cirac, P\'erez-Garc\'ia, Schuch, and Verstraete state a sufficient condition for
+canonical form in Section~II of their analysis of matrix product density
+operators \cite{Cirac2016MPDO_arXiv}.  In the notation of that paper, assume
+that the tensor has no nontrivial periodic vectors and that every orthogonal
+projection $P$ satisfying
+\begin{align}
+    PA^i &= PA^iP \qquad\text{for every }i
+\end{align}
 also satisfies
-\[
-  A^i P = P A^i P.
-\]
-This is the proposition in arXiv:1606.00608, lines 253--254.
+\begin{align}
+    A^iP &= PA^iP \qquad\text{for every }i.
+\end{align}
+The paper then asserts that the tensor is in canonical form.  This is the
+proposition at arXiv:1606.00608, lines 253--254.
 
-The algebraic projection step is formalized without normalization.  Indeed, if
-$(1-P)A^iP=0$, then the first displayed hypothesis holds for $1-P$.  Its
-conclusion gives $A^i(1-P)=(1-P)A^i(1-P)$, and hence $P A^i=A^iP$.  Thus every
-projection used in the invariant-subspace decomposition is reducing.
+\section{The algebraic projection step}
 
-The remaining implication is spectral.  The current decomposition theorem
-produces irreducible blocks and equality of all finite-ring traces, but it does
-not transport a global absence-of-periodicity hypothesis to the transfer maps
-of the individual blocks.  Moreover, the source first rescales each block so
-that its transfer map has spectral radius one; the corresponding coefficients
-are then carried by the scalars $\mu_k$.  A faithful completion therefore needs
-a theorem which simultaneously:
+The projector hypothesis has a normalization-free consequence.  Suppose that
+$P$ is an orthogonal projection for which
+\begin{align}
+    (1-P)A^iP=0 \qquad\text{for every }i.
+\end{align}
+Then
+\begin{align}
+    (1-P)A^i=(1-P)A^i(1-P).
+\end{align}
+Applying the source hypothesis to $1-P$ gives
+\begin{align}
+    A^i(1-P)=(1-P)A^i(1-P),
+\end{align}
+and hence both off-diagonal corners vanish.  Consequently
+\begin{align}
+    PA^i=A^iP \qquad\text{for every }i.
+\end{align}
+Thus every projection used in the invariant-subspace decomposition is a
+reducing projection.  This implication is formalized directly, without a
+left-canonical or unital normalization.\footnote{Formal declarations:
+\leanid{MPSTensor.commutes_of_hasInvariantProjectorClosure_of_lowerZero} and
+\leanid{MPSTensor.exists_reducing_projection_of_hasInvariantProj} in
+\doclink{TNLean/MPS/CanonicalForm/ProjectorClosure}.}
+
+\section{The remaining spectral implication}
+
+The present decomposition theorem produces irreducible blocks and preserves
+all finite-ring traces, but it does not yet transport the global absence of
+periodic vectors to the transfer maps of the individual blocks.  The source
+also rescales each nonzero block so that its transfer map has spectral radius
+one, with the removed scale carried by the corresponding scalar coefficient.
+A source-faithful completion therefore still requires a theorem which
+simultaneously:
 \begin{enumerate}
-\item constructs the reducing direct-sum decomposition from the closure
-  condition;
+\item constructs the reducing direct-sum decomposition from projector closure;
 \item rescales every nonzero irreducible block to spectral radius one; and
-\item identifies the source's absence of nontrivial periodic vectors with
-  primitivity of each rescaled block transfer map.
+\item identifies absence of nontrivial periodic vectors with primitivity of
+  every rescaled block transfer map.
 \end{enumerate}
+No identity of the form
+\begin{align}
+    \sum_i (A^i)^\dagger A^i=1
+\end{align}
+occurs among the hypotheses of the cited proposition, so such a normalization
+cannot be assumed in this completion.
 
-No left-canonical identity such as
-$\sum_i (A^i)^\dagger A^i=1$ occurs in the cited proposition, so it cannot be
-assumed in this completion.
+\section{Conclusion}
+
+The classification is an \emph{open gap}.  The normalization-free
+reducing-projection step is established, but the spectral-radius rescaling and
+the deduction of blockwise primitivity from the absence of periodic vectors
+remain to be proved.  Until these spectral statements are available, the full
+sufficient condition for canonical form at arXiv:1606.00608, lines 253--254,
+is not formalized.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
