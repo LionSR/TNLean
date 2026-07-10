@@ -81,6 +81,25 @@ dimension. -/
     mpv A σ = (D : ℂ) := by
   simp [mpv, coeff]
 
+/-- Reindex the physical alphabet of a tensor by a map of physical indices. -/
+noncomputable def reindexPhysical {d₁ d₂ D : ℕ} (f : Fin d₁ → Fin d₂)
+    (A : MPSTensor d₂ D) : MPSTensor d₁ D :=
+  fun i => A (f i)
+
+/-- Word evaluation after physical reindexing is word evaluation on the mapped word. -/
+theorem evalWord_reindexPhysical {d₁ d₂ D : ℕ} (f : Fin d₁ → Fin d₂)
+    (A : MPSTensor d₂ D) (w : List (Fin d₁)) :
+    evalWord (reindexPhysical f A) w = evalWord A (w.map f) := by
+  induction w with
+  | nil => simp
+  | cons i w ih => simp [evalWord, reindexPhysical, ih]
+
+/-- MPVs after physical reindexing are MPVs on the reindexed configuration. -/
+theorem mpv_reindexPhysical {d₁ d₂ D : ℕ} (f : Fin d₁ → Fin d₂)
+    (A : MPSTensor d₂ D) {N : ℕ} (σ : Fin N → Fin d₁) :
+    mpv (reindexPhysical f A) σ = mpv A (fun n => f (σ n)) := by
+  simp [mpv, coeff, evalWord_reindexPhysical, List.map_ofFn, Function.comp_def]
+
 /-- Gauge equivalence: `A` and `B` are related by simultaneous similarity
 `B i = X * A i * X⁻¹` for some `X ∈ GL(D,ℂ)`. -/
 def GaugeEquiv (A B : MPSTensor d D) : Prop :=
