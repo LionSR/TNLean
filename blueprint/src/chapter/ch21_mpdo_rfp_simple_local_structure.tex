@@ -109,6 +109,115 @@ strong subadditivity for a normalized three-site reduced state.
     \label{fig:mpdo_inverse_contraction}
 \end{figure}
 
+\begin{definition}[Normalized fourth-site virtual tail]
+    \label{def:mpdo_normalized_four_site_tail}
+    \lean{MPOTensor.normalizedFourSiteTail}
+    \leanok
+    \uses{def:mpo_family, def:mpo_physical_trace_transfer}
+    Let ${\cal K}$ be an MPO tensor and set
+    $Z_4=\tr[\rho^{(4)}({\cal K})]$. Its normalized fourth-site virtual tail is
+    \[
+        R_4:=Z_4^{-1}\mathcal T_{\cal K}
+        =\tr[\rho^{(4)}({\cal K})]^{-1}
+          \sum_{i_4=0}^{d-1}{\cal K}^{i_4i_4}.
+    \]
+    Thus the contraction of the fourth ket and bra indices is incorporated into
+    the virtual closing matrix. This is the $N=4$ specialization of the
+    normalization convention and three-site marginal in
+    \cite[lines~792--793 and 1343--1348]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Three-site marginal closed by the normalized fourth-site tail]
+    \label{thm:mpdo_reduced_four_three_tail}
+    \lean{MPOTensor.reducedBlockState_four_three_apply}
+    \leanok
+    \uses{def:mpdo_normalized_four_site_tail, def:mpo_eval_word}
+    Let $u=(i_1,i_2,i_3)$ and $v=(j_1,j_2,j_3)$ be physical words of length
+    three. The corresponding entry of the first-three-site marginal of the
+    normalized four-site periodic operator is
+    \[
+        \sigma_3^{(4)}({\cal K})_{u,v}
+        =\tr\!\left({\cal K}^{u,v}R_4\right)
+        =\tr\!\left(
+          {\cal K}^{i_1j_1}{\cal K}^{i_2j_2}{\cal K}^{i_3j_3}R_4
+        \right).
+    \]
+\end{theorem}
+
+\begin{figure}[ht]
+    \centering
+    \TNMPDONormalizedFourSiteTail
+    \caption{Tracing the fourth site of the normalized four-site periodic MPO
+    leaves the physical legs of sites $1,2,3$ open and replaces the fourth site
+    by the virtual closing operator
+    $R_4=\tr[\rho^{(4)}({\cal K})]^{-1}
+    \sum_{i_4}{\cal K}^{i_4 i_4}$; compare the normalization convention and
+    three-site marginal in
+    \cite[lines~792--793 and 1343--1348]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_normalized_four_site_tail}
+\end{figure}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_normalized_four_site_tail,
+        lem:mpo_eval_word_append}
+    Expanding the partial trace over the fourth site and factoring each
+    length-four word at its last letter gives
+    \[
+        \sigma_3^{(4)}({\cal K})_{u,v}
+        =Z_4^{-1}\sum_{i_4=0}^{d-1}
+          \tr\!\left({\cal K}^{u,v}{\cal K}^{i_4i_4}\right).
+    \]
+    Linearity of the trace now yields
+    \[
+        Z_4^{-1}\sum_{i_4=0}^{d-1}
+          \tr\!\left({\cal K}^{u,v}{\cal K}^{i_4i_4}\right)
+        =\tr\!\left(
+          {\cal K}^{u,v}
+          \left(Z_4^{-1}\sum_{i_4=0}^{d-1}{\cal K}^{i_4i_4}\right)
+        \right)
+        =\tr\!\left({\cal K}^{u,v}R_4\right).
+    \]
+\end{proof}
+
+\begin{theorem}[Non-vanishing of the normalized fourth-site tail]
+    \label{thm:mpdo_normalized_four_site_tail_ne_zero}
+    \lean{MPOTensor.normalizedFourSiteTail_ne_zero}
+    \leanok
+    \uses{def:mpdo_normalized_four_site_tail,
+        thm:mpdo_reduced_four_three_tail}
+    If $Z_4=\tr[\rho^{(4)}({\cal K})]\ne0$, then $R_4\ne0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_reduced_four_three_tail}
+    If $R_4=0$, then the tail formula makes every entry of
+    $\sigma_3^{(4)}({\cal K})$ vanish. Its trace would therefore be zero. On the
+    other hand, $Z_4\ne0$ makes the normalized four-site operator, and hence its
+    three-site marginal, have trace one. This is a contradiction.
+\end{proof}
+
+\begin{theorem}[A nonzero entry of the normalized fourth-site tail]
+    \label{thm:mpdo_normalized_four_site_tail_entry_ne_zero}
+    \lean{MPOTensor.exists_normalizedFourSiteTail_entry_ne_zero}
+    \leanok
+    \uses{def:mpdo_normalized_four_site_tail}
+    If $Z_4\ne0$, there exist virtual indices $\beta$ and $\alpha$ such that
+    \[
+        (R_4)_{\beta,\alpha}\ne0.
+    \]
+    These are the indices selected before the sector factorization in
+    \cite[Appendix~C.2, lines~1431--1437]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_normalized_four_site_tail_ne_zero}
+    If every matrix entry of $R_4$ vanished, then $R_4$ would be the zero
+    matrix, contrary to the preceding theorem.
+\end{proof}
+
 \begin{definition}[Three-site inverse-map contraction]
     \label{def:mpdo_inverse_map_three_site_contraction}
     \lean{MPOTensor.inverseMapThreeSiteContraction}
