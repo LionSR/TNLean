@@ -139,6 +139,36 @@ excluding the generalized zero-eigenspace, from a property of the concrete
 inverse-map tensors not currently recorded in
 \leanid{MPOTensor.ExplicitEtaOperators}.
 
+\subsection{The pairing-idempotence route}
+
+The formal development derives $T^2=T$ from the displayed operator identity
+under one additional hypothesis on the inverse-map tensors.  Suppose the
+family $(l_k)_k$ is linearly independent, so that $L$ is injective.  The
+operator identity $(LR)^2=LR$ gives
+\[
+  L\,T^2=(LR)^2L=(LR)L=L\,T,
+\]
+and cancelling $L$ on the left yields $T^2=T$.  If instead the functionals
+$(r_k)_k$ are linearly independent, the same argument in the dual space gives
+the idempotence of $T^{\top}$, hence of $T$.  Together with the trace
+normalization $\operatorname{tr}(T)=1$ and the idempotent trace-one criterion
+above, this recovers the outer-product factorization asserted by
+Lemma~C.5.\footnote{The formal statements are
+\leanid{Matrix.mul_self_eq_self_of_pairing_idempotent},
+\leanid{Matrix.mul_self_eq_self_of_pairing_idempotent_dual}, and
+\leanid{Matrix.hasRankOneFactorization_of_pairing_idempotent} in
+\path{TNLean/Algebra/PerronFrobenius/RankOne.lean}, added in \ghpr{3685}.}
+
+The linear-independence hypothesis is a scope restriction relative to the
+source.  Lemma~C.5 does not assume it: the paper derives the relevant
+independence from the injectivity of $\mathcal{K}$ in the construction
+preceding the lemma
+\cite[Appendix~C.2, lines~1457--1470]{Cirac2016MPDO_arXiv}, where injectivity
+forces the sector decomposition of the trace matrix to be trivial.  The
+formal lemmas therefore state the independence as an explicit hypothesis, to
+be discharged at the matrix product density operator call site from the
+injectivity of $\mathcal{K}$.
+
 \section{The corrected statement}
 
 The formal development proves a corrected sufficient matrix theorem. Let $T$

@@ -142,7 +142,14 @@ own square; this is the zero-correlation-length identity
 sum_k |l_k)(r_k| = sum_{k,h} T_{k,h} |l_k)(r_h| of arXiv:1606.00608,
 Appendix C.2, lines 1489--1497.  If the vectors `l k` are linearly independent,
 then `T * T = T`.  This is the operator-to-matrix step of Lemma SALZCL,
-lines 1484--1502. -/
+lines 1484--1502.
+
+**Scope restriction (linear independence):** the source lemma
+(arXiv:1606.00608, Lemma SALZCL, lines 1484--1502) does not assume linear
+independence of the sector tensors; the paper derives it from injectivity of
+$\mathcal{K}$ in the surrounding construction (lines 1457--1470). Documented in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`; the hypothesis `hl` is to be
+discharged at the MPDO call site. -/
 theorem mul_self_eq_self_of_pairing_idempotent
     {l : Fin n → V} {r : Fin n → Module.Dual R V} {T : Matrix (Fin n) (Fin n) R}
     (hT : ∀ k h, T k h = r k (l h)) (hl : LinearIndependent R l)
@@ -166,7 +173,14 @@ theorem mul_self_eq_self_of_pairing_idempotent
 independence placed on the functionals `r k` instead of the vectors `l k`.  The
 proof passes to the dual space, where the functionals become the vectors of the
 pairing, evaluation at `l k` provides the functionals, and the pairing matrix
-becomes the transpose of `T`. -/
+becomes the transpose of `T`.
+
+**Scope restriction (linear independence):** the source lemma
+(arXiv:1606.00608, Lemma SALZCL, lines 1484--1502) does not assume linear
+independence of the sector tensors; the paper derives it from injectivity of
+$\mathcal{K}$ in the surrounding construction (lines 1457--1470). Documented in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`; the hypothesis `hr` is to be
+discharged at the MPDO call site. -/
 theorem mul_self_eq_self_of_pairing_idempotent_dual
     {l : Fin n → V} {r : Fin n → Module.Dual R V} {T : Matrix (Fin n) (Fin n) R}
     (hT : ∀ k h, T k h = r k (l h)) (hr : LinearIndependent R r)
@@ -201,7 +215,14 @@ end PairingIdempotence
 Combining the idempotence `T * T = T` obtained from the zero-correlation-length
 identity of arXiv:1606.00608, Appendix C.2, lines 1489--1497 with the trace
 normalization gives the rank-one factorization of the sector trace matrix
-asserted by Lemma SALZCL, lines 1484--1502. -/
+asserted by Lemma SALZCL, lines 1484--1502.
+
+**Scope restriction (linear independence):** the source lemma
+(arXiv:1606.00608, Lemma SALZCL, lines 1484--1502) does not assume linear
+independence of the sector tensors; the paper derives it from injectivity of
+$\mathcal{K}$ in the surrounding construction (lines 1457--1470). Documented in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`; the hypothesis `hl` is to be
+discharged at the MPDO call site. -/
 theorem hasRankOneFactorization_of_pairing_idempotent
     {V : Type*} [AddCommGroup V] [Module ℝ V]
     {l : Fin n → V} {r : Fin n → Module.Dual ℝ V} {T : Matrix (Fin n) (Fin n) ℝ}
