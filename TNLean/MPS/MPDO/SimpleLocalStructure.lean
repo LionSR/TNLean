@@ -24,7 +24,7 @@ arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete).
   inverse tensor `K⁻¹` and its matrix-unit contraction identity.
 - `MPOTensor.inverseMapThreeSiteContraction` /
   `MPOTensor.inverseMapThreeSiteContraction_eq`: the double inverse-map
-  contraction used in the proof of Lemma C.4.
+  contraction at lines 1415--1438 of Appendix C.2 in arXiv:1606.00608.
 - `MPOTensor.physRealize` / `MPOTensor.physRealize_spec` /
   `MPOTensor.physRealize_mul`: the physical realization of right virtual
   insertions and its multiplicativity.
@@ -81,9 +81,9 @@ operators have the generally nonconstant primitive trace matrix whose kh-entry
 is the trace of ηₖₕ. Consequently these two families cannot simply be
 identified.
 
-The raw double inverse-map contraction in the proof of Lemma propSN is
-`MPOTensor.inverseMapThreeSiteContraction_eq`. The earliest missing connection
-to Appendix C.2 is the comparison of that contraction with the conjugated,
+The raw double inverse-map contraction (arXiv:1606.00608, Appendix C.2,
+lines 1415--1438) is `MPOTensor.inverseMapThreeSiteContraction_eq`. The earliest
+missing connection is the comparison of that contraction with the conjugated,
 reindexed Hayashi decomposition. This comparison must produce a sector
 factorization of the concrete tensor `K` satisfying, for every `N`,
 \[
@@ -169,10 +169,10 @@ third sites of a three-site MPO word.
 
 Here `R` is the virtual matrix obtained by contracting the remaining sites.
 With $X_{\alpha,\beta}$ denoting the corresponding component of
-${\cal K}^{-1}$, this is the left-hand side of the calculation following
-Equation Qketc in the proof of Lemma propSN.
+${\cal K}^{-1}$, this is the left-hand side of the double-sum contraction
+identity at lines 1415--1438 of arXiv:1606.00608.
 
-Source: arXiv:1606.00608, Appendix C.2, Lemma propSN, lines 1415--1438. -/
+Source: arXiv:1606.00608, Appendix C.2, lines 1415--1438. -/
 noncomputable def inverseMapThreeSiteContraction
     (K : MPOTensor d D) (hK : K.IsInjective)
     (R : Matrix (Fin D) (Fin D) ℂ)
@@ -192,16 +192,16 @@ middle tensor and the complementary entry of the virtual tail:
   = {\cal K}^{p_2}_{\beta_1,\alpha_3}R_{\beta_3,\alpha_1}.
 \]
 
-This is the inverse-map calculation immediately before Equation formK in
-the proof of Lemma propSN.
+This is the contraction-collapse step at lines 1422--1438 of arXiv:1606.00608,
+immediately before the sector-factorization equation.
 
-**Local fix (tail index):** the source display following Equation Qketc
+**Local fix (tail index):** the source display at lines 1422--1438
 writes $m_{\beta_3,\alpha_3}$. Direct contraction of the two matrix units
 gives $m_{\beta_3,\alpha_1}$, as shown by the formula above. The correction
 is recorded in
 `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
 
-Source: arXiv:1606.00608, Appendix C.2, Lemma propSN, lines 1422--1438. -/
+Source: arXiv:1606.00608, Appendix C.2, lines 1422--1438. -/
 theorem inverseMapThreeSiteContraction_eq
     (K : MPOTensor d D) (hK : K.IsInjective)
     (R : Matrix (Fin D) (Fin D) ℂ)
