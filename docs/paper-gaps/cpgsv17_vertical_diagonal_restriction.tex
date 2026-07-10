@@ -120,10 +120,28 @@ lemma are formalized without abstract placeholder matrices: the two entrywise
 operator identities force equality of the opposite-corner insertions on every
 horizontal canonical-form block.
 
-Completing the first stage still requires deriving
-$PH^{(N)}=PH^{(N)}P$ from a one-sided invariant projection of the tensor viewed
-vertically.  The exclusion of periodic sectors and the independent vertical
-canonical-form construction also remain open.
+The first stage is now complete.  Writing
+$P_1=P\otimes I^{\otimes(N-1)}$, the vertically viewed relation $PM=PMP$
+gives
+\[
+  P_1H^{(N)}=P_1H^{(N)}P_1=H^{(N)}P_1,
+\]
+and Lemma~L transfers this equality to every horizontal canonical-form block,
+where it is precisely $(I-P)MP=0$.  The conclusion is stated this way because
+the formal theorem assumes only $P=P^*$; the source's notation
+$P^\perp MP=0$ additionally uses that $P$ is an orthogonal projection.
+
+For the periodic-sector stage, the final positive-operator implication is also
+formalized:
+\[
+  Q[H^{(N)}]^p=[H^{(N)}]^pQ
+  \quad\Longrightarrow\quad
+  QH^{(N)}=H^{(N)}Q.
+\]
+The remaining step is to derive, from a nontrivial vertical period, one
+orthogonal projector $Q$ having the two all-length properties in source
+lines~1889--1890.  The independent vertical canonical-form construction and
+the positivity and unitary normalization of its coefficients also remain open.
 
 \paragraph{Verdict.}
 This is an open gap: the source-faithful horizontal-to-vertical implication of

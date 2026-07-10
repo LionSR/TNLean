@@ -11,7 +11,8 @@ import TNLean.Algebra.MatrixAux
 
 This file provides lemmas for Hermitian complex matrices over an arbitrary finite
 index type: rank-one positive semidefinite criteria, the extremal eigenvalue
-lemmas, and scalar-shift spectral formulae.
+lemmas, scalar-shift spectral formulae, and commutation transport from a power
+of a positive semidefinite matrix to the matrix itself.
 -/
 
 open scoped Matrix ComplexOrder InnerProductSpace
@@ -425,5 +426,57 @@ theorem trace_smul_one_sub_self_posSemidef [Nonempty n]
     module
   rw [hdecomp]
   exact hextra.add hshift
+
+/-- **Commutation with a power of a positive semidefinite matrix implies
+commutation with the matrix itself.** If `H ≥ 0`, `p ≠ 0`, and `Q` commutes
+with `H ^ p`, then `Q` commutes with `H`.
+
+In the eigenbasis of `H` the hypothesis reads
+`Q'_{ij} λ_j^p = λ_i^p Q'_{ij}`; the eigenvalues of `H` are nonnegative, so
+`λ_i^p = λ_j^p` forces `λ_i = λ_j`, and every entry of `Q'` linking distinct
+eigenvalues vanishes.  This is the final matrix implication used in the
+periodic-sector contradiction in the proof of Proposition 4.13 of
+arXiv:1606.00608, lines 1888--1893 (equation eq2:proof.IV.12).  The passage
+from a nontrivial period to an orthogonal projector satisfying the hypothesis
+at every length is a separate step; only positivity of `H` is used here. -/
+theorem commute_of_commute_pow {H Q : Matrix n n ℂ} (hH : H.PosSemidef)
+    {p : ℕ} (hp : p ≠ 0) (hQ : Commute Q (H ^ p)) : Commute Q H := by
+  classical
+  set φ : Matrix n n ℂ ≃⋆ₐ[ℂ] Matrix n n ℂ :=
+    Unitary.conjStarAlgAut ℂ (Matrix n n ℂ) (star hH.isHermitian.eigenvectorUnitary) with hφ
+  have hφH : φ H = Matrix.diagonal (RCLike.ofReal ∘ hH.isHermitian.eigenvalues) :=
+    hH.isHermitian.conjStarAlgAut_star_eigenvectorUnitary
+  -- Transport the hypothesis to the eigenbasis of `H`.
+  have hcomm : φ Q * Matrix.diagonal (RCLike.ofReal ∘ hH.isHermitian.eigenvalues) ^ p =
+      Matrix.diagonal (RCLike.ofReal ∘ hH.isHermitian.eigenvalues) ^ p * φ Q := by
+    have h := (hQ.map φ).eq
+    rwa [map_pow, hφH] at h
+  -- Entrywise, `Q'` commutes with the diagonal of eigenvalues.
+  have hentry : ∀ i j, φ Q i j * (RCLike.ofReal ∘ hH.isHermitian.eigenvalues) j =
+      (RCLike.ofReal ∘ hH.isHermitian.eigenvalues) i * φ Q i j := by
+    intro i j
+    have h1 : φ Q i j * ((hH.isHermitian.eigenvalues j : ℝ) : ℂ) ^ p =
+        ((hH.isHermitian.eigenvalues i : ℝ) : ℂ) ^ p * φ Q i j := by
+      have h2 := Matrix.ext_iff.mpr hcomm i j
+      simpa [Matrix.diagonal_pow, Matrix.mul_diagonal, Matrix.diagonal_mul,
+        Pi.pow_apply, Function.comp] using h2
+    rcases eq_or_ne (φ Q i j) 0 with h0 | h0
+    · simp [Function.comp, h0]
+    · have hpoweq : ((hH.isHermitian.eigenvalues j : ℝ) : ℂ) ^ p =
+          ((hH.isHermitian.eigenvalues i : ℝ) : ℂ) ^ p := by
+        rw [mul_comm (((hH.isHermitian.eigenvalues i : ℝ) : ℂ) ^ p) (φ Q i j)] at h1
+        exact mul_left_cancel₀ h0 h1
+      have hpreal : hH.isHermitian.eigenvalues j ^ p = hH.isHermitian.eigenvalues i ^ p := by
+        exact_mod_cast hpoweq
+      have hev : hH.isHermitian.eigenvalues j = hH.isHermitian.eigenvalues i :=
+        (pow_left_inj₀ (hH.eigenvalues_nonneg j) (hH.eigenvalues_nonneg i) hp).mp hpreal
+      simp only [Function.comp_apply, hev, mul_comm]
+  -- Reassemble and pull the commutation back through the eigenbasis automorphism.
+  have hcomm' : Commute (φ Q) (φ H) := by
+    rw [hφH]
+    refine Matrix.ext fun i j => ?_
+    rw [Matrix.mul_diagonal, Matrix.diagonal_mul]
+    exact hentry i j
+  simpa using hcomm'.map φ.symm
 
 end Matrix.PosSemidef
