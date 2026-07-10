@@ -29,8 +29,8 @@ The diagonal `j = j'` case is `IsIsometryCanonicalForm`
 
 ## Route
 
-The off-diagonal mixed transfer operator `mixedTransferMap₂ (B j) (B j')` is
-shown to be idempotent (whole-tensor RFP, via the block
+The off-diagonal mixed transfer operator $\mathcal E_{j,j'}$ is shown to be
+idempotent (whole-tensor RFP, via the block
 decomposition), and then to have spectral radius `< 1` (distinct irreducible
 left-canonical blocks, splitting on equal versus unequal bond dimension); an
 idempotent operator with spectral radius `< 1` is `0`.  The diagonal lemma
