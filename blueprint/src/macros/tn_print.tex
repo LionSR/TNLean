@@ -488,9 +488,9 @@
         \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
             (tnFourSiteTail) at (0,-1.42) {$R_4$};
         \draw[tn leg] (tnTailOne.west) -- ++(-0.48,0)
-            |- (tnFourSiteTail.west);
+            |- ($(tnFourSiteTail.east)+(0,-0.40)$) -- (tnFourSiteTail.east);
         \draw[tn leg] (tnTailThree.east) -- ++(0.48,0)
-            |- (tnFourSiteTail.east);
+            |- ($(tnFourSiteTail.west)+(0,0.38)$) -- (tnFourSiteTail.west);
 
     \end{tikzpicture}%
 }
