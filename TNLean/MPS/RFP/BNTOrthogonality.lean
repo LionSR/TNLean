@@ -11,7 +11,7 @@ import TNLean.Spectral.TransferOperatorGapNT
 
 This file proves the cross-block (`j ≠ j'`) vanishing of the mixed transfer
 operator for a multi-block tensor whose direct sum is a renormalization fixed
-point, the off-diagonal content of the isometry condition `eq:III_isometry`
+point, the off-diagonal content of the isometry condition eq:III_isometry
 (arXiv:1606.00608, line 551):
 \[
   \sum_i (U_j^i)_{\alpha,\beta}\,\overline{(U_{j'}^i)_{\alpha',\beta'}}
@@ -29,8 +29,8 @@ The diagonal `j = j'` case is `IsIsometryCanonicalForm`
 
 ## Route
 
-The off-diagonal mixed transfer operator `F_{j,j'} = mixedTransferMap₂ (B j)
-(B j')` is shown to be idempotent (whole-tensor RFP, via the block
+The off-diagonal mixed transfer operator `mixedTransferMap₂ (B j) (B j')` is
+shown to be idempotent (whole-tensor RFP, via the block
 decomposition), and then to have spectral radius `< 1` (distinct irreducible
 left-canonical blocks, splitting on equal versus unequal bond dimension); an
 idempotent operator with spectral radius `< 1` is `0`.  The diagonal lemma
@@ -64,7 +64,8 @@ private lemma submatrix_sum' {ι l m p q : Type*}
   ext a b
   simp only [Matrix.submatrix_apply, Matrix.sum_apply]
 
-/-- The `(j, j')` bond block of `(⊕_k L_k) X (⊕_k R_k)` is `L_j · X_{j,j'} · R_{j'}`. -/
+/-- The `(j, j')` bond block of $(\bigoplus_k L_k)\, X\, (\bigoplus_k R_k)$ is
+$L_j X_{j,j'} R_{j'}$. -/
 private lemma blockDiagonal'_mul_mul_toBlock
     (L R : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
     (X : Matrix ((k : Fin r) × Fin (dim k)) ((k : Fin r) × Fin (dim k)) ℂ)
@@ -96,12 +97,13 @@ private lemma blockDiagonal'_mul_mul_toBlock
   refine Finset.sum_congr rfl fun b _ => ?_
   rw [Matrix.blockDiagonal'_apply_eq, Matrix.submatrix_apply, blockIncl, blockIncl]
 
-/-- The `(j, j')` bond block of the block-diagonal
-transfer sum `∑_i (⊕_k B_k^i) X (⊕_k B_k^i)^†` is the mixed transfer operator
-`mixedTransferMap₂ (B j) (B j')` applied to the `(j, j')` bond block of `X`.
+/-- The `(j, j')` bond block of the block-diagonal transfer sum
+$\sum_i (\bigoplus_k B_k^i)\, X\, (\bigoplus_k B_k^i)^{\dagger}$ is the mixed
+transfer operator `mixedTransferMap₂ (B j) (B j')` applied to the `(j, j')`
+bond block of `X`.
 
 This is the transfer-operator analogue of `evalWord_blockDiagonal'`, and the
-reusable foundation for the cross-block content of `eq:III_isometry`
+reusable foundation for the cross-block content of eq:III_isometry
 (arXiv:1606.00608, line 551). -/
 theorem blockDiagonal'_transferSum_toBlock
     (B : (k : Fin r) → MPSTensor d (dim k))
@@ -117,7 +119,8 @@ theorem blockDiagonal'_transferSum_toBlock
   refine Finset.sum_congr rfl fun i _ => ?_
   rw [Matrix.blockDiagonal'_conjTranspose, blockDiagonal'_mul_mul_toBlock]
 
-/-- The block-diagonal transfer sum `∑_i (⊕_k B_k^i) Y (⊕_k B_k^i)^†` on the
+/-- The block-diagonal transfer sum
+$\sum_i (\bigoplus_k B_k^i)\, Y\, (\bigoplus_k B_k^i)^{\dagger}$ on the
 direct-sum bond space (`Σ`-indexed). -/
 noncomputable def blockTransferSum
     (B : (k : Fin r) → MPSTensor d (dim k))
@@ -130,7 +133,7 @@ noncomputable def blockTransferSum
 total bond space `Fin (∑ k, dim k)`.
 
 This coincides with `CanonicalForm.toTensor` of the canonical form with block
-tensors `B`, all scalar weights `μ_k = 1`, mirroring its `blockDiagonal'`/`Σ`-reindex
+tensors `B`, all scalar weights $\mu_k = 1$, mirroring its `blockDiagonal'`/`Σ`-reindex
 construction (`TNLean/MPS/Core/MultiBlock.lean`). -/
 noncomputable def directSumTensor (B : (k : Fin r) → MPSTensor d (dim k)) :
     MPSTensor d (∑ k : Fin r, dim k) := fun i =>
@@ -315,12 +318,13 @@ variable {r : ℕ} {dim : Fin r → ℕ}
 /-- **Cross-block orthogonality of the RFP isometry (mixed-transfer form).**
 
 For a family of distinct irreducible left-canonical blocks `B`, if the
-whole direct-sum tensor `⊕_k B_k` is a renormalization fixed point, then every
+whole direct-sum tensor $\bigoplus_k B_k$ is a renormalization fixed point,
+then every
 off-diagonal mixed transfer operator vanishes:
 `mixedTransferMap₂ (B j) (B j') = 0` for `j ≠ j'`.
 
-This is the `δ_{j,j'}` (cross-block) content of the isometry condition
-`eq:III_isometry` (arXiv:1606.00608, line 551), towards Corollary III.cor3
+This is the $\delta_{j,j'}$ (cross-block) content of the isometry condition
+eq:III_isometry (arXiv:1606.00608, line 551), towards Corollary III.cor3
 (line 584).
 
 The load-bearing hypothesis is whole-tensor RFP of the direct sum (the source's
@@ -355,9 +359,9 @@ physical CID and the mixed transfer operators between distinct BNT components
 vanish.
 
 This is the positive-gap part of the forward implication in arXiv:1606.00608,
-Theorem `TheoremZCLPure` (lines 498--502 and 1248--1250), for the explicit
+Theorem TheoremZCLPure (lines 498--502 and 1248--1250), for the explicit
 unweighted direct-sum representative.  The physical CID part follows from
-equation `Corr`; the local-orthogonality part is
+equation Corr; the local-orthogonality part is
 `isBNTLocallyOrthogonal_of_isRFP_directSum`.
 
 **Scope restriction (positive gaps and explicit direct sum):** the source CID
