@@ -442,6 +442,21 @@ noncomputable def blockedInclusionCoefficients
 
 end AlgebraStructureData
 
+/-- One-site peeling of the blocked transfer map, $\mathbb{E}^{n+1} = \mathbb{E}^n \circ
+\mathbb{E}$, used in the spectral fixed-point calculation of arXiv:1606.00608,
+Appendix C.4, lines 2046--2085 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+private theorem blockedTransferMap_succ (M : MPOTensor d D) (n : ℕ) :
+    blockedTransferMap M (n + 1) = blockedTransferMap M n ∘ₗ transferMap M := by
+  simp only [blockedTransferMap_eq_pow, pow_succ, Module.End.mul_eq_comp]
+
+/-- Adjoint form of the one-site peeling: the adjoint of the blocked transfer map at
+size `n + 1` is the adjoint one-site transfer map applied after the adjoint blocked
+transfer map at size `n`. -/
+private theorem adjoint_blockedTransferMap_succ_apply (M : MPOTensor d D) (n : ℕ) (X : Mat) :
+    (blockedTransferMap M (n + 1)).adjoint X =
+      (transferMap M).adjoint ((blockedTransferMap M n).adjoint X) := by
+  rw [blockedTransferMap_succ, LinearMap.adjoint_comp, LinearMap.comp_apply]
+
 /-- The algebra-structure RFP predicate forces every adjoint fixed point of the
 blocked transfer map to be an adjoint fixed point of the unblocked transfer
 map.
@@ -475,13 +490,7 @@ theorem adjoint_transferMap_apply_of_isRFP_MPDO_via_algebra
     exact (data.iota n ⟨X, hXn⟩).property
   have hXsucFix : (blockedTransferMap M (n + 1)).adjoint X = X :=
     (hCompat (n + 1) (Nat.succ_pos n) X).1 hXsuc
-  have hPow : blockedTransferMap M (n + 1) =
-      blockedTransferMap M n ∘ₗ transferMap M := by
-    simp only [blockedTransferMap_eq_pow, pow_succ, Module.End.mul_eq_comp]
-  have hAdj : (blockedTransferMap M (n + 1)).adjoint X =
-      (transferMap M).adjoint X := by
-    rw [hPow, LinearMap.adjoint_comp, LinearMap.comp_apply, hX]
-  rw [hAdj] at hXsucFix
+  rw [adjoint_blockedTransferMap_succ_apply, hX] at hXsucFix
   exact hXsucFix
 
 /-- Reverse inclusion for the adjoint fixed-point comparison: any adjoint fixed
@@ -502,10 +511,7 @@ theorem adjoint_blockedTransferMap_apply_of_adjoint_transferMap_apply
   | zero =>
       simp [blockedTransferMap_eq_pow, Module.End.one_eq_id]
   | succ k ih =>
-      have hPow : blockedTransferMap M (k + 1) =
-          blockedTransferMap M k ∘ₗ transferMap M := by
-        simp only [blockedTransferMap_eq_pow, pow_succ, Module.End.mul_eq_comp]
-      rw [hPow, LinearMap.adjoint_comp, LinearMap.comp_apply, ih, hX]
+      rw [adjoint_blockedTransferMap_succ_apply, ih, hX]
 
 /-- Eigenvector version of the blocked adjoint calculation.
 
@@ -525,11 +531,7 @@ theorem adjoint_blockedTransferMap_apply_of_adjoint_transferMap_eigenvector
   | zero =>
       simp [blockedTransferMap_eq_pow, Module.End.one_eq_id]
   | succ k ih =>
-      have hPow : blockedTransferMap M (k + 1) =
-          blockedTransferMap M k ∘ₗ transferMap M := by
-        simp only [blockedTransferMap_eq_pow, pow_succ, Module.End.mul_eq_comp]
-      rw [hPow, LinearMap.adjoint_comp, LinearMap.comp_apply, ih]
-      rw [map_smul, hX, smul_smul, pow_succ]
+      rw [adjoint_blockedTransferMap_succ_apply, ih, map_smul, hX, smul_smul, pow_succ]
 
 /-- The current algebra-structure predicate rules out finite-order adjoint
 eigenvalues different from $1$.
