@@ -200,6 +200,84 @@
     Transitivity gives the stated equality.
 \end{proof}
 
+\begin{definition}[Doubled-index forms of the three first-site contractions]
+    \label{def:mpdo_three_first_site_contractions}
+    \lean{MPSTensor.ketLeftAction}
+    \lean{MPSTensor.braRightAction}
+    \lean{MPSTensor.ketLeftBraRightAction}
+    \leanok
+    Let $P\in M_d(\C)$ and write doubled indices as $p=(a,b)$ and
+    $q=(c,e)$.  The first-site matrices corresponding respectively to
+    $PH^{(N)}$, $H^{(N)}P$, and $PH^{(N)}P$ are
+    \[
+        (Y_L)_{p,q}=P_{a,c}\delta_{b,e},\qquad
+        (Y_R)_{p,q}=\delta_{a,c}P_{e,b},\qquad
+        (Y_C)_{p,q}=P_{a,c}P_{e,b}.
+    \]
+\end{definition}
+
+\begin{lemma}[Coefficient form of the three first-site contractions]
+    \label{lem:mpdo_three_first_site_contraction_coefficients}
+    \lean{MPSTensor.mpv_toMPSTensor_pairConfig}
+    \lean{MPSTensor.ketLeftAction_mpv}
+    \lean{MPSTensor.braRightAction_mpv}
+    \lean{MPSTensor.ketLeftBraRightAction_mpv}
+    \leanok
+    \uses{def:mpo_family, def:mpdo_three_first_site_contractions}
+    For ket and bra configurations $\sigma,\tau$,
+    \[
+        V^{(N)}(\widehat M)_{(\sigma,\tau)}
+        =H^{(N)}(M)_{\sigma,\tau}.
+    \]
+    If $p_0=(a,b)$ is the first doubled index and $\sigma',\tau'$ are the
+    ket and bra configurations on the remaining $N$ sites, contraction with
+    $Y_L$, $Y_R$, and $Y_C$ gives, respectively,
+    \begin{align*}
+        \sum_c P_{a,c}H^{(N+1)}_{(c,\sigma'),(b,\tau')},\qquad
+        \sum_e H^{(N+1)}_{(a,\sigma'),(e,\tau')}P_{e,b},\\
+        \sum_{c,e}P_{a,c}H^{(N+1)}_{(c,\sigma'),(e,\tau')}P_{e,b}.
+    \end{align*}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Decode the doubled index at every site as a ket--bra pair.  The defining
+    trace of the resulting matrix word is exactly the corresponding entry of
+    $H^{(N)}(M)$.  Summing the first doubled index against $Y_L$, $Y_R$, or
+    $Y_C$ leaves the displayed single or double sums.
+\end{proof}
+
+\begin{theorem}[Blockwise reduction for the MPO contractions]
+    \label{thm:blockwise_opposite_insert_rotated_mpo}
+    \lean{MPOTensor.blockwise_opposite_insert_eq_of_rotated_mpo_entries}
+    \leanok
+    \uses{def:mpdo_three_first_site_contractions,
+        lem:mpdo_three_first_site_contraction_coefficients,
+        thm:blockwise_opposite_insert_eq}
+    Let the doubled-index tensor $\widehat M$ have a block-injective
+    canonical-form decomposition $\bigoplus_k\mu_kA_k$.  If, entrywise for
+    every positive length,
+    \[
+        PH^{(N)}=PH^{(N)}P,
+        \qquad
+        PH^{(N)}=H^{(N)}P,
+    \]
+    then for every block $A_k$ the insertions associated with $H^{(N)}P$ and
+    $PH^{(N)}P$ agree.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:mpdo_three_first_site_contraction_coefficients,
+        thm:blockwise_opposite_insert_eq}
+    Lemma~\ref{lem:mpdo_three_first_site_contraction_coefficients} turns the
+    two operator identities into equality of the corresponding first-site
+    contractions.  Equality of matrix product vectors transports these
+    equalities to the chosen canonical-form decomposition.  Apply
+    Theorem~\ref{thm:blockwise_opposite_insert_eq} with
+    $(Y_L,Y_C,Y_R)$.
+\end{proof}
+
 \begin{lemma}[Matrix product vector of the diagonal tensor]
     \label{lem:mpv_diagonal_tensor}
     \lean{MPOTensor.mpv_diagonalTensor}
@@ -544,6 +622,7 @@
     \notready
     \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_cf_mpdo,
         thm:mpdo_opposite_corner_zero, thm:blockwise_opposite_insert_eq,
+        thm:blockwise_opposite_insert_rotated_mpo,
         lem:mpv_diagonal_tensor,
         lem:mpv_diagonal_tensor_eq_blocks, lem:mpv_diagonal_tensor_nonneg,
         lem:mpv_vertical_assembled,
@@ -554,15 +633,16 @@
 \begin{proof}
     \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_cf_mpdo,
         thm:mpdo_opposite_corner_zero, thm:blockwise_opposite_insert_eq,
+        thm:blockwise_opposite_insert_rotated_mpo,
         lem:mpv_diagonal_tensor,
         lem:vertical_grouping_equiv}
     Theorem~\ref{thm:mpdo_opposite_corner_zero} gives the positive-operator
     identity needed to exclude a one-sided invariant projection, and
-    Theorem~\ref{thm:blockwise_opposite_insert_eq} gives its blockwise
-    consequence once the corresponding first-site contractions have been
-    identified.  It remains to identify those contractions with
-    $PH^{(N)}$, $PH^{(N)}P$, and $H^{(N)}P$ for the tensor viewed in the
-    vertical direction.  One must then exclude nontrivial periodic sectors and
+    Theorem~\ref{thm:blockwise_opposite_insert_rotated_mpo} identifies the
+    corresponding doubled-index first-site contractions and gives their
+    blockwise consequence from the two entrywise operator identities.  It
+    remains to derive the first identity from a one-sided invariant projection
+    for the vertically viewed tensor.  One must then exclude nontrivial periodic sectors and
     apply the canonical-form theorem to obtain a new vertical family
     $(B_k)_{k\in I}$ and weights $\nu_k$.  This family is not obtained by
     restricting the horizontal blocks to diagonal physical pairs, as

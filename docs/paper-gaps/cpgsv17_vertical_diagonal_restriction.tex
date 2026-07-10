@@ -106,14 +106,24 @@ $P=P^*$, and $PH=PHP$, then
     \qquad
     (I-P)HP=0.
 \]
-The corresponding two applications of the first-site insertion lemma are also
-formalized: agreement of the contractions representing $PH^{(N)}$ and
-$PH^{(N)}P$, together with agreement of those representing $PH^{(N)}$ and
-$H^{(N)}P$, forces equality of the opposite-corner insertions on every
-horizontal canonical-form block.  Completing the first stage still requires
-the explicit identification of these three contractions with the rotated
-vertical tensor.  The exclusion of periodic sectors and the independent
-vertical canonical-form construction also remain open.
+The doubled-index forms of the three first-site contractions are now explicit.
+For doubled indices $p=(a,b)$ and $q=(c,e)$ they are
+\[
+  (Y_L)_{p,q}=P_{a,c}\delta_{b,e},\qquad
+  (Y_R)_{p,q}=\delta_{a,c}P_{e,b},\qquad
+  (Y_C)_{p,q}=P_{a,c}P_{e,b}.
+\]
+Their contractions with the horizontal matrix product vector are proved to be
+the entries of $PH^{(N)}$, $H^{(N)}P$, and $PH^{(N)}P$, respectively.
+Consequently, the corresponding two applications of the first-site insertion
+lemma are formalized without abstract placeholder matrices: the two entrywise
+operator identities force equality of the opposite-corner insertions on every
+horizontal canonical-form block.
+
+Completing the first stage still requires deriving
+$PH^{(N)}=PH^{(N)}P$ from a one-sided invariant projection of the tensor viewed
+vertically.  The exclusion of periodic sectors and the independent vertical
+canonical-form construction also remain open.
 
 \paragraph{Verdict.}
 This is an open gap: the source-faithful horizontal-to-vertical implication of

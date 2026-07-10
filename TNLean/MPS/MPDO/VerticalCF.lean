@@ -71,6 +71,9 @@ surrogate for the paper's vertical canonical form.
   common left matrix, then the corresponding inserted tensors agree on every
   horizontal canonical-form block, by two applications of
   `blockwise_insert_eq_of_mpv_agree`.
+* `blockwise_opposite_insert_eq_of_rotated_mpo_entries`:
+  the preceding abstract matrices are identified explicitly with the
+  doubled-index contractions of $PH^{(N)}$, $PH^{(N)}P$, and $H^{(N)}P$.
 
 The results above supply matrix-product-vector identities and elementary
 positivity consequences, but do not give the passage from horizontal to
@@ -83,7 +86,9 @@ the finite-dimensional obstruction is proved in
 in `docs/paper-gaps/cpgsv17_vertical_diagonal_restriction.tex`. A source-faithful
 argument must instead follow arXiv:1606.00608, lines 1873--1921, using MPDO
 positivity and Lemma L to establish an independent vertical canonical form and
-then proving positivity of its weights.
+then proving positivity of its weights.  The doubled-index coefficient
+identification in the first step is formalized below; deriving its one-sided
+operator identity from a vertical invariant projection remains open.
 
 ## Module location
 
@@ -117,6 +122,198 @@ def FirstSiteActionAgree (A : MPSTensor d D)
   ∀ (N : ℕ) (σ : Fin (N + 1) → Fin d),
     ∑ i : Fin d, Y (σ 0) i * MPSTensor.mpv A (Fin.cons i (σ ∘ Fin.succ)) =
       ∑ i : Fin d, Z (σ 0) i * MPSTensor.mpv A (Fin.cons i (σ ∘ Fin.succ))
+
+/-- Equality of all matrix product vectors transports a first-site action
+identity between tensors of possibly different bond dimensions. -/
+theorem FirstSiteActionAgree.of_sameMPV {D' : ℕ} {A : MPSTensor d D}
+    {B : MPSTensor d D'} {Y Z : Matrix (Fin d) (Fin d) ℂ}
+    (hAB : MPSTensor.SameMPV₂ A B) (h : FirstSiteActionAgree A Y Z) :
+    FirstSiteActionAgree B Y Z := by
+  intro N σ
+  calc
+    ∑ i : Fin d, Y (σ 0) i * MPSTensor.mpv B (Fin.cons i (σ ∘ Fin.succ)) =
+        ∑ i : Fin d, Y (σ 0) i * MPSTensor.mpv A (Fin.cons i (σ ∘ Fin.succ)) := by
+      apply Finset.sum_congr rfl
+      intro i _
+      rw [hAB (N + 1) (Fin.cons i (σ ∘ Fin.succ))]
+    _ = ∑ i : Fin d, Z (σ 0) i *
+        MPSTensor.mpv A (Fin.cons i (σ ∘ Fin.succ)) := h N σ
+    _ = ∑ i : Fin d, Z (σ 0) i *
+        MPSTensor.mpv B (Fin.cons i (σ ∘ Fin.succ)) := by
+      apply Finset.sum_congr rfl
+      intro i _
+      rw [hAB (N + 1) (Fin.cons i (σ ∘ Fin.succ))]
+
+/-! ### Doubled-index form of the three contractions in Proposition 4.13 -/
+
+/-- The doubled-index action obtained by multiplying the ket index by `P`.
+
+For the horizontal MPO contraction this is the first-site form of
+$PH^{(N)}$.  It is the leftmost contraction in the displayed equation of
+the proof of Proposition 4.13 of arXiv:1606.00608, lines 1873--1887. -/
+noncomputable def ketLeftAction (P : Matrix (Fin d) (Fin d) ℂ) :
+    Matrix (Fin (d * d)) (Fin (d * d)) ℂ :=
+  fun p q => if p.modNat = q.modNat then P p.divNat q.divNat else 0
+
+/-- The doubled-index action obtained by multiplying the bra index by `P` on
+the right.  For the horizontal MPO contraction this is the first-site form of
+$H^{(N)}P$ in the displayed equation of the proof of Proposition 4.13 of
+arXiv:1606.00608, lines 1873--1887. -/
+noncomputable def braRightAction (P : Matrix (Fin d) (Fin d) ℂ) :
+    Matrix (Fin (d * d)) (Fin (d * d)) ℂ :=
+  fun p q => if p.divNat = q.divNat then P q.modNat p.modNat else 0
+
+/-- The doubled-index action obtained by multiplying the ket index by `P` and
+the bra index by `P` on the right.  For the horizontal MPO contraction this is
+the first-site form of $PH^{(N)}P$ in the displayed equation of the proof of
+Proposition 4.13 of arXiv:1606.00608, lines 1873--1887. -/
+noncomputable def ketLeftBraRightAction (P : Matrix (Fin d) (Fin d) ℂ) :
+    Matrix (Fin (d * d)) (Fin (d * d)) ℂ :=
+  fun p q => P p.divNat q.divNat * P q.modNat p.modNat
+
+@[simp] private theorem finProdFinEquiv_divNat (i j : Fin d) :
+    (finProdFinEquiv (i, j) : Fin (d * d)).divNat = i := by
+  exact congrArg Prod.fst (finProdFinEquiv.symm_apply_apply (i, j))
+
+@[simp] private theorem finProdFinEquiv_modNat (i j : Fin d) :
+    (finProdFinEquiv (i, j) : Fin (d * d)).modNat = j := by
+  exact congrArg Prod.snd (finProdFinEquiv.symm_apply_apply (i, j))
+
+/-- Reading the doubled physical index as a ket--bra pair recovers the
+corresponding matrix entry of the horizontal MPO contraction. -/
+theorem mpv_toMPSTensor_pairConfig (M : MPOTensor d D) {N : ℕ}
+    (σ τ : Fin N → Fin d) :
+    MPSTensor.mpv M.toMPSTensor (fun n => finProdFinEquiv (σ n, τ n)) =
+      MPOTensor.mpo M N σ τ := by
+  simp only [MPSTensor.mpv, MPSTensor.coeff, MPOTensor.mpo_apply,
+    MPOTensor.mpoMatrixEntry]
+  congr 1
+  induction N with
+  | zero => simp
+  | succ N ih =>
+      simp only [List.ofFn_succ, MPSTensor.evalWord_cons, MPOTensor.evalWord_cons,
+        MPOTensor.toMPSTensor]
+      rw [finProdFinEquiv_divNat, finProdFinEquiv_modNat]
+      congr 1
+      convert ih (σ ∘ Fin.succ) (τ ∘ Fin.succ) using 1 <;> rfl
+
+/-- The preceding identity with one doubled index separated from an arbitrary
+doubled-index tail. -/
+theorem mpv_toMPSTensor_cons_pair (M : MPOTensor d D) {N : ℕ}
+    (i j : Fin d) (ρ : Fin N → Fin (d * d)) :
+    MPSTensor.mpv M.toMPSTensor (Fin.cons (finProdFinEquiv (i, j)) ρ) =
+      MPOTensor.mpo M (N + 1) (Fin.cons i (fun n => (ρ n).divNat))
+        (Fin.cons j (fun n => (ρ n).modNat)) := by
+  rw [← mpv_toMPSTensor_pairConfig]
+  congr 1
+  funext n
+  refine Fin.cases ?_ (fun k => ?_) n
+  · rfl
+  · change ρ k = finProdFinEquiv ((ρ k).divNat, (ρ k).modNat)
+    exact (finProdFinEquiv.apply_symm_apply (ρ k)).symm
+
+/-- Coefficient identity identifying the first-site doubled-index ket action
+with the matrix entries of $PH^{(N)}$. -/
+theorem ketLeftAction_mpv (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ)
+    {N : ℕ} (ρ : Fin (N + 1) → Fin (d * d)) :
+    ∑ q : Fin (d * d), ketLeftAction P (ρ 0) q *
+        MPSTensor.mpv M.toMPSTensor (Fin.cons q (ρ ∘ Fin.succ)) =
+      ∑ i : Fin d, P (ρ 0).divNat i *
+        MPOTensor.mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).divNat))
+          (Fin.cons (ρ 0).modNat (fun n => (ρ (Fin.succ n)).modNat)) := by
+  rw [← finProdFinEquiv.sum_comp]
+  rw [Fintype.sum_prod_type]
+  simp only [ketLeftAction, finProdFinEquiv_divNat, finProdFinEquiv_modNat]
+  apply Finset.sum_congr rfl
+  intro i _
+  rw [Finset.sum_eq_single (ρ 0).modNat]
+  · simp only [if_true]
+    rw [mpv_toMPSTensor_cons_pair]
+    rfl
+  · intro j _ hj
+    simp only [hj.symm, if_false, zero_mul]
+  · intro hj
+    exact (hj (Finset.mem_univ _)).elim
+
+/-- Coefficient identity identifying the first-site doubled-index bra action
+with the matrix entries of $H^{(N)}P$. -/
+theorem braRightAction_mpv (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ)
+    {N : ℕ} (ρ : Fin (N + 1) → Fin (d * d)) :
+    ∑ q : Fin (d * d), braRightAction P (ρ 0) q *
+        MPSTensor.mpv M.toMPSTensor (Fin.cons q (ρ ∘ Fin.succ)) =
+      ∑ j : Fin d,
+        MPOTensor.mpo M (N + 1)
+          (Fin.cons (ρ 0).divNat (fun n => (ρ (Fin.succ n)).divNat))
+          (Fin.cons j (fun n => (ρ (Fin.succ n)).modNat)) * P j (ρ 0).modNat := by
+  rw [← finProdFinEquiv.sum_comp]
+  rw [Fintype.sum_prod_type]
+  simp only [braRightAction, finProdFinEquiv_divNat, finProdFinEquiv_modNat,
+    ite_mul]
+  rw [Finset.sum_eq_single (ρ 0).divNat]
+  · apply Finset.sum_congr rfl
+    intro j _
+    simp only [if_true]
+    rw [mpv_toMPSTensor_cons_pair]
+    simp only [Function.comp_apply, mul_comm]
+  · intro i _ hi
+    simp only [hi.symm, if_false, zero_mul, Finset.sum_const_zero]
+  · intro hi
+    exact (hi (Finset.mem_univ _)).elim
+
+/-- Coefficient identity identifying the two-sided first-site doubled-index
+action with the matrix entries of $PH^{(N)}P$. -/
+theorem ketLeftBraRightAction_mpv (M : MPOTensor d D)
+    (P : Matrix (Fin d) (Fin d) ℂ) {N : ℕ} (ρ : Fin (N + 1) → Fin (d * d)) :
+    ∑ q : Fin (d * d), ketLeftBraRightAction P (ρ 0) q *
+        MPSTensor.mpv M.toMPSTensor (Fin.cons q (ρ ∘ Fin.succ)) =
+      ∑ i : Fin d, ∑ j : Fin d, P (ρ 0).divNat i *
+        MPOTensor.mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).divNat))
+          (Fin.cons j (fun n => (ρ (Fin.succ n)).modNat)) * P j (ρ 0).modNat := by
+  rw [← finProdFinEquiv.sum_comp]
+  rw [Fintype.sum_prod_type]
+  simp only [ketLeftBraRightAction, finProdFinEquiv_divNat, finProdFinEquiv_modNat]
+  apply Finset.sum_congr rfl
+  intro i _
+  apply Finset.sum_congr rfl
+  intro j _
+  rw [mpv_toMPSTensor_cons_pair]
+  simp only [Function.comp_apply]
+  ring
+
+/-- Entrywise equality $PH^{(N)} = PH^{(N)}P$ gives the first of
+the two doubled-index first-site equalities used in Lemma L. -/
+theorem firstSiteActionAgree_ketLeft_ketLeftBraRight
+    (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ)
+    (hInv : ∀ (N : ℕ) (ρ : Fin (N + 1) → Fin (d * d)),
+      (∑ i : Fin d, P (ρ 0).divNat i *
+        MPOTensor.mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).divNat))
+          (Fin.cons (ρ 0).modNat (fun n => (ρ (Fin.succ n)).modNat)) =
+      ∑ i : Fin d, ∑ j : Fin d, P (ρ 0).divNat i *
+        MPOTensor.mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).divNat))
+          (Fin.cons j (fun n => (ρ (Fin.succ n)).modNat)) * P j (ρ 0).modNat)) :
+    MPSTensor.FirstSiteActionAgree M.toMPSTensor
+      (ketLeftAction P) (ketLeftBraRightAction P) := by
+  intro N ρ
+  rw [ketLeftAction_mpv, ketLeftBraRightAction_mpv]
+  exact hInv N ρ
+
+/-- Entrywise equality $PH^{(N)} = H^{(N)}P$ gives the second of the
+two doubled-index first-site equalities used in Lemma L. -/
+theorem firstSiteActionAgree_ketLeft_braRight
+    (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ)
+    (hComm : ∀ (N : ℕ) (ρ : Fin (N + 1) → Fin (d * d)),
+      (∑ i : Fin d, P (ρ 0).divNat i *
+        MPOTensor.mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).divNat))
+          (Fin.cons (ρ 0).modNat (fun n => (ρ (Fin.succ n)).modNat)) =
+      ∑ j : Fin d,
+        MPOTensor.mpo M (N + 1)
+          (Fin.cons (ρ 0).divNat (fun n => (ρ (Fin.succ n)).divNat))
+          (Fin.cons j (fun n => (ρ (Fin.succ n)).modNat)) * P j (ρ 0).modNat)) :
+    MPSTensor.FirstSiteActionAgree M.toMPSTensor
+      (ketLeftAction P) (braRightAction P) := by
+  intro N ρ
+  rw [ketLeftAction_mpv, braRightAction_mpv]
+  exact hComm N ρ
 
 /-- Evaluating a reindexed word: `evalWord B (l.map g) = evalWord (B ∘ g) l`. -/
 lemma evalWord_map {d' : ℕ} (B : MPSTensor d' D) (g : Fin d → Fin d') (l : List (Fin d)) :
@@ -237,7 +434,7 @@ theorem mpv_diagonalTensor_nonneg (M : MPOTensor d D) {N : ℕ}
 /-- For an MPDO, a one-sided invariant Hermitian matrix for an `N`-site density
 operator has zero opposite corner.
 
-This is equation `eq1:proof.IV.12` in the proof of Proposition 4.13 of
+This is the displayed equation in the proof of Proposition 4.13 of
 arXiv:1606.00608, lines 1873--1887.  The subsequent use of Lemma L transfers
 this operator equality back to the tensor blocks. Positivity supplies the
 Hermiticity of the density operator; the algebraic corner argument then uses
@@ -621,16 +818,16 @@ theorem blockwise_insert_eq_of_mpv_agree
 /-- **One-sided invariance becomes reduction, block by block.**
 
 Let `Yleft`, `Ycorner`, and `Yright` encode respectively the first-site
-coefficients of `P H⁽ᴺ⁾`, `P H⁽ᴺ⁾ P`, and `H⁽ᴺ⁾ P`.  If the
+coefficients of $PH^{(N)}$, $PH^{(N)}P$, and $H^{(N)}P$.  If the
 one-sided invariance gives agreement of the first two actions, while positivity
 gives agreement of the first and third actions, then Lemma L shows that the
 opposite corner vanishes on every canonical-form block: the `Yright` insertion
 equals the `Ycorner` insertion.
 
-This is the tensor-block conclusion of equation `eq1:proof.IV.12` in
-arXiv:1606.00608, Proposition 4.13, lines 1873--1887.  The two hypotheses are
-precisely the coefficient-level equalities displayed in that equation; they do
-not posit a vertical canonical decomposition. -/
+This is the tensor-block conclusion of the displayed equation in the proof
+of Proposition 4.13 of arXiv:1606.00608, lines 1873--1887.  The two
+hypotheses are precisely the coefficient-level equalities displayed in that
+equation; they do not posit a vertical canonical decomposition. -/
 theorem blockwise_opposite_insert_eq_of_mpv_agree
     {r : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ}
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -649,6 +846,51 @@ theorem blockwise_opposite_insert_eq_of_mpv_agree
       (blockwise_insert_eq_of_mpv_agree A hCF hPos k).symm
     _ = MPSTensor.insertedTensor Ycorner (A k) :=
       blockwise_insert_eq_of_mpv_agree A hCF hInv k
+
+/-- **The three contractions in Proposition 4.13, with their indices fixed.**
+
+Suppose the horizontal doubled-index tensor of `M` has the displayed
+block-diagonal canonical form.  The entrywise identities
+$PH^{(N)} = PH^{(N)}P$ and $PH^{(N)} = H^{(N)}P$ then identify
+the three abstract first-site matrices in Lemma L with `ketLeftAction P`,
+`ketLeftBraRightAction P`, and `braRightAction P`.  Consequently the last two
+insertions agree on every canonical-form block.
+
+This formalizes the doubled-index rotation implicit in the displayed
+equation of the proof of Proposition 4.13 of arXiv:1606.00608,
+lines 1873--1887.  It does not prove that a one-sided invariant projection
+for the vertically viewed tensor supplies the first entrywise identity; that
+further identification remains part of the horizontal-to-vertical
+canonical-form argument. -/
+theorem blockwise_opposite_insert_eq_of_rotated_mpo_entries
+    {r : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ}
+    (M : MPOTensor d D) (A : (k : Fin r) → MPSTensor (d * d) (dim k))
+    (hCF : HorizontalCFData (d := d * d) μ A)
+    (hM : MPSTensor.SameMPV₂ M.toMPSTensor
+      (MPSTensor.toTensorFromBlocks (d := d * d) (μ := μ) A))
+    (P : Matrix (Fin d) (Fin d) ℂ)
+    (hInv : ∀ (N : ℕ) (ρ : Fin (N + 1) → Fin (d * d)),
+      (∑ i : Fin d, P (ρ 0).divNat i *
+        mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).divNat))
+          (Fin.cons (ρ 0).modNat (fun n => (ρ (Fin.succ n)).modNat)) =
+      ∑ i : Fin d, ∑ j : Fin d, P (ρ 0).divNat i *
+        mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).divNat))
+          (Fin.cons j (fun n => (ρ (Fin.succ n)).modNat)) * P j (ρ 0).modNat))
+    (hComm : ∀ (N : ℕ) (ρ : Fin (N + 1) → Fin (d * d)),
+      (∑ i : Fin d, P (ρ 0).divNat i *
+        mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).divNat))
+          (Fin.cons (ρ 0).modNat (fun n => (ρ (Fin.succ n)).modNat)) =
+      ∑ j : Fin d,
+        mpo M (N + 1)
+          (Fin.cons (ρ 0).divNat (fun n => (ρ (Fin.succ n)).divNat))
+          (Fin.cons j (fun n => (ρ (Fin.succ n)).modNat)) * P j (ρ 0).modNat)) :
+    ∀ k, MPSTensor.insertedTensor (MPSTensor.braRightAction P) (A k) =
+      MPSTensor.insertedTensor (MPSTensor.ketLeftBraRightAction P) (A k) := by
+  apply blockwise_opposite_insert_eq_of_mpv_agree A hCF
+  · exact MPSTensor.FirstSiteActionAgree.of_sameMPV hM
+      (MPSTensor.firstSiteActionAgree_ketLeft_ketLeftBraRight M P hInv)
+  · exact MPSTensor.FirstSiteActionAgree.of_sameMPV hM
+      (MPSTensor.firstSiteActionAgree_ketLeft_braRight M P hComm)
 
 -- The implication `verticalCF_of_horizontalCF` (arXiv:1606.00608,
 -- Proposition 4.13) — every MPDO in horizontal canonical form is in vertical
