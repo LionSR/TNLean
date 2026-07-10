@@ -238,6 +238,21 @@ read as the full source definition for a multi-block BNT family. See
 def IsZCL (A : MPSTensor d D) : Prop :=
   IsLocallyOrthogonal A ∧ IsCID A
 
+/-- Correlator independence of distance forces the trace pairings of
+$\mathbb{E}^2(X\rho_R)$ and $\mathbb{E}(X\rho_R)$ against every observable to
+agree: this is the independence-of-separation step at gaps $2$ and $1$
+(arXiv:1606.00608, Definition 3.3 context). -/
+private lemma trace_mul_transferMap_sq_eq_of_isCID
+    (A : MPSTensor d D) (ρR : Matrix (Fin D) (Fin D) ℂ)
+    (hρ_pd : ρR.PosDef) (hρ_fix : transferMap A ρR = ρR) (hCID : IsCID A)
+    (X N : Matrix (Fin D) (Fin D) ℂ) :
+    Matrix.trace (N * transferMap A (transferMap A (X * ρR))) =
+      Matrix.trace (N * transferMap A (X * ρR)) := by
+  have h := hCID ρR hρ_pd hρ_fix X N 2 1 (by omega) (by omega)
+  simp only [connectedCorrelator_def, twoPointExpectation_transfer] at h
+  simp only [pow_succ, pow_zero, one_mul, Module.End.mul_apply] at h
+  exact sub_left_injective h
+
 /-- **Virtual-insertion distance independence implies RFP.**
 
 For a tensor with a positive-definite fixed point, independence of the
@@ -268,29 +283,11 @@ theorem isCID_implies_isRFP
   have hZ : Z = X * (u : Matrix (Fin D) (Fin D) ℂ) := by
     rw [hX, mul_assoc, Units.inv_mul, mul_one]
   rw [hZ]
-  -- By trace nondegeneracy, suffices: E(E(X·ρR)) - E(X·ρR) = 0
-  suffices h_diff : transferMap A (transferMap A (X * (u : Matrix (Fin D) (Fin D) ℂ))) -
-      transferMap A (X * (u : Matrix (Fin D) (Fin D) ℂ)) = 0 from
-    eq_of_sub_eq_zero h_diff
-  apply (Matrix.ext_iff_trace_mul_right
-    (A := transferMap A (transferMap A (X * (u : Matrix (Fin D) (Fin D) ℂ))) -
-      transferMap A (X * (u : Matrix (Fin D) (Fin D) ℂ)))
-    (B := 0)).2
-  intro N
-  -- From IsCID with n=2, m=1: correlator equality gives trace equality
-  have h := hCID ↑u hρ_pd hρ_fix X N 2 1 (by omega) (by omega)
-  simp only [connectedCorrelator_def, twoPointExpectation_transfer] at h
-  simp only [pow_succ, pow_zero, one_mul, Module.End.mul_apply] at h
-  -- h : tr(N * E(E(X*ρR))) - c = tr(N * E(X*ρR)) - c, so extract equality
-  have heq := sub_left_injective h
-  -- Goal: tr((E(E(X*ρR)) - E(X*ρR)) * N) = 0
-  rw [sub_mul, Matrix.trace_sub,
-    Matrix.trace_mul_comm _ N, Matrix.trace_mul_comm _ N]
-  calc
-    Matrix.trace (N * transferMap A (transferMap A (X * (u : Matrix (Fin D) (Fin D) ℂ)))) -
-        Matrix.trace (N * transferMap A (X * (u : Matrix (Fin D) (Fin D) ℂ))) = 0 :=
-      sub_eq_zero.mpr heq
-    _ = Matrix.trace (0 * N) := by simp
+  -- By trace nondegeneracy, suffices: tr(N · E(E(X·ρR))) = tr(N · E(X·ρR)) for all N
+  refine eq_of_sub_eq_zero ((Matrix.ext_iff_trace_mul_right (B := 0)).2 fun N => ?_)
+  rw [sub_mul, Matrix.trace_sub, Matrix.trace_mul_comm _ N, Matrix.trace_mul_comm _ N,
+    Matrix.zero_mul, Matrix.trace_zero]
+  exact sub_eq_zero.mpr (trace_mul_transferMap_sq_eq_of_isCID A ↑u hρ_pd hρ_fix hCID X N)
 
 /-- Single-block ZCL is equivalent to transfer-map idempotence (i.e. `IsRFP`).
 
