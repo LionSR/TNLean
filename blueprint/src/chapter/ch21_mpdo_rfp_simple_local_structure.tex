@@ -291,6 +291,26 @@ strong subadditivity for a normalized three-site reduced state.
     outer-product factorization.
 \end{proof}
 
+\begin{theorem}[Idempotent trace-one criterion]
+    \label{thm:matrix_idempotent_trace_one_rank_one}
+    \lean{Matrix.hasRankOneFactorization_of_mul_self_eq_self}
+    \leanok
+    Let $T$ be a finite real square matrix. If
+    \[
+        T^2=T,
+        \qquad \operatorname{tr}(T)=1,
+    \]
+    then there are real vectors $a,b$ such that $T=a b^\top$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The endomorphism defined by $T$ is a projection onto its range. Its trace
+    is therefore the dimension of that range, which is one. Choosing a
+    nonzero vector spanning the range expresses every column of $T$ as a
+    scalar multiple of that vector and gives the required outer product.
+\end{proof}
+
 % Unfaithful: thm:sal_zcl_implies_rank_one_t mirrors the Lean theorem
 % MPOTensor.sal_zcl_implies_rank_one_T, whose conditional Perron--Frobenius
 % hypothesis is false as a universal statement (counterexample in
