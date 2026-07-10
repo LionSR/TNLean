@@ -22,6 +22,9 @@ at varying levels of completeness.
 
 ## Companion Paper
 
-The companion paper "Multi-agent Autoformalization of Tensor Network Theory" is
-in preparation. A bibliographic citation and public link will be added here once
-the paper is available.
+S. Lu, E. Tjoa, J. I. Cirac, *Multi-agent Autoformalization of Tensor Network
+Theory*, [arXiv:2607.07857](https://arxiv.org/abs/2607.07857).
+
+Most of the formalization was carried out by agents running on
+[TeXRA](https://texra.ai), whose `lean-env-action` also sets up the Lean and
+blueprint toolchain used throughout this repository's CI workflows.
