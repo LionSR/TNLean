@@ -325,11 +325,14 @@ theorem exists_normalTensor_blockDecomp_sameMPV₂Pos_of_hasInvariantProjectorCl
 (arXiv:1606.00608, lines 253--255).
 
 **Scope restriction (no zero corners):** in addition to the source hypotheses,
-every irreducible corner of `A` is assumed to carry a nonzero letter matrix.
-Without this hypothesis a corner may be the zero tensor, which cannot be
-rescaled to spectral radius one; the source drops such zero blocks
-(eq:II_Aiplusk1, line 219, `∑ₖ Dₖ ≤ D`), which changes the length-zero
-coefficient.  The unrestricted positive-length statement is
+every irreducible corner of `A` of positive dimension is assumed to carry a
+nonzero letter matrix.  Without this hypothesis a corner may be the zero
+tensor, which cannot be rescaled to spectral radius one; the source drops
+such zero blocks (eq:II_Aiplusk1, line 219, `∑ₖ Dₖ ≤ D`), which changes the
+length-zero coefficient.  The premise `0 < n` excludes only the
+zero-dimensional corner, whose letter matrices all vanish for lack of
+entries; without it no tensor could satisfy the hypothesis.  The
+unrestricted positive-length statement is
 `MPSTensor.exists_normalTensor_blockDecomp_sameMPV₂Pos_of_hasInvariantProjectorClosure`.
 The restriction is recorded in
 `docs/paper-gaps/cpsv16_projector_closure_canonical_form.tex`. -/
@@ -337,7 +340,7 @@ theorem exists_normalTensor_blockDecomp_sameMPV₂_of_hasInvariantProjectorClosu
     (A : MPSTensor d D) (hClosure : HasInvariantProjectorClosure A)
     (hPer : HasNoPeriodicVectors A)
     (hcorner : ∀ ⦃n : ℕ⦄ (V : Matrix (Fin D) (Fin n) ℂ) (B : MPSTensor d n),
-      Vᴴ * V = 1 → (∀ i : Fin d, A i * V = V * B i) → IsIrreducibleTensor B →
+      0 < n → Vᴴ * V = 1 → (∀ i : Fin d, A i * V = V * B i) → IsIrreducibleTensor B →
       ∃ i, B i ≠ 0) :
     ∃ (r : ℕ) (dim : Fin r → ℕ) (μ : Fin r → ℂ)
       (blocks : (k : Fin r) → MPSTensor d (dim k)),
@@ -354,7 +357,7 @@ theorem exists_normalTensor_blockDecomp_sameMPV₂_of_hasInvariantProjectorClosu
     intro k
     haveI : NeZero (dim₀ k) := ⟨(hpos k).ne'⟩
     exact exists_posDef_transferMap_eigenvector_of_irreducible (blocks₀ k) (hirr k)
-      (hcorner (V k) (blocks₀ k) (hiso k) (hint k) (hirr k))
+      (hcorner (V k) (blocks₀ k) (hpos k) (hiso k) (hint k) (hirr k))
   choose ρf tf hρf htf hEigf using hPF
   have hsqrt_ne : ∀ k : Fin r₀, ((Real.sqrt (tf k) : ℝ) : ℂ) ≠ 0 := fun k =>
     Complex.ofReal_ne_zero.mpr (Real.sqrt_pos.mpr (htf k)).ne'
