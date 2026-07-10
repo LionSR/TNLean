@@ -391,6 +391,19 @@ and rates for the single-tensor transfer map $\E_A$.
     included.
 \end{definition}
 
+\begin{lemma}[Positive-gap BNT zero correlation length, unfolded]%
+    \label{lem:is_positive_gap_bnt_zcl_iff}
+    \lean{MPSTensor.isPositiveGapBNTZCL_iff}
+    \leanok
+    \uses{def:is_positive_gap_bnt_zcl}
+    Positive-gap BNT zero correlation length is equivalent to the conjunction
+    of the BNT relation, positive-gap physical distance independence, and BNT
+    local orthogonality.
+\end{lemma}
+\begin{proof}\leanok
+    This is the defining conjunction.
+\end{proof}
+
 \begin{definition}[BNT zero correlation length]%
     \label{def:source_bnt_zcl}
     \notready
@@ -422,10 +435,20 @@ and rates for the single-tensor transfer map $\E_A$.
     \uses{thm:is_positive_gap_physical_cid_of_is_rfp,
         thm:bnt_locally_orthogonal_of_rfp_direct_sum}
     Idempotence implies positive-gap physical CID by
-    Theorem~\ref{thm:is_positive_gap_physical_cid_of_is_rfp}.  On every off-diagonal bond
-    block, idempotence of $\E_A$ makes $\E_{j,j'}$ idempotent.  Distinct
-    irreducible left-canonical blocks have mixed spectral radius strictly less
-    than one.  Hence the idempotent $\E_{j,j'}$ is zero.
+    Theorem~\ref{thm:is_positive_gap_physical_cid_of_is_rfp}.  On each
+    off-diagonal bond block, idempotence of $\E_A$ gives
+    \[
+        \E_{j,j'}\circ\E_{j,j'}=\E_{j,j'}.
+    \]
+    Distinct irreducible left-canonical blocks satisfy
+    $\rho(\E_{j,j'})<1$.  Since the spectrum of an idempotent is contained in
+    $\{0,1\}$,
+    \[
+        \E_{j,j'}^2=\E_{j,j'},\qquad
+        \rho(\E_{j,j'})<1
+        \quad\Longrightarrow\quad
+        \E_{j,j'}=0.
+    \]
 \end{proof}
 
 \begin{theorem}[RFP normal tensor is injective]\label{thm:rfp_nt_injective}
@@ -1157,11 +1180,11 @@ and rates for the single-tensor transfer map $\E_A$.
     is unchanged upon replacing these gaps by positive $m_1,m_2$ satisfying
     $n_1+n_2=m_1+m_2$:
     \[
-      \operatorname{tr}\!\left[\E_{O_2}\E_A^{n_2}
-        \E_{O_1}\E_A^{n_1}(1)\right]
+      \operatorname{Tr}_{\MN{D}}\!\left(
+        \E_{O_2}\circ\E_A^{n_2}\circ\E_{O_1}\circ\E_A^{n_1}\right)
       =
-      \operatorname{tr}\!\left[\E_{O_2}\E_A^{m_2}
-        \E_{O_1}\E_A^{m_1}(1)\right].
+      \operatorname{Tr}_{\MN{D}}\!\left(
+        \E_{O_2}\circ\E_A^{m_2}\circ\E_{O_1}\circ\E_A^{m_1}\right).
     \]
     This is the transfer-matrix form of
     \cite[Definition~3.3 and the correlation formula preceding
