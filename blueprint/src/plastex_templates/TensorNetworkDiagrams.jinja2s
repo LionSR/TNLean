@@ -7,6 +7,9 @@ name: TNMPSLocal TNMPSWord TNMPV TNBlocking TNMPVOverlap TNTransferMap TNMPOCell
 name: TNMPOLocalPurification TNMPORenormalizationTS TNEtaSectorDecomposition
 {{ obj.tn_svg_html }}
 
+name: TNMPDOInverseMapThreeSiteContraction
+{{ obj.tn_svg_html }}
+
 name: TNGaugeConjugation TNPhysicalRealization TNLinearTwist
 {{ obj.tn_svg_html }}
 
