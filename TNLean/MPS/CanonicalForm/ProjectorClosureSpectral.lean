@@ -7,6 +7,7 @@ import TNLean.MPS.CanonicalForm.Definitions
 import TNLean.MPS.SharedInfra.Scaling
 import TNLean.MPS.Irreducible.FormII
 import TNLean.Channel.Irreducible.PerronFrobenius
+import TNLean.Channel.Irreducible.SpectralRadius
 
 /-!
 # Spectral steps of the canonical-form sufficient condition
@@ -156,11 +157,12 @@ tensor, provided the transfer map has no eigenvalue of modulus equal to, but
 different from, that eigenvalue.
 
 Rescaling the tensor by `r^{-1/2}` rescales the transfer map by `r⁻¹`, so the
-positive-definite eigenvector becomes a fixed point and the peripheral
-eigenvalues become the eigenvalues of modulus one; the uniqueness hypothesis
-forces the peripheral eigenvalue set to be `{1}`, which together with
-irreducibility is the normal-tensor condition of arXiv:1606.00608,
-lines 233--235. -/
+positive-definite eigenvector becomes a fixed point. Irreducibility and Wolf
+Theorem 6.3(4) (`spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp`)
+then identify its eigenvalue `1` with the spectral radius. The peripheral
+eigenvalues are therefore the eigenvalues of modulus one; the uniqueness
+hypothesis forces this set to be `{1}`. Together with irreducibility, these are
+the normal-tensor conditions of arXiv:1606.00608, lines 233--235. -/
 theorem isNormalTensor_invSqrt_smul_of_unique_peripheral {n : ℕ} [NeZero n]
     (B : MPSTensor d n) (hIrr : IsIrreducibleTensor B)
     (ρ : Matrix (Fin n) (Fin n) ℂ) (r : ℝ) (hρ : ρ.PosDef) (hr : 0 < r)
@@ -185,28 +187,38 @@ theorem isNormalTensor_invSqrt_smul_of_unique_peripheral {n : ℕ} [NeZero n]
   have hfix : transferMap (d := d) (D := n)
       (fun i => (((Real.sqrt r : ℝ) : ℂ))⁻¹ • B i) ρ = ρ := by
     rw [hmap, LinearMap.smul_apply, hEig, smul_smul, inv_mul_cancel₀ hr_ne, one_smul]
-  refine ⟨isIrreducibleTensor_smul hc_ne B hIrr, ?_⟩
-  refine isPrimitive_of_unique_norm_one _ ρ hfix hρ_ne ?_
-  intro μ hμ hμnorm
-  obtain ⟨X, hX⟩ := hμ.exists_hasEigenvector
-  have hX_eq : transferMap (d := d) (D := n)
-      (fun i => (((Real.sqrt r : ℝ) : ℂ))⁻¹ • B i) X = μ • X :=
-    Module.End.mem_eigenspace_iff.mp (Module.End.hasEigenvector_iff.mp hX).1
-  have hX_ne : X ≠ 0 := (Module.End.hasEigenvector_iff.mp hX).2
-  have hBX : transferMap (d := d) (D := n) B X = ((r : ℂ) * μ) • X := by
-    have h1 : (r : ℂ)⁻¹ • transferMap (d := d) (D := n) B X = μ • X := by
-      rw [← LinearMap.smul_apply, ← hmap]
-      exact hX_eq
-    calc transferMap (d := d) (D := n) B X
-        = (r : ℂ) • ((r : ℂ)⁻¹ • transferMap (d := d) (D := n) B X) := by
-          rw [smul_smul, mul_inv_cancel₀ hr_ne, one_smul]
-      _ = (r : ℂ) • (μ • X) := by rw [h1]
-      _ = ((r : ℂ) * μ) • X := by rw [smul_smul]
-  have hBμ : Module.End.HasEigenvalue (transferMap (d := d) (D := n) B) ((r : ℂ) * μ) :=
-    hasEigenvalue_of_eigenvector_eq _ _ X hBX hX_ne
-  have hnorm : ‖(r : ℂ) * μ‖ = r := by
-    rw [norm_mul, hμnorm, mul_one, Complex.norm_real, Real.norm_eq_abs, abs_of_pos hr]
-  exact mul_left_cancel₀ hr_ne ((huniq _ hBμ hnorm).trans (mul_one (r : ℂ)).symm)
+  have hIrrScaled : IsIrreducibleTensor
+      (fun i => (((Real.sqrt r : ℝ) : ℂ))⁻¹ • B i) :=
+    isIrreducibleTensor_smul hc_ne B hIrr
+  refine ⟨hIrrScaled, ?_, ?_⟩
+  · simpa using
+      (spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
+        (transferMap (d := d) (D := n)
+          (fun i => (((Real.sqrt r : ℝ) : ℂ))⁻¹ • B i))
+        (transferMap_isCPMap _) (isIrreducibleCP_transferMap_of_isIrreducibleTensor _ hIrrScaled)
+        ρ 1 hρ (by norm_num) (by simpa using hfix))
+  · refine isPrimitive_of_unique_norm_one _ ρ hfix hρ_ne ?_
+    intro μ hμ hμnorm
+    obtain ⟨X, hX⟩ := hμ.exists_hasEigenvector
+    have hX_eq : transferMap (d := d) (D := n)
+        (fun i => (((Real.sqrt r : ℝ) : ℂ))⁻¹ • B i) X = μ • X :=
+      Module.End.mem_eigenspace_iff.mp (Module.End.hasEigenvector_iff.mp hX).1
+    have hX_ne : X ≠ 0 := (Module.End.hasEigenvector_iff.mp hX).2
+    have hBX : transferMap (d := d) (D := n) B X = ((r : ℂ) * μ) • X := by
+      have h1 : (r : ℂ)⁻¹ • transferMap (d := d) (D := n) B X = μ • X := by
+        rw [← LinearMap.smul_apply, ← hmap]
+        exact hX_eq
+      calc transferMap (d := d) (D := n) B X
+          = (r : ℂ) • ((r : ℂ)⁻¹ • transferMap (d := d) (D := n) B X) := by
+            rw [smul_smul, mul_inv_cancel₀ hr_ne, one_smul]
+        _ = (r : ℂ) • (μ • X) := by rw [h1]
+        _ = ((r : ℂ) * μ) • X := by rw [smul_smul]
+    have hBμ : Module.End.HasEigenvalue
+        (transferMap (d := d) (D := n) B) ((r : ℂ) * μ) :=
+      hasEigenvalue_of_eigenvector_eq _ _ X hBX hX_ne
+    have hnorm : ‖(r : ℂ) * μ‖ = r := by
+      rw [norm_mul, hμnorm, mul_one, Complex.norm_real, Real.norm_eq_abs, abs_of_pos hr]
+    exact mul_left_cancel₀ hr_ne ((huniq _ hBμ hnorm).trans (mul_one (r : ℂ)).symm)
 
 /-- At positive length, a tensor whose letter matrices all vanish has vanishing
 matrix product vector coefficients.  These are the zero blocks of

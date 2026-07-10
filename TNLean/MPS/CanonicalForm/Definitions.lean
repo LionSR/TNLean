@@ -45,12 +45,13 @@ The predicates in this file are the CPSV formulations.
 ## Relation to the existing primitive-channel predicate
 
 CPSV16's clause "the associated CPM has a unique eigenvalue of magnitude
-equal to its spectral radius which is equal to one" is the standard
-*primitive transfer map* condition. We reuse `_root_.IsPrimitive`
-(`TNLean.Channel.Peripheral.Spectrum`), which states that the peripheral
-eigenvalue set equals `{1}`. This matches the paper after the spectral-radius
-normalization the paper assumes (cf. `MPDO-22-12-17-2.tex:231`, the block-then-
-renormalize paragraph immediately preceding Definition NT).
+equal to its spectral radius which is equal to one" has two parts.  The field
+`spectral_radius_one` records the spectral-radius normalization, while
+`primitive_transfer` uses `_root_.IsPrimitive`
+(`TNLean.Channel.Peripheral.Spectrum`) to state that the only eigenvalue on
+the unit circle is `1`.  Together they give the paper's peripheral-spectrum
+condition (cf. `MPDO-22-12-17-2.tex:231`, the block-then-renormalize paragraph
+immediately preceding Definition NT).
 
 The TN-Review formulation (`Papers/2011.12127/TN-Review-main.tex:1827-1830`)
 "the transfer operator is a primitive channel" is the same clause and is not
@@ -62,16 +63,16 @@ A connection is intentionally not provided here:
 
 * A BNT connection `IsCPSVBasisOfNormalTensors.of_isBNT` would require the implication
   `MPSTensor.IsNormal → IsNormalTensor` per block, i.e. from algebraic eventual
-  block injectivity to the CPSV16 (no-invariant-proj + primitive-transfer)
-  formulation. That equivalence requires Wielandt-style spectral arguments not
-  developed at this layer.
+  block injectivity to the CPSV16 conditions of no nontrivial invariant projection,
+  unit spectral radius, and unique peripheral eigenvalue. That equivalence requires
+  Wielandt-style spectral arguments not developed at this layer.
 
 ## Style
 
 Follows `docs/MATHLIB_style.md` and `docs/MATHLIB_naming.md`.
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators Matrix.Norms.Operator
 
 namespace MPSTensor
 
@@ -87,10 +88,10 @@ arXiv:1606.00608, Definition before eq. `II_CF1` (`Papers/1606.00608/MPDO-22-12-
 * (ii) the associated CPM (the transfer map `E_A(X) = ∑_i A_i X A_i^†`) has a unique
   eigenvalue of magnitude equal to its spectral radius which is equal to one.
 
-Clause (ii) is encoded via `_root_.IsPrimitive (transferMap A)`, which states that the
-peripheral eigenvalue set of the transfer map is exactly `{1}`. Combined with the
-implicit spectral-radius normalization the paper assumes (cf. `MPDO-22-12-17-2.tex:231`),
-this is the CPSV formulation.
+Clause (ii) is encoded by an explicit spectral-radius-one field together with
+`_root_.IsPrimitive (transferMap A)`, which states that the eigenvalues of norm
+one form exactly `{1}`.  The explicit field is essential: unit-circle
+uniqueness alone does not exclude eigenvalues of norm greater than one.
 
 This predicate is intentionally *weaker* than the TNLean strong predicate
 `MPSTensor.IsCanonicalFormSepAux.IsNormalCanonicalForm` (it does not require
@@ -99,8 +100,13 @@ left-canonical normalization, weight ordering, or positive bond dimension).
 structure IsNormalTensor (A : MPSTensor d D) : Prop where
   /-- (i) no nontrivial invariant orthogonal projection. -/
   no_invariant_proj : IsIrreducibleTensor A
-  /-- (ii) the associated CPM has a unique eigenvalue of magnitude equal to its
-  spectral radius equal to one (primitive transfer map). -/
+  /-- (ii-a) the associated CPM has spectral radius one, as required after the
+  rescaling of arXiv:1606.00608, lines 224--225 and 233--235. -/
+  spectral_radius_one :
+    spectralRadius ℂ
+      ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+        (transferMap (d := d) (D := D) A)) = 1
+  /-- (ii-b) the associated CPM has no unit-modulus eigenvalue other than one. -/
   primitive_transfer : _root_.IsPrimitive (transferMap (d := d) (D := D) A)
 
 /-! ## Basis of normal tensors (BNT) -/
