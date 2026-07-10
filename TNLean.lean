@@ -357,6 +357,7 @@ import TNLean.MPS.MPDO.MutualInfoMonotone
 import TNLean.MPS.MPDO.PureAreaLaw
 import TNLean.MPS.MPDO.PureRFPSAL
 import TNLean.MPS.MPDO.VerticalCF
+import TNLean.MPS.MPDO.InvariantProjection
 import TNLean.MPS.MPDO.BiCFDerivation
 import TNLean.MPS.MPDO.ZCL
 import TNLean.MPS.MPDO.RFP
