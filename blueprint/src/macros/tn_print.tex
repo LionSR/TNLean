@@ -457,6 +457,44 @@
     \end{tikzpicture}%
 }
 
+% The normalized three-site marginal of a four-site periodic MPO.  The first
+% three sites retain their two physical legs, while tracing the fourth site is
+% absorbed into the virtual closing operator R_4.
+\newcommand{\TNMPDONormalizedFourSiteTail}{%
+    \begin{tikzpicture}[tn picture]
+        \node at (-3.72,0) {$\sigma_3^{(4)}({\cal K})$};
+        \node at (-2.76,0) {$=$};
+
+        \TN@tensordot{tnTailOne}{(-1.48,0)}
+        \TN@tensordot{tnTailTwo}{(0,0)}
+        \TN@tensordot{tnTailThree}{(1.48,0)}
+        \draw[tn leg] (tnTailOne.east) -- (tnTailTwo.west);
+        \draw[tn leg] (tnTailTwo.east) -- (tnTailThree.west);
+
+        \foreach \n in {tnTailOne,tnTailTwo,tnTailThree} {
+            \TN@upleg{\n}{0.48}
+            \TN@downleg{\n}{0.48}
+        }
+        \TN@uplabel{tnTailOne}{0.72}{i_1}
+        \TN@uplabel{tnTailTwo}{0.72}{i_2}
+        \TN@uplabel{tnTailThree}{0.72}{i_3}
+        \TN@downlabel{tnTailOne}{0.72}{j_1}
+        \TN@downlabel{tnTailTwo}{0.72}{j_2}
+        \TN@downlabel{tnTailThree}{0.72}{j_3}
+        \node[anchor=east] at (-1.62,0.25) {${\cal K}$};
+        \node[anchor=east] at (-0.14,0.25) {${\cal K}$};
+        \node[anchor=east] at (1.34,0.25) {${\cal K}$};
+
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+            (tnFourSiteTail) at (0,-1.42) {$R_4$};
+        \draw[tn leg] (tnTailOne.west) -- ++(-0.48,0)
+            |- ($(tnFourSiteTail.east)+(0,-0.40)$) -- (tnFourSiteTail.east);
+        \draw[tn leg] (tnTailThree.east) -- ++(0.48,0)
+            |- ($(tnFourSiteTail.west)+(0,0.38)$) -- (tnFourSiteTail.west);
+
+    \end{tikzpicture}%
+}
+
 \newcommand{\TNGaugeConjugation}[3]{%
     \begin{tikzpicture}[tn picture]
         \TN@opdotabove{tnXl}{(-1.10,0)}{#1}

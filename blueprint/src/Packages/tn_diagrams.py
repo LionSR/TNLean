@@ -58,6 +58,7 @@ _DIAGRAM_ARGS: dict[str, str] = {
     "TNMPDOInverseContraction": "",
     "TNMPDOSectorPairing": "",
     "TNMPDOSectorZCLIdentity": "",
+    "TNMPDONormalizedFourSiteTail": "",
     "TNGaugeConjugation": "left physical right",
     "TNPhysicalRealization": "virtual physical",
     "TNLinearTwist": "twist label",
