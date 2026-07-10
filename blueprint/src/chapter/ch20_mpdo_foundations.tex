@@ -165,6 +165,53 @@ legs cyclically and taking the resulting trace.
     \]
 \end{definition}
 
+\begin{definition}[Adjoint MPO tensor]\label{def:mpo_adjoint_tensor}
+    \lean{MPOTensor.adjointTensor}
+    \lean{MPOTensor.adjointTensor_eq_iff_isHermitian}
+    \leanok
+    \uses{def:mpo_tensor, def:mpo_hermitian}
+    The \emph{adjoint tensor} $M^\dagger$ of an MPO tensor $M$ exchanges the
+    ket and bra physical indices and conjugate-transposes each virtual
+    matrix:
+    \[
+        (M^\dagger)^{ij} = (M^{ji})^\dagger.
+    \]
+    A tensor equals its adjoint tensor precisely when it is Hermitian.
+\end{definition}
+
+\begin{theorem}[Reflection identity for the adjoint tensor]
+    \label{thm:mpo_adjoint_reflection}
+    \lean{MPOTensor.evalWord_adjointTensor}
+    \lean{MPOTensor.mpo_adjointTensor}
+    \lean{MPOTensor.IsMPDO.mpo_adjointTensor_eq}
+    \lean{MPOTensor.IsMPDO.adjointTensor}
+    \leanok
+    \uses{def:mpo_adjoint_tensor, def:mpo_family, def:mpdo}
+    The adjoint tensor generates the adjoint operator family up to spatial
+    reflection: entrywise,
+    \[
+        \rho^{(N)}(M^\dagger)_{\sigma\tau}
+        = \overline{\rho^{(N)}(M)_{\tau\circ\mathrm{rev},\,
+          \sigma\circ\mathrm{rev}}},
+    \]
+    where $\mathrm{rev}$ reverses the site order.  For an MPDO the
+    conjugation disappears, $\rho^{(N)}(M^\dagger)_{\sigma\tau}
+    = \rho^{(N)}(M)_{\sigma\circ\mathrm{rev},\,\tau\circ\mathrm{rev}}$,
+    and the adjoint tensor is again an MPDO.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Word evaluation of the adjoint tensor conjugate-transposes the evaluation
+    of the reversed words with ket and bra exchanged, since the conjugate
+    transpose of a product reverses the factors.  Taking traces gives the
+    entrywise identity.  For an MPDO the density operators are Hermitian, so
+    the complex conjugate of the $(\tau\circ\mathrm{rev},
+    \sigma\circ\mathrm{rev})$ entry is the $(\sigma\circ\mathrm{rev},
+    \tau\circ\mathrm{rev})$ entry; positive semidefiniteness is preserved
+    under the simultaneous relabeling of rows and columns by the reflection.
+\end{proof}
+
 \section{Transfer maps}
 
 \begin{definition}[MPO transfer map]\label{def:mpo_transfer_map}
