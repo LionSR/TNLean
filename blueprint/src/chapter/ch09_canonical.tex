@@ -361,10 +361,14 @@ the resulting splitting decomposes any tensor into irreducible blocks.
 
 \begin{proof}
     \leanok
-    Diagonalize $P$ unitarily; its eigenvalues are $0$ and $1$ because $P$ is
-    Hermitian and idempotent. The columns of the diagonalizing unitary
-    corresponding to eigenvalue $1$ form the required isometry, and their
-    number is $\tr(P)$.
+    Since $P$ is Hermitian and idempotent, its eigenvalues are $0$ and $1$,
+    and unitary diagonalization gives
+    \[
+        P = U \diag(\underbrace{1, \ldots, 1}_{n}, 0, \ldots, 0)\, U^\dagger
+    \]
+    with $U$ unitary and $n = \tr(P)$. The matrix $V \in \C^{D \times n}$
+    formed by the first $n$ columns of $U$ satisfies $V^\dagger V = \Id$ and
+    $V V^\dagger = P$.
 \end{proof}
 
 \begin{lemma}[Corner tensors inherit projector closure]
@@ -382,9 +386,15 @@ the resulting splitting decomposes any tensor into irreducible blocks.
     \leanok
     \uses{def:invariant_projector_closure}
     Let $Q$ be an orthogonal projection with $Q B^i = Q B^i Q$ for all~$i$.
-    Then $V Q V^\dagger$ is an orthogonal projection, and commutation of
-    $V V^\dagger$ with each $A^i$ gives
-    $(V Q V^\dagger) A^i = (V Q V^\dagger) A^i (V Q V^\dagger)$.
+    Then $V Q V^\dagger$ is an orthogonal projection. Commutation of
+    $V V^\dagger$ with each $A^i$ gives $V^\dagger A^i = B^i V^\dagger$, so
+    left-invariance of $Q$ yields
+    \[
+        (V Q V^\dagger) A^i
+        = V Q B^i V^\dagger
+        = V Q B^i Q V^\dagger
+        = (V Q V^\dagger) A^i (V Q V^\dagger).
+    \]
     Projector closure for $A$ yields
     $A^i (V Q V^\dagger) = (V Q V^\dagger) A^i (V Q V^\dagger)$, and
     compressing both sides between $V^\dagger$ and $V$ returns
@@ -397,20 +407,20 @@ the resulting splitting decomposes any tensor into irreducible blocks.
     \leanok
     \uses{def:same_mpv2, def:block_diagonal_tensor}
     Let $V_1, \ldots, V_r$ be isometries, $V_k^\dagger V_k = \Id$, with
-    $\sum_k V_k V_k^\dagger = \Id$, and suppose $A^i V_k = V_k A_k^i$ for the
-    corner tensors $A_k^i = V_k^\dagger A^i V_k$. Then
-    $\mc{V}(A) = \mc{V}(\bigoplus_{k=1}^r A_k)$.
+    $\sum_k V_k V_k^\dagger = \Id$, and suppose $A^i V_k = V_k B_k^i$ for
+    some tensors $B_1, \ldots, B_r$. Then
+    $\mc{V}(A) = \mc{V}(\bigoplus_{k=1}^r B_k)$.
 \end{lemma}
 
 \begin{proof}
     \leanok
     The intertwining relation propagates from letters to words, so
-    $A^w V_k = V_k A_k^w$ for every word $w$. Inserting the partition of
+    $A^w V_k = V_k B_k^w$ for every word $w$. Inserting the partition of
     unity $\sum_k V_k V_k^\dagger = \Id$ into the trace and cycling gives
     \[
         \tr(A^w)
         = \sum_{k=1}^r \tr\bigl(V_k^\dagger A^w V_k\bigr)
-        = \sum_{k=1}^r \tr\bigl(A_k^w\bigr),
+        = \sum_{k=1}^r \tr\bigl(B_k^w\bigr),
     \]
     which is the matrix product vector of the direct sum.
 \end{proof}
@@ -437,14 +447,22 @@ the resulting splitting decomposes any tensor into irreducible blocks.
     Strong induction on the bond dimension. If $A$ is irreducible, the single
     corner $V = \Id$ suffices. Otherwise $A$ has a nontrivial invariant
     projection $P$, which commutes with every $A^i$ by
-    Theorem~\ref{thm:invariant_projector_closure_commutes}. Factoring $P$ and
-    $\Id - P$ through support isometries
-    (Lemma~\ref{lem:projection_support_isometry}) splits $A$ into two corner
-    tensors of strictly smaller bond dimension, each of which inherits
-    invariant-projector closure by Lemma~\ref{lem:projector_closure_corner}.
-    The two recursively obtained families are combined; ranges from different
-    corners are orthogonal because the corresponding projections are. The
-    equality of matrix product vectors is
+    Theorem~\ref{thm:invariant_projector_closure_commutes}. Factoring
+    $P = V_1 V_1^\dagger$ and $\Id - P = V_2 V_2^\dagger$ through support
+    isometries (Lemma~\ref{lem:projection_support_isometry}) splits $A$ into
+    two corner tensors of strictly smaller bond dimension: for $j = 1, 2$,
+    commutation gives
+    \[
+        A^i V_j = V_j \bigl(V_j^\dagger A^i V_j\bigr),
+    \]
+    and each corner inherits invariant-projector closure by
+    Lemma~\ref{lem:projector_closure_corner}. The two recursively obtained
+    families are combined; ranges from different corners are orthogonal since
+    $V_1^\dagger P = V_1^\dagger$ and $(\Id - P) V_2 = V_2$ give
+    \[
+        V_1^\dagger V_2 = V_1^\dagger P (\Id - P) V_2 = 0.
+    \]
+    The equality of matrix product vectors is
     Lemma~\ref{lem:mpv_partition_isometries}.
 \end{proof}
 
