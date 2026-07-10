@@ -38,6 +38,10 @@ unless they are cited by one of the current blueprint chapters above.
 
 For MPDO renormalization fixed points:
 
+- `cpgsv17_mpdo_sal_zcl_eta_local_structure.tex` records the missing
+  inverse-map sector factorization in Appendix C.2. The double end-site
+  inverse contraction is proved, while its comparison with the conjugated
+  Hayashi decomposition and the resulting tensors $l_k,r_k$ remain open.
 - `cpsv16_purification_rfp_definition.tex` records why the former
   local-purification PRFP predicate was removed: it required a generic
   pure-state RFP witness, but did not enforce the source's positive-length

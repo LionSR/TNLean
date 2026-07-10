@@ -22,6 +22,9 @@ arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete).
   doubled-index MPS tensor.
 - `MPOTensor.inverseTensor` / `MPOTensor.inverseTensor_spec`: the concrete
   inverse tensor `K⁻¹` and its matrix-unit contraction identity.
+- `MPOTensor.inverseMapThreeSiteContraction` /
+  `MPOTensor.inverseMapThreeSiteContraction_eq`: the double inverse-map
+  contraction at lines 1415--1438 of Appendix C.2 in arXiv:1606.00608.
 - `MPOTensor.physRealize` / `MPOTensor.physRealize_spec` /
   `MPOTensor.physRealize_mul`: the physical realization of right virtual
   insertions and its multiplicativity.
@@ -78,9 +81,11 @@ operators have the generally nonconstant primitive trace matrix whose kh-entry
 is the trace of ηₖₕ. Consequently these two families cannot simply be
 identified.
 
-The earliest missing connection to Appendix C.2 is the conclusion of Lemma
-propSN: the inverse-map calculation must produce a sector factorization of the
-concrete tensor `K` satisfying, for every `N`,
+The raw double inverse-map contraction (arXiv:1606.00608, Appendix C.2,
+lines 1415--1438) is `MPOTensor.inverseMapThreeSiteContraction_eq`. The earliest
+missing connection is the comparison of that contraction with the conjugated,
+reindexed Hayashi decomposition. This comparison must produce a sector
+factorization of the concrete tensor `K` satisfying, for every `N`,
 \[
   \widetilde\sigma^{(N)}(K)
     = \bigoplus_{k_1,\ldots,k_N}\bigotimes_{n=1}^N \eta_{k_n,k_{n+1}}.
@@ -158,6 +163,73 @@ theorem inverseTensor_spec (K : MPOTensor d D) (hK : K.IsInjective)
         = Matrix.single α β (1 : ℂ)
   exact MPSTensor.decompositionMap_sum (A := K.toMPSTensor) hK
     (Matrix.single α β (1 : ℂ))
+
+/-- The contraction obtained by applying the inverse tensor to the first and
+third sites of a three-site MPO word.
+
+Here `R` is the virtual matrix obtained by contracting the remaining sites.
+With $X_{\alpha,\beta}$ denoting the corresponding component of
+${\cal K}^{-1}$, this is the left-hand side of the double-sum contraction
+identity at lines 1415--1438 of arXiv:1606.00608.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1415--1438. -/
+noncomputable def inverseMapThreeSiteContraction
+    (K : MPOTensor d D) (hK : K.IsInjective)
+    (R : Matrix (Fin D) (Fin D) ℂ)
+    (α₁ β₁ α₃ β₃ : Fin D) (p₂ : Fin (d * d)) : ℂ :=
+  ∑ p₁ : Fin (d * d), ∑ p₃ : Fin (d * d),
+    inverseTensor K hK p₁ α₁ β₁ * inverseTensor K hK p₃ α₃ β₃ *
+      Matrix.trace
+        (K.toMPSTensor p₁ * K.toMPSTensor p₂ * K.toMPSTensor p₃ * R)
+
+/-- Applying ${\cal K}^{-1}$ to the two end sites leaves one entry of the
+middle tensor and the complementary entry of the virtual tail:
+
+\[
+  \sum_{p_1,p_3} ({\cal K}^{-1})^{\alpha_1,\beta_1}_{p_1}
+    ({\cal K}^{-1})^{\alpha_3,\beta_3}_{p_3}
+    \tr({\cal K}^{p_1}{\cal K}^{p_2}{\cal K}^{p_3}R)
+  = {\cal K}^{p_2}_{\beta_1,\alpha_3}R_{\beta_3,\alpha_1}.
+\]
+
+This is the contraction-collapse step at lines 1422--1438 of arXiv:1606.00608,
+immediately before the sector-factorization equation.
+
+**Local fix (tail index):** the source display at lines 1422--1438
+writes $m_{\beta_3,\alpha_3}$. Direct contraction of the two matrix units
+gives $m_{\beta_3,\alpha_1}$, as shown by the formula above. The correction
+is recorded in
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1422--1438. -/
+theorem inverseMapThreeSiteContraction_eq
+    (K : MPOTensor d D) (hK : K.IsInjective)
+    (R : Matrix (Fin D) (Fin D) ℂ)
+    (α₁ β₁ α₃ β₃ : Fin D) (p₂ : Fin (d * d)) :
+    inverseMapThreeSiteContraction K hK R α₁ β₁ α₃ β₃ p₂ =
+      K.toMPSTensor p₂ β₁ α₃ * R β₃ α₁ := by
+  classical
+  let a : Fin (d * d) → ℂ := fun p ↦ inverseTensor K hK p α₁ β₁
+  let b : Fin (d * d) → ℂ := fun p ↦ inverseTensor K hK p α₃ β₃
+  let C : Fin (d * d) → Matrix (Fin D) (Fin D) ℂ := K.toMPSTensor
+  change
+    (∑ p₁ : Fin (d * d), ∑ p₃ : Fin (d * d),
+      (a p₁ * b p₃) • Matrix.trace (C p₁ * C p₂ * C p₃ * R)) =
+        C p₂ β₁ α₃ * R β₃ α₁
+  simp_rw [← Matrix.trace_smul]
+  simp_rw [← Matrix.trace_sum Finset.univ]
+  have hmat :
+      (∑ i, ∑ j, (a i * b j) • (C i * C p₂ * C j * R)) =
+        (∑ i, a i • C i) * C p₂ * (∑ j, b j • C j) * R := by
+    simp only [Finset.sum_mul, Finset.mul_sum]
+    conv_rhs => rw [Finset.sum_comm]
+    simp [Matrix.mul_assoc, smul_smul, mul_comm]
+  have ha : ∑ i, a i • C i = Matrix.single α₁ β₁ (1 : ℂ) := by
+    simpa [a, C] using inverseTensor_spec K hK α₁ β₁
+  have hb : ∑ i, b i • C i = Matrix.single α₃ β₃ (1 : ℂ) := by
+    simpa [b, C] using inverseTensor_spec K hK α₃ β₃
+  rw [hmat, ha, hb, Matrix.single_mul_mul_single, Matrix.trace_single_mul]
+  simp
 
 /-- The physical realization map for a right virtual insertion on an injective
 simple MPO tensor. This is the MPO encoding of
