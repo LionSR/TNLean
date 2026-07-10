@@ -13,8 +13,10 @@ CmdLine
   -n 7   # Accent command heuristic.
   -n 8   # Dash-length heuristic.
   -n 9   # Optional-argument bracket heuristic.
+  -n 10  # Solo-parenthesis heuristic; round-bracket bra-ket pairing notation.
   -n 12  # Interword-spacing heuristic.
   -n 13  # Intersentence-spacing heuristic.
+  -n 15  # Unmatched-parenthesis heuristic; round-bracket bra-ket/valence-bond notation.
   -n 17  # Bracket-balance heuristic; noisy in blueprint macro arguments.
   -n 18  # Quote-style heuristic.
   -n 24  # Page-reference spacing heuristic.
