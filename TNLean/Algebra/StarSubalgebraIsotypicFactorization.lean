@@ -48,13 +48,13 @@ variable (S : StarSubalgebra ℂ (Matrix n n ℂ))
 nonempty family of pairwise orthogonal subspaces of $\mathbb{C}^{D}$, irreducible under a
 star-subalgebra $S$ of complex matrices and pairwise of the same type. Write $m$ for the number
 of pieces; all pieces share one dimension $d$. Then the span of the family has an orthonormal
-basis $(f_{i,j})_{i \le m,\, j \le d}$ such that for every $A \in S$ there is a matrix
-$B \in M_{d}(\mathbb{C})$ with
-$$A\,f_{i,j} \;=\; \sum_{j'} B_{j'j}\, f_{i,j'} \qquad (i \le m,\ j \le d) :$$
+basis $(f_{i,j})_{0 \le i < m,\, 0 \le j < d}$ such that for every $A \in S$ there is a matrix
+$B \in M_{d}(\mathbb{C})$ with, for all $i < m$ and $j < d$,
+$$A\,f_{i,j} \;=\; \sum_{j'} B_{j'j}\, f_{i,j'} :$$
 in the adapted basis the member $A$ acts on the component as $\mathbf{1}_{m} \otimes B$, one
 matrix on the irreducible index, identically across the multiplicity index.
 
-An orthonormal basis $e_1, \ldots, e_d$ of one piece spreads to the others through the
+An orthonormal basis $e_0, \ldots, e_{d-1}$ of one piece spreads to the others through the
 inner-product-preserving intertwiners of
 `StarSubalgebra.exists_isometry_intertwiner_of_sameIsotype`; the intertwining identity makes
 the matrix of $A$ the same on every copy. See *Quantum Channels & Operations* (Wolf 2012),
@@ -162,7 +162,7 @@ theorem exists_adapted_orthonormal_family_of_sameIsotype
 /-- **Spatial tensor factorization of the isotypic components.** For a star-subalgebra $S$ of
 complex matrices, $\mathbb{C}^{D}$ is the supremum of a finite family of pairwise orthogonal
 isotypic components, and each component carries an orthonormal basis $(f_{i,j})$, indexed by a
-multiplicity index $i \le m$ and an irreducible index $j \le d$, on which every $A \in S$ acts
+multiplicity index $i < m$ and an irreducible index $j < d$, on which every $A \in S$ acts
 by
 $$A\,f_{i,j} = \sum_{j'} B_{j'j}\, f_{i,j'}$$
 for a matrix $B \in M_{d}(\mathbb{C})$ depending only on $A$ and the component. In the adapted
