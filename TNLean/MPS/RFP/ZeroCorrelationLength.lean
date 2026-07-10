@@ -44,10 +44,10 @@ variable {g : ℕ} {dim : Fin g → ℕ}
 
 /-- The transfer insertion associated with an observable on a block of `L`
 physical spins.  If `σ, τ : Fin L → Fin d` label basis words, then
-`physicalObservableTransfer A L O X` is
-`∑_{σ,τ} O_{τ,σ} A^σ X (A^τ)†`.
+`physicalObservableTransfer A L O X` equals
+$\sum_{\sigma,\tau} O_{\tau,\sigma}\, A^{\sigma} X (A^{\tau})^{\dagger}$.
 
-This is the matrix `𝔼_O` appearing in arXiv:1606.00608, equation `Corr`
+This is the matrix $\mathbb{E}_O$ appearing in arXiv:1606.00608, equation Corr
 (lines 490--496), written as a map on virtual matrices. -/
 noncomputable def physicalObservableTransfer (A : MPSTensor d D) (L : ℕ)
     (O : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
@@ -59,7 +59,7 @@ noncomputable def physicalObservableTransfer (A : MPSTensor d D) (L : ℕ)
 /-- The periodic-chain two-region expectation obtained by placing observables
 `O₁` and `O₂` on physical blocks, with `n₁` and `n₂` unobserved sites in the two
 complementary arcs.  This is the trace formula in arXiv:1606.00608, equation
-`Corr` (lines 490--496). -/
+Corr (lines 490--496). -/
 noncomputable def physicalTwoPointExpectation (A : MPSTensor d D)
     (L₁ L₂ : ℕ)
     (O₁ : Matrix (Fin L₁ → Fin d) (Fin L₁ → Fin d) ℂ)
@@ -70,7 +70,7 @@ noncomputable def physicalTwoPointExpectation (A : MPSTensor d D)
       physicalObservableTransfer A L₁ O₁ ∘ₗ ((transferMap A) ^ n₁))
 
 /-- Positive-gap physical correlations independent of distance, in the transfer
-formula surrounding arXiv:1606.00608, Definition 3.3 and equation `Corr` (lines
+formula surrounding arXiv:1606.00608, Definition 3.3 and equation Corr (lines
 437--445 and 490--496): translating either of two physical block observables
 through the unobserved part of a fixed periodic chain does not change their
 two-region expectation.  Thus the two complementary gaps may change while
@@ -81,8 +81,8 @@ does not replace physical observables by arbitrary virtual bond matrices.
 
 **Scope restriction (arXiv:1606.00608, Definition 3.3):** the source quantifies
 over all disjoint regions, including adjacent regions.  Here both complementary
-gaps are required to be positive.  If a gap is zero, equation `Corr` contains
-`𝔼⁰ = 1`, which does not follow from `𝔼² = 𝔼`.  See
+gaps are required to be positive.  If a gap is zero, equation Corr contains
+$\mathbb{E}^0 = 1$, which does not follow from $\mathbb{E}^2 = \mathbb{E}$.  See
 `docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
 def IsPositiveGapPhysicalCID (A : MPSTensor d D) : Prop :=
   ∀ (L₁ L₂ : ℕ)
@@ -98,8 +98,9 @@ two-point expression through the transfer map is constant in the separation
 for all virtual bond matrices.
 
 For every positive definite right fixed point `ρR` of the transfer map, the
-connected correlator `C(X,Y;n) = ⟨X₀Yₙ⟩ − ⟨X⟩⟨Y⟩` is the same for all
-separations `n ≥ 1` and all bond matrices `X`, `Y`.
+connected correlator
+$C(X,Y;n) = \langle X_0 Y_n \rangle - \langle X \rangle \langle Y \rangle$ is
+the same for all separations `n ≥ 1` and all bond matrices `X`, `Y`.
 
 **Scope restriction:** this is a virtual-insertion surrogate, not Definition
 3.3 of the source.  It is also vacuous when no positive definite fixed point
@@ -116,12 +117,12 @@ def IsCID (A : MPSTensor d D) : Prop :=
 /-- Idempotence of the transfer map implies positive-gap physical CID.
 
 This is the positive-gap part of the forward implication stated immediately
-before arXiv:1606.00608, Theorem `TheoremZCLPure` (lines 498--502).  Equation
-`Corr` shows the reason directly: every positive power of an idempotent
+before arXiv:1606.00608, Theorem TheoremZCLPure (lines 498--502).  Equation
+Corr shows the reason directly: every positive power of an idempotent
 transfer map equals the transfer map itself.
 
 **Scope restriction:** adjacent regions are not covered because idempotence
-does not identify `𝔼⁰` with `𝔼`.  This is recorded in
+does not identify $\mathbb{E}^0$ with $\mathbb{E}$.  This is recorded in
 `docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
 theorem isPositiveGapPhysicalCID_of_isRFP (A : MPSTensor d D) (hRFP : IsRFP A) :
     IsPositiveGapPhysicalCID A := by
@@ -157,7 +158,7 @@ lemma isLocallyOrthogonal_iff_isRFP (A : MPSTensor d D) :
 
 /-- BNT-level local orthogonality (arXiv:1606.00608, Definition 3.5):
 for distinct BNT components `j ≠ j'`, the mixed-sector transfer matrix
-`𝔼_{j,j'} = ∑ i, A_j^i ⊗ \overline{A_{j'}^i}` vanishes.
+$\mathbb{E}_{j,j'} = \sum_i A_j^i \otimes \overline{A_{j'}^i}$ vanishes.
 
 This is the source local-orthogonality condition used in the pure-state ZCL
 theorem. The rectangular mixed transfer operator is the corresponding linear
@@ -203,7 +204,8 @@ gaps are positive.
 
 **Scope restriction (arXiv:1606.00608, Definition 3.6):** the source permits
 arbitrary disjoint regions, including adjacent regions for which a
-complementary transfer power is `𝔼⁰`.  This predicate excludes those cases.
+complementary transfer power is $\mathbb{E}^0$.  This predicate excludes those
+cases.
 It is therefore a positive-gap consequence of transfer idempotence, not the
 source ZCL predicate.  See
 `docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
@@ -237,9 +239,10 @@ def IsZCL (A : MPSTensor d D) : Prop :=
 for a tensor with a PosDef fixed point, correlations independent of distance
 implies the transfer map is idempotent.
 
-The proof uses trace nondegeneracy: IsCID forces `tr(Y · Eⁿ(X · ρR))` to be
-constant in `n` for all `X`, `Y`, so `Eⁿ(X · ρR)` is constant. Since `ρR` is
-PosDef (hence invertible), `X · ρR` ranges over all matrices, giving `E² = E`. -/
+The proof uses trace nondegeneracy: IsCID forces
+$\operatorname{tr}(Y\, E^n(X \rho_R))$ to be constant in `n` for all `X`, `Y`,
+so $E^n(X \rho_R)$ is constant. Since `ρR` is PosDef (hence invertible),
+$X \rho_R$ ranges over all matrices, giving $E^2 = E$. -/
 theorem isCID_implies_isRFP
     (A : MPSTensor d D)
     (ρR : Matrix (Fin D) (Fin D) ℂ)
@@ -282,10 +285,10 @@ theorem isCID_implies_isRFP
 /-- Single-block ZCL is equivalent to transfer-map idempotence (i.e. `IsRFP`).
 
 Forward: `IsZCL → IsRFP` is immediate since `IsLocallyOrthogonal = IsRFP`.
-Reverse: `E² = E` implies `Eⁿ = E` for `n ≥ 1` by `IsIdempotentElem.pow_eq`,
+Reverse: $E^2 = E$ implies $E^n = E$ for `n ≥ 1` by `IsIdempotentElem.pow_eq`,
 so the connected correlator is independent of separation, giving CID.
 
-**Scope restriction (arXiv:1606.00608, Theorem `TheoremZCLPure`):** the source
+**Scope restriction (arXiv:1606.00608, Theorem TheoremZCLPure):** the source
 theorem is stated for canonical-form tensors and includes the BNT-level local
 orthogonality equations for distinct components. This result proves the
 single-block idempotence/CID equivalence under the convention above; it is not
