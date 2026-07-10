@@ -294,11 +294,18 @@ $D(X)$ and cyclic shifts $U_{k0}$:
     T_C(X)=(d-n)D(X)-X+\sum_{k=1}^nD(U_{k0}XU_{k0}^{\dagger}).
 \]
 The formal statements below record the map and the rank-one reduction used in
-the standard positivity argument.  The first case $d=3$, $n=1$ is positive.
-The positivity and indecomposability assertions for the full range
-$1\le n\le d-2$ remain open.  The missing general positivity step is a cyclic
-reciprocal estimate for the weights in the rank-one reduction; it does not
-follow merely from equality of the total numerator and denominator weights.
+the standard positivity argument.  Positivity is proved for the case $d=3$,
+$n=1$ and, for every $d\ge3$, at the top of the range, $n=d-2$; the scalar
+input for the latter is a reciprocal inequality valid for an arbitrary
+permutation in place of the cyclic shift.  The positivity assertion for the
+remaining range $1\le n\le d-3$ and the indecomposability assertion remain
+open.  The missing general positivity step is a cyclic reciprocal estimate for
+the weights in the rank-one reduction; it does not follow merely from equality
+of the total numerator and denominator weights.  The general estimate is
+classical: the case $n=d-2$ is due to Ando, the case $n=1$ to Tanahashi and
+Tomiyama~\cite{TanahashiTomiyama1988Indecomposable}, and the whole range to
+Yamagami~\cite{Yamagami1993Cyclic}, whose proof is a variational argument on
+the boundary of a projective simplex.
 
 \begin{definition}[Choi-type map]
     \label{def:choi_type_map}
@@ -480,32 +487,144 @@ follow merely from equality of the total numerator and denominator weights.
     Lemma~\ref{lem:choi_type_rankone_positive_from_weight_bound}.
 \end{proof}
 
+\begin{lemma}[Positivity from rank-one positivity]
+    \label{lem:positive_map_from_rankone}
+    \lean{Matrix.isPositiveMap_of_forall_vecMulVec_posSemidef}
+    \leanok
+    A linear map on matrices that sends every rank-one projector
+    $\ket{w}\bra{w}$ to a positive semidefinite matrix sends every positive
+    semidefinite matrix to a positive semidefinite matrix.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Let $\Phi$ be the map and let $X\ge0$.  Scaling the eigenvectors of $X$ by
+    the square roots of its nonnegative eigenvalues produces vectors
+    $w_\alpha$ with
+    \[
+        X=\sum_\alpha \ket{w_\alpha}\bra{w_\alpha}.
+    \]
+    Linearity gives
+    \[
+        \Phi(X)=\sum_\alpha \Phi(\ket{w_\alpha}\bra{w_\alpha}),
+    \]
+    each summand is positive semidefinite by hypothesis, and a sum of
+    positive semidefinite matrices is positive semidefinite.
+\end{proof}
+
 \begin{theorem}[The first Choi map is positive]
     \label{thm:choi_type_first_positive_subcase}
     \lean{Matrix.choiTypeMap_isPositiveMap_three_one}
     \leanok
-    \uses{def:choi_type_map, lem:choi_type_first_cyclic_reciprocal_subcase}
+    \uses{def:choi_type_map, lem:choi_type_first_cyclic_reciprocal_subcase,
+        lem:positive_map_from_rankone}
     For $d=3$ and $n=1$, the Choi-type map $T_C$ sends every positive
     semidefinite matrix to a positive semidefinite matrix.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Let $X\ge0$.  By the spectral decomposition, there are vectors $w_\alpha$
-    such that
+    Combine Lemma~\ref{lem:choi_type_first_cyclic_reciprocal_subcase} with
+    Lemma~\ref{lem:positive_map_from_rankone}.
+\end{proof}
+
+\begin{lemma}[Permutation reciprocal inequality]
+    \label{lem:choi_type_perm_reciprocal}
+    \lean{Matrix.perm_reciprocal_sum_le_one}
+    \leanok
+    Let $x_i\ge0$ be indexed by a finite set, let $T=\sum_j x_j$, and let
+    $\sigma$ be a permutation of the index set.  Then, with zero-denominator
+    summands read as $0$,
     \[
-        X=\sum_\alpha \ket{w_\alpha}\bra{w_\alpha},
+        \sum_i \frac{x_i}{T+x_i-x_{\sigma(i)}}\le 1 .
     \]
-    where each summand is rank-one and positive semidefinite.  Linearity gives
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    If $T=0$, every summand vanishes.  Otherwise write
+    $\delta_i=x_i-x_{\sigma(i)}$.  Each summand obeys
     \[
-        T_C(X)=\sum_\alpha T_C(\ket{w_\alpha}\bra{w_\alpha}).
+        \frac{x_i}{T+\delta_i}
+        \le\frac{x_iT-x_i\delta_i+\delta_i^2/2}{T^2}:
     \]
-    The preceding lemma gives
+    for $\sigma(i)=i$ both sides equal $x_i/T$, and for $\sigma(i)\ne i$ the
+    difference of the two sides is
     \[
-        T_C(\ket{w_\alpha}\bra{w_\alpha})\ge0
+        \frac{\delta_i^2\,\bigl(T-x_i-x_{\sigma(i)}\bigr)}{2\,T^2\,(T+\delta_i)}
+        \ge0,
     \]
-    for every $\alpha$.  Hence the displayed sum is positive semidefinite, so
-    $T_C(X)\ge0$.
+    by the pair bound $x_i+x_{\sigma(i)}\le T$ and $T+\delta_i\ge 2x_i\ge0$; a
+    vanishing denominator forces $x_i=0$ and leaves a nonnegative right-hand
+    side.  Because $\sigma$ permutes the entries,
+    $\sum_i x_{\sigma(i)}^2=\sum_i x_i^2$, which gives the identity
+    $\sum_i x_i\delta_i=\tfrac12\sum_i\delta_i^2$.  Summing the term bounds
+    therefore yields
+    \[
+        \sum_i\frac{x_i}{T+\delta_i}
+        \le\frac{T\cdot T-\sum_ix_i\delta_i+\tfrac12\sum_i\delta_i^2}{T^2}
+        =1 .
+    \]
+\end{proof}
+
+\begin{lemma}[The Choi weight at the top of the range]
+    \label{lem:choi_type_weight_top}
+    \lean{Matrix.sum_shift_window_eq_sub_pair,
+        Matrix.choiTypeRankOneWeight_sub_two}
+    \leanok
+    \uses{def:choi_type_rankone_weight}
+    Let $d\ge3$ and $n=d-2$.  With $x_i=|v_i|^2$ and $T=\sum_j x_j$, the Choi
+    rank-one diagonal weight equals
+    \[
+        a_i=(d-n)x_i+\sum_{k=1}^{n}x_{i-k}=T+x_i-x_{i+1} .
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    For $n=d-2$ the backward shifts $i-1,\dots,i-(d-2)$ run over every index
+    of $\mathbb Z/d\mathbb Z$ except $i$ and $i+1$, so the shifted sum equals
+    $T-x_i-x_{i+1}$ and $a_i=2x_i+T-x_i-x_{i+1}$.
+\end{proof}
+
+\begin{lemma}[Rank-one positivity at the top of the range]
+    \label{lem:choi_type_rankone_positive_top}
+    \lean{Matrix.choiTypeMap_vecMulVec_posSemidef_sub_two}
+    \leanok
+    \uses{lem:choi_type_rankone_positive_from_weight_bound,
+        lem:choi_type_weight_top, lem:choi_type_perm_reciprocal}
+    For $d\ge3$ and $n=d-2$, every vector $v$ satisfies
+    $T_C(\ket{v}\bra{v})\ge0$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    By Lemma~\ref{lem:choi_type_weight_top}, the reciprocal weight sum is
+    \[
+        \sum_i\frac{x_i}{T+x_i-x_{i+1}}
+    \]
+    with $x_i=|v_i|^2$.  Lemma~\ref{lem:choi_type_perm_reciprocal}, applied
+    to the cyclic shift $\sigma(i)=i+1$, bounds this sum by $1$, and
+    Lemma~\ref{lem:choi_type_rankone_positive_from_weight_bound} turns the
+    bound into rank-one positivity.
+\end{proof}
+
+\begin{theorem}[Choi-type maps at the top of the range are positive]
+    \label{thm:choi_type_positive_top}
+    \lean{Matrix.choiTypeMap_isPositiveMap_sub_two}
+    \leanok
+    \uses{def:choi_type_map, lem:choi_type_rankone_positive_top,
+        lem:positive_map_from_rankone}
+    For every $d\ge3$ and $n=d-2$, the Choi-type map $T_C$ sends every
+    positive semidefinite matrix to a positive semidefinite matrix.  This is
+    the case $n=d-2$ of the positivity assertion of Wolf's Example~3.1 and
+    subsumes the case $d=3$, $n=1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Combine Lemma~\ref{lem:choi_type_rankone_positive_top} with
+    Lemma~\ref{lem:positive_map_from_rankone}.
 \end{proof}
 
 \section{Decomposable positive maps}
