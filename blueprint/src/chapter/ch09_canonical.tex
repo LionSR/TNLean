@@ -295,6 +295,60 @@ the resulting splitting decomposes any tensor into irreducible blocks.
     no nontrivial invariant projection (Definition~\ref{def:irreducible_tensor}).
 \end{definition}
 
+\begin{definition}[Invariant-projector closure]
+    \label{def:invariant_projector_closure}
+    \lean{MPSTensor.HasInvariantProjectorClosure}
+    \leanok
+    \uses{def:mps_tensor}
+    An MPS tensor $A$ has \emph{invariant-projector closure} if every
+    orthogonal projection $P$ satisfying $PA^i=PA^iP$ for all~$i$ also
+    satisfies $A^iP=PA^iP$ for all~$i$.
+    This is the projector hypothesis in the sufficient condition for canonical
+    form of \cite[Section~2]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Invariant projections are reducing under projector closure]
+    \label{thm:invariant_projector_closure_commutes}
+    \lean{MPSTensor.commutes_of_hasInvariantProjectorClosure_of_lowerZero}
+    \leanok
+    \uses{def:invariant_projector_closure}
+    Suppose that $A$ has invariant-projector closure and that $P$ is an
+    orthogonal projection satisfying $(\Id-P)A^iP=0$ for all~$i$. Then $P$
+    reduces every tensor matrix: $PA^i=A^iP$ for all~$i$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:invariant_projector_closure}
+    The lower-corner equation gives
+    \[
+        (\Id-P)A^i=(\Id-P)A^i(\Id-P).
+    \]
+    Applying projector closure to $\Id-P$ gives
+    $A^i(\Id-P)=(\Id-P)A^i(\Id-P)$, hence the upper corner
+    $PA^i(\Id-P)$ also vanishes. Therefore
+    \[
+        PA^i=PA^iP=A^iP.
+    \]
+\end{proof}
+
+\begin{theorem}[Invariant-projector closure gives a reducing projection]
+    \label{thm:exists_reducing_projection_of_invariant_projector}
+    \lean{MPSTensor.exists_reducing_projection_of_hasInvariantProj}
+    \leanok
+    \uses{def:has_inv_proj, def:invariant_projector_closure}
+    If $A$ has invariant-projector closure and admits a nontrivial invariant
+    projection, then it admits a nontrivial orthogonal projection commuting
+    with every $A^i$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:invariant_projector_closure_commutes}
+    Apply Theorem~\ref{thm:invariant_projector_closure_commutes} to the
+    projection supplied by Definition~\ref{def:has_inv_proj}.
+\end{proof}
+
 \begin{theorem}[PSD fixed point gives invariant projection]\label{thm:fp_inv_proj}
     \lean{MPSTensor.lowerZero_of_posSemidef_fixedPoint}
     \leanok
