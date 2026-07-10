@@ -135,9 +135,12 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{proof}\leanok
     \uses{thm:mpdo_injective_inverse_layer_spec}
-    Move the two finite sums through the trace. The two inverse-map identities
-    replace the contracted tensors by the matrix units
-    $E_{\alpha_1,\beta_1}$ and $E_{\alpha_3,\beta_3}$. Hence
+    Move the two finite sums through the trace.  By the inverse-map identity
+    \[
+        \sum_p({\cal K}^{-1})^{\alpha,\beta}_p\,{\cal K}^p
+        =E_{\alpha,\beta},
+    \]
+    the double sum collapses to
     \[
         \tr\bigl(E_{\alpha_1,\beta_1}{\cal K}^{p_2}
           E_{\alpha_3,\beta_3}R\bigr)
