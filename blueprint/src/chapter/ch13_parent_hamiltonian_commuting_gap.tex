@@ -1195,7 +1195,7 @@ the specialization $L=2$.
 
 \begin{theorem}[The two-site basic-vector image]
     \label{thm:appendixB_two_site_basic_embedding_range}
-    \lean{MPSTensor.AppendixBStructuralData.twoSiteBasicEmbedding_comp_weightedBoundary}
+    \lean{MPSTensor.AppendixBStructuralData.twoSiteBasicEmbedding_comp_weightedTwoSiteBoundary}
     \lean{MPSTensor.AppendixBStructuralData.twoSiteBasicEmbedding_range}
     \leanok
     \uses{def:appendixB_two_site_bond_embedding,
@@ -1240,6 +1240,7 @@ the specialization $L=2$.
 \begin{theorem}[Range and complement of the two-site basic support projector]
     \label{thm:appendixB_two_site_basic_support_projector}
     \lean{MPSTensor.AppendixBStructuralData.twoSiteBasicSupportProjection_spec}
+    \lean{MPSTensor.AppendixBStructuralData.twoSiteBasicEmbedding_range}
     \leanok
     \uses{def:appendixB_two_site_basic_support_projector,
         def:appendixB_two_site_bond_embedding, def:parent_interaction}
@@ -1264,7 +1265,17 @@ the specialization $L=2$.
     The preceding theorem identifies this range with
     $\operatorname{ran}(U^{\otimes2}I_\varphi)$.  Orthogonal projection onto
     the complementary subspace is $q_2(\Lambda U)$, hence
-    $P_2=1-q_2(\Lambda U)$. Idempotence and the two pointwise statements follow.
+    $P_2=1-q_2(\Lambda U)$. Since $q_2(\Lambda U)^2=q_2(\Lambda U)$,
+    \[
+        P_2^2=(1-q_2(\Lambda U))^2=1-q_2(\Lambda U)=P_2.
+    \]
+    If $\psi$ lies in $\operatorname{ran}(U^{\otimes2}I_\varphi)$, then
+    $\psi\in G_2(\Lambda U)=\ker q_2(\Lambda U)$, and therefore
+    \[
+        q_2(\Lambda U)\psi=0,
+        \qquad
+        P_2\psi=(1-q_2(\Lambda U))\psi=\psi.
+    \]
 \end{proof}
 
 \begin{definition}[Appendix B \(AX\) coefficient representative]

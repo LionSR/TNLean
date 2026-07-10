@@ -56,7 +56,7 @@ faces. They do not by themselves construct the source projectors on
 \(\mathcal H_A\otimes\mathcal H_X\) and
 \(\mathcal H_X\otimes\mathcal H_B\), nor do they prove the lifted commutator.
 The tensor-power and physical support constructions are provided in
-`TNLean.MPS.RFP.AppendixBSupport`.  The remaining step is to construct the
+`TNLean.MPS.RFP.AppendixBSupport`. The remaining step is to construct the
 orthogonal projector onto the virtual bond subspace \(\mathbb C\varphi_j\), place
 two copies on a three-site virtual chain, transport them through
 \(U^{\otimes3}\), and pass from the spectator range projector \(UU^*\) to the

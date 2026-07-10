@@ -254,7 +254,7 @@ weighted boundary reparametrization:
 \]
 
 Source: arXiv:1606.00608, equations (3.17)--(3.18), lines 564--578. -/
-theorem AppendixBStructuralData.twoSiteBasicEmbedding_comp_weightedBoundary
+theorem AppendixBStructuralData.twoSiteBasicEmbedding_comp_weightedTwoSiteBoundary
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
     hStruct.twoSiteBasicEmbedding.comp hStruct.weightedTwoSiteBoundary =
       groundSpaceMap hStruct.coreTensor 2 := by
@@ -313,10 +313,11 @@ theorem AppendixBStructuralData.twoSiteBasicEmbedding_range
   · rintro ψ ⟨v, rfl⟩
     obtain ⟨X, rfl⟩ := hStruct.weightedTwoSiteBoundary_surjective v
     refine ⟨X, ?_⟩
-    exact (LinearMap.congr_fun hStruct.twoSiteBasicEmbedding_comp_weightedBoundary X).symm
+    exact
+      (LinearMap.congr_fun hStruct.twoSiteBasicEmbedding_comp_weightedTwoSiteBoundary X).symm
   · rintro ψ ⟨X, rfl⟩
     refine ⟨hStruct.weightedTwoSiteBoundary X, ?_⟩
-    exact LinearMap.congr_fun hStruct.twoSiteBasicEmbedding_comp_weightedBoundary X
+    exact LinearMap.congr_fun hStruct.twoSiteBasicEmbedding_comp_weightedTwoSiteBoundary X
 
 /-- The orthogonal support projector of the two-site basic-vector image
 \(G_2(\Lambda U)\).
