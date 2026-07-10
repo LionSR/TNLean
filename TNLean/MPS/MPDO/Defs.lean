@@ -58,6 +58,20 @@ we keep both indices explicit following the notation of
 arXiv:1606.00608, Section 4. -/
 abbrev MPOTensor (d D : ℕ) := Fin d → Fin d → Matrix (Fin D) (Fin D) ℂ
 
+namespace MPSTensor
+
+/-- The first factor of a product index encoded by `finProdFinEquiv`. -/
+@[simp] theorem finProdFinEquiv_divNat {m n : ℕ} (i : Fin m) (j : Fin n) :
+    (finProdFinEquiv (i, j) : Fin (m * n)).divNat = i :=
+  congrArg Prod.fst (finProdFinEquiv.symm_apply_apply (i, j))
+
+/-- The second factor of a product index encoded by `finProdFinEquiv`. -/
+@[simp] theorem finProdFinEquiv_modNat {m n : ℕ} (i : Fin m) (j : Fin n) :
+    (finProdFinEquiv (i, j) : Fin (m * n)).modNat = j :=
+  congrArg Prod.snd (finProdFinEquiv.symm_apply_apply (i, j))
+
+end MPSTensor
+
 namespace MPOTensor
 
 variable {d D : ℕ}

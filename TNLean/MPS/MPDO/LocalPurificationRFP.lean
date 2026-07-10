@@ -385,13 +385,8 @@ returns the corresponding matrix of the family. -/
 private theorem purificationTensor_finProdFinEquiv {dK D' : ℕ}
     (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ) (i : Fin d) (k : Fin dK) :
     purificationTensor A (finProdFinEquiv (i, k)) = A i k := by
-  have h : ((finProdFinEquiv (i, k) : Fin (d * dK)).divNat,
-      (finProdFinEquiv (i, k) : Fin (d * dK)).modNat) = (i, k) :=
-    finProdFinEquiv.symm_apply_apply (i, k)
-  have hd : (finProdFinEquiv (i, k) : Fin (d * dK)).divNat = i := congrArg Prod.fst h
-  have hm : (finProdFinEquiv (i, k) : Fin (d * dK)).modNat = k := congrArg Prod.snd h
   change A (finProdFinEquiv (i, k)).divNat (finProdFinEquiv (i, k)).modNat = A i k
-  rw [hd, hm]
+  rw [MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
 
 /-- The matrix product vector coefficient of the purifying tensor along a joined
 spin-ancilla configuration is the trace of the ordered product of the
