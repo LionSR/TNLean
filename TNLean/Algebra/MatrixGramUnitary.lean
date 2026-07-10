@@ -103,4 +103,29 @@ theorem exists_unitary_mul_eq_of_conjTranspose_mul_eq
   refine ⟨⟨U_mat, Matrix.mem_unitaryGroup_iff'.2 hU_unitary⟩, ?_⟩
   exact hU_mat_eq.symm
 
+/-- A matrix whose Gram matrix is a positive multiple of the identity becomes
+unitary after dividing by the square root of the multiple.  This is the
+isometric normalization $U_{\alpha,k} = \omega_{\alpha,k}^{-1/2}X_{\alpha,k}$
+in the proof of Proposition 4.13 of arXiv:1606.00608, lines 1906--1908. -/
+theorem smul_mem_unitaryGroup_of_conjTranspose_mul_self_eq_smul_one
+    {n : Type*} [Fintype n] [DecidableEq n]
+    {X : Matrix n n ℂ} {ω : ℝ} (hω : 0 < ω)
+    (h : Xᴴ * X = (ω : ℂ) • 1) :
+    ((Real.sqrt ω : ℂ))⁻¹ • X ∈ Matrix.unitaryGroup n ℂ := by
+  have hs_pos : 0 < Real.sqrt ω := Real.sqrt_pos.mpr hω
+  have hs_ne : ((Real.sqrt ω : ℝ) : ℂ) ≠ 0 := by exact_mod_cast hs_pos.ne'
+  have hs_sq : Real.sqrt ω * Real.sqrt ω = ω := Real.mul_self_sqrt hω.le
+  have hconjs : star ((Real.sqrt ω : ℂ))⁻¹ = ((Real.sqrt ω : ℂ))⁻¹ := by
+    rw [star_inv₀]
+    congr 1
+    exact Complex.conj_ofReal _
+  have hscalar : ((Real.sqrt ω : ℂ))⁻¹ * ((Real.sqrt ω : ℂ))⁻¹ * (ω : ℂ) = 1 := by
+    rw [show ((ω : ℝ) : ℂ) = (Real.sqrt ω : ℂ) * (Real.sqrt ω : ℂ) by
+      rw [← Complex.ofReal_mul, hs_sq]]
+    field_simp
+  refine Matrix.mem_unitaryGroup_iff'.mpr ?_
+  rw [Matrix.star_eq_conjTranspose, Matrix.conjTranspose_smul, hconjs]
+  simp only [smul_mul_assoc, mul_smul_comm, smul_smul]
+  rw [h, smul_smul, hscalar, one_smul]
+
 end Matrix

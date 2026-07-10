@@ -328,6 +328,7 @@ import TNLean.MPS.CanonicalForm.Definitions
 import TNLean.MPS.CanonicalForm.Existence
 import TNLean.MPS.CanonicalForm.NormalReduction
 import TNLean.MPS.CanonicalForm.CyclicSectors
+import TNLean.MPS.CanonicalForm.NormalCommutant
 import TNLean.MPS.Periodic.SectorIrreducibility
 import TNLean.MPS.CanonicalForm.SectorComparison.CyclicSectorRelation
 import TNLean.MPS.CanonicalForm.BNTGrouping
