@@ -495,6 +495,45 @@
     \end{tikzpicture}%
 }
 
+% Sectorwise comparison between the inverse-map contraction and the Hayashi
+% product in the basis adapted to the middle-site direct sum.
+\newcommand{\TNMPDOHayashiSectorComparison}{%
+    \begin{tikzpicture}[tn picture]
+        \node at (-4.55,0) {$R_{\beta_3,\alpha_1}$};
+        \node at (-3.65,0) {$\cdot$};
+
+        \TN@tensordot{tnSectorK}{(-2.45,0)}
+        \TN@leftleg{tnSectorK}{0.72}
+        \TN@rightleg{tnSectorK}{0.72}
+        \node[anchor=east] at (-3.22,0) {$\beta_1$};
+        \node[anchor=west] at (-1.68,0) {$\alpha_3$};
+        \node[anchor=east] at (-2.58,0.25) {${\cal K}$};
+
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+            (tnSectorU) at (-2.45,0.88) {$U_B$};
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+            (tnSectorUd) at (-2.45,-0.88) {$U_B^\dagger$};
+        \draw[tn phys leg] (tnSectorK.north) -- (tnSectorU.south);
+        \draw[tn phys leg] (tnSectorU.north) -- ++(0,0.34);
+        \draw[tn phys leg] (tnSectorK.south) -- (tnSectorUd.north);
+        \draw[tn phys leg] (tnSectorUd.south) -- ++(0,-0.34);
+        \node[anchor=west] at (-1.92,0.88) {$k;l,r$};
+        \node[anchor=west] at (-1.92,-0.88) {$k;l',r'$};
+
+        \node at (-0.60,0) {$=$};
+        \node at (0.10,0) {$p_k$};
+        \node[draw, rounded corners, fill=blue!8, minimum width=1.00cm,
+            minimum height=0.62cm] (tnSectorA) at (1.25,0)
+            {$A^{(k)}_{\alpha_1,\beta_1}$};
+        \node at (2.15,0) {$\otimes$};
+        \node[draw, rounded corners, fill=blue!8, minimum width=1.00cm,
+            minimum height=0.62cm] (tnSectorB) at (3.25,0)
+            {$B^{(k)}_{\alpha_3,\beta_3}$};
+        \node at (1.25,0.62) {$l,l'$};
+        \node at (3.25,0.62) {$r,r'$};
+    \end{tikzpicture}%
+}
+
 \newcommand{\TNGaugeConjugation}[3]{%
     \begin{tikzpicture}[tn picture]
         \TN@opdotabove{tnXl}{(-1.10,0)}{#1}
