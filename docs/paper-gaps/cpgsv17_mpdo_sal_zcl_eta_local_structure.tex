@@ -10,7 +10,7 @@
 \title{The SAL to Eta-Local Structure Step in
 Cirac--Perez-Garcia--Schuch--Verstraete 2017 Appendix C.2}
 \author{}
-\date{2026-07-10}
+\date{2026-07-11}
 
 \begin{document}
 \maketitle
@@ -176,10 +176,33 @@ inverse-map contraction above.
 \leanid{MPOTensor.hayashiInverseRight}, and
 \leanid{MPOTensor.inverseMap_hayashi_sector_comparison}.}
 
-The next missing result chooses a nonzero entry
-$R_{\beta_3,\alpha_1}$ and divides the comparison to obtain the tensor
-factorization displayed at lines 1434--1438.  It must then assemble the
-neighboring operators and prove their all-length cyclic contraction identity.
+The tensor factorization is now formalized.  The three-site marginal of the
+normalized four-site chain is a three-site closure against $R_4$, the
+off-diagonal Hayashi sectors of the transformed physical slice vanish, and
+dividing the diagonal comparison by a chosen nonzero entry
+$R_{\beta_3,\alpha_1}$ produces sector tensors $l_k$ and $r_k$ with
+\[
+  U_B\,{\cal K}^{\,\cdot,\cdot}_{\beta_1,\alpha_3}\,U_B^\dagger
+  =\bigoplus_k\,(l_k)_{\beta_1}\otimes(r_k)_{\alpha_3}
+\]
+for all virtual indices $\beta_1,\alpha_3$.  The nonzero entry exists whenever
+the four-site trace is nonzero.  This is the factorization displayed at
+lines 1434--1438.
+\footnote{The formal declarations are
+\leanid{MPOTensor.isThreeSiteClosure_reducedBlockState},
+\leanid{MPOTensor.inverseMap_hayashi_sector_offdiagonal},
+\leanid{MPOTensor.sectorTensorL},
+\leanid{MPOTensor.sectorTensorR},
+\leanid{MPOTensor.physicalSlice_sector_factorization}, and
+\leanid{MPOTensor.exists_physicalSlice_sector_factorization}.}
+
+The next missing results assemble the neighboring operators $\eta_{k,h}$ from
+these sector tensors, prove their all-length cyclic contraction identity, and
+establish primitivity of the sector trace matrix.  A further assembly step is
+the Hayashi decomposition of the concrete closure state itself: the equality
+in strong subadditivity supplied by SAL is currently stated for the marginal
+in flattened block coordinates, and carrying the resulting decomposition onto
+the tripartite site index used by the closure remains to be written.
 
 The canonical family
 \leanid{MPOTensor.ExplicitEtaOperators.ofHayashiMarkov} does not supply this
@@ -193,7 +216,7 @@ is a generally nonconstant primitive nonnegative matrix.  Thus the two
 families cannot be identified without an additional theorem; in general they
 are not equal.
 
-Once the inverse-map sector factorization is available, two further steps
+Beyond the neighboring operators, two further steps
 remain.  First, the translation-invariant bond $B_{n,n+1}$ above must be
 defined in the original physical coordinates and proved positive, with
 commuting translates.  Second, one must transport the cyclic sector identity
@@ -211,7 +234,7 @@ derives the GSNNCH--ZCL and RFP conclusions.  Accordingly, adding ZCL to a
 conditional theorem would not repair the missing inverse-map sector
 factorization.
 
-The sector factorization, all-length identity, and primitivity statement of
+The neighboring operators, all-length identity, and primitivity statement of
 Lemma \texttt{propSN} are tracked by
 \href{https://github.com/LionSR/TNLean/issues/3696}{issue \#3696}.  Once those
 operators have been constructed, the positive commuting bond and product form

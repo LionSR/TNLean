@@ -383,6 +383,132 @@ strong subadditivity for a normalized three-site reduced state.
     product $p_k A^{(k)}B^{(k)}$ on the right.
 \end{proof}
 
+\begin{theorem}[The four-site marginal is a three-site closure]
+    \label{thm:mpdo_three_site_closure_reduced}
+    \lean{MPOTensor.isThreeSiteClosure_reducedBlockState}
+    \leanok
+    \uses{def:mpdo_three_site_closure, def:mpdo_normalized_four_site_tail}
+    Carried onto the tripartite site index, the three-site marginal of the
+    normalized four-site chain is the three-site closure of ${\cal K}$
+    against the normalized fourth-site tail $R_4$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_reduced_four_three_tail}
+    This restates the closed-word formula for the entries of
+    $\sigma_3^{(4)}({\cal K})$ on the product of the three site indices.
+\end{proof}
+
+\begin{theorem}[Vanishing of the off-diagonal Hayashi sectors]
+    \label{thm:mpdo_inverse_map_hayashi_sector_offdiagonal}
+    \lean{MPOTensor.inverseMap_hayashi_sector_offdiagonal}
+    \leanok
+    \uses{def:mpdo_three_site_closure, def:mpdo_hayashi_inverse_factors}
+    In the setting of
+    Theorem~\ref{thm:mpdo_inverse_map_hayashi_sector_comparison}, every
+    off-diagonal sector satisfies
+    \[
+        R_{\beta_3,\alpha_1}
+        \left[U_B\kappa_{\beta_1,\alpha_3}U_B^\dagger
+        \right]_{(k,l,r),(k',l',r')}
+        = 0
+        \qquad (k \ne k').
+    \]
+    Together with the diagonal comparison this gives the direct-sum structure
+    of the factorized tensor: the direct sum over sectors is inherited from
+    the splitting of the middle site.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_inverse_map_three_site_contraction}
+    The block equality of the Hayashi decomposition makes the middle-site
+    contraction between two distinct sectors vanish. Applying the inverse
+    tensor at the first and third sites and moving the finite sums through
+    the middle-site change of basis expresses the left-hand side as a sum of
+    such vanishing contractions.
+\end{proof}
+
+\begin{definition}[Sector tensors]
+    \label{def:mpdo_sector_tensors}
+    \lean{MPOTensor.sectorTensorL}
+    \lean{MPOTensor.sectorTensorR}
+    \leanok
+    \uses{def:mpdo_hayashi_inverse_factors}
+    Fix outer virtual indices $\alpha_1,\beta_3$ and a Hayashi sector $k$.
+    The sector tensors are
+    \[
+        (l_k)_{\beta_1}
+        := R_{\beta_3,\alpha_1}^{-1}\, p_k\, A^{(k)}_{\alpha_1,\beta_1},
+        \qquad
+        (r_k)_{\alpha_3}
+        := B^{(k)}_{\alpha_3,\beta_3}.
+    \]
+    The source leaves the distribution of the scalar
+    $R_{\beta_3,\alpha_1}^{-1} p_k$ between $l_k$ and $r_k$ unspecified; here
+    it is attached to $l_k$. These are the tensors of the factorization
+    displayed in \cite[Appendix~C.2, lines~1435--1448]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Sector factorization of an injective simple tensor]
+    \label{thm:mpdo_sector_factorization}
+    \lean{MPOTensor.physicalSlice_sector_factorization}
+    \leanok
+    \uses{def:mpdo_sector_tensors}
+    Suppose that ${\cal K}$ is injective, $\rho$ is its three-site closure
+    against $R$, a Hayashi decomposition of $\rho$ has been chosen, and the
+    outer indices satisfy $R_{\beta_3,\alpha_1}\ne0$. Then for all virtual
+    indices $\beta_1,\alpha_3$,
+    \[
+        U_B\,\kappa_{\beta_1,\alpha_3}\,U_B^\dagger
+        =\bigoplus_k (l_k)_{\beta_1}\otimes(r_k)_{\alpha_3}.
+    \]
+    The direct sum refers to the physical indices and is inherited from the
+    splitting of the middle site. This is the factorization displayed at
+    \cite[Appendix~C.2, lines~1435--1448]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_inverse_map_hayashi_sector_comparison,
+        thm:mpdo_inverse_map_hayashi_sector_offdiagonal}
+    On a diagonal sector, the sectorwise comparison gives
+    $R_{\beta_3,\alpha_1}\widetilde\kappa^{(k)}
+    = p_k A^{(k)} B^{(k)}$, and dividing by the nonzero entry
+    $R_{\beta_3,\alpha_1}$ produces $(l_k)_{\beta_1}\otimes(r_k)_{\alpha_3}$.
+    On an off-diagonal sector, the product with $R_{\beta_3,\alpha_1}$
+    vanishes, and since $R_{\beta_3,\alpha_1}\ne0$ the sector itself
+    vanishes.
+\end{proof}
+
+\begin{theorem}[Existence of the sector tensors]
+    \label{thm:mpdo_exists_sector_factorization}
+    \lean{MPOTensor.exists_physicalSlice_sector_factorization}
+    \leanok
+    \uses{def:mpdo_sector_tensors, def:mpdo_normalized_four_site_tail}
+    Let ${\cal K}$ be injective with nonzero four-site trace, let $\rho$ be a
+    three-site closure of ${\cal K}$ against the normalized fourth-site tail
+    $R_4$, and choose a Hayashi decomposition of $\rho$. Then there exist
+    sector tensors $l_k$ and $r_k$ such that
+    \[
+        U_B\,\kappa_{\beta_1,\alpha_3}\,U_B^\dagger
+        =\bigoplus_k (l_k)_{\beta_1}\otimes(r_k)_{\alpha_3}
+    \]
+    for all virtual indices $\beta_1,\alpha_3$. The remaining steps of
+    \cite[Appendix~C.2, Lemma~C.4]{Cirac2016MPDO_arXiv} assemble the
+    neighboring operators $\eta_{k,h}$ from these tensors and prove the
+    all-length identity and primitivity.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_sector_factorization,
+        thm:mpdo_normalized_four_site_tail_entry_ne_zero}
+    A nonzero four-site trace supplies outer indices with
+    $(R_4)_{\beta_3,\alpha_1}\ne0$, and the sector factorization applies.
+\end{proof}
+
 \begin{definition}[Explicit neighboring $\eta$-operator data]
     \label{def:mpdo_explicit_eta_operators}
     \lean{MPOTensor.etaOperators}

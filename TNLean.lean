@@ -370,6 +370,7 @@ import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.LocalPurificationRFP
 import TNLean.MPS.MPDO.SimpleLocalStructure
 import TNLean.MPS.MPDO.HayashiSectorComparison
+import TNLean.MPS.MPDO.SectorFactorization
 import TNLean.MPS.MPDO.FusionIsometries
 import TNLean.MPS.MPDO.AlgebraStructure
 import TNLean.MPS.MPDO.AlgebraFusionCounterexample
