@@ -82,6 +82,32 @@ The scalar pair-index equation has now been assembled into the physical map
 \end{align}
 in \leanid{MPSTensor.AppendixBStructuralData.physicalIsometry} and
 \leanid{MPSTensor.AppendixBStructuralData.physicalIsometryLeftInverse_comp}.
+The tensor-power maps now satisfy
+\begin{align}
+  U^{*\otimes L}U^{\otimes L}=1
+\end{align}
+for every \(L\), as recorded by
+\leanid{MPSTensor.AppendixBStructuralData.}\hspace{0pt}
+\leanid{physicalIsometryTensorPowerLeftInverse_comp}.
+On two sites, the inserted virtual bond
+\begin{align}
+  (I_\varphi v)_{(a,b),(b',c)}
+  =\delta_{b,b'}\lambda_bv_{a,c}
+\end{align}
+has physical image
+\begin{align}
+  \operatorname{ran}(U^{\otimes2}I_\varphi)=G_2(A_{\mathrm{core}}).
+\end{align}
+This is
+\leanid{MPSTensor.AppendixBStructuralData.}\hspace{0pt}
+\leanid{twoSiteBasicEmbedding_range}.
+The orthogonal projector onto this image is
+\leanid{MPSTensor.AppendixBStructuralData.}\hspace{0pt}
+\leanid{twoSiteBasicSupportProjection}, and
+its complementary projector is exactly \(q_2(A_{\mathrm{core}})\), as recorded
+by
+\leanid{MPSTensor.AppendixBStructuralData.}\hspace{0pt}
+\leanid{twoSiteBasicSupportProjection_eq_complement}.
 The elementary passage from \(Q_{AX},Q_{XB}\) to their complements
 \(1-Q_{AX},1-Q_{XB}\) is recorded by
 \leanid{MPSTensor.HasOverlappingTwoSiteCommutation.complement}.  The
@@ -107,18 +133,23 @@ and
 
 \section{Elimination plan}
 
-A source-faithful version should build on the existing \(AX/XB\) support layer
-by constructing tensor-product maps for the virtual factors and transporting
-the rank-one projector onto
-\(\varphi=\sum_m\lambda_m|m,m\rangle\) through the physical isometry.  The
-ranges of the resulting two-site maps must be proved equal to the local spaces
-\(K_{AX}\) and \(K_{XB}\); their complementary orthogonal projectors then give
-\(Q_{AX}\) and \(Q_{XB}\).  Commutation follows at the virtual level because
-the two bond projectors act on distinct bonds, and must then be transported to
-the common three-site physical space.  It should finally
-explain why their coefficient representatives are the two lifted copies of
-\(q_2(A)\), prove the lifted commutator, and derive the idempotent-product
-declaration above as a lemma, with \(P_K=P_{AXB}\).
+A source-faithful continuation should first construct the orthogonal projector
+onto the one-bond virtual subspace \(\mathbb C\varphi\), where
+\(\varphi=\sum_m\lambda_m\lvert m,m\rangle\).  This is distinct from the
+physical two-site support projector constructed above.  Two copies of the
+virtual projector must then be placed on the adjacent bonds of a three-site
+virtual chain.  They commute because they act on distinct bond factors.  Their
+actions must be transported through \(U^{\otimes3}\) on the isometry range and
+then extended to the full physical \(AX\) and \(XB\) support projectors.  Here
+\(U\) is only an isometry.  If \(R=UU^*\), direct transport gives
+\(P_{2,AX}\otimes R_B\) and \(R_A\otimes P_{2,XB}\), rather than the full lifts
+with spectator identity.
+One must decompose each spectator identity as \(R+(1-R)\) and use
+\(P_2\leq R\otimes R\) to show that every cross-product involving a spectator
+complement vanishes.  Passing to orthogonal complements should then identify
+the resulting projectors with the two lifted copies of \(q_2(A)\), prove the
+lifted commutator, and derive the idempotent-product declaration above as a
+lemma, with \(P_K=P_{AXB}\).
 
 After that source-level version is available, the blueprint entry for the source
 parent commuting Hamiltonian condition should point to that statement.  The
