@@ -325,6 +325,84 @@ strong subadditivity for a normalized three-site reduced state.
     and therefore $T=ab^\top$.
 \end{proof}
 
+\begin{theorem}[Idempotence of the sector trace matrix]
+    \label{thm:matrix_pairing_idempotent}
+    \lean{Matrix.mul_self_eq_self_of_pairing_idempotent}
+    \lean{Matrix.mul_self_eq_self_of_pairing_idempotent_dual}
+    \leanok
+    Let $V$ be a module over a commutative ring, let $l_1,\dots,l_n \in V$,
+    let $r_1,\dots,r_n$ be linear functionals on $V$, and let
+    $T_{k,h}=(r_k|l_h)$ be the pairing matrix; for the tensors of
+    \cite[Appendix~C.2]{Cirac2016MPDO_arXiv} this is the sector trace matrix.
+    Assume the identity
+    \[
+        \sum_k |l_k)(r_k| = \sum_{k,h} T_{k,h}\, |l_k)(r_h|,
+    \]
+    whose right-hand side is the square of its left-hand side, so that the
+    operator $M = \sum_k |l_k)(r_k|$ satisfies $M^2 = M$. If the vectors
+    $l_1,\dots,l_n$ are linearly independent, then
+    \[
+        T^2 = T.
+    \]
+    The same conclusion holds if instead the functionals $r_1,\dots,r_n$ are
+    linearly independent.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Evaluating $M^2 v = M v$ at an arbitrary $v \in V$ gives
+    \[
+        \sum_k \bigl((r_k|Mv) - (r_k|v)\bigr)\, l_k = 0,
+    \]
+    so linear independence of the $l_k$ yields $(r_k|Mv)=(r_k|v)$ for all $k$
+    and $v$. Taking $v = l_h$ and expanding
+    $M l_h = \sum_j T_{j,h}\, l_j$ turns the left-hand side into
+    $\sum_j T_{k,j} T_{j,h} = (T^2)_{k,h}$ and the right-hand side into
+    $T_{k,h}$. For linearly independent functionals, apply the same argument
+    in the dual space, with the $r_k$ as vectors and evaluation at $l_k$ as
+    functionals.  The dual pairing matrix therefore satisfies
+    \[
+        (T^\top)^2=T^\top.
+    \]
+    Taking transposes gives
+    \[
+        T^2=T.
+    \]
+\end{proof}
+
+% Scope restriction (linear independence): the source Lemma C.5 neither
+% assumes nor derives linear independence of the sector tensors. Its proof
+% instead uses primitivity of the trace matrix, obtained from the injectivity
+% of the tensor K in the preceding construction (arXiv:1606.00608,
+% lines 1457--1470), in a Perron--Frobenius trace-power argument, and
+% primitivity does not entail the independence. The hypothesis below remains
+% to be discharged at the matrix product density operator call site.
+% Recorded in docs/paper-gaps/cpgsv17_pf_rank_one.tex.
+\begin{theorem}[Rank-one factorization of the sector trace matrix]
+    \label{thm:matrix_pairing_rank_one}
+    \lean{Matrix.hasRankOneFactorization_of_pairing_idempotent}
+    \leanok
+    \uses{def:matrix_trace_rankone_predicates}
+    In the setting of Theorem~\ref{thm:matrix_pairing_idempotent} with real
+    scalars and linearly independent vectors $l_1,\dots,l_n$, if in addition
+    $\operatorname{tr}(T)=1$, then there are real vectors $a,b$ such that
+    $T = a b^\top$. This is the factorization $T_{k,h} = a_k b_h$ obtained in
+    the proof of \cite[Appendix~C.2, Lemma~C.5]{Cirac2016MPDO_arXiv} for the
+    sector trace matrix, derived here from the displayed
+    zero-correlation-length identity together with the linear independence of
+    the $l_k$, instead of the Perron--Frobenius trace-power argument of the
+    source.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:matrix_pairing_idempotent, thm:matrix_idempotent_trace_one_rank_one}
+    Theorem~\ref{thm:matrix_pairing_idempotent} gives $T^2 = T$, and the
+    idempotent trace-one criterion of
+    Theorem~\ref{thm:matrix_idempotent_trace_one_rank_one} gives the
+    factorization $T = a b^\top$.
+\end{proof}
+
 % Unfaithful: thm:sal_zcl_implies_rank_one_t mirrors the Lean theorem
 % MPOTensor.sal_zcl_implies_rank_one_T, whose conditional Perron--Frobenius
 % hypothesis is false as a universal statement (counterexample in
