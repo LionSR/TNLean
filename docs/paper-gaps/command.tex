@@ -14,3 +14,16 @@
 \newcommand{\ghissue}[1]{\href{\tnleanIssueBase#1}{GitHub issue \##1}}
 \newcommand{\ghpr}[1]{\href{\tnleanPrBase#1}{PR \##1}}
 \newcommand{\doclink}[1]{\href{\tnleanDocBase#1.html}{\path{#1}}}
+
+% Dirac notation and the identity operator, as in blueprint/src/macros/common.tex.
+% \providecommand keeps note-local definitions authoritative.
+\usepackage{dsfont}
+\providecommand{\ket}[1]{|#1\rangle}
+\providecommand{\bra}[1]{\langle #1|}
+\providecommand{\braket}[2]{\langle #1 | #2 \rangle}
+\providecommand{\ketbra}[2]{|#1\rangle\!\langle #2|}
+\providecommand{\Id}{\mathds{1}}
+\providecommand{\one}{\mathds{1}}
+\providecommand{\C}{\mathbb{C}}
+\providecommand{\MN}[1]{M_{#1}(\C)}
+\providecommand{\MD}{M_D(\C)}
