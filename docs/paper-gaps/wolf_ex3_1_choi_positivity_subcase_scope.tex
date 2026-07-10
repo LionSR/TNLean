@@ -7,9 +7,9 @@
 
 \input{command}
 
-\title{Scope of the First Choi-Type Positivity Subcase (Wolf Example~3.1)}
+\title{Scope of the Choi-Type Positivity Subcases (Wolf Example~3.1)}
 \author{}
-\date{2026-07-02}
+\date{2026-07-02, revised 2026-07-10}
 
 \begin{document}
 \maketitle
@@ -31,8 +31,10 @@ The source states that \(T_C\) is positive and indecomposable for every
 
 \section{Restricted statement now proved}
 
-The present development proves only the first subcase.  For \(d=3\), \(n=1\),
-and an arbitrary vector \(v=(v_0,v_1,v_2)\), it proves
+The present development proves two slices of the positivity assertion.
+
+First, for \(d=3\), \(n=1\), and an arbitrary vector \(v=(v_0,v_1,v_2)\), it
+proves
 \begin{align}
   T_C(|v\rangle\langle v|)\ge 0.
 \end{align}
@@ -52,6 +54,30 @@ rank-one positive semidefinite summands, the development then proves that this
 first Choi map is positive on all positive semidefinite inputs.\footnote{Formal
 declaration: \leanid{Matrix.choiTypeMap\_isPositiveMap\_three\_one}.}
 
+Second, at the top of the source's range, \(n=d-2\), the development proves
+positivity of \(T_C\) on all positive semidefinite inputs for every dimension
+\(d\ge3\); this family subsumes the \(d=3,n=1\)
+case.\footnote{Formal declarations:
+\leanid{Matrix.perm\_reciprocal\_sum\_le\_one},
+\leanid{Matrix.choiTypeMap\_vecMulVec\_posSemidef\_sub\_two}, and
+\leanid{Matrix.choiTypeMap\_isPositiveMap\_sub\_two} in
+\doclink{TNLean/Channel/ChoiTypeMap}.}  For \(n=d-2\) the backward window
+\(x_{i-1},\dots,x_{i-n}\) misses exactly the entries at \(i\) and \(i+1\), so
+with \(T=\sum_j x_j\) the diagonal weight collapses to
+\(a_i=T+x_i-x_{i+1}\), and the cyclic reciprocal estimate becomes an instance
+of a reciprocal inequality valid for an arbitrary permutation \(\sigma\):
+\begin{align}
+  \sum_i \frac{x_i}{T+x_i-x_{\sigma(i)}}\le 1,
+  \qquad x_i\ge 0 .
+\end{align}
+Each summand is at most \((x_iT-x_i\delta_i+\delta_i^2/2)/T^2\) with
+\(\delta_i=x_i-x_{\sigma(i)}\), by the pair bound
+\(x_i+x_{\sigma(i)}\le T\), and the bounds sum to \(1\) exactly because
+\(\sum_i x_i\delta_i=\tfrac12\sum_i\delta_i^2\) for a permutation.  This case
+of the cyclic estimate is classical: it is due to Ando (\emph{Positivity of
+certain maps}, seminar notes, 1985), as recorded in the introduction of
+\cite{Yamagami1993Cyclic}.
+
 \section{Missing hypotheses and elimination plan}
 
 This is a scope restriction, not the source theorem.  The full positivity
@@ -59,21 +85,37 @@ statement still requires the nonnegative cyclic reciprocal estimate
 \begin{align}
   \sum_{i\in\mathbb Z/d\mathbb Z}
   \frac{x_i}{(d-n)x_i+\sum_{k=1}^{n}x_{i-k}}\le 1
-  \qquad (x_i\ge0,\;1\le n\le d-2),
+  \qquad (x_i\ge0,\;1\le n\le d-3),
 \end{align}
-with the usual zero-term convention.  Once this estimate is available, it
-should be applied to \(x_i=|v_i|^2\) to obtain the rank-one statement for the
-full parameter range.  The same positive-semidefinite decomposition used in
-the \(d=3,n=1\) case will then extend the rank-one result to positivity of
-\(T_C\) on all positive semidefinite matrices.  This is tracked by
-\ghissue{3622}.  The indecomposability assertion of the same source paragraph
-is separate and is tracked by \ghissue{3623}.
+with the usual zero-term convention; the case \(n=d-2\) is done, as is
+\(n=d-1\), which lies outside the source's range.  Once this estimate is
+available, it should be applied to \(x_i=|v_i|^2\) to obtain the rank-one
+statement for the full parameter range; the spectral decomposition
+step\footnote{\leanid{Matrix.isPositiveMap\_of\_forall\_vecMulVec\_posSemidef}.}
+already extends any such rank-one statement to positivity of \(T_C\) on all
+positive semidefinite matrices.
+
+The remaining estimate is genuinely harder than the proved cases.  The case
+\(n=1\) is due to Tanahashi and
+Tomiyama~\cite{TanahashiTomiyama1988Indecomposable}, and the full range
+\(1\le n\le d-1\) to Yamagami~\cite{Yamagami1993Cyclic}, whose proof is
+variational: it combines Nowosad's uniqueness theorem for critical points of
+\(x\mapsto\sum_i x_i/(Sx)_i\) on the positive cone, a spectral condition on
+the Hessian at the constant vector (checked through the eigenvalues of the
+cyclic matrix \(S\)), and an analysis of the boundary of the projective
+simplex with a combinatorial count of vanishing summands.  No term-by-term
+convexity or AM--GM bound with coefficients independent of \(x\) can settle
+the middle range, so a formalization must either follow the variational route
+or find a new proof.  This is tracked by \ghissue{3622}.  The
+indecomposability assertion of the same source paragraph is separate and is
+tracked by \ghissue{3623}.
 
 \section{Classification}
 
-\emph{Scope restriction.}  The current theorem is mathematically correct as a
-\(3\times3\) positive-map subcase, but it should not be cited as the formalization
-of Wolf's full Choi-type positivity theorem.
+\emph{Scope restriction.}  The current theorems are mathematically correct as
+the \(d=3,n=1\) and \(n=d-2\) positive-map cases, but they should not be cited
+as the formalization of Wolf's full Choi-type positivity theorem, whose range
+is \(1\le n\le d-2\).
 
 \bibliographystyle{alpha}
 \bibliography{references}
