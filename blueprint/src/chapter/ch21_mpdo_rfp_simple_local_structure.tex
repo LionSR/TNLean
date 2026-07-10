@@ -184,8 +184,7 @@ strong subadditivity for a normalized three-site reduced state.
     \label{thm:mpdo_normalized_four_site_tail_ne_zero}
     \lean{MPOTensor.normalizedFourSiteTail_ne_zero}
     \leanok
-    \uses{def:mpdo_normalized_four_site_tail,
-        thm:mpdo_reduced_four_three_tail}
+    \uses{def:mpdo_normalized_four_site_tail}
     If $Z_4=\tr[\rho^{(4)}({\cal K})]\ne0$, then $R_4\ne0$.
 \end{theorem}
 
@@ -193,9 +192,15 @@ strong subadditivity for a normalized three-site reduced state.
     \leanok
     \uses{thm:mpdo_reduced_four_three_tail}
     If $R_4=0$, then the tail formula makes every entry of
-    $\sigma_3^{(4)}({\cal K})$ vanish. Its trace would therefore be zero. On the
-    other hand, $Z_4\ne0$ makes the normalized four-site operator, and hence its
-    three-site marginal, have trace one. This is a contradiction.
+    $\sigma_3^{(4)}({\cal K})$ vanish, so
+    \[
+        \tr[\sigma_3^{(4)}({\cal K})]=0.
+    \]
+    On the other hand, $Z_4\ne0$ implies
+    \[
+        \tr[\sigma_3^{(4)}({\cal K})]=1,
+    \]
+    a contradiction.
 \end{proof}
 
 \begin{theorem}[A nonzero entry of the normalized fourth-site tail]
