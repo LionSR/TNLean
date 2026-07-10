@@ -20,18 +20,44 @@
     for every word $w$ of length $L$ implies $\Delta_k=0$ for every block $k$.
 \end{definition}
 
+\begin{definition}[Vertically viewed tensor of an MPO]%
+    \label{def:vertical_tensor_mpdo}
+    \lean{MPOTensor.verticalTensor}
+    \leanok
+    \uses{def:mpo_tensor}
+    The \emph{vertical direction} of an MPO tensor exchanges the notion of
+    physical and virtual indices \cite[line~943]{Cirac2016MPDO_arXiv}: the
+    vertically viewed tensor $\widetilde M$ has its letters indexed by the
+    horizontal bond pair $(a,b)$, and each letter is the operator on the
+    physical space with matrix elements
+    \[
+        (\widetilde M_{ab})_{ij} = M^{ij}_{ab}.
+    \]
+    Concatenating $\widetilde M$ vertically generates the matrix product
+    vectors of the vertical direction.
+\end{definition}
+
 \begin{definition}[Vertical canonical form for an MPO]\label{def:vertical_cf_mpdo}
     \lean{MPOTensor.IsVerticalCF}
     \notready
-    \uses{def:mpo_tensor, def:bnt, def:same_mpv2, def:block_diagonal_tensor}
-    An MPO tensor is in \emph{vertical canonical form} if its diagonal MPS
-    tensor $\{M^{ii}\}_{i=0}^{d-1}$ generates the same MPV family as a
-    block-diagonal tensor obtained from a basis of normal tensors by repeating
-    each block according to a multiplicity and weighting each copy by a
-    positive scalar.
-    This is the flattened form of the decomposition
-    $\bigoplus_\alpha \mu_\alpha \otimes M_\alpha$
-    from \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}.
+    \uses{def:mpo_tensor, def:vertical_tensor_mpdo, def:bnt,
+        def:block_diagonal_tensor}
+    An MPO tensor is in \emph{vertical canonical form} if there are a basis of
+    normal tensors $\{M_\alpha\}_\alpha$ for its vertically viewed tensor
+    $\widetilde M$, positive diagonal matrices
+    $\mu_\alpha=\operatorname{diag}(\omega_{\alpha,1},\dots,\omega_{\alpha,m_\alpha})$,
+    and an isometry $U$ on the physical space such that
+    \[
+        U\widetilde MU^\dagger=\bigoplus_\alpha \mu_\alpha\otimes M_\alpha.
+    \]
+    This is the conclusion of
+    \cite[Proposition~4.13, lines~1863--1870]{Cirac2016MPDO_arXiv}.
+    Since each $\mu_\alpha$ is diagonal, the summand
+    $\mu_\alpha\otimes M_\alpha$ is the direct sum
+    $\bigoplus_{k=1}^{m_\alpha}\omega_{\alpha,k}M_\alpha$ of weighted copies
+    of $M_\alpha$, so the right-hand side is a block-diagonal tensor over the
+    pairs $(\alpha,k)$ in which the multiplicities $m_\alpha$ and the diagonal
+    entries $\omega_{\alpha,k}$ stay explicit.
 \end{definition}
 
 \begin{figure}[ht]
@@ -320,10 +346,13 @@
     \lean{MPOTensor.ketLeftMul}
     \lean{MPOTensor.braRightMul}
     \lean{MPOTensor.firstSiteMatrix}
+    \lean{MPOTensor.verticalTensor_ketLeftMul}
+    \lean{MPOTensor.verticalTensor_braRightMul}
     \leanok
-    \uses{def:mpo_tensor}
+    \uses{def:mpo_tensor, def:vertical_tensor_mpdo}
     View the MPO tensor $M$ vertically as the family of physical-space
-    operators $M_{ab}$, indexed by the virtual indices, with matrix elements
+    operators $M_{ab}$ of Definition~\ref{def:vertical_tensor_mpdo}, indexed
+    by the virtual indices, with matrix elements
     $(M_{ab})_{ij}=M^{ij}_{ab}$.  A matrix $P\in M_d(\C)$ then acts on the
     tensor by
     \[
@@ -332,7 +361,9 @@
         (MP)^{ij}=\sum_k P_{kj}\,M^{ik},
     \]
     and on an $(N+1)$-site chain by the first-spin operator
-    $P\otimes\Id^{\otimes N}$.
+    $P\otimes\Id^{\otimes N}$.  On the letters of the vertically viewed
+    tensor these actions are the left and right matrix products,
+    $(PM)_{ab}=PM_{ab}$ and $(MP)_{ab}=M_{ab}P$.
 \end{definition}
 
 \begin{theorem}[One-sided invariance and density-operator commutation]
@@ -903,7 +934,8 @@
 \begin{theorem}[Horizontal canonical form implies vertical canonical form]
     \label{thm:vertical_cf_of_horizontal_cf}
     \notready
-    \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_cf_mpdo,
+    \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_tensor_mpdo,
+        def:vertical_cf_mpdo,
         thm:mpdo_opposite_corner_zero, thm:blockwise_opposite_insert_eq,
         thm:blockwise_opposite_insert_rotated_mpo,
         thm:mpdo_first_site_invariant_comm,
@@ -918,7 +950,15 @@
         lem:mpv_diagonal_tensor_eq_blocks, lem:mpv_diagonal_tensor_nonneg,
         lem:mpv_vertical_assembled,
         lem:vertical_grouping_equiv}
-    Every MPDO in horizontal canonical form is also in vertical canonical form.
+    A tensor in horizontal canonical form that generates matrix product
+    density operators is also in canonical form in the vertical direction:
+    there are a basis of normal tensors $\{M_\alpha\}_\alpha$ for the
+    vertically viewed tensor $\widetilde M$, positive diagonal matrices
+    $\mu_\alpha$, and an isometry $U$ on the physical space with
+    \[
+        U\widetilde MU^\dagger=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha.
+    \]
+    This is \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}
@@ -943,32 +983,33 @@
     commuting with $[H^{(N)}]^p$ commutes with $H^{(N)}$.  It remains to prove
     that a nontrivial vertical period supplies one orthogonal projector $Q$
     with the two all-length properties stated in source lines 1889--1890.
-    One must then apply the canonical-form theorem in the vertical direction to obtain a
-    new vertical family $(B_k)_{k\in I}$ and weights $\nu_k$.  This family is not obtained by
-    restricting the horizontal blocks to diagonal physical pairs, as
-    Theorem~\ref{thm:diagonal_restriction_not_normal} shows.  Instead it satisfies
+    One must then apply the canonical-form theorem in the vertical direction
+    to the vertically viewed tensor $\widetilde M$, obtaining a decomposition
     \[
-        V^{(N)}\bigl(i\mapsto M^{ii}\bigr)
-        =V^{(N)}\Bigl(\textstyle\bigoplus_{k\in I}\nu_k B_k\Bigr).
+        \widetilde M
+        =\bigoplus_{\alpha,k}\mu_{\alpha,k}X_{\alpha,k}M_\alpha X_{\alpha,k}^{-1}
     \]
-    Group gauge-equivalent vertical sectors by a bijection
-    $e(k)=(\alpha,j)$.  Once the corresponding dimensions, weights, and
-    positive-length matrix product vectors are identified,
-    Lemma~\ref{lem:vertical_grouping_equiv} gives
+    carried by the physical space, with normal tensors $M_\alpha$ whose
+    letters remain indexed by the horizontal bond pairs.  These blocks are not
+    obtained by restricting the horizontal blocks to diagonal physical pairs,
+    as Theorem~\ref{thm:diagonal_restriction_not_normal} shows.  Positivity
+    then gives $\mu_{\alpha,k}>0$:
+    Theorem~\ref{thm:mpdo_sector_compression_trace_pos} supplies the positive
+    traces of the nonzero sector compressions.
+    Theorem~\ref{thm:eq3_of_dressed_adjoint} derives equation eq3,
     \[
-        V^{(N)}\bigl(i\mapsto M^{ii}\bigr)
-        =V^{(N)}\Bigl(
-          \textstyle\bigoplus_\alpha\bigoplus_{j=0}^{m_\alpha-1}
-          \omega_{\alpha j}A_\alpha
-        \Bigr)
+        X_{\alpha,k}^\dagger X_{\alpha,k}
+        =\omega_{\alpha,k}\,X_{\alpha,1}^\dagger X_{\alpha,1},
     \]
-    for every $N$, including $N=0$.  A final use of positivity gives
-    $\omega_{\alpha j}>0$ and makes the similarities between grouped sectors
-    unitary: Theorem~\ref{thm:mpdo_sector_compression_trace_pos} gives the
-    positive traces of the nonzero sector compressions, and
-    Theorem~\ref{thm:eq3_of_dressed_adjoint} derives equation eq3 and the
-    isometric normalization of the sector gauges from the blockwise
-    dressed-adjoint identities of the two displayed diagrams.  Deriving those
+    and the isometric normalization
+    $U_{\alpha,k}=\omega_{\alpha,k}^{-1/2}X_{\alpha,k}$ of the sector gauges
+    from the blockwise dressed-adjoint identities of the two displayed
+    diagrams.  Composing the sector unitaries $U_{\alpha,k}$ yields the
+    isometry $U$ with
+    $U\widetilde MU^\dagger=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$; each
+    $\mu_\alpha$ is diagonal, so the summands regroup as repeated weighted
+    copies of $M_\alpha$ exactly as in the finite regrouping of
+    Lemma~\ref{lem:vertical_grouping_equiv}.  Deriving the dressed-adjoint
     identities from self-adjointness of the sector compressions via Lemma L
     within the vertical decomposition remains open, as does the construction
     of the vertical canonical decomposition itself.
