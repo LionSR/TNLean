@@ -18,19 +18,26 @@ The current repository already exposes the local entropy-side ingredients
 * `MPOTensor.sal_implies_eta_structure`, and
 * `MPOTensor.sal_zcl_implies_rank_one_T`,
 
-and `SimpleLocalStructure` now gives the sector-reduced neighboring operators
-`MPOTensor.ExplicitEtaOperators.ofHayashiMarkov`. The remaining Appendix C.2
-step is no longer merely to write down such sector-local operators; it is to
-assemble the simple-MPDO tensor coordinates into a single translation-invariant
-positive two-site bond whose translated copies commute on all periodic chains
-and realize the MPO on every finite length.
+and `SimpleLocalStructure` gives a canonical sector-reduced family through
+`MPOTensor.ExplicitEtaOperators.ofHayashiMarkov`. That family is not the
+inverse-map family used in Appendix C.2: its trace matrix is identically one,
+whereas the source allows a general primitive trace matrix. The earliest
+remaining result is therefore Lemma propSN, which derives from the concrete
+tensor `K` a sector factorization satisfying, for every `N`,
+\[
+  \widetilde\sigma^{(N)}(K)
+    = \bigoplus_{k_1,\ldots,k_N}\bigotimes_{n=1}^N \eta_{k_n,k_{n+1}}.
+\]
+The later Proposition 3to4 step assembles those source
+operators into a single translation-invariant positive two-site bond whose
+translated copies commute.
 
-This is the strongest unconditional forward step currently available.
-The intended future Proposition C.8 proof should construct
-`EtaLocalStructureData M` from the SAL hypotheses, using the sector-reduced
-`η_{k,h}` operators and the inverse-map layer; the existing
-theorem `hasCommutingForm_of_etaLocalStructure` will then discharge the global
-commuting-form target.
+*Proof-state note.* The strongest unconditional conclusion currently available
+starts from `EtaLocalStructureData M`.  To reach it from SAL, one must first
+establish the inverse-map sector factorization of Lemma propSN and then
+construct the neighboring operators carried by `EtaLocalStructureData M`.
+The theorem `hasCommutingForm_of_etaLocalStructure` then gives the global
+commuting-form conclusion.
 
 ## Main declarations
 
