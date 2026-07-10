@@ -51,6 +51,9 @@ surrogate for the paper's vertical canonical form.
 * `mpv_diagonalTensor_eq_mpo_diag` / `mpv_diagonalTensor_nonneg`:
   the diagonal-tensor MPV equals the density-operator diagonal `⟨σ|ρ^{(N)}(M)|σ⟩`,
   hence is nonnegative when `M` generates an MPDO.
+* `opposite_corner_eq_zero_of_posSemidef` / `mpo_opposite_corner_eq_zero`:
+  the positivity identity `P H = P H P ⇒ (1 - P) H P = 0` used in the first
+  step of Proposition 4.13.
 * `mpv_verticalAssembledTensor_eq_sum`:
   the MPV of the vertical-assembled tensor as a sum over the flattened
   `(block, multiplicity)` index.
@@ -62,6 +65,10 @@ surrogate for the paper's vertical canonical form.
   pointwise block identifications are supplied.
 * `sameMPV₂Pos_diagonalTensor_verticalAssembledTensor_of_power_sums`:
   a separate positive-length comparison under scalar power-sum identities.
+* `blockwise_opposite_insert_eq_of_mpv_agree`:
+  once the two first-site equalities in the positivity argument are supplied,
+  Lemma L transfers them to the opposite corner of every horizontal
+  canonical-form block.
 
 The results above supply matrix-product-vector identities and elementary
 positivity consequences, but do not give the passage from horizontal to
@@ -222,6 +229,43 @@ theorem mpv_diagonalTensor_nonneg (M : MPOTensor d D) {N : ℕ}
     0 ≤ MPSTensor.mpv (diagonalTensor M) σ := by
   rw [mpv_diagonalTensor_eq_mpo_diag]
   exact hM.diag_nonneg
+
+/-! ### Positivity and one-sided invariant projections -/
+
+/-- A one-sided invariant corner of a positive semidefinite matrix is reducing.
+
+More precisely, if `P * H = P * H * P`, then Hermiticity of `H` and `P` gives
+`H * P = P * H * P` by taking adjoints.  Thus the complementary corner
+`(1 - P) * H * P` vanishes.  This is the finite-dimensional operator identity
+used in the first step of arXiv:1606.00608, Proposition 4.13, lines 1873--1887
+(equation `eq1:proof.IV.12`). -/
+theorem opposite_corner_eq_zero_of_posSemidef {n : Type*} [Fintype n] [DecidableEq n]
+    (H P : Matrix n n ℂ) (hH : H.PosSemidef) (hP : P.IsHermitian)
+    (hInv : P * H = P * H * P) :
+    (1 - P) * H * P = 0 := by
+  have hRight : H * P = P * H * P := by
+    calc
+      H * P = (P * H)ᴴ := by
+        rw [Matrix.conjTranspose_mul, hP.eq, hH.isHermitian.eq]
+      _ = (P * H * P)ᴴ := congrArg Matrix.conjTranspose hInv
+      _ = P * H * P := by
+        rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul, hP.eq,
+          hH.isHermitian.eq, Matrix.mul_assoc]
+  rw [Matrix.sub_mul, Matrix.one_mul, Matrix.sub_mul, hRight, hInv, sub_self]
+
+/-- For an MPDO, a one-sided invariant projection of an `N`-site density
+operator has zero opposite corner.
+
+This is equation `eq1:proof.IV.12` in the proof of Proposition 4.13 of
+arXiv:1606.00608, lines 1873--1887.  The subsequent use of Lemma L transfers
+this operator equality back to the tensor blocks; the present lemma isolates
+the positivity argument without adding assumptions beyond the one-sided
+invariance and orthogonality of the projection. -/
+theorem mpo_opposite_corner_eq_zero (M : MPOTensor d D) (hM : IsMPDO M) (N : ℕ)
+    (P : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) (hP : P.IsHermitian)
+    (hInv : P * mpo M N = P * mpo M N * P) :
+    (1 - P) * mpo M N * P = 0 := by
+  exact opposite_corner_eq_zero_of_posSemidef (mpo M N) P (hM N) hP hInv
 
 /-- The vertical transfer map of an MPO tensor:
 `E_vert(X) = Σ_i M^{ii} X (M^{ii})†`. -/
@@ -592,6 +636,38 @@ theorem blockwise_insert_eq_of_mpv_agree
       MPSTensor.insertedTensor Z (A k₀) s = 0 :=
     (smul_eq_zero.mp hk).resolve_left hμne
   exact sub_eq_zero.mp hdiff
+
+/-- **One-sided invariance becomes reduction, block by block.**
+
+Let `Yleft`, `Ycorner`, and `Yright` encode respectively the first-site
+coefficients of `P H⁽ᴺ⁾`, `P H⁽ᴺ⁾ P`, and `H⁽ᴺ⁾ P`.  If the
+one-sided invariance gives agreement of the first two actions, while positivity
+gives agreement of the first and third actions, then Lemma L shows that the
+opposite corner vanishes on every canonical-form block: the `Yright` insertion
+equals the `Ycorner` insertion.
+
+This is the tensor-block conclusion of equation `eq1:proof.IV.12` in
+arXiv:1606.00608, Proposition 4.13, lines 1873--1887.  The two hypotheses are
+precisely the coefficient-level equalities displayed in that equation; they do
+not posit a vertical canonical decomposition. -/
+theorem blockwise_opposite_insert_eq_of_mpv_agree
+    {r : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ}
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : HorizontalCFData (d := d) μ A)
+    (Yleft Ycorner Yright : Matrix (Fin d) (Fin d) ℂ)
+    (hInv : MPSTensor.FirstSiteActionAgree
+      (MPSTensor.toTensorFromBlocks (d := d) (μ := μ) A) Yleft Ycorner)
+    (hPos : MPSTensor.FirstSiteActionAgree
+      (MPSTensor.toTensorFromBlocks (d := d) (μ := μ) A) Yleft Yright) :
+    ∀ k, MPSTensor.insertedTensor Yright (A k) =
+      MPSTensor.insertedTensor Ycorner (A k) := by
+  intro k
+  calc
+    MPSTensor.insertedTensor Yright (A k) =
+        MPSTensor.insertedTensor Yleft (A k) :=
+      (blockwise_insert_eq_of_mpv_agree A hCF hPos k).symm
+    _ = MPSTensor.insertedTensor Ycorner (A k) :=
+      blockwise_insert_eq_of_mpv_agree A hCF hInv k
 
 -- The implication `verticalCF_of_horizontalCF` (arXiv:1606.00608,
 -- Proposition 4.13) — every MPDO in horizontal canonical form is in vertical
