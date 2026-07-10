@@ -138,6 +138,33 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     $m_n(b_i,b_j) \in \mathcal{A}_{2n}$.
 \end{proof}
 
+\begin{definition}[Blocked inclusion coefficients]%
+    \label{def:mpdo_blocked_inclusion_coefficients}
+    \lean{MPOTensor.AlgebraStructureData.blockedInclusionCoefficients}
+    \leanok
+    \uses{def:mpdo_blocked_coefficients}
+    The inclusion map $\iota_n$ determines a coefficient family for the image
+    of any chosen basis element of $\mathcal{A}_n$, now viewed in the basis of
+    $\mathcal{A}_{n+1}$.
+\end{definition}
+
+\begin{theorem}[Blocked inclusion reconstructs from its coefficients]%
+    \label{thm:mpdo_inclusion_coefficients_reconstruct}
+    \lean{MPOTensor.AlgebraStructureData.reconstructFromBlockedInclusionCoefficients}
+    \leanok
+    \uses{def:mpdo_blocked_inclusion_coefficients}
+    Reconstructing the inclusion coefficient family of a chosen basis element
+    $b_i$ of $\mathcal{A}_n$ recovers its image $\iota_n(b_i)$ in
+    $\mathcal{A}_{n+1}$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpdo_blocked_coefficients}
+    Coefficient extraction and reconstruction are mutually inverse coordinate
+    maps for the chosen basis of $\mathcal{A}_{n+1}$, so extracting the
+    coefficients of $\iota_n(b_i)$ and reconstructing returns the same
+    element.
+\end{proof}
+
 \begin{theorem}[Compatible adjoint fixed points reconstruct from blocked coefficients]%
     \label{thm:mpdo_fixedpoint_coefficients_reconstruct}
     \lean{MPOTensor.AlgebraStructureData.reconstructFromBlockedCoefficients_of_fixedPoint}
