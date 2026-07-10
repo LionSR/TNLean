@@ -87,8 +87,10 @@ in `docs/paper-gaps/cpgsv17_vertical_diagonal_restriction.tex`. A source-faithfu
 argument must instead follow arXiv:1606.00608, lines 1873--1921, using MPDO
 positivity and Lemma L to establish an independent vertical canonical form and
 then proving positivity of its weights.  The doubled-index coefficient
-identification in the first step is formalized below; deriving its one-sided
-operator identity from a vertical invariant projection remains open.
+identification in the first step is formalized below.  The one-sided operator
+identity and its blockwise consequence are proved in
+`TNLean.MPS.MPDO.InvariantProjection`; the periodic-sector construction and
+the independent vertical canonical form remain open.
 
 ## Module location
 
