@@ -74,20 +74,6 @@ surrogate for the paper's vertical canonical form.
 * `blockwise_opposite_insert_eq_of_rotated_mpo_entries`:
   the preceding abstract matrices are identified explicitly with the
   doubled-index contractions of $PH^{(N)}$, $PH^{(N)}P$, and $H^{(N)}P$.
-* `ketLeftMul` / `braRightMul` / `firstSiteMatrix`:
-  the vertically viewed products $P\tilde M$, $\tilde M P$ and the first-spin
-  action of $P$ on an $(N+1)$-site chain.
-* `firstSiteMatrix_mul_mpo_of_ketLeftMul_invariant` /
-  `firstSiteMatrix_mul_mpo_comm`:
-  the displayed chain eq1:proof.IV.12: from $P\tilde M = P\tilde M P$ derive
-  $PH^{(N)} = PH^{(N)}P$ and, using positivity, $PH^{(N)} = H^{(N)}P$.
-* `blockwise_opposite_insert_eq_of_invariant_projection`:
-  the invariant-projection step of Proposition 4.13 assembled: for Hermitian
-  $P$ with $P\tilde M = P\tilde M P$, the opposite corner
-  $P^\perp \tilde M P$ vanishes on every horizontal canonical-form block.
-* `mpo_commute_of_commute_pow`:
-  matrices commuting with a power of the positive semidefinite $H^{(N)}$
-  commute with $H^{(N)}$, the operator input excluding $p$-periodic sectors.
 
 The results above supply matrix-product-vector identities and elementary
 positivity consequences, but do not give the passage from horizontal to
@@ -100,10 +86,11 @@ the finite-dimensional obstruction is proved in
 in `docs/paper-gaps/cpgsv17_vertical_diagonal_restriction.tex`. A source-faithful
 argument must instead follow arXiv:1606.00608, lines 1873--1921, using MPDO
 positivity and Lemma L to establish an independent vertical canonical form and
-then proving positivity of its weights.  The invariant-projection step and the
-operator input to the periodic-sector exclusion are formalized below; applying
-the canonical-form theorem in the vertical direction and proving positivity of
-the resulting weights (lines 1895--1921) remain open.
+then proving positivity of its weights.  The doubled-index coefficient
+identification in the first step is formalized below.  The one-sided operator
+identity and its blockwise consequence are proved in
+`TNLean.MPS.MPDO.InvariantProjection`; the periodic-sector construction and
+the independent vertical canonical form remain open.
 
 ## Module location
 
@@ -459,20 +446,6 @@ theorem mpo_opposite_corner_eq_zero (M : MPOTensor d D) (hM : IsMPDO M) (N : ℕ
     (hInv : P * mpo M N = P * mpo M N * P) :
     (1 - P) * mpo M N * P = 0 :=
   Matrix.IsHermitian.opposite_corner_eq_zero (hM N).isHermitian hP hInv
-
-/-- For an MPDO, any matrix commuting with a nonzero power of the $N$-site
-density operator commutes with the density operator itself.
-
-This is the operator identity excluding nontrivial $p$-periodic sectors in the
-proof of Proposition 4.13 of arXiv:1606.00608, lines 1888--1895 (equation
-eq2:proof.IV.12): an orthogonal projector $Q$ with
-$Q[H^{(N)}]^p = [H^{(N)}]^p Q$ for all $N$ already satisfies
-$QH^{(N)} = H^{(N)}Q$ for all $N$, because $H^{(N)}$ is positive
-semidefinite. -/
-theorem mpo_commute_of_commute_pow (M : MPOTensor d D) (hM : IsMPDO M) (N : ℕ)
-    {p : ℕ} (hp : p ≠ 0) {Q : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
-    (hQ : Commute Q (mpo M N ^ p)) : Commute Q (mpo M N) :=
-  Matrix.PosSemidef.commute_of_commute_pow (hM N) hp hQ
 
 /-- The vertical transfer map of an MPO tensor:
 `E_vert(X) = Σ_i M^{ii} X (M^{ii})†`. -/
@@ -920,225 +893,6 @@ theorem blockwise_opposite_insert_eq_of_rotated_mpo_entries
       (MPSTensor.firstSiteActionAgree_ketLeft_ketLeftBraRight M P hInv)
   · exact MPSTensor.FirstSiteActionAgree.of_sameMPV hM
       (MPSTensor.firstSiteActionAgree_ketLeft_braRight M P hComm)
-
-/-! ### Invariant projections of the vertically viewed tensor -/
-
-/-- The vertically viewed product $P\tilde M$.  Viewing the MPO tensor as the
-family of physical-space operators $(\tilde M_{ab})_{ij} = M^{ij}_{ab}$
-indexed by the virtual indices, multiply each operator by `P` on the left:
-$(P\tilde M)^{ij} = \sum_k P_{ik} M^{kj}$.
-
-The invariant-projection step in the proof of Proposition 4.13 of
-arXiv:1606.00608, lines 1874--1887, considers a projector $P$ with
-$P\tilde M = P\tilde M P$ in this sense. -/
-noncomputable def ketLeftMul (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ) :
-    MPOTensor d D :=
-  fun i j => ∑ k : Fin d, P i k • M k j
-
-/-- The vertically viewed product $\tilde M P$: multiply each physical-space
-operator $\tilde M_{ab}$ by `P` on the right,
-$(\tilde M P)^{ij} = \sum_k P_{kj} M^{ik}$.
-
-Together with `ketLeftMul` this expresses the hypothesis
-$P\tilde M = P\tilde M P$ of the invariant-projection step in the proof of
-Proposition 4.13 of arXiv:1606.00608, lines 1874--1887. -/
-noncomputable def braRightMul (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ) :
-    MPOTensor d D :=
-  fun i j => ∑ k : Fin d, P k j • M i k
-
-/-- Splitting off the first site of a density-operator entry:
-$H^{(N+1)}_{(i,\sigma),(j,\tau)}
-= \tr(M^{ij} M^{\sigma_0\tau_0} \cdots M^{\sigma_{N-1}\tau_{N-1}})$. -/
-theorem mpo_cons_cons (M : MPOTensor d D) {N : ℕ} (i j : Fin d)
-    (σ τ : Fin N → Fin d) :
-    mpo M (N + 1) (Fin.cons i σ) (Fin.cons j τ) =
-      Matrix.trace (M i j * evalWord M (List.ofFn σ) (List.ofFn τ)) := by
-  simp only [mpo_apply, mpoMatrixEntry]
-  congr 1
-  rw [List.ofFn_succ, List.ofFn_succ]
-  simp only [Fin.cons_zero, Fin.cons_succ, evalWord_cons]
-
-/-- The one-site matrix `P` acting on the first spin of an $(N+1)$-site chain,
-$P \otimes \Id^{\otimes N}$.  The products $PH^{(N)}$, $PH^{(N)}P$, and
-$H^{(N)}P$ in the displayed chain (eq1:proof.IV.12) of the proof of
-Proposition 4.13 of arXiv:1606.00608, lines 1874--1887, are formed with this
-operator. -/
-noncomputable def firstSiteMatrix (P : Matrix (Fin d) (Fin d) ℂ) (N : ℕ) :
-    Matrix (Fin (N + 1) → Fin d) (Fin (N + 1) → Fin d) ℂ :=
-  fun σ τ => P (σ 0) (τ 0) * (if σ ∘ Fin.succ = τ ∘ Fin.succ then 1 else 0)
-
-/-- The first-spin action of a Hermitian matrix is Hermitian. -/
-theorem firstSiteMatrix_isHermitian {P : Matrix (Fin d) (Fin d) ℂ}
-    (hP : P.IsHermitian) (N : ℕ) : (firstSiteMatrix P N).IsHermitian := by
-  refine Matrix.ext fun σ τ => ?_
-  simp only [Matrix.conjTranspose_apply, firstSiteMatrix]
-  by_cases h : σ ∘ Fin.succ = τ ∘ Fin.succ
-  · rw [if_pos h, if_pos h.symm, mul_one, mul_one]
-    exact hP.apply _ _
-  · rw [if_neg h, if_neg fun hh => h hh.symm, mul_zero, mul_zero, star_zero]
-
-/-- Left multiplication by the first-spin action, entrywise:
-$(P_1 G)_{\sigma\tau} = \sum_i P_{\sigma_0 i}\,G_{(i,\sigma'),\tau}$, where
-$\sigma'$ is the tail of $\sigma$. -/
-theorem firstSiteMatrix_mul_apply (P : Matrix (Fin d) (Fin d) ℂ) {N : ℕ}
-    (G : Matrix (Fin (N + 1) → Fin d) (Fin (N + 1) → Fin d) ℂ)
-    (σ τ : Fin (N + 1) → Fin d) :
-    (firstSiteMatrix P N * G) σ τ =
-      ∑ i : Fin d, P (σ 0) i * G (Fin.cons i (σ ∘ Fin.succ)) τ := by
-  rw [Matrix.mul_apply]
-  have reindex : ∀ F : (Fin (N + 1) → Fin d) → ℂ,
-      ∑ σ' : Fin (N + 1) → Fin d, F σ' =
-        ∑ i : Fin d, ∑ ρ : Fin N → Fin d, F (Fin.cons i ρ) := fun F => by
-    rw [← Fintype.sum_prod_type']
-    exact ((Fin.consEquiv fun _ : Fin (N + 1) => Fin d).sum_comp F).symm
-  rw [reindex]
-  refine Finset.sum_congr rfl fun i _ => ?_
-  simp only [firstSiteMatrix, Fin.cons_zero, Function.comp_def, Fin.cons_succ]
-  rw [Finset.sum_eq_single (fun n : Fin N => σ (Fin.succ n))]
-  · rw [if_pos rfl, mul_one]
-  · intro ρ _ hρ
-    rw [if_neg fun hh => hρ hh.symm, mul_zero, zero_mul]
-  · intro hmem
-    exact (hmem (Finset.mem_univ _)).elim
-
-/-- Right multiplication by the first-spin action, entrywise:
-$(G P_1)_{\sigma\tau} = \sum_j G_{\sigma,(j,\tau')}\,P_{j\tau_0}$, where
-$\tau'$ is the tail of $\tau$. -/
-theorem mul_firstSiteMatrix_apply (P : Matrix (Fin d) (Fin d) ℂ) {N : ℕ}
-    (G : Matrix (Fin (N + 1) → Fin d) (Fin (N + 1) → Fin d) ℂ)
-    (σ τ : Fin (N + 1) → Fin d) :
-    (G * firstSiteMatrix P N) σ τ =
-      ∑ j : Fin d, G σ (Fin.cons j (τ ∘ Fin.succ)) * P j (τ 0) := by
-  rw [Matrix.mul_apply]
-  have reindex : ∀ F : (Fin (N + 1) → Fin d) → ℂ,
-      ∑ τ' : Fin (N + 1) → Fin d, F τ' =
-        ∑ j : Fin d, ∑ ρ : Fin N → Fin d, F (Fin.cons j ρ) := fun F => by
-    rw [← Fintype.sum_prod_type']
-    exact ((Fin.consEquiv fun _ : Fin (N + 1) => Fin d).sum_comp F).symm
-  rw [reindex]
-  refine Finset.sum_congr rfl fun j _ => ?_
-  simp only [firstSiteMatrix, Fin.cons_zero, Function.comp_def, Fin.cons_succ]
-  rw [Finset.sum_eq_single (fun n : Fin N => τ (Fin.succ n))]
-  · rw [if_pos rfl, mul_one]
-  · intro ρ _ hρ
-    rw [if_neg hρ, mul_zero, mul_zero]
-  · intro hmem
-    exact (hmem (Finset.mem_univ _)).elim
-
-/-- Trace pairing of a weighted combination of tensor entries against a fixed
-matrix. -/
-private theorem sum_mul_trace_eq_trace_sum_smul (c : Fin d → ℂ)
-    (B : Fin d → Matrix (Fin D) (Fin D) ℂ) (W : Matrix (Fin D) (Fin D) ℂ) :
-    ∑ i : Fin d, c i * Matrix.trace (B i * W) =
-      Matrix.trace ((∑ i : Fin d, c i • B i) * W) := by
-  rw [Finset.sum_mul, Matrix.trace_sum]
-  refine Finset.sum_congr rfl fun i _ => ?_
-  rw [Matrix.smul_mul, Matrix.trace_smul, smul_eq_mul]
-
-/-- **The invariant-projection identity at the operator level.** If the
-vertically viewed tensor satisfies $P\tilde M = P\tilde M P$, then for every
-size the density operator satisfies $PH^{(N)} = PH^{(N)}P$, with $P$ acting
-on the first spin.
-
-This is the first equality of the displayed chain (eq1:proof.IV.12) in the
-proof of Proposition 4.13 of arXiv:1606.00608, lines 1874--1887, obtained by
-inserting the tensor identity at the first site of the chain. -/
-theorem firstSiteMatrix_mul_mpo_of_ketLeftMul_invariant
-    (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ)
-    (hPM : M.ketLeftMul P = (M.ketLeftMul P).braRightMul P) (N : ℕ) :
-    firstSiteMatrix P N * mpo M (N + 1) =
-      firstSiteMatrix P N * mpo M (N + 1) * firstSiteMatrix P N := by
-  refine Matrix.ext fun σ τ => ?_
-  obtain ⟨a, σ', rfl⟩ : ∃ a σ'', σ = Fin.cons a σ'' :=
-    ⟨σ 0, Fin.tail σ, (Fin.cons_self_tail σ).symm⟩
-  obtain ⟨b, τ', rfl⟩ : ∃ b τ'', τ = Fin.cons b τ'' :=
-    ⟨τ 0, Fin.tail τ, (Fin.cons_self_tail τ).symm⟩
-  have hPM' := congrFun (congrFun hPM a) b
-  simp only [ketLeftMul, braRightMul] at hPM'
-  rw [mul_firstSiteMatrix_apply]
-  simp only [firstSiteMatrix_mul_apply]
-  simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ, mpo_cons_cons]
-  calc
-    ∑ i : Fin d, P a i *
-        Matrix.trace (M i b * evalWord M (List.ofFn σ') (List.ofFn τ'))
-        = Matrix.trace ((∑ i : Fin d, P a i • M i b) *
-            evalWord M (List.ofFn σ') (List.ofFn τ')) :=
-          sum_mul_trace_eq_trace_sum_smul _ _ _
-    _ = Matrix.trace ((∑ j : Fin d, P j b • ∑ i : Fin d, P a i • M i j) *
-            evalWord M (List.ofFn σ') (List.ofFn τ')) := by rw [hPM']
-    _ = ∑ j : Fin d, P j b *
-          Matrix.trace ((∑ i : Fin d, P a i • M i j) *
-            evalWord M (List.ofFn σ') (List.ofFn τ')) :=
-          (sum_mul_trace_eq_trace_sum_smul _ _ _).symm
-    _ = ∑ j : Fin d,
-          (∑ i : Fin d, P a i *
-            Matrix.trace (M i j * evalWord M (List.ofFn σ') (List.ofFn τ'))) *
-            P j b := by
-          refine Finset.sum_congr rfl fun j _ => ?_
-          rw [sum_mul_trace_eq_trace_sum_smul, mul_comm]
-
-/-- **The displayed chain eq1:proof.IV.12 completed.** For an MPDO whose
-vertically viewed tensor satisfies $P\tilde M = P\tilde M P$ with $P$
-Hermitian, the first-spin action of $P$ commutes with every density operator:
-$PH^{(N)} = PH^{(N)}P = (PH^{(N)}P)^\dagger = H^{(N)}P$
-(arXiv:1606.00608, proof of Proposition 4.13, lines 1874--1887).  In the
-paper $P$ is an orthogonal projector; only Hermiticity of $P$ is used. -/
-theorem firstSiteMatrix_mul_mpo_comm
-    (M : MPOTensor d D) (hMpdo : IsMPDO M)
-    {P : Matrix (Fin d) (Fin d) ℂ} (hP : P.IsHermitian)
-    (hPM : M.ketLeftMul P = (M.ketLeftMul P).braRightMul P) (N : ℕ) :
-    firstSiteMatrix P N * mpo M (N + 1) = mpo M (N + 1) * firstSiteMatrix P N := by
-  have hInv := firstSiteMatrix_mul_mpo_of_ketLeftMul_invariant M P hPM N
-  have hcorner := mpo_opposite_corner_eq_zero M hMpdo (N + 1) (firstSiteMatrix P N)
-    (firstSiteMatrix_isHermitian hP N) hInv
-  rw [Matrix.sub_mul, Matrix.one_mul, Matrix.sub_mul] at hcorner
-  rw [hInv]
-  exact (sub_eq_zero.mp hcorner).symm
-
-/-- **Invariant projections reduce, block by block.** Let the doubled-index
-tensor of an MPDO have a horizontal block-injective canonical-form
-decomposition, and let $P$ be Hermitian with $P\tilde M = P\tilde M P$ on the
-vertically viewed tensor.  Then on every canonical-form block the insertions
-of $\tilde M P$ and $P\tilde M P$ agree; equivalently, the opposite corner
-$P^\perp \tilde M P$ vanishes blockwise.
-
-This is the invariant-projection step of the proof of Proposition 4.13 of
-arXiv:1606.00608, lines 1874--1887: the identity $P\tilde M = P\tilde M P$
-yields $PH^{(N)} = PH^{(N)}P$ for every size; positivity of the MPDO and
-Hermiticity of $P$ upgrade this to $PH^{(N)} = H^{(N)}P$; Lemma L then
-transfers both operator identities to the blocks.  In the paper $P$ is an
-orthogonal projector; only Hermiticity of $P$ is used. -/
-theorem blockwise_opposite_insert_eq_of_invariant_projection
-    {r : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ}
-    (M : MPOTensor d D) (hMpdo : IsMPDO M)
-    (A : (k : Fin r) → MPSTensor (d * d) (dim k))
-    (hCF : HorizontalCFData (d := d * d) μ A)
-    (hM : MPSTensor.SameMPV₂ M.toMPSTensor
-      (MPSTensor.toTensorFromBlocks (d := d * d) (μ := μ) A))
-    {P : Matrix (Fin d) (Fin d) ℂ} (hP : P.IsHermitian)
-    (hPM : M.ketLeftMul P = (M.ketLeftMul P).braRightMul P) :
-    ∀ k, MPSTensor.insertedTensor (MPSTensor.braRightAction P) (A k) =
-      MPSTensor.insertedTensor (MPSTensor.ketLeftBraRightAction P) (A k) := by
-  refine blockwise_opposite_insert_eq_of_rotated_mpo_entries M A hCF hM P ?_ ?_
-  · intro N ρ
-    have h := firstSiteMatrix_mul_mpo_of_ketLeftMul_invariant M P hPM N
-    have h2 := Matrix.ext_iff.mpr h
-      (Fin.cons (ρ 0).divNat fun n => (ρ (Fin.succ n)).divNat)
-      (Fin.cons (ρ 0).modNat fun n => (ρ (Fin.succ n)).modNat)
-    rw [mul_firstSiteMatrix_apply] at h2
-    simp only [firstSiteMatrix_mul_apply] at h2
-    simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ] at h2
-    rw [h2]
-    simp only [Finset.sum_mul]
-    exact Finset.sum_comm
-  · intro N ρ
-    have h := firstSiteMatrix_mul_mpo_comm M hMpdo hP hPM N
-    have h2 := Matrix.ext_iff.mpr h
-      (Fin.cons (ρ 0).divNat fun n => (ρ (Fin.succ n)).divNat)
-      (Fin.cons (ρ 0).modNat fun n => (ρ (Fin.succ n)).modNat)
-    rw [mul_firstSiteMatrix_apply, firstSiteMatrix_mul_apply] at h2
-    simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ] at h2
-    exact h2
 
 -- The implication `verticalCF_of_horizontalCF` (arXiv:1606.00608,
 -- Proposition 4.13) — every MPDO in horizontal canonical form is in vertical

@@ -434,10 +434,11 @@ with `H ^ p`, then `Q` commutes with `H`.
 In the eigenbasis of `H` the hypothesis reads
 `Q'_{ij} λ_j^p = λ_i^p Q'_{ij}`; the eigenvalues of `H` are nonnegative, so
 `λ_i^p = λ_j^p` forces `λ_i = λ_j`, and every entry of `Q'` linking distinct
-eigenvalues vanishes.  This is the matrix identity excluding nontrivial
-periodic sectors in the proof of Proposition 4.13 of arXiv:1606.00608,
-lines 1888--1895 (equation eq2:proof.IV.12); the paper states it for an
-orthogonal projector `Q`, but only positivity of `H` is used. -/
+eigenvalues vanishes.  This is the final matrix implication used in the
+periodic-sector contradiction in the proof of Proposition 4.13 of
+arXiv:1606.00608, lines 1888--1893 (equation eq2:proof.IV.12).  The passage
+from a nontrivial period to an orthogonal projector satisfying the hypothesis
+at every length is a separate step; only positivity of `H` is used here. -/
 theorem commute_of_commute_pow {H Q : Matrix n n ℂ} (hH : H.PosSemidef)
     {p : ℕ} (hp : p ≠ 0) (hQ : Commute Q (H ^ p)) : Commute Q H := by
   classical
