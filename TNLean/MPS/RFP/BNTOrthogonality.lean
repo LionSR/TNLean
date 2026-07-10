@@ -11,7 +11,7 @@ import TNLean.Spectral.TransferOperatorGapNT
 
 This file proves the cross-block (`j ≠ j'`) vanishing of the mixed transfer
 operator for a multi-block tensor whose direct sum is a renormalization fixed
-point, the off-diagonal content of the isometry condition eq:III_isometry
+point, the off-diagonal content of the isometry condition
 (arXiv:1606.00608, line 551):
 \[
   \sum_i (U_j^i)_{\alpha,\beta}\,\overline{(U_{j'}^i)_{\alpha',\beta'}}
@@ -103,7 +103,7 @@ transfer operator `mixedTransferMap₂ (B j) (B j')` applied to the `(j, j')`
 bond block of `X`.
 
 This is the transfer-operator analogue of `evalWord_blockDiagonal'`, and the
-reusable foundation for the cross-block content of eq:III_isometry
+reusable foundation for the cross-block content of the isometry condition
 (arXiv:1606.00608, line 551). -/
 theorem blockDiagonal'_transferSum_toBlock
     (B : (k : Fin r) → MPSTensor d (dim k))
@@ -324,8 +324,8 @@ off-diagonal mixed transfer operator vanishes:
 `mixedTransferMap₂ (B j) (B j') = 0` for `j ≠ j'`.
 
 This is the $\delta_{j,j'}$ (cross-block) content of the isometry condition
-eq:III_isometry (arXiv:1606.00608, line 551), towards Corollary III.cor3
-(line 584).
+at arXiv:1606.00608, line 551, used toward the local-orthogonality conclusion
+at line 584.
 
 The load-bearing hypothesis is whole-tensor RFP of the direct sum (the source's
 "`A` in CF is RFP"), strictly stronger than per-block RFP.  The diagonal
@@ -360,10 +360,11 @@ physical CID and, for all distinct BNT components $j \ne j'$,
   \mathcal E_{j,j'}=0.
 \]
 
-This is the positive-gap part of the forward implication in arXiv:1606.00608,
-Theorem TheoremZCLPure (lines 498--502 and 1248--1250), for the explicit
-unweighted direct-sum representative.  The physical CID part follows from
-equation Corr; the local-orthogonality part is
+This is the positive-gap part of the forward implication at
+arXiv:1606.00608, lines 498--502 and 1248--1250, for the explicit unweighted
+direct-sum representative. The physical CID part follows from
+$\mathcal E_A^n=\mathcal E_A$ for $n\geq 1$ in the two-observable transfer
+formula at lines 490--496; the local-orthogonality part is
 `isBNTLocallyOrthogonal_of_isRFP_directSum`.
 
 **Scope restriction (positive gaps and explicit direct sum):** the source CID

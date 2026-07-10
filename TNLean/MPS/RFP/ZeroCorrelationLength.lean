@@ -42,13 +42,14 @@ namespace MPSTensor
 variable {d D : ℕ}
 variable {g : ℕ} {dim : Fin g → ℕ}
 
-/-- The transfer insertion associated with an observable on a block of `L`
-physical spins.  If `σ, τ : Fin L → Fin d` label basis words, then
+/-- The transfer insertion associated with an observable on a block of $L$
+physical spins. If $\sigma,\tau:\operatorname{Fin}(L)\to\operatorname{Fin}(d)$
+label basis words, then
 `physicalObservableTransfer A L O X` equals
 $\sum_{\sigma,\tau} O_{\tau,\sigma}\, A^{\sigma} X (A^{\tau})^{\dagger}$.
 
-This is the matrix $\mathbb{E}_O$ appearing in arXiv:1606.00608, equation Corr
-(lines 490--496), written as a map on virtual matrices. -/
+This is the inserted transfer map $\mathbb{E}_O$ in the two-observable formula
+at arXiv:1606.00608, lines 490--496, written as a map on virtual matrices. -/
 noncomputable def physicalObservableTransfer (A : MPSTensor d D) (L : ℕ)
     (O : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
@@ -57,9 +58,9 @@ noncomputable def physicalObservableTransfer (A : MPSTensor d D) (L : ℕ)
       (LinearMap.mulRight ℂ (evalWord A (List.ofFn τ))ᴴ))
 
 /-- The periodic-chain two-region expectation obtained by placing observables
-`O₁` and `O₂` on physical blocks, with `n₁` and `n₂` unobserved sites in the two
-complementary arcs.  This is the trace formula in arXiv:1606.00608, equation
-Corr (lines 490--496). -/
+$O_1$ and $O_2$ on physical blocks, with $n_1$ and $n_2$ unobserved sites in
+the two complementary arcs. This is the trace formula at arXiv:1606.00608,
+lines 490--496. -/
 noncomputable def physicalTwoPointExpectation (A : MPSTensor d D)
     (L₁ L₂ : ℕ)
     (O₁ : Matrix (Fin L₁ → Fin d) (Fin L₁ → Fin d) ℂ)
@@ -70,9 +71,9 @@ noncomputable def physicalTwoPointExpectation (A : MPSTensor d D)
       physicalObservableTransfer A L₁ O₁ ∘ₗ ((transferMap A) ^ n₁))
 
 /-- Positive-gap physical correlations independent of distance, in the transfer
-formula surrounding arXiv:1606.00608, Definition 3.3 and equation Corr (lines
-437--445 and 490--496): translating either of two physical block observables
-through the unobserved part of a fixed periodic chain does not change their
+formula surrounding arXiv:1606.00608, Definition 3.3 (lines 437--445) and the
+two-observable formula at lines 490--496: translating either physical block
+observable through the unobserved part of a fixed periodic chain does not change their
 two-region expectation.  Thus the two complementary gaps may change while
 their sum, and hence the chain length, remains fixed.
 
@@ -81,8 +82,9 @@ does not replace physical observables by arbitrary virtual bond matrices.
 
 **Scope restriction (arXiv:1606.00608, Definition 3.3):** the source quantifies
 over all disjoint regions, including adjacent regions.  Here both complementary
-gaps are required to be positive.  If a gap is zero, equation Corr contains
-$\mathbb{E}^0 = 1$, which does not follow from $\mathbb{E}^2 = \mathbb{E}$.  See
+gaps are required to be positive. If a gap is zero, the transfer formula
+contains $\mathbb{E}^0=1$, which does not follow from
+$\mathbb{E}^2=\mathbb{E}$. See
 `docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
 def IsPositiveGapPhysicalCID (A : MPSTensor d D) : Prop :=
   ∀ (L₁ L₂ : ℕ)
@@ -116,10 +118,11 @@ def IsCID (A : MPSTensor d D) : Prop :=
 
 /-- Idempotence of the transfer map implies positive-gap physical CID.
 
-This is the positive-gap part of the forward implication stated immediately
-before arXiv:1606.00608, Theorem TheoremZCLPure (lines 498--502).  Equation
-Corr shows the reason directly: every positive power of an idempotent
-transfer map equals the transfer map itself.
+This is the positive-gap part of the forward implication at
+arXiv:1606.00608, lines 498--502. The relation
+$\mathbb E_A^n=\mathbb E_A$ for $n\geq 1$ shows the reason directly:
+substitution in the two-observable formula makes the expectation independent
+of both positive gap sizes.
 
 **Scope restriction:** adjacent regions are not covered because idempotence
 does not identify $\mathbb{E}^0$ with $\mathbb{E}$.  This is recorded in
@@ -242,12 +245,12 @@ virtual-insertion correlator implies that the transfer map is idempotent.
 
 The proof uses trace nondegeneracy: IsCID forces
 $\operatorname{tr}(Y\, E^n(X \rho_R))$ to be constant in $n$ for all $X,Y$,
-so $E^n(X \rho_R)$ is constant. Since $\rho_R$ is positive definite and hence invertible,
-$X \rho_R$ ranges over all matrices, giving $E^2 = E$.
+so $E^n(X \rho_R)$ is constant. Since $\rho_R$ is positive definite and hence
+invertible, $X \rho_R$ ranges over all matrices, giving $E^2 = E$.
 
 **Scope restriction (virtual insertions):** `IsCID` quantifies over arbitrary
 virtual bond matrices, rather than the physical block observables in
-arXiv:1606.00608, Definition 3.3 and Theorem TheoremZCLPure.  The missing
+arXiv:1606.00608, Definition 3.3 and the theorem at lines 498--502. The missing
 physical-realization step from lines 1250--1258 is recorded in
 `docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
 theorem isCID_implies_isRFP
@@ -296,8 +299,8 @@ Reverse: $E^2 = E$ implies $E^n = E$ for $n \geq 1$ by
 `IsIdempotentElem.pow_eq`,
 so the connected correlator is independent of separation, giving CID.
 
-**Scope restriction (arXiv:1606.00608, Theorem TheoremZCLPure):** the source
-theorem is stated for canonical-form tensors and includes the BNT-level local
+**Scope restriction (arXiv:1606.00608, lines 498--502):** the source theorem is
+stated for canonical-form tensors and includes the BNT-level local
 orthogonality equations for distinct components. This result proves the
 single-block idempotence/CID equivalence under the convention above; it is not
 the full BNT-level theorem. See
