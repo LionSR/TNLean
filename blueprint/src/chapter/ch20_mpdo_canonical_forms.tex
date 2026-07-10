@@ -34,6 +34,18 @@
     from \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
+\begin{figure}[ht]
+    \centering
+    \TNMPDOVerticalDirectSum
+    \caption{Vertical direct-sum form of the tensor: after the physical
+    isometry $U$, each block factorizes as the positive diagonal weight
+    $\mu_\alpha$ on the multiplicity factor times the basis tensor $M_\alpha$,
+    and only $M_\alpha$ carries the virtual legs. This is the decomposition
+    $U\tilde MU^\dagger=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$ of
+    \cite[Proposition~4.13, lines~1864--1870]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_vertical_direct_sum}
+\end{figure}
+
 \begin{remark}[Finite witnesses for block-injective canonical form]%
     \label{rem:word_tuple_span_top}
     \lean{MPSTensor.WordTupleSpanTop}
@@ -216,6 +228,19 @@
     \]
 \end{definition}
 
+\begin{figure}[ht]
+    \centering
+    \TNMPDOHorizontalOperator
+    \caption{The horizontal operator $H^{(N)}(\tilde M)$: one row of $N$
+    copies of $\tilde M$, with the virtual bond contracted along the row and
+    closed by the trace, while every ket and bra leg stays external. Reading
+    the ket--bra pair at each site as one doubled index identifies the
+    entries of $H^{(N)}$ with the matrix product vector of the doubled-index
+    tensor. This is the contraction displayed in the proof of
+    \cite[Proposition~4.13, lines~1876--1880]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_horizontal_operator}
+\end{figure}
+
 \begin{lemma}[Coefficient form of the three first-site contractions]
     \label{lem:mpdo_three_first_site_contraction_coefficients}
     \lean{MPSTensor.mpv_toMPSTensor_pairConfig}
@@ -246,6 +271,18 @@
     $H^{(N)}(M)$.  Summing the first doubled index against $Y_L$, $Y_R$, or
     $Y_C$ leaves the displayed single or double sums.
 \end{proof}
+
+\begin{figure}[ht]
+    \centering
+    \TNMPDOFirstSiteContractions
+    \caption{The three first-site contractions of the horizontal operator on
+    $N+1$ sites: contracting the first doubled leg with $Y_L$, $Y_R$, or
+    $Y_C$ places $P$ on the ket leg, on the bra leg, or on both legs of the
+    first site, and represents $PH^{(N+1)}$, $H^{(N+1)}P$, and
+    $PH^{(N+1)}P$. Compare the first display in the proof of
+    \cite[Proposition~4.13, lines~1881--1887]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_first_site_contractions}
+\end{figure}
 
 \begin{theorem}[Blockwise reduction for the MPO contractions]
     \label{thm:blockwise_opposite_insert_rotated_mpo}
