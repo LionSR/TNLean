@@ -399,6 +399,7 @@ import TNLean.MPS.RFP.Assembly
 import TNLean.MPS.RFP.Decorrelation
 import TNLean.MPS.RFP.BNTOrthogonality
 import TNLean.MPS.RFP.ResidualIsometry
+import TNLean.MPS.RFP.PhaseMultiplicityCounterexample
 
 -- Layer 6a: Quantum Wielandt span-growth infrastructure
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan

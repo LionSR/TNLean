@@ -83,7 +83,7 @@ therefore the compatible pair-index equation is
   D_k^{-1}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
 \end{align}
 The remaining normalization comparison with the source equation
-\eqref{eq:III_isometry} is therefore explicit rather than hidden.
+\path{eq:III_isometry} is therefore explicit rather than hidden.
 
 A subsequent comparison theorem rescales the same single-block decomposition by
 $U_k^i\mapsto D_k^{1/2}U_k^i$ and
@@ -194,7 +194,7 @@ reference tensor\footnote{Local source:
   \widehat A^{(\alpha',\beta')}_{\alpha,\beta}
     = \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}\sqrt{\Lambda_\alpha},
 \end{align}
-which is left-canonical and has fixed point $\diag(\Lambda)$ with
+which is left-canonical and has fixed point $\operatorname{diag}(\Lambda)$ with
 $\tr(\Lambda)=1$.  Writing $\widehat A = \Lambda\,U$ would force
 $U^{(\alpha',\beta')}_{\alpha,\beta}
   = \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}/\sqrt{\Lambda_\alpha}$, whose pair-index
@@ -243,7 +243,7 @@ The square root on the diagonal matches the source reference tensor (the
 square-root correction is documented separately in the previous section); the
 trace
 condition $\tr(\Lambda)=1$ is imposed on $\Lambda$ itself, equivalently on the
-normalized diagonal fixed point $\rho=\diag(\Lambda)$,
+normalized diagonal fixed point $\rho=\operatorname{diag}(\Lambda)$,
 $\Lambda_\alpha=\rho_{\alpha,\alpha}/\tr\rho$.  The identity
 $\sum_\alpha\Lambda_\alpha=1$ is the trace identity
 $\sum_\alpha\rho_{\alpha,\alpha}=\tr\rho$ for the diagonal fixed point.
@@ -315,11 +315,81 @@ source canonical form \path{III_CFI_RFP}, where the inner direct sum over
 copies $q=1,\ldots,r_j$ has a single summand and the phases $\mu_{j,q}$ are all
 $1$, so the direct sum carries one copy of each normal-tensor block.  The
 full-multiplicity backward direction, summing repeated copies of each block with
-their phases and scalar weights, is a further step.
+their phases and scalar weights, requires care about the physical direct sum
+carried by the copy index.  A literal virtual-block substitution need not
+satisfy the defining physical-isometry relation.
+
+\section{Ambiguity of a literal repeated-phase reading}
+
+Equation~\path{III_CFI_RFP} allows a fixed normal tensor indexed by $j$ to occur
+several times, indexed by $q$, with independent coefficients
+$\mu_{j,q}$ satisfying $|\mu_{j,q}|=1$.
+Take one physical letter, one scalar representative
+\[
+  B^0=(1),
+\]
+and two copies with $\mu_{1,1}=1$ and $\mu_{1,2}=-1$.  With trivial gauges and
+$\Lambda=(1)$, a literal reading of the displayed virtual block diagonal gives
+\[
+  A^0=\operatorname{diag}(1,-1).
+\]
+The representative $B$ satisfies the trace-normalized unit-isometry form: take
+$X=(1)$, $\Lambda=(1)$, and $U^0=(1)$.  Both copy phases have unit modulus.
+For $g=1$ and a one-dimensional representative, the displayed joint equation
+\path{eq:III_isometry} also reduces to $|U^0|^2=1$ and is satisfied.  Notice,
+however, that this equation carries the index $j$ but not the copy index $q$.
+These facts are formalized by
+\leanid{MPSTensor.scalarUnitTensor_isIsometryCanonicalForm} and
+\leanid{MPSTensor.phaseFlipTensor_is_two_phase_copies} in
+\doclink{TNLean/MPS/RFP/PhaseMultiplicityCounterexample}.
+
+The prose following the display supplies additional meaning: the indices $j,q$
+connect the physical and virtual indices and therefore give a direct sum in
+both spaces, up to the physical isometry (local source
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:559--563}).  The one-letter tensor
+above realizes the virtual direct sum but cannot realize a nontrivial physical
+direct sum.  Indeed,
+\[
+  (A^0)^2=I,
+\]
+and there is no scalar $v$ with $I=vA^0$: the two diagonal entries would require
+$v=1$ and $v=-1$ simultaneously.  Thus this tensor fails even the unrestricted
+scalar-coefficient version of the defining relation \path{AA=A}.  This is
+formalized by \leanid{MPSTensor.phaseFlipTensor_no_blocking_coefficient}.
+
+Its transfer map is
+\[
+  \mathcal E_A(Y)=A^0Y(A^0)^\dagger.
+\]
+For the matrix unit $E_{01}$ one has
+\[
+  \mathcal E_A(E_{01})=-E_{01},
+  \qquad
+  \mathcal E_A^2(E_{01})=E_{01}.
+\]
+Thus $\mathcal E_A^2\ne\mathcal E_A$.  The formal theorem
+\leanid{MPSTensor.phaseFlipTensor_not_isRFP} proves that this tensor does not
+satisfy the present predicate \leanid{MPSTensor.IsRFP}.
+
+The calculation therefore does not show that a source RFP is rejected by the
+formal predicate.  Rather, it exposes an ambiguity in taking the displayed
+matrix formula independently of its accompanying physical-space
+interpretation.  The source definition of a pure-state RFP is the physical
+isometry relation
+\path{AA=A} (local source
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:420--425}), whereas the present
+formal predicate is literal idempotence of the transfer map.  The source then
+states the repeated-copy form in Theorem~\path{charact-MPS}, including the
+independent unit phases (local source
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:543--554}).  For the two-phase
+virtual-block reading above, neither \path{AA=A} nor literal whole-tensor
+idempotence holds.  Consequently this tensor must not be called a source RFP.
+Before formalizing the full characterization, the copy index must be represented
+in a way that implements the physical direct sum described at lines 559--563.
 
 \section{Elimination plan}
 
-The one remaining gap is the source's starting point.  Corollary~III.cor3 assumes
+There are two remaining gaps.  First, Corollary~III.cor3 assumes
 a single predicate ``$A$ in canonical form is a renormalization fixed point'',
 whereas the formal theorem takes the per-block normality, irreducibility,
 left-canonical condition, and gauge-phase distinctness of a basis of normal
@@ -327,6 +397,16 @@ tensors as explicit hypotheses.  A source-faithful version should derive those
 per-block conditions from the single canonical-form renormalization-fixed-point
 predicate, so that the residual isometry family follows from the whole-tensor
 predicate alone, by the block-level argument of the previous section.
+
+Second, the repeated-copy index $q$ must be represented at the level at which
+the source physical isometry acts.  It cannot be collapsed into a block-diagonal
+bond tensor and then tested by literal whole-tensor transfer-map idempotence,
+because the phase-flip tensor then fails the source relation \path{AA=A} as well
+as transfer-map idempotence.  A
+source-faithful characterization should formalize the relation \path{AA=A}
+itself, or an equivalent physical-isometry predicate, and prove its precise
+relation to transfer-map idempotence after stating the necessary canonical-form
+or quotient conditions.
 
 \section{Conclusion}
 
@@ -350,17 +430,20 @@ while the contracted identity is instead
 $\sum_i (U_k^i)^\dagger U_k^i=D_k I$.  Thus the scalar normalization comparison
 is explicit.  The source trace-normalization $\tr(\Lambda)=1$ is now formalized
 for a single block by the named predicate
-\leanid{MPSTensor.IsIsometryCanonicalForm} and the theorem
 \leanid{MPSTensor.isIsometryCanonicalForm_of_rfp_nt}, with the diagonal weight
 $\Lambda_\alpha=\rho_{\alpha,\alpha}/\tr\rho$ and the square-root dressing
 $\sqrt\Lambda$ of the unit isometry.  The cross-block $\delta_{j,j'}$
 orthogonality equations of \path{eq:III_isometry} are formalized at the
 normal-tensor-block level by
-\leanid{MPSTensor.exists_residualIsometryFamily_of_isRFP_directSum}.  The only
-part not yet formalized is the extraction of the per-block normality,
+\leanid{MPSTensor.exists_residualIsometryFamily_of_isRFP_directSum}.  Two parts
+remain: the extraction of the per-block normality,
 irreducibility, left-canonical condition, and gauge-phase distinctness from a
 single canonical-form renormalization-fixed-point predicate, the hypothesis form
-of Corollary~III.cor3.
+of Corollary~III.cor3; and a faithful treatment of repeated phase copies at the
+physical-isometry level.  The tensor $A^0=\operatorname{diag}(1,-1)$ proves that the latter
+cannot be represented by a literal virtual block diagonal on a one-dimensional
+physical space: that reading fails both \path{AA=A} and whole-tensor
+transfer-map idempotence.
 
 \bibliographystyle{alpha}
 \bibliography{references}
