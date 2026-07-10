@@ -358,10 +358,16 @@ strong subadditivity for a normalized three-site reduced state.
     and $v$. Taking $v = l_h$ and expanding
     $M l_h = \sum_j T_{j,h}\, l_j$ turns the left-hand side into
     $\sum_j T_{k,j} T_{j,h} = (T^2)_{k,h}$ and the right-hand side into
-    $T_{k,h}$. For linearly independent functionals, the same argument applied
+    $T_{k,h}$. For linearly independent functionals, apply the same argument
     in the dual space, with the $r_k$ as vectors and evaluation at $l_k$ as
-    functionals, gives $(T^\top)^2 = T^\top$, and transposing back gives
-    $T^2 = T$.
+    functionals.  The dual pairing matrix therefore satisfies
+    \[
+        (T^\top)^2=T^\top.
+    \]
+    Taking transposes gives
+    \[
+        T^2=T.
+    \]
 \end{proof}
 
 % Scope restriction (linear independence): the source Lemma C.5 neither
