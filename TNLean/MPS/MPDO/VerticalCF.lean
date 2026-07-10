@@ -73,7 +73,7 @@ surrogate for the paper's vertical canonical form.
   `blockwise_insert_eq_of_mpv_agree`.
 * `blockwise_opposite_insert_eq_of_rotated_mpo_entries`:
   the preceding abstract matrices are identified explicitly with the
-  doubled-index contractions of `P H⁽ᴺ⁾`, `P H⁽ᴺ⁾ P`, and `H⁽ᴺ⁾ P`.
+  doubled-index contractions of $PH^{(N)}$, $PH^{(N)}P$, and $H^{(N)}P$.
 
 The results above supply matrix-product-vector identities and elementary
 positivity consequences, but do not give the passage from horizontal to
@@ -149,24 +149,24 @@ theorem FirstSiteActionAgree.of_sameMPV {D' : ℕ} {A : MPSTensor d D}
 /-- The doubled-index action obtained by multiplying the ket index by `P`.
 
 For the horizontal MPO contraction this is the first-site form of
-`P H⁽ᴺ⁾`.  It is the leftmost contraction in equation
-`eq1:proof.IV.12` of arXiv:1606.00608, lines 1873--1887. -/
+$PH^{(N)}$.  It is the leftmost contraction in the displayed equation of
+the proof of Proposition 4.13 of arXiv:1606.00608, lines 1873--1887. -/
 noncomputable def ketLeftAction (P : Matrix (Fin d) (Fin d) ℂ) :
     Matrix (Fin (d * d)) (Fin (d * d)) ℂ :=
   fun p q => if p.modNat = q.modNat then P p.divNat q.divNat else 0
 
 /-- The doubled-index action obtained by multiplying the bra index by `P` on
 the right.  For the horizontal MPO contraction this is the first-site form of
-`H⁽ᴺ⁾ P` in equation `eq1:proof.IV.12` of arXiv:1606.00608,
-lines 1873--1887. -/
+$H^{(N)}P$ in the displayed equation of the proof of Proposition 4.13 of
+arXiv:1606.00608, lines 1873--1887. -/
 noncomputable def braRightAction (P : Matrix (Fin d) (Fin d) ℂ) :
     Matrix (Fin (d * d)) (Fin (d * d)) ℂ :=
   fun p q => if p.divNat = q.divNat then P q.modNat p.modNat else 0
 
 /-- The doubled-index action obtained by multiplying the ket index by `P` and
 the bra index by `P` on the right.  For the horizontal MPO contraction this is
-the first-site form of `P H⁽ᴺ⁾ P` in equation `eq1:proof.IV.12` of
-arXiv:1606.00608, lines 1873--1887. -/
+the first-site form of $PH^{(N)}P$ in the displayed equation of the proof of
+Proposition 4.13 of arXiv:1606.00608, lines 1873--1887. -/
 noncomputable def ketLeftBraRightAction (P : Matrix (Fin d) (Fin d) ℂ) :
     Matrix (Fin (d * d)) (Fin (d * d)) ℂ :=
   fun p q => P p.divNat q.divNat * P q.modNat p.modNat
@@ -213,7 +213,7 @@ theorem mpv_toMPSTensor_cons_pair (M : MPOTensor d D) {N : ℕ}
     exact (finProdFinEquiv.apply_symm_apply (ρ k)).symm
 
 /-- Coefficient identity identifying the first-site doubled-index ket action
-with the matrix entries of `P H⁽ᴺ⁾`. -/
+with the matrix entries of $PH^{(N)}$. -/
 theorem ketLeftAction_mpv (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ)
     {N : ℕ} (ρ : Fin (N + 1) → Fin (d * d)) :
     ∑ q : Fin (d * d), ketLeftAction P (ρ 0) q *
@@ -236,7 +236,7 @@ theorem ketLeftAction_mpv (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ)
     exact (hj (Finset.mem_univ _)).elim
 
 /-- Coefficient identity identifying the first-site doubled-index bra action
-with the matrix entries of `H⁽ᴺ⁾ P`. -/
+with the matrix entries of $H^{(N)}P$. -/
 theorem braRightAction_mpv (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ)
     {N : ℕ} (ρ : Fin (N + 1) → Fin (d * d)) :
     ∑ q : Fin (d * d), braRightAction P (ρ 0) q *
@@ -261,7 +261,7 @@ theorem braRightAction_mpv (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ)
     exact (hi (Finset.mem_univ _)).elim
 
 /-- Coefficient identity identifying the two-sided first-site doubled-index
-action with the matrix entries of `P H⁽ᴺ⁾ P`. -/
+action with the matrix entries of $PH^{(N)}P$. -/
 theorem ketLeftBraRightAction_mpv (M : MPOTensor d D)
     (P : Matrix (Fin d) (Fin d) ℂ) {N : ℕ} (ρ : Fin (N + 1) → Fin (d * d)) :
     ∑ q : Fin (d * d), ketLeftBraRightAction P (ρ 0) q *
@@ -280,7 +280,7 @@ theorem ketLeftBraRightAction_mpv (M : MPOTensor d D)
   simp only [Function.comp_apply]
   ring
 
-/-- Entrywise equality `P H⁽ᴺ⁾ = P H⁽ᴺ⁾ P` gives the first of
+/-- Entrywise equality $PH^{(N)} = PH^{(N)}P$ gives the first of
 the two doubled-index first-site equalities used in Lemma L. -/
 theorem firstSiteActionAgree_ketLeft_ketLeftBraRight
     (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ)
@@ -297,7 +297,7 @@ theorem firstSiteActionAgree_ketLeft_ketLeftBraRight
   rw [ketLeftAction_mpv, ketLeftBraRightAction_mpv]
   exact hInv N ρ
 
-/-- Entrywise equality `P H⁽ᴺ⁾ = H⁽ᴺ⁾ P` gives the second of the
+/-- Entrywise equality $PH^{(N)} = H^{(N)}P$ gives the second of the
 two doubled-index first-site equalities used in Lemma L. -/
 theorem firstSiteActionAgree_ketLeft_braRight
     (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ)
@@ -434,7 +434,7 @@ theorem mpv_diagonalTensor_nonneg (M : MPOTensor d D) {N : ℕ}
 /-- For an MPDO, a one-sided invariant Hermitian matrix for an `N`-site density
 operator has zero opposite corner.
 
-This is equation `eq1:proof.IV.12` in the proof of Proposition 4.13 of
+This is the displayed equation in the proof of Proposition 4.13 of
 arXiv:1606.00608, lines 1873--1887.  The subsequent use of Lemma L transfers
 this operator equality back to the tensor blocks. Positivity supplies the
 Hermiticity of the density operator; the algebraic corner argument then uses
@@ -818,16 +818,16 @@ theorem blockwise_insert_eq_of_mpv_agree
 /-- **One-sided invariance becomes reduction, block by block.**
 
 Let `Yleft`, `Ycorner`, and `Yright` encode respectively the first-site
-coefficients of `P H⁽ᴺ⁾`, `P H⁽ᴺ⁾ P`, and `H⁽ᴺ⁾ P`.  If the
+coefficients of $PH^{(N)}$, $PH^{(N)}P$, and $H^{(N)}P$.  If the
 one-sided invariance gives agreement of the first two actions, while positivity
 gives agreement of the first and third actions, then Lemma L shows that the
 opposite corner vanishes on every canonical-form block: the `Yright` insertion
 equals the `Ycorner` insertion.
 
-This is the tensor-block conclusion of equation `eq1:proof.IV.12` in
-arXiv:1606.00608, Proposition 4.13, lines 1873--1887.  The two hypotheses are
-precisely the coefficient-level equalities displayed in that equation; they do
-not posit a vertical canonical decomposition. -/
+This is the tensor-block conclusion of the displayed equation in the proof
+of Proposition 4.13 of arXiv:1606.00608, lines 1873--1887.  The two
+hypotheses are precisely the coefficient-level equalities displayed in that
+equation; they do not posit a vertical canonical decomposition. -/
 theorem blockwise_opposite_insert_eq_of_mpv_agree
     {r : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ}
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -851,16 +851,17 @@ theorem blockwise_opposite_insert_eq_of_mpv_agree
 
 Suppose the horizontal doubled-index tensor of `M` has the displayed
 block-diagonal canonical form.  The entrywise identities
-`P H⁽ᴺ⁾ = P H⁽ᴺ⁾ P` and `P H⁽ᴺ⁾ = H⁽ᴺ⁾ P` then identify
+$PH^{(N)} = PH^{(N)}P$ and $PH^{(N)} = H^{(N)}P$ then identify
 the three abstract first-site matrices in Lemma L with `ketLeftAction P`,
 `ketLeftBraRightAction P`, and `braRightAction P`.  Consequently the last two
 insertions agree on every canonical-form block.
 
-This formalizes the doubled-index rotation implicit in equation
-`eq1:proof.IV.12` of arXiv:1606.00608, Proposition 4.13, lines 1873--1887.  It
-does not prove that a one-sided invariant projection for the vertically viewed
-tensor supplies the first entrywise identity; that further identification
-remains part of the horizontal-to-vertical canonical-form argument. -/
+This formalizes the doubled-index rotation implicit in the displayed
+equation of the proof of Proposition 4.13 of arXiv:1606.00608,
+lines 1873--1887.  It does not prove that a one-sided invariant projection
+for the vertically viewed tensor supplies the first entrywise identity; that
+further identification remains part of the horizontal-to-vertical
+canonical-form argument. -/
 theorem blockwise_opposite_insert_eq_of_rotated_mpo_entries
     {r : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ}
     (M : MPOTensor d D) (A : (k : Fin r) → MPSTensor (d * d) (dim k))
