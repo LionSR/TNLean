@@ -333,6 +333,25 @@ theorem choiTypeMap_vecMulVec_posSemidef_three_one_of_forall_ne_zero
     (choiTypeMap 3 1 (vecMulVec v (star v))).PosSemidef :=
   choiTypeMap_vecMulVec_posSemidef_three_one v
 
+/-- A linear map on matrices is positive once its values on all rank-one
+projectors are positive semidefinite: a positive semidefinite matrix is the
+sum of the rank-one projectors of its spectral decomposition. -/
+theorem isPositiveMap_of_forall_vecMulVec_posSemidef
+    {m : Type*} [Fintype m] [DecidableEq m]
+    (Φ : Matrix m m ℂ →ₗ[ℂ] Matrix m m ℂ)
+    (h : ∀ w : m → ℂ, (Φ (vecMulVec w (star w))).PosSemidef) :
+    IsPositiveMap Φ := by
+  intro X hX
+  rw [hX.eq_sum_vecMulVec_nonzero_eigs]
+  rw [map_sum]
+  exact Matrix.posSemidef_sum Finset.univ fun i _ => by
+    let w : m → ℂ := fun p =>
+      ((Real.sqrt (hX.1.eigenvalues i.1) : ℂ)) *
+        hX.1.eigenvectorUnitary p i.1
+    convert h w using 2
+    ext p q
+    simp [w, Matrix.vecMulVec_apply]
+
 /-- Positivity of the first Choi map.
 
 **Scope restriction:** See
@@ -340,17 +359,9 @@ theorem choiTypeMap_vecMulVec_posSemidef_three_one_of_forall_ne_zero
 only the \(d=3,n=1\) case of Wolf Chapter 3, Example 3.1, equation (3.20).
 The general range \(1\le n\le d-2\) remains separate. -/
 theorem choiTypeMap_isPositiveMap_three_one :
-    IsPositiveMap (choiTypeMap 3 1) := by
-  intro X hX
-  rw [hX.eq_sum_vecMulVec_nonzero_eigs]
-  rw [map_sum]
-  exact Matrix.posSemidef_sum Finset.univ fun i _ => by
-    let v : ZMod 3 → ℂ := fun p =>
-      ((Real.sqrt (hX.1.eigenvalues i.1) : ℂ)) *
-        hX.1.eigenvectorUnitary p i.1
-    convert choiTypeMap_vecMulVec_posSemidef_three_one v using 2
-    ext p q
-    simp [v, Matrix.vecMulVec_apply]
+    IsPositiveMap (choiTypeMap 3 1) :=
+  isPositiveMap_of_forall_vecMulVec_posSemidef _
+    choiTypeMap_vecMulVec_posSemidef_three_one
 
 /-! ## The top of Wolf's range: `n = d - 2`
 
@@ -570,25 +581,6 @@ theorem choiTypeMap_vecMulVec_posSemidef_sub_two (hd : 3 ≤ d)
         Finset.sum_congr rfl fun i _ => by
           rw [choiTypeRankOneWeight_sub_two hd]
     _ ≤ 1 := hperm
-
-/-- A linear map on matrices is positive once its values on all rank-one
-projectors are positive semidefinite: a positive semidefinite matrix is the
-sum of the rank-one projectors of its spectral decomposition. -/
-theorem isPositiveMap_of_forall_vecMulVec_posSemidef
-    {m : Type*} [Fintype m] [DecidableEq m]
-    (Φ : Matrix m m ℂ →ₗ[ℂ] Matrix m m ℂ)
-    (h : ∀ w : m → ℂ, (Φ (vecMulVec w (star w))).PosSemidef) :
-    IsPositiveMap Φ := by
-  intro X hX
-  rw [hX.eq_sum_vecMulVec_nonzero_eigs]
-  rw [map_sum]
-  exact Matrix.posSemidef_sum Finset.univ fun i _ => by
-    let w : m → ℂ := fun p =>
-      ((Real.sqrt (hX.1.eigenvalues i.1) : ℂ)) *
-        hX.1.eigenvectorUnitary p i.1
-    convert h w using 2
-    ext p q
-    simp [w, Matrix.vecMulVec_apply]
 
 /-- **Wolf Chapter 3, Example 3.1, equation (3.20), case `n = d - 2`.**  The
 Choi-type map at the top of Wolf's range is positive: for `3 ≤ d`, the map

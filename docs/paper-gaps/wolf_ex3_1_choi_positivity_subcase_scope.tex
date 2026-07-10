@@ -103,12 +103,41 @@ variational: it combines Nowosad's uniqueness theorem for critical points of
 \(x\mapsto\sum_i x_i/(Sx)_i\) on the positive cone, a spectral condition on
 the Hessian at the constant vector (checked through the eigenvalues of the
 cyclic matrix \(S\)), and an analysis of the boundary of the projective
-simplex with a combinatorial count of vanishing summands.  No term-by-term
-convexity or AM--GM bound with coefficients independent of \(x\) can settle
-the middle range, so a formalization must either follow the variational route
-or find a new proof.  This is tracked by \ghissue{3622}.  The
-indecomposability assertion of the same source paragraph is separate and is
-tracked by \ghissue{3623}.
+simplex with a combinatorial count of vanishing summands.
+
+Two verifiable computations locate the obstruction to elementary summand
+bounds in the remaining range.  First, the estimate is tight in two distinct
+regimes: at the constant vector, where every summand equals \(1/d\), and
+along the geometric configurations \(x_i=t^i\) (\(i=0,\dots,d-1\)) as
+\(t\to\infty\), where each of the \(d-n\) summands whose backward window
+avoids the wrap-around tends to \(1/(d-n)\) and the remaining summands
+vanish, so the sum again approaches \(1\).  A usable summand bound must be
+exact in both regimes.  Second, the argument proving \(n=d-2\) does not
+extend.  With \(m=d-n\) and
+\(\delta_i=\sum_{k=1}^{m-1}(x_i-x_{i+k})\), the weight is \(a_i=T+\delta_i\)
+for every \(n\), and the estimate is equivalent (for \(T>0\) and positive
+weights \(a_i\)) to \(\sum_i x_i\delta_i^2/a_i\le\sum_i x_i\delta_i\).  The proved case reaches
+this through the two intermediate steps
+\begin{align}
+  \sum_i \frac{x_i\delta_i^2}{a_i}\le\frac1m\sum_i\delta_i^2
+  \qquad\text{and}\qquad
+  \frac1m\sum_i\delta_i^2
+  \le\frac12\sum_{k=1}^{m-1}\sum_i\bigl(x_i-x_{i+k}\bigr)^2
+  =\sum_i x_i\delta_i .
+\end{align}
+The first step, from \(a_i\ge m x_i\), holds for every \(m\); the second, in
+Fourier form
+\(\bigl|\sum_{k=1}^{m-1}(1-\zeta^k)\bigr|^2
+\le\tfrac m2\sum_{k=1}^{m-1}|1-\zeta^k|^2\) over \(d\)-th roots of unity
+\(\zeta\), holds with equality for \(m=2\) but fails for \(m=3\) at
+\(\zeta=e^{i\pi/3}\), where the two sides are \(7\) and \(6\).  This failure
+is consistent with the historical record: the case \((d,n)=(5,2)\) required a
+separate argument~\cite{Osaka1991Indecomposable}, and the full range was
+settled only by Yamagami's variational proof.  A formalization of the
+remaining range must therefore either follow the variational route or find a
+new proof.  This is tracked by \ghissue{3622}.  The indecomposability
+assertion of the same source paragraph is separate and is tracked by
+\ghissue{3623}.
 
 \section{Classification}
 
