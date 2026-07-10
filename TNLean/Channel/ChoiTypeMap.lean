@@ -23,10 +23,13 @@ where `D` projects a matrix to its diagonal part.
 
 The main theorem in this file is the exact action on rank-one projectors.  This
 is the algebraic reduction needed for the positivity proof of Wolf Example 3.1.
-For the first case \(d=3,n=1\), this file proves positivity.  The general
-positivity theorem still requires a genuine cyclic reciprocal inequality for
-the diagonal weights; it does not follow merely from equality of the total
-numerator and denominator weights.  Indecomposability is not proved here.
+This file proves positivity for the case \(d=3,n=1\) and, more generally, for
+the top of Wolf's range, \(n=d-2\) with \(d\ge3\); the scalar input for the
+latter is a reciprocal inequality valid for an arbitrary permutation.  The
+remaining range \(1\le n\le d-3\) still requires the general cyclic reciprocal
+inequality for the diagonal weights; it does not follow merely from equality of
+the total numerator and denominator weights.  Indecomposability is not proved
+here.
 
 ## References
 
@@ -348,5 +351,259 @@ theorem choiTypeMap_isPositiveMap_three_one :
     convert choiTypeMap_vecMulVec_posSemidef_three_one v using 2
     ext p q
     simp [v, Matrix.vecMulVec_apply]
+
+/-! ## The top of Wolf's range: `n = d - 2`
+
+For `n = d - 2` the backward window `x_{i-1}, …, x_{i-n}` misses exactly the
+entries at `i` and `i + 1`, so the Choi diagonal weight collapses to
+\(a_i = T + x_i - x_{i+1}\) with \(T = \sum_j x_j\).  The cyclic reciprocal
+estimate for this case follows from a reciprocal inequality that holds for an
+arbitrary permutation in place of the cyclic shift.  This case of Wolf's
+positivity assertion is classical: it is due to Ando (*Positivity of certain
+maps*, seminar notes, 1985), as recorded by Yamagami
+[*Cyclic inequalities*, Proc. Amer. Math. Soc. 118 (1993), 521–527], who
+proved the estimate for the whole range \(1\le n\le d-1\). -/
+
+/-- Elementary summand bound for the permutation reciprocal inequality: if
+`a + b ≤ T`, then \(a/(T+a-b) \le (aT - a(a-b) + (a-b)^2/2)/T^2\), because the
+difference of the two sides is \((a-b)^2 (T-a-b) / 2\) up to the positive
+denominators.  Zero denominators are read by the convention `x / 0 = 0`. -/
+private theorem perm_reciprocal_term_le {T a b : ℝ} (ha : 0 ≤ a)
+    (hT : 0 < T) (hpair : a + b ≤ T) :
+    a / (T + a - b) ≤ (a * T - a * (a - b) + (a - b) ^ 2 / 2) / T ^ 2 := by
+  rcases eq_or_lt_of_le (show (0 : ℝ) ≤ T + a - b by linarith) with h0 | hpos
+  · have ha0 : a = 0 := by linarith
+    subst ha0
+    rw [zero_div]
+    have hnum : (0 : ℝ) * T - 0 * (0 - b) + (0 - b) ^ 2 / 2 = b ^ 2 / 2 := by ring
+    rw [hnum]
+    positivity
+  · rw [div_le_div_iff₀ hpos (by positivity)]
+    nlinarith [mul_nonneg (sq_nonneg (a - b)) (sub_nonneg.2 hpair)]
+
+/-- **The permutation reciprocal inequality.**  For nonnegative reals `x` with
+total mass \(T=\sum_j x_j\) and any permutation \(\sigma\),
+\[
+  \sum_i \frac{x_i}{T + x_i - x_{\sigma(i)}} \le 1 ,
+\]
+with zero-denominator summands read as `0`.  Each summand is bounded by
+\((x_iT - x_i\delta_i + \delta_i^2/2)/T^2\) with \(\delta_i=x_i-x_{\sigma(i)}\),
+and the bounds sum to `1` exactly because
+\(\sum_i x_i\delta_i = \tfrac12\sum_i \delta_i^2\) for a permutation.
+
+Applied with \(\sigma\) the cyclic shift on `ZMod d`, this is the case
+`n = d - 2` of the cyclic reciprocal estimate behind Wolf Chapter 3,
+Example 3.1, equation (3.20); that case is classical (Ando 1985; see Yamagami,
+Proc. Amer. Math. Soc. 118 (1993), 521–527). -/
+theorem perm_reciprocal_sum_le_one {ι : Type*} [Fintype ι] (σ : Equiv.Perm ι)
+    (x : ι → ℝ) (hx : ∀ i, 0 ≤ x i) :
+    ∑ i, x i / ((∑ j, x j) + x i - x (σ i)) ≤ 1 := by
+  classical
+  set T : ℝ := ∑ j, x j with hTdef
+  rcases eq_or_lt_of_le (Finset.sum_nonneg fun j _ => hx j : (0 : ℝ) ≤ T)
+    with hT | hTpos
+  · have hx0 : ∀ i ∈ Finset.univ, x i = 0 :=
+      (Finset.sum_eq_zero_iff_of_nonneg fun j _ => hx j).1 hT.symm
+    have hzero : ∀ i ∈ Finset.univ,
+        x i / (T + x i - x (σ i)) = 0 := fun i hi => by
+      rw [hx0 i hi, zero_div]
+    rw [Finset.sum_congr rfl hzero, Finset.sum_const_zero]
+    exact zero_le_one
+  · have key : ∀ i ∈ Finset.univ, x i / (T + x i - x (σ i)) ≤
+        (x i * T - x i * (x i - x (σ i)) + (x i - x (σ i)) ^ 2 / 2) / T ^ 2 := by
+      intro i _
+      by_cases hfix : σ i = i
+      · rw [hfix]
+        have hT' : T + x i - x i = T := by ring
+        have hnum : x i * T - x i * (x i - x i) + (x i - x i) ^ 2 / 2
+            = T * x i := by ring
+        rw [hT', hnum, pow_two, mul_div_mul_left _ _ (ne_of_gt hTpos)]
+      · have hpair : x i + x (σ i) ≤ T := by
+          have hsum := Finset.sum_le_sum_of_subset_of_nonneg
+            (Finset.subset_univ ({i, σ i} : Finset ι)) fun j _ _ => hx j
+          rwa [Finset.sum_pair (Ne.symm hfix)] at hsum
+        exact perm_reciprocal_term_le (hx i) hTpos hpair
+    have hsq : ∑ i, x (σ i) ^ 2 = ∑ i, x i ^ 2 :=
+      Equiv.sum_comp σ fun j => x j ^ 2
+    have hkey : ∑ i, (x i - x (σ i)) ^ 2 =
+        2 * ∑ i, x i * (x i - x (σ i)) := by
+      have hcross : ∑ i, ((x i - x (σ i)) ^ 2 - 2 * (x i * (x i - x (σ i))))
+          = ∑ i, (x (σ i) ^ 2 - x i ^ 2) :=
+        Finset.sum_congr rfl fun i _ => by ring
+      rw [Finset.sum_sub_distrib, ← Finset.mul_sum] at hcross
+      rw [Finset.sum_sub_distrib, hsq, sub_self] at hcross
+      linarith [hcross]
+    have htotal : ∑ i,
+        (x i * T - x i * (x i - x (σ i)) + (x i - x (σ i)) ^ 2 / 2) / T ^ 2
+          = 1 := by
+      rw [← Finset.sum_div]
+      have hnum : ∑ i,
+          (x i * T - x i * (x i - x (σ i)) + (x i - x (σ i)) ^ 2 / 2)
+            = T ^ 2 := by
+        rw [Finset.sum_add_distrib, Finset.sum_sub_distrib, ← Finset.sum_mul,
+          ← Finset.sum_div, ← hTdef, hkey]
+        ring
+      rw [hnum, div_self (by positivity)]
+    calc ∑ i, x i / (T + x i - x (σ i))
+        ≤ ∑ i, (x i * T - x i * (x i - x (σ i)) + (x i - x (σ i)) ^ 2 / 2)
+            / T ^ 2 := Finset.sum_le_sum key
+      _ = 1 := htotal
+
+/-- For `3 ≤ d`, the backward shifts by `1, …, d - 2` from `i` run over every
+index of `ZMod d` except `i` itself and `i + 1`. -/
+theorem sum_shift_window_eq_sub_pair (hd : 3 ≤ d) (x : ZMod d → ℝ)
+    (i : ZMod d) :
+    ∑ k : Fin (d - 2), x (i - ((k.1 + 1 : ℕ) : ZMod d)) =
+      (∑ j, x j) - (x i + x (i + 1)) := by
+  classical
+  have hne : i ≠ i + 1 := by
+    intro h
+    have h1 : (0 : ZMod d) = 1 := by
+      have := congrArg (fun t => t - i) h
+      simpa using this
+    rw [eq_comm, ZMod.one_eq_zero_iff] at h1
+    omega
+  have hmain : ∑ k : Fin (d - 2), x (i - ((k.1 + 1 : ℕ) : ZMod d)) =
+      ∑ c ∈ Finset.univ \ ({i, i + 1} : Finset (ZMod d)), x c := by
+    refine Finset.sum_bij' (fun k _ => i - ((k.1 + 1 : ℕ) : ZMod d))
+      (fun c hc => ⟨(i - c).val - 1, ?_⟩) ?_ ?_ ?_ ?_ ?_
+    · -- the inverse lands in `Fin (d - 2)`
+      rw [Finset.mem_sdiff, Finset.mem_insert, Finset.mem_singleton] at hc
+      obtain ⟨-, hc2⟩ := hc
+      have hci : c ≠ i := fun h => hc2 (Or.inl h)
+      have hci1 : c ≠ i + 1 := fun h => hc2 (Or.inr h)
+      have hval_ne_zero : (i - c).val ≠ 0 := by
+        intro h0
+        have hic : i - c = 0 := (ZMod.val_eq_zero _).1 h0
+        exact hci (sub_eq_zero.1 hic).symm
+      have hval_lt : (i - c).val < d := ZMod.val_lt _
+      have hval_ne_top : (i - c).val ≠ d - 1 := by
+        intro hval
+        have hcast : ((i - c).val : ZMod d) = i - c :=
+          ZMod.natCast_rightInverse (i - c)
+        rw [hval] at hcast
+        have hd1 : ((d - 1 : ℕ) : ZMod d) = -1 := by
+          have h1d : 1 ≤ d := by omega
+          push_cast [Nat.cast_sub h1d]
+          simp
+        rw [hd1] at hcast
+        exact hci1 (by linear_combination hcast)
+      omega
+    · -- forward map lands in the complement of the pair
+      intro k _
+      rw [Finset.mem_sdiff, Finset.mem_insert, Finset.mem_singleton]
+      have hk : k.1 + 1 < d := by omega
+      refine ⟨Finset.mem_univ _, ?_⟩
+      rintro (h | h)
+      · have hzero : ((k.1 + 1 : ℕ) : ZMod d) = 0 := by
+          have := congrArg (fun t => i - t) h
+          simpa using this
+        rw [ZMod.natCast_eq_zero_iff] at hzero
+        have := Nat.le_of_dvd (by omega) hzero
+        omega
+      · have hzero : ((k.1 + 2 : ℕ) : ZMod d) = 0 := by
+          have hstep : ((k.1 + 1 : ℕ) : ZMod d) = -1 := by
+            linear_combination -h
+          push_cast at hstep ⊢
+          linear_combination hstep
+        rw [ZMod.natCast_eq_zero_iff] at hzero
+        have := Nat.le_of_dvd (by omega) hzero
+        omega
+    · -- the inverse lands in `Fin (d - 2)` membership (trivial)
+      intro c _
+      exact Finset.mem_univ _
+    · -- left inverse
+      intro k _
+      have hk : k.1 + 1 < d := by omega
+      apply Fin.ext
+      simp only [sub_sub_cancel]
+      rw [ZMod.val_cast_of_lt hk]
+      omega
+    · -- right inverse
+      intro c hc
+      rw [Finset.mem_sdiff, Finset.mem_insert, Finset.mem_singleton] at hc
+      obtain ⟨-, hc2⟩ := hc
+      have hci : c ≠ i := fun h => hc2 (Or.inl h)
+      have hval_ne_zero : (i - c).val ≠ 0 := by
+        intro h0
+        have hic : i - c = 0 := (ZMod.val_eq_zero _).1 h0
+        exact hci (sub_eq_zero.1 hic).symm
+      simp only [Nat.sub_add_cancel (Nat.one_le_iff_ne_zero.2 hval_ne_zero)]
+      rw [ZMod.natCast_rightInverse (i - c), sub_sub_cancel]
+    · -- summand values agree
+      intro k _
+      rfl
+  rw [hmain, Finset.sum_sdiff_eq_sub (Finset.subset_univ _),
+    Finset.sum_pair hne]
+
+/-- **Wolf Chapter 3, Example 3.1, equation (3.20), case `n = d - 2`.**  The
+Choi rank-one diagonal weight collapses to
+\(a_i = T + |v_i|^2 - |v_{i+1}|^2\) with \(T=\sum_j |v_j|^2\). -/
+theorem choiTypeRankOneWeight_sub_two (hd : 3 ≤ d) (v : ZMod d → ℂ)
+    (i : ZMod d) :
+    choiTypeRankOneWeight d (d - 2) v i =
+      (∑ j, ‖v j‖ ^ 2) + ‖v i‖ ^ 2 - ‖v (i + 1)‖ ^ 2 := by
+  have hcast : ((d - 2 : ℕ) : ℝ) = (d : ℝ) - 2 := by
+    have h2 : 2 ≤ d := by omega
+    push_cast [Nat.cast_sub h2]
+    ring
+  have hshift := sum_shift_window_eq_sub_pair hd (fun j => ‖v j‖ ^ 2) i
+  simp only [choiTypeRankOneWeight, hcast]
+  rw [hshift]
+  ring
+
+/-- Rank-one positivity at the top of Wolf's range: for `3 ≤ d` and
+`n = d - 2`, the image \(T_C(|v\rangle\langle v|)\) is positive semidefinite
+(Wolf Chapter 3, Example 3.1, equation (3.20)).  The scalar input is the
+permutation reciprocal inequality applied to the cyclic shift. -/
+theorem choiTypeMap_vecMulVec_posSemidef_sub_two (hd : 3 ≤ d)
+    (v : ZMod d → ℂ) :
+    (choiTypeMap d (d - 2) (vecMulVec v (star v))).PosSemidef := by
+  refine choiTypeMap_vecMulVec_posSemidef_of_weight_sum_le_one
+    (d - 2) v le_rfl ?_
+  have hperm := perm_reciprocal_sum_le_one (Equiv.addRight (1 : ZMod d))
+    (fun j => ‖v j‖ ^ 2) fun j => sq_nonneg _
+  simp only [Equiv.coe_addRight] at hperm
+  calc ∑ i, ‖v i‖ ^ 2 / choiTypeRankOneWeight d (d - 2) v i
+      = ∑ i, ‖v i‖ ^ 2 /
+          ((∑ j, ‖v j‖ ^ 2) + ‖v i‖ ^ 2 - ‖v (i + 1)‖ ^ 2) :=
+        Finset.sum_congr rfl fun i _ => by
+          rw [choiTypeRankOneWeight_sub_two hd]
+    _ ≤ 1 := hperm
+
+/-- A linear map on matrices is positive once its values on all rank-one
+projectors are positive semidefinite: a positive semidefinite matrix is the
+sum of the rank-one projectors of its spectral decomposition. -/
+theorem isPositiveMap_of_forall_vecMulVec_posSemidef
+    {m : Type*} [Fintype m] [DecidableEq m]
+    (Φ : Matrix m m ℂ →ₗ[ℂ] Matrix m m ℂ)
+    (h : ∀ w : m → ℂ, (Φ (vecMulVec w (star w))).PosSemidef) :
+    IsPositiveMap Φ := by
+  intro X hX
+  rw [hX.eq_sum_vecMulVec_nonzero_eigs]
+  rw [map_sum]
+  exact Matrix.posSemidef_sum Finset.univ fun i _ => by
+    let w : m → ℂ := fun p =>
+      ((Real.sqrt (hX.1.eigenvalues i.1) : ℂ)) *
+        hX.1.eigenvectorUnitary p i.1
+    convert h w using 2
+    ext p q
+    simp [w, Matrix.vecMulVec_apply]
+
+/-- **Wolf Chapter 3, Example 3.1, equation (3.20), case `n = d - 2`.**  The
+Choi-type map at the top of Wolf's range is positive: for `3 ≤ d`, the map
+\(T_C\) with `n = d - 2` sends every positive semidefinite matrix to a
+positive semidefinite matrix.
+
+**Scope restriction:** See
+`docs/paper-gaps/wolf_ex3_1_choi_positivity_subcase_scope.tex`.  This proves
+the case `n = d - 2` of the positivity assertion for every `d ≥ 3`, subsuming
+the earlier \(d=3,n=1\) case.  The remaining range \(1\le n\le d-3\) is still
+open; its classical proof is the variational argument of Yamagami
+[Proc. Amer. Math. Soc. 118 (1993), 521–527]. -/
+theorem choiTypeMap_isPositiveMap_sub_two (hd : 3 ≤ d) :
+    IsPositiveMap (choiTypeMap d (d - 2)) :=
+  isPositiveMap_of_forall_vecMulVec_posSemidef _ fun w =>
+    choiTypeMap_vecMulVec_posSemidef_sub_two hd w
 
 end Matrix
