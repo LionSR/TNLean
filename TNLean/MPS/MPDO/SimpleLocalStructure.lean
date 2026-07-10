@@ -64,8 +64,8 @@ arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete).
 - `MPOTensor.SectorPairingData.mul_self_eq_self` /
   `MPOTensor.SectorPairingData.linearIndependent_l`: idempotence of the sector
   trace matrix from the zero-correlation-length identity, and linear
-  independence of the sector tensors from primitivity and a block-support
-  decomposition.
+  independence of the sector tensors from primitivity and an independent
+  family of subspaces containing each sector tensor.
 - `MPOTensor.sal_zcl_implies_rank_one_T_of_pairing_idempotent` /
   `MPOTensor.sal_zcl_implies_rank_one_T_of_sector_supports`: the rank-one
   factorization at lines 1484--1499, derived from the zero-correlation-length
@@ -569,8 +569,8 @@ arXiv:1606.00608, lines 1484--1499 neither assumes nor derives
 linear independence of the sector tensors; see the marker on
 `Matrix.mul_self_eq_self_of_pairing_idempotent` and
 `docs/paper-gaps/cpgsv17_pf_rank_one.tex`.  The hypothesis `hl` is discharged
-by `SectorPairingData.linearIndependent_l` once the sector tensors carry a
-block-support decomposition. -/
+by `SectorPairingData.linearIndependent_l` once each sector tensor lies in the
+corresponding member of an independent family of subspaces. -/
 theorem mul_self_eq_self (data : SectorPairingData T V)
     (hl : LinearIndependent ℝ data.l) : T * T = T :=
   Matrix.mul_self_eq_self_of_pairing_idempotent data.pairing hl
@@ -598,12 +598,12 @@ theorem l_ne_zero (data : SectorPairingData T V)
   rw [data.pairing j k, hzero, map_zero] at hj
   exact lt_irrefl 0 hj
 
-/-- Linear independence of the closed sector tensors from a block-support
-decomposition: if each $|l_k)$ lies in its own member of an independent family
-of subspaces of $V$ and the sector trace matrix is primitive, then the family
-$|l_k)$ is linearly independent.
+/-- Linear independence of the closed sector tensors from an independent family
+of subspaces: if each $|l_k)$ lies in the corresponding member of an independent
+family of subspaces of $V$ and the sector trace matrix is primitive, then the
+family $|l_k)$ is linearly independent.
 
-**Scope restriction (block supports):** the subspace family is not displayed
+**Scope restriction (independent subspaces):** the subspace family is not displayed
 in arXiv:1606.00608. Lines 1436--1448 give a sector splitting of the physical
 indices, but the closed tensors $|l_k)$ at lines 1473--1477 live in a common
 bond space after the physical sector legs are contracted. Whether the
@@ -629,15 +629,15 @@ $T_{k,h}=a_kb_h$ with $\sum_k a_kb_k=1$, the conclusion at lines 1484--1499.
 Unlike the positive-semidefinite variant
 `MPOTensor.sal_zcl_implies_rank_one_T_of_posSemidef`, the constant trace
 powers are derived, not assumed. Primitivity of $T$ is not needed once linear
-independence is assumed. It enters the block-support form
+independence is assumed. It enters the independent-subspace form
 `MPOTensor.sal_zcl_implies_rank_one_T_of_sector_supports`, where it makes
 the closed sector tensors nonzero.
 
 **Scope restriction (linear independence):** the source lemma neither assumes
 nor derives linear independence of the sector tensors; documented in
 `docs/paper-gaps/cpgsv17_pf_rank_one.tex`.  The hypothesis `hl` is discharged
-by `SectorPairingData.linearIndependent_l` from a block-support
-decomposition. -/
+by `SectorPairingData.linearIndependent_l` when each sector tensor lies in the
+corresponding member of an independent family of subspaces. -/
 theorem sal_zcl_implies_rank_one_T_of_pairing_idempotent
     {V : Type*} [AddCommGroup V] [Module ℝ V]
     (T : Matrix (Fin n) (Fin n) ℝ)
@@ -656,9 +656,9 @@ theorem sal_zcl_implies_rank_one_T_of_pairing_idempotent
 
 This is the rank-one conclusion at arXiv:1606.00608, lines 1484--1499, with
 linear independence of the closed sector tensors derived from primitivity and
-a block-support decomposition.
+an independent family of subspaces containing the respective sector tensors.
 
-**Scope restriction (block supports):** the subspace family carrying the
+**Scope restriction (independent subspaces):** the subspace family carrying the
 closed sector tensors is not displayed in arXiv:1606.00608; documented in
 `docs/paper-gaps/cpgsv17_pf_rank_one.tex`. -/
 theorem sal_zcl_implies_rank_one_T_of_sector_supports
