@@ -1271,6 +1271,51 @@ step the two pieces are.
     whole space $W = \C^{D}$, which is invariant under every member of $S$.
 \end{proof}
 
+The irreducibility notion just used is simplicity in the language of modules. The
+members of $S$ act on $\C^{D}$ as the operators their matrices represent, making
+$\C^{D}$ a module over the algebra $S$; a subspace of $\C^{D}$ is closed under this
+action precisely when it is invariant under every member of $S$.
+
+\begin{lemma}[Irreducible invariant subspaces are the simple submodules]%
+    \label{lem:starSubalgebra_irreducible_iff_simple}
+    \lean{StarSubalgebra.isInvariantSubspace_iff_exists_restrictScalars,
+      StarSubalgebra.isIrreducibleSubspace_restrictScalars_iff}
+    \leanok
+    \uses{def:starSubalgebra_irreducibleSubspace}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$, acting on $\C^{D}$. The subspaces of
+    $\C^{D}$ closed under the action of $S$ are exactly the invariant subspaces,
+    and an invariant subspace is irreducible under $S$ precisely when, as a module
+    over $S$, it is simple: nonzero, with no submodule other than $\{0\}$ and
+    itself.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:starSubalgebra_irreducibleSubspace}
+    A subspace closed under the action of $S$ is invariant, since each member of
+    $S$ maps it into itself; conversely an invariant subspace is closed under the
+    action of every member of $S$ and under the complex scalars, which lie in $S$.
+    Under this correspondence the submodules contained in an invariant subspace
+    $W$ are exactly the invariant subspaces contained in $W$, so irreducibility of
+    $W$ and simplicity of $W$ as a module ask the same of them.
+\end{proof}
+
+\begin{lemma}[Euclidean space is a semisimple module over the subalgebra]%
+    \label{lem:starSubalgebra_isSemisimpleModule}
+    \lean{StarSubalgebra.isSemisimpleModule_euclideanSpace}
+    \leanok
+    \uses{lem:starSubalgebra_isSemisimpleRing}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$. As a module over $S$, the space
+    $\C^{D}$ is semisimple: every submodule admits a complementary submodule.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:starSubalgebra_isSemisimpleRing}
+    The ring $S$ is semisimple (Lemma~\ref{lem:starSubalgebra_isSemisimpleRing}),
+    and every module over a semisimple ring is semisimple.
+\end{proof}
+
 The next step towards the structure theorem groups the irreducible pieces by
 isomorphism type. The grouping is governed by Schur's lemma: a map commuting with
 $S$ between two pieces is either zero or an isomorphism, and over the complex
