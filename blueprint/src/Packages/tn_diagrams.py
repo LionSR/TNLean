@@ -51,6 +51,7 @@ _DIAGRAM_ARGS: dict[str, str] = {
     "TNMPOLocalPurification": "",
     "TNMPORenormalizationTS": "",
     "TNEtaSectorDecomposition": "",
+    "TNMPDOInverseMapThreeSiteContraction": "",
     "TNGaugeConjugation": "left physical right",
     "TNPhysicalRealization": "virtual physical",
     "TNLinearTwist": "twist label",
