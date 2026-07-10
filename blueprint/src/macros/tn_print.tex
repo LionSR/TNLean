@@ -126,8 +126,8 @@
         \draw[tn leg] (tnAc.east) -- ++(0.62,0);
         \TN@upleg{tnA}{0.48}
         \TN@downleg{tnAc}{0.48}
-        \draw[tn phys leg, densely dashed, rounded corners]
-            (tnA.south) -- (0,0) -- (0.78,0) -- (0.78,-0.52) -- (tnAc.east);
+        \draw[tn phys leg, densely dashed]
+            (tnA.east) .. controls (0.88,0.52) and (0.88,-0.52) .. (tnAc.east);
         \node at (-0.28,0.82) {$A$};
         \node at (-0.32,-0.82) {$\overline A$};
         \node at (0.95,0) {$k$};
