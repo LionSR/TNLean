@@ -306,38 +306,11 @@ theorem smul_one_sub_hermitian_spectral
       (↑hM.eigenvectorUnitary : Matrix n n ℂ) *
       Matrix.diagonal (fun j => (↑(c - hM.eigenvalues j) : ℂ)) *
       (↑hM.eigenvectorUnitary : Matrix n n ℂ)ᴴ := by
-  set U : Matrix n n ℂ := ↑hM.eigenvectorUnitary
-  have hUU : U * Uᴴ = 1 := by
-    simpa [U, Matrix.star_eq_conjTranspose] using
-      (Unitary.mul_star_self_of_mem hM.eigenvectorUnitary.prop)
-  have h_cI : (↑c : ℂ) • (1 : Matrix n n ℂ) =
-      U * ((↑c : ℂ) • 1) * Uᴴ := by
-    calc
-      (↑c : ℂ) • (1 : Matrix n n ℂ) = (↑c : ℂ) • (U * Uᴴ) := by
-        rw [hUU]
-      _ = U * ((↑c : ℂ) • 1) * Uᴴ := by
-          rw [Matrix.mul_smul, Matrix.mul_one, smul_mul_assoc]
-  have hspec :
-      M = U * Matrix.diagonal (fun j => (↑(hM.eigenvalues j) : ℂ)) * Uᴴ := by
-    simpa [U, Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose,
-      Function.comp_def] using hM.spectral_theorem
-  calc
-    (↑c : ℂ) • (1 : Matrix n n ℂ) - M
-        = U * ((↑c : ℂ) • 1) * Uᴴ -
-            U * Matrix.diagonal (fun j => (↑(hM.eigenvalues j) : ℂ)) * Uᴴ := by
-              conv_lhs =>
-                rw [hspec]
-                rw [h_cI]
-    _ = U * ((↑c : ℂ) • 1 -
-          Matrix.diagonal (fun j => (↑(hM.eigenvalues j) : ℂ))) * Uᴴ := by
-          noncomm_ring
-    _ = U * Matrix.diagonal (fun j => ↑(c - hM.eigenvalues j)) * Uᴴ := by
-          congr 1
-          congr 1
-          rw [Matrix.smul_one_eq_diagonal, Matrix.diagonal_sub]
-          congr 1
-          ext i
-          simp [Complex.ofReal_sub]
+  rw [← neg_sub M ((↑c : ℂ) • 1), hermitian_sub_scalar_spectral hM c, ← Matrix.neg_mul,
+    ← Matrix.mul_neg, Matrix.diagonal_neg]
+  congr 2
+  ext j
+  simp [Complex.ofReal_sub, neg_sub]
 
 /-- A Hermitian matrix is bounded above by its largest eigenvalue times the
 identity. -/
