@@ -129,8 +129,8 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     \emph{normal tensor} if, after the spectral-radius normalization
     of~\cite{Cirac2016MPDO_arXiv}, (i)~$A$ admits no nontrivial invariant
     orthogonal projection and (ii)~the associated CPM
-    $\E_A(X) = \sum_i A^i X (A^i)^\dagger$ has peripheral spectrum
-    $\sigma_\partial(\E_A)=\{1\}$.
+    $\E_A(X) = \sum_i A^i X (A^i)^\dagger$ has spectral radius
+    $r(\E_A)=1$ and peripheral spectrum $\sigma_\partial(\E_A)=\{1\}$.
 \end{definition}
 
 \begin{remark}
@@ -151,9 +151,10 @@ Definition~\ref{def:is_normal_canonical_form}, and the global weight
 normalization is invoked as a separate source hypothesis where needed.
 
 \begin{remark}[Relation to the strong predicates]
-    A tensor $A$ which is both irreducible
-    (Definition~\ref{def:irreducible_tensor}) and has primitive transfer map is
-    normal in the sense of Definition~\ref{def:nt_cpsv}. The reverse
+    A tensor $A$ which is irreducible
+    (Definition~\ref{def:irreducible_tensor}), has transfer map of spectral
+    radius one, and has primitive transfer map is normal in the sense of
+    Definition~\ref{def:nt_cpsv}. The reverse
     implications from the stronger predicates of
     Definition~\ref{def:is_normal_canonical_form} and of Chapter~\ref{ch:bnt}
     require the fundamental-theorem step or the algebraic-to-spectral normality
@@ -547,17 +548,20 @@ the resulting splitting decomposes any tensor into irreducible blocks.
 
 \begin{proof}
     \leanok
-    \uses{def:nt_cpsv}
+    \uses{def:nt_cpsv, thm:spectral_radius_pf_irred}
     The rescaling identity
     \[
         \E_{r^{-1/2}B}(X) = r^{-1}\,\E_B(X)
     \]
     gives $\E_{r^{-1/2}B}(\rho) = r^{-1}\cdot r\rho = \rho$, so $\rho$ is a
-    positive-definite fixed point of $\E_{r^{-1/2}B}$. The eigenvalues of
-    modulus one of $\E_{r^{-1/2}B}$ are the eigenvalues of $\E_B$ of modulus
-    $r$, divided by $r$; by hypothesis the only such eigenvalue is one, so
-    the peripheral eigenvalue set is $\{1\}$. Irreducibility is unchanged by
-    a nonzero rescaling.
+    positive-definite fixed point of $\E_{r^{-1/2}B}$. The rescaled map remains
+    irreducible and completely positive, so
+    Theorem~\ref{thm:spectral_radius_pf_irred} identifies its spectral radius
+    with the eigenvalue one. The eigenvalues of modulus one of
+    $\E_{r^{-1/2}B}$ are the eigenvalues of $\E_B$ of modulus $r$, divided by
+    $r$; by hypothesis the only such eigenvalue is one, so the peripheral
+    eigenvalue set is $\{1\}$. Irreducibility is unchanged by a nonzero
+    rescaling.
 \end{proof}
 
 \begin{theorem}[Sufficient condition for canonical form]
