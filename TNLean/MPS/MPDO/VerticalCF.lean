@@ -598,14 +598,18 @@ $U \widetilde M_{ab} U^\dagger = (\bigoplus_\alpha \mu_\alpha \otimes M_\alpha)_
 The right-hand side keeps the multiplicities `mult α` and the diagonal
 entries `ω α k` explicit; the trace coefficients `m_α = tr μ_α` of this
 decomposition are the ones consumed by the renormalization fixed-point
-characterization at arXiv:1606.00608, line 1956. -/
+characterization at arXiv:1606.00608, line 1956.  Every basis tensor appears
+with at least one copy: each `μ_α` is a positive diagonal matrix of size
+`mult α ≥ 1`, matching arXiv:1606.00608, line 1901, where the sector `(α, 1)`
+exists for every `α`. -/
 def IsVerticalCF (M : MPOTensor d D) : Prop :=
   ∃ (g : ℕ) (dim : Fin g → ℕ) (mult : Fin g → ℕ)
     (ω : (α : Fin g) → Fin (mult α) → ℂ)
     (A : (α : Fin g) → MPSTensor (D * D) (dim α))
     (U : Matrix (Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q))
       (Fin d) ℂ),
-    (∀ α k, (0 : ℂ) < ω α k) ∧
+    (∀ α, 0 < mult α) ∧
+      (∀ α k, (0 : ℂ) < ω α k) ∧
       Uᴴ * U = 1 ∧
       MPSTensor.IsBNT (verticalTensor M) g dim A ∧
       ∀ v : Fin (D * D),
