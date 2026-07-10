@@ -4,6 +4,9 @@ name: TNTikZDiagram
 name: TNMPSLocal TNMPSWord TNMPV TNBlocking TNMPVOverlap TNTransferMap TNMPOCell TNMPOChain
 {{ obj.tn_svg_html }}
 
+name: TNMPOLocalPurification TNMPORenormalizationTS TNEtaSectorDecomposition
+{{ obj.tn_svg_html }}
+
 name: TNGaugeConjugation TNPhysicalRealization TNLinearTwist
 {{ obj.tn_svg_html }}
 
