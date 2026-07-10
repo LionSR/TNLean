@@ -27,9 +27,9 @@ counterexample was added in
 \href{https://github.com/LionSR/TNLean/pull/849}{pull request \#849}; and the
 positive-semidefinite replacement theorem was added in
 \href{https://github.com/LionSR/TNLean/pull/917}{pull request \#917}. The open
-follow-up --- supplying matrix-level positive-semidefiniteness of the sector
-trace matrix at the MPDO call site so the replacement theorem discharges the
-\texttt{hPF} shortcut --- is tracked in
+follow-up --- either supplying matrix-level positive semidefiniteness of the
+sector trace matrix, or completing the sector-pairing and linear-independence
+route described below --- is tracked in
 \href{https://github.com/LionSR/TNLean/issues/3593}{issue \#3593}. The
 source passage is
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:1394--1499}.}
@@ -153,11 +153,11 @@ $(r_k)_k$ are linearly independent, the same argument in the dual space gives
 the idempotence of $T^{\top}$, hence of $T$.  Together with the trace
 normalization $\operatorname{tr}(T)=1$ and the idempotent trace-one criterion
 above, this recovers the outer-product factorization asserted by
-Lemma~C.5.\footnote{The formal statements are
-\leanid{Matrix.mul_self_eq_self_of_pairing_idempotent},
-\leanid{Matrix.mul_self_eq_self_of_pairing_idempotent_dual}, and
-\leanid{Matrix.hasRankOneFactorization_of_pairing_idempotent} in
-\path{TNLean/Algebra/PerronFrobenius/RankOne.lean}, added in \ghpr{3685}.}
+Lemma~C.5.\footnote{\sloppy The formal statements are
+{\scriptsize\leanid{Matrix.mul_self_eq_self_of_pairing_idempotent}},
+{\scriptsize\leanid{Matrix.mul_self_eq_self_of_pairing_idempotent_dual}}, and
+{\scriptsize\leanid{Matrix.hasRankOneFactorization_of_pairing_idempotent}} in
+\doclink{TNLean/Algebra/PerronFrobenius/RankOne}, added in \ghpr{3685}.}
 
 The linear-independence hypothesis is a scope restriction relative to the
 source.  Lemma~C.5 neither assumes nor derives it: the construction
@@ -174,7 +174,51 @@ explicit hypothesis; whether the inverse-map construction supplies it ---
 for instance through the injectivity of $\mathcal{K}$ --- remains to be
 established at the matrix product density operator call site.
 
-\section{The corrected statement}
+\subsection{The sector pairing at the matrix product density operator side}
+
+The formal development now records the paper's pairing on the matrix product
+density operator side.  In an abstract real vector space, let $|l_k)$ be the
+closed sector tensors and $(r_k|$ the corresponding functionals.  It assumes
+the two displayed identities of the source,
+\[
+  T_{k,h}=(r_k|l_h),
+  \qquad
+  \sum_k |l_k)(r_k| = \sum_{k,h} T_{k,h}|l_k)(r_h|,
+\]
+from lines 1478--1493 of Appendix C.2.  These equations make the pairing
+operator $M=\sum_k|l_k)(r_k|$ idempotent.  If the vectors $(l_k)_k$ are
+linearly independent, then the coefficient map $L$ is injective and
+\[
+  L T^2=M^2L=ML=LT,
+\]
+so $T^2=T$.  Hence all positive powers of $T$ have the same trace; trace one
+then gives the rank-one factorization.  Primitivity separately makes each
+$|l_k)$ nonzero, so an independent family of subspaces carrying the vectors
+is sufficient to derive their linear independence.
+\footnote{\sloppy The formal declarations are
+{\scriptsize\leanid{MPOTensor.SectorPairingData.pairing_operator_idempotent}},
+{\scriptsize\leanid{MPOTensor.SectorPairingData.mul_self_eq_self}},
+{\scriptsize\leanid{MPOTensor.SectorPairingData.tracePowersConstant}},
+{\scriptsize\leanid{MPOTensor.SectorPairingData.l_ne_zero}},
+{\scriptsize\leanid{MPOTensor.SectorPairingData.linearIndependent_l}},
+{\scriptsize\leanid{MPOTensor.sal_zcl_implies_rank_one_T_of_pairing_idempotent}}, and
+{\scriptsize\leanid{MPOTensor.sal_zcl_implies_rank_one_T_of_sector_supports}} in
+\doclink{TNLean/MPS/MPDO/SimpleLocalStructure}.}
+
+Three obligations remain before the conditional hypotheses disappear.
+First, the inverse-map factorization at lines 1407--1482 must construct the
+families $(l_k)_k$ and $(r_k)_k$ from an injective simple tensor and prove the
+pairing $T_{k,h}=(r_k|l_h)$.  Second, zero correlation length must be used to
+derive the operator identity at lines 1490--1493 for those concrete families;
+the present structure records this identity as data.  Third, linear
+independence of the closed tensors must be proved.  The direct sum in the
+source's sector splitting at lines 1436--1448 concerns the physical indices;
+after those indices are contracted, the closed tensors live in a common bond
+space.  Their membership in corresponding members of an independent family of
+subspaces --- or their independence by another argument --- therefore does not
+follow from the displayed equations alone.
+
+\section{A positive-semidefinite route}
 
 The formal development proves a corrected sufficient matrix theorem. Let $T$
 be a finite real square matrix. If $T$ is positive semidefinite,
@@ -225,36 +269,35 @@ sector-reduced Hayashi--Markov family is defined by
 \]
 Since each reduced density matrix has trace one, its trace matrix is the
 all-ones matrix. The theorem
-\path{MPOTensor.ExplicitEtaOperators.traceMatrixRe_ofHayashiMarkov_posSemidef}
+{\scriptsize\leanid{MPOTensor.ExplicitEtaOperators.traceMatrixRe_ofHayashiMarkov_posSemidef}}
 proves its positive
 semidefiniteness. This does not discharge Lemma~C.5: the sector-reduced family
 has not been identified with the inverse-map family constructed in lines
 1413--1455, and the trace of its all-ones matrix is the number of sectors, not
 one unless there is a single sector.
 
-The remaining argument must therefore use more of the MPDO construction than
-the separate inequalities $\eta_{k,h}\geq 0$. One possible completion is to
-derive an additional adjoint or Gram relation from the inverse-map tensors. If
-no such relation holds, the alternative is to combine the ZCL identity in
-lines 1489--1497 with injectivity and the tensor realization to rule out the
-nilpotent generalized zero-eigenspace directly. Positive semidefiniteness of
-the source trace matrix is not presently established by the cited passage.
+The positive-semidefinite route must therefore use more of the matrix product
+density operator construction than the separate inequalities
+$\eta_{k,h}\geq 0$. One possible completion is to derive an adjoint or Gram
+relation from the inverse-map tensors. Positive semidefiniteness of the source
+trace matrix is not presently established by the cited passage.
 
-This corrected theorem does not refute the intended MPDO result. It identifies
-a matrix-level hypothesis sufficient for the rank-one step. The remaining
-question is whether the trace matrix
-$T_{k,h}=\operatorname{tr}(\eta_{k,h})$ arising from the neighboring operators is
-Hermitian or positive semidefinite. Positivity of each $\eta_{k,h}$ gives
-$T_{k,h}=\operatorname{tr}(\eta_{k,h})\geq 0$ entry by entry, but entrywise
-nonnegativity is not matrix-level positive semidefiniteness or Hermitian
-symmetry of $T$.
+This corrected theorem does not refute the intended matrix product density
+operator result; it supplies one sufficient matrix-level hypothesis. For this
+route, the open question is whether the trace matrix
+$T_{k,h}=\operatorname{tr}(\eta_{k,h})$ is Hermitian or positive semidefinite.
+The pairing-idempotence route of Section~3.1 avoids that hypothesis, but instead
+requires the concrete sector pairing, the zero-correlation-length operator
+identity, and linear independence. Positivity of each $\eta_{k,h}$ gives only
+$T_{k,h}\geq 0$ entry by entry, which implies neither matrix-level positive
+semidefiniteness nor Hermitian symmetry.
 \footnote{The entrywise nonnegativity result is
-\leanid{MPOTensor.ExplicitEtaOperators.traceMatrixRe_nonneg}. The
+{\scriptsize\leanid{MPOTensor.ExplicitEtaOperators.traceMatrixRe_nonneg}}. The
 positive-semidefinite reformulation for the rank-one conclusion is
-\leanid{MPOTensor.sal_zcl_implies_rank_one_T_of_posSemidef}. The corresponding
+{\scriptsize\leanid{MPOTensor.sal_zcl_implies_rank_one_T_of_posSemidef}}. The corresponding
 blueprint entries have labels
-\texttt{thm:mpdo\_explicit\_eta\_trace\_matrix\_nonneg} and
-\texttt{thm:psd\_trace\_powers\_rank\_one\_t} in
+\texttt{\detokenize{thm:mpdo_explicit_eta_trace_matrix_nonneg}} and
+\texttt{\detokenize{thm:psd_trace_powers_rank_one_t}} in
 \path{blueprint/src/chapter/ch21_mpdo_rfp_simple_local_structure.tex}.}
 
 \section{Conclusion}
@@ -264,14 +307,18 @@ primitive entrywise non-negative matrix with constant traces of positive powers
 need not have rank one. The obstruction is a nilpotent Jordan component at the
 zero eigenvalue, which is not detected by the trace identities.
 
-The formal development proves a corrected sufficient theorem: positive
-semidefiniteness, trace normalization, and the same trace-power hypothesis imply
-the required rank-one factorization. What remains for the unconditional MPDO
-argument is not another Perron--Frobenius statement for arbitrary non-negative
-matrices, but an MPDO-specific proof that the trace matrix obtained from the
-$\eta$-operators has the Hermitian or positive-semidefinite structure needed by
-the corrected theorem. Thus the source proof has a genuine unsupported
-intermediate assertion, while the intended MPDO theorem itself has not been
+The formal development now proves two corrected sufficient theorems.  The
+first derives the rank-one factorization from positive semidefiniteness, trace
+normalization, and the trace-power identities.  The second derives
+$T^2=T$ from the sector-pairing identity and linear independence of the closed
+sector tensors; trace one then gives the same rank-one factorization directly.
+
+For the unconditional matrix product density operator argument, it therefore
+suffices either to prove the required positive-semidefinite structure of the
+trace matrix, or to construct the source sector pairing and derive the needed
+linear independence at the matrix product density operator call site.  The
+source proof has a genuine unsupported intermediate assertion, while the
+intended matrix product density operator theorem itself has not been
 disproved.
 
 \bibliographystyle{alpha}
