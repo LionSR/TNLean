@@ -303,8 +303,9 @@ open.  The missing general positivity step is a cyclic reciprocal estimate for
 the weights in the rank-one reduction; it does not follow merely from equality
 of the total numerator and denominator weights.  The general estimate is
 classical: the case $n=d-2$ is due to Ando, the case $n=1$ to Tanahashi and
-Tomiyama, and the whole range to Yamagami~\cite{Yamagami1993Cyclic}, whose
-proof is a variational argument on the boundary of a projective simplex.
+Tomiyama~\cite{TanahashiTomiyama1988Indecomposable}, and the whole range to
+Yamagami~\cite{Yamagami1993Cyclic}, whose proof is a variational argument on
+the boundary of a projective simplex.
 
 \begin{definition}[Choi-type map]
     \label{def:choi_type_map}
@@ -486,32 +487,45 @@ proof is a variational argument on the boundary of a projective simplex.
     Lemma~\ref{lem:choi_type_rankone_positive_from_weight_bound}.
 \end{proof}
 
+\begin{lemma}[Positivity from rank-one positivity]
+    \label{lem:positive_map_from_rankone}
+    \lean{Matrix.isPositiveMap_of_forall_vecMulVec_posSemidef}
+    \leanok
+    A linear map on matrices that sends every rank-one projector
+    $\ket{w}\bra{w}$ to a positive semidefinite matrix sends every positive
+    semidefinite matrix to a positive semidefinite matrix.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Let $\Phi$ be the map and let $X\ge0$.  Scaling the eigenvectors of $X$ by
+    the square roots of its nonnegative eigenvalues produces vectors
+    $w_\alpha$ with
+    \[
+        X=\sum_\alpha \ket{w_\alpha}\bra{w_\alpha}.
+    \]
+    Linearity gives
+    \[
+        \Phi(X)=\sum_\alpha \Phi(\ket{w_\alpha}\bra{w_\alpha}),
+    \]
+    each summand is positive semidefinite by hypothesis, and a sum of
+    positive semidefinite matrices is positive semidefinite.
+\end{proof}
+
 \begin{theorem}[The first Choi map is positive]
     \label{thm:choi_type_first_positive_subcase}
     \lean{Matrix.choiTypeMap_isPositiveMap_three_one}
     \leanok
-    \uses{def:choi_type_map, lem:choi_type_first_cyclic_reciprocal_subcase}
+    \uses{def:choi_type_map, lem:choi_type_first_cyclic_reciprocal_subcase,
+        lem:positive_map_from_rankone}
     For $d=3$ and $n=1$, the Choi-type map $T_C$ sends every positive
     semidefinite matrix to a positive semidefinite matrix.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Let $X\ge0$.  By the spectral decomposition, there are vectors $w_\alpha$
-    such that
-    \[
-        X=\sum_\alpha \ket{w_\alpha}\bra{w_\alpha},
-    \]
-    where each summand is rank-one and positive semidefinite.  Linearity gives
-    \[
-        T_C(X)=\sum_\alpha T_C(\ket{w_\alpha}\bra{w_\alpha}).
-    \]
-    The preceding lemma gives
-    \[
-        T_C(\ket{w_\alpha}\bra{w_\alpha})\ge0
-    \]
-    for every $\alpha$.  Hence the displayed sum is positive semidefinite, so
-    $T_C(X)\ge0$.
+    Combine Lemma~\ref{lem:choi_type_first_cyclic_reciprocal_subcase} with
+    Lemma~\ref{lem:positive_map_from_rankone}.
 \end{proof}
 
 \begin{lemma}[Permutation reciprocal inequality]
@@ -593,22 +607,6 @@ proof is a variational argument on the boundary of a projective simplex.
     to the cyclic shift $\sigma(i)=i+1$, bounds this sum by $1$, and
     Lemma~\ref{lem:choi_type_rankone_positive_from_weight_bound} turns the
     bound into rank-one positivity.
-\end{proof}
-
-\begin{lemma}[Positivity from rank-one positivity]
-    \label{lem:positive_map_from_rankone}
-    \lean{Matrix.isPositiveMap_of_forall_vecMulVec_posSemidef}
-    \leanok
-    A linear map on matrices that sends every rank-one projector
-    $\ket{w}\bra{w}$ to a positive semidefinite matrix sends every positive
-    semidefinite matrix to a positive semidefinite matrix.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    A positive semidefinite matrix is the sum of the rank-one projectors of
-    its spectral decomposition, and positive semidefiniteness is preserved
-    under sums.
 \end{proof}
 
 \begin{theorem}[Choi-type maps at the top of the range are positive]
