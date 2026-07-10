@@ -388,6 +388,49 @@ strong subadditivity for a normalized three-site reduced state.
     and therefore $T=ab^\top$.
 \end{proof}
 
+\begin{theorem}[Constant trace powers of an idempotent matrix]
+    \label{thm:matrix_idempotent_trace_powers_constant}
+    \lean{Matrix.tracePowersConstant_of_mul_self_eq_self}
+    \leanok
+    \uses{def:matrix_trace_rankone_predicates}
+    Let $T$ be a finite real square matrix with $T^2 = T$. Then for every
+    positive integer $N$,
+    \[
+        \operatorname{tr}(T^N) = \operatorname{tr}(T).
+    \]
+    This recovers the trace identity displayed in the proof of
+    \cite[Appendix~C.2, Lemma~C.5]{Cirac2016MPDO_arXiv} from idempotence.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Induction on $N$: for $N \geq 1$,
+    $T^{N+1} = T^{N} T = T T = T$, so every positive power of $T$ equals $T$.
+\end{proof}
+
+\begin{theorem}[Positive entries in every row and column of a primitive matrix]
+    \label{thm:matrix_primitive_row_col_pos}
+    \lean{Matrix.IsPrimitive.exists_row_pos}
+    \lean{Matrix.IsPrimitive.exists_col_pos}
+    \leanok
+    Let $T$ be a primitive non-negative matrix. Then every row of $T$ contains
+    a strictly positive entry, and so does every column.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    If row $k$ of $T$ vanishes, then for every $m \geq 1$,
+    \[
+        (T^{m})_{k,k} = \sum_j T_{k,j} (T^{m-1})_{j,k} = 0,
+    \]
+    contradicting the strict entrywise positivity of some power of $T$.
+    Likewise, if column $h$ of $T$ vanishes, then for every $m \geq 1$,
+    \[
+        (T^{m})_{h,h} = \sum_j (T^{m-1})_{h,j}\, T_{j,h} = 0,
+    \]
+    again contradicting the strict positivity of some power of $T$.
+\end{proof}
+
 \begin{theorem}[Idempotence of the sector trace matrix]
     \label{thm:matrix_pairing_idempotent}
     \lean{Matrix.mul_self_eq_self_of_pairing_idempotent}
@@ -523,4 +566,125 @@ strong subadditivity for a normalized three-site reduced state.
     supplies the auxiliary rank-one criterion. The conditional statement of
     \cite[Lemma~C.5]{Cirac2016MPDO_arXiv} then gives the factorization and
     trace normalization.
+\end{proof}
+
+\begin{definition}[Sector tensors paired into the sector trace matrix]
+    \label{def:mpdo_sector_pairing_data}
+    \lean{MPOTensor.SectorPairingData}
+    \leanok
+    For a real $n \times n$ matrix $T$ and a real vector space $V$, this
+    structure consists of vectors $|l_0), \dots, |l_{n-1}) \in V$ and linear
+    functionals $(r_0|, \dots, (r_{n-1}|$ on $V$ satisfying the pairing identity
+    \[
+        T_{k,h} = (r_k|l_h)
+    \]
+    of \cite[Appendix~C.2]{Cirac2016MPDO_arXiv} together with the
+    zero-correlation-length identity
+    \[
+        \sum_k |l_k)(r_k| = \sum_{k,h} T_{k,h}\, |l_k)(r_h|
+    \]
+    displayed in the proof of \cite[Lemma~C.5]{Cirac2016MPDO_arXiv}. The
+    vectors are the closed sector tensors obtained there from the sector
+    splitting of an injective simple tensor.
+\end{definition}
+
+\begin{theorem}[Idempotence of the sector trace matrix from the zero-correlation-length identity]
+    \label{thm:mpdo_sector_pairing_idempotent}
+    \lean{MPOTensor.SectorPairingData.pairing_operator_idempotent}
+    \lean{MPOTensor.SectorPairingData.mul_self_eq_self}
+    \lean{MPOTensor.SectorPairingData.tracePowersConstant}
+    \leanok
+    \uses{def:mpdo_sector_pairing_data}
+    For sector tensors paired into $T$ as in
+    Definition~\ref{def:mpdo_sector_pairing_data}, the operator
+    $M = \sum_k |l_k)(r_k|$ satisfies $M^2 = M$. If in addition the vectors
+    $|l_0), \dots, |l_{n-1})$ are linearly independent, then $T^2 = T$, and for
+    every positive integer $N$,
+    \[
+        \operatorname{tr}(T^N) = \operatorname{tr}(T).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:matrix_pairing_idempotent,
+        thm:matrix_idempotent_trace_powers_constant}
+    Substituting $T_{k,h} = (r_k|l_h)$ into the right-hand side of the
+    zero-correlation-length identity gives, for every $v \in V$,
+    \[
+        \sum_{k,h} T_{k,h}(r_h|v)\,|l_k)
+        = \sum_{k,h} (r_k|l_h)(r_h|v)\,|l_k)
+        = \sum_k (r_k|Mv)\,|l_k)
+        = M^2 v,
+    \]
+    so $M^2 = M$. Linear independence of the $|l_k)$ then
+    gives $T^2 = T$ by Theorem~\ref{thm:matrix_pairing_idempotent}, and
+    idempotence gives the constant trace powers by
+    Theorem~\ref{thm:matrix_idempotent_trace_powers_constant}.
+\end{proof}
+
+% Scope restriction (independent subspaces): the independent subspace family in the
+% second statement is not displayed in arXiv:1606.00608; the closed sector
+% tensors of that construction live in a common bond space after the physical
+% sector legs are contracted. Whether the inverse-map construction supplies
+% such supports, or the linear independence by other means, remains open.
+% Recorded in docs/paper-gaps/cpgsv17_pf_rank_one.tex.
+\begin{theorem}[Nonvanishing and independence of the sector tensors]
+    \label{thm:mpdo_sector_tensors_independent}
+    \lean{MPOTensor.SectorPairingData.l_ne_zero}
+    \lean{MPOTensor.SectorPairingData.linearIndependent_l}
+    \leanok
+    \uses{def:mpdo_sector_pairing_data, thm:matrix_primitive_row_col_pos}
+    Suppose the sector trace matrix $T$ of
+    Definition~\ref{def:mpdo_sector_pairing_data} is primitive. Then every
+    closed sector tensor satisfies $|l_k) \neq 0$. If moreover each $|l_k)$
+    lies in its own member of an independent family of subspaces of $V$, then
+    the vectors $|l_0), \dots, |l_{n-1})$ are linearly independent.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:matrix_primitive_row_col_pos}
+    By Theorem~\ref{thm:matrix_primitive_row_col_pos}, some entry of the
+    $k$-th column of $T$ is positive, and that entry is the pairing
+    $(r_j|l_k)$, so $|l_k) \neq 0$. Nonzero vectors chosen from an independent
+    family of subspaces, one from each member, are linearly independent.
+\end{proof}
+
+\begin{theorem}[Rank one from sector-pairing idempotence under linear independence]
+    \label{thm:pairing_idempotent_rank_one_t}
+    \lean{MPOTensor.sal_zcl_implies_rank_one_T_of_pairing_idempotent}
+    \lean{MPOTensor.sal_zcl_implies_rank_one_T_of_sector_supports}
+    \leanok
+    \uses{def:mpdo_sector_pairing_data, def:matrix_trace_rankone_predicates}
+    Let $T$ be a sector trace matrix with $\operatorname{tr}(T)=1$, paired
+    from sector tensors satisfying the zero-correlation-length identity of
+    Definition~\ref{def:mpdo_sector_pairing_data}. If the closed sector
+    tensors $|l_0), \dots, |l_{n-1})$ are linearly independent, then
+    \[
+        T_{k,h} = a_k b_h,
+        \qquad
+        \sum_k a_k b_k = 1
+    \]
+    for some real numbers $a_k, b_h$. The same conclusion holds if, instead
+    of the independence, $T$ is primitive and the closed sector tensors lie
+    in distinct members of an independent family of subspaces. In contrast
+    with the positive-semidefinite criterion of
+    Theorem~\ref{thm:psd_trace_powers_rank_one_t}, the constant trace powers
+    are derived rather than assumed.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_sector_pairing_idempotent,
+        thm:mpdo_sector_tensors_independent,
+        thm:matrix_idempotent_trace_one_rank_one}
+    Theorem~\ref{thm:mpdo_sector_pairing_idempotent} gives $T^2 = T$ and the
+    constant trace powers. The idempotent trace-one criterion of
+    Theorem~\ref{thm:matrix_idempotent_trace_one_rank_one} yields the
+    factorization $T = a b^\top$, and taking traces gives
+    $\sum_k a_k b_k = \operatorname{tr}(T) = 1$. When the independence is not
+    assumed directly, Theorem~\ref{thm:mpdo_sector_tensors_independent}
+    derives it from primitivity once each sector tensor lies in its own member
+    of an independent family of subspaces.
 \end{proof}

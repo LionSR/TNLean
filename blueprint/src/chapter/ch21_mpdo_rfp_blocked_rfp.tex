@@ -16,17 +16,24 @@
 \begin{theorem}[Local simple-MPDO structure from entropy data and the rank-one criterion]
     \label{thm:simple_mpdo_local_structure_data_of_sal_zcl}
     \lean{MPOTensor.SimpleMPDOLocalStructureData.ofSALZCL}
+    \lean{MPOTensor.SimpleMPDOLocalStructureData.ofSALZCLOfPairingIdempotent}
     \lean{MPOTensor.SimpleMPDOLocalStructureData.ofSALZCLOfPosSemidef}
     \leanok
     \uses{def:simple_mpdo_local_structure_data, thm:sal_implies_eta_structure,
-        thm:sal_zcl_implies_rank_one_t, thm:psd_trace_powers_rank_one_t}
+        thm:sal_zcl_implies_rank_one_t, thm:psd_trace_powers_rank_one_t,
+        thm:pairing_idempotent_rank_one_t}
     The hypotheses of \cite[Lemmas~C.2, C.4, and~C.5]{Cirac2016MPDO_arXiv}
     determine the local simple-MPDO
-    structure. There are two forms. The conditional form assumes the
+    structure. There are three forms. The conditional form assumes the
     rank-one implication for $T$. The corrected form assumes instead that
     $T\ge 0$ as a matrix, with $\operatorname{tr}(T)=1$ and
     $\operatorname{tr}(T^m)=1$ for every $m>0$, and then applies
-    Theorem~\ref{thm:psd_trace_powers_rank_one_t}.
+    Theorem~\ref{thm:psd_trace_powers_rank_one_t}. The pairing-idempotence
+    form assumes that $T$ is the sector trace matrix of linearly independent
+    sector tensors satisfying the zero-correlation-length identity, with
+    $\operatorname{tr}(T)=1$, and then applies
+    Theorem~\ref{thm:pairing_idempotent_rank_one_t}; the constant trace powers
+    are derived rather than assumed.
 \end{theorem}
 
 \begin{definition}[Simple-MPDO blocked doubled-index structure]

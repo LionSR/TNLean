@@ -8,6 +8,7 @@ import TNLean.MPS.MPDO.MutualInfoMonotone
 import TNLean.MPS.Chain.VirtualInsertion
 import TNLean.Algebra.PerronFrobenius.RankOne
 import Mathlib.Analysis.Matrix.Order
+import Mathlib.LinearAlgebra.DFinsupp
 
 /-!
 # Simple MPDO local structure
@@ -60,6 +61,18 @@ arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete).
   proved relative to the Perron–Frobenius rank-one input.
 - `MPOTensor.sal_zcl_implies_rank_one_T_of_posSemidef`: the same consequence
   with the Perron–Frobenius input derived from positive semidefiniteness of `T`.
+- `MPOTensor.SectorPairingData`: the sector tensors $|l_k)$ and functionals
+  $(r_k|$ of arXiv:1606.00608, Appendix C.2, with the pairing
+  $T_{k,h}=(r_k|l_h)$ and the displayed zero-correlation-length identity.
+- `MPOTensor.SectorPairingData.mul_self_eq_self` /
+  `MPOTensor.SectorPairingData.linearIndependent_l`: idempotence of the sector
+  trace matrix from the zero-correlation-length identity, and linear
+  independence of the sector tensors from primitivity and an independent
+  family of subspaces containing each sector tensor.
+- `MPOTensor.sal_zcl_implies_rank_one_T_of_pairing_idempotent` /
+  `MPOTensor.sal_zcl_implies_rank_one_T_of_sector_supports`: the rank-one
+  factorization at lines 1484--1499, derived from the zero-correlation-length
+  identity through idempotence of $T$.
 
 ## Implementation note
 
@@ -113,6 +126,17 @@ zero-eigenspace. Positivity of the individual η-operators alone gives only
 entrywise nonnegativity of the trace matrix. The special sector-reduced family
 `ofHayashiMarkov` does have a positive-semidefinite all-ones trace matrix, but
 its identification with the paper's inverse-map family is not available.
+
+A second exclusion of the nilpotent zero-eigenspace goes through the pairing.
+`MPOTensor.SectorPairingData` records the closed sector tensors $|l_k)$, the
+functionals $(r_k|$, the pairing $T_{k,h}=(r_k|l_h)$, and the
+zero-correlation-length identity at lines 1490--1493. The theorem
+`MPOTensor.sal_zcl_implies_rank_one_T_of_pairing_idempotent` derives the
+rank-one factorization once the closed sector tensors are linearly independent.
+Three obligations remain: construct the sector families and their pairing from
+the inverse-map factorization at lines 1407--1482, derive the operator identity
+from zero correlation length, and prove linear independence. They are recorded in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
 
 ## References
 
@@ -548,6 +572,179 @@ theorem sal_zcl_implies_rank_one_T_of_posSemidef
     ∃ a b : Fin n → ℝ, T = Matrix.vecMulVec a b ∧ a ⬝ᵥ b = 1 :=
   sal_zcl_implies_rank_one_T T hPrimitive hTrace hZCL
     (Matrix.primitive_trace_powers_constant_implies_rank_one_of_posSemidef hPSD hTrace)
+
+/-! ### Sector tensors and the pairing route to rank one
+
+Appendix C.2 of arXiv:1606.00608 obtains the sector trace matrix by pairing
+sector tensors. After the isometry $U$, the injective simple tensor splits as
+a direct sum over sectors $k$ of pairs $l_k,r_k$ at lines 1436--1448. The
+closed tensors $|l_k)$ and $(r_k|$ pair to $T_{k,h}=(r_k|l_h)$ at lines
+1473--1482. The zero-correlation-length identity at lines 1490--1493 states
+that the operator $\sum_k |l_k)(r_k|$ equals its own square. The declarations
+below record this pairing and derive the rank-one factorization of $T$ through
+`Matrix.mul_self_eq_self_of_pairing_idempotent`. -/
+
+/-- The sector tensors of arXiv:1606.00608, Appendix C.2, paired into the
+sector trace matrix $T$.
+
+The vector space $V$ carries the closed sector tensors $|l_k)$ and the
+functionals $(r_k|$ at lines 1473--1477. The recorded identities are the
+pairing $T_{k,h}=(r_k|l_h)$ at lines 1478--1482 and the
+zero-correlation-length identity at lines 1490--1493. Constructing these
+families from the injective simple tensor factorization at lines 1436--1448
+remains open; see the module docstring. -/
+structure SectorPairingData (T : Matrix (Fin n) (Fin n) ℝ)
+    (V : Type*) [AddCommGroup V] [Module ℝ V] where
+  /-- The closed sector tensors $|l_k)$; arXiv:1606.00608, lines 1473--1477. -/
+  l : Fin n → V
+  /-- The closed sector functionals $(r_k|$; arXiv:1606.00608,
+  lines 1473--1477. -/
+  r : Fin n → Module.Dual ℝ V
+  /-- The pairing identity $T_{k,h}=(r_k|l_h)$; arXiv:1606.00608,
+  lines 1478--1482. -/
+  pairing : ∀ k h, T k h = r k (l h)
+  /-- The zero-correlation-length identity
+  $\sum_k |l_k)(r_k|=\sum_{k,h}T_{k,h}|l_k)(r_h|$, evaluated on a vector;
+  arXiv:1606.00608, lines 1490--1493. -/
+  zcl : ∀ v : V, ∑ k, r k v • l k = ∑ k, ∑ h, (T k h * r h v) • l k
+
+namespace SectorPairingData
+
+variable {T : Matrix (Fin n) (Fin n) ℝ} {V : Type*} [AddCommGroup V] [Module ℝ V]
+
+/-- The zero-correlation-length identity makes the pairing operator
+$\sum_k |l_k)(r_k|$ equal to its own square. The right-hand side of the
+identity at lines 1490--1493 expands to this square after replacing
+$T_{k,h}$ by the pairing $(r_k|l_h)$ from lines 1478--1482 of
+arXiv:1606.00608. -/
+theorem pairing_operator_idempotent (data : SectorPairingData T V) (v : V) :
+    ∑ k, data.r k (∑ j, data.r j v • data.l j) • data.l k
+      = ∑ k, data.r k v • data.l k := by
+  have hexpand : ∀ k, data.r k (∑ j, data.r j v • data.l j)
+      = ∑ j, T k j * data.r j v := by
+    intro k
+    rw [map_sum]
+    refine Finset.sum_congr rfl fun j _ => ?_
+    rw [map_smul, smul_eq_mul, data.pairing k j]
+    ring
+  calc ∑ k, data.r k (∑ j, data.r j v • data.l j) • data.l k
+      = ∑ k, ∑ j, (T k j * data.r j v) • data.l k := by
+        refine Finset.sum_congr rfl fun k _ => ?_
+        rw [hexpand k, Finset.sum_smul]
+    _ = ∑ k, data.r k v • data.l k := (data.zcl v).symm
+
+/-- **Idempotence of the sector trace matrix** for sector tensors satisfying
+the zero-correlation-length identity: $T^2=T$.
+
+**Scope restriction (linear independence):** the source argument at
+arXiv:1606.00608, lines 1484--1499 neither assumes nor derives
+linear independence of the sector tensors; see the marker on
+`Matrix.mul_self_eq_self_of_pairing_idempotent` and
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.  The hypothesis `hl` is discharged
+by `SectorPairingData.linearIndependent_l` once each sector tensor lies in the
+corresponding member of an independent family of subspaces. -/
+theorem mul_self_eq_self (data : SectorPairingData T V)
+    (hl : LinearIndependent ℝ data.l) : T * T = T :=
+  Matrix.mul_self_eq_self_of_pairing_idempotent data.pairing hl
+    data.pairing_operator_idempotent
+
+/-- The traces of all positive powers of the sector trace matrix agree with
+its trace: $\operatorname{tr}(T^N)=\operatorname{tr}(T)$ for $N\geq 1$, as at
+arXiv:1606.00608, lines 1494--1497, recovered from idempotence.
+
+**Scope restriction (linear independence):** inherited from
+`SectorPairingData.mul_self_eq_self`; documented in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`. -/
+theorem tracePowersConstant (data : SectorPairingData T V)
+    (hl : LinearIndependent ℝ data.l) : Matrix.TracePowersConstant T :=
+  Matrix.tracePowersConstant_of_mul_self_eq_self (data.mul_self_eq_self hl)
+
+/-- Primitivity of the sector trace matrix makes every closed sector tensor
+$|l_k)$ nonzero: some entry of column $k$ of $T$ is positive, and that entry
+is the pairing of $|l_k)$ against a functional (arXiv:1606.00608,
+lines 1478--1482). -/
+theorem l_ne_zero (data : SectorPairingData T V)
+    (hPrimitive : Matrix.IsPrimitive T) (k : Fin n) : data.l k ≠ 0 := by
+  intro hzero
+  obtain ⟨j, hj⟩ := hPrimitive.exists_col_pos k
+  rw [data.pairing j k, hzero, map_zero] at hj
+  exact lt_irrefl 0 hj
+
+/-- Linear independence of the closed sector tensors from an independent family
+of subspaces: if each $|l_k)$ lies in the corresponding member of an independent
+family of subspaces of $V$ and the sector trace matrix is primitive, then the
+family $|l_k)$ is linearly independent.
+
+**Scope restriction (independent subspaces):** the subspace family is not displayed
+in arXiv:1606.00608. Lines 1436--1448 give a sector splitting of the physical
+indices, but the closed tensors $|l_k)$ at lines 1473--1477 live in a common
+bond space after the physical sector legs are contracted. Whether the
+inverse-map construction supplies such supports, or proves independence by
+another argument, remains open; documented in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`. -/
+theorem linearIndependent_l (data : SectorPairingData T V)
+    (support : Fin n → Submodule ℝ V)
+    (hmem : ∀ k, data.l k ∈ support k)
+    (hsupp : iSupIndep support)
+    (hPrimitive : Matrix.IsPrimitive T) :
+    LinearIndependent ℝ data.l :=
+  hsupp.linearIndependent support hmem (data.l_ne_zero hPrimitive)
+
+end SectorPairingData
+
+/-- **Rank one from sector-pairing idempotence.**
+
+For a sector trace matrix $T$ paired from sector tensors satisfying the
+zero-correlation-length identity at arXiv:1606.00608, lines 1490--1493,
+linear independence and trace normalization give
+$T_{k,h}=a_kb_h$ with $\sum_k a_kb_k=1$, the conclusion at lines 1484--1499.
+Unlike the positive-semidefinite variant
+`MPOTensor.sal_zcl_implies_rank_one_T_of_posSemidef`, the constant trace
+powers are derived, not assumed. Primitivity of $T$ is not needed once linear
+independence is assumed. It enters the independent-subspace form
+`MPOTensor.sal_zcl_implies_rank_one_T_of_sector_supports`, where it makes
+the closed sector tensors nonzero.
+
+**Scope restriction (linear independence):** the source lemma neither assumes
+nor derives linear independence of the sector tensors; documented in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.  The hypothesis `hl` is discharged
+by `SectorPairingData.linearIndependent_l` when each sector tensor lies in the
+corresponding member of an independent family of subspaces. -/
+theorem sal_zcl_implies_rank_one_T_of_pairing_idempotent
+    {V : Type*} [AddCommGroup V] [Module ℝ V]
+    (T : Matrix (Fin n) (Fin n) ℝ)
+    (data : SectorPairingData T V)
+    (hl : LinearIndependent ℝ data.l)
+    (hTrace : Matrix.trace T = 1) :
+    ∃ a b : Fin n → ℝ, T = Matrix.vecMulVec a b ∧ a ⬝ᵥ b = 1 := by
+  obtain ⟨a, b, hT⟩ :=
+    Matrix.hasRankOneFactorization_of_mul_self_eq_self
+      (data.mul_self_eq_self hl) hTrace
+  refine ⟨a, b, hT, ?_⟩
+  rw [← Matrix.trace_vecMulVec, ← hT]
+  exact hTrace
+
+/-- **Rank one from independent sector supports.**
+
+This is the rank-one conclusion at arXiv:1606.00608, lines 1484--1499, with
+linear independence of the closed sector tensors derived from primitivity and
+an independent family of subspaces containing the respective sector tensors.
+
+**Scope restriction (independent subspaces):** the subspace family carrying the
+closed sector tensors is not displayed in arXiv:1606.00608; documented in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`. -/
+theorem sal_zcl_implies_rank_one_T_of_sector_supports
+    {V : Type*} [AddCommGroup V] [Module ℝ V]
+    (T : Matrix (Fin n) (Fin n) ℝ)
+    (data : SectorPairingData T V)
+    (support : Fin n → Submodule ℝ V)
+    (hmem : ∀ k, data.l k ∈ support k)
+    (hsupp : iSupIndep support)
+    (hPrimitive : Matrix.IsPrimitive T)
+    (hTrace : Matrix.trace T = 1) :
+    ∃ a b : Fin n → ℝ, T = Matrix.vecMulVec a b ∧ a ⬝ᵥ b = 1 :=
+  sal_zcl_implies_rank_one_T_of_pairing_idempotent T data
+    (data.linearIndependent_l support hmem hsupp hPrimitive) hTrace
 
 end RankOneT
 

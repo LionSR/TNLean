@@ -42,7 +42,14 @@ sum_k |l_k)(r_k| = sum_{k,h} T_{k,h} |l_k)(r_h| (lines 1489--1497) states that
 the pairing operator equals its own square, and linear independence of the
 tensors on one side of the pairing turns this into `T * T = T`.  The theorem
 `Matrix.hasRankOneFactorization_of_pairing_idempotent` combines the two steps
-into the rank-one conclusion of Lemma SALZCL (lines 1484--1502).
+into the rank-one conclusion of Lemma C.5 (lines 1484--1502).
+
+Two further matrix facts feed the sector trace matrix:
+`Matrix.tracePowersConstant_of_mul_self_eq_self` recovers the constant trace
+powers in the proof of Lemma C.5 from idempotence, and
+`Matrix.IsPrimitive.exists_row_pos` / `Matrix.IsPrimitive.exists_col_pos` show
+that a primitive matrix has a positive entry in every row and in every column,
+which makes the paired sector tensors nonzero.
 -/
 
 open scoped BigOperators Matrix ComplexOrder
@@ -114,6 +121,66 @@ theorem hasRankOneFactorization_of_mul_self_eq_self
   change Classical.choose _ * u.1 i = f (Pi.single j 1) i at hb'
   rw [heval] at hb'
   simpa [b, Matrix.vecMulVec_apply, mul_comm] using hb'.symm
+
+/-- An idempotent matrix has constant traces of positive powers.  This recovers
+the display tr(T^N) = tr(T) in the proof of Lemma C.5 (arXiv:1606.00608,
+Appendix C.2, lines 1494--1497) from the idempotence of the sector trace matrix.
+In the pairing route below, this idempotence follows from the
+zero-correlation-length identity together with linear independence of the
+sector tensors. -/
+theorem tracePowersConstant_of_mul_self_eq_self
+    {T : Matrix (Fin n) (Fin n) ℝ} (hTT : T * T = T) :
+    TracePowersConstant T := by
+  have hpow : ∀ m : ℕ, T ^ (m + 1) = T := by
+    intro m
+    induction m with
+    | zero => rw [pow_one]
+    | succ p ih => rw [pow_succ, ih, hTT]
+  intro k hk
+  obtain ⟨m, rfl⟩ : ∃ m, k = m + 1 := ⟨k - 1, by omega⟩
+  rw [hpow]
+
+/-! ### Primitivity excludes vanishing rows and columns
+
+In the proof of Lemma C.5 (arXiv:1606.00608, Appendix C.2, lines
+1484--1499) the sector trace matrix T_{k,h} = (r_k|l_h) is primitive by
+Lemma C.4 (lines 1407--1471).  A primitive matrix has a positive entry in
+every row and in every column, so no sector tensor l_k and no functional r_k
+pairs to zero against the whole opposite family.  These lemmas supply the
+nonvanishing used to derive linear independence once each sector tensor lies in
+the corresponding member of an independent family of subspaces. -/
+
+/-- A primitive matrix has a positive entry in every row: a vanishing row of
+`T` would make the same row of every power of `T` vanish. -/
+theorem IsPrimitive.exists_row_pos {T : Matrix (Fin n) (Fin n) ℝ}
+    (hT : T.IsPrimitive) (k : Fin n) : ∃ h, 0 < T k h := by
+  by_contra hrow
+  push Not at hrow
+  have hzero : ∀ h, T k h = 0 := fun h => le_antisymm (hrow h) (hT.nonneg k h)
+  obtain ⟨m, hm, hpos⟩ := hT.exists_pos_pow
+  obtain ⟨m', rfl⟩ : ∃ m', m = m' + 1 := ⟨m - 1, by omega⟩
+  have hpow : (T ^ (m' + 1)) k k = 0 := by
+    rw [pow_succ', Matrix.mul_apply]
+    simp [hzero]
+  have h := hpos k k
+  rw [hpow] at h
+  exact lt_irrefl 0 h
+
+/-- A primitive matrix has a positive entry in every column: a vanishing
+column of `T` would make the same column of every power of `T` vanish. -/
+theorem IsPrimitive.exists_col_pos {T : Matrix (Fin n) (Fin n) ℝ}
+    (hT : T.IsPrimitive) (h : Fin n) : ∃ k, 0 < T k h := by
+  by_contra hcol
+  push Not at hcol
+  have hzero : ∀ k, T k h = 0 := fun k => le_antisymm (hcol k) (hT.nonneg k h)
+  obtain ⟨m, hm, hpos⟩ := hT.exists_pos_pow
+  obtain ⟨m', rfl⟩ : ∃ m', m = m' + 1 := ⟨m - 1, by omega⟩
+  have hpow : (T ^ (m' + 1)) h h = 0 := by
+    rw [pow_succ, Matrix.mul_apply]
+    simp [hzero]
+  have hlt := hpos h h
+  rw [hpow] at hlt
+  exact lt_irrefl 0 hlt
 
 /-! ### Idempotence of the sector trace matrix
 
