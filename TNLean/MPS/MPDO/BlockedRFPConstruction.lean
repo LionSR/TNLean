@@ -217,7 +217,7 @@ def ofSALZCLOfPairingIdempotent
   hTrace := hTrace
   hTraceConst := data.tracePowersConstant hl
   rankOne :=
-    sal_zcl_implies_rank_one_T_of_pairing_idempotent T data hPrimitive hl hTrace
+    sal_zcl_implies_rank_one_T_of_pairing_idempotent T data hl hTrace
 
 end SimpleMPDOLocalStructureData
 
