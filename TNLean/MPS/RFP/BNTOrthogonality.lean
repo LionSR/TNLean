@@ -65,7 +65,7 @@ private lemma submatrix_sum' {ι l m p q : Type*}
   simp only [Matrix.submatrix_apply, Matrix.sum_apply]
 
 /-- Left block-diagonal action on a bond block: the `(j, j')` bond block of
-$(\bigoplus_k L_k)\, X$ is $L_j X_{j,j'}$ (arXiv:1606.00608, line 551 context). -/
+$(\bigoplus_k L_k)\, X$ is $L_j X_{j,j'}$ (arXiv:1606.00608, line 551). -/
 private lemma blockDiagonal'_mul_toBlock
     (L : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
     (X : Matrix ((k : Fin r) × Fin (dim k)) ((k : Fin r) × Fin (dim k)) ℂ)
@@ -88,7 +88,7 @@ private lemma blockDiagonal'_mul_toBlock
   rw [Matrix.blockDiagonal'_apply_eq, Matrix.submatrix_apply, blockIncl, blockIncl]
 
 /-- Right block-diagonal action on a bond block: the `(j, j')` bond block of
-$X\, (\bigoplus_k R_k)$ is $X_{j,j'} R_{j'}$ (arXiv:1606.00608, line 551 context). -/
+$X\, (\bigoplus_k R_k)$ is $X_{j,j'} R_{j'}$ (arXiv:1606.00608, line 551). -/
 private lemma mul_blockDiagonal'_toBlock
     (R : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
     (X : Matrix ((k : Fin r) × Fin (dim k)) ((k : Fin r) × Fin (dim k)) ℂ)
