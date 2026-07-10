@@ -145,9 +145,11 @@ then `T * T = T`.  This is the operator-to-matrix step of Lemma SALZCL,
 lines 1484--1502.
 
 **Scope restriction (linear independence):** the source lemma
-(arXiv:1606.00608, Lemma SALZCL, lines 1484--1502) does not assume linear
-independence of the sector tensors; the paper derives it from injectivity of
-$\mathcal{K}$ in the surrounding construction (lines 1457--1470). Documented in
+(arXiv:1606.00608, Lemma SALZCL, lines 1484--1502) neither assumes nor derives
+linear independence of the sector tensors; its proof instead uses primitivity
+of the trace matrix, obtained from injectivity of K in the preceding
+construction (lines 1457--1470), in a Perron--Frobenius trace-power argument,
+and primitivity does not entail the independence. Documented in
 `docs/paper-gaps/cpgsv17_pf_rank_one.tex`; the hypothesis `hl` is to be
 discharged at the MPDO call site. -/
 theorem mul_self_eq_self_of_pairing_idempotent
@@ -176,9 +178,11 @@ pairing, evaluation at `l k` provides the functionals, and the pairing matrix
 becomes the transpose of `T`.
 
 **Scope restriction (linear independence):** the source lemma
-(arXiv:1606.00608, Lemma SALZCL, lines 1484--1502) does not assume linear
-independence of the sector tensors; the paper derives it from injectivity of
-$\mathcal{K}$ in the surrounding construction (lines 1457--1470). Documented in
+(arXiv:1606.00608, Lemma SALZCL, lines 1484--1502) neither assumes nor derives
+linear independence of the sector tensors; its proof instead uses primitivity
+of the trace matrix, obtained from injectivity of K in the preceding
+construction (lines 1457--1470), in a Perron--Frobenius trace-power argument,
+and primitivity does not entail the independence. Documented in
 `docs/paper-gaps/cpgsv17_pf_rank_one.tex`; the hypothesis `hr` is to be
 discharged at the MPDO call site. -/
 theorem mul_self_eq_self_of_pairing_idempotent_dual
@@ -218,9 +222,11 @@ normalization gives the rank-one factorization of the sector trace matrix
 asserted by Lemma SALZCL, lines 1484--1502.
 
 **Scope restriction (linear independence):** the source lemma
-(arXiv:1606.00608, Lemma SALZCL, lines 1484--1502) does not assume linear
-independence of the sector tensors; the paper derives it from injectivity of
-$\mathcal{K}$ in the surrounding construction (lines 1457--1470). Documented in
+(arXiv:1606.00608, Lemma SALZCL, lines 1484--1502) neither assumes nor derives
+linear independence of the sector tensors; its proof instead uses primitivity
+of the trace matrix, obtained from injectivity of K in the preceding
+construction (lines 1457--1470), in a Perron--Frobenius trace-power argument,
+and primitivity does not entail the independence. Documented in
 `docs/paper-gaps/cpgsv17_pf_rank_one.tex`; the hypothesis `hl` is to be
 discharged at the MPDO call site. -/
 theorem hasRankOneFactorization_of_pairing_idempotent

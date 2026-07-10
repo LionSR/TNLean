@@ -360,10 +360,18 @@ strong subadditivity for a normalized three-site reduced state.
     $\sum_j T_{k,j} T_{j,h} = (T^2)_{k,h}$ and the right-hand side into
     $T_{k,h}$. For linearly independent functionals, the same argument applied
     in the dual space, with the $r_k$ as vectors and evaluation at $l_k$ as
-    functionals, gives the idempotence of the transposed pairing matrix, and
-    transposing back gives $T^2 = T$.
+    functionals, gives $(T^\top)^2 = T^\top$, and transposing back gives
+    $T^2 = T$.
 \end{proof}
 
+% Scope restriction (linear independence): the source Lemma C.5 neither
+% assumes nor derives linear independence of the sector tensors. Its proof
+% instead uses primitivity of the trace matrix, obtained from the injectivity
+% of the tensor K in the preceding construction (arXiv:1606.00608,
+% lines 1457--1470), in a Perron--Frobenius trace-power argument, and
+% primitivity does not entail the independence. The hypothesis below remains
+% to be discharged at the matrix product density operator call site.
+% Recorded in docs/paper-gaps/cpgsv17_pf_rank_one.tex.
 \begin{theorem}[Rank-one factorization of the sector trace matrix]
     \label{thm:matrix_pairing_rank_one}
     \lean{Matrix.hasRankOneFactorization_of_pairing_idempotent}
@@ -375,12 +383,9 @@ strong subadditivity for a normalized three-site reduced state.
     $T = a b^\top$. This is the factorization $T_{k,h} = a_k b_h$ obtained in
     the proof of \cite[Appendix~C.2, Lemma~C.5]{Cirac2016MPDO_arXiv} for the
     sector trace matrix, derived here from the displayed
-    zero-correlation-length identity instead of the Perron--Frobenius
-    trace-power argument. The linear independence of the $l_k$ appears here as
-    an explicit hypothesis; the source lemma does not assume it, since the
-    construction preceding the lemma derives it from the injectivity of the
-    tensor $K$. This restriction is recorded in
-    \path{docs/paper-gaps/cpgsv17_pf_rank_one.tex}.
+    zero-correlation-length identity together with the linear independence of
+    the $l_k$, instead of the Perron--Frobenius trace-power argument of the
+    source.
 \end{theorem}
 
 \begin{proof}
