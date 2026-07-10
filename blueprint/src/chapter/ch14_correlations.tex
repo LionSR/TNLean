@@ -360,7 +360,8 @@ and rates for the single-tensor transfer map $\E_A$.
     \cite[Definition~3.5]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{definition}[BNT zero correlation length]\label{def:is_bnt_zcl}
+\begin{definition}[Virtual-insertion BNT zero correlation length]%
+    \label{def:is_bnt_zcl}
     \lean{MPSTensor.IsBNTZCL}
     \leanok
     \uses{def:bnt_cpsv, def:is_cid, def:is_bnt_locally_orthogonal}
@@ -373,8 +374,59 @@ and rates for the single-tensor transfer map $\E_A$.
     \[
         \E_{j,j'}=0.
     \]
-    This is \cite[Definition~3.6]{Cirac2016MPDO_arXiv}.
+    This virtual-insertion condition is not
+    \cite[Definition~3.6]{Cirac2016MPDO_arXiv}, which quantifies over physical
+    observables on all disjoint regions.
 \end{definition}
+
+\begin{definition}[Positive-gap BNT zero correlation length]%
+    \label{def:is_positive_gap_bnt_zcl}
+    \lean{MPSTensor.IsPositiveGapBNTZCL}
+    \leanok
+    \uses{def:bnt_cpsv, def:is_positive_gap_physical_cid,
+        def:is_bnt_locally_orthogonal}
+    A BNT family has positive-gap zero correlation length when it is locally
+    orthogonal and its physical correlations are independent of separation
+    whenever both complementary gaps are positive.  Adjacent regions are not
+    included.
+\end{definition}
+
+\begin{definition}[BNT zero correlation length]%
+    \label{def:source_bnt_zcl}
+    \notready
+    \uses{def:bnt_cpsv, def:source_physical_cid,
+        def:is_bnt_locally_orthogonal}
+    A BNT family has zero correlation length when the associated matrix-product
+    vectors have correlations independent of distance for all disjoint physical
+    regions and the BNT components are locally orthogonal.  This is
+    \cite[Definition~3.6]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Direct-sum RFP implies positive-gap BNT zero correlation length]%
+    \label{thm:is_positive_gap_bnt_zcl_of_is_rfp_direct_sum}
+    \lean{MPSTensor.isPositiveGapBNTZCL_of_isRFP_directSum}
+    \leanok
+    \uses{def:is_positive_gap_bnt_zcl, def:is_rfp}
+    Let $(A_j)_j$ be nonzero-dimensional, irreducible, left-canonical,
+    pairwise gauge-phase-distinct BNT components.  If the direct-sum tensor
+    $A=\bigoplus_j A_j$ satisfies $\E_A^2=\E_A$, then $A$ has positive-gap
+    physical CID and
+    \[
+        \E_{j,j'}=0 \qquad (j\ne j').
+    \]
+    Thus this explicit direct-sum representative has positive-gap BNT zero
+    correlation length.  This does not include the adjacent-region cases in
+    \cite[Theorem~3.8]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:is_positive_gap_physical_cid_of_is_rfp,
+        thm:bnt_locally_orthogonal_of_rfp_direct_sum}
+    Idempotence implies positive-gap physical CID by
+    Theorem~\ref{thm:is_positive_gap_physical_cid_of_is_rfp}.  On every off-diagonal bond
+    block, idempotence of $\E_A$ makes $\E_{j,j'}$ idempotent.  Distinct
+    irreducible left-canonical blocks have mixed spectral radius strictly less
+    than one.  Hence the idempotent $\E_{j,j'}$ is zero.
+\end{proof}
 
 \begin{theorem}[RFP normal tensor is injective]\label{thm:rfp_nt_injective}
     \lean{MPSTensor.rfp_nt_structural}
@@ -1066,17 +1118,69 @@ and rates for the single-tensor transfer map $\E_A$.
     is deferred here.
 \end{remark}
 
-\begin{definition}[Correlations independent of distance]\label{def:is_cid}
+\begin{definition}[Virtual-insertion distance independence]\label{def:is_cid}
     \lean{MPSTensor.IsCID}
     \leanok
     \uses{def:connected_correlator}
-    For a positive definite right fixed point $\rho^R > 0$, an MPS tensor has
-    \emph{correlations independent of distance} (CID) when for all local
-    observables $X$ and $Y$ and all separations $n,m \ge 1$,
+    For a positive definite right fixed point $\rho^R > 0$, the virtual
+    insertion expression is independent of distance when for all virtual bond
+    matrices $X$ and $Y$ and all separations $n,m \ge 1$,
     \[
         C(X,Y;n) = C(X,Y;m).
     \]
 \end{definition}
+
+\begin{definition}[Physical correlations independent of distance]%
+    \label{def:source_physical_cid}
+    \notready
+    \uses{def:transfer_map}
+    For every pair of observables supported on disjoint physical regions,
+    translating either observable without crossing the other leaves their
+    expectation unchanged.  This includes adjacent regions and is
+    \cite[Definition~3.3]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Positive-gap physical distance independence]%
+    \label{def:is_positive_gap_physical_cid}
+    \lean{MPSTensor.IsPositiveGapPhysicalCID}
+    \leanok
+    \uses{def:transfer_map}
+    For an observable $O$ on a block of $L$ physical spins, write
+    \[
+        \E_O(X)=\sum_{\boldsymbol i,\boldsymbol j}
+        \langle\boldsymbol j|O|\boldsymbol i\rangle
+        A^{\boldsymbol i}X(A^{\boldsymbol j})^\dagger .
+    \]
+    Place two finite-block observables $O_1,O_2$ on a periodic chain, with
+    positive complementary gap lengths $n_1,n_2$.  The tensor has
+    \emph{positive-gap physical correlations independent of distance} when the expectation
+    is unchanged upon replacing these gaps by positive $m_1,m_2$ satisfying
+    $n_1+n_2=m_1+m_2$:
+    \[
+      \operatorname{tr}\!\left[\E_{O_2}\E_A^{n_2}
+        \E_{O_1}\E_A^{n_1}(1)\right]
+      =
+      \operatorname{tr}\!\left[\E_{O_2}\E_A^{m_2}
+        \E_{O_1}\E_A^{m_1}(1)\right].
+    \]
+    This is the transfer-matrix form of
+    \cite[Definition~3.3 and the correlation formula preceding
+    Theorem~3.8]{Cirac2016MPDO_arXiv}, restricted to positive complementary
+    gaps.  It excludes adjacent regions.
+\end{definition}
+
+\begin{theorem}[Idempotent transfer implies positive-gap physical CID]%
+    \label{thm:is_positive_gap_physical_cid_of_is_rfp}
+    \lean{MPSTensor.isPositiveGapPhysicalCID_of_isRFP}
+    \leanok
+    \uses{def:is_rfp, def:is_positive_gap_physical_cid}
+    If $\E_A^2=\E_A$, then physical correlations are independent of distance
+    whenever both complementary gaps are positive.
+\end{theorem}
+\begin{proof}\leanok
+    Idempotence gives $\E_A^n=\E_A$ for every $n\geq1$.  Substitution in the
+    two-observable transfer formula makes the separation disappear.
+\end{proof}
 
 \begin{definition}[Zero correlation length]\label{def:is_zcl}
     \lean{MPSTensor.IsZCL}
@@ -1089,18 +1193,21 @@ and rates for the single-tensor transfer map $\E_A$.
         \qquad\text{and}\qquad
         \operatorname{CID}(A)
     \]
-    both hold. The source definition is the BNT condition in
-    Definition~\ref{def:is_bnt_zcl}.
+    both hold. The source definition is
+    Definition~\ref{def:source_bnt_zcl}; the present condition uses virtual
+    insertions instead.
 \end{definition}
 
-\begin{theorem}[CID implies RFP]\label{thm:isCID_implies_isRFP}
+\begin{theorem}[Virtual-insertion distance independence implies RFP]%
+    \label{thm:isCID_implies_isRFP}
     \lean{MPSTensor.isCID_implies_isRFP}
     \leanok
     \uses{def:is_cid, def:is_rfp, def:transfer_map}
-    If an MPS tensor admits a positive definite right fixed point of its
-    transfer map and has correlations independent of distance, then
-    its transfer map is idempotent.
-    This is the reverse direction of \cite[Theorem~3.8]{Cirac2016MPDO_arXiv}.
+    If an MPS tensor admits a positive definite right fixed point and its
+    virtual-insertion correlator is independent of distance, then its transfer
+    map is idempotent.  The reverse direction of
+    \cite[Theorem~3.8]{Cirac2016MPDO_arXiv} additionally requires the
+    realization of the virtual insertions by physical block observables.
 \end{theorem}
 \begin{proof}\leanok
     Trace nondegeneracy and invertibility of the fixed point reduce

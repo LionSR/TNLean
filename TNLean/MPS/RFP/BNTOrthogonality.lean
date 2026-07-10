@@ -345,6 +345,40 @@ theorem isBNTLocallyOrthogonal_of_isRFP_directSum
         (hirr j) (hirr j') (hleft j) (hleft j') hdim
   exact mixedTransferMap₂_eq_zero_of_isIdempotentElem (B j) (B j') hidem hsr
 
+/-- **Canonical direct-sum RFP tensors have positive-gap BNT zero correlation
+length.**
+
+Let `B` be a basis of normal tensors consisting of nonzero-dimensional,
+irreducible, left-canonical, pairwise gauge-phase-distinct blocks.  If its
+direct-sum tensor has idempotent transfer map, then it has positive-gap
+physical CID and the mixed transfer operators between distinct BNT components
+vanish.
+
+This is the positive-gap part of the forward implication in arXiv:1606.00608,
+Theorem `TheoremZCLPure` (lines 498--502 and 1248--1250), for the explicit
+unweighted direct-sum representative.  The physical CID part follows from
+equation `Corr`; the local-orthogonality part is
+`isBNTLocallyOrthogonal_of_isRFP_directSum`.
+
+**Scope restriction (positive gaps and explicit direct sum):** the source CID
+definition includes adjacent regions, whereas the predicate below assumes both
+complementary gaps are positive.  The source also allows scalar multiplicities
+and a possible bond gauge.  Both restrictions are recorded in
+`docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
+theorem isPositiveGapBNTZCL_of_isRFP_directSum
+    (B : (k : Fin r) → MPSTensor d (dim k))
+    [∀ k, NeZero (dim k)]
+    (hBNT : IsCPSVBasisOfNormalTensors (directSumTensor B)
+      (fun k => ⟨dim k, B k⟩))
+    (hirr : ∀ k, IsIrreducibleTensor (B k))
+    (hleft : ∀ k, ∑ i : Fin d, (B k i)ᴴ * B k i = 1)
+    (hdist : ∀ j k : Fin r, j ≠ k → ∀ h : dim j = dim k,
+      ¬ GaugePhaseEquiv (cast (congrArg (MPSTensor d) h) (B j)) (B k))
+    (hRFP : IsRFP (directSumTensor B)) :
+    IsPositiveGapBNTZCL (directSumTensor B) B := by
+  refine ⟨hBNT, isPositiveGapPhysicalCID_of_isRFP (directSumTensor B) hRFP, ?_⟩
+  exact isBNTLocallyOrthogonal_of_isRFP_directSum B hirr hleft hdist hRFP
+
 end Main
 
 end MPSTensor
