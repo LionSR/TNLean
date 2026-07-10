@@ -160,14 +160,19 @@ Lemma~C.5.\footnote{The formal statements are
 \path{TNLean/Algebra/PerronFrobenius/RankOne.lean}, added in \ghpr{3685}.}
 
 The linear-independence hypothesis is a scope restriction relative to the
-source.  Lemma~C.5 does not assume it: the paper derives the relevant
-independence from the injectivity of $\mathcal{K}$ in the construction
-preceding the lemma
-\cite[Appendix~C.2, lines~1457--1470]{Cirac2016MPDO_arXiv}, where injectivity
-forces the sector decomposition of the trace matrix to be trivial.  The
-formal lemmas therefore state the independence as an explicit hypothesis, to
-be discharged at the matrix product density operator call site from the
-injectivity of $\mathcal{K}$.
+source.  Lemma~C.5 neither assumes nor derives it: the construction
+preceding the lemma uses the injectivity of $\mathcal{K}$ to prove that the
+sector decomposition of the trace matrix is trivial, that is, that $T$ is
+primitive \cite[Appendix~C.2, lines~1457--1470]{Cirac2016MPDO_arXiv}.
+Primitivity constrains only the support pattern of the non-negative matrix
+$T$; a primitive $T$ can arise from linearly dependent $l_k$, so the cited
+passage does not make the family $(l_k)_k$ or $(r_k)_k$ linearly
+independent.  The proof of Lemma~C.5 then uses primitivity in the
+Perron--Frobenius trace-power step examined above, not any independence of
+the families.  The formal lemmas therefore state the independence as an
+explicit hypothesis; whether the inverse-map construction supplies it ---
+for instance through the injectivity of $\mathcal{K}$ --- remains to be
+established at the matrix product density operator call site.
 
 \section{The corrected statement}
 
