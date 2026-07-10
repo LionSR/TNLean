@@ -6,7 +6,6 @@ import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.MPS.Core.Transfer
 import TNLean.MPS.Overlap.Basic
 import TNLean.Channel.Peripheral.Spectrum
-import TNLean.Channel.Irreducible.SpectralRadius
 
 /-!
 # Normal tensor and basis of normal tensors (CPSV16)
@@ -64,16 +63,16 @@ A connection is intentionally not provided here:
 
 * A BNT connection `IsCPSVBasisOfNormalTensors.of_isBNT` would require the implication
   `MPSTensor.IsNormal → IsNormalTensor` per block, i.e. from algebraic eventual
-  block injectivity to the CPSV16 (no-invariant-proj + primitive-transfer)
-  formulation. That equivalence requires Wielandt-style spectral arguments not
-  developed at this layer.
+  block injectivity to the CPSV16 conditions of no nontrivial invariant projection,
+  unit spectral radius, and unique peripheral eigenvalue. That equivalence requires
+  Wielandt-style spectral arguments not developed at this layer.
 
 ## Style
 
 Follows `docs/MATHLIB_style.md` and `docs/MATHLIB_naming.md`.
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators Matrix.Norms.Operator
 
 namespace MPSTensor
 

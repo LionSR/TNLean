@@ -157,11 +157,12 @@ tensor, provided the transfer map has no eigenvalue of modulus equal to, but
 different from, that eigenvalue.
 
 Rescaling the tensor by `r^{-1/2}` rescales the transfer map by `r⁻¹`, so the
-positive-definite eigenvector becomes a fixed point and the peripheral
-eigenvalues become the eigenvalues of modulus one; the uniqueness hypothesis
-forces the peripheral eigenvalue set to be `{1}`, which together with
-irreducibility is the normal-tensor condition of arXiv:1606.00608,
-lines 233--235. -/
+positive-definite eigenvector becomes a fixed point. Irreducibility and Wolf
+Theorem 6.3(4) (`spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp`)
+then identify its eigenvalue `1` with the spectral radius. The peripheral
+eigenvalues are therefore the eigenvalues of modulus one; the uniqueness
+hypothesis forces this set to be `{1}`. Together with irreducibility, these are
+the normal-tensor conditions of arXiv:1606.00608, lines 233--235. -/
 theorem isNormalTensor_invSqrt_smul_of_unique_peripheral {n : ℕ} [NeZero n]
     (B : MPSTensor d n) (hIrr : IsIrreducibleTensor B)
     (ρ : Matrix (Fin n) (Fin n) ℂ) (r : ℝ) (hρ : ρ.PosDef) (hr : 0 < r)
