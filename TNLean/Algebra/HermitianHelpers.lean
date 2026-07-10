@@ -400,6 +400,15 @@ theorem trace_smul_one_sub_self_posSemidef [Nonempty n]
   rw [hdecomp]
   exact hextra.add hshift
 
+/-- A nonzero positive semidefinite matrix has positive trace, in the complex
+star order: the trace is a positive real.  This is the trace positivity used
+for the nonzero sector compressions
+$0 \ne P_{\alpha,k}H^{(N)}P_{\alpha,k} \ge 0$ in the proof of Proposition 4.13
+of arXiv:1606.00608, lines 1899--1903. -/
+theorem trace_pos_of_ne_zero {M : Matrix n n ℂ} (hM : M.PosSemidef)
+    (h : M ≠ 0) : 0 < Matrix.trace M :=
+  lt_of_le_of_ne hM.trace_nonneg fun h0 => h (hM.trace_eq_zero_iff.mp h0.symm)
+
 /-- **Commutation with a power of a positive semidefinite matrix implies
 commutation with the matrix itself.** If `H ≥ 0`, `p ≠ 0`, and `Q` commutes
 with `H ^ p`, then `Q` commutes with `H`.
