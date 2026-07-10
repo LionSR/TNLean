@@ -44,7 +44,6 @@ The pure-state theorem states that, for a tensor $A$ in canonical form,
   \mathrm{ZCL}(A)
   \quad\Longleftrightarrow\quad
   \mathbb E_A^2=\mathbb E_A.
-  \tag{\path{TheoremZCLPure}}
 \end{align}
 In the proof, the source first identifies local orthogonality with the equations
 $\mathbb E_{j,j'}=0$ for $j\ne j'$.  After assuming those equations, it proves
@@ -81,25 +80,50 @@ obtained from $\mathbb E_A^n=\mathbb E_A$ for all $n\ge 1$.  The reverse
 direction of that displayed equivalence is immediate because the left-hand side
 already contains $\mathbb E_A^2=\mathbb E_A$.
 
-This is a useful local statement, but it is not the source theorem
-\path{TheoremZCLPure}: the source theorem uses the BNT-family predicate
-\leanid{MPSTensor.IsBNTZCL}, whose local-orthogonality part is the
-mixed-sector equations (LO).
+This is a useful local statement, but it is not the source theorem at
+lines 498--502 and 1248--1268. The source theorem uses unrestricted physical CID
+together with the BNT-family mixed-sector equations (LO).  That source
+predicate has no formal counterpart; in particular, it is not the
+virtual-insertion predicate \leanid{MPSTensor.IsBNTZCL}.
 
 \section{Elimination plan}
 
-The formalization now has a BNT-family version of local orthogonality carrying
-the equations
+The formalization now has a BNT-family version of local orthogonality,
+\leanid{MPSTensor.IsBNTLocallyOrthogonal}, carrying the equations
+$\mathbb E_{j,j'}=0$ for all $j\ne j'$, and two BNT-family predicates built on
+it.  Writing $\mathrm{BNT}(A)$ for the condition that the family is a basis of
+normal tensors for $A$, the predicate \leanid{MPSTensor.IsBNTZCL} uses the
+virtual-insertion condition,
 \[
-  \mathbb E_{j,j'}=0 \qquad (j\ne j'),
+  \mathrm{ZCL}^{\mathrm{virt}}_{\mathrm{BNT}}(A)
+  :=
+  \mathrm{BNT}(A)\wedge
+  \mathrm{CID}_{\mathrm{virt}}(A)\wedge
+  \bigl(\forall j\ne j',\, \mathbb E_{j,j'}=0\bigr),
 \]
-and a BNT-family ZCL predicate
+where $\mathrm{CID}_{\mathrm{virt}}$ quantifies over arbitrary virtual bond
+matrices. The positive-gap formal predicate uses the physical condition below,
+\footnote{The formal predicate is
+\path{MPSTensor.IsPositiveGapBNTZCL}.}
+\[
+  \mathrm{ZCL}^{\mathrm{pos}}_{\mathrm{BNT}}(A)
+  :=
+  \mathrm{BNT}(A)\wedge
+  \mathrm{CID}^{\mathrm{pos}}_{\mathrm{physical}}(A)\wedge
+  \bigl(\forall j\ne j',\, \mathbb E_{j,j'}=0\bigr),
+\]
+where $\mathrm{CID}^{\mathrm{pos}}_{\mathrm{physical}}$ is the positive-gap
+physical predicate.\footnote{The formal predicate is
+\path{MPSTensor.IsPositiveGapPhysicalCID}.} Neither
+predicate contains the unrestricted physical CID of Definition~3.3, so the
+source zero-correlation-length predicate
 \[
   \mathrm{ZCL}_{\mathrm{BNT}}(A)
   :=
-  \mathrm{CID}(A)\wedge
-  \bigl(\forall j\ne j',\, \mathbb E_{j,j'}=0\bigr).
+  \mathrm{CID}_{\rm physical}(A)\wedge
+  \bigl(\forall j\ne j',\, \mathbb E_{j,j'}=0\bigr)
 \]
+remains without a formal counterpart.
 The remaining target theorem for tensors in canonical form is then
 \[
   \mathrm{ZCL}_{\mathrm{BNT}}(A)
@@ -113,6 +137,63 @@ canonical-form theorem is stated with the BNT predicate.\footnote{Tracked by
 
 The present theorem is therefore a scope restriction: it records the one-block
 idempotence/CID consequence, while the BNT-level equivalence remains open.
+
+There is a second distinction in the correlation predicate. Definition~3.3
+quantifies over physical observables on arbitrary finite regions, and the
+two-observable formula at lines 490--496 inserts such an observable through
+
+\[
+  \mathbb E_O(X)
+  =\sum_{\boldsymbol i,\boldsymbol j}
+    \langle\boldsymbol j|O|\boldsymbol i\rangle
+    A^{\boldsymbol i}X(A^{\boldsymbol j})^\dagger .
+\]
+
+For two observed blocks on a periodic chain, the contraction is the operator
+trace on the virtual matrix space,
+\[
+  \operatorname{Tr}_{M_D(\mathbb C)}\!\left(
+    \mathbb E_{O_2}\circ\mathbb E_A^{n_2}\circ
+    \mathbb E_{O_1}\circ\mathbb E_A^{n_1}\right).
+\]
+It is not the matrix trace obtained by applying this composition to the
+identity matrix; the latter gives a different contraction for a general Kraus
+family.
+
+The formal positive-gap predicate records this formula when both complementary
+gaps between the observed regions are positive. The corresponding theorem
+proves\footnote{The formal theorem is
+\path{MPSTensor.isPositiveGapPhysicalCID_of_isRFP}.}
+\[
+  \mathbb E_A^2=\mathbb E_A
+  \quad\Longrightarrow\quad
+  \operatorname{CID}_{\rm physical}^{\text{positive gaps}}(A).
+\]
+
+This is not yet Definition~3.3, which quantifies over all disjoint regions and
+therefore includes adjacent regions. For an adjacent pair, one complementary
+transfer power in the formula at lines 490--496 is $\mathbb E_A^0=1$. Idempotence gives
+$\mathbb E_A^n=\mathbb E_A$ only for $n\geq1$ and does not identify
+$\mathbb E_A^0$ with $\mathbb E_A$.  The positive-gap theorem is consequently
+a scope restriction, not the full forward implication of the source theorem
+at lines 498--502.
+The older predicate \leanid{MPSTensor.IsCID} instead quantifies directly over
+arbitrary virtual matrices $X,Y$.  Its converse to idempotence is valid, but it
+is stronger than physical CID: the source obtains the required virtual
+insertions from physical observables by block injectivity
+(lines 1250--1258).  Closing the reverse implication therefore requires a
+formal physical-realization theorem for block observables, followed by the
+nonzero power-sum argument in lines 1260--1268.  One must not identify the two
+CID predicates before that realization theorem is proved.  Since the older
+predicate universally quantifies over positive definite fixed points, it is
+also vacuous for a tensor without such a fixed point.  The periodic-chain
+predicate avoids this boundary-state issue.
+
+Accordingly, \leanid{MPSTensor.IsBNTZCL} remains the virtual-insertion
+surrogate, while \leanid{MPSTensor.IsPositiveGapBNTZCL} names the physical
+positive-gap condition.  Neither is Definition~3.6.  The unrestricted source
+BNT zero-correlation-length predicate and its equivalence with transfer
+idempotence remain open.
 
 \bibliographystyle{alpha}
 \bibliography{references}
