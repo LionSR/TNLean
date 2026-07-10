@@ -232,7 +232,7 @@ theorem mpv_diagonalTensor_nonneg (M : MPOTensor d D) {N : ℕ}
 
 /-! ### Positivity and one-sided invariant projections -/
 
-/-- A one-sided invariant corner of a positive semidefinite matrix is reducing.
+/-- The opposite corner vanishes for a one-sided invariant Hermitian matrix.
 
 More precisely, if `P * H = P * H * P`, then Hermiticity of `H` and `P` gives
 `H * P = P * H * P` by taking adjoints.  Thus the complementary corner
@@ -253,14 +253,14 @@ theorem opposite_corner_eq_zero_of_posSemidef {n : Type*} [Fintype n] [Decidable
           hH.isHermitian.eq, Matrix.mul_assoc]
   rw [Matrix.sub_mul, Matrix.one_mul, Matrix.sub_mul, hRight, hInv, sub_self]
 
-/-- For an MPDO, a one-sided invariant projection of an `N`-site density
+/-- For an MPDO, a one-sided invariant Hermitian matrix for an `N`-site density
 operator has zero opposite corner.
 
 This is equation `eq1:proof.IV.12` in the proof of Proposition 4.13 of
 arXiv:1606.00608, lines 1873--1887.  The subsequent use of Lemma L transfers
 this operator equality back to the tensor blocks; the present lemma isolates
-the positivity argument without adding assumptions beyond the one-sided
-invariance and orthogonality of the projection. -/
+the positivity argument without adding assumptions beyond one-sided invariance
+and Hermiticity of `P`. -/
 theorem mpo_opposite_corner_eq_zero (M : MPOTensor d D) (hM : IsMPDO M) (N : ℕ)
     (P : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) (hP : P.IsHermitian)
     (hInv : P * mpo M N = P * mpo M N * P) :
