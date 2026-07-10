@@ -357,26 +357,27 @@ theorem maxEigenvalue_smul_one_sub_posSemidef [Nonempty n]
   rw [smul_one_sub_hermitian_spectral hM (maxEigenvalue hM)]
   simpa [U, Λ] using hconj
 
-namespace Matrix.PosSemidef
-
 /-- The opposite corner vanishes for a one-sided invariant Hermitian matrix.
 
 More precisely, if `P * H = P * H * P`, then Hermiticity of `H` and `P` gives
 `H * P = P * H * P` by taking adjoints. Thus `(1 - P) * H * P = 0`.
 This is the finite-dimensional operator identity used in arXiv:1606.00608,
 Proposition 4.13, lines 1873--1887 (equation `eq1:proof.IV.12`). -/
-theorem opposite_corner_eq_zero {H P : Matrix n n ℂ} (hH : H.PosSemidef)
+theorem Matrix.IsHermitian.opposite_corner_eq_zero {H P : Matrix n n ℂ}
+    (hH : H.IsHermitian)
     (hP : P.IsHermitian) (hInv : P * H = P * H * P) :
     (1 - P) * H * P = 0 := by
   have hRight : H * P = P * H * P := by
     calc
       H * P = (P * H)ᴴ := by
-        rw [Matrix.conjTranspose_mul, hP.eq, hH.isHermitian.eq]
+        rw [Matrix.conjTranspose_mul, hP.eq, hH.eq]
       _ = (P * H * P)ᴴ := congrArg Matrix.conjTranspose hInv
       _ = P * H * P := by
         rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul, hP.eq,
-          hH.isHermitian.eq, Matrix.mul_assoc]
+          hH.eq, Matrix.mul_assoc]
   rw [Matrix.sub_mul, Matrix.one_mul, Matrix.sub_mul, hRight, sub_self]
+
+namespace Matrix.PosSemidef
 
 /-- The largest eigenvalue of a positive semidefinite matrix is bounded by its
 trace. -/

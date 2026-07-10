@@ -52,7 +52,7 @@ surrogate for the paper's vertical canonical form.
 * `mpv_diagonalTensor_eq_mpo_diag` / `mpv_diagonalTensor_nonneg`:
   the diagonal-tensor MPV equals the density-operator diagonal `⟨σ|ρ^{(N)}(M)|σ⟩`,
   hence is nonnegative when `M` generates an MPDO.
-* `Matrix.PosSemidef.opposite_corner_eq_zero` / `mpo_opposite_corner_eq_zero`:
+* `Matrix.IsHermitian.opposite_corner_eq_zero` / `mpo_opposite_corner_eq_zero`:
   the positivity identity `P H = P H P ⇒ (1 - P) H P = 0` used in the first
   step of Proposition 4.13.
 * `mpv_verticalAssembledTensor_eq_sum`:
@@ -245,7 +245,7 @@ theorem mpo_opposite_corner_eq_zero (M : MPOTensor d D) (hM : IsMPDO M) (N : ℕ
     (P : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) (hP : P.IsHermitian)
     (hInv : P * mpo M N = P * mpo M N * P) :
     (1 - P) * mpo M N * P = 0 :=
-  Matrix.PosSemidef.opposite_corner_eq_zero (hM N) hP hInv
+  Matrix.IsHermitian.opposite_corner_eq_zero (hM N).isHermitian hP hInv
 
 /-- The vertical transfer map of an MPO tensor:
 `E_vert(X) = Σ_i M^{ii} X (M^{ii})†`. -/
@@ -634,7 +634,7 @@ theorem blockwise_opposite_insert_eq_of_mpv_agree
     {r : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ}
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : HorizontalCFData (d := d) μ A)
-    (Yleft Ycorner Yright : Matrix (Fin d) (Fin d) ℂ)
+    {Yleft Ycorner Yright : Matrix (Fin d) (Fin d) ℂ}
     (hInv : MPSTensor.FirstSiteActionAgree
       (MPSTensor.toTensorFromBlocks (d := d) (μ := μ) A) Yleft Ycorner)
     (hPos : MPSTensor.FirstSiteActionAgree
