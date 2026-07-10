@@ -17,7 +17,6 @@ cyclic-sector normalization argument.
 ## Main declarations
 
 * `leftSectorTensor`
-* `commutes_evalWord_of_commutes_letters`
 * `left_mul_evalWord_leftSectorTensor_of_commutes`
 * `leftSectorTensor_supported`
 
@@ -38,23 +37,6 @@ section BasicProjectionWordLemmas
 /-- Left-multiply every letter by `P`. -/
 noncomputable def leftSectorTensor (P : MatrixAlg D) (A : MPSTensor d D) : MPSTensor d D :=
   fun i => P * A i
-
-/-- If `P` commutes with every letter of `A`, then it commutes with every evaluated word. -/
-lemma commutes_evalWord_of_commutes_letters
-    (P : MatrixAlg D) (A : MPSTensor d D)
-    (hComm : ∀ i : Fin d, P * A i = A i * P) :
-    ∀ w : List (Fin d), P * evalWord A w = evalWord A w * P := by
-  intro w
-  induction w with
-  | nil =>
-      simp only [evalWord, Matrix.one_mul, Matrix.mul_one]
-  | cons i w ih =>
-      simp only [evalWord]
-      calc P * (A i * evalWord A w)
-          = A i * (evalWord A w * P) := by
-            rw [← Matrix.mul_assoc, ← Matrix.mul_assoc, hComm i, Matrix.mul_assoc,
-              Matrix.mul_assoc, ih]
-        _ = A i * evalWord A w * P := by rw [← Matrix.mul_assoc]
 
 lemma left_mul_evalWord_leftSectorTensor_of_commutes
     (P : MatrixAlg D) (A : MPSTensor d D)

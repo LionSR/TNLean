@@ -48,6 +48,23 @@ lemma evalWord_append (A : MPSTensor d D) :
   | nil => simp [evalWord]
   | cons i w1 ih => simp [evalWord, ih, Matrix.mul_assoc]
 
+/-- If `P` commutes with every letter of `A`, then it commutes with every evaluated word. -/
+lemma commutes_evalWord_of_commutes_letters
+    (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D)
+    (hComm : ∀ i : Fin d, P * A i = A i * P) :
+    ∀ w : List (Fin d), P * evalWord A w = evalWord A w * P := by
+  intro w
+  induction w with
+  | nil =>
+      simp only [evalWord, Matrix.one_mul, Matrix.mul_one]
+  | cons i w ih =>
+      simp only [evalWord]
+      calc P * (A i * evalWord A w)
+          = A i * (evalWord A w * P) := by
+            rw [← Matrix.mul_assoc, ← Matrix.mul_assoc, hComm i, Matrix.mul_assoc,
+              Matrix.mul_assoc, ih]
+        _ = A i * evalWord A w * P := by rw [← Matrix.mul_assoc]
+
 /-- Scaling of word evaluation:
 scaling every matrix by a scalar `ζ` scales `evalWord` by the factor
 `ζ ^ w.length`. -/

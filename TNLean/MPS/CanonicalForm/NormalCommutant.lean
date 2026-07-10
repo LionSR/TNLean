@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Algebra.ScalarCommutant
 import TNLean.Algebra.MatrixGramUnitary
-import TNLean.MPS.CanonicalForm.CyclicSectors.Basic
+import TNLean.MPS.Defs
 import Mathlib.LinearAlgebra.Matrix.PosDef
 
 /-!
