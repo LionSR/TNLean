@@ -241,8 +241,8 @@ For a tensor with a positive-definite fixed point, independence of the
 virtual-insertion correlator implies that the transfer map is idempotent.
 
 The proof uses trace nondegeneracy: IsCID forces
-$\operatorname{tr}(Y\, E^n(X \rho_R))$ to be constant in `n` for all `X`, `Y`,
-so $E^n(X \rho_R)$ is constant. Since `ρR` is PosDef (hence invertible),
+$\operatorname{tr}(Y\, E^n(X \rho_R))$ to be constant in $n$ for all $X,Y$,
+so $E^n(X \rho_R)$ is constant. Since $\rho_R$ is positive definite and hence invertible,
 $X \rho_R$ ranges over all matrices, giving $E^2 = E$.
 
 **Scope restriction (virtual insertions):** `IsCID` quantifies over arbitrary
