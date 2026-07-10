@@ -32,13 +32,18 @@ where \(\varphi_j\) is shared by \(b_n\) and \(a_{n+1}\), and \(U\) acts on
 basic-vector form to commutativity of the translated two-site terms
 \(h_i=\tau_i(P_2^\perp)\).
 
-The declarations below separate four mathematical statements:
+The declarations below separate the following mathematical statements:
 
-* the coefficient expression for \(U^{\otimes L}\varphi_j^{\otimes L}\);
+* the coefficient expression for
+  \(U^{\otimes L}\varphi_j^{\otimes L}\);
 * the even-chain physical-pair factorization condition used later in this file;
 * the two local coefficient-space representatives used before the \(AX\) and
   \(XB\) lifts;
 * the already formalized Appendix B structural form.
+
+The tensor powers of \(U\), the two-site bond insertion, the equality of its
+physical image with \(G_2(\Lambda U)\), and the orthogonal support projector are
+constructed in `TNLean.MPS.RFP.AppendixBSupport`.
 
 **Scope restriction (overlapping two-site terms):** The source \(AX\) and
 \(XB\) support maps are treated in their basic-vector form. Definition D.2 of
@@ -50,9 +55,17 @@ Appendix B core-tensor comparison, before it is placed on the \(AX\) and \(XB\)
 faces. They do not by themselves construct the source projectors on
 \(\mathcal H_A\otimes\mathcal H_X\) and
 \(\mathcal H_X\otimes\mathcal H_B\), nor do they prove the lifted commutator.
-For this reason commutativity of the translated idempotents is kept as an
-explicit hypothesis. Eliminating this hypothesis is the source
-projector-construction and commutator step recorded in
+The tensor-power and physical support constructions are provided in
+`TNLean.MPS.RFP.AppendixBSupport`.  The remaining step is to construct the
+orthogonal projector onto the virtual bond subspace \(\mathbb C\varphi_j\), place
+two copies on a three-site virtual chain, transport them through
+\(U^{\otimes3}\), and pass from the spectator range projector \(UU^*\) to the
+full physical identity.  This last passage must use the containment of the
+two-site support in \(\operatorname{ran}(U)^{\otimes2}\).  The complements of
+the resulting physical support projectors can then be identified with the two
+coefficient representatives.  For this reason commutativity of the translated
+idempotents is kept as an explicit hypothesis. The remaining commutator step is
+recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 -/
 
