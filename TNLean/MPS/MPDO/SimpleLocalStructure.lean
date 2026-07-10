@@ -69,12 +69,13 @@ that inverse-map layer for an injective simple MPO tensor, given by
 
 `MPOTensor.ExplicitEtaOperators.ofHayashiMarkov` constructs a canonical family
 directly from the Hayashi decomposition witness as the Kronecker product of
-the sector-indexed neighboring reduced states,
-`tr_C(ρ_right k) ⊗ tr_A(ρ_left h)`. This extraction is strictly weaker than
+the sector-indexed neighboring reduced states: the right reduced state in
+sector k and the left reduced state in sector h. This extraction is strictly
+weaker than
 the paper's `K⁻¹`-based construction: it does not invoke the inverse-map layer
 and its trace matrix is identically one. By contrast, the paper's neighboring
-operators have the generally nonconstant primitive trace matrix
-`T_{k,h} = tr(η_{k,h})`. Consequently these two families cannot simply be
+operators have the generally nonconstant primitive trace matrix whose kh-entry
+is the trace of ηₖₕ. Consequently these two families cannot simply be
 identified.
 
 The earliest missing connection to Appendix C.2 is the conclusion of Lemma

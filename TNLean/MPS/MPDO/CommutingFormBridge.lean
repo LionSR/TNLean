@@ -28,12 +28,12 @@ for every `N`. The later Proposition `3to4` step assembles those source
 operators into a single translation-invariant positive two-site bond whose
 translated copies commute.
 
-This is the strongest unconditional forward step currently available.
-The intended future Proposition C.8 proof should first establish the
-inverse-map sector factorization of Lemma `propSN` and then construct
-`EtaLocalStructureData M` from its neighboring operators; the existing
-theorem `hasCommutingForm_of_etaLocalStructure` will then discharge the global
-commuting-form target.
+*Proof-state note.* The strongest unconditional conclusion currently available
+starts from `EtaLocalStructureData M`.  To reach it from SAL, one must first
+establish the inverse-map sector factorization of Lemma `propSN` and then
+construct the neighboring operators carried by `EtaLocalStructureData M`.
+The theorem `hasCommutingForm_of_etaLocalStructure` then gives the global
+commuting-form conclusion.
 
 ## Main declarations
 
