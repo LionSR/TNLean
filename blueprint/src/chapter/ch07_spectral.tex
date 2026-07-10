@@ -1271,6 +1271,60 @@ step the two pieces are.
     whole space $W = \C^{D}$, which is invariant under every member of $S$.
 \end{proof}
 
+The irreducibility notion just used is simplicity in the language of modules. The
+members of $S$ act on $\C^{D}$ as the operators their matrices represent, making
+$\C^{D}$ a module over the algebra $S$.
+
+\begin{lemma}[Irreducible invariant subspaces are the simple submodules]%
+    \label{lem:starSubalgebra_irreducible_iff_simple}
+    \lean{StarSubalgebra.isInvariantSubspace_iff_exists_restrictScalars,
+      StarSubalgebra.isIrreducibleSubspace_restrictScalars_iff}
+    \leanok
+    \uses{def:starSubalgebra_irreducibleSubspace}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$, acting on $\C^{D}$. A complex
+    subspace $W \subseteq \C^{D}$ is invariant under every member of $S$ if and
+    only if $W$ is the underlying complex subspace of a submodule of $\C^{D}$
+    over $S$. Under this identification an invariant subspace is irreducible
+    under $S$ precisely when, as a module over $S$, it is simple: nonzero, with
+    no submodule other than $\{0\}$ and itself.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:starSubalgebra_irreducibleSubspace}
+    The underlying set of a submodule of $\C^{D}$ over $S$ is closed under
+    addition and under the action of every member of $S$; since the complex
+    scalars lie in $S$, it is a complex subspace, and it is invariant.
+    Conversely an invariant complex subspace $W$ is closed under addition and
+    under the action of every member of $S$, so $W$ underlies a submodule $q$
+    of $\C^{D}$ over $S$ with the same members. Under this correspondence the
+    submodules below $q$ are exactly the invariant subspaces below $W$:
+    \[
+        \{\, q' \subseteq q : q' \text{ a submodule over } S \,\}
+        =
+        \{\, W' \subseteq W : W' \text{ invariant under } S \,\}.
+    \]
+    Hence $q$ has a submodule other than $\{0\}$ and $q$ exactly when $W$ has
+    an invariant subspace other than $\{0\}$ and $W$: simplicity of $q$ as a
+    module over $S$ is irreducibility of $W$ under $S$.
+\end{proof}
+
+\begin{lemma}[Euclidean space is a semisimple module over the subalgebra]%
+    \label{lem:starSubalgebra_isSemisimpleModule}
+    \lean{StarSubalgebra.isSemisimpleModule_euclideanSpace}
+    \leanok
+    \uses{lem:starSubalgebra_isSemisimpleRing}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$. As a module over $S$, the space
+    $\C^{D}$ is semisimple: every submodule admits a complementary submodule.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:starSubalgebra_isSemisimpleRing}
+    The ring $S$ is semisimple (Lemma~\ref{lem:starSubalgebra_isSemisimpleRing}),
+    and every module over a semisimple ring is semisimple.
+\end{proof}
+
 The next step towards the structure theorem groups the irreducible pieces by
 isomorphism type. The grouping is governed by Schur's lemma: a map commuting with
 $S$ between two pieces is either zero or an isomorphism, and over the complex
