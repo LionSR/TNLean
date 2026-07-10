@@ -97,6 +97,55 @@ strong subadditivity for a normalized three-site reduced state.
     and the analogous left-insertion statement also holds.
 \end{theorem}
 
+\begin{definition}[Three-site inverse-map contraction]
+    \label{def:mpdo_inverse_map_three_site_contraction}
+    \lean{MPOTensor.inverseMapThreeSiteContraction}
+    \leanok
+    \uses{def:mpdo_injective_inverse_layer}
+    Let ${\cal K}$ be an injective simple MPO tensor, and let $R\in\MN{D}$ be
+    the virtual contraction of the sites following a three-site word. For
+    virtual indices
+    $\alpha_1,\beta_1,\alpha_3,\beta_3$, define
+    \[
+        C_{\alpha_1,\beta_1,\alpha_3,\beta_3}(p_2;R)
+        =\sum_{p_1,p_3}
+        ({\cal K}^{-1})^{\alpha_1,\beta_1}_{p_1}
+        ({\cal K}^{-1})^{\alpha_3,\beta_3}_{p_3}
+        \tr\bigl({\cal K}^{p_1}{\cal K}^{p_2}
+        {\cal K}^{p_3}R\bigr).
+    \]
+    This is the contraction used in the proof of
+    \cite[Appendix~C.2, Lemma~C.4]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Evaluation of the three-site inverse-map contraction]
+    \label{thm:mpdo_inverse_map_three_site_contraction}
+    \lean{MPOTensor.inverseMapThreeSiteContraction_eq}
+    \leanok
+    \uses{def:mpdo_inverse_map_three_site_contraction}
+    % The source display following Qketc repeats alpha_3 in the tail scalar.
+    % Direct matrix-unit contraction gives R_{beta_3,alpha_1}; see the paper-gap note.
+    For every middle physical index $p_2$,
+    \[
+        C_{\alpha_1,\beta_1,\alpha_3,\beta_3}(p_2;R)
+        = {\cal K}^{p_2}_{\beta_1,\alpha_3}
+        R_{\beta_3,\alpha_1}.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_injective_inverse_layer_spec}
+    Move the two finite sums through the trace. The two inverse-map identities
+    replace the contracted tensors by the matrix units
+    $E_{\alpha_1,\beta_1}$ and $E_{\alpha_3,\beta_3}$. Hence
+    \[
+        \tr\bigl(E_{\alpha_1,\beta_1}{\cal K}^{p_2}
+          E_{\alpha_3,\beta_3}R\bigr)
+        = {\cal K}^{p_2}_{\beta_1,\alpha_3}
+          R_{\beta_3,\alpha_1}.
+    \]
+\end{proof}
+
 \begin{definition}[Explicit neighboring $\eta$-operator data]
     \label{def:mpdo_explicit_eta_operators}
     \lean{MPOTensor.etaOperators}
