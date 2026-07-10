@@ -42,6 +42,7 @@ import TNLean.Algebra.StarSubalgebraIntertwinerIsometry
 import TNLean.Algebra.StarSubalgebraIrreducibleDecomp
 import TNLean.Algebra.StarSubalgebraIsotypic
 import TNLean.Algebra.StarSubalgebraIsotypicDecomp
+import TNLean.Algebra.StarSubalgebraIsotypicFactorization
 import TNLean.Algebra.StarSubalgebraSchur
 import TNLean.Algebra.StarSubalgebraSemisimple
 import TNLean.Algebra.StarSubalgebraSimpleModule

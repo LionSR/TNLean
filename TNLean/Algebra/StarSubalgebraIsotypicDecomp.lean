@@ -27,7 +27,8 @@ family, the components span the whole space.
   orthogonal.
 * `StarSubalgebra.exists_orthogonal_isotypic_decomposition` -- the whole representation space
   is the supremum of a finite, pairwise orthogonal family of isotypic components, each of
-  which is the supremum of a finite, nonempty same-type class of irreducible pieces.
+  which is the supremum of a finite, nonempty same-type class of pairwise orthogonal
+  irreducible pieces.
 -/
 
 namespace StarSubalgebra
@@ -52,19 +53,19 @@ theorem isOrtho_sSup_of_not_sameIsotype
 
 /-- The whole representation space of a finite-dimensional star-subalgebra of complex matrices
 is the supremum of a finite, pairwise orthogonal family of isotypic components. Each component
-is the supremum of a finite, nonempty same-type class of irreducible pieces. The orthogonal
-decomposition into irreducible pieces supplies the family; the same-type relation groups it
-into classes; and pieces of different type are orthogonal, so distinct components are
-orthogonal. See
+is the supremum of a finite, nonempty same-type class of pairwise orthogonal irreducible
+pieces. The orthogonal decomposition into irreducible pieces supplies the family; the
+same-type relation groups it into classes, which inherit the pairwise orthogonality; and
+pieces of different type are orthogonal, so distinct components are orthogonal. See
 *Quantum Channels & Operations* (Wolf 2012), Chapter 6, towards Theorem 6.14. -/
 theorem exists_orthogonal_isotypic_decomposition :
     ∃ C : Set (Submodule ℂ (EuclideanSpace ℂ n)), C.Finite ∧
       C.Pairwise (· ⟂ ·) ∧ sSup C = ⊤ ∧
       ∀ c ∈ C, ∃ Dc : Set (Submodule ℂ (EuclideanSpace ℂ n)),
         Dc.Nonempty ∧ Dc.Finite ∧ (∀ p ∈ Dc, S.IsIrreducibleSubspace p) ∧ c = sSup Dc ∧
-          Dc.Pairwise fun p q => S.SameIsotype p q := by
+          Dc.Pairwise (· ⟂ ·) ∧ Dc.Pairwise fun p q => S.SameIsotype p q := by
   classical
-  obtain ⟨D, hDfin, hDirr, -, hDsup⟩ := S.exists_orthogonal_irreducible_decomposition
+  obtain ⟨D, hDfin, hDirr, hDpair, hDsup⟩ := S.exists_orthogonal_irreducible_decomposition
   -- The same-type class of a piece `p`, taken within the family `D`.
   set cls : Submodule ℂ (EuclideanSpace ℂ n) → Set (Submodule ℂ (EuclideanSpace ℂ n)) :=
     fun p => {q ∈ D | S.SameIsotype p q} with hcls
@@ -109,9 +110,11 @@ theorem exists_orthogonal_isotypic_decomposition :
       exact sSup_le fun q hq => le_sSup hq.1
     · -- Each piece sits inside the supremum of its own class, hence inside that component.
       exact le_trans (le_sSup (hcls_self p hp)) (le_sSup ⟨p, hp, rfl⟩)
-  · -- Each component carries its class as the requested witness.
+  · -- Each component carries its class as the requested witness; the class inherits the
+    -- pairwise orthogonality of the family.
     rintro c ⟨p, hp, rfl⟩
-    exact ⟨cls p, ⟨p, hcls_self p hp⟩, hcls_fin p, hcls_irr p, rfl, hcls_same p hp⟩
+    exact ⟨cls p, ⟨p, hcls_self p hp⟩, hcls_fin p, hcls_irr p, rfl,
+      hDpair.mono (Set.sep_subset _ _), hcls_same p hp⟩
 
 end StarSubalgebra
 
