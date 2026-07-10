@@ -166,10 +166,12 @@
         \node[draw, rounded corners, fill=blue!8, inner sep=2pt] (Uu) at (-2.55,0.76) {$U^\dagger$};
         \TN@tensordot{tnK}{(-2.55,0)}
         \node[draw, rounded corners, fill=blue!8, inner sep=2pt] (Ud) at (-2.55,-0.76) {$U$};
-        \draw[tn phys leg] (Uu.north) -- ++(0,0.36);
+        \draw[tn phys leg] ($(Uu.north)+(-0.11,0)$) -- ++(0,0.36);
+        \draw[tn phys leg] ($(Uu.north)+(0.11,0)$) -- ++(0,0.36);
         \draw[tn phys leg] (Uu.south) -- (tnK.north);
         \draw[tn phys leg] (tnK.south) -- (Ud.north);
-        \draw[tn phys leg] (Ud.south) -- ++(0,-0.36);
+        \draw[tn phys leg] ($(Ud.south)+(-0.11,0)$) -- ++(0,-0.36);
+        \draw[tn phys leg] ($(Ud.south)+(0.11,0)$) -- ++(0,-0.36);
         \TN@leftleg{tnK}{0.58}
         \TN@rightleg{tnK}{0.58}
         \node at (-2.88,-0.24) {$K$};
@@ -194,9 +196,9 @@
         \TN@downleg{tnRh}{0.50}
         \TN@upleg{tnLk}{0.50}
         \TN@downleg{tnLk}{0.50}
-        \node at (3.20,0.78) {$r_h$};
-        \node at (4.32,0.78) {$l_k$};
-        \node at (3.76,-0.80) {$\eta_{k,h}=r_h l_k\geq 0$};
+        \node at (3.20,0.78) {$r_k$};
+        \node at (4.32,0.78) {$l_h$};
+        \node at (3.76,-0.80) {$\eta_{k,h}=r_k l_h\geq 0$};
     \end{tikzpicture}%
 }
 
