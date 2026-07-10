@@ -79,11 +79,14 @@ is the trace of ηₖₕ. Consequently these two families cannot simply be
 identified.
 
 The earliest missing connection to Appendix C.2 is the conclusion of Lemma
-`propSN`: the inverse-map calculation must produce a sector factorization of
-the concrete tensor `K`, together with neighboring operators whose cyclic
-sector contractions agree with `mpo K N` for every `N`. Only after that
-statement is available can its sector operators be assembled into the common
-two-site bond of Proposition `3to4`.
+propSN: the inverse-map calculation must produce a sector factorization of the
+concrete tensor `K` satisfying, for every `N`,
+\[
+  \widetilde\sigma^{(N)}(K)
+    = \bigoplus_{k_1,\ldots,k_N}\bigotimes_{n=1}^N \eta_{k_n,k_{n+1}}.
+\]
+Only after that identity is available can its sector operators be assembled
+into the common two-site bond of Proposition 3to4.
 
 Lemma C.5 is further isolated to the finite-dimensional Perron–Frobenius step:
 for a primitive nonnegative matrix `T`, constant traces of positive powers are

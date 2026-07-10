@@ -22,15 +22,19 @@ and `SimpleLocalStructure` gives a canonical sector-reduced family through
 `MPOTensor.ExplicitEtaOperators.ofHayashiMarkov`. That family is not the
 inverse-map family used in Appendix C.2: its trace matrix is identically one,
 whereas the source allows a general primitive trace matrix. The earliest
-remaining result is therefore Lemma `propSN`, which derives from the concrete
-tensor `K` a sector factorization whose cyclic contractions realize `mpo K N`
-for every `N`. The later Proposition `3to4` step assembles those source
+remaining result is therefore Lemma propSN, which derives from the concrete
+tensor `K` a sector factorization satisfying, for every `N`,
+\[
+  \widetilde\sigma^{(N)}(K)
+    = \bigoplus_{k_1,\ldots,k_N}\bigotimes_{n=1}^N \eta_{k_n,k_{n+1}}.
+\]
+The later Proposition 3to4 step assembles those source
 operators into a single translation-invariant positive two-site bond whose
 translated copies commute.
 
 *Proof-state note.* The strongest unconditional conclusion currently available
 starts from `EtaLocalStructureData M`.  To reach it from SAL, one must first
-establish the inverse-map sector factorization of Lemma `propSN` and then
+establish the inverse-map sector factorization of Lemma propSN and then
 construct the neighboring operators carried by `EtaLocalStructureData M`.
 The theorem `hasCommutingForm_of_etaLocalStructure` then gives the global
 commuting-form conclusion.
