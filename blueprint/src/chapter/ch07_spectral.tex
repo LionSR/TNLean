@@ -531,6 +531,40 @@ a block embedding of a mixed-transfer eigenvector.
 
 \section{MPV overlap decay}
 
+Two lemmas about a complex Banach algebra translate the
+transfer-operator gap into convergence statements.
+
+\begin{lemma}[Powers vanish below unit spectral radius]%
+    \label{lem:spectral_radius_pow_zero}
+    \lean{MPSTensor.pow_tendsto_zero_of_spectralRadius_lt_one}
+    \leanok
+    Let $a$ be an element of a complex Banach algebra with
+    $\rho_{\spec}(a) < 1$. Then $a^n \to 0$ as $n \to \infty$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Choose $r$ with $\rho_{\spec}(a) < r < 1$. The Gelfand formula
+    $\|a^n\|^{1/n} \to \rho_{\spec}(a)$ gives $\|a^n\| \le r^n$ for all
+    sufficiently large $n$, and $r^n \to 0$.
+\end{proof}
+
+\begin{lemma}[An idempotent below unit spectral radius vanishes]%
+    \label{lem:idempotent_spectral_radius_zero}
+    \lean{MPSTensor.IsIdempotentElem.eq_zero_of_spectralRadius_lt_one}
+    \leanok
+    Let $a$ be an element of a complex Banach algebra with $a^2 = a$
+    and $\rho_{\spec}(a) < 1$. Then $a = 0$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:spectral_radius_pow_zero}
+    By Lemma~\ref{lem:spectral_radius_pow_zero}, $a^n \to 0$. Idempotence
+    gives $a^{n+1} = a$ for every $n$, so the shifted power sequence is
+    constant with value $a$; uniqueness of limits gives $a = 0$.
+\end{proof}
+
 \begin{theorem}[Transfer powers converge to zero]\label{thm:transfer_pow_zero}
     \lean{MPSTensor.mixedTransfer_pow_tendsto_zero}
     \leanok
@@ -542,11 +576,11 @@ a block embedding of a mixed-transfer eigenvector.
 
 \begin{proof}
     \leanok
-    \uses{thm:transfer_operator_gap}
+    \uses{thm:transfer_operator_gap, lem:spectral_radius_pow_zero}
     The transfer-operator gap $\rho_{\spec}(F_{AB}) < 1$
     (Theorem~\ref{thm:transfer_operator_gap})
     implies $\|F_{AB}^n\|_{\mathrm{op}} \to 0$
-    by the Gelfand formula,
+    by Lemma~\ref{lem:spectral_radius_pow_zero},
     so $F_{AB}^n(X) \to 0$ for every~$X$.
 \end{proof}
 
