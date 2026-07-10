@@ -100,7 +100,7 @@ for all virtual bond matrices.
 For every positive definite right fixed point `ρR` of the transfer map, the
 connected correlator
 $C(X,Y;n) = \langle X_0 Y_n \rangle - \langle X \rangle \langle Y \rangle$ is
-the same for all separations `n ≥ 1` and all bond matrices `X`, `Y`.
+the same for all separations $n \geq 1$ and all bond matrices `X`, `Y`.
 
 **Scope restriction:** this is a virtual-insertion surrogate, not Definition
 3.3 of the source.  It is also vacuous when no positive definite fixed point
@@ -292,7 +292,8 @@ theorem isCID_implies_isRFP
 /-- Single-block ZCL is equivalent to transfer-map idempotence (i.e. `IsRFP`).
 
 Forward: `IsZCL → IsRFP` is immediate since `IsLocallyOrthogonal = IsRFP`.
-Reverse: $E^2 = E$ implies $E^n = E$ for `n ≥ 1` by `IsIdempotentElem.pow_eq`,
+Reverse: $E^2 = E$ implies $E^n = E$ for $n \geq 1$ by
+`IsIdempotentElem.pow_eq`,
 so the connected correlator is independent of separation, giving CID.
 
 **Scope restriction (arXiv:1606.00608, Theorem TheoremZCLPure):** the source

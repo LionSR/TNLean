@@ -355,8 +355,10 @@ length.**
 Let `B` be a basis of normal tensors consisting of nonzero-dimensional,
 irreducible, left-canonical, pairwise gauge-phase-distinct blocks.  If its
 direct-sum tensor has idempotent transfer map, then it has positive-gap
-physical CID and the mixed transfer operators between distinct BNT components
-vanish.
+physical CID and, for all distinct BNT components $j \ne j'$,
+\[
+  \mathcal E_{j,j'}=0.
+\]
 
 This is the positive-gap part of the forward implication in arXiv:1606.00608,
 Theorem TheoremZCLPure (lines 498--502 and 1248--1250), for the explicit
