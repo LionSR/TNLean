@@ -44,16 +44,17 @@ variable {g : ℕ} {dim : Fin g → ℕ}
 
 /-- The transfer insertion associated with an observable on a block of `L`
 physical spins.  If `σ, τ : Fin L → Fin d` label basis words, then
-`physicalObservableTransfer A O X` is
+`physicalObservableTransfer A L O X` is
 `∑_{σ,τ} O_{τ,σ} A^σ X (A^τ)†`.
 
 This is the matrix `𝔼_O` appearing in arXiv:1606.00608, equation `Corr`
 (lines 490--496), written as a map on virtual matrices. -/
 noncomputable def physicalObservableTransfer (A : MPSTensor d D) (L : ℕ)
-    (O : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ)
-    (X : Matrix (Fin D) (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ :=
+    (O : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
+    Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
   ∑ σ : Fin L → Fin d, ∑ τ : Fin L → Fin d,
-    O τ σ • (evalWord A (List.ofFn σ) * X * (evalWord A (List.ofFn τ))ᴴ)
+    O τ σ • ((LinearMap.mulLeft ℂ (evalWord A (List.ofFn σ))).comp
+      (LinearMap.mulRight ℂ (evalWord A (List.ofFn τ))ᴴ))
 
 /-- The periodic-chain two-region expectation obtained by placing observables
 `O₁` and `O₂` on physical blocks, with `n₁` and `n₂` unobserved sites in the two
@@ -64,9 +65,9 @@ noncomputable def physicalTwoPointExpectation (A : MPSTensor d D)
     (O₁ : Matrix (Fin L₁ → Fin d) (Fin L₁ → Fin d) ℂ)
     (O₂ : Matrix (Fin L₂ → Fin d) (Fin L₂ → Fin d) ℂ)
     (n₁ n₂ : ℕ) : ℂ :=
-  Matrix.trace (physicalObservableTransfer A L₂ O₂
-    (((transferMap A) ^ n₂) (physicalObservableTransfer A L₁ O₁
-      (((transferMap A) ^ n₁) 1))))
+  LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ)
+    (physicalObservableTransfer A L₂ O₂ ∘ₗ ((transferMap A) ^ n₂) ∘ₗ
+      physicalObservableTransfer A L₁ O₁ ∘ₗ ((transferMap A) ^ n₁))
 
 /-- Positive-gap physical correlations independent of distance, in the transfer
 formula surrounding arXiv:1606.00608, Definition 3.3 and equation `Corr` (lines
@@ -210,6 +211,15 @@ def IsPositiveGapBNTZCL (A : MPSTensor d D)
     (blocks : (j : Fin g) → MPSTensor d (dim j)) : Prop :=
   IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, blocks j⟩) ∧
     IsPositiveGapPhysicalCID A ∧ IsBNTLocallyOrthogonal blocks
+
+/-- Unfolding of positive-gap BNT zero correlation length into the BNT
+relation, positive-gap physical CID, and BNT local orthogonality. -/
+lemma isPositiveGapBNTZCL_iff (A : MPSTensor d D)
+    (blocks : (j : Fin g) → MPSTensor d (dim j)) :
+    IsPositiveGapBNTZCL A blocks ↔
+      IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, blocks j⟩) ∧
+        IsPositiveGapPhysicalCID A ∧ IsBNTLocallyOrthogonal blocks :=
+  Iff.rfl
 
 /-- Zero correlation length in the single-block convention: a tensor has ZCL
 when it satisfies the local idempotence convention above and has correlations

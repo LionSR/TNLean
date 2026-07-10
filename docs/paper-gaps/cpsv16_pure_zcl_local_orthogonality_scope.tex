@@ -116,7 +116,7 @@ idempotence/CID consequence, while the BNT-level equivalence remains open.
 
 There is a second distinction in the correlation predicate.  Definition~3.3
 quantifies over physical observables on arbitrary finite regions, and
-equation~path{Corr} inserts such an observable through
+equation~\path{Corr} inserts such an observable through
 
 \[
   \mathbb E_O(X)
@@ -124,6 +124,17 @@ equation~path{Corr} inserts such an observable through
     \langle\boldsymbol j|O|\boldsymbol i\rangle
     A^{\boldsymbol i}X(A^{\boldsymbol j})^\dagger .
 \]
+
+For two observed blocks on a periodic chain, the contraction is the operator
+trace on the virtual matrix space,
+\[
+  \operatorname{Tr}_{\MN{D}}\!\left(
+    \mathbb E_{O_2}\circ\mathbb E_A^{n_2}\circ
+    \mathbb E_{O_1}\circ\mathbb E_A^{n_1}\right).
+\]
+It is not the matrix trace obtained by applying this composition to the
+identity matrix; the latter gives a different contraction for a general Kraus
+family.
 
 The predicate \leanid{MPSTensor.IsPositiveGapPhysicalCID} records this formula
 when both complementary gaps between the observed regions are positive.  The
