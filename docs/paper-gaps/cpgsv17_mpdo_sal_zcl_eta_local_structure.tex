@@ -114,8 +114,8 @@ then
   \tr({\cal K}^{p_1}{\cal K}^{p_2}{\cal K}^{p_3}R)
   = {\cal K}^{p_2}_{\beta_1,\alpha_3}R_{\beta_3,\alpha_1}.
 \]
-This is the calculation between Equations \path{Qketc} and
-\path{formK} in the proof of Lemma \path{propSN}.\footnote{The formal
+This is the calculation at lines 1415--1438 of Appendix C.2 in
+arXiv:1606.00608.\footnote{The formal
 declarations are \leanid{MPOTensor.inverseMapThreeSiteContraction} and
 \leanid{MPOTensor.inverseMapThreeSiteContraction_eq}.}
 
@@ -143,11 +143,11 @@ missing comparison must commute the two end contractions through this unitary
 and reindexing, obtain the sectorwise product
 $A^{(k)}_{\alpha_1,\beta_1}\otimes
 B^{(k)}_{\alpha_3,\beta_3}$, and then choose a nonzero entry
-$R_{\beta_3,\alpha_1}$ before dividing to obtain Equation
-\path{formK}.  None of the present physical-realization identities states
-this comparison: they rewrite left or right virtual multiplication on one copy
-of ${\cal K}$, whereas the required equality contracts two physical sites
-of a reduced density operator.
+$R_{\beta_3,\alpha_1}$ before dividing to obtain the sector factorization
+displayed at lines 1434--1438.  None of the present physical-realization
+identities states this comparison: they rewrite left or right virtual
+multiplication on one copy of ${\cal K}$, whereas the required equality
+contracts two physical sites of a reduced density operator.
 
 The canonical family
 \leanid{MPOTensor.ExplicitEtaOperators.ofHayashiMarkov} does not supply this
