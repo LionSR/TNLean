@@ -99,6 +99,22 @@ normal blocks of the vertical canonical form.  In particular, Newton--Girard
 identities for scalar weights address only the multiplicity coefficients; they
 cannot restore matrix directions discarded by the restriction $(i,j)\mapsto(i,i)$.
 
+The first operator identity at lines~1873--1887 is now formalized: if $H\geq0$,
+$P=P^*$, and $PH=PHP$, then
+\[
+    HP=(PH)^*=(PHP)^*=PHP,
+    \qquad
+    (I-P)HP=0.
+\]
+The corresponding two applications of the first-site insertion lemma are also
+formalized: agreement of the contractions representing $PH^{(N)}$ and
+$PH^{(N)}P$, together with agreement of those representing $PH^{(N)}$ and
+$H^{(N)}P$, forces equality of the opposite-corner insertions on every
+horizontal canonical-form block.  Completing the first stage still requires
+the explicit identification of these three contractions with the rotated
+vertical tensor.  The exclusion of periodic sectors and the independent
+vertical canonical-form construction also remain open.
+
 \paragraph{Verdict.}
 This is an open gap: the source-faithful horizontal-to-vertical implication of
 Proposition~4.13 remains unformalized. The diagonal-restriction route is a
