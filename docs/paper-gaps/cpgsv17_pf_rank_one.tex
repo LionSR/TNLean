@@ -154,9 +154,9 @@ the idempotence of $T^{\top}$, hence of $T$.  Together with the trace
 normalization $\operatorname{tr}(T)=1$ and the idempotent trace-one criterion
 above, this recovers the outer-product factorization asserted by
 Lemma~C.5.\footnote{The formal statements are
-\leanid{Matrix.mul_self_eq_self_of_pairing_idempotent},
-\leanid{Matrix.mul_self_eq_self_of_pairing_idempotent_dual}, and
-\leanid{Matrix.hasRankOneFactorization_of_pairing_idempotent} in
+\path{Matrix.mul_self_eq_self_of_pairing_idempotent},
+\path{Matrix.mul_self_eq_self_of_pairing_idempotent_dual}, and
+\path{Matrix.hasRankOneFactorization_of_pairing_idempotent} in
 \path{TNLean/Algebra/PerronFrobenius/RankOne.lean}, added in \ghpr{3685}.}
 
 The linear-independence hypothesis is a scope restriction relative to the
@@ -274,29 +274,28 @@ has not been identified with the inverse-map family constructed in lines
 1413--1455, and the trace of its all-ones matrix is the number of sectors, not
 one unless there is a single sector.
 
-The remaining argument must therefore use more of the MPDO construction than
-the separate inequalities $\eta_{k,h}\geq 0$. One possible completion is to
-derive an additional adjoint or Gram relation from the inverse-map tensors. If
-no such relation holds, the alternative is to combine the ZCL identity in
-lines 1489--1497 with injectivity and the tensor realization to rule out the
-nilpotent generalized zero-eigenspace directly. Positive semidefiniteness of
-the source trace matrix is not presently established by the cited passage.
+The positive-semidefinite route must therefore use more of the matrix product
+density operator construction than the separate inequalities
+$\eta_{k,h}\geq 0$. One possible completion is to derive an adjoint or Gram
+relation from the inverse-map tensors. Positive semidefiniteness of the source
+trace matrix is not presently established by the cited passage.
 
-This corrected theorem does not refute the intended MPDO result. It identifies
-a matrix-level hypothesis sufficient for the rank-one step. The remaining
-question is whether the trace matrix
-$T_{k,h}=\operatorname{tr}(\eta_{k,h})$ arising from the neighboring operators is
-Hermitian or positive semidefinite. Positivity of each $\eta_{k,h}$ gives
-$T_{k,h}=\operatorname{tr}(\eta_{k,h})\geq 0$ entry by entry, but entrywise
-nonnegativity is not matrix-level positive semidefiniteness or Hermitian
-symmetry of $T$.
+This corrected theorem does not refute the intended matrix product density
+operator result; it supplies one sufficient matrix-level hypothesis. For this
+route, the open question is whether the trace matrix
+$T_{k,h}=\operatorname{tr}(\eta_{k,h})$ is Hermitian or positive semidefinite.
+The pairing-idempotence route of Section~3.1 avoids that hypothesis, but instead
+requires the concrete sector pairing, the zero-correlation-length operator
+identity, and linear independence. Positivity of each $\eta_{k,h}$ gives only
+$T_{k,h}\geq 0$ entry by entry, which implies neither matrix-level positive
+semidefiniteness nor Hermitian symmetry.
 \footnote{The entrywise nonnegativity result is
-\leanid{MPOTensor.ExplicitEtaOperators.traceMatrixRe_nonneg}. The
+\path{MPOTensor.ExplicitEtaOperators.traceMatrixRe_nonneg}. The
 positive-semidefinite reformulation for the rank-one conclusion is
-\leanid{MPOTensor.sal_zcl_implies_rank_one_T_of_posSemidef}. The corresponding
+\path{MPOTensor.sal_zcl_implies_rank_one_T_of_posSemidef}. The corresponding
 blueprint entries have labels
-\texttt{thm:mpdo\_explicit\_eta\_trace\_matrix\_nonneg} and
-\texttt{thm:psd\_trace\_powers\_rank\_one\_t} in
+\path{thm:mpdo_explicit_eta_trace_matrix_nonneg} and
+\path{thm:psd_trace_powers_rank_one_t} in
 \path{blueprint/src/chapter/ch21_mpdo_rfp_simple_local_structure.tex}.}
 
 \section{Conclusion}
