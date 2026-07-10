@@ -22,6 +22,5 @@ at varying levels of completeness.
 
 ## Companion Paper
 
-The companion paper "Multi-agent Autoformalization of Tensor Network Theory" is
-in preparation. A bibliographic citation and public link will be added here once
-the paper is available.
+S. Lu, E. Tjoa, J. I. Cirac, *Multi-agent Autoformalization of Tensor Network
+Theory*, [arXiv:2607.07857](https://arxiv.org/abs/2607.07857).
