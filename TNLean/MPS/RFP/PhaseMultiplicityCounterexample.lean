@@ -7,18 +7,19 @@ import TNLean.MPS.RFP.StructuralFull
 /-!
 # Literal repeated-phase formula and the physical-isometry obstruction
 
-The displayed formula `III_CFI_RFP` in arXiv:1606.00608 (lines 543--550) permits
-repeated virtual blocks indexed by `q`, with independent unit-modulus phases.
+The displayed repeated-copy formula in arXiv:1606.00608 (lines 543--550) permits
+repeated virtual blocks indexed by $q$, with independent unit-modulus phases.
 Read literally as a virtual block diagonal, its smallest repeated-phase example
-is the one-letter tensor `diag(1, -1)`, made from two scalar blocks with phases
-`1` and `-1`.
+is the one-letter tensor $\operatorname{diag}(1,-1)$, made from two scalar blocks
+with phases $1$ and $-1$.
 
-The prose immediately following the display says that `j,q` also give a direct
+The prose immediately following the display says that $j,q$ also give a direct
 sum in the physical space after applying the isometry (lines 559--563).  The
 one-letter virtual-block reading does not realize that additional physical
 direct sum: its blocked matrix is the identity and is not a scalar multiple of
-`diag(1, -1)`.  It therefore fails the defining physical-isometry relation
-`AA=A` (lines 396--425), and its transfer map is not idempotent.  The example
+$\operatorname{diag}(1,-1)$.  It therefore fails the defining physical-isometry
+relation $AA=A$ (lines 396--425), and its transfer map is not idempotent.  The
+example
 records an ambiguity between the literal displayed matrix formula and its
 accompanying physical-space interpretation; it is not asserted to be a source
 renormalization fixed point.
@@ -31,7 +32,7 @@ namespace MPSTensor
 /-- The one-dimensional representative normal tensor in the counterexample. -/
 def scalarUnitTensor : MPSTensor 1 1 := fun _ => 1
 
-/-- The two unit-modulus phases `1` and `-1`. -/
+/-- The two unit-modulus phases $1$ and $-1$. -/
 def signPhase : Fin 2 → ℂ
   | 0 => 1
   | 1 => -1
@@ -44,8 +45,8 @@ lemma norm_signPhase (q : Fin 2) : ‖signPhase q‖ = 1 := by
   fin_cases q <;> simp [signPhase]
 
 /-- `phaseFlipTensor` is the literal virtual block-diagonal reading of two
-copies of the same scalar tensor with phases `1` and `-1` in equation
-`III_CFI_RFP` of arXiv:1606.00608, lines 543--550.  This assertion does not
+copies of the same scalar tensor with phases $1$ and $-1$ in equation
+III_CFI_RFP of arXiv:1606.00608, lines 543--550.  This assertion does not
 include the physical direct-sum interpretation described at lines 559--563. -/
 lemma phaseFlipTensor_is_two_phase_copies :
     (∀ q : Fin 2, ‖signPhase q‖ = 1) ∧
@@ -61,7 +62,7 @@ lemma phaseFlipTensor_is_two_phase_copies :
     fin_cases q <;> fin_cases r <;> simp_all [phaseFlipTensor]
 
 /-- The scalar representative is in the trace-normalized unit-isometry form of
-arXiv:1606.00608, Lemma `charact-NT-pure-RFP`, lines 1271--1301. -/
+arXiv:1606.00608, lines 1271--1301. -/
 lemma scalarUnitTensor_isIsometryCanonicalForm :
     IsIsometryCanonicalForm scalarUnitTensor := by
   refine ⟨1, fun _ => 1, scalarUnitTensor, ?_, ?_, ?_, ?_, ?_⟩
@@ -81,9 +82,9 @@ lemma scalarUnitTensor_isIsometryCanonicalForm :
     simp [scalarUnitTensor]
 
 /-- The one-letter virtual-block tensor does not satisfy even the scalar form
-of the defining physical-isometry relation `AA=A` from arXiv:1606.00608,
+of the defining physical-isometry relation $AA=A$ from arXiv:1606.00608,
 lines 396--425.  Its blocked matrix is the identity, which is not a scalar
-multiple of `diag(1, -1)`. -/
+multiple of $\operatorname{diag}(1,-1)$. -/
 lemma phaseFlipTensor_no_blocking_coefficient :
     ¬ ∃ v : ℂ,
       phaseFlipTensor 0 * phaseFlipTensor 0 = v • phaseFlipTensor 0 := by
@@ -96,10 +97,11 @@ lemma phaseFlipTensor_no_blocking_coefficient :
 
 /-- The two-phase assembly is not a renormalization fixed point under the
 present whole-tensor definition.  Evaluation on the off-diagonal matrix unit
-`E₀₁` gives `E²(E₀₁) = E₀₁` but `E(E₀₁) = -E₀₁` after one application.
+$E_{01}$ gives $\mathcal E^2(E_{01})=E_{01}$ but
+$\mathcal E(E_{01})=-E_{01}$ after one application.
 
 Together with `phaseFlipTensor_no_blocking_coefficient`, this distinguishes the
-literal virtual-block reading of `III_CFI_RFP` from the physical-isometry
+literal virtual-block reading of III_CFI_RFP from the physical-isometry
 interpretation in arXiv:1606.00608, lines 559--563. -/
 theorem phaseFlipTensor_not_isRFP : ¬ IsRFP phaseFlipTensor := by
   intro hRFP
@@ -111,8 +113,8 @@ theorem phaseFlipTensor_not_isRFP : ¬ IsRFP phaseFlipTensor := by
   norm_num [Matrix.mul_apply, Matrix.conjTranspose_apply] at h01
 
 /-- The scalar representative and two unit phases satisfy the literal virtual
-block-diagonal reading of `III_CFI_RFP`, but the resulting one-letter tensor
-fails both `AA=A` and whole-tensor transfer-map idempotence.  Hence the example
+block-diagonal reading of III_CFI_RFP, but the resulting one-letter tensor
+fails both $AA=A$ and whole-tensor transfer-map idempotence.  Hence the example
 exhibits an ambiguity between the display at arXiv:1606.00608, lines 543--554,
 and its physical direct-sum interpretation at lines 559--563; it is not a
 source renormalization fixed point. -/
