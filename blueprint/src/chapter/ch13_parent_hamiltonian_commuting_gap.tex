@@ -998,6 +998,56 @@ the specialization $L=2$.
     Substituting $\alpha_L=\alpha_0$ in the trace gives the cyclic formula.
 \end{proof}
 
+\begin{definition}[Physical isometry in the basic-vector expression]
+    \label{def:appendixB_physical_isometry}
+    \lean{MPSTensor.AppendixBStructuralData.physicalIsometry}
+    \lean{MPSTensor.AppendixBStructuralData.physicalIsometryLeftInverse}
+    \leanok
+    Let $\mathcal H_a$ and $\mathcal H_b$ have bases indexed by
+    $\alpha,\beta\in\{0,\ldots,D-1\}$.  The coefficients
+    $U^i_{\alpha,\beta}$ in the Appendix~B basic-vector expression define maps
+    \[
+        U:\mathcal H_a\otimes\mathcal H_b\longrightarrow
+            \mathcal H_{\mathrm{phys}},
+        \qquad
+        (Uv)_i=\sum_{\alpha,\beta}U^i_{\alpha,\beta}v_{\alpha,\beta},
+    \]
+    and
+    \[
+        (U^*\psi)_{\alpha,\beta}
+        =\sum_i\overline{U^i_{\alpha,\beta}}\,\psi_i.
+    \]
+\end{definition}
+
+\begin{theorem}[The physical map is an isometric embedding]
+    \label{thm:appendixB_physical_isometry_left_inverse}
+    \lean{MPSTensor.AppendixBStructuralData.physicalIsometryLeftInverse_comp}
+    \lean{MPSTensor.AppendixBStructuralData.physicalIsometry_injective}
+    \leanok
+    \uses{def:appendixB_physical_isometry}
+    The pair-index isometry equation
+    \[
+        \sum_i\overline{U^i_{\alpha,\beta}}
+          U^i_{\alpha',\beta'}
+        =\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}
+    \]
+    implies $U^*U=1$.  In particular, $U$ is injective.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Expanding the coefficient of $U^*Uv$ at $(\alpha,\beta)$ and interchanging
+    the two finite sums gives
+    \[
+        (U^*Uv)_{\alpha,\beta}
+        =\sum_{\alpha',\beta'}
+          \left(\sum_i\overline{U^i_{\alpha,\beta}}
+            U^i_{\alpha',\beta'}\right)v_{\alpha',\beta'}
+        =v_{\alpha,\beta}.
+    \]
+    A map with a left inverse is injective.
+\end{proof}
+
 \begin{theorem}[Appendix B basis change and the parent interaction]
     \label{lem:appendixB_basis_change_parent_interaction}
     \lean{MPSTensor.AppendixBStructuralData.parentInteraction_eq_coreTensor}
