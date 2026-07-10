@@ -88,18 +88,40 @@ mixed-sector equations (LO).
 
 \section{Elimination plan}
 
-The formalization now has a BNT-family version of local orthogonality carrying
-the equations
+The formalization now has a BNT-family version of local orthogonality,
+\leanid{MPSTensor.IsBNTLocallyOrthogonal}, carrying the equations
+$\mathbb E_{j,j'}=0$ for all $j\ne j'$, and two BNT-family predicates built on
+it.  Writing $\mathrm{BNT}(A)$ for the condition that the family is a basis of
+normal tensors for $A$, the predicate \leanid{MPSTensor.IsBNTZCL} uses the
+virtual-insertion condition,
 \[
-  \mathbb E_{j,j'}=0 \qquad (j\ne j'),
+  \mathrm{ZCL}^{\mathrm{virt}}_{\mathrm{BNT}}(A)
+  :=
+  \mathrm{BNT}(A)\wedge
+  \mathrm{CID}_{\mathrm{virt}}(A)\wedge
+  \bigl(\forall j\ne j',\, \mathbb E_{j,j'}=0\bigr),
 \]
-and a BNT-family ZCL predicate
+where $\mathrm{CID}_{\mathrm{virt}}$ quantifies over arbitrary virtual bond
+matrices, and the predicate \leanid{MPSTensor.IsPositiveGapBNTZCL} uses the
+positive-gap physical condition,
+\[
+  \mathrm{ZCL}^{\mathrm{pos}}_{\mathrm{BNT}}(A)
+  :=
+  \mathrm{BNT}(A)\wedge
+  \mathrm{CID}^{\mathrm{pos}}_{\mathrm{physical}}(A)\wedge
+  \bigl(\forall j\ne j',\, \mathbb E_{j,j'}=0\bigr),
+\]
+where $\mathrm{CID}^{\mathrm{pos}}_{\mathrm{physical}}$ is the positive-gap
+physical predicate \leanid{MPSTensor.IsPositiveGapPhysicalCID}.  Neither
+predicate contains the unrestricted physical CID of Definition~3.3, so the
+source zero-correlation-length predicate
 \[
   \mathrm{ZCL}_{\mathrm{BNT}}(A)
   :=
   \mathrm{CID}_{\rm physical}(A)\wedge
-  \bigl(\forall j\ne j',\, \mathbb E_{j,j'}=0\bigr).
+  \bigl(\forall j\ne j',\, \mathbb E_{j,j'}=0\bigr)
 \]
+remains without a formal counterpart.
 The remaining target theorem for tensors in canonical form is then
 \[
   \mathrm{ZCL}_{\mathrm{BNT}}(A)
@@ -128,7 +150,7 @@ equation~\path{Corr} inserts such an observable through
 For two observed blocks on a periodic chain, the contraction is the operator
 trace on the virtual matrix space,
 \[
-  \operatorname{Tr}_{\MN{D}}\!\left(
+  \operatorname{Tr}_{M_D(\mathbb C)}\!\left(
     \mathbb E_{O_2}\circ\mathbb E_A^{n_2}\circ
     \mathbb E_{O_1}\circ\mathbb E_A^{n_1}\right).
 \]
