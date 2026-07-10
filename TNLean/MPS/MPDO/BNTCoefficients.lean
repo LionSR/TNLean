@@ -627,6 +627,25 @@ theorem pulledBlockedChiFamily_toDiagonal_of_pos
       hχ.chi.comap (cmp.blockedLabel n hn) := by
   simp [pulledBlockedChiFamily, hn]
 
+/-- The pulled-back blocked chi family has positive diagonal entries at every
+blocked length: at positive length the entries come from the positive BNT-label
+witness, and at length zero the family is empty.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
+Appendix C.3--C.4, lines 1830--1942 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem pulledBlockedChiFamily_toDiagonal_posEntries
+    (cmp : BNTBlockedBasisCoefficientComparison data c)
+    (hχ : PositiveBNTLabelChiTracePowerForm c) (n : ℕ) :
+    ((cmp.pulledBlockedChiFamily hχ).toDiagonal n).PosEntries := by
+  by_cases hn : 0 < n
+  · simpa only [pulledBlockedChiFamily, dif_pos hn] using
+      hχ.posEntries.comap (cmp.blockedLabel n hn)
+  · simpa only [pulledBlockedChiFamily, dif_neg hn] using
+      DiagonalChiFamily.PosEntries.empty
+        (AlgebraStructureData.BlockedIndex data n ⊕
+          AlgebraStructureData.BlockedIndex data (2 * n))
+
 /-- At positive blocked length, the finite-sum trace-power coefficient of the
 pulled-back blocked chi family is the corresponding BNT-label trace-power
 coefficient.
@@ -723,19 +742,9 @@ def toPositiveBlockedStructureChiTracePowerForm
     (hχ : PositiveBNTLabelChiTracePowerForm c) :
     AlgebraStructureData.PositiveBlockedStructureChiTracePowerForm data where
   chi := cmp.pulledBlockedChiFamily hχ
-  posEntries := by
-    intro n i j k r
-    by_cases hn : 0 < n
-    · have hpos : ((cmp.pulledBlockedChiFamily hχ).toDiagonal n).PosEntries := by
-        simpa only [pulledBlockedChiFamily, dif_pos hn] using
-          hχ.posEntries.comap (cmp.blockedLabel n hn)
-      exact hpos (Sum.inl i) (Sum.inl j) (Sum.inr k) r
-    · have hpos : ((cmp.pulledBlockedChiFamily hχ).toDiagonal n).PosEntries := by
-        simpa only [pulledBlockedChiFamily, dif_neg hn] using
-          DiagonalChiFamily.PosEntries.empty
-            (AlgebraStructureData.BlockedIndex data n ⊕
-              AlgebraStructureData.BlockedIndex data (2 * n))
-      exact hpos (Sum.inl i) (Sum.inl j) (Sum.inr k) r
+  posEntries := fun n i j k r =>
+    cmp.pulledBlockedChiFamily_toDiagonal_posEntries hχ n
+      (Sum.inl i) (Sum.inl j) (Sum.inr k) r
   tracePower := by
     intro n hn i j k
     rw [cmp.blocked_coeff_eq n hn i j k]
