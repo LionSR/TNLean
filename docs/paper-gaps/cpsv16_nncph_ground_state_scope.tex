@@ -124,6 +124,36 @@ isometry
 recorded by
 \leanid{MPSTensor.AppendixBStructuralData.physicalIsometry} and
 \leanid{MPSTensor.AppendixBStructuralData.physicalIsometryLeftInverse_comp}.
+For every length \(L\), the tensor power \(U^{\otimes L}\) and its conjugate
+coefficient map now satisfy
+\begin{align}
+  U^{*\otimes L}U^{\otimes L}=1.
+\end{align}
+This identity is recorded by
+\leanid{MPSTensor.AppendixBStructuralData.}\hspace{0pt}
+\leanid{physicalIsometryTensorPowerLeftInverse_comp}.
+The two-site bond insertion
+\begin{align}
+  (I_\varphi v)_{(a,b),(b',c)}
+  =\delta_{b,b'}\lambda_bv_{a,c}
+\end{align}
+has also been transported through \(U^{\otimes2}\).  The range calculation
+\begin{align}
+  \operatorname{ran}(U^{\otimes2}I_\varphi)=G_2(A_{\mathrm{core}})
+\end{align}
+is recorded by
+\leanid{MPSTensor.AppendixBStructuralData.}\hspace{0pt}
+\leanid{twoSiteBasicEmbedding_range}.
+The orthogonal projector \(P_2\) onto this range is
+\leanid{MPSTensor.AppendixBStructuralData.}\hspace{0pt}
+\leanid{twoSiteBasicSupportProjection}; it
+satisfies
+\begin{align}
+  P_2=1-q_2(A_{\mathrm{core}}).
+\end{align}
+The complement identity is
+\leanid{MPSTensor.AppendixBStructuralData.}\hspace{0pt}
+\leanid{twoSiteBasicSupportProjection_eq_complement}.
 The coefficient-space representatives
 \leanid{MPSTensor.AppendixBStructuralData.appendixBQAXOnCoeffSpace} and
 \leanid{MPSTensor.AppendixBStructuralData.appendixBQXBOnCoeffSpace} are now identified with
@@ -131,14 +161,20 @@ the canonical two-site parent interaction \(q_2(A)\) before placement on the
 \(AX\) and \(XB\) faces.  They should not be read as the source tripartite
 projectors themselves.  A supplied lifted commutator for these representatives
 has been transported to the first two translated three-site parent terms.  The
-remaining local step is to form the tensor powers of this physical embedding,
-transport the rank-one projector onto
-\(\varphi=\sum_m\lambda_m|m,m\rangle\) to the two adjacent bonds, identify the
-resulting two-site ranges with \(G_2(A_{\mathrm{core}})\), and hence identify
-their complementary projectors with the coefficient representatives above.
-Only after these range equalities are proved does the disjoint-bond
-commutation give the lifted \(AX/XB\) commutator.  One must then extend
-the local transport to the all-chain family of two-site parent projectors.  On
+remaining local step begins by constructing the orthogonal projector onto the
+one-bond virtual subspace \(\mathbb C\varphi\), which is distinct from the
+physical projector \(P_2\) above.  Two copies must be placed on the adjacent
+virtual bonds of a three-site chain and proved to commute.  Their actions must
+then be transported through \(U^{\otimes3}\) on the isometry range and extended
+to the full physical \(AX\) and \(XB\) support projectors.  Since \(U\) need not
+be surjective, direct transport has the spectator range projector \(R=UU^*\) in
+place of the full identity.  The spectator identity must be decomposed as
+\(R+(1-R)\), and the containment \(P_2\leq R\otimes R\) must be used to show
+that the cross-products involving \(1-R\) vanish.  Taking orthogonal
+complements can then identify the physical projectors with the two coefficient
+representatives above and give their lifted commutator.  One must finally
+extend the local transport to the all-chain family of two-site parent
+projectors.  On
 the coefficient side, the source statement is the basic-vector formula
 \(|V^{(L)}(A_j)\rangle=U^{\otimes L}|\varphi_j\rangle^{\otimes L}\), where
 \(\varphi_j\) is shared between neighboring virtual spins.  The even-chain
@@ -172,13 +208,15 @@ basis of normal tensors of $A$.\footnote{Tracked by \ghissue{2633}.}
 The current proof boundary is therefore: the reverse implication has the
 source ground-space hypothesis, but its proof is still the Beigi axiom; the
 forward implication has the source-unit Appendix~B structural datum, its
-physical isometric embedding with explicit left inverse, the three-site
+physical isometric embedding and all tensor powers with explicit left
+inverses, the two-site bond insertion, the equality of its physical image with
+\(G_2(A_{\mathrm{core}})\), its orthogonal support projector, the three-site
 \(AX/XB\) support maps, and the coefficient form of
-\(U^{\otimes L}\varphi_j^{\otimes L}\).  It still lacks tensor-product maps for
-the virtual factors, the transported bond projectors, the equality of their
-ranges with the two-site local ground spaces, and the resulting lifted
-commutator,
-the local-projector hypotheses for all chains of length at least two, and a
+\(U^{\otimes L}\varphi_j^{\otimes L}\).  It still lacks the orthogonal
+projector onto \(\mathbb C\varphi_j\), its two adjacent placements on a
+three-site virtual chain, the spectator-complement passage from \(UU^*\) to the
+physical identity, and the resulting lifted commutator, the local-projector
+hypotheses for all chains of length at least two, and a
 justified relation between the source formula and the even-chain physical-pair
 factorization used by the conditional theorem.
 The axiom-backed theorem still supplies the commutation direction used by the

@@ -1054,6 +1054,72 @@ the specialization $L=2$.
     A map with a left inverse is injective.
 \end{proof}
 
+\begin{definition}[Tensor powers of the physical isometry]
+    \label{def:appendixB_physical_isometry_tensor_power}
+    \lean{MPSTensor.AppendixBStructuralData.physicalIsometryTensorPower}
+    \lean{MPSTensor.AppendixBStructuralData.physicalIsometryTensorPowerLeftInverse}
+    \leanok
+    \uses{def:appendixB_physical_isometry}
+    For every $N\geq 0$, the coefficients of $U$ define
+    \[
+        U^{\otimes N}:
+        (\mathcal H_a\otimes\mathcal H_b)^{\otimes N}
+        \longrightarrow \mathcal H_{\mathrm{phys}}^{\otimes N},
+    \]
+    with
+    \[
+        (U^{\otimes N}v)_\sigma
+        =
+        \sum_{p_0,\ldots,p_{N-1}}
+        \left(\prod_{t=0}^{N-1}
+          U^{\sigma_t}_{(p_t)_a,(p_t)_b}\right)
+        v_{p_0,\ldots,p_{N-1}}.
+    \]
+    The conjugate coefficient map is
+    \[
+        (U^{*\otimes N}\psi)_p
+        =
+        \sum_\sigma
+        \left(\prod_{t=0}^{N-1}
+          \overline{U^{\sigma_t}_{(p_t)_a,(p_t)_b}}\right)
+        \psi_\sigma.
+    \]
+    This is the tensor power occurring in the basic-vector expression
+    \cite[Equation~(3.17)]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[The tensor powers are isometric embeddings]
+    \label{thm:appendixB_physical_isometry_tensor_power}
+    \lean{MPSTensor.AppendixBStructuralData.physicalIsometryTensorPowerLeftInverse_comp}
+    \lean{MPSTensor.AppendixBStructuralData.physicalIsometryTensorPower_injective}
+    \leanok
+    \uses{def:appendixB_physical_isometry_tensor_power}
+    For every $N\geq 0$,
+    \[
+        U^{*\otimes N}U^{\otimes N}=1.
+    \]
+    Hence $U^{\otimes N}$ is injective.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For virtual-pair configurations $p$ and $q$, interchange the two finite
+    sums and factor the sum over physical configurations site by site:
+    \[
+        \sum_\sigma
+        \prod_t
+        \overline{U^{\sigma_t}_{(p_t)_a,(p_t)_b}}
+        U^{\sigma_t}_{(q_t)_a,(q_t)_b}
+        =
+        \prod_t\sum_i
+        \overline{U^i_{(p_t)_a,(p_t)_b}}
+        U^i_{(q_t)_a,(q_t)_b}.
+    \]
+    The pair-index isometry equation turns the last product into
+    $\prod_t\delta_{p_t,q_t}=\delta_{p,q}$. Therefore the coefficient at $p$
+    is $v_p$. A map with a left inverse is injective.
+\end{proof}
+
 \begin{theorem}[Appendix B basis change and the parent interaction]
     \label{lem:appendixB_basis_change_parent_interaction}
     \lean{MPSTensor.AppendixBStructuralData.parentInteraction_eq_coreTensor}
@@ -1085,6 +1151,132 @@ the specialization $L=2$.
         G_2(A_{\mathrm{core}})=G_2(\Lambda U).
     \]
 \end{definition}
+
+\begin{definition}[Two-site bond insertion and basic-vector embedding]
+    \label{def:appendixB_two_site_bond_embedding}
+    \lean{MPSTensor.AppendixBStructuralData.twoSiteBondInsertion}
+    \lean{MPSTensor.AppendixBStructuralData.twoSiteBasicEmbedding}
+    \lean{MPSTensor.AppendixBStructuralData.weightedTwoSiteBoundary}
+    \leanok
+    \uses{def:appendixB_physical_isometry_tensor_power}
+    Put
+    \[
+        \ket{\varphi}=\sum_b\lambda_b\ket{b,b}.
+    \]
+    For outer-boundary coefficients $v_{a,c}$, insertion of this vector on the
+    middle virtual bond is the map $I_\varphi$ defined by
+    \[
+        (I_\varphi v)_{(a,b),(b',c)}
+        =\delta_{b,b'}\lambda_bv_{a,c}.
+    \]
+    The two-site physical map is $U^{\otimes2}I_\varphi$.  A boundary matrix
+    $Y$ determines outer-boundary coefficients by
+    \[
+        (v_Y)_{a,c}=\lambda_aY_{c,a}.
+    \]
+    Opening the outer virtual bond in the two-site contraction of
+    \cite[Equations~(3.17)--(3.18)]{Cirac2016MPDO_arXiv} gives these
+    coefficients.
+\end{definition}
+
+\begin{theorem}[Surjectivity of the weighted boundary parametrization]
+    \label{thm:appendixB_weighted_two_site_boundary_surjective}
+    \lean{MPSTensor.AppendixBStructuralData.weightedTwoSiteBoundary_surjective}
+    \leanok
+    \uses{def:appendixB_two_site_bond_embedding}
+    Strict positivity of the $\lambda_a$ makes $Y\mapsto v_Y$ surjective.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For prescribed coefficients $v_{a,c}$, take
+    $Y_{c,a}=\lambda_a^{-1}v_{a,c}$.
+\end{proof}
+
+\begin{theorem}[The two-site basic-vector image]
+    \label{thm:appendixB_two_site_basic_embedding_range}
+    \lean{MPSTensor.AppendixBStructuralData.twoSiteBasicEmbedding_comp_weightedTwoSiteBoundary}
+    \lean{MPSTensor.AppendixBStructuralData.twoSiteBasicEmbedding_range}
+    \leanok
+    \uses{def:appendixB_two_site_bond_embedding,
+        def:appendixB_two_site_basic_space}
+    Opening the outer virtual bond in the two-site contraction of
+    \cite[Equations~(3.17)--(3.18)]{Cirac2016MPDO_arXiv} gives the following
+    local-support family.
+    For every boundary matrix $Y$,
+    \[
+        U^{\otimes2}I_\varphi(v_Y)=\Gamma_2(\Lambda U)(Y).
+    \]
+    Consequently,
+    \[
+        \operatorname{ran}(U^{\otimes2}I_\varphi)=G_2(\Lambda U).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:appendixB_weighted_two_site_boundary_surjective}
+    At a two-site physical configuration $(i,j)$, the bond insertion gives
+    \[
+        \sum_{a,b,c}
+        U^i_{a,b}U^j_{b,c}\lambda_b\lambda_aY_{c,a}.
+    \]
+    Expanding
+    $\operatorname{tr}((\Lambda U^i)(\Lambda U^j)Y)$ gives the same sum, so
+    the two maps agree after the weighted boundary parametrization. Since that
+    parametrization is surjective, their ranges are equal.
+\end{proof}
+
+\begin{definition}[Two-site basic support projector]
+    \label{def:appendixB_two_site_basic_support_projector}
+    \lean{MPSTensor.AppendixBStructuralData.twoSiteBasicSupportProjection}
+    \leanok
+    \uses{def:appendixB_two_site_basic_space}
+    Let $P_2$ be the orthogonal projector onto $G_2(\Lambda U)$, as in the
+    local parent-space construction of
+    \cite[Definition~3.9]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Range and complement of the two-site basic support projector]
+    \label{thm:appendixB_two_site_basic_support_projector}
+    \lean{MPSTensor.AppendixBStructuralData.twoSiteBasicSupportProjection_spec}
+    \lean{MPSTensor.AppendixBStructuralData.twoSiteBasicEmbedding_range}
+    \leanok
+    \uses{def:appendixB_two_site_basic_support_projector,
+        def:appendixB_two_site_bond_embedding, def:parent_interaction}
+    The projector $P_2$ satisfies
+    \[
+        P_2^2=P_2,
+        \qquad
+        \operatorname{ran}(P_2)
+        =\operatorname{ran}(U^{\otimes2}I_\varphi)
+        =G_2(\Lambda U),
+        \qquad
+        P_2=1-q_2(\Lambda U).
+    \]
+    In particular, $q_2(\Lambda U)$ annihilates the image of
+    $U^{\otimes2}I_\varphi$, while $P_2$ fixes that image pointwise.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:appendixB_two_site_basic_embedding_range}
+    Orthogonal projection onto $G_2(\Lambda U)$ has that subspace as its range.
+    The preceding theorem identifies this range with
+    $\operatorname{ran}(U^{\otimes2}I_\varphi)$.  Orthogonal projection onto
+    the complementary subspace is $q_2(\Lambda U)$, hence
+    $P_2=1-q_2(\Lambda U)$. Since $q_2(\Lambda U)^2=q_2(\Lambda U)$,
+    \[
+        P_2^2=(1-q_2(\Lambda U))^2=1-q_2(\Lambda U)=P_2.
+    \]
+    If $\psi$ lies in $\operatorname{ran}(U^{\otimes2}I_\varphi)$, then
+    $\psi\in G_2(\Lambda U)=\ker q_2(\Lambda U)$, and therefore
+    \[
+        q_2(\Lambda U)\psi=0,
+        \qquad
+        P_2\psi=(1-q_2(\Lambda U))\psi=\psi.
+    \]
+\end{proof}
 
 \begin{definition}[Appendix B \(AX\) coefficient representative]
     \label{def:appendixB_qax}
