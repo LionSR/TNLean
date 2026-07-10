@@ -97,7 +97,7 @@ and a BNT-family ZCL predicate
 \[
   \mathrm{ZCL}_{\mathrm{BNT}}(A)
   :=
-  \mathrm{CID}(A)\wedge
+  \mathrm{CID}_{\rm physical}(A)\wedge
   \bigl(\forall j\ne j',\, \mathbb E_{j,j'}=0\bigr).
 \]
 The remaining target theorem for tensors in canonical form is then
@@ -113,6 +113,51 @@ canonical-form theorem is stated with the BNT predicate.\footnote{Tracked by
 
 The present theorem is therefore a scope restriction: it records the one-block
 idempotence/CID consequence, while the BNT-level equivalence remains open.
+
+There is a second distinction in the correlation predicate.  Definition~3.3
+quantifies over physical observables on arbitrary finite regions, and
+equation~path{Corr} inserts such an observable through
+
+\[
+  \mathbb E_O(X)
+  =\sum_{\boldsymbol i,\boldsymbol j}
+    \langle\boldsymbol j|O|\boldsymbol i\rangle
+    A^{\boldsymbol i}X(A^{\boldsymbol j})^\dagger .
+\]
+
+The predicate \leanid{MPSTensor.IsPositiveGapPhysicalCID} records this formula
+when both complementary gaps between the observed regions are positive.  The
+theorem \leanid{MPSTensor.isPositiveGapPhysicalCID_of_isRFP} proves
+\[
+  \mathbb E_A^2=\mathbb E_A
+  \quad\Longrightarrow\quad
+  \operatorname{CID}_{\rm physical}^{\text{positive gaps}}(A).
+\]
+
+This is not yet Definition~3.3, which quantifies over all disjoint regions and
+therefore includes adjacent regions.  For an adjacent pair, one complementary
+transfer power in equation~\path{Corr} is $\mathbb E_A^0=1$.  Idempotence gives
+$\mathbb E_A^n=\mathbb E_A$ only for $n\geq1$ and does not identify
+$\mathbb E_A^0$ with $\mathbb E_A$.  The positive-gap theorem is consequently
+a scope restriction, not the full forward implication of
+\path{TheoremZCLPure}.
+The older predicate \leanid{MPSTensor.IsCID} instead quantifies directly over
+arbitrary virtual matrices $X,Y$.  Its converse to idempotence is valid, but it
+is stronger than physical CID: the source obtains the required virtual
+insertions from physical observables by block injectivity
+(lines 1250--1258).  Closing the reverse implication therefore requires a
+formal physical-realization theorem for block observables, followed by the
+nonzero power-sum argument in lines 1260--1268.  One must not identify the two
+CID predicates before that realization theorem is proved.  Since the older
+predicate universally quantifies over positive definite fixed points, it is
+also vacuous for a tensor without such a fixed point.  The periodic-chain
+predicate avoids this boundary-state issue.
+
+Accordingly, \leanid{MPSTensor.IsBNTZCL} remains the virtual-insertion
+surrogate, while \leanid{MPSTensor.IsPositiveGapBNTZCL} names the physical
+positive-gap condition.  Neither is Definition~3.6.  The unrestricted source
+BNT zero-correlation-length predicate and its equivalence with transfer
+idempotence remain open.
 
 \bibliographystyle{alpha}
 \bibliography{references}
