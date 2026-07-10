@@ -547,14 +547,20 @@ strong subadditivity for a normalized three-site reduced state.
     \uses{thm:matrix_pairing_idempotent,
         thm:matrix_idempotent_trace_powers_constant}
     Substituting $T_{k,h} = (r_k|l_h)$ into the right-hand side of the
-    zero-correlation-length identity exhibits it as the square of the
-    left-hand side, so $M^2 = M$. Linear independence of the $|l_k)$ then
+    zero-correlation-length identity gives, for every $v \in V$,
+    \[
+        \sum_{k,h} T_{k,h}(r_h|v)\,|l_k)
+        = \sum_{k,h} (r_k|l_h)(r_h|v)\,|l_k)
+        = \sum_k (r_k|Mv)\,|l_k)
+        = M^2 v,
+    \]
+    so $M^2 = M$. Linear independence of the $|l_k)$ then
     gives $T^2 = T$ by Theorem~\ref{thm:matrix_pairing_idempotent}, and
     idempotence gives the constant trace powers by
     Theorem~\ref{thm:matrix_idempotent_trace_powers_constant}.
 \end{proof}
 
-% Scope restriction (block supports): the independent subspace family in the
+% Scope restriction (independent subspaces): the independent subspace family in the
 % second statement is not displayed in arXiv:1606.00608; the closed sector
 % tensors of that construction live in a common bond space after the physical
 % sector legs are contracted. Whether the inverse-map construction supplies
