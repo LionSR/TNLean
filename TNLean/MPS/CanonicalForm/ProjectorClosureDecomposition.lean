@@ -28,7 +28,9 @@ provide one.
 The remaining steps towards the full sufficient condition for canonical form —
 rescaling each block to spectral radius one and converting the absence of
 nontrivial periodic vectors into primitivity of every rescaled block — are
-recorded in `docs/paper-gaps/cpsv16_projector_closure_canonical_form.tex`.
+carried out in `TNLean.MPS.CanonicalForm.ProjectorClosureSpectral`; the
+length-zero convention for zero blocks is recorded in
+`docs/paper-gaps/cpsv16_projector_closure_canonical_form.tex`.
 -/
 
 open scoped Matrix BigOperators
@@ -483,10 +485,10 @@ lines 237--241.
 Unlike `MPSTensor.exists_irreducible_blockDecomp`, the corner tensors are
 related to `A` by the intertwining `A i * V k = V k * blocks k i`, not only by
 equality of matrix product vectors, and no left-canonical normalization is
-assumed.  The remaining spectral steps — rescaling every block to spectral
-radius one and deducing blockwise primitivity from the absence of nontrivial
-periodic vectors — are recorded in
-`docs/paper-gaps/cpsv16_projector_closure_canonical_form.tex`. -/
+assumed.  The spectral steps — rescaling every block to spectral radius one
+and deducing blockwise primitivity from the absence of nontrivial periodic
+vectors — are carried out in
+`TNLean.MPS.CanonicalForm.ProjectorClosureSpectral`. -/
 theorem exists_irreducible_blockDecomp_with_isometry_of_hasInvariantProjectorClosure
     (A : MPSTensor d D) (hClosure : HasInvariantProjectorClosure A) :
     ∃ (r : ℕ) (dim : Fin r → ℕ) (blocks : (k : Fin r) → MPSTensor d (dim k))
