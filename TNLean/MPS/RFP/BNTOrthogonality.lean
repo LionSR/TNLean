@@ -293,7 +293,7 @@ private lemma mixedTransferMap₂_eq_zero_of_isIdempotentElem
       (((Module.End.toContinuousLinearMap V)
         (mixedTransferMap₂ (d := d) (D₁ := D₁) (D₂ := D₂) A B)) : V →L[ℂ] V) < 1
     rw [mixedTransferSpectralRadius₂_eq] at hsr
-    simpa only [] using hsr
+    exact hsr
   have hidem' : IsIdempotentElem F' := hidem.map Φ
   have hF'0 : F' = 0 :=
     @IsIdempotentElem.eq_zero_of_spectralRadius_lt_one (V →L[ℂ] V)
