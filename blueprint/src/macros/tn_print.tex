@@ -250,8 +250,10 @@
         % The trace closes the three-site word through the remaining sites R.
         \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
             (tnTail) at (-1.60,-1.42) {$R$};
-        \draw[tn leg] (tnKone.west) -- ++(-0.42,0) |- (tnTail.west);
-        \draw[tn leg] (tnTail.east) -| ($(tnKthree.east)+(0.42,0)$) -- (tnKthree.east);
+        \draw[tn leg] (tnKone.west) -- ++(-0.42,0)
+            |- ($(tnTail.east)+(0,-0.40)$) -- (tnTail.east);
+        \draw[tn leg] (tnKthree.east) -- ++(0.42,0)
+            |- ($(tnTail.west)+(0,0.38)$) -- (tnTail.west);
 
         \node at (0.88,0.20) {$=$};
 
