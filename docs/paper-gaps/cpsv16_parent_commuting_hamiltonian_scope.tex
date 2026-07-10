@@ -75,6 +75,13 @@ is now recorded by
 projection gives the algebraic overlapping-commutation predicate.  What remains
 outside this local package is the orthogonal-projector identification and the
 construction of \(Q_{AX}\) and \(Q_{XB}\) from the Appendix~B basic-vector form.
+The scalar pair-index equation has now been assembled into the physical map
+\begin{align}
+  (Uv)_i=\sum_{\alpha,\beta}U^i_{\alpha,\beta}v_{\alpha,\beta},
+  \qquad U^*U=1,
+\end{align}
+in \leanid{MPSTensor.AppendixBStructuralData.physicalIsometry} and
+\leanid{MPSTensor.AppendixBStructuralData.physicalIsometryLeftInverse_comp}.
 The elementary passage from \(Q_{AX},Q_{XB}\) to their complements
 \(1-Q_{AX},1-Q_{XB}\) is recorded by
 \leanid{MPSTensor.HasOverlappingTwoSiteCommutation.complement}.  The
@@ -101,9 +108,14 @@ and
 \section{Elimination plan}
 
 A source-faithful version should build on the existing \(AX/XB\) support layer
-by constructing the local subspaces \(K_{AX}\) and \(K_{XB}\), the corresponding
-orthogonal projectors \(Q_{AX}\) and \(Q_{XB}\), and the source
-orthogonal-projector hypotheses from the Appendix~B data.  It should then
+by constructing tensor-product maps for the virtual factors and transporting
+the rank-one projector onto
+\(\varphi=\sum_m\lambda_m|m,m\rangle\) through the physical isometry.  The
+ranges of the resulting two-site maps must be proved equal to the local spaces
+\(K_{AX}\) and \(K_{XB}\); their complementary orthogonal projectors then give
+\(Q_{AX}\) and \(Q_{XB}\).  Commutation follows at the virtual level because
+the two bond projectors act on distinct bonds, and must then be transported to
+the common three-site physical space.  It should finally
 explain why their coefficient representatives are the two lifted copies of
 \(q_2(A)\), prove the lifted commutator, and derive the idempotent-product
 declaration above as a lemma, with \(P_K=P_{AXB}\).

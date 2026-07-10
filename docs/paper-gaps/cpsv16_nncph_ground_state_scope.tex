@@ -115,16 +115,29 @@ For the forward RFP-to-NNCPH direction, the three-site \(AX/XB\) support maps
 are now represented in \leanid{MPSTensor.HasOverlappingTwoSiteCommutation};
 Appendix~B supplies the basic-vector form, while the projectors
 \(Q_{AX}\) and \(Q_{XB}\) belong to the Appendix~D.2 parent-commuting
-condition.  The coefficient-space representatives
+condition.  The coefficients in the basic-vector form now define the physical
+isometry
+\begin{align}
+  (Uv)_i=\sum_{\alpha,\beta}U^i_{\alpha,\beta}v_{\alpha,\beta},
+  \qquad U^*U=1,
+\end{align}
+recorded by
+\leanid{MPSTensor.AppendixBStructuralData.physicalIsometry} and
+\leanid{MPSTensor.AppendixBStructuralData.physicalIsometryLeftInverse_comp}.
+The coefficient-space representatives
 \leanid{MPSTensor.AppendixBStructuralData.appendixBQAXOnCoeffSpace} and
 \leanid{MPSTensor.AppendixBStructuralData.appendixBQXBOnCoeffSpace} are now identified with
 the canonical two-site parent interaction \(q_2(A)\) before placement on the
 \(AX\) and \(XB\) faces.  They should not be read as the source tripartite
 projectors themselves.  A supplied lifted commutator for these representatives
 has been transported to the first two translated three-site parent terms.  The
-remaining local step is to construct the source Appendix~D.2 data from the
-Appendix~B basic-vector form, relate its \(Q_{AX},Q_{XB}\) projectors to these
-coefficient representatives, prove the lifted \(AX/XB\) commutator, and extend
+remaining local step is to form the tensor powers of this physical embedding,
+transport the rank-one projector onto
+\(\varphi=\sum_m\lambda_m|m,m\rangle\) to the two adjacent bonds, identify the
+resulting two-site ranges with \(G_2(A_{\mathrm{core}})\), and hence identify
+their complementary projectors with the coefficient representatives above.
+Only after these range equalities are proved does the disjoint-bond
+commutation give the lifted \(AX/XB\) commutator.  One must then extend
 the local transport to the all-chain family of two-site parent projectors.  On
 the coefficient side, the source statement is the basic-vector formula
 \(|V^{(L)}(A_j)\rangle=U^{\otimes L}|\varphi_j\rangle^{\otimes L}\), where
@@ -158,10 +171,13 @@ basis of normal tensors of $A$.\footnote{Tracked by \ghissue{2633}.}
 
 The current proof boundary is therefore: the reverse implication has the
 source ground-space hypothesis, but its proof is still the Beigi axiom; the
-forward implication has the source-unit Appendix~B structural datum, the
-three-site \(AX/XB\) support maps, and the coefficient form of
-\(U^{\otimes L}\varphi_j^{\otimes L}\).  It still lacks the construction of the
-source Appendix~D.2 projectors and their lifted commutator from that datum,
+forward implication has the source-unit Appendix~B structural datum, its
+physical isometric embedding with explicit left inverse, the three-site
+\(AX/XB\) support maps, and the coefficient form of
+\(U^{\otimes L}\varphi_j^{\otimes L}\).  It still lacks tensor-product maps for
+the virtual factors, the transported bond projectors, the equality of their
+ranges with the two-site local ground spaces, and the resulting lifted
+commutator,
 the local-projector hypotheses for all chains of length at least two, and a
 justified relation between the source formula and the even-chain physical-pair
 factorization used by the conditional theorem.
