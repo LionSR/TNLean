@@ -80,7 +80,12 @@ theorem commutes_of_hasInvariantProjectorClosure_of_lowerZero
     _ = A i * P := hAP.symm
 
 /-- If a tensor with invariant-projector closure has a nontrivial invariant
-orthogonal projection, then it has a nontrivial reducing projection. -/
+orthogonal projection, then it has a nontrivial reducing projection.
+
+This is the reducing-projection consequence of the sufficient condition for
+canonical form in arXiv:1606.00608, lines 253--254.  The remaining spectral
+step is recorded in
+`docs/paper-gaps/cpsv16_projector_closure_canonical_form.tex`. -/
 theorem exists_reducing_projection_of_hasInvariantProj
     (A : MPSTensor d D) (hClosure : HasInvariantProjectorClosure A)
     (hInv : HasInvariantProj A) :

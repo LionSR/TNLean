@@ -301,14 +301,8 @@ the resulting splitting decomposes any tensor into irreducible blocks.
     \leanok
     \uses{def:mps_tensor}
     An MPS tensor $A$ has \emph{invariant-projector closure} if every
-    orthogonal projection $P$ satisfying
-    \[
-        PA^i=PA^iP \qquad\text{for all }i
-    \]
-    also satisfies
-    \[
-        A^iP=PA^iP \qquad\text{for all }i.
-    \]
+    orthogonal projection $P$ satisfying $PA^i=PA^iP$ for all~$i$ also
+    satisfies $A^iP=PA^iP$ for all~$i$.
     This is the projector hypothesis in the sufficient condition for canonical
     form of \cite[Section~2]{Cirac2016MPDO_arXiv}.
 \end{definition}
@@ -319,14 +313,8 @@ the resulting splitting decomposes any tensor into irreducible blocks.
     \leanok
     \uses{def:invariant_projector_closure}
     Suppose that $A$ has invariant-projector closure and that $P$ is an
-    orthogonal projection with
-    \[
-        (\Id-P)A^iP=0 \qquad\text{for all }i.
-    \]
-    Then $P$ reduces every tensor matrix:
-    \[
-        PA^i=A^iP \qquad\text{for all }i.
-    \]
+    orthogonal projection satisfying $(\Id-P)A^iP=0$ for all~$i$. Then $P$
+    reduces every tensor matrix: $PA^i=A^iP$ for all~$i$.
 \end{theorem}
 
 \begin{proof}
@@ -348,8 +336,7 @@ the resulting splitting decomposes any tensor into irreducible blocks.
     \label{thm:exists_reducing_projection_of_invariant_projector}
     \lean{MPSTensor.exists_reducing_projection_of_hasInvariantProj}
     \leanok
-    \uses{def:has_inv_proj, def:invariant_projector_closure,
-        thm:invariant_projector_closure_commutes}
+    \uses{def:has_inv_proj, def:invariant_projector_closure}
     If $A$ has invariant-projector closure and admits a nontrivial invariant
     projection, then it admits a nontrivial orthogonal projection commuting
     with every $A^i$.
