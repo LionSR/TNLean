@@ -67,17 +67,26 @@ that inverse-map layer for an injective simple MPO tensor, given by
 `MPOTensor.inverseTensor`, `MPOTensor.physRealize`, and
 `MPOTensor.physRealizeLeft`.
 
-The target `η_{k,h}` family is populated by
-`MPOTensor.ExplicitEtaOperators.ofHayashiMarkov`, which constructs the family
+`MPOTensor.ExplicitEtaOperators.ofHayashiMarkov` constructs a canonical family
 directly from the Hayashi decomposition witness as the Kronecker product of
-the sector-indexed neighboring reduced states,
-`η_{k,h} := tr_C(ρ_right k) ⊗ tr_A(ρ_left h)`. This extraction is strictly
-weaker than the paper's `K⁻¹`-based construction — it does not invoke the
-injective inverse-map layer — but it supplies a canonical positive
-semidefinite family of the current `ExplicitEtaOperators` type, with trace
-matrix `T_{k,h} = 1`. The remaining connection to the Appendix C.2 proof is
-the identification of this sector-reduced family with the inverse-map
-construction in the original simple-MPDO tensor coordinates.
+the sector-indexed neighboring reduced states: the right reduced state in
+sector k and the left reduced state in sector h. This extraction is strictly
+weaker than
+the paper's `K⁻¹`-based construction: it does not invoke the inverse-map layer
+and its trace matrix is identically one. By contrast, the paper's neighboring
+operators have the generally nonconstant primitive trace matrix whose kh-entry
+is the trace of ηₖₕ. Consequently these two families cannot simply be
+identified.
+
+The earliest missing connection to Appendix C.2 is the conclusion of Lemma
+propSN: the inverse-map calculation must produce a sector factorization of the
+concrete tensor `K` satisfying, for every `N`,
+\[
+  \widetilde\sigma^{(N)}(K)
+    = \bigoplus_{k_1,\ldots,k_N}\bigotimes_{n=1}^N \eta_{k_n,k_{n+1}}.
+\]
+Only after that identity is available can its sector operators be assembled
+into the common two-site bond of Proposition 3to4.
 
 Lemma C.5 is further isolated to the finite-dimensional Perron–Frobenius step:
 for a primitive nonnegative matrix `T`, constant traces of positive powers are
