@@ -1729,11 +1729,10 @@ $\MN{d_k} \otimes \Id_{m_k}$ of~\cite[Theorem~6.14]{Wolf2012Quantum}.
     of pairwise orthogonal subspaces of $\C^{D}$, irreducible under $S$ and pairwise of the
     same type. Write $m$ for the number of pieces of $\mathcal{D}$; all pieces share one
     dimension $d$. Then the component $C = \bigvee_{W \in \mathcal{D}} W$ has an orthonormal
-    basis $(f_{i,j})_{i \le m,\, j \le d}$ such that for every $A \in S$ there is a matrix
-    $B \in \MN{d}$ with
+    basis $(f_{i,j})_{0 \le i < m,\, 0 \le j < d}$ such that for every $A \in S$ there is a
+    matrix $B \in \MN{d}$ with, for all $i < m$ and $j < d$,
     \[
-        A\,f_{i,j} \;=\; \sum_{j'=1}^{d} B_{j'j}\, f_{i,j'}
-        \qquad (i \le m,\ j \le d).
+        A\,f_{i,j} \;=\; \sum_{j'=0}^{d-1} B_{j'j}\, f_{i,j'}.
     \]
     In the adapted basis the member $A$ acts on $C$ by the matrix $B$ on the irreducible
     index, identically across the multiplicity index; after reordering the indices this is the
@@ -1743,17 +1742,17 @@ $\MN{d_k} \otimes \Id_{m_k}$ of~\cite[Theorem~6.14]{Wolf2012Quantum}.
 \begin{proof}
     \leanok
     \uses{lem:starSubalgebra_sameIsotype_isometry, lem:starSubalgebra_sameIsotype_refl}
-    Fix a piece $W_1 \in \mathcal{D}$, of dimension $d$, with an orthonormal basis
-    $e_1, \ldots, e_d$, and enumerate $\mathcal{D} = \{W'_1, \ldots, W'_m\}$. Every piece of
-    $\mathcal{D}$ is of the same type as $W_1$, by hypothesis for the other pieces and by
-    reflexivity (Lemma~\ref{lem:starSubalgebra_sameIsotype_refl}) for $W_1$ itself, so
+    Fix a piece $W \in \mathcal{D}$, of dimension $d$, with an orthonormal basis
+    $e_0, \ldots, e_{d-1}$, and enumerate $\mathcal{D} = \{W'_0, \ldots, W'_{m-1}\}$. Every
+    piece of $\mathcal{D}$ is of the same type as $W$, by hypothesis for the other pieces and
+    by reflexivity (Lemma~\ref{lem:starSubalgebra_sameIsotype_refl}) for $W$ itself, so
     Lemma~\ref{lem:starSubalgebra_sameIsotype_isometry} provides intertwiners $u_i$ mapping
-    $W_1$ onto $W'_i$ and preserving the inner product on $W_1$. Set $f_{i,j} = u_i(e_j)$.
-    Within one copy the vectors $f_{i,1}, \ldots, f_{i,d}$ are orthonormal because $u_i$
+    $W$ onto $W'_i$ and preserving the inner product on $W$. Set $f_{i,j} = u_i(e_j)$.
+    Within one copy the vectors $f_{i,0}, \ldots, f_{i,d-1}$ are orthonormal because $u_i$
     preserves inner products; across copies they are orthogonal because distinct pieces of
-    $\mathcal{D}$ are. Since $u_i$ maps $W_1$ onto $W'_i$, the vectors of the $i$-th copy span
+    $\mathcal{D}$ are. Since $u_i$ maps $W$ onto $W'_i$, the vectors of the $i$-th copy span
     $W'_i$; in particular each $W'_i$ has dimension $d$, and all the vectors together span $C$.
-    For $A \in S$ the piece $W_1$ is invariant, so $A e_j = \sum_{j'} B_{j'j}\, e_{j'}$ with
+    For $A \in S$ the piece $W$ is invariant, so $A e_j = \sum_{j'} B_{j'j}\, e_{j'}$ with
     $B_{j'j} = \langle e_{j'}, A e_j \rangle$, and the intertwining identity gives
     \[
         A f_{i,j} = A\,u_i(e_j) = u_i(A e_j)
@@ -1770,10 +1769,10 @@ $\MN{d_k} \otimes \Id_{m_k}$ of~\cite[Theorem~6.14]{Wolf2012Quantum}.
         thm:starSubalgebra_adapted_orthonormal_basis}
     Let $S$ be a $*$-subalgebra of $\MN{D}$. Then $\C^{D}$ is the supremum of a finite family
     of pairwise orthogonal isotypic components, and each component carries an orthonormal
-    basis $(f_{i,j})$, indexed by a multiplicity index $i \le m$ and an irreducible index
-    $j \le d$, such that every $A \in S$ acts by
+    basis $(f_{i,j})$, indexed by a multiplicity index $i < m$ and an irreducible index
+    $j < d$, such that every $A \in S$ acts by
     \[
-        A\,f_{i,j} = \sum_{j'=1}^{d} B_{j'j}\, f_{i,j'}
+        A\,f_{i,j} = \sum_{j'=0}^{d-1} B_{j'j}\, f_{i,j'}
     \]
     for a matrix $B \in \MN{d}$ depending only on $A$ and the component. In the adapted bases
     the action of $S$ on each component is by matrix-times-identity blocks, the form
