@@ -360,9 +360,12 @@ strong subadditivity for a normalized three-site reduced state.
     \[
         (T^{m})_{k,k} = \sum_j T_{k,j} (T^{m-1})_{j,k} = 0,
     \]
-    contradicting the strict entrywise positivity of some power of $T$. The
-    column statement follows by the symmetric factorization
-    $T^{m} = T^{m-1} T$.
+    contradicting the strict entrywise positivity of some power of $T$.
+    Likewise, if column $h$ of $T$ vanishes, then for every $m \geq 1$,
+    \[
+        (T^{m})_{h,h} = \sum_j (T^{m-1})_{h,j}\, T_{j,h} = 0,
+    \]
+    again contradicting the strict positivity of some power of $T$.
 \end{proof}
 
 \begin{theorem}[Idempotence of the sector trace matrix]
@@ -507,8 +510,8 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.SectorPairingData}
     \leanok
     For a real $n \times n$ matrix $T$ and a real vector space $V$, this
-    structure consists of vectors $|l_1), \dots, |l_n) \in V$ and linear
-    functionals $(r_1|, \dots, (r_n|$ on $V$ satisfying the pairing identity
+    structure consists of vectors $|l_0), \dots, |l_{n-1}) \in V$ and linear
+    functionals $(r_0|, \dots, (r_{n-1}|$ on $V$ satisfying the pairing identity
     \[
         T_{k,h} = (r_k|l_h)
     \]
@@ -522,7 +525,7 @@ strong subadditivity for a normalized three-site reduced state.
     splitting of an injective simple tensor.
 \end{definition}
 
-\begin{theorem}[Idempotence of a primitively paired sector trace matrix]
+\begin{theorem}[Idempotence of the sector trace matrix from the zero-correlation-length identity]
     \label{thm:mpdo_sector_pairing_idempotent}
     \lean{MPOTensor.SectorPairingData.pairing_operator_idempotent}
     \lean{MPOTensor.SectorPairingData.mul_self_eq_self}
@@ -532,7 +535,7 @@ strong subadditivity for a normalized three-site reduced state.
     For sector tensors paired into $T$ as in
     Definition~\ref{def:mpdo_sector_pairing_data}, the operator
     $M = \sum_k |l_k)(r_k|$ satisfies $M^2 = M$. If in addition the vectors
-    $|l_1), \dots, |l_n)$ are linearly independent, then $T^2 = T$, and for
+    $|l_0), \dots, |l_{n-1})$ are linearly independent, then $T^2 = T$, and for
     every positive integer $N$,
     \[
         \operatorname{tr}(T^N) = \operatorname{tr}(T).
@@ -567,7 +570,7 @@ strong subadditivity for a normalized three-site reduced state.
     Definition~\ref{def:mpdo_sector_pairing_data} is primitive. Then every
     closed sector tensor satisfies $|l_k) \neq 0$. If moreover each $|l_k)$
     lies in its own member of an independent family of subspaces of $V$, then
-    the vectors $|l_1), \dots, |l_n)$ are linearly independent.
+    the vectors $|l_0), \dots, |l_{n-1})$ are linearly independent.
 \end{theorem}
 
 \begin{proof}
@@ -579,25 +582,25 @@ strong subadditivity for a normalized three-site reduced state.
     family of subspaces, one from each member, are linearly independent.
 \end{proof}
 
-\begin{theorem}[SAL and ZCL imply rank-one $T$ (pairing-idempotence form)]
+\begin{theorem}[Rank one from sector-pairing idempotence under linear independence]
     \label{thm:pairing_idempotent_rank_one_t}
     \lean{MPOTensor.sal_zcl_implies_rank_one_T_of_pairing_idempotent}
     \lean{MPOTensor.sal_zcl_implies_rank_one_T_of_sector_supports}
     \leanok
     \uses{def:mpdo_sector_pairing_data, def:matrix_trace_rankone_predicates}
-    Let $T$ be a primitive sector trace matrix with $\operatorname{tr}(T)=1$,
-    paired from sector tensors satisfying the zero-correlation-length identity
-    of Definition~\ref{def:mpdo_sector_pairing_data}. If the closed sector
-    tensors $|l_1), \dots, |l_n)$ are linearly independent --- in particular,
-    if they lie in distinct members of an independent family of subspaces ---
-    then
+    Let $T$ be a sector trace matrix with $\operatorname{tr}(T)=1$, paired
+    from sector tensors satisfying the zero-correlation-length identity of
+    Definition~\ref{def:mpdo_sector_pairing_data}. If the closed sector
+    tensors $|l_0), \dots, |l_{n-1})$ are linearly independent, then
     \[
         T_{k,h} = a_k b_h,
         \qquad
         \sum_k a_k b_k = 1
     \]
-    for some real numbers $a_k, b_h$. In contrast with the
-    positive-semidefinite criterion of
+    for some real numbers $a_k, b_h$. The same conclusion holds if, instead
+    of the independence, $T$ is primitive and the closed sector tensors lie
+    in distinct members of an independent family of subspaces. In contrast
+    with the positive-semidefinite criterion of
     Theorem~\ref{thm:psd_trace_powers_rank_one_t}, the constant trace powers
     are derived rather than assumed.
 \end{theorem}
@@ -606,8 +609,7 @@ strong subadditivity for a normalized three-site reduced state.
     \leanok
     \uses{thm:mpdo_sector_pairing_idempotent,
         thm:mpdo_sector_tensors_independent,
-        thm:matrix_idempotent_trace_one_rank_one,
-        thm:sal_zcl_implies_rank_one_t}
+        thm:matrix_idempotent_trace_one_rank_one}
     Theorem~\ref{thm:mpdo_sector_pairing_idempotent} gives $T^2 = T$ and the
     constant trace powers. The idempotent trace-one criterion of
     Theorem~\ref{thm:matrix_idempotent_trace_one_rank_one} yields the

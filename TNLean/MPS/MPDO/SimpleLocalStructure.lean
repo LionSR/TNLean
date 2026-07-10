@@ -58,18 +58,18 @@ arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete).
   proved relative to the Perron–Frobenius rank-one input.
 - `MPOTensor.sal_zcl_implies_rank_one_T_of_posSemidef`: the same consequence
   with the Perron–Frobenius input derived from positive semidefiniteness of `T`.
-- `MPOTensor.SectorPairingData`: the sector tensors `|l_k)` and functionals
-  `(r_k|` of arXiv:1606.00608, Appendix C.2, with the pairing
-  T_{k,h} = (r_k|l_h) and the displayed zero-correlation-length identity.
+- `MPOTensor.SectorPairingData`: the sector tensors $|l_k)$ and functionals
+  $(r_k|$ of arXiv:1606.00608, Appendix C.2, with the pairing
+  $T_{k,h}=(r_k|l_h)$ and the displayed zero-correlation-length identity.
 - `MPOTensor.SectorPairingData.mul_self_eq_self` /
   `MPOTensor.SectorPairingData.linearIndependent_l`: idempotence of the sector
   trace matrix from the zero-correlation-length identity, and linear
   independence of the sector tensors from primitivity and a block-support
   decomposition.
 - `MPOTensor.sal_zcl_implies_rank_one_T_of_pairing_idempotent` /
-  `MPOTensor.sal_zcl_implies_rank_one_T_of_sector_supports`: the Lemma C.5
-  consequence with the Perron–Frobenius input derived from the
-  zero-correlation-length identity through idempotence of `T`.
+  `MPOTensor.sal_zcl_implies_rank_one_T_of_sector_supports`: the rank-one
+  factorization at lines 1484--1499, derived from the zero-correlation-length
+  identity through idempotence of $T$.
 
 ## Implementation note
 
@@ -122,15 +122,15 @@ entrywise nonnegativity of the trace matrix. The special sector-reduced family
 `ofHayashiMarkov` does have a positive-semidefinite all-ones trace matrix, but
 its identification with the paper's inverse-map family is not available.
 
-A second exclusion of the nilpotent zero-eigenspace goes through the pairing:
-`MPOTensor.SectorPairingData` records the closed sector tensors `|l_k)`, the
-functionals `(r_k|`, the pairing T_{k,h} = (r_k|l_h), and the displayed
-zero-correlation-length identity of Lemma C.5, and
+A second exclusion of the nilpotent zero-eigenspace goes through the pairing.
+`MPOTensor.SectorPairingData` records the closed sector tensors $|l_k)$, the
+functionals $(r_k|$, the pairing $T_{k,h}=(r_k|l_h)$, and the
+zero-correlation-length identity at lines 1490--1493. The theorem
 `MPOTensor.sal_zcl_implies_rank_one_T_of_pairing_idempotent` derives the
-rank-one factorization once the closed sector tensors are linearly
-independent. The two obligations left open by this route are the construction
-of the sector tensor families from an injective simple tensor (Lemma propSN)
-and the derivation of their linear independence; both are recorded in
+rank-one factorization once the closed sector tensors are linearly independent.
+Three obligations remain: construct the sector families and their pairing from
+the inverse-map factorization at lines 1407--1482, derive the operator identity
+from zero correlation length, and prove linear independence. They are recorded in
 `docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
 
 ## References
@@ -625,14 +625,18 @@ theorem linearIndependent_l (data : SectorPairingData T V)
 
 end SectorPairingData
 
-/-- **Lemma C.5, pairing-idempotence form**: for a primitive sector trace
-matrix `T` paired from sector tensors that satisfy the zero-correlation-length
-identity of arXiv:1606.00608, lines 1490--1493, linear independence of the
-closed sector tensors and the trace normalization give the rank-one
-factorization T_{k,h} = a_k b_h with sum_k a_k b_k = 1 (Lemma SALZCL,
-lines 1484--1499).  Unlike the positive-semidefinite variant
+/-- **Lemma C.5, pairing-idempotence form**: for a sector trace matrix `T`
+paired from sector tensors that satisfy the zero-correlation-length identity
+of arXiv:1606.00608, lines 1490--1493, linear independence of the closed
+sector tensors and the trace normalization give the rank-one factorization
+T_{k,h} = a_k b_h with sum_k a_k b_k = 1 (Lemma SALZCL, lines 1484--1499).
+Unlike the positive-semidefinite variant
 `MPOTensor.sal_zcl_implies_rank_one_T_of_posSemidef`, the constant trace
-powers are derived, not assumed.
+powers are derived, not assumed.  The primitivity of `T`, supplied in the
+source by Lemma propSN, is not needed once the independence is assumed; it
+enters the block-support form
+`MPOTensor.sal_zcl_implies_rank_one_T_of_sector_supports`, where it makes
+the closed sector tensors nonzero.
 
 **Scope restriction (linear independence):** the source lemma neither assumes
 nor derives linear independence of the sector tensors; documented in
@@ -643,13 +647,15 @@ theorem sal_zcl_implies_rank_one_T_of_pairing_idempotent
     {V : Type*} [AddCommGroup V] [Module ℝ V]
     (T : Matrix (Fin n) (Fin n) ℝ)
     (data : SectorPairingData T V)
-    (hPrimitive : Matrix.IsPrimitive T)
     (hl : LinearIndependent ℝ data.l)
     (hTrace : Matrix.trace T = 1) :
-    ∃ a b : Fin n → ℝ, T = Matrix.vecMulVec a b ∧ a ⬝ᵥ b = 1 :=
-  sal_zcl_implies_rank_one_T T hPrimitive hTrace (data.tracePowersConstant hl)
-    fun _ _ => Matrix.hasRankOneFactorization_of_mul_self_eq_self
+    ∃ a b : Fin n → ℝ, T = Matrix.vecMulVec a b ∧ a ⬝ᵥ b = 1 := by
+  obtain ⟨a, b, hT⟩ :=
+    Matrix.hasRankOneFactorization_of_mul_self_eq_self
       (data.mul_self_eq_self hl) hTrace
+  refine ⟨a, b, hT, ?_⟩
+  rw [← Matrix.trace_vecMulVec, ← hT]
+  exact hTrace
 
 /-- **Lemma C.5, block-support form**: the rank-one factorization of the
 sector trace matrix with the linear independence of the closed sector tensors
@@ -669,7 +675,7 @@ theorem sal_zcl_implies_rank_one_T_of_sector_supports
     (hPrimitive : Matrix.IsPrimitive T)
     (hTrace : Matrix.trace T = 1) :
     ∃ a b : Fin n → ℝ, T = Matrix.vecMulVec a b ∧ a ⬝ᵥ b = 1 :=
-  sal_zcl_implies_rank_one_T_of_pairing_idempotent T data hPrimitive
+  sal_zcl_implies_rank_one_T_of_pairing_idempotent T data
     (data.linearIndependent_l support hmem hsupp hPrimitive) hTrace
 
 end RankOneT
