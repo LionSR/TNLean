@@ -24,7 +24,7 @@ form
   \sigma^{(N)}({\cal K})\propto \prod_{n=1}^N B_{n,n+1},
 \]
 where $B_{n,n+1}\geq 0$ and the translated two-site operators commute
-\cite[Appendix~C.2, Proposition~C.6]{Cirac2016MPDO_arXiv}. In the local
+\cite[Appendix~C.2, Proposition~C.8]{Cirac2016MPDO_arXiv}. In the local
 source file this is Proposition \texttt{3to4},
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:1571--1593}.
 
@@ -77,13 +77,13 @@ and the GSNNCH--ZCL consequences.  After ZCL is assumed, ZCL itself gives the
 size-$2$ fusion witness and the transfer-map fusion formulation of the MPDO
 RFP condition.
 
-The two scope-restricted declarations are assembly
+The two scope-restricted declarations are conditional construction
 statements.\footnote{These declarations are
 \leanid{MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndEtaLocalStructure} and
 \leanid{MPOTensor.simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure}.}
 They assume the eta-local structure instead of deriving it from the SAL local
 coordinates. They also carry the ZCL hypothesis needed for the subsequent RFP
-consequences. Thus they formalize the final assembly step after the
+consequences. Thus they formalize the final deduction after the
 $B_{n,n+1}$ have been constructed, not the source theorem that constructs those
 bonds from SAL.
 
@@ -104,7 +104,28 @@ the resulting neighboring operators $\eta_{k,h}$ satisfy
 for every chain length.  No current declaration states this tensor
 factorization or its all-length contraction identity.
 
-The double inverse-map contraction preceding this factorization is now
+For the four-site chain, the virtual contraction of the traced fourth site is
+now identified before applying the inverse tensor.  Writing
+\[
+  R_4=
+  \tr\!\left[\rho^{(4)}({\cal K})\right]^{-1}
+  \sum_i {\cal K}^{i,i},
+\]
+the normalized three-site marginal satisfies
+\[
+  \sigma_3^{(4)}({\cal K})_{u,v}
+  =\tr\!\left({\cal K}^{u,v}R_4\right).
+\]
+If the four-site trace is nonzero, then $R_4\ne0$, and hence some entry
+$(R_4)_{\beta,\alpha}$ is nonzero.  Thus the boundary matrix and the nonzero
+entry selected before equation \texttt{formK} are available without adding
+SAL or injectivity as separate hypotheses.\footnote{The formal declarations
+are \leanid{MPOTensor.normalizedFourSiteTail},
+\leanid{MPOTensor.reducedBlockState_four_three_apply},
+\leanid{MPOTensor.normalizedFourSiteTail_ne_zero}, and
+\leanid{MPOTensor.exists_normalizedFourSiteTail_entry_ne_zero}.}
+
+The double inverse-map contraction preceding the sector factorization is also
 formalized.  If $R$ denotes the virtual contraction of the remaining sites,
 then
 \[
@@ -175,21 +196,25 @@ of a simple MPDO satisfying SAL.  ZCL is not a hypothesis of this construction.
 
 The source Proposition \texttt{3to4} assumes SAL, not ZCL.  ZCL enters only
 after this commuting product form has been obtained, in the later step that
-derives the GSNNCH--ZCL and RFP conclusions.  Accordingly, adding ZCL to an
-assembly theorem would not repair the missing inverse-map sector
+derives the GSNNCH--ZCL and RFP conclusions.  Accordingly, adding ZCL to a
+conditional theorem would not repair the missing inverse-map sector
 factorization.
 
-This is tracked by
-\href{https://github.com/LionSR/TNLean/issues/823}{issue \#823}. Until that
-construction exists, the scope-restricted assembly statements must not be
-presented as the full formalization of Proposition~C.6.
+The inverse-map comparison, sector factorization, all-length identity, and
+primitivity statement of Lemma \texttt{propSN} are tracked by
+\href{https://github.com/LionSR/TNLean/issues/3696}{issue \#3696}.  Once those
+operators have been constructed, the positive commuting bond and product form
+of Proposition \texttt{3to4} are tracked separately by
+\href{https://github.com/LionSR/TNLean/issues/823}{issue \#823}. Until both
+constructions exist, the scope-restricted conditional statements must not be
+presented as the full formalization of Proposition~C.8.
 
 \section{Classification}
 
 This note records an open gap for the SAL-to-bond construction of
-\leanid{MPOTensor.EtaLocalStructureData}. The two assembly declarations above
-are scope restrictions: they formalize only the post-assembly step after the
-nearest-neighbor bonds have already been constructed.
+\leanid{MPOTensor.EtaLocalStructureData}. The two conditional declarations
+above are scope restrictions: they begin after the nearest-neighbor bonds have
+already been constructed.
 
 \bibliographystyle{alpha}
 \bibliography{references}
