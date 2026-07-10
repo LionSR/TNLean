@@ -445,14 +445,14 @@ end AlgebraStructureData
 /-- One-site peeling of the blocked transfer map, $\mathbb{E}^{n+1} = \mathbb{E}^n \circ
 \mathbb{E}$, used in the spectral fixed-point calculation of arXiv:1606.00608,
 Appendix C.4, lines 2046--2085 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem blockedTransferMap_succ (M : MPOTensor d D) (n : ℕ) :
+private theorem blockedTransferMap_succ (M : MPOTensor d D) (n : ℕ) :
     blockedTransferMap M (n + 1) = blockedTransferMap M n ∘ₗ transferMap M := by
   simp only [blockedTransferMap_eq_pow, pow_succ, Module.End.mul_eq_comp]
 
 /-- Adjoint form of the one-site peeling: the adjoint of the blocked transfer map at
 size `n + 1` is the adjoint one-site transfer map applied after the adjoint blocked
 transfer map at size `n`. -/
-theorem adjoint_blockedTransferMap_succ_apply (M : MPOTensor d D) (n : ℕ) (X : Mat) :
+private theorem adjoint_blockedTransferMap_succ_apply (M : MPOTensor d D) (n : ℕ) (X : Mat) :
     (blockedTransferMap M (n + 1)).adjoint X =
       (transferMap M).adjoint ((blockedTransferMap M n).adjoint X) := by
   rw [blockedTransferMap_succ, LinearMap.adjoint_comp, LinearMap.comp_apply]
