@@ -10,7 +10,7 @@
 \title{The SAL to Eta-Local Structure Step in
 Cirac--Perez-Garcia--Schuch--Verstraete 2017 Appendix C.2}
 \author{}
-\date{2026-07-09}
+\date{2026-07-10}
 
 \begin{document}
 \maketitle
@@ -103,6 +103,51 @@ the resulting neighboring operators $\eta_{k,h}$ satisfy
 \]
 for every chain length.  No current declaration states this tensor
 factorization or its all-length contraction identity.
+
+The double inverse-map contraction preceding this factorization is now
+formalized.  If $R$ denotes the virtual contraction of the remaining sites,
+then
+\[
+  \sum_{p_1,p_3}
+  ({\cal K}^{-1})^{\alpha_1,\beta_1}_{p_1}
+  ({\cal K}^{-1})^{\alpha_3,\beta_3}_{p_3}
+  \tr({\cal K}^{p_1}{\cal K}^{p_2}{\cal K}^{p_3}R)
+  = {\cal K}^{p_2}_{\beta_1,\alpha_3}R_{\beta_3,\alpha_1}.
+\]
+This is the calculation at lines 1415--1438 of Appendix C.2 in
+arXiv:1606.00608.\footnote{The formal
+declarations are \leanid{MPOTensor.inverseMapThreeSiteContraction} and
+\leanid{MPOTensor.inverseMapThreeSiteContraction_eq}.}
+
+The source display at line~1427 writes the remaining scalar as
+$m_{\beta_3,\alpha_3}$.  This repeats the third-site left index and loses the
+first-site left index.  Contracting the two matrix units gives
+\[
+  \tr(E_{\alpha_1,\beta_1}{\cal K}^{p_2}
+    E_{\alpha_3,\beta_3}R)
+  = {\cal K}^{p_2}_{\beta_1,\alpha_3}R_{\beta_3,\alpha_1},
+\]
+so the scalar is $m_{\beta_3,\alpha_1}$.  The diagram defining
+$m_{\beta,\alpha}$ and the subsequent choice of a nonzero pair $(\alpha,\beta)$
+are consistent with this correction.  Thus the repeated $\alpha_3$ is a local
+index typo, not a different mathematical hypothesis.
+
+The next result must compare this contraction of the concrete three-site
+reduced state with the two factors obtained by contracting
+$\rho_{A b_1}^{(k)}$ and $\rho_{b_2 c}^{(k)}$ in the Hayashi
+decomposition.  The equality in that decomposition is written after
+conjugation by the middle-site unitary and reindexing by
+$H_B=\bigoplus_k H_{b_1}^{(k)}\otimes H_{b_2}^{(k)}$; the new
+inverse-map identity is written in the original physical coordinates.  The
+missing comparison must commute the two end contractions through this unitary
+and reindexing, obtain the sectorwise product
+$A^{(k)}_{\alpha_1,\beta_1}\otimes
+B^{(k)}_{\alpha_3,\beta_3}$, and then choose a nonzero entry
+$R_{\beta_3,\alpha_1}$ before dividing to obtain the sector factorization
+displayed at lines 1434--1438.  None of the present physical-realization
+identities states this comparison: they rewrite left or right virtual
+multiplication on one copy of ${\cal K}$, whereas the required equality
+contracts two physical sites of a reduced density operator.
 
 The canonical family
 \leanid{MPOTensor.ExplicitEtaOperators.ofHayashiMarkov} does not supply this
