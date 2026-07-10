@@ -106,6 +106,98 @@
     \end{tikzpicture}%
 }
 
+% Local purification of an MPO tensor: the ket and bra tensors share the
+% ancillary index (curved contraction on the right) and retain their physical
+% and virtual legs.
+\newcommand{\TNMPOLocalPurification}{%
+    \begin{tikzpicture}[tn picture]
+        \TN@tensordot{tnM}{(-2.35,0)}
+        \TN@leftleg{tnM}{0.62}
+        \TN@rightleg{tnM}{0.62}
+        \TN@upleg{tnM}{0.58}
+        \TN@downleg{tnM}{0.58}
+        \node at (-2.35,-0.34) {$M$};
+        \node at (-1.20,0) {$=$};
+        \TN@tensordot{tnA}{(0,0.52)}
+        \TN@tensordot{tnAc}{(0,-0.52)}
+        \draw[tn leg] (tnA.west) -- ++(-0.62,0);
+        \draw[tn leg] (tnA.east) -- ++(0.62,0);
+        \draw[tn leg] (tnAc.west) -- ++(-0.62,0);
+        \draw[tn leg] (tnAc.east) -- ++(0.62,0);
+        \TN@upleg{tnA}{0.48}
+        \TN@downleg{tnAc}{0.48}
+        \draw[tn phys leg, densely dashed, rounded corners]
+            (tnA.south) -- (0,0) -- (0.78,0) -- (0.78,-0.52) -- (tnAc.east);
+        \node at (-0.28,0.82) {$A$};
+        \node at (-0.32,-0.82) {$\overline A$};
+        \node at (0.95,0) {$k$};
+    \end{tikzpicture}%
+}
+
+% The physical renormalization maps of the mixed-state RFP definition.
+\newcommand{\TNMPORenormalizationTS}{%
+    \begin{tikzpicture}[tn picture]
+        \TN@tensordot{tnOne}{(-2.10,0)}
+        \TN@leftleg{tnOne}{0.62}
+        \TN@rightleg{tnOne}{0.62}
+        \TN@upleg{tnOne}{0.55}
+        \TN@downleg{tnOne}{0.55}
+        \node at (-2.10,-0.88) {$M_1(X)$};
+        \TN@tensordot{tnTwoL}{(1.10,0)}
+        \TN@tensordot{tnTwoR}{(2.25,0)}
+        \draw[tn leg] (tnTwoL.west) -- ++(-0.62,0);
+        \draw[tn leg] (tnTwoL.east) -- (tnTwoR.west);
+        \draw[tn leg] (tnTwoR.east) -- ++(0.62,0);
+        \TN@upleg{tnTwoL}{0.55}
+        \TN@downleg{tnTwoL}{0.55}
+        \TN@upleg{tnTwoR}{0.55}
+        \TN@downleg{tnTwoR}{0.55}
+        \node at (1.68,-0.88) {$M_2(X)$};
+        \draw[->, line width=0.55pt, bend left=24]
+            (-1.40,0.48) to node[above] {$\mathcal T$} (0.52,0.48);
+        \draw[->, line width=0.55pt, bend left=24]
+            (0.52,-0.48) to node[below] {$\mathcal S$} (-1.40,-0.48);
+    \end{tikzpicture}%
+}
+
+% Sector decomposition of a simple MPDO tensor and its neighbouring bond.
+\newcommand{\TNEtaSectorDecomposition}{%
+    \begin{tikzpicture}[tn picture]
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt] (Uu) at (-2.55,0.76) {$U^\dagger$};
+        \TN@tensordot{tnK}{(-2.55,0)}
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt] (Ud) at (-2.55,-0.76) {$U$};
+        \draw[tn phys leg] (Uu.south) -- (tnK.north);
+        \draw[tn phys leg] (tnK.south) -- (Ud.north);
+        \TN@leftleg{tnK}{0.58}
+        \TN@rightleg{tnK}{0.58}
+        \node at (-2.88,-0.24) {$K$};
+        \node at (-1.43,0) {$=$};
+        \node at (-0.68,0) {$\displaystyle\bigoplus_k$};
+        \TN@tensordot{tnL}{(0.30,0)}
+        \TN@tensordot{tnR}{(1.42,0)}
+        \draw[tn leg] (tnL.west) -- ++(-0.52,0);
+        \draw[tn leg] (tnL.east) -- (tnR.west);
+        \draw[tn leg] (tnR.east) -- ++(0.52,0);
+        \TN@upleg{tnL}{0.50}
+        \TN@downleg{tnL}{0.50}
+        \TN@upleg{tnR}{0.50}
+        \TN@downleg{tnR}{0.50}
+        \node at (0.30,0.78) {$l_k$};
+        \node at (1.42,0.78) {$r_k$};
+        \node at (2.48,0) {$,\qquad$};
+        \TN@tensordot{tnRh}{(3.20,0)}
+        \TN@tensordot{tnLk}{(4.32,0)}
+        \draw[tn leg] (tnRh.east) -- (tnLk.west);
+        \TN@upleg{tnRh}{0.50}
+        \TN@downleg{tnRh}{0.50}
+        \TN@upleg{tnLk}{0.50}
+        \TN@downleg{tnLk}{0.50}
+        \node at (3.20,0.78) {$r_h$};
+        \node at (4.32,0.78) {$l_k$};
+        \node at (3.76,-0.80) {$\eta_{k,h}=r_h l_k\geq 0$};
+    \end{tikzpicture}%
+}
+
 \newcommand{\TNGaugeConjugation}[3]{%
     \begin{tikzpicture}[tn picture]
         \TN@opdotabove{tnXl}{(-1.10,0)}{#1}

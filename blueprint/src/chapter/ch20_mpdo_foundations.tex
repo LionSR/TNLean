@@ -242,6 +242,16 @@ legs cyclically and taking the resulting trace.
     See \cite[Section~4.3]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
+\begin{figure}[ht]
+    \centering
+    \TNMPOLocalPurification
+    \caption{Local purification of an MPO tensor: the ancillary index $k$ is
+    contracted between $A$ and $\overline A$, while the ket and bra physical
+    legs remain external. This is the tensor form of the purification in
+    \cite[Section~4.3]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_local_purification}
+\end{figure}
+
 \begin{theorem}[LPDOs are MPDOs]\label{thm:lpdo_is_mpdo}
     \lean{MPOTensor.IsLPDO.isMPDO}
     \leanok
