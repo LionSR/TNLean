@@ -466,6 +466,169 @@ the resulting splitting decomposes any tensor into irreducible blocks.
     Lemma~\ref{lem:mpv_partition_isometries}.
 \end{proof}
 
+\begin{definition}[No nontrivial periodic vectors]
+    \label{def:no_periodic_vectors}
+    \lean{MPSTensor.HasNoPeriodicVectors}
+    \leanok
+    \uses{def:mps_tensor, def:transfer_map, def:irreducible_tensor}
+    An MPS tensor $A$ has \emph{no nontrivial $p$-periodic vectors} if, for
+    every isometry $V$ with $V^\dagger V = \Id$ and $A^i V = V B^i$ for
+    all~$i$ with $B$ irreducible (equivalently, for every restriction $B$ of
+    $A$ to a minimal invariant subspace), and for every $\rho > 0$ and
+    $r > 0$ with $\E_B(\rho) = r\rho$, every eigenvalue of $\E_B$ of modulus
+    $r$ equals~$r$.
+    The eigenvalue $r$ is the spectral radius of $\E_B$
+    (Theorem~\ref{thm:spectral_radius_pf_irred}), so the condition states
+    that no block of the invariant-subspace decomposition
+    of~\cite[Section~2]{Cirac2016MPDO_arXiv}, rescaled to spectral radius
+    one, has a peripheral eigenvalue $e^{2\pi i q/p} \neq 1$. Eigenvectors
+    with such eigenvalues are the $p$-periodic vectors
+    of~\cite[Section~2]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{lemma}[Transfer map of an intertwined corner]
+    \label{lem:transfer_map_corner_intertwine}
+    \lean{MPSTensor.transferMap_conj_of_intertwine}
+    \lean{MPSTensor.hasEigenvalue_transferMap_of_intertwine}
+    \leanok
+    \uses{def:transfer_map}
+    Let $V$ satisfy $A^i V = V B^i$ for all~$i$. Then for every $X$,
+    \[
+        \E_A(V X V^\dagger) = V \E_B(X) V^\dagger.
+    \]
+    If moreover $V^\dagger V = \Id$, then every eigenvalue of $\E_B$ is an
+    eigenvalue of $\E_A$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Expanding $\E_A(V X V^\dagger)$ termwise, the intertwining
+    $A^i V = V B^i$ and its adjoint
+    $V^\dagger (A^i)^\dagger = (B^i)^\dagger V^\dagger$ move both factors
+    past $V$ and $V^\dagger$. For the eigenvalue statement, if
+    $\E_B(X) = \mu X$ with $X \neq 0$, then
+    $\E_A(V X V^\dagger) = \mu\, V X V^\dagger$, and $V X V^\dagger \neq 0$
+    because compressing with the isometry returns
+    $V^\dagger (V X V^\dagger) V = X$.
+\end{proof}
+
+\begin{lemma}[Perron eigenpair of a nonzero irreducible tensor]
+    \label{lem:irreducible_transfer_perron_pair}
+    \lean{MPSTensor.exists_posDef_transferMap_eigenvector_of_irreducible}
+    \leanok
+    \uses{def:irreducible_tensor, def:transfer_map}
+    Let $B$ be an irreducible MPS tensor of positive bond dimension, not all
+    of whose matrices vanish. Then there are $\rho > 0$ and $r > 0$ with
+    $\E_B(\rho) = r\rho$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:pf_eigenvector_existence, def:irreducible_cp}
+    Irreducibility of the tensor makes the transfer map an irreducible
+    completely positive map, and a nonzero matrix makes it nonzero, so it
+    does not annihilate any nonzero PSD matrix. The Perron--Frobenius theorem
+    for positive maps (Theorem~\ref{thm:pf_eigenvector_existence}) gives a
+    nonzero PSD eigenvector with eigenvalue $r > 0$, and irreducibility
+    upgrades it to a positive-definite one
+    (\cite[Theorem~6.3(2)]{Wolf2012Quantum}).
+\end{proof}
+
+\begin{lemma}[Spectral normalization of an irreducible block]
+    \label{lem:irreducible_block_spectral_normalization}
+    \lean{MPSTensor.isNormalTensor_invSqrt_smul_of_unique_peripheral}
+    \leanok
+    \uses{def:irreducible_tensor, def:transfer_map, def:nt_cpsv}
+    Let $B$ be an irreducible MPS tensor of positive bond dimension with
+    $\E_B(\rho) = r\rho$ for some $\rho > 0$ and $r > 0$, and suppose every
+    eigenvalue of $\E_B$ of modulus $r$ equals $r$. Then $r^{-1/2} B$ is a
+    normal tensor.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:nt_cpsv}
+    Rescaling the tensor by $r^{-1/2}$ rescales the transfer map by
+    $r^{-1}$, so $\rho$ becomes a positive-definite fixed point of
+    $\E_{r^{-1/2}B}$, and the eigenvalues of modulus one of
+    $\E_{r^{-1/2}B}$ are the eigenvalues of modulus $r$ of $\E_B$ divided
+    by $r$. By hypothesis the only such eigenvalue is one, so the peripheral
+    eigenvalue set is $\{1\}$. Irreducibility is unchanged by a nonzero
+    rescaling.
+\end{proof}
+
+\begin{theorem}[Sufficient condition for canonical form]
+    \label{thm:projector_closure_canonical_form}
+    \lean{MPSTensor.exists_normalTensor_blockDecomp_sameMPV₂Pos_of_hasInvariantProjectorClosure}
+    \leanok
+    \uses{def:invariant_projector_closure, def:no_periodic_vectors,
+        def:nt_cpsv, def:same_mpv2_pos, def:block_diagonal_tensor}
+    Suppose $A$ has invariant-projector closure and no nontrivial
+    $p$-periodic vectors. Then there are normal tensors $A_1, \ldots, A_r$
+    of positive bond dimensions $D_1, \ldots, D_r$ with $\sum_k D_k \le D$,
+    and nonzero weights $\mu_1, \ldots, \mu_r$, such that
+    \[
+        \mc{V}^+(A) = \mc{V}^+\Bigl(\bigoplus_{k=1}^r \mu_k A_k\Bigr).
+    \]
+    This is the sufficient condition for canonical form
+    of~\cite[Section~2]{Cirac2016MPDO_arXiv}, with that paper's convention
+    $\sum_k D_k \le D$ allowing zero blocks: a corner of $A$ carrying the
+    zero tensor cannot be rescaled to spectral radius one, and contributes
+    its bond dimension only to the length-zero coefficient.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:projector_closure_irreducible_corners,
+        lem:irreducible_transfer_perron_pair,
+        lem:irreducible_block_spectral_normalization}
+    Decompose $A$ into irreducible corners $B_k$ along isometries $V_k$
+    (Theorem~\ref{thm:projector_closure_irreducible_corners}); every matrix
+    product vector coefficient of $A$ is the sum of those of the corners. A
+    corner whose matrices all vanish contributes nothing at positive length
+    and is dropped. Every remaining corner has a Perron eigenpair
+    $\E_{B_k}(\rho_k) = r_k \rho_k$
+    (Lemma~\ref{lem:irreducible_transfer_perron_pair}). The absence of
+    $p$-periodic vectors, applied to the corner $B_k$, gives that every
+    eigenvalue of $\E_{B_k}$ of modulus $r_k$ equals $r_k$, so
+    $A_k := r_k^{-1/2} B_k$ is normal
+    (Lemma~\ref{lem:irreducible_block_spectral_normalization}). Setting
+    $\mu_k := r_k^{1/2}$ restores $\mu_k A_k = B_k$, so the positive-length
+    coefficients of $A$ and of $\bigoplus_k \mu_k A_k$ agree termwise. The
+    kept dimensions satisfy
+    $\sum_k D_k \le \sum_k \tr(V_k V_k^\dagger) = \tr(\Id) = D$.
+\end{proof}
+
+\begin{theorem}[Canonical form at every length without zero corners]
+    \label{thm:projector_closure_canonical_form_all_lengths}
+    \lean{MPSTensor.exists_normalTensor_blockDecomp_sameMPV₂_of_hasInvariantProjectorClosure}
+    \leanok
+    \uses{def:invariant_projector_closure, def:no_periodic_vectors,
+        def:nt_cpsv, def:same_mpv2, def:block_diagonal_tensor}
+    Suppose $A$ has invariant-projector closure, has no nontrivial
+    $p$-periodic vectors, and every restriction of $A$ to a minimal
+    invariant subspace has a nonzero matrix. Then there are normal tensors
+    $A_1, \ldots, A_r$ and nonzero weights $\mu_1, \ldots, \mu_r$ with
+    \[
+        \mc{V}(A) = \mc{V}\Bigl(\bigoplus_{k=1}^r \mu_k A_k\Bigr).
+    \]
+    The no-zero-corner hypothesis is not part of the source statement; it
+    excludes exactly the zero blocks
+    of~\cite[Section~2]{Cirac2016MPDO_arXiv}, which change only the
+    length-zero coefficient.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:projector_closure_irreducible_corners,
+        lem:irreducible_transfer_perron_pair,
+        lem:irreducible_block_spectral_normalization}
+    As for Theorem~\ref{thm:projector_closure_canonical_form}, with no
+    corner dropped: every corner is nonzero by hypothesis, so
+    $\bigoplus_k \mu_k A_k$ has the same coefficients as the unit-weight
+    direct sum of the corners at every length, including zero.
+\end{proof}
+
 \begin{theorem}[PSD fixed point gives invariant projection]\label{thm:fp_inv_proj}
     \lean{MPSTensor.lowerZero_of_posSemidef_fixedPoint}
     \leanok
