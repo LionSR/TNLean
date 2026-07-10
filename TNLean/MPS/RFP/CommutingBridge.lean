@@ -248,6 +248,107 @@ structure AppendixBStructuralData (A : MPSTensor d D) where
   /-- The original tensor has the Appendix B structural form. -/
   hA_eq : ∀ i, A i = X * Matrix.diagonal (fun k => (Λ k : ℂ)) * U i * X⁻¹
 
+/-! ### The physical isometry in the basic-vector expression -/
+
+/-- The physical isometry \(U:\mathcal H_a\otimes\mathcal H_b\to
+\mathcal H_{\mathrm{phys}}\) in the Appendix B basic-vector expression.
+
+The virtual tensor product is written in the basis indexed by pairs
+\((\alpha,\beta)\). Thus a vector is a function on
+`Fin D × Fin D`, and its image has coefficient
+
+\[
+  (Uv)_i=\sum_{\alpha,\beta}U^i_{\alpha,\beta}v_{\alpha,\beta}.
+\]
+
+Source: arXiv:1606.00608, Theorem 3.11 and lines 543--578. -/
+noncomputable def AppendixBStructuralData.physicalIsometry
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
+    ((Fin D × Fin D → ℂ) →ₗ[ℂ] (Fin d → ℂ)) where
+  toFun v i := ∑ p : Fin D × Fin D, hStruct.U i p.1 p.2 * v p
+  map_add' v w := by
+    funext i
+    simp only [Pi.add_apply, mul_add, Finset.sum_add_distrib]
+  map_smul' c v := by
+    funext i
+    change (∑ p : Fin D × Fin D, hStruct.U i p.1 p.2 * (c * v p)) =
+      c * ∑ p : Fin D × Fin D, hStruct.U i p.1 p.2 * v p
+    calc
+      _ = ∑ p : Fin D × Fin D, c * (hStruct.U i p.1 p.2 * v p) := by
+        apply Finset.sum_congr rfl
+        intro p _
+        ring
+      _ = _ := by rw [Finset.mul_sum]
+
+/-- The coefficient map \(U^*:\mathcal H_{\mathrm{phys}}\to
+\mathcal H_a\otimes\mathcal H_b\) associated with the Appendix B physical
+isometry.
+
+Source: arXiv:1606.00608, isometry equation (3.16), lines 549--554. -/
+noncomputable def AppendixBStructuralData.physicalIsometryLeftInverse
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
+    ((Fin d → ℂ) →ₗ[ℂ] (Fin D × Fin D → ℂ)) where
+  toFun ψ p := ∑ i : Fin d, star (hStruct.U i p.1 p.2) * ψ i
+  map_add' ψ φ := by
+    funext p
+    simp only [Pi.add_apply, mul_add, Finset.sum_add_distrib]
+  map_smul' c ψ := by
+    funext p
+    change (∑ i : Fin d, star (hStruct.U i p.1 p.2) * (c * ψ i)) =
+      c * ∑ i : Fin d, star (hStruct.U i p.1 p.2) * ψ i
+    calc
+      _ = ∑ i : Fin d, c * (star (hStruct.U i p.1 p.2) * ψ i) := by
+        apply Finset.sum_congr rfl
+        intro i _
+        ring
+      _ = _ := by rw [Finset.mul_sum]
+
+/-- The source pair-index isometry equation says that \(U^*U=1\).
+
+Source: arXiv:1606.00608, isometry equation (3.16), lines 549--554. -/
+@[simp] theorem AppendixBStructuralData.physicalIsometryLeftInverse_comp
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
+    hStruct.physicalIsometryLeftInverse.comp hStruct.physicalIsometry = 1 := by
+  classical
+  apply LinearMap.ext
+  intro v
+  funext p
+  change (∑ i : Fin d, star (hStruct.U i p.1 p.2) *
+      ∑ q : Fin D × Fin D, hStruct.U i q.1 q.2 * v q) = v p
+  calc
+    _ = ∑ i : Fin d, ∑ q : Fin D × Fin D,
+        (star (hStruct.U i p.1 p.2) * hStruct.U i q.1 q.2) * v q := by
+      apply Finset.sum_congr rfl
+      intro i _
+      rw [Finset.mul_sum]
+      apply Finset.sum_congr rfl
+      intro q _
+      simp only [mul_assoc]
+    _ = ∑ q : Fin D × Fin D, ∑ i : Fin d,
+        (star (hStruct.U i p.1 p.2) * hStruct.U i q.1 q.2) * v q :=
+      Finset.sum_comm
+    _ = ∑ q : Fin D × Fin D, (∑ i : Fin d,
+        star (hStruct.U i p.1 p.2) * hStruct.U i q.1 q.2) * v q := by
+      apply Finset.sum_congr rfl
+      intro q _
+      rw [Finset.sum_mul]
+    _ = v p := by
+      simp_rw [hStruct.hU_pair p]
+      simp
+
+/-- The physical map in the Appendix B basic-vector expression is injective.
+
+Source: arXiv:1606.00608, Theorem 3.11 and isometry equation (3.16), lines
+543--578. -/
+theorem AppendixBStructuralData.physicalIsometry_injective
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
+    Function.Injective hStruct.physicalIsometry := by
+  intro v w hvw
+  have hv := LinearMap.congr_fun hStruct.physicalIsometryLeftInverse_comp v
+  have hw := LinearMap.congr_fun hStruct.physicalIsometryLeftInverse_comp w
+  have hvw' := congrArg hStruct.physicalIsometryLeftInverse hvw
+  exact hv.symm.trans (hvw'.trans hw)
+
 /-- The proved structural form gives a nonempty bundled Appendix B form. -/
 theorem AppendixBStructuralData.exists_ofRFP (A : MPSTensor d D) [NeZero D]
     (hNT : IsNormal A) (hRFP : IsRFP A)
