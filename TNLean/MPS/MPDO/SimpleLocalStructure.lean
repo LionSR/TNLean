@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.MPDO.Defs
+import TNLean.MPS.MPDO.ZCL
 import TNLean.Entropy.MarkovChain
 import TNLean.MPS.MPDO.MutualInfoMonotone
 import TNLean.MPS.Chain.VirtualInsertion
@@ -23,6 +24,12 @@ arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete).
   doubled-index MPS tensor.
 - `MPOTensor.inverseTensor` / `MPOTensor.inverseTensor_spec`: the concrete
   inverse tensor `K⁻¹` and its matrix-unit contraction identity.
+- `MPOTensor.normalizedFourSiteTail` /
+  `MPOTensor.reducedBlockState_four_three_apply`: the normalized one-site
+  virtual tail closing the three-site marginal of the four-site MPO.
+- `MPOTensor.normalizedFourSiteTail_ne_zero` /
+  `MPOTensor.exists_normalizedFourSiteTail_entry_ne_zero`: nonvanishing of the
+  tail and selection of a nonzero virtual entry.
 - `MPOTensor.inverseMapThreeSiteContraction` /
   `MPOTensor.inverseMapThreeSiteContraction_eq`: the double inverse-map
   contraction at lines 1415--1438 of Appendix C.2 in arXiv:1606.00608.
@@ -187,6 +194,121 @@ theorem inverseTensor_spec (K : MPOTensor d D) (hK : K.IsInjective)
         = Matrix.single α β (1 : ℂ)
   exact MPSTensor.decompositionMap_sum (A := K.toMPSTensor) hK
     (Matrix.single α β (1 : ℂ))
+
+/-- The virtual matrix obtained by tracing the fourth physical site of the
+normalized four-site MPO:
+
+\[
+  R_4 = \operatorname{tr}(\rho^{(4)}(K))^{-1}
+    \sum_i K^{i,i}.
+\]
+
+The scalar is the normalization of the full four-site state. This matrix is
+the one-site specialization of the virtual tail in the three-site marginal
+formula at lines 1343--1348, later denoted by $m$ at lines 1430--1433.
+
+Source: arXiv:1606.00608, lines 792--793 and Appendix C.2, lines 1343--1348.
+The later inverse-map contraction at lines 1415--1438 uses this tail but is not
+part of the definition. -/
+noncomputable def normalizedFourSiteTail (K : MPOTensor d D) :
+    Matrix (Fin D) (Fin D) ℂ :=
+  (Matrix.trace (mpo K 4))⁻¹ • physTraceTransfer K
+
+/-- The normalized three-site marginal of the four-site MPO is the product of
+the first three local tensors closed against `normalizedFourSiteTail`:
+
+\[
+  \bigl(\sigma^{(4)}_3(K)\bigr)_{u,v}
+    = \operatorname{tr}\!\left(K^{u_1,v_1}K^{u_2,v_2}K^{u_3,v_3}R_4\right).
+\]
+
+This is the four-site instance of the three-site marginal formula at lines
+1343--1348. It supplies the normalized tail occurring in the inverse-map
+calculation at lines 1415--1438; it does not make the subsequent comparison
+with the Hayashi decomposition.
+
+Source: arXiv:1606.00608, lines 792--793 and Appendix C.2, lines 1343--1348;
+compare lines 1415--1438. -/
+theorem reducedBlockState_four_three_apply
+    (K : MPOTensor d D) (u v : Fin 3 → Fin d) :
+    K.reducedBlockState 4 3 (by omega) u v =
+      Matrix.trace
+        (K.evalWord (List.ofFn u) (List.ofFn v) * normalizedFourSiteTail K) := by
+  rw [reducedBlockState_eq_sum]
+  rw [normalizedMPO, normalizedFourSiteTail, physTraceTransfer]
+  simp only [Matrix.smul_apply, mpo_apply, mpoMatrixEntry]
+  have hwords (a : Fin 3 → Fin d) (x : Fin 1 → Fin d) :
+      List.ofFn (Fin.append a x ∘ Fin.cast (show 4 = 3 + 1 by omega)) =
+        List.ofFn a ++ List.ofFn x := by
+    rw [← List.ofFn_fin_append]
+    congr 1
+  simp_rw [hwords]
+  have heval (x : Fin 1 → Fin d) :
+      K.evalWord (List.ofFn u ++ List.ofFn x) (List.ofFn v ++ List.ofFn x) =
+        K.evalWord (List.ofFn u) (List.ofFn v) *
+          K.evalWord (List.ofFn x) (List.ofFn x) := by
+    exact evalWord_append K _ _ _ _ (by simp)
+  simp_rw [heval]
+  let z : Fin 1 := 0
+  have hone (x : Fin 1 → Fin d) :
+      K.evalWord (List.ofFn x) (List.ofFn x) = K (x z) (x z) := by
+    simp [z]
+  simp_rw [hone]
+  rw [← Equiv.sum_comp (Equiv.funUnique (Fin 1) (Fin d)).symm
+    (fun x : Fin 1 → Fin d ↦
+      (K.mpo 4).trace⁻¹ •
+        Matrix.trace
+          (K.evalWord (List.ofFn u) (List.ofFn v) * K (x z) (x z)))]
+  simp only [Equiv.funUnique_symm_apply, uniqueElim_const]
+  simp_rw [← Matrix.trace_smul]
+  rw [← Matrix.trace_sum]
+  congr 1
+  rw [← Finset.smul_sum]
+  rw [← Finset.mul_sum]
+  rw [Matrix.mul_smul]
+
+/-- The normalized one-site tail is nonzero whenever the four-site MPO has
+nonzero trace. Equivalently, the normalized three-site marginal cannot be
+closed against the zero virtual matrix.
+
+This is the four-site instance of the observation that the matrix $m$ in
+Appendix C.2 has a nonzero entry; the source uses such an entry in the next
+sector-factorization step.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1431--1434, with the
+normalization convention at lines 792--793. -/
+theorem normalizedFourSiteTail_ne_zero
+    (K : MPOTensor d D) (htrace : (mpo K 4).trace ≠ 0) :
+    normalizedFourSiteTail K ≠ 0 := by
+  intro htail
+  have hred : K.reducedBlockState 4 3 (by omega) = 0 := by
+    ext u v
+    rw [reducedBlockState_four_three_apply, htail]
+    simp
+  have hunit := reducedBlockState_trace K 4 3 (by omega) htrace
+  rw [hred] at hunit
+  simp at hunit
+
+/-- A nonzero four-site trace supplies virtual indices at which the normalized
+one-site tail does not vanish:
+
+\[
+  \exists\,\beta,\alpha,\qquad (R_4)_{\beta,\alpha}\ne 0.
+\]
+
+These are precisely the indices selected at line 1434 before the sector
+factorization at lines 1435--1437; no SAL or injectivity hypothesis is needed
+for this selection once the four-site state has nonzero trace.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1431--1437. -/
+theorem exists_normalizedFourSiteTail_entry_ne_zero
+    (K : MPOTensor d D) (htrace : (mpo K 4).trace ≠ 0) :
+    ∃ β α : Fin D, normalizedFourSiteTail K β α ≠ 0 := by
+  by_contra h
+  push Not at h
+  apply normalizedFourSiteTail_ne_zero K htrace
+  ext β α
+  exact h β α
 
 /-- The contraction obtained by applying the inverse tensor to the first and
 third sites of a three-site MPO word.
