@@ -42,6 +42,14 @@ the fundamental-theorem part that is being released first. The generated
 [API documentation](https://lionsr.github.io/TNLean/docs/) covers every
 declaration in the Lean source.
 
+The agent-driven workflow used to build this library is described in the
+companion paper: S. Lu, E. Tjoa, J. I. Cirac, *Multi-agent Autoformalization
+of Tensor Network Theory*,
+[arXiv:2607.07857](https://arxiv.org/abs/2607.07857). Most of the
+formalization was carried out by agents running on
+[TeXRA](https://texra.ai), whose `lean-env-action` also sets up the Lean and
+blueprint toolchain used in the workflows under `.github/workflows/`.
+
 The library loads as a single import (Lean 4 / Mathlib `v4.31.0`):
 
 ```lean
