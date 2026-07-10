@@ -241,7 +241,7 @@ def IsZCL (A : MPSTensor d D) : Prop :=
 /-- Correlator independence of distance forces the trace pairings of
 $\mathbb{E}^2(X\rho_R)$ and $\mathbb{E}(X\rho_R)$ against every observable to
 agree: this is the independence-of-separation step at gaps $2$ and $1$
-(arXiv:1606.00608, Definition 3.3 context). -/
+(arXiv:1606.00608, Definition 3.3). -/
 private lemma trace_mul_transferMap_sq_eq_of_isCID
     (A : MPSTensor d D) (ρR : Matrix (Fin D) (Fin D) ℂ)
     (hρ_pd : ρR.PosDef) (hρ_fix : transferMap A ρR = ρR) (hCID : IsCID A)
