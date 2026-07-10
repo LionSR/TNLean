@@ -191,8 +191,8 @@ Source: arXiv:1606.00608, Appendix C.2, Lemmas C.4 and C.5, lines 1406--1499.
 **Scope restriction (linear independence):** the source lemma neither assumes
 nor derives linear independence of the sector tensors; documented in
 `docs/paper-gaps/cpgsv17_pf_rank_one.tex`.  The hypothesis `hl` is discharged
-by `SectorPairingData.linearIndependent_l` from a block-support
-decomposition. -/
+by `SectorPairingData.linearIndependent_l` once each sector tensor lies in the
+corresponding member of an independent family of subspaces. -/
 def ofSALZCLOfPairingIdempotent
     {dA dB dC n : ℕ} {V : Type*} [AddCommGroup V] [Module ℝ V]
     (rhoABC : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ)
