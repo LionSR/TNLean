@@ -1003,9 +1003,13 @@ the specialization $L=2$.
     \lean{MPSTensor.AppendixBStructuralData.physicalIsometry}
     \lean{MPSTensor.AppendixBStructuralData.physicalIsometryLeftInverse}
     \leanok
-    Let $\mathcal H_a$ and $\mathcal H_b$ have bases indexed by
-    $\alpha,\beta\in\{0,\ldots,D-1\}$.  The coefficients
-    $U^i_{\alpha,\beta}$ in the Appendix~B basic-vector expression define maps
+    Suppose that $A$ is equipped with Appendix~B structural data
+    $(X,\Lambda,U)$: the matrix $X$ is invertible, the diagonal entries of
+    $\Lambda$ are strictly positive,
+    $A^i=X\Lambda U^iX^{-1}$, and $U$ satisfies the pair-index isometry
+    equation below.  Let $\mathcal H_a$ and $\mathcal H_b$ have bases indexed
+    by $\alpha,\beta\in\{0,\ldots,D-1\}$.  The coefficients
+    $U^i_{\alpha,\beta}$ define maps
     \[
         U:\mathcal H_a\otimes\mathcal H_b\longrightarrow
             \mathcal H_{\mathrm{phys}},
@@ -1025,7 +1029,9 @@ the specialization $L=2$.
     \lean{MPSTensor.AppendixBStructuralData.physicalIsometry_injective}
     \leanok
     \uses{def:appendixB_physical_isometry}
-    The pair-index isometry equation
+    Let $A$ be equipped with Appendix~B structural data $(X,\Lambda,U)$ as in
+    Definition~\ref{def:appendixB_physical_isometry}.  Its pair-index
+    isometry equation
     \[
         \sum_i\overline{U^i_{\alpha,\beta}}
           U^i_{\alpha',\beta'}
