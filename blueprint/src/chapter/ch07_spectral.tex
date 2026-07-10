@@ -1791,6 +1791,92 @@ $\MN{d_k} \otimes \Id_{m_k}$ of~\cite[Theorem~6.14]{Wolf2012Quantum}.
     component with its adapted orthonormal basis.
 \end{proof}
 
+The adapted orthonormal bases of the pairwise orthogonal isotypic components concatenate
+into a single orthonormal basis of $\C^{D}$, indexed by a component index $k$, a
+multiplicity index $i$, and an irreducible index $j$. In this basis every member of $S$
+acts block-diagonally, one matrix-times-identity block per component. A $*$-subalgebra
+contains the identity matrix, so every component carries irreducible pieces of $S$: this
+is the unital case of the block representation invoked
+by~\cite[Theorem~6.14]{Wolf2012Quantum}, without the zero block.
+
+\begin{theorem}[Adapted orthonormal basis of the whole space]%
+    \label{thm:starSubalgebra_global_adapted_orthonormal_basis}
+    \lean{StarSubalgebra.exists_adapted_orthonormalBasis}
+    \leanok
+    Let $S$ be a $*$-subalgebra of $\MN{D}$. There are $K \in \N$, positive dimensions
+    $d_0, \ldots, d_{K-1}$ and multiplicities $m_0, \ldots, m_{K-1}$, and an orthonormal
+    basis $(f_{k,i,j})_{k < K,\, i < m_k,\, j < d_k}$ of $\C^{D}$ such that for every
+    $A \in S$ there are matrices $B_k \in \MN{d_k}$ with, for all $k < K$, $i < m_k$, and
+    $j < d_k$,
+    \[
+        A\,f_{k,i,j} \;=\; \sum_{j'=0}^{d_k-1} (B_k)_{j'j}\, f_{k,i,j'}.
+    \]
+    In this basis the member $A$ acts on the $k$-th component as
+    $\Id_{m_k} \otimes B_k$. Only the containment direction is asserted: every member of
+    $S$ takes this form. The converse of~\cite[Theorem~6.14]{Wolf2012Quantum}, that every
+    choice of blocks $(B_k)_k$ is attained by a member of $S$, is not part of this
+    statement.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:starSubalgebra_orthogonal_isotypic_decomposition,
+        thm:starSubalgebra_adapted_orthonormal_basis}
+    The isotypic-component decomposition
+    (Theorem~\ref{thm:starSubalgebra_orthogonal_isotypic_decomposition}) writes $\C^{D}$ as
+    the supremum of finitely many pairwise orthogonal isotypic components, each the
+    supremum of a finite, nonempty same-type class of pairwise orthogonal irreducible
+    pieces. Theorem~\ref{thm:starSubalgebra_adapted_orthonormal_basis} equips the $k$-th
+    component with an adapted orthonormal family $(f_{k,i,j})_{i < m_k,\, j < d_k}$
+    spanning it, where $m_k$ is the number of pieces of the class, positive because the
+    class is nonempty, and $d_k$ is their common dimension, positive because irreducible
+    pieces are nonzero. Concatenating the families over $k$ yields an orthonormal family:
+    two vectors of one component are orthonormal by the adapted family, and two vectors of
+    distinct components are orthogonal because the components are. The concatenated family
+    spans $\C^{D}$ because each component is spanned by its family and the components have
+    supremum $\C^{D}$; a spanning orthonormal family is an orthonormal basis. The action
+    property holds componentwise by the adapted families.
+\end{proof}
+
+\begin{theorem}[Global unitary block-diagonal form]%
+    \label{thm:starSubalgebra_unitary_block_diagonal}
+    \lean{StarSubalgebra.exists_unitary_conj_blockDiagonal}
+    \leanok
+    Let $S$ be a $*$-subalgebra of $\MN{D}$. There are $K \in \N$, positive dimensions
+    $d_0, \ldots, d_{K-1}$ and multiplicities $m_0, \ldots, m_{K-1}$ with
+    $\sum_{k} d_k m_k = D$, realized by an explicit identification of the index sets, and
+    a unitary $U \in \MN{D}$ such that every $A \in S$ satisfies
+    \[
+        U^{\dagger} A\, U \;=\; \bigoplus_{k=0}^{K-1} \Id_{m_k} \otimes B_k
+    \]
+    for matrices $B_k \in \MN{d_k}$ depending on $A$. Up to reordering the two tensor
+    factors of each block this is the containment direction of the unital case of the
+    block representation of~\cite[Theorem~6.14]{Wolf2012Quantum}: $S$ is carried by $U$
+    into the block algebra $\bigoplus_k \Id_{m_k} \otimes \MN{d_k}$. The converse, that
+    every choice of blocks $(B_k)_k$ is attained by a member of $S$, is not part of this
+    statement.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:starSubalgebra_global_adapted_orthonormal_basis}
+    Let $(f_{k,i,j})$ be the adapted orthonormal basis of
+    Theorem~\ref{thm:starSubalgebra_global_adapted_orthonormal_basis} and let $U$ be the
+    change-of-basis matrix from the standard orthonormal basis of $\C^{D}$ to
+    $(f_{k,i,j})$, so the columns of $U$ are the adapted basis vectors; a change of basis
+    between orthonormal bases is unitary. Both bases have $D$ elements, which identifies
+    the index set of triples $(k, i, j)$ with $\{0, \ldots, D-1\}$ and gives
+    $\sum_k d_k m_k = D$. For $A \in S$ the matrix $U^{\dagger} A\, U = U^{-1} A\, U$ is
+    the matrix of the operator $x \mapsto Ax$ in the adapted basis, with entries
+    \[
+        \langle f_{k',i',j'},\, A f_{k,i,j} \rangle
+        \;=\; \sum_{j''} (B_k)_{j''j} \langle f_{k',i',j'},\, f_{k,i,j''} \rangle
+        \;=\; \delta_{k'k}\, \delta_{i'i}\, (B_k)_{j'j}
+    \]
+    by the adapted action and orthonormality. This is the block-diagonal matrix with
+    blocks $\Id_{m_k} \otimes B_k$.
+\end{proof}
+
 \begin{theorem}[Fixed-point algebra is semisimple]%
     \label{thm:fixedPointAlgebra_isSemisimpleRing}
     \lean{Kraus.fixedPointAlgebra_isSemisimpleRing}
