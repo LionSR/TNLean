@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.LinearAlgebra.Matrix.Irreducible.Defs
+import Mathlib.LinearAlgebra.Projection
+import Mathlib.LinearAlgebra.Trace
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
@@ -24,6 +26,11 @@ positive powers, then it factors as an outer product.  Primitivity is not needed
 for this strengthened statement; it remains among the surrounding MPDO
 hypotheses because it is part of the paper's construction of the auxiliary
 matrix `T`.
+
+The theorem `Matrix.hasRankOneFactorization_of_mul_self_eq_self` records the
+alternative exact condition suggested by the operator-valued ZCL identity: an
+idempotent trace-one matrix is the projection onto a one-dimensional range and
+therefore factors as an outer product.
 -/
 
 open scoped BigOperators Matrix ComplexOrder
@@ -58,6 +65,43 @@ has trace one. -/
 def PrimitiveTracePowersConstantImpliesRankOne
     (T : Matrix (Fin n) (Fin n) ℝ) : Prop :=
   Matrix.IsPrimitive T → TracePowersConstant T → HasRankOneFactorization T
+
+/-- An idempotent real matrix of trace one has a rank-one factorization.
+
+This criterion excludes precisely the nilpotent generalized zero-eigenspace
+which is invisible to traces of powers.  It is the algebraic conclusion needed
+after retaining the operator-valued ZCL identity in arXiv:1606.00608,
+Appendix C.2, lines 1489--1497. -/
+theorem hasRankOneFactorization_of_mul_self_eq_self
+    {T : Matrix (Fin n) (Fin n) ℝ}
+    (hTT : T * T = T) (hTrace : Matrix.trace T = 1) :
+    HasRankOneFactorization T := by
+  classical
+  let f : (Fin n → ℝ) →ₗ[ℝ] (Fin n → ℝ) := Matrix.toLin' T
+  have hf : IsIdempotentElem f := by
+    change Matrix.toLin' T ∘ₗ Matrix.toLin' T = Matrix.toLin' T
+    rw [← Matrix.toLin'_mul, hTT]
+  have hrank : Module.finrank ℝ (LinearMap.range f) = 1 := by
+    have h := (LinearMap.isProj_range_iff_isIdempotentElem f).2 hf |>.trace
+    rw [Matrix.trace_toLin'_eq, hTrace] at h
+    exact_mod_cast h.symm
+  rcases finrank_eq_one_iff'.mp hrank with ⟨u, hu, hspan⟩
+  let b : Fin n → ℝ := fun j ↦
+    Classical.choose (hspan ⟨f (Pi.single j 1), LinearMap.mem_range_self f _⟩)
+  refine ⟨u.1, b, ?_⟩
+  ext i j
+  have hb := Classical.choose_spec
+    (hspan ⟨f (Pi.single j 1), LinearMap.mem_range_self f _⟩)
+  have hb' := congrArg (fun x : LinearMap.range f ↦ x.1 i) hb
+  have heval : f (Pi.single j 1) i = T i j := by
+    simp only [f, Matrix.toLin'_apply, Matrix.mulVec, dotProduct]
+    rw [Fintype.sum_eq_single j]
+    · simp
+    · intro x hx
+      simp [hx]
+  change Classical.choose _ * u.1 i = f (Pi.single j 1) i at hb'
+  rw [heval] at hb'
+  simpa [b, Matrix.vecMulVec_apply, mul_comm] using hb'.symm
 
 /-- A finite family of nonnegative real numbers with sum and sum of squares both
 one has exactly one nonzero entry, and that entry is one. -/

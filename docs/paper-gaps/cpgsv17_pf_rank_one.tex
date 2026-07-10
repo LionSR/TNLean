@@ -109,6 +109,36 @@ $(xy^{\top})^2=0$ and is annihilated by $P$ on both sides. It therefore
 leaves all traces of positive powers unchanged from the Perron projector while
 raising the rank of $T$.
 
+\section{What the operator-valued ZCL identity implies}
+
+The source uses more than the trace equalities before passing to
+Perron--Frobenius theory.  With $L e_k=l_k$ and
+$(R v)_k=(r_k\mid v)$, one has $T=RL$, while the displayed ZCL identity in
+lines 1489--1493 is
+\[
+  LR=L(RL)R=(LR)^2.
+\]
+This identity makes the operator $LR$ idempotent.  Multiplication on the left
+by $R$ and on the right by $L$ gives only
+\[
+  T^2=T^3,
+\]
+not $T=T^2$.  The counterexample above already satisfies this weaker identity:
+$T^2=T^3=P$.  Thus retaining the displayed operator equation, without a
+further property of the inverse-map families $l_k$ and $r_k$, does not remove
+the nilpotent part of $T$.
+
+The exact sufficient conclusion is transparent.  If the inverse-map
+construction were shown to give $T^2=T$, then $T$ itself would be idempotent.
+An idempotent real matrix has trace equal to the dimension of its range;
+hence trace one makes that range one-dimensional and gives
+$T=a b^{\top}$.  This argument is formalized as
+\leanid{Matrix.hasRankOneFactorization_of_mul_self_eq_self}.  The remaining
+source-faithful task is therefore to derive $T^2=T$, or another condition
+excluding the generalized zero-eigenspace, from a property of the concrete
+inverse-map tensors not currently recorded in
+\leanid{MPOTensor.ExplicitEtaOperators}.
+
 \section{The corrected statement}
 
 The formal development proves a corrected sufficient matrix theorem. Let $T$
