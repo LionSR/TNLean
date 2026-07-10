@@ -2,8 +2,9 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.MPDO.Defs
+import TNLean.Algebra.HermitianHelpers
 import TNLean.MPS.BNT.Basic
+import TNLean.MPS.MPDO.Defs
 import TNLean.MPS.SharedInfra.BlockAssembly
 
 /-!
@@ -51,7 +52,7 @@ surrogate for the paper's vertical canonical form.
 * `mpv_diagonalTensor_eq_mpo_diag` / `mpv_diagonalTensor_nonneg`:
   the diagonal-tensor MPV equals the density-operator diagonal `⟨σ|ρ^{(N)}(M)|σ⟩`,
   hence is nonnegative when `M` generates an MPDO.
-* `opposite_corner_eq_zero_of_posSemidef` / `mpo_opposite_corner_eq_zero`:
+* `Matrix.PosSemidef.opposite_corner_eq_zero` / `mpo_opposite_corner_eq_zero`:
   the positivity identity `P H = P H P ⇒ (1 - P) H P = 0` used in the first
   step of Proposition 4.13.
 * `mpv_verticalAssembledTensor_eq_sum`:
@@ -232,27 +233,6 @@ theorem mpv_diagonalTensor_nonneg (M : MPOTensor d D) {N : ℕ}
 
 /-! ### Positivity and one-sided invariant projections -/
 
-/-- The opposite corner vanishes for a one-sided invariant Hermitian matrix.
-
-More precisely, if `P * H = P * H * P`, then Hermiticity of `H` and `P` gives
-`H * P = P * H * P` by taking adjoints.  Thus the complementary corner
-`(1 - P) * H * P` vanishes.  This is the finite-dimensional operator identity
-used in the first step of arXiv:1606.00608, Proposition 4.13, lines 1873--1887
-(equation `eq1:proof.IV.12`). -/
-theorem opposite_corner_eq_zero_of_posSemidef {n : Type*} [Fintype n] [DecidableEq n]
-    (H P : Matrix n n ℂ) (hH : H.PosSemidef) (hP : P.IsHermitian)
-    (hInv : P * H = P * H * P) :
-    (1 - P) * H * P = 0 := by
-  have hRight : H * P = P * H * P := by
-    calc
-      H * P = (P * H)ᴴ := by
-        rw [Matrix.conjTranspose_mul, hP.eq, hH.isHermitian.eq]
-      _ = (P * H * P)ᴴ := congrArg Matrix.conjTranspose hInv
-      _ = P * H * P := by
-        rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul, hP.eq,
-          hH.isHermitian.eq, Matrix.mul_assoc]
-  rw [Matrix.sub_mul, Matrix.one_mul, Matrix.sub_mul, hRight, hInv, sub_self]
-
 /-- For an MPDO, a one-sided invariant Hermitian matrix for an `N`-site density
 operator has zero opposite corner.
 
@@ -264,8 +244,8 @@ and Hermiticity of `P`. -/
 theorem mpo_opposite_corner_eq_zero (M : MPOTensor d D) (hM : IsMPDO M) (N : ℕ)
     (P : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) (hP : P.IsHermitian)
     (hInv : P * mpo M N = P * mpo M N * P) :
-    (1 - P) * mpo M N * P = 0 := by
-  exact opposite_corner_eq_zero_of_posSemidef (mpo M N) P (hM N) hP hInv
+    (1 - P) * mpo M N * P = 0 :=
+  Matrix.PosSemidef.opposite_corner_eq_zero (hM N) hP hInv
 
 /-- The vertical transfer map of an MPO tensor:
 `E_vert(X) = Σ_i M^{ii} X (M^{ii})†`. -/
