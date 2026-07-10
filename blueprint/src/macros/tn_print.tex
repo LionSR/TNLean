@@ -534,6 +534,53 @@
     \end{tikzpicture}%
 }
 
+% Local-orthogonality contraction: sandwiching the ket and bra legs of one
+% tensor between the orthogonal projectors P_1 and P_2, in either order,
+% gives zero, as does the neighboring two-site contraction with P_1 dressing
+% both physical legs of the first site and P_2 both legs of the second.
+\newcommand{\TNMPDOLocalOrthogonality}{%
+    \begin{tikzpicture}[tn picture]
+        % One site, P_1 on the ket leg and P_2 on the bra leg.
+        \TN@tensordot{loA}{(0,0)}
+        \TN@leftleg{loA}{0.50}
+        \TN@rightleg{loA}{0.50}
+        \TN@upleg{loA}{1.00}
+        \TN@downleg{loA}{1.00}
+        \TN@opdotleft{loAu}{(0,0.55)}{P_1}
+        \TN@opdotleft{loAd}{(0,-0.55)}{P_2}
+        \node[anchor=west] at (0.12,-0.30) {${\cal K}$};
+        \node at (1.10,0) {$=$};
+        % One site, P_2 on the ket leg and P_1 on the bra leg.
+        \TN@tensordot{loB}{(2.20,0)}
+        \TN@leftleg{loB}{0.50}
+        \TN@rightleg{loB}{0.50}
+        \TN@upleg{loB}{1.00}
+        \TN@downleg{loB}{1.00}
+        \TN@opdotleft{loBu}{(2.20,0.55)}{P_2}
+        \TN@opdotleft{loBd}{(2.20,-0.55)}{P_1}
+        \node[anchor=west] at (2.32,-0.30) {${\cal K}$};
+        \node at (3.30,0) {$=$};
+        % Two neighboring sites, P_1 dressing both physical legs of the
+        % first site and P_2 both physical legs of the second.
+        \TN@tensordot{loCa}{(4.40,0)}
+        \TN@tensordot{loCb}{(5.60,0)}
+        \draw[tn leg] (loCa.east) -- (loCb.west);
+        \TN@leftleg{loCa}{0.50}
+        \TN@rightleg{loCb}{0.50}
+        \TN@upleg{loCa}{1.00}
+        \TN@downleg{loCa}{1.00}
+        \TN@upleg{loCb}{1.00}
+        \TN@downleg{loCb}{1.00}
+        \TN@opdotleft{loCau}{(4.40,0.55)}{P_1}
+        \TN@opdotleft{loCad}{(4.40,-0.55)}{P_1}
+        \TN@opdotright{loCbu}{(5.60,0.55)}{P_2}
+        \TN@opdotright{loCbd}{(5.60,-0.55)}{P_2}
+        \node[anchor=west] at (4.52,-0.30) {${\cal K}$};
+        \node[anchor=west] at (5.72,-0.30) {${\cal K}$};
+        \node at (6.65,0) {$=\;0$};
+    \end{tikzpicture}%
+}
+
 \newcommand{\TNGaugeConjugation}[3]{%
     \begin{tikzpicture}[tn picture]
         \TN@opdotabove{tnXl}{(-1.10,0)}{#1}

@@ -64,6 +64,52 @@ private lemma submatrix_sum' {ι l m p q : Type*}
   ext a b
   simp only [Matrix.submatrix_apply, Matrix.sum_apply]
 
+/-- Left block-diagonal action on a bond block: the `(j, j')` bond block of
+$(\bigoplus_k L_k)\, X$ is $L_j X_{j,j'}$ (arXiv:1606.00608, line 551). -/
+private lemma blockDiagonal'_mul_toBlock
+    (L : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
+    (X : Matrix ((k : Fin r) × Fin (dim k)) ((k : Fin r) × Fin (dim k)) ℂ)
+    (j j' : Fin r) :
+    (Matrix.blockDiagonal' L * X).submatrix (blockIncl j dim) (blockIncl j' dim) =
+      L j * X.submatrix (blockIncl j dim) (blockIncl j' dim) := by
+  classical
+  ext a a'
+  rw [Matrix.submatrix_apply]
+  change (Matrix.blockDiagonal' L * X) (⟨j, a⟩ :
+      (k : Fin r) × Fin (dim k)) ⟨j', a'⟩ = _
+  rw [Matrix.mul_apply, Fintype.sum_sigma]
+  -- kill the off-diagonal blocks of the left factor
+  rw [Finset.sum_eq_single j
+    (fun k _ hk => Finset.sum_eq_zero fun b _ => by
+      rw [Matrix.blockDiagonal'_apply_ne _ _ _ (Ne.symm hk), zero_mul])
+    (fun h => absurd (Finset.mem_univ j) h)]
+  rw [Matrix.mul_apply]
+  refine Finset.sum_congr rfl fun b _ => ?_
+  rw [Matrix.blockDiagonal'_apply_eq, Matrix.submatrix_apply, blockIncl, blockIncl]
+
+/-- Right block-diagonal action on a bond block: the `(j, j')` bond block of
+$X\, (\bigoplus_k R_k)$ is $X_{j,j'} R_{j'}$ (arXiv:1606.00608, line 551). -/
+private lemma mul_blockDiagonal'_toBlock
+    (R : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
+    (X : Matrix ((k : Fin r) × Fin (dim k)) ((k : Fin r) × Fin (dim k)) ℂ)
+    (j j' : Fin r) :
+    (X * Matrix.blockDiagonal' R).submatrix (blockIncl j dim) (blockIncl j' dim) =
+      X.submatrix (blockIncl j dim) (blockIncl j' dim) * R j' := by
+  classical
+  ext a a'
+  rw [Matrix.submatrix_apply]
+  change (X * Matrix.blockDiagonal' R) (⟨j, a⟩ :
+      (k : Fin r) × Fin (dim k)) ⟨j', a'⟩ = _
+  rw [Matrix.mul_apply, Fintype.sum_sigma]
+  -- kill the off-diagonal blocks of the right factor
+  rw [Finset.sum_eq_single j'
+    (fun k' _ hk' => Finset.sum_eq_zero fun b' _ => by
+      rw [Matrix.blockDiagonal'_apply_ne _ _ _ hk', mul_zero])
+    (fun h => absurd (Finset.mem_univ j') h)]
+  rw [Matrix.mul_apply]
+  refine Finset.sum_congr rfl fun b' _ => ?_
+  rw [Matrix.blockDiagonal'_apply_eq, Matrix.submatrix_apply, blockIncl, blockIncl]
+
 /-- The `(j, j')` bond block of $(\bigoplus_k L_k)\, X\, (\bigoplus_k R_k)$ is
 $L_j X_{j,j'} R_{j'}$. -/
 private lemma blockDiagonal'_mul_mul_toBlock
@@ -73,29 +119,7 @@ private lemma blockDiagonal'_mul_mul_toBlock
     (Matrix.blockDiagonal' L * X * Matrix.blockDiagonal' R).submatrix
         (blockIncl j dim) (blockIncl j' dim) =
       L j * X.submatrix (blockIncl j dim) (blockIncl j' dim) * R j' := by
-  classical
-  ext a a'
-  rw [Matrix.submatrix_apply]
-  change (Matrix.blockDiagonal' L * X * Matrix.blockDiagonal' R) (⟨j, a⟩ :
-      (k : Fin r) × Fin (dim k)) ⟨j', a'⟩ = _
-  rw [Matrix.mul_apply, Fintype.sum_sigma]
-  -- reduce the outer (right block-diagonal) index to `j'`
-  rw [Finset.sum_eq_single j'
-    (fun k' _ hk' => Finset.sum_eq_zero fun b' _ => by
-      rw [Matrix.blockDiagonal'_apply_ne _ _ _ hk', mul_zero])
-    (fun h => absurd (Finset.mem_univ j') h)]
-  rw [Matrix.mul_apply]
-  refine Finset.sum_congr rfl fun b' _ => ?_
-  rw [Matrix.blockDiagonal'_apply_eq]
-  congr 1
-  -- now reduce the inner (left block-diagonal) index to `j`
-  rw [Matrix.mul_apply, Fintype.sum_sigma, Matrix.mul_apply]
-  rw [Finset.sum_eq_single j
-    (fun k _ hk => Finset.sum_eq_zero fun b _ => by
-      rw [Matrix.blockDiagonal'_apply_ne _ _ _ (Ne.symm hk), zero_mul])
-    (fun h => absurd (Finset.mem_univ j) h)]
-  refine Finset.sum_congr rfl fun b _ => ?_
-  rw [Matrix.blockDiagonal'_apply_eq, Matrix.submatrix_apply, blockIncl, blockIncl]
+  rw [mul_blockDiagonal'_toBlock, blockDiagonal'_mul_toBlock]
 
 /-- The `(j, j')` bond block of the block-diagonal transfer sum
 $\sum_i (\bigoplus_k B_k^i)\, X\, (\bigoplus_k B_k^i)^{\dagger}$ is the mixed
@@ -269,20 +293,12 @@ private lemma mixedTransferMap₂_eq_zero_of_isIdempotentElem
       (((Module.End.toContinuousLinearMap V)
         (mixedTransferMap₂ (d := d) (D₁ := D₁) (D₂ := D₂) A B)) : V →L[ℂ] V) < 1
     rw [mixedTransferSpectralRadius₂_eq] at hsr
-    simpa only [] using hsr
-  have hpow : Tendsto (fun n => F' ^ n) atTop (nhds 0) :=
-    @pow_tendsto_zero_of_spectralRadius_lt_one (V →L[ℂ] V)
+    exact hsr
+  have hidem' : IsIdempotentElem F' := hidem.map Φ
+  have hF'0 : F' = 0 :=
+    @IsIdempotentElem.eq_zero_of_spectralRadius_lt_one (V →L[ℂ] V)
       (ContinuousLinearMap.toNormedRing : NormedRing (V →L[ℂ] V)) hComplete
-      (ContinuousLinearMap.toNormedAlgebra : NormedAlgebra ℂ (V →L[ℂ] V)) F' hSpectF
-  have hFpow : ∀ n, F' ^ (n + 1) = F' := by
-    intro n
-    change (Φ (mixedTransferMap₂ A B)) ^ (n + 1) = Φ (mixedTransferMap₂ A B)
-    rw [← map_pow, hidem.pow_succ_eq n]
-  have hshift : Tendsto (fun n => F' ^ (n + 1)) atTop (nhds 0) :=
-    hpow.comp (tendsto_add_atTop_nat 1)
-  have hconst : Tendsto (fun n => F' ^ (n + 1)) atTop (nhds F') := by
-    simp only [hFpow]; exact tendsto_const_nhds
-  have hF'0 : F' = 0 := tendsto_nhds_unique hconst hshift
+      (ContinuousLinearMap.toNormedAlgebra : NormedAlgebra ℂ (V →L[ℂ] V)) F' hidem' hSpectF
   have hF0 : Φ (mixedTransferMap₂ A B) = Φ 0 := by rw [map_zero]; exact hF'0
   exact Φ.injective hF0
 
