@@ -174,6 +174,54 @@ explicit hypothesis; whether the inverse-map construction supplies it ---
 for instance through the injectivity of $\mathcal{K}$ --- remains to be
 established at the matrix product density operator call site.
 
+\subsection{The sector pairing at the matrix product density operator side}
+
+The formal development now states the paper's pairing on the matrix product
+density operator side.  The structure
+\leanid{MPOTensor.SectorPairingData} records vectors $|l_k)$ and functionals
+$(r_k|$ in an abstract real vector space together with the two displayed
+identities of the source: the pairing $T_{k,h}=(r_k|l_h)$
+\cite[Appendix~C.2, lines~1478--1482]{Cirac2016MPDO_arXiv} and the
+zero-correlation-length identity
+\[
+  \sum_k |l_k)(r_k| = \sum_{k,h} T_{k,h} |l_k)(r_h|
+\]
+\cite[Appendix~C.2, lines~1490--1493]{Cirac2016MPDO_arXiv}.  From this the
+development proves, in order: the pairing operator equals its own square
+(\leanid{MPOTensor.SectorPairingData.pairing_operator_idempotent}); with
+linearly independent $(l_k)_k$ the matrix identity $T^2=T$ and the constant
+trace powers of the source follow
+(\leanid{MPOTensor.SectorPairingData.mul_self_eq_self},
+\leanid{MPOTensor.SectorPairingData.tracePowersConstant}); primitivity of $T$
+makes every $|l_k)$ nonzero, because a primitive matrix has a positive entry
+in every row and column
+(\leanid{Matrix.IsPrimitive.exists_row_pos},
+\leanid{Matrix.IsPrimitive.exists_col_pos},
+\leanid{MPOTensor.SectorPairingData.l_ne_zero}); and nonzero vectors lying
+in distinct members of an independent family of subspaces are linearly
+independent
+(\leanid{MPOTensor.SectorPairingData.linearIndependent_l}).  The rank-one
+conclusion of Lemma~C.5, with the trace-power condition derived rather than
+assumed, is
+\leanid{MPOTensor.sal_zcl_implies_rank_one_T_of_pairing_idempotent}
+and, with the independence derived from block supports,
+\leanid{MPOTensor.sal_zcl_implies_rank_one_T_of_sector_supports}.
+
+Two obligations remain before the conditional hypotheses disappear.
+First, the families $(l_k)_k$ and $(r_k)_k$ must be constructed from an
+injective simple tensor: this is the conclusion of Lemma~propSN
+\cite[Appendix~C.2, lines~1407--1471]{Cirac2016MPDO_arXiv}, whose
+inverse-map computation is not yet formalized, and it must produce the
+pairing and zero-correlation-length identities recorded in the structure.
+Second, the linear independence of the closed tensors $|l_k)$ must be
+derived.  The direct sum in the source's sector splitting
+\cite[Appendix~C.2, lines~1436--1448]{Cirac2016MPDO_arXiv} concerns the
+physical indices; the closed tensors $|l_k)$ obtained by contracting the
+physical sector legs live in a common bond space, so their block supports
+--- or their independence by another argument --- do not follow from the
+displayed equations alone.  Until then the independence, or the subspace
+family carrying the $|l_k)$, remains an explicit hypothesis.
+
 \section{The corrected statement}
 
 The formal development proves a corrected sufficient matrix theorem. Let $T$
