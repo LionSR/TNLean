@@ -42,22 +42,8 @@ private theorem hermitian_fixed_eq_scalar_of_irreducible_unital
   classical
   haveI : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
   set c0 : ℝ := minEigenvalue hH
-  set U : MatrixAlg D := (↑hH.eigenvectorUnitary : MatrixAlg D)
-  have hU_unit : IsUnit U := by
-    rw [Matrix.isUnit_iff_isUnit_det]
-    simpa [U] using Matrix.UnitaryGroup.det_isUnit hH.eigenvectorUnitary
-  have hshift_eq :
-      H - (c0 : ℂ) • 1 =
-        U * Matrix.diagonal (fun i : Fin D => (↑(hH.eigenvalues i - c0) : ℂ)) * Uᴴ := by
-    simpa [U] using hermitian_sub_scalar_spectral hH c0
-  have hshift_psd : (H - (c0 : ℂ) • 1).PosSemidef := by
-    rw [hshift_eq]
-    have hdiag_psd :
-        (Matrix.diagonal (fun i : Fin D => (↑(hH.eigenvalues i - c0) : ℂ))).PosSemidef := by
-      rw [Matrix.posSemidef_diagonal_iff]
-      intro i
-      exact_mod_cast sub_nonneg.mpr (minEigenvalue_le hH i)
-    exact (Matrix.IsUnit.posSemidef_star_right_conjugate_iff hU_unit).2 hdiag_psd
+  have hshift_psd : (H - (c0 : ℂ) • 1).PosSemidef :=
+    sub_minEigenvalue_smul_one_posSemidef hH
   have hone_fix : transferMap (d := r) (D := D) K (1 : MatrixAlg D) = 1 := by
     simpa [MPSTensor.transferMap_apply, KadisonSchwarz.krausMap,
       KadisonSchwarz.IsUnitalKraus] using hUnital
