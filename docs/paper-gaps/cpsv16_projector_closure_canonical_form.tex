@@ -1,0 +1,38 @@
+% Source-faithfulness note for arXiv:1606.00608, lines 253--254.
+\section*{The projector-closure sufficient condition for canonical form}
+
+Cirac, Pérez-García, Schuch, and Verstraete state that a tensor without
+nontrivial periodic vectors is in canonical form if every orthogonal projection
+$P$ satisfying
+\[
+  P A^i = P A^i P
+\]
+also satisfies
+\[
+  A^i P = P A^i P.
+\]
+This is the proposition in arXiv:1606.00608, lines 253--254.
+
+The algebraic projection step is formalized without normalization.  Indeed, if
+$(1-P)A^iP=0$, then the first displayed hypothesis holds for $1-P$.  Its
+conclusion gives $A^i(1-P)=(1-P)A^i(1-P)$, and hence $P A^i=A^iP$.  Thus every
+projection used in the invariant-subspace decomposition is reducing.
+
+The remaining implication is spectral.  The current decomposition theorem
+produces irreducible blocks and equality of all finite-ring traces, but it does
+not transport a global absence-of-periodicity hypothesis to the transfer maps
+of the individual blocks.  Moreover, the source first rescales each block so
+that its transfer map has spectral radius one; the corresponding coefficients
+are then carried by the scalars $\mu_k$.  A faithful completion therefore needs
+a theorem which simultaneously:
+\begin{enumerate}
+\item constructs the reducing direct-sum decomposition from the closure
+  condition;
+\item rescales every nonzero irreducible block to spectral radius one; and
+\item identifies the source's absence of nontrivial periodic vectors with
+  primitivity of each rescaled block transfer map.
+\end{enumerate}
+
+No left-canonical identity such as
+$\sum_i (A^i)^\dagger A^i=1$ occurs in the cited proposition, so it cannot be
+assumed in this completion.
