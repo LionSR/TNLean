@@ -543,98 +543,6 @@ private theorem unit_pair_of_scaled_sqrtCard [NeZero D] (U₀ : MPSTensor d D)
           · simp [hpq, hD_ne]
           · simp [hpq]
 
-/-- **Unit pair-index form of Lemma B.1.**  This is the same structural
-decomposition as the isometry theorem above
-(Theorem~\ref{thm:rfp_nt_structural_full}), rewritten in the source convention
-for the pair-index isometry equation
-\[
-  \sum_i \overline{(U^i)_{\alpha,\beta}}\,(U^i)_{\alpha',\beta'}
-  =
-  \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
-\]
-
-The theorem is only a normalization comparison: the diagonal factor is rescaled by
-\(D^{-1/2}\), and the residual tensor by \(D^{1/2}\).
-
-**Scope restriction (source isometry):** Corollary III.cor3 and the joint
-isometry equation in arXiv:1606.00608, lines 550--554, also include the source
-trace condition \(\operatorname{tr}\Lambda=1\) and cross-block
-\(\delta_{j,j'}\) orthogonality.  Those conclusions are not proved here; this
-theorem only compares the scalar normalization for a single block.  This
-restriction is recorded in `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`.
-Elimination: prove a whole-family isometry form with trace-normalized diagonal
-weights and orthogonality between distinct blocks. -/
-theorem rfp_nt_structural_full_unit_pair (A : MPSTensor d D) [NeZero D]
-    (hNT : IsNormal A) (hRFP : IsRFP A)
-    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
-    ∃ (X : Matrix (Fin D) (Fin D) ℂ) (Λ : Fin D → ℝ)
-      (U : MPSTensor d D),
-      X.det ≠ 0 ∧
-      (∀ k, 0 < Λ k) ∧
-      (∀ p q : Fin D × Fin D,
-        ∑ i : Fin d, star (U i p.1 p.2) * U i q.1 q.2 =
-          if p = q then 1 else 0) ∧
-      (∀ i, A i = X * Matrix.diagonal (fun k => (Λ k : ℂ)) * U i * X⁻¹) := by
-  classical
-  obtain ⟨X, Λ₀, U₀, hX_det, hΛ₀_pos, _, hU₀_pair, hA_eq⟩ :=
-    rfp_nt_structural_full A hNT hRFP hLeft
-  let sR : ℝ := Real.sqrt (D : ℝ)
-  let s : ℂ := (sR : ℂ)
-  let Λ : Fin D → ℝ := fun k => Λ₀ k / sR
-  let U : MPSTensor d D := fun i => s • U₀ i
-  have hDpos_nat : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
-  have hDpos : 0 < (D : ℝ) := by
-    exact_mod_cast hDpos_nat
-  have hsR_ne : sR ≠ 0 := by
-    exact Real.sqrt_ne_zero'.2 hDpos
-  have hsR_pos : 0 < sR := by
-    exact Real.sqrt_pos.2 hDpos
-  have hs_ne : s ≠ 0 := by
-    simpa [s] using Complex.ofReal_ne_zero.mpr hsR_ne
-  have hdiag :
-      Matrix.diagonal (fun k => (Λ k : ℂ)) =
-        s⁻¹ • Matrix.diagonal (fun k => (Λ₀ k : ℂ)) := by
-    ext a b
-    by_cases hab : a = b
-    · subst hab
-      calc
-        Matrix.diagonal (fun k => (Λ k : ℂ)) a a = ((Λ₀ a / sR : ℝ) : ℂ) := by
-            simp [Λ, Matrix.diagonal]
-        _ = s⁻¹ * (Λ₀ a : ℂ) := by
-            rw [Complex.ofReal_div]
-            simp [s, div_eq_mul_inv, mul_comm]
-        _ = (s⁻¹ • Matrix.diagonal (fun k => (Λ₀ k : ℂ))) a a := by
-            simp [Matrix.diagonal]
-    · simp [Matrix.diagonal, hab]
-  refine ⟨X, Λ, U, hX_det, ?_, ?_, ?_⟩
-  · intro k
-    exact div_pos (hΛ₀_pos k) hsR_pos
-  · intro p q
-    exact unit_pair_of_scaled_sqrtCard U₀ hU₀_pair p q
-  · intro i
-    rw [hA_eq i]
-    let L : Matrix (Fin D) (Fin D) ℂ := Matrix.diagonal (fun k => (Λ k : ℂ))
-    have hdiag' : Matrix.diagonal (fun k => (Λ₀ k : ℂ)) = s • L := by
-      calc
-        Matrix.diagonal (fun k => (Λ₀ k : ℂ)) =
-            (s * s⁻¹) • Matrix.diagonal (fun k => (Λ₀ k : ℂ)) := by
-            simp [hs_ne]
-        _ = s • (s⁻¹ • Matrix.diagonal (fun k => (Λ₀ k : ℂ))) := by
-            simp [smul_smul]
-        _ = s • L := by
-            rw [← hdiag]
-    have hmove : (s • L) * U₀ i = L * (s • U₀ i) := by
-      rw [Matrix.smul_mul, Matrix.mul_smul]
-    calc
-      X * Matrix.diagonal (fun k => (Λ₀ k : ℂ)) * U₀ i * X⁻¹
-          = X * (s • L) * U₀ i * X⁻¹ := by
-              rw [hdiag']
-      _ = X * L * (s • U₀ i) * X⁻¹ := by
-          rw [Matrix.mul_assoc X (s • L) (U₀ i), hmove,
-            ← Matrix.mul_assoc X L (s • U₀ i)]
-      _ = X * Matrix.diagonal (fun k => (Λ k : ℂ)) * U i * X⁻¹ := by
-          simp [L, U]
-
 /-- **Isometry canonical form for a single normal-tensor block**
 (arXiv:1606.00608, Lemma charact-NT-pure-RFP, lines 1271--1301, and the
 single-block case j = j' of the structural characterization Theorem
@@ -782,6 +690,43 @@ theorem isIsometryCanonicalForm_of_rfp_nt (A : MPSTensor d D) [NeZero D]
               ← Matrix.mul_assoc X L (s • U₀ i)]
       _ = X * Matrix.diagonal (fun k => (Real.sqrt (Λ k) : ℂ)) * U i * X⁻¹ := by
             simp [L, U]
+
+/-- **Unit pair-index form of Lemma B.1.**  This is the same structural
+decomposition as the isometry theorem above
+(Theorem~\ref{thm:rfp_nt_structural_full}), rewritten in the source convention
+for the pair-index isometry equation
+\[
+  \sum_i \overline{(U^i)_{\alpha,\beta}}\,(U^i)_{\alpha',\beta'}
+  =
+  \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+\]
+
+The theorem is only a normalization comparison: the diagonal factor is rescaled by
+\(D^{-1/2}\), and the residual tensor by \(D^{1/2}\).
+
+**Scope restriction (source isometry):** Corollary III.cor3 and the joint
+isometry equation in arXiv:1606.00608, lines 550--554, also include the source
+trace condition \(\operatorname{tr}\Lambda=1\) and cross-block
+\(\delta_{j,j'}\) orthogonality.  Those conclusions are not proved here; this
+theorem only compares the scalar normalization for a single block.  This
+restriction is recorded in `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`.
+Elimination: prove a whole-family isometry form with trace-normalized diagonal
+weights and orthogonality between distinct blocks. -/
+theorem rfp_nt_structural_full_unit_pair (A : MPSTensor d D) [NeZero D]
+    (hNT : IsNormal A) (hRFP : IsRFP A)
+    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
+    ∃ (X : Matrix (Fin D) (Fin D) ℂ) (Λ : Fin D → ℝ)
+      (U : MPSTensor d D),
+      X.det ≠ 0 ∧
+      (∀ k, 0 < Λ k) ∧
+      (∀ p q : Fin D × Fin D,
+        ∑ i : Fin d, star (U i p.1 p.2) * U i q.1 q.2 =
+          if p = q then 1 else 0) ∧
+      (∀ i, A i = X * Matrix.diagonal (fun k => (Λ k : ℂ)) * U i * X⁻¹) := by
+  obtain ⟨X, Λ, U, hX_det, hΛ_pos, _, hU_pair, hA_eq⟩ :=
+    isIsometryCanonicalForm_of_rfp_nt A hNT hRFP hLeft
+  exact ⟨X, fun k => Real.sqrt (Λ k), U, hX_det,
+    fun k => Real.sqrt_pos.2 (hΛ_pos k), hU_pair, hA_eq⟩
 
 /-- **Per-block trace-normalized isometry canonical form.** Each block of a
 multi-block tensor that is a normal, left-canonical renormalization fixed point
