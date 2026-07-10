@@ -1019,6 +1019,46 @@ and rates for the single-tensor transfer map $\E_A$.
     (Theorem~\ref{thm:is_rfp_of_isometry_canonical_form_direct_sum}).
 \end{proof}
 
+\begin{theorem}[Ambiguity of the literal repeated-phase display]%
+    \label{thm:phase_flip_tensor_not_rfp}
+    \lean{MPSTensor.phaseFlipTensor_literal_display_ambiguity}
+    \leanok
+    \uses{def:is_rfp, def:is_isometry_canonical_form}
+    Let $B$ be the one-letter, one-dimensional tensor $B^0=(1)$, and form two
+    block-diagonal copies with phases $1$ and $-1$:
+    \[
+        A^0=\begin{pmatrix}1&0\\0&-1\end{pmatrix}.
+    \]
+    The representative $B$ is in isometry canonical form, and both copy
+    coefficients have unit modulus. Thus $A$ satisfies the literal virtual
+    block-diagonal reading of the displayed repeated-copy formula in
+    \cite[Section~3]{Cirac2016MPDO_arXiv}. It does not, however, satisfy the
+    accompanying interpretation in which the copy index also belongs to the
+    physical direct sum: there is no scalar $v$ such that
+    $(A^0)^2=vA^0$. In particular, $A$ is not a renormalization fixed point
+    in the sense of Definition~\ref{def:is_rfp}.
+% Source ambiguity: equation III_CFI_RFP at lines 543--554 admits this literal
+% virtual-block substitution, while lines 559--563 require j,q to contribute
+% to both physical and virtual direct sums; see
+% docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.
+\end{theorem}
+\begin{proof}\leanok
+    Taking the witness data of
+    Definition~\ref{def:is_isometry_canonical_form} to be
+    $X=\Lambda=U^0=(1)$, the scalar representative is in isometry canonical
+    form; moreover,
+    $|1|=|-1|=1$.
+    Direct multiplication gives $(A^0)^2=I$. Comparing diagonal entries in
+    $I=vA^0$ would give simultaneously $v=1$ and $v=-1$, which is impossible.
+    On the off-diagonal matrix unit $E_{01}$, the transfer map is conjugation by
+    $A^0$, so
+    \[
+        \E_A(E_{01})=-E_{01},\qquad
+        \E_A^2(E_{01})=E_{01}.
+    \]
+    Hence $\E_A^2\ne\E_A$.
+\end{proof}
+
 \begin{theorem}[Canonical-form blocks are injective]\label{thm:rfp_cf_structural}
     \lean{MPSTensor.rfp_cf_structural}
     \leanok
