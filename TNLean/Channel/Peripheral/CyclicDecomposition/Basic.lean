@@ -24,6 +24,8 @@ decomposition of periodic irreducible channels.
 * `cornerRestriction` — restriction of a linear map to an invariant corner.
 * `cornerCompressionLinearEquiv` — the shared linear equivalence between a matrix
   algebra and a projection corner.
+* `ProjectionSpectralSplit` — the spectral splitting of an orthogonal projection
+  into its eigenvalue-`1` and eigenvalue-`0` sectors.
 * `cornerRank` — the matrix size of a projection corner.
 
 ## Main statements
@@ -254,12 +256,8 @@ lemma cornerCompressionExpand_eq_isometry
   let I : Matrix (S ⊕ T) S ℂ := cornerCompressionInclusion (S := S) (T := T)
   let E : Matrix (Fin D) (Fin n) ℂ := Matrix.reindexLinearEquiv ℂ ℂ eST.symm eS I
   let M' : Matrix S S ℂ := Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M
-  have hM_back : Matrix.reindexLinearEquiv ℂ ℂ eS eS M' = M := by
-    change Matrix.reindexLinearEquiv ℂ ℂ eS eS
-      (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M) = M
-    rw [Matrix.reindexLinearEquiv_comp_apply, Equiv.symm_trans_self,
-      Matrix.reindexLinearEquiv_refl_refl]
-    rfl
+  have hM_back : Matrix.reindexLinearEquiv ℂ ℂ eS eS M' = M :=
+    (Matrix.reindexLinearEquiv ℂ ℂ eS eS).apply_symm_apply M
   have hE_star : Eᴴ = Matrix.reindexLinearEquiv ℂ ℂ eS eST.symm Iᴴ := by
     ext a b
     simp [E, I, Matrix.conjTranspose_apply, Matrix.reindex_apply]
@@ -508,12 +506,8 @@ lemma cornerCompressionInvFun_expand
           = (Umatᴴ * Umat) * Y_D * (Umatᴴ * Umat) := by simp [Matrix.mul_assoc]
       _ = Y_D := by rw [hU'U]; simp
   have hreindex_Y :
-      Matrix.reindexLinearEquiv ℂ ℂ eST eST Y_D = Y_ST := by
-    change Matrix.reindexLinearEquiv ℂ ℂ eST eST
-        (Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm Y_ST) = Y_ST
-    rw [Matrix.reindexLinearEquiv_comp_apply, Equiv.symm_trans_self,
-      Matrix.reindexLinearEquiv_refl_refl]
-    rfl
+      Matrix.reindexLinearEquiv ℂ ℂ eST eST Y_D = Y_ST :=
+    (Matrix.reindexLinearEquiv ℂ ℂ eST eST).apply_symm_apply Y_ST
   simp only [cornerCompressionInvFun]
   rw [cornerCompressionExpand_apply Umat eST eS M]
   rw [show Umatᴴ * (Umat *
@@ -524,11 +518,7 @@ lemma cornerCompressionInvFun_expand
       Y_ST.toBlocks₁₁ = Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M := by
     simp [Y_ST, Matrix.toBlocks_fromBlocks₁₁]
   rw [htoBlocks]
-  change Matrix.reindexLinearEquiv ℂ ℂ eS eS
-    (Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M) = M
-  rw [Matrix.reindexLinearEquiv_comp_apply, Equiv.symm_trans_self,
-    Matrix.reindexLinearEquiv_refl_refl]
-  rfl
+  exact (Matrix.reindexLinearEquiv ℂ ℂ eS eS).apply_symm_apply M
 
 lemma cornerCompressionExpand_invFun
     {D n : ℕ} (P Pdiag Umat : MatrixAlg D)
@@ -582,20 +572,14 @@ lemma cornerCompressionExpand_invFun
   rw [cornerCompressionExpand_apply Umat eST eS]
   have hround :
       Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm
-        (Matrix.reindexLinearEquiv ℂ ℂ eS eS Y_ST.toBlocks₁₁) = Y_ST.toBlocks₁₁ := by
-    rw [Matrix.reindexLinearEquiv_comp_apply, Equiv.self_trans_symm,
-      Matrix.reindexLinearEquiv_refl_refl]
-    rfl
+        (Matrix.reindexLinearEquiv ℂ ℂ eS eS Y_ST.toBlocks₁₁) = Y_ST.toBlocks₁₁ :=
+    (Matrix.reindexLinearEquiv ℂ ℂ eS eS).symm_apply_apply Y_ST.toBlocks₁₁
   rw [hround]
   rw [show Matrix.fromBlocks Y_ST.toBlocks₁₁ (0 : Matrix S T ℂ)
         (0 : Matrix T S ℂ) (0 : Matrix T T ℂ) = Y_ST from hY_ST_block.symm]
   have hround₂ :
-      Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm Y_ST = Y := by
-    change Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm
-      (Matrix.reindexLinearEquiv ℂ ℂ eST eST Y) = Y
-    rw [Matrix.reindexLinearEquiv_comp_apply, Equiv.self_trans_symm,
-      Matrix.reindexLinearEquiv_refl_refl]
-    rfl
+      Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm Y_ST = Y :=
+    (Matrix.reindexLinearEquiv ℂ ℂ eST eST).symm_apply_apply Y
   rw [hround₂]
   change Umat * (Umatᴴ * X.1 * Umat) * Umatᴴ = X.1
   calc
@@ -636,22 +620,59 @@ noncomputable def cornerCompressionLinearEquiv
       exact cornerCompressionExpand_invFun (P := P) (Pdiag := Pdiag) Umat eST eS P0
         hP0 hPdiag_UPU hPdiag_std hU'U hUU X }
 
-/-- **Compression isometry for a projection (existence form).**
+/-- Spectral splitting data for an orthogonal projection `P : M_D(ℂ)`.
 
-Given an orthogonal projection `P : M_D(ℂ)` of rank `n = trace P`, there is a linear
-isomorphism between `M_n(ℂ)` and the corner submodule `P · M_D(ℂ) · P`, constructed
-from the eigendecomposition of `P` via `Matrix.IsHermitian.eigenvectorUnitary`,
-`Matrix.reindexLinearEquiv`, and `Matrix.fromBlocks`.
+`Umat` is a diagonalizing unitary for `P`, the index types `S` and `T`
+enumerate the eigenvalue-`1` and eigenvalue-`0` eigenvectors, `eST` splits the
+ambient index set accordingly, and `eS` counts the support coordinates.  In
+the split basis the projection becomes the standard corner block
+`fromBlocks 1 0 0 0`, and the support size `n` recovers the trace of `P`.
+This bundle is shared by the corner-compression construction below and by the
+sector-compression theorem in `MPS/CanonicalForm/CyclicSectors`. -/
+structure ProjectionSpectralSplit {D : ℕ} (P : MatrixAlg D) where
+  /-- Unitary diagonalizing the projection. -/
+  Umat : MatrixAlg D
+  /-- Index type of the eigenvalue-`1` eigenvectors. -/
+  S : Type
+  /-- Index type of the eigenvalue-`0` eigenvectors. -/
+  T : Type
+  [instFintypeS : Fintype S]
+  [instFintypeT : Fintype T]
+  [instDecidableEqS : DecidableEq S]
+  [instDecidableEqT : DecidableEq T]
+  /-- Number of support coordinates. -/
+  n : ℕ
+  /-- The support size counts the eigenvalue-`1` eigenvectors. -/
+  hn : n = Fintype.card S
+  /-- Splitting of the ambient index set into the two eigenvalue sectors. -/
+  eST : Fin D ≃ S ⊕ T
+  /-- Enumeration of the support coordinates. -/
+  eS : S ≃ Fin n
+  /-- The diagonalizing matrix is unitary (`Umat * Umatᴴ = 1`). -/
+  hUU : Umat * Umatᴴ = 1
+  /-- The diagonalizing matrix is unitary (`Umatᴴ * Umat = 1`). -/
+  hU'U : Umatᴴ * Umat = 1
+  /-- In the split basis the diagonalized projection is the standard corner. -/
+  hPdiag_std : Matrix.reindexLinearEquiv ℂ ℂ eST eST (Umatᴴ * P * Umat) =
+    Matrix.fromBlocks (1 : Matrix S S ℂ) 0 0 (0 : Matrix T T ℂ)
+  /-- The projection is recovered from its diagonalization. -/
+  hP_decomp : P = Umat * (Umatᴴ * P * Umat) * Umatᴴ
+  /-- Reindexing the standard corner back returns the diagonalized projection. -/
+  hPdiag_back : Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm
+      (Matrix.fromBlocks (1 : Matrix S S ℂ) 0 0 (0 : Matrix T T ℂ)) =
+    Umatᴴ * P * Umat
+  /-- The support size recovers the trace of the projection. -/
+  htrace : (n : ℂ) = Matrix.trace P
+  /-- Conjugation by the diagonalizing unitary preserves traces. -/
+  trace_conj : ∀ M : MatrixAlg D, Matrix.trace (Umatᴴ * M * Umat) = Matrix.trace M
 
-This is the projector analog of the isometry `φ` already constructed inside
-`exists_compressedTensor_of_supported_projection` in `MPS/CanonicalForm/CyclicSectors`.
-The public interface is exposed through the `noncomputable def`s `cornerRank` and
-`cornerSubmoduleMatrixLinearEquiv` together with the companion lemma
-`cornerRank_eq_trace`. -/
-private lemma exists_cornerSubmodule_matrixLinearEquiv_aux {D : ℕ}
+/-- The spectral splitting of an orthogonal projection, obtained from the
+eigendecomposition `Matrix.IsHermitian.eigenvectorUnitary`: the eigenvalues of
+an idempotent Hermitian matrix are `0` or `1`, and splitting the eigenvector
+basis by eigenvalue puts the projection in standard corner form. -/
+noncomputable def ProjectionSpectralSplit.ofOrthogonalProjection {D : ℕ}
     (P : MatrixAlg D) (hP : IsOrthogonalProjection P) :
-    ∃ (n : ℕ) (_ : Matrix (Fin n) (Fin n) ℂ ≃ₗ[ℂ] cornerSubmodule P),
-      (n : ℂ) = Matrix.trace P := by
+    ProjectionSpectralSplit P := by
   classical
   -- Spectral diagonalization of `P`.
   have hHerm : P.IsHermitian := hP.1
@@ -686,13 +707,7 @@ private lemma exists_cornerSubmodule_matrixLinearEquiv_aux {D : ℕ}
     have hfun : (fun k => f k * f k) = f := by
       apply Matrix.diagonal_injective
       simpa [Matrix.diagonal_mul_diagonal] using hDiag_idem
-    have hfj : f j * f j = f j := congrFun hfun j
-    have hfj' : f j * (f j - 1) = 0 := by
-      calc f j * (f j - 1) = f j * f j - f j := by ring
-        _ = 0 := by simpa using sub_eq_zero.mpr hfj
-    rcases mul_eq_zero.mp hfj' with h0 | h1
-    · exact Or.inl h0
-    · exact Or.inr (sub_eq_zero.mp h1)
+    exact IsIdempotentElem.iff_eq_zero_or_one.mp (congrFun hfun j)
   let p : Fin D → Prop := fun j => f j = 1
   haveI : DecidablePred p := fun _ => inferInstance
   let S := { j : Fin D // p j }
@@ -716,7 +731,6 @@ private lemma exists_cornerSubmodule_matrixLinearEquiv_aux {D : ℕ}
     rw [hfsum, ← Finset.sum_filter, Finset.sum_const, nsmul_eq_mul, mul_one]
     have : n = (Finset.univ.filter p).card := Fintype.card_subtype p
     exact_mod_cast this
-  refine ⟨n, ?_, htrace⟩
   -- `P0` in the `S ⊕ T` basis is the identity-plus-zero block.
   let P0 : Matrix (S ⊕ T) (S ⊕ T) ℂ :=
     Matrix.fromBlocks (1 : Matrix S S ℂ) 0 0 (0 : Matrix T T ℂ)
@@ -763,16 +777,46 @@ private lemma exists_cornerSubmodule_matrixLinearEquiv_aux {D : ℕ}
       _ = Umat * (Umatᴴ * P * Umat) * Umatᴴ := by simp [Matrix.mul_assoc]
   have hPdiag_back :
       Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm P0 = Pdiag := by
-    have h := congrArg
-      (Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm) hPdiag_std
-    have hid := (Matrix.reindexLinearEquiv_comp_apply (R := ℂ) (A := ℂ)
-      eST eST eST.symm eST.symm Pdiag)
-    rw [Equiv.self_trans_symm, Matrix.reindexLinearEquiv_refl_refl,
-      LinearEquiv.refl_apply] at hid
-    exact h.symm.trans hid
-  -- Construct the compression as a `LinearEquiv` using the shared
-  -- `cornerCompressionLinearEquiv` builder.
-  exact cornerCompressionLinearEquiv (P := P) (Pdiag := Pdiag) Umat eST eS P0
+    rw [← hPdiag_std]
+    exact (Matrix.reindexLinearEquiv ℂ ℂ eST eST).symm_apply_apply Pdiag
+  exact
+    { Umat := Umat
+      S := S
+      T := T
+      n := n
+      hn := rfl
+      eST := eST
+      eS := eS
+      hUU := hUU
+      hU'U := hU'U
+      hPdiag_std := hPdiag_std
+      hP_decomp := hP_decomp
+      hPdiag_back := hPdiag_back
+      htrace := htrace
+      trace_conj := trace_conj }
+
+/-- **Compression isometry for a projection (existence form).**
+
+Given an orthogonal projection `P : M_D(ℂ)` of rank `n = trace P`, there is a linear
+isomorphism between `M_n(ℂ)` and the corner submodule `P · M_D(ℂ) · P`, constructed
+from the eigendecomposition of `P` via `Matrix.IsHermitian.eigenvectorUnitary`,
+`Matrix.reindexLinearEquiv`, and `Matrix.fromBlocks`.
+
+This is the projector analog of the isometry `φ` already constructed inside
+`exists_compressedTensor_of_supported_projection` in `MPS/CanonicalForm/CyclicSectors`.
+The public interface is exposed through the `noncomputable def`s `cornerRank` and
+`cornerSubmoduleMatrixLinearEquiv` together with the companion lemma
+`cornerRank_eq_trace`. -/
+private lemma exists_cornerSubmodule_matrixLinearEquiv_aux {D : ℕ}
+    (P : MatrixAlg D) (hP : IsOrthogonalProjection P) :
+    ∃ (n : ℕ) (_ : Matrix (Fin n) (Fin n) ℂ ≃ₗ[ℂ] cornerSubmodule P),
+      (n : ℂ) = Matrix.trace P := by
+  obtain ⟨Umat, S, T, n, -, eST, eS, hUU, hU'U, hPdiag_std,
+    hP_decomp, hPdiag_back, htrace, -⟩ :=
+    ProjectionSpectralSplit.ofOrthogonalProjection P hP
+  refine ⟨n, ?_, htrace⟩
+  exact cornerCompressionLinearEquiv (P := P) (Pdiag := Umatᴴ * P * Umat) Umat eST eS
+    (Matrix.fromBlocks (1 : Matrix S S ℂ) 0 0 (0 : Matrix T T ℂ))
     rfl hP_decomp rfl hPdiag_std hPdiag_back hU'U hUU
 
 /-- The rank of an orthogonal projection `P : M_D(ℂ)`, defined so that
