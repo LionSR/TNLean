@@ -57,36 +57,67 @@ left-canonical or unital normalization.\footnote{Formal declarations:
 \leanid{MPSTensor.exists_reducing_projection_of_hasInvariantProj} in
 \doclink{TNLean/MPS/CanonicalForm/ProjectorClosure}.}
 
-\section{The remaining spectral implication}
+\section{The spectral implication}
 
-The present decomposition theorem produces irreducible blocks and preserves
-all finite-ring traces, but it does not yet transport the global absence of
-periodic vectors to the transfer maps of the individual blocks.  The source
-also rescales each nonzero block so that its transfer map has spectral radius
-one, with the removed scale carried by the corresponding scalar coefficient.
-A source-faithful completion therefore still requires a theorem which
-simultaneously:
+The direct-sum decomposition produces irreducible corner tensors $B_k$ along
+isometries $V_k$ satisfying $A^i V_k = V_k B_k^i$.\footnote{Formal
+declaration:
+\leanid{MPSTensor.exists_irreducible_blockDecomp_with_isometry_of_hasInvariantProjectorClosure}
+in \doclink{TNLean/MPS/CanonicalForm/ProjectorClosureDecomposition}.}  The
+completion of the source proposition consists of two further steps, both now
+formalized without any normalization hypothesis:\footnote{Formal
+declarations:
+\leanid{MPSTensor.isNormalTensor_invSqrt_smul_of_unique_peripheral} and
+\leanid{MPSTensor.exists_normalTensor_blockDecomp_sameMPV₂Pos_of_hasInvariantProjectorClosure}
+in \doclink{TNLean/MPS/CanonicalForm/ProjectorClosureSpectral}.}
 \begin{enumerate}
-\item constructs the reducing direct-sum decomposition from projector closure;
-\item rescales every nonzero irreducible block to spectral radius one; and
-\item identifies absence of nontrivial periodic vectors with primitivity of
-  every rescaled block transfer map.
+\item every nonzero irreducible corner has a Perron eigenpair
+  $\mathcal{E}_{B_k}(\rho_k)=r_k\rho_k$ with $\rho_k>0$ and $r_k>0$;
+  rescaling the corner by $r_k^{-1/2}$ moves its transfer map to spectral
+  radius one and the removed scale into the coefficient
+  $\mu_k := r_k^{1/2}$; and
+\item the absence of nontrivial $p$-periodic vectors, stated for every
+  restriction of $A$ to a minimal invariant subspace, forces the peripheral
+  eigenvalue set of every rescaled corner transfer map to be $\{1\}$, so
+  every rescaled corner is a normal tensor.
 \end{enumerate}
 No identity of the form
 \begin{align}
     \sum_i (A^i)^\dagger A^i=1
 \end{align}
-occurs among the hypotheses of the cited proposition, so such a normalization
-cannot be assumed in this completion.
+occurs among the hypotheses of the cited proposition, and none is assumed in
+the formalized completion.
+
+\section{Zero blocks and the length-zero coefficient}
+
+A corner of $A$ whose matrices all vanish cannot be rescaled to spectral
+radius one; these are the zero blocks the source allows through the
+convention $\sum_k D_k \le D$ stated immediately after its invariant-subspace
+decomposition (arXiv:1606.00608, line 219).  Dropping a zero block changes
+exactly one datum of the generated family: the length-zero coefficient,
+which is the bond dimension.  The formalized sufficient condition therefore
+concludes equality of the generated matrix product vectors at every positive
+length, together with the source's dimension bound $\sum_k D_k \le D$.  A
+separate variant concludes equality at every length, including zero, under
+the explicit additional hypothesis that no restriction of $A$ to a minimal
+invariant subspace is the zero tensor; that hypothesis is not part of the
+source statement, and the variant is marked as
+scope-restricted.\footnote{Formal declaration:
+\leanid{MPSTensor.exists_normalTensor_blockDecomp_sameMPV₂_of_hasInvariantProjectorClosure}
+in \doclink{TNLean/MPS/CanonicalForm/ProjectorClosureSpectral}.}
+The positive-length formulation is the source-faithful shape of the
+length-zero bookkeeping analyzed in
+\path{docs/paper-gaps/cpsv16_zero_tail_length_zero_decomposition.tex}.
 
 \section{Conclusion}
 
-The classification is an \emph{open gap}.  The normalization-free
-reducing-projection step is established, but the spectral-radius rescaling and
-the deduction of blockwise primitivity from the absence of periodic vectors
-remain to be proved.  Until these spectral statements are available, the full
-sufficient condition for canonical form at arXiv:1606.00608, lines 253--254,
-is not formalized.
+The sufficient condition for canonical form at arXiv:1606.00608,
+lines 253--254, is formalized: projector closure and the absence of
+nontrivial $p$-periodic vectors yield a decomposition of the generated
+matrix product vectors into normal-tensor blocks with nonzero weights, at
+every positive length and with $\sum_k D_k \le D$.  The remaining deliberate
+deviation is the treatment of the length-zero coefficient in the presence of
+zero blocks, recorded in the previous section.
 
 \bibliographystyle{alpha}
 \bibliography{references}
