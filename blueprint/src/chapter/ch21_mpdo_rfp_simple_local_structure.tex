@@ -1270,12 +1270,27 @@ strong subadditivity for a normalized three-site reduced state.
     \cite[Appendix~C.2, lines~1527--1535]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
+\begin{theorem}[Positivity of finite dependent block diagonals]
+    \label{thm:matrix_pos_semidef_block_diagonal}
+    \lean{Matrix.PosSemidef.blockDiagonal'}
+    \leanok
+    Let $(A_i)_{i\in I}$ be a finite family of positive semidefinite matrices,
+    where the size of $A_i$ may depend on $i$. Then the block-diagonal matrix
+    $\bigoplus_{i\in I}A_i$ is positive semidefinite.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Write each $A_i=B_i^*B_i$ using its positive square root. The dependent
+    block diagonal then satisfies
+    $\bigoplus_i A_i=(\bigoplus_i B_i)^*(\bigoplus_i B_i)$.
+\end{proof}
+
 \begin{theorem}[Positivity of the direct-sum neighboring operator]
     \label{thm:mpdo_eta_omega_pos}
-    \lean{Matrix.PosSemidef.blockDiagonal'}
     \lean{MPOTensor.ExplicitEtaOperators.omega_pos}
     \leanok
-    \uses{def:mpdo_eta_omega, def:mpdo_explicit_eta_operators}
+    \uses{def:mpdo_eta_omega, def:mpdo_explicit_eta_operators,
+      thm:matrix_pos_semidef_block_diagonal}
     Every operator $\Omega_{k,h}$ is positive semidefinite.
 \end{theorem}
 \begin{proof}
