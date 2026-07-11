@@ -106,7 +106,7 @@ theorem trace_omega_eq_mul (data : ExplicitEtaOperators hη)
 
 /-- Every sector weight $a_kb_h$ is nonnegative, as it is the trace of the
 positive semidefinite operator $\eta_{k,h}$. -/
-theorem mul_nonneg (data : ExplicitEtaOperators hη)
+theorem weight_nonneg (data : ExplicitEtaOperators hη)
     (factor : RankOneTraceFactorization data) (k h : Fin hη.m) :
     0 ≤ factor.a k * factor.b h := by
   have htrace := (data.eta_pos k h).trace_nonneg
@@ -156,7 +156,7 @@ theorem normalizedEta_pos (data : ExplicitEtaOperators hη)
     (factor : RankOneTraceFactorization data) (k h : Fin hη.m) :
     (data.normalizedEta factor k h).PosSemidef := by
   apply (data.eta_pos k h).smul
-  exact_mod_cast inv_nonneg.mpr (data.mul_nonneg factor k h)
+  exact_mod_cast inv_nonneg.mpr (data.weight_nonneg factor k h)
 
 /-- On an active pair, the normalized neighboring operator has trace one.
 
@@ -181,7 +181,7 @@ theorem normalizedOmega_pos (data : ExplicitEtaOperators hη)
     (factor : RankOneTraceFactorization data) (k h : Fin hη.m) :
     (data.normalizedOmega factor k h).PosSemidef := by
   apply (data.omega_pos k h).smul
-  exact_mod_cast inv_nonneg.mpr (data.mul_nonneg factor k h)
+  exact_mod_cast inv_nonneg.mpr (data.weight_nonneg factor k h)
 
 /-- On an active pair, the normalized direct-sum operator has trace one.
 
@@ -207,8 +207,8 @@ theorem normalizedEta_preparationMap_isKrausCPTP
     (data : ExplicitEtaOperators hη) (factor : RankOneTraceFactorization data)
     (k h : Fin hη.m) (hactive : factor.a k * factor.b h ≠ 0) :
     IsKrausCPTP (Matrix.preparationMap (α := α)
-      (data.normalizedEta factor k h)) := by
-  exact Matrix.preparationMap_isKrausCPTP _
+      (data.normalizedEta factor k h)) :=
+  Matrix.preparationMap_isKrausCPTP _
     (data.normalizedEta_pos factor k h) (data.trace_normalizedEta factor k h hactive)
 
 /-- On an active pair, adjoining the normalized direct-sum operator is a
@@ -220,8 +220,8 @@ theorem normalizedOmega_preparationMap_isKrausCPTP
     (data : ExplicitEtaOperators hη) (factor : RankOneTraceFactorization data)
     (k h : Fin hη.m) (hactive : factor.a k * factor.b h ≠ 0) :
     IsKrausCPTP (Matrix.preparationMap (α := α)
-      (data.normalizedOmega factor k h)) := by
-  exact Matrix.preparationMap_isKrausCPTP _
+      (data.normalizedOmega factor k h)) :=
+  Matrix.preparationMap_isKrausCPTP _
     (data.normalizedOmega_pos factor k h) (data.trace_normalizedOmega factor k h hactive)
 
 end MPOTensor.ExplicitEtaOperators
