@@ -211,9 +211,18 @@ declarations are \leanid{MPOTensor.sectorEta},
 \leanid{MPOTensor.ExplicitEtaOperators.ofSectorTensors}.}  The source derives
 positivity of the $\eta_{k,h}$ from the all-length projected chain identity at
 lines 1446--1450, choosing the sector tensors so that each factor is positive
-semidefinite; until that identity is available, positive semidefiniteness of
-the chosen representatives enters the construction of the explicit
-$\eta$-data as a hypothesis.
+semidefinite.  That all-length algebraic identity is now formalized, but it
+does not by itself choose coherent positive representatives for all
+neighboring pairs.  Positive semidefiniteness of the chosen representatives
+therefore still enters the construction of the explicit $\eta$-data as a
+hypothesis.
+
+The earlier summary figure \path{MPDO_etahk=RhLk.png} at source line 1391
+draws $r_h$ next to $l_k$ while naming the operator $\eta_{k,h}$.  The later
+definition \texttt{etarl}, the identity $T_{k,h}=(r_k|l_h)$, and the products
+$\eta_{k,l}\otimes\eta_{l,h}$ in Proposition \texttt{3to5} consistently fix
+the intended convention as $\eta_{k,h}=r_k l_h$.  The formalization follows
+this later consistent convention; the earlier figure is an index-swap typo.
 
 The Hayashi decomposition of the concrete closure state is now formalized for
 the four-site chain.  Independent bijections on the three tensor factors
