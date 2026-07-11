@@ -121,8 +121,8 @@ noncomputable def verticalLoopWith (M : MPOTensor d D)
 product $PM$. -/
 theorem verticalLoop_ketLeftMul (M : MPOTensor d D)
     (P : Matrix (Fin d) (Fin d) ℂ) :
-    verticalLoop (M.ketLeftMul P) = verticalLoopWith M P :=
-  rfl
+    verticalLoop (M.ketLeftMul P) = verticalLoopWith M P := by
+  simp only [verticalLoop, ketLeftMul, verticalLoopWith]
 
 /-- The inserted loop is also the closed vertical loop of $MP$: the insertion
 point inside the loop is immaterial, by cyclicity of the single-site trace. -/
@@ -131,15 +131,6 @@ theorem verticalLoop_braRightMul (M : MPOTensor d D)
     verticalLoop (M.braRightMul P) = verticalLoopWith M P := by
   simp only [verticalLoop, braRightMul, verticalLoopWith]
   exact Finset.sum_comm
-
-/-- Reindex a sum over an $(N+1)$-site configuration by its first value and
-its remaining $N$ values. -/
-private theorem sum_succ_eq_sum_cons {β : Type*} [AddCommMonoid β] {N : ℕ}
-    (F : (Fin (N + 1) → Fin d) → β) :
-    ∑ σ : Fin (N + 1) → Fin d, F σ =
-      ∑ a : Fin d, ∑ ρ : Fin N → Fin d, F (Fin.cons a ρ) := by
-  rw [← Fintype.sum_prod_type']
-  exact ((Fin.consEquiv fun _ : Fin (N + 1) => Fin d).sum_comp F).symm
 
 /-- **Summing the diagonal word evaluations closes the vertical loops.** The
 sum of `evalWord M w w` over all length-`N` configurations `w` is the `N`-th
@@ -154,7 +145,7 @@ theorem sum_evalWord_diag_eq_verticalLoop_pow (M : MPOTensor d D) (N : ℕ) :
   | zero =>
       simp only [pow_zero, Fintype.sum_unique, List.ofFn_zero, evalWord_nil]
   | succ N ih =>
-      rw [sum_succ_eq_sum_cons
+      rw [sum_fin_succ_eq_sum_cons
         (fun σ : Fin (N + 1) → Fin d => evalWord M (List.ofFn σ) (List.ofFn σ))]
       have hof : ∀ (a : Fin d) (ρ : Fin N → Fin d),
           List.ofFn (Fin.cons a ρ : Fin (N + 1) → Fin d) = a :: List.ofFn ρ := by
@@ -248,11 +239,12 @@ private theorem sum_sum_mul_trace (c : Fin d → Fin d → ℂ)
     (W : Matrix (Fin D) (Fin D) ℂ) :
     ∑ a : Fin d, ∑ i : Fin d, c a i * Matrix.trace (B a i * W) =
       Matrix.trace ((∑ a : Fin d, ∑ i : Fin d, c a i • B a i) * W) := by
-  rw [Finset.sum_mul, Matrix.trace_sum]
-  refine Finset.sum_congr rfl fun a _ => ?_
-  rw [Finset.sum_mul, Matrix.trace_sum]
-  refine Finset.sum_congr rfl fun i _ => ?_
-  rw [Matrix.smul_mul, Matrix.trace_smul, smul_eq_mul]
+  calc
+    ∑ a : Fin d, ∑ i : Fin d, c a i * Matrix.trace (B a i * W)
+        = ∑ a : Fin d, Matrix.trace ((∑ i : Fin d, c a i • B a i) * W) :=
+          Finset.sum_congr rfl fun a _ => sum_mul_trace_eq_trace_sum_smul _ _ _
+    _ = Matrix.trace ((∑ a : Fin d, ∑ i : Fin d, c a i • B a i) * W) := by
+          rw [Finset.sum_mul, Matrix.trace_sum]
 
 /-- **The general first-site trace computation.** For any matrix `P`, the
 trace of $P_1H^{(N+1)}$ closes the marked loop with `P` inserted and the `N`
@@ -283,7 +275,7 @@ theorem trace_firstSiteMatrix_mul_mpo (M : MPOTensor d D)
           simp only [Matrix.trace, Matrix.diag]
     _ = ∑ a : Fin d, ∑ ρ : Fin N → Fin d,
           (firstSiteMatrix P N * mpo M (N + 1)) (Fin.cons a ρ) (Fin.cons a ρ) :=
-        sum_succ_eq_sum_cons _
+        sum_fin_succ_eq_sum_cons _
     _ = ∑ a : Fin d, ∑ ρ : Fin N → Fin d, ∑ i : Fin d,
           P a i * Matrix.trace (M i a * evalWord M (List.ofFn ρ) (List.ofFn ρ)) :=
         Finset.sum_congr rfl fun a _ => Finset.sum_congr rfl fun ρ _ => hdiag a ρ
