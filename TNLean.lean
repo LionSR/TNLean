@@ -53,8 +53,9 @@ import TNLean.Algebra.StarSubalgebraUnitaryIntertwiner
 
 -- Layer 0b: General analysis
 import TNLean.Analysis.ProjectionGeometry
--- Layer 0b: Trace of the Hermitian functional calculus (Mathlib-only matrix lemma)
+-- Layer 0b: Hermitian functional calculus for finite-dimensional matrices
 import TNLean.Analysis.TraceCFC
+import TNLean.Analysis.MatrixSqrt
 import TNLean.Analysis.CfcConjugation
 import TNLean.Analysis.MatrixOrderTopology
 import TNLean.Analysis.CfcLogAdditive
