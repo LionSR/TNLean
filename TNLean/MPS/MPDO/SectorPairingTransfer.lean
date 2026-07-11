@@ -78,6 +78,15 @@ theorem physTraceTransfer_eq_sum_closedSector
   rw [hfactor, Matrix.trace_blockDiagonal']
   simp only [Matrix.trace_kronecker, Matrix.vecMulVec_apply]
 
+section InverseMapSectorTensors
+
+variable {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
+variable (K : MPOTensor d D) (hK : K.IsInjective) (hη : EtaStructure ρ)
+variable (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R ρ)
+variable (α₁ β₃ : Fin D) (hm : R β₃ α₁ ≠ 0)
+
+include hρ hm
+
 /-- For the inverse-map sector tensors of an injective simple tensor,
 \[
   \mathcal T_{\cal K}=\sum_k |l_k)(r_k|.
@@ -85,11 +94,7 @@ theorem physTraceTransfer_eq_sum_closedSector
 This supplies the concrete closed-tensor operator used immediately before
 Lemma C.5 in arXiv:1606.00608, Appendix C.2, lines 1473--1493. -/
 theorem concrete_physTraceTransfer_eq_sum_closedSector
-    {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
-    (K : MPOTensor d D) (hK : K.IsInjective) (hη : EtaStructure ρ)
-    (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R ρ)
-    (α₁ β₃ : Fin D) (hm : R β₃ α₁ ≠ 0) :
-    physTraceTransfer K =
+    : physTraceTransfer K =
       ∑ q, Matrix.vecMulVec
         (closedSectorL K hK hη R α₁ β₃ q)
         (closedSectorR K hK hη β₃ q) := by
@@ -108,10 +113,6 @@ The scalar is present because `IsSourceZCL` is invariant under rescaling;
 the paper uses the canonically normalized representative in the display at
 arXiv:1606.00608, Appendix C.2, lines 1489--1493. -/
 theorem closedSector_operator_quasi_idempotent
-    {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
-    (K : MPOTensor d D) (hK : K.IsInjective) (hη : EtaStructure ρ)
-    (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R ρ)
-    (α₁ β₃ : Fin D) (hm : R β₃ α₁ ≠ 0)
     (hZCL : IsSourceZCL K) :
     ∃ lam : ℝ, 0 < lam ∧
       let S := ∑ q, Matrix.vecMulVec
@@ -129,10 +130,6 @@ pairing operator is idempotent.  This is the normalized form of the displayed
 zero-correlation-length identity in arXiv:1606.00608, Appendix C.2,
 lines 1489--1493. -/
 theorem closedSector_operator_normalized_idempotent
-    {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
-    (K : MPOTensor d D) (hK : K.IsInjective) (hη : EtaStructure ρ)
-    (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R ρ)
-    (α₁ β₃ : Fin D) (hm : R β₃ α₁ ≠ 0)
     (hZCL : IsSourceZCL K) :
     ∃ lam : ℝ, 0 < lam ∧
       let S := ∑ q, Matrix.vecMulVec
@@ -153,10 +150,6 @@ is literally idempotent, the raw closed-sector pairing operator satisfies
 This is the displayed zero-correlation-length identity used in
 arXiv:1606.00608, Appendix C.2, lines 1489--1493. -/
 theorem closedSector_operator_idempotent_of_physTraceTransfer_sq
-    {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
-    (K : MPOTensor d D) (hK : K.IsInjective) (hη : EtaStructure ρ)
-    (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R ρ)
-    (α₁ β₃ : Fin D) (hm : R β₃ α₁ ≠ 0)
     (hZCL : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K) :
     let S := ∑ q, Matrix.vecMulVec
       (closedSectorL K hK hη R α₁ β₃ q)
@@ -165,5 +158,7 @@ theorem closedSector_operator_idempotent_of_physTraceTransfer_sq
   dsimp only
   rw [← concrete_physTraceTransfer_eq_sum_closedSector K hK hη R hρ α₁ β₃ hm]
   exact hZCL
+
+end InverseMapSectorTensors
 
 end MPOTensor

@@ -827,12 +827,15 @@ strong subadditivity for a normalized three-site reduced state.
     \leanok
     \uses{def:mpo_physical_trace_transfer,
         def:mpdo_closed_sector_tensors, thm:mpdo_sector_factorization}
-    For the sector tensors obtained from the injective inverse-map
-    construction, the physical-trace transfer is the closed-sector pairing
-    operator:
+    More generally, any sector factorization
+    $U_B\kappa_{\beta,\alpha}U_B^\dagger
+    =\bigoplus_k(l_k)_\beta\otimes(r_k)_\alpha$ gives the closed-sector
+    pairing operator
     \[
         \mathcal T_{\cal K}=\sum_k |l_k)(r_k|.
     \]
+    In particular, this holds for the sector tensors obtained from the
+    injective inverse-map construction.
     This identifies the transfer matrix of
     Definition~\ref{def:mpo_physical_trace_transfer} with the operator on the
     left-hand side of the zero-correlation-length identity in
