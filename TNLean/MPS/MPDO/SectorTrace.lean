@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.MPDO.InvariantProjection
+import TNLean.MPS.MPDO.ZCL
 
 /-!
 # The sector trace identity for matrix product density operators
@@ -93,9 +94,17 @@ variable {d D : ℕ}
 an MPO tensor with its bra index gives the matrix `∑ i, M i i` on the
 horizontal bond space.  Each unmarked site of the diagram defining
 $d_\alpha$ in the proof of Proposition 4.13 of arXiv:1606.00608, lines
-1899--1901, contributes one such loop. -/
+1899--1901, contributes one such loop.  As a matrix this is the physical-trace
+transfer object `physTraceTransfer` of the zero-correlation-length layer; the
+definition delegates to it, and this name records the loop role the matrix
+plays in the sector-trace diagrams. -/
 noncomputable def verticalLoop (M : MPOTensor d D) : Matrix (Fin D) (Fin D) ℂ :=
-  ∑ i : Fin d, M i i
+  physTraceTransfer M
+
+/-- The vertical loop is the physical-trace transfer matrix. -/
+theorem verticalLoop_eq_physTraceTransfer (M : MPOTensor d D) :
+    verticalLoop M = physTraceTransfer M :=
+  rfl
 
 /-- The single-site vertical loop with a matrix `P` inserted:
 `∑ a i, P a i • M i a`.  This is the closed vertical loop of the vertically
@@ -122,14 +131,14 @@ product $PM$. -/
 theorem verticalLoop_ketLeftMul (M : MPOTensor d D)
     (P : Matrix (Fin d) (Fin d) ℂ) :
     verticalLoop (M.ketLeftMul P) = verticalLoopWith M P := by
-  simp only [verticalLoop, ketLeftMul, verticalLoopWith]
+  simp only [verticalLoop, physTraceTransfer, ketLeftMul, verticalLoopWith]
 
 /-- The inserted loop is also the closed vertical loop of $MP$: the insertion
 point inside the loop is immaterial, by cyclicity of the single-site trace. -/
 theorem verticalLoop_braRightMul (M : MPOTensor d D)
     (P : Matrix (Fin d) (Fin d) ℂ) :
     verticalLoop (M.braRightMul P) = verticalLoopWith M P := by
-  simp only [verticalLoop, braRightMul, verticalLoopWith]
+  simp only [verticalLoop, physTraceTransfer, braRightMul, verticalLoopWith]
   exact Finset.sum_comm
 
 /-- **Summing the diagonal word evaluations closes the vertical loops.** The
