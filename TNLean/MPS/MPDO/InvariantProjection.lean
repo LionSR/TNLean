@@ -131,8 +131,8 @@ theorem firstSiteMatrix_isHermitian {P : Matrix (Fin d) (Fin d) ℂ}
 
 /-- Reindex a sum over an $(N+1)$-site configuration by its first value and
 its remaining $N$ values. -/
-private theorem sum_fin_succ_eq_sum_cons {N : ℕ}
-    (F : (Fin (N + 1) → Fin d) → ℂ) :
+theorem sum_fin_succ_eq_sum_cons {β : Type*} [AddCommMonoid β] {N : ℕ}
+    (F : (Fin (N + 1) → Fin d) → β) :
     ∑ σ : Fin (N + 1) → Fin d, F σ =
       ∑ i : Fin d, ∑ ρ : Fin N → Fin d, F (Fin.cons i ρ) := by
   rw [← Fintype.sum_prod_type']
@@ -175,7 +175,7 @@ theorem mul_firstSiteMatrix_apply (P : Matrix (Fin d) (Fin d) ℂ) {N : ℕ}
     exact (hmem (Finset.mem_univ _)).elim
 
 /-- Move a finite scalar-weighted sum inside a trace pairing. -/
-private theorem sum_mul_trace_eq_trace_sum_smul (c : Fin d → ℂ)
+theorem sum_mul_trace_eq_trace_sum_smul (c : Fin d → ℂ)
     (B : Fin d → Matrix (Fin D) (Fin D) ℂ) (W : Matrix (Fin D) (Fin D) ℂ) :
     ∑ i : Fin d, c i * Matrix.trace (B i * W) =
       Matrix.trace ((∑ i : Fin d, c i • B i) * W) := by

@@ -511,7 +511,11 @@
     \label{def:mpdo_vertical_loops}
     \lean{MPOTensor.verticalLoop}
     \lean{MPOTensor.verticalLoopWith}
+    \lean{MPOTensor.verticalLoopWith_one}
+    \lean{MPOTensor.verticalLoop_ketLeftMul}
+    \lean{MPOTensor.verticalLoop_braRightMul}
     \lean{MPOTensor.sectorCompression}
+    \lean{MPOTensor.sectorCompression_def}
     \lean{MPOTensor.blockChainTrace}
     \leanok
     \uses{def:mpo_tensor, def:mpo_family, def:mpdo_vertical_one_site_actions}
@@ -522,7 +526,9 @@
     \]
     and inserting a matrix $P\in M_d(\C)$ into the loop gives
     $E_P=\sum_{i,j}P_{ji}\,M^{ij}$, the closed loop of the vertically viewed
-    product $PM$.  On a chain of length $N+1$, the compression of the density
+    product $PM$, equivalently of $MP$ by cyclicity of the single-site
+    trace; inserting the identity recovers $E$.  On a chain of length $N+1$,
+    the compression of the density
     operator by $P$ at the first site is $P_1H^{(N+1)}P_1$ with
     $P_1=P\otimes\Id^{\otimes N}$, and for a matrix $E_\alpha\in M_D(\C)$ the
     chain trace with one marked loop is
