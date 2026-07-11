@@ -465,7 +465,8 @@ root taken on the support of $\rho$.
 
 **Scope restriction (corner support):** the source's corollary takes a maximum-rank
 fixed point, for which the support condition on $X$ is automatic by the maximal-support
-property; that property is not yet available here, so the statement carries the support
+property; that property has not yet been established here, so the statement carries the
+support
 hypothesis explicitly. Documented in
 `docs/paper-gaps/wolf_cor67_maximal_support_restriction.tex`. -/
 theorem exists_weightedCorner_sqrt_eq_of_fixedPoint
