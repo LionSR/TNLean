@@ -36,6 +36,17 @@
     are derived rather than assumed.
 \end{theorem}
 
+\begin{figure}[ht]
+    \centering
+    \TNMPDOBNTVerticalProduct
+    \caption{Orthogonality of the physical supports of a basis of normal
+        tensors of a simple renormalization-fixed-point tensor: contracting
+        $\mathcal K_y$ with $\mathcal K_x$ through the shared physical index
+        vanishes whenever $x\ne y$. This is
+        \cite[Theorem~4.9(iv), lines~863--868]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_bnt_vertical_product}
+\end{figure}
+
 \begin{definition}[Simple-MPDO blocked doubled-index structure]
     \label{def:simple_mpdo_blocked_rfp_data}
     \lean{MPOTensor.SimpleMPDOBlockedRFPData}
@@ -51,6 +62,17 @@
     The local component consists of the hypotheses used in the entropy-side
     argument for commuting form.
 \end{definition}
+
+\begin{figure}[ht]
+    \centering
+    \TNMPDOTwoSiteBlocking
+    \caption{The two-site blocking of the simple tensor $K$: the blocked
+        tensor $M$ is obtained by contracting two copies of $K$ along one
+        virtual bond and grouping the two ket legs and the two bra legs into
+        blocked physical indices. This is
+        \cite[Theorem~4.9, lines~851--856]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_two_site_blocking}
+\end{figure}
 
 \begin{theorem}[Blocked-RFP structure from local data and commuting form]
     \label{thm:simple_mpdo_blocked_rfp_data_of_sal_zcl_and_commuting_form}
