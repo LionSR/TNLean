@@ -46,6 +46,8 @@ arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete).
   its three-site specialization.
 - `MPOTensor.sal_implies_eta_structure`: equality in strong subadditivity gives
   the local structure by the Hayashi equality characterization.
+- `MPOTensor.exists_etaStructure_reducedBlockState_of_isSAL`: the three-site
+  marginal of the normalized four-site periodic state has this local structure.
 - `MPOTensor.etaOperators`: the dependent type of explicit neighboring operator
   families over a fixed Hayashi decomposition.
 - `MPOTensor.ExplicitEtaOperators`: the explicit neighboring operators
@@ -499,6 +501,66 @@ theorem sal_implies_eta_structure
     (hSAL : IsSSAEquality ρ_ABC hρ_dm.1.isHermitian) :
     Nonempty (EtaStructure ρ_ABC) :=
   Entropy.exists_quantumMarkovDecomposition_of_ssaEquality ρ_ABC hρ_dm hSAL
+
+/-- **Four-site specialization of Lemma Lsigma3.** If `K` satisfies the strong
+area law, then the three-site marginal of its normalized four-site periodic
+state admits a quantum Markov decomposition on the middle site.
+
+Source: arXiv:1606.00608, Appendix C.2, Lemma Lsigma3, lines 1351--1363;
+normalization convention at lines 792--793.
+
+**Scope restriction (four-site chain):** Lemma Lsigma3 treats the three-site
+marginal of every chain to which its four-region argument applies. This theorem
+is its $N=4$ specialization. The remaining all-length construction is recorded
+in `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`. -/
+theorem exists_etaStructure_reducedBlockState_of_isSAL
+    {d D : ℕ} (K : MPOTensor d D) (hSAL : IsSAL K) :
+    Nonempty
+      (EtaStructure
+        ((K.reducedBlockState 4 3 (by omega)).submatrix
+          (fun p : Fin d × Fin d × Fin d ↦ ![p.1, p.2.1, p.2.2])
+          (fun p : Fin d × Fin d × Fin d ↦ ![p.1, p.2.1, p.2.2]))) := by
+  let hM : (mpo K 4).PosSemidef := (Classical.choose hSAL) 4
+  let ρflat :=
+    (K.reducedBlockState 4 3 (by omega)).submatrix
+      (tripartiteSplitEquiv d 1 1 1).symm
+      (tripartiteSplitEquiv d 1 1 1).symm
+  let eSite : Fin d ≃ Fin (d ^ 1) :=
+    (Equiv.funUnique (Fin 1) (Fin d)).symm.trans finFunctionFinEquiv
+  let E := eSite.prodCongr (eSite.prodCongr eSite)
+  have hρflatPos : ρflat.PosSemidef := by
+    exact (reducedBlockState_posSemidef K 4 3 (by omega) hM).submatrix _
+  have hρflatTrace : ρflat.trace = 1 := by
+    dsimp only [ρflat]
+    rw [Matrix.trace_submatrix_equiv]
+    exact reducedBlockState_trace K 4 3 (by omega) ((Classical.choose_spec hSAL).1 4)
+  have hEqFlat : IsSSAEquality ρflat hρflatPos.isHermitian := by
+    simpa [ρflat, hM] using isSSAEquality_threeSite_of_isSAL K hSAL
+  have hEqSite :
+      IsSSAEquality (ρflat.submatrix E E) (hρflatPos.isHermitian.submatrix E) :=
+    isSSAEquality_submatrix_prodEquiv ρflat hρflatPos.isHermitian
+      eSite eSite eSite hEqFlat
+  have hρsiteTrace : (ρflat.submatrix E E).trace = 1 := by
+    rw [Matrix.trace_submatrix_equiv]
+    exact hρflatTrace
+  have hη : Nonempty (EtaStructure (ρflat.submatrix E E)) :=
+    sal_implies_eta_structure (ρflat.submatrix E E)
+      ⟨hρflatPos.submatrix E, hρsiteTrace⟩ hEqSite
+  have hsplit (p : Fin d × Fin d × Fin d) :
+      (tripartiteSplitEquiv d 1 1 1).symm (E p) = ![p.1, p.2.1, p.2.2] := by
+    simp [tripartiteSplitEquiv, E, eSite]
+    rw [blockSplitEquiv_symm_apply, blockSplitEquiv_symm_apply]
+    funext i
+    fin_cases i <;> rfl
+  have hstate :
+      ρflat.submatrix E E =
+        (K.reducedBlockState 4 3 (by omega)).submatrix
+          (fun p : Fin d × Fin d × Fin d ↦ ![p.1, p.2.1, p.2.2])
+          (fun p : Fin d × Fin d × Fin d ↦ ![p.1, p.2.1, p.2.2]) := by
+    ext p q
+    simp only [ρflat, Matrix.submatrix_apply]
+    rw [hsplit p, hsplit q]
+  rwa [hstate] at hη
 
 /-- The type of explicit neighboring operator families `η_{k,h}` over a fixed
 Hayashi decomposition.
