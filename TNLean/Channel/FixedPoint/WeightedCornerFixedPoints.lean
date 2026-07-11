@@ -8,8 +8,9 @@ import TNLean.Channel.FixedPoint.Corollaries
 /-!
 # Weighted corner fixed points of a Kraus map with a singular fixed point
 
-This file extends Corollary 6.7 of *Quantum Channels & Operations* (Wolf 2012) beyond the
-positive definite case formalized in `TNLean.Channel.FixedPoint.Corollaries`. Let $T$ be a
+The following results extend Corollary 6.7 of *Quantum Channels & Operations* (Wolf 2012)
+beyond the positive definite case formalized in `TNLean.Channel.FixedPoint.Corollaries`.
+Let $T$ be a
 trace-preserving Kraus map, let $\rho$ be a positive semidefinite fixed point of $T$ —
 possibly singular — and let $Q$ be the support projection of $\rho$. The set
 $$\rho^{-1/2}\,\{X \mid T(X) = X,\ Q X Q = X\}\,\rho^{-1/2},$$
