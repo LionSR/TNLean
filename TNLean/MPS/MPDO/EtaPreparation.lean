@@ -168,7 +168,8 @@ theorem trace_normalizedEta (data : ExplicitEtaOperators hη)
   rcases mul_ne_zero_iff.mp hactive with ⟨ha, hb⟩
   have haC : (factor.a k : ℂ) ≠ 0 := by exact_mod_cast ha
   have hbC : (factor.b h : ℂ) ≠ 0 := by exact_mod_cast hb
-  simp only [normalizedEta, Matrix.trace_smul, factor.trace_eta]
+  simp only [normalizedEta, Matrix.trace_smul, factor.trace_eta, smul_eq_mul]
+  norm_cast
   field_simp
 
 /-- The normalized direct-sum operator is positive semidefinite. On a zero
@@ -193,7 +194,8 @@ theorem trace_normalizedOmega (data : ExplicitEtaOperators hη)
   have haC : (factor.a k : ℂ) ≠ 0 := by exact_mod_cast ha
   have hbC : (factor.b h : ℂ) ≠ 0 := by exact_mod_cast hb
   simp only [normalizedOmega, Matrix.trace_smul,
-    data.trace_omega_eq_mul factor k h]
+    data.trace_omega_eq_mul factor k h, smul_eq_mul]
+  norm_cast
   field_simp
 
 /-- On an active pair, adjoining the normalized neighboring operator is a
