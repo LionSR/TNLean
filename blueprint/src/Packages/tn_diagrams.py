@@ -60,6 +60,7 @@ _DIAGRAM_ARGS: dict[str, str] = {
     "TNMPDOSectorZCLIdentity": "",
     "TNMPDONormalizedFourSiteTail": "",
     "TNMPDOHayashiSectorComparison": "",
+    "TNMPDOSectorFactorization": "",
     "TNMPDOLocalOrthogonality": "",
     "TNMPSInverseContraction": "",
     "TNBNTDecomposition": "",

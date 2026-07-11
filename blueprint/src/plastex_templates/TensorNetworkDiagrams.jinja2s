@@ -10,7 +10,7 @@ name: TNMPOLocalPurification TNMPORenormalizationTS TNEtaSectorDecomposition
 name: TNMPDOInverseMapThreeSiteContraction TNMPDONormalizedFourSiteTail TNMPDOLocalOrthogonality
 {{ obj.tn_svg_html }}
 
-name: TNMPDOHayashiSectorComparison
+name: TNMPDOHayashiSectorComparison TNMPDOSectorFactorization
 {{ obj.tn_svg_html }}
 
 name: TNMPDOHorizontalOperator TNMPDOFirstSiteContractions TNMPDOVerticalDirectSum
