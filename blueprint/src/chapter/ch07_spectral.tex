@@ -2393,15 +2393,7 @@ statements restrict to the fixed points supported on the support of $\rho$.
     Let $T(X) = \sum_i K_i X K_i^\dagger$ be trace-preserving, let $\rho \succeq 0$
     satisfy $T(\rho) = \rho$, and let $Q$ be the support projection of $\rho$. The corner
     elements $Y \in Q\,\MN{D}\,Q$ such that $\sqrt{\rho}\, Y \sqrt{\rho}$ is a fixed
-    point of $T$ form a $*$-subalgebra of the corner algebra $Q\,\MN{D}\,Q$. Combined
-    with the conjugation correspondence of
-    Lemma~\ref{lem:weightedCorner_sqrt_surjective}, the carrier realizes
-    \[
-        \rho^{-1/2}\,\{X \in \MN{D} \mid T(X) = X,\ Q X Q = X\}\,\rho^{-1/2},
-    \]
-    with the inverse square root taken on the support of $\rho$: the singular
-    case of Corollary~6.7 of~\cite{Wolf2012Quantum}, restricted to the fixed points
-    supported on the support of $\rho$.
+    point of $T$ form a $*$-subalgebra of the corner algebra $Q\,\MN{D}\,Q$.
 \end{theorem}
 
 \begin{proof}
@@ -2458,9 +2450,19 @@ statements restrict to the fixed points supported on the support of $\rho$.
     images, which lies in the compressed $*$-subalgebra.
 \end{proof}
 
+Combined with the conjugation correspondence of
+Theorem~\ref{thm:weightedCorner_sqrt_surjective}, the carrier of this $*$-subalgebra
+realizes
+\[
+    \rho^{-1/2}\,\{X \in \MN{D} \mid T(X) = X,\ Q X Q = X\}\,\rho^{-1/2},
+\]
+with the inverse square root taken on the support of $\rho$: the singular case of
+Corollary~6.7 of~\cite{Wolf2012Quantum}, restricted to the fixed points supported on
+the support of $\rho$.
+
 \begin{theorem}[Conjugation by the square root is onto the corner-supported fixed
     points]%
-    \label{lem:weightedCorner_sqrt_surjective}
+    \label{thm:weightedCorner_sqrt_surjective}
     \lean{Kraus.exists_weightedCorner_sqrt_eq_of_fixedPoint}
     \leanok
     \uses{def:tp_kraus, def:support_proj}
