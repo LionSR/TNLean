@@ -196,13 +196,30 @@ lines 1434--1438.
 \leanid{MPOTensor.physicalSlice_sector_factorization}, and
 \leanid{MPOTensor.exists_physicalSlice_sector_factorization}.}
 
+The Hayashi decomposition of the concrete closure state is now formalized for
+the four-site chain.  Independent bijections on the three tensor factors
+preserve equality in strong subadditivity: each marginal is carried to the
+corresponding reindexed marginal, and the four entropies are unchanged.  The
+canonical bijection between a singleton block and one physical-site index
+therefore carries the SAL equality from flattened block coordinates to the
+tripartite site coordinates of the closure state.  Applying the forward
+Hayashi characterization gives a decomposition of the literal three-site
+marginal
+\[
+  \sigma_3^{(4)}({\cal K})=\tr_4\sigma^{(4)}({\cal K}).
+\]
+This is the $N=4$ specialization of Lemma \texttt{Lsigma3}; it does not assert
+the source statement simultaneously for arbitrary chain length.
+\footnote{The formal declarations are
+\leanid{isSSAEquality_submatrix_prodEquiv} and
+\leanid{MPOTensor.exists_etaStructure_reducedBlockState_of_isSAL}.}
+
 The next missing results assemble the neighboring operators $\eta_{k,h}$ from
-these sector tensors, prove their all-length cyclic contraction identity, and
-establish primitivity of the sector trace matrix.  A further assembly step is
-the Hayashi decomposition of the concrete closure state itself: the equality
-in strong subadditivity supplied by SAL is currently stated for the marginal
-in flattened block coordinates, and carrying the resulting decomposition onto
-the tripartite site index used by the closure remains to be written.
+the sector tensors above, prove their all-length cyclic contraction identity,
+and establish primitivity of the sector trace matrix.  The four-site
+decomposition now supplies the Hayashi witness required by the concrete sector
+factorization; these remaining assertions are the passage from that local
+factorization to the source identity at every chain length.
 
 The canonical family
 \leanid{MPOTensor.ExplicitEtaOperators.ofHayashiMarkov} does not supply this

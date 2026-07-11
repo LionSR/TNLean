@@ -68,6 +68,36 @@ strong subadditivity for a normalized three-site reduced state.
     decomposition on the middle subsystem.
 \end{proof}
 
+\begin{theorem}[Four-site SAL marginal has local $\eta$-structure]
+    \label{thm:mpdo_four_site_sal_eta_structure}
+    \lean{MPOTensor.exists_etaStructure_reducedBlockState_of_isSAL}
+    \leanok
+    \uses{def:is_sal, def:mpdo_eta_structure}
+    Let $K$ satisfy the strong area law, and let
+    $\sigma_3^{(4)}(K)=\tr_4\sigma^{(4)}(K)$ be the three-site marginal of its
+    normalized four-site periodic state. Then $\sigma_3^{(4)}(K)$ admits a
+    local $\eta$-structure on its middle site.
+
+    This assertion is restricted to the four-site chain. It is the $N=4$
+    specialization of the three-site decomposition in
+    \cite[Appendix~C.2]{Cirac2016MPDO_arXiv}, which treats all chain lengths in
+    the range of its four-region argument.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_sal_ssa_equality, thm:ssa_equality_reindex_factors,
+        thm:sal_implies_eta_structure}
+    Saturation gives equality in strong subadditivity for the three singleton
+    factors in flattened block coordinates. Relabel each singleton factor by
+    its canonical bijection with the one-site index. By
+    Theorem~\ref{thm:ssa_equality_reindex_factors}, the resulting operator
+    $\sigma_3^{(4)}(K)$ still satisfies the equality. Positivity and unit trace
+    follow from the normalized reduced state, so
+    Theorem~\ref{thm:sal_implies_eta_structure} gives the required quantum
+    Markov decomposition.
+\end{proof}
+
 \begin{definition}[Injective inverse map for a simple MPO tensor]
     \label{def:mpdo_injective_inverse_layer}
     \lean{MPOTensor.IsInjective}

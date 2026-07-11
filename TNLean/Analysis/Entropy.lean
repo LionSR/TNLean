@@ -32,6 +32,8 @@ the basic quantum entropy infrastructure needed for MPDO / RFP applications.
 * `vonNeumannEntropy_nonneg`: `S(ρ) ≥ 0` for density matrices
 * `traceA_ABC_isHermitian`, `traceC_ABC_isHermitian`, `traceAC_ABC_isHermitian`:
   tripartite partial traces preserve Hermiticity
+* `isSSAEquality_submatrix_prodEquiv`: equality in strong subadditivity is
+  invariant under independent relabelings of the three tensor factors
 * `Matrix.traceLeft_isHermitian`, `Matrix.traceRight_isHermitian`:
   bipartite partial traces preserve Hermiticity
 * `Matrix.PosSemidef.traceLeft`, `Matrix.PosSemidef.traceRight`:
@@ -666,6 +668,78 @@ def IsSSAEquality
     + vonNeumannEntropy (traceAC_ABC ρ_ABC) (traceAC_ABC_isHermitian hρ_ABC)
   = vonNeumannEntropy (traceC_ABC ρ_ABC) (traceC_ABC_isHermitian hρ_ABC)
     + vonNeumannEntropy (traceA_ABC ρ_ABC) (traceA_ABC_isHermitian hρ_ABC)
+
+/-- Independent relabelings of the three tensor factors preserve equality in
+strong subadditivity.
+
+The three partial traces are relabeled by the induced equivalences on
+$A \otimes B$, $B \otimes C$, and $B$, respectively, so invariance of the von Neumann
+entropy under reindexing preserves the defining equality.
+
+Source: standard invariance of entropy and partial trace under changes of finite
+bases; blueprint `thm:ssa_equality_reindex_factors`. -/
+theorem isSSAEquality_submatrix_prodEquiv
+    {dA' dB' dC' : ℕ}
+    (ρ : Matrix (Fin dA × Fin dB × Fin dC)
+      (Fin dA × Fin dB × Fin dC) ℂ)
+    (hρ : ρ.IsHermitian)
+    (eA : Fin dA' ≃ Fin dA)
+    (eB : Fin dB' ≃ Fin dB)
+    (eC : Fin dC' ≃ Fin dC)
+    (hEq : IsSSAEquality ρ hρ) :
+    IsSSAEquality
+      (ρ.submatrix (eA.prodCongr (eB.prodCongr eC))
+        (eA.prodCongr (eB.prodCongr eC)))
+      (hρ.submatrix (eA.prodCongr (eB.prodCongr eC))) := by
+  let E := eA.prodCongr (eB.prodCongr eC)
+  let EAB := eA.prodCongr eB
+  let EBC := eB.prodCongr eC
+  have hC :
+      Matrix.traceC_ABC (ρ.submatrix E E) =
+        (Matrix.traceC_ABC ρ).submatrix EAB EAB := by
+    ext x y
+    simp only [Matrix.traceC_ABC, Matrix.submatrix_apply, E, EAB,
+      Equiv.prodCongr_apply, Prod.map]
+    exact Equiv.sum_comp eC
+      (fun c ↦ ρ (eA x.1, eB x.2, c) (eA y.1, eB y.2, c))
+  have hA :
+      Matrix.traceA_ABC (ρ.submatrix E E) =
+        (Matrix.traceA_ABC ρ).submatrix EBC EBC := by
+    ext x y
+    simp only [Matrix.traceA_ABC, Matrix.submatrix_apply, E, EBC,
+      Equiv.prodCongr_apply, Prod.map]
+    exact Equiv.sum_comp eA
+      (fun a ↦ ρ (a, eB x.1, eC x.2) (a, eB y.1, eC y.2))
+  have hAC :
+      Matrix.traceAC_ABC (ρ.submatrix E E) =
+        (Matrix.traceAC_ABC ρ).submatrix eB eB := by
+    ext x y
+    simp only [Matrix.traceAC_ABC, Matrix.submatrix_apply, E,
+      Equiv.prodCongr_apply, Prod.map]
+    calc
+      (∑ a, ∑ c, ρ (eA a, eB x, eC c) (eA a, eB y, eC c)) =
+          ∑ a, ∑ c, ρ (eA a, eB x, c) (eA a, eB y, c) := by
+            exact Finset.sum_congr rfl fun a _ =>
+              Equiv.sum_comp eC
+                (fun c ↦ ρ (eA a, eB x, c) (eA a, eB y, c))
+      _ = ∑ a, ∑ c, ρ (a, eB x, c) (a, eB y, c) :=
+        Equiv.sum_comp eA
+          (fun a ↦ ∑ c, ρ (a, eB x, c) (a, eB y, c))
+  rw [IsSSAEquality] at hEq ⊢
+  rw [vonNeumannEntropy_submatrix_equiv E ρ hρ]
+  rw [vonNeumannEntropy_congr hAC
+    (Matrix.traceAC_ABC_isHermitian (hρ.submatrix E))
+    ((Matrix.traceAC_ABC_isHermitian hρ).submatrix eB)]
+  rw [vonNeumannEntropy_submatrix_equiv eB]
+  rw [vonNeumannEntropy_congr hC
+    (Matrix.traceC_ABC_isHermitian (hρ.submatrix E))
+    ((Matrix.traceC_ABC_isHermitian hρ).submatrix EAB)]
+  rw [vonNeumannEntropy_submatrix_equiv EAB]
+  rw [vonNeumannEntropy_congr hA
+    (Matrix.traceA_ABC_isHermitian (hρ.submatrix E))
+    ((Matrix.traceA_ABC_isHermitian hρ).submatrix EBC)]
+  rw [vonNeumannEntropy_submatrix_equiv EBC]
+  exact hEq
 
 end SSAEquality
 
