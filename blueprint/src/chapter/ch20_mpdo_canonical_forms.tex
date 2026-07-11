@@ -353,6 +353,7 @@
     \lean{MPOTensor.firstSiteMatrix}
     \lean{MPOTensor.verticalTensor_ketLeftMul}
     \lean{MPOTensor.verticalTensor_braRightMul}
+    \lean{MPOTensor.firstSiteMatrix_mul_firstSiteMatrix}
     \leanok
     \uses{def:mpo_tensor, def:vertical_tensor_mpdo}
     View the MPO tensor $M$ vertically as the family of physical-space
@@ -368,7 +369,8 @@
     and on an $(N+1)$-site chain by the first-spin operator
     $P\otimes\Id^{\otimes N}$.  On the letters of the vertically viewed
     tensor these actions are the left and right matrix products,
-    $(PM)_{ab}=PM_{ab}$ and $(MP)_{ab}=M_{ab}P$.
+    $(PM)_{ab}=PM_{ab}$ and $(MP)_{ab}=M_{ab}P$.  The first-spin operators
+    compose site by site, $P_1Q_1=(PQ)_1$.
 \end{definition}
 
 \begin{theorem}[One-sided invariance and density-operator commutation]
@@ -499,7 +501,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:psd_trace_pos}
+    \uses{thm:psd_trace_pos, def:mpdo_vertical_one_site_actions}
     Compression by a Hermitian matrix preserves positive semidefiniteness,
     since $PH^{(N)}P = PH^{(N)}P^\dagger$.  By
     Theorem~\ref{thm:psd_trace_pos}, a nonzero compression therefore has
@@ -558,14 +560,13 @@
 \end{lemma}
 \begin{proof}\leanok
     By induction on $N$: splitting off the first site factors the sum as
-    $\bigl(\sum_a M^{aa}\bigr)$ times the sum over the remaining $N-1$
+    $\bigl(\sum_a M^{aa}\bigr)$ times the sum over the remaining $N$
     sites.  Taking horizontal traces and summing the diagonal entries of
     $H^{(N)}$ gives the trace identity.
 \end{proof}
 
 \begin{theorem}[Trace of a first-site compression]
     \label{thm:mpdo_first_site_compression_trace}
-    \lean{MPOTensor.firstSiteMatrix_mul_firstSiteMatrix}
     \lean{MPOTensor.trace_firstSiteMatrix_mul_mpo}
     \lean{MPOTensor.trace_sectorCompression_of_idempotent}
     \leanok
@@ -580,7 +581,7 @@
     $\tr\bigl(P_1H^{(N+1)}P_1\bigr)=\tr\bigl(E_P\,E^{N}\bigr)$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{lem:mpdo_trace_loop_chain}
+    \uses{lem:mpdo_trace_loop_chain, def:mpdo_vertical_one_site_actions}
     Splitting each diagonal entry of $P_1H^{(N+1)}$ at the first site pairs
     $P$ against the first tensor and leaves the diagonal word evaluation of
     the remaining $N$ sites; summing the diagonal configurations closes the
