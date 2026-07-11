@@ -29,7 +29,8 @@ commutation identities remains open.
 * `ketLeftMul` and `braRightMul`: the vertically viewed products
   $P\widetilde M$ and $\widetilde M P$.
 * `firstSiteMatrix`: the operator $P\otimes\Id^{\otimes N}$ on an
-  $(N+1)$-site chain.
+  $(N+1)$-site chain; these operators compose site by site,
+  $P_1Q_1=(PQ)_1$.
 
 ## Main results
 
@@ -77,6 +78,27 @@ noncomputable def braRightMul (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) �
     MPOTensor d D :=
   fun i j => ∑ k : Fin d, P k j • M i k
 
+/-- The letters of $P\widetilde M$ are the letters of $\widetilde M$
+multiplied by `P` on the left.  This identifies the one-site action
+`ketLeftMul` with left multiplication on the vertically viewed tensor of
+arXiv:1606.00608, line 943. -/
+theorem verticalTensor_ketLeftMul (M : MPOTensor d D)
+    (P : Matrix (Fin d) (Fin d) ℂ) (v : Fin (D * D)) :
+    verticalTensor (M.ketLeftMul P) v = P * verticalTensor M v := by
+  ext i j
+  simp [verticalTensor, ketLeftMul, Matrix.mul_apply, Matrix.sum_apply]
+
+/-- The letters of $\widetilde M P$ are the letters of $\widetilde M$
+multiplied by `P` on the right.  This identifies the one-site action
+`braRightMul` with right multiplication on the vertically viewed tensor of
+arXiv:1606.00608, line 943. -/
+theorem verticalTensor_braRightMul (M : MPOTensor d D)
+    (P : Matrix (Fin d) (Fin d) ℂ) (v : Fin (D * D)) :
+    verticalTensor (M.braRightMul P) v = verticalTensor M v * P := by
+  ext i j
+  simp [verticalTensor, braRightMul, Matrix.mul_apply, Matrix.sum_apply,
+    mul_comm]
+
 /-- Splitting off the first site of a density-operator entry:
 $H^{(N+1)}_{(i,\sigma),(j,\tau)}
 =\tr(M^{ij}M^{\sigma_0\tau_0}\cdots M^{\sigma_{N-1}\tau_{N-1}})$. -/
@@ -110,8 +132,8 @@ theorem firstSiteMatrix_isHermitian {P : Matrix (Fin d) (Fin d) ℂ}
 
 /-- Reindex a sum over an $(N+1)$-site configuration by its first value and
 its remaining $N$ values. -/
-private theorem sum_fin_succ_eq_sum_cons {N : ℕ}
-    (F : (Fin (N + 1) → Fin d) → ℂ) :
+theorem sum_fin_succ_eq_sum_cons {β : Type*} [AddCommMonoid β] {N : ℕ}
+    (F : (Fin (N + 1) → Fin d) → β) :
     ∑ σ : Fin (N + 1) → Fin d, F σ =
       ∑ i : Fin d, ∑ ρ : Fin N → Fin d, F (Fin.cons i ρ) := by
   rw [← Fintype.sum_prod_type']
@@ -153,8 +175,27 @@ theorem mul_firstSiteMatrix_apply (P : Matrix (Fin d) (Fin d) ℂ) {N : ℕ}
   · intro hmem
     exact (hmem (Finset.mem_univ _)).elim
 
+/-- First-site actions compose site by site:
+$P_1Q_1 = (PQ)_1$ on an $(N+1)$-site chain. -/
+theorem firstSiteMatrix_mul_firstSiteMatrix
+    (P Q : Matrix (Fin d) (Fin d) ℂ) (N : ℕ) :
+    firstSiteMatrix P N * firstSiteMatrix Q N = firstSiteMatrix (P * Q) N := by
+  refine Matrix.ext fun σ τ => ?_
+  rw [firstSiteMatrix_mul_apply]
+  have hcons : ∀ i : Fin d,
+      (Fin.cons i (σ ∘ Fin.succ) : Fin (N + 1) → Fin d) ∘ Fin.succ =
+        σ ∘ Fin.succ := by
+    intro i
+    funext n
+    simp [Fin.cons_succ]
+  by_cases hcond : σ ∘ Fin.succ = τ ∘ Fin.succ
+  · simp only [firstSiteMatrix, Fin.cons_zero, hcons, if_pos hcond, mul_one,
+      Matrix.mul_apply]
+  · simp only [firstSiteMatrix, Fin.cons_zero, hcons, if_neg hcond, mul_zero,
+      Finset.sum_const_zero]
+
 /-- Move a finite scalar-weighted sum inside a trace pairing. -/
-private theorem sum_mul_trace_eq_trace_sum_smul (c : Fin d → ℂ)
+theorem sum_mul_trace_eq_trace_sum_smul (c : Fin d → ℂ)
     (B : Fin d → Matrix (Fin D) (Fin D) ℂ) (W : Matrix (Fin D) (Fin D) ℂ) :
     ∑ i : Fin d, c i * Matrix.trace (B i * W) =
       Matrix.trace ((∑ i : Fin d, c i • B i) * W) := by
