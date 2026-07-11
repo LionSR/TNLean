@@ -9,7 +9,7 @@ import TNLean.MPS.Core.MultiBlock
 # Closed sector tensors and the physical-trace transfer
 
 This file identifies the closed-sector pairing operator of
-arXiv:1606.00608, Appendix C.2, equations `lkrk` and `Tkn`, with the
+arXiv:1606.00608, Appendix C.2, equations lkrk and Tkn, with the
 physical-trace transfer of the original tensor.  Consequently the source
 zero-correlation-length condition gives the corresponding pairing operator
 idempotence, up to the positive scalar allowed before canonical
@@ -150,14 +150,14 @@ is literally idempotent, the raw closed-sector pairing operator satisfies
 This is the displayed zero-correlation-length identity used in
 arXiv:1606.00608, Appendix C.2, lines 1489--1493. -/
 theorem closedSector_operator_idempotent_of_physTraceTransfer_sq
-    (hZCL : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K) :
+    (hT_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K) :
     let S := ∑ q, Matrix.vecMulVec
       (closedSectorL K hK hη R α₁ β₃ q)
       (closedSectorR K hK hη β₃ q)
     S * S = S := by
   dsimp only
   rw [← concrete_physTraceTransfer_eq_sum_closedSector K hK hη R hρ α₁ β₃ hm]
-  exact hZCL
+  exact hT_sq
 
 end InverseMapSectorTensors
 
