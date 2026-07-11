@@ -583,10 +583,11 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:mpdo_trace_loop_chain, def:mpdo_vertical_one_site_actions}
-    Splitting each diagonal entry of $P_1H^{(N+1)}$ at the first site pairs
-    $P$ against the first tensor and leaves the diagonal word evaluation of
-    the remaining $N$ sites; summing the diagonal configurations closes the
-    remaining loops by Lemma~\ref{lem:mpdo_trace_loop_chain}.  For the
+    Expanding the diagonal entry $(P_1 H^{(N+1)})_{(a,\rho)(a,\rho)}$ at
+    the first site gives $\sum_i P_{ai}\,\tr(M^{ia}E_\rho^{(N)})$,
+    where $E_\rho^{(N)}=M^{\rho_0\rho_0}\cdots M^{\rho_{N-1}\rho_{N-1}}$;
+    summing over $a$ and $\rho$ and collecting closes the remaining loops
+    by Lemma~\ref{lem:mpdo_trace_loop_chain}.  For the
     two-sided compression, first-site actions compose site by site,
     $P_1Q_1=(PQ)_1$, so cyclicity of the trace and idempotency reduce
     $\tr(P_1H^{(N+1)}P_1)$ to $\tr(P_1H^{(N+1)})$.
