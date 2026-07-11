@@ -227,6 +227,107 @@ theorem supportProj_mulVec_eq_zero_of_mulVec_eq_zero
 
 end SupportProjLemmas
 
+/-! ## Range factorization of the support projection
+
+The support projection of a positive semidefinite matrix has the same range
+as the matrix itself.  At the matrix level this is witnessed by a spectral
+pseudo-inverse factor `W` with `supportProj ρ = ρ * W`; combined with
+`supportProj_mul` it lets invariance statements about the range of `ρ` pass
+to the support projection.  These lemmas serve the invariant-subspace steps
+of the canonical-form analysis, where the invariant subspace arrives as the
+range of a rectangular matrix `Y` and the corresponding orthogonal projector
+is the support projection of `Y * Yᴴ`. -/
+
+section SupportProjRange
+
+variable {D : ℕ}
+
+/-- The support projection factors through its matrix: `supportProj ρ = ρ * W`
+for an explicit spectral pseudo-inverse `W`.  This witnesses the range
+inclusion of the support projection in the range of `ρ` at the matrix
+level. -/
+lemma exists_supportProj_eq_mul (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef) :
+    ∃ W : Matrix (Fin D) (Fin D) ℂ, supportProj (D := D) ρ hρ = ρ * W := by
+  classical
+  let hH : ρ.IsHermitian := hρ.isHermitian
+  set U : Matrix (Fin D) (Fin D) ℂ := ↑hH.eigenvectorUnitary
+  set sgn : Fin D → ℂ := fun i => if 0 < hH.eigenvalues i then 1 else 0
+  set pinv : Fin D → ℂ :=
+    fun i => if 0 < hH.eigenvalues i then (↑(hH.eigenvalues i) : ℂ)⁻¹ else 0
+  refine ⟨U * Matrix.diagonal pinv * Uᴴ, ?_⟩
+  have hUU : Uᴴ * U = 1 := by
+    rw [← Matrix.star_eq_conjTranspose]
+    simp [U]
+  have hρ_spec : ρ = U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ := by
+    simpa [U, Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose,
+      Function.comp_def] using hH.spectral_theorem
+  have hmul : (fun i => (↑(hH.eigenvalues i) : ℂ) * pinv i) = sgn := by
+    ext i
+    by_cases hi : 0 < hH.eigenvalues i
+    · have hne : (↑(hH.eigenvalues i) : ℂ) ≠ 0 := by
+        exact_mod_cast ne_of_gt hi
+      simp [pinv, sgn, hi, mul_inv_cancel₀ hne]
+    · simp [pinv, sgn, hi]
+  have hP_def : supportProj (D := D) ρ hρ = U * Matrix.diagonal sgn * Uᴴ := by
+    simp [supportProj, U, sgn]
+  have hglue : ∀ A B : Matrix (Fin D) (Fin D) ℂ,
+      (U * A * Uᴴ) * (U * B * Uᴴ) = U * (A * B) * Uᴴ := by
+    intro A B
+    calc (U * A * Uᴴ) * (U * B * Uᴴ)
+        = U * (A * ((Uᴴ * U) * (B * Uᴴ))) := by simp only [Matrix.mul_assoc]
+      _ = U * (A * (B * Uᴴ)) := by rw [hUU, Matrix.one_mul]
+      _ = U * (A * B) * Uᴴ := by simp only [Matrix.mul_assoc]
+  rw [hP_def]
+  conv_rhs => rw [hρ_spec]
+  rw [hglue, Matrix.diagonal_mul_diagonal, hmul]
+
+/-- The support projection of `Y * Yᴴ` fixes `Y`. -/
+lemma supportProj_mul_left_eq_self {k : ℕ} (Y : Matrix (Fin D) (Fin k) ℂ) :
+    supportProj (D := D) (Y * Yᴴ) (Matrix.posSemidef_self_mul_conjTranspose Y) * Y = Y := by
+  set π := supportProj (D := D) (Y * Yᴴ) (Matrix.posSemidef_self_mul_conjTranspose Y) with hπ
+  have hπS : π * (Y * Yᴴ) = Y * Yᴴ :=
+    supportProj_mul (D := D) (ρ := Y * Yᴴ) (Matrix.posSemidef_self_mul_conjTranspose Y)
+  have hπherm : (1 - π)ᴴ = 1 - π := by
+    have hH : πᴴ = π :=
+      (isOrthogonalProjection_supportProj (D := D) (ρ := Y * Yᴴ)
+        (hρ := Matrix.posSemidef_self_mul_conjTranspose Y)).1.eq
+    rw [Matrix.conjTranspose_sub, Matrix.conjTranspose_one, hH]
+  have hzero : ((1 - π) * Y) * ((1 - π) * Y)ᴴ = 0 := by
+    calc ((1 - π) * Y) * ((1 - π) * Y)ᴴ
+        = (1 - π) * (Y * Yᴴ) * (1 - π)ᴴ := by
+          rw [Matrix.conjTranspose_mul]
+          simp only [Matrix.mul_assoc]
+      _ = ((Y * Yᴴ) - π * (Y * Yᴴ)) * (1 - π) := by
+          rw [hπherm, Matrix.sub_mul, Matrix.one_mul]
+      _ = 0 := by rw [hπS, sub_self, Matrix.zero_mul]
+  have h0 : (1 - π) * Y = 0 := Matrix.self_mul_conjTranspose_eq_zero.mp hzero
+  have h0' : Y - π * Y = 0 := by
+    rw [Matrix.sub_mul, Matrix.one_mul] at h0
+    exact h0
+  exact (sub_eq_zero.mp h0').symm
+
+/-- **Invariance transfer to the support projection.**  If a matrix `A` maps
+the range of `Y` into itself through a right factor, `A * Y = Y * G`, then
+the support projection `π` of `Y * Yᴴ` — the orthogonal projector onto the
+range of `Y` — satisfies the one-sided invariance `(1 - π) * A * π = 0`. -/
+lemma one_sub_supportProj_mul_mul_supportProj_eq_zero {k : ℕ}
+    (Y : Matrix (Fin D) (Fin k) ℂ) {A : Matrix (Fin D) (Fin D) ℂ}
+    {G : Matrix (Fin k) (Fin k) ℂ} (hAY : A * Y = Y * G) :
+    (1 - supportProj (D := D) (Y * Yᴴ) (Matrix.posSemidef_self_mul_conjTranspose Y)) * A *
+      supportProj (D := D) (Y * Yᴴ) (Matrix.posSemidef_self_mul_conjTranspose Y) = 0 := by
+  obtain ⟨W, hW⟩ :=
+    exists_supportProj_eq_mul (D := D) (Y * Yᴴ) (Matrix.posSemidef_self_mul_conjTranspose Y)
+  set π := supportProj (D := D) (Y * Yᴴ) (Matrix.posSemidef_self_mul_conjTranspose Y) with hπ
+  have hY : (1 - π) * Y = 0 := by
+    rw [Matrix.sub_mul, Matrix.one_mul, supportProj_mul_left_eq_self (D := D) Y, sub_self]
+  calc (1 - π) * A * π
+      = (1 - π) * A * (Y * Yᴴ * W) := by rw [← hW]
+    _ = (1 - π) * (A * Y) * (Yᴴ * W) := by simp only [Matrix.mul_assoc]
+    _ = ((1 - π) * Y) * (G * (Yᴴ * W)) := by rw [hAY]; simp only [Matrix.mul_assoc]
+    _ = 0 := by rw [hY, Matrix.zero_mul]
+
+end SupportProjRange
+
 
 /-! ## Fixed point ⇒ invariant support projection -/
 

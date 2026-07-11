@@ -583,8 +583,12 @@
     this implication from the general theory of the peripheral spectrum of
     completely positive maps, with $q$ equal to the period $p$ of the
     vector; only the existence of some exponent enters the exclusion
-    argument.  The derivation of the projector from the cyclic decomposition
-    of the peripheral spectrum remains open.
+    argument.  The projector, its word invariance, and its single-letter
+    displacement are constructed from the cyclic decomposition of the
+    peripheral spectrum
+    (Theorem~\ref{thm:mpdo_displaced_invariant_projector}); the passage
+    from the displacement to the all-length non-commutation family remains
+    open.
     % Gap recorded in docs/paper-gaps/cpgsv17_periodic_sector_projector.tex.
 \end{definition}
 
@@ -789,6 +793,112 @@
     Definition~\ref{def:mpdo_periodic_sector_projector_of_cyclic}.  The
     exclusion of periodic vectors is then
     Theorem~\ref{thm:mpdo_vertical_no_periodic_vectors}.
+\end{proof}
+
+\begin{theorem}[The displaced invariant projector of a nontrivial periodic
+    vector]
+    \label{thm:mpdo_displaced_invariant_projector}
+    \lean{MPOTensor.exists_displaced_invariant_projector_of_periodic_vector}
+    \leanok
+    \uses{def:vertical_tensor_mpdo, def:no_periodic_vectors,
+        def:mpdo_vertical_one_site_actions, def:support_proj}
+    Let $M$ be an MPO tensor and let $\widetilde M$ carry a nontrivial
+    $p$-periodic vector, presented as in
+    Definition~\ref{def:no_periodic_vectors}: an irreducible restriction
+    $B$ of $\widetilde M$ to a minimal invariant subspace, reached through
+    an isometry $V$, with a positive definite transfer eigenvector $\rho$
+    of eigenvalue $r>0$ and a transfer eigenvalue $\mu\ne r$ of modulus
+    $r$.  Then there are an exponent $q\ge 1$ and an orthogonal projector
+    $Q$ on the physical space such that $QA_w=QA_wQ$ for every product
+    $A_w$ of $q$ letters of $\widetilde M$, while
+    $Q\widetilde M\ne Q\widetilde MQ$ in the sense of
+    Definition~\ref{def:mpdo_vertical_one_site_actions}.  This realizes
+    the projector that the proof of
+    \cite[Proposition~4.13, lines~1889--1891]{Cirac2016MPDO_arXiv} draws
+    from the general theory of the peripheral spectrum, up to its
+    non-commutation family.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:spectral_unital_gauge_schwarz_setup,
+        lem:eigenvalue_transport_unital_gauge,
+        thm:peripheral_cyclic_structure,
+        thm:cyclic_decomposition_irreducible_schwarz,
+        lem:kraus_cyclic_shift, lem:support_proj_range_factorization}
+    The rescaled unital gauge $K$ of the corner satisfies the hypotheses of
+    the cyclic decomposition of the peripheral spectrum
+    (Theorem~\ref{thm:spectral_unital_gauge_schwarz_setup}), and the
+    eigenvalue $\mu/r\ne 1$ of modulus one
+    (Lemma~\ref{lem:eigenvalue_transport_unital_gauge}) forces the
+    peripheral cyclic group to have order $m\ge 2$.
+    Theorem~\ref{thm:cyclic_decomposition_irreducible_schwarz} produces
+    orthogonal projections $P_0,\dots,P_{m-1}$ summing to the identity
+    with $\E_K(P_{k+1})=P_k$, and the letter-level shift
+    $K_vP_{k+1}=P_kK_v$ holds
+    (Lemma~\ref{lem:kraus_cyclic_shift}).  Set $q=m$ and let $Q$ be the
+    complement of the support projection $\pi$ of
+    $YY^\dagger$ for $Y=V\rho^{1/2}P_0$.  A word $A_w$ of $m$ letters of
+    $\widetilde M$ satisfies $A_wY=YG_w$, where $G_w$ is a scalar multiple
+    of the corresponding word in the letters of $K$, which commutes with
+    $P_0$ by the full-period shift; so the range of $Y$ is invariant and
+    Lemma~\ref{lem:support_proj_range_factorization} gives
+    $QA_w=QA_wQ$.  If a single letter also satisfied the invariance, then
+    $\pi$ would fix $A_vY$, whose columns lie in the sector
+    $V\rho^{1/2}P_{m-1}$ by the cyclic shift; cancelling the injective
+    factor $V\rho^{1/2}$ and using orthogonality of $P_{m-1}$ and $P_0$
+    would force $P_{m-1}K_v=0$ for every letter, hence
+    $P_{m-1}=\E_K(P_0)=0$, contradicting the nonvanishing of the cyclic
+    projections.
+\end{proof}
+
+\begin{definition}[Displaced projectors never commute]
+    \label{def:mpdo_noninvariant_projector_noncommuting}
+    \lean{MPOTensor.NoninvariantProjectorNoncommuting}
+    \leanok
+    \uses{def:mpo_tensor, def:mpo_family, def:mpdo_vertical_one_site_actions}
+    Say that \emph{displaced projectors of $M$ never commute} if every
+    orthogonal projector $Q$ on the physical space with
+    $Q\widetilde M\ne Q\widetilde MQ$ satisfies
+    $Q_1H^{(N)}\ne H^{(N)}Q_1$ at every length.  This is the
+    canonical-form step of the periodic-sector argument: the proof of
+    \cite[Proposition~4.13]{Cirac2016MPDO_arXiv} assumes the tensor is in
+    canonical form in the horizontal direction, and the argument of
+    lines~1874--1887 turns all-length commutation of $Q_1$ with $H^{(N)}$
+    into the letter-level invariance $Q\widetilde M=Q\widetilde MQ$, so a
+    displaced projector cannot commute.  The derivation of this implication
+    from a horizontal canonical form remains open.
+    % Gap recorded in docs/paper-gaps/cpgsv17_periodic_sector_projector.tex.
+\end{definition}
+
+\begin{theorem}[Reduction of the periodic-sector step to the
+    non-commutation family]
+    \label{thm:mpdo_cyclic_projector_of_noncommutation}
+    \lean{MPOTensor.periodicVectorYieldsCyclicProjector_of_noncommutation}
+    \lean{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_noncommutation}
+    \leanok
+    \uses{def:mpdo, def:mpdo_noninvariant_projector_noncommuting,
+        def:mpdo_periodic_vector_yields_cyclic_projector,
+        def:vertical_tensor_mpdo, def:no_periodic_vectors}
+    Let $M$ generate matrix product density operators.  If displaced
+    projectors of $M$ never commute, then periodic vectors of $M$ supply
+    cyclic projectors, and the vertically viewed tensor $\widetilde M$ has
+    no nontrivial $p$-periodic vectors.  This narrows the hypothesis of the
+    periodic-sector step in the proof of
+    \cite[Proposition~4.13, lines~1888--1893]{Cirac2016MPDO_arXiv} to the
+    canonical-form implication of lines~1874--1887: every other ingredient
+    of the step is proved.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_displaced_invariant_projector,
+        thm:mpdo_cyclic_projector_reduction}
+    A nontrivial $p$-periodic vector supplies the invariant, displaced
+    projector of Theorem~\ref{thm:mpdo_displaced_invariant_projector}; the
+    non-commutation hypothesis upgrades the displacement to the all-length
+    non-commutation family, so periodic vectors supply cyclic projectors
+    and Theorem~\ref{thm:mpdo_cyclic_projector_reduction} applies.
 \end{proof}
 
 \begin{theorem}[Positive trace of nonzero positive semidefinite matrices]
