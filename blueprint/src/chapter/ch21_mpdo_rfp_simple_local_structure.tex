@@ -286,6 +286,154 @@ strong subadditivity for a normalized three-site reduced state.
     \]
 \end{proof}
 
+\begin{definition}[Three-site closure against a virtual tail]
+    \label{def:mpdo_three_site_closure}
+    \lean{MPOTensor.IsThreeSiteClosure}
+    \leanok
+    \uses{def:mpo_tensor}
+    Let ${\cal K}$ be an MPO tensor and let $R\in\MN{D}$. A tripartite
+    operator $\rho$ is the three-site closure of ${\cal K}$ against $R$ if
+    \[
+        \rho_{i_1i_2i_3,j_1j_2j_3}
+        =\tr\!\left(
+          {\cal K}^{i_1j_1}{\cal K}^{i_2j_2}{\cal K}^{i_3j_3}R
+        \right).
+    \]
+    This is the algebraic form of the three-site reduced operator in
+    \cite[Appendix~C.2, lines~1422--1433]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Physical slice and Hayashi inverse factors]
+    \label{def:mpdo_hayashi_inverse_factors}
+    \lean{MPOTensor.physicalSlice}
+    \lean{MPOTensor.hayashiInverseLeft}
+    \lean{MPOTensor.hayashiInverseRight}
+    \leanok
+    \uses{def:mpdo_injective_inverse_layer, def:mpdo_eta_structure}
+    Fix virtual indices $\beta,\alpha$ and set
+    \[
+        \kappa_{\beta,\alpha}(i,j)={\cal K}^{ij}_{\beta,\alpha}.
+    \]
+    For a Hayashi sector $k$, define the two inverse factors
+    \begin{align*}
+        A^{(k)}_{\alpha_1,\beta_1}(l,l')
+        &:=\sum_{i_1,j_1}
+        ({\cal K}^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
+        (\rho_{A b_1}^{(k)})_{(i_1,l),(j_1,l')},\\
+        B^{(k)}_{\alpha_3,\beta_3}(r,r')
+        &:=\sum_{i_3,j_3}
+        ({\cal K}^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}
+        (\rho_{b_2 C}^{(k)})_{(r,i_3),(r',j_3)}.
+    \end{align*}
+    These are the two factors in the sectorwise inverse-map calculation of
+    \cite[Appendix~C.2, lines~1407--1428]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Sectorwise inverse-map comparison]
+    \label{thm:mpdo_inverse_map_hayashi_sector_comparison}
+    \lean{MPOTensor.inverseMap_hayashi_sector_comparison}
+    \leanok
+    \uses{def:mpdo_three_site_closure,
+        def:mpdo_hayashi_inverse_factors}
+    Suppose that ${\cal K}$ is injective, $\rho$ is its three-site closure
+    against $R$, and a Hayashi decomposition of $\rho$ has been chosen. Write
+    \[
+        \widetilde\kappa^{(k)}_{\beta_1,\alpha_3}
+          ((l,r),(l',r'))
+        :=\left[
+          U_B\kappa_{\beta_1,\alpha_3}U_B^\dagger
+        \right]_{(k,l,r),(k,l',r')}.
+    \]
+    Then every diagonal sector satisfies
+    \[
+        R_{\beta_3,\alpha_1}\,
+        \widetilde\kappa^{(k)}_{\beta_1,\alpha_3}
+          ((l,r),(l',r'))
+        =p_k A^{(k)}_{\alpha_1,\beta_1}(l,l')
+          B^{(k)}_{\alpha_3,\beta_3}(r,r').
+    \]
+    The probability $p_k$ remains explicit because both sector density
+    operators are normalized. No zero-correlation-length or non-vanishing
+    hypothesis is used in this comparison.
+\end{theorem}
+
+\begin{figure}[ht]
+    \centering
+    \TNMPDOHayashiSectorComparison
+    \caption{The closing entry $R_{\beta_3,\alpha_1}$ times the physical
+    slice in the basis adapted to sector $k$ equals the weighted product of
+    the two Hayashi inverse factors; compare
+    \cite[Appendix~C.2, lines~1415--1438]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_inverse_map_hayashi_sector_comparison}
+\end{figure}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_inverse_map_three_site_contraction}
+    At fixed indices $(k,l,r)$ and $(k,l',r')$, the Hayashi block equality is
+    \[
+        \sum_{i_2,j_2}
+        [U_B]_{(k,l,r),i_2}\,
+        \rho_{i_1i_2i_3,j_1j_2j_3}\,
+        \overline{[U_B]_{(k,l',r'),j_2}}
+        =p_k(\rho_{A b_1}^{(k)})_{(i_1,l),(j_1,l')}
+          (\rho_{b_2 C}^{(k)})_{(r,i_3),(r',j_3)}.
+    \]
+    For each $i_2,j_2$, the preceding theorem gives
+    \[
+        \sum_{i_1,j_1,i_3,j_3}
+        ({\cal K}^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
+        ({\cal K}^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}
+        \rho_{i_1i_2i_3,j_1j_2j_3}
+        ={\cal K}^{i_2j_2}_{\beta_1,\alpha_3}
+          R_{\beta_3,\alpha_1}.
+    \]
+    Apply
+    $\sum_{i_1,j_1,i_3,j_3}
+      ({\cal K}^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
+      ({\cal K}^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}\,(-)$
+    to the Hayashi block equality. Substituting the preceding display and
+    interchanging the finite sums gives
+    \begin{align*}
+        &\sum_{i_1,j_1,i_3,j_3}
+          ({\cal K}^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
+          ({\cal K}^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}\\
+        &\quad{}\times\left(\sum_{i_2,j_2}
+          [U_B]_{(k,l,r),i_2}\,
+          \rho_{i_1i_2i_3,j_1j_2j_3}\,
+          \overline{[U_B]_{(k,l',r'),j_2}}\right)\\
+        &={}\sum_{i_2,j_2}
+          [U_B]_{(k,l,r),i_2}\,
+          {\cal K}^{i_2j_2}_{\beta_1,\alpha_3}
+          R_{\beta_3,\alpha_1}\,
+          \overline{[U_B]_{(k,l',r'),j_2}}.
+    \end{align*}
+    The right-hand side is
+    \begin{align*}
+        &R_{\beta_3,\alpha_1}
+        \sum_{i_2,j_2}[U_B]_{(k,l,r),i_2}\,
+        \kappa_{\beta_1,\alpha_3}(i_2,j_2)\,
+        \overline{[U_B]_{(k,l',r'),j_2}}\\
+        &\qquad={}
+        R_{\beta_3,\alpha_1}\,
+        \widetilde\kappa^{(k)}_{\beta_1,\alpha_3}
+          ((l,r),(l',r')).
+    \end{align*}
+    The contraction of the right-hand side of the Hayashi block equality is
+    \[
+        p_k A^{(k)}_{\alpha_1,\beta_1}(l,l')
+          B^{(k)}_{\alpha_3,\beta_3}(r,r').
+    \]
+    Since the Hayashi block equality holds, equating the two contractions gives
+    \[
+        R_{\beta_3,\alpha_1}\,
+        \widetilde\kappa^{(k)}_{\beta_1,\alpha_3}
+          ((l,r),(l',r'))
+        =p_k A^{(k)}_{\alpha_1,\beta_1}(l,l')
+          B^{(k)}_{\alpha_3,\beta_3}(r,r').
+    \]
+\end{proof}
+
 \begin{definition}[Explicit neighboring $\eta$-operator data]
     \label{def:mpdo_explicit_eta_operators}
     \lean{MPOTensor.etaOperators}
