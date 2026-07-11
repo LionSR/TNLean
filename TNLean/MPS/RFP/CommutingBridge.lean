@@ -137,12 +137,6 @@ def HasProductPairMPV (A : MPSTensor d D) : Prop :=
   ∃ ψ₂ : NSiteSpace d 2, ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
     mpv A σ = productPairState ψ₂ N σ
 
-theorem HasProductPairMPV.exists_twoSiteAmplitude {A : MPSTensor d D}
-    (hA : HasProductPairMPV A) :
-    ∃ ψ₂ : NSiteSpace d 2, ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
-      mpv A σ = productPairState ψ₂ N σ :=
-  hA
-
 /-- Hypotheses asserting that the nearest-neighbor local terms of \(A\) are
 commuting idempotents \(p_i\) on an \(N\)-site chain, with
 \(p_i p_j = p_j p_i\).
@@ -201,17 +195,6 @@ structure ProductPairBridge (A : MPSTensor d D) where
   hmpv : ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
     mpv A σ = productPairState pairAmplitude N σ
   localProjectors : ∀ N, 2 ≤ N → HasProductPairLocalProjectors A N
-
-theorem ProductPairBridge.mpv_eq_productPairState {A : MPSTensor d D}
-    (hBridge : ProductPairBridge A) :
-    ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
-      mpv A σ = productPairState hBridge.pairAmplitude N σ :=
-  hBridge.hmpv
-
-theorem ProductPairBridge.hasProductPairMPV {A : MPSTensor d D}
-    (hBridge : ProductPairBridge A) :
-    HasProductPairMPV A :=
-  ⟨hBridge.pairAmplitude, hBridge.hmpv⟩
 
 /-- The conditional physical-pair hypotheses yield the unfolded `IsNNCPH`
 conclusion: all two-site local terms commute on every finite chain of length at

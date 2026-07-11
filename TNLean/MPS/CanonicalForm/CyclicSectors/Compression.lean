@@ -51,24 +51,12 @@ private lemma evalWord_conj_unitary
     (A : MPSTensor d D) (U : Matrix.unitaryGroup (Fin D) ℂ) :
     ∀ w : List (Fin d),
       evalWord (fun i => (↑U : MatrixAlg D)ᴴ * A i * (↑U : MatrixAlg D)) w =
-        (↑U : MatrixAlg D)ᴴ * evalWord A w * (↑U : MatrixAlg D) := by
-  intro w
-  induction w with
-  | nil =>
-      have hUU : (↑U : MatrixAlg D)ᴴ * (↑U : MatrixAlg D) = 1 := by
-        simpa [Matrix.star_eq_conjTranspose] using Matrix.UnitaryGroup.star_mul_self U
-      simp only [evalWord, hUU, Matrix.mul_one]
-  | cons i w ih =>
-      have hUU : (↑U : MatrixAlg D) * (↑U : MatrixAlg D)ᴴ = 1 := by
-        simpa [Matrix.star_eq_conjTranspose] using Unitary.mul_star_self_of_mem U.prop
-      simp only [evalWord]
-      rw [ih]
-      calc (↑U : MatrixAlg D)ᴴ * A i * (↑U : MatrixAlg D) *
-            ((↑U : MatrixAlg D)ᴴ * evalWord A w * (↑U : MatrixAlg D))
-          = (↑U : MatrixAlg D)ᴴ * A i * ((↑U : MatrixAlg D) * (↑U : MatrixAlg D)ᴴ) *
-              evalWord A w * (↑U : MatrixAlg D) := by noncomm_ring
-        _ = (↑U : MatrixAlg D)ᴴ * (A i * evalWord A w) * (↑U : MatrixAlg D) := by
-              simp only [Matrix.mul_assoc, hUU, Matrix.one_mul]
+        (↑U : MatrixAlg D)ᴴ * evalWord A w * (↑U : MatrixAlg D) :=
+  evalWord_gauge
+    ⟨(↑U : MatrixAlg D)ᴴ, ↑U,
+      by simpa [Matrix.star_eq_conjTranspose] using Matrix.UnitaryGroup.star_mul_self U,
+      by simpa [Matrix.star_eq_conjTranspose] using Unitary.mul_star_self_of_mem U.prop⟩
+    fun _ => rfl
 
 /-- Compress a tensor supported on an orthogonal projection to the corresponding sector bond
 space.  The compressed tensor has the same sector MPVs and inherits the left-canonical equation.
@@ -246,9 +234,8 @@ theorem exists_compressedTensor_of_supported_projection_with_letter_and_isometry
       -- φ(∑ B_i† B_i) = ∑ φ(B_i† * B_i) = ∑ (X_i)† (X_i) = P0
       -- But we also need φ(B_i†) = (X_i)†
       have hφ_ct : ∀ i, rAlg ((B i)ᴴ) = (X i)ᴴ := by
-        intro i; ext a b
-        simp [rAlg, X, Matrix.reindex_apply, Matrix.conjTranspose_apply,
-          Matrix.submatrix_apply, Matrix.reindexAlgEquiv]
+        intro i
+        simp [rAlg, X, Matrix.coe_reindexAlgEquiv]
       -- h : ∑ (X_i)† * X_i = P0
       have h : ∑ i : Fin d, (X i)ᴴ * X i = P0 := by
         have h0 := congrArg rAlg hTPB
@@ -287,10 +274,7 @@ theorem exists_compressedTensor_of_supported_projection_with_letter_and_isometry
       change
         (Matrix.reindex eS eS (B11 i))ᴴ * Matrix.reindex eS eS (B11 i) =
           Matrix.reindex eS eS ((B11 i)ᴴ * B11 i)
-      rw [show (Matrix.reindex eS eS (B11 i))ᴴ = Matrix.reindex eS eS ((B11 i)ᴴ) from by
-        ext a b
-        simp only [Matrix.reindex_apply, Matrix.conjTranspose_apply,
-          Matrix.submatrix_apply]]
+      rw [Matrix.conjTranspose_reindex]
       simp only [Matrix.reindex_apply, Matrix.submatrix_mul_equiv]
     simp_rw [hterm]
     -- ∑ reindex eS eS (f i) = reindex eS eS (∑ f i)
