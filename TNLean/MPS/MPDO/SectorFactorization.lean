@@ -33,11 +33,23 @@ sectors of tensor products $l_k \otimes r_k$.
 - `MPOTensor.exists_physicalSlice_sector_factorization`: the existence form
   of the sector factorization for a closure against the normalized
   fourth-site tail, with the nonzero tail entry supplied by the nonzero four-site trace.
+- `MPOTensor.sectorEta`: the neighboring operators $\eta_{k,h}$, contracting
+  the right sector tensor of one site with the left sector tensor of the next
+  site over the shared virtual bond.
+- `MPOTensor.physicalSlice_neighboring_contraction`: the bond contraction of
+  two neighboring factorized slices exhibits $\eta_{k,h}$ between the outer
+  sector tensors.
+- `MPOTensor.closedSectorL` and `MPOTensor.closedSectorR`: the closed sector
+  tensors $|l_k)$ and $(r_k|$ obtained by tracing the physical legs.
+- `MPOTensor.trace_sectorEta`: the trace identity
+  $T_{k,h} = \operatorname{tr}(\eta_{k,h}) = (r_k|l_h)$.
+- `MPOTensor.ExplicitEtaOperators.ofSectorTensors`: the neighboring operator
+  family packaged as explicit $\eta$-data under the positivity hypothesis.
 
 ## References
 
 - [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
-  Appendix C.2, Lemma C.4, lines 1407--1448
+  Appendix C.2, Lemma C.4, lines 1407--1481
 -/
 
 open scoped Matrix ComplexOrder BigOperators
@@ -258,5 +270,180 @@ theorem exists_physicalSlice_sector_factorization
     fun k α₃ => sectorTensorR K hK hη β₃ k α₃,
     fun β₁ α₃ => physicalSlice_sector_factorization K hK
       (normalizedFourSiteTail K) ρ hρ hη hm β₁ α₃⟩
+
+/-! ### The neighboring operators $\eta_{k,h}$ -/
+
+/-- **The neighboring operator $\eta_{k,h}$.** The right sector tensor $r_k$
+of one site and the left sector tensor $l_h$ of the following site are
+contracted over the virtual bond they share:
+
+\[
+  \eta_{k,h} = \sum_{\gamma}\,(r_k)_{\gamma} \otimes (l_h)_{\gamma}.
+\]
+
+It acts on the neighboring bond space $B_k^R \otimes B_h^L$, the row and
+column index type of `MPOTensor.etaOperators`. The scalar
+$R_{\beta_3,\alpha_1}^{-1}\,p_h$ attached to the left sector tensor in
+`MPOTensor.sectorTensorL` rides along, so the convention matches the
+factorization `MPOTensor.physicalSlice_sector_factorization`.
+
+**Local fix (tail index):** the selected tail entry carried by the left
+sector tensor is $R_{\beta_3,\alpha_1}$, as in
+`inverseMapThreeSiteContraction_eq`, rather than the entry printed in the
+source display.  The correction is recorded in
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+
+Source: arXiv:1606.00608, Appendix C.2, equation `etarl`, lines 1441--1445. -/
+noncomputable def sectorEta
+    {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
+    (K : MPOTensor d D) (hK : K.IsInjective) (hη : EtaStructure ρ)
+    (R : Matrix (Fin D) (Fin D) ℂ) (α₁ β₃ : Fin D) (k h : Fin hη.m) :
+    Matrix (Fin (hη.dR k) × Fin (hη.dL h)) (Fin (hη.dR k) × Fin (hη.dL h)) ℂ :=
+  ∑ γ : Fin D,
+    Matrix.kroneckerMap (· * ·) (sectorTensorR K hK hη β₃ k γ)
+      (sectorTensorL K hK hη R α₁ β₃ h γ)
+
+/-- **The neighboring bond contraction.** In the setting of the sector
+factorization, contracting the shared virtual bond of two neighboring
+factorized physical slices leaves the neighboring operator between the outer
+sector tensors: for all sectors $k, h$ and virtual indices
+$\beta_1, \alpha_3$,
+
+\[
+  \sum_{\gamma}
+    \bigl[U_B\,\kappa_{\beta_1,\gamma}\,U_B^\dagger\bigr]^{(k)}
+    \bigl[U_B\,\kappa_{\gamma,\alpha_3}\,U_B^\dagger\bigr]^{(h)}
+  = (l_k)_{\beta_1} \otimes \eta_{k,h} \otimes (r_h)_{\alpha_3},
+\]
+
+stated entrywise on the sector blocks. This is the single-bond step of the
+identity assembling $\bigotimes_{n} \eta_{k_n,k_{n+1}}$ from the factorized
+chain.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1441--1449. -/
+theorem physicalSlice_neighboring_contraction
+    (K : MPOTensor d D) (hK : K.IsInjective)
+    (R : Matrix (Fin D) (Fin D) ℂ)
+    (ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ)
+    (hρ : IsThreeSiteClosure K R ρ) (hη : EtaStructure ρ)
+    {α₁ β₃ : Fin D} (hm : R β₃ α₁ ≠ 0) (β₁ α₃ : Fin D) (k h : Fin hη.m)
+    (l₁ l₁' : Fin (hη.dL k)) (r₁ r₁' : Fin (hη.dR k))
+    (l₂ l₂' : Fin (hη.dL h)) (r₂ r₂' : Fin (hη.dR h)) :
+    ∑ γ : Fin D,
+      Matrix.reindex hη.decompB hη.decompB
+          ((hη.U_B : Matrix (Fin d) (Fin d) ℂ) * physicalSlice K β₁ γ *
+            (hη.U_B : Matrix (Fin d) (Fin d) ℂ)ᴴ)
+          ⟨k, (l₁, r₁)⟩ ⟨k, (l₁', r₁')⟩ *
+        Matrix.reindex hη.decompB hη.decompB
+          ((hη.U_B : Matrix (Fin d) (Fin d) ℂ) * physicalSlice K γ α₃ *
+            (hη.U_B : Matrix (Fin d) (Fin d) ℂ)ᴴ)
+          ⟨h, (l₂, r₂)⟩ ⟨h, (l₂', r₂')⟩ =
+      sectorTensorL K hK hη R α₁ β₃ k β₁ l₁ l₁' *
+        sectorEta K hK hη R α₁ β₃ k h (r₁, l₂) (r₁', l₂') *
+        sectorTensorR K hK hη β₃ h α₃ r₂ r₂' := by
+  have hslice : ∀ (β α : Fin D) (k₀ : Fin hη.m) (l l' : Fin (hη.dL k₀))
+      (r r' : Fin (hη.dR k₀)),
+      Matrix.reindex hη.decompB hη.decompB
+          ((hη.U_B : Matrix (Fin d) (Fin d) ℂ) * physicalSlice K β α *
+            (hη.U_B : Matrix (Fin d) (Fin d) ℂ)ᴴ) ⟨k₀, (l, r)⟩ ⟨k₀, (l', r')⟩ =
+        sectorTensorL K hK hη R α₁ β₃ k₀ β l l' *
+          sectorTensorR K hK hη β₃ k₀ α r r' := by
+    intro β α k₀ l l' r r'
+    rw [physicalSlice_sector_factorization K hK R ρ hρ hη hm β α,
+      Matrix.blockDiagonal'_apply_eq]
+    rfl
+  simp_rw [hslice, sectorEta, Matrix.sum_apply]
+  rw [Finset.mul_sum, Finset.sum_mul]
+  refine Finset.sum_congr rfl fun γ _ => ?_
+  simp only [Matrix.kroneckerMap_apply]
+  ring
+
+/-- **The closed sector tensor $(r_k|$.** Tracing the two physical legs of the
+right sector tensor leaves a vector over the virtual bond:
+$(r_k|_{\gamma} = \operatorname{tr}[(r_k)_{\gamma}]$.
+
+Source: arXiv:1606.00608, Appendix C.2, equation `lkrk`, lines 1473--1477. -/
+noncomputable def closedSectorR
+    {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
+    (K : MPOTensor d D) (hK : K.IsInjective) (hη : EtaStructure ρ)
+    (β₃ : Fin D) (k : Fin hη.m) : Fin D → ℂ :=
+  fun γ => (sectorTensorR K hK hη β₃ k γ).trace
+
+/-- **The closed sector tensor $|l_k)$.** Tracing the two physical legs of the
+left sector tensor leaves a vector over the virtual bond:
+$|l_k)_{\gamma} = \operatorname{tr}[(l_k)_{\gamma}]$.
+
+Source: arXiv:1606.00608, Appendix C.2, equation `lkrk`, lines 1473--1477. -/
+noncomputable def closedSectorL
+    {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
+    (K : MPOTensor d D) (hK : K.IsInjective) (hη : EtaStructure ρ)
+    (R : Matrix (Fin D) (Fin D) ℂ) (α₁ β₃ : Fin D) (k : Fin hη.m) :
+    Fin D → ℂ :=
+  fun γ => (sectorTensorL K hK hη R α₁ β₃ k γ).trace
+
+/-- **The sector trace pairing.** The trace of the neighboring operator is the
+pairing of the closed sector tensors:
+
+\[
+  T_{k,h} = \operatorname{tr}(\eta_{k,h}) = (r_k|l_h).
+\]
+
+Source: arXiv:1606.00608, Appendix C.2, equation `StochT`, lines 1452--1455,
+and equation `Tkn`, lines 1478--1481. -/
+theorem trace_sectorEta
+    {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
+    (K : MPOTensor d D) (hK : K.IsInjective) (hη : EtaStructure ρ)
+    (R : Matrix (Fin D) (Fin D) ℂ) (α₁ β₃ : Fin D) (k h : Fin hη.m) :
+    (sectorEta K hK hη R α₁ β₃ k h).trace =
+      closedSectorR K hK hη β₃ k ⬝ᵥ closedSectorL K hK hη R α₁ β₃ h := by
+  simp only [sectorEta]
+  rw [Matrix.trace_sum]
+  simp [closedSectorR, closedSectorL, Matrix.trace_kronecker, dotProduct]
+
+/-- **The neighboring operator family as explicit $\eta$-data.** Once every
+neighboring operator built from the sector tensors is positive semidefinite,
+the family constitutes the explicit $\eta$-data consumed by the sector trace
+matrix and the rank-one step.
+
+The source obtains the positivity from the projected chain identity
+
+\[
+  0 \le \bigl[Q_{k_1}\otimes\cdots\otimes Q_{k_N}\bigr]\,\tilde\sigma\,
+    \bigl[Q_{k_1}\otimes\cdots\otimes Q_{k_N}\bigr]
+  = \bigotimes_{n=1}^{N} \eta_{k_n,k_{n+1}}
+\]
+
+at lines 1446--1450, and asserts that the $\eta$'s *can be chosen* positive
+semidefinite; the choice is a rescaling of the sector tensors. That
+all-length identity is not yet formalized, so positive semidefiniteness of
+the representative fixed by `MPOTensor.sectorTensorL` and
+`MPOTensor.sectorTensorR` enters here as a hypothesis; the surrounding gap is
+recorded in `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1441--1455. -/
+noncomputable def ExplicitEtaOperators.ofSectorTensors
+    {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
+    (K : MPOTensor d D) (hK : K.IsInjective) (hη : EtaStructure ρ)
+    (R : Matrix (Fin D) (Fin D) ℂ) (α₁ β₃ : Fin D)
+    (hpos : ∀ k h, (sectorEta K hK hη R α₁ β₃ k h).PosSemidef) :
+    ExplicitEtaOperators hη where
+  eta k h := sectorEta K hK hη R α₁ β₃ k h
+  eta_pos := hpos
+
+/-- The trace matrix of the neighboring operator family is the pairing of the
+closed sector tensors: $T_{k,h} = (r_k|l_h)$, entrywise on the sector trace
+matrix consumed by the rank-one step.
+
+Source: arXiv:1606.00608, Appendix C.2, equation `Tkn`, lines 1478--1481. -/
+@[simp] theorem ExplicitEtaOperators.traceMatrix_ofSectorTensors
+    {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
+    (K : MPOTensor d D) (hK : K.IsInjective) (hη : EtaStructure ρ)
+    (R : Matrix (Fin D) (Fin D) ℂ) (α₁ β₃ : Fin D)
+    (hpos : ∀ k h, (sectorEta K hK hη R α₁ β₃ k h).PosSemidef)
+    (k h : Fin hη.m) :
+    (ExplicitEtaOperators.ofSectorTensors K hK hη R α₁ β₃ hpos).traceMatrix k h =
+      closedSectorR K hK hη β₃ k ⬝ᵥ closedSectorL K hK hη R α₁ β₃ h := by
+  rw [ExplicitEtaOperators.traceMatrix_apply]
+  exact trace_sectorEta K hK hη R α₁ β₃ k h
 
 end MPOTensor
