@@ -160,45 +160,48 @@
     \end{tikzpicture}%
 }
 
-% Sector decomposition of a simple MPDO tensor and its neighbouring bond.
+% Contraction of neighbouring right and left sector tensors.
 \newcommand{\TNEtaSectorDecomposition}{%
     \begin{tikzpicture}[tn picture]
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt] (Uu) at (-2.55,0.76) {$U^\dagger$};
-        \TN@tensordot{tnK}{(-2.55,0)}
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt] (Ud) at (-2.55,-0.76) {$U$};
-        \draw[tn phys leg] ($(Uu.north)+(-0.11,0)$) -- ++(0,0.36);
-        \draw[tn phys leg] ($(Uu.north)+(0.11,0)$) -- ++(0,0.36);
-        \draw[tn phys leg] (Uu.south) -- (tnK.north);
-        \draw[tn phys leg] (tnK.south) -- (Ud.north);
-        \draw[tn phys leg] ($(Ud.south)+(-0.11,0)$) -- ++(0,-0.36);
-        \draw[tn phys leg] ($(Ud.south)+(0.11,0)$) -- ++(0,-0.36);
-        \TN@leftleg{tnK}{0.58}
-        \TN@rightleg{tnK}{0.58}
-        \node at (-2.88,-0.24) {$K$};
-        \node at (-1.43,0) {$=$};
-        \node at (-0.68,0) {$\displaystyle\bigoplus_k$};
-        \TN@tensordot{tnL}{(0.30,0)}
-        \TN@tensordot{tnR}{(1.42,0)}
-        \draw[tn leg] (tnL.west) -- ++(-0.52,0);
-        \draw[tn leg] (tnL.east) -- (tnR.west);
-        \draw[tn leg] (tnR.east) -- ++(0.52,0);
-        \TN@upleg{tnL}{0.50}
-        \TN@downleg{tnL}{0.50}
-        \TN@upleg{tnR}{0.50}
-        \TN@downleg{tnR}{0.50}
-        \node at (0.30,0.78) {$l_k$};
-        \node at (1.42,0.78) {$r_k$};
-        \node at (2.48,0) {$,\qquad$};
-        \TN@tensordot{tnRh}{(3.20,0)}
-        \TN@tensordot{tnLk}{(4.32,0)}
+        \node[draw, fill=white, minimum width=0.52cm, minimum height=0.38cm,
+            inner sep=1pt] (tnRh) at (-0.56,0) {$r_k$};
+        \node[draw, fill=white, minimum width=0.52cm, minimum height=0.38cm,
+            inner sep=1pt] (tnLk) at (0.56,0) {$l_h$};
         \draw[tn leg] (tnRh.east) -- (tnLk.west);
         \TN@upleg{tnRh}{0.50}
         \TN@downleg{tnRh}{0.50}
         \TN@upleg{tnLk}{0.50}
         \TN@downleg{tnLk}{0.50}
-        \node at (3.20,0.78) {$r_k$};
-        \node at (4.32,0.78) {$l_h$};
-        \node at (3.76,-0.80) {$\eta_{k,h}=r_k l_h\geq 0$};
+        \node at (0,-0.80) {$\eta_{k,h}=r_k l_h$};
+    \end{tikzpicture}%
+}
+
+% A closed chain of factorized sector tensors regrouped into neighbouring
+% eta operators.  This mirrors the cyclic contractions in Appendix C.2.
+\newcommand{\TNMPDOCyclicEtaContraction}{%
+    \begin{tikzpicture}[tn picture]
+        \foreach \name/\x/\lab in {Zero/-2.70/0,One/-0.90/1,Last/1.30/{N-1}} {
+            \node[draw, fill=white, minimum width=0.58cm, minimum height=0.38cm,
+                inner sep=1pt] (tnL\name) at (\x,0.34) {$l_{k_\lab}$};
+            \node[draw, fill=white, minimum width=0.58cm, minimum height=0.38cm,
+                inner sep=1pt] (tnR\name) at (\x+1.14,0.34) {$r_{k_\lab}$};
+            \node at (\x+0.57,0.34) {$\otimes$};
+            \TN@upleg{tnL\name}{0.42}
+            \TN@downleg{tnL\name}{0.42}
+            \TN@upleg{tnR\name}{0.42}
+            \TN@downleg{tnR\name}{0.42}
+        }
+        \draw[tn leg] (tnRZero.east) -- (tnLOne.west);
+        \draw[tn leg] (tnROne.east) -- (0.62,0.34);
+        \draw[tn leg] (0.94,0.34) -- (tnLLast.west);
+        \node at (0.78,0.34) {$\cdots$};
+        \draw[tn leg] (tnRLast.east)
+            .. controls (3.04,0.34) and (3.04,-0.42) .. (2.60,-0.42)
+            -- (-3.04,-0.42)
+            .. controls (-3.46,-0.42) and (-3.46,0.34) .. (tnLZero.west);
+        \node at (0,-0.90)
+            {$\eta_{k_0,k_1}\otimes\eta_{k_1,k_2}\otimes\cdots
+              \otimes\eta_{k_{N-1},k_0}$};
     \end{tikzpicture}%
 }
 

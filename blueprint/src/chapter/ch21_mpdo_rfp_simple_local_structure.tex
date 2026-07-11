@@ -833,14 +833,128 @@ strong subadditivity for a normalized three-site reduced state.
     corresponding positive $\eta$-data.
 \end{definition}
 
+\begin{definition}[Neighboring operators from sector tensors]
+    \label{def:mpdo_eta_of_sector_tensors}
+    \lean{MPOTensor.etaOfSectorTensors}
+    \leanok
+    \uses{def:mpdo_sector_tensors, def:mpdo_explicit_eta_operators}
+    Let $(l_k)_a$ and $(r_k)_a$ be sector tensors indexed by the horizontal
+    virtual index $a$. For neighboring sectors $k,h$, define an operator on
+    $B_k^R\otimes B_h^L$ by
+    \[
+        \eta_{k,h}\bigl((x_R,x_L),(y_R,y_L)\bigr)
+        =\sum_a (r_k)_a(x_R,y_R)(l_h)_a(x_L,y_L).
+    \]
+    Thus $\eta_{k,h}=r_k l_h$ is the contraction over the shared horizontal
+    index in
+    \cite[Appendix~C.2, equation~\textup{(etarl)}]{Cirac2016MPDO_arXiv}.
+    Positivity is not part of this definition.
+\end{definition}
+
+\begin{lemma}[Entries of the neighboring operators]
+    \label{lem:mpdo_eta_of_sector_tensors_apply}
+    \lean{MPOTensor.etaOfSectorTensors_apply}
+    \leanok
+    \uses{def:mpdo_eta_of_sector_tensors}
+    For every pair of sectors and every pair of matrix indices, the entry of
+    $\eta_{k,h}$ is the contraction displayed in
+    Definition~\ref{def:mpdo_eta_of_sector_tensors}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    This is immediate from the definition of $\eta_{k,h}$.
+\end{proof}
+
 \begin{figure}[ht]
     \centering
     \TNEtaSectorDecomposition
     \caption{Neighboring right and left sector tensors meet in the bond
-    operator $\eta_{k,h}=r_k l_h$. This is the local sector pairing used in
-    \cite[Theorem~4.14(iv) and Appendix~C.2]{Cirac2016MPDO_arXiv}.}
+    operator $\eta_{k,h}=r_k l_h$, as in
+    \cite[Appendix~C.2, lines~1441--1445]{Cirac2016MPDO_arXiv}.}
     \label{fig:mpdo_eta_sector_decomposition}
 \end{figure}
+
+\begin{theorem}[Cyclic contraction of the sector tensors]
+    \label{thm:mpdo_cyclic_sector_contraction}
+    \lean{MPOTensor.sum_cyclic_sectorTensor_eq_prod_etaOfSectorTensors}
+    \leanok
+    \uses{def:mpdo_eta_of_sector_tensors}
+    Let $N\geq1$ and let $k_0,\ldots,k_{N-1}$ be a cyclic sequence of
+    sectors. Fix matrix indices in the left and right factor of every sector,
+    and abbreviate
+    \[
+        L_n(a)=(l_{k_n})_a(x_n^L,y_n^L),
+        \qquad
+        R_n(a)=(r_{k_n})_a(x_n^R,y_n^R).
+    \]
+    With all site labels read modulo $N$,
+    \[
+        \sum_{g_0,\ldots,g_{N-1}}
+          \prod_{n=0}^{N-1}L_n(g_n)R_n(g_{n+1})
+        =\prod_{n=0}^{N-1}
+          \eta_{k_n,k_{n+1}}
+          \bigl((x_n^R,x_{n+1}^L),(y_n^R,y_{n+1}^L)\bigr).
+    \]
+    This is the entrywise cyclic contraction at
+    \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:mpdo_eta_of_sector_tensors_apply}
+    Expand the product of the sums defining the neighboring operators and set
+    $g'_n=g_{n+1}$. Cyclic invariance of the finite product and commutativity of
+    scalar multiplication give
+    \begin{align*}
+        \sum_{g_0,\ldots,g_{N-1}}
+          \prod_{n=0}^{N-1}L_n(g_n)R_n(g_{n+1})
+        &=\sum_{g'_0,\ldots,g'_{N-1}}
+          \prod_{n=0}^{N-1}R_n(g'_n)L_{n+1}(g'_n)\\
+        &=\prod_{n=0}^{N-1}\sum_a R_n(a)L_{n+1}(a).
+    \end{align*}
+    The last expression is the product of the corresponding entries of
+    $\eta_{k_n,k_{n+1}}$.
+\end{proof}
+
+\begin{theorem}[Closed sector word as neighboring contractions]
+    \label{thm:mpdo_sector_word_eta_contraction}
+    \lean{MPOTensor.trace_sector_word_eq_prod_etaOfSectorTensors}
+    \leanok
+    \uses{def:mpdo_eta_of_sector_tensors}
+    Under the hypotheses of the preceding theorem, define
+    $M_n(a,b)=L_n(a)R_n(b)$. Then
+    \[
+        \tr(M_0M_1\cdots M_{N-1})
+        =\prod_{n=0}^{N-1}
+          \eta_{k_n,k_{n+1}}
+          \bigl((x_n^R,x_{n+1}^L),(y_n^R,y_{n+1}^L)\bigr).
+    \]
+\end{theorem}
+
+\begin{figure}[ht]
+    \centering
+    \TNMPDOCyclicEtaContraction
+    \caption{Closing the horizontal indices of the factorized sector tensors
+    pairs each right factor with the left factor at the next site. The cycle
+    therefore becomes the product of the neighboring operators
+    $\eta_{k_n,k_{n+1}}$; compare
+    \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_cyclic_eta_contraction}
+\end{figure}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_cyclic_sector_contraction}
+    Expanding the trace of the matrix word gives
+    \[
+        \tr(M_0M_1\cdots M_{N-1})
+        =\sum_{g_0,\ldots,g_{N-1}}
+          \prod_{n=0}^{N-1}M_n(g_n,g_{n+1}).
+    \]
+    Substituting $M_n(a,b)=L_n(a)R_n(b)$ gives the cyclic sum in
+    Theorem~\ref{thm:mpdo_cyclic_sector_contraction}; apply that theorem.
+\end{proof}
 
 \begin{definition}[Trace matrices of explicit $\eta$-data]
     \label{def:mpdo_explicit_eta_trace_matrix}
