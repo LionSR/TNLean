@@ -9,7 +9,7 @@
 
 \title{Diagonal Restriction and the Vertical Canonical Form in Proposition 4.13}
 \author{}
-\date{2026-07-09}
+\date{2026-07-11}
 
 \begin{document}
 \maketitle
@@ -93,6 +93,13 @@ three stages visible in the source:
     \item obtain the vertical canonical-form blocks independently, and prove the
       positivity and unitary normalization of their multiplicity coefficients.
 \end{enumerate}
+The target statement is now in place: the vertical canonical form is stated
+on the vertically viewed tensor, whose letters are indexed by the horizontal
+bond pair and whose matrices act on the physical space, in the isometry form
+of the source; an earlier statement on the diagonal tensor $i\mapsto M^{ii}$
+has been removed.  The definitional realignment is recorded in
+\path{cpgsv17_vertical_tensor_definition.tex}.
+
 The already formalized equality of matrix product vectors after diagonal
 restriction remains useful as an auxiliary identity.  It cannot supply the
 normal blocks of the vertical canonical form.  In particular, Newton--Girard
@@ -140,8 +147,27 @@ formalized:
 \]
 The remaining step is to derive, from a nontrivial vertical period, one
 orthogonal projector $Q$ having the two all-length properties in source
-lines~1889--1890.  The independent vertical canonical-form construction and
-the positivity and unitary normalization of its coefficients also remain open.
+lines~1889--1890.
+
+The third stage now has conditional formalizations of its two closing
+arguments.  Granted orthogonal sector projectors whose insertion into the
+single-site vertical loop selects the sector contribution, the trace of the
+density operator compressed by the projector of sector $(\alpha,k)$ is
+identified as the sector weight $\mu_{\alpha,k}$ times a sector trace
+$d_\alpha$, and positivity of the nonzero compressions forces $d_\alpha>0$
+and $\mu_{\alpha,k}>0$ under the normalization $\mu_{\alpha,1}>0$
+(\path{TNLean/MPS/MPDO/SectorTrace.lean}).  Granted the dressed-adjoint
+identities of the two displayed diagrams at lines~1909--1919, transported
+blockwise by Lemma~L, the Gram matrix of each sector gauge $X_{\alpha,k}$ is
+a positive multiple $\omega_{\alpha,k}$ of the identity, in the normalization
+$X_{\alpha,1}=\Id$, and the normalized gauge
+$\omega_{\alpha,k}^{-1/2}X_{\alpha,k}$ is unitary, because a normal tensor
+has scalar commutant
+(\path{TNLean/MPS/CanonicalForm/NormalCommutant.lean}).  What remains open is
+the independent vertical canonical-form construction itself, which must
+supply the sector projectors with their loop identities and a nonvanishing
+compression, together with the derivation of the dressed-adjoint identities
+from self-adjointness of the sector compressions.
 
 \paragraph{Verdict.}
 This is an open gap: the source-faithful horizontal-to-vertical implication of
