@@ -1344,9 +1344,18 @@ strong subadditivity for a normalized three-site reduced state.
 \end{theorem}
 \begin{proof}
     \leanok
-    The trace of a positive semidefinite operator is nonnegative, and a
-    positive semidefinite operator with zero trace is zero. Apply this first to
-    $\eta_{k,h}$ and then to $\Omega_{k,h}$.
+    Since $\eta_{k,h}\succeq 0$, its trace is nonnegative, and hence
+    $a_kb_h=\tr(\eta_{k,h})\geq 0$. If $a_kb_h=0$, then
+    \[
+        \eta_{k,h}\succeq 0,
+        \qquad
+        \tr(\eta_{k,h})=a_kb_h=0
+        \quad\Longrightarrow\quad
+        \eta_{k,h}=0.
+    \]
+    The same implication gives $\Omega_{k,h}=0$ because
+    $\Omega_{k,h}\succeq 0$ and
+    $\tr(\Omega_{k,h})=a_kb_h=0$.
 \end{proof}
 
 \begin{definition}[Normalized active neighboring operators]
@@ -1377,9 +1386,17 @@ strong subadditivity for a normalized three-site reduced state.
 \end{theorem}
 \begin{proof}
     \leanok
-    The weight $a_kb_h$ is nonnegative, hence so is its inverse. Scaling the
-    positive semidefinite operators $\eta_{k,h}$ and $\Omega_{k,h}$ by this
-    inverse preserves positive semidefiniteness.
+    By Theorem~\ref{thm:mpdo_eta_zero_weight}, $a_kb_h\geq 0$, and hence
+    $(a_kb_h)^{-1}\geq 0$. Therefore
+    \[
+        \eta_{k,h}\succeq 0,
+        \qquad
+        (a_kb_h)^{-1}\geq 0
+        \quad\Longrightarrow\quad
+        \widehat\eta_{k,h}
+        =(a_kb_h)^{-1}\eta_{k,h}\succeq 0,
+    \]
+    and the identical argument applies to $\widehat\Omega_{k,h}$.
 \end{proof}
 
 \begin{theorem}[Normalized active preparations]
@@ -1407,8 +1424,15 @@ strong subadditivity for a normalized three-site reduced state.
 \end{theorem}
 \begin{proof}
     \leanok
-    The trace identities give
-    $\tr(\widehat\eta_{k,h})=\tr(\widehat\Omega_{k,h})=1$.
+    On an active pair,
+    \[
+        \tr(\widehat\eta_{k,h})
+        =(a_kb_h)^{-1}\tr(\eta_{k,h})
+        =(a_kb_h)^{-1}a_kb_h
+        =1.
+    \]
+    Likewise, $\tr(\widehat\Omega_{k,h})=1$ follows from
+    $\tr(\Omega_{k,h})=a_kb_h$.
     Apply Lemma~\ref{lem:mpdo_state_preparation_cptp} to each operator.
 \end{proof}
 
