@@ -328,6 +328,21 @@ and rates for the single-tensor transfer map $\E_A$.
     relating the two Kraus families.
 \end{proof}
 
+\begin{figure}[ht]
+    \centering
+    \TNRFPKrausIsometry\\[10pt]
+    \TNRFPKrausIsometryReverse
+    \caption{The fusion identity of the renormalization fixed-point
+        characterization: two contracted copies of $A$ equal a single copy of
+        $A$ with the isometry $V$ merging the summed index $j$ into the
+        physical pair $(i_1,i_2)$, which is
+        equation~(\ref{eq:corr_AA_isometry}); conversely, applying $V^\dagger$
+        to the two physical legs of the contracted pair recovers the single
+        tensor. The source draws the isometry as $U$
+        \cite[Theorem~3.1, lines~396--412]{Cirac2016MPDO_arXiv}.}
+    \label{fig:rfp_kraus_isometry}
+\end{figure}
+
 \begin{definition}[Single-block local orthogonality convention]%
     \label{def:is_locally_orthogonal}
     \lean{MPSTensor.IsLocallyOrthogonal}
@@ -751,6 +766,19 @@ and rates for the single-tensor transfer map $\E_A$.
     decomposition $A^i = X\sqrt\Lambda\,U^i X^{-1}$.
 \end{proof}
 
+\begin{figure}[ht]
+    \centering
+    \TNRFPIsometryCanonicalForm
+    \caption{The isometry canonical form of a normal renormalization fixed
+        point: $A^i = X\sqrt\Lambda\,U^i X^{-1}$, with the diagonal weight
+        $\sqrt\Lambda$ on the virtual chain and the isometry $U$ emitting the
+        physical index
+        \cite[Appendix~B, lines~1275--1289]{Cirac2016MPDO_arXiv}.}
+    \label{fig:rfp_isometry_canonical_form}
+\end{figure}
+% The source expression carries a bare $\Lambda$; the square root is the
+% corrected weight, recorded in docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.
+
 \begin{lemma}[Reference-tensor transfer identity for a unit pair-index isometry]%
     \label{lem:unit_pair_isometry_transfer}
     \lean{MPSTensor.unitPairIsometry_transfer}
@@ -815,6 +843,22 @@ and rates for the single-tensor transfer map $\E_A$.
     \uses{thm:isometry_canonical_form_of_rfp_nt}
     Apply Theorem~\ref{thm:isometry_canonical_form_of_rfp_nt} to each block.
 \end{proof}
+
+\begin{figure}[ht]
+    \centering
+    \TNRFPIsometryCanonicalFormBlocks
+    \caption{The per-block canonical form
+        $A^i=\bigoplus_{j,q}\mu_{j,q}\,X_{j,q}\sqrt{\Lambda_j}\,U_j^i
+            X_{j,q}^{-1}$: the block-index lines $j$ and $q$ thread the gauge,
+        the diagonal weight, the isometry, and the coefficient tensor $\mu$.
+        The picture is per-block, matching the entry above; the cross-block
+        physical orthogonality of
+        \cite[Section~3.4, lines~543--561]{Cirac2016MPDO_arXiv} is not
+        displayed.}
+    \label{fig:rfp_isometry_canonical_form_blocks}
+\end{figure}
+% Scope restriction: cross-block orthogonality omitted here; see
+% docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.
 
 \begin{lemma}[Block decomposition of the direct-sum transfer map]%
     \label{lem:block_diagonal_transfer_sum_to_block}

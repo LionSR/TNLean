@@ -1699,12 +1699,36 @@ $\C^{D}$.
     supremum of $\mathcal{D}_2$.
 \end{proof}
 
+An irreducible subspace of the supremum of a same-type class need not be one of its pieces,
+but its type is determined by the class.
+
+\begin{lemma}[Irreducible subspaces of a supremum inherit a type]%
+    \label{lem:starSubalgebra_sameIsotype_of_le_sSup}
+    \lean{StarSubalgebra.exists_sameIsotype_of_le_sSup}
+    \leanok
+    \uses{def:starSubalgebra_irreducibleSubspace, def:starSubalgebra_sameIsotype}
+    Let $S$ be a $*$-subalgebra of $\MN{D}$, let $\mathcal{D}$ be a family of subspaces
+    irreducible under $S$, and let $W$ be a subspace irreducible under $S$ with
+    $W \le \bigvee_{W' \in \mathcal{D}} W'$. Then $W$ is of the same type as some piece of
+    $\mathcal{D}$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:starSubalgebra_isOrtho_not_sameIsotype}
+    Suppose $W$ is of a different type than every piece of $\mathcal{D}$. Pieces of different
+    type are orthogonal (Lemma~\ref{lem:starSubalgebra_isOrtho_not_sameIsotype}), so $W$ is
+    orthogonal to every piece of $\mathcal{D}$, hence to their supremum, hence to itself. An
+    irreducible subspace is nonzero, a contradiction.
+\end{proof}
+
 \begin{theorem}[Isotypic-component decomposition]%
     \label{thm:starSubalgebra_orthogonal_isotypic_decomposition}
     \lean{StarSubalgebra.exists_orthogonal_isotypic_decomposition}
     \leanok
     \uses{thm:starSubalgebra_orthogonal_irreducible_decomposition,
         lem:starSubalgebra_isOrtho_sSup_not_sameIsotype,
+        lem:starSubalgebra_sameIsotype_of_le_sSup,
         lem:starSubalgebra_sameIsotype_refl, lem:starSubalgebra_sameIsotype_symm,
         lem:starSubalgebra_sameIsotype_trans}
     Let $S$ be a $*$-subalgebra of $\MN{D}$. Then $\C^{D}$ is the supremum of a finite family
@@ -1714,12 +1738,15 @@ $\C^{D}$.
     \[
         C = \bigvee_{W \in \mathcal{D}_C} W.
     \]
+    Moreover, for distinct components $C \neq C'$, no subspace irreducible under $S$ contained
+    in $C$ is of the same type as any subspace irreducible under $S$ contained in $C'$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:starSubalgebra_orthogonal_irreducible_decomposition,
         lem:starSubalgebra_isOrtho_sSup_not_sameIsotype,
+        lem:starSubalgebra_sameIsotype_of_le_sSup,
         lem:starSubalgebra_sameIsotype_refl, lem:starSubalgebra_sameIsotype_symm,
         lem:starSubalgebra_sameIsotype_trans}
     The orthogonal irreducible decomposition
@@ -1745,6 +1772,15 @@ $\C^{D}$.
     hence $W \sim W'$, contradicting that $W$ and $W'$ are not of the same type. So no piece of
     $\mathcal{D}_W$ is of the same type as any piece of $\mathcal{D}_{W'}$, and the components are
     orthogonal (Lemma~\ref{lem:starSubalgebra_isOrtho_sSup_not_sameIsotype}).
+
+    Finally, let $V \le C_W$ and $V' \le C_{W'}$ be irreducible under $S$ with
+    $C_W \neq C_{W'}$. By Lemma~\ref{lem:starSubalgebra_sameIsotype_of_le_sSup} there are
+    pieces $a \in \mathcal{D}_W$ and $b \in \mathcal{D}_{W'}$ with $V \sim a$ and $V' \sim b$.
+    Were $V \sim V'$, symmetry and transitivity would give
+    \[
+        W \sim a \sim V \sim V' \sim b \sim W',
+    \]
+    contradicting again that $W$ and $W'$ are not of the same type.
 \end{proof}
 
 The pieces of one class are unitarily identified copies of a single irreducible piece. An
@@ -1770,7 +1806,8 @@ $\MN{d_k} \otimes \Id_{m_k}$ of~\cite[Theorem~6.14]{Wolf2012Quantum}.
     \]
     In the adapted basis the member $A$ acts on $C$ by the matrix $B$ on the irreducible
     index, identically across the multiplicity index; after reordering the indices this is the
-    block $\MN{d} \otimes \Id_{m}$ of~\cite[Theorem~6.14]{Wolf2012Quantum}.
+    block $\MN{d} \otimes \Id_{m}$ of~\cite[Theorem~6.14]{Wolf2012Quantum}. The vectors
+    $(f_{i,j})_{0 \le j < d}$ of the $i$-th copy span one of the pieces of $\mathcal{D}$.
 \end{theorem}
 
 \begin{proof}
@@ -1837,6 +1874,7 @@ by~\cite[Theorem~6.14]{Wolf2012Quantum}, without the zero block.
     \label{thm:starSubalgebra_global_adapted_orthonormal_basis}
     \lean{StarSubalgebra.exists_adapted_orthonormalBasis}
     \leanok
+    \uses{def:starSubalgebra_irreducibleSubspace, def:starSubalgebra_sameIsotype}
     Let $S$ be a $*$-subalgebra of $\MN{D}$. There are $K \in \N$, positive dimensions
     $d_0, \ldots, d_{K-1}$ and multiplicities $m_0, \ldots, m_{K-1}$, and an orthonormal
     basis $(f_{k,i,j})_{k < K,\, i < m_k,\, j < d_k}$ of $\C^{D}$ such that for every
@@ -1846,10 +1884,11 @@ by~\cite[Theorem~6.14]{Wolf2012Quantum}, without the zero block.
         A\,f_{k,i,j} \;=\; \sum_{j'=0}^{d_k-1} (B_k)_{j'j}\, f_{k,i,j'}.
     \]
     In this basis the member $A$ acts on the $k$-th component as
-    $\Id_{m_k} \otimes B_k$. Only the containment direction is asserted: every member of
-    $S$ takes this form. The converse of~\cite[Theorem~6.14]{Wolf2012Quantum}, that every
-    choice of blocks $(B_k)_k$ is attained by a member of $S$, is not part of this
-    statement.
+    $\Id_{m_k} \otimes B_k$. Each row $(f_{k,i,j})_{0 \le j < d_k}$ spans a subspace
+    irreducible under $S$, and rows drawn from distinct components span subspaces that are
+    never of the same type. Only the containment direction is asserted: every member of
+    $S$ takes this form. The equality with the block algebra, including the reverse
+    inclusion, is Theorem~\ref{thm:starSubalgebra_unitary_block_diagonal_iff}.
 \end{theorem}
 
 \begin{proof}
@@ -1869,7 +1908,52 @@ by~\cite[Theorem~6.14]{Wolf2012Quantum}, without the zero block.
     distinct components are orthogonal because the components are. The concatenated family
     spans $\C^{D}$ because each component is spanned by its family and the components have
     supremum $\C^{D}$; a spanning orthonormal family is an orthonormal basis. The action
-    property holds componentwise by the adapted families.
+    property holds componentwise by the adapted families. Each row of the concatenated
+    family spans one of the irreducible pieces of its component's class
+    (Theorem~\ref{thm:starSubalgebra_adapted_orthonormal_basis}), and irreducible subspaces
+    of distinct components are never of the same type
+    (Theorem~\ref{thm:starSubalgebra_orthogonal_isotypic_decomposition}), so neither are the
+    row spans of distinct components.
+\end{proof}
+
+The change of basis to an orthonormal basis indexed by such triples is implemented by a
+unitary matrix, and it carries every matrix acting blockwise on the basis to a
+block-diagonal matrix.
+
+\begin{lemma}[Unitary change of basis to block-diagonal form]%
+    \label{lem:starSubalgebra_unitary_change_of_basis_block}
+    \lean{OrthonormalBasis.exists_unitary_conj_blockDiagonal}
+    \leanok
+    Let $(f_{k,i,j})_{k < K,\, i < m_k,\, j < d_k}$ be an orthonormal basis of $\C^{D}$.
+    There are an identification of the index set of triples $(k, i, j)$ with
+    $\{0, \ldots, D-1\}$, realizing $\sum_k d_k m_k = D$, and a unitary $U \in \MN{D}$,
+    whose columns are the basis vectors, such that every matrix $A \in \MN{D}$ acting on
+    the basis by
+    \[
+        A\,f_{k,i,j} \;=\; \sum_{j'=0}^{d_k-1} (B_k)_{j'j}\, f_{k,i,j'}
+    \]
+    for matrices $B_k \in \MN{d_k}$ satisfies
+    \[
+        U^{\dagger} A\, U \;=\; \bigoplus_{k=0}^{K-1} \Id_{m_k} \otimes B_k.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Let $U$ be the change-of-basis matrix from the standard orthonormal basis of $\C^{D}$
+    to $(f_{k,i,j})$, so the columns of $U$ are the basis vectors; a change of basis
+    between orthonormal bases is unitary. Both bases have $D$ elements, which identifies
+    the index set of triples $(k, i, j)$ with $\{0, \ldots, D-1\}$ and gives
+    $\sum_k d_k m_k = D$. For $A$ acting as displayed, the matrix
+    $U^{\dagger} A\, U = U^{-1} A\, U$ is the matrix of the operator $x \mapsto Ax$ in the
+    basis $(f_{k,i,j})$, with entries
+    \[
+        \langle f_{k',i',j'},\, A f_{k,i,j} \rangle
+        \;=\; \sum_{j''} (B_k)_{j''j} \langle f_{k',i',j'},\, f_{k,i,j''} \rangle
+        \;=\; \delta_{k'k}\, \delta_{i'i}\, (B_k)_{j'j}
+    \]
+    by the action property and orthonormality. This is the block-diagonal matrix with
+    blocks $\Id_{m_k} \otimes B_k$.
 \end{proof}
 
 \begin{theorem}[Global unitary block-diagonal form]%
@@ -1886,29 +1970,135 @@ by~\cite[Theorem~6.14]{Wolf2012Quantum}, without the zero block.
     for matrices $B_k \in \MN{d_k}$ depending on $A$. Up to reordering the two tensor
     factors of each block this is the containment direction of the unital case of the
     block representation of~\cite[Theorem~6.14]{Wolf2012Quantum}: $S$ is carried by $U$
-    into the block algebra $\bigoplus_k \Id_{m_k} \otimes \MN{d_k}$. The converse, that
-    every choice of blocks $(B_k)_k$ is attained by a member of $S$, is not part of this
-    statement.
+    into the block algebra $\bigoplus_k \Id_{m_k} \otimes \MN{d_k}$. The equality,
+    including the reverse inclusion, is
+    Theorem~\ref{thm:starSubalgebra_unitary_block_diagonal_iff}.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:starSubalgebra_global_adapted_orthonormal_basis}
+    \uses{thm:starSubalgebra_global_adapted_orthonormal_basis,
+        lem:starSubalgebra_unitary_change_of_basis_block}
     Let $(f_{k,i,j})$ be the adapted orthonormal basis of
     Theorem~\ref{thm:starSubalgebra_global_adapted_orthonormal_basis} and let $U$ be the
-    change-of-basis matrix from the standard orthonormal basis of $\C^{D}$ to
-    $(f_{k,i,j})$, so the columns of $U$ are the adapted basis vectors; a change of basis
-    between orthonormal bases is unitary. Both bases have $D$ elements, which identifies
-    the index set of triples $(k, i, j)$ with $\{0, \ldots, D-1\}$ and gives
-    $\sum_k d_k m_k = D$. For $A \in S$ the matrix $U^{\dagger} A\, U = U^{-1} A\, U$ is
-    the matrix of the operator $x \mapsto Ax$ in the adapted basis, with entries
+    unitary supplied by Lemma~\ref{lem:starSubalgebra_unitary_change_of_basis_block} for
+    this basis. Every $A \in S$ acts on the basis by matrices $B_k$ on the irreducible
+    index, identically across the multiplicity index, so the lemma gives
+    $U^{\dagger} A\, U = \bigoplus_k \Id_{m_k} \otimes B_k$.
+\end{proof}
+
+The reverse inclusion of the block representation rests on the double-commutant
+characterization: in finite dimensions a $*$-subalgebra contains every matrix that commutes
+with its commutant. The proof is the Jacobson density theorem for $\C^{D}$ as a semisimple
+module over the subalgebra.
+
+\begin{lemma}[Membership through the double commutant]%
+    \label{lem:starSubalgebra_double_commutant}
+    \lean{StarSubalgebra.mem_of_forall_comm}
+    \leanok
+    Let $S$ be a $*$-subalgebra of $\MN{D}$ and let $T \in \MN{D}$. If $T$ commutes with
+    every linear operator on $\C^{D}$ that commutes with all members of $S$, then
+    $T \in S$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:starSubalgebra_isSemisimpleModule}
+    The space $\C^{D}$ is a semisimple module over $S$
+    (Lemma~\ref{lem:starSubalgebra_isSemisimpleModule}), and the linear operators commuting
+    with all members of $S$ are exactly the endomorphisms of this module. The hypothesis
+    therefore makes $T$ linear over the endomorphism ring of the module. By the Jacobson
+    density theorem, for every finite set of vectors there is a member of $S$ acting on
+    them as $T$ does. Applied to a basis of $\C^{D}$, this produces a member of $S$ whose
+    action agrees with $T$ on a basis, hence equals $T$.
+\end{proof}
+
+Combining the containment direction with the double-commutant criterion yields the full
+block representation of a finite-dimensional $*$-subalgebra, the unital case of
+Eq.~(1.39) of~\cite{Wolf2012Quantum} invoked by~\cite[Theorem~6.14]{Wolf2012Quantum}: up
+to a unitary change of basis, $S$ equals the block algebra
+$\bigoplus_k \Id_{m_k} \otimes \MN{d_k}$.
+
+\begin{theorem}[Full block form of a $*$-subalgebra]%
+    \label{thm:starSubalgebra_unitary_block_diagonal_iff}
+    \lean{StarSubalgebra.exists_unitary_conj_blockDiagonal_iff}
+    \leanok
+    Let $S$ be a $*$-subalgebra of $\MN{D}$. There are $K \in \N$, positive dimensions
+    $d_0, \ldots, d_{K-1}$ and multiplicities $m_0, \ldots, m_{K-1}$ with
+    $\sum_{k} d_k m_k = D$, realized by an explicit identification of the index sets, and
+    a unitary $U \in \MN{D}$ such that a matrix $A \in \MN{D}$ belongs to $S$ exactly when
     \[
-        \langle f_{k',i',j'},\, A f_{k,i,j} \rangle
-        \;=\; \sum_{j''} (B_k)_{j''j} \langle f_{k',i',j'},\, f_{k,i,j''} \rangle
-        \;=\; \delta_{k'k}\, \delta_{i'i}\, (B_k)_{j'j}
+        U^{\dagger} A\, U \;=\; \bigoplus_{k=0}^{K-1} \Id_{m_k} \otimes B_k
     \]
-    by the adapted action and orthonormality. This is the block-diagonal matrix with
-    blocks $\Id_{m_k} \otimes B_k$.
+    for some matrices $B_k \in \MN{d_k}$; that is, up to reordering the two tensor factors
+    of each block,
+    \[
+        S \;=\; U \Bigl(\bigoplus_{k=0}^{K-1} \Id_{m_k} \otimes \MN{d_k}\Bigr) U^{\dagger}.
+    \]
+    This is the block representation of a finite-dimensional $*$-algebra in Eq.~(1.39)
+    of~\cite{Wolf2012Quantum}, invoked by~\cite[Theorem~6.14]{Wolf2012Quantum}, in the
+    unital case: a $*$-subalgebra contains the identity matrix, so there is no zero block.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:starSubalgebra_global_adapted_orthonormal_basis,
+        lem:starSubalgebra_unitary_change_of_basis_block,
+        lem:starSubalgebra_double_commutant,
+        lem:starSubalgebra_scalar_commutant_irreducible, def:starSubalgebra_intertwiner,
+        def:starSubalgebra_sameIsotype}
+    Let $(f_{k,i,j})$ be the adapted orthonormal basis of
+    Theorem~\ref{thm:starSubalgebra_global_adapted_orthonormal_basis}, write $W_{k,i}$ for
+    the span of the row $(f_{k,i,j})_{j < d_k}$, and let $U$ be the unitary supplied by
+    Lemma~\ref{lem:starSubalgebra_unitary_change_of_basis_block} for this basis: any
+    matrix $A$ whose action on the adapted basis is
+    $A f_{k,i,j} = \sum_{j'} (B_k)_{j'j}\, f_{k,i,j'}$ satisfies the displayed conjugation
+    identity; in particular every member of $S$ does, which is the containment direction.
+
+    For the reverse inclusion, fix blocks $(B_k)_k$ and let $T$ be the matrix acting on
+    the adapted basis by $T f_{k,i,j} = \sum_{j'} (B_k)_{j'j}\, f_{k,i,j'}$. By
+    Lemma~\ref{lem:starSubalgebra_double_commutant} it suffices to show that $T$ commutes
+    with every operator $g$ that commutes with all members of $S$; we compute the matrix
+    of such a $g$ in the adapted basis. For a component index $k$ and multiplicity indices
+    $i, i'$, consider the operator
+    \[
+        \tau \colon v \;\longmapsto\; \sum_{j} \langle f_{k,i',j}, v\rangle\, f_{k,i,j},
+    \]
+    which reads off the coefficients of a vector along the row $(k, i')$ and rebuilds them
+    along the row $(k, i)$. Because every member of $S$ acts on the rows $(k, i')$ and
+    $(k, i)$ by the same matrix, $\tau$ commutes with all members of $S$, and so does
+    $\tau \circ g$. The composite maps $\C^{D}$ into $W_{k,i}$, and $W_{k,i}$ is
+    irreducible, so by Schur's lemma
+    (Lemma~\ref{lem:starSubalgebra_scalar_commutant_irreducible}) there is
+    $\gamma^{(k)}_{i'i} \in \C$ with $\tau(g\,x) = \gamma^{(k)}_{i'i}\, x$ for all
+    $x \in W_{k,i}$. Evaluating at $x = f_{k,i,j}$ and comparing coefficients gives
+    \[
+        \langle f_{k,i',j'},\, g\, f_{k,i,j}\rangle
+        \;=\; \gamma^{(k)}_{i'i}\, \delta_{j'j}.
+    \]
+    Across components the matrix of $g$ vanishes: for $k' \neq k$,
+    \[
+        \langle f_{k',i',j'},\, g\, f_{k,i,j}\rangle \;=\; 0:
+    \]
+    with $\tau$ built from the rows $(k', i')$ of another component, the composite
+    $\tau \circ g$ carries $W_{k,i}$ into $W_{k',i'}$ and commutes with $S$ on $W_{k,i}$,
+    so a nonzero such entry would make it an intertwiner that does not vanish on
+    $W_{k,i}$, giving $W_{k,i}$ and $W_{k',i'}$ the same type and contradicting
+    Theorem~\ref{thm:starSubalgebra_global_adapted_orthonormal_basis}.
+    Expanding $g f_{k,i,j}$ in the adapted basis therefore gives
+    \[
+        g\, f_{k,i,j} \;=\; \sum_{i'} \gamma^{(k)}_{i'i}\, f_{k,i',j} :
+    \]
+    in the adapted basis $g$ is block diagonal with blocks $C_k \otimes \Id_{d_k}$,
+    opposite to the blocks of $S$. Since $T$ acts by one matrix $B_k$ on the irreducible
+    index of every row and $g$ acts by one coefficient family $\gamma^{(k)}$ on the
+    multiplicity index of every column, the two actions commute on every basis vector, so
+    $T g = g T$. By Lemma~\ref{lem:starSubalgebra_double_commutant}, $T \in S$.
+
+    Finally, if a matrix $A$ satisfies
+    $U^{\dagger} A\, U = \bigoplus_k \Id_{m_k} \otimes B_k$, then
+    $U^{\dagger} A\, U = U^{\dagger} T\, U$ for the member $T \in S$ built from the blocks
+    $(B_k)_k$, so $A = T \in S$.
 \end{proof}
 
 \begin{theorem}[Fixed-point algebra is semisimple]%
@@ -2014,8 +2204,75 @@ by~\cite[Theorem~6.14]{Wolf2012Quantum}, without the zero block.
     \]
     together with the density-block form $\MN{d_k} \otimes \rho_k$.
     The theorem above gives the product decomposition, multiplicities, and
-    dimension bound needed from this block form.
+    dimension bound from this block form; the unitary conjugation identity itself, in
+    the unital case, is Theorem~\ref{thm:adjointFixedPoints_block_form} below.
 \end{remark}
+
+\begin{theorem}[Unitary block form of the Heisenberg-picture fixed points]%
+    \label{thm:adjointFixedPoints_block_form}
+    \lean{Kraus.adjointFixedPoints_blockDiagonal_iff}
+    \leanok
+    \uses{def:adjoint_fixed_points, def:kraus_map_channels}
+    Let $E$ be a trace-preserving Kraus map on $\MN{D}$ with a positive definite fixed
+    point $\rho > 0$, $E(\rho) = \rho$. There are $n \in \N$, positive dimensions
+    $d_0, \ldots, d_{n-1}$ and multiplicities $m_0, \ldots, m_{n-1}$ with
+    $\sum_k d_k m_k = D$, realized by an explicit identification of the index sets, and
+    a unitary $U \in \MN{D}$ such that a matrix $X \in \MN{D}$ satisfies $E^*(X) = X$
+    exactly when
+    \[
+        U^{\dagger} X\, U \;=\; \bigoplus_{k=0}^{n-1} \Id_{m_k} \otimes B_k
+    \]
+    for some matrices $B_k \in \MN{d_k}$; that is, up to reordering the two tensor
+    factors of each block,
+    \[
+        \mathrm{Fix}(E^*) \;=\;
+        U \Bigl(\bigoplus_{k=0}^{n-1} \Id_{m_k} \otimes \MN{d_k}\Bigr) U^{\dagger}.
+    \]
+    The positive definite fixed point removes the zero block: this is the unital case
+    of the block representation in Equation~(1.39) of~\cite{Wolf2012Quantum}, invoked
+    by~\cite[Theorem~6.14]{Wolf2012Quantum}. The general form
+    of~\cite[Theorem~6.14]{Wolf2012Quantum}, with a zero block and density weights
+    $\rho_k$ on the Schr\"odinger-picture fixed points, is not asserted here.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:adjointFixedPointsStarSubalgebra,
+        thm:starSubalgebra_unitary_block_diagonal_iff}
+    The fixed points of $E^*$ form a $*$-subalgebra of $\MN{D}$ because $E$ is
+    trace-preserving with a positive definite fixed point
+    (Theorem~\ref{thm:adjointFixedPointsStarSubalgebra}). The full block form of a
+    $*$-subalgebra (Theorem~\ref{thm:starSubalgebra_unitary_block_diagonal_iff})
+    supplies the unitary $U$, the dimensions and multiplicities, and the equivalence
+    between membership and the block-diagonal conjugation identity.
+\end{proof}
+
+\begin{theorem}[Unitary block form of the fixed points of a unital Kraus map]%
+    \label{thm:fixedPoints_block_form}
+    \lean{Kraus.fixedPoints_blockDiagonal_iff}
+    \leanok
+    \uses{def:kraus_fixed_points, def:kraus_map_channels}
+    Let $E$ be a unital Kraus map on $\MN{D}$ whose adjoint map $E^*$ has a positive
+    definite fixed point $\rho > 0$. There are $n \in \N$, positive dimensions $d_k$
+    and multiplicities $m_k$ with $\sum_k d_k m_k = D$, and a unitary $U \in \MN{D}$
+    such that a matrix $X \in \MN{D}$ satisfies $E(X) = X$ exactly when
+    \[
+        U^{\dagger} X\, U \;=\; \bigoplus_{k=0}^{n-1} \Id_{m_k} \otimes B_k
+    \]
+    for some matrices $B_k \in \MN{d_k}$. This is
+    Theorem~\ref{thm:adjointFixedPoints_block_form} with the roles of the map and its
+    adjoint exchanged.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fixedPointsStarSubalgebra,
+        thm:starSubalgebra_unitary_block_diagonal_iff}
+    The fixed points of the unital map $E$ form a $*$-subalgebra of $\MN{D}$
+    (Theorem~\ref{thm:fixedPointsStarSubalgebra}), and the full block form of a
+    $*$-subalgebra (Theorem~\ref{thm:starSubalgebra_unitary_block_diagonal_iff})
+    supplies the unitary and the equivalence.
+\end{proof}
 
 \begin{theorem}[Weighted fixed points form a $*$-subalgebra]%
     \label{thm:weightedFixedPointsStarSubalgebra}

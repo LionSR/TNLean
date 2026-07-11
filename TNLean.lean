@@ -39,6 +39,7 @@ import TNLean.Algebra.CocycleCohomology
 import TNLean.Algebra.SpinCover
 import TNLean.Algebra.MatrixRankClosed
 import TNLean.Algebra.StarSubalgebraBlockDiagonal
+import TNLean.Algebra.StarSubalgebraBlockForm
 import TNLean.Algebra.StarSubalgebraIntertwinerIsometry
 import TNLean.Algebra.StarSubalgebraIrreducibleDecomp
 import TNLean.Algebra.StarSubalgebraIsotypic
@@ -162,6 +163,7 @@ import TNLean.Channel.Schwarz.MultiplicativeDomain
 import TNLean.Channel.Schwarz.MultiplicativeDomainPowers
 import TNLean.Channel.Schwarz.MultiplicativeDomainFull
 import TNLean.Channel.FixedPoint.Algebra
+import TNLean.Channel.FixedPoint.BlockForm
 import TNLean.Channel.FixedPoint.ChoiEffros
 import TNLean.Channel.FixedPoint.Cesaro
 import TNLean.Channel.FixedPoint.CornerAlgebra

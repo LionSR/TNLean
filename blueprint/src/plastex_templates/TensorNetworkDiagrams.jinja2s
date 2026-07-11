@@ -19,6 +19,18 @@ name: TNMPDOHorizontalOperator TNMPDOFirstSiteContractions TNMPDOVerticalDirectS
 name: TNMPDOInverseContraction TNMPDOSectorPairing TNMPDOSectorZCLIdentity
 {{ obj.tn_svg_html }}
 
+name: TNMPSInverseContraction TNBNTDecomposition TNMPDOZCLIdempotence
+{{ obj.tn_svg_html }}
+
+name: TNRFPKrausIsometry TNRFPKrausIsometryReverse TNRFPIsometryCanonicalForm
+{{ obj.tn_svg_html }}
+
+name: TNRFPIsometryCanonicalFormBlocks TNMPDOTwoSiteBlocking
+{{ obj.tn_svg_html }}
+
+name: TNMPDOBNTVerticalProduct TNMPDOBlockClosureMap
+{{ obj.tn_svg_html }}
+
 name: TNGaugeConjugation TNPhysicalRealization TNLinearTwist
 {{ obj.tn_svg_html }}
 
