@@ -9,7 +9,7 @@ import TNLean.Channel.FixedPoint.Corollaries
 # Weighted corner fixed points of a Kraus map with a singular fixed point
 
 The following results extend Corollary 6.7 of *Quantum Channels & Operations* (Wolf 2012)
-beyond the positive definite case formalized in `TNLean.Channel.FixedPoint.Corollaries`.
+beyond the positive definite case of `TNLean.Channel.FixedPoint.Corollaries`.
 Let $T$ be a
 trace-preserving Kraus map, let $\rho$ be a positive semidefinite fixed point of $T$ —
 possibly singular — and let $Q$ be the support projection of $\rho$. The set
@@ -25,11 +25,11 @@ support of $\rho$, which realizes the displayed set without naming the pseudo-in
 density matrix and conjugates the full fixed-point set of $T$. For a maximum-rank fixed
 point every fixed point of $T$ is supported on the support of $\rho$, so the corner
 restriction is vacuous; that maximal-support property (the proposition on maximal support
-of fixed points in Section 6.4 of the reference) is not yet formalized, and the present
-statements restrict to the fixed points supported on the support of $\rho$ instead.
-Documented in `docs/paper-gaps/wolf_cor67_maximal_support_restriction.tex`. Elimination:
-formalize the maximal-support proposition and instantiate these statements at a
-maximum-rank fixed point.
+of fixed points in Section 6.4 of the reference) remains to be established here, and the
+present statements restrict to the fixed points supported on the support of $\rho$
+instead. Documented in `docs/paper-gaps/wolf_cor67_maximal_support_restriction.tex`.
+Elimination: establish the maximal-support proposition and instantiate these statements
+at a maximum-rank fixed point.
 
 The proofs compress to the support sector, where the compressed fixed point is positive
 definite and the positive definite case applies, and transport the structure back along
@@ -365,8 +365,8 @@ corollary, with the inverse square root taken on the support of $\rho$.
 
 **Scope restriction (corner-supported fixed points):** the corollary in the reference
 takes a maximum-rank fixed point, for which every fixed point of $T$ is supported on the
-support of $\rho$ and the corner restriction disappears; that maximal-support property is
-not yet formalized. Documented in
+support of $\rho$ and the corner restriction disappears; that maximal-support property
+remains to be established here. Documented in
 `docs/paper-gaps/wolf_cor67_maximal_support_restriction.tex`. -/
 noncomputable def weightedCornerFixedPointsStarSubalgebra
     (K : Fin d → Mat) (h_tp : IsTP K) {ρ : Mat} (hρ_psd : ρ.PosSemidef)
