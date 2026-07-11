@@ -548,7 +548,12 @@ theorem exists_etaStructure_reducedBlockState_of_isSAL
       ⟨hρflatPos.submatrix E, hρsiteTrace⟩ hEqSite
   have hsplit (p : Fin d × Fin d × Fin d) :
       (tripartiteSplitEquiv d 1 1 1).symm (E p) = ![p.1, p.2.1, p.2.2] := by
-    simp [tripartiteSplitEquiv, E, eSite]
+    dsimp only [tripartiteSplitEquiv, E, eSite]
+    simp only [Nat.reduceAdd, Equiv.symm_trans, Equiv.prodCongr_symm,
+      Equiv.refl_symm, Equiv.prodCongr_apply, Equiv.coe_trans,
+      Equiv.funUnique_symm_apply, Equiv.trans_apply, Equiv.prodAssoc_symm_apply,
+      Prod.map_fst, Function.comp_apply, Equiv.symm_apply_apply, Prod.map_snd,
+      Equiv.coe_refl, Prod.map_apply, id_eq, Nat.succ_eq_add_one]
     rw [blockSplitEquiv_symm_apply, blockSplitEquiv_symm_apply]
     funext i
     fin_cases i <;> rfl
