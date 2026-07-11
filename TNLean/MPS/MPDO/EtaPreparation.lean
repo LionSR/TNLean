@@ -165,12 +165,9 @@ theorem trace_normalizedEta (data : ExplicitEtaOperators hη)
     (factor : RankOneTraceFactorization data) (k h : Fin hη.m)
     (hactive : factor.a k * factor.b h ≠ 0) :
     (data.normalizedEta factor k h).trace = 1 := by
-  rcases mul_ne_zero_iff.mp hactive with ⟨ha, hb⟩
-  have haC : (factor.a k : ℂ) ≠ 0 := by exact_mod_cast ha
-  have hbC : (factor.b h : ℂ) ≠ 0 := by exact_mod_cast hb
   simp only [normalizedEta, Matrix.trace_smul, factor.trace_eta, smul_eq_mul]
   norm_cast
-  field_simp
+  exact inv_mul_cancel₀ hactive
 
 /-- The normalized direct-sum operator is positive semidefinite. On a zero
 pair it is the zero operator; the trace-one statement below is restricted to
@@ -190,13 +187,10 @@ theorem trace_normalizedOmega (data : ExplicitEtaOperators hη)
     (factor : RankOneTraceFactorization data) (k h : Fin hη.m)
     (hactive : factor.a k * factor.b h ≠ 0) :
     (data.normalizedOmega factor k h).trace = 1 := by
-  rcases mul_ne_zero_iff.mp hactive with ⟨ha, hb⟩
-  have haC : (factor.a k : ℂ) ≠ 0 := by exact_mod_cast ha
-  have hbC : (factor.b h : ℂ) ≠ 0 := by exact_mod_cast hb
   simp only [normalizedOmega, Matrix.trace_smul,
     data.trace_omega_eq_mul factor k h, smul_eq_mul]
   norm_cast
-  field_simp
+  exact inv_mul_cancel₀ hactive
 
 /-- On an active pair, adjoining the normalized neighboring operator is a
 trace-preserving completely positive map. This is the individual
