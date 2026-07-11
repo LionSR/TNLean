@@ -173,6 +173,7 @@ import TNLean.Channel.FixedPoint.CornerBlockForm
 import TNLean.Channel.FixedPoint.CornerFixedPoints
 import TNLean.Channel.FixedPoint.StationarySupport
 import TNLean.Channel.FixedPoint.WedderburnDecomp
+import TNLean.Channel.FixedPoint.WeightedCornerFixedPoints
 import TNLean.Channel.FixedPoint.Corollaries
 import TNLean.Channel.Spectral.Support
 import TNLean.Channel.Irreducible.Ergodicity
