@@ -61,6 +61,47 @@
     \]
 \end{proof}
 
+\begin{definition}[Right partial trace]
+    \label{def:mpdo_right_partial_trace_map}
+    \lean{Matrix.partialTraceRightLM}
+    \leanok
+    For a matrix $X$ on $A\otimes B$, the right partial trace is the linear map
+    from matrices on $A\otimes B$ to matrices on $A$ given by
+    \[
+        \bigl[\tr_{B}(X)\bigr]_{ij}
+        =
+        \sum_{k}X_{(i,k),(j,k)}.
+    \]
+    After the retained and discarded subspins have been regrouped as
+    $A\otimes B$, this is the partial-trace ingredient of the maps
+    $\mathcal T_0$ and $\mathcal S_0$ in
+    \cite[Appendix~C.2, lines~1521--1522 and~1547]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{lemma}[The right partial trace is trace-preserving completely positive]
+    \label{lem:mpdo_right_partial_trace_cptp}
+    \lean{Matrix.partialTraceRightLM_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_right_partial_trace_map, def:is_kraus_cptp}
+    The map $\tr_{B}$ is trace-preserving and completely positive for arbitrary
+    finite-dimensional spaces $A$ and $B$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    For each basis vector $e_k$ of $B$, define
+    $V_k:A\otimes B\to A$ by
+    \[
+        V_k(e_i\otimes e_\ell)=\delta_{k\ell}e_i.
+    \]
+    Then
+    \[
+        \sum_k V_k X V_k^\dagger=\tr_{B}(X),
+        \qquad
+        \sum_k V_k^\dagger V_k=I_{A\otimes B}.
+    \]
+\end{proof}
+
 \begin{definition}[State-preparation map]
     \label{def:mpdo_state_preparation_map}
     \lean{Matrix.preparationMap}
