@@ -2,9 +2,10 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Channel.TransferMatrix
+import TNLean.MPS.Core.CyclicTrace
 import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.ZCL
-import TNLean.Channel.TransferMatrix
 
 /-!
 # Local purification RFP condition for MPDO tensors
@@ -367,18 +368,6 @@ it carries the local purification condition to the global purification equation
 of the source purification renormalization fixed point (arXiv:1606.00608,
 Definition 4.4, line 758). -/
 
-/-- Word evaluation of a matrix product state tensor on a listed configuration is
-the ordered product of the per-site matrices. -/
-private theorem evalWord_ofFn_prod {dphys Dbond : ℕ} (A : MPSTensor dphys Dbond) {N : ℕ}
-    (σ : Fin N → Fin dphys) :
-    MPSTensor.evalWord A (List.ofFn σ) = (List.ofFn fun l => A (σ l)).prod := by
-  induction N with
-  | zero => simp only [List.ofFn_zero, MPSTensor.evalWord_nil, List.prod_nil]
-  | succ n ih =>
-    simp only [List.ofFn_succ, MPSTensor.evalWord_cons, List.prod_cons]
-    congr 1
-    exact ih (σ ∘ Fin.succ)
-
 /-- The purifying spin-ancilla tensor recovers the original amplitude at the
 encoded product index: evaluating `purificationTensor` at the spin-ancilla pair
 returns the corresponding matrix of the family. -/
@@ -399,7 +388,8 @@ private theorem mpv_purificationTensor {dK D' : ℕ}
   have hfun : (fun l : Fin N => purificationTensor A (finProdFinEquiv (σ l, κ l)))
       = fun l => A (σ l) (κ l) :=
     funext fun l => purificationTensor_finProdFinEquiv A (σ l) (κ l)
-  simp only [MPSTensor.mpv_eq, MPSTensor.coeff_eq, evalWord_ofFn_prod, hfun]
+  simp only [MPSTensor.mpv_eq, MPSTensor.coeff_eq,
+    MPSTensor.evalWord_ofFn_eq_prod, hfun]
 
 /-- **The tensor purification identity propagates to the global density
 operators.** If M is the ancilla contraction of a purifying family A through a

@@ -44,6 +44,26 @@ boundary conditions (PBC).
     $(i_1,\ldots,i_L)$.
 \end{definition}
 
+\begin{lemma}[Word evaluation along a listed configuration]
+    \label{lem:eval_word_of_fn_prod}
+    \lean{MPSTensor.evalWord_ofFn_eq_prod}
+    \leanok
+    \uses{def:eval_word}
+    For a configuration $\sigma=(\sigma_0,\ldots,\sigma_{N-1})$, let
+    $w_\sigma=[\sigma_0,\ldots,\sigma_{N-1}]$. Then
+    \[
+        A^{w_\sigma}
+        =A^{\sigma_0}A^{\sigma_1}\cdots A^{\sigma_{N-1}}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:eval_word}
+    This follows by induction on $N$ from the recursive definition of word
+    evaluation.
+\end{proof}
+
 \begin{lemma}[Multiplicativity of word evaluation]\label{lem:eval_word_append}
     \lean{MPSTensor.evalWord_append}
     \leanok
