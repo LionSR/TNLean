@@ -174,9 +174,8 @@ lemma cornerCompressionIsometry_conjTranspose_mul
         cornerCompressionIsometry Umat eST eS = 1 := by
   let I : Matrix (S ⊕ T) S ℂ := cornerCompressionInclusion (S := S) (T := T)
   let E : Matrix (Fin D) (Fin n) ℂ := Matrix.reindexLinearEquiv ℂ ℂ eST.symm eS I
-  have hE_star : Eᴴ = Matrix.reindexLinearEquiv ℂ ℂ eS eST.symm Iᴴ := by
-    ext a b
-    simp [E, I, Matrix.conjTranspose_apply, Matrix.reindex_apply]
+  have hE_star : Eᴴ = Matrix.reindexLinearEquiv ℂ ℂ eS eST.symm Iᴴ :=
+    Matrix.conjTranspose_reindex eST.symm eS I
   rw [cornerCompressionIsometry]
   change (Umat * E)ᴴ * (Umat * E) = 1
   rw [Matrix.conjTranspose_mul]
@@ -235,13 +234,8 @@ lemma cornerCompressionExpand_one
   rw [cornerCompressionExpand_apply]
   have hReindexOne :
       Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm (1 : Matrix (Fin n) (Fin n) ℂ) =
-        (1 : Matrix S S ℂ) := by
-    ext s t
-    by_cases h : s = t
-    · subst t
-      simp [Matrix.reindex_apply]
-    · have hne : eS s ≠ eS t := fun h' => h (eS.injective h')
-      simp [Matrix.reindex_apply, h, hne]
+        (1 : Matrix S S ℂ) :=
+    Matrix.reindexLinearEquiv_one ℂ ℂ eS.symm
   rw [hReindexOne, ← hP0, hPdiag_back, ← hP_decomp]
 
 /-- The ambient expansion is conjugation by the rectangular support isometry. -/
@@ -258,9 +252,8 @@ lemma cornerCompressionExpand_eq_isometry
   let M' : Matrix S S ℂ := Matrix.reindexLinearEquiv ℂ ℂ eS.symm eS.symm M
   have hM_back : Matrix.reindexLinearEquiv ℂ ℂ eS eS M' = M :=
     (Matrix.reindexLinearEquiv ℂ ℂ eS eS).apply_symm_apply M
-  have hE_star : Eᴴ = Matrix.reindexLinearEquiv ℂ ℂ eS eST.symm Iᴴ := by
-    ext a b
-    simp [E, I, Matrix.conjTranspose_apply, Matrix.reindex_apply]
+  have hE_star : Eᴴ = Matrix.reindexLinearEquiv ℂ ℂ eS eST.symm Iᴴ :=
+    Matrix.conjTranspose_reindex eST.symm eS I
   have hE_mid :
       E * M * Eᴴ =
         Matrix.reindexLinearEquiv ℂ ℂ eST.symm eST.symm
