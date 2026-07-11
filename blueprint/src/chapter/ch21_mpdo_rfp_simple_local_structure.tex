@@ -1295,9 +1295,16 @@ strong subadditivity for a normalized three-site reduced state.
 \end{theorem}
 \begin{proof}
     \leanok
-    Each tensor product $\eta_{k,l}\otimes\eta_{l,h}$ is positive
-    semidefinite, and a finite orthogonal direct sum of positive semidefinite
-    operators is positive semidefinite.
+    For every $l$, positivity is preserved by the Kronecker product:
+    \[
+        \eta_{k,l}\succeq 0,
+        \qquad
+        \eta_{l,h}\succeq 0
+        \quad\Longrightarrow\quad
+        \eta_{k,l}\otimes\eta_{l,h}\succeq 0.
+    \]
+    Apply Theorem~\ref{thm:matrix_pos_semidef_block_diagonal} to the family
+    $(\eta_{k,l}\otimes\eta_{l,h})_l$.
 \end{proof}
 
 \begin{theorem}[Trace of the direct-sum neighboring operator]
