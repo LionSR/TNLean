@@ -205,6 +205,25 @@
     \end{tikzpicture}%
 }
 
+% The full closed MPO in sector-adapted coordinates.  Each white box is one
+% neighbouring eta operator; the brackets form a single cyclic sector block.
+\newcommand{\TNMPDOSectorAdaptedDecomposition}{%
+    \begin{tikzpicture}[tn picture]
+        \node at (-3.15,0) {$M_N(\widetilde{\cal K})$};
+        \node at (-2.05,0) {$=$};
+        \node at (-1.43,0) {$\displaystyle\bigoplus_{k_0,\ldots,k_{N-1}}$};
+        \draw[rounded corners=2pt] (-0.45,-0.58) rectangle (4.22,0.58);
+        \node[draw, fill=white, minimum width=1.08cm, minimum height=0.44cm,
+            inner sep=1pt] (tnEtaZero) at (0.30,0) {$\eta_{k_0,k_1}$};
+        \node at (1.10,0) {$\otimes$};
+        \node[draw, fill=white, minimum width=1.08cm, minimum height=0.44cm,
+            inner sep=1pt] (tnEtaOne) at (1.90,0) {$\eta_{k_1,k_2}$};
+        \node at (2.72,0) {$\otimes\cdots\otimes$};
+        \node[draw, fill=white, minimum width=1.34cm, minimum height=0.44cm,
+            inner sep=1pt] (tnEtaLast) at (3.55,0) {$\eta_{k_{N-1},k_0}$};
+    \end{tikzpicture}%
+}
+
 % Applying the inverse tensor to the first and third sites of a three-site
 % MPO word leaves one matrix entry of the middle tensor and one entry of the
 % complementary virtual tail.
