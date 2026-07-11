@@ -66,8 +66,7 @@ theorem commutes_of_hasInvariantProjectorClosure_of_lowerZero
     calc
       A i * P - P * A i * P = (1 - P) * A i * P := by noncomm_ring
       _ = 0 := h
-  have hPcomp : P * (1 - P) = 0 := by
-    rw [mul_sub, mul_one, hP.2, sub_self]
+  have hPcomp : P * (1 - P) = 0 := IsIdempotentElem.mul_one_sub_self hP.2
   have hUpper : P * A i * (1 - P) = 0 := by
     calc
       P * A i * (1 - P) = P * (A i * (1 - P)) := by noncomm_ring
