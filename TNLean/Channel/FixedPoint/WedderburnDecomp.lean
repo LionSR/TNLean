@@ -46,10 +46,11 @@ The proof chain is:
    Wedderburn--Artin decomposition — available in Mathlib via
    `IsSemisimpleRing.exists_algEquiv_pi_matrix_of_isAlgClosed`.
 
-The concrete unitary block-diagonal embedding (Wolf Equation 1.39) is carried out in
+The concrete unitary block-diagonal embedding (Equation (1.39) of *Quantum Channels &
+Operations*, Wolf 2012) is carried out in
 `TNLean.Channel.FixedPoint.BlockForm`, which conjugates the fixed-point algebra to the
 block algebra by a unitary. The conditional expectation form with density operators ρ_k
-(Wolf Equation 1.40) remains future work.
+(Equation (1.40) of *Quantum Channels & Operations*, Wolf 2012) remains future work.
 
 ## References
 
@@ -171,7 +172,8 @@ The fixed-point `*`-subalgebra of a unital Schwarz map whose adjoint map has a
 positive definite fixed point decomposes, as a ℂ-algebra, into a finite product
 of full complex matrix algebras with positive block sizes.
 
-This is the structure-of-the-algebra content of Wolf Ch. 6, Thm 6.14, applied
+This is the structure-of-the-algebra content of Theorem 6.14 of *Quantum Channels &
+Operations* (Wolf 2012), applied
 to the fixed-point `*`-subalgebra `fixedPointsStarSubalgebra` of the
 Schrödinger-picture map `map K`. It is the companion of
 `fixedPointAlgebra_wedderburnArtin`, which decomposes the Heisenberg-picture
@@ -180,7 +182,7 @@ adjoint-fixed-point algebra.
 The unitary block-diagonal refinement, exhibiting each summand as an identity on a
 multiplicity space tensored with a full matrix algebra, is
 `Kraus.fixedPoints_blockDiagonal_iff` in `TNLean.Channel.FixedPoint.BlockForm`; the
-density-weighted form of Wolf Thm 6.14 is not formalized there. -/
+density-weighted form of Theorem 6.14 there is not formalized. -/
 theorem fixedPointsStarSubalgebra_exists_algEquiv_pi_matrix
     (K : Fin d → Mat) (h_unital : IsUnital K)
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : adjointMap K ρ = ρ) :
