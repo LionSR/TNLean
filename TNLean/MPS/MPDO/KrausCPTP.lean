@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.MPDO.Defs
 import TNLean.Analysis.MatrixSqrt
+import TNLean.Channel.PartialTrace
 
 /-!
 # Trace-preserving completely positive maps in Kraus form
@@ -21,6 +22,8 @@ dimensions.
 * `isKrausCPTP_id`: the identity map is trace-preserving completely positive.
 * `isKrausCPTP_comp`: composition preserves the trace-preserving completely
   positive property.
+* `Matrix.partialTraceRightLM_isKrausCPTP`: tracing a right tensor factor is a
+  trace-preserving completely positive map.
 * `Matrix.preparationMap_isKrausCPTP`: adjoining a density matrix is a
   trace-preserving completely positive map.
 -/
@@ -81,6 +84,129 @@ theorem isKrausCPTP_comp {α β γ : Type*} [Fintype α] [DecidableEq α] [Finty
     rw [step, hA_tp, Matrix.one_mul]
 
 namespace Matrix
+
+private def partialTraceRightKraus
+    {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
+    (k : β) : Matrix α (α × β) ℂ :=
+  Matrix.of fun i p => if i = p.1 ∧ k = p.2 then 1 else 0
+
+private lemma partialTraceRightKraus_mul_apply
+    {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
+    (X : Matrix (α × β) (α × β) ℂ) (k : β) (i : α) (q : α × β) :
+    (partialTraceRightKraus (α := α) (β := β) k * X) i q = X (i, k) q := by
+  rw [Matrix.mul_apply]
+  rw [Finset.sum_eq_single (i, k)]
+  · simp [partialTraceRightKraus]
+  · rintro ⟨i', k'⟩ _ hne
+    have hnot : ¬ (i = i' ∧ k = k') := by
+      intro h
+      exact hne (Prod.ext h.1 h.2).symm
+    simp [partialTraceRightKraus, hnot]
+  · intro hmem
+    simp at hmem
+
+private lemma partialTraceRightKraus_mul_conjTranspose_apply
+    {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
+    (X : Matrix (α × β) (α × β) ℂ) (k : β) (i j : α) :
+    (partialTraceRightKraus (α := α) (β := β) k * X *
+      (partialTraceRightKraus (α := α) (β := β) k)ᴴ) i j =
+      X (i, k) (j, k) := by
+  rw [Matrix.mul_apply]
+  rw [Finset.sum_eq_single (j, k)]
+  · rw [partialTraceRightKraus_mul_apply]
+    simp [partialTraceRightKraus, Matrix.conjTranspose_apply]
+  · rintro ⟨j', k'⟩ _ hne
+    have hnot : ¬ (j = j' ∧ k = k') := by
+      intro h
+      exact hne (Prod.ext h.1 h.2).symm
+    rw [partialTraceRightKraus_mul_apply]
+    simp [partialTraceRightKraus, Matrix.conjTranspose_apply, hnot]
+  · intro hmem
+    simp at hmem
+
+private lemma partialTraceRightKraus_conjTranspose_mul_apply
+    {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
+    (k : β) (p q : α × β) :
+    ((partialTraceRightKraus (α := α) (β := β) k)ᴴ *
+      partialTraceRightKraus (α := α) (β := β) k) p q =
+      if p.1 = q.1 ∧ k = p.2 ∧ k = q.2 then 1 else 0 := by
+  rw [Matrix.mul_apply]
+  by_cases h : p.1 = q.1 ∧ k = p.2 ∧ k = q.2
+  · rw [Finset.sum_eq_single p.1]
+    · simp [partialTraceRightKraus, Matrix.conjTranspose_apply, h]
+    · intro i _ hi
+      have hleft : ¬ (i = p.1 ∧ k = p.2) := by
+        intro hi'
+        exact hi hi'.1
+      simp [partialTraceRightKraus, Matrix.conjTranspose_apply, hleft]
+    · intro hmem
+      simp at hmem
+  · rw [if_neg h]
+    apply Finset.sum_eq_zero
+    intro i _
+    by_cases hip : i = p.1 ∧ k = p.2
+    · have hiq : ¬ (i = q.1 ∧ k = q.2) := by
+        intro hiq
+        exact h ⟨hip.1.symm.trans hiq.1, hip.2, hiq.2⟩
+      have hpq : p.1 = q.1 → ¬ p.2 = q.2 := by
+        intro hspin hright
+        exact h ⟨hspin, hip.2, hip.2.trans hright⟩
+      simpa [partialTraceRightKraus, Matrix.conjTranspose_apply, hip] using hpq
+    · simp [partialTraceRightKraus, Matrix.conjTranspose_apply, hip]
+
+/-- The partial trace over a right tensor factor is trace-preserving and
+completely positive. The Kraus operators fix one label of the factor being
+traced. After retained and discarded subspins are regrouped as a product, this
+is the elementary partial-trace ingredient of `\mathcal T_0` and
+`\mathcal S_0` in arXiv:1606.00608, Appendix C.2, lines 1521--1522 and 1547. -/
+lemma partialTraceRightLM_isKrausCPTP
+    {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β] :
+    IsKrausCPTP (partialTraceRightLM (α := α) (β := β)) := by
+  classical
+  let e := (Fintype.equivFin β).symm
+  refine ⟨Fintype.card β,
+    fun k => partialTraceRightKraus (α := α) (β := β) (e k), ?_, ?_⟩
+  · intro X
+    ext i j
+    change (∑ k : β, X (i, k) (j, k)) =
+      (∑ c : Fin (Fintype.card β),
+        partialTraceRightKraus (α := α) (β := β) (e c) * X *
+          (partialTraceRightKraus (α := α) (β := β) (e c))ᴴ) i j
+    rw [Matrix.sum_apply]
+    calc
+      ∑ k : β, X (i, k) (j, k) =
+          ∑ c : Fin (Fintype.card β), X (i, e c) (j, e c) :=
+        (Equiv.sum_comp e (fun k : β => X (i, k) (j, k))).symm
+      _ = _ := Finset.sum_congr rfl fun c _ =>
+        (partialTraceRightKraus_mul_conjTranspose_apply X (e c) i j).symm
+  · change (∑ c : Fin (Fintype.card β),
+      (partialTraceRightKraus (α := α) (β := β) (e c))ᴴ *
+        partialTraceRightKraus (α := α) (β := β) (e c)) = 1
+    calc
+      _ = ∑ k : β, (partialTraceRightKraus (α := α) (β := β) k)ᴴ *
+          partialTraceRightKraus (α := α) (β := β) k :=
+        Equiv.sum_comp e (fun k : β =>
+          (partialTraceRightKraus (α := α) (β := β) k)ᴴ *
+            partialTraceRightKraus (α := α) (β := β) k)
+      _ = 1 := by
+        ext p q
+        by_cases hpq : p = q
+        · subst q
+          rw [Matrix.sum_apply, Matrix.one_apply_eq]
+          rw [Finset.sum_eq_single p.2]
+          · simp [partialTraceRightKraus_conjTranspose_mul_apply]
+          · intro k _ hk
+            simp [partialTraceRightKraus_conjTranspose_mul_apply, hk]
+          · intro hmem
+            simp at hmem
+        · rw [Matrix.sum_apply, Matrix.one_apply_ne hpq]
+          apply Finset.sum_eq_zero
+          intro k _
+          have hnot : ¬ (p.1 = q.1 ∧ k = p.2 ∧ k = q.2) := by
+            intro h
+            apply hpq
+            exact Prod.ext h.1 (h.2.1.symm.trans h.2.2)
+          simp [partialTraceRightKraus_conjTranspose_mul_apply, hnot]
 
 /-- The state-preparation map $X\mapsto X\otimes\rho$.  This is the
 elementary operation used to adjoin the positive neighboring operators in
