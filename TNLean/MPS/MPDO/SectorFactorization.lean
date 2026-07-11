@@ -63,13 +63,13 @@ theorem isThreeSiteClosure_reducedBlockState (K : MPOTensor d D) :
   simp [List.ofFn_succ, Matrix.mul_assoc]
 
 /-- **Vanishing of the off-diagonal Hayashi sectors.** In the basis selected
-by the middle-site unitary, the tail entry times every off-diagonal sector of
-the transformed physical slice vanishes:
+by the middle-site unitary, for all $k \ne k'$, the tail entry times every
+off-diagonal sector of the transformed physical slice vanishes:
 
 \[
   R_{\beta_3,\alpha_1}
   \bigl(U_B\,\kappa_{\beta_1,\alpha_3}\,U_B^\dagger\bigr)_{(k;l,r),(k';l',r')}
-  = 0 \qquad (k \ne k').
+  = 0.
 \]
 
 Together with the diagonal identity
