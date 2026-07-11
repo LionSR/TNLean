@@ -138,7 +138,7 @@ the middle MPO tensor:
 This is the sectorwise comparison immediately preceding the factorization of
 the simple tensor in Appendix C.2. The proof uses only injectivity, the
 three-site closure identity, and the state equality in the chosen Hayashi
-decomposition. In particular, it does not use the positivity fields of that
+decomposition. In particular, it does not use the positivity hypotheses of that
 decomposition, the saturated area law, or zero correlation length.
 
 **Local fix (tail index):** the tail entry is
