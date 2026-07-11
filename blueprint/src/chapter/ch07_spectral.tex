@@ -2437,10 +2437,14 @@ the fixed points supported on the support of $\rho$.
         \sqrt{\sigma}\,(V^{\dagger} Y V)\,\sqrt{\sigma}
         \;=\; V^{\dagger}\,(\sqrt{\rho}\, Y \sqrt{\rho})\,V,
     \]
-    and the fixed-point equations correspond: for corner-supported $W$ one has
-    $T(W) = W$ exactly when the compressed map fixes $V^{\dagger} W V$, because the
-    compressed map computes $V^{\dagger}\,Q\,T(W)\,Q\,V$ and $T(W)$ is again
-    corner-supported. The set therefore corresponds, element by element, to the weighted
+    and the fixed-point equations correspond: for corner-supported $W$ the compressed
+    map evaluates to
+    \[
+        C\bigl(V^{\dagger} W V\bigr) \;=\; V^{\dagger}\,Q\,T(W)\,Q\,V
+        \;=\; V^{\dagger}\,T(W)\,V,
+    \]
+    since $T(W)$ is again corner-supported, so $T(W) = W$ exactly when the compressed
+    map fixes $V^{\dagger} W V$. The set therefore corresponds, element by element, to the weighted
     fixed points of the compressed family with respect to the positive definite fixed
     point $\sigma$, which form a $*$-subalgebra by
     Theorem~\ref{thm:weightedFixedPointsStarSubalgebra}. Closure under multiplication
