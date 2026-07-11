@@ -63,13 +63,13 @@ theorem isThreeSiteClosure_reducedBlockState (K : MPOTensor d D) :
   simp [List.ofFn_succ, Matrix.mul_assoc]
 
 /-- **Vanishing of the off-diagonal Hayashi sectors.** In the basis selected
-by the middle-site unitary, the tail entry times every off-diagonal sector of
-the transformed physical slice vanishes:
+by the middle-site unitary, for all $k \ne k'$, the tail entry times every
+off-diagonal sector of the transformed physical slice vanishes:
 
 \[
   R_{\beta_3,\alpha_1}
   \bigl(U_B\,\kappa_{\beta_1,\alpha_3}\,U_B^\dagger\bigr)_{(k;l,r),(k';l',r')}
-  = 0 \qquad (k \ne k').
+  = 0.
 \]
 
 Together with the diagonal identity
@@ -217,17 +217,21 @@ theorem physicalSlice_sector_factorization
 /-- **Existence form of equation `formK`.** For a three-site closure against
 the normalized fourth-site tail, a nonzero four-site trace supplies the outer
 indices, and the sector tensors $l_k$ and $r_k$ factorize every transformed
-physical slice:
+physical slice. For all virtual indices $\beta_1,\alpha_3$,
 
 \[
   U_B\,\kappa_{\beta_1,\alpha_3}\,U_B^\dagger
-  = \bigoplus_k\,(l_k)_{\beta_1} \otimes (r_k)_{\alpha_3}
-  \qquad\text{for all } \beta_1,\alpha_3.
+  = \bigoplus_k\,(l_k)_{\beta_1} \otimes (r_k)_{\alpha_3}.
 \]
 
 This is the statement of Lemma `propSN` up to equation `formK` for the
 four-site normalized chain; the neighboring operators $\eta_{k,h}$ and their
 all-length identity are the subsequent steps.
+
+**Local fix (tail index):** the selected nonzero entry of the normalized tail
+is $(R_4)_{\beta_3,\alpha_1}$, rather than the entry printed in the source
+display. The correction is recorded in
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1407--1448. -/
 theorem exists_physicalSlice_sector_factorization
