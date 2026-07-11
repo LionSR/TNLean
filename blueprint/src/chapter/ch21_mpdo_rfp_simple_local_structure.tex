@@ -347,10 +347,17 @@ strong subadditivity for a normalized three-site reduced state.
         ={\cal K}^{i_2j_2}_{\beta_1,\alpha_3}\,
         R_{\beta_3,\alpha_1}.
     \]
-    Consequently, for any matrix $U$ on the middle site, every entry of
-    $R_{\beta_3,\alpha_1}\,U\kappa_{\beta_1,\alpha_3}U^\dagger$ expands into
-    the corresponding outer inverse-map contraction of the state conjugated
-    by $U$ on the middle site.
+    Consequently, for any matrix $U$ on the middle site,
+    \[
+        R_{\beta_3,\alpha_1}
+        \bigl(U\kappa_{\beta_1,\alpha_3}U^\dagger\bigr)_{b,b'}
+        =\sum_{i_1,j_1,i_3,j_3}
+        ({\cal K}^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
+        ({\cal K}^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}
+        \sum_{i_2,j_2}
+        U_{b,i_2}\,\rho_{i_1i_2i_3,j_1j_2j_3}\,
+        \overline{U_{b',j_2}}.
+    \]
 \end{theorem}
 
 \begin{proof}
@@ -455,11 +462,17 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{proof}
     \leanok
     \uses{thm:mpdo_closure_outer_contraction}
-    The block equality of the Hayashi decomposition makes the middle-site
-    contraction between two distinct sectors vanish. Applying the inverse
-    tensor at the first and third sites and moving the finite sums through
-    the middle-site change of basis expresses the left-hand side as a sum of
-    such vanishing contractions.
+    The Hayashi block equality at off-diagonal indices gives
+    \[
+        \sum_{i_2,j_2}(U_B)_{b,i_2}\,
+        \rho_{i_1i_2i_3,j_1j_2j_3}\,
+        \overline{(U_B)_{b',j_2}}=0
+    \]
+    for $b$ in sector $k$ and $b'$ in sector $k'$ with $k\ne k'$.
+    Substituting this vanishing into the expansion of
+    Theorem~\ref{thm:mpdo_closure_outer_contraction} gives
+    $R_{\beta_3,\alpha_1}
+    (U_B\kappa_{\beta_1,\alpha_3}U_B^\dagger)_{b,b'}=0$.
 \end{proof}
 
 \begin{definition}[Sector tensors]
