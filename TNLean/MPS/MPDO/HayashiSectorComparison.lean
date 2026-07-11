@@ -167,9 +167,9 @@ theorem inverseMap_threeSite_closure_collapse {d D : ℕ}
         K hK R α₁ β₁ α₃ β₃ (finProdFinEquiv (i₂, j₂))
 
 /-- **Expansion of the conjugated physical slice against a closure.** For any
-matrix `U` on the middle site, one tail entry times an entry of the conjugated
+matrix $U$ on the middle site, one tail entry times an entry of the conjugated
 physical slice expands into the outer inverse-map contraction of the state
-conjugated by `U` on the middle site. The finite-sum reordering needed for
+conjugated by $U$ on the middle site. The finite-sum reordering needed for
 both the diagonal and off-diagonal sector computations reduces to this
 identity.
 

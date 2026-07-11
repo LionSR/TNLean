@@ -11,9 +11,9 @@ This file derives the sector factorization of an injective simple MPO tensor
 from the sectorwise inverse-map comparison, following Appendix C.2 of
 arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete), Lemma C.4.
 
-The sectorwise comparison `MPOTensor.inverseMap_hayashi_sector_comparison`
-computes the diagonal Hayashi sectors of the transformed physical slice. Here
-we complete the passage to the factorization identity at lines 1435--1448:
+The sectorwise comparison computes the diagonal Hayashi sectors of the
+transformed physical slice. Here we complete the passage to the factorization
+identity at lines 1435--1448:
 the off-diagonal sectors vanish, and once outer indices with a nonzero tail entry
 are selected, the transformed physical slice splits as a direct sum over
 sectors of tensor products $l_k \otimes r_k$.
