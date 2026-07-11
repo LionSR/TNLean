@@ -9,7 +9,7 @@ import TNLean.MPS.Core.MultiBlock
 # Closed sector tensors and the physical-trace transfer
 
 This file identifies the closed-sector pairing operator of
-arXiv:1606.00608, Appendix C.2, equations lkrk and Tkn, with the
+arXiv:1606.00608, Appendix C.2, lines 1473--1493, with the
 physical-trace transfer of the original tensor.  Consequently the source
 zero-correlation-length condition gives the corresponding pairing operator
 idempotence, up to the positive scalar allowed before canonical
