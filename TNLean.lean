@@ -27,6 +27,7 @@ import TNLean.Algebra.MatrixAux
 import TNLean.Algebra.MatrixGramUnitary
 import TNLean.Algebra.FinSum
 import TNLean.Algebra.ScalarPowerSumIdentity
+import TNLean.Algebra.ConstantPowerSums
 import TNLean.Algebra.UnitModulusPowerSum
 import TNLean.Algebra.FiniteCycleCoboundary
 import TNLean.Algebra.PiTensorProductPhase
@@ -375,6 +376,7 @@ import TNLean.MPS.MPDO.FusionIsometries
 import TNLean.MPS.MPDO.AlgebraStructure
 import TNLean.MPS.MPDO.AlgebraFusionCounterexample
 import TNLean.MPS.MPDO.BNTCoefficients
+import TNLean.MPS.MPDO.LengthIndependentCoefficients
 import TNLean.MPS.MPDO.BNTTheoremData
 import TNLean.MPS.MPDO.BNTTheoremWitness
 import TNLean.MPS.MPDO.BNTTheoremWitnessConsequences

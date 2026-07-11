@@ -458,3 +458,111 @@
     BNT-label trace-power formula.
 \end{proof}
 
+
+\begin{lemma}[Constant power sums have entries zero or one]%
+    \label{lem:constant_power_sum_dichotomy}
+    \lean{le_one_of_forall_sum_pow_eq}
+    \lean{eq_zero_or_eq_one_of_forall_sum_pow_eq}
+    \lean{Complex.eq_zero_or_eq_one_of_forall_sum_pow_eq}
+    \leanok
+    Let $x_1,\dots,x_n$ be nonnegative real numbers whose power sums
+    $\sum_k x_k^L$ take the same value at every exponent $L \ge 1$. Then
+    every $x_k$ equals $0$ or $1$. The same holds for a finite family of
+    complex numbers that are nonnegative in the complex order.
+    Nonnegativity cannot be dropped: the primitive cube roots of unity have
+    power sums invariant under doubling the exponent, yet do not lie in
+    $\{0,1\}$.
+\end{lemma}
+\begin{proof}\leanok
+    If some entry exceeded one, its powers would grow without bound while
+    all other summands stay nonnegative, contradicting constancy of the
+    power sums; hence every entry lies in $[0,1]$. Comparing the exponents
+    one and two gives $\sum_k x_k(1-x_k) = 0$ with nonnegative summands, so
+    each summand vanishes.
+\end{proof}
+
+\begin{definition}[Length-independent coefficients]%
+    \label{def:mpdo_bnt_label_length_independent}
+    \lean{MPOTensor.BNTLabelCoefficientFamily.LengthIndependent}
+    \lean{MPOTensor.BNTLabelCoefficientFamily.LengthIndependent.coeff_eq}
+    \leanok
+    \uses{def:mpdo_bnt_label_coefficient_family}
+    A BNT-label coefficient system $c^{(L)}_{\alpha,\beta,\gamma}$ is
+    \emph{length independent} when
+    $c^{(L)}_{\alpha,\beta,\gamma} = c^{(1)}_{\alpha,\beta,\gamma}$ for
+    every positive chain length $L$ and all labels; equivalently, the
+    coefficients agree at any two positive lengths. This is the case
+    singled out in the discussion following
+    \cite[Theorem~4.14]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Length-independent coefficients are natural numbers]%
+    \label{thm:mpdo_bnt_label_length_independent_natural}
+    \lean{MPOTensor.DiagonalChiFamily.%
+        entry_eq_one_of_posEntries_of_forall_tracePowerCoeff_eq}
+    \lean{MPOTensor.BNTLabelCoefficientFamily.HasPositiveLengthChiTracePowerForm.%
+        entry_eq_one_of_lengthIndependent}
+    \lean{MPOTensor.BNTLabelCoefficientFamily.HasPositiveLengthChiTracePowerForm.%
+        entry_eq_zero_or_eq_one_of_lengthIndependent}
+    \lean{MPOTensor.BNTLabelCoefficientFamily.HasPositiveLengthChiTracePowerForm.%
+        coeff_eq_dim_of_lengthIndependent}
+    \lean{MPOTensor.BNTLabelCoefficientFamily.HasPositiveLengthChiTracePowerForm.%
+        exists_natCast_coeff_of_lengthIndependent}
+    \lean{MPOTensor.PositiveBNTLabelChiTracePowerForm.entry_eq_one_of_lengthIndependent}
+    \lean{MPOTensor.PositiveBNTLabelChiTracePowerForm.coeff_eq_dim_of_lengthIndependent}
+    \leanok
+    \uses{def:mpdo_bnt_label_length_independent,
+        def:mpdo_bnt_label_positive_length_chi_trace_power_form,
+        def:mpdo_positive_bnt_label_chi_trace_power_form,
+        lem:constant_power_sum_dichotomy}
+    Suppose a BNT-label coefficient system is in trace-power form
+    $c^{(L)}_{\alpha,\beta,\gamma}
+        = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{\,L})$
+    with positive diagonal matrices $\chi_{\alpha,\beta,\gamma}$, and is
+    length independent. Then every diagonal entry
+    $\chi_{\alpha,\beta,\gamma,r}$ lies in $\{0,1\}$, as stated in
+    \cite[Section~4.5]{Cirac2016MPDO_arXiv}; by positivity every entry
+    equals one. Consequently, at every positive length the coefficient
+    $c^{(L)}_{\alpha,\beta,\gamma}$ is the size of the diagonal matrix
+    $\chi_{\alpha,\beta,\gamma}$, a natural number.
+\end{theorem}
+\begin{proof}\leanok
+    For fixed labels, the trace-power form turns length independence into
+    constancy of the power sums of the diagonal entries of
+    $\chi_{\alpha,\beta,\gamma}$, so by
+    Lemma~\ref{lem:constant_power_sum_dichotomy} every entry equals $0$ or
+    $1$, and positivity excludes $0$. The trace of
+    $\chi_{\alpha,\beta,\gamma}^{\,L}$ is then the number of diagonal
+    entries.
+\end{proof}
+
+\begin{theorem}[Unit entries give length independence]%
+    \label{thm:mpdo_bnt_label_length_independent_of_unit_entries}
+    \lean{MPOTensor.DiagonalChiFamily.tracePowerCoeff_eq_dim_of_forall_entry_eq_one}
+    \lean{MPOTensor.BNTLabelCoefficientFamily.HasPositiveLengthChiTracePowerForm.%
+        lengthIndependent_of_forall_entry_eq_one}
+    \leanok
+    \uses{def:mpdo_bnt_label_length_independent,
+        def:mpdo_bnt_label_positive_length_chi_trace_power_form}
+    If a BNT-label coefficient system is in trace-power form with respect
+    to a diagonal $\chi$-family all of whose entries equal one, then it is
+    length independent: at every positive length each coefficient equals
+    the size of the corresponding diagonal matrix.
+\end{theorem}
+\begin{proof}\leanok
+    The power sums of a family of ones do not depend on the exponent.
+\end{proof}
+
+\begin{remark}[Topological order and an open question]%
+    \label{rem:mpdo_bnt_label_length_independent_topological}
+    Starting from the same-length product law and the idempotent condition,
+    in the particular case of natural-number structure coefficients
+    independent of the length, one recovers all known non-chiral
+    topologically ordered phases together with a description of their
+    excitations \cite{Bultinck2017Anyons}. The renormalization fixed-point
+    density operators correspond to the boundary theories of the
+    renormalization fixed-point representatives of those phases, which
+    yields a large family of non-trivial examples. Whether there exist
+    renormalization fixed points whose structure coefficients depend on the
+    length is left open in \cite[Section~4.5]{Cirac2016MPDO_arXiv}.
+\end{remark}
