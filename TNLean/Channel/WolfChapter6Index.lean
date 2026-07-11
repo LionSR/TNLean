@@ -303,7 +303,7 @@ What is still missing for the full Wolf statement is the identification of
 the ambient fixed-point space with the zero-block form and the density-block
 refinement with matrices `ρ_k` for the Schrödinger-picture fixed points.
 
-### Wolf Corollary 6.7 (faithful fixed-point conjugation) — FORMALIZED
+### Wolf Corollary 6.7 (faithful fixed-point conjugation) — PARTIALLY FORMALIZED
 
 In `TNLean.Channel.FixedPoint.Corollaries`:
 
