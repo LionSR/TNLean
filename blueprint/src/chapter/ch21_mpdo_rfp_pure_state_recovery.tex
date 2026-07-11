@@ -61,6 +61,46 @@
     \]
 \end{proof}
 
+\begin{definition}[State-preparation map]
+    \label{def:mpdo_state_preparation_map}
+    \lean{Matrix.preparationMap}
+    \leanok
+    \uses{def:is_kraus_cptp}
+    Let $\rho$ be a matrix on a finite-dimensional space $B$.  The
+    state-preparation map from matrices on $A$ to matrices on $A\otimes B$ is
+    \[
+        \mathcal P_\rho(X)=X\otimes\rho.
+    \]
+    This is the elementary preparation operation used in the maps
+    $\mathcal T_1$ and $\mathcal S_1$ of
+    \cite[Appendix~C.2, lines~1527--1533 and~1551--1555]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{lemma}[State preparation is trace-preserving completely positive]
+    \label{lem:mpdo_state_preparation_cptp}
+    \lean{Matrix.preparationMap_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_state_preparation_map, def:is_kraus_cptp}
+    If $\rho\geq0$ and $\tr(\rho)=1$, then
+    $\mathcal P_\rho:X\mapsto X\otimes\rho$ is trace-preserving completely
+    positive.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Let $R=\sqrt\rho$.  For an orthonormal basis $(e_j)_j$ of $B$, define
+    rectangular Kraus operators
+    \[
+        A_j(e_a)=e_a\otimes Re_j.
+    \]
+    Then
+    \[
+        \sum_j A_jXA_j^\dagger=X\otimes RR=X\otimes\rho,
+        \qquad
+        \sum_j A_j^\dagger A_j=\tr(RR)I_A=I_A.
+    \]
+\end{proof}
+
 \begin{definition}[One- and two-site physical closure maps]
     \label{def:phys_close}
     \lean{MPOTensor.physClose1, MPOTensor.physClose2}
