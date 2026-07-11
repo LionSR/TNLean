@@ -60,7 +60,7 @@ local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
 /-- The support projection absorbs the square root from the left:
 $Q \sqrt{\rho} = \sqrt{\rho}$. -/
-private theorem stationaryProj_mul_cfc_sqrt {ρ : Mat} (hρ_psd : ρ.PosSemidef) :
+theorem stationaryProj_mul_cfc_sqrt {ρ : Mat} (hρ_psd : ρ.PosSemidef) :
     stationaryProj hρ_psd * CFC.sqrt ρ = CFC.sqrt ρ := by
   set Q : Mat := stationaryProj hρ_psd with hQdef
   set S : Mat := CFC.sqrt ρ with hSdef
@@ -85,7 +85,7 @@ private theorem stationaryProj_mul_cfc_sqrt {ρ : Mat} (hρ_psd : ρ.PosSemidef)
 
 /-- The support projection absorbs the square root from the right:
 $\sqrt{\rho}\, Q = \sqrt{\rho}$. -/
-private theorem cfc_sqrt_mul_stationaryProj {ρ : Mat} (hρ_psd : ρ.PosSemidef) :
+theorem cfc_sqrt_mul_stationaryProj {ρ : Mat} (hρ_psd : ρ.PosSemidef) :
     CFC.sqrt ρ * stationaryProj hρ_psd = CFC.sqrt ρ := by
   have hQherm : (stationaryProj hρ_psd)ᴴ = stationaryProj hρ_psd :=
     (isOrthogonalProjection_stationaryProj hρ_psd).1.eq
@@ -95,7 +95,7 @@ private theorem cfc_sqrt_mul_stationaryProj {ρ : Mat} (hρ_psd : ρ.PosSemidef)
 
 /-- Conjugation by $\sqrt{\rho}$ lands in the corner: the matrix
 $\sqrt{\rho}\, Y \sqrt{\rho}$ is supported on the support of $\rho$. -/
-private theorem sqrt_conj_supported {ρ : Mat} (hρ_psd : ρ.PosSemidef) (Y : Mat) :
+theorem sqrt_conj_supported {ρ : Mat} (hρ_psd : ρ.PosSemidef) (Y : Mat) :
     stationaryProj hρ_psd * (CFC.sqrt ρ * Y * CFC.sqrt ρ) * stationaryProj hρ_psd =
       CFC.sqrt ρ * Y * CFC.sqrt ρ := by
   calc stationaryProj hρ_psd * (CFC.sqrt ρ * Y * CFC.sqrt ρ) * stationaryProj hρ_psd
@@ -107,7 +107,7 @@ private theorem sqrt_conj_supported {ρ : Mat} (hρ_psd : ρ.PosSemidef) (Y : Ma
 /-- The square root compresses along an isometry onto the support:
 $\sqrt{V^{\dagger} \rho V} = V^{\dagger} \sqrt{\rho}\, V$ for $V$ with
 $V^{\dagger} V = \mathbf{1}$ and $V V^{\dagger} = Q$ the support projection of $\rho$. -/
-private theorem cfc_sqrt_compression {ρ : Mat} (hρ_psd : ρ.PosSemidef)
+theorem cfc_sqrt_compression {ρ : Mat} (hρ_psd : ρ.PosSemidef)
     {r : ℕ} {V : Matrix (Fin D) (Fin r) ℂ}
     (hVVt : V * Vᴴ = stationaryProj hρ_psd) :
     CFC.sqrt (Vᴴ * ρ * V) = Vᴴ * CFC.sqrt ρ * V := by
@@ -123,7 +123,7 @@ private theorem cfc_sqrt_compression {ρ : Mat} (hρ_psd : ρ.PosSemidef)
 
 /-! ## Compression of the weighted fixed-point condition to the support sector -/
 
-/-- Compression onto the support sector, packaged for the weighted corner statements: a
+/-- Compression onto the support sector for the weighted corner statements: a
 trace-preserving compressed family with a positive definite fixed point, the compression
 identity for the square root, the transport identity for conjugation by the square root,
 and the correspondence between the ambient and compressed fixed-point equations for
