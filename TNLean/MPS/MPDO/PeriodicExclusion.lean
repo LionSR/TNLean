@@ -12,11 +12,11 @@ This file formalizes the periodic-sector step in the proof of
 Proposition 4.13 of arXiv:1606.00608, lines 1888--1893.  If the vertically
 viewed tensor of a tensor generating matrix product density operators had a
 nontrivial $p$-periodic vector, the source asserts that there would be an
-orthogonal projector $Q$ with
+orthogonal projector $Q$ satisfying, for every $N$,
 $$
-  QH^{(N)}\ne H^{(N)}Q \text{ for all } N,
+  QH^{(N)}\ne H^{(N)}Q,
   \qquad
-  Q\bigl[H^{(N)}\bigr]^p=\bigl[H^{(N)}\bigr]^pQ \text{ for all } N
+  Q\bigl[H^{(N)}\bigr]^p=\bigl[H^{(N)}\bigr]^pQ
 $$
 (eq2:proof.IV.12).  Since every $H^{(N)}$ is positive semidefinite, the second
 family of identities forces $QH^{(N)}=H^{(N)}Q$, contradicting the first.
@@ -30,7 +30,7 @@ implication from a nontrivial $p$-periodic vector to such a projector — which
 the source asserts from the general theory of the peripheral spectrum of
 completely positive maps at lines 1889--1891 — is stated as the hypothesis
 `PeriodicVectorYieldsProjector`; its derivation from the cyclic decomposition
-of the peripheral spectrum (Wolf, Theorem 6.6) applied to the vertical
+of the peripheral spectrum (Wolf 2012, Theorem 6.6) applied to the vertical
 transfer map remains open.  Granted that hypothesis,
 `hasNoPeriodicVectors_verticalTensor` concludes that the vertically viewed
 tensor has no nontrivial $p$-periodic vectors.
@@ -58,7 +58,7 @@ tensor has no nontrivial $p$-periodic vectors.
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 6.6]
 -/
 
-open scoped Matrix BigOperators ComplexOrder
+open scoped Matrix ComplexOrder
 
 namespace MPOTensor
 
@@ -84,6 +84,9 @@ structure PeriodicSectorProjector (M : MPOTensor d D) (p : ℕ) where
   /-- $Q$ is idempotent (arXiv:1606.00608, line 1889: $Q$ is an orthogonal
   projector). -/
   isIdempotentElem : IsIdempotentElem Q
+  /-- The exponent is positive: the source's $p$ is the period of a
+  nontrivial $p$-periodic vector (arXiv:1606.00608, lines 227 and 1889). -/
+  p_ne_zero : p ≠ 0
   /-- $QH^{(N)}\ne H^{(N)}Q$ at every length (arXiv:1606.00608, line 1889). -/
   not_commute : ∀ N : ℕ, ¬ Commute (firstSiteMatrix Q N) (mpo M (N + 1))
   /-- $Q[H^{(N)}]^p=[H^{(N)}]^pQ$ at every length (eq2:proof.IV.12,
@@ -97,9 +100,9 @@ $QH^{(N)}\ne H^{(N)}Q$.  This is the contradiction concluding the
 periodic-sector step in the proof of Proposition 4.13 of arXiv:1606.00608,
 lines 1892--1893. -/
 theorem isEmpty_periodicSectorProjector (M : MPOTensor d D) (hM : IsMPDO M)
-    {p : ℕ} (hp : p ≠ 0) : IsEmpty (PeriodicSectorProjector M p) :=
+    {p : ℕ} : IsEmpty (PeriodicSectorProjector M p) :=
   ⟨fun QP => QP.not_commute 0
-    (mpo_commute_of_commute_pow M hM 1 hp (QP.commute_pow 0))⟩
+    (mpo_commute_of_commute_pow M hM 1 QP.p_ne_zero (QP.commute_pow 0))⟩
 
 /-- **Hypothesis** (arXiv:1606.00608, lines 1889--1891): every nontrivial
 $p$-periodic vector of the vertically viewed tensor supplies a
@@ -112,16 +115,18 @@ modulus $r$ different from $r$.
 
 The source asserts this implication from the general theory of the
 peripheral spectrum of completely positive maps, with the exponent of the
-projector equal to the period $p$ of the vector; only the existence of some
-nonzero exponent enters the exclusion argument, so the exponent is left
-unconstrained here.  The intended derivation
-applies the cyclic decomposition of the peripheral spectrum (Wolf,
+projector equal to the period $p$ of the vector; only the existence of a
+projector with some positive exponent enters the exclusion argument, so the
+exponent is not tied to the period here.  The intended derivation
+applies the cyclic decomposition of the peripheral spectrum (Wolf 2012,
 Theorem 6.6) to the vertical transfer map: the cyclic projections of a
 period-$p$ sector are permuted by one vertical layer, hence fail to commute
 with $H^{(N)}$, while remaining invariant for $p$ stacked layers, whose
 density operator is $[H^{(N)}]^p$; invariance then gives commutation with
 $[H^{(N)}]^p$ by the argument of eq1:proof.IV.12 (lines 1874--1887) applied
-to the stacked tensor.  This derivation remains open. -/
+to the stacked tensor.  This derivation remains open; the gap between this
+hypothesis and the source's unconditional assertion is recorded in
+`docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`. -/
 def PeriodicVectorYieldsProjector (M : MPOTensor d D) : Prop :=
   ∀ ⦃n : ℕ⦄ (V : Matrix (Fin d) (Fin n) ℂ) (B : MPSTensor (D * D) n)
     (ρ : Matrix (Fin n) (Fin n) ℂ) (r : ℝ),
@@ -131,7 +136,7 @@ def PeriodicVectorYieldsProjector (M : MPOTensor d D) : Prop :=
     ∀ μ : ℂ,
       Module.End.HasEigenvalue (MPSTensor.transferMap (d := D * D) (D := n) B) μ →
       ‖μ‖ = r → μ ≠ (r : ℂ) →
-      ∃ p : ℕ, p ≠ 0 ∧ Nonempty (PeriodicSectorProjector M p)
+      ∃ p : ℕ, Nonempty (PeriodicSectorProjector M p)
 
 /-- The vertically viewed tensor of a matrix product density operator has no
 nontrivial $p$-periodic vectors, granted that periodic vectors supply
@@ -139,13 +144,18 @@ periodic-sector projectors.  This is the periodic-sector step in the proof
 of Proposition 4.13 of arXiv:1606.00608, lines 1888--1893: a nontrivial
 $p$-periodic vector would supply an orthogonal projector with the
 commutation identities eq2:proof.IV.12, and positive semidefiniteness of the
-density operators rules such a projector out. -/
+density operators rules such a projector out.
+
+**Scope restriction (conditional on the supplied projector):** the source
+proves this step outright, drawing the projector from the general theory of
+the peripheral spectrum; here that implication is the explicit hypothesis.
+Recorded in `docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`. -/
 theorem hasNoPeriodicVectors_verticalTensor (M : MPOTensor d D)
     (hM : IsMPDO M) (hYield : PeriodicVectorYieldsProjector M) :
     MPSTensor.HasNoPeriodicVectors (verticalTensor M) := by
   intro n V B ρ r hV hint hirr hρ hr hfix μ hμ hnorm
   by_contra hne
-  obtain ⟨p, hp, ⟨QP⟩⟩ := hYield V B ρ r hV hint hirr hρ hr hfix μ hμ hnorm hne
-  exact (isEmpty_periodicSectorProjector M hM hp).false QP
+  obtain ⟨p, ⟨QP⟩⟩ := hYield V B ρ r hV hint hirr hρ hr hfix μ hμ hnorm hne
+  exact (isEmpty_periodicSectorProjector M hM).false QP
 
 end MPOTensor

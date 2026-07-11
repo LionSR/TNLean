@@ -474,8 +474,8 @@
     \lean{MPOTensor.PeriodicSectorProjector}
     \leanok
     \uses{def:mpo_tensor, def:mpo_family, def:mpdo_vertical_one_site_actions}
-    Let $M$ be an MPO tensor and let $p\ge 1$.  A \emph{periodic-sector
-    projector} for $M$ with exponent $p$ is an orthogonal projector $Q$ on
+    Let $M$ be an MPO tensor.  A \emph{periodic-sector projector} for $M$
+    with exponent $p\ge 1$ is an orthogonal projector $Q$ on
     the physical space such that for every $N\ge 0$, with
     $Q_1=Q\otimes\Id^{\otimes N}$ acting on the first site,
     \[
@@ -496,8 +496,8 @@
     \leanok
     \uses{def:mpdo, def:mpdo_periodic_sector_projector,
         thm:psd_commute_of_commute_pow}
-    Let $M$ generate matrix product density operators.  Then for no $p\ge 1$
-    does $M$ admit a periodic-sector projector with exponent $p$.
+    Let $M$ generate matrix product density operators.  Then $M$ admits no
+    periodic-sector projector.
 \end{theorem}
 
 \begin{proof}
@@ -531,6 +531,7 @@
     vector; only the existence of some exponent enters the exclusion
     argument.  The derivation of the projector from the cyclic decomposition
     of the peripheral spectrum remains open.
+    % Gap recorded in docs/paper-gaps/cpgsv17_periodic_sector_projector.tex.
 \end{definition}
 
 \begin{theorem}[No periodic vectors in the vertical direction]
@@ -547,6 +548,7 @@
     \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}, lines 1888--1893, granted
     the projector that the source draws from the general theory of the
     peripheral spectrum.
+    % Gap recorded in docs/paper-gaps/cpgsv17_periodic_sector_projector.tex.
 \end{theorem}
 
 \begin{proof}
