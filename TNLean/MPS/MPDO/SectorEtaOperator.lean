@@ -215,4 +215,108 @@ theorem mpo_submatrix_sector_eq_cyclicEtaTensorProduct
   rw [mps_evalWord_ofFn_prod] at h
   simpa only [id_eq] using h
 
+/-- Distinct sector configurations give a vanishing closed word. A site where
+the sector labels differ contributes a zero local matrix, so every cyclic
+virtual-index product vanishes.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1446--1464. -/
+theorem trace_conjugatePhysical_sector_word_eq_zero_of_ne
+    (K : MPOTensor d D) (hη : EtaStructure ρ)
+    (l : (q : Fin hη.m) → Fin D →
+      Matrix (Fin (hη.dL q)) (Fin (hη.dL q)) ℂ)
+    (r : (q : Fin hη.m) → Fin D →
+      Matrix (Fin (hη.dR q)) (Fin (hη.dR q)) ℂ)
+    (hfactor : ∀ β α,
+      Matrix.reindex hη.decompB hη.decompB
+          ((hη.U_B : Matrix (Fin d) (Fin d) ℂ) * physicalSlice K β α *
+            (hη.U_B : Matrix (Fin d) (Fin d) ℂ)ᴴ)
+        = Matrix.blockDiagonal' fun q =>
+            Matrix.kroneckerMap (· * ·) (l q β) (r q α))
+    {N : ℕ} [NeZero N] (k h : Fin N → Fin hη.m)
+    (x : SectorFiber hη k) (y : SectorFiber hη h) (hne : k ≠ h) :
+    Matrix.trace (MPSTensor.evalWord
+        (fun n : Fin N =>
+          conjugatePhysical K hη.U_B
+            (hη.decompB.symm ⟨k n, x n⟩)
+            (hη.decompB.symm ⟨h n, y n⟩))
+        (List.ofFn id)) = 0 := by
+  obtain ⟨n, hn⟩ := Function.ne_iff.mp hne
+  have hlocal :
+      conjugatePhysical K hη.U_B
+        (hη.decompB.symm ⟨k n, x n⟩)
+        (hη.decompB.symm ⟨h n, y n⟩) =
+      (0 : Matrix (Fin D) (Fin D) ℂ) := by
+    ext β α
+    simp only [Matrix.zero_apply, conjugatePhysical_apply]
+    have hentry := congrFun (congrFun (hfactor β α)
+      ⟨k n, x n⟩) ⟨h n, y n⟩
+    simpa [Matrix.reindex_apply,
+      Matrix.blockDiagonal'_apply_ne _ _ _ hn] using hentry
+  rw [MPSTensor.trace_evalWord_eq_sum_cyclic]
+  apply Finset.sum_eq_zero
+  intro g hg
+  apply Finset.prod_eq_zero (Finset.mem_univ n)
+  simp only [id_eq, hlocal, Matrix.zero_apply]
+
+/-- **Sector-adapted form of the basis-conjugated MPO.** In the chain basis
+which records a sector label and its left--right index at every site, the
+$N$-site operator is the direct sum over sector configurations of the cyclic
+tensor products of the neighboring operators.
+
+No positivity of the individual neighboring operators is used or asserted.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1446--1464. -/
+theorem mpo_reindex_sectorChainEquiv_eq_blockDiagonal_cyclicEta
+    (K : MPOTensor d D) (hη : EtaStructure ρ)
+    (l : (q : Fin hη.m) → Fin D →
+      Matrix (Fin (hη.dL q)) (Fin (hη.dL q)) ℂ)
+    (r : (q : Fin hη.m) → Fin D →
+      Matrix (Fin (hη.dR q)) (Fin (hη.dR q)) ℂ)
+    (hfactor : ∀ β α,
+      Matrix.reindex hη.decompB hη.decompB
+          ((hη.U_B : Matrix (Fin d) (Fin d) ℂ) * physicalSlice K β α *
+            (hη.U_B : Matrix (Fin d) (Fin d) ℂ)ᴴ)
+        = Matrix.blockDiagonal' fun q =>
+            Matrix.kroneckerMap (· * ·) (l q β) (r q α))
+    {N : ℕ} [NeZero N] :
+    Matrix.reindex (sectorChainEquiv hη N) (sectorChainEquiv hη N)
+        (mpo (conjugatePhysical K hη.U_B) N) =
+      Matrix.blockDiagonal' fun k =>
+        cyclicEtaTensorProduct hη (etaOfSectorTensors hη l r) k := by
+  ext s t
+  obtain ⟨k, x⟩ := s
+  obtain ⟨h, y⟩ := t
+  have hx :
+      (sectorChainEquiv hη N).symm ⟨k, x⟩ =
+        fun n => hη.decompB.symm ⟨k n, x n⟩ := by
+    funext n
+    rfl
+  have hy :
+      (sectorChainEquiv hη N).symm ⟨h, y⟩ =
+        fun n => hη.decompB.symm ⟨h n, y n⟩ := by
+    funext n
+    rfl
+  by_cases hkh : k = h
+  · subst h
+    rw [Matrix.blockDiagonal'_apply_eq]
+    have hblock := congrFun (congrFun
+      (mpo_submatrix_sector_eq_cyclicEtaTensorProduct
+        K hη l r hfactor k) x) y
+    change mpo (conjugatePhysical K hη.U_B) N
+        ((sectorChainEquiv hη N).symm ⟨k, x⟩)
+        ((sectorChainEquiv hη N).symm ⟨k, y⟩) = _
+    rw [hx, hy]
+    exact hblock
+  · rw [Matrix.blockDiagonal'_apply_ne _ _ _ hkh]
+    change mpo (conjugatePhysical K hη.U_B) N
+        ((sectorChainEquiv hη N).symm ⟨k, x⟩)
+        ((sectorChainEquiv hη N).symm ⟨h, y⟩) = 0
+    rw [hx, hy]
+    simp only [mpo_apply, mpoMatrixEntry,
+      MPOTensor.evalWord_ofFn]
+    have hzero := trace_conjugatePhysical_sector_word_eq_zero_of_ne
+      K hη l r hfactor k h x y hkh
+    rw [mps_evalWord_ofFn_prod] at hzero
+    simpa only [id_eq] using hzero
+
 end MPOTensor
