@@ -59,6 +59,7 @@ _DIAGRAM_ARGS: dict[str, str] = {
     "TNMPDOSectorPairing": "",
     "TNMPDOSectorZCLIdentity": "",
     "TNMPDONormalizedFourSiteTail": "",
+    "TNMPDOHayashiSectorComparison": "",
     "TNMPDOLocalOrthogonality": "",
     "TNGaugeConjugation": "left physical right",
     "TNPhysicalRealization": "virtual physical",
