@@ -196,6 +196,26 @@ lines 1434--1438.
 \leanid{MPOTensor.physicalSlice_sector_factorization}, and
 \leanid{MPOTensor.exists_physicalSlice_sector_factorization}.}
 
+The neighboring operators are now assembled from these sector tensors.  The
+operator
+\[
+  \eta_{k,h}=\sum_{\gamma}(r_k)_{\gamma}\otimes(l_h)_{\gamma}
+\]
+acts on the neighboring bond space, the bond contraction of two neighboring
+factorized slices exhibits $\eta_{k,h}$ between the outer sector tensors, and
+its trace is the pairing $T_{k,h}=\tr(\eta_{k,h})=(r_k|l_h)$ of the closed
+sector tensors obtained by tracing the physical legs.\footnote{The formal
+declarations are \leanid{MPOTensor.sectorEta},
+\leanid{MPOTensor.physicalSlice_neighboring_contraction},
+\leanid{MPOTensor.closedSectorL}, \leanid{MPOTensor.closedSectorR},
+\leanid{MPOTensor.trace_sectorEta}, and
+\leanid{MPOTensor.ExplicitEtaOperators.ofSectorTensors}.}  The source derives
+positivity of the $\eta_{k,h}$ from the all-length projected chain identity at
+lines 1446--1450, choosing the sector tensors so that each factor is positive
+semidefinite; until that identity is available, positive semidefiniteness of
+the chosen representatives enters the construction of the explicit
+$\eta$-data as a hypothesis.
+
 The Hayashi decomposition of the concrete closure state is now formalized for
 the four-site chain.  Independent bijections on the three tensor factors
 preserve equality in strong subadditivity: each marginal is carried to the
@@ -214,12 +234,12 @@ the source statement simultaneously for arbitrary chain length.
 \leanid{isSSAEquality_submatrix_prodEquiv} and
 \leanid{MPOTensor.exists_etaStructure_reducedBlockState_of_isSAL}.}
 
-The next missing results assemble the neighboring operators $\eta_{k,h}$ from
-the sector tensors above, prove their all-length cyclic contraction identity,
-and establish primitivity of the sector trace matrix.  The four-site
-decomposition now supplies the Hayashi witness required by the concrete sector
-factorization; these remaining assertions are the passage from that local
-factorization to the source identity at every chain length.
+The next missing results are the all-length cyclic contraction identity of
+the neighboring operators, the positivity choice above, and primitivity of
+the sector trace matrix.  The four-site decomposition now supplies the
+Hayashi witness required by the concrete sector factorization; these
+remaining assertions are the passage from that local factorization to the
+source identity at every chain length.
 
 The canonical family
 \leanid{MPOTensor.ExplicitEtaOperators.ofHayashiMarkov} does not supply this

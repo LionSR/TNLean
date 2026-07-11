@@ -702,9 +702,9 @@ strong subadditivity for a normalized three-site reduced state.
         U_B\,\kappa_{\beta_1,\alpha_3}\,U_B^\dagger
         =\bigoplus_k (l_k)_{\beta_1}\otimes(r_k)_{\alpha_3}.
     \]
-    The remaining steps of
-    \cite[Appendix~C.2, Lemma~C.4]{Cirac2016MPDO_arXiv} assemble the
-    neighboring operators $\eta_{k,h}$ from these tensors and prove the
+    The neighboring operators $\eta_{k,h}$ are assembled from these tensors
+    in Definition~\ref{def:mpdo_sector_eta}; the remaining steps of
+    \cite[Appendix~C.2, Lemma~C.4]{Cirac2016MPDO_arXiv} prove the
     all-length identity and primitivity.
 \end{theorem}
 
@@ -714,6 +714,110 @@ strong subadditivity for a normalized three-site reduced state.
         thm:mpdo_normalized_four_site_tail_entry_ne_zero}
     A nonzero four-site trace supplies outer indices with
     $(R_4)_{\beta_3,\alpha_1}\ne0$, and the sector factorization applies.
+\end{proof}
+
+\begin{definition}[Neighboring operators]%
+    \label{def:mpdo_sector_eta}
+    \lean{MPOTensor.sectorEta}
+    \leanok
+    \uses{def:mpdo_sector_tensors}
+    Fix outer virtual indices $\alpha_1,\beta_3$ with the chosen Hayashi
+    decomposition, and let $l_k,r_k$ be the sector tensors of
+    Definition~\ref{def:mpdo_sector_tensors}. For each pair of sectors
+    $(k,h)$, the neighboring operator contracts the right sector tensor of
+    one site with the left sector tensor of the following site over the
+    virtual bond they share:
+    \[
+        \eta_{k,h}=\sum_{\gamma}(r_k)_{\gamma}\otimes(l_h)_{\gamma}.
+    \]
+    It acts on the neighboring bond space $B_k^{R}\otimes B_h^{L}$
+    (Figure~\ref{fig:mpdo_eta_sector_decomposition}). This is the operator
+    displayed in
+    \cite[Appendix~C.2, lines~1441--1445]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Neighboring bond contraction]
+    \label{thm:mpdo_neighboring_bond_contraction}
+    \lean{MPOTensor.physicalSlice_neighboring_contraction}
+    \leanok
+    \uses{def:mpdo_sector_eta}
+    In the setting of Theorem~\ref{thm:mpdo_sector_factorization}, for all
+    sectors $k,h$ and virtual indices $\beta_1,\alpha_3$, contracting the
+    shared virtual bond of two neighboring factorized slices leaves the
+    neighboring operator between the outer sector tensors:
+    \[
+        \sum_{\gamma}
+        \left[U_B\kappa_{\beta_1,\gamma}U_B^\dagger
+        \right]_{(k,l_1,r_1),(k,l_1',r_1')}
+        \left[U_B\kappa_{\gamma,\alpha_3}U_B^\dagger
+        \right]_{(h,l_2,r_2),(h,l_2',r_2')}
+        =
+        \left[(l_k)_{\beta_1}\right]_{l_1,l_1'}
+        \left[\eta_{k,h}\right]_{(r_1,l_2),(r_1',l_2')}
+        \left[(r_h)_{\alpha_3}\right]_{r_2,r_2'}.
+    \]
+    This is the single-bond step of the identity assembling
+    $\bigotimes_{n}\eta_{k_n,k_{n+1}}$ from the factorized chain in
+    \cite[Appendix~C.2, lines~1446--1449]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_sector_factorization}
+    Substituting the sector factorization
+    (Theorem~\ref{thm:mpdo_sector_factorization}) into each slice, the
+    outer sector tensors decouple from the bond sum, and the inner sum over
+    the shared bond $\gamma$ reads
+    \[
+        \sum_{\gamma}\bigl[(r_k)_{\gamma}\bigr]_{r_1,r_1'}\,
+        \bigl[(l_h)_{\gamma}\bigr]_{l_2,l_2'}
+        =\bigl[\eta_{k,h}\bigr]_{(r_1,l_2),(r_1',l_2')}
+    \]
+    by definition of the neighboring operator.
+\end{proof}
+
+\begin{definition}[Closed sector tensors]%
+    \label{def:mpdo_closed_sector_tensors}
+    \lean{MPOTensor.closedSectorL}
+    \lean{MPOTensor.closedSectorR}
+    \leanok
+    \uses{def:mpdo_sector_tensors}
+    Tracing the two physical legs of a sector tensor leaves a vector over
+    the virtual bond:
+    \[
+        |l_k)_{\gamma}:=\tr\left[(l_k)_{\gamma}\right],
+        \qquad
+        (r_k|_{\gamma}:=\tr\left[(r_k)_{\gamma}\right].
+    \]
+    These are the closed tensors displayed in
+    \cite[Appendix~C.2, lines~1473--1477]{Cirac2016MPDO_arXiv} and depicted
+    in Figure~\ref{fig:mpdo_sector_pairing}.
+\end{definition}
+
+\begin{theorem}[Sector trace pairing]
+    \label{thm:mpdo_sector_trace_pairing}
+    \lean{MPOTensor.trace_sectorEta}
+    \leanok
+    \uses{def:mpdo_sector_eta, def:mpdo_closed_sector_tensors}
+    For all sectors $k,h$, the trace of the neighboring operator is the
+    pairing of the closed sector tensors:
+    \[
+        T_{k,h}=\tr(\eta_{k,h})=(r_k|l_h).
+    \]
+    This is \cite[Appendix~C.2, lines~1452--1455
+    and~1478--1481]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Expanding the definition of the neighboring operator and applying
+    $\tr(A\otimes B)=\tr(A)\,\tr(B)$,
+    \[
+        \tr(\eta_{k,h})
+        =\sum_{\gamma}\tr\bigl((r_k)_{\gamma}\otimes(l_h)_{\gamma}\bigr)
+        =\sum_{\gamma}\tr[(r_k)_{\gamma}]\,\tr[(l_h)_{\gamma}]
+        =(r_k|l_h).
+    \]
 \end{proof}
 
 \begin{definition}[Explicit neighboring $\eta$-operator data]
@@ -762,6 +866,53 @@ strong subadditivity for a normalized three-site reduced state.
     \cite[Appendix~C.2, lines~1474--1481]{Cirac2016MPDO_arXiv}.}
     \label{fig:mpdo_sector_pairing}
 \end{figure}
+
+\begin{definition}[Explicit $\eta$-data from the sector tensors]%
+    \label{def:mpdo_explicit_eta_of_sector_tensors}
+    \lean{MPOTensor.ExplicitEtaOperators.ofSectorTensors}
+    \leanok
+    \uses{def:mpdo_sector_eta, def:mpdo_explicit_eta_operators}
+    If every neighboring operator $\eta_{k,h}$ of
+    Definition~\ref{def:mpdo_sector_eta} is positive semidefinite, the
+    family constitutes explicit neighboring $\eta$-data. The source obtains
+    the positivity from the projected chain identity: writing
+    $\tilde\sigma
+    = U^{\dagger\otimes N}\,\sigma^{(N)}({\cal K})\,U^{\otimes N}$
+    for the $N$-site operator in the sector basis and $Q_k$ for the
+    projector onto the $k$-th sector of the physical splitting, every
+    cyclic sector assignment $k_1,\ldots,k_N$ (with $k_{N+1}=k_1$) satisfies
+    \[
+        0\le\bigl[Q_{k_1}\otimes\cdots\otimes Q_{k_N}\bigr]\,\tilde\sigma\,
+        \bigl[Q_{k_1}\otimes\cdots\otimes Q_{k_N}\bigr]
+        =\bigotimes_{n=1}^{N}\eta_{k_n,k_{n+1}},
+    \]
+    and the sector tensors can be chosen so that each factor is positive
+    semidefinite \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv}.
+    That all-length identity is a remaining step of Lemma~C.4, so positivity
+    enters here as a hypothesis on the chosen representatives.
+\end{definition}
+
+\begin{theorem}[Trace matrix of the sector-tensor $\eta$-data]
+    \label{thm:mpdo_sector_eta_data_trace_matrix}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrix_ofSectorTensors}
+    \leanok
+    \uses{def:mpdo_explicit_eta_of_sector_tensors,
+        def:mpdo_explicit_eta_trace_matrix, def:mpdo_closed_sector_tensors}
+    Under the hypotheses of
+    Definition~\ref{def:mpdo_explicit_eta_of_sector_tensors}, the trace
+    matrix of the explicit $\eta$-data is the pairing of the closed sector
+    tensors:
+    \[
+        T_{k,h}=\tr(\eta_{k,h})=(r_k|l_h).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_sector_trace_pairing}
+    Immediate from Theorem~\ref{thm:mpdo_sector_trace_pairing} and the
+    definition of the trace matrix.
+\end{proof}
 
 % The local-orthogonality contraction is stated from arXiv:1606.00608,
 % Appendix C.2, lines 1466--1469 (the display following the sector
