@@ -274,10 +274,11 @@ This is the block representation of a finite-dimensional star-algebra of
 *Quantum Channels & Operations* (Wolf 2012), Eq. (1.39), invoked by Theorem 6.14, in the
 unital case: a star-subalgebra contains the identity, so there is no zero block. The
 containment of $S$ in the block algebra is the adapted-basis representation of
-`StarSubalgebra.exists_adapted_orthonormalBasis`; the reverse inclusion holds because a
-matrix that is block diagonal in the adapted basis commutes with the commutant of $S$
-(`StarSubalgebra.exists_commutant_coeff`) and therefore belongs to $S$ by the
-double-commutant criterion (`StarSubalgebra.mem_of_forall_comm`). -/
+`StarSubalgebra.exists_adapted_orthonormalBasis`, conjugated by the unitary change of basis
+of `StarSubalgebra.exists_unitary_conj_blockDiagonal_of_orthonormalBasis`; the reverse
+inclusion holds because a matrix that is block diagonal in the adapted basis commutes with
+the commutant of $S$ (`StarSubalgebra.exists_commutant_coeff`) and therefore belongs to $S$
+by the double-commutant criterion (`StarSubalgebra.mem_of_forall_comm`). -/
 theorem exists_unitary_conj_blockDiagonal_iff :
     ∃ (K : ℕ) (d m : Fin K → ℕ) (e : ((k : Fin K) × (Fin (m k) × Fin (d k))) ≃ n)
       (U : Matrix n n ℂ), U ∈ Matrix.unitaryGroup n ℂ ∧ (∀ k, 0 < d k) ∧ (∀ k, 0 < m k) ∧
@@ -288,68 +289,8 @@ theorem exists_unitary_conj_blockDiagonal_iff :
                 (1 : Matrix (Fin (m k)) (Fin (m k)) ℂ) ⊗ₖ B k) := by
   classical
   obtain ⟨K, d, m, b, hd, hm, hirr, hcross, hact⟩ := S.exists_adapted_orthonormalBasis
-  set s : OrthonormalBasis n ℂ (EuclideanSpace ℂ n) := EuclideanSpace.basisFun n ℂ with hs
-  set e : ((k : Fin K) × (Fin (m k) × Fin (d k))) ≃ n := b.toBasis.indexEquiv s.toBasis with he
-  set b' : OrthonormalBasis n ℂ (EuclideanSpace ℂ n) := b.reindex e with hb'
-  set U : Matrix n n ℂ := s.toBasis.toMatrix ⇑b'.toBasis with hU
-  have hUmem : U ∈ Matrix.unitaryGroup n ℂ := s.toMatrix_orthonormalBasis_mem_unitary b'
-  -- The conjugate transpose of the change-of-basis matrix is the reverse change of basis.
-  have hstar : star U = b'.toBasis.toMatrix ⇑s.toBasis := by
-    have h1 : star U * U = 1 := Matrix.mem_unitaryGroup_iff'.mp hUmem
-    have h2 : U * b'.toBasis.toMatrix ⇑s.toBasis = 1 :=
-      Module.Basis.toMatrix_mul_toMatrix_flip _ _
-    calc star U = star U * (U * b'.toBasis.toMatrix ⇑s.toBasis) := by rw [h2, mul_one]
-      _ = star U * U * b'.toBasis.toMatrix ⇑s.toBasis := by rw [mul_assoc]
-      _ = b'.toBasis.toMatrix ⇑s.toBasis := by rw [h1, one_mul]
-  -- The conjugation identity for any matrix with the adapted block action.
-  have hconj : ∀ (A : Matrix n n ℂ) (B : ∀ k, Matrix (Fin (d k)) (Fin (d k)) ℂ),
-      (∀ (k : Fin K) (i : Fin (m k)) (j : Fin (d k)),
-        Matrix.toEuclideanLin A (b ⟨k, (i, j)⟩) = ∑ j', B k j' j • b ⟨k, (i, j')⟩) →
-      star U * A * U = Matrix.reindex e e
-        (Matrix.blockDiagonal' fun k =>
-          (1 : Matrix (Fin (m k)) (Fin (m k)) ℂ) ⊗ₖ B k) := by
-    intro A B hB
-    -- A matrix is the matrix of its Euclidean operator in the standard orthonormal basis.
-    have hA' : LinearMap.toMatrix s.toBasis s.toBasis (Matrix.toEuclideanLin A) = A := by
-      rw [hs, Matrix.toEuclideanLin_eq_toLin_orthonormal, LinearMap.toMatrix_toLin]
-    -- Conjugation by the change-of-basis matrix computes the matrix in the adapted basis.
-    have hchange : b'.toBasis.toMatrix ⇑s.toBasis * A * s.toBasis.toMatrix ⇑b'.toBasis =
-        LinearMap.toMatrix b'.toBasis b'.toBasis (Matrix.toEuclideanLin A) := by
-      conv_lhs => rw [← hA']
-      exact basis_toMatrix_mul_linearMap_toMatrix_mul_basis_toMatrix
-        b'.toBasis s.toBasis b'.toBasis s.toBasis (Matrix.toEuclideanLin A)
-    -- In the adapted basis the matrix of the operator is the block-diagonal Kronecker form.
-    have hmatrix : LinearMap.toMatrix b.toBasis b.toBasis (Matrix.toEuclideanLin A) =
-        Matrix.blockDiagonal' fun k => (1 : Matrix (Fin (m k)) (Fin (m k)) ℂ) ⊗ₖ B k := by
-      ext ⟨k', i', j'⟩ ⟨k, i, j⟩
-      rw [LinearMap.toMatrix_apply, OrthonormalBasis.coe_toBasis,
-        OrthonormalBasis.coe_toBasis_repr_apply, OrthonormalBasis.repr_apply_apply, hB k i j,
-        inner_sum]
-      simp only [inner_smul_right, orthonormal_iff_ite.mp b.orthonormal]
-      rcases eq_or_ne k' k with rfl | hkk
-      · rw [Matrix.blockDiagonal'_apply_eq]
-        simp only [Matrix.kroneckerMap_apply, Matrix.one_apply, Sigma.mk.inj_iff, heq_eq_eq,
-          Prod.mk.injEq, true_and]
-        rcases eq_or_ne i' i with rfl | hii
-        · simp [Finset.sum_ite_eq]
-        · simp [hii]
-      · rw [Matrix.blockDiagonal'_apply_ne _ _ _ hkk]
-        simp [hkk]
-    -- Reindexing the basis reindexes the matrix of the operator.
-    have hreindex : LinearMap.toMatrix b'.toBasis b'.toBasis (Matrix.toEuclideanLin A) =
-        Matrix.reindex e e
-          (LinearMap.toMatrix b.toBasis b.toBasis (Matrix.toEuclideanLin A)) := by
-      ext x y
-      simp [hb', Matrix.reindex_apply, LinearMap.toMatrix_apply,
-        OrthonormalBasis.coe_toBasis_repr_apply, OrthonormalBasis.coe_toBasis]
-    calc star U * A * U
-        = b'.toBasis.toMatrix ⇑s.toBasis * A * s.toBasis.toMatrix ⇑b'.toBasis := by
-          rw [hstar, hU]
-      _ = LinearMap.toMatrix b'.toBasis b'.toBasis (Matrix.toEuclideanLin A) := hchange
-      _ = Matrix.reindex e e
-            (Matrix.blockDiagonal' fun k =>
-              (1 : Matrix (Fin (m k)) (Fin (m k)) ℂ) ⊗ₖ B k) := by
-          rw [hreindex, hmatrix]
+  -- The unitary change of basis carrying blockwise actions to block-diagonal matrices.
+  obtain ⟨e, U, hUmem, hconj⟩ := exists_unitary_conj_blockDiagonal_of_orthonormalBasis b
   refine ⟨K, d, m, e, U, hUmem, hd, hm, fun A => ⟨fun hA => ?_, fun h => ?_⟩⟩
   · -- Containment: the adapted action of a member gives the block-diagonal form.
     obtain ⟨B, hB⟩ := hact A hA

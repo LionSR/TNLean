@@ -1916,6 +1916,46 @@ by~\cite[Theorem~6.14]{Wolf2012Quantum}, without the zero block.
     row spans of distinct components.
 \end{proof}
 
+The change of basis to an orthonormal basis indexed by such triples is implemented by a
+unitary matrix, and it carries every matrix acting blockwise on the basis to a
+block-diagonal matrix.
+
+\begin{lemma}[Unitary change of basis to block-diagonal form]%
+    \label{lem:starSubalgebra_unitary_change_of_basis_block}
+    \lean{StarSubalgebra.exists_unitary_conj_blockDiagonal_of_orthonormalBasis}
+    \leanok
+    Let $(f_{k,i,j})_{k < K,\, i < m_k,\, j < d_k}$ be an orthonormal basis of $\C^{D}$.
+    There are an identification of the index set of triples $(k, i, j)$ with
+    $\{0, \ldots, D-1\}$, realizing $\sum_k d_k m_k = D$, and a unitary $U \in \MN{D}$,
+    whose columns are the basis vectors, such that every matrix $A \in \MN{D}$ acting on
+    the basis by
+    \[
+        A\,f_{k,i,j} \;=\; \sum_{j'=0}^{d_k-1} (B_k)_{j'j}\, f_{k,i,j'}
+    \]
+    for matrices $B_k \in \MN{d_k}$ satisfies
+    \[
+        U^{\dagger} A\, U \;=\; \bigoplus_{k=0}^{K-1} \Id_{m_k} \otimes B_k.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Let $U$ be the change-of-basis matrix from the standard orthonormal basis of $\C^{D}$
+    to $(f_{k,i,j})$, so the columns of $U$ are the basis vectors; a change of basis
+    between orthonormal bases is unitary. Both bases have $D$ elements, which identifies
+    the index set of triples $(k, i, j)$ with $\{0, \ldots, D-1\}$ and gives
+    $\sum_k d_k m_k = D$. For $A$ acting as displayed, the matrix
+    $U^{\dagger} A\, U = U^{-1} A\, U$ is the matrix of the operator $x \mapsto Ax$ in the
+    basis $(f_{k,i,j})$, with entries
+    \[
+        \langle f_{k',i',j'},\, A f_{k,i,j} \rangle
+        \;=\; \sum_{j''} (B_k)_{j''j} \langle f_{k',i',j'},\, f_{k,i,j''} \rangle
+        \;=\; \delta_{k'k}\, \delta_{i'i}\, (B_k)_{j'j}
+    \]
+    by the action property and orthonormality. This is the block-diagonal matrix with
+    blocks $\Id_{m_k} \otimes B_k$.
+\end{proof}
+
 \begin{theorem}[Global unitary block-diagonal form]%
     \label{thm:starSubalgebra_unitary_block_diagonal}
     \lean{StarSubalgebra.exists_unitary_conj_blockDiagonal}
@@ -1937,22 +1977,14 @@ by~\cite[Theorem~6.14]{Wolf2012Quantum}, without the zero block.
 
 \begin{proof}
     \leanok
-    \uses{thm:starSubalgebra_global_adapted_orthonormal_basis}
+    \uses{thm:starSubalgebra_global_adapted_orthonormal_basis,
+        lem:starSubalgebra_unitary_change_of_basis_block}
     Let $(f_{k,i,j})$ be the adapted orthonormal basis of
     Theorem~\ref{thm:starSubalgebra_global_adapted_orthonormal_basis} and let $U$ be the
-    change-of-basis matrix from the standard orthonormal basis of $\C^{D}$ to
-    $(f_{k,i,j})$, so the columns of $U$ are the adapted basis vectors; a change of basis
-    between orthonormal bases is unitary. Both bases have $D$ elements, which identifies
-    the index set of triples $(k, i, j)$ with $\{0, \ldots, D-1\}$ and gives
-    $\sum_k d_k m_k = D$. For $A \in S$ the matrix $U^{\dagger} A\, U = U^{-1} A\, U$ is
-    the matrix of the operator $x \mapsto Ax$ in the adapted basis, with entries
-    \[
-        \langle f_{k',i',j'},\, A f_{k,i,j} \rangle
-        \;=\; \sum_{j''} (B_k)_{j''j} \langle f_{k',i',j'},\, f_{k,i,j''} \rangle
-        \;=\; \delta_{k'k}\, \delta_{i'i}\, (B_k)_{j'j}
-    \]
-    by the adapted action and orthonormality. This is the block-diagonal matrix with
-    blocks $\Id_{m_k} \otimes B_k$.
+    unitary supplied by Lemma~\ref{lem:starSubalgebra_unitary_change_of_basis_block} for
+    this basis. Every $A \in S$ acts on the basis by matrices $B_k$ on the irreducible
+    index, identically across the multiplicity index, so the lemma gives
+    $U^{\dagger} A\, U = \bigoplus_k \Id_{m_k} \otimes B_k$.
 \end{proof}
 
 The reverse inclusion of the block representation rests on the double-commutant
@@ -2011,15 +2043,15 @@ $\bigoplus_k \Id_{m_k} \otimes \MN{d_k}$.
 \begin{proof}
     \leanok
     \uses{thm:starSubalgebra_global_adapted_orthonormal_basis,
-        thm:starSubalgebra_unitary_block_diagonal, lem:starSubalgebra_double_commutant,
+        lem:starSubalgebra_unitary_change_of_basis_block,
+        lem:starSubalgebra_double_commutant,
         lem:starSubalgebra_scalar_commutant_irreducible, def:starSubalgebra_intertwiner,
         def:starSubalgebra_sameIsotype}
     Let $(f_{k,i,j})$ be the adapted orthonormal basis of
     Theorem~\ref{thm:starSubalgebra_global_adapted_orthonormal_basis}, write $W_{k,i}$ for
-    the span of the row $(f_{k,i,j})_{j < d_k}$, and let $U$ be the change-of-basis matrix
-    from the standard basis to $(f_{k,i,j})$, as in
-    Theorem~\ref{thm:starSubalgebra_unitary_block_diagonal}. The computation there shows
-    that any matrix $A$ whose action on the adapted basis is
+    the span of the row $(f_{k,i,j})_{j < d_k}$, and let $U$ be the unitary supplied by
+    Lemma~\ref{lem:starSubalgebra_unitary_change_of_basis_block} for this basis: any
+    matrix $A$ whose action on the adapted basis is
     $A f_{k,i,j} = \sum_{j'} (B_k)_{j'j}\, f_{k,i,j'}$ satisfies the displayed conjugation
     identity; in particular every member of $S$ does, which is the containment direction.
 
@@ -2044,12 +2076,15 @@ $\bigoplus_k \Id_{m_k} \otimes \MN{d_k}$.
         \langle f_{k,i',j'},\, g\, f_{k,i,j}\rangle
         \;=\; \gamma^{(k)}_{i'i}\, \delta_{j'j}.
     \]
-    Across components the matrix of $g$ vanishes: with $\tau$ built from the rows
-    $(k', i')$ of another component, the composite $\tau \circ g$ carries $W_{k,i}$ into
-    $W_{k',i'}$ and commutes with $S$ on $W_{k,i}$, so a nonzero entry
-    $\langle f_{k',i',j'},\, g\, f_{k,i,j}\rangle$ would make it an intertwiner that does
-    not vanish on $W_{k,i}$, giving $W_{k,i}$ and $W_{k',i'}$ the same type and
-    contradicting Theorem~\ref{thm:starSubalgebra_global_adapted_orthonormal_basis}.
+    Across components the matrix of $g$ vanishes: for $k' \neq k$,
+    \[
+        \langle f_{k',i',j'},\, g\, f_{k,i,j}\rangle \;=\; 0:
+    \]
+    with $\tau$ built from the rows $(k', i')$ of another component, the composite
+    $\tau \circ g$ carries $W_{k,i}$ into $W_{k',i'}$ and commutes with $S$ on $W_{k,i}$,
+    so a nonzero such entry would make it an intertwiner that does not vanish on
+    $W_{k,i}$, giving $W_{k,i}$ and $W_{k',i'}$ the same type and contradicting
+    Theorem~\ref{thm:starSubalgebra_global_adapted_orthonormal_basis}.
     Expanding $g f_{k,i,j}$ in the adapted basis therefore gives
     \[
         g\, f_{k,i,j} \;=\; \sum_{i'} \gamma^{(k)}_{i'i}\, f_{k,i',j} :
