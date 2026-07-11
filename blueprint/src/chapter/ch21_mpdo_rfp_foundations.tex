@@ -162,6 +162,7 @@
     \label{def:mpdo_ancillary_trace_map}
     \lean{MPOTensor.ancillaryTraceMap}
     \leanok
+    \uses{def:mpdo_right_partial_trace_map}
     For a matrix $X$ on the spin--ancilla space, the ancillary trace map is
     \[
         \bigl[\operatorname{tr}_a(X)\bigr]_{ij}
@@ -182,29 +183,9 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    For each ancillary label \(k\), let \(V_k\) be the projection from the
-    spin--ancilla space onto the spin space with fixed ancillary label:
-    \[
-        (V_k)_{i,(j,\ell)}
-        =
-        \begin{cases}
-            1, & i=j\text{ and }k=\ell,\\
-            0, & \text{otherwise}.
-        \end{cases}
-    \]
-    Then
-    \[
-        (V_k X V_k^\dagger)_{ij}=X_{(i,k),(j,k)},
-    \]
-    so summing over \(k\) gives the ancillary trace. The identity resolution is
-    entrywise:
-    \[
-        \sum_k (V_k^\dagger V_k)_{(i,k'),(j,\ell')}
-        =
-        \delta_{ij}\delta_{k'\ell'} .
-    \]
-    Thus the operators \(V_k\) form a trace-preserving Kraus family for the
-    ancillary trace.
+    \uses{lem:mpdo_right_partial_trace_cptp}
+    This is Lemma~\ref{lem:mpdo_right_partial_trace_cptp} with $A$ the spin
+    space and $B$ the ancillary space.
 \end{proof}
 
 \begin{definition}[Global purification equation]
