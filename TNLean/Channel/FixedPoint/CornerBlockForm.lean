@@ -17,11 +17,15 @@ $$\{Y \in Q M_D(\mathbb{C}) Q \mid Q T^{*}(Y) Q = Y\}
   \;=\; W \Bigl(\bigoplus_{k} \mathbf{1}_{m_k} \otimes M_{d_k}(\mathbb{C})\Bigr)
   W^{\dagger},$$
 where $W$ is an isometry onto the support sector ($W^{\dagger} W = \mathbf{1}$,
-$W W^{\dagger} = Q$) and $\sum_k d_k m_k \le D$. Embedded in the ambient matrix algebra
-this is the block representation of Equation (1.39) of *Quantum Channels & Operations*
-(Wolf 2012) *with* the zero block carried by the complement of the support sector — the
-general form invoked by Theorem 6.14 of the same reference, without a full-rank
-hypothesis on the fixed point. The Kronecker factors are written in the order
+$W W^{\dagger} = Q$) and $\sum_k d_k m_k \le D$. This is the block form of the
+corner-restricted fixed-point star-algebra of Corollary 6.6 of *Quantum Channels &
+Operations* (Wolf 2012), the support-sector ingredient of the zero-block representation
+invoked by Theorem 6.14 of the same reference. A corner-restricted fixed point extended
+by zero on the complement of the support sector need not be a fixed point of the ambient
+Heisenberg-picture map (the identity matrix is always an ambient fixed point of the
+adjoint of a trace-preserving map, and it is not supported on the sector), so the
+identification of the ambient fixed-point space with a zero-block form is not asserted
+here. The Kronecker factors are written in the order
 identity-times-matrix, as in the block form of the fixed-point algebra of a map with a
 positive definite fixed point.
 
@@ -52,11 +56,14 @@ $$Y \;=\; W \Bigl(\bigoplus_{k} \mathbf{1}_{m_k} \otimes B_k\Bigr) W^{\dagger}$$
 for some matrices $B_k \in M_{d_k}(\mathbb{C})$: the corner-restricted fixed-point
 star-algebra of Corollary 6.6 of *Quantum Channels & Operations* (Wolf 2012) is carried by
 the isometry onto the block algebra, up to reordering the two Kronecker factors of each
-block. Embedded in $M_D(\mathbb{C})$, the right-hand side is the block representation of
-Equation (1.39) of *Quantum Channels & Operations* (Wolf 2012) with the zero block on the
-complement of the support sector, so this is the $\sum_k d_k m_k \le D$ form of the block
-structure invoked by Theorem 6.14 of the same reference, without a full-rank hypothesis on
-the fixed point. As in the corner star-algebra of Corollary 6.6, the map is a Kraus map,
+block. The right-hand side is the support-sector block representation of
+Equation (1.39) of *Quantum Channels & Operations* (Wolf 2012) in the
+$\sum_k d_k m_k \le D$ form, without a full-rank hypothesis on the fixed point. The
+equivalence characterizes the corner-restricted set only: a corner-restricted fixed
+point extended by zero on the complement need not satisfy the ambient fixed-point
+equation, so this does not by itself identify the ambient fixed-point space of the
+adjoint map with a zero-block form. As in the corner star-algebra of Corollary 6.6, the
+map is a Kraus map,
 the completely positive case of the Schwarz hypothesis of the reference. The
 density-weighted form of Theorem 6.14 for the Schrödinger-picture fixed points is not
 asserted here.
