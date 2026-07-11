@@ -1249,7 +1249,7 @@ strong subadditivity for a normalized three-site reduced state.
         \qquad
         \sum_l a_lb_l=1.
     \]
-    These are equations \textup{(Apptralktrrk)} and \textup{(AppPsiPhi)} in
+    These identities occur in
     \cite[Appendix~C.2, lines~1395--1402]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
@@ -1359,7 +1359,8 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.ExplicitEtaOperators.normalizedOmega_preparationMap_isKrausCPTP}
     \leanok
     \uses{def:mpdo_normalized_eta_omega, thm:mpdo_eta_omega_pos,
-      thm:mpdo_eta_omega_trace, lem:mpdo_state_preparation_cptp}
+      thm:mpdo_eta_omega_trace, thm:mpdo_eta_zero_weight,
+      lem:mpdo_state_preparation_cptp}
     If $a_kb_h\ne0$, then $\widehat\eta_{k,h}$ and
     $\widehat\Omega_{k,h}$ are positive semidefinite and have trace one.
     Consequently the maps
