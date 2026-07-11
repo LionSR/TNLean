@@ -2214,19 +2214,19 @@ $\bigoplus_k \Id_{m_k} \otimes \MN{d_k}$.
     \leanok
     \uses{def:adjoint_fixed_points, def:kraus_map_channels}
     Let $E$ be a trace-preserving Kraus map on $\MN{D}$ with a positive definite fixed
-    point $\rho > 0$, $E(\rho) = \rho$. There are $K \in \N$, positive dimensions
-    $d_0, \ldots, d_{K-1}$ and multiplicities $m_0, \ldots, m_{K-1}$ with
+    point $\rho > 0$, $E(\rho) = \rho$. There are $n \in \N$, positive dimensions
+    $d_0, \ldots, d_{n-1}$ and multiplicities $m_0, \ldots, m_{n-1}$ with
     $\sum_k d_k m_k = D$, realized by an explicit identification of the index sets, and
     a unitary $U \in \MN{D}$ such that a matrix $X \in \MN{D}$ satisfies $E^*(X) = X$
     exactly when
     \[
-        U^{\dagger} X\, U \;=\; \bigoplus_{k=0}^{K-1} \Id_{m_k} \otimes B_k
+        U^{\dagger} X\, U \;=\; \bigoplus_{k=0}^{n-1} \Id_{m_k} \otimes B_k
     \]
     for some matrices $B_k \in \MN{d_k}$; that is, up to reordering the two tensor
     factors of each block,
     \[
         \mathrm{Fix}(E^*) \;=\;
-        U \Bigl(\bigoplus_{k=0}^{K-1} \Id_{m_k} \otimes \MN{d_k}\Bigr) U^{\dagger}.
+        U \Bigl(\bigoplus_{k=0}^{n-1} \Id_{m_k} \otimes \MN{d_k}\Bigr) U^{\dagger}.
     \]
     The positive definite fixed point removes the zero block: this is the unital case
     of the block representation in Eq.~(1.39) of~\cite{Wolf2012Quantum}, invoked
@@ -2253,11 +2253,11 @@ $\bigoplus_k \Id_{m_k} \otimes \MN{d_k}$.
     \leanok
     \uses{def:kraus_fixed_points, def:kraus_map_channels}
     Let $E$ be a unital Kraus map on $\MN{D}$ whose adjoint map $E^*$ has a positive
-    definite fixed point $\rho > 0$. There are $K \in \N$, positive dimensions $d_k$
+    definite fixed point $\rho > 0$. There are $n \in \N$, positive dimensions $d_k$
     and multiplicities $m_k$ with $\sum_k d_k m_k = D$, and a unitary $U \in \MN{D}$
     such that a matrix $X \in \MN{D}$ satisfies $E(X) = X$ exactly when
     \[
-        U^{\dagger} X\, U \;=\; \bigoplus_{k=0}^{K-1} \Id_{m_k} \otimes B_k
+        U^{\dagger} X\, U \;=\; \bigoplus_{k=0}^{n-1} \Id_{m_k} \otimes B_k
     \]
     for some matrices $B_k \in \MN{d_k}$. This is
     Theorem~\ref{thm:adjointFixedPoints_block_form} with the roles of the map and its
