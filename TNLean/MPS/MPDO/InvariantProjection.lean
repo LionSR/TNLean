@@ -29,7 +29,8 @@ commutation identities remains open.
 * `ketLeftMul` and `braRightMul`: the vertically viewed products
   $P\widetilde M$ and $\widetilde M P$.
 * `firstSiteMatrix`: the operator $P\otimes\Id^{\otimes N}$ on an
-  $(N+1)$-site chain.
+  $(N+1)$-site chain; these operators compose site by site,
+  $P_1Q_1=(PQ)_1$.
 
 ## Main results
 
@@ -173,6 +174,25 @@ theorem mul_firstSiteMatrix_apply (P : Matrix (Fin d) (Fin d) ℂ) {N : ℕ}
     rw [if_neg hρ, mul_zero, mul_zero]
   · intro hmem
     exact (hmem (Finset.mem_univ _)).elim
+
+/-- First-site actions compose site by site:
+$P_1Q_1 = (PQ)_1$ on an $(N+1)$-site chain. -/
+theorem firstSiteMatrix_mul_firstSiteMatrix
+    (P Q : Matrix (Fin d) (Fin d) ℂ) (N : ℕ) :
+    firstSiteMatrix P N * firstSiteMatrix Q N = firstSiteMatrix (P * Q) N := by
+  refine Matrix.ext fun σ τ => ?_
+  rw [firstSiteMatrix_mul_apply]
+  have hcons : ∀ i : Fin d,
+      (Fin.cons i (σ ∘ Fin.succ) : Fin (N + 1) → Fin d) ∘ Fin.succ =
+        σ ∘ Fin.succ := by
+    intro i
+    funext n
+    simp [Fin.cons_succ]
+  by_cases hcond : σ ∘ Fin.succ = τ ∘ Fin.succ
+  · simp only [firstSiteMatrix, Fin.cons_zero, hcons, if_pos hcond, mul_one,
+      Matrix.mul_apply]
+  · simp only [firstSiteMatrix, Fin.cons_zero, hcons, if_neg hcond, mul_zero,
+      Finset.sum_const_zero]
 
 /-- Move a finite scalar-weighted sum inside a trace pairing. -/
 theorem sum_mul_trace_eq_trace_sum_smul (c : Fin d → ℂ)

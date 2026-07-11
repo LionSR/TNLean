@@ -68,7 +68,7 @@ The vertical canonical decomposition of Proposition 4.13 (still open, see
 orthogonal projector $P_{\alpha,k}$ together with its `SectorProjectorData`:
 the loop identity holds with $\mu = \mu_{\alpha,k}$ and
 $E_\alpha = \sum_u M_\alpha^{uu}$ the closed loop of the vertical basis
-tensor, *independently of `k`*, because the sector gauge $X_{\alpha,k}$
+tensor, *independently of $k$*, because the sector gauge $X_{\alpha,k}$
 cancels under the single-site loop trace,
 $\tr(X_{\alpha,k}M_\alpha X_{\alpha,k}^{-1}) = \tr(M_\alpha)$ on the vertical
 index.  The nonvanishing of a sector compression at some length, which the
@@ -214,25 +214,6 @@ theorem sectorCompression_trace_pos (M : MPOTensor d D) (hM : IsMPDO M)
   mpo_compress_trace_pos M hM (N + 1) (firstSiteMatrix P N)
     (firstSiteMatrix_isHermitian hP N) hne
 
-/-- First-site actions compose site by site:
-$P_1Q_1 = (PQ)_1$ on an $(N+1)$-site chain. -/
-theorem firstSiteMatrix_mul_firstSiteMatrix
-    (P Q : Matrix (Fin d) (Fin d) ℂ) (N : ℕ) :
-    firstSiteMatrix P N * firstSiteMatrix Q N = firstSiteMatrix (P * Q) N := by
-  refine Matrix.ext fun σ τ => ?_
-  rw [firstSiteMatrix_mul_apply]
-  have hcons : ∀ i : Fin d,
-      (Fin.cons i (σ ∘ Fin.succ) : Fin (N + 1) → Fin d) ∘ Fin.succ =
-        σ ∘ Fin.succ := by
-    intro i
-    funext n
-    simp [Fin.cons_succ]
-  by_cases hcond : σ ∘ Fin.succ = τ ∘ Fin.succ
-  · simp only [firstSiteMatrix, Fin.cons_zero, hcons, if_pos hcond, mul_one,
-      Matrix.mul_apply]
-  · simp only [firstSiteMatrix, Fin.cons_zero, hcons, if_neg hcond, mul_zero,
-      Finset.sum_const_zero]
-
 /-- Move a doubly indexed scalar-weighted sum inside a trace pairing. -/
 private theorem sum_sum_mul_trace (c : Fin d → Fin d → ℂ)
     (B : Fin d → Fin d → Matrix (Fin D) (Fin D) ℂ)
@@ -324,7 +305,7 @@ the proof of Proposition 4.13 of arXiv:1606.00608, line 1898:
 
 In the source decomposition the loop identity holds with
 $\mu = \mu_{\alpha,k}$ and $E_\alpha = \sum_u M_\alpha^{uu}$ the closed
-vertical loop of the basis tensor $M_\alpha$, independently of `k`: the
+vertical loop of the basis tensor $M_\alpha$, independently of $k$: the
 sector gauge cancels under the single-site loop trace,
 $\tr(X_{\alpha,k}M_\alpha X_{\alpha,k}^{-1}) = \tr(M_\alpha)$ on the vertical
 index.  The still-open vertical decomposition of Proposition 4.13 must
