@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.MPDO.Defs
+import TNLean.Analysis.MatrixSqrt
 
 /-!
 # Trace-preserving completely positive maps in Kraus form
@@ -20,9 +21,11 @@ dimensions.
 * `isKrausCPTP_id`: the identity map is trace-preserving completely positive.
 * `isKrausCPTP_comp`: composition preserves the trace-preserving completely
   positive property.
+* `Matrix.preparationMap_isKrausCPTP`: adjoining a density matrix is a
+  trace-preserving completely positive map.
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators ComplexOrder
 
 /-- A **trace-preserving completely positive map** in Kraus form
 `S(X) = ∑ᵢ Aᵢ X Aᵢ†` with `∑ᵢ Aᵢ† Aᵢ = I`; rectangular Kraus operators
@@ -76,3 +79,118 @@ theorem isKrausCPTP_comp {α β γ : Type*} [Fintype α] [DecidableEq α] [Finty
         = (B j)ᴴ * ((∑ i : Fin r, (A i)ᴴ * A i) * B j) := by
       simp only [Matrix.sum_mul, Matrix.mul_sum, Matrix.mul_assoc]
     rw [step, hA_tp, Matrix.one_mul]
+
+namespace Matrix
+
+/-- The state-preparation map $X\mapsto X\otimes\rho$.  This is the
+elementary operation used to adjoin the positive neighboring operators in
+the maps $\mathcal T_1$ and $\mathcal S_1$ of arXiv:1606.00608,
+Appendix C.2, lines 1527--1533 and 1551--1555. -/
+noncomputable def preparationMap {α β : Type*} [Fintype α] [DecidableEq α]
+    [Fintype β] [DecidableEq β] (ρ : Matrix β β ℂ) :
+    Matrix α α ℂ →ₗ[ℂ] Matrix (α × β) (α × β) ℂ where
+  toFun X := Matrix.kroneckerMap (· * ·) X ρ
+  map_add' X Y := Matrix.add_kronecker X Y ρ
+  map_smul' c X := Matrix.smul_kronecker c X ρ
+
+private noncomputable def preparationKraus
+    {α β : Type*} [Fintype α] [DecidableEq α]
+    [Fintype β] [DecidableEq β] (ρ : Matrix β β ℂ) (hρ : ρ.PosSemidef) (j : β) :
+    Matrix (α × β) α ℂ :=
+  let R := hρ.isHermitian.cfc Real.sqrt
+  Matrix.of fun p a => if p.1 = a then R p.2 j else 0
+
+private theorem preparationKraus_mul_apply {α β : Type*} [Fintype α] [DecidableEq α]
+    [Fintype β] [DecidableEq β] (ρ : Matrix β β ℂ) (hρ : ρ.PosSemidef)
+    (j : β) (X : Matrix α α ℂ) (p : α × β) (b : α) :
+    (preparationKraus (α := α) ρ hρ j * X) p b =
+      (hρ.isHermitian.cfc Real.sqrt) p.2 j * X p.1 b := by
+  rw [Matrix.mul_apply]
+  rw [Finset.sum_eq_single p.1]
+  · simp [preparationKraus]
+  · intro a _ ha
+    simp [preparationKraus, Ne.symm ha]
+  · intro hmem
+    simp at hmem
+
+private theorem preparationKraus_mul_conjTranspose_apply
+    {α β : Type*} [Fintype α] [DecidableEq α]
+    [Fintype β] [DecidableEq β] (ρ : Matrix β β ℂ) (hρ : ρ.PosSemidef)
+    (j : β) (X : Matrix α α ℂ) (p q : α × β) :
+    (preparationKraus (α := α) ρ hρ j * X * (preparationKraus (α := α) ρ hρ j)ᴴ) p q =
+      X p.1 q.1 * ((hρ.isHermitian.cfc Real.sqrt) p.2 j *
+        star ((hρ.isHermitian.cfc Real.sqrt) q.2 j)) := by
+  rw [Matrix.mul_apply]
+  rw [Finset.sum_eq_single q.1]
+  · rw [preparationKraus_mul_apply]
+    simp [preparationKraus, Matrix.conjTranspose_apply]
+    ring
+  · intro b _ hb
+    rw [preparationKraus_mul_apply]
+    simp [preparationKraus, Matrix.conjTranspose_apply, Ne.symm hb]
+  · intro hmem
+    simp at hmem
+
+private theorem preparationKraus_conjTranspose_mul_apply
+    {α β : Type*} [Fintype α] [DecidableEq α]
+    [Fintype β] [DecidableEq β] (ρ : Matrix β β ℂ) (hρ : ρ.PosSemidef)
+    (j : β) (a b : α) :
+    ((preparationKraus (α := α) ρ hρ j)ᴴ * preparationKraus (α := α) ρ hρ j) a b =
+      if a = b then ∑ t : β, star ((hρ.isHermitian.cfc Real.sqrt) t j) *
+        (hρ.isHermitian.cfc Real.sqrt) t j else 0 := by
+  rw [Matrix.mul_apply, Fintype.sum_prod_type]
+  by_cases hab : a = b
+  · subst b
+    simp [preparationKraus, Matrix.conjTranspose_apply]
+  · simp [preparationKraus, Matrix.conjTranspose_apply, hab, Ne.symm hab]
+
+/-- Adjoining a positive-semidefinite matrix of trace one is a
+trace-preserving completely positive map.  Its Kraus operators are obtained
+from the columns of $\sqrt\rho$.
+
+This is the state-preparation step used in the construction of
+$\mathcal T_1$ and $\mathcal S_1$ in arXiv:1606.00608, Appendix C.2,
+lines 1527--1533 and 1551--1555. -/
+theorem preparationMap_isKrausCPTP
+    {α β : Type*} [Fintype α] [DecidableEq α]
+    [Fintype β] [DecidableEq β] (ρ : Matrix β β ℂ) (hρ : ρ.PosSemidef)
+    (hρtr : ρ.trace = 1) : IsKrausCPTP (Matrix.preparationMap (α := α) ρ) := by
+  classical
+  let R := hρ.isHermitian.cfc Real.sqrt
+  have hRherm : R.IsHermitian := hρ.cfc_sqrt_isHermitian
+  have hRR : R * R = ρ := hρ.cfc_sqrt_mul_self
+  refine ⟨Fintype.card β,
+    fun j => preparationKraus ρ hρ ((Fintype.equivFin β).symm j), ?_, ?_⟩
+  · intro X
+    ext p q
+    change X p.1 q.1 * ρ p.2 q.2 = _
+    have hRRentry : ρ p.2 q.2 = (R * R) p.2 q.2 :=
+      congrArg (fun M : Matrix β β ℂ => M p.2 q.2) hRR.symm
+    rw [hRRentry, Matrix.mul_apply, Finset.mul_sum, Matrix.sum_apply]
+    rw [← Equiv.sum_comp (Fintype.equivFin β).symm]
+    refine Finset.sum_congr rfl fun j _ => ?_
+    rw [preparationKraus_mul_conjTranspose_apply]
+    rw [hRherm.apply]
+  · ext a b
+    have hsum : ∑ j : β, ∑ t : β, star (R t j) * R t j = 1 := by
+      calc
+        ∑ j : β, ∑ t : β, star (R t j) * R t j = (R * R).trace := by
+          simp_rw [hRherm.apply]
+          rfl
+        _ = ρ.trace := congrArg Matrix.trace hRR
+        _ = 1 := hρtr
+    by_cases hab : a = b
+    · subst b
+      rw [Matrix.one_apply_eq, Matrix.sum_apply]
+      simp_rw [preparationKraus_conjTranspose_mul_apply, if_pos]
+      change (∑ x : Fin (Fintype.card β),
+        ∑ t : β, star (R t ((Fintype.equivFin β).symm x)) *
+          R t ((Fintype.equivFin β).symm x)) = 1
+      exact (Equiv.sum_comp (Fintype.equivFin β).symm
+        (fun j : β => ∑ t : β, star (R t j) * R t j)).trans hsum
+    · rw [Matrix.one_apply_ne hab, Matrix.sum_apply]
+      apply Finset.sum_eq_zero
+      intro j _
+      rw [preparationKraus_conjTranspose_mul_apply, if_neg hab]
+
+end Matrix
