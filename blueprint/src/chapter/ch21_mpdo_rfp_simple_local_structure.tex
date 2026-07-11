@@ -1034,10 +1034,25 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{proof}
     \leanok
     \uses{thm:mpdo_sector_word_eta_contraction}
-    Expand the closed horizontal trace of the MPO word. The sector
-    factorization writes its local entries as products of entries of $l_{k_n}$
-    and $r_{k_n}$. Theorem~\ref{thm:mpdo_sector_word_eta_contraction} then
-    regroups the cyclic contraction into the entries of $\Omega_k$.
+    Fix $x,y\in I_k$ and expand the closed horizontal trace of the MPO word.
+    The sector factorization writes each local entry as a product of entries
+    of $l_{k_n}$ and $r_{k_n}$. Set
+    \[
+      M_n(\beta,\alpha)
+        =(l_{k_n})_\beta(x_n^L,y_n^L)
+         (r_{k_n})_\alpha(x_n^R,y_n^R).
+    \]
+    Then
+    \begin{align*}
+      \bigl[\operatorname{reindex}_{\Phi_N}
+        (M_N(\widetilde{\cal K}))\bigr]_{(k,x),(k,y)}
+      &=\tr(M_0M_1\cdots M_{N-1})\\
+      &=\prod_{n=0}^{N-1}\eta_{k_n,k_{n+1}}
+        \bigl((x_n^R,x_{n+1}^L),(y_n^R,y_{n+1}^L)\bigr)\\
+      &=\Omega_k(x,y).
+    \end{align*}
+    The middle equality is
+    Theorem~\ref{thm:mpdo_sector_word_eta_contraction}.
 \end{proof}
 
 \begin{theorem}[Sector-adapted MPO decomposition]
@@ -1076,9 +1091,14 @@ strong subadditivity for a normalized three-site reduced state.
     \uses{thm:mpdo_fixed_sector_cyclic_eta}
     If the row and column sector configurations coincide, the corresponding
     block is Theorem~\ref{thm:mpdo_fixed_sector_cyclic_eta}. If they differ,
-    choose a site at which their sector labels are unequal. The local
-    block-diagonal factorization vanishes there, and hence every summand in
-    the closed horizontal trace is zero.
+    choose a site $n$ at which their labels $k_n$ and $h_n$ are unequal.
+    Block diagonality gives, for every pair of horizontal indices,
+    \[
+      \bigl[U_B\kappa_{\beta,\alpha}U_B^\dagger\bigr]
+        _{(k_n,\,\cdot),(h_n,\,\cdot)}=0.
+    \]
+    This local factor occurs in every cyclic horizontal-index product, so
+    every summand in the closed trace is zero.
 \end{proof}
 
 \begin{definition}[Trace matrices of explicit $\eta$-data]
