@@ -33,6 +33,11 @@ the compression isomorphism `φ : M_n(ℂ) ≃ Q M_D(ℂ) Q`.
 * `Kraus.cornerFixedPointsStarSubalgebra`: Wolf Corollary 6.6 — the
   corner-restricted fixed points form a `StarSubalgebra` of the corner algebra.
 
+The block representation of this corner algebra, in the sense of Equation (1.39) of
+*Quantum Channels & Operations* (Wolf 2012) with the zero block on the complement of the
+support sector, is `Kraus.cornerFixedPoints_blockDiagonal_iff` in
+`TNLean.Channel.FixedPoint.CornerBlockForm`.
+
 ## References
 
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Corollary 6.6, Section 6.4]

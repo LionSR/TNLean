@@ -278,9 +278,25 @@ In `TNLean.Channel.FixedPoint.WedderburnDecomp`:
 * `Kraus.adjointFixedPoints_wedderburnDecomp` — existence of this
   decomposition data for the adjoint-fixed-point algebra.
 
-What is still missing for the full Wolf statement is the concrete unitary
-realization `Fix(T*) = U (0 ⊕ ⊕_k M_{d_k} ⊗ 1_{m_k}) U†` and the density-block
-refinement with matrices `ρ_k`.
+In `TNLean.Channel.FixedPoint.BlockForm` (unital case, positive definite fixed
+point of the pre-dual, no zero block):
+
+* `Kraus.adjointFixedPoints_blockDiagonal_iff` — the unitary realization
+  `Fix(T*) = U (⊕_k 1_{m_k} ⊗ M_{d_k}) U†` with `∑_k d_k m_k = D`.
+* `Kraus.fixedPoints_blockDiagonal_iff` — the companion for the fixed points
+  of a unital Kraus map.
+
+In `TNLean.Channel.FixedPoint.CornerBlockForm` (zero-block general case, any
+positive semidefinite fixed point):
+
+* `Kraus.cornerFixedPoints_blockDiagonal_iff` — the corner-restricted
+  fixed-point set is carried by an isometry `W` (`W† W = 1`, `W W† = Q`) onto
+  `⊕_k 1_{m_k} ⊗ M_{d_k}` with `∑_k d_k m_k ≤ D`; embedded in `M_D(ℂ)` this is
+  the block representation with the zero block on the complement of the
+  support sector.
+
+What is still missing for the full Wolf statement is the density-block
+refinement with matrices `ρ_k` for the Schrödinger-picture fixed points.
 
 ### Wolf Corollary 6.7 (faithful fixed-point conjugation) — FORMALIZED
 
@@ -291,6 +307,10 @@ In `TNLean.Channel.FixedPoint.Corollaries`:
   then `ρ^{-1/2} Fix(T) ρ^{-1/2}` is a `StarSubalgebra`.
 * `Kraus.mem_weightedFixedPointsStarSubalgebra_iff` — membership is
   equivalent to saying that `ρ^{1/2} X ρ^{1/2}` is fixed by the original map.
+
+The formalized case takes `ρ` positive definite. Wolf's statement takes any
+maximum-rank fixed-point density matrix, with the inverse square root taken on
+the support of `ρ`; the singular case is not formalized.
 
 ### Wolf Theorem 6.15 (Conditional expectation onto fixed-point algebra) — PARTIALLY FORMALIZED
 
