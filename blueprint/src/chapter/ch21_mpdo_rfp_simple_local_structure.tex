@@ -151,6 +151,19 @@ strong subadditivity for a normalized three-site reduced state.
     \label{fig:mpdo_inverse_contraction}
 \end{figure}
 
+\begin{figure}[ht]
+    \centering
+    \TNMPDOInverseRecovery
+    \caption{Recovery of the tensor after applying the inverse map:
+    contracting $K^{-1}$ with the doubled physical index of $K$ and closing
+    the virtual legs of $K^{-1}$ against a further copy of $K$ returns $K$;
+    the doubled physical index is drawn as a single thick leg. This follows
+    from the matrix-unit identity of
+    Figure~\ref{fig:mpdo_inverse_contraction}, and it is the single-block
+    case of \cite[Appendix~C.2, lines~1671--1676]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_inverse_recovery}
+\end{figure}
+
 \begin{definition}[Normalized fourth-site virtual tail]
     \label{def:mpdo_normalized_four_site_tail}
     \lean{MPOTensor.normalizedFourSiteTail}
