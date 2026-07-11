@@ -2274,6 +2274,79 @@ $\bigoplus_k \Id_{m_k} \otimes \MN{d_k}$.
     supplies the unitary and the equivalence.
 \end{proof}
 
+Without a full-rank hypothesis on the fixed point, the corner-restricted fixed-point
+$*$-algebra of Theorem~\ref{thm:cornerFixedPointsStarSubalgebra} still carries the block
+structure through the compression onto the support sector; this is the
+$\sum_k d_k m_k \le D$ support-sector form of the block representation in
+Equation~(1.39) of~\cite{Wolf2012Quantum} invoked
+by~\cite[Theorem~6.14]{Wolf2012Quantum}. A corner-restricted fixed point extended by
+zero on the complement of the support sector need not be a fixed point of the ambient
+map, so the corner block form does not by itself give the ambient fixed-point space a
+zero-block representation.
+
+\begin{theorem}[Block form of the corner-restricted fixed points]%
+    \label{thm:cornerFixedPoints_block_form}
+    \lean{Kraus.cornerFixedPoints_blockDiagonal_iff}
+    \leanok
+    \uses{def:support_proj, def:kraus_map_channels}
+    Let $E(X) = \sum_i K_i X K_i^{\dagger}$ be a trace-preserving Kraus map on $\MN{D}$,
+    with Heisenberg-picture adjoint $E^*(Y) = \sum_i K_i^{\dagger} Y K_i$, let
+    $\rho \succeq 0$ satisfy
+    $E(\rho) = \rho$, and let $Q$ be the support projection of $\rho$. There are a sector
+    dimension $r \le D$, a number $n$ of blocks, positive dimensions $d_0, \ldots,
+    d_{n-1}$ and multiplicities $m_0, \ldots, m_{n-1}$ with $\sum_k d_k m_k = r$,
+    realized by an explicit identification of the index sets, and an isometry
+    $W : \C^{r} \to \C^{D}$ with $W^{\dagger} W = \Id_{r}$ and $W W^{\dagger} = Q$, such
+    that a matrix $Y \in \MN{D}$ satisfies $Q\,Y\,Q = Y$ and $Q\,E^*(Y)\,Q = Y$ exactly
+    when
+    \[
+        Y \;=\; W \Bigl(\bigoplus_{k=0}^{n-1} \Id_{m_k} \otimes B_k\Bigr) W^{\dagger}
+    \]
+    for some matrices $B_k \in \MN{d_k}$; that is, up to reordering the two tensor
+    factors of each block,
+    \[
+        \{Y \in Q\,\MN{D}\,Q \mid Q\,E^*(Y)\,Q = Y\} \;=\;
+        W \Bigl(\bigoplus_{k=0}^{n-1} \Id_{m_k} \otimes \MN{d_k}\Bigr) W^{\dagger}.
+    \]
+    The right-hand side is the support-sector block representation in
+    Equation~(1.39) of~\cite{Wolf2012Quantum}; the equivalence characterizes the
+    corner-restricted set, not the ambient fixed-point space.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:support_proj_fixed, thm:supported_corner_compression_isometry,
+        thm:compression_on_support_posDef, thm:adjointFixedPoints_block_form}
+    Since $\rho$ is a fixed point of $E$, the support projection satisfies
+    $(\Id - Q) K_i Q = 0$ (Theorem~\ref{thm:support_proj_fixed}), so the compressed
+    family $Q K_i Q$ is supported on the corner and trace-preserving there. Compress it
+    to the support sector along the isometry $V : \C^{r} \to \C^{D}$ of
+    Theorem~\ref{thm:supported_corner_compression_isometry}, which satisfies
+    $V^{\dagger} V = \Id_{r}$ and $V V^{\dagger} = Q$: the compressed
+    family $C$ is trace-preserving on $\C^{r}$, and the compression
+    $\sigma = V^{\dagger} \rho V$ of $\rho$ is a positive definite fixed point of the
+    compressed Schr\"odinger map (Theorem~\ref{thm:compression_on_support_posDef}). The
+    block form of the Heisenberg-picture fixed points of $C$
+    (Theorem~\ref{thm:adjointFixedPoints_block_form}) yields a unitary
+    $U \in \MN{r}$, dimensions $d_k$ and multiplicities $m_k$ with
+    $\sum_k d_k m_k = r$, and the equivalence between the fixed-point equation on the
+    sector and the block-diagonal conjugation identity. Writing
+    $\Phi(X) := V X V^{\dagger}$ for the compression isomorphism onto the corner and
+    $C^*$ for the Heisenberg-picture adjoint of the compressed family, the
+    corner-restricted fixed-point condition corresponds to the fixed-point equation of
+    the compressed map,
+    \[
+        Q\,E^*\!\bigl(\Phi(X)\bigr)\,Q \;=\; \Phi(X)
+        \quad\Longleftrightarrow\quad
+        C^*(X) \;=\; X,
+    \]
+    so, with $W := V U$, which satisfies
+    $W^{\dagger} W = \Id_r$ and $W W^{\dagger} = Q$, a corner element $Y$ is a
+    corner-restricted fixed point exactly when $Y = W (\bigoplus_k \Id_{m_k} \otimes
+    B_k) W^{\dagger}$ for some blocks $B_k$. Finally $r \le D$ because the isometry $V$
+    embeds $\C^{r}$ into $\C^{D}$.
+\end{proof}
+
 \begin{theorem}[Weighted fixed points form a $*$-subalgebra]%
     \label{thm:weightedFixedPointsStarSubalgebra}
     \lean{Kraus.weightedFixedPointsStarSubalgebra}
