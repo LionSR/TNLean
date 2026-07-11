@@ -102,3 +102,12 @@ name: TNChoiMatrix TNTransferMapTracePairing
 
 name: TNTwoPointCorrelator
 {{ obj.tn_svg_html }}
+
+name: TNMPDOFirstSiteInsertionHypothesis TNMPDOFirstSiteInsertionBlockwise
+{{ obj.tn_svg_html }}
+
+name: TNMPDOInsertionTracePairing TNMPDOHorizontalCanonicalForm
+{{ obj.tn_svg_html }}
+
+name: TNMPDOBlockInjectiveInverse TNMPDOInverseRecovery TNMPDOProjectorAbsorption
+{{ obj.tn_svg_html }}

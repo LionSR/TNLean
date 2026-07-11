@@ -921,6 +921,269 @@
     \end{tikzpicture}%
 }
 
+% First-site insertion agreement on the closed word: inserting Y on the
+% physical leg of the first site of the matrix product vector gives the
+% same vector as inserting Z.
+\newcommand{\TNMPDOFirstSiteInsertionHypothesis}{%
+    \begin{tikzpicture}[tn picture]
+        \begin{scope}
+            \TN@tensordot{fihL}{(0,0)}
+            \TN@tensordot{fihM}{(1.05,0)}
+            \TN@tensordot{fihR}{(2.60,0)}
+            \draw[tn leg] (-0.42,0) rectangle (3.02,-0.44);
+            \TN@upleg{fihM}{0.42}
+            \TN@upleg{fihR}{0.42}
+            \draw[tn phys leg] (fihL.north) -- ++(0,0.86);
+            \TN@opdotleft{fihY}{(0,0.46)}{Y}
+            \node at (1.85,0) {$\cdots$};
+        \end{scope}
+        \node at (3.60,0) {$=$};
+        \begin{scope}[xshift=4.20cm]
+            \TN@tensordot{fizL}{(0,0)}
+            \TN@tensordot{fizM}{(1.05,0)}
+            \TN@tensordot{fizR}{(2.60,0)}
+            \draw[tn leg] (-0.42,0) rectangle (3.02,-0.44);
+            \TN@upleg{fizM}{0.42}
+            \TN@upleg{fizR}{0.42}
+            \draw[tn phys leg] (fizL.north) -- ++(0,0.86);
+            \TN@opdotleft{fizZ}{(0,0.46)}{Z}
+            \node at (1.85,0) {$\cdots$};
+        \end{scope}
+    \end{tikzpicture}%
+}
+
+% Blockwise conclusion of the first-site agreement: the one-site insertions
+% of Y and Z agree on each basis tensor of the canonical form.
+\newcommand{\TNMPDOFirstSiteInsertionBlockwise}{%
+    \begin{tikzpicture}[tn picture]
+        \TN@tensordot{fibA}{(0,0)}
+        \TN@leftleg{fibA}{0.60}
+        \TN@rightleg{fibA}{0.60}
+        \draw[tn phys leg] (fibA.north) -- ++(0,0.86);
+        \TN@opdotleft{fibY}{(0,0.46)}{Y}
+        \node at (0,-0.32) {$A_k$};
+        \node at (1.45,0) {$=$};
+        \TN@tensordot{fibB}{(2.90,0)}
+        \TN@leftleg{fibB}{0.60}
+        \TN@rightleg{fibB}{0.60}
+        \draw[tn phys leg] (fibB.north) -- ++(0,0.86);
+        \TN@opdotleft{fibZ}{(2.90,0.46)}{Z}
+        \node at (2.90,-0.32) {$A_k$};
+    \end{tikzpicture}%
+}
+
+% Trace pairing of a one-site insertion against a boundary operator: the
+% virtual loop closes the inserted site against W, and the pairing takes the
+% same value for the Y-insertion and the Z-insertion.
+\newcommand{\TNMPDOInsertionTracePairing}{%
+    \begin{tikzpicture}[tn picture]
+        \begin{scope}
+            \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+            (itpW) at (0,0) {$W$};
+            \TN@tensordot{itpA}{(1.15,0)}
+            \draw[tn leg] (itpW.east) -- (itpA.west);
+            \draw[tn phys leg] (itpA.north) -- ++(0,0.86);
+            \TN@opdotleft{itpY}{(1.15,0.46)}{Y}
+            \draw[tn leg, rounded corners=3pt]
+            (itpW.west) -- ++(-0.35,0) -- (-0.62,-0.80)
+            -- (1.72,-0.80) -- (1.72,0) -- (itpA.east);
+            \node at (0.55,-1.03) {$\tr$};
+        \end{scope}
+        \node at (2.70,0) {$=$};
+        \begin{scope}[xshift=4.05cm]
+            \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+            (itpWz) at (0,0) {$W$};
+            \TN@tensordot{itpAz}{(1.15,0)}
+            \draw[tn leg] (itpWz.east) -- (itpAz.west);
+            \draw[tn phys leg] (itpAz.north) -- ++(0,0.86);
+            \TN@opdotleft{itpZ}{(1.15,0.46)}{Z}
+            \draw[tn leg, rounded corners=3pt]
+            (itpWz.west) -- ++(-0.35,0) -- (-0.62,-0.80)
+            -- (1.72,-0.80) -- (1.72,0) -- (itpAz.east);
+            \node at (0.55,-1.03) {$\tr$};
+        \end{scope}
+    \end{tikzpicture}%
+}
+
+% Horizontal canonical form of the doubled tensor: the gauge X, one basis
+% tensor carrying the ket and bra legs, and X^{-1}, threaded by the
+% block-index lines j and q; the weights are absorbed into the basis
+% tensors, so the basis tensor taps only the block line j while the gauge
+% factors tap both lines.
+\newcommand{\TNMPDOHorizontalCanonicalForm}{%
+    \begin{tikzpicture}[tn picture]
+        \TN@tensordot{hcfK}{(0,0)}
+        \TN@leftleg{hcfK}{0.58}
+        \TN@rightleg{hcfK}{0.58}
+        \TN@upleg{hcfK}{0.50}
+        \TN@downleg{hcfK}{0.50}
+        \node[anchor=east] at (-0.14,-0.28) {$K$};
+        \node at (1.30,0) {$=$};
+        \TN@opdotabove{hcfX}{(2.55,0)}{X}
+        \TN@tensordot{hcfC}{(3.75,0)}
+        \TN@opdotabove{hcfXi}{(4.95,0)}{X^{-1}}
+        \draw[tn leg] (hcfX.west) -- ++(-0.55,0);
+        \draw[tn leg] (hcfX.east) -- (hcfC.west);
+        \draw[tn leg] (hcfC.east) -- (hcfXi.west);
+        \draw[tn leg] (hcfXi.east) -- ++(0.55,0);
+        \TN@upleg{hcfC}{0.50}
+        \TN@downleg{hcfC}{0.50}
+        \node[anchor=west] at (3.89,0.32) {$\mathcal K$};
+        \draw[tn leg] (1.95,-1.10) -- (5.55,-1.10);
+        \draw[tn leg] (1.95,-1.50) -- (5.55,-1.50);
+        \node[anchor=east] at (1.86,-1.10) {$j$};
+        \node[anchor=east] at (1.86,-1.50) {$q$};
+        \draw[tn leg] (hcfX.south) -- (2.55,-1.50);
+        \draw[tn leg, rounded corners=2pt]
+        (hcfC.center) -- (4.15,-0.40) -- (4.15,-1.10);
+        \draw[tn leg] (hcfXi.south) -- (4.95,-1.50);
+        \fill (2.55,-1.10) circle (0.05);
+        \fill (2.55,-1.50) circle (0.05);
+        \fill (4.15,-1.10) circle (0.05);
+        \fill (4.95,-1.10) circle (0.05);
+        \fill (4.95,-1.50) circle (0.05);
+    \end{tikzpicture}%
+}
+
+% Inverse tensor of a block-injective canonical form: contracting the
+% inverse tensor with the doubled physical index of the canonical form
+% passes the virtual legs of the gauge factors to the virtual legs of the
+% inverse tensor and ties the block index of the inverse tensor to the
+% block line.
+\newcommand{\TNMPDOBlockInjectiveInverse}{%
+    \begin{tikzpicture}[tn picture]
+        \TN@tensordot{bijI}{(0,0.55)}
+        \TN@tensordot{bijK}{(0,-0.55)}
+        \TN@leftleg{bijI}{0.55}
+        \TN@rightleg{bijI}{0.55}
+        \TN@leftleg{bijK}{0.55}
+        \TN@rightleg{bijK}{0.55}
+        \draw[tn phys leg] (bijI.south) -- (bijK.north);
+        \draw[tn leg] (bijI.north) -- ++(0,0.42);
+        \node at (-0.58,0.90) {$K^{-1}$};
+        \node at (-0.42,-0.90) {$K$};
+        \node at (1.15,0) {$=$};
+        \begin{scope}[xshift=2.30cm]
+            \TN@opdotabove{bijX}{(0.55,0)}{X}
+            \TN@tensordot{bijC}{(1.75,0)}
+            \TN@opdotabove{bijXi}{(2.95,0)}{X^{-1}}
+            \draw[tn leg] (bijX.west) -- ++(-0.50,0);
+            \draw[tn leg] (bijX.east) -- (bijC.west);
+            \draw[tn leg] (bijC.east) -- (bijXi.west);
+            \draw[tn leg] (bijXi.east) -- ++(0.50,0);
+            \node[anchor=west] at (1.89,-0.30) {$\mathcal K$};
+            \TN@tensordot{bijIt}{(1.75,1.00)}
+            \TN@leftleg{bijIt}{0.50}
+            \TN@rightleg{bijIt}{0.50}
+            \draw[tn phys leg] (bijIt.south) -- (bijC.north);
+            \draw[tn leg] (bijIt.north) -- ++(0,0.42);
+            \node at (1.02,1.32) {$K^{-1}$};
+            \draw[tn leg] (0,-1.10) -- (3.50,-1.10);
+            \draw[tn leg] (0,-1.50) -- (3.50,-1.50);
+            \node[anchor=east] at (-0.09,-1.10) {$j$};
+            \node[anchor=east] at (-0.09,-1.50) {$q$};
+            \draw[tn leg] (bijX.south) -- (0.55,-1.50);
+            \draw[tn leg] (bijC.south) -- (1.75,-1.10);
+            \draw[tn leg] (bijXi.south) -- (2.95,-1.50);
+            \fill (0.55,-1.10) circle (0.05);
+            \fill (0.55,-1.50) circle (0.05);
+            \fill (1.75,-1.10) circle (0.05);
+            \fill (2.95,-1.10) circle (0.05);
+            \fill (2.95,-1.50) circle (0.05);
+        \end{scope}
+        \node at (6.25,0) {$=$};
+        \begin{scope}[xshift=6.70cm]
+            \TN@opdotabove{bijPX}{(0.55,0)}{X}
+            \TN@opdotabove{bijPXi}{(2.95,0)}{X^{-1}}
+            \draw[tn leg] (bijPX.west) -- ++(-0.50,0);
+            \draw[tn leg] (bijPXi.east) -- ++(0.50,0);
+            \draw[tn leg, rounded corners=3pt]
+            (bijPX.east) -- (1.05,0) -- (1.05,1.00) -- (1.35,1.00);
+            \draw[tn leg, rounded corners=3pt]
+            (bijPXi.west) -- (2.45,0) -- (2.45,1.00) -- (2.15,1.00);
+            \draw[tn leg] (1.75,1.50) -- (1.75,-1.10);
+            \draw[tn leg] (0,-1.10) -- (3.50,-1.10);
+            \draw[tn leg] (0,-1.50) -- (3.50,-1.50);
+            \draw[tn leg] (bijPX.south) -- (0.55,-1.50);
+            \draw[tn leg] (bijPXi.south) -- (2.95,-1.50);
+            \fill (0.55,-1.10) circle (0.05);
+            \fill (0.55,-1.50) circle (0.05);
+            \fill (1.75,-1.10) circle (0.05);
+            \fill (2.95,-1.10) circle (0.05);
+            \fill (2.95,-1.50) circle (0.05);
+        \end{scope}
+    \end{tikzpicture}%
+}
+
+% Recovery of the tensor from the inverse map: contracting the inverse
+% tensor with the doubled physical index and closing its virtual legs
+% against a further copy of the tensor returns the tensor itself; the
+% doubled physical index is drawn as a single thick leg.
+\newcommand{\TNMPDOInverseRecovery}{%
+    \begin{tikzpicture}[tn picture]
+        \TN@tensordot{irT}{(0,1.05)}
+        \TN@tensordot{irI}{(0,0)}
+        \TN@tensordot{irB}{(0,-1.05)}
+        \draw[tn phys leg] (irT.north) -- ++(0,0.45);
+        \draw[tn leg, rounded corners=3pt]
+        (irI.west) -- ++(-0.74,0) -- (-0.82,1.05) -- (irT.west);
+        \draw[tn leg, rounded corners=3pt]
+        (irI.east) -- ++(0.74,0) -- (0.82,1.05) -- (irT.east);
+        \draw[tn phys leg] (irI.south) -- (irB.north);
+        \TN@leftleg{irB}{0.60}
+        \TN@rightleg{irB}{0.60}
+        \node[anchor=west] at (0.12,1.33) {$K$};
+        \node[anchor=west] at (0.12,0.30) {$K^{-1}$};
+        \node[anchor=east] at (-0.14,-1.33) {$K$};
+        \node at (1.85,0) {$=$};
+        \TN@tensordot{irR}{(3.05,0)}
+        \TN@leftleg{irR}{0.60}
+        \TN@rightleg{irR}{0.60}
+        \draw[tn phys leg] (irR.north) -- ++(0,0.45);
+        \node[anchor=east] at (2.91,-0.28) {$K$};
+    \end{tikzpicture}%
+}
+
+% Projector absorption for a basis tensor: expanding the identity as the
+% sum of the orthogonal projectors on the ket and bra legs leaves only the
+% diagonal term, so the tensor absorbs its own projector on either side.
+\newcommand{\TNMPDOProjectorAbsorption}{%
+    \begin{tikzpicture}[tn picture]
+        \TN@tensordot{paA}{(0,0)}
+        \TN@leftleg{paA}{0.50}
+        \TN@rightleg{paA}{0.50}
+        \TN@upleg{paA}{1.00}
+        \TN@downleg{paA}{1.00}
+        \node[anchor=west] at (0.12,-0.30) {$\mathcal K_i$};
+        \node at (1.10,0) {$=$};
+        \node at (1.80,0) {$\displaystyle\sum_{j,j'}$};
+        \TN@tensordot{paB}{(2.75,0)}
+        \TN@leftleg{paB}{0.50}
+        \TN@rightleg{paB}{0.50}
+        \TN@upleg{paB}{1.00}
+        \TN@downleg{paB}{1.00}
+        \TN@opdotleft{paBu}{(2.75,0.55)}{P_j}
+        \TN@opdotleft{paBd}{(2.75,-0.55)}{P_{j'}}
+        \node[anchor=west] at (2.87,-0.30) {$\mathcal K_i$};
+        \node at (3.90,0) {$=$};
+        \TN@tensordot{paC}{(4.85,0)}
+        \TN@leftleg{paC}{0.50}
+        \TN@rightleg{paC}{0.50}
+        \TN@upleg{paC}{1.00}
+        \TN@downleg{paC}{1.00}
+        \TN@opdotleft{paCu}{(4.85,0.55)}{P_i}
+        \node[anchor=west] at (4.97,-0.30) {$\mathcal K_i$};
+        \node at (6.00,0) {$=$};
+        \TN@tensordot{paD}{(6.95,0)}
+        \TN@leftleg{paD}{0.50}
+        \TN@rightleg{paD}{0.50}
+        \TN@upleg{paD}{1.00}
+        \TN@downleg{paD}{1.00}
+        \TN@opdotleft{paDd}{(6.95,-0.55)}{P_i}
+        \node[anchor=west] at (7.07,-0.30) {$\mathcal K_i$};
+    \end{tikzpicture}%
+}
+
 \newcommand{\TNGaugeConjugation}[3]{%
     \begin{tikzpicture}[tn picture]
         \TN@opdotabove{tnXl}{(-1.10,0)}{#1}
