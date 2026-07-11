@@ -12,6 +12,7 @@ import TNLean.Channel.FixedPoint.BlockForm
 import TNLean.Channel.FixedPoint.CornerBlockForm
 import TNLean.Channel.FixedPoint.Corollaries
 import TNLean.Channel.FixedPoint.WeightedCornerFixedPoints
+import TNLean.Channel.FixedPoint.MaximalSupport
 import TNLean.Channel.Irreducible.Ergodicity
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Irreducible.Growth

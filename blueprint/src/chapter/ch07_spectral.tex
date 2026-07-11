@@ -2503,6 +2503,24 @@ The support hypothesis on the fixed points is discharged by exhibiting a fixed p
 whose support carries every fixed point. The first ingredient is that Loewner domination
 transfers the support.
 
+\begin{lemma}[The transfer map of a trace-preserving family is a channel]%
+    \label{lem:isChannel_transferMap}
+    \lean{Kraus.isChannel_transferMap}
+    \leanok
+    \uses{def:channel, def:tp_kraus}
+    Let $K_1, \ldots, K_d$ be a trace-preserving Kraus family. The map
+    $E(X) = \sum_i K_i X K_i^{\dagger}$ is a quantum channel.
+\end{lemma}
+\begin{proof}\leanok
+    The map is completely positive because it is in Kraus form, and it preserves the
+    trace because
+    \[
+        \tr\Bigl(\sum_i K_i X K_i^{\dagger}\Bigr)
+        \;=\; \tr\Bigl(\Bigl(\sum_i K_i^{\dagger} K_i\Bigr) X\Bigr)
+        \;=\; \tr(X).
+    \]
+\end{proof}
+
 \begin{lemma}[Loewner domination transfers the support]%
     \label{lem:stationaryProj_absorb_of_le}
     \lean{Kraus.stationaryProj_absorb_of_le}
@@ -2557,7 +2575,8 @@ transfers the support.
 
 \begin{proof}
     \leanok
-    \uses{thm:hermitian_fixedpoint_parts, lem:stationaryProj_absorb_of_le}
+    \uses{lem:isChannel_transferMap, thm:hermitian_fixedpoint_parts,
+        lem:stationaryProj_absorb_of_le}
     Let $X_1, \ldots, X_m$ be a basis of the fixed-point space of $T$. Each $X_j$ splits
     into fixed Hermitian components: with
     \[
