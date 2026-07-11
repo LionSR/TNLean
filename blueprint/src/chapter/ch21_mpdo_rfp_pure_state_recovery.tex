@@ -141,17 +141,69 @@
     \]
 \end{proof}
 
-\begin{definition}[One- and two-site physical closure maps]
+\begin{definition}[Physical closure maps]
     \label{def:phys_close}
-    \lean{MPOTensor.physClose1, MPOTensor.physClose2}
+    \lean{MPOTensor.physCloseN, MPOTensor.physClose1, MPOTensor.physClose2}
     \leanok
-    \uses{def:mpo_tensor}
-    For an MPO tensor $M$, the one- and two-site physical operators obtained by
-    closing one or two tensors with a virtual operator $X$ are
-    $M_1(X)_{ij} = \tr(M^{ij} X)$ and
-    $M_2(X)_{(i_1 i_2)(j_1 j_2)} = \tr(M^{i_1 j_1} M^{i_2 j_2} X)$, both linear
-    in $X$.
+    \uses{def:mpo_eval_word}
+    For an MPO tensor $M$, a length $N$, and a virtual operator $X$, define the
+    physical operator $M_N(X)$ by
+    \[
+        M_N(X)_{\boldsymbol i,\boldsymbol j}
+        =
+        \tr\!\left(
+          M^{i_0j_0} M^{i_1j_1}\cdots M^{i_{N-1}j_{N-1}} X
+        \right).
+    \]
+    This is linear in $X$. The displayed order chooses the cut of the cyclic
+    virtual contraction immediately before the first site, so that $X$ follows
+    the last site. The one- and two-site operators are constructed in
+    \cite[lines~638--654 and Definition~4.1]{Cirac2016MPDO_arXiv}. When
+    $M=\mathcal K$, write these operators as $\mathcal K_N(X)$; the cases
+    $N=2,3$ occur in
+    \cite[Proposition~C.7, lines~1510--1516]{Cirac2016MPDO_arXiv}.
 \end{definition}
+
+\begin{theorem}[One- and two-site physical closures]
+    \label{thm:phys_close_one_two}
+    \lean{MPOTensor.physCloseN_one_eq_physClose1,
+      MPOTensor.physCloseN_two_eq_physClose2}
+    \leanok
+    \uses{def:phys_close}
+    Under the canonical identifications of one-site configurations with
+    physical indices and two-site configurations with pairs of physical
+    indices,
+    \[
+        M_1(X)_{i,j}=\tr(M^{ij} X),
+        \qquad
+        M_2(X)_{(i_0,i_1),(j_0,j_1)}
+        =\tr(M^{i_0j_0} M^{i_1j_1} X).
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    Under these identifications, the length-one and length-two word
+    evaluations are $M^{ij}$ and $M^{i_0j_0}M^{i_1j_1}$, respectively.
+\end{proof}
+
+\begin{lemma}[Three-site physical closure]
+    \label{lem:phys_close_three}
+    \lean{MPOTensor.physCloseN_three_apply}
+    \leanok
+    \uses{def:phys_close}
+    The general three-site physical closure has coefficients
+    \[
+        M_3(X)_{(i_0,i_1,i_2),(j_0,j_1,j_2)}
+        =\tr(M^{i_0j_0} M^{i_1j_1} M^{i_2j_2} X).
+    \]
+    For $M=\mathcal K$, this is the operator $\mathcal K_3(X)$ in
+    \cite[Proposition~C.7, lines~1510--1516]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The length-three word evaluation is
+    $M^{i_0j_0}M^{i_1j_1}M^{i_2j_2}$.
+\end{proof}
 
 \begin{definition}[Renormalization fixed point via trace-preserving maps]
     \label{def:is_rfp_via_ts}
