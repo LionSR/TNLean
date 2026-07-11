@@ -1329,8 +1329,13 @@ strong subadditivity for a normalized three-site reduced state.
 \end{theorem}
 \begin{proof}
     \leanok
-    The trace of a finite direct sum is the sum of the block traces, and
-    $\tr(A\otimes B)=\tr(A)\tr(B)$. Substitute
+    The direct-sum and Kronecker trace identities give
+    \[
+        \tr(\Omega_{k,h})
+        =\sum_l\tr\bigl(\eta_{k,l}\otimes\eta_{l,h}\bigr)
+        =\sum_l\tr(\eta_{k,l})\tr(\eta_{l,h}).
+    \]
+    Substitute
     $\tr(\eta_{k,h})=a_kb_h$ and $\sum_l a_lb_l=1$.
 \end{proof}
 
