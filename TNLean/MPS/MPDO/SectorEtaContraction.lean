@@ -9,10 +9,10 @@ import TNLean.MPS.MPDO.SectorFactorization
 /-!
 # Cyclic contraction of neighboring sector tensors of a simple MPDO
 
-This file begins the cyclic contraction step in Appendix C.2, Lemma C.4 of
-arXiv:1606.00608.  Given the sector tensors $l_k$ and $r_k$ obtained from the
-inverse map, the operator joining neighboring sectors is their contraction
-over the horizontal virtual index,
+The cyclic contraction step in Appendix C.2, Lemma C.4 of arXiv:1606.00608
+starts from sector tensors $l_k$ and $r_k$ obtained from the inverse map. The
+operator joining neighboring sectors is their contraction over the horizontal
+virtual index,
 \[
   \eta_{k,h}=r_k l_h.
 \]
@@ -43,7 +43,7 @@ horizontal virtual index:
     = \sum_a (r_k)_a(x_R,y_R)(l_h)_a(x_L,y_L).
 \]
 
-Source: arXiv:1606.00608, Appendix C.2, equation `etarl`, lines 1441--1445. -/
+Source: arXiv:1606.00608, Appendix C.2, equation (etarl), lines 1441--1445. -/
 noncomputable def etaOfSectorTensors
     {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
     (hη : EtaStructure ρ)
@@ -57,7 +57,7 @@ noncomputable def etaOfSectorTensors
 
 /-- The entries of a neighboring operator are the contractions of its two
 sector tensors. -/
-@[simp] theorem etaOfSectorTensors_apply
+@[simp] lemma etaOfSectorTensors_apply
     {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
     (hη : EtaStructure ρ)
     (l : (k : Fin hη.m) → Fin D →
