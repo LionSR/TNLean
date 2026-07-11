@@ -820,6 +820,76 @@ strong subadditivity for a normalized three-site reduced state.
     \]
 \end{proof}
 
+\begin{theorem}[Closed-sector form of the physical-trace transfer]
+    \label{thm:mpdo_closed_sector_physical_trace_transfer}
+    \lean{MPOTensor.physTraceTransfer_eq_sum_closedSector}
+    \lean{MPOTensor.concrete_physTraceTransfer_eq_sum_closedSector}
+    \leanok
+    \uses{def:mpo_physical_trace_transfer,
+        def:mpdo_closed_sector_tensors, thm:mpdo_sector_factorization}
+    For the sector tensors obtained from the injective inverse-map
+    construction, the physical-trace transfer is the closed-sector pairing
+    operator:
+    \[
+        \mathcal T_{\cal K}=\sum_k |l_k)(r_k|.
+    \]
+    This identifies the transfer matrix of
+    Definition~\ref{def:mpo_physical_trace_transfer} with the operator on the
+    left-hand side of the zero-correlation-length identity in
+    \cite[Appendix~C.2, lines~1489--1493]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_sector_factorization}
+    Trace the sector factorization over the physical index.  Unitary
+    invariance of the trace removes the Hayashi basis change, while the trace
+    of the block diagonal is the sum of the block traces.  In each sector,
+    \[
+        \tr\bigl((l_k)_\beta\otimes(r_k)_\alpha\bigr)
+        =\tr[(l_k)_\beta]\,\tr[(r_k)_\alpha]
+        =\bigl[|l_k)(r_k|\bigr]_{\beta,\alpha}.
+    \]
+    Summing over $k$ gives the asserted operator identity.
+\end{proof}
+
+\begin{theorem}[Normalized closed-sector pairing operator]
+    \label{thm:mpdo_closed_sector_pairing_normalized_idempotent}
+    \lean{MPOTensor.closedSector_operator_quasi_idempotent}
+    \lean{MPOTensor.closedSector_operator_normalized_idempotent}
+    \leanok
+    \uses{def:mpo_source_zcl,
+        thm:mpdo_closed_sector_physical_trace_transfer,
+        lem:mpo_source_zcl_normalized_idempotent}
+    Suppose ${\cal K}$ has source zero correlation length and set
+    \[
+        S:=\sum_k |l_k)(r_k|.
+    \]
+    Then there is a real number $\lambda>0$ such that
+    \[
+        S^2=\lambda S,
+        \qquad
+        (\lambda^{-1}S)^2=\lambda^{-1}S.
+    \]
+    The paper works with the canonically normalized representative
+    $\lambda=1$ in the display preceding
+    \cite[Appendix~C.2, Lemma~C.5]{Cirac2016MPDO_arXiv}; the first identity
+    records the rescaling-invariant form of the same zero-correlation-length
+    condition.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_closed_sector_physical_trace_transfer,
+        lem:mpo_source_zcl_normalized_idempotent}
+    Substitute
+    $S=\mathcal T_{\cal K}$ from
+    Theorem~\ref{thm:mpdo_closed_sector_physical_trace_transfer} into the
+    defining relation
+    $\mathcal T_{\cal K}^2=\lambda\mathcal T_{\cal K}$, and then apply
+    Lemma~\ref{lem:mpo_source_zcl_normalized_idempotent}.
+\end{proof}
+
 \begin{definition}[Explicit neighboring $\eta$-operator data]
     \label{def:mpdo_explicit_eta_operators}
     \lean{MPOTensor.etaOperators}
@@ -1147,8 +1217,11 @@ strong subadditivity for a normalized three-site reduced state.
     \]
     and the sector tensors can be chosen so that each factor is positive
     semidefinite \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv}.
-    That all-length identity is a remaining step of Lemma~C.4, so positivity
-    enters here as a hypothesis on the chosen representatives.
+    The all-length sector identity is
+    Theorem~\ref{thm:mpdo_sector_adapted_decomposition}.  Its positivity does
+    not, by itself, choose a coherent phase for every individual
+    $\eta_{k,h}$, so positivity remains a hypothesis on the chosen
+    representatives here.
 \end{definition}
 
 \begin{theorem}[Trace matrix of the sector-tensor $\eta$-data]
