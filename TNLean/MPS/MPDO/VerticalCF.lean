@@ -601,7 +601,15 @@ decomposition are the ones consumed by the renormalization fixed-point
 characterization at arXiv:1606.00608, line 1956.  Every basis tensor appears
 with at least one copy: each `μ_α` is a positive diagonal matrix of size
 `mult α ≥ 1`, matching arXiv:1606.00608, line 1901, where the sector `(α, 1)`
-exists for every `α`. -/
+exists for every `α`.
+
+The isometry is a unitary change of the physical basis, so both `Uᴴ * U = 1`
+and `U * Uᴴ = 1` are required: the canonical form (arXiv:1606.00608,
+eq. II_CF1, read in the vertical direction) decomposes the physical space
+exactly, and the source discards `U` because "it just changes the physical
+basis on each site" (arXiv:1606.00608, line 959).  With an isometric
+embedding alone, the decomposed space could exceed the physical space, which
+the source's conclusion excludes. -/
 def IsVerticalCF (M : MPOTensor d D) : Prop :=
   ∃ (g : ℕ) (dim : Fin g → ℕ) (mult : Fin g → ℕ)
     (ω : (α : Fin g) → Fin (mult α) → ℂ)
@@ -611,6 +619,7 @@ def IsVerticalCF (M : MPOTensor d D) : Prop :=
     (∀ α, 0 < mult α) ∧
       (∀ α k, (0 : ℂ) < ω α k) ∧
       Uᴴ * U = 1 ∧
+      U * Uᴴ = 1 ∧
       MPSTensor.IsBNT (verticalTensor M) g dim A ∧
       ∀ v : Fin (D * D),
         U * verticalTensor M v * Uᴴ = verticalAssembledTensor dim mult ω A v

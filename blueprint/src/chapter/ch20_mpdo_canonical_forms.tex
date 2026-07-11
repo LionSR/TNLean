@@ -39,7 +39,7 @@
 
 \begin{definition}[Vertical canonical form for an MPO]\label{def:vertical_cf_mpdo}
     \lean{MPOTensor.IsVerticalCF}
-    \notready
+    \leanok
     \uses{def:mpo_tensor, def:vertical_tensor_mpdo, def:bnt,
         def:block_diagonal_tensor}
     An MPO tensor is in \emph{vertical canonical form} if there are a basis of
@@ -53,6 +53,10 @@
     \]
     This is the conclusion of
     \cite[Proposition~4.13, lines~1863--1870]{Cirac2016MPDO_arXiv}.
+    The isometry is a unitary change of the physical basis: the canonical
+    form decomposes the physical space exactly, and the source treats $U$ as
+    a change of the physical basis on each site
+    \cite[line~959]{Cirac2016MPDO_arXiv}.
     Since each $\mu_\alpha$ is diagonal, the summand
     $\mu_\alpha\otimes M_\alpha$ is the direct sum
     $\bigoplus_{k=1}^{m_\alpha}\omega_{\alpha,k}M_\alpha$ of weighted copies
@@ -997,7 +1001,7 @@
     then gives $\mu_{\alpha,k}>0$:
     Theorem~\ref{thm:mpdo_sector_compression_trace_pos} supplies the positive
     traces of the nonzero sector compressions.
-    Theorem~\ref{thm:eq3_of_dressed_adjoint} derives equation eq3,
+    Theorem~\ref{thm:eq3_of_dressed_adjoint} derives the identity
     \[
         X_{\alpha,k}^\dagger X_{\alpha,k}
         =\omega_{\alpha,k}\,X_{\alpha,1}^\dagger X_{\alpha,1},
