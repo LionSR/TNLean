@@ -2,8 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import Mathlib.Analysis.Matrix.PosDef
-import Mathlib.Analysis.SpecialFunctions.Sqrt
+import TNLean.Analysis.MatrixSqrt
 import TNLean.Analysis.Entropy
 import TNLean.Analysis.TraceCFC
 
@@ -69,45 +68,6 @@ open scoped Matrix ComplexOrder Kronecker
 open Matrix Finset
 
 namespace Matrix
-
-/-! ## Positive semidefinite square root via the Hermitian functional calculus -/
-
-section Sqrt
-
-variable {n : Type*} [Fintype n] [DecidableEq n]
-
-/-- The Hermitian functional calculus square root $\sqrt\rho$, realized by
-`Real.sqrt` through the Hermitian functional calculus, of a positive semidefinite
-matrix is Hermitian. -/
-theorem PosSemidef.cfc_sqrt_isHermitian {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) :
-    (hρ.isHermitian.cfc Real.sqrt).IsHermitian := by
-  rw [hρ.isHermitian.cfc_form Real.sqrt, Matrix.star_eq_conjTranspose]
-  have hD : (Matrix.diagonal
-      (fun i => ((Real.sqrt (hρ.isHermitian.eigenvalues i) : ℝ) : ℂ))).IsHermitian := by
-    apply Matrix.IsHermitian.ext
-    intro i j
-    by_cases hij : i = j
-    · subst hij; simp
-    · simp [Matrix.diagonal_apply_ne _ hij, Matrix.diagonal_apply_ne _ (Ne.symm hij)]
-  exact Matrix.isHermitian_mul_mul_conjTranspose _ hD
-
-/-- The square of the Hermitian functional calculus square root recovers a
-positive semidefinite matrix: $\sqrt\rho \, \sqrt\rho = \rho$. The pointwise
-identity $\sqrt\lambda \, \sqrt\lambda = \lambda$ holds because every eigenvalue
-$\lambda$ of $\rho$ is nonnegative. -/
-theorem PosSemidef.cfc_sqrt_mul_self {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) :
-    hρ.isHermitian.cfc Real.sqrt * hρ.isHermitian.cfc Real.sqrt = ρ := by
-  rw [← hρ.isHermitian.cfc_mul]
-  have hcongr : hρ.isHermitian.cfc (fun x => Real.sqrt x * Real.sqrt x)
-      = hρ.isHermitian.cfc id := by
-    rw [Matrix.IsHermitian.cfc, Matrix.IsHermitian.cfc]
-    congr 2
-    funext i
-    simp only [Function.comp_apply, id_eq]
-    exact congrArg (RCLike.ofReal) (Real.mul_self_sqrt (hρ.eigenvalues_nonneg i))
-  rw [hcongr, hρ.isHermitian.cfc_id]
-
-end Sqrt
 
 /-! ## Core lemma: a projection with zero expectation annihilates a state -/
 
