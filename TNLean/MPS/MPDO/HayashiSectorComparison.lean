@@ -150,6 +150,11 @@ conjugated by `U` on the middle site. The finite-sum reordering needed for
 both the diagonal and off-diagonal sector computations reduces to this
 identity.
 
+**Local fix (tail index):** the tail entry is
+$R_{\beta_3,\alpha_1}$, as in `inverseMapThreeSiteContraction_eq`, rather than
+the entry printed in the source display.  The correction is recorded in
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+
 Source: arXiv:1606.00608, Appendix C.2, lines 1422--1434. -/
 theorem inverseMap_conj_physicalSlice_expansion {d D : ℕ}
     (K : MPOTensor d D) (hK : K.IsInjective)

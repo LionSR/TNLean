@@ -363,9 +363,23 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{proof}
     \leanok
     \uses{thm:mpdo_inverse_map_three_site_contraction}
-    The first identity evaluates the double inverse-map contraction on the
-    closure entries. The second follows by expanding the matrix products
-    entrywise and reordering the finite sums.
+    Substituting the three-site closure relation
+    \[
+        \rho_{i_1i_2i_3,j_1j_2j_3}
+        =\tr\!\left(
+          {\cal K}^{i_1j_1}{\cal K}^{i_2j_2}{\cal K}^{i_3j_3}R
+        \right)
+    \]
+    converts the left-hand side of the first identity to
+    $C_{\alpha_1,\beta_1,\alpha_3,\beta_3}((i_2,j_2);R)$.
+    Theorem~\ref{thm:mpdo_inverse_map_three_site_contraction} then gives
+    \[
+        C_{\alpha_1,\beta_1,\alpha_3,\beta_3}((i_2,j_2);R)
+        ={\cal K}^{i_2j_2}_{\beta_1,\alpha_3}
+        R_{\beta_3,\alpha_1},
+    \]
+    which is the first identity. The second follows by expanding the matrix
+    products entrywise and reordering the finite sums.
 \end{proof}
 
 \begin{theorem}[Sectorwise inverse-map comparison]
