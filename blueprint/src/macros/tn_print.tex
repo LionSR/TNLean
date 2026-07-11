@@ -163,15 +163,15 @@
 % Contraction of neighbouring right and left sector tensors.
 \newcommand{\TNEtaSectorDecomposition}{%
     \begin{tikzpicture}[tn picture]
-        \TN@tensordot{tnRh}{(-0.56,0)}
-        \TN@tensordot{tnLk}{(0.56,0)}
+        \node[draw, fill=white, minimum width=0.52cm, minimum height=0.38cm,
+            inner sep=1pt] (tnRh) at (-0.56,0) {$r_k$};
+        \node[draw, fill=white, minimum width=0.52cm, minimum height=0.38cm,
+            inner sep=1pt] (tnLk) at (0.56,0) {$l_h$};
         \draw[tn leg] (tnRh.east) -- (tnLk.west);
         \TN@upleg{tnRh}{0.50}
         \TN@downleg{tnRh}{0.50}
         \TN@upleg{tnLk}{0.50}
         \TN@downleg{tnLk}{0.50}
-        \node at (-0.56,0.78) {$r_k$};
-        \node at (0.56,0.78) {$l_h$};
         \node at (0,-0.80) {$\eta_{k,h}=r_k l_h$};
     \end{tikzpicture}%
 }
@@ -180,25 +180,25 @@
 % eta operators.  This mirrors the cyclic contractions in Appendix C.2.
 \newcommand{\TNMPDOCyclicEtaContraction}{%
     \begin{tikzpicture}[tn picture]
-        \foreach \x/\lab in {-2.55/k_0,-0.85/k_1,0.85/k_2} {
-            \TN@tensordot{tnL\lab}{(\x,0.34)}
-            \TN@tensordot{tnR\lab}{(\x+0.68,0.34)}
-            \draw[tn leg] (tnL\lab.east) -- (tnR\lab.west);
-            \TN@upleg{tnL\lab}{0.42}
-            \TN@downleg{tnL\lab}{0.42}
-            \TN@upleg{tnR\lab}{0.42}
-            \TN@downleg{tnR\lab}{0.42}
+        \foreach \name/\x/\lab in {Zero/-2.70/0,One/-0.90/1,Last/1.30/{N-1}} {
+            \node[draw, fill=white, minimum width=0.58cm, minimum height=0.38cm,
+                inner sep=1pt] (tnL\name) at (\x,0.34) {$l_{k_\lab}$};
+            \node[draw, fill=white, minimum width=0.58cm, minimum height=0.38cm,
+                inner sep=1pt] (tnR\name) at (\x+1.14,0.34) {$r_{k_\lab}$};
+            \node at (\x+0.57,0.34) {$\otimes$};
+            \TN@upleg{tnL\name}{0.42}
+            \TN@downleg{tnL\name}{0.42}
+            \TN@upleg{tnR\name}{0.42}
+            \TN@downleg{tnR\name}{0.42}
         }
-        \draw[tn leg] (tnRk_0.east) -- (tnLk_1.west);
-        \draw[tn leg] (tnRk_1.east) -- (tnLk_2.west);
-        \draw[tn leg] (tnRk_2.east)
-            .. controls (2.34,0.34) and (2.34,-0.38) .. (1.90,-0.38)
-            -- (-2.92,-0.38)
-            .. controls (-3.34,-0.38) and (-3.34,0.34) .. (tnLk_0.west);
-        \node at (-2.21,1.10) {$l_{k_0}\otimes r_{k_0}$};
-        \node at (-0.51,1.10) {$l_{k_1}\otimes r_{k_1}$};
-        \node at (1.19,1.10) {$l_{k_2}\otimes r_{k_2}$};
-        \node at (2.05,0.34) {$\cdots$};
+        \draw[tn leg] (tnRZero.east) -- (tnLOne.west);
+        \draw[tn leg] (tnROne.east) -- (0.62,0.34);
+        \draw[tn leg] (0.94,0.34) -- (tnLLast.west);
+        \node at (0.78,0.34) {$\cdots$};
+        \draw[tn leg] (tnRLast.east)
+            .. controls (3.04,0.34) and (3.04,-0.42) .. (2.60,-0.42)
+            -- (-3.04,-0.42)
+            .. controls (-3.46,-0.42) and (-3.46,0.34) .. (tnLZero.west);
         \node at (0,-0.90)
             {$\eta_{k_0,k_1}\otimes\eta_{k_1,k_2}\otimes\cdots
               \otimes\eta_{k_{N-1},k_0}$};
