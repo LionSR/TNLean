@@ -313,9 +313,23 @@ In `TNLean.Channel.FixedPoint.Corollaries`:
 * `Kraus.mem_weightedFixedPointsStarSubalgebra_iff` — membership is
   equivalent to saying that `ρ^{1/2} X ρ^{1/2}` is fixed by the original map.
 
-The formalized case takes `ρ` positive definite. Wolf's statement takes any
-maximum-rank fixed-point density matrix, with the inverse square root taken on
-the support of `ρ`; the singular case is not formalized.
+In `TNLean.Channel.FixedPoint.WeightedCornerFixedPoints` (singular case, any
+positive semidefinite fixed point, restricted to corner-supported fixed
+points):
+
+* `Kraus.weightedCornerFixedPointsStarSubalgebra` — the corner elements `Y`
+  with `√ρ Y √ρ` fixed by the map form a `StarSubalgebra` of the corner
+  algebra `Q M_D(ℂ) Q`, realizing `ρ^{-1/2} {X | T(X) = X, Q X Q = X} ρ^{-1/2}`
+  with the inverse square root taken on the support of `ρ`.
+* `Kraus.exists_weightedCorner_sqrt_eq_of_fixedPoint` — conjugation by `√ρ`
+  maps the carrier onto the corner-supported fixed points.
+
+Wolf's statement takes a maximum-rank fixed-point density matrix and
+conjugates the full fixed-point set; for such `ρ` every fixed point is
+supported on the support of `ρ`, so the corner restriction disappears. That
+maximal-support property is not yet formalized (see
+`docs/paper-gaps/wolf_cor67_maximal_support_restriction.tex`), which is the
+remaining step for the statement in its stated generality.
 
 ### Wolf Theorem 6.15 (Conditional expectation onto fixed-point algebra) — PARTIALLY FORMALIZED
 

@@ -1,0 +1,68 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\input{command}
+
+\title{Corner-Support Restriction in the Weighted Fixed-Point Star-Algebra}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{The assertion}
+
+Corollary 6.7 of \emph{Quantum Channels \& Operations} (Wolf 2012) states: for a
+trace-preserving, positive, linear map $T$ on $M_d(\mathbb{C})$ whose adjoint satisfies
+the Schwarz inequality, and for any density matrix $\rho$ which is a \emph{maximum-rank}
+fixed point of $T$, the set
+\[
+    \rho^{-1/2}\,\mathcal{F}_T\,\rho^{-1/2},
+    \qquad \mathcal{F}_T = \{X \mid T(X) = X\},
+\]
+is a $*$-algebra, with the inverse square root taken on the support of $\rho$.
+
+The corollary rests on the maximal-support property of fixed points stated earlier in
+Section~6.4 of the reference: every fixed point of $T$ has support and range within the
+support of the maximum-rank fixed point, so conjugation by $\rho^{-1/2}$ loses nothing.
+
+\section{The formal statements}
+
+The formalization (\leanid{Kraus.weightedCornerFixedPointsStarSubalgebra} and
+\leanid{Kraus.exists\_weightedCorner\_sqrt\_eq\_of\_fixedPoint} in
+\leanid{TNLean/Channel/FixedPoint/WeightedCornerFixedPoints.lean}) takes a Kraus map (the
+completely positive case of the Schwarz hypothesis, as in the other formalized results of
+this section) and an \emph{arbitrary} positive semidefinite fixed point $\rho$ with
+support projection $Q$, and proves that
+\[
+    \rho^{-1/2}\,\{X \mid T(X) = X,\ Q X Q = X\}\,\rho^{-1/2}
+\]
+is a $*$-subalgebra of the corner algebra $Q M_D(\mathbb{C}) Q$: the conjugated set is
+restricted to the fixed points \emph{supported on the support of $\rho$}. The positive
+definite case without the support restriction is
+\leanid{Kraus.weightedFixedPointsStarSubalgebra}.
+
+\section{The gap}
+
+For a maximum-rank fixed point the corner restriction $Q X Q = X$ is vacuous, by the
+maximal-support property of fixed points. That property is not formalized: the
+maximal-support and support-minimality propositions of Section~6.4 of the reference are
+recorded as open in \leanid{TNLean/Channel/FixedPoint/StationarySupport.lean}. Until it
+is available, the formal statement restricted to corner-supported fixed points is a
+proper restriction of the corollary, and neither formal version covers the corollary in
+its stated generality.
+
+\section{Elimination plan}
+
+Formalize the maximal-support property: every fixed point of a trace-preserving Kraus
+map has support and range within the support of a maximum-rank fixed point. The proof in
+the reference decomposes a fixed point into four positive fixed parts (the decomposition
+is formalized as \leanid{IsChannel.posSemidef\_parts\_of\_hermitian\_fixedPoint}) and
+bounds the support of each positive fixed part by the maximal one. With that property,
+instantiating the corner-restricted statements at a maximum-rank fixed point removes the
+restriction $Q X Q = X$ and yields Corollary 6.7 of the reference verbatim.
+
+\end{document}
