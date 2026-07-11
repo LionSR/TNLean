@@ -16,10 +16,10 @@ the identity forces $d_\alpha>0$ and hence $\mu_{\alpha,k}>0$ for every
 sector.
 
 Closing the vertical (physical) indices of a single site of an MPO tensor
-`M` produces the matrix `verticalLoop M = ∑ i, M i i` on the horizontal bond
+$M$ produces the matrix $E = \sum_i M^{ii}$ on the horizontal bond
 space; the trace of the density operator $H^{(N)}$ is the horizontal trace of
-`N` such loops.  Inserting a matrix `P` into one loop produces
-`verticalLoopWith M P`.  The displayed diagram defining $d_\alpha$ in the
+$N$ such loops.  Inserting a matrix $P$ into one loop produces
+the inserted loop $E_P$.  The displayed diagram defining $d_\alpha$ in the
 proof of Proposition 4.13 of arXiv:1606.00608, lines 1899--1901, is one loop
 of the vertical basis tensor $M_\alpha$ followed by loops of $M$, closed by
 the horizontal trace; the compression $P_{\alpha,k}H^{(N)}P_{\alpha,k}$ is by
@@ -28,8 +28,8 @@ the sector projector acting on one site, as in the diagrams of that proof.
 ## Main definitions
 
 * `verticalLoop` / `verticalLoopWith`:
-  the closed single-site vertical loop `∑ i, M i i`, and the loop with a
-  matrix `P` inserted, `∑ a i, P a i • M i a`.
+  the closed single-site vertical loop $E = \sum_i M^{ii}$, and the loop with a
+  matrix $P$ inserted, $E_P = \sum_{i,j} P_{ji}\,M^{ij}$.
 * `sectorCompression`:
   the compression $P_1H^{(N+1)}P_1$ of the density operator by a matrix
   acting on the first site.
@@ -42,7 +42,7 @@ the sector projector acting on one site, as in the diagrams of that proof.
   the hypotheses carried by a sector projector $P_{\alpha,k}$ of the vertical
   decomposition $\bigoplus_{\alpha,k}\mu_{\alpha,k}X_{\alpha,k}M_\alpha
   X_{\alpha,k}^{-1}$ (arXiv:1606.00608, line 1898): orthogonality, and the
-  loop identity `verticalLoopWith M P = μ • Eα`.
+  loop identity $E_P = \mu\,E_\alpha$.
 
 ## Main results
 
@@ -91,7 +91,7 @@ variable {d D : ℕ}
 /-! ### Single-site vertical loops -/
 
 /-- The closed vertical loop of a single site: contracting the ket index of
-an MPO tensor with its bra index gives the matrix `∑ i, M i i` on the
+an MPO tensor with its bra index gives the matrix $\sum_i M^{ii}$ on the
 horizontal bond space.  Each unmarked site of the diagram defining
 $d_\alpha$ in the proof of Proposition 4.13 of arXiv:1606.00608, lines
 1899--1901, contributes one such loop.  As a matrix this is the physical-trace
@@ -310,7 +310,7 @@ the proof of Proposition 4.13 of arXiv:1606.00608, line 1898:
 
 * $P$ is an orthogonal projector (idempotent and Hermitian);
 * inserting $P$ into the single-site vertical loop selects the sector
-  contribution, `verticalLoopWith M P = μ • Eα`.
+  contribution, $E_P = \mu\,E_\alpha$.
 
 In the source decomposition the loop identity holds with
 $\mu = \mu_{\alpha,k}$ and $E_\alpha = \sum_u M_\alpha^{uu}$ the closed
