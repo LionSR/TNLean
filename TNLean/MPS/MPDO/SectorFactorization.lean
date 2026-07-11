@@ -9,12 +9,12 @@ import TNLean.MPS.MPDO.HayashiSectorComparison
 
 This file derives the sector factorization of an injective simple MPO tensor
 from the sectorwise inverse-map comparison, following Appendix C.2 of
-arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete), Lemma `propSN`.
+arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete), Lemma C.4 (propSN).
 
 The sectorwise comparison `MPOTensor.inverseMap_hayashi_sector_comparison`
 computes the diagonal Hayashi sectors of the transformed physical slice. Here
-we complete the passage to equation `formK` (lines 1435--1448): the
-off-diagonal sectors vanish, and once outer indices with a nonzero tail entry
+we complete the passage to the factorization identity formK (lines
+1435--1448): the off-diagonal sectors vanish, and once outer indices with a nonzero tail entry
 are selected, the transformed physical slice splits as a direct sum over
 sectors of tensor products $l_k \otimes r_k$.
 
@@ -26,18 +26,18 @@ sectors of tensor products $l_k \otimes r_k$.
 - `MPOTensor.inverseMap_hayashi_sector_offdiagonal`: the tail entry times any
   off-diagonal Hayashi sector of the transformed physical slice vanishes.
 - `MPOTensor.sectorTensorL` and `MPOTensor.sectorTensorR`: the sector tensors
-  $l_k$ and $r_k$ of equation `formK`.
-- `MPOTensor.physicalSlice_sector_factorization`: equation `formK` — the
-  transformed physical slice is the direct sum over sectors of
+  $l_k$ and $r_k$ of the factorization identity formK.
+- `MPOTensor.physicalSlice_sector_factorization`: the factorization formK —
+  the transformed physical slice is the direct sum over sectors of
   $l_k \otimes r_k$ once a nonzero tail entry is selected.
-- `MPOTensor.exists_physicalSlice_sector_factorization`: the existence form of
-  equation `formK` for a closure against the normalized fourth-site tail,
-  with the nonzero tail entry supplied by the nonzero four-site trace.
+- `MPOTensor.exists_physicalSlice_sector_factorization`: the existence form
+  of the factorization formK for a closure against the normalized fourth-site
+  tail, with the nonzero tail entry supplied by the nonzero four-site trace.
 
 ## References
 
 - [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
-  Appendix C.2, Lemma C.4 (`propSN`), lines 1407--1448
+  Appendix C.2, Lemma C.4 (propSN), lines 1407--1448
 -/
 
 open scoped Matrix ComplexOrder BigOperators
@@ -74,8 +74,8 @@ off-diagonal sector of the transformed physical slice vanishes:
 
 Together with the diagonal identity
 `MPOTensor.inverseMap_hayashi_sector_comparison`, this gives the direct-sum
-structure of equation `formK`: the direct sum is inherited from the splitting
-of the middle site.
+structure of the factorization formK: the direct sum is inherited from the
+splitting of the middle site.
 
 **Local fix (tail index):** the tail entry is
 $R_{\beta_3,\alpha_1}$, as in `inverseMapThreeSiteContraction_eq`, rather than
@@ -122,8 +122,9 @@ theorem inverseMap_hayashi_sector_offdiagonal
   simp_rw [hsector]
   simp
 
-/-- The sector tensor $l_k$ of equation `formK`: for each left virtual index,
-the left Hayashi inverse factor at the selected outer indices, weighted by the
+/-- The sector tensor $l_k$ of the factorization formK: for each left virtual
+index, the left Hayashi inverse factor at the selected outer indices, weighted
+by the
 sector weight and the inverse of the selected tail entry. The tail entry and
 its inverse are attached to $l_k$; the source leaves this distribution between
 $l_k$ and $r_k$ unspecified.
@@ -142,8 +143,9 @@ noncomputable def sectorTensorL
   Matrix.of fun l l' =>
     (R β₃ α₁)⁻¹ * (hη.p k : ℂ) * hayashiInverseLeft K hK hη α₁ β₁ k l l'
 
-/-- The sector tensor $r_k$ of equation `formK`: for each right virtual index,
-the right Hayashi inverse factor at the selected outer indices.
+/-- The sector tensor $r_k$ of the factorization formK: for each right
+virtual index, the right Hayashi inverse factor at the selected outer
+indices.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1435--1448. -/
 noncomputable def sectorTensorR
@@ -153,9 +155,9 @@ noncomputable def sectorTensorR
     Matrix (Fin (hη.dR k)) (Fin (hη.dR k)) ℂ :=
   Matrix.of fun r r' => hayashiInverseRight K hK hη α₃ β₃ k r r'
 
-/-- **Equation `formK`: the sector factorization of an injective simple
-tensor.** Once outer indices with a nonzero tail entry are selected, the
-transformed physical slice splits as a direct sum over Hayashi sectors of
+/-- **The sector factorization of an injective simple tensor (formK).** Once
+outer indices with a nonzero tail entry are selected, the transformed
+physical slice splits as a direct sum over Hayashi sectors of
 tensor products: for all virtual indices $\beta_1$ and $\alpha_3$,
 
 \[
@@ -214,8 +216,9 @@ theorem physicalSlice_sector_factorization
       α₁ β₁ α₃ β₃ hkk' l r l' r'
     exact (mul_eq_zero.mp h0).resolve_left hm
 
-/-- **Existence form of equation `formK`.** For a three-site closure against
-the normalized fourth-site tail, a nonzero four-site trace supplies the outer
+/-- **Existence form of the factorization formK.** For a three-site closure
+against the normalized fourth-site tail, a nonzero four-site trace supplies
+the outer
 indices, and the sector tensors $l_k$ and $r_k$ factorize every transformed
 physical slice. For all virtual indices $\beta_1,\alpha_3$,
 
@@ -224,8 +227,8 @@ physical slice. For all virtual indices $\beta_1,\alpha_3$,
   = \bigoplus_k\,(l_k)_{\beta_1} \otimes (r_k)_{\alpha_3}.
 \]
 
-This is the statement of Lemma `propSN` up to equation `formK` for the
-four-site normalized chain; the neighboring operators $\eta_{k,h}$ and their
+This is the statement of Lemma C.4 (propSN) up to the factorization formK
+for the four-site normalized chain; the neighboring operators $\eta_{k,h}$ and their
 all-length identity are the subsequent steps.
 
 **Local fix (tail index):** the selected nonzero entry of the normalized tail
