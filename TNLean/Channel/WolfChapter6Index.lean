@@ -319,7 +319,7 @@ positive semidefinite fixed point, restricted to corner-supported fixed
 points):
 
 * `Kraus.weightedCornerFixedPointsStarSubalgebra` — the corner elements `Y`
-  with `√ρ Y √ρ` fixed by the map form a `StarSubalgebra` of the corner
+  with `√ρ Y √ρ` fixed by the map form a star-subalgebra of the corner
   algebra `Q M_D(ℂ) Q`, realizing `ρ^{-1/2} {X | T(X) = X, Q X Q = X} ρ^{-1/2}`
   with the inverse square root taken on the support of `ρ`.
 * `Kraus.exists_weightedCorner_sqrt_eq_of_fixedPoint` — conjugation by `√ρ`
@@ -328,8 +328,8 @@ points):
 Wolf's statement takes a maximum-rank fixed-point density matrix and
 conjugates the full fixed-point set; for such `ρ` every fixed point is
 supported on the support of `ρ`, so the corner restriction disappears. That
-maximal-support property is not yet formalized (see
-`docs/paper-gaps/wolf_cor67_maximal_support_restriction.tex`), which is the
+maximal-support property remains to be established here (see
+`docs/paper-gaps/wolf_cor67_maximal_support_restriction.tex`); it is the
 remaining step for the statement in its stated generality.
 
 ### Wolf Theorem 6.15 (Conditional expectation onto fixed-point algebra) — PARTIALLY FORMALIZED
