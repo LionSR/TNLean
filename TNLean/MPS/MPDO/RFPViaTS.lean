@@ -10,8 +10,8 @@ import TNLean.MPS.MPDO.KrausCPTP
 This file states the source-faithful renormalization-fixed-point notion for
 matrix product density operators, following
 arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete), Definition 4.1
-(paper label `RFPMixedTS`, line 657, figures MPDO_XM, MPDO_XMM,
-`MPDO_TandS`).
+(paper label RFPMixedTS, line 657, figures MPDO_XM, MPDO_XMM,
+MPDO_TandS).
 
 In the paper, a tensor `M` in canonical form generating MPDOs is a renormalization
 fixed point when there exist two trace-preserving completely positive maps `T` and
@@ -19,8 +19,8 @@ fixed point when there exist two trace-preserving completely positive maps `T` a
 operators obtained by contracting an arbitrary virtual operator into the tensor
 ring:
 
-* `S[M₂(X)] = M₁(X)`  (paper label `eq:Smap`);
-* `T[M₁(X)] = M₂(X)`  (paper label `eq:Tmap`),
+* `S[M₂(X)] = M₁(X)`  (paper label eq:Smap);
+* `T[M₁(X)] = M₂(X)`  (paper label eq:Tmap),
 
 for all virtual operators `X`. Here, with the physical legs left open,
 
@@ -180,12 +180,12 @@ theorem physCloseN_two_eq_physClose2 (M : MPOTensor d D) :
 /-! ### MPDO renormalization fixed point (Definition 4.1) -/
 
 /-- `IsRFPViaTS M` is the source's MPDO **renormalization fixed point** of
-arXiv:1606.00608 Definition 4.1 (paper label `RFPMixedTS`, line 657): there exist
+arXiv:1606.00608 Definition 4.1 (paper label RFPMixedTS, line 657): there exist
 two trace-preserving completely positive maps `S` and `T` on the physical indices
 intertwining the one-site and two-site physical operators, namely
 
-* `S[M₂(X)] = M₁(X)` for all `X`  (paper label `eq:Smap`), and
-* `T[M₁(X)] = M₂(X)` for all `X`  (paper label `eq:Tmap`).
+* `S[M₂(X)] = M₁(X)` for all `X`  (paper label eq:Smap), and
+* `T[M₁(X)] = M₂(X)` for all `X`  (paper label eq:Tmap).
 
 This is the source's tp-CP-map renormalization fixed point. It is *distinct* from
 `MPOTensor.IsRFP`, the transfer-map idempotence (zero-correlation-length)
