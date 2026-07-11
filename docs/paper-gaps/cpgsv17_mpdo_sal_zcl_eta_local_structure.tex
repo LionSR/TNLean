@@ -248,6 +248,36 @@ itself supply coherent positive representatives for all neighboring pairs;
 the missing argument must control these choices simultaneously across the
 sector graph.
 
+The obstruction is already present when every neighboring bond space is
+one-dimensional.  Take four sectors $0,1,2,3$ and set
+\[
+  \eta_{k,k}=1,\qquad
+  \eta_{0,1}=\eta_{0,2}=\eta_{1,3}=1,\qquad
+  \eta_{2,3}=i,
+\]
+with all other off-diagonal entries equal to zero.  Every directed cyclic
+product is either zero or one, and is therefore positive semidefinite.  The
+sector rephasing which preserves each same-sector product has the form
+\[
+  \eta_{k,h}\longmapsto z_k^{-1}z_h\eta_{k,h},
+  \qquad |z_k|=1.
+\]
+Positivity on the edges $0\to1$, $0\to2$, and $1\to3$ forces
+$z_1=z_0$, $z_2=z_0$, and $z_3=z_1$, respectively.  The transformed edge
+$2\to3$ then still has phase $i$.  Hence no coherent choice of sector phases
+makes all four nonzero neighboring operators positive.
+
+A sufficient additional hypothesis is recurrence of the nonzero support:
+every nonzero directed edge lies on a nonzero directed cycle.  Under this
+hypothesis, positivity of all cyclic tensor products would first show that
+each edge is a phase times a positive operator, then force trivial phase
+around every cycle, and finally permit a coherent choice of vertex phases.
+The source does not state this recurrence hypothesis.  It must therefore be
+derived independently from injectivity, or the positive-choice theorem must
+be recorded as scope-restricted.  The later primitivity argument cannot be
+used for this purpose without circularity, since the source defines the
+nonnegative trace matrix only after choosing positive neighboring operators.
+
 The canonical family
 \leanid{MPOTensor.ExplicitEtaOperators.ofHayashiMarkov} does not supply this
 missing result.  Its operators are partial traces of normalized sector states,
