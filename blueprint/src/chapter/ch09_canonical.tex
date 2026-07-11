@@ -798,6 +798,113 @@ irreducible unital blocks and the algebra-spanning input used later.
     coefficients.
 \end{proof}
 
+\begin{lemma}[Range factorization of the support projection]
+    \label{lem:support_proj_range_factorization}
+    \lean{MPSTensor.exists_supportProj_eq_mul}
+    \lean{MPSTensor.supportProj_mul_left_eq_self}
+    \lean{MPSTensor.one_sub_supportProj_mul_mul_supportProj_eq_zero}
+    \leanok
+    \uses{def:support_proj}
+    The support projection $\pi$ of a positive semidefinite matrix $\rho$
+    factors as $\pi=\rho W$ for a spectral pseudo-inverse $W$, witnessing
+    that the range of $\pi$ is the range of $\rho$.  For a rectangular
+    matrix $Y$, the support projection $\pi$ of $YY^\dagger$ fixes $Y$,
+    $\pi Y=Y$; and whenever $AY=YG$ for some matrix $G$ --- that is, $A$
+    maps the range of $Y$ into itself --- the one-sided invariance
+    $(\Id-\pi)A\pi=0$ holds.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:support_proj}
+    In the spectral decomposition
+    $\rho=U\diag(\lambda)U^\dagger$ take
+    $W=U\diag(\lambda^{+})U^\dagger$, where $\lambda^{+}$ inverts the
+    positive eigenvalues and vanishes on the kernel; then
+    $\rho W=U\diag(\mathbf 1_{\lambda>0})U^\dagger=\pi$.  From
+    $\pi(YY^\dagger)=YY^\dagger$ the matrix
+    $((\Id-\pi)Y)((\Id-\pi)Y)^\dagger$ vanishes, hence $\pi Y=Y$.
+    Finally $(\Id-\pi)A\pi=(\Id-\pi)AY(Y^\dagger W)
+    =(\Id-\pi)Y\,G(Y^\dagger W)=0$.
+\end{proof}
+
+\begin{theorem}[Irreducibility under rescaled conjugation]
+    \label{thm:irreducible_tensor_smul_conj}
+    \lean{MPSTensor.isIrreducibleTensor_smul_conj}
+    \leanok
+    \uses{def:irreducible_tensor, def:support_proj,
+        lem:support_proj_range_factorization}
+    Let $B$ be an irreducible tensor, let $X$ be invertible, and let
+    $c\ne 0$.  Then the rescaled conjugated tensor with letters
+    $c\,X^{-1}B^vX$ is irreducible.  In particular the rescaled unital
+    gauge of an irreducible tensor is irreducible; this is the
+    normalization of \cite[lines~224--225]{Cirac2016MPDO_arXiv} applied to
+    an irreducible corner.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:support_proj_range_factorization}
+    An invariant orthogonal projection $P\notin\{0,\Id\}$ of the
+    conjugated tensor makes the columns of $Y=XP$ span a subspace invariant
+    under every letter of $B$: $B^vY=YG_v$ with
+    $G_v=X^{-1}B^vXP$.  The support projection of $YY^\dagger$ is then a
+    nontrivial invariant orthogonal projection of $B$ by
+    Lemma~\ref{lem:support_proj_range_factorization}: it is nonzero
+    because $Y\ne 0$, and it is not the identity because any nonzero
+    vector of the kernel of $P$ transports through $(X^\dagger)^{-1}$ to
+    the kernel of $YY^\dagger$.  This contradicts irreducibility of $B$.
+\end{proof}
+
+\begin{theorem}[Unital Schwarz data for an irreducible corner]
+    \label{thm:spectral_unital_gauge_schwarz_setup}
+    \lean{MPSTensor.spectralUnitalGauge_schwarz_setup}
+    \leanok
+    \uses{def:irreducible_tensor, def:transfer_map,
+        thm:unital_gauge_of_pd_fixed_point, thm:irreducible_tensor_smul_conj}
+    Let $B$ be an irreducible tensor with a positive definite transfer
+    eigenvector, $\E_B(\rho)=r\rho$ with $\rho>0$ and $r>0$.  Then the
+    rescaled unital gauge $K^v=r^{-1/2}\rho^{-1/2}B^v\rho^{1/2}$ is a
+    unital Kraus family, is an irreducible tensor with an irreducible
+    transfer map, and its adjoint map has a positive definite fixed point.
+    These are the hypotheses of the cyclic decomposition of the peripheral
+    spectrum, \cite[Theorem~6.6]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:unital_gauge_of_pd_fixed_point, thm:irreducible_tensor_smul_conj,
+        thm:psd_fp_pd_irred}
+    Unitality is Theorem~\ref{thm:unital_gauge_of_pd_fixed_point};
+    irreducibility is Theorem~\ref{thm:irreducible_tensor_smul_conj}.  The
+    adjoint of a unital family is trace preserving, so its transfer map is
+    a channel and has a positive semidefinite fixed point by the Ces\`aro
+    argument; irreducibility of the adjoint map upgrades the fixed point to
+    a positive definite one.
+\end{proof}
+
+\begin{lemma}[Eigenvalue transport to the unital gauge]
+    \label{lem:eigenvalue_transport_unital_gauge}
+    \lean{MPSTensor.hasEigenvalue_transferMap_spectralUnitalGauge}
+    \leanok
+    \uses{def:transfer_map}
+    In the setting of
+    Theorem~\ref{thm:spectral_unital_gauge_schwarz_setup}, every transfer
+    eigenvalue $\mu$ of $B$ becomes the transfer eigenvalue $\mu/r$ of the
+    rescaled unital gauge: the gauge conjugates the transfer map by the
+    congruence with $\rho^{1/2}$ and divides it by $r$.  In particular the
+    peripheral eigenvalues $e^{2\pi iq/p}$ of
+    \cite[lines~225--230]{Cirac2016MPDO_arXiv} arise from the transfer
+    eigenvalues of modulus $r$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    If $\E_B(Z)=\mu Z$ then
+    $Z'=\rho^{-1/2}Z\rho^{-1/2}$ is nonzero and satisfies
+    $\E_K(Z')=(\mu/r)Z'$ by direct computation.
+\end{proof}
+
 \begin{theorem}[Unitary diagonal positive fixed point in TP gauge]\label{thm:form_II}
     \lean{MPSTensor.exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor}
     \leanok

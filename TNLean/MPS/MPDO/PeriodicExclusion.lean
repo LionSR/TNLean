@@ -29,11 +29,13 @@ shows that a matrix product density operator admits no such projector.  The
 implication from a nontrivial $p$-periodic vector to such a projector — which
 the source asserts from the general theory of the peripheral spectrum of
 completely positive maps at lines 1889--1891 — is stated as the hypothesis
-`PeriodicVectorYieldsProjector`; its derivation from the cyclic decomposition
-of the peripheral spectrum (Wolf 2012, Theorem 6.6) applied to the vertical
-transfer map remains open.  Granted that hypothesis,
-`hasNoPeriodicVectors_verticalTensor` concludes that the vertically viewed
-tensor has no nontrivial $p$-periodic vectors.
+`PeriodicVectorYieldsProjector`.  The cyclic decomposition of the peripheral
+spectrum (Wolf 2012, Theorem 6.6) applied to the vertical transfer map
+supplies the projector with its word invariance and single-letter
+displacement (`TNLean/MPS/MPDO/CyclicProjector.lean`); the passage from the
+displacement to the all-length non-commutation family remains open.  Granted
+that hypothesis, `hasNoPeriodicVectors_verticalTensor` concludes that the
+vertically viewed tensor has no nontrivial $p$-periodic vectors.
 
 ## Main definitions
 
@@ -127,7 +129,10 @@ $[H^{(N)}]^p$ by the argument of eq1:proof.IV.12 (lines 1874--1887) applied
 to the stacked tensor.  The stacking and invariance parts of this
 derivation are formalized in `TNLean/MPS/MPDO/StackedLayers.lean`, which
 reduces this hypothesis to `PeriodicVectorYieldsCyclicProjector`; the
-remaining gap is recorded in
+cyclic projections themselves, with their word invariance and single-letter
+displacement, are constructed in `TNLean/MPS/MPDO/CyclicProjector.lean`,
+which reduces further to the non-commutation hypothesis
+`NoninvariantProjectorNoncommuting`.  The remaining gap is recorded in
 `docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`. -/
 def PeriodicVectorYieldsProjector (M : MPOTensor d D) : Prop :=
   ∀ ⦃n : ℕ⦄ (V : Matrix (Fin d) (Fin n) ℂ) (B : MPSTensor (D * D) n)

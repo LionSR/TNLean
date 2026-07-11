@@ -370,6 +370,7 @@ import TNLean.MPS.MPDO.VerticalCF
 import TNLean.MPS.MPDO.InvariantProjection
 import TNLean.MPS.MPDO.PeriodicExclusion
 import TNLean.MPS.MPDO.StackedLayers
+import TNLean.MPS.MPDO.CyclicProjector
 import TNLean.MPS.MPDO.SectorTrace
 import TNLean.MPS.MPDO.BiCFDerivation
 import TNLean.MPS.MPDO.ZCL
