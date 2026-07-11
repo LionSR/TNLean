@@ -370,17 +370,41 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{proof}
     \leanok
     \uses{thm:mpdo_inverse_map_three_site_contraction}
-    Expand the Hayashi block equality at fixed indices $(k,l,r)$ and
-    $(k,l',r')$, and apply the inverse tensor at the first and third sites.
-    Moving the two finite sums through the middle-site change of basis reduces
-    the inner contraction to
+    At fixed indices $(k,l,r)$ and $(k,l',r')$, the Hayashi block equality is
     \[
-        {\cal K}^{i_2j_2}_{\beta_1,\alpha_3}
-        R_{\beta_3,\alpha_1}
+        \sum_{i_2,j_2}
+        [U_B]_{(k,l,r),i_2}\,
+        \rho_{i_1i_2i_3,j_1j_2j_3}\,
+        \overline{[U_B]_{(k,l',r'),j_2}}
+        =p_k(\rho_{A b_1}^{(k)})_{(i_1,l),(j_1,l')}
+          (\rho_{b_2 C}^{(k)})_{(r,i_3),(r',j_3)}.
     \]
-    by the preceding theorem. Summing over $i_2,j_2$ gives the transformed
-    physical slice on the left, while the Hayashi block equality gives the
-    product $p_k A^{(k)}B^{(k)}$ on the right.
+    For each $i_2,j_2$, the preceding theorem gives
+    \[
+        \sum_{i_1,j_1,i_3,j_3}
+        ({\cal K}^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
+        ({\cal K}^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}
+        \rho_{i_1i_2i_3,j_1j_2j_3}
+        ={\cal K}^{i_2j_2}_{\beta_1,\alpha_3}
+          R_{\beta_3,\alpha_1}.
+    \]
+    Contract the first equality with the two inverse tensors and interchange
+    the finite sums. Its left-hand side is
+    \begin{align*}
+        &R_{\beta_3,\alpha_1}
+        \sum_{i_2,j_2}[U_B]_{(k,l,r),i_2}\,
+        \kappa_{\beta_1,\alpha_3}(i_2,j_2)\,
+        \overline{[U_B]_{(k,l',r'),j_2}}\\
+        &\qquad={}
+        R_{\beta_3,\alpha_1}\,
+        \widetilde\kappa^{(k)}_{\beta_1,\alpha_3}
+          ((l,r),(l',r')),
+    \end{align*}
+    while its right-hand side is
+    \[
+        p_k A^{(k)}_{\alpha_1,\beta_1}(l,l')
+          B^{(k)}_{\alpha_3,\beta_3}(r,r').
+    \]
 \end{proof}
 
 \begin{definition}[Explicit neighboring $\eta$-operator data]
