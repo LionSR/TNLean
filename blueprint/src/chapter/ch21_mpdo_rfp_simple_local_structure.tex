@@ -68,6 +68,48 @@ strong subadditivity for a normalized three-site reduced state.
     decomposition on the middle subsystem.
 \end{proof}
 
+\begin{theorem}[Four-site SAL marginal has a Hayashi decomposition]
+    \label{thm:mpdo_four_site_sal_eta_structure}
+    \lean{MPOTensor.exists_etaStructure_reducedBlockState_of_isSAL}
+    \leanok
+    \uses{def:is_sal, def:mpdo_eta_structure}
+    Let $K$ satisfy the strong area law, and let
+    $\sigma_3^{(4)}(K)=\tr_4\sigma^{(4)}(K)$ be the three-site marginal of its
+    normalized four-site periodic state. Then $\sigma_3^{(4)}(K)$ admits a
+    quantum-Markov decomposition on its middle site.
+
+    This assertion is restricted to the four-site chain. It is the $N=4$
+    specialization of the three-site decomposition in
+    \cite[Appendix~C.2, lines~1351--1363]{Cirac2016MPDO_arXiv}, which treats all
+    chain lengths in the range of its four-region argument.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_sal_ssa_equality, thm:ssa_equality_reindex_factors,
+        thm:sal_implies_eta_structure}
+    Let $\rho^{\mathrm{flat}}$ denote the three-site marginal with index set
+    $(\Fin{d^1})^3$.
+    By Theorem~\ref{thm:mpdo_sal_ssa_equality},
+    \[
+        S(\rho^{\mathrm{flat}}_{ABC})+S(\rho^{\mathrm{flat}}_B)
+        =S(\rho^{\mathrm{flat}}_{AB})+S(\rho^{\mathrm{flat}}_{BC}).
+    \]
+    Each singleton block has the canonical identification
+    \[
+        e_{\mathrm{site}}:\Fin{d}\simeq\Fin{d^1},
+        \qquad
+        E=e_{\mathrm{site}}\times e_{\mathrm{site}}\times e_{\mathrm{site}},
+    \]
+    and reindexing $\rho^{\mathrm{flat}}$ along $E$ gives
+    $\sigma_3^{(4)}(K)$. Hence
+    Theorem~\ref{thm:ssa_equality_reindex_factors} preserves the displayed
+    equality. Positivity and unit trace follow from the normalized reduced
+    state, so
+    Theorem~\ref{thm:sal_implies_eta_structure} gives the required quantum
+    Markov decomposition.
+\end{proof}
+
 \begin{definition}[Injective inverse map for a simple MPO tensor]
     \label{def:mpdo_injective_inverse_layer}
     \lean{MPOTensor.IsInjective}
