@@ -417,6 +417,19 @@ boundary conditions (PBC).
     $\spn_{\C}\{A^i : i = 0,\ldots,d{-}1\} = \MN{D}$.
 \end{definition}
 
+\begin{figure}[ht]
+    \centering
+    \TNMPSInverseContraction
+    \caption{The inverse-tensor characterization of injectivity: a tensor $A$
+        is injective exactly when there is a tensor $A^{-1}$ with
+        $\sum_i (A^i)_{\alpha,\beta}(A^{-1,i})_{\alpha',\beta'}
+            =\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}$, so contracting
+        $A^{-1}$ with $A$ through the shared physical index leaves the two
+        disconnected virtual-leg pairings. This is
+        \cite[Section~2.3, lines~326--331]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mps_inverse_contraction}
+\end{figure}
+
 \begin{definition}[$L$-block injectivity]\label{def:l_blk_injective}
     \lean{MPSTensor.IsNBlkInjective}
     \leanok

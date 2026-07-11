@@ -49,6 +49,20 @@
     one, so the same fixed-point algebra works at every blocking size.
 \end{proof}
 
+\begin{figure}[ht]
+    \centering
+    \TNMPDOBlockClosureMap
+    \caption{The block closure maps: inserting a boundary matrix $X$ on the
+        virtual bond of the block tensor $M_\alpha$, respectively $A_\alpha$,
+        and closing the virtual loop by the trace yields the operators
+        $M_\alpha(X)$ and $A_\alpha(X)$ on the open physical legs. The spans
+        of these operators generate the fixed-point algebras compared in the
+        source proof of the algebra characterization of mixed-state
+        renormalization fixed points
+        \cite[Appendix~C.4, lines~1974--1980]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_block_closure_map}
+\end{figure}
+
 \begin{theorem}[Fusion yields a stationary algebra tower under a faithful fixed point]%
     \label{thm:mpdo_rfp_via_algebra_from_fusion}
     \lean{MPOTensor.isRFP_MPDO_via_algebra_of_isRFP_MPDO_via_fusion_of_isTP_of_posDef_fixed}

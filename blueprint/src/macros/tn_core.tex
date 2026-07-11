@@ -159,6 +159,17 @@
     -- ($(#1R.east)+(0.42,-0.92)$) -- ($(#1R.east)+(0.42,0)$) -- (#1R.east);%
 }
 
+% MPO site whose ket and bra legs are closed by a trace loop to the right of
+% the site: the physical-trace transfer matrix of the tensor.
+\newcommand{\TN@tracedMPOSite}[2]{%
+    \TN@tensordot{#1}{#2}
+    \TN@leftleg{#1}{0.60}
+    \TN@rightleg{#1}{0.60}
+    \draw[tn phys leg, rounded corners=3pt]
+    (#1.north) |- ($(#1.center)+(0.42,0.52)$)
+    -- ($(#1.center)+(0.42,-0.52)$) -| (#1.south);%
+}
+
 \newcommand{\TN@boxedThreeSiteChain}[4]{%
     \draw[tn leg] (0.40,0) rectangle (3.50,-0.46);
     \TN@tensordot{#1one}{(1.00,0)}
