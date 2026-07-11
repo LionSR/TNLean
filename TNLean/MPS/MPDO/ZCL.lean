@@ -116,8 +116,6 @@ theorem IsSourceZCL.normalized_idempotent {M : MPOTensor d D} (h : IsSourceZCL M
   refine ⟨lam, hlam, ?_⟩
   change ((lam : ℂ)⁻¹ • physTraceTransfer M) * ((lam : ℂ)⁻¹ • physTraceTransfer M)
     = (lam : ℂ)⁻¹ • physTraceTransfer M
-  rw [Matrix.smul_mul, Matrix.mul_smul, smul_smul, hidem, smul_smul]
-  congr 1
-  rw [mul_assoc, inv_mul_cancel₀ hlamC, mul_one]
+  rw [smul_mul_smul_comm, hidem, smul_smul, mul_assoc, inv_mul_cancel₀ hlamC, mul_one]
 
 end MPOTensor

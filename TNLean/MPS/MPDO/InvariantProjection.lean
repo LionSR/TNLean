@@ -150,12 +150,10 @@ theorem firstSiteMatrix_mul_apply (P : Matrix (Fin d) (Fin d) ℂ) {N : ℕ}
   rw [Matrix.mul_apply, sum_fin_succ_eq_sum_cons]
   refine Finset.sum_congr rfl fun i _ => ?_
   simp only [firstSiteMatrix, Fin.cons_zero, Function.comp_def, Fin.cons_succ]
-  rw [Finset.sum_eq_single (fun n : Fin N => σ (Fin.succ n))]
+  rw [Fintype.sum_eq_single (fun n : Fin N => σ (Fin.succ n))]
   · rw [if_pos rfl, mul_one]
-  · intro ρ _ hρ
+  · intro ρ hρ
     rw [if_neg fun hh => hρ hh.symm, mul_zero, zero_mul]
-  · intro hmem
-    exact (hmem (Finset.mem_univ _)).elim
 
 /-- Right multiplication by the first-spin action, entrywise:
 $(GP_1)_{\sigma\tau}=\sum_jG_{\sigma,(j,\tau')}P_{j\tau_0}$, where
@@ -168,12 +166,10 @@ theorem mul_firstSiteMatrix_apply (P : Matrix (Fin d) (Fin d) ℂ) {N : ℕ}
   rw [Matrix.mul_apply, sum_fin_succ_eq_sum_cons]
   refine Finset.sum_congr rfl fun j _ => ?_
   simp only [firstSiteMatrix, Fin.cons_zero, Function.comp_def, Fin.cons_succ]
-  rw [Finset.sum_eq_single (fun n : Fin N => τ (Fin.succ n))]
+  rw [Fintype.sum_eq_single (fun n : Fin N => τ (Fin.succ n))]
   · rw [if_pos rfl, mul_one]
-  · intro ρ _ hρ
+  · intro ρ hρ
     rw [if_neg hρ, mul_zero, mul_zero]
-  · intro hmem
-    exact (hmem (Finset.mem_univ _)).elim
 
 /-- First-site actions compose site by site:
 $P_1Q_1 = (PQ)_1$ on an $(N+1)$-site chain. -/
