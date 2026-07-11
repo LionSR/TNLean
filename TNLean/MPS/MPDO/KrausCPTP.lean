@@ -157,8 +157,8 @@ private lemma partialTraceRightKraus_conjTranspose_mul_apply
 /-- The partial trace over a right tensor factor is trace-preserving and
 completely positive. The Kraus operators fix one label of the factor being
 traced. After retained and discarded subspins are regrouped as a product, this
-is the elementary partial-trace ingredient of `\mathcal T_0` and
-`\mathcal S_0` in arXiv:1606.00608, Appendix C.2, lines 1521--1522 and 1547. -/
+is the elementary partial-trace ingredient of $\mathcal T_0$ and
+$\mathcal S_0$ in arXiv:1606.00608, Appendix C.2, lines 1521--1522 and 1547. -/
 lemma partialTraceRightLM_isKrausCPTP
     {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β] :
     IsKrausCPTP (partialTraceRightLM (α := α) (β := β)) := by
