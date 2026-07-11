@@ -2379,10 +2379,11 @@ zero-block representation.
 For a singular fixed point the conjugation is taken with the inverse square root on the
 support of $\rho$, and the conjugated set lives in the corner algebra of the support
 projection. The corollary in~\cite{Wolf2012Quantum} takes a maximum-rank fixed point, for
-which every fixed point of $T$ is supported on the support of $\rho$; that
-maximal-support property remains to be established here, and the following statements
-restrict to
-the fixed points supported on the support of $\rho$.
+which every fixed point of $T$ is supported on the support of $\rho$; the following
+statements restrict to the fixed points supported on the support of $\rho$.
+% Maintainer note: the maximal-support property (which makes the restriction vacuous at
+% a maximum-rank fixed point) is not yet formalized; see
+% docs/paper-gaps/wolf_cor67_maximal_support_restriction.tex.
 
 \begin{theorem}[Weighted corner fixed points form a $*$-subalgebra]%
     \label{thm:weightedCornerFixedPointsStarSubalgebra}
@@ -2392,18 +2393,15 @@ the fixed points supported on the support of $\rho$.
     Let $T(X) = \sum_i K_i X K_i^\dagger$ be trace-preserving, let $\rho \succeq 0$
     satisfy $T(\rho) = \rho$, and let $Q$ be the support projection of $\rho$. The corner
     elements $Y \in Q\,\MN{D}\,Q$ such that $\sqrt{\rho}\, Y \sqrt{\rho}$ is a fixed
-    point of $T$ form a $*$-subalgebra of the corner algebra $Q\,\MN{D}\,Q$; under
-    conjugation by $\sqrt{\rho}$ its carrier corresponds exactly to the fixed points of
-    $T$ supported on the support of $\rho$
-    (Lemma~\ref{lem:weightedCorner_sqrt_surjective}), so it realizes
+    point of $T$ form a $*$-subalgebra of the corner algebra $Q\,\MN{D}\,Q$. Combined
+    with the conjugation correspondence of
+    Lemma~\ref{lem:weightedCorner_sqrt_surjective}, the carrier realizes
     \[
         \rho^{-1/2}\,\{X \in \MN{D} \mid T(X) = X,\ Q X Q = X\}\,\rho^{-1/2},
     \]
-    with the inverse square root taken on the support of $\rho$. This is the singular
+    with the inverse square root taken on the support of $\rho$: the singular
     case of Corollary~6.7 of~\cite{Wolf2012Quantum}, restricted to the fixed points
-    supported on the support of $\rho$; for the maximum-rank fixed point of the
-    corollary the restriction is vacuous, by the maximal-support property of fixed
-    points, which remains to be established here.
+    supported on the support of $\rho$.
 \end{theorem}
 
 \begin{proof}
@@ -2460,7 +2458,7 @@ the fixed points supported on the support of $\rho$.
     images, which lies in the compressed $*$-subalgebra.
 \end{proof}
 
-\begin{lemma}[Conjugation by the square root is onto the corner-supported fixed
+\begin{theorem}[Conjugation by the square root is onto the corner-supported fixed
     points]%
     \label{lem:weightedCorner_sqrt_surjective}
     \lean{Kraus.exists_weightedCorner_sqrt_eq_of_fixedPoint}
@@ -2469,7 +2467,7 @@ the fixed points supported on the support of $\rho$.
     In the setting of Theorem~\ref{thm:weightedCornerFixedPointsStarSubalgebra}, every
     fixed point $X$ of $T$ with $Q X Q = X$ arises as $X = \sqrt{\rho}\, Y \sqrt{\rho}$
     for a corner-supported $Y$ with $\sqrt{\rho}\, Y \sqrt{\rho}$ fixed by $T$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
