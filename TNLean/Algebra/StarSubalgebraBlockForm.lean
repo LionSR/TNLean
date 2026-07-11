@@ -275,7 +275,7 @@ This is the block representation of a finite-dimensional star-algebra of
 unital case: a star-subalgebra contains the identity, so there is no zero block. The
 containment of $S$ in the block algebra is the adapted-basis representation of
 `StarSubalgebra.exists_adapted_orthonormalBasis`, conjugated by the unitary change of basis
-of `StarSubalgebra.exists_unitary_conj_blockDiagonal_of_orthonormalBasis`; the reverse
+of `OrthonormalBasis.exists_unitary_conj_blockDiagonal`; the reverse
 inclusion holds because a matrix that is block diagonal in the adapted basis commutes with
 the commutant of $S$ (`StarSubalgebra.exists_commutant_coeff`) and therefore belongs to $S$
 by the double-commutant criterion (`StarSubalgebra.mem_of_forall_comm`). -/
@@ -290,7 +290,7 @@ theorem exists_unitary_conj_blockDiagonal_iff :
   classical
   obtain ⟨K, d, m, b, hd, hm, hirr, hcross, hact⟩ := S.exists_adapted_orthonormalBasis
   -- The unitary change of basis carrying blockwise actions to block-diagonal matrices.
-  obtain ⟨e, U, hUmem, hconj⟩ := exists_unitary_conj_blockDiagonal_of_orthonormalBasis b
+  obtain ⟨e, U, hUmem, hconj⟩ := b.exists_unitary_conj_blockDiagonal
   refine ⟨K, d, m, e, U, hUmem, hd, hm, fun A => ⟨fun hA => ?_, fun h => ?_⟩⟩
   · -- Containment: the adapted action of a member gives the block-diagonal form.
     obtain ⟨B, hB⟩ := hact A hA
