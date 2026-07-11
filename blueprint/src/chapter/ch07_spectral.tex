@@ -2376,6 +2376,105 @@ zero-block representation.
     $\rho^{-1/2} F_T \rho^{-1/2}$.
 \end{proof}
 
+For a singular fixed point the conjugation is taken with the inverse square root on the
+support of $\rho$, and the conjugated set lives in the corner algebra of the support
+projection. The corollary in~\cite{Wolf2012Quantum} takes a maximum-rank fixed point, for
+which every fixed point of $T$ is supported on the support of $\rho$; that
+maximal-support property is not yet formalized, and the following statements restrict to
+the fixed points supported on the support of $\rho$.
+
+\begin{theorem}[Weighted corner fixed points form a $*$-subalgebra]%
+    \label{thm:weightedCornerFixedPointsStarSubalgebra}
+    \lean{Kraus.weightedCornerFixedPointsStarSubalgebra}
+    \leanok
+    \uses{def:tp_kraus, def:support_proj, rem:corner_algebra_star_instances}
+    Let $T(X) = \sum_i K_i X K_i^\dagger$ be trace-preserving, let $\rho \succeq 0$
+    satisfy $T(\rho) = \rho$, and let $Q$ be the support projection of $\rho$. The corner
+    elements $Y \in Q\,\MN{D}\,Q$ such that $\sqrt{\rho}\, Y \sqrt{\rho}$ is a fixed
+    point of $T$ form a $*$-subalgebra of the corner algebra $Q\,\MN{D}\,Q$; under
+    conjugation by $\sqrt{\rho}$ its carrier corresponds exactly to the fixed points of
+    $T$ supported on the support of $\rho$
+    (Lemma~\ref{lem:weightedCorner_sqrt_surjective}), so it realizes
+    \[
+        \rho^{-1/2}\,\{X \in \MN{D} \mid T(X) = X,\ Q X Q = X\}\,\rho^{-1/2},
+    \]
+    with the inverse square root taken on the support of $\rho$. This is the singular
+    case of Corollary~6.7 of~\cite{Wolf2012Quantum}, restricted to the fixed points
+    supported on the support of $\rho$; for the maximum-rank fixed point of the
+    corollary the restriction is vacuous, by the maximal-support property of fixed
+    points, which is not yet formalized.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:weightedFixedPointsStarSubalgebra,
+        thm:supported_corner_compression_isometry, thm:compression_on_support_posDef,
+        thm:support_proj_fixed}
+    Closure under addition, scalars, and conjugation is linearity together with the
+    stability of fixed points under conjugate transposition; the corner unit $Q$ belongs
+    to the set because $\sqrt{\rho}\, Q \sqrt{\rho} = \rho$ is a fixed point, the support
+    projection absorbing the square root: $Q \sqrt{\rho} = \sqrt{\rho} = \sqrt{\rho}\,Q$,
+    since $(\Id - Q)\sqrt{\rho}\,\bigl((\Id - Q)\sqrt{\rho}\bigr)^{\dagger} =
+    (\Id - Q)\rho(\Id - Q) = 0$.
+
+    For closure under multiplication, compress to the support sector: since $\rho$ is a
+    fixed point of $T$, the support projection satisfies $(\Id - Q) K_i Q = 0$
+    (Theorem~\ref{thm:support_proj_fixed}), the compressed family $Q K_i Q$ is
+    trace-preserving on the corner, and the compression along the isometry
+    $V : \C^{r} \to \C^{D}$ of Theorem~\ref{thm:supported_corner_compression_isometry},
+    with $V^{\dagger} V = \Id_r$ and $V V^{\dagger} = Q$, produces a trace-preserving
+    family $C$ on $\C^{r}$ whose Schr\"odinger map has the positive definite fixed point
+    $\sigma = V^{\dagger} \rho V$ (Theorem~\ref{thm:compression_on_support_posDef}). The
+    square root compresses along the isometry,
+    \[
+        \sqrt{\sigma} \;=\; V^{\dagger} \sqrt{\rho}\, V,
+    \]
+    by uniqueness of the positive square root, since
+    $(V^{\dagger}\sqrt{\rho}V)(V^{\dagger}\sqrt{\rho}V)
+    = V^{\dagger}\sqrt{\rho}\,Q\sqrt{\rho}V = \sigma$. Hence for corner-supported $Y$,
+    \[
+        \sqrt{\sigma}\,(V^{\dagger} Y V)\,\sqrt{\sigma}
+        \;=\; V^{\dagger}\,(\sqrt{\rho}\, Y \sqrt{\rho})\,V,
+    \]
+    and the fixed-point equations correspond: for corner-supported $W$ one has
+    $T(W) = W$ exactly when the compressed map fixes $V^{\dagger} W V$, because the
+    compressed map computes $V^{\dagger}\,Q\,T(W)\,Q\,V$ and $T(W)$ is again
+    corner-supported. The set therefore corresponds, element by element, to the weighted
+    fixed points of the compressed family with respect to the positive definite fixed
+    point $\sigma$, which form a $*$-subalgebra by
+    Theorem~\ref{thm:weightedFixedPointsStarSubalgebra}; closure under multiplication
+    transports back through the correspondence.
+\end{proof}
+
+\begin{lemma}[Conjugation by the square root is onto the corner-supported fixed
+    points]%
+    \label{lem:weightedCorner_sqrt_surjective}
+    \lean{Kraus.exists_weightedCorner_sqrt_eq_of_fixedPoint}
+    \leanok
+    \uses{def:tp_kraus, def:support_proj}
+    In the setting of Theorem~\ref{thm:weightedCornerFixedPointsStarSubalgebra}, every
+    fixed point $X$ of $T$ with $Q X Q = X$ arises as $X = \sqrt{\rho}\, Y \sqrt{\rho}$
+    for a corner-supported $Y$ with $\sqrt{\rho}\, Y \sqrt{\rho}$ fixed by $T$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:supported_corner_compression_isometry, thm:compression_on_support_posDef,
+        thm:support_proj_fixed}
+    Compress to the support sector as in the proof of
+    Theorem~\ref{thm:weightedCornerFixedPointsStarSubalgebra} and set
+    \[
+        Y \;=\; V\,\bigl(\sqrt{\sigma}^{-1}\,(V^{\dagger} X V)\,
+            \sqrt{\sigma}^{-1}\bigr)\,V^{\dagger},
+    \]
+    where $\sigma = V^{\dagger} \rho V$ is positive definite, so $\sqrt{\sigma}$ is
+    invertible. Then $Y$ is corner-supported, and the compression identity
+    $\sqrt{\sigma} = V^{\dagger}\sqrt{\rho}\,V$ gives
+    $V^{\dagger}(\sqrt{\rho}\,Y\sqrt{\rho})V = V^{\dagger} X V$, hence
+    $\sqrt{\rho}\, Y \sqrt{\rho} = Q X Q = X$, both sides being corner-supported. In
+    particular $\sqrt{\rho}\, Y \sqrt{\rho}$ is fixed by $T$.
+\end{proof}
+
 \section{Further irreducibility and primitivity equivalences}
 
 This section collects several criteria and equivalences from~\cite[Theorems~6.2, 6.7, 6.8]{Wolf2012Quantum} that are
