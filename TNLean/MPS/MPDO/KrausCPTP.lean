@@ -5,6 +5,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.MPDO.Defs
 import TNLean.Analysis.MatrixSqrt
 import TNLean.Channel.PartialTrace
+import Mathlib.Data.Matrix.PEquiv
+import Mathlib.LinearAlgebra.Matrix.Reindex
 
 /-!
 # Trace-preserving completely positive maps in Kraus form
@@ -20,8 +22,12 @@ dimensions.
 * `IsKrausCPTP`: a trace-preserving completely positive map in rectangular
   Kraus form.
 * `isKrausCPTP_id`: the identity map is trace-preserving completely positive.
+* `isKrausCPTP_of_singleKraus`: conjugation by an isometry is trace-preserving
+  completely positive.
 * `isKrausCPTP_comp`: composition preserves the trace-preserving completely
   positive property.
+* `Matrix.equivReindexMap_isKrausCPTP`: reindexing by an equivalence is
+  trace-preserving completely positive.
 * `Matrix.controlledKrausMap_isKrausCPTP`: orthogonal control of sectorwise
   Kraus families is trace-preserving completely positive.
 * `Matrix.partialTraceRightLM_isKrausCPTP`: tracing a right tensor factor is a
@@ -51,6 +57,19 @@ theorem isKrausCPTP_id {α : Type*} [Fintype α] [DecidableEq α] :
   · intro X
     simp
   · simp
+
+/-- A map given by conjugation with a single isometry is trace-preserving
+completely positive. The local basis isometry in arXiv:1606.00608,
+Appendix C.2, lines 1439 and 1520, has this form. -/
+theorem isKrausCPTP_of_singleKraus {α β : Type*} [Fintype α] [DecidableEq α]
+    [Fintype β] [DecidableEq β]
+    {S : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ} (V : Matrix β α ℂ)
+    (hform : ∀ X, S X = V * X * Vᴴ) (hV : Vᴴ * V = 1) :
+    IsKrausCPTP S := by
+  refine ⟨1, fun _ => V, ?_, ?_⟩
+  · intro X
+    simpa only [Fin.sum_univ_one] using hform X
+  · simpa only [Fin.sum_univ_one] using hV
 
 /-- Composition of trace-preserving completely positive maps is again
 trace-preserving completely positive. If `T` has Kraus operators `Bⱼ` and `S`
@@ -86,6 +105,50 @@ theorem isKrausCPTP_comp {α β γ : Type*} [Fintype α] [DecidableEq α] [Finty
     rw [step, hA_tp, Matrix.one_mul]
 
 namespace Matrix
+
+/-! ### Equivalence reindexing -/
+
+/-- Reindex both matrix coordinates along an equivalence of index sets.
+This is the basis relabeling used to regroup tensor factors and shift
+subspins in arXiv:1606.00608, Appendix C.2, lines 1521--1522, 1535--1540,
+1547, and 1555--1559. -/
+def equivReindexMap {α β : Type*} (e : α ≃ β) :
+    Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ :=
+  (Matrix.reindexLinearEquiv ℂ ℂ e e).toLinearMap
+
+/-- Reindexing both matrix coordinates along an equivalence is
+trace-preserving completely positive. This provides the general basis
+relabeling operation required by the regroupings and subspin shifts in
+arXiv:1606.00608, Appendix C.2, lines 1521--1522, 1535--1540, 1547, and
+1555--1559. -/
+theorem equivReindexMap_isKrausCPTP {α β : Type*} [Fintype α] [DecidableEq α]
+    [Fintype β] [DecidableEq β] (e : α ≃ β) :
+    IsKrausCPTP (equivReindexMap e) := by
+  let P : Matrix β α ℂ := e.symm.toPEquiv.toMatrix
+  apply isKrausCPTP_of_singleKraus P
+  · intro X
+    ext b c
+    simp [equivReindexMap, Matrix.coe_reindexLinearEquiv,
+      Matrix.reindex_apply, P, Matrix.mul_apply, PEquiv.toMatrix_apply]
+  · ext a b
+    by_cases hab : a = b
+    · subst b
+      rw [Matrix.one_apply_eq, Matrix.mul_apply]
+      rw [Finset.sum_eq_single (e a)]
+      · simp [P, Matrix.conjTranspose_apply, PEquiv.toMatrix_apply]
+      · intro b _ hba
+        have hne : e.symm b ≠ a := by
+          intro h
+          apply hba
+          simpa using congrArg e h
+        simp [P, Matrix.conjTranspose_apply, PEquiv.toMatrix_apply, hne]
+      · simp
+    · rw [Matrix.one_apply_ne hab, Matrix.mul_apply]
+      apply Finset.sum_eq_zero
+      intro x _
+      by_cases hxa : e.symm x = a
+      · simpa [P, Matrix.conjTranspose_apply, PEquiv.toMatrix_apply, hxa] using hab
+      · simp [P, Matrix.conjTranspose_apply, PEquiv.toMatrix_apply, hxa]
 
 /-! ### Orthogonally controlled direct sums -/
 
