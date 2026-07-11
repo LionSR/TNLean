@@ -83,9 +83,9 @@ def sectorChainEquiv (hη : EtaStructure ρ) (N : ℕ) :
       hη.decompB.symm ⟨x.1 n, x.2 n⟩ :=
   rfl
 
-/-- Conjugating both physical indices of every local MPO matrix by the same
-matrix changes the physical basis without changing the horizontal bond space.
--/
+/-- Forming the congruence $U\kappa_{\beta,\alpha}U^\dagger$ on every local
+MPO matrix leaves the horizontal bond space unchanged. When $U$ is unitary,
+this is the corresponding physical basis change. -/
 noncomputable def conjugatePhysical (K : MPOTensor d D)
     (U : Matrix (Fin d) (Fin d) ℂ) : MPOTensor d D :=
   fun i j β α => (U * physicalSlice K β α * Uᴴ) i j
@@ -103,7 +103,9 @@ noncomputable def conjugatePhysical (K : MPOTensor d D)
   rfl
 
 /-- Within one sector, the basis-conjugated local MPO matrix is the product of
-the corresponding entries of the left and right sector tensors. -/
+the corresponding entries of the left and right sector tensors.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1435--1448. -/
 theorem conjugatePhysical_sectorFactorization_apply
     (K : MPOTensor d D) (hη : EtaStructure ρ)
     (l : (q : Fin hη.m) → Fin D →

@@ -873,17 +873,18 @@ strong subadditivity for a normalized three-site reduced state.
     \]
 \end{definition}
 
-\begin{definition}[Physical basis change of an MPO tensor]
+\begin{definition}[Physical conjugation of an MPO tensor]
     \label{def:mpdo_conjugate_physical}
     \lean{MPOTensor.conjugatePhysical}
     \leanok
-    Let $U$ be a unitary matrix on the physical space. The physical basis
-    change of ${\cal K}$ is the tensor $\widetilde{\cal K}$ defined by
+    Let $U$ be a matrix on the physical space. The physical conjugation of
+    ${\cal K}$ by $U$ is the tensor $\widetilde{\cal K}$ defined by
     \[
         \widetilde\kappa_{\beta,\alpha}^{\,ij}
         =\bigl(U\kappa_{\beta,\alpha}U^\dagger\bigr)_{ij}.
     \]
-    Its horizontal bond indices are unchanged.
+    Its horizontal bond indices are unchanged. When $U$ is unitary, this is
+    the corresponding physical basis change.
 \end{definition}
 
 \begin{definition}[Cyclic tensor product of neighboring operators]
