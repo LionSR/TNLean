@@ -39,6 +39,7 @@ import TNLean.Algebra.CocycleCohomology
 import TNLean.Algebra.SpinCover
 import TNLean.Algebra.MatrixRankClosed
 import TNLean.Algebra.StarSubalgebraBlockDiagonal
+import TNLean.Algebra.StarSubalgebraBlockForm
 import TNLean.Algebra.StarSubalgebraIntertwinerIsometry
 import TNLean.Algebra.StarSubalgebraIrreducibleDecomp
 import TNLean.Algebra.StarSubalgebraIsotypic

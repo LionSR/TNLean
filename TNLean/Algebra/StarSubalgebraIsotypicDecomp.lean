@@ -25,10 +25,13 @@ family, the components span the whole space.
 * `StarSubalgebra.isOrtho_sSup_of_not_sameIsotype` -- if no piece of one same-type class is of
   the same type as any piece of another class, then the suprema of the two classes are
   orthogonal.
+* `StarSubalgebra.exists_sameIsotype_of_le_sSup` -- an irreducible subspace contained in the
+  supremum of a family of irreducible pieces has the same type as one of the pieces.
 * `StarSubalgebra.exists_orthogonal_isotypic_decomposition` -- the whole representation space
   is the supremum of a finite, pairwise orthogonal family of isotypic components, each of
   which is the supremum of a finite, nonempty same-type class of pairwise orthogonal
-  irreducible pieces.
+  irreducible pieces; irreducible subspaces contained in distinct components are never of the
+  same type.
 -/
 
 namespace StarSubalgebra
@@ -51,19 +54,39 @@ theorem isOrtho_sSup_of_not_sameIsotype
   intro q hq
   exact S.isOrtho_of_not_sameIsotype (h₁ p hp) (h₂ q hq) (h p hp q hq)
 
+/-- An irreducible subspace contained in the supremum of a family of irreducible pieces has
+the same type as one of the pieces. Were it of a different type than every piece, it would be
+orthogonal to every piece, hence to their supremum, hence to itself, forcing it to vanish.
+See *Quantum Channels & Operations* (Wolf 2012), Chapter 6, towards Theorem 6.14. -/
+theorem exists_sameIsotype_of_le_sSup {D : Set (Submodule ℂ (EuclideanSpace ℂ n))}
+    (hD : ∀ q ∈ D, S.IsIrreducibleSubspace q) {p : Submodule ℂ (EuclideanSpace ℂ n)}
+    (hp : S.IsIrreducibleSubspace p) (hle : p ≤ sSup D) :
+    ∃ q ∈ D, S.SameIsotype p q := by
+  by_contra hnone
+  push Not at hnone
+  have hortho : p ⟂ sSup D := Submodule.isOrtho_sSup_right.mpr fun q hq =>
+    S.isOrtho_of_not_sameIsotype hp (hD q hq) (hnone q hq)
+  exact hp.2.1 (Submodule.isOrtho_self.mp (hortho.mono_right hle))
+
 /-- The whole representation space of a finite-dimensional star-subalgebra of complex matrices
 is the supremum of a finite, pairwise orthogonal family of isotypic components. Each component
 is the supremum of a finite, nonempty same-type class of pairwise orthogonal irreducible
-pieces. The orthogonal decomposition into irreducible pieces supplies the family; the
-same-type relation groups it into classes, which inherit the pairwise orthogonality; and
-pieces of different type are orthogonal, so distinct components are orthogonal. See
-*Quantum Channels & Operations* (Wolf 2012), Chapter 6, towards Theorem 6.14. -/
+pieces, and irreducible subspaces contained in distinct components are never of the same type.
+The orthogonal decomposition into irreducible pieces supplies the family; the same-type
+relation groups it into classes, which inherit the pairwise orthogonality; and pieces of
+different type are orthogonal, so distinct components are orthogonal. An irreducible subspace
+of a component has the same type as the pieces of its class, so two such subspaces in distinct
+components cannot have the same type. See *Quantum Channels & Operations* (Wolf 2012),
+Chapter 6, towards Theorem 6.14. -/
 theorem exists_orthogonal_isotypic_decomposition :
     ∃ C : Set (Submodule ℂ (EuclideanSpace ℂ n)), C.Finite ∧
       C.Pairwise (· ⟂ ·) ∧ sSup C = ⊤ ∧
-      ∀ c ∈ C, ∃ Dc : Set (Submodule ℂ (EuclideanSpace ℂ n)),
+      (∀ c ∈ C, ∃ Dc : Set (Submodule ℂ (EuclideanSpace ℂ n)),
         Dc.Nonempty ∧ Dc.Finite ∧ (∀ p ∈ Dc, S.IsIrreducibleSubspace p) ∧ c = sSup Dc ∧
-          Dc.Pairwise (· ⟂ ·) ∧ Dc.Pairwise fun p q => S.SameIsotype p q := by
+          Dc.Pairwise (· ⟂ ·) ∧ Dc.Pairwise fun p q => S.SameIsotype p q) ∧
+      ∀ c ∈ C, ∀ c' ∈ C, c ≠ c' →
+        ∀ p, S.IsIrreducibleSubspace p → p ≤ c →
+          ∀ q, S.IsIrreducibleSubspace q → q ≤ c' → ¬ S.SameIsotype p q := by
   classical
   obtain ⟨D, hDfin, hDirr, hDpair, hDsup⟩ := S.exists_orthogonal_irreducible_decomposition
   -- The same-type class of a piece `p`, taken within the family `D`.
@@ -90,7 +113,7 @@ theorem exists_orthogonal_isotypic_decomposition :
         (S.sameIsotype_symm (hDirr p hp) (hDirr p' hp') hsame) hpq
     · exact S.sameIsotype_trans (hDirr p hp) (hDirr p' hp') (hDirr q hqD) hsame hp'q
   -- The isotypic components are the suprema of the classes.
-  refine ⟨(fun p => sSup (cls p)) '' D, hDfin.image _, ?_, ?_, ?_⟩
+  refine ⟨(fun p => sSup (cls p)) '' D, hDfin.image _, ?_, ?_, ?_, ?_⟩
   · -- Distinct components come from representatives of different type, so they are orthogonal.
     rintro _ ⟨p, hp, rfl⟩ _ ⟨p', hp', rfl⟩ hne
     have hnot : ¬ S.SameIsotype p p' :=
@@ -115,6 +138,23 @@ theorem exists_orthogonal_isotypic_decomposition :
     rintro c ⟨p, hp, rfl⟩
     exact ⟨cls p, ⟨p, hcls_self p hp⟩, hcls_fin p, hcls_irr p, rfl,
       hDpair.mono (Set.sep_subset _ _), hcls_same p hp⟩
+  · -- Irreducible subspaces of distinct components are of different types: each has the type
+    -- of its component's representative, and distinct components have representatives of
+    -- different types.
+    rintro _ ⟨p, hp, rfl⟩ _ ⟨p', hp', rfl⟩ hne w hw hwle w' hw' hw'le hsame
+    have hnot : ¬ S.SameIsotype p p' :=
+      fun hsame' => hne (congrArg sSup (hcls_eq p hp p' hp' hsame'))
+    obtain ⟨a, ha, hwa⟩ := S.exists_sameIsotype_of_le_sSup (hcls_irr p) hw hwle
+    obtain ⟨a', ha', hw'a'⟩ := S.exists_sameIsotype_of_le_sSup (hcls_irr p') hw' hw'le
+    -- Chain the types: `p ~ a ~ w ~ w' ~ a' ~ p'`.
+    have hpw : S.SameIsotype p w :=
+      S.sameIsotype_trans (hDirr p hp) (hcls_irr p a ha) hw ha.2
+        (S.sameIsotype_symm hw (hcls_irr p a ha) hwa)
+    have hw'p' : S.SameIsotype w' p' :=
+      S.sameIsotype_trans hw' (hcls_irr p' a' ha') (hDirr p' hp') hw'a'
+        (S.sameIsotype_symm (hDirr p' hp') (hcls_irr p' a' ha') ha'.2)
+    have hpw' : S.SameIsotype p w' := S.sameIsotype_trans (hDirr p hp) hw hw' hpw hsame
+    exact hnot (S.sameIsotype_trans (hDirr p hp) hw' (hDirr p' hp') hpw' hw'p')
 
 end StarSubalgebra
 
