@@ -520,7 +520,8 @@
     \lean{MPOTensor.sectorCompression_def}
     \lean{MPOTensor.blockChainTrace}
     \leanok
-    \uses{def:mpo_tensor, def:mpo_family, def:mpdo_vertical_one_site_actions}
+    \uses{def:mpo_tensor, def:mpo_family, def:vertical_tensor_mpdo,
+        def:mpdo_vertical_one_site_actions}
     Closing the vertical indices of a single site of an MPO tensor $M$ gives
     the matrix
     \[
@@ -595,7 +596,7 @@
     \label{def:mpdo_sector_projector}
     \lean{MPOTensor.SectorProjectorData}
     \leanok
-    \uses{def:mpdo_vertical_loops}
+    \uses{def:mpdo_vertical_loops, def:vertical_tensor_mpdo}
     A matrix $P\in M_d(\C)$ is a sector projector for the weight
     $\mu\in\C$ and the matrix $E_\alpha\in M_D(\C)$ if $P$ is an orthogonal
     projector and inserting $P$ into the single-site vertical loop selects
@@ -604,8 +605,9 @@
         E_P=\mu\,E_\alpha.
     \]
     In the vertical decomposition
-    $\bigoplus_{\alpha,k}\mu_{\alpha,k}X_{\alpha,k}M_\alpha
-    X_{\alpha,k}^{-1}$ of the proof of
+    $\widetilde M=\bigoplus_{\alpha,k}\mu_{\alpha,k}X_{\alpha,k}M_\alpha
+    X_{\alpha,k}^{-1}$ of the vertically viewed tensor, carried by the
+    physical space in the proof of
     \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}, the projector
     $P_{\alpha,k}$ selecting the sector $(\alpha,k)$ has this property with
     $\mu=\mu_{\alpha,k}$ and $E_\alpha$ the closed vertical loop of
