@@ -21,6 +21,19 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
+/-- Evaluating a tensor on a configuration listed in site order gives the
+ordered product of its local matrices. This is a source-independent expansion
+of the definition of word evaluation. -/
+theorem evalWord_ofFn_eq_prod (A : MPSTensor d D) {N : ℕ}
+    (σ : Fin N → Fin d) :
+    evalWord A (List.ofFn σ) = (List.ofFn fun n => A (σ n)).prod := by
+  induction N with
+  | zero => simp only [List.ofFn_zero, evalWord_nil, List.prod_nil]
+  | succ n ih =>
+    simp only [List.ofFn_succ, evalWord_cons, List.prod_cons]
+    congr 1
+    exact ih (σ ∘ Fin.succ)
+
 /-!
 ### Path expansion of matrix-product entries
 

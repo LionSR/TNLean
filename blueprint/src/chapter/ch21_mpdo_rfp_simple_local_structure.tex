@@ -956,6 +956,151 @@ strong subadditivity for a normalized three-site reduced state.
     Theorem~\ref{thm:mpdo_cyclic_sector_contraction}; apply that theorem.
 \end{proof}
 
+\begin{definition}[Sector-adapted chain coordinates]
+    \label{def:mpdo_sector_chain_coordinates}
+    \lean{MPOTensor.SectorFiber}
+    \lean{MPOTensor.SectorChainIndex}
+    \lean{MPOTensor.sectorChainEquiv}
+    \leanok
+    \uses{def:mpdo_eta_structure}
+    For a sector configuration $k=(k_0,\ldots,k_{N-1})$, let
+    \[
+        I_k=\prod_{n=0}^{N-1}
+          \bigl(\{0,\ldots,d_L(k_n)-1\}\times
+                 \{0,\ldots,d_R(k_n)-1\}\bigr).
+    \]
+    Applying the one-site Hayashi decomposition at every site gives a
+    bijection
+    \[
+        \Phi_N:\{0,\ldots,d-1\}^N
+          \longrightarrow
+          \coprod_{k_0,\ldots,k_{N-1}} I_k.
+    \]
+    We write $\operatorname{reindex}_{\Phi_N}(M)$ for the matrix obtained by
+    transporting both indices of $M$ along this bijection.
+\end{definition}
+
+\begin{definition}[Physical conjugation of an MPO tensor]
+    \label{def:mpdo_conjugate_physical}
+    \lean{MPOTensor.conjugatePhysical}
+    \leanok
+    \uses{def:mpo_tensor}
+    Let $U$ be a matrix on the physical space. The physical conjugation of
+    ${\cal K}$ by $U$ is the tensor $\widetilde{\cal K}$ defined by
+    \[
+        \widetilde\kappa_{\beta,\alpha}^{\,ij}
+        =\bigl(U\kappa_{\beta,\alpha}U^\dagger\bigr)_{ij}.
+    \]
+    Its horizontal bond indices are unchanged. When $U$ is unitary, this is
+    the corresponding physical basis change.
+\end{definition}
+
+\begin{definition}[Cyclic tensor product of neighboring operators]
+    \label{def:mpdo_cyclic_eta_tensor_product}
+    \lean{MPOTensor.cyclicEtaTensorProduct}
+    \leanok
+    \uses{def:mpdo_sector_chain_coordinates,
+        def:mpdo_explicit_eta_operators}
+    Let $N\geq1$ and let $k$ be a sector configuration. Define the matrix
+    $\Omega_k$ on $I_k$ by
+    \[
+      \Omega_k(x,y)=\prod_{n=0}^{N-1}
+        \eta_{k_n,k_{n+1}}
+        \bigl((x_n^R,x_{n+1}^L),(y_n^R,y_{n+1}^L)\bigr),
+    \]
+    where the site labels are read modulo $N$. Thus
+    $\Omega_k=\eta_{k_0,k_1}\otimes\cdots\otimes
+    \eta_{k_{N-1},k_0}$ after the neighboring tensor factors are ordered
+    cyclically.
+\end{definition}
+
+\begin{theorem}[A fixed sector block is the cyclic neighboring product]
+    \label{thm:mpdo_fixed_sector_cyclic_eta}
+    \lean{MPOTensor.mpo_submatrix_sector_eq_cyclicEtaTensorProduct}
+    \leanok
+    \uses{def:mpdo_conjugate_physical,
+        def:mpdo_cyclic_eta_tensor_product,
+        def:mpdo_eta_of_sector_tensors}
+    Suppose that the physical slices in the Hayashi basis satisfy
+    \[
+        U_B\kappa_{\beta,\alpha}U_B^\dagger
+        =\bigoplus_q(l_q)_\beta\otimes(r_q)_\alpha,
+    \]
+    and let $\eta_{q,h}=r_q l_h$. For every $N\geq1$ and every sector
+    configuration $k$, the corresponding diagonal block of
+    $\operatorname{reindex}_{\Phi_N}(M_N(\widetilde{\cal K}))$ is $\Omega_k$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_sector_word_eta_contraction}
+    Fix $x,y\in I_k$ and expand the closed horizontal trace of the MPO word.
+    The sector factorization writes each local entry as a product of entries
+    of $l_{k_n}$ and $r_{k_n}$. Set
+    \[
+      M_n(\beta,\alpha)
+        =(l_{k_n})_\beta(x_n^L,y_n^L)
+         (r_{k_n})_\alpha(x_n^R,y_n^R).
+    \]
+    Then
+    \begin{align*}
+      \bigl[\operatorname{reindex}_{\Phi_N}
+        (M_N(\widetilde{\cal K}))\bigr]_{(k,x),(k,y)}
+      &=\tr(M_0M_1\cdots M_{N-1})\\
+      &=\prod_{n=0}^{N-1}\eta_{k_n,k_{n+1}}
+        \bigl((x_n^R,x_{n+1}^L),(y_n^R,y_{n+1}^L)\bigr)\\
+      &=\Omega_k(x,y).
+    \end{align*}
+    The middle equality is
+    Theorem~\ref{thm:mpdo_sector_word_eta_contraction}.
+\end{proof}
+
+\begin{theorem}[Sector-adapted MPO decomposition]
+    \label{thm:mpdo_sector_adapted_decomposition}
+    \lean{MPOTensor.mpo_reindex_sectorChainEquiv_eq_blockDiagonal_cyclicEta}
+    \leanok
+    \uses{def:mpdo_sector_chain_coordinates,
+        def:mpdo_conjugate_physical,
+        def:mpdo_cyclic_eta_tensor_product,
+        def:mpdo_eta_of_sector_tensors}
+    Under the same sector factorization hypothesis, for every $N\geq1$,
+    \[
+        \operatorname{reindex}_{\Phi_N}
+          \bigl(M_N(\widetilde{\cal K})\bigr)
+        =\bigoplus_{k_0,\ldots,k_{N-1}}
+          \eta_{k_0,k_1}\otimes\eta_{k_1,k_2}\otimes\cdots\otimes
+          \eta_{k_{N-1},k_0}.
+    \]
+    This is the algebraic sector decomposition in
+    \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv}. It does not
+    assert that the individual neighboring operators are positive.
+\end{theorem}
+
+\begin{figure}[ht]
+    \centering
+    \TNMPDOSectorAdaptedDecomposition
+    \caption{The closed MPO in sector-adapted coordinates is a direct sum of
+    cyclic products of neighboring operators. The diagram represents only
+    this algebraic decomposition; no positivity is asserted. Compare
+    \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_sector_adapted_decomposition}
+\end{figure}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_fixed_sector_cyclic_eta}
+    If the row and column sector configurations coincide, the corresponding
+    block is Theorem~\ref{thm:mpdo_fixed_sector_cyclic_eta}. If they differ,
+    choose a site $n$ at which their labels $k_n$ and $h_n$ are unequal.
+    Block diagonality gives, for every pair of horizontal indices,
+    \[
+      \bigl[U_B\kappa_{\beta,\alpha}U_B^\dagger\bigr]
+        _{(k_n,\,\cdot),(h_n,\,\cdot)}=0.
+    \]
+    This local factor occurs in every cyclic horizontal-index product, so
+    every summand in the closed trace is zero.
+\end{proof}
+
 \begin{definition}[Trace matrices of explicit $\eta$-data]
     \label{def:mpdo_explicit_eta_trace_matrix}
     \lean{MPOTensor.ExplicitEtaOperators.traceMatrix}

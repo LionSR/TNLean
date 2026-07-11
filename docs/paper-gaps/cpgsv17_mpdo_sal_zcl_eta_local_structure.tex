@@ -89,20 +89,19 @@ bonds from SAL.
 
 \section{Missing step}
 
-After the entropy equality above, the first missing result is not merely a
-change of coordinates.  The Hayashi witness presently gives the decomposition
-of one reduced state.  The source next applies the inverse tensor
-${\cal K}^{-1}$ to that state and proves Lemma \texttt{propSN}: the concrete
-tensor ${\cal K}$ has a sector factorization by tensors $r_k$ and $l_k$, and
-the resulting neighboring operators $\eta_{k,h}$ satisfy
+After the entropy equality above, the source applies the inverse tensor
+${\cal K}^{-1}$ to the Hayashi decomposition and proves Lemma
+\texttt{propSN}.  The algebraic part of this passage is now formalized: the
+concrete tensor ${\cal K}$ has a sector factorization by tensors $r_k$ and
+$l_k$, the neighboring operators $\eta_{k,h}=r_k l_h$ are defined without a
+positivity assertion, and the resulting cyclic contraction satisfies
 \[
   \tilde\sigma^{(N)}({\cal K})
   =
   \bigoplus_{k_1,\ldots,k_N}
   \bigotimes_{n=1}^{N}\eta_{k_n,k_{n+1}}
 \]
-for every chain length.  No current declaration states this tensor
-factorization or its all-length contraction identity.
+in sector-adapted coordinates for every nonempty chain length.
 
 For the four-site chain, the virtual contraction of the traced fourth site is
 now identified before applying the inverse tensor.  Writing
@@ -234,12 +233,50 @@ the source statement simultaneously for arbitrary chain length.
 \leanid{isSSAEquality_submatrix_prodEquiv} and
 \leanid{MPOTensor.exists_etaStructure_reducedBlockState_of_isSAL}.}
 
-The next missing results are the all-length cyclic contraction identity of
-the neighboring operators, the positivity choice above, and primitivity of
-the sector trace matrix.  The four-site decomposition now supplies the
-Hayashi witness required by the concrete sector factorization; these
-remaining assertions are the passage from that local factorization to the
-source identity at every chain length.
+The neighboring operators and their all-length algebraic identity are now
+formalized.
+\footnote{The formal declarations are
+\path{MPOTensor.etaOfSectorTensors},
+\path{MPOTensor.sum_cyclic_sectorTensor_eq_prod_etaOfSectorTensors},
+\path{MPOTensor.trace_sector_word_eq_prod_etaOfSectorTensors},
+\path{MPOTensor.mpo_submatrix_sector_eq_cyclicEtaTensorProduct}, and
+\path{MPOTensor.mpo_reindex_sectorChainEquiv_eq_blockDiagonal_cyclicEta}.}
+What remains in Lemma \texttt{propSN} is the positive choice of the individual
+$\eta_{k,h}$ and the local-orthogonality argument establishing primitivity of
+the sector trace matrix.  Positivity of a complete cyclic product does not by
+itself supply coherent positive representatives for all neighboring pairs;
+the missing argument must control these choices simultaneously across the
+sector graph.
+
+The obstruction is already present when every neighboring bond space is
+one-dimensional.  Take four sectors $0,1,2,3$ and set
+\[
+  \eta_{k,k}=1,\qquad
+  \eta_{0,1}=\eta_{0,2}=\eta_{1,3}=1,\qquad
+  \eta_{2,3}=i,
+\]
+with all other off-diagonal entries equal to zero.  Every directed cyclic
+product is either zero or one, and is therefore positive semidefinite.  The
+sector rephasing which preserves each same-sector product has the form
+\[
+  \eta_{k,h}\longmapsto z_k^{-1}z_h\eta_{k,h},
+  \qquad |z_k|=1.
+\]
+Positivity on the edges $0\to1$, $0\to2$, and $1\to3$ forces
+$z_1=z_0$, $z_2=z_0$, and $z_3=z_1$, respectively.  The transformed edge
+$2\to3$ then still has phase $i$.  Hence no coherent choice of sector phases
+makes all four nonzero neighboring operators positive.
+
+A sufficient additional hypothesis is recurrence of the nonzero support:
+every nonzero directed edge lies on a nonzero directed cycle.  Under this
+hypothesis, positivity of all cyclic tensor products would first show that
+each edge is a phase times a positive operator, then force trivial phase
+around every cycle, and finally permit a coherent choice of vertex phases.
+The source does not state this recurrence hypothesis.  It must therefore be
+derived independently from injectivity, or the positive-choice theorem must
+be recorded as scope-restricted.  The later primitivity argument cannot be
+used for this purpose without circularity, since the source defines the
+nonnegative trace matrix only after choosing positive neighboring operators.
 
 The canonical family
 \leanid{MPOTensor.ExplicitEtaOperators.ofHayashiMarkov} does not supply this
@@ -271,8 +308,8 @@ derives the GSNNCH--ZCL and RFP conclusions.  Accordingly, adding ZCL to a
 conditional theorem would not repair the missing inverse-map sector
 factorization.
 
-The neighboring operators, all-length identity, and primitivity statement of
-Lemma \texttt{propSN} are tracked by
+The positive-choice and primitivity statements that remain in Lemma
+\texttt{propSN} are tracked by
 \href{https://github.com/LionSR/TNLean/issues/3696}{issue \#3696}.  Once those
 operators have been constructed, the positive commuting bond and product form
 of Proposition \texttt{3to4} are tracked separately by
