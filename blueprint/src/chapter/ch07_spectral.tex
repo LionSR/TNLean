@@ -2286,7 +2286,9 @@ of~\cite{Wolf2012Quantum} invoked by~\cite[Theorem~6.14]{Wolf2012Quantum}.
     \lean{Kraus.cornerFixedPoints_blockDiagonal_iff}
     \leanok
     \uses{def:support_proj, def:kraus_map_channels}
-    Let $E$ be a trace-preserving Kraus map on $\MN{D}$, let $\rho \succeq 0$ satisfy
+    Let $E(X) = \sum_i K_i X K_i^{\dagger}$ be a trace-preserving Kraus map on $\MN{D}$,
+    with Heisenberg-picture adjoint $E^*(Y) = \sum_i K_i^{\dagger} Y K_i$, let
+    $\rho \succeq 0$ satisfy
     $E(\rho) = \rho$, and let $Q$ be the support projection of $\rho$. There are a sector
     dimension $r \le D$, a number $n$ of blocks, positive dimensions $d_0, \ldots,
     d_{n-1}$ and multiplicities $m_0, \ldots, m_{n-1}$ with $\sum_k d_k m_k = r$,
@@ -2303,9 +2305,9 @@ of~\cite{Wolf2012Quantum} invoked by~\cite[Theorem~6.14]{Wolf2012Quantum}.
         \{Y \in Q\,\MN{D}\,Q \mid Q\,E^*(Y)\,Q = Y\} \;=\;
         W \Bigl(\bigoplus_{k=0}^{n-1} \Id_{m_k} \otimes \MN{d_k}\Bigr) W^{\dagger}.
     \]
-    Embedded in $\MN{D}$, the right-hand side is the block representation in Eq.~(1.39)
-    of~\cite{Wolf2012Quantum} with the zero block carried by the complement of the
-    support sector.
+    Embedded in $\MN{D}$, the right-hand side is the block representation in
+    Equation~(1.39) of~\cite{Wolf2012Quantum} with the zero block carried by the
+    complement of the support sector.
 \end{theorem}
 
 \begin{proof}
@@ -2325,9 +2327,17 @@ of~\cite{Wolf2012Quantum} invoked by~\cite[Theorem~6.14]{Wolf2012Quantum}.
     (Theorem~\ref{thm:adjointFixedPoints_block_form}) yields a unitary
     $U \in \MN{r}$, dimensions $d_k$ and multiplicities $m_k$ with
     $\sum_k d_k m_k = r$, and the equivalence between the fixed-point equation on the
-    sector and the block-diagonal conjugation identity. The compression isomorphism
-    intertwines the corner-restricted fixed-point condition with the fixed-point
-    equation of the compressed map, so, with $W := V U$, which satisfies
+    sector and the block-diagonal conjugation identity. Writing
+    $\Phi(X) := V X V^{\dagger}$ for the compression isomorphism onto the corner and
+    $C^*$ for the Heisenberg-picture adjoint of the compressed family, the
+    corner-restricted fixed-point condition corresponds to the fixed-point equation of
+    the compressed map,
+    \[
+        Q\,E^*\!\bigl(\Phi(X)\bigr)\,Q \;=\; \Phi(X)
+        \quad\Longleftrightarrow\quad
+        C^*(X) \;=\; X,
+    \]
+    so, with $W := V U$, which satisfies
     $W^{\dagger} W = \Id_r$ and $W W^{\dagger} = Q$, a corner element $Y$ is a
     corner-restricted fixed point exactly when $Y = W (\bigoplus_k \Id_{m_k} \otimes
     B_k) W^{\dagger}$ for some blocks $B_k$. Finally $r \le D$ because the isometry $V$

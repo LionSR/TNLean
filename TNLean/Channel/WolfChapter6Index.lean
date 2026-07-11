@@ -291,9 +291,9 @@ positive semidefinite fixed point):
 
 * `Kraus.cornerFixedPoints_blockDiagonal_iff` — the corner-restricted
   fixed-point set is carried by an isometry `W` (`W† W = 1`, `W W† = Q`) onto
-  `⊕_k 1_{m_k} ⊗ M_{d_k}` with `∑_k d_k m_k ≤ D`; embedded in `M_D(ℂ)` this is
-  the block representation with the zero block on the complement of the
-  support sector.
+  `⊕_k 1_{m_k} ⊗ M_{d_k}` with `∑_k d_k m_k = r` for the support-sector
+  dimension `r ≤ D`; embedded in `M_D(ℂ)` this is the block representation
+  with the zero block on the complement of the support sector.
 
 What is still missing for the full Wolf statement is the density-block
 refinement with matrices `ρ_k` for the Schrödinger-picture fixed points.
