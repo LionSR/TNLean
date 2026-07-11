@@ -90,8 +90,8 @@ horizontal canonical-form trace-separation conclusion.\footnote{The criteria are
     named \texttt{WordTupleSpanTop}, \texttt{wordEntryFamily}, and
     \texttt{PropBlockInjective}. The trace-separation assumption is
     \texttt{HorizontalCFData.biCF}. The constructors from these hypotheses to
-    horizontal canonical-form data are in
-    \path{TNLean/MPS/MPDO/BiCFDerivation.lean}. Relevant implications include
+    horizontal canonical-form data are in the modules under
+    \path{TNLean/MPS/MPDO/BiCFDerivation/}. Relevant implications include
     \texttt{hasBiCF\_of\_wordTupleSpanTop},
     \texttt{hasBiCF\_of\_wordEntryFamily\_linearIndependent},
     \texttt{hasBiCF\_of\_propBlockInjective}, and corresponding
@@ -116,8 +116,8 @@ $\mathbb C\oplus\mathbb C$, not the whole product algebra. Equivalently,
 choosing $\Delta_1=1$ and $\Delta_2=-1$ makes the trace pairing vanish on every
 word while the tuple $(\Delta_1,\Delta_2)$ is nonzero.
 
-This example is formalized in
-\path{TNLean/MPS/MPDO/BiCFDerivation.lean}, lines 1363--1463, and is recorded in
+This example is formalized as \texttt{duplicateScalarBlocks} and its lemmas in
+\path{TNLean/MPS/MPDO/BiCFDerivation/Counterexample.lean}, and is recorded in
 \path{docs/counterexamples.md}, lines 29--35. It shows that the additional
 finite-length witness in the formal hypotheses is genuinely stronger than the
 other horizontal canonical-form assumptions. It does not refute
