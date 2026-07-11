@@ -696,13 +696,19 @@
     The letter identity is a direct computation from the layer product:
     contracting the shared physical index composes the physical-space
     operators.  Induction on $p$ writes each vertical letter of $M^{[p]}$ as
-    a length-$p$ word.  The invariance statement follows by checking the two
-    one-site actions letter by letter.
+    a length-$p$ word.  Thus, for every bond index $v$, there is a word $w$
+    of length $p$ such that $\widetilde{M^{[p]}}_v=A_w$, and
+    \[
+        QA_w=QA_wQ
+        \quad\Longrightarrow\quad
+        Q\widetilde{M^{[p]}}_v=Q\widetilde{M^{[p]}}_vQ.
+    \]
+    Applying this identity to the two one-site actions gives
+    $QM^{[p]}=QM^{[p]}Q$.
 \end{proof}
 
-\begin{theorem}[Invariant non-commuting projectors are periodic-sector
-    projectors]
-    \label{thm:mpdo_periodic_sector_projector_of_cyclic}
+\begin{definition}[Periodic-sector projector from cyclic data]
+    \label{def:mpdo_periodic_sector_projector_of_cyclic}
     \lean{MPOTensor.periodicSectorProjectorOfCyclicData}
     \leanok
     \uses{def:mpdo, def:mpdo_periodic_sector_projector,
@@ -712,7 +718,7 @@
     $QA_w=QA_wQ$ for every product $A_w$ of $p$ letters of $\widetilde M$
     and $Q_1H^{(N)}\ne H^{(N)}Q_1$ for every length.  Then $Q$ is a
     periodic-sector projector for $M$ with exponent $p$.
-\end{theorem}
+\end{definition}
 
 \begin{proof}
     \leanok
@@ -776,11 +782,11 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_periodic_sector_projector_of_cyclic,
+    \uses{def:mpdo_periodic_sector_projector_of_cyclic,
         thm:mpdo_vertical_no_periodic_vectors}
     A nontrivial $p$-periodic vector supplies an invariant non-commuting
     projector, which is a periodic-sector projector by
-    Theorem~\ref{thm:mpdo_periodic_sector_projector_of_cyclic}.  The
+    Definition~\ref{def:mpdo_periodic_sector_projector_of_cyclic}.  The
     exclusion of periodic vectors is then
     Theorem~\ref{thm:mpdo_vertical_no_periodic_vectors}.
 \end{proof}
