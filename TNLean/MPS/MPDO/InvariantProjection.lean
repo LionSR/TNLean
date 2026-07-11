@@ -77,6 +77,27 @@ noncomputable def braRightMul (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) �
     MPOTensor d D :=
   fun i j => ∑ k : Fin d, P k j • M i k
 
+/-- The letters of $P\widetilde M$ are the letters of $\widetilde M$
+multiplied by `P` on the left.  This identifies the one-site action
+`ketLeftMul` with left multiplication on the vertically viewed tensor of
+arXiv:1606.00608, line 943. -/
+theorem verticalTensor_ketLeftMul (M : MPOTensor d D)
+    (P : Matrix (Fin d) (Fin d) ℂ) (v : Fin (D * D)) :
+    verticalTensor (M.ketLeftMul P) v = P * verticalTensor M v := by
+  ext i j
+  simp [verticalTensor, ketLeftMul, Matrix.mul_apply, Matrix.sum_apply]
+
+/-- The letters of $\widetilde M P$ are the letters of $\widetilde M$
+multiplied by `P` on the right.  This identifies the one-site action
+`braRightMul` with right multiplication on the vertically viewed tensor of
+arXiv:1606.00608, line 943. -/
+theorem verticalTensor_braRightMul (M : MPOTensor d D)
+    (P : Matrix (Fin d) (Fin d) ℂ) (v : Fin (D * D)) :
+    verticalTensor (M.braRightMul P) v = verticalTensor M v * P := by
+  ext i j
+  simp [verticalTensor, braRightMul, Matrix.mul_apply, Matrix.sum_apply,
+    mul_comm]
+
 /-- Splitting off the first site of a density-operator entry:
 $H^{(N+1)}_{(i,\sigma),(j,\tau)}
 =\tr(M^{ij}M^{\sigma_0\tau_0}\cdots M^{\sigma_{N-1}\tau_{N-1}})$. -/
