@@ -2379,10 +2379,13 @@ zero-block representation.
 For a singular fixed point the conjugation is taken with the inverse square root on the
 support of $\rho$, and the conjugated set lives in the corner algebra of the support
 projection. The corollary in~\cite{Wolf2012Quantum} takes a maximum-rank fixed point, for
-which every fixed point of $T$ is supported on the support of $\rho$; the following
-statements restrict to the fixed points supported on the support of $\rho$.
-% Maintainer note: the maximal-support property (which makes the restriction vacuous at
-% a maximum-rank fixed point) is not yet formalized; see
+which every fixed point of $T$ is supported on the support of $\rho$; the following two
+statements take an arbitrary positive semidefinite fixed point and restrict to the fixed
+points supported on the support of $\rho$. Theorem~\ref{thm:maximalSupport_fixedPoint}
+below supplies a fixed point whose support carries every fixed point, and at such a fixed
+point the restriction disappears
+(Theorem~\ref{thm:maximalSupport_weightedCorner}).
+% Maintainer note: the restriction history is recorded in
 % docs/paper-gaps/wolf_cor67_maximal_support_restriction.tex.
 
 \begin{theorem}[Weighted corner fixed points form a $*$-subalgebra]%
@@ -2495,6 +2498,137 @@ the support of $\rho$.
     $\sqrt{\rho}\, Y \sqrt{\rho} = Q X Q = X$, both sides being corner-supported. In
     particular $\sqrt{\rho}\, Y \sqrt{\rho}$ is fixed by $T$.
 \end{proof}
+
+The support hypothesis on the fixed points is discharged by exhibiting a fixed point
+whose support carries every fixed point. The first ingredient is that Loewner domination
+transfers the support.
+
+\begin{lemma}[Loewner domination transfers the support]%
+    \label{lem:stationaryProj_absorb_of_le}
+    \lean{Kraus.stationaryProj_absorb_of_le}
+    \leanok
+    \uses{def:support_proj}
+    Let $\rho, P \succeq 0$ with $P \preceq \rho$, and let $Q$ be the support projection
+    of $\rho$. Then
+    \[
+        Q\,P = P \qquad \text{and} \qquad P\,Q = P.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:support_proj}
+    The support projection absorbs $\rho$, so $(\Id - Q)\rho = 0$ and
+    \[
+        0 \;\preceq\; (\Id - Q)\,P\,(\Id - Q)
+        \;\preceq\; (\Id - Q)\,\rho\,(\Id - Q) \;=\; 0,
+    \]
+    the middle inequality because conjugation by $\Id - Q$ preserves the Loewner order.
+    Hence
+    \[
+        \bigl((\Id - Q)\sqrt{P}\bigr)\bigl((\Id - Q)\sqrt{P}\bigr)^{\dagger}
+        \;=\; (\Id - Q)\,P\,(\Id - Q) \;=\; 0,
+    \]
+    so $(\Id - Q)\sqrt{P} = 0$, and
+    \[
+        (\Id - Q)\,P \;=\; \bigl((\Id - Q)\sqrt{P}\bigr)\sqrt{P} \;=\; 0,
+    \]
+    that is $Q P = P$; taking conjugate transposes gives $P Q = P$ since $P$ and $Q$ are
+    Hermitian.
+\end{proof}
+
+\begin{theorem}[A fixed point of maximal support]%
+    \label{thm:maximalSupport_fixedPoint}
+    \lean{Kraus.exists_maximalSupport_fixedPoint}
+    \leanok
+    \uses{def:tp_kraus, def:support_proj}
+    Let $T(X) = \sum_i K_i X K_i^\dagger$ be trace-preserving. There is a positive
+    semidefinite fixed point $\rho_0$ of $T$ such that, with $Q_0$ the support projection
+    of $\rho_0$, every fixed point $X$ of $T$ satisfies
+    \[
+        Q_0\, X\, Q_0 = X.
+    \]
+    This is the maximal-support property of fixed points in Section~6.4
+    of~\cite{Wolf2012Quantum}; there the witness is the image of the identity under the
+    projection onto the fixed-point space, while here it is a sum of positive fixed
+    points. In particular $\rho_0$, normalized to unit trace, is a fixed-point density
+    matrix of maximum rank.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:hermitian_fixedpoint_parts, lem:stationaryProj_absorb_of_le}
+    Let $X_1, \ldots, X_m$ be a basis of the fixed-point space of $T$. Each $X_j$ splits
+    into fixed Hermitian components: with
+    \[
+        H_{1,j} = X_j + X_j^{\dagger},
+        \qquad
+        H_{2,j} = i\,\bigl(X_j - X_j^{\dagger}\bigr),
+    \]
+    both are Hermitian fixed points (the conjugate transpose of a fixed point is fixed),
+    and
+    \[
+        X_j \;=\; \tfrac{1}{2}\,H_{1,j} - \tfrac{i}{2}\,H_{2,j}.
+    \]
+    By the decomposition of Hermitian fixed points into positive parts
+    (Theorem~\ref{thm:hermitian_fixedpoint_parts}) there are positive semidefinite fixed
+    points with
+    \[
+        H_{1,j} = P^{+}_{1,j} - P^{-}_{1,j},
+        \qquad
+        H_{2,j} = P^{+}_{2,j} - P^{-}_{2,j}.
+    \]
+    Set
+    \[
+        \rho_0 \;=\; \sum_{j=1}^{m}
+            \bigl(P^{+}_{1,j} + P^{-}_{1,j} + P^{+}_{2,j} + P^{-}_{2,j}\bigr),
+    \]
+    a positive semidefinite fixed point. Every summand is dominated by $\rho_0$ in the
+    Loewner order, because the remaining summands are positive semidefinite, so the
+    support projection $Q_0$ of $\rho_0$ absorbs each of them
+    (Lemma~\ref{lem:stationaryProj_absorb_of_le}):
+    \[
+        Q_0\, P^{\pm}_{k,j}\, Q_0 = P^{\pm}_{k,j},
+        \qquad
+        \text{hence}
+        \qquad
+        Q_0\, X_j\, Q_0 = X_j
+    \]
+    by linearity through the two displayed decompositions. A fixed point $X$ of $T$ is a
+    linear combination of the basis $X_1, \ldots, X_m$, so $Q_0\, X\, Q_0 = X$.
+\end{proof}
+
+\begin{theorem}[Conjugation by the square root at a fixed point of maximal support]%
+    \label{thm:maximalSupport_weightedCorner}
+    \lean{Kraus.exists_maximalSupport_weightedCorner_sqrt_eq}
+    \leanok
+    \uses{def:tp_kraus, def:support_proj}
+    Let $T(X) = \sum_i K_i X K_i^\dagger$ be trace-preserving. There is a positive
+    semidefinite fixed point $\rho_0$ of $T$ such that every fixed point $X$ of $T$
+    arises as
+    \[
+        X \;=\; \sqrt{\rho_0}\, Y \sqrt{\rho_0}
+    \]
+    for a corner-supported $Y$ with $\sqrt{\rho_0}\, Y \sqrt{\rho_0}$ fixed by $T$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:maximalSupport_fixedPoint, thm:weightedCorner_sqrt_surjective}
+    Take the fixed point $\rho_0$ of Theorem~\ref{thm:maximalSupport_fixedPoint}. Every
+    fixed point $X$ of $T$ satisfies $Q_0\, X\, Q_0 = X$ for the support projection
+    $Q_0$ of $\rho_0$, so Theorem~\ref{thm:weightedCorner_sqrt_surjective} applies to
+    $X$ and produces the corner-supported $Y$.
+\end{proof}
+
+At the fixed point $\rho_0$, the carrier of the $*$-subalgebra of
+Theorem~\ref{thm:weightedCornerFixedPointsStarSubalgebra} therefore realizes
+\[
+    \rho_0^{-1/2}\,\{X \in \MN{D} \mid T(X) = X\}\,\rho_0^{-1/2},
+\]
+with the inverse square root taken on the support of $\rho_0$: the conjugated
+fixed-point set of Corollary~6.7 of~\cite{Wolf2012Quantum} at a fixed point of maximal
+support, without a support restriction on the fixed points.
 
 \section{Further irreducibility and primitivity equivalences}
 

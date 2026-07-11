@@ -65,4 +65,24 @@ bounds the support of each positive fixed part by the maximal one. With that pro
 instantiating the corner-restricted statements at a maximum-rank fixed point removes the
 restriction $Q X Q = X$ and yields Corollary 6.7 of the reference verbatim.
 
+\section{Resolution}
+
+This note is now a record of the resolved restriction. The maximal-support property is
+\leanid{Kraus.exists\_maximalSupport\_fixedPoint} in
+\leanid{TNLean/Channel/FixedPoint/MaximalSupport.lean}: a positive semidefinite fixed
+point $\rho_0$ whose support projection $Q_0$ satisfies $Q_0 X Q_0 = X$ for every fixed
+point $X$. The witness is constructed as the sum of the positive parts of the Hermitian
+and anti-Hermitian components of a basis of the fixed-point space (rather than through
+the projection onto the fixed-point space, as in the reference); every fixed point is a
+linear combination of positive fixed points dominated by $\rho_0$ in the Loewner order,
+and domination transfers the support
+(\leanid{Kraus.stationaryProj\_absorb\_of\_le}). Instantiating the corner-restricted
+statements at $\rho_0$ removes the restriction $Q X Q = X$
+(\leanid{Kraus.exists\_maximalSupport\_weightedCorner\_sqrt\_eq}), so the conjugated set
+$\rho_0^{-1/2}\,\{X \mid T(X) = X\}\,\rho_0^{-1/2}$ of the corollary is realized at a
+fixed point of maximal support. What is not asserted is the corollary's quantification
+over an \emph{arbitrary} maximum-rank fixed-point density matrix: identifying the
+supports of any two maximum-rank fixed points (so that the statement transfers from the
+constructed witness to every maximum-rank fixed point) is not formalized.
+
 \end{document}

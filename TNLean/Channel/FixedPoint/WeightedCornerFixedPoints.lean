@@ -20,16 +20,16 @@ elements $Y$ with $\sqrt{\rho}\, Y \sqrt{\rho}$ fixed by $T$; conjugation by
 $\sqrt{\rho}$ maps this carrier bijectively onto the fixed points of $T$ supported on the
 support of $\rho$, which realizes the displayed set without naming the pseudo-inverse.
 
-**Scope restriction (corner-supported fixed points):** Corollary 6.7 of
-*Quantum Channels & Operations* (Wolf 2012) takes $\rho$ to be a *maximum-rank* fixed-point
-density matrix and conjugates the full fixed-point set of $T$. For a maximum-rank fixed
-point every fixed point of $T$ is supported on the support of $\rho$, so the corner
-restriction is vacuous; that maximal-support property (the proposition on maximal support
-of fixed points in Section 6.4 of the reference) remains to be established here, and the
-present statements restrict to the fixed points supported on the support of $\rho$
-instead. Documented in `docs/paper-gaps/wolf_cor67_maximal_support_restriction.tex`.
-Elimination: establish the maximal-support proposition and instantiate these statements
-at a maximum-rank fixed point.
+Corollary 6.7 of *Quantum Channels & Operations* (Wolf 2012) takes $\rho$ to be a
+*maximum-rank* fixed-point density matrix and conjugates the full fixed-point set of $T$.
+For a fixed point of maximal support the corner restriction $Q X Q = X$ is vacuous: the
+maximal-support property is `Kraus.exists_maximalSupport_fixedPoint` in
+`TNLean.Channel.FixedPoint.MaximalSupport`, and its combination with the results below,
+removing the corner restriction, is `Kraus.exists_maximalSupport_weightedCorner_sqrt_eq`
+there. The statements below take an arbitrary positive semidefinite fixed point, so for a
+non-maximal choice of $\rho$ they conjugate the fixed points supported on the support of
+$\rho$. The resolution of the former restriction is recorded in
+`docs/paper-gaps/wolf_cor67_maximal_support_restriction.tex`.
 
 The proofs compress to the support sector, where the compressed fixed point is positive
 definite and the positive definite case applies, and transport the structure back along
@@ -363,11 +363,12 @@ the support of $\rho$ (`Kraus.exists_weightedCorner_sqrt_eq_of_fixedPoint`), so 
 realizes the set $\rho^{-1/2}\{X \mid T(X) = X,\ Q X Q = X\}\rho^{-1/2}$ of the
 corollary, with the inverse square root taken on the support of $\rho$.
 
-**Scope restriction (corner-supported fixed points):** the corollary in the reference
-takes a maximum-rank fixed point, for which every fixed point of $T$ is supported on the
-support of $\rho$ and the corner restriction disappears; that maximal-support property
-remains to be established here. Documented in
-`docs/paper-gaps/wolf_cor67_maximal_support_restriction.tex`. -/
+The corollary in the reference takes a maximum-rank fixed point, for which every fixed
+point of $T$ is supported on the support of $\rho$ and the corner restriction disappears:
+a fixed point of maximal support is `Kraus.exists_maximalSupport_fixedPoint`, and the
+combination removing the corner restriction is
+`Kraus.exists_maximalSupport_weightedCorner_sqrt_eq`, both in
+`TNLean.Channel.FixedPoint.MaximalSupport`. -/
 noncomputable def weightedCornerFixedPointsStarSubalgebra
     (K : Fin d → Mat) (h_tp : IsTP K) {ρ : Mat} (hρ_psd : ρ.PosSemidef)
     (hρ_fix : map K ρ = ρ) :
@@ -463,12 +464,11 @@ the carrier with the set $\rho^{-1/2}\{X \mid T(X) = X,\ Q X Q = X\}\rho^{-1/2}$
 Corollary 6.7 of *Quantum Channels & Operations* (Wolf 2012), with the inverse square
 root taken on the support of $\rho$.
 
-**Scope restriction (corner support):** the source's corollary takes a maximum-rank
-fixed point, for which the support condition on $X$ is automatic by the maximal-support
-property; that property has not yet been established here, so the statement carries the
-support
-hypothesis explicitly. Documented in
-`docs/paper-gaps/wolf_cor67_maximal_support_restriction.tex`. -/
+The source's corollary takes a maximum-rank fixed point, for which the support condition
+on $X$ is automatic by the maximal-support property
+(`Kraus.exists_maximalSupport_fixedPoint` in `TNLean.Channel.FixedPoint.MaximalSupport`);
+at such a fixed point the combination without the support hypothesis is
+`Kraus.exists_maximalSupport_weightedCorner_sqrt_eq`. -/
 theorem exists_weightedCorner_sqrt_eq_of_fixedPoint
     (K : Fin d → Mat) (h_tp : IsTP K) {ρ : Mat} (hρ_psd : ρ.PosSemidef)
     (hρ_fix : map K ρ = ρ) {X : Mat} (hX_fix : map K X = X)
