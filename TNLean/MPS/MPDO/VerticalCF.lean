@@ -243,14 +243,12 @@ theorem ketLeftAction_mpv (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ)
   simp only [ketLeftAction, finProdFinEquiv_divNat, finProdFinEquiv_modNat]
   apply Finset.sum_congr rfl
   intro i _
-  rw [Finset.sum_eq_single (ρ 0).modNat]
+  rw [Fintype.sum_eq_single (ρ 0).modNat]
   · simp only [if_true]
     rw [mpv_toMPSTensor_cons_pair]
     rfl
-  · intro j _ hj
+  · intro j hj
     simp only [hj.symm, if_false, zero_mul]
-  · intro hj
-    exact (hj (Finset.mem_univ _)).elim
 
 /-- Coefficient identity identifying the first-site doubled-index bra action
 with the matrix entries of $H^{(N)}P$. -/
@@ -266,16 +264,14 @@ theorem braRightAction_mpv (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ)
   rw [Fintype.sum_prod_type]
   simp only [braRightAction, finProdFinEquiv_divNat, finProdFinEquiv_modNat,
     ite_mul]
-  rw [Finset.sum_eq_single (ρ 0).divNat]
+  rw [Fintype.sum_eq_single (ρ 0).divNat]
   · apply Finset.sum_congr rfl
     intro j _
     simp only [if_true]
     rw [mpv_toMPSTensor_cons_pair]
     simp only [Function.comp_apply, mul_comm]
-  · intro i _ hi
+  · intro i hi
     simp only [hi.symm, if_false, zero_mul, Finset.sum_const_zero]
-  · intro hi
-    exact (hi (Finset.mem_univ _)).elim
 
 /-- Coefficient identity identifying the two-sided first-site doubled-index
 action with the matrix entries of $PH^{(N)}P$. -/
