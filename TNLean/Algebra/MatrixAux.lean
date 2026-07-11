@@ -38,12 +38,50 @@ Extracted from various files for reusability.
 - `Matrix.eq_zero_of_sum_conjTranspose_mul_self_eq_zero`: the conjugate-transpose
   variant
 - `Matrix.PosSemidef.mulVec_eq_zero_left/right`: kernel containment for PSD matrix sums
+- `Matrix.faithfulDensity`: the faithful uniform density matrix on a nonempty
+  finite index space
+- `Matrix.nonempty_of_trace_eq_one`: an index space carrying a trace-one matrix
+  is nonempty
 - `Continuous.matrix_kronecker`: joint continuity of the Kronecker product in both factors
 -/
 
 open scoped Matrix BigOperators ComplexOrder Kronecker Matrix.Norms.Frobenius
 
 namespace Matrix
+
+/-! ## Uniform density matrices -/
+
+/-- The faithful uniform density matrix on a nonempty finite index space. -/
+noncomputable def faithfulDensity (α : Type*) [Fintype α] [DecidableEq α]
+    [Nonempty α] : Matrix α α ℂ :=
+  ((Fintype.card α : ℂ)⁻¹) • 1
+
+/-- The uniform density matrix on a nonempty finite index space is positive
+definite. -/
+theorem faithfulDensity_posDef (α : Type*) [Fintype α] [DecidableEq α]
+    [Nonempty α] : (faithfulDensity α).PosDef := by
+  apply Matrix.PosDef.smul Matrix.PosDef.one
+  rw [inv_pos]
+  exact_mod_cast Fintype.card_pos
+
+/-- The uniform density matrix on a nonempty finite index space has trace
+one. -/
+theorem faithfulDensity_trace (α : Type*) [Fintype α] [DecidableEq α]
+    [Nonempty α] : (faithfulDensity α).trace = 1 := by
+  rw [faithfulDensity, Matrix.trace_smul, Matrix.trace_one, smul_eq_mul]
+  exact inv_mul_cancel₀ (by exact_mod_cast Fintype.card_ne_zero)
+
+/-- A finite index space carrying a matrix of trace one is nonempty. -/
+theorem nonempty_of_trace_eq_one {α : Type*} [Fintype α]
+    (ρ : Matrix α α ℂ) (hρ : ρ.trace = 1) : Nonempty α := by
+  classical
+  by_contra h
+  haveI : IsEmpty α := not_nonempty_iff.mp h
+  have hzero : ρ.trace = 0 := by
+    rw [Matrix.trace]
+    simp
+  rw [hzero] at hρ
+  norm_num at hρ
 
 section RankOneQuadratic
 

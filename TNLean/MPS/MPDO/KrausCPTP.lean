@@ -34,6 +34,7 @@ dimensions.
   trace-preserving completely positive map.
 * `Matrix.preparationMap_isKrausCPTP`: adjoining a density matrix is a
   trace-preserving completely positive map.
+* `Matrix.preparationKraus`: the explicit Kraus family for state preparation.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -408,7 +409,11 @@ def preparationMap {α β : Type*} [Fintype α] [DecidableEq α]
   map_add' X Y := Matrix.add_kronecker X Y ρ
   map_smul' c X := Matrix.smul_kronecker c X ρ
 
-private noncomputable def preparationKraus
+/-- The Kraus operator obtained from one column of the positive square root of
+the density matrix in a state-preparation map. These are the explicit
+operators underlying the preparations in arXiv:1606.00608, Appendix C.2,
+lines 1527--1533 and 1551--1555. -/
+noncomputable def preparationKraus
     {α β : Type*} [Fintype α] [DecidableEq α]
     [Fintype β] [DecidableEq β] (ρ : Matrix β β ℂ) (hρ : ρ.PosSemidef) (j : β) :
     Matrix (α × β) α ℂ :=
@@ -459,6 +464,41 @@ private theorem preparationKraus_conjTranspose_mul_apply
     simp [preparationKraus, Matrix.conjTranspose_apply]
   · simp [preparationKraus, Matrix.conjTranspose_apply, hab, Ne.symm hab]
 
+/-- The explicit preparation Kraus family resolves the identity,
+$\sum_j A_j^\dagger A_j=I$, when the prepared matrix has trace one. -/
+theorem preparationKraus_resolution
+    {α β : Type*} [Fintype α] [DecidableEq α]
+    [Fintype β] [DecidableEq β] (ρ : Matrix β β ℂ) (hρ : ρ.PosSemidef)
+    (hρtr : ρ.trace = 1) :
+    ∑ j : Fin (Fintype.card β),
+      (preparationKraus (α := α) ρ hρ ((Fintype.equivFin β).symm j))ᴴ *
+        preparationKraus (α := α) ρ hρ ((Fintype.equivFin β).symm j) = 1 := by
+  classical
+  let R := hρ.isHermitian.cfc Real.sqrt
+  have hRherm : R.IsHermitian := hρ.cfc_sqrt_isHermitian
+  have hRR : R * R = ρ := hρ.cfc_sqrt_mul_self
+  ext a b
+  have hsum : ∑ j : β, ∑ t : β, star (R t j) * R t j = 1 := by
+    calc
+      ∑ j : β, ∑ t : β, star (R t j) * R t j = (R * R).trace := by
+        simp_rw [hRherm.apply]
+        rfl
+      _ = ρ.trace := congrArg Matrix.trace hRR
+      _ = 1 := hρtr
+  by_cases hab : a = b
+  · subst b
+    rw [Matrix.one_apply_eq, Matrix.sum_apply]
+    simp_rw [preparationKraus_conjTranspose_mul_apply, if_pos]
+    change (∑ x : Fin (Fintype.card β),
+      ∑ t : β, star (R t ((Fintype.equivFin β).symm x)) *
+        R t ((Fintype.equivFin β).symm x)) = 1
+    exact (Equiv.sum_comp (Fintype.equivFin β).symm
+      (fun j : β => ∑ t : β, star (R t j) * R t j)).trans hsum
+  · rw [Matrix.one_apply_ne hab, Matrix.sum_apply]
+    apply Finset.sum_eq_zero
+    intro j _
+    rw [preparationKraus_conjTranspose_mul_apply, if_neg hab]
+
 /-- Adjoining a positive-semidefinite matrix of trace one is a
 trace-preserving completely positive map.  Its Kraus operators are obtained
 from the columns of $\sqrt\rho$.
@@ -486,26 +526,6 @@ lemma preparationMap_isKrausCPTP
     refine Finset.sum_congr rfl fun j _ => ?_
     rw [preparationKraus_mul_conjTranspose_apply]
     rw [hRherm.apply]
-  · ext a b
-    have hsum : ∑ j : β, ∑ t : β, star (R t j) * R t j = 1 := by
-      calc
-        ∑ j : β, ∑ t : β, star (R t j) * R t j = (R * R).trace := by
-          simp_rw [hRherm.apply]
-          rfl
-        _ = ρ.trace := congrArg Matrix.trace hRR
-        _ = 1 := hρtr
-    by_cases hab : a = b
-    · subst b
-      rw [Matrix.one_apply_eq, Matrix.sum_apply]
-      simp_rw [preparationKraus_conjTranspose_mul_apply, if_pos]
-      change (∑ x : Fin (Fintype.card β),
-        ∑ t : β, star (R t ((Fintype.equivFin β).symm x)) *
-          R t ((Fintype.equivFin β).symm x)) = 1
-      exact (Equiv.sum_comp (Fintype.equivFin β).symm
-        (fun j : β => ∑ t : β, star (R t j) * R t j)).trans hsum
-    · rw [Matrix.one_apply_ne hab, Matrix.sum_apply]
-      apply Finset.sum_eq_zero
-      intro j _
-      rw [preparationKraus_conjTranspose_mul_apply, if_neg hab]
+  · exact preparationKraus_resolution ρ hρ hρtr
 
 end Matrix
