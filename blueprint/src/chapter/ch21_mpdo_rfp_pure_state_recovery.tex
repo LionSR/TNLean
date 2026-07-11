@@ -61,6 +61,63 @@
     \]
 \end{proof}
 
+\begin{definition}[Rectangular Kraus map]
+    \label{def:mpdo_rectangular_kraus_map}
+    \lean{Matrix.rectangularKrausMap}
+    \leanok
+    Let $I$ be a finite index set, let $J$ be an arbitrary index set, and let
+    $(A_a\in\C^{J\times I})_a$ be a finite family of matrices. Its
+    rectangular Kraus map is
+    \[
+        \Phi_A(X)=\sum_a A_aXA_a^{\dagger}.
+    \]
+\end{definition}
+
+\begin{definition}[Orthogonally controlled Kraus map]
+    \label{def:mpdo_controlled_kraus_map}
+    \lean{Matrix.controlledKrausMap}
+    \leanok
+    \uses{def:mpdo_rectangular_kraus_map}
+    Let $H=\bigoplus_k H_k$ and $K=\bigoplus_k K_k$. For each $k$, let
+    $(A_{k,a}:H_k\to K_k)_a$ be a finite family of operators, and let
+    $\widetilde A_{k,a}:H\to K$ agree with $A_{k,a}$ on $H_k$ and vanish on
+    every other summand. The orthogonally controlled Kraus map is
+    \[
+        \mathcal C(X)
+        =\sum_{k,a}\widetilde A_{k,a}X\widetilde A_{k,a}^{\dagger}.
+    \]
+    In particular, $\mathcal C$ discards the off-diagonal blocks between
+    distinct summands. This is the sector control in the definitions of
+    $\mathcal T_1$ and $\mathcal S_1$ in
+    \cite[Appendix~C.2, lines~1523--1535 and~1548--1555]
+      {Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Orthogonal control preserves trace-preserving complete positivity]
+    \label{thm:mpdo_controlled_kraus_map_cptp}
+    \lean{Matrix.controlledKrausMap_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_controlled_kraus_map, def:is_kraus_cptp}
+    Suppose that for every $k$ the sectorwise Kraus family resolves the
+    identity:
+    \[
+        \sum_a A_{k,a}^{\dagger}A_{k,a}=I_{H_k}.
+    \]
+    Then the orthogonally controlled map $\mathcal C$ is
+    trace-preserving and completely positive.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Each embedded operator has support in one summand, and therefore
+    \[
+        \sum_{k,a}\widetilde A_{k,a}^{\dagger}\widetilde A_{k,a}
+        =\bigoplus_k\left(\sum_a A_{k,a}^{\dagger}A_{k,a}\right)
+        =\bigoplus_k I_{H_k}=I_H.
+    \]
+    The displayed Kraus form gives complete positivity, while this identity
+    gives trace preservation.
+\end{proof}
+
 \begin{definition}[Right partial trace]
     \label{def:mpdo_right_partial_trace_map}
     \lean{Matrix.partialTraceRightLM}

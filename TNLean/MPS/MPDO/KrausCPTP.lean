@@ -22,6 +22,8 @@ dimensions.
 * `isKrausCPTP_id`: the identity map is trace-preserving completely positive.
 * `isKrausCPTP_comp`: composition preserves the trace-preserving completely
   positive property.
+* `Matrix.controlledKrausMap_isKrausCPTP`: orthogonal control of sectorwise
+  Kraus families is trace-preserving completely positive.
 * `Matrix.partialTraceRightLM_isKrausCPTP`: tracing a right tensor factor is a
   trace-preserving completely positive map.
 * `Matrix.preparationMap_isKrausCPTP`: adjoining a density matrix is a
@@ -84,6 +86,130 @@ theorem isKrausCPTP_comp {α β γ : Type*} [Fintype α] [DecidableEq α] [Finty
     rw [step, hA_tp, Matrix.one_mul]
 
 namespace Matrix
+
+/-! ### Orthogonally controlled direct sums -/
+
+/-- For a finite family of rectangular matrices $A_i$ with row set $\beta$
+and finite column set $\alpha$, the associated Kraus map is
+
+$$
+\Phi_A(X)=\sum_i A_i X A_i^\dagger.
+$$
+
+It maps square matrices indexed by $\alpha$ to square matrices indexed by
+$\beta$. -/
+noncomputable def rectangularKrausMap
+    {κ α β : Type*} [Fintype κ] [Fintype α]
+    (A : κ → Matrix β α ℂ) :
+    Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ where
+  toFun X := ∑ i, A i * X * (A i)ᴴ
+  map_add' X Y := by
+    simp_rw [Matrix.mul_add, Matrix.add_mul]
+    exact Finset.sum_add_distrib
+  map_smul' c X := by
+    simp only [RingHom.id_apply]
+    rw [Finset.smul_sum]
+    apply Finset.sum_congr rfl
+    intro i _
+    rw [Matrix.mul_smul, Matrix.smul_mul]
+
+section ControlledDirectSum
+
+variable {ι : Type*} [Fintype ι] [DecidableEq ι]
+variable {α β : ι → Type*}
+variable [∀ i, Fintype (α i)] [∀ i, DecidableEq (α i)]
+variable [∀ i, Fintype (β i)] [∀ i, DecidableEq (β i)]
+
+/-- A rectangular matrix supported on one matching pair of orthogonal
+summands. -/
+private noncomputable def singleBlock (i : ι) (A : Matrix (β i) (α i) ℂ) :
+    Matrix (Σ j, β j) (Σ j, α j) ℂ :=
+  Matrix.blockDiagonal' (Pi.single i A)
+
+/-- The Kraus map controlled by an orthogonal direct-sum decomposition. Each
+Kraus operator acts on one input summand and has range in the corresponding
+output summand, so the map discards coherences between distinct summands.
+
+This is the sector-control operation in arXiv:1606.00608, Appendix C.2,
+lines 1523--1529 and 1548--1553. -/
+noncomputable def controlledKrausMap (r : ι → ℕ)
+    (A : (i : ι) → Fin (r i) → Matrix (β i) (α i) ℂ) :
+    Matrix (Σ i, α i) (Σ i, α i) ℂ →ₗ[ℂ]
+      Matrix (Σ i, β i) (Σ i, β i) ℂ :=
+  rectangularKrausMap fun p : Σ i, Fin (r i) ↦
+    singleBlock p.1 (A p.1 p.2)
+
+omit [∀ i, Fintype (α i)] [∀ i, DecidableEq (α i)]
+    [∀ i, DecidableEq (β i)] in
+private lemma singleBlock_conjTranspose_mul
+    (i : ι) (A : Matrix (β i) (α i) ℂ) :
+    (singleBlock i A)ᴴ * singleBlock i A =
+      Matrix.blockDiagonal' (Pi.single i (Aᴴ * A)) := by
+  rw [singleBlock, Matrix.blockDiagonal'_conjTranspose,
+    ← Matrix.blockDiagonal'_mul]
+  congr 1
+  funext j
+  by_cases hji : j = i
+  · subst j
+    simp
+  · simp [hji]
+
+/-- Sectorwise resolutions of the identity make the orthogonally controlled
+Kraus map trace-preserving and completely positive.
+
+This is the trace-preserving sector construction for $\mathcal T_1$ and
+$\mathcal S_1$ in arXiv:1606.00608, Appendix C.2, lines 1523--1535 and
+1548--1555. -/
+theorem controlledKrausMap_isKrausCPTP (r : ι → ℕ)
+    (A : (i : ι) → Fin (r i) → Matrix (β i) (α i) ℂ)
+    (htp : ∀ i, ∑ j, (A i j)ᴴ * A i j = (1 : Matrix (α i) (α i) ℂ)) :
+    IsKrausCPTP (controlledKrausMap r A) := by
+  let e := Fintype.equivFin (Σ i, Fin (r i))
+  refine ⟨Fintype.card (Σ i, Fin (r i)),
+    fun j ↦ singleBlock (e.symm j).1 (A (e.symm j).1 (e.symm j).2), ?_, ?_⟩
+  · intro X
+    change (∑ p : Σ i, Fin (r i), singleBlock p.1 (A p.1 p.2) * X *
+      (singleBlock p.1 (A p.1 p.2))ᴴ) = _
+    rw [← e.symm.sum_comp]
+  · change (∑ j : Fin (Fintype.card (Σ i, Fin (r i))),
+        (singleBlock (e.symm j).1 (A (e.symm j).1 (e.symm j).2))ᴴ *
+          singleBlock (e.symm j).1 (A (e.symm j).1 (e.symm j).2)) = 1
+    have hsum :
+        (∑ p : Σ i, Fin (r i),
+          (singleBlock p.1 (A p.1 p.2))ᴴ * singleBlock p.1 (A p.1 p.2)) = 1 := by
+      rw [Fintype.sum_sigma]
+      simp_rw [singleBlock_conjTranspose_mul]
+      have hinner (i : ι) :
+          (∑ j, Matrix.blockDiagonal' (Pi.single i ((A i j)ᴴ * A i j))) =
+            Matrix.blockDiagonal' (Pi.single i (∑ j, (A i j)ᴴ * A i j)) := by
+        change (∑ j, (Matrix.blockDiagonal'AddMonoidHom α α ℂ)
+          (Pi.single i ((A i j)ᴴ * A i j))) =
+            (Matrix.blockDiagonal'AddMonoidHom α α ℂ)
+              (Pi.single i (∑ j, (A i j)ᴴ * A i j))
+        rw [← map_sum (Matrix.blockDiagonal'AddMonoidHom α α ℂ)]
+        congr 1
+        funext k
+        by_cases hki : k = i
+        · subst k
+          simp
+        · simp [hki]
+      simp_rw [hinner, htp]
+      change (∑ i, (Matrix.blockDiagonal'AddMonoidHom α α ℂ)
+        (Pi.single i (1 : Matrix (α i) (α i) ℂ))) = 1
+      rw [← map_sum (Matrix.blockDiagonal'AddMonoidHom α α ℂ)]
+      have hfamily :
+          (∑ i, Pi.single i (1 : Matrix (α i) (α i) ℂ)) =
+            (1 : ∀ i, Matrix (α i) (α i) ℂ) := by
+        funext i
+        simpa only [Finset.sum_apply, Pi.one_apply] using
+          Fintype.sum_pi_single i fun j ↦ (1 : Matrix (α j) (α j) ℂ)
+      rw [hfamily]
+      change Matrix.blockDiagonal' (1 : ∀ i, Matrix (α i) (α i) ℂ) = 1
+      exact Matrix.blockDiagonal'_one
+    exact (Equiv.sum_comp e.symm fun p : Σ i, Fin (r i) ↦
+      (singleBlock p.1 (A p.1 p.2))ᴴ * singleBlock p.1 (A p.1 p.2)).trans hsum
+
+end ControlledDirectSum
 
 private def partialTraceRightKraus
     {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
