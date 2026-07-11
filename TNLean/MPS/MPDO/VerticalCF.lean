@@ -16,17 +16,18 @@ Section 4.4.
 
 The vertical direction is obtained by exchanging the notion of physical and
 virtual indices (arXiv:1606.00608, line 943): the vertically viewed tensor has
-its letters indexed by the horizontal bond pair `(a, b)`, and each letter is
+its letters indexed by the horizontal bond pair $(a, b)$, and each letter is
 the operator on the physical space with matrix elements
 $(\widetilde M_{ab})_{ij} = M^{ij}_{ab}$. Proposition 4.13 of arXiv:1606.00608
-(eq. UMU-appendix, lines 1863--1870) concludes that, after an isometry `U` on
+(lines 1863--1870) concludes that, after an isometry $U$ on
 the physical space, this tensor is a direct sum
 $U \widetilde M U^\dagger = \bigoplus_\alpha \mu_\alpha \otimes M_\alpha$,
-where the `μ_α` are positive diagonal matrices and the `M_α` form a basis of
-normal tensors (BNT). Since each `μ_α` is diagonal, the summand `μ_α ⊗ M_α`
-equals the direct sum `⊕_k ω_{α,k} M_α` of its diagonal entries, so the
-right-hand side is the block-diagonal tensor over the pairs `(α, k)` in which
-the multiplicities `m_α` and the diagonal entries `ω_{α,k}` stay explicit.
+where the $\mu_\alpha$ are positive diagonal matrices and the $M_\alpha$ form a basis of
+normal tensors (BNT). Since each $\mu_\alpha$ is diagonal, the summand
+$\mu_\alpha \otimes M_\alpha$
+equals the direct sum $\bigoplus_k \omega_{\alpha,k} M_\alpha$ of its diagonal entries, so the
+right-hand side is the block-diagonal tensor over the pairs $(\alpha, k)$ in which
+the multiplicities $m_\alpha$ and the diagonal entries $\omega_{\alpha,k}$ stay explicit.
 The predicate `IsVerticalCF` states exactly this conclusion.
 
 ## Main definitions
@@ -36,19 +37,20 @@ The predicate `IsVerticalCF` states exactly this conclusion.
   pair and matrices acting on the physical space (arXiv:1606.00608, line 943).
 * `diagonalTensor`:
   the MPS tensor `i ↦ M i i` extracted from the diagonal MPO entries; its
-  coefficients are the diagonal entries `⟨σ|ρ^{(N)}(M)|σ⟩` of the generated
-  operator.
+  coefficients are the diagonal entries $\langle\sigma|\rho^{(N)}(M)|\sigma\rangle$ of the
+  generated operator.
 * `diagonalTransferMap`:
-  the transfer map of `diagonalTensor`, i.e. `E_diag(X) = Σ_i M^{ii} X (M^{ii})†`.
+  the transfer map of `diagonalTensor`, i.e.
+  $E_{\mathrm{diag}}(X) = \sum_i M^{ii} X (M^{ii})^\dagger$.
 * `HorizontalCFData` / `IsHorizontalCF`:
   lightweight horizontal canonical-form data for an MPO, expressed via the
   doubled-index MPS tensor `M.toMPSTensor`.
 * `IsVerticalCF`:
-  the vertical canonical form of arXiv:1606.00608, eq. UMU-appendix: an
-  isometry `U` on the physical space with
+  the vertical canonical form of arXiv:1606.00608, Proposition 4.13: an
+  isometry $U$ on the physical space with
   $U \widetilde M_{ab} U^\dagger = (\bigoplus_\alpha \mu_\alpha \otimes M_\alpha)_{ab}$
-  for every bond pair `(a, b)`, with positive diagonal matrices `μ_α` and a
-  BNT `{M_α}` for the vertically viewed tensor.
+  for every bond pair $(a, b)$, with positive diagonal matrices $\mu_\alpha$ and a
+  BNT $\{M_\alpha\}$ for the vertically viewed tensor.
 * `MPSTensor.diagBlock`:
   the diagonal restriction `B ↦ (i ↦ B (i, i))` of a doubled-index block.
 
@@ -64,8 +66,8 @@ The predicate `IsVerticalCF` states exactly this conclusion.
   under a horizontal canonical form, `diagonalTensor M` shares its MPV family with
   the single-spin block-diagonal assembly of the diagonally-restricted blocks.
 * `mpv_diagonalTensor_eq_mpo_diag` / `mpv_diagonalTensor_nonneg`:
-  the diagonal-tensor MPV equals the density-operator diagonal `⟨σ|ρ^{(N)}(M)|σ⟩`,
-  hence is nonnegative when `M` generates an MPDO.
+  the diagonal-tensor MPV equals the density-operator diagonal
+  $\langle\sigma|\rho^{(N)}(M)|\sigma\rangle$, hence is nonnegative when `M` generates an MPDO.
 * `Matrix.IsHermitian.opposite_corner_eq_zero` / `mpo_opposite_corner_eq_zero`:
   the positivity identity `P H = P H P ⇒ (1 - P) H P = 0` used in the first
   step of Proposition 4.13.
@@ -356,7 +358,7 @@ variable {d D : ℕ}
 /-- The **vertically viewed tensor** of an MPO tensor.  The vertical direction
 is obtained by exchanging the notion of physical and virtual indices
 (arXiv:1606.00608, line 943): the letters of the vertical tensor are indexed
-by the horizontal bond pair `(a, b)`, and each letter is the operator on the
+by the horizontal bond pair $(a, b)$, and each letter is the operator on the
 physical space with matrix elements $(\widetilde M_{ab})_{ij} = M^{ij}_{ab}$.
 Concatenating this tensor vertically generates the matrix product vectors of
 the vertical direction, and the vertical canonical form of
@@ -368,7 +370,7 @@ def verticalTensor (M : MPOTensor d D) : MPSTensor (D * D) d :=
     (i j : Fin d) : verticalTensor M ab i j = M i j ab.divNat ab.modNat :=
   rfl
 
-/-- The vertical letter at an explicitly paired bond index `(a, b)`. -/
+/-- The vertical letter at an explicitly paired bond index $(a, b)$. -/
 lemma verticalTensor_finProdFinEquiv (M : MPOTensor d D) (a b : Fin D)
     (i j : Fin d) :
     verticalTensor M (finProdFinEquiv (a, b)) i j = M i j a b := by
@@ -376,7 +378,7 @@ lemma verticalTensor_finProdFinEquiv (M : MPOTensor d D) (a b : Fin D)
 
 /-- The diagonal MPS tensor extracted from an MPO by restricting to equal ket
 and bra indices.  Its matrix product vectors are the diagonal entries
-`⟨σ|ρ^{(N)}(M)|σ⟩` of the generated operator
+$\langle\sigma|\rho^{(N)}(M)|\sigma\rangle$ of the generated operator
 (`mpv_diagonalTensor_eq_mpo_diag`), the positivity input to the vertical
 canonical form.  The tensor generating the vertical direction itself is
 `verticalTensor`. -/
@@ -491,7 +493,7 @@ theorem mpo_compress_trace_pos (M : MPOTensor d D) (hM : IsMPDO M) (N : ℕ)
   Matrix.PosSemidef.trace_pos_of_ne_zero (mpo_compress_posSemidef M hM N P hP) hne
 
 /-- The transfer map of the diagonal tensor of an MPO:
-`E_diag(X) = Σ_i M^{ii} X (M^{ii})†`.  It acts on the horizontal bond space;
+$E_{\mathrm{diag}}(X) = \sum_i M^{ii} X (M^{ii})^\dagger$.  It acts on the horizontal bond space;
 the transfer map of the vertically viewed tensor is
 `MPSTensor.transferMap (verticalTensor M)`, which acts on the physical
 space. -/
@@ -571,9 +573,10 @@ def verticalCopyWeights {g : ℕ} (mult : Fin g → ℕ)
     let p := finSigmaFinEquiv.symm q
     ω p.1 p.2
 
-/-- The direct-sum tensor `⊕_α μ_α ⊗ M_α` with positive diagonal matrices
-`μ_α = diag (ω α 0, …)`.  Since each `μ_α` is diagonal, the summand
-`μ_α ⊗ M_α` is the further direct sum `⊕_k ω_{α,k} M_α` of its diagonal
+/-- The direct-sum tensor $\bigoplus_\alpha \mu_\alpha \otimes M_\alpha$ with positive diagonal
+matrices $\mu_\alpha = \operatorname{diag}(\omega_{\alpha,0}, \dots)$.  Since each $\mu_\alpha$ is
+diagonal, the summand $\mu_\alpha \otimes M_\alpha$ is the further direct sum
+$\bigoplus_k \omega_{\alpha,k} M_\alpha$ of its diagonal
 entries; this constructor lists those blocks in exactly that order, so the
 multiplicities `mult α` and the diagonal entries `ω α k` stay explicit. -/
 noncomputable def verticalAssembledTensor {g : ℕ}
@@ -586,27 +589,27 @@ noncomputable def verticalAssembledTensor {g : ℕ}
     (A := verticalCopyBlocks dim mult A)
 
 /-- **Vertical canonical form** of an MPO tensor (arXiv:1606.00608,
-Proposition 4.13, eq. UMU-appendix, lines 1863--1870; the vertical direction
+Proposition 4.13, lines 1863--1870; the vertical direction
 is defined at line 943 by exchanging the physical and virtual indices).
 
-There are a basis of normal tensors `{M_α}` for the vertically viewed tensor,
-positive diagonal matrices `μ_α = diag (ω α 0, …)`, and an isometry `U` on the
-physical space such that, letter by letter over the horizontal bond pairs
-`(a, b)`,
+There are a basis of normal tensors $\{M_\alpha\}$ for the vertically viewed tensor,
+positive diagonal matrices $\mu_\alpha = \operatorname{diag}(\omega_{\alpha,0}, \dots)$, and an
+isometry $U$ on the physical space such that, letter by letter over the horizontal bond pairs
+$(a, b)$,
 $U \widetilde M_{ab} U^\dagger = (\bigoplus_\alpha \mu_\alpha \otimes M_\alpha)_{ab}$.
 
 The right-hand side keeps the multiplicities `mult α` and the diagonal
-entries `ω α k` explicit; the trace coefficients `m_α = tr μ_α` of this
+entries `ω α k` explicit; the trace coefficients $m_\alpha = \operatorname{tr}\,\mu_\alpha$ of this
 decomposition are the ones consumed by the renormalization fixed-point
 characterization at arXiv:1606.00608, line 1956.  Every basis tensor appears
-with at least one copy: each `μ_α` is a positive diagonal matrix of size
-`mult α ≥ 1`, matching arXiv:1606.00608, line 1901, where the sector `(α, 1)`
-exists for every `α`.
+with at least one copy: each $\mu_\alpha$ is a positive diagonal matrix of size
+`mult α`, at least one, matching arXiv:1606.00608, line 1901, where the sector
+$(\alpha, 1)$ exists for every $\alpha$.
 
 The isometry is a unitary change of the physical basis, so both `Uᴴ * U = 1`
-and `U * Uᴴ = 1` are required: the canonical form (arXiv:1606.00608,
-eq. II_CF1, read in the vertical direction) decomposes the physical space
-exactly, and the source discards `U` because "it just changes the physical
+and `U * Uᴴ = 1` are required: the canonical-form decomposition of
+arXiv:1606.00608 read in the vertical direction decomposes the physical space
+exactly, and the source discards $U$ because "it just changes the physical
 basis on each site" (arXiv:1606.00608, line 959).  With an isometric
 embedding alone, the decomposed space could exceed the physical space, which
 the source's conclusion excludes. -/
