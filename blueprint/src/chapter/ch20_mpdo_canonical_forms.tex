@@ -20,6 +20,19 @@
     for every word $w$ of length $L$ implies $\Delta_k=0$ for every block $k$.
 \end{definition}
 
+\begin{figure}[ht]
+    \centering
+    \TNMPDOHorizontalCanonicalForm
+    \caption{Horizontal canonical form of the doubled tensor: the gauge $X$,
+    one basis tensor $\mathcal K$ carrying the ket and bra legs, and
+    $X^{-1}$, threaded by the block-index lines $j$ and $q$. In the source
+    display the weights $\mu_j$ are absorbed into the basis tensors, so the
+    basis tensor taps only the line $j$ while the gauge factors $X_{j,q}$
+    tap both lines. This is
+    \cite[Appendix~C.2, lines~1660--1665]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_horizontal_canonical_form}
+\end{figure}
+
 \begin{definition}[Vertically viewed tensor of an MPO]%
     \label{def:vertical_tensor_mpdo}
     \lean{MPOTensor.verticalTensor}
@@ -143,6 +156,21 @@
     spanning condition, hence the horizontal canonical-form data.
 \end{remark}
 
+\begin{figure}[ht]
+    \centering
+    \TNMPDOBlockInjectiveInverse
+    \caption{The inverse tensor of a block-injective canonical form:
+    contracting $K^{-1}$ with the doubled physical index of the canonical
+    form passes the virtual legs of the gauge factors $X$ and $X^{-1}$ to
+    the virtual legs of $K^{-1}$ and ties its block index to the block
+    line $j$, which is the matrix-unit identity
+    $\sum_p(\mathcal K_j^p)_{\alpha,\beta}
+    (K^{-1,p}_{j'})_{\alpha',\beta'}
+    =\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}\delta_{j,j'}$.
+    This is \cite[Appendix~C.2, lines~1666--1670]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_block_injective_inverse}
+\end{figure}
+
 \begin{theorem}[Finite block-separation criterion]
     \label{thm:propblockinj_abstract}
     \lean{MPSTensor.hasBiCF_of_propBlockInjective}
@@ -179,10 +207,24 @@
     block $A_k$.
 \end{lemma}
 
+\begin{figure}[ht]
+    \centering
+    \TNMPDOFirstSiteInsertionHypothesis\\[10pt]
+    \TNMPDOFirstSiteInsertionBlockwise
+    \caption{Blockwise equality from agreement on the MPV family. Top: the
+    hypothesis $Y_1V^{(N)}(A)=Z_1V^{(N)}(A)$ for every length $N$, with the
+    operator inserted on the physical leg of the first site. Bottom: the
+    conclusion that the two insertions agree on every block $A_k$ of the
+    canonical form. These are the two displays of Lemma~L,
+    \cite[Appendix~C.3, lines~1835--1846]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_first_site_insertion_agreement}
+\end{figure}
+
 \begin{proof}
     \leanok
     \uses{def:block_diagonal_tensor, def:injective, thm:propblockinj_abstract}
-    This is Lemma~L of \cite[Appendix~A]{Cirac2016MPDO_arXiv}, using the finite
+    This is Lemma~L of
+    \cite[Appendix~C.3, lines~1835--1846]{Cirac2016MPDO_arXiv}, using the finite
     criterion from Theorem~\ref{thm:propblockinj_abstract}.
     Expanding the hypothesis over a word of length~$L+1$ beginning with the
     fixed site and folding each block contribution into a trace pairing
@@ -196,6 +238,18 @@
     difference to be zero, and the nonzero weights give the blockwise equality
     of the two first-site insertions.
 \end{proof}
+
+\begin{figure}[ht]
+    \centering
+    \TNMPDOInsertionTracePairing
+    \caption{The trace-pairing step in the proof of the preceding lemma: for
+    every $W$ in the span of the length-$N$ word evaluations of the
+    canonical form, $\tr(WA^Y)=\tr(WA^Z)$, where $A^Y$ denotes the tensor
+    with $Y$ applied to its physical index. Compare the two displays in the
+    proof of Lemma~L,
+    \cite[Appendix~C.3, lines~1848--1858]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_insertion_trace_pairing}
+\end{figure}
 
 \begin{theorem}[One-sided invariant corners of positive operators]
     \label{thm:mpdo_opposite_corner_zero}
