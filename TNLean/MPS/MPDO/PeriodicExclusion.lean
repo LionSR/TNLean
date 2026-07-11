@@ -124,8 +124,10 @@ period-$p$ sector are permuted by one vertical layer, hence fail to commute
 with $H^{(N)}$, while remaining invariant for $p$ stacked layers, whose
 density operator is $[H^{(N)}]^p$; invariance then gives commutation with
 $[H^{(N)}]^p$ by the argument of eq1:proof.IV.12 (lines 1874--1887) applied
-to the stacked tensor.  This derivation remains open; the gap between this
-hypothesis and the source's unconditional assertion is recorded in
+to the stacked tensor.  The stacking and invariance parts of this
+derivation are formalized in `TNLean/MPS/MPDO/StackedLayers.lean`, which
+reduces this hypothesis to `PeriodicVectorYieldsCyclicProjector`; the
+remaining gap is recorded in
 `docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`. -/
 def PeriodicVectorYieldsProjector (M : MPOTensor d D) : Prop :=
   ∀ ⦃n : ℕ⦄ (V : Matrix (Fin d) (Fin n) ℂ) (B : MPSTensor (D * D) n)
