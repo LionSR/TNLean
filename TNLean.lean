@@ -364,6 +364,7 @@ import TNLean.MPS.MPDO.PureAreaLaw
 import TNLean.MPS.MPDO.PureRFPSAL
 import TNLean.MPS.MPDO.VerticalCF
 import TNLean.MPS.MPDO.InvariantProjection
+import TNLean.MPS.MPDO.PeriodicExclusion
 import TNLean.MPS.MPDO.SectorTrace
 import TNLean.MPS.MPDO.BiCFDerivation
 import TNLean.MPS.MPDO.ZCL
