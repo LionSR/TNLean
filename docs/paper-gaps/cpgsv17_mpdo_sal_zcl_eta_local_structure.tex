@@ -211,9 +211,11 @@ declarations are \leanid{MPOTensor.sectorEta},
 \leanid{MPOTensor.ExplicitEtaOperators.ofSectorTensors}.}  The source derives
 positivity of the $\eta_{k,h}$ from the all-length projected chain identity at
 lines 1446--1450, choosing the sector tensors so that each factor is positive
-semidefinite; until that identity is available, positive semidefiniteness of
-the chosen representatives enters the construction of the explicit
-$\eta$-data as a hypothesis.
+semidefinite.  That all-length algebraic identity is now formalized, but it
+does not by itself choose coherent positive representatives for all
+neighboring pairs.  Positive semidefiniteness of the chosen representatives
+therefore still enters the construction of the explicit $\eta$-data as a
+hypothesis.
 
 The Hayashi decomposition of the concrete closure state is now formalized for
 the four-site chain.  Independent bijections on the three tensor factors
