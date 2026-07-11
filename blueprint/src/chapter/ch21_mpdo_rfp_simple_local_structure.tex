@@ -257,6 +257,10 @@ strong subadditivity for a normalized three-site reduced state.
         = {\cal K}^{p_2}_{\beta_1,\alpha_3}
         R_{\beta_3,\alpha_1}.
     \]
+    \textbf{Local fix (tail index).} The source display repeats the third-site
+    left index in the tail entry. Direct contraction gives
+    $R_{\beta_3,\alpha_1}$ as above. This correction is recorded in
+    \path{docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex}.
 \end{theorem}
 
 \begin{figure}[ht]
@@ -449,8 +453,16 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{proof}
     \leanok
     \uses{thm:mpdo_reduced_four_three_tail}
-    This restates the closed-word formula for the entries of
-    $\sigma_3^{(4)}({\cal K})$ on the product of the three site indices.
+    The entry formula for $\sigma_3^{(4)}({\cal K})$, carried onto the
+    tripartite site index $(i_1,i_2,i_3)$, gives
+    \[
+        \rho_{i_1i_2i_3,j_1j_2j_3}
+        =\tr\!\left(
+          {\cal K}^{i_1j_1}{\cal K}^{i_2j_2}{\cal K}^{i_3j_3}R_4
+        \right),
+    \]
+    which is the three-site closure condition of
+    Definition~\ref{def:mpdo_three_site_closure} against $R_4$.
 \end{proof}
 
 \begin{theorem}[Vanishing of the off-diagonal Hayashi sectors]
@@ -459,14 +471,13 @@ strong subadditivity for a normalized three-site reduced state.
     \leanok
     \uses{def:mpdo_three_site_closure, def:mpdo_hayashi_inverse_factors}
     In the setting of
-    Theorem~\ref{thm:mpdo_inverse_map_hayashi_sector_comparison}, every
-    off-diagonal sector satisfies
+    Theorem~\ref{thm:mpdo_inverse_map_hayashi_sector_comparison}, for all
+    $k\ne k'$, every off-diagonal sector satisfies
     \[
         R_{\beta_3,\alpha_1}
         \left[U_B\kappa_{\beta_1,\alpha_3}U_B^\dagger
         \right]_{(k,l,r),(k',l',r')}
-        = 0
-        \qquad (k \ne k').
+        = 0.
     \]
     Together with the diagonal comparison this gives the direct-sum structure
     of the factorized tensor: the direct sum over sectors is inherited from
