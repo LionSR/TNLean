@@ -65,9 +65,9 @@
     \label{def:mpdo_rectangular_kraus_map}
     \lean{Matrix.rectangularKrausMap}
     \leanok
-    Let $H$ be finite-dimensional, let $K$ have a chosen basis, and let
-    $(A_a:H\to K)_a$ be a finite family of operators. Its rectangular Kraus
-    map is
+    Let $I$ be a finite index set, let $J$ be an arbitrary index set, and let
+    $(A_a\in\mathbb C^{J\times I})_a$ be a finite family of matrices. Its
+    rectangular Kraus map is
     \[
         \Phi_A(X)=\sum_a A_aXA_a^{\dagger}.
     \]
@@ -98,11 +98,12 @@
     \lean{Matrix.controlledKrausMap_isKrausCPTP}
     \leanok
     \uses{def:mpdo_controlled_kraus_map, def:is_kraus_cptp}
-    Suppose that every sectorwise Kraus family resolves the identity:
+    Suppose that for every $k$ the sectorwise Kraus family resolves the
+    identity:
     \[
-        \sum_a A_{k,a}^{\dagger}A_{k,a}=I_{H_k}
+        \sum_a A_{k,a}^{\dagger}A_{k,a}=I_{H_k}.
     \]
-    for each $k$. Then the orthogonally controlled map $\mathcal C$ is
+    Then the orthogonally controlled map $\mathcal C$ is
     trace-preserving and completely positive.
 \end{theorem}
 \begin{proof}
