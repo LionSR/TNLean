@@ -797,9 +797,14 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{proof}
     \leanok
-    The trace of the bond summand $(r_k)_{\gamma}\otimes(l_h)_{\gamma}$ is
-    the product $\tr[(r_k)_{\gamma}]\,\tr[(l_h)_{\gamma}]$, and summing over
-    the bond gives the pairing of the closed tensors.
+    Expanding the definition of the neighboring operator and applying
+    $\tr(A\otimes B)=\tr(A)\,\tr(B)$,
+    \[
+        \tr(\eta_{k,h})
+        =\sum_{\gamma}\tr\bigl((r_k)_{\gamma}\otimes(l_h)_{\gamma}\bigr)
+        =\sum_{\gamma}\tr[(r_k)_{\gamma}]\,\tr[(l_h)_{\gamma}]
+        =(r_k|l_h).
+    \]
 \end{proof}
 
 \begin{definition}[Explicit neighboring $\eta$-operator data]
@@ -857,12 +862,19 @@ strong subadditivity for a normalized three-site reduced state.
     If every neighboring operator $\eta_{k,h}$ of
     Definition~\ref{def:mpdo_sector_eta} is positive semidefinite, the
     family constitutes explicit neighboring $\eta$-data. The source obtains
-    the positivity from the projected chain identity: for every cyclic
-    sector assignment $k_1,\ldots,k_N$, the corresponding block of the
-    conjugated chain equals $\bigotimes_{n=1}^{N}\eta_{k_n,k_{n+1}}$ and is
-    positive semidefinite, and the sector tensors can be chosen so that
-    each factor is positive semidefinite
-    \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv}.
+    the positivity from the projected chain identity: writing
+    $\tilde\sigma
+    = U^{\dagger\otimes N}\,\sigma^{(N)}({\cal K})\,U^{\otimes N}$
+    for the $N$-site operator in the sector basis and $Q_k$ for the
+    projector onto the $k$-th sector of the physical splitting, every
+    cyclic sector assignment $k_1,\ldots,k_N$ (with $k_{N+1}=k_1$) satisfies
+    \[
+        0\le\bigl[Q_{k_1}\otimes\cdots\otimes Q_{k_N}\bigr]\,\tilde\sigma\,
+        \bigl[Q_{k_1}\otimes\cdots\otimes Q_{k_N}\bigr]
+        =\bigotimes_{n=1}^{N}\eta_{k_n,k_{n+1}},
+    \]
+    and the sector tensors can be chosen so that each factor is positive
+    semidefinite \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv}.
     That all-length identity is a remaining step of Lemma~C.4, so positivity
     enters here as a hypothesis on the chosen representatives.
 \end{definition}
