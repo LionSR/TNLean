@@ -460,7 +460,13 @@ weighted corner fixed-point star-algebra. Together with
 `Kraus.mem_weightedCornerFixedPointsStarSubalgebra` this identifies the carrier of the
 star-algebra with the set $\rho^{-1/2}\{X \mid T(X) = X,\ Q X Q = X\}\rho^{-1/2}$ of
 Corollary 6.7 of *Quantum Channels & Operations* (Wolf 2012), with the inverse square
-root taken on the support of $\rho$. -/
+root taken on the support of $\rho$.
+
+**Scope restriction (corner support):** the source's corollary takes a maximum-rank
+fixed point, for which the support condition on $X$ is automatic by the maximal-support
+property; that property is not yet available here, so the statement carries the support
+hypothesis explicitly. Documented in
+`docs/paper-gaps/wolf_cor67_maximal_support_restriction.tex`. -/
 theorem exists_weightedCorner_sqrt_eq_of_fixedPoint
     (K : Fin d → Mat) (h_tp : IsTP K) {ρ : Mat} (hρ_psd : ρ.PosSemidef)
     (hρ_fix : map K ρ = ρ) {X : Mat} (hX_fix : map K X = X)
