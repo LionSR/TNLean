@@ -839,8 +839,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.physTraceTransfer_eq_sum_closedSector}
     \leanok
     \uses{def:mpo_physical_trace_transfer,
-        def:mpdo_closed_sector_pairing_operator,
-        thm:mpdo_sector_factorization}
+        def:mpdo_closed_sector_pairing_operator}
     More generally, any sector factorization
     $U_B\kappa_{\beta,\alpha}U_B^\dagger
     =\bigoplus_k(l_k)_\beta\otimes(r_k)_\alpha$ gives the closed-sector
@@ -1271,10 +1270,10 @@ strong subadditivity for a normalized three-site reduced state.
     and the sector tensors can be chosen so that each factor is positive
     semidefinite \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv}.
     The all-length sector identity is
-    Theorem~\ref{thm:mpdo_sector_adapted_decomposition}.  Its positivity does
-    not, by itself, choose a coherent phase for every individual
-    $\eta_{k,h}$, so positivity remains a hypothesis on the chosen
-    representatives here.
+    Theorem~\ref{thm:mpdo_sector_adapted_decomposition}.  That algebraic
+    identity does not by itself choose coherent positive representatives for
+    all neighboring pairs, so positive semidefiniteness remains a hypothesis
+    on the chosen representatives here.
 \end{definition}
 
 \begin{theorem}[Trace matrix of the sector-tensor $\eta$-data]
