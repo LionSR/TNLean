@@ -823,7 +823,6 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{theorem}[Closed-sector form of the physical-trace transfer]
     \label{thm:mpdo_closed_sector_physical_trace_transfer}
     \lean{MPOTensor.physTraceTransfer_eq_sum_closedSector}
-    \lean{MPOTensor.concrete_physTraceTransfer_eq_sum_closedSector}
     \leanok
     \uses{def:mpo_physical_trace_transfer,
         def:mpdo_closed_sector_tensors, thm:mpdo_sector_factorization}
@@ -834,8 +833,6 @@ strong subadditivity for a normalized three-site reduced state.
     \[
         \mathcal T_{\cal K}=\sum_k |l_k)(r_k|.
     \]
-    In particular, this holds for the sector tensors obtained from the
-    injective inverse-map construction.
     This identifies the transfer matrix of
     Definition~\ref{def:mpo_physical_trace_transfer} with the operator on the
     left-hand side of the zero-correlation-length identity in
@@ -846,14 +843,43 @@ strong subadditivity for a normalized three-site reduced state.
     \leanok
     \uses{thm:mpdo_sector_factorization}
     Trace the sector factorization over the physical index.  Unitary
-    invariance of the trace removes the Hayashi basis change, while the trace
-    of the block diagonal is the sum of the block traces.  In each sector,
+    invariance gives
+    \[
+        \tr\bigl(U_B\kappa_{\beta,\alpha}U_B^\dagger\bigr)
+        =\tr(\kappa_{\beta,\alpha}).
+    \]
+    The trace of the block diagonal is the sum of the block traces.  In each
+    sector,
     \[
         \tr\bigl((l_k)_\beta\otimes(r_k)_\alpha\bigr)
         =\tr[(l_k)_\beta]\,\tr[(r_k)_\alpha]
         =\bigl[|l_k)(r_k|\bigr]_{\beta,\alpha}.
     \]
     Summing over $k$ gives the asserted operator identity.
+\end{proof}
+
+\begin{corollary}[Physical-trace transfer from the inverse-map sectors]
+    \label{cor:mpdo_concrete_closed_sector_physical_trace_transfer}
+    \lean{MPOTensor.concrete_physTraceTransfer_eq_sum_closedSector}
+    \leanok
+    \uses{def:mpdo_injective_inverse_layer, def:mpdo_eta_structure,
+        thm:mpdo_closed_sector_physical_trace_transfer}
+    Let ${\cal K}$ be injective.  Let $R$ and $\rho$ give a three-site
+    closure of ${\cal K}$, choose a Hayashi decomposition of $\rho$, and fix
+    virtual indices $\alpha_1,\beta_3$ such that
+    $R_{\beta_3,\alpha_1}\ne0$.  For the corresponding closed sector tensors,
+    \[
+        \mathcal T_{\cal K}=\sum_k |l_k)(r_k|.
+    \]
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_sector_factorization,
+        thm:mpdo_closed_sector_physical_trace_transfer}
+    The inverse-map sector tensors satisfy the sector factorization of
+    Theorem~\ref{thm:mpdo_sector_factorization}.  Apply
+    Theorem~\ref{thm:mpdo_closed_sector_physical_trace_transfer}.
 \end{proof}
 
 \begin{theorem}[Normalized closed-sector pairing operator]
@@ -864,7 +890,7 @@ strong subadditivity for a normalized three-site reduced state.
     \leanok
     \uses{def:mpo_source_zcl,
         def:mpdo_injective_inverse_layer, def:mpdo_eta_structure,
-        thm:mpdo_closed_sector_physical_trace_transfer,
+        cor:mpdo_concrete_closed_sector_physical_trace_transfer,
         lem:mpo_source_zcl_normalized_idempotent}
     Let ${\cal K}$ be injective.  Let $R$ and $\rho$ give a three-site
     closure of ${\cal K}$, choose a Hayashi decomposition of $\rho$, and fix
@@ -895,7 +921,8 @@ strong subadditivity for a normalized three-site reduced state.
         lem:mpo_source_zcl_normalized_idempotent}
     Substitute
     $S=\mathcal T_{\cal K}$ from
-    Theorem~\ref{thm:mpdo_closed_sector_physical_trace_transfer} into the
+    Corollary~\ref{cor:mpdo_concrete_closed_sector_physical_trace_transfer}
+    into the
     defining relation
     $\mathcal T_{\cal K}^2=\lambda\mathcal T_{\cal K}$, and then apply
     Lemma~\ref{lem:mpo_source_zcl_normalized_idempotent}.  Under literal
