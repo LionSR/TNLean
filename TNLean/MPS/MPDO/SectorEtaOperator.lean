@@ -67,22 +67,6 @@ def sectorChainEquiv (hη : EtaStructure ρ) (N : ℕ) :
   (Equiv.piCongrRight fun _ : Fin N => hη.decompB).trans
     piSigmaEquiv
 
-@[simp] lemma sectorChainEquiv_apply_fst (hη : EtaStructure ρ)
-    (b : Fin N → Fin d) (n : Fin N) :
-    (sectorChainEquiv hη N b).1 n = (hη.decompB (b n)).1 :=
-  rfl
-
-@[simp] lemma sectorChainEquiv_apply_snd (hη : EtaStructure ρ)
-    (b : Fin N → Fin d) (n : Fin N) :
-    (sectorChainEquiv hη N b).2 n = (hη.decompB (b n)).2 :=
-  rfl
-
-@[simp] lemma sectorChainEquiv_symm_apply (hη : EtaStructure ρ)
-    (x : SectorChainIndex hη N) (n : Fin N) :
-    (sectorChainEquiv hη N).symm x n =
-      hη.decompB.symm ⟨x.1 n, x.2 n⟩ :=
-  rfl
-
 /-- Forming the congruence $U\kappa_{\beta,\alpha}U^\dagger$ on every local
 MPO matrix leaves the horizontal bond space unchanged. When $U$ is unitary,
 this is the corresponding physical basis change. -/
@@ -90,23 +74,17 @@ noncomputable def conjugatePhysical (K : MPOTensor d D)
     (U : Matrix (Fin d) (Fin d) ℂ) : MPOTensor d D :=
   fun i j β α => (U * physicalSlice K β α * Uᴴ) i j
 
-@[simp] lemma conjugatePhysical_apply (K : MPOTensor d D)
+@[simp] private lemma conjugatePhysical_apply (K : MPOTensor d D)
     (U : Matrix (Fin d) (Fin d) ℂ) (i j : Fin d) (β α : Fin D) :
     conjugatePhysical K U i j β α =
       (U * physicalSlice K β α * Uᴴ) i j :=
-  rfl
-
-@[simp] lemma physicalSlice_conjugatePhysical (K : MPOTensor d D)
-    (U : Matrix (Fin d) (Fin d) ℂ) (β α : Fin D) :
-    physicalSlice (conjugatePhysical K U) β α =
-      U * physicalSlice K β α * Uᴴ :=
   rfl
 
 /-- Within one sector, the basis-conjugated local MPO matrix is the product of
 the corresponding entries of the left and right sector tensors.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1435--1448. -/
-theorem conjugatePhysical_sectorFactorization_apply
+private theorem conjugatePhysical_sectorFactorization_apply
     (K : MPOTensor d D) (hη : EtaStructure ρ)
     (l : (q : Fin hη.m) → Fin D →
       Matrix (Fin (hη.dL q)) (Fin (hη.dL q)) ℂ)
@@ -155,7 +133,7 @@ noncomputable def cyclicEtaTensorProduct
       ((x n).2, (x (n + 1)).1)
       ((y n).2, (y (n + 1)).1)
 
-@[simp] lemma cyclicEtaTensorProduct_apply
+@[simp] private lemma cyclicEtaTensorProduct_apply
     [NeZero N] (hη : EtaStructure ρ) (eta : etaOperators hη)
     (k : Fin N → Fin hη.m) (x y : SectorFiber hη k) :
     cyclicEtaTensorProduct hη eta k x y =
@@ -222,7 +200,7 @@ the sector labels differ contributes a zero local matrix, so every cyclic
 virtual-index product vanishes.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1446--1464. -/
-theorem trace_conjugatePhysical_sector_word_eq_zero_of_ne
+private theorem trace_conjugatePhysical_sector_word_eq_zero_of_ne
     (K : MPOTensor d D) (hη : EtaStructure ρ)
     (l : (q : Fin hη.m) → Fin D →
       Matrix (Fin (hη.dL q)) (Fin (hη.dL q)) ℂ)
