@@ -38,6 +38,64 @@
     $A_0^\dagger A_0 = I$.
 \end{proof}
 
+\begin{theorem}[Conjugation by an isometry is trace-preserving completely positive]
+    \label{thm:mpdo_single_kraus_isometry_cptp}
+    \lean{isKrausCPTP_of_singleKraus}
+    \leanok
+    \uses{def:is_kraus_cptp}
+    Let $H$ and $K$ be finite-dimensional complex vector spaces, and let
+    $V:H\to K$ satisfy $V^\dagger V=I_H$. Then the map
+    \[
+        \Phi_V:\operatorname{End}_{\C}(H)\longrightarrow
+          \operatorname{End}_{\C}(K),
+        \qquad \Phi_V(X)=VXV^\dagger,
+    \]
+    is trace-preserving and completely positive. This is the general
+    one-isometry form of the local basis change used in
+    \cite[Appendix~C.2, lines~1439 and~1520]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Take the sole Kraus operator to be $V$. Its resolution of the identity is
+    precisely $V^\dagger V=I_H$.
+\end{proof}
+
+\begin{definition}[Matrix reindexing along an equivalence]
+    \label{def:mpdo_equiv_reindex_map}
+    \lean{Matrix.equivReindexMap}
+    \leanok
+    Let $e:I\simeq J$ be an equivalence of index sets. The associated
+    matrix reindexing is the linear map
+    $R_e:\C^{I\times I}\to\C^{J\times J}$ determined by
+    \[
+        \bigl[R_e(X)\bigr]_{j,j'}=X_{e^{-1}(j),e^{-1}(j')}.
+    \]
+\end{definition}
+
+\begin{theorem}[Equivalence reindexing is trace-preserving completely positive]
+    \label{thm:mpdo_equiv_reindex_cptp}
+    \lean{Matrix.equivReindexMap_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_equiv_reindex_map, thm:mpdo_single_kraus_isometry_cptp}
+    For every equivalence $e:I\simeq J$ between finite index sets, the
+    reindexing map $R_e$ is trace-preserving and completely positive.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Let $P_e:\C^I\to\C^J$ be the permutation matrix of $e$. Then
+    \[
+        R_e(X)=P_eXP_e^\dagger,
+        \qquad P_e^\dagger P_e=I_{\C^I}.
+    \]
+    The claim follows from the preceding isometry lemma.
+\end{proof}
+
+% Concrete equivalences remain to be supplied for the regroupings preceding
+% T_0 and S_0 (Appendix C.2, lines 1521--1522 and 1547) and for the shifts T_2
+% and S_2 (lines 1535--1540 and 1555--1559). The result above provides the
+% trace-preserving completely positive reindexing once those equivalences are
+% defined; it does not itself define the paper-specific maps.
+
 \begin{lemma}[Composition of trace-preserving completely positive maps]
     \label{lem:is_kraus_cptp_comp}
     \lean{isKrausCPTP_comp}
