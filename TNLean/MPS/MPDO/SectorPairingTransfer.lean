@@ -15,7 +15,7 @@ zero-correlation-length condition gives the corresponding pairing operator
 idempotence, up to the positive scalar allowed before canonical
 normalization.
 
-## Main results
+## Main declarations
 
 * `physTraceTransfer_eq_sum_closedSector`: a sector factorization expresses
   the physical-trace transfer as a sum of outer products of closed tensors.
@@ -35,7 +35,7 @@ normalization.
   Appendix C.2, lines 1473--1493
 -/
 
-open scoped Matrix ComplexOrder BigOperators
+open scoped Matrix BigOperators
 
 namespace MPOTensor
 
