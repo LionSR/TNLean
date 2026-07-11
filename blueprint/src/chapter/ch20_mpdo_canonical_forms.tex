@@ -23,6 +23,7 @@
 \begin{definition}[Vertically viewed tensor of an MPO]%
     \label{def:vertical_tensor_mpdo}
     \lean{MPOTensor.verticalTensor}
+    \lean{MPOTensor.verticalTensor_finProdFinEquiv}
     \leanok
     \uses{def:mpo_tensor}
     The \emph{vertical direction} of an MPO tensor exchanges the notion of
@@ -45,8 +46,8 @@
     An MPO tensor is in \emph{vertical canonical form} if there are a basis of
     normal tensors $\{M_\alpha\}_\alpha$ for its vertically viewed tensor
     $\widetilde M$, positive diagonal matrices
-    $\mu_\alpha=\operatorname{diag}(\omega_{\alpha,1},\dots,\omega_{\alpha,m_\alpha})$
-    with $m_\alpha\geq1$,
+    $\mu_\alpha=\operatorname{diag}(\omega_{\alpha,0},\dots,\omega_{\alpha,r_\alpha-1})$
+    with $r_\alpha\geq1$,
     and an isometry $U$ on the physical space such that
     \[
         U\widetilde MU^\dagger=\bigoplus_\alpha \mu_\alpha\otimes M_\alpha.
@@ -59,10 +60,13 @@
     \cite[line~959]{Cirac2016MPDO_arXiv}.
     Since each $\mu_\alpha$ is diagonal, the summand
     $\mu_\alpha\otimes M_\alpha$ is the direct sum
-    $\bigoplus_{k=1}^{m_\alpha}\omega_{\alpha,k}M_\alpha$ of weighted copies
+    $\bigoplus_{k=0}^{r_\alpha-1}\omega_{\alpha,k}M_\alpha$ of weighted copies
     of $M_\alpha$, so the right-hand side is a block-diagonal tensor over the
-    pairs $(\alpha,k)$ in which the multiplicities $m_\alpha$ and the diagonal
-    entries $\omega_{\alpha,k}$ stay explicit.
+    pairs $(\alpha,k)$ in which the multiplicities $r_\alpha$ and the diagonal
+    entries $\omega_{\alpha,k}$ stay explicit; the coefficients
+    $m_\alpha=\tr(\mu_\alpha)=\sum_{k=0}^{r_\alpha-1}\omega_{\alpha,k}$
+    appearing in the renormalization fixed-point characterization are
+    recovered from them.
 \end{definition}
 
 \begin{figure}[ht]

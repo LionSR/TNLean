@@ -27,7 +27,9 @@ normal tensors (BNT). Since each $\mu_\alpha$ is diagonal, the summand
 $\mu_\alpha \otimes M_\alpha$
 equals the direct sum $\bigoplus_k \omega_{\alpha,k} M_\alpha$ of its diagonal entries, so the
 right-hand side is the block-diagonal tensor over the pairs $(\alpha, k)$ in which
-the multiplicities $m_\alpha$ and the diagonal entries $\omega_{\alpha,k}$ stay explicit.
+the multiplicities $r_\alpha$ and the diagonal entries $\omega_{\alpha,k}$ stay explicit;
+the coefficients $m_\alpha = \operatorname{tr}(\mu_\alpha)$ appearing in the
+renormalization fixed-point characterization are recovered from them.
 The predicate `IsVerticalCF` states exactly this conclusion.
 
 ## Main definitions
