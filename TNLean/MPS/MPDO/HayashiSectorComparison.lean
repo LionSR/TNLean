@@ -86,6 +86,50 @@ noncomputable def hayashiInverseRight {d D : ℕ}
     inverseTensor K hK (finProdFinEquiv (i, j)) α β *
       hη.ρ_right k (r, i) (r', j)
 
+/-- Expanding a three-site closure identifies its contraction against the two
+outer inverse tensors with the corresponding three-site inverse-map
+contraction. This is the contraction used in arXiv:1606.00608, Appendix C.2,
+lines 1421--1430. -/
+private lemma sum_inverseTensor_threeSiteClosure_eq {d D : ℕ}
+    (K : MPOTensor d D) (hK : K.IsInjective)
+    (R : Matrix (Fin D) (Fin D) ℂ)
+    (ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ)
+    (hρ : IsThreeSiteClosure K R ρ) (α₁ β₁ α₃ β₃ : Fin D) (i₂ j₂ : Fin d) :
+    (∑ i₁ : Fin d, ∑ j₁ : Fin d, ∑ i₃ : Fin d, ∑ j₃ : Fin d,
+      inverseTensor K hK (finProdFinEquiv (i₁, j₁)) α₁ β₁ *
+        inverseTensor K hK (finProdFinEquiv (i₃, j₃)) α₃ β₃ *
+          ρ (i₁, i₂, i₃) (j₁, j₂, j₃)) =
+      inverseMapThreeSiteContraction K hK R α₁ β₁ α₃ β₃
+        (finProdFinEquiv (i₂, j₂)) := by
+  rw [inverseMapThreeSiteContraction]
+  simp_rw [← Equiv.sum_comp finProdFinEquiv
+    (fun p ↦ ∑ p₃,
+      inverseTensor K hK p α₁ β₁ * inverseTensor K hK p₃ α₃ β₃ *
+        Matrix.trace (K.toMPSTensor p * K.toMPSTensor (finProdFinEquiv (i₂, j₂)) *
+          K.toMPSTensor p₃ * R))]
+  simp_rw [← Equiv.sum_comp finProdFinEquiv
+    (fun p ↦
+      inverseTensor K hK (finProdFinEquiv _) α₁ β₁ *
+        inverseTensor K hK p α₃ β₃ *
+        Matrix.trace (K.toMPSTensor (finProdFinEquiv _) *
+          K.toMPSTensor (finProdFinEquiv (i₂, j₂)) * K.toMPSTensor p * R))]
+  simp_rw [Fintype.sum_prod_type]
+  congr 1 with i₁
+  congr 1 with j₁
+  congr 1 with i₃
+  congr 1 with j₃
+  rw [hρ i₁ i₂ i₃ j₁ j₂ j₃]
+  simp [MPOTensor.toMPSTensor]
+
+/-- The cyclic permutation of six indices given by
+\((a,b,c,d,e,f) \mapsto (c,d,e,f,a,b)\). -/
+private def rotateSixEquiv (ι : Type) :
+    (ι × ι × ι × ι × ι × ι) ≃ (ι × ι × ι × ι × ι × ι) := {
+  toFun := fun ⟨a, b, c, d, e, f⟩ ↦ (c, d, e, f, a, b)
+  invFun := fun ⟨a, b, c, d, e, f⟩ ↦ (e, f, a, b, c, d)
+  left_inv := by rintro ⟨a, b, c, d, e, f⟩; rfl
+  right_inv := by rintro ⟨a, b, c, d, e, f⟩; rfl }
+
 /-- **Collapse of the outer inverse-map contraction of a closure.** Applying
 the inverse tensor at the two outer sites of a three-site closure leaves one
 entry of the middle physical slice and one entry of the virtual tail:
@@ -114,34 +158,13 @@ theorem inverseMap_threeSite_closure_collapse {d D : ℕ}
         inverseTensor K hK (finProdFinEquiv (i₃, j₃)) α₃ β₃ *
         ρ (i₁, i₂, i₃) (j₁, j₂, j₃) =
       K i₂ j₂ β₁ α₃ * R β₃ α₁ := by
-  classical
-  rw [show (∑ i₁ : Fin d, ∑ j₁ : Fin d, ∑ i₃ : Fin d, ∑ j₃ : Fin d,
-      inverseTensor K hK (finProdFinEquiv (i₁, j₁)) α₁ β₁ *
-        inverseTensor K hK (finProdFinEquiv (i₃, j₃)) α₃ β₃ *
-        ρ (i₁, i₂, i₃) (j₁, j₂, j₃)) =
-    inverseMapThreeSiteContraction K hK R α₁ β₁ α₃ β₃
-      (finProdFinEquiv (i₂, j₂)) from by
-        rw [inverseMapThreeSiteContraction]
-        simp_rw [← Equiv.sum_comp finProdFinEquiv
-          (fun p ↦ ∑ p₃,
-            inverseTensor K hK p α₁ β₁ * inverseTensor K hK p₃ α₃ β₃ *
-              Matrix.trace (K.toMPSTensor p * K.toMPSTensor (finProdFinEquiv (i₂, j₂)) *
-                K.toMPSTensor p₃ * R))]
-        simp_rw [← Equiv.sum_comp finProdFinEquiv
-          (fun p ↦
-            inverseTensor K hK (finProdFinEquiv _) α₁ β₁ *
-              inverseTensor K hK p α₃ β₃ *
-              Matrix.trace (K.toMPSTensor (finProdFinEquiv _) *
-                K.toMPSTensor (finProdFinEquiv (i₂, j₂)) * K.toMPSTensor p * R))]
-        simp_rw [Fintype.sum_prod_type]
-        congr 1 with i₁
-        congr 1 with j₁
-        congr 1 with i₃
-        congr 1 with j₃
-        rw [hρ i₁ i₂ i₃ j₁ j₂ j₃]
-        simp [MPOTensor.toMPSTensor]]
-  simpa [MPOTensor.toMPSTensor] using inverseMapThreeSiteContraction_eq K hK R
-    α₁ β₁ α₃ β₃ (finProdFinEquiv (i₂, j₂))
+  calc
+    _ = inverseMapThreeSiteContraction K hK R α₁ β₁ α₃ β₃
+        (finProdFinEquiv (i₂, j₂)) :=
+      sum_inverseTensor_threeSiteClosure_eq K hK R ρ hρ α₁ β₁ α₃ β₃ i₂ j₂
+    _ = _ := by
+      simpa [MPOTensor.toMPSTensor] using inverseMapThreeSiteContraction_eq
+        K hK R α₁ β₁ α₃ β₃ (finProdFinEquiv (i₂, j₂))
 
 /-- **Expansion of the conjugated physical slice against a closure.** For any
 matrix `U` on the middle site, one tail entry times an entry of the conjugated
@@ -185,13 +208,7 @@ theorem inverseMap_conj_physicalSlice_expansion {d D : ℕ}
   change R β₃ α₁ * (∑ j₂, ∑ i₂, U b i₂ * physicalSlice K β₁ α₃ i₂ j₂ *
     (starRingEnd ℂ) (U b' j₂)) = _
   rw [Finset.sum_comm]
-  let rotate :
-      (Fin d × Fin d × Fin d × Fin d × Fin d × Fin d) ≃
-        (Fin d × Fin d × Fin d × Fin d × Fin d × Fin d) := {
-    toFun := fun x ↦ (x.2.2.1, x.2.2.2.1, x.2.2.2.2.1, x.2.2.2.2.2, x.1, x.2.1)
-    invFun := fun x ↦ (x.2.2.2.2.1, x.2.2.2.2.2, x.1, x.2.1, x.2.2.1, x.2.2.2.1)
-    left_inv := by intro x; rcases x with ⟨a, b, c, e, f, g⟩; rfl
-    right_inv := by intro x; rcases x with ⟨a, b, c, e, f, g⟩; rfl }
+  let rotate := rotateSixEquiv (Fin d)
   let G : Fin d × Fin d × Fin d × Fin d × Fin d × Fin d → ℂ := fun x ↦
     U b x.1 * (A x.2.2.1 x.2.2.2.1 * B x.2.2.2.2.1 x.2.2.2.2.2 *
       ρ (x.2.2.1, x.1, x.2.2.2.2.1) (x.2.2.2.1, x.2.1, x.2.2.2.2.2)) *
@@ -207,16 +224,12 @@ theorem inverseMap_conj_physicalSlice_expansion {d D : ℕ}
         ∑ i₂, ∑ j₂, ∑ i₁, ∑ j₁, ∑ i₃, ∑ j₃,
           U b i₂ * (A i₁ j₁ * B i₃ j₃ * ρ (i₁, i₂, i₃) (j₁, j₂, j₃)) *
             (starRingEnd ℂ) (U b' j₂) := by
-      rw [Fintype.sum_prod_type]
-      simp_rw [Fintype.sum_prod_type]
-      rfl
+      simp only [Fintype.sum_prod_type, G]
     have hflat' : (∑ x, G (rotate.symm x)) =
         ∑ i₁, ∑ j₁, ∑ i₃, ∑ j₃, ∑ i₂, ∑ j₂,
           U b i₂ * (A i₁ j₁ * B i₃ j₃ * ρ (i₁, i₂, i₃) (j₁, j₂, j₃)) *
             (starRingEnd ℂ) (U b' j₂) := by
-      rw [Fintype.sum_prod_type]
-      simp_rw [Fintype.sum_prod_type]
-      rfl
+      simp [Fintype.sum_prod_type, G, rotate, rotateSixEquiv]
     rw [← hflat, ← hflat']
     exact (Equiv.sum_comp rotate.symm G).symm
   calc

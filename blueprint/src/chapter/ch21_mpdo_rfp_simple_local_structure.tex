@@ -287,6 +287,10 @@ strong subadditivity for a normalized three-site reduced state.
         = {\cal K}^{p_2}_{\beta_1,\alpha_3}
         R_{\beta_3,\alpha_1}.
     \]
+    % Local fix (tail index): the source display repeats the third-site left
+    % index in the tail entry; direct contraction gives R_{beta_3,alpha_1} as
+    % above. Recorded in
+    % docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex.
 \end{theorem}
 
 \begin{figure}[ht]
@@ -453,17 +457,41 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{proof}
     \leanok
     \uses{thm:mpdo_closure_outer_contraction}
-    Expand the Hayashi block equality at fixed indices $(k,l,r)$ and
-    $(k,l',r')$, and apply the inverse tensor at the first and third sites.
-    Moving the two finite sums through the middle-site change of basis reduces
-    the inner contraction to
+    At fixed indices $(k,l,r)$ and $(k,l',r')$, the Hayashi block equality is
     \[
-        {\cal K}^{i_2j_2}_{\beta_1,\alpha_3}
-        R_{\beta_3,\alpha_1}
+        \sum_{i_2,j_2}
+        [U_B]_{(k,l,r),i_2}\,
+        \rho_{i_1i_2i_3,j_1j_2j_3}\,
+        \overline{[U_B]_{(k,l',r'),j_2}}
+        =p_k(\rho_{A b_1}^{(k)})_{(i_1,l),(j_1,l')}
+          (\rho_{b_2 C}^{(k)})_{(r,i_3),(r',j_3)}.
     \]
-    by the preceding theorem. Summing over $i_2,j_2$ gives the transformed
-    physical slice on the left, while the Hayashi block equality gives the
-    product $p_k A^{(k)}B^{(k)}$ on the right.
+    For each $i_2,j_2$, the preceding theorem gives
+    \[
+        \sum_{i_1,j_1,i_3,j_3}
+        ({\cal K}^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
+        ({\cal K}^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}
+        \rho_{i_1i_2i_3,j_1j_2j_3}
+        ={\cal K}^{i_2j_2}_{\beta_1,\alpha_3}
+          R_{\beta_3,\alpha_1}.
+    \]
+    Contract the first equality with the two inverse tensors and interchange
+    the finite sums. Its left-hand side is
+    \begin{align*}
+        &R_{\beta_3,\alpha_1}
+        \sum_{i_2,j_2}[U_B]_{(k,l,r),i_2}\,
+        \kappa_{\beta_1,\alpha_3}(i_2,j_2)\,
+        \overline{[U_B]_{(k,l',r'),j_2}}\\
+        &\qquad={}
+        R_{\beta_3,\alpha_1}\,
+        \widetilde\kappa^{(k)}_{\beta_1,\alpha_3}
+          ((l,r),(l',r')),
+    \end{align*}
+    while its right-hand side is
+    \[
+        p_k A^{(k)}_{\alpha_1,\beta_1}(l,l')
+          B^{(k)}_{\alpha_3,\beta_3}(r,r').
+    \]
 \end{proof}
 
 \begin{theorem}[The four-site marginal is a three-site closure]
@@ -479,8 +507,16 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{proof}
     \leanok
     \uses{thm:mpdo_reduced_four_three_tail}
-    This restates the closed-word formula for the entries of
-    $\sigma_3^{(4)}({\cal K})$ on the product of the three site indices.
+    The entry formula for $\sigma_3^{(4)}({\cal K})$, carried onto the
+    tripartite site index $(i_1,i_2,i_3)$, gives
+    \[
+        \rho_{i_1i_2i_3,j_1j_2j_3}
+        =\tr\!\left(
+          {\cal K}^{i_1j_1}{\cal K}^{i_2j_2}{\cal K}^{i_3j_3}R_4
+        \right),
+    \]
+    which is the three-site closure condition of
+    Definition~\ref{def:mpdo_three_site_closure} against $R_4$.
 \end{proof}
 
 \begin{theorem}[Vanishing of the off-diagonal Hayashi sectors]
@@ -489,14 +525,13 @@ strong subadditivity for a normalized three-site reduced state.
     \leanok
     \uses{def:mpdo_three_site_closure, def:mpdo_hayashi_inverse_factors}
     In the setting of
-    Theorem~\ref{thm:mpdo_inverse_map_hayashi_sector_comparison}, every
-    off-diagonal sector satisfies
+    Theorem~\ref{thm:mpdo_inverse_map_hayashi_sector_comparison}, for all
+    $k\ne k'$, every off-diagonal sector satisfies
     \[
         R_{\beta_3,\alpha_1}
         \left[U_B\kappa_{\beta_1,\alpha_3}U_B^\dagger
         \right]_{(k,l,r),(k',l',r')}
-        = 0
-        \qquad (k \ne k').
+        = 0.
     \]
     Together with the diagonal comparison this gives the direct-sum structure
     of the factorized tensor: the direct sum over sectors is inherited from
@@ -591,12 +626,13 @@ strong subadditivity for a normalized three-site reduced state.
     Let ${\cal K}$ be injective with nonzero four-site trace, let $\rho$ be a
     three-site closure of ${\cal K}$ against the normalized fourth-site tail
     $R_4$, and choose a Hayashi decomposition of $\rho$. Then there exist
-    sector tensors $l_k$ and $r_k$ such that
+    sector tensors $l_k$ and $r_k$ such that, for all virtual indices
+    $\beta_1,\alpha_3$,
     \[
         U_B\,\kappa_{\beta_1,\alpha_3}\,U_B^\dagger
-        =\bigoplus_k (l_k)_{\beta_1}\otimes(r_k)_{\alpha_3}
+        =\bigoplus_k (l_k)_{\beta_1}\otimes(r_k)_{\alpha_3}.
     \]
-    for all virtual indices $\beta_1,\alpha_3$. The remaining steps of
+    The remaining steps of
     \cite[Appendix~C.2, Lemma~C.4]{Cirac2016MPDO_arXiv} assemble the
     neighboring operators $\eta_{k,h}$ from these tensors and prove the
     all-length identity and primitivity.

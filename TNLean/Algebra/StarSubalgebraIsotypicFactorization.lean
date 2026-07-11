@@ -32,9 +32,11 @@ $\mathbf{1}_{m} \otimes B$ with $B$ a $d \times d$ matrix.
 ## Remaining step towards Wolf Thm 6.14
 
 The adapted bases realize the action of the subalgebra on each isotypic component as
-matrix-times-identity blocks. The remaining step is the global change of basis: concatenating
-the adapted bases of the components into a single unitary matrix that conjugates the subalgebra
-to the block-diagonal form asserted by the theorem.
+matrix-times-identity blocks. The global change of basis, which concatenates the adapted bases
+of the components into a single unitary matrix conjugating every member of the subalgebra to
+the block-diagonal form, is carried out in `TNLean.Algebra.StarSubalgebraBlockDiagonal`. The
+converse direction of the theorem, that every choice of blocks is attained by a member of the
+subalgebra, remains open.
 -/
 
 open scoped InnerProductSpace
