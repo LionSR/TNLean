@@ -22,9 +22,16 @@ $\rho^{-1/2} \Fix(T) \rho^{-1/2}$ is a `StarSubalgebra` of `M_D(\mathbb{C})`.
 ## Main declarations
 
 * `Kraus.rightCanonicalGauge`: the Kraus family `ρ^{-1/2} K_i ρ^{1/2}`.
-* `Kraus.weightedFixedPointsStarSubalgebra`: Wolf Corollary 6.7.
+* `Kraus.weightedFixedPointsStarSubalgebra`: Corollary 6.7 of *Quantum Channels &
+  Operations* (Wolf 2012), in the positive
+  definite case.
 * `Kraus.mem_weightedFixedPointsStarSubalgebra_iff`: membership is equivalent
   to saying that `ρ^{1/2} X ρ^{1/2}` is fixed by the original map.
+
+The singular case, with the inverse square root taken on the support of a positive
+semidefinite fixed point and the conjugated set restricted to the corner-supported fixed
+points, is `Kraus.weightedCornerFixedPointsStarSubalgebra` in
+`TNLean.Channel.FixedPoint.WeightedCornerFixedPoints`.
 
 ## References
 
