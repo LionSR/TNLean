@@ -394,6 +394,7 @@ import TNLean.MPS.MPDO.BNTTheoremData
 import TNLean.MPS.MPDO.BNTTheoremWitness
 import TNLean.MPS.MPDO.BNTTheoremWitnessConsequences
 import TNLean.MPS.MPDO.BNTFusionIsometries
+import TNLean.MPS.MPDO.BNTAssociativity
 import TNLean.MPS.MPDO.CommutingForm
 import TNLean.MPS.MPDO.CommutingFormBridge
 import TNLean.MPS.MPDO.BlockedRFPConstruction

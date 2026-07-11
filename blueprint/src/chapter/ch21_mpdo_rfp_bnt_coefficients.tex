@@ -566,3 +566,88 @@
     renormalization fixed points whose structure coefficients depend on the
     length is left open in \cite[Section~4.5]{Cirac2016MPDO_arXiv}.
 \end{remark}
+
+\begin{definition}[Linearly independent operator family]%
+    \label{def:mpdo_bnt_label_linear_independent}
+    \lean{MPOTensor.BNTLabelOperatorFamily.LinearIndependentAt}
+    \lean{MPOTensor.BNTLabelOperatorFamily.EventuallyLinearIndependent}
+    \leanok
+    \uses{def:mpdo_bnt_label_operator_family}
+    A BNT-label operator family is \emph{linearly independent at length $L$}
+    when the operators $O_L(M_\alpha)$ are linearly independent, and
+    \emph{eventually linearly independent} when this holds for every length
+    beyond some threshold. Eventual linear independence is the
+    operator-level form of the third defining property of a basis of normal
+    tensors in \cite[Section~2.3]{Cirac2016MPDO_arXiv}, invoked for the
+    labelled operators in \cite[Appendix~C.4]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Uniqueness of the structure coefficients]%
+    \label{thm:mpdo_bnt_label_coeff_unique}
+    \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.%
+        coeff_eq_of_linearIndependentAt}
+    \leanok
+    \uses{def:mpdo_bnt_label_linear_independent,
+        def:mpdo_bnt_label_same_length_product_form,
+        def:mpdo_bnt_label_coefficient_family}
+    Two coefficient systems satisfying the same-length product law for the
+    same operator family agree at every positive length at which the
+    operators are linearly independent.
+\end{theorem}
+\begin{proof}\leanok
+    The difference of the two coefficient systems gives a vanishing linear
+    combination of the operators, so every coefficient of the difference
+    vanishes.
+\end{proof}
+
+\begin{theorem}[Associativity constraint on the structure coefficients]%
+    \label{thm:mpdo_bnt_label_coeff_associativity}
+    \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.%
+        coeff_assoc_of_linearIndependentAt}
+    \leanok
+    \uses{def:mpdo_bnt_label_linear_independent,
+        def:mpdo_bnt_label_same_length_product_form}
+    At every positive length $L$ at which the operators are linearly
+    independent, the structure coefficients of the same-length product law
+    satisfy
+    \[
+        \sum_\delta c^{(L)}_{\alpha,\beta,\delta}\,
+        c^{(L)}_{\delta,\gamma,\epsilon}
+        = \sum_\delta c^{(L)}_{\beta,\gamma,\delta}\,
+        c^{(L)}_{\alpha,\delta,\epsilon}.
+    \]
+    These are the restrictions that the associativity of the multiplication
+    imposes on the structure coefficients, noted in
+    \cite[Section~4.5]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}\leanok
+    Expand the two associations of the triple product
+    $O_L(M_\alpha)O_L(M_\beta)O_L(M_\gamma)$ through the product law and
+    compare the coefficients of the linearly independent operators.
+\end{proof}
+
+\begin{theorem}[Associativity constraint in trace-power form]%
+    \label{thm:mpdo_bnt_label_chi_associativity}
+    \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.%
+        tracePowerCoeff_assoc_of_linearIndependentAt}
+    \leanok
+    \uses{thm:mpdo_bnt_label_coeff_associativity,
+        def:mpdo_bnt_label_positive_length_chi_trace_power_form}
+    For a coefficient system in trace-power form, the associativity
+    constraint is a restriction on the family of diagonal matrices:
+    \[
+        \sum_\delta
+        \operatorname{tr}(\chi_{\alpha,\beta,\delta}^{\,L})
+        \operatorname{tr}(\chi_{\delta,\gamma,\epsilon}^{\,L})
+        = \sum_\delta
+        \operatorname{tr}(\chi_{\beta,\gamma,\delta}^{\,L})
+        \operatorname{tr}(\chi_{\alpha,\delta,\epsilon}^{\,L}).
+    \]
+    In \cite[Section~4.5]{Cirac2016MPDO_arXiv} these restrictions, combined
+    with the isometry statement, lead to a pentagon-like equation for the
+    fusion isometries whose solutions come from unitary fusion categories.
+\end{theorem}
+\begin{proof}\leanok
+    Substitute the trace-power form of the coefficients into the
+    associativity constraint.
+\end{proof}
