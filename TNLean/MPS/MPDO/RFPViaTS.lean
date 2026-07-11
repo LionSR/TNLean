@@ -10,7 +10,7 @@ import TNLean.MPS.MPDO.KrausCPTP
 This file states the source-faithful renormalization-fixed-point notion for
 matrix product density operators, following
 arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete), Definition 4.1
-(paper label `RFPMixedTS`, line 657, figures `MPDO_XM`, `MPDO_XMM`,
+(paper label `RFPMixedTS`, line 657, figures MPDO_XM, MPDO_XMM,
 `MPDO_TandS`).
 
 In the paper, a tensor `M` in canonical form generating MPDOs is a renormalization
@@ -25,9 +25,9 @@ ring:
 for all virtual operators `X`. Here, with the physical legs left open,
 
 * `(M₁ X) i j = tr(M^{ij} X)` is the one-site physical operator (figure
-  `MPDO_XM`), and
+  MPDO_XM), and
 * `(M₂ X) (i₁,i₂) (j₁,j₂) = tr(M^{i₁j₁} M^{i₂j₂} X)` is the two-site physical
-  operator (figure `MPDO_XMM`).
+  operator (figure MPDO_XMM).
 
 Following the codebase convention (as for `MPOTensor.IsRFP` and `MPOTensor.IsZCL`),
 `IsRFPViaTS` is stated on a bare `MPOTensor`; the source's standing hypotheses
@@ -92,15 +92,15 @@ noncomputable def physCloseN (M : MPOTensor d D) (N : ℕ) :
   rfl
 
 /-- The length-one physical closure has the source coefficient formula from
-arXiv:1606.00608, Definition 4.1, line 657 and figure `MPDO_XM`. -/
-@[simp] lemma physCloseN_one_apply (M : MPOTensor d D)
+arXiv:1606.00608, Definition 4.1, line 657 and figure MPDO_XM. -/
+lemma physCloseN_one_apply (M : MPOTensor d D)
     (X : Matrix (Fin D) (Fin D) ℂ) (σ τ : Fin 1 → Fin d) :
     physCloseN M 1 X σ τ = Matrix.trace (M (σ 0) (τ 0) * X) := by
   simp [physCloseN, List.ofFn_succ, evalWord_cons]
 
 /-- The length-two physical closure has the source coefficient formula from
-arXiv:1606.00608, Definition 4.1, line 657 and figure `MPDO_XMM`. -/
-@[simp] lemma physCloseN_two_apply (M : MPOTensor d D)
+arXiv:1606.00608, Definition 4.1, line 657 and figure MPDO_XMM. -/
+lemma physCloseN_two_apply (M : MPOTensor d D)
     (X : Matrix (Fin D) (Fin D) ℂ) (σ τ : Fin 2 → Fin d) :
     physCloseN M 2 X σ τ =
       Matrix.trace (M (σ 0) (τ 0) * M (σ 1) (τ 1) * X) := by
@@ -109,7 +109,7 @@ arXiv:1606.00608, Definition 4.1, line 657 and figure `MPDO_XMM`. -/
 /-- The general length-three physical closure has the coefficient formula for
 $M_3(X)$. When $M=\mathcal K$, it is the operator $\mathcal K_3(X)$ in
 arXiv:1606.00608, Proposition C.7, lines 1510--1516. -/
-@[simp] lemma physCloseN_three_apply (M : MPOTensor d D)
+lemma physCloseN_three_apply (M : MPOTensor d D)
     (X : Matrix (Fin D) (Fin D) ℂ) (σ τ : Fin 3 → Fin d) :
     physCloseN M 3 X σ τ =
       Matrix.trace
@@ -120,7 +120,7 @@ arXiv:1606.00608, Proposition C.7, lines 1510--1516. -/
 
 /-- The **one-site physical operator** as a linear map in the virtual operator
 `X`: contract `X : D × D` into a single copy of the tensor with the physical legs
-open, giving `(physClose1 M X) i j = tr(M^{ij} X)` (figure `MPDO_XM` of
+open, giving `(physClose1 M X) i j = tr(M^{ij} X)` (figure MPDO_XM of
 arXiv:1606.00608). -/
 noncomputable def physClose1 (M : MPOTensor d D) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin d) (Fin d) ℂ where
@@ -137,7 +137,7 @@ noncomputable def physClose1 (M : MPOTensor d D) :
 
 /-- Under the canonical equivalence between one-site configurations and
 physical indices, the length-one closure is `physClose1`. This is the one-site
-operator in arXiv:1606.00608, Definition 4.1, line 657 and figure `MPDO_XM`. -/
+operator in arXiv:1606.00608, Definition 4.1, line 657 and figure MPDO_XM. -/
 theorem physCloseN_one_eq_physClose1 (M : MPOTensor d D) :
     (Matrix.reindexLinearEquiv ℂ ℂ (Equiv.funUnique (Fin 1) (Fin d))
         (Equiv.funUnique (Fin 1) (Fin d))).toLinearMap ∘ₗ physCloseN M 1 =
@@ -150,7 +150,7 @@ theorem physCloseN_one_eq_physClose1 (M : MPOTensor d D) :
 /-- The **two-site physical operator** as a linear map in the virtual operator
 `X`: contract `X : D × D` into two copies of the tensor with all four physical
 legs open, giving `(physClose2 M X) (i₁,i₂) (j₁,j₂) = tr(M^{i₁j₁} M^{i₂j₂} X)`
-(figure `MPDO_XMM` of arXiv:1606.00608). -/
+(figure MPDO_XMM of arXiv:1606.00608). -/
 noncomputable def physClose2 (M : MPOTensor d D) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ where
   toFun X := Matrix.of fun i j => Matrix.trace (M i.1 j.1 * M i.2 j.2 * X)
