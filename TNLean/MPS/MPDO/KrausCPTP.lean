@@ -86,7 +86,7 @@ namespace Matrix
 elementary operation used to adjoin the positive neighboring operators in
 the maps $\mathcal T_1$ and $\mathcal S_1$ of arXiv:1606.00608,
 Appendix C.2, lines 1527--1533 and 1551--1555. -/
-noncomputable def preparationMap {α β : Type*} [Fintype α] [DecidableEq α]
+def preparationMap {α β : Type*} [Fintype α] [DecidableEq α]
     [Fintype β] [DecidableEq β] (ρ : Matrix β β ℂ) :
     Matrix α α ℂ →ₗ[ℂ] Matrix (α × β) (α × β) ℂ where
   toFun X := Matrix.kroneckerMap (· * ·) X ρ
@@ -151,7 +151,7 @@ from the columns of $\sqrt\rho$.
 This is the state-preparation step used in the construction of
 $\mathcal T_1$ and $\mathcal S_1$ in arXiv:1606.00608, Appendix C.2,
 lines 1527--1533 and 1551--1555. -/
-theorem preparationMap_isKrausCPTP
+lemma preparationMap_isKrausCPTP
     {α β : Type*} [Fintype α] [DecidableEq α]
     [Fintype β] [DecidableEq β] (ρ : Matrix β β ℂ) (hρ : ρ.PosSemidef)
     (hρtr : ρ.trace = 1) : IsKrausCPTP (Matrix.preparationMap (α := α) ρ) := by
