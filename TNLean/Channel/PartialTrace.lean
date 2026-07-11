@@ -25,6 +25,8 @@ Proposition 2.1) and for reduced states on contiguous tensor factors.
 
 * `Matrix.partialTraceRight_apply`: elementwise formula for the general right
   partial trace
+* `Matrix.partialTraceRightLM`: the general right partial trace as a complex
+  linear map
 * `Matrix.traceLeft_apply`: elementwise formula for `tr_A`
 * `Matrix.traceRight_apply`: elementwise formula for `tr_B`
 * `Matrix.trace_partialTraceRight`: the full trace is preserved by the general
@@ -106,6 +108,20 @@ multiplication. -/
 theorem partialTraceRight_real_smul (c : ℝ) (X : Matrix (α × β) (α × β) ℂ) :
     partialTraceRight (c • X) = c • partialTraceRight X := by
   ext i j; simp [partialTraceRight_apply, Finset.smul_sum]
+
+/-- The partial trace over the second factor commutes with complex scalar
+multiplication. -/
+theorem partialTraceRight_smul (c : ℂ) (X : Matrix (α × β) (α × β) ℂ) :
+    partialTraceRight (c • X) = c • partialTraceRight X := by
+  ext i j
+  simp [partialTraceRight_apply, Finset.mul_sum]
+
+/-- The partial trace over the second factor as a complex linear map. -/
+noncomputable def partialTraceRightLM {α β : Type*} [Fintype β] :
+    Matrix (α × β) (α × β) ℂ →ₗ[ℂ] Matrix α α ℂ where
+  toFun := partialTraceRight
+  map_add' := partialTraceRight_add
+  map_smul' := partialTraceRight_smul
 
 /-- The partial trace of the identity is the cardinality of the traced factor
 times the identity on the retained factor:
