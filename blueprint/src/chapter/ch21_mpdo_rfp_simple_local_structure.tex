@@ -709,9 +709,16 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{proof}
     \leanok
     \uses{thm:mpdo_sector_factorization}
-    Substituting the sector factorization for each of the two slices, the
-    outer sector tensors carry the outer virtual indices, and the bond sum
-    collects the inner pair of sector tensors into the neighboring operator.
+    Substituting the sector factorization
+    (Theorem~\ref{thm:mpdo_sector_factorization}) into each slice, the
+    outer sector tensors decouple from the bond sum, and the inner sum over
+    the shared bond $\gamma$ reads
+    \[
+        \sum_{\gamma}\bigl[(r_k)_{\gamma}\bigr]_{r_1,r_1'}\,
+        \bigl[(l_h)_{\gamma}\bigr]_{l_2,l_2'}
+        =\bigl[\eta_{k,h}\bigr]_{(r_1,l_2),(r_1',l_2')}
+    \]
+    by definition of the neighboring operator.
 \end{proof}
 
 \begin{definition}[Closed sector tensors]%
@@ -803,23 +810,42 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{definition}[Explicit $\eta$-data from the sector tensors]%
     \label{def:mpdo_explicit_eta_of_sector_tensors}
     \lean{MPOTensor.ExplicitEtaOperators.ofSectorTensors}
-    \lean{MPOTensor.ExplicitEtaOperators.traceMatrix_ofSectorTensors}
     \leanok
-    \uses{def:mpdo_sector_eta, def:mpdo_closed_sector_tensors,
-        def:mpdo_explicit_eta_operators, def:mpdo_explicit_eta_trace_matrix}
+    \uses{def:mpdo_sector_eta, def:mpdo_explicit_eta_operators}
     If every neighboring operator $\eta_{k,h}$ of
     Definition~\ref{def:mpdo_sector_eta} is positive semidefinite, the
-    family constitutes explicit neighboring $\eta$-data, and its trace
-    matrix is the pairing of the closed sector tensors,
-    $T_{k,h}=\tr(\eta_{k,h})=(r_k|l_h)$. The source obtains the positivity
-    from the projected chain identity: for every cyclic sector assignment
-    $k_1,\ldots,k_N$, the corresponding block of the conjugated chain equals
-    $\bigotimes_{n=1}^{N}\eta_{k_n,k_{n+1}}$ and is positive semidefinite,
-    and the sector tensors can be chosen so that each factor is positive
-    semidefinite \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv}.
+    family constitutes explicit neighboring $\eta$-data. The source obtains
+    the positivity from the projected chain identity: for every cyclic
+    sector assignment $k_1,\ldots,k_N$, the corresponding block of the
+    conjugated chain equals $\bigotimes_{n=1}^{N}\eta_{k_n,k_{n+1}}$ and is
+    positive semidefinite, and the sector tensors can be chosen so that
+    each factor is positive semidefinite
+    \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv}.
     That all-length identity is a remaining step of Lemma~C.4, so positivity
     enters here as a hypothesis on the chosen representatives.
 \end{definition}
+
+\begin{theorem}[Trace matrix of the sector-tensor $\eta$-data]
+    \label{thm:mpdo_sector_eta_data_trace_matrix}
+    \lean{MPOTensor.ExplicitEtaOperators.traceMatrix_ofSectorTensors}
+    \leanok
+    \uses{def:mpdo_explicit_eta_of_sector_tensors,
+        def:mpdo_explicit_eta_trace_matrix, def:mpdo_closed_sector_tensors}
+    Under the hypotheses of
+    Definition~\ref{def:mpdo_explicit_eta_of_sector_tensors}, the trace
+    matrix of the explicit $\eta$-data is the pairing of the closed sector
+    tensors:
+    \[
+        T_{k,h}=\tr(\eta_{k,h})=(r_k|l_h).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_sector_trace_pairing}
+    Immediate from Theorem~\ref{thm:mpdo_sector_trace_pairing} and the
+    definition of the trace matrix.
+\end{proof}
 
 % The local-orthogonality contraction is stated from arXiv:1606.00608,
 % Appendix C.2, lines 1466--1469 (the display following the sector
