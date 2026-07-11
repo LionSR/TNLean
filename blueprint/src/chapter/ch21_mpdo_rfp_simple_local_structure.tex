@@ -525,8 +525,20 @@ strong subadditivity for a normalized three-site reduced state.
     \]
     The direct sum refers to the physical indices and is inherited from the
     splitting of the middle site. This is the factorization displayed at
-    \cite[Appendix~C.2, lines~1435--1448]{Cirac2016MPDO_arXiv}.
+    \cite[Appendix~C.2, lines~1435--1448]{Cirac2016MPDO_arXiv} and depicted in
+    Figure~\ref{fig:mpdo_sector_factorization}.
 \end{theorem}
+
+\begin{figure}[ht]
+    \centering
+    \TNMPDOSectorFactorization
+    \caption{In the middle-site basis selected by $U_B$, the physical slice
+    of ${\cal K}$ is the direct sum of the sector products
+    $(l_k)_{\beta_1}\otimes(r_k)_{\alpha_3}$. This is the sector
+    factorization in
+    \cite[Appendix~C.2, lines~1435--1448]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_sector_factorization}
+\end{figure}
 
 \begin{proof}
     \leanok
@@ -584,9 +596,8 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{figure}[ht]
     \centering
     \TNEtaSectorDecomposition
-    \caption{After the physical isometry $U$, a simple tensor separates into
-    left and right sector tensors. Neighboring sectors meet in the positive
-    bond operator $\eta_{k,h}=r_k l_h$. This is the local structure used in
+    \caption{Neighboring right and left sector tensors meet in the bond
+    operator $\eta_{k,h}=r_k l_h$. This is the local sector pairing used in
     \cite[Theorem~4.14(iv) and Appendix~C.2]{Cirac2016MPDO_arXiv}.}
     \label{fig:mpdo_eta_sector_decomposition}
 \end{figure}
