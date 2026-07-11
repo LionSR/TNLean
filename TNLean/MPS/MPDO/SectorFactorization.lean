@@ -77,6 +77,11 @@ Together with the diagonal identity
 structure of equation `formK`: the direct sum is inherited from the splitting
 of the middle site.
 
+**Local fix (tail index):** the tail entry is
+$R_{\beta_3,\alpha_1}$, as in `inverseMapThreeSiteContraction_eq`, rather than
+the entry printed in the source display.  The correction is recorded in
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+
 Source: arXiv:1606.00608, Appendix C.2, lines 1422--1448. -/
 theorem inverseMap_hayashi_sector_offdiagonal
     (K : MPOTensor d D) (hK : K.IsInjective)
@@ -94,10 +99,6 @@ theorem inverseMap_hayashi_sector_offdiagonal
   let b : Fin d := hη.decompB.symm ⟨k, (l, r)⟩
   let b' : Fin d := hη.decompB.symm ⟨k', (l', r')⟩
   let U : Matrix (Fin d) (Fin d) ℂ := hη.U_B
-  let A : Fin d → Fin d → ℂ := fun i j ↦
-    inverseTensor K hK (finProdFinEquiv (i, j)) α₁ β₁
-  let B : Fin d → Fin d → ℂ := fun i j ↦
-    inverseTensor K hK (finProdFinEquiv (i, j)) α₃ β₃
   have hsector (i₁ j₁ i₃ j₃ : Fin d) :
       ∑ i₂ : Fin d, ∑ j₂ : Fin d,
         U b i₂ * ρ (i₁, i₂, i₃) (j₁, j₂, j₃) *
@@ -115,120 +116,11 @@ theorem inverseMap_hayashi_sector_offdiagonal
     rw [HayashiMarkov.liftB_conj_apply] at hs
     rw [HayashiMarkov.blockState_apply, dif_neg hkk'] at hs
     simpa [U] using hs
-  have hcollapse (i₂ j₂ : Fin d) :
-      ∑ i₁ : Fin d, ∑ j₁ : Fin d, ∑ i₃ : Fin d, ∑ j₃ : Fin d,
-        A i₁ j₁ * B i₃ j₃ * ρ (i₁, i₂, i₃) (j₁, j₂, j₃) =
-        K i₂ j₂ β₁ α₃ * R β₃ α₁ := by
-    rw [show (∑ i₁ : Fin d, ∑ j₁ : Fin d, ∑ i₃ : Fin d, ∑ j₃ : Fin d,
-        A i₁ j₁ * B i₃ j₃ * ρ (i₁, i₂, i₃) (j₁, j₂, j₃)) =
-      inverseMapThreeSiteContraction K hK R α₁ β₁ α₃ β₃
-        (finProdFinEquiv (i₂, j₂)) from by
-          rw [inverseMapThreeSiteContraction]
-          simp_rw [← Equiv.sum_comp finProdFinEquiv
-            (fun p ↦ ∑ p₃,
-              inverseTensor K hK p α₁ β₁ * inverseTensor K hK p₃ α₃ β₃ *
-                Matrix.trace (K.toMPSTensor p * K.toMPSTensor (finProdFinEquiv (i₂, j₂)) *
-                  K.toMPSTensor p₃ * R))]
-          simp_rw [← Equiv.sum_comp finProdFinEquiv
-            (fun p ↦
-              inverseTensor K hK (finProdFinEquiv _) α₁ β₁ *
-                inverseTensor K hK p α₃ β₃ *
-                Matrix.trace (K.toMPSTensor (finProdFinEquiv _) *
-                  K.toMPSTensor (finProdFinEquiv (i₂, j₂)) * K.toMPSTensor p * R))]
-          simp_rw [Fintype.sum_prod_type]
-          congr 1 with i₁
-          congr 1 with j₁
-          congr 1 with i₃
-          congr 1 with j₃
-          rw [hρ i₁ i₂ i₃ j₁ j₂ j₃]
-          simp [A, B, MPOTensor.toMPSTensor]]
-    simpa [MPOTensor.toMPSTensor] using inverseMapThreeSiteContraction_eq K hK R
-      α₁ β₁ α₃ β₃ (finProdFinEquiv (i₂, j₂))
   rw [Matrix.reindex_apply, Matrix.submatrix_apply]
-  simp_rw [Matrix.mul_apply]
-  simp only [Matrix.conjTranspose_apply, Complex.star_def]
-  simp_rw [Finset.sum_mul]
-  change R β₃ α₁ * (∑ j₂, ∑ i₂, U b i₂ * physicalSlice K β₁ α₃ i₂ j₂ *
-    (starRingEnd ℂ) (U b' j₂)) = 0
-  rw [Finset.sum_comm]
-  let rotate :
-      (Fin d × Fin d × Fin d × Fin d × Fin d × Fin d) ≃
-        (Fin d × Fin d × Fin d × Fin d × Fin d × Fin d) := {
-    toFun := fun x ↦ (x.2.2.1, x.2.2.2.1, x.2.2.2.2.1, x.2.2.2.2.2, x.1, x.2.1)
-    invFun := fun x ↦ (x.2.2.2.2.1, x.2.2.2.2.2, x.1, x.2.1, x.2.2.1, x.2.2.2.1)
-    left_inv := by intro x; rcases x with ⟨a, b, c, e, f, g⟩; rfl
-    right_inv := by intro x; rcases x with ⟨a, b, c, e, f, g⟩; rfl }
-  let G : Fin d × Fin d × Fin d × Fin d × Fin d × Fin d → ℂ := fun x ↦
-    U b x.1 * (A x.2.2.1 x.2.2.2.1 * B x.2.2.2.2.1 x.2.2.2.2.2 *
-      ρ (x.2.2.1, x.1, x.2.2.2.2.1) (x.2.2.2.1, x.2.1, x.2.2.2.2.2)) *
-        (starRingEnd ℂ) (U b' x.2.1)
-  have hperm :
-      (∑ i₂, ∑ j₂, ∑ i₁, ∑ j₁, ∑ i₃, ∑ j₃,
-        U b i₂ * (A i₁ j₁ * B i₃ j₃ * ρ (i₁, i₂, i₃) (j₁, j₂, j₃)) *
-          (starRingEnd ℂ) (U b' j₂)) =
-      ∑ i₁, ∑ j₁, ∑ i₃, ∑ j₃, ∑ i₂, ∑ j₂,
-        U b i₂ * (A i₁ j₁ * B i₃ j₃ * ρ (i₁, i₂, i₃) (j₁, j₂, j₃)) *
-          (starRingEnd ℂ) (U b' j₂) := by
-    have hflat : (∑ x, G x) =
-        ∑ i₂, ∑ j₂, ∑ i₁, ∑ j₁, ∑ i₃, ∑ j₃,
-          U b i₂ * (A i₁ j₁ * B i₃ j₃ * ρ (i₁, i₂, i₃) (j₁, j₂, j₃)) *
-            (starRingEnd ℂ) (U b' j₂) := by
-      rw [Fintype.sum_prod_type]
-      simp_rw [Fintype.sum_prod_type]
-      rfl
-    have hflat' : (∑ x, G (rotate.symm x)) =
-        ∑ i₁, ∑ j₁, ∑ i₃, ∑ j₃, ∑ i₂, ∑ j₂,
-          U b i₂ * (A i₁ j₁ * B i₃ j₃ * ρ (i₁, i₂, i₃) (j₁, j₂, j₃)) *
-            (starRingEnd ℂ) (U b' j₂) := by
-      rw [Fintype.sum_prod_type]
-      simp_rw [Fintype.sum_prod_type]
-      rfl
-    rw [← hflat, ← hflat']
-    exact (Equiv.sum_comp rotate.symm G).symm
-  calc
-    R β₃ α₁ * (∑ i₂, ∑ j₂, U b i₂ * physicalSlice K β₁ α₃ i₂ j₂ *
-        (starRingEnd ℂ) (U b' j₂)) =
-      ∑ i₂, ∑ j₂, U b i₂ *
-        (∑ i₁, ∑ j₁, ∑ i₃, ∑ j₃,
-          A i₁ j₁ * B i₃ j₃ * ρ (i₁, i₂, i₃) (j₁, j₂, j₃)) *
-        (starRingEnd ℂ) (U b' j₂) := by
-          rw [Finset.mul_sum]
-          refine Finset.sum_congr rfl fun i₂ _ => ?_
-          rw [Finset.mul_sum]
-          refine Finset.sum_congr rfl fun j₂ _ => ?_
-          calc
-            R β₃ α₁ * (U b i₂ * physicalSlice K β₁ α₃ i₂ j₂ *
-                (starRingEnd ℂ) (U b' j₂)) =
-              U b i₂ * (K i₂ j₂ β₁ α₃ * R β₃ α₁) *
-                (starRingEnd ℂ) (U b' j₂) := by simp [physicalSlice]; ring
-            _ = _ := by rw [← hcollapse]
-    _ = ∑ i₂, ∑ j₂, ∑ i₁, ∑ j₁, ∑ i₃, ∑ j₃,
-        U b i₂ * (A i₁ j₁ * B i₃ j₃ * ρ (i₁, i₂, i₃) (j₁, j₂, j₃)) *
-          (starRingEnd ℂ) (U b' j₂) := by
-      refine Finset.sum_congr rfl fun i₂ _ => Finset.sum_congr rfl fun j₂ _ => ?_
-      rw [Finset.mul_sum, Finset.sum_mul]
-      refine Finset.sum_congr rfl fun i₁ _ => ?_
-      rw [Finset.mul_sum, Finset.sum_mul]
-      refine Finset.sum_congr rfl fun j₁ _ => ?_
-      rw [Finset.mul_sum, Finset.sum_mul]
-      refine Finset.sum_congr rfl fun i₃ _ => ?_
-      rw [Finset.mul_sum, Finset.sum_mul]
-    _ = ∑ i₁, ∑ j₁, ∑ i₃, ∑ j₃, ∑ i₂, ∑ j₂,
-        U b i₂ * (A i₁ j₁ * B i₃ j₃ * ρ (i₁, i₂, i₃) (j₁, j₂, j₃)) *
-          (starRingEnd ℂ) (U b' j₂) := hperm
-    _ = ∑ i₁, ∑ j₁, ∑ i₃, ∑ j₃, A i₁ j₁ * B i₃ j₃ *
-        (∑ i₂, ∑ j₂, U b i₂ * ρ (i₁, i₂, i₃) (j₁, j₂, j₃) *
-          (starRingEnd ℂ) (U b' j₂)) := by
-      refine Finset.sum_congr rfl fun i₁ _ => Finset.sum_congr rfl fun j₁ _ =>
-        Finset.sum_congr rfl fun i₃ _ => Finset.sum_congr rfl fun j₃ _ => ?_
-      rw [Finset.mul_sum]
-      refine Finset.sum_congr rfl fun i₂ _ => ?_
-      rw [Finset.mul_sum]
-      refine Finset.sum_congr rfl fun j₂ _ => ?_
-      ring
-    _ = 0 := by
-      simp_rw [hsector]
-      simp
+  change R β₃ α₁ * (U * physicalSlice K β₁ α₃ * Uᴴ) b b' = 0
+  rw [inverseMap_conj_physicalSlice_expansion K hK R ρ hρ α₁ β₁ α₃ β₃ U b b']
+  simp_rw [hsector]
+  simp
 
 /-- The sector tensor $l_k$ of equation `formK`: for each left virtual index,
 the left Hayashi inverse factor at the selected outer indices, weighted by the

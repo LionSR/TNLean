@@ -329,6 +329,38 @@ strong subadditivity for a normalized three-site reduced state.
     \cite[Appendix~C.2, lines~1407--1428]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
+\begin{theorem}[Outer inverse-map contraction of a closure]
+    \label{thm:mpdo_closure_outer_contraction}
+    \lean{MPOTensor.inverseMap_threeSite_closure_collapse}
+    \lean{MPOTensor.inverseMap_conj_physicalSlice_expansion}
+    \leanok
+    \uses{def:mpdo_three_site_closure, def:mpdo_hayashi_inverse_factors}
+    Let ${\cal K}$ be injective and let $\rho$ be its three-site closure
+    against $R$. Applying the inverse tensor at the two outer sites collapses
+    the closure to one entry of the middle physical slice and one entry of the
+    tail:
+    \[
+        \sum_{i_1,j_1,i_3,j_3}
+        ({\cal K}^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
+        ({\cal K}^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}
+        \rho_{i_1i_2i_3,j_1j_2j_3}
+        ={\cal K}^{i_2j_2}_{\beta_1,\alpha_3}\,
+        R_{\beta_3,\alpha_1}.
+    \]
+    Consequently, for any matrix $U$ on the middle site, every entry of
+    $R_{\beta_3,\alpha_1}\,U\kappa_{\beta_1,\alpha_3}U^\dagger$ expands into
+    the corresponding outer inverse-map contraction of the state conjugated
+    by $U$ on the middle site.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_inverse_map_three_site_contraction}
+    The first identity evaluates the double inverse-map contraction on the
+    closure entries. The second follows by expanding the matrix products
+    entrywise and reordering the finite sums.
+\end{proof}
+
 \begin{theorem}[Sectorwise inverse-map comparison]
     \label{thm:mpdo_inverse_map_hayashi_sector_comparison}
     \lean{MPOTensor.inverseMap_hayashi_sector_comparison}
@@ -369,7 +401,7 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_inverse_map_three_site_contraction}
+    \uses{thm:mpdo_closure_outer_contraction}
     Expand the Hayashi block equality at fixed indices $(k,l,r)$ and
     $(k,l',r')$, and apply the inverse tensor at the first and third sites.
     Moving the two finite sums through the middle-site change of basis reduces
@@ -422,7 +454,7 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_inverse_map_three_site_contraction}
+    \uses{thm:mpdo_closure_outer_contraction}
     The block equality of the Hayashi decomposition makes the middle-site
     contraction between two distinct sectors vanish. Applying the inverse
     tensor at the first and third sites and moving the finite sums through
