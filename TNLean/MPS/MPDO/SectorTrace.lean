@@ -106,11 +106,11 @@ theorem verticalLoop_eq_physTraceTransfer (M : MPOTensor d D) :
     verticalLoop M = physTraceTransfer M :=
   rfl
 
-/-- The single-site vertical loop with a matrix `P` inserted:
-`∑ a i, P a i • M i a`.  This is the closed vertical loop of the vertically
-viewed product $PM$, the contraction produced at the marked site when the
-density operator is compressed by `P` there, as in the diagrams of the proof
-of Proposition 4.13 of arXiv:1606.00608, lines 1895--1902. -/
+/-- The single-site vertical loop with a matrix $P$ inserted,
+$E_P = \sum_{i,j}P_{ji}\,M^{ij}$.  This is the closed vertical loop of the
+vertically viewed product $PM$, the contraction produced at the marked site
+when the density operator is compressed by $P$ there, as in the diagrams of
+the proof of Proposition 4.13 of arXiv:1606.00608, lines 1895--1902. -/
 noncomputable def verticalLoopWith (M : MPOTensor d D)
     (P : Matrix (Fin d) (Fin d) ℂ) : Matrix (Fin D) (Fin D) ℂ :=
   ∑ a : Fin d, ∑ i : Fin d, P a i • M i a
@@ -142,7 +142,8 @@ theorem verticalLoop_braRightMul (M : MPOTensor d D)
   exact Finset.sum_comm
 
 /-- **Summing the diagonal word evaluations closes the vertical loops.** The
-sum of `evalWord M w w` over all length-`N` configurations `w` is the `N`-th
+sum $\sum_\sigma M^{\sigma_0\sigma_0}\cdots M^{\sigma_{N-1}\sigma_{N-1}}$ over
+all length-$N$ configurations $\sigma$ is the $N$-th
 power of the single-site vertical loop.  This is the contraction pattern of
 the closed diagrams in the proof of Proposition 4.13 of arXiv:1606.00608,
 lines 1895--1902: each site contributes one loop, and the loops multiply
