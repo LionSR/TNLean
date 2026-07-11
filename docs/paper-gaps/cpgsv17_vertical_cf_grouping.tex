@@ -9,7 +9,7 @@
 
 \title{Vertical Canonical-Form Grouping in Proposition 4.13}
 \author{}
-\date{2026-07-09}
+\date{2026-07-11}
 
 \begin{document}
 \maketitle
@@ -27,7 +27,12 @@ in the vertical direction.  After a physical isometry, the tensor has the form
   \label{eq:source-vertical-form}
 \end{equation}
 where each $\mu_\alpha$ is positive and diagonal and the tensors
-$M_\alpha$ form a basis of normal tensors.
+$M_\alpha$ form a basis of normal tensors.  Here $\widetilde M$ is the tensor
+viewed in the vertical direction, with letters indexed by the horizontal bond
+pair and matrices acting on the physical space; the formal vertical
+canonical-form statement is placed on exactly this tensor, in the isometry
+form \eqref{eq:source-vertical-form}, as recorded in
+\path{cpgsv17_vertical_tensor_definition.tex}.
 
 The proof has a definite order.  It first uses positivity of the generated
 operators and Lemma~L to exclude one-sided transitions and nontrivial periodic
@@ -55,9 +60,11 @@ The relevant local source passage is
 
 Suppose an indexed family of blocks $(B_k)_{k\in I}$ has already been grouped
 into copies of representative blocks $(A_\alpha)_{\alpha\in J}$.  Write
-$m_\alpha$ for the number of copies and let
+$r_\alpha$ for the number of copies, the size of the diagonal matrix
+$\mu_\alpha$; the trace coefficient $m_\alpha=\tr\mu_\alpha$ is a distinct
+quantity (see \path{cpgsv17_vertical_tensor_definition.tex}).  Let
 \begin{equation}
-  e:I\simeq\{(\alpha,j):\alpha\in J, 0\leq j<m_\alpha\}
+  e:I\simeq\{(\alpha,j):\alpha\in J, 0\leq j<r_\alpha\}
   \label{eq:grouping-equivalence}
 \end{equation}
 be the grouping bijection.  If
@@ -75,7 +82,7 @@ then finite-sum reindexing gives
   V^{(N)}\!\left(\bigoplus_{k\in I}\nu_k B_k\right)
   =
   V^{(N)}\!\left(
-    \bigoplus_{\alpha\in J}\bigoplus_{j=0}^{m_\alpha-1}
+    \bigoplus_{\alpha\in J}\bigoplus_{j=0}^{r_\alpha-1}
     \omega_{\alpha,j}A_\alpha
   \right)
   \label{eq:regrouped-mpv}
@@ -126,15 +133,41 @@ one-sided invariant-matrix calculation from source lines~1874--1887 is also
 formalized.  For the periodic-sector argument, positivity now gives the final
 implication from commutation with $[H^{(N)}]^p$ to commutation with
 $H^{(N)}$.  It remains to derive the orthogonal projector with the required
-all-length properties from a nontrivial vertical period.  The subsequent
-source-level gap is to construct the vertical canonical decomposition, its BNT
-grouping, the positive weights, and the unitary gauges from horizontal
-canonical form and MPDO positivity, as done in source lines~1895--1921.  This
-is the mathematical content shared with the normality and grouping problem
-tracked by \ghissue{2537}; it cannot be supplied by a finite-sum identity
-alone.  The original formulation of \ghissue{2536}, interpreted as a direct
-conversion of the horizontal scalar weights and diagonal restrictions, is
-therefore not a consequence of Proposition~4.13.
+all-length properties from a nontrivial vertical period.
+
+Two further steps of source lines~1895--1921 now have conditional
+formalizations.  For the positive weights: granted an orthogonal sector
+projector $P_{\alpha,k}$ whose insertion into the single-site vertical loop
+selects the sector contribution $\mu_{\alpha,k}E_\alpha$, with
+$E_\alpha=\sum_u M_\alpha^{uu}$ the closed loop of the basis tensor
+(\path{MPOTensor.SectorProjectorData}), the trace of the compressed density
+operator is identified as $\mu_{\alpha,k}d_\alpha$, and positivity of the
+nonzero compressions (\path{MPOTensor.mpo_compress_trace_pos}) yields
+$d_\alpha>0$ and $\mu_{\alpha,k}>0$ under the normalization
+$\mu_{\alpha,1}>0$ (\path{MPOTensor.sector_weight_pos} in
+\path{TNLean/MPS/MPDO/SectorTrace.lean}).  For the unitary gauges: granted
+the dressed-adjoint identities of the two displayed diagrams at source
+lines~1909--1919, transported blockwise by Lemma~L, the scalar commutant of
+the normal tensor $M_\alpha$
+(\path{MPSTensor.IsNormal.eq_smul_one_of_commute}) makes each Gram matrix
+$X_{\alpha,k}^\dagger X_{\alpha,k}$ a positive multiple of the identity, in
+the normalization $X_{\alpha,1}=\Id$, and
+$\omega_{\alpha,k}^{-1/2}X_{\alpha,k}$ unitary
+(\path{MPSTensor.IsNormal.smul_mem_unitaryGroup_of_dressed_adjoint} in
+\path{TNLean/MPS/CanonicalForm/NormalCommutant.lean}).
+
+The remaining source-level gap is the construction of the vertical canonical
+decomposition itself, with its grouping into a basis of normal tensors, from
+horizontal canonical form and MPDO positivity, as done in source
+lines~1895--1921: the construction must produce the sector projectors
+together with their loop identities and a nonvanishing compression, derive
+the dressed-adjoint identities from self-adjointness of the sector
+compressions, and supply the periodic-sector exclusion above.  This is the
+mathematical content shared with the normality and grouping problem tracked
+by \ghissue{2537}; it cannot be supplied by a finite-sum identity alone.  The
+original formulation of \ghissue{2536}, interpreted as a direct conversion of
+the horizontal scalar weights and diagonal restrictions, is therefore not a
+consequence of Proposition~4.13.
 
 \bibliographystyle{alpha}
 \bibliography{references}
