@@ -17,7 +17,8 @@ $$\{Y \in Q M_D(\mathbb{C}) Q \mid Q T^{*}(Y) Q = Y\}
   \;=\; W \Bigl(\bigoplus_{k} \mathbf{1}_{m_k} \otimes M_{d_k}(\mathbb{C})\Bigr)
   W^{\dagger},$$
 where $W$ is an isometry onto the support sector ($W^{\dagger} W = \mathbf{1}$,
-$W W^{\dagger} = Q$) and $\sum_k d_k m_k \le D$. This is the block form of the
+$W W^{\dagger} = Q$) and $\sum_k d_k m_k = r$ for the support-sector dimension
+$r \le D$. This is the block form of the
 corner-restricted fixed-point star-algebra of Corollary 6.6 of *Quantum Channels &
 Operations* (Wolf 2012), the support-sector ingredient of the zero-block representation
 invoked by Theorem 6.14 of the same reference. A corner-restricted fixed point extended
