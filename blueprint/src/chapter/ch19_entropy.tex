@@ -1140,6 +1140,40 @@ finite-dimensional quantum systems.
     \]
 \end{definition}
 
+\begin{theorem}[SSA equality under factor relabeling]
+    \label{thm:ssa_equality_reindex_factors}
+    \lean{isSSAEquality_submatrix_prodEquiv}
+    \leanok
+    \uses{def:ssa_equality}
+    Let $\rho$ be a Hermitian operator on $A\otimes B\otimes C$, and let
+    $e_A:A'\to A$, $e_B:B'\to B$, and $e_C:C'\to C$ be bijections. Define
+    $\rho'$ by
+    \[
+        \rho'_{(a',b',c'),(\widetilde a',\widetilde b',\widetilde c')}
+        =
+        \rho_{(e_A(a'),e_B(b'),e_C(c')),
+          (e_A(\widetilde a'),e_B(\widetilde b'),e_C(\widetilde c'))}.
+    \]
+    If $\rho$ satisfies equality in strong subadditivity, then so does $\rho'$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:entropy_submatrix_equiv}
+    The four operators entering the equality are related by the induced
+    bijections:
+    \[
+        \rho' = \rho_{e_A\times e_B\times e_C},\qquad
+        \rho'_{AB}=(\rho_{AB})_{e_A\times e_B},\qquad
+        \rho'_{BC}=(\rho_{BC})_{e_B\times e_C},\qquad
+        \rho'_B=(\rho_B)_{e_B}.
+    \]
+    These identities follow by changing variables in the three finite sums
+    defining the partial traces. Entropy invariance under reindexing makes the
+    corresponding four entropy terms equal, so the strong-subadditivity
+    equality for $\rho$ gives the equality for $\rho'$.
+\end{proof}
+
 \begin{definition}[Quantum Markov decomposition]\label{def:hayashi_markov_decomposition}
     \lean{HayashiMarkovDecomposition}
     \leanok
