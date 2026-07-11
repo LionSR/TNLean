@@ -415,9 +415,9 @@ The source obtains the positivity from the projected chain identity
 
 at lines 1446--1450, and asserts that the $\eta$'s *can be chosen* positive
 semidefinite; the choice is a rescaling of the sector tensors. The all-length
-sector identity is formalized in
-`MPOTensor.mpo_reindex_sectorChainEquiv_eq_blockDiagonal_cyclicEta`, but it
-does not by itself provide a coherent positive choice of representatives.
+sector identity (arXiv:1606.00608, Appendix C.2, lines 1446--1450) is now
+formalized, but it does not by itself provide a coherent positive choice of
+representatives.
 Positive semidefiniteness of the representatives fixed by
 `MPOTensor.sectorTensorL` and `MPOTensor.sectorTensorR` therefore enters here
 as a hypothesis; the remaining choice problem is recorded in
