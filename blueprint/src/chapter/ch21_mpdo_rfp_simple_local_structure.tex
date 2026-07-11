@@ -382,8 +382,25 @@ strong subadditivity for a normalized three-site reduced state.
         ={\cal K}^{i_2j_2}_{\beta_1,\alpha_3}
         R_{\beta_3,\alpha_1},
     \]
-    which is the first identity. The second follows by expanding the matrix
-    products entrywise and reordering the finite sums.
+    which is the first identity. The second identity follows by expanding the
+    matrix product entrywise,
+    \[
+        \bigl(U\kappa_{\beta_1,\alpha_3}U^\dagger\bigr)_{b,b'}
+        =\sum_{i_2,j_2}
+        U_{b,i_2}\,\kappa_{\beta_1,\alpha_3}(i_2,j_2)\,
+        \overline{U_{b',j_2}},
+    \]
+    multiplying by $R_{\beta_3,\alpha_1}$, substituting the first identity in
+    the form
+    \[
+        R_{\beta_3,\alpha_1}\,
+        \kappa_{\beta_1,\alpha_3}(i_2,j_2)
+        =\sum_{i_1,j_1,i_3,j_3}
+        ({\cal K}^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
+        ({\cal K}^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}
+        \rho_{i_1i_2i_3,j_1j_2j_3},
+    \]
+    and reordering the finite sums.
 \end{proof}
 
 \begin{theorem}[Sectorwise inverse-map comparison]
