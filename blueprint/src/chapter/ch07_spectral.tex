@@ -2448,14 +2448,16 @@ the fixed points supported on the support of $\rho$.
     fixed points of the compressed family with respect to the positive definite fixed
     point $\sigma$, which form a $*$-subalgebra by
     Theorem~\ref{thm:weightedFixedPointsStarSubalgebra}. Closure under multiplication
-    transports back through the correspondence: for corner-supported $Y_1, Y_2$ in the
-    set,
+    transports back through the correspondence: a corner-supported $Y_j$ satisfies
+    $Y_j Q = Y_j$ (right-multiply $Q Y_j Q = Y_j$ by $Q$ and use $Q^2 = Q$), so
     \[
-        V^{\dagger}\,(Y_1 Y_2)\,V \;=\; (V^{\dagger} Y_1 V)(V^{\dagger} Y_2 V),
+        (V^{\dagger} Y_1 V)(V^{\dagger} Y_2 V)
+        \;=\; V^{\dagger}\, Y_1 (V V^{\dagger})\, Y_2\, V
+        \;=\; V^{\dagger}\, (Y_1 Q)\, Y_2\, V
+        \;=\; V^{\dagger}\,(Y_1 Y_2)\,V,
     \]
-    since $V V^{\dagger} = Q$ absorbs into the corner-supported factors, so the product
-    of two members corresponds to the product of their compressed images, which lies in
-    the compressed $*$-subalgebra.
+    and the product of two members corresponds to the product of their compressed
+    images, which lies in the compressed $*$-subalgebra.
 \end{proof}
 
 \begin{lemma}[Conjugation by the square root is onto the corner-supported fixed
@@ -2480,9 +2482,16 @@ the fixed points supported on the support of $\rho$.
             \sqrt{\sigma}^{-1}\bigr)\,V^{\dagger},
     \]
     where $\sigma = V^{\dagger} \rho V$ is positive definite, so $\sqrt{\sigma}$ is
-    invertible. Then $Y$ is corner-supported, and the compression identity
-    $\sqrt{\sigma} = V^{\dagger}\sqrt{\rho}\,V$ gives
-    $V^{\dagger}(\sqrt{\rho}\,Y\sqrt{\rho})V = V^{\dagger} X V$, hence
+    invertible. Then $Y$ is corner-supported, and, writing
+    $Z = \sqrt{\sigma}^{-1}(V^{\dagger} X V)\sqrt{\sigma}^{-1}$ for the compressed
+    middle factor, the transport identity displayed above gives
+    \[
+        V^{\dagger}\bigl(\sqrt{\rho}\,Y\sqrt{\rho}\bigr)V
+        \;=\; \sqrt{\sigma}\,\bigl(V^{\dagger} Y V\bigr)\,\sqrt{\sigma}
+        \;=\; \sqrt{\sigma}\,Z\,\sqrt{\sigma}
+        \;=\; V^{\dagger} X V,
+    \]
+    hence
     $\sqrt{\rho}\, Y \sqrt{\rho} = Q X Q = X$, both sides being corner-supported. In
     particular $\sqrt{\rho}\, Y \sqrt{\rho}$ is fixed by $T$.
 \end{proof}
