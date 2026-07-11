@@ -677,7 +677,8 @@ $A \otimes B$, $B \otimes C$, and $B$, respectively, so invariance of the von Ne
 entropy under reindexing preserves the defining equality.
 
 Source: standard invariance of entropy and partial trace under relabelings of
-finite bases; blueprint `thm:ssa_equality_reindex_factors`. -/
+finite bases; invariance of the von Neumann entropy under bijective reindexing
+is `vonNeumannEntropy_submatrix_equiv`. -/
 theorem isSSAEquality_submatrix_prodEquiv
     {dA' dB' dC' : ℕ}
     (ρ : Matrix (Fin dA × Fin dB × Fin dC)
