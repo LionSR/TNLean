@@ -44,7 +44,7 @@ sectors of tensor products $l_k \otimes r_k$.
 - `MPOTensor.trace_sectorEta`: the trace identity
   $T_{k,h} = \operatorname{tr}(\eta_{k,h}) = (r_k|l_h)$.
 - `MPOTensor.ExplicitEtaOperators.ofSectorTensors`: the neighboring operator
-  family packaged as explicit $\eta$-data under the positivity hypothesis.
+  family forming explicit $\eta$-data under the positivity hypothesis.
 
 ## References
 
