@@ -414,11 +414,13 @@ The source obtains the positivity from the projected chain identity
 \]
 
 at lines 1446--1450, and asserts that the $\eta$'s *can be chosen* positive
-semidefinite; the choice is a rescaling of the sector tensors. That
-all-length identity is not yet formalized, so positive semidefiniteness of
-the representative fixed by `MPOTensor.sectorTensorL` and
-`MPOTensor.sectorTensorR` enters here as a hypothesis; the surrounding gap is
-recorded in `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+semidefinite; the choice is a rescaling of the sector tensors. The all-length
+sector identity is formalized in `MPOTensor.mpo_reindex_sectorChainEquiv`, but
+it does not by itself provide a coherent positive choice of representatives.
+Positive semidefiniteness of the representatives fixed by
+`MPOTensor.sectorTensorL` and `MPOTensor.sectorTensorR` therefore enters here
+as a hypothesis; the remaining choice problem is recorded in
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1441--1455. -/
 noncomputable def ExplicitEtaOperators.ofSectorTensors

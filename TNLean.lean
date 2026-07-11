@@ -378,6 +378,7 @@ import TNLean.MPS.MPDO.LocalPurificationRFP
 import TNLean.MPS.MPDO.SimpleLocalStructure
 import TNLean.MPS.MPDO.HayashiSectorComparison
 import TNLean.MPS.MPDO.SectorFactorization
+import TNLean.MPS.MPDO.SectorPairingTransfer
 import TNLean.MPS.MPDO.SectorEtaContraction
 import TNLean.MPS.MPDO.SectorEtaOperator
 import TNLean.MPS.MPDO.FusionIsometries
