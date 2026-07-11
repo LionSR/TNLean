@@ -863,9 +863,15 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.closedSector_operator_idempotent_of_physTraceTransfer_sq}
     \leanok
     \uses{def:mpo_source_zcl,
+        def:mpdo_injective_inverse_layer, def:mpdo_eta_structure,
         thm:mpdo_closed_sector_physical_trace_transfer,
         lem:mpo_source_zcl_normalized_idempotent}
-    Suppose ${\cal K}$ has source zero correlation length and set
+    Let ${\cal K}$ be injective.  Let $R$ and $\rho$ give a three-site
+    closure of ${\cal K}$, choose a Hayashi decomposition of $\rho$, and fix
+    virtual indices $\alpha_1,\beta_3$ such that
+    $R_{\beta_3,\alpha_1}\ne0$.  Form the corresponding closed sector
+    tensors $|l_k)$ and $(r_k|$.  If ${\cal K}$ has source zero correlation
+    length, set
     \[
         S:=\sum_k |l_k)(r_k|.
     \]
