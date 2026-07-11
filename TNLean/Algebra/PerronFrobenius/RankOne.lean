@@ -113,11 +113,7 @@ theorem hasRankOneFactorization_of_mul_self_eq_self
     (hspan ⟨f (Pi.single j 1), LinearMap.mem_range_self f _⟩)
   have hb' := congrArg (fun x : LinearMap.range f ↦ x.1 i) hb
   have heval : f (Pi.single j 1) i = T i j := by
-    simp only [f, Matrix.toLin'_apply, Matrix.mulVec, dotProduct]
-    rw [Fintype.sum_eq_single j]
-    · simp
-    · intro x hx
-      simp [hx]
+    simp [f, Matrix.toLin'_apply]
   change Classical.choose _ * u.1 i = f (Pi.single j 1) i at hb'
   rw [heval] at hb'
   simpa [b, Matrix.vecMulVec_apply, mul_comm] using hb'.symm
@@ -131,11 +127,7 @@ sector tensors. -/
 theorem tracePowersConstant_of_mul_self_eq_self
     {T : Matrix (Fin n) (Fin n) ℝ} (hTT : T * T = T) :
     TracePowersConstant T := by
-  have hpow : ∀ m : ℕ, T ^ (m + 1) = T := by
-    intro m
-    induction m with
-    | zero => rw [pow_one]
-    | succ p ih => rw [pow_succ, ih, hTT]
+  have hpow : ∀ m : ℕ, T ^ (m + 1) = T := fun m => IsIdempotentElem.pow_succ_eq m hTT
   intro k hk
   obtain ⟨m, rfl⟩ : ∃ m, k = m + 1 := ⟨k - 1, by omega⟩
   rw [hpow]
