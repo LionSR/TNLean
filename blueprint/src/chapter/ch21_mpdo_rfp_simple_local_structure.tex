@@ -1365,20 +1365,35 @@ strong subadditivity for a normalized three-site reduced state.
     $a_kb_h\ne0$.
 \end{definition}
 
+\begin{theorem}[Positivity of normalized neighboring operators]
+    \label{thm:mpdo_normalized_eta_omega_pos}
+    \lean{MPOTensor.ExplicitEtaOperators.normalizedEta_pos}
+    \lean{MPOTensor.ExplicitEtaOperators.normalizedOmega_pos}
+    \leanok
+    \uses{def:mpdo_normalized_eta_omega, thm:mpdo_eta_omega_pos,
+      thm:mpdo_eta_zero_weight}
+    For every pair $(k,h)$, the operators $\widehat\eta_{k,h}$ and
+    $\widehat\Omega_{k,h}$ are positive semidefinite.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The weight $a_kb_h$ is nonnegative, hence so is its inverse. Scaling the
+    positive semidefinite operators $\eta_{k,h}$ and $\Omega_{k,h}$ by this
+    inverse preserves positive semidefiniteness.
+\end{proof}
+
 \begin{theorem}[Normalized active preparations]
     \label{thm:mpdo_normalized_eta_omega_preparation}
-    \lean{MPOTensor.ExplicitEtaOperators.normalizedEta_pos}
     \lean{MPOTensor.ExplicitEtaOperators.trace_normalizedEta}
-    \lean{MPOTensor.ExplicitEtaOperators.normalizedOmega_pos}
     \lean{MPOTensor.ExplicitEtaOperators.trace_normalizedOmega}
     \lean{MPOTensor.ExplicitEtaOperators.normalizedEta_preparationMap_isKrausCPTP}
     \lean{MPOTensor.ExplicitEtaOperators.normalizedOmega_preparationMap_isKrausCPTP}
     \leanok
-    \uses{def:mpdo_normalized_eta_omega, thm:mpdo_eta_omega_pos,
-      thm:mpdo_eta_omega_trace, thm:mpdo_eta_zero_weight,
+    \uses{def:mpdo_normalized_eta_omega,
+      thm:mpdo_normalized_eta_omega_pos, thm:mpdo_eta_omega_trace,
       lem:mpdo_state_preparation_cptp}
     If $a_kb_h\ne0$, then $\widehat\eta_{k,h}$ and
-    $\widehat\Omega_{k,h}$ are positive semidefinite and have trace one.
+    $\widehat\Omega_{k,h}$ have trace one.
     Consequently the maps
     \[
         X\longmapsto X\otimes\widehat\eta_{k,h},
@@ -1392,8 +1407,7 @@ strong subadditivity for a normalized three-site reduced state.
 \end{theorem}
 \begin{proof}
     \leanok
-    Since $a_kb_h>0$ on an active pair, division preserves positivity. The
-    trace identities give
+    The trace identities give
     $\tr(\widehat\eta_{k,h})=\tr(\widehat\Omega_{k,h})=1$.
     Apply Lemma~\ref{lem:mpdo_state_preparation_cptp} to each operator.
 \end{proof}

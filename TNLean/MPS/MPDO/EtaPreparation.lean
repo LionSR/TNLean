@@ -36,8 +36,7 @@ variable {hη : EtaStructure rhoABC}
 /-- The rank-one trace factorization of the neighboring operators:
 $\operatorname{tr}(\eta_{k,h})=a_kb_h$ and $\sum_l a_lb_l=1$.
 
-These are equations Apptralktrrk and AppPsiPhi in arXiv:1606.00608,
-Appendix C.2, lines 1395--1402. -/
+Source: arXiv:1606.00608, Appendix C.2, lines 1395--1402. -/
 structure RankOneTraceFactorization (data : ExplicitEtaOperators hη) where
   a : Fin hη.m → ℝ
   b : Fin hη.m → ℝ
@@ -53,8 +52,9 @@ abbrev OmegaIndex (k h : Fin hη.m) :=
       (Fin (hη.dR l) × Fin (hη.dL h))
 
 /-- The direct sum
-$\Omega_{k,h}=\bigoplus_l(\eta_{k,l}\otimes\eta_{l,h})$ used by
-$\mathcal T_1$ in arXiv:1606.00608, Appendix C.2, lines 1527--1535. -/
+$\Omega_{k,h}=\bigoplus_l(\eta_{k,l}\otimes\eta_{l,h})$, adjoined by the
+preparation map $\mathcal T_{k,h}$ in arXiv:1606.00608, Appendix C.2,
+lines 1527--1535. -/
 noncomputable def omega (data : ExplicitEtaOperators hη) (k h : Fin hη.m) :
     Matrix (OmegaIndex k h) (OmegaIndex k h) ℂ :=
   Matrix.blockDiagonal' fun l ↦
@@ -87,8 +87,7 @@ theorem trace_omega (data : ExplicitEtaOperators hη) (k h : Fin hη.m) :
 /-- Under the source rank-one trace factorization,
 $\operatorname{tr}(\Omega_{k,h})=a_kb_h$.
 
-Source: arXiv:1606.00608, Appendix C.2, equations Apptralktrrk and
-AppPsiPhi at lines 1395--1402, and lines 1531--1535. -/
+Source: arXiv:1606.00608, Appendix C.2, lines 1395--1402 and 1531--1535. -/
 theorem trace_omega_eq_mul (data : ExplicitEtaOperators hη)
     (factor : RankOneTraceFactorization data) (k h : Fin hη.m) :
     (data.omega k h).trace = ((factor.a k * factor.b h : ℝ) : ℂ) := by
