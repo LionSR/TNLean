@@ -21,7 +21,8 @@ the block representation of Equation (1.39) of *Quantum Channels & Operations*
 (Wolf 2012),
 written with the Kronecker factors in the
 order identity-times-matrix. The positive definite fixed point removes the zero block:
-this is the unital case of the block form invoked by Theorem 6.14 there. The general case of
+this is the unital case of the block form invoked by Theorem 6.14 of the same reference.
+The general case of
 Theorem 6.14, where the Schrödinger-picture fixed-point space carries a zero block and
 each
 summand is weighted by a density operator $\rho_k$, is not asserted here.
