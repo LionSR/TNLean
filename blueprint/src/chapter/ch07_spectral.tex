@@ -2204,8 +2204,75 @@ $\bigoplus_k \Id_{m_k} \otimes \MN{d_k}$.
     \]
     together with the density-block form $\MN{d_k} \otimes \rho_k$.
     The theorem above gives the product decomposition, multiplicities, and
-    dimension bound needed from this block form.
+    dimension bound from this block form; the unitary conjugation identity itself, in
+    the unital case, is Theorem~\ref{thm:adjointFixedPoints_block_form} below.
 \end{remark}
+
+\begin{theorem}[Unitary block form of the Heisenberg-picture fixed points]%
+    \label{thm:adjointFixedPoints_block_form}
+    \lean{Kraus.adjointFixedPoints_blockDiagonal_iff}
+    \leanok
+    \uses{def:adjoint_fixed_points, def:kraus_map_channels}
+    Let $E$ be a trace-preserving Kraus map on $\MN{D}$ with a positive definite fixed
+    point $\rho > 0$, $E(\rho) = \rho$. There are $K \in \N$, positive dimensions
+    $d_0, \ldots, d_{K-1}$ and multiplicities $m_0, \ldots, m_{K-1}$ with
+    $\sum_k d_k m_k = D$, realized by an explicit identification of the index sets, and
+    a unitary $U \in \MN{D}$ such that a matrix $X \in \MN{D}$ satisfies $E^*(X) = X$
+    exactly when
+    \[
+        U^{\dagger} X\, U \;=\; \bigoplus_{k=0}^{K-1} \Id_{m_k} \otimes B_k
+    \]
+    for some matrices $B_k \in \MN{d_k}$; that is, up to reordering the two tensor
+    factors of each block,
+    \[
+        \mathrm{Fix}(E^*) \;=\;
+        U \Bigl(\bigoplus_{k=0}^{K-1} \Id_{m_k} \otimes \MN{d_k}\Bigr) U^{\dagger}.
+    \]
+    The positive definite fixed point removes the zero block: this is the unital case
+    of the block representation in Eq.~(1.39) of~\cite{Wolf2012Quantum}, invoked
+    by~\cite[Theorem~6.14]{Wolf2012Quantum}. The general form
+    of~\cite[Theorem~6.14]{Wolf2012Quantum}, with a zero block and density weights
+    $\rho_k$ on the Schr\"odinger-picture fixed points, is not asserted here.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:adjointFixedPointsStarSubalgebra,
+        thm:starSubalgebra_unitary_block_diagonal_iff}
+    The fixed points of $E^*$ form a $*$-subalgebra of $\MN{D}$ because $E$ is
+    trace-preserving with a positive definite fixed point
+    (Theorem~\ref{thm:adjointFixedPointsStarSubalgebra}). The full block form of a
+    $*$-subalgebra (Theorem~\ref{thm:starSubalgebra_unitary_block_diagonal_iff})
+    supplies the unitary $U$, the dimensions and multiplicities, and the equivalence
+    between membership and the block-diagonal conjugation identity.
+\end{proof}
+
+\begin{theorem}[Unitary block form of the fixed points of a unital Kraus map]%
+    \label{thm:fixedPoints_block_form}
+    \lean{Kraus.fixedPoints_blockDiagonal_iff}
+    \leanok
+    \uses{def:kraus_fixed_points, def:kraus_map_channels}
+    Let $E$ be a unital Kraus map on $\MN{D}$ whose adjoint map $E^*$ has a positive
+    definite fixed point $\rho > 0$. There are $K \in \N$, positive dimensions $d_k$
+    and multiplicities $m_k$ with $\sum_k d_k m_k = D$, and a unitary $U \in \MN{D}$
+    such that a matrix $X \in \MN{D}$ satisfies $E(X) = X$ exactly when
+    \[
+        U^{\dagger} X\, U \;=\; \bigoplus_{k=0}^{K-1} \Id_{m_k} \otimes B_k
+    \]
+    for some matrices $B_k \in \MN{d_k}$. This is
+    Theorem~\ref{thm:adjointFixedPoints_block_form} with the roles of the map and its
+    adjoint exchanged.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fixedPointsStarSubalgebra,
+        thm:starSubalgebra_unitary_block_diagonal_iff}
+    The fixed points of the unital map $E$ form a $*$-subalgebra of $\MN{D}$
+    (Theorem~\ref{thm:fixedPointsStarSubalgebra}), and the full block form of a
+    $*$-subalgebra (Theorem~\ref{thm:starSubalgebra_unitary_block_diagonal_iff})
+    supplies the unitary and the equivalence.
+\end{proof}
 
 \begin{theorem}[Weighted fixed points form a $*$-subalgebra]%
     \label{thm:weightedFixedPointsStarSubalgebra}

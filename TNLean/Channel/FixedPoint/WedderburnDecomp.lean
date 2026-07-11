@@ -46,9 +46,10 @@ The proof chain is:
    Wedderburn--Artin decomposition — available in Mathlib via
    `IsSemisimpleRing.exists_algEquiv_pi_matrix_of_isAlgClosed`.
 
-The concrete unitary block-diagonal embedding and the conditional expectation
-form with density operators ρ_k (Wolf Equations 1.39–1.40) require additional
-representation-theoretic results and are deferred to future work.
+The concrete unitary block-diagonal embedding (Wolf Equation 1.39) is carried out in
+`TNLean.Channel.FixedPoint.BlockForm`, which conjugates the fixed-point algebra to the
+block algebra by a unitary. The conditional expectation form with density operators ρ_k
+(Wolf Equation 1.40) remains future work.
 
 ## References
 
@@ -176,10 +177,10 @@ Schrödinger-picture map `map K`. It is the companion of
 `fixedPointAlgebra_wedderburnArtin`, which decomposes the Heisenberg-picture
 adjoint-fixed-point algebra.
 
-The remaining step toward the full Wolf Thm 6.14 is the unitary block-diagonal
-refinement that exhibits each summand as a full matrix algebra tensored with an
-identity on a multiplicity space, weighted by a density operator; that
-refinement is not formalized here. -/
+The unitary block-diagonal refinement, exhibiting each summand as an identity on a
+multiplicity space tensored with a full matrix algebra, is
+`Kraus.fixedPoints_blockDiagonal_iff` in `TNLean.Channel.FixedPoint.BlockForm`; the
+density-weighted form of Wolf Thm 6.14 is not formalized there. -/
 theorem fixedPointsStarSubalgebra_exists_algEquiv_pi_matrix
     (K : Fin d → Mat) (h_unital : IsUnital K)
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : adjointMap K ρ = ρ) :
@@ -232,16 +233,10 @@ structure IsWedderburnBlockDecomp
   algEquiv : ↥S ≃ₐ[ℂ] Π i : Fin numBlocks,
     Matrix (Fin (blockDim i)) (Fin (blockDim i)) ℂ
 
--- TODO: The full structure should additionally include:
--- * A unitary `U : Mat` witnessing the conjugation
--- * A proof that `S.carrier` equals the image of the block-diagonal embedding
---   under conjugation by `U`
--- * Compatibility with the star structure
---
--- This requires:
--- (1) Central projection decomposition of a semisimple algebra
--- (2) Spectral theorem on the center to extract orthogonal projections
--- (3) Construction of the unitary intertwiner U
+-- The unitary conjugation this structure leaves out is available separately:
+-- `StarSubalgebra.exists_unitary_conj_blockDiagonal_iff` identifies every star-subalgebra
+-- of `M_D(ℂ)` with a conjugated block algebra, and
+-- `TNLean.Channel.FixedPoint.BlockForm` instantiates it with the fixed-point algebras.
 
 -- TODO: This theorem is a general fact about arbitrary `StarSubalgebra ℂ Mat`,
 -- not specific to quantum channels or fixed-point algebras. It should
@@ -361,10 +356,9 @@ theorem starSubalgebra_hasWedderburnBlockDecomp
 The adjoint-fixed-point `*`-subalgebra `Fix(T*) = {X | T*(X) = X}` admits a
 Wedderburn block decomposition.
 
-Combined with `fixedPointAlgebra_wedderburnArtin`, this gives:
-`Fix(T*) ≅ ⊕_k M_{d_k}(ℂ)` (abstract) and `Fix(T*) = U(⊕_k M_{d_k} ⊗ 1_{m_k})U†`
-(concrete).
--/
+This records the product decomposition, multiplicities, and dimension bound; the unitary
+conjugation identity itself is `Kraus.adjointFixedPoints_blockDiagonal_iff` in
+`TNLean.Channel.FixedPoint.BlockForm`. -/
 theorem adjointFixedPoints_wedderburnDecomp
     (K : Fin d → Mat) (h_tp : IsTP K) {ρ : Mat}
     (hρ : ρ.PosDef) (hρ_fix : map K ρ = ρ) :
