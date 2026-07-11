@@ -8,6 +8,8 @@ import TNLean.Channel.FixedPoint.ConditionalExpectation
 import TNLean.Channel.FixedPoint.StationarySupport
 import TNLean.Channel.FixedPoint.CornerFixedPoints
 import TNLean.Channel.FixedPoint.WedderburnDecomp
+import TNLean.Channel.FixedPoint.BlockForm
+import TNLean.Channel.FixedPoint.CornerBlockForm
 import TNLean.Channel.FixedPoint.Corollaries
 import TNLean.Channel.Irreducible.Ergodicity
 import TNLean.Channel.Irreducible.Basic
@@ -286,16 +288,19 @@ point of the pre-dual, no zero block):
 * `Kraus.fixedPoints_blockDiagonal_iff` — the companion for the fixed points
   of a unital Kraus map.
 
-In `TNLean.Channel.FixedPoint.CornerBlockForm` (zero-block general case, any
+In `TNLean.Channel.FixedPoint.CornerBlockForm` (corner-restricted case, any
 positive semidefinite fixed point):
 
 * `Kraus.cornerFixedPoints_blockDiagonal_iff` — the corner-restricted
   fixed-point set is carried by an isometry `W` (`W† W = 1`, `W W† = Q`) onto
   `⊕_k 1_{m_k} ⊗ M_{d_k}` with `∑_k d_k m_k = r` for the support-sector
   dimension `r ≤ D`; embedded in `M_D(ℂ)` this is the block representation
-  with the zero block on the complement of the support sector.
+  in the `∑_k d_k m_k ≤ D` form. The equivalence characterizes the
+  corner-restricted set only; extending by zero on the complement does not
+  produce ambient fixed points in general.
 
-What is still missing for the full Wolf statement is the density-block
+What is still missing for the full Wolf statement is the identification of
+the ambient fixed-point space with the zero-block form and the density-block
 refinement with matrices `ρ_k` for the Schrödinger-picture fixed points.
 
 ### Wolf Corollary 6.7 (faithful fixed-point conjugation) — FORMALIZED
