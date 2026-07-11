@@ -725,21 +725,53 @@ theorem isSSAEquality_submatrix_prodEquiv
       _ = ∑ a, ∑ c, ρ (a, eB x, c) (a, eB y, c) :=
         Equiv.sum_comp eA
           (fun a ↦ ∑ c, ρ (a, eB x, c) (a, eB y, c))
+  have hABC :
+      vonNeumannEntropy (ρ.submatrix E E) (hρ.submatrix E) =
+        vonNeumannEntropy ρ hρ := by
+    simpa using vonNeumannEntropy_submatrix_equiv E ρ hρ
+  have hB :
+      vonNeumannEntropy (Matrix.traceAC_ABC (ρ.submatrix E E))
+          (Matrix.traceAC_ABC_isHermitian (hρ.submatrix E)) =
+        vonNeumannEntropy (Matrix.traceAC_ABC ρ)
+          (Matrix.traceAC_ABC_isHermitian hρ) := by
+    calc
+      _ = vonNeumannEntropy ((Matrix.traceAC_ABC ρ).submatrix eB eB)
+          ((Matrix.traceAC_ABC_isHermitian hρ).submatrix eB) :=
+        vonNeumannEntropy_congr hAC _ _
+      _ = _ := by
+        simpa using vonNeumannEntropy_submatrix_equiv eB
+          (Matrix.traceAC_ABC ρ) (Matrix.traceAC_ABC_isHermitian hρ)
+  have hAB :
+      vonNeumannEntropy (Matrix.traceC_ABC (ρ.submatrix E E))
+          (Matrix.traceC_ABC_isHermitian (hρ.submatrix E)) =
+        vonNeumannEntropy (Matrix.traceC_ABC ρ)
+          (Matrix.traceC_ABC_isHermitian hρ) := by
+    calc
+      _ = vonNeumannEntropy ((Matrix.traceC_ABC ρ).submatrix EAB EAB)
+          ((Matrix.traceC_ABC_isHermitian hρ).submatrix EAB) :=
+        vonNeumannEntropy_congr hC _ _
+      _ = _ := by
+        simpa using vonNeumannEntropy_submatrix_equiv EAB
+          (Matrix.traceC_ABC ρ) (Matrix.traceC_ABC_isHermitian hρ)
+  have hBC :
+      vonNeumannEntropy (Matrix.traceA_ABC (ρ.submatrix E E))
+          (Matrix.traceA_ABC_isHermitian (hρ.submatrix E)) =
+        vonNeumannEntropy (Matrix.traceA_ABC ρ)
+          (Matrix.traceA_ABC_isHermitian hρ) := by
+    calc
+      _ = vonNeumannEntropy ((Matrix.traceA_ABC ρ).submatrix EBC EBC)
+          ((Matrix.traceA_ABC_isHermitian hρ).submatrix EBC) :=
+        vonNeumannEntropy_congr hA _ _
+      _ = _ := by
+        simpa using vonNeumannEntropy_submatrix_equiv EBC
+          (Matrix.traceA_ABC ρ) (Matrix.traceA_ABC_isHermitian hρ)
   rw [IsSSAEquality] at hEq ⊢
-  rw [vonNeumannEntropy_submatrix_equiv E ρ hρ]
-  rw [vonNeumannEntropy_congr hAC
-    (Matrix.traceAC_ABC_isHermitian (hρ.submatrix E))
-    ((Matrix.traceAC_ABC_isHermitian hρ).submatrix eB)]
-  rw [vonNeumannEntropy_submatrix_equiv eB]
-  rw [vonNeumannEntropy_congr hC
-    (Matrix.traceC_ABC_isHermitian (hρ.submatrix E))
-    ((Matrix.traceC_ABC_isHermitian hρ).submatrix EAB)]
-  rw [vonNeumannEntropy_submatrix_equiv EAB]
-  rw [vonNeumannEntropy_congr hA
-    (Matrix.traceA_ABC_isHermitian (hρ.submatrix E))
-    ((Matrix.traceA_ABC_isHermitian hρ).submatrix EBC)]
-  rw [vonNeumannEntropy_submatrix_equiv EBC]
-  exact hEq
+  calc
+    _ = vonNeumannEntropy ρ hρ +
+        vonNeumannEntropy (Matrix.traceAC_ABC ρ)
+          (Matrix.traceAC_ABC_isHermitian hρ) := congrArg₂ (· + ·) hABC hB
+    _ = _ := hEq
+    _ = _ := (congrArg₂ (· + ·) hAB hBC).symm
 
 end SSAEquality
 
