@@ -21,8 +21,8 @@ $$0 \preceq P \preceq \rho \;\Longrightarrow\; Q\,P = P = P\,Q,$$
 for $Q$ the support projection of $\rho$.
 
 Instantiating the weighted corner fixed points at $\rho_0$ removes the corner-support
-restriction: conjugation by $\sqrt{\rho_0}$ maps the corner star-algebra of
-`Kraus.weightedCornerFixedPointsStarSubalgebra` onto the full fixed-point set of $T$,
+restriction: conjugation by $\sqrt{\rho_0}$ maps the weighted corner star-algebra
+(`Kraus.weightedCornerFixedPointsStarSubalgebra`) onto the full fixed-point set of $T$,
 which is the set $\rho_0^{-1/2}\,\{X \mid T(X) = X\}\,\rho_0^{-1/2}$ of Corollary 6.7 of
 *Quantum Channels & Operations* (Wolf 2012), with the inverse square root taken on the
 support of $\rho_0$.
