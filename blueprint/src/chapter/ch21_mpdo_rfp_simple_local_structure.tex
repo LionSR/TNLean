@@ -1237,6 +1237,221 @@ strong subadditivity for a normalized three-site reduced state.
     in the rank-one step.
 \end{definition}
 
+\begin{definition}[Rank-one factorization of neighboring-operator traces]
+    \label{def:mpdo_eta_rank_one_trace_factorization}
+    \lean{MPOTensor.ExplicitEtaOperators.RankOneTraceFactorization}
+    \leanok
+    \uses{def:mpdo_explicit_eta_operators}
+    Let $(\eta_{k,h})$ be a positive neighboring-operator family. A rank-one
+    trace factorization consists of real families $(a_k)$ and $(b_h)$ such that
+    \[
+        \tr(\eta_{k,h})=a_kb_h,
+        \qquad
+        \sum_l a_lb_l=1.
+    \]
+    These identities occur in
+    \cite[Appendix~C.2, lines~1395--1402]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Direct-sum neighboring operator]
+    \label{def:mpdo_eta_omega}
+    \lean{MPOTensor.ExplicitEtaOperators.OmegaIndex}
+    \lean{MPOTensor.ExplicitEtaOperators.omega}
+    \leanok
+    \uses{def:mpdo_explicit_eta_operators}
+    For sectors $k,h$, define the positive-operator candidate
+    \[
+        \Omega_{k,h}
+        =\bigoplus_l\bigl(\eta_{k,l}\otimes\eta_{l,h}\bigr).
+    \]
+    The summand indexed by $l$ acts on
+    $(B_k^R\otimes B_l^L)\otimes(B_l^R\otimes B_h^L)$.
+    This is the operator adjoined by $\mathcal T_{k,h}$ in
+    \cite[Appendix~C.2, lines~1527--1535]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Positivity of finite dependent block diagonals]
+    \label{thm:matrix_pos_semidef_block_diagonal}
+    \lean{Matrix.PosSemidef.blockDiagonal'}
+    \leanok
+    Let $(A_i)_{i\in I}$ be a finite family of positive semidefinite matrices,
+    where the size of $A_i$ may depend on $i$. Then the block-diagonal matrix
+    $\bigoplus_{i\in I}A_i$ is positive semidefinite.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Write each $A_i=B_i^*B_i$ using its positive square root. The dependent
+    block diagonal then satisfies
+    $\bigoplus_i A_i=(\bigoplus_i B_i)^*(\bigoplus_i B_i)$.
+\end{proof}
+
+\begin{theorem}[Positivity of the direct-sum neighboring operator]
+    \label{thm:mpdo_eta_omega_pos}
+    \lean{MPOTensor.ExplicitEtaOperators.omega_pos}
+    \leanok
+    \uses{def:mpdo_eta_omega, def:mpdo_explicit_eta_operators,
+      thm:matrix_pos_semidef_block_diagonal}
+    Every operator $\Omega_{k,h}$ is positive semidefinite.
+\end{theorem}
+\begin{proof}
+    \leanok
+    For every $l$, positivity is preserved by the Kronecker product:
+    \[
+        \eta_{k,l}\succeq 0,
+        \qquad
+        \eta_{l,h}\succeq 0
+        \quad\Longrightarrow\quad
+        \eta_{k,l}\otimes\eta_{l,h}\succeq 0.
+    \]
+    Apply Theorem~\ref{thm:matrix_pos_semidef_block_diagonal} to the family
+    $(\eta_{k,l}\otimes\eta_{l,h})_l$.
+\end{proof}
+
+\begin{theorem}[Trace of the direct-sum neighboring operator]
+    \label{thm:mpdo_eta_omega_trace}
+    \lean{MPOTensor.ExplicitEtaOperators.trace_omega}
+    \lean{MPOTensor.ExplicitEtaOperators.trace_omega_eq_mul}
+    \leanok
+    \uses{def:mpdo_eta_omega, def:mpdo_eta_rank_one_trace_factorization}
+    The trace is
+    \[
+        \tr(\Omega_{k,h})
+        =\sum_l\tr(\eta_{k,l})\tr(\eta_{l,h}).
+    \]
+    Under the rank-one trace factorization, this becomes
+    \[
+        \tr(\Omega_{k,h})
+        =a_kb_h\sum_l a_lb_l
+        =a_kb_h.
+    \]
+    This is the trace calculation in
+    \cite[Appendix~C.2, lines~1531--1535]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The direct-sum and Kronecker trace identities give
+    \[
+        \tr(\Omega_{k,h})
+        =\sum_l\tr\bigl(\eta_{k,l}\otimes\eta_{l,h}\bigr)
+        =\sum_l\tr(\eta_{k,l})\tr(\eta_{l,h}).
+    \]
+    Substitute
+    $\tr(\eta_{k,h})=a_kb_h$ and $\sum_l a_lb_l=1$.
+\end{proof}
+
+\begin{theorem}[Vanishing of zero-weight neighboring operators]
+    \label{thm:mpdo_eta_zero_weight}
+    \lean{MPOTensor.ExplicitEtaOperators.weight_nonneg}
+    \lean{MPOTensor.ExplicitEtaOperators.eta_eq_zero_of_mul_eq_zero}
+    \lean{MPOTensor.ExplicitEtaOperators.omega_eq_zero_of_mul_eq_zero}
+    \leanok
+    \uses{thm:mpdo_eta_omega_pos, thm:mpdo_eta_omega_trace,
+      def:mpdo_eta_rank_one_trace_factorization}
+    Every product $a_kb_h$ is nonnegative. If $a_kb_h=0$, then
+    \[
+        \eta_{k,h}=0,
+        \qquad
+        \Omega_{k,h}=0.
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    Since $\eta_{k,h}\succeq 0$, its trace is nonnegative, and hence
+    $a_kb_h=\tr(\eta_{k,h})\geq 0$. If $a_kb_h=0$, then
+    \[
+        \eta_{k,h}\succeq 0,
+        \qquad
+        \tr(\eta_{k,h})=a_kb_h=0
+        \quad\Longrightarrow\quad
+        \eta_{k,h}=0.
+    \]
+    The same implication gives $\Omega_{k,h}=0$ because
+    $\Omega_{k,h}\succeq 0$ and
+    $\tr(\Omega_{k,h})=a_kb_h=0$.
+\end{proof}
+
+\begin{definition}[Normalized active neighboring operators]
+    \label{def:mpdo_normalized_eta_omega}
+    \lean{MPOTensor.ExplicitEtaOperators.normalizedEta}
+    \lean{MPOTensor.ExplicitEtaOperators.normalizedOmega}
+    \leanok
+    \uses{def:mpdo_eta_omega, def:mpdo_eta_rank_one_trace_factorization}
+    With the convention $0^{-1}=0$, define for every pair $(k,h)$
+    \[
+        \widehat\eta_{k,h}=(a_kb_h)^{-1}\eta_{k,h},
+        \qquad
+        \widehat\Omega_{k,h}=(a_kb_h)^{-1}\Omega_{k,h}.
+    \]
+    These operators are normalized when the pair is active, namely when
+    $a_kb_h\ne0$.
+\end{definition}
+
+\begin{theorem}[Positivity of normalized neighboring operators]
+    \label{thm:mpdo_normalized_eta_omega_pos}
+    \lean{MPOTensor.ExplicitEtaOperators.normalizedEta_pos}
+    \lean{MPOTensor.ExplicitEtaOperators.normalizedOmega_pos}
+    \leanok
+    \uses{def:mpdo_normalized_eta_omega, thm:mpdo_eta_omega_pos,
+      thm:mpdo_eta_zero_weight}
+    For every pair $(k,h)$, the operators $\widehat\eta_{k,h}$ and
+    $\widehat\Omega_{k,h}$ are positive semidefinite.
+\end{theorem}
+\begin{proof}
+    \leanok
+    By Theorem~\ref{thm:mpdo_eta_zero_weight}, $a_kb_h\geq 0$, and hence
+    $(a_kb_h)^{-1}\geq 0$. Therefore
+    \[
+        \eta_{k,h}\succeq 0,
+        \qquad
+        (a_kb_h)^{-1}\geq 0
+        \quad\Longrightarrow\quad
+        \widehat\eta_{k,h}
+        =(a_kb_h)^{-1}\eta_{k,h}\succeq 0,
+    \]
+    and the identical argument applies to $\widehat\Omega_{k,h}$.
+\end{proof}
+
+\begin{theorem}[Normalized active preparations]
+    \label{thm:mpdo_normalized_eta_omega_preparation}
+    \lean{MPOTensor.ExplicitEtaOperators.trace_normalizedEta}
+    \lean{MPOTensor.ExplicitEtaOperators.trace_normalizedOmega}
+    \lean{MPOTensor.ExplicitEtaOperators.normalizedEta_preparationMap_isKrausCPTP}
+    \lean{MPOTensor.ExplicitEtaOperators.normalizedOmega_preparationMap_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_normalized_eta_omega,
+      thm:mpdo_normalized_eta_omega_pos, thm:mpdo_eta_omega_trace,
+      lem:mpdo_state_preparation_cptp}
+    If $a_kb_h\ne0$, then $\widehat\eta_{k,h}$ and
+    $\widehat\Omega_{k,h}$ have trace one.
+    Consequently the maps
+    \[
+        X\longmapsto X\otimes\widehat\eta_{k,h},
+        \qquad
+        X\longmapsto X\otimes\widehat\Omega_{k,h}
+    \]
+    are trace-preserving and completely positive. These are the individual
+    preparations $\mathcal S_{k,h}$ and $\mathcal T_{k,h}$ in
+    \cite[Appendix~C.2, lines~1527--1535 and~1551--1555]
+      {Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    On an active pair,
+    \[
+        \tr(\widehat\eta_{k,h})
+        =(a_kb_h)^{-1}\tr(\eta_{k,h})
+        =(a_kb_h)^{-1}a_kb_h
+        =1.
+    \]
+    Likewise, $\tr(\widehat\Omega_{k,h})=1$ follows from
+    $\tr(\Omega_{k,h})=a_kb_h$.
+    Apply Lemma~\ref{lem:mpdo_state_preparation_cptp} to each operator.
+\end{proof}
+
+% The orthogonal direct sum of the active maps and a trace-preserving
+% completion on the unused zero-weight input summands remain part of the
+% construction of the full maps T_1 and S_1.
+
 \begin{figure}[ht]
     \centering
     \TNMPDOSectorPairing
