@@ -89,7 +89,15 @@ namespace Matrix
 
 /-! ### Orthogonally controlled direct sums -/
 
-/-- The Kraus map associated to a finite family of rectangular operators. -/
+/-- For a finite family of rectangular matrices $A_i$ with row set $\beta$
+and finite column set $\alpha$, the associated Kraus map is
+
+$$
+\Phi_A(X)=\sum_i A_i X A_i^\dagger.
+$$
+
+It maps square matrices indexed by $\alpha$ to square matrices indexed by
+$\beta$. -/
 noncomputable def rectangularKrausMap
     {κ α β : Type*} [Fintype κ] [Fintype α]
     (A : κ → Matrix β α ℂ) :
@@ -149,7 +157,7 @@ private lemma singleBlock_conjTranspose_mul
 /-- Sectorwise resolutions of the identity make the orthogonally controlled
 Kraus map trace-preserving and completely positive.
 
-This is the trace-preserving sector assembly for $\mathcal T_1$ and
+This is the trace-preserving sector construction for $\mathcal T_1$ and
 $\mathcal S_1$ in arXiv:1606.00608, Appendix C.2, lines 1523--1535 and
 1548--1555. -/
 theorem controlledKrausMap_isKrausCPTP (r : ι → ℕ)
