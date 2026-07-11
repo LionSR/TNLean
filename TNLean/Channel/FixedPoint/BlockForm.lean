@@ -2,7 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.Channel.FixedPoint.WedderburnDecomp
+import TNLean.Channel.FixedPoint.Algebra
 import TNLean.Algebra.StarSubalgebraBlockForm
 
 /-!
@@ -12,14 +12,15 @@ This file instantiates the full block form of a star-subalgebra of complex matri
 (`StarSubalgebra.exists_unitary_conj_blockDiagonal_iff`) with the fixed-point algebras of
 *Quantum Channels & Operations* (Wolf 2012), Chapter 6. For a trace-preserving Kraus map
 whose Schrödinger picture has a positive definite fixed point, the set of fixed points of
-the Heisenberg-picture map is a unital star-subalgebra (Wolf Thm 6.12), so there is a
-unitary $U$ with
+the Heisenberg-picture map is a unital star-subalgebra (Theorem 6.12 of *Quantum
+Channels & Operations*, Wolf 2012), so there is a unitary $U$ with
 $$\{X \mid T^{*}(X) = X\}
   \;=\; U \Bigl(\bigoplus_{k} \mathbf{1}_{m_k} \otimes M_{d_k}(\mathbb{C})\Bigr)
   U^{\dagger},$$
-the block representation of Wolf Eq. (1.39), written with the Kronecker factors in the
+the block representation of Eq. (1.39) of *Quantum Channels & Operations* (Wolf 2012),
+written with the Kronecker factors in the
 order identity-times-matrix. The positive definite fixed point removes the zero block:
-this is the unital case of the block form invoked by Wolf Thm 6.14. The general case of
+this is the unital case of the block form invoked by Theorem 6.14 there. The general case of
 Thm 6.14, where the Schrödinger-picture fixed-point space carries a zero block and each
 summand is weighted by a density operator $\rho_k$, is not asserted here.
 
@@ -43,7 +44,7 @@ local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
 /-- **Unitary block form of the Heisenberg-picture fixed points.** Let $T$ be a
 trace-preserving Kraus map on $M_{D}(\mathbb{C})$ with a positive definite fixed point
-$\rho$. Then there are $K \in \mathbb{N}$, positive dimensions $d_k$ and multiplicities
+$\rho$. Then there are $n \in \mathbb{N}$, positive dimensions $d_k$ and multiplicities
 $m_k$ with $\sum_k d_k m_k = D$, and a unitary $U$ such that a matrix $X$ satisfies
 $T^{*}(X) = X$ exactly when
 $$U^{\dagger} X U \;=\; \bigoplus_{k} \mathbf{1}_{m_k} \otimes B_k$$
@@ -53,10 +54,12 @@ $$\{X \mid T^{*}(X) = X\}
   \;=\; U \Bigl(\bigoplus_{k} \mathbf{1}_{m_k} \otimes M_{d_k}(\mathbb{C})\Bigr)
   U^{\dagger}.$$
 The fixed points of the unital map $T^{*}$ form a star-subalgebra because $T$ has a
-positive definite fixed point (Wolf Thm 6.12, in the Kraus case of the Schwarz
-hypothesis), and every star-subalgebra takes the block form of Wolf Eq. (1.39); the
+positive definite fixed point (Theorem 6.12 of *Quantum Channels & Operations*, Wolf 2012,
+in the Kraus case of the Schwarz hypothesis), and every star-subalgebra takes the block
+form of Eq. (1.39) there; the
 positive definiteness of $\rho$ removes the zero block, so this is the unital case of the
-block representation invoked by *Quantum Channels & Operations* (Wolf 2012), Thm 6.14.
+block representation invoked by Theorem 6.14 of *Quantum Channels & Operations*
+(Wolf 2012).
 The density-weighted form of Thm 6.14 for the Schrödinger-picture fixed points is not
 asserted here. -/
 theorem adjointFixedPoints_blockDiagonal_iff
@@ -79,16 +82,17 @@ theorem adjointFixedPoints_blockDiagonal_iff
 
 /-- **Unitary block form of the fixed points of a unital Kraus map.** Let $E$ be a unital
 Kraus map on $M_{D}(\mathbb{C})$ whose adjoint has a positive definite fixed point $\rho$.
-Then there are $K \in \mathbb{N}$, positive dimensions $d_k$ and multiplicities $m_k$ with
+Then there are $n \in \mathbb{N}$, positive dimensions $d_k$ and multiplicities $m_k$ with
 $\sum_k d_k m_k = D$, and a unitary $U$ such that a matrix $X$ satisfies $E(X) = X$
 exactly when
 $$U^{\dagger} X U \;=\; \bigoplus_{k} \mathbf{1}_{m_k} \otimes B_k$$
 for some matrices $B_k \in M_{d_k}(\mathbb{C})$. This is
 `Kraus.adjointFixedPoints_blockDiagonal_iff` with the roles of the map and its adjoint
-exchanged: the fixed points of the unital map $E$ form a star-subalgebra (Wolf Thm 6.12,
-in the Kraus case of the Schwarz hypothesis), and the positive definite fixed point of the
-adjoint removes the zero block from the block representation of Wolf Eq. (1.39), the
-unital case invoked by *Quantum Channels & Operations* (Wolf 2012), Thm 6.14. -/
+exchanged: the fixed points of the unital map $E$ form a star-subalgebra (Theorem 6.12
+of *Quantum Channels & Operations*, Wolf 2012, in the Kraus case of the Schwarz
+hypothesis), and the positive definite fixed point of the
+adjoint removes the zero block from the block representation of Eq. (1.39) there, the
+unital case invoked by Theorem 6.14 of *Quantum Channels & Operations* (Wolf 2012). -/
 theorem fixedPoints_blockDiagonal_iff
     (K : Fin d → Mat) (h_unital : IsUnital K) {ρ : Mat}
     (hρ : ρ.PosDef) (hρ_fix : adjointMap K ρ = ρ) :
