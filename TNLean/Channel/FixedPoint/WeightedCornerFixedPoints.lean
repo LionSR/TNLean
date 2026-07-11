@@ -22,10 +22,11 @@ support of $\rho$, which realizes the displayed set without naming the pseudo-in
 
 Corollary 6.7 of *Quantum Channels & Operations* (Wolf 2012) takes $\rho$ to be a
 *maximum-rank* fixed-point density matrix and conjugates the full fixed-point set of $T$.
-For a fixed point of maximal support the corner restriction $Q X Q = X$ is vacuous: the
-maximal-support property is `Kraus.exists_maximalSupport_fixedPoint` in
-`TNLean.Channel.FixedPoint.MaximalSupport`, and its combination with the results below,
-removing the corner restriction, is `Kraus.exists_maximalSupport_weightedCorner_sqrt_eq`
+For a fixed point of maximal support the corner restriction $Q X Q = X$ is vacuous: there
+is a positive semidefinite fixed point whose support projection absorbs every fixed point
+(`Kraus.exists_maximalSupport_fixedPoint` in `TNLean.Channel.FixedPoint.MaximalSupport`),
+and at such a fixed point the conjugation below reaches the full fixed-point set
+(`Kraus.exists_maximalSupport_weightedCorner_sqrt_eq`)
 there. The statements below take an arbitrary positive semidefinite fixed point, so for a
 non-maximal choice of $\rho$ they conjugate the fixed points supported on the support of
 $\rho$. The resolution of the former restriction is recorded in
@@ -365,9 +366,10 @@ corollary, with the inverse square root taken on the support of $\rho$.
 
 The corollary in the reference takes a maximum-rank fixed point, for which every fixed
 point of $T$ is supported on the support of $\rho$ and the corner restriction disappears:
-a fixed point of maximal support is `Kraus.exists_maximalSupport_fixedPoint`, and the
-combination removing the corner restriction is
-`Kraus.exists_maximalSupport_weightedCorner_sqrt_eq`, both in
+a positive semidefinite fixed point whose support projection absorbs every fixed point
+exists (`Kraus.exists_maximalSupport_fixedPoint`), and at such a fixed point the
+conjugation reaches the full fixed-point set
+(`Kraus.exists_maximalSupport_weightedCorner_sqrt_eq`), both in
 `TNLean.Channel.FixedPoint.MaximalSupport`. -/
 noncomputable def weightedCornerFixedPointsStarSubalgebra
     (K : Fin d → Mat) (h_tp : IsTP K) {ρ : Mat} (hρ_psd : ρ.PosSemidef)
@@ -467,8 +469,8 @@ root taken on the support of $\rho$.
 The source's corollary takes a maximum-rank fixed point, for which the support condition
 on $X$ is automatic by the maximal-support property
 (`Kraus.exists_maximalSupport_fixedPoint` in `TNLean.Channel.FixedPoint.MaximalSupport`);
-at such a fixed point the combination without the support hypothesis is
-`Kraus.exists_maximalSupport_weightedCorner_sqrt_eq`. -/
+at such a fixed point the conjugation reaches the full fixed-point set without the
+support hypothesis (`Kraus.exists_maximalSupport_weightedCorner_sqrt_eq`). -/
 theorem exists_weightedCorner_sqrt_eq_of_fixedPoint
     (K : Fin d → Mat) (h_tp : IsTP K) {ρ : Mat} (hρ_psd : ρ.PosSemidef)
     (hρ_fix : map K ρ = ρ) {X : Mat} (hX_fix : map K X = X)
