@@ -182,7 +182,8 @@ adjoint-fixed-point algebra.
 The unitary block-diagonal refinement, exhibiting each summand as an identity on a
 multiplicity space tensored with a full matrix algebra, is
 `Kraus.fixedPoints_blockDiagonal_iff` in `TNLean.Channel.FixedPoint.BlockForm`; the
-density-weighted form of Theorem 6.14 there is not formalized. -/
+density-weighted form of Theorem 6.14 of *Quantum Channels & Operations* (Wolf 2012)
+is not formalized. -/
 theorem fixedPointsStarSubalgebra_exists_algEquiv_pi_matrix
     (K : Fin d → Mat) (h_unital : IsUnital K)
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : adjointMap K ρ = ρ) :
