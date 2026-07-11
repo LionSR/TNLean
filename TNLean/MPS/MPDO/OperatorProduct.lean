@@ -24,9 +24,9 @@ left factor per block accumulate the fixed factor into a matrix power.
 
 In the fusion identity the product tensor is applied to the vertically read
 tensors of arXiv:1606.00608, Proposition IV.12: there the physical dimension
-is the original bond dimension and the tensor product of physical spaces of
-eq. (Ualphabeta), lines 986--993, is the Kronecker product of the bond spaces
-in the vertical reading.
+is the original bond dimension, and the tensor product of physical spaces in
+the isometry statement of Theorem IV.13(iii) (lines 986--993) is the
+Kronecker product of the bond spaces in the vertical reading.
 
 ## References
 
