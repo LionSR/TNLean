@@ -25,6 +25,9 @@ normalization.
   gives quasi-idempotence of the closed-sector pairing operator.
 * `closedSector_operator_normalized_idempotent`: after the source
   normalization, the pairing operator is idempotent.
+* `closedSector_operator_idempotent_of_physTraceTransfer_sq`: for a
+  canonically normalized representative, the raw pairing operator is
+  idempotent.
 
 ## References
 
@@ -141,5 +144,26 @@ theorem closedSector_operator_normalized_idempotent
   dsimp only
   rw [← concrete_physTraceTransfer_eq_sum_closedSector K hK hη R hρ α₁ β₃ hm]
   exact hidem
+
+/-- For a canonically normalized representative whose physical-trace transfer
+is literally idempotent, the raw closed-sector pairing operator satisfies
+\[
+  \left(\sum_k |l_k)(r_k|\right)^2=\sum_k |l_k)(r_k|.
+\]
+This is the displayed zero-correlation-length identity used in
+arXiv:1606.00608, Appendix C.2, lines 1489--1493. -/
+theorem closedSector_operator_idempotent_of_physTraceTransfer_sq
+    {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
+    (K : MPOTensor d D) (hK : K.IsInjective) (hη : EtaStructure ρ)
+    (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R ρ)
+    (α₁ β₃ : Fin D) (hm : R β₃ α₁ ≠ 0)
+    (hZCL : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K) :
+    let S := ∑ q, Matrix.vecMulVec
+      (closedSectorL K hK hη R α₁ β₃ q)
+      (closedSectorR K hK hη β₃ q)
+    S * S = S := by
+  dsimp only
+  rw [← concrete_physTraceTransfer_eq_sum_closedSector K hK hη R hρ α₁ β₃ hm]
+  exact hZCL
 
 end MPOTensor

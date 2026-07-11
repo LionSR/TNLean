@@ -857,6 +857,7 @@ strong subadditivity for a normalized three-site reduced state.
     \label{thm:mpdo_closed_sector_pairing_normalized_idempotent}
     \lean{MPOTensor.closedSector_operator_quasi_idempotent}
     \lean{MPOTensor.closedSector_operator_normalized_idempotent}
+    \lean{MPOTensor.closedSector_operator_idempotent_of_physTraceTransfer_sq}
     \leanok
     \uses{def:mpo_source_zcl,
         thm:mpdo_closed_sector_physical_trace_transfer,
@@ -871,8 +872,9 @@ strong subadditivity for a normalized three-site reduced state.
         \qquad
         (\lambda^{-1}S)^2=\lambda^{-1}S.
     \]
-    The paper works with the canonically normalized representative
-    $\lambda=1$ in the display preceding
+    If ${\cal K}$ is the canonically normalized representative satisfying
+    $\mathcal T_{\cal K}^2=\mathcal T_{\cal K}$, then the raw pairing
+    operator itself satisfies $S^2=S$.  This is the display preceding
     \cite[Appendix~C.2, Lemma~C.5]{Cirac2016MPDO_arXiv}; the first identity
     records the rescaling-invariant form of the same zero-correlation-length
     condition.
@@ -887,7 +889,8 @@ strong subadditivity for a normalized three-site reduced state.
     Theorem~\ref{thm:mpdo_closed_sector_physical_trace_transfer} into the
     defining relation
     $\mathcal T_{\cal K}^2=\lambda\mathcal T_{\cal K}$, and then apply
-    Lemma~\ref{lem:mpo_source_zcl_normalized_idempotent}.
+    Lemma~\ref{lem:mpo_source_zcl_normalized_idempotent}.  Under literal
+    idempotence, the same substitution gives $S^2=S$ directly.
 \end{proof}
 
 \begin{definition}[Explicit neighboring $\eta$-operator data]
