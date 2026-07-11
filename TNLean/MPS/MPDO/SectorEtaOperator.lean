@@ -69,7 +69,10 @@ def sectorChainEquiv (hη : EtaStructure ρ) (N : ℕ) :
 
 /-- Forming the congruence $U\kappa_{\beta,\alpha}U^\dagger$ on every local
 MPO matrix leaves the horizontal bond space unchanged. When $U$ is unitary,
-this is the corresponding physical basis change. -/
+this is the corresponding physical basis change.
+
+This construction is source-independent. It is used with the Hayashi unitary
+from arXiv:1606.00608, Appendix C.2, lines 1434--1464. -/
 noncomputable def conjugatePhysical (K : MPOTensor d D)
     (U : Matrix (Fin d) (Fin d) ℂ) : MPOTensor d D :=
   fun i j β α => (U * physicalSlice K β α * Uᴴ) i j
@@ -107,17 +110,6 @@ private theorem conjugatePhysical_sectorFactorization_apply
     ⟨q, (iL, iR)⟩) ⟨q, (jL, jR)⟩
   simpa [Matrix.reindex_apply, Matrix.blockDiagonal'_apply_eq,
     Matrix.kroneckerMap_apply] using h
-
-private theorem mps_evalWord_ofFn_prod {dphys Dbond : ℕ}
-    (A : MPSTensor dphys Dbond) {n : ℕ} (σ : Fin n → Fin dphys) :
-    MPSTensor.evalWord A (List.ofFn σ) =
-      (List.ofFn fun i => A (σ i)).prod := by
-  induction n with
-  | zero => simp only [List.ofFn_zero, MPSTensor.evalWord_nil, List.prod_nil]
-  | succ n ih =>
-    simp only [List.ofFn_succ, MPSTensor.evalWord_cons, List.prod_cons]
-    congr 1
-    exact ih (σ ∘ Fin.succ)
 
 /-- The cyclic tensor product of neighboring operators in the fiber of a fixed
 sector configuration. Its entries pair the right index at site $n$ with the
@@ -192,7 +184,7 @@ theorem mpo_submatrix_sector_eq_cyclicEtaTensorProduct
   have h := trace_sector_word_eq_prod_etaOfSectorTensors hη l r k
     (fun n => (x n).1) (fun n => (y n).1)
     (fun n => (x n).2) (fun n => (y n).2)
-  rw [mps_evalWord_ofFn_prod] at h
+  rw [MPSTensor.evalWord_ofFn_eq_prod] at h
   simpa only [id_eq] using h
 
 /-- Distinct sector configurations give a vanishing closed word. A site where
@@ -296,7 +288,7 @@ theorem mpo_reindex_sectorChainEquiv_eq_blockDiagonal_cyclicEta
       MPOTensor.evalWord_ofFn]
     have hzero := trace_conjugatePhysical_sector_word_eq_zero_of_ne
       K hη l r hfactor k h x y hkh
-    rw [mps_evalWord_ofFn_prod] at hzero
+    rw [MPSTensor.evalWord_ofFn_eq_prod] at hzero
     simpa only [id_eq] using hzero
 
 end MPOTensor
