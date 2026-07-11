@@ -595,9 +595,17 @@
     operators are linearly independent.
 \end{theorem}
 \begin{proof}\leanok
-    The difference of the two coefficient systems gives a vanishing linear
-    combination of the operators, so every coefficient of the difference
-    vanishes.
+    Applying the same-length product law to both coefficient systems gives
+    \[
+        \sum_\delta c^{(L)}_{\alpha,\beta,\delta}\, O_L(M_\delta)
+        = O_L(M_\alpha)\, O_L(M_\beta)
+        = \sum_\delta c'^{(L)}_{\alpha,\beta,\delta}\, O_L(M_\delta).
+    \]
+    Subtracting yields
+    $\sum_\delta (c^{(L)}_{\alpha,\beta,\delta}
+        - c'^{(L)}_{\alpha,\beta,\delta})\, O_L(M_\delta) = 0$,
+    and linear independence forces every coefficient of the difference to
+    zero.
 \end{proof}
 
 \begin{theorem}[Associativity constraint on the structure coefficients]%
@@ -621,9 +629,22 @@
     \cite[Section~4.5]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}\leanok
-    Expand the two associations of the triple product
-    $O_L(M_\alpha)O_L(M_\beta)O_L(M_\gamma)$ through the product law and
-    compare the coefficients of the linearly independent operators.
+    Applying the same-length product law twice in each order gives
+    \begin{align*}
+        (O_L(M_\alpha)\, O_L(M_\beta))\, O_L(M_\gamma)
+         & = \sum_{\varepsilon'}
+        \Bigl(\sum_\delta c^{(L)}_{\alpha,\beta,\delta}\,
+        c^{(L)}_{\delta,\gamma,\varepsilon'}\Bigr)
+        O_L(M_{\varepsilon'}),   \\
+        O_L(M_\alpha)\,(O_L(M_\beta)\, O_L(M_\gamma))
+         & = \sum_{\varepsilon'}
+        \Bigl(\sum_\delta c^{(L)}_{\beta,\gamma,\delta}\,
+        c^{(L)}_{\alpha,\delta,\varepsilon'}\Bigr)
+        O_L(M_{\varepsilon'}).
+    \end{align*}
+    Associativity of multiplication equates the two left-hand sides, so the
+    right-hand sides agree; linear independence of the operators then forces
+    the corresponding coefficient sums to agree for each $\varepsilon'$.
 \end{proof}
 
 \begin{theorem}[Associativity constraint in trace-power form]%
