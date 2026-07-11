@@ -619,6 +619,308 @@
     \end{tikzpicture}%
 }
 
+% Inverse-tensor contraction for an injective MPS tensor: contracting the
+% inverse tensor with the tensor through the shared physical index identifies
+% the virtual legs of the inverse with the corresponding virtual legs of the
+% tensor.
+\newcommand{\TNMPSInverseContraction}{%
+    \begin{tikzpicture}[tn picture]
+        \TN@tensordot{mpsiT}{(0,0.55)}
+        \TN@tensordot{mpsiB}{(0,-0.55)}
+        \TN@leftleg{mpsiT}{0.60}
+        \TN@rightleg{mpsiT}{0.60}
+        \TN@leftleg{mpsiB}{0.60}
+        \TN@rightleg{mpsiB}{0.60}
+        \draw[tn phys leg] (mpsiT.south) -- (mpsiB.north);
+        \node at (-0.52,0.88) {$A^{-1}$};
+        \node at (-0.42,-0.88) {$A$};
+        \node at (1.35,0) {$=$};
+        \draw[tn leg] (1.90,0.55) -- (2.15,0.55)
+        .. controls (2.70,0.55) and (2.70,-0.55) .. (2.15,-0.55)
+        -- (1.90,-0.55);
+        \draw[tn leg] (3.90,0.55) -- (3.65,0.55)
+        .. controls (3.10,0.55) and (3.10,-0.55) .. (3.65,-0.55)
+        -- (3.90,-0.55);
+    \end{tikzpicture}%
+}
+
+% Coefficient form of a basis of normal tensors: the gauge X, one basis
+% tensor with its physical leg, and X^{-1} on the virtual chain, threaded by
+% the block-index lines j and q; the coefficient tensor mu hangs on the two
+% index lines, so the direct sums are drawn as index lines.
+\newcommand{\TNBNTDecomposition}{%
+    \begin{tikzpicture}[tn picture]
+        \TN@opdotabove{bntX}{(0,0)}{X}
+        \TN@tensordot{bntA}{(1.50,0)}
+        \TN@opdotabove{bntXi}{(3.00,0)}{X^{-1}}
+        \draw[tn leg] (bntX.west) -- ++(-0.55,0);
+        \draw[tn leg] (bntX.east) -- (bntA.west);
+        \draw[tn leg] (bntA.east) -- (bntXi.west);
+        \draw[tn leg] (bntXi.east) -- ++(0.55,0);
+        \TN@upleg{bntA}{0.46}
+        \TN@uplabel{bntA}{0.70}{i}
+        \node[anchor=west] at (1.62,-0.26) {$A_j$};
+        \node[anchor=east] at (-0.70,0) {$\alpha$};
+        \node[anchor=west] at (3.70,0) {$\beta$};
+        \draw[tn leg] (-0.60,-0.62) -- (3.60,-0.62);
+        \draw[tn leg] (-0.60,-1.02) -- (3.60,-1.02);
+        \node[anchor=east] at (-0.70,-0.62) {$j$};
+        \node[anchor=east] at (-0.70,-1.02) {$q$};
+        \draw[tn leg] (bntX.south) -- (0,-1.02);
+        \draw[tn leg] (bntA.south) -- (1.50,-0.62);
+        \draw[tn leg] (bntXi.south) -- (3.00,-1.02);
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+        (bntMu) at (0.75,-1.60) {$\mu$};
+        \draw[tn leg] ($(bntMu.north)+(-0.12,0)$) -- (0.63,-0.62);
+        \draw[tn leg] ($(bntMu.north)+(0.12,0)$) -- (0.87,-1.02);
+        \fill (0,-0.62) circle (0.05);
+        \fill (0,-1.02) circle (0.05);
+        \fill (1.50,-0.62) circle (0.05);
+        \fill (3.00,-0.62) circle (0.05);
+        \fill (3.00,-1.02) circle (0.05);
+        \fill (0.63,-0.62) circle (0.05);
+        \fill (0.87,-1.02) circle (0.05);
+    \end{tikzpicture}%
+}
+
+% Zero-correlation-length idempotence for the physical-trace transfer: the
+% trace-closed tensor equals the virtual product of two trace-closed copies.
+\newcommand{\TNMPDOZCLIdempotence}{%
+    \begin{tikzpicture}[tn picture]
+        \TN@tracedMPOSite{zciM}{(0,0)}
+        \node[anchor=east] at (-0.14,-0.28) {$M$};
+        \node at (0.21,-0.92) {$\mathcal T_M$};
+        \node at (1.40,0) {$=$};
+        \TN@tracedMPOSite{zciA}{(2.75,0)}
+        \TN@tracedMPOSite{zciB}{(4.08,0)}
+        \draw[tn leg] (zciA.east) -- (zciB.west);
+        \node[anchor=east] at (2.61,-0.28) {$M$};
+        \node[anchor=east] at (3.94,-0.28) {$M$};
+        \node at (2.96,-0.92) {$\mathcal T_M$};
+        \node at (4.29,-0.92) {$\mathcal T_M$};
+    \end{tikzpicture}%
+}
+
+% Fusion isometry of the renormalization fixed-point characterization: two
+% contracted copies of the tensor equal one copy with the isometry merging
+% the summed index into the physical pair.
+\newcommand{\TNRFPKrausIsometry}{%
+    \begin{tikzpicture}[tn picture]
+        \TN@tensordot{rfkA}{(0,0)}
+        \TN@tensordot{rfkB}{(1.20,0)}
+        \draw[tn leg] (rfkA.west) -- ++(-0.60,0);
+        \draw[tn leg] (rfkA.east) -- (rfkB.west);
+        \draw[tn leg] (rfkB.east) -- ++(0.60,0);
+        \TN@upleg{rfkA}{0.46}
+        \TN@upleg{rfkB}{0.46}
+        \TN@uplabel{rfkA}{0.70}{i_1}
+        \TN@uplabel{rfkB}{0.70}{i_2}
+        \node[anchor=east] at (-0.14,-0.28) {$A$};
+        \node[anchor=west] at (1.34,-0.28) {$A$};
+        \node at (2.50,0) {$=$};
+        \node at (3.25,0) {$\displaystyle\sum_j$};
+        \TN@tensordot{rfkC}{(4.30,0)}
+        \draw[tn leg] (rfkC.west) -- ++(-0.55,0);
+        \draw[tn leg] (rfkC.east) -- ++(0.55,0);
+        \node[anchor=west] at (4.44,-0.28) {$A$};
+        \node[draw, rounded corners, fill=blue!8,
+            inner xsep=10pt, inner ysep=2pt] (rfkV) at (4.30,0.90) {$V$};
+        \draw[tn phys leg] (rfkC.north) -- (rfkV.south);
+        \node[anchor=west] at (4.40,0.46) {$j$};
+        \draw[tn phys leg] ($(rfkV.north)+(-0.20,0)$) -- ++(0,0.34);
+        \draw[tn phys leg] ($(rfkV.north)+(0.20,0)$) -- ++(0,0.34);
+        \node at (4.10,1.62) {$i_1$};
+        \node at (4.50,1.62) {$i_2$};
+    \end{tikzpicture}%
+}
+
+% Reverse fusion identity: the adjoint isometry applied to the two physical
+% legs of the contracted pair recovers the single tensor.
+\newcommand{\TNRFPKrausIsometryReverse}{%
+    \begin{tikzpicture}[tn picture]
+        \TN@tensordot{rfrA}{(0,0)}
+        \TN@tensordot{rfrB}{(1.20,0)}
+        \draw[tn leg] (rfrA.west) -- ++(-0.60,0);
+        \draw[tn leg] (rfrA.east) -- (rfrB.west);
+        \draw[tn leg] (rfrB.east) -- ++(0.60,0);
+        \node[anchor=east] at (-0.14,-0.28) {$A$};
+        \node[anchor=west] at (1.34,-0.28) {$A$};
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt,
+            minimum width=1.62cm] (rfrV) at (0.60,0.90) {$V^\dagger$};
+        \draw[tn phys leg] (rfrA.north) -- (rfrA.north |- rfrV.south);
+        \draw[tn phys leg] (rfrB.north) -- (rfrB.north |- rfrV.south);
+        \draw[tn phys leg] (rfrV.north) -- ++(0,0.34);
+        \node[anchor=west] at (0.70,1.36) {$j$};
+        \node at (2.50,0) {$=$};
+        \TN@tensordot{rfrC}{(3.55,0)}
+        \draw[tn leg] (rfrC.west) -- ++(-0.55,0);
+        \draw[tn leg] (rfrC.east) -- ++(0.55,0);
+        \TN@upleg{rfrC}{0.46}
+        \TN@uplabel{rfrC}{0.70}{j}
+        \node[anchor=west] at (3.69,-0.28) {$A$};
+    \end{tikzpicture}%
+}
+
+% Isometry canonical form of a normal renormalization fixed point: the
+% virtual chain X, the diagonal weight, the isometry emitting the physical
+% leg, and X^{-1}.
+\newcommand{\TNRFPIsometryCanonicalForm}{%
+    \begin{tikzpicture}[tn picture]
+        \TN@tensordot{icfA}{(0,0)}
+        \draw[tn leg] (icfA.west) -- ++(-0.55,0);
+        \draw[tn leg] (icfA.east) -- ++(0.55,0);
+        \TN@upleg{icfA}{0.46}
+        \TN@uplabel{icfA}{0.70}{i}
+        \node[anchor=east] at (-0.14,-0.28) {$A$};
+        \node at (1.25,0) {$=$};
+        \TN@opdotabove{icfX}{(2.20,0)}{X}
+        \TN@opdotabove{icfL}{(3.20,0)}{\sqrt\Lambda}
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+        (icfU) at (4.30,0.75) {$U$};
+        \TN@opdotabove{icfXi}{(5.40,0)}{X^{-1}}
+        \draw[tn leg] (icfX.west) -- ++(-0.55,0);
+        \draw[tn leg] (icfX.east) -- (icfL.west);
+        \draw[tn leg, rounded corners=2pt] (icfL.east)
+        -| ($(icfU.south)+(-0.14,0)$);
+        \draw[tn leg, rounded corners=2pt] ($(icfU.south)+(0.14,0)$)
+        |- (icfXi.west);
+        \draw[tn leg] (icfXi.east) -- ++(0.55,0);
+        \draw[tn phys leg] (icfU.north) -- ++(0,0.34);
+        \node at ($(icfU.north)+(0,0.56)$) {$i$};
+    \end{tikzpicture}%
+}
+
+% Per-block isometry canonical form of a renormalization fixed point in
+% canonical form: the same chain threaded by the block-index lines j and q,
+% with the coefficient tensor mu on the two index lines.
+\newcommand{\TNRFPIsometryCanonicalFormBlocks}{%
+    \begin{tikzpicture}[tn picture]
+        \TN@tensordot{icbA}{(0,0)}
+        \draw[tn leg] (icbA.west) -- ++(-0.55,0);
+        \draw[tn leg] (icbA.east) -- ++(0.55,0);
+        \TN@upleg{icbA}{0.46}
+        \TN@uplabel{icbA}{0.70}{i}
+        \node[anchor=east] at (-0.14,-0.28) {$A$};
+        \node at (1.25,0) {$=$};
+        \TN@opdotabove{icbX}{(2.20,0)}{X}
+        \TN@opdotabove{icbL}{(3.20,0)}{\sqrt\Lambda}
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+        (icbU) at (4.30,0.75) {$U$};
+        \TN@opdotabove{icbXi}{(5.40,0)}{X^{-1}}
+        \draw[tn leg] (icbX.west) -- ++(-0.55,0);
+        \draw[tn leg] (icbX.east) -- (icbL.west);
+        \draw[tn leg, rounded corners=2pt] (icbL.east)
+        -| ($(icbU.south)+(-0.14,0)$);
+        \draw[tn leg, rounded corners=2pt] ($(icbU.south)+(0.14,0)$)
+        |- (icbXi.west);
+        \draw[tn leg] (icbXi.east) -- ++(0.55,0);
+        \draw[tn phys leg] (icbU.north) -- ++(0,0.34);
+        \node at ($(icbU.north)+(0,0.56)$) {$i$};
+        \draw[tn leg] (1.65,-0.62) -- (5.95,-0.62);
+        \draw[tn leg] (1.65,-1.02) -- (5.95,-1.02);
+        \node[anchor=east] at (1.56,-0.62) {$j$};
+        \node[anchor=east] at (1.56,-1.02) {$q$};
+        \draw[tn leg] (icbX.south) -- (2.20,-1.02);
+        \draw[tn leg] (icbL.south) -- (3.20,-0.62);
+        \draw[tn leg] (4.16,0) -- (4.16,-0.62);
+        \draw[tn leg] (icbXi.south) -- (5.40,-1.02);
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+        (icbMu) at (2.70,-1.60) {$\mu$};
+        \draw[tn leg] ($(icbMu.north)+(-0.12,0)$) -- (2.58,-0.62);
+        \draw[tn leg] ($(icbMu.north)+(0.12,0)$) -- (2.82,-1.02);
+        \fill (2.20,-0.62) circle (0.05);
+        \fill (2.20,-1.02) circle (0.05);
+        \fill (3.20,-0.62) circle (0.05);
+        \fill (4.16,0) circle (0.05);
+        \fill (4.16,-0.62) circle (0.05);
+        \fill (5.40,-0.62) circle (0.05);
+        \fill (5.40,-1.02) circle (0.05);
+        \fill (2.58,-0.62) circle (0.05);
+        \fill (2.82,-1.02) circle (0.05);
+    \end{tikzpicture}%
+}
+
+% Two-site blocking of a simple MPO tensor: two copies contracted along one
+% virtual bond, with the two ket legs and the two bra legs grouped into the
+% blocked physical indices (dashed box).
+\newcommand{\TNMPDOTwoSiteBlocking}{%
+    \begin{tikzpicture}[tn picture]
+        \TN@tensordot{tsbM}{(0,0)}
+        \TN@leftleg{tsbM}{0.60}
+        \TN@rightleg{tsbM}{0.60}
+        \TN@upleg{tsbM}{0.62}
+        \TN@downleg{tsbM}{0.62}
+        \node[anchor=east] at (-0.14,-0.28) {$M$};
+        \node at (1.35,0) {$=$};
+        \TN@tensordot{tsbKa}{(2.70,0)}
+        \TN@tensordot{tsbKb}{(3.90,0)}
+        \draw[tn leg] (tsbKa.west) -- ++(-0.60,0);
+        \draw[tn leg] (tsbKa.east) -- (tsbKb.west);
+        \draw[tn leg] (tsbKb.east) -- ++(0.60,0);
+        \foreach \n in {tsbKa,tsbKb} {
+                \TN@upleg{\n}{0.62}
+                \TN@downleg{\n}{0.62}
+            }
+        \node[anchor=west] at (2.80,-0.56) {$K$};
+        \node[anchor=west] at (4.00,-0.56) {$K$};
+        \draw[densely dashed, rounded corners]
+        (2.28,0.40) rectangle (4.32,-0.40);
+    \end{tikzpicture}%
+}
+
+% Vertical product of two distinct basis tensors, contracted through the
+% shared physical index.
+\newcommand{\TNMPDOBNTVerticalProduct}{%
+    \begin{tikzpicture}[tn picture]
+        \TN@tensordot{vpY}{(0,0.55)}
+        \TN@tensordot{vpX}{(0,-0.55)}
+        \TN@leftleg{vpY}{0.60}
+        \TN@rightleg{vpY}{0.60}
+        \TN@leftleg{vpX}{0.60}
+        \TN@rightleg{vpX}{0.60}
+        \draw[tn phys leg] (vpY.south) -- (vpX.north);
+        \draw[tn phys leg] (vpY.north) -- ++(0,0.34);
+        \draw[tn phys leg] (vpX.south) -- ++(0,-0.34);
+        \node at (-0.52,0.90) {$\mathcal K_y$};
+        \node at (-0.52,-0.90) {$\mathcal K_x$};
+        \node[anchor=west] at (0.95,0) {$=\;0 \quad (x \ne y)$};
+    \end{tikzpicture}%
+}
+
+% The two block closure maps: a boundary insertion on the virtual bond of a
+% block tensor, with the virtual loop closed by the trace, gives an operator
+% on the open physical legs.
+\newcommand{\TNMPDOBlockClosureMap}{%
+    \begin{tikzpicture}[tn picture]
+        \begin{scope}
+            \node[anchor=east] at (-0.90,0) {$M_\alpha(X)\;=$};
+            \TN@opdotabove{bcmX}{(0,0)}{X}
+            \TN@tensordot{bcmM}{(1.10,0)}
+            \TN@upleg{bcmM}{0.52}
+            \TN@downleg{bcmM}{0.52}
+            \draw[tn leg] (bcmX.east) -- (bcmM.west);
+            \draw[tn leg, rounded corners=3pt]
+            (bcmX.west) -- ++(-0.40,0) -- (-0.47,-0.95)
+            -- (1.57,-0.95) -- (1.57,0) -- (bcmM.east);
+            \node at (0.55,-1.18) {$\tr$};
+            \node[anchor=west] at (1.22,0.30) {$M_\alpha$};
+        \end{scope}
+        \begin{scope}[xshift=4.90cm]
+            \node[anchor=east] at (-0.90,0) {$A_\alpha(X)\;=$};
+            \TN@opdotabove{bcaX}{(0,0)}{X}
+            \TN@tensordot{bcaA}{(1.10,0)}
+            \TN@upleg{bcaA}{0.52}
+            \TN@downleg{bcaA}{0.52}
+            \draw[tn leg] (bcaX.east) -- (bcaA.west);
+            \draw[tn leg, rounded corners=3pt]
+            (bcaX.west) -- ++(-0.40,0) -- (-0.47,-0.95)
+            -- (1.57,-0.95) -- (1.57,0) -- (bcaA.east);
+            \node at (0.55,-1.18) {$\tr$};
+            \node[anchor=west] at (1.22,0.30) {$A_\alpha$};
+        \end{scope}
+    \end{tikzpicture}%
+}
+
 \newcommand{\TNGaugeConjugation}[3]{%
     \begin{tikzpicture}[tn picture]
         \TN@opdotabove{tnXl}{(-1.10,0)}{#1}

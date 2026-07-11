@@ -29,14 +29,12 @@ $\mathbf{1}_{m} \otimes B$ with $B$ a $d \times d$ matrix.
   the supremum of a finite, pairwise orthogonal family of isotypic components, each carrying
   such an adapted orthonormal basis.
 
-## Remaining step towards Wolf Thm 6.14
-
 The adapted bases realize the action of the subalgebra on each isotypic component as
 matrix-times-identity blocks. The global change of basis, which concatenates the adapted bases
 of the components into a single unitary matrix conjugating every member of the subalgebra to
 the block-diagonal form, is carried out in `TNLean.Algebra.StarSubalgebraBlockDiagonal`. The
-converse direction of the theorem, that every choice of blocks is attained by a member of the
-subalgebra, remains open.
+reverse inclusion, that every choice of blocks is attained by a member of the subalgebra, is
+proved in `TNLean.Algebra.StarSubalgebraBlockForm`.
 -/
 
 open scoped InnerProductSpace
@@ -54,7 +52,8 @@ basis $(f_{i,j})_{0 \le i < m,\, 0 \le j < d}$ such that for every $A \in S$ the
 $B \in M_{d}(\mathbb{C})$ with, for all $i < m$ and $j < d$,
 $$A\,f_{i,j} \;=\; \sum_{j'} B_{j'j}\, f_{i,j'} :$$
 in the adapted basis the member $A$ acts on the component as $\mathbf{1}_{m} \otimes B$, one
-matrix on the irreducible index, identically across the multiplicity index.
+matrix on the irreducible index, identically across the multiplicity index. The vectors
+$(f_{i,j})_{j < d}$ of the $i$-th copy span one of the pieces of $\mathcal{D}$.
 
 An orthonormal basis $e_0, \ldots, e_{d-1}$ of one piece spreads to the others through the
 inner-product-preserving intertwiners of
@@ -67,6 +66,7 @@ theorem exists_adapted_orthonormal_family_of_sameIsotype
     (hsame : Dc.Pairwise fun p q => S.SameIsotype p q) :
     ∃ (d m : ℕ) (f : Fin m × Fin d → EuclideanSpace ℂ n),
       m = Dc.ncard ∧ (∀ p ∈ Dc, Module.finrank ℂ p = d) ∧
+      (∀ i : Fin m, Submodule.span ℂ (Set.range fun j => f (i, j)) ∈ Dc) ∧
       Orthonormal ℂ f ∧ Submodule.span ℂ (Set.range f) = sSup Dc ∧
       ∀ A ∈ S, ∃ B : Matrix (Fin d) (Fin d) ℂ, ∀ (i : Fin m) (j : Fin d),
         Matrix.toEuclideanLin A (f (i, j)) = ∑ j', B j' j • f (i, j') := by
@@ -115,7 +115,7 @@ theorem exists_adapted_orthonormal_family_of_sameIsotype
     have h1 := congrArg (Submodule.map (u (σ i))) hspan₀
     rw [Submodule.map_span, ← Set.range_comp, hu_map (σ i)] at h1
     exact h1
-  refine ⟨Module.finrank ℂ p₀, Fintype.card ↥Dc, f, ?_, ?_, hf_on, ?_, ?_⟩
+  refine ⟨Module.finrank ℂ p₀, Fintype.card ↥Dc, f, ?_, ?_, ?_, hf_on, ?_, ?_⟩
   · -- The number of copies is the number of pieces of the family.
     rw [← Nat.card_coe_set_eq, Nat.card_eq_fintype_card]
   · -- Every piece has the dimension of the base piece: it is spanned by an orthonormal family
@@ -128,6 +128,10 @@ theorem exists_adapted_orthonormal_family_of_sameIsotype
     have h2 := finrank_span_eq_card hsub.linearIndependent
     rw [hcopy] at h2
     simpa using h2
+  · -- Each copy spans its piece, which is a member of the family.
+    intro i
+    rw [hspan_copy i]
+    exact (σ i).2
   · -- The copies together span the whole component.
     refine le_antisymm ?_ (sSup_le fun q hq => ?_)
     · rw [Submodule.span_le]
@@ -178,10 +182,10 @@ theorem exists_isotypic_tensor_factorization :
         Orthonormal ℂ f ∧ Submodule.span ℂ (Set.range f) = c ∧
         ∀ A ∈ S, ∃ B : Matrix (Fin d) (Fin d) ℂ, ∀ (i : Fin m) (j : Fin d),
           Matrix.toEuclideanLin A (f (i, j)) = ∑ j', B j' j • f (i, j') := by
-  obtain ⟨C, hCfin, hCpair, hCsup, hC⟩ := S.exists_orthogonal_isotypic_decomposition
+  obtain ⟨C, hCfin, hCpair, hCsup, hC, -⟩ := S.exists_orthogonal_isotypic_decomposition
   refine ⟨C, hCfin, hCpair, hCsup, fun c hc => ?_⟩
   obtain ⟨Dc, hne, hfin, hirr, rfl, hortho, hsame⟩ := hC c hc
-  obtain ⟨d, m, f, -, -, hon, hspan, hact⟩ :=
+  obtain ⟨d, m, f, -, -, -, hon, hspan, hact⟩ :=
     S.exists_adapted_orthonormal_family_of_sameIsotype hne hfin hirr hortho hsame
   exact ⟨d, m, f, hon, hspan, hact⟩
 
