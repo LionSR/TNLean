@@ -457,9 +457,9 @@ in it exactly when $\sqrt{\rho}\, Y \sqrt{\rho}$ is fixed by the map. -/
 /-- **Conjugation by the square root is onto the corner-supported fixed points.** Every
 fixed point $X$ of the map that is supported on the support of $\rho$ arises as
 $X = \sqrt{\rho}\, Y \sqrt{\rho}$ for a corner-supported $Y$ whose class lies in the
-weighted corner fixed-point star-algebra. Together with
-`Kraus.mem_weightedCornerFixedPointsStarSubalgebra` this identifies the carrier of the
-star-algebra with the set $\rho^{-1/2}\{X \mid T(X) = X,\ Q X Q = X\}\rho^{-1/2}$ of
+weighted corner fixed-point star-algebra. Together with the membership description of
+the star-algebra (`Kraus.mem_weightedCornerFixedPointsStarSubalgebra`) this identifies
+the carrier with the set $\rho^{-1/2}\{X \mid T(X) = X,\ Q X Q = X\}\rho^{-1/2}$ of
 Corollary 6.7 of *Quantum Channels & Operations* (Wolf 2012), with the inverse square
 root taken on the support of $\rho$.
 
