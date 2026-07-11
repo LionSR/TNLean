@@ -19,6 +19,8 @@ operator theory development.
   root of a positive-semidefinite matrix is Hermitian.
 * `Matrix.PosSemidef.cfc_sqrt_mul_self`: the square of that square root is the
   original matrix.
+* `Matrix.PosSemidef.blockDiagonal'`: a finite dependent block diagonal of
+  positive-semidefinite matrices is positive semidefinite.
 -/
 
 open scoped Matrix ComplexOrder
@@ -55,5 +57,28 @@ theorem PosSemidef.cfc_sqrt_mul_self {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef)
     simp only [Function.comp_apply, id_eq]
     exact congrArg (RCLike.ofReal) (Real.mul_self_sqrt (hρ.eigenvalues_nonneg i))
   rw [hcongr, hρ.isHermitian.cfc_id]
+
+/-- A finite dependent block diagonal of positive-semidefinite matrices is
+positive semidefinite. -/
+theorem PosSemidef.blockDiagonal'
+    {p : Type*} [Finite p] [DecidableEq p]
+    {m : p → Type*} [∀ i, Finite (m i)]
+    (A : ∀ i, Matrix (m i) (m i) ℂ) (hA : ∀ i, (A i).PosSemidef) :
+    (Matrix.blockDiagonal' A).PosSemidef := by
+  classical
+  letI := Fintype.ofFinite p
+  letI (i : p) := Fintype.ofFinite (m i)
+  let B : ∀ i, Matrix (m i) (m i) ℂ :=
+    fun i ↦ (hA i).isHermitian.cfc Real.sqrt
+  have hBherm (i) : (B i).IsHermitian := (hA i).cfc_sqrt_isHermitian
+  have hBB (i) : B i * B i = A i := (hA i).cfc_sqrt_mul_self
+  have hEq : Matrix.blockDiagonal' A =
+      (Matrix.blockDiagonal' B)ᴴ * Matrix.blockDiagonal' B := by
+    rw [Matrix.blockDiagonal'_conjTranspose, ← Matrix.blockDiagonal'_mul]
+    congr 1
+    funext i
+    rw [show (B i)ᴴ = B i from hBherm i, hBB]
+  rw [hEq]
+  exact Matrix.posSemidef_conjTranspose_mul_self _
 
 end Matrix

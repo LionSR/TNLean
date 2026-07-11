@@ -60,33 +60,12 @@ noncomputable def omega (data : ExplicitEtaOperators hη) (k h : Fin hη.m) :
   Matrix.blockDiagonal' fun l ↦
     Matrix.kroneckerMap (· * ·) (data.eta k l) (data.eta l h)
 
-private theorem posSemidef_blockDiagonal'
-    {p : Type*} [Finite p] [DecidableEq p]
-    {n : p → Type*} [∀ i, Finite (n i)]
-    (A : ∀ i, Matrix (n i) (n i) ℂ) (hA : ∀ i, (A i).PosSemidef) :
-    (Matrix.blockDiagonal' A).PosSemidef := by
-  classical
-  letI := Fintype.ofFinite p
-  letI (i : p) := Fintype.ofFinite (n i)
-  let B : ∀ i, Matrix (n i) (n i) ℂ :=
-    fun i ↦ (hA i).isHermitian.cfc Real.sqrt
-  have hBherm (i) : (B i).IsHermitian := (hA i).cfc_sqrt_isHermitian
-  have hBB (i) : B i * B i = A i := (hA i).cfc_sqrt_mul_self
-  have hEq : Matrix.blockDiagonal' A =
-      (Matrix.blockDiagonal' B)ᴴ * Matrix.blockDiagonal' B := by
-    rw [Matrix.blockDiagonal'_conjTranspose, ← Matrix.blockDiagonal'_mul]
-    congr 1
-    funext i
-    rw [show (B i)ᴴ = B i from hBherm i, hBB]
-  rw [hEq]
-  exact Matrix.posSemidef_conjTranspose_mul_self _
-
 /-- Each $\Omega_{k,h}$ is positive semidefinite.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1527--1535. -/
 theorem omega_pos (data : ExplicitEtaOperators hη) (k h : Fin hη.m) :
     (data.omega k h).PosSemidef := by
-  apply posSemidef_blockDiagonal'
+  apply Matrix.PosSemidef.blockDiagonal'
   intro l
   exact (data.eta_pos k l).kronecker (data.eta_pos l h)
 
@@ -189,7 +168,7 @@ theorem trace_normalizedEta (data : ExplicitEtaOperators hη)
   rcases mul_ne_zero_iff.mp hactive with ⟨ha, hb⟩
   have haC : (factor.a k : ℂ) ≠ 0 := by exact_mod_cast ha
   have hbC : (factor.b h : ℂ) ≠ 0 := by exact_mod_cast hb
-  simp [normalizedEta, Matrix.trace_smul, factor.trace_eta]
+  simp only [normalizedEta, Matrix.trace_smul, factor.trace_eta]
   field_simp
 
 /-- The normalized direct-sum operator is positive semidefinite. On a zero
@@ -213,7 +192,7 @@ theorem trace_normalizedOmega (data : ExplicitEtaOperators hη)
   rcases mul_ne_zero_iff.mp hactive with ⟨ha, hb⟩
   have haC : (factor.a k : ℂ) ≠ 0 := by exact_mod_cast ha
   have hbC : (factor.b h : ℂ) ≠ 0 := by exact_mod_cast hb
-  simp [normalizedOmega, Matrix.trace_smul,
+  simp only [normalizedOmega, Matrix.trace_smul,
     data.trace_omega_eq_mul factor k h]
   field_simp
 
