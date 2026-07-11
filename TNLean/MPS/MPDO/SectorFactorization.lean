@@ -128,6 +128,11 @@ sector weight and the inverse of the selected tail entry. The tail entry and
 its inverse are attached to $l_k$; the source leaves this distribution between
 $l_k$ and $r_k$ unspecified.
 
+**Local fix (tail index):** the selected tail entry is
+$R_{\beta_3,\alpha_1}$, as in `inverseMapThreeSiteContraction_eq`, rather than
+the entry printed in the source display.  The correction is recorded in
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+
 Source: arXiv:1606.00608, Appendix C.2, lines 1435--1448. -/
 noncomputable def sectorTensorL
     {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
@@ -163,6 +168,11 @@ splitting of the middle site. The diagonal sectors are supplied by
 `MPOTensor.inverseMap_hayashi_sector_comparison` and the off-diagonal sectors
 vanish by `MPOTensor.inverseMap_hayashi_sector_offdiagonal`; dividing by the
 selected tail entry yields the factorization.
+
+**Local fix (tail index):** the nonzero entry is selected at the pair
+$(\beta_3,\alpha_1)$, as in `inverseMapThreeSiteContraction_eq`, rather than
+at the pair printed in the source display.  The correction is recorded in
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1429--1448. -/
 theorem physicalSlice_sector_factorization
