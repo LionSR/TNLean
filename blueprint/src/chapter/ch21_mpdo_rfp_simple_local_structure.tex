@@ -88,12 +88,23 @@ strong subadditivity for a normalized three-site reduced state.
     \leanok
     \uses{thm:mpdo_sal_ssa_equality, thm:ssa_equality_reindex_factors,
         thm:sal_implies_eta_structure}
-    Saturation gives equality in strong subadditivity for the three singleton
-    factors in flattened block coordinates. Relabel each singleton factor by
-    its canonical bijection with the one-site index. By
-    Theorem~\ref{thm:ssa_equality_reindex_factors}, the resulting operator
-    $\sigma_3^{(4)}(K)$ still satisfies the equality. Positivity and unit trace
-    follow from the normalized reduced state, so
+    Let $\rho^{\mathrm{flat}}$ denote the three-site marginal in flattened
+    block coordinates. By Theorem~\ref{thm:mpdo_sal_ssa_equality},
+    \[
+        S(\rho^{\mathrm{flat}}_{ABC})+S(\rho^{\mathrm{flat}}_B)
+        =S(\rho^{\mathrm{flat}}_{AB})+S(\rho^{\mathrm{flat}}_{BC}).
+    \]
+    Each singleton block has the canonical identification
+    \[
+        e_{\mathrm{site}}:\Fin{d}\simeq\Fin{d^1},
+        \qquad
+        E=e_{\mathrm{site}}\times e_{\mathrm{site}}\times e_{\mathrm{site}},
+    \]
+    and reindexing $\rho^{\mathrm{flat}}$ along $E$ gives
+    $\sigma_3^{(4)}(K)$. Hence
+    Theorem~\ref{thm:ssa_equality_reindex_factors} preserves the displayed
+    equality. Positivity and unit trace follow from the normalized reduced
+    state, so
     Theorem~\ref{thm:sal_implies_eta_structure} gives the required quantum
     Markov decomposition.
 \end{proof}
