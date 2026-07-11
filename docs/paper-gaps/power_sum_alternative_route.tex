@@ -59,7 +59,11 @@ sequences which vanishes eventually vanishes at every exponent, so the equality
 holds for all positive $N$. The formal proof then applies the
 unequal-cardinality finite-range power-sum theorem.\footnote{\path{Matrix.sum_pow_eq_implies_card_eq_and_multiset_eq_of_le_max_card}.}
 The endpoint used by the BNT comparison is the corresponding sector-weight
-comparison lemma.\footnote{\path{MPSTensor.SectorWeightData.copies_eq_and_weight_multiset_eq_of_eventually_coeff_eq}.}
+comparison lemma.\footnote{\path{MPSTensor.matched_sector_weight_multiset_eq} in
+    \path{TNLean/MPS/FundamentalTheorem/SectorBNT/WeightEquiv.lean}, which composes
+    the extension to all positive exponents
+    (\path{MPSTensor.SectorWeightData.power_sums_eq_of_eventually_eq_hetero}) with
+    the unequal-cardinality power-sum theorem.}
 
 The conclusion is
 \[
