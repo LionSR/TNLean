@@ -78,9 +78,13 @@ The realignment (\ghissue{3712}) introduces the vertically viewed tensor
 \eqref{eq:vertical-letters} as a formal object and restates the vertical
 canonical-form predicate on it: there are a basis of normal tensors
 $\{M_\alpha\}_\alpha$ for $\widetilde M$, positive diagonal matrices
-$\mu_\alpha=\operatorname{diag}(\omega_{\alpha,1},\dots,\omega_{\alpha,m_\alpha})$,
-and an isometry $U$ on the physical space satisfying \eqref{eq:umu} letter by
-letter over the horizontal bond pairs.  Since each $\mu_\alpha$ is diagonal,
+$\mu_\alpha=\operatorname{diag}(\omega_{\alpha,1},\dots,\omega_{\alpha,m_\alpha})$
+with $m_\alpha\geq1$, and an isometry $U$ on the physical space satisfying
+\eqref{eq:umu} letter by letter over the horizontal bond pairs.  The isometry
+is required to be a unitary change of the physical basis ($U^\dagger U=\Id$
+and $UU^\dagger=\Id$): the canonical form decomposes the physical space
+exactly, and the source discards $U$ because ``it just changes the physical
+basis on each site'' (line~959).  Since each $\mu_\alpha$ is diagonal,
 the summand $\mu_\alpha\otimes M_\alpha$ is the direct sum
 $\bigoplus_k\omega_{\alpha,k}M_\alpha$, so the right-hand side of
 \eqref{eq:umu} is a block-diagonal tensor over the pairs $(\alpha,k)$ in
