@@ -47,6 +47,21 @@
     \label{fig:mpdo_bnt_vertical_product}
 \end{figure}
 
+\begin{figure}[ht]
+    \centering
+    \TNMPDOProjectorAbsorption
+    \caption{Projector absorption for a basis tensor: expanding the identity
+        $\sum_jP_j=\Id$ on the ket and bra legs of $\mathcal K_i$ and using
+        the local orthogonality relations $P_j\mathcal K_iP_{j'}=0$ for
+        $j\ne j'$ or $i\ne j$ leaves only the diagonal term, so
+        $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$. This is the display
+        in the proof of
+        \cite[Appendix~C.2, lines~1745--1751]{Cirac2016MPDO_arXiv}, and it
+        implies the orthogonality of
+        Figure~\ref{fig:mpdo_bnt_vertical_product}.}
+    \label{fig:mpdo_projector_absorption}
+\end{figure}
+
 \begin{definition}[Simple-MPDO blocked doubled-index structure]
     \label{def:simple_mpdo_blocked_rfp_data}
     \lean{MPOTensor.SimpleMPDOBlockedRFPData}

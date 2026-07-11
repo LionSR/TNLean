@@ -20,6 +20,19 @@
     for every word $w$ of length $L$ implies $\Delta_k=0$ for every block $k$.
 \end{definition}
 
+\begin{figure}[ht]
+    \centering
+    \TNMPDOHorizontalCanonicalForm
+    \caption{Horizontal canonical form of the doubled tensor: the gauge $X$,
+    one basis tensor $\mathcal K$ carrying the ket and bra legs, and
+    $X^{-1}$, threaded by the block-index lines $j$ and $q$. In the source
+    display the weights $\mu_j$ are absorbed into the basis tensors, so the
+    basis tensor taps only the line $j$ while the gauge factors $X_{j,q}$
+    tap both lines. This is
+    \cite[Appendix~C.2, lines~1660--1665]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_horizontal_canonical_form}
+\end{figure}
+
 \begin{definition}[Vertically viewed tensor of an MPO]%
     \label{def:vertical_tensor_mpdo}
     \lean{MPOTensor.verticalTensor}
@@ -143,6 +156,21 @@
     spanning condition, hence the horizontal canonical-form data.
 \end{remark}
 
+\begin{figure}[ht]
+    \centering
+    \TNMPDOBlockInjectiveInverse
+    \caption{The inverse tensor of a block-injective canonical form:
+    contracting $K^{-1}$ with the doubled physical index of the canonical
+    form passes the virtual legs of the gauge factors $X$ and $X^{-1}$ to
+    the virtual legs of $K^{-1}$ and ties its block index to the block
+    line $j$, which is the matrix-unit identity
+    $\sum_p(\mathcal K_j^p)_{\alpha,\beta}
+    (K^{-1,p}_{j'})_{\alpha',\beta'}
+    =\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}\delta_{j,j'}$.
+    This is \cite[Appendix~C.2, lines~1666--1670]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_block_injective_inverse}
+\end{figure}
+
 \begin{theorem}[Finite block-separation criterion]
     \label{thm:propblockinj_abstract}
     \lean{MPSTensor.hasBiCF_of_propBlockInjective}
@@ -179,10 +207,24 @@
     block $A_k$.
 \end{lemma}
 
+\begin{figure}[ht]
+    \centering
+    \TNMPDOFirstSiteInsertionHypothesis\\[10pt]
+    \TNMPDOFirstSiteInsertionBlockwise
+    \caption{Blockwise equality from agreement on the MPV family. Top: the
+    hypothesis $Y_1V^{(N)}(A)=Z_1V^{(N)}(A)$ for every length $N$, with the
+    operator inserted on the physical leg of the first site. Bottom: the
+    conclusion that the two insertions agree on every block $A_k$ of the
+    canonical form. These are the two displays of Lemma~L,
+    \cite[Appendix~C.3, lines~1835--1846]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_first_site_insertion_agreement}
+\end{figure}
+
 \begin{proof}
     \leanok
     \uses{def:block_diagonal_tensor, def:injective, thm:propblockinj_abstract}
-    This is Lemma~L of \cite[Appendix~A]{Cirac2016MPDO_arXiv}, using the finite
+    This is Lemma~L of
+    \cite[Appendix~C.3, lines~1835--1846]{Cirac2016MPDO_arXiv}, using the finite
     criterion from Theorem~\ref{thm:propblockinj_abstract}.
     Expanding the hypothesis over a word of length~$L+1$ beginning with the
     fixed site and folding each block contribution into a trace pairing
@@ -196,6 +238,18 @@
     difference to be zero, and the nonzero weights give the blockwise equality
     of the two first-site insertions.
 \end{proof}
+
+\begin{figure}[ht]
+    \centering
+    \TNMPDOInsertionTracePairing
+    \caption{The trace-pairing step in the proof of the preceding lemma: for
+    every $W$ in the span of the length-$N$ word evaluations of the
+    canonical form, $\tr(WA^Y)=\tr(WA^Z)$, where $A^Y$ denotes the tensor
+    with $Y$ applied to its physical index. Compare the two displays in the
+    proof of Lemma~L,
+    \cite[Appendix~C.3, lines~1848--1858]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_insertion_trace_pairing}
+\end{figure}
 
 \begin{theorem}[One-sided invariant corners of positive operators]
     \label{thm:mpdo_opposite_corner_zero}
@@ -467,6 +521,98 @@
     Since $x\mapsto x^p$ is injective on the nonnegative reals, every entry
     $Q'_{ij}$ with $\lambda_i\ne\lambda_j$ vanishes, so
     $Q'\Lambda=\Lambda Q'$.  Conjugating back gives $QH=HQ$.
+\end{proof}
+
+\begin{definition}[Periodic-sector projector]
+    \label{def:mpdo_periodic_sector_projector}
+    \lean{MPOTensor.PeriodicSectorProjector}
+    \leanok
+    \uses{def:mpo_tensor, def:mpo_family, def:mpdo_vertical_one_site_actions}
+    Let $M$ be an MPO tensor.  A \emph{periodic-sector projector} for $M$
+    with exponent $p\ge 1$ is an orthogonal projector $Q$ on
+    the physical space such that for every $N\ge 0$, with
+    $Q_1=Q\otimes\Id^{\otimes N}$ acting on the first site,
+    \[
+        Q_1H^{(N+1)}\ne H^{(N+1)}Q_1
+        \quad\text{and}\quad
+        Q_1\bigl[H^{(N+1)}\bigr]^p=\bigl[H^{(N+1)}\bigr]^pQ_1.
+    \]
+    These are the commutation identities that the proof of
+    \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}, lines 1889--1891, attaches
+    to a nontrivial vertical period; the second family is the displayed
+    identity at lines 1890--1891.
+\end{definition}
+
+\begin{theorem}[No periodic-sector projector for a matrix product density
+    operator]
+    \label{thm:mpdo_no_periodic_sector_projector}
+    \lean{MPOTensor.isEmpty_periodicSectorProjector}
+    \leanok
+    \uses{def:mpdo, def:mpdo_periodic_sector_projector,
+        thm:psd_commute_of_commute_pow}
+    Let $M$ generate matrix product density operators.  Then $M$ admits no
+    periodic-sector projector.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:psd_commute_of_commute_pow}
+    Suppose $Q$ were such a projector.  Every $H^{(N)}$ is positive
+    semidefinite, so commutation of $Q_1$ with $[H^{(N)}]^p$ implies
+    commutation with $H^{(N)}$
+    (Theorem~\ref{thm:psd_commute_of_commute_pow}), contradicting
+    $Q_1H^{(N)}\ne H^{(N)}Q_1$.  This is the contradiction concluding the
+    periodic-sector step in the proof of
+    \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}, lines 1892--1893.
+\end{proof}
+
+\begin{definition}[Periodic vectors supply projectors]
+    \label{def:mpdo_periodic_vector_yields_projector}
+    \lean{MPOTensor.PeriodicVectorYieldsProjector}
+    \leanok
+    \uses{def:vertical_tensor_mpdo, def:no_periodic_vectors,
+        def:mpdo_periodic_sector_projector}
+    Say that \emph{periodic vectors of $M$ supply projectors} if for every
+    nontrivial $p$-periodic vector of the vertically viewed tensor
+    $\widetilde M$ --- an irreducible restriction $B$ of $\widetilde M$ to a
+    minimal invariant subspace whose transfer map has a peripheral
+    eigenvalue different from its spectral radius, as in
+    Definition~\ref{def:no_periodic_vectors} --- there is an exponent
+    $q\ge 1$ for which $M$ admits a periodic-sector projector.  The proof of
+    \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}, lines 1889--1891, asserts
+    this implication from the general theory of the peripheral spectrum of
+    completely positive maps, with $q$ equal to the period $p$ of the
+    vector; only the existence of some exponent enters the exclusion
+    argument.  The derivation of the projector from the cyclic decomposition
+    of the peripheral spectrum remains open.
+    % Gap recorded in docs/paper-gaps/cpgsv17_periodic_sector_projector.tex.
+\end{definition}
+
+\begin{theorem}[No periodic vectors in the vertical direction]
+    \label{thm:mpdo_vertical_no_periodic_vectors}
+    \lean{MPOTensor.hasNoPeriodicVectors_verticalTensor}
+    \leanok
+    \uses{def:mpdo, def:vertical_tensor_mpdo, def:no_periodic_vectors,
+        def:mpdo_periodic_vector_yields_projector,
+        thm:mpdo_no_periodic_sector_projector}
+    Let $M$ generate matrix product density operators and suppose that
+    periodic vectors of $M$ supply projectors.  Then the vertically viewed
+    tensor $\widetilde M$ has no nontrivial $p$-periodic vectors.  This is
+    the periodic-sector step in the proof of
+    \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}, lines 1888--1893, granted
+    the projector that the source draws from the general theory of the
+    peripheral spectrum.
+    % Gap recorded in docs/paper-gaps/cpgsv17_periodic_sector_projector.tex.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_periodic_vector_yields_projector,
+        thm:mpdo_no_periodic_sector_projector}
+    A nontrivial $p$-periodic vector of $\widetilde M$ supplies a
+    periodic-sector projector for $M$, and
+    Theorem~\ref{thm:mpdo_no_periodic_sector_projector} shows that no such
+    projector exists.
 \end{proof}
 
 \begin{theorem}[Positive trace of nonzero positive semidefinite matrices]
@@ -1132,6 +1278,10 @@
         thm:mpdo_first_site_invariant_comm,
         thm:blockwise_one_sub_mp_zero,
         thm:psd_commute_of_commute_pow,
+        def:mpdo_periodic_sector_projector,
+        def:mpdo_periodic_vector_yields_projector,
+        thm:mpdo_no_periodic_sector_projector,
+        thm:mpdo_vertical_no_periodic_vectors,
         thm:mpdo_sector_compression_trace_pos,
         def:mpdo_sector_projector,
         thm:mpdo_sector_trace_identity,
@@ -1162,6 +1312,10 @@
         thm:mpdo_first_site_invariant_comm,
         thm:blockwise_one_sub_mp_zero,
         thm:psd_commute_of_commute_pow,
+        def:mpdo_periodic_sector_projector,
+        def:mpdo_periodic_vector_yields_projector,
+        thm:mpdo_no_periodic_sector_projector,
+        thm:mpdo_vertical_no_periodic_vectors,
         thm:mpdo_sector_compression_trace_pos,
         def:mpdo_sector_projector,
         thm:mpdo_sector_trace_identity,
@@ -1175,11 +1329,17 @@
     Theorem~\ref{thm:blockwise_one_sub_mp_zero} shows
     that every self-adjoint $P$ with $PM=PMP$ on the vertically viewed tensor
     gives $(\Id-P)MP=0$ on every horizontal canonical-form block.
-    Theorem~\ref{thm:psd_commute_of_commute_pow} supplies the final operator
-    implication in the periodic-sector contradiction: an orthogonal projector
-    commuting with $[H^{(N)}]^p$ commutes with $H^{(N)}$.  It remains to prove
-    that a nontrivial vertical period supplies one orthogonal projector $Q$
-    with the two all-length properties stated in source lines 1889--1890.
+    Theorem~\ref{thm:mpdo_vertical_no_periodic_vectors} excludes nontrivial
+    $p$-periodic vectors of the vertically viewed tensor:
+    Theorem~\ref{thm:mpdo_no_periodic_sector_projector} rules out any
+    periodic-sector projector, since by
+    Theorem~\ref{thm:psd_commute_of_commute_pow} an orthogonal projector
+    commuting with $[H^{(N)}]^p$ commutes with $H^{(N)}$.  It remains to
+    prove that a nontrivial vertical period supplies a periodic-sector
+    projector with the two all-length properties stated in source
+    lines 1889--1890
+    (Definition~\ref{def:mpdo_periodic_vector_yields_projector}), which the
+    source draws from the general theory of the peripheral spectrum.
     One must then apply the canonical-form theorem in the vertical direction
     to the vertically viewed tensor $\widetilde M$, obtaining a decomposition
     \[
