@@ -339,7 +339,7 @@ and the removal of the corner restriction):
 
 Wolf's statement quantifies over an arbitrary maximum-rank fixed-point
 density matrix; the formalized statements produce one fixed point of maximal
-support (a maximum-rank fixed point after normalization) and realize the
+support and realize the
 conjugated set there. Transferring the statement to every maximum-rank fixed
 point (by identifying the supports of any two of them) is not formalized
 (see `docs/paper-gaps/wolf_cor67_maximal_support_restriction.tex`).
