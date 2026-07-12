@@ -53,6 +53,8 @@ _DIAGRAM_ARGS: dict[str, str] = {
     "TNEtaSectorDecomposition": "",
     "TNMPDOTwoSiteTraceAndShift": "",
     "TNMPDOThreeSiteTraceAndShift": "",
+    "TNMPDORefinementConstruction": "",
+    "TNMPDORefinementDirection": "",
     "TNMPDOTwoSiteClosureFactorization": "",
     "TNMPDOThreeSiteClosureFactorization": "",
     "TNMPDOCyclicEtaContraction": "",
