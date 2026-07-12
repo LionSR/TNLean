@@ -423,6 +423,8 @@ the change of basis between the two resulting direct sums.
     \label{def:mpdo_final_sector_multiplicity_spaces}
     \lean{MPOTensor.BNTFusionIsometryFamily.LeftFinalMultiplicity}
     \lean{MPOTensor.BNTFusionIsometryFamily.RightFinalMultiplicity}
+    \lean{MPOTensor.BNTFusionIsometryFamily.leftFinalIndexEquiv}
+    \lean{MPOTensor.BNTFusionIsometryFamily.rightFinalIndexEquiv}
     \leanok
     \uses{def:mpdo_bnt_fusion_isometry_family}
     Fix a final label $\varepsilon$.  The multiplicity spaces of the two
@@ -511,4 +513,40 @@ the change of basis between the two resulting direct sums.
     Restrict Theorem~\ref{thm:mpdo_right_fusion_apply} to the rows and columns
     whose final label is $\varepsilon$.  The outer block-diagonal matrix then
     retains precisely the displayed $\varepsilon$-blocks.
+\end{proof}
+
+\begin{theorem}[Injective fixed-final intertwiners]%
+    \label{thm:mpdo_injective_fixed_final_intertwiner}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        exists_reindexed_intertwiner_eq_kronecker_one_of_isInjective}
+    \leanok
+    \uses{def:mpdo_final_sector_multiplicity_spaces, def:injective}
+    Suppose that $M_\varepsilon$ is injective.  Let $C$ be a matrix from the
+    right fixed-final-sector space to the left fixed-final-sector space.  Under
+    the canonical identifications with
+    $\mathcal H^{\mathrm L}_{\varepsilon}\otimes\C^{D_\varepsilon}$ and
+    $\mathcal H^{\mathrm R}_{\varepsilon}\otimes\C^{D_\varepsilon}$, assume
+    that, for every pair of physical indices $i,j$,
+    \[
+        (1_{\mathcal H^{\mathrm L}_{\varepsilon}}\otimes M_\varepsilon^{ij})C
+        =C(1_{\mathcal H^{\mathrm R}_{\varepsilon}}\otimes
+        M_\varepsilon^{ij}).
+    \]
+    Then there is a rectangular matrix
+    $F:\mathcal H^{\mathrm R}_{\varepsilon}\to
+    \mathcal H^{\mathrm L}_{\varepsilon}$ such that
+    \[
+        C=F\otimes 1_{D_\varepsilon}.
+    \]
+    This conclusion is conditional on the supplied matrix $C$.  It does not
+    assert the existence or invertibility of $C$ or $F$, and it does not
+    identify the dimensions of the positive diagonal matrices $\chi$ with the
+    fusion multiplicities in \cite[eq.~(Fmove)]{Bultinck2017Anyons}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:amplified_center_scalar}
+    Apply Lemma~\ref{lem:amplified_center_scalar} to the family
+    $\{M_\varepsilon^{ij}\}_{i,j}$.  This family spans the full matrix algebra
+    by injectivity, and the assumed relation is precisely the amplified
+    intertwining identity of that lemma.
 \end{proof}
