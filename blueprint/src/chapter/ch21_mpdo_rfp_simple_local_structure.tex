@@ -3408,10 +3408,15 @@ $\widehat{\cal K}$.
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.localizedPhysicalTMap}
     \leanok
     \uses{def:mpdo_physical_t_map}
-    Reassociate three sites as $(12)3$, apply
-    $\widehat{\mathcal T}\otimes\operatorname{id}$, and reassociate the
-    result as $1(2(34))$. This defines the localized refinement channel on
-    right-associated physical coordinates.
+    Reassociating three right-associated sites as $(12)3$, applying
+    $\widehat{\mathcal T}\otimes\operatorname{id}$ to the first two, and
+    reassociating the result back to $1(2(34))$ defines the localized
+    refinement channel
+    \[
+      \widehat{\mathcal T}_{(12)3}:
+      M_{q^3}(\mathbb C)\longrightarrow M_{q^4}(\mathbb C)
+    \]
+    on right-associated physical coordinates.
 \end{definition}
 
 \begin{theorem}[The localized physical refinement is a channel]
@@ -3458,10 +3463,15 @@ $\widehat{\cal K}$.
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.localizedPhysicalSMap}
     \leanok
     \uses{def:mpdo_physical_s_map}
-    Reassociate four sites as $(123)4$, apply
-    $\widehat{\mathcal S}\otimes\operatorname{id}$, and reassociate the
-    result as $1(23)$. This defines the localized coarse-graining channel on
-    right-associated physical coordinates.
+    Reassociating four right-associated sites as $(123)4$, applying
+    $\widehat{\mathcal S}\otimes\operatorname{id}$ to the first three, and
+    reassociating the result back to $1(23)$ defines the localized
+    coarse-graining channel
+    \[
+      \widehat{\mathcal S}_{(123)4}:
+      M_{q^4}(\mathbb C)\longrightarrow M_{q^3}(\mathbb C)
+    \]
+    on right-associated physical coordinates.
 \end{definition}
 
 \begin{theorem}[The localized physical coarse-graining is a channel]

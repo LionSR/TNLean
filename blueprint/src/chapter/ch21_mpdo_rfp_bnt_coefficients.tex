@@ -52,9 +52,12 @@
     \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.eq_sum}
     \leanok
     \uses{def:mpdo_bnt_label_same_length_product_form}
-    Under same-length BNT product form, the product of two length-$L$
-    BNT-label operators is the corresponding finite linear combination of
-    length-$L$ BNT-label operators.
+    Under same-length BNT product form, for every positive length $L$,
+    \[
+        O_L(M_\alpha)O_L(M_\beta)
+        = \sum_\gamma
+        c^{(L)}_{\alpha,\beta,\gamma} O_L(M_\gamma).
+    \]
 \end{theorem}
 \begin{proof}\leanok
     This is exactly the defining equality of same-length product form.
@@ -91,9 +94,12 @@
     \lean{MPOTensor.BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.eq_sum}
     \leanok
     \uses{def:mpdo_bnt_label_idempotent_coefficient_form}
-    Under BNT idempotent coefficient form, each $m_\gamma$ is the
-    corresponding finite linear combination of products $m_\alpha m_\beta$
-    with the length-one coefficients $c^{(1)}_{\alpha,\beta,\gamma}$.
+    Under BNT idempotent coefficient form, for every BNT label $\gamma$,
+    \[
+        m_\gamma =
+        \sum_{\alpha,\beta}
+        c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta.
+    \]
 \end{theorem}
 \begin{proof}\leanok
     This is exactly the defining equality of BNT idempotent coefficient form.
@@ -142,8 +148,13 @@
     \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.blocked_coeff_eq}
     \leanok
     \uses{def:mpdo_bnt_blocked_basis_coefficient_comparison}
-    Under a BNT comparison with blocked coefficients, each chosen blocked-basis
-    multiplication coefficient is the corresponding BNT-label coefficient.
+    Under a BNT comparison with blocked coefficients, for every positive
+    blocked length $n$ and indices $i,j,k$,
+    \[
+        c^{(n)}_{i,j,k}
+        =
+        c^{(n)}_{\sigma_n(i),\sigma_n(j),\tau_n(k)}.
+    \]
 \end{theorem}
 \begin{proof}\leanok
     This is exactly the defining equality of the comparison.
@@ -172,8 +183,10 @@
     \uses{def:mpdo_bnt_label_positive_length_chi_trace_power_form,
         thm:mpdo_trace_matrix_pow}
     Under positive-length BNT-label trace-power form, for every $L>0$,
-    $c^{(L)}_{\alpha,\beta,\gamma}$ is the trace of
-    $\chi_{\alpha,\beta,\gamma}^{L}$.
+    \[
+        c^{(L)}_{\alpha,\beta,\gamma}
+        = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L}).
+    \]
 \end{theorem}
 \begin{proof}\leanok
     Combine the defining positive-length trace-power identity with the trace
@@ -349,9 +362,15 @@
     \lean{MPOTensor.AlgebraStructureData.BlockedStructureChiFamily}
     \leanok
     \uses{def:mpdo_blocked_structure_coefficients}
-    A dependent diagonal matrix family indexed by the blocked multiplication
-    triples $(n,i,j,k)$, where $i$ and $j$ label basis elements of
-    $\mathcal{A}_n$ and $k$ labels a basis element of $\mathcal{A}_{2n}$.
+    For each blocked multiplication triple $(n,i,j,k)$, where $i$ and $j$
+    label basis elements of $\mathcal{A}_n$ and $k$ labels a basis element of
+    $\mathcal{A}_{2n}$, a size $r_{n,i,j,k} \in \N$ and diagonal entries
+    $\chi_{n,i,j,k,1}, \ldots, \chi_{n,i,j,k,r_{n,i,j,k}} \in \C$, giving the
+    diagonal matrix
+    \[
+        \chi_{n,i,j,k}
+        = \diag\bigl(\chi_{n,i,j,k,1}, \ldots, \chi_{n,i,j,k,r_{n,i,j,k}}\bigr).
+    \]
     This is a blocked-basis analog of the uniform BNT-label family in
     \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}; the remaining uniformity
     gap is recorded in
@@ -364,8 +383,11 @@
     \leanok
     \uses{def:mpdo_blocked_structure_chi_family}
     For each blocked multiplication triple $(n,i,j,k)$ and every exponent
-    $L$, the trace of the $L$-th power of its diagonal matrix is the sum of the
-    $L$-th powers of the corresponding diagonal entries.
+    $L$,
+    \[
+        \operatorname{tr}(\chi_{n,i,j,k}^{\,L})
+        = \sum_r \chi_{n,i,j,k,r}^{\,L}.
+    \]
 \end{theorem}
 \begin{proof}\leanok
     Diagonal matrices raise to powers entrywise and the trace of a diagonal
@@ -398,9 +420,11 @@
     \uses{def:mpdo_has_blocked_structure_chi_trace_power_form,
         thm:mpdo_blocked_structure_chi_trace_matrix_pow}
     Under trace-power form for the blocked multiplication coefficients,
-    for every positive blocked size $n$, the coefficient $c^{(n)}_{i,j,k}$ is
-    the trace of the $n$-th power of the diagonal matrix attached to
-    $(n,i,j,k)$.
+    for every positive blocked size $n$,
+    \[
+        c^{(n)}_{i,j,k}
+        = \operatorname{tr}(\chi_{n,i,j,k}^{\,n}).
+    \]
 \end{theorem}
 \begin{proof}\leanok
     Combine the defining trace-power identity with the trace formula for
@@ -522,9 +546,10 @@
     length independent. Then every diagonal entry
     $\chi_{\alpha,\beta,\gamma,r}$ lies in $\{0,1\}$, as stated in
     \cite[Section~4.5]{Cirac2016MPDO_arXiv}; by positivity every entry
-    equals one. Consequently, at every positive length the coefficient
-    $c^{(L)}_{\alpha,\beta,\gamma}$ is the size of the diagonal matrix
-    $\chi_{\alpha,\beta,\gamma}$, a natural number.
+    equals one. Consequently, at every positive length,
+    \[
+        c^{(L)}_{\alpha,\beta,\gamma} = r_{\alpha,\beta,\gamma} \in \N.
+    \]
 \end{theorem}
 \begin{proof}\leanok
     For fixed labels, the trace-power form turns length independence into
@@ -545,9 +570,12 @@
     \uses{def:mpdo_bnt_label_length_independent,
         def:mpdo_bnt_label_positive_length_chi_trace_power_form}
     If a BNT-label coefficient system is in trace-power form with respect
-    to a diagonal $\chi$-family all of whose entries equal one, then it is
-    length independent: at every positive length each coefficient equals
-    the size of the corresponding diagonal matrix.
+    to a diagonal $\chi$-family all of whose entries equal one, then for
+    every $L>0$,
+    \[
+        c^{(L)}_{\alpha,\beta,\gamma} = r_{\alpha,\beta,\gamma},
+    \]
+    so the coefficient system is length independent.
 \end{theorem}
 \begin{proof}\leanok
     The power sums of a family of ones do not depend on the exponent.
