@@ -1723,6 +1723,37 @@ strong subadditivity for a normalized three-site reduced state.
     can reach $k$ whenever $k\to h$ is an edge.
 \end{definition}
 
+\begin{theorem}[Closed-walk criterion for vertex phases]%
+    \label{thm:directed_cycle_coboundary}
+    \lean{TNLean.Algebra.DirectedWalk.exists_vertex_of_closedWalk_weight_eq_one}
+    \leanok
+    Let $E$ be a directed relation on a set $V$, and suppose that every edge
+    $a\to b$ admits a directed return walk from $b$ to $a$. Let $G$ be a
+    group and assign a weight $\kappa_{a,b}\in G$ to each ordered
+    pair of vertices. If the product of the edge weights along every closed
+    directed walk is one, then there are vertex weights $z_a\in G$ such that
+
+    \[
+        \kappa_{a,b}=z_a^{-1}z_b
+    \]
+    whenever $a\to b$ is an edge. This is the graph-theoretic coboundary step
+    needed to make the phase choices in
+    \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv} coherent across
+    a recurrent support component.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Reachability is an equivalence relation because every edge has a return
+    walk. Choose one vertex in each reachability class and, for every vertex
+    $a$, choose a walk from the class representative to $a$. Define $z_a$ as
+    the product of the edge weights along this walk. If two such walks have
+    the same endpoints, append a common return walk; the two resulting closed
+    walks have weight one, so the original walk weights agree. Comparing the
+    chosen walk to $b$ with the chosen walk to $a$ followed by the edge
+    $a\to b$ gives $z_b=z_a\kappa_{a,b}$.
+\end{proof}
+
 \begin{definition}[Horizontal bond fiber of a sector cycle]%
     \label{def:mpdo_eta_cycle_fiber}
     \lean{MPOTensor.CycleFiber}
@@ -1951,17 +1982,19 @@ strong subadditivity for a normalized three-site reduced state.
         thm:mpdo_cyclic_eta_posSemidef,
         thm:mpdo_eta_cycle_positive_rescaling,
         thm:mpdo_sector_adapted_decomposition,
-        thm:positive_rescaling_phase_unique}
+        thm:positive_rescaling_phase_unique,
+        thm:directed_cycle_coboundary}
     The projected chain identity makes every cyclic Kronecker product of the
     neighboring operators positive semidefinite. The finite-factor rescaling
     theorem chooses positive phases on any one nonzero cycle. Two obligations
     remain. First, recurrence of the nonzero inverse-map support must be
     derived from the actual injective normal-tensor hypotheses, without using
     the later primitivity conclusion. Second, phase uniqueness and trivial
-    cycle holonomy must be used to integrate the edge phases to a single
-    vertex-indexed rephasing of the tensors $l_k,r_k$. Such a coboundary
-    rephasing preserves every cyclic product, and hence the all-length
-    decomposition. This is the coherent-choice step asserted at
+    cycle holonomy must be established for a single edge-phase family.
+    Theorem~\ref{thm:directed_cycle_coboundary} then integrates those edge
+    phases to a vertex-indexed rephasing of the tensors $l_k,r_k$. Such a
+    coboundary rephasing preserves every cyclic product, and hence the
+    all-length decomposition. This is the coherent-choice step asserted at
     \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv}; it is not a
     consequence of positivity of the cyclic products alone.
 \end{proof}
