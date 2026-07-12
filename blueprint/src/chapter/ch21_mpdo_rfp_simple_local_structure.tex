@@ -1278,6 +1278,24 @@ strong subadditivity for a normalized three-site reduced state.
     \]
 \end{proof}
 
+\begin{definition}[Concrete closed-sector trace matrix]
+    \label{def:mpdo_concrete_closed_sector_trace_matrix}
+    \lean{MPOTensor.closedSectorTraceMatrix}
+    \lean{MPOTensor.closedSectorTraceMatrix_apply}
+    \leanok
+    \uses{def:mpdo_closed_sector_tensors, thm:mpdo_sector_trace_pairing}
+    For the inverse-map sector tensors, define the complex matrix
+    \[
+        T_{k,h}:=(r_k|l_h).
+    \]
+    Equivalently,
+    \[
+        T_{k,h}=\tr(\eta_{k,h}).
+    \]
+    This is the trace matrix in
+    \cite[Appendix~C.2, lines~1478--1481]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
 \begin{theorem}[Closed-sector form of the physical-trace transfer]
     \label{thm:mpdo_closed_sector_physical_trace_transfer}
     \lean{MPOTensor.physTraceTransfer_eq_sum_closedSector}
@@ -1384,6 +1402,41 @@ strong subadditivity for a normalized three-site reduced state.
     $\mathcal T_{\cal K}^2=\lambda\mathcal T_{\cal K}$, and then apply
     Lemma~\ref{lem:mpo_source_zcl_normalized_idempotent}.  Under literal
     idempotence, the same substitution gives $S^2=S$ directly.
+\end{proof}
+
+\begin{theorem}[Normalized closed-sector trace relation]
+    \label{thm:mpdo_closed_sector_trace_normalized_pow_relation}
+    \lean{MPOTensor.closedSectorTraceMatrix_normalized_pow_two_eq_pow_three}
+    \leanok
+    \uses{def:mpdo_concrete_closed_sector_trace_matrix,
+        thm:mpdo_closed_sector_pairing_normalized_idempotent}
+    Under the hypotheses of
+    Theorem~\ref{thm:mpdo_closed_sector_pairing_normalized_idempotent},
+    suppose that ${\cal K}$ has source zero correlation length.  There is a
+    real number $\lambda>0$ such that, for
+    \[
+        \widehat T:=\lambda^{-1}T,
+    \]
+    one has
+    \[
+        \widehat T^2=\widehat T^3.
+    \]
+    No idempotence or rank-one conclusion for $\widehat T$ is asserted.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_closed_sector_pairing_normalized_idempotent}
+    Let $L$ be the matrix whose $h$th column is $|l_h)$, and let $Q$ be the
+    matrix whose $k$th row is $(r_k|$.  Then $S=LQ$ and $T=QL$.  Place the
+    normalization scalar on $L$.  Since $\lambda^{-1}LQ$ is idempotent,
+    associativity gives
+    \[
+      (Q\lambda^{-1}L)^2
+        =Q(\lambda^{-1}LQ)\lambda^{-1}L
+        =Q(\lambda^{-1}LQ)^2\lambda^{-1}L
+        =(Q\lambda^{-1}L)^3.
+    \]
 \end{proof}
 
 \begin{definition}[Explicit neighboring $\eta$-operator data]
