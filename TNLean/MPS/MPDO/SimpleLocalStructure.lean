@@ -66,10 +66,8 @@ arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete).
   trace matrix.
 - `MPOTensor.ExplicitEtaOperators.trace_traceMatrixRe_ofHayashiMarkov`: the
   trace of that all-ones matrix is the number of sectors.
-- `MPOTensor.sal_zcl_implies_rank_one_T`: the conditional Lemma C.5 consequence,
-  proved relative to the Perron–Frobenius rank-one input.
 - `MPOTensor.sal_zcl_implies_rank_one_T_of_posSemidef`: the same consequence
-  with the Perron–Frobenius input derived from positive semidefiniteness of `T`.
+  derived from positive semidefiniteness of `T` and constant trace powers.
 - `MPOTensor.SectorPairingData`: the sector tensors $|l_k)$ and functionals
   $(r_k|$ of arXiv:1606.00608, Appendix C.2, with the pairing
   $T_{k,h}=(r_k|l_h)$ and the displayed zero-correlation-length identity.
@@ -720,51 +718,25 @@ section RankOneT
 
 variable {n : ℕ}
 
-/-- **Lemma C.5, conditional matrix form**: once the matrix `T` attached to the
-local `η`-structure is known to be primitive and to have constant trace on all
-positive powers, the remaining Perron–Frobenius input forces `T` to be rank one.
-
-The normalization `a ⬝ᵥ b = 1` is then immediate from `trace T = 1` and the
-identity `trace (vecMulVec a b) = a ⬝ᵥ b`.
-
-**Unfaithful:** relies on `hPF : PrimitiveTracePowersConstantImpliesRankOne T`,
-which restates the conclusion and is false in general (counterexample in
-`TNLean/Archive/PerronFrobeniusRankOneCounterexample.lean`); the source Lemma
-C.5 (`SALZCL`, lines 1484--1502) instead derives the factorization from
-Perron--Frobenius fixed-point theory. Documented in
-`docs/paper-gaps/cpgsv17_pf_rank_one.tex`. Elimination: discharge via the
-PSD-corrected variant `sal_zcl_implies_rank_one_T_of_posSemidef` once
-positive-semidefiniteness of `T` is available as a hypothesis; the open
-follow-up is tracked in that note. -/
-theorem sal_zcl_implies_rank_one_T
-    (T : Matrix (Fin n) (Fin n) ℝ)
-    (hPrimitive : Matrix.IsPrimitive T)
-    (hTrace : Matrix.trace T = 1)
-    (hZCL : Matrix.TracePowersConstant T)
-    (hPF : Matrix.PrimitiveTracePowersConstantImpliesRankOne T) :
-    ∃ a b : Fin n → ℝ, T = Matrix.vecMulVec a b ∧ a ⬝ᵥ b = 1 := by
-  rcases hPF hPrimitive hZCL with ⟨a, b, hT⟩
-  refine ⟨a, b, hT, ?_⟩
-  rw [← Matrix.trace_vecMulVec, ← hT]
-  exact hTrace
-
 /-- **Lemma C.5, PSD-corrected matrix form**: if the auxiliary trace matrix `T`
-is positive semidefinite, then the corrected finite-dimensional theorem
-`Matrix.PosSemidef.trace_powers_constant_implies_rank_one` supplies the
-conditional Perron--Frobenius input used by `MPOTensor.sal_zcl_implies_rank_one_T`.
+is positive semidefinite, then
+`Matrix.PosSemidef.trace_powers_constant_implies_rank_one` gives its rank-one
+factorization directly.
 
 The primitivity hypothesis is kept in the statement because it is part of the
 paper's construction of `T`, but the PSD rank-one criterion is stronger and does
 not use primitivity once `trace T = 1` and constant trace powers are known. -/
 theorem sal_zcl_implies_rank_one_T_of_posSemidef
     (T : Matrix (Fin n) (Fin n) ℝ)
-    (hPrimitive : Matrix.IsPrimitive T)
+    (_hPrimitive : Matrix.IsPrimitive T)
     (hPSD : T.PosSemidef)
     (hTrace : Matrix.trace T = 1)
     (hZCL : Matrix.TracePowersConstant T) :
-    ∃ a b : Fin n → ℝ, T = Matrix.vecMulVec a b ∧ a ⬝ᵥ b = 1 :=
-  sal_zcl_implies_rank_one_T T hPrimitive hTrace hZCL
-    (Matrix.primitive_trace_powers_constant_implies_rank_one_of_posSemidef hPSD hTrace)
+    ∃ a b : Fin n → ℝ, T = Matrix.vecMulVec a b ∧ a ⬝ᵥ b = 1 := by
+  rcases hPSD.trace_powers_constant_implies_rank_one hTrace hZCL with ⟨a, b, hT⟩
+  refine ⟨a, b, hT, ?_⟩
+  rw [← Matrix.trace_vecMulVec, ← hT]
+  exact hTrace
 
 /-! ### Sector tensors and the pairing route to rank one
 
