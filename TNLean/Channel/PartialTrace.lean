@@ -31,6 +31,8 @@ Proposition 2.1) and for reduced states on contiguous tensor factors.
 * `Matrix.traceRight_apply`: elementwise formula for `tr_B`
 * `Matrix.trace_partialTraceRight`: the full trace is preserved by the general
   right partial trace
+* `Matrix.partialTraceRight_kronecker`: the right partial trace of a Kronecker
+  product
 * `Matrix.trace_eq_trace_traceLeft`: `tr(X) = tr(tr_A(X))`
 * `Matrix.traceLeft_kronecker`: `tr_A(A ⊗ B) = tr(A) • B`
 * `Matrix.traceRight_kronecker`: `tr_B(A ⊗ B) = A • tr(B)`
@@ -97,6 +99,15 @@ theorem trace_partialTraceRight [Fintype α] (X : Matrix (α × β) (α × β) �
     (partialTraceRight X).trace = X.trace := by
   simp only [Matrix.trace, Matrix.diag, partialTraceRight_apply]
   rw [Fintype.sum_prod_type]
+
+/-- The partial trace over the right factor of a Kronecker product is the
+retained matrix multiplied by the trace of the discarded matrix. -/
+theorem partialTraceRight_kronecker (A : Matrix α α ℂ) (B : Matrix β β ℂ) :
+    partialTraceRight (kroneckerMap (· * ·) A B) = B.trace • A := by
+  ext i j
+  simp only [partialTraceRight_apply, kroneckerMap_apply, Matrix.smul_apply, Matrix.trace,
+    Matrix.diag, smul_eq_mul, ← Finset.mul_sum]
+  ring
 
 /-- The partial trace over the second factor is additive. -/
 theorem partialTraceRight_add (X Y : Matrix (α × β) (α × β) ℂ) :

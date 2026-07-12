@@ -28,15 +28,23 @@ dimensions.
   positive property.
 * `Matrix.equivReindexMap_isKrausCPTP`: reindexing by an equivalence is
   trace-preserving completely positive.
+* `Matrix.controlledKrausMap_sameBlock_apply`: the action on each diagonal
+  summand of an orthogonally controlled Kraus map.
+* `Matrix.controlledKrausMap_apply_of_ne`: the vanishing of its off-diagonal
+  output blocks.
 * `Matrix.controlledKrausMap_isKrausCPTP`: orthogonal control of sectorwise
   Kraus families is trace-preserving completely positive.
 * `Matrix.partialTraceRightLM_isKrausCPTP`: tracing a right tensor factor is a
   trace-preserving completely positive map.
 * `Matrix.controlledPartialTraceRightLM_isKrausCPTP`: tracing dependent right
   factors sector by sector is trace-preserving completely positive.
+* `Matrix.controlledPartialTraceRightLM_sameBlock_apply`: the partial trace on
+  each diagonal summand.
 * `Matrix.preparationMap_isKrausCPTP`: adjoining a density matrix is a
   trace-preserving completely positive map.
 * `Matrix.preparationKraus`: the explicit Kraus family for state preparation.
+* `Matrix.rectangularKrausMap_preparationKraus_eq`: the Kraus action of state
+  preparation.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -179,6 +187,16 @@ noncomputable def rectangularKrausMap
     intro i _
     rw [Matrix.mul_smul, Matrix.smul_mul]
 
+/-- Relabeling a finite Kraus family along an equivalence does not change its
+rectangular Kraus map. -/
+theorem rectangularKrausMap_equiv
+    {κ κ' α β : Type*} [Fintype κ] [Fintype κ'] [Fintype α]
+    (e : κ ≃ κ') (A : κ → Matrix β α ℂ) :
+    rectangularKrausMap (fun j : κ' => A (e.symm j)) = rectangularKrausMap A := by
+  apply LinearMap.ext
+  intro X
+  exact Equiv.sum_comp e.symm (fun i : κ => A i * X * (A i)ᴴ)
+
 section ControlledDirectSum
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι]
@@ -204,6 +222,89 @@ noncomputable def controlledKrausMap (r : ι → ℕ)
       Matrix (Σ i, β i) (Σ i, β i) ℂ :=
   rectangularKrausMap fun p : Σ i, Fin (r i) ↦
     singleBlock p.1 (A p.1 p.2)
+
+omit [∀ i, DecidableEq (α i)] [∀ i, Fintype (β i)] [∀ i, DecidableEq (β i)] in
+private lemma singleBlock_mul_conjTranspose_sameBlock_apply
+    (i : ι) (A : Matrix (β i) (α i) ℂ)
+    (X : Matrix (Σ i, α i) (Σ i, α i) ℂ) (b c : β i) :
+    (singleBlock i A * X * (singleBlock i A)ᴴ) ⟨i, b⟩ ⟨i, c⟩ =
+      (A * X.submatrix (Sigma.mk i) (Sigma.mk i) * Aᴴ) b c := by
+  classical
+  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Fintype.sum_sigma]
+  rw [Finset.sum_eq_single i]
+  · simp [singleBlock, Matrix.blockDiagonal'_apply, Matrix.submatrix_apply]
+  · intro j _ hji
+    simp [singleBlock, Matrix.blockDiagonal'_apply, Ne.symm hji]
+  · simp
+
+omit [∀ i, DecidableEq (α i)] [∀ i, Fintype (β i)] [∀ i, DecidableEq (β i)] in
+private lemma singleBlock_mul_conjTranspose_apply_of_left_ne
+    (j : ι) (A : Matrix (β j) (α j) ℂ)
+    (X : Matrix (Σ i, α i) (Σ i, α i) ℂ) {i : ι} (hij : i ≠ j)
+    (b : β i) (q : Σ i, β i) :
+    (singleBlock j A * X * (singleBlock j A)ᴴ) ⟨i, b⟩ q = 0 := by
+  classical
+  simp [singleBlock, Matrix.mul_apply, Matrix.blockDiagonal'_apply, hij]
+
+omit [∀ i, DecidableEq (α i)] [∀ i, Fintype (β i)] [∀ i, DecidableEq (β i)] in
+private lemma singleBlock_mul_conjTranspose_apply_of_right_ne
+    (i : ι) (A : Matrix (β i) (α i) ℂ)
+    (X : Matrix (Σ i, α i) (Σ i, α i) ℂ) {j : ι} (hji : j ≠ i)
+    (p : Σ i, β i) (c : β j) :
+    (singleBlock i A * X * (singleBlock i A)ᴴ) p ⟨j, c⟩ = 0 := by
+  classical
+  rw [Matrix.mul_apply]
+  apply Finset.sum_eq_zero
+  rintro ⟨k, d⟩ _
+  by_cases hjk : j = k
+  · subst k
+    rw [Matrix.conjTranspose_apply, singleBlock, Matrix.blockDiagonal'_apply_eq]
+    simp [hji]
+  · rw [Matrix.conjTranspose_apply, singleBlock,
+      Matrix.blockDiagonal'_apply_ne _ c d hjk]
+    simp
+
+omit [∀ i, DecidableEq (α i)] [∀ i, Fintype (β i)] [∀ i, DecidableEq (β i)] in
+/-- On a diagonal summand, an orthogonally controlled Kraus map is the
+rectangular Kraus map of the corresponding family of operators. -/
+theorem controlledKrausMap_sameBlock_apply (r : ι → ℕ)
+    (A : (i : ι) → Fin (r i) → Matrix (β i) (α i) ℂ)
+    (X : Matrix (Σ i, α i) (Σ i, α i) ℂ) (i : ι) (b c : β i) :
+    controlledKrausMap r A X ⟨i, b⟩ ⟨i, c⟩ =
+      rectangularKrausMap (A i) (X.submatrix (Sigma.mk i) (Sigma.mk i)) b c := by
+  classical
+  change (∑ p : Σ i, Fin (r i), singleBlock p.1 (A p.1 p.2) * X *
+      (singleBlock p.1 (A p.1 p.2))ᴴ) ⟨i, b⟩ ⟨i, c⟩ =
+    (∑ j, A i j * X.submatrix (Sigma.mk i) (Sigma.mk i) * (A i j)ᴴ) b c
+  rw [Fintype.sum_sigma, Matrix.sum_apply]
+  rw [Finset.sum_eq_single i]
+  · simp_rw [Matrix.sum_apply, singleBlock_mul_conjTranspose_sameBlock_apply]
+  · intro j _ hji
+    simp_rw [Matrix.sum_apply,
+      singleBlock_mul_conjTranspose_apply_of_left_ne j (A j _) X (Ne.symm hji)]
+    exact Finset.sum_const_zero
+  · simp
+
+omit [∀ i, DecidableEq (α i)] [∀ i, Fintype (β i)] [∀ i, DecidableEq (β i)] in
+/-- An orthogonally controlled Kraus map annihilates every matrix entry
+between two distinct output summands. -/
+theorem controlledKrausMap_apply_of_ne (r : ι → ℕ)
+    (A : (i : ι) → Fin (r i) → Matrix (β i) (α i) ℂ)
+    (X : Matrix (Σ i, α i) (Σ i, α i) ℂ) {i j : ι} (hij : i ≠ j)
+    (b : β i) (c : β j) :
+    controlledKrausMap r A X ⟨i, b⟩ ⟨j, c⟩ = 0 := by
+  classical
+  change (∑ p : Σ i, Fin (r i), singleBlock p.1 (A p.1 p.2) * X *
+      (singleBlock p.1 (A p.1 p.2))ᴴ) ⟨i, b⟩ ⟨j, c⟩ = 0
+  rw [Matrix.sum_apply]
+  apply Finset.sum_eq_zero
+  rintro ⟨k, a⟩ _
+  by_cases hik : i = k
+  · have hjk : j ≠ k := by
+      intro hjk
+      exact hij (hik.trans hjk.symm)
+    exact singleBlock_mul_conjTranspose_apply_of_right_ne k (A k a) X hjk ⟨i, b⟩ c
+  · exact singleBlock_mul_conjTranspose_apply_of_left_ne k (A k a) X hik b ⟨j, c⟩
 
 omit [∀ i, Fintype (α i)] [∀ i, DecidableEq (α i)]
     [∀ i, DecidableEq (β i)] in
@@ -411,6 +512,14 @@ private noncomputable def chosenKraus
     Fin (chosenKrausRank hS) → Matrix β α ℂ :=
   hS.choose_spec.choose
 
+private theorem rectangularKrausMap_chosenKraus_eq
+    {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
+    {S : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ} (hS : IsKrausCPTP S) :
+    rectangularKrausMap (chosenKraus hS) = S := by
+  apply LinearMap.ext
+  intro X
+  exact (hS.choose_spec.choose_spec.1 X).symm
+
 private theorem chosenKraus_resolution
     {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
     {S : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ} (hS : IsKrausCPTP S) :
@@ -432,6 +541,24 @@ noncomputable def controlledPartialTraceRightLM
       (partialTraceRightLM_isKrausCPTP (α := α i) (β := β i)))
     (fun i => chosenKraus
       (partialTraceRightLM_isKrausCPTP (α := α i) (β := β i)))
+
+/-- On each diagonal summand, the controlled dependent partial trace is the
+ordinary partial trace over the corresponding right factor. -/
+theorem controlledPartialTraceRightLM_sameBlock_apply
+    {ι : Type*} [Fintype ι] [DecidableEq ι]
+    {α β : ι → Type*}
+    [∀ i, Fintype (α i)] [∀ i, DecidableEq (α i)]
+    [∀ i, Fintype (β i)] [∀ i, DecidableEq (β i)]
+    (X : Matrix (Σ i, α i × β i) (Σ i, α i × β i) ℂ)
+    (i : ι) (a b : α i) :
+    controlledPartialTraceRightLM X ⟨i, a⟩ ⟨i, b⟩ =
+      partialTraceRight
+        (X.submatrix (fun p : α i × β i => Sigma.mk i p)
+          (fun p : α i × β i => Sigma.mk i p)) a b := by
+  classical
+  rw [controlledPartialTraceRightLM, controlledKrausMap_sameBlock_apply,
+    rectangularKrausMap_chosenKraus_eq]
+  rfl
 
 /-- The controlled dependent partial trace is trace-preserving and completely
 positive. -/
@@ -511,6 +638,29 @@ private theorem preparationKraus_conjTranspose_mul_apply
   · subst b
     simp [preparationKraus, Matrix.conjTranspose_apply]
   · simp [preparationKraus, Matrix.conjTranspose_apply, hab, Ne.symm hab]
+
+/-- Summing the rectangular Kraus action of the square-root columns of a
+positive-semidefinite matrix gives the corresponding state-preparation map. -/
+theorem rectangularKrausMap_preparationKraus_eq
+    {α β : Type*} [Fintype α] [DecidableEq α]
+    [Fintype β] [DecidableEq β] (ρ : Matrix β β ℂ) (hρ : ρ.PosSemidef) :
+    rectangularKrausMap (fun j : β => preparationKraus (α := α) ρ hρ j) =
+      preparationMap ρ := by
+  classical
+  let R := hρ.isHermitian.cfc Real.sqrt
+  have hRherm : R.IsHermitian := hρ.cfc_sqrt_isHermitian
+  have hRR : R * R = ρ := hρ.cfc_sqrt_mul_self
+  apply LinearMap.ext
+  intro X
+  ext p q
+  change (∑ j : β, preparationKraus (α := α) ρ hρ j * X *
+      (preparationKraus (α := α) ρ hρ j)ᴴ) p q = X p.1 q.1 * ρ p.2 q.2
+  rw [Matrix.sum_apply]
+  have hRRentry : ρ p.2 q.2 = (R * R) p.2 q.2 :=
+    congrArg (fun M : Matrix β β ℂ => M p.2 q.2) hRR.symm
+  rw [hRRentry, Matrix.mul_apply, Finset.mul_sum]
+  refine Finset.sum_congr rfl fun j _ => ?_
+  rw [preparationKraus_mul_conjTranspose_apply, hRherm.apply]
 
 /-- The explicit preparation Kraus family resolves the identity,
 $\sum_j A_j^\dagger A_j=I$, when the prepared matrix has trace one. -/
