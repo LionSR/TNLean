@@ -2507,18 +2507,15 @@ transfers the support.
     \label{lem:isChannel_transferMap}
     \lean{Kraus.isChannel_transferMap}
     \leanok
-    \uses{def:channel, def:tp_kraus}
+    \uses{def:channel, def:tp_kraus, thm:transfer_channel}
     Let $K_0, \ldots, K_{d-1}$ be a trace-preserving Kraus family. The map
     $E(X) = \sum_i K_i X K_i^{\dagger}$ is a quantum channel.
 \end{lemma}
 \begin{proof}\leanok
-    The map is completely positive because it is in Kraus form, and it preserves the
-    trace because
-    \[
-        \tr\Bigl(\sum_i K_i X K_i^{\dagger}\Bigr)
-        \;=\; \tr\Bigl(\Bigl(\sum_i K_i^{\dagger} K_i\Bigr) X\Bigr)
-        \;=\; \tr(X).
-    \]
+    \uses{thm:transfer_channel}
+    The trace-preservation hypothesis is the normalization
+    $\sum_i K_i^{\dagger} K_i = \mathbf 1$ of the channel form of the transfer map
+    (Theorem~\ref{thm:transfer_channel}).
 \end{proof}
 
 \begin{lemma}[Loewner domination transfers the support]%
