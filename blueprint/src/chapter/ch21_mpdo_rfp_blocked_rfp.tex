@@ -89,6 +89,79 @@
     \label{fig:mpdo_two_site_blocking}
 \end{figure}
 
+\begin{definition}[Two-site blocking of an MPO tensor]
+    \label{def:mpdo_two_site_blocking}
+    \lean{MPOTensor.blockTwo}
+    \leanok
+    For an MPO tensor $K$, its two-site blocking $K^{[2]}$ has physical
+    indices $(i_0,i_1)$ and $(j_0,j_1)$ and matrices
+    \[
+        \bigl(K^{[2]}\bigr)^{(i_0,i_1),(j_0,j_1)}
+          =K^{i_0j_0}K^{i_1j_1}.
+    \]
+    This is the blocking used in
+    \cite[Theorem~4.9, lines~851--856]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Four-site physical closure]
+    \label{def:mpdo_four_site_physical_closure}
+    \lean{MPOTensor.finFourArrowEquiv, MPOTensor.physClose4}
+    \leanok
+    For a virtual matrix $X$, the four-site physical closure of $K$ is the
+    operator $K_4(X)$ whose matrix coefficients are
+    \[
+        K_4(X)_{(i_0,(i_1,(i_2,i_3))),(j_0,(j_1,(j_2,j_3)))}
+          =\tr\!\left(
+            K^{i_0j_0}K^{i_1j_1}K^{i_2j_2}K^{i_3j_3}X\right).
+    \]
+\end{definition}
+
+\begin{theorem}[General and right-associated four-site closures]
+    \label{thm:mpdo_phys_close_four}
+    \lean{MPOTensor.physCloseN_four_eq_physClose4}
+    \leanok
+    \uses{def:phys_close, def:mpdo_four_site_physical_closure}
+    Under the canonical right-associated identification of four-site
+    configurations with quadruples of physical indices, the general
+    length-four closure is $K_4(X)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand the general four-site closure in the right-associated coordinates.
+\end{proof}
+
+\begin{theorem}[One-site closure of the two-site blocking]
+    \label{thm:mpdo_one_site_closure_two_site_blocking}
+    \lean{MPOTensor.physClose1_blockTwo_eq_physClose2}
+    \leanok
+    \uses{def:phys_close, def:mpdo_two_site_blocking}
+    After identifying one blocked physical index with two original indices,
+    \[
+        \bigl(K^{[2]}\bigr)_1(X)=K_2(X).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand one blocked tensor matrix and decode its two physical indices.
+\end{proof}
+
+\begin{theorem}[Two-site closure of the two-site blocking]
+    \label{thm:mpdo_two_site_closure_two_site_blocking}
+    \lean{MPOTensor.physClose2_blockTwo_eq_physClose4}
+    \leanok
+    \uses{def:phys_close, def:mpdo_two_site_blocking,
+      def:mpdo_four_site_physical_closure}
+    After identifying two blocked physical indices with four original
+    indices, one has
+    \[
+        \bigl(K^{[2]}\bigr)_2(X)=K_4(X).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand the two blocked tensor matrices and reassociate their product.
+\end{proof}
+
 \begin{theorem}[Blocked-RFP structure from local data and commuting form]
     \label{thm:simple_mpdo_blocked_rfp_data_of_sal_zcl_and_commuting_form}
     \lean{MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndCommutingForm}
