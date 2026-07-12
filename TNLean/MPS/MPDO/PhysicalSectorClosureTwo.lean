@@ -28,7 +28,7 @@ is made.
   1441--1450
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators Kronecker
 
 namespace MPOTensor.PhysicalSectorFactorization
 
@@ -79,13 +79,13 @@ regrouped as `((L_k,R_k),(L_h,R_h)) ↦ ((L_k,R_h),(R_k,L_h))`.
 
 Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and `etarl`,
 lines 1381--1388 and 1441--1450. -/
-noncomputable def physicalSectorClosureTwo (F : PhysicalSectorFactorization K)
+noncomputable def twoSiteSectorClosure (F : PhysicalSectorFactorization K)
     (k h : Fin F.sectorCount) (X : Matrix (Fin D) (Fin D) ℂ) :
     Matrix (BoundaryIndex F k h × NeighborIndex F k h)
       (BoundaryIndex F k h × NeighborIndex F k h) ℂ :=
-  (physClose2 F.sectorCoordinateTensor X).submatrix
-    (F.twoSiteSectorEmbedding k h ∘ (F.twoSiteRegroupEquiv k h).symm)
-    (F.twoSiteSectorEmbedding k h ∘ (F.twoSiteRegroupEquiv k h).symm)
+  Matrix.reindex (twoSiteRegroupEquiv F k h) (twoSiteRegroupEquiv F k h)
+    ((physClose2 F.sectorCoordinateTensor X).submatrix
+      (twoSiteSectorEmbedding F k h) (twoSiteSectorEmbedding F k h))
 
 /-- For arbitrary virtual boundary matrix `X`, the fixed-sector two-site
 closure factors into its outer boundary contraction and its neighboring
@@ -100,13 +100,13 @@ Proposition C.7.
 
 Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and `etarl`,
 lines 1381--1388 and 1441--1450. -/
-theorem physicalSectorClosureTwo_eq_kronecker (F : PhysicalSectorFactorization K)
+theorem twoSiteSectorClosure_eq (F : PhysicalSectorFactorization K)
     (k h : Fin F.sectorCount) (X : Matrix (Fin D) (Fin D) ℂ) :
-    F.physicalSectorClosureTwo k h X =
-      Matrix.kroneckerMap (· * ·) (F.boundaryOperator k h X)
-        (F.neighboringOperator k h) := by
+    F.twoSiteSectorClosure k h X =
+      F.boundaryOperator k h X ⊗ₖ
+        F.neighboringOperator k h := by
   ext x y
-  simp only [physicalSectorClosureTwo, Matrix.submatrix_apply, Function.comp_apply,
+  simp only [twoSiteSectorClosure, Matrix.reindex_apply, Matrix.submatrix_apply,
     twoSiteRegroupEquiv_symm_apply, twoSiteSectorEmbedding, physClose2_apply,
     sectorCoordinateTensor_apply_same, Matrix.trace, Matrix.diag_apply,
     Matrix.mul_apply, Matrix.kroneckerMap_apply, boundaryOperator_apply,
