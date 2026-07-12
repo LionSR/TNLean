@@ -21,6 +21,8 @@ normalization.
   the physical-trace transfer as a sum of outer products of closed tensors.
 * `concrete_physTraceTransfer_eq_sum_closedSector`: the identity for the
   inverse-map sector tensors constructed from an injective simple tensor.
+* `closedSectorTraceMatrix`: the matrix of pairings between the concrete
+  closed right and left sector tensors.
 * `closedSector_operator_quasi_idempotent`: source zero correlation length
   gives quasi-idempotence of the closed-sector pairing operator.
 * `closedSector_operator_normalized_idempotent`: after the source
@@ -40,6 +42,24 @@ open scoped Matrix BigOperators
 namespace MPOTensor
 
 variable {d D : ℕ}
+
+/-- If the rectangular product `L * R` is idempotent, then the product in the
+opposite order satisfies
+\[
+  (RL)^2=(RL)^3.
+\]
+This is the rectangular associativity calculation used in
+arXiv:1606.00608, Appendix C.2, lines 1490--1497. -/
+theorem _root_.Matrix.pow_two_eq_pow_three_of_rectangular_idempotent
+    {a b : Type*} [Fintype a] [Fintype b] [DecidableEq b]
+    {R : Type*} [Semiring R] (L : Matrix a b R) (Q : Matrix b a R)
+    (h : IsIdempotentElem (L * Q)) :
+    (Q * L) ^ 2 = (Q * L) ^ 3 := by
+  classical
+  rw [show (Q * L) ^ 2 = Q * (L * Q) * L by simp [pow_two, Matrix.mul_assoc]]
+  rw [show (Q * L) ^ 3 = Q * ((L * Q) * (L * Q)) * L by
+    simp [pow_succ, Matrix.mul_assoc]]
+  rw [h.eq]
 
 /-- The pairing operator obtained by closing the physical legs of the left and
 right tensors in each sector:
@@ -99,6 +119,30 @@ variable (K : MPOTensor d D) (hK : K.IsInjective) (hη : EtaStructure ρ)
 variable (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R ρ)
 variable (α₁ β₃ : Fin D) (hm : R β₃ α₁ ≠ 0)
 
+/-- **The concrete closed-sector trace matrix.** Its entries pair the closed
+right sector tensor with the closed left sector tensor:
+\[
+  T_{k,h}=(r_k\mid l_h).
+\]
+
+Source: arXiv:1606.00608, Appendix C.2, equation `Tkn`, lines 1478--1481. -/
+noncomputable def closedSectorTraceMatrix : Matrix (Fin hη.m) (Fin hη.m) ℂ :=
+  fun k h ↦ closedSectorR K hK hη β₃ k ⬝ᵥ
+    closedSectorL K hK hη R α₁ β₃ h
+
+/-- The entries of the concrete closed-sector trace matrix are the traces of
+the neighboring operators:
+\[
+  T_{k,h}=\operatorname{tr}(\eta_{k,h}).
+\]
+
+Source: arXiv:1606.00608, Appendix C.2, equations `etarl` and `Tkn`,
+lines 1446--1455 and 1478--1481. -/
+theorem closedSectorTraceMatrix_apply (k h : Fin hη.m) :
+    closedSectorTraceMatrix K hK hη R α₁ β₃ k h =
+      (sectorEta K hK hη R α₁ β₃ k h).trace := by
+  rw [closedSectorTraceMatrix, trace_sectorEta]
+
 include hρ hm
 
 /-- For the inverse-map sector tensors of an injective simple tensor,
@@ -155,6 +199,46 @@ theorem closedSector_operator_normalized_idempotent
   dsimp only
   rw [← concrete_physTraceTransfer_eq_sum_closedSector K hK hη R hρ α₁ β₃ hm]
   exact hidem
+
+/-- Source zero correlation length implies that the normalized concrete
+closed-sector trace matrix satisfies
+\[
+  \widehat T^2=\widehat T^3,
+  \qquad \widehat T=\lambda^{-1}T,
+  \qquad \lambda>0.
+\]
+This follows by writing the normalized closed-sector pairing operator as
+`L * Q` and the normalized trace matrix as `Q * L`.  The conclusion does not
+assert that the trace matrix is idempotent or has rank one.
+
+Derived from the zero-correlation-length identity in the proof of
+arXiv:1606.00608, Appendix C.2, Lemma `SALZCL`, lines 1490--1497. -/
+theorem closedSectorTraceMatrix_normalized_pow_two_eq_pow_three
+    (hZCL : IsSourceZCL K) :
+    ∃ lam : ℝ, 0 < lam ∧
+      let T := closedSectorTraceMatrix K hK hη R α₁ β₃
+      (((lam : ℂ)⁻¹ • T) ^ 2 = ((lam : ℂ)⁻¹ • T) ^ 3) := by
+  obtain ⟨lam, hlam, hidem⟩ :=
+    closedSector_operator_normalized_idempotent K hK hη R hρ α₁ β₃ hm hZCL
+  let L : Matrix (Fin D) (Fin hη.m) ℂ :=
+    fun β h ↦ closedSectorL K hK hη R α₁ β₃ h β
+  let Q : Matrix (Fin hη.m) (Fin D) ℂ :=
+    fun k α ↦ closedSectorR K hK hη β₃ k α
+  have hS : closedSectorPairingOperator
+      (sectorTensorL K hK hη R α₁ β₃) (sectorTensorR K hK hη β₃) = L * Q := by
+    ext β α
+    simp [closedSectorPairingOperator, L, Q, Matrix.mul_apply, Matrix.sum_apply,
+      Matrix.vecMulVec_apply, closedSectorL, closedSectorR]
+  have hT : closedSectorTraceMatrix K hK hη R α₁ β₃ = Q * L := by
+    ext k h
+    simp [closedSectorTraceMatrix, Q, L, Matrix.mul_apply, dotProduct]
+  refine ⟨lam, hlam, ?_⟩
+  dsimp only
+  have hrect : IsIdempotentElem (((lam : ℂ)⁻¹ • L) * Q) := by
+    simpa only [Matrix.smul_mul, ← hS] using hidem
+  have hpow := Matrix.pow_two_eq_pow_three_of_rectangular_idempotent
+    ((lam : ℂ)⁻¹ • L) Q hrect
+  simpa only [Matrix.mul_smul, ← hT] using hpow
 
 /-- For a canonically normalized representative whose physical-trace transfer
 is literally idempotent, the raw closed-sector pairing operator satisfies

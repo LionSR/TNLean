@@ -226,19 +226,35 @@ derive their linear independence.
 {\scriptsize\leanid{MPOTensor.sal_zcl_implies_rank_one_T_of_sector_supports}} in
 \doclink{TNLean/MPS/MPDO/SimpleLocalStructure}.}
 
-Two obligations remain before the conditional hypotheses of the rank-one
-factorization disappear; the constant trace powers above no longer depend on
-either.  First, the inverse-map factorization at lines 1407--1482 must
-construct the families $(l_k)_k$ and $(r_k)_k$ from an injective simple
-tensor and prove the pairing $T_{k,h}=(r_k|l_h)$ together with the operator
-identity at lines 1490--1493 for those concrete families; the present
-structure records the pairing and the identity as data.  Second, linear
-independence of the closed tensors must be proved.  The direct sum in the
-source's sector splitting at lines 1436--1448 concerns the physical indices;
-after those indices are contracted, the closed tensors live in a common bond
-space.  Their membership in corresponding members of an independent family of
-subspaces --- or their independence by another argument --- therefore does not
-follow from the displayed equations alone.
+The inverse-map construction has now been connected to this argument without
+introducing additional hypotheses.  The closed tensors $(l_k)_k$ and
+$(r_k)_k$ are constructed from an injective simple tensor, the complex matrix
+is defined by
+\[
+  T_{k,h}=(r_k|l_h)=\operatorname{tr}(\eta_{k,h}),
+\]
+and its pairing operator is identified with the physical-trace transfer.
+Source zero correlation length therefore supplies a number $\lambda>0$ for
+which the normalized pairing operator is idempotent.  The rectangular
+factorization $S=L R$ and $T=R L$ then proves
+\[
+  (\lambda^{-1}T)^2=(\lambda^{-1}T)^3.
+\]
+This is formalized as
+{\scriptsize\leanid{MPOTensor.closedSectorTraceMatrix_apply}} and
+{\scriptsize\leanid{MPOTensor.closedSectorTraceMatrix_normalized_pow_two_eq_pow_three}}
+in \doclink{TNLean/MPS/MPDO/SectorPairingTransfer}.
+
+This conclusion is the scale-invariant consequence of the displayed operator
+equation; it does not imply that the normalized trace matrix is
+idempotent or has rank one.  The remaining pairing route would have to prove
+linear independence of one of the two closed tensor families, or supply a
+different argument excluding the generalized zero-eigenspace.  The direct sum
+in the source's sector splitting at lines 1436--1448 concerns the physical
+indices; after those indices are contracted, the closed tensors live in a
+common bond space.  Their membership in corresponding members of an
+independent family of subspaces --- or their independence by another argument
+--- therefore does not follow from the displayed equations alone.
 
 \section{A positive-semidefinite route}
 
@@ -340,10 +356,10 @@ false primitive trace-power implication has been removed.
 
 For the unconditional matrix product density operator argument, it therefore
 suffices either to prove the required positive-semidefinite structure of the
-trace matrix, or to construct the source sector pairing and derive the needed
-linear independence at the matrix product density operator call site.  The
-source proof has a genuine unsupported intermediate assertion, while the
-intended matrix product density operator theorem itself has not been
+trace matrix, or to derive the needed linear independence (or an equivalent
+exclusion of the generalized zero-eigenspace) for the concrete source sector
+pairing.  The source proof has a genuine unsupported intermediate assertion,
+while the intended matrix product density operator theorem itself has not been
 disproved.
 
 \bibliographystyle{alpha}
