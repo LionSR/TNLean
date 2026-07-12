@@ -29,59 +29,60 @@ The corollary rests on the maximal-support property of fixed points stated earli
 Section~6.4 of the reference: every fixed point of $T$ has support and range within the
 support of the maximum-rank fixed point, so conjugation by $\rho^{-1/2}$ loses nothing.
 
-\section{The formal statements}
+\section{The formalization}
 
-The formalization (\leanid{Kraus.weightedCornerFixedPointsStarSubalgebra} and
+Two layers are established, both for a Kraus map (the completely positive case of the
+Schwarz hypothesis, as in the other results of this section).
+
+For an \emph{arbitrary} positive semidefinite fixed point $\rho$ with support
+projection $Q$ (\leanid{Kraus.weightedCornerFixedPointsStarSubalgebra} and
 \leanid{Kraus.exists\_weightedCorner\_sqrt\_eq\_of\_fixedPoint} in
-\leanid{TNLean/Channel/FixedPoint/WeightedCornerFixedPoints.lean}) takes a Kraus map (the
-completely positive case of the Schwarz hypothesis, as in the other formalized results of
-this section) and an \emph{arbitrary} positive semidefinite fixed point $\rho$ with
-support projection $Q$, and proves that
+\leanid{TNLean/Channel/FixedPoint/WeightedCornerFixedPoints.lean}), the set
 \[
     \rho^{-1/2}\,\{X \mid T(X) = X,\ Q X Q = X\}\,\rho^{-1/2}
 \]
-is a $*$-subalgebra of the corner algebra $Q M_D(\mathbb{C}) Q$: the conjugated set is
-restricted to the fixed points \emph{supported on the support of $\rho$}. The positive
-definite case without the support restriction is
+is a $*$-subalgebra of the corner algebra $Q M_D(\mathbb{C}) Q$; for a non-maximal
+$\rho$ the conjugated set is restricted to the fixed points supported on the support
+of $\rho$. The positive definite case without any support restriction is
 \leanid{Kraus.weightedFixedPointsStarSubalgebra}.
 
-\section{The gap (as originally recorded)}
+At a fixed point of maximal support the restriction disappears
+(\leanid{Kraus.exists\_maximalSupport\_weightedCorner\_sqrt\_eq} in
+\leanid{TNLean/Channel/FixedPoint/MaximalSupport.lean}): there is a positive
+semidefinite fixed point $\rho_0$ at which the conjugated set is
+\[
+    \rho_0^{-1/2}\,\{X \mid T(X) = X\}\,\rho_0^{-1/2},
+\]
+the set of the corollary, with the inverse square root taken on the support of
+$\rho_0$.
 
-For a maximum-rank fixed point the corner restriction $Q X Q = X$ is vacuous, by the
-maximal-support property of fixed points. At the time this note was written that
-property was open: the maximal-support and support-minimality propositions of
-Section~6.4 of the reference were recorded as open in
-\leanid{TNLean/Channel/FixedPoint/StationarySupport.lean}, and the formal statement
-restricted to corner-supported fixed points was a proper restriction of the corollary.
+\section{The maximal-support property}
 
-\section{Elimination plan (as executed)}
+The removal of the restriction rests on the maximal-support property
+(\leanid{Kraus.exists\_maximalSupport\_fixedPoint}): there is a positive semidefinite
+fixed point $\rho_0$ whose support projection $Q_0$ satisfies $Q_0 X Q_0 = X$ for every
+fixed point $X$. The witness is the sum of the positive parts of the Hermitian and
+anti-Hermitian components of a basis $X_0, \ldots, X_{m-1}$ of the fixed-point space
+(the reference instead takes the image of the identity under the projection onto the
+fixed-point space). Writing
+$H_{1,j} = X_j + X_j^{\dagger}$ and $H_{2,j} = i(X_j - X_j^{\dagger})$ for the fixed
+Hermitian components and $H_{k,j} = P^{+}_{k,j} - P^{-}_{k,j}$ for their positive parts
+(\leanid{IsChannel.posSemidef\_parts\_of\_hermitian\_fixedPoint}), the witness
+\begin{align*}
+    \rho_0 &= \sum_{j=0}^{m-1}
+        \bigl(P^{+}_{1,j} + P^{-}_{1,j} + P^{+}_{2,j} + P^{-}_{2,j}\bigr)
+\end{align*}
+dominates every summand in the Loewner order, domination transfers the support
+(\leanid{Kraus.stationaryProj\_absorb\_of\_le}, from
+$0 \preceq (\mathbf 1-Q_0)P(\mathbf 1-Q_0) \preceq (\mathbf 1-Q_0)\rho_0(\mathbf 1-Q_0) = 0$),
+and linearity extends the absorption from the parts to every fixed point.
 
-Establish the maximal-support property: every fixed point of a trace-preserving Kraus
-map has support and range within the support of a maximal-support fixed point. The proof
-decomposes a fixed point into four positive fixed parts (the decomposition is
-\leanid{IsChannel.posSemidef\_parts\_of\_hermitian\_fixedPoint}) and
-bounds the support of each positive fixed part by the maximal one. With that property,
-instantiating the corner-restricted statements at such a fixed point removes the
-restriction $Q X Q = X$.
+\section{Verdict}
 
-\section{Resolution}
-
-This note is now a record of the resolved restriction. The maximal-support property is
-\leanid{Kraus.exists\_maximalSupport\_fixedPoint} in
-\leanid{TNLean/Channel/FixedPoint/MaximalSupport.lean}: a positive semidefinite fixed
-point $\rho_0$ whose support projection $Q_0$ satisfies $Q_0 X Q_0 = X$ for every fixed
-point $X$. The witness is constructed as the sum of the positive parts of the Hermitian
-and anti-Hermitian components of a basis of the fixed-point space (rather than through
-the projection onto the fixed-point space, as in the reference); every fixed point is a
-linear combination of positive fixed points dominated by $\rho_0$ in the Loewner order,
-and domination transfers the support
-(\leanid{Kraus.stationaryProj\_absorb\_of\_le}). Instantiating the corner-restricted
-statements at $\rho_0$ removes the restriction $Q X Q = X$
-(\leanid{Kraus.exists\_maximalSupport\_weightedCorner\_sqrt\_eq}), so the conjugated set
-$\rho_0^{-1/2}\,\{X \mid T(X) = X\}\,\rho_0^{-1/2}$ of the corollary is realized at a
-fixed point of maximal support. What is not asserted is the corollary's quantification
-over an \emph{arbitrary} maximum-rank fixed-point density matrix: identifying the
-supports of any two maximum-rank fixed points (so that the statement transfers from the
-constructed witness to every maximum-rank fixed point) is not formalized.
+The corner-support restriction is eliminated at the constructed fixed point of maximal
+support. The residual gap against the source is the corollary's quantification over an
+\emph{arbitrary} maximum-rank fixed-point density matrix: identifying the supports of
+any two maximum-rank fixed points, so that the statement transfers from the constructed
+witness to every maximum-rank fixed point, is not established here.
 
 \end{document}
