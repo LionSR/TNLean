@@ -12,6 +12,7 @@ import TNLean.Channel.FixedPoint.BlockForm
 import TNLean.Channel.FixedPoint.CornerBlockForm
 import TNLean.Channel.FixedPoint.Corollaries
 import TNLean.Channel.FixedPoint.WeightedCornerFixedPoints
+import TNLean.Channel.FixedPoint.MaximalSupport
 import TNLean.Channel.Irreducible.Ergodicity
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Irreducible.Growth
@@ -325,12 +326,25 @@ points):
 * `Kraus.exists_weightedCorner_sqrt_eq_of_fixedPoint` — conjugation by `√ρ`
   maps the carrier onto the corner-supported fixed points.
 
-Wolf's statement takes a maximum-rank fixed-point density matrix and
-conjugates the full fixed-point set; for such `ρ` every fixed point is
-supported on the support of `ρ`, so the corner restriction disappears. That
-maximal-support property remains to be established here (see
-`docs/paper-gaps/wolf_cor67_maximal_support_restriction.tex`); it is the
-remaining step for the statement in its stated generality.
+In `TNLean.Channel.FixedPoint.MaximalSupport` (the maximal-support property
+and the removal of the corner restriction):
+
+* `Kraus.stationaryProj_absorb_of_le` — for positive semidefinite $P \preceq \rho$
+  the support projection of $\rho$ absorbs $P$.
+* `Kraus.exists_maximalSupport_fixedPoint` — a positive semidefinite fixed point
+  $\rho_0$ whose
+  support projection $Q_0$ satisfies $Q_0 X Q_0 = X$ for every fixed point $X$.
+* `Kraus.exists_maximalSupport_weightedCorner_sqrt_eq` — at $\rho_0$, conjugation
+  by $\sqrt{\rho_0}$ maps the corner carrier onto the full fixed-point set,
+  realizing $\rho_0^{-1/2}\,\{X \mid T(X) = X\}\,\rho_0^{-1/2}$ without a support
+  restriction.
+
+Wolf's statement quantifies over an arbitrary maximum-rank fixed-point
+density matrix; the formalized statements produce one fixed point of maximal
+support and realize the
+conjugated set there. Transferring the statement to every maximum-rank fixed
+point (by identifying the supports of any two of them) is not formalized
+(see `docs/paper-gaps/wolf_cor67_maximal_support_restriction.tex`).
 
 ### Wolf Theorem 6.15 (Conditional expectation onto fixed-point algebra) — PARTIALLY FORMALIZED
 
