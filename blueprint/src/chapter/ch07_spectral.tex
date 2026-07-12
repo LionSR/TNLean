@@ -2699,8 +2699,8 @@ point of maximum rank goes through the rank of the support projection.
         \;=\; \#\{i \mid \lambda_i > 0\}
         \;=\; \operatorname{rank} \rho,
     \]
-    the last equality by the count of nonzero eigenvalues in
-    Lemma~\ref{lem:rank_stationaryProj}.
+    the last equality because the rank of a positive semidefinite matrix is the number
+    of its positive eigenvalues.
 \end{proof}
 
 \begin{theorem}[The support of a fixed point of maximum rank carries every fixed
@@ -2742,9 +2742,14 @@ point of maximum rank goes through the rank of the support projection.
         \;=\; \operatorname{rank} \rho_0,
     \]
     the last equality by Lemma~\ref{lem:rank_stationaryProj}; hence the ranks agree.
-    From $\rho\,Q_0 = \rho$ and the kernel inclusion of the support projection,
-    $P (\Id - Q_0) = 0$, that is $P Q_0 = P$, and taking conjugate transposes also
-    $Q_0 P = P$. The difference $R = Q_0 - P$ is then Hermitian and idempotent,
+    From $\rho\,Q_0 = \rho$ one has $\rho\,(\Id - Q_0) = 0$, so the range of
+    $\Id - Q_0$ lies in the kernel of $\rho$; the support projection $P$ of $\rho$
+    vanishes on that kernel, so
+    \[
+        P\,(\Id - Q_0) = 0,
+        \qquad P\,Q_0 = P,
+    \]
+    and taking conjugate transposes also $Q_0 P = P$. The difference $R = Q_0 - P$ is then Hermitian and idempotent,
     \[
         R^2 \;=\; Q_0 - P - P + P \;=\; R,
     \]
