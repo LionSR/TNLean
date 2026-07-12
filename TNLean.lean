@@ -395,6 +395,7 @@ import TNLean.MPS.MPDO.PhysicalSectorClosureThree
 import TNLean.MPS.MPDO.PhysicalSectorClosureGlobal
 import TNLean.MPS.MPDO.PhysicalSectorTraceActions
 import TNLean.MPS.MPDO.PhysicalSectorOmegaPreparation
+import TNLean.MPS.MPDO.PhysicalSectorRefinement
 import TNLean.MPS.MPDO.PhysicalSectorCoarseGrainingAction
 import TNLean.MPS.MPDO.PhysicalSectorCoarseGrainingIdentity
 import TNLean.MPS.MPDO.SectorPairingTransfer

@@ -2575,29 +2575,35 @@ strong subadditivity for a normalized three-site reduced state.
 % **Local fix (zero-weight quotient):** the source quotient is completed on
 % zero-weight pairs. Documented in
 % docs/paper-gaps/cpgsv17_mpdo_zero_weight_preparation_completion.tex.
-\begin{definition}[The three-site neighboring-state preparation $\mathcal T_1$]
-    \label{def:mpdo_physical_sector_t1_preparation}
+\begin{theorem}[Positivity and zero-weight neighboring operators]
+    \label{thm:mpdo_physical_sector_three_site_neighboring_operator_properties}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.sector_nonempty,
       MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.threeSiteMiddleIndex_nonempty}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.threeSiteNeighboringOperator_pos,
       MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.threeSiteNeighboringOperator_eq_zero_of_mul_eq_zero}
-    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.normalizedThreeSiteNeighboringDensity,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.normalizedThreeSiteNeighboringDensity_pos,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_normalizedThreeSiteNeighboringDensity}
-    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.inactiveThreeSiteNeighboringDensity,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.inactiveThreeSiteNeighboringDensity_posDef,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.inactiveThreeSiteNeighboringDensity_trace}
-    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSiteNeighboringDensity,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSiteNeighboringDensity_pos,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_completedThreeSiteNeighboringDensity,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSiteNeighboringDensity_eq_normalized}
-    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSitePreparationMap,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSitePreparationMap_eq_normalized}
-    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSiteControlledMap,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSiteControlledMap_sameBlock_apply}
     \leanok
     \uses{def:mpdo_physical_sector_three_site_neighboring_operator,
-      def:mpdo_neighboring_trace_factorization}
+      def:mpdo_neighboring_trace_factorization,
+      thm:mpdo_physical_sector_three_site_neighboring_operator_trace}
+    The sector set and every middle-subspin space are nonempty. Moreover,
+    $\Omega_{k,h}$ is positive semidefinite, and
+    \[
+      a_kb_h=0 \quad\Longrightarrow\quad \Omega_{k,h}=0.
+    \]
+\end{theorem}
+
+\begin{definition}[The three-site neighboring-state preparation $\mathcal T_1$]
+    \label{def:mpdo_physical_sector_t1_preparation}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.normalizedThreeSiteNeighboringDensity}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.inactiveThreeSiteNeighboringDensity}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSiteNeighboringDensity}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSitePreparationMap}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSiteControlledMap}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.t1Map}
+    \leanok
+    \uses{def:mpdo_physical_sector_three_site_neighboring_operator,
+      def:mpdo_neighboring_trace_factorization,
+      thm:mpdo_physical_sector_three_site_neighboring_operator_properties}
     On a sector pair with $a_kb_h\ne0$, set
     \[
       \widehat\Omega_{k,h}=(a_kb_h)^{-1}\Omega_{k,h}.
@@ -2613,16 +2619,38 @@ strong subadditivity for a normalized three-site reduced state.
     preparation stage $\mathcal T_1$ of
     \cite[Appendix~C.2, lines~1523--1535]{Cirac2016MPDO_arXiv}.
     The zero-weight choice makes the source map total without imposing a
-    nonzero-weight hypothesis and does not affect its action on the two-site
-    closure.
+    nonzero-weight hypothesis.
 \end{definition}
+
+\begin{theorem}[Properties of the three-site neighboring densities]
+    \label{thm:mpdo_physical_sector_t1_density_properties}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.normalizedThreeSiteNeighboringDensity_pos,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_normalizedThreeSiteNeighboringDensity}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.inactiveThreeSiteNeighboringDensity_posDef,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.inactiveThreeSiteNeighboringDensity_trace}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSiteNeighboringDensity_pos,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_completedThreeSiteNeighboringDensity,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSiteNeighboringDensity_eq_normalized}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSitePreparationMap_eq_normalized}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSiteControlledMap_sameBlock_apply}
+    \leanok
+    \uses{def:mpdo_physical_sector_t1_preparation}
+    The normalized density is positive semidefinite and has trace one on
+    every active pair. The density chosen on an inactive pair is positive
+    definite and has trace one. Hence $\overline\Omega_{k,h}$ is positive
+    semidefinite with trace one for every pair, and agrees with
+    $\widehat\Omega_{k,h}$ on active pairs. The corresponding sectorwise and
+    controlled maps prepare these densities on their diagonal summands.
+\end{theorem}
 
 \begin{theorem}[$\mathcal T_1$ is trace-preserving completely positive]
     \label{thm:mpdo_physical_sector_t1_preparation_cptp}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSitePreparationMap_isKrausCPTP,
       MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSiteControlledMap_isKrausCPTP}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.t1Map_isKrausCPTP}
     \leanok
-    \uses{def:mpdo_physical_sector_t1_preparation}
+    \uses{def:mpdo_physical_sector_t1_preparation,
+      thm:mpdo_physical_sector_t1_density_properties}
     The completed sectorwise preparations and their orthogonally controlled
     direct sum are trace-preserving and completely positive.
 \end{theorem}
@@ -2639,6 +2667,8 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{definition}[The refinement channel $\mathcal T$]
     \label{def:mpdo_physical_sector_t_map}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.tMap}
+    \leanok
     \uses{def:mpdo_t0_map,
       def:mpdo_physical_sector_t1_preparation,
       def:mpdo_t2_map}
@@ -2654,12 +2684,15 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{theorem}[$\mathcal T$ is trace-preserving completely positive]
     \label{thm:mpdo_physical_sector_t_map_cptp}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.tMap_isKrausCPTP}
+    \leanok
     \uses{def:mpdo_physical_sector_t_map}
     The refinement channel $\mathcal T$ is trace-preserving and completely
     positive.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:mpdo_t0_map_cptp,
       thm:mpdo_physical_sector_t1_preparation_cptp,
       thm:mpdo_t2_map_cptp,
@@ -2675,18 +2708,19 @@ strong subadditivity for a normalized three-site reduced state.
     \medskip
     \TNMPDORefinementDirection
     \caption{Physical-sector construction of the refinement channel
-    $\mathcal T=\mathcal T_2\mathcal T_1\mathcal T_0$. The first stage traces
-    $R_k\otimes L_h$ and retains $a_kb_h$ on $L_k\otimes R_h$. On an active
-    sector pair, the second stage adjoins
+    $\mathcal T=\mathcal T_2\mathcal T_1\mathcal T_0$. On a two-site closure,
+    the first stage traces $R_k\otimes L_h$ and leaves $a_kb_h$ multiplying
+    the operator on $L_k\otimes R_h$. On an active sector pair, the second
+    stage adjoins
     $\widehat\Omega_{k,h}=(a_kb_h)^{-1}
       \bigoplus_l(\eta_{k,l}\otimes\eta_{l,h})$, and the final stage orders
     the factors as
     $(L_k\otimes R_k)\otimes(L_l\otimes R_l)\otimes(L_h\otimes R_h)$.
     The upper and lower rows lie in the sitewise sector coordinates
-    $\mathfrak R_2$ and $\mathfrak R_3$, respectively. The lower schematic is
-    the refinement identity in
+    $\mathfrak R_2$ and $\mathfrak R_3$, respectively. The lower schematic
+    records the intended two-site to three-site action in
     \cite[Appendix~C.2, lines~1510--1516 and~1522--1545]
-      {Cirac2016MPDO_arXiv}.}
+      {Cirac2016MPDO_arXiv}; no refinement closure identity is asserted here.}
     \label{fig:mpdo_physical_sector_refinement_channel}
 \end{figure}
 
