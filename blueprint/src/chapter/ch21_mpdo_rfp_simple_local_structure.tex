@@ -3295,7 +3295,7 @@ strong subadditivity for a normalized three-site reduced state.
 \end{proof}
 
 For the following construction, through
-Theorem~\ref{thm:mpdo_localized_physical_s_closure_identity}, assume the
+Theorem~\ref{thm:mpdo_blocked_sector_coordinate_tensor_is_rfp_via_ts}, assume the
 neighboring-operator trace factorization of
 Definition~\ref{def:mpdo_neighboring_trace_factorization}. Write
 \[
@@ -3498,6 +3498,173 @@ $\widehat{\cal K}$.
     Fixing the last ket and bra indices identifies the four-site closure with
     a three-site closure having the last tensor matrix absorbed into $X$.
     Apply the three-to-two-site coarse-graining identity.
+\end{proof}
+
+% **Local fix (implication label):** Appendix line 1824 says
+% (iii) implies (v), but the theorem statement and the local structure used
+% here give (iv) implies (v). Documented in
+% docs/paper-gaps/cpgsv17_mpdo_theorem_4_9_implication_label.tex.
+\begin{definition}[Two-step physical refinement]
+    \label{def:mpdo_physical_t_squared_map}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.physicalTSquaredMap}
+    \leanok
+    \uses{def:mpdo_physical_t_map,
+      def:mpdo_localized_physical_t_map}
+    Let $\widehat{\cal K}$ be the sector-coordinate tensor selected by the
+    physical isometry of Proposition~C.7. Define
+    \[
+      \widehat{\mathcal T}^2
+      =\widehat{\mathcal T}_{(12)3}\circ\widehat{\mathcal T},
+      \qquad
+      \widehat{\mathcal T}^2:M_{q^2}(\mathbb C)
+        \longrightarrow M_{q^4}(\mathbb C),
+    \]
+    where the second application acts on the first two sites and leaves the
+    third site unchanged. Thus the superscript denotes two successive
+    overlapping applications, as in the proof of
+    \cite[Theorem~4.9, (iv)$\Rightarrow$(v)]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[The two-step physical refinement is a channel]
+    \label{thm:mpdo_physical_t_squared_map_cptp}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.physicalTSquaredMap_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_physical_t_squared_map}
+    The map $\widehat{\mathcal T}^2$ is trace-preserving and completely
+    positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_physical_t_map_cptp,
+      thm:mpdo_localized_physical_t_map_cptp}
+    It is the composition of the physical refinement channel and its
+    localization on the first two sites.
+\end{proof}
+
+% **Local fix (zero-weight quotient):** this identity uses the completed
+% zero-weight preparation. Documented in
+% docs/paper-gaps/cpgsv17_mpdo_zero_weight_preparation_completion.tex.
+\begin{theorem}[Two-step refinement of the sector-coordinate tensor]
+    \label{thm:mpdo_physical_t_squared_closure_identity}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.physicalTSquaredMap_twoSiteClosure_eq_fourSiteClosure}
+    \leanok
+    \uses{def:mpdo_physical_t_squared_map}
+    For every virtual matrix $X$, the sector-coordinate tensor satisfies
+    \[
+      \widehat{\mathcal T}^2
+        \bigl(\widehat{\cal K}_2(X)\bigr)
+      =\widehat{\cal K}_4(X).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_physical_t_closure_identity,
+      thm:mpdo_localized_physical_t_closure_identity}
+    The first refinement gives $\widehat{\cal K}_3(X)$; applying the localized
+    refinement to its first two sites gives $\widehat{\cal K}_4(X)$.
+\end{proof}
+
+\begin{definition}[Two-step physical coarse-graining]
+    \label{def:mpdo_physical_s_squared_map}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.physicalSSquaredMap}
+    \leanok
+    \uses{def:mpdo_physical_s_map,
+      def:mpdo_localized_physical_s_map}
+    Define
+    \[
+      \widehat{\mathcal S}^2
+      =\widehat{\mathcal S}\circ\widehat{\mathcal S}_{(123)4},
+      \qquad
+      \widehat{\mathcal S}^2:M_{q^4}(\mathbb C)
+        \longrightarrow M_{q^2}(\mathbb C),
+    \]
+    where the first application acts on the first three sites and leaves the
+    fourth site unchanged. The superscript again denotes successive
+    overlapping applications.
+\end{definition}
+
+\begin{theorem}[The two-step physical coarse-graining is a channel]
+    \label{thm:mpdo_physical_s_squared_map_cptp}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.physicalSSquaredMap_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_physical_s_squared_map}
+    The map $\widehat{\mathcal S}^2$ is trace-preserving and completely
+    positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_physical_s_map_cptp,
+      thm:mpdo_localized_physical_s_map_cptp}
+    It is the composition of the localized coarse-graining channel and the
+    physical coarse-graining channel.
+\end{proof}
+
+\begin{theorem}[Two-step coarse-graining of the sector-coordinate tensor]
+    \label{thm:mpdo_physical_s_squared_closure_identity}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.physicalSSquaredMap_fourSiteClosure_eq_twoSiteClosure}
+    \leanok
+    \uses{def:mpdo_physical_s_squared_map}
+    For every virtual matrix $X$, the sector-coordinate tensor satisfies
+    \[
+      \widehat{\mathcal S}^2
+        \bigl(\widehat{\cal K}_4(X)\bigr)
+      =\widehat{\cal K}_2(X).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_localized_physical_s_closure_identity,
+      thm:mpdo_physical_s_closure_identity}
+    The localized coarse-graining first gives $\widehat{\cal K}_3(X)$; the
+    second coarse-graining gives $\widehat{\cal K}_2(X)$.
+\end{proof}
+
+\begin{figure}[ht]
+    \centering
+    \TNMPDOBlockedRFPChannels
+    \caption{The superscripts in $\widehat{\mathcal T}^2$ and
+    $\widehat{\mathcal S}^2$ denote successive overlapping applications.
+    The dashed frames identify the two-site and four-site endpoints with one
+    and two sites of the blocked tensor. This is the channel construction in
+    \cite[Appendix~C.2, lines~1821--1825]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_blocked_rfp_channels}
+\end{figure}
+
+% **Local fix (zero-weight quotient):** this theorem uses the completed
+% zero-weight preparation through the two-step refinement identity. Documented
+% in docs/paper-gaps/cpgsv17_mpdo_zero_weight_preparation_completion.tex.
+% **Scope restriction (physical coordinates):** this theorem concerns the
+% sector-coordinate tensor, not yet the original tensor. Documented in
+% docs/paper-gaps/cpgsv17_mpdo_blocked_rfp_physical_transport.tex.
+\begin{theorem}[Blocked sector-coordinate tensor is a renormalization fixed point]
+    \label{thm:mpdo_blocked_sector_coordinate_tensor_is_rfp_via_ts}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.blockTwo_sectorCoordinateTensor_isRFPViaTS}
+    \leanok
+    \uses{def:is_rfp_via_ts, def:mpdo_two_site_blocking}
+    Let $\widehat{\cal K}^{[2]}$ be the tensor obtained by blocking two
+    adjacent sites of the sector-coordinate tensor $\widehat{\cal K}$. Then
+    $\widehat{\cal K}^{[2]}$ is a renormalization fixed point in the sense of
+    Definition~\ref{def:is_rfp_via_ts}. More precisely, after the canonical
+    identifications of one blocked site with two original sites and two
+    blocked sites with four original sites, the required channels are
+    $\widehat{\mathcal S}^2$ and
+    $\widehat{\mathcal T}^2$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_physical_t_squared_map_cptp,
+      thm:mpdo_physical_t_squared_closure_identity,
+      thm:mpdo_physical_s_squared_map_cptp,
+      thm:mpdo_physical_s_squared_closure_identity,
+      thm:mpdo_one_site_closure_two_site_blocking,
+      thm:mpdo_two_site_closure_two_site_blocking}
+    Decode one blocked index as a pair of physical indices and two blocked
+    indices as four physical indices. The one-site and two-site closures of
+    $\widehat{\cal K}^{[2]}$ thereby become respectively
+    $\widehat{\cal K}_2(X)$ and $\widehat{\cal K}_4(X)$. Transporting the two
+    channels through these permutation identifications preserves complete
+    positivity and trace, and the two closure identities give the required
+    equations in Definition~\ref{def:is_rfp_via_ts}.
 \end{proof}
 
 \begin{figure}[ht]

@@ -1,0 +1,45 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{The Implication Label in the Proof of MPDO Theorem 4.9}
+\author{}
+\date{2026-07-12}
+
+\begin{document}
+\maketitle
+
+\section{The inconsistent label}
+
+The statement of Theorem~4.9 in
+\cite[lines~851--893]{Cirac2016MPDO_arXiv} labels the simple local structure as
+condition~(iv) and the renormalization fixed-point property as condition~(v).
+The Appendix construction of the two channels concludes instead with the words
+``(iii)$\Rightarrow$(v)'' at line~1824.  This label is inconsistent with the
+hypothesis used in that construction: Proposition~C.7 supplies precisely the
+neighboring-operator trace factorization belonging to the simple local
+structure in condition~(iv).
+
+Consequently the direct channel argument at lines~1821--1825 establishes
+condition~(iv)$\Rightarrow$(v).  Reading the displayed implication as
+condition~(iii)$\Rightarrow$(v) would detach the construction from the local
+structure established immediately beforehand.
+
+\section{Formal treatment}
+
+The formal development cites the route as
+Theorem~4.9, (iv)$\Rightarrow$(v), while retaining the Appendix line range for
+the explicit channels.  This is a local correction of the implication label;
+it changes neither the hypotheses nor the conclusion of the source theorem.
+A file collecting declarations that use this corrected label should carry a
+file-level \emph{Local fix (implication label)} marker and cite this note; the
+corresponding blueprint block should carry the same marker.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
