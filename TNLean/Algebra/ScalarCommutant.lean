@@ -67,7 +67,7 @@ This is the amplified commutant step used in arXiv:1511.08090,
 Section ``Fusion tensors'', in the uniqueness paragraph preceding equation
 `zippercondition2`, and Section ``Associativity and the pentagon equation'',
 in the injectivity argument following equation `pentagon3`. -/
-theorem exists_eq_kronecker_one_of_intertwines_span_eq_top
+lemma exists_eq_kronecker_one_of_intertwines_span_eq_top
     {m₁ m₂ d ι : Type*}
     [Fintype m₁] [Fintype m₂] [Fintype d]
     [DecidableEq m₁] [DecidableEq m₂] [DecidableEq d]
