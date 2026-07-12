@@ -282,6 +282,72 @@
     \end{tikzpicture}%
 }
 
+% The three stages of the physical-sector refinement channel in Appendix C.2.
+% The layout follows MPDO_TMatrix.png: a two-site sector row, the boundary row
+% left by T_0, and the three-site factor order obtained after T_1 and T_2.
+\newcommand{\TNMPDORefinementConstruction}{%
+    \begin{tikzpicture}[tn picture, scale=0.85]
+        \node[anchor=east] at (-4.30,2.45) {$\displaystyle\bigoplus_{k,h}$};
+        \TN@subspinbox{trefTopLk}{(-3.72,2.45)}{l_k}
+        \TN@subspinbox{trefTopRk}{(-2.72,2.45)}{r_k}
+        \TN@subspinbox{trefTopLh}{(-1.72,2.45)}{l_h}
+        \TN@subspinbox{trefTopRh}{(-0.72,2.45)}{r_h}
+        \TN@subspinlink{trefTopLk}{trefTopRk}
+        \TN@subspinlink{trefTopRk}{trefTopLh}
+        \TN@subspinlink{trefTopLh}{trefTopRh}
+        \draw[rounded corners=2pt, densely dashed]
+            (-3.25,1.94) rectangle (-1.19,2.96);
+        \node at (-2.22,1.68) {$\tr_{R_k\otimes L_h}$};
+
+        \draw[->, line width=0.55pt] (2.15,2.18) -- (2.15,1.22)
+            node[midway, right] {$\mathcal T_0$};
+        \node[anchor=east] at (-2.08,0.86)
+            {$\displaystyle\bigoplus_{k,h}a_kb_h$};
+        \TN@subspinbox{trefMidLk}{(-1.50,0.86)}{l_k}
+        \TN@subspinbox{trefMidRh}{(-0.50,0.86)}{r_h}
+        \TN@subspinlink{trefMidLk}{trefMidRh}
+
+        \draw[->, line width=0.55pt] (2.15,0.38) -- (2.15,-0.58)
+            node[midway, right] {$\mathcal T_2\mathcal T_1$};
+        \node[anchor=east] at (-4.30,-0.96)
+            {$\displaystyle\bigoplus_{k,h,l}$};
+        \TN@subspinbox{trefBotLk}{(-3.72,-0.96)}{l_k}
+        \TN@subspinbox{trefBotRk}{(-2.72,-0.96)}{r_k}
+        \TN@subspinbox{trefBotLl}{(-1.72,-0.96)}{l_l}
+        \TN@subspinbox{trefBotRl}{(-0.72,-0.96)}{r_l}
+        \TN@subspinbox{trefBotLh}{(0.28,-0.96)}{l_h}
+        \TN@subspinbox{trefBotRh}{(1.28,-0.96)}{r_h}
+        \TN@subspinlink{trefBotLk}{trefBotRk}
+        \TN@subspinlink{trefBotRk}{trefBotLl}
+        \TN@subspinlink{trefBotLl}{trefBotRl}
+        \TN@subspinlink{trefBotRl}{trefBotLh}
+        \TN@subspinlink{trefBotLh}{trefBotRh}
+    \end{tikzpicture}%
+}
+
+% The refinement half of MPDO_TSKKK.png.  This records only the direction and
+% site counts of the channel; the closure identity belongs to its theorem.
+\newcommand{\TNMPDORefinementDirection}{%
+    \begin{tikzpicture}[tn picture, scale=0.85]
+        \TN@subspinbox{trefDirTwoL}{(-2.85,0)}{\mathcal K}
+        \TN@subspinbox{trefDirTwoR}{(-1.75,0)}{\mathcal K}
+        \TN@subspinlink{trefDirTwoL}{trefDirTwoR}
+        \draw[tn leg] (trefDirTwoL.west) -- ++(-0.48,0);
+        \draw[tn leg] (trefDirTwoR.east) -- ++(0.48,0);
+
+        \draw[->, line width=0.65pt, bend left=18]
+            (-0.94,0.28) to node[above] {$\mathcal T$} (0.04,0.28);
+
+        \TN@subspinbox{trefDirThreeL}{(0.85,0)}{\mathcal K}
+        \TN@subspinbox{trefDirThreeM}{(1.95,0)}{\mathcal K}
+        \TN@subspinbox{trefDirThreeR}{(3.05,0)}{\mathcal K}
+        \TN@subspinlink{trefDirThreeL}{trefDirThreeM}
+        \TN@subspinlink{trefDirThreeM}{trefDirThreeR}
+        \draw[tn leg] (trefDirThreeL.west) -- ++(-0.48,0);
+        \draw[tn leg] (trefDirThreeR.east) -- ++(0.48,0);
+    \end{tikzpicture}%
+}
+
 % Fixed-sector factorization of the arbitrary-X two-site physical closure.
 % The left-hand row shows the sector subspins and the outer virtual closure;
 % the right-hand side shows only the proved boundary/neighbor tensor product.
