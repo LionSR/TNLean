@@ -24,6 +24,7 @@ import TNLean.Algebra.GramMatrixLI
 import TNLean.Algebra.HermitianHelpers
 import TNLean.Algebra.MatrixSpectralDecomp
 import TNLean.Algebra.MatrixAux
+import TNLean.Algebra.KroneckerFactorPositivity
 import TNLean.Algebra.MatrixGramUnitary
 import TNLean.Algebra.FinSum
 import TNLean.Algebra.ScalarPowerSumIdentity
@@ -407,6 +408,7 @@ import TNLean.MPS.MPDO.PhysicalSectorRefinementIdentity
 import TNLean.MPS.MPDO.SectorPairingTransfer
 import TNLean.MPS.MPDO.SectorEtaContraction
 import TNLean.MPS.MPDO.SectorEtaOperator
+import TNLean.MPS.MPDO.SectorEtaPositivity
 import TNLean.MPS.MPDO.FusionIsometries
 import TNLean.MPS.MPDO.OperatorProduct
 import TNLean.MPS.MPDO.AlgebraStructure

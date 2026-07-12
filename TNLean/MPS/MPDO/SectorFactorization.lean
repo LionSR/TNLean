@@ -422,6 +422,11 @@ Positive semidefiniteness of the representatives fixed by
 `MPOTensor.sectorTensorL` and `MPOTensor.sectorTensorR` therefore enters here
 as a hypothesis; the remaining choice problem is recorded in
 `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+For an MPDO the diagonal operators are positive semidefinite
+(`MPOTensor.sectorEta_self_posSemidef`), each pair `η_{k,h} ⊗ η_{h,k}` is
+positive semidefinite (`MPOTensor.sectorEta_kronecker_posSemidef`), and a
+rescaled positive family exists once the nonzero neighboring operators occur
+in symmetric pairs (`MPOTensor.exists_explicitEtaOperators_sectorEta`).
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1441--1455. -/
 noncomputable def ExplicitEtaOperators.ofSectorTensors

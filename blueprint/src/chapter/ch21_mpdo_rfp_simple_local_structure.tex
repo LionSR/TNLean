@@ -1588,6 +1588,185 @@ strong subadditivity for a normalized three-site reduced state.
     every summand in the closed trace is zero.
 \end{proof}
 
+\begin{theorem}[Positive rescaling of Kronecker factors]%
+    \label{thm:kronecker_factor_positive_rescaling}
+    \lean{Matrix.exists_smul_posSemidef_of_kronecker_posSemidef}
+    \lean{Matrix.eq_zero_of_forall_star_dotProduct_mulVec_eq_zero}
+    \lean{Matrix.posSemidef_of_forall_star_dotProduct_mulVec_nonneg}
+    \lean{Matrix.star_dotProduct_kronecker_mulVec_prod}
+    \lean{Matrix.smul_kronecker_smul_inv_eq}
+    \leanok
+    Let $A$ and $B$ be nonzero complex square matrices whose Kronecker
+    product $A\otimes B$ is positive semidefinite. Then there is a scalar
+    $c\ne0$ with $cA\ge0$ and $c^{-1}B\ge0$. Since
+    $(cA)\otimes(c^{-1}B)=A\otimes B$, the rescaled factors represent the
+    same product.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    On a product vector $x\otimes y$ the quadratic form of $A\otimes B$
+    factors, so for all vectors $x$ and $y$,
+    \[
+        \bigl(x^\dagger A\,x\bigr)\bigl(y^\dagger B\,y\bigr)\ge0 .
+    \]
+    By polarization a complex matrix is determined by its quadratic form;
+    since $A$ and $B$ are nonzero there are vectors with
+    $a=v_0^\dagger A\,v_0\ne0$ and $c=w_0^\dagger B\,w_0\ne0$. Every value
+    $x^\dagger(cA)\,x=(x^\dagger A\,x)\,c$ is nonnegative, and over the
+    complex numbers a nonnegative quadratic form already forces the matrix
+    to be Hermitian, hence positive semidefinite. For the second factor,
+    $ac>0$ and $a\,(y^\dagger B\,y)\ge0$ give
+    $c^{-1}(y^\dagger B\,y)=\bigl(a\,(y^\dagger B\,y)\bigr)(ac)^{-1}\ge0$.
+\end{proof}
+
+\begin{theorem}[The conjugated chain is a congruence]%
+    \label{thm:mpdo_conjugated_chain_congruence}
+    \lean{MPOTensor.mpo_conjugatePhysical_eq}
+    \lean{MPOTensor.mpo_conjugatePhysical_posSemidef}
+    \leanok
+    \uses{def:mpdo_conjugate_physical}
+    For every matrix $U$ on the physical space and every $N\ge1$,
+    \[
+        \rho^{(N)}(\widetilde{\cal K})
+        = U^{\otimes N}\,\rho^{(N)}({\cal K})\,
+          \bigl(U^{\otimes N}\bigr)^\dagger .
+    \]
+    In particular $\rho^{(N)}(\widetilde{\cal K})\ge0$ whenever
+    $\rho^{(N)}({\cal K})\ge0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Expand the closed trace over bond configurations $g$ (with
+    $g_{N+1}=g_1$), and each conjugated local entry over its two physical
+    indices:
+    \[
+        \bigl[\rho^{(N)}(\widetilde{\cal K})\bigr]_{\sigma,\tau}
+        =\sum_{g}\prod_{n=1}^{N}
+            \widetilde\kappa_{g_n,g_{n+1}}^{\,\sigma_n\tau_n}
+        =\sum_{g}\prod_{n=1}^{N}\sum_{p_n,q_n}
+            U_{\sigma_n p_n}\,
+            \kappa_{g_n,g_{n+1}}^{\,p_n q_n}\,
+            \overline{U_{\tau_n q_n}} .
+    \]
+    Distributing the site product over the physical sums factors the two
+    $U$-products out of the bond sum, which leaves the matrix entry of
+    $U^{\otimes N}\rho^{(N)}({\cal K})\bigl(U^{\otimes N}\bigr)^\dagger$.
+    Positivity is preserved by any congruence.
+\end{proof}
+
+\begin{theorem}[Positivity of the projected chain blocks]%
+    \label{thm:mpdo_cyclic_eta_posSemidef}
+    \lean{MPOTensor.cyclicEtaTensorProduct_posSemidef}
+    \leanok
+    \uses{def:mpdo, def:mpdo_cyclic_eta_tensor_product,
+        thm:mpdo_fixed_sector_cyclic_eta,
+        thm:mpdo_conjugated_chain_congruence}
+    Let ${\cal K}$ be an MPDO whose transformed physical slices satisfy the
+    sector factorization hypothesis. Then for every $N\ge1$ and every
+    cyclic sector assignment $k_1,\ldots,k_N$ (with $k_{N+1}=k_1$),
+    \[
+        0\le\bigl[Q_{k_1}\otimes\cdots\otimes Q_{k_N}\bigr]\,\tilde\sigma\,
+        \bigl[Q_{k_1}\otimes\cdots\otimes Q_{k_N}\bigr]
+        =\bigotimes_{n=1}^{N}\eta_{k_n,k_{n+1}} .
+    \]
+    This is the positivity half of the display at
+    \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_fixed_sector_cyclic_eta,
+        thm:mpdo_conjugated_chain_congruence}
+    The cyclic tensor product $\Omega_k$ of
+    Definition~\ref{def:mpdo_cyclic_eta_tensor_product} is a diagonal
+    sector block of the basis-conjugated chain by
+    Theorem~\ref{thm:mpdo_fixed_sector_cyclic_eta}. The conjugated chain is
+    positive semidefinite by
+    Theorem~\ref{thm:mpdo_conjugated_chain_congruence} and the MPDO
+    property, and a principal submatrix of a positive semidefinite matrix
+    is positive semidefinite.
+\end{proof}
+
+\begin{theorem}[Positivity of the diagonal and paired neighboring
+    operators]%
+    \label{thm:mpdo_sector_eta_pair_posSemidef}
+    \lean{MPOTensor.sectorEta_self_posSemidef}
+    \lean{MPOTensor.sectorEta_kronecker_posSemidef}
+    \lean{MPOTensor.exists_smul_posSemidef_sectorEta}
+    \lean{MPOTensor.etaOfSectorTensors_self_posSemidef}
+    \lean{MPOTensor.etaOfSectorTensors_kronecker_posSemidef}
+    \leanok
+    \uses{def:mpdo, def:mpdo_sector_eta,
+        thm:mpdo_cyclic_eta_posSemidef,
+        thm:kronecker_factor_positive_rescaling}
+    Let ${\cal K}$ be an injective MPDO with the chosen Hayashi
+    decomposition and a nonzero tail entry. Then for all sectors $k,h$:
+    \begin{enumerate}
+        \item $\eta_{k,k}\ge0$;
+        \item $\eta_{k,h}\otimes\eta_{h,k}\ge0$;
+        \item if $\eta_{k,h}\ne0$ and $\eta_{h,k}\ne0$, there is a scalar
+            $c\ne0$ with $c\,\eta_{k,h}\ge0$, $c^{-1}\eta_{h,k}\ge0$, and
+            $(c\,\eta_{k,h})\otimes(c^{-1}\eta_{h,k})=\eta_{k,h}\otimes
+            \eta_{h,k}$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_cyclic_eta_posSemidef,
+        thm:kronecker_factor_positive_rescaling}
+    The chain of length one projected to the sector $k$ is $\eta_{k,k}$ up
+    to the exchange of its two tensor factors, and the chain of length two
+    projected to $(k,h)$ is $\eta_{k,h}\otimes\eta_{h,k}$, both positive by
+    Theorem~\ref{thm:mpdo_cyclic_eta_posSemidef}. The third item, including
+    the Kronecker-product-preserving equality, is
+    Theorem~\ref{thm:kronecker_factor_positive_rescaling}.
+\end{proof}
+
+\begin{theorem}[Positivity choice with symmetric support]%
+    \label{thm:mpdo_eta_positivity_choice_symmetric}
+    \lean{MPOTensor.exists_explicitEtaOperators_sectorEta}
+    \leanok
+    \uses{def:mpdo_explicit_eta_operators,
+        thm:mpdo_sector_eta_pair_posSemidef}
+    In the setting of Theorem~\ref{thm:mpdo_sector_eta_pair_posSemidef},
+    assume in addition that the nonzero neighboring operators occur in
+    symmetric pairs: $\eta_{k,h}=0$ forces $\eta_{h,k}=0$. Then there is a
+    positive semidefinite family $\eta'_{k,h}$ with $\eta'_{k,k}=\eta_{k,k}$
+    and, for every pair of sectors, scalars $c_{k,h}\ne0$ with
+    $\eta'_{k,h}=c_{k,h}\,\eta_{k,h}$ and
+    $\eta'_{h,k}=c_{k,h}^{-1}\,\eta_{h,k}$. In particular every two-site
+    block $\eta'_{k,h}\otimes\eta'_{h,k}=\eta_{k,h}\otimes\eta_{h,k}$ of
+    the sector-adapted decomposition is unchanged.
+
+    The source asserts at
+    \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv} that the
+    $\eta$'s can be chosen positive semidefinite, without the
+    symmetric-support hypothesis. That hypothesis excludes a scalar
+    obstruction: a nonzero neighboring operator whose reverse pair
+    vanishes is constrained only by cycles through at least three
+    sectors, and a coherent choice for the whole family can then fail.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_sector_eta_pair_posSemidef,
+        thm:kronecker_factor_positive_rescaling}
+    The diagonal operators are positive by
+    Theorem~\ref{thm:mpdo_sector_eta_pair_posSemidef}, and their scalar is
+    taken to be one. For a pair of distinct sectors, either both
+    neighboring operators vanish and any nonzero scalar works, or both are
+    nonzero by symmetric support and
+    Theorem~\ref{thm:mpdo_sector_eta_pair_posSemidef} supplies the
+    reciprocal pair of scalars. Choosing the scalar once per unordered
+    pair makes the two assignments reciprocal, and the block-preserving
+    equality of Theorem~\ref{thm:kronecker_factor_positive_rescaling}
+    applied to that scalar gives
+    $\eta'_{k,h}\otimes\eta'_{h,k}=\eta_{k,h}\otimes\eta_{h,k}$.
+\end{proof}
+
 \begin{definition}[Trace matrices of explicit $\eta$-data]
     \label{def:mpdo_explicit_eta_trace_matrix}
     \lean{MPOTensor.ExplicitEtaOperators.traceMatrix}
@@ -3152,6 +3331,10 @@ strong subadditivity for a normalized three-site reduced state.
     identity does not by itself choose coherent positive representatives for
     all neighboring pairs, so positive semidefiniteness remains a hypothesis
     on the chosen representatives here.
+    Theorem~\ref{thm:mpdo_sector_eta_pair_posSemidef} provides the diagonal
+    and paired positivity, and
+    Theorem~\ref{thm:mpdo_eta_positivity_choice_symmetric} a rescaled
+    positive family under symmetric support.
 \end{definition}
 
 \begin{theorem}[Trace matrix of the sector-tensor $\eta$-data]
