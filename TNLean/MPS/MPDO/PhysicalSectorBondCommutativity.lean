@@ -507,10 +507,10 @@ Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), lines
 1589--1593. -/
 theorem physicalBond_adjacent_comm_three
     (F : PhysicalSectorFactorization K) :
-    embedLocalOperator (d := d) 2 3 (by omega) (0 : Fin 3) F.physicalBond *
-        embedLocalOperator (d := d) 2 3 (by omega) (1 : Fin 3) F.physicalBond =
-      embedLocalOperator (d := d) 2 3 (by omega) (1 : Fin 3) F.physicalBond *
-        embedLocalOperator (d := d) 2 3 (by omega) (0 : Fin 3) F.physicalBond := by
+    embedLocalOperator (d := d) 2 3 (by decide) (0 : Fin 3) F.physicalBond *
+        embedLocalOperator (d := d) 2 3 (by decide) (1 : Fin 3) F.physicalBond =
+      embedLocalOperator (d := d) 2 3 (by decide) (1 : Fin 3) F.physicalBond *
+        embedLocalOperator (d := d) 2 3 (by decide) (0 : Fin 3) F.physicalBond := by
   apply (Matrix.reindex (finThreeArrowEquiv (Fin d))
     (finThreeArrowEquiv (Fin d))).injective
   change Matrix.reindexLinearEquiv ℂ ℂ (finThreeArrowEquiv (Fin d))
@@ -526,7 +526,7 @@ theorem physicalBond_adjacent_comm_three
   have hzero :
       Matrix.reindexLinearEquiv ℂ ℂ (finThreeArrowEquiv (Fin d))
           (finThreeArrowEquiv (Fin d))
-            (embedLocalOperator (d := d) 2 3 (by omega) (0 : Fin 3)
+            (embedLocalOperator (d := d) 2 3 (by decide) (0 : Fin 3)
               F.physicalBond) =
         leftPairMatrix F.physicalPairBond := by
     simpa only [Matrix.coe_reindexLinearEquiv] using
@@ -534,7 +534,7 @@ theorem physicalBond_adjacent_comm_three
   have hone :
       Matrix.reindexLinearEquiv ℂ ℂ (finThreeArrowEquiv (Fin d))
           (finThreeArrowEquiv (Fin d))
-            (embedLocalOperator (d := d) 2 3 (by omega) (1 : Fin 3)
+            (embedLocalOperator (d := d) 2 3 (by decide) (1 : Fin 3)
               F.physicalBond) =
         rightPairMatrix F.physicalPairBond := by
     simpa only [Matrix.coe_reindexLinearEquiv] using
