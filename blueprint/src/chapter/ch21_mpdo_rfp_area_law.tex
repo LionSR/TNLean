@@ -5,10 +5,17 @@
     \leanok
     \uses{def:mpo_tensor, def:von_neumann_entropy}
     For a fixed system size $N$, a block length $L\le N$, and an MPO tensor $M$
-    such that $\rho^{(N)}(M)$ is positive semidefinite, the \emph{$L$-block entropy}
-    $S_L^{(N)}(M)$ is the von Neumann entropy of the reduced state of the first
-    $L$ of $N$ spins of the normalized state
-    $\sigma^{(N)}(M) = \rho^{(N)}(M) / \tr[\rho^{(N)}(M)]$.
+    such that $\rho^{(N)}(M)$ is positive semidefinite, let
+    \[
+        \sigma^{(N)}(M) = \frac{\rho^{(N)}(M)}{\tr[\rho^{(N)}(M)]},
+        \qquad
+        \rho_L^{(N)}(M) = \tr_{N\setminus L}\!\bigl[\sigma^{(N)}(M)\bigr]
+    \]
+    denote the normalized state and the reduced state of the first $L$ of $N$
+    spins. The \emph{$L$-block entropy} is
+    \[
+        S_L^{(N)}(M) = S\bigl(\rho_L^{(N)}(M)\bigr).
+    \]
 \end{definition}
 
 \begin{definition}[Mutual information of an MPDO]\label{def:mutual_info_chain}
@@ -70,18 +77,23 @@
     \]
 \end{theorem}
 \begin{proof}\leanok
-    Reindexing a matrix does not change its von Neumann entropy.  The first
-    equality follows immediately.  Tracing out $C$ leaves the first $a+b$
-    sites.  Tracing out $A$ and $C$ leaves the middle $b$ sites, while tracing
-    out $A$ leaves the final $b+c$ sites.  Translation invariance gives
+    Write $\rho^{(k)}$ for the first-$k$-site reduced state, with $\cong$
+    denoting equality up to a permutation of basis indices. Reindexing a
+    matrix does not change its von Neumann entropy, giving the first equality
+    $S(ABC)=S_{a+b+c}$ immediately. Tracing out $C$ leaves the first $a+b$
+    sites,
+    \[
+        \operatorname{tr}_C(\rho_{ABC})\cong\rho^{(a+b)},
+    \]
+    so $S(AB)=S_{a+b}$. Tracing out $A$ and $C$ leaves the middle $b$ sites,
+    while tracing out $A$ leaves the final $b+c$ sites; translation invariance
+    gives
     \[
         \operatorname{tr}_{A,C}(\rho_{ABC})\cong\rho^{(b)},
         \qquad
-        \operatorname{tr}_{A}(\rho_{ABC})\cong\rho^{(b+c)},
+        \operatorname{tr}_{A}(\rho_{ABC})\cong\rho^{(b+c)}.
     \]
-    where $\rho^{(k)}$ is the first-$k$-site reduced state and $\cong$ denotes
-    equality up to a permutation of basis indices.  Hence $S(B)=S_b$ and
-    $S(BC)=S_{b+c}$.
+    Hence $S(B)=S_b$ and $S(BC)=S_{b+c}$.
 \end{proof}
 
 \begin{proposition}[Monotonicity of the mutual information]
@@ -209,13 +221,18 @@
     \lean{MPSTensor.pureBlockEntropy, MPSTensor.IsSAL}
     \leanok
     \uses{def:mps_tensor, def:von_neumann_entropy}
-    For an MPS tensor $A$, a system size $N$, and a block length $L\le N$,
-    the $L$-block entropy $S_L^{(N)}(A)$ is the von Neumann entropy of the
-    reduced state of the first $L$ spins of
+    For an MPS tensor $A$, a system size $N$, and a block length $L\le N$, let
     \[
         \sigma^{(N)}(A)
         =
-        \frac{\ketbra{V^{(N)}(A)}{V^{(N)}(A)}}{\|V^{(N)}(A)\|^2}.
+        \frac{\ketbra{V^{(N)}(A)}{V^{(N)}(A)}}{\|V^{(N)}(A)\|^2},
+        \qquad
+        \rho_L^{(N)}(A) = \tr_{N\setminus L}\!\bigl[\sigma^{(N)}(A)\bigr]
+    \]
+    denote the normalized state and the reduced state of the first $L$ spins.
+    The $L$-block entropy is
+    \[
+        S_L^{(N)}(A) = S\bigl(\rho_L^{(N)}(A)\bigr).
     \]
     The tensor saturates the area law if
     $S_L^{(N)}(A) = S_{L+1}^{(N)}(A)$ for all
@@ -252,10 +269,15 @@
     theory apply to pure-state block entropies.
 \end{lemma}
 \begin{proof}\leanok
-    The word product of doubled-tensor entries is the Kronecker product of the
-    bra word product and the conjugated ket word product. Thus its trace is
+    The word evaluation of the doubled tensor is the Kronecker product of the
+    word evaluation of $A$ and its conjugate,
     \[
-        \overline{V^{(N)}(A)(\tau)}\,V^{(N)}(A)(\sigma),
+        M^{\sigma,\tau} = A^\sigma \otimes \overline{A^\tau},
+    \]
+    so its trace factors as
+    $\tr(M^{\sigma,\tau}) = \tr(A^\sigma)\,\overline{\tr(A^\tau)}$, i.e.\
+    \[
+        \overline{V^{(N)}(A)_\tau}\,V^{(N)}(A)_\sigma,
     \]
     the corresponding matrix element of
     $\ketbra{V^{(N)}(A)}{V^{(N)}(A)}$.
@@ -322,9 +344,10 @@
     $W$ is the matrix of amplitudes $\langle u\,w\,|\,V^{(N)}(A)\rangle$ with $u$ the
     first $L$ spins and $w$ the remaining $N-L$. By cyclic invariance of the
     amplitudes, the reduced state of the complement is $\propto \overline{W^\dagger W}$.
-    Since $W W^\dagger$ and $W^\dagger W$ share the same nonzero spectrum, and
-    complex conjugation preserves the (real) eigenvalues of a Hermitian matrix, the
-    two reduced states have equal von Neumann entropy.
+    Cyclic invariance of the entropy, $S(WW^\dagger) = S(W^\dagger W)$, together with
+    invariance of the entropy under entrywise conjugation of a Hermitian matrix,
+    $S(\overline{W^\dagger W}) = S(W^\dagger W)$, gives
+    $S_L^{(N)}(A) = S_{N-L}^{(N)}(A)$.
 \end{proof}
 
 \begin{proposition}[Pure-state area-law monotonicity]\label{prop:pure_area_monotone}
@@ -411,10 +434,10 @@
     \]
 \end{lemma}
 \begin{proof}\leanok
-    The RFP hypothesis says that the transfer map is idempotent. Hence
-    $\mathbb{E}_A^{\,k}=\mathbb{E}_A$ for every $k\ge 1$. Applying
-    Lemma~\ref{lem:schmidt_gram_transfer_power} to the left and right Gram
-    entries gives the two displayed identities.
+    By definition, a renormalization fixed point satisfies
+    $\mathbb{E}_A^{\,2}=\mathbb{E}_A$, so $\mathbb{E}_A^{\,k}=\mathbb{E}_A$ for
+    every $k\ge 1$. Applying Lemma~\ref{lem:schmidt_gram_transfer_power} to the
+    left and right Gram entries gives the two displayed identities.
 \end{proof}
 
 \begin{lemma}[Pure block entropy as a bond-environment charpoly sum]

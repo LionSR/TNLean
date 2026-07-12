@@ -83,11 +83,25 @@
     \uses{def:mpdo_bnt_label_theorem_data,
         thm:mpdo_bnt_blocked_basis_coefficient_eq,
         thm:mpdo_bnt_label_theorem_data_coeff_eq_trace_pow}
-    BNT-label theorem data give the comparison between the blocked-basis
+    BNT-label theorem data give, for every positive blocked length $n$ and
+    blocked-basis indices $i,j,k$, the comparison between the blocked-basis
     coefficients and the BNT-label coefficients through the source and target
-    label maps. Since the positive-length coefficients agree with the
-    canonical coefficient family determined by the same $\chi$-matrices, the
-    comparison can also be written with those canonical coefficients.
+    label maps $\sigma_n,\tau_n$,
+    \[
+        c^{(n)}_{i,j,k}
+        =
+        c^{(n)}_{\sigma_n(i),\sigma_n(j),\tau_n(k)}.
+    \]
+    Since the positive-length coefficients agree with the canonical
+    coefficient family determined by the same $\chi$-matrices, the
+    comparison can also be written as
+    \[
+        c^{(n)}_{i,j,k}
+        =
+        \operatorname{tr}\bigl(
+        \chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}^{\,n}
+        \bigr).
+    \]
 \end{theorem}
 \begin{proof}\leanok
     This is the blocked-basis coefficient comparison carried by the theorem
@@ -119,8 +133,11 @@
     \leanok
     \uses{def:mpdo_bnt_label_theorem_data,
         def:mpdo_positive_bnt_label_chi_trace_power_form}
-    BNT-label theorem data give positivity of every diagonal entry of
-    $\chi_{\alpha,\beta,\gamma}$.
+    BNT-label theorem data give, for all labels $\alpha,\beta,\gamma$ and
+    every diagonal-entry index $r$,
+    \[
+        0 < \chi_{\alpha,\beta,\gamma,r}.
+    \]
 \end{theorem}
 \begin{proof}\leanok
     This is the positivity condition carried by the positive BNT-label
@@ -133,9 +150,14 @@
     \leanok
     \uses{def:mpdo_bnt_label_theorem_data,
         thm:mpdo_bnt_label_same_length_product_eq_sum_chi_trace_pow}
-    BNT-label theorem data give the same-length product expansion with
-    coefficients written as traces of powers of the length-independent
-    $\chi_{\alpha,\beta,\gamma}$-matrices.
+    For every positive length $L$, BNT-label theorem data give the
+    same-length product expansion with coefficients written as traces of
+    powers of the length-independent $\chi_{\alpha,\beta,\gamma}$-matrices,
+    \[
+        O_L(M_\alpha)O_L(M_\beta)
+        = \sum_\gamma
+        \operatorname{tr}\bigl(\chi_{\alpha,\beta,\gamma}^{\,L}\bigr) O_L(M_\gamma).
+    \]
 \end{theorem}
 \begin{proof}\leanok
     Apply the chi-trace product law to the product identity and the positive
@@ -148,9 +170,13 @@
     \leanok
     \uses{def:mpdo_bnt_label_theorem_data,
         thm:mpdo_bnt_label_idempotent_eq_sum_chi_trace}
-    BNT-label theorem data give the idempotent scalar identity with the
-    length-one coefficients written as traces of the corresponding
-    $\chi$-matrices.
+    BNT-label theorem data give
+    \[
+        m_\gamma =
+        \sum_{\alpha,\beta}
+        \operatorname{tr}(\chi_{\alpha,\beta,\gamma})
+        m_\alpha m_\beta.
+    \]
 \end{theorem}
 \begin{proof}\leanok
     Apply the chi-trace idempotent law to the idempotent condition and the
@@ -166,7 +192,14 @@
     BNT-label theorem data give the blocked-basis coefficient trace-power
     formula obtained by pulling the BNT-label
     $\chi_{\alpha,\beta,\gamma}$-matrices back along the blocked-basis
-    comparison maps.
+    comparison maps: for every positive blocked length $n$,
+    \[
+        c^{(n)}_{i,j,k}
+        =
+        \operatorname{tr}\bigl(
+        \chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}^{\,n}
+        \bigr).
+    \]
 \end{theorem}
 \begin{proof}\leanok
     Apply the blocked-basis coefficient trace-power theorem to the comparison
@@ -185,7 +218,15 @@
         thm:mpdo_bnt_blocked_basis_to_positive_blocked_chi_trace_power_form}
     BNT-label theorem data give a positive blocked-basis $\chi$ trace-power
     witness by pulling the length-independent BNT-label $\chi$-family back
-    along the blocked-basis comparison maps.
+    along the blocked-basis comparison maps: writing $\chi_{n,i,j,k}$ for the
+    resulting blocked-basis diagonal matrix at a positive blocked length $n$,
+    \[
+        \chi_{n,i,j,k}
+        =
+        \chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}.
+    \]
+    The size, diagonal entries, and traces of powers of $\chi_{n,i,j,k}$
+    therefore agree with those of $\chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}$.
 \end{theorem}
 \begin{proof}\leanok
     Apply the BNT-to-blocked witness construction to the comparison and the
@@ -199,7 +240,13 @@
     \uses{def:mpdo_bnt_label_theorem_data,
         thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form}
     The pulled-back blocked-basis $\chi$-family obtained from BNT-label
-    theorem data satisfies the blocked trace-power predicate.
+    theorem data satisfies, for every positive blocked length $n$, the
+    blocked trace-power identity
+    \[
+        c^{(n)}_{i,j,k}
+        =
+        \sum_r \chi_{n,i,j,k,r}^{\,n}.
+    \]
 \end{theorem}
 \begin{proof}\leanok
     This is the trace-power part of the positive blocked-basis
@@ -213,7 +260,11 @@
     \uses{def:mpdo_bnt_label_theorem_data,
         thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form}
     The pulled-back blocked-basis $\chi$-family obtained from BNT-label
-    theorem data has positive diagonal entries.
+    theorem data has positive diagonal entries: for every blocked length $n$,
+    indices $i,j,k$, and entry index $r$,
+    \[
+        0 < \chi_{n,i,j,k,r}.
+    \]
 \end{theorem}
 \begin{proof}\leanok
     This is the positivity part of the positive blocked-basis
@@ -227,7 +278,11 @@
     \uses{def:mpdo_bnt_label_theorem_data,
         thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form}
     The pulled-back blocked-basis $\chi$-entries obtained from BNT-label
-    theorem data are positive.
+    theorem data are positive: for every blocked length $n$,
+    indices $i,j,k$, and entry index $r$,
+    \[
+        0 < \chi_{n,i,j,k,r}.
+    \]
 \end{theorem}
 \begin{proof}\leanok
     This is the positivity part of the positive blocked-basis
@@ -243,7 +298,12 @@
         thm:mpdo_positive_blocked_structure_chi_eq_trace_matrix_pow}
     The positive-length blocked-basis coefficients are traces of powers of the
     pulled-back blocked-basis $\chi$-matrices obtained from BNT-label
-    theorem data.
+    theorem data: for every positive blocked length $n$,
+    \[
+        c^{(n)}_{i,j,k}
+        =
+        \operatorname{tr}\bigl(\chi_{n,i,j,k}^{\,n}\bigr).
+    \]
 \end{theorem}
 \begin{proof}\leanok
     Apply the trace-power identity of the positive blocked-basis
