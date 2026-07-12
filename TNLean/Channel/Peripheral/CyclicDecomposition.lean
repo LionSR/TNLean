@@ -6,6 +6,7 @@ import TNLean.Channel.Peripheral.CyclicDecomposition.Basic
 import TNLean.Channel.Peripheral.CyclicDecomposition.PeripheralUnitary
 import TNLean.Channel.Peripheral.CyclicDecomposition.CyclicProjections
 import TNLean.Channel.Peripheral.CyclicDecomposition.Decomposition
+import TNLean.Channel.Peripheral.CyclicDecomposition.LetterShift
 import TNLean.Channel.Peripheral.CyclicDecomposition.Primitivity
 
 /-!
@@ -13,7 +14,7 @@ import TNLean.Channel.Peripheral.CyclicDecomposition.Primitivity
 
 This module keeps the historical import path
 `TNLean.Channel.Peripheral.CyclicDecomposition` while the development is split
-across five focused submodules.
+across six focused submodules.
 
 The supporting modules are:
 
@@ -25,6 +26,8 @@ The supporting modules are:
   spectral projections of a finite-order peripheral unitary.
 * `TNLean.Channel.Peripheral.CyclicDecomposition.Decomposition` — the main
   cyclic decomposition theorem for irreducible unital Schwarz maps.
+* `TNLean.Channel.Peripheral.CyclicDecomposition.LetterShift` — the cyclic
+  shift of the Kraus operators across the cyclic projections.
 * `TNLean.Channel.Peripheral.CyclicDecomposition.Primitivity` — corner
   preservation, sector irreducibility, sector primitivity, and the permutation
   variant.
@@ -32,6 +35,7 @@ The supporting modules are:
 ## Main statements
 
 * `exists_cyclic_decomposition_of_irreducible_schwarz`
+* `kraus_mul_cyclicProj`
 * `preserves_corner_pow_of_cyclic_decomp`
 * `isIrreducible_restriction_of_cyclic_decomp`
 * `isPrimitive_restriction_of_cyclic_decomp`

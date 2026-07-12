@@ -192,7 +192,13 @@ If the orthogonal projections `P` are shifted by the adjoint transfer map,
 `𝓔^*(P_{k+1}) = P_k`, then each Kraus operator carries index `k` to `k+1`:
 `P_{k+1} · A_i = A_i · P_k`.  This is the single-site analogue of the
 fixed-projection commutation `commutes_letters_of_adjoint_fixed_projection`;
-see arXiv:1708.00029, eq:Aoffdiag, in inverse-indexed form. -/
+see arXiv:1708.00029, eq:Aoffdiag, in inverse-indexed form.
+
+The companion statement `kraus_mul_cyclicProj` in
+`TNLean/Channel/Peripheral/CyclicDecomposition/LetterShift.lean` derives the
+same shift for the direct orientation from the resolution of the identity
+$\sum_kP_k=1$ instead of the unitality used here; the two hypothesis sets
+are incomparable, so the two statements coexist. -/
 theorem offDiag_shift_of_adjoint_cyclic_shift [NeZero m]
     (A : MPSTensor d D)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)

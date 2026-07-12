@@ -3186,6 +3186,42 @@ Theorem~\ref{thm:peripheral_cyclic_group}.
     full cyclic projection decomposition realizing the peripheral period.
 \end{theorem}
 
+\begin{lemma}[Cyclic shift of the Kraus operators]
+    \label{lem:kraus_cyclic_shift}
+    \lean{MPSTensor.one_sub_mul_kraus_mul_eq_zero_of_transferMap_proj}
+    \lean{orthogonalProjection_mul_eq_zero_of_sum_eq_one}
+    \lean{MPSTensor.kraus_mul_cyclicProj}
+    \lean{MPSTensor.evalWord_mul_cyclicProj}
+    \lean{MPSTensor.cyclicProj_ne_zero}
+    \leanok
+    Let $P_0,\dots,P_{m-1}$ be orthogonal projections summing to the
+    identity and cyclically permuted by a Kraus map,
+    $\sum_vK_vP_{k+1}K_v^\dagger=P_k$.  Then the projections are mutually
+    orthogonal, none of them vanishes, and each Kraus operator intertwines
+    consecutive projections,
+    \[
+        K_vP_{k+1}=P_kK_v .
+    \]
+    Consequently a product of $\ell$ Kraus operators moves each projection
+    back by $\ell$ steps; in particular a product of $m$ Kraus operators
+    commutes with every projection.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Compressing $\sum_vK_vP_{k+1}K_v^\dagger=P_k$ by $\Id-P_k$ exhibits a
+    vanishing sum of positive semidefinite matrices, so each summand
+    vanishes: $(\Id-P_k)K_vP_{k+1}=0$.  Mutual orthogonality follows by
+    compressing the resolution of the identity by a fixed $P_k$, another
+    vanishing sum of positive semidefinite matrices.  Expanding
+    $K_vP_{k+1}$ and $P_kK_v$ through the resolution of the identity, the
+    off-diagonal compressions vanish by orthogonality, leaving
+    $K_vP_{k+1}=P_kK_vP_{k+1}=P_kK_v$.  If some projection vanished, the
+    cyclic action would propagate the vanishing around the cycle,
+    contradicting the resolution of the identity.  The word statement is
+    induction on the length.
+\end{proof}
+
 \begin{lemma}[Power maps preserve each cyclic sector]
     \lean{preserves_corner_pow_of_cyclic_decomp}
     \leanok
