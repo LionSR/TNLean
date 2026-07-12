@@ -257,6 +257,43 @@ itself supply coherent positive representatives for all neighboring pairs;
 the missing argument must control these choices simultaneously across the
 sector graph.
 
+The positivity half of the projected chain identity is now formalized: for
+an MPDO, the chain of the physically conjugated tensor is a congruence of
+the original chain, so every cyclic tensor product of neighboring operators
+is a diagonal sector block of a positive operator,
+\[
+  0\le\bigl[Q_{k_1}\otimes\cdots\otimes Q_{k_N}\bigr]\,\tilde\sigma\,
+  \bigl[Q_{k_1}\otimes\cdots\otimes Q_{k_N}\bigr]
+  =\bigotimes_{n=1}^{N}\eta_{k_n,k_{n+1}} .
+\]
+The length-one and length-two specializations give $\eta_{k,k}\ge0$ and
+$\eta_{k,h}\otimes\eta_{h,k}\ge0$ unconditionally.  A rescaling lemma for
+the factors of a nonzero positive semidefinite Kronecker product then
+yields, for every pair with $\eta_{k,h}\ne0$ and $\eta_{h,k}\ne0$, a scalar
+$c\ne0$ with $c\,\eta_{k,h}\ge0$ and $c^{-1}\eta_{h,k}\ge0$.  Under the
+additional hypothesis of \emph{symmetric support} ($\eta_{k,h}=0$ forces
+$\eta_{h,k}=0$), choosing one scalar per unordered pair produces a positive
+semidefinite family which agrees with the raw family on the diagonal and
+preserves every two-site block
+$\eta_{k,h}\otimes\eta_{h,k}$.\footnote{The formal declarations are
+\path{Matrix.exists_smul_posSemidef_of_kronecker_posSemidef},
+\path{MPOTensor.mpo_conjugatePhysical_eq},
+\path{MPOTensor.cyclicEtaTensorProduct_posSemidef},
+\path{MPOTensor.sectorEta_self_posSemidef},
+\path{MPOTensor.sectorEta_kronecker_posSemidef},
+\path{MPOTensor.exists_smul_posSemidef_sectorEta}, and
+\path{MPOTensor.exists_explicitEtaOperators_sectorEta}.}
+
+Two aspects of the source's positive choice remain open.  First, the
+symmetric-support hypothesis is not stated in the source; it is neither
+implied by nor implies the recurrence hypothesis below, and either must be
+derived from injectivity or recorded as a scope restriction.  Second, the
+pairwise choice preserves the chain blocks of length at most two, whereas
+the source's choice rescales the sector tensors themselves and therefore
+preserves the blocks of every length simultaneously; the coherent choice
+across the whole sector graph is exactly the vertex-rephasing problem
+described next.
+
 The obstruction is already present when every neighboring bond space is
 one-dimensional.  Take four sectors $0,1,2,3$ and set
 \[
@@ -331,7 +368,11 @@ presented as the full formalization of Proposition~C.8.
 This note records an open gap for the SAL-to-bond construction of
 \leanid{MPOTensor.EtaLocalStructureData}. The two conditional declarations
 above are scope restrictions: they begin after the nearest-neighbor bonds have
-already been constructed.
+already been constructed. The positivity half of the projected chain identity
+is now formalized unconditionally, and the pairwise positive-choice
+construction is formalized under the symmetric-support scope restriction
+described above; the coherent choice across the whole sector graph and the
+primitivity of $T_{k,h}$ remain open.
 
 \bibliographystyle{alpha}
 \bibliography{references}
