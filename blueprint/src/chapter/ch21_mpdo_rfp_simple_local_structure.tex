@@ -1870,8 +1870,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.etaOfSectorTensors_self_posSemidef}
     \lean{MPOTensor.etaOfSectorTensors_kronecker_posSemidef}
     \leanok
-    \uses{def:mpdo, def:injective, def:normal, def:is_sal,
-        def:mpdo_sector_eta,
+    \uses{def:mpdo, def:injective, def:mpdo_sector_eta,
         thm:mpdo_cyclic_eta_posSemidef,
         thm:kronecker_factor_positive_rescaling}
     Let ${\cal K}$ be an injective MPDO with the chosen Hayashi
@@ -3976,8 +3975,7 @@ $\widehat{\cal K}$.
     \label{thm:mpdo_sector_eta_data_trace_matrix}
     \lean{MPOTensor.ExplicitEtaOperators.traceMatrix_ofSectorTensors}
     \leanok
-    \uses{def:mpdo, def:injective, def:normal, def:is_sal,
-        def:mpdo_explicit_eta_of_sector_tensors,
+    \uses{def:mpdo_explicit_eta_of_sector_tensors,
         def:mpdo_explicit_eta_trace_matrix, def:mpdo_closed_sector_tensors}
     Under the hypotheses of
     Definition~\ref{def:mpdo_explicit_eta_of_sector_tensors}, the trace
@@ -4035,6 +4033,8 @@ $\widehat{\cal K}$.
     proper subspace of the full matrix algebra, contradicting injectivity.
 \end{lemma}
 
+\clearpage
+
 \begin{figure}[ht]
     \centering
     \TNMPDOLocalOrthogonality
@@ -4066,7 +4066,8 @@ $\widehat{\cal K}$.
 \end{theorem}
 
 \begin{proof}
-    \uses{lem:mpdo_local_orthogonality_contraction}
+    \uses{def:mpdo_eta_recurrent_support,
+        lem:mpdo_local_orthogonality_contraction}
     The source first passes to a positive power and treats its Frobenius
     components as primitive diagonal blocks. For the concrete trace matrix
     considered here, one must still prove that failure of primitivity cannot
