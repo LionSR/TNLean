@@ -17,6 +17,21 @@ admits a directed return walk.
 The proof chooses one vertex in each reachability component and defines the
 vertex weight by multiplication along a walk from that vertex. Trivial closed
 walk weights make this choice independent of the walk.
+
+## Implementation notes
+
+The local `DirectedWalk` is a type-valued walk over an ordinary proposition-
+valued relation. This connects directly to relations such as
+`MPOTensor.IsSectorEdge` and allows a walk to be eliminated into its weight in
+an arbitrary monoid. In contrast, `Relation.ReflTransGen` is proposition-valued
+and therefore cannot in general be eliminated into such data, while
+`Quiver.Path` would first require replacing the proposition-valued relation by
+a quiver of edge types.
+
+`TNLean.Algebra.FiniteCycleCoboundary` treats the complementary special case of
+one finite cycle. A future MPDO specialization should prove the correspondence
+between `Relation.ReflTransGen` (hence `MPOTensor.SectorReaches`) and
+`DirectedWalk`, then apply the closed-walk theorem below to the sector phases.
 -/
 
 namespace TNLean.Algebra
@@ -53,29 +68,29 @@ theorem append_assoc {a b c d : V} (u : DirectedWalk r a b) (v : DirectedWalk r 
   | cons hab u ih => simp [append, ih]
 
 /-- The product of an edge-weight family along a directed walk. -/
-def weight (r : V → V → Prop) [Group G] (κ : V → V → G)
+def weight (r : V → V → Prop) [Monoid G] (κ : V → V → G)
     {a b : V} : DirectedWalk r a b → G
   | .nil _ => 1
   | @DirectedWalk.cons _ _ a b _ hab w => κ a b * weight r κ w
 
 @[simp]
-theorem weight_nil [Group G] (κ : V → V → G) (a : V) :
+theorem weight_nil [Monoid G] (κ : V → V → G) (a : V) :
     weight r κ (nil a) = 1 := rfl
 
 @[simp]
-theorem weight_cons [Group G] (κ : V → V → G) {a b c : V} (hab : r a b)
+theorem weight_cons [Monoid G] (κ : V → V → G) {a b c : V} (hab : r a b)
     (w : DirectedWalk r b c) :
     weight r κ (cons hab w) = κ a b * weight r κ w := rfl
 
 @[simp]
-theorem weight_append [Group G] (κ : V → V → G) {a b c : V}
+theorem weight_append [Monoid G] (κ : V → V → G) {a b c : V}
     (u : DirectedWalk r a b) (v : DirectedWalk r b c) :
     weight r κ (append r u v) = weight r κ u * weight r κ v := by
   induction u with
   | nil => simp
   | cons hab u ih => simp [append, ih, mul_assoc]
 
-private theorem weight_transport_start [Group G] (κ : V → V → G)
+private theorem weight_transport_start [Monoid G] (κ : V → V → G)
     {a a' b : V} (h : a = a') (w : DirectedWalk r a b) :
     weight r κ (h ▸ w) = weight r κ w := by
   cases h

@@ -25,7 +25,7 @@ import TNLean.Algebra.HermitianHelpers
 import TNLean.Algebra.MatrixSpectralDecomp
 import TNLean.Algebra.MatrixAux
 import TNLean.Algebra.KroneckerFactorPositivity
-import TNLean.Algebra.DirectedCycleCoboundary
+import TNLean.Algebra.DirectedWalkCoboundary
 import TNLean.Algebra.MatrixGramUnitary
 import TNLean.Algebra.FinSum
 import TNLean.Algebra.ScalarPowerSumIdentity
