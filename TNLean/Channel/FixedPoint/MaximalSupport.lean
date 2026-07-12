@@ -56,13 +56,12 @@ hence $(\mathbf 1 - Q)\sqrt{P} = 0$ and $(\mathbf 1 - Q)P = 0$. -/
 theorem stationaryProj_absorb_of_le {ρ P : Mat} (hρ_psd : ρ.PosSemidef)
     (hP_psd : P.PosSemidef) (hle : P ≤ ρ) :
     stationaryProj hρ_psd * P = P ∧ P * stationaryProj hρ_psd = P := by
-  set Q : Mat := stationaryProj hρ_psd with hQdef
+  set Q : Mat := stationaryProj hρ_psd
   have hQproj : IsOrthogonalProjection Q := isOrthogonalProjection_stationaryProj hρ_psd
   have hQherm : Qᴴ = Q := hQproj.1.eq
   have h1Q : (1 - Q)ᴴ = 1 - Q := by
     rw [Matrix.conjTranspose_sub, Matrix.conjTranspose_one, hQherm]
   have hQρ : Q * ρ = ρ := MPSTensor.supportProj_mul (D := D) (ρ := ρ) hρ_psd
-  have hρQ : ρ * Q = ρ := MPSTensor.mul_supportProj (D := D) (ρ := ρ) hρ_psd
   -- The corner of `ρ` on the complement of the support vanishes.
   have hρ0 : (1 - Q) * ρ * (1 - Q) = 0 := by
     have h : (1 - Q) * ρ = 0 := by
@@ -164,14 +163,14 @@ theorem exists_maximalSupport_fixedPoint (K : Fin d → Mat) (h_tp : IsTP K) :
   have hSmem : ∀ X : Mat, X ∈ S ↔ map K X = X := by
     intro X
     rw [hSdef, Module.End.mem_eigenspace_iff, one_smul, hEK]
-  set m : ℕ := Module.finrank ℂ ↥S with hmdef
-  set b : Module.Basis (Fin m) ℂ ↥S := Module.finBasis ℂ ↥S with hbdef
+  set m : ℕ := Module.finrank ℂ ↥S
+  set b : Module.Basis (Fin m) ℂ ↥S := Module.finBasis ℂ ↥S
   -- The Hermitian and anti-Hermitian components of the basis vectors are fixed.
   have hbfix : ∀ j : Fin m, map K ((b j : Mat)) = (b j : Mat) := fun j => (hSmem _).mp (b j).2
   have hbHfix : ∀ j : Fin m, map K ((b j : Mat))ᴴ = ((b j : Mat))ᴴ := fun j =>
     conjTranspose_mem_fixedPoints (K := K) (hbfix j)
-  set H₁ : Fin m → Mat := fun j => (b j : Mat) + (b j : Mat)ᴴ with hH₁def
-  set H₂ : Fin m → Mat := fun j => Complex.I • ((b j : Mat) - (b j : Mat)ᴴ) with hH₂def
+  set H₁ : Fin m → Mat := fun j => (b j : Mat) + (b j : Mat)ᴴ
+  set H₂ : Fin m → Mat := fun j => Complex.I • ((b j : Mat) - (b j : Mat)ᴴ)
   have hH₁herm : ∀ j, (H₁ j).IsHermitian := by
     intro j
     show ((b j : Mat) + (b j : Mat)ᴴ)ᴴ = (b j : Mat) + (b j : Mat)ᴴ
@@ -207,7 +206,7 @@ theorem exists_maximalSupport_fixedPoint (K : Fin d → Mat) (h_tp : IsTP K) :
   choose P₁p P₁m hP₁p hP₁m hH₁eq hf₁p hf₁m using fun j => hpos (H₁ j) (hH₁herm j) (hH₁fix j)
   choose P₂p P₂m hP₂p hP₂m hH₂eq hf₂p hf₂m using fun j => hpos (H₂ j) (hH₂herm j) (hH₂fix j)
   -- The maximal fixed point: the sum of all the positive parts.
-  set g : Fin m → Mat := fun j => P₁p j + P₁m j + P₂p j + P₂m j with hgdef
+  set g : Fin m → Mat := fun j => P₁p j + P₁m j + P₂p j + P₂m j
   have hg_nonneg : ∀ j, (0 : Mat) ≤ g j := by
     intro j
     show (0 : Mat) ≤ P₁p j + P₁m j + P₂p j + P₂m j
@@ -223,7 +222,7 @@ theorem exists_maximalSupport_fixedPoint (K : Fin d → Mat) (h_tp : IsTP K) :
     rw [E.map_add, E.map_add, E.map_add, hEK, hEK, hEK, hEK,
       hf₁p j, hf₁m j, hf₂p j, hf₂m j]
   refine ⟨ρ₀, hρ₀psd, hρ₀fix, ?_⟩
-  set Q₀ : Mat := stationaryProj hρ₀psd with hQ₀def
+  set Q₀ : Mat := stationaryProj hρ₀psd
   -- Every positive part is dominated by the sum, so the support projection absorbs it.
   have hg_le : ∀ j, g j ≤ ρ₀ := fun j =>
     Finset.single_le_sum (fun i _ => hg_nonneg i) (Finset.mem_univ j)

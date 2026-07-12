@@ -2607,13 +2607,19 @@ transfers the support.
     support projection $Q_0$ of $\rho_0$ absorbs each of them
     (Lemma~\ref{lem:stationaryProj_absorb_of_le}):
     \[
-        Q_0\, P^{\pm}_{k,j}\, Q_0 = P^{\pm}_{k,j},
-        \qquad
-        \text{hence}
-        \qquad
-        Q_0\, X_j\, Q_0 = X_j
+        Q_0\, P^{\pm}_{k,j}\, Q_0 = P^{\pm}_{k,j}.
     \]
-    by linearity through the two displayed decompositions. A fixed point $X$ of $T$ is a
+    Substituting into the two displayed decompositions gives
+    \[
+        Q_0\, H_{k,j}\, Q_0
+        \;=\; Q_0\,\bigl(P^{+}_{k,j} - P^{-}_{k,j}\bigr)\,Q_0
+        \;=\; H_{k,j},
+        \qquad
+        Q_0\, X_j\, Q_0
+        \;=\; \tfrac{1}{2}\,Q_0 H_{1,j} Q_0 - \tfrac{i}{2}\,Q_0 H_{2,j} Q_0
+        \;=\; X_j.
+    \]
+    A fixed point $X$ of $T$ is a
     linear combination of the basis $X_1, \ldots, X_m$, so $Q_0\, X\, Q_0 = X$.
 \end{proof}
 
