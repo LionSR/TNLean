@@ -128,6 +128,23 @@
     \]
 \end{definition}
 
+\begin{theorem}[Relabeling a rectangular Kraus family]
+    \label{thm:mpdo_rectangular_kraus_map_equiv}
+    \lean{Matrix.rectangularKrausMap_equiv}
+    \leanok
+    \uses{def:mpdo_rectangular_kraus_map}
+    If $e:I\simeq I'$ and $A'_b=A_{e^{-1}(b)}$, then
+    $\Phi_{A'}=\Phi_A$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Reindexing the finite sum gives
+    \[
+        \sum_{b\in I'}A_{e^{-1}(b)}X A_{e^{-1}(b)}^\dagger
+        =\sum_{a\in I}A_aXA_a^\dagger.
+    \]
+\end{proof}
+
 \begin{definition}[Orthogonally controlled Kraus map]
     \label{def:mpdo_controlled_kraus_map}
     \lean{Matrix.controlledKrausMap}
@@ -147,6 +164,50 @@
     \cite[Appendix~C.2, lines~1523--1535 and~1548--1555]
       {Cirac2016MPDO_arXiv}.
 \end{definition}
+
+\begin{theorem}[Diagonal blocks of an orthogonally controlled map]
+    \label{thm:mpdo_controlled_kraus_map_same_block}
+    \lean{Matrix.controlledKrausMap_sameBlock_apply}
+    \leanok
+    \uses{def:mpdo_controlled_kraus_map,
+      def:mpdo_rectangular_kraus_map}
+    Let $X_{kk}:H_k\to H_k$ denote the $k$th diagonal block of $X$. Then
+    \[
+        \mathcal C(X)_{kk}
+        =\sum_a A_{k,a}X_{kk}A_{k,a}^\dagger
+        =\Phi_{A_k}(X_{kk}).
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    If $j\ne k$, then every zero-extended Kraus operator satisfies
+    \[
+      [\widetilde A_{j,a}X\widetilde A_{j,a}^\dagger]
+        _{(k,b),(k,c)}=0.
+    \]
+    Hence only the $j=k$ terms survive, and
+    \[
+      [\mathcal C(X)]_{kk}
+      =\sum_a A_{k,a}X_{kk}A_{k,a}^\dagger.
+    \]
+\end{proof}
+
+\begin{theorem}[Off-diagonal blocks of an orthogonally controlled map]
+    \label{thm:mpdo_controlled_kraus_map_off_block}
+    \lean{Matrix.controlledKrausMap_apply_of_ne}
+    \leanok
+    \uses{def:mpdo_controlled_kraus_map}
+    If $k\ne l$, then $\mathcal C(X)_{kl}=0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    For every $(j,a)$ and $k\ne l$, the zero-extended operator satisfies
+    \[
+      [\widetilde A_{j,a}X\widetilde A_{j,a}^\dagger]
+        _{(k,b),(l,c)}=0.
+    \]
+    Therefore $[\mathcal C(X)]_{kl}=\sum_{j,a}0=0$.
+\end{proof}
 
 \begin{theorem}[Orthogonal control preserves trace-preserving complete positivity]
     \label{thm:mpdo_controlled_kraus_map_cptp}
@@ -189,6 +250,25 @@
     $\mathcal T_0$ and $\mathcal S_0$ in
     \cite[Appendix~C.2, lines~1521--1522 and~1547]{Cirac2016MPDO_arXiv}.
 \end{definition}
+
+\begin{theorem}[Right partial trace of a Kronecker product]
+    \label{thm:mpdo_right_partial_trace_kronecker}
+    \lean{Matrix.partialTraceRight_kronecker}
+    \leanok
+    \uses{def:mpdo_right_partial_trace_map}
+    For square matrices $X$ on $A$ and $Y$ on $B$,
+    \[
+        \tr_B(X\otimes Y)=\tr(Y)X.
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    For all $i,j$,
+    \[
+      [\tr_B(X\otimes Y)]_{ij}
+      =\sum_t X_{ij}Y_{tt}=\tr(Y)X_{ij}.
+    \]
+\end{proof}
 
 \begin{lemma}[The right partial trace is trace-preserving completely positive]
     \label{lem:mpdo_right_partial_trace_cptp}
@@ -238,6 +318,28 @@
         A_j(e_a)=e_a\otimes Re_j.
     \]
 \end{definition}
+
+\begin{theorem}[Kraus action of state preparation]
+    \label{thm:mpdo_state_preparation_kraus_action}
+    \lean{Matrix.rectangularKrausMap_preparationKraus_eq}
+    \leanok
+    \uses{def:mpdo_rectangular_kraus_map,
+      def:mpdo_state_preparation_map,
+      def:mpdo_state_preparation_kraus}
+    If $\rho\succeq0$ and $A_j(e_a)=e_a\otimes\sqrt\rho\,e_j$, then
+    \[
+        \sum_j A_jXA_j^\dagger=X\otimes\rho.
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    Put $R=\sqrt\rho$. Since $R$ is Hermitian and $R^2=\rho$, the
+    $((a,s),(b,t))$ entry of the left-hand side is
+    \[
+        X_{ab}\sum_jR_{sj}\overline{R_{tj}}
+        =X_{ab}(R^2)_{st}=X_{ab}\rho_{st}.
+    \]
+\end{proof}
 
 \begin{theorem}[Preparation Kraus operators resolve the identity]
     \label{thm:mpdo_state_preparation_kraus_resolution}
