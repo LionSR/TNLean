@@ -1,0 +1,63 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{The Final Traced Subspin in the Definition of $\mathcal S_0$}
+\author{}
+\date{2026-07-12}
+
+\begin{document}
+\maketitle
+
+\section{The source sentence}
+
+In the proof of Proposition~C.7, Appendix~C.2 of
+\cite{Cirac2016MPDO_arXiv}, the map $\mathcal S_0$ reduces three physical
+sites to the two outer subspins.  The prose at line~1547 of
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex} says that it traces the subspins
+$1r,2l,2r,2l$.  The factor $2l$ therefore appears twice, while no subspin of
+the third site is listed.
+
+\section{Correction forced by the diagram}
+
+The diagram \path{Papers/1606.00608/MPDO_TMatrix2.png} shows three consecutive
+sector factors
+\[
+  (L_k\otimes R_k)\otimes(L_l\otimes R_l)\otimes(L_h\otimes R_h)
+\]
+before $\mathcal S_0$, and retains only $L_k\otimes R_h$.  Hence the traced
+space is
+\[
+  (R_k\otimes L_l)\otimes(R_l\otimes L_h),
+\]
+corresponding to subspins $1r,2l,2r,3l$.  The displayed formula for
+$\mathcal S_2$ at lines~1557--1559 confirms the same two retained outer
+factors.  Thus the final occurrence of $2l$ in line~1547 is a typographical
+error for $3l$.
+
+The formal regrouping uses the corrected equivalence
+\[
+  ((l_k,r_k),((l_l,r_l),(l_h,r_h)))
+  \longmapsto ((l_k,r_h),((r_k,l_l),(r_l,l_h))).
+\]
+The corresponding formal declarations are recorded in
+\doclink{TNLean/MPS/MPDO/RFPSubspinMaps}.\footnote{In particular,
+\leanid{MPOTensor.ExplicitEtaOperators.s0RegroupEquiv},
+\leanid{MPOTensor.ExplicitEtaOperators.s0Map}, and
+\leanid{MPOTensor.ExplicitEtaOperators.s0SectorMap}.}
+This correction changes no hypothesis and is local to the ordering of tensor
+factors.
+
+\section{Verdict}
+
+This is a local correction of a repeated subspin label in the source prose.
+It does not alter the statement or hypotheses of Proposition~C.7.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

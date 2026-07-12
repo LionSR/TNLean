@@ -380,6 +380,7 @@ import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.LocalPurificationRFP
 import TNLean.MPS.MPDO.SimpleLocalStructure
 import TNLean.MPS.MPDO.EtaPreparation
+import TNLean.MPS.MPDO.RFPSubspinMaps
 import TNLean.MPS.MPDO.HayashiSectorComparison
 import TNLean.MPS.MPDO.SectorFactorization
 import TNLean.MPS.MPDO.SectorPairingTransfer

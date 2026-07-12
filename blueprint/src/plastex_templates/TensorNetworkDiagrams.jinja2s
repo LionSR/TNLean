@@ -7,6 +7,9 @@ name: TNMPSLocal TNMPSWord TNMPV TNBlocking TNMPVOverlap TNTransferMap TNMPOCell
 name: TNMPOLocalPurification TNMPORenormalizationTS TNEtaSectorDecomposition TNMPDOCyclicEtaContraction TNMPDOSectorAdaptedDecomposition
 {{ obj.tn_svg_html }}
 
+name: TNMPDOTwoSiteTraceAndShift TNMPDOThreeSiteTraceAndShift
+{{ obj.tn_svg_html }}
+
 name: TNMPDOInverseMapThreeSiteContraction TNMPDONormalizedFourSiteTail TNMPDOLocalOrthogonality
 {{ obj.tn_svg_html }}
 

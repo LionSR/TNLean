@@ -176,6 +176,112 @@
     \end{tikzpicture}%
 }
 
+% The two proved two-site operations from Appendix C.2.  The upper row is the
+% regrouping followed by T_0's partial trace.  The lower row begins with both
+% the outer and neighbouring factors already supplied and draws only the
+% inverse regrouping S_2; it deliberately contains no preparation map.
+\newcommand{\TNMPDOTwoSiteTraceAndShift}{%
+    \begin{tikzpicture}[tn picture, scale=0.60]
+        \node[anchor=east] at (-3.72,1.18) {$\mathcal T_0:$};
+        \TN@subspinbox{tzeroLk}{(-3.15,1.18)}{l_k}
+        \TN@subspinbox{tzeroRk}{(-2.15,1.18)}{r_k}
+        \TN@subspinbox{tzeroLh}{(-1.15,1.18)}{l_h}
+        \TN@subspinbox{tzeroRh}{(-0.15,1.18)}{r_h}
+        \TN@subspinlink{tzeroLk}{tzeroRk}
+        \TN@subspinlink{tzeroRk}{tzeroLh}
+        \TN@subspinlink{tzeroLh}{tzeroRh}
+        \draw[rounded corners=2pt, densely dashed]
+            (-2.62,0.68) rectangle (-0.68,1.68);
+        \node at (-1.65,0.44) {$\tr_{R_k\otimes L_h}$};
+        \draw[->, line width=0.55pt] (0.52,1.18) -- (1.32,1.18);
+        \TN@subspinbox{tzeroOutL}{(1.88,1.18)}{l_k}
+        \TN@subspinbox{tzeroOutR}{(2.88,1.18)}{r_h}
+        \TN@subspinlink{tzeroOutL}{tzeroOutR}
+
+        \node[anchor=east] at (-3.72,-1.18) {$\mathcal S_2:$};
+        \draw[rounded corners=2pt] (-3.42,-1.72) rectangle (-1.38,-0.64);
+        \TN@subspinbox{sTwoLk}{(-2.90,-1.18)}{l_k}
+        \TN@subspinbox{sTwoRh}{(-1.90,-1.18)}{r_h}
+        \TN@subspinlink{sTwoLk}{sTwoRh}
+        \node at (-1.00,-1.18) {$\otimes$};
+        \draw[rounded corners=2pt] (-0.60,-1.72) rectangle (1.44,-0.64);
+        \TN@subspinbox{sTwoRk}{(-0.08,-1.18)}{r_k}
+        \TN@subspinbox{sTwoLh}{(0.92,-1.18)}{l_h}
+        \TN@subspinlink{sTwoRk}{sTwoLh}
+        \draw[->, line width=0.55pt] (1.72,-1.18) -- (2.52,-1.18);
+        \begin{scope}[xshift=5.98cm]
+            \TN@subspinbox{sTwoOutLk}{(-3.15,-1.18)}{l_k}
+            \TN@subspinbox{sTwoOutRk}{(-2.15,-1.18)}{r_k}
+            \TN@subspinbox{sTwoOutLh}{(-1.15,-1.18)}{l_h}
+            \TN@subspinbox{sTwoOutRh}{(-0.15,-1.18)}{r_h}
+            \TN@subspinlink{sTwoOutLk}{sTwoOutRk}
+            \TN@subspinlink{sTwoOutRk}{sTwoOutLh}
+            \TN@subspinlink{sTwoOutLh}{sTwoOutRh}
+        \end{scope}
+        \node at (-1.99,-2.03) {outer factors};
+        \node at (0.42,-2.03) {neighbouring factors};
+    \end{tikzpicture}%
+}
+
+% The three-site analogues.  The dashed middle block is exactly the Omega
+% index space traced by S_0.  The lower row starts with that entire block and
+% applies only the inverse regrouping T_2, not T_1 or a full recovery map.
+\newcommand{\TNMPDOThreeSiteTraceAndShift}{%
+    \begin{tikzpicture}[tn picture, scale=0.56]
+        \node[anchor=east] at (-4.70,1.35) {$\mathcal S_0:$};
+        \TN@subspinbox{szeroLk}{(-4.10,1.35)}{l_k}
+        \TN@subspinbox{szeroRk}{(-3.10,1.35)}{r_k}
+        \TN@subspinbox{szeroLl}{(-2.10,1.35)}{l_l}
+        \TN@subspinbox{szeroRl}{(-1.10,1.35)}{r_l}
+        \TN@subspinbox{szeroLh}{(-0.10,1.35)}{l_h}
+        \TN@subspinbox{szeroRh}{(0.90,1.35)}{r_h}
+        \TN@subspinlink{szeroLk}{szeroRk}
+        \TN@subspinlink{szeroRk}{szeroLl}
+        \TN@subspinlink{szeroLl}{szeroRl}
+        \TN@subspinlink{szeroRl}{szeroLh}
+        \TN@subspinlink{szeroLh}{szeroRh}
+        \draw[rounded corners=2pt, densely dashed]
+            (-3.57,0.84) rectangle (0.37,1.86);
+        \node at (-1.60,0.50)
+            {$\tr_{\bigoplus_l[(R_k\otimes L_l)\otimes(R_l\otimes L_h)]}$};
+        \draw[->, line width=0.55pt] (1.58,1.35) -- (2.38,1.35);
+        \TN@subspinbox{szeroOutL}{(2.94,1.35)}{l_k}
+        \TN@subspinbox{szeroOutR}{(3.94,1.35)}{r_h}
+        \TN@subspinlink{szeroOutL}{szeroOutR}
+
+        \node[anchor=east] at (-4.70,-1.35) {$\mathcal T_2:$};
+        \draw[rounded corners=2pt] (-4.37,-1.90) rectangle (-2.33,-0.80);
+        \TN@subspinbox{tTwoLk}{(-3.85,-1.35)}{l_k}
+        \TN@subspinbox{tTwoRh}{(-2.85,-1.35)}{r_h}
+        \TN@subspinlink{tTwoLk}{tTwoRh}
+        \node at (-1.96,-1.35) {$\otimes$};
+        \draw[rounded corners=2pt] (-1.55,-1.90) rectangle (2.42,-0.80);
+        \TN@subspinbox{tTwoRk}{(-1.03,-1.35)}{r_k}
+        \TN@subspinbox{tTwoLl}{(-0.03,-1.35)}{l_l}
+        \TN@subspinbox{tTwoRl}{(0.97,-1.35)}{r_l}
+        \TN@subspinbox{tTwoLh}{(1.97,-1.35)}{l_h}
+        \TN@subspinlink{tTwoRk}{tTwoLl}
+        \TN@subspinlink{tTwoLl}{tTwoRl}
+        \TN@subspinlink{tTwoRl}{tTwoLh}
+        \draw[->, line width=0.55pt] (2.68,-1.35) -- (3.48,-1.35);
+        \begin{scope}[xshift=7.90cm]
+            \TN@subspinbox{tTwoOutLk}{(-4.10,-1.35)}{l_k}
+            \TN@subspinbox{tTwoOutRk}{(-3.10,-1.35)}{r_k}
+            \TN@subspinbox{tTwoOutLl}{(-2.10,-1.35)}{l_l}
+            \TN@subspinbox{tTwoOutRl}{(-1.10,-1.35)}{r_l}
+            \TN@subspinbox{tTwoOutLh}{(-0.10,-1.35)}{l_h}
+            \TN@subspinbox{tTwoOutRh}{(0.90,-1.35)}{r_h}
+            \TN@subspinlink{tTwoOutLk}{tTwoOutRk}
+            \TN@subspinlink{tTwoOutRk}{tTwoOutLl}
+            \TN@subspinlink{tTwoOutLl}{tTwoOutRl}
+            \TN@subspinlink{tTwoOutRl}{tTwoOutLh}
+            \TN@subspinlink{tTwoOutLh}{tTwoOutRh}
+        \end{scope}
+        \node at (-3.35,-2.24) {outer factors};
+        \node at (0.44,-2.24) {$\Omega_{k,h}=\bigoplus_l(\cdots)$};
+    \end{tikzpicture}%
+}
+
 % A closed chain of factorized sector tensors regrouped into neighbouring
 % eta operators.  This mirrors the cyclic contractions in Appendix C.2.
 \newcommand{\TNMPDOCyclicEtaContraction}{%
