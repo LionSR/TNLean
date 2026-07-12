@@ -45,25 +45,24 @@ restricted to the fixed points \emph{supported on the support of $\rho$}. The po
 definite case without the support restriction is
 \leanid{Kraus.weightedFixedPointsStarSubalgebra}.
 
-\section{The gap}
+\section{The gap (as originally recorded)}
 
 For a maximum-rank fixed point the corner restriction $Q X Q = X$ is vacuous, by the
-maximal-support property of fixed points. That property is not formalized: the
-maximal-support and support-minimality propositions of Section~6.4 of the reference are
-recorded as open in \leanid{TNLean/Channel/FixedPoint/StationarySupport.lean}. Until it
-is available, the formal statement restricted to corner-supported fixed points is a
-proper restriction of the corollary, and neither formal version covers the corollary in
-its stated generality.
+maximal-support property of fixed points. At the time this note was written that
+property was open: the maximal-support and support-minimality propositions of
+Section~6.4 of the reference were recorded as open in
+\leanid{TNLean/Channel/FixedPoint/StationarySupport.lean}, and the formal statement
+restricted to corner-supported fixed points was a proper restriction of the corollary.
 
-\section{Elimination plan}
+\section{Elimination plan (as executed)}
 
-Formalize the maximal-support property: every fixed point of a trace-preserving Kraus
-map has support and range within the support of a maximum-rank fixed point. The proof in
-the reference decomposes a fixed point into four positive fixed parts (the decomposition
-is formalized as \leanid{IsChannel.posSemidef\_parts\_of\_hermitian\_fixedPoint}) and
+Establish the maximal-support property: every fixed point of a trace-preserving Kraus
+map has support and range within the support of a maximal-support fixed point. The proof
+decomposes a fixed point into four positive fixed parts (the decomposition is
+\leanid{IsChannel.posSemidef\_parts\_of\_hermitian\_fixedPoint}) and
 bounds the support of each positive fixed part by the maximal one. With that property,
-instantiating the corner-restricted statements at a maximum-rank fixed point removes the
-restriction $Q X Q = X$ and yields Corollary 6.7 of the reference verbatim.
+instantiating the corner-restricted statements at such a fixed point removes the
+restriction $Q X Q = X$.
 
 \section{Resolution}
 
