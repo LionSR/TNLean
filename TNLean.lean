@@ -386,6 +386,7 @@ import TNLean.MPS.MPDO.RFPSubspinMaps
 import TNLean.MPS.MPDO.HayashiSectorComparison
 import TNLean.MPS.MPDO.SectorFactorization
 import TNLean.MPS.MPDO.PhysicalSectorFactorization
+import TNLean.MPS.MPDO.PhysicalSectorSubspinMaps
 import TNLean.MPS.MPDO.PhysicalSectorClosureTwo
 import TNLean.MPS.MPDO.PhysicalSectorClosureThree
 import TNLean.MPS.MPDO.PhysicalSectorTraceActions
