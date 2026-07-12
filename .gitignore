@@ -83,3 +83,4 @@ scripts/__pycache__/
 
 Draft/
 Draft_OLD/
+*.bak*
