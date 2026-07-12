@@ -125,9 +125,7 @@ image of the identity under the projection onto the fixed-point space, while her
 $\rho_0$ is the sum of the positive parts of the Hermitian and anti-Hermitian components
 of a basis of the fixed-point space. Every fixed point is then a linear combination of
 positive semidefinite fixed points dominated by $\rho_0$ in the Loewner order, and
-domination transfers the support (`Kraus.stationaryProj_absorb_of_le`). In particular
-$\rho_0$ has maximal rank among the positive semidefinite fixed points, and after
-normalization it is a fixed-point density matrix of maximum rank. -/
+domination transfers the support (`Kraus.stationaryProj_absorb_of_le`). -/
 theorem exists_maximalSupport_fixedPoint (K : Fin d → Mat) (h_tp : IsTP K) :
     ∃ (ρ₀ : Mat) (hρ₀ : ρ₀.PosSemidef), map K ρ₀ = ρ₀ ∧
       ∀ X : Mat, map K X = X →
