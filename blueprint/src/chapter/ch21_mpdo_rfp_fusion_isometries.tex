@@ -406,3 +406,88 @@ the change of basis between the two resulting direct sums.
     The fusion identity for $U_{\alpha,\delta}$ then gives the stated direct
     sum over $\varepsilon$.
 \end{proof}
+
+Fix a final label $\varepsilon$.  The multiplicity indices of the two
+bracketings are
+\[
+    \mathcal H^{\mathrm L}_{\varepsilon}
+      = \bigoplus_{\delta}
+        \C^{\dim\chi_{\alpha,\beta,\delta}}
+        \otimes \C^{\dim\chi_{\delta,\gamma,\varepsilon}},
+    \qquad
+    \mathcal H^{\mathrm R}_{\varepsilon}
+      = \bigoplus_{\delta}
+        \C^{\dim\chi_{\beta,\gamma,\delta}}
+        \otimes \C^{\dim\chi_{\alpha,\delta,\varepsilon}}.
+\]
+These are the $(e,\mu,\nu)$ and $(f,\lambda,\sigma)$ index spaces in the
+equation (Fmove) of \cite{Bultinck2017Anyons}.
+
+\begin{definition}[Triple-fusion maps with fixed final label]%
+    \label{def:mpdo_final_sector_fusion_isometries}
+    \lean{MPOTensor.BNTFusionIsometryFamily.LeftFinalMultiplicity}
+    \lean{MPOTensor.BNTFusionIsometryFamily.RightFinalMultiplicity}
+    \lean{MPOTensor.BNTFusionIsometryFamily.LeftFinalIndex}
+    \lean{MPOTensor.BNTFusionIsometryFamily.RightFinalIndex}
+    \lean{MPOTensor.BNTFusionIsometryFamily.leftFinalRow}
+    \lean{MPOTensor.BNTFusionIsometryFamily.rightFinalRow}
+    \lean{MPOTensor.BNTFusionIsometryFamily.leftFinalFusionIsometry}
+    \lean{MPOTensor.BNTFusionIsometryFamily.rightFinalFusionIsometry}
+    \leanok
+    \uses{def:mpdo_left_fusion_isometry,
+        def:mpdo_right_fusion_isometry}
+    The maps $U^{\mathrm L}_{\alpha,\beta,\gamma;\varepsilon}$ and
+    $U^{\mathrm R}_{\alpha,\beta,\gamma;\varepsilon}$ are the restrictions
+    of the two iterated fusion isometries to the summands with final label
+    $\varepsilon$.  Their codomains are respectively
+    $\mathcal H^{\mathrm L}_{\varepsilon}\otimes\C^{D_\varepsilon}$ and
+    $\mathcal H^{\mathrm R}_{\varepsilon}\otimes\C^{D_\varepsilon}$.
+\end{definition}
+
+\begin{theorem}[Left triple fusion at a fixed final label]%
+    \label{thm:mpdo_left_final_fusion_apply}
+    \lean{MPOTensor.BNTFusionIsometryFamily.leftFinalFusion_apply}
+    \leanok
+    \uses{def:mpdo_final_sector_fusion_isometries,
+        thm:mpdo_left_fusion_apply}
+    For every final label $\varepsilon$, the left-associated restriction
+    satisfies
+    \[
+        U^{\mathrm L}_{\alpha,\beta,\gamma;\varepsilon}
+        \bigl((M_\alpha M_\beta)M_\gamma\bigr)^{ij}
+        (U^{\mathrm L}_{\alpha,\beta,\gamma;\varepsilon})^\dagger
+        = \bigoplus_{\delta}
+          \chi_{\alpha,\beta,\delta}\otimes
+          \bigl(\chi_{\delta,\gamma,\varepsilon}\otimes
+          M_\varepsilon^{ij}\bigr).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Restrict Theorem~\ref{thm:mpdo_left_fusion_apply} to the rows and columns
+    whose final label is $\varepsilon$.  The outer block-diagonal matrix then
+    retains precisely the displayed $\varepsilon$-blocks.
+\end{proof}
+
+\begin{theorem}[Right triple fusion at a fixed final label]%
+    \label{thm:mpdo_right_final_fusion_apply}
+    \lean{MPOTensor.BNTFusionIsometryFamily.rightFinalFusion_apply}
+    \leanok
+    \uses{def:mpdo_final_sector_fusion_isometries,
+        thm:mpdo_right_fusion_apply}
+    For every final label $\varepsilon$, the right-associated restriction
+    satisfies
+    \[
+        U^{\mathrm R}_{\alpha,\beta,\gamma;\varepsilon}
+        \bigl(M_\alpha(M_\beta M_\gamma)\bigr)^{ij}
+        (U^{\mathrm R}_{\alpha,\beta,\gamma;\varepsilon})^\dagger
+        = \bigoplus_{\delta}
+          \chi_{\beta,\gamma,\delta}\otimes
+          \bigl(\chi_{\alpha,\delta,\varepsilon}\otimes
+          M_\varepsilon^{ij}\bigr).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Restrict Theorem~\ref{thm:mpdo_right_fusion_apply} to the rows and columns
+    whose final label is $\varepsilon$.  The outer block-diagonal matrix then
+    retains precisely the displayed $\varepsilon$-blocks.
+\end{proof}
