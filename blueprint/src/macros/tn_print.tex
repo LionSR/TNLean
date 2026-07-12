@@ -287,6 +287,7 @@
 % left by T_0, and the three-site factor order obtained after T_1 and T_2.
 \newcommand{\TNMPDORefinementConstruction}{%
     \begin{tikzpicture}[tn picture, scale=0.85]
+        \node[anchor=east] at (-5.35,2.45) {$\mathfrak R_2:$};
         \node[anchor=east] at (-4.30,2.45) {$\displaystyle\bigoplus_{k,h}$};
         \TN@subspinbox{trefTopLk}{(-3.72,2.45)}{l_k}
         \TN@subspinbox{trefTopRk}{(-2.72,2.45)}{r_k}
@@ -309,6 +310,7 @@
 
         \draw[->, line width=0.55pt] (2.15,0.38) -- (2.15,-0.58)
             node[midway, right] {$\mathcal T_2\mathcal T_1$};
+        \node[anchor=east] at (-5.35,-0.96) {$\mathfrak R_3:$};
         \node[anchor=east] at (-4.30,-0.96)
             {$\displaystyle\bigoplus_{k,h,l}$};
         \TN@subspinbox{trefBotLk}{(-3.72,-0.96)}{l_k}
@@ -334,6 +336,7 @@
         \TN@subspinlink{trefDirTwoL}{trefDirTwoR}
         \draw[tn leg] (trefDirTwoL.west) -- ++(-0.48,0);
         \draw[tn leg] (trefDirTwoR.east) -- ++(0.48,0);
+        \node at (-2.30,-0.92) {$\mathfrak R_2({\cal K}_2(X))$};
 
         \draw[->, line width=0.65pt, bend left=18]
             (-0.94,0.28) to node[above] {$\mathcal T$} (0.04,0.28);
@@ -345,6 +348,7 @@
         \TN@subspinlink{trefDirThreeM}{trefDirThreeR}
         \draw[tn leg] (trefDirThreeL.west) -- ++(-0.48,0);
         \draw[tn leg] (trefDirThreeR.east) -- ++(0.48,0);
+        \node at (1.95,-0.92) {$\mathfrak R_3({\cal K}_3(X))$};
     \end{tikzpicture}%
 }
 

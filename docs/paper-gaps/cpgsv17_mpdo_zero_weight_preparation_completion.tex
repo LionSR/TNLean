@@ -1,0 +1,72 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{Zero-Weight Sector Completions in the MPDO Refinement Map}
+\author{}
+\date{2026-07-12}
+
+\begin{document}
+\maketitle
+
+\section{The undefined source quotient}
+
+In the proof of Proposition~C.7,
+\cite[Appendix~C.2, lines~1523--1535]{Cirac2016MPDO_arXiv}, the sectorwise
+refinement map is written as
+\[
+  \mathcal T_{k,h}(X)
+  =\frac{1}{a_kb_h}X\otimes
+    \left[\bigoplus_l(\eta_{k,l}\otimes\eta_{l,h})\right].
+\]
+The hypotheses of Proposition~C.7 require
+\[
+  \eta_{k,h}\succeq0,
+  \qquad
+  \tr(\eta_{k,h})=a_kb_h,
+  \qquad
+  \sum_k a_kb_k=1,
+\]
+but do not state that every product $a_kb_h$ is nonzero. Consequently the
+displayed quotient is not defined on a zero-weight sector pair.
+
+\section{Trace-preserving completion}
+
+Set
+\[
+  \Omega_{k,h}
+  =\bigoplus_l(\eta_{k,l}\otimes\eta_{l,h}).
+\]
+Positivity and the source trace calculation give
+\[
+  \Omega_{k,h}\succeq0,
+  \qquad
+  \tr(\Omega_{k,h})=a_kb_h.
+\]
+Thus $a_kb_h=0$ implies $\Omega_{k,h}=0$. On an active sector pair one
+adjoins the density operator $(a_kb_h)^{-1}\Omega_{k,h}$. On a zero-weight
+pair one may adjoin any density operator on the same subspin space. This
+defines a trace-preserving completely positive map on every sector pair.
+
+The choice on a zero-weight pair does not affect the refinement identity:
+the preceding partial trace $\mathcal T_0$ produces the factor
+$a_kb_hB_{k,h}(X)$, which is already zero on that pair. Equivalently, the
+corresponding block of the three-site closure is
+$B_{k,h}(X)\otimes\Omega_{k,h}=0$.
+
+\section{Verdict}
+
+The inactive-sector density is a local completion of the map omitted from the
+source formula. It adds no hypothesis to Proposition~C.7 and leaves its two-
+site to three-site identity unchanged. Formal declarations implementing this
+completion should carry a \emph{Local fix (zero-weight quotient)} marker and
+cite this file.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
