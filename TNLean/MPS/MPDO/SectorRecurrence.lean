@@ -99,8 +99,9 @@ This is the sufficient condition identified in
 the four-sector counterexample to a coherent positive choice of the
 `η_{k,h}`.
 
-Source: arXiv:1606.00608, Appendix C.2, lines 1446--1471 (the paper's
-argument for a single primitive component, generalized). -/
+This is an auxiliary condition from
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`; it is not an
+additional hypothesis stated in arXiv:1606.00608. -/
 def IsRecurrentSupport {hη : EtaStructure ρ} (eta : etaOperators hη) : Prop :=
   ∀ k h : Fin hη.m, IsSectorEdge eta k h → SectorReaches eta h k
 
@@ -176,8 +177,8 @@ nonzero and have product one.
 This theorem concerns one fixed cycle. It does not assert that the choices
 obtained from two different cycles agree on their common edges.
 
-Source: arXiv:1606.00608, Appendix C.2, lines 1446--1450, together with the
-recurrence route recorded in
+This is a supporting lemma for the positive-choice step at arXiv:1606.00608,
+Appendix C.2, lines 1446--1450. The recurrence route is recorded in
 `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`. -/
 theorem exists_pi_smul_posSemidef_of_cyclicEtaTensorProduct_posSemidef
     [NeZero N] (hη : EtaStructure ρ) (eta : etaOperators hη)
@@ -205,7 +206,8 @@ vertex-indexed rescaling coherent across a whole recurrent component of the
 sector support graph is recorded as open in
 `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
 
-Source: arXiv:1606.00608, Appendix C.2, lines 1446--1450. -/
+This is a supporting lemma for arXiv:1606.00608, Appendix C.2,
+lines 1446--1450, not a separately stated result of the paper. -/
 theorem exists_pi_smul_posSemidef_of_sectorEta_cycle
     (K : MPOTensor d D) (hK : K.IsInjective)
     (R : Matrix (Fin D) (Fin D) ℂ)
