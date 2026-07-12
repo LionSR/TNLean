@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.PhysicalSectorCoarseGrainingAction
-import TNLean.MPS.MPDO.PhysicalSectorClosureCoordinates
+import TNLean.MPS.MPDO.PhysicalSectorClosureBlocks
 
 /-!
 # Coarse-graining identity for physical-sector closures
@@ -26,50 +26,6 @@ open scoped Matrix BigOperators Kronecker
 namespace MPOTensor.PhysicalSectorFactorization
 
 variable {d D : ℕ} {K : MPOTensor d D} {F : PhysicalSectorFactorization K}
-
-/-- On an outer-sector pair, the regrouped three-site physical closure is
-the boundary operator tensored with the direct sum of the two neighboring
-operators.
-
-Source: arXiv:1606.00608, Appendix C.2, lines 1510--1516 and 1547--1555. -/
-theorem s0Regrouped_threeSiteClosure_block_eq
-    (F : PhysicalSectorFactorization K) (X : Matrix (Fin D) (Fin D) ℂ)
-    (k h : Fin F.sectorCount) :
-    (Matrix.equivReindexMap F.s0RegroupEquiv
-      (Matrix.reindex F.threeSiteSectorCoordinateEquiv
-        F.threeSiteSectorCoordinateEquiv
-        (physClose3 F.sectorCoordinateTensor X))).submatrix
-          (Sigma.mk (k, h)) (Sigma.mk (k, h)) =
-      F.boundaryOperator k h X ⊗ₖ F.threeSiteNeighboringOperator k h := by
-  ext ⟨a, l, u⟩ ⟨b, m, v⟩
-  by_cases hlm : l = m
-  · subst m
-    have hg := congrFun (congrFun (F.threeSiteSectorClosure_eq k l h X)
-      (a, u)) (b, v)
-    simpa [Matrix.equivReindexMap, Matrix.reindex_apply, Matrix.submatrix_apply,
-      s0RegroupEquiv, threeSiteSectorCoordinateEquiv,
-      threeSiteSectorClosure, threeSiteSectorEmbedding,
-      threeSiteNeighboringOperator,
-      Matrix.blockDiagonal'_apply] using hg
-  · have hz : F.sectorCoordinateTensor
-        (F.sectorFinEquiv.symm ⟨l, (u.1.2, u.2.1)⟩)
-        (F.sectorFinEquiv.symm ⟨m, (v.1.2, v.2.1)⟩) = 0 := by
-      ext beta alpha
-      exact sectorCoordinateTensor_apply_ne F hlm _ _ beta alpha
-    change Matrix.trace
-      (F.sectorCoordinateTensor
-          (F.sectorFinEquiv.symm ⟨k, (a.1, u.1.1)⟩)
-          (F.sectorFinEquiv.symm ⟨k, (b.1, v.1.1)⟩) *
-        F.sectorCoordinateTensor
-          (F.sectorFinEquiv.symm ⟨l, (u.1.2, u.2.1)⟩)
-          (F.sectorFinEquiv.symm ⟨m, (v.1.2, v.2.1)⟩) *
-        F.sectorCoordinateTensor
-          (F.sectorFinEquiv.symm ⟨h, (u.2.2, a.2)⟩)
-          (F.sectorFinEquiv.symm ⟨h, (v.2.2, b.2)⟩) * X) =
-      F.boundaryOperator k h X a b *
-        F.threeSiteNeighboringOperator k h ⟨l, u⟩ ⟨m, v⟩
-    rw [hz]
-    simp [threeSiteNeighboringOperator, Matrix.blockDiagonal'_apply, hlm]
 
 /-- The preparation stage annihilates entries between distinct pairs of
 outer sectors.
