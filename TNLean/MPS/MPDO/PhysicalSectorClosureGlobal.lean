@@ -21,8 +21,7 @@ between distinct sector tuples vanishes.
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
-  Appendix C.2, equations `AppUkU=rl` and `etarl`, lines 1381--1450, and
-  Proposition C.7, lines 1510--1563
+  Appendix C.2, lines 1381--1450, and Proposition C.7, lines 1510--1563
 -/
 
 open scoped Matrix BigOperators Kronecker
@@ -50,8 +49,7 @@ private def sigmaTripleEquiv {I J L : Type*} {A : I → Type*} {B : J → Type*}
 /-- The complete two-site physical space, indexed by a sector pair and
 regrouped into its outer and neighboring factors.
 
-Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and `etarl`,
-lines 1381--1450. -/
+Source: arXiv:1606.00608, Appendix C.2, lines 1381--1450. -/
 noncomputable def twoSiteGlobalRegroupEquiv (F : PhysicalSectorFactorization K) :
     (Fin (Fintype.card (Σ k : Fin F.sectorCount, SectorIndex F k)) ×
       Fin (Fintype.card (Σ k : Fin F.sectorCount, SectorIndex F k))) ≃
@@ -60,6 +58,10 @@ noncomputable def twoSiteGlobalRegroupEquiv (F : PhysicalSectorFactorization K) 
   ((Equiv.prodCongr F.sectorFinEquiv F.sectorFinEquiv).trans sigmaPairEquiv).trans
     (Equiv.sigmaCongrRight fun kh ↦ F.twoSiteRegroupEquiv kh.1 kh.2)
 
+/-- The inverse global two-site regrouping is the fixed-sector embedding
+after the inverse regrouping of the four subspins.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1381--1450. -/
 @[simp] theorem twoSiteGlobalRegroupEquiv_symm_apply
     (F : PhysicalSectorFactorization K) (k h : Fin F.sectorCount)
     (x : BoundaryIndex F k h × NeighborIndex F k h) :
@@ -70,9 +72,8 @@ noncomputable def twoSiteGlobalRegroupEquiv (F : PhysicalSectorFactorization K) 
 /-- The complete three-site physical space, indexed by a sector triple and
 regrouped into its outer and two neighboring factors.
 
-Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and `etarl`,
-lines 1381--1450; the order of factors is that of Proposition C.7,
-lines 1510--1522. -/
+Source: arXiv:1606.00608, Appendix C.2, lines 1381--1450; the order of factors
+is that of Proposition C.7, lines 1510--1522. -/
 noncomputable def threeSiteGlobalRegroupEquiv (F : PhysicalSectorFactorization K) :
     (Fin (Fintype.card (Σ k : Fin F.sectorCount, SectorIndex F k)) ×
       (Fin (Fintype.card (Σ k : Fin F.sectorCount, SectorIndex F k)) ×
@@ -85,6 +86,10 @@ noncomputable def threeSiteGlobalRegroupEquiv (F : PhysicalSectorFactorization K
     (Equiv.sigmaCongrRight fun klh ↦
       F.threeSiteRegroupEquiv klh.1 klh.2.1 klh.2.2)
 
+/-- The inverse global three-site regrouping is the fixed-sector embedding
+after the inverse regrouping of the six subspins.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1381--1450. -/
 @[simp] theorem threeSiteGlobalRegroupEquiv_symm_apply
     (F : PhysicalSectorFactorization K) (k l h : Fin F.sectorCount)
     (x : BoundaryIndex F k h ×
@@ -97,9 +102,8 @@ noncomputable def threeSiteGlobalRegroupEquiv (F : PhysicalSectorFactorization K
 over sector pairs of the outer boundary operator tensored with the neighboring
 operator.
 
-Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and `etarl`,
-lines 1381--1450, and the two-site operator in Proposition C.7,
-lines 1510--1516. -/
+Source: arXiv:1606.00608, Appendix C.2, lines 1381--1450, and the two-site
+operator in Proposition C.7, lines 1510--1516. -/
 theorem twoSiteGlobalClosure_eq (F : PhysicalSectorFactorization K)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     Matrix.reindex F.twoSiteGlobalRegroupEquiv F.twoSiteGlobalRegroupEquiv
@@ -151,9 +155,8 @@ theorem twoSiteGlobalClosure_eq (F : PhysicalSectorFactorization K)
 sum over sector triples of the outer boundary operator tensored with the two
 neighboring operators.
 
-Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and `etarl`,
-lines 1381--1450, and the three-site operator in Proposition C.7,
-lines 1510--1516. -/
+Source: arXiv:1606.00608, Appendix C.2, lines 1381--1450, and the three-site
+operator in Proposition C.7, lines 1510--1516. -/
 theorem threeSiteGlobalClosure_eq (F : PhysicalSectorFactorization K)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     Matrix.reindex F.threeSiteGlobalRegroupEquiv F.threeSiteGlobalRegroupEquiv
