@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.LinearAlgebra.Dual.Defs
+import Mathlib.LinearAlgebra.Finsupp.LinearCombination
 import Mathlib.LinearAlgebra.LinearIndependent.Defs
 import Mathlib.LinearAlgebra.Matrix.Irreducible.Defs
 import Mathlib.LinearAlgebra.Projection
@@ -50,6 +51,17 @@ powers in the proof of Lemma C.5 from idempotence, and
 `Matrix.IsPrimitive.exists_row_pos` / `Matrix.IsPrimitive.exists_col_pos` show
 that a primitive matrix has a positive entry in every row and in every column,
 which makes the paired sector tensors nonzero.
+
+Without any independence hypothesis, `Matrix.pow_two_eq_pow_three_of_pairing_idempotent`
+derives `T^2 = T^3` directly from the pairing idempotence, by composing the
+identity `M^2 = M` with the coefficient map and the functional map on both
+sides. `Matrix.trace_eq_trace_sq_of_pairing_idempotent` then derives
+`trace T = trace (T^2)` by restricting the pairing operator to the
+finite-dimensional span of the tensors `l k` and using cyclicity of the trace
+of a composition there. Combined with `Matrix.pow_eq_pow_two_of_pow_two_eq_pow_three`
+(a purely algebraic fact: `T^2 = T^3` forces `T^N = T^2` for every `N ≥ 2`),
+`Matrix.tracePowersConstant_of_pairing_idempotent` gives the unconditional
+constant trace powers `Matrix.TracePowersConstant T`.
 -/
 
 open scoped BigOperators Matrix ComplexOrder
@@ -297,6 +309,166 @@ theorem hasRankOneFactorization_of_pairing_idempotent
     HasRankOneFactorization T :=
   hasRankOneFactorization_of_mul_self_eq_self
     (mul_self_eq_self_of_pairing_idempotent hT hl hM) hTrace
+
+/-! ### Unconditional constant trace powers of the sector pairing
+
+The identity `M^2 = M` alone, without any independence hypothesis on the
+tensors `l k` or the functionals `r k`, already gives `T^2 = T^3`: writing
+`T = R ∘ L` for the coefficient map `L` and the functional map `R`, the
+displayed identity `L R = (L R)^2` gives `R (L R) L = R (L R)^2 L`, and
+associativity turns the two sides into `T^2` and `T^3`. Since `T^2 = T^3`
+forces `T^N = T^2` for every `N ≥ 2`, only `trace T = trace (T^2)` remains
+to recover the constant trace powers of Lemma C.5 (lines 1494--1497)
+unconditionally. This last identity follows by restricting the pairing
+operator to the finite-dimensional span `W` of the tensors `l k`: on `W`
+the pairing operator is an idempotent endomorphism of a finite free module,
+and cyclicity of the trace of a composition between `W` and the coefficient
+space identifies `trace T` with the trace of the restricted operator and
+`trace (T^2)` with the trace of its square, which coincide by idempotence. -/
+
+/-- **Unconditional `T^2 = T^3` from the pairing idempotence.**
+
+For the sector trace matrix `T k h = r k (l h)` of arXiv:1606.00608,
+Appendix C.2, satisfying the zero-correlation-length identity
+(lines 1490--1493) in the form `M^2 = M`, the matrix identity `T^2 = T^3`
+holds without any independence hypothesis on `l` or `r`. Multiplying
+`M^2 = M` on the left by the functional map and on the right by the
+coefficient map turns the two sides directly into `T^2` and `T^3`.
+
+Source: arXiv:1606.00608, lines 1494--1497. This is the pairing computation
+of `docs/paper-gaps/cpgsv17_pf_rank_one.tex`, §3 ("What the operator-valued
+ZCL identity implies"). -/
+theorem pow_two_eq_pow_three_of_pairing_idempotent
+    {V : Type*} [AddCommGroup V] [Module ℝ V]
+    {l : Fin n → V} {r : Fin n → Module.Dual ℝ V} {T : Matrix (Fin n) (Fin n) ℝ}
+    (hT : ∀ k h, T k h = r k (l h))
+    (hM : ∀ v : V, ∑ k, r k (∑ j, r j v • l j) • l k = ∑ k, r k v • l k) :
+    T ^ 2 = T ^ 3 := by
+  classical
+  have hexpand : ∀ (v : V) (k : Fin n), r k (∑ j, r j v • l j) = ∑ j, T k j * r j v := by
+    intro v k
+    rw [map_sum]
+    exact Finset.sum_congr rfl fun j _ => by rw [map_smul, smul_eq_mul, hT k j]; ring
+  have hcube : T * T = T * T * T := by
+    ext k h
+    rw [mul_assoc]
+    simp only [Matrix.mul_apply]
+    have key := congrArg (r k) (hM (l h))
+    rw [hexpand (l h) k, hexpand (∑ j, r j (l h) • l j) k] at key
+    have hinner : ∀ k' : Fin n, r k' (∑ j, r j (l h) • l j) = ∑ j, T k' j * r j (l h) :=
+      fun k' => hexpand (l h) k'
+    simp_rw [hinner] at key
+    simpa only [← hT] using key.symm
+  have e2 : T ^ 2 = T * T := by rw [pow_succ, pow_one]
+  have e3 : T ^ 3 = T * T * T := by rw [pow_succ, pow_succ, pow_one]
+  rw [e2, e3]; exact hcube
+
+/-- **Unconditional `trace T = trace (T^2)` from the pairing idempotence.**
+
+For the sector trace matrix `T k h = r k (l h)` of arXiv:1606.00608,
+Appendix C.2, satisfying the zero-correlation-length identity in the form
+`M^2 = M`, the trace identity `trace T = trace (T^2)` holds without any
+independence hypothesis. Restricting `M` to the finite-dimensional span `W`
+of the tensors `l k` gives an idempotent endomorphism of a finite free
+module; cyclicity of the trace of a composition between `W` and the
+coefficient space `Fin n → ℝ` identifies `trace T` with the trace of the
+restriction and `trace (T^2)` with the trace of its square, which coincide
+since the restriction is idempotent.
+
+Source: arXiv:1606.00608, lines 1494--1497. This is the "finite-dimensional
+carrier" step of `docs/paper-gaps/cpgsv17_pf_rank_one.tex`, §3. -/
+theorem trace_eq_trace_sq_of_pairing_idempotent
+    {V : Type*} [AddCommGroup V] [Module ℝ V]
+    {l : Fin n → V} {r : Fin n → Module.Dual ℝ V} {T : Matrix (Fin n) (Fin n) ℝ}
+    (hT : ∀ k h, T k h = r k (l h))
+    (hM : ∀ v : V, ∑ k, r k (∑ j, r j v • l j) • l k = ∑ k, r k v • l k) :
+    Matrix.trace T = Matrix.trace (T * T) := by
+  classical
+  set W : Submodule ℝ V := Submodule.span ℝ (Set.range l) with hW
+  haveI hWfin : Module.Finite ℝ W := Module.Finite.span_of_finite ℝ (Set.finite_range l)
+  set Lfull : (Fin n → ℝ) →ₗ[ℝ] V := Fintype.linearCombination ℝ l with hLfull
+  have hLmem : ∀ x, Lfull x ∈ W := by
+    intro x
+    rw [hW, ← Fintype.range_linearCombination]
+    exact LinearMap.mem_range_self Lfull x
+  set L : (Fin n → ℝ) →ₗ[ℝ] W := LinearMap.codRestrict W Lfull hLmem with hL
+  set Rfull : V →ₗ[ℝ] (Fin n → ℝ) := LinearMap.pi r with hRfull
+  set Rres : W →ₗ[ℝ] (Fin n → ℝ) := Rfull ∘ₗ W.subtype with hRres
+  set MW : W →ₗ[ℝ] W := L ∘ₗ Rres with hMW
+  have hRresval : ∀ (u : W) (k : Fin n), Rres u k = r k (u : V) := by
+    intro u k
+    simp only [hRres, hRfull, LinearMap.comp_apply, LinearMap.pi_apply,
+      Submodule.subtype_apply]
+  have hMWval : ∀ u : W, (MW u : V) = ∑ k, r k (u : V) • l k := by
+    intro u
+    simp only [hMW, LinearMap.comp_apply, hL, LinearMap.codRestrict_apply, hLfull,
+      Fintype.linearCombination_apply, hRresval]
+  have hTL : Matrix.toLin' T = Rres ∘ₗ L := by
+    apply LinearMap.ext
+    intro x
+    funext k
+    have hLxval : (L x : V) = ∑ j, x j • l j := by
+      simp only [hL, LinearMap.codRestrict_apply, hLfull, Fintype.linearCombination_apply]
+    simp only [Matrix.toLin'_apply, Matrix.mulVec, dotProduct, LinearMap.comp_apply,
+      hRresval, hLxval, map_sum]
+    refine Finset.sum_congr rfl fun j _ => ?_
+    rw [map_smul, smul_eq_mul, hT k j, mul_comm]
+  have hMWidem : MW ∘ₗ MW = MW := by
+    ext w
+    simp only [LinearMap.comp_apply]
+    show (MW (MW w) : V) = (MW w : V)
+    rw [hMWval (MW w), hMWval w]
+    exact hM (w : V)
+  have step1 : Matrix.trace T = LinearMap.trace ℝ W MW := by
+    rw [← Matrix.trace_toLin'_eq, hTL, hMW]
+    exact LinearMap.trace_comp_comm' L Rres
+  have step2 : Matrix.trace (T * T) = LinearMap.trace ℝ W (MW ∘ₗ MW) := by
+    rw [← Matrix.trace_toLin'_eq, Matrix.toLin'_mul, hTL]
+    have hreassoc : (Rres ∘ₗ L) ∘ₗ (Rres ∘ₗ L) = Rres ∘ₗ (MW ∘ₗ L) := by
+      ext x
+      simp only [LinearMap.comp_apply, hMW]
+    rw [hreassoc]
+    exact LinearMap.trace_comp_comm' (MW ∘ₗ L) Rres
+  rw [step1, step2, hMWidem]
+
+/-- If `T^2 = T^3`, then every power `T^N` for `N ≥ 2` agrees with `T^2`. -/
+theorem pow_eq_pow_two_of_pow_two_eq_pow_three
+    {T : Matrix (Fin n) (Fin n) ℝ} (h : T ^ 2 = T ^ 3) :
+    ∀ N, 2 ≤ N → T ^ N = T ^ 2 := by
+  have hmul : T * T = T * T * T := by
+    have e2 : T ^ 2 = T * T := by rw [pow_succ, pow_one]
+    have e3 : T ^ 3 = T * T * T := by rw [pow_succ, pow_succ, pow_one]
+    rw [e2, e3] at h; exact h
+  intro N hN
+  induction N, hN using Nat.le_induction with
+  | base => rfl
+  | succ m _ ih =>
+    rw [pow_succ, ih]
+    calc T ^ 2 * T = T * T * T := by rw [pow_two]
+      _ = T * T := hmul.symm
+      _ = T ^ 2 := (pow_two T).symm
+
+/-- **Unconditional constant trace powers for the sector pairing.**
+
+For the sector trace matrix `T k h = r k (l h)` of arXiv:1606.00608,
+Appendix C.2, satisfying the zero-correlation-length identity, every positive
+power of `T` has the same trace as `T`, without any independence hypothesis
+on the tensors `l` or the functionals `r`.
+
+Source: arXiv:1606.00608, lines 1494--1497. -/
+theorem tracePowersConstant_of_pairing_idempotent
+    {V : Type*} [AddCommGroup V] [Module ℝ V]
+    {l : Fin n → V} {r : Fin n → Module.Dual ℝ V} {T : Matrix (Fin n) (Fin n) ℝ}
+    (hT : ∀ k h, T k h = r k (l h))
+    (hM : ∀ v : V, ∑ k, r k (∑ j, r j v • l j) • l k = ∑ k, r k v • l k) :
+    TracePowersConstant T := by
+  have hsq3 := pow_two_eq_pow_three_of_pairing_idempotent hT hM
+  have htr := trace_eq_trace_sq_of_pairing_idempotent hT hM
+  intro k hk
+  rcases Nat.lt_or_ge k 2 with hk2 | hk2
+  · interval_cases k
+    rw [pow_one]
+  · rw [pow_eq_pow_two_of_pow_two_eq_pow_three hsq3 k hk2, pow_two, ← htr]
 
 /-- A finite family of nonnegative real numbers with sum and sum of squares both
 one has exactly one nonzero entry, and that entry is one. -/

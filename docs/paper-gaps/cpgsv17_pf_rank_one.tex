@@ -186,31 +186,53 @@ the two displayed identities of the source,
   \sum_k |l_k)(r_k| = \sum_{k,h} T_{k,h}|l_k)(r_h|,
 \]
 from lines 1478--1493 of Appendix C.2.  These equations make the pairing
-operator $M=\sum_k|l_k)(r_k|$ idempotent.  If the vectors $(l_k)_k$ are
-linearly independent, then the coefficient map $L$ is injective and
+operator $M=\sum_k|l_k)(r_k|$ idempotent, without any independence
+hypothesis on $(l_k)_k$ or $(r_k)_k$.  Pairing the idempotence with the
+functional map $R$ on the left and the coefficient map $L$ on the right, as
+in Section~3, gives $T^2=T^3$ unconditionally; restricting the pairing
+operator to the finite-dimensional span of $(l_k)_k$ then identifies
+$\operatorname{tr}(T)$ with $\operatorname{tr}(T^2)$, so every positive
+power of $T$ has the same trace as $T$.  This recovers the trace identity
+displayed at lines 1494--1497 of Appendix C.2 unconditionally, at the matrix
+product density operator side.
+\footnote{\sloppy The formal declarations are
+{\scriptsize\leanid{MPOTensor.SectorPairingData.pairing_sq_eq_pairing_cube}}
+and
+{\scriptsize\leanid{MPOTensor.SectorPairingData.tracePowersConstant}} in
+\doclink{TNLean/MPS/MPDO/SimpleLocalStructure}, resting on the general matrix
+statements
+{\scriptsize\leanid{Matrix.pow_two_eq_pow_three_of_pairing_idempotent}},
+{\scriptsize\leanid{Matrix.trace_eq_trace_sq_of_pairing_idempotent}},
+{\scriptsize\leanid{Matrix.pow_eq_pow_two_of_pow_two_eq_pow_three}}, and
+{\scriptsize\leanid{Matrix.tracePowersConstant_of_pairing_idempotent}} in
+\doclink{TNLean/Algebra/PerronFrobenius/RankOne}, added for \ghissue{3714}.}
+
+If in addition the vectors $(l_k)_k$ are linearly independent, then the
+coefficient map $L$ is injective and
 \[
   L T^2=M^2L=ML=LT,
 \]
-so $T^2=T$.  Hence all positive powers of $T$ have the same trace; trace one
-then gives the rank-one factorization.  Primitivity separately makes each
-$|l_k)$ nonzero, so an independent family of subspaces carrying the vectors
-is sufficient to derive their linear independence.
+so $T^2=T$, the strictly stronger idempotence used for the rank-one
+factorization below.  Trace one and idempotence together then give the
+factorization directly.  Primitivity separately makes each $|l_k)$ nonzero,
+so an independent family of subspaces carrying the vectors is sufficient to
+derive their linear independence.
 \footnote{\sloppy The formal declarations are
 {\scriptsize\leanid{MPOTensor.SectorPairingData.pairing_operator_idempotent}},
 {\scriptsize\leanid{MPOTensor.SectorPairingData.mul_self_eq_self}},
-{\scriptsize\leanid{MPOTensor.SectorPairingData.tracePowersConstant}},
 {\scriptsize\leanid{MPOTensor.SectorPairingData.l_ne_zero}},
 {\scriptsize\leanid{MPOTensor.SectorPairingData.linearIndependent_l}},
 {\scriptsize\leanid{MPOTensor.sal_zcl_implies_rank_one_T_of_pairing_idempotent}}, and
 {\scriptsize\leanid{MPOTensor.sal_zcl_implies_rank_one_T_of_sector_supports}} in
 \doclink{TNLean/MPS/MPDO/SimpleLocalStructure}.}
 
-Three obligations remain before the conditional hypotheses disappear.
-First, the inverse-map factorization at lines 1407--1482 must construct the
-families $(l_k)_k$ and $(r_k)_k$ from an injective simple tensor and prove the
-pairing $T_{k,h}=(r_k|l_h)$.  Second, zero correlation length must be used to
-derive the operator identity at lines 1490--1493 for those concrete families;
-the present structure records this identity as data.  Third, linear
+Two obligations remain before the conditional hypotheses of the rank-one
+factorization disappear; the constant trace powers above no longer depend on
+either.  First, the inverse-map factorization at lines 1407--1482 must
+construct the families $(l_k)_k$ and $(r_k)_k$ from an injective simple
+tensor and prove the pairing $T_{k,h}=(r_k|l_h)$ together with the operator
+identity at lines 1490--1493 for those concrete families; the present
+structure records the pairing and the identity as data.  Second, linear
 independence of the closed tensors must be proved.  The direct sum in the
 source's sector splitting at lines 1436--1448 concerns the physical indices;
 after those indices are contracted, the closed tensors live in a common bond
