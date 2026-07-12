@@ -386,7 +386,8 @@
 
 \begin{definition}[Physical closure maps]
     \label{def:phys_close}
-    \lean{MPOTensor.physCloseN, MPOTensor.physClose1, MPOTensor.physClose2}
+    \lean{MPOTensor.physCloseN, MPOTensor.physClose1, MPOTensor.physClose2,
+      MPOTensor.physClose3}
     \leanok
     \uses{def:mpo_eval_word}
     For an MPO tensor $M$, a length $N$, and a virtual operator $X$, define the
@@ -431,12 +432,13 @@
 
 \begin{lemma}[Three-site physical closure]
     \label{lem:phys_close_three}
-    \lean{MPOTensor.physCloseN_three_apply}
+    \lean{MPOTensor.physCloseN_three_apply, MPOTensor.physClose3_apply,
+      MPOTensor.physCloseN_three_eq_physClose3}
     \leanok
     \uses{def:phys_close}
     The general three-site physical closure has coefficients
     \[
-        M_3(X)_{(i_0,i_1,i_2),(j_0,j_1,j_2)}
+        M_3(X)_{(i_0,(i_1,i_2)),(j_0,(j_1,j_2))}
         =\tr(M^{i_0j_0} M^{i_1j_1} M^{i_2j_2} X).
     \]
     For $M=\mathcal K$, this is the operator $\mathcal K_3(X)$ in

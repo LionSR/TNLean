@@ -10,6 +10,9 @@ name: TNMPOLocalPurification TNMPORenormalizationTS TNEtaSectorDecomposition TNM
 name: TNMPDOTwoSiteTraceAndShift TNMPDOThreeSiteTraceAndShift
 {{ obj.tn_svg_html }}
 
+name: TNMPDOTwoSiteClosureFactorization TNMPDOThreeSiteClosureFactorization
+{{ obj.tn_svg_html }}
+
 name: TNMPDOInverseMapThreeSiteContraction TNMPDONormalizedFourSiteTail TNMPDOLocalOrthogonality
 {{ obj.tn_svg_html }}
 

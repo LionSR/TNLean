@@ -282,6 +282,69 @@
     \end{tikzpicture}%
 }
 
+% Fixed-sector factorization of the arbitrary-X two-site physical closure.
+% The left-hand row shows the sector subspins and the outer virtual closure;
+% the right-hand side shows only the proved boundary/neighbor tensor product.
+\newcommand{\TNMPDOTwoSiteClosureFactorization}{%
+    \begin{tikzpicture}[tn picture, scale=0.50]
+        \TN@subspinbox{ctwoLk}{(-4.40,0.55)}{l_k}
+        \TN@subspinbox{ctwoRk}{(-3.40,0.55)}{r_k}
+        \TN@subspinbox{ctwoLh}{(-2.40,0.55)}{l_h}
+        \TN@subspinbox{ctwoRh}{(-1.40,0.55)}{r_h}
+        \TN@subspinlink{ctwoLk}{ctwoRk}
+        \TN@subspinlink{ctwoRk}{ctwoLh}
+        \TN@subspinlink{ctwoLh}{ctwoRh}
+        \node[draw, fill=white, inner sep=2pt] (ctwoX) at (-2.90,-0.95) {$X$};
+        \draw[tn leg] (ctwoLk.west)
+          .. controls (-5.05,0.55) and (-5.05,-0.95) .. (ctwoX.west);
+        \draw[tn leg] (ctwoX.east)
+          .. controls (-0.75,-0.95) and (-0.75,0.55) .. (ctwoRh.east);
+        \node at (0.00,0.05) {$=$};
+        \node[draw, rounded corners=2pt, minimum width=2.25cm,
+          minimum height=0.72cm] (ctwoB) at (1.70,0.05) {$B_{k,h}(X)$};
+        \node at (3.20,0.05) {$\otimes$};
+        \node[draw, rounded corners=2pt, minimum width=1.75cm,
+          minimum height=0.72cm] (ctwoEta) at (4.45,0.05) {$\eta_{k,h}$};
+        \node at (1.70,-0.62) {$L_k\otimes R_h$};
+        \node at (4.45,-0.62) {$R_k\otimes L_h$};
+    \end{tikzpicture}%
+}
+
+% Fixed-sector factorization of the arbitrary-X three-site physical closure.
+% No preparation, positivity, or channel identity is represented.
+\newcommand{\TNMPDOThreeSiteClosureFactorization}{%
+    \begin{tikzpicture}[tn picture, scale=0.43]
+        \TN@subspinbox{cthreeLk}{(-5.70,0.62)}{l_k}
+        \TN@subspinbox{cthreeRk}{(-4.70,0.62)}{r_k}
+        \TN@subspinbox{cthreeLl}{(-3.70,0.62)}{l_l}
+        \TN@subspinbox{cthreeRl}{(-2.70,0.62)}{r_l}
+        \TN@subspinbox{cthreeLh}{(-1.70,0.62)}{l_h}
+        \TN@subspinbox{cthreeRh}{(-0.70,0.62)}{r_h}
+        \TN@subspinlink{cthreeLk}{cthreeRk}
+        \TN@subspinlink{cthreeRk}{cthreeLl}
+        \TN@subspinlink{cthreeLl}{cthreeRl}
+        \TN@subspinlink{cthreeRl}{cthreeLh}
+        \TN@subspinlink{cthreeLh}{cthreeRh}
+        \node[draw, fill=white, inner sep=2pt] (cthreeX) at (-3.20,-1.00) {$X$};
+        \draw[tn leg] (cthreeLk.west)
+          .. controls (-6.35,0.62) and (-6.35,-1.00) .. (cthreeX.west);
+        \draw[tn leg] (cthreeX.east)
+          .. controls (-0.05,-1.00) and (-0.05,0.62) .. (cthreeRh.east);
+        \node at (0.45,0.05) {$=$};
+        \node[draw, rounded corners=2pt, minimum width=2.05cm,
+          minimum height=0.72cm] at (1.85,0.05) {$B_{k,h}(X)$};
+        \node at (3.15,0.05) {$\otimes$};
+        \node[draw, rounded corners=2pt, minimum width=1.65cm,
+          minimum height=0.72cm] at (4.20,0.05) {$\eta_{k,l}$};
+        \node at (5.25,0.05) {$\otimes$};
+        \node[draw, rounded corners=2pt, minimum width=1.65cm,
+          minimum height=0.72cm] at (6.30,0.05) {$\eta_{l,h}$};
+        \node at (1.85,-0.65) {$L_k\otimes R_h$};
+        \node at (5.25,-0.65)
+          {$(R_k\otimes L_l)\otimes(R_l\otimes L_h)$};
+    \end{tikzpicture}%
+}
+
 % A closed chain of factorized sector tensors regrouped into neighbouring
 % eta operators.  This mirrors the cyclic contractions in Appendix C.2.
 \newcommand{\TNMPDOCyclicEtaContraction}{%
