@@ -3294,6 +3294,212 @@ strong subadditivity for a normalized three-site reduced state.
     \]
 \end{proof}
 
+For the following construction, through
+Theorem~\ref{thm:mpdo_localized_physical_s_closure_identity}, assume the
+neighboring-operator trace factorization of
+Definition~\ref{def:mpdo_neighboring_trace_factorization}. Write
+\[
+  q=\dim\!\left(\bigoplus_k L_k\otimes R_k\right)
+\]
+for the physical dimension of the sector-coordinate tensor
+$\widehat{\cal K}$.
+
+\begin{definition}[Refinement in ordinary physical coordinates]
+    \label{def:mpdo_physical_t_map}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.physicalTMap}
+    \leanok
+    \uses{def:mpdo_physical_sector_t_map,
+      def:mpdo_physical_sector_closure_coordinates}
+    Transporting $\mathcal T$ through the canonical two-site and three-site
+    coordinate identifications gives a channel
+    \[
+      \widehat{\mathcal T}:M_{q^2}(\mathbb C)\longrightarrow
+        M_{q^3}(\mathbb C),
+    \]
+    where all multiple physical indices are associated to the right.
+\end{definition}
+
+\begin{theorem}[The physical refinement map is a channel]
+    \label{thm:mpdo_physical_t_map_cptp}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.physicalTMap_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_physical_t_map}
+    The map $\widehat{\mathcal T}$ is trace-preserving and completely
+    positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_physical_sector_t_map_cptp}
+    The coordinate identifications are unitary permutation channels.
+    Composing them with a trace-preserving completely positive map preserves
+    both properties.
+\end{proof}
+
+% **Local fix (zero-weight quotient):** this identity uses the completed
+% zero-weight preparation. Documented in
+% docs/paper-gaps/cpgsv17_mpdo_zero_weight_preparation_completion.tex.
+\begin{theorem}[Refinement identity in ordinary physical coordinates]
+    \label{thm:mpdo_physical_t_closure_identity}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.physicalTMap_twoSiteClosure_eq_threeSiteClosure}
+    \leanok
+    \uses{def:mpdo_physical_t_map}
+    For every virtual matrix $X$,
+    \[
+      \widehat{\mathcal T}\bigl(\widehat{\cal K}_2(X)\bigr)
+      =\widehat{\cal K}_3(X).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_physical_sector_t_closure_identity}
+    Transport the sector-coordinate identity through the inverse three-site
+    coordinate identification.
+\end{proof}
+
+\begin{definition}[Physical coarse-graining]
+    \label{def:mpdo_physical_s_map}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.physicalSMap}
+    \leanok
+    \uses{def:mpdo_physical_sector_s_map,
+      def:mpdo_physical_sector_closure_coordinates}
+    Transporting $\mathcal S$ through the canonical three-site and two-site
+    coordinate identifications gives a channel
+    \[
+      \widehat{\mathcal S}:M_{q^3}(\mathbb C)\longrightarrow
+        M_{q^2}(\mathbb C).
+    \]
+\end{definition}
+
+\begin{theorem}[The physical coarse-graining map is a channel]
+    \label{thm:mpdo_physical_s_map_cptp}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.physicalSMap_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_physical_s_map}
+    The map $\widehat{\mathcal S}$ is trace-preserving and completely
+    positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_physical_sector_s_map_cptp}
+    This follows by composition with the two coordinate-permutation
+    channels.
+\end{proof}
+
+\begin{theorem}[Coarse-graining identity in ordinary physical coordinates]
+    \label{thm:mpdo_physical_s_closure_identity}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.physicalSMap_threeSiteClosure_eq_twoSiteClosure}
+    \leanok
+    \uses{def:mpdo_physical_s_map}
+    For every virtual matrix $X$,
+    \[
+      \widehat{\mathcal S}\bigl(\widehat{\cal K}_3(X)\bigr)
+      =\widehat{\cal K}_2(X).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_physical_sector_s_closure_identity}
+    Transport the sector-coordinate identity through the inverse two-site
+    coordinate identification.
+\end{proof}
+
+\begin{definition}[Localized physical refinement]
+    \label{def:mpdo_localized_physical_t_map}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.localizedPhysicalTMap}
+    \leanok
+    \uses{def:mpdo_physical_t_map}
+    Reassociate three sites as $(12)3$, apply
+    $\widehat{\mathcal T}\otimes\operatorname{id}$, and reassociate the
+    result as $1(2(34))$. This defines the localized refinement channel on
+    right-associated physical coordinates.
+\end{definition}
+
+\begin{theorem}[The localized physical refinement is a channel]
+    \label{thm:mpdo_localized_physical_t_map_cptp}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.localizedPhysicalTMap_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_localized_physical_t_map}
+    The localized refinement map is trace-preserving and completely
+    positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_physical_t_map_cptp}
+    Tensoring a channel with the identity preserves complete positivity and
+    trace, as do the two associativity permutations.
+\end{proof}
+
+% **Local fix (zero-weight quotient):** this identity uses the completed
+% zero-weight preparation. Documented in
+% docs/paper-gaps/cpgsv17_mpdo_zero_weight_preparation_completion.tex.
+\begin{theorem}[Localized refinement of physical closures]
+    \label{thm:mpdo_localized_physical_t_closure_identity}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.localizedPhysicalTMap_threeSiteClosure_eq_fourSiteClosure}
+    \leanok
+    \uses{def:mpdo_localized_physical_t_map}
+    For every virtual matrix $X$,
+    \[
+      (\widehat{\mathcal T}\otimes\operatorname{id})
+        \bigl(\widehat{\cal K}_3(X)\bigr)
+      =\widehat{\cal K}_4(X),
+    \]
+    with the displayed map understood in right-associated coordinates.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_physical_t_closure_identity}
+    Fixing the last ket and bra indices turns the three-site closure into a
+    two-site closure with the last tensor matrix absorbed into $X$. Apply the
+    two-to-three-site refinement identity to this virtual matrix.
+\end{proof}
+
+\begin{definition}[Localized physical coarse-graining]
+    \label{def:mpdo_localized_physical_s_map}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.localizedPhysicalSMap}
+    \leanok
+    \uses{def:mpdo_physical_s_map}
+    Reassociate four sites as $(123)4$, apply
+    $\widehat{\mathcal S}\otimes\operatorname{id}$, and reassociate the
+    result as $1(23)$. This defines the localized coarse-graining channel on
+    right-associated physical coordinates.
+\end{definition}
+
+\begin{theorem}[The localized physical coarse-graining is a channel]
+    \label{thm:mpdo_localized_physical_s_map_cptp}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.localizedPhysicalSMap_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_localized_physical_s_map}
+    The localized coarse-graining map is trace-preserving and completely
+    positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_physical_s_map_cptp}
+    Tensor the physical coarse-graining channel with the identity and compose
+    with the two associativity permutations.
+\end{proof}
+
+\begin{theorem}[Localized coarse-graining of physical closures]
+    \label{thm:mpdo_localized_physical_s_closure_identity}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.localizedPhysicalSMap_fourSiteClosure_eq_threeSiteClosure}
+    \leanok
+    \uses{def:mpdo_localized_physical_s_map}
+    For every virtual matrix $X$,
+    \[
+      (\widehat{\mathcal S}\otimes\operatorname{id})
+        \bigl(\widehat{\cal K}_4(X)\bigr)
+      =\widehat{\cal K}_3(X),
+    \]
+    in right-associated coordinates.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_physical_s_closure_identity}
+    Fixing the last ket and bra indices identifies the four-site closure with
+    a three-site closure having the last tensor matrix absorbed into $X$.
+    Apply the three-to-two-site coarse-graining identity.
+\end{proof}
+
 \begin{figure}[ht]
     \centering
     \TNMPDOSectorPairing
