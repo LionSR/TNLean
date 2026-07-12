@@ -429,6 +429,7 @@ import TNLean.MPS.MPDO.BNTFusionIsometries
 import TNLean.MPS.MPDO.BNTAssociativity
 import TNLean.MPS.MPDO.BNTLeftTripleFusion
 import TNLean.MPS.MPDO.BNTRightTripleFusion
+import TNLean.MPS.MPDO.BNTFinalSectorFusion
 import TNLean.MPS.MPDO.CommutingForm
 import TNLean.MPS.MPDO.CommutingFormBridge
 import TNLean.MPS.MPDO.BlockedRFPConstruction
