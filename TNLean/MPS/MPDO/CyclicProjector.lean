@@ -672,4 +672,55 @@ theorem hasNoPeriodicVectors_verticalTensor_of_noncommutation
   hasNoPeriodicVectors_verticalTensor_of_cyclicProjector M hM
     (periodicVectorYieldsCyclicProjector_of_noncommutation M hNC)
 
+/-- **The periodic-sector step for a single-letter injective matrix product
+density operator, unconditionally.**
+
+If `M`'s doubled-index tensor is (single-letter) injective, the vertically
+viewed tensor has no nontrivial periodic vectors, with no further hypothesis.
+This bypasses `NoninvariantProjectorNoncommuting` entirely: rather than
+requiring the displaced-projector-noncommutation family at *every* chain
+length, the contradiction only ever needs the commutation family at chain
+length `2`, where `ketLeftMul_eq_braRightMul_of_commute_of_isInjective`
+(`TNLean/MPS/MPDO/InvariantProjection.lean`) applies directly to `M`'s own
+letters through injectivity's trace-pairing nondegeneracy — no horizontal
+canonical-form decomposition or `SameMPV₂` transport is needed.
+
+The word invariance of the constructed cyclic projector transfers to the
+stacked tensor (`stackedTensor_ketLeftMul_invariant`), giving commutation with
+$[H^{(2)}]^p$ unconditionally through the invariant-projection step applied to
+the stack (`firstSiteMatrix_mul_mpo_comm`); positive semidefiniteness of the
+density operators then removes the power (`mpo_commute_of_commute_pow`), and
+injectivity turns the resulting commutation with $H^{(2)}$ into the
+letter-level invariance that the displacement forbids.
+
+**Scope restriction (single-letter injective tensors):** the source's
+Proposition 4.13 allows `M` to be reducible, decomposed horizontally into
+several gauge-inequivalent canonical-form blocks with weights; this theorem
+covers the sub-case where `M`'s own tensor is already (single-letter)
+injective. Discharging `NoninvariantProjectorNoncommuting` for a general
+horizontal canonical form remains open, and is documented in
+`docs/paper-gaps/cpgsv17_periodic_sector_projector.tex` together with the
+reason the general route resists this proof strategy: at chain length `1`
+(the only length at which a general, block-injective argument working
+through `SameMPV₂` could plausibly reach `M`'s own letters), the single
+trailing letter is the identity, giving only one trace-level equation per
+matrix-entry pair — far short of what nondegeneracy of the trace pairing
+needs to separate a whole matrix. -/
+theorem hasNoPeriodicVectors_verticalTensor_of_isInjective
+    {d D : ℕ} (M : MPOTensor d D) (hM : IsMPDO M)
+    (hInj : MPSTensor.IsInjective M.toMPSTensor) :
+    MPSTensor.HasNoPeriodicVectors (verticalTensor M) := by
+  intro n V B ρ r hV hint hirr hρ hr hfix μ hμ hnorm
+  by_contra hne
+  obtain ⟨p, Q, hp, hQherm, hQidem, hword, hdisp⟩ :=
+    exists_displaced_invariant_projector_of_periodic_vector M V B ρ r hV hint
+      hirr hρ hr hfix μ hμ hnorm hne
+  apply hdisp
+  have hCommPow : Commute (firstSiteMatrix Q 1) (mpo M 2 ^ p) := by
+    have h := firstSiteMatrix_mul_mpo_comm (stackedTensor M p) (hM.stackedTensor p) hQherm
+      (stackedTensor_ketLeftMul_invariant M hword) 1
+    rwa [mpo_stackedTensor] at h
+  exact ketLeftMul_eq_braRightMul_of_commute_of_isInjective M hInj hQidem
+    (mpo_commute_of_commute_pow M hM 2 hp hCommPow)
+
 end MPOTensor
