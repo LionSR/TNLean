@@ -81,7 +81,7 @@ abbrev RightFinalIndex (α β γ ε : Λ) : Type u :=
 /-- The canonical identification of the left fixed-final-sector index with the product of its
 multiplicity space and the bond space of `tensor ε`.
 
-Source: arXiv:1606.00608, Theorem IV.13(iii), label `Ualphabeta`, and the associativity remark
+Source: arXiv:1606.00608, Theorem 4.14(iii), label `Ualphabeta`, and the associativity remark
 immediately following it; arXiv:1511.08090, equation (Fmove), left multiplicity indices
 `(e, μ, ν)`. -/
 def leftFinalIndexEquiv (α β γ ε : Λ) :
@@ -97,7 +97,7 @@ def leftFinalIndexEquiv (α β γ ε : Λ) :
 /-- The canonical identification of the right fixed-final-sector index with the product of its
 multiplicity space and the bond space of `tensor ε`.
 
-Source: arXiv:1606.00608, Theorem IV.13(iii), label `Ualphabeta`, and the associativity remark
+Source: arXiv:1606.00608, Theorem 4.14(iii), label `Ualphabeta`, and the associativity remark
 immediately following it; arXiv:1511.08090, equation (Fmove), right multiplicity indices
 `(f, λ, σ)`. -/
 def rightFinalIndexEquiv (α β γ ε : Λ) :
@@ -242,7 +242,7 @@ This is the injective-sector uniqueness step in the derivation of an $F$-move.  
 construct `C`, prove that either `C` or `F` is invertible, or identify the dimensions of the
 positive diagonal chi matrices with the fusion multiplicities of arXiv:1511.08090.
 
-Source: arXiv:1606.00608, Theorem IV.13(iii), label `Ualphabeta`, and the associativity remark
+Source: arXiv:1606.00608, Theorem 4.14(iii), label `Ualphabeta`, and the associativity remark
 immediately following it; arXiv:1511.08090, Section "Fusion tensors", uniqueness paragraph
 preceding equation (zippercondition2), and Section "Associativity and the pentagon equation",
 the injectivity argument following equation (pentagon3). -/
