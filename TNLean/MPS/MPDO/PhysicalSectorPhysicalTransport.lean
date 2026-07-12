@@ -82,12 +82,6 @@ private noncomputable def physicalBlockTwoInverseMap
     Matrix.equivReindexMap
       (blockedPairEquiv (Fintype.card (SectorSiteIndex F)))
 
-private theorem sandwichMap_isKrausCPTP {a b : Type*}
-    [Fintype a] [DecidableEq a] [Fintype b] [DecidableEq b]
-    (V : Matrix b a ℂ) (hV : Vᴴ * V = 1) :
-    IsKrausCPTP (sandwichMap V) :=
-  isKrausCPTP_of_singleKraus V (fun _ ↦ rfl) hV
-
 private theorem physicalBlockOneMap_isKrausCPTP
     (F : PhysicalSectorFactorization K) :
     IsKrausCPTP (physicalBlockOneMap F) := by
