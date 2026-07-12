@@ -922,7 +922,12 @@ equals the `Ycorner` insertion.
 This is the tensor-block conclusion of the displayed equation in the proof
 of Proposition 4.13 of arXiv:1606.00608, lines 1873--1887.  The two
 hypotheses are precisely the coefficient-level equalities displayed in that
-equation; they do not posit a vertical canonical decomposition. -/
+equation; they do not posit a vertical canonical decomposition.
+
+**Scope restriction (per-block separation):** inherited from
+`blockwise_insert_eq_of_mpv_agree`, whose per-block `biCF` hypothesis excludes
+decompositions with gauge-equivalent repeated blocks. Documented in
+`docs/paper-gaps/cpgsv17_bicf_block_separation.tex`. -/
 theorem blockwise_opposite_insert_eq_of_mpv_agree
     {r : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ}
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -956,7 +961,13 @@ equation of the proof of Proposition 4.13 of arXiv:1606.00608,
 lines 1873--1887.  It does not prove that a one-sided invariant projection
 for the vertically viewed tensor supplies the first entrywise identity; that
 further identification remains part of the horizontal-to-vertical
-canonical-form argument. -/
+canonical-form argument.
+
+**Scope restriction (per-block separation):** inherited from
+`blockwise_insert_eq_of_mpv_agree` via `blockwise_opposite_insert_eq_of_mpv_agree`,
+whose per-block `biCF` hypothesis excludes decompositions with gauge-equivalent
+repeated blocks. Documented in
+`docs/paper-gaps/cpgsv17_bicf_block_separation.tex`. -/
 theorem blockwise_opposite_insert_eq_of_rotated_mpo_entries
     {r : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ}
     (M : MPOTensor d D) (A : (k : Fin r) → MPSTensor (d * d) (dim k))
