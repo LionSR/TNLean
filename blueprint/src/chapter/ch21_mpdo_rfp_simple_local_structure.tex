@@ -1763,7 +1763,6 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{theorem}[Positive rescaling around one sector cycle]%
     \label{thm:mpdo_eta_cycle_positive_rescaling}
     \lean{MPOTensor.exists_pi_smul_posSemidef_of_cyclicEtaTensorProduct_posSemidef}
-    \lean{MPOTensor.exists_pi_smul_posSemidef_of_sectorEta_cycle}
     \leanok
     \uses{def:mpdo_cyclic_eta_tensor_product,
         lem:mpdo_eta_cycle_fin_kronecker,
@@ -1790,6 +1789,40 @@ strong subadditivity for a normalized three-site reduced state.
     Its matrix entries then become the finite Kronecker product of the
     consecutive neighboring operators. Apply
     Theorem~\ref{thm:finite_kronecker_positive_rescaling}.
+\end{proof}
+
+\begin{corollary}[Positive rescaling of the concrete sector operators around
+    one cycle]%
+    \label{cor:mpdo_sector_eta_cycle_positive_rescaling}
+    \lean{MPOTensor.exists_pi_smul_posSemidef_of_sectorEta_cycle}
+    \leanok
+    \uses{def:mpdo, def:injective, def:mpdo_eta_structure,
+        def:mpdo_three_site_closure, def:mpdo_sector_eta,
+        thm:mpdo_eta_cycle_positive_rescaling,
+        thm:mpdo_cyclic_eta_posSemidef}
+    Let ${\cal K}$ be an injective MPDO, let $R$ give a three-site closure,
+    and fix an $\eta$-structure and a nonzero tail entry. For a cyclic sector
+    assignment $k_0,\ldots,k_{N-1}$, suppose that every concrete operator
+    $\eta_{k_n,k_{n+1}}$ obtained from these data is nonzero. Then there are
+    nonzero scalars $c_n$ such that
+    \[
+        \prod_{n=0}^{N-1}c_n=1,
+        \qquad c_n\eta_{k_n,k_{n+1}}\geq0
+        \quad(0\leq n<N).
+    \]
+    This is the specialization of
+    Theorem~\ref{thm:mpdo_eta_cycle_positive_rescaling} to the inverse-map
+    sector operators; positivity of the cyclic product follows from the MPDO
+    property.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_eta_cycle_positive_rescaling,
+        thm:mpdo_cyclic_eta_posSemidef}
+    The fixed-sector cyclic product is positive semidefinite by
+    Theorem~\ref{thm:mpdo_cyclic_eta_posSemidef}. Apply
+    Theorem~\ref{thm:mpdo_eta_cycle_positive_rescaling}.
 \end{proof}
 
 \begin{theorem}[The conjugated chain is a congruence]%
