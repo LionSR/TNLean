@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.BNTFusionIsometries
 
 /-!
-# Iterated fusion of a triple product tensor
+# Left iterated fusion of a triple product tensor
 
 Statement (iii) of Theorem IV.13 of arXiv:1606.00608 (label Ualphabeta, lines 986--993 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`) gives, for every pair of labels, an isometry conjugating
