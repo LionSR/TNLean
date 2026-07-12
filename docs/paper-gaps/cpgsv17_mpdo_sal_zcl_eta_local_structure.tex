@@ -427,12 +427,25 @@ component and defining its vertex phase by accumulating the per-edge
 scalars along any nonzero directed path from the base sector is then
 independent of the path chosen, because any two paths between the same
 pair of sectors close into a nonzero cycle (using recurrence to supply the
-return path) whose holonomy is trivial.  What remains is the bookkeeping to
-carry this argument out in Lean: converting \leanid{MPOTensor.SectorReaches}
-membership into an explicit finite path of sectors, defining the
-vertex phase by a choice of path via that path witness, and verifying the
-choice does not depend on which cycle produced the per-edge scalar via the
-uniqueness lemma above.  No formal declaration exists yet for this step.
+return path) whose holonomy is trivial.
+
+The graph-theoretic coboundary step is now formalized: for a recurrent
+directed relation, any group-valued edge assignment with trivial
+product around every closed directed walk is a vertex coboundary.
+\footnote{The formal declaration is
+\path{TNLean.Algebra.DirectedWalk.exists_vertex_of_closedWalk_weight_eq_one}.}
+The proof chooses one representative of each reachability component and
+defines the vertex weight by multiplication along a path from that
+representative; a common return path proves independence of the chosen path.
+
+The MPDO-specific bridge to this theorem remains open.  One must choose a
+single unit-modulus rescaling scalar for every nonzero neighboring operator,
+use the fixed-cycle rescaling and phase-uniqueness theorems to prove that this
+chosen family has product one around every closed nonzero sector walk, and
+translate recurrence expressed by \leanid{MPOTensor.SectorReaches} into the
+explicit finite walks used by the coboundary theorem.  These statements are
+expected consequences of the existing per-cycle results, but they have not
+yet been assembled for the dependent sector bond spaces.
 
 The canonical family
 \leanid{MPOTensor.ExplicitEtaOperators.ofHayashiMarkov} does not supply this
