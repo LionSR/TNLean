@@ -1223,19 +1223,20 @@ strong subadditivity for a normalized three-site reduced state.
     every summand in the closed trace is zero.
 \end{proof}
 
-\begin{lemma}[Positive rescaling of Kronecker factors]%
-    \label{lem:kronecker_factor_positive_rescaling}
+\begin{theorem}[Positive rescaling of Kronecker factors]%
+    \label{thm:kronecker_factor_positive_rescaling}
     \lean{Matrix.exists_smul_posSemidef_of_kronecker_posSemidef}
     \lean{Matrix.eq_zero_of_forall_star_dotProduct_mulVec_eq_zero}
     \lean{Matrix.posSemidef_of_forall_star_dotProduct_mulVec_nonneg}
     \lean{Matrix.star_dotProduct_kronecker_mulVec_prod}
+    \lean{Matrix.smul_kronecker_smul_inv_eq}
     \leanok
     Let $A$ and $B$ be nonzero complex square matrices whose Kronecker
     product $A\otimes B$ is positive semidefinite. Then there is a scalar
     $c\ne0$ with $cA\ge0$ and $c^{-1}B\ge0$. Since
     $(cA)\otimes(c^{-1}B)=A\otimes B$, the rescaled factors represent the
     same product.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -1334,26 +1335,29 @@ strong subadditivity for a normalized three-site reduced state.
     \leanok
     \uses{def:mpdo, def:mpdo_sector_eta,
         thm:mpdo_cyclic_eta_posSemidef,
-        lem:kronecker_factor_positive_rescaling}
+        thm:kronecker_factor_positive_rescaling}
     Let ${\cal K}$ be an injective MPDO with the chosen Hayashi
     decomposition and a nonzero tail entry. Then for all sectors $k,h$:
     \begin{enumerate}
         \item $\eta_{k,k}\ge0$;
         \item $\eta_{k,h}\otimes\eta_{h,k}\ge0$;
         \item if $\eta_{k,h}\ne0$ and $\eta_{h,k}\ne0$, there is a scalar
-            $c\ne0$ with $c\,\eta_{k,h}\ge0$ and $c^{-1}\eta_{h,k}\ge0$.
+            $c\ne0$ with $c\,\eta_{k,h}\ge0$, $c^{-1}\eta_{h,k}\ge0$, and
+            $(c\,\eta_{k,h})\otimes(c^{-1}\eta_{h,k})=\eta_{k,h}\otimes
+            \eta_{h,k}$.
     \end{enumerate}
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:mpdo_cyclic_eta_posSemidef,
-        lem:kronecker_factor_positive_rescaling}
+        thm:kronecker_factor_positive_rescaling}
     The chain of length one projected to the sector $k$ is $\eta_{k,k}$ up
     to the exchange of its two tensor factors, and the chain of length two
     projected to $(k,h)$ is $\eta_{k,h}\otimes\eta_{h,k}$, both positive by
-    Theorem~\ref{thm:mpdo_cyclic_eta_posSemidef}. The third item is
-    Lemma~\ref{lem:kronecker_factor_positive_rescaling}.
+    Theorem~\ref{thm:mpdo_cyclic_eta_posSemidef}. The third item, including
+    the Kronecker-product-preserving equality, is
+    Theorem~\ref{thm:kronecker_factor_positive_rescaling}.
 \end{proof}
 
 \begin{theorem}[Positivity choice with symmetric support]%
@@ -1383,7 +1387,8 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_sector_eta_pair_posSemidef}
+    \uses{thm:mpdo_sector_eta_pair_posSemidef,
+        thm:kronecker_factor_positive_rescaling}
     The diagonal operators are positive by
     Theorem~\ref{thm:mpdo_sector_eta_pair_posSemidef}, and their scalar is
     taken to be one. For a pair of distinct sectors, either both
@@ -1391,7 +1396,10 @@ strong subadditivity for a normalized three-site reduced state.
     nonzero by symmetric support and
     Theorem~\ref{thm:mpdo_sector_eta_pair_posSemidef} supplies the
     reciprocal pair of scalars. Choosing the scalar once per unordered
-    pair makes the two assignments reciprocal.
+    pair makes the two assignments reciprocal, and the block-preserving
+    equality of Theorem~\ref{thm:kronecker_factor_positive_rescaling}
+    applied to that scalar gives
+    $\eta'_{k,h}\otimes\eta'_{h,k}=\eta_{k,h}\otimes\eta_{h,k}$.
 \end{proof}
 
 \begin{definition}[Trace matrices of explicit $\eta$-data]
