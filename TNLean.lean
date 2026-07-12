@@ -377,6 +377,7 @@ import TNLean.MPS.MPDO.BiCFDerivation
 import TNLean.MPS.MPDO.ZCL
 import TNLean.MPS.MPDO.RFP
 import TNLean.MPS.MPDO.KrausCPTP
+import TNLean.MPS.MPDO.LocalizedKrausCPTP
 import TNLean.MPS.MPDO.RFPViaTS
 import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.LocalPurificationRFP
