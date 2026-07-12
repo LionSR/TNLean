@@ -2248,8 +2248,9 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.ExplicitEtaOperators.t0RegroupEquiv}
     \lean{MPOTensor.ExplicitEtaOperators.etaShiftEquiv}
     \lean{MPOTensor.ExplicitEtaOperators.s2ShiftEquiv}
+    \lean{MPOTensor.PhysicalSectorFactorization.t0RegroupEquiv}
     \leanok
-    \uses{def:mpdo_eta_structure}
+    \uses{def:mpdo_eta_structure, def:mpdo_physical_sector_factorization}
     In sector-adapted coordinates, regroup two sites by
     \[
       ((l_k,r_k),(l_h,r_h))
@@ -2271,6 +2272,7 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{definition}[The two-site partial-trace map $\mathcal T_0$]
     \label{def:mpdo_t0_map}
     \lean{MPOTensor.ExplicitEtaOperators.t0Map}
+    \lean{MPOTensor.PhysicalSectorFactorization.t0Map}
     \leanok
     \uses{def:mpdo_two_site_subspin_regrouping,
       def:mpdo_controlled_dependent_partial_trace,
@@ -2288,6 +2290,7 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{theorem}[$\mathcal T_0$ is trace-preserving completely positive]
     \label{thm:mpdo_t0_map_cptp}
     \lean{MPOTensor.ExplicitEtaOperators.t0Map_isKrausCPTP}
+    \lean{MPOTensor.PhysicalSectorFactorization.t0Map_isKrausCPTP}
     \leanok
     \uses{def:mpdo_t0_map}
     The map $\mathcal T_0$ is trace-preserving and completely positive.
@@ -2351,9 +2354,11 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.ExplicitEtaOperators.t2ShiftEquiv}
     \lean{MPOTensor.PhysicalSectorFactorization.ThreeSiteMiddleIndex,
       MPOTensor.PhysicalSectorFactorization.S0PreparationIndex,
-      MPOTensor.PhysicalSectorFactorization.s0RegroupEquiv}
+      MPOTensor.PhysicalSectorFactorization.s0RegroupEquiv,
+      MPOTensor.PhysicalSectorFactorization.t2ShiftEquiv}
     \leanok
-    \uses{def:mpdo_two_site_subspin_regrouping, def:mpdo_eta_omega}
+    \uses{def:mpdo_two_site_subspin_regrouping, def:mpdo_eta_omega,
+      def:mpdo_physical_sector_factorization}
     Regroup three sites by
     \[
       ((l_k,r_k),((l_l,r_l),(l_h,r_h)))
@@ -2430,6 +2435,7 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{definition}[The three-site shift $\mathcal T_2$]
     \label{def:mpdo_t2_map}
     \lean{MPOTensor.ExplicitEtaOperators.t2Map}
+    \lean{MPOTensor.PhysicalSectorFactorization.t2Map}
     \leanok
     \uses{def:mpdo_three_site_subspin_regrouping,
       def:mpdo_equiv_reindex_map}
@@ -2444,6 +2450,7 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{theorem}[$\mathcal T_2$ is trace-preserving completely positive]
     \label{thm:mpdo_t2_map_cptp}
     \lean{MPOTensor.ExplicitEtaOperators.t2Map_isKrausCPTP}
+    \lean{MPOTensor.PhysicalSectorFactorization.t2Map_isKrausCPTP}
     \leanok
     \uses{def:mpdo_t2_map}
     The shift $\mathcal T_2$ is trace-preserving and completely positive.
