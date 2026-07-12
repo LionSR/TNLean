@@ -26,8 +26,7 @@ For a fixed point of maximal support the corner restriction $Q X Q = X$ is vacuo
 is a positive semidefinite fixed point whose support projection absorbs every fixed point
 (`Kraus.exists_maximalSupport_fixedPoint` in `TNLean.Channel.FixedPoint.MaximalSupport`),
 and at such a fixed point the conjugation below reaches the full fixed-point set
-(`Kraus.exists_maximalSupport_weightedCorner_sqrt_eq`)
-there. The statements below take an arbitrary positive semidefinite fixed point, so for a
+(`Kraus.exists_maximalSupport_weightedCorner_sqrt_eq`). The statements below take an arbitrary positive semidefinite fixed point, so for a
 non-maximal choice of $\rho$ they conjugate the fixed points supported on the support of
 $\rho$. The resolution of the former restriction is recorded in
 `docs/paper-gaps/wolf_cor67_maximal_support_restriction.tex`.
