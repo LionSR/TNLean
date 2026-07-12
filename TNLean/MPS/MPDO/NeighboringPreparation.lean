@@ -24,8 +24,7 @@ $\mathcal S_1$.
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
-  Appendix C.2, equations `Appetakhetc`, `Apptralktrrk`, `AppPsiPhi`, and
-  Proposition `3to5`, lines 1389--1403 and 1548--1555
+  Appendix C.2, lines 1389--1403 and 1548--1555
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -45,8 +44,7 @@ of a physical-sector factorization:
 Together with `PhysicalSectorFactorization`, these are exactly the hypotheses
 used in Proposition C.7.
 
-Source: arXiv:1606.00608, Appendix C.2, equations `Appetakhetc`,
-`Apptralktrrk`, and `AppPsiPhi`, lines 1389--1403. -/
+Source: arXiv:1606.00608, Appendix C.2, lines 1389--1403. -/
 structure NeighboringTraceFactorization (F : PhysicalSectorFactorization K) where
   /-- Every neighboring operator $\eta_{k,h}$ is positive semidefinite. -/
   neighboringOperator_pos : ∀ k h, (F.neighboringOperator k h).PosSemidef
