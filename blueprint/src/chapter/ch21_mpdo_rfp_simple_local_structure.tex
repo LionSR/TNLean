@@ -4257,17 +4257,14 @@ $\widehat{\cal K}$.
     \label{def:matrix_trace_rankone_predicates}
     \lean{Matrix.TracePowersConstant}
     \lean{Matrix.HasRankOneFactorization}
-    \lean{Matrix.PrimitiveTracePowersConstantImpliesRankOne}
     \leanok
-    The auxiliary predicates state three matrix-theoretic ingredients used in
+    The auxiliary predicates state two matrix-theoretic ingredients used in
     the rank-one step of \cite[Appendix~C.2, Lemma~C.5]{Cirac2016MPDO_arXiv}:
-    constant traces of all
-    positive powers, existence of a rank-one factorization $T = a b^\top$, and
-    the conditional Perron--Frobenius implication from primitivity together with
-    constant trace powers to such a factorization.
+    constant traces of all positive powers and existence of a rank-one
+    factorization $T = a b^\top$.
 
-    This conditional implication is not a globally provable theorem. As a
-    universal statement over primitive non-negative matrices it is false; a
+    The proposed implication from primitivity and constant trace powers to a
+    rank-one factorization is not a valid general theorem. A
     concrete $3 \times 3$ counterexample appears in the archive, and the
     deviation from the source is documented in
     \path{docs/paper-gaps/cpgsv17_pf_rank_one.tex}. The
@@ -4298,14 +4295,11 @@ $\widehat{\cal K}$.
 \begin{theorem}[PSD trace-power rank-one criterion]
     \label{thm:matrix_psd_trace_power_rank_one}
     \lean{Matrix.PosSemidef.trace_powers_constant_implies_rank_one}
-    \lean{Matrix.primitive_trace_powers_constant_implies_rank_one_of_posSemidef}
     \leanok
     \uses{def:matrix_trace_rankone_predicates}
     Let $T$ be a finite real square matrix. If $T$ is positive semidefinite,
     normalized by $\tr(T)=1$, and has constant traces on all positive powers,
-    then $T$ has a rank-one factorization. Consequently, under the same
-    positive-semidefinite and trace-normalization hypotheses, the conditional
-    rank-one criterion used in \cite[Lemma~C.5]{Cirac2016MPDO_arXiv} follows.
+    then $T$ has a rank-one factorization.
 \end{theorem}
 
 \begin{proof}
@@ -4514,40 +4508,6 @@ $\widehat{\cal K}$.
     factorization $T = a b^\top$.
 \end{proof}
 
-% Unfaithful: thm:sal_zcl_implies_rank_one_t mirrors the Lean theorem
-% MPOTensor.sal_zcl_implies_rank_one_T, whose conditional Perron--Frobenius
-% hypothesis is false as a universal statement (counterexample in
-% TNLean/Archive/PerronFrobeniusRankOneCounterexample.lean); the source
-% Lemma~C.5 derives the factorization from Perron--Frobenius fixed-point
-% theory. Documented in docs/paper-gaps/cpgsv17_pf_rank_one.tex; eliminated by
-% the PSD-corrected thm:psd_trace_powers_rank_one_t.
-\begin{theorem}[SAL and ZCL imply rank-one $T$ (conditional form)]
-    \label{thm:sal_zcl_implies_rank_one_t}
-    \lean{MPOTensor.sal_zcl_implies_rank_one_T}
-    \leanok
-    \uses{def:matrix_trace_rankone_predicates}
-    Let $T$ be a finite real square matrix. Assume that $T$ is primitive,
-    that $\tr(T) = 1$, and that every positive power of $T$ has the same trace
-    as $T$. If one further supplies the Perron--Frobenius hypothesis that
-    this particular primitive non-negative matrix with constant trace powers is
-    rank one, then
-    \[
-        T = a b^\top
-    \]
-    for some vectors $a$ and $b$, with normalization
-    \[
-        a \cdot b = 1.
-    \]
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{def:matrix_trace_rankone_predicates}
-    The Perron--Frobenius hypothesis gives the factorization $T = a b^\top$.
-    Taking traces and using $\tr(a b^\top) = a \cdot b$ converts the
-    normalization $\tr(T) = 1$ into $a \cdot b = 1$.
-\end{proof}
-
 \begin{theorem}[PSD-corrected rank-one $T$ criterion]
     \label{thm:psd_trace_powers_rank_one_t}
     \lean{MPOTensor.sal_zcl_implies_rank_one_T_of_posSemidef}
@@ -4564,13 +4524,12 @@ $\widehat{\cal K}$.
 
 \begin{proof}
     \leanok
-    \uses{def:matrix_trace_rankone_predicates, thm:sal_zcl_implies_rank_one_t,
+    \uses{def:matrix_trace_rankone_predicates,
         thm:matrix_psd_trace_power_rank_one}
     The positive-semidefinite matrix criterion diagonalizes $T$, uses the first
     two trace moments to show that exactly one eigenvalue is nonzero, and hence
-    supplies the auxiliary rank-one criterion. The conditional statement of
-    \cite[Lemma~C.5]{Cirac2016MPDO_arXiv} then gives the factorization and
-    trace normalization.
+    gives the factorization. Taking traces and using
+    $\tr(a b^\top)=a\cdot b$ gives the normalization $a\cdot b=1$.
 \end{proof}
 
 \begin{definition}[Sector tensors paired into the sector trace matrix]

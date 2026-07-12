@@ -81,22 +81,6 @@ Appendix C.2, Lemma C.4. -/
 def TracePowersConstant (T : Matrix (Fin n) (Fin n) ℝ) : Prop :=
   ∀ k : ℕ, 0 < k → Matrix.trace (T ^ k) = Matrix.trace T
 
-/-- The conditional Perron--Frobenius hypothesis for Appendix C.2, Lemma C.4.
-
-This predicate is retained for theorems that assume this implication directly
-as a hypothesis. As a universally quantified statement over primitive
-nonnegative real matrices it is false: there exist primitive nonnegative
-matrices with constant trace powers and rank greater than one. See
-`TNLean/Archive/PerronFrobeniusRankOneCounterexample.lean`.
-
-The corrected theorem in this module is
-`Matrix.PosSemidef.trace_powers_constant_implies_rank_one`, which establishes
-this hypothesis whenever the concrete matrix `T` is positive semidefinite and
-has trace one. -/
-def PrimitiveTracePowersConstantImpliesRankOne
-    (T : Matrix (Fin n) (Fin n) ℝ) : Prop :=
-  Matrix.IsPrimitive T → TracePowersConstant T → HasRankOneFactorization T
-
 /-- An idempotent real matrix of trace one has a rank-one factorization.
 
 This criterion excludes precisely the nilpotent generalized zero-eigenspace
@@ -637,17 +621,5 @@ theorem PosSemidef.trace_powers_constant_implies_rank_one
     simpa [Unitary.conjStarAlgAut_apply] using hH.spectral_theorem
   rcases hconj with ⟨a, b, hab⟩
   exact ⟨a, b, by rw [hspec, hab]⟩
-
-/-- Positive semidefiniteness and trace normalization establish the auxiliary
-rank-one hypothesis from Lemma C.4.
-
-The PSD theorem is stronger than the primitive-matrix criterion once the trace
-normalization is available. -/
-theorem primitive_trace_powers_constant_implies_rank_one_of_posSemidef
-    {T : Matrix (Fin n) (Fin n) ℝ}
-    (hPSD : T.PosSemidef) (hTrace : Matrix.trace T = 1) :
-    PrimitiveTracePowersConstantImpliesRankOne T := by
-  intro _hPrimitive hTPC
-  exact hPSD.trace_powers_constant_implies_rank_one hTrace hTPC
 
 end Matrix
