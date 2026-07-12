@@ -89,6 +89,37 @@ boundary conditions (PBC).
     vanish and all diagonal entries are equal.
 \end{proof}
 
+\begin{lemma}[Rectangular amplified commutant]
+    \label{lem:amplified_center_scalar}
+    \lean{Matrix.exists_eq_kronecker_one_of_intertwines_span_eq_top}
+    \leanok
+    \uses{lem:center_scalar}
+    Let $(A_i)_{i\in I}$ span $\MN{D}$, and let
+
+    \[
+        C:\C^{m_2}\otimes\C^D\longrightarrow
+          \C^{m_1}\otimes\C^D
+    \]
+
+    satisfy
+    \[
+        (\Id_{m_1}\otimes A_i)C
+          =C(\Id_{m_2}\otimes A_i)
+        \qquad (i\in I).
+    \]
+    Then there is a matrix $F:\C^{m_2}\to\C^{m_1}$ such that
+    \[
+        C=F\otimes\Id_D.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Each $(a,b)$ multiplicity block of $C$ commutes with every $A_i$.
+    Since the $A_i$ span the full matrix algebra,
+    Lemma~\ref{lem:center_scalar} makes this block a scalar multiple of the
+    identity.  These scalars are the entries of $F$.
+\end{proof}
+
 \begin{definition}[Matrix product vector]\label{def:mpv}
     \lean{MPSTensor.mpv}
     \leanok

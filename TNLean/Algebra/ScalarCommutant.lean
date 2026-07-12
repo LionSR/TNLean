@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import Mathlib.Data.Matrix.Basis
 import Mathlib.Data.Matrix.Block
+import Mathlib.LinearAlgebra.Matrix.Kronecker
 
 /-!
 # Scalar commutant lemma: center of M_n(R) = R·1
@@ -16,9 +17,11 @@ of the full matrix algebra over a commutative ring is trivial.
 
 * `Matrix.isScalar_of_commute_span_eq_top`: if `Z` commutes with a spanning set,
   then `Z = scalar n c` for some `c`.
+* `Matrix.exists_eq_kronecker_one_of_intertwines_span_eq_top`: an intertwiner
+  between two multiplicity amplifications has the form `F ⊗ 1`.
 -/
 
-open scoped Matrix
+open scoped Matrix Kronecker
 
 namespace Matrix
 
@@ -52,6 +55,44 @@ theorem isScalar_of_commute_span_eq_top
   rw [center_eq_scalar_image] at hcenter
   obtain ⟨c, _, rfl⟩ := hcenter
   exact ⟨c, rfl⟩
+
+/-- An intertwiner between two multiplicity amplifications of a spanning
+family of square matrices acts trivially on the matrix factor.
+
+Thus, if the matrices `A i` span the full matrix algebra and `C` intertwines
+`1 ⊗ A i` on two possibly different multiplicity spaces, then
+`C = F ⊗ 1` for a rectangular multiplicity matrix `F`.
+
+This is the amplified commutant step used in arXiv:1511.08090,
+Section ``Fusion tensors'', in the uniqueness paragraph preceding equation
+`zippercondition2`, and Section ``Associativity and the pentagon equation'',
+in the injectivity argument following equation `pentagon3`. -/
+theorem exists_eq_kronecker_one_of_intertwines_span_eq_top
+    {m₁ m₂ d ι : Type*}
+    [Fintype m₁] [Fintype m₂] [Fintype d]
+    [DecidableEq m₁] [DecidableEq m₂] [DecidableEq d]
+    (A : ι → Matrix d d R)
+    (C : Matrix (m₁ × d) (m₂ × d) R)
+    (hA : Submodule.span R (Set.range A) = ⊤)
+    (hC : ∀ i,
+      ((1 : Matrix m₁ m₁ R) ⊗ₖ A i) * C =
+        C * ((1 : Matrix m₂ m₂ R) ⊗ₖ A i)) :
+    ∃ F : Matrix m₁ m₂ R, C = F ⊗ₖ (1 : Matrix d d R) := by
+  classical
+  let Z : m₁ → m₂ → Matrix d d R := fun a b x y => C (a, x) (b, y)
+  have hZ (a : m₁) (b : m₂) (i : ι) : Z a b * A i = A i * Z a b := by
+    ext x y
+    have h := congrFun (congrFun (hC i) (a, x)) (b, y)
+    simpa [Z, Matrix.mul_apply, Matrix.one_apply, Fintype.sum_prod_type] using h.symm
+  have hscalar (a : m₁) (b : m₂) : ∃ c : R, Z a b = Matrix.scalar d c := by
+    apply Matrix.isScalar_of_commute_span_eq_top (Z a b) hA
+    rintro M ⟨i, rfl⟩
+    exact hZ a b i
+  let F : Matrix m₁ m₂ R := fun a b => Classical.choose (hscalar a b)
+  refine ⟨F, ?_⟩
+  ext ⟨a, x⟩ ⟨b, y⟩
+  have h := congrFun (congrFun (Classical.choose_spec (hscalar a b)) x) y
+  simpa [Z, F, Matrix.scalar_apply, Matrix.diagonal_apply, Matrix.one_apply] using h
 
 /-! ## Block-diagonal commutants -/
 
