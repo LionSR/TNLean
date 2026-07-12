@@ -479,11 +479,11 @@ any further physical hypothesis.\footnote{The formal declaration is
 Thus the adjacent, crossed two-site, and disjoint local commutators are all
 formalized.
 
-Two global steps remain.  First, the local calculations must be assembled
-into pairwise commutativity of all translates on every periodic chain length;
-only the finite case distinction assembling these local cases into the
-all-pairs statement remains.  Second, one must transport the cyclic sector
-identity through the local unitary to prove the finite-chain realization
+Pairwise commutativity of all translates is now complete for every periodic
+chain length at least two: the crossed two-site case, adjacent case, and
+nonadjacent disjoint case are combined by the finite overlap classification.
+The remaining global step is to transport the cyclic sector identity through
+the local unitary and prove the finite-chain realization
 \[
   \sigma^{(N)}(K)=c_N\prod_{n=1}^N B_{n,n+1}
 \]
@@ -524,11 +524,10 @@ records an elimination plan using the uniqueness of the rescaling phase).
 The primitivity of $T_{k,h}$ also remains open, and cannot be used to
 derive recurrence without circularity.
 
-For the conditional bond construction, adjacent translates commute for every
-chain length $N\geq 2$, including the wraparound and crossed two-site cases.
-Disjoint translates commute at every length for which their two-site cyclic
-supports are disjoint.  The finite all-pairs assembly and the finite-chain
-product realization remain open.
+For the conditional bond construction, all translated bonds commute pairwise
+for every chain length $N\geq 2$, including the wraparound, crossed two-site,
+and nonadjacent disjoint cases.  The finite-chain product realization remains
+open.
 
 \bibliographystyle{alpha}
 \bibliography{references}

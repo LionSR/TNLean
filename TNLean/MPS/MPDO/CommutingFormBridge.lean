@@ -2,7 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.MPDO.CommutingForm
+import TNLean.MPS.MPDO.PhysicalSectorBondTwoSite
 
 /-!
 # Local-to-global commuting-form data
@@ -106,6 +106,26 @@ def toCommutingFormData (data : TranslationInvariantBondData d) {N : ℕ}
       embedLocalOperator (d := d) 2 N hN i data.bond := rfl
 
 end TranslationInvariantBondData
+
+namespace PhysicalSectorFactorization
+
+variable {K : MPOTensor d D}
+
+/-- A physical-sector factorization with positive neighboring operators
+determines a positive translation-invariant bond whose cyclic translates
+commute at every chain length.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), lines
+1589--1593. -/
+noncomputable def translationInvariantBondData
+    (F : PhysicalSectorFactorization K)
+    (hη : ∀ k h, (F.neighboringOperator k h).PosSemidef) :
+    TranslationInvariantBondData d where
+  bond := F.physicalBond
+  bond_pos := F.physicalBond_pos hη
+  bond_comm := fun hN i j ↦ F.physicalBond_translates_comm hN i j
+
+end PhysicalSectorFactorization
 
 /-- The explicit `η`-local structure needed for Appendix C.2 after the
 sector-local neighboring operators have been assembled in the original tensor

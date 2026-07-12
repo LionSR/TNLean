@@ -15,6 +15,10 @@ coordinates `(k, h)`, the first translate acts on
 $R_k \otimes L_h$, whereas the crossed translate acts on the complementary
 factor $R_h \otimes L_k$.  Hence the two translates commute.
 
+The final theorem combines this two-site calculation with adjacent-window
+commutativity and disjoint-window locality to obtain pairwise commutativity on
+every periodic chain of length at least two.
+
 Appendix C.2, Proposition C.8 of arXiv:1606.00608 proves commutativity of the
 translated bonds.  The source does not discuss this crossed two-site ordering
 separately.
@@ -287,5 +291,35 @@ theorem physicalBond_two_zero_one_comm (F : PhysicalSectorFactorization K) :
       (finTwoArrowEquiv (Fin d)) (finTwoArrowEquiv (Fin d)),
     Matrix.coe_reindexLinearEquiv, F.reindex_embedLocalOperator_two_zero,
     F.reindex_embedLocalOperator_two_one, F.physicalPairBond_swap_comm]
+
+/-- Every pair of translated copies of the physical-sector bond commutes on
+every periodic chain of length at least two.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), lines
+1589--1593. -/
+theorem physicalBond_translates_comm (F : PhysicalSectorFactorization K)
+    {N : ℕ} (hN : 2 ≤ N) (i j : Fin N) :
+    embedLocalOperator (d := d) 2 N hN i F.physicalBond *
+        embedLocalOperator (d := d) 2 N hN j F.physicalBond =
+      embedLocalOperator (d := d) 2 N hN j F.physicalBond *
+        embedLocalOperator (d := d) 2 N hN i F.physicalBond := by
+  by_cases hN2 : N = 2
+  · subst N
+    fin_cases i <;> fin_cases j
+    · rfl
+    · exact F.physicalBond_two_zero_one_comm
+    · exact F.physicalBond_two_zero_one_comm.symm
+    · rfl
+  · have hN3 : 3 ≤ N := by omega
+    by_cases hoverlap : MPSTensor.cyclicWindowsOverlap N 2 i j
+    · rcases MPSTensor.cyclicWindowsOverlap_twoSite_cases hoverlap with
+        rfl | rfl | hi
+      · rfl
+      · simpa [MPSTensor.cyclicForwardSite, finRotate_apply,
+          Fin.add_def] using F.physicalBond_adjacent_comm hN3 i
+      · subst i
+        simpa [MPSTensor.cyclicForwardSite, finRotate_apply,
+          Fin.add_def] using (F.physicalBond_adjacent_comm hN3 j).symm
+    · exact F.physicalBond_disjoint_comm hN hoverlap
 
 end MPOTensor.PhysicalSectorFactorization

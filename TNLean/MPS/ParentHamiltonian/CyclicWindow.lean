@@ -19,6 +19,8 @@ bound that each length-L cyclic window overlaps at most \(2(L-1)\) others when
   non-wrapping window conditions imply membership in the open-chain ground space.
 * `MPSTensor.cyclicWindowSupport` and `MPSTensor.cyclicWindowsOverlap` — the
   support and overlap predicate for translated cyclic windows.
+* `MPSTensor.cyclicWindowsOverlap_twoSite_cases` — two length-two windows
+  overlap only when their starting sites agree or are cyclic neighbors.
 * `MPSTensor.cyclicWindowsOverlap_card_le` — each cyclic window overlaps at most
   \(2 * (L - 1)\) other cyclic windows when \(2 * L ≤ N\).
 -/
@@ -257,6 +259,58 @@ theorem cyclicWindowsOverlap_comm (N L : ℕ) (i j : Fin N) :
     exact ⟨k, hkj, hki⟩
   · rintro ⟨k, hkj, hki⟩
     exact ⟨k, hki, hkj⟩
+
+/-- Two length-two cyclic windows can overlap only when their starting sites
+coincide or are cyclic nearest neighbors. -/
+theorem cyclicWindowsOverlap_twoSite_cases {N : ℕ} {i j : Fin N}
+    (h : cyclicWindowsOverlap N 2 i j) :
+    j = i ∨ j = cyclicForwardSite i 1 ∨ i = cyclicForwardSite j 1 := by
+  rcases h with ⟨k, hki, hkj⟩
+  rw [cyclicWindowSupport] at hki hkj
+  rcases Finset.mem_image.mp hki with ⟨ri, hri, hri_eq⟩
+  rcases Finset.mem_image.mp hkj with ⟨rj, hrj, hrj_eq⟩
+  have hri_cases : ri = 0 ∨ ri = 1 := by
+    have hri_lt : ri < 2 := by simpa using hri
+    omega
+  have hrj_cases : rj = 0 ∨ rj = 1 := by
+    have hrj_lt : rj < 2 := by simpa using hrj
+    omega
+  rcases hri_cases with rfl | rfl <;> rcases hrj_cases with rfl | rfl
+  · have hij : i = j := by
+      apply Fin.ext
+      have hval : i.val % N = j.val % N := by
+        simpa [cyclicForwardSite] using congrArg Fin.val (hri_eq.trans hrj_eq.symm)
+      rwa [Nat.mod_eq_of_lt i.isLt, Nat.mod_eq_of_lt j.isLt] at hval
+    exact Or.inl hij.symm
+  · have hi0 : cyclicForwardSite i 0 = i := by
+      ext
+      simp [cyclicForwardSite, Nat.mod_eq_of_lt i.isLt]
+    exact Or.inr (Or.inr (hi0.symm.trans (hri_eq.trans hrj_eq.symm)))
+  · have hj0 : cyclicForwardSite j 0 = j := by
+      ext
+      simp [cyclicForwardSite, Nat.mod_eq_of_lt j.isLt]
+    exact Or.inr (Or.inl (hj0.symm.trans (hrj_eq.trans hri_eq.symm)))
+  · have hsucc : cyclicForwardSite i 1 = cyclicForwardSite j 1 :=
+      hri_eq.trans hrj_eq.symm
+    have hval : (i.val + 1) % N = (j.val + 1) % N := by
+      simpa [cyclicForwardSite] using congrArg Fin.val hsucc
+    have hij : i = j := by
+      apply Fin.ext
+      by_cases hi : i.val + 1 < N
+      · rw [Nat.mod_eq_of_lt hi] at hval
+        by_cases hj : j.val + 1 < N
+        · rw [Nat.mod_eq_of_lt hj] at hval
+          omega
+        · have hjN : j.val + 1 = N := by omega
+          rw [hjN, Nat.mod_self] at hval
+          omega
+      · have hiN : i.val + 1 = N := by omega
+        rw [hiN, Nat.mod_self] at hval
+        by_cases hj : j.val + 1 < N
+        · rw [Nat.mod_eq_of_lt hj] at hval
+          omega
+        · omega
+    exact Or.inl hij.symm
 
 /-- The cyclic-window overlap relation is decidable on a finite chain. -/
 instance cyclicWindowsOverlap_decidableRel (N L : ℕ) :

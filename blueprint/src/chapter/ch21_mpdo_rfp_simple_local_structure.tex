@@ -1472,6 +1472,53 @@ strong subadditivity for a normalized three-site reduced state.
     locality step.
 \end{proof}
 
+\begin{theorem}[Pairwise commutativity of periodic bond translates]
+    \label{thm:mpdo_physical_bond_translates_comm}
+    \lean{MPOTensor.PhysicalSectorFactorization.physicalBond_translates_comm}
+    \leanok
+    \uses{thm:mpdo_periodic_adjacent_physical_bonds_comm,
+      thm:mpdo_physical_two_site_crossed_bonds_comm}
+    Let $N\geq 2$. For all sites $i,j\in\mathbb Z/N\mathbb Z$, the translated
+    bonds commute:
+    \[
+      B_{i,i+1}B_{j,j+1}=B_{j,j+1}B_{i,i+1}.
+    \]
+    No positivity, zero-correlation-length, injectivity, or normalization
+    hypothesis is required for this identity.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For $N=2$, apply
+    Theorem~\ref{thm:mpdo_physical_two_site_crossed_bonds_comm}. Suppose $N\geq3$.
+    Two length-two cyclic intervals are either equal, adjacent, or disjoint.
+    Equal intervals commute trivially. Adjacent intervals reduce to the
+    three-site identity of
+    Theorem~\ref{thm:mpdo_periodic_adjacent_physical_bonds_comm}. Operators on
+    disjoint intervals act on disjoint tensor factors and hence commute.
+\end{proof}
+
+\begin{theorem}[Positive translation-invariant bond datum]
+    \label{thm:mpdo_positive_translation_invariant_bond_data}
+    \lean{MPOTensor.PhysicalSectorFactorization.translationInvariantBondData}
+    \leanok
+    \uses{thm:mpdo_physical_two_site_bond_pos,
+      thm:mpdo_physical_bond_translates_comm}
+    Suppose that every neighboring operator $\eta_{k,h}$ is positive
+    semidefinite. Then the physical bond is positive semidefinite and all of
+    its cyclic translates commute on every periodic chain of length at least
+    two. Thus it determines a single translation-invariant positive bond
+    datum. This assertion does not include the product formula for the
+    finite-chain density operator.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Positivity is
+    Theorem~\ref{thm:mpdo_physical_two_site_bond_pos}; pairwise commutativity
+    is Theorem~\ref{thm:mpdo_physical_bond_translates_comm}.
+\end{proof}
+
 \begin{definition}[Closed sector tensors]%
     \label{def:mpdo_closed_sector_tensors}
     \lean{MPOTensor.closedSectorL}
