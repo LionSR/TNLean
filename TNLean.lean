@@ -408,6 +408,8 @@ import TNLean.MPS.MPDO.PhysicalSectorRefinementAction
 import TNLean.MPS.MPDO.PhysicalSectorRefinementIdentity
 import TNLean.MPS.MPDO.PhysicalSectorPhysicalMaps
 import TNLean.MPS.MPDO.PhysicalSectorBlockedRFP
+import TNLean.MPS.MPDO.PhysicalSectorCoordinateTransport
+import TNLean.MPS.MPDO.PhysicalSectorPhysicalTransport
 import TNLean.MPS.MPDO.SectorPairingTransfer
 import TNLean.MPS.MPDO.SectorEtaContraction
 import TNLean.MPS.MPDO.SectorEtaOperator
