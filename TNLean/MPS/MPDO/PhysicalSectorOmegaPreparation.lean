@@ -70,7 +70,8 @@ theorem trace_threeSiteNeighboringOperator
 
 /-- The operator \(\Omega_{k,h}\) is positive semidefinite.
 
-Source: arXiv:1606.00608, Appendix C.2, lines 1510--1516 and 1527--1535. -/
+Source: arXiv:1606.00608, Appendix C.2, lines 1389--1392, 1510--1516,
+and 1527--1535. -/
 theorem NeighboringTraceFactorization.threeSiteNeighboringOperator_pos
     (H : NeighboringTraceFactorization F) (k h : Fin F.sectorCount) :
     (F.threeSiteNeighboringOperator k h).PosSemidef := by
@@ -115,7 +116,7 @@ theorem NeighboringTraceFactorization.threeSiteMiddleIndex_nonempty
 
 /-- If \(a_kb_h=0\), then \(\Omega_{k,h}=0\).
 
-Source: arXiv:1606.00608, Appendix C.2, lines 1527--1535. -/
+Source: arXiv:1606.00608, Appendix C.2, lines 1389--1392 and 1527--1535. -/
 theorem NeighboringTraceFactorization.threeSiteNeighboringOperator_eq_zero_of_mul_eq_zero
     (H : NeighboringTraceFactorization F) (k h : Fin F.sectorCount)
     (hzero : H.a k * H.b h = 0) :
@@ -244,6 +245,10 @@ theorem NeighboringTraceFactorization.completedThreeSiteNeighboringDensity_eq_no
 /-- The sectorwise map which adjoins the completed three-site neighboring
 density.
 
+**Local fix (zero-weight quotient):** the inactive branch makes the source map
+total without adding a nonzero-weight hypothesis. Documented in
+`docs/paper-gaps/cpgsv17_mpdo_zero_weight_preparation_completion.tex`.
+
 Source: arXiv:1606.00608, Appendix C.2, lines 1527--1535. -/
 noncomputable def NeighboringTraceFactorization.completedThreeSitePreparationMap
     {α : Type*} [Fintype α] [DecidableEq α]
@@ -255,6 +260,10 @@ noncomputable def NeighboringTraceFactorization.completedThreeSitePreparationMap
 
 /-- Adjoining the completed three-site neighboring density is
 trace-preserving and completely positive.
+
+**Local fix (zero-weight quotient):** this theorem includes the completed
+inactive branch documented in
+`docs/paper-gaps/cpgsv17_mpdo_zero_weight_preparation_completion.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1527--1535. -/
 theorem NeighboringTraceFactorization.completedThreeSitePreparationMap_isKrausCPTP
