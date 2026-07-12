@@ -32,6 +32,8 @@ dimensions.
   Kraus families is trace-preserving completely positive.
 * `Matrix.partialTraceRightLM_isKrausCPTP`: tracing a right tensor factor is a
   trace-preserving completely positive map.
+* `Matrix.controlledPartialTraceRightLM_isKrausCPTP`: tracing dependent right
+  factors sector by sector is trace-preserving completely positive.
 * `Matrix.preparationMap_isKrausCPTP`: adjoining a density matrix is a
   trace-preserving completely positive map.
 * `Matrix.preparationKraus`: the explicit Kraus family for state preparation.
@@ -397,6 +399,52 @@ lemma partialTraceRightLM_isKrausCPTP
             apply hpq
             exact Prod.ext h.1 (h.2.1.symm.trans h.2.2)
           simp [partialTraceRightKraus_conjTranspose_mul_apply, hnot]
+
+private noncomputable def chosenKrausRank
+    {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
+    {S : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ} (hS : IsKrausCPTP S) : ℕ :=
+  hS.choose
+
+private noncomputable def chosenKraus
+    {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
+    {S : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ} (hS : IsKrausCPTP S) :
+    Fin (chosenKrausRank hS) → Matrix β α ℂ :=
+  hS.choose_spec.choose
+
+private theorem chosenKraus_resolution
+    {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
+    {S : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ} (hS : IsKrausCPTP S) :
+    ∑ i, (chosenKraus hS i)ᴴ * chosenKraus hS i = (1 : Matrix α α ℂ) :=
+  hS.choose_spec.choose_spec.2
+
+/-- Partial trace on each summand of a dependent orthogonal direct sum. The
+map discards coherences between distinct summands and traces the right factor
+within every diagonal summand. -/
+noncomputable def controlledPartialTraceRightLM
+    {ι : Type*} [Fintype ι] [DecidableEq ι]
+    {α β : ι → Type*}
+    [∀ i, Fintype (α i)] [∀ i, DecidableEq (α i)]
+    [∀ i, Fintype (β i)] [∀ i, DecidableEq (β i)] :
+    Matrix (Σ i, α i × β i) (Σ i, α i × β i) ℂ →ₗ[ℂ]
+      Matrix (Σ i, α i) (Σ i, α i) ℂ :=
+  controlledKrausMap
+    (fun i => chosenKrausRank
+      (partialTraceRightLM_isKrausCPTP (α := α i) (β := β i)))
+    (fun i => chosenKraus
+      (partialTraceRightLM_isKrausCPTP (α := α i) (β := β i)))
+
+/-- The controlled dependent partial trace is trace-preserving and completely
+positive. -/
+theorem controlledPartialTraceRightLM_isKrausCPTP
+    {ι : Type*} [Fintype ι] [DecidableEq ι]
+    {α β : ι → Type*}
+    [∀ i, Fintype (α i)] [∀ i, DecidableEq (α i)]
+    [∀ i, Fintype (β i)] [∀ i, DecidableEq (β i)] :
+    IsKrausCPTP (controlledPartialTraceRightLM (α := α) (β := β)) := by
+  apply controlledKrausMap_isKrausCPTP
+  intro i
+  exact chosenKraus_resolution
+    (partialTraceRightLM_isKrausCPTP (α := α i) (β := β i))
 
 /-- The state-preparation map $X\mapsto X\otimes\rho$.  This is the
 elementary operation used to adjoin the positive neighboring operators in
