@@ -1018,7 +1018,9 @@ strong subadditivity for a normalized three-site reduced state.
     \leanok
     \uses{def:mpdo_physical_sector_three_site_neighboring_operator,
       def:mpdo_neighboring_trace_factorization}
-    For every outer-sector pair $(k,h)$,
+    Assume the neighboring-operator trace factorization of
+    Definition~\ref{def:mpdo_neighboring_trace_factorization}. Then, for every
+    outer-sector pair $(k,h)$,
     \[
       \tr(\Omega_{k,h})
       =\sum_l\tr(\eta_{k,l})\tr(\eta_{l,h})
@@ -2649,9 +2651,8 @@ strong subadditivity for a normalized three-site reduced state.
     The coordinate equivalences used by the coarse-graining channel expose
     the direct sums over site-sector pairs and triples. Write
     $\mathfrak R_2$ and $\mathfrak R_3$ for the corresponding matrix
-    reindexings. Their inverses send a diagonal sector block to the
-    corresponding embedded physical matrix and send off-diagonal sector
-    blocks to zero.
+    reindexings. Their inverses send every sector block to the corresponding
+    physical matrix entries.
 \end{definition}
 
 \begin{theorem}[Coarse-graining of the three-site closure]
@@ -2661,8 +2662,11 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.sMap_threeSiteClosure_eq_twoSiteClosure}
     \leanok
     \uses{def:phys_close, def:mpdo_physical_sector_s_map,
-      def:mpdo_physical_sector_closure_coordinates}
-    For every virtual matrix $X$, in the canonical physical-sector
+      def:mpdo_physical_sector_closure_coordinates,
+      def:mpdo_neighboring_trace_factorization}
+    Assume the neighboring-operator trace factorization of
+    Definition~\ref{def:mpdo_neighboring_trace_factorization}. For every
+    virtual matrix $X$, in the canonical physical-sector
     coordinates selected by the isometry $U$, the coarse-graining channel
     satisfies
     \[
