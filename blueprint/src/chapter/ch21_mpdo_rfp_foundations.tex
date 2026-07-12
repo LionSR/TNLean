@@ -198,7 +198,7 @@
     \[
         \rho^{(N)}(M)=\rho^{(N)}_p(A).
     \]
-    Equivalently,
+    Equivalently, for every positive length $N$,
     \[
         \rho^{(N)}(M)
         =
@@ -206,7 +206,6 @@
         \bigl(
             |\Psi^{(N)}(A)\rangle\langle\Psi^{(N)}(A)|
         \bigr),
-        \qquad N>0,
     \]
     as in \cite[line~751]{Cirac2016MPDO_arXiv}.
 \end{definition}
@@ -217,11 +216,8 @@
     \leanok
     \uses{def:mpdo_ancillary_trace_map, def:is_kraus_cptp}
     The spin reduction obtained by tracing the ancillary index is
-    trace-preserving and completely positive when
-    \[
-        \operatorname{tr}_a
-        \quad\text{is a tpCPM}.
-    \]
+    trace-preserving completely positive: the ancillary trace map
+    $\operatorname{tr}_a$ satisfies Definition~\ref{def:is_kraus_cptp}.
     This is the structure described immediately after Definition~4.4 in
     \cite[lines~761--764]{Cirac2016MPDO_arXiv}.
 \end{definition}
@@ -264,15 +260,14 @@
     \uses{def:mpdo_purification_rfp_witness}
     An MPO tensor is a purification renormalization fixed point if it has a
     purification RFP witness. Equivalently, it admits a purifying tensor $A$
-    satisfying
+    such that, for every positive length $N$,
     \[
         \rho^{(N)}(M)
         =
         \operatorname{tr}_a
         \bigl(
             |\Psi^{(N)}(A)\rangle\langle\Psi^{(N)}(A)|
-        \bigr)
-        \quad\text{for all }N>0,
+        \bigr),
     \]
     and $\widehat A$ is a pure-state renormalization fixed point. This is
     Definition~4.4 of \cite[lines~756--764]{Cirac2016MPDO_arXiv}.

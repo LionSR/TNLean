@@ -6,8 +6,11 @@
     \leanok
     \uses{def:mpo_tensor}
     For a fixed chain length $N \ge 2$, this consists of a positive
-    semidefinite two-site operator $B$ such that its translated copies on the
-    periodic chain commute pairwise.
+    semidefinite two-site operator $B\ge0$ whose translated copies commute
+    pairwise on the periodic $N$-site chain:
+    \[
+        [B_{i,i+1},B_{j,j+1}]=0.
+    \]
 \end{definition}
 
 \begin{definition}[Commuting form]
@@ -15,9 +18,13 @@
     \lean{MPOTensor.HasCommutingForm}
     \leanok
     \uses{def:mpdo_commuting_form_data, def:mpo_tensor}
-    An MPO tensor has the commuting-form property if for every $N \ge 2$ its
-    $N$-site operator is a positive scalar multiple of the product of the
-    translated copies of some commuting two-site operator $B$.
+    An MPO tensor $M$ has the commuting-form property if for every $N \ge 2$
+    there is a two-site operator $B$ as in
+    Definition~\ref{def:mpdo_commuting_form_data} and a constant $c>0$ such
+    that
+    \[
+        \rho^{(N)}(M)=c\prod_{i=0}^{N-1}B_{i,i+1}.
+    \]
 \end{definition}
 
 \begin{definition}[GSNNCH]
@@ -25,10 +32,14 @@
     \lean{MPOTensor.IsGSNNCH}
     \leanok
     \uses{def:mpdo_has_commuting_form}
-    An MPO tensor is a Gibbs state of a nearest-neighbor commuting Hamiltonian
-    if every finite-chain operator admits the equivalent positive-operator
-    presentation $\rho^{(N)} = c \prod_i B_{i,i+1}$ with $c > 0$ and
-    commuting nearest-neighbor factors. The projector-limit convention in
+    An MPO tensor $M$ is a Gibbs state of a nearest-neighbor commuting
+    Hamiltonian if for every $N\ge2$ its finite-chain operator admits the
+    equivalent positive-operator presentation
+    \[
+        \rho^{(N)}(M)=c\prod_{i=0}^{N-1}B_{i,i+1},
+        \qquad c>0,\qquad B\ge0,\qquad [B_{i,i+1},B_{j,j+1}]=0.
+    \]
+    The projector-limit convention in
     \cite{Cirac2016MPDO_arXiv}
     identifies this with the exponential Gibbs form.
 \end{definition}
@@ -43,8 +54,11 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    A positive normalization constant converts commuting-form data into a GSNNCH
-    witness, and every GSNNCH witness remembers its underlying commuting-form data.
+    Both directions unfold to the same identity
+    $\rho^{(N)}(M)=c\prod_{i=0}^{N-1}B_{i,i+1}$ with $c>0$: a commuting-form
+    witness for $M$ at length $N$ together with its constant $c$ is exactly a
+    GSNNCH witness for $M$ at length $N$ with that same constant, and
+    conversely.
 \end{proof}
 
 \begin{definition}[GSNNCH with doubled-index transfer idempotence]
@@ -83,9 +97,12 @@
     \lean{MPOTensor.TranslationInvariantBondData}
     \leanok
     \uses{def:mpdo_commuting_form_data}
-    This records a single positive two-site bond together with its translated
-    copies on every finite periodic chain, requiring those translated copies to
-    commute pairwise.
+    This records a single positive semidefinite two-site bond $B\ge0$ whose
+    translated copies commute pairwise on the periodic $N$-site chain at
+    every chain length $N\ge2$:
+    \[
+        [B_{i,i+1},B_{j,j+1}]=0.
+    \]
 \end{definition}
 
 \begin{definition}[$\eta$-local commuting-form data]
@@ -93,10 +110,13 @@
     \lean{MPOTensor.EtaLocalStructureData}
     \leanok
     \uses{def:mpdo_translation_invariant_bond_data, def:mpdo_has_commuting_form}
-    This defines the eta-local form of \cite[Appendix~C.2]{Cirac2016MPDO_arXiv}: the
-    translation-invariant positive two-site bond data together with the
-    requirement that the corresponding product realizes the MPO at every finite
-    length.
+    This defines the eta-local form of \cite[Appendix~C.2]{Cirac2016MPDO_arXiv}:
+    a two-site bond $B$ as in
+    Definition~\ref{def:mpdo_translation_invariant_bond_data} together with,
+    for every chain length $N\ge2$, a constant $c>0$ such that
+    \[
+        \rho^{(N)}(M)=c\prod_{i=0}^{N-1}B_{i,i+1}.
+    \]
 \end{definition}
 
 \begin{definition}[Finite-chain bond form]
@@ -133,10 +153,17 @@
     \lean{MPOTensor.EtaLocalStructureData.positive_commuting_product_form}
     \leanok
     \uses{def:mpdo_eta_local_structure_data, def:mpdo_has_commuting_form}
-    The $\eta$-local structure itself determines a commuting-form witness for every
-    chain length $N \ge 2$. In particular, the translated nearest-neighbor
-    bonds commute and the MPDO at length $N$ is a positive scalar multiple of
-    their product. This is the commuting-form half of
+    The $\eta$-local structure itself determines a commuting-form witness for
+    every chain length $N \ge 2$: writing $B$ for its bond, the translated
+    copies commute,
+    \[
+        [B_{i,i+1},B_{j,j+1}]=0,
+    \]
+    and there exists $c>0$ with
+    \[
+        \rho^{(N)}(M)=c\prod_{i=0}^{N-1}B_{i,i+1}.
+    \]
+    This is the commuting-form half of
     \cite[Proposition~C.8]{Cirac2016MPDO_arXiv}, taking the $\eta$-local data as
     given; deriving that data from the saturation of the area law is the
     deferred step recorded in Remark~\ref{rem:simple_mpdo_rfp_chain_gap}.
