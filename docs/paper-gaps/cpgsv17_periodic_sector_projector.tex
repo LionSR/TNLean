@@ -167,8 +167,9 @@ route does not go through the block-injective (biCF) machinery of
 
 \leanid{MPOTensor.ketLeftMul_eq_braRightMul_of_commute_of_isInjective}
 (\path{TNLean/MPS/MPDO/InvariantProjection.lean}) proves: if $Q$ is
-Hermitian idempotent and $Q_1H^{(2)}=H^{(2)}Q_1$ (commutation at the
-\emph{two-site} chain alone), then $Q\widetilde M=Q\widetilde MQ$.
+idempotent (Hermiticity is not needed) and $Q_1H^{(2)}=H^{(2)}Q_1$
+(commutation at the \emph{two-site} chain alone), then
+$Q\widetilde M=Q\widetilde MQ$.
 Idempotence of $Q$ upgrades the hypothesis to the one-sided reduction
 $Q_1H^{(2)}=Q_1H^{(2)}Q_1$ — the reverse of the invariant-projection step
 of lines~1874--1887 — and unfolding that identity against every trailing

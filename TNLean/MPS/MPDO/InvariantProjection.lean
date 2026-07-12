@@ -311,9 +311,12 @@ single-letter injective tensor.**
 
 If `M`'s doubled-index tensor `M.toMPSTensor` is (single-letter) injective —
 its `d * d` many matrices `M i j` already span the full `D × D` matrix
-algebra — then commutation of the first-site action of a Hermitian idempotent
-`Q` with the two-site density operator `mpo M 2` alone forces the
-letter-level invariance `M.ketLeftMul Q = (M.ketLeftMul Q).braRightMul Q`.
+algebra — then commutation of the first-site action of an idempotent `Q`
+with the two-site density operator `mpo M 2` alone forces the letter-level
+invariance `M.ketLeftMul Q = (M.ketLeftMul Q).braRightMul Q`.  Hermiticity of
+`Q` is not needed: only idempotence and the commutation itself enter the
+argument (in the application to orthogonal projectors, `Q` happens to be
+Hermitian, but that is not used here).
 
 This is a single-instantiation converse of the invariant-projection step
 (arXiv:1606.00608, lines 1874--1887): idempotence of `Q` upgrades the full
