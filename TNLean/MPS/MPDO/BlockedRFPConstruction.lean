@@ -182,9 +182,10 @@ def ofSALZCLOfPosSemidef
 /-- Construct the local simple-MPDO structure from the Lemma C.2 and C.4
 hypotheses and the pairing-idempotence Lemma C.5 rank-one criterion: the
 sector tensors of arXiv:1606.00608, Appendix C.2, satisfy the displayed
-zero-correlation-length identity (lines 1490--1493), and their linear
-independence turns it into idempotence of the sector trace matrix, from which
-the constant trace powers and the rank-one factorization follow.
+zero-correlation-length identity (lines 1490--1493), giving the constant
+trace powers of the sector trace matrix unconditionally; linear independence
+of the closed sector tensors additionally turns the identity into idempotence
+of that matrix, from which the rank-one factorization follows.
 
 Source: arXiv:1606.00608, Appendix C.2, Lemmas C.4 and C.5, lines 1406--1499.
 
@@ -215,7 +216,7 @@ def ofSALZCLOfPairingIdempotent
   T := T
   hPrimitive := hPrimitive
   hTrace := hTrace
-  hTraceConst := data.tracePowersConstant hl
+  hTraceConst := data.tracePowersConstant
   rankOne :=
     sal_zcl_implies_rank_one_T_of_pairing_idempotent T data hl hTrace
 
