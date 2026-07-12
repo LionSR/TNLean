@@ -62,31 +62,6 @@ private theorem kronecker_sum_mulTensor_right {p a bd1 bd2 : ℕ}
   simp
   ring
 
-/-- Reindexing the row space of a conjugating matrix commutes with conjugation.
-
-Source: bookkeeping lemma, not paper-specific. -/
-private theorem submatrix_left_conj_right {l m u : Type*} [Fintype l]
-    (A : Matrix m l ℂ) (r : u ≃ m) (X : Matrix l l ℂ) :
-    A.submatrix r id * X * (A.submatrix r id)ᴴ = (A * X * Aᴴ).submatrix r r := by
-  have step1 : A.submatrix r id * X = (A * X).submatrix r id :=
-    (Matrix.submatrix_mul A X r id id Function.bijective_id).symm
-  have step2 : (A * X).submatrix r id * (A.submatrix r id)ᴴ =
-      (A * X * Aᴴ).submatrix r r := by
-    rw [Matrix.conjTranspose_submatrix]
-    exact (Matrix.submatrix_mul (A * X) Aᴴ r id r Function.bijective_id).symm
-  rw [step1, step2]
-
-/-- Conjugating block-diagonal matrices acts independently on each block.
-
-Source: bookkeeping lemma, not paper-specific. -/
-private theorem blockDiagonal'_conj_right {i : Type*} [Fintype i] [DecidableEq i]
-    {m n : i → Type*} [∀ j, Fintype (n j)] (F : ∀ j, Matrix (m j) (n j) ℂ)
-    (G : ∀ j, Matrix (n j) (n j) ℂ) :
-    Matrix.blockDiagonal' F * Matrix.blockDiagonal' G * (Matrix.blockDiagonal' F)ᴴ =
-      Matrix.blockDiagonal' fun j => F j * G j * (F j)ᴴ := by
-  rw [Matrix.blockDiagonal'_conjTranspose, ← Matrix.blockDiagonal'_mul,
-    ← Matrix.blockDiagonal'_mul]
-
 namespace BNTFusionIsometryFamily
 
 variable {Λ : Type*} [Fintype Λ] [DecidableEq Λ] {p : ℕ}
@@ -326,7 +301,18 @@ theorem rightFusion_apply (α β γ : Λ) (i k : Fin p) :
       Matrix.blockDiagonal' fun δ => Matrix.blockDiagonal' fun ε =>
         Fam.chi.matrix β γ δ ⊗ₖ (Fam.chi.matrix α δ ε ⊗ₖ Fam.tensor ε i k) := by
   unfold rightFusionIsometry
-  rw [submatrix_left_conj_right]
+  let A := Matrix.blockDiagonal' (Fam.rightBlockPiece α β γ) * Fam.fuseLastTwoStep α β γ
+  let r := (Fam.rightTripleFlattenEquiv α β γ).symm
+  let X := (mulTensor (Fam.tensor α) (mulTensor (Fam.tensor β) (Fam.tensor γ))) i k
+  change A.submatrix r id * X * (A.submatrix r id)ᴴ = _
+  have step1 : A.submatrix r id * X = (A * X).submatrix r id :=
+    (Matrix.submatrix_mul A X r id id Function.bijective_id).symm
+  have step2 : (A * X).submatrix r id * (A.submatrix r id)ᴴ =
+      (A * X * Aᴴ).submatrix r r := by
+    rw [Matrix.conjTranspose_submatrix]
+    exact (Matrix.submatrix_mul (A * X) Aᴴ r id r Function.bijective_id).symm
+  rw [step1, step2]
+  dsimp only [A, r, X]
   have hreassoc :
       Matrix.blockDiagonal' (Fam.rightBlockPiece α β γ) * Fam.fuseLastTwoStep α β γ *
           (mulTensor (Fam.tensor α) (mulTensor (Fam.tensor β) (Fam.tensor γ))) i k *
@@ -342,7 +328,8 @@ theorem rightFusion_apply (α β γ : Λ) (i k : Fin p) :
   rw [hreassoc]
   rw [Fam.fuseLastTwoStep_apply]
   rw [Fam.lastPair_sum_blockDiagonal]
-  rw [blockDiagonal'_conj_right]
+  rw [Matrix.blockDiagonal'_conjTranspose, ← Matrix.blockDiagonal'_mul,
+    ← Matrix.blockDiagonal'_mul]
   simp_rw [Fam.rightBlockPiece_apply]
   rw [rightTripleFlatten_blockDiagonal']
 
