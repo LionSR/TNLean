@@ -310,6 +310,24 @@ and cyclicity of the trace of a composition between `W` and the coefficient
 space identifies `trace T` with the trace of the restricted operator and
 `trace (T^2)` with the trace of its square, which coincide by idempotence. -/
 
+/-- If the rectangular product `L * Q` is idempotent, then the product in the
+opposite order satisfies
+\[
+  (QL)^2=(QL)^3.
+\]
+This is the rectangular associativity calculation used in
+arXiv:1606.00608, Appendix C.2, lines 1490--1497. -/
+theorem pow_two_eq_pow_three_of_rectangular_idempotent
+    {a b : Type*} [Fintype a] [Fintype b] [DecidableEq b]
+    {R : Type*} [Semiring R] (L : Matrix a b R) (Q : Matrix b a R)
+    (h : IsIdempotentElem (L * Q)) :
+    (Q * L) ^ 2 = (Q * L) ^ 3 := by
+  classical
+  rw [show (Q * L) ^ 2 = Q * (L * Q) * L by simp [pow_two, Matrix.mul_assoc]]
+  rw [show (Q * L) ^ 3 = Q * ((L * Q) * (L * Q)) * L by
+    simp [pow_succ, Matrix.mul_assoc]]
+  rw [h.eq]
+
 /-- **Unconditional `T^2 = T^3` from the pairing idempotence.**
 
 For the sector trace matrix `T k h = r k (l h)` of arXiv:1606.00608,

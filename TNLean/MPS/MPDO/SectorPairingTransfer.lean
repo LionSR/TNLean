@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.MPDO.SectorFactorization
 import TNLean.MPS.Core.MultiBlock
+import TNLean.Algebra.PerronFrobenius.RankOne
 
 /-!
 # Closed sector tensors and the physical-trace transfer
@@ -42,24 +43,6 @@ open scoped Matrix BigOperators
 namespace MPOTensor
 
 variable {d D : ℕ}
-
-/-- If the rectangular product `L * R` is idempotent, then the product in the
-opposite order satisfies
-\[
-  (RL)^2=(RL)^3.
-\]
-This is the rectangular associativity calculation used in
-arXiv:1606.00608, Appendix C.2, lines 1490--1497. -/
-theorem _root_.Matrix.pow_two_eq_pow_three_of_rectangular_idempotent
-    {a b : Type*} [Fintype a] [Fintype b] [DecidableEq b]
-    {R : Type*} [Semiring R] (L : Matrix a b R) (Q : Matrix b a R)
-    (h : IsIdempotentElem (L * Q)) :
-    (Q * L) ^ 2 = (Q * L) ^ 3 := by
-  classical
-  rw [show (Q * L) ^ 2 = Q * (L * Q) * L by simp [pow_two, Matrix.mul_assoc]]
-  rw [show (Q * L) ^ 3 = Q * ((L * Q) * (L * Q)) * L by
-    simp [pow_succ, Matrix.mul_assoc]]
-  rw [h.eq]
 
 /-- The pairing operator obtained by closing the physical legs of the left and
 right tensors in each sector:
