@@ -138,18 +138,6 @@ theorem physicalCoordinateMatrixFour_coisometry
     ← Matrix.mul_kronecker_mul, F.physicalCoordinateMatrix_coisometry]
   repeat' rw [Matrix.one_kronecker_one]
 
-/-- The single-Kraus sandwich by a rectangular matrix. -/
-noncomputable def sandwichMap {a b : Type*} [Fintype a] [Fintype b]
-    (V : Matrix b a ℂ) : Matrix a a ℂ →ₗ[ℂ] Matrix b b ℂ where
-  toFun X := V * X * Vᴴ
-  map_add' X Y := by simp [Matrix.mul_add, Matrix.add_mul]
-  map_smul' c X := by simp [Matrix.mul_smul, Matrix.smul_mul]
-
-@[simp] theorem sandwichMap_apply {a b : Type*} [Fintype a] [Fintype b]
-    (V : Matrix b a ℂ) (X : Matrix a a ℂ) :
-    sandwichMap V X = V * X * Vᴴ :=
-  rfl
-
 theorem changePhysicalBasis_apply_eq_sum {e : ℕ}
     (V : Matrix (Fin e) (Fin d) ℂ) (M : MPOTensor d D)
     (i j : Fin e) :
