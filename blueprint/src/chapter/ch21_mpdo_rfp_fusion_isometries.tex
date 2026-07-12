@@ -420,19 +420,22 @@ bracketings are
         \C^{\dim\chi_{\beta,\gamma,\delta}}
         \otimes \C^{\dim\chi_{\alpha,\delta,\varepsilon}}.
 \]
-These are the $(e,\mu,\nu)$ and $(f,\lambda,\sigma)$ index spaces in the
-equation (Fmove) of \cite{Bultinck2017Anyons}.
+These spaces have the bracketing pattern of the $(e,\mu,\nu)$ and
+$(f,\lambda,\sigma)$ index spaces in equation (Fmove) of
+\cite{Bultinck2017Anyons}.  Identifying the dimensions of the positive
+diagonal matrices with the fusion multiplicities of that equation requires
+the length-independent integer specialization and is not asserted here.
 
 \begin{definition}[Triple-fusion maps with fixed final label]%
-    \label{def:mpdo_final_sector_fusion_isometries}
+    \label{def:mpdo_final_sector_fusion_maps}
     \lean{MPOTensor.BNTFusionIsometryFamily.LeftFinalMultiplicity}
     \lean{MPOTensor.BNTFusionIsometryFamily.RightFinalMultiplicity}
     \lean{MPOTensor.BNTFusionIsometryFamily.LeftFinalIndex}
     \lean{MPOTensor.BNTFusionIsometryFamily.RightFinalIndex}
     \lean{MPOTensor.BNTFusionIsometryFamily.leftFinalRow}
     \lean{MPOTensor.BNTFusionIsometryFamily.rightFinalRow}
-    \lean{MPOTensor.BNTFusionIsometryFamily.leftFinalFusionIsometry}
-    \lean{MPOTensor.BNTFusionIsometryFamily.rightFinalFusionIsometry}
+    \lean{MPOTensor.BNTFusionIsometryFamily.leftFinalFusionMap}
+    \lean{MPOTensor.BNTFusionIsometryFamily.rightFinalFusionMap}
     \leanok
     \uses{def:mpdo_left_fusion_isometry,
         def:mpdo_right_fusion_isometry}
@@ -442,16 +445,20 @@ equation (Fmove) of \cite{Bultinck2017Anyons}.
     $\varepsilon$.  Their codomains are respectively
     $\mathcal H^{\mathrm L}_{\varepsilon}\otimes\C^{D_\varepsilon}$ and
     $\mathcal H^{\mathrm R}_{\varepsilon}\otimes\C^{D_\varepsilon}$.
+    Their adjoints, after the canonical reassociation of the triple bond
+    space, have the orientation and bracketing pattern of the weighted
+    analogues of the two composites in equation (Fmove) of
+    \cite{Bultinck2017Anyons}.
 \end{definition}
 
 \begin{theorem}[Left triple fusion at a fixed final label]%
     \label{thm:mpdo_left_final_fusion_apply}
     \lean{MPOTensor.BNTFusionIsometryFamily.leftFinalFusion_apply}
     \leanok
-    \uses{def:mpdo_final_sector_fusion_isometries,
-        thm:mpdo_left_fusion_apply}
+    \uses{def:mpdo_final_sector_fusion_maps,
+        def:mpdo_operator_product, thm:mpdo_left_fusion_apply}
     For every final label $\varepsilon$, the left-associated restriction
-    satisfies
+    satisfies the positive-diagonal weighted identity
     \[
         U^{\mathrm L}_{\alpha,\beta,\gamma;\varepsilon}
         \bigl((M_\alpha M_\beta)M_\gamma\bigr)^{ij}
@@ -472,10 +479,10 @@ equation (Fmove) of \cite{Bultinck2017Anyons}.
     \label{thm:mpdo_right_final_fusion_apply}
     \lean{MPOTensor.BNTFusionIsometryFamily.rightFinalFusion_apply}
     \leanok
-    \uses{def:mpdo_final_sector_fusion_isometries,
-        thm:mpdo_right_fusion_apply}
+    \uses{def:mpdo_final_sector_fusion_maps,
+        def:mpdo_operator_product, thm:mpdo_right_fusion_apply}
     For every final label $\varepsilon$, the right-associated restriction
-    satisfies
+    satisfies the positive-diagonal weighted identity
     \[
         U^{\mathrm R}_{\alpha,\beta,\gamma;\varepsilon}
         \bigl(M_\alpha(M_\beta M_\gamma)\bigr)^{ij}
