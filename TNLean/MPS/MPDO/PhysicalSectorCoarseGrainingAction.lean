@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.PhysicalSectorCoarseGraining
-import TNLean.MPS.MPDO.PhysicalSectorTraceActions
+import TNLean.MPS.MPDO.PhysicalSectorOmegaPreparation
 
 /-!
 # Action of the physical-sector coarse-graining maps
@@ -34,40 +34,6 @@ open scoped Matrix BigOperators Kronecker
 namespace MPOTensor.PhysicalSectorFactorization
 
 variable {d D : ℕ} {K : MPOTensor d D} {F : PhysicalSectorFactorization K}
-
-/-- The direct sum
-\(\Omega_{k,h}=\bigoplus_l(\eta_{k,l}\otimes\eta_{l,h})\) carried by the
-four middle subspins of a three-site sector.
-
-Source: arXiv:1606.00608, Appendix C.2, lines 1510--1516 and 1547--1555. -/
-noncomputable def threeSiteNeighboringOperator
-    (F : PhysicalSectorFactorization K) (k h : Fin F.sectorCount) :
-    Matrix (ThreeSiteMiddleIndex F k h) (ThreeSiteMiddleIndex F k h) ℂ :=
-  Matrix.blockDiagonal' fun l ↦
-    F.neighboringOperator k l ⊗ₖ F.neighboringOperator l h
-
-/-- The trace of \(\Omega_{k,h}\) is the sum of the products of the two
-neighboring-operator traces.
-
-Source: arXiv:1606.00608, Appendix C.2, lines 1510--1516 and 1547--1555. -/
-theorem trace_threeSiteNeighboringOperator
-    (F : PhysicalSectorFactorization K) (k h : Fin F.sectorCount) :
-    (F.threeSiteNeighboringOperator k h).trace =
-      ∑ l, (F.neighboringOperator k l).trace *
-        (F.neighboringOperator l h).trace := by
-  rw [threeSiteNeighboringOperator, Matrix.trace_blockDiagonal']
-  simp only [Matrix.trace_kronecker]
-
-/-- Under the rank-one trace factorization,
-\(\operatorname{tr}(\Omega_{k,h})=a_kb_h\).
-
-Source: arXiv:1606.00608, Appendix C.2, lines 1547--1555. -/
-theorem NeighboringTraceFactorization.trace_threeSiteNeighboringOperator
-    (H : NeighboringTraceFactorization F) (k h : Fin F.sectorCount) :
-    (F.threeSiteNeighboringOperator k h).trace =
-      ((H.a k * H.b h : ℝ) : ℂ) := by
-  rw [F.trace_threeSiteNeighboringOperator]
-  exact H.sum_threeSite_trace_coefficients k h
 
 /-- On a diagonal outer-sector pair, \(\mathcal S_0\) is the partial trace
 of the corresponding regrouped block.
