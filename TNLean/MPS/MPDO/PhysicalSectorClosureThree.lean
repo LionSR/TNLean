@@ -55,8 +55,9 @@ and the two neighboring pairs:
  \longmapsto ((l_k,r_h),((r_k,l_l),(r_l,l_h))).
 \]
 
-Source: arXiv:1606.00608, Appendix C.2, line 1547 and the accompanying
-diagram. -/
+Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and `etarl`,
+lines 1435--1450; the order of the three subspins follows the convention at
+lines 1520--1522. -/
 def threeSiteRegroupEquiv (F : PhysicalSectorFactorization K)
     (k l h : Fin F.sectorCount) :
     (SectorIndex F k × (SectorIndex F l × SectorIndex F h)) ≃
@@ -98,8 +99,13 @@ theorem threeSiteSectorClosure_eq (F : PhysicalSectorFactorization K)
       F.boundaryOperator k h X ⊗ₖ
         (F.neighboringOperator k l ⊗ₖ F.neighboringOperator l h) := by
   ext x y
-  simp [threeSiteSectorClosure, threeSiteSectorEmbedding, threeSiteRegroupEquiv,
-    MPOTensor.physClose3, Matrix.trace, Matrix.mul_apply, Matrix.mul_assoc]
+  simp only [threeSiteSectorClosure, threeSiteRegroupEquiv, MPOTensor.physClose3,
+    Matrix.trace, Matrix.mul_assoc, Matrix.diag_apply, Matrix.mul_apply,
+    sectorCoordinateTensor_apply, LinearMap.coe_mk, AddHom.coe_mk,
+    Matrix.reindex_apply, Equiv.symm_mk, Equiv.coe_fn_mk, Matrix.submatrix_apply,
+    threeSiteSectorEmbedding, Matrix.of_apply, Equiv.apply_symm_apply,
+    transformedPhysicalSlice_apply_same, Matrix.kroneckerMap_apply,
+    boundaryOperator_apply, neighboringOperator_apply]
   simp_rw [Finset.mul_sum, Finset.sum_mul]
   have sum_permute (f : Fin D → Fin D → Fin D → Fin D → ℂ) :
       (∑ a, ∑ c, ∑ e, ∑ b, f a c e b) =
