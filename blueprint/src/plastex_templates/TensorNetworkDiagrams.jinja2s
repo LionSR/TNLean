@@ -25,7 +25,7 @@ name: TNMPDOHorizontalOperator TNMPDOFirstSiteContractions TNMPDOVerticalDirectS
 name: TNMPDOInverseContraction TNMPDOSectorPairing TNMPDOSectorZCLIdentity
 {{ obj.tn_svg_html }}
 
-name: TNMPSInverseContraction TNBNTDecomposition TNMPDOZCLIdempotence
+name: TNMPSInverseContraction TNBNTDecomposition TNMPDOZCLIdempotence TNMPDOFixedFinalFusionBracketings
 {{ obj.tn_svg_html }}
 
 name: TNRFPKrausIsometry TNRFPKrausIsometryReverse TNRFPIsometryCanonicalForm
