@@ -2572,6 +2572,65 @@ strong subadditivity for a normalized three-site reduced state.
     \label{fig:mpdo_regrouping_partial_trace_maps}
 \end{figure}
 
+\begin{definition}[The three-site neighboring-state preparation $\mathcal T_1$]
+    \label{def:mpdo_physical_sector_t1_preparation}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.sector_nonempty,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.threeSiteMiddleIndex_nonempty}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.threeSiteNeighboringOperator_pos,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.threeSiteNeighboringOperator_eq_zero_of_mul_eq_zero}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.normalizedThreeSiteNeighboringDensity,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.normalizedThreeSiteNeighboringDensity_pos,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_normalizedThreeSiteNeighboringDensity}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.inactiveThreeSiteNeighboringDensity,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.inactiveThreeSiteNeighboringDensity_posDef,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.inactiveThreeSiteNeighboringDensity_trace}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSiteNeighboringDensity,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSiteNeighboringDensity_pos,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_completedThreeSiteNeighboringDensity,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSiteNeighboringDensity_eq_normalized}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSitePreparationMap,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSitePreparationMap_eq_normalized}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSiteControlledMap,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSiteControlledMap_sameBlock_apply}
+    \leanok
+    \uses{def:mpdo_physical_sector_three_site_neighboring_operator,
+      def:mpdo_neighboring_trace_factorization}
+    On a sector pair with $a_kb_h\ne0$, set
+    \[
+      \widehat\Omega_{k,h}=(a_kb_h)^{-1}\Omega_{k,h}.
+    \]
+    If $a_kb_h=0$, positivity and vanishing trace imply
+    $\Omega_{k,h}=0$; choose any density operator on that summand and denote
+    the resulting completed density by $\overline\Omega_{k,h}$. The sectorwise
+    preparation is
+    \[
+      X\longmapsto X\otimes\overline\Omega_{k,h}.
+    \]
+    Taking the orthogonal direct sum over the outer sectors $(k,h)$ gives the
+    preparation stage $\mathcal T_1$ of
+    \cite[Appendix~C.2, lines~1523--1535]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[$\mathcal T_1$ is trace-preserving completely positive]
+    \label{thm:mpdo_physical_sector_t1_preparation_cptp}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSitePreparationMap_isKrausCPTP,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSiteControlledMap_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_physical_sector_t1_preparation}
+    The completed sectorwise preparations and their orthogonally controlled
+    direct sum are trace-preserving and completely positive.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    On an active pair,
+    $\tr(\widehat\Omega_{k,h})=(a_kb_h)^{-1}a_kb_h=1$; the chosen density on
+    a zero-weight pair also has trace one. Preparation by a positive operator
+    of trace one is trace-preserving and completely positive. The orthogonal
+    control discards coherences between distinct outer-sector pairs and
+    applies these preparations on the diagonal summands.
+\end{proof}
+
 \begin{definition}[The neighboring-state preparation $\mathcal S_1$]
     \label{def:mpdo_physical_sector_s1_map}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.normalizedNeighboringDensity}
