@@ -28,6 +28,8 @@ nonnegative primitive matrix `T` with
   `Mathlib.Matrix.IsPrimitive`;
 * `trace (T ^ k) = trace T = 1` for every `k ≥ 1`;
 * `T` of rank two — no rank-one factorization `T = vecMulVec a b` exists.
+* explicit rectangular factors `pairingL` and `pairingR` such that
+  `T = pairingR * pairingL` and `pairingL * pairingR` is idempotent.
 
 Concretely, `T = P + (1/6) · N` where `P = (1/3) · J` is the Perron projector
 (`J` the `3 × 3` all-ones matrix) and `N = x · yᵀ` with `x = (1, -1, 0)`,
@@ -53,6 +55,8 @@ This file is deliberately excluded from the root `TNLean.lean` import list.
 
 * `counterexample`: the explicit witness to the failure of the stated
   implication.
+* `counterexample_with_rectangular_pairing`: the same witness satisfies the
+  full rectangular pairing identity used at source lines 1490--1497.
 -/
 
 namespace TNLean.Archive.PerronFrobeniusRankOneCounterexample
@@ -66,6 +70,42 @@ noncomputable def T : Matrix (Fin 3) (Fin 3) ℝ :=
 /-- The rank-one Perron projector for `T`, equal to `T ^ k` for every `k ≥ 2`. -/
 noncomputable def P : Matrix (Fin 3) (Fin 3) ℝ :=
   !![1/3, 1/3, 1/3; 1/3, 1/3, 1/3; 1/3, 1/3, 1/3]
+
+/-- The coefficient-side factor in the rectangular pairing realization of
+`T`. Together with `pairingR`, it realizes the operator identity used in
+arXiv:1606.00608, Appendix C.2, lines 1490--1497. -/
+noncomputable def pairingL : Matrix (Fin 2) (Fin 3) ℝ :=
+  !![1/3, 1/3, 1/3; 1/6, 1/6, -1/3]
+
+/-- The functional-side factor in the rectangular pairing realization of
+`T` from arXiv:1606.00608, Appendix C.2, lines 1490--1497. -/
+noncomputable def pairingR : Matrix (Fin 3) (Fin 2) ℝ :=
+  !![1, 1; 1, -1; 1, 0]
+
+/-- The idempotent product in the bond space for the rectangular pairing
+realization of arXiv:1606.00608, Appendix C.2, lines 1490--1493. -/
+noncomputable def pairingIdempotent : Matrix (Fin 2) (Fin 2) ℝ :=
+  !![1, 0; 0, 0]
+
+lemma pairingR_mul_pairingL : pairingR * pairingL = T := by
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    simp [pairingR, pairingL, T, Matrix.mul_apply, Fin.sum_univ_two] <;> ring
+
+lemma pairingL_mul_pairingR : pairingL * pairingR = pairingIdempotent := by
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    simp [pairingL, pairingR, pairingIdempotent, Matrix.mul_apply,
+      Fin.sum_univ_three] <;> ring
+
+/-- The product in the opposite order is idempotent, exactly as in the
+operator identity of arXiv:1606.00608, Appendix C.2, lines 1490--1493. -/
+theorem pairingL_mul_pairingR_isIdempotent :
+    IsIdempotentElem (pairingL * pairingR) := by
+  rw [pairingL_mul_pairingR]
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    simp [pairingIdempotent, Matrix.mul_apply, Fin.sum_univ_two]
 
 lemma T_sq : T * T = P := by
   ext i j
@@ -169,5 +209,21 @@ theorem counterexample_with_zcl_operator_consequence :
       T ^ 2 = T ^ 3 ∧
       ¬ ∃ a b : Fin 3 → ℝ, T = Matrix.vecMulVec a b :=
   ⟨T_isPrimitive, trace_T, T_tracePowersConstant, T_sq_eq_cube, T_not_rankOne⟩
+
+/-- The primitive trace-normalized counterexample satisfies the full
+rectangular pairing identity used in arXiv:1606.00608, Appendix C.2, lines
+1490--1497: `T = pairingR * pairingL`, while the product in the opposite order
+is idempotent. Nevertheless `T` is not an outer product. Thus the rectangular
+identity proves the trace-power display at lines 1494--1497, but does not prove
+the rank-one assertion at lines 1498--1499. -/
+theorem counterexample_with_rectangular_pairing :
+    Matrix.IsPrimitive T ∧
+      Matrix.trace T = 1 ∧
+      (∀ k : ℕ, 0 < k → Matrix.trace (T ^ k) = Matrix.trace T) ∧
+      T = pairingR * pairingL ∧
+      IsIdempotentElem (pairingL * pairingR) ∧
+      ¬ ∃ a b : Fin 3 → ℝ, T = Matrix.vecMulVec a b :=
+  ⟨T_isPrimitive, trace_T, T_tracePowersConstant, pairingR_mul_pairingL.symm,
+    pairingL_mul_pairingR_isIdempotent, T_not_rankOne⟩
 
 end TNLean.Archive.PerronFrobeniusRankOneCounterexample
