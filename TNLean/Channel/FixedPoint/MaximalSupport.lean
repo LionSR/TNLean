@@ -280,8 +280,7 @@ $\sqrt{\rho_0}$ maps the carrier of the weighted corner star-subalgebra
 set realizes, with the inverse square root taken on the support of $\rho_0$,
 $$\rho_0^{-1/2}\,\{X \mid T(X) = X\}\,\rho_0^{-1/2}.$$ This is the conjugated
 fixed-point set of Corollary 6.7 of *Quantum Channels & Operations* (Wolf 2012), at a
-fixed point of maximal support; after normalization $\rho_0$ is a fixed-point density
-matrix of maximum rank, as in the corollary. -/
+fixed point of maximal support. -/
 theorem exists_maximalSupport_weightedCorner_sqrt_eq (K : Fin d → Mat) (h_tp : IsTP K) :
     ∃ (ρ₀ : Mat) (hρ₀ : ρ₀.PosSemidef), map K ρ₀ = ρ₀ ∧
       ∀ X : Mat, map K X = X →
