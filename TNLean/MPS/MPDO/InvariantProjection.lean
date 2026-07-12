@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.MPDO.VerticalCF
+import TNLean.Algebra.TracePairing
 
 /-!
 # One-sided invariant matrices for matrix product density operators
@@ -304,6 +305,82 @@ theorem blockwise_braRight_eq_ketLeftBraRight_of_invariant
     rw [mul_firstSiteMatrix_apply, firstSiteMatrix_mul_apply] at h2
     simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ] at h2
     exact h2
+
+/-- **Commutation at a two-site chain forces letter-level invariance, for a
+single-letter injective tensor.**
+
+If `M`'s doubled-index tensor `M.toMPSTensor` is (single-letter) injective —
+its `d * d` many matrices `M i j` already span the full `D × D` matrix
+algebra — then commutation of the first-site action of a Hermitian idempotent
+`Q` with the two-site density operator `mpo M 2` alone forces the
+letter-level invariance `M.ketLeftMul Q = (M.ketLeftMul Q).braRightMul Q`.
+
+This is a single-instantiation converse of the invariant-projection step
+(arXiv:1606.00608, lines 1874--1887): idempotence of `Q` upgrades the full
+commutation `Q_1 H = H Q_1` to the one-sided reduction `Q_1 H = Q_1 H Q_1`
+(the reverse of `firstSiteMatrix_mul_mpo_of_ketLeftMul_invariant`'s
+conclusion); unfolding *that* identity against every trailing letter `M c c'`
+gives `d * d` many trace identities pairing `(M.ketLeftMul Q) a b` against
+`((M.ketLeftMul Q).braRightMul Q) a b`, for every physical index pair `a, b`,
+over every letter of `M.toMPSTensor`. Injectivity's spanning property and
+nondegeneracy of the trace pairing (`MPSTensor.traceMulRightPi_ker_eq_bot`)
+then force the two matrices to agree.
+
+Unlike the block-injective route of `VerticalCF.lean`'s Lemma L (which needs a
+horizontal canonical-form decomposition and the commutation family at *every*
+length, transported through `SameMPV₂` back to `M`'s own letters — an
+unresolved transport step recorded in
+`docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`), this theorem needs
+only the commutation hypothesis at chain length `2`, applies to `M`'s own
+tensor directly, and does not extend to chain length `1` (`mpo M 1`): there
+the single trailing letter is the identity matrix, giving only a trace-level
+identity, not enough to separate the opposite-corner difference. -/
+theorem ketLeftMul_eq_braRightMul_of_commute_of_isInjective
+    (M : MPOTensor d D) (hInj : MPSTensor.IsInjective M.toMPSTensor)
+    {Q : Matrix (Fin d) (Fin d) ℂ} (hQidem : IsIdempotentElem Q)
+    (hComm : Commute (firstSiteMatrix Q 1) (mpo M 2)) :
+    M.ketLeftMul Q = (M.ketLeftMul Q).braRightMul Q := by
+  classical
+  have hQ1idem : firstSiteMatrix Q 1 * firstSiteMatrix Q 1 = firstSiteMatrix Q 1 := by
+    rw [firstSiteMatrix_mul_firstSiteMatrix, hQidem]
+  have hOneSided : firstSiteMatrix Q 1 * mpo M 2 =
+      firstSiteMatrix Q 1 * mpo M 2 * firstSiteMatrix Q 1 := by
+    calc firstSiteMatrix Q 1 * mpo M 2
+        = firstSiteMatrix Q 1 * firstSiteMatrix Q 1 * mpo M 2 := by rw [hQ1idem]
+      _ = firstSiteMatrix Q 1 * (firstSiteMatrix Q 1 * mpo M 2) := by rw [Matrix.mul_assoc]
+      _ = firstSiteMatrix Q 1 * (mpo M 2 * firstSiteMatrix Q 1) := by rw [hComm.eq]
+      _ = firstSiteMatrix Q 1 * mpo M 2 * firstSiteMatrix Q 1 := by rw [Matrix.mul_assoc]
+  funext a b
+  show (M.ketLeftMul Q) a b = ((M.ketLeftMul Q).braRightMul Q) a b
+  refine sub_eq_zero.mp
+    ((LinearMap.ker_eq_bot'.1 (MPSTensor.traceMulRightPi_ker_eq_bot hInj))
+      ((M.ketLeftMul Q) a b - ((M.ketLeftMul Q).braRightMul Q) a b) ?_)
+  funext p
+  rw [MPSTensor.traceMulRightPi_apply, Pi.zero_apply]
+  change Matrix.trace
+    (((M.ketLeftMul Q) a b - ((M.ketLeftMul Q).braRightMul Q) a b) * M p.divNat p.modNat) = 0
+  set c := p.divNat
+  set c' := p.modNat
+  have h2 := Matrix.ext_iff.mpr hOneSided
+      (Fin.cons a (fun _ : Fin 1 => c)) (Fin.cons b (fun _ : Fin 1 => c'))
+  rw [mul_firstSiteMatrix_apply] at h2
+  simp only [firstSiteMatrix_mul_apply] at h2
+  simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ] at h2
+  simp only [mpo_cons_cons, List.ofFn_succ, List.ofFn_zero, evalWord_cons,
+    evalWord_nil, mul_one] at h2
+  rw [Matrix.sub_mul, Matrix.trace_sub, sub_eq_zero]
+  calc Matrix.trace ((M.ketLeftMul Q) a b * M c c')
+      = ∑ i : Fin d, Q a i * Matrix.trace (M i b * M c c') :=
+        (sum_mul_trace_eq_trace_sum_smul (fun i => Q a i) (fun i => M i b) (M c c')).symm
+    _ = ∑ j : Fin d, (∑ i : Fin d, Q a i * Matrix.trace (M i j * M c c')) * Q j b := h2
+    _ = ∑ j : Fin d, Q j b * ∑ i : Fin d, Q a i * Matrix.trace (M i j * M c c') :=
+        Finset.sum_congr rfl fun j _ => mul_comm _ _
+    _ = ∑ j : Fin d, Q j b * Matrix.trace ((M.ketLeftMul Q) a j * M c c') := by
+        refine Finset.sum_congr rfl fun j _ => ?_
+        congr 1
+        exact sum_mul_trace_eq_trace_sum_smul (fun i => Q a i) (fun i => M i j) (M c c')
+    _ = Matrix.trace (((M.ketLeftMul Q).braRightMul Q) a b * M c c') :=
+        sum_mul_trace_eq_trace_sum_smul (fun j => Q j b) (fun j => (M.ketLeftMul Q) a j) (M c c')
 
 /-- For an MPDO, any matrix commuting with a nonzero power of the $N$-site
 density operator commutes with the density operator itself.

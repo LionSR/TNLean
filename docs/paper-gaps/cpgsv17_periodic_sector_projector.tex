@@ -156,15 +156,142 @@ Once the implication is proved from a horizontal canonical form, the
 conditional exclusion becomes the statement asserted by the source, and
 this note can be retired.
 
-\paragraph{Verdict.}
-This is an open gap, now narrowed to a single implication: the projector
-exclusion (the positivity part of the source paragraph), the
-stacked-layers reduction of the commutation family, and the construction
-of the invariant, displaced projector from the cyclic decomposition of the
-peripheral spectrum are formalized unconditionally.  The remaining stated
-hypothesis is that a projector displaced by the vertically viewed tensor
-cannot commute with $H^{(N)}$ at any length — the canonical-form step of
-lines~1874--1887.
+\section{The injective special case is now resolved}
+
+The implication \leanid{MPOTensor.NoninvariantProjectorNoncommuting} is
+discharged unconditionally when $M$'s own doubled-index tensor is
+(single-letter) injective, i.e.\ its $d^2$ matrices $M^{ij}$ already span
+the full $D\times D$ matrix algebra (\leanid{MPSTensor.IsInjective}).  The
+route does not go through the block-injective (biCF) machinery of
+\path{TNLean/MPS/MPDO/VerticalCF.lean} at all.
+
+\leanid{MPOTensor.ketLeftMul_eq_braRightMul_of_commute_of_isInjective}
+(\path{TNLean/MPS/MPDO/InvariantProjection.lean}) proves: if $Q$ is
+Hermitian idempotent and $Q_1H^{(2)}=H^{(2)}Q_1$ (commutation at the
+\emph{two-site} chain alone), then $Q\widetilde M=Q\widetilde MQ$.
+Idempotence of $Q$ upgrades the hypothesis to the one-sided reduction
+$Q_1H^{(2)}=Q_1H^{(2)}Q_1$ — the reverse of the invariant-projection step
+of lines~1874--1887 — and unfolding that identity against every trailing
+letter $M^{cc'}$ produces, for every pair of physical indices $a,b$, a
+trace identity pairing $(Q\widetilde M)_{ab}$ against
+$(Q\widetilde MQ)_{ab}$ over every letter of $M$'s doubled-index tensor.
+Injectivity's spanning property, together with nondegeneracy of the trace
+pairing on the full matrix algebra
+(\leanid{MPSTensor.traceMulRightPi_ker_eq_bot}), forces the two matrices
+to agree entrywise.  No horizontal canonical-form decomposition,
+block-injectivity, or \leanid{SameMPV₂} transport enters this argument: it
+works directly with $M$'s own letters.
+
+Combined with the stacked-layers reduction
+(\leanid{MPOTensor.stackedTensor_ketLeftMul_invariant},
+\leanid{MPOTensor.firstSiteMatrix_mul_mpo_comm}) and the positive
+semidefinite power-commutation theorem
+(\leanid{MPOTensor.mpo_commute_of_commute_pow}), this closes the
+periodic-sector step unconditionally for injective tensors:
+\leanid{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_isInjective}
+proves that an MPDO tensor with an injective doubled-index tensor has no
+nontrivial periodic vectors in the vertical direction, with no further
+hypothesis.  The contradiction only ever needs the commutation family at
+chain length~$2$; it never constructs, and does not need, an inhabitant of
+\leanid{MPOTensor.NoninvariantProjectorNoncommuting}.
+
+\section{Why the general (reducible) case resists the same route}
+
+\leanid{MPOTensor.NoninvariantProjectorNoncommuting} quantifies over
+\emph{every} chain length $N$ (starting at $N=0$), and the natural
+discharge route — the block-injective Lemma~L of
+\path{TNLean/MPS/MPDO/VerticalCF.lean}, applied to a general horizontal
+canonical-form decomposition of $M$ into several (possibly
+gauge-inequivalent) normal blocks with weights — meets two independent
+obstructions that the injective special case above sidesteps.
+
+\begin{enumerate}
+    \item \textbf{Chain length one supplies no data.}  At $N=1$ (chain
+      length one, the shortest length at which an argument of this shape
+      could plausibly reach $M$'s own letters), the trailing word is
+      empty: the only relevant ``letter'' of the commutation identity is
+      the identity matrix, and unfolding $Q_1H^{(1)}=H^{(1)}Q_1$ gives
+      only one trace-level equation per matrix-entry pair,
+      $\tr\bigl((Q\widetilde M)_{ab}-(Q\widetilde MQ)_{ab}\bigr)=0$.
+      This is far short of what nondegeneracy of the trace pairing needs
+      to conclude $(Q\widetilde M)_{ab}=(Q\widetilde MQ)_{ab}$ as
+      matrices — it forces only the trace of the difference to vanish,
+      not the difference itself, unless $D=1$.  This is why the
+      injective route above uses chain length \emph{two}, not one or
+      zero: at chain length two, the trailing word ranges over the $d^2$
+      many letters $M^{cc'}$ themselves, which is enough data once those
+      letters span the full matrix algebra.  For a general (not
+      necessarily injective) $M$, no comparable argument is available at
+      $N=0$: the periodic-sector-projector contradiction that consumes
+      \leanid{MPOTensor.NoninvariantProjectorNoncommuting}
+      (\leanid{MPOTensor.isEmpty_periodicSectorProjector}) happens to use
+      only the $N=0$ instance, but the field's type still forces a proof
+      of \leanid{NoninvariantProjectorNoncommuting} to supply the $\forall
+      N$ statement to type-check as a
+      \leanid{PeriodicSectorProjector} — \emph{unless} the contradiction
+      is derived directly, bypassing that structure, exactly as
+      \leanid{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_isInjective}
+      does above, by choosing chain length two instead of the length that
+      the structure's field type superficially suggests.
+    \item \textbf{The horizontal canonical-form surrogate is MPV-level,
+      not literal.}  \leanid{HorizontalCFData} and \leanid{IsHorizontalCF}
+      express ``$M$ is in horizontal canonical form'' through
+      \leanid{SameMPV₂}: $M$'s doubled-index tensor generates the
+      \emph{same matrix product vectors} as an assembled block-diagonal
+      tensor, not that $M$'s own letters \emph{literally equal} a
+      gauge-conjugated direct sum of normal blocks.  The source's own
+      canonical-form decomposition,
+      $\bigoplus_{j,q}\mu_{j,q}X_{j,q}A_jX_{j,q}^{-1}$
+      (\cite[eq:II\_ABasicTensors]{Cirac2016MPDO_arXiv}), is literal: it
+      exhibits $M$ itself, after a change of basis on the bond space, as
+      that direct sum.  The block-injective Lemma~L
+      (\leanid{blockwise_insert_eq_of_mpv_agree}) concludes letter
+      equality \emph{for the canonical-form blocks $A_k$}, which live in
+      their own (separately injective) bond space — not for $M$'s own
+      letters.  Transporting that block-level conclusion back to $M$'s
+      own bond space needs either $M$'s own injectivity (the special case
+      resolved above, where the transport is vacuous because $M$ already
+      is the sole block) or a literal, gauge-explicit multi-block
+      decomposition of $M$, which
+      \leanid{HorizontalCFData}/\leanid{IsHorizontalCF} does not carry
+      and which is not otherwise formalized in the repository for
+      reducible MPDO tensors.  Constructing that literal decomposition is
+      a separate, substantial undertaking, adjacent to but distinct from
+      the multiplicity-free restriction of \leanid{biCF} tracked at
+      \#3713 (\path{docs/paper-gaps/cpgsv17_bicf_block_separation.tex}),
+      not a corollary of the biCF machinery already in place.
+\end{enumerate}
+
+Both obstructions are independent of the exponent $p$ or the specific
+displaced-projector construction of
+\leanid{MPOTensor.exists_displaced_invariant_projector_of_periodic_vector}:
+they are structural facts about what finite-length trace data can
+determine, and about what \leanid{IsHorizontalCF}'s current formalization
+asserts.  Discharging \leanid{MPOTensor.NoninvariantProjectorNoncommuting}
+for a general (reducible, multi-block) horizontal canonical form therefore
+remains open, and is not a routine extension of the injective argument to
+a larger blocking length.
+
+\paragraph{Verdict (updated).}
+The periodic-sector step of Proposition~4.13 is now closed unconditionally
+for MPDO tensors whose doubled-index tensor is (single-letter) injective
+(\leanid{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_isInjective}).
+For the general reducible case, the gap is unchanged in substance from the
+previous verdict — the projector exclusion, the stacked-layers reduction,
+and the displaced-projector construction remain unconditional, and the
+remaining stated hypothesis is
+\leanid{MPOTensor.NoninvariantProjectorNoncommuting} — but is now
+understood more precisely: it is not a routine extension of the
+block-injective Lemma~L already in
+\path{TNLean/MPS/MPDO/VerticalCF.lean}, because that machinery concludes
+letter equality for the canonical-form blocks, not for $M$'s own (possibly
+non-injective) bond space, and the transport between the two needs either
+$M$'s own injectivity or a literal, gauge-explicit multi-block
+decomposition that is not currently formalized.  The capstone
+\leanid{thm:vertical_cf_of_horizontal_cf} does not consume the injective
+special case: it still needs the independent vertical canonical-form
+construction (stage~3 of \ghissue{3674}), which is unaffected by either
+resolution recorded in this note.
 
 \bibliographystyle{alpha}
 \bibliography{references}

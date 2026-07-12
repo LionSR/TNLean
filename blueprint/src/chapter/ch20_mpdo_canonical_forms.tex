@@ -967,6 +967,58 @@
     and Theorem~\ref{thm:mpdo_cyclic_projector_reduction} applies.
 \end{proof}
 
+\begin{theorem}[Commutation at chain length two forces letter invariance, for
+    an injective tensor]
+    \label{thm:mpdo_commute_of_isInjective}
+    \lean{MPOTensor.ketLeftMul_eq_braRightMul_of_commute_of_isInjective}
+    \leanok
+    \uses{def:injective, def:mpdo_vertical_one_site_actions, def:mpo_family}
+    Let $M$ be an MPO tensor whose doubled-index tensor is injective, and
+    let $Q$ be a Hermitian idempotent on the physical space.  If
+    $Q_1H^{(2)}=H^{(2)}Q_1$, then $Q\widetilde M=Q\widetilde MQ$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Idempotence of $Q$ upgrades the commutation to the one-sided reduction
+    $Q_1H^{(2)}=Q_1H^{(2)}Q_1$.  Unfolding this identity against every
+    trailing letter of $M$ gives, for every pair of physical indices $a,b$,
+    a trace identity pairing $(Q\widetilde M)_{ab}$ against
+    $(Q\widetilde MQ)_{ab}$ over every letter of the doubled-index tensor.
+    Injectivity's spanning property and nondegeneracy of the trace pairing
+    force the two matrices to agree.
+\end{proof}
+
+\begin{theorem}[No periodic vectors for an injective matrix product density
+    operator]
+    \label{thm:mpdo_vertical_no_periodic_vectors_injective}
+    \lean{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_isInjective}
+    \leanok
+    \uses{def:mpdo, def:injective, def:vertical_tensor_mpdo,
+        def:no_periodic_vectors, thm:mpdo_displaced_invariant_projector,
+        thm:mpdo_commute_of_isInjective}
+    Let $M$ generate matrix product density operators and let $M$'s
+    doubled-index tensor be injective.  Then the vertically viewed tensor
+    $\widetilde M$ has no nontrivial periodic vectors, unconditionally.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    A nontrivial periodic vector supplies the invariant, displaced projector
+    $Q$ of Theorem~\ref{thm:mpdo_displaced_invariant_projector}.  Its word
+    invariance transfers to the stacked tensor, giving commutation with
+    $[H^{(2)}]^p$ unconditionally through the invariant-projection step
+    applied to the stack; positive semidefiniteness of the density operators
+    removes the power, and Theorem~\ref{thm:mpdo_commute_of_isInjective}
+    turns the resulting commutation with $H^{(2)}$ into the letter-level
+    invariance that the displacement forbids.
+
+    This covers the sub-case where $M$'s own tensor is already injective; a
+    general horizontal canonical form (several gauge-inequivalent blocks
+    with weights) remains open, documented in
+    \path{docs/paper-gaps/cpgsv17_periodic_sector_projector.tex}.
+\end{proof}
+
 \begin{theorem}[Positive trace of nonzero positive semidefinite matrices]
     \label{thm:psd_trace_pos}
     \lean{Matrix.PosSemidef.trace_pos_of_ne_zero}
