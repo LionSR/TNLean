@@ -352,6 +352,76 @@
     \end{tikzpicture}%
 }
 
+% The overlapping applications of T and S used after two-site blocking in
+% Theorem 4.9.  The endpoint frames identify one and two blocked sites; the
+% intermediate rows retain the original physical-site decomposition.
+\newcommand{\TNMPDOBlockedRFPChannels}{%
+    \begin{tikzpicture}[tn picture, scale=0.72]
+        \foreach \x/\name in {-5.0/btTwoA,-4.0/btTwoB} {
+            \TN@subspinbox{\name}{(\x,1.35)}{\widehat{\cal K}}
+        }
+        \TN@subspinlink{btTwoA}{btTwoB}
+        \draw[rounded corners=2pt, densely dashed]
+            (-5.48,0.87) rectangle (-3.52,1.83);
+        \node at (-4.50,0.54) {one blocked site};
+
+        \foreach \x/\name in {-1.4/btThreeA,-0.4/btThreeB,0.6/btThreeC} {
+            \TN@subspinbox{\name}{(\x,1.35)}{\widehat{\cal K}}
+        }
+        \TN@subspinlink{btThreeA}{btThreeB}
+        \TN@subspinlink{btThreeB}{btThreeC}
+
+        \foreach \x/\name in {3.0/btFourA,4.0/btFourB,5.0/btFourC,6.0/btFourD} {
+            \TN@subspinbox{\name}{(\x,1.35)}{\widehat{\cal K}}
+        }
+        \TN@subspinlink{btFourA}{btFourB}
+        \TN@subspinlink{btFourB}{btFourC}
+        \TN@subspinlink{btFourC}{btFourD}
+        \draw[rounded corners=2pt, densely dashed]
+            (2.52,0.87) rectangle (4.48,1.83);
+        \draw[rounded corners=2pt, densely dashed]
+            (4.52,0.87) rectangle (6.48,1.83);
+        \node at (4.50,0.54) {two blocked sites};
+
+        \draw[->, line width=0.60pt] (-3.22,1.35) -- (-1.88,1.35)
+            node[midway, above] {$\widehat{\mathcal T}$};
+        \draw[->, line width=0.60pt] (1.08,1.35) -- (2.52,1.35)
+            node[midway, above] {$\widehat{\mathcal T}_{(12)3}$};
+        \node at (0.50,2.25)
+            {$\widehat{\mathcal T}^2:\widehat{\cal K}_2(X)
+              \longmapsto\widehat{\cal K}_4(X)$};
+
+        \foreach \x/\name in {3.0/bsFourA,4.0/bsFourB,5.0/bsFourC,6.0/bsFourD} {
+            \TN@subspinbox{\name}{(\x,-1.30)}{\widehat{\cal K}}
+        }
+        \TN@subspinlink{bsFourA}{bsFourB}
+        \TN@subspinlink{bsFourB}{bsFourC}
+        \TN@subspinlink{bsFourC}{bsFourD}
+        \draw[rounded corners=2pt, densely dashed]
+            (2.52,-1.78) rectangle (4.48,-0.82);
+        \draw[rounded corners=2pt, densely dashed]
+            (4.52,-1.78) rectangle (6.48,-0.82);
+        \foreach \x/\name in {-1.4/bsThreeA,-0.4/bsThreeB,0.6/bsThreeC} {
+            \TN@subspinbox{\name}{(\x,-1.30)}{\widehat{\cal K}}
+        }
+        \TN@subspinlink{bsThreeA}{bsThreeB}
+        \TN@subspinlink{bsThreeB}{bsThreeC}
+        \foreach \x/\name in {-5.0/bsTwoA,-4.0/bsTwoB} {
+            \TN@subspinbox{\name}{(\x,-1.30)}{\widehat{\cal K}}
+        }
+        \TN@subspinlink{bsTwoA}{bsTwoB}
+        \draw[rounded corners=2pt, densely dashed]
+            (-5.48,-1.78) rectangle (-3.52,-0.82);
+        \draw[<-, line width=0.60pt] (1.08,-1.30) -- (2.52,-1.30)
+            node[midway, above] {$\widehat{\mathcal S}_{(123)4}$};
+        \draw[<-, line width=0.60pt] (-3.22,-1.30) -- (-1.88,-1.30)
+            node[midway, above] {$\widehat{\mathcal S}$};
+        \node at (0.50,-2.20)
+            {$\widehat{\mathcal S}^2:\widehat{\cal K}_4(X)
+              \longmapsto\widehat{\cal K}_2(X)$};
+    \end{tikzpicture}%
+}
+
 % Fixed-sector factorization of the arbitrary-X two-site physical closure.
 % The left-hand row shows the sector subspins and the outer virtual closure;
 % the right-hand side shows only the proved boundary/neighbor tensor product.
