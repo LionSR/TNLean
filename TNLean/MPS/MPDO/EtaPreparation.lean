@@ -475,6 +475,24 @@ noncomputable def completedEtaControlledMap
       (data.completedEta_pos factor p.1 p.2)
       ((Fintype.equivFin (EtaIndex (hη := hη) p.1 p.2)).symm j))
 
+/-- On each diagonal sector pair, the completed neighboring-state control is
+the preparation map for the completed neighboring density.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1548--1555. -/
+theorem completedEtaControlledMap_sameBlock_apply
+    (data : ExplicitEtaOperators hη) (factor : RankOneTraceFactorization data)
+    (X : Matrix (Σ p, α p) (Σ p, α p) ℂ) (p : Fin hη.m × Fin hη.m)
+    (a b : α p) (u v : EtaIndex (hη := hη) p.1 p.2) :
+    data.completedEtaControlledMap factor X ⟨p, (a, u)⟩ ⟨p, (b, v)⟩ =
+      data.completedEtaPreparationMap factor p.1 p.2
+        (X.submatrix (Sigma.mk p) (Sigma.mk p)) (a, u) (b, v) := by
+  classical
+  rw [completedEtaControlledMap, Matrix.controlledKrausMap_sameBlock_apply,
+    Matrix.rectangularKrausMap_equiv
+      (Fintype.equivFin (EtaIndex (hη := hη) p.1 p.2)),
+    Matrix.rectangularKrausMap_preparationKraus_eq]
+  rfl
+
 /-- The global orthogonally controlled neighboring-state preparation is
 trace-preserving and completely positive.
 
@@ -507,6 +525,24 @@ noncomputable def completedOmegaControlledMap
     (fun p j => Matrix.preparationKraus (data.completedOmega factor p.1 p.2)
       (data.completedOmega_pos factor p.1 p.2)
       ((Fintype.equivFin (OmegaIndex (hη := hη) p.1 p.2)).symm j))
+
+/-- On each diagonal sector pair, the completed direct-sum control is the
+preparation map for the completed direct-sum density.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1523--1535. -/
+theorem completedOmegaControlledMap_sameBlock_apply
+    (data : ExplicitEtaOperators hη) (factor : RankOneTraceFactorization data)
+    (X : Matrix (Σ p, α p) (Σ p, α p) ℂ) (p : Fin hη.m × Fin hη.m)
+    (a b : α p) (u v : OmegaIndex (hη := hη) p.1 p.2) :
+    data.completedOmegaControlledMap factor X ⟨p, (a, u)⟩ ⟨p, (b, v)⟩ =
+      data.completedOmegaPreparationMap factor p.1 p.2
+        (X.submatrix (Sigma.mk p) (Sigma.mk p)) (a, u) (b, v) := by
+  classical
+  rw [completedOmegaControlledMap, Matrix.controlledKrausMap_sameBlock_apply,
+    Matrix.rectangularKrausMap_equiv
+      (Fintype.equivFin (OmegaIndex (hη := hη) p.1 p.2)),
+    Matrix.rectangularKrausMap_preparationKraus_eq]
+  rfl
 
 /-- The global orthogonally controlled direct-sum preparation is
 trace-preserving and completely positive.
