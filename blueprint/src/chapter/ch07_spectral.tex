@@ -2573,7 +2573,7 @@ transfers the support.
     \leanok
     \uses{lem:isChannel_transferMap, thm:hermitian_fixedpoint_parts,
         lem:stationaryProj_absorb_of_le}
-    Let $X_1, \ldots, X_m$ be a basis of the fixed-point space of $T$. Each $X_j$ splits
+    Let $X_0, \ldots, X_{m-1}$ be a basis of the fixed-point space of $T$. Each $X_j$ splits
     into fixed Hermitian components: with
     \[
         H_{1,j} = X_j + X_j^{\dagger},
@@ -2595,7 +2595,7 @@ transfers the support.
     \]
     Set
     \[
-        \rho_0 \;=\; \sum_{j=1}^{m}
+        \rho_0 \;=\; \sum_{j=0}^{m-1}
             \bigl(P^{+}_{1,j} + P^{-}_{1,j} + P^{+}_{2,j} + P^{-}_{2,j}\bigr),
     \]
     a positive semidefinite fixed point. Every summand is dominated by $\rho_0$ in the
@@ -2616,7 +2616,7 @@ transfers the support.
         \;=\; X_j.
     \]
     A fixed point $X$ of $T$ is a
-    linear combination of the basis $X_1, \ldots, X_m$, so $Q_0\, X\, Q_0 = X$.
+    linear combination of the basis $X_0, \ldots, X_{m-1}$, so $Q_0\, X\, Q_0 = X$.
 \end{proof}
 
 \begin{theorem}[Conjugation by the square root at a fixed point of maximal support]%
@@ -2642,12 +2642,13 @@ transfers the support.
     $X$ and produces the corner-supported $Y$.
 \end{proof}
 
-At the fixed point $\rho_0$, the carrier of the $*$-subalgebra of
+At the fixed point $\rho_0$, with the inverse square root taken on the support of
+$\rho_0$, the carrier of the $*$-subalgebra of
 Theorem~\ref{thm:weightedCornerFixedPointsStarSubalgebra} therefore realizes
 \[
-    \rho_0^{-1/2}\,\{X \in \MN{D} \mid T(X) = X\}\,\rho_0^{-1/2},
+    \rho_0^{-1/2}\,\{X \in \MN{D} \mid T(X) = X\}\,\rho_0^{-1/2}:
 \]
-with the inverse square root taken on the support of $\rho_0$: the conjugated
+the conjugated
 fixed-point set of Corollary~6.7 of~\cite{Wolf2012Quantum} at a fixed point of maximal
 support, without a support restriction on the fixed points.
 
