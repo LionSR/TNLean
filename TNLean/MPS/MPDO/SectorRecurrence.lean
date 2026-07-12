@@ -20,16 +20,21 @@ nonzero directed cycle: a phase mismatch along such an edge cannot be
 detected by any cyclic product, since every cyclic product containing the
 edge also contains a compensating factor elsewhere.
 
-This file formalizes the sufficient condition identified in the paper-gap
-note: *recurrence* of the nonzero sector support graph, i.e. every nonzero
-directed edge lies on a nonzero directed cycle
-(`MPOTensor.IsRecurrentSupport`). Under recurrence, positivity of the cyclic
-products along a single cycle already forces a coherent choice of phases
-around that cycle: this is the content of
+This file formalizes the recurrence condition identified in the paper-gap
+note: every nonzero directed edge lies on a nonzero directed cycle
+(`MPOTensor.IsRecurrentSupport`). It also proves that positivity of the cyclic
+product along one fixed cycle forces a compatible choice of phases on the
+occurrences around that cycle: this is the content of
 `MPOTensor.exists_pi_smul_posSemidef_of_cyclicEtaTensorProduct_posSemidef`,
 obtained from the `N`-ary Kronecker rescaling
 (`Matrix.exists_pi_smul_posSemidef_of_finKronecker_posSemidef`) applied to
 the cyclic tensor product after reindexing along the horizontal bond fiber.
+
+The recurrence declarations and the phase-uniqueness theorem
+`Matrix.exists_pos_real_smul_eq_of_smul_posSemidef` are preparatory. No proved
+theorem in this module yet derives recurrence from injectivity or combines
+the choices from different cycles into one vertex-indexed rescaling. In
+particular, the fixed-cycle theorem does not use recurrence.
 
 ## Main declarations
 
