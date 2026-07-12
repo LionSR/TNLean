@@ -8,9 +8,13 @@
     This structure records the local ingredients of
     \cite[Appendix~C.2]{Cirac2016MPDO_arXiv}: a normalized
     three-site reduced state with equality in strong subadditivity, the
-    resulting local $\eta$-structure, and the rank-one conclusion for the
-    auxiliary primitive matrix $T$, supplied here through the conditional
-    rank-one criterion of Theorem~\ref{thm:sal_zcl_implies_rank_one_t}.
+    resulting local $\eta$-structure, and, supplied here through the
+    conditional rank-one criterion of
+    Theorem~\ref{thm:sal_zcl_implies_rank_one_t}, a rank-one factorization
+    \[
+        T = a b^\top, \qquad a \cdot b = 1,
+    \]
+    for the auxiliary primitive matrix $T$.
 \end{definition}
 
 \begin{theorem}[Local simple-MPDO structure from entropy data and the rank-one criterion]
@@ -24,8 +28,14 @@
         thm:pairing_idempotent_rank_one_t}
     The hypotheses of \cite[Lemmas~C.2, C.4, and~C.5]{Cirac2016MPDO_arXiv}
     determine the local simple-MPDO
-    structure. There are three forms. The conditional form assumes the
-    rank-one implication for $T$. The corrected form assumes instead that
+    structure. There are three forms. The conditional form supplies the
+    Perron--Frobenius hypothesis of
+    Theorem~\ref{thm:sal_zcl_implies_rank_one_t} directly, yielding the
+    rank-one factorization
+    \[
+        T = a b^\top, \qquad a \cdot b = 1.
+    \]
+    The corrected form assumes instead that
     $T\ge 0$ as a matrix, with $\operatorname{tr}(T)=1$ and
     $\operatorname{tr}(T^m)=1$ for every $m>0$, and then applies
     Theorem~\ref{thm:psd_trace_powers_rank_one_t}. The pairing-idempotence
@@ -122,8 +132,11 @@
     \leanok
     \uses{def:phys_close, def:mpdo_four_site_physical_closure}
     Under the canonical right-associated identification of four-site
-    configurations with quadruples of physical indices, the general
-    length-four closure is $K_4(X)$.
+    configurations with quadruples of physical indices,
+    \[
+        K_4(X)_{(i_0,(i_1,(i_2,i_3))),(j_0,(j_1,(j_2,j_3)))}
+          =\tr\!\left(K^{i_0j_0}K^{i_1j_1}K^{i_2j_2}K^{i_3j_3}X\right).
+    \]
 \end{theorem}
 
 \begin{proof}\leanok
@@ -212,13 +225,16 @@
     local $\eta$-structure and a primitive matrix $T$ with
     $\operatorname{tr}(T)=1$, and the doubled-index transfer condition together with
     \cite[Lemma~C.5]{Cirac2016MPDO_arXiv} gives
-    $\operatorname{tr}(T^m)$ independent of $m$ and the conditional rank-one
-    criterion for $T$. Suppose also that the assembled $\eta$-local structure gives
+    $\operatorname{tr}(T^m)$ independent of $m$ and the rank-one factorization
+    \[
+        T = a b^\top, \qquad a \cdot b = 1.
+    \]
+    Suppose also that the assembled $\eta$-local structure gives
     $\sigma^{(N)}(K)=c_N\prod_{n=1}^N B_{n,n+1}$ with $c_N>0$,
     $B_{n,n+1}\ge 0$, and $[B_{i,i+1},B_{j,j+1}]=0$ for all $i,j$.
     Then these hypotheses determine the simple-MPDO blocked-RFP structure for $K$.
-    In the PSD-corrected form, the conditional rank-one criterion is replaced
-    by $T\ge0$, $\operatorname{tr}(T)=1$, and
+    In the PSD-corrected form, the rank-one factorization hypothesis is
+    replaced by $T\ge0$, $\operatorname{tr}(T)=1$, and
     $\operatorname{tr}(T^m)=1$ for all $m>0$.
 \end{theorem}
 
@@ -245,11 +261,14 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    The doubled-index transfer condition is transfer-map idempotence. Applying
-    the converse direction of
-    Theorem~\ref{thm:mpdo_rfp_via_fusion_iff} to that RFP witness yields
-    fusion-isometry data at every positive blocked size; evaluating it at size $2$
-    produces the blocked witness.
+    The doubled-index transfer condition is transfer-map idempotence, and
+    \[
+        \E_K\circ\E_K=\E_K
+        \Longrightarrow \operatorname{RFP}(K)
+        \Longrightarrow \operatorname{FusionWitness}_{2}(K)
+    \]
+    by the converse direction of Theorem~\ref{thm:mpdo_rfp_via_fusion_iff},
+    evaluated at blocked size $2$.
 \end{proof}
 
 \begin{theorem}[Blocked-RFP data give a blocked fusion-isometry witness]
@@ -384,7 +403,10 @@
         thm:simple_mpdo_rfp_chain_of_data}
     Assume the local hypotheses of
     \cite[Lemmas~C.2, C.4, and~C.5]{Cirac2016MPDO_arXiv} and the assembled
-    $\eta$-local product form, with the conditional rank-one criterion for $T$
+    $\eta$-local product form, with the rank-one factorization
+    \[
+        T = a b^\top, \qquad a \cdot b = 1,
+    \]
     and the doubled-index transfer equation
     \[
         \E_K\circ\E_K=\E_K.
@@ -395,8 +417,8 @@
     fusion-isometry witness at size $2$, and satisfies the
     transfer-map fusion formulation of idempotence. The
     PSD-corrected form uses $T\ge0$ together with
-    $\operatorname{tr}(T^m)=1$ for all $m>0$ in place of the conditional
-    matrix rank-one hypothesis.
+    $\operatorname{tr}(T^m)=1$ for all $m>0$ in place of the rank-one
+    factorization hypothesis.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -422,11 +444,21 @@
 \begin{proof}\leanok
     The commuting-form and doubled-index transfer hypotheses give the GSNNCH
     branch via
-    Theorem~\ref{thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl}.
-    The blocked witness is Theorem~\ref{thm:structural_implies_rfp_blocked}. The
-    full transfer-map fusion formulation follows by applying the converse direction
-    of Theorem~\ref{thm:mpdo_rfp_via_fusion_iff} to the doubled-index transfer
-    condition, which is transfer-map idempotence.
+    Theorem~\ref{thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl}. The
+    doubled-index transfer condition is transfer-map idempotence, and
+    \[
+        \E_K\circ\E_K=\E_K \Longrightarrow
+        \operatorname{RFP}(K) \Longrightarrow
+        \operatorname{RFP}_{\mathrm{fusion}}(K),
+    \]
+    \[
+        \E_K\circ\E_K=\E_K \Longrightarrow
+        \operatorname{RFP}(K) \Longrightarrow
+        \operatorname{FusionWitness}_{2}(K),
+    \]
+    the first by the converse direction of
+    Theorem~\ref{thm:mpdo_rfp_via_fusion_iff}, the second by
+    Theorem~\ref{thm:structural_implies_rfp_blocked}.
 \end{proof}
 
 \begin{remark}[Missing implication for the GSNNCH branch]
