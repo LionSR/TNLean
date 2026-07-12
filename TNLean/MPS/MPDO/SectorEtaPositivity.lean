@@ -234,8 +234,12 @@ theorem etaOfSectorTensors_kronecker_posSemidef
 
 /-! ### The neighboring operators of the sector tensors -/
 
-/-- The neighboring operators built from the sector tensors are the explicit
-contraction family of those tensors. -/
+/-- The `sectorEta` operator computed from the concrete sector-tensor
+representatives `sectorTensorL` and `sectorTensorR` equals the generic
+`etaOfSectorTensors` family applied to the same tensors.  This bridge lemma
+transfers the abstract positivity results proved above for
+`etaOfSectorTensors` to the concrete `sectorEta` operators used in the rest
+of the development. -/
 theorem sectorEta_eq_etaOfSectorTensors
     (K : MPOTensor d D) (hK : K.IsInjective) (hη : EtaStructure ρ)
     (R : Matrix (Fin D) (Fin D) ℂ) (α₁ β₃ : Fin D) (k h : Fin hη.m) :
@@ -284,9 +288,9 @@ theorem sectorEta_kronecker_posSemidef
 
 /-- **The pairwise positivity choice.** If the neighboring operators of a
 pair of sectors are both nonzero, positivity of `η_{k,h} ⊗ η_{h,k}` yields a
-scalar `c ≠ 0` with `c • η_{k,h}` and `c⁻¹ • η_{h,k}` positive semidefinite.
-The rescaled pair represents the same Kronecker product, so the choice
-absorbs the scalar into the sector tensors as in the source.
+scalar `c ≠ 0` with `c • η_{k,h}` and `c⁻¹ • η_{h,k}` positive semidefinite
+and with the rescaled pair representing the same Kronecker product, so the
+choice absorbs the scalar into the sector tensors as in the source.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1446--1450. -/
 theorem exists_smul_posSemidef_sectorEta
@@ -297,7 +301,11 @@ theorem exists_smul_posSemidef_sectorEta
     (hkh : sectorEta K hK hη R α₁ β₃ k h ≠ 0)
     (hhk : sectorEta K hK hη R α₁ β₃ h k ≠ 0) :
     ∃ c : ℂ, c ≠ 0 ∧ (c • sectorEta K hK hη R α₁ β₃ k h).PosSemidef ∧
-      (c⁻¹ • sectorEta K hK hη R α₁ β₃ h k).PosSemidef :=
+      (c⁻¹ • sectorEta K hK hη R α₁ β₃ h k).PosSemidef ∧
+      Matrix.kroneckerMap (· * ·) (c • sectorEta K hK hη R α₁ β₃ k h)
+          (c⁻¹ • sectorEta K hK hη R α₁ β₃ h k) =
+        Matrix.kroneckerMap (· * ·) (sectorEta K hK hη R α₁ β₃ k h)
+          (sectorEta K hK hη R α₁ β₃ h k) :=
   Matrix.exists_smul_posSemidef_of_kronecker_posSemidef
     (sectorEta_kronecker_posSemidef K hK R hρ hη hm hM k h) hkh hhk
 
@@ -331,9 +339,12 @@ theorem exists_explicitEtaOperators_sectorEta
       sectorEta K hK hη R α₁ β₃ h k = 0) :
     ∃ data : ExplicitEtaOperators hη,
       (∀ k, data.eta k k = sectorEta K hK hη R α₁ β₃ k k) ∧
-      ∀ k h, ∃ c : ℂ, c ≠ 0 ∧
+      (∀ k h, ∃ c : ℂ, c ≠ 0 ∧
         data.eta k h = c • sectorEta K hK hη R α₁ β₃ k h ∧
-        data.eta h k = c⁻¹ • sectorEta K hK hη R α₁ β₃ h k := by
+        data.eta h k = c⁻¹ • sectorEta K hK hη R α₁ β₃ h k) ∧
+      ∀ k h, Matrix.kroneckerMap (· * ·) (data.eta k h) (data.eta h k) =
+        Matrix.kroneckerMap (· * ·) (sectorEta K hK hη R α₁ β₃ k h)
+          (sectorEta K hK hη R α₁ β₃ h k) := by
   classical
   have hpair : ∀ k h, ∃ c : ℂ, c ≠ 0 ∧
       (c • sectorEta K hK hη R α₁ β₃ k h).PosSemidef ∧
@@ -345,12 +356,38 @@ theorem exists_explicitEtaOperators_sectorEta
         exact Matrix.PosSemidef.zero
       · rw [hsym k h h0, smul_zero]
         exact Matrix.PosSemidef.zero
-    · exact exists_smul_posSemidef_sectorEta K hK R hρ hη hm hM k h h0
-        fun hz => h0 (hsym h k hz)
+    · obtain ⟨c, hc, hpos1, hpos2, -⟩ :=
+        exists_smul_posSemidef_sectorEta K hK R hρ hη hm hM k h h0
+          fun hz => h0 (hsym h k hz)
+      exact ⟨c, hc, hpos1, hpos2⟩
+  -- The scalar assigned to the ordered pair `(k, h)`, together with its
+  -- defining equalities against both `sectorEta k h` and `sectorEta h k`.
+  -- Proved once and reused for the pairwise-scalar and block-preservation
+  -- conjuncts below, so both refer to the same witness `c`.
+  have hexists : ∀ k h, ∃ c : ℂ, c ≠ 0 ∧
+      (if k = h then 1 else if k ≤ h then (hpair k h).choose
+        else ((hpair h k).choose)⁻¹) • sectorEta K hK hη R α₁ β₃ k h =
+        c • sectorEta K hK hη R α₁ β₃ k h ∧
+      (if h = k then 1 else if h ≤ k then (hpair h k).choose
+        else ((hpair k h).choose)⁻¹) • sectorEta K hK hη R α₁ β₃ h k =
+        c⁻¹ • sectorEta K hK hη R α₁ β₃ h k := by
+    intro k h
+    by_cases hkh : k = h
+    · subst hkh
+      exact ⟨1, one_ne_zero, by simp, by simp⟩
+    · by_cases hle : k ≤ h
+      · have hgt : ¬h ≤ k := fun hle' => hkh (le_antisymm hle hle')
+        exact ⟨(hpair k h).choose, (hpair k h).choose_spec.1,
+          by simp [hkh, hle], by simp [Ne.symm hkh, hgt]⟩
+      · have hlt : h ≤ k := le_of_not_ge hle
+        refine ⟨((hpair h k).choose)⁻¹, inv_ne_zero (hpair h k).choose_spec.1,
+          by simp [hkh, hle], ?_⟩
+        rw [inv_inv]
+        simp [Ne.symm hkh, hlt]
   refine ⟨⟨fun k h =>
       (if k = h then 1 else if k ≤ h then (hpair k h).choose
         else ((hpair h k).choose)⁻¹) • sectorEta K hK hη R α₁ β₃ k h,
-      ?_⟩, ?_, ?_⟩
+      ?_⟩, ?_, hexists, ?_⟩
   · intro k h
     by_cases hkh : k = h
     · subst hkh
@@ -361,18 +398,9 @@ theorem exists_explicitEtaOperators_sectorEta
   · intro k
     simp
   · intro k h
-    by_cases hkh : k = h
-    · subst hkh
-      exact ⟨1, one_ne_zero, by simp, by simp⟩
-    · by_cases hle : k ≤ h
-      · have hgt : ¬h ≤ k := fun hle' => hkh (le_antisymm hle hle')
-        exact ⟨(hpair k h).choose, (hpair k h).choose_spec.1,
-          by simp [hkh, hle], by simp [Ne.symm hkh, hgt]⟩
-      · have hlt : h ≤ k := le_of_not_ge hle
-        refine ⟨((hpair h k).choose)⁻¹,
-          inv_ne_zero (hpair h k).choose_spec.1,
-          by simp [hkh, hle], ?_⟩
-        rw [inv_inv]
-        simp [Ne.symm hkh, hlt]
+    obtain ⟨c, hc, heq1, heq2⟩ := hexists k h
+    dsimp only
+    rw [heq1, heq2]
+    exact Matrix.smul_kronecker_smul_inv_eq _ _ hc
 
 end MPOTensor

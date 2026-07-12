@@ -34,6 +34,9 @@ a complex matrix is determined by its quadratic form.
 - `Matrix.exists_smul_posSemidef_of_kronecker_posSemidef`: the positive
   rescaling of the two factors of a nonzero positive semidefinite Kronecker
   product.
+- `Matrix.smul_kronecker_smul_inv_eq`: a reciprocal pair of scalars leaves a
+  Kronecker product unchanged; this is what makes the rescaling of the
+  previous result represent the same product.
 -/
 
 open scoped Matrix ComplexOrder Kronecker
@@ -122,16 +125,29 @@ theorem star_dotProduct_kronecker_mulVec_prod
   refine Finset.sum_congr rfl fun i' _ => Finset.sum_congr rfl fun j' _ => ?_
   ring
 
+/-- A reciprocal pair of scalars leaves a Kronecker product unchanged: for
+any nonzero `c`, `(c • A) ⊗ (c⁻¹ • B) = A ⊗ B`.  This holds for arbitrary
+matrix shapes and needs no positivity hypothesis; it is the algebraic fact
+that makes the rescaling in
+`Matrix.exists_smul_posSemidef_of_kronecker_posSemidef` represent the same
+product as the original factors. -/
+theorem smul_kronecker_smul_inv_eq {l p q r : Type*}
+    (A : Matrix l p ℂ) (B : Matrix q r ℂ) {c : ℂ} (hc : c ≠ 0) :
+    (c • A) ⊗ₖ (c⁻¹ • B) = A ⊗ₖ B := by
+  rw [smul_kronecker, kronecker_smul, smul_smul, mul_inv_cancel₀ hc, one_smul]
+
 /-- **Positive rescaling of Kronecker factors.** If a Kronecker product of
 two nonzero complex matrices is positive semidefinite, then there is a
 nonzero scalar `c` such that `c • A` and `c⁻¹ • B` are both positive
-semidefinite.  Since `(c • A) ⊗ (c⁻¹ • B) = A ⊗ B`, the rescaled factors
-represent the same product. -/
+semidefinite.  By `Matrix.smul_kronecker_smul_inv_eq`,
+`(c • A) ⊗ (c⁻¹ • B) = A ⊗ B`, so the rescaled factors represent the same
+product. -/
 theorem exists_smul_posSemidef_of_kronecker_posSemidef
     {m n : Type*} [Finite m] [Finite n]
     {A : Matrix m m ℂ} {B : Matrix n n ℂ}
     (hAB : (A ⊗ₖ B).PosSemidef) (hA : A ≠ 0) (hB : B ≠ 0) :
-    ∃ c : ℂ, c ≠ 0 ∧ (c • A).PosSemidef ∧ (c⁻¹ • B).PosSemidef := by
+    ∃ c : ℂ, c ≠ 0 ∧ (c • A).PosSemidef ∧ (c⁻¹ • B).PosSemidef ∧
+      (c • A) ⊗ₖ (c⁻¹ • B) = A ⊗ₖ B := by
   have := Fintype.ofFinite m
   have := Fintype.ofFinite n
   obtain ⟨v₀, ha⟩ := exists_star_dotProduct_mulVec_ne_zero hA
@@ -141,7 +157,7 @@ theorem exists_smul_posSemidef_of_kronecker_posSemidef
     intro x y
     rw [← star_dotProduct_kronecker_mulVec_prod]
     exact hAB.dotProduct_mulVec_nonneg _
-  refine ⟨star w₀ ⬝ᵥ B *ᵥ w₀, hc, ?_, ?_⟩
+  refine ⟨star w₀ ⬝ᵥ B *ᵥ w₀, hc, ?_, ?_, ?_⟩
   · refine posSemidef_of_forall_star_dotProduct_mulVec_nonneg fun x => ?_
     have hx : star x ⬝ᵥ ((star w₀ ⬝ᵥ B *ᵥ w₀) • A) *ᵥ x =
         (star x ⬝ᵥ A *ᵥ x) * (star w₀ ⬝ᵥ B *ᵥ w₀) := by
@@ -158,5 +174,6 @@ theorem exists_smul_posSemidef_of_kronecker_posSemidef
     have hpos : 0 < (star v₀ ⬝ᵥ A *ᵥ v₀) * (star w₀ ⬝ᵥ B *ᵥ w₀) :=
       lt_of_le_of_ne (hq v₀ w₀) (Ne.symm (mul_ne_zero ha hc))
     exact mul_nonneg (hq v₀ y) (le_of_lt (RCLike.inv_pos.mpr hpos))
+  · exact smul_kronecker_smul_inv_eq A B hc
 
 end Matrix
