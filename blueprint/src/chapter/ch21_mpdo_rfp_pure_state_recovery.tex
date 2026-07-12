@@ -148,6 +148,7 @@
 \begin{definition}[Orthogonally controlled Kraus map]
     \label{def:mpdo_controlled_kraus_map}
     \lean{Matrix.controlledKrausMap}
+    \lean{Matrix.controlledKrausMap_apply_of_ne}
     \leanok
     \uses{def:mpdo_rectangular_kraus_map}
     Let $H=\bigoplus_k H_k$ and $K=\bigoplus_k K_k$. For each $k$, let
@@ -158,9 +159,8 @@
         \mathcal C(X)
         =\sum_{k,a}\widetilde A_{k,a}X\widetilde A_{k,a}^{\dagger}.
     \]
-    In particular, $\mathcal C$ discards the off-diagonal blocks between
-    distinct summands. This is the sector control in the definitions of
-    $\mathcal T_1$ and $\mathcal S_1$ in
+    In particular, $\mathcal C(X)_{kl}=0$ for $k\ne l$. This is the sector
+    control in the definitions of $\mathcal T_1$ and $\mathcal S_1$ in
     \cite[Appendix~C.2, lines~1523--1535 and~1548--1555]
       {Cirac2016MPDO_arXiv}.
 \end{definition}
@@ -555,7 +555,8 @@
     \[
         \E_{A^{\mathrm{MPO}}}\circ\E_{A^{\mathrm{MPO}}}
         = \E_{A^{\mathrm{MPO}}}
-        \iff A \text{ is RFP}.
+        \iff
+        \E_A\circ\E_A=\E_A.
     \]
 \end{theorem}
 

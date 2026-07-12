@@ -51,19 +51,31 @@
     \leanok
     \uses{def:mpdo_bnt_label_theorem_witness}
     A proposition-level BNT-label theorem witness contains the source-side
-    same-length product law, the idempotent scalar law, the positive-length
-    trace-power law, and positivity of the diagonal
-    $\chi_{\alpha,\beta,\gamma}$-entries. After unpacking the witness, the
-    same-length product and idempotent equations can first be written with the
-    BNT-label coefficients $c^{(L)}_{\alpha,\beta,\gamma}$, and then with
-    the coefficients expressed as
-    $\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{\,L})$ and
-    $\operatorname{tr}(\chi_{\alpha,\beta,\gamma})$, respectively. At
-    every positive length, the BNT-label coefficient family also agrees with
-    the canonical coefficient family determined by these $\chi$-matrices.
-    Consequently, the product and idempotent predicates may be stated directly
-    using that canonical coefficient family, and the same displayed source
-    equations hold with those canonical coefficients.
+    same-length product law, which holds for every positive length $L$, and
+    the idempotent scalar law,
+    \[
+        O_L(M_\alpha)O_L(M_\beta)
+        = \sum_\gamma c^{(L)}_{\alpha,\beta,\gamma} O_L(M_\gamma),
+        \qquad
+        m_\gamma = \sum_{\alpha,\beta} c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta.
+    \]
+    A witness also carries the positive-length trace-power law
+    $c^{(L)}_{\alpha,\beta,\gamma}
+        = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{\,L})$
+    and positivity of the diagonal $\chi_{\alpha,\beta,\gamma}$-entries.
+    Substituting the trace-power law into the two equations above rewrites
+    them with the coefficients as $\chi$-traces,
+    \[
+        O_L(M_\alpha)O_L(M_\beta)
+        = \sum_\gamma \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{\,L}) O_L(M_\gamma),
+        \qquad
+        m_\gamma
+        = \sum_{\alpha,\beta} \operatorname{tr}(\chi_{\alpha,\beta,\gamma}) m_\alpha m_\beta.
+    \]
+    At every positive length the BNT-label coefficient family also agrees
+    with the canonical coefficient family determined by these
+    $\chi$-matrices, so both pairs of equations above hold equally with
+    that canonical family in place of $c^{(L)}_{\alpha,\beta,\gamma}$.
 \end{theorem}
 \begin{proof}\leanok
     Unpack the existential witness and apply the corresponding witness-level
@@ -145,12 +157,17 @@
     \leanok
     \uses{def:mpdo_bnt_label_theorem_witness,
         thm:mpdo_bnt_label_theorem_data_blocked_coeff_eq}
-    An existential BNT-label theorem witness gives the comparison between the
-    blocked-basis coefficients and the BNT-label coefficients through the
-    source and target label maps. The same comparison is also available with
-    the canonical coefficient family determined by the witness's
-    $\chi$-matrices. The proposition-level nonempty form of the witness
-    gives the same comparisons after choosing a witness.
+    An existential BNT-label theorem witness gives
+    \[
+        c^{(n)}_{i,j,k} = c^{(n)}_{\sigma_n(i),\sigma_n(j),\tau_n(k)}
+    \]
+    between the chosen blocked-basis coefficients and the witness's
+    BNT-label coefficients $c^{(n)}_{\alpha,\beta,\gamma}$, through the
+    source and target label maps $\sigma_n,\tau_n$ carried by the witness.
+    The same comparison holds with the canonical coefficient family
+    determined by the witness's $\chi$-matrices in place of
+    $c^{(n)}_{\alpha,\beta,\gamma}$. The proposition-level nonempty form of
+    the witness gives the same comparisons after choosing a witness.
 \end{theorem}
 \begin{proof}\leanok
     Apply the corresponding theorem-data comparison carried by the witness.
@@ -198,9 +215,15 @@
     \leanok
     \uses{def:mpdo_bnt_label_theorem_witness,
         thm:mpdo_bnt_label_theorem_data_blocked_coeff_eq_trace_pow}
-    An existential BNT-label theorem witness gives the blocked-basis
-    coefficient trace-power formula obtained by pulling the BNT-label
-    $\chi$-matrices back along the blocked-basis comparison maps.
+    For every positive blocked length $n$, an existential BNT-label theorem
+    witness gives the blocked-basis coefficient trace-power formula
+    \[
+        c^{(n)}_{i,j,k}
+        = \operatorname{tr}\bigl(\chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}^{\,n}\bigr),
+    \]
+    obtained by pulling the BNT-label $\chi_{\alpha,\beta,\gamma}$-matrices
+    back along the source and target label maps $\sigma_n,\tau_n$ carried by
+    the witness.
 \end{theorem}
 \begin{proof}\leanok
     Apply the corresponding theorem-data identity carried by the witness.
@@ -221,12 +244,18 @@
     \uses{def:mpdo_bnt_label_theorem_witness,
         thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form}
     An existential BNT-label theorem witness gives a positive blocked-basis
-    $\chi$ trace-power witness for the chosen algebra-structure data. The
-    blocked-basis $\chi$-family is the pullback of the BNT-label
-    $\chi$-family along the source and target comparison maps. The
-    proposition-level nonempty form of the witness gives the corresponding
-    existential blocked-basis trace-power family, both in coefficient form and
-    in matrix-trace form.
+    $\chi$ trace-power witness for the chosen algebra-structure data: a
+    blocked $\chi$-family with positive diagonal entries such that, for
+    every positive blocked length $n$,
+    \[
+        c^{(n)}_{i,j,k} = \operatorname{tr}\bigl(\chi_{n,i,j,k}^{\,n}\bigr).
+    \]
+    The blocked-basis $\chi$-family is the pullback of the BNT-label
+    $\chi$-family along the source and target comparison maps
+    $\sigma_n,\tau_n$. The proposition-level nonempty form of the witness
+    gives the same existential blocked-basis family, stated either through
+    this trace-power predicate or through the coefficient equation it
+    unfolds to.
 \end{theorem}
 \begin{proof}\leanok
     Apply the corresponding theorem-data consequence carried by the witness.
@@ -281,9 +310,12 @@
     \uses{def:mpdo_bnt_label_theorem_witness,
         thm:mpdo_bnt_label_theorem_witness_to_positive_blocked_chi_trace_power_form,
         thm:mpdo_positive_blocked_structure_chi_eq_trace_matrix_pow}
-    The positive-length blocked-basis coefficients are traces of powers of the
-    pulled-back blocked-basis $\chi$-matrices obtained from an existential
-    BNT-label theorem witness.
+    For every positive blocked length $n$, the blocked-basis coefficients
+    obtained from an existential BNT-label theorem witness are traces of
+    powers of the pulled-back blocked-basis $\chi$-matrices,
+    \[
+        c^{(n)}_{i,j,k} = \operatorname{tr}\bigl(\chi_{n,i,j,k}^{\,n}\bigr).
+    \]
 \end{theorem}
 \begin{proof}\leanok
     Apply the trace-power identity of the positive blocked-basis

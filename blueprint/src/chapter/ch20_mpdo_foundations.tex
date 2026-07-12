@@ -40,7 +40,8 @@
     \[
         M^{u,v} := M^{i_1 j_1} M^{i_2 j_2} \cdots M^{i_N j_N} \in \MN{D}.
     \]
-    The empty pair of words evaluates to $\Id_D$, and word pairs of different
+    The empty pair of words evaluates to the identity,
+    $M^{\varnothing,\varnothing} = \Id_D$, and word pairs of different
     lengths evaluate to $0$.
 \end{definition}
 
@@ -176,7 +177,8 @@ legs cyclically and taking the resulting trace.
     \[
         (M^\dagger)^{ij} = (M^{ji})^\dagger.
     \]
-    A tensor equals its adjoint tensor precisely when it is Hermitian.
+    A tensor equals its adjoint tensor, $M^\dagger = M$, precisely when it
+    is Hermitian.
 \end{definition}
 
 \begin{theorem}[Reflection identity for the adjoint tensor]
@@ -202,14 +204,23 @@ legs cyclically and taking the resulting trace.
 
 \begin{proof}
     \leanok
-    Word evaluation of the adjoint tensor conjugate-transposes the evaluation
-    of the reversed words with ket and bra exchanged, since the conjugate
-    transpose of a product reverses the factors.  Taking traces gives the
-    entrywise identity.  For an MPDO the density operators are Hermitian, so
-    the complex conjugate of the $(\tau\circ\mathrm{rev},
-    \sigma\circ\mathrm{rev})$ entry is the $(\sigma\circ\mathrm{rev},
-    \tau\circ\mathrm{rev})$ entry; positive semidefiniteness is preserved
-    under the simultaneous relabeling of rows and columns by the reflection.
+    At the level of word evaluations, the conjugate transpose of a product
+    reverses the factors, so
+    \[
+        (M^\dagger)^{\sigma,\tau}
+        = \bigl(M^{\tau\circ\mathrm{rev},\,\sigma\circ\mathrm{rev}}\bigr)^\dagger.
+    \]
+    Taking traces gives the entrywise identity
+    \[
+        \rho^{(N)}(M^\dagger)_{\sigma\tau}
+        = \tr\!\bigl((M^{\tau\circ\mathrm{rev},\,\sigma\circ\mathrm{rev}})^\dagger\bigr)
+        = \overline{\rho^{(N)}(M)_{\tau\circ\mathrm{rev},\,\sigma\circ\mathrm{rev}}}.
+    \]
+    For an MPDO, $\rho^{(N)}(M)$ is Hermitian, so
+    $\overline{\rho^{(N)}(M)_{\tau\circ\mathrm{rev},\,\sigma\circ\mathrm{rev}}}
+    = \rho^{(N)}(M)_{\sigma\circ\mathrm{rev},\,\tau\circ\mathrm{rev}}$;
+    positive semidefiniteness is preserved under the simultaneous relabeling
+    of rows and columns by the reflection.
 \end{proof}
 
 \section{Transfer maps}
@@ -230,15 +241,24 @@ legs cyclically and taking the resulting trace.
     \leanok
     \uses{def:mpo_to_mps, def:mpo_transfer_map, def:transfer_map}
     The transfer map of an MPO tensor agrees with the transfer map of its
-    doubled-index MPS view.
+    doubled-index MPS view:
+    \[
+        \E_M = \E_{M^{\mathrm{MPS}}}.
+    \]
 \end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:mpo_to_mps, def:mpo_transfer_map, def:transfer_map}
     After identifying the single physical index of the doubled tensor with a
-    pair $(i,j)$, the single sum defining the MPS transfer map is exactly the
-    double sum defining $\E_M$.
+    pair $(i,j)$, for every $X \in \MN{D}$,
+    \[
+        \E_{M^{\mathrm{MPS}}}(X)
+        = \sum_{(i,j)} M^{\mathrm{MPS}}_{(i,j)}\, X\,
+          \bigl(M^{\mathrm{MPS}}_{(i,j)}\bigr)^\dagger
+        = \sum_{i,j=0}^{d-1} M^{ij} X (M^{ij})^\dagger
+        = \E_M(X).
+    \]
 \end{proof}
 
 \begin{theorem}[Positivity of the MPO transfer map]\label{thm:mpo_transfer_pos}
