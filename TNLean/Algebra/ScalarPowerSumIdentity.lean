@@ -237,6 +237,33 @@ theorem sum_pow_eq_implies_card_eq_and_multiset_eq_of_le_max_card
   intro k hk hkcard
   exact h k hk (by simpa using hkcard)
 
+/-- A nonempty finite family of nonzero complex numbers has a nonvanishing
+power sum at some positive exponent no larger than its cardinality.
+
+This is the specialization of the Appendix power-sum lemma used in Lemma L of
+arXiv:1606.00608, lines 1851--1858. -/
+theorem exists_sum_pow_ne_zero_of_pos_card
+    (m : ℕ) (a : Fin m → ℂ) (hm : 0 < m) (ha : ∀ i, a i ≠ 0) :
+    ∃ N : ℕ, 0 < N ∧ N ≤ m ∧ ∑ i : Fin m, a i ^ N ≠ 0 := by
+  classical
+  by_contra h
+  have hzero : ∀ N : ℕ, 0 < N → N ≤ m → ∑ i : Fin m, a i ^ N = 0 := by
+    intro N hN hNm
+    by_contra hne
+    exact h ⟨N, hN, hNm, hne⟩
+  let b : Fin 0 → ℂ := fun i ↦ Fin.elim0 i
+  have hb : ∀ i, b i ≠ 0 := fun i ↦ Fin.elim0 i
+  have hp : ∀ N : ℕ, 0 < N → N ≤ max m 0 →
+      ∑ i : Fin m, a i ^ N = ∑ i : Fin 0, b i ^ N := by
+    intro N hN hNmax
+    have hNm : N ≤ m := by simpa using hNmax
+    rw [hzero N hN hNm]
+    simp
+  have hcard :=
+    (sum_pow_eq_implies_card_eq_and_multiset_eq_of_le_max_card
+      m 0 a b ha hb hp).1
+  exact (Nat.ne_of_gt hm) hcard
+
 
 private lemma list_pow_sum_eq_ofFn (f : Fin m → ℂ) (l : List ℂ)
     (h_ofFn : List.ofFn f = l) (k : ℕ) :

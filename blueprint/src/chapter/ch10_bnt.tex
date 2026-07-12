@@ -490,6 +490,32 @@ multiset with multiplicity.
     $N=0$ gives $x_a=x_b$.
 \end{proof}
 
+\begin{corollary}[A nonzero finite family has a nonvanishing power sum]
+    \label{cor:nonvanishing_finite_power_sum}
+    \lean{Matrix.exists_sum_pow_ne_zero_of_pos_card}
+    \leanok
+    \uses{thm:bounded_power_sum_multiset}
+    Let $m\geq 1$ and let $\lambda_0,\ldots,\lambda_{m-1}\in\C$ be nonzero.
+    Then there is an exponent $N$ with $1\leq N\leq m$ such that
+    \[
+        \sum_{q=0}^{m-1}\lambda_q^N\neq 0.
+    \]
+    This is the consequence of the Appendix power-sum lemma used in the proof
+    of Lemma~L
+    \cite[Appendix~C.3, lines~1851--1858]{Cirac2016MPDO_arXiv}; the finite-range
+    comparison is
+    \cite[Appendix~A, lines~1155--1163]{Cirac2016MPDO_arXiv}.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{thm:bounded_power_sum_multiset}
+    Suppose that every power sum with $1\leq N\leq m$ vanishes. Comparing
+    $\lambda_0,\ldots,\lambda_{m-1}$ with the empty family in
+    Theorem~\ref{thm:bounded_power_sum_multiset} gives $m=0$, contradicting
+    $m\geq 1$.
+\end{proof}
+
 \begin{theorem}[Equal power sums imply equal multisets]\label{thm:power_sum_multiset}
     \lean{Matrix.sum_pow_eq_implies_multiset_eq}
     \leanok
