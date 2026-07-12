@@ -198,13 +198,13 @@ theorem isIrreducibleTensor_smul_conj (B : MPSTensor d D)
 /-! ### The unital gauge of a corner satisfies the Wolf Theorem 6.6 hypotheses -/
 
 /-- **Unital Schwarz data for an irreducible corner.**  The rescaled unital
-gauge `K = spectralUnitalGauge B r ρ` of an irreducible tensor `B` with a
-positive definite transfer eigenvector `ρ` of positive eigenvalue `r`
-(arXiv:1606.00608, lines 220--225: each corner map is rescaled to spectral
-radius one) is a unital Kraus family, is again an irreducible tensor with an
-irreducible transfer map, and its adjoint map has a positive definite fixed
-point.  These are the hypotheses of the cyclic decomposition of the
-peripheral spectrum, Wolf 2012, Theorem 6.6. -/
+gauge $K^v=r^{-1/2}\rho^{-1/2}B^v\rho^{1/2}$ of an irreducible tensor $B$
+with a positive definite transfer eigenvector $\rho$ of positive eigenvalue
+$r$ (arXiv:1606.00608, lines 220--225: each corner map is rescaled to
+spectral radius one) is a unital Kraus family, is again an irreducible
+tensor with an irreducible transfer map, and its adjoint map has a positive
+definite fixed point.  These are the hypotheses of the cyclic decomposition
+of the peripheral spectrum, Wolf 2012, Theorem 6.6. -/
 theorem spectralUnitalGauge_schwarz_setup [NeZero D]
     (B : MPSTensor d D) (hIrr : IsIrreducibleTensor B)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (rad : ℝ) (hρ : ρ.PosDef) (hrad : 0 < rad)
@@ -251,12 +251,13 @@ theorem spectralUnitalGauge_schwarz_setup [NeZero D]
   simpa [Kraus.adjointMap, transferMap_apply, Matrix.conjTranspose_conjTranspose,
     Matrix.mul_assoc] using hσ_fix
 
-/-- **Eigenvalue transport to the unital gauge.**  An eigenvalue `μ` of the
-transfer map of `B` becomes the eigenvalue `μ / r` of the transfer map of the
-rescaled unital gauge `spectralUnitalGauge B r ρ`: the gauge conjugates the
-transfer map by a congruence and divides it by `r`.  In particular the
-peripheral eigenvalues `exp(2πiq/p)` of arXiv:1606.00608, lines 225--230,
-arise from the transfer eigenvalues of modulus `r`. -/
+/-- **Eigenvalue transport to the unital gauge.**  An eigenvalue $\mu$ of
+the transfer map of $B$ becomes the eigenvalue $\mu/r$ of the transfer map
+of the rescaled unital gauge $K^v=r^{-1/2}\rho^{-1/2}B^v\rho^{1/2}$: the
+gauge conjugates the transfer map by a congruence and divides it by $r$.
+In particular the peripheral eigenvalues $e^{2\pi iq/p}$ of
+arXiv:1606.00608, lines 225--230, arise from the transfer eigenvalues of
+modulus $r$. -/
 theorem hasEigenvalue_transferMap_spectralUnitalGauge
     (B : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) (rad : ℝ)
     (hρ : ρ.PosDef) (hrad : 0 < rad) {μ : ℂ}
@@ -593,7 +594,7 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
               rw [hY]; simp only [Matrix.mul_assoc]
       have hcancel := hVScancel hZ
       have horth : P (0 - 1) * P 0 = 0 :=
-        MPSTensor.orthogonalProjection_mul_eq_zero_of_sum_eq_one P hPproj hPsum h01
+        orthogonalProjection_mul_eq_zero_of_sum_eq_one P hPproj hPsum h01
       calc P (0 - 1) * K v
           = P (0 - 1) * (P (0 - 1) * K v) := by
             rw [← Matrix.mul_assoc, (hPproj (0 - 1)).2]

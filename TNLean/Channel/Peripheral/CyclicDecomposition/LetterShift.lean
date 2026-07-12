@@ -19,13 +19,25 @@ with each projection.
 
 * `one_sub_mul_kraus_mul_eq_zero_of_transferMap_proj` — each Kraus operator
   maps the range of `P'` into the range of `P` when the map sends `P'` to `P`.
-* `orthogonalProjection_mul_eq_zero_of_sum_eq_one` — orthogonal projections
-  summing to the identity are mutually orthogonal.
 * `kraus_mul_cyclicProj` — the letter-level cyclic shift
-  `K v * P (k + 1) = P k * K v`.
+  $K_vP_{k+1}=P_kK_v$.
 * `evalWord_mul_cyclicProj` — the word-level shift
-  `evalWord K w * P k = P (k - w.length) * evalWord K w`.
+  $A^wP_k=P_{k-\ell}A^w$ for words of length $\ell$.
 * `cyclicProj_ne_zero` — no cyclic projection vanishes.
+
+The mutual orthogonality of projections summing to the identity is
+`orthogonalProjection_mul_eq_zero_of_sum_eq_one` in
+`TNLean/Channel/Irreducible/Basic.lean`.
+
+The letter shift here assumes the resolution of the identity
+$\sum_kP_k=1$ and no normalization of the Kraus family; the companion
+statement `offDiag_shift_of_adjoint_cyclic_shift` in
+`TNLean/MPS/CanonicalForm/CyclicSectors/FixedAdjoint.lean` derives the same
+shift for the adjoint orientation from unitality of the family through the
+Kadison--Schwarz equality, without the resolution of the identity.  Neither
+hypothesis set implies the other, so the two statements coexist; both
+instantiate to the cyclic decomposition, where the projections sum to the
+identity and the gauged family is unital.
 
 ## References
 
@@ -77,68 +89,19 @@ theorem one_sub_mul_kraus_mul_eq_zero_of_transferMap_proj
           rw [show ∑ w : Fin r, K w * P' * (K w)ᴴ = P from by
             simpa [transferMap_apply] using hmap]
       _ = 0 := by rw [h1PP, Matrix.zero_mul]
-  -- Trace positivity extracts each summand.
-  intro v
-  have htr_sum : ∑ w : Fin r, (T w * (T w)ᴴ).trace = 0 := by
-    rw [← Matrix.trace_sum, hsum, Matrix.trace_zero]
-  have htr : (T v * (T v)ᴴ).trace = 0 :=
-    (Finset.sum_eq_zero_iff_of_nonneg fun w _ =>
-      (Matrix.posSemidef_self_mul_conjTranspose (T w)).trace_nonneg).mp
-      htr_sum v (Finset.mem_univ v)
-  exact Matrix.trace_mul_conjTranspose_self_eq_zero_iff.mp htr
-
-/-- **Orthogonal projections summing to the identity are mutually
-orthogonal**: `P k * P l = 0` for `k ≠ l`.  Compressing the resolution of the
-identity by `P k` exhibits a vanishing sum of positive semidefinite
-matrices. -/
-theorem orthogonalProjection_mul_eq_zero_of_sum_eq_one
-    (P : Fin m → MatrixAlg n)
-    (hproj : ∀ k, IsOrthogonalProjection (P k))
-    (hsum : ∑ k : Fin m, P k = 1) :
-    ∀ {k l : Fin m}, k ≠ l → P k * P l = 0 := by
-  classical
-  -- It suffices to prove `P l * P k = 0` for `l ≠ k` and take adjoints.
-  suffices h : ∀ k l : Fin m, k ≠ l → P l * P k = 0 by
-    intro k l hkl
-    have := congrArg Matrix.conjTranspose (h k l hkl)
-    simpa [Matrix.conjTranspose_mul, (hproj k).1.eq, (hproj l).1.eq] using this
-  intro k l hkl
-  -- `∑ j ≠ k, P k P j P k = P k - P k = 0`, a vanishing sum of PSD matrices.
-  have hzero : ∑ j ∈ Finset.univ.erase k, P k * P j * P k = 0 := by
-    have hfull : ∑ j : Fin m, P k * P j * P k = P k := by
-      calc ∑ j : Fin m, P k * P j * P k
-          = P k * (∑ j : Fin m, P j) * P k := by
-            rw [Finset.mul_sum, Finset.sum_mul]
-        _ = P k := by rw [hsum, Matrix.mul_one, (hproj k).2]
-    have hsplit := Finset.add_sum_erase Finset.univ
-      (fun j => P k * P j * P k) (Finset.mem_univ k)
-    rw [hfull] at hsplit
-    have hkk : P k * P k * P k = P k := by rw [(hproj k).2, (hproj k).2]
-    rw [hkk] at hsplit
-    have hsplit' : P k + ∑ j ∈ Finset.univ.erase k, P k * P j * P k = P k + 0 := by
-      rw [add_zero]; exact hsplit
-    exact add_left_cancel hsplit'
-  -- Each summand is `(P j P k)ᴴ (P j P k)`, hence PSD with nonnegative trace.
-  have hexp : ∀ j, P k * P j * P k = (P j * P k)ᴴ * (P j * P k) := by
-    intro j
-    rw [Matrix.conjTranspose_mul, (hproj j).1.eq, (hproj k).1.eq]
-    calc P k * P j * P k = P k * (P j * P j) * P k := by rw [(hproj j).2]
-      _ = P k * P j * (P j * P k) := by simp only [Matrix.mul_assoc]
-  have htr_sum : ∑ j ∈ Finset.univ.erase k, ((P j * P k)ᴴ * (P j * P k)).trace = 0 := by
-    rw [← Matrix.trace_sum, ← Finset.sum_congr rfl fun j _ => hexp j, hzero,
-      Matrix.trace_zero]
-  have htr : ((P l * P k)ᴴ * (P l * P k)).trace = 0 :=
-    (Finset.sum_eq_zero_iff_of_nonneg fun j _ =>
-      (Matrix.posSemidef_conjTranspose_mul_self (P j * P k)).trace_nonneg).mp
-      htr_sum l (Finset.mem_erase.mpr ⟨Ne.symm hkl, Finset.mem_univ l⟩)
-  exact Matrix.trace_conjTranspose_mul_self_eq_zero_iff.mp htr
+  exact Matrix.eq_zero_of_sum_mul_conjTranspose_eq_zero T hsum
 
 variable [NeZero m]
 
 /-- **Letter-level cyclic shift** (Wolf Theorem 6.6).  For a cyclic family of
 orthogonal projections summing to the identity and permuted by the transfer
-map, `E(P (k+1)) = P k`, each Kraus operator intertwines consecutive
-projections: `K v * P (k + 1) = P k * K v`. -/
+map, $\mathcal E(P_{k+1})=P_k$, each Kraus operator intertwines consecutive
+projections: $K_vP_{k+1}=P_kK_v$.
+
+For the adjoint orientation under a unitality hypothesis instead of the
+resolution of the identity, see `offDiag_shift_of_adjoint_cyclic_shift` in
+`TNLean/MPS/CanonicalForm/CyclicSectors/FixedAdjoint.lean`; the two
+hypothesis sets are incomparable (see the module docstring). -/
 theorem kraus_mul_cyclicProj
     (K : Fin r → MatrixAlg n) (P : Fin m → MatrixAlg n)
     (hproj : ∀ k, IsOrthogonalProjection (P k))
@@ -177,9 +140,10 @@ theorem kraus_mul_cyclicProj
     (fun h => absurd (Finset.mem_univ k) h)]
   exact hinto k
 
-/-- **Word-level cyclic shift**: a word of length `ℓ` moves each cyclic
-projection back by `ℓ` steps, `evalWord K w * P k = P (k - ℓ) * evalWord K w`.
-In particular a word of length `m` commutes with every cyclic projection. -/
+/-- **Word-level cyclic shift**: a word $A^w=K_{w_1}\cdots K_{w_\ell}$ of
+length $\ell$ moves each cyclic projection back by $\ell$ steps,
+$A^wP_k=P_{k-\ell}A^w$.  In particular a word of length $m$ commutes with
+every cyclic projection. -/
 theorem evalWord_mul_cyclicProj
     (K : Fin r → MatrixAlg n) (P : Fin m → MatrixAlg n)
     (hproj : ∀ k, IsOrthogonalProjection (P k))
