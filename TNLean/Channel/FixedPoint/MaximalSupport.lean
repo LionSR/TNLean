@@ -289,8 +289,8 @@ theorem exists_maximalSupport_fixedPoint (K : Fin d → Mat) (h_tp : IsTP K) :
 trace-preserving Kraus map $T$ there is a positive semidefinite fixed point $\rho_0$ such
 that every fixed point $X$ of $T$ arises as $X = \sqrt{\rho_0}\, Y \sqrt{\rho_0}$ for a
 corner-supported $Y$ with $\sqrt{\rho_0}\, Y \sqrt{\rho_0}$ fixed by $T$: conjugation by
-$\sqrt{\rho_0}$ maps the carrier of the star-subalgebra
-`Kraus.weightedCornerFixedPointsStarSubalgebra` onto the full fixed-point set, so that
+$\sqrt{\rho_0}$ maps the carrier of the weighted corner star-subalgebra
+(`Kraus.weightedCornerFixedPointsStarSubalgebra`) onto the full fixed-point set, so that
 set realizes
 $$\rho_0^{-1/2}\,\{X \mid T(X) = X\}\,\rho_0^{-1/2},$$
 with the inverse square root taken on the support of $\rho_0$. This is the conjugated
