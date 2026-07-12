@@ -40,8 +40,8 @@ the predicate.
   completely positive maps used in Definition 4.1.
 * `MPOTensor.physCloseN`: the length-$N$ physical operator as a linear map in
   the virtual operator $X$.
-* `MPOTensor.physClose1`, `MPOTensor.physClose2`: the one-site and two-site
-  specializations used in Definition 4.1.
+* `MPOTensor.physClose1`, `MPOTensor.physClose2`, `MPOTensor.physClose3`: the
+  one-site, two-site, and three-site specializations.
 * `MPOTensor.IsRFPViaTS`: Definition 4.1, the tp-CP-map renormalization
   fixed point.
 
@@ -176,6 +176,60 @@ theorem physCloseN_two_eq_physClose2 (M : MPOTensor d D) :
       physClose2 M := by
   ext X i j
   simp [Matrix.coe_reindexLinearEquiv, finTwoArrowEquiv_symm_apply]
+
+/-! ### The three-site physical operator -/
+
+/-- The canonical right-associated identification of three-coordinate
+configurations with triples: separate the first coordinate, then identify the
+remaining two-coordinate configuration with a pair. -/
+def finThreeArrowEquiv (α : Type*) : (Fin 3 → α) ≃ α × (α × α) :=
+  (Fin.consEquiv fun _ : Fin 3 => α).symm.trans
+    (Equiv.prodCongr (Equiv.refl α) (finTwoArrowEquiv α))
+
+/-- The **three-site physical operator** as a linear map in the virtual operator
+$X$. Its physical indices are right-associated as
+$\operatorname{Fin}(d) \times (\operatorname{Fin}(d) \times \operatorname{Fin}(d))$,
+and its coefficients are
+\[
+  M_3(X)_{(i_0,(i_1,i_2)),(j_0,(j_1,j_2))}
+  = \operatorname{tr}(M^{i_0j_0}M^{i_1j_1}M^{i_2j_2}X).
+\]
+
+When $M=\mathcal K$, this is the operator $\mathcal K_3(X)$ of
+arXiv:1606.00608, Proposition C.7, lines 1510--1516. -/
+noncomputable def physClose3 (M : MPOTensor d D) :
+    Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ]
+      Matrix (Fin d × (Fin d × Fin d)) (Fin d × (Fin d × Fin d)) ℂ where
+  toFun X := Matrix.of fun i j =>
+    Matrix.trace (M i.1 j.1 * M i.2.1 j.2.1 * M i.2.2 j.2.2 * X)
+  map_add' X Y := by
+    ext i j
+    simp [Matrix.mul_add, Matrix.trace_add]
+  map_smul' c X := by
+    ext i j
+    simp [Matrix.trace_smul]
+
+/-- Coefficient formula for the right-associated three-site physical closure.
+For $M=\mathcal K$, this is $\mathcal K_3(X)$ in arXiv:1606.00608,
+Proposition C.7, lines 1510--1516. -/
+@[simp] lemma physClose3_apply (M : MPOTensor d D)
+    (X : Matrix (Fin D) (Fin D) ℂ)
+    (i j : Fin d × (Fin d × Fin d)) :
+    physClose3 M X i j =
+      Matrix.trace (M i.1 j.1 * M i.2.1 j.2.1 * M i.2.2 j.2.2 * X) :=
+  rfl
+
+/-- Under the canonical right-associated identification of three-site
+configurations with triples of physical indices, the general length-three
+closure is `physClose3`. For $M=\mathcal K$, this identifies the two forms of
+$\mathcal K_3(X)$ in arXiv:1606.00608, Proposition C.7, lines 1510--1516. -/
+theorem physCloseN_three_eq_physClose3 (M : MPOTensor d D) :
+    (Matrix.reindexLinearEquiv ℂ ℂ (finThreeArrowEquiv (Fin d))
+        (finThreeArrowEquiv (Fin d))).toLinearMap ∘ₗ physCloseN M 3 =
+      physClose3 M := by
+  ext X i j
+  simp [Matrix.coe_reindexLinearEquiv, finThreeArrowEquiv,
+    Matrix.mul_assoc]
 
 /-! ### MPDO renormalization fixed point (Definition 4.1) -/
 

@@ -775,6 +775,205 @@ strong subadditivity for a normalized three-site reduced state.
     by definition of the neighboring operator.
 \end{proof}
 
+\begin{definition}[Source-minimal physical-sector factorization]
+    \label{def:mpdo_physical_sector_factorization}
+    \lean{MPOTensor.PhysicalSectorFactorization,
+      MPOTensor.PhysicalSectorFactorization.transformedPhysicalSlice,
+      MPOTensor.PhysicalSectorFactorization.transformedPhysicalSlice_eq,
+      MPOTensor.PhysicalSectorFactorization.sectorFinEquiv,
+      MPOTensor.PhysicalSectorFactorization.sectorCoordinateTensor}
+    \lean{MPOTensor.PhysicalSectorFactorization.sectorCoordinateTensor_apply,
+      MPOTensor.PhysicalSectorFactorization.sectorCoordinateTensor_apply_same,
+      MPOTensor.PhysicalSectorFactorization.sectorCoordinateTensor_apply_ne}
+    \lean{MPOTensor.PhysicalSectorFactorization.transformedPhysicalSlice_apply_same,
+      MPOTensor.PhysicalSectorFactorization.transformedPhysicalSlice_apply_ne}
+    \leanok
+    \uses{def:mpo_tensor}
+    A physical-sector factorization of an MPO tensor ${\cal K}$ consists of a
+    finite decomposition
+    \[
+      \mathbb C^d\simeq\bigoplus_k(B_k^L\otimes B_k^R),
+    \]
+    an isometry $U$ on the physical space, and matrix families
+    $(l_k)_\beta$ and $(r_k)_\alpha$ such that every physical slice satisfies
+    \[
+      U\kappa_{\beta,\alpha}U^\dagger
+      =\bigoplus_k(l_k)_\beta\otimes(r_k)_\alpha.
+    \]
+    No positivity, trace factorization, or quantum-Markov decomposition is
+    included in this datum. This is the factorization displayed in
+    \cite[Appendix~C.2, lines~1381--1388]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[Algebraic neighboring contraction]
+    \label{def:mpdo_minimal_neighboring_operator}
+    \lean{MPOTensor.PhysicalSectorFactorization.neighboringOperator,
+      MPOTensor.PhysicalSectorFactorization.neighboringOperator_apply}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization}
+    For sectors $k,h$, contract the common virtual index of the right and
+    left sector tensors:
+    \[
+      \eta_{k,h}
+      =\sum_a(r_k)_a\otimes(l_h)_a.
+    \]
+    This is an operator on $B_k^R\otimes B_h^L$. Positivity is not part of
+    this definition; it is a separate hypothesis in Proposition~C.7.
+\end{definition}
+
+\begin{definition}[Boundary contraction against a virtual matrix]
+    \label{def:mpdo_sector_boundary_operator}
+    \lean{MPOTensor.PhysicalSectorFactorization.boundaryOperator,
+      MPOTensor.PhysicalSectorFactorization.boundaryOperator_apply,
+      MPOTensor.PhysicalSectorFactorization.boundaryOperator_zero,
+      MPOTensor.PhysicalSectorFactorization.boundaryOperator_add,
+      MPOTensor.PhysicalSectorFactorization.boundaryOperator_smul}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization}
+    For an arbitrary virtual matrix $X$, define the outer boundary operator
+    on $B_k^L\otimes B_h^R$ by
+    \[
+      B_{k,h}(X)
+      =\sum_{a,b}X_{b,a}\,(l_k)_a\otimes(r_h)_b.
+    \]
+    The map $X\mapsto B_{k,h}(X)$ is complex-linear. No positivity of $X$ or
+    $B_{k,h}(X)$ is assumed.
+\end{definition}
+
+\begin{definition}[Regrouped two-site sector closure]
+    \label{def:mpdo_two_site_sector_closure}
+    \lean{MPOTensor.PhysicalSectorFactorization.twoSiteRegroupEquiv,
+      MPOTensor.PhysicalSectorFactorization.twoSiteRegroupEquiv_symm_apply,
+      MPOTensor.PhysicalSectorFactorization.twoSiteSectorEmbedding,
+      MPOTensor.PhysicalSectorFactorization.twoSiteSectorClosure}
+    \leanok
+    \uses{def:phys_close, def:mpdo_physical_sector_factorization}
+    First pass to the physical basis selected by $U$, so that each slice is
+    written in the sector coordinates of
+    Definition~\ref{def:mpdo_physical_sector_factorization}. Form the
+    two-site closure of this sector-coordinate tensor, restrict it to the
+    physical sectors $(k,h)$, and reindex its physical factors by
+    \[
+      ((L_k,R_k),(L_h,R_h))
+      \longmapsto ((L_k,R_h),(R_k,L_h)).
+    \]
+    Denote the resulting matrix by ${\cal K}_{2;k,h}(X)$.
+\end{definition}
+
+\begin{theorem}[Two-site closure factorization]
+    \label{thm:mpdo_two_site_sector_closure_factorization}
+    \lean{MPOTensor.PhysicalSectorFactorization.twoSiteSectorClosure_eq}
+    \leanok
+    \uses{def:mpdo_two_site_sector_closure,
+      def:mpdo_minimal_neighboring_operator,
+      def:mpdo_sector_boundary_operator}
+    For every virtual matrix $X$ and every sector pair $(k,h)$,
+    \[
+      {\cal K}_{2;k,h}(X)
+      =B_{k,h}(X)\otimes\eta_{k,h}.
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_two_site_sector_closure,
+      def:mpdo_minimal_neighboring_operator,
+      def:mpdo_sector_boundary_operator,
+      def:phys_close,
+      def:mpdo_physical_sector_factorization}
+    At the regrouped matrix entry indexed by
+    $((\lambda_k,\rho_h),(\rho_k,\lambda_h))$ and
+    $((\lambda'_k,\rho'_h),(\rho'_k,\lambda'_h))$, the virtual trace expands
+    as the scalar
+    \[
+      \sum_{a,b,c}X_{b,a}
+      [(l_k)_a]_{\lambda_k,\lambda'_k}
+      [(r_k)_c]_{\rho_k,\rho'_k}
+      [(l_h)_c]_{\lambda_h,\lambda'_h}
+      [(r_h)_b]_{\rho_h,\rho'_h}.
+    \]
+    Commuting scalar factors and collecting the sums over $(a,b)$ and $c$
+    gives respectively $B_{k,h}(X)$ and $\eta_{k,h}$.
+\end{proof}
+
+\begin{definition}[Regrouped three-site sector closure]
+    \label{def:mpdo_three_site_sector_closure}
+    \lean{MPOTensor.PhysicalSectorFactorization.threeSiteRegroupEquiv,
+      MPOTensor.PhysicalSectorFactorization.threeSiteRegroupEquiv_symm_apply,
+      MPOTensor.PhysicalSectorFactorization.threeSiteSectorEmbedding,
+      MPOTensor.PhysicalSectorFactorization.threeSiteSectorClosure}
+    \leanok
+    \uses{def:phys_close, def:mpdo_physical_sector_factorization}
+    First pass to the physical basis selected by $U$ and form the three-site
+    closure of the resulting sector-coordinate tensor. Restrict this closure
+    to the sectors $(k,l,h)$ and reindex its physical factors by
+    \[
+      ((L_k,R_k),((L_l,R_l),(L_h,R_h)))
+      \longmapsto
+      ((L_k,R_h),((R_k,L_l),(R_l,L_h))).
+    \]
+    Denote the resulting matrix by ${\cal K}_{3;k,l,h}(X)$.
+\end{definition}
+
+\begin{theorem}[Three-site closure factorization]
+    \label{thm:mpdo_three_site_sector_closure_factorization}
+    \lean{MPOTensor.PhysicalSectorFactorization.threeSiteSectorClosure_eq}
+    \leanok
+    \uses{def:mpdo_three_site_sector_closure,
+      def:mpdo_minimal_neighboring_operator,
+      def:mpdo_sector_boundary_operator}
+    For every virtual matrix $X$ and fixed sectors $(k,l,h)$,
+    \[
+      {\cal K}_{3;k,l,h}(X)
+      =B_{k,h}(X)\otimes
+        \bigl(\eta_{k,l}\otimes\eta_{l,h}\bigr).
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_three_site_sector_closure,
+      def:mpdo_minimal_neighboring_operator,
+      def:mpdo_sector_boundary_operator,
+      def:phys_close,
+      def:mpdo_physical_sector_factorization}
+    At the regrouped matrix entry indexed by
+    $((\lambda_k,\rho_h),((\rho_k,\lambda_l),(\rho_l,\lambda_h)))$ and its
+    primed counterpart, the left-hand side is the scalar
+    \[
+      \sum_{a,b,c,e}X_{b,a}
+      [(l_k)_a]_{\lambda_k,\lambda'_k}
+      [(r_k)_c]_{\rho_k,\rho'_k}
+      [(l_l)_c]_{\lambda_l,\lambda'_l}
+      [(r_l)_e]_{\rho_l,\rho'_l}
+      [(l_h)_e]_{\lambda_h,\lambda'_h}
+      [(r_h)_b]_{\rho_h,\rho'_h}.
+    \]
+    Reordering the four finite sums separates the $(a,b)$ boundary
+    contraction from the neighboring contractions indexed by $c$ and $e$,
+    which gives the three factors on the right-hand side.
+\end{proof}
+
+\begin{figure}[ht]
+    \centering
+    \begin{minipage}{0.41\textwidth}
+      \centering
+      \TNMPDOTwoSiteClosureFactorization
+    \end{minipage}\hfill
+    \begin{minipage}{0.56\textwidth}
+      \centering
+      \TNMPDOThreeSiteClosureFactorization
+    \end{minipage}
+    \caption{First each slice is conjugated by $U$ and expressed in the
+    corresponding sector coordinates. After restriction to fixed sectors and
+    the displayed regroupings, the arbitrary-$X$ two- and three-site closures
+    separate into the boundary factor and respectively one or two neighboring
+    contractions. The diagrams do not assert positivity,
+    preparation, recovery, or the full conclusion of Proposition~C.7. They
+    follow the contractions in
+    \cite[lines~638--655 and Appendix~C.2, lines~1435--1448]
+      {Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_sector_closure_factorizations}
+\end{figure}
+
 \begin{definition}[Closed sector tensors]%
     \label{def:mpdo_closed_sector_tensors}
     \lean{MPOTensor.closedSectorL}
