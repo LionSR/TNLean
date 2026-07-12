@@ -67,6 +67,17 @@ def threeSiteRegroupEquiv (F : PhysicalSectorFactorization K)
   left_inv := by rintro ⟨⟨lk, rk⟩, ⟨ll, rl⟩, lh, rh⟩; rfl
   right_inv := by rintro ⟨⟨lk, rh⟩, ⟨rk, ll⟩, rl, lh⟩; rfl
 
+/-- The inverse regrouping reconstructs the three complete sector indices.
+
+Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and `etarl`,
+lines 1435--1450. -/
+@[simp] theorem threeSiteRegroupEquiv_symm_apply
+    (F : PhysicalSectorFactorization K) (k l h : Fin F.sectorCount)
+    (x : BoundaryIndex F k h × (NeighborIndex F k l × NeighborIndex F l h)) :
+    (F.threeSiteRegroupEquiv k l h).symm x =
+      ((x.1.1, x.2.1.1), ((x.2.1.2, x.2.2.1), (x.2.2.2, x.1.2))) :=
+  rfl
+
 /-- The fixed-`(k,l,h)` submatrix of the three-site closure, reindexed into
 the outer boundary factors and the two neighboring pairs.
 
@@ -99,12 +110,10 @@ theorem threeSiteSectorClosure_eq (F : PhysicalSectorFactorization K)
       F.boundaryOperator k h X ⊗ₖ
         (F.neighboringOperator k l ⊗ₖ F.neighboringOperator l h) := by
   ext x y
-  simp only [threeSiteSectorClosure, threeSiteRegroupEquiv, MPOTensor.physClose3,
-    Matrix.trace, Matrix.mul_assoc, Matrix.diag_apply, Matrix.mul_apply,
-    sectorCoordinateTensor_apply, LinearMap.coe_mk, AddHom.coe_mk,
-    Matrix.reindex_apply, Equiv.symm_mk, Equiv.coe_fn_mk, Matrix.submatrix_apply,
-    threeSiteSectorEmbedding, Matrix.of_apply, Equiv.apply_symm_apply,
-    transformedPhysicalSlice_apply_same, Matrix.kroneckerMap_apply,
+  simp only [threeSiteSectorClosure, Matrix.reindex_apply, Matrix.submatrix_apply,
+    threeSiteRegroupEquiv_symm_apply, threeSiteSectorEmbedding, physClose3_apply,
+    sectorCoordinateTensor_apply_same, Matrix.trace, Matrix.mul_assoc,
+    Matrix.diag_apply, Matrix.mul_apply, Matrix.kroneckerMap_apply,
     boundaryOperator_apply, neighboringOperator_apply]
   simp_rw [Finset.mul_sum, Finset.sum_mul]
   have sum_permute (f : Fin D → Fin D → Fin D → Fin D → ℂ) :
