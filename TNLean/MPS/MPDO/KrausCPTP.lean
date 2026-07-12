@@ -24,6 +24,10 @@ dimensions.
 * `isKrausCPTP_id`: the identity map is trace-preserving completely positive.
 * `isKrausCPTP_of_singleKraus`: conjugation by an isometry is trace-preserving
   completely positive.
+* `sandwichMap`: the linear map given by conjugation with one rectangular
+  matrix.
+* `sandwichMap_isKrausCPTP`: an isometric sandwich map is trace-preserving
+  completely positive.
 * `isKrausCPTP_comp`: composition preserves the trace-preserving completely
   positive property.
 * `Matrix.equivReindexMap_isKrausCPTP`: reindexing by an equivalence is
@@ -81,6 +85,26 @@ theorem isKrausCPTP_of_singleKraus {α β : Type*} [Fintype α] [DecidableEq α]
   · intro X
     simpa only [Fin.sum_univ_one] using hform X
   · simpa only [Fin.sum_univ_one] using hV
+
+/-- The single-Kraus sandwich by a rectangular matrix. -/
+noncomputable def sandwichMap {α β : Type*} [Fintype α] [Fintype β]
+    (V : Matrix β α ℂ) : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ where
+  toFun X := V * X * Vᴴ
+  map_add' X Y := by simp [Matrix.mul_add, Matrix.add_mul]
+  map_smul' c X := by simp [Matrix.mul_smul, Matrix.smul_mul]
+
+@[simp] theorem sandwichMap_apply {α β : Type*} [Fintype α] [Fintype β]
+    (V : Matrix β α ℂ) (X : Matrix α α ℂ) :
+    sandwichMap V X = V * X * Vᴴ :=
+  rfl
+
+/-- The sandwich map associated with an isometry is trace-preserving and
+completely positive. -/
+theorem sandwichMap_isKrausCPTP {α β : Type*}
+    [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
+    (V : Matrix β α ℂ) (hV : Vᴴ * V = 1) :
+    IsKrausCPTP (sandwichMap V) :=
+  isKrausCPTP_of_singleKraus V (fun _ ↦ rfl) hV
 
 /-- Composition of trace-preserving completely positive maps is again
 trace-preserving completely positive. If `T` has Kraus operators `Bⱼ` and `S`

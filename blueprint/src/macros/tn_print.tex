@@ -422,6 +422,74 @@
     \end{tikzpicture}%
 }
 
+% Transport of the two-step channels from the sector coordinates selected by
+% the physical isometry back to the original physical coordinates. The
+% horizontal arrows follow MPDO_TSKKK.png; the vertical conjugations follow
+% the U and U^dagger convention of MPDO_K=sum_k_LkRk.png.
+\newcommand{\TNMPDOPhysicalIsometryTransport}{%
+    \begin{tikzpicture}[tn picture, scale=0.64]
+        \foreach \x/\name in {-5.0/ptRawTwoA,-4.0/ptRawTwoB} {
+            \TN@subspinbox{\name}{(\x,1.45)}{\cal K}
+        }
+        \TN@subspinlink{ptRawTwoA}{ptRawTwoB}
+        \draw[rounded corners=2pt, densely dashed]
+            (-5.48,0.97) rectangle (-3.52,1.93);
+        \node at (-4.50,2.27) {${\cal K}_2(X)$};
+
+        \foreach \x/\name in {3.0/ptRawFourA,4.0/ptRawFourB,
+                5.0/ptRawFourC,6.0/ptRawFourD} {
+            \TN@subspinbox{\name}{(\x,1.45)}{\cal K}
+        }
+        \TN@subspinlink{ptRawFourA}{ptRawFourB}
+        \TN@subspinlink{ptRawFourB}{ptRawFourC}
+        \TN@subspinlink{ptRawFourC}{ptRawFourD}
+        \draw[rounded corners=2pt, densely dashed]
+            (2.52,0.97) rectangle (4.48,1.93);
+        \draw[rounded corners=2pt, densely dashed]
+            (4.52,0.97) rectangle (6.48,1.93);
+        \node at (4.50,2.27) {${\cal K}_4(X)$};
+
+        \foreach \x/\name in {-5.0/ptHatTwoA,-4.0/ptHatTwoB} {
+            \TN@subspinbox{\name}{(\x,-1.45)}{\widehat{\cal K}}
+        }
+        \TN@subspinlink{ptHatTwoA}{ptHatTwoB}
+        \draw[rounded corners=2pt, densely dashed]
+            (-5.48,-1.93) rectangle (-3.52,-0.97);
+        \node at (-4.50,-2.27) {$\widehat{\cal K}_2(X)$};
+
+        \foreach \x/\name in {3.0/ptHatFourA,4.0/ptHatFourB,
+                5.0/ptHatFourC,6.0/ptHatFourD} {
+            \TN@subspinbox{\name}{(\x,-1.45)}{\widehat{\cal K}}
+        }
+        \TN@subspinlink{ptHatFourA}{ptHatFourB}
+        \TN@subspinlink{ptHatFourB}{ptHatFourC}
+        \TN@subspinlink{ptHatFourC}{ptHatFourD}
+        \draw[rounded corners=2pt, densely dashed]
+            (2.52,-1.93) rectangle (4.48,-0.97);
+        \draw[rounded corners=2pt, densely dashed]
+            (4.52,-1.93) rectangle (6.48,-0.97);
+        \node at (4.50,-2.27) {$\widehat{\cal K}_4(X)$};
+
+        \draw[->, line width=0.60pt, bend left=13]
+            (-3.22,1.62) to node[above] {$\mathcal T_{\cal K}^2$} (2.22,1.62);
+        \draw[->, line width=0.60pt, bend left=13]
+            (2.22,1.28) to node[below] {$\mathcal S_{\cal K}^2$} (-3.22,1.28);
+        \draw[->, line width=0.60pt, bend left=13]
+            (-3.22,-1.28) to node[above] {$\widehat{\mathcal T}^2$} (2.22,-1.28);
+        \draw[->, line width=0.60pt, bend left=13]
+            (2.22,-1.62) to node[below] {$\widehat{\mathcal S}^2$} (-3.22,-1.62);
+
+        \draw[->, line width=0.55pt] (-4.64,0.68) -- (-4.64,-0.68)
+            node[midway, left] {$U^{\otimes 2}$};
+        \draw[->, line width=0.55pt] (-4.36,-0.68) -- (-4.36,0.68)
+            node[midway, right] {$(U^\dagger)^{\otimes 2}$};
+        \draw[->, line width=0.55pt] (4.36,0.68) -- (4.36,-0.68)
+            node[midway, left] {$U^{\otimes 4}$};
+        \draw[->, line width=0.55pt] (4.64,-0.68) -- (4.64,0.68)
+            node[midway, right] {$(U^\dagger)^{\otimes 4}$};
+    \end{tikzpicture}%
+}
+
 % Fixed-sector factorization of the arbitrary-X two-site physical closure.
 % The left-hand row shows the sector subspins and the outer virtual closure;
 % the right-hand side shows only the proved boundary/neighbor tensor product.

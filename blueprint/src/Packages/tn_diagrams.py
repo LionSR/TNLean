@@ -56,6 +56,7 @@ _DIAGRAM_ARGS: dict[str, str] = {
     "TNMPDORefinementConstruction": "",
     "TNMPDORefinementDirection": "",
     "TNMPDOBlockedRFPChannels": "",
+    "TNMPDOPhysicalIsometryTransport": "",
     "TNMPDOTwoSiteClosureFactorization": "",
     "TNMPDOThreeSiteClosureFactorization": "",
     "TNMPDOCyclicEtaContraction": "",
