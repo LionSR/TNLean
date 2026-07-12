@@ -78,6 +78,10 @@ arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete).
   trace matrix from the zero-correlation-length identity, and linear
   independence of the sector tensors from primitivity and an independent
   family of subspaces containing each sector tensor.
+- `MPOTensor.SectorPairingData.pairing_sq_eq_pairing_cube` /
+  `MPOTensor.SectorPairingData.tracePowersConstant`: the unconditional matrix
+  identity $T^2=T^3$ and the resulting constant trace powers of $T$, with no
+  independence hypothesis on the sector tensors.
 - `MPOTensor.sal_zcl_implies_rank_one_T_of_pairing_idempotent` /
   `MPOTensor.sal_zcl_implies_rank_one_T_of_sector_supports`: the rank-one
   factorization at lines 1484--1499, derived from the zero-correlation-length
@@ -837,16 +841,26 @@ theorem mul_self_eq_self (data : SectorPairingData T V)
   Matrix.mul_self_eq_self_of_pairing_idempotent data.pairing hl
     data.pairing_operator_idempotent
 
-/-- The traces of all positive powers of the sector trace matrix agree with
-its trace: $\operatorname{tr}(T^N)=\operatorname{tr}(T)$ for $N\geq 1$, as at
-arXiv:1606.00608, lines 1494--1497, recovered from idempotence.
+/-- **Unconditional `T^2=T^3`** for sector tensors satisfying the
+zero-correlation-length identity, with no independence hypothesis on the
+closed sector tensors $|l_k)$ or the functionals $(r_k|$: pairing the
+identity with $(r_j|$ and $|l_i)$ gives this matrix identity directly.
 
-**Scope restriction (linear independence):** inherited from
-`SectorPairingData.mul_self_eq_self`; documented in
-`docs/paper-gaps/cpgsv17_pf_rank_one.tex`. -/
-theorem tracePowersConstant (data : SectorPairingData T V)
-    (hl : LinearIndependent ℝ data.l) : Matrix.TracePowersConstant T :=
-  Matrix.tracePowersConstant_of_mul_self_eq_self (data.mul_self_eq_self hl)
+Source: arXiv:1606.00608, lines 1494--1497. This is the pairing computation
+of `docs/paper-gaps/cpgsv17_pf_rank_one.tex`, §3 ("What the operator-valued
+ZCL identity implies"). -/
+theorem pairing_sq_eq_pairing_cube (data : SectorPairingData T V) : T ^ 2 = T ^ 3 :=
+  Matrix.pow_two_eq_pow_three_of_pairing_idempotent data.pairing data.pairing_operator_idempotent
+
+/-- **Unconditional constant trace powers of the sector trace matrix.** The
+traces of all positive powers of the sector trace matrix agree with its
+trace: $\operatorname{tr}(T^N)=\operatorname{tr}(T)$ for $N\geq 1$, with no
+independence hypothesis on the closed sector tensors $|l_k)$ or the
+functionals $(r_k|$.
+
+Source: arXiv:1606.00608, lines 1494--1497. -/
+theorem tracePowersConstant (data : SectorPairingData T V) : Matrix.TracePowersConstant T :=
+  Matrix.tracePowersConstant_of_pairing_idempotent data.pairing data.pairing_operator_idempotent
 
 /-- Primitivity of the sector trace matrix makes every closed sector tensor
 $|l_k)$ nonzero: some entry of column $k$ of $T$ is positive, and that entry
