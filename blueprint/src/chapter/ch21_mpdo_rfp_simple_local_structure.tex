@@ -3295,7 +3295,7 @@ strong subadditivity for a normalized three-site reduced state.
 \end{proof}
 
 For the following construction, through
-Theorem~\ref{thm:mpdo_blocked_sector_coordinate_tensor_is_rfp_via_ts}, assume the
+Theorem~\ref{thm:mpdo_blocked_original_tensor_is_rfp_via_ts}, assume the
 neighboring-operator trace factorization of
 Definition~\ref{def:mpdo_neighboring_trace_factorization}. Write
 \[
@@ -3629,7 +3629,7 @@ $\widehat{\cal K}$.
     second coarse-graining gives $\widehat{\cal K}_2(X)$.
 \end{proof}
 
-\begin{figure}[ht]
+\begin{figure}[!b]
     \centering
     \TNMPDOBlockedRFPChannels
     \caption{The superscripts in $\widehat{\mathcal T}^2$ and
@@ -3676,6 +3676,49 @@ $\widehat{\cal K}$.
     positivity and trace, and the two closure identities give the required
     equations in Definition~\ref{def:is_rfp_via_ts}.
 \end{proof}
+
+% **Local fix (zero-weight quotient):** this theorem uses the completed
+% zero-weight preparation through the two-step refinement identity. Documented
+% in docs/paper-gaps/cpgsv17_mpdo_zero_weight_preparation_completion.tex.
+% **Local fix (implication label):** Appendix line 1824 says
+% (iii) implies (v), but the theorem statement and the local structure used
+% here give (iv) implies (v). Documented in
+% docs/paper-gaps/cpgsv17_mpdo_theorem_4_9_implication_label.tex.
+\begin{theorem}[Two-site blocking of the original tensor is a renormalization fixed point]
+    \label{thm:mpdo_blocked_original_tensor_is_rfp_via_ts}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.blockTwo_isRFPViaTS}
+    \leanok
+    \uses{def:is_rfp_via_ts, def:mpdo_two_site_blocking}
+    Let ${\cal K}^{[2]}$ be the tensor obtained by blocking two adjacent sites
+    of the original tensor ${\cal K}$. Then ${\cal K}^{[2]}$ is a
+    renormalization fixed point in the sense of
+    Definition~\ref{def:is_rfp_via_ts}. This is
+    \cite[Theorem~4.9, (iv)$\Rightarrow$(v)]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_blocked_sector_coordinate_tensor_is_rfp_via_ts}
+    Transport the refinement and coarse-graining channels for
+    $\widehat{\cal K}^{[2]}$ through the two-site and four-site tensor powers
+    of the physical isometry, as in
+    Figure~\ref{fig:mpdo_physical_isometry_transport}. These unitary
+    congruences preserve complete positivity and trace, while the
+    corresponding closure identities carry the two fixed-point equations back
+    to ${\cal K}^{[2]}$.
+\end{proof}
+
+\begin{figure}[htbp]
+    \centering
+    \TNMPDOPhysicalIsometryTransport
+    \caption{Physical-isometry transport of the blocked channels. The
+    downward arrows conjugate the ket and bra indices by $U^{\otimes n}$ and
+    $(U^\dagger)^{\otimes n}$; the upward arrows give the inverse
+    conjugations. Hence the lower sector-coordinate channels induce the upper
+    ordinary-coordinate channels. This combines Proposition~C.7 with
+    \cite[Appendix~C.2, lines~1510--1563 and 1821--1825]
+    {Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_physical_isometry_transport}
+\end{figure}
 
 \begin{figure}[ht]
     \centering
