@@ -388,6 +388,7 @@ import TNLean.MPS.MPDO.SectorFactorization
 import TNLean.MPS.MPDO.PhysicalSectorFactorization
 import TNLean.MPS.MPDO.PhysicalSectorClosureTwo
 import TNLean.MPS.MPDO.PhysicalSectorClosureThree
+import TNLean.MPS.MPDO.PhysicalSectorTraceActions
 import TNLean.MPS.MPDO.SectorPairingTransfer
 import TNLean.MPS.MPDO.SectorEtaContraction
 import TNLean.MPS.MPDO.SectorEtaOperator
