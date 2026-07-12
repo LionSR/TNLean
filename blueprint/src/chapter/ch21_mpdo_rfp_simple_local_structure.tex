@@ -1665,6 +1665,37 @@ strong subadditivity for a normalized three-site reduced state.
     \cite[Appendix~C.2, lines~1548--1555]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
+\begin{theorem}[Diagonal-sector action of the completed neighboring preparation]
+    \label{thm:mpdo_completed_eta_controlled_map_same_block}
+    \lean{MPOTensor.ExplicitEtaOperators.completedEtaControlledMap_sameBlock_apply}
+    \leanok
+    \uses{def:mpdo_completed_eta_controlled_map,
+      def:mpdo_completed_eta_preparation}
+    If $X_{k,h}$ is the $(k,h)$ diagonal block of $X$, then
+    \[
+      [\overline{\mathcal S}_1(X)]_{k,h}
+      =\overline{\mathcal S}_{k,h}(X_{k,h})
+      =X_{k,h}\otimes\overline\eta_{k,h}.
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_controlled_kraus_map_same_block,
+      thm:mpdo_rectangular_kraus_map_equiv,
+      thm:mpdo_state_preparation_kraus_action}
+    The diagonal-block formula and invariance under Kraus-index relabeling give
+    \[
+      [\overline{\mathcal S}_1(X)]_{k,h}
+      =\Phi_{\widetilde A_{k,h}}(X_{k,h})
+      =\Phi_{A_{k,h}}(X_{k,h}).
+    \]
+    The preparation Kraus identity then gives
+    \[
+      \Phi_{A_{k,h}}(X_{k,h})
+      =X_{k,h}\otimes\overline\eta_{k,h}.
+    \]
+\end{proof}
+
 \begin{theorem}[The globally controlled neighboring-state preparation is
     trace-preserving completely positive]
     \label{thm:mpdo_completed_eta_controlled_map_cptp}
@@ -1706,6 +1737,37 @@ strong subadditivity for a normalized three-site reduced state.
     and, on active sectors, is the sector-control formula for $\mathcal T_1$
     in \cite[Appendix~C.2, lines~1523--1535]{Cirac2016MPDO_arXiv}.
 \end{definition}
+
+\begin{theorem}[Diagonal-sector action of the completed direct-sum preparation]
+    \label{thm:mpdo_completed_omega_controlled_map_same_block}
+    \lean{MPOTensor.ExplicitEtaOperators.completedOmegaControlledMap_sameBlock_apply}
+    \leanok
+    \uses{def:mpdo_completed_omega_controlled_map,
+      def:mpdo_completed_omega_preparation}
+    If $X_{k,h}$ is the $(k,h)$ diagonal block of $X$, then
+    \[
+      [\overline{\mathcal T}_1(X)]_{k,h}
+      =\overline{\mathcal T}_{k,h}(X_{k,h})
+      =X_{k,h}\otimes\overline\Omega_{k,h}.
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_controlled_kraus_map_same_block,
+      thm:mpdo_rectangular_kraus_map_equiv,
+      thm:mpdo_state_preparation_kraus_action}
+    The diagonal-block formula and invariance under Kraus-index relabeling give
+    \[
+      [\overline{\mathcal T}_1(X)]_{k,h}
+      =\Phi_{\widetilde B_{k,h}}(X_{k,h})
+      =\Phi_{B_{k,h}}(X_{k,h}).
+    \]
+    The preparation Kraus identity then gives
+    \[
+      \Phi_{B_{k,h}}(X_{k,h})
+      =X_{k,h}\otimes\overline\Omega_{k,h}.
+    \]
+\end{proof}
 
 \begin{theorem}[The globally controlled direct-sum preparation is
     trace-preserving completely positive]
@@ -1758,6 +1820,29 @@ strong subadditivity for a normalized three-site reduced state.
     The controlled dependent partial trace discards the off-diagonal blocks
     between distinct $i$ and applies $\tr_{B_i}$ to the $i$th diagonal block.
 \end{definition}
+
+\begin{theorem}[Diagonal blocks of the controlled dependent partial trace]
+    \label{thm:mpdo_controlled_dependent_partial_trace_same_block}
+    \lean{Matrix.controlledPartialTraceRightLM_sameBlock_apply}
+    \leanok
+    \uses{def:mpdo_controlled_dependent_partial_trace,
+      def:mpdo_right_partial_trace_map}
+    If $X_{ii}$ denotes the $i$th diagonal block of $X$, then
+    \[
+        [\mathcal C_{\mathrm{tr}}(X)]_{ii}=\tr_{B_i}(X_{ii}).
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_controlled_kraus_map_same_block}
+    If $(K_{i,j})_j$ is the Kraus family chosen for $\tr_{B_i}$, then the
+    diagonal-block formula gives
+    \[
+      [\mathcal C_{\mathrm{tr}}(X)]_{ii}
+      =\sum_j K_{i,j}X_{ii}K_{i,j}^\dagger
+      =\tr_{B_i}(X_{ii}).
+    \]
+\end{proof}
 
 \begin{theorem}[The controlled dependent partial trace is trace-preserving
     completely positive]
