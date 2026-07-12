@@ -954,6 +954,21 @@ strong subadditivity for a normalized three-site reduced state.
     which gives the three factors on the right-hand side.
 \end{proof}
 
+\begin{definition}[Three-site neighboring operator]
+    \label{def:mpdo_physical_sector_three_site_neighboring_operator}
+    \lean{MPOTensor.PhysicalSectorFactorization.threeSiteNeighboringOperator}
+    \leanok
+    \uses{def:mpdo_minimal_neighboring_operator}
+    For every outer-sector pair $(k,h)$, define
+    \[
+      \Omega_{k,h}=\bigoplus_l
+        \bigl(\eta_{k,l}\otimes\eta_{l,h}\bigr).
+    \]
+    This is the direct sum of the two neighboring contractions appearing in
+    the three-site closure factorization
+    \cite[Appendix~C.2, lines~1510--1516]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
 \begin{figure}[ht]
     \centering
     \begin{minipage}{0.41\textwidth}
@@ -996,15 +1011,42 @@ strong subadditivity for a normalized three-site reduced state.
     \cite[Appendix~C.2, lines~1389--1403]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
+\begin{theorem}[Trace of the three-site neighboring operator]
+    \label{thm:mpdo_physical_sector_three_site_neighboring_operator_trace}
+    \lean{MPOTensor.PhysicalSectorFactorization.trace_threeSiteNeighboringOperator,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_threeSiteNeighboringOperator}
+    \leanok
+    \uses{def:mpdo_physical_sector_three_site_neighboring_operator,
+      def:mpdo_neighboring_trace_factorization}
+    For every outer-sector pair $(k,h)$,
+    \[
+      \tr(\Omega_{k,h})
+      =\sum_l\tr(\eta_{k,l})\tr(\eta_{l,h})
+      =a_kb_h.
+    \]
+    This is the normalization used in the coarse-graining channel of
+    \cite[Appendix~C.2]{Cirac2016MPDO_arXiv}, lines~1547--1555.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_neighboring_trace_factorization}
+    The trace of a direct sum is the sum of the traces of its blocks, and the
+    trace of a tensor product is the product of the traces. Hence
+    \[
+      \tr(\Omega_{k,h})
+      =\sum_l(a_kb_l)(a_lb_h)
+      =a_kb_h\sum_l a_lb_l
+      =a_kb_h.
+    \]
+\end{proof}
+
 \begin{theorem}[Partial traces of the sector closures]
     \label{thm:mpdo_sector_closure_partial_traces}
     \lean{MPOTensor.PhysicalSectorFactorization.partialTraceRight_twoSiteSectorClosure}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.partialTraceRight_twoSiteSectorClosure}
     \lean{MPOTensor.PhysicalSectorFactorization.partialTraceRight_threeSiteSectorClosure}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.sum_threeSite_trace_coefficients}
-    \lean{MPOTensor.PhysicalSectorFactorization.threeSiteNeighboringOperator,
-      MPOTensor.PhysicalSectorFactorization.trace_threeSiteNeighboringOperator,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_threeSiteNeighboringOperator}
     \leanok
     \uses{thm:mpdo_two_site_sector_closure_factorization,
       thm:mpdo_three_site_sector_closure_factorization,
@@ -2541,10 +2583,6 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{definition}[The coarse-graining channel $\mathcal S$]
     \label{def:mpdo_physical_sector_s_map}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.sMap}
-    \lean{MPOTensor.PhysicalSectorFactorization.twoSiteSectorCoordinateEquiv,
-      MPOTensor.PhysicalSectorFactorization.twoSiteSectorCoordinateEquiv_symm_apply,
-      MPOTensor.PhysicalSectorFactorization.threeSiteSectorCoordinateEquiv,
-      MPOTensor.PhysicalSectorFactorization.threeSiteSectorCoordinateEquiv_symm_apply}
     \leanok
     \uses{def:mpdo_s0_map, def:mpdo_physical_sector_s1_map,
       def:mpdo_s2_map}
@@ -2574,15 +2612,29 @@ strong subadditivity for a normalized three-site reduced state.
     and this property is preserved under composition.
 \end{proof}
 
+\begin{definition}[Two- and three-site sector coordinates]
+    \label{def:mpdo_physical_sector_closure_coordinates}
+    \lean{MPOTensor.PhysicalSectorFactorization.twoSiteSectorCoordinateEquiv,
+      MPOTensor.PhysicalSectorFactorization.twoSiteSectorCoordinateEquiv_symm_apply,
+      MPOTensor.PhysicalSectorFactorization.threeSiteSectorCoordinateEquiv,
+      MPOTensor.PhysicalSectorFactorization.threeSiteSectorCoordinateEquiv_symm_apply}
+    \leanok
+    \uses{def:mpdo_two_site_sector_closure,
+      def:mpdo_three_site_sector_closure}
+    The two- and three-site physical spaces are identified with their
+    canonical direct sums over sector pairs and triples. The inverse
+    equivalences send a diagonal sector block to the corresponding embedded
+    physical matrix and send off-diagonal sector blocks to zero.
+\end{definition}
+
 \begin{theorem}[Coarse-graining of the three-site closure]
     \label{thm:mpdo_physical_sector_s_closure_identity}
     \lean{MPOTensor.PhysicalSectorFactorization.s0Regrouped_threeSiteClosure_block_eq}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.s0Map_block_eq_smul}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.sMap_threeSiteClosure_eq_twoSiteClosure}
     \leanok
-    \uses{thm:mpdo_global_sector_closure_decomposition,
-      thm:mpdo_sector_closure_partial_traces,
-      def:mpdo_physical_sector_s_map}
+    \uses{def:phys_close, def:mpdo_physical_sector_s_map,
+      def:mpdo_physical_sector_closure_coordinates}
     For every virtual matrix $X$, the coarse-graining channel satisfies
     \[
       \mathcal S\bigl({\cal K}_3(X)\bigr)={\cal K}_2(X).
@@ -2593,8 +2645,9 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_global_sector_closure_decomposition,
-      thm:mpdo_sector_closure_partial_traces,
+    \uses{thm:mpdo_two_site_sector_closure_factorization,
+      thm:mpdo_three_site_sector_closure_factorization,
+      thm:mpdo_physical_sector_three_site_neighboring_operator_trace,
       def:mpdo_physical_sector_s1_map}
     On the $(k,h)$ diagonal block, $\mathcal S_0$ traces
     $\Omega_{k,h}$ and gives $a_kb_hB_{k,h}(X)$. The map $\mathcal S_1$
