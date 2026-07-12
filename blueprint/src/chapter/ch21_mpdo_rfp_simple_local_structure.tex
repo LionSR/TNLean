@@ -1002,6 +1002,9 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.partialTraceRight_twoSiteSectorClosure}
     \lean{MPOTensor.PhysicalSectorFactorization.partialTraceRight_threeSiteSectorClosure}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.sum_threeSite_trace_coefficients}
+    \lean{MPOTensor.PhysicalSectorFactorization.threeSiteNeighboringOperator,
+      MPOTensor.PhysicalSectorFactorization.trace_threeSiteNeighboringOperator,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_threeSiteNeighboringOperator}
     \leanok
     \uses{thm:mpdo_two_site_sector_closure_factorization,
       thm:mpdo_three_site_sector_closure_factorization,
@@ -1032,6 +1035,41 @@ strong subadditivity for a normalized three-site reduced state.
       =a_k\left(\sum_l a_lb_l\right)b_h
       =a_kb_h.
     \]
+\end{proof}
+
+\begin{theorem}[Global direct-sum form of the sector closures]
+    \label{thm:mpdo_global_sector_closure_decomposition}
+    \lean{MPOTensor.PhysicalSectorFactorization.twoSiteGlobalRegroupEquiv,
+      MPOTensor.PhysicalSectorFactorization.twoSiteGlobalRegroupEquiv_symm_apply,
+      MPOTensor.PhysicalSectorFactorization.threeSiteGlobalRegroupEquiv,
+      MPOTensor.PhysicalSectorFactorization.threeSiteGlobalRegroupEquiv_symm_apply}
+    \lean{MPOTensor.PhysicalSectorFactorization.twoSiteGlobalClosure_eq,
+      MPOTensor.PhysicalSectorFactorization.threeSiteGlobalClosure_eq}
+    \leanok
+    \uses{thm:mpdo_two_site_sector_closure_factorization,
+      thm:mpdo_three_site_sector_closure_factorization}
+    After the canonical regrouping of all physical-sector indices, the full
+    closures are
+    \[
+      {\cal K}_2(X)
+      =\bigoplus_{k,h}B_{k,h}(X)\otimes\eta_{k,h}
+    \]
+    and
+    \[
+      {\cal K}_3(X)
+      =\bigoplus_{k,l,h}B_{k,h}(X)\otimes
+        \bigl(\eta_{k,l}\otimes\eta_{l,h}\bigr).
+    \]
+    Every matrix entry between distinct sector tuples vanishes.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_two_site_sector_closure_factorization,
+      thm:mpdo_three_site_sector_closure_factorization}
+    On a diagonal sector tuple these are the fixed-sector factorizations.
+    If two tuples differ, at least one physical slice lies between distinct
+    sectors and hence vanishes.
 \end{proof}
 
 \begin{definition}[Closed sector tensors]%
@@ -2206,7 +2244,8 @@ strong subadditivity for a normalized three-site reduced state.
     \label{def:mpdo_s2_map}
     \lean{MPOTensor.ExplicitEtaOperators.s2Map}
     \lean{MPOTensor.PhysicalSectorFactorization.s2ShiftEquiv,
-      MPOTensor.PhysicalSectorFactorization.s2Map}
+      MPOTensor.PhysicalSectorFactorization.s2Map,
+      MPOTensor.PhysicalSectorFactorization.s2Map_apply}
     \leanok
     \uses{def:mpdo_two_site_subspin_regrouping,
       def:mpdo_equiv_reindex_map}
@@ -2269,7 +2308,8 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{definition}[The three-site partial-trace map $\mathcal S_0$]
     \label{def:mpdo_s0_map}
     \lean{MPOTensor.ExplicitEtaOperators.s0Map}
-    \lean{MPOTensor.PhysicalSectorFactorization.s0Map}
+    \lean{MPOTensor.PhysicalSectorFactorization.s0Map,
+      MPOTensor.PhysicalSectorFactorization.s0Map_sameBlock_apply}
     \leanok
     \uses{def:mpdo_three_site_subspin_regrouping,
       def:mpdo_controlled_dependent_partial_trace,
@@ -2474,7 +2514,10 @@ strong subadditivity for a normalized three-site reduced state.
       MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringPreparationMap_eq_normalized}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringControlledMap}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringControlledMap_sameBlock_apply}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringPreparationMap_smul}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.s1Map}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.s1Map_block_eq_kronecker,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.s1Map_apply_of_ne}
     \leanok
     \uses{def:mpdo_neighboring_trace_factorization}
     On a sector pair with $a_kb_h\ne0$, let
@@ -2498,6 +2541,10 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{definition}[The coarse-graining channel $\mathcal S$]
     \label{def:mpdo_physical_sector_s_map}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.sMap}
+    \lean{MPOTensor.PhysicalSectorFactorization.twoSiteSectorCoordinateEquiv,
+      MPOTensor.PhysicalSectorFactorization.twoSiteSectorCoordinateEquiv_symm_apply,
+      MPOTensor.PhysicalSectorFactorization.threeSiteSectorCoordinateEquiv,
+      MPOTensor.PhysicalSectorFactorization.threeSiteSectorCoordinateEquiv_symm_apply}
     \leanok
     \uses{def:mpdo_s0_map, def:mpdo_physical_sector_s1_map,
       def:mpdo_s2_map}
@@ -2525,6 +2572,37 @@ strong subadditivity for a normalized three-site reduced state.
     \uses{lem:is_kraus_cptp_comp}
     Each of the three factors is trace-preserving and completely positive,
     and this property is preserved under composition.
+\end{proof}
+
+\begin{theorem}[Coarse-graining of the three-site closure]
+    \label{thm:mpdo_physical_sector_s_closure_identity}
+    \lean{MPOTensor.PhysicalSectorFactorization.s0Regrouped_threeSiteClosure_block_eq}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.s0Map_block_eq_smul}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.sMap_threeSiteClosure_eq_twoSiteClosure}
+    \leanok
+    \uses{thm:mpdo_global_sector_closure_decomposition,
+      thm:mpdo_sector_closure_partial_traces,
+      def:mpdo_physical_sector_s_map}
+    For every virtual matrix $X$, the coarse-graining channel satisfies
+    \[
+      \mathcal S\bigl({\cal K}_3(X)\bigr)={\cal K}_2(X).
+    \]
+    The equality is written in the canonical physical-sector coordinates
+    selected by the isometry $U$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_global_sector_closure_decomposition,
+      thm:mpdo_sector_closure_partial_traces,
+      def:mpdo_physical_sector_s1_map}
+    On the $(k,h)$ diagonal block, $\mathcal S_0$ traces
+    $\Omega_{k,h}$ and gives $a_kb_hB_{k,h}(X)$. The map $\mathcal S_1$
+    adjoins $\eta_{k,h}/(a_kb_h)$ on an active pair, so the scalar cancels;
+    both sides vanish on a zero-weight pair. Finally, $\mathcal S_2$ regroups
+    the four factors into two physical sites. Entries between distinct sector
+    pairs vanish under both the controlled preparation and the two-site
+    direct-sum decomposition.
 \end{proof}
 
 \begin{figure}[ht]
