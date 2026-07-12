@@ -407,47 +407,49 @@ the change of basis between the two resulting direct sums.
     sum over $\varepsilon$.
 \end{proof}
 
-Fix a final label $\varepsilon$.  The multiplicity indices of the two
-bracketings are
-\[
-    \mathcal H^{\mathrm L}_{\varepsilon}
-      = \bigoplus_{\delta}
-        \C^{\dim\chi_{\alpha,\beta,\delta}}
-        \otimes \C^{\dim\chi_{\delta,\gamma,\varepsilon}},
-    \qquad
-    \mathcal H^{\mathrm R}_{\varepsilon}
-      = \bigoplus_{\delta}
-        \C^{\dim\chi_{\beta,\gamma,\delta}}
-        \otimes \C^{\dim\chi_{\alpha,\delta,\varepsilon}}.
-\]
-These spaces have the bracketing pattern of the $(e,\mu,\nu)$ and
-$(f,\lambda,\sigma)$ index spaces in equation (Fmove) of
-\cite{Bultinck2017Anyons}.  Identifying the dimensions of the positive
-diagonal matrices with the fusion multiplicities of that equation requires
-the length-independent integer specialization and is not asserted here.
+\begin{definition}[Fixed-final multiplicity spaces]%
+    \label{def:mpdo_final_sector_multiplicity_spaces}
+    \lean{MPOTensor.BNTFusionIsometryFamily.LeftFinalMultiplicity}
+    \lean{MPOTensor.BNTFusionIsometryFamily.RightFinalMultiplicity}
+    \leanok
+    \uses{def:mpdo_bnt_fusion_isometry_family}
+    Fix a final label $\varepsilon$.  The multiplicity spaces of the two
+    bracketings are
+    \[
+        \mathcal H^{\mathrm L}_{\varepsilon}
+          = \bigoplus_{\delta}
+            \C^{\dim\chi_{\alpha,\beta,\delta}}
+            \otimes \C^{\dim\chi_{\delta,\gamma,\varepsilon}},
+        \qquad
+        \mathcal H^{\mathrm R}_{\varepsilon}
+          = \bigoplus_{\delta}
+            \C^{\dim\chi_{\beta,\gamma,\delta}}
+            \otimes \C^{\dim\chi_{\alpha,\delta,\varepsilon}}.
+    \]
+    These spaces have the bracketing pattern of the $(e,\mu,\nu)$ and
+    $(f,\lambda,\sigma)$ index spaces in equation (Fmove) of
+    \cite{Bultinck2017Anyons}.  Identifying the dimensions of the positive
+    diagonal matrices with the fusion multiplicities of that equation
+    requires the length-independent integer specialization and is not
+    asserted here.  The corresponding fixed-final row spaces are
+    $\mathcal H^{\mathrm L}_{\varepsilon}\otimes\C^{D_\varepsilon}$ and
+    $\mathcal H^{\mathrm R}_{\varepsilon}\otimes\C^{D_\varepsilon}$.
+\end{definition}
 
 \begin{definition}[Triple-fusion maps with fixed final label]%
     \label{def:mpdo_final_sector_fusion_maps}
-    \lean{MPOTensor.BNTFusionIsometryFamily.LeftFinalMultiplicity}
-    \lean{MPOTensor.BNTFusionIsometryFamily.RightFinalMultiplicity}
-    \lean{MPOTensor.BNTFusionIsometryFamily.LeftFinalIndex}
-    \lean{MPOTensor.BNTFusionIsometryFamily.RightFinalIndex}
-    \lean{MPOTensor.BNTFusionIsometryFamily.leftFinalRow}
-    \lean{MPOTensor.BNTFusionIsometryFamily.rightFinalRow}
     \lean{MPOTensor.BNTFusionIsometryFamily.leftFinalFusionMap}
     \lean{MPOTensor.BNTFusionIsometryFamily.rightFinalFusionMap}
     \leanok
-    \uses{def:mpdo_left_fusion_isometry,
+    \uses{def:mpdo_final_sector_multiplicity_spaces,
+        def:mpdo_left_fusion_isometry,
         def:mpdo_right_fusion_isometry}
     The maps $U^{\mathrm L}_{\alpha,\beta,\gamma;\varepsilon}$ and
-    $U^{\mathrm R}_{\alpha,\beta,\gamma;\varepsilon}$ are the restrictions
-    of the two iterated fusion isometries to the summands with final label
-    $\varepsilon$.  Their codomains are respectively
-    $\mathcal H^{\mathrm L}_{\varepsilon}\otimes\C^{D_\varepsilon}$ and
-    $\mathcal H^{\mathrm R}_{\varepsilon}\otimes\C^{D_\varepsilon}$.
-    Their adjoints, after the canonical reassociation of the triple bond
-    space, have the orientation and bracketing pattern of the weighted
-    analogues of the two composites in equation (Fmove) of
+    $U^{\mathrm R}_{\alpha,\beta,\gamma;\varepsilon}$ are obtained by
+    restricting the two iterated fusion isometries to the summands with final
+    label $\varepsilon$.  Their adjoints, after the canonical reassociation
+    of the triple bond space, have the orientation and bracketing pattern of
+    the weighted analogues of the two composites in equation (Fmove) of
     \cite{Bultinck2017Anyons}.
 \end{definition}
 

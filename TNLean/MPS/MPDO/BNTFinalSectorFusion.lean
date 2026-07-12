@@ -24,8 +24,7 @@ length-independent integer specialization and injectivity of `tensor ε`.
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, lines 995--999
 * [Bultinck--Marien--Williamson--Sahinoglu--Haegeman--Verstraete 2015]
-  arXiv:1511.08090, equation (Fmove) and lines 237--280 of
-  `References/1511.08090/AnyonsPEPS.tex`
+  arXiv:1511.08090, equation (Fmove) and lines 237--280 of the source
 -/
 
 open scoped Matrix BigOperators ComplexOrder Kronecker
