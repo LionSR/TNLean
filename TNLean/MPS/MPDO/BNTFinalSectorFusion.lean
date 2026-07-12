@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.BNTLeftTripleFusion
 import TNLean.MPS.MPDO.BNTRightTripleFusion
+import TNLean.Algebra.ScalarCommutant
 
 /-!
 # Final-sector restrictions of triple fusion
@@ -19,6 +20,12 @@ the $F$-move of arXiv:1511.08090, after reindexing the triple bond space by the 
 associator.  No identification of the positive diagonal chi indices with the fusion
 multiplicities of that source is asserted here.  Such a comparison first requires the
 length-independent integer specialization and injectivity of `tensor ε`.
+
+The final result below isolates the part of the comparison that follows from injectivity.  If a
+matrix between the two fixed-final-sector spaces already intertwines the amplified letters of
+`tensor ε`, then it acts trivially on the bond factor, up to a matrix between the two
+multiplicity spaces.  The result does not construct this intertwiner, prove that it is
+invertible, or identify the chi dimensions with fusion multiplicities.
 
 ## References
 
@@ -70,6 +77,38 @@ Source: arXiv:1606.00608, Theorem IV.13(iii), lines 986--999. -/
 abbrev RightFinalIndex (α β γ ε : Λ) : Type u :=
   (δ : Λ) × Fin (Fam.chi.dim β γ δ) × Fin (Fam.chi.dim α δ ε) ×
     Fin (Fam.bondDim ε)
+
+/-- The canonical identification of the left fixed-final-sector index with the product of its
+multiplicity space and the bond space of `tensor ε`.
+
+Source: arXiv:1606.00608, Theorem IV.13(iii), label `Ualphabeta`, and the associativity remark
+immediately following it; arXiv:1511.08090, equation (Fmove), left multiplicity indices
+`(e, μ, ν)`. -/
+def leftFinalIndexEquiv (α β γ ε : Λ) :
+    Fam.LeftFinalIndex α β γ ε ≃
+      Fam.LeftFinalMultiplicity α β γ ε × Fin (Fam.bondDim ε) :=
+  (Equiv.sigmaCongrRight fun δ =>
+    (Equiv.prodAssoc (Fin (Fam.chi.dim α β δ)) (Fin (Fam.chi.dim δ γ ε))
+      (Fin (Fam.bondDim ε))).symm).trans
+    (Equiv.sigmaProdDistrib
+      (fun δ => Fin (Fam.chi.dim α β δ) × Fin (Fam.chi.dim δ γ ε))
+      (Fin (Fam.bondDim ε))).symm
+
+/-- The canonical identification of the right fixed-final-sector index with the product of its
+multiplicity space and the bond space of `tensor ε`.
+
+Source: arXiv:1606.00608, Theorem IV.13(iii), label `Ualphabeta`, and the associativity remark
+immediately following it; arXiv:1511.08090, equation (Fmove), right multiplicity indices
+`(f, λ, σ)`. -/
+def rightFinalIndexEquiv (α β γ ε : Λ) :
+    Fam.RightFinalIndex α β γ ε ≃
+      Fam.RightFinalMultiplicity α β γ ε × Fin (Fam.bondDim ε) :=
+  (Equiv.sigmaCongrRight fun δ =>
+    (Equiv.prodAssoc (Fin (Fam.chi.dim β γ δ)) (Fin (Fam.chi.dim α δ ε))
+      (Fin (Fam.bondDim ε))).symm).trans
+    (Equiv.sigmaProdDistrib
+      (fun δ => Fin (Fam.chi.dim β γ δ) × Fin (Fam.chi.dim α δ ε))
+      (Fin (Fam.bondDim ε))).symm
 
 /-- The row inclusion selecting the block with final label `ε` in the left-associated
 decomposition.
@@ -189,5 +228,49 @@ theorem rightFinalFusion_apply (α β γ ε : Λ) (i k : Fin p) :
   · subst δ'
     simp
   · simp [Matrix.blockDiagonal'_apply_ne _ _ _ hδ]
+
+/-- An intertwiner between the two fixed-final-sector spaces of an injective final tensor is a
+matrix on the multiplicity spaces tensored with the identity on the final bond space.
+
+The matrix `C` is only assumed here.  After the two canonical reindexings, the hypothesis says
+that `C` intertwines the two identity amplifications of every letter of `tensor ε`.  Injectivity
+then forces every rectangular bond-space block of `C` to be scalar.  Thus the bond-space action
+is the identity and all remaining information lies in the rectangular matrix `F` between the
+left and right multiplicity spaces.
+
+This is the injective-sector uniqueness step in the derivation of an $F$-move.  It does not
+construct `C`, prove that either `C` or `F` is invertible, or identify the dimensions of the
+positive diagonal chi matrices with the fusion multiplicities of arXiv:1511.08090.
+
+Source: arXiv:1606.00608, Theorem IV.13(iii), label `Ualphabeta`, and the associativity remark
+immediately following it; arXiv:1511.08090, Section "Fusion tensors", uniqueness paragraph
+preceding equation (zippercondition2), and Section "Associativity and the pentagon equation",
+the injectivity argument following equation (pentagon3). -/
+theorem exists_reindexed_intertwiner_eq_kronecker_one_of_isInjective
+    (α β γ ε : Λ)
+    (hε : MPSTensor.IsInjective (Fam.tensor ε).toMPSTensor)
+    (C : Matrix (Fam.LeftFinalIndex α β γ ε)
+      (Fam.RightFinalIndex α β γ ε) ℂ)
+    (hC : ∀ ij : Fin (p * p),
+      ((1 : Matrix (Fam.LeftFinalMultiplicity α β γ ε)
+          (Fam.LeftFinalMultiplicity α β γ ε) ℂ) ⊗ₖ
+          (Fam.tensor ε).toMPSTensor ij) *
+          C.submatrix (Fam.leftFinalIndexEquiv α β γ ε).symm
+            (Fam.rightFinalIndexEquiv α β γ ε).symm =
+        C.submatrix (Fam.leftFinalIndexEquiv α β γ ε).symm
+            (Fam.rightFinalIndexEquiv α β γ ε).symm *
+          ((1 : Matrix (Fam.RightFinalMultiplicity α β γ ε)
+            (Fam.RightFinalMultiplicity α β γ ε) ℂ) ⊗ₖ
+            (Fam.tensor ε).toMPSTensor ij)) :
+    ∃ F : Matrix (Fam.LeftFinalMultiplicity α β γ ε)
+        (Fam.RightFinalMultiplicity α β γ ε) ℂ,
+      C.submatrix (Fam.leftFinalIndexEquiv α β γ ε).symm
+          (Fam.rightFinalIndexEquiv α β γ ε).symm =
+        F ⊗ₖ (1 : Matrix (Fin (Fam.bondDim ε)) (Fin (Fam.bondDim ε)) ℂ) := by
+  exact Matrix.exists_eq_kronecker_one_of_intertwines_span_eq_top
+    (Fam.tensor ε).toMPSTensor
+    (C.submatrix (Fam.leftFinalIndexEquiv α β γ ε).symm
+      (Fam.rightFinalIndexEquiv α β γ ε).symm)
+    hε.span_eq_top hC
 
 end MPOTensor.BNTFusionIsometryFamily
