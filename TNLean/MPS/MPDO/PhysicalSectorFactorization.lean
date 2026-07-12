@@ -56,10 +56,10 @@ structure PhysicalSectorFactorization (K : MPOTensor d D) where
   /-- Dimension of the right factor in each physical sector. -/
   rightDim : Fin sectorCount → ℕ
   /-- Every left sector factor is nonzero, as the direct sum ranges over the
-  nonzero sector summands in equation `AppUkU=rl`, lines 1381--1388. -/
+  nonzero sector summands in arXiv:1606.00608, Appendix C.2, lines 1381--1388. -/
   leftDim_pos : ∀ k, 0 < leftDim k
   /-- Every right sector factor is nonzero, as the direct sum ranges over the
-  nonzero sector summands in equation `AppUkU=rl`, lines 1381--1388. -/
+  nonzero sector summands in arXiv:1606.00608, Appendix C.2, lines 1381--1388. -/
   rightDim_pos : ∀ k, 0 < rightDim k
   /-- Identification of the physical space with the direct sum of its sectors. -/
   sectorEquiv : Fin d ≃ Σ k : Fin sectorCount, Fin (leftDim k) × Fin (rightDim k)
