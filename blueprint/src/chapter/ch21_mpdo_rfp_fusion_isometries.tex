@@ -281,3 +281,68 @@ them.
     taking the trace block by block and factor by factor yields the
     coefficients $\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})$.
 \end{proof}
+
+The associativity of the algebra product of \cite[eq:algebra]{Cirac2016MPDO_arXiv}
+constrains the diagonal matrices $\chi_{\alpha,\beta,\gamma}$ and, through the
+isometry statement, induces a compatibility equation between the fusion
+isometries of the two ways of bracketing a triple product,
+$(M_\alpha M_\beta) M_\gamma$ and $M_\alpha (M_\beta M_\gamma)$
+\cite[lines~995--999]{Cirac2016MPDO_arXiv}. The source attributes the
+construction of that equation, and the classification of its solutions, to
+\cite{Bultinck2017Anyons}. The next definition and theorems record the
+tensor-level content of one bracketing, $(M_\alpha M_\beta) M_\gamma$: fusing
+the first two tensors and then fusing the result with the third.
+
+\begin{definition}[Iterated fusion isometry of a triple product, left
+        bracketing]%
+    \label{def:mpdo_left_fusion_isometry}
+    \lean{MPOTensor.BNTFusionIsometryFamily.leftFusionIsometry}
+    \leanok
+    \uses{def:mpdo_bnt_fusion_isometry_family}
+    For labels $\alpha, \beta, \gamma$, the \emph{left iterated fusion
+        isometry} $U^{\mathrm L}_{\alpha,\beta,\gamma}$ is obtained by applying
+    $U_{\alpha,\beta}$ (tensored with the identity on the bond space of
+    $M_\gamma$) to fuse the first two tensors, then applying $U_{\delta,\gamma}$,
+    for each label $\delta$ appearing in the resulting direct sum, to fuse
+    the outcome with the third tensor. Its domain is indexed by pairs of
+    labels $(\delta, \varepsilon)$ together with the multiplicity indices of
+    $\chi_{\alpha,\beta,\delta}$ and $\chi_{\delta,\gamma,\varepsilon}$.
+\end{definition}
+
+\begin{theorem}[The left iterated fusion isometry is an isometry]%
+    \label{thm:mpdo_left_fusion_isometry_isometry}
+    \lean{MPOTensor.BNTFusionIsometryFamily.leftFusionIsometry_isometry}
+    \leanok
+    \uses{def:mpdo_left_fusion_isometry}
+    $(U^{\mathrm L}_{\alpha,\beta,\gamma})^\dagger
+        U^{\mathrm L}_{\alpha,\beta,\gamma} = 1$.
+\end{theorem}
+\begin{proof}\leanok
+    The composite of two isometries is an isometry.
+\end{proof}
+
+\begin{theorem}[The left iterated fusion isometry conjugates a triple product
+        onto a doubly weighted direct sum]%
+    \label{thm:mpdo_left_fusion_apply}
+    \lean{MPOTensor.BNTFusionIsometryFamily.leftFusion_apply}
+    \leanok
+    \uses{def:mpdo_left_fusion_isometry, def:mpdo_operator_product}
+    Site by site,
+    \[
+        U^{\mathrm L}_{\alpha,\beta,\gamma}\,
+        \bigl((M_\alpha M_\beta) M_\gamma\bigr)^{i j}\,
+        (U^{\mathrm L}_{\alpha,\beta,\gamma})^\dagger
+        = \bigoplus_{\delta} \bigoplus_{\varepsilon}
+        \chi_{\alpha,\beta,\delta}
+        \otimes \bigl(\chi_{\delta,\gamma,\varepsilon} \otimes
+        M_\varepsilon^{i j}\bigr).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Apply the fusion identity for $U_{\alpha,\beta}$ to the first two
+    tensors, summed against the physical index contracting with the third
+    tensor; regrouping the resulting sum block by block over $\delta$
+    exhibits it as $\chi_{\alpha,\beta,\delta}$ tensored with a letter of the
+    product tensor $M_\delta M_\gamma$, to which the fusion identity for
+    $U_{\delta,\gamma}$ applies.
+\end{proof}
