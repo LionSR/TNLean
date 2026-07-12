@@ -1476,9 +1476,9 @@ strong subadditivity for a normalized three-site reduced state.
     idempotence, the same substitution gives $S^2=S$ directly.
 \end{proof}
 
-\begin{theorem}[Normalized closed-sector trace relation]
+\begin{theorem}[Normalized closed-sector trace relations]
     \label{thm:mpdo_closed_sector_trace_normalized_pow_relation}
-    \lean{MPOTensor.closedSectorTraceMatrix_normalized_pow_two_eq_pow_three}
+    \lean{MPOTensor.closedSectorTraceMatrix_normalized_relations}
     \leanok
     \uses{def:mpdo_concrete_closed_sector_trace_matrix,
         thm:mpdo_closed_sector_pairing_normalized_idempotent}
@@ -1493,6 +1493,12 @@ strong subadditivity for a normalized three-site reduced state.
     \[
         \widehat T^2=\widehat T^3.
     \]
+    For every positive integer $N$, one also has
+    \[
+        \tr(\widehat T^N)=\tr(\widehat T).
+    \]
+    This is the valid trace-power display in
+    \cite[Appendix~C.2, lines~1490--1497]{Cirac2016MPDO_arXiv}.
     No idempotence or rank-one conclusion for $\widehat T$ is asserted.
 \end{theorem}
 
@@ -1509,6 +1515,16 @@ strong subadditivity for a normalized three-site reduced state.
         =Q(\lambda^{-1}LQ)^2\lambda^{-1}L
         =(Q\lambda^{-1}L)^3.
     \]
+    Cyclicity of trace and the idempotence of $\lambda^{-1}LQ$ give
+    \[
+      \tr(Q\lambda^{-1}L)
+        =\tr(\lambda^{-1}LQ)
+        =\tr\bigl((\lambda^{-1}LQ)^2\bigr)
+        =\tr\bigl((Q\lambda^{-1}L)^2\bigr).
+    \]
+    The preceding square--cube identity then gives
+    $\widehat T^N=\widehat T^2$ for every $N\geq2$, proving the stated trace
+    identity.
 \end{proof}
 
 \begin{definition}[Explicit neighboring $\eta$-operator data]

@@ -28,6 +28,10 @@ normalization.
   gives quasi-idempotence of the closed-sector pairing operator.
 * `closedSector_operator_normalized_idempotent`: after the source
   normalization, the pairing operator is idempotent.
+* `closedSectorTraceMatrix_normalized_trace_pow_eq_trace`: source zero
+  correlation length gives the positive-power trace identity of Lemma C.5.
+* `closedSectorTraceMatrix_normalized_relations`: the square--cube and
+  trace-power identities hold for one common source normalization.
 * `closedSector_operator_idempotent_of_physTraceTransfer_sq`: for a
   canonically normalized representative, the raw pairing operator is
   idempotent.
@@ -183,24 +187,26 @@ theorem closedSector_operator_normalized_idempotent
   rw [← concrete_physTraceTransfer_eq_sum_closedSector K hK hη R hρ α₁ β₃ hm]
   exact hidem
 
-/-- Source zero correlation length implies that the normalized concrete
-closed-sector trace matrix satisfies
+/-- Source zero correlation length supplies one positive normalization for
+which the normalized concrete closed-sector trace matrix satisfies both
 \[
-  \widehat T^2=\widehat T^3,
-  \qquad \widehat T=\lambda^{-1}T,
-  \qquad \lambda>0.
+  \widehat T^2=\widehat T^3
 \]
-This follows by writing the normalized closed-sector pairing operator as
-`L * Q` and the normalized trace matrix as `Q * L`.  The conclusion does not
-assert that the trace matrix is idempotent or has rank one.
-
-Derived from the zero-correlation-length identity in the proof of
-arXiv:1606.00608, Appendix C.2, Lemma `SALZCL`, lines 1490--1497. -/
-theorem closedSectorTraceMatrix_normalized_pow_two_eq_pow_three
+and, for every positive integer `N`,
+\[
+  \operatorname{tr}(\widehat T^N)=\operatorname{tr}(\widehat T).
+\]
+These are the source-faithful consequences of the rectangular pairing identity
+in arXiv:1606.00608, Appendix C.2, Lemma `SALZCL`, lines 1490--1497. They do
+not assert that the trace matrix is idempotent or has rank one. -/
+theorem closedSectorTraceMatrix_normalized_relations
     (hZCL : IsSourceZCL K) :
     ∃ lam : ℝ, 0 < lam ∧
       let T := closedSectorTraceMatrix K hK hη R α₁ β₃
-      (((lam : ℂ)⁻¹ • T) ^ 2 = ((lam : ℂ)⁻¹ • T) ^ 3) := by
+      (((lam : ℂ)⁻¹ • T) ^ 2 = ((lam : ℂ)⁻¹ • T) ^ 3) ∧
+        ∀ N : ℕ, 0 < N →
+          Matrix.trace (((lam : ℂ)⁻¹ • T) ^ N) =
+            Matrix.trace ((lam : ℂ)⁻¹ • T) := by
   obtain ⟨lam, hlam, hidem⟩ :=
     closedSector_operator_normalized_idempotent K hK hη R hρ α₁ β₃ hm hZCL
   let L : Matrix (Fin D) (Fin hη.m) ℂ :=
@@ -219,9 +225,55 @@ theorem closedSectorTraceMatrix_normalized_pow_two_eq_pow_three
   dsimp only
   have hrect : IsIdempotentElem (((lam : ℂ)⁻¹ • L) * Q) := by
     simpa only [Matrix.smul_mul, ← hS] using hidem
-  have hpow := Matrix.pow_two_eq_pow_three_of_rectangular_idempotent
-    ((lam : ℂ)⁻¹ • L) Q hrect
-  simpa only [Matrix.mul_smul, ← hT] using hpow
+  constructor
+  · have hpow := Matrix.pow_two_eq_pow_three_of_rectangular_idempotent
+      ((lam : ℂ)⁻¹ • L) Q hrect
+    simpa only [Matrix.mul_smul, ← hT] using hpow
+  · have htrace := Matrix.trace_pow_eq_trace_of_rectangular_idempotent
+      ((lam : ℂ)⁻¹ • L) Q hrect
+    simpa only [Matrix.mul_smul, ← hT] using htrace
+
+/-- Source zero correlation length implies that the normalized concrete
+closed-sector trace matrix satisfies
+\[
+  \widehat T^2=\widehat T^3,
+  \qquad \widehat T=\lambda^{-1}T,
+  \qquad \lambda>0.
+\]
+This follows by writing the normalized closed-sector pairing operator as
+`L * Q` and the normalized trace matrix as `Q * L`.  The conclusion does not
+assert that the trace matrix is idempotent or has rank one.
+
+Derived from the zero-correlation-length identity in the proof of
+arXiv:1606.00608, Appendix C.2, Lemma `SALZCL`, lines 1490--1497. -/
+theorem closedSectorTraceMatrix_normalized_pow_two_eq_pow_three
+    (hZCL : IsSourceZCL K) :
+    ∃ lam : ℝ, 0 < lam ∧
+      let T := closedSectorTraceMatrix K hK hη R α₁ β₃
+      (((lam : ℂ)⁻¹ • T) ^ 2 = ((lam : ℂ)⁻¹ • T) ^ 3) := by
+  obtain ⟨lam, hlam, hpow, _⟩ :=
+    closedSectorTraceMatrix_normalized_relations K hK hη R hρ α₁ β₃ hm hZCL
+  exact ⟨lam, hlam, hpow⟩
+
+/-- Source zero correlation length implies the positive-power trace identity
+for the normalized concrete closed-sector trace matrix:
+\[
+  \operatorname{tr}(\widehat T^N)=\operatorname{tr}(\widehat T),
+  \qquad \widehat T=\lambda^{-1}T,\quad N\geq 1.
+\]
+The conclusion is the valid display in arXiv:1606.00608, Appendix C.2,
+Lemma `SALZCL`, lines 1490--1497. It does not assert that the trace matrix is
+idempotent or has rank one. -/
+theorem closedSectorTraceMatrix_normalized_trace_pow_eq_trace
+    (hZCL : IsSourceZCL K) :
+    ∃ lam : ℝ, 0 < lam ∧
+      let T := closedSectorTraceMatrix K hK hη R α₁ β₃
+      ∀ N : ℕ, 0 < N →
+        Matrix.trace (((lam : ℂ)⁻¹ • T) ^ N) =
+          Matrix.trace ((lam : ℂ)⁻¹ • T) := by
+  obtain ⟨lam, hlam, _, htrace⟩ :=
+    closedSectorTraceMatrix_normalized_relations K hK hη R hρ α₁ β₃ hm hZCL
+  exact ⟨lam, hlam, htrace⟩
 
 /-- For a canonically normalized representative whose physical-trace transfer
 is literally idempotent, the raw closed-sector pairing operator satisfies

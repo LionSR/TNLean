@@ -98,9 +98,9 @@ matrix implication
 \]
 is false for finite entrywise non-negative real matrices.
 \footnote{The formal counterexample is
-\path{TNLean/Archive/PerronFrobeniusRankOneCounterexample.lean}, especially the
-matrix definition at lines 63--65 and the theorem \texttt{counterexample} at
-lines 150--154. It is also summarized in
+\path{TNLean/Archive/PerronFrobeniusRankOneCounterexample.lean}, especially
+\texttt{counterexample} and
+\texttt{counterexample\_with\_rectangular\_pairing}. It is also summarized in
 \path{docs/counterexamples.md:19--27}.}
 
 This example has the form $T=P+\frac16 xy^{\top}$, where
@@ -108,6 +108,37 @@ $x=(1,-1,0)^{\top}$ and $y=(1,1,-2)^{\top}$. The perturbation satisfies
 $(xy^{\top})^2=0$ and is annihilated by $P$ on both sides. It therefore
 leaves all traces of positive powers unchanged from the Perron projector while
 raising the rank of $T$.
+
+The same matrix has a genuinely rectangular realization of the pairing in
+lines 1490--1497 of Appendix C.2.  Set
+\[
+  L=
+  \begin{pmatrix}
+    \tfrac13&\tfrac13&\tfrac13\\
+    \tfrac16&\tfrac16&-\tfrac13
+  \end{pmatrix},
+  \qquad
+  R=
+  \begin{pmatrix}
+    1&1\\
+    1&-1\\
+    1&0
+  \end{pmatrix}.
+\]
+Direct multiplication gives
+\[
+  RL=T,
+  \qquad
+  LR=
+  \begin{pmatrix}1&0\\0&0\end{pmatrix},
+  \qquad
+  (LR)^2=LR.
+\]
+Thus the counterexample satisfies not only the scalar trace identities but
+also the full rectangular idempotence underlying the displayed
+zero-correlation-length equation at source lines 1490--1493.  Nevertheless
+$T$ is not an outer product, so this equation does not justify the rank-one
+assertion at lines 1498--1499.
 
 \section{What the operator-valued ZCL identity implies}
 
@@ -123,10 +154,27 @@ by $R$ and on the right by $L$ gives only
 \[
   T^2=T^3,
 \]
-not $T=T^2$.  The counterexample above already satisfies this weaker identity:
-$T^2=T^3=P$.  Thus retaining the displayed operator equation, without a
-further property of the inverse-map families $l_k$ and $r_k$, does not remove
-the nilpotent part of $T$.
+not $T=T^2$.  The rectangular matrices displayed above satisfy the full
+hypothesis $T=RL$ and $(LR)^2=LR$, while $T^2=T^3=P$.  Thus retaining the
+displayed operator equation, without a further property of the inverse-map
+families $l_k$ and $r_k$, does not remove the nilpotent part of $T$.
+
+There is nevertheless a direct rectangular proof of the trace-power display
+at source lines 1494--1497.  Cyclicity of trace gives
+\[
+  \tr(T)=\tr(RL)
+  =\tr(LR)
+  =\tr((LR)^2)
+  =\tr(T^2).
+\]
+Together with $T^2=T^3$, this implies $T^N=T^2$ for every $N\geq2$, and hence
+\[
+  \tr(T^N)=\tr(T)
+\]
+for every positive integer $N$.
+\footnote{\sloppy Formal declaration:
+{\scriptsize\leanid{Matrix.trace_pow_eq_trace_of_rectangular_idempotent}} in
+\doclink{TNLean/Algebra/PerronFrobenius/RankOne}.}
 
 The exact sufficient conclusion is transparent.  If the inverse-map
 construction were shown to give $T^2=T$, then $T$ itself would be idempotent.
@@ -238,12 +286,17 @@ Source zero correlation length therefore supplies a number $\lambda>0$ for
 which the normalized pairing operator is idempotent.  The rectangular
 factorization $S=L R$ and $T=R L$ then proves
 \[
-  (\lambda^{-1}T)^2=(\lambda^{-1}T)^3.
+  (\lambda^{-1}T)^2=(\lambda^{-1}T)^3,
+  \qquad
+  \tr((\lambda^{-1}T)^N)
+    =\tr(\lambda^{-1}T)
 \]
-This is formalized as
-{\scriptsize\leanid{MPOTensor.closedSectorTraceMatrix_apply}} and
-{\scriptsize\leanid{MPOTensor.closedSectorTraceMatrix_normalized_pow_two_eq_pow_three}}
-in \doclink{TNLean/MPS/MPDO/SectorPairingTransfer}.
+for every positive integer $N$.
+\footnote{\sloppy Formal declarations:
+{\scriptsize\leanid{MPOTensor.closedSectorTraceMatrix_apply}},
+and
+{\scriptsize\leanid{MPOTensor.closedSectorTraceMatrix_normalized_relations}}
+in \doclink{TNLean/MPS/MPDO/SectorPairingTransfer}.}
 
 This conclusion is the scale-invariant consequence of the displayed operator
 equation; it does not imply that the normalized trace matrix is

@@ -9,12 +9,14 @@ mathematical obstruction.
 ### Primitive constant trace powers need not be rank one
 
 - Location: `TNLean/Archive/PerronFrobeniusRankOneCounterexample.lean`
-- Main declaration: `TNLean.Archive.PerronFrobeniusRankOneCounterexample.counterexample`
+- Main declaration:
+  `TNLean.Archive.PerronFrobeniusRankOneCounterexample.counterexample_with_rectangular_pairing`
 - Statement refuted: a primitive nonnegative matrix whose positive powers have
   constant trace must have rank one.
-- Relevance: this blocks the standalone rank-one step used in the
-  simple-MPDO Appendix C.2 track of arXiv:1606.00608 unless extra structure is
-  added, such as positivity or diagonalizability hypotheses.
+- Relevance: explicit rectangular factors satisfy $T=RL$ with $LR$
+  idempotent, so even the full pairing identity of Appendix C.2 yields the
+  constant traces but not rank one. An additional condition excluding the
+  generalized zero-eigenspace is required.
 
 ### BiCF does not follow from the other horizontal canonical-form fields
 

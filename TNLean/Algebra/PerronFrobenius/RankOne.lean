@@ -62,6 +62,11 @@ of a composition there. Combined with `Matrix.pow_eq_pow_two_of_pow_two_eq_pow_t
 (a purely algebraic fact: `T^2 = T^3` forces `T^N = T^2` for every `N ≥ 2`),
 `Matrix.tracePowersConstant_of_pairing_idempotent` gives the unconditional
 constant trace powers `Matrix.TracePowersConstant T`.
+
+More generally, `Matrix.trace_pow_eq_trace_of_rectangular_idempotent` proves
+the trace-power identity directly for any rectangular factorization `T = QL`
+whose opposite product `LQ` is idempotent. This is the matrix calculation at
+Appendix C.2, lines 1490--1497.
 -/
 
 open scoped BigOperators Matrix ComplexOrder
@@ -327,6 +332,41 @@ theorem pow_two_eq_pow_three_of_rectangular_idempotent
   rw [show (Q * L) ^ 3 = Q * ((L * Q) * (L * Q)) * L by
     simp [pow_succ, Matrix.mul_assoc]]
   rw [h.eq]
+
+/-- If the rectangular product `L * Q` is idempotent, then all positive powers
+of the product in the opposite order have the same trace:
+\[
+  \operatorname{tr}((QL)^N)=\operatorname{tr}(QL), \qquad N\geq 1.
+\]
+This is the valid trace-power conclusion in arXiv:1606.00608,
+Appendix C.2, lines 1490--1497. -/
+theorem trace_pow_eq_trace_of_rectangular_idempotent
+    {a b : Type*} [Fintype a] [Fintype b] [DecidableEq b]
+    {R : Type*} [CommSemiring R] (L : Matrix a b R) (Q : Matrix b a R)
+    (h : IsIdempotentElem (L * Q)) :
+    ∀ N : ℕ, 0 < N → Matrix.trace ((Q * L) ^ N) = Matrix.trace (Q * L) := by
+  classical
+  have htrace2 : Matrix.trace ((Q * L) ^ 2) = Matrix.trace (Q * L) := by
+    calc
+      Matrix.trace ((Q * L) ^ 2) = Matrix.trace ((Q * L * Q) * L) := by
+        simp [pow_two, Matrix.mul_assoc]
+      _ = Matrix.trace (L * (Q * L * Q)) := Matrix.trace_mul_comm _ _
+      _ = Matrix.trace ((L * Q) * (L * Q)) := by simp [Matrix.mul_assoc]
+      _ = Matrix.trace (L * Q) := by rw [h.eq]
+      _ = Matrix.trace (Q * L) := Matrix.trace_mul_comm _ _
+  have hsq3 := pow_two_eq_pow_three_of_rectangular_idempotent L Q h
+  have hpowers : ∀ N : ℕ, 2 ≤ N → (Q * L) ^ N = (Q * L) ^ 2 := by
+    intro N hN
+    induction N, hN using Nat.le_induction with
+    | base => rfl
+    | succ m _ ih =>
+      rw [pow_succ, ih]
+      exact hsq3.symm
+  intro N hN
+  rcases Nat.lt_or_ge N 2 with hN2 | hN2
+  · interval_cases N
+    rw [pow_one]
+  · rw [hpowers N hN2, htrace2]
 
 /-- **Unconditional `T^2 = T^3` from the pairing idempotence.**
 
