@@ -13,11 +13,12 @@
     MPS tensor generates the same MPV family as a block-diagonal tensor
     $\bigoplus_k \mu_k A_k$ whose blocks are injective, left-canonical, and
     have nonzero weights $\mu_k$. It also includes a finite-length
-    block-separation condition: there is a length $L$ such that
+    block-separation condition: there is a length $L$ such that, for every
+    tuple $(\Delta_k)_k$ of block matrices,
     \[
-        \sum_k \tr(\Delta_k A_k^w)=0
+        \Bigl(\forall\, w \text{ of length } L,\ \textstyle\sum_k \tr(\Delta_k A_k^w)=0\Bigr)
+        \implies \forall k,\ \Delta_k=0.
     \]
-    for every word $w$ of length $L$ implies $\Delta_k=0$ for every block $k$.
 \end{definition}
 
 \begin{figure}[ht]
@@ -115,45 +116,68 @@
     \lean{MPOTensor.horizontalCFData_of_wordEntryFamily_linearIndependent}
     \lean{MPOTensor.horizontalCFData_of_propBlockInjective}
     \leanok
-    Let $(A_k)$ be a family of block tensors, and fix a length $L$.
-    Write $A_k^w$ for the length-$L$ word evaluation of $A_k$ along a word $w$.
-    The finite-length spanning hypothesis says that the tuple-valued evaluations
+    Let $(A_k)_{k}$ be a finite family of block tensors of physical
+    dimension~$d$, and fix a length $L$; write $A_k^w$ for the length-$L$
+    word evaluation of $A_k$ along a word $w \in \{0,\ldots,d{-}1\}^L$. The
+    finite-length spanning hypothesis is that the tuple-valued evaluations
+    span the full product algebra of block matrices,
     \[
-        w \longmapsto (A_k^w)_k
+        \spn_{\C}\bigl\{\,(A_k^w)_k
+            : w \in \{0,\ldots,d{-}1\}^L\,\bigr\}
+        = \textstyle\prod_k \MN{D_k}.
     \]
-    span the full product algebra of block matrices.
-    The corresponding finite-length separation property asserts that there
-    exists a length $L$ such that if, for every word $w$ of length~$L$,
+    The corresponding finite-length separation property is that some length
+    $L$ makes the trace pairing against block words nondegenerate: there is
+    a length $L$ such that, for every tuple $(\Delta_k)_k$ of block
+    matrices,
     \[
-        \sum_k \tr(\Delta_k A_k^w) = 0
+        \Bigl(\forall\, w \in \{0,\ldots,d{-}1\}^L,\
+            \textstyle\sum_k \tr(\Delta_k A_k^w) = 0\Bigr)
+        \implies \forall k,\ \Delta_k = 0.
     \]
-    then these pairings vanish on a spanning set for the product algebra, so
-    the induced linear functional on the product algebra is zero; by
-    nondegeneracy of the product trace pairing, every $\Delta_k$ vanishes.
-    In other words, a single finite blocking length already separates the blocks
-    by their word evaluations. Combined with injectivity, left-canonicality, and
-    nonzero block weights, this finite-length separation yields the horizontal
-    canonical-form data of the block-diagonal tensor.
+    Spanning at length~$L$ gives separation at the same length: a trace
+    functional that vanishes on every tuple $(A_k^w)_k$ vanishes on their
+    span, hence on the whole product algebra, so nondegeneracy of the
+    product trace pairing forces every $\Delta_k=0$. Combined with
+    injectivity, left-canonicality, and nonzero block weights, this
+    finite-length separation yields the horizontal canonical-form data of
+    the block-diagonal tensor.
 
-    The entrywise scalar family of block-matrix coefficients encodes the same
-    finite-length data. Linear independence of that scalar family implies the
-    product-algebra spanning statement, hence a block-injective
-    canonical-form witness. The same criterion therefore gives horizontal
-    canonical-form data directly.
-    The duplicate-scalar counterexample shows that this finite-length witness
+    The spanning hypothesis has an equivalent entrywise form. For a block
+    index $k$ and matrix entry $(a,b)$, let
+    \[
+        w \longmapsto (A_k^w)_{a,b}
+    \]
+    be the corresponding scalar word family, indexed jointly by the triple
+    $(k,a,b)$. Linear independence of this scalar family already implies
+    the spanning condition, hence the separation property, and hence the
+    horizontal canonical-form data directly.
+
+    The duplicate-scalar counterexample shows that the separation property
     is strictly stronger than blockwise injectivity, left-canonicality, and
-    nonzero weights alone: two identical scalar blocks satisfy those hypotheses,
-    but the block-injective canonical-form separation condition fails and no
-    blocking length makes the entrywise family linearly independent.
+    nonzero weights alone. Take $d=1$ and two blocks of bond dimension~$1$
+    with $A_0^{0}=A_1^{0}=1$ and weights $\mu_0=1$, $\mu_1=2$: both blocks
+    are injective and left-canonical, $(A_k^0)^\dagger A_k^0=1$, and the
+    weights are nonzero, but at every length $L$ there is a unique word $w$
+    and $A_0^w=A_1^w=1$, so $\Delta_0=1$, $\Delta_1=-1$ satisfies
+    $\sum_k \tr(\Delta_k A_k^w)=0$ while $\Delta\neq0$. Thus the separation
+    property fails, and no length makes the entrywise scalar family linearly
+    independent.
 
-    The block-injectivity proposition in
+    The block-injectivity proposition of
     \cite[lines~340--345]{Cirac2016MPDO_arXiv} gives a concrete sufficient
-    criterion for the spanning condition: after a common blocking length each
-    block is block-injective, and after a further finite blocking length one
-    can form linear combinations of word evaluations which equal the identity
-    on one chosen block and vanish on all others. Concatenating an injective
-    prefix with this finite block-separation data produces the product-algebra
-    spanning condition, hence the horizontal canonical-form data.
+    criterion for the spanning condition: a common length $L$ with every
+    block $L$-block-injective, together with a length $S$ at which, for
+    every $k$, there is a coefficient family $(c_w)_{w \in
+    \{0,\ldots,d{-}1\}^S}$ with
+    \[
+        \sum_w c_w A_k^w = \Id,
+        \qquad
+        \forall\, j\neq k,\ \sum_w c_w A_j^w = 0.
+    \]
+    Concatenating the injective prefix with this finite selector family
+    produces the spanning condition at length $L+S$, hence the separation
+    property and the horizontal canonical-form data.
 \end{remark}
 
 \begin{figure}[ht]
@@ -199,12 +223,22 @@
     \uses{def:block_diagonal_tensor, def:injective, thm:propblockinj_abstract}
     Let $\bigoplus_k \mu_k A_k$ be a block-diagonal tensor whose blocks are
     injective, left-canonical, weighted by nonzero scalars, and jointly
-    block-injective in the sense that for some blocking length~$L$ the tuple of
-    trace pairings against length-$L$ block words is faithful across all blocks
-    simultaneously.
-    If two physical operators induce the same first-site action on every MPV
-    generated by this tensor, then their first-site insertions agree on each
-    block $A_k$.
+    block-injective in the sense that for some blocking length~$L$ the tuple
+    of trace pairings against length-$L$ block words is faithful across all
+    blocks simultaneously.
+    For $Y\in M_d(\C)$, write $(YA_k)^i := \sum_{j=0}^{d-1}Y_{i,j}A_k^j$ for
+    the physical-index insertion of $Y$ into block $A_k$, and for a
+    configuration $\sigma=(i_1,\ldots,i_N)$ write
+    \[
+        \bigl(Y_1V^{(N)}(A)\bigr)_{(i_1,\ldots,i_N)}
+        := \sum_{j=0}^{d-1} Y_{i_1,j}\, V^{(N)}(A)_{(j,i_2,\ldots,i_N)}
+    \]
+    for $Y$ acting on the first physical index of the MPV.
+    If $Y,Z\in M_d(\C)$ satisfy
+    \[
+        Y_1V^{(N)}(A) = Z_1V^{(N)}(A)
+    \]
+    for every $N\ge 1$, then $YA_k=ZA_k$ for every block $k$.
 
     \textbf{Scope restriction (per-block separation).} The source's Lemma~L
     separates blockwise contributions at the level of a minimal basis of
@@ -294,12 +328,20 @@
     \lean{MPOTensor.blockwise_opposite_insert_eq_of_mpv_agree}
     \leanok
     \uses{def:block_diagonal_tensor, thm:propblockinj_abstract}
-    Let $\bigoplus_k\mu_kA_k$ be in block-injective canonical form.  Suppose
-    three first-site contractions represent $PH^{(N)}$, $PH^{(N)}P$, and
-    $H^{(N)}P$, respectively.  If the first and second contractions agree for
-    every $N$, and the first and third contractions agree for every $N$, then
-    the insertions representing $H^{(N)}P$ and $PH^{(N)}P$ agree on each block
-    $A_k$.
+    Let $\bigoplus_k\mu_kA_k$ be in block-injective canonical form and let
+    $Y_L,Y_C,Y_R\in M_d(\C)$, with $Y_1V^{(N)}(A)$ denoting $Y$ acting on the
+    first physical index of the MPV as in
+    Lemma~\ref{lem:blockwise_insert_eq_of_mpv_agree}. If, for every
+    $N\ge 1$,
+    \[
+        (Y_L)_1V^{(N)}(A) = (Y_C)_1V^{(N)}(A),
+        \qquad
+        (Y_L)_1V^{(N)}(A) = (Y_R)_1V^{(N)}(A),
+    \]
+    then $Y_RA_k=Y_CA_k$ for every block $A_k$. This anticipates the
+    concrete instantiation with $Y_L,Y_C,Y_R$ the physical-index insertions
+    of $P$, $PHP$, $HP$ in
+    Theorem~\ref{thm:blockwise_opposite_insert_rotated_mpo}.
 
     \textbf{Scope restriction (per-block separation).} Inherited from
     Lemma~\ref{lem:blockwise_insert_eq_of_mpv_agree}: decompositions with
