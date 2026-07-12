@@ -84,6 +84,21 @@
     \node at ($(#1.south)+(0,-#2)$) {$#3$};%
 }
 
+% A labeled Hayashi subspin factor.  The short vertical stroke follows the
+% source diagrams in Appendix C.2; horizontal strokes are added separately so
+% that a public diagram can display either a physical site or a regrouped
+% tensor product without changing the glyph.
+\newcommand{\TN@subspinbox}[3]{%
+    \node[draw, fill=white, minimum width=0.72cm, minimum height=0.52cm,
+        inner sep=1pt] (#1) at #2 {$#3$};%
+    \draw[tn leg] (#1.north) -- ++(0,0.26);%
+    \draw[tn leg] (#1.south) -- ++(0,-0.26);%
+}
+
+\newcommand{\TN@subspinlink}[2]{%
+    \draw[tn leg] (#1.east) -- (#2.west);%
+}
+
 % ---------- Layout commands ----------
 
 \newcommand{\TN@openMPSword}[4]{%
