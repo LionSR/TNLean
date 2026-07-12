@@ -79,10 +79,22 @@ and linearity extends the absorption from the parts to every fixed point.
 
 \section{Verdict}
 
-The corner-support restriction is eliminated at the constructed fixed point of maximal
-support. The residual gap against the source is the corollary's quantification over an
-\emph{arbitrary} maximum-rank fixed-point density matrix: identifying the supports of
-any two maximum-rank fixed points, so that the statement transfers from the constructed
-witness to every maximum-rank fixed point, is not established here.
+The restriction is eliminated. The maximal-support property holds at the constructed
+witness (\leanid{Kraus.exists\_maximalSupport\_fixedPoint}), and the transfer to every
+maximum-rank fixed point is
+\leanid{Kraus.maximalSupport\_of\_maximalRank} in
+\leanid{TNLean/Channel/FixedPoint/MaximalRank.lean}: for any positive semidefinite fixed
+point $\rho$ whose rank bounds the rank of every fixed-point density matrix, the support
+projection of $\rho$ carries every fixed point, because the support projection of a
+positive semidefinite matrix has the rank of the matrix and its trace is that rank, so
+the two support projections have equal traces, one absorbs the other, and they coincide.
+The conjugated set $\rho^{-1/2}\,\{X \mid T(X) = X\}\,\rho^{-1/2}$ of the corollary is
+realized at every such $\rho$
+(\leanid{Kraus.exists\_weightedCorner\_sqrt\_eq\_of\_maximalRank}), with the inverse
+square root taken on the support of $\rho$. Unit trace of $\rho$ itself is not needed for
+the conclusion and is not assumed; the maximality hypothesis quantifies over fixed-point
+density matrices, as in the source. The remaining scope convention is the Kraus
+(completely positive) case of the source's Schwarz hypothesis, shared by the other
+formalized results of the section.
 
 \end{document}
