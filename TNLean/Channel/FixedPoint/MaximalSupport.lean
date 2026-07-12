@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.FixedPoint.WeightedCornerFixedPoints
+import TNLean.MPS.Core.CPPrimitive
 import TNLean.Channel.FixedPoint.Cesaro
 
 /-!
@@ -16,9 +17,8 @@ property of fixed points stated in Section 6.4 of *Quantum Channels & Operations
 the fixed-point space to the identity; the construction here instead sums the positive
 parts of a basis of the fixed-point space, so that every fixed point is a linear
 combination of positive fixed points dominated by $\rho_0$, and domination transfers the
-support:
-$$0 \preceq P \preceq \rho \;\Longrightarrow\; Q\,P = P = P\,Q,$$
-for $Q$ the support projection of $\rho$.
+support: for $Q$ the support projection of $\rho$,
+$$0 \preceq P \preceq \rho \;\Longrightarrow\; Q\,P = P = P\,Q.$$
 
 Instantiating the weighted corner fixed points at $\rho_0$ removes the corner-support
 restriction: conjugation by $\sqrt{\rho_0}$ maps the weighted corner star-algebra
@@ -109,23 +109,12 @@ theorem stationaryProj_absorb_of_le {ρ P : Mat} (hρ_psd : ρ.PosSemidef)
   have h := congrArg Matrix.conjTranspose hQP
   rwa [Matrix.conjTranspose_mul, hQherm, hP_psd.isHermitian.eq] at h
 
-/-- The transfer map of a trace-preserving Kraus family is a quantum channel: it is
-completely positive by its Kraus form and trace-preserving because
-$\sum_i K_i^\dagger K_i = \mathbf 1$. -/
+/-- The transfer map of a trace-preserving Kraus family is a quantum channel; the
+trace-preservation hypothesis is the normalization of the channel form of the transfer
+map (`MPSTensor.transferMap_isChannel`). -/
 theorem isChannel_transferMap (K : Fin d → Mat) (h_tp : IsTP K) :
-    IsChannel (MPSTensor.transferMap (d := d) (D := D) K) := by
-  constructor
-  · exact ⟨d, K, fun X => by simp [MPSTensor.transferMap_apply]⟩
-  · intro X
-    calc Matrix.trace (MPSTensor.transferMap (d := d) (D := D) K X)
-        = ∑ i : Fin d, Matrix.trace (K i * X * (K i)ᴴ) := by
-          rw [MPSTensor.transferMap_apply, Matrix.trace_sum]
-      _ = ∑ i : Fin d, Matrix.trace ((K i)ᴴ * K i * X) := by
-          refine Finset.sum_congr rfl fun i _ => ?_
-          rw [Matrix.trace_mul_cycle]
-      _ = Matrix.trace ((∑ i : Fin d, (K i)ᴴ * K i) * X) := by
-          rw [Matrix.sum_mul, Matrix.trace_sum]
-      _ = Matrix.trace X := by rw [h_tp, Matrix.one_mul]
+    IsChannel (MPSTensor.transferMap (d := d) (D := D) K) :=
+  MPSTensor.transferMap_isChannel K h_tp
 
 /-- **A fixed point of maximal support.** For a trace-preserving Kraus map $T$ there is a
 positive semidefinite fixed point $\rho_0$ whose support carries every fixed point:
@@ -290,9 +279,8 @@ that every fixed point $X$ of $T$ arises as $X = \sqrt{\rho_0}\, Y \sqrt{\rho_0}
 corner-supported $Y$ with $\sqrt{\rho_0}\, Y \sqrt{\rho_0}$ fixed by $T$: conjugation by
 $\sqrt{\rho_0}$ maps the carrier of the weighted corner star-subalgebra
 (`Kraus.weightedCornerFixedPointsStarSubalgebra`) onto the full fixed-point set, so that
-set realizes
-$$\rho_0^{-1/2}\,\{X \mid T(X) = X\}\,\rho_0^{-1/2},$$
-with the inverse square root taken on the support of $\rho_0$. This is the conjugated
+set realizes, with the inverse square root taken on the support of $\rho_0$,
+$$\rho_0^{-1/2}\,\{X \mid T(X) = X\}\,\rho_0^{-1/2}.$$ This is the conjugated
 fixed-point set of Corollary 6.7 of *Quantum Channels & Operations* (Wolf 2012), at a
 fixed point of maximal support; after normalization $\rho_0$ is a fixed-point density
 matrix of maximum rank, as in the corollary. -/
