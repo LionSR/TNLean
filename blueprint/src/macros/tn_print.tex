@@ -1101,6 +1101,46 @@
     \end{tikzpicture}%
 }
 
+% The two fixed-final-label fusion trees.  The dashed bridge records the
+% F-change of multiplicity basis that remains to be constructed.
+\newcommand{\TNMPDOFixedFinalFusionBracketings}{%
+    \begin{tikzpicture}[tn picture, scale=0.92]
+        \node (la) at (0,0) {$\alpha$};
+        \node (lb) at (0.90,0) {$\beta$};
+        \node (lc) at (1.80,0) {$\gamma$};
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+            (lab) at (0.45,0.78) {$U_{\alpha,\beta}^{\delta}$};
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+            (labc) at (1.12,1.62) {$U_{\delta,\gamma}^{\varepsilon}$};
+        \draw[tn leg] (la.north) -- (lab.south west);
+        \draw[tn leg] (lb.north) -- (lab.south east);
+        \draw[tn leg] (lab.north) -- (labc.south west);
+        \draw[tn leg] (lc.north) -- (labc.south east);
+        \draw[tn leg] (labc.north) -- ++(0,0.42)
+            node[above] {$\varepsilon$};
+        \node at (0.90,-0.48) {$((\alpha\beta)\gamma)$};
+
+        \node (ra) at (4.20,0) {$\alpha$};
+        \node (rb) at (5.10,0) {$\beta$};
+        \node (rc) at (6.00,0) {$\gamma$};
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+            (rbc) at (5.55,0.78) {$U_{\beta,\gamma}^{\eta}$};
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+            (rabc) at (4.88,1.62) {$U_{\alpha,\eta}^{\varepsilon}$};
+        \draw[tn leg] (rb.north) -- (rbc.south west);
+        \draw[tn leg] (rc.north) -- (rbc.south east);
+        \draw[tn leg] (ra.north) -- (rabc.south west);
+        \draw[tn leg] (rbc.north) -- (rabc.south east);
+        \draw[tn leg] (rabc.north) -- ++(0,0.42)
+            node[above] {$\varepsilon$};
+        \node at (5.10,-0.48) {$(\alpha(\beta\gamma))$};
+
+        \draw[<->, densely dashed, line width=0.4pt]
+            (labc.east) -- node[above] {$F_{\varepsilon}^{\alpha\beta\gamma}$}
+            (rabc.west);
+    \end{tikzpicture}%
+}
+
 % Fusion isometry of the renormalization fixed-point characterization: two
 % contracted copies of the tensor equal one copy with the isometry merging
 % the summed index into the physical pair.

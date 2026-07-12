@@ -293,6 +293,18 @@ construction of that equation, and the classification of its solutions, to
 tensor-level content of the two bracketings separately. They do not yet assert
 the change of basis between the two resulting direct sums.
 
+\begin{figure}[ht]
+    \centering
+    \TNMPDOFixedFinalFusionBracketings
+    \caption{The two ways of fusing three labels to a fixed final label
+        $\varepsilon$, in the diagrammatic language of
+        \cite[eq.~(Fmove)]{Bultinck2017Anyons}.  The solid fusion trees are
+        the left- and right-bracketed maps constructed below.  The dashed
+        bridge denotes the remaining change of multiplicity basis; it is not
+        asserted by the present results.}
+    \label{fig:mpdo_fixed_final_fusion_bracketings}
+\end{figure}
+
 \begin{definition}[Iterated fusion isometry of a triple product, left
         bracketing]%
     \label{def:mpdo_left_fusion_isometry}
@@ -304,7 +316,7 @@ the change of basis between the two resulting direct sums.
     $U_{\alpha,\beta}$ (tensored with the identity on the bond space of
     $M_\gamma$) to fuse the first two tensors, then applying $U_{\delta,\gamma}$,
     for each label $\delta$ appearing in the resulting direct sum, to fuse
-    the outcome with the third tensor. Its domain is indexed by pairs of
+    the outcome with the third tensor. Its codomain is indexed by pairs of
     labels $(\delta, \varepsilon)$ together with the multiplicity indices of
     $\chi_{\alpha,\beta,\delta}$ and $\chi_{\delta,\gamma,\varepsilon}$.
 \end{definition}
@@ -405,4 +417,98 @@ the change of basis between the two resulting direct sums.
     \]
     The fusion identity for $U_{\alpha,\delta}$ then gives the stated direct
     sum over $\varepsilon$.
+\end{proof}
+
+\begin{definition}[Fixed-final multiplicity spaces]%
+    \label{def:mpdo_final_sector_multiplicity_spaces}
+    \lean{MPOTensor.BNTFusionIsometryFamily.LeftFinalMultiplicity}
+    \lean{MPOTensor.BNTFusionIsometryFamily.RightFinalMultiplicity}
+    \leanok
+    \uses{def:mpdo_bnt_fusion_isometry_family}
+    Fix a final label $\varepsilon$.  The multiplicity spaces of the two
+    bracketings are
+    \[
+        \mathcal H^{\mathrm L}_{\varepsilon}
+          = \bigoplus_{\delta}
+            \C^{\dim\chi_{\alpha,\beta,\delta}}
+            \otimes \C^{\dim\chi_{\delta,\gamma,\varepsilon}},
+        \qquad
+        \mathcal H^{\mathrm R}_{\varepsilon}
+          = \bigoplus_{\delta}
+            \C^{\dim\chi_{\beta,\gamma,\delta}}
+            \otimes \C^{\dim\chi_{\alpha,\delta,\varepsilon}}.
+    \]
+    These spaces have the bracketing pattern of the $(e,\mu,\nu)$ and
+    $(f,\lambda,\sigma)$ index spaces in equation (Fmove) of
+    \cite{Bultinck2017Anyons}.  Identifying the dimensions of the positive
+    diagonal matrices with the fusion multiplicities of that equation
+    requires the length-independent integer specialization and is not
+    asserted here.  The corresponding fixed-final row spaces are
+    $\mathcal H^{\mathrm L}_{\varepsilon}\otimes\C^{D_\varepsilon}$ and
+    $\mathcal H^{\mathrm R}_{\varepsilon}\otimes\C^{D_\varepsilon}$.
+\end{definition}
+
+\begin{definition}[Triple-fusion maps with fixed final label]%
+    \label{def:mpdo_final_sector_fusion_maps}
+    \lean{MPOTensor.BNTFusionIsometryFamily.leftFinalFusionMap}
+    \lean{MPOTensor.BNTFusionIsometryFamily.rightFinalFusionMap}
+    \leanok
+    \uses{def:mpdo_final_sector_multiplicity_spaces,
+        def:mpdo_left_fusion_isometry,
+        def:mpdo_right_fusion_isometry}
+    The maps $U^{\mathrm L}_{\alpha,\beta,\gamma;\varepsilon}$ and
+    $U^{\mathrm R}_{\alpha,\beta,\gamma;\varepsilon}$ are obtained by
+    restricting the two iterated fusion isometries to the summands with final
+    label $\varepsilon$.  Their adjoints, after the canonical reassociation
+    of the triple bond space, have the orientation and bracketing pattern of
+    the weighted analogues of the two composites in equation (Fmove) of
+    \cite{Bultinck2017Anyons}.
+\end{definition}
+
+\begin{theorem}[Left triple fusion at a fixed final label]%
+    \label{thm:mpdo_left_final_fusion_apply}
+    \lean{MPOTensor.BNTFusionIsometryFamily.leftFinalFusion_apply}
+    \leanok
+    \uses{def:mpdo_final_sector_fusion_maps,
+        def:mpdo_operator_product, thm:mpdo_left_fusion_apply}
+    For every final label $\varepsilon$, the left-associated restriction
+    satisfies the positive-diagonal weighted identity
+    \[
+        U^{\mathrm L}_{\alpha,\beta,\gamma;\varepsilon}
+        \bigl((M_\alpha M_\beta)M_\gamma\bigr)^{ij}
+        (U^{\mathrm L}_{\alpha,\beta,\gamma;\varepsilon})^\dagger
+        = \bigoplus_{\delta}
+          \chi_{\alpha,\beta,\delta}\otimes
+          \bigl(\chi_{\delta,\gamma,\varepsilon}\otimes
+          M_\varepsilon^{ij}\bigr).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Restrict Theorem~\ref{thm:mpdo_left_fusion_apply} to the rows and columns
+    whose final label is $\varepsilon$.  The outer block-diagonal matrix then
+    retains precisely the displayed $\varepsilon$-blocks.
+\end{proof}
+
+\begin{theorem}[Right triple fusion at a fixed final label]%
+    \label{thm:mpdo_right_final_fusion_apply}
+    \lean{MPOTensor.BNTFusionIsometryFamily.rightFinalFusion_apply}
+    \leanok
+    \uses{def:mpdo_final_sector_fusion_maps,
+        def:mpdo_operator_product, thm:mpdo_right_fusion_apply}
+    For every final label $\varepsilon$, the right-associated restriction
+    satisfies the positive-diagonal weighted identity
+    \[
+        U^{\mathrm R}_{\alpha,\beta,\gamma;\varepsilon}
+        \bigl(M_\alpha(M_\beta M_\gamma)\bigr)^{ij}
+        (U^{\mathrm R}_{\alpha,\beta,\gamma;\varepsilon})^\dagger
+        = \bigoplus_{\delta}
+          \chi_{\beta,\gamma,\delta}\otimes
+          \bigl(\chi_{\alpha,\delta,\varepsilon}\otimes
+          M_\varepsilon^{ij}\bigr).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Restrict Theorem~\ref{thm:mpdo_right_fusion_apply} to the rows and columns
+    whose final label is $\varepsilon$.  The outer block-diagonal matrix then
+    retains precisely the displayed $\varepsilon$-blocks.
 \end{proof}
