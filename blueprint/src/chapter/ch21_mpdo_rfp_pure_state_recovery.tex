@@ -231,11 +231,44 @@
     \cite[Appendix~C.2, lines~1527--1533 and~1551--1555]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
+\begin{definition}[Preparation Kraus operators]
+    \label{def:mpdo_state_preparation_kraus}
+    \lean{Matrix.preparationKraus}
+    \leanok
+    Let $R=\sqrt\rho$. For an orthonormal basis $(e_j)_j$ of $B$, define
+    rectangular operators $A_j:A\to A\otimes B$ by
+    \[
+        A_j(e_a)=e_a\otimes Re_j.
+    \]
+\end{definition}
+
+\begin{theorem}[Preparation Kraus operators resolve the identity]
+    \label{thm:mpdo_state_preparation_kraus_resolution}
+    \lean{Matrix.preparationKraus_resolution}
+    \leanok
+    \uses{def:mpdo_state_preparation_kraus}
+    If $\rho\geq0$ and $\tr(\rho)=1$, then
+    \[
+        \sum_j A_j^\dagger A_j=I_A.
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    Since $R$ is Hermitian and $R^2=\rho$, the diagonal entries of the sum are
+    \[
+        \sum_{j,t}\overline{R_{tj}}R_{tj}
+        =\tr(R^2)=\tr(\rho)=1,
+    \]
+    while its off-diagonal entries vanish.
+\end{proof}
+
 \begin{lemma}[State preparation is trace-preserving completely positive]
     \label{lem:mpdo_state_preparation_cptp}
     \lean{Matrix.preparationMap_isKrausCPTP}
     \leanok
-    \uses{def:mpdo_state_preparation_map, def:is_kraus_cptp}
+    \uses{def:mpdo_state_preparation_map, def:is_kraus_cptp,
+      def:mpdo_state_preparation_kraus,
+      thm:mpdo_state_preparation_kraus_resolution}
     If $\rho\geq0$ and $\tr(\rho)=1$, then
     $\mathcal P_\rho:X\mapsto X\otimes\rho$ is trace-preserving completely
     positive.
@@ -243,17 +276,13 @@
 
 \begin{proof}
     \leanok
-    Let $R=\sqrt\rho$.  For an orthonormal basis $(e_j)_j$ of $B$, define
-    rectangular Kraus operators
-    \[
-        A_j(e_a)=e_a\otimes Re_j.
-    \]
-    Then
+    The operators from Definition~\ref{def:mpdo_state_preparation_kraus}
+    satisfy
     \[
         \sum_j A_jXA_j^\dagger=X\otimes RR=X\otimes\rho,
-        \qquad
-        \sum_j A_j^\dagger A_j=\tr(RR)I_A=I_A.
     \]
+    and Theorem~\ref{thm:mpdo_state_preparation_kraus_resolution} gives their
+    resolution of the identity.
 \end{proof}
 
 \begin{definition}[Physical closure maps]
