@@ -26,6 +26,19 @@ idempotent identity for the trace scalars of the vertical decomposition; that
 condition is recorded separately by the idempotent coefficient predicate of
 `TNLean.MPS.MPDO.BNTCoefficients`.
 
+The fusion identity and $U_{\alpha,\beta}^\dagger U_{\alpha,\beta}=1$ also give the two
+chi-weighted zipper equations
+\[
+  U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}=G_{\alpha,\beta}^{ij}U_{\alpha,\beta},
+  \qquad
+  (M_\alpha M_\beta)^{ij}U_{\alpha,\beta}^\dagger
+    =U_{\alpha,\beta}^\dagger G_{\alpha,\beta}^{ij},
+\]
+where $G_{\alpha,\beta}^{ij}=\bigoplus_\gamma
+\chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}$.  These are weighted analogues of the zipper
+condition of arXiv:1511.08090; the unweighted condition requires a separate specialization of
+the chi matrices.
+
 From the fusion identity the same-length product law of statement (ii)
 follows for the concrete operator family: for every positive chain length,
 \[
@@ -120,6 +133,73 @@ namespace BNTFusionIsometryFamily
 
 variable {Λ : Type*} [Fintype Λ] [DecidableEq Λ] {p : ℕ}
 variable (Fam : BNTFusionIsometryFamily Λ p)
+
+/-- **The fusion map carries a product letter to its weighted direct sum.**
+
+For every pair of labels and physical indices,
+\[
+  U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}
+    = \left(\bigoplus_\gamma
+        \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}\right)U_{\alpha,\beta}.
+\]
+This is the first direction of the chi-weighted zipper identity.  It follows from the fusion
+identity by multiplying on the right by the isometry and using
+$U_{\alpha,\beta}^\dagger U_{\alpha,\beta}=1$.
+
+The corresponding equation in arXiv:1511.08090 has identity weights on the multiplicity
+spaces.  No identification of the positive diagonal chi indices with those fusion
+multiplicities is asserted here.
+
+Source: arXiv:1606.00608, Theorem 4.14(iii), equation `Ualphabeta`; arXiv:1511.08090,
+Section ``Fusion tensors'', equations `inversegaugeone` and `zippercondition2`. -/
+theorem fusionIsometry_mul_mulTensor (α β : Λ) (i j : Fin p) :
+    Fam.fusionIsometry α β * mulTensor (Fam.tensor α) (Fam.tensor β) i j =
+      (Matrix.blockDiagonal' fun γ =>
+        Fam.chi.matrix α β γ ⊗ₖ Fam.tensor γ i j) * Fam.fusionIsometry α β := by
+  calc
+    Fam.fusionIsometry α β * mulTensor (Fam.tensor α) (Fam.tensor β) i j =
+        (Fam.fusionIsometry α β * mulTensor (Fam.tensor α) (Fam.tensor β) i j *
+          (Fam.fusionIsometry α β)ᴴ) * Fam.fusionIsometry α β := by
+      rw [Matrix.mul_assoc, Fam.isometry, Matrix.mul_one]
+    _ = (Matrix.blockDiagonal' fun γ =>
+        Fam.chi.matrix α β γ ⊗ₖ Fam.tensor γ i j) * Fam.fusionIsometry α β := by
+      rw [Fam.fusion]
+
+/-- **A product letter carries the adjoint fusion map to its weighted direct sum.**
+
+For every pair of labels and physical indices,
+\[
+  (M_\alpha M_\beta)^{ij}U_{\alpha,\beta}^\dagger
+    = U_{\alpha,\beta}^\dagger
+      \left(\bigoplus_\gamma
+        \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}\right).
+\]
+This is the second direction of the chi-weighted zipper identity.  It follows from the fusion
+identity by multiplying on the left by the adjoint isometry and using
+$U_{\alpha,\beta}^\dagger U_{\alpha,\beta}=1$.
+
+The corresponding equation in arXiv:1511.08090 has identity weights on the multiplicity
+spaces.  The length-independent integer specialization removes the chi weights.  It does not
+by itself construct an $F$-move: zipper completeness and final-label separation remain
+necessary.
+
+Source: arXiv:1606.00608, Theorem 4.14(iii), equation `Ualphabeta`; arXiv:1511.08090,
+Section ``Fusion tensors'', equations `inversegaugeone` and `zippercondition2`. -/
+theorem mulTensor_mul_fusionIsometry_conjTranspose (α β : Λ) (i j : Fin p) :
+    mulTensor (Fam.tensor α) (Fam.tensor β) i j * (Fam.fusionIsometry α β)ᴴ =
+      (Fam.fusionIsometry α β)ᴴ *
+        Matrix.blockDiagonal' fun γ =>
+          Fam.chi.matrix α β γ ⊗ₖ Fam.tensor γ i j := by
+  calc
+    mulTensor (Fam.tensor α) (Fam.tensor β) i j * (Fam.fusionIsometry α β)ᴴ =
+        (Fam.fusionIsometry α β)ᴴ *
+          (Fam.fusionIsometry α β * mulTensor (Fam.tensor α) (Fam.tensor β) i j *
+            (Fam.fusionIsometry α β)ᴴ) := by
+      rw [← Matrix.mul_assoc, ← Matrix.mul_assoc, Fam.isometry, Matrix.one_mul]
+    _ = (Fam.fusionIsometry α β)ᴴ *
+        Matrix.blockDiagonal' fun γ =>
+          Fam.chi.matrix α β γ ⊗ₖ Fam.tensor γ i j := by
+      rw [Fam.fusion]
 
 /-- **The same-length product law with trace-power coefficients**: for every
 positive chain length, the product of two labelled operators expands over the
