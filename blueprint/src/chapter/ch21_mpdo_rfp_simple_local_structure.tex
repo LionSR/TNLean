@@ -1620,6 +1620,211 @@ strong subadditivity for a normalized three-site reduced state.
     $c^{-1}(y^\dagger B\,y)=\bigl(a\,(y^\dagger B\,y)\bigr)(ac)^{-1}\ge0$.
 \end{proof}
 
+\begin{lemma}[A matrix and its negative cannot both be positive]%
+    \label{lem:possemidef_and_neg_possemidef}
+    \lean{Matrix.PosSemidef.eq_zero_of_neg_posSemidef}
+    \leanok
+    If $X$ and $-X$ are positive semidefinite complex matrices, then $X=0$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The quadratic form of $X$ is both nonnegative and nonpositive, hence
+    vanishes identically. Polarization gives $X=0$.
+\end{proof}
+
+\begin{definition}[Finite Kronecker product]%
+    \label{def:finite_kronecker_product}
+    \lean{Matrix.finKronecker}
+    \leanok
+    For square matrices $A_n$ indexed by $n=0,\ldots,N-1$, possibly with
+    different index types, their finite Kronecker product is the matrix with
+    entries
+    \[
+        \left(\bigotimes_{n=0}^{N-1}A_n\right)_{x,y}
+        =\prod_{n=0}^{N-1}(A_n)_{x_n,y_n}.
+    \]
+\end{definition}
+
+\begin{lemma}[Elementary finite Kronecker identities]%
+    \label{lem:finite_kronecker_elementary}
+    \lean{Matrix.finKronecker_ne_zero}
+    \lean{Matrix.finKronecker_update_smul}
+    \leanok
+    \uses{def:finite_kronecker_product}
+    A finite Kronecker product of nonzero matrices is nonzero. Replacing one
+    factor $A_i$ by $cA_i$ multiplies the whole finite product by $c$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Choose a nonzero entry in each factor and evaluate the product at the
+    resulting row and column. The rescaling identity follows immediately from
+    the entry formula in Definition~\ref{def:finite_kronecker_product}.
+\end{proof}
+
+\begin{theorem}[Uniqueness of the positive rescaling phase]%
+    \label{thm:positive_rescaling_phase_unique}
+    \lean{Matrix.exists_pos_real_smul_eq_of_smul_posSemidef}
+    \leanok
+    \uses{lem:possemidef_and_neg_possemidef}
+    Let $M\ne0$. If $c_1,c_2\ne0$ and both $c_1M$ and $c_2M$ are positive
+    semidefinite, then $c_1=t c_2$ for some positive real number $t$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:possemidef_and_neg_possemidef}
+    Hermiticity of $c_1M$ and $c_2M$ gives
+    $c_2\overline{c_1}=c_1\overline{c_2}$, so $c_1/c_2$ is real. It cannot be
+    negative: otherwise $c_1M$ and its negative would both be positive
+    semidefinite, forcing $c_1M=0$. Thus the quotient is positive.
+\end{proof}
+
+\begin{theorem}[Positive rescaling of a finite Kronecker product]%
+    \label{thm:finite_kronecker_positive_rescaling}
+    \lean{Matrix.exists_pi_smul_posSemidef_of_finKronecker_posSemidef}
+    \leanok
+    \uses{def:finite_kronecker_product,
+        lem:finite_kronecker_elementary,
+        thm:kronecker_factor_positive_rescaling}
+    Let $N\geq1$, and let $A_0,\ldots,A_{N-1}$ be nonzero complex square
+    matrices, with possibly different dimensions. If their finite Kronecker
+    product is positive semidefinite, then there are nonzero scalars
+    $c_0,\ldots,c_{N-1}$ such that
+    \[
+        \prod_{n=0}^{N-1}c_n=1,
+        \qquad c_nA_n\geq0\quad(0\leq n<N).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:finite_kronecker_elementary,
+        thm:kronecker_factor_positive_rescaling}
+    The assertion is proved by induction on $N$. Separate the first factor
+    from the remaining Kronecker product and apply
+    Theorem~\ref{thm:kronecker_factor_positive_rescaling}. Absorb the inverse
+    of the first rescaling coefficient into one factor of the tail, then
+    apply the induction hypothesis. The resulting coefficients are nonzero,
+    their product is one, and every rescaled factor is positive semidefinite.
+\end{proof}
+
+\begin{definition}[Nonzero sector support and recurrence]%
+    \label{def:mpdo_eta_recurrent_support}
+    \lean{MPOTensor.IsSectorEdge}
+    \lean{MPOTensor.SectorReaches}
+    \lean{MPOTensor.IsRecurrentSupport}
+    \leanok
+    \uses{def:mpdo_cyclic_eta_tensor_product}
+    The nonzero support graph of a neighboring-operator family has a directed
+    edge $k\to h$ precisely when $\eta_{k,h}\ne0$. Its support is recurrent
+    when every such edge belongs to a directed cycle, equivalently when $h$
+    can reach $k$ whenever $k\to h$ is an edge.
+\end{definition}
+
+\begin{definition}[Horizontal bond fiber of a sector cycle]%
+    \label{def:mpdo_eta_cycle_fiber}
+    \lean{MPOTensor.CycleFiber}
+    \lean{MPOTensor.cycleFiberToSectorFiber}
+    \leanok
+    \uses{def:mpdo_cyclic_eta_tensor_product}
+    For a cyclic sector assignment $(k_n)_{n\in\mathbb Z/N\mathbb Z}$, the
+    horizontal bond fiber at $n$ is
+    \[
+        H_n=B^R_{k_n}\times B^L_{k_{n+1}}.
+    \]
+    Shifting the left component by one site identifies
+    $\prod_n H_n$ with the vertex-indexed sector fiber used in the cyclic
+    neighboring-operator product.
+\end{definition}
+
+\begin{lemma}[A cyclic block is a finite Kronecker product]%
+    \label{lem:mpdo_eta_cycle_fin_kronecker}
+    \lean{MPOTensor.cyclicEtaTensorProduct_submatrix_eq_finKronecker}
+    \leanok
+    \uses{def:finite_kronecker_product,
+        def:mpdo_cyclic_eta_tensor_product,
+        def:mpdo_eta_cycle_fiber}
+    Reindexing a cyclic neighboring-operator block along its horizontal bond
+    fiber gives the finite Kronecker product
+    \[
+        \bigotimes_{n=0}^{N-1}\eta_{k_n,k_{n+1}}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Expand both sides entrywise. The shifted left component of the bond fiber
+    at site $n+1$ is precisely the left index paired with the right component
+    at site $n$.
+\end{proof}
+
+\begin{theorem}[Positive rescaling around one sector cycle]%
+    \label{thm:mpdo_eta_cycle_positive_rescaling}
+    \lean{MPOTensor.exists_pi_smul_posSemidef_of_cyclicEtaTensorProduct_posSemidef}
+    \leanok
+    \uses{def:mpdo_cyclic_eta_tensor_product,
+        lem:mpdo_eta_cycle_fin_kronecker,
+        thm:finite_kronecker_positive_rescaling}
+    Let $N\geq1$, and fix a cyclic sector assignment
+    $k_0,\ldots,k_{N-1}$ such that every operator
+    $\eta_{k_n,k_{n+1}}$ is nonzero. If the corresponding cyclic tensor
+    product is positive semidefinite, then there are nonzero scalars $c_n$
+    satisfying
+    \[
+        \prod_{n=0}^{N-1}c_n=1,
+        \qquad c_n\eta_{k_n,k_{n+1}}\geq0
+        \quad(0\leq n<N).
+    \]
+    This is a choice on one fixed cycle. It does not assert that choices made
+    on two different cycles agree on a common edge.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:mpdo_eta_cycle_fin_kronecker,
+        thm:finite_kronecker_positive_rescaling}
+    Reindex the cyclic sector block by the shared horizontal-bond indices.
+    Its matrix entries then become the finite Kronecker product of the
+    consecutive neighboring operators. Apply
+    Theorem~\ref{thm:finite_kronecker_positive_rescaling}.
+\end{proof}
+
+\begin{corollary}[Positive rescaling of the concrete sector operators around
+    one cycle]%
+    \label{cor:mpdo_sector_eta_cycle_positive_rescaling}
+    \lean{MPOTensor.exists_pi_smul_posSemidef_of_sectorEta_cycle}
+    \leanok
+    \uses{def:mpdo, def:injective, def:mpdo_eta_structure,
+        def:mpdo_three_site_closure, def:mpdo_sector_eta,
+        thm:mpdo_eta_cycle_positive_rescaling,
+        thm:mpdo_cyclic_eta_posSemidef}
+    Let ${\cal K}$ be an injective MPDO, let $R$ give a three-site closure,
+    and fix an $\eta$-structure and a nonzero tail entry. Let $N\geq1$. For a
+    cyclic sector assignment $k_0,\ldots,k_{N-1}$, suppose that every
+    concrete operator $\eta_{k_n,k_{n+1}}$ obtained from these data is
+    nonzero. Then there are nonzero scalars $c_n$ such that
+    \[
+        \prod_{n=0}^{N-1}c_n=1,
+        \qquad c_n\eta_{k_n,k_{n+1}}\geq0
+        \quad(0\leq n<N).
+    \]
+    This is the specialization of
+    Theorem~\ref{thm:mpdo_eta_cycle_positive_rescaling} to the inverse-map
+    sector operators; positivity of the cyclic product follows from the MPDO
+    property.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_eta_cycle_positive_rescaling,
+        thm:mpdo_cyclic_eta_posSemidef}
+    The fixed-sector cyclic product is positive semidefinite by
+    Theorem~\ref{thm:mpdo_cyclic_eta_posSemidef}. Apply
+    Theorem~\ref{thm:mpdo_eta_cycle_positive_rescaling}.
+\end{proof}
+
 \begin{theorem}[The conjugated chain is a congruence]%
     \label{thm:mpdo_conjugated_chain_congruence}
     \lean{MPOTensor.mpo_conjugatePhysical_eq}
@@ -1698,7 +1903,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.etaOfSectorTensors_self_posSemidef}
     \lean{MPOTensor.etaOfSectorTensors_kronecker_posSemidef}
     \leanok
-    \uses{def:mpdo, def:mpdo_sector_eta,
+    \uses{def:mpdo, def:injective, def:mpdo_sector_eta,
         thm:mpdo_cyclic_eta_posSemidef,
         thm:kronecker_factor_positive_rescaling}
     Let ${\cal K}$ be an injective MPDO with the chosen Hayashi
@@ -1723,6 +1928,42 @@ strong subadditivity for a normalized three-site reduced state.
     Theorem~\ref{thm:mpdo_cyclic_eta_posSemidef}. The third item, including
     the Kronecker-product-preserving equality, is
     Theorem~\ref{thm:kronecker_factor_positive_rescaling}.
+\end{proof}
+
+\begin{theorem}[Coherent positive choice of the neighboring operators]%
+    \label{thm:mpdo_eta_coherent_positive_choice}
+    \notready
+    \uses{def:mpdo, def:injective, def:normal, def:is_sal,
+        def:mpdo_sector_eta, thm:mpdo_exists_sector_factorization}
+    Let ${\cal K}$ be an injective normal tensor that generates MPDOs and
+    satisfies SAL. The sector tensors in the factorization of
+    Theorem~\ref{thm:mpdo_exists_sector_factorization} can be chosen so
+    that every neighboring operator
+    \[
+        \eta_{k,h}=r_k l_h
+    \]
+    is positive semidefinite, while the all-length cyclic sector
+    decomposition remains unchanged.
+\end{theorem}
+
+\begin{proof}
+    \uses{def:mpdo_eta_recurrent_support,
+        thm:mpdo_cyclic_eta_posSemidef,
+        thm:mpdo_eta_cycle_positive_rescaling,
+        thm:mpdo_sector_adapted_decomposition,
+        thm:positive_rescaling_phase_unique}
+    The projected chain identity makes every cyclic Kronecker product of the
+    neighboring operators positive semidefinite. The finite-factor rescaling
+    theorem chooses positive phases on any one nonzero cycle. Two obligations
+    remain. First, recurrence of the nonzero inverse-map support must be
+    derived from the actual injective normal-tensor hypotheses, without using
+    the later primitivity conclusion. Second, phase uniqueness and trivial
+    cycle holonomy must be used to integrate the edge phases to a single
+    vertex-indexed rephasing of the tensors $l_k,r_k$. Such a coboundary
+    rephasing preserves every cyclic product, and hence the all-length
+    decomposition. This is the coherent-choice step asserted at
+    \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv}; it is not a
+    consequence of positivity of the cyclic products alone.
 \end{proof}
 
 \begin{theorem}[Positivity choice with symmetric support]%
@@ -3825,6 +4066,8 @@ $\widehat{\cal K}$.
     proper subspace of the full matrix algebra, contradicting injectivity.
 \end{lemma}
 
+\clearpage
+
 \begin{figure}[ht]
     \centering
     \TNMPDOLocalOrthogonality
@@ -3836,6 +4079,46 @@ $\widehat{\cal K}$.
     of \cite[Appendix~C.2, lines~1466--1469]{Cirac2016MPDO_arXiv}.}
     \label{fig:mpdo_local_orthogonality}
 \end{figure}
+
+\begin{theorem}[Primitivity of the concrete sector trace matrix]%
+    \label{thm:mpdo_sector_trace_matrix_primitive}
+    \notready
+    \uses{def:mpdo, def:injective, def:normal, def:is_sal,
+        def:mpdo_explicit_eta_of_sector_tensors,
+        thm:mpdo_eta_coherent_positive_choice,
+        lem:mpdo_local_orthogonality_contraction,
+        thm:mpdo_sector_eta_data_trace_matrix}
+    Let ${\cal K}$ be an injective normal tensor that generates MPDOs and
+    satisfies SAL, and choose the positive neighboring operators of
+    Theorem~\ref{thm:mpdo_eta_coherent_positive_choice}. Then the nonnegative
+    matrix
+    \[
+        T_{k,h}=\tr(\eta_{k,h})
+    \]
+    is primitive.
+\end{theorem}
+
+\begin{proof}
+    \uses{def:mpdo_eta_recurrent_support,
+        lem:mpdo_local_orthogonality_contraction}
+    The source first passes to a positive power and treats its Frobenius
+    components as primitive diagonal blocks. For the concrete trace matrix
+    considered here, one must still prove that failure of primitivity cannot
+    leave a single final component together with transient sectors, and hence
+    really yields two nonempty classes with no edges between them in either
+    direction. This is an additional open step. Once that reduction is
+    available, the orthogonal one-site projectors onto the two classes satisfy
+    the three vanishing conditions in
+    Lemma~\ref{lem:mpdo_local_orthogonality_contraction}. Let ${\cal A}_1$ and
+    ${\cal A}_2$ be the matrix spaces generated by the two projected tensor
+    families. The one-site vanishings give
+    ${\cal A}={\cal A}_1+{\cal A}_2$, while the two-site vanishing gives
+    ${\cal A}_1{\cal A}_2=0$. Hence ${\cal A}$ cannot be the full matrix
+    algebra, contradicting injectivity. This is the argument at
+    \cite[Appendix~C.2, lines~1452--1470]{Cirac2016MPDO_arXiv}; its local
+    contraction, exclusion of transient sectors, and matrix-algebra
+    contradiction remain to be formalized.
+\end{proof}
 
 \begin{theorem}[Positivity of bipartite partial traces]
     \label{thm:matrix_possemidef_partial_traces}
