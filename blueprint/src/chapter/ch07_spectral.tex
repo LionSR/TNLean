@@ -2652,6 +2652,147 @@ the conjugated
 fixed-point set of Corollary~6.7 of~\cite{Wolf2012Quantum} at a fixed point of maximal
 support, without a support restriction on the fixed points.
 
+The corollary in~\cite{Wolf2012Quantum} quantifies over an arbitrary maximum-rank
+fixed-point density matrix. The transfer from the constructed witness to every fixed
+point of maximum rank goes through the rank of the support projection.
+
+\begin{lemma}[The support projection has the rank of the matrix]%
+    \label{lem:rank_stationaryProj}
+    \lean{Kraus.rank_stationaryProj}
+    \leanok
+    \uses{def:support_proj}
+    For $\rho \succeq 0$ on $\C^{D}$, the support projection of $\rho$ has the rank of
+    $\rho$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:support_proj}
+    In the spectral decomposition $\rho = U\,\mathrm{diag}(\lambda)\,U^{\dagger}$ the
+    support projection is $U\,\mathrm{diag}(\mathbf 1_{\lambda > 0})\,U^{\dagger}$.
+    Multiplication by the invertible $U$ and $U^{\dagger}$ preserves the rank, and
+    \[
+        \operatorname{rank}\,\mathrm{diag}(\mathbf 1_{\lambda > 0})
+        \;=\; \#\{i \mid \lambda_i > 0\}
+        \;=\; \#\{i \mid \lambda_i \neq 0\}
+        \;=\; \operatorname{rank}\,\mathrm{diag}(\lambda),
+    \]
+    the middle equality because the eigenvalues of $\rho \succeq 0$ are nonnegative.
+\end{proof}
+
+\begin{lemma}[The trace of the support projection is the rank]%
+    \label{lem:trace_stationaryProj}
+    \lean{Kraus.trace_stationaryProj}
+    \leanok
+    \uses{def:support_proj}
+    For $\rho \succeq 0$ on $\C^{D}$, the trace of the support projection of $\rho$ is
+    the rank of $\rho$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:support_proj}
+    With $\rho = U\,\mathrm{diag}(\lambda)\,U^{\dagger}$ as above,
+    \[
+        \tr\bigl(U\,\mathrm{diag}(\mathbf 1_{\lambda > 0})\,U^{\dagger}\bigr)
+        \;=\; \tr\,\mathrm{diag}(\mathbf 1_{\lambda > 0})
+        \;=\; \#\{i \mid \lambda_i > 0\}
+        \;=\; \operatorname{rank} \rho,
+    \]
+    the last equality because the rank of a positive semidefinite matrix is the number
+    of its positive eigenvalues.
+\end{proof}
+
+\begin{theorem}[The support of a fixed point of maximum rank carries every fixed
+    point]%
+    \label{thm:maximalSupport_of_maximalRank}
+    \lean{Kraus.maximalSupport_of_maximalRank}
+    \leanok
+    \uses{def:tp_kraus, def:support_proj}
+    Let $T(X) = \sum_i K_i X K_i^\dagger$ be trace-preserving and let $\rho \succeq 0$
+    be a fixed point of $T$ whose rank bounds the rank of every fixed-point density
+    matrix: $\operatorname{rank} \sigma \le \operatorname{rank} \rho$ for every
+    $\sigma \succeq 0$ with $\tr \sigma = 1$ and $T(\sigma) = \sigma$. Then the support
+    projection $Q$ of $\rho$ satisfies
+    \[
+        Q\, X\, Q = X
+    \]
+    for every fixed point $X$ of $T$.
+    % Maintainer note: the maximum-rank fixed point of Corollary 6.7 of Wolf (2012) is a
+    % density matrix; unit trace of the fixed point itself is not needed for the
+    % conclusion and is not assumed here.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:maximalSupport_fixedPoint, lem:rank_stationaryProj,
+        lem:trace_stationaryProj}
+    Let $\rho_0$ be the fixed point of maximal support of
+    Theorem~\ref{thm:maximalSupport_fixedPoint}, with support projection $Q_0$, and let
+    $P$ be the support projection of $\rho$. If $\rho_0 = 0$, then every fixed point
+    vanishes, because $Q_0 = 0$ annihilates it, and the claim is trivial; so let
+    $\rho_0 \neq 0$. Its trace is then a nonzero nonnegative real number, and
+    $\sigma = (\tr \rho_0)^{-1} \rho_0$ is a fixed-point density matrix with
+    $\operatorname{rank} \sigma = \operatorname{rank} \rho_0$, so the rank hypothesis
+    gives $\operatorname{rank} \rho_0 \le \operatorname{rank} \rho$. Conversely
+    $Q_0 \rho Q_0 = \rho$, so
+    \[
+        \operatorname{rank} \rho
+        \;=\; \operatorname{rank}\bigl(Q_0\,\rho\,Q_0\bigr)
+        \;\le\; \operatorname{rank} Q_0
+        \;=\; \operatorname{rank} \rho_0,
+    \]
+    the last equality by Lemma~\ref{lem:rank_stationaryProj}; hence the ranks agree.
+    From $\rho\,Q_0 = \rho$ one has $\rho\,(\Id - Q_0) = 0$, so the range of
+    $\Id - Q_0$ lies in the kernel of $\rho$; the support projection $P$ of $\rho$
+    vanishes on that kernel, so
+    \[
+        P\,(\Id - Q_0) = 0,
+        \qquad P\,Q_0 = P,
+    \]
+    and taking conjugate transposes also $Q_0 P = P$. The difference $R = Q_0 - P$ is then Hermitian and idempotent,
+    \[
+        R^2 \;=\; Q_0 - P - P + P \;=\; R,
+    \]
+    and its trace vanishes by Lemma~\ref{lem:trace_stationaryProj} and the equality of
+    the ranks, so
+    \[
+        \tr\bigl(R^{\dagger} R\bigr) \;=\; \tr R \;=\; 0,
+    \]
+    hence $R = 0$ and $P = Q_0$. The claim now follows from the maximal-support property
+    of $\rho_0$.
+\end{proof}
+
+\begin{theorem}[Conjugation by the square root at every fixed point of maximum rank]%
+    \label{thm:weightedCorner_sqrt_eq_of_maximalRank}
+    \lean{Kraus.exists_weightedCorner_sqrt_eq_of_maximalRank}
+    \leanok
+    \uses{def:tp_kraus, def:support_proj}
+    Let $T(X) = \sum_i K_i X K_i^\dagger$ be trace-preserving and let $\rho \succeq 0$
+    be a fixed point of $T$ whose rank bounds the rank of every fixed-point density
+    matrix. Then every fixed point $X$ of $T$ arises as
+    \[
+        X \;=\; \sqrt{\rho}\, Y \sqrt{\rho}
+    \]
+    for a corner-supported $Y$ with $\sqrt{\rho}\, Y \sqrt{\rho}$ fixed by $T$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:maximalSupport_of_maximalRank, thm:weightedCorner_sqrt_surjective}
+    By Theorem~\ref{thm:maximalSupport_of_maximalRank} every fixed point $X$ of $T$
+    satisfies $Q\, X\, Q = X$ for the support projection $Q$ of $\rho$, so
+    Theorem~\ref{thm:weightedCorner_sqrt_surjective} applies to $X$ and produces the
+    corner-supported $Y$.
+\end{proof}
+
+At every fixed point $\rho$ of maximum rank, with the inverse square root taken on the
+support of $\rho$, the carrier of the $*$-subalgebra of
+Theorem~\ref{thm:weightedCornerFixedPointsStarSubalgebra} therefore realizes the
+conjugated fixed-point set
+$\rho^{-1/2}\,\{X \in \MN{D} \mid T(X) = X\}\,\rho^{-1/2}$ of Corollary~6.7
+of~\cite{Wolf2012Quantum}.
+
 \section{Further irreducibility and primitivity equivalences}
 
 This section collects several criteria and equivalences from~\cite[Theorems~6.2, 6.7, 6.8]{Wolf2012Quantum} that are
