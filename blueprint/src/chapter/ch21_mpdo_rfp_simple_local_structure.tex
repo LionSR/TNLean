@@ -1272,10 +1272,22 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{proof}
     \leanok
-    Expand the closed trace of each side as a cyclic sum over bond
-    configurations, and each conjugated local entry over its two physical
-    indices. Distributing the site product over these sums matches the two
-    sides term by term. Positivity is preserved by any congruence.
+    Expand the closed trace over bond configurations $g$ (with
+    $g_{N+1}=g_1$), and each conjugated local entry over its two physical
+    indices:
+    \[
+        \bigl[\rho^{(N)}(\widetilde{\cal K})\bigr]_{\sigma,\tau}
+        =\sum_{g}\prod_{n=1}^{N}
+            \widetilde\kappa_{g_n,g_{n+1}}^{\,\sigma_n\tau_n}
+        =\sum_{g}\prod_{n=1}^{N}\sum_{p_n,q_n}
+            U_{\sigma_n p_n}\,
+            \kappa_{g_n,g_{n+1}}^{\,p_n q_n}\,
+            \overline{U_{\tau_n q_n}} .
+    \]
+    Distributing the site product over the physical sums factors the two
+    $U$-products out of the bond sum, which leaves the matrix entry of
+    $U^{\otimes N}\rho^{(N)}({\cal K})\bigl(U^{\otimes N}\bigr)^\dagger$.
+    Positivity is preserved by any congruence.
 \end{proof}
 
 \begin{theorem}[Positivity of the projected chain blocks]%
@@ -1301,8 +1313,9 @@ strong subadditivity for a normalized three-site reduced state.
     \leanok
     \uses{thm:mpdo_fixed_sector_cyclic_eta,
         thm:mpdo_conjugated_chain_congruence}
-    The cyclic tensor product $\Omega_k$ is a diagonal sector block of the
-    basis-conjugated chain by
+    The cyclic tensor product $\Omega_k$ of
+    Definition~\ref{def:mpdo_cyclic_eta_tensor_product} is a diagonal
+    sector block of the basis-conjugated chain by
     Theorem~\ref{thm:mpdo_fixed_sector_cyclic_eta}. The conjugated chain is
     positive semidefinite by
     Theorem~\ref{thm:mpdo_conjugated_chain_congruence} and the MPDO
@@ -1318,7 +1331,6 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.exists_smul_posSemidef_sectorEta}
     \lean{MPOTensor.etaOfSectorTensors_self_posSemidef}
     \lean{MPOTensor.etaOfSectorTensors_kronecker_posSemidef}
-    \lean{MPOTensor.sectorEta_eq_etaOfSectorTensors}
     \leanok
     \uses{def:mpdo, def:mpdo_sector_eta,
         thm:mpdo_cyclic_eta_posSemidef,
