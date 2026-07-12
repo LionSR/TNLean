@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPDO.PhysicalSectorCoarseGrainingIdentity
+import TNLean.MPS.MPDO.PhysicalSectorClosureCoordinates
+import TNLean.MPS.MPDO.PhysicalSectorClosureTwo
 import TNLean.MPS.MPDO.PhysicalSectorRefinement
 
 /-!
@@ -35,11 +36,6 @@ variable {d D : ℕ} {K : MPOTensor d D} {F : PhysicalSectorFactorization K}
 /-- On an outer-sector pair, the regrouped two-site physical closure is the
 boundary operator tensored with the neighboring operator.
 
-**Local fix (zero-weight quotient):** this factorization precedes the
-preparation and remains valid on zero-weight pairs. The completion used later
-is documented in
-`docs/paper-gaps/cpgsv17_mpdo_zero_weight_preparation_completion.tex`.
-
 Source: arXiv:1606.00608, Appendix C.2, lines 1441--1450 and 1521--1524. -/
 theorem t0Regrouped_twoSiteClosure_block_eq
     (F : PhysicalSectorFactorization K) (X : Matrix (Fin D) (Fin D) ℂ)
@@ -60,11 +56,6 @@ theorem t0Regrouped_twoSiteClosure_block_eq
 /-- On a diagonal outer-sector pair, \(\mathcal T_0\) is the partial trace
 of the corresponding regrouped two-site block.
 
-**Local fix (zero-weight quotient):** this partial trace is defined on every
-sector pair and is independent of the later completion. The completion is
-documented in
-`docs/paper-gaps/cpgsv17_mpdo_zero_weight_preparation_completion.tex`.
-
 Source: arXiv:1606.00608, Appendix C.2, lines 1521--1524. -/
 theorem t0Map_sameBlock_apply (F : PhysicalSectorFactorization K)
     (X : Matrix (SectorSiteIndex F × SectorSiteIndex F)
@@ -80,11 +71,6 @@ theorem t0Map_sameBlock_apply (F : PhysicalSectorFactorization K)
 /-- If a regrouped diagonal block is
 \(B\otimes\eta_{k,h}\), then \(\mathcal T_0\) maps it to
 \((a_kb_h)B\).
-
-**Local fix (zero-weight quotient):** the coefficient vanishes on inactive
-sector pairs, so the subsequent completed preparation receives the zero
-matrix. Documented in
-`docs/paper-gaps/cpgsv17_mpdo_zero_weight_preparation_completion.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1521--1535. -/
 theorem NeighboringTraceFactorization.t0Map_block_eq_smul
@@ -173,11 +159,6 @@ theorem NeighboringTraceFactorization.t1Map_block_eq_kronecker
 /-- The preparation stage annihilates entries between distinct pairs of
 outer sectors.
 
-**Local fix (zero-weight quotient):** this vanishing follows from orthogonal
-sector control and is independent of the density chosen on inactive pairs.
-The completion is documented in
-`docs/paper-gaps/cpgsv17_mpdo_zero_weight_preparation_completion.tex`.
-
 Source: arXiv:1606.00608, Appendix C.2, lines 1523--1535. -/
 theorem NeighboringTraceFactorization.t1Map_apply_of_ne
     (H : NeighboringTraceFactorization F)
@@ -195,10 +176,6 @@ theorem NeighboringTraceFactorization.t1Map_apply_of_ne
 
 /-- The map \(\mathcal T_2\) sends the prepared matrix to the corresponding
 three-site sector matrix by relabeling its indices.
-
-**Local fix (zero-weight quotient):** this reindexing is independent of the
-inactive-sector density. The preceding completion is documented in
-`docs/paper-gaps/cpgsv17_mpdo_zero_weight_preparation_completion.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1535--1545. -/
 theorem t2Map_apply (F : PhysicalSectorFactorization K)

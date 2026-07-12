@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.PhysicalSectorCoarseGrainingAction
+import TNLean.MPS.MPDO.PhysicalSectorClosureCoordinates
 
 /-!
 # Coarse-graining identity for physical-sector closures
@@ -25,41 +26,6 @@ open scoped Matrix BigOperators Kronecker
 namespace MPOTensor.PhysicalSectorFactorization
 
 variable {d D : ℕ} {K : MPOTensor d D} {F : PhysicalSectorFactorization K}
-
-/-- Express two physical sites in the direct sum of physical sectors.
-
-Source: arXiv:1606.00608, Appendix C.2, lines 1381--1388 and 1555--1559. -/
-noncomputable def twoSiteSectorCoordinateEquiv (F : PhysicalSectorFactorization K) :
-    (Fin (Fintype.card (SectorSiteIndex F)) ×
-      Fin (Fintype.card (SectorSiteIndex F))) ≃
-      SectorSiteIndex F × SectorSiteIndex F :=
-  Equiv.prodCongr F.sectorFinEquiv F.sectorFinEquiv
-
-/-- Express three physical sites in the direct sum of physical sectors.
-
-Source: arXiv:1606.00608, Appendix C.2, lines 1381--1388 and 1547--1559. -/
-noncomputable def threeSiteSectorCoordinateEquiv (F : PhysicalSectorFactorization K) :
-    (Fin (Fintype.card (SectorSiteIndex F)) ×
-      (Fin (Fintype.card (SectorSiteIndex F)) ×
-        Fin (Fintype.card (SectorSiteIndex F)))) ≃
-      SectorSiteIndex F × (SectorSiteIndex F × SectorSiteIndex F) :=
-  Equiv.prodCongr F.sectorFinEquiv
-    (Equiv.prodCongr F.sectorFinEquiv F.sectorFinEquiv)
-
-@[simp] theorem twoSiteSectorCoordinateEquiv_symm_apply
-    (F : PhysicalSectorFactorization K) (k h : Fin F.sectorCount)
-    (x : SectorIndex F k) (y : SectorIndex F h) :
-    F.twoSiteSectorCoordinateEquiv.symm (⟨k, x⟩, ⟨h, y⟩) =
-      (F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨h, y⟩) :=
-  rfl
-
-@[simp] theorem threeSiteSectorCoordinateEquiv_symm_apply
-    (F : PhysicalSectorFactorization K) (k l h : Fin F.sectorCount)
-    (x : SectorIndex F k) (y : SectorIndex F l) (z : SectorIndex F h) :
-    F.threeSiteSectorCoordinateEquiv.symm (⟨k, x⟩, (⟨l, y⟩, ⟨h, z⟩)) =
-      (F.sectorFinEquiv.symm ⟨k, x⟩,
-        (F.sectorFinEquiv.symm ⟨l, y⟩, F.sectorFinEquiv.symm ⟨h, z⟩)) :=
-  rfl
 
 /-- On an outer-sector pair, the regrouped three-site physical closure is
 the boundary operator tensored with the direct sum of the two neighboring
