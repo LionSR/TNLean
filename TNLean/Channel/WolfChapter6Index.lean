@@ -305,7 +305,7 @@ What is still missing for the full Wolf statement is the identification of
 the ambient fixed-point space with the zero-block form and the density-block
 refinement with matrices `ρ_k` for the Schrödinger-picture fixed points.
 
-### Wolf Corollary 6.7 (faithful fixed-point conjugation) — PARTIALLY FORMALIZED
+### Wolf Corollary 6.7 (faithful fixed-point conjugation) — FORMALIZED
 
 In `TNLean.Channel.FixedPoint.Corollaries`:
 
@@ -339,11 +339,25 @@ and the removal of the corner restriction):
   realizing $\rho_0^{-1/2}\,\{X \mid T(X) = X\}\,\rho_0^{-1/2}$ without a support
   restriction.
 
-Wolf's statement quantifies over an arbitrary maximum-rank fixed-point
-density matrix; the formalized statements produce one fixed point of maximal
-support and realize the
-conjugated set there. Transferring the statement to every maximum-rank fixed
-point (by identifying the supports of any two of them) is not formalized
+In `TNLean.Channel.FixedPoint.MaximalRank` (the transfer to every fixed point
+of maximum rank):
+
+* `Kraus.rank_stationaryProj`, `Kraus.trace_stationaryProj` — the support
+  projection of a positive semidefinite matrix has the rank of the matrix,
+  and its trace is that rank.
+* `Kraus.maximalSupport_of_maximalRank` — if the rank of a positive
+  semidefinite fixed point $\rho$ bounds the rank of every fixed-point
+  density matrix, its support projection $Q$ satisfies $Q X Q = X$ for every
+  fixed point $X$.
+* `Kraus.exists_weightedCorner_sqrt_eq_of_maximalRank` — at every such
+  $\rho$, conjugation by $\sqrt{\rho}$ maps the corner carrier onto the full
+  fixed-point set, realizing $\rho^{-1/2}\,\{X \mid T(X) = X\}\,\rho^{-1/2}$
+  with the inverse square root taken on the support of $\rho$.
+
+The scope is the Kraus (completely positive) case of the source's Schwarz
+hypothesis, as recorded for the other results of this section; the source's
+maximum-rank fixed-point density matrix satisfies the rank hypothesis, with
+unit trace of $\rho$ itself not needed for the conclusion
 (see `docs/paper-gaps/wolf_cor67_maximal_support_restriction.tex`).
 
 ### Wolf Theorem 6.15 (Conditional expectation onto fixed-point algebra) — PARTIALLY FORMALIZED
