@@ -2824,6 +2824,54 @@ strong subadditivity for a normalized three-site reduced state.
     \]
 \end{definition}
 
+\begin{theorem}[Diagonal outer-sector block of the three-site closure]
+    \label{thm:mpdo_regrouped_three_site_closure_block}
+    \lean{MPOTensor.PhysicalSectorFactorization.s0Regrouped_threeSiteClosure_block_eq}
+    \leanok
+    \uses{def:phys_close,
+      def:mpdo_sector_boundary_operator,
+      def:mpdo_physical_sector_three_site_neighboring_operator,
+      def:mpdo_physical_sector_closure_coordinates,
+      def:mpdo_three_site_subspin_regrouping}
+    For every virtual matrix $X$ and outer-sector pair $(k,h)$,
+    \[
+      \left[
+        R_{\Phi_3}\mathfrak R_3({\cal K}_3(X))
+      \right]_{(k,h),(k,h)}
+      =B_{k,h}(X)\otimes\Omega_{k,h}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_three_site_sector_closure_factorization,
+      def:mpdo_physical_sector_factorization}
+    On the summand labelled by the middle sector $l$, this is the fixed-sector
+    factorization
+    $B_{k,h}(X)\otimes(\eta_{k,l}\otimes\eta_{l,h})$.
+    Taking the direct sum over $l$ gives the stated block.
+\end{proof}
+
+\begin{theorem}[Off-diagonal outer-sector entries of the three-site closure]
+    \label{thm:mpdo_regrouped_three_site_closure_off_diagonal}
+    \lean{MPOTensor.PhysicalSectorFactorization.s0Regrouped_threeSiteClosure_apply_of_outer_ne}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization,
+      def:mpdo_physical_sector_closure_coordinates,
+      def:mpdo_three_site_subspin_regrouping}
+    Every matrix entry of
+    $R_{\Phi_3}\mathfrak R_3({\cal K}_3(X))$ between distinct outer-sector
+    pairs $(k,h)\ne(p,q)$ vanishes.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization}
+    Distinct outer-sector pairs differ either in their first sector or in
+    their third sector. In the corresponding physical slice, the
+    sector-coordinate tensor is block diagonal, so that factor vanishes.
+\end{proof}
+
 \begin{theorem}[Regrouped two-site closure block]
     \label{thm:mpdo_t0_regrouped_two_site_closure_block}
     \lean{MPOTensor.PhysicalSectorFactorization.t0Regrouped_twoSiteClosure_block_eq}
@@ -2973,6 +3021,8 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{theorem}[Refinement of the two-site closure]
     \label{thm:mpdo_physical_sector_t_closure_identity}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.tMap_twoSiteClosure_eq_threeSiteClosure}
+    \leanok
     \uses{def:phys_close,
       def:mpdo_physical_sector_t_map,
       def:mpdo_physical_sector_closure_coordinates,
@@ -2991,13 +3041,13 @@ strong subadditivity for a normalized three-site reduced state.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:mpdo_t0_regrouped_two_site_closure_block,
       thm:mpdo_t0_factorized_block_action,
       thm:mpdo_t1_factorized_block_action,
       thm:mpdo_t1_off_diagonal_action,
-      thm:mpdo_t2_reindexing_action,
-      thm:mpdo_global_sector_closure_decomposition,
-      def:mpdo_physical_sector_closure_coordinates}
+      thm:mpdo_regrouped_three_site_closure_block,
+      thm:mpdo_regrouped_three_site_closure_off_diagonal}
     The regrouping contained in $\mathcal T_0$ changes
     $\mathfrak R_2$ into $\mathfrak G_2$. On the $(k,h)$ diagonal block, the
     partial trace then gives
@@ -3022,7 +3072,6 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{theorem}[Coarse-graining of the three-site closure]
     \label{thm:mpdo_physical_sector_s_closure_identity}
-    \lean{MPOTensor.PhysicalSectorFactorization.s0Regrouped_threeSiteClosure_block_eq}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.s0Map_block_eq_smul}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.sMap_threeSiteClosure_eq_twoSiteClosure}
     \leanok
@@ -3042,7 +3091,8 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_two_site_sector_closure_factorization,
+    \uses{thm:mpdo_regrouped_three_site_closure_block,
+      thm:mpdo_two_site_sector_closure_factorization,
       thm:mpdo_three_site_sector_closure_factorization,
       thm:mpdo_physical_sector_three_site_neighboring_operator_trace,
       def:mpdo_physical_sector_factorization,
