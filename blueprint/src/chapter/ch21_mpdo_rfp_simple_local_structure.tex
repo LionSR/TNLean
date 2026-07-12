@@ -1089,7 +1089,8 @@ strong subadditivity for a normalized three-site reduced state.
       MPOTensor.PhysicalSectorFactorization.threeSiteGlobalClosure_eq}
     \leanok
     \uses{thm:mpdo_two_site_sector_closure_factorization,
-      thm:mpdo_three_site_sector_closure_factorization}
+      thm:mpdo_three_site_sector_closure_factorization,
+      def:mpdo_physical_sector_factorization}
     After the canonical regrouping of all physical-sector indices, the full
     closures are
     \[
@@ -1108,10 +1109,21 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{proof}
     \leanok
     \uses{thm:mpdo_two_site_sector_closure_factorization,
-      thm:mpdo_three_site_sector_closure_factorization}
+      thm:mpdo_three_site_sector_closure_factorization,
+      def:mpdo_physical_sector_factorization}
     On a diagonal sector tuple these are the fixed-sector factorizations.
-    If two tuples differ, at least one physical slice lies between distinct
-    sectors and hence vanishes.
+    A sector-coordinate slice satisfies
+    \[
+      \widetilde K_{\sigma,\sigma'}=0
+      \qquad\text{when $\sigma$ and $\sigma'$ belong to distinct sectors.}
+    \]
+    Consequently, if $(k,h)\ne(p,q)$ or
+    $(k,l,h)\ne(p,m,q)$, respectively, then
+    \[
+      [{\cal K}_2(X)]_{(k,h),(p,q)}=0,
+      \qquad
+      [{\cal K}_3(X)]_{(k,l,h),(p,m,q)}=0.
+    \]
 \end{proof}
 
 \begin{definition}[Closed sector tensors]%
@@ -2624,7 +2636,9 @@ strong subadditivity for a normalized three-site reduced state.
     The two- and three-site physical spaces are identified with their
     canonical direct sums over sector pairs and triples. The inverse
     equivalences send a diagonal sector block to the corresponding embedded
-    physical matrix and send off-diagonal sector blocks to zero.
+    physical matrix and send off-diagonal sector blocks to zero. Write
+    $\mathfrak R_2$ and $\mathfrak R_3$ for the resulting reindexings of
+    two- and three-site matrices.
 \end{definition}
 
 \begin{theorem}[Coarse-graining of the three-site closure]
@@ -2635,12 +2649,13 @@ strong subadditivity for a normalized three-site reduced state.
     \leanok
     \uses{def:phys_close, def:mpdo_physical_sector_s_map,
       def:mpdo_physical_sector_closure_coordinates}
-    For every virtual matrix $X$, the coarse-graining channel satisfies
+    For every virtual matrix $X$, in the canonical physical-sector
+    coordinates selected by the isometry $U$, the coarse-graining channel
+    satisfies
     \[
-      \mathcal S\bigl({\cal K}_3(X)\bigr)={\cal K}_2(X).
+      \mathcal S\bigl(\mathfrak R_3({\cal K}_3(X))\bigr)
+      =\mathfrak R_2({\cal K}_2(X)).
     \]
-    The equality is written in the canonical physical-sector coordinates
-    selected by the isometry $U$.
 \end{theorem}
 
 \begin{proof}
@@ -2648,14 +2663,22 @@ strong subadditivity for a normalized three-site reduced state.
     \uses{thm:mpdo_two_site_sector_closure_factorization,
       thm:mpdo_three_site_sector_closure_factorization,
       thm:mpdo_physical_sector_three_site_neighboring_operator_trace,
+      def:mpdo_physical_sector_factorization,
       def:mpdo_physical_sector_s1_map}
     On the $(k,h)$ diagonal block, $\mathcal S_0$ traces
-    $\Omega_{k,h}$ and gives $a_kb_hB_{k,h}(X)$. The map $\mathcal S_1$
-    adjoins $\eta_{k,h}/(a_kb_h)$ on an active pair, so the scalar cancels;
-    both sides vanish on a zero-weight pair. Finally, $\mathcal S_2$ regroups
-    the four factors into two physical sites. Entries between distinct sector
-    pairs vanish under both the controlled preparation and the two-site
-    direct-sum decomposition.
+    $\Omega_{k,h}$ and gives $a_kb_hB_{k,h}(X)$. On an active sector pair,
+    \[
+      \mathcal S_1\bigl((a_kb_h)B_{k,h}(X)\bigr)
+      =B_{k,h}(X)\otimes\eta_{k,h}.
+    \]
+    If $a_kb_h=0$, positivity and zero trace give $\eta_{k,h}=0$, so both
+    sides of this identity vanish. Finally, $\mathcal S_2$ regroups the four
+    factors into two physical sites. For distinct sector pairs,
+    \[
+      (\mathcal S_1Y)_{(k,h),(p,q)}=0
+      \qquad\text{when $(k,h)\ne(p,q)$},
+    \]
+    and the two-site closure has the same off-diagonal zero blocks.
 \end{proof}
 
 \begin{figure}[ht]
