@@ -1141,6 +1141,85 @@ strong subadditivity for a normalized three-site reduced state.
     \]
 \end{proof}
 
+\begin{definition}[Two-site sector bond]
+    \label{def:mpdo_physical_sector_two_site_bond}
+    \lean{MPOTensor.PhysicalSectorFactorization.sectorCoordinateBond}
+    \leanok
+    \uses{def:mpdo_minimal_neighboring_operator,
+      def:mpdo_global_sector_closure_coordinates}
+    In the two-site sector coordinates, define
+    \[
+      B_{\mathrm{sec}}
+      =\bigoplus_{k,h}
+        \left(I_{B_k^L\otimes B_h^R}\otimes\eta_{k,h}\right).
+    \]
+    Thus the outer factors carry the identity, while the neighboring factors
+    carry the operator $\eta_{k,h}$. This is the local bond in
+    \cite[Appendix~C.2, Proposition~C.8, lines~1581--1593]
+      {Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Positivity of the two-site sector bond]
+    \label{thm:mpdo_physical_sector_two_site_bond_pos}
+    \lean{MPOTensor.PhysicalSectorFactorization.sectorCoordinateBond_pos}
+    \leanok
+    \uses{def:mpdo_physical_sector_two_site_bond,
+      thm:matrix_pos_semidef_block_diagonal}
+    Suppose that $\eta_{k,h}$ is positive semidefinite for every pair of
+    sectors. Then $B_{\mathrm{sec}}$ is positive semidefinite. The positivity
+    premise is the conclusion at
+    \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:matrix_pos_semidef_block_diagonal}
+    Each summand
+    $I_{B_k^L\otimes B_h^R}\otimes\eta_{k,h}$ is positive semidefinite.
+    Positivity is preserved by finite block diagonals and by the reindexing
+    from the regrouped direct sum to the two-site sector coordinates.
+\end{proof}
+
+\begin{definition}[Two-site bond in physical coordinates]
+    \label{def:mpdo_physical_two_site_bond}
+    \lean{MPOTensor.PhysicalSectorFactorization.physicalPairBond,
+      MPOTensor.PhysicalSectorFactorization.physicalBond}
+    \leanok
+    \uses{def:mpdo_physical_sector_two_site_bond,
+      def:mpdo_physical_sector_factorization}
+    Let $V_2$ be the two-site tensor product of the project's coordinate map,
+    so that $V_2XV_2^\dagger$ expresses a physical operator $X$ in sector
+    coordinates. Thus $V_2=U_{\mathrm{paper}}^\dagger$ in the convention of
+    \cite[Appendix~C.2, lines~1581--1583]{Cirac2016MPDO_arXiv}. Define
+    \[
+      B_{\mathrm{phys}}=V_2^\dagger B_{\mathrm{sec}}V_2,
+    \]
+    and identify pairs of physical indices with functions
+    $\{0,1\}\to\{0,\ldots,d-1\}$. This is the physical two-site bond in
+    \cite[Appendix~C.2, Proposition~C.8, lines~1581--1593]
+      {Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Positivity of the physical two-site bond]
+    \label{thm:mpdo_physical_two_site_bond_pos}
+    \lean{MPOTensor.PhysicalSectorFactorization.physicalPairBond_pos,
+      MPOTensor.PhysicalSectorFactorization.physicalBond_pos}
+    \leanok
+    \uses{def:mpdo_physical_two_site_bond,
+      thm:mpdo_physical_sector_two_site_bond_pos}
+    Suppose that $\eta_{k,h}$ is positive semidefinite for every pair of
+    sectors. Then $B_{\mathrm{phys}}$ is positive semidefinite, both with
+    pair indices and with two-site configuration indices.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_physical_sector_two_site_bond_pos}
+    Apply positivity of $B_{\mathrm{sec}}$ to the congruence
+    $U_2^\dagger B_{\mathrm{sec}}U_2$. Reindexing the resulting matrix by
+    two-site configurations preserves positivity.
+\end{proof}
+
 \begin{definition}[Closed sector tensors]%
     \label{def:mpdo_closed_sector_tensors}
     \lean{MPOTensor.closedSectorL}
