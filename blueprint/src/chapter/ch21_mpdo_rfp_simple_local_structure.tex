@@ -1321,6 +1321,69 @@ strong subadditivity for a normalized three-site reduced state.
     commutator.
 \end{proof}
 
+\begin{theorem}[Agreement outside a cyclic window]
+    \label{thm:mpdo_agreement_outside_cyclic_window}
+    \lean{MPOTensor.agreesOutsideWindow_iff}
+    \leanok
+    Let $W_i^L=\{i,i+1,\ldots,i+L-1\}$ be a cyclic window of length
+    $L\leq N$. Two configurations agree outside $W_i^L$ precisely when their
+    values agree at every site not contained in $W_i^L$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Replacing the entries in $W_i^L$ does not affect any complementary site.
+    Conversely, if the two configurations agree on the complement, replacing
+    the window of the first by the window of the second reconstructs the
+    second configuration.
+\end{proof}
+
+\begin{theorem}[Multiplicativity of cyclic local embeddings]
+    \label{thm:mpdo_cyclic_local_embedding_mul}
+    \lean{MPOTensor.embedLocalOperator_mul}
+    \leanok
+    Let $E_i^L$ embed an operator on $L$ consecutive sites into an
+    $N$-site periodic chain at the cyclic window beginning at $i$. Then
+    \[
+        E_i^L(BC)=E_i^L(B)E_i^L(C).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Identify a periodic configuration with its restriction to $W_i^L$ and
+    its restriction to the cyclic complement. In these coordinates,
+    $E_i^L(B)=B\otimes I$, so the assertion is the mixed-product identity.
+\end{proof}
+
+\begin{theorem}[Adjacent physical bonds on periodic chains]
+    \label{thm:mpdo_periodic_adjacent_physical_bonds_comm}
+    \lean{MPOTensor.PhysicalSectorFactorization.physicalBond_adjacent_comm}
+    \leanok
+    \uses{thm:mpdo_cyclic_local_embedding_mul,
+      thm:mpdo_physical_adjacent_bonds_comm}
+    Let $N\geq 3$. For every site $i\in\mathbb Z/N\mathbb Z$, including
+    $i=N-1$, the adjacent translates of the physical bond commute:
+    \[
+      (B_{\mathrm{physical}})_{i,i+1}
+      (B_{\mathrm{physical}})_{i+1,i+2}
+      =
+      (B_{\mathrm{physical}})_{i+1,i+2}
+      (B_{\mathrm{physical}})_{i,i+1}.
+    \]
+    This is the periodic-chain form of the adjacent-bond calculation in
+    \cite[Appendix~C.2, Proposition~C.8, lines~1571--1593]
+      {Cirac2016MPDO_arXiv}. The case $N=2$ is excluded because its two
+    translated bonds have the same support with opposite cyclic order.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Enclose the two bonds in the cyclic three-site window beginning at $i$.
+    In these coordinates they are the bonds beginning at sites $0$ and $1$,
+    respectively. Embedding an operator into a fixed cyclic window preserves
+    products, so the assertion follows from
+    Theorem~\ref{thm:mpdo_physical_adjacent_bonds_comm}.
+\end{proof}
+
 \begin{definition}[Closed sector tensors]%
     \label{def:mpdo_closed_sector_tensors}
     \lean{MPOTensor.closedSectorL}
