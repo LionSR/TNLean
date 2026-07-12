@@ -26,6 +26,8 @@ This is the key operation for constructing the Choi matrix
 
 * `Matrix.tensorMapId_apply`: elementwise formula
 * `Matrix.tensorMapId_kronecker`: `(T ⊗ id)(A ⊗ B) = T(A) ⊗ B`
+* `Matrix.tensorMapIdLM_id`: the lift of the identity map is the identity.
+* `Matrix.tensorMapIdLM_comp`: the lift preserves composition.
 
 ## References
 
@@ -37,48 +39,47 @@ open Matrix Finset BigOperators
 
 namespace Matrix
 
-variable {d d' d'' : ℕ}
+variable {α β γ δ : Type*}
 
-/-- Extract the `(i₂, j₂)`-slice of a bipartite matrix:
-for `X : M_{d·d''}`, the slice `X_{·,i₂,·,j₂}` is a `d × d` matrix. -/
+/-- Extract the `(i₂, j₂)`-slice of a bipartite matrix. For a matrix indexed by
+`α × δ`, the slice with fixed `δ`-coordinates is a matrix indexed by `α`. -/
 noncomputable def bipartiteSlice
-    (X : Matrix (Fin d × Fin d'') (Fin d × Fin d'') ℂ)
-    (i₂ j₂ : Fin d'') : Matrix (Fin d) (Fin d) ℂ :=
+    (X : Matrix (α × δ) (α × δ) ℂ)
+    (i₂ j₂ : δ) : Matrix α α ℂ :=
   fun i₁ j₁ => X (i₁, i₂) (j₁, j₂)
 
 @[simp]
 theorem bipartiteSlice_apply
-    (X : Matrix (Fin d × Fin d'') (Fin d × Fin d'') ℂ)
-    (i₂ j₂ : Fin d'') (i₁ j₁ : Fin d) :
+    (X : Matrix (α × δ) (α × δ) ℂ)
+    (i₂ j₂ : δ) (i₁ j₁ : α) :
     bipartiteSlice X i₂ j₂ i₁ j₁ = X (i₁, i₂) (j₁, j₂) := rfl
 
-/-- The tensor product of a linear map `T : M_d → M_{d'}` with the identity
-on `M_{d''}`. The result acts on bipartite matrices indexed by
-`(Fin d' × Fin d'')`:
+/-- The tensor product of a matrix linear map `T` with the identity on the
+matrix factor indexed by `δ`. The resulting map has the entrywise formula
 
   `((tensorMapId T) X) (i₁, i₂) (j₁, j₂) = (T (bipartiteSlice X i₂ j₂)) i₁ j₁`
 
 This corresponds to applying `T` to the first tensor factor and leaving
 the second factor untouched. -/
 noncomputable def tensorMapId
-    (T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] Matrix (Fin d') (Fin d') ℂ)
-    (X : Matrix (Fin d × Fin d'') (Fin d × Fin d'') ℂ) :
-    Matrix (Fin d' × Fin d'') (Fin d' × Fin d'') ℂ :=
+    (T : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ)
+    (X : Matrix (α × δ) (α × δ) ℂ) :
+    Matrix (β × δ) (β × δ) ℂ :=
   fun ⟨i₁, i₂⟩ ⟨j₁, j₂⟩ => (T (bipartiteSlice X i₂ j₂)) i₁ j₁
 
 @[simp]
 theorem tensorMapId_apply
-    (T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] Matrix (Fin d') (Fin d') ℂ)
-    (X : Matrix (Fin d × Fin d'') (Fin d × Fin d'') ℂ)
-    (i₁ : Fin d') (i₂ : Fin d'') (j₁ : Fin d') (j₂ : Fin d'') :
+    (T : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ)
+    (X : Matrix (α × δ) (α × δ) ℂ)
+    (i₁ : β) (i₂ : δ) (j₁ : β) (j₂ : δ) :
     tensorMapId T X (i₁, i₂) (j₁, j₂) =
       (T (bipartiteSlice X i₂ j₂)) i₁ j₁ := rfl
 
 /-- `tensorMapId T` as a linear map in `X`. -/
 noncomputable def tensorMapIdLM
-    (T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] Matrix (Fin d') (Fin d') ℂ) :
-    Matrix (Fin d × Fin d'') (Fin d × Fin d'') ℂ →ₗ[ℂ]
-    Matrix (Fin d' × Fin d'') (Fin d' × Fin d'') ℂ where
+    (T : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ) :
+    Matrix (α × δ) (α × δ) ℂ →ₗ[ℂ]
+    Matrix (β × δ) (β × δ) ℂ where
   toFun := tensorMapId T
   map_add' X Y := by
     ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
@@ -95,10 +96,16 @@ noncomputable def tensorMapIdLM
         ext; simp [bipartiteSlice, Matrix.smul_apply, smul_eq_mul]]
     simp [map_smul]
 
+@[simp]
+theorem tensorMapIdLM_apply
+    (T : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ)
+    (X : Matrix (α × δ) (α × δ) ℂ) :
+    tensorMapIdLM T X = tensorMapId T X := rfl
+
 /-- The key property: `(T ⊗ id)(A ⊗ B) = T(A) ⊗ B` for Kronecker products. -/
 theorem tensorMapId_kronecker
-    (T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] Matrix (Fin d') (Fin d') ℂ)
-    (A : Matrix (Fin d) (Fin d) ℂ) (B : Matrix (Fin d'') (Fin d'') ℂ) :
+    (T : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ)
+    (A : Matrix α α ℂ) (B : Matrix δ δ ℂ) :
     tensorMapId T (kroneckerMap (· * ·) A B) =
       kroneckerMap (· * ·) (T A) B := by
   ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
@@ -108,5 +115,27 @@ theorem tensorMapId_kronecker
       ext a b; simp [bipartiteSlice, kroneckerMap_apply]; ring]
   simp [map_smul, Matrix.smul_apply, smul_eq_mul]
   ring
+
+/-- Tensoring the identity map with the identity gives the identity map on the
+product matrix algebra. -/
+@[simp]
+theorem tensorMapIdLM_id :
+    tensorMapIdLM (δ := δ) (LinearMap.id : Matrix α α ℂ →ₗ[ℂ] Matrix α α ℂ) =
+      LinearMap.id := by
+  apply LinearMap.ext
+  intro X
+  ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
+  rfl
+
+/-- Tensoring with the identity respects composition of matrix linear maps. -/
+theorem tensorMapIdLM_comp
+    (T : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ)
+    (S : Matrix β β ℂ →ₗ[ℂ] Matrix γ γ ℂ) :
+    tensorMapIdLM (δ := δ) (S ∘ₗ T) =
+      tensorMapIdLM (δ := δ) S ∘ₗ tensorMapIdLM (δ := δ) T := by
+  apply LinearMap.ext
+  intro X
+  ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
+  rfl
 
 end Matrix
