@@ -2631,6 +2631,27 @@ strong subadditivity for a normalized three-site reduced state.
     applies these preparations on the diagonal summands.
 \end{proof}
 
+\begin{figure}[ht]
+    \centering
+    \TNMPDORefinementConstruction
+
+    \medskip
+    \TNMPDORefinementDirection
+    \caption{Physical-sector construction of the refinement channel
+    $\mathcal T=\mathcal T_2\mathcal T_1\mathcal T_0$. The first stage traces
+    $R_k\otimes L_h$ and retains $a_kb_h$ on $L_k\otimes R_h$. On an active
+    sector pair, the second stage adjoins
+    $\widehat\Omega_{k,h}=(a_kb_h)^{-1}
+      \bigoplus_l(\eta_{k,l}\otimes\eta_{l,h})$, and the final stage orders
+    the factors as
+    $(L_k\otimes R_k)\otimes(L_l\otimes R_l)\otimes(L_h\otimes R_h)$.
+    The lower schematic records the two-site to three-site direction in
+    \cite[Appendix~C.2, lines~1522--1545]{Cirac2016MPDO_arXiv}. The figure
+    records the three constituent maps only; no composite map or closure
+    identity is asserted here.}
+    \label{fig:mpdo_physical_sector_refinement_channel}
+\end{figure}
+
 \begin{definition}[The neighboring-state preparation $\mathcal S_1$]
     \label{def:mpdo_physical_sector_s1_map}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.normalizedNeighboringDensity}
@@ -2704,26 +2725,6 @@ strong subadditivity for a normalized three-site reduced state.
     Each of the three factors is trace-preserving and completely positive,
     and this property is preserved under composition.
 \end{proof}
-
-\begin{figure}[ht]
-    \centering
-    \TNMPDORefinementConstruction
-
-    \medskip
-    \TNMPDORefinementDirection
-    \caption{Physical-sector construction of the refinement channel
-    $\mathcal T=\mathcal T_2\mathcal T_1\mathcal T_0$. The first stage traces
-    $R_k\otimes L_h$ and retains $a_kb_h$ on $L_k\otimes R_h$. On an active
-    sector pair, the second stage adjoins
-    $\widehat\Omega_{k,h}=(a_kb_h)^{-1}
-      \bigoplus_l(\eta_{k,l}\otimes\eta_{l,h})$, and the final stage orders
-    the factors as
-    $(L_k\otimes R_k)\otimes(L_l\otimes R_l)\otimes(L_h\otimes R_h)$.
-    The lower schematic records the two-site to three-site direction of the
-    channel. These are the diagrams in
-    \cite[Appendix~C.2, lines~1522--1545]{Cirac2016MPDO_arXiv}.}
-    \label{fig:mpdo_physical_sector_refinement_channel}
-\end{figure}
 
 \begin{definition}[Two- and three-site sector coordinates]
     \label{def:mpdo_physical_sector_closure_coordinates}
