@@ -407,6 +407,7 @@ import TNLean.MPS.MPDO.PhysicalSectorCoarseGrainingIdentity
 import TNLean.MPS.MPDO.PhysicalSectorRefinementAction
 import TNLean.MPS.MPDO.PhysicalSectorRefinementIdentity
 import TNLean.MPS.MPDO.PhysicalSectorPhysicalMaps
+import TNLean.MPS.MPDO.PhysicalSectorBlockedRFP
 import TNLean.MPS.MPDO.SectorPairingTransfer
 import TNLean.MPS.MPDO.SectorEtaContraction
 import TNLean.MPS.MPDO.SectorEtaOperator

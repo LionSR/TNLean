@@ -1,0 +1,72 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{Physical-Isometry Transport for the Blocked MPDO Fixed Point}
+\author{}
+\date{2026-07-12}
+
+\begin{document}
+\maketitle
+
+\section{Source conclusion and present scope}
+
+The proof of Theorem~4.9, direction (iv)$\Rightarrow$(v), constructs the
+channels $\mathcal T^2$ and $\mathcal S^2$ after applying the physical
+isometry of Proposition~C.7; see
+\cite[Appendix~C.2, lines~1510--1563 and 1821--1825]
+{Cirac2016MPDO_arXiv}.  The theorem itself concerns the original tensor after
+blocking two adjacent sites.
+
+The present formal theorem
+\path{NeighboringTraceFactorization.blockTwo_sectorCoordinateTensor_isRFPViaTS}
+proves the fixed-point identities for
+\[
+  \operatorname{blockTwo}(\widehat{\mathcal K}),
+\]
+where $\widehat{\mathcal K}$ is the tensor in the sector coordinates selected
+by the physical isometry.  Its conclusion is exact in these coordinates, but
+it does not yet transport the two channels back to
+$\operatorname{blockTwo}(\mathcal K)$.  It is therefore a scope-restricted
+intermediate result, not the complete formalization of the source implication.
+
+\section{Required transport}
+
+In the formal sector factorization, the physical isometry is a square matrix
+$U$ satisfying $U^\dagger U=I$.  Finite dimensionality then also gives
+$UU^\dagger=I$.  The remaining argument should first prove the closure
+relations
+\[
+  \widehat{\mathcal K}_n(X)
+  =U^{\otimes n}\mathcal K_n(X)(U^\dagger)^{\otimes n}
+  \qquad (n=2,4),
+\]
+with the tensor indices placed in the right-associated conventions used by the
+channel construction.  Transporting $\widehat{\mathcal T}^2$ and
+$\widehat{\mathcal S}^2$ through these unitary congruences then preserves
+complete positivity and trace.  The two sector-coordinate closure identities
+become the required identities for the original blocked tensor.
+
+\section{Elimination plan}
+
+The next result should formalize the two- and four-site unitary closure
+relations, define the transported channels on the original physical matrix
+spaces, and prove
+\[
+  \operatorname{IsRFPViaTS}
+    \bigl(\operatorname{blockTwo}(\mathcal K)\bigr)
+\]
+under the same neighboring-operator trace-factorization hypothesis.  Once
+that theorem is available, the scope-restriction marker on the
+sector-coordinate theorem can remain as a description of its narrower role,
+while the source-labelled blueprint implication should refer to the transported
+theorem.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
