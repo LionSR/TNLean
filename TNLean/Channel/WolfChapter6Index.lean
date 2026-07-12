@@ -329,11 +329,12 @@ points):
 In `TNLean.Channel.FixedPoint.MaximalSupport` (the maximal-support property
 and the removal of the corner restriction):
 
-* `Kraus.stationaryProj_absorb_of_le` — for PSD `P ≤ ρ` the support
-  projection of `ρ` absorbs `P`.
-* `Kraus.exists_maximalSupport_fixedPoint` — a PSD fixed point `ρ₀` whose
+* `Kraus.stationaryProj_absorb_of_le` — for positive semidefinite $P \preceq \rho$
+  the support projection of $\rho$ absorbs $P$.
+* `Kraus.exists_maximalSupport_fixedPoint` — a positive semidefinite fixed point
+  $\rho_0$ whose
   support projection $Q_0$ satisfies $Q_0 X Q_0 = X$ for every fixed point $X$.
-* `Kraus.exists_maximalSupport_weightedCorner_sqrt_eq` — at `ρ₀`, conjugation
+* `Kraus.exists_maximalSupport_weightedCorner_sqrt_eq` — at $\rho_0$, conjugation
   by $\sqrt{\rho_0}$ maps the corner carrier onto the full fixed-point set,
   realizing $\rho_0^{-1/2}\,\{X \mid T(X) = X\}\,\rho_0^{-1/2}$ without a support
   restriction.
