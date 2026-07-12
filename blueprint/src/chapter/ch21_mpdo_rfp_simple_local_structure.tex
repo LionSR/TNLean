@@ -2645,14 +2645,14 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{theorem}[$\mathcal T_1$ is trace-preserving completely positive]
     \label{thm:mpdo_physical_sector_t1_preparation_cptp}
-    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSitePreparationMap_isKrausCPTP,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSiteControlledMap_isKrausCPTP}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSitePreparationMap_isKrausCPTP}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSiteControlledMap_isKrausCPTP}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.t1Map_isKrausCPTP}
     \leanok
     \uses{def:mpdo_physical_sector_t1_preparation,
       thm:mpdo_physical_sector_t1_density_properties}
-    The completed sectorwise preparations and their orthogonally controlled
-    direct sum are trace-preserving and completely positive.
+    Each completed preparation is trace-preserving and completely positive.
+    The same holds for their orthogonally controlled direct sum.
 \end{theorem}
 
 \begin{proof}
