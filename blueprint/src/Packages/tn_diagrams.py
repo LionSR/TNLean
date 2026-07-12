@@ -75,6 +75,7 @@ _DIAGRAM_ARGS: dict[str, str] = {
     "TNMPSInverseContraction": "",
     "TNBNTDecomposition": "",
     "TNMPDOZCLIdempotence": "",
+    "TNMPDOFixedFinalFusionBracketings": "",
     "TNRFPKrausIsometry": "",
     "TNRFPKrausIsometryReverse": "",
     "TNRFPIsometryCanonicalForm": "",
