@@ -1220,6 +1220,78 @@ strong subadditivity for a normalized three-site reduced state.
     two-site configurations preserves positivity.
 \end{proof}
 
+\begin{definition}[Three-site lifts of a two-site operator]
+    \label{def:mpdo_three_site_pair_lifts}
+    \lean{MPOTensor.PhysicalSectorFactorization.leftPairMatrix,
+      MPOTensor.PhysicalSectorFactorization.rightPairMatrix}
+    \leanok
+    Let $B$ be an operator on two copies of a finite-dimensional space $H$.
+    On the right-associated space $H\otimes(H\otimes H)$, define
+    \[
+      B_{01}=\alpha(B\otimes I_H)\alpha^{-1},
+      \qquad
+      B_{12}=I_H\otimes B,
+    \]
+    where $\alpha:(H\otimes H)\otimes H\to H\otimes(H\otimes H)$ is the
+    canonical associator.
+\end{definition}
+
+\begin{theorem}[Three-site translation identities]
+    \label{thm:mpdo_three_site_pair_lifts}
+    \lean{MPOTensor.PhysicalSectorFactorization.reindex_embedLocalOperator_zero,
+      MPOTensor.PhysicalSectorFactorization.reindex_embedLocalOperator_one}
+    \leanok
+    \uses{def:mpdo_physical_two_site_bond,
+      def:mpdo_three_site_pair_lifts}
+    Under the canonical identification of three-site configurations with
+    $H\otimes(H\otimes H)$, the translates of the physical bond beginning at
+    sites $0$ and $1$ are respectively
+    \[
+      (B_{\mathrm{physical}})_{01}=B_{01},
+      \qquad
+      (B_{\mathrm{physical}})_{12}=B_{12}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    An entry of the first translate vanishes unless the third indices agree;
+    its remaining entry is that of $B_{\mathrm{physical}}$. Similarly, an
+    entry of the second translate vanishes unless the first indices agree.
+    These are precisely the matrix entries of $B_{01}$ and $B_{12}$.
+\end{proof}
+
+\begin{theorem}[Commutativity on a fixed sector triple]
+    \label{thm:mpdo_fixed_sector_adjacent_bonds_comm}
+    \lean{MPOTensor.PhysicalSectorFactorization.adjacentSectorBonds_comm}
+    \leanok
+    \uses{def:mpdo_minimal_neighboring_operator}
+    Fix sectors $(k,l,h)$. On the regrouped sector space, set
+    \begin{align*}
+      C_{01}^{k,l,h}
+        &=I_{B_k^L\otimes B_h^R}\otimes
+          \left(\eta_{k,l}\otimes I_{B_l^R\otimes B_h^L}\right),\\
+      C_{12}^{k,l,h}
+        &=I_{B_k^L\otimes B_h^R}\otimes
+          \left(I_{B_k^R\otimes B_l^L}\otimes\eta_{l,h}\right).
+    \end{align*}
+    Then
+    \[
+      C_{01}^{k,l,h}C_{12}^{k,l,h}
+        =C_{12}^{k,l,h}C_{01}^{k,l,h}.
+    \]
+    This is the fixed-sector calculation in
+    \cite[Appendix~C.2, Proposition~C.8, lines~1589--1593]
+      {Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The operators $\eta_{k,l}$ and $\eta_{l,h}$ act on the distinct factors
+    $B_k^R\otimes B_l^L$ and $B_l^R\otimes B_h^L$, respectively. The claim
+    follows from the mixed-product identity for tensor products.
+\end{proof}
+
 \begin{definition}[Closed sector tensors]%
     \label{def:mpdo_closed_sector_tensors}
     \lean{MPOTensor.closedSectorL}
