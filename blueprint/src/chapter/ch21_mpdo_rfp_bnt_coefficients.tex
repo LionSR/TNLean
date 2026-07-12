@@ -566,3 +566,113 @@
     renormalization fixed points whose structure coefficients depend on the
     length is left open in \cite[Section~4.5]{Cirac2016MPDO_arXiv}.
 \end{remark}
+
+\begin{definition}[Linearly independent operator family]%
+    \label{def:mpdo_bnt_label_linear_independent}
+    \lean{MPOTensor.BNTLabelOperatorFamily.LinearIndependentAt}
+    \lean{MPOTensor.BNTLabelOperatorFamily.EventuallyLinearIndependent}
+    \leanok
+    \uses{def:mpdo_bnt_label_operator_family}
+    A BNT-label operator family is \emph{linearly independent at length $L$}
+    when the operators $O_L(M_\alpha)$ are linearly independent, and
+    \emph{eventually linearly independent} when this holds for every length
+    beyond some threshold. Eventual linear independence is the
+    operator-level form of the third defining property of a basis of normal
+    tensors in \cite[Section~2.3]{Cirac2016MPDO_arXiv}, invoked for the
+    labelled operators in \cite[Appendix~C.4]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Uniqueness of the structure coefficients]%
+    \label{thm:mpdo_bnt_label_coeff_unique}
+    \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.%
+        coeff_eq_of_linearIndependentAt}
+    \leanok
+    \uses{def:mpdo_bnt_label_linear_independent,
+        def:mpdo_bnt_label_same_length_product_form,
+        def:mpdo_bnt_label_coefficient_family}
+    Two coefficient systems satisfying the same-length product law for the
+    same operator family agree at every positive length at which the
+    operators are linearly independent.
+\end{theorem}
+\begin{proof}\leanok
+    Applying the same-length product law to both coefficient systems gives
+    \[
+        \sum_\delta c^{(L)}_{\alpha,\beta,\delta}\, O_L(M_\delta)
+        = O_L(M_\alpha)\, O_L(M_\beta)
+        = \sum_\delta c'^{(L)}_{\alpha,\beta,\delta}\, O_L(M_\delta).
+    \]
+    Subtracting yields
+    $\sum_\delta (c^{(L)}_{\alpha,\beta,\delta}
+        - c'^{(L)}_{\alpha,\beta,\delta})\, O_L(M_\delta) = 0$,
+    and linear independence forces every coefficient of the difference to
+    zero.
+\end{proof}
+
+\begin{theorem}[Associativity constraint on the structure coefficients]%
+    \label{thm:mpdo_bnt_label_coeff_associativity}
+    \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.%
+        coeff_assoc_of_linearIndependentAt}
+    \leanok
+    \uses{def:mpdo_bnt_label_linear_independent,
+        def:mpdo_bnt_label_same_length_product_form}
+    At every positive length $L$ at which the operators are linearly
+    independent, the structure coefficients of the same-length product law
+    satisfy
+    \[
+        \sum_\delta c^{(L)}_{\alpha,\beta,\delta}\,
+        c^{(L)}_{\delta,\gamma,\epsilon}
+        = \sum_\delta c^{(L)}_{\beta,\gamma,\delta}\,
+        c^{(L)}_{\alpha,\delta,\epsilon}.
+    \]
+    These are the restrictions that the associativity of the multiplication
+    imposes on the structure coefficients, noted in
+    \cite[Section~4.5]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}\leanok
+    Applying the same-length product law twice in each order gives
+    \begin{align*}
+        (O_L(M_\alpha)\, O_L(M_\beta))\, O_L(M_\gamma)
+         & = \sum_{\varepsilon'}
+        \Bigl(\sum_\delta c^{(L)}_{\alpha,\beta,\delta}\,
+        c^{(L)}_{\delta,\gamma,\varepsilon'}\Bigr)
+        O_L(M_{\varepsilon'}),   \\
+        O_L(M_\alpha)\,(O_L(M_\beta)\, O_L(M_\gamma))
+         & = \sum_{\varepsilon'}
+        \Bigl(\sum_\delta c^{(L)}_{\beta,\gamma,\delta}\,
+        c^{(L)}_{\alpha,\delta,\varepsilon'}\Bigr)
+        O_L(M_{\varepsilon'}).
+    \end{align*}
+    Associativity of multiplication equates the two left-hand sides, so the
+    right-hand sides agree; linear independence of the operators then forces
+    the corresponding coefficient sums to agree for each $\varepsilon'$.
+\end{proof}
+
+\begin{theorem}[Associativity constraint in trace-power form]%
+    \label{thm:mpdo_bnt_label_chi_associativity}
+    \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.%
+        tracePowerCoeff_assoc_of_linearIndependentAt}
+    \leanok
+    \uses{thm:mpdo_bnt_label_coeff_associativity,
+        def:mpdo_bnt_label_same_length_product_form,
+        def:mpdo_bnt_label_positive_length_chi_trace_power_form}
+    For a coefficient system satisfying the same-length product law for a
+    BNT-label operator family and in trace-power form, at every positive
+    length $L$ at which the labelled operators are linearly independent, the
+    associativity constraint is a restriction on the family of diagonal
+    matrices:
+    \[
+        \sum_\delta
+        \operatorname{tr}(\chi_{\alpha,\beta,\delta}^{\,L})
+        \operatorname{tr}(\chi_{\delta,\gamma,\epsilon}^{\,L})
+        = \sum_\delta
+        \operatorname{tr}(\chi_{\beta,\gamma,\delta}^{\,L})
+        \operatorname{tr}(\chi_{\alpha,\delta,\epsilon}^{\,L}).
+    \]
+    In \cite[Section~4.5]{Cirac2016MPDO_arXiv} these restrictions, combined
+    with the isometry statement, lead to a pentagon-like equation for the
+    fusion isometries whose solutions come from unitary fusion categories.
+\end{theorem}
+\begin{proof}\leanok
+    Substitute the trace-power form of the coefficients into the
+    associativity constraint.
+\end{proof}
