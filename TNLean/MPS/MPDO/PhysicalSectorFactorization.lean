@@ -55,6 +55,12 @@ structure PhysicalSectorFactorization (K : MPOTensor d D) where
   leftDim : Fin sectorCount → ℕ
   /-- Dimension of the right factor in each physical sector. -/
   rightDim : Fin sectorCount → ℕ
+  /-- Every left sector factor is nonzero, as the direct sum ranges over the
+  nonzero sector summands in arXiv:1606.00608, Appendix C.2, lines 1381--1388. -/
+  leftDim_pos : ∀ k, 0 < leftDim k
+  /-- Every right sector factor is nonzero, as the direct sum ranges over the
+  nonzero sector summands in arXiv:1606.00608, Appendix C.2, lines 1381--1388. -/
+  rightDim_pos : ∀ k, 0 < rightDim k
   /-- Identification of the physical space with the direct sum of its sectors. -/
   sectorEquiv : Fin d ≃ Σ k : Fin sectorCount, Fin (leftDim k) × Fin (rightDim k)
   /-- The physical-space isometry in equation `AppUkU=rl`. -/
@@ -88,6 +94,12 @@ and `h`. -/
 abbrev NeighborIndex (F : PhysicalSectorFactorization K)
     (k h : Fin F.sectorCount) :=
   Fin (F.rightDim k) × Fin (F.leftDim h)
+
+/-- Every neighboring-subspin index space is nonempty because the sector
+summands have nonzero left and right factors. -/
+theorem neighborIndex_nonempty (F : PhysicalSectorFactorization K)
+    (k h : Fin F.sectorCount) : Nonempty (NeighborIndex F k h) :=
+  ⟨(⟨0, F.rightDim_pos k⟩, ⟨0, F.leftDim_pos h⟩)⟩
 
 /-- The index space supporting the two outer tensors in sectors `k` and `h`. -/
 abbrev BoundaryIndex (F : PhysicalSectorFactorization K)

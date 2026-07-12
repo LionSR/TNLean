@@ -781,7 +781,8 @@ strong subadditivity for a normalized three-site reduced state.
       MPOTensor.PhysicalSectorFactorization.transformedPhysicalSlice,
       MPOTensor.PhysicalSectorFactorization.transformedPhysicalSlice_eq,
       MPOTensor.PhysicalSectorFactorization.sectorFinEquiv,
-      MPOTensor.PhysicalSectorFactorization.sectorCoordinateTensor}
+      MPOTensor.PhysicalSectorFactorization.sectorCoordinateTensor,
+      MPOTensor.PhysicalSectorFactorization.neighborIndex_nonempty}
     \lean{MPOTensor.PhysicalSectorFactorization.sectorCoordinateTensor_apply,
       MPOTensor.PhysicalSectorFactorization.sectorCoordinateTensor_apply_same,
       MPOTensor.PhysicalSectorFactorization.sectorCoordinateTensor_apply_ne}
@@ -794,6 +795,7 @@ strong subadditivity for a normalized three-site reduced state.
     \[
       \mathbb C^d\simeq\bigoplus_k(B_k^L\otimes B_k^R),
     \]
+    whose left and right factors are nonzero,
     an isometry $U$ on the physical space, and matrix families
     $(l_k)_\beta$ and $(r_k)_\alpha$ such that every physical slice satisfies
     \[
@@ -973,6 +975,64 @@ strong subadditivity for a normalized three-site reduced state.
       {Cirac2016MPDO_arXiv}.}
     \label{fig:mpdo_sector_closure_factorizations}
 \end{figure}
+
+\begin{definition}[Neighboring-operator trace factorization]
+    \label{def:mpdo_neighboring_trace_factorization}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.weight_nonneg,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.neighboringOperator_eq_zero_of_mul_eq_zero,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.neighborIndex_nonempty_of_mul_ne_zero}
+    \leanok
+    \uses{def:mpdo_minimal_neighboring_operator}
+    Suppose that every neighboring operator is positive semidefinite and that
+    there are real numbers $a_k,b_h$ such that
+    \[
+      \tr(\eta_{k,h})=a_kb_h,
+      \qquad
+      \sum_k a_kb_k=1.
+    \]
+    These are precisely the remaining hypotheses used in the construction of
+    Proposition~C.7 after the physical-sector factorization has been fixed
+    \cite[Appendix~C.2, lines~1389--1403]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Partial traces of the sector closures]
+    \label{thm:mpdo_sector_closure_partial_traces}
+    \lean{MPOTensor.PhysicalSectorFactorization.partialTraceRight_twoSiteSectorClosure}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.partialTraceRight_twoSiteSectorClosure}
+    \lean{MPOTensor.PhysicalSectorFactorization.partialTraceRight_threeSiteSectorClosure}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.sum_threeSite_trace_coefficients}
+    \leanok
+    \uses{thm:mpdo_two_site_sector_closure_factorization,
+      thm:mpdo_three_site_sector_closure_factorization,
+      def:mpdo_neighboring_trace_factorization}
+    For every virtual matrix $X$,
+    \[
+      \tr_{R_k\otimes L_h}\!\left({\cal K}_{2;k,h}(X)\right)
+      =\tr(\eta_{k,h})B_{k,h}(X)
+      =a_kb_h B_{k,h}(X).
+    \]
+    Similarly,
+    \[
+      \tr_{(R_k\otimes L_l)\otimes(R_l\otimes L_h)}
+        \!\left({\cal K}_{3;k,l,h}(X)\right)
+      =\tr(\eta_{k,l})\tr(\eta_{l,h})B_{k,h}(X),
+    \]
+    and summing the scalar coefficient over $l$ gives $a_kb_h$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_two_site_sector_closure_factorization,
+      thm:mpdo_three_site_sector_closure_factorization}
+    The partial trace of $A\otimes B$ is $\tr(B)A$. The two-site identity
+    follows immediately. For three sites, the coefficient is
+    \[
+      \sum_l (a_kb_l)(a_lb_h)
+      =a_k\left(\sum_l a_lb_l\right)b_h
+      =a_kb_h.
+    \]
+\end{proof}
 
 \begin{definition}[Closed sector tensors]%
     \label{def:mpdo_closed_sector_tensors}
@@ -2145,6 +2205,8 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{definition}[The two-site shift $\mathcal S_2$]
     \label{def:mpdo_s2_map}
     \lean{MPOTensor.ExplicitEtaOperators.s2Map}
+    \lean{MPOTensor.PhysicalSectorFactorization.s2ShiftEquiv,
+      MPOTensor.PhysicalSectorFactorization.s2Map}
     \leanok
     \uses{def:mpdo_two_site_subspin_regrouping,
       def:mpdo_equiv_reindex_map}
@@ -2159,6 +2221,7 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{theorem}[$\mathcal S_2$ is trace-preserving completely positive]
     \label{thm:mpdo_s2_map_cptp}
     \lean{MPOTensor.ExplicitEtaOperators.s2Map_isKrausCPTP}
+    \lean{MPOTensor.PhysicalSectorFactorization.s2Map_isKrausCPTP}
     \leanok
     \uses{def:mpdo_s2_map}
     The shift $\mathcal S_2$ is trace-preserving and completely positive.
@@ -2178,6 +2241,9 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.ExplicitEtaOperators.s0RegroupEquiv}
     \lean{MPOTensor.ExplicitEtaOperators.omegaShiftEquiv}
     \lean{MPOTensor.ExplicitEtaOperators.t2ShiftEquiv}
+    \lean{MPOTensor.PhysicalSectorFactorization.ThreeSiteMiddleIndex,
+      MPOTensor.PhysicalSectorFactorization.S0PreparationIndex,
+      MPOTensor.PhysicalSectorFactorization.s0RegroupEquiv}
     \leanok
     \uses{def:mpdo_two_site_subspin_regrouping, def:mpdo_eta_omega}
     Regroup three sites by
@@ -2203,6 +2269,7 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{definition}[The three-site partial-trace map $\mathcal S_0$]
     \label{def:mpdo_s0_map}
     \lean{MPOTensor.ExplicitEtaOperators.s0Map}
+    \lean{MPOTensor.PhysicalSectorFactorization.s0Map}
     \leanok
     \uses{def:mpdo_three_site_subspin_regrouping,
       def:mpdo_controlled_dependent_partial_trace,
@@ -2227,6 +2294,7 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{theorem}[$\mathcal S_0$ is trace-preserving completely positive]
     \label{thm:mpdo_s0_map_cptp}
     \lean{MPOTensor.ExplicitEtaOperators.s0Map_isKrausCPTP}
+    \lean{MPOTensor.PhysicalSectorFactorization.s0Map_isKrausCPTP}
     \leanok
     \uses{def:mpdo_s0_map}
     The map $\mathcal S_0$ is trace-preserving and completely positive.
@@ -2388,9 +2456,76 @@ strong subadditivity for a normalized three-site reduced state.
     \label{fig:mpdo_regrouping_partial_trace_maps}
 \end{figure}
 
-% The orthogonal direct sum of the active maps and a trace-preserving
-% completion on the unused zero-weight input summands remain part of the
-% construction of the full maps T_1 and S_1.
+\begin{definition}[The neighboring-state preparation $\mathcal S_1$]
+    \label{def:mpdo_physical_sector_s1_map}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.normalizedNeighboringDensity}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.normalizedNeighboringDensity_pos,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_normalizedNeighboringDensity,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.normalizedNeighboringPreparationMap_isKrausCPTP}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.inactiveNeighboringDensity,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.inactiveNeighboringDensity_posDef,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.inactiveNeighboringDensity_trace}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringDensity}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringDensity_pos,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_completedNeighboringDensity,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringDensity_eq_normalized}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringPreparationMap,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringPreparationMap_isKrausCPTP,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringPreparationMap_eq_normalized}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringControlledMap}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringControlledMap_sameBlock_apply}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.s1Map}
+    \leanok
+    \uses{def:mpdo_neighboring_trace_factorization}
+    On a sector pair with $a_kb_h\ne0$, let
+    \[
+      \mathcal S_{k,h}(X)=X\otimes\frac{\eta_{k,h}}{a_kb_h}.
+    \]
+    If $a_kb_h=0$, positivity and vanishing trace imply
+    $\eta_{k,h}=0$; choose any density operator on that unused summand.
+    Taking the orthogonal direct sum over $(k,h)$ defines $\mathcal S_1$.
+\end{definition}
+
+\begin{theorem}[$\mathcal S_1$ is trace-preserving completely positive]
+    \label{thm:mpdo_physical_sector_s1_map_cptp}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringControlledMap_isKrausCPTP}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.s1Map_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_physical_sector_s1_map}
+    The map $\mathcal S_1$ is trace-preserving and completely positive.
+\end{theorem}
+
+\begin{definition}[The coarse-graining channel $\mathcal S$]
+    \label{def:mpdo_physical_sector_s_map}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.sMap}
+    \leanok
+    \uses{def:mpdo_s0_map, def:mpdo_physical_sector_s1_map,
+      def:mpdo_s2_map}
+    Define the channel from three physical sites to two physical sites by
+    \[
+      \mathcal S=\mathcal S_2\mathcal S_1\mathcal S_0.
+    \]
+    This is the coarse-graining map in Proposition~C.7
+    \cite[Appendix~C.2, lines~1547--1563]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[$\mathcal S$ is trace-preserving completely positive]
+    \label{thm:mpdo_physical_sector_s_map_cptp}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.sMap_isKrausCPTP}
+    \leanok
+    \uses{thm:mpdo_s0_map_cptp,
+      thm:mpdo_physical_sector_s1_map_cptp,
+      thm:mpdo_s2_map_cptp,
+      lem:is_kraus_cptp_comp}
+    The channel $\mathcal S$ is trace-preserving and completely positive.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:is_kraus_cptp_comp}
+    Each of the three factors is trace-preserving and completely positive,
+    and this property is preserved under composition.
+\end{proof}
 
 \begin{figure}[ht]
     \centering
