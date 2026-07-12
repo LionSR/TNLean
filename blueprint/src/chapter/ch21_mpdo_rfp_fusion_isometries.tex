@@ -289,9 +289,9 @@ isometries of the two ways of bracketing a triple product,
 $(M_\alpha M_\beta) M_\gamma$ and $M_\alpha (M_\beta M_\gamma)$
 \cite[lines~995--999]{Cirac2016MPDO_arXiv}. The source attributes the
 construction of that equation, and the classification of its solutions, to
-\cite{Bultinck2017Anyons}. The next definition and theorems record the
-tensor-level content of one bracketing, $(M_\alpha M_\beta) M_\gamma$: fusing
-the first two tensors and then fusing the result with the third.
+\cite{Bultinck2017Anyons}. The next definitions and theorems record the
+tensor-level content of the two bracketings separately. They do not yet assert
+the change of basis between the two resulting direct sums.
 
 \begin{definition}[Iterated fusion isometry of a triple product, left
         bracketing]%
@@ -345,4 +345,64 @@ the first two tensors and then fusing the result with the third.
     exhibits it as $\chi_{\alpha,\beta,\delta}$ tensored with a letter of the
     product tensor $M_\delta M_\gamma$, to which the fusion identity for
     $U_{\delta,\gamma}$ applies.
+\end{proof}
+
+\begin{definition}[Iterated fusion isometry of a triple product, right
+        bracketing]%
+    \label{def:mpdo_right_fusion_isometry}
+    \lean{MPOTensor.BNTFusionIsometryFamily.rightFusionIsometry}
+    \leanok
+    \uses{def:mpdo_bnt_fusion_isometry_family}
+    For labels $\alpha, \beta, \gamma$, the \emph{right iterated fusion
+        isometry} $U^{\mathrm R}_{\alpha,\beta,\gamma}$ is obtained by applying
+    $U_{\beta,\gamma}$, tensored with the identity on the bond space of
+    $M_\alpha$, and then applying $U_{\alpha,\delta}$ for every intermediate
+    label $\delta$. Its codomain is indexed by the intermediate and final
+    labels $(\delta,\varepsilon)$ and by the multiplicity indices of
+    $\chi_{\beta,\gamma,\delta}$ and $\chi_{\alpha,\delta,\varepsilon}$.
+    This is the right-bracketed composite in the associativity equation of
+    \cite[Section~``Associativity and the pentagon equation'']{Bultinck2017Anyons},
+    before the change of basis by an $F$-matrix.
+\end{definition}
+
+\begin{theorem}[The right iterated fusion isometry is an isometry]%
+    \label{thm:mpdo_right_fusion_isometry_isometry}
+    \lean{MPOTensor.BNTFusionIsometryFamily.rightFusionIsometry_isometry}
+    \leanok
+    \uses{def:mpdo_right_fusion_isometry}
+    $(U^{\mathrm R}_{\alpha,\beta,\gamma})^\dagger
+        U^{\mathrm R}_{\alpha,\beta,\gamma}=1$.
+\end{theorem}
+\begin{proof}\leanok
+    The two successive fusion maps are isometries on each intermediate
+    sector, so their block-diagonal composite is an isometry.
+\end{proof}
+
+\begin{theorem}[The right iterated fusion isometry conjugates a triple product
+        onto a doubly weighted direct sum]%
+    \label{thm:mpdo_right_fusion_apply}
+    \lean{MPOTensor.BNTFusionIsometryFamily.rightFusion_apply}
+    \leanok
+    \uses{def:mpdo_right_fusion_isometry, def:mpdo_operator_product}
+    Site by site,
+    \[
+        U^{\mathrm R}_{\alpha,\beta,\gamma}\,
+        \bigl(M_\alpha(M_\beta M_\gamma)\bigr)^{i j}\,
+        (U^{\mathrm R}_{\alpha,\beta,\gamma})^\dagger
+        = \bigoplus_{\delta}\bigoplus_{\varepsilon}
+        \chi_{\beta,\gamma,\delta}
+        \otimes\bigl(\chi_{\alpha,\delta,\varepsilon}\otimes
+        M_\varepsilon^{i j}\bigr).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Apply the fusion identity for $U_{\beta,\gamma}$ to $M_\beta M_\gamma$.
+    In the summand indexed by $\delta$, exchange the first multiplicity
+    factor with the bond space of $M_\alpha$ and regroup the contraction as
+    \[
+        \chi_{\beta,\gamma,\delta}\otimes
+        (M_\alpha M_\delta)^{i j}.
+    \]
+    The fusion identity for $U_{\alpha,\delta}$ then gives the stated direct
+    sum over $\varepsilon$.
 \end{proof}
