@@ -16,7 +16,8 @@ The current repository already exposes the local entropy-side ingredients
 
 * `MPOTensor.EtaStructure`,
 * `MPOTensor.sal_implies_eta_structure`, and
-* `MPOTensor.sal_zcl_implies_rank_one_T`,
+* the positive-semidefinite and pairing-idempotence rank-one criteria in
+  `SimpleLocalStructure.lean`,
 
 and `SimpleLocalStructure` gives a canonical sector-reduced family through
 `MPOTensor.ExplicitEtaOperators.ofHayashiMarkov`. That family is not the

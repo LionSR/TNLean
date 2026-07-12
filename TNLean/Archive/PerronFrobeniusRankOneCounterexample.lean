@@ -20,8 +20,7 @@ The standalone matrix statement
 
     `Matrix.IsPrimitive T → Matrix.TracePowersConstant T → HasRankOneFactorization T`
 
-corresponding to `Matrix.PrimitiveTracePowersConstantImpliesRankOne` in
-`TNLean/Algebra/PerronFrobenius/RankOne.lean` is **false** for a general
+formerly proposed in the active development is **false** for a general
 primitive nonnegative real matrix. This module exhibits an explicit `3 × 3`
 nonnegative primitive matrix `T` with
 
@@ -151,9 +150,8 @@ theorem T_not_rankOne : ¬ ∃ a b : Fin 3 → ℝ, T = Matrix.vecMulVec a b := 
   rw [hb2, mul_zero] at h12
   norm_num at h12
 
-/-- The explicit counterexample to the standalone statement of
-`Matrix.PrimitiveTracePowersConstantImpliesRankOne`: `T` is primitive,
-satisfies the constant-trace-powers hypothesis, yet has no rank-one
+/-- The explicit counterexample to the standalone implication above: `T` is
+primitive, satisfies the constant-trace-powers hypothesis, yet has no rank-one
 factorization. -/
 theorem counterexample :
     Matrix.IsPrimitive T ∧

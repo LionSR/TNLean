@@ -73,19 +73,14 @@ structure for $K$.\footnote{The formal structure is
 \leanid{MPOTensor.EtaLocalStructureData}.} It contains the assembled positive
 translation-invariant two-site bond and its realization of the finite-chain
 MPO. From this structure, the development proves the commuting-form property
-and the GSNNCH--ZCL consequences.  After ZCL is assumed, ZCL itself gives the
-size-$2$ fusion witness and the transfer-map fusion formulation of the MPDO
-RFP condition.
+and, after ZCL is assumed separately, the GSNNCH--ZCL consequence.
 
-The two scope-restricted declarations are conditional construction
-statements.\footnote{These declarations are
-\leanid{MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndEtaLocalStructure} and
-\leanid{MPOTensor.simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure}.}
-They assume the eta-local structure instead of deriving it from the SAL local
-coordinates. They also carry the ZCL hypothesis needed for the subsequent RFP
-consequences. Thus they formalize the final deduction after the
-$B_{n,n+1}$ have been constructed, not the source theorem that constructs those
-bonds from SAL.
+Earlier versions also introduced a structure combining unrelated local,
+commuting-form, and doubled-index hypotheses, followed by deductions from the
+doubled-index condition to a fusion formulation of the RFP condition. These
+declarations did not express the source's structural fixed-point condition and
+have been removed. In particular, they no longer obscure the missing
+construction of the operators $B_{n,n+1}$ from SAL.
 
 \section{Missing step}
 
@@ -483,18 +478,15 @@ The positive-choice and primitivity statements that remain in Lemma
 operators have been constructed, the positive commuting bond and product form
 of Proposition \texttt{3to4} are tracked separately by
 \href{https://github.com/LionSR/TNLean/issues/823}{issue \#823}. Until both
-constructions exist, the scope-restricted conditional statements must not be
-presented as the full formalization of Proposition~C.8.
+constructions exist, Proposition~C.8 must not be presented as fully formalized.
 
 \section{Classification}
 
 This note records an open gap for the SAL-to-bond construction of
-\leanid{MPOTensor.EtaLocalStructureData}. The two conditional declarations
-above are scope restrictions: they begin after the nearest-neighbor bonds have
-already been constructed. The positivity half of the projected chain identity
-is now formalized unconditionally, and the pairwise positive-choice
-construction is formalized under the symmetric-support scope restriction
-described above.  The sector support graph, its recurrence, and the
+\leanid{MPOTensor.EtaLocalStructureData}. The positivity half of the projected
+chain identity is now formalized unconditionally, and the pairwise
+positive-choice construction is formalized under the symmetric-support scope
+restriction described above.  The sector support graph, its recurrence, and the
 per-cycle coherent positive rescaling are now formalized unconditionally
 (recurrence itself is a hypothesis, not yet derived).  Two obligations
 remain open: deriving recurrence from injectivity of $\mathcal K$
