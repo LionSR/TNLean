@@ -22,7 +22,7 @@ isometry of Proposition~C.7; see
 {Cirac2016MPDO_arXiv}.  The theorem itself concerns the original tensor after
 blocking two adjacent sites.
 
-The present formal theorem
+The sector-coordinate theorem
 \path{NeighboringTraceFactorization.blockTwo_sectorCoordinateTensor_isRFPViaTS}
 proves the fixed-point identities for
 \[
@@ -34,11 +34,11 @@ it does not yet transport the two channels back to
 $\operatorname{blockTwo}(\mathcal K)$.  It is therefore a scope-restricted
 intermediate result, not the complete formalization of the source implication.
 
-\section{Required transport}
+\section{Transport theorem}
 
 In the formal sector factorization, the physical isometry is a square matrix
 $U$ satisfying $U^\dagger U=I$.  Finite dimensionality then also gives
-$UU^\dagger=I$.  The remaining argument should first prove the closure
+$UU^\dagger=I$.  The transport theorem proves the closure
 relations
 \[
   \widehat{\mathcal K}_n(X)
@@ -51,20 +51,20 @@ $\widehat{\mathcal S}^2$ through these unitary congruences then preserves
 complete positivity and trace.  The two sector-coordinate closure identities
 become the required identities for the original blocked tensor.
 
-\section{Elimination plan}
+\section{Discharge}
 
-The next result should formalize the two- and four-site unitary closure
-relations, define the transported channels on the original physical matrix
-spaces, and prove
+The theorem
+\path{NeighboringTraceFactorization.blockTwo_isRFPViaTS} formalizes the
+two- and four-site unitary closure relations, transports the two channels to
+the original physical matrix spaces, and proves
 \[
   \operatorname{IsRFPViaTS}
     \bigl(\operatorname{blockTwo}(\mathcal K)\bigr)
 \]
-under the same neighboring-operator trace-factorization hypothesis.  Once
-that theorem is available, the scope-restriction marker on the
-sector-coordinate theorem can remain as a description of its narrower role,
-while the source-labelled blueprint implication should refer to the transported
-theorem.
+under the same neighboring-operator trace-factorization hypothesis.  This
+discharges the transport gap.  The scope-restriction marker on the
+sector-coordinate theorem remains as a description of that theorem's narrower
+role, while the source conclusion is represented by the transported theorem.
 
 \bibliographystyle{alpha}
 \bibliography{references}
