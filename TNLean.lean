@@ -389,6 +389,7 @@ import TNLean.MPS.MPDO.PhysicalSectorFactorization
 import TNLean.MPS.MPDO.NeighboringPreparation
 import TNLean.MPS.MPDO.PhysicalSectorSubspinMaps
 import TNLean.MPS.MPDO.PhysicalSectorCoarseGraining
+import TNLean.MPS.MPDO.PhysicalSectorCoarseGrainingAction
 import TNLean.MPS.MPDO.PhysicalSectorClosureTwo
 import TNLean.MPS.MPDO.PhysicalSectorClosureThree
 import TNLean.MPS.MPDO.PhysicalSectorClosureGlobal
