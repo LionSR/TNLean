@@ -1149,7 +1149,7 @@ strong subadditivity for a normalized three-site reduced state.
       def:mpdo_global_sector_closure_coordinates}
     In the two-site sector coordinates, define
     \[
-      B_{\mathrm{sec}}
+      B_{\mathrm{sector}}
       =\bigoplus_{k,h}
         \left(I_{B_k^L\otimes B_h^R}\otimes\eta_{k,h}\right).
     \]
@@ -1166,7 +1166,7 @@ strong subadditivity for a normalized three-site reduced state.
     \uses{def:mpdo_physical_sector_two_site_bond,
       thm:matrix_pos_semidef_block_diagonal}
     Suppose that $\eta_{k,h}$ is positive semidefinite for every pair of
-    sectors. Then $B_{\mathrm{sec}}$ is positive semidefinite. The positivity
+    sectors. Then $B_{\mathrm{sector}}$ is positive semidefinite. The positivity
     premise is the conclusion at
     \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv}.
 \end{theorem}
@@ -1192,7 +1192,7 @@ strong subadditivity for a normalized three-site reduced state.
     coordinates. Thus $V_2=U_{\mathrm{paper}}^\dagger$ in the convention of
     \cite[Appendix~C.2, lines~1581--1583]{Cirac2016MPDO_arXiv}. Define
     \[
-      B_{\mathrm{phys}}=V_2^\dagger B_{\mathrm{sec}}V_2,
+      B_{\mathrm{physical}}=V_2^\dagger B_{\mathrm{sector}}V_2,
     \]
     and identify pairs of physical indices with functions
     $\{0,1\}\to\{0,\ldots,d-1\}$. This is the physical two-site bond in
@@ -1208,15 +1208,15 @@ strong subadditivity for a normalized three-site reduced state.
     \uses{def:mpdo_physical_two_site_bond,
       thm:mpdo_physical_sector_two_site_bond_pos}
     Suppose that $\eta_{k,h}$ is positive semidefinite for every pair of
-    sectors. Then $B_{\mathrm{phys}}$ is positive semidefinite, both with
+    sectors. Then $B_{\mathrm{physical}}$ is positive semidefinite, both with
     pair indices and with two-site configuration indices.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:mpdo_physical_sector_two_site_bond_pos}
-    Apply positivity of $B_{\mathrm{sec}}$ to the congruence
-    $U_2^\dagger B_{\mathrm{sec}}U_2$. Reindexing the resulting matrix by
+    Apply positivity of $B_{\mathrm{sector}}$ to the congruence
+    $V_2^\dagger B_{\mathrm{sector}}V_2$. Reindexing the resulting matrix by
     two-site configurations preserves positivity.
 \end{proof}
 
