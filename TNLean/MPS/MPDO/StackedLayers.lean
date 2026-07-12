@@ -26,9 +26,12 @@ Combined with the all-length non-commutation family, this produces a
 periodic-sector projector.  The passage from a nontrivial $p$-periodic vector
 to an invariant, non-commuting projector — which the source draws from the
 cyclic decomposition of the peripheral spectrum (Wolf 2012, Theorem 6.6) —
-remains the hypothesis `PeriodicVectorYieldsCyclicProjector`; granted it, the
+is the hypothesis `PeriodicVectorYieldsCyclicProjector`; granted it, the
 vertically viewed tensor of a matrix product density operator has no
-nontrivial $p$-periodic vectors.
+nontrivial $p$-periodic vectors.  The invariant projector itself, together
+with its single-letter displacement, is constructed from the cyclic
+decomposition in `TNLean/MPS/MPDO/CyclicProjector.lean`, which reduces this
+hypothesis to the non-commutation family alone.
 
 ## Main definitions
 
@@ -340,8 +343,15 @@ nontrivial cyclic displacement under one layer prevents commutation with
 $H^{(N)}$.  Compared with `PeriodicVectorYieldsProjector`, the commutation
 of $Q$ with $[H^{(N)}]^p$ is no longer assumed: it is derived from the word
 invariance through the stacked-layers identity
-(`periodicSectorProjectorOfCyclicData`).  The remaining gap is recorded in
-`docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`. -/
+(`periodicSectorProjectorOfCyclicData`).
+
+The projector, its word invariance, and its single-letter displacement are
+constructed unconditionally in
+`exists_displaced_invariant_projector_of_periodic_vector`
+(`TNLean/MPS/MPDO/CyclicProjector.lean`); this hypothesis follows from the
+non-commutation hypothesis `NoninvariantProjectorNoncommuting` through
+`periodicVectorYieldsCyclicProjector_of_noncommutation`.  The remaining gap
+is recorded in `docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`. -/
 def PeriodicVectorYieldsCyclicProjector (M : MPOTensor d D) : Prop :=
   ∀ ⦃n : ℕ⦄ (V : Matrix (Fin d) (Fin n) ℂ) (B : MPSTensor (D * D) n)
     (ρ : Matrix (Fin n) (Fin n) ℂ) (r : ℝ),
