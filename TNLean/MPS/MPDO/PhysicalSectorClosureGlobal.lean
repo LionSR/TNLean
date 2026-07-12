@@ -69,6 +69,18 @@ Source: arXiv:1606.00608, Appendix C.2, lines 1381--1450. -/
       F.twoSiteSectorEmbedding k h ((F.twoSiteRegroupEquiv k h).symm x) :=
   rfl
 
+/-- The forward global two-site regrouping sends a fixed-sector embedding to
+the corresponding sector-pair summand and the regrouped four-subspin index.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1381--1450. -/
+@[simp] theorem twoSiteGlobalRegroupEquiv_apply
+    (F : PhysicalSectorFactorization K) (k h : Fin F.sectorCount)
+    (x : SectorIndex F k × SectorIndex F h) :
+    F.twoSiteGlobalRegroupEquiv (F.twoSiteSectorEmbedding k h x) =
+      ⟨(k, h), F.twoSiteRegroupEquiv k h x⟩ := by
+  apply F.twoSiteGlobalRegroupEquiv.symm.injective
+  simp
+
 /-- The complete three-site physical space, indexed by a sector triple and
 regrouped into its outer and two neighboring factors.
 
@@ -96,6 +108,76 @@ Source: arXiv:1606.00608, Appendix C.2, lines 1381--1450. -/
       (NeighborIndex F k l × NeighborIndex F l h)) :
     F.threeSiteGlobalRegroupEquiv.symm ⟨(k, (l, h)), x⟩ =
       F.threeSiteSectorEmbedding k l h ((F.threeSiteRegroupEquiv k l h).symm x) :=
+  rfl
+
+/-- The first two sites of an inversely regrouped sector triple regroup to
+the pair `(k, l)`, with outer index `(L_k,R_l)` and neighboring index
+`(R_k,L_l)`.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), lines
+1589--1593. -/
+@[simp] theorem twoSiteGlobalRegroupEquiv_threeSiteGlobalRegroupEquiv_symm_left
+    (F : PhysicalSectorFactorization K) (k l h : Fin F.sectorCount)
+    (x : BoundaryIndex F k h ×
+      (NeighborIndex F k l × NeighborIndex F l h)) :
+    F.twoSiteGlobalRegroupEquiv
+        ((F.threeSiteGlobalRegroupEquiv.symm ⟨(k, (l, h)), x⟩).1,
+          (F.threeSiteGlobalRegroupEquiv.symm ⟨(k, (l, h)), x⟩).2.1) =
+      ⟨(k, l), ((x.1.1, x.2.2.1), x.2.1)⟩ := by
+  rw [threeSiteGlobalRegroupEquiv_symm_apply]
+  change F.twoSiteGlobalRegroupEquiv
+      (F.twoSiteSectorEmbedding k l
+        ((x.1.1, x.2.1.1), (x.2.1.2, x.2.2.1))) = _
+  rw [twoSiteGlobalRegroupEquiv_apply]
+  rfl
+
+/-- The last two sites of an inversely regrouped sector triple regroup to
+the pair `(l, h)`, with outer index `(L_l,R_h)` and neighboring index
+`(R_l,L_h)`.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), lines
+1589--1593. -/
+@[simp] theorem twoSiteGlobalRegroupEquiv_threeSiteGlobalRegroupEquiv_symm_right
+    (F : PhysicalSectorFactorization K) (k l h : Fin F.sectorCount)
+    (x : BoundaryIndex F k h ×
+      (NeighborIndex F k l × NeighborIndex F l h)) :
+    F.twoSiteGlobalRegroupEquiv
+        ((F.threeSiteGlobalRegroupEquiv.symm ⟨(k, (l, h)), x⟩).2.1,
+          (F.threeSiteGlobalRegroupEquiv.symm ⟨(k, (l, h)), x⟩).2.2) =
+      ⟨(l, h), ((x.2.1.2, x.1.2), x.2.2)⟩ := by
+  rw [threeSiteGlobalRegroupEquiv_symm_apply]
+  change F.twoSiteGlobalRegroupEquiv
+      (F.twoSiteSectorEmbedding l h
+        ((x.2.1.2, x.2.2.1), (x.2.2.2, x.1.2))) = _
+  rw [twoSiteGlobalRegroupEquiv_apply]
+  rfl
+
+/-- The first site of an inversely regrouped sector triple is the finite
+encoding of `(L_k,R_k)`.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), lines
+1589--1593. -/
+@[simp] theorem threeSiteGlobalRegroupEquiv_symm_first
+    (F : PhysicalSectorFactorization K) (k l h : Fin F.sectorCount)
+    (x : BoundaryIndex F k h ×
+      (NeighborIndex F k l × NeighborIndex F l h)) :
+    (F.threeSiteGlobalRegroupEquiv.symm ⟨(k, (l, h)), x⟩).1 =
+      F.sectorFinEquiv.symm ⟨k, (x.1.1, x.2.1.1)⟩ := by
+  rw [threeSiteGlobalRegroupEquiv_symm_apply]
+  rfl
+
+/-- The last site of an inversely regrouped sector triple is the finite
+encoding of `(L_h,R_h)`.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), lines
+1589--1593. -/
+@[simp] theorem threeSiteGlobalRegroupEquiv_symm_last
+    (F : PhysicalSectorFactorization K) (k l h : Fin F.sectorCount)
+    (x : BoundaryIndex F k h ×
+      (NeighborIndex F k l × NeighborIndex F l h)) :
+    (F.threeSiteGlobalRegroupEquiv.symm ⟨(k, (l, h)), x⟩).2.2 =
+      F.sectorFinEquiv.symm ⟨h, (x.2.2.2, x.1.2)⟩ := by
+  rw [threeSiteGlobalRegroupEquiv_symm_apply]
   rfl
 
 /-- After global regrouping, the complete two-site closure is the direct sum

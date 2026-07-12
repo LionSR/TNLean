@@ -96,6 +96,20 @@ noncomputable def physicalCoordinateMatrixTwo
   Matrix.kroneckerMap (· * ·)
     F.physicalCoordinateMatrix F.physicalCoordinateMatrix
 
+/-- The right-associated three-site product of the physical coordinate matrix.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), lines
+1589--1593. -/
+noncomputable def physicalCoordinateMatrixThree
+    (F : PhysicalSectorFactorization K) :
+    Matrix
+      (Fin (Fintype.card (SectorSiteIndex F)) ×
+        (Fin (Fintype.card (SectorSiteIndex F)) ×
+          Fin (Fintype.card (SectorSiteIndex F))))
+      (Fin d × (Fin d × Fin d)) ℂ :=
+  Matrix.kroneckerMap (· * ·) F.physicalCoordinateMatrix
+    F.physicalCoordinateMatrixTwo
+
 /-- The right-associated four-site product of the physical coordinate matrix. -/
 noncomputable def physicalCoordinateMatrixFour
     (F : PhysicalSectorFactorization K) :
@@ -122,6 +136,30 @@ theorem physicalCoordinateMatrixTwo_coisometry
     F.physicalCoordinateMatrixTwo * F.physicalCoordinateMatrixTwoᴴ = 1 := by
   rw [physicalCoordinateMatrixTwo, Matrix.conjTranspose_kronecker,
     ← Matrix.mul_kronecker_mul, F.physicalCoordinateMatrix_coisometry]
+  exact Matrix.one_kronecker_one
+
+/-- The three-site physical coordinate matrix is an isometry.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), lines
+1589--1593. -/
+theorem physicalCoordinateMatrixThree_isometry
+    (F : PhysicalSectorFactorization K) :
+    F.physicalCoordinateMatrixThreeᴴ * F.physicalCoordinateMatrixThree = 1 := by
+  simp only [physicalCoordinateMatrixThree, Matrix.conjTranspose_kronecker,
+    ← Matrix.mul_kronecker_mul, F.physicalCoordinateMatrix_isometry,
+    F.physicalCoordinateMatrixTwo_isometry]
+  exact Matrix.one_kronecker_one
+
+/-- The three-site physical coordinate matrix is a coisometry.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), lines
+1589--1593. -/
+theorem physicalCoordinateMatrixThree_coisometry
+    (F : PhysicalSectorFactorization K) :
+    F.physicalCoordinateMatrixThree * F.physicalCoordinateMatrixThreeᴴ = 1 := by
+  simp only [physicalCoordinateMatrixThree, Matrix.conjTranspose_kronecker,
+    ← Matrix.mul_kronecker_mul, F.physicalCoordinateMatrix_coisometry,
+    F.physicalCoordinateMatrixTwo_coisometry]
   exact Matrix.one_kronecker_one
 
 theorem physicalCoordinateMatrixFour_isometry

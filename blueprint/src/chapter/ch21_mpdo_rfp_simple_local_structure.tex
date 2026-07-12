@@ -1292,6 +1292,101 @@ strong subadditivity for a normalized three-site reduced state.
     follows from the mixed-product identity for tensor products.
 \end{proof}
 
+\begin{theorem}[Three-site sector-coordinate commutator]
+    \label{thm:mpdo_sector_coordinate_adjacent_bonds_comm}
+    \lean{MPOTensor.PhysicalSectorFactorization.reindex_leftPairMatrix_sectorCoordinateBond,
+      MPOTensor.PhysicalSectorFactorization.reindex_rightPairMatrix_sectorCoordinateBond,
+      MPOTensor.PhysicalSectorFactorization.sectorCoordinateBond_adjacent_comm_three}
+    \leanok
+    \uses{def:mpdo_physical_sector_two_site_bond,
+      def:mpdo_three_site_pair_lifts,
+      thm:mpdo_fixed_sector_adjacent_bonds_comm}
+    Let $C_{01}$ and $C_{12}$ be the first and second three-site lifts of
+    $B_{\mathrm{sector}}$. Under the three-site sector regrouping, they are
+    respectively
+    \[
+      \bigoplus_{k,l,h}C_{01}^{k,l,h},
+      \qquad
+      \bigoplus_{k,l,h}C_{12}^{k,l,h}.
+    \]
+    Consequently,
+    \[
+      C_{01}C_{12}=C_{12}C_{01}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The first lift acts by $\eta_{k,l}$ on the first neighboring factor and
+    the second lift acts by $\eta_{l,h}$ on the second neighboring factor.
+    Thus the two regrouped matrices are block diagonal over $(k,l,h)$.
+    Apply
+    Theorem~\ref{thm:mpdo_fixed_sector_adjacent_bonds_comm} in every block.
+\end{proof}
+
+\begin{definition}[Three-site physical coordinate isometry]
+    \label{def:mpdo_three_site_physical_coordinate_isometry}
+    \lean{MPOTensor.PhysicalSectorFactorization.physicalCoordinateMatrixThree,
+      MPOTensor.PhysicalSectorFactorization.physicalCoordinateMatrixThree_isometry,
+      MPOTensor.PhysicalSectorFactorization.physicalCoordinateMatrixThree_coisometry}
+    \leanok
+    Let $V$ be the one-site change from physical to sector coordinates and
+    set
+    \[
+      V_3=V\otimes(V\otimes V).
+    \]
+    Then $V_3^\dagger V_3=I$ and $V_3V_3^\dagger=I$.
+\end{definition}
+
+\begin{theorem}[Transport of the adjacent three-site bonds]
+    \label{thm:mpdo_three_site_adjacent_bond_transport}
+    \lean{MPOTensor.PhysicalSectorFactorization.leftPairMatrix_physicalPairBond,
+      MPOTensor.PhysicalSectorFactorization.rightPairMatrix_physicalPairBond}
+    \leanok
+    \uses{def:mpdo_physical_two_site_bond,
+      def:mpdo_three_site_pair_lifts,
+      def:mpdo_three_site_physical_coordinate_isometry}
+    The two physical lifts are the congruences
+    \[
+      (B_{\mathrm{physical}})_{01}=V_3^\dagger C_{01}V_3,
+      \qquad
+      (B_{\mathrm{physical}})_{12}=V_3^\dagger C_{12}V_3.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Expand $B_{\mathrm{physical}}=V_2^\dagger
+    B_{\mathrm{sector}}V_2$. For the right lift, the mixed-product identity
+    gives the displayed congruence directly. For the left lift, first apply
+    the associator from $(H\otimes H)\otimes H$ to
+    $H\otimes(H\otimes H)$ and then use the same identity.
+\end{proof}
+
+\begin{theorem}[Adjacent physical bonds commute on three sites]
+    \label{thm:mpdo_physical_adjacent_bonds_comm_three}
+    \lean{MPOTensor.PhysicalSectorFactorization.physicalPairBond_adjacent_comm_three,
+      MPOTensor.PhysicalSectorFactorization.physicalBond_adjacent_comm_three}
+    \leanok
+    \uses{thm:mpdo_three_site_pair_lifts,
+      thm:mpdo_sector_coordinate_adjacent_bonds_comm,
+      thm:mpdo_three_site_adjacent_bond_transport}
+    On a three-site chain,
+    \[
+      (B_{\mathrm{physical}})_{01}(B_{\mathrm{physical}})_{12}
+      =(B_{\mathrm{physical}})_{12}(B_{\mathrm{physical}})_{01}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Insert $V_3V_3^\dagger=I$ between the two congruences in
+    Theorem~\ref{thm:mpdo_three_site_adjacent_bond_transport}, and use
+    Theorem~\ref{thm:mpdo_sector_coordinate_adjacent_bonds_comm}. The
+    translation identities then give the assertion for three-site
+    configuration indices.
+\end{proof}
+
 \begin{definition}[Closed sector tensors]%
     \label{def:mpdo_closed_sector_tensors}
     \lean{MPOTensor.closedSectorL}
