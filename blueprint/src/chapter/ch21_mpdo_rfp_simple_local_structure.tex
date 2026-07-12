@@ -2824,6 +2824,153 @@ strong subadditivity for a normalized three-site reduced state.
     \]
 \end{definition}
 
+\begin{theorem}[Regrouped two-site closure block]
+    \label{thm:mpdo_t0_regrouped_two_site_closure_block}
+    \lean{MPOTensor.PhysicalSectorFactorization.t0Regrouped_twoSiteClosure_block_eq}
+    \leanok
+    \uses{thm:mpdo_two_site_sector_closure_factorization,
+      def:mpdo_physical_sector_closure_coordinates,
+      def:mpdo_two_site_subspin_regrouping}
+    For every virtual matrix $X$ and outer-sector pair $(k,h)$,
+    \[
+      \left[
+        R_{\Phi_2}\mathfrak R_2({\cal K}_2(X))
+      \right]_{(k,h),(k,h)}
+      =B_{k,h}(X)\otimes\eta_{k,h}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_two_site_sector_closure_factorization}
+    This is the fixed-sector two-site factorization after identifying the
+    sitewise sector coordinates with the regrouped boundary and neighboring
+    coordinates.
+\end{proof}
+
+\begin{theorem}[Diagonal-block action of $\mathcal T_0$]
+    \label{thm:mpdo_t0_same_block_action}
+    \lean{MPOTensor.PhysicalSectorFactorization.t0Map_sameBlock_apply}
+    \leanok
+    \uses{def:mpdo_t0_map,
+      def:mpdo_two_site_subspin_regrouping}
+    For every two-site matrix $Y$, outer-sector pair $(k,h)$, and boundary
+    indices $a,b$,
+    \[
+      [\mathcal T_0(Y)]_{(k,h,a),(k,h,b)}
+      =\left[
+        \tr_{R_k\otimes L_h}
+          \left([R_{\Phi_2}Y]_{(k,h),(k,h)}\right)
+       \right]_{a,b}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The controlled partial trace acts on a diagonal outer-sector block by
+    the ordinary partial trace over its neighboring factor.
+\end{proof}
+
+\begin{theorem}[Partial trace of a factorized two-site block]
+    \label{thm:mpdo_t0_factorized_block_action}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.t0Map_block_eq_smul}
+    \leanok
+    \uses{thm:mpdo_t0_same_block_action,
+      def:mpdo_neighboring_trace_factorization}
+    If the $(k,h)$ diagonal block of $R_{\Phi_2}Y$ is
+    $B\otimes\eta_{k,h}$, then
+    \[
+      [\mathcal T_0(Y)]_{(k,h),(k,h)}=a_kb_hB.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_t0_same_block_action,
+      def:mpdo_neighboring_trace_factorization}
+    The partial trace of $B\otimes\eta_{k,h}$ is
+    $\tr(\eta_{k,h})B=a_kb_hB$.
+\end{proof}
+
+% **Local fix (zero-weight quotient):** the next three entries use the
+% completion documented in
+% docs/paper-gaps/cpgsv17_mpdo_zero_weight_preparation_completion.tex.
+\begin{theorem}[Preparation of a scaled boundary block]
+    \label{thm:mpdo_t1_scaled_block_preparation}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSitePreparationMap_smul}
+    \leanok
+    \uses{def:mpdo_physical_sector_t1_preparation,
+      thm:mpdo_physical_sector_t1_density_properties}
+    For every outer-sector pair $(k,h)$ and boundary matrix $B$, the completed
+    sectorwise preparation satisfies
+    \[
+      \overline{\mathcal T}_{k,h}(a_kb_hB)
+      =B\otimes\Omega_{k,h}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_physical_sector_t1_density_properties,
+      thm:mpdo_physical_sector_three_site_neighboring_operator_trace}
+    If $a_kb_h\ne0$, the scalar cancels the normalization in
+    $\widehat\Omega_{k,h}=(a_kb_h)^{-1}\Omega_{k,h}$. If $a_kb_h=0$, both
+    sides vanish because $\Omega_{k,h}=0$.
+\end{proof}
+
+\begin{theorem}[Diagonal-block action of $\mathcal T_1$]
+    \label{thm:mpdo_t1_factorized_block_action}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.t1Map_block_eq_kronecker}
+    \leanok
+    \uses{def:mpdo_physical_sector_t1_preparation,
+      thm:mpdo_t1_scaled_block_preparation}
+    If the $(k,h)$ diagonal block of a boundary matrix $Y$ is $a_kb_hB$, then
+    \[
+      [\mathcal T_1(Y)]_{(k,h),(k,h)}
+      =B\otimes\Omega_{k,h}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_t1_scaled_block_preparation}
+    On a diagonal outer-sector block, the controlled map is the completed
+    sectorwise preparation, to which the preceding theorem applies.
+\end{proof}
+
+\begin{theorem}[Off-diagonal action of $\mathcal T_1$]
+    \label{thm:mpdo_t1_off_diagonal_action}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.t1Map_apply_of_ne}
+    \leanok
+    \uses{def:mpdo_physical_sector_t1_preparation}
+    The map $\mathcal T_1$ annihilates every matrix entry between distinct
+    outer-sector pairs.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This is the orthogonal control in the definition of $\mathcal T_1$.
+\end{proof}
+
+\begin{theorem}[Reindexing action of $\mathcal T_2$]
+    \label{thm:mpdo_t2_reindexing_action}
+    \lean{MPOTensor.PhysicalSectorFactorization.t2Map_apply}
+    \leanok
+    \uses{def:mpdo_t2_map}
+    Let $\Phi_3$ be the three-site regrouping. For every prepared matrix $Y$
+    and three-site indices $p,q$,
+    \[
+      [\mathcal T_2(Y)]_{p,q}
+      =Y_{\Phi_3(p),\Phi_3(q)}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This is matrix reindexing along the inverse regrouping
+    $\Phi_3^{-1}$.
+\end{proof}
+
 \begin{theorem}[Refinement of the two-site closure]
     \label{thm:mpdo_physical_sector_t_closure_identity}
     \uses{def:phys_close,
@@ -2844,9 +2991,12 @@ strong subadditivity for a normalized three-site reduced state.
 \end{theorem}
 
 \begin{proof}
-    \uses{thm:mpdo_global_sector_closure_decomposition,
-      thm:mpdo_sector_closure_partial_traces,
-      def:mpdo_physical_sector_t1_preparation,
+    \uses{thm:mpdo_t0_regrouped_two_site_closure_block,
+      thm:mpdo_t0_factorized_block_action,
+      thm:mpdo_t1_factorized_block_action,
+      thm:mpdo_t1_off_diagonal_action,
+      thm:mpdo_t2_reindexing_action,
+      thm:mpdo_global_sector_closure_decomposition,
       def:mpdo_physical_sector_closure_coordinates}
     The regrouping contained in $\mathcal T_0$ changes
     $\mathfrak R_2$ into $\mathfrak G_2$. On the $(k,h)$ diagonal block, the

@@ -398,6 +398,7 @@ import TNLean.MPS.MPDO.PhysicalSectorOmegaPreparation
 import TNLean.MPS.MPDO.PhysicalSectorRefinement
 import TNLean.MPS.MPDO.PhysicalSectorCoarseGrainingAction
 import TNLean.MPS.MPDO.PhysicalSectorCoarseGrainingIdentity
+import TNLean.MPS.MPDO.PhysicalSectorRefinementAction
 import TNLean.MPS.MPDO.SectorPairingTransfer
 import TNLean.MPS.MPDO.SectorEtaContraction
 import TNLean.MPS.MPDO.SectorEtaOperator
