@@ -125,6 +125,29 @@ the CPGSV17 proposition \texttt{propblockinj}. The duplicate scalar blocks are
 related by similarity and phase, and therefore do not form a minimal basis of
 normal tensors in the sense of the source characterization.
 
+\section{Consequence for Lemma L}
+
+The same counterexample marks a restriction one level up, in the consumer of
+\texttt{biCF}. The source's Lemma L (Appendix~C.3,
+lines~1835--1858 of the local source) separates blockwise contributions at
+the level of a minimal basis of normal tensors: writing the canonical-form
+decomposition as $\bigoplus_{j,q}\mu_{j,q}X_{j,q}A_jX_{j,q}^{-1}$, with $j$
+ranging over the minimal representatives and $q$ over the gauge-equivalent
+copies of each, the proof groups by $j$ and disposes of the weight sum
+$\sum_q\mu_{j,q}^N$ by the nonvanishing power-sum step of Lemma~app\_simple
+(lines~1858 and the appendix lemma it cites). No hypothesis beyond canonical
+form is used: the minimal-basis characterization already excludes distinct
+$j$'s from being gauge-equivalent, so the grouped separation needs no
+additional data.
+
+The formal \texttt{blockwise\_insert\_eq\_of\_mpv\_agree} instead demands
+\texttt{biCF} directly on the full per-block family, with no grouping by
+representative. Since \texttt{biCF} fails exactly on gauge-equivalent copies
+(the counterexample above), any decomposition containing two or more copies
+of one normal tensor is excluded from the current theorem's scope, even
+though the source's Lemma L covers it. The current formalization is
+therefore restricted to multiplicity-free horizontal decompositions.
+
 \section{Conclusion}
 
 The conclusion is provisional and should not be read as a source erratum.
@@ -132,7 +155,10 @@ The formal statements replace the paper's finite-length block-separation theorem
 by explicit finite-length span, linear-independence, or selector hypotheses. A
 small counterexample shows that those hypotheses cannot be derived from the
 weaker assumptions alone. The full source theorem remains plausible under the
-actual canonical-form and minimal basis-of-normal-tensors hypotheses.
+actual canonical-form and minimal basis-of-normal-tensors hypotheses. The same
+example additionally marks \texttt{blockwise\_insert\_eq\_of\_mpv\_agree} as
+restricted to multiplicity-free decompositions until the representative-level
+grouping is formalized.
 
 What remains to be formalized is the David2006/Cirac--Perez-Garcia--Schuch--Verstraete 2017 finite-length
 block-separation argument: from minimality of the basis-of-normal-tensors blocks,

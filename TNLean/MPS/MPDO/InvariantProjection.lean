@@ -268,7 +268,11 @@ $(\Id-P)MP=0$ blockwise.
 This is the algebraic conclusion of the invariant-projection step in the proof
 of Proposition 4.13 of arXiv:1606.00608, lines 1874--1887.  The source takes
 $P$ to be an orthogonal projector and writes $P^\perp MP=0$; under the weaker
-Hermiticity hypothesis used here, the precise expression is $(\Id-P)MP=0$. -/
+Hermiticity hypothesis used here, the precise expression is $(\Id-P)MP=0$.
+
+**Scope restriction (per-block separation):** inherited from
+`MPOTensor.blockwise_opposite_insert_eq_of_rotated_mpo_entries`
+(`docs/paper-gaps/cpgsv17_bicf_block_separation.tex`). -/
 theorem blockwise_braRight_eq_ketLeftBraRight_of_invariant
     {r : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ}
     (M : MPOTensor d D) (hMpdo : IsMPDO M)
