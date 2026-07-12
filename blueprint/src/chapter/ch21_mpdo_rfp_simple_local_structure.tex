@@ -1292,6 +1292,35 @@ strong subadditivity for a normalized three-site reduced state.
     follows from the mixed-product identity for tensor products.
 \end{proof}
 
+\begin{theorem}[Commutativity of adjacent physical bonds]
+    \label{thm:mpdo_physical_adjacent_bonds_comm}
+    \lean{MPOTensor.PhysicalSectorFactorization.physicalBond_zero_one_comm}
+    \leanok
+    \uses{def:mpdo_physical_two_site_bond,
+      def:mpdo_global_sector_closure_coordinates,
+      thm:mpdo_three_site_pair_lifts,
+      thm:mpdo_fixed_sector_adjacent_bonds_comm}
+    The two translates of the physical bond on three sites commute:
+    \[
+      (B_{\mathrm{physical}})_{01}(B_{\mathrm{physical}})_{12}
+        =(B_{\mathrm{physical}})_{12}(B_{\mathrm{physical}})_{01}.
+    \]
+    This is the adjacent-bond calculation in
+    \cite[Appendix~C.2, Proposition~C.8, lines~1589--1593]
+      {Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Regroup the three-site sector coordinates into the direct sum over triples
+    $(k,l,h)$. The two bonds become block diagonal, with blocks
+    $C_{01}^{k,l,h}$ and $C_{12}^{k,l,h}$, which commute by
+    Theorem~\ref{thm:mpdo_fixed_sector_adjacent_bonds_comm}. Conjugating by the
+    three-fold physical coordinate unitary preserves the equality. The
+    three-site translation identities then give the displayed physical
+    commutator.
+\end{proof}
+
 \begin{definition}[Closed sector tensors]%
     \label{def:mpdo_closed_sector_tensors}
     \lean{MPOTensor.closedSectorL}
