@@ -158,12 +158,14 @@ this note can be retired.
 
 \section{The injective special case is now resolved}
 
-The implication \leanid{MPOTensor.NoninvariantProjectorNoncommuting} is
-discharged unconditionally when $M$'s own doubled-index tensor is
+The periodic-exclusion goal that
+\leanid{MPOTensor.NoninvariantProjectorNoncommuting} was introduced to
+supply is reached unconditionally when $M$'s own doubled-index tensor is
 (single-letter) injective, i.e.\ its $d^2$ matrices $M^{ij}$ already span
-the full $D\times D$ matrix algebra (\leanid{MPSTensor.IsInjective}).  The
-route does not go through the block-injective (biCF) machinery of
-\path{TNLean/MPS/MPDO/VerticalCF.lean} at all.
+the full $D\times D$ matrix algebra (\leanid{MPSTensor.IsInjective}) --- by
+a route that bypasses that hypothesis rather than discharging it (see
+below).  The route does not go through the block-injective (biCF) machinery
+of \path{TNLean/MPS/MPDO/VerticalCF.lean} at all.
 
 \leanid{MPOTensor.ketLeftMul_eq_braRightMul_of_commute_of_isInjective}
 (\path{TNLean/MPS/MPDO/InvariantProjection.lean}) proves: if $Q$ is
