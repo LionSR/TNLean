@@ -324,6 +324,116 @@ be recorded as scope-restricted.  The later primitivity argument cannot be
 used for this purpose without circularity, since the source defines the
 nonnegative trace matrix only after choosing positive neighboring operators.
 
+\subsection{Recurrence of the sector support graph: definitions and the
+per-cycle rescaling}
+
+The directed graph on sector indices with an edge $k\to h$ whenever
+$\eta_{k,h}\ne0$, reachability along its nonzero edges, and recurrence of
+this graph (every nonzero edge lies on a nonzero directed cycle) are now
+formalized without further hypothesis.\footnote{The formal declarations are
+\leanid{MPOTensor.IsSectorEdge}, \leanid{MPOTensor.SectorReaches}, and
+\leanid{MPOTensor.IsRecurrentSupport}, in
+\texttt{TNLean/MPS/MPDO/SectorRecurrence.lean}.} The edge is on $\eta$, not
+on the trace matrix $T$: this matches the phase-mismatch mechanism of the
+four-sector counterexample above, which is already visible at the level of
+the individual neighboring operators.
+
+The finite-factor rescaling used implicitly by the four-sector
+counterexample is now a general lemma about complex matrices, independent of
+the MPDO setting.  If a finite Kronecker product $A_0\otimes\cdots\otimes
+A_{N-1}$ of nonzero matrices is positive semidefinite, then there are
+nonzero scalars $c_0,\ldots,c_{N-1}$ with $\prod_n c_n=1$ and every
+$c_nA_n\geq0$; the proof peels off one factor at a time using the two-factor
+rescaling already available.  A companion lemma shows that the rescaling
+scalar of a single nonzero matrix is unique up to a positive real factor:
+if $c_1M$ and $c_2M$ are both positive semidefinite for a nonzero $M$, then
+$c_1/c_2$ is a positive real number.\footnote{The formal declarations are
+\leanid{Matrix.exists_pi_smul_posSemidef_of_finKronecker_posSemidef} and
+\leanid{Matrix.exists_pos_real_smul_eq_of_smul_posSemidef}, in
+\texttt{TNLean/Algebra/KroneckerFactorPositivity.lean}.}
+
+Reindexing the cyclic tensor product $\Omega_k=\bigotimes_n\eta_{k_n,k_{n+1}}$
+along the shared horizontal-bond indices identifies it, entrywise, with the
+finite Kronecker product of the consecutive neighboring operators around the
+cycle.\footnote{The formal declaration is
+\leanid{MPOTensor.cyclicEtaTensorProduct_submatrix_eq_finKronecker}.}
+Combined with the finite-factor rescaling lemma and with positivity of
+$\Omega_k$ at every length
+(\leanid{MPOTensor.cyclicEtaTensorProduct_posSemidef}), this gives a coherent
+choice of phases around any \emph{one fixed} nonzero cycle: nonzero scalars
+$c_n$ with $\prod_n c_n=1$ and every $c_n\eta_{k_n,k_{n+1}}\geq0$, both for
+an abstract neighboring-operator family and for the concrete
+inverse-map-constructed
+\leanid{MPOTensor.sectorEta}.\footnote{The formal declarations are
+\leanid{MPOTensor.exists_pi_smul_posSemidef_of_cyclicEtaTensorProduct_posSemidef}
+and
+\leanid{MPOTensor.exists_pi_smul_posSemidef_of_sectorEta_cycle}.} This
+theorem concerns one fixed cycle: it does not by itself assert that the
+choices made on two different cycles agree on a shared edge, which is the
+remaining content of the coherent vertex-rephasing step.
+
+\subsection{Why recurrence is not a direct consequence of the source's own
+argument}
+
+The source's proof that $T$ has a single primitive component (quoted above)
+uses two orthogonal projectors $P_{1,2}$ satisfying three vanishing
+conditions and derives a contradiction with injectivity from the resulting
+matrix-algebra decomposition $\mathcal A=\mathcal A_1+\mathcal A_2$,
+$\mathcal A_1\mathcal A_2=0$.  Read literally as a graph statement, this
+argument requires a partition of the sector index set into two nonempty
+blocks with \emph{no} edges between them in \emph{either} direction: this is
+exactly what the paper's ``$T^n=\bigoplus_x T^{(x)}$'' display asserts.
+
+For a general nonnegative matrix, however, such an exactly block-diagonal
+power exists only when the support graph, restricted to the transitive
+closure the paper is decomposing, already has no edges leaving one block for
+another --- i.e., only when the graph decomposes into strongly connected
+components with no cross edges at all.  A vertex with a self-loop and one
+outgoing edge to a different component (a \emph{transient} sector in the
+usual Markov-chain sense) can still leave a unique sink component
+unreachable from it in the reverse direction; no exact power of $T$
+eliminates that one-directional edge.  The two-projector argument, run on
+the split \{sink component\}/\{everything else\}, only forces vanishing in
+the direction from the sink into the rest, not the reverse: exactly the
+direction of the surviving edge in the four-sector counterexample above
+(there, $1\to3$ and $2\to3$ survive with $3$ the unique sink, while
+$0,1,2$ are transient).  Consequently, the source's own two-projector
+argument --- formalized as stated --- yields at most \emph{uniqueness of the
+final (recurrent) component} of the sector graph, which is a strictly
+weaker statement than recurrence of every nonzero edge, and does not rule
+out the four-sector counterexample's transient edges.  Whether recurrence
+itself follows from injectivity of $\mathcal K$ through some other, more
+specific argument tied to the inverse-map construction of the sector
+tensors --- rather than through this graph-theoretic argument alone --- is
+the open question left by this note.  No such argument has been identified.
+
+\subsection{An elimination plan for the coherent vertex-rephasing step}
+
+Granting recurrence, propagating the per-cycle phase choice above into a
+single vertex-indexed rescaling requires a coboundary argument, for which
+the uniqueness lemma above supplies the key input.  Fix a nonzero edge
+$k\to h$: by uniqueness, \emph{every} valid rescaling scalar of the single
+matrix $\eta_{k,h}$ (whichever cycle through the edge was used to produce
+it) agrees with every other one up to a positive real factor.  Consequently,
+for any nonzero cycle through several edges, the finite-factor rescaling
+scalars obtained from that one cycle are, edge by edge, the unique
+per-edge scalars up to a positive real factor, so the product of the
+per-edge scalars around \emph{any} nonzero cycle is a positive real number
+(apply the finite-factor lemma to that cycle and compare via uniqueness to
+the per-edge scalars). This is the statement that the phase assignment has
+trivial holonomy, which is the standard sufficient condition for a
+cocycle on a graph to be a coboundary: fixing a base sector in a recurrent
+component and defining its vertex phase by accumulating the per-edge
+scalars along any nonzero directed path from the base sector is then
+independent of the path chosen, because any two paths between the same
+pair of sectors close into a nonzero cycle (using recurrence to supply the
+return path) whose holonomy is trivial.  What remains is the bookkeeping to
+carry this argument out in Lean: converting \leanid{MPOTensor.SectorReaches}
+membership into an explicit finite path of sectors, defining the
+vertex phase by a choice of path via that path witness, and verifying the
+choice does not depend on which cycle produced the per-edge scalar via the
+uniqueness lemma above.  No formal declaration exists yet for this step.
+
 The canonical family
 \leanid{MPOTensor.ExplicitEtaOperators.ofHayashiMarkov} does not supply this
 missing result.  Its operators are partial traces of normalized sector states,
@@ -371,8 +481,18 @@ above are scope restrictions: they begin after the nearest-neighbor bonds have
 already been constructed. The positivity half of the projected chain identity
 is now formalized unconditionally, and the pairwise positive-choice
 construction is formalized under the symmetric-support scope restriction
-described above; the coherent choice across the whole sector graph and the
-primitivity of $T_{k,h}$ remain open.
+described above.  The sector support graph, its recurrence, and the
+per-cycle coherent positive rescaling are now formalized unconditionally
+(recurrence itself is a hypothesis, not yet derived).  Two obligations
+remain open: deriving recurrence from injectivity of $\mathcal K$
+(\S~``Why recurrence is not a direct consequence of the source's own
+argument'' above records why the source's own two-projector argument does
+not by itself supply it), and propagating the per-cycle phase choice into a
+single vertex-indexed rescaling coherent across a whole recurrent component
+(\S~``An elimination plan for the coherent vertex-rephasing step'' above
+records an elimination plan using the uniqueness of the rescaling phase).
+The primitivity of $T_{k,h}$ also remains open, and cannot be used to
+derive recurrence without circularity.
 
 \bibliographystyle{alpha}
 \bibliography{references}
