@@ -3518,6 +3518,40 @@ strong subadditivity for a normalized three-site reduced state.
     \label{fig:mpdo_sector_zcl_identity}
 \end{figure}
 
+\begin{theorem}[Unconditional constant trace powers of the pairing matrix]
+    \label{thm:matrix_pairing_sq_eq_cube}
+    \lean{Matrix.pow_two_eq_pow_three_of_pairing_idempotent}
+    \lean{Matrix.trace_eq_trace_sq_of_pairing_idempotent}
+    \lean{Matrix.pow_eq_pow_two_of_pow_two_eq_pow_three}
+    \lean{Matrix.tracePowersConstant_of_pairing_idempotent}
+    \leanok
+    \uses{def:matrix_trace_rankone_predicates}
+    In the setting of Theorem~\ref{thm:matrix_pairing_idempotent}, without
+    assuming linear independence of $l_1,\dots,l_n$ or of $r_1,\dots,r_n$,
+    \[
+        T^2 = T^3,
+    \]
+    so $T^N = T^2$ for every $N \geq 2$, and for every positive integer $N$,
+    \[
+        \operatorname{tr}(T^N) = \operatorname{tr}(T).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:matrix_pairing_idempotent}
+    Multiplying the identity $M^2 = M$ on the left by the functional map and
+    on the right by the coefficient map turns the two sides directly into
+    $T^2$ and $T^3$, with no independence hypothesis; induction then gives
+    $T^N = T^2$ for every $N \geq 2$. For the trace identity, restrict the
+    operator $M$ to the finite-dimensional span of $l_1,\dots,l_n$: there it
+    is an idempotent endomorphism of a finite free module, and cyclicity of
+    the trace of a composition between that span and the coefficient space
+    identifies $\operatorname{tr}(T)$ with the trace of the restriction and
+    $\operatorname{tr}(T^2)$ with the trace of its square, which agree since
+    the restriction is idempotent.
+\end{proof}
+
 % Scope restriction (linear independence): the source Lemma C.5 neither
 % assumes nor derives linear independence of the sector tensors. Its proof
 % instead uses primitivity of the trace matrix, obtained from the injectivity
@@ -3634,23 +3668,17 @@ strong subadditivity for a normalized three-site reduced state.
     \label{thm:mpdo_sector_pairing_idempotent}
     \lean{MPOTensor.SectorPairingData.pairing_operator_idempotent}
     \lean{MPOTensor.SectorPairingData.mul_self_eq_self}
-    \lean{MPOTensor.SectorPairingData.tracePowersConstant}
     \leanok
     \uses{def:mpdo_sector_pairing_data}
     For sector tensors paired into $T$ as in
     Definition~\ref{def:mpdo_sector_pairing_data}, the operator
     $M = \sum_k |l_k)(r_k|$ satisfies $M^2 = M$. If in addition the vectors
-    $|l_0), \dots, |l_{n-1})$ are linearly independent, then $T^2 = T$, and for
-    every positive integer $N$,
-    \[
-        \operatorname{tr}(T^N) = \operatorname{tr}(T).
-    \]
+    $|l_0), \dots, |l_{n-1})$ are linearly independent, then $T^2 = T$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:matrix_pairing_idempotent,
-        thm:matrix_idempotent_trace_powers_constant}
+    \uses{thm:matrix_pairing_idempotent}
     Substituting $T_{k,h} = (r_k|l_h)$ into the right-hand side of the
     zero-correlation-length identity gives, for every $v \in V$,
     \[
@@ -3660,9 +3688,34 @@ strong subadditivity for a normalized three-site reduced state.
         = M^2 v,
     \]
     so $M^2 = M$. Linear independence of the $|l_k)$ then
-    gives $T^2 = T$ by Theorem~\ref{thm:matrix_pairing_idempotent}, and
-    idempotence gives the constant trace powers by
-    Theorem~\ref{thm:matrix_idempotent_trace_powers_constant}.
+    gives $T^2 = T$ by Theorem~\ref{thm:matrix_pairing_idempotent}.
+\end{proof}
+
+\begin{theorem}[Unconditional constant trace powers of the sector trace matrix]
+    \label{thm:mpdo_sector_pairing_trace_powers}
+    \lean{MPOTensor.SectorPairingData.pairing_sq_eq_pairing_cube}
+    \lean{MPOTensor.SectorPairingData.tracePowersConstant}
+    \leanok
+    \uses{def:mpdo_sector_pairing_data}
+    For sector tensors paired into $T$ as in
+    Definition~\ref{def:mpdo_sector_pairing_data}, without any independence
+    hypothesis on the closed sector tensors or the functionals,
+    \[
+        T^2 = T^3,
+    \]
+    and for every positive integer $N$,
+    \[
+        \operatorname{tr}(T^N) = \operatorname{tr}(T).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_sector_pairing_idempotent, thm:matrix_pairing_sq_eq_cube}
+    The operator identity $M^2 = M$ established in the proof of
+    Theorem~\ref{thm:mpdo_sector_pairing_idempotent} gives $T^2 = T^3$ and
+    the constant trace powers by Theorem~\ref{thm:matrix_pairing_sq_eq_cube},
+    with no independence hypothesis.
 \end{proof}
 
 % Scope restriction (independent subspaces): the independent subspace family in the
@@ -3719,10 +3772,12 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{proof}
     \leanok
     \uses{thm:mpdo_sector_pairing_idempotent,
+        thm:mpdo_sector_pairing_trace_powers,
         thm:mpdo_sector_tensors_independent,
         thm:matrix_idempotent_trace_one_rank_one}
-    Theorem~\ref{thm:mpdo_sector_pairing_idempotent} gives $T^2 = T$ and the
-    constant trace powers. The idempotent trace-one criterion of
+    Theorem~\ref{thm:mpdo_sector_pairing_idempotent} gives $T^2 = T$, and
+    Theorem~\ref{thm:mpdo_sector_pairing_trace_powers} gives the constant
+    trace powers unconditionally. The idempotent trace-one criterion of
     Theorem~\ref{thm:matrix_idempotent_trace_one_rank_one} yields the
     factorization $T = a b^\top$, and taking traces gives
     $\sum_k a_k b_k = \operatorname{tr}(T) = 1$. When the independence is not
