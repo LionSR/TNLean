@@ -222,6 +222,43 @@ them.
     Definition~\ref{def:mpdo_bnt_label_idempotent_coefficient_form}.
 \end{definition}
 
+\begin{theorem}[Weighted zipper identities]%
+    \label{thm:mpdo_bnt_weighted_zipper}
+    \lean{MPOTensor.BNTFusionIsometryFamily.fusionIsometry_mul_mulTensor}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        mulTensor_mul_fusionIsometry_conjTranspose}
+    \leanok
+    \uses{def:mpdo_bnt_fusion_isometry_family}
+    For every pair of labels and physical indices, write
+    \[
+        G_{\alpha,\beta}^{ij}
+        = \bigoplus_\gamma \chi_{\alpha,\beta,\gamma}
+            \otimes M_\gamma^{ij}.
+    \]
+    The fusion isometry satisfies the two chi-weighted zipper identities
+    \[
+        U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}
+          = G_{\alpha,\beta}^{ij}U_{\alpha,\beta},
+        \qquad
+        (M_\alpha M_\beta)^{ij}U_{\alpha,\beta}^\dagger
+          = U_{\alpha,\beta}^\dagger G_{\alpha,\beta}^{ij}.
+    \]
+    The corresponding identities in
+    \cite[Equation~(21)]{Bultinck2017Anyons} have identity matrices on
+    the multiplicity spaces in place of the positive diagonal matrices
+    $\chi$.  Their unweighted form requires the length-independent integer
+    specialization and is not a consequence of the present hypotheses. Even
+    after that specialization, zipper completeness and final-label separation
+    are still needed to construct an invertible $F$-move.
+\end{theorem}
+\begin{proof}\leanok
+    Multiply the fusion identity
+    $U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}U_{\alpha,\beta}^\dagger
+      =G_{\alpha,\beta}^{ij}$ on the right by $U_{\alpha,\beta}$ and on the
+    left by $U_{\alpha,\beta}^\dagger$, respectively, and use
+    $U_{\alpha,\beta}^\dagger U_{\alpha,\beta}=1$.
+\end{proof}
+
 \begin{definition}[Operator family of a fusion-isometry family]%
     \label{def:mpdo_bnt_fusion_operator_family}
     \lean{MPOTensor.BNTFusionIsometryFamily.toOperatorFamily}
