@@ -1079,27 +1079,39 @@ strong subadditivity for a normalized three-site reduced state.
     \]
 \end{proof}
 
-\begin{theorem}[Global direct-sum form of the sector closures]
-    \label{thm:mpdo_global_sector_closure_decomposition}
+\begin{definition}[Global two- and three-site sector coordinates]
+    \label{def:mpdo_global_sector_closure_coordinates}
     \lean{MPOTensor.PhysicalSectorFactorization.twoSiteGlobalRegroupEquiv,
       MPOTensor.PhysicalSectorFactorization.twoSiteGlobalRegroupEquiv_symm_apply,
       MPOTensor.PhysicalSectorFactorization.threeSiteGlobalRegroupEquiv,
       MPOTensor.PhysicalSectorFactorization.threeSiteGlobalRegroupEquiv_symm_apply}
+    \leanok
+    \uses{def:mpdo_two_site_sector_closure,
+      def:mpdo_three_site_sector_closure}
+    The two- and three-site physical spaces are reindexed by their canonical
+    direct sums over sector pairs and triples, with each summand further
+    regrouped into its boundary and neighboring factors. Write
+    $\mathfrak G_2$ and $\mathfrak G_3$ for these reindexings of matrices.
+\end{definition}
+
+\begin{theorem}[Global direct-sum form of the sector closures]
+    \label{thm:mpdo_global_sector_closure_decomposition}
     \lean{MPOTensor.PhysicalSectorFactorization.twoSiteGlobalClosure_eq,
       MPOTensor.PhysicalSectorFactorization.threeSiteGlobalClosure_eq}
     \leanok
     \uses{thm:mpdo_two_site_sector_closure_factorization,
       thm:mpdo_three_site_sector_closure_factorization,
-      def:mpdo_physical_sector_factorization}
+      def:mpdo_physical_sector_factorization,
+      def:mpdo_global_sector_closure_coordinates}
     After the canonical regrouping of all physical-sector indices, the full
     closures are
     \[
-      {\cal K}_2(X)
+      \mathfrak G_2({\cal K}_2(X))
       =\bigoplus_{k,h}B_{k,h}(X)\otimes\eta_{k,h}
     \]
     and
     \[
-      {\cal K}_3(X)
+      \mathfrak G_3({\cal K}_3(X))
       =\bigoplus_{k,l,h}B_{k,h}(X)\otimes
         \bigl(\eta_{k,l}\otimes\eta_{l,h}\bigr).
     \]
@@ -1110,19 +1122,20 @@ strong subadditivity for a normalized three-site reduced state.
     \leanok
     \uses{thm:mpdo_two_site_sector_closure_factorization,
       thm:mpdo_three_site_sector_closure_factorization,
-      def:mpdo_physical_sector_factorization}
+      def:mpdo_physical_sector_factorization,
+      def:mpdo_global_sector_closure_coordinates}
     On a diagonal sector tuple these are the fixed-sector factorizations.
-    When $\sigma$ and $\sigma'$ belong to distinct sectors, a
-    sector-coordinate slice satisfies
+    For distinct sector labels $k\ne p$, the block structure of the
+    sector-coordinate tensor gives
     \[
-      \widetilde K_{\sigma,\sigma'}=0.
+      [U\kappa_{\beta,\alpha}U^\dagger]_{k,p}=0.
     \]
     Consequently, if $(k,h)\ne(p,q)$ or
     $(k,l,h)\ne(p,m,q)$, respectively, then
     \[
-      [{\cal K}_2(X)]_{(k,h),(p,q)}=0,
+      [\mathfrak G_2({\cal K}_2(X))]_{(k,h),(p,q)}=0,
       \qquad
-      [{\cal K}_3(X)]_{(k,l,h),(p,m,q)}=0.
+      [\mathfrak G_3({\cal K}_3(X))]_{(k,l,h),(p,m,q)}=0.
     \]
 \end{proof}
 
@@ -2633,12 +2646,12 @@ strong subadditivity for a normalized three-site reduced state.
     \leanok
     \uses{def:mpdo_two_site_sector_closure,
       def:mpdo_three_site_sector_closure}
-    The two- and three-site physical spaces are identified with their
-    canonical direct sums over sector pairs and triples. The inverse
-    equivalences send a diagonal sector block to the corresponding embedded
-    physical matrix and send off-diagonal sector blocks to zero. Write
-    $\mathfrak R_2$ and $\mathfrak R_3$ for the resulting reindexings of
-    two- and three-site matrices.
+    The coordinate equivalences used by the coarse-graining channel expose
+    the direct sums over site-sector pairs and triples. Write
+    $\mathfrak R_2$ and $\mathfrak R_3$ for the corresponding matrix
+    reindexings. Their inverses send a diagonal sector block to the
+    corresponding embedded physical matrix and send off-diagonal sector
+    blocks to zero.
 \end{definition}
 
 \begin{theorem}[Coarse-graining of the three-site closure]
@@ -2664,6 +2677,7 @@ strong subadditivity for a normalized three-site reduced state.
       thm:mpdo_three_site_sector_closure_factorization,
       thm:mpdo_physical_sector_three_site_neighboring_operator_trace,
       def:mpdo_physical_sector_factorization,
+      def:mpdo_physical_sector_closure_coordinates,
       def:mpdo_physical_sector_s1_map}
     On the $(k,h)$ diagonal block, $\mathcal S_0$ traces
     $\Omega_{k,h}$ and gives $a_kb_hB_{k,h}(X)$. On an active sector pair,
