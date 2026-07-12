@@ -24,6 +24,11 @@ subspin space to extend the preparation to a trace-preserving completely
 positive map. These preparations are combined according to the orthogonal
 outer-sector decomposition in the definition of \(\mathcal T_1\).
 
+**Local fix (zero-weight quotient):** the density chosen on an inactive pair
+makes the source map total without adding a nonzero-weight hypothesis. This is
+documented in
+`docs/paper-gaps/cpgsv17_mpdo_zero_weight_preparation_completion.tex`.
+
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
@@ -156,6 +161,10 @@ theorem NeighboringTraceFactorization.trace_normalizedThreeSiteNeighboringDensit
 /-- A density matrix used to extend the preparation on a zero-weight outer
 sector pair, where the quotient in the source formula is undefined.
 
+**Local fix (zero-weight quotient):** this completion makes the source map
+total without adding a nonzero-weight hypothesis. Documented in
+`docs/paper-gaps/cpgsv17_mpdo_zero_weight_preparation_completion.tex`.
+
 Source formula: arXiv:1606.00608, Appendix C.2, lines 1527--1535. -/
 noncomputable def NeighboringTraceFactorization.inactiveThreeSiteNeighboringDensity
     (H : NeighboringTraceFactorization F) (k h : Fin F.sectorCount) :
@@ -188,6 +197,9 @@ operator on an active pair and a density matrix on a zero-weight pair.
 
 The second branch extends the source formula to a trace-preserving map where
 the quotient \((a_kb_h)^{-1}\) is undefined.
+
+**Local fix (zero-weight quotient):** documented in
+`docs/paper-gaps/cpgsv17_mpdo_zero_weight_preparation_completion.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1527--1535. -/
 noncomputable def NeighboringTraceFactorization.completedThreeSiteNeighboringDensity
@@ -276,6 +288,10 @@ three-site neighboring density in every diagonal pair.
 
 On active pairs this is \(\mathcal T_{k,h}\) from the source; the zero-weight
 branch is its trace-preserving extension.
+
+**Local fix (zero-weight quotient):** the inactive branch makes the source map
+total without adding a nonzero-weight hypothesis. Documented in
+`docs/paper-gaps/cpgsv17_mpdo_zero_weight_preparation_completion.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1523--1535. -/
 noncomputable def NeighboringTraceFactorization.completedThreeSiteControlledMap

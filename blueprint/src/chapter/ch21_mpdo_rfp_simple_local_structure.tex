@@ -2572,6 +2572,9 @@ strong subadditivity for a normalized three-site reduced state.
     \label{fig:mpdo_regrouping_partial_trace_maps}
 \end{figure}
 
+% **Local fix (zero-weight quotient):** the source quotient is completed on
+% zero-weight pairs. Documented in
+% docs/paper-gaps/cpgsv17_mpdo_zero_weight_preparation_completion.tex.
 \begin{definition}[The three-site neighboring-state preparation $\mathcal T_1$]
     \label{def:mpdo_physical_sector_t1_preparation}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.sector_nonempty,
@@ -2609,6 +2612,9 @@ strong subadditivity for a normalized three-site reduced state.
     Taking the orthogonal direct sum over the outer sectors $(k,h)$ gives the
     preparation stage $\mathcal T_1$ of
     \cite[Appendix~C.2, lines~1523--1535]{Cirac2016MPDO_arXiv}.
+    The zero-weight choice makes the source map total without imposing a
+    nonzero-weight hypothesis and does not affect its action on the two-site
+    closure.
 \end{definition}
 
 \begin{theorem}[$\mathcal T_1$ is trace-preserving completely positive]
@@ -2631,6 +2637,37 @@ strong subadditivity for a normalized three-site reduced state.
     applies these preparations on the diagonal summands.
 \end{proof}
 
+\begin{definition}[The refinement channel $\mathcal T$]
+    \label{def:mpdo_physical_sector_t_map}
+    \uses{def:mpdo_t0_map,
+      def:mpdo_physical_sector_t1_preparation,
+      def:mpdo_t2_map}
+    Define the channel from two physical sites to three physical sites by
+    \[
+      \mathcal T=\mathcal T_2\mathcal T_1\mathcal T_0.
+    \]
+    Thus $\mathcal T_0$ traces the neighboring subspins, $\mathcal T_1$
+    adjoins the completed three-site neighboring density, and $\mathcal T_2$
+    restores the three complete physical sectors. This is the refinement map
+    in \cite[Appendix~C.2, lines~1522--1545]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[$\mathcal T$ is trace-preserving completely positive]
+    \label{thm:mpdo_physical_sector_t_map_cptp}
+    \uses{def:mpdo_physical_sector_t_map}
+    The refinement channel $\mathcal T$ is trace-preserving and completely
+    positive.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:mpdo_t0_map_cptp,
+      thm:mpdo_physical_sector_t1_preparation_cptp,
+      thm:mpdo_t2_map_cptp,
+      lem:is_kraus_cptp_comp}
+    Each constituent map is trace-preserving and completely positive, and
+    this property is preserved under composition.
+\end{proof}
+
 \begin{figure}[ht]
     \centering
     \TNMPDORefinementConstruction
@@ -2645,10 +2682,11 @@ strong subadditivity for a normalized three-site reduced state.
       \bigoplus_l(\eta_{k,l}\otimes\eta_{l,h})$, and the final stage orders
     the factors as
     $(L_k\otimes R_k)\otimes(L_l\otimes R_l)\otimes(L_h\otimes R_h)$.
-    The lower schematic records the two-site to three-site direction in
-    \cite[Appendix~C.2, lines~1522--1545]{Cirac2016MPDO_arXiv}. The figure
-    records the three constituent maps only; no composite map or closure
-    identity is asserted here.}
+    The upper and lower rows lie in the sitewise sector coordinates
+    $\mathfrak R_2$ and $\mathfrak R_3$, respectively. The lower schematic is
+    the refinement identity in
+    \cite[Appendix~C.2, lines~1510--1516 and~1522--1545]
+      {Cirac2016MPDO_arXiv}.}
     \label{fig:mpdo_physical_sector_refinement_channel}
 \end{figure}
 
@@ -2739,8 +2777,64 @@ strong subadditivity for a normalized three-site reduced state.
     the direct sums over site-sector pairs and triples. Write
     $\mathfrak R_2$ and $\mathfrak R_3$ for the corresponding matrix
     reindexings. Their inverses send every sector block to the corresponding
-    physical matrix entries.
+    physical matrix entries. These reindexings preserve the left-right order
+    within every physical site. They differ from the regrouped coordinates
+    $\mathfrak G_2$ and $\mathfrak G_3$ of
+    Definition~\ref{def:mpdo_global_sector_closure_coordinates}, which place
+    the two outer subspins before the neighboring subspins. If
+    $R_{\Phi_2}$ and $R_{\Phi_3}$ denote the two regrouping maps, then
+    \[
+      \mathfrak G_2=R_{\Phi_2}\mathfrak R_2,
+      \qquad
+      \mathfrak G_3=R_{\Phi_3}\mathfrak R_3.
+    \]
 \end{definition}
+
+\begin{theorem}[Refinement of the two-site closure]
+    \label{thm:mpdo_physical_sector_t_closure_identity}
+    \uses{def:phys_close,
+      def:mpdo_physical_sector_t_map,
+      def:mpdo_physical_sector_closure_coordinates,
+      def:mpdo_neighboring_trace_factorization}
+    Assume the neighboring-operator trace factorization of
+    Definition~\ref{def:mpdo_neighboring_trace_factorization}. For every
+    virtual matrix $X$, in the canonical physical-sector coordinates selected
+    by the isometry $U$, the refinement channel satisfies
+    \[
+      \mathcal T\bigl(\mathfrak R_2({\cal K}_2(X))\bigr)
+      =\mathfrak R_3({\cal K}_3(X)).
+    \]
+    This is the refinement half of Proposition~C.7
+    \cite[Appendix~C.2, lines~1510--1516 and~1522--1545]
+      {Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:mpdo_global_sector_closure_decomposition,
+      thm:mpdo_sector_closure_partial_traces,
+      def:mpdo_physical_sector_t1_preparation,
+      def:mpdo_physical_sector_closure_coordinates}
+    The regrouping contained in $\mathcal T_0$ changes
+    $\mathfrak R_2$ into $\mathfrak G_2$. On the $(k,h)$ diagonal block, the
+    partial trace then gives
+    \[
+      \mathcal T_0\bigl(\mathfrak R_2({\cal K}_2(X))\bigr)_{k,h}
+      =a_kb_hB_{k,h}(X).
+    \]
+    On an active pair, $\mathcal T_1$ adjoins
+    $(a_kb_h)^{-1}\Omega_{k,h}$, and hence
+    \[
+      \mathcal T_1\mathcal T_0
+        \bigl(\mathfrak R_2({\cal K}_2(X))\bigr)_{k,h}
+      =B_{k,h}(X)\otimes\Omega_{k,h}.
+    \]
+    If $a_kb_h=0$, both sides vanish because
+    $\Omega_{k,h}=0$. After the canonical reassociation of the intermediate
+    sector sum, these are precisely the diagonal blocks of
+    $\mathfrak G_3({\cal K}_3(X))$; all off-diagonal sector blocks vanish.
+    Finally, the inverse regrouping $\mathcal T_2$ changes
+    $\mathfrak G_3$ into $\mathfrak R_3$, which gives the stated equality.
+\end{proof}
 
 \begin{theorem}[Coarse-graining of the three-site closure]
     \label{thm:mpdo_physical_sector_s_closure_identity}
