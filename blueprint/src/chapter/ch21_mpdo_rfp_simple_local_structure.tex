@@ -2441,6 +2441,27 @@ strong subadditivity for a normalized three-site reduced state.
     the reflexive transitive closure.
 \end{proof}
 
+\begin{lemma}[Finite cyclic form of a closed directed walk]%
+    \label{lem:directed_closed_walk_finite_cycle}
+    \lean{TNLean.Algebra.DirectedWalk.closedConsVertices}
+    \lean{TNLean.Algebra.DirectedWalk.closedConsVertices_edge}
+    \lean{TNLean.Algebra.DirectedWalk.weight_closedCons_eq_fin_prod}
+    \leanok
+    Every nonempty closed directed walk of length $N$ determines a cyclic
+    family of vertices $v_0,\ldots,v_{N-1}$. Each $v_n\to v_{n+1}$ is an
+    edge, where $v_N=v_0$, and for any edge weights in a commutative monoid,
+    \[
+        \operatorname{wt}(w)=\prod_{n=0}^{N-1}\kappa_{v_n,v_{n+1}}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Enumerate the sources of the successive edges. The last edge ends at the
+    initial vertex because the walk is closed. The product identity follows
+    by induction on the number of edges.
+\end{proof}
+
 \begin{theorem}[Closed-walk criterion for vertex phases]%
     \label{thm:directed_cycle_coboundary}
     \lean{TNLean.Algebra.DirectedWalk.exists_vertex_of_closedWalk_weight_eq_one}
