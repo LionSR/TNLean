@@ -57,9 +57,10 @@ source hypotheses.
 
 \section{Formal proof}
 
-The literal horizontal canonical-form reduction is
+The formal proof first establishes the literal horizontal canonical-form
+reduction described below.\footnote{Formal declaration:
 \leanid{MPOTensor.IsHorizontalCF.exists\_not\_commute\_of\_displaced} in
-\path{TNLean/MPS/MPDO/HorizontalBNT.lean}.  Suppose, to the contrary, that
+\doclink{TNLean/MPS/MPDO/HorizontalBNT}.}  Suppose, to the contrary, that
 $Q_1$ commutes with $H^{(N+1)}$ for every $N$.  Idempotence of $Q$ gives
 \[
   Q_1H^{(N+1)}=Q_1H^{(N+1)}Q_1.
@@ -77,27 +78,27 @@ to the $p$-fold vertically stacked tensor, so
   Q_1[H^{(N+1)}]^p=[H^{(N+1)}]^pQ_1.
 \]
 The positive-semidefinite power-commutation theorem then gives commutation
-with $H^{(N+1)}$, a contradiction.  The resulting theorem is
-\leanid{MPOTensor.hasNoPeriodicVectors\_verticalTensor\_of\_horizontalCF}.
+with $H^{(N+1)}$, a contradiction.\footnote{Formal conclusion:
+\leanid{MPOTensor.hasNoPeriodicVectors\_verticalTensor\_of\_horizontalCF}
+in \doclink{TNLean/MPS/MPDO/CyclicProjector}.}
 
-The proof introduces no new assumption.  Its kernel dependencies are the
-standard principles \leanid{propext}, \leanid{Classical.choice}, and
-\leanid{Quot.sound}.
+The proof introduces no additional mathematical assumption.
 
 \section{Status}
 
 The periodic-sector step of Proposition~4.13 is complete for every
 horizontally canonical matrix product density operator.  The earlier
-all-length predicate
-\leanid{MPOTensor.NoninvariantProjectorNoncommuting} remains only as a
-stronger conditional auxiliary statement and is not used by the
-source-faithful theorem.
+all-length condition remains only as a stronger conditional auxiliary
+statement and is not used by the source-faithful theorem.\footnote{Formal
+predicate: \leanid{MPOTensor.NoninvariantProjectorNoncommuting}.}
 
 The remaining work for Proposition~4.13 is the vertical canonical-form
 construction: applying the invariant-projector and no-periodic-vector
 criterion, producing the sector projectors and nonzero compressions, proving
 positivity of the vertical weights, deriving the dressed-adjoint identities,
 and assembling the physical-space isometry.
+
+\paragraph{Verdict.} Local correction.
 
 \bibliographystyle{alpha}
 \bibliography{references}
