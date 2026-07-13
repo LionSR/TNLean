@@ -413,6 +413,7 @@ import TNLean.MPS.MPDO.PhysicalSectorCoordinateTransport
 import TNLean.MPS.MPDO.PhysicalSectorPositiveBond
 import TNLean.MPS.MPDO.PhysicalSectorBondCommutativity
 import TNLean.MPS.MPDO.PhysicalSectorBondTransport
+import TNLean.MPS.MPDO.PhysicalSectorBondTwoSite
 import TNLean.MPS.MPDO.PhysicalSectorPhysicalTransport
 import TNLean.MPS.MPDO.SectorPairingTransfer
 import TNLean.MPS.MPDO.SectorEtaContraction
