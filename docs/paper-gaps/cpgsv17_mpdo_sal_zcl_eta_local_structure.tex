@@ -357,14 +357,21 @@ Thus $1\to0$ is a nonzero support edge, whereas no edge enters sector $1$.
 This edge is not recurrent.  Hence no theorem deriving recurrence may
 quantify over an arbitrary decomposition satisfying only $p_k\geq0$.
 
-The source-faithful repair is to remove zero-weight summands before forming
-the inverse-map sector tensors.  This does not strengthen the mathematical
-hypotheses: such summands make no contribution to the Markov decomposition.
-After pruning, every retained weight is strictly positive.  One may then seek
-to prove recurrence from injectivity by closing any nonzero two-sector product
-with a third sector, using nondegeneracy of the matrix trace pairing.  The
-formal construction of this positive-weight decomposition and the resulting
-recurrence theorem remain open.
+The source-faithful repair retains the full physical direct sum, since a
+zero-weight summand can have nonzero left and right factor dimensions.  In the
+chosen inverse-map factorization, $p_k=0$ already implies $l_k=0$.  Replacing
+$r_k$ by zero on precisely those sectors therefore leaves every product
+$l_k\otimes r_k$ unchanged and kills the spurious outgoing edges of the
+zero-weight sectors.  Incoming edges were already zero because their target
+left tensor vanishes.  This reparameterization and its neighboring-operator
+formula are now formalized by
+\leanid{MPOTensor.PhysicalSectorFactorization.zeroRightTensorOnInactive},
+\leanid{MPOTensor.sectorTensorL_eq_zero_of_weight_eq_zero},
+\leanid{MPOTensor.zeroWeightReparameterizedInverseMapPhysicalSectorFactorization},
+and
+\leanid{MPOTensor.zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_neighboringOperator}.
+The remaining problem is the injectivity argument establishing recurrence on
+the nonzero-weight support.
 
 \subsection{Recurrence of the sector support graph: definitions and the
 per-cycle rescaling}
@@ -431,40 +438,36 @@ theorem concerns one fixed cycle: it does not by itself assert that the
 choices made on two different cycles agree on a shared edge, which is the
 remaining content of the coherent vertex-rephasing step.
 
-\subsection{Why recurrence is not a direct consequence of the source's own
-argument}
+\subsection{Directed-cut recurrence after zero-weight reparameterization}
 
-The source's proof that $T$ has a single primitive component (quoted above)
-uses two orthogonal projectors $P_{1,2}$ satisfying three vanishing
-conditions and derives a contradiction with injectivity from the resulting
-matrix-algebra decomposition $\mathcal A=\mathcal A_1+\mathcal A_2$,
-$\mathcal A_1\mathcal A_2=0$.  Read literally as a graph statement, this
-argument requires a partition of the sector index set into two nonempty
-blocks with \emph{no} edges between them in \emph{either} direction: this is
-exactly what the paper's ``$T^n=\bigoplus_x T^{(x)}$'' display asserts.
+The source's local-orthogonality contradiction uses the decomposition
+$\mathcal A=\mathcal A_1+\mathcal A_2$ together with the one-sided product
+vanishing $\mathcal A_1\mathcal A_2=0$.  It does not require
+$\mathcal A_2\mathcal A_1=0$.  Thus the argument applies to a directed cut,
+not only to a block-diagonal partition.
 
-For a general nonnegative matrix, however, such an exactly block-diagonal
-power exists only when the support graph, restricted to the transitive
-closure the paper is decomposing, already has no edges leaving one block for
-another --- i.e., only when the graph decomposes into strongly connected
-components with no cross edges at all.  A vertex with a self-loop and one
-outgoing edge to a different component (a \emph{transient} sector in the
-usual Markov-chain sense) can still leave a unique sink component
-unreachable from it in the reverse direction; no exact power of $T$
-eliminates that one-directional edge.  The two-projector argument, run on
-the split \{sink component\}/\{everything else\}, only forces vanishing in
-the direction from the sink into the rest, not the reverse: exactly the
-direction of the surviving edge in the four-sector counterexample above
-(there, $1\to3$ and $2\to3$ survive with $3$ the unique sink, while
-$0,1,2$ are transient).  Consequently, the source's own two-projector
-argument --- formalized as stated --- yields at most \emph{uniqueness of the
-final (recurrent) component} of the sector graph, which is a strictly
-weaker statement than recurrence of every nonzero edge, and does not rule
-out the four-sector counterexample's transient edges.  Whether recurrence
-itself follows from injectivity of $\mathcal K$ through some other, more
-specific argument tied to the inverse-map construction of the sector
-tensors --- rather than through this graph-theoretic argument alone --- is
-the open question left by this note.  No such argument has been identified.
+Indeed, let $S$ be a nonempty forward-closed set of sectors and let $C$ be
+its complement.  The direct-sum physical factorization gives the two
+single-site cross-sector vanishings.  The absence of edges from $S$ to $C$
+gives $\eta_{s,c}=0$ for $s\in S$ and $c\in C$, hence
+\[
+  \mathcal A_S\mathcal A_C=0.
+\]
+If the one-site matrices belonging to both sides are nonzero, injectivity
+and the physical direct sum give
+$\mathcal A_S+\mathcal A_C=M_D(\mathbb C)$, contradicting this product
+vanishing exactly as in Appendix~C.2, lines 1463--1470.  Taking $S$ to be
+the vertices reachable from a fixed positive-weight sector would therefore
+show that the positive-weight support is strongly connected, and hence
+recurrent.
+
+The missing formal statements are now precise: a positive Hayashi weight
+must imply that the corresponding same-sector one-site matrix space is
+nonzero, physical unitary reparameterization must preserve the injective
+span, and the preceding one-sided-cut contradiction must be expressed for a
+physical-sector factorization.  The abstract four-sector phase example is
+still a counterexample to cyclic positivity alone, but it does not satisfy
+these additional inverse-map and injectivity conclusions.
 
 \subsection{Coherent vertex rephasing under recurrence}
 
@@ -516,10 +519,10 @@ construction gives
 \leanid{MPOTensor.nonempty_etaLocalStructureData_of_recurrentSupport}.
 
 This result is explicitly a scope restriction: recurrence is an additional
-hypothesis not present in Lemma~C.4.  The remaining elimination problem is to
-prune zero-weight Hayashi summands and derive recurrence for the resulting
-inverse-map neighboring operators from the source's injectivity and normality
-assumptions, without appealing to the later primitivity conclusion.
+hypothesis not present in Lemma~C.4.  The zero-weight reparameterization is
+now formalized.  The remaining elimination problem is to derive recurrence
+for its neighboring operators from injectivity by the directed-cut argument
+above, without appealing to the later primitivity conclusion.
 
 The canonical family
 \leanid{MPOTensor.ExplicitEtaOperators.ofHayashiMarkov} does not supply this
@@ -603,12 +606,12 @@ positive-choice construction is formalized under the symmetric-support scope
 restriction described above.  The sector support graph, the per-cycle
 positive rescaling, and the coherent vertex-rephasing theorem are now
 formalized.  In the last theorem recurrence is a hypothesis, not a conclusion.
-The remaining obligation for the source statement is to prune zero-weight
-Hayashi summands and then derive recurrence from injectivity of $\mathcal K$
-(\S~``Why recurrence is not a direct consequence of the source's own
-argument'' above records why the source's two-projector argument does not by
-itself supply it).  The primitivity of $T_{k,h}$ also remains open and cannot
-be used to derive recurrence without circularity.
+The zero-weight reparameterization is formalized, but recurrence remains a
+hypothesis.  The remaining obligation for the source statement is to prove
+that positive-weight sectors contribute nonzero one-site matrix spaces and
+then formalize the directed-cut injectivity contradiction above.  The
+primitivity of $T_{k,h}$ also remains open and cannot be used to derive
+recurrence without circularity.
 
 For the conditional bond construction, all translates commute pairwise at
 every length $N\geq2$.  The finite-chain MPO is the ordered product of those

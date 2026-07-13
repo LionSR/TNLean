@@ -644,6 +644,30 @@ strong subadditivity for a normalized three-site reduced state.
     displayed in \cite[Appendix~C.2, lines~1435--1448]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
+\begin{lemma}[Zero-weight left sector tensor]
+    \label{lem:mpdo_sector_tensor_left_zero_of_weight_zero}
+    \lean{MPOTensor.sectorTensorL_eq_zero_of_weight_eq_zero}
+    \lean{MPOTensor.sectorEta_eq_zero_of_target_weight_eq_zero}
+    \leanok
+    \uses{def:mpdo_sector_tensors}
+    If $p_k=0$, then
+    \[
+        (l_k)_\beta=0
+    \]
+    for every virtual index $\beta$. Consequently,
+    \[
+        \eta_{h,k}=0
+    \]
+    for every sector $h$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The scalar weight $p_k$ is a factor of every matrix entry of
+    $(l_k)_\beta$. Each neighboring operator entering sector $k$ contains
+    $(l_k)_\beta$ as its target factor.
+\end{proof}
+
 \begin{theorem}[Sector factorization of an injective simple tensor]
     \label{thm:mpdo_sector_factorization}
     \lean{MPOTensor.physicalSlice_sector_factorization}
@@ -845,6 +869,40 @@ strong subadditivity for a normalized three-site reduced state.
     Every complete cyclic product of neighboring operators is unchanged.
 \end{definition}
 
+\begin{definition}[Vanishing right tensors on inactive sectors]
+    \label{def:mpdo_physical_sector_inactive_right_zero}
+    \lean{MPOTensor.PhysicalSectorFactorization.zeroRightTensorOnInactive}
+    \lean{MPOTensor.PhysicalSectorFactorization.zeroRightTensorOnInactive_neighboringOperator}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization,
+      def:mpdo_minimal_neighboring_operator}
+    Let $S$ be a set of active sectors in a physical-sector factorization,
+    and suppose that $(l_k)_\beta=0$ for every $k\notin S$ and every $\beta$.
+    Retain every physical summand and define
+    \[
+        \widehat l_k=l_k,
+        \qquad
+        \widehat r_k=
+        \begin{cases}
+          r_k,&k\in S,\\
+          0,&k\notin S.
+        \end{cases}
+    \]
+    Then $\widehat l_k\otimes\widehat r_k=l_k\otimes r_k$ for every $k$,
+    so the physical-slice factorization is unchanged. The neighboring
+    operators become
+    \[
+        \widehat\eta_{k,h}=
+        \begin{cases}
+          \eta_{k,h},&k\in S,\\
+          0,&k\notin S.
+        \end{cases}
+    \]
+    This is the reparameterization freedom in the factorization and
+    neighboring contraction of
+    \cite[Appendix~C.2, lines~1434--1445]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
 \begin{definition}[Inverse-map physical-sector factorization]
     \label{def:mpdo_inverse_map_physical_sector_factorization}
     \lean{MPOTensor.inverseMapPhysicalSectorFactorization}
@@ -881,6 +939,55 @@ strong subadditivity for a normalized three-site reduced state.
     This is equation \texttt{etarl} in
     \cite[Appendix~C.2, lines~1441--1445]{Cirac2016MPDO_arXiv}.
 \end{theorem}
+
+\begin{definition}[Zero-weight inverse-map reparameterization]
+    \label{def:mpdo_zero_weight_reparameterized_inverse_map_factorization}
+    \lean{MPOTensor.zeroWeightReparameterizedInverseMapPhysicalSectorFactorization}
+    \leanok
+    \uses{def:mpdo_inverse_map_physical_sector_factorization,
+      def:mpdo_physical_sector_inactive_right_zero,
+      lem:mpdo_sector_tensor_left_zero_of_weight_zero}
+    In the inverse-map factorization, retain every physical sector and its
+    factor spaces, and set
+    \[
+        \widehat l_k=l_k,
+        \qquad
+        \widehat r_k=
+        \begin{cases}
+          r_k,&p_k\ne0,\\
+          0,&p_k=0.
+        \end{cases}
+    \]
+    The physical-slice factorization is unchanged. This treats the
+    zero-weight freedom left by the Hayashi decomposition used in
+    \cite[Appendix~C.2, lines~1415--1445]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Neighboring operators after zero-weight reparameterization]
+    \label{thm:mpdo_zero_weight_reparameterized_neighboring_operator}
+    \lean{MPOTensor.zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_neighboringOperator}
+    \leanok
+    \uses{def:mpdo_zero_weight_reparameterized_inverse_map_factorization,
+      thm:mpdo_inverse_map_factorization_neighboring_operator}
+    The neighboring operators of the reparameterized factorization are
+    \[
+        \widehat\eta_{k,h}=
+        \begin{cases}
+          \eta_{k,h},&p_k\ne0,\\
+          0,&p_k=0.
+        \end{cases}
+    \]
+    Thus a zero-weight sector has no outgoing support edge. Since
+    $p_h=0$ also gives $l_h=0$, it has no incoming support edge either.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The neighboring contraction uses $r_k$ at its source and $l_h$ at its
+    target. The first assertion follows from the definition of
+    $\widehat r_k$, and the last assertion follows from
+    Lemma~\ref{lem:mpdo_sector_tensor_left_zero_of_weight_zero}.
+\end{proof}
 
 \begin{corollary}[SAL gives a raw physical-sector factorization]
     \label{cor:mpdo_sal_raw_physical_sector_factorization}
