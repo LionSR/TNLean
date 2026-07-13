@@ -244,10 +244,14 @@ factors are derived from the trace-one Hayashi density matrices, rather than
 assumed.  For an injective tensor satisfying SAL, the four-site Hayashi
 decomposition and a nonzero entry of the normalized tail therefore produce
 this raw factorization without ZCL or positivity hypotheses.
+For one such factorization, every complete nonempty cyclic neighboring
+product is positive semidefinite as a diagonal sector compression of the
+corresponding finite-chain operator.
 \footnote{The formal declarations are
 \path{MPOTensor.inverseMapPhysicalSectorFactorization},
 \path{MPOTensor.inverseMapPhysicalSectorFactorization_neighboringOperator_eq_sectorEta},
 \path{MPOTensor.nonempty_physicalSectorFactorization_of_isSAL},
+\path{MPOTensor.exists_physicalSectorFactorization_with_cyclicNeighboringProduct_posSemidef_of_isSAL},
 \path{MPOTensor.etaOfSectorTensors},
 \path{MPOTensor.sum_cyclic_sectorTensor_eq_prod_etaOfSectorTensors},
 \path{MPOTensor.trace_sector_word_eq_prod_etaOfSectorTensors},
