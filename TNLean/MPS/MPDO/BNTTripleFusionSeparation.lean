@@ -6,6 +6,8 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.BNTTripleFusionComparison
 import TNLean.MPS.MPDO.BNTFinalSectorFusion
 import TNLean.MPS.MPDO.BiCFDerivation.Core
+import TNLean.MPS.Core.CyclicTrace
+import Mathlib.LinearAlgebra.Matrix.Rank
 
 /-!
 # Separation of final sectors in the triple-fusion comparison
@@ -17,10 +19,12 @@ word form of the simultaneous inverse used in the fixed-channel extraction in
 arXiv:1511.08090.
 
 The selector hypothesis is stated explicitly.  It is not presently derived
-from the assumptions on `BNTFusionIsometryFamily`.  Consequently the result below is
-a conditional final-sector decomposition; it does not construct an invertible
-fixed-sector comparison, identify its multiplicity factor with the source
-$F$-matrix, or prove a pentagon identity.
+from the assumptions on `BNTFusionIsometryFamily`. At a positive selector
+length it also makes both iterated fusion maps surjective, and hence makes the
+full comparison invertible with adjoint inverse. The fixed-final results remain
+conditional: they do not construct an invertible fixed-sector comparison,
+identify its multiplicity factor with the source $F$-matrix, or prove a
+pentagon identity.
 
 ## References
 
@@ -72,6 +76,338 @@ def HasFinalLabelSelectorWords (S : ℕ) : Prop :=
     ∀ ε' : Λ, ε' ≠ ε →
       (∑ w : Fin S → Fin (p * p),
         c w • MPSTensor.evalWord (Fam.tensor ε').toMPSTensor (List.ofFn w)) = 0
+
+/-- **Positive-length final-label selectors make every pair fusion map surjective.**
+
+Suppose that the positive trace-power coefficients are independent of the positive chain
+length, and that common words of one positive length separate the labelled tensors. Then the
+range projection of every fusion isometry is the identity.
+
+The positivity of the selector length is essential: products of conjugated letters telescope
+through `U† U = 1` only for nonempty words. The selector hypothesis is the finite-word form of
+the simultaneous inverse at line 269 of arXiv:1511.08090. It is not derived here from
+individual injectivity.
+
+This is the support-completeness step behind the invertible total fusion matrix discussed in
+arXiv:1511.08090, lines 181--191. It concerns the full pair fusion map; it does not construct a
+fixed-final $F$-matrix or prove a pentagon identity.
+
+Source: arXiv:1606.00608, lines 995--1010; arXiv:1511.08090, lines 181--191,
+247--252, and 269. -/
+theorem fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords
+    (c : BNTLabelCoefficientFamily Λ)
+    (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
+    (hLI : c.LengthIndependent) {S : ℕ} (hS : 0 < S)
+    (hSel : Fam.HasFinalLabelSelectorWords S) (α β : Λ) :
+    Fam.fusionIsometry α β * (Fam.fusionIsometry α β)ᴴ = 1 := by
+  classical
+  obtain ⟨n, rfl⟩ : ∃ n, S = n + 1 := ⟨S - 1, (Nat.succ_pred_eq_of_pos hS).symm⟩
+  let U := Fam.fusionIsometry α β
+  let A := (mulTensor (Fam.tensor α) (Fam.tensor β)).toMPSTensor
+  let D : Fin (p * p) →
+      Matrix ((γ : Λ) × (Fin (Fam.chi.dim α β γ) × Fin (Fam.bondDim γ)))
+        ((γ : Λ) × (Fin (Fam.chi.dim α β γ) × Fin (Fam.bondDim γ))) ℂ :=
+    fun ij => Matrix.blockDiagonal' fun γ =>
+      (1 : Matrix (Fin (Fam.chi.dim α β γ)) (Fin (Fam.chi.dim α β γ)) ℂ) ⊗ₖ
+        (Fam.tensor γ).toMPSTensor ij
+  have hU : Uᴴ * U = 1 := Fam.isometry α β
+  have hletter (ij : Fin (p * p)) : D ij = U * A ij * Uᴴ := by
+    obtain ⟨⟨i, k⟩, rfl⟩ := finProdFinEquiv.surjective ij
+    simpa [U, A, D, MPOTensor.toMPSTensor,
+      Fam.chi_matrix_eq_one_of_lengthIndependent c hχ hLI] using
+      (Fam.fusion α β i k).symm
+  have evalWord_ofFn_eq_prod (m : ℕ) (w : Fin m → Fin (p * p)) :
+      _root_.evalWord D (List.ofFn w) = (List.ofFn fun l => D (w l)).prod := by
+    induction m with
+    | zero => simp only [List.ofFn_zero, _root_.evalWord, List.prod_nil]
+    | succ m ih =>
+        simp only [List.ofFn_succ, _root_.evalWord, List.prod_cons]
+        congr 1
+        exact ih (w ∘ Fin.succ)
+  have hword (w : Fin (n + 1) → Fin (p * p)) :
+      _root_.evalWord D (List.ofFn w) =
+        U * MPSTensor.evalWord A (List.ofFn w) * Uᴴ := by
+    rw [evalWord_ofFn_eq_prod, MPSTensor.evalWord_ofFn_eq_prod]
+    have hconj := MPOTensor.listProd_conj_of_conjTranspose_mul_self U hU
+      (fun l => A (w l))
+    simpa only [hletter] using hconj
+  have hDword : ∀ w : List (Fin (p * p)),
+      _root_.evalWord D w = Matrix.blockDiagonal' fun γ =>
+        (1 : Matrix (Fin (Fam.chi.dim α β γ))
+          (Fin (Fam.chi.dim α β γ)) ℂ) ⊗ₖ
+          MPSTensor.evalWord (Fam.tensor γ).toMPSTensor w := by
+    intro w
+    induction w with
+    | nil =>
+        simp only [_root_.evalWord, MPSTensor.evalWord_nil]
+        rw [show (fun γ =>
+            (1 : Matrix (Fin (Fam.chi.dim α β γ))
+              (Fin (Fam.chi.dim α β γ)) ℂ) ⊗ₖ
+              (1 : Matrix (Fin (Fam.bondDim γ)) (Fin (Fam.bondDim γ)) ℂ)) =
+            fun _ => 1 by
+          funext γ
+          exact Matrix.one_kronecker_one]
+        exact Matrix.blockDiagonal'_one.symm
+    | cons ij w ih =>
+        simp only [_root_.evalWord, MPSTensor.evalWord_cons, ih, D]
+        rw [← Matrix.blockDiagonal'_mul]
+        congr 1
+        funext γ
+        rw [← Matrix.mul_kronecker_mul, Matrix.one_mul]
+  choose coeff hSelf hOther using hSel
+  have hcoeffTotal (γ : Λ) :
+      (∑ ε : Λ, ∑ w : Fin (n + 1) → Fin (p * p),
+        coeff ε w • MPSTensor.evalWord (Fam.tensor γ).toMPSTensor (List.ofFn w)) = 1 := by
+    rw [Finset.sum_eq_single γ]
+    · exact hSelf γ
+    · intro ε _ hε
+      exact hOther ε γ hε.symm
+    · simp
+  have htotal :
+      (∑ ε : Λ, ∑ w : Fin (n + 1) → Fin (p * p),
+        coeff ε w • _root_.evalWord D (List.ofFn w)) = 1 := by
+    calc
+      (∑ ε : Λ, ∑ w : Fin (n + 1) → Fin (p * p),
+          coeff ε w • _root_.evalWord D (List.ofFn w)) =
+          Matrix.blockDiagonal' fun γ =>
+            (1 : Matrix (Fin (Fam.chi.dim α β γ))
+              (Fin (Fam.chi.dim α β γ)) ℂ) ⊗ₖ
+              (∑ ε : Λ, ∑ w : Fin (n + 1) → Fin (p * p),
+                coeff ε w •
+                  MPSTensor.evalWord (Fam.tensor γ).toMPSTensor (List.ofFn w)) := by
+        ext ⟨γ, μ, b⟩ ⟨γ', μ', b'⟩
+        by_cases hγ : γ = γ'
+        · subst γ'
+          simp [Matrix.sum_apply, Matrix.smul_apply, hDword,
+            Matrix.blockDiagonal'_apply, Finset.mul_sum, mul_left_comm]
+        · simp [Matrix.sum_apply, Matrix.smul_apply, hDword,
+            Matrix.blockDiagonal'_apply, hγ]
+      _ = Matrix.blockDiagonal' fun γ =>
+          (1 : Matrix (Fin (Fam.chi.dim α β γ))
+            (Fin (Fam.chi.dim α β γ)) ℂ) ⊗ₖ
+            (1 : Matrix (Fin (Fam.bondDim γ)) (Fin (Fam.bondDim γ)) ℂ) := by
+        congr 1
+        funext γ
+        rw [hcoeffTotal]
+      _ = 1 := by
+        rw [show (fun γ =>
+            (1 : Matrix (Fin (Fam.chi.dim α β γ))
+              (Fin (Fam.chi.dim α β γ)) ℂ) ⊗ₖ
+              (1 : Matrix (Fin (Fam.bondDim γ)) (Fin (Fam.bondDim γ)) ℂ)) =
+            fun _ => 1 by
+          funext γ
+          exact Matrix.one_kronecker_one]
+        exact Matrix.blockDiagonal'_one
+  let P := U * Uᴴ
+  have hPword (w : Fin (n + 1) → Fin (p * p)) :
+      P * _root_.evalWord D (List.ofFn w) =
+        _root_.evalWord D (List.ofFn w) := by
+    rw [hword]
+    simp only [P, Matrix.mul_assoc]
+    rw [← Matrix.mul_assoc Uᴴ, hU, Matrix.one_mul]
+  calc
+    U * Uᴴ = P := rfl
+    _ = P * 1 := by rw [Matrix.mul_one]
+    _ = P * (∑ ε : Λ, ∑ w : Fin (n + 1) → Fin (p * p),
+        coeff ε w • _root_.evalWord D (List.ofFn w)) := by rw [htotal]
+    _ = ∑ ε : Λ, ∑ w : Fin (n + 1) → Fin (p * p),
+        coeff ε w • _root_.evalWord D (List.ofFn w) := by
+      simp_rw [Matrix.mul_sum, Matrix.mul_smul, hPword]
+    _ = 1 := htotal
+
+private theorem mul_conjTranspose_eq_one_of_conjTranspose_mul_eq_one_of_card_eq
+    {m n : Type*} [Fintype m] [DecidableEq m] [Fintype n] [DecidableEq n]
+    (U : Matrix m n ℂ) (hcard : Fintype.card m = Fintype.card n)
+    (hU : Uᴴ * U = 1) : U * Uᴴ = 1 := by
+  let e : m ≃ n := Fintype.equivOfCardEq hcard
+  let V : Matrix n n ℂ := U.submatrix e.symm id
+  have hV : Vᴴ * V = 1 := by
+    unfold V
+    rw [Matrix.conjTranspose_submatrix,
+      Matrix.submatrix_mul_equiv _ _ _ e.symm _, hU, Matrix.submatrix_id_id]
+  have hVV : V * Vᴴ = 1 := mul_eq_one_comm.mpr hV
+  have hreindex : (U * Uᴴ).submatrix e.symm e.symm = 1 := by
+    rw [← Matrix.submatrix_mul_equiv U Uᴴ e.symm (Equiv.refl n) e.symm]
+    exact hVV
+  ext i j
+  have hij := congrArg (fun M => M (e i) (e j)) hreindex
+  simpa [Matrix.one_apply] using hij
+
+private theorem card_fusionIndex_eq_of_lengthIndependent_of_selectorWords
+    (c : BNTLabelCoefficientFamily Λ)
+    (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
+    (hLI : c.LengthIndependent) {S : ℕ} (hS : 0 < S)
+    (hSel : Fam.HasFinalLabelSelectorWords S) (α β : Λ) :
+    Fintype.card ((γ : Λ) ×
+        (Fin (Fam.chi.dim α β γ) × Fin (Fam.bondDim γ))) =
+      Fintype.card (Fin (Fam.bondDim α * Fam.bondDim β)) := by
+  let U := Fam.fusionIsometry α β
+  apply Nat.le_antisymm
+  · calc
+      Fintype.card ((γ : Λ) ×
+          (Fin (Fam.chi.dim α β γ) × Fin (Fam.bondDim γ))) =
+          (1 : Matrix ((γ : Λ) ×
+            (Fin (Fam.chi.dim α β γ) × Fin (Fam.bondDim γ)))
+            ((γ : Λ) ×
+              (Fin (Fam.chi.dim α β γ) × Fin (Fam.bondDim γ))) ℂ).rank :=
+            Matrix.rank_one.symm
+      _ = (U * Uᴴ).rank := by
+        rw [Fam.fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords
+          c hχ hLI hS hSel α β]
+      _ ≤ U.rank := Matrix.rank_mul_le_left _ _
+      _ ≤ Fintype.card (Fin (Fam.bondDim α * Fam.bondDim β)) :=
+        Matrix.rank_le_card_width _
+  · calc
+      Fintype.card (Fin (Fam.bondDim α * Fam.bondDim β)) =
+          (1 : Matrix (Fin (Fam.bondDim α * Fam.bondDim β))
+            (Fin (Fam.bondDim α * Fam.bondDim β)) ℂ).rank := Matrix.rank_one.symm
+      _ = (Uᴴ * U).rank := by rw [Fam.isometry]
+      _ ≤ U.rank := Matrix.rank_mul_le_right _ _
+      _ ≤ Fintype.card ((γ : Λ) ×
+          (Fin (Fam.chi.dim α β γ) × Fin (Fam.bondDim γ))) :=
+        Matrix.rank_le_card_height _
+
+private theorem card_leftTripleFusionIndex_eq_of_lengthIndependent_of_selectorWords
+    (c : BNTLabelCoefficientFamily Λ)
+    (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
+    (hLI : c.LengthIndependent) {S : ℕ} (hS : 0 < S)
+    (hSel : Fam.HasFinalLabelSelectorWords S) (α β γ : Λ) :
+    Fintype.card (Fam.LeftTripleFusionIndex α β γ) =
+      Fintype.card (Fin (Fam.bondDim α * Fam.bondDim β * Fam.bondDim γ)) := by
+  have hpair (a b : Λ) :
+      ∑ δ, Fam.chi.dim a b δ * Fam.bondDim δ = Fam.bondDim a * Fam.bondDim b := by
+    simpa only [Fintype.card_sigma, Fintype.card_prod, Fintype.card_fin] using
+      Fam.card_fusionIndex_eq_of_lengthIndependent_of_selectorWords
+        c hχ hLI hS hSel a b
+  simp only [LeftTripleFusionIndex, Fintype.card_sigma, Fintype.card_prod,
+    Fintype.card_fin]
+  calc
+    ∑ δ, ∑ ε, Fam.chi.dim α β δ *
+        (Fam.chi.dim δ γ ε * Fam.bondDim ε) =
+        ∑ δ, Fam.chi.dim α β δ *
+          (∑ ε, Fam.chi.dim δ γ ε * Fam.bondDim ε) := by
+      apply Finset.sum_congr rfl
+      intro δ _
+      rw [Finset.mul_sum]
+    _ = ∑ δ, Fam.chi.dim α β δ * (Fam.bondDim δ * Fam.bondDim γ) := by
+      simp_rw [hpair]
+    _ = (∑ δ, Fam.chi.dim α β δ * Fam.bondDim δ) * Fam.bondDim γ := by
+      rw [Finset.sum_mul]
+      apply Finset.sum_congr rfl
+      intro δ _
+      simp [Nat.mul_assoc]
+    _ = Fam.bondDim α * Fam.bondDim β * Fam.bondDim γ := by rw [hpair]
+
+private theorem card_rightTripleFusionIndex_eq_of_lengthIndependent_of_selectorWords
+    (c : BNTLabelCoefficientFamily Λ)
+    (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
+    (hLI : c.LengthIndependent) {S : ℕ} (hS : 0 < S)
+    (hSel : Fam.HasFinalLabelSelectorWords S) (α β γ : Λ) :
+    Fintype.card (Fam.RightTripleFusionIndex α β γ) =
+      Fintype.card (Fin (Fam.bondDim α * (Fam.bondDim β * Fam.bondDim γ))) := by
+  have hpair (a b : Λ) :
+      ∑ δ, Fam.chi.dim a b δ * Fam.bondDim δ = Fam.bondDim a * Fam.bondDim b := by
+    simpa only [Fintype.card_sigma, Fintype.card_prod, Fintype.card_fin] using
+      Fam.card_fusionIndex_eq_of_lengthIndependent_of_selectorWords
+        c hχ hLI hS hSel a b
+  simp only [RightTripleFusionIndex, Fintype.card_sigma, Fintype.card_prod,
+    Fintype.card_fin]
+  calc
+    ∑ δ, ∑ ε, Fam.chi.dim β γ δ *
+        (Fam.chi.dim α δ ε * Fam.bondDim ε) =
+        ∑ δ, Fam.chi.dim β γ δ *
+          (∑ ε, Fam.chi.dim α δ ε * Fam.bondDim ε) := by
+      apply Finset.sum_congr rfl
+      intro δ _
+      rw [Finset.mul_sum]
+    _ = ∑ δ, Fam.chi.dim β γ δ * (Fam.bondDim α * Fam.bondDim δ) := by
+      simp_rw [hpair]
+    _ = Fam.bondDim α *
+        (∑ δ, Fam.chi.dim β γ δ * Fam.bondDim δ) := by
+      rw [Finset.mul_sum]
+      apply Finset.sum_congr rfl
+      intro δ _
+      simp [Nat.mul_assoc, Nat.mul_comm]
+    _ = Fam.bondDim α * (Fam.bondDim β * Fam.bondDim γ) := by rw [hpair]
+
+/-- **Positive-length final-label selectors make the left iterated fusion map surjective.**
+
+The pair fusion maps are surjective by the selector argument above. Their source and target
+dimensions therefore agree, and the same cardinal calculation for the two fusion stages shows
+that the left iterated fusion isometry is square. Its isometry identity then gives the stated
+range identity.
+
+Source: arXiv:1606.00608, lines 995--1010; arXiv:1511.08090, lines 181--191,
+247--252, and 269. -/
+theorem leftFusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords
+    (c : BNTLabelCoefficientFamily Λ)
+    (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
+    (hLI : c.LengthIndependent) {S : ℕ} (hS : 0 < S)
+    (hSel : Fam.HasFinalLabelSelectorWords S) (α β γ : Λ) :
+    Fam.leftFusionIsometry α β γ * (Fam.leftFusionIsometry α β γ)ᴴ = 1 := by
+  exact mul_conjTranspose_eq_one_of_conjTranspose_mul_eq_one_of_card_eq
+    (Fam.leftFusionIsometry α β γ)
+    (Fam.card_leftTripleFusionIndex_eq_of_lengthIndependent_of_selectorWords
+      c hχ hLI hS hSel α β γ)
+    (Fam.leftFusionIsometry_isometry α β γ)
+
+/-- **Positive-length final-label selectors make the right iterated fusion map surjective.**
+
+This is the right-associated counterpart of
+`leftFusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords`.
+
+Source: arXiv:1606.00608, lines 995--1010; arXiv:1511.08090, lines 181--191,
+247--252, and 269. -/
+theorem rightFusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords
+    (c : BNTLabelCoefficientFamily Λ)
+    (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
+    (hLI : c.LengthIndependent) {S : ℕ} (hS : 0 < S)
+    (hSel : Fam.HasFinalLabelSelectorWords S) (α β γ : Λ) :
+    Fam.rightFusionIsometry α β γ * (Fam.rightFusionIsometry α β γ)ᴴ = 1 := by
+  exact mul_conjTranspose_eq_one_of_conjTranspose_mul_eq_one_of_card_eq
+    (Fam.rightFusionIsometry α β γ)
+    (Fam.card_rightTripleFusionIndex_eq_of_lengthIndependent_of_selectorWords
+      c hχ hLI hS hSel α β γ)
+    (Fam.rightFusionIsometry_isometry α β γ)
+
+/-- **The full triple-fusion comparison has a right adjoint inverse under positive-length
+final-label separation.**
+
+The comparison times its adjoint is the left iterated fusion range projection, which is the
+identity by selector completeness. This is a full-direct-sum statement; no fixed-final
+$F$-matrix is asserted.
+
+Source: arXiv:1606.00608, lines 995--1010; arXiv:1511.08090, lines 181--191,
+247--252, and 269. -/
+theorem tripleFusionComparison_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords
+    (c : BNTLabelCoefficientFamily Λ)
+    (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
+    (hLI : c.LengthIndependent) {S : ℕ} (hS : 0 < S)
+    (hSel : Fam.HasFinalLabelSelectorWords S) (α β γ : Λ) :
+    Fam.tripleFusionComparison α β γ * (Fam.tripleFusionComparison α β γ)ᴴ = 1 := by
+  rw [Fam.tripleFusionComparison_mul_conjTranspose,
+    Fam.leftFusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords
+      c hχ hLI hS hSel]
+
+/-- **The adjoint of the full triple-fusion comparison is also a left inverse under
+positive-length final-label separation.**
+
+This is the opposite product of
+`tripleFusionComparison_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords`.
+It proves two-sided invertibility only on the full direct sums; extracting an invertible
+fixed-final multiplicity matrix remains a separate step.
+
+Source: arXiv:1606.00608, lines 995--1010; arXiv:1511.08090, lines 181--191,
+247--252, and 269. -/
+theorem conjTranspose_mul_tripleFusionComparison_eq_one_of_lengthIndependent_of_selectorWords
+    (c : BNTLabelCoefficientFamily Λ)
+    (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
+    (hLI : c.LengthIndependent) {S : ℕ} (hS : 0 < S)
+    (hSel : Fam.HasFinalLabelSelectorWords S) (α β γ : Λ) :
+    (Fam.tripleFusionComparison α β γ)ᴴ * Fam.tripleFusionComparison α β γ = 1 := by
+  rw [Fam.conjTranspose_mul_tripleFusionComparison,
+    Fam.rightFusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords
+      c hχ hLI hS hSel]
 
 private theorem rectangularIntertwiner_eq_zero_of_selectorWords
     {d D₁ D₂ S : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
