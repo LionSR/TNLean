@@ -1959,6 +1959,26 @@ strong subadditivity for a normalized three-site reduced state.
     realizes every finite-chain operator with normalization scalar $1$.
 \end{proof}
 
+\begin{corollary}[$\eta$-local structure from SAL]%
+    \label{cor:mpdo_eta_local_structure_of_is_sal}
+    \lean{MPOTensor.nonempty_etaLocalStructureData_of_isSAL}
+    \leanok
+    \uses{thm:mpdo_eta_local_structure_of_positive_physical_sector_factorization,
+      thm:mpdo_eta_coherent_positive_choice}
+    Every injective MPO tensor satisfying SAL admits an $\eta$-local
+    structure.  Thus there is a single positive two-site bond whose cyclic
+    translates commute pairwise and whose ordered product is the finite-chain
+    density operator at every length $N\geq2$, with normalization scalar one.
+    This is the conclusion of Proposition~C.8.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    Theorem~\ref{thm:mpdo_eta_coherent_positive_choice} supplies the positive
+    physical-sector factorization. Apply
+    Theorem~\ref{thm:mpdo_eta_local_structure_of_positive_physical_sector_factorization}.
+\end{proof}
+
 \subsection{Closed-sector contractions and coherent rephasing}
 
 \begin{definition}[Closed sector tensors]%
@@ -2614,13 +2634,8 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{Matrix.submodule_sup_ne_top_of_mul_eq_zero}
     \leanok
     Let $\mathcal A_1,\mathcal A_2\subseteq\MN{D}$ be nonzero linear
-    subspaces. If
-    \[
-        XY=0
-        \qquad
-        (X\in\mathcal A_1,\;Y\in\mathcal A_2),
-    \]
-    then
+    subspaces. If $XY=0$ for every $X\in\mathcal A_1$ and
+    $Y\in\mathcal A_2$, then
     \[
         \mathcal A_1+\mathcal A_2\ne\MN{D}.
     \]
@@ -2655,6 +2670,71 @@ strong subadditivity for a normalized three-site reduced state.
     when every such edge belongs to a directed cycle, equivalently when $h$
     can reach $k$ whenever $k\to h$ is an edge.
 \end{definition}
+
+\begin{theorem}[Sector spanning from injectivity]%
+    \label{thm:mpdo_sector_virtual_matrix_spanning}
+    \lean{MPOTensor.PhysicalSectorFactorization.changePhysicalBasis_inverse_apply_eq_sum}
+    \lean{MPOTensor.PhysicalSectorFactorization.sectorCoordinateMatrixFamily}
+    \lean{MPOTensor.PhysicalSectorFactorization.sectorCoordinateMatrixFamily_span_eq_top}
+    \lean{MPOTensor.PhysicalSectorFactorization.sectorCoordinateTensor_mem_span_sectorVirtualMatrixFamily}
+    \lean{MPOTensor.PhysicalSectorFactorization.sectorVirtualMatrixFamily_span_eq_top}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization}
+    Let ${\cal K}$ be injective and let
+    \[
+      U\kappa_{\beta,\alpha}U^\dagger
+      =\bigoplus_k(l_k)_\beta\otimes(r_k)_\alpha
+    \]
+    be a physical-sector factorization. Then the virtual matrices
+    $A_{k;x,y}$ obtained from all within-sector physical entries span the full
+    virtual matrix algebra $\MN{D}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Since $U$ is unitary, every original physical matrix of ${\cal K}$ is a
+    linear combination of the matrices in the transformed physical
+    coordinates. The off-diagonal sector entries in those coordinates vanish,
+    while each diagonal sector entry is one of the matrices $A_{k;x,y}$.
+    Injectivity says that the original physical matrices span $\MN{D}$, and
+    the conclusion follows.
+\end{proof}
+
+\begin{theorem}[Triangle closure from sector spanning]%
+    \label{thm:mpdo_sector_support_triangle_closure}
+    \lean{MPOTensor.PhysicalSectorFactorization.sectorVirtualMatrix}
+    \lean{MPOTensor.PhysicalSectorFactorization.sectorVirtualMatrix_mul_apply}
+    \lean{MPOTensor.PhysicalSectorFactorization.exists_two_edge_return_of_neighboringOperator_ne_zero}
+    \lean{MPOTensor.PhysicalSectorFactorization.neighboringOperator_reaches_of_ne_zero}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization,
+        def:mpdo_minimal_neighboring_operator,
+        thm:trace_nondeg}
+    For a physical-sector factorization, let $A_{k;x,y}\in\MN{D}$ be the
+    virtual matrix obtained from the physical matrix entry $(x,y)$ within
+    sector $k$. Suppose that all such matrices span $\MN{D}$ and that both
+    endpoint sectors of every nonzero neighboring operator contain a nonzero
+    matrix of this form. Then every nonzero $\eta_{k,h}$ admits a two-edge
+    return: there is a sector $j$ for which
+    \[
+        \eta_{h,j}\ne0,
+        \qquad
+        \eta_{j,k}\ne0.
+    \]
+    In particular, the nonzero neighboring support is recurrent.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:trace_nondeg}
+    A nonzero entry of $\eta_{k,h}$, together with nonzero sector matrices at
+    $k$ and $h$, gives matrices $A$ from sector $k$ and $B$ from sector $h$
+    with $AB\ne0$. By nondegeneracy of the trace pairing, choose $Y$ with
+    $\tr(ABY)\ne0$. Expanding $Y$ in the spanning family, some sector matrix
+    $C$ from a sector $j$ satisfies $\tr(ABC)\ne0$. Cyclicity of the trace
+    gives $BC\ne0$ and $CA\ne0$. The sector multiplication identity then
+    forces $\eta_{h,j}\ne0$ and $\eta_{j,k}\ne0$.
+\end{proof}
 
 \begin{lemma}[Equivalent forms of sector reachability]%
     \label{lem:mpdo_eta_reachability_equivalence}
@@ -2964,8 +3044,10 @@ strong subadditivity for a normalized three-site reduced state.
 
     This is a scope-restricted result. Recurrence is not a hypothesis of
     Lemma~C.4 in
-    \cite[Appendix~C.2, lines~1406--1450]{Cirac2016MPDO_arXiv}; its derivation
-    from the source hypotheses remains open.
+    \cite[Appendix~C.2, lines~1406--1450]{Cirac2016MPDO_arXiv}. Its derivation
+    for the zero-weight reparameterized inverse-map factorization is treated in
+    Theorem~\ref{thm:mpdo_eta_coherent_positive_choice} and recorded in
+    \path{docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex}.
 \end{theorem}
 % The recurrence gap is documented in
 % docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex.
@@ -2996,39 +3078,54 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{theorem}[Coherent positive choice of the neighboring operators]%
     \label{thm:mpdo_eta_coherent_positive_choice}
-    \notready
-    \uses{def:mpdo, def:injective, def:normal, def:is_sal,
-        def:mpdo_sector_eta, thm:mpdo_exists_sector_factorization}
-    Let ${\cal K}$ be an injective normal tensor that generates MPDOs and
-    satisfies SAL. The sector tensors in the factorization of
-    Theorem~\ref{thm:mpdo_exists_sector_factorization} can be chosen so
-    that every neighboring operator
+    \lean{MPOTensor.conjugated_middle_threeSiteClosure}
+    \lean{MPOTensor.exists_active_sectorVirtualMatrix_ne_zero}
+    \lean{MPOTensor.zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_isRecurrentSupport}
+    \lean{MPOTensor.exists_positive_inverseMapPhysicalSectorFactorization}
+    \lean{MPOTensor.exists_positive_physicalSectorFactorization_of_isSAL}
+    \leanok
+    \uses{def:mpdo, def:injective, def:is_sal,
+        def:mpdo_sector_eta,
+        def:mpdo_zero_weight_reparameterized_inverse_map_factorization,
+        thm:mpdo_zero_weight_reparameterized_neighboring_operator,
+        thm:mpdo_sector_virtual_matrix_spanning,
+        thm:mpdo_sector_support_triangle_closure,
+        thm:mpdo_eta_coherent_positive_choice_recurrent}
+    Let ${\cal K}$ be an injective MPO tensor satisfying SAL. Then it admits
+    a physical-sector factorization for which every neighboring operator
     \[
         \eta_{k,h}=r_k l_h
     \]
-    is positive semidefinite, while the all-length cyclic sector
-    decomposition remains unchanged.
+    is positive semidefinite. Zero-weight Hayashi sectors remain in the
+    physical direct sum, but their right tensors may be set to zero without
+    changing the physical slices.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{def:mpdo_eta_recurrent_support,
         thm:mpdo_cyclic_eta_posSemidef,
         thm:mpdo_eta_cycle_positive_rescaling,
-        thm:mpdo_sector_adapted_decomposition,
+        def:mpdo_zero_weight_reparameterized_inverse_map_factorization,
+        thm:mpdo_zero_weight_reparameterized_neighboring_operator,
+        thm:mpdo_sector_virtual_matrix_spanning,
+        thm:mpdo_sector_support_triangle_closure,
         thm:positive_rescaling_phase_unique,
         thm:directed_cycle_coboundary,
         thm:mpdo_eta_coherent_positive_choice_recurrent}
-    The projected chain identity makes every cyclic Kronecker product of the
-    neighboring operators positive semidefinite.
-    Theorem~\ref{thm:mpdo_eta_coherent_positive_choice_recurrent} completes
-    the phase-uniqueness, trivial-holonomy, and vertex-rephasing argument once
-    recurrence is known. The remaining obligation is therefore to remove
-    zero-weight Hayashi summands and derive recurrence of the resulting
-    nonzero inverse-map support from the actual injective normal-tensor
-    hypotheses, without using the later primitivity conclusion. This is the
-    last missing part of the coherent-choice step asserted at
-    \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv}; it is not a
-    consequence of positivity of the cyclic products alone.
+    First set the right tensor to zero in every zero-weight sector. The left
+    tensor already vanishes there, so this does not alter the factorization
+    and removes every support edge incident to such a sector. Every remaining
+    endpoint has positive weight. If all virtual matrices in a positive-weight
+    sector vanished, then the corresponding middle-site block of the
+    three-site closure would vanish; this contradicts its Hayashi expression
+    as a nonzero weight times two trace-one sector states. Thus every endpoint
+    of a nonzero edge contains a nonzero virtual matrix. Injectivity supplies
+    spanning by all sector virtual matrices, and triangle closure gives
+    recurrence. The projected chain identity makes every cyclic Kronecker
+    product positive semidefinite. Apply
+    Theorem~\ref{thm:mpdo_eta_coherent_positive_choice_recurrent} to obtain the
+    coherent vertex rephasing.
 \end{proof}
 
 \begin{theorem}[Positivity choice with symmetric support]%
@@ -5147,48 +5244,68 @@ $\widehat{\cal K}$.
     \label{fig:mpdo_local_orthogonality}
 \end{figure}
 
-\begin{theorem}[Primitivity of the concrete sector trace matrix]%
+\begin{theorem}[Primitivity of the active sector trace matrix]%
     \label{thm:mpdo_sector_trace_matrix_primitive}
     \notready
-    \uses{def:mpdo, def:injective, def:normal, def:is_sal,
+    \uses{def:mpdo, def:injective, def:is_sal,
         def:mpdo_explicit_eta_of_sector_tensors,
         thm:mpdo_eta_coherent_positive_choice,
-        lem:mpdo_local_orthogonality_contraction,
         thm:mpdo_sector_eta_data_trace_matrix}
-    Let ${\cal K}$ be an injective normal tensor that generates MPDOs and
+    Let ${\cal K}$ be an injective tensor that generates MPDOs and
     satisfies SAL, and choose the positive neighboring operators of
-    Theorem~\ref{thm:mpdo_eta_coherent_positive_choice}. Then the nonnegative
+    Theorem~\ref{thm:mpdo_eta_coherent_positive_choice}. Restrict the sector
+    index to the positive-weight summands of the Hayashi decomposition. Then
+    the nonnegative
     matrix
     \[
         T_{k,h}=\tr(\eta_{k,h})
     \]
     is primitive.
+
+    \emph{Local fix (inactive sectors):} the physical direct sum retains
+    zero-weight summands, but the normalized factorization makes every
+    neighboring operator incident to such a summand zero. Hence the trace
+    matrix on the full ambient sector set has a zero row and column and cannot
+    be primitive. The primitive matrix asserted by the source is the
+    restriction to its effective, positive-weight sector set. This is recorded
+    in
+    \path{docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex}.
 \end{theorem}
 
 \begin{proof}
     \uses{def:mpdo_eta_recurrent_support,
         def:mpdo_zero_weight_reparameterized_inverse_map_factorization,
         thm:mpdo_zero_weight_reparameterized_neighboring_operator,
+        thm:mpdo_sector_virtual_matrix_spanning,
+        thm:mpdo_sector_support_triangle_closure,
         lem:mpdo_local_orthogonality_contraction,
         thm:mpdo_directed_cut_one_site_spaces,
         lem:matrix_one_sided_product_obstruction}
     First use the zero-weight reparameterization to make every zero-weight
-    sector isolated. Suppose that the retained support is not strongly
-    connected. The sectors reachable from a fixed retained sector then contain
-    a nonempty proper forward-closed set $S$; write $C$ for its complement.
-    There are no neighboring edges from $S$ to $C$.
+    sector isolated. The spanning theorem and the trace-pairing argument close
+    every nonzero edge through a third sector, so the active support is
+    recurrent.
+
+    Suppose that the active support is not strongly connected. The sectors
+    reachable from a fixed active sector then form a nonempty proper
+    forward-closed set $S$; write $C$ for its complement. There are no
+    neighboring edges from $S$ to $C$.
 
     Let ${\cal A}_S$ and ${\cal A}_C$ be the one-site matrix spaces belonging
-    to the two classes. The directed-cut theorem gives
-    ${\cal A}_S{\cal A}_C=0$. The source argument still requires two bridges:
-    both spaces are nonzero, and injectivity in the physical sector coordinates
-    gives ${\cal A}_S+{\cal A}_C=\MN{D}$. Once these are established,
+    to the two classes. Positive sector weights make both spaces nonzero.
+    Injectivity in physical sector coordinates gives
+    ${\cal A}_S+{\cal A}_C=\MN{D}$, while the directed-cut theorem gives
+    ${\cal A}_S{\cal A}_C=0$. Hence
     Lemma~\ref{lem:matrix_one_sided_product_obstruction} gives the desired
     contradiction. No vanishing in the reverse order is needed. This is the
     directed-cut argument at
-    \cite[Appendix~C.2, lines~1452--1470]{Cirac2016MPDO_arXiv}; formalizing the
-    two bridges, and then the passage from the resulting recurrent positive
-    support to primitivity of $T$, remains open.
+    \cite[Appendix~C.2, lines~1452--1470]{Cirac2016MPDO_arXiv}.
+
+    Finally, nondegeneracy and cyclicity of the trace pairing give a closed
+    support walk of length two through every active sector. Triangle closure
+    gives one of length three. Strong connectivity together with these two
+    coprime return lengths yields a common length at which every entry of the
+    active trace-matrix power is positive. Thus $T$ is primitive.
 \end{proof}
 
 \begin{theorem}[Positivity of bipartite partial traces]

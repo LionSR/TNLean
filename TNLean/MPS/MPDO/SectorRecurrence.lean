@@ -35,8 +35,11 @@ The recurrence declarations and the phase-uniqueness theorem
 `Matrix.exists_pos_real_smul_eq_of_smul_posSemidef` prepare the coherent
 rephasing argument in `TNLean.MPS.MPDO.RecurrentSectorRephasing`. That later
 module combines the choices from different cycles under the recurrence
-hypothesis. No proved theorem derives recurrence from injectivity. In
-particular, the fixed-cycle theorem below does not use recurrence.
+hypothesis. For the inverse-map physical-sector factorization, recurrence after
+zero-weight reparameterization is derived from injectivity in
+`TNLean.MPS.MPDO.InverseMapActiveSectorRecurrence`. The fixed-cycle theorem
+below applies to a general neighboring-operator family and does not use
+recurrence.
 
 ## Main declarations
 
@@ -60,12 +63,14 @@ particular, the fixed-cycle theorem below does not use recurrence.
 - `MPOTensor.exists_pi_smul_posSemidef_of_sectorEta_cycle`: the preceding
   fixed-cycle result for the concrete inverse-map neighboring operators.
 
-## What remains
+## Scope
 
-Deriving `IsRecurrentSupport` unconditionally from injectivity of `𝒦` remains
-open and is recorded in the paper-gap note. Conditional on recurrence,
-`TNLean.MPS.MPDO.RecurrentSectorRephasing` propagates the per-cycle choices
-into a single vertex-indexed rephasing.
+For a general neighboring-operator family, recurrence remains a hypothesis.
+Conditional on it, `TNLean.MPS.MPDO.RecurrentSectorRephasing` propagates the
+per-cycle choices into a single vertex-indexed rephasing. The concrete
+inverse-map family arising from an injective tensor satisfies recurrence after
+zero-weight reparameterization, as proved in
+`TNLean.MPS.MPDO.InverseMapActiveSectorRecurrence`.
 
 ## References
 
