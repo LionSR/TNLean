@@ -28,9 +28,11 @@ The source then writes the corresponding basic vectors as
   |\varphi_j\rangle=\sum_m\lambda_m|m,m\rangle,
 \]
 where \(\varphi_j\) is shared by \(b_n\) and \(a_{n+1}\), and \(U\) acts on
-\((a_n,b_n)\). The remaining parent-Hamiltonian step is to pass from this
-basic-vector form to commutativity of the translated two-site terms
-\(h_i=\tau_i(P_2^\perp)\).
+\((a_n,b_n)\). The parent-Hamiltonian step passes from this basic-vector form
+to commutativity of the translated two-site terms
+\(h_i=\tau_i(P_2^\perp)\). It is completed in
+`TNLean.MPS.RFP.AppendixBCommutation` and
+`TNLean.MPS.RFP.AppendixBChainCommutation`.
 
 The declarations below separate the following mathematical statements:
 
@@ -52,21 +54,20 @@ arXiv:1606.00608 supplies the parent-commuting condition for the \(Q_{AX}\) and
 \(\widehat Q_{XB}\) below are only the common two-site coefficient-space
 representative \(q_2(\Lambda U)\), identified with \(q_2(A)\) after the
 Appendix B core-tensor comparison, before it is placed on the \(AX\) and \(XB\)
-faces. They do not by themselves construct the source projectors on
+faces. The declarations in this file do not by themselves construct the source
+projectors on
 \(\mathcal H_A\otimes\mathcal H_X\) and
 \(\mathcal H_X\otimes\mathcal H_B\), nor do they prove the lifted commutator.
 The tensor-power and physical support constructions are provided in
-`TNLean.MPS.RFP.AppendixBSupport`. The remaining step is to construct the
-orthogonal projector onto the virtual bond subspace \(\mathbb C\varphi_j\), place
-two copies on a three-site virtual chain, transport them through
-\(U^{\otimes3}\), and pass from the spectator range projector \(UU^*\) to the
-full physical identity.  This last passage must use the containment of the
-two-site support in \(\operatorname{ran}(U)^{\otimes2}\).  The complements of
-the resulting physical support projectors can then be identified with the two
-coefficient representatives.  For this reason commutativity of the translated
-idempotents is kept as an explicit hypothesis. The remaining commutator step is
-recorded in
-`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
+`TNLean.MPS.RFP.AppendixBSupport`. The orthogonal virtual bond projector, its
+two three-site placements, their transport through \(U^{\otimes3}\), and the
+passage from the spectator range projector \(UU^*\) to the full physical
+identity are proved in `TNLean.MPS.RFP.AppendixBCommutation`. Their complements
+give the local commutator, which is transported around every periodic chain with
+\(N>2\) in `TNLean.MPS.RFP.AppendixBChainCommutation`.
+Accordingly, the conditional structures below continue to take the translated
+idempotents as hypotheses; the unconditional commutator is proved separately in
+`TNLean.MPS.RFP.AppendixBChainCommutation`.
 -/
 
 open scoped Matrix BigOperators
@@ -189,29 +190,29 @@ noncomputable def HasProductPairLocalProjectors.of_commuting_localTerms
 
 /-- Conditional hypotheses for a tensor whose positive even-chain coefficients
 factor through one repeated two-site amplitude and whose nearest-neighbor parent
-terms are commuting idempotents on every finite chain of length at least two. -/
+terms are commuting idempotents on every finite chain of length greater than two. -/
 structure ProductPairBridge (A : MPSTensor d D) where
   pairAmplitude : NSiteSpace d 2
   hmpv : ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
     mpv A σ = productPairState pairAmplitude N σ
-  localProjectors : ∀ N, 2 ≤ N → HasProductPairLocalProjectors A N
+  localProjectors : ∀ N, 2 < N → HasProductPairLocalProjectors A N
 
 /-- The conditional physical-pair hypotheses yield the unfolded `IsNNCPH`
 conclusion: all two-site local terms commute on every finite chain of length at
-least two.
+least three.
 
 The statement is written as the commutation equation for the translated
 two-site parent terms, which is the nearest-neighbor commutation condition in
 arXiv:1606.00608, Definition 3.9. -/
 theorem ProductPairBridge.commuting_twoSite_localTerms
-    {A : MPSTensor d D} (hBridge : ProductPairBridge A) (N : ℕ) (hN : 2 ≤ N) :
+    {A : MPSTensor d D} (hBridge : ProductPairBridge A) (N : ℕ) (hN : 2 < N) :
     ∀ i j : Fin N,
       localTerm A 2 N i * localTerm A 2 N j =
         localTerm A 2 N j * localTerm A 2 N i :=
   (hBridge.localProjectors N hN).commuting_twoSite_localTerms
 
 theorem ProductPairBridge.localTerm_idempotent
-    {A : MPSTensor d D} (hBridge : ProductPairBridge A) (N : ℕ) (hN : 2 ≤ N)
+    {A : MPSTensor d D} (hBridge : ProductPairBridge A) (N : ℕ) (hN : 2 < N)
     (i : Fin N) :
     localTerm A 2 N i * localTerm A 2 N i = localTerm A 2 N i :=
   (hBridge.localProjectors N hN).localTerm_idempotent i
@@ -790,24 +791,22 @@ theorem AppendixBStructuralData.mpv_eq_productPairState_one {A : MPSTensor d D}
     mpv A σ = productPairState hStruct.twoSiteAmplitude 1 σ := by
   rw [productPairState_one, hStruct.twoSiteAmplitude_eq_mpv]
 
-/-- The remaining even-chain physical-pair factorization needed after the source
+/-- The even-chain physical-pair factorization considered after the source
 basic-vector expression.
 
-For a fixed structural form, this captures the two facts that are still not
-produced by the Appendix B structural datum: the coefficient formula for
-\(U^{\otimes N}\varphi_j^{\otimes N}\) must be related to the repeated
-physical-pair two-site amplitude stated here, and the translated length-two
-parent terms on each finite chain must be shown to commute.  The latter step is
-the source \(Q_{AX},Q_{XB}\) projector construction and lifted-commutator
-argument, not a consequence of the coefficient representatives alone. -/
+For a fixed structural form, this captures the proposed identification of
+\(U^{\otimes N}\varphi_j^{\otimes N}\) with the repeated physical-pair
+two-site amplitude stated here. It also records the translated
+length-two local projectors explicitly; the Appendix B commutation results provide
+those projectors without using the physical-pair factorization. -/
 structure AppendixBProductPairExtraction {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) where
   /-- Positive even-chain factorization through the structural two-site amplitude. -/
   hmpv : ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
     mpv A σ = productPairState hStruct.twoSiteAmplitude N σ
   /-- Local projectors realizing the nearest-neighbor parent terms for chains
-  of length at least two. -/
-  localProjectors : ∀ N, 2 ≤ N → HasProductPairLocalProjectors A N
+  of length greater than two. -/
+  localProjectors : ∀ N, 2 < N → HasProductPairLocalProjectors A N
 
 /-- Construct the coefficient part of the conditional structure from the
 Appendix B core tensor.
@@ -818,7 +817,7 @@ noncomputable def AppendixBProductPairExtraction.ofCoreTensorFactorization
     {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}
     (hCore : ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
       mpv hStruct.coreTensor σ = productPairState hStruct.twoSiteAmplitude N σ)
-    (hProj : ∀ N, 2 ≤ N → HasProductPairLocalProjectors A N) :
+    (hProj : ∀ N, 2 < N → HasProductPairLocalProjectors A N) :
     AppendixBProductPairExtraction hStruct where
   hmpv := by
     intro N hN σ
@@ -827,7 +826,7 @@ noncomputable def AppendixBProductPairExtraction.ofCoreTensorFactorization
   localProjectors := hProj
 
 /-- Construct the conditional Appendix B extraction from the coefficient
-factorization and the \(N \ge 2\) commutation equations for the translated
+factorization and the \(N > 2\) commutation equations for the translated
 length-two parent terms.
 
 The idempotency of the local terms is supplied by `localTerm_idempotent`; the
@@ -836,7 +835,7 @@ noncomputable def AppendixBProductPairExtraction.ofCoreTensorFactorizationAndCom
     {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}
     (hCore : ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
       mpv hStruct.coreTensor σ = productPairState hStruct.twoSiteAmplitude N σ)
-    (hComm : ∀ N, 2 ≤ N → ∀ i j : Fin N,
+    (hComm : ∀ N, 2 < N → ∀ i j : Fin N,
       localTerm A 2 N i * localTerm A 2 N j =
         localTerm A 2 N j * localTerm A 2 N i) :
     AppendixBProductPairExtraction hStruct :=
@@ -854,10 +853,10 @@ noncomputable def AppendixBProductPairExtraction.toProductPairBridge
   localProjectors := hExtract.localProjectors
 
 /-- The conditional Appendix B hypotheses give the unfolded nearest-neighbor
-commutation statement on every finite chain of length at least two. -/
+commutation statement on every finite chain of length greater than two. -/
 theorem AppendixBProductPairExtraction.commuting_twoSite_localTerms
     {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}
-    (hExtract : AppendixBProductPairExtraction hStruct) (N : ℕ) (hN : 2 ≤ N) :
+    (hExtract : AppendixBProductPairExtraction hStruct) (N : ℕ) (hN : 2 < N) :
     ∀ i j : Fin N,
       localTerm A 2 N i * localTerm A 2 N j =
         localTerm A 2 N j * localTerm A 2 N i :=
@@ -870,17 +869,17 @@ commutation equation as soon as the even-chain physical-pair coefficient conditi
 and the translated two-site commutation identities are supplied for the
 resulting structural form.
 
-This theorem deliberately stops short of claiming the full Beigi-independent
-`rfp_implies_nncph`: the missing hypothesis is exactly
-`AppendixBProductPairExtraction` for the structural form produced by
-`AppendixBStructuralData.ofRFP`. -/
+The direct chain-transport theorem `rfp_implies_nncph_of_leftCanonical` in
+`TNLean.MPS.RFP.AppendixBChainCommutation` removes the extraction hypothesis
+for the commutation conclusion; the extraction remains relevant only to the
+separate physical-pair coefficient factorization. -/
 theorem commuting_twoSite_localTerms_of_rfp_of_appendixBExtraction
     (A : MPSTensor d D) [NeZero D]
     (hNT : IsNormal A) (hRFP : IsRFP A)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hExtract : AppendixBProductPairExtraction
       (AppendixBStructuralData.ofRFP A hNT hRFP hLeft))
-    (N : ℕ) (hN : 2 ≤ N) :
+    (N : ℕ) (hN : 2 < N) :
     ∀ i j : Fin N,
       localTerm A 2 N i * localTerm A 2 N j =
         localTerm A 2 N j * localTerm A 2 N i :=

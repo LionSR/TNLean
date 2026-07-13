@@ -924,16 +924,19 @@ the specialization $L=2$.
     \leanok
     \uses{def:is_rfp, def:is_nncph, def:normal}
     If $A$ has nonzero virtual dimension and is a normal renormalization fixed
-    point, then for every chain length $N \ge 2$ the two-site local terms
+    point, then for every chain length $N > 2$ the two-site local terms
     commute. This theorem records the commutation part of the nearest-neighbor
     source condition, not the ground-space spanning part.
     This implication is cited here from the structural characterization theorem
     for renormalization fixed points in~\cite{Cirac2016MPDO_arXiv}; the source
     proof says that RFP $\Rightarrow$ NNCPH follows from that theorem.
-    At present this implication remains an unproved hypothesis. The source
-    derivation from the basic-vector formula
-    $V^{(N)}(A_j)=U^{\otimes N}\varphi_j^{\otimes N}$ and the corresponding
-    two-site projectors remains to be proved.
+    The unrestricted statement remains an unproved hypothesis.  In the
+    left-canonical gauge, the derivation from the basic-vector formula
+    $V^{(N)}(A_j)=U^{\otimes N}\varphi_j^{\otimes N}$ is proved below: the
+    corresponding two-site projectors commute on a three-site window, and the
+    commutator is transported to every periodic chain with $N>2$.  What remains
+    is removal of the additional gauge hypothesis and the separate
+    ground-space spanning equation.
 \end{theorem}
 
 \begin{theorem}[Renormalization fixed points satisfy the NNCPH commutation and zero-energy equations]%
@@ -943,7 +946,7 @@ the specialization $L=2$.
     \leanok
     \uses{thm:rfp_implies_nncph, def:is_nncph_ground_state}
     If $A$ has nonzero virtual dimension and is a normal renormalization fixed
-    point, then for every chain length $N \ge 2$ the MPS vector $V^{(N)}(A)$
+    point, then for every chain length $N > 2$ the MPS vector $V^{(N)}(A)$
     satisfies the commutation and zero-energy equations for nearest-neighbor
     local terms:
     \[
@@ -1473,6 +1476,112 @@ the specialization $L=2$.
     of $P_2$ commute, their complementary lifts commute as well.
 \end{proof}
 
+\begin{theorem}[Transport of the three-site commutator]
+    \label{thm:three_site_commutator_chain_transport}
+    \lean{MPSTensor.cyclicRestrictₗ_three_localTerm_left}
+    \lean{MPSTensor.cyclicRestrictₗ_three_localTerm_right}
+    \lean{MPSTensor.localTerm_adjacent_twoSite_commute_of_threeSite_zero_one_commute}
+    \leanok
+    \uses{def:local_term_parent}
+    Suppose the first two length-two parent interactions commute on the
+    three-site chain:
+    \[
+        h_0^{(3)}h_1^{(3)}=h_1^{(3)}h_0^{(3)}.
+    \]
+    Then, for every $N>2$ and every $i\in\mathbb Z/N\mathbb Z$, the two
+    adjacent translates commute:
+    \[
+        h_i^{(N)}h_{i+1}^{(N)}=h_{i+1}^{(N)}h_i^{(N)}.
+    \]
+    For each exterior configuration $\tau$, let $R_{i,\tau}^{(3)}$ restrict to
+    the cyclic three-site window beginning at $i$.  It intertwines the two
+    $N$-site terms with the two three-site terms:
+    \[
+        R_{i,\tau}^{(3)}h_i^{(N)}=h_0^{(3)}R_{i,\tau}^{(3)},\qquad
+        R_{i,\tau}^{(3)}h_{i+1}^{(N)}=h_1^{(3)}R_{i,\tau}^{(3)}.
+    \]
+    Diagrammatically, the same local $A\!X\!B$ calculation is placed at every
+    cyclic translate:
+    \[
+        \TNAppendixBChainTransport
+    \]
+    The hypothesis $N>2$ is essential to this transport: at $N=2$ the two
+    cyclic windows contain the same sites in opposite orders.  This case
+    is not part of \cite[Theorem~3.10]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:local_term_parent}
+    Restrict an $N$-site vector to the cyclic window $(i,i+1,i+2)$ while
+    holding all other physical indices fixed.  Window extraction and
+    replacement identify the two restricted local terms with
+    $h_0^{(3)}$ and $h_1^{(3)}$.  Apply the three-site commutator to the
+    restricted vector and then evaluate at the original three-site
+    configuration.  Replacing a window by the values extracted from that
+    configuration recovers the original $N$-site configuration.
+\end{proof}
+
+\begin{theorem}[Appendix B adjacent commutation on periodic chains]
+    \label{thm:appendixB_adjacent_chain_commutation}
+    \lean{MPSTensor.AppendixBStructuralData.adjacent_twoSite_localTerms_commute}
+    \leanok
+    \uses{thm:appendixB_overlapping_two_site_commutation,
+        thm:three_site_commutator_chain_transport}
+    For every Appendix~B structural datum and every periodic chain of length
+    $N>2$, the adjacent translated length-two parent interactions commute.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Theorem~\ref{thm:appendixB_overlapping_two_site_commutation} gives the
+    three-site commutator, and
+    Theorem~\ref{thm:three_site_commutator_chain_transport} places it at every
+    adjacent pair on the periodic chain.
+\end{proof}
+
+\begin{definition}[Appendix B local-projector family]
+    \label{def:appendixB_chain_local_projectors}
+    \lean{MPSTensor.AppendixBStructuralData.hasProductPairLocalProjectors}
+    \leanok
+    \uses{thm:appendixB_adjacent_chain_commutation,
+        lem:nncph_from_adjacent_two_site_commutation}
+    For an Appendix~B structural datum and a periodic chain of length $N>2$,
+    set
+    \[
+        p_i=h_i^{(N)},\qquad i\in\mathbb Z/N\mathbb Z,
+    \]
+    where $h_i^{(N)}$ is the translated length-two parent interaction.  These
+    maps are idempotent and commute pairwise: adjacent commutation follows from
+    Theorem~\ref{thm:appendixB_adjacent_chain_commutation}, while disjoint
+    length-two interactions commute by locality.
+\end{definition}
+
+\begin{theorem}[Left-canonical RFP commutation and zero energy]
+    \label{thm:left_canonical_rfp_chain_commutation}
+    \lean{MPSTensor.AppendixBStructuralData.isNNCPH}
+    \lean{MPSTensor.rfp_implies_nncph_of_leftCanonical}
+    \lean{MPSTensor.rfp_implies_nncph_ground_state_of_leftCanonical}
+    \leanok
+    \uses{def:appendixB_chain_local_projectors}
+    A normal left-canonical renormalization fixed-point tensor of nonzero
+    virtual dimension has pairwise
+    commuting length-two parent interactions on every periodic chain of length
+    $N>2$, and its periodic matrix product vector is annihilated by every such
+    interaction.  The removal of the left-canonical hypothesis and the
+    ground-space spanning equation in
+    \cite[Definition~3.9]{Cirac2016MPDO_arXiv} remain separate.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The Appendix~B structural theorem supplies the datum used in
+    Definition~\ref{def:appendixB_chain_local_projectors}.  Its commuting
+    idempotents are precisely the translated parent interactions.  The
+    standard frustration-free identity shows that each interaction annihilates
+    the periodic matrix product vector.
+\end{proof}
+
 \begin{lemma}[Appendix B overlapping condition from the lifted commutator]
     \label{lem:appendixB_overlapping_condition_from_lift_commutator}
     \lean{MPSTensor.AppendixBStructuralData.hasOverlappingTwoSiteCommutation_of_commute_lifts}
@@ -1793,32 +1902,31 @@ the specialization $L=2$.
     the even-chain physical-pair factorization above.
     On a three-site chain, the two adjacent length-two local terms are the
     \(AX\) and \(XB\) actions of the canonical two-site parent interaction.
-    Appendix~B supplies the basic-vector expression, while Appendix~D.2 supplies
-    the parent-commuting condition for the source projectors. The
-    coefficient-representative identification above does not prove the
-    overlapping commutation relation
+    Theorem~\ref{thm:appendixB_overlapping_two_site_commutation} constructs the
+    adjacent physical support projectors from the basic-vector expression and
+    proves the overlapping relation
     \[
         (\widehat Q_{AX})_{AX}(\widehat Q_{XB})_{XB}
         =
         (\widehat Q_{XB})_{XB}(\widehat Q_{AX})_{AX}.
     \]
-    Nor does it construct the source projectors \(Q_{AX},Q_{XB}\) on the
-    two overlapping tensor factors, or their lifted actions on the tripartite
-    space. For the all-chain statement, the remaining local condition is the
-    following commutation equation: for every chain length $N\geq2$ and every
+    Theorem~\ref{thm:three_site_commutator_chain_transport} transports this
+    identity around a periodic chain.  Consequently, for every $N>2$ and every
     pair of sites $i,j\in\mathbb Z/N\mathbb Z$,
     \[
         h_i(A,2)h_j(A,2)=h_j(A,2)h_i(A,2).
     \]
-    The idempotency equation $h_i(A,2)^2=h_i(A,2)$ is already
-    Lemma~\ref{lem:local_term_idempotent}.
-    The overlapping commutation theorem and the justification of any passage
-    from the source coefficients to this even-chain factorization are the
-    remaining obligations before the conditional theorem can be applied; once
-    they are proved, the local terms commute. Together with
-    Lemma~\ref{lem:parent_hamiltonian_ff}, the same factorization also gives
-    the zero-energy equation for $V^{(N)}(A)$ when $N\geq2$, still without
-    asserting the source ground-space spanning condition.
+    Definition~\ref{def:appendixB_chain_local_projectors} collects these maps
+    into a commuting idempotent family; idempotency is
+    Lemma~\ref{lem:local_term_idempotent}.  Together with
+    Lemma~\ref{lem:parent_hamiltonian_ff}, this gives the zero-energy equation
+    for $V^{(N)}(A)$.  Neither conclusion requires the even-chain
+    physical-pair factorization displayed above.  That factorization remains a
+    separate conditional coefficient statement.  The full source implication
+    additionally requires removal of the left-canonical hypothesis and the
+    ground-space spanning equation.  The kernel-intersection characterization
+    of the projectors in \cite[Definition~D.2]{Cirac2016MPDO_arXiv} also
+    remains separate.
 \end{remark}
 
 \begin{theorem}[Even-chain factorization and ground-space spanning give all-chain NNCPH]%
