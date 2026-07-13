@@ -222,8 +222,7 @@ theorem physCloseN_three_eq_physClose3 (M : MPOTensor d D) :
         (_root_.finThreeArrowEquiv (Fin d))).toLinearMap ∘ₗ physCloseN M 3 =
       physClose3 M := by
   ext X i j
-  simp [Matrix.coe_reindexLinearEquiv, _root_.finThreeArrowEquiv,
-    Matrix.mul_assoc]
+  simp [Matrix.coe_reindexLinearEquiv, Matrix.mul_assoc]
 
 /-! ### MPDO renormalization fixed point (Definition 4.1) -/
 
