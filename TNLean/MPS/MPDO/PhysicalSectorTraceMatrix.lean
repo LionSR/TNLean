@@ -7,7 +7,6 @@ import Mathlib.LinearAlgebra.Matrix.Irreducible.Defs
 import TNLean.Algebra.HermitianHelpers
 import TNLean.Algebra.PerronFrobenius.PrimitiveAperiodic
 import TNLean.MPS.MPDO.PhysicalSectorDirectedCut
-import TNLean.MPS.MPDO.PhysicalSectorRephasing
 import TNLean.MPS.MPDO.PhysicalSectorVirtualSpanning
 
 /-!
