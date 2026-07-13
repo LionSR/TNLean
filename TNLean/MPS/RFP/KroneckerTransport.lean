@@ -7,9 +7,11 @@ import TNLean.MPS.RFP.CommutingBridge
 /-!
 # Three-site transport of commuting pair matrices
 
-This file contains the finite-dimensional matrix calculation which transports
-two commuting adjacent pair operators through a tensor cube of an isometry.
-It is independent of the particular virtual bond operator used in Appendix B.
+This file contains the finite-dimensional matrix calculation used in the
+Appendix B argument to transport two commuting adjacent pair operators through
+a tensor cube of an isometry.  The calculation does not depend on the
+particular virtual bond operator, but its exported names remain Appendix B
+specific because they support that argument.
 -/
 
 open scoped Matrix Kronecker
@@ -54,7 +56,7 @@ private noncomputable def tripleMatrix
 
 /-- Reindexing carries a product of three matrices to the product of their
 three compatible reindexings. -/
-private theorem reindex_three_mul
+theorem reindex_three_mul
     {m n o p m' n' o' p' : Type*}
     [Fintype n] [Fintype n'] [Fintype o] [Fintype o']
     (em : m ≃ m') (en : n ≃ n') (eo : o ≃ o') (ep : p ≃ p')

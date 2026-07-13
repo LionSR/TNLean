@@ -77,21 +77,6 @@ private theorem replaceXBCfg_eq_iff (sigma tau : Cfg d 3) (beta : Cfg d 2) :
     funext k
     fin_cases k <;> simp [replaceXBCfg, xbPairCfg, h]
 
-/-- Matrix lift of a two-site operator to the first two factors of a
-right-associated triple. -/
-private noncomputable def leftPairMatrix {n : Type*} [Fintype n] [DecidableEq n]
-    (B : Matrix (n × n) (n × n) ℂ) :
-    Matrix (n × (n × n)) (n × (n × n)) ℂ :=
-  Matrix.reindex (Equiv.prodAssoc n n n) (Equiv.prodAssoc n n n)
-    (B ⊗ₖ (1 : Matrix n n ℂ))
-
-/-- Matrix lift of a two-site operator to the final two factors of a
-right-associated triple. -/
-private noncomputable def rightPairMatrix {n : Type*} [Fintype n] [DecidableEq n]
-    (B : Matrix (n × n) (n × n) ℂ) :
-    Matrix (n × (n × n)) (n × (n × n)) ℂ :=
-  (1 : Matrix n n ℂ) ⊗ₖ B
-
 /-- Reindexing the coefficient matrix of the first physical pair lift gives
 the standard tensor-product matrix lift. -/
 private theorem leftPairLift_toMatrix_reindex
@@ -99,7 +84,7 @@ private theorem leftPairLift_toMatrix_reindex
     Matrix.reindex (appendixBFinThreeArrowEquiv (Fin d))
         (appendixBFinThreeArrowEquiv (Fin d))
         (LinearMap.toMatrix' (leftPairLift Q)) =
-      leftPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin d))
+      appendixBLeftPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin d))
         (finTwoArrowEquiv (Fin d)) (LinearMap.toMatrix' Q)) := by
   classical
   ext σ τ
@@ -150,7 +135,7 @@ private theorem rightPairLift_toMatrix_reindex
     Matrix.reindex (appendixBFinThreeArrowEquiv (Fin d))
         (appendixBFinThreeArrowEquiv (Fin d))
         (LinearMap.toMatrix' (rightPairLift Q)) =
-      rightPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin d))
+      appendixBRightPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin d))
         (finTwoArrowEquiv (Fin d)) (LinearMap.toMatrix' Q)) := by
   classical
   ext σ τ
@@ -270,25 +255,6 @@ private theorem AppendixBStructuralData.replaceVirtualBond12_eq_iff
 
 /-! ### Matrices of the physical and virtual two-site transports -/
 
-/-- Reindexing carries a product of three matrices to the product of their
-three compatible reindexings. -/
-private theorem reindex_three_mul
-    {m n o p m' n' o' p' : Type*}
-    [Fintype n] [Fintype n'] [Fintype o] [Fintype o']
-    (em : m ≃ m') (en : n ≃ n') (eo : o ≃ o') (ep : p ≃ p')
-    (M : Matrix m n ℂ) (N : Matrix n o ℂ) (P : Matrix o p ℂ) :
-    Matrix.reindex em ep ((M * N) * P) =
-      (Matrix.reindex em en M * Matrix.reindex en eo N) *
-        Matrix.reindex eo ep P := by
-  calc
-    _ = Matrix.reindex em eo (M * N) * Matrix.reindex eo ep P := by
-      simpa only [Matrix.coe_reindexLinearEquiv] using
-        (Matrix.reindexLinearEquiv_mul ℂ ℂ em eo ep (M * N) P).symm
-    _ = _ := by
-      simpa only [Matrix.coe_reindexLinearEquiv] using congrArg
-        (fun Q ↦ Q * Matrix.reindex eo ep P)
-        (Matrix.reindexLinearEquiv_mul ℂ ℂ em en eo M N).symm
-
 /-- The one-site physical isometry in the pair-index basis. -/
 private noncomputable def AppendixBStructuralData.physicalIsometryMatrix
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
@@ -363,19 +329,21 @@ private theorem AppendixBStructuralData.leftVirtualBondProjection_matrix
     Matrix.reindex (appendixBFinThreeArrowEquiv (Fin D × Fin D))
         (appendixBFinThreeArrowEquiv (Fin D × Fin D))
         (LinearMap.toMatrix' hStruct.leftVirtualBondProjection) =
-      leftPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin D × Fin D))
+      appendixBLeftPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin D × Fin D))
         (finTwoArrowEquiv (Fin D × Fin D))
         (LinearMap.toMatrix' hStruct.twoSiteVirtualBondProjection)) := by
   classical
   ext p q
   by_cases hs : p.2.2 = q.2.2
-  · simp [leftPairMatrix, Matrix.reindex_apply, LinearMap.toMatrix'_apply,
+  · simp [appendixBLeftPairMatrix, appendixBLeftPairMatrixAux,
+      Matrix.reindex_apply, LinearMap.toMatrix'_apply,
       AppendixBStructuralData.leftVirtualBondProjection,
       AppendixBStructuralData.twoSiteVirtualBondProjection,
       hStruct.replaceVirtualBond01_eq_iff,
       appendixBFirstPairCfg, appendixBFinThreeArrowEquiv, finTwoArrowEquiv,
       Pi.single_apply, hs]
-  · simp [leftPairMatrix, Matrix.reindex_apply, LinearMap.toMatrix'_apply,
+  · simp [appendixBLeftPairMatrix, appendixBLeftPairMatrixAux,
+      Matrix.reindex_apply, LinearMap.toMatrix'_apply,
       AppendixBStructuralData.leftVirtualBondProjection,
       AppendixBStructuralData.twoSiteVirtualBondProjection,
       hStruct.replaceVirtualBond01_eq_iff,
@@ -389,19 +357,21 @@ private theorem AppendixBStructuralData.rightVirtualBondProjection_matrix
     Matrix.reindex (appendixBFinThreeArrowEquiv (Fin D × Fin D))
         (appendixBFinThreeArrowEquiv (Fin D × Fin D))
         (LinearMap.toMatrix' hStruct.rightVirtualBondProjection) =
-      rightPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin D × Fin D))
+      appendixBRightPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin D × Fin D))
         (finTwoArrowEquiv (Fin D × Fin D))
         (LinearMap.toMatrix' hStruct.twoSiteVirtualBondProjection)) := by
   classical
   ext p q
   by_cases hs : p.1 = q.1
-  · simp [rightPairMatrix, Matrix.reindex_apply, LinearMap.toMatrix'_apply,
+  · simp [appendixBRightPairMatrix, appendixBRightPairMatrixAux,
+      Matrix.reindex_apply, LinearMap.toMatrix'_apply,
       AppendixBStructuralData.rightVirtualBondProjection,
       AppendixBStructuralData.twoSiteVirtualBondProjection,
       hStruct.replaceVirtualBond12_eq_iff,
       appendixBLastPairCfg, appendixBFinThreeArrowEquiv, finTwoArrowEquiv,
       Pi.single_apply, Matrix.one_apply, hs]
-  · simp [rightPairMatrix, Matrix.reindex_apply, LinearMap.toMatrix'_apply,
+  · simp [appendixBRightPairMatrix, appendixBRightPairMatrixAux,
+      Matrix.reindex_apply, LinearMap.toMatrix'_apply,
       AppendixBStructuralData.rightVirtualBondProjection,
       AppendixBStructuralData.twoSiteVirtualBondProjection,
       hStruct.replaceVirtualBond12_eq_iff,
@@ -411,16 +381,16 @@ private theorem AppendixBStructuralData.rightVirtualBondProjection_matrix
 /-- The two standard pair matrices of the virtual bond projector commute. -/
 private theorem AppendixBStructuralData.virtualPairMatrices_comm
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
-    leftPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin D × Fin D))
+    appendixBLeftPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin D × Fin D))
           (finTwoArrowEquiv (Fin D × Fin D))
           (LinearMap.toMatrix' hStruct.twoSiteVirtualBondProjection)) *
-        rightPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin D × Fin D))
+        appendixBRightPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin D × Fin D))
           (finTwoArrowEquiv (Fin D × Fin D))
           (LinearMap.toMatrix' hStruct.twoSiteVirtualBondProjection)) =
-      rightPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin D × Fin D))
+      appendixBRightPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin D × Fin D))
           (finTwoArrowEquiv (Fin D × Fin D))
           (LinearMap.toMatrix' hStruct.twoSiteVirtualBondProjection)) *
-        leftPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin D × Fin D))
+        appendixBLeftPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin D × Fin D))
           (finTwoArrowEquiv (Fin D × Fin D))
           (LinearMap.toMatrix' hStruct.twoSiteVirtualBondProjection)) := by
   rw [← hStruct.leftVirtualBondProjection_matrix,
@@ -450,16 +420,16 @@ private theorem AppendixBStructuralData.virtualPairMatrices_comm
 three physical sites. -/
 private theorem AppendixBStructuralData.transportedPairMatrices_comm
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
-    leftPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin d))
+    appendixBLeftPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin d))
           (finTwoArrowEquiv (Fin d))
           (LinearMap.toMatrix' hStruct.transportedTwoSiteBondProjection)) *
-        rightPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin d))
+        appendixBRightPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin d))
           (finTwoArrowEquiv (Fin d))
           (LinearMap.toMatrix' hStruct.transportedTwoSiteBondProjection)) =
-      rightPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin d))
+      appendixBRightPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin d))
           (finTwoArrowEquiv (Fin d))
           (LinearMap.toMatrix' hStruct.transportedTwoSiteBondProjection)) *
-        leftPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin d))
+        appendixBLeftPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin d))
           (finTwoArrowEquiv (Fin d))
           (LinearMap.toMatrix' hStruct.transportedTwoSiteBondProjection)) := by
   rw [hStruct.transportedTwoSiteBondProjection_matrix]
@@ -468,9 +438,11 @@ private theorem AppendixBStructuralData.transportedPairMatrices_comm
     (LinearMap.toMatrix' hStruct.twoSiteVirtualBondProjection)
   have hB : appendixBLeftPairMatrix B * appendixBRightPairMatrix B =
       appendixBRightPairMatrix B * appendixBLeftPairMatrix B := by
-    simpa [B, leftPairMatrix, rightPairMatrix, appendixBLeftPairMatrixAux,
+    simpa [B, appendixBLeftPairMatrix, appendixBRightPairMatrix,
+      appendixBLeftPairMatrixAux,
       appendixBRightPairMatrixAux] using hStruct.virtualPairMatrices_comm
-  simpa [B, leftPairMatrix, rightPairMatrix, appendixBLeftPairMatrixAux,
+  simpa [B, appendixBLeftPairMatrix, appendixBRightPairMatrix,
+    appendixBLeftPairMatrixAux,
     appendixBRightPairMatrixAux] using
     appendixB_transportedPairMatrices_comm hStruct.physicalIsometryMatrix B
       hStruct.physicalIsometryMatrix_isometry hB
@@ -498,10 +470,10 @@ private theorem AppendixBStructuralData.transportedTwoSiteBondProjection_commute
           (LinearMap.toMatrix' (leftPairLift hStruct.transportedTwoSiteBondProjection))
           (LinearMap.toMatrix'
             (rightPairLift hStruct.transportedTwoSiteBondProjection))).symm
-    _ = leftPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin d))
+    _ = appendixBLeftPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin d))
           (finTwoArrowEquiv (Fin d))
           (LinearMap.toMatrix' hStruct.transportedTwoSiteBondProjection)) *
-        rightPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin d))
+        appendixBRightPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin d))
           (finTwoArrowEquiv (Fin d))
           (LinearMap.toMatrix' hStruct.transportedTwoSiteBondProjection)) := by
       rw [leftPairLift_toMatrix_reindex, rightPairLift_toMatrix_reindex]
