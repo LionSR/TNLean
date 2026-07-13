@@ -510,6 +510,27 @@ is oriented from the right-associated sum to the left-associated sum, hence
 oppositely to the printed $F$-matrix convention in equation
 \texttt{Fmove}; it is not identified with that $F$-matrix.
 
+The two products of the full comparison with its adjoint are now identified
+exactly:
+\[
+    CC^\dagger=U^{\mathrm L}(U^{\mathrm L})^\dagger,
+    \qquad
+    C^\dagger C=U^{\mathrm R}(U^{\mathrm R})^\dagger.
+\]
+These are the range projections of the two iterated fusion isometries.  They
+are formalized by
+\leanid{MPOTensor.BNTFusionIsometryFamily.%
+tripleFusionComparison_mul_conjTranspose} and
+\leanid{MPOTensor.BNTFusionIsometryFamily.%
+conjTranspose_mul_tripleFusionComparison}.  The present fusion assumptions
+give $(U^{\mathrm L})^\dagger U^{\mathrm L}=1$ and
+$(U^{\mathrm R})^\dagger U^{\mathrm R}=1$, but do not identify either range
+projection with the identity.  Thus the full comparison is a partial
+isometry between these ranges.  The invertible total fusion matrix of
+arXiv:1511.08090, lines~187--191, supplies the missing completeness in the
+source argument; no corresponding surjectivity assertion is presently part
+of the fusion-isometry family.
+
 The simultaneous inverse relation at line~269 of the arXiv:1511.08090 source,
 \[
     B_d^+ B_{d'}=\delta_{d,d'}1,
