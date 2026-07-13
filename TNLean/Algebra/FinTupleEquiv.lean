@@ -18,6 +18,7 @@ on short finite index types.
 * `finThreeArrowEquiv`: identifies a function on `Fin 3` with a right-associated triple.
 * `finThreeArrowEquiv_symm_apply`: gives the ordered coordinates of the inverse map.
 * `finFourArrowEquiv`: identifies a function on `Fin 4` with a right-associated quadruple.
+* `finFourArrowEquiv_symm_apply`: gives the ordered coordinates of the inverse map.
 
 ## Implementation notes
 
@@ -46,5 +47,13 @@ coordinates in order. -/
 @[simp] theorem finThreeArrowEquiv_symm_apply
     {α : Type*} (x : α × (α × α)) :
     (finThreeArrowEquiv α).symm x = ![x.1, x.2.1, x.2.2] := by
+  funext i
+  fin_cases i <;> rfl
+
+/-- The inverse right-associated identification sends a quadruple to its four
+coordinates in order. -/
+@[simp] theorem finFourArrowEquiv_symm_apply
+    {α : Type*} (x : α × (α × (α × α))) :
+    (finFourArrowEquiv α).symm x = ![x.1, x.2.1, x.2.2.1, x.2.2.2] := by
   funext i
   fin_cases i <;> rfl

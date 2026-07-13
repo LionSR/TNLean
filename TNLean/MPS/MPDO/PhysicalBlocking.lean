@@ -87,8 +87,7 @@ theorem physCloseN_four_eq_physClose4 (M : MPOTensor d D) :
         (finFourArrowEquiv (Fin d))).toLinearMap ∘ₗ physCloseN M 4 =
       physClose4 M := by
   ext X i j
-  simp [Matrix.coe_reindexLinearEquiv, finFourArrowEquiv, finThreeArrowEquiv,
-    Matrix.mul_assoc]
+  simp [Matrix.coe_reindexLinearEquiv, Matrix.mul_assoc]
 
 /-! ### Blocking identities -/
 
