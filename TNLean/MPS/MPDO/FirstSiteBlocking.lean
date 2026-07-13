@@ -18,6 +18,29 @@ insertion followed by the word carried by those remaining letters.
 
 If the length-`L` words span the full matrix algebra, equality of two such
 blocked insertions implies equality before blocking.
+
+## Main definitions
+
+* `firstSiteActionOnBlock`: the physical matrix induced on a block by an
+  action on its first letter.
+
+## Main statements
+
+* `firstSiteActionAgree_iff_trace`: the trace-pairing form of the all-length
+  first-site identity.
+* `FirstSiteActionAgree.trace_evalWord`: its consequence for an arbitrary
+  finite word.
+* `insertedTensor_firstSiteActionOnBlock_blockTensor`: the induced insertion
+  factors as the original insertion followed by the remaining word.
+* `FirstSiteActionAgree.blockTensor`: first-site agreement is preserved by
+  physical blocking.
+* `insertedTensor_eq_of_firstSiteActionOnBlock_blockTensor_eq`: block
+  injectivity recovers equality before blocking.
+
+## References
+
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
+  lines 318--345 and Appendix C.3, Lemma L, lines 1835--1858.
 -/
 
 open scoped Matrix BigOperators
