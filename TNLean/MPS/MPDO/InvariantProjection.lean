@@ -18,14 +18,15 @@ $$
 $$
 where $P_1=P\otimes\Id^{\otimes N}$.  Given an MPV-level BNT representation,
 Lemma L transfers these identities to every minimal representative, where they
-say $(\Id-P)MP=0$.  The further transport to the original MPO letters requires
-the literal horizontal-canonical-form gauge and is not proved here.
+say $(\Id-P)MP=0$. The further transport to the original MPO letters uses the
+literal horizontal canonical form and is carried out in
+`TNLean.MPS.MPDO.HorizontalBNT`.
 
 The file also specializes the positive-semidefinite power-commutation theorem
 to matrix product density operators.  This is only the final operator
-implication in source lines 1888--1893.  The passage from a nontrivial vertical
-period to an orthogonal projector $Q$ satisfying the required all-length
-commutation identities remains open.
+implication in source lines 1888--1893. The passage from a nontrivial vertical
+period to an orthogonal projector and its exclusion are carried out in
+`TNLean.MPS.MPDO.CyclicProjector`.
 
 ## Main definitions
 
@@ -437,10 +438,10 @@ theorem ketLeftMul_eq_braRightMul_of_commute_of_isInjective
 density operator commutes with the density operator itself.
 
 This is the final operator implication in the contradiction at
-arXiv:1606.00608, lines 1888--1893 (equation eq2:proof.IV.12).  It does not
+arXiv:1606.00608, lines 1888--1893 (equation eq2:proof.IV.12). It does not
 construct the orthogonal projector $Q$ associated with a nontrivial vertical
-period or establish its commutation with $[H^{(N)}]^p$ for every $N$; that
-connection remains open. -/
+period or establish its commutation with $[H^{(N)}]^p$; these steps are proved
+in `TNLean.MPS.MPDO.CyclicProjector`. -/
 theorem mpo_commute_of_commute_pow (M : MPOTensor d D) (hM : IsMPDO M) (N : ℕ)
     {p : ℕ} (hp : p ≠ 0) {Q : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
     (hQ : Commute Q (mpo M N ^ p)) : Commute Q (mpo M N) :=

@@ -1643,8 +1643,10 @@
     $M_\alpha$ --- independently of $k$, because the sector gauge
     $X_{\alpha,k}$ cancels under the single-site loop trace,
     $\sum_i(X_{\alpha,k}M_\alpha X_{\alpha,k}^{-1})^{ii}=\sum_i M_\alpha^{ii}$.
-    Constructing
-    that decomposition, and with it these projectors, remains open.
+    The irreducible reducing projections have been constructed in
+    Theorem~\ref{thm:mpdo_vertical_complete_reducing_projectors}. Their
+    identification with the grouped normal sectors above, including the loop
+    identity $E_P=\mu E_\alpha$, remains open.
 \end{definition}
 
 \begin{theorem}[The sector trace identity]
@@ -1657,9 +1659,9 @@
     \[
         \tr\bigl(P_1H^{(N+1)}P_1\bigr)=\mu\,d_\alpha^{(N+1)}.
     \]
-    Once the vertical decomposition supplies the sector projectors
-    $P_{\alpha,k}$ --- their construction remains open
-    (Definition~\ref{def:mpdo_sector_projector}) --- this specializes to the
+    Once spectral normalization and grouping identify the reducing
+    projectors with sector projectors $P_{\alpha,k}$ satisfying
+    Definition~\ref{def:mpdo_sector_projector}, this specializes to the
     trace identification
     $\tr(P_{\alpha,k}H^{(N)}P_{\alpha,k})=\mu_{\alpha,k}d_\alpha$ used in
     the proof of \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}; the source
@@ -2149,6 +2151,94 @@
     Combining these two equalities proves the claim.
 \end{proof}
 
+\begin{theorem}[Invariant vertical projections are reducing]
+    \label{thm:mpdo_vertical_projector_closure}
+    \lean{MPOTensor.IsHorizontalCF.hasInvariantProjectorClosure_verticalTensor}
+    \leanok
+    \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_tensor_mpdo,
+        def:invariant_projector_closure,
+        thm:representative_one_sub_mp_zero}
+    Let $M$ be in horizontal canonical form and generate matrix product
+    density operators. If an orthogonal projection $P$ satisfies
+    \[
+        P\widetilde M_v=P\widetilde M_vP
+        \qquad\text{for every }v,
+    \]
+    then it also satisfies
+    \[
+        \widetilde M_vP=P\widetilde M_vP
+        \qquad\text{for every }v.
+    \]
+    Thus the vertically viewed tensor has invariant-projector closure.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:representative_one_sub_mp_zero}
+    Translate the left-invariance identity into the one-site ket and bra
+    actions of the original tensor. The horizontal canonical-form version of
+    Lemma~L gives the opposite one-sided identity. Translating back to the
+    vertically viewed tensor proves the claim.
+\end{proof}
+
+\begin{theorem}[Irreducible reducing sectors of the vertically viewed tensor]
+    \label{thm:mpdo_vertical_irreducible_reducing_sectors}
+    \lean{MPOTensor.IsHorizontalCF.exists_irreducible_verticalBlockDecomp_with_isometry}
+    \leanok
+    \uses{thm:mpdo_vertical_projector_closure,
+        thm:projector_closure_irreducible_corners}
+    Under the hypotheses of
+    Theorem~\ref{thm:mpdo_vertical_projector_closure}, there are positive
+    integers $d_k$, tensors $B_k$ of bond dimension $d_k$, and isometries
+    $V_k:\C^{d_k}\to\C^d$ such that
+    \[
+        V_k^\dagger V_k=\Id,\qquad
+        \sum_k V_kV_k^\dagger=\Id,\qquad
+        V_k^\dagger V_l=0\quad(k\ne l).
+    \]
+    Every $B_k$ is irreducible, and for every vertical letter $v$,
+    \[
+        \widetilde M_vV_k=V_kB_k^v,
+        \qquad
+        V_k^\dagger\widetilde M_v=B_k^vV_k^\dagger,
+        \qquad
+        B_k^v=V_k^\dagger\widetilde M_vV_k.
+    \]
+    Moreover, $\widetilde M$ and the unit-weight direct sum
+    $\bigoplus_k B_k$ have the same matrix product vectors at every length.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_vertical_projector_closure,
+        thm:projector_closure_irreducible_corners}
+    Apply the irreducible-corner decomposition under invariant-projector
+    closure to $\widetilde M$.
+\end{proof}
+
+\begin{theorem}[Complete vertical reducing projectors]
+    \label{thm:mpdo_vertical_complete_reducing_projectors}
+    \lean{MPOTensor.IsHorizontalCF.exists_complete_verticalReducingProjectors}
+    \leanok
+    \uses{thm:mpdo_vertical_irreducible_reducing_sectors}
+    Under the same hypotheses, there are orthogonal projections $P_k$ such
+    that
+    \[
+        \sum_kP_k=\Id,\qquad P_kP_l=0\quad(k\ne l),\qquad
+        \widetilde M_vP_k=P_k\widetilde M_v
+    \]
+    for every $k$ and every vertical letter $v$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_vertical_irreducible_reducing_sectors}
+    For the isometries of
+    Theorem~\ref{thm:mpdo_vertical_irreducible_reducing_sectors}, set
+    $P_k=V_kV_k^\dagger$. The isometry, orthogonality, completeness, and
+    intertwining identities give the four assertions directly.
+\end{proof}
+
 \begin{theorem}[Horizontal canonical form implies vertical canonical form]
     \label{thm:vertical_cf_of_horizontal_cf}
     \notready
@@ -2158,6 +2248,10 @@
         thm:mpdo_first_site_invariant_comm,
         thm:representative_one_sub_mp_zero,
         thm:mpdo_vertical_no_periodic_vectors_horizontal_cf,
+        thm:mpdo_vertical_projector_closure,
+        thm:mpdo_vertical_irreducible_reducing_sectors,
+        thm:mpdo_vertical_complete_reducing_projectors,
+        thm:projector_closure_canonical_form,
         thm:mpdo_sector_compression_trace_pos,
         def:mpdo_sector_projector,
         thm:mpdo_sector_trace_identity,
@@ -2174,9 +2268,13 @@
     density operators is also in canonical form in the vertical direction:
     there are a basis of normal tensors $\{M_\alpha\}_\alpha$ for the
     vertically viewed tensor $\widetilde M$, positive diagonal matrices
-    $\mu_\alpha$, and an isometry $U$ on the physical space with
+    $\mu_\alpha$, and a coisometry $U$ from the physical space onto the
+    retained nonzero sectors. Writing
+    $B=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$, one has
     \[
-        U\widetilde MU^\dagger=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha.
+        UU^\dagger=\Id,\qquad
+        U\widetilde MU^\dagger=B,\qquad
+        \widetilde M=U^\dagger BU.
     \]
     This is \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}.
 \end{theorem}
@@ -2187,6 +2285,10 @@
         thm:mpdo_first_site_invariant_comm,
         thm:representative_one_sub_mp_zero,
         thm:mpdo_vertical_no_periodic_vectors_horizontal_cf,
+        thm:mpdo_vertical_projector_closure,
+        thm:mpdo_vertical_irreducible_reducing_sectors,
+        thm:mpdo_vertical_complete_reducing_projectors,
+        thm:projector_closure_canonical_form,
         thm:mpdo_sector_compression_trace_pos,
         def:mpdo_sector_projector,
         thm:mpdo_sector_trace_identity,
@@ -2206,8 +2308,19 @@
     Theorem~\ref{thm:mpdo_vertical_no_periodic_vectors_horizontal_cf}
     excludes nontrivial $p$-periodic vectors of the vertically viewed tensor
     from the horizontal canonical-form and positivity hypotheses alone.
-    One must then apply the canonical-form theorem in the vertical direction
-    to the vertically viewed tensor $\widetilde M$, obtaining a decomposition
+    Theorem~\ref{thm:mpdo_vertical_projector_closure} proves that every
+    one-sided invariant orthogonal projection of $\widetilde M$ is reducing.
+    Theorem~\ref{thm:mpdo_vertical_irreducible_reducing_sectors} therefore
+    decomposes the physical space into complete orthogonal irreducible
+    reducing sectors, and
+    Theorem~\ref{thm:mpdo_vertical_complete_reducing_projectors} records their
+    commuting range projections. Together with the absence of periodic
+    vectors, Theorem~\ref{thm:projector_closure_canonical_form} already gives
+    an abstract positive-length decomposition into normal blocks. That theorem
+    does not retain the physical isometries and reducing projections. The
+    source argument requires a refinement that retains this data through
+    zero-corner removal and spectral normalization, and then groups the
+    resulting normal tensors, obtaining
     \[
         \widetilde M
         =\bigoplus_{\alpha,k}\mu_{\alpha,k}X_{\alpha,k}M_\alpha X_{\alpha,k}^{-1}
@@ -2232,15 +2345,17 @@
     $U_{\alpha,k}=\omega_{\alpha,k}^{-1/2}X_{\alpha,k}$ of the sector gauges
     from the blockwise dressed-adjoint identities of the two displayed
     diagrams.  Composing the sector unitaries $U_{\alpha,k}$ yields the
-    isometry $U$ with
-    $U\widetilde MU^\dagger=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$; each
+    coisometry $U$ with
+    $U\widetilde MU^\dagger=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$ and
+    the corresponding reconstruction identity; each
     $\mu_\alpha$ is diagonal, so the summands regroup as repeated weighted
     copies of $M_\alpha$ exactly as in the finite regrouping of
     Lemma~\ref{lem:vertical_grouping_equiv}.  Deriving the dressed-adjoint
     identities from self-adjointness of the sector compressions via Lemma L
-    within the vertical decomposition remains open, as does the construction
-    of the vertical canonical decomposition itself, which must also produce
-    the sector projectors of
-    Definition~\ref{def:mpdo_sector_projector} together with their loop
-    identities and the nonvanishing of a sector compression at some length.
+    within the spectrally normalized vertical decomposition remains open.
+    The remaining construction must also identify the reducing projectors
+    above with the grouped sector projectors of
+    Definition~\ref{def:mpdo_sector_projector}, prove their loop identities
+    and the nonvanishing of a sector compression at some length, and assemble
+    the positive weights and proportional-unitary gauges.
 \end{proof}
