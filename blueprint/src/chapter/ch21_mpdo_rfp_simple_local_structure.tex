@@ -823,6 +823,26 @@ strong subadditivity for a normalized three-site reduced state.
     this definition; it is a separate hypothesis in Proposition~C.7.
 \end{definition}
 
+\begin{definition}[Vertex rephasing of the sector tensors]%
+    \label{def:mpdo_physical_sector_rephasing}
+    \lean{MPOTensor.PhysicalSectorFactorization.rephase}
+    \lean{MPOTensor.PhysicalSectorFactorization.rephase_neighboringOperator}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization,
+      def:mpdo_minimal_neighboring_operator}
+    Let $z_k\in\mathbb C$ satisfy $|z_k|=1$ for every sector. Replacing
+    \[
+        (l_k)_a\longmapsto z_k(l_k)_a,
+        \qquad
+        (r_k)_a\longmapsto z_k^{-1}(r_k)_a
+    \]
+    leaves every physical-slice factorization unchanged and transforms the
+    neighboring operators by
+    \[
+        \eta_{k,h}\longmapsto z_k^{-1}z_h\,\eta_{k,h}.
+    \]
+\end{definition}
+
 \begin{definition}[Inverse-map physical-sector factorization]
     \label{def:mpdo_inverse_map_physical_sector_factorization}
     \lean{MPOTensor.inverseMapPhysicalSectorFactorization}
