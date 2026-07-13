@@ -4,13 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.Basic
 import TNLean.MPS.ParentHamiltonian.LocalSupport
+import TNLean.MPS.ParentHamiltonian.Martingale.Transport
 
 /-!
-# Transport of the three-site nearest-neighbor commutator
+# Three-site local support and transport of the nearest-neighbor commutator
 
-This file transports the local commutation relation between the two adjacent
-length-two parent interactions on a three-site window to every translated
-three-site window of a longer periodic chain.
+This file first identifies the three-site MPS ground space with the
+intersection of the kernels of its two adjacent length-two parent interactions.
+It then transports the local commutation relation between these interactions
+to every translated three-site window of a longer periodic chain.
 
 The chain-length hypothesis is (3 \leq N), matching the (N>2) condition in
 arXiv:1606.00608, Theorem 3.10 and the local relation
@@ -20,6 +22,53 @@ arXiv:1606.00608, Theorem 3.10 and the local relation
 namespace MPSTensor
 
 variable {d D : ℕ}
+
+/-! ### Three-site kernel intersection -/
+
+/-- On an injective MPS tensor, a vector on \(L+1\) sites lies in the local MPS
+ground space precisely when both adjacent length-\(L\) parent interactions
+annihilate it.
+
+This is the function-space form of the standard MPS intersection property. It
+is obtained from the Euclidean-space statement without changing the two local
+operators.
+
+Source: arXiv:2011.12127, Section IV.C, lines 2013--2078. -/
+theorem adjacent_localTerm_eq_zero_iff_mem_groundSpace_succ
+    {A : MPSTensor d D} (hA : IsInjective A) {L : ℕ} (hL : 1 < L)
+    {v : NSiteSpace d (L + 1)} :
+    localTerm A L (L + 1) (0 : Fin (L + 1)) v = 0 ∧
+        localTerm A L (L + 1) (1 : Fin (L + 1)) v = 0 ↔
+      v ∈ groundSpace A (L + 1) := by
+  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d (L + 1))
+  have h := adjacent_localTermES_eq_zero_iff_mem_groundSpaceES_succ
+    hA hL (v := e.symm v)
+  simpa [localTermES, e, mem_groundSpaceES_iff] using h
+
+/-- The three-site MPS ground space of an injective tensor is the intersection
+of the kernels of the two adjacent canonical two-site parent interactions:
+\[
+  G_3(A)=\ker(q_2(A)_{AX})\cap\ker(q_2(A)_{XB}).
+\]
+
+This is the three-site specialization of the MPS intersection property, written
+in the local-support notation of arXiv:1606.00608, Definition D.2. Definition
+D.2 is a separate statement in Appendix D; the source proof of Theorem 3.10
+does not invoke it.
+
+Source: arXiv:1606.00608, Definition D.2, lines 2205--2218;
+arXiv:2011.12127, Section IV.C, lines 2013--2078. -/
+theorem groundSpace_three_eq_adjacent_twoSite_parent_kernels
+    {A : MPSTensor d D} (hA : IsInjective A) :
+    groundSpace A 3 =
+      LinearMap.ker (leftPairLift (parentInteraction A 2)) ⊓
+        LinearMap.ker (rightPairLift (parentInteraction A 2)) := by
+  ext v
+  rw [Submodule.mem_inf, LinearMap.mem_ker, LinearMap.mem_ker]
+  rw [← localTerm_two_three_zero_eq_leftPairLift_parentInteraction]
+  rw [← localTerm_two_three_one_eq_rightPairLift_parentInteraction]
+  exact (adjacent_localTerm_eq_zero_iff_mem_groundSpace_succ
+    hA (by omega : 1 < 2)).symm
 
 private theorem extractWindow_two_replaceWindow_three_left
     {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (τ : Cfg d N) (σ : Cfg d 3) :

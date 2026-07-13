@@ -16,6 +16,12 @@
 
 \section{Source condition}
 
+This Appendix~D condition is not the route used in the proof of the forward
+RFP-to-NNCPH implication.  The proof of Theorem~3.10 at source lines
+1305--1307 consists of one sentence saying that the implication is immediate
+from the structural characterization in Theorem~3.11.  Definition~D.2 belongs
+to the later, independent discussion of decorrelation.
+
 Definition~D.2 of \cite{Cirac2016MPDO_arXiv} states the parent commuting
 Hamiltonian condition for a tripartite Hilbert space
 \(\mathcal H_A\otimes\mathcal H_X\otimes\mathcal H_B\).  It uses local
@@ -70,11 +76,9 @@ kernel-intersection equation
 \[
   K_{AXB}=\ker((Q_{AX})_{AX})\cap\ker((Q_{XB})_{XB})
 \]
-is now recorded by
+is recorded by
 \leanid{MPSTensor.HasAppendixD2ParentCommutingHamiltonian}, whose forgetful
-projection gives the algebraic overlapping-commutation predicate.  What remains
-outside this local package is the orthogonal-projector identification and the
-construction of \(Q_{AX}\) and \(Q_{XB}\) from the Appendix~B basic-vector form.
+projection gives the algebraic overlapping-commutation predicate.
 The scalar pair-index equation has now been assembled into the physical map
 \begin{align}
   (Uv)_i=\sum_{\alpha,\beta}U^i_{\alpha,\beta}v_{\alpha,\beta},
@@ -133,21 +137,42 @@ recorded by
 The corresponding adjacent parent terms commute on every periodic chain with
 \(N>2\), by
 \leanid{MPSTensor.AppendixBStructuralData.adjacent_twoSite_localTerms_commute}.
+For an injective tensor, the general three-site MPS intersection identity is
+now recorded by
+\leanid{MPSTensor.groundSpace_three_eq_adjacent_twoSite_parent_kernels}:
+\begin{align}
+  G_3(A)=
+  \ker(q_2(A)_{AX})\cap\ker(q_2(A)_{XB}).
+\end{align}
+Consequently the Appendix~B representatives, placed on their two faces, give
+the idempotence, commutation, and kernel-intersection clauses of Definition~D.2
+on \(K_{AXB}=G_3(A)\), as proved by
+\leanid{MPSTensor.AppendixBStructuralData.}
+\hspace{0pt}\leanid{hasAppendixD2ParentCommutingHamiltonian}.
+For a normal left-canonical RFP tensor, the injectivity used by the intersection
+property is derived from the RFP hypotheses in
+\leanid{MPSTensor.rfp_hasAppendixD2ParentCommutingHamiltonian_of_leftCanonical};
+it is not an additional assumption.
 
 \section{Elimination plan}
 
-The Appendix~B commutator needed for the forward RFP-to-NNCPH argument is now
-proved. What remains for a full formalization of Definition~D.2 is different:
-construct the source projectors \(Q_{AX}\) and \(Q_{XB}\) as orthogonal
-projectors on the stated tensor factors and prove the kernel-intersection
-identity
-\[
-  K_{AXB}=\ker((Q_{AX})_{AX})\cap\ker((Q_{XB})_{XB}).
-\]
-The current coefficient-space theorem supplies the commutator part but does not
-identify that tripartite subspace. The algebraic idempotent-product declaration
-remains the lemma used in the backward direction of Proposition~D.3. The work
-is tracked by \ghissue{3373}, \ghissue{2633}, and \ghissue{190}.
+The algebraic and kernel-intersection clauses in the local Appendix~B
+specialization of Definition~D.2 are now proved: the operators are the
+canonical orthogonal parent interactions \(q_2(A)\), their lifts commute, and
+their kernel intersection is \(G_3(A)\).  This does not
+complete the general decorrelation equivalence of Proposition~D.3.  In
+particular, \leanid{Decorrelation.HasCommutingParentHam} remains only its
+algebraic idempotent-product consequence, and the generic
+\leanid{MPSTensor.HasAppendixD2ParentCommutingHamiltonian} structure does not
+itself record self-adjointness.  The concrete canonical parent interactions
+used here are orthogonal by construction, but a fully general source-facing
+package should expose that property explicitly and complete both directions of
+Proposition~D.3.  That work is tracked separately by \ghissue{190}.
+
+For Theorem~3.10, the remaining obligations are instead the full
+canonical-form scope and the all-chain ground-space spanning statement.  They
+are tracked by \ghissue{2633}; Definition~D.2 should not be presented as their
+missing proof route.
 
 \bibliographystyle{alpha}
 \bibliography{references}

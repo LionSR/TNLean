@@ -114,9 +114,10 @@ equivalence with ZCL, the complete canonical-form hypotheses from the source
 statement, or the Beigi ground-space characterization as an internal theorem.
 For the forward RFP-to-NNCPH direction, the three-site \(AX/XB\) support maps
 are now represented in \leanid{MPSTensor.HasOverlappingTwoSiteCommutation};
-Appendix~B supplies the basic-vector form, while the projectors
-\(Q_{AX}\) and \(Q_{XB}\) belong to the Appendix~D.2 parent-commuting
-condition.  The coefficients in the basic-vector form now define the physical
+Appendix~B supplies the basic-vector form.  The local projectors in
+Definition~D.2 belong to a separate Appendix~D discussion and are not invoked
+by the one-sentence proof of RFP \(\Rightarrow\) NNCPH at source lines
+1305--1307.  The coefficients in the basic-vector form now define the physical
 isometry
 \begin{align}
   (Uv)_i=\sum_{\alpha,\beta}U^i_{\alpha,\beta}v_{\alpha,\beta},
@@ -159,8 +160,8 @@ The coefficient-space representatives
 \leanid{MPSTensor.AppendixBStructuralData.appendixBQAXOnCoeffSpace} and
 \leanid{MPSTensor.AppendixBStructuralData.appendixBQXBOnCoeffSpace} are now identified with
 the canonical two-site parent interaction \(q_2(A)\) before placement on the
-\(AX\) and \(XB\) faces.  They should not be read as the source tripartite
-projectors themselves.  The one-bond virtual projector and its two adjacent
+\(AX\) and \(XB\) faces.  Their two lifts are the corresponding local actions
+on the tripartite space.  The one-bond virtual projector and its two adjacent
 placements are now constructed in
 \leanid{MPSTensor.AppendixBStructuralData.virtualBondProjection},
 \leanid{MPSTensor.AppendixBStructuralData.leftVirtualBondProjection}, and
@@ -178,6 +179,15 @@ and
 \leanid{MPSTensor.AppendixBStructuralData.adjacent_twoSite_localTerms_commute}.
 The resulting commuting projector family is
 \leanid{MPSTensor.AppendixBStructuralData.hasProductPairLocalProjectors}.
+The separate Appendix~D algebraic and kernel-intersection clauses are also now
+proved locally:
+\leanid{MPSTensor.AppendixBStructuralData.}
+\hspace{0pt}\leanid{hasAppendixD2ParentCommutingHamiltonian} identifies
+\(K_{AXB}=G_3(A)\) with the intersection of the two lifted kernels.  Its RFP
+corollary derives injectivity from the normal left-canonical RFP hypotheses.
+The concrete canonical parent interactions are orthogonal by construction, but
+the structure returned by this declaration does not expose self-adjointness.
+This local result is not used in the chain commutator proof.
 Consequently the forward commutation and zero-energy statements are proved for
 normal left-canonical RFP tensors by
 \leanid{MPSTensor.rfp_implies_nncph_of_leftCanonical} and
