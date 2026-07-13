@@ -299,6 +299,63 @@
     first-site hypothesis to the sector-decomposition tensor.
 \end{proof}
 
+\begin{lemma}[First-site actions under physical blocking]
+    \label{lem:first_site_action_physical_blocking}
+    \lean{MPSTensor.firstSiteActionOnBlock}
+    \lean{MPSTensor.firstSiteActionAgree_iff_trace}
+    \lean{MPSTensor.insertedTensor_firstSiteActionOnBlock_blockTensor}
+    \lean{MPSTensor.FirstSiteActionAgree.blockTensor}
+    \lean{MPSTensor.insertedTensor_eq_of_firstSiteActionOnBlock_blockTensor_eq}
+    \leanok
+    \uses{def:blocked_tensor, def:l_blk_injective}
+    This auxiliary statement supplies the transport needed to combine the
+    block-injectivity argument of arXiv:1606.00608, lines 318--345, with
+    Appendix C.3, Lemma L, lines 1835--1858.
+
+    Let $A$ be a tensor, let $Y\in M_d(\C)$, and write a physical index of
+    $A^{[L+1]}$ as $I=(i_0,\ldots,i_L)$.  Define the induced matrix on the
+    blocked physical space by
+    \[
+        Y^{[L+1]}_{I,J}
+        =Y_{i_0,j_0}\prod_{k=1}^{L}\delta_{i_k,j_k}.
+    \]
+    Its insertion into the blocked tensor satisfies
+    \[
+        \bigl(Y^{[L+1]}A^{[L+1]}\bigr)^I
+        =(YA)^{i_0}A^{i_1}\cdots A^{i_L}.
+    \]
+    Hence equality of the first-site actions of $Y,Z$ on the MPV family of
+    $A$ implies equality of the first-block actions of
+    $Y^{[L+1]},Z^{[L+1]}$ on the MPV family of $A^{[L+1]}$.
+
+    The first-site actions of $Y,Z$ agree at every length if and only if
+    \[
+        \tr\bigl((YA)^i A^w\bigr)=\tr\bigl((ZA)^i A^w\bigr)
+    \]
+    for every physical index $i$ and every finite word $w$.
+
+    Conversely, suppose that $A$ is $L$-block injective.  If the two induced
+    insertion tensors on $A^{[L+1]}$ are equal, then $YA=ZA$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    For the forward implication, split the first block into its first letter
+    and its remaining $L$ letters.  The displayed insertion identity reduces
+    the blocked MPV equality to the original first-site equality, with the
+    remaining letters of the first block prepended to the flattened tail.
+
+    For the converse, put $\Delta^i=(YA)^i-(ZA)^i$.  Equality after blocking
+    gives
+    \[
+        \Delta^i A^w=0
+        \qquad (|w|=L).
+    \]
+    Since the length-$L$ words span $\MN{D}$, the same equality holds with
+    $A^w$ replaced by the identity, and therefore $\Delta^i=0$ for every
+    physical index $i$.
+\end{proof}
+
 \begin{theorem}[Representative separation after injective blocking]
     \label{thm:postblocked_representative_grouped_insert_eq}
     \lean{MPSTensor.IsBNTCanonicalForm.eventuallyRepresentativeWordTupleSpan_of_basis_injective}
