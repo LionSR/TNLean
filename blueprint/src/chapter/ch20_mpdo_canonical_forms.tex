@@ -373,6 +373,8 @@
     \lean{MPSTensor.pairTraceSeparatingAt_blockTensor}
     \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_firstSiteActionAgree_of_basis_injective}
     \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree_of_basis_injective}
+    \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_firstSiteActionAgree_of_common_blockInjective}
+    \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree_of_common_blockInjective}
     \leanok
     \uses{def:sector_bnt_cf, def:sector_decomposition_block_tensor,
       def:representative_word_tuple_span, thm:representative_grouped_insert_eq}
@@ -399,11 +401,24 @@
     has representative word-tuple separation at every blocked length
     $L\geq 6(g-1)+1$.
 
-    This is the conclusion after the blocking step in
-    \cite[lines~318--345]{Cirac2016MPDO_arXiv}. The hypothesis that each
-    representative is injective is precisely the post-blocking hypothesis;
-    the assertion does not transport a first-site action from the original
-    physical alphabet through the blocking map.
+    Finally, suppose there is a common $L>0$ for which every unblocked
+    representative $A_j$ is $L$-block injective.  If the first-site actions
+    of $Y,Z$ agree on the tensor represented by $P$, then
+    \[
+        YA_j=ZA_j
+        \quad (0\leq j<g).
+    \]
+    The same conclusion holds when the first-site equality is given for any
+    tensor with the same complete MPV family.  This composes the blocking
+    conclusion of \cite[lines~318--345]{Cirac2016MPDO_arXiv} with
+    Appendix~C.3, Lemma~L
+    \cite[lines~1835--1858]{Cirac2016MPDO_arXiv}.
+
+    \textbf{Scope restriction (common block-injectivity length).}  The last
+    assertion takes the common positive length as an explicit hypothesis.
+    Deriving its existence from the normal-representative output of the
+    canonical-form construction remains separate; see
+    \path{docs/paper-gaps/cpgsv17_bicf_block_separation.tex}.
 \end{theorem}
 
 \begin{proof}
@@ -440,6 +455,17 @@
     $6p$ transports this to pair trace separation for the $p$-blocked
     representatives. The preceding selector argument then applies verbatim
     to $P^{[p]}$.
+
+    For the final assertion, start from a common positive length $L$ at which
+    every representative is block injective and block $L+1$ sites.  Injectivity
+    propagates from length $L$ to length $L+1$, so the blocked representatives
+    are injective.  Act on the first letter of each physical block and apply
+    the blocked representative separation followed by the
+    representative-grouped Lemma~L.  This gives equality of the two induced
+    insertions on every blocked representative.  The remaining $L$ letters
+    of the first block form a spanning family, so
+    Lemma~\ref{lem:first_site_action_physical_blocking} recovers
+    $YA_j=ZA_j$ before blocking.
 \end{proof}
 
 \begin{lemma}[Blockwise equality from agreement on the MPV family]
