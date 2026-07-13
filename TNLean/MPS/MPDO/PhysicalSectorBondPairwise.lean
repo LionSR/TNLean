@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.PhysicalSectorBondTwoSite
-import TNLean.MPS.ParentHamiltonian.Martingale.OverlapReduction
 
 /-!
 # Pairwise commutativity of the physical-sector bond
