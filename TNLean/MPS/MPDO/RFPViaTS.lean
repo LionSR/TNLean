@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Algebra.FinTupleEquiv
 import TNLean.MPS.MPDO.KrausCPTP
 
 /-!
@@ -179,13 +180,6 @@ theorem physCloseN_two_eq_physClose2 (M : MPOTensor d D) :
 
 /-! ### The three-site physical operator -/
 
-/-- The canonical right-associated identification of three-coordinate
-configurations with triples: separate the first coordinate, then identify the
-remaining two-coordinate configuration with a pair. -/
-def finThreeArrowEquiv (α : Type*) : (Fin 3 → α) ≃ α × (α × α) :=
-  (Fin.consEquiv fun _ : Fin 3 => α).symm.trans
-    (Equiv.prodCongr (Equiv.refl α) (finTwoArrowEquiv α))
-
 /-- The **three-site physical operator** as a linear map in the virtual operator
 $X$. Its physical indices are right-associated as
 $\operatorname{Fin}(d) \times (\operatorname{Fin}(d) \times \operatorname{Fin}(d))$,
@@ -224,12 +218,11 @@ configurations with triples of physical indices, the general length-three
 closure is `physClose3`. For $M=\mathcal K$, this identifies the two forms of
 $\mathcal K_3(X)$ in arXiv:1606.00608, Proposition C.7, lines 1510--1516. -/
 theorem physCloseN_three_eq_physClose3 (M : MPOTensor d D) :
-    (Matrix.reindexLinearEquiv ℂ ℂ (finThreeArrowEquiv (Fin d))
-        (finThreeArrowEquiv (Fin d))).toLinearMap ∘ₗ physCloseN M 3 =
+    (Matrix.reindexLinearEquiv ℂ ℂ (_root_.finThreeArrowEquiv (Fin d))
+        (_root_.finThreeArrowEquiv (Fin d))).toLinearMap ∘ₗ physCloseN M 3 =
       physClose3 M := by
   ext X i j
-  simp [Matrix.coe_reindexLinearEquiv, finThreeArrowEquiv,
-    Matrix.mul_assoc]
+  simp [Matrix.coe_reindexLinearEquiv, Matrix.mul_assoc]
 
 /-! ### MPDO renormalization fixed point (Definition 4.1) -/
 
@@ -252,5 +245,8 @@ def IsRFPViaTS (M : MPOTensor d D) : Prop :=
     IsKrausCPTP S ∧ IsKrausCPTP T ∧
     (∀ X, S (physClose2 M X) = physClose1 M X) ∧
     (∀ X, T (physClose1 M X) = physClose2 M X)
+
+@[deprecated _root_.finThreeArrowEquiv (since := "2026-07-13")]
+alias finThreeArrowEquiv := _root_.finThreeArrowEquiv
 
 end MPOTensor

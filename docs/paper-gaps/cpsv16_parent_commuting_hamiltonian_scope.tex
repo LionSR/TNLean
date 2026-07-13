@@ -125,7 +125,25 @@ representatives are
 \leanid{MPSTensor.AppendixBStructuralData.appendixBQAXOnCoeffSpace} and
 \leanid{MPSTensor.AppendixBStructuralData.appendixBQXBOnCoeffSpace}; both are identified
 with the canonical two-site parent interaction \(q_2(A)\) before placement on
-the \(AX\) and \(XB\) faces.  Since \(q_2(A)\) is the canonical orthogonal
+the \(AX\) and \(XB\) faces.  Their factor actions on the homogeneous
+three-single-site coefficient space are now explicit.  Under the canonical
+two-site and right-associated three-site reindexings,
+\begin{align}
+  [\widehat Q_{AX}]_{AX}&=[\widehat Q_{AX}]\otimes I_d,\\
+  [\widehat Q_{XB}]_{XB}&=I_d\otimes[\widehat Q_{XB}].
+\end{align}
+The generic matrix identities are
+\leanid{MPSTensor.leftPairLift_toMatrix_reindex} and
+\leanid{MPSTensor.rightPairLift_toMatrix_reindex}; their specialization to the
+hatted Appendix~B representatives is given separately by
+\leanid{MPSTensor.AppendixBStructuralData.appendixBQAX_factor_action} and
+\leanid{MPSTensor.AppendixBStructuralData.appendixBQXB_factor_action}.  This
+realizes only the
+homogeneous choice
+\(\mathcal H_A=\mathcal H_X=\mathcal H_B=\mathbb C^d\) of the factor spaces
+introduced at source lines 2185--2186.  It does not supply the arbitrary
+factorization used in Definition~D.2 at lines 2205--2218.
+Since \(q_2(A)\) is the canonical orthogonal
 projector onto \(G_2(A)^\perp\), these coefficient-space maps are orthogonal.
 They are not, by themselves, constructions of the source projectors on
 \(\mathcal H_A\otimes\mathcal H_X\) and
