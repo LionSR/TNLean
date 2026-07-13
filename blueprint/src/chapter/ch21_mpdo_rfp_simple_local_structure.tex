@@ -823,6 +823,57 @@ strong subadditivity for a normalized three-site reduced state.
     this definition; it is a separate hypothesis in Proposition~C.7.
 \end{definition}
 
+\begin{definition}[Inverse-map physical-sector factorization]
+    \label{def:mpdo_inverse_map_physical_sector_factorization}
+    \lean{MPOTensor.inverseMapPhysicalSectorFactorization}
+    \leanok
+    \uses{thm:mpdo_sector_factorization,
+      def:mpdo_physical_sector_factorization,
+      lem:mpdo_trace_one_nonempty}
+    Let ${\cal K}$ be injective, let $\rho$ be its three-site closure against
+    a virtual tail $R$, and choose a Hayashi decomposition of $\rho$. Fix
+    outer indices such that $R_{\beta_3,\alpha_1}\ne0$. The inverse-map
+    tensors $l_k,r_k$, together with the Hayashi physical decomposition and
+    unitary, determine a physical-sector factorization of ${\cal K}$.
+
+    The left and right factor spaces are nonzero because the corresponding
+    Hayashi density matrices have trace one; their nonzero dimensions are
+    conclusions rather than hypotheses. No positivity of the neighboring
+    operators is asserted. This gives the factorization in
+    \cite[Appendix~C.2, equations \texttt{AppUkU=rl} and \texttt{formK},
+    lines~1383--1387 and~1434--1439]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Identification of the neighboring operators]
+    \label{thm:mpdo_inverse_map_factorization_neighboring_operator}
+    \lean{MPOTensor.inverseMapPhysicalSectorFactorization_neighboringOperator_eq_sectorEta}
+    \leanok
+    \uses{def:mpdo_inverse_map_physical_sector_factorization,
+      def:mpdo_sector_eta,
+      def:mpdo_minimal_neighboring_operator}
+    For all sectors $k,h$, the neighboring contraction of the resulting
+    physical-sector factorization is the inverse-map operator
+    \[
+      \eta_{k,h}=\sum_\gamma (r_k)_\gamma\otimes(l_h)_\gamma.
+    \]
+    This is equation \texttt{etarl} in
+    \cite[Appendix~C.2, lines~1441--1445]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{corollary}[SAL gives a raw physical-sector factorization]
+    \label{cor:mpdo_sal_raw_physical_sector_factorization}
+    \lean{MPOTensor.nonempty_physicalSectorFactorization_of_isSAL}
+    \leanok
+    \uses{thm:mpdo_four_site_sal_eta_structure,
+      thm:mpdo_normalized_four_site_tail_entry_ne_zero,
+      def:mpdo_inverse_map_physical_sector_factorization}
+    Every injective MPO tensor satisfying SAL admits a physical-sector
+    factorization. This is only the raw algebraic factorization from Lemma C.4
+    and equations \texttt{formK} and \texttt{etarl}; coherent positivity of
+    the neighboring operators, recurrence, and primitivity are not part of
+    this conclusion.
+\end{corollary}
+
 \begin{definition}[Finite-chain coordinates of a physical-sector factorization]
     \label{def:mpdo_physical_sector_chain_coordinates}
     \lean{MPOTensor.PhysicalSectorFactorization.SectorChainFiber,
