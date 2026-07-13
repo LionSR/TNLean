@@ -50,12 +50,6 @@ noncomputable def blockTwo (M : MPOTensor d D) : MPOTensor (d * d) D :=
 
 /-! ### The four-site physical closure -/
 
-/-- The canonical right-associated identification of four-coordinate
-configurations with quadruples. -/
-def finFourArrowEquiv (α : Type*) : (Fin 4 → α) ≃ α × (α × (α × α)) :=
-  (Fin.consEquiv fun _ : Fin 4 => α).symm.trans
-    (Equiv.prodCongr (Equiv.refl α) (finThreeArrowEquiv α))
-
 /-- The four-site physical closure, with the physical indices associated as
 `Fin d × (Fin d × (Fin d × Fin d))`. Its coefficient is the virtual trace of
 four consecutive tensor matrices followed by the inserted virtual operator.
