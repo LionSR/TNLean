@@ -21,10 +21,10 @@ arXiv:1511.08090.
 The selector hypothesis is stated explicitly.  It is not presently derived
 from the assumptions on `BNTFusionIsometryFamily`. At a positive selector
 length it also makes both iterated fusion maps surjective, and hence makes the
-full comparison invertible with adjoint inverse. The fixed-final results remain
-conditional: they do not construct an invertible fixed-sector comparison,
-identify its multiplicity factor with the source $F$-matrix, or prove a
-pentagon identity.
+full comparison invertible with adjoint inverse. Its diagonal final-sector
+corners can then be studied separately. The fixed-final conclusions remain
+conditional on the selector and injectivity hypotheses and require a separate
+argument.
 
 ## References
 
@@ -395,7 +395,8 @@ positive-length final-label separation.**
 This is the opposite product of
 `tripleFusionComparison_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords`.
 It proves two-sided invertibility only on the full direct sums; extracting an invertible
-fixed-final multiplicity matrix remains a separate step.
+fixed-final multiplicity matrix also requires off-diagonal separation,
+injectivity of the selected tensor, and positive bond dimension.
 
 Source: arXiv:1606.00608, lines 995--1010; arXiv:1511.08090, lines 181--191,
 247--252, and 269. -/
