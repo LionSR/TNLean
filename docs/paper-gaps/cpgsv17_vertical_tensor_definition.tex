@@ -79,12 +79,17 @@ The realignment (\ghissue{3712}) introduces the vertically viewed tensor
 canonical-form predicate on it: there are a basis of normal tensors
 $\{M_\alpha\}_\alpha$ for $\widetilde M$, positive diagonal matrices
 $\mu_\alpha=\operatorname{diag}(\omega_{\alpha,0},\dots,\omega_{\alpha,r_\alpha-1})$
-with $r_\alpha\geq1$, and an isometry $U$ on the physical space satisfying
-\eqref{eq:umu} letter by letter over the horizontal bond pairs.  The isometry
-is required to be a unitary change of the physical basis ($U^\dagger U=\Id$
-and $UU^\dagger=\Id$): the canonical form decomposes the physical space
-exactly, and the source discards $U$ because ``it just changes the physical
-basis on each site'' (line~959).  Since each $\mu_\alpha$ is diagonal,
+with $r_\alpha\geq1$, and a coisometry $U$ onto the retained nonzero sector
+space satisfying \eqref{eq:umu} letter by letter over the horizontal bond
+pairs.  It satisfies $UU^\dagger=\Id$ on that retained space; its adjoint is
+the isometric inclusion into the original physical space.  The source's
+general canonical-form construction allows $\sum_k D_k<D$ and hence permits
+a zero orthogonal complement (lines~214--225).  Thus $U^\dagger U$ is in
+general the support projection rather than the identity.  This correction is
+documented in \path{cpgsv17_vertical_isometry_zero_sector.tex}.  The reverse
+identity reconstructs the original tensor from the displayed direct sum and
+therefore requires the omitted complement to be a zero sector.  Since each
+$\mu_\alpha$ is diagonal,
 the summand $\mu_\alpha\otimes M_\alpha$ is the direct sum
 $\bigoplus_{k=0}^{r_\alpha-1}\omega_{\alpha,k}M_\alpha$, so the right-hand side of
 \eqref{eq:umu} is a block-diagonal tensor over the pairs $(\alpha,k)$ in
@@ -121,8 +126,10 @@ rather than on the vertically viewed tensor $\widetilde M$ defined at source
 line~943, and the $d=2$, $D=1$ example shows the diagonal surrogate cannot
 carry the multiplicity coefficients $m_\alpha=\tr(\mu_\alpha)$ of
 \eqref{eq:umu}; a proof of the surrogate would therefore not have formalized
-the proposition.  The realignment restores the source-faithful vertical
-tensor definition and the isometry-form conclusion.  The
+the proposition.  The realignment restores the source-faithful vertical tensor
+definition.  The later correction in
+\path{cpgsv17_vertical_isometry_zero_sector.tex} restores the source's
+one-sided isometry condition in the presence of zero sectors.  The
 horizontal-to-vertical implication of Proposition~4.13 itself remains an
 open gap.
 
