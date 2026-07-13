@@ -1999,6 +1999,31 @@
     \end{tikzpicture}%
 }
 
+% The BNT-label operator O_L(M_alpha): L vertically read copies of M_alpha
+% are multiplied along the vertical index and closed by the trace, while the
+% horizontal legs remain open.  This follows source figure MPDO_O_L_A_.png.
+\newcommand{\TNMPDOBNTOperatorTraceClosure}{%
+    \begin{tikzpicture}[tn picture, scale=0.92]
+        \path[draw=black, opacity=0, use as bounding box]
+            (-3.08,-2.00) rectangle (1.40,2.00);
+        \node[anchor=east] at (-1.08,0) {$O_L(M_\alpha)\;=$};
+        \TN@tensordot{botcTop}{(0,1.08)}
+        \TN@tensordot{botcBottom}{(0,-1.08)}
+        \foreach \n in {botcTop,botcBottom} {
+            \TN@leftleg{\n}{0.62}
+            \TN@rightleg{\n}{0.62}
+        }
+        \draw[tn phys leg] (botcTop.south) -- (0,0.38);
+        \draw[tn phys leg] (0,-0.38) -- (botcBottom.north);
+        \node at (0,0) {$\vdots$};
+        \draw[tn phys leg, rounded corners=4pt]
+            (botcTop.north) -- (0,1.56) -- (-0.76,1.56)
+            -- (-0.76,-1.56) -- (0,-1.56) -- (botcBottom.south);
+        \node[anchor=south west] at (0.18,1.12) {$M_\alpha$};
+        \node[anchor=south west] at (0.18,-1.04) {$M_\alpha$};
+    \end{tikzpicture}%
+}
+
 % First-site insertion agreement on the closed word: inserting Y on the
 % physical leg of the first site of the matrix product vector gives the
 % same vector as inserting Z.
