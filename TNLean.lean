@@ -36,6 +36,7 @@ import TNLean.Algebra.FiniteCycleCoboundary
 import TNLean.Algebra.PiTensorProductPhase
 import TNLean.Algebra.BurnsideMatrix
 import TNLean.Algebra.IrreducibleTensorAction
+import TNLean.Algebra.PerronFrobenius.PrimitiveAperiodic
 import TNLean.Algebra.PerronFrobenius.RankOne
 import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.ScalarCommutant
@@ -419,6 +420,7 @@ import TNLean.MPS.MPDO.PhysicalSectorCoordinateTransport
 import TNLean.MPS.MPDO.PhysicalSectorVirtualSpanning
 import TNLean.MPS.MPDO.PhysicalSectorTraceMatrix
 import TNLean.MPS.MPDO.InverseMapActiveSectorRecurrence
+import TNLean.MPS.MPDO.InverseMapActiveSectorPrimitivity
 import TNLean.MPS.MPDO.PhysicalSectorPositiveBond
 import TNLean.MPS.MPDO.PhysicalSectorBondCommutativity
 import TNLean.MPS.MPDO.PhysicalSectorBondTransport

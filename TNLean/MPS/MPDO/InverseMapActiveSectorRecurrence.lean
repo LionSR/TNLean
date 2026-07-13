@@ -219,6 +219,44 @@ theorem zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_isRecurre
     exists_active_sectorVirtualMatrix_ne_zero
       K hK R hρ hη alpha beta hm b hb⟩
 
+/-- The zero-weight reparameterized inverse-map factorization admits a
+reciprocal sector rephasing with positive semidefinite neighboring operators.
+
+This exposes the coherent rephasing witness used both for the positive
+factorization and for the active trace-matrix primitivity theorem.
+
+**Local fix (inactive sectors):** see
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 (`propSN`), lines
+1406--1450. -/
+theorem exists_rephase_zeroWeightInverseMap_posSemidef
+    {rho : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
+    (K : MPOTensor d D) (hK : K.IsInjective)
+    (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R rho)
+    (hη : EtaStructure rho) (alpha beta : Fin D) (hm : R beta alpha ≠ 0)
+    (hM : IsMPDO K) :
+    let F := zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
+      K hK R hρ hη alpha beta hm
+    ∃ z : Fin F.sectorCount → Circle,
+      ∀ k h, ((F.rephase z).neighboringOperator k h).PosSemidef := by
+  let F := zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
+    K hK R hρ hη alpha beta hm
+  let eta : etaOperators hη := fun k h ↦ F.neighboringOperator k h
+  have hcyc : ∀ {N : ℕ} [NeZero N] (q : Fin N → Fin hη.m),
+      (cyclicEtaTensorProduct hη eta q).PosSemidef := by
+    intro N _ q
+    exact cyclicEtaTensorProduct_posSemidef K hη F.leftTensor F.rightTensor
+      F.factorization (hM N) q
+  have hrec : IsRecurrentSupport eta :=
+    zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_isRecurrentSupport
+      K hK R hρ hη alpha beta hm
+  obtain ⟨z, hz⟩ :=
+    exists_vertexPhase_smul_posSemidef hη eta hcyc hrec
+  refine ⟨z, fun k h ↦ ?_⟩
+  rw [F.rephase_neighboringOperator]
+  exact hz k h
+
 /-- The inverse-map construction admits a physical-sector factorization whose
 neighboring operators are all positive semidefinite, with no recurrence
 hypothesis.
@@ -242,20 +280,9 @@ theorem exists_positive_inverseMapPhysicalSectorFactorization
       ∀ k h, (F.neighboringOperator k h).PosSemidef := by
   let F := zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
     K hK R hρ hη alpha beta hm
-  let eta : etaOperators hη := fun k h ↦ F.neighboringOperator k h
-  have hcyc : ∀ {N : ℕ} [NeZero N] (q : Fin N → Fin hη.m),
-      (cyclicEtaTensorProduct hη eta q).PosSemidef := by
-    intro N _ q
-    exact cyclicEtaTensorProduct_posSemidef K hη F.leftTensor F.rightTensor
-      F.factorization (hM N) q
-  have hrec : IsRecurrentSupport eta :=
-    zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_isRecurrentSupport
-      K hK R hρ hη alpha beta hm
-  obtain ⟨z, hz⟩ :=
-    exists_vertexPhase_smul_posSemidef hη eta hcyc hrec
-  refine ⟨F.rephase z, fun k h ↦ ?_⟩
-  rw [F.rephase_neighboringOperator]
-  exact hz k h
+  obtain ⟨z, hpos⟩ := exists_rephase_zeroWeightInverseMap_posSemidef
+    K hK R hρ hη alpha beta hm hM
+  exact ⟨F.rephase z, hpos⟩
 
 /-- Every injective MPO tensor satisfying the strong area law admits a
 physical-sector factorization with positive semidefinite neighboring

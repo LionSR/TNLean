@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Matrix.Irreducible.Defs
 import TNLean.Algebra.HermitianHelpers
+import TNLean.Algebra.PerronFrobenius.PrimitiveAperiodic
 import TNLean.MPS.MPDO.PhysicalSectorDirectedCut
 import TNLean.MPS.MPDO.PhysicalSectorVirtualSpanning
 
@@ -411,5 +412,79 @@ theorem activeSectorTraceMatrix_isIrreducible
         F.exists_active_neighboringOperator_ne_zero p hspan hnonzero k
       exact hconnected.isSStronglyConnected_of_hom
         (PLift.up ((F.activeSectorTraceMatrix_pos_iff p hpos k h).2 hkh))
+
+/-- If every active nonzero edge closes through a third active sector, then
+every diagonal entry of the cube of the active trace matrix is positive.
+
+**Local fix (periodicity):** this length-three return is an auxiliary
+substitute for the source's blocking of periodic components and is combined
+with the length-two return above. See
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 (`propSN`), lines
+1452--1470. -/
+theorem activeSectorTraceMatrix_pow_three_diag_pos
+    (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
+    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
+    (hspan : Submodule.span ℂ
+      (Set.range (F.activeSectorOneSiteMatrixFamily p)) = ⊤)
+    (hnonzero : ∀ k : F.ActiveSector p,
+      ∃ x y : F.SectorIndex k, F.sectorVirtualMatrix k x y ≠ 0)
+    (htriangle : ∀ {k h : F.ActiveSector p},
+      F.neighboringOperator k h ≠ 0 →
+        ∃ j : F.ActiveSector p,
+          F.neighboringOperator h j ≠ 0 ∧
+            F.neighboringOperator j k ≠ 0)
+    (k : F.ActiveSector p) :
+    0 < ((F.activeSectorTraceMatrix p) ^ 3) k k := by
+  obtain ⟨h, hkh⟩ :=
+    F.exists_active_neighboringOperator_ne_zero p hspan hnonzero k
+  obtain ⟨j, hhj, hjk⟩ := htriangle hkh
+  let T := F.activeSectorTraceMatrix p
+  have hnonneg : ∀ a b, 0 ≤ T a b :=
+    F.activeSectorTraceMatrix_nonneg p hpos
+  have hpow2 : 0 < (T ^ 2) k j := by
+    rw [pow_two, Matrix.mul_apply]
+    apply Finset.sum_pos'
+    · intro l _
+      exact mul_nonneg (hnonneg k l) (hnonneg l j)
+    · exact ⟨h, Finset.mem_univ h, mul_pos
+        ((F.activeSectorTraceMatrix_pos_iff p hpos k h).2 hkh)
+        ((F.activeSectorTraceMatrix_pos_iff p hpos h j).2 hhj)⟩
+  rw [show T ^ 3 = T ^ 2 * T by rw [pow_succ], Matrix.mul_apply]
+  apply Finset.sum_pos'
+  · intro l _
+    exact mul_nonneg (Matrix.pow_apply_nonneg hnonneg 2 k l) (hnonneg l k)
+  · exact ⟨j, Finset.mem_univ j, mul_pos hpow2
+      ((F.activeSectorTraceMatrix_pos_iff p hpos j k).2 hjk)⟩
+
+/-- Active-sector spanning, sector nonvanishing, positive neighboring
+operators, and triangle closure imply primitivity of the active trace matrix.
+
+**Local fix (periodicity):** the common positive power is obtained from
+closed walks of lengths two and three in place of the source's blocking
+argument. See
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 (`propSN`), lines
+1451--1471. -/
+theorem activeSectorTraceMatrix_isPrimitive
+    (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
+    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
+    (hspan : Submodule.span ℂ
+      (Set.range (F.activeSectorOneSiteMatrixFamily p)) = ⊤)
+    (hnonzero : ∀ k : F.ActiveSector p,
+      ∃ x y : F.SectorIndex k, F.sectorVirtualMatrix k x y ≠ 0)
+    (htriangle : ∀ {k h : F.ActiveSector p},
+      F.neighboringOperator k h ≠ 0 →
+        ∃ j : F.ActiveSector p,
+          F.neighboringOperator h j ≠ 0 ∧
+            F.neighboringOperator j k ≠ 0) :
+    Matrix.IsPrimitive (F.activeSectorTraceMatrix p) :=
+  (F.activeSectorTraceMatrix_isIrreducible p hpos hspan hnonzero)
+    |>.isPrimitive_of_pow_two_diagonal_pos_of_pow_three_diagonal_pos
+      (F.activeSectorTraceMatrix_pow_two_diag_pos p hpos hspan hnonzero)
+      (F.activeSectorTraceMatrix_pow_three_diag_pos
+        p hpos hspan hnonzero htriangle)
 
 end MPOTensor.PhysicalSectorFactorization
