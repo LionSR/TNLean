@@ -358,6 +358,15 @@ theorem.\footnote{The formal declarations are
 \leanid{MPOTensor.sectorReaches_iff_directedWalkReaches}, and
 \leanid{MPOTensor.isRecurrentSupport_iff_directedWalkReturns}.}
 
+Every nonempty closed directed walk is also represented by a finite cyclic
+family of its source vertices.  Consecutive vertices are connected by the
+corresponding edge, including the final return to the initial vertex, and the
+cyclic product of edge weights equals the walk weight.\footnote{The formal
+declarations are
+\leanid{TNLean.Algebra.DirectedWalk.closedConsVertices},
+\leanid{TNLean.Algebra.DirectedWalk.closedConsVertices_edge}, and
+\leanid{TNLean.Algebra.DirectedWalk.weight_closedCons_eq_fin_prod}.}
+
 The finite-factor rescaling used implicitly by the four-sector
 counterexample is now a general lemma about complex matrices, independent of
 the MPDO setting.  If a finite Kronecker product $A_0\otimes\cdots\otimes
