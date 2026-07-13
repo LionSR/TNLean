@@ -244,7 +244,12 @@ formalized.
 \path{MPOTensor.sum_cyclic_sectorTensor_eq_prod_etaOfSectorTensors},
 \path{MPOTensor.trace_sector_word_eq_prod_etaOfSectorTensors},
 \path{MPOTensor.mpo_submatrix_sector_eq_cyclicEtaTensorProduct}, and
-\path{MPOTensor.mpo_reindex_sectorChainEquiv_eq_blockDiagonal_cyclicEta}.}
+\path{MPOTensor.mpo_reindex_sectorChainEquiv_eq_blockDiagonal_cyclicEta}.
+For the source-minimal physical-sector factorization, the corresponding direct
+statements are
+\path{MPOTensor.PhysicalSectorFactorization.mpo_submatrix_sector_eq_cyclicNeighboringProduct}
+and
+\path{MPOTensor.PhysicalSectorFactorization.mpo_reindex_sectorChainEquiv_eq_blockDiagonal}.}
 What remains in Lemma \texttt{propSN} is the positive choice of the individual
 $\eta_{k,h}$ and the local-orthogonality argument establishing primitivity of
 the sector trace matrix.  Positivity of a complete cyclic product does not by
@@ -529,7 +534,10 @@ For the conditional bond construction, adjacent translates commute for every
 chain length $N\geq 2$, including the wraparound and crossed two-site cases,
 and disjoint translates commute by locality.  These cases are assembled into
 pairwise commutativity of all translates at every length $N\geq2$.  The
-finite-chain product realization remains open.
+finite-chain MPO is now expressed directly as the cyclic neighboring product
+in the coordinates of the physical-sector factorization.  Identifying this
+matrix with the ordered product of the translated two-site bonds, and then
+transporting that product to the original physical coordinates, remain open.
 
 \bibliographystyle{alpha}
 \bibliography{references}
