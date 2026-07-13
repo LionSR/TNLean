@@ -9,7 +9,7 @@
 
 \title{Finite-Length Block Separation in the CPGSV17 Proposition \texttt{propblockinj}}
 \author{}
-\date{2026-04-30}
+\date{2026-07-13}
 
 \begin{document}
 \maketitle
@@ -54,12 +54,11 @@ block-injective canonical form immediately preceding it is
 P\'erez-Garc\'ia--Verstraete--Wolf--Cirac
 \cite{PerezGarcia2007MPSReps}.
 
-\section{The formal replacement}
+\section{The older per-copy formulation}
 
-The formal treatment does not yet derive this proposition from the
-canonical-form and basis-of-normal-tensors hypotheses. Instead, it makes the
-finite-length conclusion explicit. The horizontal canonical-form data record
-the following trace-separation assumption: there is a length $N$ such that, if
+The older auxiliary horizontal block hypotheses make the finite-length conclusion
+explicit on every flattened copy.  They record the following trace-separation
+assumption: there is a length $N$ such that, if
 matrices $\Delta_j\in M_{D_j}(\mathbb C)$ satisfy
 \[
     \sum_{j=1}^g \operatorname{tr}(\Delta_j A_j^w)=0
@@ -86,28 +85,23 @@ others. Concatenating an injective prefix with such a selector suffix gives the
 full product-algebra span.
 
 In the formal files, these three finite-length criteria suffice to produce the
-horizontal canonical-form trace-separation conclusion.\footnote{The criteria are
+older per-copy trace-separation conclusion.\footnote{The criteria are
     named \texttt{WordTupleSpanTop}, \texttt{wordEntryFamily}, and
     \texttt{PropBlockInjective}. The trace-separation assumption is
     \texttt{HorizontalCFData.biCF}. The constructors from these hypotheses to
-    horizontal canonical-form data are in the modules under
+    \texttt{HorizontalCFData} structures are in the modules under
     \path{TNLean/MPS/MPDO/BiCFDerivation/}. Relevant implications include
     \texttt{hasBiCF\_of\_wordTupleSpanTop},
     \texttt{hasBiCF\_of\_wordEntryFamily\_linearIndependent},
     \texttt{hasBiCF\_of\_propBlockInjective}, and corresponding
     \texttt{HorizontalCFData} constructors such as
-    \texttt{horizontalCFData\_of\_propBlockInjective}. The blueprint records the same
-    state in \path{blueprint/src/chapter/ch20_mpdo_canonical_forms.tex}, lines 27--108.}
-Thus \texttt{propblockinj} has not been asserted without proof. The formal statements
-prove that several finite-length witnesses are sufficient.  For the
-representative-indexed BNT canonical form, such a witness is now derived from
-irreducibility, left-canonicality, and normalized self-overlap.  The predicate
-\texttt{HasHorizontalCFMPVRepresentation} records the resulting equality of
-complete MPV families with a representative-indexed BNT decomposition.  It is
-not the paper's literal horizontal canonical form: it contains no bond-space
-gauge relating the original tensor letters to the repeated BNT blocks.  The
-flattened \texttt{HorizontalCFData} formulation remains as a strictly stronger
-auxiliary hypothesis for the older per-copy results.
+    \texttt{horizontalCFData\_of\_propBlockInjective}.  The blueprint records
+    these restricted criteria in its finite-witness remark.}
+Thus \texttt{propblockinj} has not been asserted without proof.  These
+statements remain correct restricted results, but the public horizontal
+canonical-form predicate no longer uses them.  It is now stated through a
+representative-indexed BNT sector decomposition, so repeated copies are
+grouped before the separation argument.
 
 \section{The counterexample boundary}
 
@@ -218,22 +212,23 @@ block-injectivity length by taking a common multiple of their individual
 lengths.  Consequently the representative-indexed Lemma L now follows from
 the BNT canonical-form predicate itself.
 
-The MPV-level representation predicate and the representative-indexed part of
-the MPDO argument now use a \texttt{SectorDecomposition} satisfying
-\texttt{IsBNTCanonicalForm}.  Equality of the three first-site contractions is
-therefore reduced to equality on each minimal representative by the grouped
-Lemma L, with no per-copy trace-separation hypothesis.  The older
-\texttt{HorizontalCFData}, \texttt{IsPerCopyHorizontalCF}, and per-copy
-\texttt{biCF} theorems remain correct restricted results, but they are not the
-source-facing formulation of Lemma L.
+The public horizontal canonical-form predicate has now been replaced by the
+representative-indexed formulation.  It quantifies a BNT sector decomposition
+whose total bond dimension equals the original bond dimension and which is
+literally related to the doubled-index tensor by one global gauge.  Complete
+MPV equality transports the first-site identities to the BNT representatives.  The
+representative-grouped Lemma L concludes equality of the opposite-corner
+insertions on every minimal representative.  Linearity extends this equality
+to the full weighted direct sum, and gauge conjugation transports the result
+to the original MPO tensor.  The older
+per-copy \texttt{HorizontalCFData} theorems remain available only as explicitly
+restricted auxiliary statements.
 
-This does not yet prove the first conclusion of Proposition~4.13 for the
-original MPO tensor.  The source uses the literal decomposition
-$\bigoplus_{j,q}\mu_{j,q}X_{j,q}A_jX_{j,q}^{-1}$ to transport equality on the
-minimal representatives back to the original bond space.  The formal MPV-level
-predicate has no matrices $X_{j,q}$ and cannot justify that transport.  A
-faithful completion therefore requires a gauge-explicit horizontal
-canonical-form structure and the corresponding direct-sum conjugation theorem.
+This closes the multiplicity and block-separation gap in Lemma L.  It does not
+by itself complete Proposition~4.13: constructing the letterwise vertical
+decomposition from the resulting reducing projections, and proving the
+subsequent positivity and isometric normalization of its sectors, are separate
+parts of that proposition.
 
 Separately, the numerical bound in the full block-injectivity proposition still
 requires the David2006 argument: from minimality of the basis of normal tensors

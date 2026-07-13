@@ -245,10 +245,10 @@ the length-`L` word span then recovers equality of the original insertions.
 This is the blocking step of arXiv:1606.00608, lines 318--344, composed with
 Appendix C.3, Lemma L, lines 1835--1858.
 
-**Scope restriction (common block-injectivity length):** The common positive
-length is an explicit hypothesis; its derivation from the canonical-form
-construction remains open.  See
-`docs/paper-gaps/cpgsv17_bicf_block_separation.tex`. -/
+The common positive length is explicit in this auxiliary theorem.  It is
+derived from the BNT canonical-form hypotheses by
+`IsBNTCanonicalForm.exists_common_basis_isNBlkInjective` and eliminated in
+`insertedTensor_basis_eq_of_firstSiteActionAgree` below. -/
 theorem insertedTensor_basis_eq_of_firstSiteActionAgree_of_common_blockInjective
     (hCF : IsBNTCanonicalForm P) (L : ℕ) (hL : 0 < L)
     (hInj : ∀ j, IsNBlkInjective (P.basis j) L)
@@ -281,9 +281,9 @@ The common block-injectivity length is the input supplied by the canonical-form
 blocking step in arXiv:1606.00608, lines 318--344.  The representative
 conclusion is Appendix C.3, Lemma L, lines 1835--1858.
 
-**Scope restriction (common block-injectivity length):** This transport theorem
-inherits the explicit common-length hypothesis above.  See
-`docs/paper-gaps/cpgsv17_bicf_block_separation.tex`. -/
+The common positive length is explicit in this auxiliary transport theorem and
+is eliminated in
+`insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree` below. -/
 theorem insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree_of_common_blockInjective
     {D : ℕ} (A : MPSTensor d D) (hCF : IsBNTCanonicalForm P)
     (L : ℕ) (hL : 0 < L) (hInj : ∀ j, IsNBlkInjective (P.basis j) L)
