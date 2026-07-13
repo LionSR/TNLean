@@ -718,6 +718,123 @@ separate step.
     \cite{Bultinck2017Anyons}.
 \end{definition}
 
+\begin{theorem}[Pair fusion completeness from positive-length selectors]%
+    \label{thm:mpdo_pair_fusion_selector_completeness}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords}
+    \leanok
+    \uses{def:mpdo_final_label_selector_words,
+        thm:mpdo_bnt_length_independent_zipper}
+    Suppose the positive trace-power coefficients are independent of the
+    positive chain length, and suppose that common selectors exist at a
+    positive length.  Then every pair fusion isometry is surjective:
+    \[
+        U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=1.
+    \]
+    The common selectors are the finite-word form of the simultaneous inverse
+    used in \cite[line~269]{Bultinck2017Anyons}.
+\end{theorem}
+\begin{proof}\leanok
+    For a word $w$ of the positive selector length, the identity
+    $U_{\alpha,\beta}^{\dagger}U_{\alpha,\beta}=1$ gives
+    \[
+        D^w=U_{\alpha,\beta}(M_\alpha M_\beta)^w
+            U_{\alpha,\beta}^{\dagger},
+    \]
+    where
+    $D=\bigoplus_\gamma 1_{r_{\alpha,\beta}^{\gamma}}\otimes M_\gamma$.
+    Hence the range projection
+    $P=U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}$ satisfies $PD^w=D^w$.
+    Summing the selector polynomials over the final label gives the identity
+    on the full direct sum, and therefore $P=1$.
+\end{proof}
+
+\begin{theorem}[Left iterated fusion completeness]%
+    \label{thm:mpdo_left_fusion_selector_completeness}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        leftFusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords}
+    \leanok
+    \uses{thm:mpdo_pair_fusion_selector_completeness,
+        def:mpdo_left_fusion_isometry}
+    Under the hypotheses of
+    Theorem~\ref{thm:mpdo_pair_fusion_selector_completeness},
+    \[
+        U^{\mathrm L}_{\alpha,\beta,\gamma}
+        (U^{\mathrm L}_{\alpha,\beta,\gamma})^{\dagger}=1.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Pair fusion completeness gives
+    \[
+        \sum_\delta r_{a,b}^{\delta}D_\delta=D_aD_b.
+    \]
+    Applying this equality first to $(\delta,\gamma)$ and then to
+    $(\alpha,\beta)$ shows that the source and target dimensions of
+    $U^{\mathrm L}_{\alpha,\beta,\gamma}$ coincide.  A square isometry is
+    surjective.
+\end{proof}
+
+\begin{theorem}[Right iterated fusion completeness]%
+    \label{thm:mpdo_right_fusion_selector_completeness}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        rightFusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords}
+    \leanok
+    \uses{thm:mpdo_pair_fusion_selector_completeness,
+        def:mpdo_right_fusion_isometry}
+    Under the same hypotheses,
+    \[
+        U^{\mathrm R}_{\alpha,\beta,\gamma}
+        (U^{\mathrm R}_{\alpha,\beta,\gamma})^{\dagger}=1.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    The right-associated dimension calculation is
+    \[
+        \sum_{\delta,\varepsilon}
+          r_{\beta,\gamma}^{\delta}r_{\alpha,\delta}^{\varepsilon}
+          D_\varepsilon
+        =D_\alpha(D_\beta D_\gamma).
+    \]
+    The right iterated fusion map is therefore a square isometry.
+\end{proof}
+
+\begin{theorem}[Right adjoint inverse for the full triple-fusion comparison]%
+    \label{thm:mpdo_triple_fusion_comparison_right_inverse}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        tripleFusionComparison_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords}
+    \leanok
+    \uses{thm:mpdo_triple_fusion_comparison_left_range,
+        thm:mpdo_left_fusion_selector_completeness}
+    Under the same hypotheses, the comparison of the full direct sums satisfies
+    \[
+        C_{\alpha,\beta,\gamma}C_{\alpha,\beta,\gamma}^{\dagger}=1.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    The left range identity reduces the product to
+    $U^{\mathrm L}(U^{\mathrm L})^{\dagger}$, which is the identity by
+    Theorem~\ref{thm:mpdo_left_fusion_selector_completeness}.
+\end{proof}
+
+\begin{theorem}[Left adjoint inverse for the full triple-fusion comparison]%
+    \label{thm:mpdo_triple_fusion_comparison_left_inverse}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        conjTranspose_mul_tripleFusionComparison_eq_one_of_lengthIndependent_of_selectorWords}
+    \leanok
+    \uses{thm:mpdo_triple_fusion_comparison_right_range,
+        thm:mpdo_right_fusion_selector_completeness}
+    Under the same hypotheses,
+    \[
+        C_{\alpha,\beta,\gamma}^{\dagger}C_{\alpha,\beta,\gamma}=1.
+    \]
+    This proves invertibility on the full direct sums.  It does not yet prove
+    invertibility of a fixed-final multiplicity matrix.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the right range identity and
+    Theorem~\ref{thm:mpdo_right_fusion_selector_completeness}.
+\end{proof}
+
 \begin{theorem}[Vanishing between distinct final sectors]%
     \label{thm:mpdo_triple_fusion_comparison_final_sector_vanishing}
     \lean{MPOTensor.BNTFusionIsometryFamily.%
