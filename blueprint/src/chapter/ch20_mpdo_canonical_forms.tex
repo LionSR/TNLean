@@ -6,24 +6,32 @@
 % `Prop:IV.12` is Proposition 4.13 in the arXiv source.
 
 \begin{definition}[Horizontal canonical form for an MPO]\label{def:horizontal_cf_mpdo}
-    \notready
-    \uses{def:mpo_tensor, def:sector_bnt_cf}
+    \lean{MPOTensor.IsHorizontalCF}
+    \leanok
+    \uses{def:mpo_tensor, def:sector_bnt_cf, def:gauge_equiv}
     An MPO tensor is in \emph{horizontal canonical form} if its doubled-index
-    tensor has a literal bond-space decomposition
+    MPS tensor is a BNT sector decomposition with an independent gauge on
+    every repeated copy:
     \[
-        \widehat M^i
-        =\bigoplus_{j=0}^{g-1}\bigoplus_{q=0}^{r_j-1}
-          \mu_{j,q}X_{j,q}A_j^iX_{j,q}^{-1},
+        M^{ab}=\bigoplus_{j=0}^{g-1}\bigoplus_{q=0}^{r_j-1}
+        \mu_{j,q}X_{j,q}A_j^{ab}X_{j,q}^{-1}.
     \]
-    where $(A_j)_{0\leq j<g}$ is a minimal basis of normal tensors, each
-    $\mu_{j,q}$ is nonzero, and every $X_{j,q}$ is invertible.  Equivalently,
-    with
+    Here the $A_j$ are the distinct minimal representatives, $r_j>0$, and
+    every weight $\mu_{j,q}$ is nonzero, $|\mu_{j,q}|\leq1$, and at least
+    one weight has modulus one.  The BNT hypotheses include
+    irreducibility, left-canonicality, normalized self-overlap, eventual
+    linear independence of the representative MPV families, and the
+    exclusion of similarity up to phase between distinct representatives.
+    Repeated gauge-equivalent copies are retained over the same representative
+    rather than separated as distinct blocks.  The total bond dimension of
+    the displayed direct sum is exactly $D$.  Equivalently, with the
+    block-diagonal matrix $X=\bigoplus_{j,q}X_{j,q}$,
     \[
-        X=\bigoplus_{j=0}^{g-1}\bigoplus_{q=0}^{r_j-1}X_{j,q},
+        M^{ab}=X\left[\bigoplus_{j,q}\mu_{j,q}A_j^{ab}\right]X^{-1},
+        \qquad X=\bigoplus_{j,q}X_{j,q}.
     \]
-    this is the gauge-explicit decomposition of
-    \cite[Section~2.3, lines~283--297]{Cirac2016MPDO_arXiv}.
-    % No Lean tag: the literal bond-space gauge data are not yet formalized.
+    This is the canonical form and its BNT decomposition in
+    \cite[lines~237--246 and 281--301]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{definition}[MPV representation associated with horizontal canonical form]
@@ -35,18 +43,33 @@
     its doubled-index MPS tensor generates the same complete MPV family as a
     BNT canonical form
     \[
-        \bigoplus_{j=0}^{g-1}\bigoplus_{q=0}^{r_j-1}\mu_{j,q}A_j,
+        \bigoplus_{j=0}^{g-1}\bigoplus_{q=0}^{r_j-1}\mu_{j,q}A_j.
     \]
-    where $(A_j)_{0\leq j<g}$ is a minimal basis of normal tensors and each
-    $\mu_{j,q}$ is nonzero.  Its length-$N$ matrix product vector is therefore
+    Its length-$N$ matrix product vector is
     \[
         \sum_{j=0}^{g-1}
         \left(\sum_{q=0}^{r_j-1}\mu_{j,q}^{N}\right)V^{(N)}(A_j).
     \]
     This is the MPV-level decomposition in
-    \cite[Section~2.3, lines~298--301]{Cirac2016MPDO_arXiv}.  It does not assert
-    the literal bond-space gauge of Definition~\ref{def:horizontal_cf_mpdo}.
+    \cite[Section~2.3, lines~298--301]{Cirac2016MPDO_arXiv}.
 \end{definition}
+
+\begin{theorem}[Horizontal canonical form gives the BNT MPV representation]
+    \label{thm:horizontal_cf_gives_mpv_representation}
+    \lean{MPOTensor.IsHorizontalCF.hasHorizontalCFMPVRepresentation}
+    \leanok
+    \uses{def:horizontal_cf_mpdo,
+        def:horizontal_cf_mpv_representation}
+    Every MPO tensor in horizontal canonical form has the associated complete
+    BNT matrix-product-vector representation.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Each copy similarity cancels inside its closed matrix-product trace.
+    Since the two bond dimensions agree, this also identifies the coefficient
+    at length zero.
+\end{proof}
 
 \begin{figure}[ht]
     \centering
@@ -54,7 +77,8 @@
     \caption{Horizontal canonical form of the doubled tensor: the gauge $X$,
     one basis tensor $\mathcal K$ carrying the ket and bra legs, and
     $X^{-1}$, threaded by the block-index lines $j$ and $q$. In the source
-    display the weights $\mu_j$ are absorbed into the basis tensors, so the
+    specialized simple-biCF/ZCL display the weights $\mu_j$ are independent
+    of the copy index and absorbed into the basis tensors, so the
     basis tensor taps only the line $j$ while the gauge factors $X_{j,q}$
     tap both lines. This is
     \cite[Appendix~C.2, lines~1660--1665]{Cirac2016MPDO_arXiv}.}
@@ -167,8 +191,8 @@
     span, hence on the whole product algebra, so nondegeneracy of the
     product trace pairing forces every $\Delta_k=0$. Combined with
     injectivity, left-canonicality, and nonzero block weights, this
-    finite-length separation yields the horizontal canonical-form data of
-    the block-diagonal tensor.
+    finite-length separation supplies the older per-copy trace-separation
+    hypotheses for the block-diagonal tensor.
 
     The spanning hypothesis has an equivalent entrywise form. For a block
     index $k$ and matrix entry $(a,b)$, let
@@ -178,7 +202,7 @@
     be the corresponding scalar word family, indexed jointly by the triple
     $(k,a,b)$. Linear independence of this scalar family already implies
     the spanning condition, hence the separation property, and hence the
-    horizontal canonical-form data directly.
+    older per-copy trace-separation hypotheses directly.
 
     The duplicate-scalar counterexample shows that the separation property
     is strictly stronger than blockwise injectivity, left-canonicality, and
@@ -204,7 +228,7 @@
     \]
     Concatenating the injective prefix with this finite selector family
     produces the spanning condition at length $L+S$, hence the separation
-    property and the horizontal canonical-form data.
+    property and the older per-copy trace-separation hypotheses.
 \end{remark}
 
 \begin{figure}[ht]
@@ -236,11 +260,12 @@
 \begin{proof}
     \leanok
     \uses{rem:word_tuple_span_top}
-    This is the direct implication from the finite-length data to the
-    finite-length trace-separation statement. What remains open in the full
-    block-injectivity proposition of
-    \cite[lines~340--345]{Cirac2016MPDO_arXiv} is the derivation of this
-    finite witness from separated canonical-form / BNT data.
+    This is the direct implication from the finite-length hypotheses to the
+    finite-length trace-separation statement.  General BNT canonical-form
+    hypotheses now yield a finite representative-indexed witness.  What remains
+    open in the sharper block-injectivity proposition of
+    \cite[lines~340--345]{Cirac2016MPDO_arXiv} is the stated numerical bound
+    $3D^5$ and its particular selector construction.
 \end{proof}
 
 \begin{definition}[Representative word-tuple separation]
@@ -291,11 +316,11 @@
     The representative grouping is the argument of
     \cite[Appendix~C.3, lines~1835--1858]{Cirac2016MPDO_arXiv}.
 
-    \textbf{Scope restriction (finite representative span).}  Appendix~C.3
-    obtains the required separation from block injectivity of a minimal basis
-    of normal tensors.  Here eventual representative word-tuple separation is
-    an explicit assumption; its derivation from the full canonical-form
-    hypotheses remains open.  This is recorded in
+    In the first auxiliary assertion, eventual representative word-tuple
+    separation is an explicit assumption.  The later post-blocked theorem
+    derives the needed finite representative separation from the full BNT
+    canonical-form hypotheses.  The source's sharp $3D^5$ bound remains
+    separate, as recorded in
     \path{docs/paper-gaps/cpgsv17_bicf_block_separation.tex}.
 \end{theorem}
 
@@ -512,6 +537,80 @@
     of the first block form a spanning family, so
     Lemma~\ref{lem:first_site_action_physical_blocking} recovers
     $YA_j=ZA_j$ before blocking.
+\end{proof}
+
+\begin{theorem}[Representative and literal reduction from first-site contractions]
+    \label{thm:representative_one_sub_mp_zero}
+    \lean{MPSTensor.FirstSiteActionAgree.of_sameMPV}
+    \lean{MPSTensor.insertedTensor_toTensorFromBlocks}
+    \lean{MPSTensor.SectorDecomposition.insertedTensor_toTensor_eq_of_basis}
+    \lean{MPSTensor.insertedTensor_eq_of_gauge}
+    \lean{MPOTensor.IsHorizontalCF.insertedTensor_eq_of_firstSiteActionAgree}
+    \lean{MPOTensor.insertedTensor_braRightAction_toMPSTensor}
+    \lean{MPOTensor.insertedTensor_ketLeftBraRightAction_toMPSTensor}
+    \lean{MPOTensor.representative_opposite_insert_eq_of_rotated_mpo_entries}
+    \lean{MPOTensor.representative_braRight_eq_ketLeftBraRight_of_invariant}
+    \lean{MPOTensor.IsHorizontalCF.exists_representative_braRight_eq_ketLeftBraRight}
+    \lean{MPOTensor.IsHorizontalCF.braRight_eq_ketLeftBraRight_of_invariant}
+    \leanok
+    \uses{def:mpdo, def:horizontal_cf_mpdo,
+        def:mpdo_three_first_site_contractions,
+        thm:representative_grouped_insert_eq,
+        thm:postblocked_representative_grouped_insert_eq,
+        thm:mpdo_first_site_invariant_comm}
+    Let $M$ be in horizontal canonical form.  For doubled-index matrices
+    $Y,Z$, suppose that
+    \[
+        Y_1V^{(N)}(M)=Z_1V^{(N)}(M)
+        \qquad (N\geq1).
+    \]
+    Then the corresponding inserted tensors agree on the original bond
+    space, $YM=ZM$.
+
+    Now suppose in addition that $M$ generates an MPDO, $Q=Q^\dagger$, and
+    that $Q\widetilde M=Q\widetilde M Q$ on the vertically viewed tensor.
+    Then, on every representative, the insertions corresponding to
+    $\widetilde M Q$ and $Q\widetilde M Q$ agree:
+    \[
+        Y_R(Q)A_j=Y_C(Q)A_j
+        \qquad (0\leq j<g).
+    \]
+    This equality extends through every repeated weighted sector and the
+    direct sum of the copy gauges, so that the original MPO tensor satisfies
+    \[
+        \widetilde M Q=Q\widetilde M Q.
+    \]
+    The specialized assertion follows from the two entrywise identities
+    $Q_1H^{(N)}=Q_1H^{(N)}Q_1$ and
+    $Q_1H^{(N)}=H^{(N)}Q_1$ at every positive length.
+
+    This is the representative-indexed conclusion of the invariant-projection
+    step in
+    \cite[Proposition~4.13, lines~1873--1887]{Cirac2016MPDO_arXiv}.
+    Copies with a common normal representative are grouped before separation,
+    exactly as in Appendix~C.3, Lemma~L.
+    The source assumes that $Q$ is an orthogonal projector; this implication
+    only uses its Hermiticity.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:representative_grouped_insert_eq,
+        thm:postblocked_representative_grouped_insert_eq,
+        thm:mpdo_first_site_invariant_comm}
+    For the general assertion, complete MPV equality transports the first-site
+    identity to the BNT sector decomposition.  The representative-grouped
+    Lemma~L gives $YA_j=ZA_j$ for every representative.  First-site insertion
+    commutes with the weighted direct sum, and conjugating each copy by its
+    gauge gives $YM=ZM$ on the original bond space.
+
+    For the specialized assertion, positivity and Hermiticity give
+    $Q_1H^{(N)}=Q_1H^{(N)}Q_1=H^{(N)}Q_1$.  Transport these two identities to
+    the BNT sector decomposition and apply the
+    representative-grouped Lemma~L to identify first $Y_L(Q)A_j$ with
+    $Y_C(Q)A_j$ and then with $Y_R(Q)A_j$.  Transitivity gives the stated
+    equality for every representative, and the same direct-sum and copy-gauge
+    argument gives the literal equality on $\widetilde M$.
 \end{proof}
 
 \begin{lemma}[Blockwise equality from agreement on the MPV family]
@@ -860,9 +959,14 @@
     density operator generated by an MPDO commutes with the density operator
     itself.  This is the final operator implication in the periodic-sector
     contradiction in the proof of
-    \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}.  It does not construct the
-    orthogonal projector $Q$ from a nontrivial vertical period or prove the
-    all-length commutation hypothesis; those steps remain open.
+    \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}.  The cyclic projector and
+    its displacement are now constructed.  What remains open is the mismatch
+    between the all-length noncommutation family used by the cyclic argument
+    and the simultaneous positive-length commutation family excluded by
+    Lemma~L.  One may close it either by deriving the stronger noncommutation
+    family from the cyclic and peripheral information, or by reformulating the
+    final contradiction to use the single noncommuting length supplied by the
+    contrapositive of Lemma~L.
 \end{theorem}
 
 \begin{proof}
@@ -1220,9 +1324,14 @@
     \cite[Proposition~4.13]{Cirac2016MPDO_arXiv} assumes the tensor is in
     canonical form in the horizontal direction, and the argument of
     lines~1874--1887 turns all-length commutation of $Q_1$ with $H^{(N)}$
-    into the letter-level invariance $Q\widetilde M=Q\widetilde MQ$, so a
-    displaced projector cannot commute.  The derivation of this implication
-    from a horizontal canonical form remains open.
+    into the letter-level invariance $Q\widetilde M=Q\widetilde MQ$.  The
+    literal transport through a horizontal canonical form is now proved.
+    What remains open is the mismatch between this all-length
+    noncommutation family and the simultaneous positive-length commutation
+    family excluded by Lemma~L.  One may close it either by deriving the
+    stronger noncommutation family from the cyclic and peripheral
+    information, or by reformulating the final contradiction to use the
+    single noncommuting length supplied by the contrapositive of Lemma~L.
     % Gap recorded in docs/paper-gaps/cpgsv17_periodic_sector_projector.tex.
 \end{definition}
 
@@ -1674,14 +1783,15 @@
     product vector of the single-spin block-diagonal assembly.
 \end{proof}
 
-\begin{theorem}[Diagonal restriction need not preserve normality]
+\begin{theorem}[Per-copy horizontal hypotheses do not control diagonal normality]
     \label{thm:diagonal_restriction_not_normal}
     \lean{MPSTensor.horizontalCFData_diagBlock_not_isNormal}
     \leanok
-    \uses{def:horizontal_cf_mpdo}
+    \uses{rem:word_tuple_span_top}
     There is a left-canonical, injective doubled-index tensor with a nonzero
-    block weight satisfying the finite-length block-separation hypothesis whose
-    restriction to the diagonal physical pairs is not normal.  On bond space
+    block weight satisfying the older per-copy finite-length separation
+    hypothesis whose restriction to the diagonal physical pairs is not normal.
+    On bond space
     $\mathbb C^2$, take
     \[
         A^{(a,b)}=c_a E_{ab},
@@ -1763,6 +1873,8 @@
 
 \begin{lemma}[Matrix product vector of the vertical-assembled tensor]
     \label{lem:mpv_vertical_assembled}
+    \lean{MPOTensor.verticalCopyDim}
+    \lean{MPOTensor.verticalCopyBlocks}
     \lean{MPOTensor.mpv_verticalAssembledTensor_eq_sum}
     \leanok
     \uses{thm:mpv_decomposition, def:block_diagonal_tensor}
@@ -1966,11 +2078,13 @@
     \notready
     \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_tensor_mpdo,
         def:vertical_cf_mpdo,
-        thm:mpdo_opposite_corner_zero, thm:blockwise_opposite_insert_eq,
-        thm:blockwise_opposite_insert_rotated_mpo,
+        thm:mpdo_opposite_corner_zero,
         thm:mpdo_first_site_invariant_comm,
-        thm:blockwise_one_sub_mp_zero,
+        thm:representative_one_sub_mp_zero,
         thm:psd_commute_of_commute_pow,
+        thm:mpdo_displaced_invariant_projector,
+        def:mpdo_noninvariant_projector_noncommuting,
+        thm:mpdo_cyclic_projector_of_noncommutation,
         def:mpdo_periodic_sector_projector,
         def:mpdo_periodic_vector_yields_projector,
         thm:mpdo_no_periodic_sector_projector,
@@ -2000,11 +2114,13 @@
 
 \begin{proof}
     \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_cf_mpdo,
-        thm:mpdo_opposite_corner_zero, thm:blockwise_opposite_insert_eq,
-        thm:blockwise_opposite_insert_rotated_mpo,
+        thm:mpdo_opposite_corner_zero,
         thm:mpdo_first_site_invariant_comm,
-        thm:blockwise_one_sub_mp_zero,
+        thm:representative_one_sub_mp_zero,
         thm:psd_commute_of_commute_pow,
+        thm:mpdo_displaced_invariant_projector,
+        def:mpdo_noninvariant_projector_noncommuting,
+        thm:mpdo_cyclic_projector_of_noncommutation,
         def:mpdo_periodic_sector_projector,
         def:mpdo_periodic_vector_yields_projector,
         thm:mpdo_no_periodic_sector_projector,
@@ -2019,20 +2135,26 @@
         thm:eq3_of_dressed_adjoint,
         lem:mpv_diagonal_tensor,
         lem:vertical_grouping_equiv}
-    Theorem~\ref{thm:blockwise_one_sub_mp_zero} shows
+    Theorem~\ref{thm:representative_one_sub_mp_zero} shows
     that every self-adjoint $P$ with $PM=PMP$ on the vertically viewed tensor
-    gives $(\Id-P)MP=0$ on every horizontal canonical-form block.
+    gives the literal equality $MP=PMP$ on the original MPO tensor, including
+    all its repeated sectors.  The paper takes $P$
+    to be an orthogonal projector; Hermiticity is the only part of that
+    assumption needed for this implication.
     Theorem~\ref{thm:mpdo_vertical_no_periodic_vectors} excludes nontrivial
     $p$-periodic vectors of the vertically viewed tensor:
     Theorem~\ref{thm:mpdo_no_periodic_sector_projector} rules out any
     periodic-sector projector, since by
     Theorem~\ref{thm:psd_commute_of_commute_pow} an orthogonal projector
-    commuting with $[H^{(N)}]^p$ commutes with $H^{(N)}$.  It remains to
-    prove that a nontrivial vertical period supplies a periodic-sector
-    projector with the two all-length properties stated in source
-    lines 1889--1890
-    (Definition~\ref{def:mpdo_periodic_vector_yields_projector}), which the
-    source draws from the general theory of the peripheral spectrum.
+    commuting with $[H^{(N)}]^p$ commutes with $H^{(N)}$.  A nontrivial
+    vertical period now supplies the displaced cyclic projector and its word
+    invariance.  A mismatch remains between the present non-commutation
+    interface, which asks for a contradiction at every length separately, and
+    the literal canonical-form reduction, which only rules out simultaneous
+    commutation at all positive lengths.  One must either derive the stronger
+    family from the cyclic decomposition and peripheral spectral hypotheses,
+    or weaken the final
+    contradiction to consume one noncommuting length.
     One must then apply the canonical-form theorem in the vertical direction
     to the vertically viewed tensor $\widetilde M$, obtaining a decomposition
     \[

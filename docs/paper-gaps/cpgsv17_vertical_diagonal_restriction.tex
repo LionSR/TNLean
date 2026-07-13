@@ -60,7 +60,7 @@ $M_2(\mathbb C)$.  They also satisfy
 Taking a single horizontal block makes the simultaneous block-separation
 condition identical to ordinary injectivity.  Thus this example satisfies the
 injectivity, left-canonicality, nonzero-weight, and finite-length block-separation
-assumptions in the current horizontal canonical-form structure.
+assumptions in the older per-copy \texttt{HorizontalCFData} structure.
 
 Its diagonal restriction is
 \[
@@ -133,10 +133,11 @@ gives
 \[
   P_1H^{(N)}=P_1H^{(N)}P_1=H^{(N)}P_1,
 \]
-and Lemma~L transfers this equality to every horizontal canonical-form block,
-where it is precisely $(I-P)MP=0$.  The conclusion is stated this way because
-the formal theorem assumes only $P=P^*$; the source's notation
-$P^\perp MP=0$ additionally uses that $P$ is an orthogonal projection.
+and the representative-grouped Lemma~L transfers this equality through every
+repeated weighted sector and the direct sum of the copy gauges.  Thus the
+original tensor satisfies the literal equality $MP=PMP$, equivalently
+$(I-P)MP=0$.  The formal theorem assumes only $P=P^*$; the source specializes
+to an orthogonal projector.
 
 For the periodic-sector stage, the final positive-operator implication is also
 formalized:
@@ -145,9 +146,10 @@ formalized:
   \quad\Longrightarrow\quad
   QH^{(N)}=H^{(N)}Q.
 \]
-The remaining step is to derive, from a nontrivial vertical period, one
-orthogonal projector $Q$ having the two all-length properties in source
-lines~1889--1890.
+A nontrivial vertical period now yields the displaced cyclic projector and its
+word invariance.  The remaining step is the fixed-length interface: the
+present noncommutation predicate asks for a contradiction at every individual
+chain length, while Lemma~L consumes the simultaneous positive-length family.
 
 The third stage now has conditional formalizations of its two closing
 arguments.  Granted orthogonal sector projectors whose insertion into the
