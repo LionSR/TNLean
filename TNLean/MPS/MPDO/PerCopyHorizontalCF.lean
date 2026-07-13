@@ -302,4 +302,3 @@ theorem blockwise_opposite_insert_eq_of_rotated_mpo_entries
       (MPSTensor.firstSiteActionAgree_ketLeft_braRight M P hComm)
 
 end MPOTensor
-
