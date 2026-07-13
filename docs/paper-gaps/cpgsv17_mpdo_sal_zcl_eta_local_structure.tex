@@ -454,8 +454,10 @@ physical summand, sets the right sector tensor to zero when its Hayashi weight
 vanishes, and thereby isolates every zero-weight sector without changing the
 physical slices.  On the retained positive-weight support, let $S$ be a
 nonempty proper forward-closed set and let $C$ be its complement.  The absence
-of edges from $S$ to $C$ should give
-$\mathcal A_S\mathcal A_C=0$.  Injectivity should give
+of edges from $S$ to $C$ now gives
+$\mathcal A_S\mathcal A_C=0$ by
+\leanid{MPOTensor.PhysicalSectorFactorization.oneSiteSectorSpace_mul_eq_zero}.
+Injectivity should give
 $\mathcal A_S+\mathcal A_C=M_D(\mathbb C)$, while nontriviality of the two
 parts should make both spaces nonzero.  The formalized obstruction would
 then give a contradiction.  No absence of edges from $C$ to $S$ is needed.
@@ -463,11 +465,10 @@ then give a contradiction.  No absence of edges from $C$ to $S$ is needed.
 The remaining statements needed for this application are separate from the
 matrix-algebra lemma: physical unitary reparameterization must be shown to
 preserve the injective one-site span, positive-weight sectors must contribute
-nonzero one-site matrix spaces, and vanishing neighboring operators across a
-directed cut must be transported to the corresponding product of those
-spaces.  The abstract four-sector phase example remains a counterexample to
-cyclic positivity alone, but it need not satisfy these inverse-map and
-injectivity consequences.  Thus no recurrence theorem is asserted here.
+nonzero one-site matrix spaces.  The abstract four-sector phase example
+remains a counterexample to cyclic positivity alone, but it need not satisfy
+these inverse-map and injectivity consequences.  Thus no recurrence theorem
+is asserted here.
 
 \subsection{Coherent vertex rephasing under recurrence}
 
