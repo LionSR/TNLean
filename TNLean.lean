@@ -466,7 +466,7 @@ import TNLean.MPS.MPDO.BNTTripleFusionSeparation
 import TNLean.MPS.MPDO.BNTFixedFinalUnitarity
 import TNLean.MPS.MPDO.CompleteZipperFusion
 import TNLean.MPS.MPDO.CompleteZipperFusionInverse
-import TNLean.MPS.MPDO.CompleteZipperFusionFourfold
+import TNLean.MPS.MPDO.CompleteZipperFusionPentagon
 import TNLean.MPS.MPDO.CommutingForm
 import TNLean.MPS.MPDO.CommutingFormBridge
 import TNLean.MPS.MPDO.BlockedRFPConstruction

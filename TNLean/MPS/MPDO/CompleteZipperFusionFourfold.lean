@@ -10,21 +10,14 @@ import TNLean.MPS.MPDO.CompleteZipperFusionInverse
 
 The five parenthesizations of four MPO blocks give five multiplicity spaces at a fixed final
 label.  Their coordinates are the fusion labels and multiplicity indices printed in the pentagon
-equation of arXiv:1511.08090.  This file also defines the corresponding fourfold fusion maps and
-the five lifted, printed-orientation `F`-matrices along the associahedron.
+equation of arXiv:1511.08090.  This file defines the corresponding fourfold fusion maps and the
+explicit analysis of the right-associated map.
 
 These are categorical fusion multiplicities from `CompleteZipperFusionFamily`; they are not the
 positive-diagonal weighted coordinates of `BNTFusionIsometryFamily`.
 
-**Local fix (equation `pentagoneq`):** The source prints the entries in equation
-`pentagoneq` with the opposite upper/lower placement from equation `Fmove`.  The forward edge
-matrices below follow `Fmove`: rows are right-tree coordinates and columns are left-tree
-coordinates.  The literal index placement in `pentagoneq` therefore belongs to the inverse edge
-matrices.  This correction is documented in
-`docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
-
-No pentagon equality is asserted in this file.  Its proof must identify the two composites with
-the same fourfold fusion map and cancel a fusion analysis map.
+The lifted $F$-matrices, equality of the two paths, and literal indexed pentagon are given in
+`CompleteZipperFusionPentagon`.
 
 ## References
 
@@ -164,204 +157,200 @@ noncomputable def rightAssocFourfoldAnalysis (a b c d e : Λ) :
         Fus.fusionTensorLeftInverse b j i delta yi (xb, yj) *
           Fus.fusionTensorLeftInverse c d j gamma yj (xc, xd)
 
-/-! ### Regroupings for the five printed `F`-moves -/
+private noncomputable def fixedFinalSynthesis (a b e : Λ) :
+    Matrix (Fin (Fus.bondDim a) × Fin (Fus.bondDim b))
+      (Fin (Fus.fusionMultiplicity a b e) × Fin (Fus.bondDim e)) ℂ :=
+  fun x y => Fus.fusionTensor a b e y.1 x y.2
 
-private def leftPathFirstSourceEquiv (a b c d e : Λ) :
-    Fus.FourfoldLeftAssocMultiplicity a b c d e ≃
-      (g : Λ) × (Fus.LeftTripleMultiplicity a b c g ×
-        Fin (Fus.fusionMultiplicity g d e)) where
+private noncomputable def fixedFinalAnalysis (a b e : Λ) :
+    Matrix (Fin (Fus.fusionMultiplicity a b e) × Fin (Fus.bondDim e))
+      (Fin (Fus.bondDim a) × Fin (Fus.bondDim b)) ℂ :=
+  fun x y => Fus.fusionTensorLeftInverse a b e x.1 x.2 y
+
+private theorem fixedFinalAnalysis_mul_synthesis (a b e : Λ) :
+    Fus.fixedFinalAnalysis a b e * Fus.fixedFinalSynthesis a b e = 1 := by
+  funext ⟨mu, z⟩ ⟨nu, w⟩
+  have h := congrArg
+    (fun M => M ⟨e, mu, z⟩ ⟨e, nu, w⟩) (Fus.analysis_mul_synthesis a b)
+  simpa [fixedFinalAnalysis, fixedFinalSynthesis, fusionTensorLeftInverse,
+    fusionTensor, Matrix.mul_apply, Matrix.one_apply] using h
+
+private abbrev RightFourfoldFirstStage (a b c d : Λ) : Type u :=
+  Fin (Fus.bondDim a) × Fus.RightTripleIndex b c d
+
+private def rightFourfoldBondEquiv (a b c d : Λ) :
+    Fus.FourfoldBond a b c d ≃
+      Fin (Fus.bondDim a) × Fus.TripleBond b c d where
   toFun
-    | ⟨f, g, mu, nu, rho⟩ => ⟨g, ⟨⟨f, mu, nu⟩, rho⟩⟩
+    | ⟨⟨⟨xa, xb⟩, xc⟩, xd⟩ => ⟨xa, ⟨⟨xb, xc⟩, xd⟩⟩
   invFun
-    | ⟨g, ⟨⟨f, mu, nu⟩, rho⟩⟩ => ⟨f, g, mu, nu, rho⟩
-  left_inv := by rintro ⟨f, g, mu, nu, rho⟩; rfl
-  right_inv := by rintro ⟨g, ⟨⟨f, mu, nu⟩, rho⟩⟩; rfl
+    | ⟨xa, ⟨⟨xb, xc⟩, xd⟩⟩ => ⟨⟨⟨xa, xb⟩, xc⟩, xd⟩
+  left_inv := by rintro ⟨⟨⟨xa, xb⟩, xc⟩, xd⟩; rfl
+  right_inv := by rintro ⟨xa, ⟨⟨xb, xc⟩, xd⟩⟩; rfl
 
-private def leftPathFirstTargetEquiv (a b c d e : Λ) :
-    Fus.FourfoldLeftInnerMultiplicity a b c d e ≃
-      (g : Λ) × (Fus.RightTripleMultiplicity a b c g ×
-        Fin (Fus.fusionMultiplicity g d e)) where
-  toFun
-    | ⟨h, g, sigma, lambda, rho⟩ => ⟨g, ⟨⟨h, sigma, lambda⟩, rho⟩⟩
-  invFun
-    | ⟨g, ⟨⟨h, sigma, lambda⟩, rho⟩⟩ => ⟨h, g, sigma, lambda, rho⟩
-  left_inv := by rintro ⟨h, g, sigma, lambda, rho⟩; rfl
-  right_inv := by rintro ⟨g, ⟨⟨h, sigma, lambda⟩, rho⟩⟩; rfl
-
-private def leftPathSecondSourceEquiv (a b c d e : Λ) :
-    Fus.FourfoldLeftInnerMultiplicity a b c d e ≃
-      (h : Λ) × (Fin (Fus.fusionMultiplicity b c h) ×
-        Fus.LeftTripleMultiplicity a h d e) where
-  toFun
-    | ⟨h, g, sigma, lambda, rho⟩ => ⟨h, ⟨sigma, ⟨g, lambda, rho⟩⟩⟩
-  invFun
-    | ⟨h, ⟨sigma, ⟨g, lambda, rho⟩⟩⟩ => ⟨h, g, sigma, lambda, rho⟩
-  left_inv := by rintro ⟨h, g, sigma, lambda, rho⟩; rfl
-  right_inv := by rintro ⟨h, ⟨sigma, ⟨g, lambda, rho⟩⟩⟩; rfl
-
-private def leftPathSecondTargetEquiv (a b c d e : Λ) :
-    Fus.FourfoldMiddleMultiplicity a b c d e ≃
-      (h : Λ) × (Fin (Fus.fusionMultiplicity b c h) ×
-        Fus.RightTripleMultiplicity a h d e) where
-  toFun
-    | ⟨h, i, sigma, omega, kappa⟩ => ⟨h, ⟨sigma, ⟨i, omega, kappa⟩⟩⟩
-  invFun
-    | ⟨h, ⟨sigma, ⟨i, omega, kappa⟩⟩⟩ => ⟨h, i, sigma, omega, kappa⟩
-  left_inv := by rintro ⟨h, i, sigma, omega, kappa⟩; rfl
-  right_inv := by rintro ⟨h, ⟨sigma, ⟨i, omega, kappa⟩⟩⟩; rfl
-
-private def leftPathThirdSourceEquiv (a b c d e : Λ) :
-    Fus.FourfoldMiddleMultiplicity a b c d e ≃
-      (i : Λ) × (Fus.LeftTripleMultiplicity b c d i ×
-        Fin (Fus.fusionMultiplicity a i e)) where
-  toFun
-    | ⟨h, i, sigma, omega, kappa⟩ => ⟨i, ⟨⟨h, sigma, omega⟩, kappa⟩⟩
-  invFun
-    | ⟨i, ⟨⟨h, sigma, omega⟩, kappa⟩⟩ => ⟨h, i, sigma, omega, kappa⟩
-  left_inv := by rintro ⟨h, i, sigma, omega, kappa⟩; rfl
-  right_inv := by rintro ⟨i, ⟨⟨h, sigma, omega⟩, kappa⟩⟩; rfl
-
-private def leftPathThirdTargetEquiv (a b c d e : Λ) :
-    Fus.FourfoldRightAssocMultiplicity a b c d e ≃
+private def rightFourfoldFirstStageEquiv (a b c d : Λ) :
+    Fus.RightFourfoldFirstStage a b c d ≃
       (i : Λ) × (Fus.RightTripleMultiplicity b c d i ×
-        Fin (Fus.fusionMultiplicity a i e)) where
+        (Fin (Fus.bondDim a) × Fin (Fus.bondDim i))) where
   toFun
-    | ⟨j, i, gamma, delta, kappa⟩ => ⟨i, ⟨⟨j, gamma, delta⟩, kappa⟩⟩
+    | ⟨xa, ⟨i, m, yi⟩⟩ => ⟨i, m, xa, yi⟩
   invFun
-    | ⟨i, ⟨⟨j, gamma, delta⟩, kappa⟩⟩ => ⟨j, i, gamma, delta, kappa⟩
-  left_inv := by rintro ⟨j, i, gamma, delta, kappa⟩; rfl
-  right_inv := by rintro ⟨i, ⟨⟨j, gamma, delta⟩, kappa⟩⟩; rfl
+    | ⟨i, m, xa, yi⟩ => ⟨xa, ⟨i, m, yi⟩⟩
+  left_inv := by rintro ⟨xa, ⟨i, m, yi⟩⟩; rfl
+  right_inv := by rintro ⟨i, m, xa, yi⟩; rfl
 
-private def rightPathFirstSourceEquiv (a b c d e : Λ) :
-    Fus.FourfoldLeftAssocMultiplicity a b c d e ≃
-      (f : Λ) × (Fin (Fus.fusionMultiplicity a b f) ×
-        Fus.LeftTripleMultiplicity f c d e) where
+private abbrev RightFourfoldFinalNested (a b c d e : Λ) : Type u :=
+  (i : Λ) × (Fus.RightTripleMultiplicity b c d i ×
+    (Fin (Fus.fusionMultiplicity a i e) × Fin (Fus.bondDim e)))
+
+private def rightFourfoldFinalEquiv (a b c d e : Λ) :
+    Fus.FourfoldRightAssocMultiplicity a b c d e × Fin (Fus.bondDim e) ≃
+      Fus.RightFourfoldFinalNested a b c d e where
   toFun
-    | ⟨f, g, mu, nu, rho⟩ => ⟨f, ⟨mu, ⟨g, nu, rho⟩⟩⟩
+    | ⟨⟨j, i, gamma, delta, kappa⟩, z⟩ =>
+        ⟨i, ⟨⟨j, gamma, delta⟩, ⟨kappa, z⟩⟩⟩
   invFun
-    | ⟨f, ⟨mu, ⟨g, nu, rho⟩⟩⟩ => ⟨f, g, mu, nu, rho⟩
-  left_inv := by rintro ⟨f, g, mu, nu, rho⟩; rfl
-  right_inv := by rintro ⟨f, ⟨mu, ⟨g, nu, rho⟩⟩⟩; rfl
+    | ⟨i, ⟨⟨j, gamma, delta⟩, ⟨kappa, z⟩⟩⟩ =>
+        ⟨⟨j, i, gamma, delta, kappa⟩, z⟩
+  left_inv := by rintro ⟨⟨j, i, gamma, delta, kappa⟩, z⟩; rfl
+  right_inv := by rintro ⟨i, ⟨⟨j, gamma, delta⟩, ⟨kappa, z⟩⟩⟩; rfl
 
-private def rightPathFirstTargetEquiv (a b c d e : Λ) :
-    Fus.FourfoldPairMultiplicity a b c d e ≃
-      (f : Λ) × (Fin (Fus.fusionMultiplicity a b f) ×
-        Fus.RightTripleMultiplicity f c d e) where
-  toFun
-    | ⟨f, j, mu, gamma, tau⟩ => ⟨f, ⟨mu, ⟨j, gamma, tau⟩⟩⟩
-  invFun
-    | ⟨f, ⟨mu, ⟨j, gamma, tau⟩⟩⟩ => ⟨f, j, mu, gamma, tau⟩
-  left_inv := by rintro ⟨f, j, mu, gamma, tau⟩; rfl
-  right_inv := by rintro ⟨f, ⟨mu, ⟨j, gamma, tau⟩⟩⟩; rfl
+private noncomputable def rightFourfoldFirstSynthesis (a b c d : Λ) :
+    Matrix (Fus.FourfoldBond a b c d)
+      (Fus.RightFourfoldFirstStage a b c d) ℂ :=
+  ((1 : Matrix (Fin (Fus.bondDim a)) (Fin (Fus.bondDim a)) ℂ) ⊗ₖ
+    Fus.rightTripleSynthesisFull b c d).submatrix
+      (Fus.rightFourfoldBondEquiv a b c d) (Equiv.refl _)
 
-private def rightPathSecondSourceEquiv (a b c d e : Λ) :
-    Fus.FourfoldPairMultiplicity a b c d e ≃
-      (j : Λ) × (Fus.LeftTripleMultiplicity a b j e ×
-        Fin (Fus.fusionMultiplicity c d j)) where
-  toFun
-    | ⟨f, j, mu, gamma, tau⟩ => ⟨j, ⟨⟨f, mu, tau⟩, gamma⟩⟩
-  invFun
-    | ⟨j, ⟨⟨f, mu, tau⟩, gamma⟩⟩ => ⟨f, j, mu, gamma, tau⟩
-  left_inv := by rintro ⟨f, j, mu, gamma, tau⟩; rfl
-  right_inv := by rintro ⟨j, ⟨⟨f, mu, tau⟩, gamma⟩⟩; rfl
+private noncomputable def rightFourfoldFirstAnalysis (a b c d : Λ) :
+    Matrix (Fus.RightFourfoldFirstStage a b c d)
+      (Fus.FourfoldBond a b c d) ℂ :=
+  ((1 : Matrix (Fin (Fus.bondDim a)) (Fin (Fus.bondDim a)) ℂ) ⊗ₖ
+    Fus.rightTripleAnalysisFull b c d).submatrix
+      (Equiv.refl _) (Fus.rightFourfoldBondEquiv a b c d)
 
-private def rightPathSecondTargetEquiv (a b c d e : Λ) :
-    Fus.FourfoldRightAssocMultiplicity a b c d e ≃
-      (j : Λ) × (Fus.RightTripleMultiplicity a b j e ×
-        Fin (Fus.fusionMultiplicity c d j)) where
-  toFun
-    | ⟨j, i, gamma, delta, kappa⟩ => ⟨j, ⟨⟨i, delta, kappa⟩, gamma⟩⟩
-  invFun
-    | ⟨j, ⟨⟨i, delta, kappa⟩, gamma⟩⟩ => ⟨j, i, gamma, delta, kappa⟩
-  left_inv := by rintro ⟨j, i, gamma, delta, kappa⟩; rfl
-  right_inv := by rintro ⟨j, ⟨⟨i, delta, kappa⟩, gamma⟩⟩; rfl
+private noncomputable def rightFourfoldSecondSynthesis (a b c d e : Λ) :
+    Matrix (Fus.RightFourfoldFirstStage a b c d)
+      (Fus.FourfoldRightAssocMultiplicity a b c d e × Fin (Fus.bondDim e)) ℂ :=
+  (Matrix.blockDiagonal' fun i =>
+    (1 : Matrix (Fus.RightTripleMultiplicity b c d i)
+      (Fus.RightTripleMultiplicity b c d i) ℂ) ⊗ₖ
+        Fus.fixedFinalSynthesis a i e).submatrix
+          (Fus.rightFourfoldFirstStageEquiv a b c d)
+          (Fus.rightFourfoldFinalEquiv a b c d e)
 
-/-! ### The five lifted printed `F`-matrices -/
+private noncomputable def rightFourfoldSecondAnalysis (a b c d e : Λ) :
+    Matrix (Fus.FourfoldRightAssocMultiplicity a b c d e × Fin (Fus.bondDim e))
+      (Fus.RightFourfoldFirstStage a b c d) ℂ :=
+  (Matrix.blockDiagonal' fun i =>
+    (1 : Matrix (Fus.RightTripleMultiplicity b c d i)
+      (Fus.RightTripleMultiplicity b c d i) ℂ) ⊗ₖ
+        Fus.fixedFinalAnalysis a i e).submatrix
+          (Fus.rightFourfoldFinalEquiv a b c d e)
+          (Fus.rightFourfoldFirstStageEquiv a b c d)
 
-/-- The `F^{abc}_g` edge from `(((a b) c) d) -> e` to `((a (b c)) d) -> e`.
+private theorem rightFourfoldSynthesis_eq_stages (a b c d e : Λ) :
+    Fus.rightAssocFourfoldSynthesis a b c d e =
+      Fus.rightFourfoldFirstSynthesis a b c d *
+        Fus.rightFourfoldSecondSynthesis a b c d e := by
+  classical
+  funext ⟨⟨⟨xa, xb⟩, xc⟩, xd⟩ ⟨⟨j, i, gamma, delta, kappa⟩, z⟩
+  simp only [rightAssocFourfoldSynthesis, rightFourfoldFirstSynthesis,
+    rightFourfoldBondEquiv, Equiv.coe_fn_mk, Equiv.coe_refl,
+    rightFourfoldSecondSynthesis, rightFourfoldFirstStageEquiv,
+    rightFourfoldFinalEquiv, Matrix.mul_apply, submatrix_apply, id_eq,
+    kroneckerMap_apply, Matrix.one_apply, rightTripleSynthesisFull,
+    rightTripleSynthesis, ite_mul, one_mul, zero_mul, blockDiagonal'_apply,
+    fixedFinalSynthesis, mul_dite, mul_ite, mul_zero, Fintype.sum_prod_type,
+    Fintype.sum_sigma, Finset.sum_dite_irrel, Finset.sum_const_zero,
+    Finset.sum_dite_eq', Finset.mem_univ, ↓reduceIte, cast_eq,
+    Sigma.mk.injEq, Finset.sum_ite_irrel]
+  rw [Finset.sum_eq_single xa
+    (fun x _ hx => by simp [Ne.symm hx])
+    (fun h => absurd (Finset.mem_univ xa) h)]
+  rw [Finset.sum_eq_single j
+    (fun x _ hx => by simp [hx])
+    (fun h => absurd (Finset.mem_univ j) h)]
+  simp only [true_and, if_true, heq_eq_eq]
+  rw [Finset.sum_eq_single gamma
+    (fun x _ hx => by simp [hx])
+    (fun h => absurd (Finset.mem_univ gamma) h)]
+  simp only [Prod.mk.injEq, true_and]
+  rw [Finset.sum_eq_single delta
+    (fun x _ hx => by simp [hx])
+    (fun h => absurd (Finset.mem_univ delta) h)]
+  simp only [if_true, Finset.sum_mul]
+  rw [Finset.sum_comm]
 
-Source: arXiv:1511.08090, equation `Fmove`, lines 248--251, and the first factor of
-equation `pentagoneq`, lines 280--281. -/
-noncomputable def leftAssocToLeftInnerPrintedFMatrix (a b c d e : Λ) :
-    Matrix (Fus.FourfoldLeftInnerMultiplicity a b c d e)
-      (Fus.FourfoldLeftAssocMultiplicity a b c d e) ℂ :=
-  (Matrix.blockDiagonal' fun g => Fus.printedFMatrix a b c g ⊗ₖ
-    (1 : Matrix (Fin (Fus.fusionMultiplicity g d e))
-      (Fin (Fus.fusionMultiplicity g d e)) ℂ)).submatrix
-        (Fus.leftPathFirstTargetEquiv a b c d e)
-        (Fus.leftPathFirstSourceEquiv a b c d e)
+private theorem rightFourfoldAnalysis_eq_stages (a b c d e : Λ) :
+    Fus.rightAssocFourfoldAnalysis a b c d e =
+      Fus.rightFourfoldSecondAnalysis a b c d e *
+        Fus.rightFourfoldFirstAnalysis a b c d := by
+  classical
+  funext ⟨⟨j, i, gamma, delta, kappa⟩, z⟩ ⟨⟨⟨xa, xb⟩, xc⟩, xd⟩
+  simp only [rightAssocFourfoldAnalysis, rightFourfoldSecondAnalysis,
+    rightFourfoldFinalEquiv, Equiv.coe_fn_mk, rightFourfoldFirstStageEquiv,
+    rightFourfoldFirstAnalysis, Equiv.coe_refl, rightFourfoldBondEquiv,
+    Matrix.mul_apply, submatrix_apply, blockDiagonal'_apply,
+    kroneckerMap_apply, Matrix.one_apply, fixedFinalAnalysis, ite_mul,
+    one_mul, zero_mul, id_eq, rightTripleAnalysisFull, rightTripleAnalysis,
+    mul_ite, dite_mul, mul_zero, Fintype.sum_prod_type,
+    Finset.sum_ite_irrel, Fintype.sum_sigma, Finset.sum_dite_irrel,
+    Finset.sum_const_zero, Finset.sum_dite_eq, Finset.mem_univ,
+    ↓reduceIte, cast_eq, Sigma.mk.injEq, Finset.sum_ite_eq']
+  rw [Finset.sum_eq_single j
+    (fun x _ hx => by simp [Ne.symm hx])
+    (fun h => absurd (Finset.mem_univ j) h)]
+  simp only [true_and, heq_eq_eq]
+  rw [Finset.sum_eq_single gamma
+    (fun x _ hx => by simp [Ne.symm hx])
+    (fun h => absurd (Finset.mem_univ gamma) h)]
+  simp only [Prod.mk.injEq, true_and]
+  rw [Finset.sum_eq_single delta
+    (fun x _ hx => by simp [Ne.symm hx])
+    (fun h => absurd (Finset.mem_univ delta) h)]
+  simp only [if_true, Finset.mul_sum, mul_assoc]
 
-/-- The `F^{ahd}_e` edge from `((a (b c)) d) -> e` to `a ((b c) d) -> e`.
+private theorem rightFourfoldFirstAnalysis_mul_synthesis (a b c d : Λ) :
+    Fus.rightFourfoldFirstAnalysis a b c d *
+      Fus.rightFourfoldFirstSynthesis a b c d = 1 := by
+  unfold rightFourfoldFirstAnalysis rightFourfoldFirstSynthesis
+  rw [Matrix.submatrix_mul_equiv _ _ _ (Fus.rightFourfoldBondEquiv a b c d) _,
+    ← Matrix.mul_kronecker_mul, Fus.rightTripleAnalysisFull_mul_synthesis,
+    Matrix.one_mul, Matrix.one_kronecker_one]
+  rfl
 
-Source: arXiv:1511.08090, equation `Fmove`, lines 248--251, and the second factor of
-equation `pentagoneq`, lines 280--281. -/
-noncomputable def leftInnerToMiddlePrintedFMatrix (a b c d e : Λ) :
-    Matrix (Fus.FourfoldMiddleMultiplicity a b c d e)
-      (Fus.FourfoldLeftInnerMultiplicity a b c d e) ℂ :=
-  (Matrix.blockDiagonal' fun h =>
-    (1 : Matrix (Fin (Fus.fusionMultiplicity b c h))
-      (Fin (Fus.fusionMultiplicity b c h)) ℂ) ⊗ₖ Fus.printedFMatrix a h d e).submatrix
-        (Fus.leftPathSecondTargetEquiv a b c d e)
-        (Fus.leftPathSecondSourceEquiv a b c d e)
+private theorem rightFourfoldSecondAnalysis_mul_synthesis (a b c d e : Λ) :
+    Fus.rightFourfoldSecondAnalysis a b c d e *
+      Fus.rightFourfoldSecondSynthesis a b c d e = 1 := by
+  unfold rightFourfoldSecondAnalysis rightFourfoldSecondSynthesis
+  rw [Matrix.submatrix_mul_equiv _ _ _
+      (Fus.rightFourfoldFirstStageEquiv a b c d) _,
+    ← Matrix.blockDiagonal'_mul]
+  simp_rw [← Matrix.mul_kronecker_mul, Fus.fixedFinalAnalysis_mul_synthesis,
+    Matrix.one_mul, Matrix.one_kronecker_one]
+  change (Matrix.blockDiagonal'
+    (1 : (i : Λ) → Matrix
+      (Fus.RightTripleMultiplicity b c d i ×
+        (Fin (Fus.fusionMultiplicity a i e) × Fin (Fus.bondDim e)))
+      (Fus.RightTripleMultiplicity b c d i ×
+        (Fin (Fus.fusionMultiplicity a i e) × Fin (Fus.bondDim e))) ℂ)).submatrix
+          (Fus.rightFourfoldFinalEquiv a b c d e)
+          (Fus.rightFourfoldFinalEquiv a b c d e) = 1
+  rw [Matrix.blockDiagonal'_one, Matrix.submatrix_one_equiv]
 
-/-- The `F^{bcd}_i` edge from `a ((b c) d) -> e` to `a (b (c d)) -> e`.
+/-- The right-associated fourfold analysis is a left inverse of its synthesis.
 
-Source: arXiv:1511.08090, equation `Fmove`, lines 248--251, and the third factor of
-equation `pentagoneq`, lines 280--281. -/
-noncomputable def middleToRightAssocPrintedFMatrix (a b c d e : Λ) :
-    Matrix (Fus.FourfoldRightAssocMultiplicity a b c d e)
-      (Fus.FourfoldMiddleMultiplicity a b c d e) ℂ :=
-  (Matrix.blockDiagonal' fun i => Fus.printedFMatrix b c d i ⊗ₖ
-    (1 : Matrix (Fin (Fus.fusionMultiplicity a i e))
-      (Fin (Fus.fusionMultiplicity a i e)) ℂ)).submatrix
-        (Fus.leftPathThirdTargetEquiv a b c d e)
-        (Fus.leftPathThirdSourceEquiv a b c d e)
+This is the threefold application of the fusion-tensor biorthogonality relation, starting with
+the innermost fusion of `c` and `d` and ending with the fusion into the final label `e`.
 
-/-- The `F^{fcd}_e` edge from `(((a b) c) d) -> e` to `(a b) (c d) -> e`.
-
-Source: arXiv:1511.08090, equation `Fmove`, lines 248--251, and the first factor on the
-right-hand side of equation `pentagoneq`, lines 282--283. -/
-noncomputable def leftAssocToPairPrintedFMatrix (a b c d e : Λ) :
-    Matrix (Fus.FourfoldPairMultiplicity a b c d e)
-      (Fus.FourfoldLeftAssocMultiplicity a b c d e) ℂ :=
-  (Matrix.blockDiagonal' fun f =>
-    (1 : Matrix (Fin (Fus.fusionMultiplicity a b f))
-      (Fin (Fus.fusionMultiplicity a b f)) ℂ) ⊗ₖ Fus.printedFMatrix f c d e).submatrix
-        (Fus.rightPathFirstTargetEquiv a b c d e)
-        (Fus.rightPathFirstSourceEquiv a b c d e)
-
-/-- The `F^{abj}_e` edge from `(a b) (c d) -> e` to `a (b (c d)) -> e`.
-
-Source: arXiv:1511.08090, equation `Fmove`, lines 248--251, and the second factor on the
-right-hand side of equation `pentagoneq`, lines 282--283. -/
-noncomputable def pairToRightAssocPrintedFMatrix (a b c d e : Λ) :
-    Matrix (Fus.FourfoldRightAssocMultiplicity a b c d e)
-      (Fus.FourfoldPairMultiplicity a b c d e) ℂ :=
-  (Matrix.blockDiagonal' fun j => Fus.printedFMatrix a b j e ⊗ₖ
-    (1 : Matrix (Fin (Fus.fusionMultiplicity c d j))
-      (Fin (Fus.fusionMultiplicity c d j)) ℂ)).submatrix
-        (Fus.rightPathSecondTargetEquiv a b c d e)
-        (Fus.rightPathSecondSourceEquiv a b c d e)
-
-/-- The three-edge printed-`F` composite from the fully left- to the fully right-associated tree.
-
-Source: arXiv:1511.08090, equation `pentagoneq`, left-hand side, lines 280--281; its
-orientation follows equation `Fmove`, lines 248--251. -/
-noncomputable def threeEdgePrintedFMatrix (a b c d e : Λ) :
-    Matrix (Fus.FourfoldRightAssocMultiplicity a b c d e)
-      (Fus.FourfoldLeftAssocMultiplicity a b c d e) ℂ :=
-  (Fus.middleToRightAssocPrintedFMatrix a b c d e *
-    Fus.leftInnerToMiddlePrintedFMatrix a b c d e) *
-      Fus.leftAssocToLeftInnerPrintedFMatrix a b c d e
-
-/-- The two-edge printed-`F` composite from the fully left- to the fully right-associated tree.
-
-Source: arXiv:1511.08090, equation `pentagoneq`, right-hand side, lines 282--283; its
-orientation follows equation `Fmove`, lines 248--251. -/
-noncomputable def twoEdgePrintedFMatrix (a b c d e : Λ) :
-    Matrix (Fus.FourfoldRightAssocMultiplicity a b c d e)
-      (Fus.FourfoldLeftAssocMultiplicity a b c d e) ℂ :=
-  Fus.pairToRightAssocPrintedFMatrix a b c d e *
-    Fus.leftAssocToPairPrintedFMatrix a b c d e
-
+Source: arXiv:1511.08090, the fusion left inverses at line 161 and the rightmost fourfold tree
+in equation `pentagoneq`, lines 279--283. -/
+theorem rightAssocFourfoldAnalysis_mul_synthesis (a b c d e : Λ) :
+    Fus.rightAssocFourfoldAnalysis a b c d e *
+      Fus.rightAssocFourfoldSynthesis a b c d e = 1 := by
+  rw [Fus.rightFourfoldSynthesis_eq_stages, Fus.rightFourfoldAnalysis_eq_stages,
+    Matrix.mul_assoc, ← Matrix.mul_assoc (Fus.rightFourfoldFirstAnalysis a b c d),
+    Fus.rightFourfoldFirstAnalysis_mul_synthesis, Matrix.one_mul,
+    Fus.rightFourfoldSecondAnalysis_mul_synthesis]
 end MPOTensor.CompleteZipperFusionFamily
