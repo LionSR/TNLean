@@ -453,6 +453,7 @@ import TNLean.MPS.MPDO.BNTLeftTripleFusion
 import TNLean.MPS.MPDO.BNTRightTripleFusion
 import TNLean.MPS.MPDO.BNTTripleFusionComparison
 import TNLean.MPS.MPDO.BNTFinalSectorFusion
+import TNLean.MPS.MPDO.BNTFourfoldFusionIndices
 import TNLean.MPS.MPDO.BNTTripleFusionSeparation
 import TNLean.MPS.MPDO.BNTFixedFinalUnitarity
 import TNLean.MPS.MPDO.CommutingForm
