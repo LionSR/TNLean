@@ -98,6 +98,37 @@ The results follow~\cite{Sanz2010Quantum}.
     length~$L$ equals $\MN{D}$.
 \end{proof}
 
+\begin{theorem}[Positive-length propagation of block injectivity]
+    \label{thm:wordspan_blk_inj_succ}
+    \lean{MPSTensor.wordSpan_succ_eq_mul_left}
+    \lean{MPSTensor.isNBlkInjective_succ_of_isNBlkInjective}
+    \leanok
+    \uses{def:word_span, def:l_blk_injective}
+    For every $n$,
+    \[
+        S_{n+1}(A)=\spn_{\C}\{A_i\}_i S_n(A).
+    \]
+    Consequently, if $L>0$ and $A$ is $L$-block injective, then
+    $A$ is $(L+1)$-block injective.
+    This is an auxiliary length-shift statement used to combine the
+    block-injectivity discussion in~\cite[lines~318--345]{Cirac2016MPDO_arXiv}
+    with Appendix~C.3, Lemma~L, lines~1835--1858; it is not stated there
+    as a separate lemma.
+\end{theorem}
+
+\begin{proof}\leanok\uses{def:word_span}
+    Every word of length $n+1$ factors into its first letter and a word
+    of length $n$, which proves the displayed equality by bilinearity.
+    Write $L=n+1$.  Since $S_L(A)=\MN{D}$, one has
+    $S_n(A)\le S_L(A)$.  Hence
+    \[
+        \MN{D}=S_L(A)
+        =\spn_{\C}\{A_i\}_i S_n(A)
+        \le \spn_{\C}\{A_i\}_i S_L(A)
+        =S_{L+1}(A).
+    \]
+\end{proof}
+
 \begin{lemma}[Zero-length word span]
     \label{lem:wordspan_zero_ne_top}
     \lean{MPSTensor.wordSpan_zero_ne_top_of_two_le}

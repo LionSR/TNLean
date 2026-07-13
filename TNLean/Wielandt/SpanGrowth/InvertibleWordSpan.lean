@@ -27,7 +27,6 @@ Wielandt inequality (arXiv:0909.5347, Theorem 1; Wolf Section 6.9).
   is invertible.
 * `wordSpan_eq_top_of_ge_of_isUnit`: if `S_N = ⊤` and `A i₀` is invertible,
   then `S_m = ⊤` for all `m ≥ N`.
-* `wordSpan_succ_eq_mul_left`: `S_{n+1} = span{A_i} · S_n`.
 
 ### Sharp case-(2) theorem
 * `wordSpan_eq_top_of_isNormal_of_isUnit`: under `IsNormal A` and an
@@ -203,31 +202,6 @@ theorem mulLeft_pow_image_wordSpan_le (A : MPSTensor d D)
               Submodule.map_mono ih
           _ ≤ wordSpan A ((n + k) + 1) :=
               mulLeft_image_wordSpan_le_succ A i₀ (n + k)
-
-/-! ## S_{n+1} = span{A_i} * S_n -/
-
-/-- `S_{n+1} = span{A_i} · S_n` (left-multiplication decomposition).
-
-This is an auxiliary step for arXiv:0909.5347, Theorem 1 case (2); Wolf,
-Theorem 6.9. -/
-theorem wordSpan_succ_eq_mul_left (A : MPSTensor d D) (n : ℕ) :
-    wordSpan A (n + 1) =
-      (Submodule.span ℂ (Set.range A)) * wordSpan A n := by
-  apply le_antisymm
-  · exact wordSpan_succ_le_mul A n
-  · -- span{A_i} ≤ wordSpan A 1
-    have hS1 : Submodule.span ℂ (Set.range A) ≤ wordSpan A 1 := by
-      apply Submodule.span_le.mpr
-      rintro M ⟨j, rfl⟩
-      apply Submodule.subset_span
-      refine ⟨fun _ => j, ?_⟩
-      simp only [List.ofFn, Fin.foldr_succ, Fin.foldr_zero]
-      simp only [evalWord, Matrix.mul_one]
-    calc (Submodule.span ℂ (Set.range A)) * wordSpan A n
-        ≤ wordSpan A 1 * wordSpan A n :=
-          mul_le_mul' hS1 (le_refl _)
-      _ ≤ wordSpan A (1 + n) := wordSpan_mul_le A 1 n
-      _ = wordSpan A (n + 1) := by congr 1; omega
 
 /-! ## Monotonicity of wordSpan dimension under invertibility -/
 
