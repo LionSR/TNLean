@@ -1025,6 +1025,7 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{theorem}[Neighboring operators after zero-weight reparameterization]
     \label{thm:mpdo_zero_weight_reparameterized_neighboring_operator}
     \lean{MPOTensor.zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_neighboringOperator}
+    \lean{MPOTensor.probability_ne_zero_of_reparameterized_neighboringOperator_ne_zero}
     \leanok
     \uses{def:mpdo_zero_weight_reparameterized_inverse_map_factorization,
       thm:mpdo_inverse_map_factorization_neighboring_operator}
@@ -2677,6 +2678,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.PhysicalSectorFactorization.sectorCoordinateMatrixFamily}
     \lean{MPOTensor.PhysicalSectorFactorization.sectorCoordinateMatrixFamily_span_eq_top}
     \lean{MPOTensor.PhysicalSectorFactorization.sectorCoordinateTensor_mem_span_sectorVirtualMatrixFamily}
+    \lean{MPOTensor.PhysicalSectorFactorization.sectorVirtualMatrixFamily}
     \lean{MPOTensor.PhysicalSectorFactorization.sectorVirtualMatrixFamily_span_eq_top}
     \leanok
     \uses{def:mpdo_physical_sector_factorization}
@@ -2704,6 +2706,8 @@ strong subadditivity for a normalized three-site reduced state.
     \label{thm:mpdo_sector_support_triangle_closure}
     \lean{MPOTensor.PhysicalSectorFactorization.sectorVirtualMatrix}
     \lean{MPOTensor.PhysicalSectorFactorization.sectorVirtualMatrix_mul_apply}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      sectorVirtualMatrix_mul_eq_zero_of_neighboringOperator_eq_zero}
     \lean{MPOTensor.PhysicalSectorFactorization.exists_two_edge_return_of_neighboringOperator_ne_zero}
     \lean{MPOTensor.PhysicalSectorFactorization.neighboringOperator_reaches_of_ne_zero}
     \leanok
