@@ -247,15 +247,14 @@ structure HasOverlappingTwoSiteCommutation
     leftPairLift QAX * rightPairLift QXB =
       rightPairLift QXB * leftPairLift QAX
 
-/-- The local projector condition of arXiv:1606.00608, Definition D.2, on one
-three-site window.
+/-- A coefficient-space condition modeled on arXiv:1606.00608, Definition D.2,
+for one three-site window.
 
-The source writes two local projectors \(Q_{AX}\) and \(Q_{XB}\) on the
-overlapping pairs \(AX\) and \(XB\). Besides idempotence and commutation after
-lifting them to \(A X B\), Definition D.2 includes the local ground-space
-condition that the three-site subspace is the intersection of their two lifted
-kernels. Orthogonality and the construction of these projectors from the
-Appendix B basic-vector form are still separate obligations. -/
+It requires two idempotent two-site maps whose lifts commute and a three-site
+subspace equal to the intersection of their lifted kernels. It does not assert
+self-adjointness or identify these maps with the source projectors on
+\(\mathcal H_A\otimes\mathcal H_X\) and
+\(\mathcal H_X\otimes\mathcal H_B\). -/
 structure HasAppendixD2ParentCommutingHamiltonian
     (KAXB : Submodule ℂ (NSiteSpace d 3))
     (QAX QXB : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) : Prop where
