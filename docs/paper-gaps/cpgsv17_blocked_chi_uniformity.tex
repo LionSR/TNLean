@@ -502,9 +502,24 @@ tensors'' section of the arXiv:1511.08090 source file
 This result has an explicit scope restriction: it assumes the special
 length-independent coefficient system discussed at lines~995--1010, rather
 than proving that every renormalization fixed point has such coefficients.
-It also neither constructs the comparison of the two triple-fusion orders nor
-proves its invertibility.  Thus the associativity constraint and the
-pentagon-like equation mentioned at lines~995--999 remain unformalized.
+For this specialization, the canonical bond reassociation and the two
+iterated fusion isometries now define the comparison of the full left- and
+right-associated direct sums.  The formalized letterwise identity states
+that this comparison intertwines the two unweighted direct sums.  The matrix
+is oriented from the right-associated sum to the left-associated sum, hence
+oppositely to the printed $F$-matrix convention in equation
+\texttt{Fmove}; it is not identified with that $F$-matrix.
+
+The formalization does not extract a comparison at a fixed final label.  That
+extraction uses the simultaneous inverse relation at line~269 of the
+arXiv:1511.08090 source,
+\[
+    B_d^+ B_{d'}=\delta_{d,d'}1,
+\]
+which separates all final-label blocks at once.  No such simultaneous
+final-label separation is presently derived from the BNT hypotheses.  Hence
+the fixed-final $F$-transformation, its invertibility, and the pentagon-like
+equation mentioned at lines~995--999 remain unformalized.
 
 To eliminate the source-theorem gap, the formalization should instead:
 \begin{enumerate}
