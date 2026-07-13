@@ -823,6 +823,28 @@ strong subadditivity for a normalized three-site reduced state.
     this definition; it is a separate hypothesis in Proposition~C.7.
 \end{definition}
 
+\begin{definition}[Vertex rephasing of the sector tensors]%
+    \label{def:mpdo_physical_sector_rephasing}
+    \lean{MPOTensor.PhysicalSectorFactorization.rephase}
+    \lean{MPOTensor.PhysicalSectorFactorization.rephase_neighboringOperator}
+    \lean{MPOTensor.PhysicalSectorFactorization.rephase_cyclicNeighboringProduct}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization,
+      def:mpdo_minimal_neighboring_operator}
+    Let $z_k\in\mathbb C$ satisfy $|z_k|=1$ for every sector. Replacing
+    \[
+        (l_k)_a\longmapsto z_k(l_k)_a,
+        \qquad
+        (r_k)_a\longmapsto z_k^{-1}(r_k)_a
+    \]
+    leaves every physical-slice factorization unchanged and transforms the
+    neighboring operators by
+    \[
+        \eta_{k,h}\longmapsto z_k^{-1}z_h\,\eta_{k,h}.
+    \]
+    Every complete cyclic product of neighboring operators is unchanged.
+\end{definition}
+
 \begin{definition}[Inverse-map physical-sector factorization]
     \label{def:mpdo_inverse_map_physical_sector_factorization}
     \lean{MPOTensor.inverseMapPhysicalSectorFactorization}
@@ -2364,11 +2386,18 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{theorem}[Uniqueness of the positive rescaling phase]%
     \label{thm:positive_rescaling_phase_unique}
+    \lean{Complex.unitsPhase}
+    \lean{Complex.phase}
+    \lean{Complex.phase_smul_posSemidef}
+    \lean{Circle.eq_of_smul_posSemidef}
     \lean{Matrix.exists_pos_real_smul_eq_of_smul_posSemidef}
     \leanok
     \uses{lem:possemidef_and_neg_possemidef}
     Let $M\ne0$. If $c_1,c_2\ne0$ and both $c_1M$ and $c_2M$ are positive
     semidefinite, then $c_1=t c_2$ for some positive real number $t$.
+    In particular, every nonzero scalar $c$ has a unit-modulus part
+    $u=c/|c|$, positivity of $cM$ implies positivity of $uM$, and there is
+    at most one such unit scalar when $M\ne0$.
 \end{theorem}
 
 \begin{proof}
@@ -2378,6 +2407,9 @@ strong subadditivity for a normalized three-site reduced state.
     $c_2\overline{c_1}=c_1\overline{c_2}$, so $c_1/c_2$ is real. It cannot be
     negative: otherwise $c_1M$ and its negative would both be positive
     semidefinite, forcing $c_1M=0$. Thus the quotient is positive.
+    Multiplication by $|c|^{-1}>0$ replaces $c$ by its unit-modulus part
+    without changing positivity. Two admissible unit scalars differ by a
+    positive real number of modulus one, and are therefore equal.
 \end{proof}
 
 \begin{theorem}[Positive rescaling of a finite Kronecker product]%
@@ -2700,6 +2732,65 @@ strong subadditivity for a normalized three-site reduced state.
     Theorem~\ref{thm:kronecker_factor_positive_rescaling}.
 \end{proof}
 
+\begin{theorem}[Coherent positive rephasing under recurrent support]%
+    \label{thm:mpdo_eta_coherent_positive_choice_recurrent}
+    \lean{MPOTensor.exists_vertexPhase_smul_posSemidef}
+    \lean{MPOTensor.exists_rephased_inverseMapPhysicalSectorFactorization}
+    \lean{MPOTensor.nonempty_etaLocalStructureData_of_recurrentSupport}
+    \leanok
+    \uses{def:mpdo_physical_sector_rephasing,
+        def:mpdo_eta_recurrent_support,
+        lem:mpdo_eta_reachability_equivalence,
+        lem:directed_closed_walk_finite_cycle,
+        thm:positive_rescaling_phase_unique,
+        thm:mpdo_eta_cycle_positive_rescaling,
+        thm:directed_cycle_coboundary}
+    Let $(\eta_{k,h})$ be a neighboring-operator family for which every
+    nonempty cyclic tensor product is positive semidefinite. Suppose, in
+    addition, that every nonzero edge $k\to h$ admits a directed return path
+    from $h$ to $k$. Then there are unit complex numbers $z_k$ such that
+    \[
+        z_k^{-1}z_h\,\eta_{k,h}\geq0
+        \qquad\text{for all }k,h.
+    \]
+    Consequently, if the neighboring operators arise from the inverse-map
+    physical-sector factorization of an injective MPDO and its nonzero
+    support is recurrent, the sector tensors admit a reciprocal rephasing
+    for which all neighboring operators are positive semidefinite. This
+    factorization determines the positive commuting nearest-neighbor product
+    structure of Proposition~C.8.
+
+    This is a scope-restricted result. Recurrence is not a hypothesis of
+    Lemma~C.4 in
+    \cite[Appendix~C.2, lines~1406--1450]{Cirac2016MPDO_arXiv}; its derivation
+    from the source hypotheses remains open and is recorded in
+    \path{docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:mpdo_eta_reachability_equivalence,
+        lem:directed_closed_walk_finite_cycle,
+        thm:positive_rescaling_phase_unique,
+        thm:mpdo_eta_cycle_positive_rescaling,
+        thm:directed_cycle_coboundary,
+        def:mpdo_physical_sector_rephasing,
+        thm:mpdo_eta_local_structure_of_positive_physical_sector_factorization}
+    For a nonzero edge, choose a directed return path and close it with the
+    edge. Positive rescaling of the corresponding cyclic tensor product
+    supplies a scalar that makes the edge operator positive; retain only its
+    unit-modulus part. On any closed directed walk, positive rescaling of the
+    associated cyclic tensor product gives phases whose product is one.
+    Uniqueness of the unit phase identifies them edge by edge with the chosen
+    phases. Hence the chosen edge phases have product one around every closed
+    walk. The closed-walk criterion gives
+    $\kappa_{k,h}=z_k^{-1}z_h$ on every nonzero edge. Zero edge operators are
+    already positive semidefinite. Finally, reciprocal rephasing of the left
+    and right sector tensors multiplies each neighboring operator by this
+    phase and preserves the physical-slice factorization. The conditional
+    eta-local construction then gives the positive commuting product data.
+\end{proof}
+
 \begin{theorem}[Coherent positive choice of the neighboring operators]%
     \label{thm:mpdo_eta_coherent_positive_choice}
     \notready
@@ -2722,18 +2813,17 @@ strong subadditivity for a normalized three-site reduced state.
         thm:mpdo_eta_cycle_positive_rescaling,
         thm:mpdo_sector_adapted_decomposition,
         thm:positive_rescaling_phase_unique,
-        thm:directed_cycle_coboundary}
+        thm:directed_cycle_coboundary,
+        thm:mpdo_eta_coherent_positive_choice_recurrent}
     The projected chain identity makes every cyclic Kronecker product of the
-    neighboring operators positive semidefinite. The finite-factor rescaling
-    theorem chooses positive phases on any one nonzero cycle. Two obligations
-    remain. First, recurrence of the nonzero inverse-map support must be
-    derived from the actual injective normal-tensor hypotheses, without using
-    the later primitivity conclusion. Second, phase uniqueness and trivial
-    cycle holonomy must be established for a single edge-phase family.
-    Theorem~\ref{thm:directed_cycle_coboundary} then integrates those edge
-    phases to a vertex-indexed rephasing of the tensors $l_k,r_k$. Such a
-    coboundary rephasing preserves every cyclic product, and hence the
-    all-length decomposition. This is the coherent-choice step asserted at
+    neighboring operators positive semidefinite.
+    Theorem~\ref{thm:mpdo_eta_coherent_positive_choice_recurrent} completes
+    the phase-uniqueness, trivial-holonomy, and vertex-rephasing argument once
+    recurrence is known. The remaining obligation is therefore to remove
+    zero-weight Hayashi summands and derive recurrence of the resulting
+    nonzero inverse-map support from the actual injective normal-tensor
+    hypotheses, without using the later primitivity conclusion. This is the
+    last missing part of the coherent-choice step asserted at
     \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv}; it is not a
     consequence of positivity of the cyclic products alone.
 \end{proof}
