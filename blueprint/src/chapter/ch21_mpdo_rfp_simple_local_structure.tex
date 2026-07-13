@@ -855,6 +855,57 @@ strong subadditivity for a normalized three-site reduced state.
     this definition; it is a separate hypothesis in Proposition~C.7.
 \end{definition}
 
+\begin{definition}[One-site matrix spaces of sector sets]%
+    \label{def:mpdo_one_site_sector_matrix_space}
+    \lean{MPOTensor.PhysicalSectorFactorization.oneSiteSectorMatrix,
+      MPOTensor.PhysicalSectorFactorization.oneSiteSectorSpace}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization}
+    For a sector $k$ and physical matrix indices $x,y$ in its summand, let
+    $A_{k;x,y}\in\MN{D}$ be the corresponding entry of the
+    sector-coordinate tensor. For a set $S$ of sectors, define
+    \[
+        {\cal A}_S=\spn\{A_{k;x,y}:k\in S\}.
+    \]
+    These are the matrix spaces associated with the physical projections in
+    \cite[Appendix~C.2, lines~1463--1467]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Directed-cut annihilation of one-site matrix spaces]%
+    \label{thm:mpdo_directed_cut_one_site_spaces}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      oneSiteSectorMatrix_mul_eq_zero_of_neighboringOperator_eq_zero}
+    \lean{MPOTensor.PhysicalSectorFactorization.oneSiteSectorSpace_mul_eq_zero}
+    \leanok
+    \uses{def:mpdo_minimal_neighboring_operator,
+      def:mpdo_one_site_sector_matrix_space}
+    Let $S$ and $C$ be sets of sectors. If
+    \[
+        \eta_{k,h}=0\qquad(k\in S,\ h\in C),
+    \]
+    then
+    \[
+        XY=0\qquad(X\in{\cal A}_S,\ Y\in{\cal A}_C).
+    \]
+    No conclusion in the reverse product order is asserted. This is the
+    directed local-orthogonality implication used in
+    \cite[Appendix~C.2, lines~1463--1470]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Expand two generating matrices in sector coordinates. Their product has
+    entries
+    \[
+      \sum_{\gamma}
+        (l_k)_\beta (r_k)_\gamma
+        (l_h)_\gamma (r_h)_\alpha.
+    \]
+    The middle contraction is a matrix entry of $\eta_{k,h}$ and therefore
+    vanishes. Bilinearity extends the conclusion from the generators to the
+    two linear spans.
+\end{proof}
+
 \begin{definition}[Vertex rephasing of the sector tensors]%
     \label{def:mpdo_physical_sector_rephasing}
     \lean{MPOTensor.PhysicalSectorFactorization.rephase}
@@ -5119,6 +5170,7 @@ $\widehat{\cal K}$.
         def:mpdo_zero_weight_reparameterized_inverse_map_factorization,
         thm:mpdo_zero_weight_reparameterized_neighboring_operator,
         lem:mpdo_local_orthogonality_contraction,
+        thm:mpdo_directed_cut_one_site_spaces,
         lem:matrix_one_sided_product_obstruction}
     First use the zero-weight reparameterization to make every zero-weight
     sector isolated. Suppose that the retained support is not strongly
@@ -5127,15 +5179,15 @@ $\widehat{\cal K}$.
     There are no neighboring edges from $S$ to $C$.
 
     Let ${\cal A}_S$ and ${\cal A}_C$ be the one-site matrix spaces belonging
-    to the two classes. The source argument requires three remaining bridges:
-    both spaces are nonzero, injectivity in the physical sector coordinates
-    gives ${\cal A}_S+{\cal A}_C=\MN{D}$, and the local contraction across the
-    directed cut gives ${\cal A}_S{\cal A}_C=0$. Once these are established,
+    to the two classes. The directed-cut theorem gives
+    ${\cal A}_S{\cal A}_C=0$. The source argument still requires two bridges:
+    both spaces are nonzero, and injectivity in the physical sector coordinates
+    gives ${\cal A}_S+{\cal A}_C=\MN{D}$. Once these are established,
     Lemma~\ref{lem:matrix_one_sided_product_obstruction} gives the desired
     contradiction. No vanishing in the reverse order is needed. This is the
     directed-cut argument at
     \cite[Appendix~C.2, lines~1452--1470]{Cirac2016MPDO_arXiv}; formalizing the
-    three bridges, and then the passage from the resulting recurrent positive
+    two bridges, and then the passage from the resulting recurrent positive
     support to primitivity of $T$, remains open.
 \end{proof}
 
