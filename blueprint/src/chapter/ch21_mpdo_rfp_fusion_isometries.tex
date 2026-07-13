@@ -1230,6 +1230,132 @@ separate step.
     \label{fig:mpdo_fixed_final_comparison_unitary}
 \end{figure}
 
+\begin{definition}[Complete zipper fusion family]%
+    \label{def:mpdo_complete_zipper_fusion_family}
+    \lean{MPOTensor.CompleteZipperFusionFamily}
+    \leanok
+    \uses{def:mpo_tensor}
+    Let $\Lambda$ be a finite set.  A \emph{complete zipper fusion family}
+    consists of positive bond dimensions $D_a$, MPO blocks
+    $B_a^{ij}\in M_{D_a}(\mathbb C)$, fusion multiplicities $N_{ab}^{c}$,
+    and matrices
+    \[
+        X^c_{ab,\mu}:\mathbb C^{D_c}\longrightarrow
+          \mathbb C^{D_a}\otimes\mathbb C^{D_b},
+        \qquad
+        X^{c+}_{ab,\mu}:\mathbb C^{D_a}\otimes\mathbb C^{D_b}
+          \longrightarrow\mathbb C^{D_c}.
+    \]
+    The matrices $X^{c+}_{ab,\mu}$ are independently chosen left inverses,
+    not adjoints.  For all labels and multiplicity indices,
+    \[
+        X^{d+}_{ab,\nu}X^c_{ab,\mu}
+          =\delta_{cd}\delta_{\mu\nu}1_{D_c}.
+    \]
+    The opposite product
+    $P_{ab}=\sum_{c,\mu}X^c_{ab,\mu}X^{c+}_{ab,\mu}$ is the projector onto
+    the product-MPO support; it need not be the identity on the ambient bond
+    space.  Every product-MPO letter is reconstructed on this support:
+    \[
+        B_{ab}^{ik}
+          =\sum_{c,\mu}X^c_{ab,\mu}B_c^{ik}X^{c+}_{ab,\mu}.
+    \]
+    Writing $B_{ab}^{ik}=\sum_j B_a^{ij}\otimes B_b^{jk}$, the two zipper
+    identities are
+    \[
+    \begin{aligned}
+        B_{ab}^{ik}X^c_{ab,\mu}&=X^c_{ab,\mu}B_c^{ik},\\
+        X^{c+}_{ab,\mu}B_{ab}^{ik}&=B_c^{ik}X^{c+}_{ab,\mu}.
+    \end{aligned}
+    \]
+    Each block is injective, and the labelled block-letter matrix has a common
+    left inverse: its contraction with $B_d^{ij}$ is
+    $\delta_{cd}E_{xy}$ on the block selected by $(c,x,y)$.
+    These are the fusion-tensor, reconstruction, zipper, and simultaneous
+    inverse relations of
+    \cite[lines~161, 181--200, and 269--277]{Bultinck2017Anyons}.
+\end{definition}
+
+\begin{theorem}[Printed F-move and inverse]%
+    \label{thm:mpdo_complete_zipper_printed_fmove}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        rightTripleSynthesis_mul_printedFMatrix}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        printedFMatrix_mul_inversePrintedFMatrix}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        inversePrintedFMatrix_mul_printedFMatrix}
+    \leanok
+    \uses{def:mpdo_complete_zipper_fusion_family}
+    Fix $a,b,c,d\in\Lambda$.  There is an invertible matrix
+    \[
+        F^{abc}_d:
+        \bigoplus_e\mathbb C^{N_{ab}^{e}}\otimes
+          \mathbb C^{N_{ec}^{d}}
+        \longrightarrow
+        \bigoplus_f\mathbb C^{N_{bc}^{f}}\otimes
+          \mathbb C^{N_{af}^{d}}
+    \]
+    whose rows are indexed by $(f,\lambda,\sigma)$ and whose columns are
+    indexed by $(e,\mu,\nu)$.  Its entries satisfy
+    \[
+        (X^e_{ab,\mu}\otimes1)X^d_{ec,\nu}
+        =\sum_{f,\lambda,\sigma}
+          (F^{abc}_d)^{f\lambda\sigma}_{e\mu\nu}
+          (1\otimes X^f_{bc,\lambda})X^d_{af,\sigma}.
+    \]
+    The matrix in the opposite orientation is its two-sided inverse.  This is
+    the $F$-move of \cite[equation~(Fmove)]{Bultinck2017Anyons}.
+\end{theorem}
+\begin{proof}\leanok
+    Form the full left- and right-associated synthesis matrices $L$ and $R$
+    and their analysis matrices $L^+$ and $R^+$.  Applying the reconstruction
+    equation twice to the two associative decompositions gives
+    \[
+        B_{abc}^{il}=L D_{\mathrm L}^{il}L^+
+          =R D_{\mathrm R}^{il}R^+.
+    \]
+    Contract this equality with the simultaneous inverse of the final block
+    letters and sum the diagonal final-label matrix units.  The two direct
+    sums $D_{\mathrm L}$ and $D_{\mathrm R}$ both contract to the identity.
+    Consequently,
+    \[
+        P:=LL^+=RR^+,
+        \qquad L^+L=R^+R=1.
+    \]
+    Hence $R^+L$ changes left-tree coordinates into right-tree coordinates and
+    \[
+        R(R^+L)=(RR^+)L=PL=(LL^+)L=L.
+    \]
+    Its opposite-oriented comparison is $L^+R$.  Using the same support
+    identity,
+    \[
+        (R^+L)(L^+R)=R^+PR=1,
+        \qquad
+        (L^+R)(R^+L)=L^+PL=1.
+    \]
+    The zipper identities show that $R^+L$ intertwines the direct sums of the
+    final-block letters.  The simultaneous block inverse annihilates its
+    corners with different final labels.  On the $d$-diagonal corner,
+    injectivity gives
+    \[
+        (R^+L)_d=F^{abc}_d\otimes1_{D_d}.
+    \]
+    Restricting $R(R^+L)=L$ to this corner gives the displayed $F$-move.
+    The corresponding fixed-final corner of $L^+R$, together with
+    $(R^+L)(L^+R)=1=(L^+R)(R^+L)$, gives the two inverse identities.
+\end{proof}
+
+\begin{figure}[ht]
+    \centering
+    \TNMPDOPrintedFMove
+    \caption{The source-oriented $F$-move.  The left-associated fusion tensor
+        is expanded in the right-associated fusion basis.  The upper indices
+        $(f,\lambda,\sigma)$ label the rows of $F^{abc}_d$, and the lower
+        indices $(e,\mu,\nu)$ label its columns, as in
+        \cite[equation~(Fmove)]{Bultinck2017Anyons}.}
+    \label{fig:mpdo_complete_zipper_printed_fmove}
+\end{figure}
+
 \begin{theorem}[Coherence of four bond-coordinate reassociations]%
     \label{thm:mpdo_fourfold_bond_coordinate_coherence}
     \lean{MPOTensor.BNTFusionIsometryFamily.%

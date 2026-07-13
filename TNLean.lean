@@ -458,6 +458,8 @@ import TNLean.MPS.MPDO.BNTFinalSectorFusion
 import TNLean.MPS.MPDO.BNTFourfoldFusionIndices
 import TNLean.MPS.MPDO.BNTTripleFusionSeparation
 import TNLean.MPS.MPDO.BNTFixedFinalUnitarity
+import TNLean.MPS.MPDO.CompleteZipperFusion
+import TNLean.MPS.MPDO.CompleteZipperFusionInverse
 import TNLean.MPS.MPDO.CommutingForm
 import TNLean.MPS.MPDO.CommutingFormBridge
 import TNLean.MPS.MPDO.BlockedRFPConstruction
