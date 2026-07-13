@@ -553,6 +553,51 @@
     \end{tikzpicture}%
 }
 
+% Adjacent-bond commutativity on one fixed sector triple.  The six vertical
+% lines are the factors L_k, R_k, L_l, R_l, L_h, R_h.  Reading from bottom to
+% top, the two panels differ only by the order of the operators on the disjoint
+% pairs R_k \otimes L_l and R_l \otimes L_h.
+\newcommand{\TNMPDOFixedSectorAdjacentCommutativity}{%
+    \begin{tikzpicture}[tn picture, scale=0.78]
+        \foreach \x in {-5.25,-4.45,-3.65,-2.85,-2.05,-1.25,
+                        1.25,2.05,2.85,3.65,4.45,5.25} {
+            \draw[tn leg] (\x,-1.12) -- (\x,1.12);
+        }
+
+        \node[draw, fill=white, rounded corners=2pt, minimum width=1.38cm,
+            minimum height=0.48cm, inner sep=1pt]
+            at (-4.05,0.38) {$\eta_{k,l}$};
+        \node[draw, fill=white, rounded corners=2pt, minimum width=1.38cm,
+            minimum height=0.48cm, inner sep=1pt]
+            at (-2.45,-0.38) {$\eta_{l,h}$};
+
+        \node[draw, fill=white, rounded corners=2pt, minimum width=1.38cm,
+            minimum height=0.48cm, inner sep=1pt]
+            at (2.45,-0.38) {$\eta_{k,l}$};
+        \node[draw, fill=white, rounded corners=2pt, minimum width=1.38cm,
+            minimum height=0.48cm, inner sep=1pt]
+            at (4.05,0.38) {$\eta_{l,h}$};
+
+        \node at (-3.25,1.57) {$C_{01}^{k,l,h}C_{12}^{k,l,h}$};
+        \node at (3.25,1.57) {$C_{12}^{k,l,h}C_{01}^{k,l,h}$};
+        \node at (0,0) {$=$};
+
+        \foreach \x/\lab in {
+            -5.25/{B_k^L},-4.45/{B_k^R},-3.65/{B_l^L},-2.85/{B_l^R},
+            -2.05/{B_h^L},-1.25/{B_h^R},
+             1.25/{B_k^L}, 2.05/{B_k^R}, 2.85/{B_l^L}, 3.65/{B_l^R},
+             4.45/{B_h^L}, 5.25/{B_h^R}} {
+            \node at (\x,-1.42) {$\lab$};
+        }
+        \foreach \a/\b/\lab in {
+            -5.58/-4.12/0,-3.98/-2.52/1,-2.38/-0.92/2,
+             0.92/2.38/0, 2.52/3.98/1, 4.12/5.58/2} {
+            \draw[tn leg] (\a,-1.72) -- (\a,-1.84) -- (\b,-1.84) -- (\b,-1.72);
+            \node at ({(\a+\b)/2},-2.05) {site $\lab$};
+        }
+    \end{tikzpicture}%
+}
+
 % A closed chain of factorized sector tensors regrouped into neighbouring
 % eta operators.  This mirrors the cyclic contractions in Appendix C.2.
 \newcommand{\TNMPDOCyclicEtaContraction}{%
