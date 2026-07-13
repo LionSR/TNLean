@@ -16,8 +16,10 @@ vector on two sites, identifies the resulting physical image with
 
 The adjacent virtual placements commute.  Their transport to the physical
 three-site coefficient space uses only the isometry identity \(U^*U=1\); no
-surjectivity of \(U\) is required.  The distinction between this local result
-and an all-chain statement is recorded in
+surjectivity of \(U\) is required.  The physical three-site commutator is proved
+in `TNLean.MPS.RFP.AppendixBCommutation` and transported around periodic chains
+in `TNLean.MPS.RFP.AppendixBChainCommutation`.  The remaining canonical-form and
+ground-space spanning restrictions are recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 -/
 

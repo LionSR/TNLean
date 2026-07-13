@@ -121,41 +121,33 @@ representatives are
 \leanid{MPSTensor.AppendixBStructuralData.appendixBQAXOnCoeffSpace} and
 \leanid{MPSTensor.AppendixBStructuralData.appendixBQXBOnCoeffSpace}; both are identified
 with the canonical two-site parent interaction \(q_2(A)\) before placement on
-the \(AX\) and \(XB\) faces.  These representatives are not yet the source
+the \(AX\) and \(XB\) faces. These representatives are not yet the source
 orthogonal projectors \(Q_{AX}\) and \(Q_{XB}\) on
 \(\mathcal H_A\otimes\mathcal H_X\) and
-\(\mathcal H_X\otimes\mathcal H_B\).  A supplied lifted commutator or supplied
-Definition~D.2 datum for the representatives is transported to the corresponding
-three-site translated parent terms by
-\leanid{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_commute_lifts}
-and
-\leanid{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_appendixD2}.
+\(\mathcal H_X\otimes\mathcal H_B\). Their lifted commutator is now proved
+from the adjacent virtual-bond projectors and their isometric transport, as
+recorded by
+\leanid{MPSTensor.AppendixBStructuralData.}\hspace{0pt}
+\leanid{twoSiteBasicSupportProjection_commute_lifts} and
+\leanid{MPSTensor.AppendixBStructuralData.hasOverlappingTwoSiteCommutation}.
+The corresponding adjacent parent terms commute on every periodic chain with
+\(N>2\), by
+\leanid{MPSTensor.AppendixBStructuralData.adjacent_twoSite_localTerms_commute}.
 
 \section{Elimination plan}
 
-A source-faithful continuation should first construct the orthogonal projector
-onto the one-bond virtual subspace \(\mathbb C\varphi\), where
-\(\varphi=\sum_m\lambda_m\lvert m,m\rangle\).  This is distinct from the
-physical two-site support projector constructed above.  Two copies of the
-virtual projector must then be placed on the adjacent bonds of a three-site
-virtual chain.  They commute because they act on distinct bond factors.  Their
-actions must be transported through \(U^{\otimes3}\) on the isometry range and
-then extended to the full physical \(AX\) and \(XB\) support projectors.  Here
-\(U\) is only an isometry.  If \(R=UU^*\), direct transport gives
-\(P_{2,AX}\otimes R_B\) and \(R_A\otimes P_{2,XB}\), rather than the full lifts
-with spectator identity.
-One must decompose each spectator identity as \(R+(1-R)\) and use
-\(P_2\leq R\otimes R\) to show that every cross-product involving a spectator
-complement vanishes.  Passing to orthogonal complements should then identify
-the resulting projectors with the two lifted copies of \(q_2(A)\), prove the
-lifted commutator, and derive the idempotent-product declaration above as a
-lemma, with \(P_K=P_{AXB}\).
-
-After that source-level version is available, the blueprint entry for the source
-parent commuting Hamiltonian condition should point to that statement.  The
-current idempotent-product declaration can remain as the
-algebraic lemma used in the backward direction of Proposition~D.3.  The work is
-tracked by \ghissue{3373}, \ghissue{2633}, and \ghissue{190}.
+The Appendix~B commutator needed for the forward RFP-to-NNCPH argument is now
+proved. What remains for a full formalization of Definition~D.2 is different:
+construct the source projectors \(Q_{AX}\) and \(Q_{XB}\) as orthogonal
+projectors on the stated tensor factors and prove the kernel-intersection
+identity
+\[
+  K_{AXB}=\ker((Q_{AX})_{AX})\cap\ker((Q_{XB})_{XB}).
+\]
+The current coefficient-space theorem supplies the commutator part but does not
+identify that tripartite subspace. The algebraic idempotent-product declaration
+remains the lemma used in the backward direction of Proposition~D.3. The work
+is tracked by \ghissue{3373}, \ghissue{2633}, and \ghissue{190}.
 
 \bibliographystyle{alpha}
 \bibliography{references}
