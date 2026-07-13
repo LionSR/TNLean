@@ -10,14 +10,14 @@ import TNLean.MPS.MPDO.SectorRecurrence
 import TNLean.MPS.MPDO.RecurrentSectorRephasing
 
 /-!
-# Recurrence after deactivating zero-weight sectors
+# Recurrence after reparameterizing zero-weight sectors
 
 For the inverse-map physical-sector factorization, every positive-weight
 Hayashi sector contains a nonzero virtual matrix. Otherwise the corresponding
 middle-site block of the three-site closure would vanish, contrary to its
 expression as a nonzero weight times two trace-one density matrices.
 
-After zero-weight sectors are deactivated, every endpoint of a nonzero
+After zero-weight sectors are reparameterized, every endpoint of a nonzero
 neighboring operator has positive weight. Injectivity supplies spanning by the
 sector virtual matrices, so the triangle-closing argument proves recurrence of
 the neighboring support. The recurrent-support rephasing theorem then gives a
@@ -100,7 +100,7 @@ theorem probability_ne_zero_of_reparameterized_neighboringOperator_ne_zero
   constructor
   · intro hk
     rw [zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_neighboringOperator,
-      if_neg (not_ne_of_eq hk)] at hkh
+      if_neg (fun hne ↦ hne hk)] at hkh
     exact hkh rfl
   · intro hh
     rw [zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_neighboringOperator,
