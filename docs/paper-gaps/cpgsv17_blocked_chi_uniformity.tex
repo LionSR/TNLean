@@ -614,17 +614,26 @@ Under the positive-length selector hypothesis above, the range-completeness
 obstruction from lines~181--191 has now been removed.  The two-sided unitarity
 of the full comparison, together with the vanishing of its off-diagonal
 final-label corners, implies mathematically that every fixed-final bond-space
-corner is two-sided unitary.  This consequence has not yet been packaged as a
-separate Lean theorem.  Combining it with the factorization
-$C^{\varepsilon,\varepsilon}=F_\varepsilon\otimes 1_{D_\varepsilon}$ should
-give the two unitary identities for $F_\varepsilon$ by cancelling the identity
-factor.  That cancellation requires either the explicit assumption
-$0<D_\varepsilon$ or a separate treatment of the zero-dimensional case,
-since injectivity is vacuous when $D_\varepsilon=0$.  Thus the remaining steps
-are to formalize the fixed-final corner identities, extract the
-invertibility---indeed unitarity---of $F_\varepsilon$ with this dimensional
-qualification, identify the orientation convention with the printed
-$F$-matrix, and prove the pentagon-like equation mentioned at lines~995--999.
+corner is two-sided unitary.  The two identities are now formalized by
+\leanid{MPOTensor.BNTFusionIsometryFamily.%
+tripleFusionComparison_finalSector_mul_conjTranspose_eq_one} and
+\leanid{MPOTensor.BNTFusionIsometryFamily.%
+conjTranspose_mul_tripleFusionComparison_finalSector_eq_one}.
+
+Combining these corner identities with
+$C^{\varepsilon,\varepsilon}=F_\varepsilon\otimes 1_{D_\varepsilon}$ gives
+the two unitary identities for $F_\varepsilon$ by cancelling the identity
+factor.  This is formalized by
+\leanid{MPOTensor.BNTFusionIsometryFamily.%
+exists_tripleFusionComparison_finalSector_eq_kronecker_one_and_unitary}
+under the explicit assumption $0<D_\varepsilon$.  The dimensional
+qualification is necessary because injectivity is vacuous when
+$D_\varepsilon=0$.  Thus the fixed-final invertibility obstruction has been
+removed under the simultaneous-selector, present-blocking injectivity, and
+positive-bond-dimension hypotheses.  The remaining steps are to derive those
+hypotheses from the source assumptions, identify the orientation convention
+with the printed $F$-matrix, and prove the pentagon-like equation mentioned at
+lines~995--999.
 
 To eliminate the source-theorem gap, the formalization should instead:
 \begin{enumerate}
