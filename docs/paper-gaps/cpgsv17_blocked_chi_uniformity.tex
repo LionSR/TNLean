@@ -565,11 +565,31 @@ oriented oppositely to the printed convention.
 This remains a scope-restricted result.  Neither the simultaneous final-label
 selectors nor one-letter injectivity of every final tensor at the present
 blocking is derived from the assumptions on the fusion-isometry family.  The
-matrix $F_\varepsilon$ may be rectangular, and the theorem proves neither its
-invertibility nor invertibility of the diagonal corner.  It is therefore not
-identified with the printed $F$-matrix.  The invertible fixed-final
-$F$-transformation and the pentagon-like equation mentioned at lines~995--999
-remain unformalized.
+factorization theorem alone permits a rectangular matrix $F_\varepsilon$.
+
+There is now a separate numerical squareness result.  Under length
+independence and eventual linear independence,
+\leanid{MPOTensor.BNTFusionIsometryFamily.%
+card_leftFinalMultiplicity_eq_card_rightFinalMultiplicity_of_lengthIndependent}
+specializes the coefficient associativity relation to
+\[
+  \sum_\delta r_{\alpha,\beta}^{\delta}
+      r_{\delta,\gamma}^{\varepsilon}
+    = \sum_\delta r_{\beta,\gamma}^{\delta}
+      r_{\alpha,\delta}^{\varepsilon}.
+\]
+This is exactly the equality of fixed-final multiplicity dimensions at
+lines~238--241 of the arXiv:1511.08090 source.  It proves that the matrix
+$F_\varepsilon$ has square shape when both the factorization theorem and the
+additional eventual-independence hypothesis apply.  It does not prove that
+$F_\varepsilon$, or the corresponding diagonal corner, is invertible.
+Lines~181--191 of that source explain the remaining obstruction: without the
+zipper completeness relation, the fusion tensors may cover only a proper
+support subspace and may leave nonzero upper-triangular blocks.  The existing
+isometry relation supplies a left inverse but not this missing range
+completeness.  Consequently the formalized square-shape result is not yet the
+printed invertible $F$-matrix.  The invertible fixed-final transformation and
+the pentagon-like equation mentioned at lines~995--999 remain unformalized.
 
 To eliminate the source-theorem gap, the formalization should instead:
 \begin{enumerate}
