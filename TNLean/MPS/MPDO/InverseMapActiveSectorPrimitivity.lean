@@ -1,0 +1,182 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+-/
+import TNLean.MPS.MPDO.PhysicalSectorTraceMatrix
+
+/-!
+# Primitivity of the active inverse-map sector trace matrix
+
+The coherently rephased inverse-map physical-sector factorization has a
+primitive trace matrix on the positive-weight Hayashi sectors. Zero-weight
+sectors remain in the physical direct sum; they are omitted only from the
+auxiliary trace matrix because the source-faithful reparameterization makes
+all incident neighboring operators vanish.
+
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 (`propSN`), lines
+1406--1471.
+-/
+
+open scoped Matrix ComplexOrder BigOperators
+
+namespace MPOTensor
+
+variable {d D : ℕ}
+  {rho : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
+
+/-- A zero-weight sector has zero virtual matrices in the source-faithful
+zero-weight reparameterization.
+
+**Local fix (inactive sectors):** see
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+
+Source: arXiv:1606.00608, Appendix C.2, equations `formK` and `etarl`, lines
+1434--1445. -/
+theorem zeroWeightReparameterized_sectorVirtualMatrix_eq_zero
+    (K : MPOTensor d D) (hK : K.IsInjective)
+    (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R rho)
+    (hη : EtaStructure rho) (alpha beta : Fin D) (hm : R beta alpha ≠ 0)
+    (k : Fin hη.m) (hk : hη.p k = 0)
+    (x y : (zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
+      K hK R hρ hη alpha beta hm).SectorIndex k) :
+    (zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
+      K hK R hρ hη alpha beta hm).sectorVirtualMatrix k x y = 0 := by
+  ext gamma delta
+  simp [PhysicalSectorFactorization.sectorVirtualMatrix,
+    zeroWeightReparameterizedInverseMapPhysicalSectorFactorization,
+    hk, Matrix.zero_apply]
+  right
+  rfl
+
+/-- The source inverse-map factorization admits a coherent rephasing whose
+active trace matrix is primitive.
+
+**Local fix (inactive sectors):** the physical factorization retains every
+zero-weight sector. Primitivity concerns only the subtype on which the Hayashi
+weight is nonzero. See
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 (`propSN`), lines
+1406--1471. -/
+theorem exists_rephased_inverseMap_activeSectorTraceMatrix_isPrimitive
+    (K : MPOTensor d D) (hK : K.IsInjective)
+    (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R rho)
+    (hη : EtaStructure rho) (alpha beta : Fin D) (hm : R beta alpha ≠ 0)
+    (hM : IsMPDO K) :
+    let F := zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
+      K hK R hρ hη alpha beta hm
+    ∃ z : Fin F.sectorCount → Circle,
+      (∀ k h, ((F.rephase z).neighboringOperator k h).PosSemidef) ∧
+        Matrix.IsPrimitive ((F.rephase z).activeSectorTraceMatrix hη.p) := by
+  let F := zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
+    K hK R hρ hη alpha beta hm
+  change ∃ z : Fin F.sectorCount → Circle,
+    (∀ k h, ((F.rephase z).neighboringOperator k h).PosSemidef) ∧
+      Matrix.IsPrimitive ((F.rephase z).activeSectorTraceMatrix hη.p)
+  let eta : etaOperators hη := fun k h ↦ F.neighboringOperator k h
+  have hcyc : ∀ {N : ℕ} [NeZero N] (q : Fin N → Fin hη.m),
+      (cyclicEtaTensorProduct hη eta q).PosSemidef := by
+    intro N _ q
+    exact cyclicEtaTensorProduct_posSemidef K hη F.leftTensor F.rightTensor
+      F.factorization (hM N) q
+  have hrec : IsRecurrentSupport eta :=
+    zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_isRecurrentSupport
+      K hK R hρ hη alpha beta hm
+  obtain ⟨z, hz⟩ := exists_vertexPhase_smul_posSemidef hη eta hcyc hrec
+  have hpos : ∀ k h, ((F.rephase z).neighboringOperator k h).PosSemidef := by
+    intro k h
+    rw [F.rephase_neighboringOperator]
+    exact hz k h
+  refine ⟨z, hpos, ?_⟩
+  have hspanAll :
+      Submodule.span ℂ (Set.range F.sectorVirtualMatrixFamily) = ⊤ :=
+    F.sectorVirtualMatrixFamily_span_eq_top hK
+  have hinactive : ∀ k, hη.p k = 0 →
+      ∀ x y : F.SectorIndex k, F.sectorVirtualMatrix k x y = 0 := by
+    intro k hk x y
+    exact zeroWeightReparameterized_sectorVirtualMatrix_eq_zero
+      K hK R hρ hη alpha beta hm k hk x y
+  have hspanF : Submodule.span ℂ
+      (Set.range (F.activeSectorVirtualMatrixFamily hη.p)) = ⊤ :=
+    F.activeSectorVirtualMatrixFamily_span_eq_top hη.p hspanAll hinactive
+  have hfamily :
+      (F.rephase z).activeSectorVirtualMatrixFamily hη.p =
+        F.activeSectorVirtualMatrixFamily hη.p := by
+    funext q
+    exact F.rephase_sectorVirtualMatrix z q.1.1 q.2.1 q.2.2
+  have hspan : Submodule.span ℂ
+      (Set.range ((F.rephase z).activeSectorVirtualMatrixFamily hη.p)) = ⊤ := by
+    rw [hfamily]
+    exact hspanF
+  have hnonzero : ∀ k : (F.rephase z).ActiveSector hη.p,
+      ∃ x y : (F.rephase z).SectorIndex k,
+        (F.rephase z).sectorVirtualMatrix k x y ≠ 0 := by
+    intro k
+    obtain ⟨x, y, hxy⟩ := exists_active_sectorVirtualMatrix_ne_zero
+      K hK R hρ hη alpha beta hm k.1 k.property
+    exact ⟨x, y, by simpa using hxy⟩
+  have hedgeNonzero : ∀ {k h}, F.neighboringOperator k h ≠ 0 →
+      (∃ x y : F.SectorIndex k, F.sectorVirtualMatrix k x y ≠ 0) ∧
+        ∃ x y : F.SectorIndex h, F.sectorVirtualMatrix h x y ≠ 0 := by
+    intro k h hkh
+    obtain ⟨hk, hh⟩ :=
+      probability_ne_zero_of_reparameterized_neighboringOperator_ne_zero
+        K hK R hρ hη alpha beta hm hkh
+    exact ⟨exists_active_sectorVirtualMatrix_ne_zero
+      K hK R hρ hη alpha beta hm k hk,
+      exists_active_sectorVirtualMatrix_ne_zero
+        K hK R hρ hη alpha beta hm h hh⟩
+  have htriangle : ∀ {k h : (F.rephase z).ActiveSector hη.p},
+      (F.rephase z).neighboringOperator k h ≠ 0 →
+        ∃ j : (F.rephase z).ActiveSector hη.p,
+          (F.rephase z).neighboringOperator h j ≠ 0 ∧
+            (F.rephase z).neighboringOperator j k ≠ 0 := by
+    intro k h hkh
+    have hkhF : F.neighboringOperator k.1 h.1 ≠ 0 :=
+      (F.rephase_neighboringOperator_ne_zero_iff z k.1 h.1).1 hkh
+    obtain ⟨j, hhj, hjk⟩ :=
+      F.exists_two_edge_return_of_neighboringOperator_ne_zero
+        hspanAll hedgeNonzero hkhF
+    have hj : hη.p j ≠ 0 :=
+      (probability_ne_zero_of_reparameterized_neighboringOperator_ne_zero
+        K hK R hρ hη alpha beta hm hhj).2
+    exact ⟨⟨j, hj⟩,
+      (F.rephase_neighboringOperator_ne_zero_iff z h.1 j).2 hhj,
+      (F.rephase_neighboringOperator_ne_zero_iff z j k.1).2 hjk⟩
+  exact (F.rephase z).activeSectorTraceMatrix_isPrimitive
+    hη.p hpos hspan hnonzero htriangle
+
+/-- Every injective MPO tensor satisfying the strong area law admits a
+positive physical-sector factorization whose active trace matrix is primitive.
+
+The accompanying weights are nonnegative and sum to one. Zero-weight sectors
+remain in the physical factorization and are omitted only from the auxiliary
+trace matrix.
+
+**Local fix (inactive sectors):** see
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 (`propSN`), lines
+1406--1471. -/
+theorem exists_positive_physicalSectorFactorization_activeSectorTraceMatrix_isPrimitive_of_isSAL
+    (K : MPOTensor d D) (hK : K.IsInjective) (hSAL : IsSAL K) :
+    ∃ (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ),
+      (∀ k, 0 ≤ p k) ∧
+        (∑ k, p k) = 1 ∧
+          (∀ k h, (F.neighboringOperator k h).PosSemidef) ∧
+            Matrix.IsPrimitive (F.activeSectorTraceMatrix p) := by
+  obtain ⟨hη⟩ := exists_etaStructure_reducedBlockState_of_isSAL K hSAL
+  obtain ⟨beta, alpha, hm⟩ :=
+    exists_normalizedFourSiteTail_entry_ne_zero
+      K ((Classical.choose_spec hSAL).1 4)
+  let F₀ := zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
+    K hK (normalizedFourSiteTail K)
+      (isThreeSiteClosure_reducedBlockState K) hη alpha beta hm
+  obtain ⟨z, hpos, hprim⟩ :=
+    exists_rephased_inverseMap_activeSectorTraceMatrix_isPrimitive
+      K hK (normalizedFourSiteTail K)
+        (isThreeSiteClosure_reducedBlockState K) hη alpha beta hm
+          (Classical.choose hSAL)
+  exact ⟨F₀.rephase z, hη.p, hη.hp_nonneg, hη.hp_sum, hpos, hprim⟩
+
+end MPOTensor

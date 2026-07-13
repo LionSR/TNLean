@@ -262,13 +262,12 @@ statements are
 \path{MPOTensor.PhysicalSectorFactorization.mpo_submatrix_sector_eq_cyclicNeighboringProduct}
 and
 \path{MPOTensor.PhysicalSectorFactorization.mpo_reindex_sectorChainEquiv_eq_blockDiagonal}.}
-The positive choice of the individual $\eta_{k,h}$ is now obtained for the
-inverse-map factorization by isolating zero-weight sectors, deriving recurrence
-from injectivity, and applying coherent vertex rephasing.  Positivity of a
-complete cyclic product alone would not suffice: the recurrence and
-injectivity argument is essential.  What remains in Lemma \texttt{propSN} is
-the local-orthogonality argument establishing primitivity of the sector trace
-matrix on the positive-weight sector set.
+The positive choice of the individual $\eta_{k,h}$ and primitivity of the
+active sector trace matrix are now obtained from this factorization.
+Positivity of a complete cyclic product alone would not supply coherent
+positive representatives for all neighboring pairs: recurrence, injective
+spanning, and the directed-cut argument control the choices simultaneously
+across the sector graph.
 
 The positivity half of the projected chain identity is now formalized: for
 an MPDO, the chain of the physically conjugated tensor is a congruence of
@@ -482,13 +481,17 @@ let $C$ be its complement.  The source argument obtains
 $\mathcal A_S\mathcal A_C=0$ from the absence of edges from $S$ to $C$; this
 directed-cut implication is formalized by
 \leanid{MPOTensor.PhysicalSectorFactorization.oneSiteSectorSpace_mul_eq_zero}.
-The spanning and positive-weight nontriviality results above supply the two
-remaining inputs for the one-sided product obstruction.  Their assembly into
-the one-component conclusion, followed by the passage from one-component
-positive support to primitivity of the active trace matrix, remains open.  No
-absence of edges from $C$ to $S$ is needed.  The abstract four-sector phase
-example remains a counterexample to cyclic positivity alone, but it does not
-satisfy the additional inverse-map and injectivity consequences used here.
+Injective spanning gives
+$\mathcal A_S+\mathcal A_C=M_D(\mathbb C)$, while both spaces are nonzero.
+The one-sided product obstruction then gives a contradiction, without any
+assumption on products in the reverse order.  This directed-cut argument is
+now formalized for the active-sector virtual matrix spaces.  Nondegeneracy of
+the trace pairing gives a closed support walk of length two through every
+active sector, while triangle closure gives one of length three.  Strong
+connectivity and these coprime return lengths yield a common positive power of
+the active trace matrix.  The abstract four-sector phase example remains a
+counterexample to cyclic positivity alone, but it does not satisfy the
+additional inverse-map and injectivity consequences used here.
 
 \subsection{Coherent vertex rephasing under recurrence}
 
@@ -610,13 +613,13 @@ after this commuting product form has been obtained, in the later step that
 derives the GSNNCH--ZCL and RFP conclusions.  Accordingly, adding ZCL to a
 conditional theorem would not be relevant to the coherent positive choice.
 
-The coherent positive choice in Lemma \texttt{propSN} is now complete.  The
-remaining trace-matrix primitivity statement is tracked by
-\href{https://github.com/LionSR/TNLean/issues/3696}{issue \#3696}.  The positive
-commuting bond, its exact all-length product realization, and the resulting
-eta-local structure of Proposition \texttt{3to4} are already available from a
-coherently positive physical-sector factorization.  Their composition with
-the new SAL theorem is
+The coherent positive choice and the active-sector trace-matrix primitivity in
+Lemma \texttt{propSN} are now complete.  The latter is
+\leanid{MPOTensor.exists_positive_physicalSectorFactorization_activeSectorTraceMatrix_isPrimitive_of_isSAL}.
+The positive commuting bond, its exact all-length product realization, and
+the resulting eta-local structure of Proposition \texttt{3to4} are available
+from a coherently positive physical-sector factorization.  Their composition
+with the SAL theorem is
 \leanid{MPOTensor.nonempty_etaLocalStructureData_of_isSAL}, so the
 $\eta$-local conclusion of Proposition~C.8 is now formalized from its source
 hypotheses.
@@ -630,23 +633,22 @@ matrix on the full ambient sector set has a zero row and a zero column and is
 not primitive.  The primitive matrix in Lemma \texttt{propSN} must therefore
 be read on the effective sector set $\{k:p_k>0\}$, as is customary when zero
 probability terms in a direct-sum state decomposition are omitted.  The Lean
-statement will restrict the trace matrix to this subtype while leaving the
+statement restricts the trace matrix to this subtype while leaving the
 physical sector equivalence, and hence the full Hilbert space, unchanged.
 
 \section{Classification}
 
-This note now records a closed coherent-positive-choice gap and the remaining
-downstream obligations in the SAL-to-positive-bond construction of
+This note now records a closed coherent-positive-choice and primitivity gap in
+the SAL-to-positive-bond construction of
 \leanid{MPOTensor.EtaLocalStructureData}. Zero-weight sectors are
 reparameterized without changing the physical decomposition, recurrence is
 derived from injectivity, and the inverse-map sector tensors are coherently
 rephased so that every neighboring operator is positive semidefinite. The
 earlier scope-restricted recurrence theorem remains useful as the general
 graph-theoretic component, but recurrence is a conclusion for the
-reparameterized inverse-map factorization.  The primitivity of the trace
-matrix restricted to positive-weight sectors remains open; it is no longer
-needed for recurrence and must be proved separately.  The unrestricted
-ambient trace matrix is not primitive when a zero-weight sector is present.
+reparameterized inverse-map factorization.  The trace matrix restricted to
+positive-weight sectors is primitive.  The unrestricted ambient trace matrix
+is not primitive when a zero-weight sector is present.
 
 For the conditional bond construction, all translates commute pairwise at
 every length $N\geq2$.  The finite-chain MPO is the ordered product of those
@@ -657,9 +659,11 @@ scalar one, and they determine the eta-local structure data. The raw
 physical-sector factorization already follows for an injective tensor
 satisfying SAL, and the coherent positive choice is now obtained by
 normalizing the inactive sectors and deriving recurrence from injectivity.
-The remaining work in this part of the paper is the later active-sector
-trace-matrix primitivity step; it is logically separate from the
-commuting-bond construction.
+The active-sector trace-matrix primitivity step is also complete.  The
+projector form of the local-orthogonality contraction remains a separate
+source presentation, but it is no longer an obstruction to Lemma
+\texttt{propSN} because the directed-cut product identity is proved directly
+for the sector virtual matrix spaces.
 
 \bibliographystyle{alpha}
 \bibliography{references}
