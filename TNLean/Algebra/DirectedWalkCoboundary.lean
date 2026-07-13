@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Algebra.Group.Defs
 import Mathlib.Data.Quot
 
@@ -29,12 +30,18 @@ and therefore cannot in general be eliminated into such data, while
 a quiver of edge types.
 
 `TNLean.Algebra.FiniteCycleCoboundary` treats the complementary special case of
-one finite cycle. A future MPDO specialization should prove the correspondence
-between `Relation.ReflTransGen` (hence `MPOTensor.SectorReaches`) and
-`DirectedWalk`, then apply the closed-walk theorem below to the sector phases.
+one finite cycle. Reachability by a directed walk is equivalent to the
+reflexive transitive closure of the edge relation; this permits direct use with
+relations defined through `Relation.ReflTransGen`.
+
+A nonempty closed walk also determines a finite cyclic family of vertices.
+Every consecutive pair is an edge, including the final return to the initial
+vertex, and the cyclic product of the edge weights equals the walk weight.
 -/
 
 namespace TNLean.Algebra
+
+open scoped BigOperators
 
 variable {V G : Type*} (r : V → V → Prop)
 
@@ -90,6 +97,193 @@ theorem weight_append [Monoid G] (κ : V → V → G) {a b c : V}
   | nil => simp
   | cons hab u ih => simp [append, ih, mul_assoc]
 
+/-- The number of edges in a directed walk. -/
+@[reducible] def edgeCount {a b : V} : DirectedWalk r a b → ℕ
+  | .nil _ => 0
+  | .cons _ w => edgeCount w + 1
+
+@[simp] theorem edgeCount_nil (a : V) : edgeCount r (.nil a) = 0 := rfl
+
+@[simp] theorem edgeCount_cons {a b c : V} (hab : r a b) (w : DirectedWalk r b c) :
+    edgeCount r (.cons hab w) = edgeCount r w + 1 := rfl
+
+/-- The vertex at a position of a directed walk, including both endpoints. -/
+def vertexAt {a b : V} (w : DirectedWalk r a b) :
+    Fin (edgeCount r w + 1) → V :=
+  match w with
+  | .nil a => fun _ => a
+  | .cons (a := a) _ w => Fin.cases a (fun i => vertexAt w i)
+
+@[simp] theorem vertexAt_nil (a : V) (i : Fin 1) :
+    vertexAt r (.nil a) i = a := rfl
+
+@[simp] theorem vertexAt_cons_zero {a b c : V} (hab : r a b)
+    (w : DirectedWalk r b c) :
+    vertexAt r (.cons hab w) 0 = a := rfl
+
+@[simp] theorem vertexAt_cons_succ {a b c : V} (hab : r a b)
+    (w : DirectedWalk r b c) (i : Fin (edgeCount r w + 1)) :
+    vertexAt r (.cons hab w) i.succ = vertexAt r w i := rfl
+
+@[simp] theorem vertexAt_zero {a b : V} (w : DirectedWalk r a b) :
+    vertexAt r w 0 = a := by
+  cases w <;> rfl
+
+@[simp] theorem vertexAt_last {a b : V} (w : DirectedWalk r a b) :
+    vertexAt r w (Fin.last (edgeCount r w)) = b := by
+  induction w with
+  | nil => rfl
+  | @cons a b c hab w ih =>
+      change Fin.cases a (fun i => vertexAt r w i)
+        (Fin.last (edgeCount r w + 1)) = c
+      rw [show Fin.last (edgeCount r w + 1) = (Fin.last (edgeCount r w)).succ by
+        ext
+        simp]
+      exact ih
+
+/-- Consecutive positions in a directed walk are related by an edge. -/
+theorem vertexAt_edge {a b : V} (w : DirectedWalk r a b)
+    (i : Fin (edgeCount r w)) :
+    r (vertexAt r w i.castSucc) (vertexAt r w i.succ) := by
+  induction w with
+  | nil => exact Fin.elim0 i
+  | @cons a b c hab w ih =>
+      refine Fin.cases ?_ (fun j => ?_) i
+      · change r a (Fin.cases a (fun i => vertexAt r w i) 1)
+        have hone : (1 : Fin (edgeCount r w + 2)) =
+            (0 : Fin (edgeCount r w + 1)).succ := by
+          ext
+          simp
+        rw [hone]
+        rw [Fin.cases_succ, vertexAt_zero]
+        exact hab
+      · change r
+          (Fin.cases a (fun i => vertexAt r w i) j.succ.castSucc)
+          (Fin.cases a (fun i => vertexAt r w i) j.succ.succ)
+        simp only [Fin.cases_succ]
+        exact ih j
+
+/-- A nonempty closed walk, written as its cyclic list of source vertices. -/
+def closedConsVertices {a b : V} (hab : r a b) (w : DirectedWalk r b a) :
+    Fin (edgeCount r w + 1) → V :=
+  fun i => vertexAt r (.cons hab w) i.castSucc
+
+@[simp] theorem closedConsVertices_zero {a b : V} (hab : r a b)
+    (w : DirectedWalk r b a) :
+    closedConsVertices r hab w 0 = a := rfl
+
+private theorem castSucc_add_one_eq_succ_of_ne_last {N : ℕ}
+    (i : Fin (N + 1)) (hi : i ≠ Fin.last N) :
+    (i + 1).castSucc = i.succ := by
+  apply Fin.ext
+  have hi' : i.val < N := by
+    have hine : i.val ≠ N := by
+      intro heq
+      apply hi
+      ext
+      exact heq
+    omega
+  have hone : (1 : Fin (N + 1)).val = 1 := by
+    rw [Fin.val_one']
+    exact Nat.mod_eq_of_lt (by omega)
+  calc
+    ↑(i + 1).castSucc = ↑(i + 1) := Fin.val_castSucc _
+    _ = (i.val + (1 : Fin (N + 1)).val) % (N + 1) := Fin.val_add _ _
+    _ = (i.val + 1) % (N + 1) := by rw [hone]
+    _ = i.val + 1 := Nat.mod_eq_of_lt (by omega)
+    _ = ↑i.succ := (Fin.val_succ i).symm
+
+private theorem castSucc_add_one_eq_zero_of_eq_last {N : ℕ}
+    (i : Fin (N + 1)) (hi : i = Fin.last N) :
+    (i + 1).castSucc = (0 : Fin (N + 2)) := by
+  subst i
+  apply Fin.ext
+  calc
+    ↑(Fin.last N + 1).castSucc = ↑(Fin.last N + 1) := Fin.val_castSucc _
+    _ = ((Fin.last N).val + (1 : Fin (N + 1)).val) % (N + 1) :=
+      Fin.val_add _ _
+    _ = 0 := by
+      cases N <;> simp [Nat.mod_self]
+    _ = ↑(0 : Fin (N + 2)) := rfl
+
+/-- The vertex following the initial vertex is the target of the distinguished
+first edge. -/
+@[simp] theorem closedConsVertices_zero_add_one {a b : V} (hab : r a b)
+    (w : DirectedWalk r b a) :
+    closedConsVertices r hab w (0 + 1) = b := by
+  cases w with
+  | nil =>
+      rw [show (0 + 1 : Fin 1) = 0 from Subsingleton.elim _ _,
+        closedConsVertices_zero]
+  | @cons b c a hbc w =>
+      unfold closedConsVertices
+      rw [castSucc_add_one_eq_succ_of_ne_last]
+      · simp only [vertexAt_cons_succ, vertexAt_zero]
+      · intro h
+        have := congrArg Fin.val h
+        simp at this
+
+/-- Consecutive cyclic vertices of a nonempty closed walk are related by an edge. -/
+theorem closedConsVertices_edge {a b : V} (hab : r a b)
+    (w : DirectedWalk r b a) (i : Fin (edgeCount r w + 1)) :
+    r (closedConsVertices r hab w i)
+      (closedConsVertices r hab w (i + 1)) := by
+  by_cases hi : i = Fin.last (edgeCount r w)
+  · have hedge := vertexAt_edge r (.cons hab w) i
+    change r (vertexAt r (.cons hab w) i.castSucc)
+      (vertexAt r (.cons hab w) (i + 1).castSucc)
+    rw [castSucc_add_one_eq_zero_of_eq_last i hi, vertexAt_zero]
+    have hisucc : i.succ = Fin.last (edgeCount r w + 1) := by
+      subst i
+      ext
+      simp
+    rw [hisucc, vertexAt_last] at hedge
+    exact hedge
+  · have hedge := vertexAt_edge r (.cons hab w) i
+    change r (vertexAt r (.cons hab w) i.castSucc)
+      (vertexAt r (.cons hab w) (i + 1).castSucc)
+    rw [castSucc_add_one_eq_succ_of_ne_last i hi]
+    exact hedge
+
+/-- The weight of a walk is the product of the weights of its linearly ordered edges. -/
+theorem weight_eq_fin_prod_vertexAt [CommMonoid G] (κ : V → V → G)
+    {a b : V} (w : DirectedWalk r a b) :
+    weight r κ w = ∏ i : Fin (edgeCount r w),
+      κ (vertexAt r w i.castSucc) (vertexAt r w i.succ) := by
+  induction w with
+  | nil => simp [edgeCount]
+  | @cons a b c hab w ih =>
+      rw [weight_cons]
+      change κ a b * weight r κ w = ∏ i : Fin (edgeCount r w + 1),
+        κ (vertexAt r (.cons hab w) i.castSucc)
+          (vertexAt r (.cons hab w) i.succ)
+      rw [Fin.prod_univ_succ]
+      rw [ih]
+      congr 1
+      change κ a b = κ a (vertexAt r w 0)
+      rw [vertexAt_zero]
+
+/-- The weight of a nonempty closed walk is the cyclic product of the weights
+of its consecutive edges. -/
+theorem weight_closedCons_eq_fin_prod [CommMonoid G] (κ : V → V → G)
+    {a b : V} (hab : r a b) (w : DirectedWalk r b a) :
+    weight r κ (.cons hab w) = ∏ i : Fin (edgeCount r w + 1),
+      κ (closedConsVertices r hab w i)
+        (closedConsVertices r hab w (i + 1)) := by
+  rw [weight_eq_fin_prod_vertexAt]
+  apply Finset.prod_congr rfl
+  intro i _
+  congr 1
+  unfold closedConsVertices
+  by_cases hi : i = Fin.last (edgeCount r w)
+  · rw [castSucc_add_one_eq_zero_of_eq_last i hi, vertexAt_zero]
+    have hisucc : i.succ = Fin.last (edgeCount r w + 1) := by
+      subst i
+      ext
+      simp
+    rw [hisucc, vertexAt_last]
+  · rw [castSucc_add_one_eq_succ_of_ne_last i hi]
+
 private theorem weight_transport_start [Monoid G] (κ : V → V → G)
     {a a' b : V} (h : a = a') (w : DirectedWalk r a b) :
     weight r κ (h ▸ w) = weight r κ w := by
@@ -107,6 +301,22 @@ theorem reaches_of_edge {a b : V} (hab : r a b) : Reaches r a b :=
 theorem Reaches.trans {a b c : V} : Reaches r a b → Reaches r b c → Reaches r a c := by
   rintro ⟨u⟩ ⟨v⟩
   exact ⟨append r u v⟩
+
+/-- Reachability by a directed walk is equivalent to membership in the
+reflexive transitive closure of the edge relation. -/
+theorem reaches_iff_reflTransGen {a b : V} :
+    Reaches r a b ↔ Relation.ReflTransGen r a b := by
+  constructor
+  · rintro ⟨w⟩
+    induction w with
+    | nil => exact .refl
+    | cons hab w ih => exact ih.head hab
+  · intro h
+    induction h with
+    | refl => exact ⟨nil _⟩
+    | tail hab hbc ih =>
+      obtain ⟨w⟩ := ih
+      exact ⟨append r w (cons hbc (nil _))⟩
 
 /-- If every edge admits a return walk, every walk admits a return walk. -/
 theorem reaches_reverse_of_edge_returns
