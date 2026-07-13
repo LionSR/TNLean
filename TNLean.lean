@@ -392,6 +392,7 @@ import TNLean.MPS.MPDO.RFPSubspinMaps
 import TNLean.MPS.MPDO.HayashiSectorComparison
 import TNLean.MPS.MPDO.SectorFactorization
 import TNLean.MPS.MPDO.PhysicalSectorFactorization
+import TNLean.MPS.MPDO.PhysicalSectorSupportRecurrence
 import TNLean.MPS.MPDO.PhysicalSectorRephasing
 import TNLean.MPS.MPDO.InverseMapPhysicalSectorFactorization
 import TNLean.MPS.MPDO.PhysicalSectorPruning

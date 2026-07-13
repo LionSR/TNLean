@@ -370,8 +370,20 @@ formula are now formalized by
 \leanid{MPOTensor.zeroWeightReparameterizedInverseMapPhysicalSectorFactorization},
 and
 \leanid{MPOTensor.zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_neighboringOperator}.
-The remaining problem is the injectivity argument establishing recurrence on
-the nonzero-weight support.
+Every neighboring operator incident to an inactive sector therefore
+vanishes, while active--active operators are unchanged.  On the active
+support, recurrence follows from an algebraic triangle-closing argument once
+the virtual matrices furnished by all sector entries span the full matrix
+algebra and every active sector furnishes a nonzero matrix.  This argument is
+now formalized: a nonzero edge $k\to h$ can be closed through one further
+sector $j$, giving $h\to j\to k$, by nondegeneracy and cyclicity of the matrix
+trace pairing.\footnote{The formal declarations are
+\leanid{MPOTensor.PhysicalSectorFactorization.sectorVirtualMatrix},
+\leanid{MPOTensor.PhysicalSectorFactorization.exists_two_edge_return_of_neighboringOperator_ne_zero},
+and
+\leanid{MPOTensor.PhysicalSectorFactorization.neighboringOperator_reaches_of_ne_zero}.}
+The remaining concrete obligations are to derive the spanning and
+sector-nonvanishing hypotheses from the injective inverse-map construction.
 
 \subsection{Recurrence of the sector support graph: definitions and the
 per-cycle rescaling}
