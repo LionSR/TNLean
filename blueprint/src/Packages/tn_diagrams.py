@@ -94,6 +94,7 @@ _DIAGRAM_ARGS: dict[str, str] = {
     "TNMPDOTwoSiteBlocking": "",
     "TNMPDOBNTVerticalProduct": "",
     "TNMPDOBlockClosureMap": "",
+    "TNMPDOBNTOperatorTraceClosure": "",
     "TNMPDOFirstSiteInsertionHypothesis": "",
     "TNMPDOFirstSiteInsertionBlockwise": "",
     "TNMPDOInsertionTracePairing": "",
