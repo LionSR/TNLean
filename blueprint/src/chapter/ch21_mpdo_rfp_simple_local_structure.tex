@@ -1472,6 +1472,45 @@ strong subadditivity for a normalized three-site reduced state.
     locality step.
 \end{proof}
 
+\begin{theorem}[Pairwise commutativity of the physical bonds]
+    \label{thm:mpdo_periodic_pairwise_physical_bonds_comm}
+    \lean{MPOTensor.PhysicalSectorFactorization.physicalBond_pairwise_comm}
+    \leanok
+    \uses{lem:two_site_cyclic_window_overlap_cases,
+      thm:mpdo_periodic_adjacent_physical_bonds_comm,
+      thm:mpdo_physical_two_site_crossed_bonds_comm,
+      thm:mpdo_periodic_disjoint_physical_bonds_comm}
+    Suppose that the physical-sector factorization is given. For every
+    periodic chain of length $N\geq2$ and every pair of sites
+    $i,j\in\mathbb Z/N\mathbb Z$, the corresponding translates of the
+    physical bond commute:
+    \[
+      (B_{\mathrm{physical}})_{i,i+1}
+      (B_{\mathrm{physical}})_{j,j+1}
+      =
+      (B_{\mathrm{physical}})_{j,j+1}
+      (B_{\mathrm{physical}})_{i,i+1}.
+    \]
+    This is the pairwise commutation assertion in
+    \cite[Appendix~C.2, Proposition~C.8, lines~1571--1593]
+      {Cirac2016MPDO_arXiv}, conditional here on the physical-sector
+    factorization constructed in the preceding results.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For $N=2$, equal translates commute trivially, while the two distinct
+    translates commute by
+    Theorem~\ref{thm:mpdo_physical_two_site_crossed_bonds_comm}. Let $N\geq3$.
+    If the two cyclic supports are disjoint, apply
+    Theorem~\ref{thm:mpdo_periodic_disjoint_physical_bonds_comm}. Otherwise,
+    Lemma~\ref{lem:two_site_cyclic_window_overlap_cases} shows that the two
+    starting sites either coincide or are cyclic neighbors. The coincident
+    case is immediate, and the two neighboring orientations follow from
+    Theorem~\ref{thm:mpdo_periodic_adjacent_physical_bonds_comm} and its
+    symmetric equality.
+\end{proof}
+
 \begin{definition}[Closed sector tensors]%
     \label{def:mpdo_closed_sector_tensors}
     \lean{MPOTensor.closedSectorL}
