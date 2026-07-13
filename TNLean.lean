@@ -429,6 +429,7 @@ import TNLean.MPS.MPDO.SectorEtaOperator
 import TNLean.MPS.MPDO.SectorEtaPositivity
 import TNLean.MPS.MPDO.SALPhysicalSectorCyclicPositivity
 import TNLean.MPS.MPDO.SectorRecurrence
+import TNLean.MPS.MPDO.RecurrentSectorRephasing
 import TNLean.MPS.MPDO.FusionIsometries
 import TNLean.MPS.MPDO.OperatorProduct
 import TNLean.MPS.MPDO.AlgebraStructure
