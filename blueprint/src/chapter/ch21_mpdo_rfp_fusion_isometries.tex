@@ -615,6 +615,60 @@ separate step.
     and apply Theorem~\ref{thm:mpdo_operator_product_associativity}.
 \end{proof}
 
+\begin{definition}[Common word selectors for the final labels]%
+    \label{def:mpdo_final_label_selector_words}
+    \lean{MPOTensor.BNTFusionIsometryFamily.HasFinalLabelSelectorWords}
+    \leanok
+    For some common length $S$, suppose that for each final label
+    $\varepsilon$ there are coefficients $c_\varepsilon(w)$, indexed by the
+    words $w$ of length $S$ in the doubled physical alphabet, such that
+    \[
+        \sum_{|w|=S}c_\varepsilon(w)M_\varepsilon^w=1,
+        \qquad
+        \sum_{|w|=S}c_\varepsilon(w)M_{\varepsilon'}^w=0
+        \quad(\varepsilon'\ne\varepsilon).
+    \]
+    This is the finite-word form of the simultaneous inverse relation
+    $B_d^+B_{d'}=\delta_{d,d'}1$ used in the fixed-channel argument of
+    \cite{Bultinck2017Anyons}.
+\end{definition}
+
+\begin{theorem}[Vanishing between distinct final sectors]%
+    \label{thm:mpdo_triple_fusion_comparison_final_sector_vanishing}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        tripleFusionComparison_finalSector_submatrix_eq_zero}
+    \leanok
+    \uses{def:mpdo_triple_fusion_comparison,
+        def:mpdo_final_label_selector_words}
+    Suppose the positive trace-power coefficients are independent of the
+    positive chain length and common word selectors exist.  If
+    $\varepsilon\ne\varepsilon'$, then the corner of the full comparison from
+    the right final sector $\varepsilon'$ to the left final sector
+    $\varepsilon$ vanishes:
+    \[
+        P^{\mathrm L}_{\varepsilon}
+        C_{\alpha,\beta,\gamma}
+        P^{\mathrm R}_{\varepsilon'}=0.
+    \]
+    The assertion is conditional on the displayed word-selector identities.
+    It neither states that a diagonal corner is invertible nor identifies one
+    with an $F$-matrix, and it does not assert the pentagon identity.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpdo_triple_fusion_comparison_intertwines}
+    Fix one left multiplicity index and one right multiplicity index.  Taking
+    the corresponding bond-space corner of the full letterwise identity gives
+    \[
+        M_\varepsilon^{ij}X
+          =X M_{\varepsilon'}^{ij}.
+    \]
+    Induction on the word $w$ gives
+    $M_\varepsilon^w X = X M_{\varepsilon'}^w$.  Multiply these identities by
+    $c_\varepsilon(w)$ and sum over all words of length $S$.  The two selector
+    identities give $X=0$.  Since the multiplicity indices were arbitrary,
+    the whole off-diagonal final-sector corner vanishes.
+\end{proof}
+
 \begin{definition}[Fixed-final multiplicity spaces]%
     \label{def:mpdo_final_sector_multiplicity_spaces}
     \lean{MPOTensor.BNTFusionIsometryFamily.LeftFinalMultiplicity}

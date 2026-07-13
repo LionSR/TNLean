@@ -510,16 +510,28 @@ is oriented from the right-associated sum to the left-associated sum, hence
 oppositely to the printed $F$-matrix convention in equation
 \texttt{Fmove}; it is not identified with that $F$-matrix.
 
-The formalization does not extract a comparison at a fixed final label.  That
-extraction uses the simultaneous inverse relation at line~269 of the
-arXiv:1511.08090 source,
+The simultaneous inverse relation at line~269 of the arXiv:1511.08090 source,
 \[
     B_d^+ B_{d'}=\delta_{d,d'}1,
 \]
-which separates all final-label blocks at once.  No such simultaneous
-final-label separation is presently derived from the BNT hypotheses.  Hence
-the fixed-final $F$-transformation, its invertibility, and the pentagon-like
-equation mentioned at lines~995--999 remain unformalized.
+separates all final-label blocks at once.  Its exact finite-word consequence is
+now an explicit hypothesis in
+\leanid{MPOTensor.BNTFusionIsometryFamily.HasFinalLabelSelectorWords}.  Under
+this hypothesis,
+\leanid{MPOTensor.BNTFusionIsometryFamily.%
+tripleFusionComparison_finalSector_submatrix_eq_zero} proves that the full
+comparison has zero corner between two distinct final labels.  The proof takes
+one rectangular bond-space corner of the letterwise intertwining identity,
+extends it to words, and applies the selector polynomial.
+
+This is a scope-restricted result: no simultaneous final-label selector is
+presently derived from the assumptions on the fusion-isometry family.  That
+missing implication is the remaining source-faithfulness gap at this stage.
+Even after it is supplied, off-diagonal vanishing alone neither proves that the
+diagonal fixed-final corners are invertible nor identifies them with the
+printed $F$-matrices.  The fixed-final $F$-transformation, its invertibility,
+and the pentagon-like equation mentioned at lines~995--999 therefore remain
+unformalized.
 
 To eliminate the source-theorem gap, the formalization should instead:
 \begin{enumerate}
