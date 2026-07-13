@@ -457,10 +457,28 @@ are not equal.
 The translation-invariant bond $B_{n,n+1}$ is now defined in the original
 physical coordinates and proved positive.  Adjacent translates commute on
 every periodic chain of length at least three, including the pair crossing
-the periodic boundary.  The two-site crossed-order commutator and the
-nonadjacent cases needed for full pairwise commutativity remain open.
-One must also transport the cyclic sector identity through the local unitary
-to prove the finite-chain realization
+the periodic boundary.  The exceptional chain of length two is also covered:
+the translates beginning at sites zero and one read the sites in the opposite
+cyclic orders.  On the $(k,h)$ sector block they act,
+respectively, as
+\[
+  I_{L_k\otimes R_h}\otimes\eta_{k,h},
+  \qquad
+  \eta_{h,k}^{\mathrm{op}}\otimes I_{R_k\otimes L_h},
+\]
+and therefore commute on complementary tensor factors.  Proposition~C.8 does
+not discuss this crossed finite-size ordering separately, although it is an
+instance of its translated-bond conclusion.\footnote{The formal declarations
+are
+\leanid{MPOTensor.PhysicalSectorFactorization.physicalBond_adjacent_comm} and
+\leanid{MPOTensor.PhysicalSectorFactorization.physicalBond_two_zero_one_comm}.}
+
+Two global steps remain.  First, the local calculations must be assembled
+into pairwise commutativity of all translates on every periodic chain length;
+the remaining case is commutativity of nonadjacent, disjoint translates by
+locality, followed by the finite case distinction assembling the pairwise
+statement.  Second, one must transport the cyclic sector identity through the
+local unitary to prove the finite-chain realization
 \[
   \sigma^{(N)}(K)=c_N\prod_{n=1}^N B_{n,n+1}
 \]
@@ -502,9 +520,9 @@ The primitivity of $T_{k,h}$ also remains open, and cannot be used to
 derive recurrence without circularity.
 
 For the conditional bond construction, adjacent translates commute for every
-chain length $N\geq 3$, including the wraparound pair.  The $N=2$
-crossed-order commutator, the remaining nonadjacent cases required for full
-pairwise commutativity, and the finite-chain product realization remain open.
+chain length $N\geq 2$, including the wraparound and crossed two-site cases.
+The remaining nonadjacent cases required for full pairwise commutativity and
+the finite-chain product realization remain open.
 
 \bibliographystyle{alpha}
 \bibliography{references}
