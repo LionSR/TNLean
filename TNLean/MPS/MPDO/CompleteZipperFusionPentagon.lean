@@ -307,7 +307,9 @@ noncomputable def twoEdgePrintedFMatrix (a b c d e : Λ) :
     Fus.leftAssocToPairPrintedFMatrix a b c d e
 
 /-- The inverse-orientation composite along the three-edge path, from the
-fully right- to the fully left-associated tree. -/
+fully right- to the fully left-associated tree.
+
+Source: arXiv:1511.08090, equation `pentagoneq`, lines 279--283. -/
 noncomputable def threeEdgeInversePrintedFMatrix (a b c d e : Λ) :
     Matrix (Fus.FourfoldLeftAssocMultiplicity a b c d e)
       (Fus.FourfoldRightAssocMultiplicity a b c d e) ℂ :=
@@ -316,7 +318,9 @@ noncomputable def threeEdgeInversePrintedFMatrix (a b c d e : Λ) :
       Fus.rightAssocToMiddleInversePrintedFMatrix a b c d e)
 
 /-- The inverse-orientation composite along the two-edge path, from the
-fully right- to the fully left-associated tree. -/
+fully right- to the fully left-associated tree.
+
+Source: arXiv:1511.08090, equation `pentagoneq`, lines 279--283. -/
 noncomputable def twoEdgeInversePrintedFMatrix (a b c d e : Λ) :
     Matrix (Fus.FourfoldLeftAssocMultiplicity a b c d e)
       (Fus.FourfoldRightAssocMultiplicity a b c d e) ℂ :=
@@ -856,7 +860,9 @@ theorem threeEdgePrintedFMatrix_eq_twoEdgePrintedFMatrix
 
 /-- The inverse-orientation composites around the fourfold associahedron
 are equal.  This is the matrix orientation printed in equation
-`pentagoneq` of the source. -/
+`pentagoneq` of the source.
+
+Source: arXiv:1511.08090, equation `pentagoneq`, lines 279--283. -/
 theorem threeEdgeInversePrintedFMatrix_eq_twoEdgeInversePrintedFMatrix
     (a b c d e : Λ) :
     Fus.threeEdgeInversePrintedFMatrix a b c d e =
