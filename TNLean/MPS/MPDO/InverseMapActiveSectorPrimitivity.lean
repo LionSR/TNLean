@@ -82,20 +82,8 @@ theorem exists_rephased_inverseMap_activeSectorTraceMatrix_isPrimitive
   change ∃ z : Fin F.sectorCount → Circle,
     (∀ k h, ((F.rephase z).neighboringOperator k h).PosSemidef) ∧
       Matrix.IsPrimitive ((F.rephase z).activeSectorTraceMatrix hη.p)
-  let eta : etaOperators hη := fun k h ↦ F.neighboringOperator k h
-  have hcyc : ∀ {N : ℕ} [NeZero N] (q : Fin N → Fin hη.m),
-      (cyclicEtaTensorProduct hη eta q).PosSemidef := by
-    intro N _ q
-    exact cyclicEtaTensorProduct_posSemidef K hη F.leftTensor F.rightTensor
-      F.factorization (hM N) q
-  have hrec : IsRecurrentSupport eta :=
-    zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_isRecurrentSupport
-      K hK R hρ hη alpha beta hm
-  obtain ⟨z, hz⟩ := exists_vertexPhase_smul_posSemidef hη eta hcyc hrec
-  have hpos : ∀ k h, ((F.rephase z).neighboringOperator k h).PosSemidef := by
-    intro k h
-    rw [F.rephase_neighboringOperator]
-    exact hz k h
+  obtain ⟨z, hpos⟩ := exists_rephase_zeroWeightInverseMap_posSemidef
+    K hK R hρ hη alpha beta hm hM
   refine ⟨z, hpos, ?_⟩
   have hspanAll :
       Submodule.span ℂ (Set.range F.sectorVirtualMatrixFamily) = ⊤ :=
