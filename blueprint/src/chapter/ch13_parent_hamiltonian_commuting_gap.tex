@@ -28,6 +28,7 @@ specialization of that Appendix~D definition.
     \lean{MPSTensor.xbPairCfg}
     \lean{MPSTensor.replaceAXCfg}
     \lean{MPSTensor.replaceXBCfg}
+    \lean{MPSTensor.finThreeArrowEquiv}
     \lean{MPSTensor.leftPairLift}
     \lean{MPSTensor.rightPairLift}
     \lean{MPSTensor.leftPairLift_sub}
@@ -102,6 +103,45 @@ specialization of that Appendix~D definition.
     \(P_{AX},P_{XB}\) satisfies the same idempotent-and-commutation condition on
     the three-site space.
 \end{definition}
+
+\begin{theorem}[Matrices of the two adjacent factor actions]
+    \label{thm:pair_lift_kronecker_matrices}
+    \lean{MPSTensor.leftPairLift_toMatrix_reindex}
+    \lean{MPSTensor.rightPairLift_toMatrix_reindex}
+    \leanok
+    \uses{def:overlapping_two_site_supports}
+    Let $\mathcal H=\C^d$, and let $Q$ be an endomorphism of
+    $\mathcal H\otimes\mathcal H$.  Under the canonical identifications of
+    two- and three-site configurations with pairs and right-associated triples,
+    the matrices of its two adjacent actions are
+    \[
+        [Q_{AX}]=[Q]\otimes I_d,
+        \qquad
+        [Q_{XB}]=I_d\otimes[Q].
+    \]
+    Equivalently, for all $a,x,b,a',x',b'\in\{0,\ldots,d-1\}$,
+    \[
+        [Q_{AX}]_{(a,x,b),(a',x',b')}
+          =[Q]_{(a,x),(a',x')}\delta_{b,b'},
+    \]
+    and
+    \[
+        [Q_{XB}]_{(a,x,b),(a',x',b')}
+          =\delta_{a,a'}[Q]_{(x,b),(x',b')}.
+    \]
+    This is the homogeneous three-single-site specialization of the factor
+    actions on $\mathcal H_A\otimes\mathcal H_X\otimes\mathcal H_B$ in
+    \cite[Definition~D.2]{Cirac2016MPDO_arXiv}; here
+    $\mathcal H_A=\mathcal H_X=\mathcal H_B=\mathcal H$.  No assertion is made
+    for unequal factor spaces.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    On the first pair, the final coordinate is unchanged, which contributes
+    $\delta_{b,b'}$ to the matrix coefficient.  On the final pair, the first
+    coordinate is unchanged, which contributes $\delta_{a,a'}$.
+\end{proof}
 
 \begin{theorem}[Three-site translated local terms]
     \label{thm:local_term_two_three_ax_xb_lifts}
@@ -1405,6 +1445,31 @@ specialization of that Appendix~D definition.
     \(\mathcal H_X\otimes\mathcal H_B\).  The displayed operator is the
     coefficient representative later placed on the \(XB\) face.
 \end{definition}
+
+\begin{theorem}[Factor actions of the Appendix B coefficient representatives]
+    \label{thm:appendixB_qax_qxb_factor_actions}
+    \lean{MPSTensor.AppendixBStructuralData.appendixBQAXQXB_factor_actions}
+    \leanok
+    \uses{def:appendixB_qax, def:appendixB_qxb,
+        thm:pair_lift_kronecker_matrices}
+    On the homogeneous three-single-site coefficient space
+    $(\C^d)^{\otimes3}$, the hatted Appendix~B representatives act as
+    \[
+        [\widehat Q_{AX}]_{AX}=[\widehat Q_{AX}]\otimes I_d,
+        \qquad
+        [\widehat Q_{XB}]_{XB}=I_d\otimes[\widehat Q_{XB}].
+    \]
+    These equations give the coefficient-factor specialization of the two
+    local actions in \cite[Definition~D.2]{Cirac2016MPDO_arXiv}.  They do not
+    construct projectors for an arbitrary factorization
+    $\mathcal H_A\otimes\mathcal H_X\otimes\mathcal H_B$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Apply Theorem~\ref{thm:pair_lift_kronecker_matrices} first to
+    $\widehat Q_{AX}$ and then to $\widehat Q_{XB}$.
+\end{proof}
 
 \begin{lemma}[Appendix B coefficient representatives and the parent interaction]
     \label{lem:appendixB_qax_qxb_parent_interaction}

@@ -29,18 +29,20 @@ variable {d D : ℕ}
 
 /-! ### Matrices of adjacent pair lifts -/
 
-/-- The right-associated identification of a three-coordinate function with a
-triple. -/
-private def appendixBFinThreeArrowEquiv (α : Type*) :
+/-- The canonical right-associated identification of a three-site configuration
+with a triple. -/
+def finThreeArrowEquiv (α : Type*) :
     (Fin 3 → α) ≃ α × (α × α) :=
   (Fin.consEquiv fun _ : Fin 3 ↦ α).symm.trans
     (Equiv.prodCongr (Equiv.refl α) (finTwoArrowEquiv α))
 
-@[simp] private theorem appendixBFinThreeArrowEquiv_symm_apply
+@[simp] private theorem finThreeArrowEquiv_symm_apply
     {alpha : Type*} (x : alpha × (alpha × alpha)) :
-    (appendixBFinThreeArrowEquiv alpha).symm x = ![x.1, x.2.1, x.2.2] := by
+    (finThreeArrowEquiv alpha).symm x = ![x.1, x.2.1, x.2.2] := by
   funext k
   fin_cases k <;> rfl
+
+private abbrev appendixBFinThreeArrowEquiv := finThreeArrowEquiv
 
 @[simp] private theorem axPairCfg_vecCons (a b c : Fin d) :
     axPairCfg ![a, b, c] = ![a, b] := by
@@ -78,12 +80,16 @@ private theorem replaceXBCfg_eq_iff (sigma tau : Cfg d 3) (beta : Cfg d 2) :
     funext k
     fin_cases k <;> simp [replaceXBCfg, xbPairCfg, h]
 
-/-- Reindexing the coefficient matrix of the first physical pair lift gives
-the standard tensor-product matrix lift. -/
-private theorem leftPairLift_toMatrix_reindex
+/-- Under the canonical two-site and three-site reindexings, the first-pair
+action is \(Q\otimes 1\).
+
+This is the homogeneous three-single-site coefficient-space specialization of
+the \(AX\) factor action in arXiv:1606.00608, lines 2185--2186 and 2205--2218.
+-/
+theorem leftPairLift_toMatrix_reindex
     (Q : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) :
-    Matrix.reindex (appendixBFinThreeArrowEquiv (Fin d))
-        (appendixBFinThreeArrowEquiv (Fin d))
+    Matrix.reindex (finThreeArrowEquiv (Fin d))
+        (finThreeArrowEquiv (Fin d))
         (LinearMap.toMatrix' (leftPairLift Q)) =
       appendixBLeftPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin d))
         (finTwoArrowEquiv (Fin d)) (LinearMap.toMatrix' Q)) := by
@@ -129,12 +135,16 @@ private theorem leftPairLift_toMatrix_reindex
     rw [hslice]
     simp [h]
 
-/-- Reindexing the coefficient matrix of the second physical pair lift gives
-the standard tensor-product matrix lift. -/
-private theorem rightPairLift_toMatrix_reindex
+/-- Under the canonical two-site and three-site reindexings, the final-pair
+action is \(1\otimes Q\).
+
+This is the homogeneous three-single-site coefficient-space specialization of
+the \(XB\) factor action in arXiv:1606.00608, lines 2185--2186 and 2205--2218.
+-/
+theorem rightPairLift_toMatrix_reindex
     (Q : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) :
-    Matrix.reindex (appendixBFinThreeArrowEquiv (Fin d))
-        (appendixBFinThreeArrowEquiv (Fin d))
+    Matrix.reindex (finThreeArrowEquiv (Fin d))
+        (finThreeArrowEquiv (Fin d))
         (LinearMap.toMatrix' (rightPairLift Q)) =
       appendixBRightPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin d))
         (finTwoArrowEquiv (Fin d)) (LinearMap.toMatrix' Q)) := by
@@ -179,6 +189,34 @@ private theorem rightPairLift_toMatrix_reindex
           ((finTwoArrowEquiv (Fin d)).symm (σ.2.1, σ.2.2))
     rw [hslice]
     simp [h]
+
+/-- The hatted Appendix B coefficient representatives act on a homogeneous
+three-single-site coefficient space by
+\(\widehat Q_{AX}\otimes 1\) and \(1\otimes\widehat Q_{XB}\), respectively,
+under the canonical right-associated reindexings.
+
+This is only the three-single-site coefficient-factor specialization of the
+local actions in Definition D.2. It does not construct projectors for an
+arbitrary factorization
+\(\mathcal H_A\otimes\mathcal H_X\otimes\mathcal H_B\).
+
+Source: arXiv:1606.00608, factor spaces at lines 2185--2186 and Definition D.2,
+lines 2205--2218. -/
+theorem AppendixBStructuralData.appendixBQAXQXB_factor_actions
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
+    (Matrix.reindex (finThreeArrowEquiv (Fin d))
+          (finThreeArrowEquiv (Fin d))
+          (LinearMap.toMatrix' (leftPairLift hStruct.appendixBQAXOnCoeffSpace)) =
+        appendixBLeftPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin d))
+          (finTwoArrowEquiv (Fin d))
+          (LinearMap.toMatrix' hStruct.appendixBQAXOnCoeffSpace))) ∧
+      Matrix.reindex (finThreeArrowEquiv (Fin d))
+          (finThreeArrowEquiv (Fin d))
+          (LinearMap.toMatrix' (rightPairLift hStruct.appendixBQXBOnCoeffSpace)) =
+        appendixBRightPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin d))
+          (finTwoArrowEquiv (Fin d))
+          (LinearMap.toMatrix' hStruct.appendixBQXBOnCoeffSpace)) := by
+  exact ⟨leftPairLift_toMatrix_reindex _, rightPairLift_toMatrix_reindex _⟩
 
 /-! ### Virtual replacement slices -/
 
