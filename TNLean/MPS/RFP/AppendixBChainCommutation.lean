@@ -31,9 +31,10 @@ injective.
 The two operators are the canonical parent interaction \(q_2(A)\), placed on
 the \(AX\) and \(XB\) faces. Their commutation was obtained from the adjacent
 virtual-bond projectors. The remaining kernel equation is the standard
-three-site MPS intersection property. The result type records idempotence,
-commutation, and the kernel equation; orthogonality of these concrete
-interactions follows separately from the definition of \(q_2(A)\).
+three-site MPS intersection property. Thus the two interactions are
+idempotent, their lifts commute, and the intersection of their lifted kernels
+is \(G_3(A)\). They are orthogonal projectors because \(q_2(A)\) is the
+canonical orthogonal parent interaction.
 
 This theorem relates the Appendix B basic-vector construction to the separate
 condition in Appendix D. It is not the argument printed for the implication

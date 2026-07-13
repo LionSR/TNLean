@@ -1484,8 +1484,8 @@ specialization of that Appendix~D definition.
     of $P_2$ commute, their complementary lifts commute as well.
 \end{proof}
 
-\begin{lemma}[Three-site intersection of adjacent parent kernels]
-    \label{lem:three_site_ground_space_adjacent_parent_kernels}
+\begin{theorem}[Three-site intersection of adjacent parent kernels]
+    \label{thm:three_site_ground_space_adjacent_parent_kernels}
     \lean{MPSTensor.adjacent_localTerm_eq_zero_iff_mem_groundSpace_succ}
     \lean{MPSTensor.groundSpace_three_eq_adjacent_twoSite_parent_kernels}
     \leanok
@@ -1502,7 +1502,7 @@ specialization of that Appendix~D definition.
     More generally, on $L+1$ sites, simultaneous annihilation by the two
     adjacent length-$L$ parent interactions is equivalent to membership in
     $G_{L+1}(A)$ whenever $A$ is injective and $L>1$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -1519,7 +1519,7 @@ specialization of that Appendix~D definition.
     \lean{MPSTensor.rfp_hasAppendixD2ParentCommutingHamiltonian_of_leftCanonical}
     \leanok
     \uses{thm:appendixB_overlapping_two_site_commutation,
-        lem:three_site_ground_space_adjacent_parent_kernels,
+        thm:three_site_ground_space_adjacent_parent_kernels,
         lem:appendixB_qax_qxb_parent_interaction}
     Let $A$ be injective and let an Appendix~B structural datum be fixed.  Put
     \[
@@ -1547,7 +1547,7 @@ specialization of that Appendix~D definition.
     Idempotency and commutation are
     Theorem~\ref{thm:appendixB_overlapping_two_site_commutation}.  The two
     coefficient representatives are $q_2(A)$, and
-    Lemma~\ref{lem:three_site_ground_space_adjacent_parent_kernels} supplies
+    Theorem~\ref{thm:three_site_ground_space_adjacent_parent_kernels} supplies
     the remaining kernel equation.  This Appendix~D corollary is not the
     argument printed for RFP $\Rightarrow$ NNCPH: the source proof at lines
     1305--1307 instead refers directly to the structural characterization.
