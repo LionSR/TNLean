@@ -418,6 +418,7 @@ import TNLean.MPS.MPDO.PhysicalSectorBondPairwise
 import TNLean.MPS.MPDO.PhysicalSectorChainDecomposition
 import TNLean.MPS.MPDO.PhysicalSectorProductRealization
 import TNLean.MPS.MPDO.PhysicalSectorProductTransport
+import TNLean.MPS.MPDO.PhysicalSectorEtaLocalStructure
 import TNLean.MPS.MPDO.PhysicalSectorPhysicalTransport
 import TNLean.MPS.MPDO.SectorPairingTransfer
 import TNLean.MPS.MPDO.SectorEtaContraction

@@ -1663,6 +1663,33 @@ strong subadditivity for a normalized three-site reduced state.
     is Theorem~\ref{thm:mpdo_periodic_pairwise_physical_bonds_comm}.
 \end{proof}
 
+\begin{theorem}[$\eta$-local structure from a positive physical-sector factorization]
+    \label{thm:mpdo_eta_local_structure_of_positive_physical_sector_factorization}
+    \lean{MPOTensor.PhysicalSectorFactorization.etaLocalStructureData}
+    \leanok
+    \uses{thm:mpdo_exact_physical_sector_bond_product,
+      thm:mpdo_positive_translation_invariant_bond_data,
+      def:mpdo_eta_local_structure_data}
+    Suppose that a physical-sector factorization of $K$ is given and that
+    every neighboring operator $\eta_{k,h}$ is positive semidefinite. Then
+    the physical two-site bond determines an $\eta$-local structure for $K$.
+    Its translated copies commute pairwise, and for every $N\geq2$,
+    \[
+      \rho_N=B_0B_1\cdots B_{N-1}.
+    \]
+    Thus the positive normalization scalar may be chosen to be $1$. This is
+    Proposition~C.8 conditional on the coherently positive physical-sector
+    factorization that the source derives from SAL.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Theorem~\ref{thm:mpdo_positive_translation_invariant_bond_data} gives the
+    positive translation-invariant bond and its pairwise commuting
+    translates. Theorem~\ref{thm:mpdo_exact_physical_sector_bond_product}
+    realizes every finite-chain operator with normalization scalar $1$.
+\end{proof}
+
 \begin{definition}[Closed sector tensors]%
     \label{def:mpdo_closed_sector_tensors}
     \lean{MPOTensor.closedSectorL}
