@@ -6,25 +6,29 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.BNTFinalSectorFusion
 
 /-!
-# Multiplicity spaces for fourfold fusion
+# Weighted coordinate spaces for fourfold fusion
 
-The five parenthesizations of four labels give five finite multiplicity spaces at a fixed final
-label. This file records those spaces and the canonical coordinate reassociations used along the
-three-edge and two-edge routes between the fully left- and fully right-associated products.
+The five parenthesizations of four labels give five finite weighted coordinate spaces at a fixed
+final label. Their `Fin` factors come from the positive-diagonal matrices `Fam.chi`; they are
+analogues of the categorical fusion-multiplicity indices in arXiv:1511.08090, not an
+identification with them. This file records those spaces and the canonical coordinate
+reassociations used along the three-edge and two-edge route patterns between the fully left- and
+fully right-associated products.
 
 For each edge, the source and target spaces are identified with a dependent sum in which one
-factor is a triple-fusion multiplicity space and the remaining multiplicity index is unchanged.
-These identifications do not identify the source and target multiplicity spaces: that change of
-basis belongs to the fusion comparison. The associated matrices below only permute coordinates
-within each fixed parenthesization.
+factor is a weighted triple-fusion coordinate space and the remaining weighted index is
+unchanged. These identifications do not identify the source and target coordinate spaces: that
+change of basis belongs to the fusion comparison. The associated matrices below only permute
+coordinates within each fixed parenthesization.
 
 The same five parenthesizations also give five bond-coordinate types. Their edge equivalences are
 ordinary reassociations of finite Cartesian products. The two composites between the extreme
 parenthesizations are proved equal, together with the corresponding equality of coordinate-
 permutation matrices.
 
-No comparison matrix between different parenthesizations is defined here, and no pentagon
-identity is asserted.
+References below to factors in the printed pentagon record only the pattern of labels and
+indices. No comparison matrix between different parenthesizations is defined here, no equality
+with the source's categorical multiplicities is asserted, and no pentagon identity is asserted.
 
 ## References
 
@@ -41,63 +45,74 @@ universe u
 variable {Λ : Type u} [Fintype Λ] [DecidableEq Λ] {p : ℕ}
 variable (Fam : BNTFusionIsometryFamily Λ p)
 
-/-! ### The five parenthesizations -/
+/-! ### The five weighted coordinate spaces -/
 
-/-- The multiplicity space for the parenthesization ((((\alpha\beta)\gamma)\delta)\)
+/-- The weighted coordinate space for the parenthesization ((((\alpha\beta)\gamma)\delta)\)
 with final label \(\varepsilon\).
 
-Its elements are tuples \((f,g,\mu,\nu,\rho)\), with multiplicity indices for the successive
-fusions \(\alpha\beta\to f\), \(f\gamma\to g\), and \(g\delta\to\varepsilon\).
+Its tuples \((f,g,\mu,\nu,\rho)\) follow the index pattern for the successive fusions
+\(\alpha\beta\to f\), \(f\gamma\to g\), and \(g\delta\to\varepsilon\). The `Fin` factors are
+positive-diagonal weighted analogues; no equality with the categorical fusion multiplicities is
+asserted.
 
-Source: arXiv:1511.08090, `Papers/1511.08090/AnyonsPEPS.tex`, lines 279--299. -/
+Source: arXiv:1606.00608, Theorem IV.13(iii), lines 986--999; index pattern from
+arXiv:1511.08090, `Papers/1511.08090/AnyonsPEPS.tex`, lines 279--299. -/
 abbrev FourfoldLeftAssocMultiplicity (α β γ δ ε : Λ) : Type u :=
   (f : Λ) × (g : Λ) × Fin (Fam.chi.dim α β f) × Fin (Fam.chi.dim f γ g) ×
     Fin (Fam.chi.dim g δ ε)
 
-/-- The multiplicity space for the parenthesization \(((\alpha(\beta\gamma))\delta)\)
+/-- The weighted coordinate space for the parenthesization \(((\alpha(\beta\gamma))\delta)\)
 with final label \(\varepsilon\).
 
-Its elements are tuples \((h,g,\sigma,\lambda,\rho)\), with multiplicity indices for the
-successive fusions \(\beta\gamma\to h\), \(\alpha h\to g\), and
-\(g\delta\to\varepsilon\).
+Its tuples \((h,g,\sigma,\lambda,\rho)\) follow the index pattern for the successive fusions
+\(\beta\gamma\to h\), \(\alpha h\to g\), and \(g\delta\to\varepsilon\). The `Fin` factors are
+positive-diagonal weighted analogues; no equality with the categorical fusion multiplicities is
+asserted.
 
-Source: arXiv:1511.08090, `Papers/1511.08090/AnyonsPEPS.tex`, lines 279--299. -/
+Source: arXiv:1606.00608, Theorem IV.13(iii), lines 986--999; index pattern from
+arXiv:1511.08090, `Papers/1511.08090/AnyonsPEPS.tex`, lines 279--299. -/
 abbrev FourfoldLeftInnerMultiplicity (α β γ δ ε : Λ) : Type u :=
   (h : Λ) × (g : Λ) × Fin (Fam.chi.dim β γ h) × Fin (Fam.chi.dim α h g) ×
     Fin (Fam.chi.dim g δ ε)
 
-/-- The multiplicity space for the parenthesization \(\alpha((\beta\gamma)\delta)\)
+/-- The weighted coordinate space for the parenthesization \(\alpha((\beta\gamma)\delta)\)
 with final label \(\varepsilon\).
 
-Its elements are tuples \((h,i,\sigma,\omega,\kappa)\), with multiplicity indices for the
-successive fusions \(\beta\gamma\to h\), \(h\delta\to i\), and
-\(\alpha i\to\varepsilon\).
+Its tuples \((h,i,\sigma,\omega,\kappa)\) follow the index pattern for the successive fusions
+\(\beta\gamma\to h\), \(h\delta\to i\), and \(\alpha i\to\varepsilon\). The `Fin` factors are
+positive-diagonal weighted analogues; no equality with the categorical fusion multiplicities is
+asserted.
 
-Source: arXiv:1511.08090, `Papers/1511.08090/AnyonsPEPS.tex`, lines 279--299. -/
+Source: arXiv:1606.00608, Theorem IV.13(iii), lines 986--999; index pattern from
+arXiv:1511.08090, `Papers/1511.08090/AnyonsPEPS.tex`, lines 279--299. -/
 abbrev FourfoldMiddleMultiplicity (α β γ δ ε : Λ) : Type u :=
   (h : Λ) × (i : Λ) × Fin (Fam.chi.dim β γ h) × Fin (Fam.chi.dim h δ i) ×
     Fin (Fam.chi.dim α i ε)
 
-/-- The multiplicity space for the parenthesization \(\alpha(\beta(\gamma\delta))\)
+/-- The weighted coordinate space for the parenthesization \(\alpha(\beta(\gamma\delta))\)
 with final label \(\varepsilon\).
 
-Its elements are tuples \((j,i,\gamma',\delta',\kappa)\), with multiplicity indices for the
-successive fusions \(\gamma\delta\to j\), \(\beta j\to i\), and
-\(\alpha i\to\varepsilon\).
+Its tuples \((j,i,\gamma',\delta',\kappa)\) follow the index pattern for the successive fusions
+\(\gamma\delta\to j\), \(\beta j\to i\), and \(\alpha i\to\varepsilon\). The `Fin` factors are
+positive-diagonal weighted analogues; no equality with the categorical fusion multiplicities is
+asserted.
 
-Source: arXiv:1511.08090, `Papers/1511.08090/AnyonsPEPS.tex`, lines 279--299. -/
+Source: arXiv:1606.00608, Theorem IV.13(iii), lines 986--999; index pattern from
+arXiv:1511.08090, `Papers/1511.08090/AnyonsPEPS.tex`, lines 279--299. -/
 abbrev FourfoldRightAssocMultiplicity (α β γ δ ε : Λ) : Type u :=
   (j : Λ) × (i : Λ) × Fin (Fam.chi.dim γ δ j) × Fin (Fam.chi.dim β j i) ×
     Fin (Fam.chi.dim α i ε)
 
-/-- The multiplicity space for the parenthesization \((\alpha\beta)(\gamma\delta)\)
+/-- The weighted coordinate space for the parenthesization \((\alpha\beta)(\gamma\delta)\)
 with final label \(\varepsilon\).
 
-Its elements are tuples \((f,j,\mu,\gamma',\sigma)\), with multiplicity indices for the
-successive fusions \(\alpha\beta\to f\), \(\gamma\delta\to j\), and
-\(fj\to\varepsilon\).
+Its tuples \((f,j,\mu,\gamma',\sigma)\) follow the index pattern for the successive fusions
+\(\alpha\beta\to f\), \(\gamma\delta\to j\), and \(fj\to\varepsilon\). The `Fin` factors are
+positive-diagonal weighted analogues; no equality with the categorical fusion multiplicities is
+asserted.
 
-Source: arXiv:1511.08090, `Papers/1511.08090/AnyonsPEPS.tex`, lines 279--299. -/
+Source: arXiv:1606.00608, Theorem IV.13(iii), lines 986--999; index pattern from
+arXiv:1511.08090, `Papers/1511.08090/AnyonsPEPS.tex`, lines 279--299. -/
 abbrev FourfoldPairMultiplicity (α β γ δ ε : Λ) : Type u :=
   (f : Λ) × (j : Λ) × Fin (Fam.chi.dim α β f) × Fin (Fam.chi.dim γ δ j) ×
     Fin (Fam.chi.dim f j ε)
@@ -105,10 +120,11 @@ abbrev FourfoldPairMultiplicity (α β γ δ ε : Λ) : Type u :=
 /-! ### The three-edge route -/
 
 /-- Reassociate the coordinates of \((((\alpha\beta)\gamma)\delta)\) so that the first
-triple-fusion multiplicity and the unchanged last multiplicity are explicit.
+weighted triple-fusion coordinate space and the unchanged last weighted index are explicit.
 
 Source: arXiv:1511.08090, `Papers/1511.08090/AnyonsPEPS.tex`, lines 279--299,
-the first factor on the left-hand side of equation `pentagoneq`. -/
+following only the route pattern of the first factor on the left-hand side of equation
+`pentagoneq`. -/
 def leftPathFirstSourceEquiv (α β γ δ ε : Λ) :
     Fam.FourfoldLeftAssocMultiplicity α β γ δ ε ≃
       (g : Λ) × Fam.LeftFinalMultiplicity α β γ g × Fin (Fam.chi.dim g δ ε) where
@@ -120,10 +136,11 @@ def leftPathFirstSourceEquiv (α β γ δ ε : Λ) :
   right_inv x := by rcases x with ⟨g, ⟨f, μ, ν⟩, ρ⟩; rfl
 
 /-- Reassociate the coordinates of \(((\alpha(\beta\gamma))\delta)\) so that the first
-triple-fusion multiplicity and the unchanged last multiplicity are explicit.
+weighted triple-fusion coordinate space and the unchanged last weighted index are explicit.
 
 Source: arXiv:1511.08090, `Papers/1511.08090/AnyonsPEPS.tex`, lines 279--299,
-the first factor on the left-hand side of equation `pentagoneq`. -/
+following only the route pattern of the first factor on the left-hand side of equation
+`pentagoneq`. -/
 def leftPathFirstTargetEquiv (α β γ δ ε : Λ) :
     Fam.FourfoldLeftInnerMultiplicity α β γ δ ε ≃
       (g : Λ) × Fam.RightFinalMultiplicity α β γ g × Fin (Fam.chi.dim g δ ε) where
@@ -135,10 +152,11 @@ def leftPathFirstTargetEquiv (α β γ δ ε : Λ) :
   right_inv x := by rcases x with ⟨g, ⟨h, σ, l⟩, ρ⟩; rfl
 
 /-- Reassociate the coordinates of \(((\alpha(\beta\gamma))\delta)\) so that fusion of
-\(\alpha,h,\delta\) is isolated, with the \(\beta\gamma\to h\) multiplicity unchanged.
+\(\alpha,h,\delta\) is isolated, with the weighted \(\beta\gamma\to h\) index unchanged.
 
 Source: arXiv:1511.08090, `Papers/1511.08090/AnyonsPEPS.tex`, lines 279--299,
-the second factor on the left-hand side of equation `pentagoneq`. -/
+following only the route pattern of the second factor on the left-hand side of equation
+`pentagoneq`. -/
 def leftPathSecondSourceEquiv (α β γ δ ε : Λ) :
     Fam.FourfoldLeftInnerMultiplicity α β γ δ ε ≃
       (h : Λ) × Fin (Fam.chi.dim β γ h) × Fam.LeftFinalMultiplicity α h δ ε where
@@ -150,10 +168,11 @@ def leftPathSecondSourceEquiv (α β γ δ ε : Λ) :
   right_inv x := by rcases x with ⟨h, σ, ⟨g, l, ρ⟩⟩; rfl
 
 /-- Reassociate the coordinates of \(\alpha((\beta\gamma)\delta)\) so that fusion of
-\(\alpha,h,\delta\) is isolated, with the \(\beta\gamma\to h\) multiplicity unchanged.
+\(\alpha,h,\delta\) is isolated, with the weighted \(\beta\gamma\to h\) index unchanged.
 
 Source: arXiv:1511.08090, `Papers/1511.08090/AnyonsPEPS.tex`, lines 279--299,
-the second factor on the left-hand side of equation `pentagoneq`. -/
+following only the route pattern of the second factor on the left-hand side of equation
+`pentagoneq`. -/
 def leftPathSecondTargetEquiv (α β γ δ ε : Λ) :
     Fam.FourfoldMiddleMultiplicity α β γ δ ε ≃
       (h : Λ) × Fin (Fam.chi.dim β γ h) × Fam.RightFinalMultiplicity α h δ ε where
@@ -165,11 +184,12 @@ def leftPathSecondTargetEquiv (α β γ δ ε : Λ) :
   right_inv x := by rcases x with ⟨h, σ, ⟨i, ω, κ⟩⟩; rfl
 
 /-- Reassociate the coordinates of \(\alpha((\beta\gamma)\delta)\) so that fusion of
-\(\beta,\gamma,\delta\) is isolated, with the \(\alpha i\to\varepsilon\) multiplicity
+\(\beta,\gamma,\delta\) is isolated, with the weighted \(\alpha i\to\varepsilon\) index
 unchanged.
 
 Source: arXiv:1511.08090, `Papers/1511.08090/AnyonsPEPS.tex`, lines 279--299,
-the third factor on the left-hand side of equation `pentagoneq`. -/
+following only the route pattern of the third factor on the left-hand side of equation
+`pentagoneq`. -/
 def leftPathThirdSourceEquiv (α β γ δ ε : Λ) :
     Fam.FourfoldMiddleMultiplicity α β γ δ ε ≃
       (i : Λ) × Fam.LeftFinalMultiplicity β γ δ i × Fin (Fam.chi.dim α i ε) where
@@ -181,11 +201,12 @@ def leftPathThirdSourceEquiv (α β γ δ ε : Λ) :
   right_inv x := by rcases x with ⟨i, ⟨h, σ, ω⟩, κ⟩; rfl
 
 /-- Reassociate the coordinates of \(\alpha(\beta(\gamma\delta))\) so that fusion of
-\(\beta,\gamma,\delta\) is isolated, with the \(\alpha i\to\varepsilon\) multiplicity
+\(\beta,\gamma,\delta\) is isolated, with the weighted \(\alpha i\to\varepsilon\) index
 unchanged.
 
 Source: arXiv:1511.08090, `Papers/1511.08090/AnyonsPEPS.tex`, lines 279--299,
-the third factor on the left-hand side of equation `pentagoneq`. -/
+following only the route pattern of the third factor on the left-hand side of equation
+`pentagoneq`. -/
 def leftPathThirdTargetEquiv (α β γ δ ε : Λ) :
     Fam.FourfoldRightAssocMultiplicity α β γ δ ε ≃
       (i : Λ) × Fam.RightFinalMultiplicity β γ δ i × Fin (Fam.chi.dim α i ε) where
@@ -199,10 +220,11 @@ def leftPathThirdTargetEquiv (α β γ δ ε : Λ) :
 /-! ### The two-edge route -/
 
 /-- Reassociate the coordinates of \((((\alpha\beta)\gamma)\delta)\) so that fusion of
-\(f,\gamma,\delta\) is isolated, with the \(\alpha\beta\to f\) multiplicity unchanged.
+\(f,\gamma,\delta\) is isolated, with the weighted \(\alpha\beta\to f\) index unchanged.
 
 Source: arXiv:1511.08090, `Papers/1511.08090/AnyonsPEPS.tex`, lines 279--299,
-the first factor on the right-hand side of equation `pentagoneq`. -/
+following only the route pattern of the first factor on the right-hand side of equation
+`pentagoneq`. -/
 def rightPathFirstSourceEquiv (α β γ δ ε : Λ) :
     Fam.FourfoldLeftAssocMultiplicity α β γ δ ε ≃
       (f : Λ) × Fin (Fam.chi.dim α β f) × Fam.LeftFinalMultiplicity f γ δ ε where
@@ -214,10 +236,11 @@ def rightPathFirstSourceEquiv (α β γ δ ε : Λ) :
   right_inv x := by rcases x with ⟨f, μ, ⟨g, ν, ρ⟩⟩; rfl
 
 /-- Reassociate the coordinates of \((\alpha\beta)(\gamma\delta)\) so that fusion of
-\(f,\gamma,\delta\) is isolated, with the \(\alpha\beta\to f\) multiplicity unchanged.
+\(f,\gamma,\delta\) is isolated, with the weighted \(\alpha\beta\to f\) index unchanged.
 
 Source: arXiv:1511.08090, `Papers/1511.08090/AnyonsPEPS.tex`, lines 279--299,
-the first factor on the right-hand side of equation `pentagoneq`. -/
+following only the route pattern of the first factor on the right-hand side of equation
+`pentagoneq`. -/
 def rightPathFirstTargetEquiv (α β γ δ ε : Λ) :
     Fam.FourfoldPairMultiplicity α β γ δ ε ≃
       (f : Λ) × Fin (Fam.chi.dim α β f) × Fam.RightFinalMultiplicity f γ δ ε where
@@ -229,10 +252,11 @@ def rightPathFirstTargetEquiv (α β γ δ ε : Λ) :
   right_inv x := by rcases x with ⟨f, μ, ⟨j, γ', σ⟩⟩; rfl
 
 /-- Reassociate the coordinates of \((\alpha\beta)(\gamma\delta)\) so that fusion of
-\(\alpha,\beta,j\) is isolated, with the \(\gamma\delta\to j\) multiplicity unchanged.
+\(\alpha,\beta,j\) is isolated, with the weighted \(\gamma\delta\to j\) index unchanged.
 
 Source: arXiv:1511.08090, `Papers/1511.08090/AnyonsPEPS.tex`, lines 279--299,
-the second factor on the right-hand side of equation `pentagoneq`. -/
+following only the route pattern of the second factor on the right-hand side of equation
+`pentagoneq`. -/
 def rightPathSecondSourceEquiv (α β γ δ ε : Λ) :
     Fam.FourfoldPairMultiplicity α β γ δ ε ≃
       (j : Λ) × Fam.LeftFinalMultiplicity α β j ε × Fin (Fam.chi.dim γ δ j) where
@@ -244,10 +268,11 @@ def rightPathSecondSourceEquiv (α β γ δ ε : Λ) :
   right_inv x := by rcases x with ⟨j, ⟨f, μ, σ⟩, γ'⟩; rfl
 
 /-- Reassociate the coordinates of \(\alpha(\beta(\gamma\delta))\) so that fusion of
-\(\alpha,\beta,j\) is isolated, with the \(\gamma\delta\to j\) multiplicity unchanged.
+\(\alpha,\beta,j\) is isolated, with the weighted \(\gamma\delta\to j\) index unchanged.
 
 Source: arXiv:1511.08090, `Papers/1511.08090/AnyonsPEPS.tex`, lines 279--299,
-the second factor on the right-hand side of equation `pentagoneq`. -/
+following only the route pattern of the second factor on the right-hand side of equation
+`pentagoneq`. -/
 def rightPathSecondTargetEquiv (α β γ δ ε : Λ) :
     Fam.FourfoldRightAssocMultiplicity α β γ δ ε ≃
       (j : Λ) × Fam.RightFinalMultiplicity α β j ε × Fin (Fam.chi.dim γ δ j) where
