@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.BNTLeftTripleFusion
 import TNLean.MPS.MPDO.BNTRightTripleFusion
+import TNLean.MPS.MPDO.BNTAssociativity
 import TNLean.Algebra.ScalarCommutant
 
 /-!
@@ -21,11 +22,16 @@ associator.  No identification of the positive diagonal chi indices with the fus
 multiplicities of that source is asserted here.  Such a comparison first requires the
 length-independent integer specialization and injectivity of `tensor ε`.
 
+Associativity gives one further conclusion in the length-independent case: eventual linear
+independence identifies the cardinalities of the two fixed-final multiplicity spaces.  Thus a
+matrix between them has square shape.  This numerical conclusion does not provide the
+completeness of the two fusion decompositions required for invertibility.
+
 The final result below isolates the part of the comparison that follows from injectivity.  If a
 matrix between the two fixed-final-sector spaces already intertwines the amplified letters of
 `tensor ε`, then it acts trivially on the bond factor, up to a matrix between the two
-multiplicity spaces.  The result does not construct this intertwiner, prove that it is
-invertible, or identify the chi dimensions with fusion multiplicities.
+multiplicity spaces.  The result does not construct this intertwiner or prove that it is
+invertible.
 
 ## References
 
@@ -63,6 +69,58 @@ asserted.
 Source: arXiv:1606.00608, Theorem IV.13(iii), lines 986--999. -/
 abbrev RightFinalMultiplicity (α β γ ε : Λ) : Type u :=
   (δ : Λ) × Fin (Fam.chi.dim β γ δ) × Fin (Fam.chi.dim α δ ε)
+
+/-- The left- and right-associated multiplicity spaces at a fixed final label
+have the same dimension when the positive trace-power coefficients are length
+independent and the labelled operators are eventually linearly independent.
+
+Indeed, eventual linear independence permits coefficient comparison in the
+associativity identity, while length independence identifies each coefficient
+with the corresponding fusion multiplicity.  The resulting equality is
+\[
+  \sum_\delta r_{\alpha,\beta}^{\delta}r_{\delta,\gamma}^{\varepsilon}
+    = \sum_\delta
+      r_{\beta,\gamma}^{\delta}r_{\alpha,\delta}^{\varepsilon}.
+\]
+
+This proves only that a fixed-final multiplicity matrix has square shape.  It
+does not supply completeness of either fusion decomposition and does not prove
+that the fixed-final comparison is invertible.
+
+**Scope restriction (BNT input):** Eventual linear independence is an explicit
+hypothesis because a fusion-isometry family does not itself include the defining
+independence property of a basis of normal tensors.  This distinction is recorded
+in `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
+
+Source: arXiv:1606.00608, lines 995--1010; arXiv:1511.08090,
+`AnyonsPEPS.tex`, lines 237--252, especially the multiplicity associativity
+identity at lines 238--241. -/
+theorem card_leftFinalMultiplicity_eq_card_rightFinalMultiplicity_of_lengthIndependent
+    (c : BNTLabelCoefficientFamily Λ)
+    (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
+    (hLI : c.LengthIndependent)
+    (hlin : Fam.toOperatorFamily.EventuallyLinearIndependent)
+    (α β γ ε : Λ) :
+    Fintype.card (Fam.LeftFinalMultiplicity α β γ ε) =
+      Fintype.card (Fam.RightFinalMultiplicity α β γ ε) := by
+  have hprod : Fam.toOperatorFamily.HasSameLengthProductForm c := by
+    intro L hL α' β'
+    rw [Fam.toOperatorFamily_hasSameLengthProductForm L hL α' β']
+    apply Finset.sum_congr rfl
+    intro γ' _
+    rw [BNTLabelCoefficientFamily.ofChi_coeff, ← hχ L hL α' β' γ']
+  obtain ⟨N, hN⟩ := hlin
+  let L := N + 1
+  have hL : 0 < L := by
+    simp [L]
+  have hassoc := hprod.coeff_assoc_of_linearIndependentAt hL
+    (hN L (by simp [L])) α β γ ε
+  simp_rw [hχ.coeff_eq_dim_of_lengthIndependent Fam.posEntries hLI L hL] at hassoc
+  have hnat :
+      ∑ δ, Fam.chi.dim α β δ * Fam.chi.dim δ γ ε =
+        ∑ δ, Fam.chi.dim β γ δ * Fam.chi.dim α δ ε := by
+    exact_mod_cast hassoc
+  simpa only [Fintype.card_sigma, Fintype.card_prod, Fintype.card_fin] using hnat
 
 /-- The left-associated fixed-final-sector index, including the bond index of `tensor ε`.
 
