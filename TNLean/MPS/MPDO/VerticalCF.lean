@@ -30,7 +30,9 @@ right-hand side is the block-diagonal tensor over the pairs $(\alpha, k)$ in whi
 the multiplicities $r_\alpha$ and the diagonal entries $\omega_{\alpha,k}$ stay explicit;
 the coefficients $m_\alpha = \operatorname{tr}(\mu_\alpha)$ appearing in the
 renormalization fixed-point characterization are recovered from them.
-The predicate `IsVerticalCF` states exactly this conclusion.
+The predicate `IsVerticalCF` states this conclusion after the zero physical
+sector has been discarded, as allowed in the source's canonical-form
+construction (arXiv:1606.00608, lines 214--225).
 
 ## Main definitions
 
@@ -46,7 +48,8 @@ The predicate `IsVerticalCF` states exactly this conclusion.
   $E_{\mathrm{diag}}(X) = \sum_i M^{ii} X (M^{ii})^\dagger$.
 * `IsVerticalCF`:
   the vertical canonical form of arXiv:1606.00608, Proposition 4.13: an
-  isometry $U$ on the physical space with
+  isometry after restriction to the nonzero physical sectors, represented by
+  a coisometry $U$ with
   $U \widetilde M_{ab} U^\dagger = (\bigoplus_\alpha \mu_\alpha \otimes M_\alpha)_{ab}$
   for every bond pair $(a, b)$, with positive diagonal matrices $\mu_\alpha$ and a
   BNT $\{M_\alpha\}$ for the vertically viewed tensor.
@@ -541,13 +544,18 @@ with at least one copy: each $\mu_\alpha$ is a positive diagonal matrix of size
 `mult α`, at least one, matching arXiv:1606.00608, line 1901, where the sector
 $(\alpha, 1)$ exists for every $\alpha$.
 
-The isometry is a unitary change of the physical basis, so both `Uᴴ * U = 1`
-and `U * Uᴴ = 1` are required: the canonical-form decomposition of
-arXiv:1606.00608 read in the vertical direction decomposes the physical space
-exactly, and the source discards $U$ because "it just changes the physical
-basis on each site" (arXiv:1606.00608, line 959).  With an isometric
-embedding alone, the decomposed space could exceed the physical space, which
-the source's conclusion excludes. -/
+The source's general canonical-form construction permits zero sectors and only
+requires the sum of the nonzero block dimensions to be at most the original
+dimension (arXiv:1606.00608, lines 214--225). In the matrix orientation used
+below, $U$ maps the original physical space onto the retained nonzero sector
+space. Thus $U U^\dagger = 1$; the matrix $U^\dagger U$ is generally the
+support projection on the original physical space.
+
+**Local fix (zero-sector complement):** An earlier formulation also required
+$U^\dagger U = 1$, which incorrectly excluded the zero sectors allowed at
+arXiv:1606.00608, lines 216--219. The correction and a two-dimensional example
+are recorded in
+`docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`. -/
 def IsVerticalCF (M : MPOTensor d D) : Prop :=
   ∃ (g : ℕ) (dim : Fin g → ℕ) (mult : Fin g → ℕ)
     (ω : (α : Fin g) → Fin (mult α) → ℂ)
@@ -556,7 +564,6 @@ def IsVerticalCF (M : MPOTensor d D) : Prop :=
       (Fin d) ℂ),
     (∀ α, 0 < mult α) ∧
       (∀ α k, (0 : ℂ) < ω α k) ∧
-      Uᴴ * U = 1 ∧
       U * Uᴴ = 1 ∧
       MPSTensor.IsBNT (verticalTensor M) g dim A ∧
       ∀ v : Fin (D * D),

@@ -113,16 +113,19 @@
     $\widetilde M$, positive diagonal matrices
     $\mu_\alpha=\operatorname{diag}(\omega_{\alpha,0},\dots,\omega_{\alpha,r_\alpha-1})$
     with $r_\alpha\geq1$,
-    and an isometry $U$ on the physical space such that
+    and a matrix $U$ from the physical space onto the retained nonzero sector
+    space such that
     \[
         U\widetilde MU^\dagger=\bigoplus_\alpha \mu_\alpha\otimes M_\alpha.
     \]
     This is the conclusion of
     \cite[Proposition~4.13, lines~1863--1870]{Cirac2016MPDO_arXiv}.
-    The isometry is a unitary change of the physical basis: the canonical
-    form decomposes the physical space exactly, and the source treats $U$ as
-    a change of the physical basis on each site
-    \cite[line~959]{Cirac2016MPDO_arXiv}.
+    In this orientation $UU^\dagger=I$ on the retained space, while
+    $U^\dagger U$ is its support projection in the original physical space.
+    The orthogonal complement may be a zero sector: the source's general
+    canonical-form construction explicitly permits the sum of the nonzero
+    block dimensions to be strictly smaller than the original dimension
+    \cite[lines~214--225]{Cirac2016MPDO_arXiv}.
     Since each $\mu_\alpha$ is diagonal, the summand
     $\mu_\alpha\otimes M_\alpha$ is the direct sum
     $\bigoplus_{k=0}^{r_\alpha-1}\omega_{\alpha,k}M_\alpha$ of weighted copies
