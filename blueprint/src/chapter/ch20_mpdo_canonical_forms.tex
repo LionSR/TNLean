@@ -375,6 +375,10 @@
     \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree_of_basis_injective}
     \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_firstSiteActionAgree_of_common_blockInjective}
     \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree_of_common_blockInjective}
+    \lean{MPSTensor.isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one}
+    \lean{MPSTensor.IsBNTCanonicalForm.exists_common_basis_isNBlkInjective}
+    \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_firstSiteActionAgree}
+    \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree}
     \leanok
     \uses{def:sector_bnt_cf, def:sector_decomposition_block_tensor,
       def:representative_word_tuple_span, thm:representative_grouped_insert_eq}
@@ -401,8 +405,13 @@
     has representative word-tuple separation at every blocked length
     $L\geq 6(g-1)+1$.
 
-    Finally, suppose there is a common $L>0$ for which every unblocked
-    representative $A_j$ is $L$-block injective.  If the first-site actions
+    Finally, the BNT canonical-form hypotheses imply that there is a common
+    $L>0$ for which every unblocked representative $A_j$ is $L$-block
+    injective.  Indeed, irreducibility and left-canonicality give a finite
+    peripheral period $m_j$.  The self-overlap tends to $m_j$ along multiples
+    of $m_j$, but by normalization it also tends to $1$; hence $m_j=1$.
+    Thus every representative is normal, and finiteness gives a common
+    positive block-injectivity length.  If the first-site actions
     of $Y,Z$ agree on the tensor represented by $P$, then
     \[
         YA_j=ZA_j
@@ -414,11 +423,9 @@
     Appendix~C.3, Lemma~L
     \cite[lines~1835--1858]{Cirac2016MPDO_arXiv}.
 
-    \textbf{Scope restriction (common block-injectivity length).}  The last
-    assertion takes the common positive length as an explicit hypothesis.
-    Deriving its existence from the normal-representative output of the
-    canonical-form construction remains separate; see
-    \path{docs/paper-gaps/cpgsv17_bicf_block_separation.tex}.
+    No additional common-length hypothesis is required.
+    % The remaining MPDO scope question is the relation with the horizontal
+    % copy-indexed hypotheses; see docs/paper-gaps/cpgsv17_bicf_block_separation.tex.
 \end{theorem}
 
 \begin{proof}
@@ -456,8 +463,20 @@
     representatives. The preceding selector argument then applies verbatim
     to $P^{[p]}$.
 
-    For the final assertion, start from a common positive length $L$ at which
-    every representative is block injective and block $L+1$ sites.  Injectivity
+    For the final assertion, first consider one representative $A_j$.
+    Irreducibility and left-canonicality give a positive peripheral period
+    $m_j$.  The periodic self-overlap formula and the normalized self-overlap
+    hypothesis give, along the same subsequence,
+    \[
+        \lim_{k\to\infty}O_{A_jA_j}(m_jk)=m_j,
+        \qquad
+        \lim_{k\to\infty}O_{A_jA_j}(m_jk)=1.
+    \]
+    Hence $m_j=1$.
+    Primitivity then implies normality.  Taking a common
+    multiple of the finitely many normality lengths gives a positive length
+    $L$ at which every representative is block injective.  Block $L+1$ sites.
+    Injectivity
     propagates from length $L$ to length $L+1$, so the blocked representatives
     are injective.  Act on the first letter of each physical block and apply
     the blocked representative separation followed by the

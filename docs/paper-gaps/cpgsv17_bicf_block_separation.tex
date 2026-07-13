@@ -99,9 +99,11 @@ horizontal canonical-form trace-separation conclusion.\footnote{The criteria are
     \texttt{horizontalCFData\_of\_propBlockInjective}. The blueprint records the same
     state in \path{blueprint/src/chapter/ch20_mpdo_canonical_forms.tex}, lines 27--108.}
 Thus \texttt{propblockinj} has not been asserted without proof. The formal statements
-prove that several finite-length witnesses are sufficient, while the derivation
-of such a witness from the full canonical-form and basis-of-normal-tensors
-hypotheses remains open.
+prove that several finite-length witnesses are sufficient.  For the
+representative-indexed BNT canonical form, such a witness is now derived from
+irreducibility, left-canonicality, and normalized self-overlap.  Relating this
+representative-indexed conclusion to the flattened \texttt{HorizontalCFData}
+surface remains open.
 
 \section{The counterexample boundary}
 
@@ -164,13 +166,13 @@ converse.
 
 \section{Conclusion}
 
-The conclusion is provisional and should not be read as a source erratum.  A
+The original counterexample should not be read as a source erratum.  A
 small counterexample shows only that per-copy blockwise injectivity,
 left-canonicality, and nonzero weights do not imply simultaneous separation.
 It does not satisfy the source's minimal-representative condition.
 
-The remaining task for the source-level Lemma L is to compose the results
-above with the canonical-form construction.  Positive-length block injectivity
+The representative-level source theorem is now composed with the canonical-form
+hypotheses.  Positive-length block injectivity
 propagates from length $L$ to length $L+1$ without a normalization hypothesis:
 the identity
 $S_{L+1}(A)=\spn\{A_i\}_iS_L(A)$, together with the same identity at length
@@ -192,8 +194,8 @@ to pair separation for the blocked representatives at length $6$.  It follows
 that $P^{[p]}$ has simultaneous representative word-tuple span at every
 blocked length at least $6(g-1)+1$.
 
-This statement has now been composed with the first-site transport under an
-explicit common block-injectivity hypothesis.  Given a common positive $L$
+The first-site transport was first proved under an explicit common
+block-injectivity hypothesis.  Given a common positive $L$
 for which every representative is $L$-block injective, use $p=L+1$;
 positive-length propagation makes every $A_j^{[L+1]}$ injective.  Blocked
 representative separation and the representative-grouped Lemma L give equality
@@ -202,12 +204,19 @@ span then recovers equality of the unblocked insertions.  This length shift is
 essential: recovery from a physical block of length $L+1$ uses the span of its
 length-$L$ tail.
 
-Two tasks remain for the unrestricted source application.  First, the
-canonical-form construction must supply the common positive block-injectivity
-length from the normality of its minimal representatives, rather than taking
-that length as an explicit hypothesis.  Second, the flattened
+The first task is now closed without adding a hypothesis.  For an irreducible
+left-canonical representative, quantum Perron--Frobenius theory gives a finite
+peripheral period $m$.  Its self-overlap along multiples of $m$ tends to $m$,
+whereas the normalized BNT hypothesis makes the same subsequence tend to $1$.
+Thus $m=1$, the transfer map is primitive, and the representative is normal.
+The finitely many normal representatives have a common positive
+block-injectivity length by taking a common multiple of their individual
+lengths.  Consequently the representative-indexed Lemma L now follows from
+the BNT canonical-form predicate itself.
+
+One task remains for the unrestricted MPDO application: the flattened
 \texttt{HorizontalCFData} formulation must be replaced, or related explicitly,
-by this representative-indexed statement.  The older per-copy \texttt{biCF}
+to this representative-indexed statement.  The older per-copy \texttt{biCF}
 theorem remains a correct restricted result, but it is no longer the intended
 route to Lemma L.
 
