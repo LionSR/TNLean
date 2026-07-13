@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.Analysis.Complex.Circle
 import TNLean.Algebra.KroneckerFactorPositivity
-import TNLean.MPS.MPDO.PhysicalSectorFactorization
+import TNLean.MPS.MPDO.PhysicalSectorChainDecomposition
 
 /-!
 # Rephasing a physical-sector factorization
@@ -72,5 +72,17 @@ theorem rephase_neighboringOperator (F : PhysicalSectorFactorization K)
       ((z h : ℂ) * F.leftTensor h a x.2 y.2) = _
   simp only [Circle.coe_mul, Circle.coe_inv]
   ring
+
+/-- Reciprocal sector rephasing leaves every complete cyclic product of
+neighboring operators unchanged.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1446--1450. -/
+theorem rephase_cyclicNeighboringProduct (F : PhysicalSectorFactorization K)
+    (z : Fin F.sectorCount → Circle) {N : ℕ} [NeZero N]
+    (k : Fin N → Fin F.sectorCount) :
+    (F.rephase z).cyclicNeighboringProduct k = F.cyclicNeighboringProduct k := by
+  rw [← (F.rephase z).mpo_submatrix_sector_eq_cyclicNeighboringProduct k,
+    ← F.mpo_submatrix_sector_eq_cyclicNeighboringProduct k]
+  rfl
 
 end MPOTensor.PhysicalSectorFactorization

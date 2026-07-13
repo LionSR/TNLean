@@ -25,7 +25,6 @@ import TNLean.Algebra.HermitianHelpers
 import TNLean.Algebra.MatrixSpectralDecomp
 import TNLean.Algebra.MatrixAux
 import TNLean.Algebra.KroneckerFactorPositivity
-import TNLean.Algebra.ComplexPhasePositivity
 import TNLean.Algebra.DirectedWalkCoboundary
 import TNLean.Algebra.MatrixGramUnitary
 import TNLean.Algebra.FinSum
@@ -392,7 +391,6 @@ import TNLean.MPS.MPDO.RFPSubspinMaps
 import TNLean.MPS.MPDO.HayashiSectorComparison
 import TNLean.MPS.MPDO.SectorFactorization
 import TNLean.MPS.MPDO.PhysicalSectorFactorization
-import TNLean.MPS.MPDO.PhysicalSectorRephasing
 import TNLean.MPS.MPDO.InverseMapPhysicalSectorFactorization
 import TNLean.MPS.MPDO.NeighboringPreparation
 import TNLean.MPS.MPDO.PhysicalSectorSubspinMaps
@@ -429,7 +427,6 @@ import TNLean.MPS.MPDO.SectorEtaOperator
 import TNLean.MPS.MPDO.SectorEtaPositivity
 import TNLean.MPS.MPDO.SALPhysicalSectorCyclicPositivity
 import TNLean.MPS.MPDO.SectorRecurrence
-import TNLean.MPS.MPDO.RecurrentSectorRephasing
 import TNLean.MPS.MPDO.FusionIsometries
 import TNLean.MPS.MPDO.OperatorProduct
 import TNLean.MPS.MPDO.AlgebraStructure
