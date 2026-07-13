@@ -5273,8 +5273,8 @@ $\widehat{\cal K}$.
     contains every zero-weight summand.
 \end{definition}
 
-\begin{lemma}[Identification and spanning of active one-site matrices]%
-    \label{lem:mpdo_active_one_site_matrix_spanning}
+\begin{theorem}[Identification and spanning of active one-site matrices]%
+    \label{thm:mpdo_active_one_site_matrix_spanning}
     \lean{MPOTensor.PhysicalSectorFactorization.%
       oneSiteSectorMatrix_eq_sectorVirtualMatrix}
     \lean{MPOTensor.PhysicalSectorFactorization.%
@@ -5289,10 +5289,10 @@ $\widehat{\cal K}$.
     \[
         \spn\{A_{k;x,y}:k\in I_*\}=\MN{D}.
     \]
-\end{lemma}
+\end{theorem}
 
-\begin{lemma}[Complementary active-sector spaces]%
-    \label{lem:mpdo_active_sector_complementary_spaces}
+\begin{theorem}[Complementary active-sector spaces]%
+    \label{thm:mpdo_active_sector_complementary_spaces}
     \lean{MPOTensor.PhysicalSectorFactorization.%
       activeSectorOneSiteSpace_sup_compl_eq_top}
     \lean{MPOTensor.PhysicalSectorFactorization.activeSectorOneSiteSpace_ne_bot}
@@ -5300,7 +5300,7 @@ $\widehat{\cal K}$.
       mul_eq_zero_of_mem_activeSectorOneSiteSpace}
     \leanok
     \uses{def:mpdo_active_sector_trace_matrix,
-      lem:mpdo_active_one_site_matrix_spanning,
+      thm:mpdo_active_one_site_matrix_spanning,
       thm:mpdo_directed_cut_one_site_spaces}
     Suppose that the active one-site matrices span $\MN{D}$ and each active
     sector contains a nonzero such matrix.  For every $S\subseteq I_*$,
@@ -5310,7 +5310,7 @@ $\widehat{\cal K}$.
     and both spaces are nonzero when the corresponding sector sets are
     nonempty.  If $\eta_{k,h}=0$ for $k\in S$ and $h\in C$, then
     ${\cal A}_S{\cal A}_C=0$.
-\end{lemma}
+\end{theorem}
 
 \begin{theorem}[Strong connectivity of the active neighboring support]%
     \label{thm:mpdo_active_neighboring_support_strongly_connected}
@@ -5319,7 +5319,7 @@ $\widehat{\cal K}$.
     \lean{MPOTensor.PhysicalSectorFactorization.%
       exists_active_neighboringOperator_ne_zero}
     \leanok
-    \uses{lem:mpdo_active_sector_complementary_spaces,
+    \uses{thm:mpdo_active_sector_complementary_spaces,
       lem:matrix_one_sided_product_obstruction}
     Suppose that the active one-site matrices span $\MN{D}$ and each active
     sector contains a nonzero such matrix.  Then for every $k,h\in I_*$ there
@@ -5333,8 +5333,8 @@ $\widehat{\cal K}$.
     operator.
 \end{theorem}
 
-\begin{lemma}[Positive entries of the active trace matrix]%
-    \label{lem:mpdo_active_trace_matrix_positive_entries}
+\begin{theorem}[Positive entries of the active trace matrix]%
+    \label{thm:mpdo_active_trace_matrix_positive_entries}
     \lean{MPOTensor.PhysicalSectorFactorization.activeSectorTraceMatrix_nonneg}
     \lean{MPOTensor.PhysicalSectorFactorization.activeSectorTraceMatrix_pos_iff}
     \leanok
@@ -5344,20 +5344,20 @@ $\widehat{\cal K}$.
     \[
         T^*_{k,h}>0\quad\Longleftrightarrow\quad\eta_{k,h}\ne0.
     \]
-\end{lemma}
+\end{theorem}
 
 % **Local fix (periodicity):** the source blocks to remove periodic
 % components.  The following two-cycle is an auxiliary substitute, to be
 % paired with the three-cycle supplied by triangle closure.  See
 % docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex.
-\begin{lemma}[Two-step return through every active sector]%
-    \label{lem:mpdo_active_sector_two_step_return}
+\begin{theorem}[Two-step return through every active sector]%
+    \label{thm:mpdo_active_sector_two_step_return}
     \lean{MPOTensor.PhysicalSectorFactorization.exists_active_two_cycle}
     \lean{MPOTensor.PhysicalSectorFactorization.%
       activeSectorTraceMatrix_pow_two_diag_pos}
     \leanok
-    \uses{lem:mpdo_active_one_site_matrix_spanning,
-      lem:mpdo_active_trace_matrix_positive_entries}
+    \uses{thm:mpdo_active_one_site_matrix_spanning,
+      thm:mpdo_active_trace_matrix_positive_entries}
     Suppose that the active one-site matrices span $\MN{D}$ and each active
     sector contains a nonzero such matrix.  For every $k\in I_*$ there is an
     $h\in I_*$ such that
@@ -5370,14 +5370,14 @@ $\widehat{\cal K}$.
     \[
         (T^{*2})_{k,k}>0.
     \]
-\end{lemma}
+\end{theorem}
 
 \begin{theorem}[Irreducibility of the active trace matrix]%
     \label{thm:mpdo_active_trace_matrix_irreducible}
     \lean{MPOTensor.PhysicalSectorFactorization.activeSectorTraceMatrix_isIrreducible}
     \leanok
     \uses{thm:mpdo_active_neighboring_support_strongly_connected,
-      lem:mpdo_active_trace_matrix_positive_entries}
+      thm:mpdo_active_trace_matrix_positive_entries}
     Suppose that the neighboring operators are positive semidefinite, the
     active one-site matrices span $\MN{D}$, and each active sector contains a
     nonzero such matrix.  Then the nonnegative matrix $T^*$ is irreducible.
@@ -5416,12 +5416,12 @@ $\widehat{\cal K}$.
         def:mpdo_zero_weight_reparameterized_inverse_map_factorization,
         thm:mpdo_zero_weight_reparameterized_neighboring_operator,
         thm:mpdo_sector_virtual_matrix_spanning,
-        lem:mpdo_active_one_site_matrix_spanning,
+        thm:mpdo_active_one_site_matrix_spanning,
         thm:mpdo_sector_support_triangle_closure,
         thm:mpdo_active_neighboring_support_strongly_connected,
-        lem:mpdo_active_sector_two_step_return,
+        thm:mpdo_active_sector_two_step_return,
         thm:mpdo_active_trace_matrix_irreducible,
-        lem:mpdo_active_trace_matrix_positive_entries}
+        thm:mpdo_active_trace_matrix_positive_entries}
     First use the zero-weight reparameterization to make every zero-weight
     sector isolated. Injectivity makes the nonzero-weight one-site matrices
     span $\MN{D}$, and every such sector contains a nonzero matrix. Hence
