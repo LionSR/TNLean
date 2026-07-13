@@ -216,6 +216,89 @@
     finite witness from separated canonical-form / BNT data.
 \end{proof}
 
+\begin{definition}[Representative word-tuple separation]
+    \label{def:representative_word_tuple_span}
+    \lean{MPSTensor.SectorDecomposition.RepresentativeWordTupleSpanAt}
+    \lean{MPSTensor.SectorDecomposition.EventuallyRepresentativeWordTupleSpan}
+    \leanok
+    \uses{def:sector_weight_data, rem:word_tuple_span_top}
+    Let $(A_j)_{j=0}^{g-1}$ be the basis representatives of a sector
+    decomposition.  They have \emph{representative word-tuple separation at
+    length $L$} when
+    \[
+        \spn_{\C}\bigl\{(A_j^w)_{j=0}^{g-1}:
+        w\in\{0,\ldots,d{-}1\}^{L}\bigr\}
+        =\prod_{j=1}^g M_{D_j}(\C).
+    \]
+    They have \emph{eventual representative word-tuple separation} when this
+    equality holds at every sufficiently large length.  Notice that the
+    family is indexed by the minimal representatives $j$, and not by the
+    repeated copies lying over each $j$.
+\end{definition}
+
+\begin{theorem}[Representative-grouped Lemma L]
+    \label{thm:representative_grouped_insert_eq}
+    \lean{MPSTensor.SectorDecomposition.insertedTensor_basis_eq_of_firstSiteActionAgree_of_coeff_ne_zero}
+    \lean{MPSTensor.SectorDecomposition.insertedTensor_basis_eq_of_firstSiteActionAgree}
+    \lean{MPSTensor.SectorDecomposition.insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree}
+    \leanok
+    \uses{def:representative_word_tuple_span,
+      def:sector_weight_data, cor:nonvanishing_finite_power_sum}
+    Let $A_{\mathrm{tot}}$ be the tensor of a sector decomposition with basis
+    representatives $(A_j)_{j=0}^{g-1}$, multiplicities $r_j>0$, nonzero weights
+    $\mu_{j,q}$, and grouped coefficients
+    \[
+        c_j^{(N)}=\sum_{q=0}^{r_j-1}\mu_{j,q}^{N}.
+    \]
+    Suppose that the first-site actions of $Y,Z\in M_d(\C)$ agree on the MPV
+    family of $A_{\mathrm{tot}}$.  If representative word-tuple separation
+    holds at length $L$ and $c_{j_0}^{(L+1)}\neq0$, then
+    \[
+        YA_{j_0}=ZA_{j_0}.
+    \]
+    Consequently, under eventual representative word-tuple separation,
+    $YA_j=ZA_j$ for every representative $j$.  The same conclusion holds if
+    the first-site equality is initially given for any tensor with the same
+    complete MPV family as $A_{\mathrm{tot}}$.
+
+    The representative grouping is the argument of
+    \cite[Appendix~C.3, lines~1835--1858]{Cirac2016MPDO_arXiv}.
+
+    \textbf{Scope restriction (finite representative span).}  Appendix~C.3
+    obtains the required separation from block injectivity of a minimal basis
+    of normal tensors.  Here eventual representative word-tuple separation is
+    an explicit assumption; its derivation from the full canonical-form
+    hypotheses remains open.  This is recorded in
+    \path{docs/paper-gaps/cpgsv17_bicf_block_separation.tex}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:representative_word_tuple_span,
+      lem:paper_decomp_formula, cor:nonvanishing_finite_power_sum}
+    At a fixed tail length $L$, expand the first-site equality at system size
+    $L+1$ and group all copies lying over the same representative.  For every
+    length-$L$ word $w$ this gives
+    \[
+      \sum_{j=0}^{g-1}
+      \tr\!\left(c_j^{(L+1)}(YA_j-ZA_j)A_j^w\right)=0.
+    \]
+    Representative word-tuple separation therefore forces each matrix
+    $c_j^{(L+1)}(YA_j-ZA_j)$ to vanish.  A nonzero coefficient may then be
+    cancelled.
+
+    For the eventual assertion, choose a threshold $L_0$ and put
+    $M=L_0+1$.  For a fixed representative $j$, apply
+    Corollary~\ref{cor:nonvanishing_finite_power_sum} to the nonzero numbers
+    $\mu_{j,q}^{M}$.  It yields $r\geq1$ such that
+    \[
+        c_j^{(Mr)}=\sum_q(\mu_{j,q}^{M})^r\neq0.
+    \]
+    Since $Mr-1\geq L_0$, the fixed-length argument applies with
+    $L=Mr-1$.  Finally, equality of complete MPV families transports the
+    first-site hypothesis to the sector-decomposition tensor.
+\end{proof}
+
 \begin{lemma}[Blockwise equality from agreement on the MPV family]
     \label{lem:blockwise_insert_eq_of_mpv_agree}
     \lean{MPOTensor.blockwise_insert_eq_of_mpv_agree}
