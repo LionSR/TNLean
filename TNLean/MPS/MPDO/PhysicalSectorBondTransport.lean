@@ -611,10 +611,10 @@ The two-site chain is excluded because its two translated windows have the
 same support with opposite cyclic order, rather than forming the three-site
 configuration used in the source calculation.
 
-**Scope restriction (N ≥ 3):** The two-site crossed-order commutator remains
-open, as documented in
-`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.  Elimination:
-prove the `N = 2` crossed-order commutator separately.
+**Scope restriction (N ≥ 3):** This theorem treats the three-site local
+configuration and its embeddings.  The crossed-order case at `N = 2` is
+supplied separately by `physicalBond_two_zero_one_comm`, as documented in
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition C.8, lines 1571--1593. -/
 theorem physicalBond_adjacent_comm (F : PhysicalSectorFactorization K)
