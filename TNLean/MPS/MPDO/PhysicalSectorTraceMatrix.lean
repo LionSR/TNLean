@@ -61,26 +61,6 @@ lines 1383--1387 and 1434--1439. -/
   ext beta alpha
   simp [oneSiteSectorMatrix, sectorVirtualMatrix]
 
-/-- Reciprocal sector rephasing leaves each sector virtual matrix unchanged. -/
-@[simp] theorem rephase_sectorVirtualMatrix (F : PhysicalSectorFactorization K)
-    (z : Fin F.sectorCount → Circle) (k : Fin F.sectorCount)
-    (x y : F.SectorIndex k) :
-    (F.rephase z).sectorVirtualMatrix k x y =
-      F.sectorVirtualMatrix k x y := by
-  ext beta alpha
-  simp only [sectorVirtualMatrix, rephase, Matrix.smul_apply, smul_eq_mul]
-  field_simp [Circle.coe_ne_zero]
-
-/-- Reciprocal sector rephasing preserves the nonzero neighboring support. -/
-theorem rephase_neighboringOperator_ne_zero_iff
-    (F : PhysicalSectorFactorization K) (z : Fin F.sectorCount → Circle)
-    (k h : Fin F.sectorCount) :
-    (F.rephase z).neighboringOperator k h ≠ 0 ↔
-      F.neighboringOperator k h ≠ 0 := by
-  rw [F.rephase_neighboringOperator]
-  exact smul_ne_zero_iff_right
-    (mul_ne_zero (Circle.coe_ne_zero ((z k)⁻¹)) (Circle.coe_ne_zero (z h)))
-
 /-- The ambient sector indices represented by a set of nonzero-weight
 sectors. -/
 def activeSectorSet (F : PhysicalSectorFactorization K)

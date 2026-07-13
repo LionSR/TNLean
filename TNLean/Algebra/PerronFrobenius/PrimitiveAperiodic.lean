@@ -14,8 +14,9 @@ positive support has closed walks of lengths two and three. The proof chooses
 one positive path between each ordered pair, bounds their lengths uniformly,
 and pads every path to a common length using the two coprime return lengths.
 
-This is the elementary matrix step used for the active sector trace matrix in
-arXiv:1606.00608, Appendix C.2, Lemma C.4 (`propSN`), lines 1451--1471.
+This is an auxiliary finite-matrix lemma. For the active sector trace matrix,
+it implements the marked local replacement of the source's removal of periodic
+components by blocking; it is not an argument stated in the source.
 -/
 
 namespace Matrix

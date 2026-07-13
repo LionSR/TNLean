@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import Mathlib.Analysis.Complex.Circle
 import TNLean.Algebra.KroneckerFactorPositivity
 import TNLean.MPS.MPDO.PhysicalSectorChainDecomposition
+import TNLean.MPS.MPDO.PhysicalSectorSupportRecurrence
 
 /-!
 # Rephasing a physical-sector factorization
@@ -72,6 +73,30 @@ theorem rephase_neighboringOperator (F : PhysicalSectorFactorization K)
       ((z h : ℂ) * F.leftTensor h a x.2 y.2) = _
   simp only [Circle.coe_mul, Circle.coe_inv]
   ring
+
+/-- Reciprocal sector rephasing leaves each sector virtual matrix unchanged.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1434--1450. -/
+@[simp] theorem rephase_sectorVirtualMatrix (F : PhysicalSectorFactorization K)
+    (z : Fin F.sectorCount → Circle) (k : Fin F.sectorCount)
+    (x y : F.SectorIndex k) :
+    (F.rephase z).sectorVirtualMatrix k x y =
+      F.sectorVirtualMatrix k x y := by
+  ext beta alpha
+  simp only [sectorVirtualMatrix, rephase, Matrix.smul_apply, smul_eq_mul]
+  field_simp [Circle.coe_ne_zero]
+
+/-- Reciprocal sector rephasing preserves the nonzero neighboring support.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1441--1450. -/
+theorem rephase_neighboringOperator_ne_zero_iff
+    (F : PhysicalSectorFactorization K) (z : Fin F.sectorCount → Circle)
+    (k h : Fin F.sectorCount) :
+    (F.rephase z).neighboringOperator k h ≠ 0 ↔
+      F.neighboringOperator k h ≠ 0 := by
+  rw [F.rephase_neighboringOperator]
+  exact smul_ne_zero_iff_right
+    (mul_ne_zero (Circle.coe_ne_zero ((z k)⁻¹)) (Circle.coe_ne_zero (z h)))
 
 /-- Reciprocal sector rephasing leaves every complete cyclic product of
 neighboring operators unchanged.

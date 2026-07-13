@@ -909,8 +909,6 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{definition}[Vertex rephasing of the sector tensors]%
     \label{def:mpdo_physical_sector_rephasing}
     \lean{MPOTensor.PhysicalSectorFactorization.rephase}
-    \lean{MPOTensor.PhysicalSectorFactorization.rephase_neighboringOperator}
-    \lean{MPOTensor.PhysicalSectorFactorization.rephase_cyclicNeighboringProduct}
     \leanok
     \uses{def:mpdo_physical_sector_factorization,
       def:mpdo_minimal_neighboring_operator}
@@ -920,13 +918,28 @@ strong subadditivity for a normalized three-site reduced state.
         \qquad
         (r_k)_a\longmapsto z_k^{-1}(r_k)_a
     \]
-    leaves every physical-slice factorization unchanged and transforms the
-    neighboring operators by
+    leaves every physical-slice factorization unchanged.
+\end{definition}
+
+\begin{theorem}[Rephasing identities for the sector data]%
+    \label{thm:mpdo_physical_sector_rephasing_invariance}
+    \lean{MPOTensor.PhysicalSectorFactorization.rephase_neighboringOperator}
+    \lean{MPOTensor.PhysicalSectorFactorization.rephase_cyclicNeighboringProduct}
+    \lean{MPOTensor.PhysicalSectorFactorization.rephase_sectorVirtualMatrix}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      rephase_neighboringOperator_ne_zero_iff}
+    \leanok
+    \uses{def:mpdo_physical_sector_rephasing,
+      def:mpdo_minimal_neighboring_operator}
+    Vertex rephasing transforms the neighboring operators by
     \[
         \eta_{k,h}\longmapsto z_k^{-1}z_h\,\eta_{k,h}.
     \]
-    Every complete cyclic product of neighboring operators is unchanged.
-\end{definition}
+    It leaves every sector virtual matrix unchanged, preserves the nonzero
+    neighboring support, and leaves every complete cyclic product of
+    neighboring operators unchanged. These are the rephasing identities used
+    in \cite[Appendix~C.2, lines~1434--1450]{Cirac2016MPDO_arXiv}.
+\end{theorem}
 
 \begin{definition}[Vanishing right tensors on inactive sectors]
     \label{def:mpdo_physical_sector_inactive_right_zero}
@@ -2672,16 +2685,27 @@ strong subadditivity for a normalized three-site reduced state.
     can reach $k$ whenever $k\to h$ is an edge.
 \end{definition}
 
+\begin{definition}[Sector-coordinate virtual matrix families]%
+    \label{def:mpdo_sector_virtual_matrix_families}
+    \lean{MPOTensor.PhysicalSectorFactorization.sectorCoordinateMatrixFamily}
+    \lean{MPOTensor.PhysicalSectorFactorization.sectorVirtualMatrix}
+    \lean{MPOTensor.PhysicalSectorFactorization.sectorVirtualMatrixFamily}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization}
+    In sector coordinates, let $A_{k;x,y}$ be the virtual matrix obtained
+    from the $(x,y)$ entry within sector $k$. The sector-coordinate family
+    contains all transformed physical matrices, while the virtual-matrix
+    family consists of all matrices $A_{k;x,y}$.
+\end{definition}
+
 \begin{theorem}[Sector spanning from injectivity]%
     \label{thm:mpdo_sector_virtual_matrix_spanning}
     \lean{MPOTensor.PhysicalSectorFactorization.changePhysicalBasis_inverse_apply_eq_sum}
-    \lean{MPOTensor.PhysicalSectorFactorization.sectorCoordinateMatrixFamily}
     \lean{MPOTensor.PhysicalSectorFactorization.sectorCoordinateMatrixFamily_span_eq_top}
     \lean{MPOTensor.PhysicalSectorFactorization.sectorCoordinateTensor_mem_span_sectorVirtualMatrixFamily}
-    \lean{MPOTensor.PhysicalSectorFactorization.sectorVirtualMatrixFamily}
     \lean{MPOTensor.PhysicalSectorFactorization.sectorVirtualMatrixFamily_span_eq_top}
     \leanok
-    \uses{def:mpdo_physical_sector_factorization}
+    \uses{def:mpdo_sector_virtual_matrix_families}
     Let ${\cal K}$ be injective and let
     \[
       U\kappa_{\beta,\alpha}U^\dagger
@@ -2704,14 +2728,13 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{theorem}[Triangle closure from sector spanning]%
     \label{thm:mpdo_sector_support_triangle_closure}
-    \lean{MPOTensor.PhysicalSectorFactorization.sectorVirtualMatrix}
     \lean{MPOTensor.PhysicalSectorFactorization.sectorVirtualMatrix_mul_apply}
     \lean{MPOTensor.PhysicalSectorFactorization.%
       sectorVirtualMatrix_mul_eq_zero_of_neighboringOperator_eq_zero}
     \lean{MPOTensor.PhysicalSectorFactorization.exists_two_edge_return_of_neighboringOperator_ne_zero}
     \lean{MPOTensor.PhysicalSectorFactorization.neighboringOperator_reaches_of_ne_zero}
     \leanok
-    \uses{def:mpdo_physical_sector_factorization,
+    \uses{def:mpdo_sector_virtual_matrix_families,
         def:mpdo_minimal_neighboring_operator,
         thm:trace_nondeg}
     For a physical-sector factorization, let $A_{k;x,y}\in\MN{D}$ be the
@@ -5279,9 +5302,6 @@ $\widehat{\cal K}$.
       MPOTensor.PhysicalSectorFactorization.activeSectorSet,
       MPOTensor.PhysicalSectorFactorization.activeSectorOneSiteSpace}
     \lean{MPOTensor.PhysicalSectorFactorization.activeSectorTraceMatrix}
-    \lean{MPOTensor.PhysicalSectorFactorization.rephase_sectorVirtualMatrix}
-    \lean{MPOTensor.PhysicalSectorFactorization.%
-      rephase_neighboringOperator_ne_zero_iff}
     \leanok
     \uses{def:mpdo_one_site_sector_matrix_space,
       def:mpdo_minimal_neighboring_operator}
