@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.Data.Matrix.PEquiv
 import TNLean.Channel.PartialTrace
 import TNLean.MPS.MPDO.Defs
 
@@ -39,7 +40,7 @@ open Matrix
 
 namespace MPOTensor
 
-variable {d D D₁ D₂ : ℕ}
+variable {d D D₁ D₂ D₃ : ℕ}
 
 /-! ### The product tensor -/
 
@@ -63,6 +64,72 @@ noncomputable def mulTensor (M : MPOTensor d D₁) (N : MPOTensor d D₂) :
     (i k : Fin d) :
     mulTensor M N i k = (∑ j : Fin d, (M i j) ⊗ₖ (N j k)).submatrix
       finProdFinEquiv.symm finProdFinEquiv.symm := rfl
+
+/-- The canonical reassociation equivalence of three bond spaces,
+\(((\mathbb C^{D_1}\otimes\mathbb C^{D_2})\otimes\mathbb C^{D_3})\) with
+\(\mathbb C^{D_1}\otimes(\mathbb C^{D_2}\otimes\mathbb C^{D_3})\).
+
+Source: arXiv:1606.00608, lines 995--999; arXiv:1511.08090, Section
+``Associativity and the pentagon equation'', lines 237--251 of the source. -/
+def mulTensorAssocEquiv (D₁ D₂ D₃ : ℕ) :
+    Fin (D₁ * D₂ * D₃) ≃ Fin (D₁ * (D₂ * D₃)) :=
+  finProdFinEquiv.symm |>.trans
+    ((Equiv.prodCongr finProdFinEquiv.symm (Equiv.refl (Fin D₃))).trans
+      ((Equiv.prodAssoc (Fin D₁) (Fin D₂) (Fin D₃)).trans
+        ((Equiv.prodCongr (Equiv.refl (Fin D₁)) finProdFinEquiv).trans
+          finProdFinEquiv)))
+
+/-- The permutation matrix of `mulTensorAssocEquiv`, with rows indexed by the
+left-associated bond space and columns by the right-associated bond space.
+
+Source: arXiv:1606.00608, lines 995--999; arXiv:1511.08090, Section
+``Associativity and the pentagon equation'', lines 237--251 of the source. -/
+noncomputable def mulTensorAssocMatrix (D₁ D₂ D₃ : ℕ) :
+    Matrix (Fin (D₁ * D₂ * D₃)) (Fin (D₁ * (D₂ * D₃))) ℂ :=
+  (mulTensorAssocEquiv D₁ D₂ D₃).toPEquiv.toMatrix
+
+/-- **Associativity of the MPO tensor product.** A right-associated product
+letter, reindexed by the canonical bond reassociation on both indices, is the
+corresponding left-associated product letter.
+
+Source: arXiv:1606.00608, lines 995--999; arXiv:1511.08090, Section
+``Associativity and the pentagon equation'', lines 237--251 of the source. -/
+theorem mulTensor_assoc (M : MPOTensor d D₁) (N : MPOTensor d D₂)
+    (P : MPOTensor d D₃) (i l : Fin d) :
+    mulTensor (mulTensor M N) P i l =
+      (mulTensor M (mulTensor N P) i l).submatrix
+        (mulTensorAssocEquiv D₁ D₂ D₃) (mulTensorAssocEquiv D₁ D₂ D₃) := by
+  rw [mulTensor_apply, mulTensor_apply]
+  ext x y
+  rcases finProdFinEquiv.surjective x with ⟨⟨x₁₂, x₃⟩, rfl⟩
+  rcases finProdFinEquiv.surjective x₁₂ with ⟨⟨x₁, x₂⟩, rfl⟩
+  rcases finProdFinEquiv.surjective y with ⟨⟨y₁₂, y₃⟩, rfl⟩
+  rcases finProdFinEquiv.surjective y₁₂ with ⟨⟨y₁, y₂⟩, rfl⟩
+  simp only [Matrix.submatrix_apply, Matrix.sum_apply, mulTensor_apply,
+    mulTensorAssocEquiv, Equiv.trans_apply, Equiv.prodCongr_apply, Prod.map_apply,
+    Equiv.refl_apply, Equiv.prodAssoc_apply]
+  simp only [Equiv.symm_apply_apply, kroneckerMap_apply, submatrix_apply,
+    Equiv.coe_refl, Prod.map_apply, id_eq]
+  simp only [Matrix.sum_apply, Matrix.kronecker_apply]
+  simp_rw [Finset.sum_mul, Finset.mul_sum]
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl fun x _ => ?_
+  simp only [mul_assoc]
+
+/-- The product-tensor associator intertwines the letters belonging to the two
+parenthesizations of a triple product.
+
+Source: arXiv:1606.00608, lines 995--999; arXiv:1511.08090, Section
+``Associativity and the pentagon equation'', lines 237--251 of the source. -/
+theorem mulTensor_mul_assocMatrix (M : MPOTensor d D₁) (N : MPOTensor d D₂)
+    (P : MPOTensor d D₃) (i l : Fin d) :
+    mulTensor (mulTensor M N) P i l * mulTensorAssocMatrix D₁ D₂ D₃ =
+      mulTensorAssocMatrix D₁ D₂ D₃ *
+        mulTensor M (mulTensor N P) i l := by
+  rw [mulTensor_assoc, mulTensorAssocMatrix, PEquiv.mul_toMatrix_toPEquiv,
+    PEquiv.toMatrix_toPEquiv_mul]
+  ext x y
+  simp
 
 /-- Word evaluation of the product tensor is a sum over the contracted middle
 configurations of Kronecker products of word evaluations.
