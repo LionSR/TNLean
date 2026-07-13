@@ -2736,6 +2736,7 @@ strong subadditivity for a normalized three-site reduced state.
     \label{thm:mpdo_eta_coherent_positive_choice_recurrent}
     \lean{MPOTensor.exists_vertexPhase_smul_posSemidef}
     \lean{MPOTensor.exists_rephased_inverseMapPhysicalSectorFactorization}
+    \lean{MPOTensor.nonempty_etaLocalStructureData_of_recurrentSupport}
     \leanok
     \uses{def:mpdo_physical_sector_rephasing,
         def:mpdo_eta_recurrent_support,
@@ -2755,7 +2756,9 @@ strong subadditivity for a normalized three-site reduced state.
     Consequently, if the neighboring operators arise from the inverse-map
     physical-sector factorization of an injective MPDO and its nonzero
     support is recurrent, the sector tensors admit a reciprocal rephasing
-    for which all neighboring operators are positive semidefinite.
+    for which all neighboring operators are positive semidefinite. This
+    factorization determines the positive commuting nearest-neighbor product
+    structure of Proposition~C.8.
 
     This is a scope-restricted result. Recurrence is not a hypothesis of
     Lemma~C.4 in
@@ -2771,7 +2774,8 @@ strong subadditivity for a normalized three-site reduced state.
         thm:positive_rescaling_phase_unique,
         thm:mpdo_eta_cycle_positive_rescaling,
         thm:directed_cycle_coboundary,
-        def:mpdo_physical_sector_rephasing}
+        def:mpdo_physical_sector_rephasing,
+        thm:mpdo_eta_local_structure_of_positive_physical_sector_factorization}
     For a nonzero edge, choose a directed return path and close it with the
     edge. Positive rescaling of the corresponding cyclic tensor product
     supplies a scalar that makes the edge operator positive; retain only its
@@ -2783,7 +2787,8 @@ strong subadditivity for a normalized three-site reduced state.
     $\kappa_{k,h}=z_k^{-1}z_h$ on every nonzero edge. Zero edge operators are
     already positive semidefinite. Finally, reciprocal rephasing of the left
     and right sector tensors multiplies each neighboring operator by this
-    phase and preserves the physical-slice factorization.
+    phase and preserves the physical-slice factorization. The conditional
+    eta-local construction then gives the positive commuting product data.
 \end{proof}
 
 \begin{theorem}[Coherent positive choice of the neighboring operators]%
