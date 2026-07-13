@@ -18,6 +18,8 @@ on square matrices that are used throughout the proof of the Fundamental Theorem
 ## Main definitions and results
 
 * `Matrix.trace_mul_right_eq_zero_iff` — nondegeneracy of the trace pairing over `ℂ`
+* `Matrix.submodule_sup_ne_top_of_mul_eq_zero` — two nonzero matrix subspaces with
+  one-sided zero product cannot span the full matrix algebra
 * `Matrix.traceAdjointMap_traceAdjointMap` — the trace-pairing adjoint is involutive
 * `MPSTensor.traceMulRightPi` — the linear map `M ↦ (i ↦ trace (M * A i))`
 * `MPSTensor.SameMPV.trace_evalWord` — `SameMPV` implies trace agreement on all words
@@ -66,6 +68,45 @@ theorem span_range_mul_nonzero_mul_eq_top {n : Type*} [Fintype n]
   refine (Submodule.eq_top_iff_forall_basis_mem (Matrix.stdBasis ℂ n n)).2 ?_
   rintro ⟨i, j⟩
   simpa [Matrix.stdBasis_eq_single] using hsingle i j
+
+/-- Two nonzero linear subspaces of a full complex matrix algebra whose products vanish in one
+order cannot together span the full matrix algebra.
+
+This is the matrix-algebra obstruction used in the proof of CPGSV17, Lemma C.4. The source
+obtains linear spaces `A₁` and `A₂` with `A = A₁ + A₂` and `A₁ A₂ = 0`. It then
+concludes that `A` is not the full matrix algebra. Only the displayed order of multiplication
+is needed.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1465--1470. -/
+theorem submodule_sup_ne_top_of_mul_eq_zero {n : Type*} [Fintype n]
+    (A₁ A₂ : Submodule ℂ (Matrix n n ℂ))
+    (hA₁ : A₁ ≠ ⊥) (hA₂ : A₂ ≠ ⊥)
+    (hmul : ∀ X ∈ A₁, ∀ Y ∈ A₂, X * Y = 0) :
+    A₁ ⊔ A₂ ≠ ⊤ := by
+  classical
+  obtain ⟨X, hXA₁, hX⟩ := (Submodule.ne_bot_iff A₁).mp hA₁
+  obtain ⟨Y, hYA₂, hY⟩ := (Submodule.ne_bot_iff A₂).mp hA₂
+  intro htop
+  obtain ⟨i, p, hip⟩ : ∃ i p, X i p ≠ 0 := by
+    by_contra h
+    push Not at h
+    exact hX (Matrix.ext fun i p ↦ h i p)
+  obtain ⟨q, j, hqj⟩ : ∃ q j, Y q j ≠ 0 := by
+    by_contra h
+    push Not at h
+    exact hY (Matrix.ext fun q j ↦ h q j)
+  let E : Matrix n n ℂ := Matrix.single p q 1
+  have hE : E ∈ A₁ ⊔ A₂ := by
+    rw [htop]
+    exact Submodule.mem_top
+  obtain ⟨E₁, hE₁, E₂, hE₂, hsum⟩ := Submodule.mem_sup.mp hE
+  have hzero : X * E * Y = 0 := by
+    rw [← hsum, Matrix.mul_add, Matrix.add_mul, Matrix.mul_assoc X E₁ Y,
+      hmul E₁ hE₁ Y hYA₂, hmul X hXA₁ E₂ hE₂]
+    simp
+  have hentry := congrArg (fun M : Matrix n n ℂ ↦ M i j) hzero
+  simp [E, Matrix.mul_apply, Matrix.single, Matrix.of_apply, ite_and] at hentry
+  exact hentry.elim hip hqj
 
 /-- Nondegeneracy of the trace pairing on square matrices over `ℂ`:
 if `trace (M * N) = 0` for all `N`, then `M = 0`. -/
