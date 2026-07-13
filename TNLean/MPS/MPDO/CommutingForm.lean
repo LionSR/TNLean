@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.MPDO.RFP
 import TNLean.MPS.ParentHamiltonian.Defs
+import TNLean.MPS.ParentHamiltonian.CyclicWindow
 
 /-!
 # Commuting-form and GSNNCH data for simple MPDOs
@@ -237,6 +238,130 @@ theorem embedLocalOperator_mul (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
     reindex_embedLocalOperator_windowComplement,
     ← Matrix.mul_kronecker_mul]
   simp
+
+/-- The action of a cyclically embedded local operator is the sum over
+replacements of the configuration inside its window. -/
+private theorem embedLocalOperator_mulVec_apply (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
+    (B : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ)
+    (v : (Fin N → Fin d) → ℂ) (σ : Fin N → Fin d) :
+    (embedLocalOperator (d := d) L N hLN i B).mulVec v σ =
+      ∑ τ : Fin L → Fin d,
+        B (MPSTensor.extractWindow L i σ) τ *
+          v (MPSTensor.replaceWindow L hLN i σ τ) := by
+  let e := windowComplementEquiv (d := d) L N hLN i
+  rw [Matrix.mulVec, dotProduct]
+  calc
+    (∑ τ : Fin N → Fin d,
+        embedLocalOperator (d := d) L N hLN i B σ τ * v τ) =
+        ∑ x : (Fin L → Fin d) × (Fin (N - L) → Fin d),
+          embedLocalOperator (d := d) L N hLN i B σ (e.symm x) * v (e.symm x) :=
+      Fintype.sum_equiv e _ _ fun x ↦ by rw [e.symm_apply_apply]
+    _ = _ := by
+      rw [Fintype.sum_prod_type]
+      apply Finset.sum_congr rfl
+      intro τ _
+      have heσ : e σ =
+          (MPSTensor.extractWindow L i σ, (e σ).2) := by
+        exact Prod.ext rfl rfl
+      have hreplace :
+          e.symm (τ, (e σ).2) = MPSTensor.replaceWindow L hLN i σ τ := by
+        apply e.injective
+        rw [e.apply_symm_apply, windowComplementEquiv_replaceWindow]
+      have hentry (u : Fin (N - L) → Fin d) :
+          embedLocalOperator (d := d) L N hLN i B σ (e.symm (τ, u)) =
+            B (MPSTensor.extractWindow L i σ) τ *
+              (if (e σ).2 = u then 1 else 0) := by
+        have h := congrFun (congrFun
+          (reindex_embedLocalOperator_windowComplement (d := d) L N hLN i B)
+          (e σ)) (τ, u)
+        simp only [Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.kroneckerMap_apply,
+          Matrix.one_apply] at h
+        rw [e.symm_apply_apply] at h
+        rw [show (e σ).1 = MPSTensor.extractWindow L i σ from rfl] at h
+        exact h
+      simp_rw [hentry]
+      rw [Finset.sum_eq_single (e σ).2]
+      · simp [hreplace]
+      · intro u _ hu
+        rw [if_neg (Ne.symm hu), mul_zero, zero_mul]
+      · simp
+
+private theorem cyclicWindowsDisjoint_of_not_overlap {N L : ℕ} (hLN : L ≤ N)
+    {i j : Fin N} (hij : ¬ MPSTensor.cyclicWindowsOverlap N L i j) :
+    ∀ k : Fin N,
+      ((k.val + N - i.val) % N < L) →
+        ((k.val + N - j.val) % N < L) → False := by
+  intro k hki hkj
+  apply hij
+  refine ⟨k, ?_, ?_⟩
+  · exact (MPSTensor.mem_cyclicWindowSupport_iff hLN i k).mpr hki
+  · exact (MPSTensor.mem_cyclicWindowSupport_iff hLN j k).mpr hkj
+
+private theorem extractWindow_replaceWindow_of_not_cyclicWindowsOverlap
+    {N L : ℕ} (hLN : L ≤ N) {i j : Fin N}
+    (hij : ¬ MPSTensor.cyclicWindowsOverlap N L i j)
+    (σ : Fin N → Fin d) (τ : Fin L → Fin d) :
+    MPSTensor.extractWindow L i (MPSTensor.replaceWindow L hLN j σ τ) =
+      MPSTensor.extractWindow L i σ := by
+  funext r
+  unfold MPSTensor.extractWindow MPSTensor.replaceWindow
+  have hi : (((i.val + r.val) % N + N - i.val) % N) < L := by
+    rw [MPSTensor.offset_mod_eq i.isLt (Nat.lt_of_lt_of_le r.isLt hLN)]
+    exact r.isLt
+  have hnotj : ¬ (((i.val + r.val) % N + N - j.val) % N < L) := by
+    intro hj
+    exact cyclicWindowsDisjoint_of_not_overlap hLN hij
+      ⟨(i.val + r.val) % N, Nat.mod_lt _ (Fin.pos i)⟩ hi hj
+  rw [dif_neg hnotj]
+
+private theorem replaceWindow_commute_of_not_cyclicWindowsOverlap
+    {N L : ℕ} (hLN : L ≤ N) {i j : Fin N}
+    (hij : ¬ MPSTensor.cyclicWindowsOverlap N L i j)
+    (σ : Fin N → Fin d) (α β : Fin L → Fin d) :
+    MPSTensor.replaceWindow L hLN j (MPSTensor.replaceWindow L hLN i σ α) β =
+      MPSTensor.replaceWindow L hLN i (MPSTensor.replaceWindow L hLN j σ β) α := by
+  funext k
+  have hdisjoint := cyclicWindowsDisjoint_of_not_overlap hLN hij
+  by_cases hi : ((k.val + N - i.val) % N < L)
+  · have hnotj : ¬ ((k.val + N - j.val) % N < L) := fun hj => hdisjoint k hi hj
+    simp [MPSTensor.replaceWindow, hi, hnotj]
+  · by_cases hj : ((k.val + N - j.val) % N < L)
+    · simp [MPSTensor.replaceWindow, hi, hj]
+    · simp [MPSTensor.replaceWindow, hi, hj]
+
+/-- Operators embedded into disjoint cyclic windows commute.
+
+The hypothesis is precisely that the two cyclic supports have no common site.
+No positivity, idempotency, or relation between the two local matrices is
+required.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition C.8, lines
+1571--1593. -/
+theorem embedLocalOperator_commute_of_not_cyclicWindowsOverlap
+    (L N : ℕ) (hLN : L ≤ N) {i j : Fin N}
+    (hij : ¬ MPSTensor.cyclicWindowsOverlap N L i j)
+    (B C : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
+    embedLocalOperator (d := d) L N hLN i B *
+        embedLocalOperator (d := d) L N hLN j C =
+      embedLocalOperator (d := d) L N hLN j C *
+        embedLocalOperator (d := d) L N hLN i B := by
+  apply Matrix.mulVec_injective
+  funext v σ
+  rw [← Matrix.mulVec_mulVec, ← Matrix.mulVec_mulVec]
+  rw [embedLocalOperator_mulVec_apply, embedLocalOperator_mulVec_apply]
+  simp_rw [embedLocalOperator_mulVec_apply]
+  simp_rw [extractWindow_replaceWindow_of_not_cyclicWindowsOverlap
+    (d := d) hLN hij]
+  simp_rw [extractWindow_replaceWindow_of_not_cyclicWindowsOverlap
+    (d := d) hLN (fun h ↦ hij ((MPSTensor.cyclicWindowsOverlap_comm N L j i).mp h))]
+  simp_rw [Finset.mul_sum]
+  rw [Finset.sum_comm]
+  apply Finset.sum_congr rfl
+  intro β _
+  apply Finset.sum_congr rfl
+  intro α _
+  rw [replaceWindow_commute_of_not_cyclicWindowsOverlap (d := d) hLN hij]
+  ring
 
 /-- Chain-level commuting-form data for the simple-MPDO theorem.
 

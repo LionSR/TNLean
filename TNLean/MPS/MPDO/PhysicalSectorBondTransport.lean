@@ -639,4 +639,23 @@ theorem physicalBond_adjacent_comm (F : PhysicalSectorFactorization K)
     _ = _ := by
       rw [embedLocalOperator_two_zero_nested, embedLocalOperator_two_one_nested]
 
+/-- Translates of the physical bond with disjoint cyclic supports commute.
+
+This is the locality part of the pairwise commutation assertion in the source.
+It requires no property of the sector factorization beyond the existence of its
+two-site physical bond.  The adjacent, overlapping case is the separate content
+of `physicalBond_adjacent_comm`.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition C.8, lines
+1571--1593. -/
+theorem physicalBond_disjoint_comm (F : PhysicalSectorFactorization K)
+    {N : ℕ} (hN : 2 ≤ N) {i j : Fin N}
+    (hij : ¬ MPSTensor.cyclicWindowsOverlap N 2 i j) :
+    embedLocalOperator (d := d) 2 N hN i F.physicalBond *
+        embedLocalOperator (d := d) 2 N hN j F.physicalBond =
+      embedLocalOperator (d := d) 2 N hN j F.physicalBond *
+        embedLocalOperator (d := d) 2 N hN i F.physicalBond :=
+  embedLocalOperator_commute_of_not_cyclicWindowsOverlap 2 N hN hij
+    F.physicalBond F.physicalBond
+
 end MPOTensor.PhysicalSectorFactorization

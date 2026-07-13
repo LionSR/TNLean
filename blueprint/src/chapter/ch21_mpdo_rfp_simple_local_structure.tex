@@ -1354,6 +1354,27 @@ strong subadditivity for a normalized three-site reduced state.
     $E_i^L(B)=B\otimes I$, so the assertion is the mixed-product identity.
 \end{proof}
 
+\begin{theorem}[Commutativity on disjoint cyclic windows]
+    \label{thm:mpdo_disjoint_cyclic_local_embeddings_comm}
+    \lean{MPOTensor.embedLocalOperator_commute_of_not_cyclicWindowsOverlap}
+    \leanok
+    \uses{lem:cyclic_window_support_offsets,
+      lem:cyclic_windows_overlap_symmetry}
+    Let $L\leq N$, and let $W_i^L$ and $W_j^L$ be disjoint cyclic windows in
+    an $N$-site periodic chain. For arbitrary operators $B$ and $C$ on $L$ sites,
+    \[
+      E_i^L(B)E_j^L(C)=E_j^L(C)E_i^L(B).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply both sides to a chain amplitude. The first order of application is
+    a double sum over replacements on $W_i^L$ and $W_j^L$. Since the windows
+    are disjoint, each replacement leaves the other restricted configuration
+    unchanged, and the two replacements commute. Interchanging the two finite
+    sums gives the reverse order.
+\end{proof}
+
 \begin{theorem}[Adjacent physical bonds on periodic chains]
     \label{thm:mpdo_periodic_adjacent_physical_bonds_comm}
     \lean{MPOTensor.PhysicalSectorFactorization.physicalBond_adjacent_comm}
@@ -1421,6 +1442,34 @@ strong subadditivity for a normalized three-site reduced state.
     the factors $R_h$ and $L_k$.  These operators act on complementary
     factors and commute.  Taking the direct sum over $(k,h)$ and conjugating
     by the two-fold physical coordinate unitary proves the claim.
+\end{proof}
+
+\begin{theorem}[Disjoint physical bonds on periodic chains]
+    \label{thm:mpdo_periodic_disjoint_physical_bonds_comm}
+    \lean{MPOTensor.PhysicalSectorFactorization.physicalBond_disjoint_comm}
+    \leanok
+    \uses{def:mpdo_physical_two_site_bond,
+      thm:mpdo_disjoint_cyclic_local_embeddings_comm}
+    Let $N\geq 2$, and suppose that the cyclic bonds beginning at $i$ and $j$
+    have disjoint two-site supports. Then their physical bond operators
+    commute:
+    \[
+      (B_{\mathrm{physical}})_{i,i+1}
+      (B_{\mathrm{physical}})_{j,j+1}
+      =
+      (B_{\mathrm{physical}})_{j,j+1}
+      (B_{\mathrm{physical}})_{i,i+1}.
+    \]
+    This is the locality part of the pairwise commutation assertion in
+    \cite[Appendix~C.2, Proposition~C.8, lines~1571--1593]
+      {Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    This is Theorem~\ref{thm:mpdo_disjoint_cyclic_local_embeddings_comm}
+    applied to the same physical bond operator in both windows. No positivity
+    or additional property of the sector factorization is needed for this
+    locality step.
 \end{proof}
 
 \begin{definition}[Closed sector tensors]%
