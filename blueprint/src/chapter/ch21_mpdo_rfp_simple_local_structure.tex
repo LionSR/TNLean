@@ -2656,6 +2656,42 @@ strong subadditivity for a normalized three-site reduced state.
     can reach $k$ whenever $k\to h$ is an edge.
 \end{definition}
 
+\begin{theorem}[Triangle closure from sector spanning]%
+    \label{thm:mpdo_sector_support_triangle_closure}
+    \lean{MPOTensor.PhysicalSectorFactorization.sectorVirtualMatrix}
+    \lean{MPOTensor.PhysicalSectorFactorization.sectorVirtualMatrix_mul_apply}
+    \lean{MPOTensor.PhysicalSectorFactorization.exists_two_edge_return_of_neighboringOperator_ne_zero}
+    \lean{MPOTensor.PhysicalSectorFactorization.neighboringOperator_reaches_of_ne_zero}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization,
+        def:mpdo_minimal_neighboring_operator,
+        thm:trace_nondeg}
+    For a physical-sector factorization, let $A_{k;x,y}\in\MN{D}$ be the
+    virtual matrix obtained from the physical matrix entry $(x,y)$ within
+    sector $k$. Suppose that all such matrices span $\MN{D}$ and that both
+    endpoint sectors of every nonzero neighboring operator contain a nonzero
+    matrix of this form. Then every nonzero $\eta_{k,h}$ admits a two-edge
+    return: there is a sector $j$ for which
+    \[
+        \eta_{h,j}\ne0,
+        \qquad
+        \eta_{j,k}\ne0.
+    \]
+    In particular, the nonzero neighboring support is recurrent.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:trace_nondeg}
+    A nonzero entry of $\eta_{k,h}$, together with nonzero sector matrices at
+    $k$ and $h$, gives matrices $A$ from sector $k$ and $B$ from sector $h$
+    with $AB\ne0$. By nondegeneracy of the trace pairing, choose $Y$ with
+    $\tr(ABY)\ne0$. Expanding $Y$ in the spanning family, some sector matrix
+    $C$ from a sector $j$ satisfies $\tr(ABC)\ne0$. Cyclicity of the trace
+    gives $BC\ne0$ and $CA\ne0$. The sector multiplication identity then
+    forces $\eta_{h,j}\ne0$ and $\eta_{j,k}\ne0$.
+\end{proof}
+
 \begin{lemma}[Equivalent forms of sector reachability]%
     \label{lem:mpdo_eta_reachability_equivalence}
     \lean{TNLean.Algebra.DirectedWalk.reaches_iff_reflTransGen}
