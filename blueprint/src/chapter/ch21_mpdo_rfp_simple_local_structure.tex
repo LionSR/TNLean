@@ -5294,9 +5294,11 @@ $\widehat{\cal K}$.
 \begin{lemma}[Strong connectivity of active sector support]%
     \label{lem:mpdo_active_sector_support_strongly_connected}
     \lean{MPOTensor.PhysicalSectorFactorization.activeSectorVirtualSubmodule}
+    \lean{MPOTensor.PhysicalSectorFactorization.activeSectorSet}
     \lean{MPOTensor.PhysicalSectorFactorization.activeSectorVirtualMatrixFamily_span_eq_top}
     \lean{MPOTensor.PhysicalSectorFactorization.activeSectorVirtualSubmodule_sup_compl_eq_top}
     \lean{MPOTensor.PhysicalSectorFactorization.activeSectorVirtualSubmodule_ne_bot}
+    \lean{MPOTensor.PhysicalSectorFactorization.activeSectorVirtualSubmodule_eq_oneSiteSectorSpace}
     \lean{MPOTensor.PhysicalSectorFactorization.mul_eq_zero_of_mem_activeSectorVirtualSubmodule}
     \lean{MPOTensor.PhysicalSectorFactorization.activeSector_reflTransGen_neighboringOperator_ne_zero}
     \lean{MPOTensor.PhysicalSectorFactorization.exists_active_neighboringOperator_ne_zero}
@@ -5310,7 +5312,8 @@ $\widehat{\cal K}$.
 \end{lemma}
 
 \begin{proof}
-    \uses{lem:matrix_one_sided_product_obstruction}
+    \uses{thm:mpdo_directed_cut_one_site_spaces,
+        lem:matrix_one_sided_product_obstruction}
     \leanok
     Fix an active sector $k$ and let $S$ be the active sectors reachable from
     it. If an active sector lay outside $S$, the virtual matrix spaces

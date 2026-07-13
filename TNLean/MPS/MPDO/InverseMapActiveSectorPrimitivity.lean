@@ -42,11 +42,12 @@ theorem zeroWeightReparameterized_sectorVirtualMatrix_eq_zero
     (zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
       K hK R hρ hη alpha beta hm).sectorVirtualMatrix k x y = 0 := by
   ext gamma delta
-  simp [PhysicalSectorFactorization.sectorVirtualMatrix,
-    zeroWeightReparameterizedInverseMapPhysicalSectorFactorization,
-    hk, Matrix.zero_apply]
-  right
-  rfl
+  unfold PhysicalSectorFactorization.sectorVirtualMatrix
+  unfold zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
+  simp only [Matrix.zero_apply]
+  dsimp only [PhysicalSectorFactorization.zeroRightTensorOnInactive]
+  rw [if_neg (not_ne_iff.mpr hk)]
+  exact mul_zero _
 
 /-- The source inverse-map factorization admits a coherent rephasing whose
 active trace matrix is primitive.
