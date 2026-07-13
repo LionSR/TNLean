@@ -1642,6 +1642,35 @@
     \end{tikzpicture}%
 }
 
+% Cyclic transport of the local three-site Appendix B commutator.  The left
+% panel shows one three-site window inside an N-site ring; the right panel is
+% the source AXB window with its two overlapping length-two interactions.
+\newcommand{\TNAppendixBChainTransport}{%
+    \begin{tikzpicture}[tn picture, scale=0.92]
+        \foreach \a/\name in {150/ctA,90/ctX,30/ctB,-30/ctC,-90/ctD,-150/ctE} {
+            \node[circle, fill=black, inner sep=1.6pt] (\name)
+                at ({1.34*cos(\a)},{1.02*sin(\a)}) {};
+        }
+        \draw[tn leg] (ctA) -- (ctX) -- (ctB) -- (ctC) -- (ctD) -- (ctE) -- (ctA);
+        \draw[red, line width=2.2pt] (ctA) -- (ctX);
+        \draw[blue, line width=2.2pt] (ctX) -- (ctB);
+        \node[red, anchor=east] at ($(ctA)+(-0.34,0.18)$) {$h_i$};
+        \node[blue, anchor=west] at ($(ctB)+(0.34,0.18)$) {$h_{i+1}$};
+        \node at (0,-1.46) {$N>2$};
+        \draw[->, line width=0.7pt] (1.85,0) -- (2.75,0)
+            node[midway, above] {$R_{i,\tau}^{(3)}$};
+        \foreach \x/\name/\lab in {3.35/ctLA/A,4.55/ctLX/X,5.75/ctLB/B} {
+            \node[circle, fill=black, inner sep=1.6pt] (\name) at (\x,0) {};
+            \node at (\x,0.38) {$\lab$};
+        }
+        \draw[tn leg] (ctLA) -- (ctLX) -- (ctLB);
+        \draw[red, line width=1.0pt] ($(ctLA)+(0,-0.30)$) --
+            node[below] {$h_0^{(3)}$} ($(ctLX)+(0,-0.30)$);
+        \draw[blue, line width=1.0pt] ($(ctLX)+(0,-0.78)$) --
+            node[below] {$h_1^{(3)}$} ($(ctLB)+(0,-0.78)$);
+    \end{tikzpicture}%
+}
+
 \newcommand{\TNRFPKrausIsometry}{%
     \begin{tikzpicture}[tn picture]
         \TN@tensordot{rfkA}{(0,0)}

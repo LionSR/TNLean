@@ -109,14 +109,14 @@ noncomputable def AppendixBProductPairExtraction.ofCoreTensorFactorizationAndOve
     {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}
     (hCore : ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
       mpv hStruct.coreTensor σ = productPairState hStruct.twoSiteAmplitude N σ)
-    (hOverlap : ∀ N, 2 ≤ N → ∀ i j : Fin N, cyclicWindowsOverlap N 2 i j →
+    (hOverlap : ∀ N, 2 < N → ∀ i j : Fin N, cyclicWindowsOverlap N 2 i j →
       localTerm A 2 N i * localTerm A 2 N j =
         localTerm A 2 N j * localTerm A 2 N i) :
     AppendixBProductPairExtraction hStruct :=
   AppendixBProductPairExtraction.ofCoreTensorFactorization hCore
     (fun N hN =>
       HasProductPairLocalProjectors.of_twoSite_cyclicWindowsOverlap_commute
-        (A := A) hN (hOverlap N hN))
+        (A := A) (by omega) (hOverlap N hN))
 
 /-- Construct the conditional Appendix B extraction from the coefficient
 factorization and the adjacent length-two cyclic-window commutation equations on
@@ -129,13 +129,13 @@ noncomputable def AppendixBProductPairExtraction.ofCoreTensorFactorizationAndAdj
     {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}
     (hCore : ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
       mpv hStruct.coreTensor σ = productPairState hStruct.twoSiteAmplitude N σ)
-    (hAdjacent : ∀ N, 2 ≤ N → ∀ i : Fin N,
+    (hAdjacent : ∀ N, 2 < N → ∀ i : Fin N,
       localTerm A 2 N i * localTerm A 2 N (cyclicForwardSite i 1) =
         localTerm A 2 N (cyclicForwardSite i 1) * localTerm A 2 N i) :
     AppendixBProductPairExtraction hStruct :=
   AppendixBProductPairExtraction.ofCoreTensorFactorization hCore
     (fun N hN =>
       HasProductPairLocalProjectors.of_adjacent_twoSite_commute
-        (A := A) hN (hAdjacent N hN))
+        (A := A) (by omega) (hAdjacent N hN))
 
 end MPSTensor

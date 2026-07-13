@@ -56,18 +56,12 @@ in the proofs of
 
 ## TODO
 
-Replace `Axioms.rfp_to_nncph_commute` with a Lean proof that uses the
-structural characterization theorem in arXiv:1606.00608, source lines
-543--555. The structural
-construction in
-`TNLean/MPS/RFP/CommutingBridge.lean` (`ProductPairBridge`) already
-encodes the key combinatorial content; the missing piece is the
-extraction of a `ProductPairBridge A` witness from `IsRFP A` and
-normality. In that construction one may pass to a normalized
-representative only for building the witness and establishing the NNCPH
-conclusion, whose content is insensitive to this scaling; this is not
-a claim that `IsRFP` itself is preserved under rescaling. This is
-internal to the library.
+Replace `Axioms.rfp_to_nncph_commute` by transporting the proved
+left-canonical theorem `MPSTensor.rfp_implies_nncph_of_leftCanonical` to the
+canonical-form scope of the source. The Appendix B projector commutator and its
+transport to every chain with (N>2) are now internal. The remaining
+obligation is the canonical gauge passage needed to remove the explicit
+left-canonical hypothesis without strengthening the source theorem.
 
 Replace `Axioms.beigi_nncph_to_rfp` with a Lean proof that internalizes
 S. Beigi's (2012) classification of ground spaces of nearest-neighbor
@@ -103,7 +97,7 @@ Theorem 3.10.
 
 For a normal MPS tensor `A` in RFP, the two-site parent-Hamiltonian
 `localTerm` projectors pairwise commute on every finite periodic chain
-of length at least `2`.
+of length greater than `2`.
 
 Unfolded on the NNCPH side, the commutativity condition is exactly
 `MPSTensor.IsNNCPH A N` (as defined in
@@ -117,11 +111,17 @@ the file that consumes it.
 construction for the product-of-entangled-pairs form lives in
 `TNLean/MPS/RFP/CommutingBridge.lean` as `ProductPairBridge`.
 
+**Scope restriction (normal commutation):** The source theorem is stated for
+canonical-form tensors and includes the ground-space spanning condition of
+Definition 3.9.  This axiom records only the commutation equations under
+normality and the RFP hypothesis.  The difference is recorded in
+`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
+
 See the module docstring for the formalization plan. -/
 axiom rfp_to_nncph_commute {d D : ℕ} [NeZero D]
     (A : MPSTensor d D) (_hNT : MPSTensor.IsNormal A)
     (_hRFP : MPSTensor.IsRFP A) :
-    ∀ N : ℕ, 2 ≤ N → ∀ i j : Fin N,
+    ∀ N : ℕ, 2 < N → ∀ i j : Fin N,
       MPSTensor.localTerm A 2 N i * MPSTensor.localTerm A 2 N j =
         MPSTensor.localTerm A 2 N j * MPSTensor.localTerm A 2 N i
 

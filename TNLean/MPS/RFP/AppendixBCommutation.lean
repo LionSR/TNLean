@@ -11,9 +11,10 @@ import TNLean.MPS.RFP.KroneckerTransport
 This file transports the two commuting placements of the virtual rank-one bond
 projector through the three-site physical isometry.  The calculation uses the
 identity \(U^*U=1\) and does not require the physical isometry to be
-surjective.  It proves a local three-site commutator, rather than an all-chain
-nearest-neighbor commutation statement.  The all-chain and ground-space
-upgrade is recorded in
+surjective.  It proves a local three-site commutator, which is transported to
+every periodic chain with \(N>2\) in
+`TNLean.MPS.RFP.AppendixBChainCommutation`.  The remaining canonical-form and
+ground-space spanning restrictions are recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
 Source: arXiv:1606.00608, equations (3.16)--(3.18), lines 549--578, and the

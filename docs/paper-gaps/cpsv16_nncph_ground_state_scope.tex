@@ -27,8 +27,9 @@ conditions are equivalent:\footnote{Local source:
   \forall N>2,\; |V^{(N)}(A)\rangle
   \text{ is a ground state of a NNCPH}.
 \end{align}
-The formal implication below is stated for $N\ge2$; it therefore includes the
-extra endpoint $N=2$.
+The formal implications below use the same range $N>2$. No claim is made for
+$N=2$, where the two periodic length-two windows traverse the same sites in
+opposite orders.
 The preceding definition constructs
 \begin{align}
   H_L^{(N)}=\sum_{j=0}^{N-1}\tau_j(P_L^\perp)
@@ -159,32 +160,34 @@ The coefficient-space representatives
 \leanid{MPSTensor.AppendixBStructuralData.appendixBQXBOnCoeffSpace} are now identified with
 the canonical two-site parent interaction \(q_2(A)\) before placement on the
 \(AX\) and \(XB\) faces.  They should not be read as the source tripartite
-projectors themselves.  A supplied lifted commutator for these representatives
-has been transported to the first two translated three-site parent terms.  The
-remaining local step begins by constructing the orthogonal projector onto the
-one-bond virtual subspace \(\mathbb C\varphi\), which is distinct from the
-physical projector \(P_2\) above.  Two copies must be placed on the adjacent
-virtual bonds of a three-site chain and proved to commute.  Their actions must
-then be transported through \(U^{\otimes3}\) on the isometry range and extended
-to the full physical \(AX\) and \(XB\) support projectors.  Since \(U\) need not
-be surjective, direct transport has the spectator range projector \(R=UU^*\) in
-place of the full identity.  The spectator identity must be decomposed as
-\(R+(1-R)\), and the containment \(P_2\leq R\otimes R\) must be used to show
-that the cross-products involving \(1-R\) vanish.  Taking orthogonal
-complements can then identify the physical projectors with the two coefficient
-representatives above and give their lifted commutator.  One must finally
-extend the local transport to the all-chain family of two-site parent
-projectors.  On
-the coefficient side, the source statement is the basic-vector formula
-\(|V^{(L)}(A_j)\rangle=U^{\otimes L}|\varphi_j\rangle^{\otimes L}\), where
-\(\varphi_j\) is shared between neighboring virtual spins.  The even-chain
-physical-pair factorization is a separate conditional statement and should not
-be read as the source formula itself.
+projectors themselves.  The one-bond virtual projector and its two adjacent
+placements are now constructed in
+\leanid{MPSTensor.AppendixBStructuralData.virtualBondProjection},
+\leanid{MPSTensor.AppendixBStructuralData.leftVirtualBondProjection}, and
+\leanid{MPSTensor.AppendixBStructuralData.rightVirtualBondProjection}. Their
+commutation is transported through \(U^{\otimes3}\) to the two adjacent physical
+support projectors, giving
+\leanid{MPSTensor.AppendixBStructuralData.}\hspace{0pt}
+\leanid{twoSiteBasicSupportProjection_commute_lifts} and hence the
+unconditional coefficient-space relation
+\leanid{MPSTensor.AppendixBStructuralData.hasOverlappingTwoSiteCommutation}.
+The cyclic three-site restriction transports this commutator to every adjacent
+pair on every chain with \(N>2\), as recorded by
+\leanid{MPSTensor.localTerm_adjacent_twoSite_commute_of_threeSite_zero_one_commute}
+and
+\leanid{MPSTensor.AppendixBStructuralData.adjacent_twoSite_localTerms_commute}.
+The resulting commuting projector family is
+\leanid{MPSTensor.AppendixBStructuralData.hasProductPairLocalProjectors}.
+Consequently the forward commutation and zero-energy statements are proved for
+normal left-canonical RFP tensors by
+\leanid{MPSTensor.rfp_implies_nncph_of_leftCanonical} and
+\leanid{MPSTensor.rfp_implies_nncph_ground_state_of_leftCanonical}.
 The reverse theorem now consumes both the explicit BNT relation
 \leanid{MPSTensor.IsBNT} and the named all-chain condition
 \leanid{MPSTensor.HasNNCPHGroundSpaces}, but the implication still depends on
-the axiom \leanid{Axioms.beigi_nncph_to_rfp}. The RFP-to-NNCPH direction still
-depends on \leanid{Axioms.rfp_to_nncph_commute}.
+the axiom \leanid{Axioms.beigi_nncph_to_rfp}. The general RFP-to-NNCPH theorem
+still uses \leanid{Axioms.rfp_to_nncph_commute}, but its left-canonical
+specialization no longer does.
 
 \section{Elimination plan}
 
@@ -212,15 +215,14 @@ physical isometric embedding and all tensor powers with explicit left
 inverses, the two-site bond insertion, the equality of its physical image with
 \(G_2(A_{\mathrm{core}})\), its orthogonal support projector, the three-site
 \(AX/XB\) support maps, and the coefficient form of
-\(U^{\otimes L}\varphi_j^{\otimes L}\).  It still lacks the orthogonal
-projector onto \(\mathbb C\varphi_j\), its two adjacent placements on a
-three-site virtual chain, the spectator-complement passage from \(UU^*\) to the
-physical identity, and the resulting lifted commutator, the local-projector
-hypotheses for all chains of length at least two, and a
-justified relation between the source formula and the even-chain physical-pair
-factorization used by the conditional theorem.
-The axiom-backed theorem still supplies the commutation direction used by the
-unconditional statements.
+\(U^{\otimes L}\varphi_j^{\otimes L}\), the adjacent virtual and physical
+projectors, their three-site commutator, and its transport to every periodic
+chain with \(N>2\). The remaining forward obligation is to transport the
+proved left-canonical statement to the full canonical-form scope without an
+extra hypothesis. The even-chain physical-pair factorization remains a
+separate conditional construction and is not needed for the proved chain
+commutator. The full source implication also still requires the ground-space
+spanning clause.
 
 \bibliographystyle{alpha}
 \bibliography{references}
