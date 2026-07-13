@@ -184,14 +184,21 @@ the coefficient identity
 The tensor assembled from this blocked decomposition has the same MPV family
 as the physical blocking of the original assembled tensor.
 
-One should therefore choose a common positive $L$ for which every normal BNT
-representative is $L$-block injective and prove the representative-separation
-property for the sector decomposition blocked by $L+1$ sites.  The existing
-post-blocking theorem applies once this property, or the relevant preserved
-canonical-form data, is supplied.  The original length-$L$ span then recovers
-equality of the unblocked insertions from equality of the blocked insertions.
-This length shift is essential: recovery from a physical block of length
-$L+1$ uses the span of its length-$L$ tail.  The flattened
+The representative-separation step has now been obtained without asserting
+preservation of the full canonical-form predicate.  If $p>0$ and every
+$A_j^{[p]}$ is injective, then pair separation for the original representatives
+at length $6p$ transports through the bijection of blocked and unblocked words
+to pair separation for the blocked representatives at length $6$.  It follows
+that $P^{[p]}$ has simultaneous representative word-tuple span at every
+blocked length at least $6(g-1)+1$.
+
+It remains to compose this statement with the first-site transport.  One
+chooses a common positive $L$ for which every normal representative is
+$L$-block injective and uses $p=L+1$; positive-length propagation makes every
+$A_j^{[L+1]}$ injective.  The original length-$L$ span then recovers equality
+of the unblocked insertions from equality of the blocked insertions.  This
+length shift is essential: recovery from a physical block of length $L+1$
+uses the span of its length-$L$ tail.  The flattened
 \texttt{HorizontalCFData} formulation must then be replaced, or related
 explicitly, by this representative-indexed statement.  The older per-copy
 \texttt{biCF} theorem remains a correct restricted result, but it is no longer

@@ -208,6 +208,54 @@ lemma length_flattenBlockedWord (d L : ℕ) :
       simp [flattenBlockedWord_cons, ih, length_wordOfBlock,
         Nat.succ_mul, Nat.add_comm]
 
+/-- Blocked configurations of length `N` are equivalent to ordinary configurations of length
+`N * L`.
+
+This is the configuration-level identification implicit in physical blocking; see
+arXiv:1606.00608, lines 318--344. -/
+noncomputable def blockedConfigEquiv (d N L : ℕ) :
+    (Fin N → Fin (blockPhysDim d L)) ≃ (Fin (N * L) → Fin d) :=
+  ((Equiv.arrowCongr (Equiv.refl (Fin N)) (decodeBlockEquiv d L)).trans
+    (Equiv.curry (Fin N) (Fin L) (Fin d)).symm).trans
+    (Equiv.arrowCongr finProdFinEquiv (Equiv.refl (Fin d)))
+
+/-- Reading a blocked configuration through `blockedConfigEquiv` gives the flattened blocked
+word.  This is the word-level identification used in the blocking step of
+arXiv:1606.00608, lines 318--344. -/
+@[mps_block_words]
+lemma ofFn_blockedConfigEquiv (d N L : ℕ)
+    (σ : Fin N → Fin (blockPhysDim d L)) :
+    List.ofFn (blockedConfigEquiv d N L σ) = flattenBlockedWord d L (List.ofFn σ) := by
+  have hfun : blockedConfigEquiv d N L σ =
+      fun k : Fin (N * L) =>
+        decodeBlock d L (σ (finProdFinEquiv.symm k).1) (finProdFinEquiv.symm k).2 := by
+    funext k
+    simp [blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry, decodeBlockEquiv_apply,
+      Function.comp]
+  rw [hfun, List.ofFn_mul]
+  rw [flattenBlockedWord, List.map_ofFn]
+  congr 1
+  refine congrArg List.ofFn (funext fun i => ?_)
+  have hsymm : ∀ j : Fin L,
+      finProdFinEquiv.symm
+          (⟨(i : ℕ) * L + (j : ℕ),
+            by
+              calc
+                (i : ℕ) * L + (j : ℕ) < ((i : ℕ) + 1) * L := by
+                  have := j.isLt
+                  rw [Nat.add_mul, Nat.one_mul]
+                  omega
+                _ ≤ N * L := Nat.mul_le_mul_right _ (by have := i.isLt; omega)⟩ :
+            Fin (N * L)) = (i, j) := by
+    intro j
+    rw [Equiv.symm_apply_eq]
+    apply Fin.ext
+    change (i : ℕ) * L + (j : ℕ) = (j : ℕ) + L * (i : ℕ)
+    rw [Nat.mul_comm L (i : ℕ), Nat.add_comm]
+  simp only [hsymm]
+  change (List.ofFn fun j : Fin L => decodeBlock d L (σ i) j) = (wordOfBlock d L ∘ σ) i
+  simp [wordOfBlock, Function.comp]
+
 private theorem list_ofFn_comp_fin_rev {L : ℕ} {α : Type*} (σ : Fin L → α) :
     List.ofFn (σ ∘ Fin.rev) = (List.ofFn σ).reverse := by
   calc
