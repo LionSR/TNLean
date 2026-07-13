@@ -28,7 +28,7 @@ name: TNMPDOInverseContraction TNMPDOSectorPairing TNMPDOSectorZCLIdentity
 name: TNMPSInverseContraction TNBNTDecomposition TNMPDOZCLIdempotence TNMPDOFixedFinalFusionBracketings
 {{ obj.tn_svg_html }}
 
-name: TNMPDOBNTFusionIdentity TNMPDOUnweightedZipperReconstruction TNMPDOFusionTracePower TNMPDOFixedFinalComparisonUnitary
+name: TNMPDOBNTFusionIdentity TNMPDOUnweightedZipperReconstruction TNMPDOFusionTracePower TNMPDOFixedFinalComparisonUnitary TNMPDOFourfoldBondReassociationPentagon
 {{ obj.tn_svg_html }}
 
 name: TNRFPKrausIsometry TNRFPKrausIsometryReverse TNRFPIsometryCanonicalForm
