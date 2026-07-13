@@ -164,6 +164,195 @@ noncomputable def rightAssocFourfoldAnalysis (a b c d e : Λ) :
         Fus.fusionTensorLeftInverse b j i delta yi (xb, yj) *
           Fus.fusionTensorLeftInverse c d j gamma yj (xc, xd)
 
+private noncomputable def fixedFinalSynthesis (a b e : Λ) :
+    Matrix (Fin (Fus.bondDim a) × Fin (Fus.bondDim b))
+      (Fin (Fus.fusionMultiplicity a b e) × Fin (Fus.bondDim e)) ℂ :=
+  fun x y => Fus.fusionTensor a b e y.1 x y.2
+
+private noncomputable def fixedFinalAnalysis (a b e : Λ) :
+    Matrix (Fin (Fus.fusionMultiplicity a b e) × Fin (Fus.bondDim e))
+      (Fin (Fus.bondDim a) × Fin (Fus.bondDim b)) ℂ :=
+  fun x y => Fus.fusionTensorLeftInverse a b e x.1 x.2 y
+
+private theorem fixedFinalAnalysis_mul_synthesis (a b e : Λ) :
+    Fus.fixedFinalAnalysis a b e * Fus.fixedFinalSynthesis a b e = 1 := by
+  funext ⟨mu, z⟩ ⟨nu, w⟩
+  have h := congrArg
+    (fun M => M ⟨e, mu, z⟩ ⟨e, nu, w⟩) (Fus.analysis_mul_synthesis a b)
+  simpa [fixedFinalAnalysis, fixedFinalSynthesis, fusionTensorLeftInverse,
+    fusionTensor, Matrix.mul_apply, Matrix.one_apply] using h
+
+private abbrev RightFourfoldFirstStage (a b c d : Λ) : Type u :=
+  Fin (Fus.bondDim a) × Fus.RightTripleIndex b c d
+
+private def rightFourfoldBondEquiv (a b c d : Λ) :
+    Fus.FourfoldBond a b c d ≃
+      Fin (Fus.bondDim a) × Fus.TripleBond b c d where
+  toFun
+    | ⟨⟨⟨xa, xb⟩, xc⟩, xd⟩ => ⟨xa, ⟨⟨xb, xc⟩, xd⟩⟩
+  invFun
+    | ⟨xa, ⟨⟨xb, xc⟩, xd⟩⟩ => ⟨⟨⟨xa, xb⟩, xc⟩, xd⟩
+  left_inv := by rintro ⟨⟨⟨xa, xb⟩, xc⟩, xd⟩; rfl
+  right_inv := by rintro ⟨xa, ⟨⟨xb, xc⟩, xd⟩⟩; rfl
+
+private def rightFourfoldFirstStageEquiv (a b c d : Λ) :
+    Fus.RightFourfoldFirstStage a b c d ≃
+      (i : Λ) × (Fus.RightTripleMultiplicity b c d i ×
+        (Fin (Fus.bondDim a) × Fin (Fus.bondDim i))) where
+  toFun
+    | ⟨xa, ⟨i, m, yi⟩⟩ => ⟨i, m, xa, yi⟩
+  invFun
+    | ⟨i, m, xa, yi⟩ => ⟨xa, ⟨i, m, yi⟩⟩
+  left_inv := by rintro ⟨xa, ⟨i, m, yi⟩⟩; rfl
+  right_inv := by rintro ⟨i, m, xa, yi⟩; rfl
+
+private abbrev RightFourfoldFinalNested (a b c d e : Λ) : Type u :=
+  (i : Λ) × (Fus.RightTripleMultiplicity b c d i ×
+    (Fin (Fus.fusionMultiplicity a i e) × Fin (Fus.bondDim e)))
+
+private def rightFourfoldFinalEquiv (a b c d e : Λ) :
+    Fus.FourfoldRightAssocMultiplicity a b c d e × Fin (Fus.bondDim e) ≃
+      Fus.RightFourfoldFinalNested a b c d e where
+  toFun
+    | ⟨⟨j, i, gamma, delta, kappa⟩, z⟩ =>
+        ⟨i, ⟨⟨j, gamma, delta⟩, ⟨kappa, z⟩⟩⟩
+  invFun
+    | ⟨i, ⟨⟨j, gamma, delta⟩, ⟨kappa, z⟩⟩⟩ =>
+        ⟨⟨j, i, gamma, delta, kappa⟩, z⟩
+  left_inv := by rintro ⟨⟨j, i, gamma, delta, kappa⟩, z⟩; rfl
+  right_inv := by rintro ⟨i, ⟨⟨j, gamma, delta⟩, ⟨kappa, z⟩⟩⟩; rfl
+
+private noncomputable def rightFourfoldFirstSynthesis (a b c d : Λ) :
+    Matrix (Fus.FourfoldBond a b c d)
+      (Fus.RightFourfoldFirstStage a b c d) ℂ :=
+  ((1 : Matrix (Fin (Fus.bondDim a)) (Fin (Fus.bondDim a)) ℂ) ⊗ₖ
+    Fus.rightTripleSynthesisFull b c d).submatrix
+      (Fus.rightFourfoldBondEquiv a b c d) (Equiv.refl _)
+
+private noncomputable def rightFourfoldFirstAnalysis (a b c d : Λ) :
+    Matrix (Fus.RightFourfoldFirstStage a b c d)
+      (Fus.FourfoldBond a b c d) ℂ :=
+  ((1 : Matrix (Fin (Fus.bondDim a)) (Fin (Fus.bondDim a)) ℂ) ⊗ₖ
+    Fus.rightTripleAnalysisFull b c d).submatrix
+      (Equiv.refl _) (Fus.rightFourfoldBondEquiv a b c d)
+
+private noncomputable def rightFourfoldSecondSynthesis (a b c d e : Λ) :
+    Matrix (Fus.RightFourfoldFirstStage a b c d)
+      (Fus.FourfoldRightAssocMultiplicity a b c d e × Fin (Fus.bondDim e)) ℂ :=
+  (Matrix.blockDiagonal' fun i =>
+    (1 : Matrix (Fus.RightTripleMultiplicity b c d i)
+      (Fus.RightTripleMultiplicity b c d i) ℂ) ⊗ₖ
+        Fus.fixedFinalSynthesis a i e).submatrix
+          (Fus.rightFourfoldFirstStageEquiv a b c d)
+          (Fus.rightFourfoldFinalEquiv a b c d e)
+
+private noncomputable def rightFourfoldSecondAnalysis (a b c d e : Λ) :
+    Matrix (Fus.FourfoldRightAssocMultiplicity a b c d e × Fin (Fus.bondDim e))
+      (Fus.RightFourfoldFirstStage a b c d) ℂ :=
+  (Matrix.blockDiagonal' fun i =>
+    (1 : Matrix (Fus.RightTripleMultiplicity b c d i)
+      (Fus.RightTripleMultiplicity b c d i) ℂ) ⊗ₖ
+        Fus.fixedFinalAnalysis a i e).submatrix
+          (Fus.rightFourfoldFinalEquiv a b c d e)
+          (Fus.rightFourfoldFirstStageEquiv a b c d)
+
+private theorem rightFourfoldSynthesis_eq_stages (a b c d e : Λ) :
+    Fus.rightAssocFourfoldSynthesis a b c d e =
+      Fus.rightFourfoldFirstSynthesis a b c d *
+        Fus.rightFourfoldSecondSynthesis a b c d e := by
+  classical
+  funext ⟨⟨⟨xa, xb⟩, xc⟩, xd⟩ ⟨⟨j, i, gamma, delta, kappa⟩, z⟩
+  simp [rightAssocFourfoldSynthesis, rightFourfoldFirstSynthesis,
+    rightFourfoldSecondSynthesis, rightFourfoldBondEquiv,
+    rightFourfoldFirstStageEquiv, rightFourfoldFinalEquiv, fixedFinalSynthesis,
+    rightTripleSynthesisFull, rightTripleSynthesis, Matrix.mul_apply,
+    Fintype.sum_prod_type, Fintype.sum_sigma, Matrix.blockDiagonal'_apply,
+    Matrix.one_apply]
+  rw [Finset.sum_eq_single xa
+    (fun x _ hx => by simp [Ne.symm hx])
+    (fun h => absurd (Finset.mem_univ xa) h)]
+  rw [Finset.sum_eq_single j
+    (fun x _ hx => by simp [hx])
+    (fun h => absurd (Finset.mem_univ j) h)]
+  simp only [true_and, if_true, heq_eq_eq]
+  rw [Finset.sum_eq_single gamma
+    (fun x _ hx => by simp [hx])
+    (fun h => absurd (Finset.mem_univ gamma) h)]
+  simp only [Prod.mk.injEq, true_and]
+  rw [Finset.sum_eq_single delta
+    (fun x _ hx => by simp [hx])
+    (fun h => absurd (Finset.mem_univ delta) h)]
+  simp only [if_true, Finset.sum_mul]
+  rw [Finset.sum_comm]
+
+private theorem rightFourfoldAnalysis_eq_stages (a b c d e : Λ) :
+    Fus.rightAssocFourfoldAnalysis a b c d e =
+      Fus.rightFourfoldSecondAnalysis a b c d e *
+        Fus.rightFourfoldFirstAnalysis a b c d := by
+  classical
+  funext ⟨⟨j, i, gamma, delta, kappa⟩, z⟩ ⟨⟨⟨xa, xb⟩, xc⟩, xd⟩
+  simp [rightAssocFourfoldAnalysis, rightFourfoldFirstAnalysis,
+    rightFourfoldSecondAnalysis, rightFourfoldBondEquiv,
+    rightFourfoldFirstStageEquiv, rightFourfoldFinalEquiv, fixedFinalAnalysis,
+    rightTripleAnalysisFull, rightTripleAnalysis, Matrix.mul_apply,
+    Fintype.sum_prod_type, Fintype.sum_sigma, Matrix.blockDiagonal'_apply,
+    Matrix.one_apply]
+  rw [Finset.sum_eq_single j
+    (fun x _ hx => by simp [Ne.symm hx])
+    (fun h => absurd (Finset.mem_univ j) h)]
+  simp only [true_and, heq_eq_eq]
+  rw [Finset.sum_eq_single gamma
+    (fun x _ hx => by simp [Ne.symm hx])
+    (fun h => absurd (Finset.mem_univ gamma) h)]
+  simp only [Prod.mk.injEq, true_and]
+  rw [Finset.sum_eq_single delta
+    (fun x _ hx => by simp [Ne.symm hx])
+    (fun h => absurd (Finset.mem_univ delta) h)]
+  simp only [if_true, Finset.mul_sum, mul_assoc]
+
+private theorem rightFourfoldFirstAnalysis_mul_synthesis (a b c d : Λ) :
+    Fus.rightFourfoldFirstAnalysis a b c d *
+      Fus.rightFourfoldFirstSynthesis a b c d = 1 := by
+  unfold rightFourfoldFirstAnalysis rightFourfoldFirstSynthesis
+  rw [Matrix.submatrix_mul_equiv _ _ _ (Fus.rightFourfoldBondEquiv a b c d) _,
+    ← Matrix.mul_kronecker_mul, Fus.rightTripleAnalysisFull_mul_synthesis,
+    Matrix.one_mul, Matrix.one_kronecker_one]
+  rfl
+
+private theorem rightFourfoldSecondAnalysis_mul_synthesis (a b c d e : Λ) :
+    Fus.rightFourfoldSecondAnalysis a b c d e *
+      Fus.rightFourfoldSecondSynthesis a b c d e = 1 := by
+  unfold rightFourfoldSecondAnalysis rightFourfoldSecondSynthesis
+  rw [Matrix.submatrix_mul_equiv _ _ _
+      (Fus.rightFourfoldFirstStageEquiv a b c d) _,
+    ← Matrix.blockDiagonal'_mul]
+  simp_rw [← Matrix.mul_kronecker_mul, Fus.fixedFinalAnalysis_mul_synthesis,
+    Matrix.one_mul, Matrix.one_kronecker_one]
+  change (Matrix.blockDiagonal'
+    (1 : (i : Λ) → Matrix
+      (Fus.RightTripleMultiplicity b c d i ×
+        (Fin (Fus.fusionMultiplicity a i e) × Fin (Fus.bondDim e)))
+      (Fus.RightTripleMultiplicity b c d i ×
+        (Fin (Fus.fusionMultiplicity a i e) × Fin (Fus.bondDim e))) ℂ)).submatrix
+          (Fus.rightFourfoldFinalEquiv a b c d e)
+          (Fus.rightFourfoldFinalEquiv a b c d e) = 1
+  rw [Matrix.blockDiagonal'_one, Matrix.submatrix_one_equiv]
+
+/-- The right-associated fourfold analysis is a left inverse of its synthesis.
+
+This is the threefold application of the fusion-tensor biorthogonality relation, starting with
+the innermost fusion of `c` and `d` and ending with the fusion into the final label `e`.
+
+Source: arXiv:1511.08090, the fusion left inverses at line 161 and the rightmost fourfold tree
+in equation `pentagoneq`, lines 279--283. -/
+theorem rightAssocFourfoldAnalysis_mul_synthesis (a b c d e : Λ) :
+    Fus.rightAssocFourfoldAnalysis a b c d e *
+      Fus.rightAssocFourfoldSynthesis a b c d e = 1 := by
+  rw [Fus.rightFourfoldSynthesis_eq_stages, Fus.rightFourfoldAnalysis_eq_stages,
+    Matrix.mul_assoc, ← Matrix.mul_assoc (Fus.rightFourfoldFirstAnalysis a b c d),
+    Fus.rightFourfoldFirstAnalysis_mul_synthesis, Matrix.one_mul,
+    Fus.rightFourfoldSecondAnalysis_mul_synthesis]
+
 /-! ### Regroupings for the five printed `F`-moves -/
 
 private def leftPathFirstSourceEquiv (a b c d e : Λ) :
