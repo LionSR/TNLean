@@ -1371,8 +1371,9 @@ strong subadditivity for a normalized three-site reduced state.
     \]
     This is the periodic-chain form of the adjacent-bond calculation in
     \cite[Appendix~C.2, Proposition~C.8, lines~1571--1593]
-      {Cirac2016MPDO_arXiv}. The case $N=2$ is excluded because its two
-    translated bonds have the same support with opposite cyclic order.
+      {Cirac2016MPDO_arXiv}. The case $N=2$ is treated separately below,
+    because its two translated bonds have the same support with opposite
+    cyclic order.
 \end{theorem}
 
 \begin{proof}
@@ -1382,6 +1383,44 @@ strong subadditivity for a normalized three-site reduced state.
     respectively. Embedding an operator into a fixed cyclic window preserves
     products, so the assertion follows from
     Theorem~\ref{thm:mpdo_physical_adjacent_bonds_comm}.
+\end{proof}
+
+\begin{theorem}[Commutativity of the crossed two-site translates]
+    \label{thm:mpdo_physical_two_site_crossed_bonds_comm}
+    \lean{MPOTensor.PhysicalSectorFactorization.physicalBond_two_zero_one_comm}
+    \leanok
+    \uses{def:mpdo_global_sector_closure_coordinates,
+      def:mpdo_physical_sector_two_site_bond,
+      def:mpdo_physical_two_site_bond}
+    On the periodic chain of length two, the translates beginning at sites
+    zero and one read the physical sites in the opposite cyclic orders
+    $(0,1)$ and $(1,0)$.  Nevertheless they commute:
+    \[
+      B_{01}B_{10}=B_{10}B_{01}.
+    \]
+    This is the length-two instance of the translated-bond commutativity in
+    \cite[Appendix~C.2, Proposition~C.8]{Cirac2016MPDO_arXiv}.  The source
+    does not discuss the crossed finite-size ordering separately.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Fix sectors $(k,h)$ and regroup the two physical sites as
+    \[
+      (L_k\otimes R_h)\otimes(R_k\otimes L_h).
+    \]
+    The translate in the order $(0,1)$ is
+    \[
+      I_{L_k\otimes R_h}\otimes\eta_{k,h},
+    \]
+    while the translate in the order $(1,0)$ is
+    \[
+      \eta_{h,k}^{\mathrm{op}}\otimes I_{R_k\otimes L_h},
+    \]
+    where $\eta_{h,k}^{\mathrm{op}}$ denotes the same matrix after exchanging
+    the factors $R_h$ and $L_k$.  These operators act on complementary
+    factors and commute.  Taking the direct sum over $(k,h)$ and conjugating
+    by the two-fold physical coordinate unitary proves the claim.
 \end{proof}
 
 \begin{definition}[Closed sector tensors]%
