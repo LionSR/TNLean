@@ -1231,6 +1231,109 @@
     \end{tikzpicture}%
 }
 
+% The two unweighted zipper directions and the resulting reconstruction of a
+% product letter.  This follows the graphical arrangement of the zipper
+% figures in Bultinck et al., arXiv:1511.08090, while using the notation of
+% the present MPDO fusion family.  The final row uses U^\dagger U = 1 only;
+% it deliberately does not depict U U^\dagger = 1.
+\newcommand{\TNMPDOUnweightedZipperReconstruction}{%
+    \begin{tikzpicture}[tn picture, scale=0.95]
+        % U (M_alpha M_beta) = H U.
+        \node[anchor=east] at (-4.72,2.35)
+            {$U(M_\alpha M_\beta)=HU$};
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt,
+            minimum height=1.10cm] (uzTopL) at (-3.78,2.35) {$U$};
+        \TN@tensordot{uzTopA}{(-2.48,2.72)}
+        \TN@tensordot{uzTopB}{(-2.48,1.98)}
+        \draw[tn leg] (uzTopL.west) -- ++(-0.42,0);
+        \draw[tn leg] (uzTopL.north east) -- (uzTopA.west);
+        \draw[tn leg] (uzTopL.south east) -- (uzTopB.west);
+        \TN@rightleg{uzTopA}{0.42}
+        \TN@rightleg{uzTopB}{0.42}
+        \draw[tn phys leg] (uzTopA.south) -- (uzTopB.north);
+        \TN@upleg{uzTopA}{0.34}
+        \TN@downleg{uzTopB}{0.34}
+        \node at (-2.18,2.72) {$M_\alpha$};
+        \node at (-2.18,1.98) {$M_\beta$};
+        \node at (-1.42,2.35) {$=$};
+        \node[draw, fill=white, minimum width=0.72cm,
+            minimum height=0.52cm, inner sep=1pt]
+            (uzTopH) at (-0.52,2.35) {$H$};
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt,
+            minimum height=1.10cm] (uzTopR) at (0.80,2.35) {$U$};
+        \draw[tn leg] (uzTopH.west) -- ++(-0.42,0);
+        \draw[tn leg] (uzTopH.east) -- (uzTopR.west);
+        \draw[tn leg] (uzTopR.north east) -- ++(0.56,0);
+        \draw[tn leg] (uzTopR.south east) -- ++(0.56,0);
+        \TN@upleg{uzTopH}{0.34}
+        \TN@downleg{uzTopH}{0.34}
+
+        % (M_alpha M_beta) U^dagger = U^dagger H.
+        \node[anchor=east] at (-4.72,0)
+            {$(M_\alpha M_\beta)U^\dagger=U^\dagger H$};
+        \TN@tensordot{uzBotA}{(-3.78,0.37)}
+        \TN@tensordot{uzBotB}{(-3.78,-0.37)}
+        \TN@leftleg{uzBotA}{0.42}
+        \TN@leftleg{uzBotB}{0.42}
+        \draw[tn phys leg] (uzBotA.south) -- (uzBotB.north);
+        \TN@upleg{uzBotA}{0.34}
+        \TN@downleg{uzBotB}{0.34}
+        \node at (-3.48,0.37) {$M_\alpha$};
+        \node at (-3.48,-0.37) {$M_\beta$};
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt,
+            minimum height=1.10cm] (uzBotL) at (-2.48,0) {$U^\dagger$};
+        \draw[tn leg] (uzBotA.east) -- (uzBotL.north west);
+        \draw[tn leg] (uzBotB.east) -- (uzBotL.south west);
+        \draw[tn leg] (uzBotL.east) -- ++(0.42,0);
+        \node at (-1.42,0) {$=$};
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt,
+            minimum height=1.10cm] (uzBotR) at (-0.52,0) {$U^\dagger$};
+        \node[draw, fill=white, minimum width=0.72cm,
+            minimum height=0.52cm, inner sep=1pt]
+            (uzBotH) at (0.80,0) {$H$};
+        \draw[tn leg] (uzBotR.north west) -- ++(-0.56,0);
+        \draw[tn leg] (uzBotR.south west) -- ++(-0.56,0);
+        \draw[tn leg] (uzBotR.east) -- (uzBotH.west);
+        \draw[tn leg] (uzBotH.east) -- ++(0.42,0);
+        \TN@upleg{uzBotH}{0.34}
+        \TN@downleg{uzBotH}{0.34}
+
+        % Local reconstruction M_alpha M_beta = U^dagger H U.
+        \node[anchor=east] at (-4.72,-2.42)
+            {$M_\alpha M_\beta=U^\dagger H U$};
+        \TN@tensordot{uzRecA}{(-3.78,-2.05)}
+        \TN@tensordot{uzRecB}{(-3.78,-2.79)}
+        \TN@leftleg{uzRecA}{0.42}
+        \TN@leftleg{uzRecB}{0.42}
+        \TN@rightleg{uzRecA}{0.42}
+        \TN@rightleg{uzRecB}{0.42}
+        \draw[tn phys leg] (uzRecA.south) -- (uzRecB.north);
+        \TN@upleg{uzRecA}{0.34}
+        \TN@downleg{uzRecB}{0.34}
+        \node at (-3.48,-2.05) {$M_\alpha$};
+        \node at (-3.48,-2.79) {$M_\beta$};
+        \node at (-2.68,-2.42) {$=$};
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt,
+            minimum height=1.10cm] (uzRecUd) at (-1.72,-2.42)
+            {$U^\dagger$};
+        \node[draw, fill=white, minimum width=0.72cm,
+            minimum height=0.52cm, inner sep=1pt]
+            (uzRecH) at (-0.40,-2.42) {$H$};
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt,
+            minimum height=1.10cm] (uzRecU) at (0.92,-2.42) {$U$};
+        \draw[tn leg] (uzRecUd.north west) -- ++(-0.52,0);
+        \draw[tn leg] (uzRecUd.south west) -- ++(-0.52,0);
+        \draw[tn leg] (uzRecUd.east) -- (uzRecH.west);
+        \draw[tn leg] (uzRecH.east) -- (uzRecU.west);
+        \draw[tn leg] (uzRecU.north east) -- ++(0.52,0);
+        \draw[tn leg] (uzRecU.south east) -- ++(0.52,0);
+        \TN@upleg{uzRecH}{0.34}
+        \TN@downleg{uzRecH}{0.34}
+        \node[anchor=west] at (-1.72,-3.48)
+            {local reconstruction; not total-fusion completeness};
+    \end{tikzpicture}%
+}
+
 % Closing an L-site chain of the local BNT fusion identity.  On the right the
 % multiplicity loop and the M_gamma loop are disjoint, so their traces factor.
 \newcommand{\TNMPDOFusionTracePower}{%
