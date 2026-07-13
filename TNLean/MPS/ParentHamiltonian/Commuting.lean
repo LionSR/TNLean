@@ -349,7 +349,7 @@ theorem HasProductPairLocalProjectors.isNNCPH {A : MPSTensor d D} {N : ℕ}
 /-- The even-chain physical-pair factorization and the two-site projector
 identities give NNCPH on each finite chain of length greater than two. -/
 theorem ProductPairBridge.isNNCPH {A : MPSTensor d D} (hBridge : ProductPairBridge A)
-    (N : ℕ) (hN : 3 ≤ N) :
+    (N : ℕ) (hN : 2 < N) :
     IsNNCPH A N :=
   (hBridge.localProjectors N hN).isNNCPH
 
@@ -388,7 +388,7 @@ theorem rfp_implies_nncph_of_appendixBExtraction (A : MPSTensor d D) [NeZero D]
     (hRFP : IsRFP A) (hNT : IsNormal A) (hLeft : IsLeftCanonical A)
     (hExtract : AppendixBProductPairExtraction
       (AppendixBStructuralData.ofRFP A hNT hRFP hLeft))
-    (N : ℕ) (hN : 3 ≤ N) :
+    (N : ℕ) (hN : 2 < N) :
     IsNNCPH A N :=
   commuting_twoSite_localTerms_of_rfp_of_appendixBExtraction
     A hNT hRFP hLeft hExtract N hN
@@ -411,7 +411,7 @@ theorem rfp_implies_nncph_ground_state_of_appendixBExtraction
     (hRFP : IsRFP A) (hNT : IsNormal A) (hLeft : IsLeftCanonical A)
     (hExtract : AppendixBProductPairExtraction
       (AppendixBStructuralData.ofRFP A hNT hRFP hLeft))
-    (N : ℕ) (hN : 3 ≤ N) :
+    (N : ℕ) (hN : 2 < N) :
     IsNNCPHGroundState A N :=
   have hNN := rfp_implies_nncph_of_appendixBExtraction A hRFP hNT hLeft hExtract N hN
   hNN.isNNCPHGroundState (by omega)
@@ -475,7 +475,7 @@ normality and the RFP hypothesis.  The difference is recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 theorem rfp_implies_nncph (A : MPSTensor d D) [NeZero D]
     (hRFP : IsRFP A) (hNT : IsNormal A)
-    (N : ℕ) (hN : 3 ≤ N) :
+    (N : ℕ) (hN : 2 < N) :
     IsNNCPH A N := by
   classical
   unfold IsNNCPH IsCommutingParentHam
@@ -497,7 +497,7 @@ zero-energy equations for \(V^{(N)}(A)\). Documented in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 theorem rfp_implies_nncph_ground_state (A : MPSTensor d D) [NeZero D]
     (hRFP : IsRFP A) (hNT : IsNormal A)
-    (N : ℕ) (hN : 3 ≤ N) :
+    (N : ℕ) (hN : 2 < N) :
     IsNNCPHGroundState A N :=
   (rfp_implies_nncph A hRFP hNT N hN).isNNCPHGroundState (by omega)
 
