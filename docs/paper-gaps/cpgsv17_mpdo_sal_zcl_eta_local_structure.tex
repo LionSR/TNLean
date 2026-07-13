@@ -498,10 +498,11 @@ factorization.\footnote{The formal declaration is
 \leanid{MPOTensor.PhysicalSectorFactorization.mpo_eq_product_physicalBond}.}
 Together with positivity of the neighboring operators, this supplies the
 mathematical data needed to construct
-\leanid{MPOTensor.EtaLocalStructureData}.  The remaining steps are to package
-these conditional results and, upstream, to construct a coherently positive
-physical-sector factorization from SAL. ZCL is not a hypothesis of this
-construction.
+\leanid{MPOTensor.EtaLocalStructureData}.  The conditional construction is
+\leanid{MPOTensor.PhysicalSectorFactorization.etaLocalStructureData}; its
+normalization scalar is one. The remaining step is upstream: construct a
+coherently positive physical-sector factorization from SAL. ZCL is not a
+hypothesis of this construction.
 
 The source Proposition \texttt{3to4} assumes SAL, not ZCL.  ZCL enters only
 after this commuting product form has been obtained, in the later step that
@@ -511,11 +512,12 @@ factorization.
 
 The positive-choice and primitivity statements that remain in Lemma
 \texttt{propSN} are tracked by
-\href{https://github.com/LionSR/TNLean/issues/3696}{issue \#3696}.  Once those
-operators have been constructed, the positive commuting bond and product form
-of Proposition \texttt{3to4} are tracked separately by
-\href{https://github.com/LionSR/TNLean/issues/823}{issue \#823}. Until both
-constructions exist, Proposition~C.8 must not be presented as fully formalized.
+\href{https://github.com/LionSR/TNLean/issues/3696}{issue \#3696}. Conditional
+on the coherently positive physical-sector factorization produced there, the
+positive commuting bond, its exact all-length product realization, and the
+resulting eta-local structure of Proposition \texttt{3to4} are formalized.
+Until the SAL implication is complete, Proposition~C.8 must not be presented
+as unconditionally formalized from its source hypotheses.
 
 \section{Classification}
 
@@ -541,9 +543,9 @@ every length $N\geq2$.  The finite-chain MPO is the ordered product of those
 bonds, first in cyclic sector coordinates and then in the original physical
 coordinates.  If the neighboring operators are positive semidefinite, these
 results provide the positive commuting bond and its exact realization with
-scalar one. Packaging them as eta-local structure data, and deriving the
-required coherently positive physical-sector factorization from SAL, remain
-open.
+scalar one, and they determine the eta-local structure data. The only
+remaining obligation in this implication is to derive the required
+coherently positive physical-sector factorization from SAL.
 
 \bibliographystyle{alpha}
 \bibliography{references}
