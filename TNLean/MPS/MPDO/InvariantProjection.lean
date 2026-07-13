@@ -2,7 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.MPDO.VerticalCF
+import TNLean.MPS.MPDO.HorizontalBNTCanonicalForm
 import TNLean.Algebra.TracePairing
 
 /-!
@@ -39,8 +39,8 @@ commutation identities remains open.
   invariance gives $P_1H^{(N+1)}=P_1H^{(N+1)}P_1$.
 * `firstSiteMatrix_mul_mpo_comm`: positivity and Hermiticity give
   $P_1H^{(N+1)}=H^{(N+1)}P_1$.
-* `blockwise_braRight_eq_ketLeftBraRight_of_invariant`: the blockwise form of
-  $(\Id-P)MP=0$.
+* `basis_braRight_eq_ketLeftBraRight_of_invariant`: the representative-indexed
+  form of $(\Id-P)MP=0$.
 * `mpo_commute_of_commute_pow`: commutation with a nonzero power of an MPDO
   density operator implies commutation with that density operator.
 
@@ -259,6 +259,49 @@ theorem firstSiteMatrix_mul_mpo_comm
   rw [Matrix.sub_mul, Matrix.one_mul, Matrix.sub_mul] at hcorner
   rw [hInv]
   exact (sub_eq_zero.mp hcorner).symm
+
+/-- Let the doubled-index tensor of an MPDO have a horizontal BNT canonical
+form, and let \(P\) be Hermitian with \(P\widetilde M=P\widetilde M P\).  On
+every minimal BNT representative, the insertions of \(\widetilde M P\) and
+\(P\widetilde M P\) agree.  Equivalently, \((\Id-P)MP=0\) on every
+representative.
+
+Repeated gauge-equivalent copies are grouped through their power-sum
+coefficient before Lemma L is applied.  Thus the theorem has the horizontal
+canonical-form hypotheses of arXiv:1606.00608 and does not assume per-copy
+trace separation.
+
+Source: arXiv:1606.00608, Proposition 4.13, lines 1873--1887, and Appendix
+C.3, Lemma L, lines 1835--1858. -/
+theorem basis_braRight_eq_ketLeftBraRight_of_invariant
+    (M : MPOTensor d D) (hMpdo : IsMPDO M)
+    (S : MPSTensor.SectorDecomposition (d * d))
+    (hCF : MPSTensor.IsBNTCanonicalForm S)
+    (hM : MPSTensor.SameMPV₂ M.toMPSTensor S.toTensor)
+    {P : Matrix (Fin d) (Fin d) ℂ} (hP : P.IsHermitian)
+    (hPM : M.ketLeftMul P = (M.ketLeftMul P).braRightMul P) :
+    ∀ k, MPSTensor.insertedTensor (MPSTensor.braRightAction P) (S.basis k) =
+      MPSTensor.insertedTensor (MPSTensor.ketLeftBraRightAction P) (S.basis k) := by
+  refine basis_opposite_insert_eq_of_rotated_mpo_entries M S hCF hM P ?_ ?_
+  · intro N ρ
+    have h := firstSiteMatrix_mul_mpo_of_ketLeftMul_invariant M P hPM N
+    have h2 := Matrix.ext_iff.mpr h
+      (Fin.cons (ρ 0).divNat fun n ↦ (ρ (Fin.succ n)).divNat)
+      (Fin.cons (ρ 0).modNat fun n ↦ (ρ (Fin.succ n)).modNat)
+    rw [mul_firstSiteMatrix_apply] at h2
+    simp only [firstSiteMatrix_mul_apply] at h2
+    simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ] at h2
+    rw [h2]
+    simp only [Finset.sum_mul]
+    exact Finset.sum_comm
+  · intro N ρ
+    have h := firstSiteMatrix_mul_mpo_comm M hMpdo hP hPM N
+    have h2 := Matrix.ext_iff.mpr h
+      (Fin.cons (ρ 0).divNat fun n ↦ (ρ (Fin.succ n)).divNat)
+      (Fin.cons (ρ 0).modNat fun n ↦ (ρ (Fin.succ n)).modNat)
+    rw [mul_firstSiteMatrix_apply, firstSiteMatrix_mul_apply] at h2
+    simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ] at h2
+    exact h2
 
 /-- Let the doubled-index tensor of an MPDO have a horizontal block-injective
 canonical-form decomposition, and let $P$ be Hermitian with

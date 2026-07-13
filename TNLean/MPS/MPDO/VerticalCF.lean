@@ -44,9 +44,9 @@ The predicate `IsVerticalCF` states exactly this conclusion.
 * `diagonalTransferMap`:
   the transfer map of `diagonalTensor`, i.e.
   $E_{\mathrm{diag}}(X) = \sum_i M^{ii} X (M^{ii})^\dagger$.
-* `HorizontalCFData` / `IsHorizontalCF`:
-  lightweight horizontal canonical-form data for an MPO, expressed via the
-  doubled-index MPS tensor `M.toMPSTensor`.
+* `HorizontalCFData` / `IsPerCopyHorizontalCF`:
+  a restricted per-copy horizontal decomposition of the doubled-index MPS
+  tensor `M.toMPSTensor`.
 * `IsVerticalCF`:
   the vertical canonical form of arXiv:1606.00608, Proposition 4.13: an
   isometry $U$ on the physical space with
@@ -499,12 +499,11 @@ noncomputable def diagonalTransferMap (M : MPOTensor d D) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
   MPSTensor.transferMap (diagonalTensor M)
 
-/-- Lightweight horizontal canonical-form data for a family of blocks.
+/-- Restricted per-copy horizontal data for a family of blocks.
 
-This is the fragment of the full canonical-form data needed for the MPDO
-vertical-canonical-form interface in this file: injective blocks, the
-left-canonical normalization, nonzero block weights, and block-injective
-canonical form (biCF). -/
+This is the stronger flattened hypothesis used by the older per-copy results
+in this file: injective blocks, the left-canonical normalization, nonzero block
+weights, and block-injective canonical form (biCF). -/
 structure HorizontalCFData {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
   /-- Each block is algebraically injective. -/
@@ -544,9 +543,18 @@ structure HorizontalCFData {r : ℕ} {dim : Fin r → ℕ}
         (∑ k : Fin r, Matrix.trace (Δ k * MPSTensor.evalWord (A k) (List.ofFn w))) = 0) →
     ∀ k, Δ k = 0
 
-/-- Horizontal canonical form for an MPO tensor, expressed via a canonical-form
-decomposition of the doubled-index MPS tensor `M.toMPSTensor`. -/
-def IsHorizontalCF (M : MPOTensor d D) : Prop :=
+/-- A per-copy horizontal decomposition of an MPO tensor.
+
+This predicate retains the older flattened formulation in which every copy is
+required to participate separately in one simultaneous trace-separation
+identity.  It is stronger than the horizontal canonical form of
+arXiv:1606.00608, equations `eq:II_ABasicTensors` and `decBSV`, lines 283--301,
+when several copies have the same basis-of-normal-tensors representative.
+
+**Scope restriction (per-copy separation):** the source groups the copies over
+each minimal representative before applying Lemma L.  See
+`docs/paper-gaps/cpgsv17_bicf_block_separation.tex`. -/
+def IsPerCopyHorizontalCF (M : MPOTensor d D) : Prop :=
   ∃ (r : ℕ) (dim : Fin r → ℕ) (μ : Fin r → ℂ)
     (A : (k : Fin r) → MPSTensor (d * d) (dim k)),
     HorizontalCFData (d := d * d) μ A ∧

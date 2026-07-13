@@ -101,9 +101,10 @@ horizontal canonical-form trace-separation conclusion.\footnote{The criteria are
 Thus \texttt{propblockinj} has not been asserted without proof. The formal statements
 prove that several finite-length witnesses are sufficient.  For the
 representative-indexed BNT canonical form, such a witness is now derived from
-irreducibility, left-canonicality, and normalized self-overlap.  Relating this
-representative-indexed conclusion to the flattened \texttt{HorizontalCFData}
-surface remains open.
+irreducibility, left-canonicality, and normalized self-overlap.  The public
+horizontal canonical-form predicate now uses this representative-indexed BNT
+formulation.  The flattened \texttt{HorizontalCFData} formulation remains as a
+strictly stronger auxiliary hypothesis for the older per-copy results.
 
 \section{The counterexample boundary}
 
@@ -214,11 +215,14 @@ block-injectivity length by taking a common multiple of their individual
 lengths.  Consequently the representative-indexed Lemma L now follows from
 the BNT canonical-form predicate itself.
 
-One task remains for the unrestricted MPDO application: the flattened
-\texttt{HorizontalCFData} formulation must be replaced, or related explicitly,
-to this representative-indexed statement.  The older per-copy \texttt{biCF}
-theorem remains a correct restricted result, but it is no longer the intended
-route to Lemma L.
+The horizontal canonical-form predicate and the first stage of the MPDO
+application now use a \texttt{SectorDecomposition} satisfying
+\texttt{IsBNTCanonicalForm}.  Equality of the three first-site contractions is
+therefore reduced to equality on each minimal representative by the grouped
+Lemma L, with no per-copy trace-separation hypothesis.  The older
+\texttt{HorizontalCFData}, \texttt{IsPerCopyHorizontalCF}, and per-copy
+\texttt{biCF} theorems remain correct restricted results, but they are not the
+source-facing formulation of Lemma L.
 
 Separately, the numerical bound in the full block-injectivity proposition still
 requires the David2006 argument: from minimality of the basis of normal tensors
