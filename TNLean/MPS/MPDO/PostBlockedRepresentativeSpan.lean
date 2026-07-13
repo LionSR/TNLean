@@ -10,6 +10,7 @@ import TNLean.MPS.MPDO.BiCFDerivation.BNTDirectSum
 import TNLean.MPS.MPDO.BiCFDerivation.Blocking
 import TNLean.MPS.MPDO.FirstSiteBlocking
 import TNLean.MPS.MPDO.RepresentativeGroupedLemmaL
+import TNLean.MPS.Periodic.NormalizedSelfOverlap
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
 
 /-!
@@ -292,5 +293,37 @@ theorem insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree_of_common_blo
     ∀ j, insertedTensor Y (P.basis j) = insertedTensor Z (P.basis j) := by
   exact hCF.insertedTensor_basis_eq_of_firstSiteActionAgree_of_common_blockInjective
     L hL hInj (hAct.of_sameMPV hAP)
+
+/-- Representative-grouped Lemma L for an unblocked BNT canonical form.
+
+Irreducibility, left-canonicality, and normalized self-overlap force each basis
+representative to have period one and hence to be normal.  A common positive
+block-injectivity length for the finite representative family then supplies
+the blocking hypothesis of the preceding theorem.
+
+Source: arXiv:1606.00608, lines 318--344 and Appendix C.3, Lemma L,
+lines 1835--1858; the period-one characterization is the non-periodic
+canonical-form condition of arXiv:2011.12127, lines 1815--1837. -/
+theorem insertedTensor_basis_eq_of_firstSiteActionAgree
+    (hCF : IsBNTCanonicalForm P)
+    {Y Z : Matrix (Fin d) (Fin d) ℂ}
+    (hAct : FirstSiteActionAgree P.toTensor Y Z) :
+    ∀ j, insertedTensor Y (P.basis j) = insertedTensor Z (P.basis j) := by
+  obtain ⟨L, hL, hInj⟩ := hCF.exists_common_basis_isNBlkInjective
+  exact hCF.insertedTensor_basis_eq_of_firstSiteActionAgree_of_common_blockInjective
+    L hL hInj hAct
+
+/-- Same-MPV transport of representative-grouped Lemma L for an unblocked BNT
+canonical form.
+
+Source: arXiv:1606.00608, lines 318--344 and Appendix C.3, Lemma L,
+lines 1835--1858. -/
+theorem insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree
+    {D : ℕ} (A : MPSTensor d D) (hCF : IsBNTCanonicalForm P)
+    (hAP : SameMPV₂ A P.toTensor)
+    {Y Z : Matrix (Fin d) (Fin d) ℂ}
+    (hAct : FirstSiteActionAgree A Y Z) :
+    ∀ j, insertedTensor Y (P.basis j) = insertedTensor Z (P.basis j) := by
+  exact hCF.insertedTensor_basis_eq_of_firstSiteActionAgree (hAct.of_sameMPV hAP)
 
 end MPSTensor.IsBNTCanonicalForm
