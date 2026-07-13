@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.DirectedWalkCoboundary
 import TNLean.Algebra.KroneckerFactorPositivity
 import TNLean.MPS.MPDO.SectorEtaPositivity
 
@@ -110,6 +111,33 @@ This is an auxiliary condition from
 additional hypothesis stated in arXiv:1606.00608. -/
 def IsRecurrentSupport {hη : EtaStructure ρ} (eta : etaOperators hη) : Prop :=
   ∀ k h : Fin hη.m, IsSectorEdge eta k h → SectorReaches eta h k
+
+/-- Reachability in the nonzero sector support is equivalently witnessed by a
+finite directed walk of nonzero neighboring operators.
+
+Source: `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`,
+the elimination plan for coherent sector rephasing. -/
+theorem sectorReaches_iff_directedWalkReaches {hη : EtaStructure ρ}
+    (eta : etaOperators hη) (k h : Fin hη.m) :
+    SectorReaches eta k h ↔
+      TNLean.Algebra.DirectedWalk.Reaches (IsSectorEdge eta) k h := by
+  exact (TNLean.Algebra.DirectedWalk.reaches_iff_reflTransGen _).symm
+
+/-- Recurrence of the nonzero sector support is exactly the return-walk
+hypothesis for its directed edge relation.
+
+Source: `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`,
+the elimination plan for coherent sector rephasing. -/
+theorem isRecurrentSupport_iff_directedWalkReturns {hη : EtaStructure ρ}
+    (eta : etaOperators hη) :
+    IsRecurrentSupport eta ↔
+      ∀ {k h : Fin hη.m}, IsSectorEdge eta k h →
+        TNLean.Algebra.DirectedWalk.Reaches (IsSectorEdge eta) h k := by
+  constructor
+  · intro hrec k h hkh
+    exact (sectorReaches_iff_directedWalkReaches eta h k).mp (hrec k h hkh)
+  · intro hrec k h hkh
+    exact (sectorReaches_iff_directedWalkReaches eta h k).mpr (hrec hkh)
 
 /-! ### The horizontal bond fiber around a cyclic sector assignment -/
 

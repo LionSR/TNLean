@@ -29,9 +29,9 @@ and therefore cannot in general be eliminated into such data, while
 a quiver of edge types.
 
 `TNLean.Algebra.FiniteCycleCoboundary` treats the complementary special case of
-one finite cycle. A future MPDO specialization should prove the correspondence
-between `Relation.ReflTransGen` (hence `MPOTensor.SectorReaches`) and
-`DirectedWalk`, then apply the closed-walk theorem below to the sector phases.
+one finite cycle. Reachability by a directed walk is equivalent to the
+reflexive transitive closure of the edge relation; this permits direct use with
+relations defined through `Relation.ReflTransGen`.
 -/
 
 namespace TNLean.Algebra
@@ -107,6 +107,22 @@ theorem reaches_of_edge {a b : V} (hab : r a b) : Reaches r a b :=
 theorem Reaches.trans {a b c : V} : Reaches r a b → Reaches r b c → Reaches r a c := by
   rintro ⟨u⟩ ⟨v⟩
   exact ⟨append r u v⟩
+
+/-- Reachability by a directed walk is equivalent to membership in the
+reflexive transitive closure of the edge relation. -/
+theorem reaches_iff_reflTransGen {a b : V} :
+    Reaches r a b ↔ Relation.ReflTransGen r a b := by
+  constructor
+  · rintro ⟨w⟩
+    induction w with
+    | nil => exact .refl
+    | cons hab w ih => exact ih.head hab
+  · intro h
+    induction h with
+    | refl => exact ⟨nil _⟩
+    | tail hab hbc ih =>
+      obtain ⟨w⟩ := ih
+      exact ⟨append r w (cons hbc (nil _))⟩
 
 /-- If every edge admits a return walk, every walk admits a return walk. -/
 theorem reaches_reverse_of_edge_returns
