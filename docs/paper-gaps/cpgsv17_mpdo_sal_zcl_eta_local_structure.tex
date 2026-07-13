@@ -438,36 +438,36 @@ theorem concerns one fixed cycle: it does not by itself assert that the
 choices made on two different cycles agree on a shared edge, which is the
 remaining content of the coherent vertex-rephasing step.
 
-\subsection{Directed-cut recurrence after zero-weight reparameterization}
+\subsection{The source's one-sided directed-cut obstruction}
 
 The source's local-orthogonality contradiction uses the decomposition
 $\mathcal A=\mathcal A_1+\mathcal A_2$ together with the one-sided product
-vanishing $\mathcal A_1\mathcal A_2=0$.  It does not require
-$\mathcal A_2\mathcal A_1=0$.  Thus the argument applies to a directed cut,
-not only to a block-diagonal partition.
+vanishing $\mathcal A_1\mathcal A_2=0$ at Appendix~C.2, lines 1465--1470.
+It does not require $\mathcal A_2\mathcal A_1=0$.  The underlying
+matrix-algebra statement is now formalized as
+\leanid{Matrix.submodule_sup_ne_top_of_mul_eq_zero}: two nonzero linear
+subspaces of a full complex matrix algebra cannot both span the algebra and
+have all products vanish in one order.
 
-Indeed, let $S$ be a nonempty forward-closed set of sectors and let $C$ be
-its complement.  The direct-sum physical factorization gives the two
-single-site cross-sector vanishings.  The absence of edges from $S$ to $C$
-gives $\eta_{s,c}=0$ for $s\in S$ and $c\in C$, hence
-\[
-  \mathcal A_S\mathcal A_C=0.
-\]
-If the one-site matrices belonging to both sides are nonzero, injectivity
-and the physical direct sum give
-$\mathcal A_S+\mathcal A_C=M_D(\mathbb C)$, contradicting this product
-vanishing exactly as in Appendix~C.2, lines 1463--1470.  Taking $S$ to be
-the vertices reachable from a fixed positive-weight sector would therefore
-show that the positive-weight support is strongly connected, and hence
-recurrent.
+The zero-weight reparameterization is now formalized: it retains every
+physical summand, sets the right sector tensor to zero when its Hayashi weight
+vanishes, and thereby isolates every zero-weight sector without changing the
+physical slices.  On the retained positive-weight support, let $S$ be a
+nonempty proper forward-closed set and let $C$ be its complement.  The absence
+of edges from $S$ to $C$ should give
+$\mathcal A_S\mathcal A_C=0$.  Injectivity should give
+$\mathcal A_S+\mathcal A_C=M_D(\mathbb C)$, while nontriviality of the two
+parts should make both spaces nonzero.  The formalized obstruction would
+then give a contradiction.  No absence of edges from $C$ to $S$ is needed.
 
-The missing formal statements are now precise: a positive Hayashi weight
-must imply that the corresponding same-sector one-site matrix space is
-nonzero, physical unitary reparameterization must preserve the injective
-span, and the preceding one-sided-cut contradiction must be expressed for a
-physical-sector factorization.  The abstract four-sector phase example is
-still a counterexample to cyclic positivity alone, but it does not satisfy
-these additional inverse-map and injectivity conclusions.
+The remaining statements needed for this application are separate from the
+matrix-algebra lemma: physical unitary reparameterization must be shown to
+preserve the injective one-site span, positive-weight sectors must contribute
+nonzero one-site matrix spaces, and vanishing neighboring operators across a
+directed cut must be transported to the corresponding product of those
+spaces.  The abstract four-sector phase example remains a counterexample to
+cyclic positivity alone, but it need not satisfy these inverse-map and
+injectivity consequences.  Thus no recurrence theorem is asserted here.
 
 \subsection{Coherent vertex rephasing under recurrence}
 
