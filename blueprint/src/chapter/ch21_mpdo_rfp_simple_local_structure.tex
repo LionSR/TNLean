@@ -5244,6 +5244,29 @@ $\widehat{\cal K}$.
     \label{fig:mpdo_local_orthogonality}
 \end{figure}
 
+\begin{theorem}[Primitivity from returns of lengths two and three]%
+    \label{thm:matrix_primitive_of_two_three_returns}
+    \lean{Matrix.IsIrreducible.%
+      isPrimitive_of_pow_two_diagonal_pos_of_pow_three_diagonal_pos}
+    \leanok
+    Let $T$ be a nonnegative irreducible matrix on a finite index set. If
+    \[
+        (T^2)_{k,k}>0
+        \qquad\text{and}\qquad
+        (T^3)_{k,k}>0
+    \]
+    for every index $k$, then $T$ is primitive.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Choose a positive path between every ordered pair of indices, and let $L$
+    be the sum of the chosen path lengths. Every chosen length is at most $L$.
+    For a chosen path of length $m$, write the difference $2L+2-m$ as
+    $2a+3b$ with $a,b\geq0$. Appending these returns at the terminal index
+    gives a positive path of common length $2L+2$ between every ordered pair.
+\end{proof}
+
 \begin{definition}[Nonzero-weight sector trace matrix]%
     \label{def:mpdo_active_sector_trace_matrix}
     \lean{MPOTensor.PhysicalSectorFactorization.ActiveSector,
@@ -5252,6 +5275,9 @@ $\widehat{\cal K}$.
       MPOTensor.PhysicalSectorFactorization.activeSectorSet,
       MPOTensor.PhysicalSectorFactorization.activeSectorOneSiteSpace}
     \lean{MPOTensor.PhysicalSectorFactorization.activeSectorTraceMatrix}
+    \lean{MPOTensor.PhysicalSectorFactorization.rephase_sectorVirtualMatrix}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      rephase_neighboringOperator_ne_zero_iff}
     \leanok
     \uses{def:mpdo_one_site_sector_matrix_space,
       def:mpdo_minimal_neighboring_operator}
@@ -5383,9 +5409,41 @@ $\widehat{\cal K}$.
     nonzero such matrix.  Then the nonnegative matrix $T^*$ is irreducible.
 \end{theorem}
 
+% **Local fix (periodicity):** the source blocks to remove periodic
+% components.  The following length-three return and common-power argument
+% replace that step.  See
+% docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex.
+\begin{theorem}[Three-step returns and a common positive power]%
+    \label{thm:mpdo_active_sector_three_step_return_and_primitivity}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      activeSectorTraceMatrix_pow_three_diag_pos}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      activeSectorTraceMatrix_isPrimitive}
+    \leanok
+    \uses{thm:matrix_primitive_of_two_three_returns,
+      thm:mpdo_active_sector_two_step_return,
+      thm:mpdo_active_trace_matrix_irreducible,
+      thm:mpdo_sector_support_triangle_closure}
+    If every nonzero edge closes through a third active sector, then
+    $(T^{*3})_{k,k}>0$ for every $k\in I_*$. Consequently, under the
+    hypotheses of the irreducibility theorem, $T^*$ is primitive.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Triangle closure supplies a positive closed walk of length three through
+    each active sector. Combine these walks with the length-two returns and
+    apply Theorem~\ref{thm:matrix_primitive_of_two_three_returns}.
+\end{proof}
+
 \begin{theorem}[Primitivity of the active sector trace matrix]%
     \label{thm:mpdo_sector_trace_matrix_primitive}
-    \notready
+    \lean{MPOTensor.zeroWeightReparameterized_sectorVirtualMatrix_eq_zero}
+    \lean{MPOTensor.%
+      exists_rephased_inverseMap_activeSectorTraceMatrix_isPrimitive}
+    \lean{MPOTensor.%
+      exists_positive_physicalSectorFactorization_activeSectorTraceMatrix_isPrimitive_of_isSAL}
+    \leanok
     \uses{def:mpdo, def:injective, def:is_sal,
         def:mpdo_explicit_eta_of_sector_tensors,
         thm:mpdo_eta_coherent_positive_choice,
@@ -5421,7 +5479,9 @@ $\widehat{\cal K}$.
         thm:mpdo_active_neighboring_support_strongly_connected,
         thm:mpdo_active_sector_two_step_return,
         thm:mpdo_active_trace_matrix_irreducible,
-        thm:mpdo_active_trace_matrix_positive_entries}
+        thm:mpdo_active_trace_matrix_positive_entries,
+        thm:mpdo_active_sector_three_step_return_and_primitivity}
+    \leanok
     First use the zero-weight reparameterization to make every zero-weight
     sector isolated. Injectivity makes the nonzero-weight one-site matrices
     span $\MN{D}$, and every such sector contains a nonzero matrix. Hence
