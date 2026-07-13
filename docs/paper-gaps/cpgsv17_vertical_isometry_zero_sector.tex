@@ -1,0 +1,127 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The Vertical Canonical Form Retains Only the Nonzero Physical Sectors}
+\author{}
+\date{2026-07-13}
+
+\begin{document}
+\maketitle
+
+\section{The dimension allowed by canonical form}
+
+The canonical-form construction of \cite{Cirac2016MPDO_arXiv} writes a tensor
+as a direct sum of nonzero irreducible blocks of dimensions $D_k$ and states
+explicitly that
+\begin{equation}
+  \sum_k D_k\leq D,
+  \label{eq:dimension-bound}
+\end{equation}
+because zero blocks may remain in the original space (source lines~214--225).
+Proposition~4.13 later applies this construction to the vertically viewed
+tensor and obtains
+\begin{equation}
+  U\widetilde M U^\dagger
+  =\bigoplus_\alpha\mu_\alpha\otimes M_\alpha,
+  \label{eq:vertical-form}
+\end{equation}
+where the matrices $\mu_\alpha$ are positive and diagonal and the tensors
+$M_\alpha$ form a basis of normal tensors (source lines~943--951 and
+1863--1870).
+
+Let $s$ be the dimension of the right-hand side of
+\eqref{eq:vertical-form}. In the displayed orientation,
+$U:\mathbb C^D\to\mathbb C^s$ maps the original physical space onto the
+retained nonzero sector space. Consequently
+\begin{equation}
+  UU^\dagger=I_s,
+  \qquad
+  U^\dagger U=P,
+  \label{eq:coisometry}
+\end{equation}
+where $P$ is the support projection of the nonzero sectors. Equality
+$U^\dagger U=I_D$ holds only when there is no zero complement. It is not part
+of the hypotheses or conclusion of Proposition~4.13.  The assertion that the
+discarded complement is a zero sector is the reconstruction identity
+\begin{equation}
+  \widetilde M
+  =U^\dagger\left(\bigoplus_\alpha
+    \mu_\alpha\otimes M_\alpha\right)U.
+  \label{eq:reconstruction}
+\end{equation}
+Without \eqref{eq:reconstruction}, equation~\eqref{eq:vertical-form} alone is
+only a compression and does not exclude nonzero entries in the discarded or
+off-diagonal corners.
+
+\section{A zero-sector example}
+
+Take horizontal bond dimension one and physical dimension two, and define
+the local tensor by
+\begin{equation}
+  M^{00}=1,
+  \qquad
+  M^{01}=M^{10}=M^{11}=0.
+  \label{eq:rank-one-tensor}
+\end{equation}
+It is a one-block horizontal normal tensor. At every positive length it
+generates the positive operator
+\begin{equation}
+  \rho^{(N)}(M)
+  =\lvert 0\cdots0\rangle\langle0\cdots0\rvert.
+  \label{eq:rank-one-operator}
+\end{equation}
+The vertically viewed tensor has one letter,
+\begin{equation}
+  \widetilde M=\begin{pmatrix}1&0\\0&0\end{pmatrix}.
+  \label{eq:vertical-letter}
+\end{equation}
+Its nonzero canonical part is the one-dimensional tensor with letter $1$.
+Equation~\eqref{eq:vertical-form} holds with
+\begin{equation}
+  U=\begin{pmatrix}1&0\end{pmatrix},
+  \qquad UU^\dagger=1,
+  \qquad U^\dagger U=
+  \begin{pmatrix}1&0\\0&0\end{pmatrix}.
+  \label{eq:example-coisometry}
+\end{equation}
+
+A square unitary formulation can describe this tensor if it retains the
+explicit zero block $[0]$.  The earlier formal predicate had no such block: its
+right-hand side contained only strictly positive weights multiplying normal
+tensors. Within that positive-block-only assembly, a unitary preserves the
+two-dimensional space while the second one-dimensional corner of
+\eqref{eq:vertical-letter} necessarily has weight zero. Treating the whole
+matrix as one block would not give a normal tensor. Thus the combination of a
+two-sided unitary and the positive-block-only assembly would make
+Proposition~4.13 false even in this elementary case.
+
+\section{Formal correction}
+
+The vertical canonical-form predicate now requires $UU^\dagger=I_s$ in the
+orientation of \eqref{eq:vertical-form}, together with
+\eqref{eq:reconstruction}. This is the source-faithful statement compatible
+with \eqref{eq:dimension-bound}: the retained part is represented
+rectangularly, while the omitted part is required to be zero. No full-support
+assumption is added to Proposition~4.13. The construction of the canonical
+form from horizontal canonical form remains open and is tracked in
+\ghissue{3674}; the present correction is tracked in \ghissue{3869} and
+concerns only its conclusion.
+
+\paragraph{Verdict.}
+The earlier two-sided-unitary condition was a stronger statement absent from
+the source and was false when the vertically viewed tensor had a zero sector.
+Replacing it by the coisometry identity $UU^\dagger=I$, while retaining exact
+reconstruction from the nonzero sectors, is a corrected definitional
+mismatch. The correction changes no hypothesis of Proposition~4.13 and
+introduces no new mathematical assumption.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
