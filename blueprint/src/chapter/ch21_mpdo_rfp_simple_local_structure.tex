@@ -939,6 +939,33 @@ strong subadditivity for a normalized three-site reduced state.
     vanishes. Thus all off-diagonal sector blocks vanish.
 \end{proof}
 
+\begin{corollary}[SAL gives positive cyclic sector products]
+    \label{cor:mpdo_sal_positive_cyclic_sector_products}
+    \lean{MPOTensor.exists_physicalSectorFactorization_with_cyclicNeighboringProduct_posSemidef_of_isSAL}
+    \leanok
+    \uses{cor:mpdo_sal_raw_physical_sector_factorization,
+      thm:mpdo_physical_sector_chain_decomposition}
+    Every injective MPO tensor satisfying SAL admits a physical-sector
+    factorization such that, for every $N\geq1$ and every cyclic sector
+    configuration $k=(k_0,\ldots,k_{N-1})$,
+    \[
+      \bigotimes_{n=0}^{N-1}\eta_{k_n,k_{n+1}}\geq0,
+      \qquad k_N=k_0.
+    \]
+    This is the projected-chain inequality in
+    \cite[Appendix~C.2, Lemma~C.4, lines~1446--1450]{Cirac2016MPDO_arXiv}.
+    It does not assert positivity of the individual neighboring operators.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{cor:mpdo_sal_raw_physical_sector_factorization,
+      thm:mpdo_physical_sector_chain_decomposition}
+    Choose the raw physical-sector factorization supplied by SAL. Each cyclic
+    neighboring product is a diagonal sector compression of the physically
+    conjugated $N$-site MPO and is therefore positive semidefinite.
+\end{proof}
+
 \begin{definition}[Boundary contraction against a virtual matrix]
     \label{def:mpdo_sector_boundary_operator}
     \lean{MPOTensor.PhysicalSectorFactorization.boundaryOperator,
