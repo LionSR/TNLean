@@ -364,4 +364,351 @@ noncomputable def twoEdgePrintedFMatrix (a b c d e : Λ) :
   Fus.pairToRightAssocPrintedFMatrix a b c d e *
     Fus.leftAssocToPairPrintedFMatrix a b c d e
 
+/-! ### Fourfold F-move identities -/
+
+/-- The first edge of the three-edge path is the printed F-move on the first
+three tensor factors, with the last fusion multiplicity and final bond
+coordinate unchanged.
+
+Source: arXiv:1511.08090, equations `Fmove` and `pentagoneq`, lines 248--251
+and 279--283. -/
+theorem leftInnerFourfoldSynthesis_mul_leftAssocToLeftInnerPrintedFMatrix
+    (a b c d e : Λ) :
+    Fus.leftInnerFourfoldSynthesis a b c d e *
+        (Fus.leftAssocToLeftInnerPrintedFMatrix a b c d e ⊗ₖ
+          (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ)) =
+      Fus.leftAssocFourfoldSynthesis a b c d e := by
+  classical
+  funext x y
+  rcases x with ⟨⟨⟨xa, xb⟩, xc⟩, xd⟩
+  rcases y with ⟨⟨f, g, mu, nu, rho⟩, z⟩
+  simp [Matrix.mul_apply, leftInnerFourfoldSynthesis,
+    leftAssocToLeftInnerPrintedFMatrix, leftAssocFourfoldSynthesis,
+    leftPathFirstTargetEquiv, leftPathFirstSourceEquiv,
+    Fintype.sum_prod_type, Fintype.sum_sigma, Matrix.one_apply,
+    Matrix.blockDiagonal'_apply]
+  have hF (yg : Fin (Fus.bondDim g)) := congrArg
+    (fun M => M ⟨⟨xa, xb⟩, xc⟩ ⟨⟨f, mu, nu⟩, yg⟩)
+      (Fus.rightTripleSynthesis_mul_printedFMatrix a b c g)
+  simp [Matrix.mul_apply, rightTripleSynthesis, leftTripleSynthesis,
+    Fintype.sum_prod_type, Fintype.sum_sigma, Matrix.one_apply] at hF
+  have hSum := congrArg
+    (fun q => ∑ yg, q yg * Fus.fusionTensor g d e rho (yg, xd) z)
+    (funext hF)
+  convert hSum using 1
+  · simp_rw [Finset.sum_mul]
+    conv_rhs =>
+      rw [Finset.sum_comm]
+      enter [2, h]
+      rw [Finset.sum_comm]
+      enter [2, sigma]
+      rw [Finset.sum_comm]
+    apply Finset.sum_congr rfl
+    intro h _
+    apply Finset.sum_congr rfl
+    intro sigma _
+    apply Finset.sum_congr rfl
+    intro lambda _
+    rw [Finset.sum_comm]
+    apply Finset.sum_congr rfl
+    intro yh _
+    apply Finset.sum_congr rfl
+    intro yg _
+    ring
+  · simp_rw [Finset.sum_mul]
+    rw [Finset.sum_comm]
+
+/-- The second edge of the three-edge path is the printed F-move on the
+subtree with incoming labels `a`, `h`, and `d`.
+
+Source: arXiv:1511.08090, equations `Fmove` and `pentagoneq`, lines 248--251
+and 279--283. -/
+theorem middleFourfoldSynthesis_mul_leftInnerToMiddlePrintedFMatrix
+    (a b c d e : Λ) :
+    Fus.middleFourfoldSynthesis a b c d e *
+        (Fus.leftInnerToMiddlePrintedFMatrix a b c d e ⊗ₖ
+          (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ)) =
+      Fus.leftInnerFourfoldSynthesis a b c d e := by
+  classical
+  funext x y
+  rcases x with ⟨⟨⟨xa, xb⟩, xc⟩, xd⟩
+  rcases y with ⟨⟨h, g, sigma, lambda, rho⟩, z⟩
+  simp [Matrix.mul_apply, middleFourfoldSynthesis,
+    leftInnerToMiddlePrintedFMatrix, leftInnerFourfoldSynthesis,
+    leftPathSecondTargetEquiv, leftPathSecondSourceEquiv,
+    Fintype.sum_prod_type, Fintype.sum_sigma, Matrix.one_apply,
+    Matrix.blockDiagonal'_apply]
+  have hF (yh : Fin (Fus.bondDim h)) := congrArg
+    (fun M => M ⟨⟨xa, yh⟩, xd⟩ ⟨⟨g, lambda, rho⟩, z⟩)
+      (Fus.rightTripleSynthesis_mul_printedFMatrix a h d e)
+  simp [Matrix.mul_apply, rightTripleSynthesis, leftTripleSynthesis,
+    Fintype.sum_prod_type, Fintype.sum_sigma, Matrix.one_apply] at hF
+  have hSum := congrArg
+    (fun q => ∑ yh, Fus.fusionTensor b c h sigma (xb, xc) yh * q yh)
+    (funext hF)
+  convert hSum using 1
+  · simp_rw [Finset.mul_sum]
+    conv_rhs =>
+      rw [Finset.sum_comm]
+      enter [2, i]
+      rw [Finset.sum_comm]
+      enter [2, omega]
+      rw [Finset.sum_comm]
+    apply Finset.sum_congr rfl
+    intro i _
+    apply Finset.sum_congr rfl
+    intro omega _
+    apply Finset.sum_congr rfl
+    intro kappa _
+    simp_rw [Finset.sum_mul]
+    apply Finset.sum_congr rfl
+    intro yh _
+    simp_rw [Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro yi _
+    ring
+  · simp_rw [Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro yh _
+    apply Finset.sum_congr rfl
+    intro yg _
+    ring
+
+/-- The third edge of the three-edge path is the printed F-move on the
+subtree with incoming labels `b`, `c`, and `d`.
+
+Source: arXiv:1511.08090, equations `Fmove` and `pentagoneq`, lines 248--251
+and 279--283. -/
+theorem rightAssocFourfoldSynthesis_mul_middleToRightAssocPrintedFMatrix
+    (a b c d e : Λ) :
+    Fus.rightAssocFourfoldSynthesis a b c d e *
+        (Fus.middleToRightAssocPrintedFMatrix a b c d e ⊗ₖ
+          (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ)) =
+      Fus.middleFourfoldSynthesis a b c d e := by
+  classical
+  funext x y
+  rcases x with ⟨⟨⟨xa, xb⟩, xc⟩, xd⟩
+  rcases y with ⟨⟨h, i, sigma, omega, kappa⟩, z⟩
+  simp [Matrix.mul_apply, rightAssocFourfoldSynthesis,
+    middleToRightAssocPrintedFMatrix, middleFourfoldSynthesis,
+    leftPathThirdTargetEquiv, leftPathThirdSourceEquiv,
+    Fintype.sum_prod_type, Fintype.sum_sigma, Matrix.one_apply,
+    Matrix.blockDiagonal'_apply]
+  have hF (yi : Fin (Fus.bondDim i)) := congrArg
+    (fun M => M ⟨⟨xb, xc⟩, xd⟩ ⟨⟨h, sigma, omega⟩, yi⟩)
+      (Fus.rightTripleSynthesis_mul_printedFMatrix b c d i)
+  simp [Matrix.mul_apply, rightTripleSynthesis, leftTripleSynthesis,
+    Fintype.sum_prod_type, Fintype.sum_sigma, Matrix.one_apply] at hF
+  have hSum := congrArg
+    (fun q => ∑ yi, q yi * Fus.fusionTensor a i e kappa (xa, yi) z)
+    (funext hF)
+  convert hSum using 1
+  · simp_rw [Finset.sum_mul]
+    conv_rhs =>
+      rw [Finset.sum_comm]
+      enter [2, j]
+      rw [Finset.sum_comm]
+      enter [2, gamma]
+      rw [Finset.sum_comm]
+    apply Finset.sum_congr rfl
+    intro j _
+    apply Finset.sum_congr rfl
+    intro gamma _
+    apply Finset.sum_congr rfl
+    intro delta _
+    rw [Finset.sum_comm]
+    apply Finset.sum_congr rfl
+    intro yj _
+    apply Finset.sum_congr rfl
+    intro yi _
+    ring
+  · simp_rw [Finset.sum_mul]
+    rw [Finset.sum_comm]
+
+/-- The first edge of the two-edge path is the printed F-move on the
+subtree with incoming labels `f`, `c`, and `d`.
+
+Source: arXiv:1511.08090, equations `Fmove` and `pentagoneq`, lines 248--251
+and 279--283. -/
+theorem pairFourfoldSynthesis_mul_leftAssocToPairPrintedFMatrix
+    (a b c d e : Λ) :
+    Fus.pairFourfoldSynthesis a b c d e *
+        (Fus.leftAssocToPairPrintedFMatrix a b c d e ⊗ₖ
+          (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ)) =
+      Fus.leftAssocFourfoldSynthesis a b c d e := by
+  classical
+  funext x y
+  rcases x with ⟨⟨⟨xa, xb⟩, xc⟩, xd⟩
+  rcases y with ⟨⟨f, g, mu, nu, rho⟩, z⟩
+  simp [Matrix.mul_apply, pairFourfoldSynthesis,
+    leftAssocToPairPrintedFMatrix, leftAssocFourfoldSynthesis,
+    rightPathFirstTargetEquiv, rightPathFirstSourceEquiv,
+    Fintype.sum_prod_type, Fintype.sum_sigma, Matrix.one_apply,
+    Matrix.blockDiagonal'_apply]
+  have hF (yf : Fin (Fus.bondDim f)) := congrArg
+    (fun M => M ⟨⟨yf, xc⟩, xd⟩ ⟨⟨g, nu, rho⟩, z⟩)
+      (Fus.rightTripleSynthesis_mul_printedFMatrix f c d e)
+  simp [Matrix.mul_apply, rightTripleSynthesis, leftTripleSynthesis,
+    Fintype.sum_prod_type, Fintype.sum_sigma, Matrix.one_apply] at hF
+  have hSum := congrArg
+    (fun q => ∑ yf, Fus.fusionTensor a b f mu (xa, xb) yf * q yf)
+    (funext hF)
+  convert hSum using 1
+  · simp_rw [Finset.mul_sum]
+    conv_rhs =>
+      rw [Finset.sum_comm]
+      enter [2, j]
+      rw [Finset.sum_comm]
+      enter [2, gamma]
+      rw [Finset.sum_comm]
+    apply Finset.sum_congr rfl
+    intro j _
+    apply Finset.sum_congr rfl
+    intro gamma _
+    apply Finset.sum_congr rfl
+    intro tau _
+    simp_rw [Finset.sum_mul]
+    apply Finset.sum_congr rfl
+    intro yf _
+    simp_rw [Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro yj _
+    ring
+  · simp_rw [Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro yf _
+    apply Finset.sum_congr rfl
+    intro yg _
+    ring
+
+/-- The second edge of the two-edge path is the printed F-move on the
+subtree with incoming labels `a`, `b`, and `j`.
+
+Source: arXiv:1511.08090, equations `Fmove` and `pentagoneq`, lines 248--251
+and 279--283. -/
+theorem rightAssocFourfoldSynthesis_mul_pairToRightAssocPrintedFMatrix
+    (a b c d e : Λ) :
+    Fus.rightAssocFourfoldSynthesis a b c d e *
+        (Fus.pairToRightAssocPrintedFMatrix a b c d e ⊗ₖ
+          (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ)) =
+      Fus.pairFourfoldSynthesis a b c d e := by
+  classical
+  funext x y
+  rcases x with ⟨⟨⟨xa, xb⟩, xc⟩, xd⟩
+  rcases y with ⟨⟨f, j, mu, gamma, tau⟩, z⟩
+  simp [Matrix.mul_apply, rightAssocFourfoldSynthesis,
+    pairToRightAssocPrintedFMatrix, pairFourfoldSynthesis,
+    rightPathSecondTargetEquiv, rightPathSecondSourceEquiv,
+    Fintype.sum_prod_type, Fintype.sum_sigma, Matrix.one_apply,
+    Matrix.blockDiagonal'_apply]
+  have hF (yj : Fin (Fus.bondDim j)) := congrArg
+    (fun M => M ⟨⟨xa, xb⟩, yj⟩ ⟨⟨f, mu, tau⟩, z⟩)
+      (Fus.rightTripleSynthesis_mul_printedFMatrix a b j e)
+  simp [Matrix.mul_apply, rightTripleSynthesis, leftTripleSynthesis,
+    Fintype.sum_prod_type, Fintype.sum_sigma, Matrix.one_apply] at hF
+  have hSum := congrArg
+    (fun q => ∑ yj, Fus.fusionTensor c d j gamma (xc, xd) yj * q yj)
+    (funext hF)
+  convert hSum using 1
+  · simp_rw [Finset.mul_sum]
+    conv_rhs =>
+      rw [Finset.sum_comm]
+      enter [2, i]
+      rw [Finset.sum_comm]
+      enter [2, delta]
+      rw [Finset.sum_comm]
+    apply Finset.sum_congr rfl
+    intro i _
+    apply Finset.sum_congr rfl
+    intro delta _
+    apply Finset.sum_congr rfl
+    intro kappa _
+    simp_rw [Finset.sum_mul]
+    apply Finset.sum_congr rfl
+    intro yj _
+    simp_rw [Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro yi _
+    ring
+  · simp_rw [Finset.mul_sum]
+    rw [Finset.sum_comm]
+    apply Finset.sum_congr rfl
+    intro yj _
+    apply Finset.sum_congr rfl
+    intro yf _
+    ring
+
+/-- The three-edge path carries the fully left-associated synthesis to the
+fully right-associated synthesis.
+
+Source: arXiv:1511.08090, equation `pentagoneq`, lines 279--283. -/
+theorem rightAssocFourfoldSynthesis_mul_threeEdgePrintedFMatrix
+    (a b c d e : Λ) :
+    Fus.rightAssocFourfoldSynthesis a b c d e *
+        (Fus.threeEdgePrintedFMatrix a b c d e ⊗ₖ
+          (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ)) =
+      Fus.leftAssocFourfoldSynthesis a b c d e := by
+  rw [threeEdgePrintedFMatrix]
+  have hLast :
+      ((Fus.middleToRightAssocPrintedFMatrix a b c d e *
+            Fus.leftInnerToMiddlePrintedFMatrix a b c d e) *
+          Fus.leftAssocToLeftInnerPrintedFMatrix a b c d e) ⊗ₖ
+          (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ) =
+        ((Fus.middleToRightAssocPrintedFMatrix a b c d e *
+            Fus.leftInnerToMiddlePrintedFMatrix a b c d e) ⊗ₖ
+              (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ)) *
+          (Fus.leftAssocToLeftInnerPrintedFMatrix a b c d e ⊗ₖ
+            (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ)) := by
+    simpa only [Matrix.one_mul] using Matrix.mul_kronecker_mul
+      (Fus.middleToRightAssocPrintedFMatrix a b c d e *
+        Fus.leftInnerToMiddlePrintedFMatrix a b c d e)
+      (Fus.leftAssocToLeftInnerPrintedFMatrix a b c d e)
+      (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ) 1
+  have hFirst :
+      (Fus.middleToRightAssocPrintedFMatrix a b c d e *
+          Fus.leftInnerToMiddlePrintedFMatrix a b c d e) ⊗ₖ
+          (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ) =
+        (Fus.middleToRightAssocPrintedFMatrix a b c d e ⊗ₖ
+          (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ)) *
+          (Fus.leftInnerToMiddlePrintedFMatrix a b c d e ⊗ₖ
+            (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ)) := by
+    simpa only [Matrix.one_mul] using Matrix.mul_kronecker_mul
+      (Fus.middleToRightAssocPrintedFMatrix a b c d e)
+      (Fus.leftInnerToMiddlePrintedFMatrix a b c d e)
+      (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ) 1
+  rw [hLast, hFirst, ← Matrix.mul_assoc]
+  rw [← Matrix.mul_assoc]
+  rw [Fus.rightAssocFourfoldSynthesis_mul_middleToRightAssocPrintedFMatrix]
+  rw [Fus.middleFourfoldSynthesis_mul_leftInnerToMiddlePrintedFMatrix]
+  exact Fus.leftInnerFourfoldSynthesis_mul_leftAssocToLeftInnerPrintedFMatrix
+    a b c d e
+
+/-- The two-edge path carries the fully left-associated synthesis to the
+fully right-associated synthesis.
+
+Source: arXiv:1511.08090, equation `pentagoneq`, lines 279--283. -/
+theorem rightAssocFourfoldSynthesis_mul_twoEdgePrintedFMatrix
+    (a b c d e : Λ) :
+    Fus.rightAssocFourfoldSynthesis a b c d e *
+        (Fus.twoEdgePrintedFMatrix a b c d e ⊗ₖ
+          (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ)) =
+      Fus.leftAssocFourfoldSynthesis a b c d e := by
+  rw [twoEdgePrintedFMatrix]
+  have hPath :
+      (Fus.pairToRightAssocPrintedFMatrix a b c d e *
+          Fus.leftAssocToPairPrintedFMatrix a b c d e) ⊗ₖ
+          (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ) =
+        (Fus.pairToRightAssocPrintedFMatrix a b c d e ⊗ₖ
+          (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ)) *
+          (Fus.leftAssocToPairPrintedFMatrix a b c d e ⊗ₖ
+            (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ)) := by
+    simpa only [Matrix.one_mul] using Matrix.mul_kronecker_mul
+      (Fus.pairToRightAssocPrintedFMatrix a b c d e)
+      (Fus.leftAssocToPairPrintedFMatrix a b c d e)
+      (1 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ) 1
+  rw [hPath, ← Matrix.mul_assoc]
+  rw [Fus.rightAssocFourfoldSynthesis_mul_pairToRightAssocPrintedFMatrix]
+  exact Fus.pairFourfoldSynthesis_mul_leftAssocToPairPrintedFMatrix
+    a b c d e
+
 end MPOTensor.CompleteZipperFusionFamily
