@@ -83,8 +83,8 @@ noncomputable def physClose4 (M : MPOTensor d D) :
 configurations with quadruples of physical indices, the general length-four
 closure is `physClose4`. -/
 theorem physCloseN_four_eq_physClose4 (M : MPOTensor d D) :
-    (Matrix.reindexLinearEquiv ℂ ℂ (finFourArrowEquiv (Fin d))
-        (finFourArrowEquiv (Fin d))).toLinearMap ∘ₗ physCloseN M 4 =
+    (Matrix.reindexLinearEquiv ℂ ℂ (_root_.finFourArrowEquiv (Fin d))
+        (_root_.finFourArrowEquiv (Fin d))).toLinearMap ∘ₗ physCloseN M 4 =
       physClose4 M := by
   ext X i j
   simp [Matrix.coe_reindexLinearEquiv, Matrix.mul_assoc]
