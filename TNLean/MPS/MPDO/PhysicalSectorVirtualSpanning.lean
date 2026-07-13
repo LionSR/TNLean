@@ -165,4 +165,3 @@ theorem sectorVirtualMatrixFamily_span_eq_top
   | smul c X _ hX => exact Submodule.smul_mem _ c hX
 
 end MPOTensor.PhysicalSectorFactorization
-

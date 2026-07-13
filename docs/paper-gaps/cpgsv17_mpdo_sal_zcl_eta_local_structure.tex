@@ -262,12 +262,13 @@ statements are
 \path{MPOTensor.PhysicalSectorFactorization.mpo_submatrix_sector_eq_cyclicNeighboringProduct}
 and
 \path{MPOTensor.PhysicalSectorFactorization.mpo_reindex_sectorChainEquiv_eq_blockDiagonal}.}
-What remains in Lemma \texttt{propSN} is the positive choice of the individual
-$\eta_{k,h}$ and the local-orthogonality argument establishing primitivity of
-the sector trace matrix.  Positivity of a complete cyclic product does not by
-itself supply coherent positive representatives for all neighboring pairs;
-the missing argument must control these choices simultaneously across the
-sector graph.
+The positive choice of the individual $\eta_{k,h}$ is now obtained for the
+inverse-map factorization by isolating zero-weight sectors, deriving recurrence
+from injectivity, and applying coherent vertex rephasing.  Positivity of a
+complete cyclic product alone would not suffice: the recurrence and
+injectivity argument is essential.  What remains in Lemma \texttt{propSN} is
+the local-orthogonality argument establishing primitivity of the sector trace
+matrix on the positive-weight sector set.
 
 The positivity half of the projected chain identity is now formalized: for
 an MPDO, the chain of the physically conjugated tensor is a congruence of
