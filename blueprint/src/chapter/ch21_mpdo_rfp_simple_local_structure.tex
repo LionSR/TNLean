@@ -2422,6 +2422,25 @@ strong subadditivity for a normalized three-site reduced state.
     can reach $k$ whenever $k\to h$ is an edge.
 \end{definition}
 
+\begin{lemma}[Equivalent forms of sector reachability]%
+    \label{lem:mpdo_eta_reachability_equivalence}
+    \lean{TNLean.Algebra.DirectedWalk.reaches_iff_reflTransGen}
+    \lean{MPOTensor.sectorReaches_iff_directedWalkReaches}
+    \lean{MPOTensor.isRecurrentSupport_iff_directedWalkReturns}
+    \leanok
+    A vertex $h$ is reachable from $k$ in the nonzero sector support if and
+    only if there is a finite directed walk from $k$ to $h$. Consequently,
+    the support is recurrent if and only if every directed edge admits a
+    directed return walk.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    A walk gives an element of the reflexive transitive closure by induction
+    on its edges. Conversely, append the final edge at each induction step in
+    the reflexive transitive closure.
+\end{proof}
+
 \begin{theorem}[Closed-walk criterion for vertex phases]%
     \label{thm:directed_cycle_coboundary}
     \lean{TNLean.Algebra.DirectedWalk.exists_vertex_of_closedWalk_weight_eq_one}
