@@ -31,13 +31,13 @@ source lines 534--540; and the structural characterization and basic-vector
 form, source lines 543--578. -/
 theorem AppendixBStructuralData.adjacent_twoSite_localTerms_commute
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
-    {N : ℕ} (hN : 3 ≤ N) (i : Fin N) :
+    {N : ℕ} (hN : 2 < N) (i : Fin N) :
     localTerm A 2 N i * localTerm A 2 N (cyclicForwardSite i 1) =
       localTerm A 2 N (cyclicForwardSite i 1) * localTerm A 2 N i :=
   localTerm_adjacent_twoSite_commute_of_threeSite_zero_one_commute
     (hStruct.localTerm_two_three_zero_one_commute_of_overlapping
       hStruct.hasOverlappingTwoSiteCommutation)
-    hN i
+    (by omega) i
 
 /-- The Appendix B structural datum supplies the commuting local-projector
 family on every periodic chain of length (N>2).
@@ -51,7 +51,7 @@ source lines 534--540; and the structural characterization and basic-vector
 form, source lines 543--578. -/
 noncomputable def AppendixBStructuralData.hasProductPairLocalProjectors
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
-    {N : ℕ} (hN : 3 ≤ N) :
+    {N : ℕ} (hN : 2 < N) :
     HasProductPairLocalProjectors A N :=
   HasProductPairLocalProjectors.of_adjacent_twoSite_commute (by omega)
     (hStruct.adjacent_twoSite_localTerms_commute hN)
@@ -64,7 +64,7 @@ source lines 534--540; and the structural characterization and basic-vector
 form, source lines 543--578. -/
 theorem AppendixBStructuralData.isNNCPH
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
-    {N : ℕ} (hN : 3 ≤ N) :
+    {N : ℕ} (hN : 2 < N) :
     IsNNCPH A N :=
   (hStruct.hasProductPairLocalProjectors hN).isNNCPH
 
@@ -88,7 +88,7 @@ characterization and basic-vector form, source lines 543--578. -/
 theorem rfp_implies_nncph_of_leftCanonical
     (A : MPSTensor d D) [NeZero D]
     (hRFP : IsRFP A) (hNT : IsNormal A) (hLeft : IsLeftCanonical A)
-    (N : ℕ) (hN : 3 ≤ N) :
+    (N : ℕ) (hN : 2 < N) :
     IsNNCPH A N :=
   (AppendixBStructuralData.ofRFP A hNT hRFP hLeft).isNNCPH hN
 
@@ -108,7 +108,7 @@ Theorem 3.10, source lines 534--540. -/
 theorem rfp_implies_nncph_ground_state_of_leftCanonical
     (A : MPSTensor d D) [NeZero D]
     (hRFP : IsRFP A) (hNT : IsNormal A) (hLeft : IsLeftCanonical A)
-    (N : ℕ) (hN : 3 ≤ N) :
+    (N : ℕ) (hN : 2 < N) :
     IsNNCPHGroundState A N :=
   (rfp_implies_nncph_of_leftCanonical A hRFP hNT hLeft N hN).isNNCPHGroundState
     (by omega)

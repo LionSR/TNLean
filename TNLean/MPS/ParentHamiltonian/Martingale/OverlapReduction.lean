@@ -109,7 +109,7 @@ noncomputable def AppendixBProductPairExtraction.ofCoreTensorFactorizationAndOve
     {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}
     (hCore : ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
       mpv hStruct.coreTensor σ = productPairState hStruct.twoSiteAmplitude N σ)
-    (hOverlap : ∀ N, 3 ≤ N → ∀ i j : Fin N, cyclicWindowsOverlap N 2 i j →
+    (hOverlap : ∀ N, 2 < N → ∀ i j : Fin N, cyclicWindowsOverlap N 2 i j →
       localTerm A 2 N i * localTerm A 2 N j =
         localTerm A 2 N j * localTerm A 2 N i) :
     AppendixBProductPairExtraction hStruct :=
@@ -129,7 +129,7 @@ noncomputable def AppendixBProductPairExtraction.ofCoreTensorFactorizationAndAdj
     {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}
     (hCore : ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
       mpv hStruct.coreTensor σ = productPairState hStruct.twoSiteAmplitude N σ)
-    (hAdjacent : ∀ N, 3 ≤ N → ∀ i : Fin N,
+    (hAdjacent : ∀ N, 2 < N → ∀ i : Fin N,
       localTerm A 2 N i * localTerm A 2 N (cyclicForwardSite i 1) =
         localTerm A 2 N (cyclicForwardSite i 1) * localTerm A 2 N i) :
     AppendixBProductPairExtraction hStruct :=

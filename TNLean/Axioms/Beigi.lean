@@ -121,7 +121,7 @@ See the module docstring for the formalization plan. -/
 axiom rfp_to_nncph_commute {d D : ℕ} [NeZero D]
     (A : MPSTensor d D) (_hNT : MPSTensor.IsNormal A)
     (_hRFP : MPSTensor.IsRFP A) :
-    ∀ N : ℕ, 3 ≤ N → ∀ i j : Fin N,
+    ∀ N : ℕ, 2 < N → ∀ i j : Fin N,
       MPSTensor.localTerm A 2 N i * MPSTensor.localTerm A 2 N j =
         MPSTensor.localTerm A 2 N j * MPSTensor.localTerm A 2 N i
 
