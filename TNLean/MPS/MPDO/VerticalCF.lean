@@ -534,6 +534,8 @@ positive diagonal matrices $\mu_\alpha = \operatorname{diag}(\omega_{\alpha,0}, 
 isometry $U$ on the physical space such that, letter by letter over the horizontal bond pairs
 $(a, b)$,
 $U \widetilde M_{ab} U^\dagger = (\bigoplus_\alpha \mu_\alpha \otimes M_\alpha)_{ab}$.
+The reverse identity reconstructs $\widetilde M_{ab}$ from this direct sum and
+records that the discarded orthogonal complement is a zero sector.
 
 The right-hand side keeps the multiplicities `mult α` and the diagonal
 entries `ω α k` explicit; the trace coefficients
@@ -549,7 +551,10 @@ requires the sum of the nonzero block dimensions to be at most the original
 dimension (arXiv:1606.00608, lines 214--225). In the matrix orientation used
 below, $U$ maps the original physical space onto the retained nonzero sector
 space. Thus $U U^\dagger = 1$; the matrix $U^\dagger U$ is generally the
-support projection on the original physical space.
+support projection on the original physical space. The reverse identity
+$\widetilde M = U^\dagger (\bigoplus_\alpha \mu_\alpha \otimes M_\alpha) U$
+ensures that every vertical letter is supported on this projection; a bare
+compression would not exclude nonzero discarded or off-diagonal corners.
 
 **Local fix (zero-sector complement):** An earlier formulation also required
 $U^\dagger U = 1$, which incorrectly excluded the zero sectors allowed at
@@ -566,8 +571,10 @@ def IsVerticalCF (M : MPOTensor d D) : Prop :=
       (∀ α k, (0 : ℂ) < ω α k) ∧
       U * Uᴴ = 1 ∧
       MPSTensor.IsBNT (verticalTensor M) g dim A ∧
+      (∀ v : Fin (D * D),
+        U * verticalTensor M v * Uᴴ = verticalAssembledTensor dim mult ω A v) ∧
       ∀ v : Fin (D * D),
-        U * verticalTensor M v * Uᴴ = verticalAssembledTensor dim mult ω A v
+        verticalTensor M v = Uᴴ * verticalAssembledTensor dim mult ω A v * U
 
 /-- The matrix product vector of the vertical-assembled tensor, as a sum over the
 flattened `(block, multiplicity)` index `(α, j)`:

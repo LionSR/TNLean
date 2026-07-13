@@ -116,12 +116,19 @@
     and a matrix $U$ from the physical space onto the retained nonzero sector
     space such that
     \[
-        U\widetilde MU^\dagger=\bigoplus_\alpha \mu_\alpha\otimes M_\alpha.
+        U\widetilde MU^\dagger=B,
+        \qquad
+        \widetilde M=U^\dagger B U,
+        \qquad
+        B=\bigoplus_\alpha \mu_\alpha\otimes M_\alpha.
     \]
     This is the conclusion of
     \cite[Proposition~4.13, lines~1863--1870]{Cirac2016MPDO_arXiv}.
     In this orientation $UU^\dagger=I$ on the retained space, while
     $U^\dagger U$ is its support projection in the original physical space.
+    The reconstruction identity says that every letter of $\widetilde M$ is
+    supported on this projection, so the discarded orthogonal complement and
+    the off-diagonal corners vanish.
     The orthogonal complement may be a zero sector: the source's general
     canonical-form construction explicitly permits the sum of the nonzero
     block dimensions to be strictly smaller than the original dimension
