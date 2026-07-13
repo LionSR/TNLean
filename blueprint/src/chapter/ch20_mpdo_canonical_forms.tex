@@ -299,6 +299,66 @@
     first-site hypothesis to the sector-decomposition tensor.
 \end{proof}
 
+\begin{theorem}[Representative separation after injective blocking]
+    \label{thm:postblocked_representative_grouped_insert_eq}
+    \lean{MPSTensor.IsBNTCanonicalForm.eventuallyRepresentativeWordTupleSpan_of_basis_injective}
+    \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_firstSiteActionAgree_of_basis_injective}
+    \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree_of_basis_injective}
+    \leanok
+    \uses{def:sector_bnt_cf, def:representative_word_tuple_span,
+      thm:representative_grouped_insert_eq}
+    Let $P$ be a BNT canonical form with basis representatives
+    $(A_j)_{j=0}^{g-1}$, and suppose that the representatives have already
+    been blocked so that every $A_j$ is injective. Then representative
+    word-tuple separation holds at every length
+    \[
+        L\geq 6(g-1)+1.
+    \]
+    Consequently, if the first-site actions of $Y,Z\in M_d(\C)$ agree on the
+    complete MPV family of the tensor represented by $P$, then
+    \[
+        YA_j=ZA_j
+        \quad (0\leq j<g).
+    \]
+    The same conclusion holds when the first-site equality is given for any
+    tensor with the same complete MPV family as the tensor represented by
+    $P$.
+
+    This is the conclusion after the blocking step in
+    \cite[lines~318--345]{Cirac2016MPDO_arXiv}. The hypothesis that each
+    representative is injective is precisely the post-blocking hypothesis;
+    the assertion does not transport a first-site action from the original
+    physical alphabet through the blocking map.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:bnt_direct_sum_block_separation_word_span,
+      lem:block_separating_equations_from_pairwise_separation,
+      lem:product_word_span_from_bnt_block_separation,
+      thm:representative_grouped_insert_eq}
+    Injectivity of $A_j$ implies that its homogeneous words span
+    $M_{D_j}(\C)$ at every positive length. Apply the three-block separation
+    argument with source length $1$. For each ordered pair of distinct
+    representatives it gives a pairwise block-separating equation at length
+    $6$. Multiplying the equations for the $g-1$ representatives different
+    from $A_j$ gives coefficients $c_w^{(j)}$ satisfying
+    \[
+        \sum_{|w|=6(g-1)}c_w^{(j)}A_k^w
+        =
+        \begin{cases}
+            I, & k=j,\\
+            0, & k\neq j.
+        \end{cases}
+    \]
+    If $L\geq6(g-1)+1$, put $m=L-6(g-1)>0$. The length-$m$ words of each
+    $A_j$ span $M_{D_j}(\C)$. Concatenating these words with the displayed
+    selectors shows that the simultaneous length-$L$ word tuples span
+    $\prod_jM_{D_j}(\C)$. This proves eventual representative word-tuple
+    separation. The representative-grouped Lemma L gives the two first-site
+    conclusions.
+\end{proof}
+
 \begin{lemma}[Blockwise equality from agreement on the MPV family]
     \label{lem:blockwise_insert_eq_of_mpv_agree}
     \lean{MPOTensor.blockwise_insert_eq_of_mpv_agree}
