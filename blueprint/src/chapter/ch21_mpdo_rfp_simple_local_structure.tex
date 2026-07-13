@@ -3122,7 +3122,7 @@ strong subadditivity for a normalized three-site reduced state.
     Let ${\cal K}$ be an injective MPO tensor satisfying SAL. Then it admits
     a physical-sector factorization for which every neighboring operator
     \[
-        \eta_{k,h}=r_k l_h
+        \eta_{k,h}=\sum_a (r_k)_a\otimes(l_h)_a
     \]
     is positive semidefinite. Zero-weight Hayashi sectors remain in the
     physical direct sum, but their right tensors may be set to zero without
@@ -5449,9 +5449,12 @@ $\widehat{\cal K}$.
       thm:mpdo_active_sector_two_step_return,
       thm:mpdo_active_trace_matrix_irreducible,
       thm:mpdo_sector_support_triangle_closure}
-    If every nonzero edge closes through a third active sector, then
-    $(T^{*3})_{k,k}>0$ for every $k\in I_*$. Consequently, under the
-    hypotheses of the irreducibility theorem, $T^*$ is primitive.
+    Suppose that the neighboring operators are positive semidefinite, the
+    active one-site matrices span $\MN{D}$, each active sector contains a
+    nonzero such matrix, and every nonzero edge closes through a third active
+    sector. Then $(T^{*3})_{k,k}>0$ for every $k\in I_*$. Together with the
+    length-two returns and irreducibility, this implies that $T^*$ is
+    primitive.
 \end{theorem}
 
 \begin{proof}
@@ -5461,6 +5464,9 @@ $\widehat{\cal K}$.
     apply Theorem~\ref{thm:matrix_primitive_of_two_three_returns}.
 \end{proof}
 
+% The effective-sector restriction, including the zero rows and columns on
+% the full ambient sector set, is documented in
+% docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex.
 \begin{theorem}[Primitivity of the active sector trace matrix]%
     \label{thm:mpdo_sector_trace_matrix_primitive}
     \lean{MPOTensor.zeroWeightReparameterized_sectorVirtualMatrix_eq_zero}
@@ -5470,6 +5476,7 @@ $\widehat{\cal K}$.
       exists_positive_physicalSectorFactorization_activeSectorTraceMatrix_isPrimitive_of_isSAL}
     \leanok
     \uses{def:mpdo, def:injective, def:is_sal,
+        def:mpdo_active_sector_trace_matrix,
         def:mpdo_explicit_eta_of_sector_tensors,
         thm:mpdo_eta_coherent_positive_choice,
         thm:mpdo_sector_eta_data_trace_matrix}
@@ -5477,21 +5484,13 @@ $\widehat{\cal K}$.
     satisfies SAL, and choose the positive neighboring operators of
     Theorem~\ref{thm:mpdo_eta_coherent_positive_choice}. Restrict the sector
     index to the positive-weight summands of the Hayashi decomposition. Then
-    the nonnegative
-    matrix
+    positive semidefiniteness makes every neighboring trace real and
+    nonnegative, and the matrix
     \[
-        T_{k,h}=\tr(\eta_{k,h})
+        T^*_{k,h}=\operatorname{Re}\tr(\eta_{k,h})
     \]
-    is primitive.
-
-    \emph{Local fix (inactive sectors):} the physical direct sum retains
-    zero-weight summands, but the normalized factorization makes every
-    neighboring operator incident to such a summand zero. Hence the trace
-    matrix on the full ambient sector set has a zero row and column and cannot
-    be primitive. The primitive matrix asserted by the source is the
-    restriction to its effective, positive-weight sector set. This is recorded
-    in
-    \path{docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex}.
+    is primitive. Zero-weight summands remain in the physical direct sum but
+    are not indices of $T^*$.
 \end{theorem}
 
 \begin{proof}
