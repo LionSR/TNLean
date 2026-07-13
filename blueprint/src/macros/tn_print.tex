@@ -1186,6 +1186,46 @@
     \end{tikzpicture}%
 }
 
+% The source-oriented F-move.  The left tree is expanded in the basis of
+% right trees.  The multiplicity labels and the direction of F agree with
+% equation (Fmove) of arXiv:1511.08090.
+\newcommand{\TNMPDOPrintedFMove}{%
+    \begin{tikzpicture}[tn picture, scale=0.92]
+        \node (pfLa) at (-4.20,-1.20) {$a$};
+        \node (pfLb) at (-3.20,-1.20) {$b$};
+        \node (pfLc) at (-2.20,-1.20) {$c$};
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+            (pfLab) at (-3.70,-0.34) {$X^{e}_{ab,\mu}$};
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+            (pfLroot) at (-3.00,0.62) {$X^{d}_{ec,\nu}$};
+        \draw[tn leg] (pfLa.north) -- (pfLab.south west);
+        \draw[tn leg] (pfLb.north) -- (pfLab.south east);
+        \draw[tn leg] (pfLab.north) -- (pfLroot.south west);
+        \draw[tn leg] (pfLc.north) -- (pfLroot.south east);
+        \draw[tn leg] (pfLroot.north) -- ++(0,0.42)
+            node[above] {$d$};
+
+        \node at (-0.65,-0.12) {$=$};
+        \node at (0.15,-0.12) {$\displaystyle\sum_{f,\lambda,\sigma}$};
+        \node at (1.33,-0.12)
+            {$\displaystyle(F^{abc}_{d})^{f\lambda\sigma}_{e\mu\nu}$};
+
+        \node (pfRa) at (2.75,-1.20) {$a$};
+        \node (pfRb) at (3.75,-1.20) {$b$};
+        \node (pfRc) at (4.75,-1.20) {$c$};
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+            (pfRbc) at (4.25,-0.34) {$X^{f}_{bc,\lambda}$};
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+            (pfRroot) at (3.45,0.62) {$X^{d}_{af,\sigma}$};
+        \draw[tn leg] (pfRb.north) -- (pfRbc.south west);
+        \draw[tn leg] (pfRc.north) -- (pfRbc.south east);
+        \draw[tn leg] (pfRa.north) -- (pfRroot.south west);
+        \draw[tn leg] (pfRbc.north) -- (pfRroot.south east);
+        \draw[tn leg] (pfRroot.north) -- ++(0,0.42)
+            node[above] {$d$};
+    \end{tikzpicture}%
+}
+
 % The fixed-final comparison argument in three graphical steps.  A
 % positive-length simultaneous word selector isolates one final label, the
 % resulting comparison is block diagonal in that label, and injectivity
