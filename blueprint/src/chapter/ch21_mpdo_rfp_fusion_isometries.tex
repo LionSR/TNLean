@@ -248,8 +248,9 @@ them.
     the multiplicity spaces in place of the positive diagonal matrices
     $\chi$.  Their unweighted form requires the length-independent integer
     specialization and is not a consequence of the present hypotheses. Even
-    after that specialization, zipper completeness and final-label separation
-    are still needed to construct an invertible $F$-move.
+    after that specialization, comparison of the two triple-fusion orders and
+    final-label separation are still needed to construct an invertible
+    $F$-move.
 \end{theorem}
 \begin{proof}\leanok
     Multiply the fusion identity
@@ -257,6 +258,59 @@ them.
       =G_{\alpha,\beta}^{ij}$ on the right by $U_{\alpha,\beta}$ and on the
     left by $U_{\alpha,\beta}^\dagger$, respectively, and use
     $U_{\alpha,\beta}^\dagger U_{\alpha,\beta}=1$.
+\end{proof}
+
+\begin{theorem}[Length-independent zipper identities and completeness]%
+    \label{thm:mpdo_bnt_length_independent_zipper}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        chi_matrix_eq_one_of_lengthIndependent}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        fusionIsometry_mul_mulTensor_of_lengthIndependent}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        mulTensor_mul_fusionIsometry_conjTranspose_of_lengthIndependent}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        mulTensor_eq_conjTranspose_mul_unweightedDirectSum_mul_of_lengthIndependent}
+    \leanok
+    \uses{def:mpdo_bnt_fusion_isometry_family,
+        def:mpdo_bnt_label_length_independent,
+        thm:mpdo_bnt_label_length_independent_natural,
+        thm:mpdo_bnt_weighted_zipper}
+    Suppose the structure coefficients have positive trace-power form and are
+    independent of the positive chain length. Then
+    $\chi_{\alpha,\beta,\gamma}=1_{r_{\alpha,\beta,\gamma}}$ for every triple
+    of labels. If
+    \[
+        H_{\alpha,\beta}^{ij}
+          = \bigoplus_\gamma 1_{r_{\alpha,\beta,\gamma}}
+              \otimes M_\gamma^{ij},
+    \]
+    the fusion isometries satisfy
+    \[
+        U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}
+          = H_{\alpha,\beta}^{ij}U_{\alpha,\beta},
+        \qquad
+        (M_\alpha M_\beta)^{ij}U_{\alpha,\beta}^\dagger
+          = U_{\alpha,\beta}^\dagger H_{\alpha,\beta}^{ij},
+    \]
+    and
+    \[
+        (M_\alpha M_\beta)^{ij}
+          = U_{\alpha,\beta}^\dagger H_{\alpha,\beta}^{ij}
+              U_{\alpha,\beta}.
+    \]
+    These are the identity-weight specialization of the zipper and
+    completeness equations in
+    \cite[Section~3, Equations~(19)--(21)]{Bultinck2017Anyons}, obtained from
+    the length-independent case described after
+    \cite[Theorem~4.14]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}\leanok
+    Length independence makes every positive diagonal entry of
+    $\chi_{\alpha,\beta,\gamma}$ equal to one. Substitute the resulting
+    identity matrices into
+    Theorem~\ref{thm:mpdo_bnt_weighted_zipper}. For completeness, insert
+    $U_{\alpha,\beta}^\dagger U_{\alpha,\beta}=1$ on both sides of the product
+    letter and apply the fusion identity between the two inserted factors.
 \end{proof}
 
 \begin{definition}[Operator family of a fusion-isometry family]%

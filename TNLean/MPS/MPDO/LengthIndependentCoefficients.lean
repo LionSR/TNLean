@@ -73,6 +73,21 @@ theorem entry_eq_one_of_posEntries_of_forall_tracePowerCoeff_eq
   · exact absurd h (ne_of_gt (hχ α β γ k))
   · exact h
 
+/-- A diagonal chi matrix all of whose diagonal entries equal one is the
+identity matrix.
+
+Source: arXiv:1606.00608, line 1010 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem matrix_eq_one_of_forall_entry_eq_one
+    (hone : ∀ α β γ : I, ∀ k : Fin (χ.dim α β γ), χ.entry α β γ k = 1)
+    (α β γ : I) :
+    χ.matrix α β γ = 1 := by
+  ext i j
+  by_cases hij : i = j
+  · subst j
+    simp [DiagonalChiFamily.matrix, hone]
+  · simp [DiagonalChiFamily.matrix, hij]
+
 /-- When every diagonal entry of a chi family equals one, the trace-power
 coefficient at any exponent is the size of the diagonal matrix.
 
