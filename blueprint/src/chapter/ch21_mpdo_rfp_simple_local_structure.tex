@@ -944,6 +944,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.exists_physicalSectorFactorization_with_cyclicNeighboringProduct_posSemidef_of_isSAL}
     \leanok
     \uses{cor:mpdo_sal_raw_physical_sector_factorization,
+      thm:mpdo_conjugated_chain_congruence,
       thm:mpdo_physical_sector_chain_decomposition}
     Every injective MPO tensor satisfying SAL admits a physical-sector
     factorization such that, for every $N\geq1$ and every cyclic sector
@@ -960,10 +961,12 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{proof}
     \leanok
     \uses{cor:mpdo_sal_raw_physical_sector_factorization,
+      thm:mpdo_conjugated_chain_congruence,
       thm:mpdo_physical_sector_chain_decomposition}
-    Choose the raw physical-sector factorization supplied by SAL. Each cyclic
-    neighboring product is a diagonal sector compression of the physically
-    conjugated $N$-site MPO and is therefore positive semidefinite.
+    Choose the raw physical-sector factorization supplied by SAL. The physical
+    basis change sends the positive $N$-site MPO to a positive congruence.
+    Each cyclic neighboring product is a diagonal sector compression of this
+    congruence and is therefore positive semidefinite.
 \end{proof}
 
 \begin{definition}[Boundary contraction against a virtual matrix]
