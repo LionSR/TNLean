@@ -16,8 +16,11 @@ on short finite index types.
 ## Main definitions
 
 * `finThreeArrowEquiv`: identifies a function on `Fin 3` with a right-associated triple.
-* `finThreeArrowEquiv_symm_apply`: gives the ordered coordinates of the inverse map.
 * `finFourArrowEquiv`: identifies a function on `Fin 4` with a right-associated quadruple.
+
+## Main statements
+
+* `finThreeArrowEquiv_symm_apply`: gives the ordered coordinates of the inverse map.
 * `finFourArrowEquiv_symm_apply`: gives the ordered coordinates of the inverse map.
 
 ## Implementation notes

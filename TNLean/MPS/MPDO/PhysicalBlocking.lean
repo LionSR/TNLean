@@ -122,4 +122,7 @@ theorem physClose2_blockTwo_eq_physClose4 (M : MPOTensor d D) :
   simp [Matrix.coe_reindexLinearEquiv, blockedPairEquiv, blockedIndexEquiv,
     blockTwo, Matrix.mul_assoc]
 
+@[deprecated _root_.finFourArrowEquiv (since := "2026-07-13")]
+alias finFourArrowEquiv := _root_.finFourArrowEquiv
+
 end MPOTensor

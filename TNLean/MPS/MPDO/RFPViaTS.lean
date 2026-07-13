@@ -218,11 +218,11 @@ configurations with triples of physical indices, the general length-three
 closure is `physClose3`. For $M=\mathcal K$, this identifies the two forms of
 $\mathcal K_3(X)$ in arXiv:1606.00608, Proposition C.7, lines 1510--1516. -/
 theorem physCloseN_three_eq_physClose3 (M : MPOTensor d D) :
-    (Matrix.reindexLinearEquiv ℂ ℂ (finThreeArrowEquiv (Fin d))
-        (finThreeArrowEquiv (Fin d))).toLinearMap ∘ₗ physCloseN M 3 =
+    (Matrix.reindexLinearEquiv ℂ ℂ (_root_.finThreeArrowEquiv (Fin d))
+        (_root_.finThreeArrowEquiv (Fin d))).toLinearMap ∘ₗ physCloseN M 3 =
       physClose3 M := by
   ext X i j
-  simp [Matrix.coe_reindexLinearEquiv, finThreeArrowEquiv,
+  simp [Matrix.coe_reindexLinearEquiv, _root_.finThreeArrowEquiv,
     Matrix.mul_assoc]
 
 /-! ### MPDO renormalization fixed point (Definition 4.1) -/
@@ -246,5 +246,8 @@ def IsRFPViaTS (M : MPOTensor d D) : Prop :=
     IsKrausCPTP S ∧ IsKrausCPTP T ∧
     (∀ X, S (physClose2 M X) = physClose1 M X) ∧
     (∀ X, T (physClose1 M X) = physClose2 M X)
+
+@[deprecated _root_.finThreeArrowEquiv (since := "2026-07-13")]
+alias finThreeArrowEquiv := _root_.finThreeArrowEquiv
 
 end MPOTensor

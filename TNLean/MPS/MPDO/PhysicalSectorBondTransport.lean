@@ -591,16 +591,16 @@ theorem physicalBond_zero_one_comm (F : PhysicalSectorFactorization K) :
         embedLocalOperator (d := d) 2 3 (by decide) (1 : Fin 3) F.physicalBond =
       embedLocalOperator (d := d) 2 3 (by decide) (1 : Fin 3) F.physicalBond *
         embedLocalOperator (d := d) 2 3 (by decide) (0 : Fin 3) F.physicalBond := by
-  apply (Matrix.reindex (finThreeArrowEquiv (Fin d))
-    (finThreeArrowEquiv (Fin d))).injective
-  change (Matrix.reindexLinearEquiv ℂ ℂ (finThreeArrowEquiv (Fin d))
-      (finThreeArrowEquiv (Fin d))) (_ * _) =
-    (Matrix.reindexLinearEquiv ℂ ℂ (finThreeArrowEquiv (Fin d))
-      (finThreeArrowEquiv (Fin d))) (_ * _)
-  rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ (finThreeArrowEquiv (Fin d))
-      (finThreeArrowEquiv (Fin d)) (finThreeArrowEquiv (Fin d)),
-    ← Matrix.reindexLinearEquiv_mul ℂ ℂ (finThreeArrowEquiv (Fin d))
-      (finThreeArrowEquiv (Fin d)) (finThreeArrowEquiv (Fin d)),
+  apply (Matrix.reindex (_root_.finThreeArrowEquiv (Fin d))
+    (_root_.finThreeArrowEquiv (Fin d))).injective
+  change (Matrix.reindexLinearEquiv ℂ ℂ (_root_.finThreeArrowEquiv (Fin d))
+      (_root_.finThreeArrowEquiv (Fin d))) (_ * _) =
+    (Matrix.reindexLinearEquiv ℂ ℂ (_root_.finThreeArrowEquiv (Fin d))
+      (_root_.finThreeArrowEquiv (Fin d))) (_ * _)
+  rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ (_root_.finThreeArrowEquiv (Fin d))
+      (_root_.finThreeArrowEquiv (Fin d)) (_root_.finThreeArrowEquiv (Fin d)),
+    ← Matrix.reindexLinearEquiv_mul ℂ ℂ (_root_.finThreeArrowEquiv (Fin d))
+      (_root_.finThreeArrowEquiv (Fin d)) (_root_.finThreeArrowEquiv (Fin d)),
     Matrix.coe_reindexLinearEquiv, F.reindex_embedLocalOperator_zero,
     F.reindex_embedLocalOperator_one, F.physicalPairBonds_comm]
 
