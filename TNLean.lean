@@ -376,6 +376,7 @@ import TNLean.MPS.MPDO.MutualInfoMonotone
 import TNLean.MPS.MPDO.PureAreaLaw
 import TNLean.MPS.MPDO.PureRFPSAL
 import TNLean.MPS.MPDO.VerticalCF
+import TNLean.MPS.MPDO.PerCopyHorizontalCF
 import TNLean.MPS.MPDO.FirstSiteBlocking
 import TNLean.MPS.MPDO.RepresentativeGroupedLemmaL
 import TNLean.MPS.MPDO.PostBlockedRepresentativeSpan
