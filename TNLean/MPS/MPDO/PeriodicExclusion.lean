@@ -32,10 +32,12 @@ completely positive maps at lines 1889--1891 — is stated as the hypothesis
 `PeriodicVectorYieldsProjector`.  The cyclic decomposition of the peripheral
 spectrum (Wolf 2012, Theorem 6.6) applied to the vertical transfer map
 supplies the projector with its word invariance and single-letter
-displacement (`TNLean/MPS/MPDO/CyclicProjector.lean`); the passage from the
-displacement to the all-length non-commutation family remains open.  Granted
-that hypothesis, `hasNoPeriodicVectors_verticalTensor` concludes that the
-vertically viewed tensor has no nontrivial $p$-periodic vectors.
+displacement (`TNLean/MPS/MPDO/CyclicProjector.lean`).  The all-length
+non-commutation family remains available as a stronger conditional
+formulation.  For a tensor in horizontal canonical form, the theorem
+`hasNoPeriodicVectors_verticalTensor_of_horizontalCF` instead uses the one
+noncommuting length supplied by the contrapositive of Lemma L and proves the
+source conclusion without this hypothesis.
 
 ## Main definitions
 

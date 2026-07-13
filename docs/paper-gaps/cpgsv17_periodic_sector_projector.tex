@@ -3,263 +3,101 @@
 \usepackage{amsmath,amssymb}
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
-\setlength{\emergencystretch}{2em}
 
 \input{command}
 
-\title{The Periodic-Sector Projector in Proposition 4.13}
+\title{The Periodic-Sector Argument in Proposition 4.13}
 \author{}
-\date{2026-07-11}
+\date{2026-07-13}
 
 \begin{document}
 \maketitle
 
-\section{The source argument}
+\section{The printed argument}
 
 The proof of Proposition~4.13 of Cirac, P\'erez-Garc\'ia, Schuch, and
 Verstraete \cite[Proposition~4.13]{Cirac2016MPDO_arXiv} excludes nontrivial
-periodic sectors of the vertically viewed tensor in one paragraph.  The local
-source is \path{Papers/1606.00608/MPDO-22-12-17-2.tex}, lines~1888--1893: if
-there were a $p$-periodic vector, ``there would exist an orthogonal projector
-$Q$'' with, for every~$N$,
+periodic sectors of the vertically viewed tensor.  The local source is
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex}, lines~1888--1893.  It states
+that a nontrivial period supplies an orthogonal projector $Q$ such that, for
+every $N$,
 \[
-    QH^{(N)}\ne H^{(N)}Q,
-    \qquad
-    Q\bigl[H^{(N)}\bigr]^p=\bigl[H^{(N)}\bigr]^pQ,
+  Q_1H^{(N+1)}\ne H^{(N+1)}Q_1,
+  \qquad
+  Q_1[H^{(N+1)}]^p=[H^{(N+1)}]^pQ_1,
 \]
-where $H^{(N)}$ is the density operator generated in the horizontal
-direction.  Since $H^{(N)}$ is positive semidefinite, the second family of
-identities forces $QH^{(N)}=H^{(N)}Q$, which contradicts the first.
+where $Q_1=Q\otimes\Id^{\otimes N}$.  Since $H^{(N+1)}$ is positive
+semidefinite, the second equality implies
+$Q_1H^{(N+1)}=H^{(N+1)}Q_1$, contradicting the first.
 
-The projector $Q$ is drawn from the general theory of the peripheral
-spectrum of completely positive maps; the source does not spell out its
-construction.  A nontrivial $p$-periodic vector is an eigenvector of the
-(rescaled) transfer map with peripheral eigenvalue $e^{2\pi iq/p}\ne 1$
-(lines~225--230 of the source).
+\section{The quantifier correction}
 
-\section{What is formalized}
+The cyclic decomposition of the peripheral spectrum gives a projector $Q$
+which is invariant under every word of one full period and is displaced by
+one vertical layer,
+\[
+  Q\widetilde M\ne Q\widetilde MQ.
+\]
+The representative-grouped form of Lemma~L proves the contrapositive
+statement
+\[
+  Q\widetilde M\ne Q\widetilde MQ
+  \quad\Longrightarrow\quad
+  \exists N\ge0:\
+  Q_1H^{(N+1)}\ne H^{(N+1)}Q_1.
+\]
+It does not imply the stronger inequality for every $N$ printed at source
+line~1889.  That stronger assertion is unnecessary: the positivity argument
+at lines~1890--1893 is pointwise in $N$, so the same existential witness
+suffices.
 
-The file \path{TNLean/MPS/MPDO/PeriodicExclusion.lean} formalizes this step
-as follows.
+This is a local correction of the intermediate statement, not a restriction
+of Proposition~4.13.  The final no-periodic-vectors theorem has exactly the
+source hypotheses.
 
-\begin{enumerate}
-    \item The commutation identities above, with $Q$ an orthogonal projector
-      on the physical space acting on the first site --- as does the
-      projector of the invariant-projection step at lines~1874--1887 --- are
-      collected in the notion of a \emph{periodic-sector projector} with
-      exponent $p\ge 1$ (\leanid{MPOTensor.PeriodicSectorProjector}).
-    \item The contradiction is proved unconditionally
-      (\leanid{MPOTensor.isEmpty\_periodicSectorProjector}): a tensor
-      generating positive semidefinite density operators at every length
-      admits no periodic-sector projector.  This uses the power-commutation
-      theorem for positive semidefinite matrices already formalized in
-      \path{TNLean/Algebra/HermitianHelpers.lean}.
-    \item The implication \emph{nontrivial vertical period $\Rightarrow$
-      periodic-sector projector} is stated as an explicit hypothesis
-      (\leanid{MPOTensor.PeriodicVectorYieldsProjector}).  Granted it, the
-      vertically viewed tensor has no nontrivial $p$-periodic vectors
-      (\leanid{MPOTensor.hasNoPeriodicVectors\_verticalTensor}).
-\end{enumerate}
+\section{Formal proof}
 
-\section{The gap}
+The literal horizontal canonical-form reduction is
+\leanid{MPOTensor.IsHorizontalCF.exists\_not\_commute\_of\_displaced} in
+\path{TNLean/MPS/MPDO/HorizontalBNT.lean}.  Suppose, to the contrary, that
+$Q_1$ commutes with $H^{(N+1)}$ for every $N$.  Idempotence of $Q$ gives
+\[
+  Q_1H^{(N+1)}=Q_1H^{(N+1)}Q_1.
+\]
+After writing these as first-site contractions of the doubled-index tensor,
+the literal representative-grouped Lemma~L yields
+$Q\widetilde M=Q\widetilde MQ$, contradicting displacement.
 
-The projector construction and its displacement are formalized: from the
-corner data of a nontrivial vertical period, the cyclic decomposition of
-the peripheral spectrum produces an orthogonal projector on the physical
-space that is one-sided invariant for every full-period vertical word and
-fails the single-letter invariance
-(\leanid{MPOTensor.exists\_displaced\_invariant\_projector\_of\_periodic\_vector},
-in \path{TNLean/MPS/MPDO/CyclicProjector.lean}).  What the source
-additionally asserts — and what remains open — is that the cyclic
-decomposition and peripheral spectral hypotheses force
-$QH^{(N)}\ne H^{(N)}Q$ at \emph{every} length.  Literal Lemma-L
-transport shows only that commutation cannot hold simultaneously at all
-positive lengths: its contrapositive produces at least one noncommuting
-length, not the all-length family required by the present interface.
+The cyclic decomposition and its letter shift are formalized in
+\path{TNLean/MPS/MPDO/CyclicProjector.lean}.  They give $p\ge1$, an
+orthogonal projector $Q$, full-period word invariance, and displacement.
+Choose the noncommuting length $N+1$ above.  Full-period invariance transfers
+to the $p$-fold vertically stacked tensor, so
+\[
+  Q_1[H^{(N+1)}]^p=[H^{(N+1)}]^pQ_1.
+\]
+The positive-semidefinite power-commutation theorem then gives commutation
+with $H^{(N+1)}$, a contradiction.  The resulting theorem is
+\leanid{MPOTensor.hasNoPeriodicVectors\_verticalTensor\_of\_horizontalCF}.
 
-\section{Elimination plan}
+The proof introduces no new assumption.  Its kernel dependencies are the
+standard principles \leanid{propext}, \leanid{Classical.choice}, and
+\leanid{Quot.sound}.
 
-The intended derivation of the hypothesis from the positivity assumption
-has three ingredients.
+\section{Status}
 
-\begin{enumerate}
-    \item The cyclic decomposition of the peripheral spectrum of an
-      irreducible positive map \cite[Theorem~6.6]{Wolf2012Quantum},
-      formalized in
-      \path{TNLean/Channel/Peripheral/CyclicDecomposition}, applied to the
-      transfer map of the vertically viewed tensor: a period-$p$ sector
-      carries a family of orthogonal projectors permuted cyclically by one
-      application of the map.
-    \item The vertical stacking identity: the density operator generated by
-      $p$ vertically stacked copies of the tensor at length $N$ is
-      $[H^{(N)}]^p$.  Formalized in
-      \path{TNLean/MPS/MPDO/StackedLayers.lean}
-      (\leanid{MPOTensor.mpo\_stackedTensor}).
-    \item The first-site invariance argument of lines~1874--1887, formalized
-      in \path{TNLean/MPS/MPDO/HorizontalBNT.lean}, together with the stacked
-      tensor: invariance of a cyclic projector under $p$ stacked layers gives
-      commutation with $[H^{(N)}]^p$ at every length.  This invariance half is
-      formalized: one-sided invariance under every length-$p$ word of the
-      vertically viewed tensor transfers to the stacked tensor
-      (\leanid{MPOTensor.stackedTensor\_ketLeftMul\_invariant}) and yields
-      the commutation family through item~2
-      (\leanid{MPOTensor.periodicSectorProjectorOfCyclicData}).
-\end{enumerate}
+The periodic-sector step of Proposition~4.13 is complete for every
+horizontally canonical matrix product density operator.  The earlier
+all-length predicate
+\leanid{MPOTensor.NoninvariantProjectorNoncommuting} remains only as a
+stronger conditional auxiliary statement and is not used by the
+source-faithful theorem.
 
-Items~2 and the formalized half of item~3 are combined in
-\path{TNLean/MPS/MPDO/StackedLayers.lean}: the hypothesis of the
-conditional exclusion is reduced to the statement that the constructed
-orthogonal projector, one-sided invariant for every length-$p$ vertical word,
-fails to commute with $H^{(N)}$ at every length
-(\leanid{MPOTensor.PeriodicVectorYieldsCyclicProjector},
-\leanid{MPOTensor.periodicVectorYieldsProjector\_of\_cyclic}).
-
-Item~1 is now formalized in
-\path{TNLean/MPS/MPDO/CyclicProjector.lean}.  The rescaled unital gauge of
-the corner satisfies the hypotheses of the cyclic decomposition
-(\leanid{MPSTensor.spectralUnitalGauge\_schwarz\_setup}; the gauge
-preserves irreducibility by
-\leanid{MPSTensor.isIrreducibleTensor\_smul\_conj}, through the support
-projection of the transported invariant subspace).  The letter-level shift
-of the cyclic projections, $K_vP_{k+1}=P_kK_v$, is derived in
-\path{TNLean/Channel/Peripheral/CyclicDecomposition/LetterShift.lean}
-(\leanid{MPSTensor.kraus\_mul\_cyclicProj},
-\leanid{MPSTensor.evalWord\_mul\_cyclicProj}).  Transporting one cyclic
-sector through the isometry and the square root of the transfer
-eigenvector and taking the complement of its support projection yields an
-orthogonal projector on the physical space that is one-sided invariant for
-every full-period vertical word and fails single-letter invariance,
-$Q\widetilde M\ne Q\widetilde MQ$
-(\leanid{MPOTensor.exists\_displaced\_invariant\_projector\_of\_periodic\_vector}).
-
-What remains open is the all-length non-commutation family asserted at source
-lines~1888--1891.  The literal horizontal canonical-form argument proves that
-simultaneous commutation at all positive lengths would imply the forbidden
-letter-level invariance.  Its contrapositive gives only the existence of a
-noncommuting length.  The stronger family is recorded as the hypothesis
-\leanid{MPOTensor.NoninvariantProjectorNoncommuting}; granted it, the
-cyclic-projector hypothesis follows
-(\leanid{MPOTensor.periodicVectorYieldsCyclicProjector\_of\_noncommutation}).
-Elimination therefore requires either deriving the all-length family from the
-cyclic decomposition and peripheral spectral hypotheses, as the source
-asserts, or refactoring the final
-contradiction so that one noncommuting length suffices.  Once one of these
-routes is formalized, this note can be retired.
-
-\section{The injective special case is now resolved}
-
-The periodic-exclusion goal that
-\leanid{MPOTensor.NoninvariantProjectorNoncommuting} was introduced to
-supply is reached unconditionally when $M$'s own doubled-index tensor is
-(single-letter) injective, i.e.\ its $d^2$ matrices $M^{ij}$ already span
-the full $D\times D$ matrix algebra (\leanid{MPSTensor.IsInjective}) --- by
-a route that bypasses that hypothesis rather than discharging it (see
-below).  The route does not go through the block-injective (biCF) machinery
-of \path{TNLean/MPS/MPDO/PerCopyHorizontalCF.lean} at all.
-
-\leanid{MPOTensor.ketLeftMul_eq_braRightMul_of_commute_of_isInjective}
-(\path{TNLean/MPS/MPDO/InvariantProjection.lean}) proves: if $Q$ is
-idempotent (Hermiticity is not needed) and $Q_1H^{(2)}=H^{(2)}Q_1$
-(commutation at the \emph{two-site} chain alone), then
-$Q\widetilde M=Q\widetilde MQ$.
-Idempotence of $Q$ upgrades the hypothesis to the one-sided reduction
-$Q_1H^{(2)}=Q_1H^{(2)}Q_1$ — the reverse of the invariant-projection step
-of lines~1874--1887 — and unfolding that identity against every trailing
-letter $M^{cc'}$ produces, for every pair of physical indices $a,b$, a
-trace identity pairing $(Q\widetilde M)_{ab}$ against
-$(Q\widetilde MQ)_{ab}$ over every letter of $M$'s doubled-index tensor.
-Injectivity's spanning property, together with nondegeneracy of the trace
-pairing on the full matrix algebra
-(\leanid{MPSTensor.traceMulRightPi_ker_eq_bot}), forces the two matrices
-to agree entrywise.  No horizontal canonical-form decomposition,
-block-injectivity, or \leanid{SameMPV₂} transport enters this argument: it
-works directly with $M$'s own letters.
-
-Combined with the stacked-layers reduction
-(\leanid{MPOTensor.stackedTensor_ketLeftMul_invariant},
-\leanid{MPOTensor.firstSiteMatrix_mul_mpo_comm}) and the positive
-semidefinite power-commutation theorem
-(\leanid{MPOTensor.mpo_commute_of_commute_pow}), this closes the
-periodic-sector step unconditionally for injective tensors:
-\leanid{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_isInjective}
-proves that an MPDO tensor with an injective doubled-index tensor has no
-nontrivial periodic vectors in the vertical direction, with no further
-hypothesis.  The contradiction only ever needs the commutation family at
-chain length~$2$; it never constructs, and does not need, an inhabitant of
-\leanid{MPOTensor.NoninvariantProjectorNoncommuting}.
-
-\section{Why the general (reducible) case resists the same route}
-
-\leanid{MPOTensor.NoninvariantProjectorNoncommuting} quantifies over
-\emph{every} chain length $N$ (starting at $N=0$), and the natural
-discharge route uses the representative Lemma~L for a general horizontal
-canonical-form decomposition of $M$ into several normal representatives with
-weights.  One fixed-length obstruction remains; the second item below records
-the former literal-transport obstruction and its resolution.
-
-\begin{enumerate}
-    \item \textbf{Chain length one supplies no data.}  At $N=1$ (chain
-      length one, the shortest length at which an argument of this shape
-      could plausibly reach $M$'s own letters), the trailing word is
-      empty: the only relevant ``letter'' of the commutation identity is
-      the identity matrix, and unfolding $Q_1H^{(1)}=H^{(1)}Q_1$ gives
-      only one trace-level equation per matrix-entry pair,
-      $\tr\bigl((Q\widetilde M)_{ab}-(Q\widetilde MQ)_{ab}\bigr)=0$.
-      This is far short of what nondegeneracy of the trace pairing needs
-      to conclude $(Q\widetilde M)_{ab}=(Q\widetilde MQ)_{ab}$ as
-      matrices — it forces only the trace of the difference to vanish,
-      not the difference itself, unless $D=1$.  This is why the
-      injective route above uses chain length \emph{two}, not one or
-      zero: at chain length two, the trailing word ranges over the $d^2$
-      many letters $M^{cc'}$ themselves, which is enough data once those
-      letters span the full matrix algebra.  For a general (not
-      necessarily injective) $M$, no comparable argument is available at
-      $N=0$: the periodic-sector-projector contradiction that consumes
-      \leanid{MPOTensor.NoninvariantProjectorNoncommuting}
-      (\leanid{MPOTensor.isEmpty_periodicSectorProjector}) happens to use
-      only the $N=0$ instance, but the field's type still forces a proof
-      of \leanid{NoninvariantProjectorNoncommuting} to supply the $\forall
-      N$ statement to type-check as a
-      \leanid{PeriodicSectorProjector} — \emph{unless} the contradiction
-      is derived directly, bypassing that structure, exactly as
-      \leanid{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_isInjective}
-      does above, by choosing chain length two instead of the length that
-      the structure's field type superficially suggests.
-    \item \textbf{The former literal-transport obstruction is resolved.}
-      The public \leanid{IsHorizontalCF} now carries the source's literal
-      global gauge and an exact-dimension representative-indexed BNT
-      decomposition.  The representative-grouped Lemma~L is
-      extended over all repeated weighted sectors and transported through
-      that gauge.  Thus the first-stage conclusion is now an equality of
-      the original tensor's letters, not merely of its matrix product
-      vectors or of separate canonical-form blocks.  The older
-      \leanid{HorizontalCFData} remains only as a per-copy auxiliary.
-\end{enumerate}
-
-The remaining fixed-length obstruction is independent of the exponent $p$ or the specific
-displaced-projector construction of
-\leanid{MPOTensor.exists_displaced_invariant_projector_of_periodic_vector}:
-it concerns what one finite-length trace identity can determine.  Discharging
-\leanid{MPOTensor.NoninvariantProjectorNoncommuting}
-for a general (reducible, multi-block) horizontal canonical form therefore
-remains open, and is not a routine extension of the injective argument to
-a larger blocking length.
-
-\paragraph{Verdict (updated).}
-The periodic-sector step of Proposition~4.13 is now closed unconditionally
-for MPDO tensors whose doubled-index tensor is (single-letter) injective
-(\leanid{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_isInjective}).
-For the general reducible case, the projector exclusion, stacked-layers
-reduction, displaced-projector construction, and literal horizontal
-canonical-form transport are unconditional.  The remaining stated
-hypothesis is \leanid{MPOTensor.NoninvariantProjectorNoncommuting}: the
-representative Lemma~L consumes the simultaneous positive-length family,
-whereas this predicate asks a contradiction from commutation at each one
-fixed length.  The capstone
-\leanid{thm:vertical_cf_of_horizontal_cf} does not consume the injective
-special case: it still needs the independent vertical canonical-form
-construction (stage~3 of \ghissue{3674}), which is unaffected by either
-resolution recorded in this note.
+The remaining work for Proposition~4.13 is the vertical canonical-form
+construction: applying the invariant-projector and no-periodic-vector
+criterion, producing the sector projectors and nonzero compressions, proving
+positivity of the vertical weights, deriving the dressed-adjoint identities,
+and assembling the physical-space isometry.
 
 \bibliographystyle{alpha}
 \bibliography{references}
