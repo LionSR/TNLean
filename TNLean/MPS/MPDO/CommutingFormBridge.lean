@@ -29,16 +29,14 @@ tensor `K` a sector factorization satisfying, for every `N`,
   \widetilde\sigma^{(N)}(K)
     = \bigoplus_{k_1,\ldots,k_N}\bigotimes_{n=1}^N \eta_{k_n,k_{n+1}}.
 \]
-The later Proposition 3to4 step assembles those source
-operators into a single translation-invariant positive two-site bond whose
-translated copies commute.
+Conditional on a physical-sector factorization with positive neighboring
+operators, Proposition 3to4 is completed by
+`PhysicalSectorFactorization.etaLocalStructureData`.
 
-*Proof-state note.* The strongest unconditional conclusion currently available
-starts from `EtaLocalStructureData M`.  To reach it from SAL, one must first
-establish the inverse-map sector factorization of Lemma propSN and then
-construct the neighboring operators carried by `EtaLocalStructureData M`.
-The theorem `hasCommutingForm_of_etaLocalStructure` then gives the global
-commuting-form conclusion.
+*Proof-state note.* To reach `EtaLocalStructureData M` from SAL, it remains to
+establish the inverse-map sector factorization of Lemma propSN with a coherent
+positive choice of all neighboring operators. The conditional bond,
+commutativity, product realization, and eta-local structure are complete.
 
 ## Main declarations
 

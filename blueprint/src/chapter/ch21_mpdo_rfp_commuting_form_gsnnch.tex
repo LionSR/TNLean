@@ -233,11 +233,10 @@
 \end{proof}
 
 \begin{remark}[Entropy-side construction]
-    The remaining entropy-side step is the construction of a single
-    $\eta$-local product form from $\mathrm{SAL}(K)$. The local $\eta_{k,h}$
-    are already supplied by
-    Definition~\ref{def:mpdo_eta_of_hayashi_markov}. What remains is the
-    tensor-coordinate assembly
+    The remaining entropy-side step is to derive from $\mathrm{SAL}(K)$ a
+    physical-sector factorization whose neighboring operators
+    $\eta_{k,h}$ are simultaneously positive semidefinite. Given such a
+    factorization, the two-site bond is
     \begin{equation}\label{eq:mpdo_eta_bond_assembly}
         B=\sum_{k,h}
         \operatorname{Id}_{H_L^{(k)}}\otimes
@@ -251,10 +250,11 @@
         \qquad c_N>0,\qquad
         [B_{i,i+1},B_{j,j+1}]=0.
     \end{equation}
-    (\ref{eq:mpdo_eta_bond_assembly}) and~(\ref{eq:mpdo_eta_product_form}) are
-    exactly the $\eta$-local product hypothesis; after that,
-    Theorem~\ref{thm:mpdo_has_commuting_form_of_eta_local_structure}
-    gives the commuting-form conclusion. Adjacent translates commute on every
+    Theorem~\ref{thm:mpdo_eta_local_structure_of_positive_physical_sector_factorization}
+    constructs the $\eta$-local structure and proves
+    (\ref{eq:mpdo_eta_bond_assembly})--(\ref{eq:mpdo_eta_product_form}) with
+    $c_N=1$. Theorem~\ref{thm:mpdo_has_commuting_form_of_eta_local_structure}
+    then gives the commuting-form conclusion. Adjacent translates commute on every
     periodic chain of length at least three by
     Theorem~\ref{thm:mpdo_periodic_adjacent_physical_bonds_comm}, and the
     crossed two-site case is
@@ -265,9 +265,8 @@
     Theorem~\ref{thm:mpdo_periodic_pairwise_physical_bonds_comm}. Given the
     physical-sector factorization, the all-length product identity is
     Theorem~\ref{thm:mpdo_exact_physical_sector_bond_product}. The remaining
-    entropy-side problem is to construct a coherently positive physical-sector
-    factorization from SAL and assemble these conditional results into the
-    eta-local structure.
+    entropy-side problem is precisely the construction of a coherently
+    positive physical-sector factorization from SAL.
     The doubled-index transfer condition enters only in the subsequent RFP and
     GSNNCH branch conclusions.
 \end{remark}
