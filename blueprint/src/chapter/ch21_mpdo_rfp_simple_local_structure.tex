@@ -1,5 +1,7 @@
 \section{Simple local structure from SAL and ZCL}
 
+\subsection{Markov decomposition and inverse-map sector factorization}
+
 For the simple MPDO case in Appendix~C.2 of \cite{Cirac2016MPDO_arXiv},
 the strong-area-law hypothesis is used locally through the equality case of
 strong subadditivity for a normalized three-site reduced state.
@@ -739,6 +741,8 @@ strong subadditivity for a normalized three-site reduced state.
     $(R_4)_{\beta_3,\alpha_1}\ne0$, and the sector factorization applies.
 \end{proof}
 
+\subsection{Neighboring operators and commuting bond products}
+
 \begin{definition}[Neighboring operators]%
     \label{def:mpdo_sector_eta}
     \lean{MPOTensor.sectorEta}
@@ -769,15 +773,19 @@ strong subadditivity for a normalized three-site reduced state.
     shared virtual bond of two neighboring factorized slices leaves the
     neighboring operator between the outer sector tensors:
     \[
-        \sum_{\gamma}
+        \begin{aligned}
+        &\sum_{\gamma}
         \left[U_B\kappa_{\beta_1,\gamma}U_B^\dagger
-        \right]_{(k,l_1,r_1),(k,l_1',r_1')}
+        \right]_{(k,l_1,r_1),(k,l_1',r_1')} \\
+        &\qquad {}\cdot
         \left[U_B\kappa_{\gamma,\alpha_3}U_B^\dagger
-        \right]_{(h,l_2,r_2),(h,l_2',r_2')}
-        =
+        \right]_{(h,l_2,r_2),(h,l_2',r_2')} \\
+        &\quad =
         \left[(l_k)_{\beta_1}\right]_{l_1,l_1'}
-        \left[\eta_{k,h}\right]_{(r_1,l_2),(r_1',l_2')}
+        \left[\eta_{k,h}\right]_{(r_1,l_2),(r_1',l_2')} \\
+        &\qquad {}\cdot
         \left[(r_h)_{\alpha_3}\right]_{r_2,r_2'}.
+        \end{aligned}
     \]
     This is the single-bond step of the identity assembling
     $\bigotimes_{n}\eta_{k_n,k_{n+1}}$ from the factorized chain in
@@ -1900,6 +1908,8 @@ strong subadditivity for a normalized three-site reduced state.
     realizes every finite-chain operator with normalization scalar $1$.
 \end{proof}
 
+\subsection{Closed-sector contractions and coherent rephasing}
+
 \begin{definition}[Closed sector tensors]%
     \label{def:mpdo_closed_sector_tensors}
     \lean{MPOTensor.closedSectorL}
@@ -2870,9 +2880,10 @@ strong subadditivity for a normalized three-site reduced state.
     This is a scope-restricted result. Recurrence is not a hypothesis of
     Lemma~C.4 in
     \cite[Appendix~C.2, lines~1406--1450]{Cirac2016MPDO_arXiv}; its derivation
-    from the source hypotheses remains open and is recorded in
-    \path{docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex}.
+    from the source hypotheses remains open.
 \end{theorem}
+% The recurrence gap is documented in
+% docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex.
 
 \begin{proof}
     \leanok
@@ -2976,6 +2987,8 @@ strong subadditivity for a normalized three-site reduced state.
     applied to that scalar gives
     $\eta'_{k,h}\otimes\eta'_{h,k}=\eta_{k,h}\otimes\eta_{h,k}$.
 \end{proof}
+
+\subsection{Normalized preparations and controlled partial traces}
 
 \begin{definition}[Trace matrices of explicit $\eta$-data]
     \label{def:mpdo_explicit_eta_trace_matrix}
@@ -3936,20 +3949,16 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{figure}[ht]
     \centering
-    \begin{minipage}{0.40\textwidth}
-      \centering
-      $\displaystyle\bigoplus_{k,h}$; one $(k,h)$-fiber is drawn
+    $\displaystyle\bigoplus_{k,h}$; one $(k,h)$-fiber is drawn
 
-      \smallskip
-      \TNMPDOTwoSiteTraceAndShift
-    \end{minipage}\hfill
-    \begin{minipage}{0.57\textwidth}
-      \centering
-      $\displaystyle\bigoplus_{k,h}$; one $(k,h)$-fiber and one $l$-summand are drawn
+    \smallskip
+    \TNMPDOTwoSiteTraceAndShift
 
-      \smallskip
-      \TNMPDOThreeSiteTraceAndShift
-    \end{minipage}
+    \medskip
+    $\displaystyle\bigoplus_{k,h}$; one $(k,h)$-fiber and one $l$-summand are drawn
+
+    \smallskip
+    \TNMPDOThreeSiteTraceAndShift
     \caption{Schematics on a fixed $(k,h)$-summand of the global $\bigoplus_{k,h}$ index
     space. The controlled maps $\mathcal T_0$ and $\mathcal S_0$ discard coherences between
     distinct outer summands and take the displayed trace in each diagonal summand; the shifts
@@ -3960,6 +3969,8 @@ strong subadditivity for a normalized three-site reduced state.
     \cite[Appendix~C.2, lines~1521--1559]{Cirac2016MPDO_arXiv}.}
     \label{fig:mpdo_regrouping_partial_trace_maps}
 \end{figure}
+
+\subsection{Refinement and coarse-graining channels}
 
 % **Local fix (zero-weight quotient):** the source quotient is completed on
 % zero-weight pairs. Documented in
@@ -4941,6 +4952,8 @@ $\widehat{\cal K}$.
     \label{fig:mpdo_sector_pairing}
 \end{figure}
 
+\subsection{Primitivity and rank-one trace matrices}
+
 \begin{definition}[Explicit $\eta$-data from the sector tensors]%
     \label{def:mpdo_explicit_eta_of_sector_tensors}
     \lean{MPOTensor.ExplicitEtaOperators.ofSectorTensors}
@@ -5201,13 +5214,13 @@ $\widehat{\cal K}$.
 
     The proposed implication from primitivity and constant trace powers to a
     rank-one factorization is not a valid general theorem. A
-    concrete $3 \times 3$ counterexample appears in the archive, and the
-    deviation from the source is documented in
-    \path{docs/paper-gaps/cpgsv17_pf_rank_one.tex}. The
-    corrected criterion proved here adds positive semidefiniteness and trace
+    concrete $3 \times 3$ counterexample appears in the archive. The corrected
+    criterion proved here adds positive semidefiniteness and trace
     normalization, which provide the diagonalizability needed to turn the
     trace-power condition into a rank-one factorization.
 \end{definition}
+% The deviation from the source is documented in
+% docs/paper-gaps/cpgsv17_pf_rank_one.tex.
 
 \begin{theorem}[Trace square of a Hermitian matrix]
     \label{thm:matrix_hermitian_trace_square_eigenvalues}
