@@ -17,6 +17,7 @@ The following archival modules are intentionally excluded
 -/
 
 -- Layer 0: General algebra
+import TNLean.Algebra.FinTupleEquiv
 import TNLean.Algebra.TracePairing
 import TNLean.Algebra.BlockPermutation
 import TNLean.Algebra.SkolemNoether

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinTupleEquiv
 import TNLean.MPS.MPDO.PhysicalSectorPositiveBond
 import TNLean.MPS.MPDO.CommutingForm
 
@@ -56,33 +57,39 @@ its left tensor-product lift after identifying configurations with triples.
 Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), lines
 1589--1593. -/
 theorem reindex_embedLocalOperator_zero (F : PhysicalSectorFactorization K) :
-    Matrix.reindex (finThreeArrowEquiv (Fin d)) (finThreeArrowEquiv (Fin d))
+    Matrix.reindex (_root_.finThreeArrowEquiv (Fin d))
+        (_root_.finThreeArrowEquiv (Fin d))
         (embedLocalOperator (d := d) 2 3 (by decide) (0 : Fin 3) F.physicalBond) =
       leftPairMatrix F.physicalPairBond := by
   ext σ τ
   have hAgree :
       AgreesOutsideWindow (d := d) 2 (by decide) (0 : Fin 3)
-          ((finThreeArrowEquiv (Fin d)).symm σ)
-          ((finThreeArrowEquiv (Fin d)).symm τ) ↔
+          ((_root_.finThreeArrowEquiv (Fin d)).symm σ)
+          ((_root_.finThreeArrowEquiv (Fin d)).symm τ) ↔
         τ.2.2 = σ.2.2 := by
     constructor
     · intro ha
       have h := congrFun ha (2 : Fin 3)
-      simpa [AgreesOutsideWindow, finThreeArrowEquiv,
-        MPSTensor.replaceWindow, MPSTensor.extractWindow] using h
+      simpa [AgreesOutsideWindow, MPSTensor.replaceWindow,
+        MPSTensor.extractWindow] using h
     · intro ha
       funext i
       fin_cases i <;>
-        simp [finThreeArrowEquiv,
-          MPSTensor.replaceWindow, MPSTensor.extractWindow, ha]
+        simp [MPSTensor.replaceWindow, MPSTensor.extractWindow, ha]
   by_cases h : τ.2.2 = σ.2.2
   · have ha := hAgree.mpr h
-    simp [Matrix.reindex_apply, embedLocalOperator_apply, ha, leftPairMatrix,
-      physicalBond, MPSTensor.extractWindow, h]
-    simp [finThreeArrowEquiv]
+    simp only [Fin.isValue, Matrix.reindex_apply, Matrix.submatrix_apply,
+      embedLocalOperator_apply]
+    rw [if_pos ha]
+    simp only [physicalBond, Matrix.reindex_apply, Matrix.submatrix_apply,
+      Equiv.symm_symm, leftPairMatrix, Matrix.kroneckerMap_apply]
+    change F.physicalPairBond (σ.1, σ.2.1) (τ.1, τ.2.1) =
+      F.physicalPairBond (σ.1, σ.2.1) (τ.1, τ.2.1) *
+        (if σ.2.2 = τ.2.2 then 1 else 0)
+    rw [if_pos h.symm, mul_one]
   · have ha : ¬ AgreesOutsideWindow (d := d) 2 (by decide) (0 : Fin 3)
-        ((finThreeArrowEquiv (Fin d)).symm σ)
-        ((finThreeArrowEquiv (Fin d)).symm τ) := fun ha ↦ h (hAgree.mp ha)
+        ((_root_.finThreeArrowEquiv (Fin d)).symm σ)
+        ((_root_.finThreeArrowEquiv (Fin d)).symm τ) := fun ha ↦ h (hAgree.mp ha)
     simp only [Fin.isValue, Matrix.reindex_apply, Matrix.submatrix_apply,
       embedLocalOperator_apply]
     rw [if_neg ha]
@@ -98,25 +105,24 @@ its right tensor-product lift after identifying configurations with triples.
 Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), lines
 1589--1593. -/
 theorem reindex_embedLocalOperator_one (F : PhysicalSectorFactorization K) :
-    Matrix.reindex (finThreeArrowEquiv (Fin d)) (finThreeArrowEquiv (Fin d))
+    Matrix.reindex (_root_.finThreeArrowEquiv (Fin d))
+        (_root_.finThreeArrowEquiv (Fin d))
         (embedLocalOperator (d := d) 2 3 (by decide) (1 : Fin 3) F.physicalBond) =
       rightPairMatrix F.physicalPairBond := by
   ext σ τ
   have hAgree :
       AgreesOutsideWindow (d := d) 2 (by decide) (1 : Fin 3)
-          ((finThreeArrowEquiv (Fin d)).symm σ)
-          ((finThreeArrowEquiv (Fin d)).symm τ) ↔
+          ((_root_.finThreeArrowEquiv (Fin d)).symm σ)
+          ((_root_.finThreeArrowEquiv (Fin d)).symm τ) ↔
         τ.1 = σ.1 := by
     constructor
     · intro ha
       have h := congrFun ha (0 : Fin 3)
-      simpa [finThreeArrowEquiv, MPSTensor.replaceWindow,
-        MPSTensor.extractWindow] using h
+      simpa [MPSTensor.replaceWindow, MPSTensor.extractWindow] using h
     · intro ha
       funext i
       fin_cases i <;>
-        simp [finThreeArrowEquiv, MPSTensor.replaceWindow,
-          MPSTensor.extractWindow, ha]
+        simp [MPSTensor.replaceWindow, MPSTensor.extractWindow, ha]
   by_cases h : τ.1 = σ.1
   · have ha := hAgree.mpr h
     simp only [Fin.isValue, Matrix.reindex_apply, Matrix.submatrix_apply,
@@ -126,8 +132,8 @@ theorem reindex_embedLocalOperator_one (F : PhysicalSectorFactorization K) :
       (if σ.1 = τ.1 then 1 else 0) * F.physicalPairBond σ.2 τ.2
     rw [if_pos h.symm, one_mul]
   · have ha : ¬ AgreesOutsideWindow (d := d) 2 (by decide) (1 : Fin 3)
-        ((finThreeArrowEquiv (Fin d)).symm σ)
-        ((finThreeArrowEquiv (Fin d)).symm τ) := fun ha ↦ h (hAgree.mp ha)
+        ((_root_.finThreeArrowEquiv (Fin d)).symm σ)
+        ((_root_.finThreeArrowEquiv (Fin d)).symm τ) := fun ha ↦ h (hAgree.mp ha)
     simp only [Fin.isValue, Matrix.reindex_apply, Matrix.submatrix_apply,
       embedLocalOperator_apply]
     rw [if_neg ha]

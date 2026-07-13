@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Algebra.FinTupleEquiv
 import TNLean.MPS.RFP.AppendixBSupport
 import TNLean.MPS.RFP.KroneckerTransport
 
@@ -28,19 +29,6 @@ namespace MPSTensor
 variable {d D : ℕ}
 
 /-! ### Matrices of adjacent pair lifts -/
-
-/-- The right-associated identification of a three-coordinate function with a
-triple. -/
-private def appendixBFinThreeArrowEquiv (α : Type*) :
-    (Fin 3 → α) ≃ α × (α × α) :=
-  (Fin.consEquiv fun _ : Fin 3 ↦ α).symm.trans
-    (Equiv.prodCongr (Equiv.refl α) (finTwoArrowEquiv α))
-
-@[simp] private theorem appendixBFinThreeArrowEquiv_symm_apply
-    {alpha : Type*} (x : alpha × (alpha × alpha)) :
-    (appendixBFinThreeArrowEquiv alpha).symm x = ![x.1, x.2.1, x.2.2] := by
-  funext k
-  fin_cases k <;> rfl
 
 @[simp] private theorem axPairCfg_vecCons (a b c : Fin d) :
     axPairCfg ![a, b, c] = ![a, b] := by
@@ -78,12 +66,16 @@ private theorem replaceXBCfg_eq_iff (sigma tau : Cfg d 3) (beta : Cfg d 2) :
     funext k
     fin_cases k <;> simp [replaceXBCfg, xbPairCfg, h]
 
-/-- Reindexing the coefficient matrix of the first physical pair lift gives
-the standard tensor-product matrix lift. -/
-private theorem leftPairLift_toMatrix_reindex
+/-- Under the canonical two-site and three-site reindexings, the first-pair
+action is \(Q\otimes 1\).
+
+This is the homogeneous three-single-site coefficient-space specialization of
+the \(AX\) factor action in arXiv:1606.00608, lines 2185--2186 and 2205--2218.
+-/
+theorem leftPairLift_toMatrix_reindex
     (Q : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) :
-    Matrix.reindex (appendixBFinThreeArrowEquiv (Fin d))
-        (appendixBFinThreeArrowEquiv (Fin d))
+    Matrix.reindex (finThreeArrowEquiv (Fin d))
+        (finThreeArrowEquiv (Fin d))
         (LinearMap.toMatrix' (leftPairLift Q)) =
       appendixBLeftPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin d))
         (finTwoArrowEquiv (Fin d)) (LinearMap.toMatrix' Q)) := by
@@ -91,9 +83,9 @@ private theorem leftPairLift_toMatrix_reindex
   ext σ τ
   by_cases h : σ.2.2 = τ.2.2
   · have hslice : (fun α ↦
-        (Pi.single ((appendixBFinThreeArrowEquiv (Fin d)).symm τ) (1 : ℂ) :
+        (Pi.single ((finThreeArrowEquiv (Fin d)).symm τ) (1 : ℂ) :
           NSiteSpace d 3)
-          (replaceAXCfg ((appendixBFinThreeArrowEquiv (Fin d)).symm σ) α)) =
+          (replaceAXCfg ((finThreeArrowEquiv (Fin d)).symm σ) α)) =
         (Pi.single ((finTwoArrowEquiv (Fin d)).symm (τ.1, τ.2.1)) (1 : ℂ) :
           NSiteSpace d 2) := by
       funext α
@@ -101,40 +93,44 @@ private theorem leftPairLift_toMatrix_reindex
       simp only [replaceAXCfg_eq_iff]
       simp [finTwoArrowEquiv, h]
     change Q (fun α ↦
-        (Pi.single ((appendixBFinThreeArrowEquiv (Fin d)).symm τ) (1 : ℂ) :
+        (Pi.single ((finThreeArrowEquiv (Fin d)).symm τ) (1 : ℂ) :
           NSiteSpace d 3)
-          (replaceAXCfg ((appendixBFinThreeArrowEquiv (Fin d)).symm σ) α))
-        (axPairCfg ((appendixBFinThreeArrowEquiv (Fin d)).symm σ)) =
+          (replaceAXCfg ((finThreeArrowEquiv (Fin d)).symm σ) α))
+        (axPairCfg ((finThreeArrowEquiv (Fin d)).symm σ)) =
       Q (Pi.single ((finTwoArrowEquiv (Fin d)).symm (τ.1, τ.2.1)) (1 : ℂ))
         ((finTwoArrowEquiv (Fin d)).symm (σ.1, σ.2.1)) *
           (if σ.2.2 = τ.2.2 then 1 else 0)
     rw [hslice]
     simp [finTwoArrowEquiv, h]
   · have hslice : (fun α ↦
-        (Pi.single ((appendixBFinThreeArrowEquiv (Fin d)).symm τ) (1 : ℂ) :
+        (Pi.single ((finThreeArrowEquiv (Fin d)).symm τ) (1 : ℂ) :
           NSiteSpace d 3)
-          (replaceAXCfg ((appendixBFinThreeArrowEquiv (Fin d)).symm σ) α)) = 0 := by
+          (replaceAXCfg ((finThreeArrowEquiv (Fin d)).symm σ) α)) = 0 := by
       funext α
       simp only [Pi.single_apply, Pi.zero_apply]
       simp only [replaceAXCfg_eq_iff]
       simp [h]
     change Q (fun α ↦
-        (Pi.single ((appendixBFinThreeArrowEquiv (Fin d)).symm τ) (1 : ℂ) :
+        (Pi.single ((finThreeArrowEquiv (Fin d)).symm τ) (1 : ℂ) :
           NSiteSpace d 3)
-          (replaceAXCfg ((appendixBFinThreeArrowEquiv (Fin d)).symm σ) α))
-        (axPairCfg ((appendixBFinThreeArrowEquiv (Fin d)).symm σ)) =
+          (replaceAXCfg ((finThreeArrowEquiv (Fin d)).symm σ) α))
+        (axPairCfg ((finThreeArrowEquiv (Fin d)).symm σ)) =
       Q (Pi.single ((finTwoArrowEquiv (Fin d)).symm (τ.1, τ.2.1)) (1 : ℂ))
         ((finTwoArrowEquiv (Fin d)).symm (σ.1, σ.2.1)) *
           (if σ.2.2 = τ.2.2 then 1 else 0)
     rw [hslice]
     simp [h]
 
-/-- Reindexing the coefficient matrix of the second physical pair lift gives
-the standard tensor-product matrix lift. -/
-private theorem rightPairLift_toMatrix_reindex
+/-- Under the canonical two-site and three-site reindexings, the final-pair
+action is \(1\otimes Q\).
+
+This is the homogeneous three-single-site coefficient-space specialization of
+the \(XB\) factor action in arXiv:1606.00608, lines 2185--2186 and 2205--2218.
+-/
+theorem rightPairLift_toMatrix_reindex
     (Q : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) :
-    Matrix.reindex (appendixBFinThreeArrowEquiv (Fin d))
-        (appendixBFinThreeArrowEquiv (Fin d))
+    Matrix.reindex (finThreeArrowEquiv (Fin d))
+        (finThreeArrowEquiv (Fin d))
         (LinearMap.toMatrix' (rightPairLift Q)) =
       appendixBRightPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin d))
         (finTwoArrowEquiv (Fin d)) (LinearMap.toMatrix' Q)) := by
@@ -142,9 +138,9 @@ private theorem rightPairLift_toMatrix_reindex
   ext σ τ
   by_cases h : σ.1 = τ.1
   · have hslice : (fun β ↦
-        (Pi.single ((appendixBFinThreeArrowEquiv (Fin d)).symm τ) (1 : ℂ) :
+        (Pi.single ((finThreeArrowEquiv (Fin d)).symm τ) (1 : ℂ) :
           NSiteSpace d 3)
-          (replaceXBCfg ((appendixBFinThreeArrowEquiv (Fin d)).symm σ) β)) =
+          (replaceXBCfg ((finThreeArrowEquiv (Fin d)).symm σ) β)) =
         (Pi.single ((finTwoArrowEquiv (Fin d)).symm (τ.2.1, τ.2.2)) (1 : ℂ) :
           NSiteSpace d 2) := by
       funext β
@@ -152,33 +148,75 @@ private theorem rightPairLift_toMatrix_reindex
       simp only [replaceXBCfg_eq_iff]
       simp [finTwoArrowEquiv, h]
     change Q (fun β ↦
-        (Pi.single ((appendixBFinThreeArrowEquiv (Fin d)).symm τ) (1 : ℂ) :
+        (Pi.single ((finThreeArrowEquiv (Fin d)).symm τ) (1 : ℂ) :
           NSiteSpace d 3)
-          (replaceXBCfg ((appendixBFinThreeArrowEquiv (Fin d)).symm σ) β))
-        (xbPairCfg ((appendixBFinThreeArrowEquiv (Fin d)).symm σ)) =
+          (replaceXBCfg ((finThreeArrowEquiv (Fin d)).symm σ) β))
+        (xbPairCfg ((finThreeArrowEquiv (Fin d)).symm σ)) =
       (if σ.1 = τ.1 then 1 else 0) *
         Q (Pi.single ((finTwoArrowEquiv (Fin d)).symm (τ.2.1, τ.2.2)) (1 : ℂ))
           ((finTwoArrowEquiv (Fin d)).symm (σ.2.1, σ.2.2))
     rw [hslice]
     simp [finTwoArrowEquiv, h]
   · have hslice : (fun β ↦
-        (Pi.single ((appendixBFinThreeArrowEquiv (Fin d)).symm τ) (1 : ℂ) :
+        (Pi.single ((finThreeArrowEquiv (Fin d)).symm τ) (1 : ℂ) :
           NSiteSpace d 3)
-          (replaceXBCfg ((appendixBFinThreeArrowEquiv (Fin d)).symm σ) β)) = 0 := by
+          (replaceXBCfg ((finThreeArrowEquiv (Fin d)).symm σ) β)) = 0 := by
       funext β
       simp only [Pi.single_apply, Pi.zero_apply]
       simp only [replaceXBCfg_eq_iff]
       simp [h]
     change Q (fun β ↦
-        (Pi.single ((appendixBFinThreeArrowEquiv (Fin d)).symm τ) (1 : ℂ) :
+        (Pi.single ((finThreeArrowEquiv (Fin d)).symm τ) (1 : ℂ) :
           NSiteSpace d 3)
-          (replaceXBCfg ((appendixBFinThreeArrowEquiv (Fin d)).symm σ) β))
-        (xbPairCfg ((appendixBFinThreeArrowEquiv (Fin d)).symm σ)) =
+          (replaceXBCfg ((finThreeArrowEquiv (Fin d)).symm σ) β))
+        (xbPairCfg ((finThreeArrowEquiv (Fin d)).symm σ)) =
       (if σ.1 = τ.1 then 1 else 0) *
         Q (Pi.single ((finTwoArrowEquiv (Fin d)).symm (τ.2.1, τ.2.2)) (1 : ℂ))
           ((finTwoArrowEquiv (Fin d)).symm (σ.2.1, σ.2.2))
     rw [hslice]
     simp [h]
+
+/-- The hatted Appendix B (AX) coefficient representative acts on a
+homogeneous three-single-site coefficient space by
+\(\widehat Q_{AX}\otimes 1\) under the canonical right-associated reindexing.
+
+This is only the three-single-site coefficient-factor specialization of the
+left local action in Definition D.2. It does not construct a projector for an
+arbitrary factorization
+\(\mathcal H_A\otimes\mathcal H_X\otimes\mathcal H_B\).
+
+Source: arXiv:1606.00608, factor spaces at lines 2185--2186 and Definition D.2,
+lines 2205--2218. -/
+theorem AppendixBStructuralData.appendixBQAX_factor_action
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
+    Matrix.reindex (finThreeArrowEquiv (Fin d))
+        (finThreeArrowEquiv (Fin d))
+        (LinearMap.toMatrix' (leftPairLift hStruct.appendixBQAXOnCoeffSpace)) =
+      appendixBLeftPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin d))
+        (finTwoArrowEquiv (Fin d))
+        (LinearMap.toMatrix' hStruct.appendixBQAXOnCoeffSpace)) := by
+  exact leftPairLift_toMatrix_reindex _
+
+/-- The hatted Appendix B (XB) coefficient representative acts on a
+homogeneous three-single-site coefficient space by
+\(1\otimes\widehat Q_{XB}\) under the canonical right-associated reindexing.
+
+This is only the three-single-site coefficient-factor specialization of the
+right local action in Definition D.2. It does not construct a projector for an
+arbitrary factorization
+\(\mathcal H_A\otimes\mathcal H_X\otimes\mathcal H_B\).
+
+Source: arXiv:1606.00608, factor spaces at lines 2185--2186 and Definition D.2,
+lines 2205--2218. -/
+theorem AppendixBStructuralData.appendixBQXB_factor_action
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
+    Matrix.reindex (finThreeArrowEquiv (Fin d))
+          (finThreeArrowEquiv (Fin d))
+          (LinearMap.toMatrix' (rightPairLift hStruct.appendixBQXBOnCoeffSpace)) =
+      appendixBRightPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin d))
+        (finTwoArrowEquiv (Fin d))
+        (LinearMap.toMatrix' hStruct.appendixBQXBOnCoeffSpace)) := by
+  exact rightPairLift_toMatrix_reindex _
 
 /-! ### Virtual replacement slices -/
 
@@ -327,8 +365,8 @@ private theorem AppendixBStructuralData.physicalIsometryMatrix_isometry
 left pair matrix of the two-site virtual projector. -/
 private theorem AppendixBStructuralData.leftVirtualBondProjection_matrix
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
-    Matrix.reindex (appendixBFinThreeArrowEquiv (Fin D × Fin D))
-        (appendixBFinThreeArrowEquiv (Fin D × Fin D))
+    Matrix.reindex (finThreeArrowEquiv (Fin D × Fin D))
+        (finThreeArrowEquiv (Fin D × Fin D))
         (LinearMap.toMatrix' hStruct.leftVirtualBondProjection) =
       appendixBLeftPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin D × Fin D))
         (finTwoArrowEquiv (Fin D × Fin D))
@@ -341,22 +379,22 @@ private theorem AppendixBStructuralData.leftVirtualBondProjection_matrix
       AppendixBStructuralData.leftVirtualBondProjection,
       AppendixBStructuralData.twoSiteVirtualBondProjection,
       hStruct.replaceVirtualBond01_eq_iff,
-      appendixBFirstPairCfg, appendixBFinThreeArrowEquiv, finTwoArrowEquiv,
+      appendixBFirstPairCfg, finThreeArrowEquiv, finTwoArrowEquiv,
       Pi.single_apply, hs]
   · simp [appendixBLeftPairMatrix, appendixBLeftPairMatrixAux,
       Matrix.reindex_apply, LinearMap.toMatrix'_apply,
       AppendixBStructuralData.leftVirtualBondProjection,
       AppendixBStructuralData.twoSiteVirtualBondProjection,
       hStruct.replaceVirtualBond01_eq_iff,
-      appendixBFirstPairCfg, appendixBFinThreeArrowEquiv, finTwoArrowEquiv,
+      appendixBFirstPairCfg, finThreeArrowEquiv, finTwoArrowEquiv,
       Pi.single_apply, hs]
 
 /-- Reindexing the second three-site virtual bond projector gives the standard
 right pair matrix of the two-site virtual projector. -/
 private theorem AppendixBStructuralData.rightVirtualBondProjection_matrix
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
-    Matrix.reindex (appendixBFinThreeArrowEquiv (Fin D × Fin D))
-        (appendixBFinThreeArrowEquiv (Fin D × Fin D))
+    Matrix.reindex (finThreeArrowEquiv (Fin D × Fin D))
+        (finThreeArrowEquiv (Fin D × Fin D))
         (LinearMap.toMatrix' hStruct.rightVirtualBondProjection) =
       appendixBRightPairMatrix (Matrix.reindex (finTwoArrowEquiv (Fin D × Fin D))
         (finTwoArrowEquiv (Fin D × Fin D))
@@ -369,14 +407,14 @@ private theorem AppendixBStructuralData.rightVirtualBondProjection_matrix
       AppendixBStructuralData.rightVirtualBondProjection,
       AppendixBStructuralData.twoSiteVirtualBondProjection,
       hStruct.replaceVirtualBond12_eq_iff,
-      appendixBLastPairCfg, appendixBFinThreeArrowEquiv, finTwoArrowEquiv,
+      appendixBLastPairCfg, finThreeArrowEquiv, finTwoArrowEquiv,
       Pi.single_apply, Matrix.one_apply, hs]
   · simp [appendixBRightPairMatrix, appendixBRightPairMatrixAux,
       Matrix.reindex_apply, LinearMap.toMatrix'_apply,
       AppendixBStructuralData.rightVirtualBondProjection,
       AppendixBStructuralData.twoSiteVirtualBondProjection,
       hStruct.replaceVirtualBond12_eq_iff,
-      appendixBLastPairCfg, appendixBFinThreeArrowEquiv, finTwoArrowEquiv,
+      appendixBLastPairCfg, finThreeArrowEquiv, finTwoArrowEquiv,
       Pi.single_apply, hs]
 
 /-- The two standard pair matrices of the virtual bond projector commute. -/
@@ -396,7 +434,7 @@ private theorem AppendixBStructuralData.virtualPairMatrices_comm
           (LinearMap.toMatrix' hStruct.twoSiteVirtualBondProjection)) := by
   rw [← hStruct.leftVirtualBondProjection_matrix,
     ← hStruct.rightVirtualBondProjection_matrix]
-  let e := appendixBFinThreeArrowEquiv (Fin D × Fin D)
+  let e := finThreeArrowEquiv (Fin D × Fin D)
   have hMatrix := congrArg LinearMap.toMatrix'
     hStruct.leftVirtualBondProjection_comp_right
   rw [LinearMap.toMatrix'_comp, LinearMap.toMatrix'_comp] at hMatrix
@@ -458,7 +496,7 @@ private theorem AppendixBStructuralData.transportedTwoSiteBondProjection_commute
         leftPairLift hStruct.transportedTwoSiteBondProjection := by
   apply LinearMap.toMatrix'.injective
   simp only [LinearMap.toMatrix'_mul]
-  let e := appendixBFinThreeArrowEquiv (Fin d)
+  let e := finThreeArrowEquiv (Fin d)
   apply (Matrix.reindexLinearEquiv ℂ ℂ e e).injective
   simp only [Matrix.coe_reindexLinearEquiv]
   calc

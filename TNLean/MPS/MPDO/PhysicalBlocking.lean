@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinTupleEquiv
 import TNLean.MPS.MPDO.RFPViaTS
 
 /-!
@@ -50,12 +51,6 @@ noncomputable def blockTwo (M : MPOTensor d D) : MPOTensor (d * d) D :=
 
 /-! ### The four-site physical closure -/
 
-/-- The canonical right-associated identification of four-coordinate
-configurations with quadruples. -/
-def finFourArrowEquiv (α : Type*) : (Fin 4 → α) ≃ α × (α × (α × α)) :=
-  (Fin.consEquiv fun _ : Fin 4 => α).symm.trans
-    (Equiv.prodCongr (Equiv.refl α) (finThreeArrowEquiv α))
-
 /-- The four-site physical closure, with the physical indices associated as
 `Fin d × (Fin d × (Fin d × Fin d))`. Its coefficient is the virtual trace of
 four consecutive tensor matrices followed by the inserted virtual operator.
@@ -89,12 +84,11 @@ noncomputable def physClose4 (M : MPOTensor d D) :
 configurations with quadruples of physical indices, the general length-four
 closure is `physClose4`. -/
 theorem physCloseN_four_eq_physClose4 (M : MPOTensor d D) :
-    (Matrix.reindexLinearEquiv ℂ ℂ (finFourArrowEquiv (Fin d))
-        (finFourArrowEquiv (Fin d))).toLinearMap ∘ₗ physCloseN M 4 =
+    (Matrix.reindexLinearEquiv ℂ ℂ (_root_.finFourArrowEquiv (Fin d))
+        (_root_.finFourArrowEquiv (Fin d))).toLinearMap ∘ₗ physCloseN M 4 =
       physClose4 M := by
   ext X i j
-  simp [Matrix.coe_reindexLinearEquiv, finFourArrowEquiv, finThreeArrowEquiv,
-    Matrix.mul_assoc]
+  simp [Matrix.coe_reindexLinearEquiv, Matrix.mul_assoc]
 
 /-! ### Blocking identities -/
 
@@ -128,5 +122,8 @@ theorem physClose2_blockTwo_eq_physClose4 (M : MPOTensor d D) :
   ext X i j
   simp [Matrix.coe_reindexLinearEquiv, blockedPairEquiv, blockedIndexEquiv,
     blockTwo, Matrix.mul_assoc]
+
+@[deprecated _root_.finFourArrowEquiv (since := "2026-07-13")]
+alias finFourArrowEquiv := _root_.finFourArrowEquiv
 
 end MPOTensor
