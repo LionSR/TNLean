@@ -85,6 +85,84 @@ noncomputable def tripleFusionComparison (α β γ : Λ) :
     mulTensorAssocMatrix (Fam.bondDim α) (Fam.bondDim β) (Fam.bondDim γ) *
       (Fam.rightFusionIsometry α β γ)ᴴ
 
+private theorem mulTensorAssocMatrix_mul_conjTranspose (D₁ D₂ D₃ : ℕ) :
+    mulTensorAssocMatrix D₁ D₂ D₃ * (mulTensorAssocMatrix D₁ D₂ D₃)ᴴ = 1 := by
+  ext x y
+  simp [mulTensorAssocMatrix, Matrix.mul_apply, Matrix.conjTranspose_apply,
+    PEquiv.toMatrix_apply, Matrix.one_apply]
+
+private theorem conjTranspose_mul_mulTensorAssocMatrix (D₁ D₂ D₃ : ℕ) :
+    (mulTensorAssocMatrix D₁ D₂ D₃)ᴴ * mulTensorAssocMatrix D₁ D₂ D₃ = 1 := by
+  classical
+  ext x y
+  rw [Matrix.mul_apply, Matrix.one_apply]
+  rw [Finset.sum_eq_single ((mulTensorAssocEquiv D₁ D₂ D₃).symm x)]
+  · simp [mulTensorAssocMatrix, Matrix.conjTranspose_apply, PEquiv.toMatrix_apply]
+  · intro z _ hz
+    have hf : mulTensorAssocEquiv D₁ D₂ D₃ z ≠ x := by
+      intro h
+      apply hz
+      exact (mulTensorAssocEquiv D₁ D₂ D₃).injective
+        (h.trans ((mulTensorAssocEquiv D₁ D₂ D₃).apply_symm_apply x).symm)
+    simp [mulTensorAssocMatrix, Matrix.conjTranspose_apply, PEquiv.toMatrix_apply, hf]
+  · simp
+
+/-- The product of the full triple-fusion comparison with its adjoint is the
+range projection of the left iterated fusion isometry:
+\[
+  C_{\alpha,\beta,\gamma}C_{\alpha,\beta,\gamma}^\dagger
+    = U^{\mathrm L}_{\alpha,\beta,\gamma}
+      (U^{\mathrm L}_{\alpha,\beta,\gamma})^\dagger.
+\]
+
+The right iterated fusion map is an isometry and the bond reassociation is a
+permutation, so both factors cancel between the two copies of the comparison.
+The remaining projection is not asserted to be the identity. Such an assertion
+requires completeness of the fusion decomposition, which is the additional
+hypothesis in the invertible total fusion-matrix argument of the source.
+
+Source: arXiv:1511.08090, source lines 181--191 and 237--252. -/
+theorem tripleFusionComparison_mul_conjTranspose (α β γ : Λ) :
+    Fam.tripleFusionComparison α β γ * (Fam.tripleFusionComparison α β γ)ᴴ =
+      Fam.leftFusionIsometry α β γ * (Fam.leftFusionIsometry α β γ)ᴴ := by
+  unfold tripleFusionComparison
+  rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,
+    Matrix.conjTranspose_conjTranspose]
+  simp only [Matrix.mul_assoc]
+  rw [← Matrix.mul_assoc (Fam.rightFusionIsometry α β γ)ᴴ,
+    Fam.rightFusionIsometry_isometry, Matrix.one_mul]
+  rw [← Matrix.mul_assoc (mulTensorAssocMatrix (Fam.bondDim α)
+      (Fam.bondDim β) (Fam.bondDim γ)),
+    mulTensorAssocMatrix_mul_conjTranspose, Matrix.one_mul]
+
+/-- The product of the adjoint of the full triple-fusion comparison with the
+comparison is the range projection of the right iterated fusion isometry:
+\[
+  C_{\alpha,\beta,\gamma}^\dagger C_{\alpha,\beta,\gamma}
+    = U^{\mathrm R}_{\alpha,\beta,\gamma}
+      (U^{\mathrm R}_{\alpha,\beta,\gamma})^\dagger.
+\]
+
+The left iterated fusion map is an isometry and the bond reassociation is a
+permutation, so both factors cancel between the two copies of the comparison.
+The remaining projection is not asserted to be the identity. Such an assertion
+requires completeness of the fusion decomposition, which is the additional
+hypothesis in the invertible total fusion-matrix argument of the source.
+
+Source: arXiv:1511.08090, source lines 181--191 and 237--252. -/
+theorem conjTranspose_mul_tripleFusionComparison (α β γ : Λ) :
+    (Fam.tripleFusionComparison α β γ)ᴴ * Fam.tripleFusionComparison α β γ =
+      Fam.rightFusionIsometry α β γ * (Fam.rightFusionIsometry α β γ)ᴴ := by
+  unfold tripleFusionComparison
+  rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,
+    Matrix.conjTranspose_conjTranspose]
+  simp only [Matrix.mul_assoc]
+  rw [← Matrix.mul_assoc (Fam.leftFusionIsometry α β γ)ᴴ,
+    Fam.leftFusionIsometry_isometry, Matrix.one_mul]
+  rw [← Matrix.mul_assoc
+      (mulTensorAssocMatrix (Fam.bondDim α) (Fam.bondDim β) (Fam.bondDim γ))ᴴ,
+    conjTranspose_mul_mulTensorAssocMatrix, Matrix.one_mul]
+
 /-- **The full triple-fusion comparison intertwines the unweighted direct
 sums.** Suppose the positive trace-power coefficients are independent of the
 positive chain length. For every letter, if
