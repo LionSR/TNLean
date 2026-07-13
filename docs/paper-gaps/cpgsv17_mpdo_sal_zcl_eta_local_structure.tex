@@ -336,6 +336,36 @@ be recorded as scope-restricted.  The later primitivity argument cannot be
 used for this purpose without circularity, since the source defines the
 nonnegative trace matrix only after choosing positive neighboring operators.
 
+For the present formal notion of a Hayashi decomposition, recurrence is false
+even for the concrete inverse-map neighboring operators.  The reason is that
+the structure permits zero sector weights.  Consider the scalar-bond tensor
+on a two-dimensional physical space given by
+\[
+  K^{00}=1,\qquad K^{01}=K^{10}=K^{11}=0.
+\]
+It is injective and generates the rank-one projector onto the constant-zero
+word at every length.  Decompose the middle physical space into its two
+one-dimensional coordinate sectors, with weights $p_0=1$ and $p_1=0$, and
+choose the normalized left and right states in both sectors to be supported
+on the zero coordinate.  For the scalar tail $R=1$, the inverse-map sector
+tensors satisfy
+\[
+  r_0=r_1=1,\qquad l_0=1,\qquad l_1=0,
+  \qquad \eta_{k,h}=p_h.
+\]
+Thus $1\to0$ is a nonzero support edge, whereas no edge enters sector $1$.
+This edge is not recurrent.  Hence no theorem deriving recurrence may
+quantify over an arbitrary decomposition satisfying only $p_k\geq0$.
+
+The source-faithful repair is to remove zero-weight summands before forming
+the inverse-map sector tensors.  This does not strengthen the mathematical
+hypotheses: such summands make no contribution to the Markov decomposition.
+After pruning, every retained weight is strictly positive.  One may then seek
+to prove recurrence from injectivity by closing any nonzero two-sector product
+with a third sector, using nondegeneracy of the matrix trace pairing.  The
+formal construction of this positive-weight decomposition and the resulting
+recurrence theorem remain open.
+
 \subsection{Recurrence of the sector support graph: definitions and the
 per-cycle rescaling}
 
@@ -436,7 +466,7 @@ specific argument tied to the inverse-map construction of the sector
 tensors --- rather than through this graph-theoretic argument alone --- is
 the open question left by this note.  No such argument has been identified.
 
-\subsection{An elimination plan for the coherent vertex-rephasing step}
+\subsection{Coherent vertex rephasing under recurrence}
 
 Granting recurrence, propagating the per-cycle phase choice above into a
 single vertex-indexed rescaling requires a coboundary argument, for which
@@ -467,14 +497,29 @@ The proof chooses one representative of each reachability component and
 defines the vertex weight by multiplication along a path from that
 representative; a common return path proves independence of the chosen path.
 
-The MPDO-specific bridge to this theorem remains open.  One must choose a
-single unit-modulus rescaling scalar for every nonzero neighboring operator,
-use the fixed-cycle rescaling and phase-uniqueness theorems to prove that this
-chosen family has product one around every closed nonzero sector walk, and
-translate recurrence expressed by \leanid{MPOTensor.SectorReaches} into the
-explicit finite walks used by the coboundary theorem.  These statements are
-expected consequences of the existing per-cycle results, but they have not
-yet been assembled for the dependent sector bond spaces.
+The MPDO-specific bridge is now formalized under the recurrence hypothesis.
+For every nonzero neighboring operator, a directed return path closes the
+edge into a nonzero cycle.  Positive rescaling of that cyclic tensor product
+therefore supplies a unit phase that makes the edge operator positive
+semidefinite.  Positive rescaling of an arbitrary closed walk, together with
+uniqueness of the unit phase, shows that these chosen edge phases have product
+one around the walk.  The coboundary theorem then gives unit vertex phases
+$z_k$ with edge phase $z_k^{-1}z_h$.  The declarations
+\leanid{MPOTensor.exists_vertexPhase_smul_posSemidef} and
+\leanid{MPOTensor.exists_rephased_inverseMapPhysicalSectorFactorization}
+carry out this argument, including the dependent sector bond spaces and the
+reciprocal rephasing of the physical-sector tensors.
+The latter leaves every complete cyclic neighboring product unchanged by
+\leanid{MPOTensor.PhysicalSectorFactorization.rephase_cyclicNeighboringProduct}.
+Composing the positive rephased factorization with the conditional bond
+construction gives
+\leanid{MPOTensor.nonempty_etaLocalStructureData_of_recurrentSupport}.
+
+This result is explicitly a scope restriction: recurrence is an additional
+hypothesis not present in Lemma~C.4.  The remaining elimination problem is to
+prune zero-weight Hayashi summands and derive recurrence for the resulting
+inverse-map neighboring operators from the source's injectivity and normality
+assumptions, without appealing to the later primitivity conclusion.
 
 The canonical family
 \leanid{MPOTensor.ExplicitEtaOperators.ofHayashiMarkov} does not supply this
@@ -555,18 +600,15 @@ This note records an open gap for the SAL-to-positive-bond construction of
 \leanid{MPOTensor.EtaLocalStructureData}. The positivity half of the projected
 chain identity is now formalized unconditionally, and the pairwise
 positive-choice construction is formalized under the symmetric-support scope
-restriction described above.  The sector support graph, its recurrence, and the
-per-cycle coherent positive rescaling are now formalized unconditionally
-(recurrence itself is a hypothesis, not yet derived).  Two obligations
-remain open: deriving recurrence from injectivity of $\mathcal K$
+restriction described above.  The sector support graph, the per-cycle
+positive rescaling, and the coherent vertex-rephasing theorem are now
+formalized.  In the last theorem recurrence is a hypothesis, not a conclusion.
+The remaining obligation for the source statement is to prune zero-weight
+Hayashi summands and then derive recurrence from injectivity of $\mathcal K$
 (\S~``Why recurrence is not a direct consequence of the source's own
-argument'' above records why the source's own two-projector argument does
-not by itself supply it), and propagating the per-cycle phase choice into a
-single vertex-indexed rescaling coherent across a whole recurrent component
-(\S~``An elimination plan for the coherent vertex-rephasing step'' above
-records an elimination plan using the uniqueness of the rescaling phase).
-The primitivity of $T_{k,h}$ also remains open, and cannot be used to
-derive recurrence without circularity.
+argument'' above records why the source's two-projector argument does not by
+itself supply it).  The primitivity of $T_{k,h}$ also remains open and cannot
+be used to derive recurrence without circularity.
 
 For the conditional bond construction, all translates commute pairwise at
 every length $N\geq2$.  The finite-chain MPO is the ordered product of those
@@ -575,8 +617,10 @@ coordinates.  If the neighboring operators are positive semidefinite, these
 results provide the positive commuting bond and its exact realization with
 scalar one, and they determine the eta-local structure data. The raw
 physical-sector factorization already follows for an injective tensor
-satisfying SAL. The remaining obligation in this implication is to choose the
-inverse-map neighboring operators coherently positive.
+satisfying SAL. The coherent positive choice follows once recurrence of the
+inverse-map support is known; constructing a strictly positive-weight Hayashi
+decomposition and deriving recurrence for it from the source hypotheses is the
+remaining obligation in this implication.
 
 \bibliographystyle{alpha}
 \bibliography{references}
