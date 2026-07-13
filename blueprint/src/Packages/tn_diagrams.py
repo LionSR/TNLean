@@ -83,6 +83,8 @@ _DIAGRAM_ARGS: dict[str, str] = {
     "TNMPDOBNTFusionIdentity": "",
     "TNMPDOUnweightedZipperReconstruction": "",
     "TNMPDOFusionTracePower": "",
+    "TNAppendixBAdjacentBondProjectors": "",
+    "TNAppendixBPhysicalSupportTransport": "",
     "TNRFPKrausIsometry": "",
     "TNRFPKrausIsometryReverse": "",
     "TNRFPIsometryCanonicalForm": "",
