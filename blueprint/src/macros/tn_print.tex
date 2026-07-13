@@ -1279,6 +1279,37 @@
     \end{tikzpicture}%
 }
 
+% The associahedron for four ordinary bond-coordinate factors.  The upper
+% three-edge route and lower two-edge route have the same endpoints.  This is
+% only Cartesian-product reassociation; the edges do not represent F-matrices.
+\newcommand{\TNMPDOFourfoldBondReassociationPentagon}{%
+    \begin{tikzpicture}[tn picture, scale=0.92]
+        \tikzset{tn assoc node/.style={
+            draw,
+            rounded corners,
+            fill=blue!8,
+            inner sep=3pt
+        },
+        tn assoc edge/.style={->, line width=0.7pt}}
+        \node[tn assoc node] (assocL) at (-5.00,0)
+            {$(((A\times B)\times C)\times D)$};
+        \node[tn assoc node] (assocLI) at (-3.00,1.80)
+            {$((A\times(B\times C))\times D)$};
+        \node[tn assoc node] (assocM) at (1.00,1.80)
+            {$(A\times((B\times C)\times D))$};
+        \node[tn assoc node] (assocR) at (4.20,0)
+            {$(A\times(B\times(C\times D)))$};
+        \node[tn assoc node] (assocP) at (-0.30,-1.80)
+            {$((A\times B)\times(C\times D))$};
+
+        \draw[tn assoc edge] (assocL) -- node[above left] {$r_1$} (assocLI);
+        \draw[tn assoc edge] (assocLI) -- node[above] {$r_2$} (assocM);
+        \draw[tn assoc edge] (assocM) -- node[above right] {$r_3$} (assocR);
+        \draw[tn assoc edge] (assocL) -- node[below left] {$s_1$} (assocP);
+        \draw[tn assoc edge] (assocP) -- node[below right] {$s_2$} (assocR);
+    \end{tikzpicture}%
+}
+
 % Local BNT fusion identity from CPSV16, eq. (Ualphabeta).  The left-hand
 % isometry combines the two incoming bond factors, while its adjoint separates
 % the outgoing factors.  The right-hand side records the weighted final-sector
