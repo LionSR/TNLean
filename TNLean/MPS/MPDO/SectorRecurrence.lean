@@ -32,10 +32,11 @@ obtained from the `N`-ary Kronecker rescaling
 the cyclic tensor product after reindexing along the horizontal bond fiber.
 
 The recurrence declarations and the phase-uniqueness theorem
-`Matrix.exists_pos_real_smul_eq_of_smul_posSemidef` are preparatory. No proved
-theorem in this module yet derives recurrence from injectivity or combines
-the choices from different cycles into one vertex-indexed rescaling. In
-particular, the fixed-cycle theorem does not use recurrence.
+`Matrix.exists_pos_real_smul_eq_of_smul_posSemidef` prepare the coherent
+rephasing argument in `TNLean.MPS.MPDO.RecurrentSectorRephasing`. That later
+module combines the choices from different cycles under the recurrence
+hypothesis. No proved theorem derives recurrence from injectivity. In
+particular, the fixed-cycle theorem below does not use recurrence.
 
 ## Main declarations
 
@@ -61,10 +62,10 @@ particular, the fixed-cycle theorem does not use recurrence.
 
 ## What remains
 
-Deriving `IsRecurrentSupport` unconditionally from injectivity of `𝒦`, and
-propagating the per-cycle phase choice above into a single vertex-indexed
-rescaling coherent across the whole recurrent component, are recorded as
-open steps in the paper-gap note.
+Deriving `IsRecurrentSupport` unconditionally from injectivity of `𝒦` remains
+open and is recorded in the paper-gap note. Conditional on recurrence,
+`TNLean.MPS.MPDO.RecurrentSectorRephasing` propagates the per-cycle choices
+into a single vertex-indexed rephasing.
 
 ## References
 
@@ -235,10 +236,9 @@ the cycle have a compatible choice of phases: scalars, all nonzero, with
 product `1`, rescaling every consecutive `η_{k_n,k_{n+1}}` to be positive
 semidefinite.
 
-This theorem concerns one fixed cycle; propagating the choice into a single
-vertex-indexed rescaling coherent across a whole recurrent component of the
-sector support graph is recorded as open in
-`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+This theorem concerns one fixed cycle. Conditional on recurrence,
+`MPOTensor.exists_vertexPhase_smul_posSemidef` propagates these choices into
+a single vertex-indexed rephasing over the whole support graph.
 
 This is a supporting lemma for arXiv:1606.00608, Appendix C.2,
 lines 1446--1450, not a separately stated result of the paper. -/
