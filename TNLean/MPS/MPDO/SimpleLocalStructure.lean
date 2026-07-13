@@ -107,15 +107,16 @@ identified.
 
 The raw double inverse-map contraction (arXiv:1606.00608, Appendix C.2,
 lines 1415--1438) is `MPOTensor.inverseMapThreeSiteContraction_eq`. The
-remaining passage from this contraction to the neighboring-sector operators
-must produce a
-factorization of the concrete tensor `K` satisfying, for every `N`,
+Hayashi-sector comparison then gives a factorization of the concrete tensor
+`K` whose neighboring operators satisfy, for every `N`,
 \[
   \widetilde\sigma^{(N)}(K)
     = \bigoplus_{k_1,\ldots,k_N}\bigotimes_{n=1}^N \eta_{k_n,k_{n+1}}.
 \]
-Only after that identity is available can its sector operators be assembled
-into the common two-site bond of Proposition 3to4.
+The inverse-map factorization has a coherently positive choice, and
+`MPOTensor.nonempty_etaLocalStructureData_of_isSAL` assembles its neighboring
+operators into the common two-site bond of Proposition C.8 from injectivity and
+SAL alone.
 
 Lemma C.5 is further isolated to the finite-dimensional Perron–Frobenius step:
 for a primitive nonnegative matrix `T`, constant traces of positive powers are
@@ -144,9 +145,12 @@ functionals $(r_k|$, the pairing $T_{k,h}=(r_k|l_h)$, and the
 zero-correlation-length identity at lines 1490--1493. The theorem
 `MPOTensor.sal_zcl_implies_rank_one_T_of_pairing_idempotent` derives the
 rank-one factorization once the closed sector tensors are linearly independent.
-Three obligations remain: construct the sector families and their pairing from
-the inverse-map factorization at lines 1407--1482, derive the operator identity
-from zero correlation length, and prove linear independence. They are recorded in
+For the concrete inverse-map sector families,
+`MPOTensor.closedSectorTraceMatrix_normalized_relations` proves the normalized
+square--cube and trace-power identities from source zero correlation length.
+The remaining problem is to exclude the nilpotent generalized zero-eigenspace
+of the concrete trace matrix without an additional hypothesis absent from
+Lemma C.5. It is recorded in
 `docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
 
 ## References

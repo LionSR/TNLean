@@ -7,36 +7,23 @@ import TNLean.MPS.MPDO.PhysicalSectorBondPairwise
 /-!
 # Local-to-global commuting-form data
 
-This file states the exact eta-local structure still needed after the
-sector-local operators have been obtained in the simple-MPDO SAL + ZCL analysis
-of arXiv:1606.00608 Appendix C.2, in order to conclude
-`MPOTensor.HasCommutingForm`.
+This file defines the eta-local structure used to express the simple-MPDO
+commuting product form of arXiv:1606.00608, Appendix C.2. Conditional on a
+physical-sector factorization with positive neighboring operators,
+`PhysicalSectorFactorization.etaLocalStructureData` gives one positive two-site
+bond whose translates commute and whose ordered product realizes every finite
+chain.
 
-The current repository already exposes the local entropy-side ingredients
-
-* `MPOTensor.EtaStructure`,
-* `MPOTensor.sal_implies_eta_structure`, and
-* the positive-semidefinite and pairing-idempotence rank-one criteria in
-  `SimpleLocalStructure.lean`,
-
-and `SimpleLocalStructure` gives a canonical sector-reduced family through
-`MPOTensor.ExplicitEtaOperators.ofHayashiMarkov`. That family is not the
-inverse-map family used in Appendix C.2: its trace matrix is identically one,
-whereas the source allows a general primitive trace matrix. The earliest
-remaining result is therefore Lemma propSN, which derives from the concrete
-tensor `K` a sector factorization satisfying, for every `N`,
+For an injective tensor `K` satisfying SAL, the inverse-map sector construction
+gives a coherently positive physical-sector factorization satisfying
 \[
   \widetilde\sigma^{(N)}(K)
     = \bigoplus_{k_1,\ldots,k_N}\bigotimes_{n=1}^N \eta_{k_n,k_{n+1}}.
 \]
-Conditional on a physical-sector factorization with positive neighboring
-operators, Proposition 3to4 is completed by
-`PhysicalSectorFactorization.etaLocalStructureData`.
-
-*Proof-state note.* To reach `EtaLocalStructureData M` from SAL, it remains to
-establish the inverse-map sector factorization of Lemma propSN with a coherent
-positive choice of all neighboring operators. The conditional bond,
-commutativity, product realization, and eta-local structure are complete.
+Consequently, `MPOTensor.nonempty_etaLocalStructureData_of_isSAL` constructs
+the eta-local structure from injectivity and SAL alone. Zero correlation length
+is not used in Proposition C.8; it enters only in the later GSNNCH-with-ZCL and
+RFP consequences.
 
 ## Main declarations
 
@@ -133,9 +120,12 @@ Concretely, this structure stores the single translation-invariant bond extracte
 from the local simple-MPDO analysis, together with proofs that it realizes the
 finite-chain MPO operators. This is stronger than `HasCommutingForm M`, since
 it requires one bond that works for every chain length rather than a separate
-commuting-form witness at each length. The remaining assembly theorem should
-construct this structure from the SAL and ZCL hypotheses, the sector-reduced
-`η_{k,h}` family, and the inverse-map realization layer. -/
+commuting-form witness at each length. For every injective tensor satisfying
+SAL, `MPOTensor.nonempty_etaLocalStructureData_of_isSAL` constructs this
+structure from the inverse-map sector factorization and its coherently positive
+neighboring operators. No zero-correlation-length hypothesis is required.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition C.8, lines 1569--1594. -/
 structure EtaLocalStructureData (M : MPOTensor d D) where
   /-- The chain-independent nearest-neighbor bond extracted from the local
   `η_{k,h}` operators. -/

@@ -16,9 +16,12 @@ For an `N`-site operator `ρ`, a commuting-form witness consists of a positive
 semidefinite two-site matrix `B`, together with proofs that its translated
 copies on the periodic chain pairwise commute and that their product
 reproduces `ρ` up to a positive scalar. This is the projector-limit version of
-the commuting-form definition in arXiv:1606.00608. The actual entropy-side derivation
-`SAL ⟹ HasCommutingForm` is not yet formalized here; this file starts from the
-commuting-form witness and proves the GSNNCH equivalence built from that data.
+the commuting-form definition in arXiv:1606.00608. This file defines the
+commuting-form witness and proves the GSNNCH equivalence built from it. The
+theorem `MPOTensor.nonempty_etaLocalStructureData_of_isSAL` proves the
+entropy-side implication from SAL; its local structure gives
+`HasCommutingForm` through `MPOTensor.EtaLocalStructureData.hasCommutingForm`.
+This is Proposition C.8 of arXiv:1606.00608, Appendix C.2, lines 1569--1594.
 
 ## Main declarations
 
