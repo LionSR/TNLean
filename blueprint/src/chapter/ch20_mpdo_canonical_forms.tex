@@ -6,19 +6,46 @@
 % `Prop:IV.12` is Proposition 4.13 in the arXiv source.
 
 \begin{definition}[Horizontal canonical form for an MPO]\label{def:horizontal_cf_mpdo}
-    \lean{MPOTensor.IsHorizontalCF}
     \notready
-    \uses{def:mpo_tensor, def:block_diagonal_tensor, def:injective, def:same_mpv2}
+    \uses{def:mpo_tensor, def:sector_bnt_cf}
     An MPO tensor is in \emph{horizontal canonical form} if its doubled-index
-    MPS tensor generates the same MPV family as a block-diagonal tensor
-    $\bigoplus_k \mu_k A_k$ whose blocks are injective, left-canonical, and
-    have nonzero weights $\mu_k$. It also includes a finite-length
-    block-separation condition: there is a length $L$ such that, for every
-    tuple $(\Delta_k)_k$ of block matrices,
+    tensor has a literal bond-space decomposition
     \[
-        \Bigl(\forall\, w \text{ of length } L,\ \textstyle\sum_k \tr(\Delta_k A_k^w)=0\Bigr)
-        \implies \forall k,\ \Delta_k=0.
+        \widehat M^i
+        =\bigoplus_{j=0}^{g-1}\bigoplus_{q=0}^{r_j-1}
+          \mu_{j,q}X_{j,q}A_j^iX_{j,q}^{-1},
     \]
+    where $(A_j)_{0\leq j<g}$ is a minimal basis of normal tensors, each
+    $\mu_{j,q}$ is nonzero, and every $X_{j,q}$ is invertible.  Equivalently,
+    with
+    \[
+        X=\bigoplus_{j=0}^{g-1}\bigoplus_{q=0}^{r_j-1}X_{j,q},
+    \]
+    this is the gauge-explicit decomposition of
+    \cite[Section~2.3, lines~283--297]{Cirac2016MPDO_arXiv}.
+    % No Lean tag: the literal bond-space gauge data are not yet formalized.
+\end{definition}
+
+\begin{definition}[MPV representation associated with horizontal canonical form]
+    \label{def:horizontal_cf_mpv_representation}
+    \lean{MPOTensor.HasHorizontalCFMPVRepresentation}
+    \leanok
+    \uses{def:mpo_tensor, def:sector_bnt_cf, def:same_mpv2}
+    An MPO tensor has a \emph{horizontal-canonical-form MPV representation} if
+    its doubled-index MPS tensor generates the same complete MPV family as a
+    BNT canonical form
+    \[
+        \bigoplus_{j=0}^{g-1}\bigoplus_{q=0}^{r_j-1}\mu_{j,q}A_j,
+    \]
+    where $(A_j)_{0\leq j<g}$ is a minimal basis of normal tensors and each
+    $\mu_{j,q}$ is nonzero.  Its length-$N$ matrix product vector is therefore
+    \[
+        \sum_{j=0}^{g-1}
+        \left(\sum_{q=0}^{r_j-1}\mu_{j,q}^{N}\right)V^{(N)}(A_j).
+    \]
+    This is the MPV-level decomposition in
+    \cite[Section~2.3, lines~298--301]{Cirac2016MPDO_arXiv}.  It does not assert
+    the literal bond-space gauge of Definition~\ref{def:horizontal_cf_mpdo}.
 \end{definition}
 
 \begin{figure}[ht]
@@ -594,39 +621,35 @@
     Therefore $(\Id-P)HP=HP-PHP=0$.
 \end{proof}
 
-\begin{theorem}[Blockwise reduction from first-site contractions]
+\begin{theorem}[Representative reduction from first-site contractions]
     \label{thm:blockwise_opposite_insert_eq}
-    \lean{MPOTensor.blockwise_opposite_insert_eq_of_mpv_agree}
+    \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_two_firstSiteActionAgree}
     \leanok
-    \uses{def:block_diagonal_tensor, thm:propblockinj_abstract}
-    Let $\bigoplus_k\mu_kA_k$ be in block-injective canonical form and let
+    \uses{def:sector_bnt_cf, thm:postblocked_representative_grouped_insert_eq}
+    Let $\bigoplus_{j,q}\mu_{j,q}A_j$ be a BNT canonical form and let
     $Y_L,Y_C,Y_R\in M_d(\C)$, with $Y_1V^{(N)}(A)$ denoting $Y$ acting on the
-    first physical index of the MPV as in
-    Lemma~\ref{lem:blockwise_insert_eq_of_mpv_agree}. If, for every
+    first physical index of the MPV. If, for every
     $N\ge 1$,
     \[
         (Y_L)_1V^{(N)}(A) = (Y_C)_1V^{(N)}(A),
         \qquad
         (Y_L)_1V^{(N)}(A) = (Y_R)_1V^{(N)}(A),
     \]
-    then $Y_RA_k=Y_CA_k$ for every block $A_k$. This anticipates the
+    then $Y_RA_j=Y_CA_j$ for every minimal representative $A_j$. This is the
+    representative-grouped application of Lemma~L and anticipates the
     concrete instantiation with $Y_L,Y_C,Y_R$ the physical-index insertions
     of $P$, $PHP$, $HP$ in
     Theorem~\ref{thm:blockwise_opposite_insert_rotated_mpo}.
-
-    \textbf{Scope restriction (per-block separation).} Inherited from
-    Lemma~\ref{lem:blockwise_insert_eq_of_mpv_agree}: decompositions with
-    gauge-equivalent repeated blocks are excluded. Documented in
-    \path{docs/paper-gaps/cpgsv17_bicf_block_separation.tex}.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{lem:blockwise_insert_eq_of_mpv_agree}
-    Lemma~\ref{lem:blockwise_insert_eq_of_mpv_agree} first identifies the
-    insertions representing $PH^{(N)}$ and $H^{(N)}P$ on each block.  A second
-    application identifies those representing $PH^{(N)}$ and $PH^{(N)}P$.
-    Transitivity gives the stated equality.
+    \uses{thm:postblocked_representative_grouped_insert_eq}
+    Apply the representative-grouped Lemma~L first to the actions $Y_L,Y_R$
+    and then to $Y_L,Y_C$.  The BNT canonical-form hypotheses supply the
+    required common block-injectivity length.  Transitivity gives the stated
+    equality on every minimal representative; the repeated copies have
+    already been combined through $\sum_q\mu_{j,q}^{N}$.
 \end{proof}
 
 \begin{definition}[Doubled-index forms of the three first-site contractions]
@@ -701,28 +724,24 @@
     \label{fig:mpdo_first_site_contractions}
 \end{figure}
 
-\begin{theorem}[Blockwise reduction for the MPO contractions]
+\begin{theorem}[Representative reduction for the MPO contractions]
     \label{thm:blockwise_opposite_insert_rotated_mpo}
-    \lean{MPOTensor.blockwise_opposite_insert_eq_of_rotated_mpo_entries}
+    \lean{MPOTensor.basis_opposite_insert_eq_of_rotated_mpo_entries}
     \leanok
     \uses{def:mpdo_three_first_site_contractions,
         lem:mpdo_three_first_site_contraction_coefficients,
         thm:blockwise_opposite_insert_eq}
-    Let the doubled-index tensor $\widehat M$ have a block-injective
-    canonical-form decomposition $\bigoplus_k\mu_kA_k$.  If, entrywise for
-    every positive length,
+    Let the doubled-index tensor $\widehat M$ generate the same complete MPV
+    family as a BNT canonical form $\bigoplus_{j,q}\mu_{j,q}A_j$.  If,
+    entrywise at every positive length,
     \[
         PH^{(N)}=PH^{(N)}P,
         \qquad
         PH^{(N)}=H^{(N)}P,
     \]
-    then for every block $A_k$ the insertions associated with $H^{(N)}P$ and
-    $PH^{(N)}P$ agree.
-
-    \textbf{Scope restriction (per-block separation).} Inherited from
-    Theorem~\ref{thm:blockwise_opposite_insert_eq}; decompositions with
-    gauge-equivalent repeated blocks are excluded
-    (\path{docs/paper-gaps/cpgsv17_bicf_block_separation.tex}).
+    then for every minimal representative $A_j$ the insertions associated
+    with $H^{(N)}P$ and $PH^{(N)}P$ agree.  Repeated copies over $A_j$ are
+    grouped through the coefficient $\sum_q\mu_{j,q}^{N}$.
 \end{theorem}
 
 \begin{proof}
@@ -801,22 +820,20 @@
     $H^{(N+1)}P_1=P_1H^{(N+1)}P_1=P_1H^{(N+1)}$.
 \end{proof}
 
-\begin{theorem}[One-sided invariance reduces blockwise]
+\begin{theorem}[One-sided invariance on BNT representatives]
     \label{thm:blockwise_one_sub_mp_zero}
-    \lean{MPOTensor.blockwise_braRight_eq_ketLeftBraRight_of_invariant}
+    \lean{MPOTensor.basis_braRight_eq_ketLeftBraRight_of_invariant}
     \leanok
-    \uses{def:mpdo, def:horizontal_cf_mpdo, def:mpdo_vertical_one_site_actions,
+    \uses{def:mpdo, def:horizontal_cf_mpv_representation,
+        def:mpdo_vertical_one_site_actions,
         thm:mpdo_first_site_invariant_comm,
         thm:blockwise_opposite_insert_rotated_mpo}
-    Let $M$ generate an MPDO whose doubled-index tensor $\widehat M$ has a
-    block-injective canonical-form decomposition $\bigoplus_k\mu_kA_k$, and
-    let $P=P^\dagger$ satisfy $PM=PMP$ on the vertically viewed tensor.  Then
-    on every block $A_k$ the insertions of $MP$ and $PMP$ agree;
-    equivalently, $(\Id-P)MP=0$ blockwise.
-
-    \textbf{Scope restriction (per-block separation).} Inherited from
-    Theorem~\ref{thm:blockwise_opposite_insert_rotated_mpo}
-    (\path{docs/paper-gaps/cpgsv17_bicf_block_separation.tex}).
+    Let $M$ generate an MPDO whose doubled-index tensor $\widehat M$ generates
+    the same complete MPV family as a BNT canonical form
+    $\bigoplus_{j,q}\mu_{j,q}A_j$, and let $P=P^\dagger$ satisfy $PM=PMP$ on
+    the vertically viewed tensor.  Then on every minimal representative
+    $A_j$ the insertions of $MP$ and $PMP$ agree; equivalently,
+    $(\Id-P)MP=0$ on every representative.
 \end{theorem}
 
 \begin{proof}
@@ -828,7 +845,8 @@
     $P_1H^{(N+1)}=P_1H^{(N+1)}P_1$ and
     $P_1H^{(N+1)}=H^{(N+1)}P_1$.  These are exactly the hypotheses of
     Theorem~\ref{thm:blockwise_opposite_insert_rotated_mpo}, whose conclusion
-    is the blockwise equality of the insertions of $MP$ and $PMP$.
+    is the equality of the insertions of $MP$ and $PMP$ on every minimal
+    representative.
 \end{proof}
 
 \begin{theorem}[Commutation with a power of a positive semidefinite matrix]

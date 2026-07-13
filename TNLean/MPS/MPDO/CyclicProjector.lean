@@ -624,7 +624,7 @@ operator $H^{(N)}$ at every length.
 This is the horizontal-canonical-form step of the periodic-sector argument.
 The source assumes the tensor is in canonical form in the horizontal
 direction; the argument of lines 1874--1887 (Lemma L of the appendix,
-formalized blockwise in `TNLean/MPS/MPDO/VerticalCF.lean`) then turns
+formalized blockwise in `TNLean/MPS/MPDO/PerCopyHorizontalCF.lean`) then turns
 all-length commutation of $Q_1$ with $H^{(N)}$ into the letter-level
 invariance $Q\widetilde M=Q\widetilde MQ$; contrapositively, a displaced
 projector cannot commute.  The derivation of this implication from a
