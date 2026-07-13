@@ -369,6 +369,25 @@ them.
     letter and apply the fusion identity between the two inserted factors.
 \end{proof}
 
+\begin{figure}[ht]
+    \centering
+    \TNMPDOUnweightedZipperReconstruction
+    \caption{The two unweighted zipper directions and their local
+        reconstruction consequence. Here
+        $H=H_{\alpha,\beta}^{ij}$ and the physical indices are carried by the
+        vertical legs. The final row uses only
+        $U_{\alpha,\beta}^\dagger U_{\alpha,\beta}=1$ to recover the product
+        letter. It does not assert
+        $U_{\alpha,\beta}U_{\alpha,\beta}^\dagger=1$, surjectivity of the
+        fusion map, total-fusion completeness, or invertibility of a
+        fixed-final comparison. The layout follows the zipper figures of
+        \cite[Section~3, Equations~(19)--(21)]{Bultinck2017Anyons}; in the
+        MPDO specialization these identities arise from the length-independent
+        fusion data discussed in
+        \cite[lines~995--1008]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_unweighted_zipper_reconstruction}
+\end{figure}
+
 \begin{definition}[Operator family of a fusion-isometry family]%
     \label{def:mpdo_bnt_fusion_operator_family}
     \lean{MPOTensor.BNTFusionIsometryFamily.toOperatorFamily}
