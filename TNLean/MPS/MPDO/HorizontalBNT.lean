@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.BlockTriangularTrace
 import TNLean.MPS.MPDO.InvariantProjection
 import TNLean.MPS.MPDO.PostBlockedRepresentativeSpan
 
@@ -29,72 +28,6 @@ open scoped Matrix BigOperators
 namespace MPSTensor
 
 variable {d D : ℕ}
-
-/-- Adjoin an all-zero block of dimension `z` to an MPS tensor.
-
-The horizontal canonical form of arXiv:1606.00608, lines 217--219 permits
-such a block: the sum of the nonzero block dimensions may be strictly smaller
-than the original bond dimension. -/
-noncomputable def zeroTail (A : MPSTensor d D) (z : ℕ) : MPSTensor d (z + D) :=
-  MPSTensor.diagFin (fun _ ↦ 0) A
-
-/-- An all-zero direct summand does not change any positive-length matrix
-product vector.
-
-Source: arXiv:1606.00608, lines 217--219. -/
-theorem zeroTail_sameMPV₂Pos (A : MPSTensor d D) (z : ℕ) :
-    MPSTensor.SameMPV₂Pos (zeroTail A z) A := by
-  classical
-  intro N hN σ
-  obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hN)
-  simp only [MPSTensor.mpv, MPSTensor.coeff, zeroTail]
-  let e : (Fin z ⊕ Fin D) ≃ Fin (z + D) := finSumFinEquiv
-  change Matrix.trace (MPSTensor.evalWord
-      (fun i ↦ Matrix.reindex e e (MPSTensor.diagSum (fun _ ↦ 0) A i))
-      (List.ofFn σ)) = _
-  rw [MPSTensor.evalWord_reindex (e := e)]
-  rw [Matrix.trace_reindex]
-  rw [MPSTensor.evalWord_diagSum_is_fromBlocks]
-  rw [MPSTensor.trace_fromBlocks_upper]
-  simp [List.ofFn_succ]
-
-/-- Positive-length matrix product vector equality transports a first-site
-action identity between tensors of possibly different bond dimensions.
-
-This is the form needed when a horizontal canonical form contains the zero
-summand allowed in arXiv:1606.00608, lines 217--219: first-site identities
-only involve chains of length `N + 1`, and hence never use the empty chain. -/
-theorem FirstSiteActionAgree.of_sameMPVPos {D' : ℕ} {A : MPSTensor d D}
-    {B : MPSTensor d D'} {Y Z : Matrix (Fin d) (Fin d) ℂ}
-    (hAB : MPSTensor.SameMPV₂Pos A B) (h : FirstSiteActionAgree A Y Z) :
-    FirstSiteActionAgree B Y Z := by
-  intro N σ
-  calc
-    ∑ i : Fin d, Y (σ 0) i * MPSTensor.mpv B (Fin.cons i (σ ∘ Fin.succ)) =
-        ∑ i : Fin d, Y (σ 0) i * MPSTensor.mpv A (Fin.cons i (σ ∘ Fin.succ)) := by
-      apply Finset.sum_congr rfl
-      intro i _
-      rw [hAB (N + 1) (Nat.succ_pos N) (Fin.cons i (σ ∘ Fin.succ))]
-    _ = ∑ i : Fin d, Z (σ 0) i *
-        MPSTensor.mpv A (Fin.cons i (σ ∘ Fin.succ)) := h N σ
-    _ = ∑ i : Fin d, Z (σ 0) i *
-        MPSTensor.mpv B (Fin.cons i (σ ∘ Fin.succ)) := by
-      apply Finset.sum_congr rfl
-      intro i _
-      rw [hAB (N + 1) (Nat.succ_pos N) (Fin.cons i (σ ∘ Fin.succ))]
-
-/-- First-site insertion commutes with adjoining an all-zero summand.
-
-Source: the zero-block allowance in arXiv:1606.00608, lines 217--219. -/
-theorem insertedTensor_zeroTail (Y : Matrix (Fin d) (Fin d) ℂ)
-    (A : MPSTensor d D) (z : ℕ) :
-    insertedTensor Y (zeroTail A z) = zeroTail (insertedTensor Y A) z := by
-  funext i a b
-  generalize ha : finSumFinEquiv.symm a = a'
-  generalize hb : finSumFinEquiv.symm b = b'
-  cases a' <;> cases b' <;>
-    simp [insertedTensor, zeroTail, diagFin, diagSum, Matrix.sum_apply,
-      Matrix.smul_apply, Matrix.submatrix_apply, ha, hb]
 
 /-- First-site insertion commutes with a weighted block-diagonal direct sum.
 
@@ -190,23 +123,54 @@ variable {d D : ℕ}
 
 /-- Horizontal canonical form for an MPO tensor.
 
-The doubled-index tensor is literally gauge-conjugate to the direct sum of an
-all-zero block and a representative-indexed BNT sector decomposition.
-Repeated gauge-equivalent copies are grouped over one representative and
-retain their individual nonzero weights.  This is the decomposition in
-arXiv:1606.00608, lines 217--219 and eq. `eq:II_ABasicTensors`, lines 281--301. -/
+The doubled-index tensor is the representative-indexed BNT sector
+decomposition, with one invertible gauge on each repeated copy.  Thus the
+global gauge is the block direct sum of the copy gauges, rather than an
+arbitrary similarity that could mix distinct sectors.  Repeated
+gauge-equivalent copies are grouped over one representative and retain their
+individual nonzero weights.  There is no additional all-zero summand.
+
+Source: arXiv:1606.00608, canonical form at lines 237--244 and the BNT
+decomposition `eq:II_ABasicTensors` at lines 281--301. -/
 def IsHorizontalCF (M : MPOTensor d D) : Prop :=
   ∃ S : MPSTensor.SectorDecomposition (d * d),
     MPSTensor.IsBNTCanonicalForm S ∧
-      ∃ z : ℕ, ∃ hTotal : z + S.totalDim = D, ∃ X : GL (Fin D) ℂ,
+      ∃ hTotal : S.totalDim = D,
+        ∃ X : (s : Fin S.totalCopies) → GL (Fin (S.flatDim s)) ℂ,
         ∀ i : Fin (d * d),
           M.toMPSTensor i =
-            (X : Matrix (Fin D) (Fin D) ℂ) *
-              cast (by rw [hTotal] :
-                  Matrix (Fin (z + S.totalDim)) (Fin (z + S.totalDim)) ℂ =
-                    Matrix (Fin D) (Fin D) ℂ)
-                (MPSTensor.zeroTail S.toTensor z i) *
-              (((X)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
+            cast (by rw [hTotal] :
+                Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ =
+                  Matrix (Fin D) (Fin D) ℂ)
+              ((MPSTensor.globalGaugeOfBlocks X :
+                    Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) *
+                S.toTensor i *
+                (((MPSTensor.globalGaugeOfBlocks X)⁻¹ :
+                    GL (Fin S.totalDim) ℂ) :
+                  Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ))
+
+/-- A literal horizontal canonical form gives its complete BNT MPV
+representation.
+
+The block direct sum of the copy similarities leaves every closed
+matrix-product trace invariant.  The equality of bond dimensions also
+identifies the empty-chain coefficient, so the conclusion is full MPV
+equality rather than only positive-length equality.
+
+Source: arXiv:1606.00608, `eq:II_ABasicTensors` and `decBSV`, lines
+281--301. -/
+theorem IsHorizontalCF.hasHorizontalCFMPVRepresentation
+    {M : MPOTensor d D} (hHorizontal : IsHorizontalCF M) :
+    HasHorizontalCFMPVRepresentation M := by
+  obtain ⟨S, hCF, hTotal, Xcopy, hX⟩ := hHorizontal
+  subst D
+  refine ⟨S, hCF, ?_⟩
+  have hGauge : MPSTensor.GaugeEquiv S.toTensor M.toMPSTensor := by
+    refine ⟨MPSTensor.globalGaugeOfBlocks Xcopy, ?_⟩
+    intro i
+    simpa using hX i
+  intro N σ
+  exact (hGauge.sameMPV N σ).symm
 
 /-- Inserting the doubled-index right action gives the doubled-index tensor of
 right multiplication of the vertically viewed MPO tensor.
@@ -260,7 +224,7 @@ theorem insertedTensor_ketLeftBraRightAction_toMPSTensor
 /-- The two first-site identities in Proposition 4.13 imply equality of the
 opposite-corner insertions on every BNT representative.
 
-Positive-length MPV equality transports the first-site identities from the
+Complete MPV equality transports the first-site identities from the
 doubled-index tensor of `M` to the representative-indexed sector
 decomposition.  The representative-grouped Lemma L then separates the BNT
 representatives while grouping all repeated copies of each representative.
@@ -270,7 +234,7 @@ the contractions in Proposition 4.13, lines 1873--1887. -/
 theorem representative_opposite_insert_eq_of_rotated_mpo_entries
     (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
     (hCF : MPSTensor.IsBNTCanonicalForm S)
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPSTensor.SameMPV₂ M.toMPSTensor S.toTensor)
     (Q : Matrix (Fin d) (Fin d) ℂ)
     (hInv : ∀ (N : ℕ) (ρ : Fin (N + 1) → Fin (d * d)),
       (∑ i : Fin d, Q (ρ 0).divNat i *
@@ -294,12 +258,12 @@ theorem representative_opposite_insert_eq_of_rotated_mpo_entries
     MPSTensor.insertedTensor (MPSTensor.braRightAction Q) (S.basis j) =
         MPSTensor.insertedTensor (MPSTensor.ketLeftAction Q) (S.basis j) :=
       (hCF.insertedTensor_basis_eq_of_firstSiteActionAgree
-        ((MPSTensor.firstSiteActionAgree_ketLeft_braRight M Q hComm).of_sameMPVPos hM)
+        ((MPSTensor.firstSiteActionAgree_ketLeft_braRight M Q hComm).of_sameMPV hM)
         j).symm
     _ = MPSTensor.insertedTensor
         (MPSTensor.ketLeftBraRightAction Q) (S.basis j) :=
       hCF.insertedTensor_basis_eq_of_firstSiteActionAgree
-        ((MPSTensor.firstSiteActionAgree_ketLeft_ketLeftBraRight M Q hInv).of_sameMPVPos hM)
+        ((MPSTensor.firstSiteActionAgree_ketLeft_ketLeftBraRight M Q hInv).of_sameMPV hM)
         j
 
 /-- A one-sided invariant Hermitian matrix reduces every horizontal BNT
@@ -316,7 +280,7 @@ theorem representative_braRight_eq_ketLeftBraRight_of_invariant
     (M : MPOTensor d D) (hMpdo : IsMPDO M)
     (S : MPSTensor.SectorDecomposition (d * d))
     (hCF : MPSTensor.IsBNTCanonicalForm S)
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPSTensor.SameMPV₂ M.toMPSTensor S.toTensor)
     {Q : Matrix (Fin d) (Fin d) ℂ} (hQ : Q.IsHermitian)
     (hQM : M.ketLeftMul Q = (M.ketLeftMul Q).braRightMul Q) :
     ∀ j, MPSTensor.insertedTensor (MPSTensor.braRightAction Q) (S.basis j) =
@@ -342,14 +306,54 @@ theorem representative_braRight_eq_ketLeftBraRight_of_invariant
     simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ] at h2
     exact h2
 
+/-- **Lemma L on the original bond space.**
+
+Let `M` be in literal horizontal canonical form.  If two physical operators
+have the same first-site action on every matrix product vector of `M`, then
+their inserted tensors are equal on the original bond space:
+\[
+  Y_1V^{(N)}(M)=Z_1V^{(N)}(M)\quad\hbox{for every }N
+  \quad\Longrightarrow\quad YM=ZM.
+\]
+The representative-grouped Lemma L first gives equality on each minimal BNT
+representative.  Linearity extends it to all repeated weighted sectors, and
+the block direct sum of the copy gauges transports it to `M`.
+
+Source: arXiv:1606.00608, Appendix C.3, Lemma L, lines 1835--1858, using the
+horizontal BNT decomposition at lines 281--301. -/
+theorem IsHorizontalCF.insertedTensor_eq_of_firstSiteActionAgree
+    (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M)
+    {Y Z : Matrix (Fin (d * d)) (Fin (d * d)) ℂ}
+    (hAct : MPSTensor.FirstSiteActionAgree M.toMPSTensor Y Z) :
+    MPSTensor.insertedTensor Y M.toMPSTensor =
+      MPSTensor.insertedTensor Z M.toMPSTensor := by
+  obtain ⟨S, hCF, hTotal, Xcopy, hX⟩ := hHorizontal
+  subst D
+  let X := MPSTensor.globalGaugeOfBlocks Xcopy
+  have hX' : ∀ i, M.toMPSTensor i =
+      (X : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) * S.toTensor i *
+        (((X)⁻¹ : GL (Fin S.totalDim) ℂ) :
+          Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) := by
+    intro i
+    simpa using hX i
+  have hGauge : MPSTensor.GaugeEquiv S.toTensor M.toMPSTensor := ⟨X, hX'⟩
+  have hM : MPSTensor.SameMPV₂ M.toMPSTensor S.toTensor := by
+    intro N σ
+    exact (hGauge.sameMPV N σ).symm
+  have hBasis :=
+    hCF.insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree
+      M.toMPSTensor hM hAct
+  have hSector : MPSTensor.insertedTensor Y S.toTensor =
+      MPSTensor.insertedTensor Z S.toTensor :=
+    S.insertedTensor_toTensor_eq_of_basis Y Z hBasis
+  exact MPSTensor.insertedTensor_eq_of_gauge X hX' Y Z hSector
+
 /-- The public horizontal canonical-form predicate supplies the
 representative-indexed invariant-projection conclusion.
 
 The witness is the BNT sector decomposition occurring in `IsHorizontalCF`.
 Repeated copies remain grouped over their common representative; no
-per-copy trace-separation hypothesis is introduced.  The equality is stated
-for positive lengths because the permitted all-zero summand changes only the
-empty-chain coefficient.
+per-copy trace-separation hypothesis is introduced.
 
 Source: arXiv:1606.00608, lines 264--301 and Proposition 4.13,
 lines 1873--1887. -/
@@ -359,22 +363,18 @@ theorem IsHorizontalCF.exists_representative_braRight_eq_ketLeftBraRight
     (hQM : M.ketLeftMul Q = (M.ketLeftMul Q).braRightMul Q) :
     ∃ S : MPSTensor.SectorDecomposition (d * d),
       MPSTensor.IsBNTCanonicalForm S ∧
-      MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor ∧
+      MPSTensor.SameMPV₂ M.toMPSTensor S.toTensor ∧
       ∀ j, MPSTensor.insertedTensor (MPSTensor.braRightAction Q) (S.basis j) =
         MPSTensor.insertedTensor (MPSTensor.ketLeftBraRightAction Q) (S.basis j) := by
-  obtain ⟨S, hCF, z, hTotal, X, hX⟩ := hHorizontal
+  obtain ⟨S, hCF, hTotal, Xcopy, hX⟩ := hHorizontal
   subst D
-  have hGauge : MPSTensor.GaugeEquiv
-      (MPSTensor.zeroTail S.toTensor z) M.toMPSTensor := by
-    refine ⟨X, ?_⟩
+  have hGauge : MPSTensor.GaugeEquiv S.toTensor M.toMPSTensor := by
+    refine ⟨MPSTensor.globalGaugeOfBlocks Xcopy, ?_⟩
     intro i
     simpa using hX i
-  have hMZero : MPSTensor.SameMPV₂Pos M.toMPSTensor
-      (MPSTensor.zeroTail S.toTensor z) := by
-    intro N _ σ
+  have hM : MPSTensor.SameMPV₂ M.toMPSTensor S.toTensor := by
+    intro N σ
     exact (hGauge.sameMPV N σ).symm
-  have hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor :=
-    hMZero.trans (MPSTensor.zeroTail_sameMPV₂Pos S.toTensor z)
   exact ⟨S, hCF, hM,
     representative_braRight_eq_ketLeftBraRight_of_invariant
       M hMpdo S hCF hM hQ hQM⟩
@@ -384,7 +384,7 @@ the right.
 
 The representative-grouped Lemma L first identifies the two insertions on
 every minimal BNT representative.  Linearity gives the identity on all
-repeated weighted sectors and the all-zero summand, and the global gauge in
+repeated weighted sectors, and the direct sum of the copy gauges in
 `IsHorizontalCF` transports it to the original tensor.  Thus the conclusion
 is a literal equality of MPO tensors, rather than merely an equality of their
 MPV families.  The source specializes `Q` to an orthogonal projector; this
@@ -398,23 +398,19 @@ theorem IsHorizontalCF.braRight_eq_ketLeftBraRight_of_invariant
     {Q : Matrix (Fin d) (Fin d) ℂ} (hQ : Q.IsHermitian)
     (hQM : M.ketLeftMul Q = (M.ketLeftMul Q).braRightMul Q) :
     M.braRightMul Q = (M.ketLeftMul Q).braRightMul Q := by
-  obtain ⟨S, hCF, z, hTotal, X, hX⟩ := hHorizontal
+  obtain ⟨S, hCF, hTotal, Xcopy, hX⟩ := hHorizontal
   subst D
+  let X := MPSTensor.globalGaugeOfBlocks Xcopy
   have hX' : ∀ i, M.toMPSTensor i =
-      (X : Matrix (Fin (z + S.totalDim)) (Fin (z + S.totalDim)) ℂ) *
-        MPSTensor.zeroTail S.toTensor z i *
-        (((X)⁻¹ : GL (Fin (z + S.totalDim)) ℂ) :
-          Matrix (Fin (z + S.totalDim)) (Fin (z + S.totalDim)) ℂ) := by
+      (X : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) * S.toTensor i *
+        (((X)⁻¹ : GL (Fin S.totalDim) ℂ) :
+          Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) := by
     intro i
     simpa using hX i
-  have hGauge : MPSTensor.GaugeEquiv
-      (MPSTensor.zeroTail S.toTensor z) M.toMPSTensor := ⟨X, hX'⟩
-  have hMZero : MPSTensor.SameMPV₂Pos M.toMPSTensor
-      (MPSTensor.zeroTail S.toTensor z) := by
-    intro N _ σ
+  have hGauge : MPSTensor.GaugeEquiv S.toTensor M.toMPSTensor := ⟨X, hX'⟩
+  have hM : MPSTensor.SameMPV₂ M.toMPSTensor S.toTensor := by
+    intro N σ
     exact (hGauge.sameMPV N σ).symm
-  have hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor :=
-    hMZero.trans (MPSTensor.zeroTail_sameMPV₂Pos S.toTensor z)
   have hBasis := representative_braRight_eq_ketLeftBraRight_of_invariant
     M hMpdo S hCF hM hQ hQM
   have hSector :
@@ -422,18 +418,11 @@ theorem IsHorizontalCF.braRight_eq_ketLeftBraRight_of_invariant
         MPSTensor.insertedTensor
           (MPSTensor.ketLeftBraRightAction Q) S.toTensor :=
     S.insertedTensor_toTensor_eq_of_basis _ _ hBasis
-  have hZero :
-      MPSTensor.insertedTensor (MPSTensor.braRightAction Q)
-          (MPSTensor.zeroTail S.toTensor z) =
-        MPSTensor.insertedTensor (MPSTensor.ketLeftBraRightAction Q)
-          (MPSTensor.zeroTail S.toTensor z) := by
-    rw [MPSTensor.insertedTensor_zeroTail,
-      MPSTensor.insertedTensor_zeroTail, hSector]
   have hOriginal :
       MPSTensor.insertedTensor (MPSTensor.braRightAction Q) M.toMPSTensor =
         MPSTensor.insertedTensor
           (MPSTensor.ketLeftBraRightAction Q) M.toMPSTensor :=
-    MPSTensor.insertedTensor_eq_of_gauge X hX' _ _ hZero
+    MPSTensor.insertedTensor_eq_of_gauge X hX' _ _ hSector
   have hTensor : (M.braRightMul Q).toMPSTensor =
       ((M.ketLeftMul Q).braRightMul Q).toMPSTensor := by
     rw [← insertedTensor_braRightAction_toMPSTensor,

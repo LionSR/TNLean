@@ -10,10 +10,11 @@
     \leanok
     \uses{def:mpo_tensor, def:sector_bnt_cf, def:gauge_equiv}
     An MPO tensor is in \emph{horizontal canonical form} if its doubled-index
-    MPS tensor is globally gauge-conjugate to a BNT sector decomposition
+    MPS tensor is a BNT sector decomposition with an independent gauge on
+    every repeated copy:
     \[
-        \bigoplus_{j=0}^{g-1}\bigoplus_{q=0}^{r_j-1}
-        \mu_{j,q}A_j.
+        M^{ab}=\bigoplus_{j=0}^{g-1}\bigoplus_{q=0}^{r_j-1}
+        \mu_{j,q}X_{j,q}A_j^{ab}X_{j,q}^{-1}.
     \]
     Here the $A_j$ are the distinct minimal representatives, $r_j>0$, and
     every weight $\mu_{j,q}$ is nonzero, $|\mu_{j,q}|\leq1$, and at least
@@ -23,11 +24,11 @@
     exclusion of similarity up to phase between distinct representatives.
     Repeated gauge-equivalent copies are retained over the same representative
     rather than separated as distinct blocks.  The total bond dimension of
-    the displayed direct sum is exactly $D$, and there is
-    an invertible matrix $X\in M_D(\mathbb C)$ such that
+    the displayed direct sum is exactly $D$.  Equivalently, with the
+    block-diagonal matrix $X=\bigoplus_{j,q}X_{j,q}$,
     \[
-        M^{ab}=X\left[\bigoplus_{j,q}\mu_{j,q}A_j^{ab}\right]X^{-1}
-        \qquad (0\leq a,b<d).
+        M^{ab}=X\left[\bigoplus_{j,q}\mu_{j,q}A_j^{ab}\right]X^{-1},
+        \qquad X=\bigoplus_{j,q}X_{j,q}.
     \]
     This is the canonical form and its BNT decomposition in
     \cite[lines~237--246 and 281--301]{Cirac2016MPDO_arXiv}.
@@ -52,6 +53,23 @@
     This is the MPV-level decomposition in
     \cite[Section~2.3, lines~298--301]{Cirac2016MPDO_arXiv}.
 \end{definition}
+
+\begin{theorem}[Horizontal canonical form gives the BNT MPV representation]
+    \label{thm:horizontal_cf_gives_mpv_representation}
+    \lean{MPOTensor.IsHorizontalCF.hasHorizontalCFMPVRepresentation}
+    \leanok
+    \uses{def:horizontal_cf_mpdo,
+        def:horizontal_cf_mpv_representation}
+    Every MPO tensor in horizontal canonical form has the associated complete
+    BNT matrix-product-vector representation.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Each copy similarity cancels inside its closed matrix-product trace.
+    Since the two bond dimensions agree, this also identifies the coefficient
+    at length zero.
+\end{proof}
 
 \begin{figure}[ht]
     \centering
@@ -524,11 +542,10 @@
 \begin{theorem}[Representative and literal reduction from first-site contractions]
     \label{thm:representative_one_sub_mp_zero}
     \lean{MPSTensor.FirstSiteActionAgree.of_sameMPV}
-    \lean{MPSTensor.FirstSiteActionAgree.of_sameMPVPos}
-    \lean{MPSTensor.insertedTensor_zeroTail}
     \lean{MPSTensor.insertedTensor_toTensorFromBlocks}
     \lean{MPSTensor.SectorDecomposition.insertedTensor_toTensor_eq_of_basis}
     \lean{MPSTensor.insertedTensor_eq_of_gauge}
+    \lean{MPOTensor.IsHorizontalCF.insertedTensor_eq_of_firstSiteActionAgree}
     \lean{MPOTensor.insertedTensor_braRightAction_toMPSTensor}
     \lean{MPOTensor.insertedTensor_ketLeftBraRightAction_toMPSTensor}
     \lean{MPOTensor.representative_opposite_insert_eq_of_rotated_mpo_entries}
@@ -541,8 +558,16 @@
         thm:representative_grouped_insert_eq,
         thm:postblocked_representative_grouped_insert_eq,
         thm:mpdo_first_site_invariant_comm}
-    Let $M$ generate an MPDO and be in horizontal canonical form, with BNT
-    representatives $(A_j)_{j=0}^{g-1}$.  Suppose that $Q=Q^\dagger$ and
+    Let $M$ be in horizontal canonical form.  For doubled-index matrices
+    $Y,Z$, suppose that
+    \[
+        Y_1V^{(N)}(M)=Z_1V^{(N)}(M)
+        \qquad (N\geq1).
+    \]
+    Then the corresponding inserted tensors agree on the original bond
+    space, $YM=ZM$.
+
+    Now suppose in addition that $M$ generates an MPDO, $Q=Q^\dagger$, and
     that $Q\widetilde M=Q\widetilde M Q$ on the vertically viewed tensor.
     Then, on every representative, the insertions corresponding to
     $\widetilde M Q$ and $Q\widetilde M Q$ agree:
@@ -550,15 +575,12 @@
         Y_R(Q)A_j=Y_C(Q)A_j
         \qquad (0\leq j<g).
     \]
-    Moreover, this equality extends through every repeated weighted sector,
-    the permitted all-zero summand, and the global gauge, so that the original
-    MPO tensor satisfies
+    This equality extends through every repeated weighted sector and the
+    direct sum of the copy gauges, so that the original MPO tensor satisfies
     \[
         \widetilde M Q=Q\widetilde M Q.
     \]
-    The representative transport uses equality of the positive-length matrix
-    product vectors; the all-zero summand affects only length zero.  It also
-    follows directly from the two entrywise identities
+    The specialized assertion follows from the two entrywise identities
     $Q_1H^{(N)}=Q_1H^{(N)}Q_1$ and
     $Q_1H^{(N)}=H^{(N)}Q_1$ at every positive length.
 
@@ -576,18 +598,19 @@
     \uses{thm:representative_grouped_insert_eq,
         thm:postblocked_representative_grouped_insert_eq,
         thm:mpdo_first_site_invariant_comm}
-    Positivity and Hermiticity give
-    \[
-        Q_1H^{(N)}=Q_1H^{(N)}Q_1=H^{(N)}Q_1.
-    \]
-    Equality of positive-length MPV families transports these two first-site
-    identities to the BNT sector decomposition.  Apply the
+    For the general assertion, complete MPV equality transports the first-site
+    identity to the BNT sector decomposition.  The representative-grouped
+    Lemma~L gives $YA_j=ZA_j$ for every representative.  First-site insertion
+    commutes with the weighted direct sum, and conjugating each copy by its
+    gauge gives $YM=ZM$ on the original bond space.
+
+    For the specialized assertion, positivity and Hermiticity give
+    $Q_1H^{(N)}=Q_1H^{(N)}Q_1=H^{(N)}Q_1$.  Transport these two identities to
+    the BNT sector decomposition and apply the
     representative-grouped Lemma~L to identify first $Y_L(Q)A_j$ with
     $Y_C(Q)A_j$ and then with $Y_R(Q)A_j$.  Transitivity gives the stated
-    equality for every representative.  First-site insertion commutes with
-    the weighted direct sum and the all-zero summand, hence the identity holds
-    on the full horizontal tensor.  Conjugating by the global gauge then gives
-    the literal equality on $\widetilde M$.
+    equality for every representative, and the same direct-sum and copy-gauge
+    argument gives the literal equality on $\widetilde M$.
 \end{proof}
 
 \begin{lemma}[Blockwise equality from agreement on the MPV family]
@@ -2115,7 +2138,7 @@
     Theorem~\ref{thm:representative_one_sub_mp_zero} shows
     that every self-adjoint $P$ with $PM=PMP$ on the vertically viewed tensor
     gives the literal equality $MP=PMP$ on the original MPO tensor, including
-    its repeated sectors and permitted all-zero summand.  The paper takes $P$
+    all its repeated sectors.  The paper takes $P$
     to be an orthogonal projector; Hermiticity is the only part of that
     assumption needed for this implication.
     Theorem~\ref{thm:mpdo_vertical_no_periodic_vectors} excludes nontrivial
