@@ -1588,6 +1588,60 @@ strong subadditivity for a normalized three-site reduced state.
     symmetric equality.
 \end{proof}
 
+\begin{theorem}[Exact product of physical-sector bonds]
+    \label{thm:mpdo_exact_physical_sector_bond_product}
+    \lean{MPOTensor.PhysicalSectorFactorization.mpo_eq_product_physicalBond}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization,
+      def:mpdo_physical_two_site_bond,
+      thm:mpdo_physical_sector_chain_decomposition}
+    Suppose that $K$ is equipped with a physical-sector factorization $F$.
+    Let $B_i$ denote the cyclic translate beginning at site $i$ of the
+    physical two-site bond determined by $F$. For every $N\geq2$, the
+    $N$-site periodic operator is
+    \[
+      \rho_N=B_0B_1\cdots B_{N-1}.
+    \]
+    No positivity, zero-correlation-length, injectivity, or normalization
+    hypothesis is required. This is the product identity in
+    \cite[Appendix~C.2, Proposition~C.8, lines~1581--1593]
+      {Cirac2016MPDO_arXiv}, conditional here on the given physical-sector
+    factorization.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For a fixed cyclic sector sequence, contraction of the virtual index
+    between the right tensor at site $i$ and the left tensor at site $i+1$
+    produces $\eta_{k_i,k_{i+1}}$. Taking the virtual trace therefore gives
+    the cyclic product of these neighboring operators. The
+    translated sector bonds give the same ordered product. Conjugating by the
+    tensor power of the one-site coordinate unitary gives the stated physical
+    identity. For $N=2$, the second translate has the opposite cyclic order;
+    the two factors are the ordinary and crossed bonds.
+\end{proof}
+
+\begin{theorem}[Unit scalar in the physical-sector product]
+    \label{thm:mpdo_physical_sector_bond_product_unit_scalar}
+    \lean{MPOTensor.PhysicalSectorFactorization.exists_positive_scalar_mpo_eq_product_physicalBond}
+    \leanok
+    \uses{thm:mpdo_exact_physical_sector_bond_product}
+    Under the physical-sector factorization $F$ of the preceding theorem,
+    for every $N\geq2$ there is a real number $c>0$ such that
+    \[
+      \rho_N=c\,B_0B_1\cdots B_{N-1}.
+    \]
+    Here the bonds are the canonical bonds determined by $F$, and one may
+    take $c=1$. No positivity hypothesis on the neighboring operators
+    $\eta_{k,h}$ is required.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Take $c=1$ in
+    Theorem~\ref{thm:mpdo_exact_physical_sector_bond_product}.
+\end{proof}
+
 \begin{theorem}[Positive translation-invariant bond datum]
     \label{thm:mpdo_positive_translation_invariant_bond_data}
     \lean{MPOTensor.PhysicalSectorFactorization.translationInvariantBondData}

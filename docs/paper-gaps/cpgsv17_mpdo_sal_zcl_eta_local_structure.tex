@@ -487,15 +487,21 @@ commutativity of all translates on every periodic chain of length $N\geq2$.
 \footnote{The formal declaration is
 \leanid{MPOTensor.PhysicalSectorFactorization.physicalBond_pairwise_comm}.}
 
-The remaining global step is to transport the cyclic sector identity through
-the local unitary and prove the finite-chain realization
+The cyclic sector identity is now identified with the ordered bond product
+and transported through the local unitary, giving the exact finite-chain
+realization
 \[
   \sigma^{(N)}(K)=c_N\prod_{n=1}^N B_{n,n+1}
 \]
-for positive scalars $c_N$.  Together with the positive bond already
-constructed, this product identity will construct
-\leanid{MPOTensor.EtaLocalStructureData} from the Appendix C.2 local structure
-of a simple MPDO satisfying SAL.  ZCL is not a hypothesis of this construction.
+with $c_N=1$ for the canonical bond determined by the physical-sector
+factorization.\footnote{The formal declaration is
+\leanid{MPOTensor.PhysicalSectorFactorization.mpo_eq_product_physicalBond}.}
+Together with positivity of the neighboring operators, this supplies the
+mathematical data needed to construct
+\leanid{MPOTensor.EtaLocalStructureData}.  The remaining steps are to package
+these conditional results and, upstream, to construct a coherently positive
+physical-sector factorization from SAL. ZCL is not a hypothesis of this
+construction.
 
 The source Proposition \texttt{3to4} assumes SAL, not ZCL.  ZCL enters only
 after this commuting product form has been obtained, in the later step that
@@ -530,14 +536,14 @@ records an elimination plan using the uniqueness of the rescaling phase).
 The primitivity of $T_{k,h}$ also remains open, and cannot be used to
 derive recurrence without circularity.
 
-For the conditional bond construction, adjacent translates commute for every
-chain length $N\geq 2$, including the wraparound and crossed two-site cases,
-and disjoint translates commute by locality.  These cases are assembled into
-pairwise commutativity of all translates at every length $N\geq2$.  The
-finite-chain MPO is now expressed directly as the cyclic neighboring product
-in the coordinates of the physical-sector factorization.  Identifying this
-matrix with the ordered product of the translated two-site bonds, and then
-transporting that product to the original physical coordinates, remain open.
+For the conditional bond construction, all translates commute pairwise at
+every length $N\geq2$.  The finite-chain MPO is the ordered product of those
+bonds, first in cyclic sector coordinates and then in the original physical
+coordinates.  If the neighboring operators are positive semidefinite, these
+results provide the positive commuting bond and its exact realization with
+scalar one. Packaging them as eta-local structure data, and deriving the
+required coherently positive physical-sector factorization from SAL, remain
+open.
 
 \bibliographystyle{alpha}
 \bibliography{references}
