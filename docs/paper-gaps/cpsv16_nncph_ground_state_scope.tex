@@ -160,9 +160,12 @@ The coefficient-space representatives
 \leanid{MPSTensor.AppendixBStructuralData.appendixBQAXOnCoeffSpace} and
 \leanid{MPSTensor.AppendixBStructuralData.appendixBQXBOnCoeffSpace} are now identified with
 the canonical two-site parent interaction \(q_2(A)\) before placement on the
-\(AX\) and \(XB\) faces.  Their two lifts are the corresponding local actions
-on the tripartite space.  The one-bond virtual projector and its two adjacent
-placements are now constructed in
+\(AX\) and \(XB\) faces.  Write these coefficient-space maps as
+\(\widehat Q_{AX}\) and \(\widehat Q_{XB}\).  Their two lifts act on the
+three-site coefficient space; they are not yet identified with the source
+projectors on \(\mathcal H_A\otimes\mathcal H_X\) and
+\(\mathcal H_X\otimes\mathcal H_B\).  The one-bond virtual projector and its
+two adjacent placements are now constructed in
 \leanid{MPSTensor.AppendixBStructuralData.virtualBondProjection},
 \leanid{MPSTensor.AppendixBStructuralData.leftVirtualBondProjection}, and
 \leanid{MPSTensor.AppendixBStructuralData.rightVirtualBondProjection}. Their
@@ -179,15 +182,18 @@ and
 \leanid{MPSTensor.AppendixBStructuralData.adjacent_twoSite_localTerms_commute}.
 The resulting commuting projector family is
 \leanid{MPSTensor.AppendixBStructuralData.hasProductPairLocalProjectors}.
-The separate Appendix~D algebraic and kernel-intersection clauses are also now
-proved locally:
+The coefficient-space analogues of the Appendix~D algebraic and
+kernel-intersection equations are also now proved locally:
 \leanid{MPSTensor.AppendixBStructuralData.}
 \hspace{0pt}\leanid{hasAppendixD2ParentCommutingHamiltonian} identifies
-\(K_{AXB}=G_3(A)\) with the intersection of the two lifted kernels.  Its RFP
-corollary derives injectivity from the normal left-canonical RFP hypotheses.
-The concrete canonical parent interactions are orthogonal by construction, but
-the structure returned by this declaration does not expose self-adjointness.
-This local result is not used in the chain commutator proof.
+\(\widehat K_{AXB}=G_3(A)\) with the intersection of the kernels of the lifts
+of \(\widehat Q_{AX}\) and \(\widehat Q_{XB}\).  Its RFP corollary derives
+injectivity from the normal left-canonical RFP hypotheses.  The concrete
+canonical parent interactions are orthogonal by construction, but the
+condition recorded by this declaration does not assert self-adjointness.  It
+remains to construct the source projectors and identify their transported
+actions with the hatted coefficient-space maps.  This local coefficient-space
+result is not used in the chain commutator proof.
 Consequently the forward commutation and zero-energy statements are proved for
 normal left-canonical RFP tensors by
 \leanid{MPSTensor.rfp_implies_nncph_of_leftCanonical} and

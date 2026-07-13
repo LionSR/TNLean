@@ -38,12 +38,10 @@ canonical orthogonal parent interaction. This theorem does not identify these
 maps with the source projectors on the two explicitly factored Hilbert spaces.
 
 This theorem relates the Appendix B basic-vector construction to the separate
-equations in Appendix D. It is not the argument printed for the implication
-RFP \(\Rightarrow\) NNCPH: arXiv:1606.00608, lines 1305--1307, calls that
-implication an immediate consequence of the structural characterization.
+equations in Appendix D.
 
-Source: arXiv:1606.00608, Theorem 3.11, lines 543--578; Definition D.2,
-lines 2205--2218; and the proof of Theorem 3.10, lines 1305--1307. -/
+Source: arXiv:1606.00608, Theorem 3.11, lines 543--578, and Definition D.2,
+lines 2205--2218. -/
 theorem AppendixBStructuralData.hasAppendixD2ParentCommutingHamiltonian
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
     (hA : IsInjective A) :
@@ -63,17 +61,15 @@ analogue of the algebraic and kernel-intersection datum in arXiv:1606.00608,
 Definition D.2.
 
 Injectivity is not an additional hypothesis: it follows from normality, the RFP
-identity, and left-canonical normalization. This is a local Appendix D
-corollary of the Appendix B structural form. It is logically separate from the
-one-sentence proof of RFP \(\Rightarrow\) NNCPH at source lines 1305--1307.
+identity, and left-canonical normalization.
 
 **Scope restriction (left-canonical local datum):** The source structural
 theorem is stated for tensors in canonical form. This result uses the proved
 left-canonical specialization recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
-Source: arXiv:1606.00608, Theorems 3.10--3.11, lines 534--578 and
-1305--1307; Definition D.2, lines 2205--2218. -/
+Source: arXiv:1606.00608, Theorem 3.11, lines 543--578, and Definition D.2,
+lines 2205--2218. -/
 theorem rfp_hasAppendixD2ParentCommutingHamiltonian_of_leftCanonical
     (A : MPSTensor d D) [NeZero D]
     (hRFP : IsRFP A) (hNT : IsNormal A) (hLeft : IsLeftCanonical A) :

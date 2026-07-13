@@ -17,6 +17,20 @@ to every translated three-site window of a longer periodic chain.
 The chain-length hypothesis is (3 \leq N), matching the (N>2) condition in
 arXiv:1606.00608, Theorem 3.10 and the local relation
 \([\tau_1(P_2),P_2]=0\) in Definition 3.9.
+
+## Main statements
+
+* `adjacent_localTerm_eq_zero_iff_mem_groundSpace_succ` characterizes the
+  \((L+1)\)-site ground space by the two adjacent length-\(L\) kernels.
+* `groundSpace_three_eq_adjacent_twoSite_parent_kernels` gives the three-site
+  specialization for the canonical two-site parent interaction.
+* `localTerm_adjacent_twoSite_commute_of_threeSite_zero_one_commute` transports
+  the three-site commutator to every translated three-site window.
+
+## References
+
+* arXiv:2011.12127, Section IV.C.
+* arXiv:1606.00608, Definition 3.9 and Appendix D, Definition D.2.
 -/
 
 namespace MPSTensor
@@ -52,9 +66,7 @@ of the kernels of the two adjacent canonical two-site parent interactions:
 \]
 
 This is the three-site specialization of the MPS intersection property, written
-in the local-support notation of arXiv:1606.00608, Definition D.2. Definition
-D.2 is a separate statement in Appendix D; the source proof of Theorem 3.10
-does not invoke it.
+in the local-support notation of arXiv:1606.00608, Definition D.2.
 
 Source: arXiv:1606.00608, Definition D.2, lines 2205--2218;
 arXiv:2011.12127, Section IV.C, lines 2013--2078. -/
