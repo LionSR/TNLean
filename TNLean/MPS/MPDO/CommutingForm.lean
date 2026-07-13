@@ -99,7 +99,7 @@ theorem agreesOutsideWindow_iff (L : ℕ) {N : ℕ} (hLN : L ≤ N)
 
 /-- Decompose a periodic configuration into a cyclic window and its cyclic
 complement. -/
-private def windowComplementEquiv (L N : ℕ) (hLN : L ≤ N) (i : Fin N) :
+def windowComplementEquiv (L N : ℕ) (hLN : L ≤ N) (i : Fin N) :
     (Fin N → Fin d) ≃ ((Fin L → Fin d) × (Fin (N - L) → Fin d)) where
   toFun σ :=
     (MPSTensor.extractWindow L i σ,
@@ -183,7 +183,7 @@ private def windowComplementEquiv (L N : ℕ) (hLN : L ≤ N) (i : Fin N) :
 
 /-- In cyclic-window coordinates, a local operator is the tensor product of
 the window operator with the identity on the complement. -/
-private theorem reindex_embedLocalOperator_windowComplement
+theorem reindex_embedLocalOperator_windowComplement
     (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
     (B : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
     Matrix.reindex (windowComplementEquiv (d := d) L N hLN i)

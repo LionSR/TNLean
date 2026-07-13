@@ -26,8 +26,12 @@ namespace MPOTensor.PhysicalSectorFactorization
 
 variable {d D : ℕ} {K : MPOTensor d D}
 
-/-- Exchange the two factors of a matrix indexed by ordered pairs. -/
-private noncomputable def swapPairMatrix {n : Type*}
+/-- Exchange the two factors of a matrix indexed by ordered pairs.
+
+This is the opposite cyclic ordering of the two sites at chain length two.
+Appendix C.2, Proposition C.8 of arXiv:1606.00608 does not discuss this
+finite-size ordering separately. -/
+noncomputable def swapPairMatrix {n : Type*}
     (B : Matrix (n × n) (n × n) ℂ) : Matrix (n × n) (n × n) ℂ :=
   Matrix.reindex (Equiv.prodComm n n) (Equiv.prodComm n n) B
 
@@ -43,7 +47,7 @@ private theorem reindex_prodComm_kronecker_self
 
 /-- Exchanging both physical sites commutes with a change of coordinates
 which is the tensor square of one single-site coordinate matrix. -/
-private theorem swapPairMatrix_sandwich_kronecker_self
+theorem swapPairMatrix_sandwich_kronecker_self
     {m n : Type*} [Fintype m] [Fintype n]
     (A : Matrix m n ℂ) (B : Matrix (m × m) (m × m) ℂ) :
     swapPairMatrix (sandwichMap (A ⊗ₖ A)ᴴ B) =
@@ -80,8 +84,11 @@ the outer and neighboring pairs in the regrouped coordinates. -/
   rfl
 
 /-- The crossed bond on a fixed `(k,h)` sector block.  It acts on the outer
-factor $L_k \otimes R_h$, leaving the neighboring factor fixed. -/
-private noncomputable def crossedSectorBond (F : PhysicalSectorFactorization K)
+factor $L_k \otimes R_h$, leaving the neighboring factor fixed.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition C.8.  The source does not
+separately state the crossed finite-size case. -/
+noncomputable def crossedSectorBond (F : PhysicalSectorFactorization K)
     (k h : Fin F.sectorCount) :
     Matrix (BoundaryIndex F k h × NeighborIndex F k h)
       (BoundaryIndex F k h × NeighborIndex F k h) ℂ :=
@@ -102,8 +109,11 @@ private theorem fixedSectorBond_crossed_comm
   simp
 
 /-- Regrouping the swapped sector-coordinate bond gives the dependent direct
-sum of the crossed fixed-sector bonds. -/
-private theorem reindex_swapPairMatrix_sectorCoordinateBond
+sum of the crossed fixed-sector bonds.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition C.8.  The source does not
+separately state the crossed finite-size case. -/
+theorem reindex_swapPairMatrix_sectorCoordinateBond
     (F : PhysicalSectorFactorization K) :
     Matrix.reindex F.twoSiteGlobalRegroupEquiv F.twoSiteGlobalRegroupEquiv
         (swapPairMatrix F.sectorCoordinateBond) =
@@ -214,7 +224,7 @@ the original pair matrix after identifying configurations with ordered pairs.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition C.8.  The source does not
 separately state the crossed finite-size case. -/
-private theorem reindex_embedLocalOperator_two_zero
+theorem reindex_embedLocalOperator_two_zero
     (F : PhysicalSectorFactorization K) :
     Matrix.reindex (finTwoArrowEquiv (Fin d)) (finTwoArrowEquiv (Fin d))
         (embedLocalOperator (d := d) 2 2 (by decide) (0 : Fin 2) F.physicalBond) =
@@ -236,7 +246,7 @@ the pair matrix with its two tensor factors exchanged.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition C.8.  The source does not
 separately state the crossed finite-size case. -/
-private theorem reindex_embedLocalOperator_two_one
+theorem reindex_embedLocalOperator_two_one
     (F : PhysicalSectorFactorization K) :
     Matrix.reindex (finTwoArrowEquiv (Fin d)) (finTwoArrowEquiv (Fin d))
         (embedLocalOperator (d := d) 2 2 (by decide) (1 : Fin 2) F.physicalBond) =
