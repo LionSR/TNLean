@@ -23,6 +23,64 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
+/-- The canonical two-site parent interactions supplied by an Appendix B
+structural datum satisfy the coefficient-space analogues of the algebraic and
+kernel-intersection equations in Definition D.2 on the three-site MPS ground
+space, provided the tensor is injective.
+
+The two operators are the canonical parent interaction \(q_2(A)\), placed on
+the \(AX\) and \(XB\) faces. Their commutation was obtained from the adjacent
+virtual-bond projectors. The remaining kernel equation is the standard
+three-site MPS intersection property. Thus the two interactions are
+idempotent, their lifts commute, and the intersection of their lifted kernels
+is \(G_3(A)\). They are orthogonal projectors because \(q_2(A)\) is the
+canonical orthogonal parent interaction. This theorem does not identify these
+maps with the source projectors on the two explicitly factored Hilbert spaces.
+
+This theorem relates the Appendix B basic-vector construction to the separate
+equations in Appendix D.
+
+Source: arXiv:1606.00608, Theorem 3.11, lines 543--578, and Definition D.2,
+lines 2205--2218. -/
+theorem AppendixBStructuralData.hasAppendixD2ParentCommutingHamiltonian
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
+    (hA : IsInjective A) :
+    HasAppendixD2ParentCommutingHamiltonian (d := d) (groundSpace A 3)
+      hStruct.appendixBQAXOnCoeffSpace hStruct.appendixBQXBOnCoeffSpace := by
+  refine
+    { left_idempotent := hStruct.appendixBQAXOnCoeffSpace_idempotent
+      right_idempotent := hStruct.appendixBQXBOnCoeffSpace_idempotent
+      commute_lifts := hStruct.hasOverlappingTwoSiteCommutation.commute_lifts
+      kernel_intersection := ?_ }
+  rw [hStruct.appendixBQAXOnCoeffSpace_eq_parentInteraction]
+  rw [hStruct.appendixBQXBOnCoeffSpace_eq_parentInteraction]
+  exact groundSpace_three_eq_adjacent_twoSite_parent_kernels hA
+
+/-- A normal left-canonical RFP tensor supplies the three-site coefficient-space
+analogue of the algebraic and kernel-intersection datum in arXiv:1606.00608,
+Definition D.2.
+
+Injectivity is not an additional hypothesis: it follows from normality, the RFP
+identity, and left-canonical normalization.
+
+**Scope restriction (left-canonical local datum):** The source structural
+theorem is stated for tensors in canonical form. This result uses the proved
+left-canonical specialization recorded in
+`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
+
+Source: arXiv:1606.00608, Theorem 3.11, lines 543--578, and Definition D.2,
+lines 2205--2218. -/
+theorem rfp_hasAppendixD2ParentCommutingHamiltonian_of_leftCanonical
+    (A : MPSTensor d D) [NeZero D]
+    (hRFP : IsRFP A) (hNT : IsNormal A) (hLeft : IsLeftCanonical A) :
+    let hStruct := AppendixBStructuralData.ofRFP A hNT hRFP hLeft
+    HasAppendixD2ParentCommutingHamiltonian (d := d) (groundSpace A 3)
+      hStruct.appendixBQAXOnCoeffSpace hStruct.appendixBQXBOnCoeffSpace := by
+  dsimp only
+  exact AppendixBStructuralData.hasAppendixD2ParentCommutingHamiltonian
+    (AppendixBStructuralData.ofRFP A hNT hRFP hLeft)
+    (rfp_nt_structural_of_leftCanonical A hNT hRFP hLeft)
+
 /-- The Appendix B structural datum gives commutation of adjacent translated
 length-two parent interactions on every periodic chain of length (N>2).
 

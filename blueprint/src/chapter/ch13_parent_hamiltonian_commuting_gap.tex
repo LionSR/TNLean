@@ -16,6 +16,13 @@ condition also says that, for $N>L$, the ground space is spanned by the
 periodic MPS vectors associated to the BNT components; nearest-neighbor means
 the specialization $L=2$.
 
+The proof of the forward implication in
+\cite[Theorem~3.10]{Cirac2016MPDO_arXiv} is the single sentence at source
+lines 1305--1307 saying that it follows immediately from the structural
+characterization in Theorem~3.11.  It does not invoke Definition~D.2.  The
+three-site kernel intersection proved below is instead a separate local
+specialization of that Appendix~D definition.
+
 \begin{definition}[Overlapping two-site supports]\label{def:overlapping_two_site_supports}
     \lean{MPSTensor.axPairCfg}
     \lean{MPSTensor.xbPairCfg}
@@ -1461,11 +1468,14 @@ the specialization $L=2$.
         (\widehat Q_{XB})_{XB}(\widehat Q_{AX})_{AX}.
     \]
     Thus they satisfy the algebraic overlapping two-site condition of
-    Definition~\ref{def:overlapping_two_site_supports}.  This is precisely the
-    projector-and-commutator part of
-    \cite[Definition~D.2]{Cirac2016MPDO_arXiv}.  It neither constructs the
-    source projectors nor proves the kernel-intersection equation in that
-    definition, and it makes no assertion for every chain length.
+    Definition~\ref{def:overlapping_two_site_supports}.  This is the
+    coefficient-space analogue of the projector-and-commutator part of
+    \cite[Definition~D.2]{Cirac2016MPDO_arXiv}.  The hatted maps have not yet
+    been identified with the source projectors on the explicitly factored
+    spaces.  By itself the result does not prove the kernel-intersection
+    equation in that definition and makes no assertion for every chain length.
+    The coefficient-space kernel equation is established in the next two
+    results.
 \end{theorem}
 
 \begin{proof}
@@ -1474,6 +1484,79 @@ the specialization $L=2$.
     two-site basic support projector.  Their idempotency was established in
     Lemma~\ref{lem:appendixB_qax_qxb_idempotent}.  Since the two adjacent lifts
     of $P_2$ commute, their complementary lifts commute as well.
+\end{proof}
+
+\begin{theorem}[Three-site intersection of adjacent parent kernels]
+    \label{thm:three_site_ground_space_adjacent_parent_kernels}
+    \lean{MPSTensor.adjacent_localTerm_eq_zero_iff_mem_groundSpace_succ}
+    \lean{MPSTensor.groundSpace_three_eq_adjacent_twoSite_parent_kernels}
+    \leanok
+    \uses{thm:local_term_two_three_ax_xb_lifts,
+        thm:ground_space_intersection, def:parent_interaction, def:injective}
+    If $A$ is injective, then
+    \[
+        G_3(A)
+        =
+        \ker\bigl(q_2(A)_{AX}\bigr)
+        \cap
+        \ker\bigl(q_2(A)_{XB}\bigr).
+    \]
+    More generally, on $L+1$ sites, simultaneous annihilation by the two
+    adjacent length-$L$ parent interactions is equivalent to membership in
+    $G_{L+1}(A)$ whenever $A$ is injective and $L>1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By Theorem~\ref{thm:ground_space_intersection}, a three-site vector belongs
+    to $G_3(A)$ exactly when its restrictions to both adjacent pairs belong to
+    $G_2(A)$.  Since $\ker q_2(A)=G_2(A)$, this is equivalent to annihilation
+    by both adjacent terms.  Theorem~\ref{thm:local_term_two_three_ax_xb_lifts}
+    identifies these terms with the two displayed lifts.
+\end{proof}
+
+\begin{theorem}[Appendix B coefficient-space analogue of the Appendix D kernel datum]
+    \label{thm:appendixB_definition_d2_coefficient_analogue}
+    \lean{MPSTensor.AppendixBStructuralData.hasAppendixD2ParentCommutingHamiltonian}
+    \lean{MPSTensor.rfp_hasAppendixD2ParentCommutingHamiltonian_of_leftCanonical}
+    \leanok
+    \uses{thm:appendixB_overlapping_two_site_commutation,
+        thm:three_site_ground_space_adjacent_parent_kernels,
+        lem:appendixB_qax_qxb_parent_interaction}
+    Let $A$ be injective and let an Appendix~B structural datum be fixed.  Put
+    \[
+        \widehat K_{AXB}=G_3(A),\qquad
+        \widehat Q_{AX}=q_2(A),\qquad \widehat Q_{XB}=q_2(A),
+    \]
+    with the two copies of $q_2(A)$ lifted to the indicated faces of the
+    three-site coefficient space.  Then
+    \[
+        [ (\widehat Q_{AX})_{AX}, (\widehat Q_{XB})_{XB}]=0,
+        \qquad
+        \widehat K_{AXB}
+        =\ker\bigl((\widehat Q_{AX})_{AX}\bigr)
+          \cap\ker\bigl((\widehat Q_{XB})_{XB}\bigr).
+    \]
+    These are the coefficient-space analogues of the idempotence, commutation,
+    and kernel-intersection equations in
+    \cite[Definition~D.2]{Cirac2016MPDO_arXiv}.  The hatted operators are not
+    identified here with the source projectors on
+    $\mathcal H_A\otimes\mathcal H_X$ and
+    $\mathcal H_X\otimes\mathcal H_B$.  For a normal left-canonical RFP tensor,
+    injectivity follows from the RFP structural theorem and is not an
+    additional hypothesis.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Idempotency and commutation are
+    Theorem~\ref{thm:appendixB_overlapping_two_site_commutation}.  The two
+    coefficient representatives are $q_2(A)$, and
+    Theorem~\ref{thm:three_site_ground_space_adjacent_parent_kernels} supplies
+    the remaining kernel equation.
+    % Source-scope note: this Appendix D corollary is not the argument printed
+    % for RFP => NNCPH.  The proof at source lines 1305--1307 instead refers
+    % directly to the structural characterization.
 \end{proof}
 
 \begin{theorem}[Transport of the three-site commutator]
@@ -1855,11 +1938,8 @@ the specialization $L=2$.
     \[
         \widehat Q_{AX}=q_2(A),\qquad \widehat Q_{XB}=q_2(A),
     \]
-    as coefficient-space representatives. This is not yet the construction of
-    the source projectors \(Q_{AX}\) and \(Q_{XB}\) on
-    \(\mathcal H_A\otimes\mathcal H_X\) and
-    \(\mathcal H_X\otimes\mathcal H_B\). On the three-site window the
-    coefficient representatives give the local identifications
+    as coefficient-space representatives. On the three-site window their two
+    lifts give the local identifications
     \[
         h_0^{(3)}(A,2)=(\widehat Q_{AX})_{AX},\qquad
         h_1^{(3)}(A,2)=(\widehat Q_{XB})_{XB}.
@@ -1924,9 +2004,11 @@ the specialization $L=2$.
     physical-pair factorization displayed above.  That factorization remains a
     separate conditional coefficient statement.  The full source implication
     additionally requires removal of the left-canonical hypothesis and the
-    ground-space spanning equation.  The kernel-intersection characterization
-    of the projectors in \cite[Definition~D.2]{Cirac2016MPDO_arXiv} also
-    remains separate.
+    ground-space spanning equation.  The coefficient-space analogue of the
+    local kernel-intersection equation is
+    Theorem~\ref{thm:appendixB_definition_d2_coefficient_analogue}; identifying
+    its hatted maps with the source projectors remains separate and is not
+    needed for the chain commutator.
 \end{remark}
 
 \begin{theorem}[Even-chain factorization and ground-space spanning give all-chain NNCPH]%
