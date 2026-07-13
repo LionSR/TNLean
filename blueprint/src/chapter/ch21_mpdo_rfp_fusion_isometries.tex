@@ -1237,8 +1237,17 @@ separate step.
     \lean{MPOTensor.BNTFusionIsometryFamily.%
         fourfoldBondMatrix_threeEdge_eq_twoEdge}
     \leanok
-    \uses{def:mpdo_operator_product_associator}
-    For finite bond-coordinate sets $A,B,C,D$, let
+    \uses{def:mpdo_operator_product_associator,
+        def:mpdo_bnt_fusion_isometry_family}
+    Fix four labels $\alpha,\beta,\gamma,\delta$ in a BNT fusion-isometry
+    family, and write
+    \[
+        A=\{1,\ldots,D_\alpha\},\quad
+        B=\{1,\ldots,D_\beta\},\quad
+        C=\{1,\ldots,D_\gamma\},\quad
+        D=\{1,\ldots,D_\delta\}
+    \]
+    for their bond-coordinate sets.  Let
     \[
         r_{X,Y,Z}:((X\times Y)\times Z)\longrightarrow
           X\times(Y\times Z)
