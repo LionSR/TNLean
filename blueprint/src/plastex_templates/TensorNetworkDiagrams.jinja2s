@@ -31,6 +31,9 @@ name: TNMPSInverseContraction TNBNTDecomposition TNMPDOZCLIdempotence TNMPDOFixe
 name: TNMPDOBNTFusionIdentity TNMPDOUnweightedZipperReconstruction TNMPDOFusionTracePower TNMPDOFixedFinalComparisonUnitary TNMPDOFourfoldBondReassociationPentagon TNMPDOPrintedFMove
 {{ obj.tn_svg_html }}
 
+name: TNAppendixBAdjacentBondProjectors TNAppendixBPhysicalSupportTransport
+{{ obj.tn_svg_html }}
+
 name: TNRFPKrausIsometry TNRFPKrausIsometryReverse TNRFPIsometryCanonicalForm
 {{ obj.tn_svg_html }}
 

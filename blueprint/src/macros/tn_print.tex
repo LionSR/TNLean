@@ -1562,6 +1562,86 @@
 % Fusion isometry of the renormalization fixed-point characterization: two
 % contracted copies of the tensor equal one copy with the isometry merging
 % the summed index into the physical pair.
+
+% Appendix B basic-vector geometry.  This is the vector counterpart of the
+% source figure II_RFP_MPS.png: each U acts on the two virtual halves at one
+% physical site, while the two highlighted rank-one projectors act on the
+% separate bonds shared by adjacent sites.
+\newcommand{\TNAppendixBAdjacentBondProjectors}{%
+    \begin{tikzpicture}[tn picture, scale=0.92]
+        \foreach \x/\name in {0/rfpUzero,2.20/rfpUone,4.40/rfpUtwo} {
+            \node[draw, fill=white, minimum width=0.72cm, minimum height=0.58cm]
+                (\name) at (\x,0.92) {$U$};
+            \draw[tn phys leg] (\name.north) -- ++(0,0.42);
+        }
+        \node[draw, fill=white, minimum width=0.68cm, minimum height=0.50cm]
+            (rfpPhiZero) at (1.10,0) {$\varphi$};
+        \node[draw, fill=white, minimum width=0.68cm, minimum height=0.50cm]
+            (rfpPhiOne) at (3.30,0) {$\varphi$};
+        \draw[tn leg] ($(rfpUzero.south)+(-0.16,0)$) -- ++(0,-0.42)
+            -- (rfpPhiZero.west);
+        \draw[tn leg] (rfpPhiZero.east) -- ++(0.36,0)
+            -- ($(rfpUone.south)+(-0.16,0)$);
+        \draw[tn leg] ($(rfpUone.south)+(0.16,0)$) -- ++(0,-0.42)
+            -- (rfpPhiOne.west);
+        \draw[tn leg] (rfpPhiOne.east) -- ++(0.36,0)
+            -- ($(rfpUtwo.south)+(0.16,0)$);
+        \draw[tn leg] ($(rfpUzero.south)+(0.16,0)$) -- ++(0,-0.80) -- ++(-0.76,0);
+        \draw[tn leg] ($(rfpUtwo.south)+(-0.16,0)$) -- ++(0,-0.80) -- ++(0.76,0);
+        \draw[red, rounded corners]
+            ($(rfpPhiZero.south west)+(-0.07,-0.07)$) rectangle
+            ($(rfpPhiZero.north east)+(0.07,0.07)$);
+        \draw[red, rounded corners]
+            ($(rfpPhiOne.south west)+(-0.07,-0.07)$) rectangle
+            ($(rfpPhiOne.north east)+(0.07,0.07)$);
+        \node[red] at (1.10,-0.55) {$P_{01}$};
+        \node[red] at (3.30,-0.55) {$P_{12}$};
+    \end{tikzpicture}%
+}
+
+% Isometric transport of the two virtual bond projectors to the adjacent
+% physical two-site basic-support projectors.  The upper row retains the
+% source's three U tensors and diagonal bond vectors; the upper red brackets
+% record the two overlapping physical supports.
+\newcommand{\TNAppendixBPhysicalSupportTransport}{%
+    \begin{tikzpicture}[tn picture, scale=0.90]
+        \foreach \x/\name in {0/rfpTzero,2.20/rfpTone,4.40/rfpTtwo} {
+            \node[draw, fill=white, minimum width=0.72cm, minimum height=0.58cm]
+                (\name) at (\x,0.72) {$U$};
+            \draw[tn phys leg] (\name.north) -- ++(0,0.52);
+            \fill[black] ($(\name.north)+(0,0.52)$) circle (1.4pt);
+        }
+        \node[draw, fill=white, minimum width=0.68cm, minimum height=0.50cm]
+            (rfpTPhiZero) at (1.10,-0.12) {$\varphi$};
+        \node[draw, fill=white, minimum width=0.68cm, minimum height=0.50cm]
+            (rfpTPhiOne) at (3.30,-0.12) {$\varphi$};
+        \draw[tn leg] ($(rfpTzero.south)+(-0.16,0)$) -- ++(0,-0.42)
+            -- (rfpTPhiZero.west);
+        \draw[tn leg] (rfpTPhiZero.east) -- ++(0.36,0)
+            -- ($(rfpTone.south)+(-0.16,0)$);
+        \draw[tn leg] ($(rfpTone.south)+(0.16,0)$) -- ++(0,-0.42)
+            -- (rfpTPhiOne.west);
+        \draw[tn leg] (rfpTPhiOne.east) -- ++(0.36,0)
+            -- ($(rfpTtwo.south)+(0.16,0)$);
+        \draw[tn leg] ($(rfpTzero.south)+(0.16,0)$) -- ++(0,-0.80) -- ++(-0.76,0);
+        \draw[tn leg] ($(rfpTtwo.south)+(-0.16,0)$) -- ++(0,-0.80) -- ++(0.76,0);
+        \draw[red, rounded corners=4pt, line width=0.7pt]
+            (-0.34,1.44) rectangle (2.54,1.74);
+        \draw[red, rounded corners=4pt, line width=0.7pt]
+            (1.86,1.84) rectangle (4.74,2.14);
+        \node[red, anchor=east] at (-0.40,1.59) {$(P_2)_{01}$};
+        \node[red, anchor=west] at (4.80,1.99) {$(P_2)_{12}$};
+        \draw[red, rounded corners]
+            ($(rfpTPhiZero.south west)+(-0.07,-0.07)$) rectangle
+            ($(rfpTPhiZero.north east)+(0.07,0.07)$);
+        \draw[red, rounded corners]
+            ($(rfpTPhiOne.south west)+(-0.07,-0.07)$) rectangle
+            ($(rfpTPhiOne.north east)+(0.07,0.07)$);
+        \node[red] at (1.10,-0.68) {$P_{01}$};
+        \node[red] at (3.30,-0.68) {$P_{12}$};
+    \end{tikzpicture}%
+}
+
 \newcommand{\TNRFPKrausIsometry}{%
     \begin{tikzpicture}[tn picture]
         \TN@tensordot{rfkA}{(0,0)}

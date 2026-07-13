@@ -1179,6 +1179,50 @@ the specialization $L=2$.
     coefficients.
 \end{definition}
 
+\begin{definition}[Virtual bond projector and its adjacent placements]
+    \label{def:appendixB_virtual_bond_projectors}
+    \lean{MPSTensor.AppendixBStructuralData.virtualBondProjection}
+    \lean{MPSTensor.AppendixBStructuralData.leftVirtualBondProjection}
+    \lean{MPSTensor.AppendixBStructuralData.rightVirtualBondProjection}
+    \leanok
+    \uses{def:appendixB_two_site_bond_embedding}
+    Write
+    \[
+        s=\langle\varphi,\varphi\rangle=\sum_b\lambda_b^2.
+    \]
+    The orthogonal projector onto $\mathbb C\varphi$ has pair-index
+    coefficients
+    \[
+        (P_\varphi v)_{b,b'}
+        =\delta_{b,b'}\frac{\lambda_b}{s}
+          \sum_k\lambda_kv_{k,k}.
+    \]
+    On three virtual site pairs, let $P_{01}$ place this projector on the bond
+    joining the right index of site zero to the left index of site one, and let
+    $P_{12}$ place it on the next bond.
+\end{definition}
+
+\begin{theorem}[Commutation of the adjacent virtual bond projectors]
+    \label{thm:appendixB_virtual_bond_projectors_commute}
+    \lean{MPSTensor.AppendixBStructuralData.leftVirtualBondProjection_comp_right}
+    \leanok
+    \uses{def:appendixB_virtual_bond_projectors}
+    The two adjacent placements commute:
+    \[
+        \TNAppendixBAdjacentBondProjectors
+        \qquad
+        P_{01}P_{12}=P_{12}P_{01}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The contracted bond coordinates are disjoint.  Thus replacing the first
+    bond by the diagonal basis vector $\lvert k,k\rangle$ and the second by
+    $\lvert \ell,\ell\rangle$ is independent of the order.  Expanding both
+    rank-one projectors gives the same double sum over $(k,\ell)$.
+\end{proof}
+
 \begin{theorem}[Surjectivity of the weighted boundary parametrization]
     \label{thm:appendixB_weighted_two_site_boundary_surjective}
     \lean{MPSTensor.AppendixBStructuralData.weightedTwoSiteBoundary_surjective}
@@ -1278,6 +1322,49 @@ the specialization $L=2$.
     \]
 \end{proof}
 
+\begin{theorem}[Commutation of adjacent two-site basic support projectors]
+    \label{thm:appendixB_two_site_basic_support_projectors_commute}
+    \lean{MPSTensor.AppendixBStructuralData.twoSiteBasicSupportProjection_commute_lifts}
+    \leanok
+    \uses{thm:appendixB_virtual_bond_projectors_commute,
+        thm:appendixB_physical_isometry_tensor_power,
+        thm:appendixB_two_site_basic_support_projector}
+    Let $(P_2)_{01}$ and $(P_2)_{12}$ be the two adjacent placements of the
+    two-site basic support projector on three physical sites.  Then
+    \[
+        (P_2)_{01}(P_2)_{12}=(P_2)_{12}(P_2)_{01}.
+    \]
+    This is the local three-site consequence of the parent-space construction
+    and the basic-vector form in
+    \cite[Definition~3.9, Equations~(3.16)--(3.18), and
+    Appendix~B]{Cirac2016MPDO_arXiv}.  It does not assert commutation for every
+    chain length.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The one-site map $U$ is an isometry.  The preceding range identity
+    therefore identifies the physical projector with the isometric transport
+    of the virtual bond projector:
+    \[
+        P_2=U^{\otimes2}P_\varphi (U^*)^{\otimes2}.
+    \]
+    On three sites, multiplication of the two adjacent transports cancels the
+    middle factors by $U^*U=1$.  Consequently their products are
+    \[
+        U^{\otimes3}P_{01}P_{12}(U^*)^{\otimes3}
+        \quad\text{and}\quad
+        U^{\otimes3}P_{12}P_{01}(U^*)^{\otimes3},
+    \]
+    respectively.  They agree by
+    Theorem~\ref{thm:appendixB_virtual_bond_projectors_commute}.
+    Diagrammatically, the same argument transports the two disjoint virtual
+    bond contractions through the three one-site isometries:
+    \[
+        \TNAppendixBPhysicalSupportTransport
+    \]
+\end{proof}
+
 \begin{definition}[Appendix B \(AX\) coefficient representative]
     \label{def:appendixB_qax}
     \lean{MPSTensor.AppendixBStructuralData.appendixBQAXOnCoeffSpace}
@@ -1347,6 +1434,43 @@ the specialization $L=2$.
     By the preceding identification, both representatives are the canonical
     two-site parent interaction \(q_2(A)\).  The latter is an orthogonal
     projector, hence is idempotent.
+\end{proof}
+
+\begin{theorem}[Appendix B overlapping two-site commutation]
+    \label{thm:appendixB_overlapping_two_site_commutation}
+    \lean{MPSTensor.AppendixBStructuralData.hasOverlappingTwoSiteCommutation}
+    \leanok
+    \uses{thm:appendixB_two_site_basic_support_projectors_commute,
+        thm:appendixB_two_site_basic_support_projector,
+        lem:appendixB_qax_qxb_idempotent,
+        def:overlapping_two_site_supports}
+    The two Appendix~B coefficient representatives satisfy
+    \[
+        \widehat Q_{AX}^{\,2}=\widehat Q_{AX},
+        \qquad
+        \widehat Q_{XB}^{\,2}=\widehat Q_{XB},
+    \]
+    and their adjacent actions on the common three-site coefficient space
+    commute:
+    \[
+        (\widehat Q_{AX})_{AX}(\widehat Q_{XB})_{XB}
+        =
+        (\widehat Q_{XB})_{XB}(\widehat Q_{AX})_{AX}.
+    \]
+    Thus they satisfy the algebraic overlapping two-site condition of
+    Definition~\ref{def:overlapping_two_site_supports}.  This is precisely the
+    projector-and-commutator part of
+    \cite[Definition~D.2]{Cirac2016MPDO_arXiv}.  It neither constructs the
+    source projectors nor proves the kernel-intersection equation in that
+    definition, and it makes no assertion for every chain length.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Both coefficient representatives are the complement $1-P_2$ of the
+    two-site basic support projector.  Their idempotency was established in
+    Lemma~\ref{lem:appendixB_qax_qxb_idempotent}.  Since the two adjacent lifts
+    of $P_2$ commute, their complementary lifts commute as well.
 \end{proof}
 
 \begin{lemma}[Appendix B overlapping condition from the lifted commutator]

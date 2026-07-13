@@ -486,7 +486,9 @@ import TNLean.MPS.MPDO.PureRecovery
 import TNLean.MPS.RFP.StructuralForm
 import TNLean.MPS.RFP.StructuralFull
 import TNLean.MPS.RFP.CommutingBridge
+import TNLean.MPS.RFP.KroneckerTransport
 import TNLean.MPS.RFP.AppendixBSupport
+import TNLean.MPS.RFP.AppendixBCommutation
 import TNLean.MPS.RFP.Convergence
 import TNLean.MPS.RFP.Assembly
 import TNLean.MPS.RFP.Decorrelation

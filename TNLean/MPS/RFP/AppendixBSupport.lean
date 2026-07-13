@@ -9,17 +9,19 @@ import TNLean.MPS.RFP.CommutingBridge
 
 This file develops the local support construction arising from the Appendix B
 basic-vector expression in arXiv:1606.00608, equations (3.16)--(3.18).  It
-constructs every tensor power of the physical isometry, inserts the virtual bond
+constructs every tensor power of the physical isometry, the rank-one virtual
+bond projector and its adjacent three-site placements, inserts the virtual bond
 vector on two sites, identifies the resulting physical image with
 \(G_2(\Lambda U)\), and constructs its orthogonal support projector.
 
-The subsequent three-site commutator still requires the virtual projector onto
-\(\mathbb C\varphi\), its two adjacent placements, and the spectator-complement
-argument for the possibly non-surjective physical isometry.  That boundary is
-recorded in `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
+The adjacent virtual placements commute.  Their transport to the physical
+three-site coefficient space uses only the isometry identity \(U^*U=1\); no
+surjectivity of \(U\) is required.  The distinction between this local result
+and an all-chain statement is recorded in
+`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators InnerProductSpace
 
 namespace MPSTensor
 
@@ -172,7 +174,336 @@ theorem AppendixBStructuralData.physicalIsometryTensorPower_injective
   LinearMap.injective_of_comp_eq_id _ _
     (hStruct.physicalIsometryTensorPowerLeftInverse_comp N)
 
+/-- The coefficient map called the left inverse above is the Hilbert-space
+adjoint of the physical tensor power.
+
+Source: arXiv:1606.00608, pair-index isometry equation (3.16) and basic-vector
+equation (3.17), lines 549--578. -/
+theorem AppendixBStructuralData.physicalIsometryTensorPower_adjoint_inner
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) (N : ℕ)
+    (ψ : NSiteSpace d N) (v : (Fin N → Fin D × Fin D) → ℂ) :
+    ⟪(WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm ψ,
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm
+          (hStruct.physicalIsometryTensorPower N v)⟫_ℂ =
+      ⟪(WithLp.linearEquiv 2 ℂ ((Fin N → Fin D × Fin D) → ℂ)).symm
+          (hStruct.physicalIsometryTensorPowerLeftInverse N ψ),
+        (WithLp.linearEquiv 2 ℂ ((Fin N → Fin D × Fin D) → ℂ)).symm v⟫_ℂ := by
+  classical
+  change (∑ σ : Cfg d N,
+      (∑ p : Fin N → Fin D × Fin D,
+        (∏ t : Fin N, hStruct.U (σ t) (p t).1 (p t).2) * v p) * star (ψ σ)) =
+    ∑ p : Fin N → Fin D × Fin D, v p * star (∑ σ : Cfg d N,
+      (∏ t : Fin N, star (hStruct.U (σ t) (p t).1 (p t).2)) * ψ σ)
+  calc
+    _ = ∑ σ : Cfg d N, ∑ p : Fin N → Fin D × Fin D,
+        ((∏ t : Fin N, hStruct.U (σ t) (p t).1 (p t).2) * v p) * star (ψ σ) := by
+      apply Finset.sum_congr rfl
+      intro σ _
+      rw [Finset.sum_mul]
+    _ = ∑ p : Fin N → Fin D × Fin D, ∑ σ : Cfg d N,
+        v p * (star (ψ σ) * ∏ t : Fin N,
+          hStruct.U (σ t) (p t).1 (p t).2) := by
+      rw [Finset.sum_comm]
+      apply Finset.sum_congr rfl
+      intro p _
+      apply Finset.sum_congr rfl
+      intro σ _
+      ring
+    _ = _ := by
+      apply Finset.sum_congr rfl
+      intro p _
+      rw [star_sum, Finset.mul_sum]
+      apply Finset.sum_congr rfl
+      intro σ _
+      simp only [star_mul, star_prod, star_star]
+
+/-- Every physical tensor power preserves the Hilbert-space inner product.
+
+Source: arXiv:1606.00608, pair-index isometry equation (3.16), lines
+549--554. -/
+theorem AppendixBStructuralData.physicalIsometryTensorPower_inner
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) (N : ℕ)
+    (v w : (Fin N → Fin D × Fin D) → ℂ) :
+    ⟪(WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm
+          (hStruct.physicalIsometryTensorPower N v),
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm
+          (hStruct.physicalIsometryTensorPower N w)⟫_ℂ =
+      ⟪(WithLp.linearEquiv 2 ℂ ((Fin N → Fin D × Fin D) → ℂ)).symm v,
+        (WithLp.linearEquiv 2 ℂ ((Fin N → Fin D × Fin D) → ℂ)).symm w⟫_ℂ := by
+  rw [hStruct.physicalIsometryTensorPower_adjoint_inner]
+  have hleft := LinearMap.congr_fun
+    (hStruct.physicalIsometryTensorPowerLeftInverse_comp N) v
+  simp only [LinearMap.comp_apply, Module.End.one_apply] at hleft
+  rw [hleft]
+
+/-! ### The virtual bond projector -/
+
+/-- The squared norm
+\(\langle\varphi,\varphi\rangle=\sum_b\lambda_b^2\) of the Appendix B bond
+vector \(\varphi=\sum_b\lambda_b\lvert b,b\rangle\).
+
+Source: arXiv:1606.00608, equations (3.17)--(3.18), lines 564--578. -/
+noncomputable def AppendixBStructuralData.virtualBondNormSq
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) : ℂ :=
+  ∑ k : Fin D, (hStruct.Λ k : ℂ) * (hStruct.Λ k : ℂ)
+
+/-- Strict positivity of the bond weights makes the squared bond norm nonzero
+whenever the virtual space is nonempty.
+
+Source: arXiv:1606.00608, equation (3.18), lines 573--578. -/
+theorem AppendixBStructuralData.virtualBondNormSq_ne_zero
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
+    [Nonempty (Fin D)] : hStruct.virtualBondNormSq ≠ 0 := by
+  let k₀ : Fin D := Classical.choice inferInstance
+  have hnonneg : ∀ k ∈ Finset.univ, 0 ≤ hStruct.Λ k * hStruct.Λ k := by
+    intro k _
+    exact mul_nonneg (le_of_lt (hStruct.hΛ_pos k)) (le_of_lt (hStruct.hΛ_pos k))
+  have hpos : 0 < ∑ k : Fin D, hStruct.Λ k * hStruct.Λ k := by
+    apply Finset.sum_pos' hnonneg
+    exact ⟨k₀, Finset.mem_univ k₀, mul_pos (hStruct.hΛ_pos k₀) (hStruct.hΛ_pos k₀)⟩
+  have hc : ((∑ k : Fin D, hStruct.Λ k * hStruct.Λ k : ℝ) : ℂ) ≠ 0 := by
+    exact_mod_cast ne_of_gt hpos
+  simpa [AppendixBStructuralData.virtualBondNormSq] using hc
+
+/-- The rank-one orthogonal projector onto
+\(\mathbb C\varphi\), written in the pair-index basis.
+
+Source: arXiv:1606.00608, equations (3.17)--(3.18), lines 564--578. -/
+noncomputable def AppendixBStructuralData.virtualBondProjection
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
+    ((Fin D × Fin D → ℂ) →ₗ[ℂ] (Fin D × Fin D → ℂ)) where
+  toFun v p :=
+    if p.1 = p.2 then
+      (hStruct.Λ p.1 : ℂ) / hStruct.virtualBondNormSq *
+        ∑ k : Fin D, (hStruct.Λ k : ℂ) * v (k, k)
+    else 0
+  map_add' v w := by
+    funext p
+    by_cases hp : p.1 = p.2
+    · simp only [hp, if_true, Pi.add_apply, mul_add, Finset.sum_add_distrib]
+    · simp only [Pi.add_apply, hp, if_false, add_zero]
+  map_smul' c v := by
+    funext p
+    by_cases hp : p.1 = p.2
+    · simp [hp, Finset.mul_sum, mul_assoc, mul_comm]
+    · simp [hp]
+
+/-- Replace the virtual bond joining sites zero and one by the diagonal basis
+vector indexed by `k`, leaving the four remaining virtual indices unchanged. -/
+def AppendixBStructuralData.replaceVirtualBond01
+    {A : MPSTensor d D} (_hStruct : AppendixBStructuralData A)
+    (p : Fin 3 → Fin D × Fin D) (k : Fin D) : Fin 3 → Fin D × Fin D :=
+  fun t ↦ if t = 0 then ((p 0).1, k) else if t = 1 then (k, (p 1).2) else p t
+
+/-- Replace the virtual bond joining sites one and two by the diagonal basis
+vector indexed by `k`, leaving the four remaining virtual indices unchanged. -/
+def AppendixBStructuralData.replaceVirtualBond12
+    {A : MPSTensor d D} (_hStruct : AppendixBStructuralData A)
+    (p : Fin 3 → Fin D × Fin D) (k : Fin D) : Fin 3 → Fin D × Fin D :=
+  fun t ↦ if t = 1 then ((p 1).1, k) else if t = 2 then (k, (p 2).2) else p t
+
+@[simp] theorem AppendixBStructuralData.replaceVirtualBond01_zero
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
+    (p : Fin 3 → Fin D × Fin D) (k : Fin D) :
+    hStruct.replaceVirtualBond01 p k 0 = ((p 0).1, k) := by
+  simp [AppendixBStructuralData.replaceVirtualBond01]
+
+@[simp] theorem AppendixBStructuralData.replaceVirtualBond01_one
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
+    (p : Fin 3 → Fin D × Fin D) (k : Fin D) :
+    hStruct.replaceVirtualBond01 p k 1 = (k, (p 1).2) := by
+  simp [AppendixBStructuralData.replaceVirtualBond01]
+
+@[simp] theorem AppendixBStructuralData.replaceVirtualBond01_two
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
+    (p : Fin 3 → Fin D × Fin D) (k : Fin D) :
+    hStruct.replaceVirtualBond01 p k 2 = p 2 := by
+  simp [AppendixBStructuralData.replaceVirtualBond01]
+
+@[simp] theorem AppendixBStructuralData.replaceVirtualBond12_zero
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
+    (p : Fin 3 → Fin D × Fin D) (k : Fin D) :
+    hStruct.replaceVirtualBond12 p k 0 = p 0 := by
+  simp [AppendixBStructuralData.replaceVirtualBond12]
+
+@[simp] theorem AppendixBStructuralData.replaceVirtualBond12_one
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
+    (p : Fin 3 → Fin D × Fin D) (k : Fin D) :
+    hStruct.replaceVirtualBond12 p k 1 = ((p 1).1, k) := by
+  simp [AppendixBStructuralData.replaceVirtualBond12]
+
+@[simp] theorem AppendixBStructuralData.replaceVirtualBond12_two
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
+    (p : Fin 3 → Fin D × Fin D) (k : Fin D) :
+    hStruct.replaceVirtualBond12 p k 2 = (k, (p 2).2) := by
+  simp [AppendixBStructuralData.replaceVirtualBond12]
+
+/-- The replacement of the two adjacent virtual bonds is independent of its
+order. -/
+theorem AppendixBStructuralData.replaceVirtualBonds_commute
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
+    (p : Fin 3 → Fin D × Fin D) (k l : Fin D) :
+    hStruct.replaceVirtualBond01 (hStruct.replaceVirtualBond12 p l) k =
+      hStruct.replaceVirtualBond12 (hStruct.replaceVirtualBond01 p k) l := by
+  funext t
+  fin_cases t <;> simp
+
+/-- The placement of the virtual bond projector on the bond joining sites zero
+and one of three virtual pairs.
+
+Source: arXiv:1606.00608, equations (3.17)--(3.18), lines 564--578. -/
+noncomputable def AppendixBStructuralData.leftVirtualBondProjection
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
+    (((Fin 3 → Fin D × Fin D) → ℂ) →ₗ[ℂ]
+      ((Fin 3 → Fin D × Fin D) → ℂ)) where
+  toFun v p :=
+    if (p 0).2 = (p 1).1 then
+      (hStruct.Λ (p 0).2 : ℂ) / hStruct.virtualBondNormSq *
+        ∑ k : Fin D, (hStruct.Λ k : ℂ) * v (hStruct.replaceVirtualBond01 p k)
+    else 0
+  map_add' v w := by
+    funext p
+    by_cases hp : (p 0).2 = (p 1).1
+    · simp only [hp, if_true, Pi.add_apply, mul_add, Finset.sum_add_distrib]
+    · simp only [Pi.add_apply, hp, if_false, add_zero]
+  map_smul' c v := by
+    funext p
+    by_cases hp : (p 0).2 = (p 1).1
+    · simp [hp, Finset.mul_sum, mul_assoc, mul_comm]
+    · simp [hp]
+
+/-- The placement of the virtual bond projector on the bond joining sites one
+and two of three virtual pairs.
+
+Source: arXiv:1606.00608, equations (3.17)--(3.18), lines 564--578. -/
+noncomputable def AppendixBStructuralData.rightVirtualBondProjection
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
+    (((Fin 3 → Fin D × Fin D) → ℂ) →ₗ[ℂ]
+      ((Fin 3 → Fin D × Fin D) → ℂ)) where
+  toFun v p :=
+    if (p 1).2 = (p 2).1 then
+      (hStruct.Λ (p 1).2 : ℂ) / hStruct.virtualBondNormSq *
+        ∑ k : Fin D, (hStruct.Λ k : ℂ) * v (hStruct.replaceVirtualBond12 p k)
+    else 0
+  map_add' v w := by
+    funext p
+    by_cases hp : (p 1).2 = (p 2).1
+    · simp only [hp, if_true, Pi.add_apply, mul_add, Finset.sum_add_distrib]
+    · simp only [Pi.add_apply, hp, if_false, add_zero]
+  map_smul' c v := by
+    funext p
+    by_cases hp : (p 1).2 = (p 2).1
+    · simp [hp, Finset.mul_sum, mul_assoc, mul_comm]
+    · simp [hp]
+
+/-- The two adjacent placements of the rank-one virtual bond projector commute.
+They act on the two disjoint contracted bonds among three virtual site pairs.
+
+Source: arXiv:1606.00608, equations (3.17)--(3.18), lines 564--578. -/
+theorem AppendixBStructuralData.leftVirtualBondProjection_comp_right
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
+    hStruct.leftVirtualBondProjection.comp hStruct.rightVirtualBondProjection =
+      hStruct.rightVirtualBondProjection.comp hStruct.leftVirtualBondProjection := by
+  apply LinearMap.ext
+  intro v
+  funext p
+  by_cases h01 : (p 0).2 = (p 1).1
+  · by_cases h12 : (p 1).2 = (p 2).1
+    · simp [LinearMap.comp_apply, AppendixBStructuralData.leftVirtualBondProjection,
+        AppendixBStructuralData.rightVirtualBondProjection, h01, h12]
+      simp_rw [← hStruct.replaceVirtualBonds_commute]
+      simp only [Finset.mul_sum]
+      rw [Finset.sum_comm]
+      apply Finset.sum_congr rfl
+      intro k _
+      apply Finset.sum_congr rfl
+      intro l _
+      ring
+    · simp [LinearMap.comp_apply, AppendixBStructuralData.leftVirtualBondProjection,
+        AppendixBStructuralData.rightVirtualBondProjection, h01, h12]
+  · simp [LinearMap.comp_apply, AppendixBStructuralData.leftVirtualBondProjection,
+      AppendixBStructuralData.rightVirtualBondProjection, h01]
+
 /-! ### The two-site virtual bond -/
+
+/-- Replace the contracted virtual bond in two virtual site pairs by the
+diagonal basis vector indexed by `k`. -/
+def AppendixBStructuralData.replaceTwoSiteVirtualBond
+    {A : MPSTensor d D} (_hStruct : AppendixBStructuralData A)
+    (p : Fin 2 → Fin D × Fin D) (k : Fin D) : Fin 2 → Fin D × Fin D :=
+  fun t ↦ if t = 0 then ((p 0).1, k) else (k, (p 1).2)
+
+@[simp] theorem AppendixBStructuralData.replaceTwoSiteVirtualBond_zero
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
+    (p : Fin 2 → Fin D × Fin D) (k : Fin D) :
+    hStruct.replaceTwoSiteVirtualBond p k 0 = ((p 0).1, k) := by
+  simp [AppendixBStructuralData.replaceTwoSiteVirtualBond]
+
+@[simp] theorem AppendixBStructuralData.replaceTwoSiteVirtualBond_one
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
+    (p : Fin 2 → Fin D × Fin D) (k : Fin D) :
+    hStruct.replaceTwoSiteVirtualBond p k 1 = (k, (p 1).2) := by
+  simp [AppendixBStructuralData.replaceTwoSiteVirtualBond]
+
+/-- The rank-one virtual bond projector acting on the contracted indices of two
+virtual site pairs and as the identity on their outer indices.
+
+Source: arXiv:1606.00608, equations (3.17)--(3.18), lines 564--578. -/
+noncomputable def AppendixBStructuralData.twoSiteVirtualBondProjection
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
+    (((Fin 2 → Fin D × Fin D) → ℂ) →ₗ[ℂ]
+      ((Fin 2 → Fin D × Fin D) → ℂ)) where
+  toFun v p :=
+    if (p 0).2 = (p 1).1 then
+      (hStruct.Λ (p 0).2 : ℂ) / hStruct.virtualBondNormSq *
+        ∑ k : Fin D,
+          (hStruct.Λ k : ℂ) * v (hStruct.replaceTwoSiteVirtualBond p k)
+    else 0
+  map_add' v w := by
+    funext p
+    by_cases hp : (p 0).2 = (p 1).1
+    · simp only [hp, if_true, Pi.add_apply, mul_add, Finset.sum_add_distrib]
+    · simp only [Pi.add_apply, hp, if_false, add_zero]
+  map_smul' c v := by
+    funext p
+    by_cases hp : (p 0).2 = (p 1).1
+    · simp [hp, Finset.mul_sum, mul_assoc, mul_comm]
+    · simp [hp]
+
+/-- The two-site virtual configuration with outer indices `a,c` and diagonal
+bond index `k`. -/
+def AppendixBStructuralData.twoSiteVirtualBondConfig
+    {A : MPSTensor d D} (_hStruct : AppendixBStructuralData A)
+    (a c k : Fin D) : Fin 2 → Fin D × Fin D :=
+  fun t ↦ if t = 0 then (a, k) else (k, c)
+
+@[simp] theorem AppendixBStructuralData.twoSiteVirtualBondConfig_zero
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) (a c k : Fin D) :
+    hStruct.twoSiteVirtualBondConfig a c k 0 = (a, k) := by
+  simp [AppendixBStructuralData.twoSiteVirtualBondConfig]
+
+@[simp] theorem AppendixBStructuralData.twoSiteVirtualBondConfig_one
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) (a c k : Fin D) :
+    hStruct.twoSiteVirtualBondConfig a c k 1 = (k, c) := by
+  simp [AppendixBStructuralData.twoSiteVirtualBondConfig]
+
+/-- Contract a two-site virtual coefficient tensor against the normalized bond
+vector while retaining its two outer indices. -/
+noncomputable def AppendixBStructuralData.twoSiteVirtualBoundaryContraction
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
+    (((Fin 2 → Fin D × Fin D) → ℂ) →ₗ[ℂ] (Fin D × Fin D → ℂ)) where
+  toFun v ac := hStruct.virtualBondNormSq⁻¹ *
+    ∑ k : Fin D, (hStruct.Λ k : ℂ) *
+      v (hStruct.twoSiteVirtualBondConfig ac.1 ac.2 k)
+  map_add' v w := by
+    funext ac
+    simp only [Pi.add_apply, mul_add, Finset.sum_add_distrib]
+  map_smul' c v := by
+    funext ac
+    simp only [Pi.smul_apply, RingHom.id_apply, smul_eq_mul, Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro k _
+    ring_nf
 
 /-- Insert the bond vector
 \(\varphi=\sum_b\lambda_b\lvert b,b\rangle\) between two virtual site pairs.
@@ -202,6 +533,118 @@ noncomputable def AppendixBStructuralData.twoSiteBondInsertion
     · simp [h, mul_assoc, mul_comm]
     · simp [h]
 
+/-- Replacing the contracted bond while retaining the outer indices gives the
+canonical virtual-bond configuration. -/
+theorem AppendixBStructuralData.replaceTwoSiteVirtualBond_eq_config
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
+    (p : Fin 2 → Fin D × Fin D) (k : Fin D) :
+    hStruct.replaceTwoSiteVirtualBond p k =
+      hStruct.twoSiteVirtualBondConfig (p 0).1 (p 1).2 k := by
+  funext t
+  fin_cases t <;> simp
+
+/-- The two-site virtual bond projector is bond insertion after contraction of
+the same bond.
+
+Source: arXiv:1606.00608, equations (3.17)--(3.18), lines 564--578. -/
+theorem AppendixBStructuralData.twoSiteVirtualBondProjection_eq_comp
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
+    hStruct.twoSiteVirtualBondProjection =
+      hStruct.twoSiteBondInsertion.comp hStruct.twoSiteVirtualBoundaryContraction := by
+  apply LinearMap.ext
+  intro v
+  funext p
+  by_cases hp : (p 0).2 = (p 1).1
+  · simp [AppendixBStructuralData.twoSiteVirtualBondProjection,
+      AppendixBStructuralData.twoSiteBondInsertion,
+      AppendixBStructuralData.twoSiteVirtualBoundaryContraction, hp]
+    simp_rw [hStruct.replaceTwoSiteVirtualBond_eq_config]
+    ring_nf
+  · simp [AppendixBStructuralData.twoSiteVirtualBondProjection,
+      AppendixBStructuralData.twoSiteBondInsertion, hp]
+
+/-- If the bond vector is nonzero, its virtual support projector fixes every
+inserted-bond vector.
+
+Source: arXiv:1606.00608, equations (3.17)--(3.18), lines 564--578. -/
+theorem AppendixBStructuralData.twoSiteVirtualBondProjection_apply_insertion
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
+    (hφ : hStruct.virtualBondNormSq ≠ 0) (v : Fin D × Fin D → ℂ) :
+    hStruct.twoSiteVirtualBondProjection (hStruct.twoSiteBondInsertion v) =
+      hStruct.twoSiteBondInsertion v := by
+  have hsum : (∑ k : Fin D, (hStruct.Λ k : ℂ) ^ 2) ≠ 0 := by
+    simpa [AppendixBStructuralData.virtualBondNormSq, pow_two] using hφ
+  funext p
+  by_cases hp : (p 0).2 = (p 1).1
+  · simp [AppendixBStructuralData.twoSiteVirtualBondProjection,
+      AppendixBStructuralData.twoSiteBondInsertion,
+      AppendixBStructuralData.replaceTwoSiteVirtualBond, hp,
+      AppendixBStructuralData.virtualBondNormSq]
+    field_simp [hsum]
+    have hv : (∑ x : Fin D,
+        (hStruct.Λ x : ℂ) ^ 2 * v ((p 0).1, (p 1).2)) =
+        (∑ x : Fin D, (hStruct.Λ x : ℂ) ^ 2) * v ((p 0).1, (p 1).2) := by
+      rw [Finset.sum_mul]
+    rw [hv]
+    ac_rfl
+  · simp [AppendixBStructuralData.twoSiteVirtualBondProjection,
+      AppendixBStructuralData.twoSiteBondInsertion, hp]
+
+/-- For a nonzero bond vector, the two-site virtual bond projector is
+idempotent.
+
+Source: arXiv:1606.00608, equations (3.17)--(3.18), lines 564--578. -/
+theorem AppendixBStructuralData.twoSiteVirtualBondProjection_idempotent
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
+    (hφ : hStruct.virtualBondNormSq ≠ 0) :
+    hStruct.twoSiteVirtualBondProjection * hStruct.twoSiteVirtualBondProjection =
+      hStruct.twoSiteVirtualBondProjection := by
+  apply LinearMap.ext
+  intro v
+  rw [Module.End.mul_apply]
+  rw [show hStruct.twoSiteVirtualBondProjection v =
+      hStruct.twoSiteBondInsertion
+        (hStruct.twoSiteVirtualBoundaryContraction v) by
+    exact LinearMap.congr_fun hStruct.twoSiteVirtualBondProjection_eq_comp v]
+  rw [hStruct.twoSiteVirtualBondProjection_apply_insertion hφ]
+
+/-- The physical transport of the virtual bond projector through the two-site
+isometry.
+
+Source: arXiv:1606.00608, equations (3.16)--(3.18), lines 549--578. -/
+noncomputable def AppendixBStructuralData.transportedTwoSiteBondProjection
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
+    NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2 :=
+  (hStruct.physicalIsometryTensorPower 2).comp
+    (hStruct.twoSiteVirtualBondProjection.comp
+      (hStruct.physicalIsometryTensorPowerLeftInverse 2))
+
+/-- For a nonzero bond vector, the transported two-site bond operator is
+idempotent.
+
+Source: arXiv:1606.00608, equations (3.16)--(3.18), lines 549--578. -/
+theorem AppendixBStructuralData.transportedTwoSiteBondProjection_idempotent
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
+    (hφ : hStruct.virtualBondNormSq ≠ 0) :
+    hStruct.transportedTwoSiteBondProjection *
+        hStruct.transportedTwoSiteBondProjection =
+      hStruct.transportedTwoSiteBondProjection := by
+  apply LinearMap.ext
+  intro v
+  simp only [Module.End.mul_apply,
+    AppendixBStructuralData.transportedTwoSiteBondProjection, LinearMap.comp_apply]
+  have hleft := LinearMap.congr_fun
+    (hStruct.physicalIsometryTensorPowerLeftInverse_comp 2)
+    (hStruct.twoSiteVirtualBondProjection
+      (hStruct.physicalIsometryTensorPowerLeftInverse 2 v))
+  simp only [LinearMap.comp_apply, Module.End.one_apply] at hleft
+  rw [hleft]
+  have hV := LinearMap.congr_fun
+    (hStruct.twoSiteVirtualBondProjection_idempotent hφ)
+    (hStruct.physicalIsometryTensorPowerLeftInverse 2 v)
+  simp only [Module.End.mul_apply] at hV
+  rw [hV]
+
 /-- The two-site basic-vector embedding
 \(U^{\otimes 2}I_\varphi\), with the bond vector inserted between the two
 neighboring virtual sites.
@@ -211,6 +654,34 @@ noncomputable def AppendixBStructuralData.twoSiteBasicEmbedding
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
     ((Fin D × Fin D → ℂ) →ₗ[ℂ] NSiteSpace d 2) :=
   (hStruct.physicalIsometryTensorPower 2).comp hStruct.twoSiteBondInsertion
+
+/-- For a nonzero bond vector, the transported virtual projector has exactly
+the two-site basic-vector range.
+
+Source: arXiv:1606.00608, equations (3.16)--(3.18), lines 549--578. -/
+theorem AppendixBStructuralData.transportedTwoSiteBondProjection_range
+    {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
+    (hφ : hStruct.virtualBondNormSq ≠ 0) :
+    LinearMap.range hStruct.transportedTwoSiteBondProjection =
+      LinearMap.range hStruct.twoSiteBasicEmbedding := by
+  apply le_antisymm
+  · rintro ψ ⟨v, rfl⟩
+    refine ⟨hStruct.twoSiteVirtualBoundaryContraction
+      (hStruct.physicalIsometryTensorPowerLeftInverse 2 v), ?_⟩
+    simp only [AppendixBStructuralData.transportedTwoSiteBondProjection,
+      AppendixBStructuralData.twoSiteBasicEmbedding, LinearMap.comp_apply]
+    rw [hStruct.twoSiteVirtualBondProjection_eq_comp]
+    rfl
+  · rintro ψ ⟨v, rfl⟩
+    refine ⟨hStruct.twoSiteBasicEmbedding v, ?_⟩
+    simp only [AppendixBStructuralData.transportedTwoSiteBondProjection,
+      AppendixBStructuralData.twoSiteBasicEmbedding, LinearMap.comp_apply]
+    have hleft := LinearMap.congr_fun
+      (hStruct.physicalIsometryTensorPowerLeftInverse_comp 2)
+      (hStruct.twoSiteBondInsertion v)
+    simp only [LinearMap.comp_apply, Module.End.one_apply] at hleft
+    rw [hleft]
+    rw [hStruct.twoSiteVirtualBondProjection_apply_insertion hφ]
 
 /-- Identify a boundary matrix \(Y\) with its two outer virtual indices by
 \(v_{a,c}=\lambda_aY_{c,a}\).
