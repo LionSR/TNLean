@@ -896,6 +896,8 @@ separate step.
     \lean{MPOTensor.BNTFusionIsometryFamily.RightFinalMultiplicity}
     \lean{MPOTensor.BNTFusionIsometryFamily.leftFinalIndexEquiv}
     \lean{MPOTensor.BNTFusionIsometryFamily.rightFinalIndexEquiv}
+    \lean{MPOTensor.BNTFusionIsometryFamily.leftTripleFinalEquiv}
+    \lean{MPOTensor.BNTFusionIsometryFamily.rightTripleFinalEquiv}
     \leanok
     \uses{def:mpdo_bnt_fusion_isometry_family}
     Fix a final label $\varepsilon$.  The multiplicity spaces of the two
@@ -1117,4 +1119,95 @@ separate step.
     $C^{\varepsilon,\varepsilon'}=0$ whenever
     $\varepsilon'\ne\varepsilon$ by
     Theorem~\ref{thm:mpdo_triple_fusion_comparison_final_sector_vanishing}.
+\end{proof}
+
+\begin{theorem}[Unitarity of each fixed-final comparison corner]%
+    \label{thm:mpdo_triple_fusion_comparison_final_sector_unitary}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        tripleFusionComparison_finalSector_mul_conjTranspose_eq_one}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        conjTranspose_mul_tripleFusionComparison_finalSector_eq_one}
+    \leanok
+    \uses{def:mpdo_final_label_selector_words,
+        def:mpdo_final_sector_multiplicity_spaces,
+        def:mpdo_triple_fusion_comparison}
+    Suppose the positive trace-power coefficients are independent of the
+    positive chain length and common selectors exist at a positive length.
+    For every final label $\varepsilon$, write
+
+    \[
+        C_\varepsilon
+          =P^{\mathrm L}_{\varepsilon}
+            C_{\alpha,\beta,\gamma}
+            P^{\mathrm R}_{\varepsilon}.
+    \]
+    Then
+    \[
+        C_\varepsilon C_\varepsilon^\dagger=1,
+        \qquad
+        C_\varepsilon^\dagger C_\varepsilon=1.
+    \]
+    The conclusion is conditional on the simultaneous selector identities.
+    It is the fixed-output-channel invertibility consequence of the
+    simultaneous inverse used in \cite[lines~247--277]{Bultinck2017Anyons}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpdo_triple_fusion_comparison_right_inverse,
+        thm:mpdo_triple_fusion_comparison_left_inverse,
+        thm:mpdo_triple_fusion_comparison_final_sector_vanishing}
+    Order each full direct sum first by its final label.  In the product
+    $CC^\dagger$, the $\varepsilon$-diagonal corner is
+    \[
+        \sum_{\varepsilon'}
+          C^{\varepsilon,\varepsilon'}
+          (C^{\varepsilon,\varepsilon'})^\dagger.
+    \]
+    Every term with $\varepsilon'\ne\varepsilon$ vanishes, while
+    $CC^\dagger=1$.  Hence
+    $C_\varepsilon C_\varepsilon^\dagger=1$.  Taking instead the
+    $\varepsilon$-diagonal corner of $C^\dagger C=1$ gives the second identity.
+\end{proof}
+\begin{theorem}[Unitarity of the fixed-final multiplicity matrix]%
+    \label{thm:mpdo_triple_fusion_multiplicity_unitary}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        exists_tripleFusionComparison_finalSector_eq_kronecker_one_and_unitary}
+    \leanok
+    \uses{def:mpdo_final_label_selector_words,
+        def:mpdo_final_sector_multiplicity_spaces,
+        def:mpdo_triple_fusion_comparison}
+    Assume the hypotheses of
+    Theorem~\ref{thm:mpdo_triple_fusion_comparison_final_sector_unitary}.
+    Suppose in addition that $M_\varepsilon$ is injective at the present
+    blocking and that $D_\varepsilon>0$.  There is a matrix
+    \[
+        F_\varepsilon:\mathcal H^{\mathrm R}_{\varepsilon}
+          \longrightarrow \mathcal H^{\mathrm L}_{\varepsilon}
+    \]
+    such that
+    \[
+        C_\varepsilon=F_\varepsilon\otimes1_{D_\varepsilon},
+        \qquad
+        F_\varepsilon F_\varepsilon^\dagger=1,
+        \qquad
+        F_\varepsilon^\dagger F_\varepsilon=1.
+    \]
+    Thus $F_\varepsilon$ is invertible.  Its orientation is opposite to the
+    convention in equation (Fmove) of \cite{Bultinck2017Anyons}; no pentagon
+    identity is asserted.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpdo_triple_fusion_comparison_final_sector_kronecker,
+        thm:mpdo_triple_fusion_comparison_final_sector_unitary}
+    Injectivity gives
+    $C_\varepsilon=F_\varepsilon\otimes1_{D_\varepsilon}$.
+    Substitute this expression into the two identities for $C_\varepsilon$:
+    \[
+        (F_\varepsilon F_\varepsilon^\dagger)
+          \otimes1_{D_\varepsilon}=1,
+        \qquad
+        (F_\varepsilon^\dagger F_\varepsilon)
+          \otimes1_{D_\varepsilon}=1.
+    \]
+    Since $D_\varepsilon>0$, evaluation at any bond basis vector cancels the
+    identity factor and gives the two asserted identities.
 \end{proof}
