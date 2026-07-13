@@ -573,6 +573,70 @@ here feed the BNT canonical-form predicate below.
     $(A_j)_{j=1}^g$ together with these multiplicities and weights.
 \end{definition}
 
+\begin{definition}[Physical blocking of a sector decomposition]%
+    \label{def:sector_decomposition_block_tensor}
+    \lean{MPSTensor.SectorDecomposition.blockTensor}
+    \leanok
+    \uses{def:sector_weight_data, def:blocked_tensor}
+    Let $P$ be a sector decomposition with representatives $A_j$,
+    multiplicities $r_j$, and copy weights $\mu_{j,q}$.  Its physical
+    $p$-site blocking has the same representative and copy indices, with
+    \[
+        A_j\longmapsto A_j^{[p]},
+        \qquad
+        \mu_{j,q}\longmapsto \mu_{j,q}^{p}.
+    \]
+    The two-layer decomposition is
+    \cite[lines~283--301]{Cirac2016MPDO_arXiv}.
+    Its blocked form is an auxiliary construction for the planned formal proof
+    of Appendix~C.3, Lemma~L, lines~1835--1858; it is not stated there as a
+    separate construction.
+\end{definition}
+
+\begin{theorem}[Indices, dimensions, weights, and representatives under blocking]%
+    \label{thm:sector_decomposition_block_tensor_data}
+    \lean{MPSTensor.SectorDecomposition.blockTensor_basis}
+    \lean{MPSTensor.SectorDecomposition.blockTensor_weight}
+    \lean{MPSTensor.SectorDecomposition.blockTensor_copies}
+    \lean{MPSTensor.SectorDecomposition.blockTensor_totalCopies}
+    \lean{MPSTensor.SectorDecomposition.blockTensor_flatDim}
+    \lean{MPSTensor.SectorDecomposition.blockTensor_totalDim}
+    \lean{MPSTensor.SectorDecomposition.blockTensor_flatWeight}
+    \lean{MPSTensor.SectorDecomposition.blockTensor_flatBasis}
+    \leanok
+    \uses{def:sector_decomposition_block_tensor}
+    Physical blocking preserves the copy sets and bond dimensions.  On the
+    flattened copy index, the weight is raised to the $p$-th power and the
+    representative is replaced by its $p$-site blocking.
+\end{theorem}
+
+\begin{proof}\leanok\uses{def:sector_decomposition_block_tensor}
+    These identities follow directly from the definition.
+\end{proof}
+
+\begin{theorem}[Blocked sector coefficients and assembled tensor]%
+    \label{thm:sector_decomposition_block_tensor_mpv}
+    \lean{MPSTensor.SectorDecomposition.coeff_blockTensor}
+    \lean{MPSTensor.SectorDecomposition.sameMPV₂_blockTensor_toTensor}
+    \leanok
+    \uses{def:sector_decomposition_block_tensor, thm:block_tensor_to_tensor_from_blocks}
+    The coefficient of the blocked decomposition satisfies
+    \[
+        c_{P^{[p]},j}^{(N)}
+        =\sum_q\bigl(\mu_{j,q}^{p}\bigr)^N
+        =c_{P,j}^{(Np)}.
+    \]
+    Moreover, blocking the tensor assembled from $P$ gives the same MPV family
+    as the tensor assembled from the blocked sector decomposition.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:block_tensor_to_tensor_from_blocks}
+    The coefficient identity is $(\mu^p)^N=\mu^{pN}$.  The tensor identity is
+    Theorem~\ref{thm:block_tensor_to_tensor_from_blocks} applied to the
+    flattened copy family.
+\end{proof}
+
 \begin{lemma}[Sector decomposition formula]%
     \label{lem:paper_decomp_formula}
     \lean{MPSTensor.SectorDecomposition.mpv_toTensor_eq_sum_coeff}
