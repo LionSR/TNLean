@@ -1446,29 +1446,48 @@ specialization of that Appendix~D definition.
     coefficient representative later placed on the \(XB\) face.
 \end{definition}
 
-\begin{theorem}[Factor actions of the Appendix B coefficient representatives]
-    \label{thm:appendixB_qax_qxb_factor_actions}
-    \lean{MPSTensor.AppendixBStructuralData.appendixBQAXQXB_factor_actions}
+\begin{theorem}[The (AX) factor action]
+    \label{thm:appendixB_qax_factor_action}
+    \lean{MPSTensor.AppendixBStructuralData.appendixBQAX_factor_action}
     \leanok
-    \uses{def:appendixB_qax, def:appendixB_qxb,
-        thm:pair_lift_kronecker_matrices}
+    \uses{def:appendixB_qax, thm:pair_lift_kronecker_matrices}
     On the homogeneous three-single-site coefficient space
-    $(\C^d)^{\otimes3}$, the hatted Appendix~B representatives act as
+    $(\C^d)^{\otimes3}$, the hatted Appendix~B (AX) representative acts as
     \[
-        [\widehat Q_{AX}]_{AX}=[\widehat Q_{AX}]\otimes I_d,
-        \qquad
-        [\widehat Q_{XB}]_{XB}=I_d\otimes[\widehat Q_{XB}].
+        [\widehat Q_{AX}]_{AX}=[\widehat Q_{AX}]\otimes I_d.
     \]
-    These equations give the coefficient-factor specialization of the two
-    local actions in \cite[Definition~D.2]{Cirac2016MPDO_arXiv}.  They do not
-    construct projectors for an arbitrary factorization
+    This equation gives the coefficient-factor specialization of the left
+    local action in \cite[Definition~D.2]{Cirac2016MPDO_arXiv}.  It does not
+    construct a projector for an arbitrary factorization
     $\mathcal H_A\otimes\mathcal H_X\otimes\mathcal H_B$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Apply Theorem~\ref{thm:pair_lift_kronecker_matrices} first to
-    $\widehat Q_{AX}$ and then to $\widehat Q_{XB}$.
+    Apply the left identity in
+    Theorem~\ref{thm:pair_lift_kronecker_matrices} to $\widehat Q_{AX}$.
+\end{proof}
+
+\begin{theorem}[The (XB) factor action]
+    \label{thm:appendixB_qxb_factor_action}
+    \lean{MPSTensor.AppendixBStructuralData.appendixBQXB_factor_action}
+    \leanok
+    \uses{def:appendixB_qxb, thm:pair_lift_kronecker_matrices}
+    On the homogeneous three-single-site coefficient space
+    $(\C^d)^{\otimes3}$, the hatted Appendix~B (XB) representative acts as
+    \[
+        [\widehat Q_{XB}]_{XB}=I_d\otimes[\widehat Q_{XB}].
+    \]
+    This equation gives the coefficient-factor specialization of the right
+    local action in \cite[Definition~D.2]{Cirac2016MPDO_arXiv}.  It does not
+    construct a projector for an arbitrary factorization
+    $\mathcal H_A\otimes\mathcal H_X\otimes\mathcal H_B$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Apply the right identity in
+    Theorem~\ref{thm:pair_lift_kronecker_matrices} to $\widehat Q_{XB}$.
 \end{proof}
 
 \begin{lemma}[Appendix B coefficient representatives and the parent interaction]
