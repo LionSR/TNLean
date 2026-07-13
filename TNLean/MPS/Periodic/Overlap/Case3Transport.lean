@@ -100,46 +100,6 @@ private lemma sum_trace_proj_overlap_shift {L' m : ℕ} [NeZero m]
   rw [trace_proj_evalWord_rotateCfg A P hShiftA u σ,
     trace_proj_evalWord_rotateCfg B Q hShiftB v σ]
 
-/-- Equivalence between blocked configurations of length `N` and physical
-configurations of length `N * m`, via `MPSTensor.decodeBlockEquiv`. -/
-private noncomputable def blockedCfgEquiv (d N m : ℕ) :
-    (Fin N → Fin (blockPhysDim d m)) ≃ (Fin (N * m) → Fin d) :=
-  ((Equiv.arrowCongr (Equiv.refl (Fin N)) (decodeBlockEquiv d m)).trans
-    (Equiv.curry (Fin N) (Fin m) (Fin d)).symm).trans
-    (Equiv.arrowCongr finProdFinEquiv (Equiv.refl (Fin d)))
-
-private lemma ofFn_blockedCfgEquiv (d N m : ℕ) (σ : Fin N → Fin (blockPhysDim d m)) :
-    List.ofFn (blockedCfgEquiv d N m σ) = flattenBlockedWord d m (List.ofFn σ) := by
-  have hfun : (blockedCfgEquiv d N m σ) =
-      fun k : Fin (N * m) =>
-        decodeBlock d m (σ (finProdFinEquiv.symm k).1) ((finProdFinEquiv.symm k).2) := by
-    funext k
-    simp [blockedCfgEquiv, Equiv.arrowCongr, Equiv.curry, decodeBlockEquiv_apply,
-      Function.comp]
-  rw [hfun, List.ofFn_mul]
-  rw [flattenBlockedWord, List.map_ofFn]
-  congr 1
-  refine congrArg List.ofFn (funext fun i => ?_)
-  -- The grouped index `⟨i*m+j⟩` decodes to `(i, j)` under `finProdFinEquiv`.
-  have hsymm : ∀ j : Fin m,
-      finProdFinEquiv.symm
-          (⟨(i : ℕ) * m + (j : ℕ),
-            by
-              calc
-                (i : ℕ) * m + (j : ℕ) < ((i : ℕ) + 1) * m := by
-                  have := j.isLt; rw [Nat.add_mul, Nat.one_mul]; omega
-                _ ≤ N * m := Nat.mul_le_mul_right _ (by have := i.isLt; omega)⟩ :
-            Fin (N * m)) = (i, j) := by
-    intro j
-    rw [Equiv.symm_apply_eq]
-    apply Fin.ext
-    -- `finProdFinEquiv (i, j) = ⟨j + m * i, _⟩` by definition.
-    change (i : ℕ) * m + (j : ℕ) = (j : ℕ) + m * (i : ℕ)
-    rw [Nat.mul_comm m (i : ℕ), Nat.add_comm]
-  simp only [hsymm]
-  change (List.ofFn fun j : Fin m => decodeBlock d m (σ i) j) = (wordOfBlock d m ∘ σ) i
-  simp [wordOfBlock, Function.comp]
-
 /-- The cross overlap of two compressed cyclic sectors, expanded via the
 `IsCyclicSectorDecomp` trace formula and reindexed to physical configurations
 of length `N * m`. -/
@@ -160,12 +120,12 @@ private lemma sectorOverlap_eq_physical_sum {m : ℕ} [NeZero D] [NeZero m]
           star ((PB v * evalWord B (List.ofFn τ)).trace) := by
   classical
   rw [mpvOverlap]
-  rw [← Equiv.sum_comp (blockedCfgEquiv d N m)
+  rw [← Equiv.sum_comp (blockedConfigEquiv d N m)
     (fun τ : Fin (N * m) → Fin d =>
       (PA u * evalWord A (List.ofFn τ)).trace *
         star ((PB v * evalWord B (List.ofFn τ)).trace))]
   refine Finset.sum_congr rfl fun σ _ => ?_
-  rw [hTraceA u N σ, hTraceB v N σ, ofFn_blockedCfgEquiv,
+  rw [hTraceA u N σ, hTraceB v N σ, ofFn_blockedConfigEquiv,
     ← evalWord_blockTensor, ← evalWord_blockTensor]
 
 /-- **One-step transport of the cross sector overlap** (positive lengths,
