@@ -262,12 +262,13 @@ statements are
 \path{MPOTensor.PhysicalSectorFactorization.mpo_submatrix_sector_eq_cyclicNeighboringProduct}
 and
 \path{MPOTensor.PhysicalSectorFactorization.mpo_reindex_sectorChainEquiv_eq_blockDiagonal}.}
-What remains in Lemma \texttt{propSN} is the positive choice of the individual
-$\eta_{k,h}$ and the local-orthogonality argument establishing primitivity of
-the sector trace matrix.  Positivity of a complete cyclic product does not by
-itself supply coherent positive representatives for all neighboring pairs;
-the missing argument must control these choices simultaneously across the
-sector graph.
+The positive choice of the individual $\eta_{k,h}$ is now obtained for the
+inverse-map factorization by isolating zero-weight sectors, deriving recurrence
+from injectivity, and applying coherent vertex rephasing.  Positivity of a
+complete cyclic product alone would not suffice: the recurrence and
+injectivity argument is essential.  What remains in Lemma \texttt{propSN} is
+the local-orthogonality argument establishing primitivity of the sector trace
+matrix on the positive-weight sector set.
 
 The positivity half of the projected chain identity is now formalized: for
 an MPDO, the chain of the physically conjugated tensor is a congruence of
@@ -296,15 +297,13 @@ $\eta_{k,h}\otimes\eta_{h,k}$.\footnote{The formal declarations are
 \path{MPOTensor.exists_smul_posSemidef_sectorEta}, and
 \path{MPOTensor.exists_explicitEtaOperators_sectorEta}.}
 
-Two aspects of the source's positive choice remain open.  First, the
-symmetric-support hypothesis is not stated in the source; it is neither
-implied by nor implies the recurrence hypothesis below, and either must be
-derived from injectivity or recorded as a scope restriction.  Second, the
-pairwise choice preserves the chain blocks of length at most two, whereas
-the source's choice rescales the sector tensors themselves and therefore
-preserves the blocks of every length simultaneously; the coherent choice
-across the whole sector graph is exactly the vertex-rephasing problem
-described next.
+The pairwise construction has two limitations.  Its symmetric-support
+hypothesis is not stated in the source, and it preserves only the chain blocks
+of length at most two.  The source instead rescales the sector tensors and
+therefore preserves every length simultaneously.  These limitations are
+overcome below by reparameterizing zero-weight sectors, proving recurrence of the
+remaining support, and applying a vertex rephasing across the whole sector
+graph.
 
 The obstruction is already present when every neighboring bond space is
 one-dimensional.  Take four sectors $0,1,2,3$ and set
@@ -325,16 +324,15 @@ $z_1=z_0$, $z_2=z_0$, and $z_3=z_1$, respectively.  The transformed edge
 $2\to3$ then still has phase $i$.  Hence no coherent choice of sector phases
 makes all four nonzero neighboring operators positive.
 
-A sufficient additional hypothesis is recurrence of the nonzero support:
+A sufficient condition for the graph-theoretic rephasing step is recurrence
+of the nonzero support:
 every nonzero directed edge lies on a nonzero directed cycle.  Under this
 hypothesis, positivity of all cyclic tensor products would first show that
 each edge is a phase times a positive operator, then force trivial phase
 around every cycle, and finally permit a coherent choice of vertex phases.
-The source does not state this recurrence hypothesis.  It must therefore be
-derived independently from injectivity, or the positive-choice theorem must
-be recorded as scope-restricted.  The later primitivity argument cannot be
-used for this purpose without circularity, since the source defines the
-nonnegative trace matrix only after choosing positive neighboring operators.
+The source does not state recurrence as a hypothesis.  It is derived below
+from injectivity after zero-weight sectors are reparameterized.  This derivation
+does not use the later primitivity argument, and hence avoids circularity.
 
 For the present formal notion of a Hayashi decomposition, recurrence is false
 even for the concrete inverse-map neighboring operators.  The reason is that
@@ -370,8 +368,28 @@ formula are now formalized by
 \leanid{MPOTensor.zeroWeightReparameterizedInverseMapPhysicalSectorFactorization},
 and
 \leanid{MPOTensor.zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_neighboringOperator}.
-The remaining problem is the injectivity argument establishing recurrence on
-the nonzero-weight support.
+Every neighboring operator incident to an inactive sector therefore
+vanishes, while active--active operators are unchanged.  On the active
+support, recurrence follows from an algebraic triangle-closing argument once
+the virtual matrices furnished by all sector entries span the full matrix
+algebra and every active sector furnishes a nonzero matrix.  This argument is
+now formalized: a nonzero edge $k\to h$ can be closed through one further
+sector $j$, giving $h\to j\to k$, by nondegeneracy and cyclicity of the matrix
+trace pairing.\footnote{The formal declarations are
+\leanid{MPOTensor.PhysicalSectorFactorization.sectorVirtualMatrix},
+\leanid{MPOTensor.PhysicalSectorFactorization.exists_two_edge_return_of_neighboringOperator_ne_zero},
+and
+\leanid{MPOTensor.PhysicalSectorFactorization.neighboringOperator_reaches_of_ne_zero}.}
+Injectivity now supplies the spanning hypothesis for every physical-sector
+factorization.\footnote{This is
+\leanid{MPOTensor.PhysicalSectorFactorization.sectorVirtualMatrixFamily_span_eq_top}.}
+Positive-weight endpoint nonvanishing is now proved directly from the
+three-site closure and the Hayashi state decomposition.\footnote{The formal
+declaration is
+\leanid{MPOTensor.exists_active_sectorVirtualMatrix_ne_zero}.}
+Consequently the zero-weight reparameterized inverse-map support is recurrent,
+by injective spanning and triangle closure.\footnote{This is
+\leanid{MPOTensor.zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_isRecurrentSupport}.}
 
 \subsection{Recurrence of the sector support graph: definitions and the
 per-cycle rescaling}
@@ -452,23 +470,25 @@ have all products vanish in one order.
 The zero-weight reparameterization is now formalized: it retains every
 physical summand, sets the right sector tensor to zero when its Hayashi weight
 vanishes, and thereby isolates every zero-weight sector without changing the
-physical slices.  On the retained positive-weight support, let $S$ be a
-nonempty proper forward-closed set and let $C$ be its complement.  The absence
-of edges from $S$ to $C$ now gives
-$\mathcal A_S\mathcal A_C=0$ by
-\leanid{MPOTensor.PhysicalSectorFactorization.oneSiteSectorSpace_mul_eq_zero}.
-Injectivity should give
-$\mathcal A_S+\mathcal A_C=M_D(\mathbb C)$, while nontriviality of the two
-parts should make both spaces nonzero.  The formalized obstruction would
-then give a contradiction.  No absence of edges from $C$ to $S$ is needed.
+physical slices.  The concrete inverse-map construction gives a short proof
+of recurrence.  Positive-weight sectors contain nonzero virtual matrices,
+injectivity makes the full sector family span $M_D(\mathbb C)$, and the
+trace-pairing argument closes every nonzero edge through a third sector.
+Thus recurrence is a conclusion, not an additional hypothesis.
 
-The remaining statements needed for this application are separate from the
-matrix-algebra lemma: physical unitary reparameterization must be shown to
-preserve the injective one-site span, positive-weight sectors must contribute
-nonzero one-site matrix spaces.  The abstract four-sector phase example
-remains a counterexample to cyclic positivity alone, but it need not satisfy
-these inverse-map and injectivity consequences.  Thus no recurrence theorem
-is asserted here.
+For the stronger one-component assertion used in trace-matrix primitivity,
+let $S$ be a nonempty proper forward-closed set of positive-weight sectors and
+let $C$ be its complement.  The source argument obtains
+$\mathcal A_S\mathcal A_C=0$ from the absence of edges from $S$ to $C$; this
+directed-cut implication is formalized by
+\leanid{MPOTensor.PhysicalSectorFactorization.oneSiteSectorSpace_mul_eq_zero}.
+The spanning and positive-weight nontriviality results above supply the two
+remaining inputs for the one-sided product obstruction.  Their assembly into
+the one-component conclusion, followed by the passage from one-component
+positive support to primitivity of the active trace matrix, remains open.  No
+absence of edges from $C$ to $S$ is needed.  The abstract four-sector phase
+example remains a counterexample to cyclic positivity alone, but it does not
+satisfy the additional inverse-map and injectivity consequences used here.
 
 \subsection{Coherent vertex rephasing under recurrence}
 
@@ -501,7 +521,7 @@ The proof chooses one representative of each reachability component and
 defines the vertex weight by multiplication along a path from that
 representative; a common return path proves independence of the chosen path.
 
-The MPDO-specific bridge is now formalized under the recurrence hypothesis.
+The general MPDO-specific bridge is formalized under a recurrence hypothesis.
 For every nonzero neighboring operator, a directed return path closes the
 edge into a nonzero cycle.  Positive rescaling of that cyclic tensor product
 therefore supplies a unit phase that makes the edge operator positive
@@ -519,11 +539,14 @@ Composing the positive rephased factorization with the conditional bond
 construction gives
 \leanid{MPOTensor.nonempty_etaLocalStructureData_of_recurrentSupport}.
 
-This result is explicitly a scope restriction: recurrence is an additional
-hypothesis not present in Lemma~C.4.  The zero-weight reparameterization is
-now formalized.  The remaining elimination problem is to derive recurrence
-for its neighboring operators from injectivity by the directed-cut argument
-above, without appealing to the later primitivity conclusion.
+This general result is explicitly scope-restricted: recurrence is an
+additional hypothesis not present in Lemma~C.4. For the concrete inverse-map
+factorization, that restriction is now eliminated. The declarations
+\leanid{MPOTensor.zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_isRecurrentSupport},
+\leanid{MPOTensor.exists_positive_inverseMapPhysicalSectorFactorization}, and
+\leanid{MPOTensor.exists_positive_physicalSectorFactorization_of_isSAL}
+retain and reparameterize the zero-weight sectors, derive recurrence from the
+source hypotheses, and produce the coherently positive factorization.
 
 The canonical family
 \leanid{MPOTensor.ExplicitEtaOperators.ofHayashiMarkov} does not supply this
@@ -533,9 +556,9 @@ construction the trace matrix
 \[
   T_{k,h}=\tr(\eta_{k,h})
 \]
-is a generally nonconstant primitive nonnegative matrix.  Thus the two
-families cannot be identified without an additional theorem; in general they
-are not equal.
+is a generally nonconstant nonnegative matrix whose positive-weight
+restriction is asserted to be primitive.  Thus the two families cannot be
+identified without an additional theorem; in general they are not equal.
 
 The translation-invariant bond $B_{n,n+1}$ is now defined in the original
 physical coordinates and proved positive.  Adjacent translates commute on
@@ -579,40 +602,51 @@ mathematical data needed to construct
 \leanid{MPOTensor.EtaLocalStructureData}.  The conditional construction is
 \leanid{MPOTensor.PhysicalSectorFactorization.etaLocalStructureData}; its
 normalization scalar is one. The raw inverse-map physical-sector factorization
-is now constructed for an injective tensor satisfying SAL. The remaining
-upstream step is to choose its
-neighboring contractions coherently positive. ZCL is not a hypothesis of this
-construction.
+and its coherently positive normalization are now constructed for an injective
+tensor satisfying SAL.  ZCL is not a hypothesis of this construction.
 
 The source Proposition \texttt{3to4} assumes SAL, not ZCL.  ZCL enters only
 after this commuting product form has been obtained, in the later step that
 derives the GSNNCH--ZCL and RFP conclusions.  Accordingly, adding ZCL to a
-conditional theorem would not repair the missing coherent positive choice.
+conditional theorem would not be relevant to the coherent positive choice.
 
-The positive-choice and primitivity statements that remain in Lemma
-\texttt{propSN} are tracked by
-\href{https://github.com/LionSR/TNLean/issues/3696}{issue \#3696}. Conditional
-on the coherently positive physical-sector factorization produced there, the
-positive commuting bond, its exact all-length product realization, and the
-resulting eta-local structure of Proposition \texttt{3to4} are formalized.
-Until the SAL implication is complete, Proposition~C.8 must not be presented
-as unconditionally formalized from its source hypotheses.
+The coherent positive choice in Lemma \texttt{propSN} is now complete.  The
+remaining trace-matrix primitivity statement is tracked by
+\href{https://github.com/LionSR/TNLean/issues/3696}{issue \#3696}.  The positive
+commuting bond, its exact all-length product realization, and the resulting
+eta-local structure of Proposition \texttt{3to4} are already available from a
+coherently positive physical-sector factorization.  Their composition with
+the new SAL theorem is
+\leanid{MPOTensor.nonempty_etaLocalStructureData_of_isSAL}, so the
+$\eta$-local conclusion of Proposition~C.8 is now formalized from its source
+hypotheses.
+
+There is a necessary distinction between the physical sector decomposition
+and the effective index set of the trace matrix.  The former must retain every
+summand of the middle Hilbert space, including a summand with $p_k=0$.  After
+the zero-weight reparameterization above, however,
+$\eta_{k,h}=\eta_{h,k}=0$ for every $h$ whenever $p_k=0$.  Thus the trace
+matrix on the full ambient sector set has a zero row and a zero column and is
+not primitive.  The primitive matrix in Lemma \texttt{propSN} must therefore
+be read on the effective sector set $\{k:p_k>0\}$, as is customary when zero
+probability terms in a direct-sum state decomposition are omitted.  The Lean
+statement will restrict the trace matrix to this subtype while leaving the
+physical sector equivalence, and hence the full Hilbert space, unchanged.
 
 \section{Classification}
 
-This note records an open gap for the SAL-to-positive-bond construction of
-\leanid{MPOTensor.EtaLocalStructureData}. The positivity half of the projected
-chain identity is now formalized unconditionally, and the pairwise
-positive-choice construction is formalized under the symmetric-support scope
-restriction described above.  The sector support graph, the per-cycle
-positive rescaling, and the coherent vertex-rephasing theorem are now
-formalized.  In the last theorem recurrence is a hypothesis, not a conclusion.
-The zero-weight reparameterization is formalized, but recurrence remains a
-hypothesis.  The remaining obligation for the source statement is to prove
-that positive-weight sectors contribute nonzero one-site matrix spaces and
-then formalize the directed-cut injectivity contradiction above.  The
-primitivity of $T_{k,h}$ also remains open and cannot be used to derive
-recurrence without circularity.
+This note now records a closed coherent-positive-choice gap and the remaining
+downstream obligations in the SAL-to-positive-bond construction of
+\leanid{MPOTensor.EtaLocalStructureData}. Zero-weight sectors are
+reparameterized without changing the physical decomposition, recurrence is
+derived from injectivity, and the inverse-map sector tensors are coherently
+rephased so that every neighboring operator is positive semidefinite. The
+earlier scope-restricted recurrence theorem remains useful as the general
+graph-theoretic component, but recurrence is a conclusion for the
+reparameterized inverse-map factorization.  The primitivity of the trace
+matrix restricted to positive-weight sectors remains open; it is no longer
+needed for recurrence and must be proved separately.  The unrestricted
+ambient trace matrix is not primitive when a zero-weight sector is present.
 
 For the conditional bond construction, all translates commute pairwise at
 every length $N\geq2$.  The finite-chain MPO is the ordered product of those
@@ -621,10 +655,11 @@ coordinates.  If the neighboring operators are positive semidefinite, these
 results provide the positive commuting bond and its exact realization with
 scalar one, and they determine the eta-local structure data. The raw
 physical-sector factorization already follows for an injective tensor
-satisfying SAL. The coherent positive choice follows once recurrence of the
-inverse-map support is known; constructing a strictly positive-weight Hayashi
-decomposition and deriving recurrence for it from the source hypotheses is the
-remaining obligation in this implication.
+satisfying SAL, and the coherent positive choice is now obtained by
+normalizing the inactive sectors and deriving recurrence from injectivity.
+The remaining work in this part of the paper is the later active-sector
+trace-matrix primitivity step; it is logically separate from the
+commuting-bond construction.
 
 \bibliographystyle{alpha}
 \bibliography{references}
