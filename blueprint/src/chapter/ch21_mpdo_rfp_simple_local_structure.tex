@@ -1511,6 +1511,27 @@ strong subadditivity for a normalized three-site reduced state.
     symmetric equality.
 \end{proof}
 
+\begin{theorem}[Positive translation-invariant bond datum]
+    \label{thm:mpdo_positive_translation_invariant_bond_data}
+    \lean{MPOTensor.PhysicalSectorFactorization.translationInvariantBondData}
+    \leanok
+    \uses{thm:mpdo_physical_two_site_bond_pos,
+      thm:mpdo_periodic_pairwise_physical_bonds_comm}
+    Suppose that every neighboring operator $\eta_{k,h}$ is positive
+    semidefinite. Then the physical bond is positive semidefinite and all of
+    its cyclic translates commute on every periodic chain of length at least
+    two. Thus it determines a single translation-invariant positive bond
+    datum. This assertion does not include the product formula for the
+    finite-chain density operator.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Positivity is
+    Theorem~\ref{thm:mpdo_physical_two_site_bond_pos}; pairwise commutativity
+    is Theorem~\ref{thm:mpdo_periodic_pairwise_physical_bonds_comm}.
+\end{proof}
+
 \begin{definition}[Closed sector tensors]%
     \label{def:mpdo_closed_sector_tensors}
     \lean{MPOTensor.closedSectorL}
