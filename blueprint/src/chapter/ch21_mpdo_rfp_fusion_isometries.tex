@@ -785,6 +785,43 @@ separate step.
     $\mathcal H^{\mathrm R}_{\varepsilon}\otimes\C^{D_\varepsilon}$.
 \end{definition}
 
+\begin{theorem}[Equality of fixed-final multiplicity dimensions]%
+    \label{thm:mpdo_final_sector_multiplicity_card_eq}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        card_leftFinalMultiplicity_eq_card_rightFinalMultiplicity_of_lengthIndependent}
+    \leanok
+    \uses{def:mpdo_final_sector_multiplicity_spaces,
+        def:mpdo_bnt_label_linear_independent,
+        def:mpdo_bnt_label_length_independent}
+    Suppose that the positive trace-power coefficients are independent of
+    the positive chain length and that the labelled operators are eventually
+    linearly independent.  Then, for each final label $\varepsilon$,
+    \[
+        \dim\mathcal H^{\mathrm L}_{\varepsilon}
+          = \sum_{\delta}
+              \dim\chi_{\alpha,\beta,\delta}\,
+              \dim\chi_{\delta,\gamma,\varepsilon}
+          = \sum_{\delta}
+              \dim\chi_{\beta,\gamma,\delta}\,
+              \dim\chi_{\alpha,\delta,\varepsilon}
+          = \dim\mathcal H^{\mathrm R}_{\varepsilon}.
+    \]
+    Consequently a matrix between the two fixed-final multiplicity spaces
+    is square.  This is the numerical associativity statement of
+    \cite[lines~237--241]{Bultinck2017Anyons}; it does not assert completeness
+    of the fusion maps or invertibility of the fixed-final comparison.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpdo_bnt_label_coeff_associativity,
+        thm:mpdo_bnt_label_length_independent_natural}
+    Choose a positive length beyond the linear-independence threshold.
+    Associativity of the same-length product law gives equality of the two
+    sums of products of structure coefficients.  Length independence and
+    positivity identify every coefficient with the size of its corresponding
+    diagonal $\chi$-matrix.  The two sums are precisely the cardinalities of
+    the displayed dependent sums.
+\end{proof}
+
 \begin{definition}[Triple-fusion maps with fixed final label]%
     \label{def:mpdo_final_sector_fusion_maps}
     \lean{MPOTensor.BNTFusionIsometryFamily.leftFinalFusionMap}
