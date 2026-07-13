@@ -478,8 +478,8 @@ separate step.
     \centering
     \TNMPDOFixedFinalFusionBracketings
     \caption{The two ways of fusing three labels to a fixed final label
-        $\varepsilon$, in the diagrammatic language of
-        \cite[eq.~(Fmove)]{Bultinck2017Anyons}.  The solid fusion trees are
+        $\varepsilon$, using the printed-$F$ row/column convention of
+        \cite[Section~3.4]{Bultinck2017Anyons}.  The solid fusion trees are
         the left- and right-bracketed maps constructed below.  The dashed
         line denotes the invertible fixed-final change of multiplicity basis
         in the source.  The results below first extract its action on the
@@ -621,8 +621,8 @@ separate step.
     This definition does not select a fixed final label and makes no
     invertibility assertion.  Its orientation is from the right-associated
     sum to the left-associated sum; consequently it is adjoint-oriented with
-    respect to the $F$-matrix convention in equation (Fmove) of
-    \cite{Bultinck2017Anyons}.
+    respect to the printed-$F$ row/column convention used here for
+    \cite[Section~3.4]{Bultinck2017Anyons}.
 \end{definition}
 
 \begin{theorem}[Left range projection of the full triple-fusion comparison]%
@@ -913,8 +913,8 @@ separate step.
             \otimes \C^{\dim\chi_{\alpha,\delta,\varepsilon}}.
     \]
     These spaces have the bracketing pattern of the $(e,\mu,\nu)$ and
-    $(f,\lambda,\sigma)$ index spaces in equation (Fmove) of
-    \cite{Bultinck2017Anyons}.  Identifying the dimensions of the positive
+    $(f,\lambda,\sigma)$ index spaces in the printed-$F$ row/column convention
+    of \cite[Section~3.4]{Bultinck2017Anyons}.  Identifying the dimensions of the positive
     diagonal matrices with the fusion multiplicities of that equation
     requires the length-independent integer specialization and is not
     asserted here.  The corresponding fixed-final row spaces are
@@ -972,8 +972,8 @@ separate step.
     restricting the two iterated fusion isometries to the summands with final
     label $\varepsilon$.  Their adjoints, after the canonical reassociation
     of the triple bond space, have the orientation and bracketing pattern of
-    the weighted analogues of the two composites in equation (Fmove) of
-    \cite{Bultinck2017Anyons}.
+    the weighted analogues of the two sides in the printed-$F$ row/column
+    convention of \cite[Section~3.4]{Bultinck2017Anyons}.
 \end{definition}
 
 \begin{theorem}[Left triple fusion at a fixed final label]%
@@ -1050,7 +1050,8 @@ separate step.
     This conclusion is conditional on the supplied matrix $C$.  It does not
     assert the existence or invertibility of $C$ or $F$, and it does not
     identify the dimensions of the positive diagonal matrices $\chi$ with the
-    fusion multiplicities in \cite[eq.~(Fmove)]{Bultinck2017Anyons}.
+    fusion multiplicities in the printed-$F$ row/column convention of
+    \cite[Section~3.4]{Bultinck2017Anyons}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:amplified_center_scalar}
@@ -1096,7 +1097,7 @@ separate step.
     The selector identities and injectivity at the present blocking are
     additional hypotheses here.  The theorem neither asserts that
     $F_\varepsilon$ is square or invertible nor identifies it with the
-    $F$-matrix of \cite[eq.~(Fmove)]{Bultinck2017Anyons}; no pentagon identity
+    printed $F$-matrix of \cite[Section~3.4]{Bultinck2017Anyons}; no pentagon identity
     is asserted.
 \end{theorem}
 \begin{proof}\leanok
@@ -1191,7 +1192,8 @@ separate step.
         F_\varepsilon^\dagger F_\varepsilon=1.
     \]
     Thus $F_\varepsilon$ is invertible.  Its orientation is opposite to the
-    convention in equation (Fmove) of \cite{Bultinck2017Anyons}; no pentagon
+    printed-$F$ row/column convention of
+    \cite[Section~3.4]{Bultinck2017Anyons}; no pentagon
     identity is asserted.
 \end{theorem}
 \begin{proof}\leanok
@@ -1304,7 +1306,7 @@ separate step.
           (1\otimes X^f_{bc,\lambda})X^d_{af,\sigma}.
     \]
     The matrix in the opposite orientation is its two-sided inverse.  This is
-    the $F$-move of \cite[equation~(Fmove)]{Bultinck2017Anyons}.
+    the printed $F$-move of \cite[Section~3.4]{Bultinck2017Anyons}.
 \end{theorem}
 \begin{proof}\leanok
     Form the full left- and right-associated synthesis matrices $L$ and $R$
@@ -1351,10 +1353,63 @@ separate step.
     \caption{The source-oriented $F$-move.  The left-associated fusion tensor
         is expanded in the right-associated fusion basis.  The upper indices
         $(f,\lambda,\sigma)$ label the rows of $F^{abc}_d$, and the lower
-        indices $(e,\mu,\nu)$ label its columns, as in
-        \cite[equation~(Fmove)]{Bultinck2017Anyons}.}
+        indices $(e,\mu,\nu)$ label its columns.  This is the printed-$F$
+        row/column convention used here for
+        \cite[Section~3.4]{Bultinck2017Anyons}.}
     \label{fig:mpdo_complete_zipper_printed_fmove}
 \end{figure}
+
+\begin{definition}[Fourfold complete zipper fusion data]%
+    \label{def:mpdo_complete_zipper_fourfold_fusion_data}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        FourfoldLeftAssocMultiplicity}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        FourfoldLeftInnerMultiplicity}
+    \lean{MPOTensor.CompleteZipperFusionFamily.FourfoldMiddleMultiplicity}
+    \lean{MPOTensor.CompleteZipperFusionFamily.FourfoldPairMultiplicity}
+    \lean{MPOTensor.CompleteZipperFusionFamily.FourfoldRightAssocMultiplicity}
+    \lean{MPOTensor.CompleteZipperFusionFamily.leftAssocFourfoldSynthesis}
+    \lean{MPOTensor.CompleteZipperFusionFamily.leftInnerFourfoldSynthesis}
+    \lean{MPOTensor.CompleteZipperFusionFamily.middleFourfoldSynthesis}
+    \lean{MPOTensor.CompleteZipperFusionFamily.pairFourfoldSynthesis}
+    \lean{MPOTensor.CompleteZipperFusionFamily.rightAssocFourfoldSynthesis}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        leftAssocToLeftInnerPrintedFMatrix}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        leftInnerToMiddlePrintedFMatrix}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        middleToRightAssocPrintedFMatrix}
+    \lean{MPOTensor.CompleteZipperFusionFamily.leftAssocToPairPrintedFMatrix}
+    \lean{MPOTensor.CompleteZipperFusionFamily.pairToRightAssocPrintedFMatrix}
+    \lean{MPOTensor.CompleteZipperFusionFamily.threeEdgePrintedFMatrix}
+    \lean{MPOTensor.CompleteZipperFusionFamily.twoEdgePrintedFMatrix}
+    \leanok
+    \uses{def:mpdo_complete_zipper_fusion_family,
+        thm:mpdo_complete_zipper_printed_fmove}
+    Fix labels $a,b,c,d,e$.  The five fusion trees in equation~(33) of
+    \cite{Bultinck2017Anyons} determine five multiplicity spaces and five
+    synthesis maps into the fourfold bond space.  These spaces use the integer
+    multiplicities $N_{ab}^{c}$ of the complete zipper family, rather than the
+    weighted positive-diagonal coordinates introduced earlier.
+
+    Each edge of the pentagon carries the printed $F$-matrix for the affected
+    triple tensor factor and the identity on the untouched multiplicity
+    factor.  The three upper edges define a composite
+    $F_{\mathrm{upper}}$, while the two lower edges define
+    $F_{\mathrm{lower}}$.  These are definitions of the two matrices compared
+    by equation~(33); their equality is not asserted here.
+\end{definition}
+
+\begin{figure}[ht]
+    \centering
+    \TNMPDOCompleteZipperFusionPentagon
+    \caption{The five complete zipper fusion trees of
+        \cite[Section~3.4, equation~(33)]{Bultinck2017Anyons}.  Each arrow is
+        a printed $F$-move, with right-tree coordinates indexing rows and
+        left-tree coordinates indexing columns.}
+    \label{fig:mpdo_complete_zipper_fusion_pentagon}
+\end{figure}
+\clearpage
 
 \begin{theorem}[Coherence of four bond-coordinate reassociations]%
     \label{thm:mpdo_fourfold_bond_coordinate_coherence}
