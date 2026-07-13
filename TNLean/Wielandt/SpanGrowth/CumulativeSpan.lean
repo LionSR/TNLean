@@ -27,6 +27,9 @@ arXiv:0909.5347 (Sanz, Pérez-García, Wolf, Cirac).
 
 - `cumulativeSpan_mono`: T_n ≤ T_{n+1}
 - `wordSpan_succ_le_mul`: S_{n+1} ⊆ span(A) * S_n
+- `wordSpan_succ_eq_mul_left`: S_{n+1} = span(A) * S_n
+- `isNBlkInjective_succ_of_isNBlkInjective`: positive-length block injectivity
+  propagates by one site
 - `cumulativeSpan_stable`: If T_n = T_{n+1}, then T_m = T_n for all m ≥ n
 - `cumulativeSpan_finrank_le`: dim(T_n) ≤ D²
 - `cumulativeSpan_finrank_strict_mono`: strict inclusion ⇒ strict dim growth
@@ -89,6 +92,49 @@ theorem wordSpan_succ_le_mul (A : MPSTensor d D) (n : ℕ) :
   apply Submodule.mul_mem_mul
   · exact Submodule.subset_span ⟨σ 0, rfl⟩
   · exact Submodule.subset_span ⟨σ ∘ Fin.succ, rfl⟩
+
+/-- The exact factorization `S_{n+1}(A) = span{A_i} S_n(A)`.
+
+This is the elementary word factorization underlying the definition of
+`S_n(A)` in arXiv:0909.5347, equation (1). -/
+theorem wordSpan_succ_eq_mul_left (A : MPSTensor d D) (n : ℕ) :
+    wordSpan A (n + 1) =
+      (Submodule.span ℂ (Set.range A)) * wordSpan A n := by
+  classical
+  apply le_antisymm
+  · exact wordSpan_succ_le_mul A n
+  · rw [wordSpan, Submodule.span_mul_span]
+    apply Submodule.span_le.mpr
+    intro M hM
+    obtain ⟨M₁, ⟨i, rfl⟩, M₂, ⟨σ, rfl⟩, rfl⟩ := Set.mem_mul.mp hM
+    apply Submodule.subset_span
+    refine ⟨Fin.cons i σ, ?_⟩
+    simp [List.ofFn_succ]
+
+/-- Block injectivity at a positive length propagates to the next length.
+
+This auxiliary statement supplies the length shift needed to combine the
+block-injectivity discussion in arXiv:1606.00608, lines 318--345, with
+Appendix C.3, Lemma L, lines 1835--1858. It is not asserted there as a
+separate result. -/
+theorem isNBlkInjective_succ_of_isNBlkInjective
+    (A : MPSTensor d D) {L : ℕ} (hLpos : 0 < L)
+    (hL : IsNBlkInjective A L) :
+    IsNBlkInjective A (L + 1) := by
+  change wordSpan A L = ⊤ at hL
+  change wordSpan A (L + 1) = ⊤
+  obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hLpos)
+  have hprev_le : wordSpan A n ≤ wordSpan A (n + 1) := by
+    rw [hL]
+    exact le_top
+  rw [wordSpan_succ_eq_mul_left A (n + 1)]
+  apply eq_top_iff.mpr
+  calc
+    ⊤ = wordSpan A (n + 1) := hL.symm
+    _ = Submodule.span ℂ (Set.range A) * wordSpan A n :=
+      wordSpan_succ_eq_mul_left A n
+    _ ≤ Submodule.span ℂ (Set.range A) * wordSpan A (n + 1) :=
+      mul_le_mul' le_rfl hprev_le
 
 /-! ### cumulativeSpan: T_n(A) -/
 

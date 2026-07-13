@@ -170,14 +170,18 @@ left-canonicality, and nonzero weights do not imply simultaneous separation.
 It does not satisfy the source's minimal-representative condition.
 
 The remaining task for the source-level Lemma L is to compose the results
-above with the canonical-form construction.  One should choose a common
-positive $L$ for which every normal BNT representative is $L$-block
-injective, propagate exact word-span to length $L+1$, and identify the sector
-decomposition and powered copy weights after blocking $L+1$ sites.  The
+above with the canonical-form construction.  Positive-length block injectivity
+propagates from length $L$ to length $L+1$ without a normalization hypothesis:
+the identity
+$S_{L+1}(A)=\spn\{A_i\}_iS_L(A)$, together with the same identity at length
+$L$, gives the result.  One should therefore choose a common positive $L$ for
+which every normal BNT representative is $L$-block injective and identify the
+sector decomposition and powered copy weights after blocking $L+1$ sites.  The
 representative-separation theorem then applies to that blocked decomposition,
-while the original length-$L$ span gives the converse blocking step.  This
-propagation is essential: recovery from a physical block of length $L+1$ uses
-the span of its length-$L$ tail.  The flattened
+while the original length-$L$ span recovers equality of the unblocked insertions
+from equality of the blocked insertions.  This length shift is essential:
+recovery from a physical block of length $L+1$ uses the span of its length-$L$
+tail.  The flattened
 \texttt{HorizontalCFData} formulation must then be replaced, or related
 explicitly, by this representative-indexed statement.  The older per-copy
 \texttt{biCF} theorem remains a correct restricted result, but it is no longer
