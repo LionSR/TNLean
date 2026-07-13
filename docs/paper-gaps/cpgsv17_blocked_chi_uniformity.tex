@@ -664,10 +664,9 @@ injectivity hypothesis is imposed on this source-labelled result.
 
 This new package does not close the gap for the positive-diagonal family:
 constructing its complete zipper data from the assumptions of
-arXiv:1606.00608 remains open.  It also stops before the genuine fourfold,
-entrywise pentagon equation of \texttt{AnyonsPEPS.tex}, lines~279--283.  The
-two-sided printed $F$-move is therefore complete, while the pentagon remains a
-separate open formalization problem.
+arXiv:1606.00608 remains open.  Within the complete zipper family itself, the
+two-sided printed $F$-move and the genuine fourfold, entrywise pentagon
+equation of \texttt{AnyonsPEPS.tex}, lines~279--283, are now formalized.
 
 The five categorical fourfold multiplicity spaces, their fusion maps, and the
 five lifted printed-$F$ edges are now recorded by
@@ -676,10 +675,18 @@ FourfoldLeftAssocMultiplicity} through
 \leanid{MPOTensor.CompleteZipperFusionFamily.%
 twoEdgePrintedFMatrix}.  These spaces use the integer fusion multiplicities
 $N_{ab}^{c}$ of the complete zipper family.  They are not identified with the
-positive-diagonal weighted coordinates of the restricted family.  The
-remaining proof must show that the three-edge and two-edge composites give the
-same expansion in the right-associated fourfold fusion map and then cancel its
-analysis map.
+positive-diagonal weighted coordinates of the restricted family.  The five
+elementary $F$-moves identify the three-edge and two-edge composites with the
+same expansion in the right-associated fourfold fusion map.  Its explicit
+analysis map cancels that expansion, proving the forward equality
+\leanid{MPOTensor.CompleteZipperFusionFamily.%
+threeEdgePrintedFMatrix_eq_twoEdgePrintedFMatrix}.  The inverse edge matrices
+then give both
+\leanid{MPOTensor.CompleteZipperFusionFamily.%
+threeEdgeInversePrintedFMatrix_eq_twoEdgeInversePrintedFMatrix} and the
+literal indexed equation~(33),
+\leanid{MPOTensor.CompleteZipperFusionFamily.%
+inversePrintedFMatrix_pentagon}.
 
 \paragraph{Local fixes in the fusion-tensor display.}
 The prose at line~161 of \texttt{AnyonsPEPS.tex} displays the arrow for
@@ -705,8 +712,8 @@ $F$-matrix.  The forward edge matrices in the formalization follow
 \texttt{Fmove}; equivalently, the literal upper/lower placement in
 \texttt{pentagoneq} is read using
 \leanid{MPOTensor.CompleteZipperFusionFamily.inversePrintedFMatrix}.  Both the
-forward identity and this inverse, literally indexed form must be stated when
-the pentagon proof is completed.
+forward identity and this inverse, literally indexed form are stated by the
+two matrix equalities and the entrywise theorem above.
 
 To eliminate the source-theorem gap, the formalization should instead:
 \begin{enumerate}

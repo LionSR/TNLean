@@ -1383,6 +1383,20 @@ separate step.
     \lean{MPOTensor.CompleteZipperFusionFamily.pairToRightAssocPrintedFMatrix}
     \lean{MPOTensor.CompleteZipperFusionFamily.threeEdgePrintedFMatrix}
     \lean{MPOTensor.CompleteZipperFusionFamily.twoEdgePrintedFMatrix}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        leftInnerToLeftAssocInversePrintedFMatrix}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        middleToLeftInnerInversePrintedFMatrix}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        rightAssocToMiddleInversePrintedFMatrix}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        pairToLeftAssocInversePrintedFMatrix}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        rightAssocToPairInversePrintedFMatrix}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        threeEdgeInversePrintedFMatrix}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        twoEdgeInversePrintedFMatrix}
     \leanok
     \uses{def:mpdo_complete_zipper_fusion_family,
         thm:mpdo_complete_zipper_printed_fmove}
@@ -1394,10 +1408,10 @@ separate step.
 
     Each edge of the pentagon carries the printed $F$-matrix for the affected
     triple tensor factor and the identity on the untouched multiplicity
-    factor.  The three upper edges define a composite
-    $F_{\mathrm{upper}}$, while the two lower edges define
-    $F_{\mathrm{lower}}$.  These are definitions of the two matrices compared
-    by equation~(33); their equality is not asserted here.
+    factor.  The three upper edges and the two lower edges define composites
+    in the forward orientation.  Replacing each edge by its inverse defines
+    the opposite-oriented composites whose entries occur literally in
+    equation~(33).
 \end{definition}
 
 \begin{figure}[ht]
@@ -1410,6 +1424,43 @@ separate step.
     \label{fig:mpdo_complete_zipper_fusion_pentagon}
 \end{figure}
 \clearpage
+
+\begin{theorem}[Complete zipper fusion pentagon]%
+    \label{thm:mpdo_complete_zipper_fusion_pentagon}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        threeEdgePrintedFMatrix_eq_twoEdgePrintedFMatrix}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        threeEdgeInversePrintedFMatrix_eq_twoEdgeInversePrintedFMatrix}
+    \lean{MPOTensor.CompleteZipperFusionFamily.inversePrintedFMatrix_pentagon}
+    \leanok
+    \uses{def:mpdo_complete_zipper_fourfold_fusion_data,
+        thm:mpdo_complete_zipper_printed_fmove}
+    The three-edge and two-edge composites of the forward printed
+    $F$-matrices are equal.  The corresponding composites of the inverse
+    $F$-matrices are also equal.  In the upper/lower convention of
+    \cite[equation~(33)]{Bultinck2017Anyons}, the latter equality is
+    \begin{align*}
+      &\sum_{h,\sigma,\lambda,\omega}
+        (F^{abc}_{g})^{f\mu\nu}_{h\sigma\lambda}
+        (F^{ahd}_{e})^{g\lambda\rho}_{i\omega\kappa}
+        (F^{bcd}_{i})^{h\sigma\omega}_{j\gamma\delta} \\
+      &\hspace{3em}=
+        \sum_{\tau}
+        (F^{fcd}_{e})^{g\nu\rho}_{j\gamma\tau}
+        (F^{abj}_{e})^{f\mu\tau}_{i\delta\kappa},
+    \end{align*}
+    where every displayed entry denotes the inverse of the forward matrix in
+    the $F$-move convention.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the elementary three-block $F$-move along each of the five edges.
+    Both paths then give the same expansion in the right-associated fourfold
+    fusion map.  Its analysis map is a left inverse, by three successive
+    applications of fusion-tensor biorthogonality, so the forward composites
+    are equal.  The reverse composites are two-sided inverses of this common
+    matrix, hence they coincide.  Taking a matrix entry gives the displayed
+    identity.
+\end{proof}
 
 \begin{theorem}[Coherence of four bond-coordinate reassociations]%
     \label{thm:mpdo_fourfold_bond_coordinate_coherence}
@@ -1454,11 +1505,9 @@ separate step.
     \[
         P(r_1)P(r_2)P(r_3)=P(s_1)P(s_2).
     \]
-    These are equalities of Cartesian bond-coordinate identifications only.
-    The MPO fusion pentagon in
-    \cite[Section~3.4, equation~(33)]{Bultinck2017Anyons} instead compares
-    products of $F$-matrix entries, summed over intermediate fusion labels and
-    multiplicities; it is not asserted here.
+    These are equalities of Cartesian bond-coordinate identifications only;
+    they are distinct from the fusion-multiplicity identity in
+    Theorem~\ref{thm:mpdo_complete_zipper_fusion_pentagon}.
 \end{theorem}
 \begin{proof}\leanok
     Every element $(((a,b),c),d)$ is sent by either composite to
@@ -1474,7 +1523,6 @@ separate step.
         $r_3\circ r_2\circ r_1$, and the lower path is the two-edge composite
         $s_2\circ s_1$.  This figure depicts only canonical Cartesian
         reassociation.  It does not contain fusion multiplicity spaces or
-        $F$-matrices, and the MPO fusion pentagon identity of
-        \cite[equation~(33)]{Bultinck2017Anyons} remains unproved.}
+        $F$-matrices.}
     \label{fig:mpdo_fourfold_bond_coordinate_reassociation}
 \end{figure}
