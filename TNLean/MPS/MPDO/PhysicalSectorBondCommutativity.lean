@@ -77,9 +77,15 @@ theorem reindex_embedLocalOperator_zero (F : PhysicalSectorFactorization K) :
           MPSTensor.replaceWindow, MPSTensor.extractWindow, ha]
   by_cases h : τ.2.2 = σ.2.2
   · have ha := hAgree.mpr h
-    simp [Matrix.reindex_apply, embedLocalOperator_apply, ha, leftPairMatrix,
-      physicalBond, MPSTensor.extractWindow, h]
-    simp [finThreeArrowEquiv]
+    simp only [Fin.isValue, Matrix.reindex_apply, Matrix.submatrix_apply,
+      embedLocalOperator_apply]
+    rw [if_pos ha]
+    simp only [physicalBond, Matrix.reindex_apply, Matrix.submatrix_apply,
+      Equiv.symm_symm, leftPairMatrix, Matrix.kroneckerMap_apply]
+    change F.physicalPairBond (σ.1, σ.2.1) (τ.1, τ.2.1) =
+      F.physicalPairBond (σ.1, σ.2.1) (τ.1, τ.2.1) *
+        (if σ.2.2 = τ.2.2 then 1 else 0)
+    rw [if_pos h.symm, mul_one]
   · have ha : ¬ AgreesOutsideWindow (d := d) 2 (by decide) (0 : Fin 3)
         ((finThreeArrowEquiv (Fin d)).symm σ)
         ((finThreeArrowEquiv (Fin d)).symm τ) := fun ha ↦ h (hAgree.mp ha)

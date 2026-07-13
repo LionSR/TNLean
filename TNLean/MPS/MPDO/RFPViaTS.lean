@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Algebra.FinTupleEquiv
 import TNLean.MPS.MPDO.KrausCPTP
 
 /-!
@@ -178,13 +179,6 @@ theorem physCloseN_two_eq_physClose2 (M : MPOTensor d D) :
   simp [Matrix.coe_reindexLinearEquiv, finTwoArrowEquiv_symm_apply]
 
 /-! ### The three-site physical operator -/
-
-/-- The canonical right-associated identification of three-coordinate
-configurations with triples: separate the first coordinate, then identify the
-remaining two-coordinate configuration with a pair. -/
-def finThreeArrowEquiv (α : Type*) : (Fin 3 → α) ≃ α × (α × α) :=
-  (Fin.consEquiv fun _ : Fin 3 => α).symm.trans
-    (Equiv.prodCongr (Equiv.refl α) (finTwoArrowEquiv α))
 
 /-- The **three-site physical operator** as a linear map in the virtual operator
 $X$. Its physical indices are right-associated as
