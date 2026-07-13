@@ -165,7 +165,7 @@ supply is reached unconditionally when $M$'s own doubled-index tensor is
 the full $D\times D$ matrix algebra (\leanid{MPSTensor.IsInjective}) --- by
 a route that bypasses that hypothesis rather than discharging it (see
 below).  The route does not go through the block-injective (biCF) machinery
-of \path{TNLean/MPS/MPDO/VerticalCF.lean} at all.
+of \path{TNLean/MPS/MPDO/PerCopyHorizontalCF.lean} at all.
 
 \leanid{MPOTensor.ketLeftMul_eq_braRightMul_of_commute_of_isInjective}
 (\path{TNLean/MPS/MPDO/InvariantProjection.lean}) proves: if $Q$ is
@@ -203,7 +203,7 @@ chain length~$2$; it never constructs, and does not need, an inhabitant of
 \leanid{MPOTensor.NoninvariantProjectorNoncommuting} quantifies over
 \emph{every} chain length $N$ (starting at $N=0$), and the natural
 discharge route — the block-injective Lemma~L of
-\path{TNLean/MPS/MPDO/VerticalCF.lean}, applied to a general horizontal
+\path{TNLean/MPS/MPDO/PerCopyHorizontalCF.lean}, applied to a general horizontal
 canonical-form decomposition of $M$ into several (possibly
 gauge-inequivalent) normal blocks with weights — meets two independent
 obstructions that the injective special case above sidesteps.
@@ -236,41 +236,38 @@ obstructions that the injective special case above sidesteps.
       \leanid{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_isInjective}
       does above, by choosing chain length two instead of the length that
       the structure's field type superficially suggests.
-    \item \textbf{The horizontal canonical-form surrogate is MPV-level,
-      not literal.}  \leanid{HorizontalCFData} and \leanid{IsHorizontalCF}
-      express ``$M$ is in horizontal canonical form'' through
-      \leanid{SameMPV₂}: $M$'s doubled-index tensor generates the
-      \emph{same matrix product vectors} as an assembled block-diagonal
-      tensor, not that $M$'s own letters \emph{literally equal} a
+    \item \textbf{The available representation is MPV-level, not literal.}
+      \leanid{HasHorizontalCFMPVRepresentation} asserts through
+      \leanid{SameMPV₂} that $M$'s doubled-index tensor generates the
+      \emph{same matrix product vectors} as an assembled block-diagonal BNT
+      tensor.  It does not assert that $M$'s own letters \emph{literally equal} a
       gauge-conjugated direct sum of normal blocks.  The source's own
       canonical-form decomposition,
       $\bigoplus_{j,q}\mu_{j,q}X_{j,q}A_jX_{j,q}^{-1}$
       (\cite[eq:II\_ABasicTensors]{Cirac2016MPDO_arXiv}), is literal: it
       exhibits $M$ itself, after a change of basis on the bond space, as
-      that direct sum.  The block-injective Lemma~L
-      (\leanid{blockwise_insert_eq_of_mpv_agree}) concludes letter
-      equality \emph{for the canonical-form blocks $A_k$}, which live in
-      their own (separately injective) bond space — not for $M$'s own
+      that direct sum.  The representative-grouped Lemma~L concludes letter
+      equality \emph{for the canonical-form representatives $A_j$}, which
+      live in their own (separately injective) bond space — not for $M$'s own
       letters.  Transporting that block-level conclusion back to $M$'s
       own bond space needs either $M$'s own injectivity (the special case
       resolved above, where the transport is vacuous because $M$ already
       is the sole block) or a literal, gauge-explicit multi-block
       decomposition of $M$, which
-      \leanid{HorizontalCFData}/\leanid{IsHorizontalCF} does not carry
+      \leanid{HasHorizontalCFMPVRepresentation} does not carry
       and which is not otherwise formalized in the repository for
-      reducible MPDO tensors.  Constructing that literal decomposition is
-      a separate, substantial undertaking, adjacent to but distinct from
-      the multiplicity-free restriction of \leanid{biCF} tracked at
-      \#3713 (\path{docs/paper-gaps/cpgsv17_bicf_block_separation.tex}),
-      not a corollary of the biCF machinery already in place.
+      reducible MPDO tensors.  The older \leanid{HorizontalCFData} and
+      \leanid{IsPerCopyHorizontalCF} also do not carry such a gauge.  They
+      impose the stronger per-copy separation hypothesis documented in
+      \path{docs/paper-gaps/cpgsv17_bicf_block_separation.tex}.
 \end{enumerate}
 
 Both obstructions are independent of the exponent $p$ or the specific
 displaced-projector construction of
 \leanid{MPOTensor.exists_displaced_invariant_projector_of_periodic_vector}:
 they are structural facts about what finite-length trace data can
-determine, and about what \leanid{IsHorizontalCF}'s current formalization
-asserts.  Discharging \leanid{MPOTensor.NoninvariantProjectorNoncommuting}
+determine, and about what the available MPV representation asserts.
+Discharging \leanid{MPOTensor.NoninvariantProjectorNoncommuting}
 for a general (reducible, multi-block) horizontal canonical form therefore
 remains open, and is not a routine extension of the injective argument to
 a larger blocking length.
@@ -284,11 +281,11 @@ previous verdict — the projector exclusion, the stacked-layers reduction,
 and the displaced-projector construction remain unconditional, and the
 remaining stated hypothesis is
 \leanid{MPOTensor.NoninvariantProjectorNoncommuting} — but is now
-understood more precisely: it is not a routine extension of the
-block-injective Lemma~L already in
-\path{TNLean/MPS/MPDO/VerticalCF.lean}, because that machinery concludes
-letter equality for the canonical-form blocks, not for $M$'s own (possibly
-non-injective) bond space, and the transport between the two needs either
+understood more precisely: it is not resolved by the representative-grouped
+Lemma~L in \path{TNLean/MPS/MPDO/HorizontalCFMPVRepresentation.lean}, because
+that theorem concludes letter equality for the canonical-form representatives,
+not for $M$'s own (possibly non-injective) bond space, and the transport
+between the two needs either
 $M$'s own injectivity or a literal, gauge-explicit multi-block
 decomposition that is not currently formalized.  The capstone
 \leanid{thm:vertical_cf_of_horizontal_cf} does not consume the injective

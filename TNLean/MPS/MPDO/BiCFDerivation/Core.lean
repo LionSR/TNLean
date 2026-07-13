@@ -2,7 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.MPDO.VerticalCF
+import TNLean.MPS.MPDO.PerCopyHorizontalCF
 import TNLean.PiAlgebra.Construction
 import Mathlib.LinearAlgebra.Finsupp.LinearCombination
 import Mathlib.LinearAlgebra.Prod
@@ -11,7 +11,7 @@ import Mathlib.RingTheory.Noetherian.Defs
 /-!
 # Finite-length sufficient conditions for MPDO biCF
 
-The `HorizontalCFData` structure in `VerticalCF.lean` states the block-injective
+The `HorizontalCFData` structure in `PerCopyHorizontalCF.lean` states the block-injective
 canonical-form property `biCF` as a hypothesis. This file states finite-length
 sufficient conditions for deriving that field.
 
