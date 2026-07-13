@@ -43,7 +43,7 @@ name: TNRFPKrausIsometry TNRFPKrausIsometryReverse TNRFPIsometryCanonicalForm
 name: TNRFPIsometryCanonicalFormBlocks TNMPDOTwoSiteBlocking
 {{ obj.tn_svg_html }}
 
-name: TNMPDOBNTVerticalProduct TNMPDOBlockClosureMap
+name: TNMPDOBNTVerticalProduct TNMPDOBlockClosureMap TNMPDOBNTOperatorTraceClosure
 {{ obj.tn_svg_html }}
 
 name: TNGaugeConjugation TNPhysicalRealization TNLinearTwist
