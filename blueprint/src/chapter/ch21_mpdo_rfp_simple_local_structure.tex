@@ -823,6 +823,71 @@ strong subadditivity for a normalized three-site reduced state.
     this definition; it is a separate hypothesis in Proposition~C.7.
 \end{definition}
 
+\begin{definition}[Finite-chain coordinates of a physical-sector factorization]
+    \label{def:mpdo_physical_sector_chain_coordinates}
+    \lean{MPOTensor.PhysicalSectorFactorization.SectorChainFiber,
+      MPOTensor.PhysicalSectorFactorization.SectorChainIndex,
+      MPOTensor.PhysicalSectorFactorization.sectorChainEquiv,
+      MPOTensor.PhysicalSectorFactorization.cyclicNeighboringProduct}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization,
+      def:mpdo_minimal_neighboring_operator}
+    Let $N\geq1$. For a cyclic sector configuration
+    $k=(k_0,\ldots,k_{N-1})$, write
+    \[
+      I_k=\prod_{n=0}^{N-1}(B_{k_n}^L\times B_{k_n}^R).
+    \]
+    Applying the one-site sector decomposition at every site gives a
+    bijection
+    \[
+      \Phi_N:\{0,\ldots,d-1\}^N
+        \longrightarrow\coprod_{k_0,\ldots,k_{N-1}}I_k.
+    \]
+    On $I_k$, define the cyclic neighboring product by
+    \[
+      \Omega_k(x,y)=\prod_{n=0}^{N-1}
+        \eta_{k_n,k_{n+1}}
+        \bigl((x_n^R,x_{n+1}^L),(y_n^R,y_{n+1}^L)\bigr),
+    \]
+    where site labels are read modulo $N$.
+\end{definition}
+
+\begin{theorem}[Finite-chain decomposition of a physical-sector factorization]
+    \label{thm:mpdo_physical_sector_chain_decomposition}
+    \lean{MPOTensor.PhysicalSectorFactorization.mpo_submatrix_sector_eq_cyclicNeighboringProduct,
+      MPOTensor.PhysicalSectorFactorization.mpo_reindex_sectorChainEquiv_eq_blockDiagonal}
+    \leanok
+    \uses{def:mpdo_physical_sector_chain_coordinates}
+    Suppose that the physical-sector factorization is given. For every
+    $N\geq1$, the physically transformed MPO is block diagonal in the cyclic
+    sector configurations, and
+    \[
+      \operatorname{reindex}_{\Phi_N}
+        \bigl(M_N(\widetilde{\cal K})\bigr)
+      =\bigoplus_{k_0,\ldots,k_{N-1}}\Omega_k.
+    \]
+    This is the all-length algebraic decomposition in
+    \cite[Appendix~C.2, lines~1435--1450]{Cirac2016MPDO_arXiv}, conditional
+    here on the displayed physical-sector factorization. It does not assert
+    positivity of the individual neighboring operators.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Fix a sector configuration $k$ and entries $x,y\in I_k$. Expanding the
+    closed horizontal contraction gives
+    \[
+      \sum_g\prod_n
+        (l_{k_n})_{g_n}(x_n^L,y_n^L)
+        (r_{k_n})_{g_{n+1}}(x_n^R,y_n^R).
+    \]
+    Cyclically shifting the summation variables and collecting the factors
+    with the same horizontal index turns this expression into
+    $\Omega_k(x,y)$. If the row and column sector configurations differ,
+    one transformed physical slice lies between distinct direct summands and
+    vanishes. Thus all off-diagonal sector blocks vanish.
+\end{proof}
+
 \begin{definition}[Boundary contraction against a virtual matrix]
     \label{def:mpdo_sector_boundary_operator}
     \lean{MPOTensor.PhysicalSectorFactorization.boundaryOperator,
