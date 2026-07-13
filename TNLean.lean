@@ -425,6 +425,7 @@ import TNLean.MPS.MPDO.SectorPairingTransfer
 import TNLean.MPS.MPDO.SectorEtaContraction
 import TNLean.MPS.MPDO.SectorEtaOperator
 import TNLean.MPS.MPDO.SectorEtaPositivity
+import TNLean.MPS.MPDO.SALPhysicalSectorCyclicPositivity
 import TNLean.MPS.MPDO.SectorRecurrence
 import TNLean.MPS.MPDO.FusionIsometries
 import TNLean.MPS.MPDO.OperatorProduct
