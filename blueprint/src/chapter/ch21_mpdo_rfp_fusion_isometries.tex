@@ -129,6 +129,48 @@ them.
     \cite[Theorem~4.14(iii)]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
+\begin{definition}[Canonical reassociation of three bond spaces]%
+    \label{def:mpdo_operator_product_associator}
+    \lean{MPOTensor.mulTensorAssocEquiv}
+    \lean{MPOTensor.mulTensorAssocMatrix}
+    \leanok
+    \uses{def:mpdo_operator_product}
+    For three bond spaces, let
+    \[
+        A_{D_1,D_2,D_3}:
+        \C^{D_1}\otimes(\C^{D_2}\otimes\C^{D_3})
+        \longrightarrow
+        (\C^{D_1}\otimes\C^{D_2})\otimes\C^{D_3}
+    \]
+    be the coordinate pullback induced by canonical reassociation, defined on
+    elementary tensors by
+    $A_{D_1,D_2,D_3}(x_1\otimes(x_2\otimes x_3))
+    =(x_1\otimes x_2)\otimes x_3$.
+\end{definition}
+
+\begin{theorem}[Associativity of the product tensor]%
+    \label{thm:mpdo_operator_product_associativity}
+    \lean{MPOTensor.mulTensor_assoc}
+    \lean{MPOTensor.mulTensor_mul_assocMatrix}
+    \leanok
+    \uses{def:mpdo_operator_product,
+        def:mpdo_operator_product_associator}
+    The letters of the two parenthesizations of a triple product are related
+    by the canonical bond reassociation.  Equivalently, for every pair of
+    physical indices $i,k$,
+    \[
+        \bigl((M\mathbin{\cdot}N)\mathbin{\cdot}P\bigr)^{ik}
+          A_{D_1,D_2,D_3}
+        =A_{D_1,D_2,D_3}
+          \bigl(M\mathbin{\cdot}(N\mathbin{\cdot}P)\bigr)^{ik}.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Expand both product tensors.  Reassociation preserves every elementary
+    tensor factor, while exchanging the order of the two finite sums gives
+    the same contraction over the two intermediate physical indices.
+\end{proof}
+
 \begin{lemma}[Word evaluation of the product tensor]%
     \label{lem:mpdo_operator_product_eval_word}
     \lean{MPOTensor.evalWord_mulTensor}
@@ -380,9 +422,10 @@ isometries of the two ways of bracketing a triple product,
 $(M_\alpha M_\beta) M_\gamma$ and $M_\alpha (M_\beta M_\gamma)$
 \cite[lines~995--999]{Cirac2016MPDO_arXiv}. The source attributes the
 construction of that equation, and the classification of its solutions, to
-\cite{Bultinck2017Anyons}. The next definitions and theorems record the
-tensor-level content of the two bracketings separately. They do not yet assert
-the change of basis between the two resulting direct sums.
+\cite{Bultinck2017Anyons}. The next definitions and theorems first record the
+tensor-level content of the two bracketings and then compare the resulting
+full direct sums.  Restriction of that comparison to a fixed final label is a
+separate step.
 
 \begin{figure}[ht]
     \centering
@@ -391,8 +434,9 @@ the change of basis between the two resulting direct sums.
         $\varepsilon$, in the diagrammatic language of
         \cite[eq.~(Fmove)]{Bultinck2017Anyons}.  The solid fusion trees are
         the left- and right-bracketed maps constructed below.  The dashed
-        bridge denotes the remaining change of multiplicity basis; it is not
-        asserted by the present results.}
+        bridge denotes the fixed-final change of multiplicity basis.  The
+        results below compare the full direct sums, but do not yet extract
+        this fixed-final map or prove its invertibility.}
     \label{fig:mpdo_fixed_final_fusion_bracketings}
 \end{figure}
 
@@ -508,6 +552,67 @@ the change of basis between the two resulting direct sums.
     \]
     The fusion identity for $U_{\alpha,\delta}$ then gives the stated direct
     sum over $\varepsilon$.
+\end{proof}
+
+\begin{definition}[Full comparison of the two triple-fusion orders]%
+    \label{def:mpdo_triple_fusion_comparison}
+    \lean{MPOTensor.BNTFusionIsometryFamily.tripleFusionComparison}
+    \leanok
+    \uses{def:mpdo_left_fusion_isometry,
+        def:mpdo_right_fusion_isometry,
+        def:mpdo_operator_product_associator}
+    The canonical comparison from the right-associated full direct sum to the
+    left-associated full direct sum is
+    \[
+        C_{\alpha,\beta,\gamma}
+          =U^{\mathrm L}_{\alpha,\beta,\gamma}
+            A_{D_\alpha,D_\beta,D_\gamma}
+            (U^{\mathrm R}_{\alpha,\beta,\gamma})^\dagger.
+    \]
+    Both intermediate labels and the final label remain in the direct sums.
+    This definition does not select a fixed final label and makes no
+    invertibility assertion.  Its orientation is from the right-associated
+    sum to the left-associated sum; consequently it is adjoint-oriented with
+    respect to the $F$-matrix convention in equation (Fmove) of
+    \cite{Bultinck2017Anyons}.
+\end{definition}
+
+\begin{theorem}[The full triple-fusion comparison intertwines the unweighted
+        direct sums]%
+    \label{thm:mpdo_triple_fusion_comparison_intertwines}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        tripleFusionComparison_intertwines_of_lengthIndependent}
+    \leanok
+    \uses{def:mpdo_triple_fusion_comparison,
+        thm:mpdo_operator_product_associativity,
+        thm:mpdo_left_fusion_apply,
+        thm:mpdo_right_fusion_apply,
+        thm:mpdo_bnt_length_independent_zipper}
+    Suppose the positive trace-power coefficients are independent of the
+    positive chain length.  For every pair of physical indices $i,k$, let
+    \[
+        D^{\mathrm L}_{ik}
+          =\bigoplus_{\delta,\varepsilon}
+            1_{r_{\alpha,\beta}^{\delta}}\otimes
+            \bigl(1_{r_{\delta,\gamma}^{\varepsilon}}
+              \otimes M_\varepsilon^{ik}\bigr)
+    \]
+    and define $D^{\mathrm R}_{ik}$ by the right-associated multiplicities
+    $r_{\beta,\gamma}^{\delta}$ and
+    $r_{\alpha,\delta}^{\varepsilon}$.  Then
+    \[
+        D^{\mathrm L}_{ik}C_{\alpha,\beta,\gamma}
+          =C_{\alpha,\beta,\gamma}D^{\mathrm R}_{ik}.
+    \]
+    This is an identity on the full direct sums.  It neither extracts a
+    fixed-final $F$-transformation nor proves invertibility or the pentagon
+    identity.
+\end{theorem}
+\begin{proof}\leanok
+    Length independence makes every positive diagonal factor equal to the
+    identity.  Substitute the left and right triple-fusion identities into
+    the definition of $C_{\alpha,\beta,\gamma}$, cancel the two isometries,
+    and apply Theorem~\ref{thm:mpdo_operator_product_associativity}.
 \end{proof}
 
 \begin{definition}[Fixed-final multiplicity spaces]%
