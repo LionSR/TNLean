@@ -31,6 +31,9 @@ name: TNMPSInverseContraction TNBNTDecomposition TNMPDOZCLIdempotence TNMPDOFixe
 name: TNMPDOBNTFusionIdentity TNMPDOUnweightedZipperReconstruction TNMPDOFusionTracePower TNMPDOFixedFinalComparisonUnitary TNMPDOFourfoldBondReassociationPentagon TNMPDOPrintedFMove
 {{ obj.tn_svg_html }}
 
+name: TNMPDOCompleteZipperFusionPentagon
+{{ obj.tn_svg_html }}
+
 name: TNAppendixBAdjacentBondProjectors TNAppendixBPhysicalSupportTransport TNAppendixBChainTransport
 {{ obj.tn_svg_html }}
 

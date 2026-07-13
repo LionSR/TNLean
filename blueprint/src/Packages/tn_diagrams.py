@@ -79,6 +79,7 @@ _DIAGRAM_ARGS: dict[str, str] = {
     "TNMPDOFixedFinalFusionBracketings": "",
     "TNMPDOFixedFinalComparisonUnitary": "",
     "TNMPDOFourfoldBondReassociationPentagon": "",
+    "TNMPDOCompleteZipperFusionPentagon": "",
     "TNMPDOPrintedFMove": "",
     "TNMPDOBNTFusionIdentity": "",
     "TNMPDOUnweightedZipperReconstruction": "",

@@ -1350,6 +1350,117 @@
     \end{tikzpicture}%
 }
 
+% The five genuine fusion trees in the MPO pentagon.  Unlike the Cartesian
+% reassociation diagram above, every edge is a printed-orientation F-move and
+% every internal label is a fusion-sector label.  The arrangement follows
+% Figure `pentagon` (n13.pdf) of arXiv:1511.08090.
+\newcommand{\TNMPDOCompleteZipperFusionPentagon}{%
+    \begin{tikzpicture}[tn picture, scale=0.82]
+        \tikzset{tn pent edge/.style={->, line width=0.7pt}}
+
+        % (((a b) c) d)
+        \coordinate (pL-a) at (-5.70,0.75);
+        \coordinate (pL-b) at (-5.15,0.75);
+        \coordinate (pL-c) at (-4.60,0.75);
+        \coordinate (pL-d) at (-4.05,0.75);
+        \coordinate (pL-f) at (-5.42,0.22);
+        \coordinate (pL-g) at (-5.00,-0.28);
+        \coordinate (pL-e) at (-4.56,-0.80);
+        \draw[tn leg] (pL-a) -- (pL-f) -- (pL-b);
+        \draw[tn leg] (pL-f) -- (pL-g) -- (pL-c);
+        \draw[tn leg] (pL-g) -- (pL-e) -- (pL-d);
+        \draw[tn leg] (pL-e) -- ++(0,-0.48);
+        \foreach \n/\t in {pL-a/a,pL-b/b,pL-c/c,pL-d/d}
+            \node[above] at (\n) {$\t$};
+        \node[left] at ($(pL-f)!0.55!(pL-g)$) {$f$};
+        \node[left] at ($(pL-g)!0.55!(pL-e)$) {$g$};
+        \node[below] at ($(pL-e)+(0,-0.48)$) {$e$};
+
+        % ((a (b c)) d)
+        \coordinate (pLI-a) at (-4.20,3.52);
+        \coordinate (pLI-b) at (-3.65,3.52);
+        \coordinate (pLI-c) at (-3.10,3.52);
+        \coordinate (pLI-d) at (-2.55,3.52);
+        \coordinate (pLI-h) at (-3.38,2.99);
+        \coordinate (pLI-g) at (-3.78,2.49);
+        \coordinate (pLI-e) at (-3.28,1.97);
+        \draw[tn leg] (pLI-b) -- (pLI-h) -- (pLI-c);
+        \draw[tn leg] (pLI-a) -- (pLI-g) -- (pLI-h);
+        \draw[tn leg] (pLI-g) -- (pLI-e) -- (pLI-d);
+        \draw[tn leg] (pLI-e) -- ++(0,-0.48);
+        \foreach \n/\t in {pLI-a/a,pLI-b/b,pLI-c/c,pLI-d/d}
+            \node[above] at (\n) {$\t$};
+        \node[right] at ($(pLI-h)!0.55!(pLI-g)$) {$h$};
+        \node[left] at ($(pLI-g)!0.55!(pLI-e)$) {$g$};
+        \node[below] at ($(pLI-e)+(0,-0.48)$) {$e$};
+
+        % a ((b c) d)
+        \coordinate (pM-a) at (0.10,3.52);
+        \coordinate (pM-b) at (0.65,3.52);
+        \coordinate (pM-c) at (1.20,3.52);
+        \coordinate (pM-d) at (1.75,3.52);
+        \coordinate (pM-h) at (0.92,2.99);
+        \coordinate (pM-i) at (1.34,2.49);
+        \coordinate (pM-e) at (0.84,1.97);
+        \draw[tn leg] (pM-b) -- (pM-h) -- (pM-c);
+        \draw[tn leg] (pM-h) -- (pM-i) -- (pM-d);
+        \draw[tn leg] (pM-a) -- (pM-e) -- (pM-i);
+        \draw[tn leg] (pM-e) -- ++(0,-0.48);
+        \foreach \n/\t in {pM-a/a,pM-b/b,pM-c/c,pM-d/d}
+            \node[above] at (\n) {$\t$};
+        \node[left] at ($(pM-h)!0.55!(pM-i)$) {$h$};
+        \node[right] at ($(pM-i)!0.55!(pM-e)$) {$i$};
+        \node[below] at ($(pM-e)+(0,-0.48)$) {$e$};
+
+        % a (b (c d))
+        \coordinate (pR-a) at (4.05,0.75);
+        \coordinate (pR-b) at (4.60,0.75);
+        \coordinate (pR-c) at (5.15,0.75);
+        \coordinate (pR-d) at (5.70,0.75);
+        \coordinate (pR-j) at (5.42,0.22);
+        \coordinate (pR-i) at (5.00,-0.28);
+        \coordinate (pR-e) at (4.56,-0.80);
+        \draw[tn leg] (pR-c) -- (pR-j) -- (pR-d);
+        \draw[tn leg] (pR-b) -- (pR-i) -- (pR-j);
+        \draw[tn leg] (pR-a) -- (pR-e) -- (pR-i);
+        \draw[tn leg] (pR-e) -- ++(0,-0.48);
+        \foreach \n/\t in {pR-a/a,pR-b/b,pR-c/c,pR-d/d}
+            \node[above] at (\n) {$\t$};
+        \node[right] at ($(pR-j)!0.55!(pR-i)$) {$j$};
+        \node[right] at ($(pR-i)!0.55!(pR-e)$) {$i$};
+        \node[below] at ($(pR-e)+(0,-0.48)$) {$e$};
+
+        % (a b) (c d)
+        \coordinate (pP-a) at (-0.85,-2.10);
+        \coordinate (pP-b) at (-0.30,-2.10);
+        \coordinate (pP-c) at (0.30,-2.10);
+        \coordinate (pP-d) at (0.85,-2.10);
+        \coordinate (pP-f) at (-0.58,-2.63);
+        \coordinate (pP-j) at (0.58,-2.63);
+        \coordinate (pP-e) at (0,-3.18);
+        \draw[tn leg] (pP-a) -- (pP-f) -- (pP-b);
+        \draw[tn leg] (pP-c) -- (pP-j) -- (pP-d);
+        \draw[tn leg] (pP-f) -- (pP-e) -- (pP-j);
+        \draw[tn leg] (pP-e) -- ++(0,-0.48);
+        \foreach \n/\t in {pP-a/a,pP-b/b,pP-c/c,pP-d/d}
+            \node[above] at (\n) {$\t$};
+        \node[left] at ($(pP-f)!0.55!(pP-e)$) {$f$};
+        \node[right] at ($(pP-j)!0.55!(pP-e)$) {$j$};
+        \node[below] at ($(pP-e)+(0,-0.48)$) {$e$};
+
+        \draw[tn pent edge] (-4.48,1.10) -- node[above left]
+            {$F^{abc}_{g}$} (-3.95,1.73);
+        \draw[tn pent edge] (-2.20,2.72) -- node[above]
+            {$F^{ahd}_{e}$} (-0.25,2.72);
+        \draw[tn pent edge] (1.80,1.78) -- node[above right]
+            {$F^{bcd}_{i}$} (4.15,1.08);
+        \draw[tn pent edge] (-3.95,-1.05) -- node[below left]
+            {$F^{fcd}_{e}$} (-1.02,-2.15);
+        \draw[tn pent edge] (1.02,-2.15) -- node[below right]
+            {$F^{abj}_{e}$} (3.95,-1.05);
+    \end{tikzpicture}%
+}
+
 % Local BNT fusion identity from CPSV16, eq. (Ualphabeta).  The left-hand
 % isometry combines the two incoming bond factors, while its adjoint separates
 % the outgoing factors.  The right-hand side records the weighted final-sector
