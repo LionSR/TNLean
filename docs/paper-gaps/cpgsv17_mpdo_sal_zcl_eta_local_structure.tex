@@ -300,7 +300,7 @@ The pairwise construction has two limitations.  Its symmetric-support
 hypothesis is not stated in the source, and it preserves only the chain blocks
 of length at most two.  The source instead rescales the sector tensors and
 therefore preserves every length simultaneously.  These limitations are
-overcome below by deactivating zero-weight sectors, proving recurrence of the
+overcome below by reparameterizing zero-weight sectors, proving recurrence of the
 remaining support, and applying a vertex rephasing across the whole sector
 graph.
 
@@ -330,7 +330,7 @@ hypothesis, positivity of all cyclic tensor products would first show that
 each edge is a phase times a positive operator, then force trivial phase
 around every cycle, and finally permit a coherent choice of vertex phases.
 The source does not state recurrence as a hypothesis.  It is derived below
-from injectivity after zero-weight sectors are deactivated.  This derivation
+from injectivity after zero-weight sectors are reparameterized.  This derivation
 does not use the later primitivity argument, and hence avoids circularity.
 
 For the present formal notion of a Hayashi decomposition, recurrence is false
@@ -555,9 +555,9 @@ construction the trace matrix
 \[
   T_{k,h}=\tr(\eta_{k,h})
 \]
-is a generally nonconstant primitive nonnegative matrix.  Thus the two
-families cannot be identified without an additional theorem; in general they
-are not equal.
+is a generally nonconstant nonnegative matrix whose positive-weight
+restriction is asserted to be primitive.  Thus the two families cannot be
+identified without an additional theorem; in general they are not equal.
 
 The translation-invariant bond $B_{n,n+1}$ is now defined in the original
 physical coordinates and proved positive.  Adjacent translates commute on
@@ -623,7 +623,7 @@ hypotheses.
 There is a necessary distinction between the physical sector decomposition
 and the effective index set of the trace matrix.  The former must retain every
 summand of the middle Hilbert space, including a summand with $p_k=0$.  After
-the inactive-sector normalization above, however,
+the zero-weight reparameterization above, however,
 $\eta_{k,h}=\eta_{h,k}=0$ for every $h$ whenever $p_k=0$.  Thus the trace
 matrix on the full ambient sector set has a zero row and a zero column and is
 not primitive.  The primitive matrix in Lemma \texttt{propSN} must therefore
