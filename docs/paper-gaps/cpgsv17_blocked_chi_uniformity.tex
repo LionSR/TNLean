@@ -524,14 +524,31 @@ comparison has zero corner between two distinct final labels.  The proof takes
 one rectangular bond-space corner of the letterwise intertwining identity,
 extends it to words, and applies the selector polynomial.
 
-This is a scope-restricted result: no simultaneous final-label selector is
-presently derived from the assumptions on the fusion-isometry family.  That
-missing implication is the remaining source-faithfulness gap at this stage.
-Even after it is supplied, off-diagonal vanishing alone neither proves that the
-diagonal fixed-final corners are invertible nor identifies them with the
-printed $F$-matrices.  The fixed-final $F$-transformation, its invertibility,
-and the pentagon-like equation mentioned at lines~995--999 therefore remain
-unformalized.
+Under the additional assumption that the selected final tensor is injective
+at the present blocking,
+\leanid{MPOTensor.BNTFusionIsometryFamily.%
+exists_tripleFusionComparison_finalSector_eq_kronecker_one_of_separation}
+combines this separation with the amplified-commutant argument.  For every
+selected final label $\varepsilon$, it produces a rectangular multiplicity
+matrix $F_\varepsilon$ for which the reindexed diagonal corner is
+\[
+    C^{\varepsilon,\varepsilon}_{\alpha,\beta,\gamma}
+      =F_\varepsilon\otimes 1_{D_\varepsilon},
+\]
+and retains the vanishing of
+$C^{\varepsilon,\varepsilon'}_{\alpha,\beta,\gamma}$ when
+$\varepsilon'\ne\varepsilon$.  This is the bond-factor conclusion appearing
+at line~277 of the arXiv:1511.08090 source, but the comparison used here is
+oriented oppositely to the printed convention.
+
+This remains a scope-restricted result.  Neither the simultaneous final-label
+selectors nor one-letter injectivity of every final tensor at the present
+blocking is derived from the assumptions on the fusion-isometry family.  The
+matrix $F_\varepsilon$ may be rectangular, and the theorem proves neither its
+invertibility nor invertibility of the diagonal corner.  It is therefore not
+identified with the printed $F$-matrix.  The invertible fixed-final
+$F$-transformation and the pentagon-like equation mentioned at lines~995--999
+remain unformalized.
 
 To eliminate the source-theorem gap, the formalization should instead:
 \begin{enumerate}

@@ -19,7 +19,8 @@ arXiv:1511.08090.
 The selector hypothesis is stated explicitly.  It is not presently derived
 from the assumptions on `BNTFusionIsometryFamily`.  Consequently the result below is
 a conditional final-sector decomposition; it does not construct an invertible
-fixed-sector comparison, an $F$-matrix, or a pentagon identity.
+fixed-sector comparison, identify its multiplicity factor with the source
+$F$-matrix, or prove a pentagon identity.
 
 ## References
 
@@ -39,6 +40,20 @@ universe u
 
 variable {Λ : Type u} [Fintype Λ] [DecidableEq Λ] {p : ℕ}
 variable (Fam : BNTFusionIsometryFamily Λ p)
+
+@[simp] private theorem leftFinalIndexEquiv_symm_apply
+    (α β γ ε δ : Λ) (μ : Fin (Fam.chi.dim α β δ))
+    (ν : Fin (Fam.chi.dim δ γ ε)) (b : Fin (Fam.bondDim ε)) :
+    (Fam.leftFinalIndexEquiv α β γ ε).symm (⟨⟨δ, μ, ν⟩, b⟩) =
+      ⟨δ, μ, ν, b⟩ := by
+  rfl
+
+@[simp] private theorem rightFinalIndexEquiv_symm_apply
+    (α β γ ε δ : Λ) (μ : Fin (Fam.chi.dim β γ δ))
+    (ν : Fin (Fam.chi.dim α δ ε)) (b : Fin (Fam.bondDim ε)) :
+    (Fam.rightFinalIndexEquiv α β γ ε).symm (⟨⟨δ, μ, ν⟩, b⟩) =
+      ⟨δ, μ, ν, b⟩ := by
+  rfl
 
 /-- A common finite family of word polynomials separates every final-label
 tensor from all the others.  This is the arbitrary-finite-label form of
@@ -147,5 +162,80 @@ theorem tripleFusionComparison_finalSector_submatrix_eq_zero
     (Fam.tensor ε).toMPSTensor (Fam.tensor ε').toMPSTensor Cblock hLetter
     coeff hSelf (hOther ε' hε)
   exact congrArg (fun X => X bL bR) hZero
+
+/-- **Conditional fixed-final Kronecker form.** Suppose the positive
+trace-power coefficients are independent of the positive chain length, common
+finite word selectors separate the final-label tensors, and the selected final
+tensor is injective at the present blocking. Then the diagonal fixed-final corner of the full
+triple-fusion comparison has the form \(F_\varepsilon \otimes 1\), while every
+corner from a distinct right final sector into the selected left sector
+vanishes.
+
+**Scope restriction (injectivity and simultaneous final-label separation):**
+neither injectivity at the present blocking nor the selector hypothesis is derived
+from the current assumptions on `BNTFusionIsometryFamily`. The missing
+implications are documented in
+`docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
+
+The matrix `F` is rectangular in general. This theorem does not assert that it
+or the diagonal comparison corner is invertible, identify it with the printed
+$F$-matrix, or prove a pentagon identity.
+
+Source: arXiv:1511.08090, equations `Fmove` and `zippercondition2`, lines
+237--277, especially the simultaneous inverse at line 269, the injectivity
+argument following equation `pentagon3`, and the tensor-product conclusion at
+line 277; arXiv:1606.00608, lines 995--1010. -/
+theorem exists_tripleFusionComparison_finalSector_eq_kronecker_one_of_separation
+    (c : BNTLabelCoefficientFamily Λ)
+    (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
+    (hLI : c.LengthIndependent) {S : ℕ}
+    (hSel : Fam.HasFinalLabelSelectorWords S)
+    (α β γ ε : Λ)
+    (hε : MPSTensor.IsInjective (Fam.tensor ε).toMPSTensor) :
+    ∃ F : Matrix (Fam.LeftFinalMultiplicity α β γ ε)
+        (Fam.RightFinalMultiplicity α β γ ε) ℂ,
+      ((Fam.tripleFusionComparison α β γ).submatrix
+          (Fam.leftFinalRow α β γ ε) (Fam.rightFinalRow α β γ ε)).submatrix
+            (Fam.leftFinalIndexEquiv α β γ ε).symm
+            (Fam.rightFinalIndexEquiv α β γ ε).symm =
+          F ⊗ₖ (1 : Matrix (Fin (Fam.bondDim ε)) (Fin (Fam.bondDim ε)) ℂ) ∧
+        ∀ ε' : Λ, ε' ≠ ε →
+          (Fam.tripleFusionComparison α β γ).submatrix
+            (Fam.leftFinalRow α β γ ε) (Fam.rightFinalRow α β γ ε') = 0 := by
+  let C := (Fam.tripleFusionComparison α β γ).submatrix
+    (Fam.leftFinalRow α β γ ε) (Fam.rightFinalRow α β γ ε)
+  have hC : ∀ ij : Fin (p * p),
+      ((1 : Matrix (Fam.LeftFinalMultiplicity α β γ ε)
+          (Fam.LeftFinalMultiplicity α β γ ε) ℂ) ⊗ₖ
+          (Fam.tensor ε).toMPSTensor ij) *
+          C.submatrix (Fam.leftFinalIndexEquiv α β γ ε).symm
+            (Fam.rightFinalIndexEquiv α β γ ε).symm =
+        C.submatrix (Fam.leftFinalIndexEquiv α β γ ε).symm
+            (Fam.rightFinalIndexEquiv α β γ ε).symm *
+          ((1 : Matrix (Fam.RightFinalMultiplicity α β γ ε)
+            (Fam.RightFinalMultiplicity α β γ ε) ℂ) ⊗ₖ
+            (Fam.tensor ε).toMPSTensor ij) := by
+    intro ij
+    obtain ⟨⟨i, k⟩, rfl⟩ := finProdFinEquiv.surjective ij
+    have hFull := Fam.tripleFusionComparison_intertwines_of_lengthIndependent
+      c hχ hLI α β γ i k
+    ext ⟨⟨δL, μL, νL⟩, bL⟩ ⟨⟨δR, μR, νR⟩, bR⟩
+    simp [C, Matrix.mul_apply, MPOTensor.toMPSTensor,
+      leftFinalIndexEquiv_symm_apply, rightFinalIndexEquiv_symm_apply,
+      Fintype.sum_prod_type, Matrix.one_apply]
+    have hEntry := congrArg
+      (fun X => X (Fam.leftFinalRow α β γ ε ⟨δL, μL, νL, bL⟩)
+        (Fam.rightFinalRow α β γ ε ⟨δR, μR, νR, bR⟩)) hFull
+    simpa [Matrix.mul_apply, Matrix.blockDiagonal'_apply,
+      leftFinalRow, rightFinalRow, Fintype.sum_sigma,
+      Fintype.sum_prod_type, Matrix.one_apply] using hEntry
+  obtain ⟨F, hF⟩ :=
+    Fam.exists_reindexed_intertwiner_eq_kronecker_one_of_isInjective
+      α β γ ε hε C hC
+  refine ⟨F, ?_, ?_⟩
+  · exact hF
+  · intro ε' hε'
+    exact Fam.tripleFusionComparison_finalSector_submatrix_eq_zero
+      c hχ hLI hSel α β γ ε ε' hε'
 
 end MPOTensor.BNTFusionIsometryFamily

@@ -462,9 +462,11 @@ separate step.
         $\varepsilon$, in the diagrammatic language of
         \cite[eq.~(Fmove)]{Bultinck2017Anyons}.  The solid fusion trees are
         the left- and right-bracketed maps constructed below.  The dashed
-        bridge denotes the fixed-final change of multiplicity basis.  The
-        results below compare the full direct sums, but do not yet extract
-        this fixed-final map or prove its invertibility.}
+        line denotes the invertible fixed-final change of multiplicity basis
+        in the source.  The conditional result below extracts a rectangular
+        multiplicity factor acting trivially on the final bond space, but does
+        not identify that factor with the dashed source transformation or
+        prove its invertibility.}
     \label{fig:mpdo_fixed_final_fusion_bracketings}
 \end{figure}
 
@@ -827,4 +829,64 @@ separate step.
     $\{M_\varepsilon^{ij}\}_{i,j}$.  This family spans the full matrix algebra
     by injectivity, and the assumed relation is precisely the amplified
     intertwining identity of that lemma.
+\end{proof}
+
+\begin{theorem}[Conditional fixed-final Kronecker form and separation]%
+    \label{thm:mpdo_triple_fusion_comparison_final_sector_kronecker}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        exists_tripleFusionComparison_finalSector_eq_kronecker_one_of_separation}
+    \leanok
+    \uses{def:mpdo_triple_fusion_comparison,
+        def:mpdo_final_label_selector_words,
+        def:mpdo_final_sector_multiplicity_spaces}
+    Suppose the positive trace-power coefficients are independent of the
+    positive chain length and common word selectors separate the final labels.
+    Fix labels $\alpha,\beta,\gamma,\varepsilon$, and suppose that
+    $M_\varepsilon$ is injective at the present blocking.  Write
+    \[
+        C^{\varepsilon,\varepsilon'}_{\alpha,\beta,\gamma}
+          =P^{\mathrm L}_{\varepsilon}
+            C_{\alpha,\beta,\gamma}
+            P^{\mathrm R}_{\varepsilon'}
+    \]
+    for the corner from the right final sector $\varepsilon'$ to the left
+    final sector $\varepsilon$.  There is a rectangular matrix
+    \[
+        F_\varepsilon:\mathcal H^{\mathrm R}_{\varepsilon}
+          \longrightarrow \mathcal H^{\mathrm L}_{\varepsilon}
+    \]
+    such that, after the canonical index identifications,
+    \[
+        C^{\varepsilon,\varepsilon}_{\alpha,\beta,\gamma}
+          =F_\varepsilon\otimes 1_{D_\varepsilon}.
+    \]
+    For every $\varepsilon'\ne\varepsilon$,
+    \[
+        C^{\varepsilon,\varepsilon'}_{\alpha,\beta,\gamma}=0.
+    \]
+    The selector identities and injectivity at the present blocking are
+    additional hypotheses here.  The theorem neither asserts that
+    $F_\varepsilon$ is square or invertible nor identifies it with the
+    $F$-matrix of \cite[eq.~(Fmove)]{Bultinck2017Anyons}; no pentagon identity
+    is asserted.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpdo_triple_fusion_comparison_intertwines,
+        thm:mpdo_triple_fusion_comparison_final_sector_vanishing,
+        thm:mpdo_injective_fixed_final_intertwiner}
+    Taking the $\varepsilon$--$\varepsilon$ corner of the full comparison
+    identity gives, for every pair $i,j$,
+    \[
+        (1_{\mathcal H^{\mathrm L}_\varepsilon}\otimes
+          M_\varepsilon^{ij})C^{\varepsilon,\varepsilon}
+          =C^{\varepsilon,\varepsilon}
+            (1_{\mathcal H^{\mathrm R}_\varepsilon}\otimes
+              M_\varepsilon^{ij}).
+    \]
+    Injectivity and the amplified commutant result give
+    $C^{\varepsilon,\varepsilon}=F_\varepsilon\otimes1_{D_\varepsilon}$.
+    The common word selectors give
+    $C^{\varepsilon,\varepsilon'}=0$ whenever
+    $\varepsilon'\ne\varepsilon$ by
+    Theorem~\ref{thm:mpdo_triple_fusion_comparison_final_sector_vanishing}.
 \end{proof}
