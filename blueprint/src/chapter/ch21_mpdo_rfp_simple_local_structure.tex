@@ -2634,13 +2634,8 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{Matrix.submodule_sup_ne_top_of_mul_eq_zero}
     \leanok
     Let $\mathcal A_1,\mathcal A_2\subseteq\MN{D}$ be nonzero linear
-    subspaces. If
-    \[
-        XY=0
-        \qquad
-        (X\in\mathcal A_1,\;Y\in\mathcal A_2),
-    \]
-    then
+    subspaces. If $XY=0$ for every $X\in\mathcal A_1$ and
+    $Y\in\mathcal A_2$, then
     \[
         \mathcal A_1+\mathcal A_2\ne\MN{D}.
     \]
@@ -5249,48 +5244,68 @@ $\widehat{\cal K}$.
     \label{fig:mpdo_local_orthogonality}
 \end{figure}
 
-\begin{theorem}[Primitivity of the concrete sector trace matrix]%
+\begin{theorem}[Primitivity of the active sector trace matrix]%
     \label{thm:mpdo_sector_trace_matrix_primitive}
     \notready
-    \uses{def:mpdo, def:injective, def:normal, def:is_sal,
+    \uses{def:mpdo, def:injective, def:is_sal,
         def:mpdo_explicit_eta_of_sector_tensors,
         thm:mpdo_eta_coherent_positive_choice,
-        lem:mpdo_local_orthogonality_contraction,
         thm:mpdo_sector_eta_data_trace_matrix}
-    Let ${\cal K}$ be an injective normal tensor that generates MPDOs and
+    Let ${\cal K}$ be an injective tensor that generates MPDOs and
     satisfies SAL, and choose the positive neighboring operators of
-    Theorem~\ref{thm:mpdo_eta_coherent_positive_choice}. Then the nonnegative
+    Theorem~\ref{thm:mpdo_eta_coherent_positive_choice}. Restrict the sector
+    index to the positive-weight summands of the Hayashi decomposition. Then
+    the nonnegative
     matrix
     \[
         T_{k,h}=\tr(\eta_{k,h})
     \]
     is primitive.
+
+    \emph{Local fix (inactive sectors):} the physical direct sum retains
+    zero-weight summands, but the normalized factorization makes every
+    neighboring operator incident to such a summand zero. Hence the trace
+    matrix on the full ambient sector set has a zero row and column and cannot
+    be primitive. The primitive matrix asserted by the source is the
+    restriction to its effective, positive-weight sector set. This is recorded
+    in
+    \path{docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex}.
 \end{theorem}
 
 \begin{proof}
     \uses{def:mpdo_eta_recurrent_support,
         def:mpdo_zero_weight_reparameterized_inverse_map_factorization,
         thm:mpdo_zero_weight_reparameterized_neighboring_operator,
+        thm:mpdo_sector_virtual_matrix_spanning,
+        thm:mpdo_sector_support_triangle_closure,
         lem:mpdo_local_orthogonality_contraction,
         thm:mpdo_directed_cut_one_site_spaces,
         lem:matrix_one_sided_product_obstruction}
     First use the zero-weight reparameterization to make every zero-weight
-    sector isolated. Suppose that the retained support is not strongly
-    connected. The sectors reachable from a fixed retained sector then contain
-    a nonempty proper forward-closed set $S$; write $C$ for its complement.
-    There are no neighboring edges from $S$ to $C$.
+    sector isolated. The spanning theorem and the trace-pairing argument close
+    every nonzero edge through a third sector, so the active support is
+    recurrent.
+
+    Suppose that the active support is not strongly connected. The sectors
+    reachable from a fixed active sector then form a nonempty proper
+    forward-closed set $S$; write $C$ for its complement. There are no
+    neighboring edges from $S$ to $C$.
 
     Let ${\cal A}_S$ and ${\cal A}_C$ be the one-site matrix spaces belonging
-    to the two classes. The directed-cut theorem gives
-    ${\cal A}_S{\cal A}_C=0$. The source argument still requires two bridges:
-    both spaces are nonzero, and injectivity in the physical sector coordinates
-    gives ${\cal A}_S+{\cal A}_C=\MN{D}$. Once these are established,
+    to the two classes. Positive sector weights make both spaces nonzero.
+    Injectivity in physical sector coordinates gives
+    ${\cal A}_S+{\cal A}_C=\MN{D}$, while the directed-cut theorem gives
+    ${\cal A}_S{\cal A}_C=0$. Hence
     Lemma~\ref{lem:matrix_one_sided_product_obstruction} gives the desired
     contradiction. No vanishing in the reverse order is needed. This is the
     directed-cut argument at
-    \cite[Appendix~C.2, lines~1452--1470]{Cirac2016MPDO_arXiv}; formalizing the
-    two bridges, and then the passage from the resulting recurrent positive
-    support to primitivity of $T$, remains open.
+    \cite[Appendix~C.2, lines~1452--1470]{Cirac2016MPDO_arXiv}.
+
+    Finally, nondegeneracy and cyclicity of the trace pairing give a closed
+    support walk of length two through every active sector. Triangle closure
+    gives one of length three. Strong connectivity together with these two
+    coprime return lengths yields a common length at which every entry of the
+    active trace-matrix power is positive. Thus $T$ is primitive.
 \end{proof}
 
 \begin{theorem}[Positivity of bipartite partial traces]
