@@ -607,6 +607,61 @@ separate step.
     \cite{Bultinck2017Anyons}.
 \end{definition}
 
+\begin{theorem}[Left range projection of the full triple-fusion comparison]%
+    \label{thm:mpdo_triple_fusion_comparison_left_range}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        tripleFusionComparison_mul_conjTranspose}
+    \leanok
+    \uses{def:mpdo_triple_fusion_comparison}
+    The product of the full comparison with its adjoint is the range
+    projection of the left iterated fusion isometry:
+    \[
+        C_{\alpha,\beta,\gamma}C_{\alpha,\beta,\gamma}^{\dagger}
+          =U^{\mathrm L}_{\alpha,\beta,\gamma}
+            (U^{\mathrm L}_{\alpha,\beta,\gamma})^{\dagger}.
+    \]
+    The right side is not asserted to be the identity.  Surjectivity of the
+    left iterated fusion map requires completeness of the fusion
+    decomposition, corresponding to the invertible total fusion matrix in
+    \cite[lines~181--191]{Bultinck2017Anyons}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpdo_right_fusion_isometry_isometry,
+        def:mpdo_operator_product_associator}
+    Substitute
+    $C=U^{\mathrm L}A(U^{\mathrm R})^{\dagger}$.
+    The isometry identity $(U^{\mathrm R})^{\dagger}U^{\mathrm R}=1$
+    and the two-sided inverse identities for the permutation matrix $A$
+    leave $U^{\mathrm L}(U^{\mathrm L})^{\dagger}$.
+\end{proof}
+
+\begin{theorem}[Right range projection of the full triple-fusion comparison]%
+    \label{thm:mpdo_triple_fusion_comparison_right_range}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        conjTranspose_mul_tripleFusionComparison}
+    \leanok
+    \uses{def:mpdo_triple_fusion_comparison}
+    The product in the opposite order is the range projection of the right
+    iterated fusion isometry:
+    \[
+        C_{\alpha,\beta,\gamma}^{\dagger}C_{\alpha,\beta,\gamma}
+          =U^{\mathrm R}_{\alpha,\beta,\gamma}
+            (U^{\mathrm R}_{\alpha,\beta,\gamma})^{\dagger}.
+    \]
+    The right side is not asserted to be the identity.  Surjectivity of the
+    right iterated fusion map likewise requires completeness of the fusion
+    decomposition.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpdo_left_fusion_isometry_isometry,
+        def:mpdo_operator_product_associator}
+    Substitute
+    $C=U^{\mathrm L}A(U^{\mathrm R})^{\dagger}$.
+    The isometry identity $(U^{\mathrm L})^{\dagger}U^{\mathrm L}=1$
+    and the two-sided inverse identities for $A$ leave
+    $U^{\mathrm R}(U^{\mathrm R})^{\dagger}$.
+\end{proof}
+
 \begin{theorem}[The full triple-fusion comparison intertwines the unweighted
         direct sums]%
     \label{thm:mpdo_triple_fusion_comparison_intertwines}
