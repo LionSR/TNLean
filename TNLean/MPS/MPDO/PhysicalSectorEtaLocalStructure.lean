@@ -37,11 +37,8 @@ The normalization scalar at every chain length is one.
 Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), lines
 1571--1593.
 
-**Scope restriction (given coherently positive physical-sector
-factorization):** The source derives the factorization and the simultaneous
-positive choice of its neighboring contractions from SAL. That upstream step
-remains documented in
-`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`. -/
+The source-faithful existence theorem from SAL is
+`MPOTensor.nonempty_etaLocalStructureData_of_isSAL`. -/
 noncomputable def etaLocalStructureData
     (F : PhysicalSectorFactorization K)
     (hη : ∀ k h, (F.neighboringOperator k h).PosSemidef) :
