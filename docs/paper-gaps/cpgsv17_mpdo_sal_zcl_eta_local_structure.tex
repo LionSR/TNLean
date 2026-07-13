@@ -620,6 +620,18 @@ the new SAL theorem is
 $\eta$-local conclusion of Proposition~C.8 is now formalized from its source
 hypotheses.
 
+There is a necessary distinction between the physical sector decomposition
+and the effective index set of the trace matrix.  The former must retain every
+summand of the middle Hilbert space, including a summand with $p_k=0$.  After
+the inactive-sector normalization above, however,
+$\eta_{k,h}=\eta_{h,k}=0$ for every $h$ whenever $p_k=0$.  Thus the trace
+matrix on the full ambient sector set has a zero row and a zero column and is
+not primitive.  The primitive matrix in Lemma \texttt{propSN} must therefore
+be read on the effective sector set $\{k:p_k>0\}$, as is customary when zero
+probability terms in a direct-sum state decomposition are omitted.  The Lean
+statement will restrict the trace matrix to this subtype while leaving the
+physical sector equivalence, and hence the full Hilbert space, unchanged.
+
 \section{Classification}
 
 This note now records a closed coherent-positive-choice gap and the remaining
@@ -629,9 +641,11 @@ reparameterized without changing the physical decomposition, recurrence is
 derived from injectivity, and the inverse-map sector tensors are coherently
 rephased so that every neighboring operator is positive semidefinite. The
 earlier scope-restricted recurrence theorem remains useful as the general
-graph-theoretic component, but recurrence is a conclusion for the normalized
-inverse-map factorization. The primitivity of the trace matrix $T$ remains
-open; it is no longer needed for recurrence and must be proved separately.
+graph-theoretic component, but recurrence is a conclusion for the
+reparameterized inverse-map factorization.  The primitivity of the trace
+matrix restricted to positive-weight sectors remains open; it is no longer
+needed for recurrence and must be proved separately.  The unrestricted
+ambient trace matrix is not primitive when a zero-weight sector is present.
 
 For the conditional bond construction, all translates commute pairwise at
 every length $N\geq2$.  The finite-chain MPO is the ordered product of those
@@ -642,9 +656,9 @@ scalar one, and they determine the eta-local structure data. The raw
 physical-sector factorization already follows for an injective tensor
 satisfying SAL, and the coherent positive choice is now obtained by
 normalizing the inactive sectors and deriving recurrence from injectivity.
-The remaining work in this part of the paper is the later trace-matrix
-primitivity step; it is logically separate from the commuting-bond
-construction.
+The remaining work in this part of the paper is the later active-sector
+trace-matrix primitivity step; it is logically separate from the
+commuting-bond construction.
 
 \bibliographystyle{alpha}
 \bibliography{references}
