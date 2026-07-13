@@ -1229,3 +1229,71 @@ separate step.
         pentagon coherence identity is asserted here.}
     \label{fig:mpdo_fixed_final_comparison_unitary}
 \end{figure}
+
+\begin{theorem}[Coherence of four bond-coordinate reassociations]%
+    \label{thm:mpdo_fourfold_bond_coordinate_coherence}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        fourfoldBondReassociation_threeEdge_eq_twoEdge}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        fourfoldBondMatrix_threeEdge_eq_twoEdge}
+    \leanok
+    \uses{def:mpdo_operator_product_associator,
+        def:mpdo_bnt_fusion_isometry_family}
+    Fix four labels $\alpha,\beta,\gamma,\delta$ in a BNT fusion-isometry
+    family, and write
+    \[
+        A=\{1,\ldots,D_\alpha\},\quad
+        B=\{1,\ldots,D_\beta\},\quad
+        C=\{1,\ldots,D_\gamma\},\quad
+        D=\{1,\ldots,D_\delta\}
+    \]
+    for their bond-coordinate sets.  Let
+    \[
+        r_{X,Y,Z}:((X\times Y)\times Z)\longrightarrow
+          X\times(Y\times Z)
+    \]
+    denote the canonical reassociation.  Define
+    \[
+    \begin{aligned}
+        r_1&=r_{A,B,C}\times 1_D,&
+        r_2&=r_{A,B\times C,D},&
+        r_3&=1_A\times r_{B,C,D},\\
+        s_1&=r_{A\times B,C,D},&
+        s_2&=r_{A,B,C\times D}.&&
+    \end{aligned}
+    \]
+    The three-edge and two-edge reassociations from
+    $(((A\times B)\times C)\times D)$ to
+    $A\times(B\times(C\times D))$ coincide:
+    \[
+        r_3\circ r_2\circ r_1=s_2\circ s_1.
+    \]
+    If $P(r)_{x,y}=1$ when $r(x)=y$ and is zero otherwise, then the
+    corresponding coordinate-permutation matrices satisfy
+    \[
+        P(r_1)P(r_2)P(r_3)=P(s_1)P(s_2).
+    \]
+    These are equalities of Cartesian bond-coordinate identifications only.
+    The MPO fusion pentagon in
+    \cite[Section~3.4, equation~(33)]{Bultinck2017Anyons} instead compares
+    products of $F$-matrix entries, summed over intermediate fusion labels and
+    multiplicities; it is not asserted here.
+\end{theorem}
+\begin{proof}\leanok
+    Every element $(((a,b),c),d)$ is sent by either composite to
+    $(a,(b,(c,d)))$.  The first equality follows.  The identity
+    $P(v\circ u)=P(u)P(v)$ then turns it into the stated matrix equality.
+\end{proof}
+
+\begin{figure}[ht]
+    \centering
+    \TNMPDOFourfoldBondReassociationPentagon
+    \caption{The five parenthesizations of four bond-coordinate factors.
+        The upper path is the three-edge composite
+        $r_3\circ r_2\circ r_1$, and the lower path is the two-edge composite
+        $s_2\circ s_1$.  This figure depicts only canonical Cartesian
+        reassociation.  It does not contain fusion multiplicity spaces or
+        $F$-matrices, and the MPO fusion pentagon identity of
+        \cite[equation~(33)]{Bultinck2017Anyons} remains unproved.}
+    \label{fig:mpdo_fourfold_bond_coordinate_reassociation}
+\end{figure}
