@@ -24,9 +24,9 @@ namespace MPSTensor
 variable {d D : ℕ}
 
 /-- The canonical two-site parent interactions supplied by an Appendix B
-structural datum satisfy the algebraic and kernel-intersection clauses of
-Definition D.2 on the three-site MPS ground space, provided the tensor is
-injective.
+structural datum satisfy the coefficient-space analogues of the algebraic and
+kernel-intersection equations in Definition D.2 on the three-site MPS ground
+space, provided the tensor is injective.
 
 The two operators are the canonical parent interaction \(q_2(A)\), placed on
 the \(AX\) and \(XB\) faces. Their commutation was obtained from the adjacent
@@ -34,10 +34,11 @@ virtual-bond projectors. The remaining kernel equation is the standard
 three-site MPS intersection property. Thus the two interactions are
 idempotent, their lifts commute, and the intersection of their lifted kernels
 is \(G_3(A)\). They are orthogonal projectors because \(q_2(A)\) is the
-canonical orthogonal parent interaction.
+canonical orthogonal parent interaction. This theorem does not identify these
+maps with the source projectors on the two explicitly factored Hilbert spaces.
 
 This theorem relates the Appendix B basic-vector construction to the separate
-condition in Appendix D. It is not the argument printed for the implication
+equations in Appendix D. It is not the argument printed for the implication
 RFP \(\Rightarrow\) NNCPH: arXiv:1606.00608, lines 1305--1307, calls that
 implication an immediate consequence of the structural characterization.
 
@@ -57,8 +58,9 @@ theorem AppendixBStructuralData.hasAppendixD2ParentCommutingHamiltonian
   rw [hStruct.appendixBQXBOnCoeffSpace_eq_parentInteraction]
   exact groundSpace_three_eq_adjacent_twoSite_parent_kernels hA
 
-/-- A normal left-canonical RFP tensor supplies the three-site algebraic and
-kernel-intersection datum of arXiv:1606.00608, Definition D.2.
+/-- A normal left-canonical RFP tensor supplies the three-site coefficient-space
+analogue of the algebraic and kernel-intersection datum in arXiv:1606.00608,
+Definition D.2.
 
 Injectivity is not an additional hypothesis: it follows from normality, the RFP
 identity, and left-canonical normalization. This is a local Appendix D

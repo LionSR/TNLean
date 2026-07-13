@@ -1513,8 +1513,8 @@ specialization of that Appendix~D definition.
     identifies these terms with the two displayed lifts.
 \end{proof}
 
-\begin{theorem}[Appendix B realization of the local Appendix D kernel datum]
-    \label{thm:appendixB_definition_d2_local_realization}
+\begin{theorem}[Appendix B coefficient-space analogue of the Appendix D kernel datum]
+    \label{thm:appendixB_definition_d2_coefficient_analogue}
     \lean{MPSTensor.AppendixBStructuralData.hasAppendixD2ParentCommutingHamiltonian}
     \lean{MPSTensor.rfp_hasAppendixD2ParentCommutingHamiltonian_of_leftCanonical}
     \leanok
@@ -1523,23 +1523,26 @@ specialization of that Appendix~D definition.
         lem:appendixB_qax_qxb_parent_interaction}
     Let $A$ be injective and let an Appendix~B structural datum be fixed.  Put
     \[
-        K_{AXB}=G_3(A),\qquad
-        Q_{AX}=q_2(A),\qquad Q_{XB}=q_2(A),
+        \widehat K_{AXB}=G_3(A),\qquad
+        \widehat Q_{AX}=q_2(A),\qquad \widehat Q_{XB}=q_2(A),
     \]
-    with the two copies of $q_2(A)$ placed on the indicated faces.  Then
+    with the two copies of $q_2(A)$ lifted to the indicated faces of the
+    three-site coefficient space.  Then
     \[
-        [Q_{AX},Q_{XB}]=0,
+        [ (\widehat Q_{AX})_{AX}, (\widehat Q_{XB})_{XB}]=0,
         \qquad
-        K_{AXB}
-        =\ker\bigl((Q_{AX})_{AX}\bigr)
-          \cap\ker\bigl((Q_{XB})_{XB}\bigr).
+        \widehat K_{AXB}
+        =\ker\bigl((\widehat Q_{AX})_{AX}\bigr)
+          \cap\ker\bigl((\widehat Q_{XB})_{XB}\bigr).
     \]
-    Thus these canonical local interactions satisfy the idempotence,
-    commutation, and kernel-intersection clauses of
-    \cite[Definition~D.2]{Cirac2016MPDO_arXiv}.  The conclusion here is limited
-    to these three clauses.  For a normal left-canonical RFP tensor, injectivity
-    follows from the RFP structural theorem and is not an additional
-    hypothesis.
+    These are the coefficient-space analogues of the idempotence, commutation,
+    and kernel-intersection equations in
+    \cite[Definition~D.2]{Cirac2016MPDO_arXiv}.  The hatted operators are not
+    identified here with the source projectors on
+    $\mathcal H_A\otimes\mathcal H_X$ and
+    $\mathcal H_X\otimes\mathcal H_B$.  For a normal left-canonical RFP tensor,
+    injectivity follows from the RFP structural theorem and is not an
+    additional hypothesis.
 \end{theorem}
 
 \begin{proof}
@@ -1999,10 +2002,11 @@ specialization of that Appendix~D definition.
     physical-pair factorization displayed above.  That factorization remains a
     separate conditional coefficient statement.  The full source implication
     additionally requires removal of the left-canonical hypothesis and the
-    ground-space spanning equation.  The local kernel-intersection
-    characterization of Definition~D.2 is
-    Theorem~\ref{thm:appendixB_definition_d2_local_realization}; it is a
-    separate Appendix~D statement and is not needed for the chain commutator.
+    ground-space spanning equation.  The coefficient-space analogue of the
+    local kernel-intersection equation is
+    Theorem~\ref{thm:appendixB_definition_d2_coefficient_analogue}; identifying
+    its hatted maps with the source projectors remains separate and is not
+    needed for the chain commutator.
 \end{remark}
 
 \begin{theorem}[Even-chain factorization and ground-space spanning give all-chain NNCPH]%

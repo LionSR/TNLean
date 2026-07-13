@@ -66,9 +66,10 @@ identity are proved in `TNLean.MPS.RFP.AppendixBCommutation`. Their complements
 give the local commutator, which is transported around every periodic chain with
 \(N>2\) in `TNLean.MPS.RFP.AppendixBChainCommutation`.
 That file also combines the commutator with the standard three-site MPS
-intersection property to obtain the algebraic and kernel-intersection clauses
-of Definition D.2 on \(K_{AXB}=G_3(A)\). Definition D.2 is not used in the
-source's one-sentence proof of RFP \(\Rightarrow\) NNCPH at lines 1305--1307.
+intersection property to obtain the coefficient-space analogues of the
+algebraic and kernel-intersection equations in Definition D.2 on
+\(K_{AXB}=G_3(A)\). Definition D.2 is not used in the source's one-sentence
+proof of RFP \(\Rightarrow\) NNCPH at lines 1305--1307.
 Accordingly, the conditional structures below continue to take the translated
 idempotents as hypotheses; the unconditional commutator is proved separately in
 `TNLean.MPS.RFP.AppendixBChainCommutation`.
@@ -703,8 +704,9 @@ length-two parent terms on the three-site window.
 This theorem only transports the supplied idempotency and lifted-commutator
 clauses to the canonical parent interactions identified above; the
 kernel-intersection clause is not used here. The unconditional local algebraic
-and kernel-intersection clauses of Definition D.2 are proved separately in
-`TNLean.MPS.RFP.AppendixBChainCommutation`.
+and kernel-intersection coefficient-space analogues are proved separately in
+`TNLean.MPS.RFP.AppendixBChainCommutation`; identification with the source
+projectors remains a separate hypothesis.
 
 Source: arXiv:1606.00608, lines 543--578 and Definition D.2, lines
 2205--2218. -/
