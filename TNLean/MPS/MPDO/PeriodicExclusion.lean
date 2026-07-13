@@ -133,9 +133,9 @@ derivation are formalized in `TNLean/MPS/MPDO/StackedLayers.lean`, which
 reduces this hypothesis to `PeriodicVectorYieldsCyclicProjector`; the
 cyclic projections themselves, with their word invariance and single-letter
 displacement, are constructed in `TNLean/MPS/MPDO/CyclicProjector.lean`,
-which reduces further to the non-commutation hypothesis
-`NoninvariantProjectorNoncommuting`.  The remaining gap is recorded in
-`docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`. -/
+which also proves the source conclusion directly from horizontal canonical
+form by using one noncommuting length.  The predicate below retains the
+stronger all-length formulation as an auxiliary interface. -/
 def PeriodicVectorYieldsProjector (M : MPOTensor d D) : Prop :=
   ∀ ⦃n : ℕ⦄ (V : Matrix (Fin d) (Fin n) ℂ) (B : MPSTensor (D * D) n)
     (ρ : Matrix (Fin n) (Fin n) ℂ) (r : ℝ),
