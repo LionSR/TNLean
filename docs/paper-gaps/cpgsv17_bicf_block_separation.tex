@@ -192,17 +192,24 @@ to pair separation for the blocked representatives at length $6$.  It follows
 that $P^{[p]}$ has simultaneous representative word-tuple span at every
 blocked length at least $6(g-1)+1$.
 
-It remains to compose this statement with the first-site transport.  One
-chooses a common positive $L$ for which every normal representative is
-$L$-block injective and uses $p=L+1$; positive-length propagation makes every
-$A_j^{[L+1]}$ injective.  The original length-$L$ span then recovers equality
-of the unblocked insertions from equality of the blocked insertions.  This
-length shift is essential: recovery from a physical block of length $L+1$
-uses the span of its length-$L$ tail.  The flattened
-\texttt{HorizontalCFData} formulation must then be replaced, or related
-explicitly, by this representative-indexed statement.  The older per-copy
-\texttt{biCF} theorem remains a correct restricted result, but it is no longer
-the intended route to Lemma L.
+This statement has now been composed with the first-site transport under an
+explicit common block-injectivity hypothesis.  Given a common positive $L$
+for which every representative is $L$-block injective, use $p=L+1$;
+positive-length propagation makes every $A_j^{[L+1]}$ injective.  Blocked
+representative separation and the representative-grouped Lemma L give equality
+of the induced insertions on every $A_j^{[L+1]}$.  The original length-$L$
+span then recovers equality of the unblocked insertions.  This length shift is
+essential: recovery from a physical block of length $L+1$ uses the span of its
+length-$L$ tail.
+
+Two tasks remain for the unrestricted source application.  First, the
+canonical-form construction must supply the common positive block-injectivity
+length from the normality of its minimal representatives, rather than taking
+that length as an explicit hypothesis.  Second, the flattened
+\texttt{HorizontalCFData} formulation must be replaced, or related explicitly,
+by this representative-indexed statement.  The older per-copy \texttt{biCF}
+theorem remains a correct restricted result, but it is no longer the intended
+route to Lemma L.
 
 Separately, the numerical bound in the full block-injectivity proposition still
 requires the David2006 argument: from minimality of the basis of normal tensors

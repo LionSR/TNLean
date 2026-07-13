@@ -8,6 +8,7 @@ import TNLean.MPS.FundamentalTheorem.SectorBNT.Basic
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Blocking
 import TNLean.MPS.MPDO.BiCFDerivation.BNTDirectSum
 import TNLean.MPS.MPDO.BiCFDerivation.Blocking
+import TNLean.MPS.MPDO.FirstSiteBlocking
 import TNLean.MPS.MPDO.RepresentativeGroupedLemmaL
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
 
@@ -231,5 +232,65 @@ theorem insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree_of_basis_inje
     ∀ j, insertedTensor Y (P.basis j) = insertedTensor Z (P.basis j) := by
   exact hCF.insertedTensor_basis_eq_of_firstSiteActionAgree_of_basis_injective
     hInj (hAct.of_sameMPV hAP)
+
+/-- Representative-grouped Lemma L before physical blocking.
+
+Suppose that every representative has full word span at one common positive
+length `L`.  Blocking `L + 1` sites makes every representative injective,
+while leaving a length-`L` tail after the first-site insertion.  Representative
+separation on the blocked tensors gives equality of the induced insertions;
+the length-`L` word span then recovers equality of the original insertions.
+
+This is the blocking step of arXiv:1606.00608, lines 318--344, composed with
+Appendix C.3, Lemma L, lines 1835--1858.
+
+**Scope restriction (common block-injectivity length):** The common positive
+length is an explicit hypothesis; its derivation from the canonical-form
+construction remains open.  See
+`docs/paper-gaps/cpgsv17_bicf_block_separation.tex`. -/
+theorem insertedTensor_basis_eq_of_firstSiteActionAgree_of_common_blockInjective
+    (hCF : IsBNTCanonicalForm P) (L : ℕ) (hL : 0 < L)
+    (hInj : ∀ j, IsNBlkInjective (P.basis j) L)
+    {Y Z : Matrix (Fin d) (Fin d) ℂ}
+    (hAct : FirstSiteActionAgree P.toTensor Y Z) :
+    ∀ j, insertedTensor Y (P.basis j) = insertedTensor Z (P.basis j) := by
+  have hInjSucc : ∀ j, IsInjective (blockTensor (P.basis j) (L + 1)) := by
+    intro j
+    exact (isNBlkInjective_iff_blockTensor_isInjective (P.basis j) (L + 1)).1
+      (isNBlkInjective_succ_of_isNBlkInjective (P.basis j) hL (hInj j))
+  have hSpan := hCF.eventuallyRepresentativeWordTupleSpan_blockTensor
+    (L + 1) (by omega) hInjSucc
+  have hActBlocked : FirstSiteActionAgree (P.blockTensor (L + 1)).toTensor
+      (firstSiteActionOnBlock L Y) (firstSiteActionOnBlock L Z) :=
+    (hAct.blockTensor L).of_sameMPV (P.sameMPV₂_blockTensor_toTensor (L + 1))
+  have hEq := (P.blockTensor (L + 1)).insertedTensor_basis_eq_of_firstSiteActionAgree
+    hSpan hActBlocked
+  intro j
+  apply insertedTensor_eq_of_firstSiteActionOnBlock_blockTensor_eq
+    (P.basis j) L (hInj j)
+  have hEqj := hEq j
+  change insertedTensor (firstSiteActionOnBlock L Y) (blockTensor (P.basis j) (L + 1)) =
+    insertedTensor (firstSiteActionOnBlock L Z) (blockTensor (P.basis j) (L + 1)) at hEqj
+  exact hEqj
+
+/-- Same-MPV transport of representative-grouped Lemma L before physical
+blocking.
+
+The common block-injectivity length is the input supplied by the canonical-form
+blocking step in arXiv:1606.00608, lines 318--344.  The representative
+conclusion is Appendix C.3, Lemma L, lines 1835--1858.
+
+**Scope restriction (common block-injectivity length):** This transport theorem
+inherits the explicit common-length hypothesis above.  See
+`docs/paper-gaps/cpgsv17_bicf_block_separation.tex`. -/
+theorem insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree_of_common_blockInjective
+    {D : ℕ} (A : MPSTensor d D) (hCF : IsBNTCanonicalForm P)
+    (L : ℕ) (hL : 0 < L) (hInj : ∀ j, IsNBlkInjective (P.basis j) L)
+    (hAP : SameMPV₂ A P.toTensor)
+    {Y Z : Matrix (Fin d) (Fin d) ℂ}
+    (hAct : FirstSiteActionAgree A Y Z) :
+    ∀ j, insertedTensor Y (P.basis j) = insertedTensor Z (P.basis j) := by
+  exact hCF.insertedTensor_basis_eq_of_firstSiteActionAgree_of_common_blockInjective
+    L hL hInj (hAct.of_sameMPV hAP)
 
 end MPSTensor.IsBNTCanonicalForm
