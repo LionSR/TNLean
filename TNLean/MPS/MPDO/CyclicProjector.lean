@@ -624,11 +624,13 @@ operator $H^{(N)}$ at every length.
 This is the horizontal-canonical-form step of the periodic-sector argument.
 The source assumes the tensor is in canonical form in the horizontal
 direction; the argument of lines 1874--1887 (Lemma L of the appendix,
-formalized blockwise in `TNLean/MPS/MPDO/PerCopyHorizontalCF.lean`) then turns
-all-length commutation of $Q_1$ with $H^{(N)}$ into the letter-level
-invariance $Q\widetilde M=Q\widetilde MQ$; contrapositively, a displaced
-projector cannot commute.  The derivation of this implication from a
-horizontal canonical form of `M` remains open; it is recorded in
+formalized for the literal representative-indexed horizontal canonical form
+in `TNLean/MPS/MPDO/HorizontalBNT.lean`) turns the full positive-length family
+of first-site identities into the letter-level invariance
+$Q\widetilde M=Q\widetilde MQ$.  The remaining problem is stronger: the
+predicate below asks noncommutation at every fixed length separately, while
+commutation at one fixed length does not supply the full family consumed by
+Lemma L.  This residual interface is recorded in
 `docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`. -/
 def NoninvariantProjectorNoncommuting {d D : ℕ} (M : MPOTensor d D) : Prop :=
   ∀ Q : Matrix (Fin d) (Fin d) ℂ, Q.IsHermitian → IsIdempotentElem Q →
@@ -641,8 +643,9 @@ spectrum supplies the invariant, displaced projector unconditionally
 (`exists_displaced_invariant_projector_of_periodic_vector`), and the
 displacement upgrades to the all-length non-commutation family through the
 hypothesis.  This reduces the periodic-sector step of the proof of
-Proposition 4.13 of arXiv:1606.00608, lines 1888--1893, to the
-canonical-form implication of lines 1874--1887. -/
+Proposition 4.13 of arXiv:1606.00608, lines 1888--1893, to the explicit
+all-length non-commutation interface; the scope marker below records the two
+remaining ways to eliminate that interface. -/
 theorem periodicVectorYieldsCyclicProjector_of_noncommutation
     {d D : ℕ} (M : MPOTensor d D)
     (hNC : NoninvariantProjectorNoncommuting M) :
@@ -660,10 +663,13 @@ Proposition 4.13 of arXiv:1606.00608, lines 1888--1893, with the projector
 and its word invariance constructed from the cyclic decomposition of the
 peripheral spectrum (Wolf 2012, Theorem 6.6) rather than assumed.
 
-**Scope restriction (conditional on the non-commutation family):** the source
-derives the non-commutation from the horizontal canonical form through the
-argument of lines 1874--1887; here that implication is the explicit
-hypothesis.  Recorded in
+**Scope restriction (conditional on the non-commutation family):** the literal
+horizontal canonical-form argument of lines 1874--1887 rules out simultaneous
+commutation at all positive lengths and hence yields at least one noncommuting
+length.  The hypothesis here requires noncommutation at every length.  The
+remaining alternatives are to derive that stronger family from the cyclic
+decomposition and peripheral spectral hypotheses, or to weaken the final
+contradiction to consume one noncommuting length.  Recorded in
 `docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`. -/
 theorem hasNoPeriodicVectors_verticalTensor_of_noncommutation
     {d D : ℕ} (M : MPOTensor d D) (hM : IsMPDO M)
@@ -699,13 +705,11 @@ several gauge-inequivalent canonical-form blocks with weights; this theorem
 covers the sub-case where `M`'s own tensor is already (single-letter)
 injective. Discharging `NoninvariantProjectorNoncommuting` for a general
 horizontal canonical form remains open, and is documented in
-`docs/paper-gaps/cpgsv17_periodic_sector_projector.tex` together with the
-reason the general route resists this proof strategy: at chain length `1`
-(the only length at which a general, block-injective argument working
-through `SameMPV₂` could plausibly reach `M`'s own letters), the single
-trailing letter is the identity, giving only one trace-level equation per
-matrix-entry pair — far short of what nondegeneracy of the trace pairing
-needs to separate a whole matrix. -/
+`docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`.  Literal gauge
+transport is now available.  The residual obstruction is that the
+representative Lemma L consumes the full positive-length family, whereas
+`NoninvariantProjectorNoncommuting` demands a contradiction from commutation
+at each single fixed length. -/
 theorem hasNoPeriodicVectors_verticalTensor_of_isInjective
     {d D : ℕ} (M : MPOTensor d D) (hM : IsMPDO M)
     (hInj : MPSTensor.IsInjective M.toMPSTensor) :

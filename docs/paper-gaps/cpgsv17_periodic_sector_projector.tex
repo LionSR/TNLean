@@ -63,26 +63,19 @@ as follows.
 
 \section{The gap}
 
-The unformalized content is the construction of the projector: the source
-asserts, from the general theory of the peripheral spectrum, that a
-nontrivial vertical period supplies an orthogonal projector with the two
-all-length families of identities.  The conditional theorem does not close
-this.  Indeed, under the global positivity hypothesis the periodic-sector
-projector type is uninhabited by item~2 above, so the hypothesis of item~3
-is logically equivalent to its conclusion; the unconditional mathematical
-content of the formalized step is the projector exclusion of item~2, and
-the hypothesis of item~3 is the named interface for the missing
-construction.
-
-The construction itself is now formalized up to its final family: from the
+The projector construction and its displacement are formalized: from the
 corner data of a nontrivial vertical period, the cyclic decomposition of
 the peripheral spectrum produces an orthogonal projector on the physical
 space that is one-sided invariant for every full-period vertical word and
 fails the single-letter invariance
 (\leanid{MPOTensor.exists\_displaced\_invariant\_projector\_of\_periodic\_vector},
 in \path{TNLean/MPS/MPDO/CyclicProjector.lean}).  What the source
-additionally asserts — and what remains open — is that this single-letter
-displacement forces $QH^{(N)}\ne H^{(N)}Q$ at \emph{every} length.
+additionally asserts — and what remains open — is that the cyclic
+decomposition and peripheral spectral hypotheses force
+$QH^{(N)}\ne H^{(N)}Q$ at \emph{every} length.  Literal Lemma-L
+transport shows only that commutation cannot hold simultaneously at all
+positive lengths: its contrapositive produces at least one noncommuting
+length, not the all-length family required by the present interface.
 
 \section{Elimination plan}
 
@@ -102,25 +95,22 @@ has three ingredients.
       $[H^{(N)}]^p$.  Formalized in
       \path{TNLean/MPS/MPDO/StackedLayers.lean}
       (\leanid{MPOTensor.mpo\_stackedTensor}).
-    \item The first-site invariance argument of lines~1874--1887, already
-      formalized in \path{TNLean/MPS/MPDO/InvariantProjection.lean}, applied
-      to the stacked tensor: invariance of a cyclic projector under $p$
-      stacked layers gives commutation with $[H^{(N)}]^p$ at every length,
-      while its nontrivial cyclic displacement under one layer gives
-      non-commutation with $H^{(N)}$ at every length.  The invariance half
-      is formalized: one-sided invariance under every length-$p$ word of the
+    \item The first-site invariance argument of lines~1874--1887, formalized
+      in \path{TNLean/MPS/MPDO/HorizontalBNT.lean}, together with the stacked
+      tensor: invariance of a cyclic projector under $p$ stacked layers gives
+      commutation with $[H^{(N)}]^p$ at every length.  This invariance half is
+      formalized: one-sided invariance under every length-$p$ word of the
       vertically viewed tensor transfers to the stacked tensor
       (\leanid{MPOTensor.stackedTensor\_ketLeftMul\_invariant}) and yields
       the commutation family through item~2
       (\leanid{MPOTensor.periodicSectorProjectorOfCyclicData}).
 \end{enumerate}
 
-Items~2 and~3 are combined in
+Items~2 and the formalized half of item~3 are combined in
 \path{TNLean/MPS/MPDO/StackedLayers.lean}: the hypothesis of the
-conditional exclusion is reduced to the statement that a nontrivial
-$p$-periodic vector supplies an orthogonal projector that is one-sided
-invariant for every length-$p$ vertical word and fails to commute with
-$H^{(N)}$ at every length
+conditional exclusion is reduced to the statement that the constructed
+orthogonal projector, one-sided invariant for every length-$p$ vertical word,
+fails to commute with $H^{(N)}$ at every length
 (\leanid{MPOTensor.PeriodicVectorYieldsCyclicProjector},
 \leanid{MPOTensor.periodicVectorYieldsProjector\_of\_cyclic}).
 
@@ -142,19 +132,19 @@ every full-period vertical word and fails single-letter invariance,
 $Q\widetilde M\ne Q\widetilde MQ$
 (\leanid{MPOTensor.exists\_displaced\_invariant\_projector\_of\_periodic\_vector}).
 
-What remains open is the all-length non-commutation family: the source
-asserts $QH^{(N)}\ne H^{(N)}Q$ for every $N$, which does not follow from
-the single-letter displacement alone.  This is where the horizontal
-canonical form enters: the proposition assumes the tensor is in canonical
-form horizontally, and the argument of lines~1874--1887 (Lemma~L of the
-appendix) turns all-length commutation into the letter-level invariance
-that the displacement forbids.  This implication is recorded as the
-hypothesis \leanid{MPOTensor.NoninvariantProjectorNoncommuting}; granted
-it, the cyclic-projector hypothesis follows
+What remains open is the all-length non-commutation family asserted at source
+lines~1888--1891.  The literal horizontal canonical-form argument proves that
+simultaneous commutation at all positive lengths would imply the forbidden
+letter-level invariance.  Its contrapositive gives only the existence of a
+noncommuting length.  The stronger family is recorded as the hypothesis
+\leanid{MPOTensor.NoninvariantProjectorNoncommuting}; granted it, the
+cyclic-projector hypothesis follows
 (\leanid{MPOTensor.periodicVectorYieldsCyclicProjector\_of\_noncommutation}).
-Once the implication is proved from a horizontal canonical form, the
-conditional exclusion becomes the statement asserted by the source, and
-this note can be retired.
+Elimination therefore requires either deriving the all-length family from the
+cyclic decomposition and peripheral spectral hypotheses, as the source
+asserts, or refactoring the final
+contradiction so that one noncommuting length suffices.  Once one of these
+routes is formalized, this note can be retired.
 
 \section{The injective special case is now resolved}
 
@@ -202,11 +192,10 @@ chain length~$2$; it never constructs, and does not need, an inhabitant of
 
 \leanid{MPOTensor.NoninvariantProjectorNoncommuting} quantifies over
 \emph{every} chain length $N$ (starting at $N=0$), and the natural
-discharge route — the block-injective Lemma~L of
-\path{TNLean/MPS/MPDO/PerCopyHorizontalCF.lean}, applied to a general horizontal
-canonical-form decomposition of $M$ into several (possibly
-gauge-inequivalent) normal blocks with weights — meets two independent
-obstructions that the injective special case above sidesteps.
+discharge route uses the representative Lemma~L for a general horizontal
+canonical-form decomposition of $M$ into several normal representatives with
+weights.  One fixed-length obstruction remains; the second item below records
+the former literal-transport obstruction and its resolution.
 
 \begin{enumerate}
     \item \textbf{Chain length one supplies no data.}  At $N=1$ (chain
@@ -236,38 +225,22 @@ obstructions that the injective special case above sidesteps.
       \leanid{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_isInjective}
       does above, by choosing chain length two instead of the length that
       the structure's field type superficially suggests.
-    \item \textbf{The available representation is MPV-level, not literal.}
-      \leanid{HasHorizontalCFMPVRepresentation} asserts through
-      \leanid{SameMPV₂} that $M$'s doubled-index tensor generates the
-      \emph{same matrix product vectors} as an assembled block-diagonal BNT
-      tensor.  It does not assert that $M$'s own letters \emph{literally equal} a
-      gauge-conjugated direct sum of normal blocks.  The source's own
-      canonical-form decomposition,
-      $\bigoplus_{j,q}\mu_{j,q}X_{j,q}A_jX_{j,q}^{-1}$
-      (\cite[eq:II\_ABasicTensors]{Cirac2016MPDO_arXiv}), is literal: it
-      exhibits $M$ itself, after a change of basis on the bond space, as
-      that direct sum.  The representative-grouped Lemma~L concludes letter
-      equality \emph{for the canonical-form representatives $A_j$}, which
-      live in their own (separately injective) bond space — not for $M$'s own
-      letters.  Transporting that block-level conclusion back to $M$'s
-      own bond space needs either $M$'s own injectivity (the special case
-      resolved above, where the transport is vacuous because $M$ already
-      is the sole block) or a literal, gauge-explicit multi-block
-      decomposition of $M$, which
-      \leanid{HasHorizontalCFMPVRepresentation} does not carry
-      and which is not otherwise formalized in the repository for
-      reducible MPDO tensors.  The older \leanid{HorizontalCFData} and
-      \leanid{IsPerCopyHorizontalCF} also do not carry such a gauge.  They
-      impose the stronger per-copy separation hypothesis documented in
-      \path{docs/paper-gaps/cpgsv17_bicf_block_separation.tex}.
+    \item \textbf{The former literal-transport obstruction is resolved.}
+      The public \leanid{IsHorizontalCF} now carries the source's literal
+      global gauge and an exact-dimension representative-indexed BNT
+      decomposition.  The representative-grouped Lemma~L is
+      extended over all repeated weighted sectors and transported through
+      that gauge.  Thus the first-stage conclusion is now an equality of
+      the original tensor's letters, not merely of its matrix product
+      vectors or of separate canonical-form blocks.  The older
+      \leanid{HorizontalCFData} remains only as a per-copy auxiliary.
 \end{enumerate}
 
-Both obstructions are independent of the exponent $p$ or the specific
+The remaining fixed-length obstruction is independent of the exponent $p$ or the specific
 displaced-projector construction of
 \leanid{MPOTensor.exists_displaced_invariant_projector_of_periodic_vector}:
-they are structural facts about what finite-length trace data can
-determine, and about what the available MPV representation asserts.
-Discharging \leanid{MPOTensor.NoninvariantProjectorNoncommuting}
+it concerns what one finite-length trace identity can determine.  Discharging
+\leanid{MPOTensor.NoninvariantProjectorNoncommuting}
 for a general (reducible, multi-block) horizontal canonical form therefore
 remains open, and is not a routine extension of the injective argument to
 a larger blocking length.
@@ -276,18 +249,13 @@ a larger blocking length.
 The periodic-sector step of Proposition~4.13 is now closed unconditionally
 for MPDO tensors whose doubled-index tensor is (single-letter) injective
 (\leanid{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_isInjective}).
-For the general reducible case, the gap is unchanged in substance from the
-previous verdict — the projector exclusion, the stacked-layers reduction,
-and the displaced-projector construction remain unconditional, and the
-remaining stated hypothesis is
-\leanid{MPOTensor.NoninvariantProjectorNoncommuting} — but is now
-understood more precisely: it is not resolved by the representative-grouped
-Lemma~L in \path{TNLean/MPS/MPDO/HorizontalCFMPVRepresentation.lean}, because
-that theorem concludes letter equality for the canonical-form representatives,
-not for $M$'s own (possibly non-injective) bond space, and the transport
-between the two needs either
-$M$'s own injectivity or a literal, gauge-explicit multi-block
-decomposition that is not currently formalized.  The capstone
+For the general reducible case, the projector exclusion, stacked-layers
+reduction, displaced-projector construction, and literal horizontal
+canonical-form transport are unconditional.  The remaining stated
+hypothesis is \leanid{MPOTensor.NoninvariantProjectorNoncommuting}: the
+representative Lemma~L consumes the simultaneous positive-length family,
+whereas this predicate asks a contradiction from commutation at each one
+fixed length.  The capstone
 \leanid{thm:vertical_cf_of_horizontal_cf} does not consume the injective
 special case: it still needs the independent vertical canonical-form
 construction (stage~3 of \ghissue{3674}), which is unaffected by either

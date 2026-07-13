@@ -18,7 +18,7 @@ mathematical obstruction.
   constant traces but not rank one. An additional condition excluding the
   generalized zero-eigenspace is required.
 
-### BiCF does not follow from the other horizontal canonical-form fields
+### BiCF does not follow from the other per-copy `HorizontalCFData` fields
 
 - Location: `TNLean/MPS/MPDO/BiCFDerivation.lean`
 - Statement refuted: blockwise injectivity, left-canonicality, nonzero weights,
