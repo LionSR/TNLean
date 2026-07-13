@@ -264,6 +264,20 @@ them.
     Definition~\ref{def:mpdo_bnt_label_idempotent_coefficient_form}.
 \end{definition}
 
+\begin{figure}[ht]
+    \centering
+    \TNMPDOBNTFusionIdentity
+    \caption{The local fusion isometry: the two vertically concatenated basis
+        tensors are conjugated by $U_{\alpha,\beta}$ into the weighted direct
+        sum $\bigoplus_\gamma\chi_{\alpha,\beta,\gamma}\otimes M_\gamma$.
+        This is precisely the tensor identity in
+        \cite[Theorem~4.14(iii), equation~(89), lines~986--991]
+        {Cirac2016MPDO_arXiv}; its graphical arrangement follows the physical
+        isometry and direct-sum picture of
+        \cite[Proposition~4.13, lines~943--959]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_bnt_fusion_identity}
+\end{figure}
+
 \begin{theorem}[Weighted zipper identities]%
     \label{thm:mpdo_bnt_weighted_zipper}
     \lean{MPOTensor.BNTFusionIsometryFamily.fusionIsometry_mul_mulTensor}
@@ -370,6 +384,20 @@ them.
     $c^{(L)}_{\alpha,\beta,\gamma}
         = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})$.
 \end{definition}
+
+\begin{figure}[ht]
+    \centering
+    \TNMPDOFusionTracePower
+    \caption{Closing an $L$-site chain of the local fusion identity. On the
+        left, the bra legs of the $M_\alpha$ operator are contracted with the
+        ket legs of the $M_\beta$ operator. On the right, the multiplicity loop
+        and the $M_\gamma$ loop are disjoint; the former contributes
+        $\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})$. Thus the diagram is
+        the trace-power product law of
+        \cite[Theorem~4.14(ii)--(iii), equations~(87) and~(89),
+        lines~962--991]{Cirac2016MPDO_arXiv}.}
+    \label{fig:mpdo_fusion_trace_power}
+\end{figure}
 
 \begin{theorem}[Fusion isometries give the same-length product law]%
     \label{thm:mpdo_fusion_same_length_product}

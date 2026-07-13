@@ -77,6 +77,8 @@ _DIAGRAM_ARGS: dict[str, str] = {
     "TNBNTDecomposition": "",
     "TNMPDOZCLIdempotence": "",
     "TNMPDOFixedFinalFusionBracketings": "",
+    "TNMPDOBNTFusionIdentity": "",
+    "TNMPDOFusionTracePower": "",
     "TNRFPKrausIsometry": "",
     "TNRFPKrausIsometryReverse": "",
     "TNRFPIsometryCanonicalForm": "",

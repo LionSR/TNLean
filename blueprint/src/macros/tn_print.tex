@@ -1186,6 +1186,112 @@
     \end{tikzpicture}%
 }
 
+% Local BNT fusion identity from CPSV16, eq. (Ualphabeta).  The left-hand
+% isometry combines the two incoming bond factors, while its adjoint separates
+% the outgoing factors.  The right-hand side records the weighted final-sector
+% direct sum without introducing an F-move.
+\newcommand{\TNMPDOBNTFusionIdentity}{%
+    \begin{tikzpicture}[tn picture, scale=0.92]
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt,
+            minimum height=1.16cm] (bfiU) at (-2.20,0) {$U_{\alpha,\beta}$};
+        \TN@tensordot{bfiA}{(-0.95,0.42)}
+        \TN@tensordot{bfiB}{(-0.95,-0.42)}
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt,
+            minimum height=1.16cm] (bfiUd) at (0.30,0)
+            {$U_{\alpha,\beta}^{\dagger}$};
+        \draw[tn leg] (bfiU.north east) -- (bfiA.west);
+        \draw[tn leg] (bfiU.south east) -- (bfiB.west);
+        \draw[tn leg] (bfiA.east) -- (bfiUd.north west);
+        \draw[tn leg] (bfiB.east) -- (bfiUd.south west);
+        \draw[tn leg] (bfiU.west) -- ++(-0.48,0);
+        \draw[tn leg] (bfiUd.east) -- ++(0.48,0);
+        \draw[tn phys leg] (bfiA.south) -- (bfiB.north);
+        \TN@upleg{bfiA}{0.42}
+        \TN@downleg{bfiB}{0.42}
+        \node at (-0.68,0.68) {$M_\alpha$};
+        \node at (-0.68,-0.68) {$M_\beta$};
+        \node at (-1.17,1.06) {$i$};
+        \node at (-1.17,-1.06) {$j$};
+
+        \node at (1.42,0) {$=$};
+        \node at (2.32,0) {$\displaystyle\bigoplus_\gamma$};
+        \node[draw, fill=white, minimum width=1.08cm, minimum height=0.48cm,
+            inner sep=1pt] (bfiChi) at (3.65,0.55)
+            {$\chi_{\alpha,\beta,\gamma}$};
+        \TN@tensordot{bfiG}{(3.65,-0.36)}
+        \TN@leftleg{bfiChi}{0.48}
+        \TN@rightleg{bfiChi}{0.48}
+        \TN@leftleg{bfiG}{0.48}
+        \TN@rightleg{bfiG}{0.48}
+        \TN@upleg{bfiG}{0.42}
+        \TN@downleg{bfiG}{0.42}
+        \node at (3.94,-0.36) {$M_\gamma$};
+        \node at (3.46,0.20) {$i$};
+        \node at (3.46,-0.92) {$j$};
+    \end{tikzpicture}%
+}
+
+% Closing an L-site chain of the local BNT fusion identity.  On the right the
+% multiplicity loop and the M_gamma loop are disjoint, so their traces factor.
+\newcommand{\TNMPDOFusionTracePower}{%
+    \begin{tikzpicture}[tn picture, scale=0.82]
+        \foreach \x/\s in {0/L,1.10/M,3.20/R} {
+            \TN@tensordot{ftpA\s}{(\x,0.52)}
+            \TN@tensordot{ftpB\s}{(\x,-0.52)}
+            \draw[tn phys leg] (ftpA\s.south) -- (ftpB\s.north);
+        }
+        \draw[tn leg] (ftpAL.east) -- (ftpAM.west);
+        \draw[tn leg] (ftpAM.east) -- ++(0.52,0);
+        \draw[tn leg] ($(ftpAR.west)+(-0.52,0)$) -- (ftpAR.west);
+        \draw[tn leg] (ftpBL.east) -- (ftpBM.west);
+        \draw[tn leg] (ftpBM.east) -- ++(0.52,0);
+        \draw[tn leg] ($(ftpBR.west)+(-0.52,0)$) -- (ftpBR.west);
+        \node at (2.15,0.52) {$\cdots$};
+        \node at (2.15,-0.52) {$\cdots$};
+        \draw[tn leg] (ftpAL.west) -- ++(-0.40,0) -- ++(0,0.86)
+            -- ($(ftpAR.east)+(0.40,0.86)$) -- ($(ftpAR.east)+(0.40,0)$)
+            -- (ftpAR.east);
+        \draw[tn leg] (ftpBL.west) -- ++(-0.40,0) -- ++(0,-0.86)
+            -- ($(ftpBR.east)+(0.40,-0.86)$) -- ($(ftpBR.east)+(0.40,0)$)
+            -- (ftpBR.east);
+        \foreach \s in {L,M,R} {
+            \TN@upleg{ftpA\s}{0.34}
+            \TN@downleg{ftpB\s}{0.34}
+        }
+        \node[anchor=east] at (-0.60,0.52) {$M_\alpha$};
+        \node[anchor=east] at (-0.60,-0.52) {$M_\beta$};
+        \node at (4.20,0) {$=$};
+        \node at (4.82,0) {$\displaystyle\sum_\gamma$};
+
+        \foreach \x/\s in {5.65/L,6.75/M,8.85/R} {
+            \TN@opdot{ftpC\s}{(\x,0.52)}
+            \TN@tensordot{ftpG\s}{(\x,-0.52)}
+        }
+        \draw[tn leg] (ftpCL.east) -- (ftpCM.west);
+        \draw[tn leg] (ftpCM.east) -- ++(0.52,0);
+        \draw[tn leg] ($(ftpCR.west)+(-0.52,0)$) -- (ftpCR.west);
+        \draw[tn leg] (ftpGL.east) -- (ftpGM.west);
+        \draw[tn leg] (ftpGM.east) -- ++(0.52,0);
+        \draw[tn leg] ($(ftpGR.west)+(-0.52,0)$) -- (ftpGR.west);
+        \node at (7.80,0.52) {$\cdots$};
+        \node at (7.80,-0.52) {$\cdots$};
+        \draw[tn leg] (ftpCL.west) -- ++(-0.40,0) -- ++(0,0.86)
+            -- ($(ftpCR.east)+(0.40,0.86)$) -- ($(ftpCR.east)+(0.40,0)$)
+            -- (ftpCR.east);
+        \draw[tn leg] (ftpGL.west) -- ++(-0.40,0) -- ++(0,-0.86)
+            -- ($(ftpGR.east)+(0.40,-0.86)$) -- ($(ftpGR.east)+(0.40,0)$)
+            -- (ftpGR.east);
+        \foreach \s in {L,M,R} {
+            \TN@upleg{ftpG\s}{0.34}
+            \TN@downleg{ftpG\s}{0.34}
+        }
+        \node[anchor=east] at (5.05,0.52) {$\chi_{\alpha,\beta,\gamma}$};
+        \node[anchor=east] at (5.05,-0.52) {$M_\gamma$};
+        \node at (2.15,-1.80) {$L\text{ sites}$};
+        \node at (7.80,-1.80) {$L\text{ sites}$};
+    \end{tikzpicture}%
+}
+
 % Fusion isometry of the renormalization fixed-point characterization: two
 % contracted copies of the tensor equal one copy with the isometry merging
 % the summed index into the physical pair.
