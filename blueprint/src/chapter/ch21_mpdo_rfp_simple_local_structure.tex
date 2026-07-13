@@ -1959,6 +1959,26 @@ strong subadditivity for a normalized three-site reduced state.
     realizes every finite-chain operator with normalization scalar $1$.
 \end{proof}
 
+\begin{corollary}[$\eta$-local structure from SAL]%
+    \label{cor:mpdo_eta_local_structure_of_is_sal}
+    \lean{MPOTensor.nonempty_etaLocalStructureData_of_isSAL}
+    \leanok
+    \uses{thm:mpdo_eta_local_structure_of_positive_physical_sector_factorization,
+      thm:mpdo_eta_coherent_positive_choice}
+    Every injective MPO tensor satisfying SAL admits an $\eta$-local
+    structure.  Thus there is a single positive two-site bond whose cyclic
+    translates commute pairwise and whose ordered product is the finite-chain
+    density operator at every length $N\geq2$, with normalization scalar one.
+    This is the conclusion of Proposition~C.8.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    Theorem~\ref{thm:mpdo_eta_coherent_positive_choice} supplies the positive
+    physical-sector factorization. Apply
+    Theorem~\ref{thm:mpdo_eta_local_structure_of_positive_physical_sector_factorization}.
+\end{proof}
+
 \subsection{Closed-sector contractions and coherent rephasing}
 
 \begin{definition}[Closed sector tensors]%

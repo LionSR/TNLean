@@ -282,4 +282,15 @@ theorem exists_positive_physicalSectorFactorization_of_isSAL
     (normalizedFourSiteTail K) (isThreeSiteClosure_reducedBlockState K)
     hη alpha beta hm (Classical.choose hSAL)
 
+/-- Every injective MPO tensor satisfying the strong area law has the
+positive commuting nearest-neighbor product structure of Proposition C.8.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), lines
+1571--1593. -/
+theorem nonempty_etaLocalStructureData_of_isSAL
+    (K : MPOTensor d D) (hK : K.IsInjective) (hSAL : IsSAL K) :
+    Nonempty (EtaLocalStructureData K) := by
+  obtain ⟨F, hF⟩ := exists_positive_physicalSectorFactorization_of_isSAL K hK hSAL
+  exact ⟨F.etaLocalStructureData hF⟩
+
 end MPOTensor
