@@ -482,13 +482,36 @@ let $C$ be its complement.  The source argument obtains
 $\mathcal A_S\mathcal A_C=0$ from the absence of edges from $S$ to $C$; this
 directed-cut implication is formalized by
 \leanid{MPOTensor.PhysicalSectorFactorization.oneSiteSectorSpace_mul_eq_zero}.
-The spanning and positive-weight nontriviality results above supply the two
-remaining inputs for the one-sided product obstruction.  Their assembly into
-the one-component conclusion, followed by the passage from one-component
-positive support to primitivity of the active trace matrix, remains open.  No
-absence of edges from $C$ to $S$ is needed.  The abstract four-sector phase
-example remains a counterexample to cyclic positivity alone, but it does not
-satisfy the additional inverse-map and injectivity consequences used here.
+The one-site matrices in this directed-cut space are now identified with the
+sector virtual matrices used in the spanning theorem.  On the nonzero-weight
+subtype, the spaces belonging to $S$ and $C$ are both nonzero, their sum is the
+full matrix algebra, and their products in the order
+$\mathcal A_S\mathcal A_C$ vanish.  The one-sided product obstruction therefore
+proves that the nonzero neighboring support is strongly connected; no absence
+of edges from $C$ to $S$ is needed.  Positivity identifies this support with
+the positive entries of the restricted real trace matrix, so the latter is
+irreducible.  The relevant declarations are
+\leanid{MPOTensor.PhysicalSectorFactorization.oneSiteSectorMatrix_eq_sectorVirtualMatrix},
+\leanid{MPOTensor.PhysicalSectorFactorization.activeSector_reflTransGen_neighboringOperator_ne_zero},
+and
+\leanid{MPOTensor.PhysicalSectorFactorization.activeSectorTraceMatrix_isIrreducible}.
+
+The periodicity step is treated differently from the source.  At lines
+1457--1462 the source passes to a power $T^n$, invokes blocking to remove
+periodic components, and then reduces to primitive diagonal components.  The
+present argument does not formalize that reduction.  Instead, nondegeneracy
+and cyclicity of the trace pairing give a closed support walk of length two
+through every nonzero-weight sector.  Triangle closure, applied to an outgoing
+edge, gives a closed support walk of length three through the same sector.
+These two coprime return lengths are an auxiliary replacement for the source's
+blocking step.  The length-two result and positivity of the corresponding
+diagonal entry of $T^2$ are formalized by
+\leanid{MPOTensor.PhysicalSectorFactorization.exists_active_two_cycle} and
+\leanid{MPOTensor.PhysicalSectorFactorization.activeSectorTraceMatrix_pow_two_diag_pos}.
+The remaining theorem must combine strong connectivity with the length-two
+and length-three returns to exhibit one common exponent $N$ for which every
+entry of $T^N$ is positive.  Until that common exponent is proved, primitivity
+remains open.
 
 \subsection{Coherent vertex rephasing under recurrence}
 
@@ -630,8 +653,9 @@ matrix on the full ambient sector set has a zero row and a zero column and is
 not primitive.  The primitive matrix in Lemma \texttt{propSN} must therefore
 be read on the effective sector set $\{k:p_k>0\}$, as is customary when zero
 probability terms in a direct-sum state decomposition are omitted.  The Lean
-statement will restrict the trace matrix to this subtype while leaving the
-physical sector equivalence, and hence the full Hilbert space, unchanged.
+definition \leanid{PhysicalSectorFactorization.activeSectorTraceMatrix}
+restricts the trace matrix to this subtype while leaving the physical sector
+equivalence, and hence the full Hilbert space, unchanged.
 
 \section{Classification}
 

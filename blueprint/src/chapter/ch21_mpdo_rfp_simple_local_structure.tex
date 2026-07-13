@@ -5244,6 +5244,145 @@ $\widehat{\cal K}$.
     \label{fig:mpdo_local_orthogonality}
 \end{figure}
 
+\begin{definition}[Nonzero-weight sector trace matrix]%
+    \label{def:mpdo_active_sector_trace_matrix}
+    \lean{MPOTensor.PhysicalSectorFactorization.ActiveSector,
+      MPOTensor.PhysicalSectorFactorization.ActiveSectorEntryIndex}
+    \lean{MPOTensor.PhysicalSectorFactorization.activeSectorOneSiteMatrixFamily,
+      MPOTensor.PhysicalSectorFactorization.activeSectorSet,
+      MPOTensor.PhysicalSectorFactorization.activeSectorOneSiteSpace}
+    \lean{MPOTensor.PhysicalSectorFactorization.activeSectorTraceMatrix}
+    \leanok
+    \uses{def:mpdo_one_site_sector_matrix_space,
+      def:mpdo_minimal_neighboring_operator}
+    For sector weights $p_k$, let
+    $I_*=\{k:p_k\ne0\}$.  The one-site matrices and their spaces on $I_*$
+    are
+    \[
+        A_{k;x,y},
+        \qquad
+        {\cal A}_S=\spn\{A_{k;x,y}:k\in S\},
+        \qquad S\subseteq I_*.
+    \]
+    The real trace matrix on this index set is
+    \[
+        T^*_{k,h}=\operatorname{Re}\tr(\eta_{k,h}),
+        \qquad k,h\in I_*.
+    \]
+    Only the trace matrix is restricted: the physical direct sum still
+    contains every zero-weight summand.
+\end{definition}
+
+\begin{lemma}[Identification and spanning of active one-site matrices]%
+    \label{lem:mpdo_active_one_site_matrix_spanning}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      oneSiteSectorMatrix_eq_sectorVirtualMatrix}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      activeSectorOneSiteMatrixFamily_span_eq_top}
+    \leanok
+    \uses{def:mpdo_active_sector_trace_matrix,
+      thm:mpdo_sector_virtual_matrix_spanning}
+    For every sector entry, the one-site matrix used in the directed-cut
+    argument equals the virtual matrix used in the spanning argument.  If all
+    sector virtual matrices span $\MN{D}$ and the matrices in every
+    zero-weight sector vanish, then
+    \[
+        \spn\{A_{k;x,y}:k\in I_*\}=\MN{D}.
+    \]
+\end{lemma}
+
+\begin{lemma}[Complementary active-sector spaces]%
+    \label{lem:mpdo_active_sector_complementary_spaces}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      activeSectorOneSiteSpace_sup_compl_eq_top}
+    \lean{MPOTensor.PhysicalSectorFactorization.activeSectorOneSiteSpace_ne_bot}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      mul_eq_zero_of_mem_activeSectorOneSiteSpace}
+    \leanok
+    \uses{def:mpdo_active_sector_trace_matrix,
+      lem:mpdo_active_one_site_matrix_spanning,
+      thm:mpdo_directed_cut_one_site_spaces}
+    Suppose that the active one-site matrices span $\MN{D}$ and each active
+    sector contains a nonzero such matrix.  For every $S\subseteq I_*$,
+    \[
+        {\cal A}_S+{\cal A}_{I_*\setminus S}=\MN{D},
+    \]
+    and both spaces are nonzero when the corresponding sector sets are
+    nonempty.  If $\eta_{k,h}=0$ for $k\in S$ and $h\in C$, then
+    ${\cal A}_S{\cal A}_C=0$.
+\end{lemma}
+
+\begin{theorem}[Strong connectivity of the active neighboring support]%
+    \label{thm:mpdo_active_neighboring_support_strongly_connected}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      activeSector_reflTransGen_neighboringOperator_ne_zero}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      exists_active_neighboringOperator_ne_zero}
+    \leanok
+    \uses{lem:mpdo_active_sector_complementary_spaces,
+      lem:matrix_one_sided_product_obstruction}
+    Suppose that the active one-site matrices span $\MN{D}$ and each active
+    sector contains a nonzero such matrix.  Then for every $k,h\in I_*$ there
+    is a directed walk
+    \[
+        k=k_0\longrightarrow k_1\longrightarrow\cdots
+        \longrightarrow k_m=h,
+        \qquad \eta_{k_j,k_{j+1}}\ne0.
+    \]
+    In particular, every active sector has an outgoing nonzero neighboring
+    operator.
+\end{theorem}
+
+\begin{lemma}[Positive entries of the active trace matrix]%
+    \label{lem:mpdo_active_trace_matrix_positive_entries}
+    \lean{MPOTensor.PhysicalSectorFactorization.activeSectorTraceMatrix_nonneg}
+    \lean{MPOTensor.PhysicalSectorFactorization.activeSectorTraceMatrix_pos_iff}
+    \leanok
+    \uses{def:mpdo_active_sector_trace_matrix}
+    If every neighboring operator is positive semidefinite, then $T^*$ is
+    entrywise nonnegative and
+    \[
+        T^*_{k,h}>0\quad\Longleftrightarrow\quad\eta_{k,h}\ne0.
+    \]
+\end{lemma}
+
+% **Local fix (periodicity):** the source blocks to remove periodic
+% components.  The following two-cycle is an auxiliary substitute, to be
+% paired with the three-cycle supplied by triangle closure.  See
+% docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex.
+\begin{lemma}[Two-step return through every active sector]%
+    \label{lem:mpdo_active_sector_two_step_return}
+    \lean{MPOTensor.PhysicalSectorFactorization.exists_active_two_cycle}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      activeSectorTraceMatrix_pow_two_diag_pos}
+    \leanok
+    \uses{lem:mpdo_active_one_site_matrix_spanning,
+      lem:mpdo_active_trace_matrix_positive_entries}
+    Suppose that the active one-site matrices span $\MN{D}$ and each active
+    sector contains a nonzero such matrix.  For every $k\in I_*$ there is an
+    $h\in I_*$ such that
+    \[
+        \eta_{k,h}\ne0,
+        \qquad
+        \eta_{h,k}\ne0.
+    \]
+    If the neighboring operators are positive semidefinite, then
+    \[
+        (T^{*2})_{k,k}>0.
+    \]
+\end{lemma}
+
+\begin{theorem}[Irreducibility of the active trace matrix]%
+    \label{thm:mpdo_active_trace_matrix_irreducible}
+    \lean{MPOTensor.PhysicalSectorFactorization.activeSectorTraceMatrix_isIrreducible}
+    \leanok
+    \uses{thm:mpdo_active_neighboring_support_strongly_connected,
+      lem:mpdo_active_trace_matrix_positive_entries}
+    Suppose that the neighboring operators are positive semidefinite, the
+    active one-site matrices span $\MN{D}$, and each active sector contains a
+    nonzero such matrix.  Then the nonnegative matrix $T^*$ is irreducible.
+\end{theorem}
+
 \begin{theorem}[Primitivity of the active sector trace matrix]%
     \label{thm:mpdo_sector_trace_matrix_primitive}
     \notready
@@ -5277,29 +5416,19 @@ $\widehat{\cal K}$.
         def:mpdo_zero_weight_reparameterized_inverse_map_factorization,
         thm:mpdo_zero_weight_reparameterized_neighboring_operator,
         thm:mpdo_sector_virtual_matrix_spanning,
+        lem:mpdo_active_one_site_matrix_spanning,
         thm:mpdo_sector_support_triangle_closure,
-        lem:mpdo_local_orthogonality_contraction,
-        thm:mpdo_directed_cut_one_site_spaces,
-        lem:matrix_one_sided_product_obstruction}
+        thm:mpdo_active_neighboring_support_strongly_connected,
+        lem:mpdo_active_sector_two_step_return,
+        thm:mpdo_active_trace_matrix_irreducible,
+        lem:mpdo_active_trace_matrix_positive_entries}
     First use the zero-weight reparameterization to make every zero-weight
-    sector isolated. The spanning theorem and the trace-pairing argument close
-    every nonzero edge through a third sector, so the active support is
-    recurrent.
-
-    Suppose that the active support is not strongly connected. The sectors
-    reachable from a fixed active sector then form a nonempty proper
-    forward-closed set $S$; write $C$ for its complement. There are no
-    neighboring edges from $S$ to $C$.
-
-    Let ${\cal A}_S$ and ${\cal A}_C$ be the one-site matrix spaces belonging
-    to the two classes. Positive sector weights make both spaces nonzero.
-    Injectivity in physical sector coordinates gives
-    ${\cal A}_S+{\cal A}_C=\MN{D}$, while the directed-cut theorem gives
-    ${\cal A}_S{\cal A}_C=0$. Hence
-    Lemma~\ref{lem:matrix_one_sided_product_obstruction} gives the desired
-    contradiction. No vanishing in the reverse order is needed. This is the
-    directed-cut argument at
-    \cite[Appendix~C.2, lines~1452--1470]{Cirac2016MPDO_arXiv}.
+    sector isolated. Injectivity makes the nonzero-weight one-site matrices
+    span $\MN{D}$, and every such sector contains a nonzero matrix. Hence
+    Theorem~\ref{thm:mpdo_active_neighboring_support_strongly_connected}
+    gives strong connectivity of the active neighboring support. Its proof is
+    the one-sided directed-cut argument at
+    \cite[Appendix~C.2, lines~1463--1470]{Cirac2016MPDO_arXiv}.
 
     Finally, nondegeneracy and cyclicity of the trace pairing give a closed
     support walk of length two through every active sector. Triangle closure
