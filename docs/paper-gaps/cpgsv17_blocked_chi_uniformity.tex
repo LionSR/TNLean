@@ -469,6 +469,43 @@ their positive trace-power representation, and the length-one idempotent
 identity are the hypothesis of the converse, not consequences of the mere
 existence of stabilized adjoint fixed-point algebras.
 
+\section{Length-independent zipper specialization}
+
+For a fusion-isometry family already satisfying Theorem~4.14(iii), suppose
+that its positive trace-power coefficients are independent of the positive
+chain length.  The observation at line~1010 then gives
+\[
+    \chi_{\alpha,\beta,\gamma}
+      = 1_{r_{\alpha,\beta,\gamma}}.
+\]
+Substitution in the weighted fusion identity gives both zipper equations and
+the completeness equation
+\[
+    (M_\alpha M_\beta)^{ij}
+      = U_{\alpha,\beta}^\dagger
+          \left(\bigoplus_\gamma
+            1_{r_{\alpha,\beta,\gamma}}\otimes M_\gamma^{ij}\right)
+        U_{\alpha,\beta}.
+\]
+These statements are formalized by
+\leanid{MPOTensor.BNTFusionIsometryFamily.%
+fusionIsometry_mul_mulTensor_of_lengthIndependent},
+\leanid{MPOTensor.BNTFusionIsometryFamily.%
+mulTensor_mul_fusionIsometry_conjTranspose_of_lengthIndependent}, and
+\leanid{MPOTensor.BNTFusionIsometryFamily.%
+mulTensor_eq_conjTranspose_mul_unweightedDirectSum_mul_of_lengthIndependent}.
+They are the identity-weight specialization of the equations labelled
+\texttt{zippercondition2} and \texttt{inversegaugeone} in the ``Fusion
+tensors'' section of the arXiv:1511.08090 source file
+\texttt{AnyonsPEPS.tex}.
+
+This result has an explicit scope restriction: it assumes the special
+length-independent coefficient system discussed at lines~995--1010, rather
+than proving that every renormalization fixed point has such coefficients.
+It also neither constructs the comparison of the two triple-fusion orders nor
+proves its invertibility.  Thus the associativity constraint and the
+pentagon-like equation mentioned at lines~995--999 remain unformalized.
+
 To eliminate the source-theorem gap, the formalization should instead:
 \begin{enumerate}
     \item define a separate, source-faithful predicate for
