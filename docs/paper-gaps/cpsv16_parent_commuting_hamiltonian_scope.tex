@@ -126,10 +126,18 @@ representatives are
 \leanid{MPSTensor.AppendixBStructuralData.appendixBQXBOnCoeffSpace}; both are identified
 with the canonical two-site parent interaction \(q_2(A)\) before placement on
 the \(AX\) and \(XB\) faces.  Since \(q_2(A)\) is the canonical orthogonal
-projector onto \(G_2(A)^\perp\), these are precisely the orthogonal local parent
-interactions \(Q_{AX}\) and \(Q_{XB}\) required on the two source factors.
-Their lifted commutator follows from the adjacent virtual-bond projectors and
-their isometric transport, as recorded by
+projector onto \(G_2(A)^\perp\), these coefficient-space maps are orthogonal.
+They are not, by themselves, constructions of the source projectors on
+\(\mathcal H_A\otimes\mathcal H_X\) and
+\(\mathcal H_X\otimes\mathcal H_B\), as stated in their defining docstrings in
+\texttt{TNLean/MPS/RFP/CommutingBridge.lean}.  The additional identification,
+after transporting the source projectors to coefficient space, is the explicit
+hypothesis of
+\leanid{MPSTensor.AppendixBStructuralData.}\hspace{0pt}
+\leanid{hasOverlappingTwoSiteCommutation_of_appendixD2_identified_projectors}.
+Without that identification, the lifted commutator of the coefficient-space
+maps follows directly from the adjacent virtual-bond projectors and their
+isometric transport, as recorded by
 \leanid{MPSTensor.AppendixBStructuralData.}\hspace{0pt}
 \leanid{twoSiteBasicSupportProjection_commute_lifts} and
 \leanid{MPSTensor.AppendixBStructuralData.hasOverlappingTwoSiteCommutation}.
@@ -155,13 +163,16 @@ it is not an additional assumption.
 
 \section{Elimination plan}
 
-The algebraic and kernel-intersection clauses in the local Appendix~B
-specialization of Definition~D.2 are now proved: the operators are the
-canonical orthogonal parent interactions \(q_2(A)\), their lifts commute, and
-their kernel intersection is \(G_3(A)\).  This does not
-complete the general decorrelation equivalence of Proposition~D.3.  In
-particular, \leanid{Decorrelation.HasCommutingParentHam} remains only its
-algebraic idempotent-product consequence, and the generic
+The coefficient-space analogue of the algebraic and kernel-intersection clauses
+is now proved: the operators are the canonical orthogonal parent interactions
+\(q_2(A)\), their lifts commute, and their kernel intersection is \(G_3(A)\).
+It remains to construct the source projectors on the two stated tensor factors
+and identify their transported actions with these coefficient-space maps.  The
+conditional comparison theorem cited above records precisely this missing
+identification.  This also does not complete the general decorrelation
+equivalence of Proposition~D.3.  In particular,
+\leanid{Decorrelation.HasCommutingParentHam} remains only its algebraic
+idempotent-product consequence, and the generic
 \leanid{MPSTensor.HasAppendixD2ParentCommutingHamiltonian} structure does not
 itself record self-adjointness.  The concrete canonical parent interactions
 used here are orthogonal by construction, but the general statement should
