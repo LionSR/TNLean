@@ -21,7 +21,9 @@ on short finite index types.
 
 ## Main statements
 
+* `finThreeArrowEquiv_apply`: gives the ordered coordinates of the forward map.
 * `finThreeArrowEquiv_symm_apply`: gives the ordered coordinates of the inverse map.
+* `finFourArrowEquiv_apply`: gives the ordered coordinates of the forward map.
 * `finFourArrowEquiv_symm_apply`: gives the ordered coordinates of the inverse map.
 
 ## Implementation notes
@@ -46,6 +48,13 @@ def finFourArrowEquiv (α : Type*) : (Fin 4 → α) ≃ α × (α × (α × α))
   (Fin.consEquiv fun _ : Fin 4 ↦ α).symm.trans
     (Equiv.prodCongr (Equiv.refl α) (finThreeArrowEquiv α))
 
+/-- The forward right-associated identification extracts the three coordinates
+in order. -/
+@[simp] theorem finThreeArrowEquiv_apply
+    {α : Type*} (x : Fin 3 → α) :
+    finThreeArrowEquiv α x = (x 0, x 1, x 2) := by
+  rfl
+
 /-- The inverse right-associated identification sends a triple to its three
 coordinates in order. -/
 @[simp] theorem finThreeArrowEquiv_symm_apply
@@ -53,6 +62,13 @@ coordinates in order. -/
     (finThreeArrowEquiv α).symm x = ![x.1, x.2.1, x.2.2] := by
   funext i
   fin_cases i <;> rfl
+
+/-- The forward right-associated identification extracts the four coordinates
+in order. -/
+@[simp] theorem finFourArrowEquiv_apply
+    {α : Type*} (x : Fin 4 → α) :
+    finFourArrowEquiv α x = (x 0, x 1, x 2, x 3) := by
+  rfl
 
 /-- The inverse right-associated identification sends a quadruple to its four
 coordinates in order. -/

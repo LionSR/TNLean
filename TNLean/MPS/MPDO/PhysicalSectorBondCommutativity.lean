@@ -70,13 +70,12 @@ theorem reindex_embedLocalOperator_zero (F : PhysicalSectorFactorization K) :
     constructor
     · intro ha
       have h := congrFun ha (2 : Fin 3)
-      simpa [AgreesOutsideWindow, _root_.finThreeArrowEquiv,
-        MPSTensor.replaceWindow, MPSTensor.extractWindow] using h
+      simpa [AgreesOutsideWindow, MPSTensor.replaceWindow,
+        MPSTensor.extractWindow] using h
     · intro ha
       funext i
       fin_cases i <;>
-        simp [_root_.finThreeArrowEquiv,
-          MPSTensor.replaceWindow, MPSTensor.extractWindow, ha]
+        simp [MPSTensor.replaceWindow, MPSTensor.extractWindow, ha]
   by_cases h : τ.2.2 = σ.2.2
   · have ha := hAgree.mpr h
     simp only [Fin.isValue, Matrix.reindex_apply, Matrix.submatrix_apply,
@@ -119,13 +118,11 @@ theorem reindex_embedLocalOperator_one (F : PhysicalSectorFactorization K) :
     constructor
     · intro ha
       have h := congrFun ha (0 : Fin 3)
-      simpa [_root_.finThreeArrowEquiv, MPSTensor.replaceWindow,
-        MPSTensor.extractWindow] using h
+      simpa [MPSTensor.replaceWindow, MPSTensor.extractWindow] using h
     · intro ha
       funext i
       fin_cases i <;>
-        simp [_root_.finThreeArrowEquiv, MPSTensor.replaceWindow,
-          MPSTensor.extractWindow, ha]
+        simp [MPSTensor.replaceWindow, MPSTensor.extractWindow, ha]
   by_cases h : τ.1 = σ.1
   · have ha := hAgree.mpr h
     simp only [Fin.isValue, Matrix.reindex_apply, Matrix.submatrix_apply,
