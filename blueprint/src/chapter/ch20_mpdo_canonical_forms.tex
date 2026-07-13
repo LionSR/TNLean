@@ -6,23 +6,46 @@
 % `Prop:IV.12` is Proposition 4.13 in the arXiv source.
 
 \begin{definition}[Horizontal canonical form for an MPO]\label{def:horizontal_cf_mpdo}
-    \lean{MPOTensor.IsHorizontalCF}
+    \notready
+    \uses{def:mpo_tensor, def:sector_bnt_cf}
+    An MPO tensor is in \emph{horizontal canonical form} if its doubled-index
+    tensor has a literal bond-space decomposition
+    \[
+        \widehat M^i
+        =\bigoplus_{j=0}^{g-1}\bigoplus_{q=0}^{r_j-1}
+          \mu_{j,q}X_{j,q}A_j^iX_{j,q}^{-1},
+    \]
+    where $(A_j)_{0\leq j<g}$ is a minimal basis of normal tensors, each
+    $\mu_{j,q}$ is nonzero, and every $X_{j,q}$ is invertible.  Equivalently,
+    with
+    \[
+        X=\bigoplus_{j=0}^{g-1}\bigoplus_{q=0}^{r_j-1}X_{j,q},
+    \]
+    this is the gauge-explicit decomposition of
+    \cite[Section~2.3, lines~283--297]{Cirac2016MPDO_arXiv}.
+    % No Lean tag: the literal bond-space gauge data are not yet formalized.
+\end{definition}
+
+\begin{definition}[MPV representation associated with horizontal canonical form]
+    \label{def:horizontal_cf_mpv_representation}
+    \lean{MPOTensor.HasHorizontalCFMPVRepresentation}
     \leanok
     \uses{def:mpo_tensor, def:sector_bnt_cf, def:same_mpv2}
-    An MPO tensor is in \emph{horizontal canonical form} if its doubled-index
-    MPS tensor generates the same complete MPV family as a BNT canonical form
+    An MPO tensor has a \emph{horizontal-canonical-form MPV representation} if
+    its doubled-index MPS tensor generates the same complete MPV family as a
+    BNT canonical form
     \[
-        \bigoplus_{j=1}^{g}\bigoplus_{q=1}^{r_j}\mu_{j,q}A_j,
+        \bigoplus_{j=0}^{g-1}\bigoplus_{q=0}^{r_j-1}\mu_{j,q}A_j,
     \]
-    where $(A_j)_{j=1}^{g}$ is a minimal basis of normal tensors and each
-    $\mu_{j,q}$ is nonzero.  Thus its length-$N$ matrix product vector is
+    where $(A_j)_{0\leq j<g}$ is a minimal basis of normal tensors and each
+    $\mu_{j,q}$ is nonzero.  Its length-$N$ matrix product vector is therefore
     \[
-        \sum_{j=1}^{g}
-        \left(\sum_{q=1}^{r_j}\mu_{j,q}^{N}\right)V^{(N)}(A_j).
+        \sum_{j=0}^{g-1}
+        \left(\sum_{q=0}^{r_j-1}\mu_{j,q}^{N}\right)V^{(N)}(A_j).
     \]
-    In particular, repeated gauge-equivalent copies are grouped over their
-    common representative, as in
-    \cite[Section~2.3, lines~283--301]{Cirac2016MPDO_arXiv}.
+    This is the MPV-level decomposition in
+    \cite[Section~2.3, lines~298--301]{Cirac2016MPDO_arXiv}.  It does not assert
+    the literal bond-space gauge of Definition~\ref{def:horizontal_cf_mpdo}.
 \end{definition}
 
 \begin{figure}[ht]
@@ -801,7 +824,8 @@
     \label{thm:blockwise_one_sub_mp_zero}
     \lean{MPOTensor.basis_braRight_eq_ketLeftBraRight_of_invariant}
     \leanok
-    \uses{def:mpdo, def:horizontal_cf_mpdo, def:mpdo_vertical_one_site_actions,
+    \uses{def:mpdo, def:horizontal_cf_mpv_representation,
+        def:mpdo_vertical_one_site_actions,
         thm:mpdo_first_site_invariant_comm,
         thm:blockwise_opposite_insert_rotated_mpo}
     Let $M$ generate an MPDO whose doubled-index tensor $\widehat M$ generates

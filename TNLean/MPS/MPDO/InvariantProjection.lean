@@ -2,7 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.MPDO.HorizontalBNTCanonicalForm
+import TNLean.MPS.MPDO.HorizontalCFMPVRepresentation
 import TNLean.Algebra.TracePairing
 
 /-!
@@ -15,9 +15,10 @@ the density operators gives
 $$
   P_1H^{(N+1)}=P_1H^{(N+1)}P_1=H^{(N+1)}P_1,
 $$
-where $P_1=P\otimes\Id^{\otimes N}$.  Lemma L then transfers these identities
-to every horizontal canonical-form block, where they say
-$(\Id-P)MP=0$.
+where $P_1=P\otimes\Id^{\otimes N}$.  Given an MPV-level BNT representation,
+Lemma L transfers these identities to every minimal representative, where they
+say $(\Id-P)MP=0$.  The further transport to the original MPO letters requires
+the literal horizontal-canonical-form gauge and is not proved here.
 
 The file also specializes the positive-semidefinite power-commutation theorem
 to matrix product density operators.  This is only the final operator
@@ -39,8 +40,8 @@ commutation identities remains open.
   invariance gives $P_1H^{(N+1)}=P_1H^{(N+1)}P_1$.
 * `firstSiteMatrix_mul_mpo_comm`: positivity and Hermiticity give
   $P_1H^{(N+1)}=H^{(N+1)}P_1$.
-* `basis_braRight_eq_ketLeftBraRight_of_invariant`: the representative-indexed
-  form of $(\Id-P)MP=0$.
+* `basis_braRight_eq_ketLeftBraRight_of_invariant`: $(\Id-P)MP=0$ on every
+  representative in an MPV-level BNT representation.
 * `mpo_commute_of_commute_pow`: commutation with a nonzero power of an MPDO
   density operator implies commutation with that density operator.
 
@@ -260,16 +261,18 @@ theorem firstSiteMatrix_mul_mpo_comm
   rw [hInv]
   exact (sub_eq_zero.mp hcorner).symm
 
-/-- Let the doubled-index tensor of an MPDO have a horizontal BNT canonical
-form, and let \(P\) be Hermitian with \(P\widetilde M=P\widetilde M P\).  On
-every minimal BNT representative, the insertions of \(\widetilde M P\) and
+/-- Let the doubled-index tensor of an MPDO have the same complete MPV family
+as a BNT sector decomposition, and let \(P\) be Hermitian with
+\(P\widetilde M=P\widetilde M P\).  On every minimal BNT representative, the
+insertions of \(\widetilde M P\) and
 \(P\widetilde M P\) agree.  Equivalently, \((\Id-P)MP=0\) on every
 representative.
 
 Repeated gauge-equivalent copies are grouped through their power-sum
-coefficient before Lemma L is applied.  Thus the theorem has the horizontal
-canonical-form hypotheses of arXiv:1606.00608 and does not assume per-copy
-trace separation.
+coefficient before Lemma L is applied.  Thus the theorem uses the MPV-level
+consequence `decBSV` of the horizontal canonical form in arXiv:1606.00608 and
+does not assume per-copy trace separation.  It does not include the literal
+bond-space gauge in equation `eq:II_ABasicTensors`.
 
 Source: arXiv:1606.00608, Proposition 4.13, lines 1873--1887, and Appendix
 C.3, Lemma L, lines 1835--1858. -/
@@ -372,15 +375,16 @@ over every letter of `M.toMPSTensor`. Injectivity's spanning property and
 nondegeneracy of the trace pairing (`MPSTensor.traceMulRightPi_ker_eq_bot`)
 then force the two matrices to agree.
 
-Unlike the block-injective route of `VerticalCF.lean`'s Lemma L (which needs a
-horizontal canonical-form decomposition and the commutation family at *every*
-length, transported through `SameMPV₂` back to `M`'s own letters — an
-unresolved transport step recorded in
-`docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`), this theorem needs
-only the commutation hypothesis at chain length `2`, applies to `M`'s own
-tensor directly, and does not extend to chain length `1` (`mpo M 1`): there
-the single trailing letter is the identity matrix, giving only a trace-level
-identity, not enough to separate the opposite-corner difference. -/
+Unlike the representative-grouped Lemma L in
+`HorizontalCFMPVRepresentation.lean` (which uses an MPV-level BNT
+representation and the commutation family at *every* length, but does not
+transport its conclusion back to `M`'s own letters), this theorem needs only
+the commutation hypothesis at chain length `2`, applies to `M`'s own tensor
+directly, and does not extend to chain length `1` (`mpo M 1`).  The missing
+literal-gauge transport is recorded in
+`docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`.  At chain length `1`,
+the single trailing letter is the identity matrix, giving only a
+trace-level identity, not enough to separate the opposite-corner difference. -/
 theorem ketLeftMul_eq_braRightMul_of_commute_of_isInjective
     (M : MPOTensor d D) (hInj : MPSTensor.IsInjective M.toMPSTensor)
     {Q : Matrix (Fin d) (Fin d) ℂ} (hQidem : IsIdempotentElem Q)

@@ -236,12 +236,11 @@ obstructions that the injective special case above sidesteps.
       \leanid{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_isInjective}
       does above, by choosing chain length two instead of the length that
       the structure's field type superficially suggests.
-    \item \textbf{The horizontal canonical-form statement is MPV-level,
-      not literal.}  \leanid{IsHorizontalCF} expresses ``$M$ is in
-      horizontal canonical form'' through \leanid{SameMPV₂}: $M$'s
-      doubled-index tensor generates the \emph{same matrix product vectors}
-      as an assembled block-diagonal BNT tensor, not that $M$'s own letters
-      \emph{literally equal} a
+    \item \textbf{The available representation is MPV-level, not literal.}
+      \leanid{HasHorizontalCFMPVRepresentation} asserts through
+      \leanid{SameMPV₂} that $M$'s doubled-index tensor generates the
+      \emph{same matrix product vectors} as an assembled block-diagonal BNT
+      tensor.  It does not assert that $M$'s own letters \emph{literally equal} a
       gauge-conjugated direct sum of normal blocks.  The source's own
       canonical-form decomposition,
       $\bigoplus_{j,q}\mu_{j,q}X_{j,q}A_jX_{j,q}^{-1}$
@@ -254,7 +253,8 @@ obstructions that the injective special case above sidesteps.
       own bond space needs either $M$'s own injectivity (the special case
       resolved above, where the transport is vacuous because $M$ already
       is the sole block) or a literal, gauge-explicit multi-block
-      decomposition of $M$, which \leanid{IsHorizontalCF} does not carry
+      decomposition of $M$, which
+      \leanid{HasHorizontalCFMPVRepresentation} does not carry
       and which is not otherwise formalized in the repository for
       reducible MPDO tensors.  The older \leanid{HorizontalCFData} and
       \leanid{IsPerCopyHorizontalCF} also do not carry such a gauge.  They
@@ -266,8 +266,8 @@ Both obstructions are independent of the exponent $p$ or the specific
 displaced-projector construction of
 \leanid{MPOTensor.exists_displaced_invariant_projector_of_periodic_vector}:
 they are structural facts about what finite-length trace data can
-determine, and about what \leanid{IsHorizontalCF}'s current formalization
-asserts.  Discharging \leanid{MPOTensor.NoninvariantProjectorNoncommuting}
+determine, and about what the available MPV representation asserts.
+Discharging \leanid{MPOTensor.NoninvariantProjectorNoncommuting}
 for a general (reducible, multi-block) horizontal canonical form therefore
 remains open, and is not a routine extension of the injective argument to
 a larger blocking length.
@@ -282,7 +282,7 @@ and the displaced-projector construction remain unconditional, and the
 remaining stated hypothesis is
 \leanid{MPOTensor.NoninvariantProjectorNoncommuting} — but is now
 understood more precisely: it is not resolved by the representative-grouped
-Lemma~L in \path{TNLean/MPS/MPDO/HorizontalBNTCanonicalForm.lean}, because
+Lemma~L in \path{TNLean/MPS/MPDO/HorizontalCFMPVRepresentation.lean}, because
 that theorem concludes letter equality for the canonical-form representatives,
 not for $M$'s own (possibly non-injective) bond space, and the transport
 between the two needs either
