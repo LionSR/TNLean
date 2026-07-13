@@ -417,6 +417,7 @@ import TNLean.MPS.MPDO.PhysicalSectorPhysicalMaps
 import TNLean.MPS.MPDO.PhysicalSectorBlockedRFP
 import TNLean.MPS.MPDO.PhysicalSectorCoordinateTransport
 import TNLean.MPS.MPDO.PhysicalSectorVirtualSpanning
+import TNLean.MPS.MPDO.PhysicalSectorTraceMatrix
 import TNLean.MPS.MPDO.InverseMapActiveSectorRecurrence
 import TNLean.MPS.MPDO.PhysicalSectorPositiveBond
 import TNLean.MPS.MPDO.PhysicalSectorBondCommutativity
