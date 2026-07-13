@@ -238,8 +238,16 @@ the source statement simultaneously for arbitrary chain length.
 \leanid{MPOTensor.exists_etaStructure_reducedBlockState_of_isSAL}.}
 
 The neighboring operators and their all-length algebraic identity are now
-formalized.
+formalized.  The inverse-map tensors also determine a source-minimal
+physical-sector factorization.  The nonzero dimensions of its left and right
+factors are derived from the trace-one Hayashi density matrices, rather than
+assumed.  For an injective tensor satisfying SAL, the four-site Hayashi
+decomposition and a nonzero entry of the normalized tail therefore produce
+this raw factorization without ZCL or positivity hypotheses.
 \footnote{The formal declarations are
+\path{MPOTensor.inverseMapPhysicalSectorFactorization},
+\path{MPOTensor.inverseMapPhysicalSectorFactorization_neighboringOperator_eq_sectorEta},
+\path{MPOTensor.nonempty_physicalSectorFactorization_of_isSAL},
 \path{MPOTensor.etaOfSectorTensors},
 \path{MPOTensor.sum_cyclic_sectorTensor_eq_prod_etaOfSectorTensors},
 \path{MPOTensor.trace_sector_word_eq_prod_etaOfSectorTensors},
@@ -500,15 +508,16 @@ Together with positivity of the neighboring operators, this supplies the
 mathematical data needed to construct
 \leanid{MPOTensor.EtaLocalStructureData}.  The conditional construction is
 \leanid{MPOTensor.PhysicalSectorFactorization.etaLocalStructureData}; its
-normalization scalar is one. The remaining step is upstream: construct a
-coherently positive physical-sector factorization from SAL. ZCL is not a
-hypothesis of this construction.
+normalization scalar is one. The raw inverse-map physical-sector factorization
+is now constructed for an injective tensor satisfying SAL. The remaining
+upstream step is to choose its
+neighboring contractions coherently positive. ZCL is not a hypothesis of this
+construction.
 
 The source Proposition \texttt{3to4} assumes SAL, not ZCL.  ZCL enters only
 after this commuting product form has been obtained, in the later step that
 derives the GSNNCH--ZCL and RFP conclusions.  Accordingly, adding ZCL to a
-conditional theorem would not repair the missing inverse-map sector
-factorization.
+conditional theorem would not repair the missing coherent positive choice.
 
 The positive-choice and primitivity statements that remain in Lemma
 \texttt{propSN} are tracked by
@@ -521,7 +530,7 @@ as unconditionally formalized from its source hypotheses.
 
 \section{Classification}
 
-This note records an open gap for the SAL-to-bond construction of
+This note records an open gap for the SAL-to-positive-bond construction of
 \leanid{MPOTensor.EtaLocalStructureData}. The positivity half of the projected
 chain identity is now formalized unconditionally, and the pairwise
 positive-choice construction is formalized under the symmetric-support scope
@@ -543,9 +552,10 @@ every length $N\geq2$.  The finite-chain MPO is the ordered product of those
 bonds, first in cyclic sector coordinates and then in the original physical
 coordinates.  If the neighboring operators are positive semidefinite, these
 results provide the positive commuting bond and its exact realization with
-scalar one, and they determine the eta-local structure data. The only
-remaining obligation in this implication is to derive the required
-coherently positive physical-sector factorization from SAL.
+scalar one, and they determine the eta-local structure data. The raw
+physical-sector factorization already follows for an injective tensor
+satisfying SAL. The remaining obligation in this implication is to choose the
+inverse-map neighboring operators coherently positive.
 
 \bibliographystyle{alpha}
 \bibliography{references}
