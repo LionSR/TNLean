@@ -482,10 +482,9 @@ separate step.
         \cite[eq.~(Fmove)]{Bultinck2017Anyons}.  The solid fusion trees are
         the left- and right-bracketed maps constructed below.  The dashed
         line denotes the invertible fixed-final change of multiplicity basis
-        in the source.  The conditional result below extracts a rectangular
-        multiplicity factor acting trivially on the final bond space, but does
-        not identify that factor with the dashed source transformation or
-        prove its invertibility.}
+        in the source.  The results below first extract its action on the
+        multiplicity space and then prove its two-sided unitarity under the
+        simultaneous-selector and positive-bond-dimension hypotheses.}
     \label{fig:mpdo_fixed_final_fusion_bracketings}
 \end{figure}
 
@@ -1211,3 +1210,22 @@ separate step.
     Since $D_\varepsilon>0$, evaluation at any bond basis vector cancels the
     identity factor and gives the two asserted identities.
 \end{proof}
+
+\begin{figure}[ht]
+    \centering
+    \TNMPDOFixedFinalComparisonUnitary
+    \caption{The fixed-final comparison in the graphical order of
+        \cite[equation~(pentagon3) and lines~269--277]
+        {Bultinck2017Anyons}.  At a positive common length, the simultaneous
+        word selector is the finite-word counterpart of the inverse
+        $B_d^+$ in the source: it retains the chosen final label and
+        annihilates every other one.  Thus the comparison has no
+        off-diagonal final-label corners.  On the surviving corner,
+        injectivity gives
+        $C_\varepsilon=F_\varepsilon\otimes1_{D_\varepsilon}$; two-sided
+        unitarity of $C_\varepsilon$ and $D_\varepsilon>0$ give two-sided
+        unitarity of $F_\varepsilon$.  This is the associativity mechanism
+        described in \cite[lines~995--1010]{Cirac2016MPDO_arXiv}.  No
+        pentagon coherence identity is asserted here.}
+    \label{fig:mpdo_fixed_final_comparison_unitary}
+\end{figure}

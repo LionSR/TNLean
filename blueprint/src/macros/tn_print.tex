@@ -1186,6 +1186,99 @@
     \end{tikzpicture}%
 }
 
+% The fixed-final comparison argument in three graphical steps.  A
+% positive-length simultaneous word selector isolates one final label, the
+% resulting comparison is block diagonal in that label, and injectivity
+% identifies each diagonal corner with F tensored with the identity on the
+% final bond space.  The last line records two-sided unitarity, but deliberately
+% contains no four-fold reassociation or pentagon claim.
+\newcommand{\TNMPDOFixedFinalComparisonUnitary}{%
+    \begin{tikzpicture}[tn picture, scale=0.86]
+        % Positive-length simultaneous selector.
+        \node[anchor=east] at (-4.62,2.82) {\textup{selector}};
+        \node[anchor=east] at (-4.62,2.42) {$S>0$};
+        \foreach \x/\s in {-3.90/L,-2.86/M,-0.66/R} {
+            \TN@tensordot{ffSel\s}{(\x,2.62)}
+            \TN@upleg{ffSel\s}{0.31}
+            \TN@downleg{ffSel\s}{0.31}
+        }
+        \draw[tn leg] (ffSelL.east) -- (ffSelM.west);
+        \draw[tn leg] (ffSelM.east) -- ++(0.49,0);
+        \draw[tn leg] ($(ffSelR.west)+(-0.49,0)$) -- (ffSelR.west);
+        \TN@leftleg{ffSelL}{0.34}
+        \TN@rightleg{ffSelR}{0.34}
+        \node at (-1.76,2.62) {$\cdots$};
+        \node at (-2.28,2.14) {$M_{\varepsilon'}^{w}$};
+        \draw[densely dashed, rounded corners]
+            (-4.33,2.03) rectangle (-0.23,3.17);
+        \node[fill=white, inner sep=1pt] at (-2.28,3.17)
+            {$\displaystyle\sum_{|w|=S}c_{\varepsilon}(w)\,(\,\cdot\,)^{w}$};
+        \draw[->, tn leg] (0.12,2.62) -- (1.05,2.62);
+        \node[anchor=west] at (1.18,2.62)
+            {$\displaystyle
+              \begin{cases}
+                1_{D_\varepsilon},&\varepsilon'=\varepsilon,\\[-1pt]
+                0,&\varepsilon'\ne\varepsilon.
+              \end{cases}$};
+
+        % Off-diagonal corners of the comparison vanish.  The two small trees
+        % retain the bracketing convention of the source F-move figures.
+        \node[anchor=east] at (-4.62,0.48) {\textup{sector cut}};
+        \node (ffLa) at (-3.92,-0.20) {$\alpha$};
+        \node (ffLb) at (-3.32,-0.20) {$\beta$};
+        \node (ffLc) at (-2.72,-0.20) {$\gamma$};
+        \node[draw, rounded corners, fill=blue!8, inner sep=1.2pt]
+            (ffLab) at (-3.62,0.35) {$U_{\alpha,\beta}$};
+        \node[draw, rounded corners, fill=blue!8, inner sep=1.2pt]
+            (ffLroot) at (-3.17,0.94) {$U^{\mathrm L}$};
+        \draw[tn leg] (ffLa.north) -- (ffLab.south west);
+        \draw[tn leg] (ffLb.north) -- (ffLab.south east);
+        \draw[tn leg] (ffLab.north) -- (ffLroot.south west);
+        \draw[tn leg] (ffLc.north) -- (ffLroot.south east);
+        \node[above=1pt] at (ffLroot.north) {$\varepsilon$};
+
+        \node (ffRa) at (2.48,-0.20) {$\alpha$};
+        \node (ffRb) at (3.08,-0.20) {$\beta$};
+        \node (ffRc) at (3.68,-0.20) {$\gamma$};
+        \node[draw, rounded corners, fill=blue!8, inner sep=1.2pt]
+            (ffRbc) at (3.38,0.35) {$U_{\beta,\gamma}$};
+        \node[draw, rounded corners, fill=blue!8, inner sep=1.2pt]
+            (ffRroot) at (2.93,0.94) {$U^{\mathrm R}$};
+        \draw[tn leg] (ffRb.north) -- (ffRbc.south west);
+        \draw[tn leg] (ffRc.north) -- (ffRbc.south east);
+        \draw[tn leg] (ffRa.north) -- (ffRroot.south west);
+        \draw[tn leg] (ffRbc.north) -- (ffRroot.south east);
+        \node[above=1pt] at (ffRroot.north) {$\varepsilon'$};
+        \draw[<-, tn leg] (ffLroot.east) -- node[above]
+            {$C^{\varepsilon,\varepsilon'}_{\alpha,\beta,\gamma}$}
+            (ffRroot.west);
+        \node[anchor=west] at (4.18,0.94)
+            {$=0\quad(\varepsilon\ne\varepsilon')$};
+
+        % The surviving corner splits into the multiplicity F-matrix and the
+        % identity on the final MPO bond space.
+        \node[anchor=east] at (-4.62,-1.76) {\textup{diagonal corner}};
+        \node[anchor=east] at (-3.43,-1.48)
+            {$\mathcal H^{\mathrm L}_{\varepsilon}$};
+        \node[anchor=east] at (-3.43,-2.08) {$\C^{D_\varepsilon}$};
+        \node[anchor=west] at (3.43,-1.48)
+            {$\mathcal H^{\mathrm R}_{\varepsilon}$};
+        \node[anchor=west] at (3.43,-2.08) {$\C^{D_\varepsilon}$};
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+            (ffF) at (0,-1.48) {$F_\varepsilon$};
+        \draw[<-, tn leg] (-3.36,-1.48) -- (ffF.west);
+        \draw[<-, tn leg] (ffF.east) -- (3.36,-1.48);
+        \draw[<-, tn leg] (-3.36,-2.08) -- node[below]
+            {$1_{D_\varepsilon}$} (3.36,-2.08);
+        \node at (0,-2.62)
+            {$C_\varepsilon=F_\varepsilon\otimes1_{D_\varepsilon},\qquad
+              D_\varepsilon>0$};
+        \node at (0,-3.15)
+            {$F_\varepsilon F_\varepsilon^\dagger=1,\qquad
+              F_\varepsilon^\dagger F_\varepsilon=1$};
+    \end{tikzpicture}%
+}
+
 % Local BNT fusion identity from CPSV16, eq. (Ualphabeta).  The left-hand
 % isometry combines the two incoming bond factors, while its adjoint separates
 % the outgoing factors.  The right-hand side records the weighted final-sector
