@@ -37,7 +37,7 @@ commuting-form witness and proves the GSNNCH equivalence built from that data.
   Section 4.4 and Appendix C.2
 -/
 
-open scoped Matrix BigOperators ComplexOrder
+open scoped Matrix Kronecker BigOperators ComplexOrder
 open Matrix Finset
 
 namespace MPOTensor
@@ -75,6 +75,168 @@ noncomputable def embedLocalOperator (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
         B (MPSTensor.extractWindow L i σ) (MPSTensor.extractWindow L i τ)
       else 0 :=
   rfl
+
+/-- Two configurations agree outside a cyclic window exactly when their values
+coincide at every site outside that window. -/
+theorem agreesOutsideWindow_iff (L : ℕ) {N : ℕ} (hLN : L ≤ N)
+    (i : Fin N) (σ τ : Fin N → Fin d) :
+    AgreesOutsideWindow (d := d) L hLN i σ τ ↔
+      ∀ k : Fin N, ¬ ((k.val + N - i.val) % N < L) → τ k = σ k := by
+  constructor
+  · intro h k hk
+    have hk' := congrFun h k
+    simpa [AgreesOutsideWindow, MPSTensor.replaceWindow, hk] using hk'
+  · intro h
+    rw [AgreesOutsideWindow]
+    funext k
+    unfold MPSTensor.replaceWindow
+    by_cases hk : (k.val + N - i.val) % N < L
+    · rw [dif_pos hk]
+      have hself := congrFun (MPSTensor.replaceWindow_extractWindow L hLN i σ) k
+      simpa [MPSTensor.replaceWindow, hk] using hself
+    · simp [hk, h k hk]
+
+/-- Decompose a periodic configuration into a cyclic window and its cyclic
+complement. -/
+private def windowComplementEquiv (L N : ℕ) (hLN : L ≤ N) (i : Fin N) :
+    (Fin N → Fin d) ≃ ((Fin L → Fin d) × (Fin (N - L) → Fin d)) where
+  toFun σ :=
+    (MPSTensor.extractWindow L i σ,
+      fun r ↦ σ ⟨(i.val + L + r.val) % N, Nat.mod_lt _ (Fin.pos i)⟩)
+  invFun x := fun k ↦
+    let offset := (k.val + N - i.val) % N
+    if h : offset < L then x.1 ⟨offset, h⟩
+    else x.2 ⟨offset - L, by
+      have hoffN : offset < N := Nat.mod_lt _ (Fin.pos i)
+      omega⟩
+  left_inv σ := by
+    funext k
+    simp only
+    let offset := (k.val + N - i.val) % N
+    have hoffN : offset < N := Nat.mod_lt _ (Fin.pos i)
+    have hsite : (i.val + offset) % N = k.val := by
+      rcases lt_or_ge k.val i.val with hki | hik
+      · have hmod : offset = k.val + N - i.val := by
+          simp only [offset]
+          rw [Nat.mod_eq_of_lt (by omega)]
+        rw [hmod, show i.val + (k.val + N - i.val) = k.val + N by omega,
+          Nat.add_mod_right, Nat.mod_eq_of_lt k.isLt]
+      · have hmod : offset = k.val - i.val := by
+          simp only [offset]
+          have heq : k.val + N - i.val = N + (k.val - i.val) := by omega
+          rw [heq, Nat.add_mod_left,
+            Nat.mod_eq_of_lt (lt_of_le_of_lt (Nat.sub_le _ _) k.isLt)]
+        rw [hmod, Nat.add_sub_of_le hik, Nat.mod_eq_of_lt k.isLt]
+    by_cases hoff : offset < L
+    · rw [dif_pos hoff]
+      exact congrArg σ (Fin.ext hsite)
+    · rw [dif_neg hoff]
+      apply congrArg σ
+      apply Fin.ext
+      change (i.val + L + (offset - L)) % N = k.val
+      calc
+        _ = (i.val + offset) % N := by congr 1; omega
+        _ = k.val := hsite
+  right_inv x := by
+    apply Prod.ext
+    · funext r
+      simp only [MPSTensor.extractWindow]
+      have hoff : (((i.val + r.val) % N + N - i.val) % N) = r.val :=
+        MPSTensor.offset_mod_eq i.isLt (Nat.lt_of_lt_of_le r.isLt hLN)
+      rw [dif_pos (hoff.symm ▸ r.isLt)]
+      exact congrArg x.1 (Fin.ext hoff)
+    · funext r
+      simp only
+      have hrN : L + r.val < N := by omega
+      have hoff :
+          (((i.val + L + r.val) % N + N - i.val) % N) = L + r.val := by
+        simpa [Nat.add_assoc] using MPSTensor.offset_mod_eq i.isLt hrN
+      have hnot :
+          ¬ (((i.val + L + r.val) % N + N - i.val) % N) < L := by
+        omega
+      rw [dif_neg hnot]
+      apply congrArg x.2
+      apply Fin.ext
+      change (((i.val + L + r.val) % N + N - i.val) % N) - L = r.val
+      omega
+
+@[simp] private theorem windowComplementEquiv_replaceWindow
+    (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
+    (σ : Fin N → Fin d) (τ : Fin L → Fin d) :
+    windowComplementEquiv (d := d) L N hLN i
+        (MPSTensor.replaceWindow L hLN i σ τ) =
+      (τ, (windowComplementEquiv (d := d) L N hLN i σ).2) := by
+  apply Prod.ext
+  · exact MPSTensor.extractWindow_replaceWindow L hLN i σ τ
+  · funext r
+    simp only [windowComplementEquiv, Equiv.coe_fn_mk]
+    unfold MPSTensor.replaceWindow
+    have hrN : L + r.val < N := by omega
+    have hoff :
+        (((i.val + L + r.val) % N + N - i.val) % N) = L + r.val := by
+      simpa [Nat.add_assoc] using MPSTensor.offset_mod_eq i.isLt hrN
+    have hnot :
+        ¬ (((i.val + L + r.val) % N + N - i.val) % N) < L := by
+      omega
+    rw [dif_neg hnot]
+
+/-- In cyclic-window coordinates, a local operator is the tensor product of
+the window operator with the identity on the complement. -/
+private theorem reindex_embedLocalOperator_windowComplement
+    (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
+    (B : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
+    Matrix.reindex (windowComplementEquiv (d := d) L N hLN i)
+        (windowComplementEquiv (d := d) L N hLN i)
+        (embedLocalOperator (d := d) L N hLN i B) =
+      B ⊗ₖ (1 : Matrix (Fin (N - L) → Fin d) (Fin (N - L) → Fin d) ℂ) := by
+  let e := windowComplementEquiv (d := d) L N hLN i
+  ext ⟨x, u⟩ ⟨y, v⟩
+  let σ := e.symm (x, u)
+  let τ := e.symm (y, v)
+  have heσ : e σ = (x, u) := e.apply_symm_apply (x, u)
+  have heτ : e τ = (y, v) := e.apply_symm_apply (y, v)
+  have hx : MPSTensor.extractWindow L i σ = x := congrArg Prod.fst heσ
+  have hy : MPSTensor.extractWindow L i τ = y := congrArg Prod.fst heτ
+  have hAgree : AgreesOutsideWindow (d := d) L hLN i σ τ ↔ v = u := by
+    constructor
+    · intro h
+      have heq := congrArg e h
+      have hsnd := congrArg Prod.snd heq
+      simpa [e, σ, τ] using hsnd
+    · intro h
+      apply e.injective
+      rw [windowComplementEquiv_replaceWindow, heσ, heτ, h, hx]
+  by_cases h : v = u
+  · change (if AgreesOutsideWindow (d := d) L hLN i σ τ then
+        B (MPSTensor.extractWindow L i σ) (MPSTensor.extractWindow L i τ) else 0) =
+      B x y * (if u = v then 1 else 0)
+    rw [if_pos (hAgree.mpr h), hx, hy, if_pos h.symm, mul_one]
+  · change (if AgreesOutsideWindow (d := d) L hLN i σ τ then
+        B (MPSTensor.extractWindow L i σ) (MPSTensor.extractWindow L i τ) else 0) =
+      B x y * (if u = v then 1 else 0)
+    rw [if_neg (hAgree.not.mpr h), if_neg (Ne.symm h), mul_zero]
+
+/-- Embedding two operators into the same cyclic window preserves their
+product. -/
+theorem embedLocalOperator_mul (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
+    (B C : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
+    embedLocalOperator (d := d) L N hLN i (B * C) =
+      embedLocalOperator (d := d) L N hLN i B *
+        embedLocalOperator (d := d) L N hLN i C := by
+  let e := windowComplementEquiv (d := d) L N hLN i
+  apply (Matrix.reindex e e).injective
+  change (Matrix.reindexLinearEquiv ℂ ℂ e e)
+      (embedLocalOperator (d := d) L N hLN i (B * C)) =
+    (Matrix.reindexLinearEquiv ℂ ℂ e e)
+      (embedLocalOperator (d := d) L N hLN i B *
+        embedLocalOperator (d := d) L N hLN i C)
+  rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ e e e,
+    Matrix.coe_reindexLinearEquiv,
+    reindex_embedLocalOperator_windowComplement,
+    reindex_embedLocalOperator_windowComplement,
+    reindex_embedLocalOperator_windowComplement,
+    ← Matrix.mul_kronecker_mul]
+  simp
 
 /-- Chain-level commuting-form data for the simple-MPDO theorem.
 
