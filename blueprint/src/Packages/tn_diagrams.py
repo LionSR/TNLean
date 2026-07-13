@@ -59,6 +59,7 @@ _DIAGRAM_ARGS: dict[str, str] = {
     "TNMPDOPhysicalIsometryTransport": "",
     "TNMPDOTwoSiteClosureFactorization": "",
     "TNMPDOThreeSiteClosureFactorization": "",
+    "TNMPDOFixedSectorAdjacentCommutativity": "",
     "TNMPDOCyclicEtaContraction": "",
     "TNMPDOSectorAdaptedDecomposition": "",
     "TNMPDOInverseMapThreeSiteContraction": "",
