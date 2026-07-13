@@ -369,11 +369,13 @@
 \begin{theorem}[Representative separation after injective blocking]
     \label{thm:postblocked_representative_grouped_insert_eq}
     \lean{MPSTensor.IsBNTCanonicalForm.eventuallyRepresentativeWordTupleSpan_of_basis_injective}
+    \lean{MPSTensor.IsBNTCanonicalForm.eventuallyRepresentativeWordTupleSpan_blockTensor}
+    \lean{MPSTensor.pairTraceSeparatingAt_blockTensor}
     \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_firstSiteActionAgree_of_basis_injective}
     \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂_firstSiteActionAgree_of_basis_injective}
     \leanok
-    \uses{def:sector_bnt_cf, def:representative_word_tuple_span,
-      thm:representative_grouped_insert_eq}
+    \uses{def:sector_bnt_cf, def:sector_decomposition_block_tensor,
+      def:representative_word_tuple_span, thm:representative_grouped_insert_eq}
     Let $P$ be a BNT canonical form with basis representatives
     $(A_j)_{j=0}^{g-1}$, and suppose that the representatives have already
     been blocked so that every $A_j$ is injective. Then representative
@@ -390,6 +392,12 @@
     The same conclusion holds when the first-site equality is given for any
     tensor with the same complete MPV family as the tensor represented by
     $P$.
+
+    More generally, let $P$ be a BNT canonical form before physical blocking,
+    let $p>0$, and suppose that every $p$-blocked representative
+    $A_j^{[p]}$ is injective. Then the blocked sector decomposition $P^{[p]}$
+    has representative word-tuple separation at every blocked length
+    $L\geq 6(g-1)+1$.
 
     This is the conclusion after the blocking step in
     \cite[lines~318--345]{Cirac2016MPDO_arXiv}. The hypothesis that each
@@ -424,6 +432,14 @@
     $\prod_jM_{D_j}(\C)$. This proves eventual representative word-tuple
     separation. The representative-grouped Lemma L gives the two first-site
     conclusions.
+
+    For the unblocked canonical form, propagate $p$-block injectivity to the
+    lengths $2p-1$, $2p$, and $6p$. The Condition C1 form of the direct-sum
+    argument gives pair trace separation at original length $6p$. The
+    bijection between blocked words of length $6$ and original words of length
+    $6p$ transports this to pair trace separation for the $p$-blocked
+    representatives. The preceding selector argument then applies verbatim
+    to $P^{[p]}$.
 \end{proof}
 
 \begin{lemma}[Blockwise equality from agreement on the MPV family]
