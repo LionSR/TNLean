@@ -61,6 +61,10 @@ zero-weight sector. Primitivity concerns only the subtype on which the Hayashi
 weight is nonzero. See
 `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
 
+**Local fix (periodicity):** the proof uses closed walks of lengths two and
+three in place of the source's blocking of periodic components. See the same
+paper-gap note.
+
 Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 (`propSN`), lines
 1406--1471. -/
 theorem exists_rephased_inverseMap_activeSectorTraceMatrix_isPrimitive
@@ -160,6 +164,10 @@ trace matrix.
 
 **Local fix (inactive sectors):** see
 `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+
+**Local fix (periodicity):** the proof uses closed walks of lengths two and
+three in place of the source's blocking of periodic components. See the same
+paper-gap note.
 
 Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 (`propSN`), lines
 1406--1471. -/
