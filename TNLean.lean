@@ -314,6 +314,7 @@ import TNLean.MPS.Overlap.PeripheralToTransferMapGap
 import TNLean.MPS.FundamentalTheorem.Multi
 import TNLean.MPS.FundamentalTheorem.SectorWeightComparison
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Basic
+import TNLean.MPS.FundamentalTheorem.SectorBNT.Blocking
 import TNLean.MPS.FundamentalTheorem.SectorBNT.CoeffIdentity
 import TNLean.MPS.FundamentalTheorem.SectorBNT.CopyWeightMatching
 import TNLean.MPS.FundamentalTheorem.SectorBNT.EqualModulus

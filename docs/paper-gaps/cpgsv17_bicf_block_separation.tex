@@ -174,14 +174,24 @@ above with the canonical-form construction.  Positive-length block injectivity
 propagates from length $L$ to length $L+1$ without a normalization hypothesis:
 the identity
 $S_{L+1}(A)=\spn\{A_i\}_iS_L(A)$, together with the same identity at length
-$L$, gives the result.  One should therefore choose a common positive $L$ for
-which every normal BNT representative is $L$-block injective and identify the
-sector decomposition and powered copy weights after blocking $L+1$ sites.  The
-representative-separation theorem then applies to that blocked decomposition,
-while the original length-$L$ span recovers equality of the unblocked insertions
-from equality of the blocked insertions.  This length shift is essential:
-recovery from a physical block of length $L+1$ uses the span of its length-$L$
-tail.  The flattened
+$L$, gives the result.  Physical blocking of a sector decomposition has also
+been defined explicitly: it preserves the representative and copy indices,
+replaces $A_j$ by $A_j^{[p]}$, replaces $\mu_{j,q}$ by $\mu_{j,q}^p$, and gives
+the coefficient identity
+\[
+    c_{P^{[p]},j}^{(N)}=c_{P,j}^{(Np)}.
+\]
+The tensor assembled from this blocked decomposition has the same MPV family
+as the physical blocking of the original assembled tensor.
+
+One should therefore choose a common positive $L$ for which every normal BNT
+representative is $L$-block injective and prove the representative-separation
+property for the sector decomposition blocked by $L+1$ sites.  The existing
+post-blocking theorem applies once this property, or the relevant preserved
+canonical-form data, is supplied.  The original length-$L$ span then recovers
+equality of the unblocked insertions from equality of the blocked insertions.
+This length shift is essential: recovery from a physical block of length
+$L+1$ uses the span of its length-$L$ tail.  The flattened
 \texttt{HorizontalCFData} formulation must then be replaced, or related
 explicitly, by this representative-indexed statement.  The older per-copy
 \texttt{biCF} theorem remains a correct restricted result, but it is no longer
