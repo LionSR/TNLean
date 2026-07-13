@@ -44,11 +44,14 @@ theorem zeroWeightReparameterized_sectorVirtualMatrix_eq_zero
     (zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
       K hK R hρ hη alpha beta hm).sectorVirtualMatrix k x y = 0 := by
   ext gamma delta
-  simp [PhysicalSectorFactorization.sectorVirtualMatrix,
-    zeroWeightReparameterizedInverseMapPhysicalSectorFactorization,
-    hk, Matrix.zero_apply]
-  right
-  rfl
+  rw [PhysicalSectorFactorization.sectorVirtualMatrix]
+  have hleft :
+      (zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
+        K hK R hρ hη alpha beta hm).leftTensor k gamma = 0 := by
+    change sectorTensorL K hK hη R alpha beta k gamma = 0
+    exact sectorTensorL_eq_zero_of_weight_eq_zero
+      K hK hη R alpha beta k gamma hk
+  rw [hleft, Matrix.zero_apply, zero_mul, Matrix.zero_apply]
 
 /-- The source inverse-map factorization admits a coherent rephasing whose
 active trace matrix is primitive.
@@ -105,8 +108,7 @@ theorem exists_rephased_inverseMap_activeSectorTraceMatrix_isPrimitive
       (F.rephase z).activeSectorOneSiteMatrixFamily hη.p =
         F.activeSectorOneSiteMatrixFamily hη.p := by
     funext q
-    simpa [PhysicalSectorFactorization.activeSectorOneSiteMatrixFamily] using
-      F.rephase_sectorVirtualMatrix z q.1.1 q.2.1 q.2.2
+    simp [PhysicalSectorFactorization.activeSectorOneSiteMatrixFamily]
   have hspan : Submodule.span ℂ
       (Set.range ((F.rephase z).activeSectorOneSiteMatrixFamily hη.p)) = ⊤ := by
     rw [hfamily]
