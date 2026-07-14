@@ -148,28 +148,27 @@
 
 % The physical renormalization maps of the mixed-state RFP definition.
 \newcommand{\TNMPORenormalizationTS}{%
-    \begin{tikzpicture}[tn picture]
-        \TN@tensor{tnOne}{(-2.10,0)}
-        \TN@vleg{tnOne}{west}{-0.62,0}
-        \TN@vleg{tnOne}{east}{0.62,0}
-        \TN@pleg{tnOne}{north}{0,0.55}
-        \TN@pleg{tnOne}{south}{0,-0.55}
-        \node at (-2.10,-0.88) {$M_1(X)$};
-        \TN@tensor{tnTwoL}{(1.10,0)}
-        \TN@tensor{tnTwoR}{(2.25,0)}
-        \TN@vleg{tnTwoL}{west}{-0.62,0}
-        \TN@vconnect{tnTwoL}{east}{tnTwoR}{west}
-        \TN@vleg{tnTwoR}{east}{0.62,0}
-        \TN@pleg{tnTwoL}{north}{0,0.55}
-        \TN@pleg{tnTwoL}{south}{0,-0.55}
-        \TN@pleg{tnTwoR}{north}{0,0.55}
-        \TN@pleg{tnTwoR}{south}{0,-0.55}
-        \node at (1.68,-0.88) {$M_2(X)$};
-        \TN@arrow[->, line width=0.55pt, bend left=24]{
-            (-1.40,0.48) to node[above] {$\mathcal T$} (0.52,0.48);}
-        \TN@arrow[->, line width=0.55pt, bend left=24]{
-            (0.52,-0.48) to node[below] {$\mathcal S$} (-1.40,-0.48);}
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{M_1(X)=}
+        \TNTerm{%
+            \TNMPOSite{rtsOne}{(0,0)}{M}
+            \TNOpenVirtualWest{rtsOneWest}
+            \TNOpenVirtualEast{rtsOneEast}
+            \TNOpenPhysicalNorth{rtsOneKet}
+            \TNOpenPhysicalSouth{rtsOneBra}}
+        \TNRelation{\xrightleftharpoons[\mathcal S]{\mathcal T}}
+        \TNTerm{%
+            \TNMPOSite{rtsLeft}{(0,0)}{M}
+            \TNMPOSite{rtsRight}{(1.25,0)}{M}
+            \TNOpenVirtualWest{rtsLeftWest}
+            \TNConnectVirtual{rtsLeftEast}{rtsRightWest}
+            \TNOpenVirtualEast{rtsRightEast}
+            \TNOpenPhysicalNorth{rtsLeftKet}
+            \TNOpenPhysicalSouth{rtsLeftBra}
+            \TNOpenPhysicalNorth{rtsRightKet}
+            \TNOpenPhysicalSouth{rtsRightBra}}
+        \ensuremath{=M_2(X)}
+    \end{TNEquationRow}%
 }
 
 % Contraction of neighbouring right and left sector tensors.
