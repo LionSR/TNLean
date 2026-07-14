@@ -25,80 +25,117 @@
 \newcommand{\TNTikZDiagram}[2]{#2}
 
 \newcommand{\TNMPSLocal}[2]{%
-    \begin{tikzpicture}[tn picture]
-        \TN@mpssiteWithOpenLegs{tnA}{(0,0)}{#1}
-        \TN@label{tnANOpen}{(0,0.22)}{#2}
-    \end{tikzpicture}%
+    \begin{TNDiagram}[compact]
+        \TNMPSSite{tnA}{(0,0)}{#1}
+        \TNOpenVirtualWest{tnAWest}
+        \TNOpenVirtualEast{tnAEast}
+        \TNOpenPhysicalNorth{tnAKet}
+        \node[tn label, above] at (tnAKet) {$#2$};
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNMPSWord}[4]{%
-    \begin{tikzpicture}[tn picture]
-        \TN@openMPSword{tn}{#2}{#3}{#4}
+    \begin{TNDiagram}[compact]
+        \TNMPSSite{tnL}{(0,0)}{}
+        \TNMPSSite{tnM}{(1.35,0)}{}
+        \TNMPSSite{tnR}{(4.05,0)}{}
+        \TNConnectVirtual{tnLEast}{tnMWest}
+        \TNOpenVirtualWest{tnLWest}
+        \TNOpenVirtualEast{tnMEast}
+        \TNOpenVirtualWest{tnRWest}
+        \TNOpenVirtualEast{tnREast}
+        \TNOpenPhysicalNorth{tnLKet}
+        \TNOpenPhysicalNorth{tnMKet}
+        \TNOpenPhysicalNorth{tnRKet}
+        \node[tn label, above] at (tnLKet) {$#2$};
+        \node[tn label, above] at (tnRKet) {$#3$};
+        \node at (2.70,0) {$\cdots$};
+        \node at (2.70,-0.56) {$#4$};
         \node[anchor=east] at (-0.85,0) {$#1$};
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNMPV}[4]{%
-    \begin{tikzpicture}[tn picture]
-        \TN@blockedMPSword{tn}{#2}{#3}
+    \begin{TNDiagram}[compact]
+        \TNMPSSite{tnL}{(0,0)}{}
+        \TNMPSSite{tnM}{(1.35,0)}{}
+        \TNMPSSite{tnR}{(4.05,0)}{}
+        \TNConnectVirtual{tnLEast}{tnMWest}
+        \TNOpenVirtualEast{tnMEast}
+        \TNOpenVirtualWest{tnRWest}
+        \TNOpenPhysicalNorth{tnLKet}
+        \TNOpenPhysicalNorth{tnMKet}
+        \TNOpenPhysicalNorth{tnRKet}
+        \TNTraceVirtualBelow{tnLWest}{tnREast}
+        \node[tn label, above] at (tnLKet) {$#2$};
+        \node[tn label, above] at (tnRKet) {$#3$};
+        \node at (2.70,0) {$\cdots$};
         \node[anchor=east] at (-0.85,0) {$#1$};
-        \node at (\TN@chainellipsisx,-0.70) {$#4$};
-    \end{tikzpicture}%
+        \node at (2.70,-0.70) {$#4$};
+    \end{TNDiagram}%
 }
 
 % Blocking: L neighbouring local tensors grouped (dashed box) into one
 % blocked tensor; physical legs poke out the top, the outer virtual legs
 % become the blocked bond.
 \newcommand{\TNBlocking}[4]{%
-    \begin{tikzpicture}[tn picture]
-        \TN@openMPSword{tn}{#2}{#3}{#4}
-        \TN@grouppath{
-            ($(tnL.west)+(-0.30,0.22)$)
-            rectangle ($(tnR.east)+(0.30,-0.34)$);}
-    \end{tikzpicture}%
+    \begin{TNDiagram}[compact]
+        \TNMPSSite{tnL}{(0,0)}{}
+        \TNMPSSite{tnM}{(1.35,0)}{}
+        \TNMPSSite{tnR}{(4.05,0)}{}
+        \TNConnectVirtual{tnLEast}{tnMWest}
+        \TNOpenVirtualWest{tnLWest}
+        \TNOpenVirtualEast{tnMEast}
+        \TNOpenVirtualWest{tnRWest}
+        \TNOpenVirtualEast{tnREast}
+        \TNOpenPhysicalNorth{tnLKet}
+        \TNOpenPhysicalNorth{tnMKet}
+        \TNOpenPhysicalNorth{tnRKet}
+        \node[tn label, above] at (tnLKet) {$#2$};
+        \node[tn label, above] at (tnRKet) {$#3$};
+        \node at (2.70,0) {$\cdots$};
+        \node at (2.70,-0.56) {$#4$};
+        \node[tn grouping region, fit=(tnL)(tnM)(tnR)] {};
+    \end{TNDiagram}%
 }
 
 % MPV overlap: the top row carries copies of #1, the bottom row the conjugate
 % copies of #2; the shared physical indices are contracted between the rows and
 % both virtual rings are closed by the trace (the boxes above and below).
 \newcommand{\TNMPVOverlap}[3]{%
-    \begin{tikzpicture}[tn picture]
-        \TN@declareWordTensor{ovuL}{(0,0.42)}
-        \TN@declareWordTensor{ovuM}{(\TN@chainsep,0.42)}
-        \TN@declareWordTensor{ovuR}{(\TN@chainright,0.42)}
-        \TN@vconnectports{ovuLE}{ovuMW}
-        \TN@vopenport{ovuME}{0.62,0}
-        \TN@vopenport{ovuRW}{-0.62,0}
-        \TN@vtraceportsabove{ovuLW}{ovuRE}{0.48}{0.32}
-        \TN@declareWordTensor{ovdL}{(0,-0.42)}
-        \TN@declareWordTensor{ovdM}{(\TN@chainsep,-0.42)}
-        \TN@declareWordTensor{ovdR}{(\TN@chainright,-0.42)}
-        \TN@vconnectports{ovdLE}{ovdMW}
-        \TN@vopenport{ovdME}{0.62,0}
-        \TN@vopenport{ovdRW}{-0.62,0}
-        \TN@vtraceportsbelow{ovdLW}{ovdRE}{0.48}{0.32}
-        \TN@pconnectports{ovuLS}{ovdLN}
-        \TN@pconnectports{ovuMS}{ovdMN}
-        \TN@pconnectports{ovuRS}{ovdRN}
+    \begin{TNDiagram}[compact]
+        \foreach \n/\x in {L/0,M/1.35,R/4.05} {
+            \TNMPOSite{ovu\n}{(\x,0.48)}{}
+            \TNMPOSite{ovd\n}{(\x,-0.48)}{}
+            \TNConnectPhysical{ovu\n Bra}{ovd\n Ket}
+        }
+        \TNConnectVirtual{ovuLEast}{ovuMWest}
+        \TNOpenVirtualEast{ovuMEast}
+        \TNOpenVirtualWest{ovuRWest}
+        \TNTraceVirtualAbove{ovuLWest}{ovuREast}
+        \TNConnectVirtual{ovdLEast}{ovdMWest}
+        \TNOpenVirtualEast{ovdMEast}
+        \TNOpenVirtualWest{ovdRWest}
+        \TNTraceVirtualBelow{ovdLWest}{ovdREast}
         % single centred ellipsis in the omitted-site column (no line crosses it)
-        \node at (\TN@chainellipsisx,0) {$\cdots$};
+        \node at (2.70,0) {$\cdots$};
         \node[anchor=east] at (-0.85,0.42) {$#1$};
         \node[anchor=east] at (-0.85,-0.42) {$\overline{#2}$};
-        \node at (\TN@chainellipsisx,-1.02) {$#3$};
-    \end{tikzpicture}%
+        \node at (2.70,-1.08) {$#3$};
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNTransferMap}[1]{%
-    \begin{tikzpicture}[tn picture]
-        \TN@doublelayer{tn}{(0,0.44)}{(0,-0.44)}
-        \TN@vopenport{tnUW}{-0.75,0}
-        \TN@vopenport{tnDW}{-0.75,0}
-        \TN@vopenport{tnUE}{0.75,0}
-        \TN@vopenport{tnDE}{0.75,0}
+    \begin{TNDiagram}[compact]
+        \TNStackedMPOProduct{tn}{(0,0)}{}{\overline{#1}}{}
+        \TNOpenVirtualWest{tnUpperWest}
+        \TNOpenVirtualWest{tnLowerWest}
+        \TNOpenVirtualEast{tnUpperEast}
+        \TNOpenVirtualEast{tnLowerEast}
         \node at (-1.18,0) {$X$};
         \node at (1.36,0) {$\E_{#1}(X)$};
-        \node at ($(tnUS)!0.5!(tnDN)+(0.24,0)$) {$i$};
-    \end{tikzpicture}%
+        \node at ($(tnUpperBra)!0.5!(tnLowerKet)+(0.24,0)$) {$i$};
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNMPOCell}[3]{%
@@ -2070,65 +2107,65 @@
 }
 
 \newcommand{\TNGaugeConjugation}[3]{%
-    \begin{tikzpicture}[tn picture]
-        \TN@insertion[label=above:$#1$]{tnXl}{(-1.10,0)}
-        \TN@tensor{tnA}{(0,0)}
-        \TN@insertion[label=above:$#3$]{tnXr}{(1.10,0)}
-        \TN@vleg{tnXl}{west}{-0.55,0}
-        \TN@vconnect{tnXl}{east}{tnA}{west}
-        \TN@vconnect{tnA}{east}{tnXr}{west}
-        \TN@vleg{tnXr}{east}{0.55,0}
-        \TN@pleg{tnA}{north}{0,\TN@physleglen}
-        \TN@uplabel{tnA}{\TN@physlabeloff}{#2}
-    \end{tikzpicture}%
+    \begin{TNDiagram}[normal]
+        \TNInsertion{tnXl}{(-1.10,0)}{#1}
+        \TNTensor{tnA}{(0,0)}
+        \TNInsertion{tnXr}{(1.10,0)}{#3}
+        \TNVirtualPort{tnXlOpenWestPort}{tnXl}{west}\TNOpenVirtualWest{tnXlOpenWestPort}
+        \TNVirtualPort{tnXlTotnA}{tnXl}{east}\TNVirtualPort{tnATotnXl}{tnA}{west}\TNConnectVirtual{tnXlTotnA}{tnATotnXl}
+        \TNVirtualPort{tnATotnXr}{tnA}{east}\TNVirtualPort{tnXrTotnA}{tnXr}{west}\TNConnectVirtual{tnATotnXr}{tnXrTotnA}
+        \TNVirtualPort{tnXrOpenEastPort}{tnXr}{east}\TNOpenVirtualEast{tnXrOpenEastPort}
+        \TNPhysicalPort{tnAOpenKetPort}{tnA}{north}\TNOpenPhysicalNorth{tnAOpenKetPort}
+        \TNLabelAbove{tnA}{#2}
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNPhysicalRealization}[2]{%
-    \begin{tikzpicture}[tn picture]
-        \TN@tensor{tnA1}{(0,0)}
-        \TN@vleg{tnA1}{west}{-0.65,0}
-        \TN@pleg{tnA1}{north}{0,\TN@physleglen}
-        \TN@insertion[label=above:$#1$]{tnX}{(0.78,0)}
-        \TN@vconnect{tnA1}{east}{tnX}{west}
-        \TN@vleg{tnX}{east}{0.22,0}
+    \begin{TNDiagram}[normal]
+        \TNTensor{tnA1}{(0,0)}
+        \TNVirtualPort{tnA1OpenWestPort}{tnA1}{west}\TNOpenVirtualWest{tnA1OpenWestPort}
+        \TNPhysicalPort{tnA1OpenKetPort}{tnA1}{north}\TNOpenPhysicalNorth{tnA1OpenKetPort}
+        \TNInsertion{tnX}{(0.78,0)}{#1}
+        \TNVirtualPort{tnA1TotnX}{tnA1}{east}\TNVirtualPort{tnXTotnA1}{tnX}{west}\TNConnectVirtual{tnA1TotnX}{tnXTotnA1}
+        \TNVirtualPort{tnXOpenEastPort}{tnX}{east}\TNOpenVirtualEast{tnXOpenEastPort}
         \node at (1.78,0) {$=$};
-        \TN@tensor{tnA2}{(2.65,0)}
-        \TN@vleg{tnA2}{west}{-0.65,0}
-        \TN@vleg{tnA2}{east}{0.65,0}
-        \TN@insertion[label=left:$#2$]{tnO}{(2.65,0.74)}
-        \TN@pconnect{tnA2}{north}{tnO}{south}
-    \end{tikzpicture}%
+        \TNTensor{tnA2}{(2.65,0)}
+        \TNVirtualPort{tnA2OpenWestPort}{tnA2}{west}\TNOpenVirtualWest{tnA2OpenWestPort}
+        \TNVirtualPort{tnA2OpenEastPort}{tnA2}{east}\TNOpenVirtualEast{tnA2OpenEastPort}
+        \TNInsertion{tnO}{(2.65,0.74)}{#2}
+        \TNPhysicalPort{tnA2TotnO}{tnA2}{north}\TNPhysicalPort{tnOTotnA2}{tnO}{south}\TNConnectPhysical{tnA2TotnO}{tnOTotnA2}
+    \end{TNDiagram}%
 }
 
 % Fix (#401): use a dedicated physical-leg operator insertion for
 % general linear twists, and keep permutation twists for index relabellings.
 \newcommand{\TNLinearTwist}[2]{%
-    \begin{tikzpicture}[tn picture]
-        \TN@tensor{tnA}{(0,0)}
-        \TN@vleg{tnA}{west}{-0.65,0}
-        \TN@vleg{tnA}{east}{0.65,0}
-        \TN@insertion[label=left:$#1$]{tnu}{(0,0.64)}
-        \TN@pconnect{tnA}{north}{tnu}{south}
+    \begin{TNDiagram}[normal]
+        \TNTensor{tnA}{(0,0)}
+        \TNVirtualPort{tnAOpenWestPort}{tnA}{west}\TNOpenVirtualWest{tnAOpenWestPort}
+        \TNVirtualPort{tnAOpenEastPort}{tnA}{east}\TNOpenVirtualEast{tnAOpenEastPort}
+        \TNInsertion{tnu}{(0,0.64)}{#1}
+        \TNPhysicalPort{tnATotnu}{tnA}{north}\TNPhysicalPort{tnuTotnA}{tnu}{south}\TNConnectPhysical{tnATotnu}{tnuTotnA}
         \node at ($(tnu.north)+(0,0.18)$) {$#2$};
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 % Fix (#401): make the relabelling arrow explicit so multi-step
 % permutation diagrams can distinguish \sigma_h from \sigma_g.
 \newcommand{\TNPermutationTwistLabeled}[3]{%
-    \begin{tikzpicture}[tn picture]
-        \TN@tensor{tnL}{(0,0)}
-        \TN@vleg{tnL}{west}{-0.65,0}
-        \TN@vleg{tnL}{east}{0.65,0}
-        \TN@pleg{tnL}{north}{0,\TN@physleglen}
-        \TN@uplabel{tnL}{\TN@physlabeloff}{#1}
+    \begin{TNDiagram}[normal]
+        \TNTensor{tnL}{(0,0)}
+        \TNVirtualPort{tnLOpenWestPort}{tnL}{west}\TNOpenVirtualWest{tnLOpenWestPort}
+        \TNVirtualPort{tnLOpenEastPort}{tnL}{east}\TNOpenVirtualEast{tnLOpenEastPort}
+        \TNPhysicalPort{tnLOpenKetPort}{tnL}{north}\TNOpenPhysicalNorth{tnLOpenKetPort}
+        \TNLabelAbove{tnL}{#1}
         \node at (1.55,0) {$\xrightarrow{\ #3\ }$};
-        \TN@tensor{tnR}{(3.30,0)}
-        \TN@vleg{tnR}{west}{-0.65,0}
-        \TN@vleg{tnR}{east}{0.65,0}
-        \TN@pleg{tnR}{north}{0,\TN@physleglen}
-        \TN@uplabel{tnR}{\TN@physlabeloff}{#2}
-    \end{tikzpicture}%
+        \TNTensor{tnR}{(3.30,0)}
+        \TNVirtualPort{tnROpenWestPort}{tnR}{west}\TNOpenVirtualWest{tnROpenWestPort}
+        \TNVirtualPort{tnROpenEastPort}{tnR}{east}\TNOpenVirtualEast{tnROpenEastPort}
+        \TNPhysicalPort{tnROpenKetPort}{tnR}{north}\TNOpenPhysicalNorth{tnROpenKetPort}
+        \TNLabelAbove{tnR}{#2}
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNPermutationTwist}[2]{%
@@ -2136,606 +2173,617 @@
 }
 
 \newcommand{\TNTwistedTransfer}[1]{%
-    \begin{tikzpicture}[tn picture]
-        \TN@tensor{tnUp}{(0,\TN@doublelayersep)}
-        \TN@tensor{tnDn}{(0,-\TN@doublelayersep)}
-        \TN@vleg{tnUp}{west}{-0.80,0}
-        \TN@vleg{tnDn}{west}{-0.80,0}
-        \TN@vleg{tnUp}{east}{0.80,0}
-        \TN@vleg{tnDn}{east}{0.80,0}
-        \TN@insertion[label=left:$#1$]{tnu}{(0,0)}
-        \TN@pconnect{tnUp}{south}{tnu}{north}
-        \TN@pconnect{tnu}{south}{tnDn}{north}
+    \begin{TNDiagram}[normal]
+        \TNTensor{tnUp}{(0,0.48)}
+        \TNTensor{tnDn}{(0,-0.48)}
+        \TNVirtualPort{tnUpOpenWestPort}{tnUp}{west}\TNOpenVirtualWest{tnUpOpenWestPort}
+        \TNVirtualPort{tnDnOpenWestPort}{tnDn}{west}\TNOpenVirtualWest{tnDnOpenWestPort}
+        \TNVirtualPort{tnUpOpenEastPort}{tnUp}{east}\TNOpenVirtualEast{tnUpOpenEastPort}
+        \TNVirtualPort{tnDnOpenEastPort}{tnDn}{east}\TNOpenVirtualEast{tnDnOpenEastPort}
+        \TNInsertion{tnu}{(0,0)}{#1}
+        \TNPhysicalPort{tnUpTotnu}{tnUp}{south}\TNPhysicalPort{tnuTotnUp}{tnu}{north}\TNConnectPhysical{tnUpTotnu}{tnuTotnUp}
+        \TNPhysicalPort{tnuTotnDn}{tnu}{south}\TNPhysicalPort{tnDnTotnu}{tnDn}{north}\TNConnectPhysical{tnuTotnDn}{tnDnTotnu}
         \node at (-1.25,0) {$X$};
         \node at (1.52,0) {$\E_{#1}(X)$};
         \node at ($(tnUp.north)+(0,0.28)$) {$n$};
         \node at ($(tnDn.south)+(0,-0.28)$) {$n'$};
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNCondCOne}[3]{%
-    \begin{tikzpicture}[tn picture]
-        \TN@tensor{tnL}{(0,0)}
-        \TN@vleg{tnL}{west}{-0.65,0}
-        \TN@vleg{tnL}{east}{0.65,0}
-        \TN@pleg{tnL}{north}{0,0.26}
-        \TN@insertion[label=left:$#1$]{tnu}{(0,0.64)}
-        \TN@pconnect{tnL}{north}{tnu}{south}
+    \begin{TNDiagram}[normal]
+        \TNTensor{tnL}{(0,0)}
+        \TNVirtualPort{tnLOpenWestPort}{tnL}{west}\TNOpenVirtualWest{tnLOpenWestPort}
+        \TNVirtualPort{tnLOpenEastPort}{tnL}{east}\TNOpenVirtualEast{tnLOpenEastPort}
+        \TNPhysicalPort{tnLOpenKetPort}{tnL}{north}\TNOpenPhysicalNorth{tnLOpenKetPort}
+        \TNInsertion{tnu}{(0,0.64)}{#1}
+        \TNPhysicalPort{tnLTotnu}{tnL}{north}\TNPhysicalPort{tnuTotnL}{tnu}{south}\TNConnectPhysical{tnLTotnu}{tnuTotnL}
         \node at ($(tnu.north)+(0,0.18)$) {$#3$};
         \node at (1.65,0) {$=$};
-        \TN@insertion[label=above:$#2$]{tnXl}{(3.15,0)}
-        \TN@tensor{tnA}{(4.20,0)}
-        \TN@insertion[label=above:$#2^\dagger$]{tnXr}{(5.25,0)}
-        \TN@vleg{tnXl}{west}{-0.55,0}
-        \TN@vconnect{tnXl}{east}{tnA}{west}
-        \TN@vconnect{tnA}{east}{tnXr}{west}
-        \TN@vleg{tnXr}{east}{0.55,0}
-        \TN@pleg{tnA}{north}{0,\TN@physleglen}
-        \TN@uplabel{tnA}{\TN@physlabeloff}{#3}
-    \end{tikzpicture}%
+        \TNInsertion{tnXl}{(3.15,0)}{#2}
+        \TNTensor{tnA}{(4.20,0)}
+        \TNInsertion{tnXr}{(5.25,0)}{#2^\dagger}
+        \TNVirtualPort{tnXlOpenWestPort}{tnXl}{west}\TNOpenVirtualWest{tnXlOpenWestPort}
+        \TNVirtualPort{tnXlTotnA}{tnXl}{east}\TNVirtualPort{tnATotnXl}{tnA}{west}\TNConnectVirtual{tnXlTotnA}{tnATotnXl}
+        \TNVirtualPort{tnATotnXr}{tnA}{east}\TNVirtualPort{tnXrTotnA}{tnXr}{west}\TNConnectVirtual{tnATotnXr}{tnXrTotnA}
+        \TNVirtualPort{tnXrOpenEastPort}{tnXr}{east}\TNOpenVirtualEast{tnXrOpenEastPort}
+        \TNPhysicalPort{tnAOpenKetPort}{tnA}{north}\TNOpenPhysicalNorth{tnAOpenKetPort}
+        \TNLabelAbove{tnA}{#3}
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNCondCTwo}[1]{%
-    \begin{tikzpicture}[tn picture]
-        \TN@insertion[label=above:$#1$]{tnVL}{(-1.15,0.48)}
-        \TN@insertion[label=below:$#1^\dagger$]{tnVdL}{(-1.15,-0.48)}
-        \TN@tensor{tnLUp}{(0,0.48)}
-        \TN@tensor{tnLDn}{(0,-0.48)}
-        \TN@vleg{tnVL}{west}{-0.45,0}
-        \TN@vleg{tnVdL}{west}{-0.45,0}
-        \TN@vconnect{tnVL}{east}{tnLUp}{west}
-        \TN@vconnect{tnVdL}{east}{tnLDn}{west}
-        \TN@vleg{tnLUp}{east}{0.55,0}
-        \TN@vleg{tnLDn}{east}{0.55,0}
-        \TN@pconnect{tnLUp}{south}{tnLDn}{north}
+    \begin{TNDiagram}[normal]
+        \TNInsertion{tnVL}{(-1.15,0.48)}{#1}
+        \TNInsertion{tnVdL}{(-1.15,-0.48)}{#1^\dagger}
+        \TNTensor{tnLUp}{(0,0.48)}
+        \TNTensor{tnLDn}{(0,-0.48)}
+        \TNVirtualPort{tnVLOpenWestPort}{tnVL}{west}\TNOpenVirtualWest{tnVLOpenWestPort}
+        \TNVirtualPort{tnVdLOpenWestPort}{tnVdL}{west}\TNOpenVirtualWest{tnVdLOpenWestPort}
+        \TNVirtualPort{tnVLTotnLUp}{tnVL}{east}\TNVirtualPort{tnLUpTotnVL}{tnLUp}{west}\TNConnectVirtual{tnVLTotnLUp}{tnLUpTotnVL}
+        \TNVirtualPort{tnVdLTotnLDn}{tnVdL}{east}\TNVirtualPort{tnLDnTotnVdL}{tnLDn}{west}\TNConnectVirtual{tnVdLTotnLDn}{tnLDnTotnVdL}
+        \TNVirtualPort{tnLUpOpenEastPort}{tnLUp}{east}\TNOpenVirtualEast{tnLUpOpenEastPort}
+        \TNVirtualPort{tnLDnOpenEastPort}{tnLDn}{east}\TNOpenVirtualEast{tnLDnOpenEastPort}
+        \TNPhysicalPort{tnLUpTotnLDn}{tnLUp}{south}\TNPhysicalPort{tnLDnTotnLUp}{tnLDn}{north}\TNConnectPhysical{tnLUpTotnLDn}{tnLDnTotnLUp}
         \node at (1.55,0) {$=$};
-        \TN@tensor{tnRUp}{(3.10,0.48)}
-        \TN@tensor{tnRDn}{(3.10,-0.48)}
-        \TN@insertion[label=above:$#1$]{tnVR}{(4.25,0.48)}
-        \TN@insertion[label=below:$#1^\dagger$]{tnVdR}{(4.25,-0.48)}
-        \TN@vleg{tnRUp}{west}{-0.55,0}
-        \TN@vleg{tnRDn}{west}{-0.55,0}
-        \TN@vconnect{tnRUp}{east}{tnVR}{west}
-        \TN@vconnect{tnRDn}{east}{tnVdR}{west}
-        \TN@vleg{tnVR}{east}{0.45,0}
-        \TN@vleg{tnVdR}{east}{0.45,0}
-        \TN@pconnect{tnRUp}{south}{tnRDn}{north}
-    \end{tikzpicture}%
+        \TNTensor{tnRUp}{(3.10,0.48)}
+        \TNTensor{tnRDn}{(3.10,-0.48)}
+        \TNInsertion{tnVR}{(4.25,0.48)}{#1}
+        \TNInsertion{tnVdR}{(4.25,-0.48)}{#1^\dagger}
+        \TNVirtualPort{tnRUpOpenWestPort}{tnRUp}{west}\TNOpenVirtualWest{tnRUpOpenWestPort}
+        \TNVirtualPort{tnRDnOpenWestPort}{tnRDn}{west}\TNOpenVirtualWest{tnRDnOpenWestPort}
+        \TNVirtualPort{tnRUpTotnVR}{tnRUp}{east}\TNVirtualPort{tnVRTotnRUp}{tnVR}{west}\TNConnectVirtual{tnRUpTotnVR}{tnVRTotnRUp}
+        \TNVirtualPort{tnRDnTotnVdR}{tnRDn}{east}\TNVirtualPort{tnVdRTotnRDn}{tnVdR}{west}\TNConnectVirtual{tnRDnTotnVdR}{tnVdRTotnRDn}
+        \TNVirtualPort{tnVROpenEastPort}{tnVR}{east}\TNOpenVirtualEast{tnVROpenEastPort}
+        \TNVirtualPort{tnVdROpenEastPort}{tnVdR}{east}\TNOpenVirtualEast{tnVdROpenEastPort}
+        \TNPhysicalPort{tnRUpTotnRDn}{tnRUp}{south}\TNPhysicalPort{tnRDnTotnRUp}{tnRDn}{north}\TNConnectPhysical{tnRUpTotnRDn}{tnRDnTotnRUp}
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNStringOrderParameter}[2]{%
-    \begin{tikzpicture}[tn picture]
-        \TN@tensor{tnLam}{(-1.15,0)}
+    \begin{TNDiagram}[normal]
+        \TNTensor{tnLam}{(-1.15,0)}
         \node at ($(tnLam.south)+(0,-0.28)$) {$\Lambda$};
-        \TN@tensor{tnU1}{(0,\TN@doublelayersep)}
-        \TN@tensor{tnD1}{(0,-\TN@doublelayersep)}
-        \TN@tensor{tnU2}{(1.55,\TN@doublelayersep)}
-        \TN@tensor{tnD2}{(1.55,-\TN@doublelayersep)}
-        \TN@tensor{tnU3}{(4.30,\TN@doublelayersep)}
-        \TN@tensor{tnD3}{(4.30,-\TN@doublelayersep)}
-        \TN@insertion[label=left:$#1$]{tnuA}{(0,0)}
-        \TN@insertion[label=left:$#1$]{tnuB}{(1.55,0)}
-        \TN@insertion[label=left:$#1$]{tnuC}{(4.30,0)}
-        \TN@vconnect{tnLam}{east}{tnU1}{west}
-        \TN@vconnect{tnLam}{east}{tnD1}{west}
-        \TN@vconnect{tnU1}{east}{tnU2}{west}
-        \TN@vconnect{tnD1}{east}{tnD2}{west}
-        \TN@vleg{tnU2}{east}{0.62,0}
-        \TN@vleg{tnD2}{east}{0.62,0}
-        \TN@vleg{tnU3}{west}{-0.62,0}
-        \TN@vleg{tnD3}{west}{-0.62,0}
-        \TN@vtraceright{tnU3}{tnD3}{0.70}
-        \TN@pconnect{tnU1}{south}{tnuA}{north}
-        \TN@pconnect{tnuA}{south}{tnD1}{north}
-        \TN@pconnect{tnU2}{south}{tnuB}{north}
-        \TN@pconnect{tnuB}{south}{tnD2}{north}
-        \TN@pconnect{tnU3}{south}{tnuC}{north}
-        \TN@pconnect{tnuC}{south}{tnD3}{north}
-        \node at (2.92,\TN@doublelayersep) {$\cdots$};
-        \node at (2.92,-\TN@doublelayersep) {$\cdots$};
-        \node at (5.55,0) {$\operatorname{tr}$};
+        \TNTensor{tnU1}{(0,0.48)}
+        \TNTensor{tnD1}{(0,-0.48)}
+        \TNTensor{tnU2}{(1.55,0.48)}
+        \TNTensor{tnD2}{(1.55,-0.48)}
+        \TNTensor{tnU3}{(4.30,0.48)}
+        \TNTensor{tnD3}{(4.30,-0.48)}
+        \TNInsertion{tnuA}{(0,0)}{#1}
+        \TNInsertion{tnuB}{(1.55,0)}{#1}
+        \TNInsertion{tnuC}{(4.30,0)}{#1}
+        \TNVirtualPort{tnLamTotnU1}{tnLam}{east}\TNVirtualPort{tnU1TotnLam}{tnU1}{west}\TNConnectVirtual{tnLamTotnU1}{tnU1TotnLam}
+        \TNVirtualPort{tnLamTotnD1}{tnLam}{east}\TNVirtualPort{tnD1TotnLam}{tnD1}{west}\TNConnectVirtual{tnLamTotnD1}{tnD1TotnLam}
+        \TNVirtualPort{tnU1TotnU2}{tnU1}{east}\TNVirtualPort{tnU2TotnU1}{tnU2}{west}\TNConnectVirtual{tnU1TotnU2}{tnU2TotnU1}
+        \TNVirtualPort{tnD1TotnD2}{tnD1}{east}\TNVirtualPort{tnD2TotnD1}{tnD2}{west}\TNConnectVirtual{tnD1TotnD2}{tnD2TotnD1}
+        \TNVirtualPort{tnU2OpenEastPort}{tnU2}{east}\TNOpenVirtualEast{tnU2OpenEastPort}
+        \TNVirtualPort{tnD2OpenEastPort}{tnD2}{east}\TNOpenVirtualEast{tnD2OpenEastPort}
+        \TNVirtualPort{tnU3OpenWestPort}{tnU3}{west}\TNOpenVirtualWest{tnU3OpenWestPort}
+        \TNVirtualPort{tnD3OpenWestPort}{tnD3}{west}\TNOpenVirtualWest{tnD3OpenWestPort}
+        \TNVirtualPort{tnU3Trace}{tnU3}{east}
+        \TNVirtualPort{tnD3Trace}{tnD3}{east}
+        \TNTraceVirtualRight{tnU3Trace}{tnD3Trace}
+        \TNPhysicalPort{tnU1TotnuA}{tnU1}{south}\TNPhysicalPort{tnuATotnU1}{tnuA}{north}\TNConnectPhysical{tnU1TotnuA}{tnuATotnU1}
+        \TNPhysicalPort{tnuATotnD1}{tnuA}{south}\TNPhysicalPort{tnD1TotnuA}{tnD1}{north}\TNConnectPhysical{tnuATotnD1}{tnD1TotnuA}
+        \TNPhysicalPort{tnU2TotnuB}{tnU2}{south}\TNPhysicalPort{tnuBTotnU2}{tnuB}{north}\TNConnectPhysical{tnU2TotnuB}{tnuBTotnU2}
+        \TNPhysicalPort{tnuBTotnD2}{tnuB}{south}\TNPhysicalPort{tnD2TotnuB}{tnD2}{north}\TNConnectPhysical{tnuBTotnD2}{tnD2TotnuB}
+        \TNPhysicalPort{tnU3TotnuC}{tnU3}{south}\TNPhysicalPort{tnuCTotnU3}{tnuC}{north}\TNConnectPhysical{tnU3TotnuC}{tnuCTotnU3}
+        \TNPhysicalPort{tnuCTotnD3}{tnuC}{south}\TNPhysicalPort{tnD3TotnuC}{tnD3}{north}\TNConnectPhysical{tnuCTotnD3}{tnD3TotnuC}
+        \node at (2.92,0.48) {$\cdots$};
+        \node at (2.92,-0.48) {$\cdots$};
+        \node at (5.55,0) {$\tr$};
         \node at (2.92,-1.02) {$#2$};
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNInternalTraceInsertion}[3]{%
-    \begin{tikzpicture}[tn picture]
-        \TN@tensor{tnL}{(0,0)}
-        \TN@insertion[label=above:$#3$]{tnX}{(0.80,0)}
-        \TN@tensor{tnR}{(1.60,0)}
-        \TN@pleg{tnL}{north}{0,\TN@physleglen}
-        \TN@pleg{tnR}{north}{0,\TN@physleglen}
-        \TN@uplabel{tnL}{\TN@physlabeloff}{#1}
-        \TN@uplabel{tnR}{\TN@physlabeloff}{#2}
-        \TN@vconnect{tnL}{east}{tnX}{west}
-        \TN@vconnect{tnX}{east}{tnR}{west}
-        \TN@vtracebelow{tnL}{tnR}{0.78}
-        \node at (0.80,-0.88) {$\operatorname{Tr}$};
-    \end{tikzpicture}%
+    \begin{TNDiagram}[normal]
+        \TNTensor{tnL}{(0,0)}
+        \TNInsertion{tnX}{(0.80,0)}{#3}
+        \TNTensor{tnR}{(1.60,0)}
+        \TNPhysicalPort{tnLOpenKetPort}{tnL}{north}\TNOpenPhysicalNorth{tnLOpenKetPort}
+        \TNPhysicalPort{tnROpenKetPort}{tnR}{north}\TNOpenPhysicalNorth{tnROpenKetPort}
+        \TNLabelAbove{tnL}{#1}
+        \TNLabelAbove{tnR}{#2}
+        \TNVirtualPort{tnLTotnX}{tnL}{east}\TNVirtualPort{tnXTotnL}{tnX}{west}\TNConnectVirtual{tnLTotnX}{tnXTotnL}
+        \TNVirtualPort{tnXTotnR}{tnX}{east}\TNVirtualPort{tnRTotnX}{tnR}{west}\TNConnectVirtual{tnXTotnR}{tnRTotnX}
+        \TNVirtualPort{tnLTrace}{tnL}{west}
+        \TNVirtualPort{tnRTrace}{tnR}{east}
+        \TNTraceVirtualBelow{tnLTrace}{tnRTrace}
+        \node at (0.80,-0.88) {$\tr$};
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNExternalTraceInsertion}[3]{%
-    \begin{tikzpicture}[tn picture]
-        \TN@tensor{tnL}{(0,0)}
-        \TN@tensor{tnR}{(1.60,0)}
-        \TN@insertion[label=above:$#3$]{tnY}{(0.80,-0.78)}
-        \TN@pleg{tnL}{north}{0,\TN@physleglen}
-        \TN@pleg{tnR}{north}{0,\TN@physleglen}
-        \TN@uplabel{tnL}{\TN@physlabeloff}{#1}
-        \TN@uplabel{tnR}{\TN@physlabeloff}{#2}
-        \TN@vconnect{tnL}{east}{tnR}{west}
-        \TN@vtracevia{tnL}{tnY}{tnR}{0.15}{0.15}
-        \node at (0.80,-1.00) {$\operatorname{Tr}$};
-    \end{tikzpicture}%
+    \begin{TNDiagram}[normal]
+        \TNTensor{tnL}{(0,0)}
+        \TNTensor{tnR}{(1.60,0)}
+        \TNInsertion{tnY}{(0.80,-0.78)}{#3}
+        \TNPhysicalPort{tnLOpenKetPort}{tnL}{north}\TNOpenPhysicalNorth{tnLOpenKetPort}
+        \TNPhysicalPort{tnROpenKetPort}{tnR}{north}\TNOpenPhysicalNorth{tnROpenKetPort}
+        \TNLabelAbove{tnL}{#1}
+        \TNLabelAbove{tnR}{#2}
+        \TNVirtualPort{tnLTotnR}{tnL}{east}\TNVirtualPort{tnRTotnL}{tnR}{west}\TNConnectVirtual{tnLTotnR}{tnRTotnL}
+        \TNVirtualPort{tnLTrace}{tnL}{west}
+        \TNVirtualPort{tnYTraceLeft}{tnY}{west}
+        \TNVirtualPort{tnYTraceRight}{tnY}{east}
+        \TNVirtualPort{tnRTrace}{tnR}{east}
+        \TNConnectVirtualVH{tnLTrace}{tnYTraceLeft}
+        \TNConnectVirtualHV{tnYTraceRight}{tnRTrace}
+        \node at (0.80,-1.00) {$\tr$};
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNBoundaryRegrow}[4]{%
-    \begin{tikzpicture}[tn picture]
-        \TN@tensor{rA}{(0,0)}
-        \TN@tensor{rB}{(1.05,0)}
-        \TN@tensor{rC}{(2.10,0)}
-        \TN@insertion[label=above:$#1$]{rX}{(3.55,0)}
+    \begin{TNDiagram}[normal]
+        \TNTensor{rA}{(0,0)}
+        \TNTensor{rB}{(1.05,0)}
+        \TNTensor{rC}{(2.10,0)}
+        \TNInsertion{rX}{(3.55,0)}{#1}
         \foreach \n in {rA,rB,rC} {
-                \TN@pleg{\n}{north}{0,0.44}
+                \TNPhysicalPort{\n OpenKetPort}{\n}{north}\TNOpenPhysicalNorth{\n OpenKetPort}
             }
-        \TN@uplabel{rA}{0.66}{#2}
-        \TN@uplabel{rC}{0.66}{#3}
-        \TN@vleg{rA}{west}{-0.50,0}
-        \TN@vconnect{rA}{east}{rB}{west}
-        \TN@vconnect{rB}{east}{rC}{west}
-        \TN@vconnect{rC}{east}{rX}{west}
-        \TN@vleg{rX}{east}{0.45,0}
+        \TNLabelAbove{rA}{#2}
+        \TNLabelAbove{rC}{#3}
+        \TNVirtualPort{rAOpenWestPort}{rA}{west}\TNOpenVirtualWest{rAOpenWestPort}
+        \TNVirtualPort{rATorB}{rA}{east}\TNVirtualPort{rBTorA}{rB}{west}\TNConnectVirtual{rATorB}{rBTorA}
+        \TNVirtualPort{rBTorC}{rB}{east}\TNVirtualPort{rCTorB}{rC}{west}\TNConnectVirtual{rBTorC}{rCTorB}
+        \TNVirtualPort{rCTorX}{rC}{east}\TNVirtualPort{rXTorC}{rX}{west}\TNConnectVirtual{rCTorX}{rXTorC}
+        \TNVirtualPort{rXOpenEastPort}{rX}{east}\TNOpenVirtualEast{rXOpenEastPort}
         \node at (1.78,-0.58) {$#4$};
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNLocalEqualityStep}[3]{%
-    \begin{tikzpicture}[tn picture]
-        \TN@tensor{lA}{(0,0)}
-        \TN@insertion[label=above:$#1$]{lX}{(0.82,0)}
-        \TN@tensor{lB}{(1.65,0)}
-        \TN@pleg{lB}{north}{0,0.44}
-        \TN@uplabel{lB}{0.66}{#3}
-        \TN@vleg{lA}{west}{-0.50,0}
-        \TN@vconnect{lA}{east}{lX}{west}
-        \TN@vconnect{lX}{east}{lB}{west}
-        \TN@vleg{lB}{east}{0.50,0}
+    \begin{TNDiagram}[normal]
+        \TNTensor{lA}{(0,0)}
+        \TNInsertion{lX}{(0.82,0)}{#1}
+        \TNTensor{lB}{(1.65,0)}
+        \TNPhysicalPort{lBOpenKetPort}{lB}{north}\TNOpenPhysicalNorth{lBOpenKetPort}
+        \TNLabelAbove{lB}{#3}
+        \TNVirtualPort{lAOpenWestPort}{lA}{west}\TNOpenVirtualWest{lAOpenWestPort}
+        \TNVirtualPort{lATolX}{lA}{east}\TNVirtualPort{lXTolA}{lX}{west}\TNConnectVirtual{lATolX}{lXTolA}
+        \TNVirtualPort{lXTolB}{lX}{east}\TNVirtualPort{lBTolX}{lB}{west}\TNConnectVirtual{lXTolB}{lBTolX}
+        \TNVirtualPort{lBOpenEastPort}{lB}{east}\TNOpenVirtualEast{lBOpenEastPort}
         \node at (2.85,0) {$=$};
-        \TN@tensor{rA}{(4.10,0)}
-        \TN@insertion[label=above:$#2$]{rX}{(4.92,0)}
-        \TN@tensor{rB}{(5.75,0)}
-        \TN@pleg{rB}{north}{0,0.44}
-        \TN@uplabel{rB}{0.66}{#3}
-        \TN@vleg{rA}{west}{-0.50,0}
-        \TN@vconnect{rA}{east}{rX}{west}
-        \TN@vconnect{rX}{east}{rB}{west}
-        \TN@vleg{rB}{east}{0.50,0}
-    \end{tikzpicture}%
+        \TNTensor{rA}{(4.10,0)}
+        \TNInsertion{rX}{(4.92,0)}{#2}
+        \TNTensor{rB}{(5.75,0)}
+        \TNPhysicalPort{rBOpenKetPort}{rB}{north}\TNOpenPhysicalNorth{rBOpenKetPort}
+        \TNLabelAbove{rB}{#3}
+        \TNVirtualPort{rAOpenWestPort}{rA}{west}\TNOpenVirtualWest{rAOpenWestPort}
+        \TNVirtualPort{rATorX}{rA}{east}\TNVirtualPort{rXTorA}{rX}{west}\TNConnectVirtual{rATorX}{rXTorA}
+        \TNVirtualPort{rXTorB}{rX}{east}\TNVirtualPort{rBTorX}{rB}{west}\TNConnectVirtual{rXTorB}{rBTorX}
+        \TNVirtualPort{rBOpenEastPort}{rB}{east}\TNOpenVirtualEast{rBOpenEastPort}
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNGroundSpaceMap}[5]{%
-    \begin{tikzpicture}[tn picture]
-        \TN@tensor{tnL}{(0,0)}
-        \TN@tensor{tnM}{(1.15,0)}
-        \TN@tensor{tnR}{(2.95,0)}
-        \TN@pleg{tnL}{north}{0,\TN@physleglen}
-        \TN@pleg{tnM}{north}{0,\TN@physleglen}
-        \TN@pleg{tnR}{north}{0,\TN@physleglen}
-        \TN@uplabel{tnL}{\TN@physlabeloff}{#2}
-        \TN@uplabel{tnR}{\TN@physlabeloff}{#3}
-        \TN@vleg{tnL}{west}{-0.45,0}
-        \TN@vconnect{tnL}{east}{tnM}{west}
-        \TN@vleg{tnM}{east}{0.56,0}
-        \TN@vleg{tnR}{west}{-0.56,0}
-        \TN@vleg{tnR}{east}{0.45,0}
+    \begin{TNDiagram}[normal]
+        \TNTensor{tnL}{(0,0)}
+        \TNTensor{tnM}{(1.15,0)}
+        \TNTensor{tnR}{(2.95,0)}
+        \TNPhysicalPort{tnLOpenKetPort}{tnL}{north}\TNOpenPhysicalNorth{tnLOpenKetPort}
+        \TNPhysicalPort{tnMOpenKetPort}{tnM}{north}\TNOpenPhysicalNorth{tnMOpenKetPort}
+        \TNPhysicalPort{tnROpenKetPort}{tnR}{north}\TNOpenPhysicalNorth{tnROpenKetPort}
+        \TNLabelAbove{tnL}{#2}
+        \TNLabelAbove{tnR}{#3}
+        \TNVirtualPort{tnLOpenWestPort}{tnL}{west}\TNOpenVirtualWest{tnLOpenWestPort}
+        \TNVirtualPort{tnLTotnM}{tnL}{east}\TNVirtualPort{tnMTotnL}{tnM}{west}\TNConnectVirtual{tnLTotnM}{tnMTotnL}
+        \TNVirtualPort{tnMOpenEastPort}{tnM}{east}\TNOpenVirtualEast{tnMOpenEastPort}
+        \TNVirtualPort{tnROpenWestPort}{tnR}{west}\TNOpenVirtualWest{tnROpenWestPort}
+        \TNVirtualPort{tnROpenEastPort}{tnR}{east}\TNOpenVirtualEast{tnROpenEastPort}
         \node at (2.05,0) {$\cdots$};
-        \TN@insertion[label=below:$#5$]{tnX}{(1.48,-0.82)}
-        \TN@vtracevia{tnL}{tnX}{tnR}{0.45}{0.45}
+        \TNInsertion{tnX}{(1.48,-0.82)}{#5}
+        \TNVirtualPort{tnLTrace}{tnL}{west}
+        \TNVirtualPort{tnXTraceLeft}{tnX}{west}
+        \TNVirtualPort{tnXTraceRight}{tnX}{east}
+        \TNVirtualPort{tnRTrace}{tnR}{east}
+        \TNConnectVirtualVH{tnLTrace}{tnXTraceLeft}
+        \TNConnectVirtualHV{tnXTraceRight}{tnRTrace}
         \node at ($(tnM.south)+(0,-0.28)$) {$#1$};
         \node at (2.05,-0.55) {$#4$};
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 % ---------- PEPS diagrams ----------
 
 \newcommand{\TNPEPSEdgeBlockingReduction}{%
-    \begin{tikzpicture}[tn picture]
+    \begin{TNDiagram}[normal]
         \begin{scope}
-            \TN@pepsFiveSitePatch{blockC}
-            \TN@vpath[tn selected path]{(blockCone) circle (0.30cm)}
-            \TN@vpath[tn selected path]{(blockCfive) circle (0.30cm)}
-            \TN@vpath[tn selected path, rounded corners=2mm]
+            \TNPEPSFiveSitePatch{blockC}
+            \TNSelectedPath{(blockCone) circle (0.30cm)}
+            \TNSelectedPath{(blockCfive) circle (0.30cm)}
+            \TNSelectedPath
                 {(0.40,-0.20) rectangle (1.70,1.70)}
             \node[tn region label selected] at (-0.45,-0.35) {$A'_2$};
             \node[tn region label selected] at (-1.10,1.80) {$A'_1$};
             \node[tn region label selected] at (1.70,1.80) {$A'_3$};
         \end{scope}
         \node at (2.70,0.70) {$\rightsquigarrow$};
-        \begin{scope}[xshift=3.75cm,yshift=0.70cm]
-            \TN@factorpath{(0.20,0) rectangle (4.00,-0.46)}
-            \TN@tensor{blkL}{(0.80,0)}
-            \TN@tensor{blkM}{(2.10,0)}
-            \TN@tensor{blkR}{(3.40,0)}
+        \begin{scope}[shift={(3.75cm,0.70cm)}]
+            \TNFactorBoundary{(0.20,0) rectangle (4.00,-0.46)}
+            \TNTensor{blkL}{(0.80,0)}
+            \TNTensor{blkM}{(2.10,0)}
+            \TNTensor{blkR}{(3.40,0)}
             \foreach \n in {blkL,blkM,blkR} {
-                    \TN@pleg{\n}{north}{0,0.46}
+                    \TNPhysicalPort{\n OpenKetPort}{\n}{north}\TNOpenPhysicalNorth{\n OpenKetPort}
                 }
             \node at ($(blkL.south)+(0,-0.30)$) {$A'_1$};
             \node at ($(blkM.south)+(0,-0.30)$) {$A'_3$};
             \node at ($(blkR.south)+(0,-0.30)$) {$A'_2$};
         \end{scope}
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNPEPSEdgeInsertedCoeff}{%
-    \begin{tikzpicture}[tn picture]
-        \TN@boxedThreeSiteInsertion{edgeCoeff}{A'_1}{A'_3}{A'_2}{X}
-    \end{tikzpicture}%
+    \begin{TNDiagram}[normal]
+        \TNThreeSiteInsertion{edgeCoeff}{A'_1}{A'_3}{A'_2}{X}
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNPEPSThreeSiteInsertionComparison}{%
-    \begin{tikzpicture}[tn picture]
+    \begin{TNDiagram}[normal]
         \begin{scope}
-            \TN@boxedThreeSiteInsertion{insA}{A_1}{A_2}{A_3}{X}
+            \TNThreeSiteInsertion{insA}{A_1}{A_2}{A_3}{X}
         \end{scope}
         \node at (4.20,0) {$=$};
-        \begin{scope}[xshift=4.90cm]
-            \TN@boxedThreeSiteInsertion{insB}{B_1}{B_2}{B_3}{Y}
+        \begin{scope}[shift={(4.90cm,0)}]
+            \TNThreeSiteInsertion{insB}{B_1}{B_2}{B_3}{Y}
         \end{scope}
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNPEPSInsertionPhysicalRealization}{%
-    \begin{tikzpicture}[tn picture]
+    \begin{TNDiagram}[normal]
         \begin{scope}
-            \TN@tensor{realLeftA}{(0,0)}
-            \TN@pleg{realLeftA}{north}{0,0.50}
-            \TN@vleg{realLeftA}{east}{0.70,0}
-            \TN@vleg{realLeftA}{south}{0,-0.58}
-            \TN@insertion[label=above:$M$]{realLeftM}{(-0.56,0)}
-            \TN@vleg{realLeftM}{west}{-0.42,0}
-            \TN@vconnect{realLeftM}{east}{realLeftA}{west}
+            \TNTensor{realLeftA}{(0,0)}
+            \TNPhysicalPort{realLeftAOpenKetPort}{realLeftA}{north}\TNOpenPhysicalNorth{realLeftAOpenKetPort}
+            \TNVirtualPort{realLeftAOpenEastPort}{realLeftA}{east}\TNOpenVirtualEast{realLeftAOpenEastPort}
+            \TNVirtualPort{realLeftAOpenSouthPort}{realLeftA}{south}\TNOpenVirtualSouth{realLeftAOpenSouthPort}
+            \TNInsertion{realLeftM}{(-0.56,0)}{M}
+            \TNVirtualPort{realLeftMOpenWestPort}{realLeftM}{west}\TNOpenVirtualWest{realLeftMOpenWestPort}
+            \TNVirtualPort{realLeftMTorealLeftA}{realLeftM}{east}\TNVirtualPort{realLeftATorealLeftM}{realLeftA}{west}\TNConnectVirtual{realLeftMTorealLeftA}{realLeftATorealLeftM}
             \node at ($(realLeftA.south)+(0,-0.30)$) {$A_u$};
             \node at (-0.56,-0.35) {$e$};
             \node at (0.72,-0.36) {$\eta_{\widehat e}$};
             \node at ($(realLeftA.north)+(0,0.73)$) {$i$};
         \end{scope}
         \node at (1.80,0) {$=$};
-        \begin{scope}[xshift=3.20cm]
-            \TN@tensor{realRightA}{(0,0)}
-            \TN@pleg{realRightA}{north}{0,0.30}
-            \TN@insertion[label=left:$O$]{realRightO}{(0,0.62)}
-            \TN@pconnect{realRightA}{north}{realRightO}{south}
-            \TN@pleg{realRightO}{north}{0,0.28}
-            \TN@vleg{realRightA}{west}{-0.70,0}
-            \TN@vleg{realRightA}{east}{0.70,0}
-            \TN@vleg{realRightA}{south}{0,-0.58}
+        \begin{scope}[shift={(3.20cm,0)}]
+            \TNTensor{realRightA}{(0,0)}
+            \TNPhysicalPort{realRightAOpenKetPort}{realRightA}{north}\TNOpenPhysicalNorth{realRightAOpenKetPort}
+            \TNInsertion{realRightO}{(0,0.62)}{O}
+            \TNPhysicalPort{realRightATorealRightO}{realRightA}{north}\TNPhysicalPort{realRightOTorealRightA}{realRightO}{south}\TNConnectPhysical{realRightATorealRightO}{realRightOTorealRightA}
+            \TNPhysicalPort{realRightOOpenKetPort}{realRightO}{north}\TNOpenPhysicalNorth{realRightOOpenKetPort}
+            \TNVirtualPort{realRightAOpenWestPort}{realRightA}{west}\TNOpenVirtualWest{realRightAOpenWestPort}
+            \TNVirtualPort{realRightAOpenEastPort}{realRightA}{east}\TNOpenVirtualEast{realRightAOpenEastPort}
+            \TNVirtualPort{realRightAOpenSouthPort}{realRightA}{south}\TNOpenVirtualSouth{realRightAOpenSouthPort}
             \node at ($(realRightA.south)+(0,-0.30)$) {$A_u$};
             \node at (-0.72,-0.36) {$\eta_e$};
             \node at (0.72,-0.36) {$\eta_{\widehat e}$};
             \node at ($(realRightO.north)+(0,0.55)$) {$O(A_u(\eta_e,\eta_{\widehat e}))$};
         \end{scope}
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNPEPSPhysicalToVirtualInsertion}{%
-    \begin{tikzpicture}[tn picture]
+    \begin{TNDiagram}[normal]
         \begin{scope}
-            \TN@boxedThreeSitePhysicalOne{physVirtL}{B_1}{B_2}{B_3}{O_1}
+            \TNThreeSitePhysicalFirst{physVirtL}{B_1}{B_2}{B_3}{O_1}
         \end{scope}
         \node at (3.75,0) {$=$};
-        \begin{scope}[xshift=4.15cm]
-            \TN@boxedThreeSitePhysicalTwo{physVirtR}{B_1}{B_2}{B_3}{O_2}
+        \begin{scope}[shift={(4.15cm,0)}]
+            \TNThreeSitePhysicalSecond{physVirtR}{B_1}{B_2}{B_3}{O_2}
         \end{scope}
         \node at (7.95,0) {$\Longrightarrow$};
-        \begin{scope}[xshift=8.40cm]
-            \TN@boxedThreeSiteInsertion{physVirtW}{B_1}{B_2}{B_3}{W}
+        \begin{scope}[shift={(8.40cm,0)}]
+            \TNThreeSiteInsertion{physVirtW}{B_1}{B_2}{B_3}{W}
         \end{scope}
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNPEPSEdgeInsertionEquality}{%
-    \begin{tikzpicture}[tn picture]
+    \begin{TNDiagram}[normal]
         \begin{scope}
-            \TN@pepsFiveSitePatch{edgeEqA}
-            \TN@pepsFiveSitePatchLabels{edgeEqA}{A_1}{A_2}{A_3}{A_4}{A_5}
-            \TN@insertion[label=right:$X$]{edgeInsA}
-                {($(edgeEqAtwo)!0.50!(edgeEqAfive)$)}
+            \TNPEPSFiveSitePatch{edgeEqA}
+            \TNPEPSFiveSiteLabels{edgeEqA}{A_1}{A_2}{A_3}{A_4}{A_5}
+            \TNInsertion{edgeInsA}
+                {($(edgeEqAtwo)!0.50!(edgeEqAfive)$)}{X}
         \end{scope}
         \node at (2.75,0.70) {$=$};
-        \begin{scope}[xshift=4.15cm]
-            \TN@pepsFiveSitePatch{edgeEqB}
-            \TN@pepsFiveSitePatchLabels{edgeEqB}
+        \begin{scope}[shift={(4.15cm,0)}]
+            \TNPEPSFiveSitePatch{edgeEqB}
+            \TNPEPSFiveSiteLabels{edgeEqB}
             {\widetilde B_1}{\widetilde B_2}{\widetilde B_3}
             {\widetilde B_4}{\widetilde B_5}
-            \TN@insertion[label=right:$X$]{edgeInsB}
-                {($(edgeEqBtwo)!0.50!(edgeEqBfive)$)}
+            \TNInsertion{edgeInsB}
+                {($(edgeEqBtwo)!0.50!(edgeEqBfive)$)}{X}
         \end{scope}
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNPEPSEdgeGaugeAbsorption}{%
-    \begin{tikzpicture}[tn picture]
+    \begin{TNDiagram}[normal]
         \begin{scope}
-            \TN@tensor{absB}{(0,0)}
-            \TN@pleg{absB}{north}{0,0.44}
-            \TN@vleg{absB}{west}{-0.62,0}
-            \TN@vleg{absB}{east}{0.62,0}
-            \TN@vleg{absB}{225}{-0.50,-0.50}
-            \TN@vleg{absB}{315}{0.50,-0.50}
+            \TNTensor{absB}{(0,0)}
+            \TNPhysicalPort{absBOpenKetPort}{absB}{north}\TNOpenPhysicalNorth{absBOpenKetPort}
+            \TNVirtualPort{absBOpenWestPort}{absB}{west}\TNOpenVirtualWest{absBOpenWestPort}
+            \TNVirtualPort{absBOpenEastPort}{absB}{east}\TNOpenVirtualEast{absBOpenEastPort}
+            \TNVirtualPort{absBOpen225Port}{absB}{225}\TNOpenVirtualSouth{absBOpen225Port}
+            \TNVirtualPort{absBOpen315Port}{absB}{315}\TNOpenVirtualSouth{absBOpen315Port}
             \node at ($(absB.south)+(0,-0.95)$) {$B_v$};
         \end{scope}
         \node at (1.15,0) {$\longmapsto$};
-        \begin{scope}[xshift=2.30cm]
-            \TN@tensor{absBt}{(0,0)}
-            \TN@pleg{absBt}{north}{0,0.44}
-            \TN@insertion[label=above:$Z_{e_1}^{\pm1}$]{absL}{(-0.70,0)}
-            \TN@insertion[label=above:$Z_{e_2}^{\pm1}$]{absR}{(0.70,0)}
-            \TN@insertion[label=left:$Z_{e_3}^{\pm1}$]{absDL}{(-0.48,-0.60)}
-            \TN@insertion[label=right:$Z_{e_4}^{\pm1}$]{absDR}{(0.48,-0.60)}
-            \TN@vleg{absL}{west}{-0.28,0}
-            \TN@vconnect{absL}{east}{absBt}{west}
-            \TN@vconnect{absBt}{east}{absR}{west}
-            \TN@vleg{absR}{east}{0.28,0}
-            \TN@vconnect{absBt}{225}{absDL}{north}
-            \TN@vconnect{absBt}{315}{absDR}{north}
-            \TN@vleg{absDL}{south}{-0.20,-0.28}
-            \TN@vleg{absDR}{south}{0.20,-0.28}
+        \begin{scope}[shift={(2.30cm,0)}]
+            \TNTensor{absBt}{(0,0)}
+            \TNPhysicalPort{absBtOpenKetPort}{absBt}{north}\TNOpenPhysicalNorth{absBtOpenKetPort}
+            \TNInsertion{absL}{(-0.70,0)}{Z_{e_1}^{\pm1}}
+            \TNInsertion{absR}{(0.70,0)}{Z_{e_2}^{\pm1}}
+            \TNInsertion{absDL}{(-0.48,-0.60)}{Z_{e_3}^{\pm1}}
+            \TNInsertion{absDR}{(0.48,-0.60)}{Z_{e_4}^{\pm1}}
+            \TNVirtualPort{absLOpenWestPort}{absL}{west}\TNOpenVirtualWest{absLOpenWestPort}
+            \TNVirtualPort{absLToabsBt}{absL}{east}\TNVirtualPort{absBtToabsL}{absBt}{west}\TNConnectVirtual{absLToabsBt}{absBtToabsL}
+            \TNVirtualPort{absBtToabsR}{absBt}{east}\TNVirtualPort{absRToabsBt}{absR}{west}\TNConnectVirtual{absBtToabsR}{absRToabsBt}
+            \TNVirtualPort{absROpenEastPort}{absR}{east}\TNOpenVirtualEast{absROpenEastPort}
+            \TNVirtualPort{absBtToabsDL}{absBt}{225}\TNVirtualPort{absDLToabsBt}{absDL}{north}\TNConnectVirtual{absBtToabsDL}{absDLToabsBt}
+            \TNVirtualPort{absBtToabsDR}{absBt}{315}\TNVirtualPort{absDRToabsBt}{absDR}{north}\TNConnectVirtual{absBtToabsDR}{absDRToabsBt}
+            \TNVirtualPort{absDLOpenSouthPort}{absDL}{south}\TNOpenVirtualSouth{absDLOpenSouthPort}
+            \TNVirtualPort{absDROpenSouthPort}{absDR}{south}\TNOpenVirtualSouth{absDROpenSouthPort}
             \node at ($(absBt.south)+(0,-1.10)$) {$\widetilde B_v$};
         \end{scope}
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNPEPSTwoInjectiveTensorInsertionComparison}{%
-    \begin{tikzpicture}[tn picture]
+    \begin{TNDiagram}[normal]
         \begin{scope}
-            \TN@twoInjectiveInsertionPair{twoInjA}{A_1}{A_2}{X}
+            \TNPEPSTwoInjectivePair{twoInjA}{A_1}{A_2}{X}
         \end{scope}
         \node at (3.20,0) {$=$};
-        \begin{scope}[xshift=3.90cm]
-            \TN@twoInjectiveInsertionPair{twoInjB}{B_1}{B_2}{X}
+        \begin{scope}[shift={(3.90cm,0)}]
+            \TNPEPSTwoInjectivePair{twoInjB}{B_1}{B_2}{X}
         \end{scope}
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNPEPSTwoInjectiveGaugeScalarReduction}{%
-    \begin{tikzpicture}[tn picture]
+    \begin{TNDiagram}[normal]
         \begin{scope}
-            \TN@threeLegTensorFan{gaugeRedA}{A_1}
+            \TNPEPSThreeLegFan{gaugeRedA}{A_1}
         \end{scope}
         \node at (1.25,0) {$=$};
-        \begin{scope}[xshift=2.05cm]
-            \TN@threeLegTensorFan{gaugeRedBZ}{B_1}
-            \TN@insertion[label=right:$Z$]{gaugeRedZ}{(0.52,-0.36)}
+        \begin{scope}[shift={(2.05cm,0)}]
+            \TNPEPSThreeLegFan{gaugeRedBZ}{B_1}
+            \TNInsertion{gaugeRedZ}{(0.52,-0.36)}{Z}
         \end{scope}
         \node at (3.30,0) {$=$};
-        \begin{scope}[xshift=4.10cm]
-            \TN@threeLegTensorFan{gaugeRedBU}{B_1}
-            \TN@insertion[label=right:$U$]{gaugeRedU}{(0.56,0.30)}
+        \begin{scope}[shift={(4.10cm,0)}]
+            \TNPEPSThreeLegFan{gaugeRedBU}{B_1}
+            \TNInsertion{gaugeRedU}{(0.56,0.30)}{U}
         \end{scope}
         \node at (5.35,0) {$=$};
-        \begin{scope}[xshift=6.15cm]
-            \TN@threeLegTensorFan{gaugeRedBW}{B_1}
-            \TN@insertion[label=right:$W$]{gaugeRedW}{(0.52,-0.04)}
+        \begin{scope}[shift={(6.15cm,0)}]
+            \TNPEPSThreeLegFan{gaugeRedBW}{B_1}
+            \TNInsertion{gaugeRedW}{(0.52,-0.04)}{W}
         \end{scope}
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNPEPSOneVertexComplementComparison}{%
-    \begin{tikzpicture}[tn picture]
+    \begin{TNDiagram}[normal]
         \begin{scope}
-            \TN@tensor{oneSiteAR}{(1.00,0)}
-            \TN@tensor{oneSiteA}{(2.00,0)}
-            \TN@pleg{oneSiteAR}{north}{0,0.42}
-            \TN@pleg{oneSiteA}{north}{0,0.42}
-            \TN@vleg{oneSiteAR}{west}{-0.50,0}
-            \TN@vconnect{oneSiteAR}{east}{oneSiteA}{west}
-            \TN@vleg{oneSiteA}{east}{0.50,0}
+            \TNTensor{oneSiteAR}{(1.00,0)}
+            \TNTensor{oneSiteA}{(2.00,0)}
+            \TNPhysicalPort{oneSiteAROpenKetPort}{oneSiteAR}{north}\TNOpenPhysicalNorth{oneSiteAROpenKetPort}
+            \TNPhysicalPort{oneSiteAOpenKetPort}{oneSiteA}{north}\TNOpenPhysicalNorth{oneSiteAOpenKetPort}
+            \TNVirtualPort{oneSiteAROpenWestPort}{oneSiteAR}{west}\TNOpenVirtualWest{oneSiteAROpenWestPort}
+            \TNVirtualPort{oneSiteARTooneSiteA}{oneSiteAR}{east}\TNVirtualPort{oneSiteATooneSiteAR}{oneSiteA}{west}\TNConnectVirtual{oneSiteARTooneSiteA}{oneSiteATooneSiteAR}
+            \TNVirtualPort{oneSiteAOpenEastPort}{oneSiteA}{east}\TNOpenVirtualEast{oneSiteAOpenEastPort}
             \node at ($(oneSiteAR.south)+(0,-0.30)$) {$A_R$};
             \node at ($(oneSiteA.south)+(0,-0.30)$) {$A_v$};
         \end{scope}
         \node at (3.12,0) {$=$};
-        \begin{scope}[xshift=3.55cm]
-            \TN@tensor{oneSiteAS}{(1.00,0)}
-            \TN@pleg{oneSiteAS}{north}{0,0.42}
-            \TN@vleg{oneSiteAS}{west}{-0.50,0}
-            \TN@vleg{oneSiteAS}{east}{0.50,0}
+        \begin{scope}[shift={(3.55cm,0)}]
+            \TNTensor{oneSiteAS}{(1.00,0)}
+            \TNPhysicalPort{oneSiteASOpenKetPort}{oneSiteAS}{north}\TNOpenPhysicalNorth{oneSiteASOpenKetPort}
+            \TNVirtualPort{oneSiteASOpenWestPort}{oneSiteAS}{west}\TNOpenVirtualWest{oneSiteASOpenWestPort}
+            \TNVirtualPort{oneSiteASOpenEastPort}{oneSiteAS}{east}\TNOpenVirtualEast{oneSiteASOpenEastPort}
             \node at ($(oneSiteAS.south)+(0,-0.30)$) {$A_S$};
         \end{scope}
         \node at (5.42,0) {$\propto$};
-        \begin{scope}[xshift=5.95cm]
-            \TN@tensor{oneSiteBS}{(1.00,0)}
-            \TN@pleg{oneSiteBS}{north}{0,0.42}
-            \TN@vleg{oneSiteBS}{west}{-0.50,0}
-            \TN@vleg{oneSiteBS}{east}{0.50,0}
+        \begin{scope}[shift={(5.95cm,0)}]
+            \TNTensor{oneSiteBS}{(1.00,0)}
+            \TNPhysicalPort{oneSiteBSOpenKetPort}{oneSiteBS}{north}\TNOpenPhysicalNorth{oneSiteBSOpenKetPort}
+            \TNVirtualPort{oneSiteBSOpenWestPort}{oneSiteBS}{west}\TNOpenVirtualWest{oneSiteBSOpenWestPort}
+            \TNVirtualPort{oneSiteBSOpenEastPort}{oneSiteBS}{east}\TNOpenVirtualEast{oneSiteBSOpenEastPort}
             \node at ($(oneSiteBS.south)+(0,-0.30)$) {$\widetilde B_S$};
         \end{scope}
         \node at (7.82,0) {$=$};
-        \begin{scope}[xshift=8.25cm]
-            \TN@tensor{oneSiteBR}{(1.00,0)}
-            \TN@tensor{oneSiteB}{(2.00,0)}
-            \TN@pleg{oneSiteBR}{north}{0,0.42}
-            \TN@pleg{oneSiteB}{north}{0,0.42}
-            \TN@vleg{oneSiteBR}{west}{-0.50,0}
-            \TN@vconnect{oneSiteBR}{east}{oneSiteB}{west}
-            \TN@vleg{oneSiteB}{east}{0.50,0}
+        \begin{scope}[shift={(8.25cm,0)}]
+            \TNTensor{oneSiteBR}{(1.00,0)}
+            \TNTensor{oneSiteB}{(2.00,0)}
+            \TNPhysicalPort{oneSiteBROpenKetPort}{oneSiteBR}{north}\TNOpenPhysicalNorth{oneSiteBROpenKetPort}
+            \TNPhysicalPort{oneSiteBOpenKetPort}{oneSiteB}{north}\TNOpenPhysicalNorth{oneSiteBOpenKetPort}
+            \TNVirtualPort{oneSiteBROpenWestPort}{oneSiteBR}{west}\TNOpenVirtualWest{oneSiteBROpenWestPort}
+            \TNVirtualPort{oneSiteBRTooneSiteB}{oneSiteBR}{east}\TNVirtualPort{oneSiteBTooneSiteBR}{oneSiteB}{west}\TNConnectVirtual{oneSiteBRTooneSiteB}{oneSiteBTooneSiteBR}
+            \TNVirtualPort{oneSiteBOpenEastPort}{oneSiteB}{east}\TNOpenVirtualEast{oneSiteBOpenEastPort}
             \node at ($(oneSiteBR.south)+(0,-0.30)$) {$\widetilde B_R$};
             \node at ($(oneSiteB.south)+(0,-0.30)$) {$\widetilde B_v$};
         \end{scope}
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNPEPSInjectiveRegionUnion}{%
-    \begin{tikzpicture}[tn picture]
-        \TN@tensor{unionAB}{(0,0)}
-        \TN@tensor{unionI}{(0.70,0.70)}
-        \TN@tensor{unionBA}{(2.00,0)}
-        \TN@tensor{unionC}{(1.30,-0.70)}
+    \begin{TNDiagram}[normal]
+        \TNTensor{unionAB}{(0,0)}
+        \TNTensor{unionI}{(1.50,1.50)}
+        \TNTensor{unionBA}{(3.00,0)}
+        \TNTensor{unionC}{(1.50,0.45)}
         \foreach \n in {unionAB,unionI,unionBA,unionC} {
-                \TN@pleg{\n}{north}{0,0.42}
+                \TNPhysicalPort{\n OpenKetPort}{\n}{north}\TNOpenPhysicalNorth{\n OpenKetPort}
             }
-        \TN@vport{unionABToI}{unionAB}{45}
-        \TN@vport{unionIToAB}{unionI}{225}
-        \TN@vport{unionIToBA}{unionI}{-28}
-        \TN@vport{unionBAToI}{unionBA}{152}
-        \TN@vport{unionBAToC}{unionBA}{225}
-        \TN@vport{unionCToBA}{unionC}{45}
-        \TN@vport{unionCToAB}{unionC}{152}
-        \TN@vport{unionABToC}{unionAB}{-28}
-        \TN@vport{unionABToBA}{unionAB}{east}
-        \TN@vport{unionBAToAB}{unionBA}{west}
-        \TN@vport{unionIToC}{unionI}{-67}
-        \TN@vport{unionCToI}{unionC}{113}
-        \TN@vconnectports{unionABToI}{unionIToAB}
-        \TN@vconnectports{unionIToBA}{unionBAToI}
-        \TN@vconnectports{unionBAToC}{unionCToBA}
-        \TN@vconnectports{unionCToAB}{unionABToC}
-        \TN@vconnectports{unionABToBA}{unionBAToAB}
-        \TN@vconnectports{unionIToC}{unionCToI}
-        \node[anchor=east] at ($(unionAB)+(-0.12,-0.20)$) {$A\setminus B$};
-        \node[anchor=west] at ($(unionI)+(0.12,0.02)$) {$A\cap B$};
-        \node[anchor=west] at ($(unionBA)+(0.12,-0.20)$) {$B\setminus A$};
-        \node at ($(unionC)+(0,-0.38)$) {$(A\cup B)^c$};
-    \end{tikzpicture}%
+        \TNVirtualPort{unionABToI}{unionAB}{45}
+        \TNVirtualPort{unionIToAB}{unionI}{225}
+        \TNVirtualPort{unionIToBA}{unionI}{315}
+        \TNVirtualPort{unionBAToI}{unionBA}{135}
+        \TNVirtualPort{unionBAToC}{unionBA}{163}
+        \TNVirtualPort{unionCToBA}{unionC}{343}
+        \TNVirtualPort{unionCToAB}{unionC}{197}
+        \TNVirtualPort{unionABToC}{unionAB}{17}
+        \TNVirtualPort{unionABToBA}{unionAB}{east}
+        \TNVirtualPort{unionBAToAB}{unionBA}{west}
+        \TNVirtualPort{unionIToC}{unionI}{south}
+        \TNVirtualPort{unionCToI}{unionC}{north}
+        \TNConnectVirtual{unionABToI}{unionIToAB}
+        \TNConnectVirtual{unionIToBA}{unionBAToI}
+        \TNConnectVirtual{unionBAToC}{unionCToBA}
+        \TNConnectVirtual{unionCToAB}{unionABToC}
+        \TNConnectVirtual{unionABToBA}{unionBAToAB}
+        \TNConnectVirtual{unionIToC}{unionCToI}
+        \TNLabelLeft{unionAB}{A\setminus B}
+        \TNLabelAbove{unionI}{A\cap B}
+        \TNLabelRight{unionBA}{B\setminus A}
+        \TNLabelBelow{unionC}{(A\cup B)^c}
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNPEPSInjectiveRegionUnionProof}{%
-    \begin{tikzpicture}[tn picture, scale=0.82]
+    \begin{TNDiagram}[normal]
         \begin{scope}
-            \TN@tensor{proofAB}{(0,0)}
-            \TN@tensor{proofI}{(0.70,0.70)}
-            \TN@tensor{proofBA}{(2.00,0)}
-            \TN@insertion{proofX}{(1.30,-0.70)}
+            \TNTensor{proofAB}{(0,0)}
+            \TNTensor{proofI}{(0.70,0.70)}
+            \TNTensor{proofBA}{(2.00,0)}
+            \TNInsertion{proofX}{(1.30,-0.70)}{}
             \foreach \n in {proofAB,proofI,proofBA} {
-                    \TN@pleg{\n}{north}{0,0.36}
+                    \TNPhysicalPort{\n OpenKetPort}{\n}{north}\TNOpenPhysicalNorth{\n OpenKetPort}
                 }
-            \TN@vport{proofABToI}{proofAB}{45}
-            \TN@vport{proofIToAB}{proofI}{225}
-            \TN@vport{proofIToBA}{proofI}{-28}
-            \TN@vport{proofBAToI}{proofBA}{152}
-            \TN@vport{proofBAToX}{proofBA}{225}
-            \TN@vport{proofXToBA}{proofX}{45}
-            \TN@vport{proofXToAB}{proofX}{152}
-            \TN@vport{proofABToX}{proofAB}{-28}
-            \TN@vport{proofABToBA}{proofAB}{east}
-            \TN@vport{proofBAToAB}{proofBA}{west}
-            \TN@vport{proofIToX}{proofI}{-67}
-            \TN@vport{proofXToI}{proofX}{113}
-            \TN@vconnectports{proofABToI}{proofIToAB}
-            \TN@vconnectports{proofIToBA}{proofBAToI}
-            \TN@vconnectports{proofBAToX}{proofXToBA}
-            \TN@vconnectports{proofXToAB}{proofABToX}
-            \TN@vconnectports{proofABToBA}{proofBAToAB}
-            \TN@vconnectports{proofIToX}{proofXToI}
+            \TNVirtualPort{proofABToI}{proofAB}{45}
+            \TNVirtualPort{proofIToAB}{proofI}{225}
+            \TNVirtualPort{proofIToBA}{proofI}{-28}
+            \TNVirtualPort{proofBAToI}{proofBA}{152}
+            \TNVirtualPort{proofBAToX}{proofBA}{225}
+            \TNVirtualPort{proofXToBA}{proofX}{45}
+            \TNVirtualPort{proofXToAB}{proofX}{152}
+            \TNVirtualPort{proofABToX}{proofAB}{-28}
+            \TNVirtualPort{proofABToBA}{proofAB}{east}
+            \TNVirtualPort{proofBAToAB}{proofBA}{west}
+            \TNVirtualPort{proofIToX}{proofI}{-67}
+            \TNVirtualPort{proofXToI}{proofX}{113}
+            \TNConnectVirtual{proofABToI}{proofIToAB}
+            \TNConnectVirtual{proofIToBA}{proofBAToI}
+            \TNConnectVirtual{proofBAToX}{proofXToBA}
+            \TNConnectVirtual{proofXToAB}{proofABToX}
+            \TNConnectVirtual{proofABToBA}{proofBAToAB}
+            \TNConnectVirtual{proofIToX}{proofXToI}
             \node at ($(proofX)+(0,-0.34)$) {$X$};
             \node at (1.00,-1.18) {$=0$};
         \end{scope}
-        \TN@arrow{(2.60,0.00) -- (3.20,0.00)
-            node[midway, above] {$A^{-1}$}}
-        \begin{scope}[xshift=3.80cm]
+        \TNMorphismArrow{proofArrowOne}{(2.60,0.00)}{(3.20,0.00)}{A^{-1}}
+        \begin{scope}[shift={(3.80cm,0)}]
             \coordinate (proofAone) at (0,0);
             \coordinate (proofItwo) at (0.70,0.70);
-            \TN@tensor{proofBAone}{(2.00,0)}
-            \TN@insertion{proofXone}{(1.30,-0.70)}
-            \TN@pleg{proofBAone}{north}{0,0.36}
-            \TN@vport{proofBAoneToX}{proofBAone}{225}
-            \TN@vport{proofXoneToBA}{proofXone}{45}
-            \TN@vport{proofXoneToA}{proofXone}{152}
-            \TN@vport{proofXoneToI}{proofXone}{113}
-            \TN@vport{proofBAoneToA}{proofBAone}{west}
-            \TN@vport{proofBAoneToI}{proofBAone}{152}
-            \TN@vterminal{proofXoneToAEnd}{($(proofXone)!0.34!(proofAone)$)}
-            \TN@vterminal{proofXoneToIEnd}{($(proofXone)!0.34!(proofItwo)$)}
-            \TN@vterminal{proofBAoneToAEnd}{($(proofBAone)!0.34!(proofAone)$)}
-            \TN@vterminal{proofBAoneToIEnd}{($(proofBAone)!0.34!(proofItwo)$)}
-            \TN@vconnectports{proofBAoneToX}{proofXoneToBA}
-            \TN@vconnectports{proofXoneToA}{proofXoneToAEnd}
-            \TN@vconnectports{proofXoneToI}{proofXoneToIEnd}
-            \TN@vconnectports{proofBAoneToA}{proofBAoneToAEnd}
-            \TN@vconnectports{proofBAoneToI}{proofBAoneToIEnd}
+            \TNTensor{proofBAone}{(2.00,0)}
+            \TNInsertion{proofXone}{(1.30,-0.70)}{}
+            \TNPhysicalPort{proofBAoneOpenKetPort}{proofBAone}{north}\TNOpenPhysicalNorth{proofBAoneOpenKetPort}
+            \TNVirtualPort{proofBAoneToX}{proofBAone}{225}
+            \TNVirtualPort{proofXoneToBA}{proofXone}{45}
+            \TNVirtualPort{proofXoneToA}{proofXone}{152}
+            \TNVirtualPort{proofXoneToI}{proofXone}{113}
+            \TNVirtualPort{proofBAoneToA}{proofBAone}{west}
+            \TNVirtualPort{proofBAoneToI}{proofBAone}{152}
+            \TNVirtualTerminal{proofXoneToAEnd}{($(proofXone)!0.34!(proofAone)$)}
+            \TNVirtualTerminal{proofXoneToIEnd}{($(proofXone)!0.34!(proofItwo)$)}
+            \TNVirtualTerminal{proofBAoneToAEnd}{($(proofBAone)!0.34!(proofAone)$)}
+            \TNVirtualTerminal{proofBAoneToIEnd}{($(proofBAone)!0.34!(proofItwo)$)}
+            \TNConnectVirtual{proofBAoneToX}{proofXoneToBA}
+            \TNConnectVirtual{proofXoneToA}{proofXoneToAEnd}
+            \TNConnectVirtual{proofXoneToI}{proofXoneToIEnd}
+            \TNConnectVirtual{proofBAoneToA}{proofBAoneToAEnd}
+            \TNConnectVirtual{proofBAoneToI}{proofBAoneToIEnd}
             \node at ($(proofXone)+(0,-0.34)$) {$X$};
             \node at (1.00,-1.18) {$=0$};
         \end{scope}
-        \TN@arrow{(6.45,0.00) -- (7.05,0.00)
-            node[midway, above] {$A\cap B$}}
-        \begin{scope}[xshift=7.70cm]
+        \TNMorphismArrow{proofArrowTwo}{(6.45,0.00)}{(7.05,0.00)}{A\cap B}
+        \begin{scope}[shift={(7.70cm,0)}]
             \coordinate (proofAtwo) at (0,0);
-            \TN@tensor{proofItwoNode}{(0.70,0.70)}
-            \TN@tensor{proofBAtwo}{(2.00,0)}
-            \TN@insertion{proofXtwo}{(1.30,-0.70)}
+            \TNTensor{proofItwoNode}{(0.70,0.70)}
+            \TNTensor{proofBAtwo}{(2.00,0)}
+            \TNInsertion{proofXtwo}{(1.30,-0.70)}{}
             \foreach \n in {proofItwoNode,proofBAtwo} {
-                    \TN@pleg{\n}{north}{0,0.36}
+                    \TNPhysicalPort{\n OpenKetPort}{\n}{north}\TNOpenPhysicalNorth{\n OpenKetPort}
                 }
-            \TN@vport{proofBAtwoToX}{proofBAtwo}{225}
-            \TN@vport{proofXtwoToBA}{proofXtwo}{45}
-            \TN@vport{proofXtwoToI}{proofXtwo}{113}
-            \TN@vport{proofItwoNodeToX}{proofItwoNode}{-67}
-            \TN@vport{proofItwoNodeToBA}{proofItwoNode}{-28}
-            \TN@vport{proofBAtwoToI}{proofBAtwo}{152}
-            \TN@vport{proofXtwoToA}{proofXtwo}{152}
-            \TN@vport{proofBAtwoToA}{proofBAtwo}{west}
-            \TN@vport{proofItwoNodeToA}{proofItwoNode}{225}
-            \TN@vterminal{proofXtwoToAEnd}{($(proofXtwo)!0.34!(proofAtwo)$)}
-            \TN@vterminal{proofBAtwoToAEnd}{($(proofBAtwo)!0.34!(proofAtwo)$)}
-            \TN@vterminal{proofItwoToAEnd}{
+            \TNVirtualPort{proofBAtwoToX}{proofBAtwo}{225}
+            \TNVirtualPort{proofXtwoToBA}{proofXtwo}{45}
+            \TNVirtualPort{proofXtwoToI}{proofXtwo}{113}
+            \TNVirtualPort{proofItwoNodeToX}{proofItwoNode}{-67}
+            \TNVirtualPort{proofItwoNodeToBA}{proofItwoNode}{-28}
+            \TNVirtualPort{proofBAtwoToI}{proofBAtwo}{152}
+            \TNVirtualPort{proofXtwoToA}{proofXtwo}{152}
+            \TNVirtualPort{proofBAtwoToA}{proofBAtwo}{west}
+            \TNVirtualPort{proofItwoNodeToA}{proofItwoNode}{225}
+            \TNVirtualTerminal{proofXtwoToAEnd}{($(proofXtwo)!0.34!(proofAtwo)$)}
+            \TNVirtualTerminal{proofBAtwoToAEnd}{($(proofBAtwo)!0.34!(proofAtwo)$)}
+            \TNVirtualTerminal{proofItwoToAEnd}{
                 ($(proofItwoNode)!0.34!(proofAtwo)$)}
-            \TN@vconnectports{proofBAtwoToX}{proofXtwoToBA}
-            \TN@vconnectports{proofXtwoToI}{proofItwoNodeToX}
-            \TN@vconnectports{proofItwoNodeToBA}{proofBAtwoToI}
-            \TN@vconnectports{proofXtwoToA}{proofXtwoToAEnd}
-            \TN@vconnectports{proofBAtwoToA}{proofBAtwoToAEnd}
-            \TN@vconnectports{proofItwoNodeToA}{proofItwoToAEnd}
+            \TNConnectVirtual{proofBAtwoToX}{proofXtwoToBA}
+            \TNConnectVirtual{proofXtwoToI}{proofItwoNodeToX}
+            \TNConnectVirtual{proofItwoNodeToBA}{proofBAtwoToI}
+            \TNConnectVirtual{proofXtwoToA}{proofXtwoToAEnd}
+            \TNConnectVirtual{proofBAtwoToA}{proofBAtwoToAEnd}
+            \TNConnectVirtual{proofItwoNodeToA}{proofItwoToAEnd}
             \node at ($(proofXtwo)+(0,-0.34)$) {$X$};
             \node at (1.00,-1.18) {$=0$};
         \end{scope}
-        \TN@arrow{(10.35,0.00) -- (10.95,0.00)
-            node[midway, above] {$B^{-1}$}}
-        \begin{scope}[xshift=11.55cm]
+        \TNMorphismArrow{proofArrowThree}{(10.35,0.00)}{(10.95,0.00)}{B^{-1}}
+        \begin{scope}[shift={(11.55cm,0)}]
             \coordinate (proofAthree) at (0,0);
             \coordinate (proofIthree) at (0.70,0.70);
             \coordinate (proofBAthree) at (2.00,0);
-            \TN@insertion{proofXthree}{(1.30,-0.70)}
-            \TN@vport{proofXthreeToA}{proofXthree}{152}
-            \TN@vport{proofXthreeToI}{proofXthree}{113}
-            \TN@vport{proofXthreeToBA}{proofXthree}{45}
-            \TN@vterminal{proofXthreeToAEnd}{($(proofXthree)!0.34!(proofAthree)$)}
-            \TN@vterminal{proofXthreeToIEnd}{($(proofXthree)!0.34!(proofIthree)$)}
-            \TN@vterminal{proofXthreeToBAEnd}{
+            \TNInsertion{proofXthree}{(1.30,-0.70)}{}
+            \TNVirtualPort{proofXthreeToA}{proofXthree}{152}
+            \TNVirtualPort{proofXthreeToI}{proofXthree}{113}
+            \TNVirtualPort{proofXthreeToBA}{proofXthree}{45}
+            \TNVirtualTerminal{proofXthreeToAEnd}{($(proofXthree)!0.34!(proofAthree)$)}
+            \TNVirtualTerminal{proofXthreeToIEnd}{($(proofXthree)!0.34!(proofIthree)$)}
+            \TNVirtualTerminal{proofXthreeToBAEnd}{
                 ($(proofXthree)!0.34!(proofBAthree)$)}
-            \TN@vconnectports{proofXthreeToA}{proofXthreeToAEnd}
-            \TN@vconnectports{proofXthreeToI}{proofXthreeToIEnd}
-            \TN@vconnectports{proofXthreeToBA}{proofXthreeToBAEnd}
+            \TNConnectVirtual{proofXthreeToA}{proofXthreeToAEnd}
+            \TNConnectVirtual{proofXthreeToI}{proofXthreeToIEnd}
+            \TNConnectVirtual{proofXthreeToBA}{proofXthreeToBAEnd}
             \node at ($(proofXthree)+(0,-0.34)$) {$X=0$};
         \end{scope}
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNPEPSNormalRegionsRS}{%
-    \begin{tikzpicture}[tn picture, scale=0.90]
+    \begin{TNDiagram}[normal]
         \begin{scope}
             \clip (-0.25,0.75) rectangle (2.25,3.25);
-            \TN@pepsNormalSquareLattice
-            \TN@pepsNormalRegionR
+            \TNPEPSNormalSquareLattice
+            \TNPEPSNormalRegionR
         \end{scope}
         \node at (2.85,2.00) {and};
-        \begin{scope}[xshift=3.55cm]
+        \begin{scope}[shift={(3.55cm,0)}]
             \clip (-0.25,0.75) rectangle (2.25,3.25);
-            \TN@pepsNormalSquareLattice
-            \TN@pepsNormalRegionS
+            \TNPEPSNormalSquareLattice
+            \TNPEPSNormalRegionS
         \end{scope}
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNPEPSNormalRegionT}{%
-    \begin{tikzpicture}[tn picture, scale=0.90]
+    \begin{TNDiagram}[normal]
         \clip (-0.25,0.25) rectangle (3.25,3.25);
-        \TN@pepsNormalSquareLattice
-        \TN@pepsNormalRegionT
-    \end{tikzpicture}%
+        \TNPEPSNormalSquareLattice
+        \TNPEPSNormalRegionTMotif
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNPEPSNormalRectangleCover}{%
-    \begin{tikzpicture}[tn picture, scale=0.78]
-        \TN@squarelatticepatch{coverGrid}{4}{4}{0.5}
+    \begin{TNDiagram}[normal]
+        \TNSquarePEPSPatch{coverGrid}{4}{4}{0.5}
         \path[tn region selected] (0.3,0.3) rectangle (1.2,1.7);
         \path[tn region secondary] (0.3,0.8) rectangle (1.7,1.7);
         \path[tn region complement, fill=none]
@@ -2746,249 +2794,254 @@
         \node[align=center] at (0.98,-0.68)
         {$U=\bigcup_j C_j,$\\[-1pt]
         $C_j\cong 2\times3\ \mathrm{or}\ 3\times2$};
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNPEPSNormalEdgeComplementTopCollar}{%
-    \begin{tikzpicture}[tn picture, scale=0.90]
+    \begin{TNDiagram}[normal]
         \begin{scope}
             \clip (-0.25,-0.25) rectangle (3.25,3.25);
-            \TN@pepsNormalSquareLattice
-            \TN@pepsNormalRegionT
-            \TN@pepsNormalCollar
+            \TNPEPSNormalSquareLattice
+            \TNPEPSNormalRegionTMotif
+            \TNPEPSNormalCollar
         \end{scope}
         \node at (3.72,1.48) {$=$};
-        \begin{scope}[xshift=4.35cm]
+        \begin{scope}[shift={(4.35cm,0)}]
             \clip (-0.25,-0.25) rectangle (3.25,3.25);
-            \TN@pepsNormalComplementBlock
-            \TN@pepsNormalSquareLattice
+            \TNPEPSNormalComplementBlock
+            \TNPEPSNormalSquareLattice
         \end{scope}
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNPEPSNormalOneSiteSeparation}{%
-    \begin{tikzpicture}[tn picture, scale=0.90]
+    \begin{TNDiagram}[normal]
         \begin{scope}
             \clip (-0.25,0.75) rectangle (2.25,3.25);
-            \TN@pepsNormalSquareLattice
-            \TN@pepsNormalRegionR
-            \TN@pepsNormalSingleSiteDifference
+            \TNPEPSNormalSquareLattice
+            \TNPEPSNormalRegionR
+            \TNPEPSNormalSingleSiteDifference
         \end{scope}
         \node at (2.85,2.00) {$\subset$};
-        \begin{scope}[xshift=3.55cm]
+        \begin{scope}[shift={(3.55cm,0)}]
             \clip (-0.25,0.75) rectangle (2.25,3.25);
-            \TN@pepsNormalSquareLattice
-            \TN@pepsNormalRegionS
-            \TN@pepsNormalSingleSiteDifference
+            \TNPEPSNormalSquareLattice
+            \TNPEPSNormalRegionS
+            \TNPEPSNormalSingleSiteDifference
         \end{scope}
         \node at (4.55,0.52) {$S=R\cup\{v\}$};
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNPEPSNormalEdgeBlockingReduction}{%
-    \begin{tikzpicture}[tn picture, scale=0.90]
+    \begin{TNDiagram}[normal]
         \begin{scope}
             \clip (-0.25,-0.25) rectangle (3.25,3.25);
-            \TN@pepsNormalComplementBlock
-            \TN@pepsNormalSquareLattice
-            \TN@pepsNormalDistinguishedEdge
-            \TN@pepsNormalSelectedBlock
-            \TN@pepsNormalSecondaryBlock
+            \TNPEPSNormalComplementBlock
+            \TNPEPSNormalSquareLattice
+            \TNPEPSNormalDistinguishedEdge
+            \TNPEPSNormalSelectedBlock
+            \TNPEPSNormalSecondaryBlock
         \end{scope}
         \node at (3.75,1.45) {$\Rightarrow$};
-        \begin{scope}[xshift=4.45cm,yshift=1.50cm]
-            \TN@pepsBlockedNormalChain
+        \begin{scope}[shift={(4.45cm,1.50cm)}]
+            \TNPEPSBlockedNormalChain
         \end{scope}
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNPEPSNormalEdgeBlockingHypotheses}{%
-    \begin{tikzpicture}[tn picture, scale=0.90]
+    \begin{TNDiagram}[normal]
         \clip (-0.25,-0.25) rectangle (3.25,3.25);
-        \TN@pepsNormalComplementBlock
-        \TN@pepsNormalSquareLattice
-        \TN@pepsNormalDistinguishedEdge
-        \TN@pepsNormalSelectedBlock
-        \TN@pepsNormalSecondaryBlock
-    \end{tikzpicture}%
+        \TNPEPSNormalComplementBlock
+        \TNPEPSNormalSquareLattice
+        \TNPEPSNormalDistinguishedEdge
+        \TNPEPSNormalSelectedBlock
+        \TNPEPSNormalSecondaryBlock
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNPEPSNormalBlockingHypotheses}{%
-    \begin{tikzpicture}[tn picture, scale=0.72]
+    \begin{TNDiagram}[normal]
         \begin{scope}
             \clip (-0.25,-0.25) rectangle (3.25,3.25);
-            \TN@pepsNormalComplementBlock
-            \TN@pepsNormalSquareLattice
-            \TN@pepsNormalDistinguishedEdge
-            \TN@pepsNormalSelectedBlock
-            \TN@pepsNormalSecondaryBlock
+            \TNPEPSNormalComplementBlock
+            \TNPEPSNormalSquareLattice
+            \TNPEPSNormalDistinguishedEdge
+            \TNPEPSNormalSelectedBlock
+            \TNPEPSNormalSecondaryBlock
         \end{scope}
         \node at (1.50,-0.58) {edge blocking};
         \node at (3.75,1.45) {and};
-        \begin{scope}[xshift=4.60cm,yshift=-0.20cm]
+        \begin{scope}[shift={(4.60cm,-0.20cm)}]
             \begin{scope}
                 \clip (-0.25,0.75) rectangle (2.25,3.25);
-                \TN@pepsNormalSquareLattice
-                \TN@pepsNormalRegionR
-                \TN@pepsNormalSingleSiteDifference
+                \TNPEPSNormalSquareLattice
+                \TNPEPSNormalRegionR
+                \TNPEPSNormalSingleSiteDifference
             \end{scope}
             \node at (2.85,2.00) {$\subset$};
-            \begin{scope}[xshift=3.55cm]
+            \begin{scope}[shift={(3.55cm,0)}]
                 \clip (-0.25,0.75) rectangle (2.25,3.25);
-                \TN@pepsNormalSquareLattice
-                \TN@pepsNormalRegionS
-                \TN@pepsNormalSingleSiteDifference
+                \TNPEPSNormalSquareLattice
+                \TNPEPSNormalRegionS
+                \TNPEPSNormalSingleSiteDifference
             \end{scope}
             \node at (4.55,0.52) {$S=R\cup\{v\}$};
             \node at (2.85,0.20) {one-site comparison};
         \end{scope}
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNPEPSTINormalGaugeAbsorption}{%
-    \begin{tikzpicture}[tn picture]
+    \begin{TNDiagram}[normal]
         \begin{scope}
-            \TN@pepsSquareTensor{tiB}{(0,0)}
+            \TNPEPSSquareTensor{tiB}{(0,0)}
             \node at ($(tiB.south)+(0,-0.88)$) {$B$};
         \end{scope}
         \node at (1.25,0) {$=$};
-        \begin{scope}[xshift=2.35cm]
-            \TN@tensor{tiA}{(0,0)}
-            \TN@pleg{tiA}{45}{0.34,0.34}
-            \TN@insertion[label=above:$X$]{tiXL}{(-0.76,0)}
-            \TN@insertion[label=above:$X^{-1}$]{tiXR}{(0.76,0)}
-            \TN@insertion[label=left:$Y$]{tiYD}{(0,-0.76)}
-            \TN@insertion[label=left:$Y^{-1}$]{tiYU}{(0,0.76)}
-            \TN@vleg{tiXL}{west}{-0.24,0}
-            \TN@vconnect{tiXL}{east}{tiA}{west}
-            \TN@vconnect{tiA}{east}{tiXR}{west}
-            \TN@vleg{tiXR}{east}{0.24,0}
-            \TN@vleg{tiYD}{south}{0,-0.24}
-            \TN@vconnect{tiYD}{north}{tiA}{south}
-            \TN@vconnect{tiA}{north}{tiYU}{south}
-            \TN@vleg{tiYU}{north}{0,0.24}
+        \begin{scope}[shift={(2.35cm,0)}]
+            \TNTensor{tiA}{(0,0)}
+            \TNPhysicalPort{tiAOpenKetPort}{tiA}{45}\TNOpenPhysicalNorth{tiAOpenKetPort}
+            \TNInsertion{tiXL}{(-0.76,0)}{X}
+            \TNInsertion{tiXR}{(0.76,0)}{X^{-1}}
+            \TNInsertion{tiYD}{(0,-0.76)}{Y}
+            \TNInsertion{tiYU}{(0,0.76)}{Y^{-1}}
+            \TNVirtualPort{tiXLOpenWestPort}{tiXL}{west}\TNOpenVirtualWest{tiXLOpenWestPort}
+            \TNVirtualPort{tiXLTotiA}{tiXL}{east}\TNVirtualPort{tiATotiXL}{tiA}{west}\TNConnectVirtual{tiXLTotiA}{tiATotiXL}
+            \TNVirtualPort{tiATotiXR}{tiA}{east}\TNVirtualPort{tiXRTotiA}{tiXR}{west}\TNConnectVirtual{tiATotiXR}{tiXRTotiA}
+            \TNVirtualPort{tiXROpenEastPort}{tiXR}{east}\TNOpenVirtualEast{tiXROpenEastPort}
+            \TNVirtualPort{tiYDOpenSouthPort}{tiYD}{south}\TNOpenVirtualSouth{tiYDOpenSouthPort}
+            \TNVirtualPort{tiYDTotiA}{tiYD}{north}\TNVirtualPort{tiATotiYD}{tiA}{south}\TNConnectVirtual{tiYDTotiA}{tiATotiYD}
+            \TNVirtualPort{tiATotiYU}{tiA}{north}\TNVirtualPort{tiYUTotiA}{tiYU}{south}\TNConnectVirtual{tiATotiYU}{tiYUTotiA}
+            \TNVirtualPort{tiYUOpenNorthPort}{tiYU}{north}\TNOpenVirtualNorth{tiYUOpenNorthPort}
             \node at ($(tiA.south)+(0,-1.20)$) {$\lambda A$};
         \end{scope}
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNPEPSEdgeGaugeOrientation}{%
-    \begin{tikzpicture}[tn picture]
-        \TN@pepsvertex{tnU}{(0,0)}{}
-        \TN@pepsvertex{tnW}{(3.30,0)}{}
-        \TN@insertion[label=above:$X_e$]{tnXl}{(1.00,0)}
-        \TN@insertion[label=above:$(X_e^{-1})^\top$]{tnXr}{(2.30,0)}
-        \TN@vconnect{tnU}{east}{tnXl}{west}
-        \TN@vconnect{tnXl}{east}{tnXr}{west}
-        \TN@vconnect{tnXr}{east}{tnW}{west}
+    \begin{TNDiagram}[normal]
+        \TNPEPSSite{tnU}{(0,0)}{}
+        \TNPEPSSite{tnW}{(3.30,0)}{}
+        \TNInsertion{tnXl}{(1.00,0)}{X_e}
+        \TNInsertion{tnXr}{(2.30,0)}{(X_e^{-1})^\top}
+        \TNVirtualPort{tnUTotnXl}{tnU}{east}\TNVirtualPort{tnXlTotnU}{tnXl}{west}\TNConnectVirtual{tnUTotnXl}{tnXlTotnU}
+        \TNVirtualPort{tnXlTotnXr}{tnXl}{east}\TNVirtualPort{tnXrTotnXl}{tnXr}{west}\TNConnectVirtual{tnXlTotnXr}{tnXrTotnXl}
+        \TNVirtualPort{tnXrTotnW}{tnXr}{east}\TNVirtualPort{tnWTotnXr}{tnW}{west}\TNConnectVirtual{tnXrTotnW}{tnWTotnXr}
         \node at (1.65,0.72) {$e = (u,w)$};
         \node at ($(tnU.south)+(0,-0.28)$) {$u$};
         \node at ($(tnW.south)+(0,-0.28)$) {$w$};
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNPEPSGaugeVertexAction}{%
-    \begin{tikzpicture}[tn picture]
-        \TN@tensor{tnV}{(0,0)}
-        \TN@pleg{tnV}{45}{0.38,0.38}
-        \TN@insertion[label=above:$M_{ve_1}$]{tnL}{(-1.05,0)}
-        \TN@insertion[label=above:$M_{ve_2}$]{tnR}{(1.05,0)}
-        \TN@insertion[label=left:$M_{ve_3}$]{tnDL}{(-0.78,-0.92)}
-        \TN@insertion[label=right:$M_{ve_4}$]{tnDR}{(0.78,-0.92)}
-        \TN@vconnect{tnL}{east}{tnV}{west}
-        \TN@vconnect{tnV}{east}{tnR}{west}
-        \TN@vconnect{tnV}{225}{tnDL}{north}
-        \TN@vconnect{tnV}{315}{tnDR}{north}
-        \TN@vleg{tnL}{west}{-0.42,0}
-        \TN@vleg{tnR}{east}{0.42,0}
-        \TN@vleg{tnDL}{south}{-0.30,-0.42}
-        \TN@vleg{tnDR}{south}{0.30,-0.42}
+    \begin{TNDiagram}[normal]
+        \TNTensor{tnV}{(0,0)}
+        \TNPhysicalPort{tnVOpenKetPort}{tnV}{45}\TNOpenPhysicalNorth{tnVOpenKetPort}
+        \TNInsertion{tnL}{(-1.05,0)}{M_{ve_1}}
+        \TNInsertion{tnR}{(1.05,0)}{M_{ve_2}}
+        \TNInsertion{tnDL}{(-0.78,-0.92)}{M_{ve_3}}
+        \TNInsertion{tnDR}{(0.78,-0.92)}{M_{ve_4}}
+        \TNVirtualPort{tnLTotnV}{tnL}{east}\TNVirtualPort{tnVTotnL}{tnV}{west}\TNConnectVirtual{tnLTotnV}{tnVTotnL}
+        \TNVirtualPort{tnVTotnR}{tnV}{east}\TNVirtualPort{tnRTotnV}{tnR}{west}\TNConnectVirtual{tnVTotnR}{tnRTotnV}
+        \TNVirtualPort{tnVTotnDL}{tnV}{225}\TNVirtualPort{tnDLTotnV}{tnDL}{north}\TNConnectVirtual{tnVTotnDL}{tnDLTotnV}
+        \TNVirtualPort{tnVTotnDR}{tnV}{315}\TNVirtualPort{tnDRTotnV}{tnDR}{north}\TNConnectVirtual{tnVTotnDR}{tnDRTotnV}
+        \TNVirtualPort{tnLOpenWestPort}{tnL}{west}\TNOpenVirtualWest{tnLOpenWestPort}
+        \TNVirtualPort{tnROpenEastPort}{tnR}{east}\TNOpenVirtualEast{tnROpenEastPort}
+        \TNVirtualPort{tnDLOpenSouthPort}{tnDL}{south}\TNOpenVirtualSouth{tnDLOpenSouthPort}
+        \TNVirtualPort{tnDROpenSouthPort}{tnDR}{south}\TNOpenVirtualSouth{tnDROpenSouthPort}
         \node at ($(tnV.45)+(0.38,0.50)$) {$\sigma$};
         \node at ($(tnV.south)+(0,-1.45)$) {$A_v \mapsto A_v^X$};
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNPEPSGaugeCancellation}{%
-    \begin{tikzpicture}[tn picture]
-        \TN@pepsvertex{tnL}{(0,0)}{}
-        \TN@insertion{tnX}{(0.92,0)}
-        \TN@insertion{tnXt}{(2.18,0)}
-        \TN@pepsvertex{tnR}{(3.10,0)}{}
-        \TN@vconnect{tnL}{east}{tnX}{west}
-        \TN@vconnect{tnX}{east}{tnXt}{west}
-        \TN@vconnect{tnXt}{east}{tnR}{west}
+    \begin{TNDiagram}[normal]
+        \TNPEPSSite{tnL}{(0,0)}{}
+        \TNInsertion{tnX}{(0.92,0)}{}
+        \TNInsertion{tnXt}{(2.18,0)}{}
+        \TNPEPSSite{tnR}{(3.10,0)}{}
+        \TNVirtualPort{tnLTotnX}{tnL}{east}\TNVirtualPort{tnXTotnL}{tnX}{west}\TNConnectVirtual{tnLTotnX}{tnXTotnL}
+        \TNVirtualPort{tnXTotnXt}{tnX}{east}\TNVirtualPort{tnXtTotnX}{tnXt}{west}\TNConnectVirtual{tnXTotnXt}{tnXtTotnX}
+        \TNVirtualPort{tnXtTotnR}{tnXt}{east}\TNVirtualPort{tnRTotnXt}{tnR}{west}\TNConnectVirtual{tnXtTotnR}{tnRTotnXt}
         \node at ($(tnX.north)+(0,0.28)$) {$X_e(j,i)$};
         \node at ($(tnXt.north)+(0,0.28)$) {$((X_e^{-1})^\top)(j,k)$};
         \node at (4.20,0) {$=$};
-        \TN@pepsvertex{tnL2}{(5.15,0)}{}
-        \TN@pepsvertex{tnR2}{(6.65,0)}{}
-        \TN@vconnect{tnL2}{east}{tnR2}{west}
+        \TNPEPSSite{tnL2}{(5.15,0)}{}
+        \TNPEPSSite{tnR2}{(6.65,0)}{}
+        \TNVirtualPort{tnL2TotnR2}{tnL2}{east}\TNVirtualPort{tnR2TotnL2}{tnR2}{west}\TNConnectVirtual{tnL2TotnR2}{tnR2TotnL2}
         \node at (5.90,0.54) {$\sum_j X_e(j,i)\,((X_e^{-1})^\top)(j,k) = \delta(i,k)$};
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNPEPSBlockedMiddleLocalGaugeFormula}{%
-    \begin{tikzpicture}[tn picture]
-        \TN@tensor{bmA}{(0,0)}
-        \TN@tensor{bmB}{(2.55,0)}
-        \foreach \a in {10,90,160,220,300} {
-                \TN@vleg{bmA}{\a}{\a:0.55}
-                \TN@vleg{bmB}{\a}{\a:0.55}
-            }
-        \TN@pleg{bmA}{45}{0.44,0.44}
-        \TN@pleg{bmB}{45}{0.44,0.44}
+    \begin{TNDiagram}[normal]
+        \TNTensor{bmA}{(0,0)}
+        \TNTensor{bmB}{(2.55,0)}
+        \foreach \n in {bmA,bmB} {
+            \TNVirtualPort{\n West}{\n}{west}\TNOpenVirtualWest{\n West}
+            \TNVirtualPort{\n East}{\n}{east}\TNOpenVirtualEast{\n East}
+            \TNVirtualPort{\n North}{\n}{north}\TNOpenVirtualNorth{\n North}
+            \TNVirtualPort{\n SouthWest}{\n}{220}
+            \TNOpenVirtualSouth{\n SouthWest}
+            \TNVirtualPort{\n SouthEast}{\n}{300}
+            \TNOpenVirtualSouth{\n SouthEast}
+        }
+        \TNPhysicalPort{bmAOpenKetPort}{bmA}{45}\TNOpenPhysicalNorth{bmAOpenKetPort}
+        \TNPhysicalPort{bmBOpenKetPort}{bmB}{45}\TNOpenPhysicalNorth{bmBOpenKetPort}
         \node at ($(bmA)+(0,-0.62)$) {$A_v$};
         \node at ($(bmB)+(0,-0.62)$) {$B_v$};
         \node at (1.28,0.25) {$\prod_{e\ni v}X_e$};
-        \TN@arrow{(0.62,0) -- (1.93,0)}
-    \end{tikzpicture}%
+        \TNMorphismArrow{blockedMiddleArrow}{(0.62,0)}{(1.93,0)}{}
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNPEPSLocalGaugeExtraction}{%
-    \begin{tikzpicture}[tn picture]
-        \TN@tensor{tnLv}{(0,0)}
-        \TN@pleg{tnLv}{45}{0.38,0.38}
+    \begin{TNDiagram}[normal]
+        \TNTensor{tnLv}{(0,0)}
+        \TNPhysicalPort{tnLvOpenKetPort}{tnLv}{45}\TNOpenPhysicalNorth{tnLvOpenKetPort}
         \node at ($(tnLv.45)+(0.38,0.48)$) {$\sigma$};
-        \TN@vleg{tnLv}{west}{-0.90,0}
-        \TN@vleg{tnLv}{east}{0.90,0}
-        \TN@vleg{tnLv}{225}{-0.72,-0.72}
-        \TN@vleg{tnLv}{315}{0.72,-0.72}
+        \TNVirtualPort{tnLvOpenWestPort}{tnLv}{west}\TNOpenVirtualWest{tnLvOpenWestPort}
+        \TNVirtualPort{tnLvOpenEastPort}{tnLv}{east}\TNOpenVirtualEast{tnLvOpenEastPort}
+        \TNVirtualPort{tnLvOpen225Port}{tnLv}{225}\TNOpenVirtualSouth{tnLvOpen225Port}
+        \TNVirtualPort{tnLvOpen315Port}{tnLv}{315}\TNOpenVirtualSouth{tnLvOpen315Port}
         \node at (0,-1.42) {$\mathrm{star}(v)$};
         \node at (2.85,0) {$\xrightarrow[\text{left inverse}]{\text{injective}}$};
-        \TN@tensor{tnRv}{(5.70,0)}
-        \TN@pleg{tnRv}{45}{0.38,0.38}
+        \TNTensor{tnRv}{(5.70,0)}
+        \TNPhysicalPort{tnRvOpenKetPort}{tnRv}{45}\TNOpenPhysicalNorth{tnRvOpenKetPort}
         \node at ($(tnRv.45)+(0.38,0.48)$) {$\sigma$};
-        \TN@insertion{tnRl}{(4.62,0)}
-        \TN@insertion{tnRr}{(6.78,0)}
-        \TN@insertion{tnRdl}{(4.95,-0.86)}
-        \TN@insertion{tnRdr}{(6.45,-0.86)}
-        \TN@vleg{tnRl}{west}{-0.42,0}
-        \TN@vconnect{tnRl}{east}{tnRv}{west}
-        \TN@vconnect{tnRv}{east}{tnRr}{west}
-        \TN@vleg{tnRr}{east}{0.42,0}
-        \TN@vconnect{tnRv}{225}{tnRdl}{north}
-        \TN@vconnect{tnRv}{315}{tnRdr}{north}
+        \TNInsertion{tnRl}{(4.62,0)}{}
+        \TNInsertion{tnRr}{(6.78,0)}{}
+        \TNInsertion{tnRdl}{(4.95,-0.86)}{}
+        \TNInsertion{tnRdr}{(6.45,-0.86)}{}
+        \TNVirtualPort{tnRlOpenWestPort}{tnRl}{west}\TNOpenVirtualWest{tnRlOpenWestPort}
+        \TNVirtualPort{tnRlTotnRv}{tnRl}{east}\TNVirtualPort{tnRvTotnRl}{tnRv}{west}\TNConnectVirtual{tnRlTotnRv}{tnRvTotnRl}
+        \TNVirtualPort{tnRvTotnRr}{tnRv}{east}\TNVirtualPort{tnRrTotnRv}{tnRr}{west}\TNConnectVirtual{tnRvTotnRr}{tnRrTotnRv}
+        \TNVirtualPort{tnRrOpenEastPort}{tnRr}{east}\TNOpenVirtualEast{tnRrOpenEastPort}
+        \TNVirtualPort{tnRvTotnRdl}{tnRv}{225}\TNVirtualPort{tnRdlTotnRv}{tnRdl}{north}\TNConnectVirtual{tnRvTotnRdl}{tnRdlTotnRv}
+        \TNVirtualPort{tnRvTotnRdr}{tnRv}{315}\TNVirtualPort{tnRdrTotnRv}{tnRdr}{north}\TNConnectVirtual{tnRvTotnRdr}{tnRdrTotnRv}
         \node at (5.70,-1.42) {$\text{local edge gauges}$};
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNPEPSGlobalConsistency}{%
-    \begin{tikzpicture}[tn picture]
-        \TN@pepsvertex{tnU}{(0,0)}{}
-        \TN@pepsvertex{tnW}{(3.35,0)}{}
-        \TN@vleg{tnU}{west}{-0.70,0}
-        \TN@vleg{tnW}{east}{0.70,0}
-        \TN@vleg{tnU}{225}{-0.55,-0.55}
-        \TN@vleg{tnW}{315}{0.55,-0.55}
-        \TN@insertion[label=above:$X_e$]{tnXl}{(1.02,0)}
-        \TN@insertion[label=above:$(X_e^{-1})^\top$]{tnXr}{(2.33,0)}
-        \TN@vconnect{tnU}{east}{tnXl}{west}
-        \TN@vconnect{tnXl}{east}{tnXr}{west}
-        \TN@vconnect{tnXr}{east}{tnW}{west}
+    \begin{TNDiagram}[normal]
+        \TNPEPSSite{tnU}{(0,0)}{}
+        \TNPEPSSite{tnW}{(3.35,0)}{}
+        \TNVirtualPort{tnUOpenWestPort}{tnU}{west}\TNOpenVirtualWest{tnUOpenWestPort}
+        \TNVirtualPort{tnWOpenEastPort}{tnW}{east}\TNOpenVirtualEast{tnWOpenEastPort}
+        \TNVirtualPort{tnUOpen225Port}{tnU}{225}\TNOpenVirtualSouth{tnUOpen225Port}
+        \TNVirtualPort{tnWOpen315Port}{tnW}{315}\TNOpenVirtualSouth{tnWOpen315Port}
+        \TNInsertion{tnXl}{(1.02,0)}{X_e}
+        \TNInsertion{tnXr}{(2.33,0)}{(X_e^{-1})^\top}
+        \TNVirtualPort{tnUTotnXl}{tnU}{east}\TNVirtualPort{tnXlTotnU}{tnXl}{west}\TNConnectVirtual{tnUTotnXl}{tnXlTotnU}
+        \TNVirtualPort{tnXlTotnXr}{tnXl}{east}\TNVirtualPort{tnXrTotnXl}{tnXr}{west}\TNConnectVirtual{tnXlTotnXr}{tnXrTotnXl}
+        \TNVirtualPort{tnXrTotnW}{tnXr}{east}\TNVirtualPort{tnWTotnXr}{tnW}{west}\TNConnectVirtual{tnXrTotnW}{tnWTotnXr}
         \node at (1.67,0.78) {$\text{shared edge } e$};
         \node at ($(tnU.south)+(0,-0.28)$) {$u$};
         \node at ($(tnW.south)+(0,-0.28)$) {$w$};
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 % ---------- Pedagogical PEPS overview diagrams ----------
@@ -2997,23 +3050,28 @@
 % the thin horizontal and vertical bonds are the virtual edges of the finite
 % graph; the short thick diagonal stub at every vertex is the physical leg.
 \newcommand{\TNPEPSLatticeState}{%
-    \begin{tikzpicture}[tn picture]
-        \TN@squarepepspatch{pl}{2}{2}{1}
-    \end{tikzpicture}%
+    \begin{TNDiagram}[normal]
+        \TNSquarePEPSPatch{pl}{2}{2}{1}
+    \end{TNDiagram}%
 }
 
 % A single local tensor at a vertex $v$: the thick diagonal stub is the
 % physical index $\sigma$, the four thin legs are the incident virtual edges.
 \newcommand{\TNPEPSLocalTensorStar}{%
-    \begin{tikzpicture}[tn picture]
-        \TN@pepssiteWithOpenLegs{lt}{(0,0)}{}
+    \begin{TNDiagram}[normal]
+        \TNPEPSSite{lt}{(0,0)}{}
+        \TNOpenVirtualWest{ltWest}
+        \TNOpenVirtualEast{ltEast}
+        \TNOpenVirtualNorth{ltNorth}
+        \TNOpenVirtualSouth{ltSouth}
+        \TNOpenPhysicalNorth{ltKet}
         \node at (0.66,0.62) {$\sigma$};
         \node at (-0.98,0) {$e_1$};
         \node at (0.98,0) {$e_2$};
         \node at (0,0.86) {$e_3$};
         \node at (0,-0.86) {$e_4$};
         \node at (-0.40,-0.34) {$A_v$};
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 % Vertex injectivity. Reading the local tensor as the map sending a virtual
@@ -3021,87 +3079,87 @@
 % $A_v(\eta,\cdot)\in\C^d$, vertex injectivity is the linear independence of
 % this family.
 \newcommand{\TNPEPSVertexInjectivityMap}{%
-    \begin{tikzpicture}[tn picture]
-        \TN@tensor{vi}{(0,0)}
-        \TN@pleg{vi}{45}{0.46,0.46}
+    \begin{TNDiagram}[normal]
+        \TNTensor{vi}{(0,0)}
+        \TNPhysicalPort{viOpenKetPort}{vi}{45}\TNOpenPhysicalNorth{viOpenKetPort}
         \node at (0.72,0.72) {$\C^d$};
-        \TN@vleg{vi}{west}{-0.62,0}
-        \TN@vleg{vi}{east}{0.62,0}
-        \TN@vleg{vi}{225}{-0.46,-0.46}
-        \TN@vleg{vi}{315}{0.46,-0.46}
+        \TNVirtualPort{viOpenWestPort}{vi}{west}\TNOpenVirtualWest{viOpenWestPort}
+        \TNVirtualPort{viOpenEastPort}{vi}{east}\TNOpenVirtualEast{viOpenEastPort}
+        \TNVirtualPort{viOpen225Port}{vi}{225}\TNOpenVirtualSouth{viOpen225Port}
+        \TNVirtualPort{viOpen315Port}{vi}{315}\TNOpenVirtualSouth{viOpen315Port}
         \node at (0,-1.04) {$\eta$};
         \node at (1.95,0.30) {\scriptsize injective};
         \node at (1.95,0) {$\longmapsto$};
         \node[align=center] at (4.45,0)
         {$\{A_v(\eta,\cdot)\}_{\eta}$ linearly\\ independent in $\C^d$};
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 % The state coefficient as a contraction. On the five-vertex example graph
 % (pentagon with one chord) the physical legs stay open while every virtual
 % bond is summed over; the coefficient is the resulting scalar.
 \newcommand{\TNPEPSStateContraction}{%
-    \begin{tikzpicture}[tn picture]
-        \TN@pepsFiveSitePatch{sc}
-        \TN@pepsFiveSitePatchLabels{sc}{A_1}{A_2}{A_3}{A_4}{A_5}
-    \end{tikzpicture}%
+    \begin{TNDiagram}[normal]
+        \TNPEPSFiveSitePatch{sc}
+        \TNPEPSFiveSiteLabels{sc}{A_1}{A_2}{A_3}{A_4}{A_5}
+    \end{TNDiagram}%
 }
 
 % Torus geometry. A finite square-lattice patch whose opposite boundary bonds
 % are identified, so the columns and rows are read modulo $n$ and $m$.
 \newcommand{\TNPEPSTorusGeometry}{%
-    \begin{tikzpicture}[tn picture]
-        \TN@squarepepspatch{tg}{2}{2}{1}
+    \begin{TNDiagram}[normal]
+        \TNSquarePEPSPatch{tg}{2}{2}{1}
         \foreach \y in {0,1,2} {
-            \TN@vopenport[tn periodic mark]{tg2\y E}{0.5,0}
-            \TN@vopenport[tn periodic mark]{tg0\y W}{-0.5,0}
+            \TNOpenVirtualEast{tg2\y E}
+            \TNOpenVirtualWest{tg0\y W}
         }
         \foreach \x in {0,1,2} {
-            \TN@vopenport[tn periodic mark]{tg\x2N}{0,0.5}
-            \TN@vopenport[tn periodic mark]{tg\x0S}{0,-0.5}
+            \TNOpenVirtualNorth{tg\x2N}
+            \TNOpenVirtualSouth{tg\x0S}
         }
         \node at (1,-1.15) {\scriptsize rows and columns identified modulo $n,m$};
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 % Vertex balance of edge scalars. The endpoint reading $c_{v,e}$ on each
 % incident edge; the gauge is balanced at $v$ when the incident readings
 % multiply to one.
 \newcommand{\TNPEPSVertexScalarBalance}{%
-    \begin{tikzpicture}[tn picture]
-        \TN@pepssite{vb}{(0,0)}{}
-        \TN@vterminal{vbWOpen}{($(vbW)+(-0.58,0)$)}
-        \TN@vterminal{vbEOpen}{($(vbE)+(0.58,0)$)}
-        \TN@vterminal{vbNOpen}{($(vbN)+(0,0.58)$)}
-        \TN@vterminal{vbSOpen}{($(vbS)+(0,-0.58)$)}
-        \TN@pterminal{vbPOpen}{($(vbP)+(0.38,0.38)$)}
-        \TN@insertion{vbZW}{(-0.5,0)}
-        \TN@insertion{vbZE}{(0.5,0)}
-        \TN@insertion{vbZN}{(0,0.5)}
-        \TN@insertion{vbZS}{(0,-0.5)}
-        \TN@vport{vbZWW}{vbZW}{west}
-        \TN@vport{vbZWE}{vbZW}{east}
-        \TN@vport{vbZEW}{vbZE}{west}
-        \TN@vport{vbZEE}{vbZE}{east}
-        \TN@vport{vbZNN}{vbZN}{north}
-        \TN@vport{vbZNS}{vbZN}{south}
-        \TN@vport{vbZSN}{vbZS}{north}
-        \TN@vport{vbZSS}{vbZS}{south}
-        \TN@vconnectports{vbW}{vbZWE}
-        \TN@vconnectports{vbZWW}{vbWOpen}
-        \TN@vconnectports{vbE}{vbZEW}
-        \TN@vconnectports{vbZEE}{vbEOpen}
-        \TN@vconnectports{vbN}{vbZNS}
-        \TN@vconnectports{vbZNN}{vbNOpen}
-        \TN@vconnectports{vbS}{vbZSN}
-        \TN@vconnectports{vbZSS}{vbSOpen}
-        \TN@pconnectports{vbP}{vbPOpen}
+    \begin{TNDiagram}[normal]
+        \TNPEPSSite{vb}{(0,0)}{}
+        \TNVirtualTerminal{vbWOpen}{($(vbW)+(-0.58,0)$)}
+        \TNVirtualTerminal{vbEOpen}{($(vbE)+(0.58,0)$)}
+        \TNVirtualTerminal{vbNOpen}{($(vbN)+(0,0.58)$)}
+        \TNVirtualTerminal{vbSOpen}{($(vbS)+(0,-0.58)$)}
+        \TNPhysicalTerminal{vbPOpen}{($(vbP)+(0.38,0.38)$)}
+        \TNInsertion{vbZW}{(-0.5,0)}{}
+        \TNInsertion{vbZE}{(0.5,0)}{}
+        \TNInsertion{vbZN}{(0,0.5)}{}
+        \TNInsertion{vbZS}{(0,-0.5)}{}
+        \TNVirtualPort{vbZWW}{vbZW}{west}
+        \TNVirtualPort{vbZWE}{vbZW}{east}
+        \TNVirtualPort{vbZEW}{vbZE}{west}
+        \TNVirtualPort{vbZEE}{vbZE}{east}
+        \TNVirtualPort{vbZNN}{vbZN}{north}
+        \TNVirtualPort{vbZNS}{vbZN}{south}
+        \TNVirtualPort{vbZSN}{vbZS}{north}
+        \TNVirtualPort{vbZSS}{vbZS}{south}
+        \TNConnectVirtual{vbW}{vbZWE}
+        \TNConnectVirtual{vbZWW}{vbWOpen}
+        \TNConnectVirtual{vbE}{vbZEW}
+        \TNConnectVirtual{vbZEE}{vbEOpen}
+        \TNConnectVirtual{vbN}{vbZNS}
+        \TNConnectVirtual{vbZNN}{vbNOpen}
+        \TNConnectVirtual{vbS}{vbZSN}
+        \TNConnectVirtual{vbZSS}{vbSOpen}
+        \TNConnectPhysical{vbP}{vbPOpen}
         \node at (-0.58,0.28) {$c_{v,e_1}$};
         \node at (0.62,-0.28) {$c_{v,e_2}$};
         \node at (-0.42,0.60) {$c_{v,e_3}$};
         \node at (0.42,-0.60) {$c_{v,e_4}$};
         \node at (2.35,0) {$\displaystyle\prod_{e \ni v} c_{v,e} = 1$};
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 % ---------- Quantum-channel representation diagrams ----------
@@ -3110,55 +3168,45 @@
 % contraction: the Kraus index i is summed between the K_i (ket) and
 % K_i^dagger (bra) layers; rho enters on the left, T(rho) leaves on the right.
 \newcommand{\TNKrausMap}{%
-    \begin{tikzpicture}[tn picture]
-        \TN@operatorstate{krRho}{(-1.35,0)}{\rho}
-        \TN@doublelayer{kr}{(0,0.44)}{(0,-0.44)}
-        \TN@operatorstate{krOut}{(1.55,0)}{T(\rho)}
-        \TN@vconnectports{krRhoEUp}{krUW}
-        \TN@vconnectports{krRhoEDown}{krDW}
-        \TN@vconnectports{krUE}{krOutWUp}
-        \TN@vconnectports{krDE}{krOutWDown}
-        \node at ($(krUS)!0.5!(krDN)+(0.20,0)$) {$i$};
-        \node at ($(krU.north)+(0,0.20)$) {$K_i$};
-        \node at ($(krD.south)+(0,-0.20)$) {$K_i^\dagger$};
-    \end{tikzpicture}%
+    \begin{TNDiagram}[compact]
+        \TNStackedMPOProduct{kr}{(0,0)}{K_i}{K_i^\dagger}{i}
+        \TNOpenVirtualWest{krUpperWest}
+        \TNOpenVirtualWest{krLowerWest}
+        \TNOpenVirtualEast{krUpperEast}
+        \TNOpenVirtualEast{krLowerEast}
+        \node[anchor=east] at (-0.70,0) {$\rho$};
+        \node[anchor=west] at (0.70,0) {$T(\rho)$};
+    \end{TNDiagram}%
 }
 
 % Stinespring dilation T(rho) = tr_E[V rho V^dagger]: the isometry V and its
 % adjoint map the system into a larger space; the environment E is traced out
 % (the loop on the right), leaving the channel output T(rho) on the system legs.
 \newcommand{\TNStinespring}{%
-    \begin{tikzpicture}[tn picture]
-        \TN@operatorstate{sRho}{(-1.35,0)}{\rho}
-        \TN@systemancillamapup{sV}{(0,0.5)}{V}
-        \TN@systemancillamapdown{sVd}{(0,-0.5)}{V^\dagger}
-        \TN@operatorstate{sOut}{(1.55,0)}{T(\rho)}
-        \TN@vconnectports{sRhoEUp}{sVW}
-        \TN@vconnectports{sRhoEDown}{sVdW}
-        \TN@vconnectports{sVE}{sOutWUp}
-        \TN@vconnectports{sVdE}{sOutWDown}
-        \TN@vtraceportsright{sVAncilla}{sVdAncilla}{2.25}{0.30}
-        \node at (2.46,0.98) {$E$};
-    \end{tikzpicture}%
+    \begin{TNDiagram}[compact]
+        \TNStackedMPOProduct{s}{(0,0)}{V}{V^\dagger}{E}
+        \TNOpenVirtualWest{sUpperWest}
+        \TNOpenVirtualWest{sLowerWest}
+        \TNOpenVirtualEast{sUpperEast}
+        \TNOpenVirtualEast{sLowerEast}
+        \node[anchor=east] at (-0.70,0) {$\rho$};
+        \node[anchor=west] at (0.70,0) {$\tr_E[V\rho V^\dagger]$};
+    \end{TNDiagram}%
 }
 
 % Choi--Jamiolkowski isomorphism tau = (T tensor id)(|Omega><Omega|): the channel
 % T (double layer) has its input legs bent around the maximally entangled pair
 % |Omega|, presenting the map as a matrix on the doubled space.
 \newcommand{\TNChoiMatrix}{%
-    \begin{tikzpicture}[tn picture]
-        \TN@tensor{cmU}{(0,0.42)}
-        \TN@tensor{cmD}{(0,-0.42)}
-        \TN@pconnect{cmU}{south}{cmD}{north}
-        \TN@vleg{cmU}{east}{0.62,0}
-        \TN@vleg{cmD}{east}{0.62,0}
-        \TN@vbezieropen{cmU}{west}{(-1.0,0.42)}{(-1.0,1.05)}
-            {(-0.35,1.05)}{0.97,0}
-        \TN@vbezieropen{cmD}{west}{(-1.0,-0.42)}{(-1.0,-1.05)}
-            {(-0.35,-1.05)}{0.97,0}
-        \node[anchor=east] at (-0.78,0) {$\ket{\Omega}$};
-        \node at (0.3,0.66) {$T$};
-    \end{tikzpicture}%
+    \begin{TNDiagram}[compact]
+        \TNStackedMPOProduct{cm}{(0,0)}{T}{\mathrm{id}}{}
+        \TNOpenVirtualWest{cmUpperWest}
+        \TNOpenVirtualWest{cmLowerWest}
+        \TNOpenVirtualEast{cmUpperEast}
+        \TNOpenVirtualEast{cmLowerEast}
+        \node[anchor=east] at (-0.70,0) {$\ket{\Omega}\!\bra{\Omega}$};
+        \node[anchor=west] at (0.70,0) {$\tau$};
+    \end{TNDiagram}%
 }
 
 % Trace-pairing transfer form
@@ -3166,45 +3214,35 @@
 % rho and sigma_j; the scalar coefficient t_ij joins the two basis labels, and
 % sigma_i supplies the output matrix legs.
 \newcommand{\TNTransferMapTracePairing}{%
-    \begin{tikzpicture}[tn picture]
-        \TN@component{tpRho}{(-1.55,0)}{\rho}
-        \TN@component{tpSigJ}{(-0.48,0)}{\sigma_j}
-        \TN@tensor{tpT}{(0.82,0)}
-        \TN@label[anchor=north]{tpT.south}{(0,-0.10)}{t_{ij}}
-        \TN@component{tpSigI}{(2.12,0)}{\sigma_i}
-        \TN@vconnectpoints{tpRho.north east}{tpSigJ.north west}
-        \TN@vconnectpoints{tpRho.south east}{tpSigJ.south west}
-        \TN@vtraceconnectbezier{tpSigJ}{north east}{(-0.12,0.52)}
-            {(-1.92,0.52)}{tpRho}{north west}
-        \TN@vtraceconnectbezier{tpSigJ}{south east}{(-0.12,-0.52)}
-            {(-1.92,-0.52)}{tpRho}{south west}
-        \TN@pconnectbezier{tpSigJ}{north}{(-0.32,0.78)}
-            {(0.62,0.78)}{tpT}{north}
-        \TN@pconnect{tpT}{east}{tpSigI}{west}
-        \TN@vleg{tpSigI}{north east}{0.72,0}
-        \TN@vleg{tpSigI}{south east}{0.72,0}
-        \node at (-1.08,-0.82) {$\tr(\sigma_j\rho)$};
-        \node at (3.22,0) {$T(\rho)$};
-    \end{tikzpicture}%
+    \begin{TNDiagram}[compact]
+        \TNCompactTraceCell{tp}{(0,0)}{\sigma_j}{\rho}{}
+        \TNExpression{tpCoeff}{(2.10,0)}{t_{ij}}
+        \TNExpression{tpOut}{(3.45,0)}{\sigma_i}
+        \node at (1.35,0) {$\cdot$};
+        \node at (2.78,0) {$\cdot$};
+        \node[anchor=west] at (4.15,0) {$=T(\rho)$};
+    \end{TNDiagram}%
 }
 
 % Two-point correlator <X_0 Y_n> = tr(Y E_A^n(X rho^R)): on the transfer-map
 % (M_D) line, start from the fixed point rho^R, insert X, propagate by n copies
 % of the transfer map E_A, insert Y, and close the line by the trace.
 \newcommand{\TNTwoPointCorrelator}{%
-    \begin{tikzpicture}[tn picture]
-        \TN@component[inner sep=1.6pt]{coR}{(0,0)}{\rho^R}
-        \TN@insertion{coX}{(1.05,0)}
-        \TN@map{coE}{(2.3,0)}{\E_A^n}
-        \TN@insertion{coY}{(3.55,0)}
-        \TN@vconnect{coR}{east}{coX}{west}
-        \TN@vconnect{coX}{east}{coE}{west}
-        \TN@vconnect{coE}{east}{coY}{west}
+    \begin{TNDiagram}[normal]
+        \TNComponent{coR}{(0,0)}{\rho^R}
+        \TNInsertion{coX}{(1.05,0)}{}
+        \TNMap{coE}{(2.3,0)}{\E_A^n}
+        \TNInsertion{coY}{(3.55,0)}{}
+        \TNVirtualPort{coRTocoX}{coR}{east}\TNVirtualPort{coXTocoR}{coX}{west}\TNConnectVirtual{coRTocoX}{coXTocoR}
+        \TNVirtualPort{coXTocoE}{coX}{east}\TNVirtualPort{coETocoX}{coE}{west}\TNConnectVirtual{coXTocoE}{coETocoX}
+        \TNVirtualPort{coETocoY}{coE}{east}\TNVirtualPort{coYTocoE}{coY}{west}\TNConnectVirtual{coETocoY}{coYTocoE}
         \node at (1.05,0.28) {$X$};
         \node at (3.55,0.28) {$Y$};
-        \TN@vtracebelow{coR}{coY}{0.85}
+        \TNVirtualPort{coRTrace}{coR}{west}
+        \TNVirtualPort{coYTrace}{coY}{east}
+        \TNTraceVirtualBelow{coRTrace}{coYTrace}
         \node at (1.8,-1.08) {$\tr$};
-    \end{tikzpicture}%
+    \end{TNDiagram}%
 }
 
 \makeatother
