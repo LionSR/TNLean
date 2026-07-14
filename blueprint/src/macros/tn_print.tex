@@ -2721,11 +2721,10 @@
         \TN@tensordot{pA}{(0,0)}
         \TN@tensordot{pB}{(1.10,0)}
         \TN@opdotbelow{pZ}{(0.55,-0.72)}{#2}
-        \draw[tn leg] (-0.45,0) -- (1.55,0);
+        \draw[tn leg] ($(pA.west)+(-0.45,0)$) -- ($(pB.east)+(0.45,0)$);
         \TN@upleg{pA}{0.38}
         \TN@upleg{pB}{0.38}
-        \draw[tn virtual closure] (-0.45,0) -- (-0.45,-0.72) -- (pZ.west);
-        \draw[tn virtual closure] (pZ.east) -- (1.55,-0.72) -- (1.55,0);
+        \TN@vtracevia{pA}{pZ}{pB}{0.45}{0.45}
     \end{tikzpicture}%
 }
 
@@ -2739,7 +2738,7 @@
         \TN@upleg{tnR}{\TN@physleglen}
         \TN@uplabel{tnL}{\TN@physlabeloff}{#2}
         \TN@uplabel{tnR}{\TN@physlabeloff}{#3}
-        \draw[tn leg] (-0.45,0) -- (3.40,0);
+        \draw[tn leg] ($(tnL.west)+(-0.45,0)$) -- ($(tnR.east)+(0.45,0)$);
         \node at (2.05,0) {$\cdots$};
         \TN@opdotbelow{tnX}{(1.48,-0.82)}{#5}
         \TN@vtracevia{tnL}{tnX}{tnR}{0.45}{0.45}
