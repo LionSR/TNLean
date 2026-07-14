@@ -398,6 +398,7 @@ import TNLean.MPS.MPDO.SectorTrace
 import TNLean.MPS.MPDO.ReflectedMarkedChain
 import TNLean.MPS.MPDO.FigureEightPairwise
 import TNLean.MPS.MPDO.GroupedFigure8
+import TNLean.MPS.MPDO.GroupedGramNormalization
 import TNLean.MPS.MPDO.BiCFDerivation
 import TNLean.MPS.MPDO.ZCL
 import TNLean.MPS.MPDO.RFP

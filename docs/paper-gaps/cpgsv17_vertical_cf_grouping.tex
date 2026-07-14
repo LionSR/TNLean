@@ -164,9 +164,10 @@ some finite length.  The MPDO trace argument then proves that every grouped
 coefficient is positive.  This is the phase-class decomposition and positivity
 argument of source lines~1898--1902, obtained by combining the BNT
 characterization at lines~1135--1148 with the preceding isometry-preserving
-vertical sector theorem.  It does not formalize the positive-diagonal isometry
-asserted at lines~1895--1896 or the subsequent gauge normalization and final
-coisometry.  Equality of
+vertical sector theorem.  By itself it does not formalize the
+positive-diagonal isometry asserted at lines~1895--1896, the subsequent gauge
+normalization, or the final coisometry; the gauge normalization is supplied
+below.  Equality of
 the bond dimensions within each phase class is obtained from non-decay of the
 positive-length rectangular overlap, as in Lemma~\texttt{equalMPS}; the
 empty-word coefficient is not used in this comparison.
@@ -212,34 +213,38 @@ X_{\alpha,k}^\dagger X_{\alpha,k}
 The relative gauge $X_{\alpha,k}X_{\alpha,1}^{-1}$ becomes unitary after
 division by $\sqrt{\omega_{\alpha,k}}$.  The grouping theorem now exposes its choice
 $X_{\alpha,1}=\Id$, giving the normalization printed by the source
-(\path{MPSTensor.IsNormal.gram_eq_pos_smul_gram_of_gram_conj_eq} in
-\path{TNLean/MPS/CanonicalForm/NormalCommutant.lean}).
+(\path{MPOTensor.IsMPDO.grouped_sector_gram_eq_pos_smul_one} and
+\path{MPOTensor.IsMPDO.grouped_sector_exists_unitary_normalization} in
+\path{TNLean/MPS/MPDO/GroupedGramNormalization.lean}).
 
 The reflected marked-chain, two-sector separation, and dependent-dimension
-transport of source lines~1909--1919 are therefore complete.  What remains is
-to apply normal-tensor Gram rigidity to this grouped comparison and normalize
-the copy embeddings.  Their generic assembly into the direct-sum coisometry
-$U$ is already
+transport of source lines~1909--1919 are therefore complete, as is the
+positive scalar Gram identity and unitary normalization of every grouped
+gauge.  What remains is to transport these unitary gauges to common
+representative bond spaces, compose them with the physical sector isometries,
+and establish the normalized physical maps required by the final coisometry.
+Their generic assembly into the direct-sum coisometry $U$ is already
 proved by \path{Matrix.sigmaBlockRow_isCoisometry},
 \path{Matrix.sigmaBlockRow_conjugation}, and
 \path{Matrix.sigmaBlockRow_reconstruction}.  The remaining source-specific
 identifications are to transport the copy bond spaces along the dimension
 equalities supplied by the grouping theorem, index the sectors by dependent
 pairs $(\alpha,q)$, and identify the dependent disjoint union with the
-standard direct-sum coordinate space.  The algebraic BNT predicate also
-requires a retained representative; its existence must still be deduced from
-horizontal canonical form and the literal reconstruction of the nonzero
-vertical tensor.  Consequently, the relative Gram conclusion at
-lines~1903--1908 has not yet been derived from the MPDO hypotheses.  These
-gauge and coisometry conclusions are not part of the grouping theorem.  The original
+standard direct-sum coordinate space.  A retained representative is already
+supplied by
+\path{MPOTensor.IsHorizontalCF.exists_nonempty_verticalBNTGrouping} in
+\path{TNLean/MPS/MPDO/RetainedClass.lean}.  Thus only the source-specific
+normalized physical maps, their final coisometry, the direct-sum indexing,
+and the literal vertical canonical-form identity remain.  The original
 formulation of \ghissue{2536}, interpreted as a direct conversion of the
 horizontal scalar weights and diagonal restrictions, is therefore not a
 consequence of Proposition~4.13.
 
 \paragraph{Verdict.}
-This is an open gap: Figure~8 is complete for the actual grouped sectors, but
-the normal-tensor Gram normalization and the final physical coisometry have
-not yet been derived from the matrix-product-density-operator hypotheses.
+This is an open gap: Figure~8 and the normal-tensor Gram normalization are
+complete for the actual grouped sectors, but the normalized physical maps and
+their final coisometry have not yet been assembled from the
+matrix-product-density-operator hypotheses.
 
 \bibliographystyle{alpha}
 \bibliography{references}
