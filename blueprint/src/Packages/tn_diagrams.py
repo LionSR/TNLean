@@ -138,6 +138,8 @@ _UNTYPED_PORT_COMMAND_PATTERN = re.compile(
 )
 _TYPED_PORT_COMMAND_ARITIES = {
     "TN@vconnectports": (2, (0, 1)),
+    "TN@vconnectportshv": (2, (0, 1)),
+    "TN@vconnectportsvh": (2, (0, 1)),
     "TN@pconnectports": (2, (0, 1)),
     "TN@mconnectports": (2, (0, 1)),
     "TN@mcompareports": (2, (0, 1)),
@@ -146,6 +148,9 @@ _TYPED_PORT_COMMAND_ARITIES = {
     "TN@vtraceportsbelow": (4, (0, 1)),
     "TN@vtraceportsabove": (4, (0, 1)),
     "TN@vtraceportsright": (4, (0, 1)),
+    "TN@ptraceportsbelow": (4, (0, 1)),
+    "TN@ptraceportsabove": (4, (0, 1)),
+    "TN@ptraceportsright": (4, (0, 1)),
 }
 
 
