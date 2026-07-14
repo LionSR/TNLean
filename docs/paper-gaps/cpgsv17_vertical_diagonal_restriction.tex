@@ -173,19 +173,19 @@ $\mu_{\alpha,1}>0$ (\path{TNLean/MPS/MPDO/VerticalBNT.lean} and
 identity of the second displayed diagram at lines~1914--1919 is proved in
 \path{TNLean/MPS/MPDO/FigureEightPairwise.lean}, and its dependent transport
 to the actual grouped sectors is proved in
-\path{TNLean/MPS/MPDO/GroupedFigure8.lean}.  Together with the scalar
-commutant of a normal tensor, this identity shows that the Gram matrix of
-each sector gauge $X_{\alpha,k}$ is
-a positive real multiple of the reference Gram matrix,
+\path{TNLean/MPS/MPDO/GroupedFigure8.lean}.  Normal-tensor rigidity then shows
+that the Gram matrix of each sector gauge $X_{\alpha,k}$ is a positive real
+multiple of the reference Gram matrix,
 \[
 X_{\alpha,k}^\dagger X_{\alpha,k}
 =\omega_{\alpha,k}X_{\alpha,1}^\dagger X_{\alpha,1}.
 \]
 The relative gauge $X_{\alpha,k}X_{\alpha,1}^{-1}$ is therefore proportional
-to a unitary; the grouping chooses $X_{\alpha,1}=\Id$.  This follows because
-a normal tensor has scalar
-commutant
-(\path{TNLean/MPS/CanonicalForm/NormalCommutant.lean}). Projector closure and
+to a unitary; the grouping chooses $X_{\alpha,1}=\Id$.  The positive scalar
+identity and the unitary normalization of the actual grouped gauge are proved
+in \path{TNLean/MPS/MPDO/GroupedGramNormalization.lean}, with the source
+passage at lines~1903--1921 recorded in both theorem docstrings.  Projector
+closure and
 the absence of periodic vectors already give an abstract positive-length
 normal-block decomposition
 (\path{TNLean/MPS/CanonicalForm/ProjectorClosureSpectral.lean}). The literal
@@ -195,10 +195,11 @@ grouped into pairwise gauge-phase-distinct BNT representatives in
 \path{TNLean/MPS/MPDO/VerticalBNT.lean}. Every copy is expressed by a positive
 coefficient, a unit-modulus phase, and an invertible bond-space gauge, while
 the physical isometries and the literal vertical reconstruction are retained.
-What remains is to apply normal-tensor Gram rigidity to this grouped
-comparison, normalize the resulting sector maps, and assemble them into the
-final coisometry.  Consequently, the conclusion stated at lines~1903--1908
-has not yet been derived from the MPDO hypotheses.
+What remains is to transport the unitary gauge normalizations to common
+representative bond spaces, compose them with the physical sector isometries,
+and assemble these normalized physical maps into the final coisometry.  The
+literal vertical canonical-form identity has therefore not yet been derived
+from the MPDO hypotheses.
 
 \paragraph{Verdict.}
 This is an open gap: the source-faithful horizontal-to-vertical implication of
