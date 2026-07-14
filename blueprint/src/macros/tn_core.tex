@@ -218,6 +218,18 @@
     -- ($(#1.center)+(0.42,-0.52)$) -| (#1.south);%
 }
 
+% Close two right virtual legs by an ordinary trace contraction.
+\newcommand{\TN@vtraceright}[3]{%
+    \draw[tn virtual closure] (#1.east) -- ++(#3,0) |- (#2.east);%
+}
+
+% Close the virtual bond through an insertion below an open tensor row.
+\newcommand{\TN@vtracevia}[5]{%
+    \draw[tn virtual closure] (#1.west) -- ++(-#4,0) |- (#2.west);%
+    \draw[tn virtual closure] (#2.east) -| ($(#3.east)+(#5,0)$)
+        -- (#3.east);%
+}
+
 \newcommand{\TN@boxedThreeSiteChain}[4]{%
     \draw[tn virtual closure] (0.40,0) rectangle (3.50,-0.46);
     \TN@tensordot{#1one}{(1.00,0)}

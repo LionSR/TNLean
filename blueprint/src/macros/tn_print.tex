@@ -133,8 +133,8 @@
         \TN@upleg{tnA}{0.48}
         \TN@downleg{tnAc}{0.48}
         \draw[tn purification contraction]
-            (tnA.south east) .. controls (0.88,0.42) and (0.88,-0.42) ..
-            (tnAc.north east);
+            (tnA.-35) .. controls (0.88,0.42) and (0.88,-0.42) ..
+            (tnAc.35);
         \node at (-0.28,0.82) {$A$};
         \node at (-0.32,-0.82) {$\overline A$};
         \node at (0.95,0) {$k$};
@@ -1924,8 +1924,7 @@
 \newcommand{\TNAppendixBChainTransport}{%
     \begin{tikzpicture}[tn picture, scale=0.92]
         \foreach \a/\name in {150/ctA,90/ctX,30/ctB,-30/ctC,-90/ctD,-150/ctE} {
-            \node[tn tensor dot] (\name)
-                at ({1.34*cos(\a)},{1.02*sin(\a)}) {};
+            \TN@tensordot{\name}{({1.34*cos(\a)},{1.02*sin(\a)})}
         }
         \draw[tn leg] (ctA) -- (ctX) -- (ctB) -- (ctC) -- (ctD) -- (ctE) -- (ctA);
         \draw[red, line width=2.2pt] (ctA) -- (ctX);
@@ -1936,7 +1935,7 @@
         \draw[->, line width=0.7pt] (1.85,0) -- (2.75,0)
             node[midway, above] {$R_{i,\tau}^{(3)}$};
         \foreach \x/\name/\lab in {3.35/ctLA/A,4.55/ctLX/X,5.75/ctLB/B} {
-            \node[tn tensor dot] (\name) at (\x,0) {};
+            \TN@tensordot{\name}{(\x,0)}
             \node at (\x,0.38) {$\lab$};
         }
         \draw[tn leg] (ctLA) -- (ctLX) -- (ctLB);
@@ -2607,8 +2606,7 @@
         \draw[tn leg] (tnD2.east) -- ++(0.62,0);
         \draw[tn leg] ($(tnU3.west)+(-0.62,0)$) -- (tnU3.west);
         \draw[tn leg] ($(tnD3.west)+(-0.62,0)$) -- (tnD3.west);
-        \draw[tn leg] (tnU3.east) -- ++(0.70,0);
-        \draw[tn leg] (tnD3.east) -- ++(0.70,0);
+        \TN@vtraceright{tnU3}{tnD3}{0.70}
         \draw[tn phys leg] (tnU1.south) -- (tnuA.north);
         \draw[tn phys leg] (tnuA.south) -- (tnD1.north);
         \draw[tn phys leg] (tnU2.south) -- (tnuB.north);
@@ -2744,8 +2742,7 @@
         \draw[tn leg] (-0.45,0) -- (3.40,0);
         \node at (2.05,0) {$\cdots$};
         \TN@opdotbelow{tnX}{(1.48,-0.82)}{#5}
-        \draw[tn virtual closure] (-0.45,0) -- (-0.45,-0.82) -- (tnX.west);
-        \draw[tn virtual closure] (tnX.east) -- (3.40,-0.82) -- (3.40,0);
+        \TN@vtracevia{tnL}{tnX}{tnR}{0.45}{0.45}
     \end{tikzpicture}%
 }
 
@@ -3646,7 +3643,8 @@
     \begin{tikzpicture}[tn picture]
         \node[tn tensor box] (tpRho) at (-1.55,0) {$\rho$};
         \node[tn tensor box] (tpSigJ) at (-0.48,0) {$\sigma_j$};
-        \node[tn tensor box] (tpT) at (0.82,0) {$t_{ij}$};
+        \TN@tensordot{tpT}{(0.82,0)}
+        \node[anchor=north] at ($(tpT.south)+(0,-0.10)$) {$t_{ij}$};
         \node[tn tensor box] (tpSigI) at (2.12,0) {$\sigma_i$};
         \draw[tn leg] (tpRho.north east) -- (tpSigJ.north west);
         \draw[tn leg] (tpRho.south east) -- (tpSigJ.south west);
