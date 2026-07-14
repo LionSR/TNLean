@@ -22,6 +22,9 @@ name: TNMPDOHayashiSectorComparison TNMPDOSectorFactorization
 name: TNMPDOHorizontalOperator TNMPDOFirstSiteContractions TNMPDOVerticalDirectSum
 {{ obj.tn_svg_html }}
 
+name: TNMPDOVerticalReducingSectors
+{{ obj.tn_svg_html }}
+
 name: TNMPDOInverseContraction TNMPDOSectorPairing TNMPDOSectorZCLIdentity
 {{ obj.tn_svg_html }}
 
