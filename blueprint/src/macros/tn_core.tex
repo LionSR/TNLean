@@ -21,8 +21,36 @@
             tn tensor dot,
             red
         },
+    % Labeled tensors remain neutral; linear maps and insertions are blue.
+    % These two styles prevent a tensor label from being mistaken for a map.
+    tn tensor box/.style={
+            draw,
+            fill=white,
+            inner sep=1.4pt
+        },
+    tn map box/.style={
+            draw,
+            rounded corners=2pt,
+            fill=blue!8,
+            inner sep=2pt
+        },
     tn leg/.style={line width=0.4pt},
-    tn phys leg/.style={line width=0.7pt}
+    tn phys leg/.style={line width=0.7pt},
+    % A contracted index is always solid.  Dashed strokes are reserved for
+    % grouping boundaries or for an explicitly indicated periodic
+    % identification, neither of which is an index contraction.
+    tn contraction/.style={tn leg},
+    tn phys contraction/.style={tn phys leg},
+    tn purification contraction/.style={tn phys contraction},
+    tn virtual closure/.style={tn contraction, rounded corners=3pt},
+    tn physical closure/.style={tn phys contraction, rounded corners=3pt},
+    tn grouping boundary/.style={densely dashed, rounded corners=2pt},
+    tn basis change/.style={densely dashed, line width=0.4pt},
+    tn periodic identification/.style={
+            tn leg,
+            densely dashed,
+            ->
+        }
 }
 
 \makeatletter
@@ -89,7 +117,7 @@
 % that a public diagram can display either a physical site or a regrouped
 % tensor product without changing the glyph.
 \newcommand{\TN@subspinbox}[3]{%
-    \node[draw, fill=white, minimum width=0.72cm, minimum height=0.52cm,
+    \node[tn tensor box, minimum width=0.72cm, minimum height=0.52cm,
         inner sep=1pt] (#1) at #2 {$#3$};%
     \draw[tn leg] (#1.north) -- ++(0,0.26);%
     \draw[tn leg] (#1.south) -- ++(0,-0.26);%
@@ -128,7 +156,7 @@
     \TN@upleg{#1R}{\TN@physleglen}
     \TN@uplabel{#1L}{\TN@physlabeloff}{#2}
     \TN@uplabel{#1R}{\TN@physlabeloff}{#3}
-    \draw[tn leg] (-0.48,0) rectangle (4.68,-0.44);
+    \draw[tn virtual closure] (-0.48,0) rectangle (4.68,-0.44);
     \node at (\TN@chainellipsisx,0) {$\cdots$};%
 }
 
@@ -170,7 +198,7 @@
     \draw[tn leg] (#1M.east) -- ++(0.50,0);
     \draw[tn leg] ($(#1R.west)+(-0.50,0)$) -- (#1R.west);
     \node at (2.10,0) {$\cdots$};
-    \draw[tn leg] (#1L.west) -- ++(-0.42,0) -- ++(0,-0.92)
+    \draw[tn virtual closure] (#1L.west) -- ++(-0.42,0) -- ++(0,-0.92)
     -- ($(#1R.east)+(0.42,-0.92)$) -- ($(#1R.east)+(0.42,0)$) -- (#1R.east);%
 }
 
@@ -180,13 +208,13 @@
     \TN@tensordot{#1}{#2}
     \TN@leftleg{#1}{0.60}
     \TN@rightleg{#1}{0.60}
-    \draw[tn phys leg, rounded corners=3pt]
+    \draw[tn physical closure]
     (#1.north) |- ($(#1.center)+(0.42,0.52)$)
     -- ($(#1.center)+(0.42,-0.52)$) -| (#1.south);%
 }
 
 \newcommand{\TN@boxedThreeSiteChain}[4]{%
-    \draw[tn leg] (0.40,0) rectangle (3.50,-0.46);
+    \draw[tn virtual closure] (0.40,0) rectangle (3.50,-0.46);
     \TN@tensordot{#1one}{(1.00,0)}
     \TN@tensordot{#1two}{(2.00,0)}
     \TN@tensordot{#1three}{(3.00,0)}
