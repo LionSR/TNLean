@@ -206,6 +206,9 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
 \begin{theorem}[Simultaneous one-letter span after blocking a BNT]
     \label{thm:cpsv_bnt_blocked_simultaneous_span}
     \lean{MPSTensor.IsCPSVBasisOfNormalTensors.%
+        exists_positive_wordTupleSpanTop}
+    \lean{MPSTensor.wordTupleSpanTop_blockTensor_one}
+    \lean{MPSTensor.IsCPSVBasisOfNormalTensors.%
         exists_blocked_wordTupleSpanTop_one}
     \leanok
     \uses{def:bnt_cpsv, def:blocked_tensor,

@@ -588,10 +588,12 @@ $\varepsilon'\ne\varepsilon$.  This is the bond-factor conclusion appearing
 at line~277 of the arXiv:1511.08090 source, but the comparison used here is
 oriented oppositely to the printed convention.
 
-This remains a scope-restricted result.  Neither the simultaneous final-label
-selectors nor one-letter injectivity of every final tensor at the present
-blocking is derived from the assumptions on the fusion-isometry family.  The
-factorization theorem alone permits a rectangular matrix $F_\varepsilon$.
+This remains a scope-restricted result when only the abstract
+fusion-isometry family is supplied.  Once its labelled tensors are linked to
+the source BNT witness, however, the simultaneous final-label selectors are
+derived rather than assumed, as described below.  One-letter injectivity at a
+chosen present blocking remains separate.  The factorization theorem alone
+permits a rectangular matrix $F_\varepsilon$.
 
 There is now a separate numerical squareness result.  Under length
 independence and eventual linear independence,
@@ -642,6 +644,22 @@ zero on the others.  One-letter injectivity and selector coefficients can
 therefore be extracted after the same common blocking, without adding either
 property to the definition of a BNT.
 
+The pre-blocking common word span is exposed by
+\leanid{MPSTensor.IsCPSVBasisOfNormalTensors.%
+exists_positive_wordTupleSpanTop}.  Its selector coefficients bridge directly
+to the fusion-family formulation.  Consequently
+\leanid{MPOTensor.BNTFusionIsometryFamily.%
+fusionIsometry_mul_conjTranspose_eq_one_of_bnt_of_lengthIndependent}
+proves
+\[
+    U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=I
+\]
+from the BNT witness and the length-independent fusion data, with no selector
+or coisometry hypothesis.  The selector length supplied by the BNT argument is
+positive; the empty-chain case is not used.  This coisometry proof is a short
+derived argument from the cited source ingredients, not a proof printed
+verbatim in either paper.
+
 For the positive-diagonal fusion family, under the explicit hypothesis that
 identifies the labelled doubled-index tensors with a BNT witness, transport
 through the same positive block length is now formalized by
@@ -650,16 +668,16 @@ exists_positive_block_with_injective_fusion}.  The theorem derives the common
 one-letter span and injectivity of every blocked labelled tensor, and proves
 the blocked conjugation identity, both zipper orientations, and literal
 reconstruction.  Its multiplicity is exactly the dimension of the
-specialized chi space.  The positive-length condition is essential: at block
-length zero the conjugation identity would assert the unproved coisometry
-$U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=I$.
+specialized chi space.  The blocking length remains positive.  The empty chain
+is neither needed nor used: although its conjugation formula would reduce to
+coisometry, the equality above is instead derived from positive-length BNT
+selectors.
 
 The remaining construction is therefore narrower.  One must first construct
-this identification from the RFP tensor and the BNT of its vertical canonical
+the identification from the RFP tensor and the BNT of its vertical canonical
 form.  The simultaneous inverse must then be extracted from the blocked span
-and reindexed in the fusion coordinates.  One must derive the coisometry
-rather than assume it, assemble synthesis and analysis maps with their
-biorthogonality, and construct
+and reindexed in the fusion coordinates.  One must assemble the synthesis and
+analysis maps with their biorthogonality and construct
 \leanid{MPOTensor.CompleteZipperFusionFamily}.  The existing printed
 $F$-matrix and pentagon theorem can then be applied to this family.
 
