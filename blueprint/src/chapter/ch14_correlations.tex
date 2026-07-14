@@ -349,12 +349,12 @@ and rates for the single-tensor transfer map $\E_A$.
     \label{thm:physical_blocking_isometry_iff_transfer_idempotence}
     \lean{MPSTensor.isRFP_iff_hasPhysicalBlockingIsometry}
     \leanok
-    \uses{def:physical_blocking_isometry, def:mps_transfer_idempotence,
-        thm:kraus_isometry_iff_transfer_idempotence}
+    \uses{def:physical_blocking_isometry, def:mps_transfer_idempotence}
     The transfer map of an MPS tensor is idempotent if and only if the tensor
     has a physical blocking isometry.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:kraus_isometry_iff_transfer_idempotence}
     This is Theorem~\ref{thm:kraus_isometry_iff_transfer_idempotence}, with the
     physical blocking relation written as
     Definition~\ref{def:physical_blocking_isometry}.
