@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.MPS.Periodic.NormalizedSelfOverlap
 import TNLean.MPS.RFP.BNTOrthogonality
 import TNLean.MPS.RFP.StructuralFull
 
@@ -411,5 +412,74 @@ theorem isRFP_directSumTensor_iff [∀ k, NeZero (dim k)]
     exact isRFP_directSumTensor_of_isIsometryCanonicalForm B hCF hortho
 
 end Blocks
+
+namespace IsBNTCanonicalForm
+
+variable {P : SectorDecomposition d}
+
+/-- **Multiplicity-one characterization for the basis of normal tensors.**
+
+If `P` is in BNT canonical form, then the direct sum of its distinct basis
+tensors is a renormalization fixed point exactly when every basis tensor is in
+isometry canonical form and the mixed transfer operators between distinct
+basis tensors vanish.  The blockwise normality, irreducibility,
+left-canonical normalization, positive bond dimensions, and gauge-phase
+distinctness required by `isRFP_directSumTensor_iff` all follow from the one
+BNT canonical-form hypothesis.
+
+This is the multiplicity-one, phase-one specialization of CPSV16,
+Theorem `charact-MPS` and Corollary `III.cor3` (arXiv:1606.00608, lines
+543--584).  The repeated-copy physical-space construction remains separate;
+see `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
+theorem isRFP_basisDirectSum_iff (hCF : IsBNTCanonicalForm P) :
+    IsRFP (directSumTensor P.basis) ↔
+      ((∀ k, IsIsometryCanonicalForm (P.basis k)) ∧
+        ∀ j j' : Fin P.basisCount, j ≠ j' →
+          mixedTransferMap₂ (P.basis j) (P.basis j') = 0) := by
+  letI : ∀ k : Fin P.basisCount, NeZero (P.basisDim k) :=
+    fun k => ⟨(hCF.basis_dim_pos k).ne'⟩
+  have hnormal : ∀ k : Fin P.basisCount, IsNormal (P.basis k) := by
+    intro k
+    exact isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one
+      (P.basis k) (hCF.basis_irreducible k) (hCF.basis_left_canonical k)
+        (hCF.basis_normalized_self_overlap k)
+  exact isRFP_directSumTensor_iff P.basis hnormal hCF.basis_irreducible
+    hCF.basis_left_canonical hCF.basis_distinct
+
+/-- **Residual isometry family for a BNT basis direct sum.**
+
+If `P` is in BNT canonical form and the direct sum of its basis tensors is a
+renormalization fixed point, then those basis tensors have simultaneous
+trace-normalized isometry canonical forms whose residual tensors satisfy the
+full within-block and cross-block isometry equations.
+
+This is the multiplicity-one, phase-one form of CPSV16, Corollary `III.cor3`
+(arXiv:1606.00608, lines 583--589).  The repeated-copy physical-space
+construction remains outside this statement; see
+`docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
+theorem exists_residualIsometryFamily_of_isRFP_basisDirectSum
+    (hCF : IsBNTCanonicalForm P) (hRFP : IsRFP (directSumTensor P.basis)) :
+    ∃ (X : (j : Fin P.basisCount) →
+        Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ)
+      (Λ : (j : Fin P.basisCount) → Fin (P.basisDim j) → ℝ)
+      (U : (j : Fin P.basisCount) → MPSTensor d (P.basisDim j)),
+      (∀ j, (X j).det ≠ 0) ∧
+      (∀ j k, 0 < Λ j k) ∧
+      (∀ j, ∑ k, Λ j k = 1) ∧
+      (∀ j i, P.basis j i =
+        X j * Matrix.diagonal (fun k => (Real.sqrt (Λ j k) : ℂ)) *
+          U j i * (X j)⁻¹) ∧
+      IsResidualIsometryFamily U := by
+  letI : ∀ k : Fin P.basisCount, NeZero (P.basisDim k) :=
+    fun k => ⟨(hCF.basis_dim_pos k).ne'⟩
+  have hnormal : ∀ k : Fin P.basisCount, IsNormal (P.basis k) := by
+    intro k
+    exact isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one
+      (P.basis k) (hCF.basis_irreducible k) (hCF.basis_left_canonical k)
+        (hCF.basis_normalized_self_overlap k)
+  exact exists_residualIsometryFamily_of_isRFP_directSum P.basis hnormal
+    hCF.basis_irreducible hCF.basis_left_canonical hCF.basis_distinct hRFP
+
+end IsBNTCanonicalForm
 
 end MPSTensor

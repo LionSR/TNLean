@@ -319,6 +319,19 @@ their phases and scalar weights, requires care about the physical direct sum
 carried by the copy index.  A literal virtual-block substitution need not
 satisfy the defining physical-isometry relation.
 
+For a sector decomposition $P$ satisfying the single BNT canonical-form
+predicate, the explicit blockwise hypotheses are now eliminated.  The theorem
+\leanid{MPSTensor.IsBNTCanonicalForm.isRFP_basisDirectSum_iff} derives positive
+bond dimensions, normality, irreducibility, left-canonical normalization, and
+gauge-phase distinctness from that predicate and gives the preceding
+characterization for the direct sum of the basis representatives.  Under the
+forward hypothesis,
+\leanid{MPSTensor.IsBNTCanonicalForm.exists_residualIsometryFamily_of_isRFP_basisDirectSum}
+also supplies the trace-normalized decompositions and the full residual
+isometry family.  This discharges the canonical-form extraction for the
+multiplicity-one basis direct sum.  It does not identify that direct sum with
+the repeated-copy tensor carrying the weights $\mu_{j,q}$.
+
 \section{Ambiguity of a literal repeated-phase reading}
 
 Equation~\path{III_CFI_RFP} allows a fixed normal tensor indexed by $j$ to occur
@@ -391,16 +404,9 @@ in a way that implements the physical direct sum described at lines 559--563.
 
 \section{Elimination plan}
 
-There are two remaining gaps.  First, Corollary~III.cor3 assumes
-a single predicate ``$A$ in canonical form is a renormalization fixed point'',
-whereas the formal theorem takes the per-block normality, irreducibility,
-left-canonical condition, and gauge-phase distinctness of a basis of normal
-tensors as explicit hypotheses.  A source-faithful version should derive those
-per-block conditions from the single canonical-form renormalization-fixed-point
-predicate, so that the residual isometry family follows from the whole-tensor
-predicate alone, by the block-level argument of the previous section.
-
-Second, the repeated-copy index $q$ must be represented at the level at which
+The canonical-form extraction is discharged for the multiplicity-one basis
+direct sum by the two theorems cited above.  The remaining gap is the
+repeated-copy index $q$, which must be represented at the level at which
 the source physical isometry acts.  It cannot be collapsed into a block-diagonal
 bond tensor and then tested by literal whole-tensor transfer-map idempotence,
 because the phase-flip tensor then fails the source relation \path{AA=A} as well
@@ -439,12 +445,11 @@ $\Lambda_\alpha=\rho_{\alpha,\alpha}/\tr\rho$ and the square-root dressing
 $\sqrt\Lambda$ of the unit isometry.  The cross-block $\delta_{j,j'}$
 orthogonality equations of \path{eq:III_isometry} are formalized at the
 normal-tensor-block level by
-\leanid{MPSTensor.exists_residualIsometryFamily_of_isRFP_directSum}.  Two parts
-remain: the extraction of the per-block normality,
-irreducibility, left-canonical condition, and gauge-phase distinctness from a
-single canonical-form renormalization-fixed-point predicate, the hypothesis form
-of Corollary~III.cor3; and a faithful treatment of repeated phase copies at the
-physical-isometry level.  The tensor $A^0=\operatorname{diag}(1,-1)$ proves that the latter
+\leanid{MPSTensor.exists_residualIsometryFamily_of_isRFP_directSum}.  For the
+multiplicity-one basis direct sum, the single BNT canonical-form predicate now
+supplies all blockwise hypotheses and the residual family.  The remaining part
+is a faithful treatment of repeated phase copies at the physical-isometry
+level.  The tensor $A^0=\operatorname{diag}(1,-1)$ proves that this
 cannot be represented by a literal virtual block diagonal on a one-dimensional
 physical space: that reading fails both \path{AA=A} and whole-tensor
 transfer-map idempotence.
