@@ -474,6 +474,7 @@ import TNLean.MPS.MPDO.BNTTheoremData
 import TNLean.MPS.MPDO.BNTTheoremWitness
 import TNLean.MPS.MPDO.BNTTheoremWitnessConsequences
 import TNLean.MPS.MPDO.BNTFusionIsometries
+import TNLean.MPS.MPDO.BlockedBNTFusionIsometries
 import TNLean.MPS.MPDO.BNTAssociativity
 import TNLean.MPS.MPDO.BNTLeftTripleFusion
 import TNLean.MPS.MPDO.BNTRightTripleFusion

@@ -4,17 +4,23 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.FinTupleEquiv
+import TNLean.MPS.Core.CyclicTrace
+import TNLean.MPS.Core.PhysicalReindexTransport
+import TNLean.MPS.MPDO.OperatorProduct
 import TNLean.MPS.MPDO.RFPViaTS
 
 /-!
-# Two-site physical blocking of MPO tensors
+# Physical blocking of MPO tensors
 
-This file defines the tensor obtained by blocking two adjacent physical sites
-of an MPO tensor and identifies its one-site and two-site physical closures
-with the two-site and four-site closures of the original tensor.
+This file defines arbitrary physical blocking of an MPO tensor, together with
+the two-site specialization used in the renormalization maps.  Ket words and
+bra words are grouped separately, as in the operator notation of
+arXiv:1606.00608.
 
 ## Main definitions
 
+* `MPOTensor.blockTensor`: the tensor obtained by blocking an arbitrary number
+  of adjacent sites.
 * `MPOTensor.blockTwo`: the tensor obtained by blocking two adjacent sites.
 * `MPOTensor.physClose4`: the right-associated four-site physical closure.
 * `MPOTensor.physClose1_blockTwo_eq_physClose2`: one blocked site is two original sites.
@@ -31,6 +37,97 @@ open scoped Matrix
 namespace MPOTensor
 
 variable {d D : ℕ}
+
+/-! ### Arbitrary physical blocking -/
+
+/-- The MPO tensor obtained by blocking `L` adjacent physical sites.  A ket
+index and a bra index each encode a word of length `L`; the corresponding
+letter is the ordered product of the original MPO matrices along those two
+words.
+
+This is the MPO counterpart of the blocking used to make the basis of normal
+tensors block injective in arXiv:1606.00608, lines 317--345.  The ket and bra
+indices remain separate.  This local tensor should not be confused with the
+closed-chain operator `O_L(M)` defined at lines 962--967. -/
+noncomputable def blockTensor (M : MPOTensor d D) (L : ℕ) :
+    MPOTensor (MPSTensor.blockPhysDim d L) D :=
+  fun i j => evalWord M (MPSTensor.wordOfBlock d L i) (MPSTensor.wordOfBlock d L j)
+
+@[simp]
+lemma blockTensor_apply (M : MPOTensor d D) (L : ℕ)
+    (i j : Fin (MPSTensor.blockPhysDim d L)) :
+    blockTensor M L i j =
+      evalWord M (MPSTensor.wordOfBlock d L i) (MPSTensor.wordOfBlock d L j) :=
+  rfl
+
+/-- Canonical identification between the doubled physical index of an
+`L`-site MPO block and the `L`-site block of the doubled MPS index.
+
+The map decodes the blocked ket and bra words, pairs their letters site by
+site, and then encodes the resulting word in `Fin (d * d)`.  This is the
+index identification implicit in the blocking argument of
+arXiv:1606.00608, lines 317--345. -/
+noncomputable def blockedDoubledIndexEquiv (d L : ℕ) :
+    Fin (MPSTensor.blockPhysDim d L * MPSTensor.blockPhysDim d L) ≃
+      Fin (MPSTensor.blockPhysDim (d * d) L) :=
+  finProdFinEquiv.symm |>.trans
+    (Equiv.prodCongr (MPSTensor.decodeBlockEquiv d L)
+      (MPSTensor.decodeBlockEquiv d L)) |>.trans
+    (Equiv.arrowProdEquivProdArrow (Fin L) (fun _ ↦ Fin d) (fun _ ↦ Fin d)).symm |>.trans
+    (Equiv.arrowCongr (Equiv.refl (Fin L)) finProdFinEquiv) |>.trans
+    (MPSTensor.decodeBlockEquiv (d * d) L).symm
+
+@[simp]
+lemma decodeBlock_blockedDoubledIndexEquiv (d L : ℕ)
+    (ij : Fin (MPSTensor.blockPhysDim d L * MPSTensor.blockPhysDim d L))
+    (k : Fin L) :
+    MPSTensor.decodeBlock (d * d) L (blockedDoubledIndexEquiv d L ij) k =
+      finProdFinEquiv
+        (MPSTensor.decodeBlock d L ij.divNat k,
+          MPSTensor.decodeBlock d L ij.modNat k) := by
+  simp [blockedDoubledIndexEquiv, Equiv.arrowCongr,
+    MPSTensor.decodeBlockEquiv_apply]
+
+/-- Physical blocking commutes with passing from an MPO tensor to its
+doubled-index MPS tensor, up to the canonical pairing of the blocked ket and
+bra words. -/
+theorem toMPSTensor_blockTensor (M : MPOTensor d D) {L : ℕ} :
+    (blockTensor M L).toMPSTensor =
+      MPSTensor.reindexPhysical (blockedDoubledIndexEquiv d L)
+        (MPSTensor.blockTensor M.toMPSTensor L) := by
+  funext ij
+  simp only [toMPSTensor, blockTensor_apply, MPSTensor.reindexPhysical,
+    MPSTensor.blockTensor]
+  simp only [MPSTensor.wordOfBlock, MPOTensor.evalWord_ofFn,
+    MPSTensor.evalWord_ofFn_eq_prod]
+  simp only [toMPSTensor, decodeBlock_blockedDoubledIndexEquiv,
+    MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
+
+/-- Injectivity of an MPO block is the injectivity of the corresponding block
+of its doubled-index MPS tensor. -/
+theorem isInjective_toMPSTensor_blockTensor_iff
+    (M : MPOTensor d D) {L : ℕ} :
+    MPSTensor.IsInjective (blockTensor M L).toMPSTensor ↔
+      MPSTensor.IsInjective (MPSTensor.blockTensor M.toMPSTensor L) := by
+  rw [toMPSTensor_blockTensor M,
+    MPSTensor.isInjective_reindexPhysical_equiv]
+
+/-- Physical blocking commutes with the product of MPO tensors.  The
+intermediate physical word is merely reindexed from a function `Fin L → Fin d`
+to one blocked physical index. -/
+theorem blockTensor_mulTensor {D₁ D₂ : ℕ}
+    (M : MPOTensor d D₁) (N : MPOTensor d D₂) {L : ℕ} :
+    blockTensor (mulTensor M N) L =
+      mulTensor (blockTensor M L) (blockTensor N L) := by
+  funext I K
+  rw [blockTensor_apply, mulTensor_apply]
+  change evalWord (mulTensor M N)
+      (List.ofFn (MPSTensor.decodeBlock d L I))
+      (List.ofFn (MPSTensor.decodeBlock d L K)) = _
+  rw [evalWord_mulTensor]
+  rw [← (MPSTensor.decodeBlockEquiv d L).sum_comp]
+  simp only [MPSTensor.decodeBlockEquiv_apply, blockTensor_apply,
+    MPSTensor.wordOfBlock]
 
 /-! ### Two-site blocking -/
 
