@@ -55,7 +55,13 @@ For MPDO renormalization fixed points:
 - `cpsv16_pure_zcl_local_orthogonality_scope.tex` records that the current
   pure-MPS ZCL theorem is a single-block idempotence/CID equivalence. The
   source theorem also includes the BNT-level local-orthogonality equations
-  between distinct blocks.
+  between distinct blocks. The unrestricted source equivalence is false under
+  its stated raw-weight BNT normalization, as recorded in
+  `cpsv16_pure_zcl_raw_weight_counterexample.tex`.
+- `cpsv16_pure_zcl_raw_weight_counterexample.tex` gives the canonical tensor
+  $A^0=\operatorname{diag}(1,1/2)$. It satisfies physical CID and has a
+  one-component, hence locally orthogonal, BNT, but its transfer map is not
+  idempotent. It identifies the failed inference at source lines 1248--1251.
 - `cpsv16_rfp_isometry_scope.tex` records the normalization and cross-block
   content of the source's equation `III_isometry`, together with the remaining
   canonical-form hypotheses. It also records the ambiguity between a literal

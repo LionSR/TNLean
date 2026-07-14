@@ -138,19 +138,21 @@ this positive-gap restriction by
 BNT implication is
 \leanid{MPSTensor.isPositiveGapBNTZCL_of_isPhysicalBNTZCL}.
 
-The remaining target theorem for tensors in canonical form is
+The unrestricted BNT-level equivalence is not a remaining proof target.  Under
+the source's raw-weight canonical-form normalization it is false.  The tensor
 \[
-  \mathrm{ZCL}_{\mathrm{BNT}}(A)
-  \Longleftrightarrow
-  \mathbb E_A^2=\mathbb E_A.
+  A^0=\operatorname{diag}(1,1/2)
 \]
-The existing single-block theorem supplies only the CID consequence of
-idempotence and should remain marked as a scope restriction until the
-canonical-form theorem is stated with the BNT predicate.\footnote{Tracked by
-\ghissue{2597}.}
+has one normal BNT component with raw weights $1$ and $1/2$.  It satisfies
+physical CID, while local orthogonality is vacuous, but its transfer matrix is
+not idempotent.  The counterexample and the failed inference at source lines
+1248--1251 are recorded in
+\path{docs/paper-gaps/cpsv16_pure_zcl_raw_weight_counterexample.tex}.\footnote{Tracked
+by \ghissue{2597}.}
 
-The present theorem is therefore a scope restriction: it records the one-block
-idempotence/CID consequence, while the BNT-level equivalence remains open.
+The existing single-block theorem remains a scope restriction: it records the
+one-block idempotence/CID consequence and does not assert the false raw-weight
+BNT equivalence.
 
 There is a second distinction in the correlation predicate. Definition~3.3
 quantifies over physical observables on arbitrary nonempty finite regions, and
@@ -197,19 +199,26 @@ The older predicate \leanid{MPSTensor.IsCID} instead quantifies directly over
 arbitrary virtual matrices $X,Y$.  Its converse to idempotence is valid, but it
 is stronger than physical CID: the source obtains the required virtual
 insertions from physical observables by block injectivity
-(lines 1250--1258).  Closing the reverse implication therefore requires a
-formal physical-realization theorem for block observables, followed by the
-nonzero power-sum argument in lines 1260--1268.  One must not identify the two
-CID predicates before that realization theorem is proved.  Since the older
+(lines 1250--1258).  For a corrected statement which removes the raw-copy
+obstruction, the reverse implication would still require a formal
+physical-realization theorem for block observables, followed by the nonzero
+power-sum argument in lines 1260--1268.  One must not identify the two CID
+predicates before that realization theorem is proved.  Since the older
 predicate universally quantifies over positive definite fixed points, it is
 also vacuous for a tensor without such a fixed point.  The periodic-chain
-predicate avoids this boundary-state issue.
+predicate avoids this boundary-state issue.  Even after a physical-realization
+theorem is supplied, the source proof cannot establish the unrestricted
+reverse implication: the step from non-idempotence of the full transfer matrix
+to non-idempotence of a normal BNT component ignores the eigenvalues contributed
+by the raw copy weights.  A theorem restricted to one unit-weight copy per BNT
+component would still require the physical-realization and power-sum arguments,
+but it would be a different statement.
 
 Accordingly, \leanid{MPSTensor.IsBNTZCL} remains the virtual-insertion
 surrogate, while \leanid{MPSTensor.IsPositiveGapBNTZCL} names the physical
 positive-gap condition. Neither is Definition~3.6; that definition is now
-\leanid{MPSTensor.IsPhysicalBNTZCL}. Its equivalence with transfer idempotence
-remains open.
+\leanid{MPSTensor.IsPhysicalBNTZCL}. Its unrestricted equivalence with transfer
+idempotence is disproved by the raw-weight counterexample above.
 
 \bibliographystyle{alpha}
 \bibliography{references}
