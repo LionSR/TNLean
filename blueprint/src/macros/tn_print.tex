@@ -670,17 +670,17 @@
     \begin{tikzpicture}[tn picture]
         % Three-site MPO word.  At the first and third sites, both physical
         % legs are contracted against the corresponding inverse tensor.
-        \TN@tensor{tnKone}{(-3.00,0)}
-        \TN@tensor{tnKtwo}{(-1.60,0)}
-        \TN@tensor{tnKthree}{(-0.20,0)}
+        \TNTensor{tnKone}{(-3.00,0)}
+        \TNTensor{tnKtwo}{(-1.60,0)}
+        \TNTensor{tnKthree}{(-0.20,0)}
         \TN@vpath{ (tnKone.east) -- (tnKtwo.west);}
         \TN@vpath{ (tnKtwo.east) -- (tnKthree.west);}
         \node[anchor=east] at (-3.14,-0.28) {${\cal K}$};
         \node[anchor=east] at (-1.74,-0.28) {${\cal K}$};
         \node[anchor=east] at (-0.34,-0.28) {${\cal K}$};
 
-        \TN@tensor{tnInvOne}{(-3.00,1.18)}
-        \TN@tensor{tnInvThree}{(-0.20,1.18)}
+        \TNTensor{tnInvOne}{(-3.00,1.18)}
+        \TNTensor{tnInvThree}{(-0.20,1.18)}
         \TN@ppath{ (tnKone.north) -- (tnInvOne.south);}
         \TN@ppath{ (tnKthree.north) -- (tnInvThree.south);}
         \TN@ppath{
@@ -709,7 +709,7 @@
         \node at (-1.08,0.48) {$j_3$};
 
         % The trace closes the three-site word through the remaining sites R.
-        \TN@component{tnTail}{(-1.60,-1.42)}{R}
+        \TNComponent{tnTail}{(-1.60,-1.42)}{R}
         \TN@vtracepath{ (tnKone.west) -- ++(-0.42,0)
             |- ($(tnTail.east)+(0,-0.40)$) -- (tnTail.east);}
         \TN@vtracepath{ (tnKthree.east) -- ++(0.42,0)
@@ -718,7 +718,7 @@
         \node at (0.88,0.20) {$=$};
 
         % The two surviving factors.
-        \TN@tensor{tnMiddle}{(2.25,0.20)}
+        \TNTensor{tnMiddle}{(2.25,0.20)}
         \TN@vleg{tnMiddle}{west}{-0.58,0}
         \TN@vleg{tnMiddle}{east}{0.58,0}
         \TN@pleg{tnMiddle}{north}{0,0.52}
@@ -729,7 +729,7 @@
         \node[anchor=east] at (1.61,0.20) {$\beta_1$};
         \node[anchor=west] at (2.89,0.20) {$\alpha_3$};
         \node at (3.50,0.20) {$\times$};
-        \TN@component{tnTailEntry}{(4.65,0.20)}{R}
+        \TNComponent{tnTailEntry}{(4.65,0.20)}{R}
         \TN@vpath{ (tnTailEntry.west) -- ++(-0.58,0);}
         \TN@vpath{ (tnTailEntry.east) -- ++(0.58,0);}
         \node[anchor=east] at (4.01,0.20) {$\beta_3$};
@@ -776,9 +776,9 @@
 % a basis tensor carrying the virtual legs.
 \newcommand{\TNMPDOVerticalDirectSum}{%
     \begin{tikzpicture}[tn picture]
-        \TN@map{vdUu}{(-2.55,0.76)}{U^\dagger}
-        \TN@tensor{vdM}{(-2.55,0)}
-        \TN@map{vdUd}{(-2.55,-0.76)}{U}
+        \TNMap{vdUu}{(-2.55,0.76)}{U^\dagger}
+        \TNTensor{vdM}{(-2.55,0)}
+        \TNMap{vdUd}{(-2.55,-0.76)}{U}
         \TN@pnorthport{vdUuNLeft}{vdUu}{0.30}
         \TN@pnorthport{vdUuNRight}{vdUu}{0.70}
         \TN@psouthport{vdUdSLeft}{vdUd}{0.30}
@@ -798,7 +798,7 @@
         \TN@ppath{ (vdMu.north) -- ++(0,0.40);}
         \TN@ppath{ (vdMu.south) -- ++(0,-0.40);}
         \node at (0.45,0.74) {$\mu_\alpha$};
-        \TN@tensor{vdMa}{(1.55,0)}
+        \TNTensor{vdMa}{(1.55,0)}
         \TN@pleg{vdMa}{north}{0,0.44}
         \TN@pleg{vdMa}{south}{0,-0.44}
         \TN@vleg{vdMa}{west}{-0.55,0}
@@ -814,7 +814,7 @@
     \begin{tikzpicture}[tn picture, scale=0.94]
         \path[draw=black, opacity=0, use as bounding box]
             (-4.35,-1.42) rectangle (5.75,1.42);
-        \TN@tensor{vrsM}{(-3.50,0)}
+        \TNTensor{vrsM}{(-3.50,0)}
         \TN@vleg{vrsM}{west}{-0.58,0}
         \TN@vleg{vrsM}{east}{0.58,0}
         \TN@pleg{vrsM}{north}{0,0.48}
@@ -822,9 +822,9 @@
         \node[anchor=west] at (-3.33,0.30) {$\widetilde M$};
         \node at (-2.45,0) {$=$};
         \node at (-1.55,0) {$\displaystyle\sum_k$};
-        \TN@map{vrsV}{(0,0.82)}{V_k}
-        \TN@tensor{vrsB}{(0,0)}
-        \TN@map{vrsVd}{(0,-0.82)}{V_k^\dagger}
+        \TNMap{vrsV}{(0,0.82)}{V_k}
+        \TNTensor{vrsB}{(0,0)}
+        \TNMap{vrsVd}{(0,-0.82)}{V_k^\dagger}
         \TN@ppath{ (vrsV.north) -- ++(0,0.34);}
         \TN@ppath{ (vrsV.south) -- (vrsB.north);}
         \TN@ppath{ (vrsB.south) -- (vrsVd.north);}
@@ -849,7 +849,7 @@
         \path[draw=black, opacity=0, use as bounding box]
             (-3.45,-1.62) rectangle (3.45,1.62);
         \begin{scope}[xshift=-1.80cm]
-            \TN@tensor{vggL}{(0,0)}
+            \TNTensor{vggL}{(0,0)}
             \TN@ppath{ (vggL.west) -- ++(-0.72,0);}
             \TN@ppath{ (vggL.east) -- ++(0.72,0);}
             \TN@insertion[label=right:$X_{\alpha,k}$]{vggLX}{(0,0.58)}
@@ -866,7 +866,7 @@
         \end{scope}
         \node at (0,0) {$=$};
         \begin{scope}[xshift=1.80cm]
-            \TN@tensor{vggR}{(0,0)}
+            \TNTensor{vggR}{(0,0)}
             \TN@ppath{ (vggR.west) -- ++(-0.72,0);}
             \TN@ppath{ (vggR.east) -- ++(0.72,0);}
             \TN@insertion[label=right:$X_{\alpha,1}$]{vggRX}{(0,0.58)}
@@ -889,8 +889,8 @@
 % two pairs of virtual legs (the matrix units on the bond space).
 \newcommand{\TNMPDOInverseContraction}{%
     \begin{tikzpicture}[tn picture]
-        \TN@tensor{invT}{(0,0.55)}
-        \TN@tensor{invB}{(0,-0.55)}
+        \TNTensor{invT}{(0,0.55)}
+        \TNTensor{invB}{(0,-0.55)}
         \TN@vleg{invT}{west}{-0.60,0}
         \TN@vleg{invT}{east}{0.60,0}
         \TN@vleg{invB}{west}{-0.60,0}
@@ -913,7 +913,7 @@
 % the trace-matrix entry.
 \newcommand{\TNMPDOSectorPairing}{%
     \begin{tikzpicture}[tn picture]
-        \TN@tensor{spL}{(0,0)}
+        \TNTensor{spL}{(0,0)}
         \TN@vleg{spL}{west}{-0.60,0}
         \coordinate (spLTraceNorth) at (0,0.41);
         \coordinate (spLTraceSouth) at (0,-0.41);
@@ -923,7 +923,7 @@
         .. controls (0.46,0.41) and (0.46,-0.41) .. (spLTraceSouth);}
         \node at (0,0.68) {$l_k$};
         \node[anchor=west] at (0.62,0) {$=\;|l_k)$};
-        \TN@tensor{spR}{(3.05,0)}
+        \TNTensor{spR}{(3.05,0)}
         \TN@vleg{spR}{east}{0.60,0}
         \coordinate (spRTraceNorth) at (3.05,0.41);
         \coordinate (spRTraceSouth) at (3.05,-0.41);
@@ -933,8 +933,8 @@
         .. controls (2.59,0.41) and (2.59,-0.41) .. (spRTraceSouth);}
         \node at (3.05,0.68) {$r_k$};
         \node[anchor=west] at (3.80,0) {$=\;(r_k|$};
-        \TN@tensor{spTk}{(6.35,0)}
-        \TN@tensor{spTh}{(7.35,0)}
+        \TNTensor{spTk}{(6.35,0)}
+        \TNTensor{spTh}{(7.35,0)}
         \TN@vpath{ (spTk.east) -- (spTh.west);}
         \coordinate (spTkTraceNorth) at (6.35,0.41);
         \coordinate (spTkTraceSouth) at (6.35,-0.41);
@@ -959,7 +959,7 @@
 \newcommand{\TNMPDOSectorZCLIdentity}{%
     \begin{tikzpicture}[tn picture]
         \node at (-1.60,0) {$\displaystyle\sum_k$};
-        \TN@tensor{zcAl}{(-0.50,0)}
+        \TNTensor{zcAl}{(-0.50,0)}
         \TN@vpath{ (zcAl.west) -- ++(-0.55,0);}
         \coordinate (zcAlTraceNorth) at (-0.50,0.41);
         \coordinate (zcAlTraceSouth) at (-0.50,-0.41);
@@ -968,7 +968,7 @@
         \TN@ptracepath{ (zcAlTraceNorth)
         .. controls (-0.04,0.41) and (-0.04,-0.41) .. (zcAlTraceSouth);}
         \node at (-0.50,0.68) {$l_k$};
-        \TN@tensor{zcAr}{(0.75,0)}
+        \TNTensor{zcAr}{(0.75,0)}
         \TN@vpath{ (zcAr.east) -- ++(0.55,0);}
         \coordinate (zcArTraceNorth) at (0.75,0.41);
         \coordinate (zcArTraceSouth) at (0.75,-0.41);
@@ -979,7 +979,7 @@
         \node at (0.75,0.68) {$r_k$};
         \node at (1.90,0) {$=$};
         \node at (2.70,0) {$\displaystyle\sum_{k,h}$};
-        \TN@tensor{zcBlk}{(3.85,0)}
+        \TNTensor{zcBlk}{(3.85,0)}
         \TN@vpath{ (zcBlk.west) -- ++(-0.55,0);}
         \coordinate (zcBlkTraceNorth) at (3.85,0.41);
         \coordinate (zcBlkTraceSouth) at (3.85,-0.41);
@@ -988,7 +988,7 @@
         \TN@ptracepath{ (zcBlkTraceNorth)
         .. controls (4.31,0.41) and (4.31,-0.41) .. (zcBlkTraceSouth);}
         \node at (3.85,0.68) {$l_k$};
-        \TN@tensor{zcBrk}{(5.10,0)}
+        \TNTensor{zcBrk}{(5.10,0)}
         \coordinate (zcBrkTraceNorth) at (5.10,0.41);
         \coordinate (zcBrkTraceSouth) at (5.10,-0.41);
         \TN@ppath{ (zcBrk.north) -- (zcBrkTraceNorth);}
@@ -996,7 +996,7 @@
         \TN@ptracepath{ (zcBrkTraceNorth)
         .. controls (4.64,0.41) and (4.64,-0.41) .. (zcBrkTraceSouth);}
         \node at (5.10,0.68) {$r_k$};
-        \TN@tensor{zcBlh}{(5.90,0)}
+        \TNTensor{zcBlh}{(5.90,0)}
         \TN@vpath{ (zcBrk.east) -- (zcBlh.west);}
         \coordinate (zcBlhTraceNorth) at (5.90,0.41);
         \coordinate (zcBlhTraceSouth) at (5.90,-0.41);
@@ -1005,7 +1005,7 @@
         \TN@ptracepath{ (zcBlhTraceNorth)
         .. controls (6.36,0.41) and (6.36,-0.41) .. (zcBlhTraceSouth);}
         \node at (5.90,0.68) {$l_h$};
-        \TN@tensor{zcBrh}{(7.15,0)}
+        \TNTensor{zcBrh}{(7.15,0)}
         \TN@vpath{ (zcBrh.east) -- ++(0.55,0);}
         \coordinate (zcBrhTraceNorth) at (7.15,0.41);
         \coordinate (zcBrhTraceSouth) at (7.15,-0.41);
@@ -1025,9 +1025,9 @@
         \node at (-3.72,0) {$\sigma_3^{(4)}({\cal K})$};
         \node at (-2.76,0) {$=$};
 
-        \TN@tensor{tnTailOne}{(-1.48,0)}
-        \TN@tensor{tnTailTwo}{(0,0)}
-        \TN@tensor{tnTailThree}{(1.48,0)}
+        \TNTensor{tnTailOne}{(-1.48,0)}
+        \TNTensor{tnTailTwo}{(0,0)}
+        \TNTensor{tnTailThree}{(1.48,0)}
         \TN@vpath{ (tnTailOne.east) -- (tnTailTwo.west);}
         \TN@vpath{ (tnTailTwo.east) -- (tnTailThree.west);}
 
@@ -1045,7 +1045,7 @@
         \node[anchor=east] at (-0.14,0.25) {${\cal K}$};
         \node[anchor=east] at (1.34,0.25) {${\cal K}$};
 
-        \TN@component{tnFourSiteTail}{(0,-1.42)}{R_4}
+        \TNComponent{tnFourSiteTail}{(0,-1.42)}{R_4}
         \TN@vtracepath{ (tnTailOne.west) -- ++(-0.48,0)
             |- ($(tnFourSiteTail.east)+(0,-0.40)$) -- (tnFourSiteTail.east);}
         \TN@vtracepath{ (tnTailThree.east) -- ++(0.48,0)
@@ -1061,15 +1061,15 @@
         \node at (-4.55,0) {$R_{\beta_3,\alpha_1}$};
         \node at (-3.65,0) {$\cdot$};
 
-        \TN@tensor{tnSectorK}{(-2.45,0)}
+        \TNTensor{tnSectorK}{(-2.45,0)}
         \TN@vleg{tnSectorK}{west}{-0.72,0}
         \TN@vleg{tnSectorK}{east}{0.72,0}
         \node[anchor=east] at (-3.22,0) {$\beta_1$};
         \node[anchor=west] at (-1.68,0) {$\alpha_3$};
         \node[anchor=east] at (-2.58,0.25) {${\cal K}$};
 
-        \TN@map{tnSectorU}{(-2.45,0.88)}{U_B}
-        \TN@map{tnSectorUd}{(-2.45,-0.88)}{U_B^\dagger}
+        \TNMap{tnSectorU}{(-2.45,0.88)}{U_B}
+        \TNMap{tnSectorUd}{(-2.45,-0.88)}{U_B^\dagger}
         \TN@ppath{ (tnSectorK.north) -- (tnSectorU.south);}
         \TN@ppath{ (tnSectorU.north) -- ++(0,0.34);}
         \TN@ppath{ (tnSectorK.south) -- (tnSectorUd.north);}
@@ -1095,15 +1095,15 @@
 % orientation U_B K U_B^\dagger.
 \newcommand{\TNMPDOSectorFactorization}{%
     \begin{tikzpicture}[tn picture]
-        \TN@tensor{sfK}{(-2.65,0)}
+        \TNTensor{sfK}{(-2.65,0)}
         \TN@vleg{sfK}{west}{-0.72,0}
         \TN@vleg{sfK}{east}{0.72,0}
         \node[anchor=east] at (-3.42,0) {$\beta_1$};
         \node[anchor=west] at (-1.88,0) {$\alpha_3$};
         \node[anchor=east] at (-2.78,0.25) {${\cal K}$};
 
-        \TN@map{sfU}{(-2.65,0.88)}{U_B}
-        \TN@map{sfUd}{(-2.65,-0.88)}{U_B^\dagger}
+        \TNMap{sfU}{(-2.65,0.88)}{U_B}
+        \TNMap{sfUd}{(-2.65,-0.88)}{U_B^\dagger}
         \TN@ppath{ (sfK.north) -- (sfU.south);}
         \TN@ppath{ (sfU.north) -- ++(0,0.34);}
         \TN@ppath{ (sfK.south) -- (sfUd.north);}
@@ -1111,8 +1111,8 @@
 
         \node at (-0.95,0) {$=$};
         \node at (-0.10,0) {$\displaystyle\bigoplus_k$};
-        \TN@tensor{sfL}{(1.10,0)}
-        \TN@tensor{sfR}{(2.75,0)}
+        \TNTensor{sfL}{(1.10,0)}
+        \TNTensor{sfR}{(2.75,0)}
         \TN@vpath{ (sfL.west) -- ++(-0.62,0);}
         \node at (1.93,0) {$\otimes$};
         \TN@vpath{ (sfR.east) -- ++(0.62,0);}
@@ -1132,7 +1132,7 @@
 \newcommand{\TNMPDOLocalOrthogonality}{%
     \begin{tikzpicture}[tn picture]
         % One site, P_1 on the ket leg and P_2 on the bra leg.
-        \TN@tensor{loA}{(0,0)}
+        \TNTensor{loA}{(0,0)}
         \TN@vleg{loA}{west}{-0.50,0}
         \TN@vleg{loA}{east}{0.50,0}
         \TN@pleg{loA}{north}{0,1.00}
@@ -1142,7 +1142,7 @@
         \node[anchor=west] at (0.12,-0.30) {${\cal K}$};
         \node at (1.10,0) {$=$};
         % One site, P_2 on the ket leg and P_1 on the bra leg.
-        \TN@tensor{loB}{(2.20,0)}
+        \TNTensor{loB}{(2.20,0)}
         \TN@vleg{loB}{west}{-0.50,0}
         \TN@vleg{loB}{east}{0.50,0}
         \TN@pleg{loB}{north}{0,1.00}
@@ -1153,8 +1153,8 @@
         \node at (3.30,0) {$=$};
         % Two neighboring sites, P_1 dressing both physical legs of the
         % first site and P_2 both physical legs of the second.
-        \TN@tensor{loCa}{(4.40,0)}
-        \TN@tensor{loCb}{(5.60,0)}
+        \TNTensor{loCa}{(4.40,0)}
+        \TNTensor{loCb}{(5.60,0)}
         \TN@vpath{ (loCa.east) -- (loCb.west);}
         \TN@vleg{loCa}{west}{-0.50,0}
         \TN@vleg{loCb}{east}{0.50,0}
@@ -1178,8 +1178,8 @@
 % tensor.
 \newcommand{\TNMPSInverseContraction}{%
     \begin{tikzpicture}[tn picture]
-        \TN@tensor{mpsiT}{(0,0.55)}
-        \TN@tensor{mpsiB}{(0,-0.55)}
+        \TNTensor{mpsiT}{(0,0.55)}
+        \TNTensor{mpsiB}{(0,-0.55)}
         \TN@vleg{mpsiT}{west}{-0.60,0}
         \TN@vleg{mpsiT}{east}{0.60,0}
         \TN@vleg{mpsiB}{west}{-0.60,0}
@@ -1204,7 +1204,7 @@
 \newcommand{\TNBNTDecomposition}{%
     \begin{tikzpicture}[tn picture]
         \TN@insertion[label=above:$X$]{bntX}{(0,0)}
-        \TN@tensor{bntA}{(1.50,0)}
+        \TNTensor{bntA}{(1.50,0)}
         \TN@insertion[label=above:$X^{-1}$]{bntXi}{(3.00,0)}
         \TN@vleg{bntX}{west}{-0.55,0}
         \TN@vconnect{bntX}{east}{bntA}{west}
@@ -1222,7 +1222,7 @@
         \TN@vpath{(bntX.south) -- (0,-1.02)}
         \TN@vpath{(bntA.south) -- (1.50,-0.62)}
         \TN@vpath{(bntXi.south) -- (3.00,-1.02)}
-        \TN@component{bntMu}{(0.75,-1.60)}{\mu}
+        \TNComponent{bntMu}{(0.75,-1.60)}{\mu}
         \TN@vnorthport{bntMuNLeft}{bntMu}{0.15}
         \TN@vnorthport{bntMuNRight}{bntMu}{0.85}
         \TN@vpath{(bntMuNLeft) -- (0.63,-0.62)}
@@ -2003,7 +2003,7 @@
         \TN@mpssite{rfkA}{(0,0)}{}
         \TN@mpssite{rfkB}{(1.20,0)}{}
         \TN@vopenport{rfkAW}{-\TN@virtualleglen,0}
-        \TN@vconnectports{rfkAE}{rfkBW}
+        \TNConnectVirtual{rfkAE}{rfkBW}
         \TN@vopenport{rfkBE}{\TN@virtualleglen,0}
         \TN@popenport{rfkAN}{0,\TN@physicalleglen}
         \TN@popenport{rfkBN}{0,\TN@physicalleglen}
@@ -2018,7 +2018,7 @@
         \node[anchor=west] at (4.44,-0.28) {$A$};
         \TN@physicalsplitmap[inner xsep=10pt, inner ysep=2pt]
             {rfkV}{(4.30,0.90)}{V}
-        \TN@pconnectports{rfkCN}{rfkVTrunk}
+        \TNConnectPhysical{rfkCN}{rfkVTrunk}
         \node[anchor=west] at (4.40,0.46) {$j$};
         \TN@popenport{rfkVLeft}{0,0.34}
         \TN@popenport{rfkVRight}{0,0.34}
@@ -2034,14 +2034,14 @@
         \TN@mpssite{rfrA}{(0,0)}{}
         \TN@mpssite{rfrB}{(1.20,0)}{}
         \TN@vopenport{rfrAW}{-\TN@virtualleglen,0}
-        \TN@vconnectports{rfrAE}{rfrBW}
+        \TNConnectVirtual{rfrAE}{rfrBW}
         \TN@vopenport{rfrBE}{\TN@virtualleglen,0}
         \node[anchor=east] at (-0.14,-0.28) {$A$};
         \node[anchor=west] at (1.34,-0.28) {$A$};
         \TN@physicalmergemap[minimum width=1.62cm]
             {rfrV}{(0.60,0.90)}{V^\dagger}
-        \TN@pconnectports{rfrAN}{rfrVLeft}
-        \TN@pconnectports{rfrBN}{rfrVRight}
+        \TNConnectPhysical{rfrAN}{rfrVLeft}
+        \TNConnectPhysical{rfrBN}{rfrVRight}
         \TN@popenport{rfrVTrunk}{0,0.34}
         \node[anchor=west] at (0.70,1.36) {$j$};
         \node at (2.50,0) {$=$};
@@ -2058,7 +2058,7 @@
 % leg, and X^{-1}.
 \newcommand{\TNRFPIsometryCanonicalForm}{%
     \begin{tikzpicture}[tn picture]
-        \TN@tensor{icfA}{(0,0)}
+        \TNTensor{icfA}{(0,0)}
         \TN@vleg{icfA}{west}{-0.55,0}
         \TN@vleg{icfA}{east}{0.55,0}
         \TN@pleg{icfA}{north}{0,0.46}
@@ -2076,9 +2076,9 @@
         \TN@vport{icfXiW}{icfXi}{west}
         \TN@vport{icfXiE}{icfXi}{east}
         \TN@vopenport{icfXW}{-0.55,0}
-        \TN@vconnectports{icfXE}{icfLW}
-        \TN@vconnectportshv{icfLE}{icfULeft}
-        \TN@vconnectportsvh{icfURight}{icfXiW}
+        \TNConnectVirtual{icfXE}{icfLW}
+        \TNConnectVirtualHV{icfLE}{icfULeft}
+        \TNConnectVirtualVH{icfURight}{icfXiW}
         \TN@vopenport{icfXiE}{0.55,0}
         \TN@popenport{icfUPhysical}{0,0.34}
         \node at ($(icfUPhysicalOpen)+(0,0.22)$) {$i$};
@@ -2090,7 +2090,7 @@
 % with the coefficient tensor mu on the two index lines.
 \newcommand{\TNRFPIsometryCanonicalFormBlocks}{%
     \begin{tikzpicture}[tn picture]
-        \TN@tensor{icbA}{(0,0)}
+        \TNTensor{icbA}{(0,0)}
         \TN@vleg{icbA}{west}{-0.55,0}
         \TN@vleg{icbA}{east}{0.55,0}
         \TN@pleg{icbA}{north}{0,0.46}
@@ -2104,9 +2104,9 @@
         \TN@vport{icbLW}{icbL}{west}
         \TN@vport{icbLE}{icbL}{east}
         \TN@vopenport{icbXW}{-0.55,0}
-        \TN@vconnectports{icbXE}{icbLW}
-        \TN@vconnectportshv{icbLE}{icbULeft}
-        \TN@vconnectportsvh{icbURight}{icbXiW}
+        \TNConnectVirtual{icbXE}{icbLW}
+        \TNConnectVirtualHV{icbLE}{icbULeft}
+        \TNConnectVirtualVH{icbURight}{icbXiW}
         \TN@vopenport{icbXiE}{0.55,0}
         \TN@popenport{icbUPhysical}{0,0.34}
         \node at ($(icbUPhysicalOpen)+(0,0.22)$) {$i$};
@@ -2115,25 +2115,25 @@
         \TN@vport{icbLBus}{icbL}{south}
         \TN@vbusprojecttap{icbJ}{icbJX}{icbXBlock}
         \TN@vbusprojecttap{icbQ}{icbQX}{icbXCopy}
-        \TN@vconnectports{icbXBlock}{icbJX}
-        \TN@vconnectports{icbXCopy}{icbQX}
+        \TNConnectVirtual{icbXBlock}{icbJX}
+        \TNConnectVirtual{icbXCopy}{icbQX}
         \TN@vbusprojecttap{icbJ}{icbJL}{icbLBus}
-        \TN@vconnectports{icbLBus}{icbJL}
+        \TNConnectVirtual{icbLBus}{icbJL}
         \TN@vterminal{icbUBlock}{(icbULeft |- icbL)}
         \TN@anonymousjunction{(icbUBlock)}
         \TN@vbusprojecttap{icbJ}{icbJU}{icbUBlock}
-        \TN@vconnectports{icbUBlock}{icbJU}
+        \TNConnectVirtual{icbUBlock}{icbJU}
         \TN@vbusprojecttap{icbJ}{icbJXi}{icbXiBlock}
         \TN@vbusprojecttap{icbQ}{icbQXi}{icbXiCopy}
-        \TN@vconnectports{icbXiBlock}{icbJXi}
-        \TN@vconnectports{icbXiCopy}{icbQXi}
-        \TN@component{icbMu}{(2.70,-1.60)}{\mu}
+        \TNConnectVirtual{icbXiBlock}{icbJXi}
+        \TNConnectVirtual{icbXiCopy}{icbQXi}
+        \TNComponent{icbMu}{(2.70,-1.60)}{\mu}
         \TN@vnorthport{icbMuNLeft}{icbMu}{0.15}
         \TN@vnorthport{icbMuNRight}{icbMu}{0.85}
         \TN@vbusprojecttap{icbJ}{icbJMu}{icbMuNLeft}
         \TN@vbusprojecttap{icbQ}{icbQMu}{icbMuNRight}
-        \TN@vconnectports{icbMuNLeft}{icbJMu}
-        \TN@vconnectports{icbMuNRight}{icbQMu}
+        \TNConnectVirtual{icbMuNLeft}{icbJMu}
+        \TNConnectVirtual{icbMuNRight}{icbQMu}
     \end{tikzpicture}%
 }
 
@@ -2211,7 +2211,7 @@
             \TN@declareWordTensor{fihL}{(0,0)}
             \TN@declareWordTensor{fihM}{(1.05,0)}
             \TN@declareWordTensor{fihR}{(2.60,0)}
-            \TN@vconnectports{fihLE}{fihMW}
+            \TNConnectVirtual{fihLE}{fihMW}
             \TN@vopenport{fihME}{0.45,0}
             \TN@vopenport{fihRW}{-0.45,0}
             \TN@vtracepath{(fihLW) -- (-0.42,0) -- (-0.42,-0.44)
@@ -2221,7 +2221,7 @@
             \TN@insertion[label=left:$Y$]{fihY}{(0,0.46)}
             \TN@pport{fihYS}{fihY}{south}
             \TN@pport{fihYN}{fihY}{north}
-            \TN@pconnectports{fihLN}{fihYS}
+            \TNConnectPhysical{fihLN}{fihYS}
             \TN@popenport{fihYN}{0,0.40}
             \node at (1.85,0) {$\cdots$};
         \end{scope}
@@ -2230,7 +2230,7 @@
             \TN@declareWordTensor{fizL}{(0,0)}
             \TN@declareWordTensor{fizM}{(1.05,0)}
             \TN@declareWordTensor{fizR}{(2.60,0)}
-            \TN@vconnectports{fizLE}{fizMW}
+            \TNConnectVirtual{fizLE}{fizMW}
             \TN@vopenport{fizME}{0.45,0}
             \TN@vopenport{fizRW}{-0.45,0}
             \TN@vtracepath{(fizLW) -- (-0.42,0) -- (-0.42,-0.44)
@@ -2240,7 +2240,7 @@
             \TN@insertion[label=left:$Z$]{fizZ}{(0,0.46)}
             \TN@pport{fizZS}{fizZ}{south}
             \TN@pport{fizZN}{fizZ}{north}
-            \TN@pconnectports{fizLN}{fizZS}
+            \TNConnectPhysical{fizLN}{fizZS}
             \TN@popenport{fizZN}{0,0.40}
             \node at (1.85,0) {$\cdots$};
         \end{scope}
@@ -2251,14 +2251,14 @@
 % of Y and Z agree on each basis tensor of the canonical form.
 \newcommand{\TNMPDOFirstSiteInsertionBlockwise}{%
     \begin{tikzpicture}[tn picture]
-        \TN@tensor{fibA}{(0,0)}
+        \TNTensor{fibA}{(0,0)}
         \TN@vleg{fibA}{west}{-0.60,0}
         \TN@vleg{fibA}{east}{0.60,0}
         \TN@pleg{fibA}{north}{0,0.86}
         \TN@insertion[label=left:$Y$]{fibY}{(0,0.46)}
         \node at (0,-0.32) {$A_k$};
         \node at (1.45,0) {$=$};
-        \TN@tensor{fibB}{(2.90,0)}
+        \TNTensor{fibB}{(2.90,0)}
         \TN@vleg{fibB}{west}{-0.60,0}
         \TN@vleg{fibB}{east}{0.60,0}
         \TN@pleg{fibB}{north}{0,0.86}
@@ -2273,8 +2273,8 @@
 \newcommand{\TNMPDOInsertionTracePairing}{%
     \begin{tikzpicture}[tn picture]
         \begin{scope}
-            \TN@component{itpW}{(0,0)}{W}
-            \TN@tensor{itpA}{(1.15,0)}
+            \TNComponent{itpW}{(0,0)}{W}
+            \TNTensor{itpA}{(1.15,0)}
             \TN@vconnect{itpW}{east}{itpA}{west}
             \TN@pleg{itpA}{north}{0,0.86}
             \TN@insertion[label=left:$Y$]{itpY}{(1.15,0.46)}
@@ -2284,8 +2284,8 @@
         \end{scope}
         \node at (2.70,0) {$=$};
         \begin{scope}[xshift=4.05cm]
-            \TN@component{itpWz}{(0,0)}{W}
-            \TN@tensor{itpAz}{(1.15,0)}
+            \TNComponent{itpWz}{(0,0)}{W}
+            \TNTensor{itpAz}{(1.15,0)}
             \TN@vconnect{itpWz}{east}{itpAz}{west}
             \TN@pleg{itpAz}{north}{0,0.86}
             \TN@insertion[label=left:$Z$]{itpZ}{(1.15,0.46)}
@@ -2303,7 +2303,7 @@
 % factors tap both lines.
 \newcommand{\TNMPDOHorizontalCanonicalForm}{%
     \begin{tikzpicture}[tn picture]
-        \TN@tensor{hcfK}{(0,0)}
+        \TNTensor{hcfK}{(0,0)}
         \TN@vleg{hcfK}{west}{-0.58,0}
         \TN@vleg{hcfK}{east}{0.58,0}
         \TN@pleg{hcfK}{north}{0,0.50}
@@ -2311,7 +2311,7 @@
         \node[anchor=east] at (-0.14,-0.28) {$K$};
         \node at (1.30,0) {$=$};
         \TN@sectorgauge{hcfX}{(2.55,0)}{X}
-        \TN@tensor{hcfC}{(3.75,0)}
+        \TNTensor{hcfC}{(3.75,0)}
         \TN@inverseSectorgauge{hcfXi}{(4.95,0)}{X^{-1}}
         \TN@vleg{hcfX}{west}{-0.55,0}
         \TN@vconnect{hcfX}{east}{hcfC}{west}
@@ -2326,15 +2326,15 @@
         \TN@vparallelbus{hcfQ}{hcfJ}{-\TN@buspitch}{q}
         \TN@vbusprojecttap{hcfJ}{hcfJX}{hcfXBlock}
         \TN@vbusprojecttap{hcfQ}{hcfQX}{hcfXCopy}
-        \TN@vconnectports{hcfXBlock}{hcfJX}
-        \TN@vconnectports{hcfXCopy}{hcfQX}
+        \TNConnectVirtual{hcfXBlock}{hcfJX}
+        \TNConnectVirtual{hcfXCopy}{hcfQX}
         \TN@vport{hcfCBlock}{hcfC}{-45}
         \TN@vbusprojecttap{hcfJ}{hcfJC}{hcfCBlock}
-        \TN@vconnectports{hcfCBlock}{hcfJC}
+        \TNConnectVirtual{hcfCBlock}{hcfJC}
         \TN@vbusprojecttap{hcfJ}{hcfJXi}{hcfXiBlock}
         \TN@vbusprojecttap{hcfQ}{hcfQXi}{hcfXiCopy}
-        \TN@vconnectports{hcfXiBlock}{hcfJXi}
-        \TN@vconnectports{hcfXiCopy}{hcfQXi}
+        \TNConnectVirtual{hcfXiBlock}{hcfJXi}
+        \TNConnectVirtual{hcfXiCopy}{hcfQXi}
     \end{tikzpicture}%
 }
 
@@ -2345,8 +2345,8 @@
 % block line.
 \newcommand{\TNMPDOBlockInjectiveInverse}{%
     \begin{tikzpicture}[tn picture]
-        \TN@tensor{bijI}{(0,0.55)}
-        \TN@tensor{bijK}{(0,-0.55)}
+        \TNTensor{bijI}{(0,0.55)}
+        \TNTensor{bijK}{(0,-0.55)}
         \TN@vleg{bijI}{west}{-0.55,0}
         \TN@vleg{bijI}{east}{0.55,0}
         \TN@vleg{bijK}{west}{-0.55,0}
@@ -2358,14 +2358,14 @@
         \node at (1.15,0) {$=$};
         \begin{scope}[xshift=2.30cm]
             \TN@sectorgauge{bijX}{(0.55,0)}{X}
-            \TN@tensor{bijC}{(1.75,0)}
+            \TNTensor{bijC}{(1.75,0)}
             \TN@inverseSectorgauge{bijXi}{(2.95,0)}{X^{-1}}
             \TN@vleg{bijX}{west}{-0.50,0}
             \TN@vconnect{bijX}{east}{bijC}{west}
             \TN@vconnect{bijC}{east}{bijXi}{west}
             \TN@vleg{bijXi}{east}{0.50,0}
             \node[anchor=west] at (1.89,-0.30) {$\mathcal K$};
-            \TN@tensor{bijIt}{(1.75,1.00)}
+            \TNTensor{bijIt}{(1.75,1.00)}
             \TN@vleg{bijIt}{west}{-0.50,0}
             \TN@vleg{bijIt}{east}{0.50,0}
             \TN@pconnect{bijIt}{south}{bijC}{north}
@@ -2378,14 +2378,14 @@
             \TN@vport{bijCBlock}{bijC}{south}
             \TN@vbusprojecttap{bijJ}{bijJX}{bijXBlock}
             \TN@vbusprojecttap{bijQ}{bijQX}{bijXCopy}
-            \TN@vconnectports{bijXBlock}{bijJX}
-            \TN@vconnectports{bijXCopy}{bijQX}
+            \TNConnectVirtual{bijXBlock}{bijJX}
+            \TNConnectVirtual{bijXCopy}{bijQX}
             \TN@vbusprojecttap{bijJ}{bijJC}{bijCBlock}
-            \TN@vconnectports{bijCBlock}{bijJC}
+            \TNConnectVirtual{bijCBlock}{bijJC}
             \TN@vbusprojecttap{bijJ}{bijJXi}{bijXiBlock}
             \TN@vbusprojecttap{bijQ}{bijQXi}{bijXiCopy}
-            \TN@vconnectports{bijXiBlock}{bijJXi}
-            \TN@vconnectports{bijXiCopy}{bijQXi}
+            \TNConnectVirtual{bijXiBlock}{bijJXi}
+            \TNConnectVirtual{bijXiCopy}{bijQXi}
         \end{scope}
         \node at (6.25,0) {$=$};
         \begin{scope}[xshift=6.70cm]
@@ -2401,15 +2401,15 @@
             \TN@vparallelbus{bijPQ}{bijPJ}{-\TN@buspitch}{}
             \TN@vbusprojecttap{bijPJ}{bijPJX}{bijPXBlock}
             \TN@vbusprojecttap{bijPQ}{bijPQX}{bijPXCopy}
-            \TN@vconnectports{bijPXBlock}{bijPJX}
-            \TN@vconnectports{bijPXCopy}{bijPQX}
+            \TNConnectVirtual{bijPXBlock}{bijPJX}
+            \TNConnectVirtual{bijPXCopy}{bijPQX}
             \TN@vbusprojecttap{bijPJ}{bijPJXi}{bijPXiBlock}
             \TN@vbusprojecttap{bijPQ}{bijPQXi}{bijPXiCopy}
-            \TN@vconnectports{bijPXiBlock}{bijPJXi}
-            \TN@vconnectports{bijPXiCopy}{bijPQXi}
+            \TNConnectVirtual{bijPXiBlock}{bijPJXi}
+            \TNConnectVirtual{bijPXiCopy}{bijPQXi}
             \TN@vterminal{bijPBlockTop}{(1.75,1.50)}
             \TN@vbusprojecttap{bijPJ}{bijPJBlock}{bijPBlockTop}
-            \TN@vconnectports{bijPBlockTop}{bijPJBlock}
+            \TNConnectVirtual{bijPBlockTop}{bijPJBlock}
         \end{scope}
     \end{tikzpicture}%
 }
@@ -2420,9 +2420,9 @@
 % doubled physical index is drawn as a single thick leg.
 \newcommand{\TNMPDOInverseRecovery}{%
     \begin{tikzpicture}[tn picture]
-        \TN@tensor{irT}{(0,1.05)}
-        \TN@tensor{irI}{(0,0)}
-        \TN@tensor{irB}{(0,-1.05)}
+        \TNTensor{irT}{(0,1.05)}
+        \TNTensor{irI}{(0,0)}
+        \TNTensor{irB}{(0,-1.05)}
         \TN@pleg{irT}{north}{0,0.45}
         \TN@vpath[rounded corners=3pt]{(irI.west) -- ++(-0.74,0) -- (-0.82,1.05) -- (irT.west)}
         \TN@vpath[rounded corners=3pt]{(irI.east) -- ++(0.74,0) -- (0.82,1.05) -- (irT.east)}
@@ -2433,7 +2433,7 @@
         \node[anchor=west] at (0.12,0.30) {$K^{-1}$};
         \node[anchor=east] at (-0.14,-1.33) {$K$};
         \node at (1.85,0) {$=$};
-        \TN@tensor{irR}{(3.05,0)}
+        \TNTensor{irR}{(3.05,0)}
         \TN@vleg{irR}{west}{-0.60,0}
         \TN@vleg{irR}{east}{0.60,0}
         \TN@pleg{irR}{north}{0,0.45}
