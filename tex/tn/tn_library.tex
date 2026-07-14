@@ -777,10 +777,12 @@
 
 \newenvironment{TNEquationRow}[1][compact]{%
     \par\smallskip
-    \noindent\hbox to \linewidth\bgroup\hfil
-    \begingroup\TNLayoutProfile{#1}%
+    \begin{center}%
+    \begingroup
+    \TNLayoutProfile{#1}%
 }{%
-    \endgroup\hfil\egroup
+    \endgroup
+    \end{center}%
     \smallskip
 }
 
@@ -796,6 +798,21 @@
 }
 
 \newcommand{\TNPortAlias}[2]{\TN@aliasport{#1}{#2}}
+\newcommand{\TNVirtualPort}[3]{\TN@vport{#1}{#2}{#3}}
+\newcommand{\TNPhysicalPort}[3]{\TN@pport{#1}{#2}{#3}}
+\newcommand{\TNMorphismPort}[3]{\TN@mport{#1}{#2}{#3}}
+\newcommand{\TNVirtualTerminal}[2]{\TN@vterminal{#1}{#2}}
+\newcommand{\TNPhysicalTerminal}[2]{\TN@pterminal{#1}{#2}}
+\newcommand{\TNMorphismTerminal}[2]{\TN@mterminal{#1}{#2}}
+\newcommand{\TNPoint}[2]{\TN@annotationterminal{#1}{#2}}
+\newcommand{\TNVirtualWestPort}[3]{\TN@vwestport{#1}{#2}{#3}}
+\newcommand{\TNVirtualEastPort}[3]{\TN@veastport{#1}{#2}{#3}}
+\newcommand{\TNVirtualNorthPort}[3]{\TN@vnorthport{#1}{#2}{#3}}
+\newcommand{\TNVirtualSouthPort}[3]{\TN@vsouthport{#1}{#2}{#3}}
+\newcommand{\TNPhysicalWestPort}[3]{\TN@pwestport{#1}{#2}{#3}}
+\newcommand{\TNPhysicalEastPort}[3]{\TN@peastport{#1}{#2}{#3}}
+\newcommand{\TNPhysicalNorthPort}[3]{\TN@pnorthport{#1}{#2}{#3}}
+\newcommand{\TNPhysicalSouthPort}[3]{\TN@psouthport{#1}{#2}{#3}}
 \newcommand{\TNConnectVirtual}[2]{\TN@vconnectports{#1}{#2}}
 \newcommand{\TNConnectPhysical}[2]{\TN@pconnectports{#1}{#2}}
 \newcommand{\TNConnectMorphism}[2]{\TN@mconnectports{#1}{#2}}
@@ -831,6 +848,33 @@
 \newcommand{\TNState}[3]{\TN@state{#1}{#2}{#3}}
 \newcommand{\TNExpression}[3]{\TN@expression{#1}{#2}{#3}}
 \newcommand{\TNInsertion}[3]{\TN@labeledinsertion{#1}{#2}{#3}}
+\newcommand{\TNJunction}[2]{\TN@junction{#1}{#2}}
+\newcommand{\TNOperatorState}[3]{%
+    \TN@operatorstate{#1}{#2}{#3}%
+    \TN@aliasport{#1WestKet}{#1WUp}%
+    \TN@aliasport{#1WestBra}{#1WDown}%
+    \TN@aliasport{#1EastKet}{#1EUp}%
+    \TN@aliasport{#1EastBra}{#1EDown}%
+}
+\newcommand{\TNSectorGauge}[3]{\TN@sectorgauge{#1}{#2}{#3}}
+\newcommand{\TNInverseSectorGauge}[3]{\TN@inverseSectorgauge{#1}{#2}{#3}}
+
+% Labels attach to a named object or port.  The four directional forms use a
+% profile-controlled clearance; the general form is reserved for irregular
+% regions and takes a relative displacement rather than a page coordinate.
+\newcommand{\TNLabel}[3]{\TN@label{#1}{#2}{#3}}
+\newcommand{\TNLabelAbove}[2]{\TN@label[anchor=south]{#1}{(0,0.24)}{#2}}
+\newcommand{\TNLabelBelow}[2]{\TN@label[anchor=north]{#1}{(0,-0.24)}{#2}}
+\newcommand{\TNLabelLeft}[2]{\TN@label[anchor=east]{#1}{(-0.24,0)}{#2}}
+\newcommand{\TNLabelRight}[2]{\TN@label[anchor=west]{#1}{(0.24,0)}{#2}}
+
+% Regions and explanatory marks do not represent index contractions.
+\newcommand{\TNGroupBoundary}[1]{\TN@grouppath{#1}}
+\newcommand{\TNFactorBoundary}[1]{\TN@factorpath{#1}}
+\newcommand{\TNAnnotation}[1]{\TN@annotationpath{#1}}
+\newcommand{\TNSelectedPath}[1]{\TN@selectedpath{#1}}
+\newcommand{\TNSecondaryPath}[1]{\TN@secondarypath{#1}}
+\newcommand{\TNRegion}[4]{\TN@region{#1}{#2}{#3}{#4}}
 
 \newcommand{\TNMPSSite}[3]{%
     \TN@mpssite{#1}{#2}{#3}%
@@ -866,6 +910,15 @@
     \TN@aliasport{#1South}{#1S}%
     \TN@aliasport{#1Ket}{#1P}%
 }
+
+\newcommand{\TNDoubleLayer}[3]{%
+    \TN@doublelayer{#1}{#2}{#3}%
+    \TN@aliasport{#1UpperWest}{#1UW}%
+    \TN@aliasport{#1UpperEast}{#1UE}%
+    \TN@aliasport{#1LowerWest}{#1DW}%
+    \TN@aliasport{#1LowerEast}{#1DE}%
+}
+\newcommand{\TNFactorPair}[5]{\TN@factorpair{#1}{#2}{#3}{#4}{#5}}
 
 \newcommand{\TNOpenVirtualWest}[1]{\TN@vopenport{#1}{-\TN@virtualleglen,0}}
 \newcommand{\TNOpenVirtualEast}[1]{\TN@vopenport{#1}{\TN@virtualleglen,0}}
@@ -971,6 +1024,40 @@
 \newcommand{\TNParallelSectorBus}[4]{\TN@vparallelbus{#1}{#2}{#3}{#4}}
 \newcommand{\TNSectorBusTap}[3]{\TN@vbustap{#1}{#2}{#3}}
 \newcommand{\TNThreeSiteChain}[4]{\TN@boxedThreeSiteChain{#1}{#2}{#3}{#4}}
+\newcommand{\TNThreeSiteInsertion}[5]{%
+    \TN@boxedThreeSiteInsertion{#1}{#2}{#3}{#4}{#5}%
+}
+\newcommand{\TNThreeSitePhysicalFirst}[5]{%
+    \TN@boxedThreeSitePhysicalOne{#1}{#2}{#3}{#4}{#5}%
+}
+\newcommand{\TNThreeSitePhysicalSecond}[5]{%
+    \TN@boxedThreeSitePhysicalTwo{#1}{#2}{#3}{#4}{#5}%
+}
+\newcommand{\TNPEPSFiveSitePatch}[1]{\TN@pepsFiveSitePatch{#1}}
+\newcommand{\TNPEPSFiveSiteLabels}[6]{%
+    \TN@pepsFiveSitePatchLabels{#1}{#2}{#3}{#4}{#5}{#6}%
+}
+\newcommand{\TNPEPSEdge}[5]{\TN@vedge{#1}{#2}{#3}{#4}{#5}}
+\newcommand{\TNSquarePEPSPatch}[4]{\TN@squarepepspatch{#1}{#2}{#3}{#4}}
+\newcommand{\TNPEPSTwoInjectivePair}[4]{%
+    \TN@twoInjectiveInsertionPair{#1}{#2}{#3}{#4}%
+}
+\newcommand{\TNPEPSThreeLegFan}[2]{\TN@threeLegTensorFan{#1}{#2}}
+\newcommand{\TNPEPSNormalSquareLattice}{\TN@pepsNormalSquareLattice}
+\newcommand{\TNPEPSNormalRegionR}{\TN@pepsNormalRegionR}
+\newcommand{\TNPEPSNormalRegionS}{\TN@pepsNormalRegionS}
+\newcommand{\TNPEPSNormalRegionTMotif}{\TN@pepsNormalRegionT}
+\newcommand{\TNPEPSNormalSingleSiteDifference}{\TN@pepsNormalSingleSiteDifference}
+\newcommand{\TNPEPSNormalDistinguishedEdge}{\TN@pepsNormalDistinguishedEdge}
+\newcommand{\TNPEPSNormalSelectedBlock}{\TN@pepsNormalSelectedBlock}
+\newcommand{\TNPEPSNormalSecondaryBlock}{\TN@pepsNormalSecondaryBlock}
+\newcommand{\TNPEPSNormalComplementBlock}{\TN@pepsNormalComplementBlock}
+\newcommand{\TNPEPSNormalCollar}{\TN@pepsNormalCollar}
+\newcommand{\TNPEPSBlockedNormalChain}{\TN@pepsBlockedNormalChain}
+\newcommand{\TNPEPSSquareTensor}[2]{\TN@pepsSquareTensor{#1}{#2}}
+
+\newcommand{\TNMorphismArrow}[4]{\TN@labeledmorphism{#1}{#2}{#3}{#4}}
+\newcommand{\TNComparisonArrow}[4]{\TN@labeledcomparison{#1}{#2}{#3}{#4}}
 
 % Two levels of the standard binary fusion tree.  All ports and branches are
 % inherited from the unique trivalent-map constructor.
