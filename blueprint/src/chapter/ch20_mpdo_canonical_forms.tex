@@ -435,7 +435,7 @@
     $c_j^{(|w|+1)}$.
 \end{proof}
 
-\begin{theorem}[Representative separation with an arbitrary marked letter]
+\begin{theorem}[Algebraic marked-letter extension of representative separation]
     \label{thm:representative_grouped_marked_separation}
     \lean{MPSTensor.SectorDecomposition.markedTensor_basis_eq_of_trace_agree_of_coeff_ne_zero}
     \lean{MPSTensor.SectorDecomposition.markedTensor_basis_eq_of_trace_agree}
@@ -455,11 +455,16 @@
     $c_{j_0}^{(L+1)}\neq0$, then $C_{j_0}=E_{j_0}$.  Under eventual
     representative word-tuple separation, one has $C_j=E_j$ for every $j$.
 
-    This is the arbitrary-marked-letter form of Lemma~L used to compare the
-    two marked chains in
-    \cite[Proposition~4.13, lines~1909--1919]{Cirac2016MPDO_arXiv}; the
-    representative grouping is the argument of
-    \cite[Appendix~C.3, lines~1835--1858]{Cirac2016MPDO_arXiv}.
+    Lemma~L is stated for marks induced by physical operators on the first
+    site.  After its closed-chain identity has been expanded, the separation
+    calculation uses only the matrices in the marked slot.  The theorem is
+    the resulting algebraic extension of
+    \cite[Appendix~C.3, lines~1848--1858]{Cirac2016MPDO_arXiv}; it is not
+    attributed to the paper as a separately stated arbitrary-mark theorem.
+    In the application to
+    \cite[Proposition~4.13, lines~1909--1919]{Cirac2016MPDO_arXiv}, the
+    marked families must still be obtained from the actual grouped vertical
+    corners before this separation theorem is applied.
 \end{theorem}
 
 \begin{proof}
