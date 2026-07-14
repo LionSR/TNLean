@@ -2444,6 +2444,63 @@
     % Lean adapter: this final reindexing is `finSigmaFinEquiv`.
 \end{proof}
 
+\begin{theorem}[Vertical canonical form from orthogonal grouped sectors]
+    \label{thm:vertical_cf_of_grouped_orthogonal_sectors}
+    \lean{MPOTensor.isVerticalCF_of_grouped_orthogonal_sectors}
+    \leanok
+    \uses{def:vertical_tensor_mpdo, def:vertical_cf_mpdo, def:bnt}
+    Let $\{A_\alpha\}_{\alpha=0}^{g-1}$ be a BNT for the vertically viewed
+    tensor $\widetilde M$.  For each $\alpha$, let $r_\alpha>0$, let
+    $\omega_{\alpha,q}>0$ for $0\leq q<r_\alpha$, and let
+    $W_{\alpha,q}:\C^{D_\alpha}\to\C^d$ satisfy
+    \[
+        W_{\alpha,q}^\dagger W_{\alpha,q}=\Id,
+        \qquad
+        W_{\alpha,q}^\dagger W_{\beta,p}=0
+        \quad\text{if }(\alpha,q)\ne(\beta,p).
+    \]
+    Suppose that, for every vertical letter $v$ and every pair $(\alpha,q)$,
+    \[
+        \widetilde M_v W_{\alpha,q}
+          =W_{\alpha,q}(\omega_{\alpha,q}A_\alpha^v),
+    \]
+    and that the letters have the exact sector decomposition
+    \[
+        \widetilde M_v
+          =\sum_{\alpha=0}^{g-1}\sum_{q=0}^{r_\alpha-1}
+            W_{\alpha,q}(\omega_{\alpha,q}A_\alpha^v)
+            W_{\alpha,q}^\dagger.
+    \]
+    Then $M$ is in vertical canonical form.
+    This is the final finite-dimensional implication in
+    \cite[Proposition~4.13, lines~1863--1870]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:vertical_sector_coisometry}
+    Form the block-row map $U$ from the adjoints
+    $W_{\alpha,q}^\dagger$.  Theorem~\ref{thm:vertical_sector_coisometry}
+    gives
+    \[
+        UU^\dagger=\Id,
+        \qquad
+        U\widetilde M_vU^\dagger
+          =\bigoplus_{\alpha,q}\omega_{\alpha,q}A_\alpha^v,
+    \]
+    together with
+    \[
+        \widetilde M_v
+          =U^\dagger\!\left(
+              \bigoplus_{\alpha,q}\omega_{\alpha,q}A_\alpha^v
+            \right)U.
+    \]
+    Identifying the dependent pairs $(\alpha,q)$ and their bond indices with
+    the standard coordinates of the two finite direct sums gives the required
+    matrix dimensions.  Positivity of the multiplicities and weights, together
+    with the BNT hypothesis, supplies the remaining conditions of vertical
+    canonical form.
+\end{proof}
 \begin{lemma}[A retained vertical phase class exists]
     \label{lem:mpdo_vertical_retained_class_nonempty}
     \notready
