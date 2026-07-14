@@ -100,7 +100,8 @@
     \label{thm:mpo_is_zcl_iff_to_mps_rfp}
     \lean{MPOTensor.isZCL_iff_toMPSTensor_isRFP}
     \leanok
-    \uses{def:mpo_is_zcl, def:mpo_to_mps, def:is_rfp, lem:mpo_transfer_eq_mps}
+    \uses{def:mpo_is_zcl, def:mpo_to_mps, def:mps_transfer_idempotence,
+        lem:mpo_transfer_eq_mps}
     An MPO tensor satisfies the doubled-index transfer condition if and only if
     its doubled-index MPS view is a renormalization fixed point.
 \end{theorem}
@@ -242,7 +243,7 @@
     \label{def:mpdo_purification_rfp_witness}
     \lean{MPOTensor.HasPurificationRFPWitness}
     \leanok
-    \uses{def:mpdo_global_purification_equation, def:is_rfp}
+    \uses{def:mpdo_global_purification_equation, def:mps_transfer_idempotence}
     An MPO tensor $M$ has a purification RFP witness if it satisfies the global
     purification equation for some purifying spin--ancilla tensor $A$, and
     $\widehat A$ is a pure-state renormalization fixed point:
@@ -289,7 +290,7 @@
 \begin{definition}[Local purification RFP condition]\label{def:is_local_purification_rfp}
     \lean{MPOTensor.IsLocalPurificationRFP}
     \leanok
-    \uses{def:lpdo, def:is_rfp}
+    \uses{def:lpdo, def:mps_transfer_idempotence}
     An MPO tensor $M$ satisfies the local purification RFP condition if it is an
     LPDO whose purifying tensor $A$, viewed as a matrix product state tensor on
     the combined spin--ancilla index, is a pure-state renormalization fixed point.
@@ -391,7 +392,8 @@
     \label{thm:phys_trace_transfer_sq_of_local_purification_rfp}
     \lean{MPOTensor.physTraceTransfer_sq_of_isLocalPurificationRFP}
     \leanok
-    \uses{def:is_local_purification_rfp, def:mpo_physical_trace_transfer, def:is_rfp}
+    \uses{def:is_local_purification_rfp, def:mpo_physical_trace_transfer,
+        def:mps_transfer_idempotence}
     If an MPO tensor $M$ is the ancilla contraction of a pure-state
     renormalization fixed point, then its physical-trace transfer
     $\mathcal T_M=\sum_i M^{ii}$ is idempotent,
@@ -401,7 +403,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:is_rfp}
+    \uses{def:mps_transfer_idempotence}
     Let $K' = \sum_p \overline{A_p}\otimes A_p$ be the transfer matrix of the
     purifying tensor $A$; the pure-state renormalization fixed point condition
     makes it idempotent, $K'K' = K'$. Write $X_\sigma$ for the reindexing of a

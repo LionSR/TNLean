@@ -10,13 +10,14 @@ import TNLean.Channel.KrausFreedom
 /-!
 # Pure-state renormalization fixed point (RFP) — definitions
 
-This file defines the notion of a **renormalization fixed point** (RFP) for a
-pure MPS tensor, following arXiv:1606.00608 Section 3.1
+This file gives two equivalent descriptions of a **renormalization fixed point**
+for a pure MPS tensor, following arXiv:1606.00608, Section 3.1
 (Cirac–Pérez-García–Schuch–Verstraete).
 
-The key definition is `IsRFP A`, which says that the completely positive map
-(CPM) associated to the MPS tensor `A` is **idempotent**: composing the
-transfer map with itself yields the same transfer map.
+The source definition is `HasPhysicalBlockingIsometry A`: multiplication of two
+tensor letters is obtained from one tensor letter by an isometry on the physical
+index. The equivalent predicate `IsRFP A` says that the associated completely
+positive transfer map is idempotent.
 -/
 
 open scoped Matrix BigOperators
@@ -26,16 +27,34 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- An MPS tensor `A` is a **renormalization fixed point** (RFP) when its
-transfer map is idempotent as a linear map, i.e. `E_A ∘ E_A = E_A`.
-See arXiv:1606.00608, Definition 3.2. -/
+/-- An MPS tensor has a **physical blocking isometry** when multiplication of
+two tensor letters can be reversed by an isometry on the physical index:
+\[
+  A^{i_1}A^{i_2}=\sum_j U_{(i_1,i_2),j}A^j,
+  \qquad U^\dagger U=1.
+\]
+
+This is the renormalization fixed-point relation `AA=A` in arXiv:1606.00608,
+equation `AA=A` and Definition `defRFP`, lines 398--424. -/
+def HasPhysicalBlockingIsometry (A : MPSTensor d D) : Prop :=
+  ∃ U : Matrix (Fin d × Fin d) (Fin d) ℂ,
+    U.conjTranspose * U = 1 ∧
+    ∀ i₁ i₂ : Fin d, A i₁ * A i₂ = ∑ j : Fin d, U (i₁, i₂) j • A j
+
+/-- The transfer-map criterion for a pure-state renormalization fixed point:
+the completely positive map associated to `A` is idempotent,
+`E_A ∘ E_A = E_A`.
+
+The source defines the fixed-point property by a physical blocking isometry.
+Theorem `isRFP_iff_hasPhysicalBlockingIsometry` proves that the two conditions
+are equivalent. -/
 def IsRFP (A : MPSTensor d D) : Prop :=
   transferMap A ∘ₗ transferMap A = transferMap A
 
-/-- The backward direction of the RFP ↔ Kraus-isometry characterisation
-(arXiv:1606.00608, Theorem 3.1): if the Kraus operators of an MPS tensor
-decompose via a rectangular isometry `V` (with `V†V = 1`), then the
-transfer map is idempotent.
+/-- If the product letters of an MPS tensor are obtained from its letters by a
+rectangular isometry `V`, with `V†V = 1`, then the transfer map is idempotent.
+
+This is the Kraus-family implication used in arXiv:1606.00608, lines 1205--1209.
 
 See `isRFP_iff_kraus_isometry` for the full equivalence (both directions). -/
 theorem isRFP_of_kraus_isometry (A : MPSTensor d D)
@@ -104,7 +123,8 @@ rectangular isometry `V` with `V†V = 1`.
 
 **Backward direction**: proved as `isRFP_of_kraus_isometry`.
 
-See arXiv:1606.00608, Theorem 3.1 and Wolf Theorem 2.1 item 4. -/
+See arXiv:1606.00608, Definition `defRFP`, lines 420--424, and its Kraus-family
+argument at lines 1205--1209; see also Wolf Theorem 2.1 item 4. -/
 theorem isRFP_iff_kraus_isometry (A : MPSTensor d D) :
     IsRFP A ↔
       ∃ V : Matrix (Fin d × Fin d) (Fin d) ℂ,
@@ -140,5 +160,14 @@ theorem isRFP_iff_kraus_isometry (A : MPSTensor d D) :
   · -- Backward direction: proved as `isRFP_of_kraus_isometry`
     rintro ⟨V, hV, hprod⟩
     exact isRFP_of_kraus_isometry A V hV hprod
+
+/-- Transfer-map idempotence is equivalent to the physical blocking-isometry
+definition of a pure-state renormalization fixed point.
+
+This identifies the transfer-map criterion with equation `AA=A` and Definition
+`defRFP` in arXiv:1606.00608, lines 398--424. -/
+theorem isRFP_iff_hasPhysicalBlockingIsometry (A : MPSTensor d D) :
+    IsRFP A ↔ HasPhysicalBlockingIsometry A := by
+  simpa only [HasPhysicalBlockingIsometry] using isRFP_iff_kraus_isometry A
 
 end MPSTensor

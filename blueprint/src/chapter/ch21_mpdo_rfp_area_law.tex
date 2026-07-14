@@ -423,7 +423,7 @@
     \lean{MPSTensor.schmidtLeft_gram_eq_of_isRFP,
         MPSTensor.schmidtRight_gram_eq_of_isRFP}
     \leanok
-    \uses{def:is_rfp, lem:schmidt_gram_transfer_power}
+    \uses{def:mps_transfer_idempotence, lem:schmidt_gram_transfer_power}
     Let $A$ be a renormalization fixed point. For every $L\ge 1$ and
     $m\ge 1$, the operator-Schmidt Grams of the $L$-block and of the
     $m$-site complement are the one-site Grams:
@@ -477,7 +477,8 @@
     \label{thm:rfp-saturates-area-law}
     \lean{MPSTensor.isSAL_of_isRFP}
     \leanok
-    \uses{def:is_rfp, def:pure_sal, lem:pure_block_entropy_env_charpoly,
+    \uses{def:mps_transfer_idempotence, def:pure_sal,
+        lem:pure_block_entropy_env_charpoly,
         lem:rfp_schmidt_gram_collapse}
     If an MPS tensor $A$ is a renormalization fixed point, then it saturates the
     area law: for every chain length $N$ and every block length
