@@ -2238,6 +2238,50 @@
     intertwining identities give the four assertions directly.
 \end{proof}
 
+\begin{theorem}[Spectrally normalized vertical sectors with physical isometries]
+    \label{thm:mpdo_vertical_normal_sectors_with_isometries}
+    \lean{MPOTensor.IsHorizontalCF.exists_normal_verticalBlockDecomp_with_isometry}
+    \leanok
+    \uses{thm:mpdo_vertical_irreducible_reducing_sectors,
+        thm:mpdo_vertical_no_periodic_vectors_horizontal_cf,
+        lem:irreducible_transfer_perron_pair,
+        lem:irreducible_block_spectral_normalization}
+    Under the same hypotheses, there are positive integers $d_k$, positive
+    scalars $\mu_k$, normal tensors $B_k$ of bond dimension $d_k$, and
+    isometries $V_k:\C^{d_k}\to\C^d$ with pairwise orthogonal ranges. For
+    every sector $k$ and every vertical letter $v$,
+    \[
+        \widetilde M_vV_k=V_k(\mu_kB_k^v),
+        \qquad
+        V_k^\dagger\widetilde M_v=(\mu_kB_k^v)V_k^\dagger,
+        \qquad
+        \mu_kB_k^v=V_k^\dagger\widetilde M_vV_k.
+    \]
+    Moreover, every vertical letter is reconstructed literally by
+    \[
+        \widetilde M_v
+        =\sum_k V_k(\mu_kB_k^v)V_k^\dagger.
+    \]
+    The omitted irreducible corners have all their letters equal to zero.
+    Hence the retained range projections need not sum to the identity, but
+    their orthogonal complement is a zero sector.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_vertical_irreducible_reducing_sectors,
+        thm:mpdo_vertical_no_periodic_vectors_horizontal_cf,
+        lem:irreducible_transfer_perron_pair,
+        lem:irreducible_block_spectral_normalization}
+    Retain exactly the irreducible corners containing a nonzero letter. The
+    Perron--Frobenius eigenvalue of each retained corner is positive, and the
+    absence of nontrivial periodic vectors makes the inverse-square-root
+    rescaling normal. Put the removed square root into $\mu_k$ and reindex the
+    retained corners. The original complete reducing decomposition expresses
+    each vertical letter as the sum of all compressed corners; every omitted
+    summand vanishes, which gives the displayed reconstruction.
+\end{proof}
+
 \begin{theorem}[Horizontal canonical form implies vertical canonical form]
     \label{thm:vertical_cf_of_horizontal_cf}
     \notready
@@ -2250,6 +2294,7 @@
         thm:mpdo_vertical_projector_closure,
         thm:mpdo_vertical_irreducible_reducing_sectors,
         thm:mpdo_vertical_complete_reducing_projectors,
+        thm:mpdo_vertical_normal_sectors_with_isometries,
         thm:projector_closure_canonical_form,
         thm:mpdo_sector_compression_trace_pos,
         def:mpdo_sector_projector,
@@ -2313,13 +2358,12 @@
     decomposes the physical space into complete orthogonal irreducible
     reducing sectors, and
     Theorem~\ref{thm:mpdo_vertical_complete_reducing_projectors} records their
-    commuting range projections. Together with the absence of periodic
-    vectors, Theorem~\ref{thm:projector_closure_canonical_form} already gives
-    an abstract positive-length decomposition into normal blocks. That theorem
-    does not retain the physical isometries and reducing projections. The
-    source argument requires a refinement that retains this data through
-    zero-corner removal and spectral normalization, and then groups the
-    resulting normal tensors, obtaining
+    commuting range projections. Theorem~\ref{thm:mpdo_vertical_normal_sectors_with_isometries}
+    removes the zero corners and spectrally normalizes the remaining corners
+    while retaining their physical isometries, both intertwining identities,
+    exact compression, and literal reconstruction of every vertical letter.
+    The remaining source argument must group the resulting normal tensors,
+    obtaining
     \[
         \widetilde M
         =\bigoplus_{\alpha,k}\mu_{\alpha,k}X_{\alpha,k}M_\alpha X_{\alpha,k}^{-1}

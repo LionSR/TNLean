@@ -140,6 +140,14 @@ vectors at every length
 Its range projections are complete, pairwise orthogonal, and commute with all
 vertical letters
 (\path{MPOTensor.IsHorizontalCF.exists_complete_verticalReducingProjectors}).
+The nonzero corners can moreover be spectrally normalized without losing
+their physical embeddings: the resulting blocks are normal, their weights
+are positive, both intertwining identities and exact compression remain, and
+the retained sectors reconstruct every vertical letter literally
+(\path{MPOTensor.IsHorizontalCF.exists_normal_verticalBlockDecomp_with_isometry}
+in \path{TNLean/MPS/MPDO/VerticalSpectral.lean}).  The complement of their
+range projections consists precisely of the omitted zero corners, so no
+false completeness assertion is made after this removal.
 
 The periodic-sector exclusion is also complete:
 \path{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_horizontalCF} derives
@@ -170,15 +178,11 @@ $\omega_{\alpha,k}^{-1/2}X_{\alpha,k}$ unitary
 (\path{MPSTensor.IsNormal.smul_mem_unitaryGroup_of_dressed_adjoint} in
 \path{TNLean/MPS/CanonicalForm/NormalCommutant.lean}).
 
-Projector closure together with the absence of periodic vectors already gives
-an abstract positive-length decomposition into normal blocks
-(\path{TNLean/MPS/CanonicalForm/ProjectorClosureSpectral.lean}).
-This theorem does not retain the physical isometries and reducing projections
-constructed above. The remaining source-level gap is the refinement that
-retains this data through zero-corner removal and spectral normalization,
-groups gauge-equivalent normal tensors, identifies the resulting grouped
-projections with the sector projectors carrying the single-site loop
-identities, and proves a nonvanishing compression. One must then derive the
+The remaining source-level gap begins with grouping the normalized corners
+above into gauge-equivalent copies of a basis of normal tensors.  One must
+identify the resulting grouped projections with the sector projectors
+carrying the single-site loop identities and prove a nonvanishing
+compression. One must then derive the
 dressed-adjoint identities from self-adjointness of the sector compressions
 and assemble the positive weights and proportional-unitary gauges of source
 lines~1895--1921. This is the mathematical content shared with the normality
