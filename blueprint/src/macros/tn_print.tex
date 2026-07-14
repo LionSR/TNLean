@@ -414,7 +414,7 @@
 % F-change of multiplicity basis that remains to be constructed.
 \newcommand{\TNMPDOFixedFinalFusionBracketings}{%
     \begin{TNDiagram}[normal]
-        \path[use as bounding box] (-4.70,-2.05) rectangle (4.70,1.55);
+        \TNCanvas{(-4.70,-2.05)}{(4.70,1.55)}
         \TNCofusionMap{ffLeftLower}{(-3.35,-0.72)}{U_{\alpha,\beta}^{\delta}}
         \TNCofusionMap{ffLeftUpper}{(-2.80,0.55)}{U_{\delta,\gamma}^{\varepsilon}}
         \TNConnectVirtual{ffLeftLowerCombined}{ffLeftUpperFactorOne}
@@ -422,11 +422,12 @@
         \TNOpenVirtualSouth{ffLeftLowerFactorTwo}
         \TNOpenVirtualSouth{ffLeftUpperFactorTwo}
         \TNOpenVirtualNorth{ffLeftUpperCombined}
-        \node[below] at (ffLeftLowerFactorOneOpen) {$\alpha$};
-        \node[below] at (ffLeftLowerFactorTwoOpen) {$\beta$};
-        \node[below] at (ffLeftUpperFactorTwoOpen) {$\gamma$};
-        \node[above] at (ffLeftUpperCombinedOpen) {$\varepsilon$};
-        \node at (-3.00,-1.72) {$((\alpha\beta)\gamma)$};
+        \TNLabelBelow{ffLeftLowerFactorOneOpen}{\alpha}
+        \TNLabelBelow{ffLeftLowerFactorTwoOpen}{\beta}
+        \TNLabelBelow{ffLeftUpperFactorTwoOpen}{\gamma}
+        \TNLabelAbove{ffLeftUpperCombinedOpen}{\varepsilon}
+        \TNPoint{ffLeftBracketing}{(-3.00,-1.72)}
+        \TNLabel{ffLeftBracketing}{(0,0)}{((\alpha\beta)\gamma)}
 
         \TNCofusionMap{ffRightLower}{(3.35,-0.72)}{U_{\beta,\gamma}^{\eta}}
         \TNCofusionMap{ffRightUpper}{(2.80,0.55)}{U_{\alpha,\eta}^{\varepsilon}}
@@ -435,11 +436,12 @@
         \TNOpenVirtualSouth{ffRightLowerFactorOne}
         \TNOpenVirtualSouth{ffRightLowerFactorTwo}
         \TNOpenVirtualNorth{ffRightUpperCombined}
-        \node[below] at (ffRightUpperFactorOneOpen) {$\alpha$};
-        \node[below] at (ffRightLowerFactorOneOpen) {$\beta$};
-        \node[below] at (ffRightLowerFactorTwoOpen) {$\gamma$};
-        \node[above] at (ffRightUpperCombinedOpen) {$\varepsilon$};
-        \node at (3.00,-1.72) {$(\alpha(\beta\gamma))$};
+        \TNLabelBelow{ffRightUpperFactorOneOpen}{\alpha}
+        \TNLabelBelow{ffRightLowerFactorOneOpen}{\beta}
+        \TNLabelBelow{ffRightLowerFactorTwoOpen}{\gamma}
+        \TNLabelAbove{ffRightUpperCombinedOpen}{\varepsilon}
+        \TNPoint{ffRightBracketing}{(3.00,-1.72)}
+        \TNLabel{ffRightBracketing}{(0,0)}{(\alpha(\beta\gamma))}
 
         \TNComparisonArrow{ffBracketingChange}{(ffLeftUpper.east)}
             {(ffRightUpper.west)}{F_{\varepsilon}^{\alpha\beta\gamma}}
@@ -458,13 +460,15 @@
             \TNOpenVirtualSouth{pfLeftLowerFactorTwo}
             \TNOpenVirtualSouth{pfLeftUpperFactorTwo}
             \TNOpenVirtualNorth{pfLeftUpperCombined}
-            \node[below] at (pfLeftLowerFactorOneOpen) {$a$};
-            \node[below] at (pfLeftLowerFactorTwoOpen) {$b$};
-            \node[below] at (pfLeftUpperFactorTwoOpen) {$c$};
-            \node[above] at (pfLeftUpperCombinedOpen) {$d$};
-        \node at (-1.55,0) {$=\displaystyle\sum_{f,\lambda,\sigma}$};
-        \node at (0.25,0)
-            {$\displaystyle(F^{abc}_{d})^{f\lambda\sigma}_{e\mu\nu}$};
+            \TNLabelBelow{pfLeftLowerFactorOneOpen}{a}
+            \TNLabelBelow{pfLeftLowerFactorTwoOpen}{b}
+            \TNLabelBelow{pfLeftUpperFactorTwoOpen}{c}
+            \TNLabelAbove{pfLeftUpperCombinedOpen}{d}
+        \TNPoint{pfRelation}{(-1.55,0)}
+        \TNLabel{pfRelation}{(0,0)}{=\displaystyle\sum_{f,\lambda,\sigma}}
+        \TNPoint{pfCoefficient}{(0.25,0)}
+        \TNLabel{pfCoefficient}{(0,0)}
+            {\displaystyle(F^{abc}_{d})^{f\lambda\sigma}_{e\mu\nu}}
             \TNCofusionMap{pfRightLower}{(3.15,-0.55)}{X^{f}_{bc,\lambda}}
             \TNCofusionMap{pfRightUpper}{(2.60,0.70)}{X^{d}_{af,\sigma}}
             \TNConnectVirtual{pfRightLowerCombined}{pfRightUpperFactorTwo}
@@ -472,10 +476,10 @@
             \TNOpenVirtualSouth{pfRightLowerFactorOne}
             \TNOpenVirtualSouth{pfRightLowerFactorTwo}
             \TNOpenVirtualNorth{pfRightUpperCombined}
-            \node[below] at (pfRightUpperFactorOneOpen) {$a$};
-            \node[below] at (pfRightLowerFactorOneOpen) {$b$};
-            \node[below] at (pfRightLowerFactorTwoOpen) {$c$};
-            \node[above] at (pfRightUpperCombinedOpen) {$d$};
+            \TNLabelBelow{pfRightUpperFactorOneOpen}{a}
+            \TNLabelBelow{pfRightLowerFactorOneOpen}{b}
+            \TNLabelBelow{pfRightLowerFactorTwoOpen}{c}
+            \TNLabelAbove{pfRightUpperCombinedOpen}{d}
     \end{TNDiagram}%
 }
 
@@ -487,8 +491,9 @@
 % contains no four-fold reassociation or pentagon claim.
 \newcommand{\TNMPDOFixedFinalComparisonUnitary}{%
     \begin{TNDiagram}[normal]
-        \path[use as bounding box] (-5.90,-3.45) rectangle (5.90,3.25);
-        \node[anchor=east] at (-5.10,2.35) {\textup{selector}, $S>0$};
+        \TNCanvas{(-5.90,-3.45)}{(5.90,3.25)}
+        \TNPoint{ffSelectorHeading}{(-5.10,2.35)}
+        \TNLabelLeft{ffSelectorHeading}{\textup{selector},\ S>0}
         \TNMPOSite{ffSelL}{(-3.90,2.35)}{}
         \TNMPOSite{ffSelM}{(-2.55,2.35)}{M_{\varepsilon'}^{w}}
         \TNMPOSite{ffSelR}{(-1.20,2.35)}{}
@@ -496,13 +501,16 @@
         \TNConnectVirtual{ffSelMEast}{ffSelRWest}
         \TNOpenVirtualWest{ffSelLWest}
         \TNOpenVirtualEast{ffSelREast}
-        \node[above] at (-2.55,2.78)
-            {$\sum_{|w|=S}c_{\varepsilon}(w)(\,\cdot\,)^{w}$};
+        \TNPoint{ffSelectorFormula}{(-2.55,2.78)}
+        \TNLabelAbove{ffSelectorFormula}
+            {\sum_{|w|=S}c_{\varepsilon}(w)(\,\cdot\,)^{w}}
         \TNMorphismArrow{ffSelectorArrow}{(-0.35,2.35)}{(0.60,2.35)}{}
-        \node[anchor=west] at (0.78,2.35)
-            {$\delta_{\varepsilon,\varepsilon'}1_{D_\varepsilon}$};
+        \TNPoint{ffSelectorValue}{(0.78,2.35)}
+        \TNLabelRight{ffSelectorValue}
+            {\delta_{\varepsilon,\varepsilon'}1_{D_\varepsilon}}
 
-        \node[anchor=east] at (-5.10,0.30) {\textup{sector cut}};
+        \TNPoint{ffSectorHeading}{(-5.10,0.30)}
+        \TNLabelLeft{ffSectorHeading}{\textup{sector cut}}
         \TNBinaryFusionTree{ffCutLeft}{(-2.65,0.20)}
             {\alpha}{\beta}{\gamma}{U^{\mathrm L}}
         \TNBinaryFusionTree{ffCutRight}{(2.65,0.20)}
@@ -512,10 +520,11 @@
         \TNComparisonArrow{ffSectorComparison}{(ffCutLeftUpper.east)}
             {(ffCutRightUpper.west)}
             {C^{\varepsilon,\varepsilon'}_{\alpha,\beta,\gamma}}
-        \node[anchor=west] at (4.25,0.20)
-            {$=0\quad(\varepsilon\ne\varepsilon')$};
+        \TNPoint{ffSectorValue}{(4.25,0.20)}
+        \TNLabelRight{ffSectorValue}{=0\quad(\varepsilon\ne\varepsilon')}
 
-        \node[anchor=east] at (-5.10,-2.15) {\textup{diagonal corner}};
+        \TNPoint{ffDiagonalHeading}{(-5.10,-2.15)}
+        \TNLabelLeft{ffDiagonalHeading}{\textup{diagonal corner}}
         \TNExpression{ffLeftSpace}{(-3.35,-2.15)}
             {\mathcal H^{\mathrm L}_{\varepsilon}\otimes\C^{D_\varepsilon}}
         \TNMap{ffF}{(0,-2.15)}{F_\varepsilon\otimes1_{D_\varepsilon}}
@@ -523,9 +532,10 @@
             {\mathcal H^{\mathrm R}_{\varepsilon}\otimes\C^{D_\varepsilon}}
         \TNMorphismArrow{ffDiagonalLeft}{(ffLeftSpace.east)}{(ffF.west)}{}
         \TNMorphismArrow{ffDiagonalRight}{(ffF.east)}{(ffRightSpace.west)}{}
-        \node at (0,-3.05)
-            {$F_\varepsilon F_\varepsilon^\dagger=1,\qquad
-              F_\varepsilon^\dagger F_\varepsilon=1$};
+        \TNPoint{ffUnitarity}{(0,-3.05)}
+        \TNLabel{ffUnitarity}{(0,0)}
+            {F_\varepsilon F_\varepsilon^\dagger=1,\qquad
+              F_\varepsilon^\dagger F_\varepsilon=1}
     \end{TNDiagram}%
 }
 
@@ -553,7 +563,7 @@
 % Figure `pentagon` (n13.pdf) of arXiv:1511.08090.
 \newcommand{\TNMPDOCompleteZipperFusionPentagon}{%
     \begin{TNDiagram}[normal]
-        \path[use as bounding box] (-6.25,-4.30) rectangle (6.25,4.10);
+        \TNCanvas{(-6.75,-4.45)}{(6.75,4.55)}
         % (((a b) c) d)
         \TNFusionMap{pLf}{(-5.42,0.22)}{}
         \TNFusionMap{pLg}{(-5.00,-0.55)}{}
@@ -565,12 +575,15 @@
         \TNConnectVirtual{pLgCombined}{pLeFactorOne}
         \TNOpenVirtualNorth{pLeFactorTwo}
         \TNOpenVirtualSouth{pLeCombined}
-        \foreach \n/\t in {pLfFactorOneOpen/a,pLfFactorTwoOpen/b,
-            pLgFactorTwoOpen/c,pLeFactorTwoOpen/d}
-            \node[above] at (\n) {$\t$};
-        \node[left] at ($(pLfOut)!0.5!(pLgLeft)$) {$f$};
-        \node[left] at ($(pLgOut)!0.5!(pLeLeft)$) {$g$};
-        \node[below] at (pLeCombinedOpen) {$e$};
+        \TNLabelAbove{pLfFactorOneOpen}{a}
+        \TNLabelAbove{pLfFactorTwoOpen}{b}
+        \TNLabelAbove{pLgFactorTwoOpen}{c}
+        \TNLabelAbove{pLeFactorTwoOpen}{d}
+        \TNPoint{pLfInternal}{($(pLfOut)!0.5!(pLgLeft)$)}
+        \TNPoint{pLgInternal}{($(pLgOut)!0.5!(pLeLeft)$)}
+        \TNLabelLeft{pLfInternal}{f}
+        \TNLabelLeft{pLgInternal}{g}
+        \TNLabelBelow{pLeCombinedOpen}{e}
 
         % ((a (b c)) d)
         \TNFusionMap{pLIh}{(-3.38,2.99)}{}
@@ -583,12 +596,15 @@
         \TNConnectVirtual{pLIgCombined}{pLIeFactorOne}
         \TNOpenVirtualNorth{pLIeFactorTwo}
         \TNOpenVirtualSouth{pLIeCombined}
-        \foreach \n/\t in {pLIgFactorOneOpen/a,pLIhFactorOneOpen/b,
-            pLIhFactorTwoOpen/c,pLIeFactorTwoOpen/d}
-            \node[above] at (\n) {$\t$};
-        \node[right] at ($(pLIhOut)!0.5!(pLIgRight)$) {$h$};
-        \node[left] at ($(pLIgOut)!0.5!(pLIeLeft)$) {$g$};
-        \node[below] at (pLIeCombinedOpen) {$e$};
+        \TNLabelAbove{pLIgFactorOneOpen}{a}
+        \TNLabelAbove{pLIhFactorOneOpen}{b}
+        \TNLabelAbove{pLIhFactorTwoOpen}{c}
+        \TNLabelAbove{pLIeFactorTwoOpen}{d}
+        \TNPoint{pLIhInternal}{($(pLIhOut)!0.5!(pLIgRight)$)}
+        \TNPoint{pLIgInternal}{($(pLIgOut)!0.5!(pLIeLeft)$)}
+        \TNLabelLeft{pLIhInternal}{h}
+        \TNLabelLeft{pLIgInternal}{g}
+        \TNLabelBelow{pLIeCombinedOpen}{e}
 
         % a ((b c) d)
         \TNFusionMap{pMh}{(0.92,2.99)}{}
@@ -601,12 +617,15 @@
         \TNOpenVirtualNorth{pMeFactorOne}
         \TNConnectVirtual{pMiCombined}{pMeFactorTwo}
         \TNOpenVirtualSouth{pMeCombined}
-        \foreach \n/\t in {pMeFactorOneOpen/a,pMhFactorOneOpen/b,
-            pMhFactorTwoOpen/c,pMiFactorTwoOpen/d}
-            \node[above] at (\n) {$\t$};
-        \node[left] at ($(pMhOut)!0.5!(pMiLeft)$) {$h$};
-        \node[right] at ($(pMiOut)!0.5!(pMeRight)$) {$i$};
-        \node[below] at (pMeCombinedOpen) {$e$};
+        \TNLabelAbove{pMeFactorOneOpen}{a}
+        \TNLabelAbove{pMhFactorOneOpen}{b}
+        \TNLabelAbove{pMhFactorTwoOpen}{c}
+        \TNLabelAbove{pMiFactorTwoOpen}{d}
+        \TNPoint{pMhInternal}{($(pMhOut)!0.5!(pMiLeft)$)}
+        \TNPoint{pMiInternal}{($(pMiOut)!0.5!(pMeRight)$)}
+        \TNLabelRight{pMhInternal}{h}
+        \TNLabelRight{pMiInternal}{i}
+        \TNLabelBelow{pMeCombinedOpen}{e}
 
         % a (b (c d))
         \TNFusionMap{pRj}{(5.42,0.22)}{}
@@ -619,12 +638,15 @@
         \TNOpenVirtualNorth{pReFactorOne}
         \TNConnectVirtual{pRiCombined}{pReFactorTwo}
         \TNOpenVirtualSouth{pReCombined}
-        \foreach \n/\t in {pReFactorOneOpen/a,pRiFactorOneOpen/b,
-            pRjFactorOneOpen/c,pRjFactorTwoOpen/d}
-            \node[above] at (\n) {$\t$};
-        \node[right] at ($(pRjOut)!0.5!(pRiRight)$) {$j$};
-        \node[right] at ($(pRiOut)!0.5!(pReRight)$) {$i$};
-        \node[below] at (pReCombinedOpen) {$e$};
+        \TNLabelAbove{pReFactorOneOpen}{a}
+        \TNLabelAbove{pRiFactorOneOpen}{b}
+        \TNLabelAbove{pRjFactorOneOpen}{c}
+        \TNLabelAbove{pRjFactorTwoOpen}{d}
+        \TNPoint{pRjInternal}{($(pRjOut)!0.5!(pRiRight)$)}
+        \TNPoint{pRiInternal}{($(pRiOut)!0.5!(pReRight)$)}
+        \TNLabelRight{pRjInternal}{j}
+        \TNLabelRight{pRiInternal}{i}
+        \TNLabelBelow{pReCombinedOpen}{e}
 
         % (a b) (c d)
         \TNFusionMap{pPf}{(-0.72,-2.63)}{}
@@ -637,12 +659,15 @@
         \TNConnectVirtual{pPfCombined}{pPeFactorOne}
         \TNConnectVirtual{pPjCombined}{pPeFactorTwo}
         \TNOpenVirtualSouth{pPeCombined}
-        \foreach \n/\t in {pPfFactorOneOpen/a,pPfFactorTwoOpen/b,
-            pPjFactorOneOpen/c,pPjFactorTwoOpen/d}
-            \node[above] at (\n) {$\t$};
-        \node[left] at ($(pPfOut)!0.5!(pPeLeft)$) {$f$};
-        \node[right] at ($(pPjOut)!0.5!(pPeRight)$) {$j$};
-        \node[below] at (pPeCombinedOpen) {$e$};
+        \TNLabelAbove{pPfFactorOneOpen}{a}
+        \TNLabelAbove{pPfFactorTwoOpen}{b}
+        \TNLabelAbove{pPjFactorOneOpen}{c}
+        \TNLabelAbove{pPjFactorTwoOpen}{d}
+        \TNPoint{pPfInternal}{($(pPfOut)!0.5!(pPeLeft)$)}
+        \TNPoint{pPjInternal}{($(pPjOut)!0.5!(pPeRight)$)}
+        \TNLabelLeft{pPfInternal}{f}
+        \TNLabelRight{pPjInternal}{j}
+        \TNLabelBelow{pPeCombinedOpen}{e}
 
         \TNMorphismArrow{pentagonOne}{(-4.48,1.10)}{(-3.95,1.73)}{F^{abc}_{g}}
         \TNMorphismArrow{pentagonTwo}{(-2.20,2.72)}{(-0.25,2.72)}{F^{ahd}_{e}}
@@ -669,9 +694,10 @@
             \TNOpenVirtualEast{bfiUdCombined}
             \TNOpenPhysicalNorth{bfiProductUpperKet}
             \TNOpenPhysicalSouth{bfiProductLowerBra}
-            \node[above] at (bfiProductUpperKetOpen) {$i$};
-            \node[below] at (bfiProductLowerBraOpen) {$j$};
-        \node at (0.45,0) {$=\displaystyle\bigoplus_\gamma$};
+            \TNLabelAbove{bfiProductUpperKetOpen}{i}
+            \TNLabelBelow{bfiProductLowerBraOpen}{j}
+        \TNPoint{bfiRelation}{(0.45,0)}
+        \TNLabel{bfiRelation}{(0,0)}{=\displaystyle\bigoplus_\gamma}
             \TNWeightedMPOBlock{bfiBlock}{(2.30,0)}
                 {M_\gamma}{M_\gamma}{}{\chi_{\alpha,\beta,\gamma}}
             \TNOpenVirtualWest{bfiBlockWeightW}
@@ -697,7 +723,8 @@
             \TNOpenVirtualWest{uzOneUCombined}
             \TNOpenVirtualEast{uzOnePUpperEast}
             \TNOpenVirtualEast{uzOnePLowerEast}
-        \node at (-1.55,2.20) {$=$};
+        \TNPoint{uzOneRelation}{(-1.55,2.20)}
+        \TNLabel{uzOneRelation}{(0,0)}{=}
         \TNMPOSite{uzOneH}{(-0.35,2.20)}{H_{\alpha,\beta}^{ij}}
             \TNSplitMap{uzOneR}{(1.15,2.20)}{U_{\alpha,\beta}}
             \TNConnectVirtual{uzOneHEast}{uzOneRCombined}
@@ -712,7 +739,8 @@
             \TNOpenVirtualWest{uzTwoPUpperWest}
             \TNOpenVirtualWest{uzTwoPLowerWest}
             \TNOpenVirtualEast{uzTwoUCombined}
-        \node at (-1.55,0) {$=$};
+        \TNPoint{uzTwoRelation}{(-1.55,0)}
+        \TNLabel{uzTwoRelation}{(0,0)}{=}
         \TNMergeMap{uzTwoL}{(-0.35,0)}{U_{\alpha,\beta}^{\dagger}}
             \TNMPOSite{uzTwoH}{(1.15,0)}{H_{\alpha,\beta}^{ij}}
             \TNConnectVirtual{uzTwoLCombined}{uzTwoHWest}
@@ -725,7 +753,8 @@
             \TNOpenVirtualWest{uzThreePLowerWest}
             \TNOpenVirtualEast{uzThreePUpperEast}
             \TNOpenVirtualEast{uzThreePLowerEast}
-        \node at (-2.65,-2.20) {$=$};
+        \TNPoint{uzThreeRelation}{(-2.65,-2.20)}
+        \TNLabel{uzThreeRelation}{(0,0)}{=}
         \TNMergeMap{uzThreeL}{(-1.45,-2.20)}{U_{\alpha,\beta}^{\dagger}}
             \TNMPOSite{uzThreeH}{(0,-2.20)}{H_{\alpha,\beta}^{ij}}
             \TNSplitMap{uzThreeR}{(1.45,-2.20)}{U_{\alpha,\beta}}
@@ -751,8 +780,10 @@
             \TNConnectVirtual{ftpLeftBLowerEast}{ftpLeftCLowerWest}
             \TNTraceVirtualAbove{ftpLeftAUpperWest}{ftpLeftCUpperEast}
             \TNTraceVirtualBelow{ftpLeftALowerWest}{ftpLeftCLowerEast}
-            \node at (-4.00,-1.45) {$L\text{ sites}$};
-        \node at (-1.05,0) {$=\displaystyle\sum_\gamma$};
+            \TNPoint{ftpLeftLength}{(-4.00,-1.45)}
+            \TNLabel{ftpLeftLength}{(0,0)}{L\text{ sites}}
+        \TNPoint{ftpRelation}{(-1.05,0)}
+        \TNLabel{ftpRelation}{(0,0)}{=\displaystyle\sum_\gamma}
             \TNStackedMPOProduct{ftpRightA}{(0.80,0)}
                 {\chi_{\alpha,\beta,\gamma}}{M_\gamma}{}
             \TNStackedMPOProduct{ftpRightB}{(2.00,0)}
@@ -765,7 +796,8 @@
             \TNConnectVirtual{ftpRightBLowerEast}{ftpRightCLowerWest}
             \TNTraceVirtualAbove{ftpRightAUpperWest}{ftpRightCUpperEast}
             \TNTraceVirtualBelow{ftpRightALowerWest}{ftpRightCLowerEast}
-            \node at (2.00,-1.45) {$L\text{ sites}$};
+            \TNPoint{ftpRightLength}{(2.00,-1.45)}
+            \TNLabel{ftpRightLength}{(0,0)}{L\text{ sites}}
     \end{TNDiagram}%
 }
 
@@ -774,8 +806,9 @@
 % the lower wires retain earlier labels while the recursion proceeds.
 \newcommand{\TNMPDORecursiveStructureOperator}{%
     \begin{TNDiagram}[normal]
-        \path[use as bounding box] (-5.75,-1.55) rectangle (5.15,1.55);
-        \node at (-5.25,0) {$Q=$};
+        \TNCanvas{(-5.75,-1.55)}{(5.15,1.55)}
+        \TNPoint{rqRelation}{(-5.25,0)}
+        \TNLabel{rqRelation}{(0,0)}{Q=}
         \TNMPOSite{rqOne}{(-4.15,0)}{X}
         \TNMPOSite{rqTwo}{(-2.70,0)}{X}
         \TNMPOSite{rqThree}{(-1.25,0)}{X}
@@ -788,15 +821,17 @@
         \TNOpenPhysicalSouth{rqTwoBra}
         \TNOpenPhysicalNorth{rqThreeKet}
         \TNOpenPhysicalSouth{rqThreeBra}
-        \node at (0,0) {$\cdots$};
+        \TNPoint{rqEllipsis}{(0,0)}
+        \TNLabel{rqEllipsis}{(0,0)}{\cdots}
         \TNMPOSite{rqLast}{(1.25,0)}{X}
         \TNCompactTraceCell{rqTrace}{(3.35,0)}{M_\gamma}{1}{}
         \TNConnectVirtual{rqLastEast}{rqTraceInsertionW}
         \TNOpenPhysicalNorth{rqLastKet}
         \TNOpenPhysicalSouth{rqLastBra}
-        \node[above] at (rqTwoKetOpen) {$k$};
-        \node[below] at (rqTwoBraOpen) {$\alpha,\beta,\gamma$};
-        \node[below] at (rqTraceCentre |- 0,-1.25) {$\tr(M_\gamma)$};
+        \TNLabelAbove{rqTwoKetOpen}{k}
+        \TNLabelBelow{rqTwoBraOpen}{\alpha,\beta,\gamma}
+        \TNPoint{rqTraceLabel}{(rqTraceCentre |- 0,-1.25)}
+        \TNLabelBelow{rqTraceLabel}{\tr(M_\gamma)}
     \end{TNDiagram}%
 }
 
@@ -810,6 +845,7 @@
 % separate bonds shared by adjacent sites.
 \newcommand{\TNAppendixBAdjacentBondProjectors}{%
     \begin{TNDiagram}[normal]
+        \TNCanvas{(-3.20,-2.00)}{(3.20,1.70)}
         \TNFusionMap{rfpUzero}{(-2.40,0.85)}{U_0}
         \TNFusionMap{rfpUone}{(0,0.85)}{U_1}
         \TNFusionMap{rfpUtwo}{(2.40,0.85)}{U_2}
@@ -824,10 +860,10 @@
         \TNOpenVirtualSouth{rfpUzeroCombined}
         \TNOpenVirtualSouth{rfpUoneCombined}
         \TNOpenVirtualSouth{rfpUtwoCombined}
-        \node[tn grouping region, fit=(rfpPhiZero)] {};
-        \node[tn grouping region, fit=(rfpPhiOne)] {};
-        \node[red, below] at (rfpPhiZero) {$P_{01}$};
-        \node[red, below] at (rfpPhiOne) {$P_{12}$};
+        \TNGroupingRegionSelectedBelow{rfpPhiZeroRegion}
+            {(rfpPhiZero)}{P_{01}}
+        \TNGroupingRegionSelectedBelow{rfpPhiOneRegion}
+            {(rfpPhiOne)}{P_{12}}
     \end{TNDiagram}%
 }
 
@@ -837,6 +873,7 @@
 % record the two overlapping physical supports.
 \newcommand{\TNAppendixBPhysicalSupportTransport}{%
     \begin{TNDiagram}[normal]
+        \TNCanvas{(-3.20,-2.00)}{(3.20,2.25)}
         \TNFusionMap{rfpTzero}{(-2.40,0.65)}{U_0}
         \TNFusionMap{rfpTone}{(0,0.65)}{U_1}
         \TNFusionMap{rfpTtwo}{(2.40,0.65)}{U_2}
@@ -849,12 +886,14 @@
         \TNOpenVirtualSouth{rfpTzeroCombined}
         \TNOpenVirtualSouth{rfpToneCombined}
         \TNOpenVirtualSouth{rfpTtwoCombined}
-        \node[tn grouping region, fit=(rfpTzero)(rfpTone),
-            label=above:{$(P_2)_{01}$}] {};
-        \node[tn grouping region, fit=(rfpTone)(rfpTtwo),
-            label=above:{$(P_2)_{12}$}] {};
-        \node[red, below] at (rfpTPhiZero) {$P_{01}$};
-        \node[red, below] at (rfpTPhiOne) {$P_{12}$};
+        \TNGroupingRegionAbove{rfpTzeroOneRegion}
+            {(rfpTzero)(rfpTone)}{(P_2)_{01}}
+        \TNGroupingRegionAbove{rfpToneTwoRegion}
+            {(rfpTone)(rfpTtwo)}{(P_2)_{12}}
+        \TNGroupingRegionSelectedBelow{rfpTPhiZeroRegion}
+            {(rfpTPhiZero)}{P_{01}}
+        \TNGroupingRegionSelectedBelow{rfpTPhiOneRegion}
+            {(rfpTPhiOne)}{P_{12}}
     \end{TNDiagram}%
 }
 
@@ -863,6 +902,7 @@
 % the source AXB window with its two overlapping length-two interactions.
 \newcommand{\TNAppendixBChainTransport}{%
     \begin{TNDiagram}[normal]
+        \TNCanvas{(-3.00,-2.10)}{(7.35,1.80)}
         \TNMPSSite{ctA}{(-2.20,0)}{A}
         \TNMPSSite{ctX}{(-1.10,1.15)}{X}
         \TNMPSSite{ctB}{(0.25,1.15)}{B}
@@ -875,9 +915,10 @@
         \TNConnectVirtual{ctCEast}{ctDWest}
         \TNConnectVirtual{ctDEast}{ctEWest}
         \TNConnectVirtual{ctEEast}{ctAWest}
-        \node[red, above left] at (ctX) {$h_i$};
-        \node[blue, above right] at (ctX) {$h_{i+1}$};
-        \node at (-0.45,-1.75) {$N>2$};
+        \TNSelectedLabelAbove{ctX}{h_i}
+        \TNSecondaryLabelAbove{ctB}{h_{i+1}}
+        \TNPoint{ctLengthCondition}{(-0.45,-1.75)}
+        \TNLabel{ctLengthCondition}{(0,0)}{N>2}
         \TNMorphismArrow{ctTransport}{(2.00,0)}{(3.15,0)}{R_{i,\tau}^{(3)}}
         \TNMPSSite{ctLA}{(3.80,0)}{A}
         \TNMPSSite{ctLX}{(5.20,0)}{X}
@@ -886,8 +927,10 @@
         \TNConnectVirtual{ctLXEast}{ctLBWest}
         \TNOpenVirtualWest{ctLAWest}
         \TNOpenVirtualEast{ctLBEast}
-        \node[red, below] at ($(ctLA)!0.5!(ctLX)$) {$h_0^{(3)}$};
-        \node[blue, below] at ($(ctLX)!0.5!(ctLB)$) {$h_1^{(3)}$};
+        \TNPoint{ctLeftInteraction}{($(ctLA)!0.5!(ctLX)$)}
+        \TNPoint{ctRightInteraction}{($(ctLX)!0.5!(ctLB)$)}
+        \TNSelectedLabelBelow{ctLeftInteraction}{h_0^{(3)}}
+        \TNSecondaryLabelBelow{ctRightInteraction}{h_1^{(3)}}
     \end{TNDiagram}%
 }
 

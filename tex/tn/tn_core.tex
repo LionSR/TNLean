@@ -169,6 +169,8 @@
     \def\TN@rowgap{0.52em}%
     \def\TN@relationgap{0.72em}%
     \def\TN@physlabeloff{0.68}%
+    \def\TN@labelclearance{0.24}%
+    \def\TN@annotationclearance{0.34}%
     \def\TN@chainsep{1.45}%
     \def\TN@chainright{4.20}%
     \def\TN@chainellipsisx{2.82}%
@@ -187,6 +189,8 @@
     \def\TN@rowgap{0.40em}%
     \def\TN@relationgap{0.56em}%
     \def\TN@physlabeloff{0.56}%
+    \def\TN@labelclearance{0.24}%
+    \def\TN@annotationclearance{0.28}%
     \def\TN@chainsep{1.18}%
     \def\TN@chainright{3.42}%
     \def\TN@chainellipsisx{2.30}%
@@ -773,6 +777,12 @@
 
 % ---------- Semantic regions ----------
 
+% A complete diagram may reserve a rectangular canvas independently of its
+% ink.  This fixes uniform outer margins without exposing a client-side path.
+\newcommand{\TN@canvas}[2]{%
+    \path[use as bounding box] #1 rectangle #2;%
+}
+
 \newcommand{\TN@region}[5][]{%
     \begin{scope}[on background layer]
         \node[#2, fit=#4, inner sep=4pt, #1] (#3) {#5};%
@@ -781,6 +791,18 @@
 
 \newcommand{\TN@groupregion}[4][]{%
     \TN@region[#1]{tn grouping region}{#2}{#3}{#4}%
+}
+
+\newcommand{\TN@groupregionabove}[3]{%
+    \TN@groupregion{#1}{#2}{}%
+    \TN@label[anchor=south]
+        {#1.north}{(0,\TN@annotationclearance)}{#3}%
+}
+
+\newcommand{\TN@groupregionselectedbelow}[3]{%
+    \TN@groupregion{#1}{#2}{}%
+    \TN@label[anchor=north,tn region label selected]
+        {#1.south}{(0,-\TN@annotationclearance)}{#3}%
 }
 
 \newcommand{\TN@factorregion}[4][]{%
