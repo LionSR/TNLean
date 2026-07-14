@@ -117,9 +117,6 @@ private theorem normalized_gauge_corner
           (X : Matrix (Fin n) (Fin n) ℂ))ᴴ =
       c • ((X : Matrix (Fin n) (Fin n) ℂ) * A *
         (↑(X⁻¹) : Matrix (Fin n) (Fin n) ℂ)) := by
-  have hs_pos : 0 < Real.sqrt omega := Real.sqrt_pos.mpr homega
-  have hs_ne : ((Real.sqrt omega : ℝ) : ℂ) ≠ 0 := by
-    exact_mod_cast hs_pos.ne'
   have hs_sq : Real.sqrt omega * Real.sqrt omega = omega :=
     Real.mul_self_sqrt homega.le
   have hconjs : star ((Real.sqrt omega : ℂ))⁻¹ =
