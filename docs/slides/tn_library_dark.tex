@@ -7,45 +7,22 @@
 \input{../../tex/tn/tn_library} % chktex 27 (repository-relative shared source)
 
 \tikzset{
-  tn theme picture/.style={transform shape, font=\scriptsize},
-  tn theme tensor/.style={
-    circle, draw=white, fill=black, minimum size=6.5mm,
-    inner sep=1.5pt, text=white, thick, font=\scriptsize\bfseries
-  },
-  tn theme component/.style={
-    rectangle, draw=dimwhite, fill=cardbg, minimum height=7mm,
-    inner sep=2pt, text=white, thick, font=\scriptsize\bfseries
-  },
-  tn theme factor/.style={
-    rectangle, draw=dimwhite, fill=black!55, minimum height=7mm,
-    inner sep=2pt, text=white, thick, font=\scriptsize\bfseries
-  },
-  tn theme map/.style={
-    rectangle, rounded corners=2pt, draw=leanblue, fill=cardbg,
-    inner sep=2pt, text=white, thick, font=\scriptsize\bfseries
-  },
-  tn theme state/.style={
-    rectangle, rounded corners=2pt, draw=dimwhite, fill=black!55,
-    inner sep=2pt, text=white, thick, font=\scriptsize\bfseries
-  },
-  tn theme expression/.style={
-    rectangle, rounded corners=0.7pt, draw=amber, fill=cardbg,
-    inner sep=2pt, text=white, thick, font=\scriptsize\bfseries
-  },
-  tn theme insertion/.style={
-    circle, draw=white, fill=softred, minimum size=5.5mm,
-    inner sep=1pt, text=black, thick, font=\scriptsize\bfseries
-  },
-  tn theme junction/.style={circle, fill=white, inner sep=0.8pt},
-  tn theme virtual wire/.style={draw=white, line width=0.8pt},
-  tn theme physical wire/.style={draw=leangreen!80!white, line width=1.2pt},
-  tn theme trace/.style={rounded corners=3pt},
-  tn theme factor region/.style={draw=dimwhite, rounded corners=2pt},
-  tn theme grouping region/.style={
-    draw=dimwhite, densely dashed, rounded corners=2pt
-  },
-  tn theme annotation/.style={draw=dimwhite, thick},
-  tn theme label/.style={text=dimwhite, font=\scriptsize}
+  % A theme changes palette only.  Geometry, dimensions, baselines, and type
+  % remain those of the repository-wide calculus loaded above.
+  tn theme tensor/.append style={draw=white, fill=black, text=white},
+  tn theme component/.append style={draw=dimwhite, fill=cardbg, text=white},
+  tn theme factor/.append style={draw=dimwhite, fill=black!55, text=white},
+  tn theme map/.append style={draw=leanblue, fill=cardbg, text=white},
+  tn theme state/.append style={draw=dimwhite, fill=black!55, text=white},
+  tn theme expression/.append style={draw=amber, fill=cardbg, text=white},
+  tn theme insertion/.append style={draw=white, fill=softred, text=black},
+  tn theme junction/.append style={fill=white},
+  tn theme virtual wire/.append style={draw=white},
+  tn theme physical wire/.append style={draw=leangreen!80!white},
+  tn theme factor region/.append style={draw=dimwhite},
+  tn theme grouping region/.append style={draw=dimwhite},
+  tn theme annotation/.append style={draw=dimwhite},
+  tn theme label/.append style={text=dimwhite}
 }
 
 \makeatletter
@@ -58,64 +35,76 @@
         Pen/3.25/i_{#2-1},Last/4.55/i_{#2}} {
       \TNMPSSite{sltnA\name}{(\x,0)}{#1}
       \TNOpenPhysicalNorth{sltnA\name Ket}
-      \node[tn label, above] at (sltnA\name Ket) {$\i$};
+      \TNLabelAbove{sltnA\name Ket}{\i}
     }
     \TNConnectVirtual{sltnAOneEast}{sltnATwoWest}
     \TNOpenVirtualEast{sltnATwoEast}
     \TNOpenVirtualWest{sltnAPenWest}
     \TNConnectVirtual{sltnAPenEast}{sltnALastWest}
     \TNTraceVirtualBelow{sltnAOneWest}{sltnALastEast}
-    \node[tn label] at (2.28,0) {$\cdots$};
-    \node[tn label] at (2.28,-1.02) {trace; bond dimension $D$};
+    \TNPoint{sltnOmitted}{(2.28,0)}
+    \TNPoint{sltnTraceLabel}{(2.28,-1.02)}
+    \TNLabel{sltnOmitted}{(0,0)}{\cdots}
+    \TNLabel{sltnTraceLabel}{(0,0)}{\text{trace; bond dimension }D}
   \end{TNDiagram}%
 }
 
 % The left-hand tensor is B, matching B^i = X A^i X^{-1}.
 \newcommand{\SlideTNGaugeConjugation}[3]{%
-  \begin{TNDiagram}[normal]
-    \TNMPSSite{sltnB}{(0,0)}{#1}
-    \TNOpenVirtualWest{sltnBWest}
-    \TNOpenVirtualEast{sltnBEast}
-    \TNOpenPhysicalNorth{sltnBKet}
-    \node[tn label, above] at (sltnBKet) {$i$};
-    \node[tn label, text=white, font=\Large] at (1.35,0) {$=$};
-    \TNInsertion{sltnX}{(2.35,0)}{#3}
-    \TNMPSSite{sltnA}{(3.55,0)}{#2}
-    \TNInsertion{sltnXi}{(4.80,0)}{#3^{-1}}
-    \TNVirtualPort{sltnXWest}{sltnX}{west}
-    \TNVirtualPort{sltnXEast}{sltnX}{east}
-    \TNVirtualPort{sltnXiWest}{sltnXi}{west}
-    \TNVirtualPort{sltnXiEast}{sltnXi}{east}
-    \TNOpenVirtualWest{sltnXWest}
-    \TNConnectVirtual{sltnXEast}{sltnAWest}
-    \TNConnectVirtual{sltnAEast}{sltnXiWest}
-    \TNOpenVirtualEast{sltnXiEast}
-    \TNOpenPhysicalNorth{sltnAKet}
-    \node[tn label, above] at (sltnAKet) {$i$};
-  \end{TNDiagram}%
+  \begin{TNEquationRow}[normal]
+    \TNTerm[normal]{%
+      \TNMPSSite{sltnB}{(0,0)}{#1}
+      \TNOpenVirtualWest{sltnBWest}
+      \TNOpenVirtualEast{sltnBEast}
+      \TNOpenPhysicalNorth{sltnBKet}
+      \TNLabelAbove{sltnBKet}{i}%
+    }%
+    \TNRelation{=}%
+    \TNTerm[normal]{%
+      \TNInsertion{sltnX}{(0,0)}{#3}
+      \TNMPSSite{sltnA}{(1.20,0)}{#2}
+      \TNInsertion{sltnXi}{(2.45,0)}{#3^{-1}}
+      \TNVirtualPort{sltnXWest}{sltnX}{west}
+      \TNVirtualPort{sltnXEast}{sltnX}{east}
+      \TNVirtualPort{sltnXiWest}{sltnXi}{west}
+      \TNVirtualPort{sltnXiEast}{sltnXi}{east}
+      \TNOpenVirtualWest{sltnXWest}
+      \TNConnectVirtual{sltnXEast}{sltnAWest}
+      \TNConnectVirtual{sltnAEast}{sltnXiWest}
+      \TNOpenVirtualEast{sltnXiEast}
+      \TNOpenPhysicalNorth{sltnAKet}
+      \TNLabelAbove{sltnAKet}{i}%
+    }%
+  \end{TNEquationRow}%
 }
 
 \newcommand{\SlideTNBlockingIdentity}[3]{%
-  \begin{TNDiagram}[compact]
-    \TNMPSSite{sltnC}{(0,0)}{#1}
-    \TNOpenVirtualWest{sltnCWest}
-    \TNOpenVirtualEast{sltnCEast}
-    \TNOpenPhysicalNorth{sltnCKet}
-    \node[tn label, above] at (sltnCKet) {$(i_1,\ldots,i_{#3})$};
-    \node[tn label, text=white, font=\Large] at (1.25,0) {$=$};
-    \foreach \name/\x/\i in {One/2.10/i_1,Two/3.25/i_2,Last/5.15/i_{#3}} {
-      \TNMPSSite{sltnB\name}{(\x,0)}{#2}
-      \TNOpenPhysicalNorth{sltnB\name Ket}
-      \node[tn label, above] at (sltnB\name Ket) {$\i$};
-    }
-    \TNOpenVirtualWest{sltnBOneWest}
-    \TNConnectVirtual{sltnBOneEast}{sltnBTwoWest}
-    \TNOpenVirtualEast{sltnBTwoEast}
-    \TNOpenVirtualWest{sltnBLastWest}
-    \TNOpenVirtualEast{sltnBLastEast}
-    \node[tn label] at (4.20,0) {$\cdots$};
-    \node[tn label] at (3.64,-0.68) {#3 copies};
-  \end{TNDiagram}%
+  \begin{TNEquationRow}[compact]
+    \TNTerm{%
+      \TNMPSSite{sltnC}{(0,0)}{#1}
+      \TNOpenVirtualWest{sltnCWest}
+      \TNOpenVirtualEast{sltnCEast}
+      \TNOpenPhysicalNorth{sltnCKet}
+      \TNLabelAbove{sltnCKet}{(i_1,\ldots,i_{#3})}%
+    }%
+    \TNRelation{=}%
+    \TNTerm{%
+      \foreach \name/\x/\i in {One/0/i_1,Two/1.15/i_2,Last/3.05/i_{#3}} {
+        \TNMPSSite{sltnB\name}{(\x,0)}{#2}
+        \TNOpenPhysicalNorth{sltnB\name Ket}
+        \TNLabelAbove{sltnB\name Ket}{\i}
+      }
+      \TNOpenVirtualWest{sltnBOneWest}
+      \TNConnectVirtual{sltnBOneEast}{sltnBTwoWest}
+      \TNOpenVirtualEast{sltnBTwoEast}
+      \TNOpenVirtualWest{sltnBLastWest}
+      \TNOpenVirtualEast{sltnBLastEast}
+      \TNPoint{sltnOmitted}{(2.10,0)}
+      \TNPoint{sltnMultiplicity}{(1.54,-0.68)}
+      \TNLabel{sltnOmitted}{(0,0)}{\cdots}
+      \TNLabel{sltnMultiplicity}{(0,0)}{\text{#3 copies}}%
+    }%
+  \end{TNEquationRow}%
 }
 
 \newcommand{\SlideTNMixedTransfer}[4]{%
@@ -135,11 +124,14 @@
     \TNConnectVirtual{sltnPenLowerEast}{sltnLastLowerWest}
     \TNOpenVirtualEast{sltnLastUpperEast}
     \TNOpenVirtualEast{sltnLastLowerEast}
-    \node[tn label, anchor=east] at (-0.62,0) {$#3$};
-    \node[tn label] at (2.28,0.72) {$\cdots$};
-    \node[tn label] at (2.28,-0.72) {$\cdots$};
-    \node[tn label, anchor=west] at (5.20,0)
-      {$\mathcal F^{#4}_{#1,#2}(#3)$};
+    \TNPoint{sltnInput}{(-0.62,0)}
+    \TNPoint{sltnUpperOmitted}{(2.28,0.72)}
+    \TNPoint{sltnLowerOmitted}{(2.28,-0.72)}
+    \TNPoint{sltnOutput}{(5.20,0)}
+    \TNLabelLeft{sltnInput}{#3}
+    \TNLabel{sltnUpperOmitted}{(0,0)}{\cdots}
+    \TNLabel{sltnLowerOmitted}{(0,0)}{\cdots}
+    \TNLabelRight{sltnOutput}{\mathcal F^{#4}_{#1,#2}(#3)}
   \end{TNDiagram}%
 }
 
@@ -150,16 +142,19 @@
     \TNOpenVirtualWest{sltnLowerWest}
     \TNOpenVirtualEast{sltnUpperEast}
     \TNOpenVirtualEast{sltnLowerEast}
-    \node[tn label, anchor=east] at (-0.62,0) {$#2$};
-    \node[tn label] at (0.32,0) {$\sum_i$};
-    \node[tn label, anchor=west] at (0.95,0)
-      {$\mathcal E_{#1}(#2)$};
+    \TNPoint{sltnInput}{(-0.62,0)}
+    \TNPoint{sltnSum}{(0.32,0)}
+    \TNPoint{sltnOutput}{(0.95,0)}
+    \TNLabelLeft{sltnInput}{#2}
+    \TNLabel{sltnSum}{(0,0)}{\sum_i}
+    \TNLabelRight{sltnOutput}{\mathcal E_{#1}(#2)}
   \end{TNDiagram}%
 }
 
 \newcommand{\SlideTNBlockingComparison}[2]{%
   \begin{TNDiagram}[compact]
-    \node[tn label, anchor=east] at (-0.55,0.75) {chain of $N$:};
+    \TNPoint{sltnChainLabel}{(-0.55,0.75)}
+    \TNLabelLeft{sltnChainLabel}{\text{chain of }N\text{:}}
     \foreach \x/\name in {0/One,0.85/Two,1.70/Three,4.05/Pen,4.90/Last} {
       \TNMPSSite{sltnP\name}{(\x,0.75)}{#1}
       \TNOpenPhysicalNorth{sltnP\name Ket}
@@ -171,9 +166,10 @@
     \TNConnectVirtual{sltnPPenEast}{sltnPLastWest}
     \TNOpenVirtualWest{sltnPOneWest}
     \TNOpenVirtualEast{sltnPLastEast}
-    \node[tn label] at (2.88,0.75) {$\cdots$};
-    \node[tn label, anchor=east] at (-0.55,-0.85)
-      {after blocking $#2$:};
+    \TNPoint{sltnOmitted}{(2.88,0.75)}
+    \TNPoint{sltnBlockedLabel}{(-0.55,-0.85)}
+    \TNLabel{sltnOmitted}{(0,0)}{\cdots}
+    \TNLabelLeft{sltnBlockedLabel}{\text{after blocking }#2\text{:}}
     \TNMPSSite{sltnBlockOne}{(0.65,-0.85)}{#1^{(#2)}}
     \TNMPSSite{sltnBlockTwo}{(2.45,-0.85)}{#1^{(#2)}}
     \TNMPSSite{sltnBlockLast}{(4.25,-0.85)}{#1^{(#2)}}
