@@ -16,7 +16,9 @@ On current `main`, the repository already contains:
   commuting-idempotent algebra and the extended
   `HasCommutingParentHam` / `IsDecorrelated` API
 - `TNLean/Axioms/Beigi.lean`, which records the two sanctioned trusted assumptions
-  currently used by the Theorem 3.10 wrappers.
+  used by the Theorem 3.10 wrappers at the date of this audit. The forward
+  commutation axiom has since been eliminated by the Appendix B gauge-transport
+  proof; only the reverse Beigi axiom remains.
 
 So the honest remaining work for #234 is **not** “define commuting parent Hamiltonians.”
 It is the pair of deeper follow-up gaps described below.
@@ -35,7 +37,7 @@ Those results are immediate from the already-proved unfolded commutation theorem
 wrapper each time.
 
 The 2026-04-25 follow-up records the upstream Appendix B input and adds a conditional internal
-route that does not call `Axioms.rfp_to_nncph_commute`:
+route that did not call the former forward commutation axiom:
 
 - `MPSTensor.AppendixBStructuralData` bundles the structural decomposition
   $A_i = X \Lambda U_i X^{-1}$;
@@ -46,7 +48,7 @@ route that does not call `Axioms.rfp_to_nncph_commute`:
 - `MPSTensor.AppendixBProductPairExtraction` names the remaining chain-space extraction from a
   fixed structural witness, using its structural two-site amplitude;
 - `MPSTensor.rfp_implies_nncph_of_appendixBExtraction` proves NNCPH from RFP plus that extraction,
-  without calling `Axioms.rfp_to_nncph_commute`.
+  without calling the former forward commutation axiom.
 
 The 2026-04-25 wave-14 follow-up removes a real coefficient-bookkeeping nuisance:
 
@@ -72,10 +74,11 @@ In other words, the internal part of the forward direction now factors as
 3. construct the product-pair local projector family;
 4. apply the product-pair theorem to get NNCPH.
 
-## Gap 1 — replacing `Axioms.rfp_to_nncph_commute`
+## Gap 1 — replacing the former forward commutation axiom
 
-The forward direction of Theorem 3.10 is currently discharged by the sanctioned declaration
-`Axioms.rfp_to_nncph_commute`.
+At the date of this audit, the forward direction of Theorem 3.10 was discharged
+by a sanctioned axiom. This gap has since been closed for one CPSV normal
+tensor by `MPSTensor.rfp_implies_nncph`.
 
 After the wrappers and Appendix B structural data above, the missing internal theorem is more precise:
 
@@ -152,8 +155,8 @@ non-vacuous.
 
 Issue #234 should remain open, but its remaining content is now sharply separated:
 
-1. **internal forward direction**: replace `Axioms.rfp_to_nncph_commute` by constructing
-   `ProductPairBridge A` from the Appendix B structural form;
+1. **internal forward direction**: completed for one CPSV normal tensor by the
+   Appendix B projector construction and pure trace-preserving gauge passage;
 2. **tensor-local decorrelation direction**: strengthen the decorrelation API with genuine locality
    data, then prove the forward implication.
 

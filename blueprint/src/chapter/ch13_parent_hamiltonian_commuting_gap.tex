@@ -965,31 +965,46 @@ specialization of that Appendix~D definition.
     \(G_L^{(N)}(A_j)=\spn\{V^{(N)}(A_j)\}\) give the previous hypothesis.
 \end{proof}
 
+\begin{lemma}[Gauge invariance of fixed points and parent interactions]
+    \label{lem:rfp_parent_gauge_invariance}
+    \lean{MPSTensor.GaugeEquiv.isTransferIdempotent_iff}
+    \lean{MPSTensor.GaugeEquiv.parentInteraction_eq}
+    \lean{MPSTensor.GaugeEquiv.localTerm_eq}
+    \leanok
+    \uses{def:gauge_equiv, def:mps_transfer_idempotence,
+        def:parent_interaction}
+    A virtual similarity preserves the physical blocking relation and hence
+    transfer idempotence. It also preserves every local MPS space, so the
+    canonical parent interaction and all its translated local terms are
+    unchanged.
+\end{lemma}
+
 \begin{theorem}[Renormalization fixed points have commuting nearest-neighbor local terms]\label{thm:rfp_implies_nncph}
     \lean{MPSTensor.rfp_implies_nncph}
-    \lean{Axioms.rfp_to_nncph_commute}
     \leanok
-    \uses{def:mps_transfer_idempotence, def:is_nncph, def:normal}
-    If $A$ has nonzero virtual dimension and is a normal renormalization fixed
-    point, then for every chain length $N > 2$ the two-site local terms
-    commute. This theorem records the commutation part of the nearest-neighbor
-    source condition, not the ground-space spanning part.
-    This implication is cited here from the structural characterization theorem
-    for renormalization fixed points in~\cite{Cirac2016MPDO_arXiv}; the source
-    proof says that RFP $\Rightarrow$ NNCPH follows from that theorem.
-    The unrestricted statement remains an unproved hypothesis.  In the
-    left-canonical gauge, the derivation from the basic-vector formula
-    $V^{(N)}(A_j)=U^{\otimes N}\varphi_j^{\otimes N}$ is proved below: the
-    corresponding two-site projectors commute on a three-site window, and the
-    commutator is transported to every periodic chain with $N>2$.  What remains
-    is removal of the additional gauge hypothesis and the separate
-    ground-space spanning equation.
+    \uses{def:mps_transfer_idempotence, def:is_nncph, def:nt_cpsv,
+        thm:cpsv_normal_tp_gauge, lem:rfp_parent_gauge_invariance}
+    If $A$ has nonzero virtual dimension, is a normal tensor in the sense of
+    \cite{Cirac2016MPDO_arXiv}, and is a renormalization fixed point, then for
+    every chain length $N > 2$ the two-site local terms commute. This theorem
+    records the commutation part of the nearest-neighbor source condition, not
+    the ground-space spanning part.
 \end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cpsv_normal_tp_gauge, lem:rfp_parent_gauge_invariance}
+    Put $A$ into its trace-preserving gauge.  This is a pure similarity, since
+    the normal-tensor normalization fixes the transfer spectral radius at one.
+    Similarity preserves the physical blocking relation and the local MPS
+    spaces, hence also the canonical parent interactions.  In the
+    trace-preserving gauge, the Appendix~B virtual-bond projectors give the
+    adjacent three-site commutator; cyclic transport gives all pairwise
+    commutators on every chain with $N>2$.  Transporting back proves the claim.
+\end{proof}
 
 \begin{theorem}[Renormalization fixed points satisfy the NNCPH commutation and zero-energy equations]%
     \label{thm:rfp_implies_nncph_ground_state}
     \lean{MPSTensor.rfp_implies_nncph_ground_state}
-    \lean{Axioms.rfp_to_nncph_commute}
     \leanok
     \uses{thm:rfp_implies_nncph, def:is_nncph_ground_state}
     If $A$ has nonzero virtual dimension and is a normal renormalization fixed
@@ -1001,16 +1016,15 @@ specialization of that Appendix~D definition.
         h_i V^{(N)}(A)=0.
     \]
     The zero-energy equation is the usual parent-Hamiltonian
-    frustration-freeness statement. The commuting part is still inherited from
-    the axiom tagged above, so this entry is not yet the full source
-    implication.
+    frustration-freeness statement. The separate ground-space spanning clause
+    of the source definition is not asserted here.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:rfp_implies_nncph, lem:parent_hamiltonian_ff}
-    Conditional on Theorem~\ref{thm:rfp_implies_nncph}, the first equation is
-    immediate. The second is Lemma~\ref{lem:parent_hamiltonian_ff} with $L=2$.
+    The first equation is Theorem~\ref{thm:rfp_implies_nncph}. The second is
+    Lemma~\ref{lem:parent_hamiltonian_ff} with $L=2$.
 \end{proof}
 
 \begin{theorem}[Cyclic trace expansion for a closed MPS chain]\label{thm:trace_eval_word_eq_sum_cyclic}

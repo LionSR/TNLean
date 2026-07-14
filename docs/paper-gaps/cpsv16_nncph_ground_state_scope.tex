@@ -198,17 +198,22 @@ Consequently the forward commutation and zero-energy statements are proved for
 normal left-canonical RFP tensors by
 \leanid{MPSTensor.rfp_implies_nncph_of_leftCanonical} and
 \leanid{MPSTensor.rfp_implies_nncph_ground_state_of_leftCanonical}.
+For a CPSV normal tensor, the spectral-radius-one normalization supplies a pure
+trace-preserving gauge.  Gauge invariance of the physical RFP relation and of
+the canonical parent interactions transports the preceding result to
+\leanid{MPSTensor.rfp_implies_nncph} and
+\leanid{MPSTensor.rfp_implies_nncph_ground_state}.  Thus the forward
+commutation axiom has been eliminated in the single-normal-tensor scope.
 The reverse theorem now consumes both the explicit BNT relation
 \leanid{MPSTensor.IsBNT} and the named all-chain condition
 \leanid{MPSTensor.HasNNCPHGroundSpaces}, but the implication still depends on
-the axiom \leanid{Axioms.beigi_nncph_to_rfp}. The general RFP-to-NNCPH theorem
-still uses \leanid{Axioms.rfp_to_nncph_commute}, but its left-canonical
-specialization no longer does.
+the axiom \leanid{Axioms.beigi_nncph_to_rfp}.
 
 \section{Elimination plan}
 
-A source-faithful formalization should replace the axiom-backed implications by
-proved theorems and state the three-way equivalence for canonical-form tensors,
+A source-faithful formalization should replace the remaining axiom-backed
+reverse implication by a proved theorem and state the three-way equivalence for
+canonical-form tensors,
 including the spanning condition in the parent-Hamiltonian ground-space clause:
 \begin{align}
   \mathrm{RFP}(A)
@@ -218,27 +223,30 @@ including the spanning condition in the parent-Hamiltonian ground-space clause:
   \forall N>2,\; |V^{(N)}(A)\rangle
   \text{ is a ground state of a NNCPH}.
 \end{align}
-The forward implication must use the basic-vector form in Theorem~3.11 and the
-corresponding local projectors.  The reverse implication must internalize Beigi's
+The forward commutation implication now uses the basic-vector form in
+Theorem~3.11 and the corresponding local projectors.  The reverse implication
+must internalize Beigi's
 one-dimensional nearest-neighbor commuting-Hamiltonian ground-space
 classification and identify the resulting locally orthogonal states with the
 basis of normal tensors of $A$.\footnote{Tracked by \ghissue{2633}.}
 
 The current proof boundary is therefore: the reverse implication has the
 source ground-space hypothesis, but its proof is still the Beigi axiom; the
-forward implication has the source-unit Appendix~B structural datum, its
+forward commutation implication has the source-unit Appendix~B structural
+datum, its
 physical isometric embedding and all tensor powers with explicit left
 inverses, the two-site bond insertion, the equality of its physical image with
 \(G_2(A_{\mathrm{core}})\), its orthogonal support projector, the three-site
 \(AX/XB\) support maps, and the coefficient form of
 \(U^{\otimes L}\varphi_j^{\otimes L}\), the adjacent virtual and physical
-projectors, their three-site commutator, and its transport to every periodic
-chain with \(N>2\). The remaining forward obligation is to transport the
-proved left-canonical statement to the full canonical-form scope without an
-extra hypothesis. The even-chain physical-pair factorization remains a
+projectors, their three-site commutator, its transport to every periodic
+chain with \(N>2\), and the pure trace-preserving gauge passage for a CPSV
+normal tensor. The even-chain physical-pair factorization remains a
 separate conditional construction and is not needed for the proved chain
-commutator. The full source implication also still requires the ground-space
-spanning clause.
+commutator. Extending from one normal tensor to the full repeated-sector
+canonical form is subject to the source obstruction recorded in
+\path{docs/paper-gaps/cpsv16_rfp_isometry_scope.tex}. The full source
+implication also still requires the ground-space spanning clause.
 
 \bibliographystyle{alpha}
 \bibliography{references}

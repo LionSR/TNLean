@@ -35,6 +35,22 @@ theorem parentInteraction_idempotent (A : MPSTensor d D) (L : ℕ) :
   rw [LinearEquiv.symm_apply_apply]
   exact congr_arg e (LinearMap.congr_fun hP (e.symm v))
 
+/-- A virtual gauge change leaves the canonical parent interaction unchanged.
+
+The parent interaction depends only on the local MPS space, and gauge-equivalent
+tensors have the same local MPS space at every length. -/
+theorem GaugeEquiv.parentInteraction_eq {A B : MPSTensor d D}
+    (h : GaugeEquiv A B) (L : ℕ) :
+    parentInteraction A L = parentInteraction B L := by
+  simp [parentInteraction, groundSpaceES, h.groundSpace_eq L]
+
+/-- A virtual gauge change leaves every translated parent interaction unchanged. -/
+theorem GaugeEquiv.localTerm_eq {A B : MPSTensor d D}
+    (h : GaugeEquiv A B) (L N : ℕ) (i : Fin N) :
+    localTerm A L N i = localTerm B L N i := by
+  unfold localTerm
+  rw [h.parentInteraction_eq L]
+
 /-- Pointwise formula for a translated local term when the window length is at
 most the chain length. -/
 @[simp] theorem localTerm_apply_of_le (A : MPSTensor d D) (L N : ℕ)

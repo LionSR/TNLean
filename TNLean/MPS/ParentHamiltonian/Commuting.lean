@@ -46,20 +46,16 @@ clause from Definition 3.9.
 * `MPSTensor.rfp_implies_nncph_of_appendixBExtraction` — a conditional theorem
   deriving NNCPH from the Appendix B structural form
   \(A^i = X\Lambda U^iX^{-1}\), the even-chain physical-pair factorization,
-  and the two-site projector identities, without invoking
-  `Axioms.rfp_to_nncph_commute`.
+  and the two-site projector identities.
 * `MPSTensor.rfp_implies_nncph_ground_state_of_appendixBExtraction` — the same
   conditional theorem with the zero-energy equation for \(V^{(N)}(A)\) included.
 * `MPSTensor.rfp_implies_hasNNCPHGroundSpaces_of_appendixBExtraction_of_groundSpaceSpanning` —
   the same Appendix B conditional theorem upgraded to the full all-chain
   Definition 3.9 condition once the ground-space spanning equation is supplied.
-* `MPSTensor.rfp_implies_nncph` — construction of the length-two commutation
-  equations in the RFP \(\Longrightarrow\) NNCPH direction, using the
-  structural characterization theorem of arXiv:1606.00608, source lines
-  543--555.
-* `MPSTensor.rfp_implies_nncph_ground_state` — the same direction with the
-  zero-energy ground-vector equation for the MPS vector included, but without
-  the source ground-space spanning assertion.
+* `MPSTensor.rfp_implies_nncph` and
+  `MPSTensor.rfp_implies_nncph_ground_state` are proved downstream in
+  `TNLean.MPS.RFP.AppendixBChainCommutation`, after the Appendix B projector
+  construction is available.
 * `MPSTensor.hasNNCPHGroundSpaces_iff_forall_isNNCPH_and_groundSpaceSpanning` —
   the all-chain source condition is equivalently all-chain nearest-neighbor
   commutation together with the ground-space spanning clause of
@@ -380,7 +376,7 @@ and the two-site parent terms are identified with commuting
 idempotents, then the nearest-neighbor parent Hamiltonian is commuting on every
 finite chain of length greater than two.
 
-This theorem does not use `Axioms.rfp_to_nncph_commute`.  The extraction
+This theorem does not use an external commutation assumption.  The extraction
 hypothesis includes a physical-pair coefficient factorization; the later theorem
 `rfp_implies_nncph_of_leftCanonical` obtains the commutation conclusion directly
 from the Appendix B structural datum. -/
@@ -424,7 +420,7 @@ equations for nearest-neighbor parent terms. If, in addition, the
 Definition 3.9 ground-space spanning equation is supplied for a chosen BNT
 family \(A_j\), then the full all-chain NNCPH ground-space condition holds.
 
-This theorem does not use `Axioms.rfp_to_nncph_commute`; beyond the conditional
+This theorem does not use an external commutation assumption; beyond the conditional
 Appendix B hypotheses, it assumes the source ground-space spanning clause.
 
 **Scope restriction (spanning clause assumed):** The source implication proves
@@ -457,49 +453,6 @@ theorem IsCommutingParentHam.ham_comm_localTerm {A : MPSTensor d D} {L N : ℕ}
   congr 1
   ext j : 1
   exact _h j i
-
-/-- **Theorem 3.10(i)⟹(iii)** (arXiv:1606.00608): RFP implies the NNCPH
-commutation equations.
-A normal renormalization fixed-point tensor has commuting length-two parent
-terms.
-
-Per arXiv:1606.00608 Section 3.3, the proof passage at source line 1307
-derives this direction from the structural characterization theorem, so it does
-not depend on S. Beigi (2012). It is conditioned on that source theorem
-(source lines 543--555), stated here as `Axioms.rfp_to_nncph_commute`.
-
-**Scope restriction (normal commutation):** The source theorem is stated for
-canonical-form tensors and includes the ground-space spanning condition of
-Definition 3.9.  This theorem records only the commutation equations under
-normality and the RFP hypothesis.  The difference is recorded in
-`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
-theorem rfp_implies_nncph (A : MPSTensor d D) [NeZero D]
-    (hRFP : IsTransferIdempotent A) (hNT : IsNormal A)
-    (N : ℕ) (hN : 2 < N) :
-    IsNNCPH A N := by
-  classical
-  unfold IsNNCPH IsCommutingParentHam
-  intro i j
-  exact Axioms.rfp_to_nncph_commute A hNT hRFP N hN i j
-
-/-- **Theorem 3.10(i)⟹(iii)** (arXiv:1606.00608), ground-vector form:
-RFP implies that the periodic MPS vector satisfies the zero-energy equation for
-commuting nearest-neighbor parent terms on every chain of length greater than two.
-
-This theorem adds the frustration-free ground-vector equation to
-`rfp_implies_nncph`.
-
-**Scope restriction (ground vector):** The source theorem states the
-three-way equivalence for canonical-form tensors and requires the full
-parent-Hamiltonian ground-space condition, namely spanning by the periodic MPS
-vectors of the BNT components. This theorem proves only the commutation and
-zero-energy equations for \(V^{(N)}(A)\). Documented in
-`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
-theorem rfp_implies_nncph_ground_state (A : MPSTensor d D) [NeZero D]
-    (hRFP : IsTransferIdempotent A) (hNT : IsNormal A)
-    (N : ℕ) (hN : 2 < N) :
-    IsNNCPHGroundState A N :=
-  (rfp_implies_nncph A hRFP hNT N hN).isNNCPHGroundState (by omega)
 
 /-- **Theorem 3.10(iii)⟹(i)** (arXiv:1606.00608): all-chain
 nearest-neighbor commuting parent-Hamiltonian ground spaces imply RFP in the
