@@ -2242,6 +2242,45 @@
     $\sqrt\omega$ makes it unitary.
 \end{proof}
 
+\begin{theorem}[Normalization of the grouped vertical gauges]
+    \label{thm:mpdo_grouped_sector_unitary_normalization}
+    \lean{MPOTensor.IsMPDO.grouped_sector_gram_eq_pos_smul_one}
+    \lean{MPOTensor.IsMPDO.grouped_sector_exists_unitary_normalization}
+    \leanok
+    \uses{thm:mpdo_grouped_sector_gram_conjugation,
+        thm:eq3_of_dressed_adjoint,
+        thm:mpdo_vertical_bnt_grouping_with_isometries}
+    In the grouped vertical decomposition of a horizontally canonical
+    matrix-product density operator, let $X_{\alpha,k}$ be the gauge of a
+    copy of the normal representative $M_\alpha$, with the distinguished
+    gauge fixed to $X_{\alpha,1}=\Id$.  Then there is a positive real number
+    $\omega_{\alpha,k}$ such that
+    \[
+        X_{\alpha,k}^\dagger X_{\alpha,k}
+        =\omega_{\alpha,k}\Id,
+    \]
+    and
+    \[
+        U_{\alpha,k}
+        =\omega_{\alpha,k}^{-1/2}X_{\alpha,k}
+    \]
+    is unitary.  This is the normalization in
+    \cite[Proposition~4.13, lines~1903--1921]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_grouped_sector_gram_conjugation,
+        thm:eq3_of_dressed_adjoint}
+    Transport the normal representative to the bond space of the chosen
+    copy.  Theorem~\ref{thm:mpdo_grouped_sector_gram_conjugation} states that
+    conjugation by $X_{\alpha,k}^\dagger X_{\alpha,k}$ fixes every letter of
+    the transported tensor.  Apply
+    Theorem~\ref{thm:eq3_of_dressed_adjoint} with the second gauge equal to
+    the identity.  The resulting Gram identity has a positive real scalar,
+    and division by its positive square root gives the stated unitary.
+\end{proof}
+
 \begin{lemma}[Matrix product vector of the diagonal tensor]
     \label{lem:mpv_diagonal_tensor}
     \lean{MPOTensor.mpv_diagonalTensor}
@@ -2844,6 +2883,7 @@
         thm:mpdo_reflected_marked_chain,
         thm:mpdo_pairwise_vertical_gram_conjugation,
         thm:mpdo_grouped_sector_gram_conjugation,
+        thm:mpdo_grouped_sector_unitary_normalization,
         thm:vertical_sector_coisometry,
         lem:mpdo_vertical_retained_class_nonempty,
         thm:projector_closure_canonical_form,
@@ -2883,6 +2923,7 @@
         thm:mpdo_vertical_bnt_grouping_with_isometries,
         thm:mpdo_reflected_marked_chain,
         thm:mpdo_pairwise_vertical_gram_conjugation,
+        thm:mpdo_grouped_sector_unitary_normalization,
         thm:vertical_sector_coisometry,
         lem:mpdo_vertical_retained_class_nonempty,
         thm:projector_closure_canonical_form,
@@ -2946,38 +2987,38 @@
     proves the Figure~7 identity for each such sector, and
     Theorem~\ref{thm:mpdo_grouped_sector_gram_conjugation} applies the
     pairwise Gram comparison to the actual grouped corners and gives the
-    Gram-conjugation identity in Figure~8.  It remains to apply
-    Theorem~\ref{thm:eq3_of_dressed_adjoint} to derive the identity
+    Gram-conjugation identity in Figure~8.
+    Theorem~\ref{thm:mpdo_grouped_sector_unitary_normalization} applies
+    normal-tensor rigidity to the actual grouped comparison and gives
     \[
         X_{\alpha,k}^\dagger X_{\alpha,k}
-        =\omega_{\alpha,k}\,X_{\alpha,1}^\dagger X_{\alpha,1},
+        =\omega_{\alpha,k}\Id,
     \]
-    and the isometric normalization
+    and the unitary normalization
     $U_{\alpha,k}=\omega_{\alpha,k}^{-1/2}X_{\alpha,k}$ of the sector gauges
-    from the two-gauge form of the displayed identities.  The grouped
-    decomposition fixes $X_{\alpha,1}=\Id$, so this relative normalization is
-    the source's $U_{\alpha,k}$.  Put
-    $W_{\alpha,k}=V_{\alpha,k}U_{\alpha,k}$.  Conditional on the relative
-    Gram-conjugation identity, these are isometries with orthogonal ranges,
-    and their block relations become the intertwining and literal reconstruction hypotheses of
-    Theorem~\ref{thm:vertical_sector_coisometry} after the representative bond
-    spaces have been identified.  That theorem supplies all the remaining
+    using the grouped decomposition's distinguished gauge
+    $X_{\alpha,1}=\Id$.  This is the source's $U_{\alpha,k}$.  It remains to
+    identify the representative
+    and copy bond spaces and then define
+    $W_{\alpha,k}=V_{\alpha,k}U_{\alpha,k}$.  The remaining construction must
+    prove that these maps are isometries with orthogonal ranges and that their
+    block relations give the intertwining and literal reconstruction
+    hypotheses of Theorem~\ref{thm:vertical_sector_coisometry}.  That theorem
+    supplies all the remaining
     coisometry algebra and, once the source-specific identifications below are
     made, gives $U$ with
     $U\widetilde MU^\dagger=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$ and
     the corresponding reconstruction identity; each
     $\mu_\alpha$ is diagonal, so the summands regroup as repeated weighted
     copies of $M_\alpha$ exactly as in the finite regrouping of
-    Lemma~\ref{lem:vertical_grouping_equiv}.
-    Consequently, the conclusion stated at lines 1903--1908 has not yet been
-    derived from the matrix-product-density-operator hypotheses.  The generic
-    block-row construction is already proved.  The remaining step is to apply
-    normal-tensor Gram rigidity to the grouped comparison.  After the relative
-    normalization, the remaining source-specific identifications are to form the normalized
-    sector isometries, transport each copy bond space to its representative
-    bond space using the dimension equalities from the grouping theorem,
-    index the sectors by dependent pairs $(\alpha,q)$, and identify their
-    dependent disjoint union with the standard direct-sum coordinate space.
+    Lemma~\ref{lem:vertical_grouping_equiv}.  The remaining proof is to form
+    the normalized physical sector isometries, transport each copy bond space
+    to its representative bond space, and assemble the physical coisometry.  The
+    generic block-row construction is already proved, but its source-specific
+    application must still index the sectors by dependent pairs
+    $(\alpha,q)$ and identify their dependent disjoint union with the standard
+    direct-sum coordinate space.  The remaining boundary is the final
+    coisometry and literal vertical canonical-form identity.
 
     Conditional on that construction, the algebraic basis-of-normal-tensors
     clauses are verified as follows.  With the notation of the grouping
@@ -3013,12 +3054,9 @@
     the span of those of the $M_\alpha$.
 
     The empty chain is separate because the bond dimensions of
-    $\widetilde M$ and $B$ may differ.  Before choosing a representative, one
-    needs the nonemptiness assertion in
-    Lemma~\ref{lem:mpdo_vertical_retained_class_nonempty}; this is a separate
-    open obligation, since the present grouping theorem does not include
-    nonemptiness in its conclusion.  Once that lemma is proved, choose a
-    retained representative $M_{\alpha_0}$ of bond dimension
+    $\widetilde M$ and $B$ may differ.
+    Lemma~\ref{lem:mpdo_vertical_retained_class_nonempty} supplies a retained
+    representative $M_{\alpha_0}$ of bond dimension
     $d_{\alpha_0}>0$.  By
     Lemma~\ref{lem:mpv_zero_length}, assigning it the coefficient
     $d/d_{\alpha_0}$ and assigning zero to the other representatives gives
