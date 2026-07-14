@@ -518,8 +518,9 @@
     conclusions.
 
     For the unblocked canonical form, propagate $p$-block injectivity to the
-    lengths $2p-1$, $2p$, and $6p$. The Condition C1 form of the direct-sum
-    argument gives pair trace separation at original length $6p$. The
+    lengths $2p-1$, $2p$, and $6p$. Applying the direct-sum argument to the
+    resulting injective tensors gives pair trace separation at original
+    length $6p$. The
     bijection between blocked words of length $6$ and original words of length
     $6p$ transports this to pair trace separation for the $p$-blocked
     representatives. The preceding selector argument then applies verbatim
@@ -728,7 +729,7 @@
     Therefore $(\Id-P)HP=HP-PHP=0$.
 \end{proof}
 
-\begin{theorem}[Representative reduction from first-site contractions]
+\begin{theorem}[First-site contraction reduction]
     \label{thm:blockwise_opposite_insert_eq}
     \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_two_firstSiteActionAgree}
     \leanok
@@ -1618,10 +1619,14 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:mpdo_trace_loop_chain, def:mpdo_vertical_one_site_actions}
-    Expanding the diagonal entry $(P_1 H^{(N+1)})_{(a,\rho)(a,\rho)}$ at
-    the first site gives $\sum_i P_{ai}\,\tr(M^{ia}E_\rho^{(N)})$,
-    where $E_\rho^{(N)}=M^{\rho_0\rho_0}\cdots M^{\rho_{N-1}\rho_{N-1}}$;
-    summing over $a$ and $\rho$ and collecting closes the remaining loops
+    For a length-$N$ configuration $\rho$, write
+    $E_\rho^{(N)}=M^{\rho_0\rho_0}\cdots M^{\rho_{N-1}\rho_{N-1}}$.
+    Expanding at the first site gives
+    \[
+        (P_1 H^{(N+1)})_{(a,\rho)(a,\rho)}
+        = \sum_i P_{ai}\,\tr(M^{ia}E_\rho^{(N)}).
+    \]
+    Summing over $a$ and $\rho$ and collecting closes the remaining loops
     by Lemma~\ref{lem:mpdo_trace_loop_chain}.  For the
     two-sided compression, first-site actions compose site by site,
     $P_1Q_1=(PQ)_1$, so cyclicity of the trace and idempotency reduce
@@ -1756,10 +1761,12 @@
         X^\dagger X = \omega\,\Id
     \]
     for a necessarily positive constant $\omega$, and $\omega^{-1/2}X$ is
-    unitary.  This is equation eq3 in the proof of
-    \cite[Proposition~4.13]{Cirac2016MPDO_arXiv} in the normalization
-    $X_{\alpha,1}=\Id$, together with the isometric normalization
-    $U_{\alpha,k}=\omega_{\alpha,k}^{-1/2}X_{\alpha,k}$; deriving the
+    unitary.  This is the normalized form
+    $X_{\alpha,k}^\dagger X_{\alpha,k}=\omega_{\alpha,k}\Id$ of the
+    Gram-matrix proportionality in the proof of
+    \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}, with
+    $X_{\alpha,1}=\Id$ and
+    $U_{\alpha,k}=\omega_{\alpha,k}^{-1/2}X_{\alpha,k}$. Deriving the
     commutation from self-adjointness of the sector compressions is a
     separate step.
 \end{theorem}
@@ -1806,7 +1813,7 @@
     $X^\dagger X$ on the right gives the commutation.
 \end{proof}
 
-\begin{theorem}[Equation eq3 from the dressed-adjoint identities]
+\begin{theorem}[Gram-matrix proportionality from the dressed-adjoint identities]
     \label{thm:eq3_of_dressed_adjoint}
     \lean{MPSTensor.IsNormal.conjTranspose_mul_self_eq_smul_one_of_dressed_adjoint}
     \lean{MPSTensor.IsNormal.smul_mem_unitaryGroup_of_dressed_adjoint}
@@ -1821,8 +1828,8 @@
     hypotheses are the blockwise identities produced by Lemma L from the
     first diagram in the proof of
     \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}, for the sectors $k$ and
-    $1$ in the normalization $X_{\alpha,1}=\Id$; the conclusion is
-    equation eq3 with its isometric normalization.
+    $1$ in the normalization $X_{\alpha,1}=\Id$; the conclusion is the
+    Gram-matrix proportionality used to normalize the gauges isometrically.
 \end{theorem}
 
 \begin{proof}
