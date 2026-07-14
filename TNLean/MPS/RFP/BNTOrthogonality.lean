@@ -359,8 +359,8 @@ private lemma scalar_eq_one_of_smul_idempotent
 coefficients and the literal bond direct sum is transfer-idempotent, then all
 coefficients are equal.
 
-This is the corrected literal-block consequence of arXiv:1606.00608, Theorem
-charact-MPS, lines 543--563. The printed independent-phase statement does not
+**Local fix (CPSV16, Theorem charact-MPS, lines 543--563):** This is the corrected
+literal-block consequence. The printed independent-phase statement does not
 specify the additional physical-space construction needed to avoid these mixed
 copy equations; see `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
 theorem phases_eq_of_isTransferIdempotent_directSum_scaled_self
