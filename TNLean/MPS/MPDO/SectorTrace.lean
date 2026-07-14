@@ -75,7 +75,8 @@ $k$ because cyclicity of trace removes the internal similarity
 $X_{\alpha,k}M_\alpha^{(a,b)}X_{\alpha,k}^{-1}$.  The same decomposition uses
 the horizontal canonical form to find a nonzero sector compression, and hence
 deduces the positivity of every grouped coefficient.  The remaining argument
-of Proposition 4.13 begins with the dressed adjoints at line 1903.
+of Proposition 4.13 begins with the reflected marked-chain comparison at line
+1909.
 
 ## References
 
