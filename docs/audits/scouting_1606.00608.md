@@ -224,7 +224,8 @@ This is a **dimension-independent** result (not restricted to 1D/MPS). Could be 
 ### Phase 1: Pure-state RFP characterization (~800 LOC)
 **Goal**: Formalize Thm 3.8 (ZCL⟺E²=E) and Thm 3.11 (RFP structural form)
 
-1. Define `IsRFP A` := `transferMap A ∘ transferMap A = transferMap A` (or CPM version)
+1. Define `IsTransferIdempotent A` :=
+   `transferMap A ∘ transferMap A = transferMap A` (or CPM version)
 2. Define `IsZCL A` := `IsLocallyOrthogonal A ∧ IsCID A`
 3. Prove ZCL ⟺ E²=E for CF tensors
 4. Prove NT + RFP ⟹ A^i = XΛU^iX^{-1} (Lemma B.1 `lem:charact-NT-pure-RFP`)
@@ -276,7 +277,7 @@ Following the existing codebase conventions (`TNLean/MPS/{Topic}/{File}.lean`), 
 
 ```
 TNLean/MPS/RFP/
-├── Defs.lean                    -- §3.1: IsRFP, IsIdempotentCPM
+├── Defs.lean                    -- §3.1: IsTransferIdempotent, IsIdempotentCPM
 ├── ZeroCorrelationLength.lean   -- §3.2: IsCID, IsLocallyOrthogonal, IsZCL, Thm 3.8 (ZCL ⟺ E²=E)
 ├── StructuralForm.lean          -- §3.4 + Lem B.1: NT RFP ⟹ A^i = XΛU^iX^{-1}; full CF structural char
 ├── Convergence.lean             -- App B: RG flow convergence from CF (E^N → idempotent)
@@ -308,7 +309,7 @@ TNLean/MPS/RFP/
 
 | File | Paper ref | Key definitions/theorems | Est. LOC | Imports from existing |
 |------|-----------|-------------------------|----------|-----------------------|
-| `Defs.lean` | Def 3.2 | `IsRFP (A : MPSTensor d D)`, `IsIdempotentCPM` (E²=E), equivalence of the two defs via Stinespring | ~80 | `MPS/Defs`, `MPS/Core/Transfer`, `Channel/Stinespring` |
+| `Defs.lean` | Def 3.2 | `IsTransferIdempotent (A : MPSTensor d D)`, `IsIdempotentCPM` (E²=E), equivalence with the physical blocking definition via Stinespring | ~80 | `MPS/Defs`, `MPS/Core/Transfer`, `Channel/Stinespring` |
 | `ZeroCorrelationLength.lean` | Defs 3.3–3.7, Thm 3.8 | `IsCID`, `IsLocallyOrthogonal`, `IsZCL`, `zcl_iff_idempotent_transfer` | ~250 | `MPS/Core/Transfer`, `MPS/BNT/*`, `Spectral/SpectralGap`, `Algebra/ScalarPowerSumIdentity` |
 | `StructuralForm.lean` | Thm 3.11, Lem B.1, Cor 3.12 | `rfp_nt_structural` (A^i = XΛU^iX^{-1}), `rfp_cf_structural` (full block form), `rfp_bnt_structural` | ~200 | `RFP/Defs`, `RFP/ZeroCorrelationLength`, `Channel/FixedPoint/*`, `MPS/BNT/*` |
 | `Convergence.lean` | App B (RG convergence) | `rg_flow_converges_of_cf` | ~120 | `MPS/Core/Transfer`, `MPS/BNT/*`, `Spectral/SpectralGap` |
@@ -470,9 +471,10 @@ Tier 5 ────────────────────────�
   - `IsLPDO (M : MPOTensor d D)` — ∃ purification MPS tensor A, M = tr_anc(A ⊗ Ā) (local purifiability)
   - `IsLPDO → IsMPDO` (but not converse)
 - **Predicates on MPS** (RFP theory):
-  - `IsRFP`, `IsZCL`, `IsCID`, `IsLocallyOrthogonal`, `IsDecorrelated`, `IsFrustrationFree`, `IsNNCPH`
+  - `IsTransferIdempotent`, `IsZCL`, `IsCID`, `IsLocallyOrthogonal`,
+    `IsDecorrelated`, `IsFrustrationFree`, `IsNNCPH`
 - **Theorems**: `zcl_iff_idempotent_transfer`, `rfp_iff_zcl`, `rfp_nt_structural`, `decorrelated_iff_commutingHam`, `isLPDO_of_purification`, `prfp_iff_zcl_of_isLPDO`
-- **Namespaces**: `MPSTensor.IsRFP`, `MPOTensor.IsMPDO`, `MPOTensor.IsLPDO`, `MPOTensor.IsRFP`
+- **Namespaces**: `MPSTensor.IsTransferIdempotent`, `MPOTensor.IsMPDO`, `MPOTensor.IsLPDO`, `MPOTensor.IsRFP`
 
 ---
 
@@ -510,7 +512,7 @@ Tier 5 ────────────────────────�
 
 | Scouting report module | Existing PH plan | Compatible? | Notes |
 |------------------------|------------------|-------------|-------|
-| **`MPS/RFP/Defs.lean`** (IsRFP) | Not in PH plan | **No conflict** | New concept, orthogonal to PH infrastructure |
+| **`MPS/RFP/Defs.lean`** (`IsTransferIdempotent`) | Not in PH plan | **No conflict** | New concept, orthogonal to PH infrastructure |
 | **`MPS/RFP/ZeroCorrelationLength.lean`** | ch15 remark (line 89–91) says "E²=E ⟺ ξ=0 ⟺ RGFP" | **Compatible** — ch15 already gestures at this equivalence. Our module would formalize it. | The `correlationLength` in `Correlations.lean` is defined as `-1/log‖λ₂‖`. ZCL = this being 0 = λ₂ = 0 = E²=E. Clean connection. |
 | **`MPS/RFP/Assembly.lean`** (RFP ⟺ ZCL) | Not in PH plan | **No conflict** | |
 | **`MPS/ParentHamiltonian/GroundSpace.lean`** | **PH-0a in issue #191** | **Direct match** — our proposed file has the same name and content as the PH plan | Must coordinate: whoever implements first sets the API |

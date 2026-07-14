@@ -496,7 +496,7 @@
 
 \begin{theorem}[Transfer-map idempotence iff doubled-index MPS RFP]
     \label{thm:is_rfp_iff_to_mps_rfp}
-    \lean{MPOTensor.isRFP_iff_toMPSTensor_isRFP}
+    \lean{MPOTensor.isRFP_iff_toMPSTensor_isTransferIdempotent}
     \leanok
     \uses{def:is_rfp_mpdo, def:mpo_to_mps, def:mps_transfer_idempotence,
         def:mpo_is_zcl,
@@ -548,7 +548,7 @@
 
 \begin{theorem}[Pure-state recovery of transfer-map idempotence]%
     \label{thm:to_mpo_rfp_iff_rfp}
-    \lean{MPSTensor.toMPOTensor_isRFP_iff_isRFP}
+    \lean{MPSTensor.toMPOTensor_isRFP_iff_isTransferIdempotent}
     \leanok
     \uses{def:is_rfp_mpdo, def:mps_transfer_idempotence,
         thm:to_mpo_transfer_map}

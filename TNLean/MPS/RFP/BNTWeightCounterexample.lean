@@ -317,10 +317,11 @@ private theorem halvedWeightTensor_no_blocking_coefficient :
 The Kraus-isometry characterization of arXiv:1606.00608, Theorem 3.1,
 would give a scalar one-letter blocking coefficient, contradicting
 `halvedWeightTensor_no_blocking_coefficient`. -/
-theorem halvedWeightTensor_not_isRFP : ¬ IsRFP halvedWeightTensor := by
+theorem halvedWeightTensor_not_isTransferIdempotent :
+    ¬ IsTransferIdempotent halvedWeightTensor := by
   intro hRFP
   apply halvedWeightTensor_no_blocking_coefficient
-  obtain ⟨V, _, hprod⟩ := (isRFP_iff_kraus_isometry halvedWeightTensor).mp hRFP
+  obtain ⟨V, _, hprod⟩ := (isTransferIdempotent_iff_kraus_isometry halvedWeightTensor).mp hRFP
   refine ⟨V ((0 : Fin 1), (0 : Fin 1)) (0 : Fin 1), ?_⟩
   simpa using hprod (0 : Fin 1) (0 : Fin 1)
 
@@ -338,11 +339,11 @@ theorem halvedWeightTensor_counterexample_to_unrestricted_zcl_iff_rfp :
       SameMPV₂ halvedWeightTensor
         (SectorBNT.Examples.halvedDecomp scalarUnitTensor).toTensor ∧
       IsPhysicalBNTZCL halvedWeightTensor (fun _ : Fin 1 => scalarUnitTensor) ∧
-      ¬ IsRFP halvedWeightTensor := by
+      ¬ IsTransferIdempotent halvedWeightTensor := by
   exact ⟨halvedWeightTensor_isBNTCanonicalForm,
     halvedWeightTensor_eq_halvedDecomp_toTensor,
     halvedWeightTensor_sameMPV₂_halvedDecomp,
     halvedWeightTensor_isPhysicalBNTZCL,
-    halvedWeightTensor_not_isRFP⟩
+    halvedWeightTensor_not_isTransferIdempotent⟩
 
 end MPSTensor

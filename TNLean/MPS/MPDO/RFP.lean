@@ -21,7 +21,7 @@ future work (#826, #237).
 ## Main results
 
 * `MPOTensor.isRFP_iff_isZCL`: `IsRFP M ↔ IsZCL M`.
-* `MPOTensor.isRFP_iff_toMPSTensor_isRFP`: equivalence with the doubled-index
+* `MPOTensor.isRFP_iff_toMPSTensor_isTransferIdempotent`: equivalence with the doubled-index
   MPS RFP condition.
 
 ## References
@@ -43,8 +43,8 @@ theorem isRFP_iff_isZCL (M : MPOTensor d D) : IsRFP M ↔ IsZCL M :=
 
 /-- `IsRFP M` is equivalent to the pure-state RFP condition for the
 doubled-index MPS tensor. -/
-theorem isRFP_iff_toMPSTensor_isRFP (M : MPOTensor d D) :
-    IsRFP M ↔ MPSTensor.IsRFP (M.toMPSTensor) := by
-  simpa [IsRFP, MPOTensor.IsZCL] using isZCL_iff_toMPSTensor_isRFP M
+theorem isRFP_iff_toMPSTensor_isTransferIdempotent (M : MPOTensor d D) :
+    IsRFP M ↔ MPSTensor.IsTransferIdempotent (M.toMPSTensor) := by
+  simpa [IsRFP, MPOTensor.IsZCL] using isZCL_iff_toMPSTensor_isTransferIdempotent M
 
 end MPOTensor

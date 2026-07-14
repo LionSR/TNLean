@@ -32,10 +32,10 @@ the full isometry condition of Corollary III.cor3 (arXiv:1606.00608, line 584).
 * `IsResidualIsometryFamily` — the full isometry condition eq:III_isometry as a
   predicate on a family of residual tensors (the within-block orthonormality
   together with the cross-block vanishing).
-* `exists_residualIsometryFamily_of_isRFP_directSum` — under whole-tensor RFP of
+* `exists_residualIsometryFamily_of_isTransferIdempotent_directSum` — under whole-tensor RFP of
   the direct sum, the residual tensors of the isometry canonical forms of the
   blocks satisfy `IsResidualIsometryFamily`.
-* `isRFP_directSumTensor_iff` — the distinct-blocks renormalization-fixed-point
+* `isTransferIdempotent_directSumTensor_iff` — the distinct-blocks renormalization-fixed-point
   characterization: the direct sum is a renormalization fixed point if and only
   if each block is in isometry canonical form and the cross-block mixed transfer
   operators vanish.
@@ -174,12 +174,12 @@ variable {r : ℕ} {dim : Fin r → ℕ}
 
 /-- Whole-tensor RFP of the direct sum makes each block a renormalization fixed
 point: the diagonal $j = j'$ mixed transfer operator is `transferMap (B j)`,
-whose idempotence is `IsRFP (B j)` (arXiv:1606.00608, Definition 3.2). -/
-lemma isRFP_block_of_isRFP_directSum [∀ k, NeZero (dim k)]
+whose idempotence is `IsTransferIdempotent (B j)` (arXiv:1606.00608, Definition 3.2). -/
+lemma isTransferIdempotent_block_of_isTransferIdempotent_directSum [∀ k, NeZero (dim k)]
     (B : (k : Fin r) → MPSTensor d (dim k))
-    (hRFP : IsRFP (directSumTensor B)) (j : Fin r) :
-    IsRFP (B j) := by
-  have hidem := mixedTransferMap₂_isIdempotentElem_of_isRFP_directSum B hRFP j j
+    (hRFP : IsTransferIdempotent (directSumTensor B)) (j : Fin r) :
+    IsTransferIdempotent (B j) := by
+  have hidem := mixedTransferMap₂_isIdempotentElem_of_isTransferIdempotent_directSum B hRFP j j
   rwa [mixedTransferMap₂_self] at hidem
 
 /-- **Residual isometry family** (arXiv:1606.00608, eq:III_isometry, line 551).
@@ -220,14 +220,14 @@ from a single predicate "$A$ in canonical form is RFP"; extracting the per-block
 normality, irreducibility, left-canonical condition, and gauge-phase
 distinctness from that predicate is a separate step.  This restriction is
 recorded in the paper-gap note docs/paper-gaps/cpsv16_rfp_isometry_scope.tex. -/
-theorem exists_residualIsometryFamily_of_isRFP_directSum [∀ k, NeZero (dim k)]
+theorem exists_residualIsometryFamily_of_isTransferIdempotent_directSum [∀ k, NeZero (dim k)]
     (B : (k : Fin r) → MPSTensor d (dim k))
     (hnormal : ∀ k, IsNormal (B k))
     (hirr : ∀ k, IsIrreducibleTensor (B k))
     (hleft : ∀ k, ∑ i : Fin d, (B k i)ᴴ * B k i = 1)
     (hdist : ∀ j k : Fin r, j ≠ k → ∀ h : dim j = dim k,
       ¬ GaugePhaseEquiv (cast (congrArg (MPSTensor d) h) (B j)) (B k))
-    (hRFP : IsRFP (directSumTensor B)) :
+    (hRFP : IsTransferIdempotent (directSumTensor B)) :
     ∃ (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
       (Λ : (j : Fin r) → Fin (dim j) → ℝ)
       (U : (j : Fin r) → MPSTensor d (dim j)),
@@ -240,7 +240,7 @@ theorem exists_residualIsometryFamily_of_isRFP_directSum [∀ k, NeZero (dim k)]
   classical
   have hICF : ∀ j, IsIsometryCanonicalForm (B j) := fun j =>
     isIsometryCanonicalForm_of_rfp_nt (B j) (hnormal j)
-      (isRFP_block_of_isRFP_directSum B hRFP j) (hleft j)
+      (isTransferIdempotent_block_of_isTransferIdempotent_directSum B hRFP j) (hleft j)
   choose X Λ U hXdet hΛpos hΛsum hUiso hdecomp using hICF
   have hDdet : ∀ j,
       (Matrix.diagonal (fun k => (Real.sqrt (Λ j k) : ℂ))).det ≠ 0 := by
@@ -249,7 +249,7 @@ theorem exists_residualIsometryFamily_of_isRFP_directSum [∀ k, NeZero (dim k)]
     intro k _
     exact Complex.ofReal_ne_zero.mpr (Real.sqrt_pos.mpr (hΛpos j k)).ne'
   have hBNT : IsBNTLocallyOrthogonal B :=
-    isBNTLocallyOrthogonal_of_isRFP_directSum B hirr hleft hdist hRFP
+    isBNTLocallyOrthogonal_of_isTransferIdempotent_directSum B hirr hleft hdist hRFP
   refine ⟨X, Λ, U, hXdet, hΛpos, hΛsum, hdecomp, ?_, ?_⟩
   · -- within-block orthonormality, conjugate of the isometry-canonical-form field
     intro j α β α' β'
@@ -279,7 +279,7 @@ The $(j,j')$ bond block of the transfer sum acts as `mixedTransferMap₂ (B j)
 (B j')` on the $(j,j')$ block of the argument
 (`blockDiagonal'_transferSum_toBlock`).  Each diagonal block contributes
 `transferMap (B j)`, which is idempotent because $B_j$ is a renormalization fixed
-point (`isRFP_of_isIsometryCanonicalForm`); each off-diagonal block vanishes by
+point (`isTransferIdempotent_of_isIsometryCanonicalForm`); each off-diagonal block vanishes by
 the cross-block orthogonality hypothesis.  This is the block-space form of the
 backward direction of the
 structural characterization of pure-state renormalization fixed points
@@ -310,7 +310,8 @@ theorem blockTransferSum_idempotent_of_isIsometryCanonicalForm
     by_cases hjj' : j = j'
     · subst hjj'
       rw [mixedTransferMap₂_self]
-      have hRFPj : IsRFP (B j) := isRFP_of_isIsometryCanonicalForm (B j) (hCF j)
+      have hRFPj : IsTransferIdempotent (B j) :=
+        isTransferIdempotent_of_isIsometryCanonicalForm (B j) (hCF j)
       simpa only [LinearMap.comp_apply] using
         LinearMap.congr_fun hRFPj (Y.submatrix (blockIncl j dim) (blockIncl j dim))
     · rw [hortho j j' hjj']
@@ -342,11 +343,11 @@ form allows each normal tensor to repeat with a multiplicity and a
 phase; this is the distinct-blocks (multiplicity-one, phase-one) case, where the
 direct sum carries one copy of each block.  Recorded in the paper-gap note
 docs/paper-gaps/cpsv16_rfp_isometry_scope.tex. -/
-theorem isRFP_directSumTensor_of_isIsometryCanonicalForm
+theorem isTransferIdempotent_directSumTensor_of_isIsometryCanonicalForm
     (B : (k : Fin r) → MPSTensor d (dim k))
     (hCF : ∀ k, IsIsometryCanonicalForm (B k))
     (hortho : ∀ j j' : Fin r, j ≠ j' → mixedTransferMap₂ (B j) (B j') = 0) :
-    IsRFP (directSumTensor B) := by
+    IsTransferIdempotent (directSumTensor B) := by
   classical
   set e := finSigmaFinEquiv (m := r) (n := dim)
   change transferMap (directSumTensor B) ∘ₗ transferMap (directSumTensor B)
@@ -376,15 +377,16 @@ For a family of normal, irreducible, left-canonical blocks $B$, no two
 gauge-phase equivalent and each of positive bond dimension ($\dim_k \ge 1$), the
 direct sum is a renormalization fixed point if and only if each block is in
 isometry canonical form and the mixed transfer operators between distinct blocks
-vanish.  In symbols, `IsRFP (directSumTensor B)` holds exactly when both
+vanish.  In symbols, `IsTransferIdempotent (directSumTensor B)` holds exactly when both
 `IsIsometryCanonicalForm (B k)` for every $k$ and
 `mixedTransferMap₂ (B j) (B j') = 0` for all $j \ne j'$.
 
 The forward direction combines the per-block isometry canonical form — each
-block is a renormalization fixed point by `isRFP_block_of_isRFP_directSum`, hence
+block is a renormalization fixed point by
+`isTransferIdempotent_block_of_isTransferIdempotent_directSum`, hence
 in isometry canonical form by `isIsometryCanonicalForm_of_rfp_nt` — with the
-cross-block vanishing `isBNTLocallyOrthogonal_of_isRFP_directSum`.  The backward
-direction is `isRFP_directSumTensor_of_isIsometryCanonicalForm`.
+cross-block vanishing `isBNTLocallyOrthogonal_of_isTransferIdempotent_directSum`.  The backward
+direction is `isTransferIdempotent_directSumTensor_of_isIsometryCanonicalForm`.
 
 **Scope restriction (multiplicity-one canonical form):** the source canonical
 form $A^i = \bigoplus_{j} \bigoplus_{q} \mu_{j,q} X_{j,q} \Lambda_j U^i_j
@@ -392,24 +394,24 @@ X_{j,q}^{-1}$ allows each normal tensor to repeat with a multiplicity $r_j$ and 
 unit-modulus phase $\mu_{j,q}$; this is the distinct-blocks (multiplicity-one,
 phase-one) case, where the direct sum carries one copy of each block.  Recorded
 in the paper-gap note docs/paper-gaps/cpsv16_rfp_isometry_scope.tex. -/
-theorem isRFP_directSumTensor_iff [∀ k, NeZero (dim k)]
+theorem isTransferIdempotent_directSumTensor_iff [∀ k, NeZero (dim k)]
     (B : (k : Fin r) → MPSTensor d (dim k))
     (hnormal : ∀ k, IsNormal (B k))
     (hirr : ∀ k, IsIrreducibleTensor (B k))
     (hleft : ∀ k, ∑ i : Fin d, (B k i)ᴴ * B k i = 1)
     (hdist : ∀ j k : Fin r, j ≠ k → ∀ h : dim j = dim k,
       ¬ GaugePhaseEquiv (cast (congrArg (MPSTensor d) h) (B j)) (B k)) :
-    IsRFP (directSumTensor B) ↔
+    IsTransferIdempotent (directSumTensor B) ↔
       ((∀ k, IsIsometryCanonicalForm (B k)) ∧
         (∀ j j' : Fin r, j ≠ j' → mixedTransferMap₂ (B j) (B j') = 0)) := by
   constructor
   · intro hRFP
     refine ⟨fun k => ?_, ?_⟩
     · exact isIsometryCanonicalForm_of_rfp_nt (B k) (hnormal k)
-        (isRFP_block_of_isRFP_directSum B hRFP k) (hleft k)
-    · exact isBNTLocallyOrthogonal_of_isRFP_directSum B hirr hleft hdist hRFP
+        (isTransferIdempotent_block_of_isTransferIdempotent_directSum B hRFP k) (hleft k)
+    · exact isBNTLocallyOrthogonal_of_isTransferIdempotent_directSum B hirr hleft hdist hRFP
   · rintro ⟨hCF, hortho⟩
-    exact isRFP_directSumTensor_of_isIsometryCanonicalForm B hCF hortho
+    exact isTransferIdempotent_directSumTensor_of_isIsometryCanonicalForm B hCF hortho
 
 end Blocks
 
@@ -424,15 +426,15 @@ tensors is a renormalization fixed point exactly when every basis tensor is in
 isometry canonical form and the mixed transfer operators between distinct
 basis tensors vanish.  The blockwise normality, irreducibility,
 left-canonical normalization, positive bond dimensions, and gauge-phase
-distinctness required by `isRFP_directSumTensor_iff` all follow from the one
+distinctness required by `isTransferIdempotent_directSumTensor_iff` all follow from the one
 BNT canonical-form hypothesis.
 
 This is the multiplicity-one, phase-one specialization of CPSV16,
 Theorem `charact-MPS` and Corollary `III.cor3` (arXiv:1606.00608, lines
 543--584).  The repeated-copy physical-space construction remains separate;
 see `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
-theorem isRFP_basisDirectSum_iff (hCF : IsBNTCanonicalForm P) :
-    IsRFP (directSumTensor P.basis) ↔
+theorem isTransferIdempotent_basisDirectSum_iff (hCF : IsBNTCanonicalForm P) :
+    IsTransferIdempotent (directSumTensor P.basis) ↔
       ((∀ k, IsIsometryCanonicalForm (P.basis k)) ∧
         ∀ j j' : Fin P.basisCount, j ≠ j' →
           mixedTransferMap₂ (P.basis j) (P.basis j') = 0) := by
@@ -443,7 +445,7 @@ theorem isRFP_basisDirectSum_iff (hCF : IsBNTCanonicalForm P) :
     exact isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one
       (P.basis k) (hCF.basis_irreducible k) (hCF.basis_left_canonical k)
         (hCF.basis_normalized_self_overlap k)
-  exact isRFP_directSumTensor_iff P.basis hnormal hCF.basis_irreducible
+  exact isTransferIdempotent_directSumTensor_iff P.basis hnormal hCF.basis_irreducible
     hCF.basis_left_canonical hCF.basis_distinct
 
 /-- **Residual isometry family for a BNT basis direct sum.**
@@ -457,8 +459,8 @@ This is the multiplicity-one, phase-one form of CPSV16, Corollary `III.cor3`
 (arXiv:1606.00608, lines 583--589).  The repeated-copy physical-space
 construction remains outside this statement; see
 `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
-theorem exists_residualIsometryFamily_of_isRFP_basisDirectSum
-    (hCF : IsBNTCanonicalForm P) (hRFP : IsRFP (directSumTensor P.basis)) :
+theorem exists_residualIsometryFamily_of_isTransferIdempotent_basisDirectSum
+    (hCF : IsBNTCanonicalForm P) (hRFP : IsTransferIdempotent (directSumTensor P.basis)) :
     ∃ (X : (j : Fin P.basisCount) →
         Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ)
       (Λ : (j : Fin P.basisCount) → Fin (P.basisDim j) → ℝ)
@@ -477,7 +479,7 @@ theorem exists_residualIsometryFamily_of_isRFP_basisDirectSum
     exact isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one
       (P.basis k) (hCF.basis_irreducible k) (hCF.basis_left_canonical k)
         (hCF.basis_normalized_self_overlap k)
-  exact exists_residualIsometryFamily_of_isRFP_directSum P.basis hnormal
+  exact exists_residualIsometryFamily_of_isTransferIdempotent_directSum P.basis hnormal
     hCF.basis_irreducible hCF.basis_left_canonical hCF.basis_distinct hRFP
 
 end IsBNTCanonicalForm

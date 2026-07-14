@@ -38,7 +38,7 @@ transfer-map-level fusion formulation.
 * `IsRFP_MPDO_via_fusion`: existence of such structures for every positive blocked
   size.
 * `isRFP_MPDO_via_fusion_iff_isRFP`: equivalence with the MPDO RFP predicate.
-* `MPSTensor.toMPOTensor_isRFP_MPDO_via_fusion_iff_isRFP`: pure-state recovery
+* `MPSTensor.toMPOTensor_isRFP_MPDO_via_fusion_iff_isTransferIdempotent`: pure-state recovery
   for the diagonal MPO embedding.
 
 ## References
@@ -233,8 +233,8 @@ variable {d D : ℕ}
 
 /-- For a pure MPS embedded diagonally as an MPO, the transfer-map-level
 fusion formulation recovers the original pure-state RFP condition. -/
-theorem toMPOTensor_isRFP_MPDO_via_fusion_iff_isRFP (A : MPSTensor d D) :
-    MPOTensor.IsRFP_MPDO_via_fusion A.toMPOTensor ↔ IsRFP A := by
-  rw [MPOTensor.isRFP_MPDO_via_fusion_iff_isRFP, toMPOTensor_isRFP_iff_isRFP]
+theorem toMPOTensor_isRFP_MPDO_via_fusion_iff_isTransferIdempotent (A : MPSTensor d D) :
+    MPOTensor.IsRFP_MPDO_via_fusion A.toMPOTensor ↔ IsTransferIdempotent A := by
+  rw [MPOTensor.isRFP_MPDO_via_fusion_iff_isRFP, toMPOTensor_isRFP_iff_isTransferIdempotent]
 
 end MPSTensor

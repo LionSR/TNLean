@@ -48,7 +48,7 @@ area law, not the implication from PRFP to zero correlation length.
 The deleted predicate \leanid{MPOTensor.IsPRFP} did not formalize the source
 definition. It did require a local LPDO witness and the condition
 \[
-  \leanid{MPSTensor.IsRFP}(\leanid{purifyingMPSTensor}(A)),
+  \leanid{MPSTensor.IsTransferIdempotent}(\leanid{purifyingMPSTensor}(A)),
 \]
 so the pure-state RFP requirement itself was present. The missing source data
 was the stronger purification-RFP structure around
@@ -117,7 +117,7 @@ local purification structure
 \]
 together with the requirement that the purifying tensor $A$, viewed as an MPS
 tensor on the combined spin--ancilla index, is a pure-state renormalization
-fixed point (\leanid{MPSTensor.IsRFP}). This predicate pins the local tensor of
+fixed point (\leanid{MPSTensor.IsTransferIdempotent}). This predicate pins the local tensor of
 $M$ and proves the useful consequence
 \[
   \leanid{MPOTensor.IsLocalPurificationRFP.isMPDO}:

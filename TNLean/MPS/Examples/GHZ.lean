@@ -20,7 +20,7 @@ proves its key properties.
 
 ## Main results
 
-* `ghz_isRFP` : the GHZ tensor is a renormalization fixed point
+* `ghz_isTransferIdempotent` : the GHZ tensor is a renormalization fixed point
 * `ghz_not_isInjective` : the GHZ tensor is not injective
 * `ghz_isOnSiteSymmetric_Z2` : the GHZ tensor is on-site symmetric under Z₂
 * `ghz_virtual_Z2_symmetric` : the virtual Z₂ symmetry, with σz commuting with every
@@ -77,7 +77,7 @@ theorem ghz_transferMap_idempotent :
   split <;> simp [*]
 
 /-- The GHZ tensor is a renormalization fixed point. -/
-theorem ghz_isRFP : IsRFP ghzTensor := ghz_transferMap_idempotent
+theorem ghz_isTransferIdempotent : IsTransferIdempotent ghzTensor := ghz_transferMap_idempotent
 
 /-! ### Non-injectivity -/
 
