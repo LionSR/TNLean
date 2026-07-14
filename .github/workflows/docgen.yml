@@ -90,6 +90,9 @@ jobs:
           cd docbuild
           lake build TNLean:docs
 
+      - name: Build FT-MPS blueprint volume
+        run: ./scripts/build_blueprint_ch01_12.sh
+
       - name: Deploy to gh-pages
         env:
           GITHUB_TOKEN: ${{ github.token }}

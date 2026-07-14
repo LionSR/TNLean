@@ -72,7 +72,7 @@ theorem faithfulDensity_trace (α : Type*) [Fintype α] [DecidableEq α]
   exact inv_mul_cancel₀ (by exact_mod_cast Fintype.card_ne_zero)
 
 /-- A finite index space carrying a matrix of trace one is nonempty. -/
-theorem nonempty_of_trace_eq_one {α : Type*} [Fintype α]
+lemma nonempty_of_trace_eq_one {α : Type*} [Fintype α]
     (ρ : Matrix α α ℂ) (hρ : ρ.trace = 1) : Nonempty α := by
   classical
   by_contra h
