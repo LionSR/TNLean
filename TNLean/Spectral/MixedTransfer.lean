@@ -171,6 +171,31 @@ lemma mixedTransferMap₂_self {d D : ℕ} (A : MPSTensor d D) :
     mixedTransferMap₂ A A = transferMap (d := d) (D := D) A := by
   ext X; simp only [mixedTransferMap₂_apply, transferMap_apply]
 
+/-- Linearity of the rectangular mixed transfer operator in the first tensor. -/
+private lemma mixedTransferMap₂_smul_left (c : ℂ)
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) :
+    mixedTransferMap₂ (fun i ↦ c • A i) B = c • mixedTransferMap₂ A B := by
+  ext X
+  simp [← Finset.smul_sum]
+
+/-- Conjugate linearity of the rectangular mixed transfer operator in the
+second tensor. -/
+private lemma mixedTransferMap₂_smul_right (c : ℂ)
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) :
+    mixedTransferMap₂ A (fun i ↦ c • B i) =
+      starRingEnd ℂ c • mixedTransferMap₂ A B := by
+  ext X
+  simp [← Finset.smul_sum]
+
+/-- Scaling the two tensors scales their rectangular mixed transfer operator by
+$c\overline e$:
+$$\mathcal E_{cA,eB}=c\overline e\,\mathcal E_{A,B}.$$ -/
+lemma mixedTransferMap₂_smul (c e : ℂ)
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) :
+    mixedTransferMap₂ (fun i ↦ c • A i) (fun i ↦ e • B i) =
+      (c * starRingEnd ℂ e) • mixedTransferMap₂ A B := by
+  rw [mixedTransferMap₂_smul_left, mixedTransferMap₂_smul_right, smul_smul]
+
 end MixedTransferRect
 
 section IteratedTransferRect
