@@ -102,47 +102,48 @@
 }
 
 \newcommand{\TNMPOCell}[3]{%
-    \begin{tikzpicture}[tn picture]
-        \TN@mpositeWithOpenLegs{tnM}{(0,0)}{#1}
-        \TN@label{tnMNOpen}{(0,0.22)}{#2}
-        \TN@label{tnMSOpen}{(0,-0.22)}{#3}
-    \end{tikzpicture}%
+    \begin{TNDiagram}[compact]
+        \TNMPOSite{tnM}{(0,0)}{#1}
+        \TNOpenVirtualWest{tnMWest}
+        \TNOpenVirtualEast{tnMEast}
+        \TNOpenPhysicalNorth{tnMKet}
+        \TNOpenPhysicalSouth{tnMBra}
+        \node[above] at (tnMKet) {$#2$};
+        \node[below] at (tnMBra) {$#3$};
+    \end{TNDiagram}%
 }
 
 \newcommand{\TNMPOChain}[6]{%
-    \begin{tikzpicture}[tn picture]
-        \TN@openMPOword{tn}{#2}{#3}{#4}{#5}{#6}
-        \node[anchor=east] at (-0.85,0) {$#1$};
-    \end{tikzpicture}%
+    \begin{TNDiagram}[normal]
+        \TNHorizontalWord{tn}{#2}{#3}{#6}
+        \node[above] at (tnRN) {$#4$};
+        \node[below] at (tnRS) {$#5$};
+        \node[anchor=east] at (tnLW) {$#1$};
+    \end{TNDiagram}%
 }
 
 % Local purification of an MPO tensor: the ket and bra tensors share the
 % ancillary index (straight contraction on the right) and retain their physical
 % and virtual legs.
 \newcommand{\TNMPOLocalPurification}{%
-    \begin{tikzpicture}[tn picture]
-        \TN@tensor{tnM}{(-2.35,0)}
-        \TN@vleg{tnM}{west}{-0.62,0}
-        \TN@vleg{tnM}{east}{0.62,0}
-        \TN@pleg{tnM}{north}{0,0.58}
-        \TN@pleg{tnM}{south}{0,-0.58}
-        \node[anchor=east] at (-2.50,-0.30) {$M$};
-        \node at (-1.20,0) {$=$};
-        \TN@tensor{tnA}{(0,0.52)}
-        \TN@tensor{tnAc}{(0,-0.52)}
-        \TN@vleg{tnA}{west}{-0.62,0}
-        \TN@vleg{tnA}{east}{0.62,0}
-        \TN@vleg{tnAc}{west}{-0.62,0}
-        \TN@vleg{tnAc}{east}{0.62,0}
-        \TN@pleg{tnA}{north}{0,0.48}
-        \TN@pleg{tnAc}{south}{0,-0.48}
-        \TN@pport{tnAK}{tnA}{-35}
-        \TN@pport{tnAcK}{tnAc}{35}
-        \TN@pconnectports{tnAK}{tnAcK}
-        \node at (-0.28,0.82) {$A$};
-        \node at (-0.32,-0.82) {$\overline A$};
-        \node at (0.34,0) {$k$};
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \TNTerm{%
+            \TNMPOSite{purM}{(0,0)}{M}
+            \TNOpenVirtualWest{purMWest}
+            \TNOpenVirtualEast{purMEast}
+            \TNOpenPhysicalNorth{purMKet}
+            \TNOpenPhysicalSouth{purMBra}}
+        \TNRelation{=}
+        \TNTerm{%
+            \TNPurificationSite{pur}{(0,0)}{A}{\overline A}
+            \TNOpenVirtualWest{purKetWest}
+            \TNOpenVirtualEast{purKetEast}
+            \TNOpenVirtualWest{purBraWest}
+            \TNOpenVirtualEast{purBraEast}
+            \TNOpenPhysicalNorth{purKet}
+            \TNOpenPhysicalSouth{purBra}
+            \node[right] at (purKetAncilla) {$k$};}
+    \end{TNEquationRow}%
 }
 
 % The physical renormalization maps of the mixed-state RFP definition.
@@ -173,12 +174,9 @@
 
 % Contraction of neighbouring right and left sector tensors.
 \newcommand{\TNEtaSectorDecomposition}{%
-    \begin{tikzpicture}[tn picture]
-        \TN@factorwithlegs{tnRh}{(-0.56,0)}{r_k}
-        \TN@factorwithlegs{tnLk}{(0.56,0)}{l_h}
-        \TN@vconnectports{tnRhE}{tnLkW}
-        \node at (0,-0.80) {$\eta_{k,h}=r_k l_h$};
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{\eta_{k,h}=r_k l_h}
+    \end{TNEquationRow}%
 }
 
 % The two proved two-site operations from Appendix C.2.  The upper row is the
@@ -1243,19 +1241,25 @@
 % Zero-correlation-length idempotence for the physical-trace transfer: the
 % trace-closed tensor equals the virtual product of two trace-closed copies.
 \newcommand{\TNMPDOZCLIdempotence}{%
-    \begin{tikzpicture}[tn picture]
-        \TN@tracedMPOSite{zciM}{(0,0)}
-        \node[anchor=east] at (-0.14,-0.28) {$M$};
-        \node at (0.21,-0.92) {$\mathcal T_M$};
-        \node at (1.40,0) {$=$};
-        \TN@tracedMPOSite{zciA}{(2.75,0)}
-        \TN@tracedMPOSite{zciB}{(4.08,0)}
-        \TN@vconnect{zciA}{east}{zciB}{west}
-        \node[anchor=east] at (2.61,-0.28) {$M$};
-        \node[anchor=east] at (3.94,-0.28) {$M$};
-        \node at (2.96,-0.92) {$\mathcal T_M$};
-        \node at (4.29,-0.92) {$\mathcal T_M$};
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \TNTerm{%
+            \TNMPOSite{zciM}{(0,0)}{M}
+            \TNOpenVirtualWest{zciMWest}
+            \TNOpenVirtualEast{zciMEast}
+            \TNTracePhysicalRight{zciMKet}{zciMBra}
+            \node[below] at (zciM) {$\mathcal T_M$};}
+        \TNRelation{=}
+        \TNTerm{%
+            \TNMPOSite{zciA}{(0,0)}{M}
+            \TNMPOSite{zciB}{(1.25,0)}{M}
+            \TNOpenVirtualWest{zciAWest}
+            \TNConnectVirtual{zciAEast}{zciBWest}
+            \TNOpenVirtualEast{zciBEast}
+            \TNTracePhysicalRight{zciAKet}{zciABra}
+            \TNTracePhysicalRight{zciBKet}{zciBBra}
+            \node[below] at (zciA) {$\mathcal T_M$};
+            \node[below] at (zciB) {$\mathcal T_M$};}
+    \end{TNEquationRow}%
 }
 
 % The two fixed-final-label fusion trees.  The dashed bridge records the
@@ -2138,102 +2142,65 @@
 % virtual bond, with the two ket legs and the two bra legs grouped into the
 % blocked physical indices (dashed box).
 \newcommand{\TNMPDOTwoSiteBlocking}{%
-    \begin{tikzpicture}[tn picture]
-        \TN@tensor{tsbM}{(0,0)}
-        \TN@vleg{tsbM}{west}{-0.60,0}
-        \TN@vleg{tsbM}{east}{0.60,0}
-        \TN@pleg{tsbM}{north}{0,0.62}
-        \TN@pleg{tsbM}{south}{0,-0.62}
-        \node[anchor=east] at (-0.14,-0.28) {$M$};
-        \node at (1.35,0) {$=$};
-        \TN@tensor{tsbKa}{(2.70,0)}
-        \TN@tensor{tsbKb}{(3.90,0)}
-        \TN@vleg{tsbKa}{west}{-0.60,0}
-        \TN@vconnect{tsbKa}{east}{tsbKb}{west}
-        \TN@vleg{tsbKb}{east}{0.60,0}
-        \foreach \n in {tsbKa,tsbKb} {
-                \TN@pleg{\n}{north}{0,0.62}
-                \TN@pleg{\n}{south}{0,-0.62}
-            }
-        \node[anchor=west] at (2.80,-0.56) {$K$};
-        \node[anchor=west] at (4.00,-0.56) {$K$};
-        \TN@grouppath{(2.28,0.40) rectangle (4.32,-0.40)}
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \TNTerm{%
+            \TNMPOSite{tsbM}{(0,0)}{M}
+            \TNOpenVirtualWest{tsbMWest}
+            \TNOpenVirtualEast{tsbMEast}
+            \TNOpenPhysicalNorth{tsbMKet}
+            \TNOpenPhysicalSouth{tsbMBra}}
+        \TNRelation{=}
+        \TNTerm{%
+            \TNMPOSite{tsbKa}{(0,0)}{K}
+            \TNMPOSite{tsbKb}{(1.25,0)}{K}
+            \TNOpenVirtualWest{tsbKaWest}
+            \TNConnectVirtual{tsbKaEast}{tsbKbWest}
+            \TNOpenVirtualEast{tsbKbEast}
+            \TNOpenPhysicalNorth{tsbKaKet}
+            \TNOpenPhysicalSouth{tsbKaBra}
+            \TNOpenPhysicalNorth{tsbKbKet}
+            \TNOpenPhysicalSouth{tsbKbBra}}
+    \end{TNEquationRow}%
 }
 
 % Vertical product of two distinct basis tensors, contracted through the
 % shared physical index.
 \newcommand{\TNMPDOBNTVerticalProduct}{%
-    \begin{tikzpicture}[tn picture]
-        \TN@tensor{vpY}{(0,0.55)}
-        \TN@tensor{vpX}{(0,-0.55)}
-        \TN@vleg{vpY}{west}{-0.60,0}
-        \TN@vleg{vpY}{east}{0.60,0}
-        \TN@vleg{vpX}{west}{-0.60,0}
-        \TN@vleg{vpX}{east}{0.60,0}
-        \TN@pconnect{vpY}{south}{vpX}{north}
-        \TN@pleg{vpY}{north}{0,0.34}
-        \TN@pleg{vpX}{south}{0,-0.34}
-        \node at (-0.52,0.90) {$\mathcal K_y$};
-        \node at (-0.52,-0.90) {$\mathcal K_x$};
-        \node[anchor=west] at (0.95,0) {$=\;0 \quad (x \ne y)$};
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \TNTerm{%
+            \TNStackedMPOProduct{vp}{(0,0)}{\mathcal K_y}{\mathcal K_x}{}
+            \TNOpenVirtualWest{vpUpperWest}
+            \TNOpenVirtualEast{vpUpperEast}
+            \TNOpenVirtualWest{vpLowerWest}
+            \TNOpenVirtualEast{vpLowerEast}
+            \TNOpenPhysicalNorth{vpUpperKet}
+            \TNOpenPhysicalSouth{vpLowerBra}}
+        \TNRelation{=}
+        \ensuremath{0\qquad(x\ne y)}
+    \end{TNEquationRow}%
 }
 
 % The two block closure maps: a boundary insertion on the virtual bond of a
 % block tensor, with the virtual loop closed by the trace, gives an operator
 % on the open physical legs.
 \newcommand{\TNMPDOBlockClosureMap}{%
-    \begin{tikzpicture}[tn picture]
-        \begin{scope}
-            \node[anchor=east] at (-0.90,0) {$M_\alpha(X)\;=$};
-            \TN@insertion[label=above:$X$]{bcmX}{(0,0)}
-            \TN@tensor{bcmM}{(1.10,0)}
-            \TN@pleg{bcmM}{north}{0,0.52}
-            \TN@pleg{bcmM}{south}{0,-0.52}
-            \TN@vconnect{bcmX}{east}{bcmM}{west}
-            \TN@vtracepath{(bcmX.west) -- ++(-0.40,0) -- (-0.47,-0.95)
-            -- (1.57,-0.95) -- (1.57,0) -- (bcmM.east)}
-            \node at (0.55,-1.18) {$\tr$};
-            \node[anchor=west] at (1.22,0.30) {$M_\alpha$};
-        \end{scope}
-        \begin{scope}[xshift=4.90cm]
-            \node[anchor=east] at (-0.90,0) {$A_\alpha(X)\;=$};
-            \TN@insertion[label=above:$X$]{bcaX}{(0,0)}
-            \TN@tensor{bcaA}{(1.10,0)}
-            \TN@pleg{bcaA}{north}{0,0.52}
-            \TN@pleg{bcaA}{south}{0,-0.52}
-            \TN@vconnect{bcaX}{east}{bcaA}{west}
-            \TN@vtracepath{(bcaX.west) -- ++(-0.40,0) -- (-0.47,-0.95)
-            -- (1.57,-0.95) -- (1.57,0) -- (bcaA.east)}
-            \node at (0.55,-1.18) {$\tr$};
-            \node[anchor=west] at (1.22,0.30) {$A_\alpha$};
-        \end{scope}
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{M_\alpha(X)=}
+        \TNTerm{\TNCompactTraceCell{bcm}{(0,0)}{M_\alpha}{X}{}}
+        \qquad
+        \ensuremath{A_\alpha(X)=}
+        \TNTerm{\TNCompactTraceCell{bca}{(0,0)}{A_\alpha}{X}{}}
+    \end{TNEquationRow}%
 }
 
 % The BNT-label operator O_L(M_alpha): L vertically read copies of M_alpha
 % are multiplied along the vertical index and closed by the trace, while the
 % horizontal legs remain open.  This follows source figure MPDO_O_L_A_.png.
 \newcommand{\TNMPDOBNTOperatorTraceClosure}{%
-    \begin{tikzpicture}[tn picture, scale=0.92]
-        \path[draw=black, opacity=0, use as bounding box]
-            (-3.08,-2.00) rectangle (1.40,2.00);
-        \node[anchor=east] at (-1.08,0) {$O_L(M_\alpha)\;=$};
-        \TN@tensor{botcTop}{(0,1.08)}
-        \TN@tensor{botcBottom}{(0,-1.08)}
-        \foreach \n in {botcTop,botcBottom} {
-            \TN@vleg{\n}{west}{-0.62,0}
-            \TN@vleg{\n}{east}{0.62,0}
-        }
-        \TN@ppath{(botcTop.south) -- (0,0.38)}
-        \TN@ppath{(0,-0.38) -- (botcBottom.north)}
-        \node at (0,0) {$\vdots$};
-        \TN@ptracepath{(botcTop.north) -- (0,1.56) -- (-0.76,1.56)
-            -- (-0.76,-1.56) -- (0,-1.56) -- (botcBottom.south)}
-        \node[anchor=south west] at (0.18,1.12) {$M_\alpha$};
-        \node[anchor=south west] at (0.18,-1.04) {$M_\alpha$};
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{O_L(M_\alpha)=}
+        \TNTerm{\TNVerticalWord{botc}{(0,0)}{M_\alpha}{closed}}
+    \end{TNEquationRow}%
 }
 
 % First-site insertion agreement on the closed word: inserting Y on the
@@ -2479,40 +2446,13 @@
 % sum of the orthogonal projectors on the ket and bra legs leaves only the
 % diagonal term, so the tensor absorbs its own projector on either side.
 \newcommand{\TNMPDOProjectorAbsorption}{%
-    \begin{tikzpicture}[tn picture]
-        \TN@tensor{paA}{(0,0)}
-        \TN@vleg{paA}{west}{-0.50,0}
-        \TN@vleg{paA}{east}{0.50,0}
-        \TN@pleg{paA}{north}{0,1.00}
-        \TN@pleg{paA}{south}{0,-1.00}
-        \node[anchor=west] at (0.12,-0.30) {$\mathcal K_i$};
-        \node at (1.10,0) {$=$};
-        \node at (1.80,0) {$\displaystyle\sum_{j,j'}$};
-        \TN@tensor{paB}{(2.75,0)}
-        \TN@vleg{paB}{west}{-0.50,0}
-        \TN@vleg{paB}{east}{0.50,0}
-        \TN@pleg{paB}{north}{0,1.00}
-        \TN@pleg{paB}{south}{0,-1.00}
-        \TN@insertion[label=left:$P_j$]{paBu}{(2.75,0.55)}
-        \TN@insertion[label=left:$P_{j'}$]{paBd}{(2.75,-0.55)}
-        \node[anchor=west] at (2.87,-0.30) {$\mathcal K_i$};
-        \node at (3.90,0) {$=$};
-        \TN@tensor{paC}{(4.85,0)}
-        \TN@vleg{paC}{west}{-0.50,0}
-        \TN@vleg{paC}{east}{0.50,0}
-        \TN@pleg{paC}{north}{0,1.00}
-        \TN@pleg{paC}{south}{0,-1.00}
-        \TN@insertion[label=left:$P_i$]{paCu}{(4.85,0.55)}
-        \node[anchor=west] at (4.97,-0.30) {$\mathcal K_i$};
-        \node at (6.00,0) {$=$};
-        \TN@tensor{paD}{(6.95,0)}
-        \TN@vleg{paD}{west}{-0.50,0}
-        \TN@vleg{paD}{east}{0.50,0}
-        \TN@pleg{paD}{north}{0,1.00}
-        \TN@pleg{paD}{south}{0,-1.00}
-        \TN@insertion[label=left:$P_i$]{paDd}{(6.95,-0.55)}
-        \node[anchor=west] at (7.07,-0.30) {$\mathcal K_i$};
-    \end{tikzpicture}%
+    \begin{TNEquationRow}[compact]
+        \ensuremath{
+            \mathcal K_i
+            =\sum_{j,j'}P_j\,\mathcal K_i\,P_{j'}
+            =P_i\,\mathcal K_i
+            =\mathcal K_i\,P_i}
+    \end{TNEquationRow}%
 }
 
 \newcommand{\TNGaugeConjugation}[3]{%

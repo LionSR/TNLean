@@ -43,42 +43,27 @@
     traces is a conclusion rather than an assumption.
 \end{theorem}
 
-\begin{figure}[ht]
-    \centering
+The physical supports are locally orthogonal:
+\begin{center}
     \TNMPDOBNTVerticalProduct
-    \caption{Orthogonality of the physical supports of a basis of normal
-        tensors of a simple renormalization-fixed-point tensor: contracting
-        $\mathcal K_y$ with $\mathcal K_x$ through the shared physical index
-        vanishes whenever $x\ne y$. This is
-        \cite[Theorem~4.9(iv), lines~863--868]{Cirac2016MPDO_arXiv}.}
-    \label{fig:mpdo_bnt_vertical_product}
-\end{figure}
+\end{center}
+This is \cite[Theorem~4.9(iv), lines~863--868]{Cirac2016MPDO_arXiv}.
 
-\begin{figure}[ht]
-    \centering
+Expanding $\sum_jP_j=\Id$ on both physical indices and using the local
+orthogonality relations leaves only the diagonal term:
+\begin{center}
     \TNMPDOProjectorAbsorption
-    \caption{Projector absorption for a basis tensor: expanding the identity
-        $\sum_jP_j=\Id$ on the ket and bra legs of $\mathcal K_i$ and using
-        the local orthogonality relations $P_j\mathcal K_iP_{j'}=0$ for
-        $j\ne j'$ or $i\ne j$ leaves only the diagonal term, so
-        $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$. This is the display
-        in the proof of
-        \cite[Appendix~C.2, lines~1745--1751]{Cirac2016MPDO_arXiv}, and it
-        implies the orthogonality of
-        Figure~\ref{fig:mpdo_bnt_vertical_product}.}
-    \label{fig:mpdo_projector_absorption}
-\end{figure}
+\end{center}
+This is the calculation in
+\cite[Appendix~C.2, lines~1745--1751]{Cirac2016MPDO_arXiv}.
 
-\begin{figure}[ht]
-    \centering
+The two-site block is the virtual contraction of two copies of $K$:
+\begin{center}
     \TNMPDOTwoSiteBlocking
-    \caption{The two-site blocking of the simple tensor $K$: the blocked
-        tensor $M$ is obtained by contracting two copies of $K$ along one
-        virtual bond and grouping the two ket legs and the two bra legs into
-        blocked physical indices. This is
-        \cite[Theorem~4.9, lines~851--856]{Cirac2016MPDO_arXiv}.}
-    \label{fig:mpdo_two_site_blocking}
-\end{figure}
+\end{center}
+The two ket indices and the two bra indices are grouped into the blocked
+physical indices, as in
+\cite[Theorem~4.9, lines~851--856]{Cirac2016MPDO_arXiv}.
 
 \begin{definition}[Positive-length physical blocking of an MPO tensor]
     \label{def:mpdo_positive_physical_blocking}
