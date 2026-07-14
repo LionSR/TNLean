@@ -17,9 +17,15 @@ matrices representative by representative.
 The proof first treats one length at which the simultaneous representative
 word tuples span the product matrix algebra.  A bounded nonvanishing power
 sum then selects a sufficiently large separating length for each
-representative.  The resulting statement is the arbitrary-marked-letter form
-of Lemma L needed for the two marked chains in Figures 7 and 8 of the proof of
-Proposition 4.13 of arXiv:1606.00608, lines 1909--1919.
+representative.
+
+Lemma L in arXiv:1606.00608, lines 1835--1858, is stated for matrices induced
+by physical operators on the first site.  After the closed-chain identity has
+been expanded, however, its separation calculation uses only the matrices in
+the marked slot.  The theorems below record that algebraic extension.  They do
+not assert that the paper states Lemma L for arbitrary marked matrices.  In
+the application to Figures 7 and 8, the marks must still be constructed from
+the actual grouped vertical corners.
 
 ## Main results
 
@@ -51,8 +57,10 @@ same sector-decomposition tail gives
 Representative word-tuple separation and a nonzero coefficient at `j₀` then
 give `C j₀ = E j₀`.
 
-Source: arXiv:1606.00608, Appendix C.3, lines 1848--1858, in the
-arbitrary-marked-letter form used in Proposition 4.13, lines 1909--1919. -/
+This is the algebraic extension of the separation calculation in
+arXiv:1606.00608, Appendix C.3, lines 1848--1858.  The source states the
+physical-insertion case; the unrestricted marked matrices here are an
+auxiliary consequence of the same calculation. -/
 theorem markedTensor_basis_eq_of_trace_agree_of_coeff_ne_zero
     (P : SectorDecomposition d)
     (C E : (j : Fin P.basisCount) → MPSTensor e (P.basisDim j))
@@ -101,8 +109,10 @@ For each representative, the bounded nonvanishing power-sum theorem selects
 a sufficiently large length at which its grouped coefficient is nonzero.
 The fixed-length marked separation theorem then applies.
 
-Source: arXiv:1606.00608, Appendix C.3, lines 1835--1858, in the
-arbitrary-marked-letter form used in Proposition 4.13, lines 1909--1919. -/
+This is the algebraic extension of arXiv:1606.00608, Appendix C.3,
+lines 1835--1858.  The source states the physical-insertion case; the
+unrestricted marked matrices here are an auxiliary consequence of its
+trace-separation proof. -/
 theorem markedTensor_basis_eq_of_trace_agree
     (P : SectorDecomposition d)
     (C E : (j : Fin P.basisCount) → MPSTensor e (P.basisDim j))
@@ -144,11 +154,13 @@ variable {d e : ℕ} {P : SectorDecomposition d}
 on every representative of a BNT canonical form.
 
 The BNT hypotheses give eventual simultaneous representative word-tuple span.
-The representative-grouped arbitrary-marked-letter form of Lemma L then
-separates the marked tensors.
+The algebraic marked-letter extension of the representative-grouped
+separation argument then separates the marked tensors.
 
-Source: arXiv:1606.00608, lines 318--344, Appendix C.3, lines 1835--1858,
-and the marked-chain comparison in Proposition 4.13, lines 1909--1919. -/
+The representative span is from arXiv:1606.00608, lines 318--344, and the
+separation calculation is Appendix C.3, lines 1848--1858.  The source states
+the latter for physical first-site insertions; the arbitrary marked matrices
+are an auxiliary algebraic extension. -/
 theorem markedTensor_basis_eq_of_trace_agree
     (hCF : IsBNTCanonicalForm P)
     (C E : (j : Fin P.basisCount) → MPSTensor e (P.basisDim j))
