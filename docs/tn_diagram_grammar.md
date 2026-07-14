@@ -77,9 +77,9 @@ fractions, and port roles have the same meaning in every occurrence.
 
 - Tensor sites are black dots. A physical index is drawn as a thicker vertical
   leg. Virtual indices are drawn as thinner horizontal or slanted legs.
-- A tensor label is placed outside its black dot in the blueprint; a label does
-  not change the kind of object. The enlarged tensor circles in dark slides
-  may carry the same label internally for legibility. A neutral square box
+- A tensor label is placed outside its black dot; a label does not change the
+  kind of object. Dark slides change only the palette, not the geometry or
+  typography of the glyph. A neutral square box
   denotes a named tensor whose internal contraction is suppressed. A displayed
   tensor-product or direct-sum factor is a pale plate. A linear map, including
   an isometry or coisometry, is a rounded blue box. A state displayed without
@@ -128,62 +128,56 @@ fractions, and port roles have the same meaning in every occurrence.
   virtual leg.
 
 Every contraction joins two registered ports of the same type. Virtual trace
-closures join named ports through `\TN@vtraceportsbelow`,
-`\TN@vtraceportsabove`, or `\TN@vtraceportsright`; physical trace closures use
-`\TN@ptraceportsbelow`, `\TN@ptraceportsabove`, or
-`\TN@ptraceportsright`. An open index ends at an explicitly named typed
+closures join named ports through `\TNTraceVirtualBelow`,
+`\TNTraceVirtualAbove`, or `\TNTraceVirtualRight`; physical trace closures use
+`\TNTracePhysicalBelow`, `\TNTracePhysicalAbove`, or
+`\TNTracePhysicalRight`. An open index ends at an explicitly named typed
 terminal; it does not end at a numerical point chosen near a tensor or map. A
 red insertion divides an index line into two contractions ending on the
 insertion.
 
-The library supplies four standard open interfaces. The construction
-`\TN@openhorizontalports` exposes the west and east virtual indices,
-`\TN@openvverticalports` exposes two vertical virtual indices,
-`\TN@openpverticalports` exposes the north and south physical indices, and
-`\TN@openmpoports` combines the first and third interfaces. These interfaces
-use the common virtual and physical leg lengths. Consequently two occurrences
+The operations `\TNOpenVirtualWest`, `\TNOpenVirtualEast`,
+`\TNOpenVirtualNorth`, `\TNOpenVirtualSouth`, and their physical analogues
+extend a declared port by the common leg length. Consequently two occurrences
 of the same local tensor have the same boundary geometry.
 
 Trivalent maps are typed by their mathematical domain and codomain. The maps
-`\TN@splitmap` and `\TN@mergemap` have only virtual ports. The maps
-`\TN@physicalsplitmap` and `\TN@physicalmergemap` have only physical ports.
-The construction `\TN@bondpairmap` has two virtual half-bonds and one physical
-index. Each physical split or merge uses the same `Trunk`, `Left`, and `Right`
-interface. Thus blocking a physical Hilbert space, fusing virtual sectors, and
-realizing a physical site from two virtual half-bonds cannot be confused by a
-change of labels or by reflecting the map.
+`\TNSplitMap` and `\TNMergeMap` have only virtual ports, while
+`\TNPhysicalSplitMap` and `\TNPhysicalMergeMap` have only physical ports. The
+general `\TNTrivalentMap` fixes the same box and branch geometry for mixed
+interfaces. Each orientation uses the roles `Combined`, `FactorOne`, and
+`FactorTwo`. Thus blocking a physical Hilbert space, fusing virtual sectors,
+and realizing a physical site from two virtual half-bonds cannot be confused
+by a change of labels or by reflecting the map.
 
-The action tensors of an MPO on an MPS are constructed by `\TN@actionmap` and
-`\TN@coactionmap`. Their three virtual ports are named `MPO`, `StateIn`, and
+The action tensors of an MPO on an MPS are constructed by `\TNActionMap` and
+`\TNCoactionMap`. Their three virtual ports are named `MPO`, `StateIn`, and
 `StateOut`, corresponding to the blocks \(a\), \(x\), and \(y\) in
 \(V_{ax}^{y,i}\). The glyph remains the ordinary trivalent linear-map box;
 the additional names record the module roles of its indices.
 
-A canonical-form gauge \(X_{j,q}\) is constructed by `\TN@sectorgauge`.
+A canonical-form gauge \(X_{j,q}\) is constructed by `\TNSectorGauge`.
 Besides the horizontal bond ports `W` and `E`, it has distinct virtual ports
 `Block` and `Copy` for the indices \(j\) and \(q\). Attaching these ports
 separately to parallel sector buses preserves the distinction between the two
-indices. The reflected construction `\TN@inverseSectorgauge` retains these
+indices. The reflected construction `\TNInverseSectorGauge` retains these
 port roles while reversing their planar order for \(X_{j,q}^{-1}\).
 
 A sector index which passes through several factors is represented by
-`\TN@vbus`. Its endpoints and every contraction point are named virtual ports.
-A parallel sector index is obtained from it by `\TN@vparallelbus`, which
-inherits the same horizontal extent and applies a common signed displacement.
-A tap may be placed at a fixed relative position by `\TN@vbustap`, or projected
-from a port of the attached tensor by `\TN@vbusprojecttap`. Projection makes
-the attachment depend on the tensor placement rather than on a second copy of
-its horizontal coordinate.
+`\TNSectorBus`. Its endpoints and every contraction point are named virtual
+ports. A parallel sector index is obtained from it by `\TNParallelSectorBus`,
+which inherits the same horizontal extent and applies a common signed
+displacement. A tap is placed by `\TNSectorBusTap`; its endpoint remains a
+named virtual port.
 
-Orthogonal virtual contractions use `\TN@vconnectportshv` or
-`\TN@vconnectportsvh`; the suffix records the order of the horizontal and
-vertical segments. A span annotation such as \(n\), \(\geq \ell\), or
-\(\geq \ell'\) uses `\TN@spanbraceabove` or `\TN@spanbracebelow`. Such a brace
-is an annotation and never denotes an additional index. Its endpoints are
-named by `\TN@annotationterminal`, which deliberately carries no index type.
+Orthogonal virtual contractions use `\TNConnectVirtualHV` or
+`\TNConnectVirtualVH`; the suffix records the order of the horizontal and
+vertical segments. The corresponding physical and morphism operations follow
+the same convention. An annotation endpoint is declared by `\TNPoint`, which
+deliberately carries no index type.
 
 Tensor products are written with $\otimes$. A horizontal line never means
-mere adjacency or tensor product. The construction `\TN@factorpair` displays
+mere adjacency or tensor product. The construction `\TNFactorPair` displays
 two factor plates and places $\otimes$ between them. When two factors carry a
 contracted index, the contraction is drawn explicitly instead.
 
@@ -292,33 +286,29 @@ contracted index, the contraction is drawn explicitly instead.
   entry points.
 
 The public library provides `\TNMPSSite`, `\TNMPOSite`, `\TNRotatedMPOSite`,
-and `\TNPEPSSite` for
-local tensor sites; `\TN@doublelayer` for the local contraction in a transfer
-construction; `\TN@operatorstate` for a density matrix or operator with paired
-system ports; `\TN@splitmap`, `\TN@mergemap`, `\TN@physicalsplitmap`,
-`\TN@physicalmergemap`, `\TN@bondpairmap`, and `\TN@fusionmap` for the typed
-trivalent maps; `\TN@vbus` for a virtual sector line;
-`\TN@squarelatticepatch` and `\TN@squarepepspatch` for finite square lattices;
-and `\TN@openMPSword`, `\TN@openMPOword`, and `\TN@closedMPOword` for standard
-finite words. MPS and MPO words are declared by distinct constructors, since
-an MPS site has one physical index whereas an MPO site has two. These
-constructions determine the conventional index directions once. Each local
-site atom declares stable boundary ports and draws no open stub. The
-corresponding
-`\TN@mpssiteWithOpenLegs`, `\TN@mpositeWithOpenLegs`,
-`\TN@pepssiteWithOpenLegs`, and `\TN@doublelayerWithOpenLegs` motifs add named
-free endpoints when a complete standalone object is required. A complete
-figure should compose these units rather than choose the same leg positions
-independently at each occurrence.
+and `\TNPEPSSite` for local tensor sites; `\TNDoubleLayer` for the local
+contraction in a transfer construction; `\TNOperatorState` for a density
+matrix or operator with paired system ports; `\TNSplitMap`, `\TNMergeMap`,
+`\TNPhysicalSplitMap`, `\TNPhysicalMergeMap`, and `\TNFusionMap` for typed
+trivalent maps; `\TNSectorBus` for a virtual sector line;
+`\TNSquarePEPSPatch` for a finite square lattice; and `\TNHorizontalWord` and
+`\TNVerticalWord` for standard finite words. MPS and MPO words are declared by
+distinct constructors, since an MPS site has one physical index whereas an MPO
+site has two. These constructions determine the conventional index directions
+once. Each local atom declares stable boundary ports; the `\TNOpen...`
+operations extend only those declared ports. A complete figure composes these
+units rather than choosing the same leg positions independently at each
+occurrence.
 
 The named profiles fix all standard separations and the branch positions of a
 trivalent map. A theorem-level diagram selects `normal` or `compact`; it does
 not rescale the picture or reproduce one of these distances locally.
 
 The web blueprint renders the same complete figure commands as cached SVG
-images. A new chapter-facing command therefore also requires an argument
-declaration in `blueprint/src/Packages/tn_diagrams.py` and a name in
-`blueprint/src/plastex_templates/TensorNetworkDiagrams.jinja2s`. A private
+images. Zero-argument registrations are derived from the TeX declarations.
+Only parameterized chapter commands require an argument declaration in
+`blueprint/src/Packages/tn_diagrams.py`; every chapter-facing command also has
+an explicit `display` or `figure` role and an HTML template entry. A private
 construction in `tex/tn/tn_core.tex` or `tex/tn/tn_library.tex` requires no
 such declaration.
 
@@ -351,11 +341,11 @@ calculus.
 ## Slide Diagrams
 
 The slide collection loads the shared semantic core and reusable atoms from
-`tex/tn/`. The file `docs/slides/tn_library_dark.tex` changes only the
-`tn theme ...` slots and defines the complete figures used by the slide
-collection. Thus the slides remain independent of the blueprint build files
-while sharing the meanings of tensors, insertions, maps, states, expressions,
-ports, contractions, traces, and grouping boundaries.
+`tex/tn/`. The file `docs/slides/tn_library_dark.tex` appends only palette
+choices to the `tn theme ...` slots and defines the complete figures used by
+the slide collection. Thus the slides remain independent of the blueprint
+build files while sharing the meanings of tensors, insertions, maps, states,
+expressions, ports, contractions, traces, and grouping boundaries.
 
 The slide preamble imports this library. A slide should call one of its complete
 diagram commands rather than declare local tensor-network styles or draw a
