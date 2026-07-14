@@ -858,6 +858,35 @@ separate step.
     on the full direct sum, and therefore $P=1$.
 \end{proof}
 
+\begin{theorem}[Pair fusion completeness from a source BNT]%
+    \label{thm:mpdo_pair_fusion_bnt_completeness}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        hasFinalLabelSelectorWords_of_hasBlockSelectorWords}
+    \lean{MPOTensor.BNTFusionIsometryFamily.%
+        fusionIsometry_mul_conjTranspose_eq_one_of_bnt_of_lengthIndependent}
+    \leanok
+    \uses{thm:cpsv_bnt_blocked_simultaneous_span,
+        thm:mpdo_pair_fusion_selector_completeness}
+    Suppose that the labelled tensors in the fusion family form a basis of
+    normal tensors and that the positive trace-power coefficients are
+    independent of the positive chain length.  Then every pair fusion
+    isometry is surjective:
+    \[
+        U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=1.
+    \]
+    In particular, final-label selectors and coisometry are conclusions, not
+    additional hypotheses.  This is a derived consequence of the common BNT
+    word span in \cite[lines~317--345]{Cirac2016MPDO_arXiv}, the fusion
+    identity at lines~986--993, and length independence at lines~995--1010.
+\end{theorem}
+\begin{proof}\leanok
+    The basis-of-normal-tensors argument gives a positive common word length
+    at which the labelled word evaluations span the full product matrix
+    algebra.  Choosing the tuple which is the identity in one labelled block
+    and zero in every other block gives common final-label selectors.  Apply
+    Theorem~\ref{thm:mpdo_pair_fusion_selector_completeness}.
+\end{proof}
+
 \begin{theorem}[Left iterated fusion completeness]%
     \label{thm:mpdo_left_fusion_selector_completeness}
     \lean{MPOTensor.BNTFusionIsometryFamily.%

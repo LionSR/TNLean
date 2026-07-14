@@ -5,7 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.BNTTripleFusionComparison
 import TNLean.MPS.MPDO.BNTFinalSectorFusion
-import TNLean.MPS.MPDO.BiCFDerivation.Core
+import TNLean.MPS.MPDO.BiCFDerivation.Selectors
+import TNLean.MPS.MPDO.SourceBNTBlocking
 import TNLean.MPS.Core.CyclicTrace
 import Mathlib.LinearAlgebra.Matrix.Rank
 
@@ -76,6 +77,15 @@ def HasFinalLabelSelectorWords (S : ℕ) : Prop :=
     ∀ ε' : Λ, ε' ≠ ε →
       (∑ w : Fin S → Fin (p * p),
         c w • MPSTensor.evalWord (Fam.tensor ε').toMPSTensor (List.ofFn w)) = 0
+
+/-- Simultaneous block selectors for the labelled MPO tensors are precisely
+final-label selectors for their fusion family. -/
+theorem hasFinalLabelSelectorWords_of_hasBlockSelectorWords
+    {g : ℕ} (Fam : BNTFusionIsometryFamily (Fin g) p) {S : ℕ}
+    (hSel : MPSTensor.HasBlockSelectorWords
+      (fun ε ↦ (Fam.tensor ε).toMPSTensor) S) :
+    Fam.HasFinalLabelSelectorWords S :=
+  hSel
 
 /-- **Positive-length final-label selectors make every pair fusion map surjective.**
 
@@ -214,6 +224,37 @@ theorem fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selector
         coeff ε w • _root_.evalWord D (List.ofFn w) := by
       simp_rw [Matrix.mul_sum, Matrix.mul_smul, hPword]
     _ = 1 := htotal
+
+/-- A source basis of normal tensors makes every length-independent pair
+fusion isometry a coisometry.
+
+The BNT hypothesis supplies a common positive word span.  Matrix-unit
+selectors extracted from that span give the final-label selectors required by
+`fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords`.
+Thus neither selectors nor coisometry are additional hypotheses.
+
+This is a derived argument from arXiv:1606.00608, BNT separation at lines
+317--345, equation `Ualphabeta` at lines 986--993, and length independence at
+lines 995--1010.  The simultaneous-inverse interpretation agrees with
+arXiv:1511.08090, lines 269--277 and 427--431. -/
+theorem fusionIsometry_mul_conjTranspose_eq_one_of_bnt_of_lengthIndependent
+    {g D : ℕ} (Fam : BNTFusionIsometryFamily (Fin g) p)
+    {A : MPSTensor (p * p) D}
+    (hBNT : MPSTensor.IsCPSVBasisOfNormalTensors A
+      (fun γ : Fin g ↦
+        ⟨Fam.bondDim γ, (Fam.tensor γ).toMPSTensor⟩))
+    (c : BNTLabelCoefficientFamily (Fin g))
+    (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
+    (hLI : c.LengthIndependent) (α β : Fin g) :
+    Fam.fusionIsometry α β * (Fam.fusionIsometry α β)ᴴ = 1 := by
+  obtain ⟨S, hS, hSpan⟩ := hBNT.exists_positive_wordTupleSpanTop
+  have hBlockSelectors :=
+    MPSTensor.hasBlockSelectorWords_of_wordTupleSpanTop
+      (fun γ ↦ (Fam.tensor γ).toMPSTensor) hSpan
+  exact Fam.fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords
+    c hχ hLI hS
+      (Fam.hasFinalLabelSelectorWords_of_hasBlockSelectorWords hBlockSelectors)
+      α β
 
 private theorem mul_conjTranspose_eq_one_of_conjTranspose_mul_eq_one_of_card_eq
     {m n : Type*} [Fintype m] [DecidableEq m] [Fintype n] [DecidableEq n]
