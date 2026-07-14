@@ -2277,6 +2277,64 @@
     and division by its positive square root gives the stated unitary.
 \end{proof}
 
+\begin{theorem}[Normalized physical maps of the grouped vertical sectors]
+    \label{thm:mpdo_normalized_grouped_sector_maps}
+    \lean{MPOTensor.IsMPDO.exists_normalized_grouped_sector_maps}
+    \leanok
+    \uses{thm:mpdo_grouped_sector_unitary_normalization,
+        thm:mpdo_vertical_bnt_grouping_with_isometries}
+    In the grouped vertical decomposition, put
+    \[
+        Q_{\alpha,q}=\omega_{\alpha,q}^{-1/2}X_{\alpha,q},
+        \qquad
+        W_{\alpha,q}=V_{\alpha,q}Q_{\alpha,q},
+    \]
+    and identify the bond space of each copy with that of its chosen
+    representative.  Then
+    \[
+        W_{\alpha,q}^\dagger W_{\alpha,q}=\Id,
+        \qquad
+        W_{\alpha,q}^\dagger W_{\beta,p}=0
+        \quad\text{if }(\alpha,q)\ne(\beta,p).
+    \]
+    Writing
+    $c_{\alpha,q}=\nu_{\alpha,q}\zeta_{\alpha,q}>0$, the normalized maps
+    satisfy
+    \[
+        \widetilde M_vW_{\alpha,q}
+        =W_{\alpha,q}(c_{\alpha,q}M_\alpha^v)
+    \]
+    and retain the literal reconstruction
+    \[
+        \widetilde M_v
+        =\sum_\alpha\sum_q
+          W_{\alpha,q}(c_{\alpha,q}M_\alpha^v)
+          W_{\alpha,q}^\dagger.
+    \]
+    These are the normalized sector identities in
+    \cite[Proposition~4.13, lines~1895--1921]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_grouped_sector_unitary_normalization,
+        thm:mpdo_vertical_bnt_grouping_with_isometries}
+    Each $Q_{\alpha,q}$ is unitary, so right multiplication by it preserves
+    the isometry equation and the pairwise orthogonality of the physical
+    sector maps.  In the intertwining relation, the scalar normalization
+    commutes with every letter and the adjacent factors
+    $X_{\alpha,q}^{-1}X_{\alpha,q}$ cancel.  The Gram identity gives
+    $X_{\alpha,q}^\dagger
+      =\omega_{\alpha,q}X_{\alpha,q}^{-1}$; hence
+    \[
+        Q_{\alpha,q}M_\alpha^vQ_{\alpha,q}^\dagger
+        =X_{\alpha,q}M_\alpha^vX_{\alpha,q}^{-1}.
+    \]
+    Substitution into every summand of the grouped reconstruction proves the
+    final identity.  Transport along the equality of bond dimensions changes
+    only the coordinate labels.
+\end{proof}
+
 \begin{lemma}[Matrix product vector of the diagonal tensor]
     \label{lem:mpv_diagonal_tensor}
     \lean{MPOTensor.mpv_diagonalTensor}
