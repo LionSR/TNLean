@@ -195,12 +195,12 @@ $\mu_{\alpha,k}$ in the source is $\mu_{\alpha,k}=c_{\alpha,k}$
 (\path{TNLean/MPS/MPDO/VerticalBNT.lean} and
 \path{TNLean/MPS/MPDO/SectorTrace.lean}).  For the unitary gauges, the
 pairwise Gram-conjugation identity of the second displayed diagram at source
-lines~1914--1919 is proved for two corners on a common representative bond
-space by
-\path{MPOTensor.IsHorizontalCF.gramDressing_eq_of_two_grouped_corners}.
-It combines the reflected marked-chain identity with physical-letter marked
-separation and does not identify either corner separately with the raw
-reflected adjoint.  The scalar commutant of
+lines~1914--1919 is proved in
+\path{TNLean/MPS/MPDO/FigureEightPairwise.lean}.  The dependent transport to
+the actual grouped sector and its distinguished copy is proved in
+\path{TNLean/MPS/MPDO/GroupedFigure8.lean}.  This argument does not identify
+either corner separately with the raw reflected adjoint.  The scalar
+commutant of
 the normal tensor $M_\alpha$
 (\path{MPSTensor.IsNormal.eq_smul_one_of_commute}) makes the relative Gram
 ratio scalar.  Positivity of the two Gram matrices then gives
@@ -215,17 +215,11 @@ $X_{\alpha,1}=\Id$, giving the normalization printed by the source
 (\path{MPSTensor.IsNormal.gram_eq_pos_smul_gram_of_gram_conj_eq} in
 \path{TNLean/MPS/CanonicalForm/NormalCommutant.lean}).
 
-The reflected marked-chain and two-sector separation argument of source
-lines~1909--1919 is now proved in
-\path{TNLean/MPS/MPDO/FigureEightPairwise.lean}.  The adjoint exchanges the
-oriented bond indices and reverses the tail word; eliminating the common
-reflected chain before physical-letter separation gives the relative Gram
-identity.  What remains is the dependent-dimension transport from the grouped
-vertical decomposition to two corners on the common representative bond
-space required by this theorem.
-
-Afterwards the copy embeddings can be normalized using the relative theorem
-above.  Their generic assembly into the direct-sum coisometry $U$ is already
+The reflected marked-chain, two-sector separation, and dependent-dimension
+transport of source lines~1909--1919 are therefore complete.  What remains is
+to apply normal-tensor Gram rigidity to this grouped comparison and normalize
+the copy embeddings.  Their generic assembly into the direct-sum coisometry
+$U$ is already
 proved by \path{Matrix.sigmaBlockRow_isCoisometry},
 \path{Matrix.sigmaBlockRow_conjugation}, and
 \path{Matrix.sigmaBlockRow_reconstruction}.  The remaining source-specific
@@ -241,6 +235,11 @@ gauge and coisometry conclusions are not part of the grouping theorem.  The orig
 formulation of \ghissue{2536}, interpreted as a direct conversion of the
 horizontal scalar weights and diagonal restrictions, is therefore not a
 consequence of Proposition~4.13.
+
+\paragraph{Verdict.}
+This is an open gap: Figure~8 is complete for the actual grouped sectors, but
+the normal-tensor Gram normalization and the final physical coisometry have
+not yet been derived from the matrix-product-density-operator hypotheses.
 
 \bibliographystyle{alpha}
 \bibliography{references}

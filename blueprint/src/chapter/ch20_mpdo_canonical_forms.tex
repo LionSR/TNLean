@@ -2112,6 +2112,38 @@
     identifies every slice, hence every vertical letter.
 \end{proof}
 
+\begin{theorem}[Gram conjugation for an actual grouped sector]
+    \label{thm:mpdo_grouped_sector_gram_conjugation}
+    \lean{MPOTensor.IsMPDO.grouped_sector_gram_conj_eq}
+    \leanok
+    \uses{thm:mpdo_pairwise_vertical_gram_conjugation,
+        thm:mpdo_vertical_bnt_grouping_with_isometries}
+    Consider the grouped vertical decomposition furnished by
+    Theorem~\ref{thm:mpdo_vertical_bnt_grouping_with_isometries}.  For a
+    phase class $\alpha$ and a copy $q$, transport its representative tensor
+    to the bond space of that copy.  If $X_{\alpha,q}$ is the corresponding
+    gauge, then
+    \[
+      (X_{\alpha,q}^\dagger X_{\alpha,q})A_{\alpha,q}^v
+      (X_{\alpha,q}^\dagger X_{\alpha,q})^{-1}
+      =A_{\alpha,q}^v
+    \]
+    for every vertical letter $v$.  This is Figure~8 for the actual witnesses
+    of the grouped decomposition.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_pairwise_vertical_gram_conjugation,
+        thm:mpdo_vertical_bnt_grouping_with_isometries}
+    Transport the distinguished corner of the phase class along the equality
+    of its bond dimension with that of the copy $q$.  Its distinguished gauge
+    is the identity.  Apply
+    Theorem~\ref{thm:mpdo_pairwise_vertical_gram_conjugation} to this corner
+    and the corner indexed by $q$.  The Gram conjugation belonging to the
+    distinguished corner is the identity, which gives the stated equality.
+\end{proof}
+
 \begin{theorem}[Gram conjugation from the adjoint dressing]
     \label{thm:gram_conj_of_dressed_adjoint}
     \lean{Matrix.gram_conj_eq_of_dressed_target}
@@ -2176,6 +2208,7 @@
     \leanok
     \uses{def:normal, thm:gram_conj_of_dressed_adjoint,
         thm:mpdo_pairwise_vertical_gram_conjugation,
+        thm:mpdo_grouped_sector_gram_conjugation,
         thm:normal_tensor_gram_rigidity}
     Let $M_\alpha$ be a normal tensor, and let $X$ and $Y$ be invertible
     gauges whose Gram matrices induce the same conjugation on each letter
@@ -2810,6 +2843,7 @@
         thm:mpdo_vertical_bnt_grouping_with_isometries,
         thm:mpdo_reflected_marked_chain,
         thm:mpdo_pairwise_vertical_gram_conjugation,
+        thm:mpdo_grouped_sector_gram_conjugation,
         thm:vertical_sector_coisometry,
         lem:mpdo_vertical_retained_class_nonempty,
         thm:projector_closure_canonical_form,
@@ -2910,10 +2944,10 @@
     $\mu_{\alpha,k}=c_{\alpha,k}$ for the positive coefficient in the
     source decomposition.  Theorem~\ref{thm:mpdo_reflected_marked_chain}
     proves the Figure~7 identity for each such sector, and
-    Theorem~\ref{thm:mpdo_pairwise_vertical_gram_conjugation} gives the
-    pairwise Gram-conjugation identity in Figure~8 whenever the two grouped
-    corners have been transported to their common representative bond space.
-    Theorem~\ref{thm:eq3_of_dressed_adjoint} derives the identity
+    Theorem~\ref{thm:mpdo_grouped_sector_gram_conjugation} applies the
+    pairwise Gram comparison to the actual grouped corners and gives the
+    Gram-conjugation identity in Figure~8.  It remains to apply
+    Theorem~\ref{thm:eq3_of_dressed_adjoint} to derive the identity
     \[
         X_{\alpha,k}^\dagger X_{\alpha,k}
         =\omega_{\alpha,k}\,X_{\alpha,1}^\dagger X_{\alpha,1},
@@ -2934,14 +2968,11 @@
     the corresponding reconstruction identity; each
     $\mu_\alpha$ is diagonal, so the summands regroup as repeated weighted
     copies of $M_\alpha$ exactly as in the finite regrouping of
-    Lemma~\ref{lem:vertical_grouping_equiv}. The remaining step is to transport
-    each grouped corner along the dimension equalities of the grouping
-    theorem so that
-    Theorem~\ref{thm:mpdo_pairwise_vertical_gram_conjugation} applies on the
-    common representative bond space.
+    Lemma~\ref{lem:vertical_grouping_equiv}.
     Consequently, the conclusion stated at lines 1903--1908 has not yet been
     derived from the matrix-product-density-operator hypotheses.  The generic
-    block-row construction is already proved.  After the relative
+    block-row construction is already proved.  The remaining step is to apply
+    normal-tensor Gram rigidity to the grouped comparison.  After the relative
     normalization, the remaining source-specific identifications are to form the normalized
     sector isometries, transport each copy bond space to its representative
     bond space using the dimension equalities from the grouping theorem,
