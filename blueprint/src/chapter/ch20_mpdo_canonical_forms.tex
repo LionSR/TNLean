@@ -1803,6 +1803,50 @@
     Gram matrix the identity.
 \end{proof}
 
+\begin{theorem}[Reflected marked-chain identity]
+    \label{thm:mpdo_reflected_marked_chain}
+    \lean{MPOTensor.horizontalSlice}
+    \lean{MPOTensor.reflectedAdjoint}
+    \lean{MPOTensor.markedChainCoefficient}
+    \lean{MPOTensor.IsMPDO.markedChainCoefficient_eq_reflectedAdjoint}
+    \leanok
+    \uses{def:mpdo, def:vertical_tensor_mpdo,
+        thm:mpo_adjoint_reflection}
+    Let $M$ generate positive semidefinite operators at every length, let
+    $A$ be a vertical tensor, and suppose that a matrix $V$ selects the
+    vertical corner
+    \[
+        V^\dagger\widetilde M_vV=cA^v,
+        \qquad c>0.
+    \]
+    For vertical indices $r,s$, write
+    $(\mathcal R(A)^{rs})_{ab}=(A^{(a,b)})_{rs}$, and set
+    $(A^\sharp)^v=(A^{v^{\mathrm{op}}})^\dagger$.  Then, for every pair of
+    equal-length tail words $\sigma,\tau$,
+    \[
+    \begin{split}
+      \operatorname{tr}\!\left(\mathcal R(A)^{rs}
+        M^{\sigma_1\tau_1}\cdots M^{\sigma_L\tau_L}\right)
+      ={}&\operatorname{tr}\!\left(\mathcal R(A^\sharp)^{rs}
+        (M^\dagger)^{\sigma_L\tau_L}\cdots
+        (M^\dagger)^{\sigma_1\tau_1}\right).
+    \end{split}
+    \]
+    Thus the adjoint exchanges the oriented horizontal bond pair and reverses
+    the unmarked tail.  In particular, this is not a same-tail identity and
+    does not identify $A$ with $A^\sharp$ letterwise.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Compress the first site of the positive operator by $V$.  The resulting
+    matrix is Hermitian.  Expanding one matrix entry gives the marked chain on
+    the left and the complex conjugate of the entry with $r,s$ and the ket--bra
+    words exchanged.  Taking the conjugate transpose reverses the tail
+    product, cyclicity of trace returns the marked factor to the first
+    position, and positivity of $c$ permits cancellation without a phase.
+\end{proof}
+
 \begin{theorem}[Gram conjugation from the adjoint dressing]
     \label{thm:gram_conj_of_dressed_adjoint}
     \lean{Matrix.gram_conj_eq_of_dressed_target}
@@ -1820,12 +1864,13 @@
     \[
         (X^\dagger X)\,B\,(X^\dagger X)^{-1} = C.
     \]
-    Hence any two gauges satisfying the identity with the same target have
-    equal Gram conjugations, and the ratio of their Gram matrices commutes
-    with $B$.  Applied letterwise to a vertical tensor $A$, take $B=A^v$ and,
-    in the fixed orientation $v=(a,b)$, take
-    $C=(A^{(b,a)})^\dagger$ in the first diagram of
+    Hence any two gauges satisfying this conditional identity with the same
+    target have equal Gram conjugations, and the ratio of their Gram matrices commutes
+    with $B$.  This is a useful algebraic route from an abstract common target
+    to the relative identity in
     \cite[Proposition~4.13, lines 1909--1919]{Cirac2016MPDO_arXiv}.
+    The reflected marked-chain argument in the source does not identify the
+    target separately for either sector.
     The same-letter choice $C=B^\dagger$ and the
     further specialization $B^\dagger=B$ are useful corollaries, but the
     latter is not assumed by the source.
@@ -1856,7 +1901,7 @@
     \label{fig:mpdo_vertical_gauge_gram_comparison}
 \end{figure}
 
-\begin{theorem}[Gram-matrix proportionality from the dressed-adjoint identities]
+\begin{theorem}[Gram-matrix proportionality from relative Gram conjugations]
     \label{thm:eq3_of_dressed_adjoint}
     \lean{MPSTensor.IsNormal.gram_eq_pos_smul_gram_of_gram_conj_eq}
     \lean{MPSTensor.IsNormal.gram_eq_pos_smul_gram_of_common_dressed_target}
@@ -1866,17 +1911,19 @@
     \uses{def:normal, thm:gram_conj_of_dressed_adjoint,
         thm:normal_tensor_gram_rigidity}
     Let $M_\alpha$ be a normal tensor, and let $X$ and $Y$ be invertible
-    gauges which dress each letter $M_\alpha^v$ to the same target $C^v$.
+    gauges whose Gram matrices induce the same conjugation on each letter
+    $M_\alpha^v$.
     Then there is a positive real number $\omega$ such that
     \[
         X^\dagger X=\omega\,Y^\dagger Y,
     \]
-    and $\omega^{-1/2}XY^{-1}$ is unitary.  For the first diagram in the
-    proof of \cite[Proposition~4.13, lines 1909--1921]{Cirac2016MPDO_arXiv},
-    the target is $C^v=(M_\alpha^{v^{\mathrm{op}}})^\dagger$.  Taking $Y$ to
-    be the distinguished sector gauge gives the Gram-matrix proportionality
-    used at lines 1903--1907. In the normalization $Y=\Id$, the resulting
-    unitary is $\omega^{-1/2}X$.
+    and $\omega^{-1/2}XY^{-1}$ is unitary.  The Figure~8 comparison in
+    \cite[Proposition~4.13, lines 1909--1921]{Cirac2016MPDO_arXiv} supplies
+    precisely this relative hypothesis for a sector and the distinguished
+    sector. In the normalization $Y=\Id$, the resulting unitary is
+    $\omega^{-1/2}X$.  The common-target declarations attached to this entry
+    are conditional algebraic corollaries, not the reflected marked-chain
+    statement itself.
 \end{theorem}
 
 \begin{proof}
@@ -2397,72 +2444,6 @@
     % Lean adapter: this final reindexing is `finSigmaFinEquiv`.
 \end{proof}
 
-\begin{theorem}[Dressed adjoint from all-length sector compressions]
-    \label{thm:mpdo_grouped_sector_dressed_adjoint}
-    \notready
-    \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_tensor_mpdo}
-    Let $M$ be in horizontal canonical form and generate matrix product
-    density operators.  Let $A$ be a normal vertical tensor, let
-    $V:\C^n\to\C^d$ be an isometry, let $X\in\GL_n(\C)$, and let
-    $c>0$.  Suppose that these matrices and maps satisfy the identities of one
-    reducing vertical sector: for every vertical letter $v$,
-    \[
-        \widetilde M_vV
-          =V\bigl(cXA^vX^{-1}\bigr),
-        \qquad
-        V^\dagger\widetilde M_v
-          =\bigl(cXA^vX^{-1}\bigr)V^\dagger,
-    \]
-    and
-    \[
-        cXA^vX^{-1}=V^\dagger\widetilde M_vV.
-    \]
-    For a vertical letter $v=(a,b)$, write
-    $v^{\mathrm{op}}=(b,a)$.  Then, for every vertical letter $v$, the gauge
-    dressing agrees with the adjoint dressing of the oppositely oriented
-    letter:
-    \[
-        XA^vX^{-1}
-        =(X^{-1})^\dagger(A^{v^{\mathrm{op}}})^\dagger X^\dagger.
-    \]
-    This is the dressed-target conclusion obtained from the two displayed
-    diagrams and Lemma~L in
-    \cite[Proposition~4.13, lines~1909--1919]{Cirac2016MPDO_arXiv}.
-\end{theorem}
-
-\begin{proof}
-    \uses{thm:mpdo_sector_compression_trace_pos,
-        thm:mpo_adjoint_reflection, lem:vertical_tensor_adjoint_reflection,
-        thm:mpo_translation_invariant,
-        thm:representative_one_sub_mp_zero}
-    Put $P=VV^\dagger$.  For every $N\geq 1$, the compression
-    $P_1H^{(N)}P_1$ is positive semidefinite, and is therefore self-adjoint.
-    Taking its adjoint produces the reflected chain of the adjoint tensor and
-    reverses the tail word.  The adjoint-reflection identity exchanges the two
-    oriented bond indices.  Cyclic translation of the periodic chain then
-    returns the marked sector to the first site.  Thus the first-site
-    contractions for $A^v$ and $(A^{v^{\mathrm{op}}})^\dagger$ agree for every
-    chain length and every pair of physical configurations.  This is the input
-    required by a reflected marked-chain form of the horizontal Lemma~L.  The
-    existing same-tail first-site-action theorem does not cover the reversed
-    tail word.  Proving this generalized separation statement is the open
-    step.  Conditional on that statement, the corresponding inserted tensors
-    are equal on the original bond space.
-
-    Compress that tensor equality on the left by $V^\dagger$ and on the right
-    by $V$.  The reducing and corner identities give
-    \[
-        cXA^vX^{-1}
-        =\overline c\,(X^{-1})^\dagger
-        (A^{v^{\mathrm{op}}})^\dagger X^\dagger.
-    \]
-    Since $c>0$, one has $\overline c=c\ne0$; cancelling $c$ gives the
-    asserted dressed-adjoint identity.  The existence of one nonzero sector
-    compression is not used here: that existential statement belongs to the
-    preceding proof that $c$ is positive, whereas Lemma~L requires the
-    self-adjoint compression identity at every length.
-\end{proof}
-
 \begin{lemma}[A retained vertical phase class exists]
     \label{lem:mpdo_vertical_retained_class_nonempty}
     \notready
@@ -2498,7 +2479,7 @@
         thm:mpdo_vertical_complete_reducing_projectors,
         thm:mpdo_vertical_normal_sectors_with_isometries,
         thm:mpdo_vertical_bnt_grouping_with_isometries,
-        thm:mpdo_grouped_sector_dressed_adjoint,
+        thm:mpdo_reflected_marked_chain,
         thm:vertical_sector_coisometry,
         lem:mpdo_vertical_retained_class_nonempty,
         thm:projector_closure_canonical_form,
@@ -2536,7 +2517,7 @@
         thm:mpdo_vertical_irreducible_reducing_sectors,
         thm:mpdo_vertical_complete_reducing_projectors,
         thm:mpdo_vertical_bnt_grouping_with_isometries,
-        thm:mpdo_grouped_sector_dressed_adjoint,
+        thm:mpdo_reflected_marked_chain,
         thm:vertical_sector_coisometry,
         lem:mpdo_vertical_retained_class_nonempty,
         thm:projector_closure_canonical_form,
@@ -2596,19 +2577,11 @@
     $c_{\alpha,k}>0$ from the normalization
     $c_{\alpha,1}=\nu_{\alpha,1}>0$.  From now on write
     $\mu_{\alpha,k}=c_{\alpha,k}$ for the positive coefficient in the
-    source decomposition, and put
-    $P_{\alpha,k}=V_{\alpha,k}V_{\alpha,k}^\dagger$.  The remaining
-    all-length marked-chain step is isolated in
-    Theorem~\ref{thm:mpdo_grouped_sector_dressed_adjoint}.  Applied to each
-    grouped sector with $c=c_{\alpha,k}=\mu_{\alpha,k}$, it gives, for
-    $v=(a,b)$,
-    \[
-        X_{\alpha,k}M_\alpha^vX_{\alpha,k}^{-1}
-        =(X_{\alpha,k}^{-1})^\dagger
-        (M_\alpha^{(b,a)})^\dagger X_{\alpha,k}^\dagger.
-    \]
-    The target $(M_\alpha^{(b,a)})^\dagger$ is independent of $k$.
-    Theorem~\ref{thm:eq3_of_dressed_adjoint} therefore derives the identity
+    source decomposition.  Theorem~\ref{thm:mpdo_reflected_marked_chain}
+    proves the Figure~7 identity for each such sector.  Once the reflected
+    form of Lemma~L compares a grouped sector with the distinguished sector
+    and gives the pairwise Gram-conjugation identity in Figure~8,
+    Theorem~\ref{thm:eq3_of_dressed_adjoint} derives the identity
     \[
         X_{\alpha,k}^\dagger X_{\alpha,k}
         =\omega_{\alpha,k}\,X_{\alpha,1}^\dagger X_{\alpha,1},
@@ -2618,9 +2591,9 @@
     from the two-gauge form of the displayed identities.  The grouped
     decomposition fixes $X_{\alpha,1}=\Id$, so this relative normalization is
     the source's $U_{\alpha,k}$.  Put
-    $W_{\alpha,k}=V_{\alpha,k}U_{\alpha,k}$.  Conditional on the dressed-adjoint
-    theorem, these are isometries with orthogonal ranges, and their block
-    relations become the intertwining and literal reconstruction hypotheses of
+    $W_{\alpha,k}=V_{\alpha,k}U_{\alpha,k}$.  Conditional on the relative
+    Gram-conjugation identity, these are isometries with orthogonal ranges,
+    and their block relations become the intertwining and literal reconstruction hypotheses of
     Theorem~\ref{thm:vertical_sector_coisometry} after the representative bond
     spaces have been identified.  That theorem supplies all the remaining
     coisometry algebra and, once the source-specific identifications below are
@@ -2629,18 +2602,19 @@
     the corresponding reconstruction identity; each
     $\mu_\alpha$ is diagonal, so the summands regroup as repeated weighted
     copies of $M_\alpha$ exactly as in the finite regrouping of
-    Lemma~\ref{lem:vertical_grouping_equiv}.  Since
-    Theorem~\ref{thm:mpdo_grouped_sector_dressed_adjoint} remains open, the
-    conclusion stated at lines 1903--1908 has not yet been derived from the
-    matrix-product-density-operator hypotheses.  The generic block-row
-    construction is already proved.  The remaining source-specific
-    identifications are to form the normalized sector isometries above,
-    transport each copy bond space to its representative bond space using the
-    dimension equalities supplied by the grouping theorem, regard the sectors
-    as dependent pairs $(\alpha,q)$, and identify their dependent disjoint
-    union with the standard direct-sum coordinate space.
-    % Lean adapter: the four steps use the normalized gauges, `hdim`, the pair
-    % `(alpha, q)`, and `finSigmaFinEquiv`, respectively.
+    Lemma~\ref{lem:vertical_grouping_equiv}. The remaining missing proof is the
+    reflected marked-chain and Lemma~L argument of lines 1909--1919: one must
+    compare two marked sector compressions, whose adjoints reverse the tail
+    word, and obtain their relative Gram-conjugation equality without making
+    a separate raw-adjoint identification for either sector.
+    Consequently, the conclusion stated at lines 1903--1908 has not yet been
+    derived from the matrix-product-density-operator hypotheses.  The generic
+    block-row construction is already proved.  After the relative
+    normalization, the remaining source-specific identifications are to form the normalized
+    sector isometries, transport each copy bond space to its representative
+    bond space using the dimension equalities from the grouping theorem,
+    index the sectors by dependent pairs $(\alpha,q)$, and identify their
+    dependent disjoint union with the standard direct-sum coordinate space.
 
     Conditional on that construction, the algebraic basis-of-normal-tensors
     clauses are verified as follows.  With the notation of the grouping

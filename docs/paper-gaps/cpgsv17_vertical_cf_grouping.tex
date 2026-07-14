@@ -194,8 +194,9 @@ $c_{\alpha,1}=\nu_{\alpha,1}>0$.  Thus the coefficient denoted by
 $\mu_{\alpha,k}$ in the source is $\mu_{\alpha,k}=c_{\alpha,k}$
 (\path{TNLean/MPS/MPDO/VerticalBNT.lean} and
 \path{TNLean/MPS/MPDO/SectorTrace.lean}).  For the unitary gauges: granted
-the dressed-adjoint identities of the two displayed diagrams at source
-lines~1909--1919, transported blockwise by Lemma~L, the scalar commutant of
+the pairwise Gram-conjugation identity of the second displayed diagram at
+source lines~1914--1919, transported blockwise by a reflected form of
+Lemma~L, the scalar commutant of
 the normal tensor $M_\alpha$
 (\path{MPSTensor.IsNormal.eq_smul_one_of_commute}) makes the relative Gram
 ratio scalar.  Positivity of the two Gram matrices then gives
@@ -207,51 +208,36 @@ X_{\alpha,k}^\dagger X_{\alpha,k}
 The relative gauge $X_{\alpha,k}X_{\alpha,1}^{-1}$ becomes unitary after
 division by $\sqrt{\omega_{\alpha,k}}$.  The grouping theorem now exposes its choice
 $X_{\alpha,1}=\Id$, giving the normalization printed by the source
-(\path{MPSTensor.IsNormal.gram_eq_pos_smul_gram_of_common_dressed_target} in
+(\path{MPSTensor.IsNormal.gram_eq_pos_smul_gram_of_gram_conj_eq} in
 \path{TNLean/MPS/CanonicalForm/NormalCommutant.lean}).
 
-The remaining source-level gap begins with the dressed-adjoint argument at
-source line~1909.  For every chain length, positivity makes the sector
-compression $(P_{\alpha,k})_1H^{(N)}(P_{\alpha,k})_1$ self-adjoint.  Taking its
-adjoint reverses the tail word, and vertical adjoint reflection exchanges the
-two oriented bond indices.  Spatial reflection followed by cyclic translation
-must return this marked chain to a first-site contraction.  Only the resulting
-all-length family can be passed to Lemma~L.  For every $v=(a,b)$ it must give
-\[
-  X_{\alpha,k}M_\alpha^vX_{\alpha,k}^{-1}
-  =(X_{\alpha,k}^{-1})^\dagger
-    (M_\alpha^{(b,a)})^\dagger X_{\alpha,k}^\dagger.
-\]
-Thus the common target is $(M_\alpha^{(b,a)})^\dagger$, not the adjoint of
-the same oriented letter.  A reflected marked-chain form of Lemma~L is still
-required to derive this identity from the sector compressions.
+The remaining missing proof is the reflected marked-chain and Lemma~L argument
+of source lines~1909--1919.  The adjoint of the marked finite chain exchanges
+the oriented bond indices and reverses its tail word.  A reflected
+marked-chain form of Lemma~L must compare sector $k$ directly with the
+distinguished sector $1$ and derive equality of their Gram conjugations.
+It must not identify either dressed sector separately with the raw reflected
+adjoint: together with the literal positive reconstruction, that stronger
+statement would force tensor-level Hermiticity, which is not invariant under
+the horizontal invertible similarities allowed by canonical form.
+The Figure~7 marked-chain identity itself is now proved in
+\path{TNLean/MPS/MPDO/ReflectedMarkedChain.lean}; the missing statement is
+precisely the two-sector separation step.
 
-The one length at which a sector compression is known to be nonzero is used
-only to prove positivity of its coefficient; it does not suffice for
-Lemma~L.  In cancelling the coefficient from the displayed identity, one must
-use the already established positivity
-$c_{\alpha,k}=\nu_{\alpha,k}\zeta_{\alpha,k}
-=\mu_{\alpha,k}>0$, which gives both
-$\overline c_{\alpha,k}=c_{\alpha,k}$ and $c_{\alpha,k}\ne0$.
-
-After the dressed-adjoint identities have been proved, each invertible gauge
-can be replaced by a proportional unitary.  The generic assembly of
-orthogonal sector isometries into the single direct-sum coisometry $U$ is now
-proved by the block-row identities
-\path{Matrix.sigmaBlockRow_isCoisometry},
+Afterwards the copy embeddings can be normalized using the relative theorem
+above.  Their generic assembly into the direct-sum coisometry $U$ is already
+proved by \path{Matrix.sigmaBlockRow_isCoisometry},
 \path{Matrix.sigmaBlockRow_conjugation}, and
-\path{Matrix.sigmaBlockRow_reconstruction}.  Only the source-specific adapter
-remains: form the normalized sector isometries, transport them along the
-bond-dimension equalities \path{hdim} supplied by the grouping theorem,
-flatten the dependent pair $(\alpha,q)$, and use
-\path{finSigmaFinEquiv} to reindex the dependent disjoint union as the standard
-direct-sum coordinate space.  The length-zero clause in the
-algebraic BNT predicate also requires a retained representative.  The present
-grouping theorem does not state that its phase-class index is nonempty; this
-must be derived from horizontal canonical form and the literal reconstruction
-of the nonzero vertical tensor before a representative is chosen.  These
-source-specific gauge and indexing conclusions are not part of the grouping
-theorem.  The original
+\path{Matrix.sigmaBlockRow_reconstruction}.  The remaining source-specific
+identifications are to transport the copy bond spaces along the dimension
+equalities supplied by the grouping theorem, index the sectors by dependent
+pairs $(\alpha,q)$, and identify the dependent disjoint union with the
+standard direct-sum coordinate space.  The algebraic BNT predicate also
+requires a retained representative; its existence must still be deduced from
+horizontal canonical form and the literal reconstruction of the nonzero
+vertical tensor.  Consequently, the relative Gram conclusion at
+lines~1903--1908 has not yet been derived from the MPDO hypotheses.  These
+gauge and coisometry conclusions are not part of the grouping theorem.  The original
 formulation of \ghissue{2536}, interpreted as a direct conversion of the
 horizontal scalar weights and diagonal restrictions, is therefore not a
 consequence of Proposition~4.13.
