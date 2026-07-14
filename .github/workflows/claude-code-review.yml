@@ -9,6 +9,7 @@ on:
       - "lakefile.toml"
       - "lean-toolchain"
       - "blueprint/src/**/*.tex"
+      - "tex/tn/**/*.tex"
       - "docs/paper-gaps/**/*.tex"
       - "docs/paper-gaps/**/*.bib"
 

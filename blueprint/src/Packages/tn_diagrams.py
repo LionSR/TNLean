@@ -1,9 +1,10 @@
 r"""plasTeX renderers for TNLean tensor-network diagrams.
 
-The PDF blueprint renders the chapter-facing ``\TN...`` macros with TikZ from
-``macros/tn_print.tex``.  Its private drawing kernel lives in
-``macros/tn_core.tex``.  The web blueprint uses the same macro calls and asks
-this module for a cached SVG.  Thus TikZ remains the single source of truth.
+The PDF blueprint renders the chapter-facing ``\TN...`` macros from
+``macros/tn_print.tex`` together with the repository-wide core and library in
+``tex/tn``.  The web blueprint invokes the same public commands and compiles
+the same TeX sources to cached SVG files.  Thus the semantic TikZ calculus is
+common to print and web output.
 """
 
 from __future__ import annotations
@@ -29,16 +30,20 @@ from plasTeX import Command
 log = logging.getLogger(__name__)
 
 _SRC_DIR = Path(__file__).resolve().parents[1]
+_REPO_ROOT = _SRC_DIR.parents[1]
+_TN_SHARED_DIR = _REPO_ROOT / "tex/tn"
+_TN_CORE_FILE = _TN_SHARED_DIR / "tn_core.tex"
+_TN_LIBRARY_FILE = _TN_SHARED_DIR / "tn_library.tex"
 _CACHE_DIR = _SRC_DIR / ".tn_svg_cache"
 _SVG_SUBDIR = "tn_svg"
 _RENDER_SOURCE_FILES = (
     _SRC_DIR / "macros/common.tex",
-    _SRC_DIR / "macros/tn_core.tex",
-    _SRC_DIR / "macros/tn_library.tex",
+    _TN_CORE_FILE,
+    _TN_LIBRARY_FILE,
     _SRC_DIR / "macros/tn_print.tex",
 )
 _TEMPLATE_FILE = _SRC_DIR / "plastex_templates/TensorNetworkDiagrams.jinja2s"
-_SLIDE_DIR = _SRC_DIR.parents[1] / "docs/slides"
+_SLIDE_DIR = _REPO_ROOT / "docs/slides"
 _SLIDE_LIBRARY = _SLIDE_DIR / "tn_library_dark.tex"
 
 _EXPECTED_SLIDE_DIAGRAM_CALLS = {
@@ -80,19 +85,38 @@ _LEGACY_WIRE_COMMAND_PATTERN = re.compile(
 _SEMANTIC_GLYPH_COMMANDS = frozenset(
     {
         "TN@component",
+        "TN@cofusionmap",
+        "TN@expression",
         "TN@factor",
+        "TN@factorwithlegs",
+        "TN@fusionmap",
         "TN@insertion",
         "TN@junction",
+        "TN@labeledmposite",
+        "TN@labeledmpssite",
         "TN@map",
+        "TN@mergemap",
         "TN@mposite",
         "TN@mpssite",
+        "TN@operatorstate",
+        "TN@pinsertion",
         "TN@pepssite",
         "TN@pepsvertex",
         "TN@scalar",
+        "TN@splitmap",
         "TN@state",
         "TN@subspinbox",
+        "TN@systemancillamapdown",
+        "TN@systemancillamapup",
         "TN@tensor",
+        "TN@labeledtensor",
+        "TN@labeledinsertion",
         "TN@threeLegTensorFan",
+        "TN@vcomponent",
+        "TN@vexpression",
+        "TN@vfactor",
+        "TN@vinsertion",
+        "TN@vstate",
     }
 )
 _GENERAL_WIRE_COMMANDS = frozenset(
@@ -107,6 +131,21 @@ _OFFSET_ANCHOR_POINT_PATTERN = re.compile(
     r"(?:north|south|east|west)(?:\s+(?:east|west))?)\s*\)\s*[+-][^$]*\$\)"
 )
 _SIMPLE_NODE_NAME_PATTERN = re.compile(r"[#A-Za-z\\][#A-Za-z0-9@_\\-]*\Z")
+_SYMBOLIC_PORT_PATTERN = re.compile(r"[#A-Za-z\\][#A-Za-z0-9@_\\-]*\Z")
+_UNTYPED_PORT_COMMAND_PATTERN = re.compile(
+    r"\\TN@(?:port|betweenport|westport|eastport|northport|southport|registerport)\b"
+)
+_TYPED_PORT_COMMAND_ARITIES = {
+    "TN@vconnectports": (2, (0, 1)),
+    "TN@pconnectports": (2, (0, 1)),
+    "TN@mconnectports": (2, (0, 1)),
+    "TN@mcompareports": (2, (0, 1)),
+    "TN@vopenport": (2, (0,)),
+    "TN@popenport": (2, (0,)),
+    "TN@vtraceportsbelow": (4, (0, 1)),
+    "TN@vtraceportsabove": (4, (0, 1)),
+    "TN@vtraceportsright": (4, (0, 1)),
+}
 
 
 _DIAGRAM_ARGS: dict[str, str] = {
@@ -314,14 +353,39 @@ def _source_line(path: Path, offset: int) -> str:
 
     text = path.read_text(encoding="utf-8")
     try:
-        relative = path.relative_to(_SRC_DIR)
+        relative = path.relative_to(_REPO_ROOT)
     except ValueError:
         relative = path
     return f"{relative}:{text.count(chr(10), 0, offset) + 1}"
 
 
+def _mask_tex_comments(source: str) -> str:
+    """Replace unescaped TeX comments by spaces while preserving offsets."""
+
+    characters = list(source)
+    index = 0
+    while index < len(characters):
+        if characters[index] != "%":
+            index += 1
+            continue
+        backslashes = 0
+        cursor = index - 1
+        while cursor >= 0 and characters[cursor] == "\\":
+            backslashes += 1
+            cursor -= 1
+        if backslashes % 2:
+            index += 1
+            continue
+        cursor = index
+        while cursor < len(characters) and characters[cursor] != "\n":
+            characters[cursor] = " "
+            cursor += 1
+        index = cursor
+    return "".join(characters)
+
+
 def _pattern_locations(path: Path, pattern: re.Pattern[str]) -> list[str]:
-    text = path.read_text(encoding="utf-8")
+    text = _mask_tex_comments(path.read_text(encoding="utf-8"))
     return [_source_line(path, match.start()) for match in pattern.finditer(text)]
 
 
@@ -329,12 +393,13 @@ def _assert_no_chapter_local_tikz() -> None:
     """Require chapter sources to use the public tensor-network vocabulary."""
 
     forbidden = re.compile(
-        r"^[ \t]*(?:\\begin\{tikzpicture\}|\\tikzset\b|\\tikzstyle\b)",
-        re.MULTILINE,
+        r"\\begin\{tikzpicture\}|\\tikz(?:set|style)?\b|"
+        r"\\(?:draw|fill|filldraw|shade|shadedraw|coordinate|node)\b|"
+        r"\\path\s*(?:\[|\()"
     )
     violations = [
         location
-        for path in sorted((_SRC_DIR / "chapter").glob("*.tex"))
+        for path in sorted((_SRC_DIR / "chapter").rglob("*.tex"))
         for location in _pattern_locations(path, forbidden)
     ]
     if violations:
@@ -344,8 +409,74 @@ def _assert_no_chapter_local_tikz() -> None:
         )
 
 
+def _assert_typed_port_syntax() -> None:
+    """Require typed compositions to use symbolic ports and typed constructors."""
+
+    sources = (_SRC_DIR / "macros/tn_print.tex", _TN_LIBRARY_FILE, _SLIDE_LIBRARY)
+    command_names = frozenset(_TYPED_PORT_COMMAND_ARITIES)
+    malformed: list[str] = []
+    untyped: list[str] = []
+    forbidden_options = re.compile(
+        r"(?:^|,)\s*(?:<?-+>?|dashed|densely dashed|tn (?:grouping|factor) region|"
+        r"tn (?:morphism|comparison) arrow)\s*(?:,|$)"
+    )
+    for path in sources:
+        source = _mask_tex_comments(path.read_text(encoding="utf-8"))
+        untyped.extend(
+            _source_line(path, match.start())
+            for match in _UNTYPED_PORT_COMMAND_PATTERN.finditer(source)
+        )
+        for command, arguments, offset, option in _tex_command_calls(
+            source, command_names
+        ):
+            arity, endpoint_indices = _TYPED_PORT_COMMAND_ARITIES[command]
+            if len(arguments) != arity:
+                malformed.append(_source_line(path, offset))
+                continue
+            endpoints = [re.sub(r"\s+", "", arguments[index]) for index in endpoint_indices]
+            if any(not _SYMBOLIC_PORT_PATTERN.fullmatch(value) for value in endpoints):
+                malformed.append(_source_line(path, offset))
+            if option and forbidden_options.search(option):
+                malformed.append(_source_line(path, offset))
+    if untyped:
+        raise RuntimeError(
+            "Untyped port constructors are private to tex/tn/tn_core.tex: "
+            + _abbreviate_locations(untyped)
+        )
+    if malformed:
+        raise RuntimeError(
+            "Typed tensor-network composition has a non-symbolic endpoint, wrong "
+            "arity, or category-changing style at "
+            + _abbreviate_locations(sorted(set(malformed)))
+        )
+
+
+def _assert_no_raw_glyph_nodes() -> None:
+    """Reject locally styled boxes and dots outside the semantic node vocabulary."""
+
+    appearance = re.compile(
+        r"(?:^|,)\s*(?:draw(?:=|,|$)|fill(?:=|,|$)|circle(?:,|$)|rectangle(?:,|$)|"
+        r"rounded corners|shape=|minimum (?:width|height|size))"
+    )
+    approved = re.compile(
+        r"(?:^|,)\s*tn (?:label|region label \w+|vertex distinguished)(?:,|$)"
+    )
+    violations: list[str] = []
+    for path in (_SRC_DIR / "macros/tn_print.tex", _TN_LIBRARY_FILE, _SLIDE_LIBRARY):
+        source = _mask_tex_comments(path.read_text(encoding="utf-8"))
+        for match in re.finditer(r"\\node\s*\[([^]]*)\]", source):
+            options = match.group(1)
+            if appearance.search(options) and not approved.search(options):
+                violations.append(_source_line(path, match.start()))
+    if violations:
+        raise RuntimeError(
+            "Raw tensor-network glyph appearance is forbidden outside semantic "
+            "node constructors: " + _abbreviate_locations(violations)
+        )
+
+
 def _assert_slide_diagram_contract() -> None:
-    """Check the independent dark-theme tensor-network slide vocabulary."""
+    """Check the dark theme over the repository-wide tensor-network core."""
 
     if not _SLIDE_LIBRARY.exists():
         raise RuntimeError(f"Missing slide tensor-network library: {_SLIDE_LIBRARY}")
@@ -381,9 +512,57 @@ def _assert_slide_diagram_contract() -> None:
         )
 
     library_source = _SLIDE_LIBRARY.read_text(encoding="utf-8")
+    required_shared_inputs = (
+        r"\input{../../tex/tn/tn_core}",
+        r"\input{../../tex/tn/tn_library}",
+    )
+    missing_inputs = [
+        path for path in required_shared_inputs if path not in library_source
+    ]
+    if missing_inputs:
+        raise RuntimeError(
+            "The slide tensor-network theme must load the universal core and "
+            "library: " + ", ".join(missing_inputs)
+        )
+
+    core_source = _TN_CORE_FILE.read_text(encoding="utf-8")
+    core_theme_keys = set(
+        re.findall(r"^\s*(tn theme [^/]+?)/\.style", core_source, re.MULTILINE)
+    )
+    slide_tn_style_keys = set(
+        re.findall(r"^\s*(tn [^/]+?)/\.style", library_source, re.MULTILINE)
+    )
+    invalid_theme_keys = sorted(slide_tn_style_keys - core_theme_keys)
+    if invalid_theme_keys:
+        raise RuntimeError(
+            "The slide theme may replace only declared tn theme slots: "
+            + ", ".join(invalid_theme_keys)
+        )
+
+    duplicate_kernel = re.compile(
+        r"slidetn/|^\\newcommand\{\\SlideTN(?:Tensor|Component|State|Insertion|"
+        r"PhysicalLeg|VirtualBond|OpenLeft|OpenRight|OmittedChain|TraceClosure)\}",
+        re.MULTILINE,
+    )
+    if duplicate_kernel.search(library_source):
+        raise RuntimeError(
+            "The slide theme duplicates tensor-network atoms instead of using "
+            "the universal TN core."
+        )
+
+    raw_slide_draw = re.compile(
+        r"^[ \t]*\\(?:draw|path|coordinate|fill|filldraw|shade|shadedraw)\b",
+        re.MULTILINE,
+    )
+    if raw_slide_draw.search(library_source):
+        raise RuntimeError(
+            "Complete slide tensor networks must compose universal TN commands, "
+            "not contain raw TikZ paths or coordinates."
+        )
+
     dashed_contraction = re.compile(
-        r"\\draw\[(?:[^\]]*,)?slidetn/(?:virtual wire|physical wire|trace)"
-        r"[^\]]*(?:dashed|densely dashed)"
+        r"\\TN@(?:v|p)(?:connect|open|trace)[A-Za-z@]*"
+        r"(?:\[[^\]]*(?:dashed|densely dashed)[^\]]*\])"
     )
     if dashed_contraction.search(library_source):
         raise RuntimeError(
@@ -410,13 +589,14 @@ def _assert_slide_diagram_contract() -> None:
 
 
 def _noncore_tikz_style_locations() -> list[str]:
-    """Locate style declarations that still need migration to ``tn_core.tex``."""
+    """Locate semantic style declarations outside the universal TN core."""
 
-    core_path = (_SRC_DIR / "macros/tn_core.tex").resolve()
+    core_path = _TN_CORE_FILE.resolve()
     forbidden = re.compile(r"^[ \t]*(?:\\tikzset\b|\\tikzstyle\b)", re.MULTILINE)
     return [
         location
-        for path in sorted(_SRC_DIR.rglob("*.tex"))
+        for root in (_SRC_DIR, _TN_SHARED_DIR)
+        for path in sorted(root.rglob("*.tex"))
         if path.resolve() != core_path
         for location in _pattern_locations(path, forbidden)
     ]
@@ -635,16 +815,16 @@ def _semantic_audit_counts() -> dict[str, object]:
     """Collect migration measures without assigning mathematical meaning to them."""
 
     print_path = _SRC_DIR / "macros/tn_print.tex"
-    core_path = _SRC_DIR / "macros/tn_core.tex"
+    core_path = _TN_CORE_FILE
     print_source = print_path.read_text(encoding="utf-8")
     core_source = core_path.read_text(encoding="utf-8")
-    library_path = _SRC_DIR / "macros/tn_library.tex"
+    library_path = _TN_LIBRARY_FILE
     library_source = (
         library_path.read_text(encoding="utf-8") if library_path.exists() else ""
     )
     private_source = core_source + "\n" + library_source
     public_macros = _public_macro_bodies(print_source)
-    chapter_paths = sorted((_SRC_DIR / "chapter").glob("*.tex"))
+    chapter_paths = sorted((_SRC_DIR / "chapter").rglob("*.tex"))
     chapter_sources = [path.read_text(encoding="utf-8") for path in chapter_paths]
     chapter_source = "\n".join(chapter_sources)
 
@@ -665,7 +845,7 @@ def _semantic_audit_counts() -> dict[str, object]:
 
     audited_sources = {
         "macros/tn_print.tex": _source_semantic_debt(print_path, print_source),
-        "macros/tn_library.tex": _source_semantic_debt(library_path, library_source),
+        "tex/tn/tn_library.tex": _source_semantic_debt(library_path, library_source),
     }
     raw_glyph_counts = {
         name: sum(
@@ -771,6 +951,8 @@ def _run_semantic_audit(*, strict: bool, machine_readable: bool) -> None:
     _assert_diagram_args_match_print_macros()
     _assert_diagram_templates_cover_registered_macros()
     _assert_no_chapter_local_tikz()
+    _assert_typed_port_syntax()
+    _assert_no_raw_glyph_nodes()
 
     counts = _semantic_audit_counts()
     raw_glyph_counts = counts["raw_glyph_counts"]
@@ -838,7 +1020,7 @@ def _run_semantic_audit(*, strict: bool, machine_readable: bool) -> None:
         failures = []
         if noncore_style_locations:
             failures.append(
-                "TikZ styles outside macros/tn_core.tex at "
+                "TikZ styles outside tex/tn/tn_core.tex at "
                 + _abbreviate_locations(noncore_style_locations)
             )
         raw_glyph_total = sum(raw_glyph_counts.values())
@@ -850,7 +1032,7 @@ def _run_semantic_audit(*, strict: bool, machine_readable: bool) -> None:
             )
             failures.append(
                 "raw glyph aliases or tensor-network draws in macros/tn_print.tex "
-                "and macros/tn_library.tex "
+                "and tex/tn/tn_library.tex "
                 f"(glyphs={raw_glyph_total}, wires={raw_wire_total}) at "
                 + _abbreviate_locations(raw_locations)
             )
@@ -1213,7 +1395,7 @@ def _main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--check-slides",
         action="store_true",
-        help="check the independent dark-theme tensor-network slide vocabulary",
+        help="check the shared tensor-network calculus under the slide dark theme",
     )
     parser.add_argument(
         "--audit",
@@ -1275,8 +1457,8 @@ def _main(argv: list[str] | None = None) -> int:
         _assert_slide_diagram_contract()
         slide_calls = sum(_EXPECTED_SLIDE_DIAGRAM_CALLS.values())
         print(
-            f"checked {slide_calls} tensor-network diagrams in the independent "
-            "slide collection"
+            f"checked {slide_calls} tensor-network diagrams under the shared "
+            "calculus and slide theme"
         )
 
     if args.audit:
