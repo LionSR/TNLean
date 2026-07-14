@@ -715,56 +715,60 @@
 % the present MPDO fusion family.  The final row uses U^\dagger U = 1 only;
 % it deliberately does not depict U U^\dagger = 1.
 \newcommand{\TNMPDOUnweightedZipperReconstruction}{%
-    \begin{TNEquationRow}[compact]
-      \TNTerm{\TNSplitMap{uzOneU}{(-3.80,2.20)}{U_{\alpha,\beta}}
-            \TNStackedMPOProduct{uzOneP}{(-2.65,2.20)}{M_\alpha}{M_\beta}{}
+    \begin{TNEquationRows}[compact]
+      \TNTerm{\TNSplitMap{uzOneU}{(0,0)}{U_{\alpha,\beta}}
+            \TNStackedMPOProduct{uzOneP}{(\TNCellPitch,0)}{}{}{}
             \TNConnectVirtual{uzOneUFactorOne}{uzOnePUpperWest}
             \TNConnectVirtual{uzOneUFactorTwo}{uzOnePLowerWest}
             \TNOpenVirtualWest{uzOneUCombined}
             \TNOpenVirtualEast{uzOnePUpperEast}
             \TNOpenVirtualEast{uzOnePLowerEast}
-        \TNPoint{uzOneRelation}{(-1.55,2.20)}
-        \TNLabel{uzOneRelation}{(0,0)}{=}
-        \TNMPOSite{uzOneH}{(-0.35,2.20)}{H_{\alpha,\beta}^{ij}}
-            \TNSplitMap{uzOneR}{(1.15,2.20)}{U_{\alpha,\beta}}
+            \TNLabelAbove{uzOnePUpperKet}{M_\alpha}
+            \TNLabelBelow{uzOnePLowerBra}{M_\beta}}
+        & \TNRelation{=} &
+        \TNTerm{\TNMPOSite{uzOneH}{(0,0)}{}
+            \TNSplitMap{uzOneR}{(\TNCellPitch,0)}{U_{\alpha,\beta}}
             \TNConnectVirtual{uzOneHEast}{uzOneRCombined}
             \TNOpenVirtualWest{uzOneHWest}
             \TNOpenVirtualEast{uzOneRFactorOne}
             \TNOpenVirtualEast{uzOneRFactorTwo}
-
-        \TNStackedMPOProduct{uzTwoP}{(-3.80,0)}{M_\alpha}{M_\beta}{}
-            \TNMergeMap{uzTwoU}{(-2.65,0)}{U_{\alpha,\beta}^{\dagger}}
+            \TNLabelBelow{uzOneHBra}{H_{\alpha,\beta}^{ij}}} \\
+      \TNTerm{\TNStackedMPOProduct{uzTwoP}{(0,0)}{}{}{}
+            \TNMergeMap{uzTwoU}{(\TNCellPitch,0)}{U_{\alpha,\beta}^{\dagger}}
             \TNConnectVirtual{uzTwoPUpperEast}{uzTwoUFactorOne}
             \TNConnectVirtual{uzTwoPLowerEast}{uzTwoUFactorTwo}
             \TNOpenVirtualWest{uzTwoPUpperWest}
             \TNOpenVirtualWest{uzTwoPLowerWest}
             \TNOpenVirtualEast{uzTwoUCombined}
-        \TNPoint{uzTwoRelation}{(-1.55,0)}
-        \TNLabel{uzTwoRelation}{(0,0)}{=}
-        \TNMergeMap{uzTwoL}{(-0.35,0)}{U_{\alpha,\beta}^{\dagger}}
-            \TNMPOSite{uzTwoH}{(1.15,0)}{H_{\alpha,\beta}^{ij}}
+            \TNLabelAbove{uzTwoPUpperKet}{M_\alpha}
+            \TNLabelBelow{uzTwoPLowerBra}{M_\beta}}
+        & \TNRelation{=} &
+        \TNTerm{\TNMergeMap{uzTwoL}{(0,0)}{U_{\alpha,\beta}^{\dagger}}
+            \TNMPOSite{uzTwoH}{(\TNCellPitch,0)}{}
             \TNConnectVirtual{uzTwoLCombined}{uzTwoHWest}
             \TNOpenVirtualWest{uzTwoLFactorOne}
             \TNOpenVirtualWest{uzTwoLFactorTwo}
             \TNOpenVirtualEast{uzTwoHEast}
-
-        \TNStackedMPOProduct{uzThreeP}{(-3.80,-2.20)}{M_\alpha}{M_\beta}{}
+            \TNLabelBelow{uzTwoHBra}{H_{\alpha,\beta}^{ij}}} \\
+      \TNTerm{\TNStackedMPOProduct{uzThreeP}{(0,0)}{}{}{}
             \TNOpenVirtualWest{uzThreePUpperWest}
             \TNOpenVirtualWest{uzThreePLowerWest}
             \TNOpenVirtualEast{uzThreePUpperEast}
             \TNOpenVirtualEast{uzThreePLowerEast}
-        \TNPoint{uzThreeRelation}{(-2.65,-2.20)}
-        \TNLabel{uzThreeRelation}{(0,0)}{=}
-        \TNMergeMap{uzThreeL}{(-1.45,-2.20)}{U_{\alpha,\beta}^{\dagger}}
-            \TNMPOSite{uzThreeH}{(0,-2.20)}{H_{\alpha,\beta}^{ij}}
-            \TNSplitMap{uzThreeR}{(1.45,-2.20)}{U_{\alpha,\beta}}
+            \TNLabelAbove{uzThreePUpperKet}{M_\alpha}
+            \TNLabelBelow{uzThreePLowerBra}{M_\beta}}
+        & \TNRelation{=} &
+        \TNTerm{\TNMergeMap{uzThreeL}{(0,0)}{U_{\alpha,\beta}^{\dagger}}
+            \TNMPOSite{uzThreeH}{(\TNCellPitch,0)}{}
+            \TNSplitMap{uzThreeR}{(2*\TNCellPitch,0)}{U_{\alpha,\beta}}
             \TNConnectVirtual{uzThreeLCombined}{uzThreeHWest}
             \TNConnectVirtual{uzThreeHEast}{uzThreeRCombined}
             \TNOpenVirtualWest{uzThreeLFactorOne}
             \TNOpenVirtualWest{uzThreeLFactorTwo}
             \TNOpenVirtualEast{uzThreeRFactorOne}
-            \TNOpenVirtualEast{uzThreeRFactorTwo}}
-    \end{TNEquationRow}%
+            \TNOpenVirtualEast{uzThreeRFactorTwo}
+            \TNLabelBelow{uzThreeHBra}{H_{\alpha,\beta}^{ij}}}
+    \end{TNEquationRows}%
 }
 
 % Closing an L-site chain of the local BNT fusion identity.  On the right the
@@ -1104,15 +1108,7 @@
 
 \newcommand{\TNGaugeConjugation}[3]{%
     \begin{TNDiagram}[normal]
-        \TNInsertion{tnXl}{(-1.10,0)}{#1}
-        \TNTensor{tnA}{(0,0)}
-        \TNInsertion{tnXr}{(1.10,0)}{#3}
-        \TNVirtualPort{tnXlOpenWestPort}{tnXl}{west}\TNOpenVirtualWest{tnXlOpenWestPort}
-        \TNVirtualPort{tnXlTotnA}{tnXl}{east}\TNVirtualPort{tnATotnXl}{tnA}{west}\TNConnectVirtual{tnXlTotnA}{tnATotnXl}
-        \TNVirtualPort{tnATotnXr}{tnA}{east}\TNVirtualPort{tnXrTotnA}{tnXr}{west}\TNConnectVirtual{tnATotnXr}{tnXrTotnA}
-        \TNVirtualPort{tnXrOpenEastPort}{tnXr}{east}\TNOpenVirtualEast{tnXrOpenEastPort}
-        \TNPhysicalPort{tnAOpenKetPort}{tnA}{north}\TNOpenPhysicalNorth{tnAOpenKetPort}
-        \TNLabelAbove{tnA}{#2}
+        \TNGaugeConjugatedMPSSite{tnGauge}{(0,0)}{#2}{#1}{#3}
     \end{TNDiagram}%
 }
 
@@ -1307,7 +1303,7 @@
         \TNVirtualPort{tnRTrace}{tnR}{east}
         \TNConnectVirtualVH{tnLTrace}{tnYTraceLeft}
         \TNConnectVirtualHV{tnYTraceRight}{tnRTrace}
-        \TNPlacedLabel{tnClientLabel1267}{(0.80,-1.00)}{\tr}
+        \TNLabelBelow{tnY.south}{\tr}
     \end{TNDiagram}%
 }
 
@@ -1435,7 +1431,7 @@
             \TNInsertion{realLeftM}{(-0.56,0)}{M}
             \TNVirtualPort{realLeftMOpenWestPort}{realLeftM}{west}\TNOpenVirtualWest{realLeftMOpenWestPort}
             \TNVirtualPort{realLeftMTorealLeftA}{realLeftM}{east}\TNVirtualPort{realLeftATorealLeftM}{realLeftA}{west}\TNConnectVirtual{realLeftMTorealLeftA}{realLeftATorealLeftM}
-            \TNPlacedLabel{tnClientLabel1401}{($(realLeftA.south)+(0,-0.30)$)}{A_u}
+            \TNLabelRight{realLeftA.south}{A_u}
             \TNPlacedLabel{tnClientLabel1402}{(-0.56,-0.35)}{e}
             \TNPlacedLabel{tnClientLabel1403}{(0.72,-0.36)}{\eta_{\widehat e}}
             \TNPlacedLabel{tnClientLabel1404}{($(realLeftA.north)+(0,0.73)$)}{i}
@@ -1444,13 +1440,13 @@
         \begin{TNPanel}{tnClientPanel1407}{(3.20cm,0)}
             \TNTensor{realRightA}{(0,0)}
             \TNPhysicalPort{realRightAOpenKetPort}{realRightA}{north}\TNOpenPhysicalNorth{realRightAOpenKetPort}
-            \TNInsertion{realRightO}{(0,0.62)}{O}
+            \TNInsertion{realRightO}{(0,0.62)}{}
             \TNPhysicalPort{realRightATorealRightO}{realRightA}{north}\TNPhysicalPort{realRightOTorealRightA}{realRightO}{south}\TNConnectPhysical{realRightATorealRightO}{realRightOTorealRightA}
             \TNPhysicalPort{realRightOOpenKetPort}{realRightO}{north}\TNOpenPhysicalNorth{realRightOOpenKetPort}
             \TNVirtualPort{realRightAOpenWestPort}{realRightA}{west}\TNOpenVirtualWest{realRightAOpenWestPort}
             \TNVirtualPort{realRightAOpenEastPort}{realRightA}{east}\TNOpenVirtualEast{realRightAOpenEastPort}
             \TNVirtualPort{realRightAOpenSouthPort}{realRightA}{south}\TNOpenVirtualSouth{realRightAOpenSouthPort}
-            \TNPlacedLabel{tnClientLabel1416}{($(realRightA.south)+(0,-0.30)$)}{A_u}
+            \TNLabelRight{realRightA.south}{A_u}
             \TNPlacedLabel{tnClientLabel1417}{(-0.72,-0.36)}{\eta_e}
             \TNPlacedLabel{tnClientLabel1418}{(0.72,-0.36)}{\eta_{\widehat e}}
             \TNPlacedLabel{tnClientLabel1419}{($(realRightO.north)+(0,0.55)$)}{O(A_u(\eta_e,\eta_{\widehat e}))}
@@ -1477,19 +1473,15 @@
 \newcommand{\TNPEPSEdgeInsertionEquality}{%
     \begin{TNDiagram}[normal]
         \begin{TNPanel}{tnClientPanel1442}{(0,0)}
-            \TNPEPSFiveSitePatch{edgeEqA}
+            \TNPEPSFiveSiteEdgeInsertion{edgeEqA}{X}
             \TNPEPSFiveSiteLabels{edgeEqA}{A_1}{A_2}{A_3}{A_4}{A_5}
-            \TNInsertion{edgeInsA}
-                {($(edgeEqAtwo)!0.50!(edgeEqAfive)$)}{X}
         \end{TNPanel}
         \TNPlacedLabel{tnClientLabel1448}{(2.75,0.70)}{=}
         \begin{TNPanel}{tnClientPanel1449}{(4.15cm,0)}
-            \TNPEPSFiveSitePatch{edgeEqB}
+            \TNPEPSFiveSiteEdgeInsertion{edgeEqB}{X}
             \TNPEPSFiveSiteLabels{edgeEqB}
             {\widetilde B_1}{\widetilde B_2}{\widetilde B_3}
             {\widetilde B_4}{\widetilde B_5}
-            \TNInsertion{edgeInsB}
-                {($(edgeEqBtwo)!0.50!(edgeEqBfive)$)}{X}
         \end{TNPanel}
     \end{TNDiagram}%
 }
@@ -1507,21 +1499,12 @@
         \end{TNPanel}
         \TNPlacedLabel{tnClientLabel1471}{(1.15,0)}{\longmapsto}
         \begin{TNPanel}{tnClientPanel1472}{(2.30cm,0)}
-            \TNTensor{absBt}{(0,0)}
-            \TNPhysicalPort{absBtOpenKetPort}{absBt}{north}\TNOpenPhysicalNorth{absBtOpenKetPort}
-            \TNInsertion{absL}{(-0.70,0)}{Z_{e_1}^{\pm1}}
-            \TNInsertion{absR}{(0.70,0)}{Z_{e_2}^{\pm1}}
-            \TNInsertion{absDL}{(-0.48,-0.60)}{Z_{e_3}^{\pm1}}
-            \TNInsertion{absDR}{(0.48,-0.60)}{Z_{e_4}^{\pm1}}
-            \TNVirtualPort{absLOpenWestPort}{absL}{west}\TNOpenVirtualWest{absLOpenWestPort}
-            \TNVirtualPort{absLToabsBt}{absL}{east}\TNVirtualPort{absBtToabsL}{absBt}{west}\TNConnectVirtual{absLToabsBt}{absBtToabsL}
-            \TNVirtualPort{absBtToabsR}{absBt}{east}\TNVirtualPort{absRToabsBt}{absR}{west}\TNConnectVirtual{absBtToabsR}{absRToabsBt}
-            \TNVirtualPort{absROpenEastPort}{absR}{east}\TNOpenVirtualEast{absROpenEastPort}
-            \TNVirtualPort{absBtToabsDL}{absBt}{225}\TNVirtualPort{absDLToabsBt}{absDL}{north}\TNConnectVirtual{absBtToabsDL}{absDLToabsBt}
-            \TNVirtualPort{absBtToabsDR}{absBt}{315}\TNVirtualPort{absDRToabsBt}{absDR}{north}\TNConnectVirtual{absBtToabsDR}{absDRToabsBt}
-            \TNVirtualPort{absDLOpenSouthPort}{absDL}{south}\TNOpenVirtualSouth{absDLOpenSouthPort}
-            \TNVirtualPort{absDROpenSouthPort}{absDR}{south}\TNOpenVirtualSouth{absDROpenSouthPort}
-            \TNPlacedLabel{tnClientLabel1487}{($(absBt.south)+(0,-1.10)$)}{\widetilde B_v}
+            \TNFourBondGaugeStar{absGauge}{(0,0)}
+                {Z_{e_1}^{\pm1}}{Z_{e_2}^{\pm1}}
+                {Z_{e_3}^{\pm1}}{Z_{e_4}^{\pm1}}
+            \TNPoint{absGaugeLabel}
+                {($(absGaugeSouthWestOuter)!0.5!(absGaugeSouthEastOuter)$)}
+            \TNLabelBelow{absGaugeLabel}{\widetilde B_v}
         \end{TNPanel}
     \end{TNDiagram}%
 }
@@ -1545,18 +1528,15 @@
         \end{TNPanel}
         \TNPlacedLabel{tnClientLabel1509}{(1.25,0)}{=}
         \begin{TNPanel}{tnClientPanel1510}{(2.05cm,0)}
-            \TNPEPSThreeLegFan{gaugeRedBZ}{B_1}
-            \TNInsertion{gaugeRedZ}{(0.52,-0.36)}{Z}
+            \TNPEPSThreeLegFanInsertion{gaugeRedBZ}{B_1}{3}{Z}
         \end{TNPanel}
         \TNPlacedLabel{tnClientLabel1514}{(3.30,0)}{=}
         \begin{TNPanel}{tnClientPanel1515}{(4.10cm,0)}
-            \TNPEPSThreeLegFan{gaugeRedBU}{B_1}
-            \TNInsertion{gaugeRedU}{(0.56,0.30)}{U}
+            \TNPEPSThreeLegFanInsertion{gaugeRedBU}{B_1}{1}{U}
         \end{TNPanel}
         \TNPlacedLabel{tnClientLabel1519}{(5.35,0)}{=}
         \begin{TNPanel}{tnClientPanel1520}{(6.15cm,0)}
-            \TNPEPSThreeLegFan{gaugeRedBW}{B_1}
-            \TNInsertion{gaugeRedW}{(0.52,-0.04)}{W}
+            \TNPEPSThreeLegFanInsertion{gaugeRedBW}{B_1}{2}{W}
         \end{TNPanel}
     \end{TNDiagram}%
 }
@@ -1635,7 +1615,9 @@
         \TNLabelLeft{unionAB}{A\setminus B}
         \TNLabelAbove{unionI}{A\cap B}
         \TNLabelRight{unionBA}{B\setminus A}
-        \TNLabelBelow{unionC}{(A\cup B)^c}
+        \TNPoint{unionBaseLabel}
+            {($(unionABToBA)!0.5!(unionBAToAB)$)}
+        \TNLabelBelow{unionBaseLabel}{(A\cup B)^c}
     \end{TNDiagram}%
 }
 
@@ -1883,21 +1865,9 @@
         \end{TNPanel}
         \TNPlacedLabel{tnClientLabel1855}{(1.25,0)}{=}
         \begin{TNPanel}{tnClientPanel1856}{(2.35cm,0)}
-            \TNTensor{tiA}{(0,0)}
-            \TNPhysicalPort{tiAOpenKetPort}{tiA}{45}\TNOpenPhysicalNorth{tiAOpenKetPort}
-            \TNInsertion{tiXL}{(-0.76,0)}{X}
-            \TNInsertion{tiXR}{(0.76,0)}{X^{-1}}
-            \TNInsertion{tiYD}{(0,-0.76)}{Y}
-            \TNInsertion{tiYU}{(0,0.76)}{Y^{-1}}
-            \TNVirtualPort{tiXLOpenWestPort}{tiXL}{west}\TNOpenVirtualWest{tiXLOpenWestPort}
-            \TNVirtualPort{tiXLTotiA}{tiXL}{east}\TNVirtualPort{tiATotiXL}{tiA}{west}\TNConnectVirtual{tiXLTotiA}{tiATotiXL}
-            \TNVirtualPort{tiATotiXR}{tiA}{east}\TNVirtualPort{tiXRTotiA}{tiXR}{west}\TNConnectVirtual{tiATotiXR}{tiXRTotiA}
-            \TNVirtualPort{tiXROpenEastPort}{tiXR}{east}\TNOpenVirtualEast{tiXROpenEastPort}
-            \TNVirtualPort{tiYDOpenSouthPort}{tiYD}{south}\TNOpenVirtualSouth{tiYDOpenSouthPort}
-            \TNVirtualPort{tiYDTotiA}{tiYD}{north}\TNVirtualPort{tiATotiYD}{tiA}{south}\TNConnectVirtual{tiYDTotiA}{tiATotiYD}
-            \TNVirtualPort{tiATotiYU}{tiA}{north}\TNVirtualPort{tiYUTotiA}{tiYU}{south}\TNConnectVirtual{tiATotiYU}{tiYUTotiA}
-            \TNVirtualPort{tiYUOpenNorthPort}{tiYU}{north}\TNOpenVirtualNorth{tiYUOpenNorthPort}
-            \TNPlacedLabel{tnClientLabel1871}{($(tiA.south)+(0,-1.20)$)}{\lambda A}
+            \TNCardinalGaugeCross{tiGauge}{(0,0)}
+                {X}{X^{-1}}{Y}{Y^{-1}}
+            \TNLabelBelow{tiGaugeSouthOuter}{\lambda A}
         \end{TNPanel}
     \end{TNDiagram}%
 }
@@ -1919,22 +1889,13 @@
 
 \newcommand{\TNPEPSGaugeVertexAction}{%
     \begin{TNDiagram}[normal]
-        \TNTensor{tnV}{(0,0)}
-        \TNPhysicalPort{tnVOpenKetPort}{tnV}{45}\TNOpenPhysicalNorth{tnVOpenKetPort}
-        \TNInsertion{tnL}{(-1.05,0)}{M_{ve_1}}
-        \TNInsertion{tnR}{(1.05,0)}{M_{ve_2}}
-        \TNInsertion{tnDL}{(-0.78,-0.92)}{M_{ve_3}}
-        \TNInsertion{tnDR}{(0.78,-0.92)}{M_{ve_4}}
-        \TNVirtualPort{tnLTotnV}{tnL}{east}\TNVirtualPort{tnVTotnL}{tnV}{west}\TNConnectVirtual{tnLTotnV}{tnVTotnL}
-        \TNVirtualPort{tnVTotnR}{tnV}{east}\TNVirtualPort{tnRTotnV}{tnR}{west}\TNConnectVirtual{tnVTotnR}{tnRTotnV}
-        \TNVirtualPort{tnVTotnDL}{tnV}{225}\TNVirtualPort{tnDLTotnV}{tnDL}{north}\TNConnectVirtual{tnVTotnDL}{tnDLTotnV}
-        \TNVirtualPort{tnVTotnDR}{tnV}{315}\TNVirtualPort{tnDRTotnV}{tnDR}{north}\TNConnectVirtual{tnVTotnDR}{tnDRTotnV}
-        \TNVirtualPort{tnLOpenWestPort}{tnL}{west}\TNOpenVirtualWest{tnLOpenWestPort}
-        \TNVirtualPort{tnROpenEastPort}{tnR}{east}\TNOpenVirtualEast{tnROpenEastPort}
-        \TNVirtualPort{tnDLOpenSouthPort}{tnDL}{south}\TNOpenVirtualSouth{tnDLOpenSouthPort}
-        \TNVirtualPort{tnDROpenSouthPort}{tnDR}{south}\TNOpenVirtualSouth{tnDROpenSouthPort}
-        \TNPlacedLabel{tnClientLabel1907}{($(tnV.45)+(0.38,0.50)$)}{\sigma}
-        \TNPlacedLabel{tnClientLabel1908}{($(tnV.south)+(0,-1.45)$)}{A_v \mapsto A_v^X}
+        \TNFourBondGaugeStar{tnGaugeAction}{(0,0)}
+            {M_{ve_1}}{M_{ve_2}}{M_{ve_3}}{M_{ve_4}}
+        \TNLabelRight{tnGaugeActionPhysical}{\sigma}
+        \TNPoint{tnGaugeActionLabel}
+            {($(tnGaugeActionSouthWestOuter)!0.5!
+                (tnGaugeActionSouthEastOuter)$)}
+        \TNLabelBelow{tnGaugeActionLabel}{A_v \mapsto A_v^X}
     \end{TNDiagram}%
 }
 

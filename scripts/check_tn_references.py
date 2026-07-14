@@ -101,6 +101,11 @@ def main() -> int:
         action="store_true",
         help="replace approved references after explicit visual approval",
     )
+    parser.add_argument(
+        "--all-registered",
+        action="store_true",
+        help="render every registered diagram and reject boundary contact",
+    )
     args = parser.parse_args()
     renderer = load_renderer()
     REFERENCES.mkdir(parents=True, exist_ok=True)
@@ -124,6 +129,14 @@ def main() -> int:
             if score > 0.012:
                 raise RuntimeError(f"{name}: raster difference {score:.4f} exceeds 0.012")
             print(f"{name}: {score:.4f}")
+        if args.all_registered:
+            rendered = renderer._smoke_render(renderer._DIAGRAM_ARGS)
+            for svg in rendered:
+                name = svg.stem.removeprefix("tn-smoke-")
+                png = temporary / f"registered-{name}.png"
+                rasterize(svg, png)
+                assert_margin(Image.open(png), name)
+            print(f"registered boundary checks: {len(rendered)}")
     return 0
 
 

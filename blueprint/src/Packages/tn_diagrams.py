@@ -139,7 +139,7 @@ _UNTYPED_PORT_COMMAND_PATTERN = re.compile(
 _PRIVATE_COMMAND_PATTERN = re.compile(r"\\TN@[A-Za-z@]+")
 _CLIENT_TIKZ_PATTERN = re.compile(
     r"\\begin\{tikzpicture\}|\\begin\{scope\}(?:\[[^]]*\])?|"
-    r"\\(?:draw|path|coordinate|node)\b"
+    r"\\(?:draw|coordinate|node)\b|\\path\s*(?:\[|\()"
 )
 _LOCAL_GEOMETRY_PATTERN = re.compile(
     r"(?:scale|xshift|yshift)\s*=|"
@@ -1406,6 +1406,7 @@ def _dvisvgm_command(stem: str, ext: str, svg_path: Path) -> list[str]:
         shutil.which("dvisvgm") or "dvisvgm",
         "--no-fonts",
         "--exact",
+        "--bbox=2pt",
         f"--output={svg_path}",
     ]
     if ext == "pdf":

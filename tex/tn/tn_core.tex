@@ -27,11 +27,11 @@
             inner sep=0.055cm
         },
     tn theme insertion/.style={
-            draw,
-            fill,
+            draw=red!75!black,
+            fill=red!28,
+            text=black,
             shape=circle,
-            inner sep=0.055cm,
-            red
+            inner sep=0.055cm
         },
     tn theme junction/.style={
             fill,
@@ -174,6 +174,8 @@
     \def\TN@chainsep{1.45}%
     \def\TN@chainright{4.20}%
     \def\TN@chainellipsisx{2.82}%
+    \def\TN@gaugeradius{0.74}%
+    \def\TN@gaugediagonal{0.54}%
 }
 
 \newcommand{\TN@compactprofile}{%
@@ -194,6 +196,8 @@
     \def\TN@chainsep{1.18}%
     \def\TN@chainright{3.42}%
     \def\TN@chainellipsisx{2.30}%
+    \def\TN@gaugeradius{0.62}%
+    \def\TN@gaugediagonal{0.45}%
 }
 
 \tikzset{
@@ -257,7 +261,10 @@
 }
 
 \newcommand{\TN@labeledinsertion}[4][]{%
-    \TN@node[#1]{tn insertion node}{#2}{#3}{$#4$}%
+    \TN@node[#1]{tn insertion node}{#2}{#3}{}%
+    \if\relax\detokenize{#4}\relax\else
+        \TN@label[anchor=south]{#2.north}{(0,\TN@labelclearance)}{#4}%
+    \fi
 }
 
 \newcommand{\TN@junction}[3][]{%
