@@ -1706,6 +1706,85 @@
     \end{tikzpicture}%
 }
 
+% Recursive contraction for the structure operator Q in CPSV16, lines
+% 999--1008.  Each X has the four ordered indices k, alpha, beta, gamma;
+% the lower wires retain earlier labels while the recursion proceeds.
+\newcommand{\TNMPDORecursiveStructureOperator}{%
+    \begin{tikzpicture}[tn picture, scale=0.82]
+        \path[use as bounding box] (-5.75,-1.90) rectangle (5.55,1.48);
+        \node at (-5.34,-0.08) {$Q=$};
+
+        % First visible fusion factor.
+        \node[draw, fill=white, minimum width=0.76cm,
+            minimum height=0.66cm, inner sep=1pt] (rqXone) at (-4.58,-0.44)
+            {$X$};
+        \foreach \x in {-3.92,-3.68,-3.44}
+            \draw[tn leg] (\x,-1.28) -- (\x,1.30);
+        \foreach \y/\x in {-0.18/-3.92,-0.34/-3.68,-0.50/-3.44} {
+            \draw[tn leg] (rqXone.east |- 0,\y) -- (\x,\y);
+            \fill (\x,\y) circle[radius=0.055cm];
+        }
+
+        % Second factor; the lowest wire from the first factor is retained.
+        \node[draw, fill=white, minimum width=0.76cm,
+            minimum height=0.66cm, inner sep=1pt] (rqXtwo) at (-2.76,-0.02)
+            {$X$};
+        \foreach \x in {-2.10,-1.86,-1.62}
+            \draw[tn leg] (\x,-1.28) -- (\x,1.30);
+        \foreach \y/\x in {0.24/-2.10,0.08/-1.86,-0.08/-1.62} {
+            \draw[tn leg] (rqXtwo.east |- 0,\y) -- (\x,\y);
+            \fill (\x,\y) circle[radius=0.055cm];
+        }
+
+        % Third factor; each preceding lower wire ends on the middle vertical
+        % of the next fusion bundle.
+        \node[draw, fill=white, minimum width=0.76cm,
+            minimum height=0.66cm, inner sep=1pt] (rqXthree) at (-0.94,0.40)
+            {$X$};
+        \foreach \x in {-0.28,-0.04,0.20}
+            \draw[tn leg] (\x,-1.28) -- (\x,1.30);
+        \foreach \y/\x in {0.66/-0.28,0.50/-0.04,0.34/0.20} {
+            \draw[tn leg] (rqXthree.east |- 0,\y) -- (\x,\y);
+            \fill (\x,\y) circle[radius=0.055cm];
+        }
+        \draw[tn leg] (rqXone.east |- 0,-0.66) -- (-1.86,-0.66);
+        \fill (-1.86,-0.66) circle[radius=0.055cm];
+        \draw[tn leg] (rqXtwo.east |- 0,-0.24) -- (-0.04,-0.24);
+        \fill (-0.04,-0.24) circle[radius=0.055cm];
+        \draw[tn leg] (rqXthree.east |- 0,0.10) -- (1.02,0.10);
+
+        \node at (1.30,0.10) {$\cdots$};
+
+        % Final visible factor and the terminal traced tensor.
+        \node[draw, fill=white, minimum width=0.76cm,
+            minimum height=0.66cm, inner sep=1pt] (rqXlast) at (2.40,0.48)
+            {$X$};
+        \foreach \x in {3.06,3.30,3.54}
+            \draw[tn leg] (\x,-1.28) -- (\x,1.30);
+        \foreach \y/\x in {0.74/3.06,0.58/3.30,0.42/3.54} {
+            \draw[tn leg] (rqXlast.east |- 0,\y) -- (\x,\y);
+            \fill (\x,\y) circle[radius=0.055cm];
+        }
+        \draw[tn leg] (rqXlast.east |- 0,0.26) -- (3.84,0.26);
+        \draw[tn leg] (3.84,-1.28) -- (3.84,1.30);
+        \fill (3.84,0.26) circle[radius=0.055cm];
+        \draw[tn leg] (1.58,0.10) -- (3.30,0.10);
+        \fill (3.30,0.10) circle[radius=0.055cm];
+        \fill (3.84,-0.66) circle[radius=0.055cm];
+
+        \node[draw, fill=white, minimum width=0.82cm,
+            minimum height=0.68cm, inner sep=1pt] (rqM) at (4.72,-0.66)
+            {$M_\gamma$};
+        \draw[tn leg] (3.84,-0.66) -- (rqM.west);
+        \draw[tn leg] (rqM.north) -- ++(0,0.72);
+        \draw[tn leg] (rqM.south) -- ++(0,-0.34);
+        \draw[tn leg] (rqM.south west) .. controls +(0,-0.38) and +(0,-0.38)
+            .. (rqM.south east);
+        \node[below] at (rqM.south |- 0,-1.58)
+            {$\operatorname{tr}(M_\gamma)$};
+    \end{tikzpicture}%
+}
+
 % Fusion isometry of the renormalization fixed-point characterization: two
 % contracted copies of the tensor equal one copy with the isometry merging
 % the summed index into the physical pair.
