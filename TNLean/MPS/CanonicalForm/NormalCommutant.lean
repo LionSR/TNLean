@@ -29,8 +29,9 @@ diagrams at lines 1909--1919.  Hermiticity first gives a reflected marked-chain
 identity whose adjoint reverses the unmarked tail.  Lemma L is then applied to
 two sectors together, producing equality of their Gram conjugations.  The
 resulting ratio of Gram matrices commutes with every matrix of the tensor.
-The passage from this relative equality to eq3 is proved below; deriving the
-relative equality from the reflected marked chains remains open.
+The passage from this relative equality to eq3 is proved below.  The reflected
+marked-chain argument and its specialization to the grouped vertical sectors
+are proved in the matrix-product-density-operator canonical-form development.
 
 ## Main results
 
