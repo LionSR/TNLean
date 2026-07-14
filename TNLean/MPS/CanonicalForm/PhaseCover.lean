@@ -17,8 +17,10 @@ canonical-form equal-norm and sector comparisons.
 
 * `MPVBlockPhaseEquiv.dim_eq`: exact phase equivalence at every nonnegative
   length forces equality of bond dimensions.
+* `MPVPhaseClassData.enumEquiv`: the dependent family of class copies is
+  equivalent to the original block-index set.
 * `MPVPhaseClassData.regroup_matrix`: a matrix-valued sum can be regrouped by
-phase classes and their copies.
+  phase classes and their copies.
 -/
 
 open scoped Matrix BigOperators
@@ -240,6 +242,40 @@ lemma exists_enum_eq (classes : MPVPhaseClassData blocks) (k : Fin r) :
   have hregroup := classes.regroup (fun x : Fin r => if x = k then (1 : ℂ) else 0)
   rw [hzero, hone] at hregroup
   exact zero_ne_one hregroup
+
+/-- The phase-class enumeration is an equivalence with the original block indices.
+
+The regrouping identity shows that the dependent sum of all class copies has the same
+cardinality as the original index set.  Since every original index occurs in the enumeration,
+the enumeration is therefore bijective. -/
+noncomputable def enumEquiv (classes : MPVPhaseClassData blocks) :
+    (Σ j : Fin classes.g, Fin (classes.copies j)) ≃ Fin r := by
+  classical
+  let enumFn : (Σ j : Fin classes.g, Fin (classes.copies j)) → Fin r :=
+    fun jq ↦ classes.enum jq.1 jq.2
+  refine Equiv.ofBijective enumFn
+    ((Fintype.bijective_iff_surjective_and_card enumFn).2 ⟨?_, ?_⟩)
+  · intro k
+    obtain ⟨j, q, hq⟩ := classes.exists_enum_eq k
+    exact ⟨⟨j, q⟩, hq⟩
+  · rw [Fintype.card_sigma]
+    simp only [Fintype.card_fin]
+    have hcard := classes.regroup (fun _ ↦ (1 : ℂ))
+    simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul,
+      mul_one] at hcard
+    exact_mod_cast hcard
+
+@[simp]
+lemma enumEquiv_apply (classes : MPVPhaseClassData blocks)
+    (j : Fin classes.g) (q : Fin (classes.copies j)) :
+    classes.enumEquiv ⟨j, q⟩ = classes.enum j q :=
+  rfl
+
+/-- A nonempty block family has at least one MPV phase class. -/
+lemma g_pos_of_r_pos (classes : MPVPhaseClassData blocks) (hr : 0 < r) :
+    0 < classes.g := by
+  obtain ⟨j, _q, _hq⟩ := classes.exists_enum_eq ⟨0, hr⟩
+  exact Nat.lt_of_le_of_lt (Nat.zero_le j) j.isLt
 
 /-- Regroup a matrix-valued sum over the original block indices by phase
 classes and their copies. -/

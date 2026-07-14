@@ -852,6 +852,7 @@ single family.
     \lean{MPSTensor.MPVPhaseClassData}
     \lean{MPSTensor.mpvPhaseClassData}
     \lean{MPSTensor.mpvPhaseClassData_enum_zero_eq_repr}
+    \lean{MPSTensor.MPVPhaseClassData.enumEquiv}
     \leanok
     For a finite family of blocks, put $j \sim k$ when there is a nonzero
     scalar factor $\zeta$ such that
@@ -863,8 +864,23 @@ single family.
     for every length~$N$. The associated tuple enumerates the finite quotient,
     chooses one representative per class, enumerates that representative first
     in its class, records the scalar relating the representative to each member,
-    and proves that distinct representatives are not MPV-phase equivalent.
+    and proves that distinct representatives are not MPV-phase equivalent. The
+    pairs $(j,q)$, with $j$ a phase class and $q$ a copy in that class, are in
+    bijection with the original block indices.
 \end{definition}
+
+\begin{lemma}[Existence of an MPV phase class]
+    \label{lem:mpv_phase_class_nonempty}
+    \lean{MPSTensor.MPVPhaseClassData.g_pos_of_r_pos}
+    \leanok
+    \uses{def:mpv_phase_class_data}
+    A nonempty finite family of blocks has at least one MPV phase class.
+\end{lemma}
+
+\begin{proof}\leanok
+    Choose one original block index. Its occurrence in the phase-class
+    enumeration supplies a phase class containing it.
+\end{proof}
 
 \begin{lemma}[Regrouping a matrix sum by MPV phase classes]
     \label{lem:mpv_phase_class_regroup_matrix}
