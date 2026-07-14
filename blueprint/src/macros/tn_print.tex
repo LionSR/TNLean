@@ -789,6 +789,42 @@
     \end{tikzpicture}%
 }
 
+% Complete orthogonal reducing-sector decomposition of the vertical tensor.
+% The physical isometries V_k surround the irreducible corner B_k; their
+% range projections resolve the physical identity and reduce every letter.
+\newcommand{\TNMPDOVerticalReducingSectors}{%
+    \begin{tikzpicture}[tn picture, scale=0.94]
+        \path[draw=black, opacity=0, use as bounding box]
+            (-4.35,-1.42) rectangle (5.75,1.42);
+        \TN@tensordot{vrsM}{(-3.50,0)}
+        \TN@leftleg{vrsM}{0.58}
+        \TN@rightleg{vrsM}{0.58}
+        \TN@upleg{vrsM}{0.48}
+        \TN@downleg{vrsM}{0.48}
+        \node[anchor=west] at (-3.33,0.30) {$\widetilde M$};
+        \node at (-2.45,0) {$=$};
+        \node at (-1.55,0) {$\displaystyle\sum_k$};
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+            (vrsV) at (0,0.82) {$V_k$};
+        \TN@tensordot{vrsB}{(0,0)}
+        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+            (vrsVd) at (0,-0.82) {$V_k^\dagger$};
+        \draw[tn phys leg] (vrsV.north) -- ++(0,0.34);
+        \draw[tn phys leg] (vrsV.south) -- (vrsB.north);
+        \draw[tn phys leg] (vrsB.south) -- (vrsVd.north);
+        \draw[tn phys leg] (vrsVd.south) -- ++(0,-0.34);
+        \TN@leftleg{vrsB}{0.60}
+        \TN@rightleg{vrsB}{0.60}
+        \node[anchor=west] at (0.16,0.27) {$B_k$};
+        \node[anchor=west, align=left] at (1.62,0.48)
+            {$P_k=V_kV_k^\dagger,\qquad \sum_kP_k=I,$};
+        \node[anchor=west, align=left] at (1.62,-0.18)
+            {$P_kP_l=0\ (k\ne l),$};
+        \node[anchor=west, align=left] at (1.62,-0.78)
+            {$P_k\widetilde M=\widetilde MP_k.$};
+    \end{tikzpicture}%
+}
+
 % Inverse-map contraction for an injective simple tensor: contracting the
 % inverse tensor with the tensor through the physical index identifies the
 % two pairs of virtual legs (the matrix units on the bond space).
