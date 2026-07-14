@@ -36,6 +36,27 @@
     \TN@pverticalports{#1}%
 }
 
+% A canonical-form gauge X_{j,q} has two independent sector indices in
+% addition to its horizontal bond indices.  The sector legs meet the glyph at
+% distinct boundary ports: Block carries j and Copy carries q.  In particular,
+% attaching both ports to parallel buses never identifies the two buses.
+\newcommand{\TN@sectorgauge}[3]{%
+    \TN@insertion[label=above:$#3$]{#1}{#2}%
+    \TN@horizontalports{#1}%
+    \TN@vport{#1Block}{#1}{240}%
+    \TN@vport{#1Copy}{#1}{300}%
+}
+
+% The inverse gauge reflects the two lower legs while retaining their roles.
+% This is the planar order in the canonical-form figures: Copy is the
+% lower-left port and Block is the lower-right port of X^{-1}.
+\newcommand{\TN@inverseSectorgauge}[3]{%
+    \TN@insertion[label=above:$#3$]{#1}{#2}%
+    \TN@horizontalports{#1}%
+    \TN@vport{#1Block}{#1}{300}%
+    \TN@vport{#1Copy}{#1}{240}%
+}
+
 \newcommand{\TN@vfactor}[3]{%
     \TN@factor{#1}{#2}{#3}%
     \TN@vverticalports{#1}%
@@ -52,6 +73,29 @@
 \newcommand{\TN@vjunctionatom}[2]{%
     \TN@junction{#1}{#2}%
     \TN@cardinalports{#1}%
+}
+
+% Standard open interfaces.  These helpers extend an already declared port
+% bundle by the repository-wide semantic stub lengths; they do not redeclare
+% the boundary ports themselves.
+\newcommand{\TN@openhorizontalports}[2][]{%
+    \TN@vopenport[#1]{#2W}{-\TN@virtualleglen,0}%
+    \TN@vopenport[#1]{#2E}{\TN@virtualleglen,0}%
+}
+
+\newcommand{\TN@openvverticalports}[2][]{%
+    \TN@vopenport[#1]{#2N}{0,\TN@virtualleglen}%
+    \TN@vopenport[#1]{#2S}{0,-\TN@virtualleglen}%
+}
+
+\newcommand{\TN@openpverticalports}[2][]{%
+    \TN@popenport[#1]{#2N}{0,\TN@physicalleglen}%
+    \TN@popenport[#1]{#2S}{0,-\TN@physicalleglen}%
+}
+
+\newcommand{\TN@openmpoports}[2][]{%
+    \TN@openhorizontalports[#1]{#2}%
+    \TN@openpverticalports[#1]{#2}%
 }
 
 % An operator or density matrix has paired system ports on each side.  The
@@ -85,9 +129,8 @@
 % The corresponding standalone motif has named ports at all three free ends.
 \newcommand{\TN@mpssiteWithOpenLegs}[3]{%
     \TN@mpssite{#1}{#2}{#3}%
-    \TN@vopenport{#1W}{-0.60,0}%
-    \TN@vopenport{#1E}{0.60,0}%
-    \TN@popenport{#1N}{0,0.46}%
+    \TN@openhorizontalports{#1}%
+    \TN@popenport{#1N}{0,\TN@physicalleglen}%
 }
 
 % An MPO or MPDO tensor has west and east virtual ports and north and south
@@ -108,10 +151,7 @@
 % The standalone MPO/MPDO motif has named ports at all four free ends.
 \newcommand{\TN@mpositeWithOpenLegs}[3]{%
     \TN@mposite{#1}{#2}{#3}%
-    \TN@vopenport{#1W}{-0.60,0}%
-    \TN@vopenport{#1E}{0.60,0}%
-    \TN@popenport{#1N}{0,0.46}%
-    \TN@popenport{#1S}{0,-0.46}%
+    \TN@openmpoports{#1}%
 }
 
 % A PEPS vertex has a named north-east physical port.  Lattice-specific
@@ -161,10 +201,8 @@
 % The standalone doubled layer exposes named ports at its four virtual ends.
 \newcommand{\TN@doublelayerWithOpenLegs}[3]{%
     \TN@doublelayer{#1}{#2}{#3}%
-    \TN@vopenport{#1UW}{-0.60,0}%
-    \TN@vopenport{#1UE}{0.60,0}%
-    \TN@vopenport{#1DW}{-0.60,0}%
-    \TN@vopenport{#1DE}{0.60,0}%
+    \TN@openhorizontalports{#1U}%
+    \TN@openhorizontalports{#1D}%
 }
 
 % Two displayed tensor-product factors.  Tensor product is written explicitly;
@@ -179,16 +217,15 @@
 
 % A left-to-right fusion map with one trunk and two ordered branches.  The
 % atom retains the semantic rounded blue map glyph; its interface is named by
-% role rather than by absolute coordinates.  Top and Bottom are available for
-% additional physical indices when the same map participates in a larger
-% contraction.
+% role rather than by absolute coordinates.  LabelTop and LabelBottom are
+% annotation coordinates, not tensor indices.
 \newcommand{\TN@splitmap}[4][]{%
     \TN@map[#1]{#2}{#3}{#4}%
     \TN@vport{#2Mid}{#2}{west}%
-    \TN@vport{#2Up}{#2}{north east}%
-    \TN@vport{#2Down}{#2}{south east}%
-    \TN@pport{#2Top}{#2}{north}%
-    \TN@pport{#2Bottom}{#2}{south}%
+    \TN@veastport{#2Up}{#2}{\TN@branchfirstfraction}%
+    \TN@veastport{#2Down}{#2}{\TN@branchsecondfraction}%
+    \coordinate (#2LabelTop) at (#2.north);%
+    \coordinate (#2LabelBottom) at (#2.south);%
 }
 
 % The mirror image of \TN@splitmap: two ordered branches merge into one
@@ -198,10 +235,10 @@
 \newcommand{\TN@mergemap}[4][]{%
     \TN@map[#1]{#2}{#3}{#4}%
     \TN@vport{#2Mid}{#2}{east}%
-    \TN@vport{#2Up}{#2}{north west}%
-    \TN@vport{#2Down}{#2}{south west}%
-    \TN@pport{#2Top}{#2}{north}%
-    \TN@pport{#2Bottom}{#2}{south}%
+    \TN@vwestport{#2Up}{#2}{\TN@branchfirstfraction}%
+    \TN@vwestport{#2Down}{#2}{\TN@branchsecondfraction}%
+    \coordinate (#2LabelTop) at (#2.north);%
+    \coordinate (#2LabelBottom) at (#2.south);%
 }
 
 % A vertical fusion map has two ordered incoming sector ports and one outgoing
@@ -212,6 +249,8 @@
     \TN@vport{#2Left}{#2}{north west}%
     \TN@vport{#2Right}{#2}{north east}%
     \TN@vport{#2Out}{#2}{south}%
+    \coordinate (#2LabelTop) at (#2.north);%
+    \coordinate (#2LabelBottom) at (#2.south);%
 }
 
 \newcommand{\TN@cofusionmap}[4][]{%
@@ -219,6 +258,53 @@
     \TN@vport{#2In}{#2}{north}%
     \TN@vport{#2Left}{#2}{south west}%
     \TN@vport{#2Right}{#2}{south east}%
+    \coordinate (#2LabelTop) at (#2.north);%
+    \coordinate (#2LabelBottom) at (#2.south);%
+}
+
+% An action tensor V_ax^y is a trivalent virtual map with role names inherited
+% from the MPO action: an MPO block a acts on an incoming state block x and
+% produces an outgoing state block y.  Its reflected partner has the same
+% interface names.
+\newcommand{\TN@actionmap}[4][]{%
+    \TN@splitmap[#1]{#2}{#3}{#4}%
+    \TN@vterminal{#2StateOut}{(#2Mid)}%
+    \TN@vterminal{#2MPO}{(#2Up)}%
+    \TN@vterminal{#2StateIn}{(#2Down)}%
+}
+
+\newcommand{\TN@coactionmap}[4][]{%
+    \TN@mergemap[#1]{#2}{#3}{#4}%
+    \TN@vterminal{#2StateOut}{(#2Mid)}%
+    \TN@vterminal{#2MPO}{(#2Up)}%
+    \TN@vterminal{#2StateIn}{(#2Down)}%
+}
+
+% A physical splitter has one incoming physical index and two ordered outgoing
+% physical indices.  The merger is its vertically reflected interface.  These
+% atoms cover blocking and refinement isometries without assigning a virtual
+% type to any physical Hilbert-space index.
+\newcommand{\TN@physicalsplitmap}[4][]{%
+    \TN@map[#1]{#2}{#3}{#4}%
+    \TN@pport{#2Trunk}{#2}{south}%
+    \TN@pnorthport{#2Left}{#2}{\TN@branchfirstfraction}%
+    \TN@pnorthport{#2Right}{#2}{\TN@branchsecondfraction}%
+}
+
+\newcommand{\TN@physicalmergemap}[4][]{%
+    \TN@map[#1]{#2}{#3}{#4}%
+    \TN@psouthport{#2Left}{#2}{\TN@branchfirstfraction}%
+    \TN@psouthport{#2Right}{#2}{\TN@branchsecondfraction}%
+    \TN@pport{#2Trunk}{#2}{north}%
+}
+
+% A local isometry from two ordered virtual half-bonds to one physical site.
+% The role names, rather than the geometric anchors, form its public interface.
+\newcommand{\TN@bondpairmap}[4][]{%
+    \TN@map[#1]{#2}{#3}{#4}%
+    \TN@vsouthport{#2Left}{#2}{\TN@branchfirstfraction}%
+    \TN@vsouthport{#2Right}{#2}{\TN@branchsecondfraction}%
+    \TN@pport{#2Physical}{#2}{north}%
 }
 
 % A Stinespring isometry carries a system index from west to east and one
@@ -249,19 +335,29 @@
 % A one-dimensional tensor atom carries named boundary ports.  The centre port
 % is used only to place labels; every index line starts or ends at a boundary
 % port.
-\newcommand{\TN@declareWordTensor}[2]{%
-    \TN@tensor{#1}{#2}
-    \TN@mpoports{#1}
+\newcommand{\TN@declareMPSWordTensor}[2]{%
+    \TN@mpssite{#1}{#2}{}%
     \coordinate (#1C) at (#1.center);%
 }
 
+\newcommand{\TN@declareMPOWordTensor}[2]{%
+    \TN@mposite{#1}{#2}{}%
+    \coordinate (#1C) at (#1.center);%
+}
+
+% Compatibility name for existing complete MPDO figures.  New constructions
+% choose the MPS or MPO signature explicitly.
+\newcommand{\TN@declareWordTensor}[2]{%
+    \TN@declareMPOWordTensor{#1}{#2}%
+}
+
 \newcommand{\TN@openMPSword}[4]{%
-    \TN@declareWordTensor{#1L}{(0,0)}
-    \TN@declareWordTensor{#1M}{(\TN@chainsep,0)}
-    \TN@declareWordTensor{#1R}{(\TN@chainright,0)}
-    \TN@popenport{#1LN}{0,\TN@physleglen}
-    \TN@popenport{#1MN}{0,\TN@physleglen}
-    \TN@popenport{#1RN}{0,\TN@physleglen}
+    \TN@declareMPSWordTensor{#1L}{(0,0)}
+    \TN@declareMPSWordTensor{#1M}{(\TN@chainsep,0)}
+    \TN@declareMPSWordTensor{#1R}{(\TN@chainright,0)}
+    \TN@popenport{#1LN}{0,\TN@physicalleglen}
+    \TN@popenport{#1MN}{0,\TN@physicalleglen}
+    \TN@popenport{#1RN}{0,\TN@physicalleglen}
     \TN@label{#1LN}{(0,\TN@physlabeloff)}{#2}
     \TN@label{#1RN}{(0,\TN@physlabeloff)}{#3}
     \TN@vopenport{#1LW}{-0.8,0}
@@ -274,12 +370,12 @@
 }
 
 \newcommand{\TN@blockedMPSword}[3]{%
-    \TN@declareWordTensor{#1L}{(0,0)}
-    \TN@declareWordTensor{#1M}{(\TN@chainsep,0)}
-    \TN@declareWordTensor{#1R}{(\TN@chainright,0)}
-    \TN@popenport{#1LN}{0,\TN@physleglen}
-    \TN@popenport{#1MN}{0,\TN@physleglen}
-    \TN@popenport{#1RN}{0,\TN@physleglen}
+    \TN@declareMPSWordTensor{#1L}{(0,0)}
+    \TN@declareMPSWordTensor{#1M}{(\TN@chainsep,0)}
+    \TN@declareMPSWordTensor{#1R}{(\TN@chainright,0)}
+    \TN@popenport{#1LN}{0,\TN@physicalleglen}
+    \TN@popenport{#1MN}{0,\TN@physicalleglen}
+    \TN@popenport{#1RN}{0,\TN@physicalleglen}
     \TN@label{#1LN}{(0,\TN@physlabeloff)}{#2}
     \TN@label{#1RN}{(0,\TN@physlabeloff)}{#3}
     \TN@vconnectports{#1LE}{#1MW}
@@ -290,15 +386,12 @@
 }
 
 \newcommand{\TN@openMPOword}[6]{%
-    \TN@declareWordTensor{#1L}{(0,0)}
-    \TN@declareWordTensor{#1M}{(\TN@chainsep,0)}
-    \TN@declareWordTensor{#1R}{(\TN@chainright,0)}
-    \TN@popenport{#1LN}{0,\TN@physleglen}
-    \TN@popenport{#1LS}{0,-\TN@physleglen}
-    \TN@popenport{#1MN}{0,\TN@physleglen}
-    \TN@popenport{#1MS}{0,-\TN@physleglen}
-    \TN@popenport{#1RN}{0,\TN@physleglen}
-    \TN@popenport{#1RS}{0,-\TN@physleglen}
+    \TN@declareMPOWordTensor{#1L}{(0,0)}
+    \TN@declareMPOWordTensor{#1M}{(\TN@chainsep,0)}
+    \TN@declareMPOWordTensor{#1R}{(\TN@chainright,0)}
+    \TN@openpverticalports{#1L}
+    \TN@openpverticalports{#1M}
+    \TN@openpverticalports{#1R}
     \TN@label{#1LN}{(0,\TN@physlabeloff)}{#2}
     \TN@label{#1LS}{(0,-\TN@physlabeloff)}{#3}
     \TN@label{#1RN}{(0,\TN@physlabeloff)}{#4}
@@ -314,15 +407,12 @@
 
 % Trace-closed MPO word with open ket and bra indices.
 \newcommand{\TN@closedMPOword}[1]{%
-    \TN@declareWordTensor{#1L}{(0,0)}
-    \TN@declareWordTensor{#1M}{(1.15,0)}
-    \TN@declareWordTensor{#1R}{(3.05,0)}
-    \TN@popenport{#1LN}{0,0.46}
-    \TN@popenport{#1LS}{0,-0.46}
-    \TN@popenport{#1MN}{0,0.46}
-    \TN@popenport{#1MS}{0,-0.46}
-    \TN@popenport{#1RN}{0,0.46}
-    \TN@popenport{#1RS}{0,-0.46}
+    \TN@declareMPOWordTensor{#1L}{(0,0)}
+    \TN@declareMPOWordTensor{#1M}{(1.15,0)}
+    \TN@declareMPOWordTensor{#1R}{(3.05,0)}
+    \TN@openpverticalports{#1L}
+    \TN@openpverticalports{#1M}
+    \TN@openpverticalports{#1R}
     \TN@vconnectports{#1LE}{#1MW}
     \TN@vopenport{#1ME}{0.50,0}
     \TN@vopenport{#1RW}{-0.50,0}
@@ -332,11 +422,42 @@
 
 % MPO site with the ket and bra indices closed by a physical trace.
 \newcommand{\TN@tracedMPOSite}[2]{%
-    \TN@declareWordTensor{#1}{#2}
-    \TN@vopenport{#1W}{-0.60,0}
-    \TN@vopenport{#1E}{0.60,0}
-    \TN@ptracepath{(#1N) |- ($(#1C)+(0.42,0.52)$)
-        -- ($(#1C)+(0.42,-0.52)$) -| (#1S)}%
+    \TN@declareMPOWordTensor{#1}{#2}
+    \TN@openhorizontalports{#1}
+    \TN@ptraceportsright{#1N}{#1S}{\TN@traceclearance}{\TN@physicalleglen}%
+}
+
+% ---------- Sector buses ----------
+
+% A sector bus is a virtual index line with named endpoints.  Taps are virtual
+% contraction ports placed at relative positions along the bus, so arbitrary
+% port-bearing atoms can be attached without reconstructing the line.
+\newcommand{\TN@vbus}[5][]{%
+    \TN@vterminal{#2L}{#3}%
+    \TN@vterminal{#2R}{#4}%
+    \TN@vconnectports[#1]{#2L}{#2R}%
+    \if\relax\detokenize{#5}\relax\else
+        \node[tn label, anchor=east] at ($(#2L)+(-0.10,0)$) {$#5$};%
+    \fi
+}
+
+% A parallel bus inherits the horizontal extent of a previously declared bus.
+% Its displacement is signed, so the same construction applies above or below.
+\newcommand{\TN@vparallelbus}[5][]{%
+    \TN@vbus[#1]{#2}{($(#3L)+(0,#4)$)}{($(#3R)+(0,#4)$)}{#5}%
+}
+
+\newcommand{\TN@vbustap}[3]{%
+    \TN@vterminal{#2}{($(#1L)!#3!(#1R)$)}%
+    \TN@anonymousjunction{(#2)}%
+}
+
+% Projecting a named point onto a bus aligns a tap with an attached atom
+% without repeating its horizontal coordinate in the complete diagram.
+\newcommand{\TN@vbusprojecttap}[3]{%
+    \TN@assertporttype{#3}{virtual}%
+    \TN@vterminal{#2}{($(#1L)!(#3)!(#1R)$)}%
+    \TN@anonymousjunction{(#2)}%
 }
 
 % ---------- Repeated finite constructions ----------
@@ -535,14 +656,14 @@
         (0.3,1.3) -- (1.2,1.3) -- (1.2,1.8) -- (1.7,1.8) --
         (1.7,2.7) -- (0.3,2.7) -- cycle;
     \end{scope}
-    \node[tn region label selected] at (0.75,2.0) {$R$};%
+    \node[tn region label selected] at (0.75,2.25) {$R$};%
 }
 
 \newcommand{\TN@pepsNormalRegionS}{%
     \begin{scope}[on background layer]
         \path[tn region selected] (0.3,1.3) rectangle (1.7,2.7);
     \end{scope}
-    \node[tn region label selected] at (1.00,2.00) {$S$};%
+    \node[tn region label selected] at (1.25,2.25) {$S$};%
 }
 
 \newcommand{\TN@pepsNormalRegionT}{%
@@ -552,7 +673,7 @@
         (2.7,0.8) -- (1.3,0.8) -- (1.3,1.3) -- (0.3,1.3) -- cycle
         (-0.25,0.25) rectangle (3.25,3.25);
     \end{scope}
-    \node[tn region label selected] at (2.0,2.3) {$T$};%
+    \node[tn region label selected] at (2.25,2.25) {$T$};%
 }
 
 \newcommand{\TN@pepsNormalSingleSiteDifference}{%
@@ -584,7 +705,7 @@
         (0.3,1.3) rectangle (1.2,2.7)
         (1.3,0.8) rectangle (2.7,1.7);
     \end{scope}
-    \node[tn region label complement] at (2.38,2.45) {$A_3$};%
+    \node[tn region label complement] at (2.75,2.75) {$A_3$};%
 }
 
 \newcommand{\TN@pepsNormalCollar}{%
@@ -592,7 +713,8 @@
         \path[tn region collar] (0.3,2.55) rectangle (1.7,3.18);
         \path[tn region collar] (1.3,2.55) rectangle (2.7,3.18);
     \end{scope}
-    \node[tn region label collar] at (1.50,2.88) {top collar};%
+    \node[tn region label collar, fill=white, fill opacity=0.82,
+        text opacity=1, inner sep=1pt] at (1.75,2.75) {top collar};%
 }
 
 \newcommand{\TN@pepsBlockedNormalChain}{%

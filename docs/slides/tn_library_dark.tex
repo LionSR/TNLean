@@ -121,15 +121,15 @@
     \TN@label{sltnBtwoNOpen}{(0,0.22)}{i_2}
     \TN@label{sltnBlastNOpen}{(0,0.22)}{i_{#3}}
     \node[tn label] at (4.20,0) {$\cdots$};
-    \TN@annotationpath[decorate,
-      decoration={brace, mirror, amplitude=4pt}]{
-      (1.72,-0.58) -- (5.55,-0.58)
-      node[midway, below=5pt, tn label] {$#3$ copies};}
+    \TN@annotationterminal{sltnBraceL}{(1.72,-0.58)}
+    \TN@annotationterminal{sltnBraceR}{(5.55,-0.58)}
+    \TN@spanbracebelow[text=dimwhite]
+      {sltnBraceL}{sltnBraceR}{#3\text{ copies}}
   \end{tikzpicture}%
 }
 
 \newcommand{\SlideTNMixedTransfer}[4]{%
-  \begin{tikzpicture}[tn picture]
+  \begin{tikzpicture}[tn picture, scale=0.92]
     \TN@state{sltnRho}{(-1.15,0)}{#3}
     \TN@veastport{sltnRhoTop}{sltnRho}{0.25}
     \TN@veastport{sltnRhoBottom}{sltnRho}{0.75}
@@ -154,7 +154,7 @@
     }
     \node[tn label] at (2.28,0.72) {$\cdots$};
     \node[tn label] at (2.28,-0.72) {$\cdots$};
-    \node[tn label, anchor=west] at (5.35,0)
+    \node[tn label, anchor=west] at (5.20,0)
       {$\mathcal F^{#4}_{#1,#2}(#3)$};
   \end{tikzpicture}%
 }
