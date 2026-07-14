@@ -2327,6 +2327,76 @@
     coefficient positive.
 \end{proof}
 
+\begin{definition}[Block-row map of sector isometries]
+    \label{def:vertical_sector_block_row}
+    \lean{Matrix.sigmaBlockRow}
+    \leanok
+    Let $W_k:\C^{D_k}\to\C^d$ be a finite family of rectangular
+    matrices.  Their block-row map
+    $U:\C^d\to\bigoplus_k\C^{D_k}$ is defined by
+    \[
+        Ux=(W_k^\dagger x)_k.
+    \]
+    This realizes the coisometry in the conclusion of
+    \cite[Proposition~4.13, lines~1863--1870]{Cirac2016MPDO_arXiv} once the
+    sector isometries have been normalized.
+\end{definition}
+
+\begin{theorem}[Conjugation and reconstruction from orthogonal sectors]
+    \label{thm:vertical_sector_coisometry}
+    \lean{Matrix.sigmaBlockRow_isCoisometry}
+    \lean{Matrix.sigmaBlockRow_conjugation}
+    \lean{Matrix.sigmaBlockRow_reconstruction}
+    \leanok
+    \uses{def:vertical_sector_block_row}
+    Suppose that
+    \[
+        W_k^\dagger W_k=\Id,
+        \qquad
+        W_k^\dagger W_l=0\quad(k\ne l),
+    \]
+    and, for every letter $v$ and every sector $k$,
+    \[
+        T_vW_k=W_kB_k^v.
+    \]
+    Then the block-row map $U$ is a coisometry and conjugates $T$ to the
+    direct sum of the sector tensors:
+    \[
+        UU^\dagger=\Id,
+        \qquad
+        UT_vU^\dagger=\bigoplus_k B_k^v.
+    \]
+    If the letters also satisfy the literal sector decomposition
+    \[
+        T_v=\sum_k W_kB_k^vW_k^\dagger,
+    \]
+    then
+    \[
+        T_v=U^\dagger\!\left(\bigoplus_k B_k^v\right)U.
+    \]
+    This last equality is a conditional consequence of the displayed literal
+    sector decomposition; no additional assertion from the source is used.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The $(k,l)$ block of $UU^\dagger$ is $W_k^\dagger W_l$, hence the
+    first identity follows from orthonormality.  The corresponding block of
+    $UT_vU^\dagger$ is
+    \[
+        W_k^\dagger T_vW_l
+        =W_k^\dagger W_lB_l^v,
+    \]
+    which is $B_k^v$ for $k=l$ and zero otherwise.  Finally, multiplication
+    of the block diagonal matrix by the block row gives the sum
+    $\sum_kW_kB_k^vW_k^\dagger$, which is $T_v$ by hypothesis.
+    The row indices of $U$ form the dependent disjoint union
+    $\coprod_k\{0,\ldots,D_k-1\}$.  Its canonical order-preserving bijection
+    with $\{0,\ldots,\sum_kD_k-1\}$ gives the coordinate reindexing required
+    by the vertical canonical-form definition.
+    % Lean adapter: this final reindexing is `finSigmaFinEquiv`.
+\end{proof}
+
 \begin{theorem}[Horizontal canonical form implies vertical canonical form]
     \label{thm:vertical_cf_of_horizontal_cf}
     \notready
