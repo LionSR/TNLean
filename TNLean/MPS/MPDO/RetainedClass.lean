@@ -78,7 +78,7 @@ private theorem bntCanonicalForm_toTensor_ne_zero
 
 Source: arXiv:1606.00608, canonical form at lines 237--246 and Proposition
 `prop:vertical`, lines 1895--1902. -/
-private theorem IsHorizontalCF.verticalTensor_ne_zero
+theorem IsHorizontalCF.verticalTensor_ne_zero
     (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M) : verticalTensor M ≠ 0 := by
   obtain ⟨S, hCF, hTotal, X, hX⟩ := hHorizontal
   subst D
