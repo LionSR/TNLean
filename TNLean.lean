@@ -384,6 +384,7 @@ import TNLean.MPS.MPDO.PostBlockedRepresentativeSpan
 import TNLean.MPS.MPDO.HorizontalCFMPVRepresentation
 import TNLean.MPS.MPDO.InvariantProjection
 import TNLean.MPS.MPDO.HorizontalBNT
+import TNLean.MPS.MPDO.VerticalReduction
 import TNLean.MPS.MPDO.PeriodicExclusion
 import TNLean.MPS.MPDO.StackedLayers
 import TNLean.MPS.MPDO.CyclicProjector

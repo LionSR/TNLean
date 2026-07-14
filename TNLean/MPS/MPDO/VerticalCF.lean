@@ -99,10 +99,16 @@ argument must instead follow arXiv:1606.00608, lines 1873--1921, using MPDO
 positivity and Lemma L to establish an independent vertical canonical form and
 then proving positivity of its weights.  The doubled-index coefficient
 identification in the first step is formalized in
-`TNLean.MPS.MPDO.PerCopyHorizontalCF`.  The one-sided operator identity and its
-blockwise consequence are proved in `TNLean.MPS.MPDO.InvariantProjection`; the
-periodic-sector construction and the independent vertical canonical form remain
-open.
+`TNLean.MPS.MPDO.PerCopyHorizontalCF`. The one-sided operator identity and its
+blockwise consequence are proved in `TNLean.MPS.MPDO.InvariantProjection`.
+The periodic sectors are excluded in `TNLean.MPS.MPDO.CyclicProjector`, and
+`TNLean.MPS.MPDO.VerticalReduction` constructs a complete orthogonal family of
+irreducible reducing vertical corners. The general theorem in
+`TNLean.MPS.CanonicalForm.ProjectorClosureSpectral` gives an abstract
+positive-length normal-block decomposition. What remains open is a refinement
+that retains the physical isometries and reducing projections through
+zero-corner removal and normalization, followed by the BNT grouping,
+positivity, and gauge analysis needed for the final vertical canonical form.
 
 ## Module location
 

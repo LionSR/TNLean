@@ -128,12 +128,26 @@ canonical decomposition, not by declaring the diagonal restrictions of the
 horizontal blocks to be normal blocks.
 
 The exact reindexing step \eqref{eq:regrouped-mpv} is therefore complete once
-the bijection and the pointwise block identifications are known.  The
-one-sided invariant-matrix calculation from source lines~1874--1887 is also
-formalized.  For the periodic-sector argument, positivity now gives the final
-implication from commutation with $[H^{(N)}]^p$ to commutation with
-$H^{(N)}$.  It remains to derive the orthogonal projector with the required
-all-length properties from a nontrivial vertical period.
+the bijection and the pointwise block identifications are known. The
+one-sided invariant-matrix calculation from source lines~1874--1887 now gives
+invariant-projector closure for the vertically viewed tensor
+(\path{MPOTensor.IsHorizontalCF.hasInvariantProjectorClosure_verticalTensor}).
+The general decomposition under this closure condition produces a complete
+orthogonal family of irreducible reducing corners, with isometries, both
+intertwining identities, exact compression, and equality of matrix product
+vectors at every length
+(\path{MPOTensor.IsHorizontalCF.exists_irreducible_verticalBlockDecomp_with_isometry}).
+Its range projections are complete, pairwise orthogonal, and commute with all
+vertical letters
+(\path{MPOTensor.IsHorizontalCF.exists_complete_verticalReducingProjectors}).
+
+The periodic-sector exclusion is also complete:
+\path{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_horizontalCF} derives
+the displaced cyclic projector associated with a nontrivial period, together
+with its full-period word invariance, and contradicts positivity at a suitable
+chain length. The source prints an all-length inequality, whereas the proof
+only needs one noncommuting length; this local correction is recorded in
+\path{docs/paper-gaps/cpgsv17_periodic_sector_projector.tex}.
 
 Two further steps of source lines~1895--1921 now have conditional
 formalizations.  For the positive weights: granted an orthogonal sector
@@ -156,18 +170,22 @@ $\omega_{\alpha,k}^{-1/2}X_{\alpha,k}$ unitary
 (\path{MPSTensor.IsNormal.smul_mem_unitaryGroup_of_dressed_adjoint} in
 \path{TNLean/MPS/CanonicalForm/NormalCommutant.lean}).
 
-The remaining source-level gap is the construction of the vertical canonical
-decomposition itself, with its grouping into a basis of normal tensors, from
-horizontal canonical form and MPDO positivity, as done in source
-lines~1895--1921: the construction must produce the sector projectors
-together with their loop identities and a nonvanishing compression, derive
-the dressed-adjoint identities from self-adjointness of the sector
-compressions, and supply the periodic-sector exclusion above.  This is the
-mathematical content shared with the normality and grouping problem tracked
-by \ghissue{2537}; it cannot be supplied by a finite-sum identity alone.  The
-original formulation of \ghissue{2536}, interpreted as a direct conversion of
-the horizontal scalar weights and diagonal restrictions, is therefore not a
-consequence of Proposition~4.13.
+Projector closure together with the absence of periodic vectors already gives
+an abstract positive-length decomposition into normal blocks
+(\path{TNLean/MPS/CanonicalForm/ProjectorClosureSpectral.lean}).
+This theorem does not retain the physical isometries and reducing projections
+constructed above. The remaining source-level gap is the refinement that
+retains this data through zero-corner removal and spectral normalization,
+groups gauge-equivalent normal tensors, identifies the resulting grouped
+projections with the sector projectors carrying the single-site loop
+identities, and proves a nonvanishing compression. One must then derive the
+dressed-adjoint identities from self-adjointness of the sector compressions
+and assemble the positive weights and proportional-unitary gauges of source
+lines~1895--1921. This is the mathematical content shared with the normality
+and grouping problem tracked by \ghissue{2537}; it cannot be supplied by a
+finite-sum identity alone. The original formulation of \ghissue{2536},
+interpreted as a direct conversion of the horizontal scalar weights and
+diagonal restrictions, is therefore not a consequence of Proposition~4.13.
 
 \bibliographystyle{alpha}
 \bibliography{references}
