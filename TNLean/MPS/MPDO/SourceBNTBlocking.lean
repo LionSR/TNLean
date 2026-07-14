@@ -70,7 +70,7 @@ private theorem IsCPSVBasisOfNormalTensors.blocks_not_gaugePhaseEquiv
 
 /-- A simultaneous length-`L` word span becomes a simultaneous one-letter
 span after blocking `L` physical sites. -/
-private theorem wordTupleSpanTop_blockTensor_one
+theorem wordTupleSpanTop_blockTensor_one
     {g : ℕ} {dim : Fin g → ℕ}
     (B : (j : Fin g) → MPSTensor d (dim j)) {L : ℕ}
     (hSpan : WordTupleSpanTop B L) :
@@ -163,23 +163,23 @@ private theorem hasBlockSelectorWords_of_family_gaugeEquiv
         rw [hoff j hjk]
         simp
 
-/-- A basis of normal tensors becomes simultaneously injective after one
-common positive blocking.
+/-- A basis of normal tensors has one common positive word length at which the
+labelled word evaluations span the full product matrix algebra.
 
 The BNT hypothesis supplies positive bond dimensions and excludes
 gauge-phase-equivalent duplicate representatives.  Perron gauges put all
 representatives in left-canonical form, after which the block-injectivity
 argument gives simultaneous selectors.  The gauges are then removed and the
-entire selector length is absorbed into one physical blocking.
+resulting injectivity and selectors give the simultaneous product-algebra
+span at one positive word length.
 
 Source: arXiv:1606.00608, BNT definition at lines 271--274 and block
 injectivity at lines 317--345. -/
-theorem IsCPSVBasisOfNormalTensors.exists_blocked_wordTupleSpanTop_one
+theorem IsCPSVBasisOfNormalTensors.exists_positive_wordTupleSpanTop
     {g : ℕ} {dim : Fin g → ℕ}
     {A : MPSTensor d D} {B : (j : Fin g) → MPSTensor d (dim j)}
     (hBNT : IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩)) :
-    ∃ L : ℕ, 0 < L ∧
-      WordTupleSpanTop (fun j => blockTensor (B j) L) 1 := by
+    ∃ L : ℕ, 0 < L ∧ WordTupleSpanTop B L := by
   classical
   have hdimPos := hBNT.blocks_dim_pos
   letI : ∀ j : Fin g, NeZero (dim j) := fun j => ⟨(hdimPos j).ne'⟩
@@ -239,7 +239,23 @@ theorem IsCPSVBasisOfNormalTensors.exists_blocked_wordTupleSpanTop_one
   have hSpan : WordTupleSpanTop B (p + selectorLength) :=
     wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords
       B hOriginalAtP hSelectors
-  refine ⟨p + selectorLength, Nat.add_pos_left hp selectorLength, ?_⟩
-  exact wordTupleSpanTop_blockTensor_one B hSpan
+  exact ⟨p + selectorLength, Nat.add_pos_left hp selectorLength, hSpan⟩
+
+/-- A basis of normal tensors becomes simultaneously injective after one
+common positive blocking.
+
+The common positive word span is absorbed into one physical letter by
+blocking the same number of sites.
+
+Source: arXiv:1606.00608, BNT definition at lines 271--274 and block
+injectivity at lines 317--345. -/
+theorem IsCPSVBasisOfNormalTensors.exists_blocked_wordTupleSpanTop_one
+    {g : ℕ} {dim : Fin g → ℕ}
+    {A : MPSTensor d D} {B : (j : Fin g) → MPSTensor d (dim j)}
+    (hBNT : IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩)) :
+    ∃ L : ℕ, 0 < L ∧
+      WordTupleSpanTop (fun j => blockTensor (B j) L) 1 := by
+  obtain ⟨L, hL, hSpan⟩ := hBNT.exists_positive_wordTupleSpanTop
+  exact ⟨L, hL, wordTupleSpanTop_blockTensor_one B hSpan⟩
 
 end MPSTensor
