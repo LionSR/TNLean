@@ -107,9 +107,14 @@ letterwise reconstruction. `TNLean.MPS.MPDO.VerticalBNT` groups these corners
 into representatives while retaining their physical isometries, and
 `TNLean.MPS.MPDO.SectorTrace` proves positivity of every grouped coefficient.
 The relative Gram algebra is formalized in
-`TNLean.MPS.CanonicalForm.NormalCommutant`.  What remains open is the reflected
-marked-chain form of Lemma L needed to apply it to the grouped data, followed
-by the final coisometry assembly.
+`TNLean.MPS.CanonicalForm.NormalCommutant`; the reflected marked-chain and
+Figure~8 arguments are proved in `TNLean.MPS.MPDO.ReflectedMarkedLemmaL` and
+`TNLean.MPS.MPDO.GroupedFigure8`.  The grouped gauges are normalized and
+absorbed into orthogonal physical sector maps in
+`TNLean.MPS.MPDO.GroupedGramNormalization` and
+`TNLean.MPS.MPDO.NormalizedGroupedSectors`.  What remains open is to transport
+the algebraic basis-of-normal-tensors spanning property to the original
+vertical tensor and apply the established coisometry assembly.
 
 ## Module location
 

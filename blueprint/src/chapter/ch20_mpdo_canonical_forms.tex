@@ -2277,6 +2277,55 @@
     and division by its positive square root gives the stated unitary.
 \end{proof}
 
+\begin{theorem}[Normalized physical maps for the grouped vertical sectors]
+    \label{thm:mpdo_normalized_grouped_physical_maps}
+    \lean{MPOTensor.IsMPDO.exists_normalized_grouped_physical_maps}
+    \leanok
+    \uses{thm:mpdo_vertical_bnt_grouping_with_isometries,
+        thm:mpdo_grouped_sector_unitary_normalization}
+    In the grouped vertical decomposition, let $V_{\alpha,k}$ be the
+    isometry carrying the copy $(\alpha,k)$ and let
+    $U_{\alpha,k}=\omega_{\alpha,k}^{-1/2}X_{\alpha,k}$ be its normalized
+    unitary gauge.  After identifying the copy bond space with the bond space
+    of its representative, define
+    \[
+        W_{\alpha,k}=V_{\alpha,k}U_{\alpha,k}.
+    \]
+    Then the maps $W_{\alpha,k}$ are isometries with mutually orthogonal
+    ranges.  If $c_{\alpha,k}>0$ is the grouped coefficient, then
+    \[
+        \widetilde M^v W_{\alpha,k}
+          =W_{\alpha,k}\bigl(c_{\alpha,k}M_\alpha^v\bigr)
+    \]
+    for every vertical letter $v$, and
+    \[
+        \widetilde M^v
+          =\sum_{\alpha,k}W_{\alpha,k}
+            \bigl(c_{\alpha,k}M_\alpha^v\bigr)
+            W_{\alpha,k}^\dagger.
+    \]
+    This is the physical-sector normalization used in
+    \cite[Proposition~4.13, lines~1903--1921]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_grouped_sector_unitary_normalization}
+    The unitary $U_{\alpha,k}$ identifies the representative bond space with
+    the bond space of its copy.  Hence
+    $W_{\alpha,k}^\dagger W_{\alpha,k}=\Id$, while the orthogonality of two
+    distinct maps follows from
+    $V_{\alpha,k}^\dagger V_{\beta,l}=0$.
+    Since $U_{\alpha,k}$ is a nonzero scalar multiple of
+    $X_{\alpha,k}$, the scalar cancels from the similarity transform:
+    \[
+        U_{\alpha,k}M_\alpha^vU_{\alpha,k}^\dagger
+          =X_{\alpha,k}M_\alpha^vX_{\alpha,k}^{-1}.
+    \]
+    Substitution into the original sector intertwining and reconstruction
+    identities gives the two displayed formulas.
+\end{proof}
+
 \begin{lemma}[Matrix product vector of the diagonal tensor]
     \label{lem:mpv_diagonal_tensor}
     \lean{MPOTensor.mpv_diagonalTensor}
@@ -2880,6 +2929,7 @@
         thm:mpdo_pairwise_vertical_gram_conjugation,
         thm:mpdo_grouped_sector_gram_conjugation,
         thm:mpdo_grouped_sector_unitary_normalization,
+        thm:mpdo_normalized_grouped_physical_maps,
         thm:vertical_sector_coisometry,
         lem:mpdo_vertical_retained_class_nonempty,
         thm:projector_closure_canonical_form,
@@ -2921,6 +2971,7 @@
         thm:mpdo_pairwise_vertical_gram_conjugation,
         thm:mpdo_grouped_sector_gram_conjugation,
         thm:mpdo_grouped_sector_unitary_normalization,
+        thm:mpdo_normalized_grouped_physical_maps,
         thm:vertical_sector_coisometry,
         lem:mpdo_vertical_retained_class_nonempty,
         thm:projector_closure_canonical_form,
@@ -2995,8 +3046,8 @@
     $U_{\alpha,k}=\omega_{\alpha,k}^{-1/2}X_{\alpha,k}$ of the sector gauges
     using the grouped decomposition's distinguished gauge
     $X_{\alpha,1}=\Id$.  This is the source's $U_{\alpha,k}$.
-    After identifying the bond space of each copy with that of its
-    representative, define
+    Theorem~\ref{thm:mpdo_normalized_grouped_physical_maps} identifies the
+    bond space of each copy with that of its representative and defines
 
     \[
         W_{\alpha,k}=V_{\alpha,k}U_{\alpha,k}.
