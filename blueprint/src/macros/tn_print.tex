@@ -5,13 +5,14 @@
 %
 % Layout policy:
 % - Public \TN... macros are chapter-facing and semantically named.
-% - Private \TN@... helpers in macros/tn_core.tex and macros/tn_library.tex
-%   provide the atomic grammar and reusable tensor-network constructions.
+% - Private \TN@... constructions in tex/tn/tn_core.tex and
+%   tex/tn/tn_library.tex provide the atomic grammar and reusable networks.
 % - Public diagrams default to unlabeled tensor glyphs; the surrounding
 %   formula/prose carries the tensor names.
 % - A local tensor is a black dot.  A suppressed contracted component is a
 %   neutral square box, a linear map is a rounded blue box, a state is a
-%   rounded gray box, and an endomorphism inserted on an index is a red dot.
+%   rounded gray box, a formal expression has its own neutral box, and an
+%   endomorphism inserted on an index is a red dot.
 % - Solid strokes are contracted indices.  Dashed strokes indicate only a
 %   grouping boundary, a change of multiplicity basis, or an identified
 %   boundary of a periodic lattice.
@@ -19,28 +20,14 @@
 
 \makeatletter
 
-% A displayed algebraic factor with its two exposed index lines.  This local
-% abbreviation keeps the source-derived sector diagrams legible while using
-% the common factor glyph and anchored-leg constructors.
-\newcommand{\TN@factorwithlegs}[3]{%
-    \TN@factor[minimum width=0.72cm, minimum height=0.52cm,
-        inner sep=1pt]{#1}{#2}{#3}%
-    \TN@vleg{#1}{north}{0,0.26}%
-    \TN@vleg{#1}{south}{0,-0.26}%
-}
-
 % ---------- Public semantic macros ----------
 
 \newcommand{\TNTikZDiagram}[2]{#2}
 
 \newcommand{\TNMPSLocal}[2]{%
     \begin{tikzpicture}[tn picture]
-        \TN@tensor{tnA}{(0,0)}
-        \TN@vleg{tnA}{west}{-0.8,0}
-        \TN@vleg{tnA}{east}{0.8,0}
-        \TN@pleg{tnA}{north}{0,\TN@physleglen}
-        \TN@uplabel{tnA}{\TN@physlabeloff}{#2}
-        \node at ($(tnA.south)+(0,-0.30)$) {$#1$};
+        \TN@mpssiteWithOpenLegs{tnA}{(0,0)}{#1}
+        \TN@label{tnANOpen}{(0,0.22)}{#2}
     \end{tikzpicture}%
 }
 
@@ -65,7 +52,7 @@
 \newcommand{\TNBlocking}[4]{%
     \begin{tikzpicture}[tn picture]
         \TN@openMPSword{tn}{#2}{#3}{#4}
-        \TN@vpath[tn grouping region]{
+        \TN@grouppath{
             ($(tnL.west)+(-0.30,0.22)$)
             rectangle ($(tnR.east)+(0.30,-0.34)$);}
     \end{tikzpicture}%
@@ -82,19 +69,17 @@
         \TN@vconnectports{ovuLE}{ovuMW}
         \TN@vopenport{ovuME}{0.62,0}
         \TN@vopenport{ovuRW}{-0.62,0}
-        \TN@vtracepath{(ovuLW) -- (-0.48,0.42) -- (-0.48,0.74)
-            -- (4.68,0.74) -- (4.68,0.42) -- (ovuRE)}
+        \TN@vtraceportsabove{ovuLW}{ovuRE}{0.48}{0.32}
         \TN@declareWordTensor{ovdL}{(0,-0.42)}
         \TN@declareWordTensor{ovdM}{(\TN@chainsep,-0.42)}
         \TN@declareWordTensor{ovdR}{(\TN@chainright,-0.42)}
         \TN@vconnectports{ovdLE}{ovdMW}
         \TN@vopenport{ovdME}{0.62,0}
         \TN@vopenport{ovdRW}{-0.62,0}
-        \TN@vtracepath{(ovdLW) -- (-0.48,-0.42) -- (-0.48,-0.74)
-            -- (4.68,-0.74) -- (4.68,-0.42) -- (ovdRE)}
-        \TN@pconnect{ovuL}{south}{ovdL}{north}
-        \TN@pconnect{ovuM}{south}{ovdM}{north}
-        \TN@pconnect{ovuR}{south}{ovdR}{north}
+        \TN@vtraceportsbelow{ovdLW}{ovdRE}{0.48}{0.32}
+        \TN@pconnectports{ovuLS}{ovdLN}
+        \TN@pconnectports{ovuMS}{ovdMN}
+        \TN@pconnectports{ovuRS}{ovdRN}
         % single centred ellipsis in the omitted-site column (no line crosses it)
         \node at (\TN@chainellipsisx,0) {$\cdots$};
         \node[anchor=east] at (-0.85,0.42) {$#1$};
@@ -105,29 +90,22 @@
 
 \newcommand{\TNTransferMap}[1]{%
     \begin{tikzpicture}[tn picture]
-        \TN@tensor{tnUp}{(0,0.44)}
-        \TN@tensor{tnDn}{(0,-0.44)}
-        \TN@vleg{tnUp}{west}{-0.75,0}
-        \TN@vleg{tnDn}{west}{-0.75,0}
-        \TN@vleg{tnUp}{east}{0.75,0}
-        \TN@vleg{tnDn}{east}{0.75,0}
-        \TN@pconnect{tnUp}{south}{tnDn}{north}
+        \TN@doublelayer{tn}{(0,0.44)}{(0,-0.44)}
+        \TN@vopenport{tnUW}{-0.75,0}
+        \TN@vopenport{tnDW}{-0.75,0}
+        \TN@vopenport{tnUE}{0.75,0}
+        \TN@vopenport{tnDE}{0.75,0}
         \node at (-1.18,0) {$X$};
         \node at (1.36,0) {$\E_{#1}(X)$};
-        \node at ($(tnUp.south)!0.5!(tnDn.north)+(0.24,0)$) {$i$};
+        \node at ($(tnUS)!0.5!(tnDN)+(0.24,0)$) {$i$};
     \end{tikzpicture}%
 }
 
 \newcommand{\TNMPOCell}[3]{%
     \begin{tikzpicture}[tn picture]
-        \TN@tensor{tnM}{(0,0)}
-        \TN@vleg{tnM}{west}{-0.8,0}
-        \TN@vleg{tnM}{east}{0.8,0}
-        \TN@pleg{tnM}{north}{0,\TN@physleglen}
-        \TN@pleg{tnM}{south}{0,-\TN@physleglen}
-        \TN@uplabel{tnM}{\TN@physlabeloff}{#2}
-        \TN@downlabel{tnM}{\TN@physlabeloff}{#3}
-        \node[anchor=north west] at ($(tnM.south east)+(0.12,-0.18)$) {$#1$};
+        \TN@mpositeWithOpenLegs{tnM}{(0,0)}{#1}
+        \TN@label{tnMNOpen}{(0,0.22)}{#2}
+        \TN@label{tnMSOpen}{(0,-0.22)}{#3}
     \end{tikzpicture}%
 }
 
@@ -195,15 +173,9 @@
 % Contraction of neighbouring right and left sector tensors.
 \newcommand{\TNEtaSectorDecomposition}{%
     \begin{tikzpicture}[tn picture]
-        \TN@factor[minimum width=0.52cm, minimum height=0.38cm,
-            inner sep=1pt]{tnRh}{(-0.56,0)}{r_k}
-        \TN@factor[minimum width=0.52cm, minimum height=0.38cm,
-            inner sep=1pt]{tnLk}{(0.56,0)}{l_h}
-        \TN@vconnect{tnRh}{east}{tnLk}{west}
-        \TN@pleg{tnRh}{north}{0,0.50}
-        \TN@pleg{tnRh}{south}{0,-0.50}
-        \TN@pleg{tnLk}{north}{0,0.50}
-        \TN@pleg{tnLk}{south}{0,-0.50}
+        \TN@factorwithlegs{tnRh}{(-0.56,0)}{r_k}
+        \TN@factorwithlegs{tnLk}{(0.56,0)}{l_h}
+        \TN@vconnectports{tnRhE}{tnLkW}
         \node at (0,-0.80) {$\eta_{k,h}=r_k l_h$};
     \end{tikzpicture}%
 }
@@ -222,7 +194,7 @@
         \TN@vconnect{tzeroLk}{east}{tzeroRk}{west}
         \TN@vconnect{tzeroRk}{east}{tzeroLh}{west}
         \TN@vconnect{tzeroLh}{east}{tzeroRh}{west}
-        \TN@vpath[tn grouping region]{
+        \TN@grouppath{
             (-2.62,0.68) rectangle (-0.68,1.68);}
         \node at (-1.65,0.44) {$\tr_{R_k\otimes L_h}$};
         \TN@arrow[->, line width=0.55pt]{ (0.52,1.18) -- (1.32,1.18);}
@@ -231,12 +203,12 @@
         \TN@vconnect{tzeroOutL}{east}{tzeroOutR}{west}
 
         \node[anchor=east] at (-3.72,-1.18) {$\mathcal S_2:$};
-        \TN@vpath[tn factor region]{ (-3.42,-1.72) rectangle (-1.38,-0.64);}
+        \TN@factorpath{ (-3.42,-1.72) rectangle (-1.38,-0.64);}
         \TN@factorwithlegs{sTwoLk}{(-2.90,-1.18)}{l_k}
         \TN@factorwithlegs{sTwoRh}{(-1.90,-1.18)}{r_h}
         \TN@vconnect{sTwoLk}{east}{sTwoRh}{west}
         \node at (-1.00,-1.18) {$\otimes$};
-        \TN@vpath[tn factor region]{ (-0.60,-1.72) rectangle (1.44,-0.64);}
+        \TN@factorpath{ (-0.60,-1.72) rectangle (1.44,-0.64);}
         \TN@factorwithlegs{sTwoRk}{(-0.08,-1.18)}{r_k}
         \TN@factorwithlegs{sTwoLh}{(0.92,-1.18)}{l_h}
         \TN@vconnect{sTwoRk}{east}{sTwoLh}{west}
@@ -272,7 +244,7 @@
         \TN@vconnect{szeroLl}{east}{szeroRl}{west}
         \TN@vconnect{szeroRl}{east}{szeroLh}{west}
         \TN@vconnect{szeroLh}{east}{szeroRh}{west}
-        \TN@vpath[tn grouping region]{
+        \TN@grouppath{
             (-3.57,0.84) rectangle (0.37,1.86);}
         \node at (-1.60,0.50)
             {$\tr_{\bigoplus_l[(R_k\otimes L_l)\otimes(R_l\otimes L_h)]}$};
@@ -282,12 +254,12 @@
         \TN@vconnect{szeroOutL}{east}{szeroOutR}{west}
 
         \node[anchor=east] at (-4.70,-1.35) {$\mathcal T_2:$};
-        \TN@vpath[tn factor region]{ (-4.37,-1.90) rectangle (-2.33,-0.80);}
+        \TN@factorpath{ (-4.37,-1.90) rectangle (-2.33,-0.80);}
         \TN@factorwithlegs{tTwoLk}{(-3.85,-1.35)}{l_k}
         \TN@factorwithlegs{tTwoRh}{(-2.85,-1.35)}{r_h}
         \TN@vconnect{tTwoLk}{east}{tTwoRh}{west}
         \node at (-1.96,-1.35) {$\otimes$};
-        \TN@vpath[tn factor region]{ (-1.55,-1.90) rectangle (2.42,-0.80);}
+        \TN@factorpath{ (-1.55,-1.90) rectangle (2.42,-0.80);}
         \TN@factorwithlegs{tTwoRk}{(-1.03,-1.35)}{r_k}
         \TN@factorwithlegs{tTwoLl}{(-0.03,-1.35)}{l_l}
         \TN@factorwithlegs{tTwoRl}{(0.97,-1.35)}{r_l}
@@ -328,7 +300,7 @@
         \TN@vconnect{trefTopLk}{east}{trefTopRk}{west}
         \TN@vconnect{trefTopRk}{east}{trefTopLh}{west}
         \TN@vconnect{trefTopLh}{east}{trefTopRh}{west}
-        \TN@vpath[tn grouping region]{
+        \TN@grouppath{
             (-3.25,1.94) rectangle (-1.19,2.96);}
         \node at (-2.22,1.68) {$\tr_{R_k\otimes L_h}$};
 
@@ -393,7 +365,7 @@
             \TN@factorwithlegs{\name}{(\x,1.35)}{\widehat{\cal K}}
         }
         \TN@vconnect{btTwoA}{east}{btTwoB}{west}
-        \TN@vpath[tn grouping region]{
+        \TN@grouppath{
             (-5.48,0.87) rectangle (-3.52,1.83);}
         \node at (-4.50,0.54) {one blocked site};
 
@@ -409,9 +381,9 @@
         \TN@vconnect{btFourA}{east}{btFourB}{west}
         \TN@vconnect{btFourB}{east}{btFourC}{west}
         \TN@vconnect{btFourC}{east}{btFourD}{west}
-        \TN@vpath[tn grouping region]{
+        \TN@grouppath{
             (2.52,0.87) rectangle (4.48,1.83);}
-        \TN@vpath[tn grouping region]{
+        \TN@grouppath{
             (4.52,0.87) rectangle (6.48,1.83);}
         \node at (4.50,0.54) {two blocked sites};
 
@@ -429,9 +401,9 @@
         \TN@vconnect{bsFourA}{east}{bsFourB}{west}
         \TN@vconnect{bsFourB}{east}{bsFourC}{west}
         \TN@vconnect{bsFourC}{east}{bsFourD}{west}
-        \TN@vpath[tn grouping region]{
+        \TN@grouppath{
             (2.52,-1.78) rectangle (4.48,-0.82);}
-        \TN@vpath[tn grouping region]{
+        \TN@grouppath{
             (4.52,-1.78) rectangle (6.48,-0.82);}
         \foreach \x/\name in {-1.4/bsThreeA,-0.4/bsThreeB,0.6/bsThreeC} {
             \TN@factorwithlegs{\name}{(\x,-1.30)}{\widehat{\cal K}}
@@ -442,7 +414,7 @@
             \TN@factorwithlegs{\name}{(\x,-1.30)}{\widehat{\cal K}}
         }
         \TN@vconnect{bsTwoA}{east}{bsTwoB}{west}
-        \TN@vpath[tn grouping region]{
+        \TN@grouppath{
             (-5.48,-1.78) rectangle (-3.52,-0.82);}
         \TN@arrow[<-, line width=0.60pt]{ (1.08,-1.30) -- (2.52,-1.30)
             node[midway, above] {$\widehat{\mathcal S}_{(123)4}$};}
@@ -464,7 +436,7 @@
             \TN@factorwithlegs{\name}{(\x,1.45)}{\cal K}
         }
         \TN@vconnect{ptRawTwoA}{east}{ptRawTwoB}{west}
-        \TN@vpath[tn grouping region]{
+        \TN@grouppath{
             (-5.48,0.97) rectangle (-3.52,1.93);}
         \node at (-4.50,2.27) {${\cal K}_2(X)$};
 
@@ -475,9 +447,9 @@
         \TN@vconnect{ptRawFourA}{east}{ptRawFourB}{west}
         \TN@vconnect{ptRawFourB}{east}{ptRawFourC}{west}
         \TN@vconnect{ptRawFourC}{east}{ptRawFourD}{west}
-        \TN@vpath[tn grouping region]{
+        \TN@grouppath{
             (2.52,0.97) rectangle (4.48,1.93);}
-        \TN@vpath[tn grouping region]{
+        \TN@grouppath{
             (4.52,0.97) rectangle (6.48,1.93);}
         \node at (4.50,2.27) {${\cal K}_4(X)$};
 
@@ -485,7 +457,7 @@
             \TN@factorwithlegs{\name}{(\x,-1.45)}{\widehat{\cal K}}
         }
         \TN@vconnect{ptHatTwoA}{east}{ptHatTwoB}{west}
-        \TN@vpath[tn grouping region]{
+        \TN@grouppath{
             (-5.48,-1.93) rectangle (-3.52,-0.97);}
         \node at (-4.50,-2.27) {$\widehat{\cal K}_2(X)$};
 
@@ -496,9 +468,9 @@
         \TN@vconnect{ptHatFourA}{east}{ptHatFourB}{west}
         \TN@vconnect{ptHatFourB}{east}{ptHatFourC}{west}
         \TN@vconnect{ptHatFourC}{east}{ptHatFourD}{west}
-        \TN@vpath[tn grouping region]{
+        \TN@grouppath{
             (2.52,-1.93) rectangle (4.48,-0.97);}
-        \TN@vpath[tn grouping region]{
+        \TN@grouppath{
             (4.52,-1.93) rectangle (6.48,-0.97);}
         \node at (4.50,-2.27) {$\widehat{\cal K}_4(X)$};
 
@@ -614,10 +586,10 @@
             commEtaLHLeft/-0.50/1.26,
             commEtaKLRight/-0.50/1.26,
             commEtaLHRight/-1.26/0.50} {
-            \TN@southport{\factor SouthLeft}{\factor}{0.21}
-            \TN@southport{\factor SouthRight}{\factor}{0.79}
-            \TN@northport{\factor NorthLeft}{\factor}{0.21}
-            \TN@northport{\factor NorthRight}{\factor}{0.79}
+            \TN@vsouthport{\factor SouthLeft}{\factor}{0.21}
+            \TN@vsouthport{\factor SouthRight}{\factor}{0.79}
+            \TN@vnorthport{\factor NorthLeft}{\factor}{0.21}
+            \TN@vnorthport{\factor NorthRight}{\factor}{0.79}
             \TN@vopenport{\factor SouthLeft}{0,\low}
             \TN@vopenport{\factor SouthRight}{0,\low}
             \TN@vopenport{\factor NorthLeft}{0,\high}
@@ -681,7 +653,7 @@
             {$\operatorname{reindex}_{\Phi_N}\!M_N(\widetilde{\cal K})$};
         \node at (-1.93,0) {$=$};
         \node at (-1.28,0) {$\displaystyle\bigoplus_{k_0,\ldots,k_{N-1}}$};
-        \TN@vpath[tn factor region]{ (-0.45,-0.58) rectangle (4.22,0.58);}
+        \TN@factorpath{ (-0.45,-0.58) rectangle (4.22,0.58);}
         \TN@factor[minimum width=1.08cm, minimum height=0.44cm,
             inner sep=1pt]{tnEtaZero}{(0.30,0)}{\eta_{k_0,k_1}}
         \node at (1.10,0) {$\otimes$};
@@ -809,10 +781,10 @@
         \TN@map{vdUu}{(-2.55,0.76)}{U^\dagger}
         \TN@tensor{vdM}{(-2.55,0)}
         \TN@map{vdUd}{(-2.55,-0.76)}{U}
-        \TN@northport{vdUuNLeft}{vdUu}{0.30}
-        \TN@northport{vdUuNRight}{vdUu}{0.70}
-        \TN@southport{vdUdSLeft}{vdUd}{0.30}
-        \TN@southport{vdUdSRight}{vdUd}{0.70}
+        \TN@pnorthport{vdUuNLeft}{vdUu}{0.30}
+        \TN@pnorthport{vdUuNRight}{vdUu}{0.70}
+        \TN@psouthport{vdUdSLeft}{vdUd}{0.30}
+        \TN@psouthport{vdUdSRight}{vdUd}{0.70}
         \TN@popenport{vdUuNLeft}{0,0.36}
         \TN@popenport{vdUuNRight}{0,0.36}
         \TN@ppath{ (vdUu.south) -- (vdM.north);}
@@ -1253,8 +1225,8 @@
         \TN@vpath{(bntA.south) -- (1.50,-0.62)}
         \TN@vpath{(bntXi.south) -- (3.00,-1.02)}
         \TN@component{bntMu}{(0.75,-1.60)}{\mu}
-        \TN@northport{bntMuNLeft}{bntMu}{0.15}
-        \TN@northport{bntMuNRight}{bntMu}{0.85}
+        \TN@vnorthport{bntMuNLeft}{bntMu}{0.15}
+        \TN@vnorthport{bntMuNRight}{bntMu}{0.85}
         \TN@vpath{(bntMuNLeft) -- (0.63,-0.62)}
         \TN@vpath{(bntMuNRight) -- (0.87,-1.02)}
         \TN@anonymousjunction{(0,-0.62)}
@@ -1375,16 +1347,18 @@
         }
         \TN@vconnect{ffSelL}{east}{ffSelM}{west}
         \TN@vleg{ffSelM}{east}{0.49,0}
-        \TN@port{ffSelRW}{ffSelR}{west}
+        \TN@vport{ffSelRW}{ffSelR}{west}
         \TN@vopenport{ffSelRW}{-0.49,0}
         \TN@vleg{ffSelL}{west}{-0.34,0}
         \TN@vleg{ffSelR}{east}{0.34,0}
         \node at (-1.76,2.62) {$\cdots$};
         \node at (-2.28,2.14) {$M_{\varepsilon'}^{w}$};
         \TN@grouppath{(-4.33,2.03) rectangle (-0.23,3.17)}
-        \node[fill=white, inner sep=1pt] at (-2.28,3.17)
+        \node[tn label, fill=white, inner sep=1pt] at (-2.28,3.17)
             {$\displaystyle\sum_{|w|=S}c_{\varepsilon}(w)\,(\,\cdot\,)^{w}$};
-        \TN@vpath[->]{(0.12,2.62) -- (1.05,2.62)}
+        \TN@mterminal{ffSelectorSource}{(0.12,2.62)}
+        \TN@mterminal{ffSelectorTarget}{(1.05,2.62)}
+        \TN@mconnectports{ffSelectorSource}{ffSelectorTarget}
         \node[anchor=west] at (1.18,2.62)
             {$\displaystyle
               \begin{cases}
@@ -1416,9 +1390,11 @@
         \TN@vconnect{ffRa}{north}{ffRroot}{south west}
         \TN@vconnect{ffRbc}{north}{ffRroot}{south east}
         \node[above=1pt] at (ffRroot.north) {$\varepsilon'$};
-        \TN@vpath[<-]{(ffLroot.east) -- node[above]
-            {$C^{\varepsilon,\varepsilon'}_{\alpha,\beta,\gamma}$}
-            (ffRroot.west)}
+        \TN@mport{ffLComparison}{ffLroot}{east}
+        \TN@mport{ffRComparison}{ffRroot}{west}
+        \TN@mconnectports{ffRComparison}{ffLComparison}
+        \node[above] at ($(ffLComparison)!0.5!(ffRComparison)$)
+            {$C^{\varepsilon,\varepsilon'}_{\alpha,\beta,\gamma}$};
         \node[anchor=west] at (4.18,0.94)
             {$=0\quad(\varepsilon\ne\varepsilon')$};
 
@@ -1432,10 +1408,17 @@
             {$\mathcal H^{\mathrm R}_{\varepsilon}$};
         \node[anchor=west] at (3.43,-2.08) {$\C^{D_\varepsilon}$};
         \TN@map{ffF}{(0,-1.48)}{F_\varepsilon}
-        \TN@vpath[<-]{(-3.36,-1.48) -- (ffF.west)}
-        \TN@vpath[<-]{(ffF.east) -- (3.36,-1.48)}
-        \TN@vpath[<-]{(-3.36,-2.08) -- node[below]
-            {$1_{D_\varepsilon}$} (3.36,-2.08)}
+        \TN@mport{ffFW}{ffF}{west}
+        \TN@mport{ffFE}{ffF}{east}
+        \TN@mterminal{ffHLeft}{(-3.36,-1.48)}
+        \TN@mterminal{ffHRight}{(3.36,-1.48)}
+        \TN@mterminal{ffDLeft}{(-3.36,-2.08)}
+        \TN@mterminal{ffDRight}{(3.36,-2.08)}
+        \TN@mconnectports{ffHRight}{ffFE}
+        \TN@mconnectports{ffFW}{ffHLeft}
+        \TN@mconnectports{ffDRight}{ffDLeft}
+        \node[below] at ($(ffDLeft)!0.5!(ffDRight)$)
+            {$1_{D_\varepsilon}$};
         \node at (0,-2.62)
             {$C_\varepsilon=F_\varepsilon\otimes1_{D_\varepsilon},\qquad
               D_\varepsilon>0$};
@@ -1450,11 +1433,11 @@
 % only Cartesian-product reassociation; the edges do not represent F-matrices.
 \newcommand{\TNMPDOFourfoldBondReassociationPentagon}{%
     \begin{tikzpicture}[tn picture, scale=0.92]
-        \TN@state[inner sep=3pt]{assocL}{(-5.00,0)}{(((A\times B)\times C)\times D)}
-        \TN@state[inner sep=3pt]{assocLI}{(-3.00,1.80)}{((A\times(B\times C))\times D)}
-        \TN@state[inner sep=3pt]{assocM}{(1.00,1.80)}{(A\times((B\times C)\times D))}
-        \TN@state[inner sep=3pt]{assocR}{(4.20,0)}{(A\times(B\times(C\times D)))}
-        \TN@state[inner sep=3pt]{assocP}{(-0.30,-1.80)}{((A\times B)\times(C\times D))}
+        \TN@expression[inner sep=3pt]{assocL}{(-5.00,0)}{(((A\times B)\times C)\times D)}
+        \TN@expression[inner sep=3pt]{assocLI}{(-3.00,1.80)}{((A\times(B\times C))\times D)}
+        \TN@expression[inner sep=3pt]{assocM}{(1.00,1.80)}{(A\times((B\times C)\times D))}
+        \TN@expression[inner sep=3pt]{assocR}{(4.20,0)}{(A\times(B\times(C\times D)))}
+        \TN@expression[inner sep=3pt]{assocP}{(-0.30,-1.80)}{((A\times B)\times(C\times D))}
 
         \TN@arrow[line width=0.7pt]{(assocL) -- node[above left] {$r_1$} (assocLI)}
         \TN@arrow[line width=0.7pt]{(assocLI) -- node[above] {$r_2$} (assocM)}
@@ -1471,94 +1454,129 @@
 \newcommand{\TNMPDOCompleteZipperFusionPentagon}{%
     \begin{tikzpicture}[tn picture, scale=0.82]
         % (((a b) c) d)
-        \coordinate (pL-a) at (-5.70,0.75);
-        \coordinate (pL-b) at (-5.15,0.75);
-        \coordinate (pL-c) at (-4.60,0.75);
-        \coordinate (pL-d) at (-4.05,0.75);
-        \coordinate (pL-f) at (-5.42,0.22);
-        \coordinate (pL-g) at (-5.00,-0.28);
-        \coordinate (pL-e) at (-4.56,-0.80);
-        \TN@vpath{(pL-a) -- (pL-f) -- (pL-b)}
-        \TN@vpath{(pL-f) -- (pL-g) -- (pL-c)}
-        \TN@vpath{(pL-g) -- (pL-e) -- (pL-d)}
-        \TN@vpath{(pL-e) -- ++(0,-0.48)}
-        \foreach \n/\t in {pL-a/a,pL-b/b,pL-c/c,pL-d/d}
+        \TN@vterminal{pLa}{(-5.70,0.75)}
+        \TN@vterminal{pLb}{(-5.15,0.75)}
+        \TN@vterminal{pLc}{(-4.60,0.75)}
+        \TN@vterminal{pLd}{(-4.05,0.75)}
+        \TN@fusionmap[minimum width=0.28cm, minimum height=0.20cm,
+            inner sep=0.4pt]{pLf}{(-5.42,0.22)}{}
+        \TN@fusionmap[minimum width=0.28cm, minimum height=0.20cm,
+            inner sep=0.4pt]{pLg}{(-5.00,-0.28)}{}
+        \TN@fusionmap[minimum width=0.28cm, minimum height=0.20cm,
+            inner sep=0.4pt]{pLe}{(-4.56,-0.80)}{}
+        \TN@vterminal{pLroot}{(-4.56,-1.28)}
+        \TN@vconnectports{pLa}{pLfLeft}
+        \TN@vconnectports{pLb}{pLfRight}
+        \TN@vconnectports{pLfOut}{pLgLeft}
+        \TN@vconnectports{pLc}{pLgRight}
+        \TN@vconnectports{pLgOut}{pLeLeft}
+        \TN@vconnectports{pLd}{pLeRight}
+        \TN@vconnectports{pLeOut}{pLroot}
+        \foreach \n/\t in {pLa/a,pLb/b,pLc/c,pLd/d}
             \node[above] at (\n) {$\t$};
-        \node[left] at ($(pL-f)!0.55!(pL-g)$) {$f$};
-        \node[left] at ($(pL-g)!0.55!(pL-e)$) {$g$};
-        \node[below] at ($(pL-e)+(0,-0.48)$) {$e$};
+        \node[left] at ($(pLfOut)!0.5!(pLgLeft)$) {$f$};
+        \node[left] at ($(pLgOut)!0.5!(pLeLeft)$) {$g$};
+        \node[below] at (pLroot) {$e$};
 
         % ((a (b c)) d)
-        \coordinate (pLI-a) at (-4.20,3.52);
-        \coordinate (pLI-b) at (-3.65,3.52);
-        \coordinate (pLI-c) at (-3.10,3.52);
-        \coordinate (pLI-d) at (-2.55,3.52);
-        \coordinate (pLI-h) at (-3.38,2.99);
-        \coordinate (pLI-g) at (-3.78,2.49);
-        \coordinate (pLI-e) at (-3.28,1.97);
-        \TN@vpath{(pLI-b) -- (pLI-h) -- (pLI-c)}
-        \TN@vpath{(pLI-a) -- (pLI-g) -- (pLI-h)}
-        \TN@vpath{(pLI-g) -- (pLI-e) -- (pLI-d)}
-        \TN@vpath{(pLI-e) -- ++(0,-0.48)}
-        \foreach \n/\t in {pLI-a/a,pLI-b/b,pLI-c/c,pLI-d/d}
+        \TN@vterminal{pLIa}{(-4.20,3.52)}
+        \TN@vterminal{pLIb}{(-3.65,3.52)}
+        \TN@vterminal{pLIc}{(-3.10,3.52)}
+        \TN@vterminal{pLId}{(-2.55,3.52)}
+        \TN@fusionmap[minimum width=0.28cm, minimum height=0.20cm,
+            inner sep=0.4pt]{pLIh}{(-3.38,2.99)}{}
+        \TN@fusionmap[minimum width=0.28cm, minimum height=0.20cm,
+            inner sep=0.4pt]{pLIg}{(-3.78,2.49)}{}
+        \TN@fusionmap[minimum width=0.28cm, minimum height=0.20cm,
+            inner sep=0.4pt]{pLIe}{(-3.28,1.97)}{}
+        \TN@vterminal{pLIroot}{(-3.28,1.49)}
+        \TN@vconnectports{pLIb}{pLIhLeft}
+        \TN@vconnectports{pLIc}{pLIhRight}
+        \TN@vconnectports{pLIa}{pLIgLeft}
+        \TN@vconnectports{pLIhOut}{pLIgRight}
+        \TN@vconnectports{pLIgOut}{pLIeLeft}
+        \TN@vconnectports{pLId}{pLIeRight}
+        \TN@vconnectports{pLIeOut}{pLIroot}
+        \foreach \n/\t in {pLIa/a,pLIb/b,pLIc/c,pLId/d}
             \node[above] at (\n) {$\t$};
-        \node[right] at ($(pLI-h)!0.55!(pLI-g)$) {$h$};
-        \node[left] at ($(pLI-g)!0.55!(pLI-e)$) {$g$};
-        \node[below] at ($(pLI-e)+(0,-0.48)$) {$e$};
+        \node[right] at ($(pLIhOut)!0.5!(pLIgRight)$) {$h$};
+        \node[left] at ($(pLIgOut)!0.5!(pLIeLeft)$) {$g$};
+        \node[below] at (pLIroot) {$e$};
 
         % a ((b c) d)
-        \coordinate (pM-a) at (0.10,3.52);
-        \coordinate (pM-b) at (0.65,3.52);
-        \coordinate (pM-c) at (1.20,3.52);
-        \coordinate (pM-d) at (1.75,3.52);
-        \coordinate (pM-h) at (0.92,2.99);
-        \coordinate (pM-i) at (1.34,2.49);
-        \coordinate (pM-e) at (0.84,1.97);
-        \TN@vpath{(pM-b) -- (pM-h) -- (pM-c)}
-        \TN@vpath{(pM-h) -- (pM-i) -- (pM-d)}
-        \TN@vpath{(pM-a) -- (pM-e) -- (pM-i)}
-        \TN@vpath{(pM-e) -- ++(0,-0.48)}
-        \foreach \n/\t in {pM-a/a,pM-b/b,pM-c/c,pM-d/d}
+        \TN@vterminal{pMa}{(0.10,3.52)}
+        \TN@vterminal{pMb}{(0.65,3.52)}
+        \TN@vterminal{pMc}{(1.20,3.52)}
+        \TN@vterminal{pMd}{(1.75,3.52)}
+        \TN@fusionmap[minimum width=0.28cm, minimum height=0.20cm,
+            inner sep=0.4pt]{pMh}{(0.92,2.99)}{}
+        \TN@fusionmap[minimum width=0.28cm, minimum height=0.20cm,
+            inner sep=0.4pt]{pMi}{(1.34,2.49)}{}
+        \TN@fusionmap[minimum width=0.28cm, minimum height=0.20cm,
+            inner sep=0.4pt]{pMe}{(0.84,1.97)}{}
+        \TN@vterminal{pMroot}{(0.84,1.49)}
+        \TN@vconnectports{pMb}{pMhLeft}
+        \TN@vconnectports{pMc}{pMhRight}
+        \TN@vconnectports{pMhOut}{pMiLeft}
+        \TN@vconnectports{pMd}{pMiRight}
+        \TN@vconnectports{pMa}{pMeLeft}
+        \TN@vconnectports{pMiOut}{pMeRight}
+        \TN@vconnectports{pMeOut}{pMroot}
+        \foreach \n/\t in {pMa/a,pMb/b,pMc/c,pMd/d}
             \node[above] at (\n) {$\t$};
-        \node[left] at ($(pM-h)!0.55!(pM-i)$) {$h$};
-        \node[right] at ($(pM-i)!0.55!(pM-e)$) {$i$};
-        \node[below] at ($(pM-e)+(0,-0.48)$) {$e$};
+        \node[left] at ($(pMhOut)!0.5!(pMiLeft)$) {$h$};
+        \node[right] at ($(pMiOut)!0.5!(pMeRight)$) {$i$};
+        \node[below] at (pMroot) {$e$};
 
         % a (b (c d))
-        \coordinate (pR-a) at (4.05,0.75);
-        \coordinate (pR-b) at (4.60,0.75);
-        \coordinate (pR-c) at (5.15,0.75);
-        \coordinate (pR-d) at (5.70,0.75);
-        \coordinate (pR-j) at (5.42,0.22);
-        \coordinate (pR-i) at (5.00,-0.28);
-        \coordinate (pR-e) at (4.56,-0.80);
-        \TN@vpath{(pR-c) -- (pR-j) -- (pR-d)}
-        \TN@vpath{(pR-b) -- (pR-i) -- (pR-j)}
-        \TN@vpath{(pR-a) -- (pR-e) -- (pR-i)}
-        \TN@vpath{(pR-e) -- ++(0,-0.48)}
-        \foreach \n/\t in {pR-a/a,pR-b/b,pR-c/c,pR-d/d}
+        \TN@vterminal{pRa}{(4.05,0.75)}
+        \TN@vterminal{pRb}{(4.60,0.75)}
+        \TN@vterminal{pRc}{(5.15,0.75)}
+        \TN@vterminal{pRd}{(5.70,0.75)}
+        \TN@fusionmap[minimum width=0.28cm, minimum height=0.20cm,
+            inner sep=0.4pt]{pRj}{(5.42,0.22)}{}
+        \TN@fusionmap[minimum width=0.28cm, minimum height=0.20cm,
+            inner sep=0.4pt]{pRi}{(5.00,-0.28)}{}
+        \TN@fusionmap[minimum width=0.28cm, minimum height=0.20cm,
+            inner sep=0.4pt]{pRe}{(4.56,-0.80)}{}
+        \TN@vterminal{pRroot}{(4.56,-1.28)}
+        \TN@vconnectports{pRc}{pRjLeft}
+        \TN@vconnectports{pRd}{pRjRight}
+        \TN@vconnectports{pRb}{pRiLeft}
+        \TN@vconnectports{pRjOut}{pRiRight}
+        \TN@vconnectports{pRa}{pReLeft}
+        \TN@vconnectports{pRiOut}{pReRight}
+        \TN@vconnectports{pReOut}{pRroot}
+        \foreach \n/\t in {pRa/a,pRb/b,pRc/c,pRd/d}
             \node[above] at (\n) {$\t$};
-        \node[right] at ($(pR-j)!0.55!(pR-i)$) {$j$};
-        \node[right] at ($(pR-i)!0.55!(pR-e)$) {$i$};
-        \node[below] at ($(pR-e)+(0,-0.48)$) {$e$};
+        \node[right] at ($(pRjOut)!0.5!(pRiRight)$) {$j$};
+        \node[right] at ($(pRiOut)!0.5!(pReRight)$) {$i$};
+        \node[below] at (pRroot) {$e$};
 
         % (a b) (c d)
-        \coordinate (pP-a) at (-0.85,-2.10);
-        \coordinate (pP-b) at (-0.30,-2.10);
-        \coordinate (pP-c) at (0.30,-2.10);
-        \coordinate (pP-d) at (0.85,-2.10);
-        \coordinate (pP-f) at (-0.58,-2.63);
-        \coordinate (pP-j) at (0.58,-2.63);
-        \coordinate (pP-e) at (0,-3.18);
-        \TN@vpath{(pP-a) -- (pP-f) -- (pP-b)}
-        \TN@vpath{(pP-c) -- (pP-j) -- (pP-d)}
-        \TN@vpath{(pP-f) -- (pP-e) -- (pP-j)}
-        \TN@vpath{(pP-e) -- ++(0,-0.48)}
-        \foreach \n/\t in {pP-a/a,pP-b/b,pP-c/c,pP-d/d}
+        \TN@vterminal{pPa}{(-0.85,-2.10)}
+        \TN@vterminal{pPb}{(-0.30,-2.10)}
+        \TN@vterminal{pPc}{(0.30,-2.10)}
+        \TN@vterminal{pPd}{(0.85,-2.10)}
+        \TN@fusionmap[minimum width=0.28cm, minimum height=0.20cm,
+            inner sep=0.4pt]{pPf}{(-0.58,-2.63)}{}
+        \TN@fusionmap[minimum width=0.28cm, minimum height=0.20cm,
+            inner sep=0.4pt]{pPj}{(0.58,-2.63)}{}
+        \TN@fusionmap[minimum width=0.28cm, minimum height=0.20cm,
+            inner sep=0.4pt]{pPe}{(0,-3.18)}{}
+        \TN@vterminal{pProot}{(0,-3.66)}
+        \TN@vconnectports{pPa}{pPfLeft}
+        \TN@vconnectports{pPb}{pPfRight}
+        \TN@vconnectports{pPc}{pPjLeft}
+        \TN@vconnectports{pPd}{pPjRight}
+        \TN@vconnectports{pPfOut}{pPeLeft}
+        \TN@vconnectports{pPjOut}{pPeRight}
+        \TN@vconnectports{pPeOut}{pProot}
+        \foreach \n/\t in {pPa/a,pPb/b,pPc/c,pPd/d}
             \node[above] at (\n) {$\t$};
-        \node[left] at ($(pP-f)!0.55!(pP-e)$) {$f$};
-        \node[right] at ($(pP-j)!0.55!(pP-e)$) {$j$};
-        \node[below] at ($(pP-e)+(0,-0.48)$) {$e$};
+        \node[left] at ($(pPfOut)!0.5!(pPeLeft)$) {$f$};
+        \node[right] at ($(pPjOut)!0.5!(pPeRight)$) {$j$};
+        \node[below] at (pProot) {$e$};
 
         \TN@arrow[line width=0.7pt]{(-4.48,1.10) -- node[above left]
             {$F^{abc}_{g}$} (-3.95,1.73)}
@@ -1643,8 +1661,8 @@
         \TN@component[minimum width=0.72cm, minimum height=0.52cm, inner sep=1pt]
             {uzTopH}{(-0.52,2.35)}{H}
         \TN@splitmap[minimum height=1.10cm]{uzTopR}{(0.80,2.35)}{U}
-        \TN@port{uzTopHW}{uzTopH}{west}
-        \TN@port{uzTopHE}{uzTopH}{east}
+        \TN@vport{uzTopHW}{uzTopH}{west}
+        \TN@vport{uzTopHE}{uzTopH}{east}
         \TN@vopenport{uzTopHW}{-0.42,0}
         \TN@vconnectports{uzTopHE}{uzTopRMid}
         \TN@vopenport{uzTopRUp}{0.56,0}
@@ -1672,8 +1690,8 @@
         \TN@mergemap[minimum height=1.10cm]{uzBotR}{(-0.52,0)}{U^\dagger}
         \TN@component[minimum width=0.72cm, minimum height=0.52cm, inner sep=1pt]
             {uzBotH}{(0.80,0)}{H}
-        \TN@port{uzBotHW}{uzBotH}{west}
-        \TN@port{uzBotHE}{uzBotH}{east}
+        \TN@vport{uzBotHW}{uzBotH}{west}
+        \TN@vport{uzBotHE}{uzBotH}{east}
         \TN@vopenport{uzBotRUp}{-0.56,0}
         \TN@vopenport{uzBotRDown}{-0.56,0}
         \TN@vconnectports{uzBotRMid}{uzBotHW}
@@ -1700,8 +1718,8 @@
         \TN@component[minimum width=0.72cm, minimum height=0.52cm, inner sep=1pt]
             {uzRecH}{(-0.40,-2.42)}{H}
         \TN@splitmap[minimum height=1.10cm]{uzRecU}{(0.92,-2.42)}{U}
-        \TN@port{uzRecHW}{uzRecH}{west}
-        \TN@port{uzRecHE}{uzRecH}{east}
+        \TN@vport{uzRecHW}{uzRecH}{west}
+        \TN@vport{uzRecHE}{uzRecH}{east}
         \TN@vopenport{uzRecUdUp}{-0.52,0}
         \TN@vopenport{uzRecUdDown}{-0.52,0}
         \TN@vconnectports{uzRecUdMid}{uzRecHW}
@@ -1726,11 +1744,11 @@
         }
         \TN@vconnect{ftpAL}{east}{ftpAM}{west}
         \TN@vleg{ftpAM}{east}{0.52,0}
-        \TN@port{ftpARW}{ftpAR}{west}
+        \TN@vport{ftpARW}{ftpAR}{west}
         \TN@vopenport{ftpARW}{-0.52,0}
         \TN@vconnect{ftpBL}{east}{ftpBM}{west}
         \TN@vleg{ftpBM}{east}{0.52,0}
-        \TN@port{ftpBRW}{ftpBR}{west}
+        \TN@vport{ftpBRW}{ftpBR}{west}
         \TN@vopenport{ftpBRW}{-0.52,0}
         \node at (2.15,0.52) {$\cdots$};
         \node at (2.15,-0.52) {$\cdots$};
@@ -1755,11 +1773,11 @@
         }
         \TN@vconnect{ftpCL}{east}{ftpCM}{west}
         \TN@vleg{ftpCM}{east}{0.52,0}
-        \TN@port{ftpCRW}{ftpCR}{west}
+        \TN@vport{ftpCRW}{ftpCR}{west}
         \TN@vopenport{ftpCRW}{-0.52,0}
         \TN@vconnect{ftpGL}{east}{ftpGM}{west}
         \TN@vleg{ftpGM}{east}{0.52,0}
-        \TN@port{ftpGRW}{ftpGR}{west}
+        \TN@vport{ftpGRW}{ftpGR}{west}
         \TN@vopenport{ftpGRW}{-0.52,0}
         \node at (7.80,0.52) {$\cdots$};
         \node at (7.80,-0.52) {$\cdots$};
@@ -1869,16 +1887,16 @@
     \begin{tikzpicture}[tn picture, scale=0.92]
         \foreach \x/\name in {0/rfpUzero,2.20/rfpUone,4.40/rfpUtwo} {
             \TN@map[minimum width=0.72cm, minimum height=0.58cm]{\name}{(\x,0.92)}{U}
-            \TN@southport{\name Left}{\name}{0.28}
-            \TN@southport{\name Right}{\name}{0.72}
+            \TN@vsouthport{\name Left}{\name}{0.28}
+            \TN@vsouthport{\name Right}{\name}{0.72}
             \TN@pleg{\name}{north}{0,0.42}
         }
         \TN@state[minimum width=0.68cm, minimum height=0.50cm]{rfpPhiZero}{(1.10,0)}{\varphi}
         \TN@state[minimum width=0.68cm, minimum height=0.50cm]{rfpPhiOne}{(3.30,0)}{\varphi}
-        \TN@port{rfpPhiZeroW}{rfpPhiZero}{west}
-        \TN@port{rfpPhiZeroE}{rfpPhiZero}{east}
-        \TN@port{rfpPhiOneW}{rfpPhiOne}{west}
-        \TN@port{rfpPhiOneE}{rfpPhiOne}{east}
+        \TN@vport{rfpPhiZeroW}{rfpPhiZero}{west}
+        \TN@vport{rfpPhiZeroE}{rfpPhiZero}{east}
+        \TN@vport{rfpPhiOneW}{rfpPhiOne}{west}
+        \TN@vport{rfpPhiOneE}{rfpPhiOne}{east}
         \TN@vpath{(rfpUzeroLeft) -- ++(0,-0.42) -- (rfpPhiZeroW)}
         \TN@vpath{(rfpPhiZeroE) -- ++(0.36,0) -- (rfpUoneLeft)}
         \TN@vpath{(rfpUoneRight) -- ++(0,-0.42) -- (rfpPhiOneW)}
@@ -1904,17 +1922,17 @@
     \begin{tikzpicture}[tn picture, scale=0.90]
         \foreach \x/\name in {0/rfpTzero,2.20/rfpTone,4.40/rfpTtwo} {
             \TN@map[minimum width=0.72cm, minimum height=0.58cm]{\name}{(\x,0.72)}{U}
-            \TN@southport{\name Left}{\name}{0.28}
-            \TN@southport{\name Right}{\name}{0.72}
+            \TN@vsouthport{\name Left}{\name}{0.28}
+            \TN@vsouthport{\name Right}{\name}{0.72}
             \TN@pleg{\name}{north}{0,0.52}
             \TN@anonymousjunction{($(\name.north)+(0,0.52)$)}
         }
         \TN@state[minimum width=0.68cm, minimum height=0.50cm]{rfpTPhiZero}{(1.10,-0.12)}{\varphi}
         \TN@state[minimum width=0.68cm, minimum height=0.50cm]{rfpTPhiOne}{(3.30,-0.12)}{\varphi}
-        \TN@port{rfpTPhiZeroW}{rfpTPhiZero}{west}
-        \TN@port{rfpTPhiZeroE}{rfpTPhiZero}{east}
-        \TN@port{rfpTPhiOneW}{rfpTPhiOne}{west}
-        \TN@port{rfpTPhiOneE}{rfpTPhiOne}{east}
+        \TN@vport{rfpTPhiZeroW}{rfpTPhiZero}{west}
+        \TN@vport{rfpTPhiZeroE}{rfpTPhiZero}{east}
+        \TN@vport{rfpTPhiOneW}{rfpTPhiOne}{west}
+        \TN@vport{rfpTPhiOneE}{rfpTPhiOne}{east}
         \TN@vpath{(rfpTzeroLeft) -- ++(0,-0.42) -- (rfpTPhiZeroW)}
         \TN@vpath{(rfpTPhiZeroE) -- ++(0.36,0) -- (rfpToneLeft)}
         \TN@vpath{(rfpToneRight) -- ++(0,-0.42) -- (rfpTPhiOneW)}
@@ -1986,8 +2004,8 @@
         \TN@map[inner xsep=10pt, inner ysep=2pt]{rfkV}{(4.30,0.90)}{V}
         \TN@pconnect{rfkC}{north}{rfkV}{south}
         \node[anchor=west] at (4.40,0.46) {$j$};
-        \TN@northport{rfkVNLeft}{rfkV}{0.28}
-        \TN@northport{rfkVNRight}{rfkV}{0.72}
+        \TN@pnorthport{rfkVNLeft}{rfkV}{0.28}
+        \TN@pnorthport{rfkVNRight}{rfkV}{0.72}
         \TN@popenport{rfkVNLeft}{0,0.34}
         \TN@popenport{rfkVNRight}{0,0.34}
         \node at (4.10,1.62) {$i_1$};
@@ -2039,8 +2057,8 @@
         \TN@insertion[label=above:$X^{-1}$]{icfXi}{(5.40,0)}
         \TN@vleg{icfX}{west}{-0.55,0}
         \TN@vconnect{icfX}{east}{icfL}{west}
-        \TN@southport{icfUSLeft}{icfU}{0.18}
-        \TN@southport{icfUSRight}{icfU}{0.82}
+        \TN@vsouthport{icfUSLeft}{icfU}{0.18}
+        \TN@vsouthport{icfUSRight}{icfU}{0.82}
         \TN@vpath[rounded corners=3pt]{(icfL.east)
         -| (icfUSLeft)}
         \TN@vpath[rounded corners=3pt]{(icfUSRight)
@@ -2069,8 +2087,8 @@
         \TN@insertion[label=above:$X^{-1}$]{icbXi}{(5.40,0)}
         \TN@vleg{icbX}{west}{-0.55,0}
         \TN@vconnect{icbX}{east}{icbL}{west}
-        \TN@southport{icbUSLeft}{icbU}{0.18}
-        \TN@southport{icbUSRight}{icbU}{0.82}
+        \TN@vsouthport{icbUSLeft}{icbU}{0.18}
+        \TN@vsouthport{icbUSRight}{icbU}{0.82}
         \TN@vpath[rounded corners=3pt]{(icbL.east)
         -| (icbUSLeft)}
         \TN@vpath[rounded corners=3pt]{(icbUSRight)
@@ -2087,8 +2105,8 @@
         \TN@vpath{(4.16,0) -- (4.16,-0.62)}
         \TN@vpath{(icbXi.south) -- (5.40,-1.02)}
         \TN@component{icbMu}{(2.70,-1.60)}{\mu}
-        \TN@northport{icbMuNLeft}{icbMu}{0.15}
-        \TN@northport{icbMuNRight}{icbMu}{0.85}
+        \TN@vnorthport{icbMuNLeft}{icbMu}{0.15}
+        \TN@vnorthport{icbMuNRight}{icbMu}{0.85}
         \TN@vpath{(icbMuNLeft) -- (2.58,-0.62)}
         \TN@vpath{(icbMuNRight) -- (2.82,-1.02)}
         \TN@anonymousjunction{(2.20,-0.62)}
@@ -2222,8 +2240,8 @@
             \TN@popenport{fihMN}{0,0.42}
             \TN@popenport{fihRN}{0,0.42}
             \TN@insertion[label=left:$Y$]{fihY}{(0,0.46)}
-            \TN@port{fihYS}{fihY}{south}
-            \TN@port{fihYN}{fihY}{north}
+            \TN@pport{fihYS}{fihY}{south}
+            \TN@pport{fihYN}{fihY}{north}
             \TN@pconnectports{fihLN}{fihYS}
             \TN@popenport{fihYN}{0,0.40}
             \node at (1.85,0) {$\cdots$};
@@ -2241,8 +2259,8 @@
             \TN@popenport{fizMN}{0,0.42}
             \TN@popenport{fizRN}{0,0.42}
             \TN@insertion[label=left:$Z$]{fizZ}{(0,0.46)}
-            \TN@port{fizZS}{fizZ}{south}
-            \TN@port{fizZN}{fizZ}{north}
+            \TN@pport{fizZS}{fizZ}{south}
+            \TN@pport{fizZN}{fizZ}{north}
             \TN@pconnectports{fizLN}{fizZS}
             \TN@popenport{fizZN}{0,0.40}
             \node at (1.85,0) {$\cdots$};
@@ -2328,7 +2346,7 @@
         \node[anchor=east] at (1.86,-1.10) {$j$};
         \node[anchor=east] at (1.86,-1.50) {$q$};
         \TN@vpath{(hcfX.south) -- (2.55,-1.50)}
-        \TN@port{hcfCBlock}{hcfC}{-45}
+        \TN@vport{hcfCBlock}{hcfC}{-45}
         \TN@vpath[rounded corners=3pt]{(hcfCBlock) -- (4.15,-0.40) -- (4.15,-1.10)}
         \TN@vpath{(hcfXi.south) -- (4.95,-1.50)}
         \TN@anonymousjunction{(2.55,-1.10)}
@@ -2757,7 +2775,7 @@
         \end{scope}
         \node at (2.70,0.70) {$\rightsquigarrow$};
         \begin{scope}[xshift=3.75cm,yshift=0.70cm]
-            \TN@vpath[tn factor region]{(0.20,0) rectangle (4.00,-0.46)}
+            \TN@factorpath{(0.20,0) rectangle (4.00,-0.46)}
             \TN@tensor{blkL}{(0.80,0)}
             \TN@tensor{blkM}{(2.10,0)}
             \TN@tensor{blkR}{(3.40,0)}
@@ -2978,18 +2996,18 @@
         \foreach \n in {unionAB,unionI,unionBA,unionC} {
                 \TN@pleg{\n}{north}{0,0.42}
             }
-        \TN@port{unionABToI}{unionAB}{45}
-        \TN@port{unionIToAB}{unionI}{225}
-        \TN@port{unionIToBA}{unionI}{-28}
-        \TN@port{unionBAToI}{unionBA}{152}
-        \TN@port{unionBAToC}{unionBA}{225}
-        \TN@port{unionCToBA}{unionC}{45}
-        \TN@port{unionCToAB}{unionC}{152}
-        \TN@port{unionABToC}{unionAB}{-28}
-        \TN@port{unionABToBA}{unionAB}{east}
-        \TN@port{unionBAToAB}{unionBA}{west}
-        \TN@port{unionIToC}{unionI}{-67}
-        \TN@port{unionCToI}{unionC}{113}
+        \TN@vport{unionABToI}{unionAB}{45}
+        \TN@vport{unionIToAB}{unionI}{225}
+        \TN@vport{unionIToBA}{unionI}{-28}
+        \TN@vport{unionBAToI}{unionBA}{152}
+        \TN@vport{unionBAToC}{unionBA}{225}
+        \TN@vport{unionCToBA}{unionC}{45}
+        \TN@vport{unionCToAB}{unionC}{152}
+        \TN@vport{unionABToC}{unionAB}{-28}
+        \TN@vport{unionABToBA}{unionAB}{east}
+        \TN@vport{unionBAToAB}{unionBA}{west}
+        \TN@vport{unionIToC}{unionI}{-67}
+        \TN@vport{unionCToI}{unionC}{113}
         \TN@vconnectports{unionABToI}{unionIToAB}
         \TN@vconnectports{unionIToBA}{unionBAToI}
         \TN@vconnectports{unionBAToC}{unionCToBA}
@@ -3013,18 +3031,18 @@
             \foreach \n in {proofAB,proofI,proofBA} {
                     \TN@pleg{\n}{north}{0,0.36}
                 }
-            \TN@port{proofABToI}{proofAB}{45}
-            \TN@port{proofIToAB}{proofI}{225}
-            \TN@port{proofIToBA}{proofI}{-28}
-            \TN@port{proofBAToI}{proofBA}{152}
-            \TN@port{proofBAToX}{proofBA}{225}
-            \TN@port{proofXToBA}{proofX}{45}
-            \TN@port{proofXToAB}{proofX}{152}
-            \TN@port{proofABToX}{proofAB}{-28}
-            \TN@port{proofABToBA}{proofAB}{east}
-            \TN@port{proofBAToAB}{proofBA}{west}
-            \TN@port{proofIToX}{proofI}{-67}
-            \TN@port{proofXToI}{proofX}{113}
+            \TN@vport{proofABToI}{proofAB}{45}
+            \TN@vport{proofIToAB}{proofI}{225}
+            \TN@vport{proofIToBA}{proofI}{-28}
+            \TN@vport{proofBAToI}{proofBA}{152}
+            \TN@vport{proofBAToX}{proofBA}{225}
+            \TN@vport{proofXToBA}{proofX}{45}
+            \TN@vport{proofXToAB}{proofX}{152}
+            \TN@vport{proofABToX}{proofAB}{-28}
+            \TN@vport{proofABToBA}{proofAB}{east}
+            \TN@vport{proofBAToAB}{proofBA}{west}
+            \TN@vport{proofIToX}{proofI}{-67}
+            \TN@vport{proofXToI}{proofX}{113}
             \TN@vconnectports{proofABToI}{proofIToAB}
             \TN@vconnectports{proofIToBA}{proofBAToI}
             \TN@vconnectports{proofBAToX}{proofXToBA}
@@ -3042,16 +3060,16 @@
             \TN@tensor{proofBAone}{(2.00,0)}
             \TN@insertion{proofXone}{(1.30,-0.70)}
             \TN@pleg{proofBAone}{north}{0,0.36}
-            \TN@port{proofBAoneToX}{proofBAone}{225}
-            \TN@port{proofXoneToBA}{proofXone}{45}
-            \TN@port{proofXoneToA}{proofXone}{152}
-            \TN@port{proofXoneToI}{proofXone}{113}
-            \TN@port{proofBAoneToA}{proofBAone}{west}
-            \TN@port{proofBAoneToI}{proofBAone}{152}
-            \coordinate (proofXoneToAEnd) at ($(proofXone)!0.34!(proofAone)$);
-            \coordinate (proofXoneToIEnd) at ($(proofXone)!0.34!(proofItwo)$);
-            \coordinate (proofBAoneToAEnd) at ($(proofBAone)!0.34!(proofAone)$);
-            \coordinate (proofBAoneToIEnd) at ($(proofBAone)!0.34!(proofItwo)$);
+            \TN@vport{proofBAoneToX}{proofBAone}{225}
+            \TN@vport{proofXoneToBA}{proofXone}{45}
+            \TN@vport{proofXoneToA}{proofXone}{152}
+            \TN@vport{proofXoneToI}{proofXone}{113}
+            \TN@vport{proofBAoneToA}{proofBAone}{west}
+            \TN@vport{proofBAoneToI}{proofBAone}{152}
+            \TN@vterminal{proofXoneToAEnd}{($(proofXone)!0.34!(proofAone)$)}
+            \TN@vterminal{proofXoneToIEnd}{($(proofXone)!0.34!(proofItwo)$)}
+            \TN@vterminal{proofBAoneToAEnd}{($(proofBAone)!0.34!(proofAone)$)}
+            \TN@vterminal{proofBAoneToIEnd}{($(proofBAone)!0.34!(proofItwo)$)}
             \TN@vconnectports{proofBAoneToX}{proofXoneToBA}
             \TN@vconnectports{proofXoneToA}{proofXoneToAEnd}
             \TN@vconnectports{proofXoneToI}{proofXoneToIEnd}
@@ -3070,19 +3088,19 @@
             \foreach \n in {proofItwoNode,proofBAtwo} {
                     \TN@pleg{\n}{north}{0,0.36}
                 }
-            \TN@port{proofBAtwoToX}{proofBAtwo}{225}
-            \TN@port{proofXtwoToBA}{proofXtwo}{45}
-            \TN@port{proofXtwoToI}{proofXtwo}{113}
-            \TN@port{proofItwoNodeToX}{proofItwoNode}{-67}
-            \TN@port{proofItwoNodeToBA}{proofItwoNode}{-28}
-            \TN@port{proofBAtwoToI}{proofBAtwo}{152}
-            \TN@port{proofXtwoToA}{proofXtwo}{152}
-            \TN@port{proofBAtwoToA}{proofBAtwo}{west}
-            \TN@port{proofItwoNodeToA}{proofItwoNode}{225}
-            \coordinate (proofXtwoToAEnd) at ($(proofXtwo)!0.34!(proofAtwo)$);
-            \coordinate (proofBAtwoToAEnd) at ($(proofBAtwo)!0.34!(proofAtwo)$);
-            \coordinate (proofItwoToAEnd) at
-                ($(proofItwoNode)!0.34!(proofAtwo)$);
+            \TN@vport{proofBAtwoToX}{proofBAtwo}{225}
+            \TN@vport{proofXtwoToBA}{proofXtwo}{45}
+            \TN@vport{proofXtwoToI}{proofXtwo}{113}
+            \TN@vport{proofItwoNodeToX}{proofItwoNode}{-67}
+            \TN@vport{proofItwoNodeToBA}{proofItwoNode}{-28}
+            \TN@vport{proofBAtwoToI}{proofBAtwo}{152}
+            \TN@vport{proofXtwoToA}{proofXtwo}{152}
+            \TN@vport{proofBAtwoToA}{proofBAtwo}{west}
+            \TN@vport{proofItwoNodeToA}{proofItwoNode}{225}
+            \TN@vterminal{proofXtwoToAEnd}{($(proofXtwo)!0.34!(proofAtwo)$)}
+            \TN@vterminal{proofBAtwoToAEnd}{($(proofBAtwo)!0.34!(proofAtwo)$)}
+            \TN@vterminal{proofItwoToAEnd}{
+                ($(proofItwoNode)!0.34!(proofAtwo)$)}
             \TN@vconnectports{proofBAtwoToX}{proofXtwoToBA}
             \TN@vconnectports{proofXtwoToI}{proofItwoNodeToX}
             \TN@vconnectports{proofItwoNodeToBA}{proofBAtwoToI}
@@ -3099,13 +3117,13 @@
             \coordinate (proofIthree) at (0.70,0.70);
             \coordinate (proofBAthree) at (2.00,0);
             \TN@insertion{proofXthree}{(1.30,-0.70)}
-            \TN@port{proofXthreeToA}{proofXthree}{152}
-            \TN@port{proofXthreeToI}{proofXthree}{113}
-            \TN@port{proofXthreeToBA}{proofXthree}{45}
-            \coordinate (proofXthreeToAEnd) at ($(proofXthree)!0.34!(proofAthree)$);
-            \coordinate (proofXthreeToIEnd) at ($(proofXthree)!0.34!(proofIthree)$);
-            \coordinate (proofXthreeToBAEnd) at
-                ($(proofXthree)!0.34!(proofBAthree)$);
+            \TN@vport{proofXthreeToA}{proofXthree}{152}
+            \TN@vport{proofXthreeToI}{proofXthree}{113}
+            \TN@vport{proofXthreeToBA}{proofXthree}{45}
+            \TN@vterminal{proofXthreeToAEnd}{($(proofXthree)!0.34!(proofAthree)$)}
+            \TN@vterminal{proofXthreeToIEnd}{($(proofXthree)!0.34!(proofIthree)$)}
+            \TN@vterminal{proofXthreeToBAEnd}{
+                ($(proofXthree)!0.34!(proofBAthree)$)}
             \TN@vconnectports{proofXthreeToA}{proofXthreeToAEnd}
             \TN@vconnectports{proofXthreeToI}{proofXthreeToIEnd}
             \TN@vconnectports{proofXthreeToBA}{proofXthreeToBAEnd}
@@ -3140,17 +3158,12 @@
 
 \newcommand{\TNPEPSNormalRectangleCover}{%
     \begin{tikzpicture}[tn picture, scale=0.78]
-        \TN@vpath[step=0.5]{(-0.25,-0.25) grid (2.35,2.35)}
+        \TN@squarelatticepatch{coverGrid}{4}{4}{0.5}
         \path[tn region selected] (0.3,0.3) rectangle (1.2,1.7);
         \path[tn region secondary] (0.3,0.8) rectangle (1.7,1.7);
         \path[tn region complement, fill=none]
             (0.3,0.3) -- (1.2,0.3) -- (1.2,0.8) -- (1.7,0.8) --
             (1.7,1.7) -- (0.3,1.7) -- cycle;
-        \foreach \x in {0,0.5,1,1.5,2} {
-                \foreach \y in {0,0.5,1,1.5,2} {
-                        \TN@pepsvertex{coverDot}{(\x,\y)}{}
-                    }
-            }
         \node[tn region label complement] at (1.48,1.35) {$U$};
         \node[tn region label selected] at (0.75,0.55) {$2\times3$};
         \node[tn region label secondary] at (1.20,1.25) {$3\times2$};
@@ -3163,17 +3176,15 @@
     \begin{tikzpicture}[tn picture, scale=0.90]
         \begin{scope}
             \clip (-0.25,-0.25) rectangle (3.25,3.25);
-            \TN@pepsNormalSquareLatticeLines
+            \TN@pepsNormalSquareLattice
             \TN@pepsNormalRegionT
             \TN@pepsNormalCollar
-            \TN@pepsNormalSquareLatticeDots
         \end{scope}
         \node at (3.72,1.48) {$=$};
         \begin{scope}[xshift=4.35cm]
             \clip (-0.25,-0.25) rectangle (3.25,3.25);
             \TN@pepsNormalComplementBlock
-            \TN@pepsNormalSquareLatticeLines
-            \TN@pepsNormalSquareLatticeDots
+            \TN@pepsNormalSquareLattice
         \end{scope}
     \end{tikzpicture}%
 }
@@ -3203,9 +3214,8 @@
         \begin{scope}
             \clip (-0.25,-0.25) rectangle (3.25,3.25);
             \TN@pepsNormalComplementBlock
-            \TN@pepsNormalSquareLatticeLines
+            \TN@pepsNormalSquareLattice
             \TN@pepsNormalDistinguishedEdge
-            \TN@pepsNormalSquareLatticeDots
             \TN@pepsNormalSelectedBlock
             \TN@pepsNormalSecondaryBlock
         \end{scope}
@@ -3220,9 +3230,8 @@
     \begin{tikzpicture}[tn picture, scale=0.90]
         \clip (-0.25,-0.25) rectangle (3.25,3.25);
         \TN@pepsNormalComplementBlock
-        \TN@pepsNormalSquareLatticeLines
+        \TN@pepsNormalSquareLattice
         \TN@pepsNormalDistinguishedEdge
-        \TN@pepsNormalSquareLatticeDots
         \TN@pepsNormalSelectedBlock
         \TN@pepsNormalSecondaryBlock
     \end{tikzpicture}%
@@ -3233,9 +3242,8 @@
         \begin{scope}
             \clip (-0.25,-0.25) rectangle (3.25,3.25);
             \TN@pepsNormalComplementBlock
-            \TN@pepsNormalSquareLatticeLines
+            \TN@pepsNormalSquareLattice
             \TN@pepsNormalDistinguishedEdge
-            \TN@pepsNormalSquareLatticeDots
             \TN@pepsNormalSelectedBlock
             \TN@pepsNormalSecondaryBlock
         \end{scope}
@@ -3415,17 +3423,7 @@
 % graph; the short thick diagonal stub at every vertex is the physical leg.
 \newcommand{\TNPEPSLatticeState}{%
     \begin{tikzpicture}[tn picture]
-        \foreach \x in {0,1,2} {
-            \foreach \y in {0,1,2} {
-                    \TN@pepsvertex{pl\x\y}{(\x,\y)}{}
-                }
-        }
-        \foreach \y in {0,1,2} {
-            \TN@vpath{(pl0\y) -- (pl1\y) -- (pl2\y)}
-        }
-        \foreach \x in {0,1,2} {
-            \TN@vpath{(pl\x0) -- (pl\x1) -- (pl\x2)}
-        }
+        \TN@squarepepspatch{pl}{2}{2}{1}
     \end{tikzpicture}%
 }
 
@@ -3478,24 +3476,14 @@
 % are identified, so the columns and rows are read modulo $n$ and $m$.
 \newcommand{\TNPEPSTorusGeometry}{%
     \begin{tikzpicture}[tn picture]
-        \foreach \x in {0,1,2} {
-            \foreach \y in {0,1,2} {
-                    \TN@pepsvertex{tg\x\y}{(\x,\y)}{}
-                }
-        }
+        \TN@squarepepspatch{tg}{2}{2}{1}
         \foreach \y in {0,1,2} {
-            \TN@vpath{(tg0\y) -- (tg1\y) -- (tg2\y)}
+            \TN@vopenport[tn periodic mark]{tg2\y E}{0.5,0}
+            \TN@vopenport[tn periodic mark]{tg0\y W}{-0.5,0}
         }
         \foreach \x in {0,1,2} {
-            \TN@vpath{(tg\x0) -- (tg\x1) -- (tg\x2)}
-        }
-        \foreach \y in {0,1,2} {
-            \TN@vleg[tn periodic mark]{tg2\y}{east}{0.5,0}
-            \TN@vleg[tn periodic mark]{tg0\y}{west}{-0.5,0}
-        }
-        \foreach \x in {0,1,2} {
-            \TN@vleg[tn periodic mark]{tg\x2}{north}{0,0.5}
-            \TN@vleg[tn periodic mark]{tg\x0}{south}{0,-0.5}
+            \TN@vopenport[tn periodic mark]{tg\x2N}{0,0.5}
+            \TN@vopenport[tn periodic mark]{tg\x0S}{0,-0.5}
         }
         \node at (1,-1.15) {\scriptsize rows and columns identified modulo $n,m$};
     \end{tikzpicture}%
@@ -3507,23 +3495,23 @@
 \newcommand{\TNPEPSVertexScalarBalance}{%
     \begin{tikzpicture}[tn picture]
         \TN@pepssite{vb}{(0,0)}{}
-        \coordinate (vbWOpen) at ($(vbW)+(-0.58,0)$);
-        \coordinate (vbEOpen) at ($(vbE)+(0.58,0)$);
-        \coordinate (vbNOpen) at ($(vbN)+(0,0.58)$);
-        \coordinate (vbSOpen) at ($(vbS)+(0,-0.58)$);
-        \coordinate (vbPOpen) at ($(vbP)+(0.38,0.38)$);
+        \TN@vterminal{vbWOpen}{($(vbW)+(-0.58,0)$)}
+        \TN@vterminal{vbEOpen}{($(vbE)+(0.58,0)$)}
+        \TN@vterminal{vbNOpen}{($(vbN)+(0,0.58)$)}
+        \TN@vterminal{vbSOpen}{($(vbS)+(0,-0.58)$)}
+        \TN@pterminal{vbPOpen}{($(vbP)+(0.38,0.38)$)}
         \TN@insertion{vbZW}{(-0.5,0)}
         \TN@insertion{vbZE}{(0.5,0)}
         \TN@insertion{vbZN}{(0,0.5)}
         \TN@insertion{vbZS}{(0,-0.5)}
-        \TN@port{vbZWW}{vbZW}{west}
-        \TN@port{vbZWE}{vbZW}{east}
-        \TN@port{vbZEW}{vbZE}{west}
-        \TN@port{vbZEE}{vbZE}{east}
-        \TN@port{vbZNN}{vbZN}{north}
-        \TN@port{vbZNS}{vbZN}{south}
-        \TN@port{vbZSN}{vbZS}{north}
-        \TN@port{vbZSS}{vbZS}{south}
+        \TN@vport{vbZWW}{vbZW}{west}
+        \TN@vport{vbZWE}{vbZW}{east}
+        \TN@vport{vbZEW}{vbZE}{west}
+        \TN@vport{vbZEE}{vbZE}{east}
+        \TN@vport{vbZNN}{vbZN}{north}
+        \TN@vport{vbZNS}{vbZN}{south}
+        \TN@vport{vbZSN}{vbZS}{north}
+        \TN@vport{vbZSS}{vbZS}{south}
         \TN@vconnectports{vbW}{vbZWE}
         \TN@vconnectports{vbZWW}{vbWOpen}
         \TN@vconnectports{vbE}{vbZEW}
@@ -3548,18 +3536,16 @@
 % K_i^dagger (bra) layers; rho enters on the left, T(rho) leaves on the right.
 \newcommand{\TNKrausMap}{%
     \begin{tikzpicture}[tn picture]
-        \TN@tensor{krUp}{(0,0.44)}
-        \TN@tensor{krDn}{(0,-0.44)}
-        \TN@vleg{krUp}{west}{-0.7,0}
-        \TN@vleg{krDn}{west}{-0.7,0}
-        \TN@vleg{krUp}{east}{0.7,0}
-        \TN@vleg{krDn}{east}{0.7,0}
-        \TN@pconnect{krUp}{south}{krDn}{north}
-        \node at (-1.02,0) {$\rho$};
-        \node at (1.46,0) {$T(\rho)$};
-        \node at ($(krUp.south)!0.5!(krDn.north)+(0.2,0)$) {$i$};
-        \node at ($(krUp.north)+(0,0.2)$) {$K_i$};
-        \node at ($(krDn.south)+(0,-0.2)$) {$K_i^\dagger$};
+        \TN@operatorstate{krRho}{(-1.35,0)}{\rho}
+        \TN@doublelayer{kr}{(0,0.44)}{(0,-0.44)}
+        \TN@operatorstate{krOut}{(1.55,0)}{T(\rho)}
+        \TN@vconnectports{krRhoEUp}{krUW}
+        \TN@vconnectports{krRhoEDown}{krDW}
+        \TN@vconnectports{krUE}{krOutWUp}
+        \TN@vconnectports{krDE}{krOutWDown}
+        \node at ($(krUS)!0.5!(krDN)+(0.20,0)$) {$i$};
+        \node at ($(krU.north)+(0,0.20)$) {$K_i$};
+        \node at ($(krD.south)+(0,-0.20)$) {$K_i^\dagger$};
     \end{tikzpicture}%
 }
 
@@ -3568,28 +3554,16 @@
 % (the loop on the right), leaving the channel output T(rho) on the system legs.
 \newcommand{\TNStinespring}{%
     \begin{tikzpicture}[tn picture]
-        \TN@map{sV}{(0,0.5)}{V}
-        \TN@map{sVd}{(0,-0.5)}{V^\dagger}
-        \node at (-1.05,0) {$\rho$};
-        \coordinate (sRhoU) at (-0.8,0.16);
-        \coordinate (sRhoD) at (-0.8,-0.16);
-        \TN@vconnectpoints{sRhoU}{sV.west}
-        \TN@vconnectpoints{sRhoD}{sVd.west}
-        \TN@vleg{sV}{east}{0.6,0}
-        \TN@vleg{sVd}{east}{0.6,0}
-        \node at (1.0,0) {$T(\rho)$};
-        \coordinate (sEnv) at (1.55,0);
-        \coordinate (sEnvTop) at ($(sV.north)+(0,0.3)$);
-        \coordinate (sEnvTopRight) at (sEnvTop -| sEnv);
-        \coordinate (sEnvBottom) at ($(sVd.south)+(0,-0.3)$);
-        \coordinate (sEnvBottomRight) at (sEnvBottom -| sEnv);
-        \TN@vtraceconnectpoints{sV.north}{sEnvTop}
-        \TN@vtraceconnectpoints{sEnvTop}{sEnvTopRight}
-        \TN@vtraceconnectpoints{sEnvTopRight}{sEnv}
-        \TN@vtraceconnectpoints{sVd.south}{sEnvBottom}
-        \TN@vtraceconnectpoints{sEnvBottom}{sEnvBottomRight}
-        \TN@vtraceconnectpoints{sEnvBottomRight}{sEnv}
-        \node at (1.78,0) {$E$};
+        \TN@operatorstate{sRho}{(-1.35,0)}{\rho}
+        \TN@systemancillamapup{sV}{(0,0.5)}{V}
+        \TN@systemancillamapdown{sVd}{(0,-0.5)}{V^\dagger}
+        \TN@operatorstate{sOut}{(1.55,0)}{T(\rho)}
+        \TN@vconnectports{sRhoEUp}{sVW}
+        \TN@vconnectports{sRhoEDown}{sVdW}
+        \TN@vconnectports{sVE}{sOutWUp}
+        \TN@vconnectports{sVdE}{sOutWDown}
+        \TN@vtraceportsright{sVAncilla}{sVdAncilla}{2.25}{0.30}
+        \node at (2.46,0.98) {$E$};
     \end{tikzpicture}%
 }
 

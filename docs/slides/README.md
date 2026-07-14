@@ -3,6 +3,11 @@
 Talk decks for the TNLean project. Each deck is a self-contained `.tex` file
 that shares `preamble.tex` and `references.bib`.
 
+Tensor-network figures use the repository-wide calculus in `tex/tn/`. The file
+`tn_library_dark.tex` supplies only the dark theme and the complete slide
+figures; tensor, map, state, expression, insertion, wire, and port meanings
+remain those of the shared calculus.
+
 ## Naming
 
 ```

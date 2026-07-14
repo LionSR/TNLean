@@ -11,6 +11,7 @@ on:
       - 'lake-manifest.json'
       - '.github/workflows/lint-blueprint.yml'
       - 'blueprint/src/**'
+      - 'tex/tn/**'
       - 'docs/slides/**'
       - 'blueprint/.chktexrc'
       - 'blueprint/latexindent.yaml'
@@ -26,6 +27,7 @@ on:
       - 'lake-manifest.json'
       - '.github/workflows/lint-blueprint.yml'
       - 'blueprint/src/**'
+      - 'tex/tn/**'
       - 'docs/slides/**'
       - 'blueprint/.chktexrc'
       - 'blueprint/latexindent.yaml'
@@ -109,9 +111,8 @@ jobs:
 
       - name: Lint LaTeX (chktex)
         run: |
-          cd blueprint/src
-          find . -name '*.tex' -not -path '*/Packages/*' -print0 \
-            | xargs -0 -r chktex -q -l ../.chktexrc
+          find blueprint/src tex/tn -name '*.tex' -not -path '*/Packages/*' -print0 \
+            | xargs -0 -r chktex -q -l blueprint/.chktexrc
 
       # TODO: drop continue-on-error after a separate mechanical PR has run
       # `latexindent -l blueprint/latexindent.yaml -w -s` over blueprint/src.
@@ -126,7 +127,7 @@ jobs:
               echo "::warning file=$f::not formatted to blueprint/latexindent.yaml; run 'latexindent -l blueprint/latexindent.yaml -w -s \"$f\"' locally to fix"
               status=1
             fi
-          done < <(find blueprint/src -name '*.tex' -not -path '*/Packages/*')
+          done < <(find blueprint/src tex/tn -name '*.tex' -not -path '*/Packages/*')
           exit $status
 
       - name: Build blueprint bibliography
