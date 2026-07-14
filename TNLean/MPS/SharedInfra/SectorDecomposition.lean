@@ -133,6 +133,103 @@ theorem toTensor_eq_toTensorFromBlocks_flat (P : SectorDecomposition d) :
     P.toTensor = toTensorFromBlocks (d := d) (μ := P.flatWeight) P.flatBasis :=
   rfl
 
+/-! ## Direct sums with one marked letter -/
+
+/-- Pull a family of marked representative tensors back to the flattened copy index.
+
+Every copy over a fixed representative carries the same marked matrix.  The copy weight is
+inserted separately by `markedTensor`.
+
+Source: arXiv:1606.00608, Appendix C.3, lines 1835--1858, and the marked chains in the
+proof of Proposition 4.13, lines 1909--1919. -/
+noncomputable def flatMarked {e : ℕ} (P : SectorDecomposition d)
+    (C : (j : Fin P.basisCount) → MPSTensor e (P.basisDim j)) :
+    (s : Fin P.totalCopies) → MPSTensor e (P.flatDim s) :=
+  fun s ↦ C (P.flatIndexEquiv.symm s).1
+
+/-- The weighted direct sum with one arbitrary marked letter in each representative.
+
+If the unmarked sector tensor is
+`Aᵗᵒᵗ = ⊕_(j,q) μ_(j,q) A_j`, then the marked tensor associated with a family
+`C_j` is `Cᵗᵒᵗ = ⊕_(j,q) μ_(j,q) C_j`.  The alphabet indexing the marked matrices
+may differ from the alphabet of the unmarked tail.
+
+Source: arXiv:1606.00608, Appendix C.3, lines 1835--1858, and the marked chains in the
+proof of Proposition 4.13, lines 1909--1919. -/
+noncomputable def markedTensor {e : ℕ} (P : SectorDecomposition d)
+    (C : (j : Fin P.basisCount) → MPSTensor e (P.basisDim j)) :
+    MPSTensor e P.totalDim :=
+  toTensorFromBlocks (d := e) P.flatWeight (P.flatMarked C)
+
+/-- Trace expansion for a weighted direct sum with one marked letter.
+
+For a tail word `w`, all copies over representative `j` combine into the coefficient
+`P.coeff (w.length + 1) j`.  The additional power comes from the weight at the marked
+site.
+
+Source: arXiv:1606.00608, Appendix C.3, lines 1835--1858, and the marked chains in the
+proof of Proposition 4.13, lines 1909--1919. -/
+theorem trace_markedTensor_mul_evalWord {e : ℕ} (P : SectorDecomposition d)
+    (C : (j : Fin P.basisCount) → MPSTensor e (P.basisDim j))
+    (s : Fin e) (w : List (Fin d)) :
+    Matrix.trace (P.markedTensor C s * evalWord P.toTensor w) =
+      ∑ j : Fin P.basisCount, P.coeff (w.length + 1) j *
+        Matrix.trace (C j s * evalWord (P.basis j) w) := by
+  classical
+  rw [markedTensor, SectorDecomposition.toTensor,
+    evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal]
+  rw [toTensorFromBlocks]
+  change Matrix.trace
+      ((Matrix.reindexLinearEquiv ℂ ℂ finSigmaFinEquiv finSigmaFinEquiv)
+          (Matrix.blockDiagonal' fun k ↦
+            P.flatWeight k • P.flatMarked C k s) *
+        (Matrix.reindexLinearEquiv ℂ ℂ finSigmaFinEquiv finSigmaFinEquiv)
+          (Matrix.blockDiagonal' fun k ↦
+            P.flatWeight k ^ w.length • evalWord (P.flatBasis k) w)) = _
+  rw [Matrix.reindexLinearEquiv_mul ℂ ℂ finSigmaFinEquiv
+    finSigmaFinEquiv finSigmaFinEquiv]
+  simp only [Matrix.coe_reindexLinearEquiv]
+  rw [Matrix.trace_reindex, ← Matrix.blockDiagonal'_mul,
+    Matrix.trace_blockDiagonal']
+  calc
+    ∑ i : Fin P.totalCopies,
+        Matrix.trace
+          ((P.flatWeight i • P.flatMarked C i s) *
+            (P.flatWeight i ^ w.length • evalWord (P.flatBasis i) w)) =
+        ∑ i : Fin P.totalCopies, P.flatWeight i ^ (w.length + 1) *
+          Matrix.trace (P.flatMarked C i s * evalWord (P.flatBasis i) w) := by
+      apply Finset.sum_congr rfl
+      intro i _
+      simp only [Matrix.smul_mul, Matrix.mul_smul, Matrix.trace_smul, smul_eq_mul]
+      rw [pow_succ']
+      ring
+    _ = ∑ x : ((j : Fin P.basisCount) × Fin (P.copies j)),
+          P.weight x.1 x.2 ^ (w.length + 1) *
+            Matrix.trace (C x.1 s * evalWord (P.basis x.1) w) := by
+      let f : ((j : Fin P.basisCount) × Fin (P.copies j)) → ℂ :=
+        fun x ↦ P.weight x.1 x.2 ^ (w.length + 1) *
+          Matrix.trace (C x.1 s * evalWord (P.basis x.1) w)
+      let g : Fin P.totalCopies → ℂ := fun i ↦
+        P.flatWeight i ^ (w.length + 1) *
+          Matrix.trace (P.flatMarked C i s * evalWord (P.flatBasis i) w)
+      exact (Fintype.sum_equiv P.flatIndexEquiv f g (fun x ↦ by
+        calc
+          f x = f (P.flatIndexEquiv.symm (P.flatIndexEquiv x)) :=
+            congrArg f (P.flatIndexEquiv.symm_apply_apply x).symm
+          _ = g (P.flatIndexEquiv x) := rfl)).symm
+    _ = ∑ j : Fin P.basisCount, ∑ q : Fin (P.copies j),
+          P.weight j q ^ (w.length + 1) *
+            Matrix.trace (C j s * evalWord (P.basis j) w) := by
+      simpa using Fintype.sum_sigma' (fun j q ↦
+        P.weight j q ^ (w.length + 1) *
+          Matrix.trace (C j s * evalWord (P.basis j) w))
+    _ = ∑ j : Fin P.basisCount, P.coeff (w.length + 1) j *
+          Matrix.trace (C j s * evalWord (P.basis j) w) := by
+      apply Finset.sum_congr rfl
+      intro j _
+      rw [← Finset.sum_mul]
+      rfl
+
 /--
 Intermediate expansion: first sum over the basis index `j`, then over its copies `q`.
 -/
