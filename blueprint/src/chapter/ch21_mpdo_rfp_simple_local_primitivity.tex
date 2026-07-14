@@ -358,6 +358,65 @@
     active trace-matrix power is positive. Thus $T$ is primitive.
 \end{proof}
 
+\begin{theorem}[Zero-correlation-length relations on the primitive active trace matrix]%
+    \label{thm:mpdo_active_trace_matrix_zcl_relations}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      activeSectorTraceMatrix_normalized_relations_of_isSourceZCL}
+    \lean{MPOTensor.%
+      exists_rephased_inverseMap_activeSectorTraceMatrix_normalized_relations}
+    \lean{MPOTensor.%
+      exists_activeTraceMatrix_relations_of_isSAL_of_isSourceZCL}
+    \leanok
+    \uses{def:mpdo_active_sector_trace_matrix,
+      thm:mpdo_sector_trace_matrix_primitive,
+      thm:mpdo_closed_sector_pairing_normalized_idempotent}
+    Let ${\cal K}$ be injective and suppose that it satisfies SAL and source
+    zero correlation length. Then there are a physical-sector factorization,
+    weights $p_k\geq0$ with $\sum_k p_k=1$, and positive semidefinite
+    neighboring operators $\eta_{k,h}$ such that the active trace matrix
+    \[
+        T^*_{k,h}=\operatorname{Re}\tr(\eta_{k,h}),
+        \qquad k,h\in I_*:=\{j:p_j\ne0\},
+    \]
+    is primitive. Moreover, there is a real number $\lambda>0$ for which,
+    upon setting $\widehat T^*:=\lambda^{-1}T^*$,
+    \[
+        (\widehat T^*)^2=(\widehat T^*)^3.
+    \]
+    For every positive integer $N$,
+    \[
+        \tr((\widehat T^*)^N)=\tr(\widehat T^*).
+    \]
+    Thus the primitivity and the two normalized identities concern the same
+    active, positively rephased trace matrix. No idempotence, rank-one, or
+    semisimplicity conclusion is asserted.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_sector_trace_matrix_primitive,
+      thm:mpdo_closed_sector_pairing_normalized_idempotent}
+    Choose the coherent sector phases from
+    Theorem~\ref{thm:mpdo_sector_trace_matrix_primitive}. For the resulting
+    factorization, let $L$ have columns
+    $\bigl(\tr((l_h)_\beta)\bigr)_\beta$ and let $Q$ have rows
+    $\bigl(\tr((r_k)_\alpha)\bigr)_\alpha$, with both indices restricted to
+    $I_*$. The left tensor vanishes when $p_k=0$, so the rectangular product
+    $LQ$ is the full physical-trace transfer. Source zero correlation length
+    therefore makes $\lambda^{-1}LQ$ idempotent for some $\lambda>0$.
+
+    Positivity of the neighboring operators makes their traces real, and
+    hence $QL$ is the complexification of $T^*$. Associativity and cyclicity
+    of trace give
+    \[
+        (\lambda^{-1}QL)^2=(\lambda^{-1}QL)^3,
+        \qquad
+        \tr((\lambda^{-1}QL)^N)=\tr(\lambda^{-1}QL)
+    \]
+    for every $N\geq1$. Injectivity of the real-to-complex inclusion gives
+    the two real matrix identities.
+\end{proof}
+
 \begin{theorem}[Positivity of bipartite partial traces]
     \label{thm:matrix_possemidef_partial_traces}
     \lean{Matrix.PosSemidef.traceLeft}
