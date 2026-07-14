@@ -872,6 +872,48 @@
 \newcommand{\TNLabelLeft}[2]{\TN@label[anchor=east]{#1}{(-0.24,0)}{#2}}
 \newcommand{\TNLabelRight}[2]{\TN@label[anchor=west]{#1}{(0.24,0)}{#2}}
 
+% A placed annotation is not a tensor-network object and therefore carries no
+% index ports.  Naming the point keeps later labels and arrows compositional.
+\newcommand{\TNPlacedLabel}[3]{%
+    \TN@annotationterminal{#1}{#2}%
+    \TN@label{#1}{(0,0)}{#3}%
+}
+\newcommand{\TNPlacedLabelAbove}[3]{%
+    \TN@annotationterminal{#1}{#2}%
+    \TN@label[anchor=south]{#1}{(0,0)}{#3}%
+}
+\newcommand{\TNPlacedLabelBelow}[3]{%
+    \TN@annotationterminal{#1}{#2}%
+    \TN@label[anchor=north]{#1}{(0,0)}{#3}%
+}
+\newcommand{\TNPlacedLabelLeft}[3]{%
+    \TN@annotationterminal{#1}{#2}%
+    \TN@label[anchor=east]{#1}{(0,0)}{#3}%
+}
+\newcommand{\TNPlacedLabelRight}[3]{%
+    \TN@annotationterminal{#1}{#2}%
+    \TN@label[anchor=west]{#1}{(0,0)}{#3}%
+}
+
+% A panel gives a named origin to one stage of a comparison without exposing
+% TikZ scopes to theorem diagrams.  Its origin is global placement; all local
+% geometry remains the responsibility of the atoms and motifs it contains.
+\newenvironment{TNPanel}[2]{%
+    \coordinate (#1) at #2;%
+    \begin{scope}[shift={#2}]%
+}{%
+    \end{scope}%
+}
+
+% Fitted semantic boundaries are shared presentation operations.  The caller
+% supplies only the already named objects which constitute the region.
+\newcommand{\TNGroupFit}[2]{%
+    \node[tn grouping region, fit=#2] (#1) {};%
+}
+\newcommand{\TNFactorFit}[2]{%
+    \node[tn factor region, fit=#2] (#1) {};%
+}
+
 % Regions and explanatory marks do not represent index contractions.
 \newcommand{\TNGroupBoundary}[1]{\TN@grouppath{#1}}
 \newcommand{\TNFactorBoundary}[1]{\TN@factorpath{#1}}
@@ -879,6 +921,24 @@
 \newcommand{\TNSelectedPath}[1]{\TN@selectedpath{#1}}
 \newcommand{\TNSecondaryPath}[1]{\TN@secondarypath{#1}}
 \newcommand{\TNRegion}[4]{\TN@region{#1}{#2}{#3}{#4}}
+\newcommand{\TNSelectedRegionPath}[1]{\path[tn region selected] #1;}
+\newcommand{\TNSecondaryRegionPath}[1]{\path[tn region secondary] #1;}
+\newcommand{\TNComplementRegionPath}[1]{%
+    \path[tn region complement, fill=none] #1;%
+}
+
+% The normal-region figures use three canonical viewing windows.  Keeping
+% their bounds here makes clipping part of the shared PEPS presentation,
+% rather than a chapter-local adjustment.
+\newcommand{\TNPEPSNormalFullWindow}{%
+    \clip (-0.25,-0.25) rectangle (3.25,3.25);%
+}
+\newcommand{\TNPEPSNormalTallWindow}{%
+    \clip (-0.25,0.75) rectangle (2.25,3.25);%
+}
+\newcommand{\TNPEPSNormalUpperWindow}{%
+    \clip (-0.25,0.25) rectangle (3.25,3.25);%
+}
 
 \newcommand{\TNMPSSite}[3]{%
     \TN@mpssite{#1}{#2}{#3}%
@@ -1047,6 +1107,41 @@
     \TN@twoInjectiveInsertionPair{#1}{#2}{#3}{#4}%
 }
 \newcommand{\TNPEPSThreeLegFan}[2]{\TN@threeLegTensorFan{#1}{#2}}
+
+% Selected regions used when a five-site PEPS patch is reduced to a blocked
+% three-site word.  The labels are arguments; the topology and clearances are
+% fixed by the motif.
+\newcommand{\TNPEPSEdgeBlockingRegions}[4]{%
+    \TN@selectedpath{(#1one) circle (0.30cm)}%
+    \TN@selectedpath{(#1five) circle (0.30cm)}%
+    \TN@selectedpath[rounded corners=2mm]
+        {(0.40,-0.20) rectangle (1.70,1.70)}%
+    \TN@annotationterminal{#1RegionTwo}{(-0.45,-0.35)}%
+    \TN@annotationterminal{#1RegionOne}{(-1.10,1.80)}%
+    \TN@annotationterminal{#1RegionThree}{(1.70,1.80)}%
+    \TN@label{#1RegionTwo}{(0,0)}{#2}%
+    \TN@label{#1RegionOne}{(0,0)}{#3}%
+    \TN@label{#1RegionThree}{(0,0)}{#4}%
+}
+
+% The two overlapping rectangular covers used in the normal-PEPS argument.
+% This motif owns the irregular union boundary and its label placement.
+\newcommand{\TNPEPSRectangleCoverRegions}{%
+    \path[tn region selected] (0.3,0.3) rectangle (1.2,1.7);%
+    \path[tn region secondary] (0.3,0.8) rectangle (1.7,1.7);%
+    \path[tn region complement, fill=none]
+        (0.3,0.3) -- (1.2,0.3) -- (1.2,0.8) -- (1.7,0.8) --
+        (1.7,1.7) -- (0.3,1.7) -- cycle;%
+    \TN@annotationterminal{tnCoverSelectedLabel}{(0.75,0.55)}%
+    \TN@annotationterminal{tnCoverSecondaryLabel}{(1.20,1.25)}%
+    \TN@annotationterminal{tnCoverDescription}{(0.98,-0.68)}%
+    \TN@label{tnCoverSelectedLabel}{(0,0)}{2\times3}%
+    \TN@label{tnCoverSecondaryLabel}{(0,0)}{3\times2}%
+    \TN@label{tnCoverDescription}{(0,0)}
+        {\substack{U=\bigcup_j C_j,\\
+         C_j\cong 2\times3\ \mathrm{or}\ 3\times2}}%
+}
+
 \newcommand{\TNPEPSNormalSquareLattice}{\TN@pepsNormalSquareLattice}
 \newcommand{\TNPEPSNormalRegionR}{\TN@pepsNormalRegionR}
 \newcommand{\TNPEPSNormalRegionS}{\TN@pepsNormalRegionS}
