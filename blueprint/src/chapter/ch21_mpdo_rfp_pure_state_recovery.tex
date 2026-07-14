@@ -498,7 +498,8 @@
     \label{thm:is_rfp_iff_to_mps_rfp}
     \lean{MPOTensor.isRFP_iff_toMPSTensor_isRFP}
     \leanok
-    \uses{def:is_rfp_mpdo, def:mpo_to_mps, def:is_rfp, def:mpo_is_zcl,
+    \uses{def:is_rfp_mpdo, def:mpo_to_mps, def:mps_transfer_idempotence,
+        def:mpo_is_zcl,
         thm:mpo_is_zcl_iff_to_mps_rfp}
     MPO transfer-map idempotence is equivalent to the pure-state RFP condition
     for the doubled-index MPS tensor.
@@ -549,7 +550,8 @@
     \label{thm:to_mpo_rfp_iff_rfp}
     \lean{MPSTensor.toMPOTensor_isRFP_iff_isRFP}
     \leanok
-    \uses{def:is_rfp_mpdo, def:is_rfp, thm:to_mpo_transfer_map}
+    \uses{def:is_rfp_mpdo, def:mps_transfer_idempotence,
+        thm:to_mpo_transfer_map}
     For an MPS tensor $A$, the diagonal MPO embedding has idempotent transfer
     map if and only if $A$ is an RFP:
     \[
@@ -562,7 +564,8 @@
 
 \begin{proof}
     \leanok
-    \uses{def:is_rfp_mpdo, def:is_rfp, thm:to_mpo_transfer_map}
+    \uses{def:is_rfp_mpdo, def:mps_transfer_idempotence,
+        thm:to_mpo_transfer_map}
     Both conditions assert idempotence of the corresponding transfer map.
     Theorem~\ref{thm:to_mpo_transfer_map} identifies those transfer maps, so
     the two predicates are equivalent.

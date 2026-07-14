@@ -969,7 +969,7 @@ specialization of that Appendix~D definition.
     \lean{MPSTensor.rfp_implies_nncph}
     \lean{Axioms.rfp_to_nncph_commute}
     \leanok
-    \uses{def:is_rfp, def:is_nncph, def:normal}
+    \uses{def:mps_transfer_idempotence, def:is_nncph, def:normal}
     If $A$ has nonzero virtual dimension and is a normal renormalization fixed
     point, then for every chain length $N > 2$ the two-site local terms
     commute. This theorem records the commutation part of the nearest-neighbor
@@ -2135,7 +2135,8 @@ specialization of that Appendix~D definition.
     \lean{MPSTensor.nncph_implies_rfp}
     \lean{Axioms.beigi_nncph_to_rfp}
     \leanok
-    \uses{def:is_rfp, def:bnt, def:has_nncph_ground_spaces, def:normal}
+    \uses{def:mps_transfer_idempotence, def:bnt, def:has_nncph_ground_spaces,
+        def:normal}
     Let $B$ be normal and in left-canonical form. Suppose that the family
     \(A_j\) is a BNT for \(B\), and that the nearest-neighbor parent
     Hamiltonian of \(B\) has the
