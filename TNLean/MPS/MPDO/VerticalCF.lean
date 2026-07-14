@@ -106,8 +106,10 @@ remaining corners without losing their physical isometries or the literal
 letterwise reconstruction. `TNLean.MPS.MPDO.VerticalBNT` groups these corners
 into representatives while retaining their physical isometries, and
 `TNLean.MPS.MPDO.SectorTrace` proves positivity of every grouped coefficient.
-What remains open is the dressed-adjoint argument that normalizes the gauges
-and assembles the final coisometry.
+The relative Gram algebra is formalized in
+`TNLean.MPS.CanonicalForm.NormalCommutant`.  What remains open is the reflected
+marked-chain form of Lemma L needed to apply it to the grouped data, followed
+by the final coisometry assembly.
 
 ## Module location
 
@@ -358,6 +360,24 @@ arXiv:1606.00608, Proposition 4.13, is a statement about this tensor. -/
 def verticalTensor (M : MPOTensor d D) : MPSTensor (D * D) d :=
   fun ab i j => M i j ab.divNat ab.modNat
 
+/-- Exchange the two oriented horizontal bond indices of a vertical letter.
+For `ab = (a,b)`, this is `bondPairSwap ab = (b,a)`.
+
+This is the bond-index exchange under adjunction in the first diagram of the
+proof of Proposition 4.13 of arXiv:1606.00608, lines 1909--1913. -/
+def bondPairSwap (ab : Fin (D * D)) : Fin (D * D) :=
+  finProdFinEquiv (ab.modNat, ab.divNat)
+
+@[simp] theorem bondPairSwap_finProdFinEquiv (a b : Fin D) :
+    bondPairSwap (finProdFinEquiv (a, b)) = finProdFinEquiv (b, a) := by
+  simp [bondPairSwap]
+
+@[simp] theorem bondPairSwap_involutive (ab : Fin (D * D)) :
+    bondPairSwap (bondPairSwap ab) = ab := by
+  rw [show ab = finProdFinEquiv (ab.divNat, ab.modNat) by
+    exact (finProdFinEquiv.apply_symm_apply ab).symm]
+  simp
+
 @[simp] lemma verticalTensor_apply (M : MPOTensor d D) (ab : Fin (D * D))
     (i j : Fin d) : verticalTensor M ab i j = M i j ab.divNat ab.modNat :=
   rfl
@@ -367,6 +387,19 @@ lemma verticalTensor_finProdFinEquiv (M : MPOTensor d D) (a b : Fin D)
     (i j : Fin d) :
     verticalTensor M (finProdFinEquiv (a, b)) i j = M i j a b := by
   simp
+
+/-- The vertical view of the MPO adjoint exchanges the oriented horizontal
+bond indices and conjugate-transposes the resulting vertical letter:
+$\widetilde{M^\dagger}_{a,b}=(\widetilde M_{b,a})^\dagger$.
+
+This is the indexed adjoint convention in the first displayed diagram of the
+proof of Proposition 4.13 of arXiv:1606.00608, lines 1909--1913. -/
+@[simp] theorem verticalTensor_adjointTensor (M : MPOTensor d D)
+    (ab : Fin (D * D)) :
+    verticalTensor (adjointTensor M) ab =
+      (verticalTensor M (bondPairSwap ab))ᴴ := by
+  ext i j
+  simp [verticalTensor_apply, bondPairSwap, Matrix.conjTranspose_apply]
 
 /-- The diagonal MPS tensor extracted from an MPO by restricting to equal ket
 and bra indices.  Its matrix product vectors are the diagonal entries

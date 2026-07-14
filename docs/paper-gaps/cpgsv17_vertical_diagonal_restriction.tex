@@ -172,10 +172,15 @@ $\mu_{\alpha,1}>0$ (\path{TNLean/MPS/MPDO/VerticalBNT.lean} and
 \path{TNLean/MPS/MPDO/SectorTrace.lean}). Granted the dressed-adjoint
 identities of the two displayed diagrams at lines~1909--1919, transported
 blockwise by Lemma~L, the Gram matrix of each sector gauge $X_{\alpha,k}$ is
-a positive multiple $\omega_{\alpha,k}$ of the identity, in the normalization
-$X_{\alpha,1}=\Id$, and the normalized gauge
-$\omega_{\alpha,k}^{-1/2}X_{\alpha,k}$ is unitary, because a normal tensor
-has scalar commutant
+a positive real multiple of the reference Gram matrix,
+\[
+X_{\alpha,k}^\dagger X_{\alpha,k}
+=\omega_{\alpha,k}X_{\alpha,1}^\dagger X_{\alpha,1}.
+\]
+The relative gauge $X_{\alpha,k}X_{\alpha,1}^{-1}$ is therefore proportional
+to a unitary; the grouping chooses $X_{\alpha,1}=\Id$.  This follows because
+a normal tensor has scalar
+commutant
 (\path{TNLean/MPS/CanonicalForm/NormalCommutant.lean}). Projector closure and
 the absence of periodic vectors already give an abstract positive-length
 normal-block decomposition
@@ -186,9 +191,13 @@ grouped into pairwise gauge-phase-distinct BNT representatives in
 \path{TNLean/MPS/MPDO/VerticalBNT.lean}. Every copy is expressed by a positive
 coefficient, a unit-modulus phase, and an invertible bond-space gauge, while
 the physical isometries and the literal vertical reconstruction are retained.
-What remains open begins with the dressed-adjoint identities at source
-line~1903: they are needed to normalize the gauges to unitaries and assemble
-the final coisometry.
+What remains open is the reflected marked-chain and Lemma~L argument of source
+lines~1909--1919.  Its fixed-index form exchanges the two oriented bond indices,
+and the adjoint marked chain reverses the tail word.  A corresponding
+reflected marked-chain form of Lemma~L is needed before the relative Gram
+theorem can normalize the gauges; the resulting sector maps must then be
+assembled into the final coisometry.  Consequently, the conclusion stated at
+lines~1903--1908 has not yet been derived from the MPDO hypotheses.
 
 \paragraph{Verdict.}
 This is an open gap: the source-faithful horizontal-to-vertical implication of
