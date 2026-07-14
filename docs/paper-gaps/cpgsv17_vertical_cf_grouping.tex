@@ -93,27 +93,25 @@ Summing these equalities along the bijection
 \eqref{eq:grouping-equivalence} gives the total bond-dimension equality.
 
 This statement is formalized by
-\path{MPOTensor.sameMPV2_toTensorFromBlocks_verticalAssembledTensor_of_equiv}
-and its diagonal-tensor consequence
-\path{MPOTensor.sameMPV2_diagonalTensor_verticalAssembledTensor_of_equiv}.
-In these two displayed names, the plain digit~$2$ denotes the subscripted
-character used in the source declaration.
+\path{MPOTensor.sameMPV2_toTensorFromBlocks_verticalAssembledTensor_of_equiv}.
+In this displayed name, the plain digit~$2$ denotes the subscripted character
+used in the source declaration.
 
 \section{Boundary of the present result}
 
-The conditional power-sum lemmas already present in the development compare
-one scalar weight $\mu_\alpha$ with several weights $\omega_{\alpha,j}$ under
-the additional identities
+An earlier auxiliary route compared one scalar weight $\mu_\alpha$ with
+several weights $\omega_{\alpha,j}$ under the additional identities
 \begin{equation}
   \mu_\alpha^N=\sum_j\omega_{\alpha,j}^N,
   \qquad N\geq 1.
   \label{eq:power-sum-assumption}
 \end{equation}
-They are correct positive-length comparison lemmas, but
+Although this gives a correct conditional positive-length comparison,
 \eqref{eq:power-sum-assumption} is not the flattening argument in
-Proposition~4.13.  In the source, the several weights are already the weights
-of the several vertical sectors in \eqref{eq:source-sector-form}; no single
-horizontal coefficient is replaced by their power sum.
+Proposition~4.13.  The corresponding terminal lemmas have therefore been
+removed from the development.  In the source, the several weights are already
+the weights of the several vertical sectors in \eqref{eq:source-sector-form};
+no single horizontal coefficient is replaced by their power sum.
 
 Diagonal restriction also does not preserve injectivity of a horizontal
 block.  For $d=D\geq2$, let the doubled-index matrices be
