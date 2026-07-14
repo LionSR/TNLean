@@ -461,10 +461,6 @@
     the resulting algebraic extension of
     \cite[Appendix~C.3, lines~1848--1858]{Cirac2016MPDO_arXiv}; it is not
     attributed to the paper as a separately stated arbitrary-mark theorem.
-    In the application to
-    \cite[Proposition~4.13, lines~1909--1919]{Cirac2016MPDO_arXiv}, the
-    marked families must still be obtained from the actual grouped vertical
-    corners before this separation theorem is applied.
 \end{theorem}
 
 \begin{proof}
@@ -2998,32 +2994,58 @@
     and the unitary normalization
     $U_{\alpha,k}=\omega_{\alpha,k}^{-1/2}X_{\alpha,k}$ of the sector gauges
     using the grouped decomposition's distinguished gauge
-    $X_{\alpha,1}=\Id$.  This is the source's $U_{\alpha,k}$.  It remains to
-    identify the representative
-    and copy bond spaces and then define
-    $W_{\alpha,k}=V_{\alpha,k}U_{\alpha,k}$.  The remaining construction must
-    prove that these maps are isometries with orthogonal ranges and that their
-    block relations give the intertwining and literal reconstruction
-    hypotheses of Theorem~\ref{thm:vertical_sector_coisometry}.  That theorem
-    supplies all the remaining
-    coisometry algebra and, once the source-specific identifications below are
-    made, gives $U$ with
-    $U\widetilde MU^\dagger=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$ and
-    the corresponding reconstruction identity; each
-    $\mu_\alpha$ is diagonal, so the summands regroup as repeated weighted
-    copies of $M_\alpha$ exactly as in the finite regrouping of
-    Lemma~\ref{lem:vertical_grouping_equiv}.  The remaining proof is to form
-    the normalized physical sector isometries, transport each copy bond space
-    to its representative bond space, and assemble the physical coisometry.  The
-    generic block-row construction is already proved, but its source-specific
-    application must still index the sectors by dependent pairs
-    $(\alpha,q)$ and identify their dependent disjoint union with the standard
-    direct-sum coordinate space.  The remaining boundary is the final
-    coisometry and literal vertical canonical-form identity.
+    $X_{\alpha,1}=\Id$.  This is the source's $U_{\alpha,k}$.
+    After identifying the bond space of each copy with that of its
+    representative, define
 
-    Conditional on that construction, the algebraic basis-of-normal-tensors
-    clauses are verified as follows.  With the notation of the grouping
-    theorem, its spectral BNT property applies to the raw weighted tensor
+    \[
+        W_{\alpha,k}=V_{\alpha,k}U_{\alpha,k}.
+    \]
+
+    Since $V_{\alpha,k}$ is an isometry and $U_{\alpha,k}$ is unitary,
+
+    \[
+        W_{\alpha,k}^\dagger W_{\alpha,k}=\Id,
+        \qquad
+        W_{\alpha,k}^\dagger W_{\beta,l}=0
+        \quad\text{if }(\alpha,k)\ne(\beta,l).
+    \]
+
+    The sector gauge relation and the literal reconstruction of
+    $\widetilde M$ become
+
+    \[
+        \widetilde M_vW_{\alpha,k}
+          =W_{\alpha,k}(\mu_{\alpha,k}M_\alpha^v),
+        \qquad
+        \widetilde M_v
+          =\sum_{\alpha,k}
+            W_{\alpha,k}(\mu_{\alpha,k}M_\alpha^v)
+            W_{\alpha,k}^\dagger.
+    \]
+
+    Theorem~\ref{thm:vertical_sector_coisometry}, indexed by the dependent
+    pairs $(\alpha,k)$, therefore gives a coisometry $U$ such that
+
+    \[
+        U\widetilde MU^\dagger
+          =\bigoplus_{\alpha,k}\mu_{\alpha,k}M_\alpha,
+        \qquad
+        \widetilde M
+          =U^\dagger\!\left(
+              \bigoplus_{\alpha,k}\mu_{\alpha,k}M_\alpha
+            \right)U.
+    \]
+
+    The dependent disjoint union of the sector bond indices has its canonical
+    identification with the standard direct-sum coordinates.  Regrouping the
+    summands by $\alpha$ gives
+    $\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$ as in
+    Lemma~\ref{lem:vertical_grouping_equiv}.
+
+    The algebraic basis-of-normal-tensors clauses follow from the same
+    decomposition.  With the notation of the grouping theorem, its spectral
+    BNT property applies to the raw weighted tensor
     \[
         A_{\mathrm{ret}}
         =\bigoplus_{\alpha,k}\nu_{\alpha,k}B_{\alpha,k}.
@@ -3054,13 +3076,12 @@
     Thus the positive-length matrix product vectors of $\widetilde M$ lie in
     the span of those of the $M_\alpha$.
 
-    The empty chain is separate because the bond dimensions of
-    $\widetilde M$ and $B$ may differ.
-    Lemma~\ref{lem:mpdo_vertical_retained_class_nonempty} supplies a retained
-    representative $M_{\alpha_0}$ of bond dimension
-    $d_{\alpha_0}>0$.  By
-    Lemma~\ref{lem:mpv_zero_length}, assigning it the coefficient
-    $d/d_{\alpha_0}$ and assigning zero to the other representatives gives
-    the length-zero coefficient $d$ of $\widetilde M$.  This proves the
-    spanning clause at every length once the coisometry has been constructed.
+    The empty chain requires a separate argument because the bond dimensions
+    of $\widetilde M$ and $B$ may differ.  By
+    Lemma~\ref{lem:mpdo_vertical_retained_class_nonempty}, choose a retained
+    representative $M_{\alpha_0}$ with bond dimension $d_{\alpha_0}>0$.
+    Assign it the coefficient $d/d_{\alpha_0}$ and assign zero to every other
+    representative.  Lemma~\ref{lem:mpv_zero_length} then gives the
+    length-zero coefficient $d$ of $\widetilde M$.  Hence the spanning clause
+    holds at every length.
 \end{proof}
