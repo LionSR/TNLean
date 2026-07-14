@@ -120,6 +120,26 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
     of the two bond dimensions.
 \end{proof}
 
+\begin{theorem}[Non-decaying rectangular overlap determines the bond dimension]
+    \label{thm:rect_overlap_norm_one_dim_eq}
+    \lean{MPSTensor.dim_eq_of_mpvOverlap_norm_tendsto_one_of_irreducible_TP}
+    \leanok
+    \uses{def:mpv_overlap, def:irreducible_tensor, def:tp_kraus}
+    Let $A$ and $B$ be irreducible trace-preserving tensors of positive,
+    possibly different, bond dimensions. If
+    \[
+        |O_{AB}(N)|\longrightarrow 1,
+    \]
+    then their bond dimensions are equal.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:overlap_decay_rect_irr_tp}
+    If the bond dimensions differed, the rectangular overlap-decay theorem
+    would give $O_{AB}(N)\to0$, and hence $|O_{AB}(N)|\to0$, contradicting the
+    assumed limit.
+\end{proof}
+
 \begin{theorem}[Phase-equivalent normal tensors are gauge-phase equivalent]
     \label{thm:cpsv_normal_mpv_phase_gauge}
     \lean{MPSTensor.MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor}
@@ -142,14 +162,16 @@ multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpv_block_phase_equiv_dim_eq, thm:cpsv_normal_tp_gauge,
+    \uses{thm:cpsv_normal_tp_gauge, thm:rect_overlap_norm_one_dim_eq,
         thm:nt_overlap_norm_one_gauge}
-    Lemma~\ref{lem:mpv_block_phase_equiv_dim_eq} gives equality of bond
-    dimensions. Apply Theorem~\ref{thm:cpsv_normal_tp_gauge} to both tensors.
-    Gauge invariance of matrix product vectors preserves the phase relation,
-    whose self-overlap identities imply unit modulus for the phase. The
-    unit-overlap rigidity theorem then gives a gauge-phase equivalence between
-    the trace-preserving representatives. Conjugating by the two Perron gauges
+    Apply Theorem~\ref{thm:cpsv_normal_tp_gauge} to both tensors. Gauge
+    invariance of matrix product vectors preserves the phase relation, whose
+    self-overlap identities imply unit modulus for the phase. The resulting
+    rectangular cross-overlap has norm tending to one. If the bond dimensions
+    differed, Theorem~\ref{thm:rect_overlap_norm_one_dim_eq} would give a
+    contradiction. Thus the bond dimensions agree, and the
+    unit-overlap rigidity theorem gives a gauge-phase equivalence between the
+    trace-preserving representatives. Conjugating by the two Perron gauges
     gives the asserted relation for $A$ and $B$.
 \end{proof}
 
@@ -1144,6 +1166,7 @@ a contradiction.
 \end{lemma}
 
 \begin{proof}\leanok
+    \uses{thm:rect_overlap_norm_one_dim_eq}
     Choose $\zeta\neq0$ with
     $\ket{V^{(N)}(Y)}=\zeta^N\ket{V^{(N)}(X)}$ for every length~$N$. The
     normalized self-overlaps give $|O_{XX}(N)|\to 1$, and the phase relation

@@ -154,6 +154,39 @@ private theorem gaugePhaseEquiv_of_eventually_proportionalMPV₂_of_overlap_deca
 
 /-! ## Gauge-phase equivalence from unit-modulus overlap -/
 
+/-- **Bond-dimension equality from a non-decaying rectangular overlap.**
+
+Source: arXiv:1606.00608, Lemma `equalMPS`, statement lines 1080--1091 and
+proof lines 1093--1117.  Two irreducible trace-preserving tensors whose
+rectangular MPV overlap has norm tending to one have equal bond dimensions.
+Indeed, distinct bond dimensions would force the same overlap to tend to zero.
+
+This is the bond-dimension part of the source lemma, separated from the
+same-dimension gauge recovery below.  The relation to the full source statement
+is recorded in `docs/paper-gaps/cpsv16_equalMPS_gauge_phase_gap.tex`. -/
+theorem dim_eq_of_mpvOverlap_norm_tendsto_one_of_irreducible_TP
+    {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hA_irr : IsIrreducibleTensor A)
+    (hB_irr : IsIrreducibleTensor B)
+    (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
+    (hOverlap :
+      Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A B N‖) Filter.atTop
+        (nhds (1 : ℝ))) :
+    D₁ = D₂ := by
+  by_contra hdim
+  have hzero :
+      Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop
+        (nhds (0 : ℂ)) :=
+    mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP
+      A B hA_irr hB_irr hA_norm hB_norm hdim
+  have hnorm_zero :
+      Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A B N‖) Filter.atTop
+        (nhds (0 : ℝ)) := by
+    simpa using hzero.norm
+  exact one_ne_zero (tendsto_nhds_unique hOverlap hnorm_zero)
+
 /-- **Spectral radius lower bound from unit-modulus overlap.**
 
 Source: arXiv:1606.00608, proof of Lemma equalMPS, lines 1093-1117.

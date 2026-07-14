@@ -159,9 +159,12 @@ of that representative.  The representatives are pairwise gauge-phase
 distinct and form a basis of normal tensors for the weighted block tensor.
 The physical isometries are not changed: both intertwining identities, exact
 compression, and the literal reconstruction of each vertical letter survive
-the regrouping.  This formalizes the decomposition displayed at source
-lines~1895--1898, before the subsequent positivity and unitary-gauge
-arguments.
+the regrouping.  This is the algebraic phase-class decomposition invoked in
+the first sentence of source line~1898, obtained by combining the BNT
+characterization at lines~1135--1148 with the preceding isometry-preserving
+vertical sector theorem.  It does not formalize the positive-diagonal isometry
+asserted at lines~1895--1896.  Positivity of the grouped coefficients and
+unitarity of the gauges remain part of the subsequent argument.
 
 The periodic-sector exclusion is also complete:
 \path{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_horizontalCF} derives
@@ -196,9 +199,12 @@ The remaining source-level gap begins after this grouping.  One must identify
 the grouped range projections with the sector projectors carrying the
 single-site loop identities and prove that the relevant compressions are
 nonzero.  Positivity must then be used to show that the grouped coefficients
-are positive.  Finally, one must derive the dressed-adjoint identities from
-self-adjointness of the sector compressions and use them to replace each
-invertible gauge by a proportional unitary, as in source lines~1898--1921.
+are positive.  The copy embeddings must also be assembled into the single
+direct-sum coisometry $U$ (equivalently, the adjoint isometry) appearing in
+source lines~1895--1896, with the zero complement treated explicitly.  Finally,
+one must derive the dressed-adjoint identities from self-adjointness of the
+sector compressions and use them to replace each invertible gauge by a
+proportional unitary, as in source lines~1898--1921.
 These conclusions are not part of the grouping theorem.  The original
 formulation of \ghissue{2536}, interpreted as a direct conversion of the
 horizontal scalar weights and diagonal restrictions, is therefore not a

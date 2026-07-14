@@ -162,12 +162,10 @@ theorem MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
       GaugePhaseEquiv
         (cast (congr_arg (MPSTensor d) hdim) X) Y := by
   classical
-  have hdim : DX = DY := h.dim_eq
-  subst hdim
   obtain ⟨σX, _hσX, _hσXfix, hTPX, hGaugeX, hPrimX, hIrrX⟩ := hX.exists_tpGauge
   obtain ⟨σY, _hσY, _hσYfix, hTPY, hGaugeY, hPrimY, hIrrY⟩ := hY.exists_tpGauge
   let X' := tpGauge (d := d) (D := DX) X σX
-  let Y' := tpGauge (d := d) (D := DX) Y σY
+  let Y' := tpGauge (d := d) (D := DY) Y σY
   have hPhase : MPVBlockPhaseEquiv X' Y' := by
     obtain ⟨ζ, hζ, hmpv⟩ := h
     refine ⟨ζ, hζ, ?_⟩
@@ -209,6 +207,10 @@ theorem MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
   have hCrossNorm : Tendsto
       (fun N => ‖mpvOverlap (d := d) X' Y' N‖) atTop (nhds (1 : ℝ)) :=
     hSelfNorm.congr fun N => (hCrossNormEq N).symm
+  have hdim : DX = DY :=
+    dim_eq_of_mpvOverlap_norm_tendsto_one_of_irreducible_TP
+      X' Y' hIrrX hIrrY hTPX hTPY hCrossNorm
+  subst DY
   have hGaugePhase : GaugePhaseEquiv X' Y' :=
     gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP
       X' Y' hIrrX hIrrY hTPX hTPY hCrossNorm
