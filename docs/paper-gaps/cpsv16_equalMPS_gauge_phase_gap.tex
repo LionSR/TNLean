@@ -102,11 +102,12 @@ theorem
 \leanid{MPSTensor.mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP}
 in \path{TNLean/Spectral/TransferOperatorGapNT.lean}: if the bond dimensions
 differ, the overlap tends to zero, contradicting the unit-modulus overlap
-hypothesis, so a non-decaying overlap forces $D_a=D_b$. (A standalone
-contrapositive packaging of this step in
-\path{TNLean/MPS/FundamentalTheorem/Proportional.lean} was removed as part of a
-superseded route; the decay theorem is now applied directly where blocks of
-differing dimension arise.)
+hypothesis, so a non-decaying overlap forces $D_a=D_b$.  The contrapositive is
+recorded as
+\leanid{MPSTensor.dim_eq_of_mpvOverlap_norm_tendsto_one_of_irreducible_TP}
+in \path{TNLean/MPS/FundamentalTheorem/Proportional.lean}.  Its hypotheses and
+proof involve only the positive-length asymptotic overlap and do not use the
+empty-word coefficient.
 
 This rectangular dimension recovery is genuinely needed in the proof of
 Theorem~\texttt{thm1}
@@ -122,10 +123,10 @@ after the rectangular dimension conclusion has been supplied separately.
 The same-bond-dimension gauge component is formalized without the
 source-absent MPV proportionality hypothesis. The rectangular
 bond-dimension conclusion $D_a=D_b$ follows from the rectangular overlap-decay
-theorem, which is applied directly where blocks of differing dimension arise.
-Together these two components recover the structural conclusion of the
-unit-overlap branch of Lemma~\texttt{equalMPS}, though the upstream normal-tensor
-periodicity and dichotomy statements remain separate from this note.
+theorem through its non-decay contrapositive. Together these two components
+recover the structural conclusion of the unit-overlap branch of
+Lemma~\texttt{equalMPS}, though the upstream normal-tensor periodicity and
+dichotomy statements remain separate from this note.
 
 \bibliographystyle{alpha}
 \bibliography{references}

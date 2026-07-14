@@ -151,8 +151,10 @@ This is the grouping implication in arXiv:1606.00608, Lemma `equalMPS`
 (lines 1080--1117) and Proposition `prop:char-BNT` (lines 1135--1148).
 Each tensor is first put into its trace-preserving Perron gauge.  The gauges
 are pure similarities because both tensors have spectral radius one.  The
-trace-preserving equal-overlap theorem supplies the gauge-phase relation, which
-is then transported back to the original tensors. -/
+rectangular overlap-decay theorem gives equality of the bond dimensions from
+the positive-length overlaps, without using the empty word.  The
+trace-preserving equal-overlap theorem then supplies the gauge-phase relation,
+which is transported back to the original tensors. -/
 theorem MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
     {DX DY : ℕ} [NeZero DX] [NeZero DY]
     {X : MPSTensor d DX} {Y : MPSTensor d DY}
