@@ -9,6 +9,12 @@
 %   vocabulary.
 % - Public diagrams default to unlabeled tensor glyphs; the surrounding
 %   formula/prose carries the tensor names.
+% - A local tensor is a black dot.  A tensor which must carry a label is a
+%   neutral square box; a linear map or insertion is a rounded blue box, and
+%   a scalar operator inserted on a leg is a red dot.
+% - Solid strokes are contracted indices.  Dashed strokes indicate only a
+%   grouping boundary, a change of multiplicity basis, or an identified
+%   boundary of a periodic lattice.
 \input{macros/tn_core} % chktex 27 (job-dir-relative path; chktex lints this file standalone)
 
 \makeatletter
@@ -45,7 +51,7 @@
 \newcommand{\TNBlocking}[4]{%
     \begin{tikzpicture}[tn picture]
         \TN@openMPSword{tn}{#2}{#3}{#4}
-        \draw[densely dashed, rounded corners]
+        \draw[tn grouping boundary]
         ($(tnL.west)+(-0.30,0.22)$) rectangle ($(tnR.east)+(0.30,-0.34)$);
     \end{tikzpicture}%
 }
@@ -58,11 +64,11 @@
         \TN@tensordot{ovuL}{(0,0.42)}
         \TN@tensordot{ovuM}{(\TN@chainsep,0.42)}
         \TN@tensordot{ovuR}{(\TN@chainright,0.42)}
-        \draw[tn leg] (-0.48,0.42) rectangle (4.68,0.74);
+        \draw[tn virtual closure] (-0.48,0.42) rectangle (4.68,0.74);
         \TN@tensordot{ovdL}{(0,-0.42)}
         \TN@tensordot{ovdM}{(\TN@chainsep,-0.42)}
         \TN@tensordot{ovdR}{(\TN@chainright,-0.42)}
-        \draw[tn leg] (-0.48,-0.42) rectangle (4.68,-0.74);
+        \draw[tn virtual closure] (-0.48,-0.42) rectangle (4.68,-0.74);
         \draw[tn phys leg] (ovuL.south) -- (ovdL.north);
         \draw[tn phys leg] (ovuM.south) -- (ovdM.north);
         \draw[tn phys leg] (ovuR.south) -- (ovdR.north);
@@ -126,7 +132,7 @@
         \draw[tn leg] (tnAc.east) -- ++(0.62,0);
         \TN@upleg{tnA}{0.48}
         \TN@downleg{tnAc}{0.48}
-        \draw[tn phys leg, densely dashed]
+        \draw[tn purification contraction]
             (tnA.east) .. controls (0.88,0.52) and (0.88,-0.52) .. (tnAc.east);
         \node at (-0.28,0.82) {$A$};
         \node at (-0.32,-0.82) {$\overline A$};
@@ -163,9 +169,9 @@
 % Contraction of neighbouring right and left sector tensors.
 \newcommand{\TNEtaSectorDecomposition}{%
     \begin{tikzpicture}[tn picture]
-        \node[draw, fill=white, minimum width=0.52cm, minimum height=0.38cm,
+        \node[tn tensor box, minimum width=0.52cm, minimum height=0.38cm,
             inner sep=1pt] (tnRh) at (-0.56,0) {$r_k$};
-        \node[draw, fill=white, minimum width=0.52cm, minimum height=0.38cm,
+        \node[tn tensor box, minimum width=0.52cm, minimum height=0.38cm,
             inner sep=1pt] (tnLk) at (0.56,0) {$l_h$};
         \draw[tn leg] (tnRh.east) -- (tnLk.west);
         \TN@upleg{tnRh}{0.50}
@@ -190,7 +196,7 @@
         \TN@subspinlink{tzeroLk}{tzeroRk}
         \TN@subspinlink{tzeroRk}{tzeroLh}
         \TN@subspinlink{tzeroLh}{tzeroRh}
-        \draw[rounded corners=2pt, densely dashed]
+        \draw[tn grouping boundary]
             (-2.62,0.68) rectangle (-0.68,1.68);
         \node at (-1.65,0.44) {$\tr_{R_k\otimes L_h}$};
         \draw[->, line width=0.55pt] (0.52,1.18) -- (1.32,1.18);
@@ -240,7 +246,7 @@
         \TN@subspinlink{szeroLl}{szeroRl}
         \TN@subspinlink{szeroRl}{szeroLh}
         \TN@subspinlink{szeroLh}{szeroRh}
-        \draw[rounded corners=2pt, densely dashed]
+        \draw[tn grouping boundary]
             (-3.57,0.84) rectangle (0.37,1.86);
         \node at (-1.60,0.50)
             {$\tr_{\bigoplus_l[(R_k\otimes L_l)\otimes(R_l\otimes L_h)]}$};
@@ -296,7 +302,7 @@
         \TN@subspinlink{trefTopLk}{trefTopRk}
         \TN@subspinlink{trefTopRk}{trefTopLh}
         \TN@subspinlink{trefTopLh}{trefTopRh}
-        \draw[rounded corners=2pt, densely dashed]
+        \draw[tn grouping boundary]
             (-3.25,1.94) rectangle (-1.19,2.96);
         \node at (-2.22,1.68) {$\tr_{R_k\otimes L_h}$};
 
@@ -361,7 +367,7 @@
             \TN@subspinbox{\name}{(\x,1.35)}{\widehat{\cal K}}
         }
         \TN@subspinlink{btTwoA}{btTwoB}
-        \draw[rounded corners=2pt, densely dashed]
+        \draw[tn grouping boundary]
             (-5.48,0.87) rectangle (-3.52,1.83);
         \node at (-4.50,0.54) {one blocked site};
 
@@ -377,9 +383,9 @@
         \TN@subspinlink{btFourA}{btFourB}
         \TN@subspinlink{btFourB}{btFourC}
         \TN@subspinlink{btFourC}{btFourD}
-        \draw[rounded corners=2pt, densely dashed]
+        \draw[tn grouping boundary]
             (2.52,0.87) rectangle (4.48,1.83);
-        \draw[rounded corners=2pt, densely dashed]
+        \draw[tn grouping boundary]
             (4.52,0.87) rectangle (6.48,1.83);
         \node at (4.50,0.54) {two blocked sites};
 
@@ -397,9 +403,9 @@
         \TN@subspinlink{bsFourA}{bsFourB}
         \TN@subspinlink{bsFourB}{bsFourC}
         \TN@subspinlink{bsFourC}{bsFourD}
-        \draw[rounded corners=2pt, densely dashed]
+        \draw[tn grouping boundary]
             (2.52,-1.78) rectangle (4.48,-0.82);
-        \draw[rounded corners=2pt, densely dashed]
+        \draw[tn grouping boundary]
             (4.52,-1.78) rectangle (6.48,-0.82);
         \foreach \x/\name in {-1.4/bsThreeA,-0.4/bsThreeB,0.6/bsThreeC} {
             \TN@subspinbox{\name}{(\x,-1.30)}{\widehat{\cal K}}
@@ -410,7 +416,7 @@
             \TN@subspinbox{\name}{(\x,-1.30)}{\widehat{\cal K}}
         }
         \TN@subspinlink{bsTwoA}{bsTwoB}
-        \draw[rounded corners=2pt, densely dashed]
+        \draw[tn grouping boundary]
             (-5.48,-1.78) rectangle (-3.52,-0.82);
         \draw[<-, line width=0.60pt] (1.08,-1.30) -- (2.52,-1.30)
             node[midway, above] {$\widehat{\mathcal S}_{(123)4}$};
@@ -432,7 +438,7 @@
             \TN@subspinbox{\name}{(\x,1.45)}{\cal K}
         }
         \TN@subspinlink{ptRawTwoA}{ptRawTwoB}
-        \draw[rounded corners=2pt, densely dashed]
+        \draw[tn grouping boundary]
             (-5.48,0.97) rectangle (-3.52,1.93);
         \node at (-4.50,2.27) {${\cal K}_2(X)$};
 
@@ -443,9 +449,9 @@
         \TN@subspinlink{ptRawFourA}{ptRawFourB}
         \TN@subspinlink{ptRawFourB}{ptRawFourC}
         \TN@subspinlink{ptRawFourC}{ptRawFourD}
-        \draw[rounded corners=2pt, densely dashed]
+        \draw[tn grouping boundary]
             (2.52,0.97) rectangle (4.48,1.93);
-        \draw[rounded corners=2pt, densely dashed]
+        \draw[tn grouping boundary]
             (4.52,0.97) rectangle (6.48,1.93);
         \node at (4.50,2.27) {${\cal K}_4(X)$};
 
@@ -453,7 +459,7 @@
             \TN@subspinbox{\name}{(\x,-1.45)}{\widehat{\cal K}}
         }
         \TN@subspinlink{ptHatTwoA}{ptHatTwoB}
-        \draw[rounded corners=2pt, densely dashed]
+        \draw[tn grouping boundary]
             (-5.48,-1.93) rectangle (-3.52,-0.97);
         \node at (-4.50,-2.27) {$\widehat{\cal K}_2(X)$};
 
@@ -464,9 +470,9 @@
         \TN@subspinlink{ptHatFourA}{ptHatFourB}
         \TN@subspinlink{ptHatFourB}{ptHatFourC}
         \TN@subspinlink{ptHatFourC}{ptHatFourD}
-        \draw[rounded corners=2pt, densely dashed]
+        \draw[tn grouping boundary]
             (2.52,-1.93) rectangle (4.48,-0.97);
-        \draw[rounded corners=2pt, densely dashed]
+        \draw[tn grouping boundary]
             (4.52,-1.93) rectangle (6.48,-0.97);
         \node at (4.50,-2.27) {$\widehat{\cal K}_4(X)$};
 
@@ -564,17 +570,17 @@
             \draw[tn leg] (\x,-1.12) -- (\x,1.12);
         }
 
-        \node[draw, fill=white, rounded corners=2pt, minimum width=1.38cm,
+        \node[tn tensor box, rounded corners=2pt, minimum width=1.38cm,
             minimum height=0.48cm, inner sep=1pt]
             at (-4.05,0.38) {$\eta_{k,l}$};
-        \node[draw, fill=white, rounded corners=2pt, minimum width=1.38cm,
+        \node[tn tensor box, rounded corners=2pt, minimum width=1.38cm,
             minimum height=0.48cm, inner sep=1pt]
             at (-2.45,-0.38) {$\eta_{l,h}$};
 
-        \node[draw, fill=white, rounded corners=2pt, minimum width=1.38cm,
+        \node[tn tensor box, rounded corners=2pt, minimum width=1.38cm,
             minimum height=0.48cm, inner sep=1pt]
             at (2.45,-0.38) {$\eta_{k,l}$};
-        \node[draw, fill=white, rounded corners=2pt, minimum width=1.38cm,
+        \node[tn tensor box, rounded corners=2pt, minimum width=1.38cm,
             minimum height=0.48cm, inner sep=1pt]
             at (4.05,0.38) {$\eta_{l,h}$};
 
@@ -603,9 +609,9 @@
 \newcommand{\TNMPDOCyclicEtaContraction}{%
     \begin{tikzpicture}[tn picture]
         \foreach \name/\x/\lab in {Zero/-2.70/0,One/-0.90/1,Last/1.30/{N-1}} {
-            \node[draw, fill=white, minimum width=0.58cm, minimum height=0.38cm,
+            \node[tn tensor box, minimum width=0.58cm, minimum height=0.38cm,
                 inner sep=1pt] (tnL\name) at (\x,0.34) {$l_{k_\lab}$};
-            \node[draw, fill=white, minimum width=0.58cm, minimum height=0.38cm,
+            \node[tn tensor box, minimum width=0.58cm, minimum height=0.38cm,
                 inner sep=1pt] (tnR\name) at (\x+1.14,0.34) {$r_{k_\lab}$};
             \node at (\x+0.57,0.34) {$\otimes$};
             \TN@upleg{tnL\name}{0.42}
@@ -617,7 +623,7 @@
         \draw[tn leg] (tnROne.east) -- (0.62,0.34);
         \draw[tn leg] (0.94,0.34) -- (tnLLast.west);
         \node at (0.78,0.34) {$\cdots$};
-        \draw[tn leg] (tnRLast.east)
+        \draw[tn virtual closure] (tnRLast.east)
             .. controls (3.04,0.34) and (3.04,-0.42) .. (2.60,-0.42)
             -- (-3.04,-0.42)
             .. controls (-3.46,-0.42) and (-3.46,0.34) .. (tnLZero.west);
@@ -636,13 +642,13 @@
         \node at (-1.93,0) {$=$};
         \node at (-1.28,0) {$\displaystyle\bigoplus_{k_0,\ldots,k_{N-1}}$};
         \draw[rounded corners=2pt] (-0.45,-0.58) rectangle (4.22,0.58);
-        \node[draw, fill=white, minimum width=1.08cm, minimum height=0.44cm,
+        \node[tn tensor box, minimum width=1.08cm, minimum height=0.44cm,
             inner sep=1pt] (tnEtaZero) at (0.30,0) {$\eta_{k_0,k_1}$};
         \node at (1.10,0) {$\otimes$};
-        \node[draw, fill=white, minimum width=1.08cm, minimum height=0.44cm,
+        \node[tn tensor box, minimum width=1.08cm, minimum height=0.44cm,
             inner sep=1pt] (tnEtaOne) at (1.90,0) {$\eta_{k_1,k_2}$};
         \node at (2.72,0) {$\otimes\cdots\otimes$};
-        \node[draw, fill=white, minimum width=1.34cm, minimum height=0.44cm,
+        \node[tn tensor box, minimum width=1.34cm, minimum height=0.44cm,
             inner sep=1pt] (tnEtaLast) at (3.55,0) {$\eta_{k_{N-1},k_0}$};
     \end{tikzpicture}%
 }
@@ -693,11 +699,11 @@
         \node at (-1.08,0.48) {$j_3$};
 
         % The trace closes the three-site word through the remaining sites R.
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+        \node[tn map box, inner sep=2pt]
             (tnTail) at (-1.60,-1.42) {$R$};
-        \draw[tn leg] (tnKone.west) -- ++(-0.42,0)
+        \draw[tn virtual closure] (tnKone.west) -- ++(-0.42,0)
             |- ($(tnTail.east)+(0,-0.40)$) -- (tnTail.east);
-        \draw[tn leg] (tnKthree.east) -- ++(0.42,0)
+        \draw[tn virtual closure] (tnKthree.east) -- ++(0.42,0)
             |- ($(tnTail.west)+(0,0.38)$) -- (tnTail.west);
 
         \node at (0.88,0.20) {$=$};
@@ -714,7 +720,7 @@
         \node[anchor=east] at (1.61,0.20) {$\beta_1$};
         \node[anchor=west] at (2.89,0.20) {$\alpha_3$};
         \node at (3.50,0.20) {$\times$};
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+        \node[tn map box, inner sep=2pt]
             (tnTailEntry) at (4.65,0.20) {$R$};
         \draw[tn leg] (tnTailEntry.west) -- ++(-0.58,0);
         \draw[tn leg] (tnTailEntry.east) -- ++(0.58,0);
@@ -762,9 +768,9 @@
 % a basis tensor carrying the virtual legs.
 \newcommand{\TNMPDOVerticalDirectSum}{%
     \begin{tikzpicture}[tn picture]
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt] (vdUu) at (-2.55,0.76) {$U^\dagger$};
+        \node[tn map box] (vdUu) at (-2.55,0.76) {$U^\dagger$};
         \TN@tensordot{vdM}{(-2.55,0)}
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt] (vdUd) at (-2.55,-0.76) {$U$};
+        \node[tn map box] (vdUd) at (-2.55,-0.76) {$U$};
         \draw[tn phys leg] ($(vdUu.north)+(-0.11,0)$) -- ++(0,0.36);
         \draw[tn phys leg] ($(vdUu.north)+(0.11,0)$) -- ++(0,0.36);
         \draw[tn phys leg] (vdUu.south) -- (vdM.north);
@@ -804,10 +810,10 @@
         \node[anchor=west] at (-3.33,0.30) {$\widetilde M$};
         \node at (-2.45,0) {$=$};
         \node at (-1.55,0) {$\displaystyle\sum_k$};
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+        \node[tn map box, inner sep=2pt]
             (vrsV) at (0,0.82) {$V_k$};
         \TN@tensordot{vrsB}{(0,0)}
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+        \node[tn map box, inner sep=2pt]
             (vrsVd) at (0,-0.82) {$V_k^\dagger$};
         \draw[tn phys leg] (vrsV.north) -- ++(0,0.34);
         \draw[tn phys leg] (vrsV.south) -- (vrsB.north);
@@ -1009,11 +1015,11 @@
         \node[anchor=east] at (-0.14,0.25) {${\cal K}$};
         \node[anchor=east] at (1.34,0.25) {${\cal K}$};
 
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+        \node[tn map box, inner sep=2pt]
             (tnFourSiteTail) at (0,-1.42) {$R_4$};
-        \draw[tn leg] (tnTailOne.west) -- ++(-0.48,0)
+        \draw[tn virtual closure] (tnTailOne.west) -- ++(-0.48,0)
             |- ($(tnFourSiteTail.east)+(0,-0.40)$) -- (tnFourSiteTail.east);
-        \draw[tn leg] (tnTailThree.east) -- ++(0.48,0)
+        \draw[tn virtual closure] (tnTailThree.east) -- ++(0.48,0)
             |- ($(tnFourSiteTail.west)+(0,0.38)$) -- (tnFourSiteTail.west);
 
     \end{tikzpicture}%
@@ -1033,9 +1039,9 @@
         \node[anchor=west] at (-1.68,0) {$\alpha_3$};
         \node[anchor=east] at (-2.58,0.25) {${\cal K}$};
 
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+        \node[tn map box, inner sep=2pt]
             (tnSectorU) at (-2.45,0.88) {$U_B$};
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+        \node[tn map box, inner sep=2pt]
             (tnSectorUd) at (-2.45,-0.88) {$U_B^\dagger$};
         \draw[tn phys leg] (tnSectorK.north) -- (tnSectorU.south);
         \draw[tn phys leg] (tnSectorU.north) -- ++(0,0.34);
@@ -1046,11 +1052,11 @@
 
         \node at (-0.60,0) {$=$};
         \node at (0.10,0) {$p_k$};
-        \node[draw, rounded corners, fill=blue!8, minimum width=1.00cm,
+        \node[tn tensor box, minimum width=1.00cm,
             minimum height=0.62cm] (tnSectorA) at (1.25,0)
             {$A^{(k)}_{\alpha_1,\beta_1}$};
         \node at (2.15,0) {$\otimes$};
-        \node[draw, rounded corners, fill=blue!8, minimum width=1.00cm,
+        \node[tn tensor box, minimum width=1.00cm,
             minimum height=0.62cm] (tnSectorB) at (3.25,0)
             {$B^{(k)}_{\alpha_3,\beta_3}$};
         \node at (1.25,0.62) {$l,l'$};
@@ -1071,9 +1077,9 @@
         \node[anchor=west] at (-1.88,0) {$\alpha_3$};
         \node[anchor=east] at (-2.78,0.25) {${\cal K}$};
 
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+        \node[tn map box, inner sep=2pt]
             (sfU) at (-2.65,0.88) {$U_B$};
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+        \node[tn map box, inner sep=2pt]
             (sfUd) at (-2.65,-0.88) {$U_B^\dagger$};
         \draw[tn phys leg] (sfK.north) -- (sfU.south);
         \draw[tn phys leg] (sfU.north) -- ++(0,0.34);
@@ -1193,7 +1199,7 @@
         \draw[tn leg] (bntX.south) -- (0,-1.02);
         \draw[tn leg] (bntA.south) -- (1.50,-0.62);
         \draw[tn leg] (bntXi.south) -- (3.00,-1.02);
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+        \node[tn tensor box]
         (bntMu) at (0.75,-1.60) {$\mu$};
         \draw[tn leg] ($(bntMu.north)+(-0.12,0)$) -- (0.63,-0.62);
         \draw[tn leg] ($(bntMu.north)+(0.12,0)$) -- (0.87,-1.02);
@@ -1232,9 +1238,9 @@
         \node (la) at (0,0) {$\alpha$};
         \node (lb) at (0.90,0) {$\beta$};
         \node (lc) at (1.80,0) {$\gamma$};
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+        \node[tn map box, inner sep=2pt]
             (lab) at (0.45,0.78) {$U_{\alpha,\beta}^{\delta}$};
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+        \node[tn map box, inner sep=2pt]
             (labc) at (1.12,1.62) {$U_{\delta,\gamma}^{\varepsilon}$};
         \draw[tn leg] (la.north) -- (lab.south west);
         \draw[tn leg] (lb.north) -- (lab.south east);
@@ -1247,9 +1253,9 @@
         \node (ra) at (4.20,0) {$\alpha$};
         \node (rb) at (5.10,0) {$\beta$};
         \node (rc) at (6.00,0) {$\gamma$};
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+        \node[tn map box, inner sep=2pt]
             (rbc) at (5.55,0.78) {$U_{\beta,\gamma}^{\eta}$};
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+        \node[tn map box, inner sep=2pt]
             (rabc) at (4.88,1.62) {$U_{\alpha,\eta}^{\varepsilon}$};
         \draw[tn leg] (rb.north) -- (rbc.south west);
         \draw[tn leg] (rc.north) -- (rbc.south east);
@@ -1259,7 +1265,7 @@
             node[above] {$\varepsilon$};
         \node at (5.10,-0.48) {$(\alpha(\beta\gamma))$};
 
-        \draw[<->, densely dashed, line width=0.4pt]
+        \draw[tn basis change, <->]
             (labc.east) -- node[above] {$F_{\varepsilon}^{\alpha\beta\gamma}$}
             (rabc.west);
     \end{tikzpicture}%
@@ -1273,9 +1279,9 @@
         \node (pfLa) at (-4.20,-1.20) {$a$};
         \node (pfLb) at (-3.20,-1.20) {$b$};
         \node (pfLc) at (-2.20,-1.20) {$c$};
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+        \node[tn map box, inner sep=2pt]
             (pfLab) at (-3.70,-0.34) {$X^{e}_{ab,\mu}$};
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+        \node[tn map box, inner sep=2pt]
             (pfLroot) at (-3.00,0.62) {$X^{d}_{ec,\nu}$};
         \draw[tn leg] (pfLa.north) -- (pfLab.south west);
         \draw[tn leg] (pfLb.north) -- (pfLab.south east);
@@ -1292,9 +1298,9 @@
         \node (pfRa) at (2.75,-1.20) {$a$};
         \node (pfRb) at (3.75,-1.20) {$b$};
         \node (pfRc) at (4.75,-1.20) {$c$};
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+        \node[tn map box, inner sep=2pt]
             (pfRbc) at (4.25,-0.34) {$X^{f}_{bc,\lambda}$};
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+        \node[tn map box, inner sep=2pt]
             (pfRroot) at (3.45,0.62) {$X^{d}_{af,\sigma}$};
         \draw[tn leg] (pfRb.north) -- (pfRbc.south west);
         \draw[tn leg] (pfRc.north) -- (pfRbc.south east);
@@ -1328,7 +1334,7 @@
         \TN@rightleg{ffSelR}{0.34}
         \node at (-1.76,2.62) {$\cdots$};
         \node at (-2.28,2.14) {$M_{\varepsilon'}^{w}$};
-        \draw[densely dashed, rounded corners]
+        \draw[tn grouping boundary]
             (-4.33,2.03) rectangle (-0.23,3.17);
         \node[fill=white, inner sep=1pt] at (-2.28,3.17)
             {$\displaystyle\sum_{|w|=S}c_{\varepsilon}(w)\,(\,\cdot\,)^{w}$};
@@ -1346,9 +1352,9 @@
         \node (ffLa) at (-3.92,-0.20) {$\alpha$};
         \node (ffLb) at (-3.32,-0.20) {$\beta$};
         \node (ffLc) at (-2.72,-0.20) {$\gamma$};
-        \node[draw, rounded corners, fill=blue!8, inner sep=1.2pt]
+        \node[tn map box, inner sep=1.2pt]
             (ffLab) at (-3.62,0.35) {$U_{\alpha,\beta}$};
-        \node[draw, rounded corners, fill=blue!8, inner sep=1.2pt]
+        \node[tn map box, inner sep=1.2pt]
             (ffLroot) at (-3.17,0.94) {$U^{\mathrm L}$};
         \draw[tn leg] (ffLa.north) -- (ffLab.south west);
         \draw[tn leg] (ffLb.north) -- (ffLab.south east);
@@ -1359,9 +1365,9 @@
         \node (ffRa) at (2.48,-0.20) {$\alpha$};
         \node (ffRb) at (3.08,-0.20) {$\beta$};
         \node (ffRc) at (3.68,-0.20) {$\gamma$};
-        \node[draw, rounded corners, fill=blue!8, inner sep=1.2pt]
+        \node[tn map box, inner sep=1.2pt]
             (ffRbc) at (3.38,0.35) {$U_{\beta,\gamma}$};
-        \node[draw, rounded corners, fill=blue!8, inner sep=1.2pt]
+        \node[tn map box, inner sep=1.2pt]
             (ffRroot) at (2.93,0.94) {$U^{\mathrm R}$};
         \draw[tn leg] (ffRb.north) -- (ffRbc.south west);
         \draw[tn leg] (ffRc.north) -- (ffRbc.south east);
@@ -1383,7 +1389,7 @@
         \node[anchor=west] at (3.43,-1.48)
             {$\mathcal H^{\mathrm R}_{\varepsilon}$};
         \node[anchor=west] at (3.43,-2.08) {$\C^{D_\varepsilon}$};
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+        \node[tn map box, inner sep=2pt]
             (ffF) at (0,-1.48) {$F_\varepsilon$};
         \draw[<-, tn leg] (-3.36,-1.48) -- (ffF.west);
         \draw[<-, tn leg] (ffF.east) -- (3.36,-1.48);
@@ -1546,11 +1552,11 @@
 % direct sum without introducing an F-move.
 \newcommand{\TNMPDOBNTFusionIdentity}{%
     \begin{tikzpicture}[tn picture, scale=0.92]
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt,
+        \node[tn map box, inner sep=2pt,
             minimum height=1.16cm] (bfiU) at (-2.20,0) {$U_{\alpha,\beta}$};
         \TN@tensordot{bfiA}{(-0.95,0.42)}
         \TN@tensordot{bfiB}{(-0.95,-0.42)}
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt,
+        \node[tn map box, inner sep=2pt,
             minimum height=1.16cm] (bfiUd) at (0.30,0)
             {$U_{\alpha,\beta}^{\dagger}$};
         \draw[tn leg] (bfiU.north east) -- (bfiA.west);
@@ -1569,7 +1575,7 @@
 
         \node at (1.42,0) {$=$};
         \node at (2.32,0) {$\displaystyle\bigoplus_\gamma$};
-        \node[draw, fill=white, minimum width=1.08cm, minimum height=0.48cm,
+        \node[tn tensor box, minimum width=1.08cm, minimum height=0.48cm,
             inner sep=1pt] (bfiChi) at (3.65,0.55)
             {$\chi_{\alpha,\beta,\gamma}$};
         \TN@tensordot{bfiG}{(3.65,-0.36)}
@@ -1595,7 +1601,7 @@
         % U (M_alpha M_beta) = H U.
         \node[anchor=east] at (-4.72,2.35)
             {$U(M_\alpha M_\beta)=HU$};
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt,
+        \node[tn map box, inner sep=2pt,
             minimum height=1.10cm] (uzTopL) at (-3.78,2.35) {$U$};
         \TN@tensordot{uzTopA}{(-2.48,2.72)}
         \TN@tensordot{uzTopB}{(-2.48,1.98)}
@@ -1610,10 +1616,10 @@
         \node at (-2.18,2.72) {$M_\alpha$};
         \node at (-2.18,1.98) {$M_\beta$};
         \node at (-1.42,2.35) {$=$};
-        \node[draw, fill=white, minimum width=0.72cm,
+        \node[tn tensor box, minimum width=0.72cm,
             minimum height=0.52cm, inner sep=1pt]
             (uzTopH) at (-0.52,2.35) {$H$};
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt,
+        \node[tn map box, inner sep=2pt,
             minimum height=1.10cm] (uzTopR) at (0.80,2.35) {$U$};
         \draw[tn leg] (uzTopH.west) -- ++(-0.42,0);
         \draw[tn leg] (uzTopH.east) -- (uzTopR.west);
@@ -1634,15 +1640,15 @@
         \TN@downleg{uzBotB}{0.34}
         \node at (-3.48,0.37) {$M_\alpha$};
         \node at (-3.48,-0.37) {$M_\beta$};
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt,
+        \node[tn map box, inner sep=2pt,
             minimum height=1.10cm] (uzBotL) at (-2.48,0) {$U^\dagger$};
         \draw[tn leg] (uzBotA.east) -- (uzBotL.north west);
         \draw[tn leg] (uzBotB.east) -- (uzBotL.south west);
         \draw[tn leg] (uzBotL.east) -- ++(0.42,0);
         \node at (-1.42,0) {$=$};
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt,
+        \node[tn map box, inner sep=2pt,
             minimum height=1.10cm] (uzBotR) at (-0.52,0) {$U^\dagger$};
-        \node[draw, fill=white, minimum width=0.72cm,
+        \node[tn tensor box, minimum width=0.72cm,
             minimum height=0.52cm, inner sep=1pt]
             (uzBotH) at (0.80,0) {$H$};
         \draw[tn leg] (uzBotR.north west) -- ++(-0.56,0);
@@ -1667,13 +1673,13 @@
         \node at (-3.48,-2.05) {$M_\alpha$};
         \node at (-3.48,-2.79) {$M_\beta$};
         \node at (-2.68,-2.42) {$=$};
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt,
+        \node[tn map box, inner sep=2pt,
             minimum height=1.10cm] (uzRecUd) at (-1.72,-2.42)
             {$U^\dagger$};
-        \node[draw, fill=white, minimum width=0.72cm,
+        \node[tn tensor box, minimum width=0.72cm,
             minimum height=0.52cm, inner sep=1pt]
             (uzRecH) at (-0.40,-2.42) {$H$};
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt,
+        \node[tn map box, inner sep=2pt,
             minimum height=1.10cm] (uzRecU) at (0.92,-2.42) {$U$};
         \draw[tn leg] (uzRecUd.north west) -- ++(-0.52,0);
         \draw[tn leg] (uzRecUd.south west) -- ++(-0.52,0);
@@ -1758,7 +1764,7 @@
         \node at (-5.34,-0.08) {$Q=$};
 
         % First visible fusion factor.
-        \node[draw, fill=white, minimum width=0.76cm,
+        \node[tn tensor box, minimum width=0.76cm,
             minimum height=0.66cm, inner sep=1pt] (rqXone) at (-4.58,-0.44)
             {$X$};
         \foreach \x in {-3.92,-3.68,-3.44}
@@ -1769,7 +1775,7 @@
         }
 
         % Second factor; the lowest wire from the first factor is retained.
-        \node[draw, fill=white, minimum width=0.76cm,
+        \node[tn tensor box, minimum width=0.76cm,
             minimum height=0.66cm, inner sep=1pt] (rqXtwo) at (-2.76,-0.02)
             {$X$};
         \foreach \x in {-2.10,-1.86,-1.62}
@@ -1781,7 +1787,7 @@
 
         % Third factor; each preceding lower wire ends on the middle vertical
         % of the next fusion bundle.
-        \node[draw, fill=white, minimum width=0.76cm,
+        \node[tn tensor box, minimum width=0.76cm,
             minimum height=0.66cm, inner sep=1pt] (rqXthree) at (-0.94,0.40)
             {$X$};
         \foreach \x in {-0.28,-0.04,0.20}
@@ -1799,7 +1805,7 @@
         \node at (1.30,0.10) {$\cdots$};
 
         % Final visible factor and the terminal traced tensor.
-        \node[draw, fill=white, minimum width=0.76cm,
+        \node[tn tensor box, minimum width=0.76cm,
             minimum height=0.66cm, inner sep=1pt] (rqXlast) at (2.40,0.48)
             {$X$};
         \foreach \x in {3.06,3.30,3.54}
@@ -1815,7 +1821,7 @@
         \fill (3.30,0.10) circle[radius=0.055cm];
         \fill (3.84,-0.66) circle[radius=0.055cm];
 
-        \node[draw, fill=white, minimum width=0.82cm,
+        \node[tn tensor box, minimum width=0.82cm,
             minimum height=0.68cm, inner sep=1pt] (rqM) at (4.72,-0.66)
             {$M_\gamma$};
         \draw[tn leg] (3.84,-0.66) -- (rqM.west);
@@ -1839,13 +1845,13 @@
 \newcommand{\TNAppendixBAdjacentBondProjectors}{%
     \begin{tikzpicture}[tn picture, scale=0.92]
         \foreach \x/\name in {0/rfpUzero,2.20/rfpUone,4.40/rfpUtwo} {
-            \node[draw, fill=white, minimum width=0.72cm, minimum height=0.58cm]
+            \node[tn tensor box, minimum width=0.72cm, minimum height=0.58cm]
                 (\name) at (\x,0.92) {$U$};
             \draw[tn phys leg] (\name.north) -- ++(0,0.42);
         }
-        \node[draw, fill=white, minimum width=0.68cm, minimum height=0.50cm]
+        \node[tn tensor box, minimum width=0.68cm, minimum height=0.50cm]
             (rfpPhiZero) at (1.10,0) {$\varphi$};
-        \node[draw, fill=white, minimum width=0.68cm, minimum height=0.50cm]
+        \node[tn tensor box, minimum width=0.68cm, minimum height=0.50cm]
             (rfpPhiOne) at (3.30,0) {$\varphi$};
         \draw[tn leg] ($(rfpUzero.south)+(-0.16,0)$) -- ++(0,-0.42)
             -- (rfpPhiZero.west);
@@ -1875,14 +1881,14 @@
 \newcommand{\TNAppendixBPhysicalSupportTransport}{%
     \begin{tikzpicture}[tn picture, scale=0.90]
         \foreach \x/\name in {0/rfpTzero,2.20/rfpTone,4.40/rfpTtwo} {
-            \node[draw, fill=white, minimum width=0.72cm, minimum height=0.58cm]
+            \node[tn tensor box, minimum width=0.72cm, minimum height=0.58cm]
                 (\name) at (\x,0.72) {$U$};
             \draw[tn phys leg] (\name.north) -- ++(0,0.52);
             \fill[black] ($(\name.north)+(0,0.52)$) circle (1.4pt);
         }
-        \node[draw, fill=white, minimum width=0.68cm, minimum height=0.50cm]
+        \node[tn tensor box, minimum width=0.68cm, minimum height=0.50cm]
             (rfpTPhiZero) at (1.10,-0.12) {$\varphi$};
-        \node[draw, fill=white, minimum width=0.68cm, minimum height=0.50cm]
+        \node[tn tensor box, minimum width=0.68cm, minimum height=0.50cm]
             (rfpTPhiOne) at (3.30,-0.12) {$\varphi$};
         \draw[tn leg] ($(rfpTzero.south)+(-0.16,0)$) -- ++(0,-0.42)
             -- (rfpTPhiZero.west);
@@ -1959,7 +1965,7 @@
         \draw[tn leg] (rfkC.west) -- ++(-0.55,0);
         \draw[tn leg] (rfkC.east) -- ++(0.55,0);
         \node[anchor=west] at (4.44,-0.28) {$A$};
-        \node[draw, rounded corners, fill=blue!8,
+        \node[tn map box,
             inner xsep=10pt, inner ysep=2pt] (rfkV) at (4.30,0.90) {$V$};
         \draw[tn phys leg] (rfkC.north) -- (rfkV.south);
         \node[anchor=west] at (4.40,0.46) {$j$};
@@ -1981,7 +1987,7 @@
         \draw[tn leg] (rfrB.east) -- ++(0.60,0);
         \node[anchor=east] at (-0.14,-0.28) {$A$};
         \node[anchor=west] at (1.34,-0.28) {$A$};
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt,
+        \node[tn map box, inner sep=2pt,
             minimum width=1.62cm] (rfrV) at (0.60,0.90) {$V^\dagger$};
         \draw[tn phys leg] (rfrA.north) -- (rfrA.north |- rfrV.south);
         \draw[tn phys leg] (rfrB.north) -- (rfrB.north |- rfrV.south);
@@ -2011,7 +2017,7 @@
         \node at (1.25,0) {$=$};
         \TN@opdotabove{icfX}{(2.20,0)}{X}
         \TN@opdotabove{icfL}{(3.20,0)}{\sqrt\Lambda}
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+        \node[tn map box, inner sep=2pt]
         (icfU) at (4.30,0.75) {$U$};
         \TN@opdotabove{icfXi}{(5.40,0)}{X^{-1}}
         \draw[tn leg] (icfX.west) -- ++(-0.55,0);
@@ -2040,7 +2046,7 @@
         \node at (1.25,0) {$=$};
         \TN@opdotabove{icbX}{(2.20,0)}{X}
         \TN@opdotabove{icbL}{(3.20,0)}{\sqrt\Lambda}
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+        \node[tn map box, inner sep=2pt]
         (icbU) at (4.30,0.75) {$U$};
         \TN@opdotabove{icbXi}{(5.40,0)}{X^{-1}}
         \draw[tn leg] (icbX.west) -- ++(-0.55,0);
@@ -2060,7 +2066,7 @@
         \draw[tn leg] (icbL.south) -- (3.20,-0.62);
         \draw[tn leg] (4.16,0) -- (4.16,-0.62);
         \draw[tn leg] (icbXi.south) -- (5.40,-1.02);
-        \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+        \node[tn map box, inner sep=2pt]
         (icbMu) at (2.70,-1.60) {$\mu$};
         \draw[tn leg] ($(icbMu.north)+(-0.12,0)$) -- (2.58,-0.62);
         \draw[tn leg] ($(icbMu.north)+(0.12,0)$) -- (2.82,-1.02);
@@ -2099,7 +2105,7 @@
             }
         \node[anchor=west] at (2.80,-0.56) {$K$};
         \node[anchor=west] at (4.00,-0.56) {$K$};
-        \draw[densely dashed, rounded corners]
+        \draw[tn grouping boundary]
         (2.28,0.40) rectangle (4.32,-0.40);
     \end{tikzpicture}%
 }
@@ -2135,7 +2141,7 @@
             \TN@upleg{bcmM}{0.52}
             \TN@downleg{bcmM}{0.52}
             \draw[tn leg] (bcmX.east) -- (bcmM.west);
-            \draw[tn leg, rounded corners=3pt]
+            \draw[tn virtual closure]
             (bcmX.west) -- ++(-0.40,0) -- (-0.47,-0.95)
             -- (1.57,-0.95) -- (1.57,0) -- (bcmM.east);
             \node at (0.55,-1.18) {$\tr$};
@@ -2148,7 +2154,7 @@
             \TN@upleg{bcaA}{0.52}
             \TN@downleg{bcaA}{0.52}
             \draw[tn leg] (bcaX.east) -- (bcaA.west);
-            \draw[tn leg, rounded corners=3pt]
+            \draw[tn virtual closure]
             (bcaX.west) -- ++(-0.40,0) -- (-0.47,-0.95)
             -- (1.57,-0.95) -- (1.57,0) -- (bcaA.east);
             \node at (0.55,-1.18) {$\tr$};
@@ -2174,7 +2180,7 @@
         \draw[tn phys leg] (botcTop.south) -- (0,0.38);
         \draw[tn phys leg] (0,-0.38) -- (botcBottom.north);
         \node at (0,0) {$\vdots$};
-        \draw[tn phys leg, rounded corners=4pt]
+        \draw[tn physical closure]
             (botcTop.north) -- (0,1.56) -- (-0.76,1.56)
             -- (-0.76,-1.56) -- (0,-1.56) -- (botcBottom.south);
         \node[anchor=south west] at (0.18,1.12) {$M_\alpha$};
@@ -2191,7 +2197,7 @@
             \TN@tensordot{fihL}{(0,0)}
             \TN@tensordot{fihM}{(1.05,0)}
             \TN@tensordot{fihR}{(2.60,0)}
-            \draw[tn leg] (-0.42,0) rectangle (3.02,-0.44);
+            \draw[tn virtual closure] (-0.42,0) rectangle (3.02,-0.44);
             \TN@upleg{fihM}{0.42}
             \TN@upleg{fihR}{0.42}
             \draw[tn phys leg] (fihL.north) -- ++(0,0.86);
@@ -2203,7 +2209,7 @@
             \TN@tensordot{fizL}{(0,0)}
             \TN@tensordot{fizM}{(1.05,0)}
             \TN@tensordot{fizR}{(2.60,0)}
-            \draw[tn leg] (-0.42,0) rectangle (3.02,-0.44);
+            \draw[tn virtual closure] (-0.42,0) rectangle (3.02,-0.44);
             \TN@upleg{fizM}{0.42}
             \TN@upleg{fizR}{0.42}
             \draw[tn phys leg] (fizL.north) -- ++(0,0.86);
@@ -2239,26 +2245,26 @@
 \newcommand{\TNMPDOInsertionTracePairing}{%
     \begin{tikzpicture}[tn picture]
         \begin{scope}
-            \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+            \node[tn map box, inner sep=2pt]
             (itpW) at (0,0) {$W$};
             \TN@tensordot{itpA}{(1.15,0)}
             \draw[tn leg] (itpW.east) -- (itpA.west);
             \draw[tn phys leg] (itpA.north) -- ++(0,0.86);
             \TN@opdotleft{itpY}{(1.15,0.46)}{Y}
-            \draw[tn leg, rounded corners=3pt]
+            \draw[tn virtual closure]
             (itpW.west) -- ++(-0.35,0) -- (-0.62,-0.80)
             -- (1.72,-0.80) -- (1.72,0) -- (itpA.east);
             \node at (0.55,-1.03) {$\tr$};
         \end{scope}
         \node at (2.70,0) {$=$};
         \begin{scope}[xshift=4.05cm]
-            \node[draw, rounded corners, fill=blue!8, inner sep=2pt]
+            \node[tn map box, inner sep=2pt]
             (itpWz) at (0,0) {$W$};
             \TN@tensordot{itpAz}{(1.15,0)}
             \draw[tn leg] (itpWz.east) -- (itpAz.west);
             \draw[tn phys leg] (itpAz.north) -- ++(0,0.86);
             \TN@opdotleft{itpZ}{(1.15,0.46)}{Z}
-            \draw[tn leg, rounded corners=3pt]
+            \draw[tn virtual closure]
             (itpWz.west) -- ++(-0.35,0) -- (-0.62,-0.80)
             -- (1.72,-0.80) -- (1.72,0) -- (itpAz.east);
             \node at (0.55,-1.03) {$\tr$};
@@ -2358,9 +2364,9 @@
             \TN@opdotabove{bijPXi}{(2.95,0)}{X^{-1}}
             \draw[tn leg] (bijPX.west) -- ++(-0.50,0);
             \draw[tn leg] (bijPXi.east) -- ++(0.50,0);
-            \draw[tn leg, rounded corners=3pt]
+            \draw[tn virtual closure]
             (bijPX.east) -- (1.05,0) -- (1.05,1.00) -- (1.35,1.00);
-            \draw[tn leg, rounded corners=3pt]
+            \draw[tn virtual closure]
             (bijPXi.west) -- (2.45,0) -- (2.45,1.00) -- (2.15,1.00);
             \draw[tn leg] (1.75,1.50) -- (1.75,-1.10);
             \draw[tn leg] (0,-1.10) -- (3.50,-1.10);
@@ -2386,9 +2392,9 @@
         \TN@tensordot{irI}{(0,0)}
         \TN@tensordot{irB}{(0,-1.05)}
         \draw[tn phys leg] (irT.north) -- ++(0,0.45);
-        \draw[tn leg, rounded corners=3pt]
+        \draw[tn virtual closure]
         (irI.west) -- ++(-0.74,0) -- (-0.82,1.05) -- (irT.west);
-        \draw[tn leg, rounded corners=3pt]
+        \draw[tn virtual closure]
         (irI.east) -- ++(0.74,0) -- (0.82,1.05) -- (irT.east);
         \draw[tn phys leg] (irI.south) -- (irB.north);
         \TN@leftleg{irB}{0.60}
@@ -2758,7 +2764,7 @@
         \end{scope}
         \node at (2.70,0.70) {$\rightsquigarrow$};
         \begin{scope}[xshift=3.75cm,yshift=0.70cm]
-            \draw[tn leg] (0.20,0) rectangle (4.00,-0.46);
+            \draw[tn virtual closure] (0.20,0) rectangle (4.00,-0.46);
             \TN@tensordot{blkL}{(0.80,0)}
             \TN@tensordot{blkM}{(2.10,0)}
             \TN@tensordot{blkR}{(3.40,0)}
@@ -3032,7 +3038,7 @@
 }
 
 \newcommand{\pepsBlockedNormalChain}{%
-    \draw[tn leg] (0.50,0) rectangle (3.50,-0.46);
+    \draw[tn virtual closure] (0.50,0) rectangle (3.50,-0.46);
     \draw[line width=0.6mm, green!65!black] (1.00,0) -- (2.00,0);
     \foreach \x/\c/\lab in {1/red/A_1,2/blue/A_2,3/black/A_3} {
             \TN@tensordot{normalBlock\x}{(\x,0)}
@@ -3540,12 +3546,12 @@
                 }
         }
         \foreach \y in {0,1,2} {
-            \draw[tn leg, densely dashed, ->] (tg2\y.east) -- ++(0.5,0);
-            \draw[tn leg, densely dashed, ->] (tg0\y.west) -- ++(-0.5,0);
+            \draw[tn periodic identification] (tg2\y.east) -- ++(0.5,0);
+            \draw[tn periodic identification] (tg0\y.west) -- ++(-0.5,0);
         }
         \foreach \x in {0,1,2} {
-            \draw[tn leg, densely dashed, ->] (tg\x2.north) -- ++(0,0.5);
-            \draw[tn leg, densely dashed, ->] (tg\x0.south) -- ++(0,-0.5);
+            \draw[tn periodic identification] (tg\x2.north) -- ++(0,0.5);
+            \draw[tn periodic identification] (tg\x0.south) -- ++(0,-0.5);
         }
         \node at (1,-1.15) {\scriptsize rows and columns identified modulo $n,m$};
     \end{tikzpicture}%
@@ -3600,8 +3606,8 @@
 % (the loop on the right), leaving the channel output T(rho) on the system legs.
 \newcommand{\TNStinespring}{%
     \begin{tikzpicture}[tn picture]
-        \node[draw, fill=white, inner sep=1.4pt] (sV) at (0,0.5) {$V$};
-        \node[draw, fill=white, inner sep=1.4pt] (sVd) at (0,-0.5) {$V^\dagger$};
+        \node[tn map box] (sV) at (0,0.5) {$V$};
+        \node[tn map box] (sVd) at (0,-0.5) {$V^\dagger$};
         \node at (-1.05,0) {$\rho$};
         \draw[tn leg] (-0.8,0.16) -- (sV.west);
         \draw[tn leg] (-0.8,-0.16) -- (sVd.west);
@@ -3637,10 +3643,10 @@
 % sigma_i supplies the output matrix legs.
 \newcommand{\TNTransferMapTracePairing}{%
     \begin{tikzpicture}[tn picture]
-        \node[draw, fill=white, inner sep=1.4pt] (tpRho) at (-1.55,0) {$\rho$};
-        \node[draw, fill=white, inner sep=1.4pt] (tpSigJ) at (-0.48,0) {$\sigma_j$};
-        \node[draw, fill=white, inner sep=1.4pt] (tpT) at (0.82,0) {$t_{ij}$};
-        \node[draw, fill=white, inner sep=1.4pt] (tpSigI) at (2.12,0) {$\sigma_i$};
+        \node[tn tensor box] (tpRho) at (-1.55,0) {$\rho$};
+        \node[tn tensor box] (tpSigJ) at (-0.48,0) {$\sigma_j$};
+        \node[tn tensor box] (tpT) at (0.82,0) {$t_{ij}$};
+        \node[tn tensor box] (tpSigI) at (2.12,0) {$\sigma_i$};
         \draw[tn leg] (tpRho.north east) -- (tpSigJ.north west);
         \draw[tn leg] (tpRho.south east) -- (tpSigJ.south west);
         \draw[tn leg] (tpSigJ.north east)
@@ -3662,9 +3668,9 @@
 % of the transfer map E_A, insert Y, and close the line by the trace.
 \newcommand{\TNTwoPointCorrelator}{%
     \begin{tikzpicture}[tn picture]
-        \node[draw, fill=white, inner sep=1.6pt] (coR) at (0,0) {$\rho^R$};
+        \node[tn tensor box, inner sep=1.6pt] (coR) at (0,0) {$\rho^R$};
         \TN@opdot{coX}{(1.05,0)}
-        \node[draw, fill=white, inner sep=2pt] (coE) at (2.3,0) {$\E_A^n$};
+        \node[tn map box] (coE) at (2.3,0) {$\E_A^n$};
         \TN@opdot{coY}{(3.55,0)}
         \draw[tn leg] (coR.east) -- (coX.west);
         \draw[tn leg] (coX.east) -- (coE.west);
