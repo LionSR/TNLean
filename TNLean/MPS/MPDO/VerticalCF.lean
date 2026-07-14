@@ -107,9 +107,13 @@ letterwise reconstruction. `TNLean.MPS.MPDO.VerticalBNT` groups these corners
 into representatives while retaining their physical isometries, and
 `TNLean.MPS.MPDO.SectorTrace` proves positivity of every grouped coefficient.
 The relative Gram algebra is formalized in
-`TNLean.MPS.CanonicalForm.NormalCommutant`.  What remains open is the reflected
-marked-chain form of Lemma L needed to apply it to the grouped data, followed
-by the final coisometry assembly.
+`TNLean.MPS.CanonicalForm.NormalCommutant`; its application to the grouped
+sectors is carried out in `TNLean.MPS.MPDO.GroupedFigure8` and
+`TNLean.MPS.MPDO.GroupedGramNormalization`.  The normalized physical maps and
+the algebraic vertical BNT are constructed in
+`TNLean.MPS.MPDO.NormalizedGroupedSectors` and
+`TNLean.MPS.MPDO.VerticalBNTConstruction`.  Their final coisometry assembly is
+proved in `TNLean.MPS.MPDO.VerticalCanonicalForm`.
 
 ## Module location
 
@@ -665,11 +669,7 @@ theorem sameMPV₂_toTensorFromBlocks_verticalAssembledTensor_of_equiv
           ∑ q : Fin (∑ α : Fin g, mult α), dim ((finSigmaFinEquiv.symm q).1)
         exact (Equiv.sum_comp finSigmaFinEquiv.symm (fun p ↦ dim p.1)).symm
 
--- The implication `verticalCF_of_horizontalCF` (arXiv:1606.00608,
--- Proposition 4.13) — every MPDO in horizontal canonical form is in vertical
--- canonical form — is tracked by the blueprint entry
--- `thm:vertical_cf_of_horizontal_cf` (currently `\notready`) and will be added
--- as a theorem together with its proof once the horizontal-to-vertical
--- canonical-form argument has been formalized.
+-- The implication `verticalCF_of_horizontalCF` from arXiv:1606.00608,
+-- Proposition 4.13, is proved in `VerticalCanonicalForm.lean`.
 
 end MPOTensor

@@ -92,11 +92,12 @@ all-length condition remains only as a stronger conditional auxiliary
 statement and is not used by the source-faithful theorem.\footnote{Formal
 predicate: \leanid{MPOTensor.NoninvariantProjectorNoncommuting}.}
 
-The remaining work for Proposition~4.13 is the vertical canonical-form
-construction: applying the invariant-projector and no-periodic-vector
-criterion, producing the sector projectors and nonzero compressions, proving
-positivity of the vertical weights, deriving the dressed-adjoint identities,
-and assembling the physical-space isometry.
+The invariant-projector and no-periodic-vector criterion, the nonzero sector
+compressions, positivity of the vertical weights, the dressed-adjoint
+identities, and the physical-space coisometry are now combined in the proof of
+\path{MPOTensor.verticalCF_of_horizontalCF} in
+\path{TNLean/MPS/MPDO/VerticalCanonicalForm.lean}.  Thus the
+horizontal-to-vertical implication of Proposition~4.13 is complete.
 
 \paragraph{Verdict.} Local correction.
 

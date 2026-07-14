@@ -108,10 +108,11 @@ orientation of \eqref{eq:vertical-form}, together with
 \eqref{eq:reconstruction}. This is the source-faithful statement compatible
 with \eqref{eq:dimension-bound}: the retained part is represented
 rectangularly, while the omitted part is required to be zero. No full-support
-assumption is added to Proposition~4.13. The construction of the canonical
-form from horizontal canonical form remains open and is tracked in
-\ghissue{3674}; the present correction is tracked in \ghissue{3869} and
-concerns only its conclusion.
+assumption is added to Proposition~4.13.  The construction of the canonical
+form from horizontal canonical form is proved by
+\path{MPOTensor.verticalCF_of_horizontalCF} in
+\path{TNLean/MPS/MPDO/VerticalCanonicalForm.lean}.  It uses this corrected
+coisometry condition.  The correction itself is tracked in \ghissue{3869}.
 
 \paragraph{Verdict.}
 The earlier two-sided-unitary condition was a stronger statement absent from
