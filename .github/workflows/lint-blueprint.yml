@@ -11,6 +11,7 @@ on:
       - 'lake-manifest.json'
       - '.github/workflows/lint-blueprint.yml'
       - 'blueprint/src/**'
+      - 'docs/slides/**'
       - 'blueprint/.chktexrc'
       - 'blueprint/latexindent.yaml'
       - 'scripts/blueprint_bibtex.py'
@@ -25,6 +26,7 @@ on:
       - 'lake-manifest.json'
       - '.github/workflows/lint-blueprint.yml'
       - 'blueprint/src/**'
+      - 'docs/slides/**'
       - 'blueprint/.chktexrc'
       - 'blueprint/latexindent.yaml'
       - 'scripts/blueprint_bibtex.py'
@@ -100,6 +102,9 @@ jobs:
           PYTHONPATH=Packages python3 Packages/tn_diagrams.py \
             --check \
             --check-peps-usage \
+            --check-slides \
+            --audit \
+            --audit-strict \
             --smoke-render
 
       - name: Lint LaTeX (chktex)

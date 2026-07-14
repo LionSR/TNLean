@@ -49,24 +49,7 @@ B^i = X A^i X^{-1}
 
 \column{0.45\textwidth}
 \begin{center}
-\begin{tikzpicture}[scale=0.85]
-% Tensor nodes
-\foreach \x in {1,2,3,4,5} {
-  \node[rectangle,draw=white,fill=leangreen,minimum size=0.6cm] (A\x) at (\x*1.1,0) {\tiny $A$};
-  % Physical leg pointing upward
-  \draw[-,white,thick] (A\x.north) -- ++(0,0.4);
-  \node[above=0.45cm of A\x] {\small $i_{\x}$};
-}
-% Virtual bonds (horizontal, bond dimension D)
-\foreach \x in {1,2,3,4} {
-  \pgfmathtruncatemacro{\next}{\x+1}
-  \draw[-,white,thick] (A\x) -- (A\next);
-}
-% Trace boundary
-\draw[-,white,thick,dashed] (A1.west) -- ++(-0.25,0);
-\draw[-,white,thick,dashed] (A5.east) -- ++(0.25,0);
-\node[above] at (3*1.1,1.3) {\textcolor{white}{\textbf{Tensor Network}}};
-\end{tikzpicture}
+\SlideTNPeriodicMPS{A}{N}
 
 \vspace{1.5em}
 {\ttfamily\small

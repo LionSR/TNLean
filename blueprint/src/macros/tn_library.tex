@@ -1,0 +1,479 @@
+% Reusable tensor-network constructions.
+%
+% The commands in this file compose the semantic grammar from tn_core.tex into
+% standard local tensors, chains, closures, and finite patches.  They are
+% private building blocks for the chapter-facing diagrams in tn_print.tex.
+\input{macros/tn_core} % chktex 27 (job-dir-relative path)
+
+\makeatletter
+
+% ---------- Standard tensor-network sites ----------
+
+% An MPS tensor has west and east virtual ports and one north physical port.
+% The atom itself carries no open legs, so it may be composed without erasing
+% pre-drawn index lines.
+\newcommand{\TN@mpssite}[3]{%
+    \TN@tensor{#1}{#2}%
+    \TN@port{#1W}{#1}{west}%
+    \TN@port{#1E}{#1}{east}%
+    \TN@port{#1N}{#1}{north}%
+    \if\relax\detokenize{#3}\relax\else
+        \node at ($(#1.south)+(0,-0.28)$) {$#3$};%
+    \fi
+}
+
+% The corresponding standalone motif has named ports at all three free ends.
+\newcommand{\TN@mpssiteWithOpenLegs}[3]{%
+    \TN@mpssite{#1}{#2}{#3}%
+    \coordinate (#1WOpen) at ($(#1W)+(-0.60,0)$);%
+    \coordinate (#1EOpen) at ($(#1E)+(0.60,0)$);%
+    \coordinate (#1NOpen) at ($(#1N)+(0,0.46)$);%
+    \TN@vconnectports{#1W}{#1WOpen}%
+    \TN@vconnectports{#1E}{#1EOpen}%
+    \TN@pconnectports{#1N}{#1NOpen}%
+}
+
+% An MPO or MPDO tensor has west and east virtual ports and north and south
+% physical ports.
+\newcommand{\TN@mposite}[3]{%
+    \TN@tensor{#1}{#2}%
+    \TN@port{#1W}{#1}{west}%
+    \TN@port{#1E}{#1}{east}%
+    \TN@port{#1N}{#1}{north}%
+    \TN@port{#1S}{#1}{south}%
+    \if\relax\detokenize{#3}\relax\else
+        \node[anchor=west] at ($(#1.south east)+(0.12,-0.18)$) {$#3$};%
+    \fi
+}
+
+% The standalone MPO/MPDO motif has named ports at all four free ends.
+\newcommand{\TN@mpositeWithOpenLegs}[3]{%
+    \TN@mposite{#1}{#2}{#3}%
+    \coordinate (#1WOpen) at ($(#1W)+(-0.60,0)$);%
+    \coordinate (#1EOpen) at ($(#1E)+(0.60,0)$);%
+    \coordinate (#1NOpen) at ($(#1N)+(0,0.46)$);%
+    \coordinate (#1SOpen) at ($(#1S)+(0,-0.46)$);%
+    \TN@vconnectports{#1W}{#1WOpen}%
+    \TN@vconnectports{#1E}{#1EOpen}%
+    \TN@pconnectports{#1N}{#1NOpen}%
+    \TN@pconnectports{#1S}{#1SOpen}%
+}
+
+% A PEPS vertex carries a north-east physical index.  Lattice-specific virtual
+% indices are added separately, so the physical index never replaces a virtual
+% north port.
+\newcommand{\TN@pepsvertex}[3]{%
+    \TN@tensor{#1}{#2}%
+    \TN@pleg{#1}{45}{0.38,0.38}%
+    \if\relax\detokenize{#3}\relax\else
+        \node[anchor=north east] at ($(#1.south west)+(-0.10,-0.10)$) {$#3$};%
+    \fi
+}
+
+% A square-lattice PEPS tensor has four cardinal virtual indices in addition
+% to the north-east physical index.  Its five named boundary ports form the
+% compositional interface; the base atom has no fixed open stubs.
+\newcommand{\TN@pepssite}[3]{%
+    \TN@tensor{#1}{#2}%
+    \TN@port{#1W}{#1}{west}%
+    \TN@port{#1E}{#1}{east}%
+    \TN@port{#1N}{#1}{north}%
+    \TN@port{#1S}{#1}{south}%
+    \TN@port{#1P}{#1}{45}%
+    \if\relax\detokenize{#3}\relax\else
+        \node[anchor=north east] at ($(#1.south west)+(-0.10,-0.10)$) {$#3$};%
+    \fi
+}
+
+% The standalone square-lattice site has named ports at all five free ends.
+\newcommand{\TN@pepssiteWithOpenLegs}[3]{%
+    \TN@pepssite{#1}{#2}{#3}%
+    \coordinate (#1WOpen) at ($(#1W)+(-0.58,0)$);%
+    \coordinate (#1EOpen) at ($(#1E)+(0.58,0)$);%
+    \coordinate (#1NOpen) at ($(#1N)+(0,0.58)$);%
+    \coordinate (#1SOpen) at ($(#1S)+(0,-0.58)$);%
+    \coordinate (#1POpen) at ($(#1P)+(0.38,0.38)$);%
+    \TN@vconnectports{#1W}{#1WOpen}%
+    \TN@vconnectports{#1E}{#1EOpen}%
+    \TN@vconnectports{#1N}{#1NOpen}%
+    \TN@vconnectports{#1S}{#1SOpen}%
+    \TN@pconnectports{#1P}{#1POpen}%
+}
+
+% A doubled local tensor with its physical index contracted between the two
+% layers.  The prefix names the upper and lower tensor nodes.
+\newcommand{\TN@doublelayer}[3]{%
+    \TN@tensor{#1U}{#2}%
+    \TN@tensor{#1D}{#3}%
+    \TN@port{#1UW}{#1U}{west}%
+    \TN@port{#1UE}{#1U}{east}%
+    \TN@port{#1US}{#1U}{south}%
+    \TN@port{#1DW}{#1D}{west}%
+    \TN@port{#1DE}{#1D}{east}%
+    \TN@port{#1DN}{#1D}{north}%
+    \TN@pconnectports{#1US}{#1DN}%
+}
+
+% The standalone doubled layer exposes named ports at its four virtual ends.
+\newcommand{\TN@doublelayerWithOpenLegs}[3]{%
+    \TN@doublelayer{#1}{#2}{#3}%
+    \coordinate (#1UWOpen) at ($(#1UW)+(-0.60,0)$);%
+    \coordinate (#1UEOpen) at ($(#1UE)+(0.60,0)$);%
+    \coordinate (#1DWOpen) at ($(#1DW)+(-0.60,0)$);%
+    \coordinate (#1DEOpen) at ($(#1DE)+(0.60,0)$);%
+    \TN@vconnectports{#1UW}{#1UWOpen}%
+    \TN@vconnectports{#1UE}{#1UEOpen}%
+    \TN@vconnectports{#1DW}{#1DWOpen}%
+    \TN@vconnectports{#1DE}{#1DEOpen}%
+}
+
+% Two displayed tensor-product factors.  Tensor product is written explicitly;
+% it is never represented by an index line.
+\newcommand{\TN@factorpair}[5]{%
+    \TN@factor{#1L}{#2}{#4}%
+    \TN@factor{#1R}{#3}{#5}%
+    \node at ($(#1L.center)!0.5!(#1R.center)$) {$\otimes$};%
+}
+
+% ---------- Oriented fusion maps ----------
+
+% A left-to-right fusion map with one trunk and two ordered branches.  The
+% atom retains the semantic rounded blue map glyph; its interface is named by
+% role rather than by absolute coordinates.  Top and Bottom are available for
+% additional physical indices when the same map participates in a larger
+% contraction.
+\newcommand{\TN@splitmap}[4][]{%
+    \TN@map[#1]{#2}{#3}{#4}%
+    \TN@port{#2Mid}{#2}{west}%
+    \TN@port{#2Up}{#2}{north east}%
+    \TN@port{#2Down}{#2}{south east}%
+    \TN@port{#2Top}{#2}{north}%
+    \TN@port{#2Bottom}{#2}{south}%
+}
+
+% The mirror image of \TN@splitmap: two ordered branches merge into one
+% trunk.  The port names have the same mathematical roles in both
+% orientations, so a split and a merge may be interchanged without exposing
+% TikZ anchors to the surrounding construction.
+\newcommand{\TN@mergemap}[4][]{%
+    \TN@map[#1]{#2}{#3}{#4}%
+    \TN@port{#2Mid}{#2}{east}%
+    \TN@port{#2Up}{#2}{north west}%
+    \TN@port{#2Down}{#2}{south west}%
+    \TN@port{#2Top}{#2}{north}%
+    \TN@port{#2Bottom}{#2}{south}%
+}
+
+% ---------- One-dimensional words and closures ----------
+
+% A one-dimensional tensor atom carries named boundary ports.  The centre port
+% is used only to place labels; every index line starts or ends at a boundary
+% port.
+\newcommand{\TN@declareWordTensor}[2]{%
+    \TN@tensor{#1}{#2}
+    \TN@port{#1W}{#1}{west}
+    \TN@port{#1E}{#1}{east}
+    \TN@port{#1N}{#1}{north}
+    \TN@port{#1S}{#1}{south}
+    \TN@port{#1C}{#1}{center}%
+}
+
+\newcommand{\TN@openMPSword}[4]{%
+    \TN@declareWordTensor{#1L}{(0,0)}
+    \TN@declareWordTensor{#1M}{(\TN@chainsep,0)}
+    \TN@declareWordTensor{#1R}{(\TN@chainright,0)}
+    \TN@popenport{#1LN}{0,\TN@physleglen}
+    \TN@popenport{#1MN}{0,\TN@physleglen}
+    \TN@popenport{#1RN}{0,\TN@physleglen}
+    \TN@label{#1LN}{(0,\TN@physlabeloff)}{#2}
+    \TN@label{#1RN}{(0,\TN@physlabeloff)}{#3}
+    \TN@vopenport{#1LW}{-0.8,0}
+    \TN@vconnectports{#1LE}{#1MW}
+    \TN@vopenport{#1ME}{0.62,0}
+    \TN@vopenport{#1RW}{-0.62,0}
+    \TN@vopenport{#1RE}{0.8,0}
+    \node at (\TN@chainellipsisx,0) {$\cdots$};
+    \node at (\TN@chainellipsisx,-0.56) {$#4$};%
+}
+
+\newcommand{\TN@blockedMPSword}[3]{%
+    \TN@declareWordTensor{#1L}{(0,0)}
+    \TN@declareWordTensor{#1M}{(\TN@chainsep,0)}
+    \TN@declareWordTensor{#1R}{(\TN@chainright,0)}
+    \TN@popenport{#1LN}{0,\TN@physleglen}
+    \TN@popenport{#1MN}{0,\TN@physleglen}
+    \TN@popenport{#1RN}{0,\TN@physleglen}
+    \TN@label{#1LN}{(0,\TN@physlabeloff)}{#2}
+    \TN@label{#1RN}{(0,\TN@physlabeloff)}{#3}
+    \TN@vconnectports{#1LE}{#1MW}
+    \TN@vopenport{#1ME}{0.62,0}
+    \TN@vopenport{#1RW}{-0.62,0}
+    \TN@vtraceportsbelow{#1LW}{#1RE}{0.42}{0.44}
+    \node at (\TN@chainellipsisx,0) {$\cdots$};%
+}
+
+\newcommand{\TN@openMPOword}[6]{%
+    \TN@declareWordTensor{#1L}{(0,0)}
+    \TN@declareWordTensor{#1M}{(\TN@chainsep,0)}
+    \TN@declareWordTensor{#1R}{(\TN@chainright,0)}
+    \TN@popenport{#1LN}{0,\TN@physleglen}
+    \TN@popenport{#1LS}{0,-\TN@physleglen}
+    \TN@popenport{#1MN}{0,\TN@physleglen}
+    \TN@popenport{#1MS}{0,-\TN@physleglen}
+    \TN@popenport{#1RN}{0,\TN@physleglen}
+    \TN@popenport{#1RS}{0,-\TN@physleglen}
+    \TN@label{#1LN}{(0,\TN@physlabeloff)}{#2}
+    \TN@label{#1LS}{(0,-\TN@physlabeloff)}{#3}
+    \TN@label{#1RN}{(0,\TN@physlabeloff)}{#4}
+    \TN@label{#1RS}{(0,-\TN@physlabeloff)}{#5}
+    \TN@vopenport{#1LW}{-0.8,0}
+    \TN@vconnectports{#1LE}{#1MW}
+    \TN@vopenport{#1ME}{0.62,0}
+    \TN@vopenport{#1RW}{-0.62,0}
+    \TN@vopenport{#1RE}{0.8,0}
+    \node at (\TN@chainellipsisx,0) {$\cdots$};
+    \node at (\TN@chainellipsisx,-1.02) {$#6$};%
+}
+
+% Trace-closed MPO word with open ket and bra indices.
+\newcommand{\TN@closedMPOword}[1]{%
+    \TN@declareWordTensor{#1L}{(0,0)}
+    \TN@declareWordTensor{#1M}{(1.15,0)}
+    \TN@declareWordTensor{#1R}{(3.05,0)}
+    \TN@popenport{#1LN}{0,0.46}
+    \TN@popenport{#1LS}{0,-0.46}
+    \TN@popenport{#1MN}{0,0.46}
+    \TN@popenport{#1MS}{0,-0.46}
+    \TN@popenport{#1RN}{0,0.46}
+    \TN@popenport{#1RS}{0,-0.46}
+    \TN@vconnectports{#1LE}{#1MW}
+    \TN@vopenport{#1ME}{0.50,0}
+    \TN@vopenport{#1RW}{-0.50,0}
+    \node at (2.10,0) {$\cdots$};
+    \TN@vtraceportsbelow{#1LW}{#1RE}{0.42}{0.92}%
+}
+
+% MPO site with the ket and bra indices closed by a physical trace.
+\newcommand{\TN@tracedMPOSite}[2]{%
+    \TN@declareWordTensor{#1}{#2}
+    \TN@vopenport{#1W}{-0.60,0}
+    \TN@vopenport{#1E}{0.60,0}
+    \TN@ptracepath{(#1N) |- ($(#1C)+(0.42,0.52)$)
+        -- ($(#1C)+(0.42,-0.52)$) -| (#1S)}%
+}
+
+% ---------- Repeated finite constructions ----------
+
+\newcommand{\TN@declareThreeSiteChain}[4]{%
+    \TN@declareWordTensor{#1one}{(1.00,0)}
+    \TN@declareWordTensor{#1two}{(2.00,0)}
+    \TN@declareWordTensor{#1three}{(3.00,0)}
+    \TN@label{#1oneS}{(0,-0.30)}{#2}
+    \TN@label{#1twoS}{(0,-0.30)}{#3}
+    \TN@label{#1threeS}{(0,-0.30)}{#4}%
+}
+
+\newcommand{\TN@connectThreeSiteChain}[1]{%
+    \TN@vconnectports{#1oneE}{#1twoW}
+    \TN@vconnectports{#1twoE}{#1threeW}%
+}
+
+\newcommand{\TN@closeThreeSiteChain}[1]{%
+    \TN@vtracepath{(#1oneW) -- (0.40,0) -- (0.40,-0.46)
+        -- (3.50,-0.46) -- (3.50,0) -- (#1threeE)}%
+}
+
+\newcommand{\TN@openThreeSitePhysicalPorts}[1]{%
+    \TN@popenport{#1oneN}{0,0.46}
+    \TN@popenport{#1twoN}{0,0.46}
+    \TN@popenport{#1threeN}{0,0.46}%
+}
+
+\newcommand{\TN@boxedThreeSiteChain}[4]{%
+    \TN@declareThreeSiteChain{#1}{#2}{#3}{#4}
+    \TN@connectThreeSiteChain{#1}
+    \TN@closeThreeSiteChain{#1}
+    \TN@openThreeSitePhysicalPorts{#1}%
+}
+
+\newcommand{\TN@boxedThreeSiteInsertion}[5]{%
+    \TN@declareThreeSiteChain{#1}{#2}{#3}{#4}
+    \TN@insertion[label=above:$#5$]{#1X}{(1.50,0)}
+    \TN@port{#1XW}{#1X}{west}
+    \TN@port{#1XE}{#1X}{east}
+    \TN@vconnectports{#1oneE}{#1XW}
+    \TN@vconnectports{#1XE}{#1twoW}
+    \TN@vconnectports{#1twoE}{#1threeW}
+    \TN@closeThreeSiteChain{#1}
+    \TN@openThreeSitePhysicalPorts{#1}%
+}
+
+\newcommand{\TN@boxedThreeSitePhysicalOne}[5]{%
+    \TN@declareThreeSiteChain{#1}{#2}{#3}{#4}
+    \TN@insertion[label=left:$#5$]{#1O}{(1.00,0.72)}
+    \TN@port{#1ON}{#1O}{north}
+    \TN@port{#1OS}{#1O}{south}
+    \TN@connectThreeSiteChain{#1}
+    \TN@closeThreeSiteChain{#1}
+    \TN@pconnectports{#1oneN}{#1OS}
+    \TN@popenport{#1ON}{0,0.36}
+    \TN@popenport{#1twoN}{0,0.46}
+    \TN@popenport{#1threeN}{0,0.46}%
+}
+
+\newcommand{\TN@boxedThreeSitePhysicalTwo}[5]{%
+    \TN@declareThreeSiteChain{#1}{#2}{#3}{#4}
+    \TN@insertion[label=left:$#5$]{#1O}{(2.00,0.72)}
+    \TN@port{#1ON}{#1O}{north}
+    \TN@port{#1OS}{#1O}{south}
+    \TN@connectThreeSiteChain{#1}
+    \TN@closeThreeSiteChain{#1}
+    \TN@popenport{#1oneN}{0,0.46}
+    \TN@pconnectports{#1twoN}{#1OS}
+    \TN@popenport{#1ON}{0,0.36}
+    \TN@popenport{#1threeN}{0,0.46}%
+}
+
+\newcommand{\TN@pepsFiveSitePatch}[1]{%
+    \TN@pepsvertex{#1one}{(0,0)}{}
+    \TN@pepsvertex{#1two}{(1.00,0)}{}
+    \TN@pepsvertex{#1three}{(1.50,1.00)}{}
+    \TN@pepsvertex{#1four}{(0.60,1.50)}{}
+    \TN@pepsvertex{#1five}{(-0.60,1.50)}{}
+    \TN@vconnect{#1one}{east}{#1two}{west}
+    \TN@vconnect{#1two}{63}{#1three}{243}
+    \TN@vconnect{#1three}{151}{#1four}{331}
+    \TN@vconnect{#1four}{west}{#1five}{east}
+    \TN@vconnect{#1five}{292}{#1one}{112}
+    \TN@vconnect{#1two}{137}{#1five}{317}%
+}
+
+\newcommand{\TN@pepsFiveSitePatchLabels}[6]{%
+    \node at ($(#1one.south)+(0,-0.25)$) {$#2$};
+    \node at ($(#1two.south)+(0,-0.25)$) {$#3$};
+    \node at ($(#1three.south)+(0,-0.25)$) {$#4$};
+    \node at ($(#1four.south)+(0,-0.25)$) {$#5$};
+    \node at ($(#1five.south)+(0,-0.25)$) {$#6$};%
+}
+
+\newcommand{\TN@twoInjectiveInsertionPair}[4]{%
+    \TN@tensor{#1one}{(0,0)}
+    \TN@tensor{#1two}{(2.50,0)}
+    \TN@pleg{#1one}{north}{0,0.42}
+    \TN@pleg{#1two}{north}{0,0.42}
+    \TN@insertion[label=above:$#4$]{#1X}{(1.25,0.45)}
+    \TN@vconnectcurve{#1one}{30}{30}{180}{#1X}{west}
+    \TN@vconnectcurve{#1X}{east}{0}{150}{#1two}{150}
+    \TN@vconnectbendright{#1one}{-8}{12}{#1two}{188}
+    \TN@vconnectbendright{#1one}{-28}{38}{#1two}{208}
+    \node at (1.25,-0.08) {$\vdots$};
+    \node at ($(#1one.south)+(0,-0.30)$) {$#2$};
+    \node at ($(#1two.south)+(0,-0.30)$) {$#3$};%
+}
+
+\newcommand{\TN@threeLegTensorFan}[2]{%
+    \TN@tensor{#1}{(0,0)}
+    \TN@pleg{#1}{north}{0,0.42}
+    \TN@vleg{#1}{31}{0.64,0.38}
+    \TN@vleg{#1}{-4}{0.67,-0.04}
+    \TN@vleg{#1}{-40}{0.54,-0.46}
+    \node at ($(#1.south)+(0,-0.30)$) {$#2$};%
+}
+
+\newcommand{\TN@normalPepsGridLines}{%
+    \TN@vpath[step=0.5]{(-1,-1) grid (4,4)}%
+}
+
+\newcommand{\TN@normalPepsGridDots}{%
+    \foreach \x in {0,0.5,1,1.5,2,2.5,3} {
+            \foreach \y in {0,0.5,1,1.5,2,2.5,3} {
+                    \TN@anonymoustensor{(\x,\y)}
+                }
+        }%
+}
+
+\newcommand{\TN@normalPepsGrid}{%
+    \TN@normalPepsGridLines
+    \TN@normalPepsGridDots
+}
+
+% ---------- Normal-PEPS regions ----------
+
+\newcommand{\TN@pepsNormalSquareLattice}{%
+    \TN@normalPepsGrid%
+}
+
+\newcommand{\TN@pepsNormalSquareLatticeLines}{%
+    \TN@normalPepsGridLines%
+}
+
+\newcommand{\TN@pepsNormalSquareLatticeDots}{%
+    \TN@normalPepsGridDots%
+}
+
+\newcommand{\TN@pepsNormalRegionR}{%
+    \path[tn region selected]
+    (0.3,1.3) -- (1.2,1.3) -- (1.2,1.8) -- (1.7,1.8) --
+    (1.7,2.7) -- (0.3,2.7) -- cycle;
+    \node[tn region label selected] at (0.75,2.0) {$R$};%
+}
+
+\newcommand{\TN@pepsNormalRegionS}{%
+    \path[tn region selected] (0.3,1.3) rectangle (1.7,2.7);
+    \node[tn region label selected] at (1.00,2.00) {$S$};%
+}
+
+\newcommand{\TN@pepsNormalRegionT}{%
+    \path[tn region selected, even odd rule]
+    (0.3,2.7) -- (1.2,2.7) -- (1.2,1.7) -- (2.7,1.7) --
+    (2.7,0.8) -- (1.3,0.8) -- (1.3,1.3) -- (0.3,1.3) -- cycle
+    (-0.25,0.25) rectangle (3.25,3.25);
+    \node[tn region label selected] at (2.0,2.3) {$T$};%
+}
+
+\newcommand{\TN@pepsNormalSingleSiteDifference}{%
+    \node[tn vertex distinguished, minimum size=0.32cm, inner sep=0pt]
+        at (1.5,1.5) {\scriptsize $v$};%
+}
+
+\newcommand{\TN@pepsNormalDistinguishedEdge}{%
+    \TN@vpath[tn edge distinguished]{(1,1.5) -- (1.5,1.5)}%
+}
+
+\newcommand{\TN@pepsNormalSelectedBlock}{%
+    \path[tn region selected] (0.3,1.3) rectangle (1.2,2.7);%
+}
+
+\newcommand{\TN@pepsNormalSecondaryBlock}{%
+    \path[tn region secondary] (1.3,1.7) rectangle (2.7,0.8);%
+}
+
+\newcommand{\TN@pepsNormalComplementBlock}{%
+    \path[tn region complement, even odd rule]
+    (-0.15,-0.15) rectangle (3.15,3.15)
+    (0.3,1.3) rectangle (1.2,2.7)
+    (1.3,0.8) rectangle (2.7,1.7);
+    \node[tn region label complement] at (2.38,2.45) {$A_3$};%
+}
+
+\newcommand{\TN@pepsNormalCollar}{%
+    \path[tn region collar] (0.3,2.55) rectangle (1.7,3.18);
+    \path[tn region collar] (1.3,2.55) rectangle (2.7,3.18);
+    \node[tn region label collar] at (1.50,2.88) {top collar};%
+}
+
+\newcommand{\TN@pepsBlockedNormalChain}{%
+    \TN@vpath[tn factor region]{(0.50,0) rectangle (3.50,-0.46)}
+    \TN@vpath[tn edge distinguished]{(1.00,0) -- (2.00,0)}
+    \foreach \x/\lab in {1/A_1,2/A_2,3/A_3} {
+            \TN@tensor{normalBlock\x}{(\x,0)}
+            \TN@pleg{normalBlock\x}{north}{0,0.46}
+            \node at ($(normalBlock\x.south)+(0,-0.30)$) {$\lab$};
+        }%
+}
+
+\newcommand{\TN@pepsSquareTensor}[2]{%
+    \TN@pepssiteWithOpenLegs{#1}{#2}{}%
+}
+
+\makeatother

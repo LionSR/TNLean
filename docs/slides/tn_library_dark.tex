@@ -1,0 +1,216 @@
+% Tensor-network diagrams for the independent TNLean slide collection.
+%
+% This file mirrors the mathematical graphical conventions of the blueprint
+% in a dark theme, but it has no dependency on blueprint sources.  Every
+% contracted index begins and ends at a named node anchor; an open index has
+% one named anchor and one deliberately free endpoint.  Dashed strokes are
+% reserved for grouping regions; contractions and trace closures are solid.
+
+\tikzset{
+  slidetn/picture/.style={transform shape, font=\scriptsize},
+  slidetn/tensor/.style={
+    circle, draw=white, fill=black, minimum size=6.5mm,
+    inner sep=1.5pt, text=white, thick, font=\scriptsize\bfseries
+  },
+  slidetn/component/.style={
+    rectangle, draw=dimwhite, fill=cardbg, minimum height=7mm,
+    inner sep=2pt, text=white, thick, font=\scriptsize\bfseries
+  },
+  slidetn/map/.style={
+    rectangle, rounded corners=2pt, draw=leanblue, fill=cardbg,
+    inner sep=2pt, text=white, thick, font=\scriptsize\bfseries
+  },
+  slidetn/state/.style={
+    rectangle, rounded corners=2pt, draw=dimwhite, fill=black!55,
+    inner sep=2pt, text=white, thick, font=\scriptsize\bfseries
+  },
+  slidetn/insertion/.style={
+    circle, draw=white, fill=softred, minimum size=5.5mm,
+    inner sep=1pt, text=black, thick, font=\scriptsize\bfseries
+  },
+  slidetn/virtual wire/.style={draw=white, line width=0.8pt},
+  slidetn/physical wire/.style={draw=leangreen!80!white, line width=1.2pt},
+  slidetn/trace/.style={slidetn/virtual wire, rounded corners=3pt},
+  slidetn/grouping/.style={draw=dimwhite, densely dashed, rounded corners=2pt},
+  slidetn/label/.style={text=dimwhite, font=\scriptsize}
+}
+
+\newcommand{\SlideTNTensor}[3]{%
+  \node[slidetn/tensor] (#1) at #2 {$#3$};%
+}
+
+\newcommand{\SlideTNComponent}[3]{%
+  \node[slidetn/component] (#1) at #2 {$#3$};%
+}
+
+\newcommand{\SlideTNState}[3]{%
+  \node[slidetn/state] (#1) at #2 {$#3$};%
+}
+
+\newcommand{\SlideTNInsertion}[3]{%
+  \node[slidetn/insertion] (#1) at #2 {$#3$};%
+}
+
+\newcommand{\SlideTNPhysicalLeg}[2]{%
+  \draw[slidetn/physical wire] (#1.north) -- ++(0,0.48);%
+  \if\relax\detokenize{#2}\relax\else
+    \node[above, slidetn/label] at ($(#1.north)+(0,0.48)$) {$#2$};%
+  \fi
+}
+
+\newcommand{\SlideTNVirtualBond}[2]{%
+  \draw[slidetn/virtual wire] (#1.east) -- (#2.west);%
+}
+
+\newcommand{\SlideTNOpenLeft}[1]{%
+  \draw[slidetn/virtual wire] (#1.west) -- ++(-0.48,0);%
+}
+
+\newcommand{\SlideTNOpenRight}[1]{%
+  \draw[slidetn/virtual wire] (#1.east) -- ++(0.48,0);%
+}
+
+\newcommand{\SlideTNOmittedChain}[2]{%
+  \draw[slidetn/virtual wire] (#1.east) -- ++(0.38,0);%
+  \draw[slidetn/virtual wire] (#2.west) -- ++(-0.38,0);%
+  \node[text=dimwhite] at ($(#1.east)!0.5!(#2.west)$) {$\cdots$};%
+}
+
+\newcommand{\SlideTNTraceClosure}[3]{%
+  \draw[slidetn/trace] (#1.west) -- ++(-0.42,0) -- ++(0,-#3)
+    -| ($(#2.east)+(0.42,0)$) -- (#2.east);%
+}
+
+% A common periodic MPS word.  Omitted sites are denoted by two open solid
+% stubs and an ellipsis, never by a dashed contraction.
+\newcommand{\SlideTNPeriodicMPS}[2]{%
+  \begin{tikzpicture}[slidetn/picture]
+    \SlideTNTensor{sltnAone}{(0,0)}{#1}
+    \SlideTNTensor{sltnAtwo}{(1.30,0)}{#1}
+    \SlideTNTensor{sltnApen}{(3.25,0)}{#1}
+    \SlideTNTensor{sltnAlast}{(4.55,0)}{#1}
+    \SlideTNVirtualBond{sltnAone}{sltnAtwo}
+    \SlideTNOmittedChain{sltnAtwo}{sltnApen}
+    \SlideTNVirtualBond{sltnApen}{sltnAlast}
+    \SlideTNPhysicalLeg{sltnAone}{i_1}
+    \SlideTNPhysicalLeg{sltnAtwo}{i_2}
+    \SlideTNPhysicalLeg{sltnApen}{i_{#2-1}}
+    \SlideTNPhysicalLeg{sltnAlast}{i_{#2}}
+    \SlideTNTraceClosure{sltnAone}{sltnAlast}{0.78}
+    \node[slidetn/label] at (2.28,-1.02) {trace; bond dimension $D$};
+  \end{tikzpicture}%
+}
+
+% The left-hand tensor is B, matching B^i = X A^i X^{-1}.
+\newcommand{\SlideTNGaugeConjugation}[3]{%
+  \begin{tikzpicture}[slidetn/picture]
+    \SlideTNTensor{sltnB}{(0,0)}{#1}
+    \SlideTNOpenLeft{sltnB}
+    \SlideTNOpenRight{sltnB}
+    \SlideTNPhysicalLeg{sltnB}{i}
+    \node[text=white, font=\Large] at (1.35,0) {$=$};
+    \SlideTNInsertion{sltnX}{(2.35,0)}{#3}
+    \SlideTNTensor{sltnA}{(3.55,0)}{#2}
+    \SlideTNInsertion{sltnXi}{(4.80,0)}{#3^{-1}}
+    \SlideTNOpenLeft{sltnX}
+    \SlideTNVirtualBond{sltnX}{sltnA}
+    \SlideTNVirtualBond{sltnA}{sltnXi}
+    \SlideTNOpenRight{sltnXi}
+    \SlideTNPhysicalLeg{sltnA}{i}
+  \end{tikzpicture}%
+}
+
+\newcommand{\SlideTNBlockingIdentity}[3]{%
+  \begin{tikzpicture}[slidetn/picture, scale=0.82]
+    \SlideTNComponent{sltnC}{(0,0)}{#1}
+    \SlideTNOpenLeft{sltnC}
+    \SlideTNOpenRight{sltnC}
+    \SlideTNPhysicalLeg{sltnC}{(i_1,\ldots,i_{#3})}
+    \node[text=white, font=\Large] at (1.25,0) {$=$};
+    \SlideTNTensor{sltnBone}{(2.10,0)}{#2}
+    \SlideTNTensor{sltnBtwo}{(3.25,0)}{#2}
+    \SlideTNTensor{sltnBlast}{(5.15,0)}{#2}
+    \SlideTNOpenLeft{sltnBone}
+    \SlideTNVirtualBond{sltnBone}{sltnBtwo}
+    \SlideTNOmittedChain{sltnBtwo}{sltnBlast}
+    \SlideTNOpenRight{sltnBlast}
+    \SlideTNPhysicalLeg{sltnBone}{i_1}
+    \SlideTNPhysicalLeg{sltnBtwo}{i_2}
+    \SlideTNPhysicalLeg{sltnBlast}{i_{#3}}
+    \draw[decorate, decoration={brace, mirror, amplitude=4pt}, dimwhite, thick]
+      (1.72,-0.58) -- (5.55,-0.58)
+      node[midway, below=5pt, slidetn/label] {$#3$ copies};
+  \end{tikzpicture}%
+}
+
+\newcommand{\SlideTNMixedTransfer}[4]{%
+  \begin{tikzpicture}[slidetn/picture]
+    \SlideTNState{sltnRho}{(-1.15,0)}{#3}
+    \foreach \name/\x in {One/0,Two/1.30,Pen/3.25,Last/4.55} {
+      \SlideTNTensor{sltnTop\name}{(\x,0.72)}{#1}
+    }
+    \foreach \name/\x in {One/0,Two/1.30,Pen/3.25,Last/4.55} {
+      \SlideTNTensor{sltnBot\name}{(\x,-0.72)}{#2^\dagger}
+    }
+    \draw[slidetn/virtual wire] (sltnRho.north east) -- (sltnTopOne.west);
+    \draw[slidetn/virtual wire] (sltnRho.south east) -- (sltnBotOne.west);
+    \SlideTNVirtualBond{sltnTopOne}{sltnTopTwo}
+    \SlideTNVirtualBond{sltnBotOne}{sltnBotTwo}
+    \SlideTNOmittedChain{sltnTopTwo}{sltnTopPen}
+    \SlideTNOmittedChain{sltnBotTwo}{sltnBotPen}
+    \SlideTNVirtualBond{sltnTopPen}{sltnTopLast}
+    \SlideTNVirtualBond{sltnBotPen}{sltnBotLast}
+    \SlideTNOpenRight{sltnTopLast}
+    \SlideTNOpenRight{sltnBotLast}
+    \foreach \name in {One,Two,Pen,Last} {
+      \draw[slidetn/physical wire] (sltnTop\name.south) -- (sltnBot\name.north);
+    }
+    \node[slidetn/label, anchor=west] at (5.35,0) {$\mathcal F^{#4}_{#1,#2}(#3)$};
+  \end{tikzpicture}%
+}
+
+\newcommand{\SlideTNTransferMap}[2]{%
+  \begin{tikzpicture}[slidetn/picture]
+    \SlideTNState{sltnInput}{(-1.55,0)}{#2}
+    \SlideTNTensor{sltnKet}{(0,0.72)}{#1}
+    \SlideTNTensor{sltnBra}{(0,-0.72)}{\overline{#1}}
+    \draw[slidetn/virtual wire] (sltnInput.north east) -- (sltnKet.west);
+    \draw[slidetn/virtual wire] (sltnInput.south east) -- (sltnBra.west);
+    \draw[slidetn/physical wire] (sltnKet.south) -- (sltnBra.north)
+      node[midway, right, slidetn/label] {$\sum_i$};
+    \SlideTNOpenRight{sltnKet}
+    \SlideTNOpenRight{sltnBra}
+    \node[slidetn/label, anchor=west] at (0.95,0) {$\mathcal E_{#1}(#2)$};
+  \end{tikzpicture}%
+}
+
+\newcommand{\SlideTNBlockingComparison}[2]{%
+  \begin{tikzpicture}[slidetn/picture, scale=0.82]
+    \node[slidetn/label, anchor=east] at (-0.55,0.75) {chain of $N$:};
+    \foreach \x/\name in {0/One,0.85/Two,1.70/Three,4.05/Pen,4.90/Last} {
+      \SlideTNTensor{sltnP\name}{(\x,0.75)}{#1}
+      \SlideTNPhysicalLeg{sltnP\name}{}
+    }
+    \SlideTNVirtualBond{sltnPOne}{sltnPTwo}
+    \SlideTNVirtualBond{sltnPTwo}{sltnPThree}
+    \SlideTNOmittedChain{sltnPThree}{sltnPPen}
+    \SlideTNVirtualBond{sltnPPen}{sltnPLast}
+    \SlideTNOpenLeft{sltnPOne}
+    \SlideTNOpenRight{sltnPLast}
+    \node[slidetn/label, anchor=east] at (-0.55,-0.85) {after blocking $#2$:};
+    \SlideTNComponent{sltnBlockOne}{(0.65,-0.85)}{#1^{(#2)}}
+    \SlideTNComponent{sltnBlockTwo}{(2.45,-0.85)}{#1^{(#2)}}
+    \SlideTNComponent{sltnBlockLast}{(4.25,-0.85)}{#1^{(#2)}}
+    \SlideTNVirtualBond{sltnBlockOne}{sltnBlockTwo}
+    \SlideTNVirtualBond{sltnBlockTwo}{sltnBlockLast}
+    \SlideTNOpenLeft{sltnBlockOne}
+    \SlideTNOpenRight{sltnBlockLast}
+    \SlideTNPhysicalLeg{sltnBlockOne}{}
+    \SlideTNPhysicalLeg{sltnBlockTwo}{}
+    \SlideTNPhysicalLeg{sltnBlockLast}{}
+    \draw[slidetn/grouping] (-0.20,0.30) -- (-0.20,-0.35);
+    \draw[slidetn/grouping] (1.55,0.30) -- (1.55,-0.35);
+    \draw[slidetn/grouping] (3.65,0.30) -- (3.65,-0.35);
+    \draw[slidetn/grouping] (5.30,0.30) -- (5.30,-0.35);
+  \end{tikzpicture}%
+}

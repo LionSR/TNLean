@@ -48,47 +48,10 @@ $B^i = X A^i X^{-1}$ with $X\in\GLC(D,\mathbb{C})$ leaves \emph{every} coefficie
 
 \column{0.43\textwidth}
 \begin{center}
-\begin{tikzpicture}[scale=0.82]
-\foreach \x in {1,2,3,4,5} {
-  \node[rectangle,draw=white,fill=leangreen,minimum size=0.6cm,
-        font=\small\bfseries] (A\x) at (\x*1.1,0) {$A$};
-  \draw[-,white,thick] (A\x.north) -- ++(0,0.55);
-  \node[above=0.58cm of A\x,font=\small] {$i_{\x}$};
-}
-\foreach \x in {1,2,3,4} {
-  \pgfmathtruncatemacro{\next}{\x+1}
-  \draw[-,white,thick] (A\x.east) -- (A\next.west);
-}
-\draw[-,white,thick,densely dashed] (A1.west) -- ++(-0.5,0)
-  node[left,font=\tiny] {tr};
-\draw[-,white,thick,densely dashed] (A5.east) -- ++(0.5,0);
-\draw[-,white,thick,densely dashed,rounded corners]
-  ([xshift=-0.5cm]A1.west) -- ++(0,-0.7) -- ++(6.5,0) -- ++(0,0.7);
-\node[font=\footnotesize\bfseries,white] at (3.3,-1.2) {bond dimension $D$};
-\end{tikzpicture}
+\SlideTNPeriodicMPS{A}{N}
 
 \vspace{1.5em}
-\begin{tikzpicture}[scale=0.82]
-\node[rectangle,draw=white,fill=leangreen,minimum size=0.6cm,
-      font=\small\bfseries] (Ai) at (0,0) {$A$};
-\draw[-,white,thick] (Ai.north) -- ++(0,0.5);
-\node[above=0.55cm of Ai,font=\small] {$i$};
-\draw[-,white,thick] (Ai.west) -- ++(-0.5,0);
-\draw[-,white,thick] (Ai.east) -- ++(0.5,0);
-\node[font=\Large,white] at (2,0) {$=$};
-\node[circle,draw=white,fill=amber!80!black,minimum size=0.55cm,
-      font=\scriptsize\bfseries,text=black] (X) at (3,0) {$X$};
-\node[rectangle,draw=white,fill=leangreen,minimum size=0.6cm,
-      font=\small\bfseries] (A2) at (4.2,0) {$A$};
-\node[circle,draw=white,fill=amber!80!black,minimum size=0.55cm,
-      font=\scriptsize\bfseries,text=black] (Xi) at (5.4,0) {$X^{\!-\!1}$};
-\draw[-,white,thick] (A2.north) -- ++(0,0.5);
-\node[above=0.55cm of A2,font=\small] {$i$};
-\draw[-,white,thick] (X.west) -- ++(-0.5,0);
-\draw[-,white,thick] (X.east) -- (A2.west);
-\draw[-,white,thick] (A2.east) -- (Xi.west);
-\draw[-,white,thick] (Xi.east) -- ++(0.5,0);
-\end{tikzpicture}
+\SlideTNGaugeConjugation{B}{A}{X}
 \end{center}
 \end{columns}
 \end{frame}

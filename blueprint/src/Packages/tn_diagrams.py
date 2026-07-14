@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import json
 import logging
 import os
 import posixpath
@@ -33,9 +34,79 @@ _SVG_SUBDIR = "tn_svg"
 _RENDER_SOURCE_FILES = (
     _SRC_DIR / "macros/common.tex",
     _SRC_DIR / "macros/tn_core.tex",
+    _SRC_DIR / "macros/tn_library.tex",
     _SRC_DIR / "macros/tn_print.tex",
 )
 _TEMPLATE_FILE = _SRC_DIR / "plastex_templates/TensorNetworkDiagrams.jinja2s"
+_SLIDE_DIR = _SRC_DIR.parents[1] / "docs/slides"
+_SLIDE_LIBRARY = _SLIDE_DIR / "tn_library_dark.tex"
+
+_EXPECTED_SLIDE_DIAGRAM_CALLS = {
+    "SlideTNPeriodicMPS": 7,
+    "SlideTNGaugeConjugation": 2,
+    "SlideTNBlockingIdentity": 1,
+    "SlideTNBlockingComparison": 1,
+    "SlideTNMixedTransfer": 1,
+    "SlideTNTransferMap": 1,
+}
+
+_PUBLIC_MACRO_PATTERN = re.compile(
+    r"^\\newcommand\{\\(TN(?!@)\w+)\}(?:\[(\d+)\])?", re.MULTILINE
+)
+_LITERAL_COORDINATE_PATTERN = re.compile(
+    r"(?<![A-Za-z])\((-?\d+(?:\.\d+)?(?:cm)?),"
+    r"(-?\d+(?:\.\d+)?(?:cm)?)\)"
+)
+_RAW_GLYPH_PATTERNS = {
+    "filled circles": re.compile(r"\\fill(?:\[[^\]]*\])?[^;\n]*\bcircle\b"),
+    "circle nodes": re.compile(
+        r"\\node\[[^\]]*(?<![A-Za-z])circle(?:\s|,|\])"
+    ),
+    "styled glyph nodes": re.compile(
+        r"\\node\[[^\]]*(?<![A-Za-z])tn (?:tensor node|insertion node|"
+        r"component node|factor node|"
+        r"map node|tensor dot|operator dot|tensor box|map box)\b"
+    ),
+    "legacy glyph commands": re.compile(
+        r"\\TN@(?:tensordot|opdot(?:above|below|left|right)?|subspinbox)\b"
+    ),
+}
+_RAW_WIRE_PATTERN = re.compile(
+    r"\\draw\s*\[[^\]]*(?<![A-Za-z])tn(?:\s|/)[^\]]*\]"
+)
+_LEGACY_WIRE_COMMAND_PATTERN = re.compile(
+    r"\\TN@(?:leftleg|rightleg|upleg|downleg|subspinlink)\b"
+)
+_SEMANTIC_GLYPH_COMMANDS = frozenset(
+    {
+        "TN@component",
+        "TN@factor",
+        "TN@insertion",
+        "TN@junction",
+        "TN@map",
+        "TN@mposite",
+        "TN@mpssite",
+        "TN@pepssite",
+        "TN@pepsvertex",
+        "TN@scalar",
+        "TN@state",
+        "TN@subspinbox",
+        "TN@tensor",
+        "TN@threeLegTensorFan",
+    }
+)
+_GENERAL_WIRE_COMMANDS = frozenset(
+    {"TN@ppath", "TN@ptracepath", "TN@vpath", "TN@vtracepath"}
+)
+_POINT_CONNECTOR_COMMANDS = frozenset(
+    {"TN@connectpoints", "TN@pconnectpoints", "TN@vconnectpoints"}
+)
+_TRACE_PATH_COMMANDS = frozenset({"TN@ptracepath", "TN@vtracepath"})
+_OFFSET_ANCHOR_POINT_PATTERN = re.compile(
+    r"\(\$\(\s*(?P<reference>[#A-Za-z\\][#A-Za-z0-9@_\\-]*\."
+    r"(?:north|south|east|west)(?:\s+(?:east|west))?)\s*\)\s*[+-][^$]*\$\)"
+)
+_SIMPLE_NODE_NAME_PATTERN = re.compile(r"[#A-Za-z\\][#A-Za-z0-9@_\\-]*\Z")
 
 
 _DIAGRAM_ARGS: dict[str, str] = {
@@ -114,12 +185,10 @@ _DIAGRAM_ARGS: dict[str, str] = {
     "TNCondCOne": "twist virtual label",
     "TNCondCTwo": "virtual",
     "TNStringOrderParameter": "twist length",
-    "TNVirtualInsertion": "left middle right virtual",
     "TNInternalTraceInsertion": "left right virtual",
     "TNExternalTraceInsertion": "left right virtual",
     "TNBoundaryRegrow": "virtual left right length",
     "TNLocalEqualityStep": "left_virtual right_virtual physical",
-    "TNPeriodicGauge": "left virtual right",
     "TNGroundSpaceMap": "tensor left right length virtual",
     "TNPEPSEdgeBlockingReduction": "",
     "TNPEPSEdgeInsertedCoeff": "",
@@ -187,11 +256,7 @@ def _sample_arg_value(name: str) -> str:
         "left_virtual": "X",
         "right_virtual": "Y",
         "rendered": "\\TNPEPSNormalRegionT",
-        "body": (
-            "\\begin{tikzpicture}[tn picture]"
-            "\\node[tn tensor dot] at (0,0) {};"
-            "\\end{tikzpicture}"
-        ),
+        "body": "\\TNMPSLocal{A}{i}",
     }
     return values.get(name, "x")
 
@@ -242,6 +307,571 @@ def _assert_diagram_templates_cover_registered_macros() -> None:
             "Tensor-network diagram HTML templates are out of sync with "
             f"registered macros (missing={missing}, stale={stale})."
         )
+
+
+def _source_line(path: Path, offset: int) -> str:
+    """Return a stable ``path:line`` description for a source offset."""
+
+    text = path.read_text(encoding="utf-8")
+    try:
+        relative = path.relative_to(_SRC_DIR)
+    except ValueError:
+        relative = path
+    return f"{relative}:{text.count(chr(10), 0, offset) + 1}"
+
+
+def _pattern_locations(path: Path, pattern: re.Pattern[str]) -> list[str]:
+    text = path.read_text(encoding="utf-8")
+    return [_source_line(path, match.start()) for match in pattern.finditer(text)]
+
+
+def _assert_no_chapter_local_tikz() -> None:
+    """Require chapter sources to use the public tensor-network vocabulary."""
+
+    forbidden = re.compile(
+        r"^[ \t]*(?:\\begin\{tikzpicture\}|\\tikzset\b|\\tikzstyle\b)",
+        re.MULTILINE,
+    )
+    violations = [
+        location
+        for path in sorted((_SRC_DIR / "chapter").glob("*.tex"))
+        for location in _pattern_locations(path, forbidden)
+    ]
+    if violations:
+        raise RuntimeError(
+            "Chapter-local tensor-network TikZ is forbidden; define a public "
+            "mathematical diagram command instead: " + ", ".join(violations)
+        )
+
+
+def _assert_slide_diagram_contract() -> None:
+    """Check the independent dark-theme tensor-network slide vocabulary."""
+
+    if not _SLIDE_LIBRARY.exists():
+        raise RuntimeError(f"Missing slide tensor-network library: {_SLIDE_LIBRARY}")
+
+    preamble = (_SLIDE_DIR / "preamble.tex").read_text(encoding="utf-8")
+    if r"\input{tn_library_dark}" not in preamble:
+        raise RuntimeError("The slide preamble must load tn_library_dark.tex.")
+
+    decks = sorted(_SLIDE_DIR.glob("presentation*.tex"))
+    deck_source = "\n".join(path.read_text(encoding="utf-8") for path in decks)
+    calls = re.findall(r"\\(SlideTN[A-Z]\w*)\b", deck_source)
+    counts = {name: calls.count(name) for name in sorted(set(calls))}
+    if counts != _EXPECTED_SLIDE_DIAGRAM_CALLS:
+        raise RuntimeError(
+            "Slide tensor-network diagram calls differ from the audited collection "
+            f"(actual={counts}, expected={_EXPECTED_SLIDE_DIAGRAM_CALLS})."
+        )
+
+    legacy_style = re.compile(
+        r"(?:^|[,{ ])(?:tn|bond|phys)/\.style|"
+        r"\\(?:node|draw)\[(?:tn|bond|phys)(?:,|\])",
+        re.MULTILINE,
+    )
+    violations = [
+        location
+        for path in decks
+        for location in _pattern_locations(path, legacy_style)
+    ]
+    if violations:
+        raise RuntimeError(
+            "Slide tensor networks must use the SlideTN vocabulary, not local "
+            "tn/bond/phys styles: " + ", ".join(violations)
+        )
+
+    library_source = _SLIDE_LIBRARY.read_text(encoding="utf-8")
+    dashed_contraction = re.compile(
+        r"\\draw\[(?:[^\]]*,)?slidetn/(?:virtual wire|physical wire|trace)"
+        r"[^\]]*(?:dashed|densely dashed)"
+    )
+    if dashed_contraction.search(library_source):
+        raise RuntimeError(
+            "A slide contraction or trace is dashed; dashed strokes are reserved "
+            "for grouping regions."
+        )
+
+    macro_pattern = re.compile(
+        r"^\\newcommand\{\\(SlideTN[A-Z]\w*)\}\[(\d+)\]", re.MULTILINE
+    )
+    matches = list(macro_pattern.finditer(library_source))
+    ignored: dict[str, list[int]] = {}
+    for index, match in enumerate(matches):
+        body_end = matches[index + 1].start() if index + 1 < len(matches) else len(
+            library_source
+        )
+        body = library_source[match.end() : body_end]
+        arity = int(match.group(2))
+        missing = [argument for argument in range(1, arity + 1) if f"#{argument}" not in body]
+        if missing:
+            ignored[match.group(1)] = missing
+    if ignored:
+        raise RuntimeError(f"Slide tensor-network macros ignore arguments: {ignored}")
+
+
+def _noncore_tikz_style_locations() -> list[str]:
+    """Locate style declarations that still need migration to ``tn_core.tex``."""
+
+    core_path = (_SRC_DIR / "macros/tn_core.tex").resolve()
+    forbidden = re.compile(r"^[ \t]*(?:\\tikzset\b|\\tikzstyle\b)", re.MULTILINE)
+    return [
+        location
+        for path in sorted(_SRC_DIR.rglob("*.tex"))
+        if path.resolve() != core_path
+        for location in _pattern_locations(path, forbidden)
+    ]
+
+
+def _public_macro_bodies(source: str) -> list[tuple[str, int, str]]:
+    matches = list(_PUBLIC_MACRO_PATTERN.finditer(source))
+    return [
+        (
+            match.group(1),
+            int(match.group(2) or 0),
+            source[match.end() : matches[index + 1].start()]
+            if index + 1 < len(matches)
+            else source[match.end() :],
+        )
+        for index, match in enumerate(matches)
+    ]
+
+
+def _skip_tex_space(source: str, offset: int) -> int:
+    """Skip TeX whitespace and comments beginning at ``offset``."""
+
+    while offset < len(source):
+        if source[offset].isspace():
+            offset += 1
+            continue
+        if source[offset] == "%":
+            newline = source.find("\n", offset)
+            return len(source) if newline < 0 else _skip_tex_space(source, newline + 1)
+        return offset
+    return offset
+
+
+def _tex_group(source: str, offset: int, opener: str, closer: str) -> tuple[str, int]:
+    """Read one balanced TeX group and return its contents and final offset."""
+
+    if offset >= len(source) or source[offset] != opener:
+        raise ValueError(f"expected {opener!r} at source offset {offset}")
+    depth = 0
+    for index in range(offset, len(source)):
+        escaped = index > 0 and source[index - 1] == "\\"
+        if source[index] == opener and not escaped:
+            depth += 1
+        elif source[index] == closer and not escaped:
+            depth -= 1
+            if depth == 0:
+                return source[offset + 1 : index], index + 1
+    raise ValueError(f"unterminated {opener!r} group at source offset {offset}")
+
+
+def _tex_command_calls(
+    source: str, command_names: frozenset[str]
+) -> list[tuple[str, list[str], int, str | None]]:
+    """Find calls to selected commands, including balanced mandatory arguments."""
+
+    if not command_names:
+        return []
+    alternatives = "|".join(re.escape(name) for name in sorted(command_names))
+    pattern = re.compile(r"\\(" + alternatives + r")(?=[^A-Za-z@]|\Z)")
+    calls: list[tuple[str, list[str], int, str | None]] = []
+    for match in pattern.finditer(source):
+        offset = _skip_tex_space(source, match.end())
+        option = None
+        if offset < len(source) and source[offset] == "[":
+            option, offset = _tex_group(source, offset, "[", "]")
+            offset = _skip_tex_space(source, offset)
+        arguments = []
+        while offset < len(source) and source[offset] == "{":
+            argument, offset = _tex_group(source, offset, "{", "}")
+            arguments.append(argument)
+            offset = _skip_tex_space(source, offset)
+        calls.append((match.group(1), arguments, match.start(), option))
+    return calls
+
+
+def _tex_macro_definitions(source: str) -> list[tuple[str, str, int]]:
+    """Return complete ``newcommand`` bodies with their source offsets."""
+
+    pattern = re.compile(
+        r"^\\newcommand\{\\(?P<name>[A-Za-z@]+)\}(?:\[\d+\])?",
+        re.MULTILINE,
+    )
+    definitions = []
+    for match in pattern.finditer(source):
+        offset = _skip_tex_space(source, match.end())
+        if offset >= len(source) or source[offset] != "{":
+            continue
+        body, body_end = _tex_group(source, offset, "{", "}")
+        definitions.append((match.group("name"), body, offset + 1))
+        if body_end <= offset:
+            raise AssertionError("balanced TeX group did not advance")
+    return definitions
+
+
+def _semantic_node_names(body: str) -> set[str]:
+    names = set()
+    for _, arguments, _, _ in _tex_command_calls(body, _SEMANTIC_GLYPH_COMMANDS):
+        if not arguments:
+            continue
+        name = arguments[0].strip()
+        if _SIMPLE_NODE_NAME_PATTERN.fullmatch(name):
+            names.add(name)
+    return names
+
+
+def _named_port_debt(path: Path, source: str) -> dict[str, list[dict[str, object]]]:
+    """Locate semantic wires that bypass the atomic named-port vocabulary.
+
+    Coordinate-only lattice edges and region boundaries remain legitimate
+    geometric paths.  Explicit anchors such as ``object.east`` and
+    ``object.30`` are exact boundary ports and remain valid for curved or
+    multi-segment contractions.  Debt consists of bare semantic nodes and of
+    endpoints obtained by shifting an anchor, endpoints at an object centre,
+    and traces whose endpoints are only numerical coordinates.  The same
+    exact-attachment condition applies to point connectors.
+    """
+
+    inexact_path_endpoints: list[dict[str, object]] = []
+    bare_node_connectors: list[dict[str, object]] = []
+    for macro_name, body, body_offset in _tex_macro_definitions(source):
+        semantic_names = _semantic_node_names(body)
+        for command, arguments, call_offset, option in _tex_command_calls(
+            body, _GENERAL_WIRE_COMMANDS
+        ):
+            if not arguments:
+                continue
+            if option and re.search(r"\btn (?:factor|grouping) region\b", option):
+                continue
+            path_body = arguments[0]
+            references = {
+                name
+                for name in semantic_names
+                if re.search(r"\(\s*" + re.escape(name) + r"\s*\)", path_body)
+            }
+            stripped_path = path_body.strip().removesuffix(";").rstrip()
+            references.update(
+                match.group("reference") + " (offset)"
+                for match in _OFFSET_ANCHOR_POINT_PATTERN.finditer(stripped_path)
+                if match.start() == 0 or match.end() == len(stripped_path)
+            )
+            references.update(
+                name + ".center"
+                for name in semantic_names
+                for match in re.finditer(
+                    r"\(\s*" + re.escape(name) + r"\.center\s*\)", stripped_path
+                )
+                if match.start() == 0 or match.end() == len(stripped_path)
+            )
+            if command in _TRACE_PATH_COMMANDS and not re.search(
+                r"\(\s*(?:\$\([^)]*\)\s*)?[#A-Za-z\\]", stripped_path
+            ):
+                references.add("coordinate-only trace")
+            if references:
+                inexact_path_endpoints.append(
+                    {
+                        "location": _source_line(path, body_offset + call_offset),
+                        "macro": macro_name,
+                        "command": command,
+                        "references": sorted(references),
+                    }
+                )
+
+        for command, arguments, call_offset, _ in _tex_command_calls(
+            body, _POINT_CONNECTOR_COMMANDS
+        ):
+            point_arguments = (
+                arguments[1:3] if command == "TN@connectpoints" else arguments[:2]
+            )
+            inexact_nodes = sorted(
+                stripped
+                for argument in point_arguments
+                if (stripped := argument.strip()) in semantic_names
+                or stripped in {name + ".center" for name in semantic_names}
+            )
+            if inexact_nodes:
+                bare_node_connectors.append(
+                    {
+                        "location": _source_line(path, body_offset + call_offset),
+                        "macro": macro_name,
+                        "command": command,
+                        "references": inexact_nodes,
+                    }
+                )
+
+    return {
+        "inexact_path_endpoints": inexact_path_endpoints,
+        "bare_node_point_connectors": bare_node_connectors,
+    }
+
+
+def _source_semantic_debt(path: Path, source: str) -> dict[str, object]:
+    raw_glyph_locations = {
+        name: [_source_line(path, match.start()) for match in pattern.finditer(source)]
+        for name, pattern in _RAW_GLYPH_PATTERNS.items()
+    }
+    direct_draw_locations = [
+        _source_line(path, match.start()) for match in _RAW_WIRE_PATTERN.finditer(source)
+    ]
+    legacy_wire_locations = [
+        _source_line(path, match.start())
+        for match in _LEGACY_WIRE_COMMAND_PATTERN.finditer(source)
+    ]
+    port_debt = _named_port_debt(path, source)
+    return {
+        "raw_glyph_locations": raw_glyph_locations,
+        "raw_glyph_count": sum(len(locations) for locations in raw_glyph_locations.values()),
+        "direct_tn_draw_locations": direct_draw_locations,
+        "legacy_wire_locations": legacy_wire_locations,
+        "raw_wire_count": len(direct_draw_locations) + len(legacy_wire_locations),
+        **port_debt,
+        "named_port_debt_count": sum(len(locations) for locations in port_debt.values()),
+    }
+
+
+def _semantic_audit_counts() -> dict[str, object]:
+    """Collect migration measures without assigning mathematical meaning to them."""
+
+    print_path = _SRC_DIR / "macros/tn_print.tex"
+    core_path = _SRC_DIR / "macros/tn_core.tex"
+    print_source = print_path.read_text(encoding="utf-8")
+    core_source = core_path.read_text(encoding="utf-8")
+    library_path = _SRC_DIR / "macros/tn_library.tex"
+    library_source = (
+        library_path.read_text(encoding="utf-8") if library_path.exists() else ""
+    )
+    private_source = core_source + "\n" + library_source
+    public_macros = _public_macro_bodies(print_source)
+    chapter_paths = sorted((_SRC_DIR / "chapter").glob("*.tex"))
+    chapter_sources = [path.read_text(encoding="utf-8") for path in chapter_paths]
+    chapter_source = "\n".join(chapter_sources)
+
+    chapter_calls = re.findall(r"\\(TN[A-Z]\w+)", chapter_source)
+    ignored_arguments = {
+        name: [index for index in range(1, arity + 1) if f"#{index}" not in body]
+        for name, arity, body in public_macros
+        if arity > 0 and name != "TNTikZDiagram"
+    }
+    ignored_arguments = {
+        name: indices for name, indices in ignored_arguments.items() if indices
+    }
+    unused_diagrams = sorted(
+        name
+        for name, _, _ in public_macros
+        if name != "TNTikZDiagram" and name not in chapter_calls
+    )
+
+    audited_sources = {
+        "macros/tn_print.tex": _source_semantic_debt(print_path, print_source),
+        "macros/tn_library.tex": _source_semantic_debt(library_path, library_source),
+    }
+    raw_glyph_counts = {
+        name: sum(
+            len(source_debt["raw_glyph_locations"][name])
+            for source_debt in audited_sources.values()
+        )
+        for name in _RAW_GLYPH_PATTERNS
+    }
+    direct_wire_commands = sum(
+        len(source_debt["direct_tn_draw_locations"])
+        for source_debt in audited_sources.values()
+    )
+    legacy_wire_commands = sum(
+        len(source_debt["legacy_wire_locations"])
+        for source_debt in audited_sources.values()
+    )
+    named_port_debt = sum(
+        int(source_debt["named_port_debt_count"])
+        for source_debt in audited_sources.values()
+    )
+    return {
+        "registered": len(_DIAGRAM_ARGS),
+        "public": len(public_macros),
+        "concrete": sum(r"\begin{tikzpicture}" in body for _, _, body in public_macros),
+        "zero_argument": sum(arity == 0 for _, arity, _ in public_macros),
+        "chapter_files": sum(
+            bool(re.search(r"\\TN[A-Z]\w+", source)) for source in chapter_sources
+        ),
+        "chapter_calls": len(chapter_calls),
+        "chapter_commands": len(set(chapter_calls)),
+        "private_commands": len(
+            re.findall(r"^\\newcommand\{\\TN@\w+\}", private_source, re.MULTILINE)
+        ),
+        "private_lengths": len(
+            re.findall(r"^\\def\\TN@\w+", private_source, re.MULTILINE)
+        ),
+        "core_styles": len(
+            re.findall(r"^\s*tn [^/]+?/\.style", core_source, re.MULTILINE)
+        ),
+        "literal_coordinates": len(_LITERAL_COORDINATE_PATTERN.findall(print_source)),
+        "draw_commands": len(re.findall(r"\\draw\b", print_source)),
+        "node_commands": len(re.findall(r"\\node\b", print_source)),
+        "raw_glyph_counts": raw_glyph_counts,
+        "direct_wire_commands": direct_wire_commands,
+        "legacy_wire_commands": legacy_wire_commands,
+        "raw_wire_commands": direct_wire_commands + legacy_wire_commands,
+        "named_port_debt": named_port_debt,
+        "audited_sources": audited_sources,
+        "noncore_style_locations": _noncore_tikz_style_locations(),
+        "ignored_arguments": ignored_arguments,
+        "unused_diagrams": unused_diagrams,
+    }
+
+
+def _format_ignored_arguments(ignored: dict[str, list[int]]) -> str:
+    return ", ".join(
+        f"{name}({','.join(f'#{index}' for index in indices)})"
+        for name, indices in sorted(ignored.items())
+    )
+
+
+def _debt_locations(
+    audited_sources: dict[str, object], categories: tuple[str, ...]
+) -> list[str]:
+    locations = []
+    for source_debt in audited_sources.values():
+        assert isinstance(source_debt, dict)
+        for category in categories:
+            records = source_debt[category]
+            assert isinstance(records, list)
+            for record in records:
+                if isinstance(record, str):
+                    locations.append(record)
+                else:
+                    assert isinstance(record, dict)
+                    locations.append(str(record["location"]))
+    return locations
+
+
+def _raw_glyph_locations(audited_sources: dict[str, object]) -> list[str]:
+    locations = []
+    for source_debt in audited_sources.values():
+        assert isinstance(source_debt, dict)
+        by_kind = source_debt["raw_glyph_locations"]
+        assert isinstance(by_kind, dict)
+        locations.extend(
+            location
+            for kind_locations in by_kind.values()
+            for location in kind_locations
+        )
+    return locations
+
+
+def _abbreviate_locations(locations: list[str], limit: int = 16) -> str:
+    visible = locations[:limit]
+    suffix = f", ... ({len(locations) - limit} more)" if len(locations) > limit else ""
+    return ", ".join(visible) + suffix
+
+
+def _run_semantic_audit(*, strict: bool, machine_readable: bool) -> None:
+    """Check stable invariants and report the remaining diagram migration debt."""
+
+    _assert_diagram_args_match_print_macros()
+    _assert_diagram_templates_cover_registered_macros()
+    _assert_no_chapter_local_tikz()
+
+    counts = _semantic_audit_counts()
+    raw_glyph_counts = counts["raw_glyph_counts"]
+    assert isinstance(raw_glyph_counts, dict)
+    ignored_arguments = counts["ignored_arguments"]
+    assert isinstance(ignored_arguments, dict)
+    unused_diagrams = counts["unused_diagrams"]
+    assert isinstance(unused_diagrams, list)
+    noncore_style_locations = counts["noncore_style_locations"]
+    assert isinstance(noncore_style_locations, list)
+    audited_sources = counts["audited_sources"]
+    assert isinstance(audited_sources, dict)
+
+    if machine_readable:
+        print(json.dumps(counts, indent=2, sort_keys=True))
+    else:
+        print(
+            "tensor-network semantic audit: "
+            f"{counts['concrete']} concrete diagrams, {counts['registered']} registrations, "
+            f"{counts['chapter_calls']} calls to {counts['chapter_commands']} commands in "
+            f"{counts['chapter_files']} chapter files"
+        )
+        print(
+            "tensor-network private vocabulary: "
+            f"{counts['core_styles']} styles, {counts['private_lengths']} lengths, "
+            f"{counts['private_commands']} drawing commands"
+        )
+        print(
+            "tensor-network migration measures: "
+            f"{counts['zero_argument']} zero-argument public commands, "
+            f"{counts['literal_coordinates']} literal coordinate pairs, "
+            f"{counts['draw_commands']} draw commands, {counts['node_commands']} node commands"
+        )
+        print(
+            "tensor-network raw aliases: "
+            + ", ".join(f"{name}={value}" for name, value in raw_glyph_counts.items())
+            + f", direct tn draw commands={counts['direct_wire_commands']}, "
+            + f"legacy wire commands={counts['legacy_wire_commands']}"
+        )
+        for source_name, source_debt in audited_sources.items():
+            assert isinstance(source_debt, dict)
+            print(
+                f"tensor-network structural debt in {source_name}: "
+                f"raw glyphs={source_debt['raw_glyph_count']}, "
+                f"raw wires={source_debt['raw_wire_count']}, "
+                f"named-port violations={source_debt['named_port_debt_count']}"
+            )
+        if noncore_style_locations:
+            print(
+                "tensor-network non-core style declarations: "
+                + ", ".join(noncore_style_locations)
+            )
+        print(
+            "tensor-network ignored public arguments: "
+            + (
+                _format_ignored_arguments(ignored_arguments)
+                if ignored_arguments
+                else "none"
+            )
+        )
+        if unused_diagrams:
+            print("tensor-network unused public diagrams: " + ", ".join(unused_diagrams))
+
+    if strict:
+        failures = []
+        if noncore_style_locations:
+            failures.append(
+                "TikZ styles outside macros/tn_core.tex at "
+                + _abbreviate_locations(noncore_style_locations)
+            )
+        raw_glyph_total = sum(raw_glyph_counts.values())
+        raw_wire_total = int(counts["raw_wire_commands"])
+        if raw_glyph_total or raw_wire_total:
+            raw_locations = _raw_glyph_locations(audited_sources) + _debt_locations(
+                audited_sources,
+                ("direct_tn_draw_locations", "legacy_wire_locations"),
+            )
+            failures.append(
+                "raw glyph aliases or tensor-network draws in macros/tn_print.tex "
+                "and macros/tn_library.tex "
+                f"(glyphs={raw_glyph_total}, wires={raw_wire_total}) at "
+                + _abbreviate_locations(raw_locations)
+            )
+        named_port_total = int(counts["named_port_debt"])
+        if named_port_total:
+            port_locations = _debt_locations(
+                audited_sources,
+                ("inexact_path_endpoints", "bare_node_point_connectors"),
+            )
+            failures.append(
+                "semantic contractions bypass the atomic named-port vocabulary "
+                f"({named_port_total} calls) at "
+                + _abbreviate_locations(port_locations)
+            )
+        if ignored_arguments:
+            failures.append(
+                "public tensor-network macros ignore declared arguments: "
+                + _format_ignored_arguments(ignored_arguments)
+            )
+        if failures:
+            raise RuntimeError("Strict tensor-network audit failed: " + "; ".join(failures))
 
 
 def _read_chapter_with_includes(path: Path, seen: set[Path] | None = None) -> str:
@@ -581,6 +1211,32 @@ def _main(argv: list[str] | None = None) -> int:
         help="check that public PEPS diagram macros are used in the PEPS chapter",
     )
     parser.add_argument(
+        "--check-slides",
+        action="store_true",
+        help="check the independent dark-theme tensor-network slide vocabulary",
+    )
+    parser.add_argument(
+        "--audit",
+        action="store_true",
+        help=(
+            "enforce stable tensor-network vocabulary invariants and report "
+            "remaining migration measures without failing on them"
+        ),
+    )
+    parser.add_argument(
+        "--audit-strict",
+        action="store_true",
+        help=(
+            "also reject non-core TikZ styles, raw glyph or wire aliases, and "
+            "semantic paths that bypass the atomic named-port vocabulary"
+        ),
+    )
+    parser.add_argument(
+        "--audit-json",
+        action="store_true",
+        help="emit the semantic audit measures as JSON (requires --audit)",
+    )
+    parser.add_argument(
         "--smoke-render",
         nargs="*",
         metavar="MACRO",
@@ -591,7 +1247,18 @@ def _main(argv: list[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
 
-    if not args.check and not args.check_peps_usage and args.smoke_render is None:
+    if args.audit_json and not args.audit:
+        parser.error("--audit-json requires --audit")
+    if args.audit_strict and not args.audit:
+        parser.error("--audit-strict requires --audit")
+
+    if (
+        not args.check
+        and not args.check_peps_usage
+        and not args.check_slides
+        and not args.audit
+        and args.smoke_render is None
+    ):
         parser.print_help()
         return 0
 
@@ -603,6 +1270,20 @@ def _main(argv: list[str] | None = None) -> int:
     if args.check_peps_usage:
         _assert_peps_macros_used_in_chapter()
         print("checked public PEPS diagram usage in the PEPS chapter")
+
+    if args.check_slides:
+        _assert_slide_diagram_contract()
+        slide_calls = sum(_EXPECTED_SLIDE_DIAGRAM_CALLS.values())
+        print(
+            f"checked {slide_calls} tensor-network diagrams in the independent "
+            "slide collection"
+        )
+
+    if args.audit:
+        _run_semantic_audit(
+            strict=args.audit_strict,
+            machine_readable=args.audit_json,
+        )
 
     if args.smoke_render is not None:
         names = args.smoke_render or list(_DIAGRAM_ARGS)

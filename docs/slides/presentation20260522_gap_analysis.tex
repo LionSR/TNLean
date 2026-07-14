@@ -691,36 +691,7 @@ Pi-tensors don't span product algebra \\
 
 \column{0.44\textwidth}
 \begin{center}
-\begin{tikzpicture}[scale=0.7]
-% Transfer operator tensor network:
-%   E_A(rho) = sum_i A^i rho (A^i)^dag
-%
-% Layout:  rho on left, A on top, A^dag on bottom
-% Physical index i contracted vertically between A and A^dag
-% Left virtual indices connect to rho
-% Right virtual indices are the output
-%
-\node[rectangle,draw=white,fill=leangreen!30!black,minimum size=0.6cm,
-  font=\scriptsize\bfseries] (A1) at (0,0) {$A$};
-\node[rectangle,draw=white,fill=leangreen!30!black,minimum size=0.6cm,
-  font=\scriptsize\bfseries] (A2) at (0,-1.8) {$\bar{A}$};
-\node[rectangle,draw=white,fill=amber!30!black,minimum size=0.6cm,
-  font=\scriptsize\bfseries] (rho) at (-1.8,-0.9) {$\rho$};
-% Left virtual: rho -> A (top) and rho -> A^dag (bottom)
-\draw[-,white,thick] (rho.north east) -- (A1.west);
-\draw[-,white,thick] (rho.south east) -- (A2.west);
-% Physical index i: contracted between A and A^dag
-\draw[-,white,thick] (A1.south) -- (A2.north);
-\node[font=\tiny,amber,right] at (0.05,-0.9) {$\scriptstyle\sum_i$};
-% Right virtual: output indices
-\draw[-,white,thick] (A1.east) -- ++(0.8,0);
-\draw[-,white,thick] (A2.east) -- ++(0.8,0);
-% Output brace
-\draw[decorate,decoration={brace,amplitude=3pt,mirror},white]
-  (1.0,0.1) -- (1.0,-1.9) node[midway,right=4pt,font=\tiny,white]{$\mathcal{E}_A(\rho)$};
-% Label
-\node[font=\scriptsize,white] at (-0.5,-3.0) {Transfer operator $\mathcal{E}_A$};
-\end{tikzpicture}
+\SlideTNTransferMap{A}{\rho}
 \end{center}
 \end{columns}
 

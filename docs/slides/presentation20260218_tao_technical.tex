@@ -74,41 +74,7 @@ Key references:~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix,Cirac2017Annals,Wol
         \column{0.46\textwidth}
         \begin{center}
             \vspace{0.2em}
-            % MPS Tensor Network Diagram
-            \begin{tikzpicture}[
-                    tn/.style={draw=leangreen, fill=cardbg, rounded corners=2pt,
-                            minimum size=7mm, thick, text=white, font=\small},
-                    bond/.style={thick, white},
-                    phys/.style={thick, leangreen!80!white}
-                ]
-                \node[tn] (A1) at (0,0) {$A$};
-                \node[tn] (A2) at (1.5,0) {$A$};
-                \node[tn] (A3) at (3.0,0) {$A$};
-                \node[tn] (A4) at (4.5,0) {$A$};
-
-                % physical indices (up)
-                \foreach \a in {A1,A2,A3,A4}
-                    \draw[phys] (\a.north) -- ++(0,0.55);
-
-                \node[font=\scriptsize, text=dimwhite] at (0, 0.85) {$i_1$};
-                \node[font=\scriptsize, text=dimwhite] at (1.5, 0.85) {$i_2$};
-                \node[font=\scriptsize, text=dimwhite] at (3.0, 0.85) {$i_3$};
-                \node[font=\scriptsize, text=dimwhite] at (4.5, 0.85) {$i_N$};
-
-                % bond indices (horizontal)
-                \draw[bond] (A1.east) -- (A2.west);
-                \draw[bond] (A2.east) -- (A3.west);
-                \draw[bond] (A3.east) -- (A4.west);
-
-                % bond dimension labels
-                \node[font=\tiny, text=dimwhite] at (0.75,0.25) {$D$};
-
-                % trace: curved line below connecting ends
-                \draw[dimwhite, thick, densely dashed]
-                (A1.west) -- ++(-0.25,0) -- ++(0,-0.55)
-                -- ($(A4.east)+(0.25,-0.55)$) -- ++(0,0.55) -- (A4.east);
-                \node[font=\tiny, text=amber] at (2.25,-0.7) {$\mathrm{tr}$};
-            \end{tikzpicture}
+            \SlideTNPeriodicMPS{A}{N}
 
             {\scriptsize\textcolor{dimwhite}{Tensor network for $\tr(A^{i_1}\!\cdots A^{i_N})$.\\
                     Physical indices $\uparrow$, virtual indices $\leftrightarrow$.}}
@@ -345,50 +311,7 @@ Key references:~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix,Cirac2017Annals,Wol
         \column{0.36\textwidth}
         \begin{center}
             \vspace{0.3em}
-            % Blocking: C = B ⊗ B ⊗ ... ⊗ B (TikZ replacement)
-            \begin{tikzpicture}[scale=0.78, every node/.style={scale=0.78},
-                    tn/.style={draw=white, fill=cardbg, rounded corners=1.5pt,
-                            minimum size=6.5mm, thick, text=white, font=\small},
-                    bond/.style={thick, white},
-                    phys/.style={thick, dimwhite}
-                ]
-                % Left side: blocked tensor C
-                \node[tn] (C) at (0,0) {$C$};
-                \draw[bond] (C.west) -- ++(-0.4,0);
-                \draw[bond] (C.east) -- ++(0.4,0);
-                \draw[phys] (C.north) -- ++(0,0.45);
-
-                % Equals
-                \node[text=white, font=\normalsize] at (1.1,0) {$=$};
-
-                % Right side: chain of B tensors
-                \node[tn, draw=leangreen, text=leangreen] (B1) at (2.0,0) {$B$};
-                \node[tn, draw=leangreen, text=leangreen] (B2) at (3.2,0) {$B$};
-                \node[tn, draw=leangreen, text=leangreen] (B3) at (4.4,0) {$B$};
-
-                % Bond connections
-                \draw[bond] (B1.west) -- ++(-0.35,0);
-                \draw[bond] (B1.east) -- (B2.west);
-                \draw[bond] (B2.east) -- (B3.west);
-                \draw[bond] (B3.east) -- ++(0.35,0);
-
-                % Physical indices
-                \draw[phys] (B1.north) -- ++(0,0.45);
-                \draw[phys] (B2.north) -- ++(0,0.45);
-                \draw[phys] (B3.north) -- ++(0,0.45);
-
-                % Ellipsis for more B's
-                \node[text=dimwhite, font=\small] at (5.1,0) {$\cdots$};
-                \node[tn, draw=leangreen, text=leangreen] (BL) at (5.8,0) {$B$};
-                \draw[bond] (BL.east) -- ++(0.35,0);
-                \draw[phys] (BL.north) -- ++(0,0.45);
-
-                % Brace underneath
-                \draw[decorate, decoration={brace, mirror, amplitude=4pt},
-                      dimwhite, thick]
-                    (1.6,-0.55) -- (6.25,-0.55)
-                    node[midway, below=5pt, font=\tiny, text=dimwhite] {$L$ copies};
-            \end{tikzpicture}
+            \SlideTNBlockingIdentity{C}{B}{L}
 
             \vspace{0.2em}
             {\scriptsize\textcolor{dimwhite}{Blocking: $C = B^{\otimes L}$.\\
@@ -876,48 +799,7 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
         \column{0.50\textwidth}
         \begin{center}
             \vspace{0.2em}
-            % Overlap sandwich: two MPS layers
-            \begin{tikzpicture}[
-                    tn/.style={draw=leangreen, fill=cardbg, rounded corners=2pt,
-                            minimum size=6mm, thick, text=white, font=\scriptsize},
-                    bn/.style={draw=leanblue, fill=cardbg, rounded corners=2pt,
-                            minimum size=6mm, thick, text=leanblue, font=\scriptsize},
-                    bond/.style={thick, white},
-                    phys/.style={thick, dimwhite},
-                    xnode/.style={draw=amber, fill=cardbg, rounded corners=2pt,
-                            minimum width=5mm, minimum height=5mm, thick,
-                            text=amber, font=\scriptsize}
-                ]
-                % Top row: A tensors
-                \foreach \i in {1,2,3} {
-                        \node[tn] (A\i) at ({(\i-1)*1.4}, 0.8) {$A$};
-                    }
-                % Bottom row: B^* tensors
-                \foreach \i in {1,2,3} {
-                        \node[bn] (B\i) at ({(\i-1)*1.4}, -0.8) {$B^\dagger$};
-                    }
-                % X in the middle-left
-                \node[xnode] (X) at (-1.1, 0) {$X$};
-
-                % Horizontal bonds (top)
-                \draw[bond] (X.north east) -- (A1.west);
-                \draw[bond] (A1.east) -- (A2.west);
-                \draw[bond] (A2.east) -- (A3.west);
-                \draw[bond] (A3.east) -- ++(0.3,0);
-                % Horizontal bonds (bottom)
-                \draw[bond] (X.south east) -- (B1.west);
-                \draw[bond] (B1.east) -- (B2.west);
-                \draw[bond] (B2.east) -- (B3.west);
-                \draw[bond] (B3.east) -- ++(0.3,0);
-                % Vertical contractions (physical indices)
-                \foreach \i in {1,2,3} {
-                        \draw[phys] (A\i.south) -- (B\i.north);
-                    }
-                % Labels
-                \node[font=\tiny, text=dimwhite] at (-1.1, 1.3) {};
-                \node[font=\tiny, text=amber] at (3.2, 0) {$\cF^N(X)$};
-                \node[font=\tiny, text=dimwhite] at (0.7, 0) {$\sum_i$};
-            \end{tikzpicture}
+            \SlideTNMixedTransfer{A}{B}{X}{N}
 
             {\scriptsize\textcolor{dimwhite}{Sandwich: $\cF^N_{A,B}(X)$.\\Top: $A$, bottom: $B^\dagger$, contract physical indices.}}
         \end{center}
