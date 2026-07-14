@@ -3019,37 +3019,13 @@
 
 \begin{theorem}[Horizontal canonical form implies vertical canonical form]
     \label{thm:vertical_cf_of_horizontal_cf}
-    \notready
+    \lean{MPOTensor.verticalCF_of_horizontalCF}
+    \leanok
     \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_tensor_mpdo,
-        def:vertical_cf_mpdo,
-        thm:mpdo_opposite_corner_zero,
-        thm:mpdo_first_site_invariant_comm,
-        thm:representative_one_sub_mp_zero,
-        thm:mpdo_vertical_no_periodic_vectors_horizontal_cf,
-        thm:mpdo_vertical_projector_closure,
-        thm:mpdo_vertical_irreducible_reducing_sectors,
-        thm:mpdo_vertical_complete_reducing_projectors,
-        thm:mpdo_vertical_normal_sectors_with_isometries,
-        thm:mpdo_vertical_bnt_grouping_with_isometries,
-        thm:mpdo_reflected_marked_chain,
-        thm:mpdo_pairwise_vertical_gram_conjugation,
-        thm:mpdo_grouped_sector_gram_conjugation,
-        thm:mpdo_grouped_sector_unitary_normalization,
-        thm:vertical_sector_coisometry,
-        lem:mpdo_vertical_retained_class_nonempty,
-        thm:projector_closure_canonical_form,
-        thm:mpdo_sector_compression_trace_pos,
-        def:mpdo_sector_projector,
-        thm:mpdo_sector_trace_identity,
-        thm:mpdo_sector_weight_pos,
-        thm:eq3_of_dressed_adjoint,
-        lem:mpv_diagonal_tensor,
-        lem:mpv_diagonal_tensor_eq_blocks, lem:mpv_diagonal_tensor_nonneg,
-        lem:mpv_vertical_assembled,
-        lem:vertical_grouping_equiv}
+        def:vertical_cf_mpdo}
     A tensor in horizontal canonical form that generates matrix product
     density operators is also in canonical form in the vertical direction:
-    there are a basis of normal tensors $\{M_\alpha\}_\alpha$ for the
+    there exist a basis of normal tensors $\{M_\alpha\}_\alpha$ for the
     vertically viewed tensor $\widetilde M$, positive diagonal matrices
     $\mu_\alpha$, and a coisometry $U$ from the physical space onto the
     retained nonzero sectors. Writing
@@ -3063,180 +3039,40 @@
 \end{theorem}
 
 \begin{proof}
-    \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_cf_mpdo, def:bnt,
-        thm:mpdo_opposite_corner_zero,
-        thm:mpdo_first_site_invariant_comm,
-        thm:representative_one_sub_mp_zero,
-        thm:mpdo_vertical_no_periodic_vectors_horizontal_cf,
-        thm:mpdo_vertical_projector_closure,
-        thm:mpdo_vertical_irreducible_reducing_sectors,
-        thm:mpdo_vertical_complete_reducing_projectors,
-        thm:mpdo_vertical_bnt_grouping_with_isometries,
-        thm:mpdo_reflected_marked_chain,
-        thm:mpdo_pairwise_vertical_gram_conjugation,
-        thm:mpdo_grouped_sector_gram_conjugation,
-        thm:mpdo_grouped_sector_unitary_normalization,
-        thm:vertical_sector_coisometry,
-        lem:mpdo_vertical_retained_class_nonempty,
-        thm:projector_closure_canonical_form,
-        thm:mpdo_sector_compression_trace_pos,
-        def:mpdo_sector_projector,
-        thm:mpdo_sector_trace_identity,
-        thm:mpdo_sector_weight_pos,
-        thm:eq3_of_dressed_adjoint,
-        thm:cpsv_normal_eventually_injective,
-        thm:gauge_invariance,
-        lem:mpv_diagonal_tensor,
-        lem:vertical_grouping_equiv, lem:mpv_zero_length}
-    Theorem~\ref{thm:representative_one_sub_mp_zero} shows
-    that every self-adjoint $P$ with $PM=PMP$ on the vertically viewed tensor
-    gives the literal equality $MP=PMP$ on the original MPO tensor, including
-    all its repeated sectors.  The paper takes $P$
-    to be an orthogonal projector; Hermiticity is the only part of that
-    assumption needed for this implication.
-    Theorem~\ref{thm:mpdo_vertical_no_periodic_vectors_horizontal_cf}
-    excludes nontrivial $p$-periodic vectors of the vertically viewed tensor
-    from the horizontal canonical-form and positivity hypotheses alone.
-    Theorem~\ref{thm:mpdo_vertical_projector_closure} proves that every
-    one-sided invariant orthogonal projection of $\widetilde M$ is reducing.
-    Theorem~\ref{thm:mpdo_vertical_irreducible_reducing_sectors} therefore
-    decomposes the physical space into complete orthogonal irreducible
-    reducing sectors, and
-    Theorem~\ref{thm:mpdo_vertical_complete_reducing_projectors} records their
-    commuting range projections. Theorem~\ref{thm:mpdo_vertical_normal_sectors_with_isometries}
-    removes the zero corners and spectrally normalizes the remaining corners
-    while retaining their physical isometries, both intertwining identities,
-    exact compression, and literal reconstruction of every vertical letter.
-    Theorem~\ref{thm:mpdo_vertical_bnt_grouping_with_isometries} groups the
-    resulting normal tensors.  Write $\nu_{\alpha,k}$ for the raw sector
-    weight, $\zeta_{\alpha,k}$ for the phase of its chosen representative,
-    and
-    \[
-        c_{\alpha,k}=\nu_{\alpha,k}\zeta_{\alpha,k}.
-    \]
-    The grouped decomposition is
-    \[
-        \widetilde M
-        =\bigoplus_{\alpha,k}c_{\alpha,k}
-        X_{\alpha,k}M_\alpha X_{\alpha,k}^{-1}
-    \]
-    carried by the physical space, with normal tensors $M_\alpha$ whose
-    letters remain indexed by the horizontal bond pairs.  These blocks are not
-    obtained by restricting the horizontal blocks to diagonal physical pairs,
-    as Theorem~\ref{thm:diagonal_restriction_not_normal} shows. It also
-    identifies the physical range projectors with the grouped sectors, proves
-    their loop identities, and finds a nonzero compression for each sector.
-    Positivity then gives $c_{\alpha,k}>0$:
-    Theorem~\ref{thm:mpdo_sector_compression_trace_pos} supplies the positive
-    traces of the nonzero sector compressions,
-    Theorem~\ref{thm:mpdo_sector_trace_identity} identifies each such trace
-    as $c_{\alpha,k}d_\alpha$, and
-    Theorem~\ref{thm:mpdo_sector_weight_pos} concludes $d_\alpha>0$ and
-    $c_{\alpha,k}>0$ from the normalization
-    $c_{\alpha,1}=\nu_{\alpha,1}>0$.  From now on write
-    $\mu_{\alpha,k}=c_{\alpha,k}$ for the positive coefficient in the
-    source decomposition.  Theorem~\ref{thm:mpdo_reflected_marked_chain}
-    proves the Figure~7 identity for each such sector, and
-    Theorem~\ref{thm:mpdo_grouped_sector_gram_conjugation} applies the
-    pairwise Gram comparison to the actual grouped corners and gives the
-    Gram-conjugation identity in Figure~8.
-    Theorem~\ref{thm:mpdo_grouped_sector_unitary_normalization} applies
-    normal-tensor rigidity to the actual grouped comparison and gives
-    \[
-        X_{\alpha,k}^\dagger X_{\alpha,k}
-        =\omega_{\alpha,k}\Id,
-    \]
-    and the unitary normalization
-    $U_{\alpha,k}=\omega_{\alpha,k}^{-1/2}X_{\alpha,k}$ of the sector gauges
-    using the grouped decomposition's distinguished gauge
-    $X_{\alpha,1}=\Id$.  This is the source's $U_{\alpha,k}$.
-    After identifying the bond space of each copy with that of its
-    representative, define
+    \leanok
+    \uses{thm:mpdo_vertical_bnt_grouping_with_isometries,
+        thm:mpdo_vertical_grouped_is_bnt,
+        thm:mpdo_normalized_grouped_sector_maps,
+        thm:vertical_cf_of_grouped_orthogonal_sectors}
+    Apply
+    Theorem~\ref{thm:mpdo_vertical_bnt_grouping_with_isometries} once and keep
+    its representatives $M_\alpha$, multiplicities $r_\alpha$, exact
+    positive weights $\mu_{\alpha,q}$, and physical sector maps.  For these
+    same witnesses,
+    Theorem~\ref{thm:mpdo_vertical_grouped_is_bnt} proves that
+    $\{M_\alpha\}_\alpha$ is a BNT for $\widetilde M$.
 
+    Theorem~\ref{thm:mpdo_normalized_grouped_sector_maps} absorbs each
+    normalized bond gauge into its physical map and gives maps
+    $W_{\alpha,q}$ such that
     \[
-        W_{\alpha,k}=V_{\alpha,k}U_{\alpha,k}.
+        W_{\alpha,q}^\dagger W_{\alpha,q}=\Id,\qquad
+        W_{\alpha,q}^\dagger W_{\beta,p}=0
+        \quad\text{if }(\alpha,q)\ne(\beta,p),
     \]
-
-    Since $V_{\alpha,k}$ is an isometry and $U_{\alpha,k}$ is unitary,
-
     \[
-        W_{\alpha,k}^\dagger W_{\alpha,k}=\Id,
-        \qquad
-        W_{\alpha,k}^\dagger W_{\beta,l}=0
-        \quad\text{if }(\alpha,k)\ne(\beta,l).
-    \]
-
-    The sector gauge relation and the literal reconstruction of
-    $\widetilde M$ become
-
-    \[
-        \widetilde M_vW_{\alpha,k}
-          =W_{\alpha,k}(\mu_{\alpha,k}M_\alpha^v),
+        \widetilde M_vW_{\alpha,q}
+          =W_{\alpha,q}(\mu_{\alpha,q}M_\alpha^v),
         \qquad
         \widetilde M_v
-          =\sum_{\alpha,k}
-            W_{\alpha,k}(\mu_{\alpha,k}M_\alpha^v)
-            W_{\alpha,k}^\dagger.
+          =\sum_\alpha\sum_q
+            W_{\alpha,q}(\mu_{\alpha,q}M_\alpha^v)
+            W_{\alpha,q}^\dagger.
     \]
-
-    Theorem~\ref{thm:vertical_sector_coisometry}, indexed by the dependent
-    pairs $(\alpha,k)$, therefore gives a coisometry $U$ such that
-
-    \[
-        U\widetilde MU^\dagger
-          =\bigoplus_{\alpha,k}\mu_{\alpha,k}M_\alpha,
-        \qquad
-        \widetilde M
-          =U^\dagger\!\left(
-              \bigoplus_{\alpha,k}\mu_{\alpha,k}M_\alpha
-            \right)U.
-    \]
-
-    The dependent disjoint union of the sector bond indices has its canonical
-    identification with the standard direct-sum coordinates.  Regrouping the
-    summands by $\alpha$ gives
-    $\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$ as in
-    Lemma~\ref{lem:vertical_grouping_equiv}.
-
-    The algebraic basis-of-normal-tensors clauses follow from the same
-    decomposition.  With the notation of the grouping theorem, its spectral
-    BNT property applies to the raw weighted tensor
-    \[
-        A_{\mathrm{ret}}
-        =\bigoplus_{\alpha,k}\nu_{\alpha,k}B_{\alpha,k}.
-    \]
-    Theorem~\ref{thm:cpsv_normal_eventually_injective} makes every
-    $M_\alpha$ algebraically normal.  Eventual linear independence is
-    unchanged because the representatives themselves are unchanged.
-
-    For the spanning clause, let
-    $\mathcal X=\bigoplus_{\alpha,k}X_{\alpha,k}$.  The gauge-phase identities
-    and $\mu_{\alpha,k}=c_{\alpha,k}=\nu_{\alpha,k}\zeta_{\alpha,k}$ give the
-    square block gauge
-    \[
-        A_{\mathrm{ret}}=\mathcal X B\mathcal X^{-1},
-        \qquad
-        B=\bigoplus_{\alpha,k}\mu_{\alpha,k}M_\alpha.
-    \]
-    Theorem~\ref{thm:gauge_invariance} therefore transfers the spectral BNT
-    spanning identity from $A_{\mathrm{ret}}$ to $B$.  For every nonempty
-    word $w=(v_1,\ldots,v_N)$, the coisometry and reconstruction identities
-    give
-    \[
-        \widetilde M^w=U^\dagger B^wU,
-        \qquad
-        \tr(\widetilde M^w)
-        =\tr(B^wUU^\dagger)=\tr(B^w).
-    \]
-    Thus the positive-length matrix product vectors of $\widetilde M$ lie in
-    the span of those of the $M_\alpha$.
-
-    The empty chain requires a separate argument because the bond dimensions
-    of $\widetilde M$ and $B$ may differ.  By
-    Lemma~\ref{lem:mpdo_vertical_retained_class_nonempty}, choose a retained
-    representative $M_{\alpha_0}$ with bond dimension $d_{\alpha_0}>0$.
-    Assign it the coefficient $d/d_{\alpha_0}$ and assign zero to every other
-    representative.  Lemma~\ref{lem:mpv_zero_length} then gives the
-    length-zero coefficient $d$ of $\widetilde M$.  Hence the spanning clause
-    holds at every length.
+    The canonical equivalence between the dependent disjoint union
+    $\coprod_\alpha\{0,\ldots,r_\alpha-1\}$ and its standard finite index
+    set reindexes the nested reconstruction sum without changing any weight
+    or sector.  The hypotheses of
+    Theorem~\ref{thm:vertical_cf_of_grouped_orthogonal_sectors} now hold, and
+    that theorem gives the vertical canonical form of $M$.
 \end{proof}
